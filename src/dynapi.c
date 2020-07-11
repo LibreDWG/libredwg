@@ -1046,7 +1046,7 @@ static const Dwg_DYNAPI_field _dwg_ARC_DIMENSION_fields[] = {
     0,0,0, 70 },
   { "flag1",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_ARC_DIMENSION, flag1),
     0,0,0, 0 },
-  { "user_text",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_ARC_DIMENSION, user_text),
+  { "user_text",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_ARC_DIMENSION, user_text),
     1,1,1, 1 },
   { "text_rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_ARC_DIMENSION, text_rotation),
     0,0,0, 53 },
@@ -1304,7 +1304,7 @@ static const Dwg_DYNAPI_field _dwg_DIMENSION_ALIGNED_fields[] = {
     0,0,0, 70 },
   { "flag1",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_DIMENSION_ALIGNED, flag1),
     0,0,0, 0 },
-  { "user_text",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_DIMENSION_ALIGNED, user_text),
+  { "user_text",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_DIMENSION_ALIGNED, user_text),
     1,1,1, 1 },
   { "text_rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_DIMENSION_ALIGNED, text_rotation),
     0,0,0, 53 },
@@ -1360,7 +1360,7 @@ static const Dwg_DYNAPI_field _dwg_DIMENSION_ANG2LN_fields[] = {
     0,0,0, 70 },
   { "flag1",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_DIMENSION_ANG2LN, flag1),
     0,0,0, 0 },
-  { "user_text",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_DIMENSION_ANG2LN, user_text),
+  { "user_text",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_DIMENSION_ANG2LN, user_text),
     1,1,1, 1 },
   { "text_rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_DIMENSION_ANG2LN, text_rotation),
     0,0,0, 53 },
@@ -1418,7 +1418,7 @@ static const Dwg_DYNAPI_field _dwg_DIMENSION_ANG3PT_fields[] = {
     0,0,0, 70 },
   { "flag1",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_DIMENSION_ANG3PT, flag1),
     0,0,0, 0 },
-  { "user_text",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_DIMENSION_ANG3PT, user_text),
+  { "user_text",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_DIMENSION_ANG3PT, user_text),
     1,1,1, 1 },
   { "text_rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_DIMENSION_ANG3PT, text_rotation),
     0,0,0, 53 },
@@ -1476,7 +1476,7 @@ static const Dwg_DYNAPI_field _dwg_DIMENSION_DIAMETER_fields[] = {
     0,0,0, 70 },
   { "flag1",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_DIMENSION_DIAMETER, flag1),
     0,0,0, 0 },
-  { "user_text",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_DIMENSION_DIAMETER, user_text),
+  { "user_text",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_DIMENSION_DIAMETER, user_text),
     1,1,1, 1 },
   { "text_rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_DIMENSION_DIAMETER, text_rotation),
     0,0,0, 53 },
@@ -1530,7 +1530,7 @@ static const Dwg_DYNAPI_field _dwg_DIMENSION_LINEAR_fields[] = {
     0,0,0, 70 },
   { "flag1",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_DIMENSION_LINEAR, flag1),
     0,0,0, 0 },
-  { "user_text",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_DIMENSION_LINEAR, user_text),
+  { "user_text",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_DIMENSION_LINEAR, user_text),
     1,1,1, 1 },
   { "text_rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_DIMENSION_LINEAR, text_rotation),
     0,0,0, 53 },
@@ -1588,7 +1588,7 @@ static const Dwg_DYNAPI_field _dwg_DIMENSION_ORDINATE_fields[] = {
     0,0,0, 70 },
   { "flag1",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_DIMENSION_ORDINATE, flag1),
     0,0,0, 0 },
-  { "user_text",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_DIMENSION_ORDINATE, user_text),
+  { "user_text",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_DIMENSION_ORDINATE, user_text),
     1,1,1, 1 },
   { "text_rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_DIMENSION_ORDINATE, text_rotation),
     0,0,0, 53 },
@@ -1644,7 +1644,7 @@ static const Dwg_DYNAPI_field _dwg_DIMENSION_RADIUS_fields[] = {
     0,0,0, 70 },
   { "flag1",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_DIMENSION_RADIUS, flag1),
     0,0,0, 0 },
-  { "user_text",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_DIMENSION_RADIUS, user_text),
+  { "user_text",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_DIMENSION_RADIUS, user_text),
     1,1,1, 1 },
   { "text_rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_DIMENSION_RADIUS, text_rotation),
     0,0,0, 53 },
@@ -1902,7 +1902,7 @@ static const Dwg_DYNAPI_field _dwg_HATCH_fields[] = {
     0,0,0, 30 },
   { "extrusion",	"BE", sizeof (BITCODE_BE),  OFF (struct _dwg_entity_HATCH, extrusion),
     0,0,0, 210 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_HATCH, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_HATCH, name),
     1,1,1, 2 },
   { "is_solid_fill",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_HATCH, is_solid_fill),
     0,0,0, 70 },
@@ -2110,7 +2110,7 @@ static const Dwg_DYNAPI_field _dwg_LARGE_RADIAL_DIMENSION_fields[] = {
     0,0,0, 70 },
   { "flag1",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_LARGE_RADIAL_DIMENSION, flag1),
     0,0,0, 0 },
-  { "user_text",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_LARGE_RADIAL_DIMENSION, user_text),
+  { "user_text",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_LARGE_RADIAL_DIMENSION, user_text),
     1,1,1, 1 },
   { "text_rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_LARGE_RADIAL_DIMENSION, text_rotation),
     0,0,0, 53 },
@@ -3046,7 +3046,7 @@ static const Dwg_DYNAPI_field _dwg_POINTCLOUD_fields[] = {
     1,1,1, 1 },
   { "num_source_files",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_POINTCLOUD, num_source_files),
     0,0,0, 90 },
-  { "source_files",	"TV*", sizeof (BITCODE_TV*),  OFF (struct _dwg_entity_POINTCLOUD, source_files),
+  { "source_files",	"T**", sizeof (BITCODE_T**),  OFF (struct _dwg_entity_POINTCLOUD, source_files),
     1,1,0, 2 },
   { "extents_min",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_POINTCLOUD, extents_min),
     1,0,0, 11 },
@@ -4144,7 +4144,7 @@ static const Dwg_DYNAPI_field _dwg_VIEWPORT_fields[] = {
     0,0,0, 0 },
   { "status_flag",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_VIEWPORT, status_flag),
     0,0,0, 90 },
-  { "style_sheet",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_VIEWPORT, style_sheet),
+  { "style_sheet",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_VIEWPORT, style_sheet),
     1,1,1, 1 },
   { "render_mode",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_VIEWPORT, render_mode),
     0,0,0, 281 },
@@ -4825,7 +4825,7 @@ static const Dwg_DYNAPI_field _dwg_APPID_fields[] = {
     1,1,0, 0 },
   { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_APPID, flag),
     0,0,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_APPID, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_APPID, name),
     1,1,1, 0 },
   { "used",	"RSd", sizeof (BITCODE_RSd),  OFF (struct _dwg_object_APPID, used),
     0,0,0, 0 },
@@ -4961,7 +4961,7 @@ static const Dwg_DYNAPI_field _dwg_ASSOCACTIONPARAM_fields[] = {
     0,0,0, 90 },
   { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCACTIONPARAM, aap_version),
     0,0,0, 90 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCACTIONPARAM, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_ASSOCACTIONPARAM, name),
     1,1,1, 1 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -4997,7 +4997,7 @@ static const Dwg_DYNAPI_field _dwg_ASSOCARRAYACTIONBODY_fields[] = {
     0,0,0, 0 },
   { "aaab_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYACTIONBODY, aaab_version),
     0,0,0, 90 },
-  { "paramblock",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCARRAYACTIONBODY, paramblock),
+  { "paramblock",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_ASSOCARRAYACTIONBODY, paramblock),
     1,1,1, 1 },
   { "transmatrix",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_ASSOCARRAYACTIONBODY, transmatrix),
     1,1,0, 40 },
@@ -5013,7 +5013,7 @@ static const Dwg_DYNAPI_field _dwg_ASSOCARRAYMODIFYACTIONBODY_fields[] = {
     0,0,0, 0 },
   { "aaab_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY, aaab_version),
     0,0,0, 90 },
-  { "paramblock",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY, paramblock),
+  { "paramblock",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY, paramblock),
     1,1,1, 1 },
   { "transmatrix",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY, transmatrix),
     1,1,0, 40 },
@@ -5033,7 +5033,7 @@ static const Dwg_DYNAPI_field _dwg_ASSOCASMBODYACTIONPARAM_fields[] = {
     0,0,0, 90 },
   { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCASMBODYACTIONPARAM, aap_version),
     0,0,0, 90 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCASMBODYACTIONPARAM, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_ASSOCASMBODYACTIONPARAM, name),
     1,1,1, 1 },
   { "asdap_class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCASMBODYACTIONPARAM, asdap_class_version),
     0,0,0, 90 },
@@ -5143,7 +5143,7 @@ static const Dwg_DYNAPI_field _dwg_ASSOCCOMPOUNDACTIONPARAM_fields[] = {
     0,0,0, 90 },
   { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCCOMPOUNDACTIONPARAM, aap_version),
     0,0,0, 90 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCCOMPOUNDACTIONPARAM, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_ASSOCCOMPOUNDACTIONPARAM, name),
     1,1,1, 1 },
   { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCCOMPOUNDACTIONPARAM, class_version),
     0,0,0, 90 },
@@ -5225,7 +5225,7 @@ static const Dwg_DYNAPI_field _dwg_ASSOCEDGEACTIONPARAM_fields[] = {
     0,0,0, 90 },
   { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCEDGEACTIONPARAM, aap_version),
     0,0,0, 90 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCEDGEACTIONPARAM, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_ASSOCEDGEACTIONPARAM, name),
     1,1,1, 1 },
   { "asdap_class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCEDGEACTIONPARAM, asdap_class_version),
     0,0,0, 90 },
@@ -5313,7 +5313,7 @@ static const Dwg_DYNAPI_field _dwg_ASSOCFACEACTIONPARAM_fields[] = {
     0,0,0, 90 },
   { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCFACEACTIONPARAM, aap_version),
     0,0,0, 90 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCFACEACTIONPARAM, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_ASSOCFACEACTIONPARAM, name),
     1,1,1, 1 },
   { "asdap_class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCFACEACTIONPARAM, asdap_class_version),
     0,0,0, 90 },
@@ -5357,7 +5357,7 @@ static const Dwg_DYNAPI_field _dwg_ASSOCGEOMDEPENDENCY_fields[] = {
     0,0,0, 90 },
   { "enabled",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ASSOCGEOMDEPENDENCY, enabled),
     0,0,0, 290 },
-  { "classname",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCGEOMDEPENDENCY, classname),
+  { "classname",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_ASSOCGEOMDEPENDENCY, classname),
     1,1,1, 1 },
   { "dependent_on_compound_object",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_ASSOCGEOMDEPENDENCY, dependent_on_compound_object),
     0,0,0, 290 },
@@ -5467,7 +5467,7 @@ static const Dwg_DYNAPI_field _dwg_ASSOCOBJECTACTIONPARAM_fields[] = {
     0,0,0, 90 },
   { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCOBJECTACTIONPARAM, aap_version),
     0,0,0, 90 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCOBJECTACTIONPARAM, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_ASSOCOBJECTACTIONPARAM, name),
     1,1,1, 1 },
   { "asdap_class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCOBJECTACTIONPARAM, asdap_class_version),
     0,0,0, 90 },
@@ -5525,7 +5525,7 @@ static const Dwg_DYNAPI_field _dwg_ASSOCOSNAPPOINTREFACTIONPARAM_fields[] = {
     0,0,0, 90 },
   { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, aap_version),
     0,0,0, 90 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, name),
     1,1,1, 1 },
   { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM, class_version),
     0,0,0, 90 },
@@ -5581,7 +5581,7 @@ static const Dwg_DYNAPI_field _dwg_ASSOCPATHACTIONPARAM_fields[] = {
     0,0,0, 90 },
   { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, aap_version),
     0,0,0, 90 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, name),
     1,1,1, 1 },
   { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCPATHACTIONPARAM, class_version),
     0,0,0, 90 },
@@ -5723,7 +5723,7 @@ static const Dwg_DYNAPI_field _dwg_ASSOCPOINTREFACTIONPARAM_fields[] = {
     0,0,0, 90 },
   { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCPOINTREFACTIONPARAM, aap_version),
     0,0,0, 90 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCPOINTREFACTIONPARAM, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_ASSOCPOINTREFACTIONPARAM, name),
     1,1,1, 1 },
   { "class_version",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_ASSOCPOINTREFACTIONPARAM, class_version),
     0,0,0, 90 },
@@ -5901,7 +5901,7 @@ static const Dwg_DYNAPI_field _dwg_ASSOCVERTEXACTIONPARAM_fields[] = {
     0,0,0, 90 },
   { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCVERTEXACTIONPARAM, aap_version),
     0,0,0, 90 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCVERTEXACTIONPARAM, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_ASSOCVERTEXACTIONPARAM, name),
     1,1,1, 1 },
   { "asdap_class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCVERTEXACTIONPARAM, asdap_class_version),
     0,0,0, 90 },
@@ -5937,7 +5937,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKALIGNEDCONSTRAINTPARAMETER_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, be_major),
     0,0,0, 98 },
@@ -5975,9 +5975,9 @@ static const Dwg_DYNAPI_field _dwg_BLOCKALIGNEDCONSTRAINTPARAMETER_fields[] = {
     1,0,0, 0 },
   { "dependency",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, dependency),
     1,0,0, 330 },
-  { "expr_name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, expr_name),
+  { "expr_name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, expr_name),
     1,1,1, 305 },
-  { "expr_description",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, expr_description),
+  { "expr_description",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, expr_description),
     1,1,1, 306 },
   { "value",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER, value),
     0,0,0, 140 },
@@ -5991,7 +5991,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKALIGNMENTGRIP_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKALIGNMENTGRIP, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKALIGNMENTGRIP, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKALIGNMENTGRIP, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKALIGNMENTGRIP, be_major),
     0,0,0, 98 },
@@ -6019,7 +6019,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKALIGNMENTPARAMETER_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKALIGNMENTPARAMETER, be_major),
     0,0,0, 98 },
@@ -6065,7 +6065,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKANGULARCONSTRAINTPARAMETER_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER, be_major),
     0,0,0, 98 },
@@ -6125,7 +6125,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKARRAYACTION_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKARRAYACTION, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKARRAYACTION, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKARRAYACTION, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKARRAYACTION, be_major),
     0,0,0, 98 },
@@ -6157,7 +6157,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKBASEPOINTPARAMETER_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKBASEPOINTPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKBASEPOINTPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKBASEPOINTPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKBASEPOINTPARAMETER, be_major),
     0,0,0, 98 },
@@ -6189,7 +6189,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKDIAMETRICCONSTRAINTPARAMETER_fields[] = 
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER, be_major),
     0,0,0, 98 },
@@ -6245,7 +6245,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKFLIPACTION_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKFLIPACTION, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKFLIPACTION, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKFLIPACTION, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKFLIPACTION, be_major),
     0,0,0, 98 },
@@ -6279,7 +6279,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKFLIPGRIP_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKFLIPGRIP, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKFLIPGRIP, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKFLIPGRIP, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKFLIPGRIP, be_major),
     0,0,0, 98 },
@@ -6313,7 +6313,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKFLIPPARAMETER_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKFLIPPARAMETER, be_major),
     0,0,0, 98 },
@@ -6383,7 +6383,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKHORIZONTALCONSTRAINTPARAMETER_fields[] =
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, be_major),
     0,0,0, 98 },
@@ -6421,9 +6421,9 @@ static const Dwg_DYNAPI_field _dwg_BLOCKHORIZONTALCONSTRAINTPARAMETER_fields[] =
     1,0,0, 0 },
   { "dependency",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, dependency),
     1,0,0, 330 },
-  { "expr_name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, expr_name),
+  { "expr_name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, expr_name),
     1,1,1, 305 },
-  { "expr_description",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, expr_description),
+  { "expr_description",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, expr_description),
     1,1,1, 306 },
   { "value",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER, value),
     0,0,0, 140 },
@@ -6437,7 +6437,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKLINEARCONSTRAINTPARAMETER_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, be_major),
     0,0,0, 98 },
@@ -6475,9 +6475,9 @@ static const Dwg_DYNAPI_field _dwg_BLOCKLINEARCONSTRAINTPARAMETER_fields[] = {
     1,0,0, 0 },
   { "dependency",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, dependency),
     1,0,0, 330 },
-  { "expr_name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, expr_name),
+  { "expr_name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, expr_name),
     1,1,1, 305 },
-  { "expr_description",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, expr_description),
+  { "expr_description",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, expr_description),
     1,1,1, 306 },
   { "value",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER, value),
     0,0,0, 140 },
@@ -6491,7 +6491,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKLINEARGRIP_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKLINEARGRIP, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKLINEARGRIP, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKLINEARGRIP, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKLINEARGRIP, be_major),
     0,0,0, 98 },
@@ -6519,7 +6519,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKLINEARPARAMETER_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKLINEARPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKLINEARPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKLINEARPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKLINEARPARAMETER, be_major),
     0,0,0, 98 },
@@ -6571,7 +6571,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKLOOKUPACTION_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKLOOKUPACTION, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKLOOKUPACTION, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKLOOKUPACTION, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKLOOKUPACTION, be_major),
     0,0,0, 98 },
@@ -6597,7 +6597,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKLOOKUPACTION_fields[] = {
     0,0,0, 93 },
   { "lut",	"Dwg_BLOCKLOOKUPACTION_lut*", sizeof (Dwg_BLOCKLOOKUPACTION_lut*),  OFF (struct _dwg_object_BLOCKLOOKUPACTION, lut),
     1,1,0, 0 },
-  { "exprs",	"TV*", sizeof (BITCODE_TV*),  OFF (struct _dwg_object_BLOCKLOOKUPACTION, exprs),
+  { "exprs",	"T**", sizeof (BITCODE_T**),  OFF (struct _dwg_object_BLOCKLOOKUPACTION, exprs),
     1,1,0, 302 },
   { "b280",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKLOOKUPACTION, b280),
     0,0,0, 280 },
@@ -6609,7 +6609,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKLOOKUPGRIP_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKLOOKUPGRIP, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKLOOKUPGRIP, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKLOOKUPGRIP, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKLOOKUPGRIP, be_major),
     0,0,0, 98 },
@@ -6635,7 +6635,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKLOOKUPPARAMETER_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKLOOKUPPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKLOOKUPPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKLOOKUPPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKLOOKUPPARAMETER, be_major),
     0,0,0, 98 },
@@ -6671,7 +6671,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKMOVEACTION_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKMOVEACTION, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKMOVEACTION, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKMOVEACTION, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKMOVEACTION, be_major),
     0,0,0, 98 },
@@ -6719,7 +6719,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKPOINTPARAMETER_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKPOINTPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKPOINTPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKPOINTPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKPOINTPARAMETER, be_major),
     0,0,0, 98 },
@@ -6753,7 +6753,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKPOLARGRIP_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKPOLARGRIP, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKPOLARGRIP, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKPOLARGRIP, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKPOLARGRIP, be_major),
     0,0,0, 98 },
@@ -6779,7 +6779,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKPOLARPARAMETER_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKPOLARPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKPOLARPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKPOLARPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKPOLARPARAMETER, be_major),
     0,0,0, 98 },
@@ -6837,7 +6837,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKPOLARSTRETCHACTION_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKPOLARSTRETCHACTION, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKPOLARSTRETCHACTION, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKPOLARSTRETCHACTION, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKPOLARSTRETCHACTION, be_major),
     0,0,0, 98 },
@@ -6885,7 +6885,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKPROPERTIESTABLEGRIP_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKPROPERTIESTABLEGRIP, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKPROPERTIESTABLEGRIP, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKPROPERTIESTABLEGRIP, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKPROPERTIESTABLEGRIP, be_major),
     0,0,0, 98 },
@@ -6911,7 +6911,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKRADIALCONSTRAINTPARAMETER_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER, be_major),
     0,0,0, 98 },
@@ -6975,7 +6975,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKROTATEACTION_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKROTATEACTION, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKROTATEACTION, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKROTATEACTION, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKROTATEACTION, be_major),
     0,0,0, 98 },
@@ -7009,7 +7009,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKROTATIONGRIP_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKROTATIONGRIP, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKROTATIONGRIP, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKROTATIONGRIP, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKROTATIONGRIP, be_major),
     0,0,0, 98 },
@@ -7035,7 +7035,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKROTATIONPARAMETER_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKROTATIONPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKROTATIONPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKROTATIONPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKROTATIONPARAMETER, be_major),
     0,0,0, 98 },
@@ -7089,7 +7089,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKSCALEACTION_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKSCALEACTION, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKSCALEACTION, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKSCALEACTION, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKSCALEACTION, be_major),
     0,0,0, 98 },
@@ -7123,7 +7123,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKSTRETCHACTION_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKSTRETCHACTION, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKSTRETCHACTION, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKSTRETCHACTION, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKSTRETCHACTION, be_major),
     0,0,0, 98 },
@@ -7169,7 +7169,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKUSERPARAMETER_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKUSERPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKUSERPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKUSERPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKUSERPARAMETER, be_major),
     0,0,0, 98 },
@@ -7207,7 +7207,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKVERTICALCONSTRAINTPARAMETER_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, be_major),
     0,0,0, 98 },
@@ -7245,9 +7245,9 @@ static const Dwg_DYNAPI_field _dwg_BLOCKVERTICALCONSTRAINTPARAMETER_fields[] = {
     1,0,0, 0 },
   { "dependency",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, dependency),
     1,0,0, 330 },
-  { "expr_name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, expr_name),
+  { "expr_name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, expr_name),
     1,1,1, 305 },
-  { "expr_description",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, expr_description),
+  { "expr_description",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, expr_description),
     1,1,1, 306 },
   { "value",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER, value),
     0,0,0, 140 },
@@ -7261,7 +7261,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKVISIBILITYGRIP_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKVISIBILITYGRIP, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKVISIBILITYGRIP, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKVISIBILITYGRIP, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKVISIBILITYGRIP, be_major),
     0,0,0, 98 },
@@ -7287,7 +7287,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKVISIBILITYPARAMETER_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, be_major),
     0,0,0, 98 },
@@ -7331,7 +7331,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKXYGRIP_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKXYGRIP, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKXYGRIP, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKXYGRIP, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKXYGRIP, be_major),
     0,0,0, 98 },
@@ -7357,7 +7357,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKXYPARAMETER_fields[] = {
     1,1,0, 0 },
   { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_BLOCKXYPARAMETER, evalexpr),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCKXYPARAMETER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKXYPARAMETER, name),
     1,1,1, 300 },
   { "be_major",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKXYPARAMETER, be_major),
     0,0,0, 98 },
@@ -7433,7 +7433,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCK_HEADER_fields[] = {
     1,1,0, 0 },
   { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_BLOCK_HEADER, flag),
     0,0,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCK_HEADER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCK_HEADER, name),
     1,1,1, 0 },
   { "used",	"RSd", sizeof (BITCODE_RSd),  OFF (struct _dwg_object_BLOCK_HEADER, used),
     0,0,0, 0 },
@@ -7461,11 +7461,11 @@ static const Dwg_DYNAPI_field _dwg_BLOCK_HEADER_fields[] = {
     0,0,0, 0 },
   { "base_pt",	"3DPOINT", sizeof (BITCODE_3DPOINT),  OFF (struct _dwg_object_BLOCK_HEADER, base_pt),
     1,0,0, 10 },
-  { "xref_pname",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCK_HEADER, xref_pname),
+  { "xref_pname",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCK_HEADER, xref_pname),
     1,1,1, 1 },
   { "num_inserts",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_object_BLOCK_HEADER, num_inserts),
     0,0,0, 0 },
-  { "description",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCK_HEADER, description),
+  { "description",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCK_HEADER, description),
     1,1,1, 4 },
   { "preview_size",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCK_HEADER, preview_size),
     0,0,0, 0 },
@@ -7711,7 +7711,7 @@ static const Dwg_DYNAPI_field _dwg_DICTIONARY_fields[] = {
     0,0,0, 280 },
   { "cloning",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_DICTIONARY, cloning),
     0,0,0, 281 },
-  { "texts",	"T*", sizeof (BITCODE_T*),  OFF (struct _dwg_object_DICTIONARY, texts),
+  { "texts",	"T**", sizeof (BITCODE_T**),  OFF (struct _dwg_object_DICTIONARY, texts),
     1,1,0, 3 },
   { "itemhandles",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_DICTIONARY, itemhandles),
     1,1,0, 350 },
@@ -7737,7 +7737,7 @@ static const Dwg_DYNAPI_field _dwg_DICTIONARYWDFLT_fields[] = {
     0,0,0, 280 },
   { "cloning",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_DICTIONARYWDFLT, cloning),
     0,0,0, 281 },
-  { "texts",	"T*", sizeof (BITCODE_T*),  OFF (struct _dwg_object_DICTIONARYWDFLT, texts),
+  { "texts",	"T**", sizeof (BITCODE_T**),  OFF (struct _dwg_object_DICTIONARYWDFLT, texts),
     1,1,0, 3 },
   { "itemhandles",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_DICTIONARYWDFLT, itemhandles),
     1,1,0, 350 },
@@ -7767,7 +7767,7 @@ static const Dwg_DYNAPI_field _dwg_DIMSTYLE_fields[] = {
     1,1,0, 0 },
   { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_DIMSTYLE, flag),
     0,0,0, 70 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_DIMSTYLE, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_DIMSTYLE, name),
     1,1,1, 0 },
   { "used",	"RSd", sizeof (BITCODE_RSd),  OFF (struct _dwg_object_DIMSTYLE, used),
     0,0,0, 0 },
@@ -8289,7 +8289,7 @@ static const Dwg_DYNAPI_field _dwg_GROUND_PLANE_BACKGROUND_fields[] = {
 static const Dwg_DYNAPI_field _dwg_GROUP_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_GROUP, parent),
     1,1,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_GROUP, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_GROUP, name),
     1,1,1, 300 },
   { "unnamed",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_GROUP, unnamed),
     0,0,0, 70 },
@@ -8391,7 +8391,7 @@ static const Dwg_DYNAPI_field _dwg_LAYER_fields[] = {
     1,1,0, 0 },
   { "flag",	"BS", sizeof (BITCODE_RC),  OFF (struct _dwg_object_LAYER, flag),
     0,0,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LAYER, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_LAYER, name),
     1,1,1, 0 },
   { "used",	"RSd", sizeof (BITCODE_RSd),  OFF (struct _dwg_object_LAYER, used),
     0,0,0, 0 },
@@ -8435,7 +8435,7 @@ static const Dwg_DYNAPI_field _dwg_LAYERFILTER_fields[] = {
     1,1,0, 0 },
   { "num_names",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_LAYERFILTER, num_names),
     0,0,0, 0 },
-  { "names",	"TV*", sizeof (BITCODE_TV*),  OFF (struct _dwg_object_LAYERFILTER, names),
+  { "names",	"T**", sizeof (BITCODE_T**),  OFF (struct _dwg_object_LAYERFILTER, names),
     1,1,0, 8 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -8557,7 +8557,7 @@ static const Dwg_DYNAPI_field _dwg_LTYPE_fields[] = {
     1,1,0, 0 },
   { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_LTYPE, flag),
     0,0,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LTYPE, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_LTYPE, name),
     1,1,1, 0 },
   { "used",	"RSd", sizeof (BITCODE_RSd),  OFF (struct _dwg_object_LTYPE, used),
     0,0,0, 0 },
@@ -8569,7 +8569,7 @@ static const Dwg_DYNAPI_field _dwg_LTYPE_fields[] = {
     0,0,0, 0 },
   { "xref",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_LTYPE, xref),
     1,0,0, 0 },
-  { "description",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LTYPE, description),
+  { "description",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_LTYPE, description),
     1,1,1, 3 },
   { "pattern_len",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_LTYPE, pattern_len),
     0,0,0, 40 },
@@ -8693,7 +8693,7 @@ static const Dwg_DYNAPI_field _dwg_MENTALRAYRENDERSETTINGS_fields[] = {
     1,1,0, 0 },
   { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, class_version),
     0,0,0, 90 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, name),
     1,1,1, 1 },
   { "fog_enabled",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, fog_enabled),
     0,0,0, 290 },
@@ -8703,9 +8703,9 @@ static const Dwg_DYNAPI_field _dwg_MENTALRAYRENDERSETTINGS_fields[] = {
     0,0,0, 290 },
   { "environ_image_enabled",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, environ_image_enabled),
     0,0,0, 290 },
-  { "environ_image_filename",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, environ_image_filename),
+  { "environ_image_filename",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, environ_image_filename),
     1,1,1, 1 },
-  { "description",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, description),
+  { "description",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, description),
     1,1,1, 1 },
   { "display_index",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_MENTALRAYRENDERSETTINGS, display_index),
     0,0,0, 90 },
@@ -8847,13 +8847,13 @@ static const Dwg_DYNAPI_field _dwg_MLEADERSTYLE_fields[] = {
     0,0,0, 42 },
   { "landing_dist",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MLEADERSTYLE, landing_dist),
     0,0,0, 43 },
-  { "description",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_MLEADERSTYLE, description),
+  { "description",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MLEADERSTYLE, description),
     1,1,1, 3 },
   { "arrow_head",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_MLEADERSTYLE, arrow_head),
     1,0,0, 341 },
   { "arrow_head_size",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_MLEADERSTYLE, arrow_head_size),
     0,0,0, 44 },
-  { "text_default",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_MLEADERSTYLE, text_default),
+  { "text_default",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MLEADERSTYLE, text_default),
     1,1,1, 300 },
   { "text_style",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_MLEADERSTYLE, text_style),
     1,0,0, 342 },
@@ -8911,9 +8911,9 @@ static const Dwg_DYNAPI_field _dwg_MLEADERSTYLE_fields[] = {
 static const Dwg_DYNAPI_field _dwg_MLINESTYLE_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_MLINESTYLE, parent),
     1,1,0, 0 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_MLINESTYLE, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MLINESTYLE, name),
     1,1,1, 2 },
-  { "description",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_MLINESTYLE, description),
+  { "description",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_MLINESTYLE, description),
     1,1,1, 3 },
   { "flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_MLINESTYLE, flag),
     0,0,0, 70 },
@@ -9307,7 +9307,7 @@ static const Dwg_DYNAPI_field _dwg_RAPIDRTRENDERSETTINGS_fields[] = {
     1,1,0, 0 },
   { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_RAPIDRTRENDERSETTINGS, class_version),
     0,0,0, 90 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_RAPIDRTRENDERSETTINGS, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_RAPIDRTRENDERSETTINGS, name),
     1,1,1, 1 },
   { "fog_enabled",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_RAPIDRTRENDERSETTINGS, fog_enabled),
     0,0,0, 290 },
@@ -9317,9 +9317,9 @@ static const Dwg_DYNAPI_field _dwg_RAPIDRTRENDERSETTINGS_fields[] = {
     0,0,0, 290 },
   { "environ_image_enabled",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_RAPIDRTRENDERSETTINGS, environ_image_enabled),
     0,0,0, 290 },
-  { "environ_image_filename",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_RAPIDRTRENDERSETTINGS, environ_image_filename),
+  { "environ_image_filename",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_RAPIDRTRENDERSETTINGS, environ_image_filename),
     1,1,1, 1 },
-  { "description",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_RAPIDRTRENDERSETTINGS, description),
+  { "description",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_RAPIDRTRENDERSETTINGS, description),
     1,1,1, 1 },
   { "display_index",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_RAPIDRTRENDERSETTINGS, display_index),
     0,0,0, 90 },
@@ -9459,7 +9459,7 @@ static const Dwg_DYNAPI_field _dwg_RENDERSETTINGS_fields[] = {
     1,1,0, 0 },
   { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_RENDERSETTINGS, class_version),
     0,0,0, 90 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_RENDERSETTINGS, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_RENDERSETTINGS, name),
     1,1,1, 1 },
   { "fog_enabled",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_RENDERSETTINGS, fog_enabled),
     0,0,0, 290 },
@@ -9469,9 +9469,9 @@ static const Dwg_DYNAPI_field _dwg_RENDERSETTINGS_fields[] = {
     0,0,0, 290 },
   { "environ_image_enabled",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_RENDERSETTINGS, environ_image_enabled),
     0,0,0, 290 },
-  { "environ_image_filename",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_RENDERSETTINGS, environ_image_filename),
+  { "environ_image_filename",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_RENDERSETTINGS, environ_image_filename),
     1,1,1, 1 },
-  { "description",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_RENDERSETTINGS, description),
+  { "description",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_RENDERSETTINGS, description),
     1,1,1, 1 },
   { "display_index",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_RENDERSETTINGS, display_index),
     0,0,0, 90 },
@@ -9485,7 +9485,7 @@ static const Dwg_DYNAPI_field _dwg_SCALE_fields[] = {
     1,1,0, 0 },
   { "flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SCALE, flag),
     0,0,0, 70 },
-  { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_SCALE, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_SCALE, name),
     1,1,1, 300 },
   { "paper_units",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SCALE, paper_units),
     0,0,0, 140 },
@@ -9699,7 +9699,7 @@ static const Dwg_DYNAPI_field _dwg_STYLE_fields[] = {
     1,1,0, 0 },
   { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_STYLE, flag),
     0,0,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_STYLE, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_STYLE, name),
     1,1,1, 0 },
   { "used",	"RSd", sizeof (BITCODE_RSd),  OFF (struct _dwg_object_STYLE, used),
     0,0,0, 0 },
@@ -9951,7 +9951,7 @@ static const Dwg_DYNAPI_field _dwg_UCS_fields[] = {
     1,1,0, 0 },
   { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_UCS, flag),
     0,0,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_UCS, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_UCS, name),
     1,1,1, 0 },
   { "used",	"RSd", sizeof (BITCODE_RSd),  OFF (struct _dwg_object_UCS, used),
     0,0,0, 0 },
@@ -10017,7 +10017,7 @@ static const Dwg_DYNAPI_field _dwg_VIEW_fields[] = {
     1,1,0, 0 },
   { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_VIEW, flag),
     0,0,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_VIEW, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_VIEW, name),
     1,1,1, 0 },
   { "used",	"RSd", sizeof (BITCODE_RSd),  OFF (struct _dwg_object_VIEW, used),
     0,0,0, 0 },
@@ -10349,7 +10349,7 @@ static const Dwg_DYNAPI_field _dwg_VISUALSTYLE_fields[] = {
     0,0,0, 90 },
   { "edge_wiggle_int",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_VISUALSTYLE, edge_wiggle_int),
     0,0,0, 176 },
-  { "strokes",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_VISUALSTYLE, strokes),
+  { "strokes",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_VISUALSTYLE, strokes),
     1,1,1, 1 },
   { "strokes_int",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_VISUALSTYLE, strokes_int),
     0,0,0, 176 },
@@ -10373,7 +10373,7 @@ static const Dwg_DYNAPI_field _dwg_VPORT_fields[] = {
     1,1,0, 0 },
   { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_VPORT, flag),
     0,0,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_VPORT, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_VPORT, name),
     1,1,1, 0 },
   { "used",	"RSd", sizeof (BITCODE_RSd),  OFF (struct _dwg_object_VPORT, used),
     0,0,0, 0 },
@@ -10507,7 +10507,7 @@ static const Dwg_DYNAPI_field _dwg_VX_TABLE_RECORD_fields[] = {
     1,1,0, 0 },
   { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_VX_TABLE_RECORD, flag),
     0,0,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_VX_TABLE_RECORD, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_VX_TABLE_RECORD, name),
     1,1,1, 0 },
   { "used",	"RSd", sizeof (BITCODE_RSd),  OFF (struct _dwg_object_VX_TABLE_RECORD, used),
     0,0,0, 0 },
@@ -10577,7 +10577,7 @@ static const Dwg_DYNAPI_field _dwg_ASSOCARRAYPARAMETERS_fields[] = {
     0,0,0, 0 },
   { "num_items",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, num_items),
     0,0,0, 0 },
-  { "classname",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, classname),
+  { "classname",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, classname),
     1,1,1, 0 },
   { "items",	"Dwg_ASSOCARRAYITEM*", sizeof (Dwg_ASSOCARRAYITEM*),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, items),
     1,1,0, 0 },
@@ -11134,7 +11134,7 @@ static const Dwg_DYNAPI_field _dwg_AcDs_SegmentIndex_fields[] = {
 static const Dwg_DYNAPI_field _dwg_BLOCKACTION_connectionpts_fields[] = {
   { "code",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BLOCKACTION_connectionpts, code),
     0,0,0, 0 },
-  { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_BLOCKACTION_connectionpts, name),
+  { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_BLOCKACTION_connectionpts, name),
     1,1,1, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
@@ -11164,24 +11164,6 @@ static const Dwg_DYNAPI_field _dwg_BLOCKPARAMETER_connection_fields[] = {
     0,0,0, 0 },
   { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_BLOCKPARAMETER_connection, name),
     1,1,1, 0 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
-/* from typedef struct _dwg_BLOCKPARAMVALUESET: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_BLOCKPARAMVALUESET_fields[] = {
-  { "desc",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_BLOCKPARAMVALUESET, desc),
-    1,1,1, 0 },
-  { "flags",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BLOCKPARAMVALUESET, flags),
-    0,0,0, 0 },
-  { "minimum",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_BLOCKPARAMVALUESET, minimum),
-    0,0,0, 0 },
-  { "maximum",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_BLOCKPARAMVALUESET, maximum),
-    0,0,0, 0 },
-  { "increment",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_BLOCKPARAMVALUESET, increment),
-    0,0,0, 0 },
-  { "num_valuelist",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_BLOCKPARAMVALUESET, num_valuelist),
-    0,0,0, 0 },
-  { "valuelist",	"BD*", sizeof (BITCODE_BD*),  OFF (struct _dwg_BLOCKPARAMVALUESET, valuelist),
-    1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_BLOCKSTRETCHACTION_codes: (sorted by offset) */
@@ -11426,7 +11408,7 @@ static const Dwg_DYNAPI_field _dwg_DIMASSOC_Ref_fields[] = {
     0,0,0, 91 },
   { "num_xrefpaths",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_DIMASSOC_Ref, num_xrefpaths),
     0,0,0, 0 },
-  { "xrefpaths",	"TV*", sizeof (BITCODE_TV*),  OFF (struct _dwg_DIMASSOC_Ref, xrefpaths),
+  { "xrefpaths",	"T**", sizeof (BITCODE_T**),  OFF (struct _dwg_DIMASSOC_Ref, xrefpaths),
     1,1,0, 301 },
   { "has_lastpt_ref",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_DIMASSOC_Ref, has_lastpt_ref),
     0,0,0, 75 },
@@ -11456,7 +11438,7 @@ static const Dwg_DYNAPI_field _dwg_DIMENSION_common_fields[] = {
     0,0,0, 70 },
   { "flag1",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_DIMENSION_common, flag1),
     0,0,0, 0 },
-  { "user_text",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_DIMENSION_common, user_text),
+  { "user_text",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_DIMENSION_common, user_text),
     1,1,1, 1 },
   { "text_rotation",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_DIMENSION_common, text_rotation),
     0,0,0, 53 },
@@ -11540,7 +11522,7 @@ static const Dwg_DYNAPI_field _dwg_EvalExpr_fields[] = {
     1,0,0, 0 },
   { "value.pt3d",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_EvalExpr, value.pt3d),
     1,0,0, 0 },
-  { "value.text1",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_EvalExpr, value.text1),
+  { "value.text1",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_EvalExpr, value.text1),
     1,1,1, 0 },
   { "value.long90",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_EvalExpr, value.long90),
     0,0,0, 0 },
@@ -11564,7 +11546,7 @@ static const Dwg_DYNAPI_field _dwg_EvalVariant_fields[] = {
     0,0,0, 0 },
   { "u.rc",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_EvalVariant, u.rc),
     0,0,0, 0 },
-  { "u.text",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_EvalVariant, u.text),
+  { "u.text",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_EvalVariant, u.text),
     1,1,1, 0 },
   { "u.handle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_EvalVariant, u.handle),
     1,0,0, 0 },
@@ -11812,7 +11794,7 @@ static const Dwg_DYNAPI_field _dwg_LEADER_BlockLabel_fields[] = {
     1,1,0, 0 },
   { "attdef",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_LEADER_BlockLabel, attdef),
     1,0,0, 330 },
-  { "label_text",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_LEADER_BlockLabel, label_text),
+  { "label_text",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_LEADER_BlockLabel, label_text),
     1,1,1, 302 },
   { "ui_index",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_LEADER_BlockLabel, ui_index),
     0,0,0, 177 },
@@ -13418,93 +13400,92 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
   { "BLOCKLOOKUPACTION_lut", (int)DWG_TYPE_BLOCKLOOKUPACTION, NULL, _dwg_BLOCKLOOKUPACTION_lut_fields, sizeof (Dwg_BLOCKLOOKUPACTION_lut) },	/* 36 */
   { "BLOCKPARAMETER_PropInfo", 0, NULL, _dwg_BLOCKPARAMETER_PropInfo_fields, sizeof (Dwg_BLOCKPARAMETER_PropInfo) },	/* 37 */
   { "BLOCKPARAMETER_connection", 0, NULL, _dwg_BLOCKPARAMETER_connection_fields, sizeof (Dwg_BLOCKPARAMETER_connection) },	/* 38 */
-  { "BLOCKPARAMVALUESET", 0, NULL, _dwg_BLOCKPARAMVALUESET_fields, sizeof (Dwg_BLOCKPARAMVALUESET) },	/* 39 */
-  { "BLOCKSTRETCHACTION_codes", (int)DWG_TYPE_BLOCKSTRETCHACTION, NULL, _dwg_BLOCKSTRETCHACTION_codes_fields, sizeof (Dwg_BLOCKSTRETCHACTION_codes) },	/* 40 */
-  { "BLOCKSTRETCHACTION_handles", (int)DWG_TYPE_BLOCKSTRETCHACTION, NULL, _dwg_BLOCKSTRETCHACTION_handles_fields, sizeof (Dwg_BLOCKSTRETCHACTION_handles) },	/* 41 */
-  { "BLOCKVISIBILITYPARAMETER_state", (int)DWG_TYPE_BLOCKVISIBILITYPARAMETER, NULL, _dwg_BLOCKVISIBILITYPARAMETER_state_fields, sizeof (Dwg_BLOCKVISIBILITYPARAMETER_state) },	/* 42 */
-  { "COMPOUNDOBJECTID", 0, NULL, _dwg_COMPOUNDOBJECTID_fields, sizeof (Dwg_COMPOUNDOBJECTID) },	/* 43 */
-  { "CONSTRAINTGROUPNODE", 0, NULL, _dwg_CONSTRAINTGROUPNODE_fields, sizeof (Dwg_CONSTRAINTGROUPNODE) },	/* 44 */
-  { "CONTEXTDATA_dict", 0, NULL, _dwg_CONTEXTDATA_dict_fields, sizeof (Dwg_CONTEXTDATA_dict) },	/* 45 */
-  { "CONTEXTDATA_submgr", 0, NULL, _dwg_CONTEXTDATA_submgr_fields, sizeof (Dwg_CONTEXTDATA_submgr) },	/* 46 */
-  { "CellContentGeometry", 0, NULL, _dwg_CellContentGeometry_fields, sizeof (Dwg_CellContentGeometry) },	/* 47 */
-  { "CellStyle", 0, NULL, _dwg_CellStyle_fields, sizeof (Dwg_CellStyle) },	/* 48 */
-  { "ColorRamp", 0, NULL, _dwg_ColorRamp_fields, sizeof (Dwg_ColorRamp) },	/* 49 */
-  { "ContentFormat", 0, NULL, _dwg_ContentFormat_fields, sizeof (Dwg_ContentFormat) },	/* 50 */
-  { "DATALINK_customdata", (int)DWG_TYPE_DATALINK, NULL, _dwg_DATALINK_customdata_fields, sizeof (Dwg_DATALINK_customdata) },	/* 51 */
-  { "DATATABLE_column", (int)DWG_TYPE_DATATABLE, NULL, _dwg_DATATABLE_column_fields, sizeof (Dwg_DATATABLE_column) },	/* 52 */
-  { "DATATABLE_row", (int)DWG_TYPE_DATATABLE, NULL, _dwg_DATATABLE_row_fields, sizeof (Dwg_DATATABLE_row) },	/* 53 */
-  { "DIMASSOC_Ref", (int)DWG_TYPE_DIMASSOC, NULL, _dwg_DIMASSOC_Ref_fields, sizeof (Dwg_DIMASSOC_Ref) },	/* 54 */
-  { "DIMENSION_common", 0, "AcDbDimension", _dwg_DIMENSION_common_fields, sizeof (Dwg_DIMENSION_common) },	/* 55 */
-  { "EVAL_Edge", 0, NULL, _dwg_EVAL_Edge_fields, sizeof (Dwg_EVAL_Edge) },	/* 56 */
-  { "EVAL_Node", 0, NULL, _dwg_EVAL_Node_fields, sizeof (Dwg_EVAL_Node) },	/* 57 */
-  { "EvalExpr", 0, NULL, _dwg_EvalExpr_fields, sizeof (Dwg_EvalExpr) },	/* 58 */
-  { "EvalVariant", 0, NULL, _dwg_EvalVariant_fields, sizeof (Dwg_EvalVariant) },	/* 59 */
-  { "FIELD_ChildValue", (int)DWG_TYPE_FIELD, NULL, _dwg_FIELD_ChildValue_fields, sizeof (Dwg_FIELD_ChildValue) },	/* 60 */
-  { "FileDepList_Files", 0, NULL, _dwg_FileDepList_Files_fields, sizeof (Dwg_FileDepList_Files) },	/* 61 */
-  { "FormattedTableData", 0, NULL, _dwg_FormattedTableData_fields, sizeof (Dwg_FormattedTableData) },	/* 62 */
-  { "FormattedTableMerged", 0, NULL, _dwg_FormattedTableMerged_fields, sizeof (Dwg_FormattedTableMerged) },	/* 63 */
-  { "GEODATA_meshface", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshface_fields, sizeof (Dwg_GEODATA_meshface) },	/* 64 */
-  { "GEODATA_meshpt", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshpt_fields, sizeof (Dwg_GEODATA_meshpt) },	/* 65 */
-  { "GridFormat", 0, NULL, _dwg_GridFormat_fields, sizeof (Dwg_GridFormat) },	/* 66 */
-  { "HATCH_Color", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_Color_fields, sizeof (Dwg_HATCH_Color) },	/* 67 */
-  { "HATCH_ControlPoint", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_ControlPoint_fields, sizeof (Dwg_HATCH_ControlPoint) },	/* 68 */
-  { "HATCH_DefLine", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_DefLine_fields, sizeof (Dwg_HATCH_DefLine) },	/* 69 */
-  { "HATCH_Path", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_Path_fields, sizeof (Dwg_HATCH_Path) },	/* 70 */
-  { "HATCH_PathSeg", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_PathSeg_fields, sizeof (Dwg_HATCH_PathSeg) },	/* 71 */
-  { "HATCH_PolylinePath", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_PolylinePath_fields, sizeof (Dwg_HATCH_PolylinePath) },	/* 72 */
-  { "LAYER_entry", (int)DWG_TYPE_LAYER, NULL, _dwg_LAYER_entry_fields, sizeof (Dwg_LAYER_entry) },	/* 73 */
-  { "LEADER_ArrowHead", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_ArrowHead_fields, sizeof (Dwg_LEADER_ArrowHead) },	/* 74 */
-  { "LEADER_BlockLabel", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_BlockLabel_fields, sizeof (Dwg_LEADER_BlockLabel) },	/* 75 */
-  { "LEADER_Break", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Break_fields, sizeof (Dwg_LEADER_Break) },	/* 76 */
-  { "LEADER_Line", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Line_fields, sizeof (Dwg_LEADER_Line) },	/* 77 */
-  { "LEADER_Node", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Node_fields, sizeof (Dwg_LEADER_Node) },	/* 78 */
-  { "LIGHTLIST_light", (int)DWG_TYPE_LIGHTLIST, NULL, _dwg_LIGHTLIST_light_fields, sizeof (Dwg_LIGHTLIST_light) },	/* 79 */
-  { "LTYPE_dash", (int)DWG_TYPE_LTYPE, NULL, _dwg_LTYPE_dash_fields, sizeof (Dwg_LTYPE_dash) },	/* 80 */
-  { "LWPOLYLINE_width", (int)DWG_TYPE_LWPOLYLINE, NULL, _dwg_LWPOLYLINE_width_fields, sizeof (Dwg_LWPOLYLINE_width) },	/* 81 */
-  { "LinkedData", 0, NULL, _dwg_LinkedData_fields, sizeof (Dwg_LinkedData) },	/* 82 */
-  { "LinkedTableData", 0, NULL, _dwg_LinkedTableData_fields, sizeof (Dwg_LinkedTableData) },	/* 83 */
-  { "MATERIAL_color", (int)DWG_TYPE_MATERIAL, NULL, _dwg_MATERIAL_color_fields, sizeof (Dwg_MATERIAL_color) },	/* 84 */
-  { "MATERIAL_gentexture", (int)DWG_TYPE_MATERIAL, NULL, _dwg_MATERIAL_gentexture_fields, sizeof (Dwg_MATERIAL_gentexture) },	/* 85 */
-  { "MATERIAL_mapper", (int)DWG_TYPE_MATERIAL, NULL, _dwg_MATERIAL_mapper_fields, sizeof (Dwg_MATERIAL_mapper) },	/* 86 */
-  { "MESH_edge", (int)DWG_TYPE_MESH, NULL, _dwg_MESH_edge_fields, sizeof (Dwg_MESH_edge) },	/* 87 */
-  { "MLEADER_AnnotContext", 0, "AcDbMLeaderAnnotContext", _dwg_MLEADER_AnnotContext_fields, sizeof (Dwg_MLEADER_AnnotContext) },	/* 88 */
-  { "MLEADER_Content", 0, NULL, _dwg_MLEADER_Content_fields, sizeof (Dwg_MLEADER_Content) },	/* 89 */
-  { "MLEADER_Content_Block", 0, NULL, _dwg_MLEADER_Content_Block_fields, sizeof (Dwg_MLEADER_Content_Block) },	/* 90 */
-  { "MLEADER_Content_MText", 0, NULL, _dwg_MLEADER_Content_MText_fields, sizeof (Dwg_MLEADER_Content_MText) },	/* 91 */
-  { "MLINESTYLE_line", (int)DWG_TYPE_MLINESTYLE, NULL, _dwg_MLINESTYLE_line_fields, sizeof (Dwg_MLINESTYLE_line) },	/* 92 */
-  { "MLINE_line", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_line_fields, sizeof (Dwg_MLINE_line) },	/* 93 */
-  { "MLINE_vertex", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_vertex_fields, sizeof (Dwg_MLINE_vertex) },	/* 94 */
-  { "OCD_Dimension", 0, "AcDbDimensionObjectContextData", _dwg_OCD_Dimension_fields, sizeof (Dwg_OCD_Dimension) },	/* 95 */
-  { "PARTIAL_VIEWING_INDEX_Entry", (int)DWG_TYPE_PARTIAL_VIEWING_INDEX, NULL, _dwg_PARTIAL_VIEWING_INDEX_Entry_fields, sizeof (Dwg_PARTIAL_VIEWING_INDEX_Entry) },	/* 96 */
-  { "POINTCLOUDCOLORMAP_Ramp", (int)DWG_TYPE_POINTCLOUDCOLORMAP, NULL, _dwg_POINTCLOUDCOLORMAP_Ramp_fields, sizeof (Dwg_POINTCLOUDCOLORMAP_Ramp) },	/* 97 */
-  { "POINTCLOUDEX_Croppings", (int)DWG_TYPE_POINTCLOUDEX, NULL, _dwg_POINTCLOUDEX_Croppings_fields, sizeof (Dwg_POINTCLOUDEX_Croppings) },	/* 98 */
-  { "POINTCLOUD_Clippings", (int)DWG_TYPE_POINTCLOUD, NULL, _dwg_POINTCLOUD_Clippings_fields, sizeof (Dwg_POINTCLOUD_Clippings) },	/* 99 */
-  { "POINTCLOUD_IntensityStyle", (int)DWG_TYPE_POINTCLOUD, NULL, _dwg_POINTCLOUD_IntensityStyle_fields, sizeof (Dwg_POINTCLOUD_IntensityStyle) },	/* 100 */
-  { "PROXY_LWPOLYLINE", 0, NULL, _dwg_PROXY_LWPOLYLINE_fields, sizeof (Dwg_PROXY_LWPOLYLINE) },	/* 101 */
-  { "R2004_Header", 0, NULL, _dwg_R2004_Header_fields, sizeof (Dwg_R2004_Header) },	/* 102 */
-  { "SECTION_geometrysettings", 0, NULL, _dwg_SECTION_geometrysettings_fields, sizeof (Dwg_SECTION_geometrysettings) },	/* 103 */
-  { "SECTION_typesettings", 0, NULL, _dwg_SECTION_typesettings_fields, sizeof (Dwg_SECTION_typesettings) },	/* 104 */
-  { "SPLINE_control_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_control_point_fields, sizeof (Dwg_SPLINE_control_point) },	/* 105 */
-  { "SUNSTUDY_Dates", (int)DWG_TYPE_SUNSTUDY, NULL, _dwg_SUNSTUDY_Dates_fields, sizeof (Dwg_SUNSTUDY_Dates) },	/* 106 */
-  { "SummaryInfo_Property", 0, NULL, _dwg_SummaryInfo_Property_fields, sizeof (Dwg_SummaryInfo_Property) },	/* 107 */
-  { "TABLEGEOMETRY_Cell", (int)DWG_TYPE_TABLEGEOMETRY, NULL, _dwg_TABLEGEOMETRY_Cell_fields, sizeof (Dwg_TABLEGEOMETRY_Cell) },	/* 108 */
-  { "TABLESTYLE_CellStyle", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_CellStyle_fields, sizeof (Dwg_TABLESTYLE_CellStyle) },	/* 109 */
-  { "TABLESTYLE_border", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_border_fields, sizeof (Dwg_TABLESTYLE_border) },	/* 110 */
-  { "TABLESTYLE_rowstyles", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_rowstyles_fields, sizeof (Dwg_TABLESTYLE_rowstyles) },	/* 111 */
-  { "TABLE_AttrDef", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_AttrDef_fields, sizeof (Dwg_TABLE_AttrDef) },	/* 112 */
-  { "TABLE_BreakHeight", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakHeight_fields, sizeof (Dwg_TABLE_BreakHeight) },	/* 113 */
-  { "TABLE_BreakRow", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakRow_fields, sizeof (Dwg_TABLE_BreakRow) },	/* 114 */
-  { "TABLE_Cell", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_Cell_fields, sizeof (Dwg_TABLE_Cell) },	/* 115 */
-  { "TABLE_CustomDataItem", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_CustomDataItem_fields, sizeof (Dwg_TABLE_CustomDataItem) },	/* 116 */
-  { "TABLE_value", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_value_fields, sizeof (Dwg_TABLE_value) },	/* 117 */
-  { "TableCell", 0, NULL, _dwg_TableCell_fields, sizeof (Dwg_TableCell) },	/* 118 */
-  { "TableCellContent", 0, NULL, _dwg_TableCellContent_fields, sizeof (Dwg_TableCellContent) },	/* 119 */
-  { "TableCellContent_Attr", 0, NULL, _dwg_TableCellContent_Attr_fields, sizeof (Dwg_TableCellContent_Attr) },	/* 120 */
-  { "TableDataColumn", 0, NULL, _dwg_TableDataColumn_fields, sizeof (Dwg_TableDataColumn) },	/* 121 */
-  { "TableRow", 0, NULL, _dwg_TableRow_fields, sizeof (Dwg_TableRow) },	/* 122 */
-  { "UCS_orthopts", (int)DWG_TYPE_UCS, NULL, _dwg_UCS_orthopts_fields, sizeof (Dwg_UCS_orthopts) },	/* 123 */
-  { "VALUEPARAM", 0, NULL, _dwg_VALUEPARAM_fields, sizeof (Dwg_VALUEPARAM) },	/* 124 */
-  { "VALUEPARAM_vars", 0, NULL, _dwg_VALUEPARAM_vars_fields, sizeof (Dwg_VALUEPARAM_vars) },	/* 125 */
+  { "BLOCKSTRETCHACTION_codes", (int)DWG_TYPE_BLOCKSTRETCHACTION, NULL, _dwg_BLOCKSTRETCHACTION_codes_fields, sizeof (Dwg_BLOCKSTRETCHACTION_codes) },	/* 39 */
+  { "BLOCKSTRETCHACTION_handles", (int)DWG_TYPE_BLOCKSTRETCHACTION, NULL, _dwg_BLOCKSTRETCHACTION_handles_fields, sizeof (Dwg_BLOCKSTRETCHACTION_handles) },	/* 40 */
+  { "BLOCKVISIBILITYPARAMETER_state", (int)DWG_TYPE_BLOCKVISIBILITYPARAMETER, NULL, _dwg_BLOCKVISIBILITYPARAMETER_state_fields, sizeof (Dwg_BLOCKVISIBILITYPARAMETER_state) },	/* 41 */
+  { "COMPOUNDOBJECTID", 0, NULL, _dwg_COMPOUNDOBJECTID_fields, sizeof (Dwg_COMPOUNDOBJECTID) },	/* 42 */
+  { "CONSTRAINTGROUPNODE", 0, NULL, _dwg_CONSTRAINTGROUPNODE_fields, sizeof (Dwg_CONSTRAINTGROUPNODE) },	/* 43 */
+  { "CONTEXTDATA_dict", 0, NULL, _dwg_CONTEXTDATA_dict_fields, sizeof (Dwg_CONTEXTDATA_dict) },	/* 44 */
+  { "CONTEXTDATA_submgr", 0, NULL, _dwg_CONTEXTDATA_submgr_fields, sizeof (Dwg_CONTEXTDATA_submgr) },	/* 45 */
+  { "CellContentGeometry", 0, NULL, _dwg_CellContentGeometry_fields, sizeof (Dwg_CellContentGeometry) },	/* 46 */
+  { "CellStyle", 0, NULL, _dwg_CellStyle_fields, sizeof (Dwg_CellStyle) },	/* 47 */
+  { "ColorRamp", 0, NULL, _dwg_ColorRamp_fields, sizeof (Dwg_ColorRamp) },	/* 48 */
+  { "ContentFormat", 0, NULL, _dwg_ContentFormat_fields, sizeof (Dwg_ContentFormat) },	/* 49 */
+  { "DATALINK_customdata", (int)DWG_TYPE_DATALINK, NULL, _dwg_DATALINK_customdata_fields, sizeof (Dwg_DATALINK_customdata) },	/* 50 */
+  { "DATATABLE_column", (int)DWG_TYPE_DATATABLE, NULL, _dwg_DATATABLE_column_fields, sizeof (Dwg_DATATABLE_column) },	/* 51 */
+  { "DATATABLE_row", (int)DWG_TYPE_DATATABLE, NULL, _dwg_DATATABLE_row_fields, sizeof (Dwg_DATATABLE_row) },	/* 52 */
+  { "DIMASSOC_Ref", (int)DWG_TYPE_DIMASSOC, NULL, _dwg_DIMASSOC_Ref_fields, sizeof (Dwg_DIMASSOC_Ref) },	/* 53 */
+  { "DIMENSION_common", 0, "AcDbDimension", _dwg_DIMENSION_common_fields, sizeof (Dwg_DIMENSION_common) },	/* 54 */
+  { "EVAL_Edge", 0, NULL, _dwg_EVAL_Edge_fields, sizeof (Dwg_EVAL_Edge) },	/* 55 */
+  { "EVAL_Node", 0, NULL, _dwg_EVAL_Node_fields, sizeof (Dwg_EVAL_Node) },	/* 56 */
+  { "EvalExpr", 0, NULL, _dwg_EvalExpr_fields, sizeof (Dwg_EvalExpr) },	/* 57 */
+  { "EvalVariant", 0, NULL, _dwg_EvalVariant_fields, sizeof (Dwg_EvalVariant) },	/* 58 */
+  { "FIELD_ChildValue", (int)DWG_TYPE_FIELD, NULL, _dwg_FIELD_ChildValue_fields, sizeof (Dwg_FIELD_ChildValue) },	/* 59 */
+  { "FileDepList_Files", 0, NULL, _dwg_FileDepList_Files_fields, sizeof (Dwg_FileDepList_Files) },	/* 60 */
+  { "FormattedTableData", 0, NULL, _dwg_FormattedTableData_fields, sizeof (Dwg_FormattedTableData) },	/* 61 */
+  { "FormattedTableMerged", 0, NULL, _dwg_FormattedTableMerged_fields, sizeof (Dwg_FormattedTableMerged) },	/* 62 */
+  { "GEODATA_meshface", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshface_fields, sizeof (Dwg_GEODATA_meshface) },	/* 63 */
+  { "GEODATA_meshpt", (int)DWG_TYPE_GEODATA, NULL, _dwg_GEODATA_meshpt_fields, sizeof (Dwg_GEODATA_meshpt) },	/* 64 */
+  { "GridFormat", 0, NULL, _dwg_GridFormat_fields, sizeof (Dwg_GridFormat) },	/* 65 */
+  { "HATCH_Color", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_Color_fields, sizeof (Dwg_HATCH_Color) },	/* 66 */
+  { "HATCH_ControlPoint", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_ControlPoint_fields, sizeof (Dwg_HATCH_ControlPoint) },	/* 67 */
+  { "HATCH_DefLine", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_DefLine_fields, sizeof (Dwg_HATCH_DefLine) },	/* 68 */
+  { "HATCH_Path", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_Path_fields, sizeof (Dwg_HATCH_Path) },	/* 69 */
+  { "HATCH_PathSeg", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_PathSeg_fields, sizeof (Dwg_HATCH_PathSeg) },	/* 70 */
+  { "HATCH_PolylinePath", (int)DWG_TYPE_HATCH, NULL, _dwg_HATCH_PolylinePath_fields, sizeof (Dwg_HATCH_PolylinePath) },	/* 71 */
+  { "LAYER_entry", (int)DWG_TYPE_LAYER, NULL, _dwg_LAYER_entry_fields, sizeof (Dwg_LAYER_entry) },	/* 72 */
+  { "LEADER_ArrowHead", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_ArrowHead_fields, sizeof (Dwg_LEADER_ArrowHead) },	/* 73 */
+  { "LEADER_BlockLabel", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_BlockLabel_fields, sizeof (Dwg_LEADER_BlockLabel) },	/* 74 */
+  { "LEADER_Break", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Break_fields, sizeof (Dwg_LEADER_Break) },	/* 75 */
+  { "LEADER_Line", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Line_fields, sizeof (Dwg_LEADER_Line) },	/* 76 */
+  { "LEADER_Node", (int)DWG_TYPE_LEADER, NULL, _dwg_LEADER_Node_fields, sizeof (Dwg_LEADER_Node) },	/* 77 */
+  { "LIGHTLIST_light", (int)DWG_TYPE_LIGHTLIST, NULL, _dwg_LIGHTLIST_light_fields, sizeof (Dwg_LIGHTLIST_light) },	/* 78 */
+  { "LTYPE_dash", (int)DWG_TYPE_LTYPE, NULL, _dwg_LTYPE_dash_fields, sizeof (Dwg_LTYPE_dash) },	/* 79 */
+  { "LWPOLYLINE_width", (int)DWG_TYPE_LWPOLYLINE, NULL, _dwg_LWPOLYLINE_width_fields, sizeof (Dwg_LWPOLYLINE_width) },	/* 80 */
+  { "LinkedData", 0, NULL, _dwg_LinkedData_fields, sizeof (Dwg_LinkedData) },	/* 81 */
+  { "LinkedTableData", 0, NULL, _dwg_LinkedTableData_fields, sizeof (Dwg_LinkedTableData) },	/* 82 */
+  { "MATERIAL_color", (int)DWG_TYPE_MATERIAL, NULL, _dwg_MATERIAL_color_fields, sizeof (Dwg_MATERIAL_color) },	/* 83 */
+  { "MATERIAL_gentexture", (int)DWG_TYPE_MATERIAL, NULL, _dwg_MATERIAL_gentexture_fields, sizeof (Dwg_MATERIAL_gentexture) },	/* 84 */
+  { "MATERIAL_mapper", (int)DWG_TYPE_MATERIAL, NULL, _dwg_MATERIAL_mapper_fields, sizeof (Dwg_MATERIAL_mapper) },	/* 85 */
+  { "MESH_edge", (int)DWG_TYPE_MESH, NULL, _dwg_MESH_edge_fields, sizeof (Dwg_MESH_edge) },	/* 86 */
+  { "MLEADER_AnnotContext", 0, "AcDbMLeaderAnnotContext", _dwg_MLEADER_AnnotContext_fields, sizeof (Dwg_MLEADER_AnnotContext) },	/* 87 */
+  { "MLEADER_Content", 0, NULL, _dwg_MLEADER_Content_fields, sizeof (Dwg_MLEADER_Content) },	/* 88 */
+  { "MLEADER_Content_Block", 0, NULL, _dwg_MLEADER_Content_Block_fields, sizeof (Dwg_MLEADER_Content_Block) },	/* 89 */
+  { "MLEADER_Content_MText", 0, NULL, _dwg_MLEADER_Content_MText_fields, sizeof (Dwg_MLEADER_Content_MText) },	/* 90 */
+  { "MLINESTYLE_line", (int)DWG_TYPE_MLINESTYLE, NULL, _dwg_MLINESTYLE_line_fields, sizeof (Dwg_MLINESTYLE_line) },	/* 91 */
+  { "MLINE_line", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_line_fields, sizeof (Dwg_MLINE_line) },	/* 92 */
+  { "MLINE_vertex", (int)DWG_TYPE_MLINE, NULL, _dwg_MLINE_vertex_fields, sizeof (Dwg_MLINE_vertex) },	/* 93 */
+  { "OCD_Dimension", 0, "AcDbDimensionObjectContextData", _dwg_OCD_Dimension_fields, sizeof (Dwg_OCD_Dimension) },	/* 94 */
+  { "PARTIAL_VIEWING_INDEX_Entry", (int)DWG_TYPE_PARTIAL_VIEWING_INDEX, NULL, _dwg_PARTIAL_VIEWING_INDEX_Entry_fields, sizeof (Dwg_PARTIAL_VIEWING_INDEX_Entry) },	/* 95 */
+  { "POINTCLOUDCOLORMAP_Ramp", (int)DWG_TYPE_POINTCLOUDCOLORMAP, NULL, _dwg_POINTCLOUDCOLORMAP_Ramp_fields, sizeof (Dwg_POINTCLOUDCOLORMAP_Ramp) },	/* 96 */
+  { "POINTCLOUDEX_Croppings", (int)DWG_TYPE_POINTCLOUDEX, NULL, _dwg_POINTCLOUDEX_Croppings_fields, sizeof (Dwg_POINTCLOUDEX_Croppings) },	/* 97 */
+  { "POINTCLOUD_Clippings", (int)DWG_TYPE_POINTCLOUD, NULL, _dwg_POINTCLOUD_Clippings_fields, sizeof (Dwg_POINTCLOUD_Clippings) },	/* 98 */
+  { "POINTCLOUD_IntensityStyle", (int)DWG_TYPE_POINTCLOUD, NULL, _dwg_POINTCLOUD_IntensityStyle_fields, sizeof (Dwg_POINTCLOUD_IntensityStyle) },	/* 99 */
+  { "PROXY_LWPOLYLINE", 0, NULL, _dwg_PROXY_LWPOLYLINE_fields, sizeof (Dwg_PROXY_LWPOLYLINE) },	/* 100 */
+  { "R2004_Header", 0, NULL, _dwg_R2004_Header_fields, sizeof (Dwg_R2004_Header) },	/* 101 */
+  { "SECTION_geometrysettings", 0, NULL, _dwg_SECTION_geometrysettings_fields, sizeof (Dwg_SECTION_geometrysettings) },	/* 102 */
+  { "SECTION_typesettings", 0, NULL, _dwg_SECTION_typesettings_fields, sizeof (Dwg_SECTION_typesettings) },	/* 103 */
+  { "SPLINE_control_point", (int)DWG_TYPE_SPLINE, NULL, _dwg_SPLINE_control_point_fields, sizeof (Dwg_SPLINE_control_point) },	/* 104 */
+  { "SUNSTUDY_Dates", (int)DWG_TYPE_SUNSTUDY, NULL, _dwg_SUNSTUDY_Dates_fields, sizeof (Dwg_SUNSTUDY_Dates) },	/* 105 */
+  { "SummaryInfo_Property", 0, NULL, _dwg_SummaryInfo_Property_fields, sizeof (Dwg_SummaryInfo_Property) },	/* 106 */
+  { "TABLEGEOMETRY_Cell", (int)DWG_TYPE_TABLEGEOMETRY, NULL, _dwg_TABLEGEOMETRY_Cell_fields, sizeof (Dwg_TABLEGEOMETRY_Cell) },	/* 107 */
+  { "TABLESTYLE_CellStyle", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_CellStyle_fields, sizeof (Dwg_TABLESTYLE_CellStyle) },	/* 108 */
+  { "TABLESTYLE_border", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_border_fields, sizeof (Dwg_TABLESTYLE_border) },	/* 109 */
+  { "TABLESTYLE_rowstyles", (int)DWG_TYPE_TABLESTYLE, NULL, _dwg_TABLESTYLE_rowstyles_fields, sizeof (Dwg_TABLESTYLE_rowstyles) },	/* 110 */
+  { "TABLE_AttrDef", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_AttrDef_fields, sizeof (Dwg_TABLE_AttrDef) },	/* 111 */
+  { "TABLE_BreakHeight", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakHeight_fields, sizeof (Dwg_TABLE_BreakHeight) },	/* 112 */
+  { "TABLE_BreakRow", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_BreakRow_fields, sizeof (Dwg_TABLE_BreakRow) },	/* 113 */
+  { "TABLE_Cell", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_Cell_fields, sizeof (Dwg_TABLE_Cell) },	/* 114 */
+  { "TABLE_CustomDataItem", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_CustomDataItem_fields, sizeof (Dwg_TABLE_CustomDataItem) },	/* 115 */
+  { "TABLE_value", (int)DWG_TYPE_TABLE, NULL, _dwg_TABLE_value_fields, sizeof (Dwg_TABLE_value) },	/* 116 */
+  { "TableCell", 0, NULL, _dwg_TableCell_fields, sizeof (Dwg_TableCell) },	/* 117 */
+  { "TableCellContent", 0, NULL, _dwg_TableCellContent_fields, sizeof (Dwg_TableCellContent) },	/* 118 */
+  { "TableCellContent_Attr", 0, NULL, _dwg_TableCellContent_Attr_fields, sizeof (Dwg_TableCellContent_Attr) },	/* 119 */
+  { "TableDataColumn", 0, NULL, _dwg_TableDataColumn_fields, sizeof (Dwg_TableDataColumn) },	/* 120 */
+  { "TableRow", 0, NULL, _dwg_TableRow_fields, sizeof (Dwg_TableRow) },	/* 121 */
+  { "UCS_orthopts", (int)DWG_TYPE_UCS, NULL, _dwg_UCS_orthopts_fields, sizeof (Dwg_UCS_orthopts) },	/* 122 */
+  { "VALUEPARAM", 0, NULL, _dwg_VALUEPARAM_fields, sizeof (Dwg_VALUEPARAM) },	/* 123 */
+  { "VALUEPARAM_vars", 0, NULL, _dwg_VALUEPARAM_vars_fields, sizeof (Dwg_VALUEPARAM_vars) },	/* 124 */
 
 };
 
@@ -14105,7 +14086,7 @@ dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
       if (is_tu && strNE (f->type, "TF")) /* not TF */
         {
           BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
-          char *utf8 = bit_convert_TU (wstr);
+          char *utf8 = bit_TU_to_utf8 (wstr);
           if (wstr && !utf8) // some conversion error, invalid wchar (nyi)
             return false;
           *out = utf8;
@@ -14177,7 +14158,7 @@ dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
         if (is_tu && !is_fixed) /* not TF */
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
-            char *utf8 = bit_convert_TU (wstr);
+            char *utf8 = bit_TU_to_utf8 (wstr);
             if (wstr && !utf8) // some conversion error, invalid wchar (nyi)
               return false;
             *out = utf8;
@@ -14314,7 +14295,7 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
         if (is_tu && strNE (f->type, "TF")) /* not TF */
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
-            char *utf8 = bit_convert_TU (wstr);
+            char *utf8 = bit_TU_to_utf8 (wstr);
             if (wstr && !utf8) // some conversion error, invalid wchar (nyi)
               return false;
             *out = utf8;
@@ -14771,7 +14752,7 @@ dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
       {
         BITCODE_TU wstr = *(BITCODE_TU *)((char *)_obj + f->offset);
         *alloced = 1;
-        return bit_convert_TU (wstr);
+        return bit_TU_to_utf8 (wstr);
       }
     else
       {

@@ -2273,11 +2273,11 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
       ATTRIBUTE_ALIGNED (2) BITCODE_T u8;
       if (!nod->texts || !nod->itemhandles)
         continue;
-      u8 = nod->texts[j];
+      u8 = *nod->texts[j];
       if (!u8)
         continue;
       if (IS_FROM_TU_DWG (dwg))
-        u8 = bit_convert_TU ((BITCODE_TU)u8);
+        u8 = bit_convert_TU (u8);
       if (u8 && strEQ (u8, name))
         {
           Dwg_Object_Ref *ref = nod->itemhandles[j];
@@ -2324,21 +2324,13 @@ dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict,
     return NULL;
   for (i = 0; i < _obj->numitems; i++)
     {
-      ATTRIBUTE_ALIGNED (2) BITCODE_T *texts = _obj->texts;
+      ATTRIBUTE_ALIGNED (2) BITCODE_T **texts = _obj->texts;
       BITCODE_H *hdlv = _obj->itemhandles;
 
       if (!hdlv || !texts || !texts[i])
         continue;
-      if (IS_FROM_TU_DWG (dwg))
-        {
-          if (bit_eq_TU (name, (BITCODE_TU)texts[i]))
-            return hdlv[i];
-        }
-      else
-        {
-          if (strEQ (name, texts[i]))
-            return hdlv[i];
-        }
+      if (bit_eq_T (texts[i], name))
+        return hdlv[i];
     }
   return NULL;
 }
@@ -2912,8 +2904,8 @@ dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
 
 /* Returns the string value of the member of the AcDbVariableDictionary.
    NULL if not found.
-   The name is ascii. E.g. LIGHTINGUNITS => "0" */
-EXPORT char *
+   E.g. LIGHTINGUNITS => "0" */
+EXPORT BITCODE_T *
 dwg_variable_dict (Dwg_Data *restrict dwg, const char *restrict name)
 {
   BITCODE_H var_dict = NULL;
