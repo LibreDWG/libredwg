@@ -545,10 +545,10 @@
   {                                                                           \
     SINCE (R_13b1) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }  \
     _obj->nam = bit_read_TF (dat, (size_t)len);                               \
-    LOG_TRACE (#nam ": \"%s\" [TF %" PRIuSIZE " " #dxf "]", _obj->nam, (size_t)len);    \
+    LOG_TRACE (#nam ": \"%s\" [TF %u " #dxf "]", _obj->nam, (unsigned)len);   \
     if (!_obj->nam)                                                           \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
-    LOG_INSANE (" @%" PRIuSIZE ".%u", dat->byte, (unsigned)dat->bit)                    \
+    LOG_INSANE (" @%" PRIuSIZE ".%u", dat->byte, (unsigned)dat->bit)          \
     LOG_TRACE ("\n")                                                          \
     LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
   }
@@ -556,9 +556,9 @@
   {                                                                           \
     /* if (_obj->nam) free (_obj->nam); // preR13 add_Document defaults */    \
     SINCE (R_13b1) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }  \
-    _obj->nam = (BITCODE_TV)bit_read_TF (dat, (size_t)len);                   \
-    LOG_TRACE (#nam ": \"%s\" [TFv %" PRIuSIZE " " #dxf "]", _obj->nam,       \
-               (size_t)len);                                                  \
+    _obj->nam = SET_STR ((char*)bit_read_TF (dat, (size_t)len));              \
+    LOG_TRACE (#nam ": \"%s\" [TFv %u " #dxf "]", _obj->nam->str,             \
+               (unsigned)len);                                                \
     if (!_obj->nam)                                                           \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     LOG_RPOS                                                                  \
