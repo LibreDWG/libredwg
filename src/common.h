@@ -623,6 +623,16 @@ void *memmem (const void *h0, size_t k, const void *n0, size_t l)
     __nonnull ((1, 3));
 #endif
 
+// DWG src encoding is either codepage or UTF-16
+#define SET_STR(src)                                                          \
+  (Dwg_String *)({                                                            \
+    Dwg_String *str = (Dwg_String *)calloc (1, sizeof (Dwg_String));          \
+    str->str = strdup (src);                                                  \
+    str->len = strlen (src);                                                  \
+    str->cp = dwg->header.from_version < R_2007 ? dwg->header.codepage : CP_UTF16;  \
+    str;                                                                      \
+  })
+
 // push to handle vector at the end. It really is unshift.
 #define PUSH_HV(_obj, numfield, hvfield, ref)                                 \
   if (_obj->numfield <= 0 || _obj->hvfield[_obj->numfield - 1] != ref)        \
