@@ -1671,7 +1671,7 @@ fixup_NOD (Dwg_Data *restrict dwg,
     {                                                                         \
       if (is_tu)                                                              \
         {                                                                     \
-          char *u8 = bit_convert_TU ((BITCODE_TU)_obj->texts[i]);             \
+          char *u8 = bit_TU_to_utf8 ((BITCODE_TU)_obj->texts[i]);             \
           if (u8 && strEQc (u8, "ACAD_" #name))                               \
             remove_NOD_item (_obj, i, "ACAD_" #name);                         \
           free (u8);                                                          \
