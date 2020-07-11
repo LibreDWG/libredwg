@@ -6898,7 +6898,7 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
       if (dwg->header.version >= R_13)
         {
           owned = (BITCODE_H *)realloc (owned, num_owned * sizeof (BITCODE_H));
-          owned[j] = dwg_add_handleref (dwg, 4, _o->handle.value, owner);
+          owned[j] = dwg_add_handleref (dwg, 3, _o->handle.value, owner);
           LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [H* 0]\n", owner->name,
                      owhdls, j, ARGS_REF (owned[j]));
         }
