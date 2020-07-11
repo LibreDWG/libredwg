@@ -6069,7 +6069,7 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
           if (!_obj)
             continue;
           _objname
-              = is_uni ? bit_convert_TU ((BITCODE_TU)_obj->name) : _obj->name;
+              = is_uni ? bit_TU_to_utf8 ((BITCODE_TU)_obj->name) : _obj->name;
           LOG_TRACE ("BLOCK_HEADER %s: %u\n", _objname,
                      (unsigned)_obj->num_owned);
           if (!_obj->entities)

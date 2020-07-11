@@ -235,11 +235,11 @@ void bit_write_T16 (Bit_Chain *restrict dat, BITCODE_T16 restrict value);
 void bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict value);
 void bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict value);
 
-BITCODE_T bit_read_T (Bit_Chain *restrict dat) ATTRIBUTE_MALLOC;
-void bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict chain);
+BITCODE_T* bit_read_T (Bit_Chain *restrict dat) ATTRIBUTE_MALLOC;
+void bit_write_T (Bit_Chain *restrict dat, BITCODE_T *restrict chain);
 
 /* Converts UCS-2 to ASCII (with \U+XXXX), returning a copy. */
-EXPORT char *bit_embed_TU (BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
+EXPORT char *bit_embed_TU (BITCODE_T *restrict tstr) ATTRIBUTE_MALLOC;
 EXPORT char *bit_embed_TU_size (BITCODE_TU restrict wstr,
                                 const int len) ATTRIBUTE_MALLOC;
 
@@ -274,10 +274,12 @@ size_t bit_strnlen (const char *restrict str, const size_t maxlen);
 #  define strnlen(str, maxlen) bit_strnlen (str, maxlen)
 #endif
 
+/* Converts UCS-2 to UTF-8, returning a copy. */
+EXPORT char *bit_convert_TU (BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
+
 /* Convert UCS-2LE to UTF-8, returning a copy. */
-EXPORT char *bit_convert_TU (const BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
-EXPORT char *bit_TU_to_utf8_len (const BITCODE_TU restrict wstr,
-                                 const int len) ATTRIBUTE_MALLOC;
+EXPORT char *bit_TU_to_utf8 (BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
+EXPORT char *bit_T_to_utf8 (const BITCODE_T *restrict tstr);
 
 /** Converts UTF-8 (dxf,json) to ASCII TV.
     \uxxxx or other unicode => \U+XXXX if not representable in this codepage.
@@ -305,14 +307,17 @@ EXPORT BITCODE_TU bit_utf8_to_TU (char *restrict str,
 // convert all \\U+XXXX and \\M+nXXXX sequences to UTF-8
 char *bit_u_expand (char *src);
 
-/* compare an ASCII/TU string to ASCII name */
-int bit_eq_T (Bit_Chain *restrict dat, const BITCODE_T restrict str1,
-              const char *restrict str2);
+/* compare two strings, the 2nd string being raw */
+int bit_eq_T (const BITCODE_T *restrict str1, const char *restrict str2);
+/* compare two T strings */
+int bit_eq_T_T (const BITCODE_T *restrict str1,
+                const BITCODE_T *restrict str2);
 /* compare an ASCII/utf-8 string to a r2007+ name */
 int bit_eq_TU (const char *str, BITCODE_TU restrict wstr);
 /* check if the string (ascii or unicode) is empty */
-int bit_empty_T (Bit_Chain *restrict dat, BITCODE_T restrict str);
-BITCODE_T bit_set_T (Bit_Chain *restrict dat, const char *restrict src);
+int bit_empty_T (Bit_Chain *restrict dat, BITCODE_T *restrict str);
+BITCODE_T *bit_set_T (Bit_Chain *restrict dat,
+                      const char *restrict src) ATTRIBUTE_MALLOC;
 
 BITCODE_TIMEBLL bit_read_TIMEBLL (Bit_Chain *dat);
 void bit_write_TIMEBLL (Bit_Chain *dat, BITCODE_TIMEBLL date);
