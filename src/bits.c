@@ -2173,16 +2173,27 @@ bit_strnlen (const char *restrict str, const size_t maxlen)
 
 /* converts TU to ASCII with embedded \U+XXXX */
 char *
-bit_embed_TU (BITCODE_TU restrict wstr)
+bit_embed_TU (BITCODE_T *restrict tstr)
 {
-  BITCODE_TU tmp = wstr;
-  int len = 0;
-
-  if (!wstr)
-    return NULL;
-  while (*tmp++)
-    len++;
-  return bit_embed_TU_size (wstr, len);
+  if (tstr->cp == CP_UTF16)
+    return bit_embed_TU_size ((BITCODE_TU)tstr->str, tstr->len);
+  else if (tstr->cp == CP_UTF8)
+    {
+      char *dest = (char *)malloc (tstr->len);
+      int len = tstr->len;
+      if (!dest)
+        return dest;
+      while (!bit_utf8_to_TV (dest, (unsigned char *)tstr->str, len))
+        {
+          len += 8;
+          dest = realloc (dest, len);
+          if (!dest)
+            return dest;
+        }
+      return dest;
+    }
+  else // FIXME iconv codepages
+    return tstr->str;
 }
 
 /** Write ASCIIZ text.
@@ -2278,14 +2289,13 @@ hexval (int c)
 /** Write ASCII or Unicode text.
  */
 void
-bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
+bit_write_T (Bit_Chain *restrict dat, BITCODE_T *restrict s)
 {
   size_t i, length;
 
-  // only if from r2007+ DWG. not JSON, DXF, add API.
-  if (IS_FROM_TU (dat))
+  if (s->cp == CP_UTF16)
     {
-      // downconvert TU to TV
+      // downconvert TU to TV. FIXME iconv codepages
       if (dat->version < R_2007)
         {
           if (!s)
@@ -2321,11 +2331,12 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
         }
       else
         {
-          bit_write_TU (dat, (BITCODE_TU)s);
+          bit_write_TU (dat, (BITCODE_TU)s->str);
         }
     }
   else
     {
+      // FIXME iconv codepages
       // convert TV to TU. parse \U+xxxx to wchars
       if (dat->version >= R_2007)
         {
@@ -2335,9 +2346,8 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
             }
           else
             {
-              const size_t len = strlen (s);
-              const char *endp = s + len;
-              BITCODE_TU ws = (BITCODE_TU)malloc ((len + 1) * 2);
+              const char *endp = s->str + s->len;
+              BITCODE_TU ws = (BITCODE_TU)malloc ((s->len + 1) * 2);
               const BITCODE_TU orig = ws;
               // DXF in-memory strings are UTF-8 (in_dxf keeps them as read);
               // decode multi-byte sequences to UTF-16 so non-ASCII is not
@@ -2347,7 +2357,7 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
               // keep the byte-wise path. Both honour the inline \U+xxxx
               // escape.
               const bool is_utf8 = (dat->opts & DWG_OPTS_INDXF) != 0;
-              while (s < endp)
+              while (s->str < endp)
                 {
                   unsigned char c = (unsigned char)*s;
                   // \U+xxxx escape: shorter result
@@ -2439,7 +2449,7 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
             }
         }
       else
-        bit_write_TV (dat, s);
+        bit_write_TV (dat, s->str);
     }
 }
 
@@ -2911,20 +2921,77 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
     }
 }
 
-BITCODE_T
+BITCODE_T *
 bit_read_T (Bit_Chain *restrict dat)
 {
-  if (IS_FROM_TU (dat))
-    return (BITCODE_T)bit_read_TU (dat);
+  BITCODE_T *tstr = calloc (1, sizeof (BITCODE_T));
+  if (!tstr)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("Out of memory");
+      return NULL;
+    }
+  CHK_OVERFLOW_PLUS (1, __FUNCTION__, NULL)
+  tstr->len = bit_read_BS (dat);
+  if (dat->from_version >= R_2007)
+    {
+      BITCODE_TU chain;
+      CHK_OVERFLOW_PLUS (tstr->len * 2, __FUNCTION__, NULL)
+      chain = (BITCODE_TU)malloc ((tstr->len + 1) * 2);
+      if (!chain)
+        {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+          LOG_ERROR ("Out of memory")
+          return NULL;
+        }
+      for (unsigned i = 0; i < tstr->len; i++)
+        chain[i] = bit_read_RS (dat); // without byte swapping
+      // normally not needed, as the DWG itself contains the ending 0 as last
+      // char but we enforce writing it.
+      chain[tstr->len] = '\0';
+      tstr->str = (char *)chain;
+      return tstr;
+    }
   else
-    return (BITCODE_T)bit_read_TV (dat);
+    {
+      BITCODE_RC *chain;
+      CHK_OVERFLOW_PLUS (tstr->len, __FUNCTION__, NULL)
+      chain = (unsigned char *)malloc (tstr->len + 1);
+      if (!chain)
+        {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+          LOG_ERROR ("Out of memory");
+          return NULL;
+        }
+      for (unsigned i = 0; i < tstr->len; i++)
+        chain[i] = bit_read_RC (dat);
+      // normally not needed, as the DWG itself contains the ending \0 as last
+      // char
+      chain[tstr->len] = '\0';
+      tstr->str = (char *)chain;
+      tstr->cp = CP_DWG; // use dwg->header.codepage
+      return tstr;
+    }
 }
 
-/* converts UCS-2LE to UTF-8.
-   first pass to get the dest len. single malloc.
+/* converts Dwg_String* to UTF-8, returns a copy. */
+char *
+bit_T_to_utf8 (const BITCODE_T *restrict tstr)
+{
+  if (tstr->cp == CP_UTF16)
+    return bit_TU_to_utf8 ((BITCODE_TU)tstr->str);
+  else /*if (tstr->cp == CP_UTF8)
+    return tstr->str;
+  else
+    */
+    // FIXME iconv
+    return tstr->str;
+}
+
+/* converts UCS-2 to UTF-8, returns a copy (used for dxf, json or console out)
  */
 char *
-bit_convert_TU (const BITCODE_TU restrict wstr)
+bit_TU_to_utf8 (BITCODE_TU restrict wstr)
 {
   BITCODE_TU tmp = wstr;
   char *str;
@@ -3824,17 +3891,39 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
   return wstr;
 }
 
-/* compare an ASCII/TU string to ASCII name */
+/* compare an T string to ASCII name */
 int
-bit_eq_T (Bit_Chain *restrict dat, const BITCODE_T restrict wstr1,
-          const char *restrict str2)
+bit_eq_T (const BITCODE_T *restrict tstr, const char *restrict str)
 {
-  if (!wstr1 || !str2)
-    return str2 == wstr1;
-  if (IS_FROM_TU (dat))
-    return bit_eq_TU (str2, (BITCODE_TU)wstr1);
+  if (!tstr || !str)
+    return str == tstr;
+  if (tstr->cp == CP_UTF16)
+    return tstr->len == strlen (str) && bit_eq_TU (str, (BITCODE_TU)tstr->str);
   else
-    return !strcmp (wstr1, str2);
+    return !strcmp (tstr->str, str);
+}
+
+// compare two T strings
+int
+bit_eq_T_T (const BITCODE_T *restrict str1, const BITCODE_T *restrict str2)
+{
+  if (!str1 && !str2)
+    return 1;
+  if (!str1 || !str2)
+    return str1 == str2;
+  if (str1->cp == str2->cp)
+    return str1->len == str2->len && !memcmp (str1->str, str2->str, str1->len);
+  else // convert both to utf8
+    {
+      char *s1 = bit_T_to_utf8 (str1);
+      char *s2 = bit_T_to_utf8 (str1);
+      int result = !strcmp (s1, s2);
+      if (str1->cp == CP_UTF16)
+        free (s1);
+      if (str2->cp == CP_UTF16)
+        free (s2);
+      return result;
+    }
 }
 
 /* compare an ASCII/utf-8 string to a r2007+ name */
@@ -3845,7 +3934,7 @@ bit_eq_TU (const char *restrict str, BITCODE_TU restrict wstr)
   int result;
   if (!str)
     return (wstr && *wstr) ? 0 : 1;
-  utf8 = bit_convert_TU (wstr);
+  char *utf8 = bit_TU_to_utf8 (wstr);
   result = utf8 ? (strcmp (str, utf8) ? 0 : 1) : 0;
   free (utf8);
   return result;
@@ -3853,36 +3942,36 @@ bit_eq_TU (const char *restrict str, BITCODE_TU restrict wstr)
 
 /* check if the string (ascii or unicode) is NULL or empty */
 int
-bit_empty_T (Bit_Chain *restrict dat, BITCODE_T restrict str)
+bit_empty_T (Bit_Chain *restrict dat, BITCODE_T *restrict tstr)
 {
-  if (!str)
+  if (!tstr || !tstr->len || !tstr->str)
     return 1;
-  // importer hack: in_json/dxf still write all strings as TV
-  if (!(IS_FROM_TU (dat)))
-    return !*str;
+  if (tstr->cp != CP_UTF16)
+    return !*tstr->str;
   else
     {
       uint16_t c;
 #ifdef HAVE_ALIGNED_ACCESS_REQUIRED
-      if ((uintptr_t)str % SIZEOF_SIZE_T)
+      if ((uintptr_t)tstr->str % SIZEOF_SIZE_T)
         {
-          unsigned char *b = (unsigned char *)str;
+          unsigned char *b = (unsigned char *)tstr->str;
           c = TU_to_int (b);
           return !c;
         }
 #endif
-      c = *(BITCODE_TU)str;
+      c = *(BITCODE_TU)tstr->str;
       return !c;
     }
 }
 
-BITCODE_T
+BITCODE_T *
 bit_set_T (Bit_Chain *dat, const char *restrict src)
 {
-  if (!(IS_FROM_TU (dat)))
-    return strdup (src);
-  else
-    return (BITCODE_T)bit_utf8_to_TU ((char *)src, 0);
+  Dwg_String *str = (Dwg_String *)calloc (1, sizeof (Dwg_String));
+  str->str = strdup (src);
+  str->len = strlen (src);
+  str->cp = CP_DWG;
+  return str;
 }
 
 /** Read 2 time BL bitlong (compacted data).
