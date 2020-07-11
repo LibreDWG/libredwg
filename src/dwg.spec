@@ -3969,7 +3969,7 @@ DWG_TABLE (STYLE)
       if (FIELD_VALUE (font_file) && !dxf_has_STYLE_eed (dat, obj->tio.object))
         {
           if (IS_FROM_TU (dat)) {
-            s = bit_convert_TU ((BITCODE_TU)FIELD_VALUE (font_file));
+            s = bit_TU_to_utf8 ((BITCODE_TU)FIELD_VALUE (font_file));
             strncpy (_buf, s, 255);
             free (s);
           }
@@ -8102,14 +8102,14 @@ DWG_OBJECT (SECTION_SETTINGS)
           SUB_FIELD_BS (types[rcount1].geom[rcount2], hatch_type, 72);
           ENCODER {
             if (bit_empty_T (dat, _obj->types[rcount1].geom[rcount2].hatch_pattern))
-              _obj->types[rcount1].geom[rcount2].hatch_pattern = bit_set_T (dat, "SOLID");
+              _obj->types[rcount1].geom[rcount2].hatch_pattern = SET_STR ("SOLID");
           }
           SUB_FIELD_T (types[rcount1].geom[rcount2], hatch_pattern, 2);
           DECODER {
             if (bit_empty_T (dat, _obj->types[rcount1].geom[rcount2].hatch_pattern))
               {
                 free (_obj->types[rcount1].geom[rcount2].hatch_pattern);
-                _obj->types[rcount1].geom[rcount2].hatch_pattern = bit_set_T (dat, "SOLID");
+                _obj->types[rcount1].geom[rcount2].hatch_pattern = SET_STR ("SOLID");
               }
           }
           SUB_FIELD_BD (types[rcount1].geom[rcount2], hatch_angle, 41);
@@ -8696,9 +8696,9 @@ DWG_ENTITY (LIGHT)
     // LIGHTINGUNITS is a member of the AcDbVariableDictionary
     // NOD => DICTIONARY => DICTIONARYVAR
     // may not be cached
-    char *value = dwg_variable_dict (dwg, "LIGHTINGUNITS");
-    LOG_TRACE ("vardict.LIGHTINGUNITS: %s\n", value);
-    if (value && strEQ (value, "2")) /* PHOTOMETRIC */
+    BITCODE_T *value = dwg_variable_dict (dwg, "LIGHTINGUNITS");
+    LOG_TRACE ("vardict.LIGHTINGUNITS: %s\n", value->str);
+    if (value && bit_eq_T (value, "2")) /* PHOTOMETRIC */
       FIELD_VALUE (is_photometric) = 1;
   }
   LOG_TRACE ("is_photometric: %d\n", FIELD_VALUE (is_photometric));
