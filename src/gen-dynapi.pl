@@ -2865,7 +2865,7 @@ dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
       if (is_tu && strNE (f->type, "TF")) /* not TF */
         {
           BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
-          char *utf8 = bit_convert_TU (wstr);
+          char *utf8 = bit_TU_to_utf8 (wstr);
           if (wstr && !utf8) // some conversion error, invalid wchar (nyi)
             return false;
           *out = utf8;
@@ -2937,7 +2937,7 @@ dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
         if (is_tu && !is_fixed) /* not TF */
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
-            char *utf8 = bit_convert_TU (wstr);
+            char *utf8 = bit_TU_to_utf8 (wstr);
             if (wstr && !utf8) // some conversion error, invalid wchar (nyi)
               return false;
             *out = utf8;
@@ -3074,7 +3074,7 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
         if (is_tu && strNE (f->type, "TF")) /* not TF */
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
-            char *utf8 = bit_convert_TU (wstr);
+            char *utf8 = bit_TU_to_utf8 (wstr);
             if (wstr && !utf8) // some conversion error, invalid wchar (nyi)
               return false;
             *out = utf8;
@@ -3531,7 +3531,7 @@ dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
       {
         BITCODE_TU wstr = *(BITCODE_TU *)((char *)_obj + f->offset);
         *alloced = 1;
-        return bit_convert_TU (wstr);
+        return bit_TU_to_utf8 (wstr);
       }
     else
       {
