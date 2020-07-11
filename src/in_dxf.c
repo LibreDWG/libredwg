@@ -10285,9 +10285,8 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                           Dwg_Object_BLOCK_CONTROL *_ctrl
                               = blkhdr->tio.object->tio.BLOCK_CONTROL;
                           ent->ownerhandle->obj = NULL; // still dirty
-                          // TODO R2007+
                           if (!_ctrl->model_space && _obj->name
-                              && strEQc (_obj->name, "*Model_Space"))
+                              && bit_eq_T (dat, _obj->name, "*Model_Space"))
                             {
                               _ctrl->model_space = dwg_add_handleref (
                                   dwg, 3, obj->handle.value, blkhdr);
@@ -10297,7 +10296,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                                   ARGS_REF (_ctrl->model_space));
                             }
                           else if (!_ctrl->paper_space && _obj->name
-                                   && strEQc (_obj->name, "*Paper_Space"))
+                                   && bit_eq_T (dat, _obj->name, "*Paper_Space"))
                             {
                               _ctrl->paper_space = dwg_add_handleref (
                                   dwg, 3, obj->handle.value, blkhdr);
@@ -10312,10 +10311,9 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     blkhdr = NULL;
                   if (!_obj || !_obj->name)
                     ;
-                  // TODO R2007+
-                  else if (strEQc (_obj->name, "*Model_Space"))
+                  else if (bit_eq_T (dat, _obj->name, "*Model_Space"))
                     entmode = ent->entmode = 2;
-                  else if (strEQc (_obj->name, "*Paper_Space"))
+                  else if (bit_eq_T (dat, _obj->name, "*Paper_Space"))
                     entmode = ent->entmode = 1;
                   else
                     entmode = 0;

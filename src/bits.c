@@ -2392,6 +2392,16 @@ bit_utf8_to_TU (char *restrict str)
   return wstr;
 }
 
+/* compare an ASCII/TU string to ASCII name */
+int
+bit_eq_T (Bit_Chain *restrict dat, const BITCODE_T restrict str1, const char *restrict str2)
+{
+  if (dat->version >= R_2007)
+    return bit_eq_TU (str2, (BITCODE_TU)str1);
+  else
+    return !strcmp (str1, str2);
+}
+
 /* compare an ASCII/utf-8 string to a r2007+ name */
 int
 bit_eq_TU (const char *restrict str, BITCODE_TU restrict wstr)

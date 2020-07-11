@@ -272,6 +272,8 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src, const in
     Needed by dwg importers, writers (e.g. dxf2dwg) */
 EXPORT BITCODE_TU bit_utf8_to_TU (char *restrict str) ATTRIBUTE_MALLOC;
 
+/* compare an ASCII/TU string to ASCII name */
+int bit_eq_T (Bit_Chain *restrict dat, const BITCODE_T restrict str1, const char *restrict str2);
 /* compare an ASCII/utf-8 string to a r2007+ name */
 int bit_eq_TU (const char *str, BITCODE_TU restrict wstr);
 /* check if the string (ascii or unicode) is empty */
