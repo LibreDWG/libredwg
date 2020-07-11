@@ -1912,14 +1912,14 @@ main (int argc, char const *argv[])
     dwg_wchar_t w[] = { 0x4e2d, 0x5fc3, 0x7ebf, 0 };
     unsigned char expect[]
         = { 0xe4, 0xb8, 0xad, 0xe5, 0xbf, 0x83, 0xe7, 0xba, 0xbf, 0 };
-    unsigned char *s = (unsigned char *)bit_convert_TU (w);
+    unsigned char *s = (unsigned char *)bit_TU_to_utf8 (w);
     int fails = 0;
     for (unsigned int i = 0; i < sizeof (expect); i++)
       {
         if (s[i] != expect[i])
           {
             fails++;
-            fail ("bit_convert_TU s[%d] %x != %x", i, s[i], expect[i]);
+            fail ("bit_TU_to_utf8 s[%d] %x != %x", i, s[i], expect[i]);
           }
       }
     if (!fails)
