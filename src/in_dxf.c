@@ -6766,6 +6766,52 @@ add_AcDbDetailViewStyle (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   return NULL;
 }
 
+// return a relative softptr (4 handle) to the prev_ref handle, relative to obj.
+static Dwg_Object_Ref *
+dwg_link_prev (Dwg_Object_Ref *restrict prev_ref, Dwg_Object *restrict obj)
+{
+  Dwg_Object *prev;
+  Dwg_Data *dwg = obj ? obj->parent : NULL;
+  if (!prev_ref)
+    return dwg_add_handleref (dwg, 4, 0, NULL);
+  if (!obj)
+    return NULL;
+  prev = dwg_ref_object (dwg, prev_ref);
+  if (!prev || prev->supertype != DWG_SUPERTYPE_ENTITY)
+    return NULL;
+  if (obj && obj->supertype == DWG_SUPERTYPE_ENTITY)
+    obj->tio.entity->nolinks = 1;
+  return dwg_add_handleref (dwg, 4, prev->handle.value, obj);
+}
+
+// return a relative softptr (4 handle) to the next_ref handle, relative to obj.
+// sets obj nolinks to 1 or 0.
+static Dwg_Object_Ref *
+dwg_link_next (Dwg_Object_Ref *restrict next_ref, Dwg_Object *restrict obj)
+{
+  Dwg_Object *prev, *next;
+  Dwg_Object_Ref *prev_ref;
+  Dwg_Data *dwg = obj ? obj->parent : NULL;
+  if (!next_ref)
+    return dwg_add_handleref (dwg, 4, 0, NULL);
+  if (!obj)
+    return NULL;
+  next = dwg_ref_object (dwg, next_ref);
+  if (!next || next->supertype != DWG_SUPERTYPE_ENTITY)
+    return NULL;
+  if (next->index == obj->index + 1)
+    {
+      prev_ref = obj->tio.entity->prev_entity;
+      // check if nolinks can be set
+      if (prev_ref && prev_ref->handleref.code == 8 && prev_ref->handleref.value == 0)
+        {
+          obj->tio.entity->nolinks = 1;
+          return NULL;
+        }
+    }
+  return dwg_add_handleref (dwg, 4, next->handle.value, obj);
+}
+
 // Also exported to in_json. To set to linked list of children in POLYLINE_*/*INSERT
 void
 in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
@@ -6818,6 +6864,7 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
   if (dwg->header.version >= R_13
       && dwg->header.version <= R_2000) // if downconvert to r2000
     {
+      Dwg_Object *owned_obj;
       dwg_dynapi_entity_set_value (ow, owner->name, firstfield, &owned[0], 0);
       LOG_TRACE ("%s.%s = " FORMAT_REF "[H 0]\n", owner->name, firstfield,
                  ARGS_REF (owned[0]));
@@ -6825,14 +6872,32 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
                                    &owned[num_owned - 1], 0);
       LOG_TRACE ("%s.%s = " FORMAT_REF "[H 0]\n", owner->name, lastfield,
                  ARGS_REF (owned[num_owned - 1]));
+      // link the list, because the children have entmode, different to the
+      // owner.
+      owned_obj = dwg_ref_object (dwg, owned[0]);
+      if (!owned_obj || owned_obj->supertype != DWG_SUPERTYPE_ENTITY)
+        return;
+      owned_obj->tio.entity->prev_entity = dwg_link_prev (NULL, owned_obj);
+      owned_obj->tio.entity->next_entity
+          = dwg_link_next (num_owned > 1 ? owned[1] : NULL, owned_obj);
+      for (unsigned i = 1; i < num_owned; i++)
+        {
+          owned_obj = dwg_ref_object (dwg, owned[i]);
+          if (!owned_obj || owned_obj->supertype != DWG_SUPERTYPE_ENTITY)
+            continue;
+          owned_obj->tio.entity->prev_entity
+              = dwg_link_prev (owned[i - 1], owned_obj);
+          owned_obj->tio.entity->next_entity = dwg_link_next (
+              (i < num_owned - 1) ? owned[i + 1] : NULL, owned_obj);
+        }
     }
   else if (dwg->header.version >= R_2004
-           && !owned) // FXIME we only partially write r2004+ yet
+           && !owned) // FIXME we only partially write r2004+ yet
     {
       BITCODE_H *first, *last;
       dwg_dynapi_entity_value (ow, owner->name, firstfield, &first, 0);
       dwg_dynapi_entity_value (ow, owner->name, lastfield, &last, 0);
-      //..
+      // FIXME walk the list and set the vector
       LOG_ERROR ("Cannot yet create the owned array from %s to %s", firstfield,
                  lastfield)
     }
