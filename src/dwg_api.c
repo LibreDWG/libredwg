@@ -5504,7 +5504,7 @@ dwg_ent_text_get_text (const dwg_ent_text *restrict ent, int *restrict error)
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU ((BITCODE_TU)ent->text_value);
+        return bit_TU_to_utf8 ((BITCODE_TU)ent->text_value);
       else
         return ent->text_value;
     }
@@ -5924,7 +5924,7 @@ dwg_ent_attrib_get_text (const dwg_ent_attrib *restrict ent,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU ((BITCODE_TU)ent->text_value);
+        return bit_TU_to_utf8 ((BITCODE_TU)ent->text_value);
       else
         return ent->text_value;
     }
@@ -6339,7 +6339,7 @@ dwg_ent_attdef_get_default_value (const dwg_ent_attdef *restrict ent,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU ((BITCODE_TU)ent->default_value);
+        return bit_TU_to_utf8 ((BITCODE_TU)ent->default_value);
       else
         return ent->default_value;
     }
@@ -7328,7 +7328,7 @@ dwg_ent_block_get_name (const dwg_ent_block *restrict block,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU ((BITCODE_TU)block->name);
+        return bit_TU_to_utf8 ((BITCODE_TU)block->name);
       else
         return block->name;
     }
@@ -9453,7 +9453,7 @@ dwg_obj_mlinestyle_get_name (const dwg_obj_mlinestyle *restrict mlinestyle,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU ((BITCODE_TU)mlinestyle->name);
+        return bit_TU_to_utf8 ((BITCODE_TU)mlinestyle->name);
       else
         return mlinestyle->name;
     }
@@ -9504,7 +9504,7 @@ dwg_obj_mlinestyle_get_desc (const dwg_obj_mlinestyle *restrict mlinestyle,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU ((BITCODE_TU)mlinestyle->description);
+        return bit_TU_to_utf8 ((BITCODE_TU)mlinestyle->description);
       else
         return mlinestyle->description;
     }
@@ -9772,7 +9772,7 @@ dwg_obj_appid_get_name (const dwg_obj_appid *restrict appid,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU ((BITCODE_TU)appid->name);
+        return bit_TU_to_utf8 ((BITCODE_TU)appid->name);
       else
         return appid->name;
     }
@@ -9880,7 +9880,7 @@ dwg_ent_dim_get_block_name (const dwg_ent_dim *restrict dim,
                        ->block->obj->tio.object->tio.BLOCK_HEADER->name;
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU ((BITCODE_TU)name);
+        return bit_TU_to_utf8 ((BITCODE_TU)name);
       else
         return name;
     }
@@ -10297,7 +10297,7 @@ dwg_ent_dim_get_user_text (const dwg_ent_dim *restrict dim,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU ((BITCODE_TU)dim->user_text);
+        return bit_TU_to_utf8 ((BITCODE_TU)dim->user_text);
       else
         return dim->user_text;
     }
@@ -13024,7 +13024,7 @@ dwg_ent_mtext_get_text (const dwg_ent_mtext *restrict ent, int *restrict error)
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU ((BITCODE_TU)ent->text); // a copy
+        return bit_TU_to_utf8 ((BITCODE_TU)ent->text); // a copy
       else
         return ent->text; // the ref
     }
@@ -13979,7 +13979,7 @@ dwg_ent_tolerance_get_text_string (const dwg_ent_tolerance *restrict tol,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU ((BITCODE_TU)tol->text_value);
+        return bit_TU_to_utf8 ((BITCODE_TU)tol->text_value);
       else
         return tol->text_value;
     }
@@ -15442,7 +15442,7 @@ dwg_ent_viewport_get_style_sheet (const dwg_ent_viewport *restrict vp,
     {
       *error = 0;
       if (dwg_version >= R_2007)
-        return bit_convert_TU ((BITCODE_TU)vp->style_sheet);
+        return bit_TU_to_utf8 ((BITCODE_TU)vp->style_sheet);
       else
         return vp->style_sheet;
     }
