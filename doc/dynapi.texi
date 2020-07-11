@@ -3465,7 +3465,7 @@ T,	DXF 1
 @item num_source_files
 BL,	DXF 90
 @item source_files
-TV*,	DXF 2
+T**,	DXF 2
 @item extents_min
 3BD,	DXF 11
 @item extents_max
@@ -5693,7 +5693,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+T
 @item used
 RSd
 @item is_xref_ref
@@ -7882,7 +7882,7 @@ BL,	DXF 93
 @item lut
 Dwg_BLOCKLOOKUPACTION_lut*
 @item exprs
-TV*,	DXF 302
+T**,	DXF 302
 @item b280
 B,	DXF 280
 
@@ -8901,7 +8901,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+T
 @item used
 RSd
 @item is_xref_ref
@@ -9256,7 +9256,7 @@ RC,	DXF 280
 @item cloning
 BS,	DXF 281
 @item texts
-T*,	DXF 3
+T**,	DXF 3
 @item itemhandles
 H*,	DXF 350
 
@@ -9296,7 +9296,7 @@ RC,	DXF 280
 @item cloning
 BS,	DXF 281
 @item texts
-T*,	DXF 3
+T**,	DXF 3
 @item itemhandles
 H*,	DXF 350
 @item defaultid
@@ -10170,7 +10170,7 @@ struct _dwg_object_object*
 @item num_names
 BL
 @item names
-TV*,	DXF 8
+T**,	DXF 8
 
 @end vtable
 @end indentedblock
@@ -10349,7 +10349,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+T
 @item used
 RSd
 @item is_xref_ref
@@ -11788,7 +11788,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+T
 @item used
 RSd
 @item is_xref_ref
@@ -12111,7 +12111,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+T
 @item used
 RSd
 @item is_xref_ref
@@ -12213,7 +12213,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+T
 @item used
 RSd
 @item is_xref_ref
@@ -12598,7 +12598,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+T
 @item used
 RSd
 @item is_xref_ref
@@ -12765,7 +12765,7 @@ struct _dwg_object_object*
 @item flag
 RC
 @item name
-TV
+T
 @item used
 RSd
 @item is_xref_ref
@@ -12883,7 +12883,7 @@ BL
 @item num_items
 BL
 @item classname
-TV
+T
 @item items
 Dwg_ASSOCARRAYITEM*
 @item numitems
@@ -13785,7 +13785,7 @@ RL
 @item code
 BL
 @item name
-TV
+T
 
 @end vtable
 @end indentedblock
@@ -13832,30 +13832,6 @@ Dwg_BLOCKPARAMETER_connection*
 BL
 @item name
 T
-
-@end vtable
-@end indentedblock
-
-@strong{Dwg_BLOCKPARAMVALUESET} @anchor{Dwg_BLOCKPARAMVALUESET}
-@vindex Dwg_BLOCKPARAMVALUESET
-
-@indentedblock
-@vtable @code
-
-@item desc
-TV
-@item flags
-BL
-@item minimum
-BD
-@item maximum
-BD
-@item increment
-BD
-@item num_valuelist
-BS
-@item valuelist
-BD*
 
 @end vtable
 @end indentedblock
@@ -14189,11 +14165,11 @@ BL,	DXF 91
 @item num_xrefpaths
 BS
 @item xrefpaths
-TV*,	DXF 301
+T*,	DXF 301
 @item num_intersec_xrefpaths
 BS
 @item intersec_xrefpaths
-TV*
+T*
 @item has_lastpt_ref
 B,	DXF 75
 @item intersec_subent_type
@@ -14333,7 +14309,7 @@ BD
 @item value.pt3d
 3BD
 @item value.text1
-TV
+T
 @item value.long90
 BL
 @item value.handle91
@@ -14363,7 +14339,7 @@ BS
 @item u.rc
 RC
 @item u.text
-TV
+T
 @item u.handle
 H
 
@@ -14707,7 +14683,7 @@ struct _dwg_entity_MULTILEADER*
 @item attdef
 H,	DXF 330
 @item label_text
-TV,	DXF 302
+T,	DXF 302
 @item ui_index
 BS,	DXF 177
 @item width
