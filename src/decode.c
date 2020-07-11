@@ -661,7 +661,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x14
 
-  // tables really
+  // 10 tables + header + block
   dwg->header.num_sections = 12;
   dwg->header.section = (Dwg_Section *)calloc (
       1, sizeof (Dwg_Section) * dwg->header.num_sections);

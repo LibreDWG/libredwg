@@ -32,7 +32,7 @@
   FIELD_RC (is_maint, 0);
 
   PRE (R_13) {
-    FIELD_RC (zero_one_or_three, 0); // 1
+    FIELD_RC (zero_one_or_three, 0); // 1,3,0,5,0,0x00cd,0
     for (i = 0; i < 3; i++) { // 3, 5, 205
       FIELD_RS (unknown_s[i], 0);
     }
@@ -40,7 +40,7 @@
   } LATER_VERSIONS {
     FIELD_RC (zero_one_or_three, 0);
     FIELD_RL (thumbnail_address, 0); //@0x0d
-    FIELD_RC (dwg_version, 0);
+    FIELD_RC (dwg_version, 0); // of app which stored it. eg. SaveAs
     FIELD_RC (maint_version, 0);
     FIELD_RS (codepage, 0); //@0x13: 29/30 for ANSI_1252, since r2007 UTF-16
   }

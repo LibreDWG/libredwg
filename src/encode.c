@@ -1801,9 +1801,17 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   {
     Dwg_Header *_obj = &dwg->header;
     Dwg_Object *obj = NULL;
-    if (!_obj->dwg_version)
+    if (!_obj->dwg_version) // ie from DXF
       {
-        _obj->is_maint = 0;
+        _obj->zero_one_or_three = 1;
+        _obj->dwg_version = 0x21;
+        _obj->is_maint = 0xf;
+        _obj->maint_version = 29;
+        if (dwg->header.version < R_13)
+          {
+            _obj->dwg_version = 0x14;
+          }
+        /*
         switch (dwg->header.version)
           {
           case R_9:
@@ -1846,7 +1854,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             break;
           case R_2018:
             _obj->dwg_version = 0x21;
-            _obj->is_maint = 0x4;
+            _obj->is_maint = 0x1d;
             break;
           case R_2021:
             _obj->dwg_version = 0x24;
@@ -1874,6 +1882,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           default:
             break;
           }
+          */
         if (!_obj->app_dwg_version)
           _obj->app_dwg_version = _obj->dwg_version;
       }
