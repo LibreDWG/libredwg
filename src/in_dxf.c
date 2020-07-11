@@ -6861,8 +6861,7 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
       lastfield = "last_attrib";
     }
   // store all these fields, or just the ones for the requested version?
-  if (dwg->header.version >= R_13
-      && dwg->header.version <= R_2000) // if downconvert to r2000
+  if (dwg->header.from_version > R_2000) // if downconvert to r2000
     {
       Dwg_Object *owned_obj;
       dwg_dynapi_entity_set_value (ow, owner->name, firstfield, &owned[0], 0);
@@ -6891,15 +6890,41 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
               (i < num_owned - 1) ? owned[i + 1] : NULL, owned_obj);
         }
     }
-  else if (dwg->header.version >= R_2004
-           && !owned) // FIXME we only partially write r2004+ yet
+  else if (dwg->header.from_version <= R_2000 && !owned)
     {
-      BITCODE_H *first, *last;
+      BITCODE_H first, last, ref;
+      unsigned i = 0;
+      owned = xcalloc (1, sizeof (BITCODE_H));
       dwg_dynapi_entity_value (ow, owner->name, firstfield, &first, 0);
       dwg_dynapi_entity_value (ow, owner->name, lastfield, &last, 0);
-      // FIXME walk the list and set the vector
-      LOG_ERROR ("Cannot yet create the owned array from %s to %s", firstfield,
-                 lastfield)
+      ref = first;
+      if (!first || !last || !last->absolute_ref)
+        {
+          num_owned = 0;
+          owned[0] = first;
+        }
+      else if (first->absolute_ref == last->absolute_ref)
+        {
+          num_owned = 1;
+          owned[0] = first;
+        }
+      else
+        while (ref && ref->absolute_ref && ref->absolute_ref != last->absolute_ref)
+          {
+            Dwg_Object *ref_obj  = dwg_ref_object (dwg, ref);
+            if (!ref_obj || ref_obj->supertype != DWG_SUPERTYPE_ENTITY)
+              continue;
+            owned[i] = ref;
+            ref = ref_obj->tio.entity->next_entity;
+            i++;
+            if (i > 1)
+              {
+                num_owned = i;
+                owned = realloc (owned, i * sizeof (BITCODE_H));
+              }
+          }
+      dwg_dynapi_entity_set_value (ow, owner->name, "num_owned", &num_owned, 0);
+      dwg_dynapi_entity_set_value (ow, owner->name, owhdls, &owned, 0);
     }
 }
 
