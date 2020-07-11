@@ -59,6 +59,8 @@ static unsigned int loglevel;
 Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
                                        int *restrict error);
 #endif
+static void
+dxf_set_DWGCODEPAGE (Dwg_Data *dwg);
 // from dwg_api.c
 Dwg_Object_DICTIONARY *
 dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
@@ -1408,6 +1410,15 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           const Dwg_DYNAPI_field *f = dwg_dynapi_header_field (&field[1]);
           if (!f)
             {
+              if (strEQc (field, "$DWGCODEPAGE"))
+                {
+                  dwg->header_vars.DWGCODEPAGE = pair->value.s;
+                  LOG_TRACE ("HEADER.%s %s [TV %d]\n", &field[1],
+                             pair->value.s, (int)pair->code);
+                  dxf_set_DWGCODEPAGE (dwg); // needed early to set the cp for all strings
+                  dwg->header_vars.DWGCODEPAGE = SET_STR (pair->value.s);
+                }
+              else
               if (pair->code == 40 && strEQc (field, "$3DDWFPREC"))
                 {
                   LOG_TRACE ("HEADER.%s [%s %d]\n", &field[1], "BD",
@@ -1423,7 +1434,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       bit_utf8_to_TV (dest, (unsigned char *)pair->value.s.ptr, 1024,             \
                       strlen (pair->value.s.ptr), 0, dat->codepage);              \
       dest[1023] = '\0';                                                      \
-      dwg->summaryinfo.name = strdup (dest);                                  \
+      dwg->summaryinfo.name = SET_STR (dest);                                 \
     }
 
               // clang-format off
@@ -1453,7 +1464,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                                   1024, strlen (pair->value.s.ptr), 0,
                                   dat->codepage);
                   dest[1023] = '\0';
-                  dwg->summaryinfo.props[j].tag = strdup (dest);
+                  dwg->summaryinfo.props[j].tag = SET_STR (dest);
                 }
               else if (pair->code == 1 && strEQc (field, "$CUSTOMPROPERTY")
                        && pair->value.s.ptr != NULL && dwg->summaryinfo.props
@@ -1467,7 +1478,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                                   1024, strlen (pair->value.s.ptr), 0,
                                   dat->codepage);
                   dest[1023] = '\0';
-                  dwg->summaryinfo.props[j].value = strdup (dest);
+                  dwg->summaryinfo.props[j].value = SET_STR (dest);
                 }
               else
                 LOG_ERROR ("skipping HEADER: 9 %s, unknown field with code %d",
@@ -1692,7 +1703,7 @@ dxf_fixup_header (Bit_Chain *dat, Dwg_Data *dwg)
     dwg->header.from_version = R_11;
   if (vars->HANDSEED)
     vars->HANDSEED->handleref.code = 0;
-  if (vars->DWGCODEPAGE)
+  if (vars->DWGCODEPAGE && !hdr->codepage)
     dxf_set_DWGCODEPAGE (dat, dwg);
   else
     dxf_set_default_DWGCODEPAGE (dat, dwg);

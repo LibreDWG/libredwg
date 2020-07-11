@@ -3928,7 +3928,7 @@ DWG_TABLE (STYLE)
       if (FIELD_VALUE (font_file) && !dxf_has_STYLE_eed (dat, obj->tio.object))
         {
           if (IS_FROM_TU (dat)) {
-            s = bit_convert_TU ((BITCODE_TU)FIELD_VALUE (font_file));
+            s = bit_TU_to_utf8 ((BITCODE_TU)FIELD_VALUE (font_file));
             strncpy (_buf, s, 255);
             free (s);
           }
