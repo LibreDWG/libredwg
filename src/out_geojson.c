@@ -548,14 +548,14 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         {
           Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
           char *text;
-          if (IS_FROM_TU (dat))
-            text = bit_convert_TU ((BITCODE_TU)_hdr->name);
+          if (dat->version >= R_2007)
+            text = bit_TU_to_utf8 ((BITCODE_TU)_hdr->name);
           else
             text = _hdr->name;
           if (text)
             {
               PAIR_S (name, text);
-              if (IS_FROM_TU (dat))
+              if (dat->version >= R_2007)
                 free (text);
             }
         }

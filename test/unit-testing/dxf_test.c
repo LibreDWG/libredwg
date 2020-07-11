@@ -120,7 +120,7 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
             if (value && dwg_version >= R_2007
                 && strNE (field.type, "TF")) /* not TF */
               {
-                value = bit_convert_TU ((BITCODE_TU)value);
+                value = bit_TU_to_utf8 ((BITCODE_TU)value);
                 if (!value) // some conversion error, invalid wchar (nyi)
                   {
                     fail ("%s[%d].%s: NULL [STRING %s]", fieldname, index, key,
