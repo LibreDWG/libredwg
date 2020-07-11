@@ -19,7 +19,7 @@ api_process (dwg_object *obj)
     {
       if (dwg_version >= R_2007)
         {
-          char *name = bit_convert_TU ((BITCODE_TU)names[i]);
+          char *name = bit_TU_to_utf8 ((BITCODE_TU)names[i]);
           ok ("LAYERFILTER.names[%d]: %s", i, name);
           free (name);
         }

@@ -31,7 +31,7 @@
 #include <dwg.h>
 #include <dwg_api.h>
 #include "common.h"
-#include "../src/bits.h" //bit_convert_TU
+#include "../src/bits.h" //bit_TU_to_utf8
 #include "suffix.inc"
 #include "geom.h"
 
@@ -86,7 +86,7 @@ set_info (PSDoc *restrict ps, Dwg_Data *restrict dwg, const char *restrict key,
     }
   else
     {
-      char *u8 = bit_convert_TU ((BITCODE_TU)text);
+      char *u8 = bit_TU_to_utf8 (text);
       if (u8 && strlen (u8))
         {
           PS_set_info (ps, key, u8);

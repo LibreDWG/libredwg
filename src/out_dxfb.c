@@ -218,7 +218,12 @@ static void dxfb_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
   {                                                                           \
     if (IS_FROM_TU (dat))                                                     \
       {                                                                       \
-        FIELD_TU (nam, dxf)                                                   \
+        char *u8 = bit_TU_to_utf8 ((BITCODE_TU)_obj->nam);                    \
+        if (u8 && *u8)                                                        \
+          {                                                                   \
+            FIELD_TU (nam, dxf)                                               \
+          }                                                                   \
+        free (u8);                                                            \
       }                                                                       \
     else                                                                      \
       {                                                                       \
@@ -1206,7 +1211,7 @@ dxfb_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
     {
       if (IS_FROM_TU (dat))
         {
-          name = bit_convert_TU ((BITCODE_TU)name);
+          name = bit_TU_to_utf8 ((BITCODE_TU)name);
         }
       if (dat->from_version >= R_13b1 && dat->version < R_13b1)
         { // convert the other way round, from newer to older
@@ -1258,7 +1263,7 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
     }
   if (IS_FROM_TU (dat)) // r2007+ unicode names
     {
-      name = bit_convert_TU ((BITCODE_TU)name);
+      name = bit_TU_to_utf8 ((BITCODE_TU)name);
     }
   if (dat->version == dat->from_version) // no conversion
     {
