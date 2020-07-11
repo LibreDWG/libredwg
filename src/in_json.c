@@ -1677,7 +1677,7 @@ find_numfield (const Dwg_DYNAPI_field *restrict fields,
   strcpy (s, "num_");
   strcat (s, key);
   // see gen-dynapi.pl:1102
-  if (strEQc (key, "attrib_handles"))
+  if (strEQc (key, "attribs"))
     strcpy (s, "num_owned");
   else if (strEQc (key, "attribs"))
     strcpy (s, "num_owned");

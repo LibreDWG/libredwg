@@ -1210,7 +1210,7 @@ EOF
              # VECTOR_N
              and $var !~ /(_transform|_transmatrix1?|shhn_pts)$/) {
       my %countfield = (
-        attrib_handles => 'num_owned',
+        attribs => 'num_owned',
         attribs => 'num_owned', # XXX TABLE
         vertex => 'num_owned',
         itemhandles => 'numitems',

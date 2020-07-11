@@ -123,7 +123,7 @@ api_process (dwg_object *obj)
   BITCODE_H block_header;
   BITCODE_H first_attrib;
   BITCODE_H last_attrib;
-  BITCODE_H* attrib_handles;
+  BITCODE_H* attribs;
   BITCODE_H seqend;
   BITCODE_H title_row_style_override;
   BITCODE_H header_row_style_override;
@@ -315,7 +315,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (table, TABLE, block_header);
   CHK_ENTITY_H (table, TABLE, first_attrib);
   CHK_ENTITY_H (table, TABLE, last_attrib);
-  //CHK_ENTITY_TYPE (table, TABLE, attrib_handles, H*, attrib_handles);
+  //CHK_ENTITY_TYPE (table, TABLE, attribs, H*, attribs);
   CHK_ENTITY_H (table, TABLE, seqend);
   CHK_ENTITY_H (table, TABLE, title_row_style_override);
   CHK_ENTITY_H (table, TABLE, header_row_style_override);

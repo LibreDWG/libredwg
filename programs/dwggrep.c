@@ -1411,8 +1411,8 @@ match_BLOCK_HEADER (const char *restrict filename,
                   Dwg_Object *o;
                   for (BITCODE_BL j = 0; j < _obj->num_owned; j++)
                     {
-                      o = _obj->attrib_handles[j]
-                              ? _obj->attrib_handles[j]->obj
+                      o = _obj->attribs[j]
+                              ? _obj->attribs[j]->obj
                               : NULL;
                       if (o && o->type == DWG_TYPE_ATTRIB)
                         found += match_ATTRIB (filename, o);
@@ -1446,8 +1446,8 @@ match_BLOCK_HEADER (const char *restrict filename,
                   Dwg_Object *o;
                   for (BITCODE_BL j = 0; j < _obj->num_owned; j++)
                     {
-                      o = _obj->attrib_handles[j]
-                              ? _obj->attrib_handles[j]->obj
+                      o = _obj->attribs[j]
+                              ? _obj->attribs[j]->obj
                               : NULL;
                       if (o && o->type == DWG_TYPE_ATTRIB)
                         found += match_ATTRIB (filename, o);

@@ -10,7 +10,7 @@ api_process (dwg_object *obj)
   BITCODE_BB scale_flag;
   BITCODE_B has_attribs;
   BITCODE_BL num_owned;
-  BITCODE_H block_header, first_attrib, last_attrib, seqend, *attrib_handles;
+  BITCODE_H block_header, first_attrib, last_attrib, seqend, *attribs;
 
   Dwg_Version_Type version = obj->parent->header.version;
   dwg_ent_insert *insert = dwg_object_to_INSERT (obj);
@@ -37,7 +37,7 @@ api_process (dwg_object *obj)
         }
       if (version >= R_2004)
         {
-          CHK_ENTITY_HV (insert, INSERT, attrib_handles, num_owned);
+          CHK_ENTITY_HV (insert, INSERT, attribs, num_owned);
         }
       CHK_ENTITY_H (insert, INSERT, seqend);
     }

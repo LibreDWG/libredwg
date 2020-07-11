@@ -1058,8 +1058,8 @@ get_first_owned_subentity (const Dwg_Object *owner)
       if (version <= R_2000)
         return _obj->first_attrib ? _obj->first_attrib->obj : NULL;
       else
-        return _obj->attrib_handles && _obj->attrib_handles[0]
-                   ? dwg_ref_object (dwg, _obj->attrib_handles[0])
+        return _obj->attribs && _obj->attribs[0]
+                   ? dwg_ref_object (dwg, _obj->attribs[0])
                    : NULL;
     }
   else if (type == DWG_TYPE_MINSERT)
@@ -1068,8 +1068,8 @@ get_first_owned_subentity (const Dwg_Object *owner)
       if (version <= R_2000)
         return _obj->first_attrib ? dwg_ref_object (dwg, _obj->first_attrib) : NULL;
       else
-        return _obj->attrib_handles && _obj->attrib_handles[0]
-                   ? dwg_ref_object (dwg, _obj->attrib_handles[0])
+        return _obj->attribs && _obj->attribs[0]
+                   ? dwg_ref_object (dwg, _obj->attribs[0])
                    : NULL;
     }
   else if (type == DWG_TYPE_POLYLINE_2D || type == DWG_TYPE_POLYLINE_3D
@@ -1119,8 +1119,8 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
               return NULL;
             }
           else
-            return _obj->attrib_handles
-                       ? dwg_ref_object (dwg, _obj->attrib_handles[ent->__iterator])
+            return _obj->attribs
+                       ? dwg_ref_object (dwg, _obj->attribs[ent->__iterator])
                        : NULL;
         }
     }
@@ -1141,8 +1141,8 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
               return NULL;
             }
           else
-            return _obj->attrib_handles
-                      ? dwg_ref_object (dwg, _obj->attrib_handles[ent->__iterator])
+            return _obj->attribs
+                      ? dwg_ref_object (dwg, _obj->attribs[ent->__iterator])
                       : NULL;
         }
     }

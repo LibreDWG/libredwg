@@ -570,7 +570,7 @@ DWG_ENTITY (INSERT)
     {
       if (FIELD_VALUE (has_attribs))
         {
-          HANDLE_VECTOR (attrib_handles, num_owned, 4, 0);
+          HANDLE_VECTOR (attribs, num_owned, 4, 0);
         }
     }
 
@@ -705,7 +705,7 @@ DWG_ENTITY (MINSERT)
     {
     if (FIELD_VALUE (has_attribs))
       {
-        HANDLE_VECTOR (attrib_handles, num_owned, 4, 0);
+        HANDLE_VECTOR (attribs, num_owned, 4, 0);
       }
     }
 
@@ -5555,10 +5555,10 @@ DWG_ENTITY (TABLE)
     SINCE (R_2004)
       {
   #if defined (IS_JSON) || defined (IS_DXF)
-        if (!_obj->attrib_handles && _obj->num_owned)
+        if (!_obj->attribs && _obj->num_owned)
           _obj->num_owned = 0;
   #endif
-        HANDLE_VECTOR (attrib_handles, num_owned, 4, 0)
+        HANDLE_VECTOR (attribs, num_owned, 4, 0)
       }
     if (FIELD_VALUE (has_attribs)) {
       FIELD_HANDLE (seqend, 3, 0);

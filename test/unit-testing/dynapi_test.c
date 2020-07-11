@@ -12167,14 +12167,14 @@ static int test_INSERT (const Dwg_Object *obj)
   Dwg_Entity_INSERT *restrict insert = obj->tio.entity->tio.INSERT;
   failed = 0;
   {
-    BITCODE_H* attrib_handles;
+    BITCODE_H* attribs;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (insert, "INSERT", "num_owned", &count, NULL)
-        && dwg_dynapi_entity_value (insert, "INSERT", "attrib_handles", &attrib_handles, NULL)
-        && attrib_handles == insert->attrib_handles)
+        && dwg_dynapi_entity_value (insert, "INSERT", "attribs", &attribs, NULL)
+        && attribs == insert->attribs)
       pass ();
     else
-      fail ("INSERT.attrib_handles [H*] * %u num_owned", count);
+      fail ("INSERT.attribs [H*] * %u num_owned", count);
   }
   {
     BITCODE_H block_header;
@@ -14843,14 +14843,14 @@ static int test_MINSERT (const Dwg_Object *obj)
   Dwg_Entity_MINSERT *restrict minsert = obj->tio.entity->tio.MINSERT;
   failed = 0;
   {
-    BITCODE_H* attrib_handles;
+    BITCODE_H* attribs;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (minsert, "MINSERT", "num_owned", &count, NULL)
-        && dwg_dynapi_entity_value (minsert, "MINSERT", "attrib_handles", &attrib_handles, NULL)
-        && attrib_handles == minsert->attrib_handles)
+        && dwg_dynapi_entity_value (minsert, "MINSERT", "attribs", &attribs, NULL)
+        && attribs == minsert->attribs)
       pass ();
     else
-      fail ("MINSERT.attrib_handles [H*] * %u num_owned", count);
+      fail ("MINSERT.attribs [H*] * %u num_owned", count);
   }
   {
     BITCODE_H block_header;
@@ -21605,14 +21605,14 @@ static int test_TABLE (const Dwg_Object *obj)
   Dwg_Entity_TABLE *restrict table = obj->tio.entity->tio.TABLE;
   failed = 0;
   {
-    BITCODE_H* attrib_handles;
+    BITCODE_H* attribs;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (table, "TABLE", "num_owned", &count, NULL)
-        && dwg_dynapi_entity_value (table, "TABLE", "attrib_handles", &attrib_handles, NULL)
-        && attrib_handles == table->attrib_handles)
+        && dwg_dynapi_entity_value (table, "TABLE", "attribs", &attribs, NULL)
+        && attribs == table->attribs)
       pass ();
     else
-      fail ("TABLE.attrib_handles [H*] * %u num_owned", count);
+      fail ("TABLE.attribs [H*] * %u num_owned", count);
   }
   {
     BITCODE_H block_header;

@@ -1314,7 +1314,7 @@ decl_dxfb_process_VERTEX (PFACE)
       Dwg_Object *o;                                                          \
       for (BITCODE_BL j = 0; j < _obj->num_owned; j++)                        \
         {                                                                     \
-          o = _obj->attrib_handles[j] ? _obj->attrib_handles[j]->obj : NULL;  \
+          o = _obj->attribs[j] ? _obj->attribs[j]->obj : NULL;  \
           if (o && o->fixedtype == DWG_TYPE_ATTRIB)                           \
             error |= dwg_dxfb_ATTRIB (dat, o);                                \
         }                                                                     \

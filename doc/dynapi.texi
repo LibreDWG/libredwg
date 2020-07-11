@@ -2102,7 +2102,7 @@ H,	DXF 2
 H
 @item last_attrib
 H
-@item attrib_handles
+@item attribs
 H*
 @item seqend
 H
@@ -2611,7 +2611,7 @@ H,	DXF 2
 H
 @item last_attrib
 H
-@item attrib_handles
+@item attribs
 H*
 @item seqend
 H
@@ -4160,7 +4160,7 @@ H,	DXF 2
 H
 @item last_attrib
 H
-@item attrib_handles
+@item attribs
 H*
 @item seqend
 H

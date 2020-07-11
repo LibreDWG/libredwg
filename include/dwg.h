@@ -1284,7 +1284,7 @@ typedef struct _dwg_entity_INSERT
   BITCODE_H   block_header;
   BITCODE_H   first_attrib;
   BITCODE_H   last_attrib;
-  BITCODE_H*  attrib_handles;
+  BITCODE_H*  attribs;
   BITCODE_H   seqend;
 } Dwg_Entity_INSERT;
 
@@ -1311,7 +1311,7 @@ typedef struct _dwg_entity_MINSERT
   BITCODE_H   block_header;
   BITCODE_H   first_attrib;
   BITCODE_H   last_attrib;
-  BITCODE_H*  attrib_handles;
+  BITCODE_H*  attribs;
   BITCODE_H   seqend;
 } Dwg_Entity_MINSERT;
 
@@ -3759,7 +3759,7 @@ typedef struct _dwg_entity_TABLE
   BITCODE_H block_header;
   BITCODE_H first_attrib;
   BITCODE_H last_attrib;
-  BITCODE_H* attrib_handles;
+  BITCODE_H* attribs;
   BITCODE_H seqend;
   BITCODE_H title_row_style_override;
   BITCODE_H header_row_style_override;

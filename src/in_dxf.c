@@ -6766,7 +6766,7 @@ add_AcDbDetailViewStyle (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   return NULL;
 }
 
-// Also exported to in_json. To set list of children in POLYLINE_*/*INSERT
+// Also exported to in_json. To set to linked list of children in POLYLINE_*/*INSERT
 void
 in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
                        BITCODE_H *owned)
@@ -6793,9 +6793,9 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
     }
 
   obj->tio.entity->ownerhandle->obj = NULL;
-  owhdls = memBEGINc (owner->name, "POLYLINE_") ? "vertex" : "attrib_handles";
-  ow = owner->tio.entity->tio
-           .POLYLINE_2D; // not the same layout for all possible owners
+  owhdls = memBEGINc (owner->name, "POLYLINE_") ? "vertex" : "attribs";
+  // not the same layout for all possible owners
+  ow = owner->tio.entity->tio.POLYLINE_2D;
   if (!num_owned && !owned)
     {
       dwg_dynapi_entity_value (ow, owner->name, "num_owned", &num_owned, 0);
@@ -6827,13 +6827,13 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
                  ARGS_REF (owned[num_owned - 1]));
     }
   else if (dwg->header.version >= R_2004
-           && !owned) // we cannot write r2004, TODO
+           && !owned) // FXIME we only partially write r2004+ yet
     {
       BITCODE_H *first, *last;
       dwg_dynapi_entity_value (ow, owner->name, firstfield, &first, 0);
       dwg_dynapi_entity_value (ow, owner->name, lastfield, &last, 0);
       //..
-      LOG_ERROR ("Cannot yet create the owner array from %s to %s", firstfield,
+      LOG_ERROR ("Cannot yet create the owned array from %s to %s", firstfield,
                  lastfield)
     }
 }
@@ -6882,7 +6882,7 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
       return;
     }
   obj->tio.entity->ownerhandle->obj = NULL;
-  owhdls = memBEGINc (owner->name, "POLYLINE_") ? "vertex" : "attrib_handles";
+  owhdls = memBEGINc (owner->name, "POLYLINE_") ? "vertex" : "attribs";
   ow = owner->tio.entity->tio.POLYLINE_2D;
 
   seqend = dwg_add_handleref (dwg, 3, obj->handle.value, owner);

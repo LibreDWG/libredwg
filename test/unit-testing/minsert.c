@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
   double col_spacing, row_spacing;
   BITCODE_BL num_owned;
   BITCODE_BS num_rows, num_cols;
-  BITCODE_H block_header, first_attrib, last_attrib, seqend, *attrib_handles;
+  BITCODE_H block_header, first_attrib, last_attrib, seqend, *attribs;
 
   Dwg_Version_Type version = obj->parent->header.version;
   dwg_ent_minsert *minsert = dwg_object_to_MINSERT (obj);
@@ -40,7 +40,7 @@ api_process (dwg_object *obj)
         }
       if (version >= R_2004)
         {
-          CHK_ENTITY_HV (minsert, MINSERT, attrib_handles, num_owned);
+          CHK_ENTITY_HV (minsert, MINSERT, attribs, num_owned);
         }
       CHK_ENTITY_H (minsert, MINSERT, seqend);
     }
