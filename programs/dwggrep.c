@@ -163,7 +163,7 @@ print_match (const int is16, const char *restrict filename,
              char *restrict text)
 {
   if (is16)
-    text = bit_convert_TU ((BITCODE_TU)text);
+    text = bit_TU_to_utf8 ((BITCODE_TU)text);
   printf ("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxfgroup,
           text);
   if (is16)
@@ -322,7 +322,7 @@ do_match (const int is16, const char *restrict filename,
     if (text)                                                                 \
       {                                                                       \
         if (obj->parent->header.version >= R_2007)                            \
-          text = bit_convert_TU ((BITCODE_TU)text);                           \
+          text = bit_TU_to_utf8 ((BITCODE_TU)text);                           \
         found += do_match (obj->parent->header.version >= R_2007, filename,   \
                            #ENTITY, dxfgroup, text);                          \
         if (obj->parent->header.version >= R_2007)                            \
