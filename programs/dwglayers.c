@@ -191,7 +191,7 @@ main (int argc, char *argv[])
           // since r2007 unicode, converted to utf-8
           if (dwg.header.from_version >= R_2007)
             {
-              char *utf8 = bit_convert_TU ((BITCODE_TU)name);
+              const char *utf8 = bit_TU_to_utf8 ((BITCODE_TU)name);
               printf ("%s\n", utf8);
               free (utf8);
             }
