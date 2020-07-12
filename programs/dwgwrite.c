@@ -157,7 +157,7 @@ main (int argc, char *argv[])
   char *outfile = NULL;
   Bit_Chain dat = { 0 };
   const char *version = NULL;
-  Dwg_Version_Type dwg_version = R_INVALID;
+  Dwg_Version_Type dwg_version = R_2000;
   int c;
   int force_free = 0;
   int free_outfile = 0;
@@ -376,10 +376,7 @@ main (int argc, char *argv[])
 
   if (dwg.header.from_version == R_INVALID)
     dwg.header.from_version = dwg.header.version;
-  if (version)
-    dat.version = dwg.header.version = dwg_version;
-  else
-    dat.version = dwg.header.version = R_2000;
+  dat.version = dwg.header.version = dwg_version;
 
   if (!outfile)
     {
