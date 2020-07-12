@@ -339,16 +339,22 @@ main (int argc, char *argv[])
            || (infile && !strcasecmp (infile, ".dxfb")))
     {
       if (opts > 1)
-        fprintf (stderr, "Reading Binary DXF file %s\n",
+        {
+          fprintf (stderr, "Reading Binary DXF file %s\n",
                  infile ? infile : "from stdin");
+          fprintf (stderr, "Warning: still highly experimental and untested.\n");
+        }
       error = dwg_read_dxfb (&dat, &dwg);
     }
   else if ((fmt && !strcasecmp (fmt, "dxf"))
            || (infile && !strcasecmp (infile, ".dxf")))
     {
       if (opts > 1)
-        fprintf (stderr, "Reading DXF file %s\n",
-                 infile ? infile : "from stdin");
+        {
+          fprintf (stderr, "Reading DXF file %s\n",
+                   infile ? infile : "from stdin");
+          fprintf (stderr, "Warning: still experimental.\n");
+        }
       if (infile)
         error = dxf_read_file (infile, &dwg); // ascii or binary
       else
