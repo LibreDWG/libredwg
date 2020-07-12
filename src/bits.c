@@ -26,6 +26,7 @@
 #include <ctype.h>
 #include <stdint.h>
 #include <inttypes.h>
+#include <unistd.h> // ftruncate
 #include <math.h>
 #include <assert.h>
 #include <errno.h>
@@ -44,6 +45,7 @@ static unsigned int errors = 0;
 #    define DWG_ABORT_LIMIT 200
 #  endif
 #endif
+#define CHAIN_BLOCK 4096
 
 static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
@@ -3893,6 +3895,12 @@ bit_search_sentinel (Bit_Chain *dat, const unsigned char sentinel[16])
 void
 bit_chain_init (Bit_Chain *dat, const size_t size)
 {
+  if (dat->opts & DWG_OPTS_MMAP)
+    {
+      dat->size = size;
+      ftruncate (fileno (dat->fh), dat->size);
+      return;
+    }
   GCC14_DIAG_IGNORE (-Wanalyzer-malloc-leak)
   if (size > MAX_MEM_ALLOC)
     {
@@ -3936,6 +3944,12 @@ bit_chain_init_dat (Bit_Chain *restrict dat, const size_t size,
 void
 bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
 {
+  if (dat->opts & DWG_OPTS_MMAP)
+    {
+      dat->size += CHAIN_BLOCK;
+      ftruncate (fileno (dat->fh), dat->size);
+      return;
+    }
   if (dat->size == 0 || !dat->chain)
     {
       bit_chain_init (dat, size);
@@ -3972,7 +3986,6 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
     }
 }
 
-#define CHAIN_BLOCK 4096
 void
 bit_chain_alloc (Bit_Chain *dat)
 {
