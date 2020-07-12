@@ -26,6 +26,10 @@
 #include <ctype.h>
 #include <stdint.h>
 #include <inttypes.h>
+#include <unistd.h> // ftruncate
+#ifdef HAVE_SYS_MMAN_H
+#  include <sys/mman.h>
+#endif
 #include <math.h>
 #include <assert.h>
 #include <errno.h>
@@ -44,6 +48,7 @@ static unsigned int errors = 0;
 #    define DWG_ABORT_LIMIT 200
 #  endif
 #endif
+#define CHAIN_BLOCK 4096
 
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
@@ -4226,6 +4231,22 @@ bit_search_sentinel (Bit_Chain *dat, const unsigned char sentinel[16])
 void
 bit_chain_init (Bit_Chain *dat, const size_t size)
 {
+  if (dat->opts & DWG_OPTS_MMAP)
+    {
+      int fd = fileno (dat->fh);
+      dat->size = size;
+      if (fd < 0 || ftruncate (fd, dat->size))
+        {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+          LOG_ERROR ("ftruncate failed with %s", strerror (errno));
+#ifdef DWG_ABORT
+          abort ();
+#else
+          return;
+#endif
+        }
+      return;
+    }
   GCC14_DIAG_IGNORE (-Wanalyzer-malloc-leak)
   if (size > MAX_MEM_ALLOC)
     {
@@ -4269,6 +4290,69 @@ bit_chain_init_dat (Bit_Chain *restrict dat, const size_t size,
 void
 bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
 {
+#ifdef HAVE_SYS_MMAN_H
+  if (dat->opts & DWG_OPTS_MMAP)
+    {
+      unsigned char *chain;
+      size_t old_size;
+      size_t new_size;
+      int fd;
+
+      old_size = dat->size;
+      if (!dat->fh || size > MAX_MEM_ALLOC || old_size > MAX_MEM_ALLOC - size)
+        {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+          LOG_ERROR ("Out of memory");
+#  ifdef DWG_ABORT
+          abort ();
+#  else
+          return;
+#  endif
+        }
+      new_size = old_size + size;
+      fd = fileno (dat->fh);
+      if (fd < 0 || ftruncate (fd, new_size))
+        {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+          LOG_ERROR ("ftruncate failed with %s", strerror (errno));
+#  ifdef DWG_ABORT
+          abort ();
+#  else
+          return;
+#  endif
+        }
+      if (dat->chain && old_size)
+        {
+          if (munmap (dat->chain, old_size))
+            {
+              loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+              LOG_ERROR ("unmap failed with %s", strerror (errno));
+#  ifdef DWG_ABORT
+              abort ();
+#  else
+              return;
+#  endif
+            }
+          dat->chain = NULL;
+          dat->size = 0;
+        }
+      chain = (unsigned char *)mmap (NULL, new_size, PROT_READ | PROT_WRITE,
+                                    MAP_SHARED, fd, 0L);
+      if (!chain || chain == MAP_FAILED)
+        {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+          LOG_ERROR ("mmap failed with %s", strerror (errno));
+#  ifdef DWG_ABORT
+          abort ();
+#  else
+          return;
+#  endif
+        }
+      dat->chain = chain;
+      dat->size = new_size;
+      return;
+    }
+#endif
   if (dat->size == 0 || !dat->chain)
     {
       bit_chain_init (dat, size);
@@ -4305,7 +4389,6 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
     }
 }
 
-#define CHAIN_BLOCK 4096
 void
 bit_chain_alloc (Bit_Chain *dat)
 {
