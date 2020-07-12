@@ -37,6 +37,11 @@
 #else
 char *basename (char *);
 #endif
+#ifdef HAVE_SYS_MMAN_H
+#  include <unistd.h>   // ftruncate
+#  include <sys/mman.h> // mmap
+#endif
+#include <errno.h>
 
 #include "bits.h"
 #include "common.h"
@@ -90,6 +95,40 @@ static void dwg_init_handseed (Dwg_Data *dwg);
  * Public functions
  */
 
+// use with PROT_READ or PROT_WRITE
+EXPORT int
+dat_mmap_file (Bit_Chain *restrict dat, int prot)
+{
+  int flags;
+  int fd;
+  if (!dat->fh)
+    {
+      LOG_ERROR ("%s empty filehandle", __FUNCTION__)
+      fclose (dat->fh);
+      return DWG_ERR_IOERROR;
+    }
+  fd = fileno (dat->fh);
+  if (!dat->size)
+    {
+      struct stat attrib;
+      if (fd >= 0 && !fstat (fd, &attrib))
+        dat->size = attrib.st_size;
+    }
+#ifdef HAVE_SYS_MMAN_H
+  flags = (prot & PROT_WRITE) ? MAP_SHARED : MAP_PRIVATE;
+  if ((prot & PROT_WRITE) && !dat->size)
+    dat->size = 4096;
+  dat->chain = (unsigned char *)mmap (NULL, dat->size, prot, flags, fd, 0L);
+  if (!dat->size || !dat->chain || dat->chain == MAP_FAILED)
+#endif
+    {
+      LOG_ERROR ("mmap failed")
+      fclose (dat->fh);
+      return DWG_ERR_IOERROR;
+    }
+  return 0;
+}
+
 EXPORT int
 dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
                const char *restrict filename)
@@ -102,6 +141,11 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
       if (fd >= 0 && !fstat (fd, &attrib))
         dat->size = attrib.st_size;
     }
+  if (!dat->fh)
+    dat->fh = fp;
+#ifdef HAVE_SYS_MMAN_H
+  return dat_mmap_file (dat, PROT_READ);
+#else
   dat->chain = (unsigned char *)calloc (1, dat->size + 1);
   if (!dat->chain)
     {
@@ -128,13 +172,17 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
     }
   // ensure zero-termination for strstr, strtol, ...
   dat->chain[dat->size] = '\0';
+#endif
   return 0;
 }
 
-// fast bulk-read when we known the size
+// Prefered fast bulk-read when we known the size
 EXPORT int
 dat_read_size (Bit_Chain *restrict dat)
 {
+#ifdef HAVE_SYS_MMAN_H
+  return dat_mmap_file (dat, PROT_READ | PROT_WRITE);
+#else
   if (!dat->chain)
     dat->chain = (unsigned char *)calloc (1, dat->size + 2);
   else
@@ -155,6 +203,46 @@ dat_read_size (Bit_Chain *restrict dat)
     }
   dat->chain[dat->size] = '\0'; // ensure zero-termination
   return 0;
+#endif
+}
+
+EXPORT int
+dat_close_file (Bit_Chain *restrict dat)
+{
+  int error;
+  if (!dat->fh) // already closed
+    return 0;
+#ifdef HAVE_SYS_MMAN_H
+  // msync only needed when still open and opened for write
+  if (msync (dat->chain, dat->size, MS_SYNC))
+    {
+      LOG_ERROR ("msync failed with %s", strerror (errno));
+      fclose (dat->fh);
+      dat->fh = NULL;
+      error = DWG_ERR_IOERROR;
+    }
+#endif
+  if (fclose (dat->fh))
+    return DWG_ERR_IOERROR;
+  dat->fh = NULL;
+  return 0;
+}
+
+EXPORT int
+dat_unmap_file (Bit_Chain *restrict dat)
+{
+  int error = dat_close_file (dat);
+#ifdef HAVE_SYS_MMAN_H
+  if (munmap (dat->chain, dat->size))
+    {
+      LOG_ERROR ("unmap failed with %s", strerror (errno));
+      error |= DWG_ERR_IOERROR;
+    }
+  dat->chain = NULL;
+  dat->size = 0;
+#endif
+  bit_chain_free (dat);
+  return error;
 }
 
 EXPORT int
@@ -175,8 +263,8 @@ dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
       if (!dat->chain)
         {
           LOG_ERROR ("Not enough memory.\n");
-          fclose (fp);
-          dat->fh = NULL;
+          dat->fh = fp;
+          dat_unmap_file (dat);
           return DWG_ERR_OUTOFMEM;
         }
       size = fread (&dat->chain[dat->size], sizeof (char), 4096, fp);
@@ -189,10 +277,10 @@ dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
       LOG_ERROR ("Could not read from stream (%" PRIuSIZE " out of %" PRIuSIZE
                  ")\n",
                  size, dat->size);
-      fclose (fp);
       free (dat->chain);
-      dat->fh = NULL;
       dat->chain = NULL;
+      dat->fh = fp;
+      dat_unmap_file (dat);
       return DWG_ERR_IOERROR;
     }
 
@@ -285,6 +373,7 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   memset (&bit_chain, 0, sizeof (Bit_Chain));
   if (fp == stdin)
     {
+      // TODO mmap
       error = dat_read_stream (&bit_chain, fp);
       if (error >= DWG_ERR_CRITICAL)
         return error;
@@ -298,7 +387,7 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
       if (error >= DWG_ERR_CRITICAL)
         return error;
     }
-  fclose (fp);
+  // fclose (fp); // mmap can read from closed files if readonly
 
   if (bit_chain.size < 6)
     {
@@ -312,10 +401,9 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   error = dwg_decode (&bit_chain, dwg);
   if (error >= DWG_ERR_CRITICAL)
     {
-      LOG_ERROR ("Failed to decode file: %s 0x%x", filename, error);
-      free (bit_chain.chain);
-      bit_chain.chain = NULL;
-      bit_chain.size = 0;
+      LOG_ERROR ("Failed to decode file: %s 0x%x\n", filename, error);
+      bit_chain.fh = fp;
+      dat_unmap_file (&bit_chain);
       return error;
     }
 
@@ -324,8 +412,10 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   free (bit_chain.chain);
   bit_chain.chain = NULL;
   bit_chain.size = 0;
+  bit_chain.fh = fp;
 
   dwg_fixup_viewport_ids (dwg);
+  error |= dat_unmap_file (&bit_chain);
   return error;
 }
 
@@ -378,15 +468,16 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   dwg->header.version = version;
 
   memset (&dat, 0, sizeof (Bit_Chain));
+  dat.fh = fp;
 #  ifdef HAVE_SYS_STAT_H
   dat.size = attrib.st_size;
 #  endif
-  dat.chain = (unsigned char *)calloc (1, dat.size + 2);
-  if (!dat.chain)
+  error = dat_read_size (&dat);
+  if (error > DWG_ERR_CRITICAL)
     {
-      LOG_ERROR ("Not enough memory");
-      fclose (fp);
-      return DWG_ERR_OUTOFMEM;
+      LOG_ERROR ("dat_read_size failed\n");
+      dat_unmap_file (&dat);
+      return error;
     }
   dat.byte = 0;
   dat.bit = 0;
@@ -394,18 +485,7 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   dat.version = dwg->header.version;
   dat.opts = dwg->opts;
 
-  size = fread (dat.chain, sizeof (char), dat.size, fp);
-  fclose (fp);
-  if (size != dat.size)
-    {
-      LOG_ERROR ("Could not read the entire file (%" PRIuSIZE
-                 " out of %" PRIuSIZE "): %s",
-                 size, dat.size, filename);
-      free (dat.chain);
-      dat.chain = NULL;
-      dat.size = 0;
-      return DWG_ERR_IOERROR;
-    }
+  size = dat.size;
   /*
 0
 SECTION
@@ -440,9 +520,7 @@ ENDSEC
       || !memcmp (dat.chain, "AC2.10", 4) || !memcmp (dat.chain, "MC0.0", 4))
     {
       LOG_ERROR ("This is a DWG, not a DXF file: %s", filename);
-      free (dat.chain);
-      dat.chain = NULL;
-      dat.size = 0;
+      dat_unmap_file (&dat);
       return DWG_ERR_INVALIDDWG;
     }
   /* See if binary or ascii */
@@ -459,17 +537,12 @@ ENDSEC
   if (error >= DWG_ERR_CRITICAL)
     {
       LOG_ERROR ("Failed to decode DXF file: %s", filename);
-      free (dat.chain);
-      dat.chain = NULL;
-      dat.size = 0;
+      dat_unmap_file (&dat);
       return error;
     }
 
   // TODO: does dwg hold any char* pointers to the dat or are they all copied?
-  free (dat.chain);
-  dat.chain = NULL;
-  dat.size = 0;
-
+  dat_unmap_file (&dat);
   return 0;
 }
 #endif /* DISABLE_DXF */
@@ -484,7 +557,7 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
   FILE *fh;
   struct_stat_t attrib;
   Bit_Chain dat = { 0 };
-  int error;
+  int error = 0;
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   assert (filename);
@@ -502,6 +575,25 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
     dwg_fixup_BLOCKS_entities ((Dwg_Data *)dwg);
 
   dat.size = 0;
+
+#  ifdef HAVE_SYS_MMAN_H
+  // try opening the output file in write mode
+  if (!stat (filename, &attrib)
+#    ifdef _WIN32
+      && strNE (filename, "NUL")
+#    else
+      && strNE (filename, "/dev/null")
+#    endif
+  )
+    {
+      LOG_ERROR ("The file already exists. We won't overwrite it.")
+      return error | DWG_ERR_IOERROR;
+    }
+
+  dat.fh = fopen (filename, "wb");
+  dat_mmap_file (&dat, PROT_WRITE);
+#  endif
+
   error = dwg_encode ((Dwg_Data *)dwg, &dat);
   if (error >= DWG_ERR_CRITICAL)
     {
@@ -509,11 +601,7 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
       /* In development we want to look at the corpses */
 #  ifdef IS_RELEASE
       if (dat.size > 0)
-        {
-          free (dat.chain);
-          dat.chain = NULL;
-          dat.size = 0;
-        }
+        error |= dat_unmap_file (&dat);
       return error;
 #  endif
     }
@@ -530,13 +618,16 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
       LOG_ERROR ("The file already exists. We won't overwrite it.");
       return error | DWG_ERR_IOERROR;
     }
+
+#  ifdef HAVE_SYS_MMAN_H
+  dat_unmap_file (&dat);
+#  else
   fh = fopen (filename, "wb");
   if (!fh || !dat.chain)
     {
       LOG_ERROR ("Failed to create the file: %s", filename);
       return error | DWG_ERR_IOERROR;
     }
-
   // Write the data into the file
   if (fwrite (dat.chain, sizeof (char), dat.size, fh) != dat.size)
     {
@@ -555,6 +646,7 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
       dat.chain = NULL;
       dat.size = 0;
     }
+#  endif
 
   return error;
 }
@@ -2615,7 +2707,7 @@ dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict,
     }
   if (obj->fixedtype != DWG_TYPE_DICTIONARY)
     {
-      LOG_ERROR ("dwg_find_dicthandle: dict not a DICTIONARY\n");
+      LOG_ERROR ("dwg_find_dicthandle: dict not a DICTIONARY");
       return NULL;
     }
 
@@ -2662,7 +2754,7 @@ dwg_find_dicthandle_objname (Dwg_Data *restrict dwg, BITCODE_H dict,
     }
   if (obj->fixedtype != DWG_TYPE_DICTIONARY)
     {
-      LOG_ERROR ("dwg_find_dicthandle: dict not a DICTIONARY\n");
+      LOG_ERROR ("dwg_find_dicthandle: dict not a DICTIONARY");
       return NULL;
     }
 
