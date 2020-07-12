@@ -72,7 +72,7 @@ typedef struct _bit_chain
   size_t size;
   size_t byte;
   unsigned char bit;
-  unsigned char opts; // from dwg->opts, see DWG_OPTS_*
+  unsigned short opts; // from dwg->opts, see DWG_OPTS_*
   Dwg_Version_Type version;
   Dwg_Version_Type from_version;
   FILE *fh;
