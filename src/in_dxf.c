@@ -118,29 +118,53 @@ static Dxf_Objs *dxf_objs;
 
 // stricter ordering for special subclasses:
 #define FIELD_B(field, dxf)                                                   \
-  pair = dxf_read_pair (dat);                                                 \
-  EXPECT_INT_DXF (#field, dxf, B)
+  if (dxf)                                                                    \
+    {                                                                         \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_INT_DXF (#field, dxf, B);                                        \
+    }
 #define FIELD_RC(field, dxf)                                                  \
-  pair = dxf_read_pair (dat);                                                 \
-  EXPECT_INT_DXF (#field, dxf, RC)
+  if (dxf)                                                                    \
+    {                                                                         \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_INT_DXF (#field, dxf, RC);                                       \
+    }
 #define FIELD_BS(field, dxf)                                                  \
-  pair = dxf_read_pair (dat);                                                 \
-  EXPECT_INT_DXF (#field, dxf, BS)
+  if (dxf)                                                                    \
+    {                                                                         \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_INT_DXF (#field, dxf, BS);                                       \
+    }
 #define FIELD_BLd(field, dxf)                                                 \
-  pair = dxf_read_pair (dat);                                                 \
-  EXPECT_INT_DXF (#field, dxf, BLd)
+  if (dxf)                                                                    \
+    {                                                                         \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_INT_DXF (#field, dxf, BLd);                                      \
+    }
 #define FIELD_BL(field, dxf)                                                  \
-  pair = dxf_read_pair (dat);                                                 \
-  EXPECT_INT_DXF (#field, dxf, BL)
+  if (dxf)                                                                    \
+    {                                                                         \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_INT_DXF (#field, dxf, BL);                                       \
+    }
 #define FIELD_BD(field, dxf)                                                  \
-  pair = dxf_read_pair (dat);                                                 \
-  EXPECT_DBL_DXF (#field, dxf, BD)
+  if (dxf)                                                                    \
+    {                                                                         \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_DBL_DXF (#field, dxf, BD);                                       \
+    }
 #define FIELD_HANDLE(field, code, dxf)                                        \
-  pair = dxf_read_pair (dat);                                                 \
-  EXPECT_H_DXF (#field, code, dxf, H)
+  if (dxf)                                                                    \
+    {                                                                         \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_H_DXF (#field, code, dxf, H);                                    \
+    }
 #define FIELD_T(field, dxf)                                                   \
-  pair = dxf_read_pair (dat);                                                 \
-  EXPECT_T_DXF (#field, dxf)
+  if (dxf)                                                                    \
+    {                                                                         \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_T_DXF (#field, dxf);                                             \
+    }
 
 static void *
 xcalloc (size_t n, size_t s)
@@ -684,16 +708,20 @@ dxf_find_lweight (const int lw)
   return 0;
 }
 
+// FIXME: support 430 (name), 440 (alpha)
 static int
-dxf_read_CMC (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair,
-              BITCODE_CMC *restrict color)
+dxf_read_CMC (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
+              BITCODE_CMC *restrict color, const int dxf)
 {
-  if (pair->code < 90)
+  int error = 1;
+  unsigned long pos = bit_position (dat);
+  Dxf_Pair *pair = dxf_read_pair (dat);
+  if (pair->code < 90 && dxf == pair->code)
     {
       color->index = pair->value.i;
-      if (pair->value.i == 256)
+      if (pair->value.i == 256) // bylayer
         color->method = 0xc2;
-      if (pair->value.i == 257)
+      if (pair->value.i == 257) // none
         color->method = 0xc8;
       else if (dwg->header.version >= R_2004)
         {
@@ -703,9 +731,38 @@ dxf_read_CMC (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair,
         }
       LOG_TRACE ("color.index = %d [%s %d]\n", pair->value.i, "CMC",
                  pair->code);
-      return 0;
+      // optional 420, 430, 440 fields
+      pos = bit_position (dat);
+      error = dxf_read_CMC (dwg, dat, color, dxf);
     }
-  return 1;
+  else if (pair->code < 430 && pair->code == (dxf + 420 - 62)) // truecolor
+    {
+      color->rgb = pair->value.l;
+      color->rgb |= 0xc3000000;
+      LOG_TRACE ("color.rgb = 0x%08x [%s %d]\n", color->rgb, "CMC",
+                 pair->code);
+      error = 0;
+    }
+  // TODO 430, 440
+  else if (pair->code < 440 && pair->code == (dxf + 430 - 62)) // name
+    {
+      LOG_WARN ("color.name %s ignored [%s %d]", pair->value.s, "CMC",
+                 pair->code);
+      error = 0;
+    }
+  else if (pair->code < 450 && pair->code == (dxf + 440 - 62)) // alpha
+    {
+      LOG_WARN ("color.alpha %ld ignored [%s %d]", pair->value.l, "CMC",
+                 pair->code);
+      error = 0;
+    }
+  dxf_free_pair (pair);
+  if (error)
+    {
+      LOG_TRACE ("no optional CMC, backup\n");
+      bit_set_position (dat, pos);
+    }
+  return error;
 }
 
 static int
@@ -6652,15 +6709,14 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj, char *_obj,
   return pair;
 }
 
+#define FIELD_CMC(field, dxf)                                                 \
+  {                                                                           \
+    dxf_read_CMC (dwg, dat, &o->field, dxf);                                  \
+  }
 #define FIELD_CMC2004(field, dxf)                                             \
   if (dwg->header.from_version >= R_2004)                                     \
   {                                                                           \
-    pair = dxf_read_pair (dat);                                               \
-    if (pair->code == 62)                                                     \
-      {                                                                       \
-        dxf_read_CMC (dwg, pair, &o->field);                                  \
-        dxf_free_pair (pair);                                                 \
-      }                                                                       \
+    dxf_read_CMC (dwg, dat, &o->field, dxf);                                  \
   }
 
 // returns NULL on success
@@ -6767,6 +6823,49 @@ add_AcDbDetailViewStyle (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_BLd (borderline_linewt, 90);
   FIELD_CMC2004 (borderline_color, 62);
   FIELD_RC (model_edge, 280); // type, origin, direction
+  return NULL;
+}
+
+static Dxf_Pair *
+add_VISUALSTYLE_props (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_VISUALSTYLE *o = obj->tio.object->tio.VISUALSTYLE;
+  // starting with 70 . 58 num_props
+  Dxf_Pair *pair;
+  FIELD_BS (num_props, 70); // 58
+  if (o->num_props != 58)
+    LOG_ERROR ("Invalid VISUALSTYLE.num_props %u != 58", (unsigned)o->num_props);
+  FIELD_B (b_prop1c, 290);                FIELD_BS (b_prop1c_int, 176);
+  FIELD_B (b_prop1d, 290);                FIELD_BS (b_prop1d_int, 176);
+  FIELD_B (b_prop1e, 290);                FIELD_BS (b_prop1e_int, 176);
+  FIELD_B (b_prop1f, 90);                 FIELD_BS (b_prop1f_int, 176);
+  FIELD_B (b_prop20, 290);                FIELD_BS (b_prop20_int, 176);
+  FIELD_B (b_prop21, 90);                 FIELD_BS (b_prop21_int, 176);
+  FIELD_B (b_prop22, 290);                FIELD_BS (b_prop22_int, 176);
+  FIELD_B (b_prop23, 290);                FIELD_BS (b_prop23_int, 176);
+  FIELD_B (b_prop24, 290);                FIELD_BS (b_prop24_int, 176);
+  FIELD_BL (bl_prop25, 90);               FIELD_BS (bl_prop25_int, 176);
+  FIELD_BD (bd_prop26, 40);               FIELD_BS (bd_prop26_int, 176);
+  FIELD_BD (bd_prop27, 40);               FIELD_BS (bd_prop27_int, 176);
+  FIELD_BL (bl_prop28, 90);               FIELD_BS (bl_prop28_int, 176);
+  FIELD_CMC (c_prop29, 62);               FIELD_BS (c_prop29_int, 176);
+  FIELD_BL (bl_prop2a, 90);               FIELD_BS (bl_prop2a_int, 176);
+  FIELD_BL (bl_prop2b, 90);               FIELD_BS (bl_prop2b_int, 176);
+  FIELD_CMC (c_prop2c, 62);               FIELD_BS (c_prop2c_int, 176);
+  /*FIELD_B (b_prop2d, 0);*/              FIELD_BS (b_prop2d_int, 176);
+  FIELD_BL (bl_prop2e, 290);              FIELD_BS (bl_prop2e_int, 176);
+  FIELD_BL (bl_prop2f, 90);               FIELD_BS (bl_prop2f_int, 176);
+  FIELD_BL (bl_prop30, 90);               FIELD_BS (bl_prop30_int, 176);
+  FIELD_B (b_prop31, 290);                FIELD_BS (b_prop31_int, 176);
+  FIELD_BL (bl_prop32, 90);               FIELD_BS (bl_prop32_int, 176);
+  FIELD_CMC (c_prop33, 62);               FIELD_BS (c_prop33_int, 176);
+  FIELD_BD (bd_prop34, 40);               FIELD_BS (bd_prop34_int, 176);
+  FIELD_BL (edge_wiggle, 90);             FIELD_BS (edge_wiggle_int, 176);  // prop 0x35
+  FIELD_T (strokes, 1);                   FIELD_BS (strokes_int, 176);      // prop 0x36
+  FIELD_B (b_prop37, 290);                FIELD_BS (b_prop37_int, 176);
+  FIELD_BD (bd_prop38, 40);               FIELD_BS (bd_prop38_int, 176);
+  FIELD_BD (bd_prop39, 40);               FIELD_BS (bd_prop39_int, 176);
   return NULL;
 }
 
@@ -7325,6 +7424,7 @@ new_object (char *restrict name, char *restrict dxfname,
   BITCODE_BB scale_flag;
   BITCODE_3BD pt;
   Dwg_Object *ctrl;
+  const Dwg_DYNAPI_field *prev_vstyle = NULL;
   subclass[0] = '\0';
 
   if (ctrl_id || i)
@@ -9025,7 +9125,6 @@ new_object (char *restrict name, char *restrict dxfname,
               const Dwg_DYNAPI_field *f;
               const Dwg_DYNAPI_field *fields
                   = dwg_dynapi_entity_fields (obj->name);
-              const Dwg_DYNAPI_field *prev_vstyle = NULL;
               if (!pair || pair->code == 0)
                 break;
               if (!fields)
@@ -9180,7 +9279,7 @@ new_object (char *restrict name, char *restrict dxfname,
                         }
                     }
                   else if (obj->fixedtype == DWG_TYPE_VISUALSTYLE
-                           && dat->version >= R_2010 && pair->code == 176
+                           && dwg->header.from_version >= R_2010 && pair->code == 176
                            && prev_vstyle)
                     {
                       // which 176 of the many? the one after the previous
@@ -9197,7 +9296,19 @@ new_object (char *restrict name, char *restrict dxfname,
                       if (strEQ (fieldname, f->name))
                         {
                           LOG_HANDLE ("found %s.%s:\n", name, fieldname);
-                          goto matching_pair;
+                          if (strEQc (f->name, "display_shadow_type_int")
+                              && dwg->header.from_version >= R_2013)
+                            {
+                              Dwg_Object_VISUALSTYLE *o = obj->tio.object->tio.VISUALSTYLE;
+                              o->display_shadow_type_int = pair->value.i;
+                              pair = add_VISUALSTYLE_props (obj, dat);
+                              if (!pair) // success
+                                goto start_loop;
+                              else // or better advance to the next 0
+                                goto search_field;
+                            }
+                          else
+                            goto matching_pair;
                         }
                       else
                         LOG_WARN ("%s.%s [BS 176] not found in dynapi", name,
@@ -9207,13 +9318,13 @@ new_object (char *restrict name, char *restrict dxfname,
                     {
                     matching_pair:
                       if (obj->fixedtype == DWG_TYPE_VISUALSTYLE
-                          && dat->version >= R_2010 && pair->code != 176)
+                          && dwg->header.from_version >= R_2010 && pair->code != 176)
                         {
                           prev_vstyle = f;
                         }
                       // exceptions, where there's another field 92:
                       if (pair->code == 92 && is_entity
-                          && dat->from_version < R_2010
+                          && dwg->header.from_version < R_2010
                           && strEQc (subclass, "AcDbEntity"))
                         // not MULTILEADER.text_color, nor MESH.num_vertex
                         {
@@ -9836,7 +9947,7 @@ new_object (char *restrict name, char *restrict dxfname,
                           else
                             {
                               if (is_entity && pair->code == 160
-                                  && dat->from_version >= R_2010)
+                                  && dwg->header.from_version >= R_2010)
                                 {
                                   pair = add_ent_preview (obj, dat, pair);
                                   goto start_loop; // already fresh pair
@@ -9857,7 +9968,7 @@ new_object (char *restrict name, char *restrict dxfname,
               // still needed? already handled above
               // not in dynapi: 92 as 310 size prefix for PROXY vector preview
               // FIXME 92 is just for pre-r2010 entities. r2010+ is 160
-              if (pair->code == 92 && is_entity && dat->from_version < R_2010
+              if (pair->code == 92 && is_entity && dwg->header.from_version < R_2010
                   && (strEQc (subclass, "AcDbEntity")
                       || strEQc (subclass, "AcDbProxyEntity")
                       || strstr (subclass, "Surface")))
