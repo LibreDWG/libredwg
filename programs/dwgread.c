@@ -317,7 +317,10 @@ main (int argc, char *argv[])
         fprintf (stderr, "Invalid output format '%s'\n", fmt);
 
       if (outfile)
-        fclose (dat.fh);
+        {
+          fclose (dat.fh);
+          dat.fh = NULL;
+        }
     }
 
 done:
