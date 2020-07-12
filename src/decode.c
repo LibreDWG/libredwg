@@ -6115,6 +6115,7 @@ int dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                 = j + 1 < _obj->num_owned ? _obj->entities[j + 1] : NULL;
               unsigned long prev_ref = prev ? prev->absolute_ref : 0;
               unsigned long next_ref = next ? next->absolute_ref : 0;
+              unsigned long cur_ref = hdl ? hdl->absolute_ref : 0;
 
               if (!o)
                 continue;
@@ -6128,11 +6129,24 @@ int dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                   continue;
                 }
               // only log changes
-              if (prev_ref == 0L && next_ref == 0L && !ent->nolinks)
+              if (prev_ref == 0L && next_ref == 0L)
                 {
-                  LOG_TRACE ("nolinks: 1\n");
-                  ent->nolinks = 1;
-                  changes++;
+                  if (!ent->nolinks)
+                    {
+                      LOG_TRACE ("nolinks: 1\n");
+                      ent->nolinks = 1;
+                      changes++;
+                    }
+                }
+              else if (prev_ref && prev_ref == cur_ref - 1 &&
+                       next_ref && next_ref == cur_ref + 1)
+                {
+                  if (!ent->nolinks)
+                    {
+                      LOG_TRACE ("nolinks: 1\n");
+                      ent->nolinks = 1;
+                      changes++;
+                    }
                 }
               else if (prev_ref && next_ref && ent->nolinks)
                 {
@@ -6162,6 +6176,11 @@ int dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                 }
               if (ent->prev_entity == NULL)
                 {
+                  if (!prev_ref)
+                    {
+                      LOG_TRACE ("nolinks: 0\n");
+                      ent->nolinks = 0;
+                    }
                   LOG_TRACE (" %4lX: prev_entity %4lX, ", hdl->absolute_ref, prev_ref);
                   ent->prev_entity = dwg_add_handleref (dwg, 4, prev_ref, o);
                 }
@@ -6178,6 +6197,11 @@ int dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                 {
                   LOG_TRACE (" next_entity %4lX\n", next_ref);
                   ent->next_entity = dwg_add_handleref (dwg, 4, next_ref, o);
+                  if (!next_ref)
+                    {
+                      LOG_TRACE ("    nolinks: 0\n");
+                      ent->nolinks = 0;
+                    }
                 }
               else if (ent->next_entity->absolute_ref != next_ref)
                 {
