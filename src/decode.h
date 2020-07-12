@@ -92,6 +92,8 @@ void section_string_stream (Bit_Chain *restrict dat, BITCODE_RL bitsize,
                             Bit_Chain *restrict str);
 
 /* from dwg.c */
+// from dat.fh
+EXPORT int dat_read_size (Bit_Chain *restrict dat);
 EXPORT int dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
                           const char *restrict filename);
 EXPORT int dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp);

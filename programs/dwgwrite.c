@@ -322,13 +322,6 @@ main (int argc, char *argv[])
           exit (1);
         }
       dat.size = attrib.st_size;
-      dat.chain = (unsigned char *)calloc (1, dat.size + 2);
-      if (!dat.chain)
-        {
-          fprintf (stderr, "Not enough memory.\n");
-          fclose (dat.fh);
-          return DWG_ERR_OUTOFMEM;
-        }
     }
   else
     {
@@ -342,6 +335,8 @@ main (int argc, char *argv[])
       if (opts > 1)
         fprintf (stderr, "Reading JSON file %s\n",
                  infile ? infile : "from stdin");
+      if (infile)
+        dat_read_file (&dat, dat.fh, infile);
       error = dwg_read_json (&dat, &dwg);
     }
   else if ((fmt && !strcasecmp (fmt, "dxfb"))

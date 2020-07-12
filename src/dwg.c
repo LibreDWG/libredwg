@@ -109,6 +109,31 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
   return 0;
 }
 
+// fast bulk-read when we known the size
+EXPORT int
+dat_read_size (Bit_Chain *restrict dat)
+{
+  if (!dat->chain)
+    dat->chain = (unsigned char *)calloc (1, dat->size + 2);
+  else
+    dat->chain = (unsigned char *)realloc (dat->chain, dat->size + 2);
+  if (!dat->chain)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("Not enough memory");
+      fclose (dat->fh);
+      return DWG_ERR_OUTOFMEM;
+    }
+  if (fread (dat->chain, 1, dat->size, dat->fh) != dat->size)
+    {
+      fclose (dat->fh);
+      free (dat->chain);
+      dat->chain = NULL;
+      return DWG_ERR_IOERROR;
+    }
+  return 0;
+}
+
 EXPORT int
 dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
 {
@@ -125,6 +150,7 @@ dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
         }
       if (!dat->chain)
         {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("Not enough memory.\n");
           fclose (fp);
           return DWG_ERR_OUTOFMEM;
