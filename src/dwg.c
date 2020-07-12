@@ -292,7 +292,7 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   dat.chain = (unsigned char *)calloc (1, dat.size + 2);
   if (!dat.chain)
     {
-      LOG_ERROR ("Not enough memory.\n")
+      LOG_ERROR ("Not enough memory.\n");
       fclose (fp);
       return DWG_ERR_OUTOFMEM;
     }

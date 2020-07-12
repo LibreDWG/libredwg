@@ -4128,7 +4128,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg->opts |= (loglevel | DWG_OPTS_INJSON);
   dat->opts |= (loglevel | DWG_OPTS_INJSON);
   loglevel = dwg->opts & 0xf;
-  if (!dat->chain && dat->fh)
+  if (dat->fh && (!dat->chain || !*dat->chain))
     {
       error = dat_read_stream (dat, dat->fh);
       if (error >= DWG_ERR_CRITICAL)

@@ -11013,6 +11013,12 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dxf_Pair *pair;
   int error = 0;
 
+  if (!dat->chain && dat->fh)
+    {
+      error = dat_read_stream (dat, dat->fh);
+      if (error >= DWG_ERR_CRITICAL)
+        return error;
+    }
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   num_dxf_objs = 0;
   size_dxf_objs = 1000;

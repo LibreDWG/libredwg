@@ -304,7 +304,7 @@ main (int argc, char *argv[])
   
   // allow stdin, but require -I|--format then
   memset (&dwg, 0, sizeof (Dwg_Data));
-  dwg.opts = opts;
+  dat.opts = dwg.opts = opts;
   dat.version = dwg.header.version = dwg_version;
 
   if (infile)
@@ -322,9 +322,18 @@ main (int argc, char *argv[])
           exit (1);
         }
       dat.size = attrib.st_size;
+      dat.chain = (unsigned char *)calloc (1, dat.size + 2);
+      if (!dat.chain)
+        {
+          fprintf (stderr, "Not enough memory.\n");
+          fclose (dat.fh);
+          return DWG_ERR_OUTOFMEM;
+        }
     }
   else
-    dat.fh = stdin;
+    {
+      dat.fh = stdin;
+    }
 
 #ifndef DISABLE_DXF
   if ((fmt && !strcasecmp (fmt, "json"))
@@ -344,7 +353,10 @@ main (int argc, char *argv[])
                  infile ? infile : "from stdin");
           fprintf (stderr, "Warning: still highly experimental and untested.\n");
         }
-      error = dwg_read_dxfb (&dat, &dwg);
+      if (infile)
+        error = dxf_read_file (infile, &dwg); // ascii or binary
+      else
+        error = dwg_read_dxfb (&dat, &dwg);
     }
   else if ((fmt && !strcasecmp (fmt, "dxf"))
            || (infile && !strcasecmp (infile, ".dxf")))
