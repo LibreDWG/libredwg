@@ -2132,8 +2132,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       klass = &dwg->dwg_class[j];
       bit_write_BS (dat, klass->number);
       bit_write_BS (dat, klass->proxyflag);
-      bit_write_T (dat, klass->appname);
-      bit_write_T (dat, klass->cppname);
+      SINCE (R_2007) {
+        bit_write_T (dat, klass->appname);
+        bit_write_T (dat, klass->cppname);
+      } else {
+        bit_write_TV (dat, klass->appname);
+        bit_write_TV (dat, klass->cppname);
+      }
       SINCE (R_2007) // only when we have it. like not for 2004 => 2007
                      // conversions
       {
@@ -2154,6 +2159,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
       SINCE (R_2007)
       {
+        if (dat->from_version < R_2007 && !klass->dwg_version) {
+          // defaults
+          klass->dwg_version = (BITCODE_BL)dwg->header.dwg_version;
+          klass->maint_version = (BITCODE_BL)dwg->header.maint_version;
+          // TODO num_instances
+        }
         bit_write_BL (dat, klass->num_instances);
         bit_write_BL (dat, klass->dwg_version);
         bit_write_BL (dat, klass->maint_version);

@@ -757,15 +757,11 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               if (strEQ (version, version_codes[v]))
                 {
-                  dat->from_version = dwg->header.from_version = v;
+                  dwg->header.from_version = v;
                   is_tu = dat->from_version >= R_2007;
-                  LOG_TRACE ("HEADER.from_version = dat->from_version = %s\n",
-                             version);
-                  if (!dwg->header.version)
-                    dwg->header.version = dat->version = dat->from_version;
-                  else
-                    LOG_TRACE ("HEADER.version = %s\n",
-                               version_codes[dat->version]);
+                  LOG_TRACE ("HEADER.from_version = %s,\tdat->from_version = %s\n",
+                             version_codes[dwg->header.from_version],
+                             version_codes[dat->from_version]);
                   if (is_tu && dwg->num_objects
                       && dwg->object[0].fixedtype == DWG_TYPE_BLOCK_HEADER)
                     {
@@ -780,6 +776,9 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               if (v == R_AFTER)
                 LOG_ERROR ("Invalid HEADER: 9 %s, 1 %s", field, version)
             }
+          LOG_TRACE ("HEADER.version = %s,\tdat->version = %s\n",
+                     version_codes[dwg->header.version],
+                     version_codes[dat->version]);
         }
       else if (field[0] == '$')
         {
@@ -1157,6 +1156,7 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_BL i;
   Dxf_Pair *pair = dxf_read_pair (dat);
   Dwg_Class *klass;
+  const char* t_type = dat->version >= R_2007 ? "TU" : "TV";
 
   while (pair)
     { // read next class
@@ -1223,7 +1223,8 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 {
                   STRADD_T (klass->cppname, pair->value.s);
                 }
-              LOG_TRACE ("CLASS[%d].cppname = %s [TV 2]\n", i, pair->value.s);
+              LOG_TRACE ("CLASS[%d].cppname = %s [%s 2]\n", i, pair->value.s,
+                         t_type);
               break;
             case 3:
               if (klass->appname)
@@ -1236,7 +1237,8 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 {
                   STRADD_T (klass->appname, pair->value.s);
                 }
-              LOG_TRACE ("CLASS[%d].appname = %s [TV 3]\n", i, pair->value.s);
+              LOG_TRACE ("CLASS[%d].appname = %s [%s 3]\n", i, pair->value.s,
+                         t_type);
               break;
             case 90:
               klass->proxyflag = pair->value.l;
@@ -1670,7 +1672,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_TRACE ("LTYPE.dashes[%d].length = %f [BD 49]\n", j,
                      pair->value.d);
           PRE (R_13)
-          o->pattern_len += pair->value.d;
+            o->pattern_len += pair->value.d;
         }
       else if (pair->code == 74)
         {
@@ -1822,24 +1824,24 @@ add_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               // TODO SHRT_MAX, but should be -1 really
               o->lines[j].lt_index = 32767;
               LOG_TRACE ("MLINESTYLE.lines[%d].lt_index = -1 [BSd 6]\n", j);
-              SINCE (R_2018)
-              goto mline_hdl;
+              if (dwg->header.from_version >= R_2018)
+                goto mline_hdl;
             }
           else if (strEQc (pair->value.s, "BYBLOCK")
                    || strEQc (pair->value.s, "ByBlock"))
             {
               o->lines[j].lt_index = 32766;
               LOG_TRACE ("MLINESTYLE.lines[%d].lt_index = -2 [BSd 6]\n", j);
-              SINCE (R_2018)
-              goto mline_hdl;
+              if (dwg->header.from_version >= R_2018)
+                goto mline_hdl;
             }
           else if (strEQc (pair->value.s, "CONTINUOUS")
                    || strEQc (pair->value.s, "Continuous"))
             {
               o->lines[j].lt_index = 0;
               LOG_TRACE ("MLINESTYLE.lines[%d].lt_index = 0 [BSd 6]\n", j);
-              SINCE (R_2018)
-              goto mline_hdl;
+              if (dwg->header.from_version >= R_2018)
+                goto mline_hdl;
             }
           else // lookup on LTYPE_CONTROL list
           mline_hdl:
@@ -5867,6 +5869,8 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         int length = rbuf->value.str.size = strlen (pair->value.s);
         if (length > 0)
           rbuf->value.str.u.wdata = bit_utf8_to_TU (pair->value.s);
+        LOG_TRACE ("xdata[%d]: \"%s\" [TU %d]\n", num_xdata,
+                   pair->value.s, rbuf->type);
         xdata_size += 2 + 2 * rbuf->value.str.size;
       }
       break;
@@ -6649,7 +6653,7 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj, char *_obj,
 }
 
 #define FIELD_CMC2004(field, dxf)                                             \
-  SINCE (R_2004)                                                              \
+  if (dwg->header.from_version >= R_2004)                                     \
   {                                                                           \
     pair = dxf_read_pair (dat);                                               \
     if (pair->code == 62)                                                     \
@@ -6813,6 +6817,7 @@ dwg_link_next (Dwg_Object_Ref *restrict next_ref, Dwg_Object *restrict obj)
 }
 
 // Also exported to in_json. To set to linked list of children in POLYLINE_*/*INSERT
+// similar to dwg_fixup_BLOCKS_entities()
 void
 in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
                        BITCODE_H *owned)

@@ -255,6 +255,7 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   struct stat attrib;
   size_t size;
   Bit_Chain dat = { 0 };
+  Dwg_Version_Type version;
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
 
@@ -281,8 +282,11 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
 
   /* Load whole file into memory
    */
+  version = dwg->header.version;
   memset (dwg, 0, sizeof (Dwg_Data));
   dwg->opts = loglevel | DWG_OPTS_INDXF;
+  dwg->header.version = version;
+
   memset (&dat, 0, sizeof (Bit_Chain));
   dat.size = attrib.st_size;
   dat.chain = (unsigned char *)calloc (1, dat.size + 2);
@@ -377,7 +381,7 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
   dat.from_version = (Dwg_Version_Type)dwg->header.from_version;
 
   // json HACK. no wide chars from JSON, because we just encode to R_2000
-  if (dwg->opts & DWG_OPTS_INJSON)
+  if (dwg->opts & (DWG_OPTS_INJSON | DWG_OPTS_INDXF))
     dat.from_version = dat.version;
 
   if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)

@@ -305,6 +305,7 @@ main (int argc, char *argv[])
   // allow stdin, but require -I|--format then
   memset (&dwg, 0, sizeof (Dwg_Data));
   dwg.opts = opts;
+  dat.version = dwg.header.version = dwg_version;
 
   if (infile)
     {

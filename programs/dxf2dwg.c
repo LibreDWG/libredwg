@@ -307,7 +307,7 @@ main (int argc, char *argv[])
         }
 
       dwg.opts = opts;
-      printf ("Warning: dxf2dwg is still highly experimental.\n");
+      dwg.header.version = dwg_version;
       printf ("Reading DXF file %s\n", filename_in);
       error = dxf_read_file (filename_in, &dwg);
       if (error >= DWG_ERR_CRITICAL)
@@ -329,8 +329,9 @@ main (int argc, char *argv[])
         }
       else
         {
-          // FIXME: for now only R_2000. later remove this line.
-          dwg.header.version = dwg_version;
+          // FIXME: for now only R_13 - R_2000. later remove this line.
+          if (dwg.header.from_version < R_13 || dwg.header.from_version >= R_2004)
+            dwg.header.version = dwg_version;
           if (dwg.header.from_version == R_INVALID)
             dwg.header.from_version = dwg.header.version;
           printf ("\n");
