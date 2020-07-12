@@ -7882,7 +7882,7 @@ new_object (char *restrict name, char *restrict dxfname,
                 goto invalid_dxf;
               dwg_dynapi_entity_set_value (_obj, obj->name, "inserts",
                                            &inserts, 0);
-              hdl = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+              hdl = dwg_add_handleref (dwg, 4, pair->value.u, NULL); // absolute
               LOG_TRACE ("%s.inserts[%d] = " FORMAT_REF " [H* 331]\n",
                          obj->name, curr_inserts, ARGS_REF (hdl));
               inserts[curr_inserts++] = hdl;
@@ -10363,7 +10363,16 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   ent->entmode = entmode;
                   LOG_TRACE ("%s.entmode = %d [BB] (blocks)\n", obj->name,
                              entmode);
-                  // blkhdr.entries[] array already done in TABLES section
+                  // add to entities
+                  if (ent->ownerhandle
+                      && (blkhdr = dwg_ref_object (dwg, ent->ownerhandle))
+                      && blkhdr->fixedtype == DWG_TYPE_BLOCK_HEADER
+                      && (_hdr = blkhdr->tio.object->tio.BLOCK_HEADER))
+                    {
+                      BITCODE_H ref = dwg_add_handleref (
+                          dwg, 3, obj->handle.value, NULL);
+                      PUSH_HV(_hdr, num_owned, entities, ref)
+                    }
                   if (ent->ownerhandle
                       && (dwg->header.version >= R_13
                           || dwg->header.version == R_INVALID)
@@ -10393,6 +10402,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 // register this block entity, e.g. ModelSpace with the BLOCK_HEADER
+// TODO use this also in the BLOCKS section, not just ENTITIES
 static void
 add_to_BLOCK_HEADER (Dwg_Object *restrict obj,
                      Dwg_Object_Ref *restrict ownerhandle)
@@ -10429,14 +10439,6 @@ add_to_BLOCK_HEADER (Dwg_Object *restrict obj,
     // always overwrite. and it is global, so we can reuse it.
     _ctrl->last_entity = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
   PUSH_HV (_ctrl, num_owned, entities, _ctrl->last_entity);
-  /*
-  _ctrl->entities
-      = (BITCODE_H*)realloc (_ctrl->entities, (_ctrl->num_owned + 1) * sizeof
-  (BITCODE_H)); _ctrl->entities[_ctrl->num_owned] = _ctrl->last_entity;
-  LOG_TRACE ("%s[%d] = " FORMAT_REF " [H]\n", "entities", _ctrl->num_owned,
-             ARGS_REF (_ctrl->entities[_ctrl->num_owned]));
-  _ctrl->num_owned++;
-  */
 }
 
 static int
