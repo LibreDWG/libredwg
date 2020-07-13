@@ -182,15 +182,24 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
       SUB_FIELD_HANDLE (o, nam, handle_code, dxf);                            \
     }
 #define HEADER_9(nam)                                                         \
-  GROUP (9);                                                                  \
-  fprintf (dat->fh, "$%s\r\n", #nam)
+  {                                                                           \
+    GROUP (9);                                                                \
+    fprintf (dat->fh, "$%s\r\n", #nam);                                       \
+  }
 #define VALUE_H(value, dxf)                                                   \
   if (dxf)                                                                    \
-  fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf, value ? value->absolute_ref : 0)
+    fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf, value ? value->absolute_ref : 0)
 #define HEADER_H(nam, dxf)                                                    \
-  HEADER_9 (nam);                                                             \
-  VALUE_H (dwg->header_vars.nam, dxf)
-
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    VALUE_H (dwg->header_vars.nam, dxf);                                      \
+  }
+#define HEADER_H0(nam, dxf)                                                   \
+  if (dwg->header_vars.nam && dwg->header_vars.nam->absolute_ref)             \
+    {                                                                         \
+      HEADER_9 (nam);                                                         \
+      VALUE_H (dwg->header_vars.nam, dxf);                                    \
+    }
 #define HEADER_VALUE(nam, type, dxf, value)                                   \
   if (dxf)                                                                    \
     {                                                                         \
@@ -223,14 +232,20 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
     }
 
 #define HEADER_3D(nam)                                                        \
-  HEADER_9 (nam);                                                             \
-  POINT_3D (nam, header_vars.nam, 10, 20, 30)
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    POINT_3D (nam, header_vars.nam, 10, 20, 30);                              \
+  }
 #define HEADER_2D(nam)                                                        \
-  HEADER_9 (nam);                                                             \
-  POINT_2D (nam, header_vars.nam, 10, 20)
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    POINT_2D (nam, header_vars.nam, 10, 20);                                  \
+  }
 #define HEADER_BLL(nam, dxf)                                                  \
-  HEADER_9 (nam);                                                             \
-  VALUE_BLL (dwg->header_vars.nam, dxf)
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    VALUE_BLL (dwg->header_vars.nam, dxf);                                    \
+  }
 
 #define SECTION(section)                                                      \
   LOG_INFO ("\nSection " #section "\n")                                       \
@@ -361,8 +376,10 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
       FIELDG (nam, RC, dxf);                                                  \
     }
 #define HEADER_RS(nam, dxf)                                                   \
-  HEADER_9 (nam);                                                             \
-  FIELDG (nam, RS, dxf)
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    FIELDG (nam, RS, dxf);                                                    \
+  }
 #define HEADER_RS0(nam, dxf)                                                  \
   if (FIELD_VALUE (nam))                                                      \
     {                                                                         \
@@ -370,11 +387,15 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
       FIELDG (nam, RS, dxf);                                                  \
     }
 #define HEADER_RD(nam, dxf)                                                   \
-  HEADER_9 (nam);                                                             \
-  FIELD_RD (nam, dxf)
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    FIELD_RD (nam, dxf);                                                      \
+  }
 #define HEADER_RL(nam, dxf)                                                   \
-  HEADER_9 (nam);                                                             \
-  FIELDG (nam, RL, dxf)
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    FIELDG (nam, RL, dxf);                                                    \
+  }
 #define HEADER_RLL(nam, dxf)                                                  \
   HEADER_9 (nam);                                                             \
   FIELDG (nam, RLL, dxf)

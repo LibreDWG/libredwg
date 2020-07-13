@@ -154,18 +154,16 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
     }
 
 #define GROUP(code)                                                           \
-  {                                                                           \
-    if (dat->version < R_14)                                                  \
-      {                                                                       \
-        uint8_t icode = (uint8_t)((code) & 0xff);                             \
-        fwrite (&icode, 1, 1, dat->fh);                                       \
-      }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        uint16_t icode = (uint16_t)(code);                                    \
-        fwrite (&icode, 2, 1, dat->fh);                                       \
-      }                                                                       \
-  }
+  if (dat->version < R_14)                                                    \
+    {                                                                         \
+      uint8_t icode = (uint8_t) ((code)&0xff);                                \
+      fwrite (&icode, 1, 1, dat->fh);                                         \
+    }                                                                         \
+  else                                                                        \
+    {                                                                         \
+      uint16_t icode = (uint16_t) (code);                                     \
+      fwrite (&icode, 2, 1, dat->fh);                                         \
+    }
 #define FIELD_TV(nam, dxf)                                                    \
   if (_obj->nam != NULL && dxf != 0)                                          \
     {                                                                         \
@@ -240,27 +238,41 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
     }
 
 #define HEADER_TV(nam, dxf)                                                   \
-  HEADER_9 (nam);                                                             \
-  VALUE_TV (dwg->header_vars.nam, dxf)
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    VALUE_TV (dwg->header_vars.nam, dxf);                                     \
+  }
 #define HEADER_TU(nam, dxf)                                                   \
-  HEADER_9 (nam);                                                             \
-  VALUE_TU (dwg->header_vars.nam, dxf)
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    VALUE_TU (dwg->header_vars.nam, dxf);                                     \
+  }
 #define HEADER_T(nam, dxf)                                                    \
-  HEADER_9 (nam);                                                             \
-  VALUE_T (dwg->header_vars.nam, dxf)
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    VALUE_T (dwg->header_vars.nam, dxf);                                      \
+  }
 #define POINT_3D(nam, var, c1, c2, c3)                                        \
-  VALUE_RD (dwg->var.x, c1);                                                  \
-  VALUE_RD (dwg->var.y, c2);                                                  \
-  VALUE_RD (dwg->var.z, c3)
+  {                                                                           \
+    VALUE_RD (dwg->var.x, c1);                                                \
+    VALUE_RD (dwg->var.y, c2);                                                \
+    VALUE_RD (dwg->var.z, c3);                                                \
+  }
 #define POINT_2D(nam, var, c1, c2)                                            \
-  VALUE_RD (dwg->var.x, c1);                                                  \
-  VALUE_RD (dwg->var.x, c2)
+  {                                                                           \
+    VALUE_RD (dwg->var.x, c1);                                                \
+    VALUE_RD (dwg->var.x, c2);                                                \
+  }
 #define HEADER_3D(nam)                                                        \
-  HEADER_9 (nam);                                                             \
-  POINT_3D (nam, header_vars.nam, 10, 20, 30)
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    POINT_3D (nam, header_vars.nam, 10, 20, 30);                              \
+  }
 #define HEADER_2D(nam)                                                        \
-  HEADER_9 (nam);                                                             \
-  POINT_2D (nam, header_vars.nam, 10, 20)
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    POINT_2D (nam, header_vars.nam, 10, 20);                                  \
+  }
 #define SECTION(token)                                                        \
   VALUE_TV ("SECTION", 0);                                                    \
   VALUE_TV (#token, 2)
@@ -299,8 +311,10 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 #define FIELD_BD(nam, dxf) FIELD_RD (nam, dxf)
 
 #define HEADER_9(nam)                                                         \
-  GROUP (9);                                                                  \
-  fprintf (dat->fh, "$%s%c", #nam, 0)
+  {                                                                           \
+    GROUP (9);                                                                \
+    fprintf (dat->fh, "$%s%c", #nam, 0);                                      \
+  }
 #define VALUE(value, type, dxf) VALUE_##type (value, dxf)
 #define VALUE_B(value, dxf) VALUE_RC (value, dxf)
 #define VALUE_BB(value, dxf) VALUE_RC (value, dxf)
@@ -311,7 +325,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 #define VALUE_BD(value, dxf) VALUE_RD (value, dxf)
 #define VALUE_RC(value, dxf)                                                  \
   {                                                                           \
-    BITCODE_RC c = (value);                                                   \
+    BITCODE_RC c = (BITCODE_RC)(value);                                       \
     GROUP (dxf);                                                              \
     fwrite (&c, 1, 1, dat->fh);                                               \
   }
@@ -323,8 +337,10 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
   }
 #define FIELD_RC(nam, dxf) VALUE_RC (_obj->nam, dxf)
 #define HEADER_RC(nam, dxf)                                                   \
-  HEADER_9 (nam);                                                             \
-  VALUE_RC (dwg->header_vars.nam, dxf)
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    VALUE_RC (dwg->header_vars.nam, dxf);                                     \
+  }
 #define HEADER_RC0(nam, dxf)                                                  \
   if (dwg->header_vars.nam)                                                   \
     {                                                                         \
@@ -341,15 +357,16 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 
 #define VALUE_RS(value, dxf)                                                  \
   {                                                                           \
-    BITCODE_RS s = (value);                                                   \
+    BITCODE_RS s = (BITCODE_RS)(value);                                       \
     GROUP (dxf);                                                              \
     fwrite (&s, 2, 1, dat->fh);                                               \
   }
 #define FIELD_RS(nam, dxf) VALUE_RS (_obj->nam, dxf)
 #define HEADER_RS(nam, dxf)                                                   \
-  HEADER_9 (nam);                                                             \
-  VALUE_RS (dwg->header_vars.nam, dxf)
-
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    VALUE_RS (dwg->header_vars.nam, dxf);                                     \
+  }
 #define VALUE_RD(value, dxf)                                                  \
   {                                                                           \
     double d = (value);                                                       \
@@ -358,8 +375,10 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
   }
 #define FIELD_RD(nam, dxf) VALUE_RD (_obj->nam, dxf)
 #define HEADER_RD(nam, dxf)                                                   \
-  HEADER_9 (nam);                                                             \
-  VALUE_RD (dwg->header_vars.nam, dxf)
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    VALUE_RD (dwg->header_vars.nam, dxf);                                     \
+  }
 
 #define VALUE_RL(value, dxf)                                                  \
   {                                                                           \
@@ -369,8 +388,10 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
   }
 #define FIELD_RL(nam, dxf) VALUE_RL (_obj->nam, dxf)
 #define HEADER_RL(nam, dxf)                                                   \
-  HEADER_9 (nam);                                                             \
-  VALUE_RL (dwg->header_vars.nam, dxf)
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    VALUE_RL (dwg->header_vars.nam, dxf);                                     \
+  }
 
 #define HEADER_B(nam, dxf) HEADER_RC (nam, dxf)
 #define HEADER_BS(nam, dxf) HEADER_RS (nam, dxf)
@@ -392,8 +413,16 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
       }                                                                       \
   }
 #define HEADER_H(nam, dxf)                                                    \
-  HEADER_9 (nam);                                                             \
-  VALUE_H (dwg->header_vars.nam, dxf)
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    VALUE_H (dwg->header_vars.nam, dxf);                                      \
+  }
+#define HEADER_H0(nam, dxf)                                                   \
+  if (dwg->header_vars.nam && dwg->header_vars.nam->absolute_ref)             \
+    {                                                                         \
+      HEADER_9 (nam);                                                         \
+      VALUE_H (dwg->header_vars.nam, dxf);                                    \
+    }
 
 #define HANDLE_NAME(nam, code, table)                                         \
   VALUE_HANDLE_NAME (dwg->header_vars.nam, dxf, table)
@@ -515,24 +544,20 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
       }                                                                       \
   }
 #define HEADER_CMC(nam, dxf)                                                  \
-  HEADER_9 (nam);                                                             \
-  VALUE_RS (dwg->header_vars.nam.index, dxf)
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    VALUE_RS (dwg->header_vars.nam.index, dxf);                               \
+  }
 #define HEADER_TIMEBLL(nam, dxf)                                              \
-  HEADER_9 (nam);                                                             \
-  FIELD_TIMEBLL (nam, dxf)
-#if 0
-// or just RD of the double value?
-#  define FIELD_TIMEBLL(nam, dxf)               \
-  VALUE_RL (_obj->nam.days, dxf);               \
-  VALUE_RL (_obj->nam.ms / 86.4, dxf)
-#else
-#  define FIELD_TIMEBLL(nam, dxf)               \
-  VALUE_RD (_obj->nam.value, dxf);
-#endif
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    FIELD_TIMEBLL (nam, dxf);                                                 \
+  }
+#define FIELD_TIMEBLL(nam, dxf) VALUE_RD (_obj->nam.value, dxf)
 
-// FIELD_VECTOR_N(nam, type, size):
-// reads data of the type indicated by 'type' 'size' times and stores
-// it all in the vector called 'nam'.
+  // FIELD_VECTOR_N(nam, type, size):
+  // reads data of the type indicated by 'type' 'size' times and stores
+  // it all in the vector called 'nam'.
 #define FIELD_VECTOR_N(nam, type, size, dxf)                                  \
   if (dxf && _obj->nam)                                                       \
     {                                                                         \
