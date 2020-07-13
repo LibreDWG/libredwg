@@ -320,35 +320,33 @@ dxf_read_rd (Bit_Chain *dat)
     }
 }
 
-// Unicode strings are created in the field
+// Unicode strings are UTF-8 with quoted \\U+
+// no length prefixes, just zero-terminated strings
 static void
 dxf_read_string (Bit_Chain *dat, char **string)
 {
   const int is_binary = dat->opts & DWG_OPTS_DXFB;
+  if (dat->byte >= dat->size)
+    return;
   if (is_binary)
     {
-      int len = dxf_read_rs (dat);
-      if (dat->byte + len >= dat->size)
-        return;
+      int size = sscanf ((char*)&dat->chain[dat->byte], "%s", (char*)buf);
+      buf[4095] = '\0';
+      if (size != EOF)
+        size = strlen (buf) + 1;
+      dat->byte += size;
       if (!string)
         {
-          if (len > 4096)
+          if (size > 4096)
             return;
-          memcpy (buf, &dat->chain[dat->byte], len);
-          buf[len] = '\0';
           return; // ignore, just advanced dat
         }
-      if (!*string)
-        *string = (char *)malloc (len + 1);
-      else
-        *string = (char *)realloc (*string, len + 1);
-      memcpy (*string, &dat->chain[dat->byte], len);
+      *string = !*string ? (char *)malloc (size) : (char *)realloc (*string, size);
+      strcpy (*string, buf);
     }
   else
     {
       int i;
-      if (dat->byte >= dat->size)
-        return;
       dxf_skip_ws (dat);
       for (i = 0;
            dat->byte < dat->size && dat->chain[dat->byte] != '\n' && i < 4096;
@@ -437,6 +435,7 @@ dxf_read_pair (Bit_Chain *dat)
       LOG_TRACE ("  dxf (%d, %f)\n", pair->code, pair->value.d);
       break;
     case VT_BINARY:
+      //FIXME len?
       dxf_read_string (dat, &pair->value.s);
       LOG_TRACE ("  dxf (%d, %s)\n", (int)pair->code, pair->value.s);
       break;
@@ -444,14 +443,14 @@ dxf_read_pair (Bit_Chain *dat)
     case VT_OBJECTID:
       if (is_binary)
         {
-          dxf_read_string (dat, NULL);
-          sscanf (buf, "%X", &pair->value.u);
+          // string without len
+          dat->byte += sscanf ((char*)&dat->chain[dat->byte], "%X", &pair->value.u);
         }
       else
-        {
-          dxf_read_string (dat, NULL);
-          sscanf (buf, "%X", &pair->value.u);
-        }
+      {
+        dxf_read_string (dat, NULL);
+        sscanf (buf, "%X", &pair->value.u);
+      }
       LOG_TRACE ("  dxf (%d, %X)\n", (int)pair->code, pair->value.u);
       break;
     case VT_INVALID:
@@ -11019,6 +11018,13 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       error = dat_read_stream (dat, dat->fh);
       if (error >= DWG_ERR_CRITICAL)
         return error;
+      if (dat->size >= 22 &&
+          !memcmp (dat->chain, "AutoCAD Binary DXF",
+                   sizeof ("AutoCAD Binary DXF") - 1))
+        {
+          dat->opts |= DWG_OPTS_DXFB;
+          dat->byte = 22;
+        }
     }
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   num_dxf_objs = 0;
@@ -11207,6 +11213,12 @@ dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   dwg->opts |= DWG_OPTS_DXFB; // binary
   dat->opts |= DWG_OPTS_DXFB;
+  if (dat->size >= 22 && dat->byte < 22 &&
+      !memcmp (dat->chain, "AutoCAD Binary DXF",
+               sizeof ("AutoCAD Binary DXF") - 1))
+    {
+      dat->byte = 22;
+    }
   return dwg_read_dxf (dat, dwg);
 }
 

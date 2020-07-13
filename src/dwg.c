@@ -364,7 +364,10 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   /* See if binary or ascii */
   if (!memcmp (dat.chain, "AutoCAD Binary DXF",
                sizeof ("AutoCAD Binary DXF") - 1))
-    error = dwg_read_dxfb (&dat, dwg);
+    {
+      dat.byte = 22;
+      error = dwg_read_dxfb (&dat, dwg);
+    }
   else
     error = dwg_read_dxf (&dat, dwg);
 
