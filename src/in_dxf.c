@@ -444,7 +444,8 @@ dxf_read_pair (Bit_Chain *dat)
     case VT_OBJECTID:
       if (is_binary)
         {
-          pair->value.u = dxf_read_rl (dat);
+          dxf_read_string (dat, NULL);
+          sscanf (buf, "%X", &pair->value.u);
         }
       else
         {

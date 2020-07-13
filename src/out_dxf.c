@@ -130,11 +130,11 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1
 // the hex code
-#define VALUE_HANDLE(value, nam, handle_code, dxf)                            \
+#define VALUE_HANDLE(ref, nam, handle_code, dxf)                              \
   if (dxf)                                                                    \
     {                                                                         \
       fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf,                                \
-               value != NULL ? ((BITCODE_H)value)->absolute_ref : 0);         \
+               ref ? ((BITCODE_H)ref)->absolute_ref : 0UL);                   \
     }
 // the name in the table, referenced by the handle
 // names on: 6 7 8. which else? there are more styles: plot, ...
@@ -188,17 +188,17 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
   }
 #define VALUE_H(value, dxf)                                                   \
   if (dxf)                                                                    \
-    fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf, value ? value->absolute_ref : 0)
+    fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf, value)
 #define HEADER_H(nam, dxf)                                                    \
   {                                                                           \
     HEADER_9 (nam);                                                           \
-    VALUE_H (dwg->header_vars.nam, dxf);                                      \
+    VALUE_HANDLE (dwg->header_vars.nam, nam, 0, dxf);                         \
   }
 #define HEADER_H0(nam, dxf)                                                   \
   if (dwg->header_vars.nam && dwg->header_vars.nam->absolute_ref)             \
     {                                                                         \
       HEADER_9 (nam);                                                         \
-      VALUE_H (dwg->header_vars.nam, dxf);                                    \
+      VALUE_H (dwg->header_vars.nam->absolute_ref, dxf);                      \
     }
 #define HEADER_VALUE(nam, type, dxf, value)                                   \
   if (dxf)                                                                    \
@@ -364,7 +364,13 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
   HEADER_9 (nam);                                                             \
   FIELD_HANDLE_NAME (nam, dxf, table)
 
-#define FIELD_DATAHANDLE(nam, code, dxf) FIELD_HANDLE (nam, code, dxf)
+#define FIELD_DATAHANDLE(nam, code, dxf)                                      \
+  {                                                                           \
+    Dwg_Object_Ref *ref = _obj->nam;                                          \
+    char s[16];                                                               \
+    HEADER_9 (nam);                                                           \
+    VALUE_H (ref ? ref->handleref.value : 0UL, dxf);                          \
+  }
 
 #define HEADER_RC(nam, dxf)                                                   \
   HEADER_9 (nam);                                                             \
@@ -2524,8 +2530,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             /* if saved from newer version, eg. AC1032: */
             VALUE_TV ("ACAD", 1001);
             VALUE_TV ("DbSaveVer", 1000);
-            VALUE_RS ((dat->from_version * 3) + 15,
-                      1071); // so that 69 is R_2018
+            VALUE_RS (dwg->header.dwg_version, 1071); // so that 69 is R_2018
           }
         for (i = 0; i < dwg->vport_control.num_entries; i++)
           {

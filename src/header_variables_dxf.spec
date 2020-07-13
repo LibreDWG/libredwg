@@ -23,7 +23,7 @@
   HEADER_VALUE_TV (ACADVER, 1, version_codes[dwg->header.version]);
 
   if (minimal) {
-    HEADER_VALUE (HANDSEED, RS, 5, _obj->HANDSEED->absolute_ref);
+    HEADER_VALUE (HANDSEED, RL, 5, _obj->HANDSEED->handleref.value);
     ENDSEC ();
     return 0;
   }
@@ -249,9 +249,9 @@
     HEADER_RS (HANDLING, 70); //default 1
   }
 
-  //HEADER_VALUE (HANDSEED, RS, 5, _obj->HANDSEED->absolute_ref);
+  //HEADER_H (HANDSEED, 5); //default: 20000, before r13: 0xB8BC
   SINCE (R_9)
-    HEADER_H (HANDSEED, 5); //default: 20000, before r13: 0xB8BC
+    FIELD_DATAHANDLE (HANDSEED, 0, 5);
 
   HEADER_RS (SURFTAB1, 70); // 6
   HEADER_RS (SURFTAB2, 70); // 6

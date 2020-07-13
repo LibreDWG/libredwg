@@ -3176,7 +3176,7 @@ DWG_OBJECT (VPORT)
 
   COMMON_TABLE_FLAGS (Viewport)
 
- DXF { // has a different order of fields
+  DXF { // has a different order of fields
 
   FIELD_2RD (lower_left, 10);
   FIELD_2RD (upper_right, 11);
@@ -3968,7 +3968,7 @@ DWG_ENTITY (HATCH)
           FIELD_HANDLE (boundary_handles[rcount1], 0, 330)
         } else {
           LOG_WARN ("HATCH.num_path < num_boundary_handles or empty boundary_handles")
-          VALUE_HANDLE ((BITCODE_H)NULL, boundary_handles, 0, 330)
+          VALUE_H (0UL, 330);
         }
       }
 #endif
@@ -4175,7 +4175,7 @@ DWG_ENTITY (MPOLYGON)
           FIELD_HANDLE (boundary_handles[rcount1], 0, 330)
         } else {
           LOG_WARN ("HATCH.num_path < num_boundary_handles or empty boundary_handles")
-          VALUE_HANDLE ((BITCODE_H)NULL, boundary_handles, 0, 330)
+          VALUE_H (0UL, 330);
         }
       }
 #endif
@@ -6140,7 +6140,7 @@ DWG_OBJECT (XRECORD)
 #ifdef IS_DXF
   if (FIELD_VALUE (objid_handles)) {
     REPEAT (num_objid_handles, objid_handles, T)
-        VALUE_H (_obj->objid_handles[rcount1], 340);
+      VALUE_HANDLE (_obj->objid_handles[rcount1], objid_handles, 4, 340);
     END_REPEAT (objid_handles)
   }
 #endif
