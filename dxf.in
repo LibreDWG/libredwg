@@ -17,8 +17,14 @@ v=-v3
 test -z "$v" && echo $top_builddir
 args=-y
 out=
+next_is_o=
 
 for d in "$@"; do
+    if [ -n "$next_is_o" ]; then
+        out="$d"
+        next_is_o=
+    else
+    # shellcheck disable=SC2039
     case $d in
         -v*)    v="$d"    ;;
         --as=*) args="$args $d" ;;
@@ -26,6 +32,9 @@ for d in "$@"; do
         -b)     args="$args $d" ;;
         -Ijson) ext=json  ;;
         -Idxf)  ext=dxf   ;;
+        -Idxfb) args="$args $d"; ext=dxf ;;
+        -o)     next_is_o=1 ;;
+        -o*)    out="${d:2}" ;;
         -y)     ;;
         *)
         if [ ! -f "$d" ]; then
@@ -56,13 +65,15 @@ for d in "$@"; do
             *.DWG)  ext=dwg ;;
             *.dxf)  ext=dxf ;;
             *.DXF)  ext=dxf ;;
+            *.dxfb) ext=dxf ;;
+            *.DXFB) ext=dxf ;;
             *.json) ext=json ;;
             *.JSON) ext=json ;;
             *)      echo "Illegal extension for $d"; exit ;;
         esac
         b=$(basename "$d" .$ext)
         log="$b$dir.log"
-        out="$b$dir.dxf"
+        [ -n "$out" ] || out="$b$dir.dxf"
         if [ x$ext = xdwg ]; then
             echo "$timeout @LTEXEC@ programs/dwg2dxf $args $v -o $out $d 2>$log"
             # shellcheck disable=SC2086
@@ -73,6 +84,8 @@ for d in "$@"; do
             $timeout @LTEXEC@ programs/dxfwrite $args "$v" -o "$out" "$d" 2>"$log"
         fi
         tail -n2 "$log"
+        out=
         ;;
     esac
+    fi
 done

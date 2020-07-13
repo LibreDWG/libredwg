@@ -318,6 +318,7 @@ TESTDATA = \
     test-data/example_2013.dxf \
     test-data/example_2018.dwg \
     test-data/example_2018.dxf \
+    test-data/example_2018.dxfb \
     test-data/example_r12.dxf \
     test-data/example_r13.dwg \
     test-data/example_r13.dxf \
