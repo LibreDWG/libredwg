@@ -94,26 +94,16 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
     GROUP (dxf);                                                              \
     fprintf (dat->fh, "%s%c", value, 0);                                      \
   }
-#ifdef HAVE_NATIVE_WCHAR2
-#  define VALUE_TU(value, dxf)                                                \
+#define VALUE_TU(wstr, dxf)                                                   \
     {                                                                         \
+      char *_u8 = bit_convert_TU ((BITCODE_TU)wstr);                          \
       GROUP (dxf);                                                            \
-      fprintf (dat->fh, "%ls%c%c", (wchar_t *)value, 0, 0);                   \
+      if (_u8)                                                                \
+        fprintf (dat->fh, "%s%c", _u8, 0);                                    \
+      else                                                                    \
+        fprintf (dat->fh, "%c", 0);                                           \
+      free (_u8);                                                             \
     }
-#else
-#  define VALUE_TU(wstr, dxf)                                                 \
-    {                                                                         \
-      BITCODE_TU ws = (BITCODE_TU)wstr;                                       \
-      uint16_t _c;                                                            \
-      GROUP (dxf);                                                            \
-      if (wstr)                                                               \
-        while ((_c = *ws++))                                                  \
-          {                                                                   \
-            fprintf (dat->fh, "%c", (char)(_c & 0xff));                       \
-          }                                                                   \
-      fprintf (dat->fh, "%c%c", 0, 0);                                        \
-    }
-#endif
 #define VALUE_TFF(str, dxf) VALUE_TV (str, dxf)
 #define VALUE_BINARY(value, size, dxf)                                        \
   {                                                                           \
@@ -144,7 +134,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
                         ? (uint32_t) ((BITCODE_H)hdlptr)->absolute_ref        \
                         : 0;                                                  \
       GROUP (dxf);                                                            \
-      fwrite (&_j, sizeof (uint32_t), 1, dat->fh);                            \
+      fwrite (&_j, 4, 1, dat->fh);                                            \
     }
 // TODO: try to resolve the handle. rather write 0 than in invalid handle:
 // if (_obj->nam->obj) ...
@@ -244,25 +234,10 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
       FIELD_BT (nam, dxf)                                                     \
   }
 #define FIELD_T0(nam, dxf)                                                    \
-  {                                                                           \
-    if (_obj->nam)                                                            \
-      {                                                                       \
-        if (dat->from_version >= R_2007)                                      \
-          {                                                                   \
-            char *u8 = bit_convert_TU ((BITCODE_TU)_obj->nam);                \
-            if (u8 && *u8)                                                    \
-              {                                                               \
-                FIELD_TU (nam, dxf)                                           \
-              }                                                               \
-            free (u8);                                                        \
-          }                                                                   \
-        else if (*_obj->nam)                                                  \
-          {                                                                   \
-            FIELD_TV (nam, dxf);                                              \
-          }                                                                   \
-      }                                                                       \
-  }
-
+  if (!bit_empty_T (dat, _obj->nam))                                          \
+    {                                                                         \
+      FIELD_T (nam, dxf)                                                      \
+    }
 
 #define HEADER_TV(nam, dxf)                                                   \
   HEADER_9 (nam);                                                             \
@@ -338,7 +313,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
   {                                                                           \
     BITCODE_RC c = (value);                                                   \
     GROUP (dxf);                                                              \
-    fwrite (&c, sizeof (BITCODE_RC), 1, dat->fh);                             \
+    fwrite (&c, 1, 1, dat->fh);                                               \
   }
 #define VALUE_3BD(value, dxf)                                                 \
   {                                                                           \
@@ -362,7 +337,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
   {                                                                           \
     BITCODE_RS s = (value);                                                   \
     GROUP (dxf);                                                              \
-    fwrite (&s, sizeof (BITCODE_RS), 1, dat->fh);                             \
+    fwrite (&s, 2, 1, dat->fh);                                               \
   }
 #define FIELD_RS(nam, dxf) VALUE_RS (_obj->nam, dxf)
 #define HEADER_RS(nam, dxf)                                                   \
@@ -373,7 +348,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
   {                                                                           \
     double d = (value);                                                       \
     GROUP (dxf);                                                              \
-    fwrite (&d, sizeof (double), 1, dat->fh);                                 \
+    fwrite (&d, 8, 1, dat->fh);                                               \
   }
 #define FIELD_RD(nam, dxf) VALUE_RD (_obj->nam, dxf)
 #define HEADER_RD(nam, dxf)                                                   \
@@ -384,7 +359,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
   {                                                                           \
     BITCODE_RL _s = value;                                                    \
     GROUP (dxf);                                                              \
-    fwrite (&_s, sizeof (BITCODE_RL), 1, dat->fh);                            \
+    fwrite (&_s, 4, 1, dat->fh);                                              \
   }
 #define FIELD_RL(nam, dxf) VALUE_RL (_obj->nam, dxf)
 #define HEADER_RL(nam, dxf)                                                   \
@@ -439,7 +414,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
   {                                                                           \
     BITCODE_BLL s = _obj->nam;                                                \
     GROUP (dxf);                                                              \
-    fwrite (&s, sizeof (BITCODE_RLL), 1, dat->fh);                            \
+    fwrite (&s, 8, 1, dat->fh);                                               \
   }
 #define FIELD_RLL(nam, dxf) FIELD_BLL (nam, dxf)
 #define HEADER_RLL(nam, dxf)                                                  \
@@ -733,7 +708,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
       uint32_t i = (uint32_t)obj->handle.value;                               \
       LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H (obj->handle))       \
       GROUP (330);                                                            \
-      fwrite (&i, sizeof (uint32_t), 1, dat->fh);                             \
+      fwrite (&i, 4, 1, dat->fh);                                             \
     }                                                                         \
     SINCE (R_13)                                                              \
     {                                                                         \
@@ -791,7 +766,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
           const uint32_t _i = (uint32_t)obj->handle.value;                    \
           const int dxf = obj->type == DWG_TYPE_DIMSTYLE ? 105 : 5;           \
           GROUP (dxf);                                                        \
-          fwrite (&_i, sizeof (uint32_t), 1, dat->fh);                        \
+          fwrite (&_i, 4, 1, dat->fh);                                        \
           _XDICOBJHANDLE (3);                                                 \
           _REACTORS (4);                                                      \
         }                                                                     \
@@ -879,9 +854,10 @@ dxfb_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       switch (type)
         {
         case VT_STRING:
-          UNTIL (R_2007){ VALUE_TV (rbuf->value.str.u.data,
-                                    dxftype) } LATER_VERSIONS
-          {
+          UNTIL (R_2007) {
+            VALUE_TV (rbuf->value.str.u.data, dxftype)
+          }
+          LATER_VERSIONS {
             VALUE_TU (rbuf->value.str.u.wdata, dxftype)
           }
           break;
@@ -911,7 +887,7 @@ dxfb_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           // fprintf(dat->fh, "%lX\r\n", (unsigned
           // long)*(uint64_t*)rbuf->value.hdl);
           GROUP (dxftype);
-          fwrite (&rbuf->value.hdl, sizeof (uint32_t), 1, dat->fh);
+          fwrite (&rbuf->value.hdl, 4, 1, dat->fh);
           break;
         case VT_INVALID:
         default:
@@ -1039,7 +1015,7 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
         BITCODE_BL vcount;                                                    \
         uint32_t _i = (uint32_t)ctrl->handle.value;                           \
         GROUP (5);                                                            \
-        fwrite (&_i, sizeof (uint32_t), 1, dat->fh);                          \
+        fwrite (&_i, 4, 1, dat->fh);                                          \
         _XDICOBJHANDLE (3);                                                   \
         _REACTORS (4);                                                        \
       }                                                                       \
@@ -2059,7 +2035,7 @@ dwg_write_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     dwg_fixup_BLOCKS_entities (dwg);
 
   fprintf (dat->fh, "AutoCAD Binary DXF\r\n%c%c", 0x1a, 0);
-  VALUE_TV (PACKAGE_STRING, 999);
+  //VALUE_TV (PACKAGE_STRING, 999); // not used in binary DXF
 
   // a minimal header requires only $ACADVER, $HANDSEED, and then ENTITIES
   // see https://pythonhosted.org/ezdxf/dxfinternals/filestructure.html
