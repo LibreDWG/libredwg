@@ -15,6 +15,9 @@ make -s -C programs dwg2dxf dxfwrite
 v=-v3
 # dummy to please shellcheck
 test -z "$v" && echo $top_builddir
+# check for dash
+# shellcheck disable=SC2039,SC2161
+[[ 1 ]] 2>/dev/null || DASH=1
 args=-y
 out=
 next_is_o=
@@ -24,68 +27,73 @@ for d in "$@"; do
         out="$d"
         next_is_o=
     else
-    # shellcheck disable=SC2039
-    case $d in
-        -v*)    v="$d"    ;;
-        --as=*) args="$args $d" ;;
-        -m)     args="$args $d" ;;
-        -b)     args="$args $d" ;;
-        -Ijson) ext=json  ;;
-        -Idxf)  ext=dxf   ;;
-        -Idxfb) args="$args $d"; ext=dxf ;;
-        -o)     next_is_o=1 ;;
-        -o*)    out="${d:2}" ;;
-        -y)     ;;
-        *)
-        if [ ! -f "$d" ]; then
-            if [ -f "$srcdir/test/test-data/$d" ]
-            then
-                d="$srcdir/test/test-data/$d";
-            elif [ -f "$srcdir/test/test-data/$d.dwg" ]
-            then
-                d="$srcdir/test/test-data/$d.dwg"
-                ext=dwg
-            elif [ -f "$srcdir/test/test-data/$d.json" ]
-            then
-                d="$srcdir/test/test-data/$d.json"
-                ext=json
-            elif [ -f "$srcdir/test/test-data/$d.dxf" ]
-            then
-                d="$srcdir/test/test-data/$d.dxf"
-                ext=dxf
-            fi
-        fi
-        xd=$(dirname "$d")
-        dir=_$(basename "$xd")
-        if [ "$dir" = "_test-data" ]; then dir=""; fi
-        if [ "$dir" = "_td" ]; then dir=""; fi
-        if [ "$dir" = "_." ]; then dir=""; fi
-        case $(basename "$d") in
-            *.dwg)  ext=dwg ;;
-            *.DWG)  ext=dwg ;;
-            *.dxf)  ext=dxf ;;
-            *.DXF)  ext=dxf ;;
-            *.dxfb) ext=dxf ;;
-            *.DXFB) ext=dxf ;;
-            *.json) ext=json ;;
-            *.JSON) ext=json ;;
-            *)      echo "Illegal extension for $d"; exit ;;
+        case $d in
+            -v*)    v="$d"    ;;
+            --as=*) args="$args $d" ;;
+            -m)     args="$args $d" ;;
+            -b)     args="$args $d" ;;
+            -Ijson) ext=json  ;;
+            -Idxf)  ext=dxf   ;;
+            -Idxfb) args="$args $d"; ext=dxf ;;
+            -o)     next_is_o=1 ;;
+            -o*)    if [ -n "$DASH" ]; then
+                        out="$(echo "$d" | awk '{ string=substr($0, 3); print string; }')"
+                    else
+                        # shellcheck disable=SC2039
+                        out="${d:2}"
+                    fi
+                    ;;
+            -y)     ;;
+            *)
+                if [ ! -f "$d" ]; then
+                    if [ -f "$srcdir/test/test-data/$d" ]
+                    then
+                        d="$srcdir/test/test-data/$d";
+                    elif [ -f "$srcdir/test/test-data/$d.dwg" ]
+                    then
+                        d="$srcdir/test/test-data/$d.dwg"
+                        ext=dwg
+                    elif [ -f "$srcdir/test/test-data/$d.json" ]
+                    then
+                        d="$srcdir/test/test-data/$d.json"
+                        ext=json
+                    elif [ -f "$srcdir/test/test-data/$d.dxf" ]
+                    then
+                        d="$srcdir/test/test-data/$d.dxf"
+                        ext=dxf
+                    fi
+                fi
+                xd=$(dirname "$d")
+                dir=_$(basename "$xd")
+                if [ "$dir" = "_test-data" ]; then dir=""; fi
+                if [ "$dir" = "_td" ]; then dir=""; fi
+                if [ "$dir" = "_." ]; then dir=""; fi
+                case $(basename "$d") in
+                    *.dwg)  ext=dwg ;;
+                    *.DWG)  ext=dwg ;;
+                    *.dxf)  ext=dxf ;;
+                    *.DXF)  ext=dxf ;;
+                    *.dxfb) ext=dxf ;;
+                    *.DXFB) ext=dxf ;;
+                    *.json) ext=json ;;
+                    *.JSON) ext=json ;;
+                    *)      echo "Illegal extension for $d"; exit ;;
+                esac
+                b=$(basename "$d" .$ext)
+                log="$b$dir.log"
+                [ -n "$out" ] || out="$b$dir.dxf"
+                if [ x$ext = xdwg ]; then
+                    echo "$timeout @LTEXEC@ programs/dwg2dxf $args $v -o $out $d 2>$log"
+                    # shellcheck disable=SC2086
+                    $timeout @LTEXEC@ programs/dwg2dxf $args "$v" -o "$out" "$d" 2>"$log"
+                else
+                    echo "$timeout @LTEXEC@ programs/dxfwrite $args $v -o $out $d 2>$log"
+                    # shellcheck disable=SC2086
+                    $timeout @LTEXEC@ programs/dxfwrite $args "$v" -o "$out" "$d" 2>"$log"
+                fi
+                tail -n2 "$log"
+                out=
+                ;;
         esac
-        b=$(basename "$d" .$ext)
-        log="$b$dir.log"
-        [ -n "$out" ] || out="$b$dir.dxf"
-        if [ x$ext = xdwg ]; then
-            echo "$timeout @LTEXEC@ programs/dwg2dxf $args $v -o $out $d 2>$log"
-            # shellcheck disable=SC2086
-            $timeout @LTEXEC@ programs/dwg2dxf $args "$v" -o "$out" "$d" 2>"$log"
-        else
-            echo "$timeout @LTEXEC@ programs/dxfwrite $args $v -o $out $d 2>$log"
-            # shellcheck disable=SC2086
-            $timeout @LTEXEC@ programs/dxfwrite $args "$v" -o "$out" "$d" 2>"$log"
-        fi
-        tail -n2 "$log"
-        out=
-        ;;
-    esac
     fi
 done
