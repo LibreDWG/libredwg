@@ -363,6 +363,12 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define HEADER_RS(nam, dxf)                                                   \
   HEADER_9 (nam);                                                             \
   FIELDG (nam, RS, dxf)
+#define HEADER_RS0(nam, dxf)                                                  \
+  if (FIELD_VALUE (nam))                                                      \
+    {                                                                         \
+      HEADER_9 (nam);                                                         \
+      FIELDG (nam, RS, dxf);                                                  \
+    }
 #define HEADER_RD(nam, dxf)                                                   \
   HEADER_9 (nam);                                                             \
   FIELD_RD (nam, dxf)
