@@ -29,10 +29,10 @@
   }
 
   VERSIONS (R_13, R_2013) {
-    HEADER_VALUE (ACADMAINTVER, RC, 70, dwg->header.maint_version);
+    HEADER_VALUE (ACADMAINTVER, RS, 70, dwg->header.maint_version);
   }
   SINCE (R_2018) {
-    HEADER_VALUE (ACADMAINTVER, RC, 90, dwg->header.maint_version);
+    HEADER_VALUE (ACADMAINTVER, RL, 90, dwg->header.maint_version);
   }
   SINCE (R_10) {
     HEADER_VALUE_TV (DWGCODEPAGE, 3, codepage);
