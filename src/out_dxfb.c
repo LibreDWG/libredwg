@@ -1602,15 +1602,19 @@ dxfb_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           && (strEQc (dxfname, "ACDBPLACEHOLDER")
               || strEQc (dxfname, "LAYOUT")))
         continue;
+      if (strEQc (dxfname, "DATATABLE"))
+        dxfname = "ACDBDATATABLE";
       RECORD (CLASS);
       VALUE_TV (dxfname, 1);
       VALUE_T (dwg->dwg_class[j].cppname, 2);
       VALUE_T (dwg->dwg_class[j].appname, 3);
-      VALUE_RS (dwg->dwg_class[j].proxyflag, 90);
-      SINCE (R_2004) { VALUE_RC (dwg->dwg_class[j].num_instances, 91); }
-      VALUE_RC (dwg->dwg_class[j].is_zombie, 280);
+      VALUE_RL (dwg->dwg_class[j].proxyflag, 90);
+      SINCE (R_2004) {
+        VALUE_RL (dwg->dwg_class[j].num_instances, 91);
+      }
+      VALUE_RS (dwg->dwg_class[j].is_zombie, 280); // acad calls it was_a_zombie
       // Is-an-entity. 1f2 for entities, 1f3 for objects
-      VALUE_RC (dwg->dwg_class[j].item_class_id == 0x1F2 ? 1 : 0, 281);
+      VALUE_RS (dwg->dwg_class[j].item_class_id == 0x1F2 ? 1 : 0, 281);
     }
   ENDSEC ();
   return 0;
