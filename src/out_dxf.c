@@ -15,8 +15,8 @@
  * written by Reini Urban
  */
 
-/* Works for most r13+ files, but not for many r2014+ objects.
-TODO:
+/* Works mostly.
+   TODO:
 * down-conversions from unsupported entities on older DXF versions.
   Since r13:
   Entities: LWPOLYLINE, HATCH, SPLINE, LEADER, DIMENSION, MTEXT, IMAGE,
@@ -48,7 +48,6 @@ static unsigned int loglevel;
 static unsigned int cur_ver = 0;
 static char buf[255];
 static BITCODE_BL rcount1, rcount2;
-// static int is_sorted = 0;
 
 // imported
 char *dwg_obj_table_get_name (const Dwg_Object *restrict obj,
@@ -915,7 +914,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
         {                                                                     \
           BITCODE_BL vcount;                                                  \
           const int dxf = obj->type == DWG_TYPE_DIMSTYLE ? 105 : 5;           \
-          fprintf (dat->fh, "%3i\r\n%lX\r\n", dxf, obj->handle.value);        \
+          VALUE_H (obj->handle.value, dxf);                                   \
           _XDICOBJHANDLE (3);                                                 \
           _REACTORS (4);                                                      \
         }                                                                     \
@@ -1317,7 +1316,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     {                                                                         \
       SINCE (R_13)                                                            \
       {                                                                       \
-        fprintf (dat->fh, "%3i\r\n%lX\r\n", 5, ctrl->handle.value);           \
+        VALUE_H (ctrl->handle.value, 5);                                      \
         _XDICOBJHANDLE (3);                                                   \
         _REACTORS (4);                                                        \
       }                                                                       \

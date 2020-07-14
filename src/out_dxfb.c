@@ -12,6 +12,7 @@
 
 /*
  * out_dxfb.c: write as Binary DXF
+ * Does not work yet.
  * written by Reini Urban
  */
 
@@ -25,7 +26,6 @@
 #define IS_DXF
 #include "common.h"
 #include "bits.h"
-//#include "myalloca.h"
 #include "dwg.h"
 #include "decode.h"
 #include "out_dxf.h"
@@ -39,6 +39,9 @@ static unsigned int cur_ver = 0;
 static char buf[4096];
 static BITCODE_BL rcount1, rcount2;
 
+// imported
+char *dwg_obj_table_get_name (const Dwg_Object *restrict obj,
+                              int *restrict error);
 // private
 static int dxfb_common_entity_handle_data (Bit_Chain *restrict dat,
                                            const Dwg_Object *restrict obj);
@@ -711,9 +714,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
   static int dwg_dxfb_##token (Bit_Chain *restrict dat,                       \
                                const Dwg_Object *restrict obj)                \
   {                                                                           \
-    BITCODE_BL vcount, rcount3, rcount4;                                      \
     int error = 0;                                                            \
-    Dwg_Data *dwg = obj->parent;                                              \
     Bit_Chain *hdl_dat = dat;                                                 \
     Bit_Chain *str_dat = dat;                                                 \
     if (obj->fixedtype != DWG_TYPE_##token)                                   \
@@ -780,7 +781,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
   static int dwg_dxfb_##token (Bit_Chain *restrict dat,                       \
                                const Dwg_Object *restrict obj)                \
   {                                                                           \
-    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    BITCODE_BL vcount;                                                        \
     int error = 0;                                                            \
     Bit_Chain *str_dat = dat;                                                 \
     Bit_Chain *hdl_dat = dat;                                                 \
@@ -813,7 +814,19 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
           VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);   \
         }                                                                     \
       }                                                                       \
-    LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle))         \
+    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                   \
+      {                                                                       \
+        if (dwg_obj_is_table (obj))                                           \
+          {                                                                   \
+            char *_name = dwg_obj_table_get_name (obj, &error);               \
+            LOG_TRACE ("Object handle: " FORMAT_H ", name: %s\n",             \
+                       ARGS_H (obj->handle), _name);                          \
+            SINCE (R_2007)                                                    \
+              free (_name);                                                   \
+          }                                                                   \
+        else                                                                  \
+          LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle))   \
+      }                                                                       \
     error |= dwg_dxfb_##token##_private (dat, hdl_dat, str_dat, obj);         \
     error |= dxfb_write_eed (dat, obj->tio.object);                           \
     return error;                                                             \
@@ -1048,7 +1061,7 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
       SINCE (R_13)                                                            \
       {                                                                       \
         BITCODE_BL vcount;                                                    \
-        VALUE_H (ctrl->handle.value, 5)                                       \
+        VALUE_H (ctrl->handle.value, 5);                                      \
         _XDICOBJHANDLE (3);                                                   \
         _REACTORS (4);                                                        \
       }                                                                       \

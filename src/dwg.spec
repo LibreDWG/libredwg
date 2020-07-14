@@ -3178,64 +3178,64 @@ DWG_OBJECT (VPORT)
 
   DXF { // has a different order of fields
 
-  FIELD_2RD (lower_left, 10);
-  FIELD_2RD (upper_right, 11);
-  FIELD_2RD (VIEWCTR, 12);
-  FIELD_2RD (SNAPBASE, 13);
-  FIELD_2RD (SNAPUNIT, 14);
-  FIELD_2RD (GRIDUNIT, 15);
-  FIELD_3RD (VIEWDIR, 16);
-  FIELD_3RD (view_target, 17);
-  FIELD_RD (VIEWSIZE, 40);
-  FIELD_RD (aspect_ratio, 41); // = view_width / VIEWSIZE
-  FIELD_RD (lens_length, 42);
-  FIELD_RD (front_clip_z, 43);
-  FIELD_RD (back_clip_z, 44);
-  FIELD_RD (SNAPANG, 50);
-  FIELD_RD (view_twist, 51);
-  PRE (R_13) {
-    FIELD_RC (UCSFOLLOW, 71);
-  }
-  else {
-    FIELD_VALUE (VIEWMODE) |= ((FIELD_VALUE (UCSFOLLOW) << 2) | FIELD_VALUE (UCSVP));
-    FIELD_4BITS (VIEWMODE, 71); // UCSFOLLOW is bit 3 of 71, UCSVP bit 0, ucs_at_origin bit 1
-  }
-  FIELD_RS (circle_zoom, 72);
-  FIELD_RC (FASTZOOM, 73);
-  FIELD_RC (UCSICON, 74);
-  FIELD_RS (SNAPMODE, 75);
-  FIELD_RC (GRIDMODE, 76);
-  FIELD_RC (SNAPSTYLE, 77);
-  FIELD_RS (SNAPISOPAIR, 78);
+    FIELD_2RD (lower_left, 10);
+    FIELD_2RD (upper_right, 11);
+    FIELD_2RD (VIEWCTR, 12);
+    FIELD_2RD (SNAPBASE, 13);
+    FIELD_2RD (SNAPUNIT, 14);
+    FIELD_2RD (GRIDUNIT, 15);
+    FIELD_3RD (VIEWDIR, 16);
+    FIELD_3RD (view_target, 17);
+    FIELD_RD (VIEWSIZE, 40);
+    FIELD_RD (aspect_ratio, 41); // = view_width / VIEWSIZE
+    FIELD_RD (lens_length, 42);
+    FIELD_RD (front_clip_z, 43);
+    FIELD_RD (back_clip_z, 44);
+    FIELD_RD (SNAPANG, 50);
+    FIELD_RD (view_twist, 51);
+    PRE (R_13) {
+      FIELD_RS (UCSFOLLOW, 71);
+    }
+    else {
+      FIELD_VALUE (VIEWMODE) |= ((FIELD_VALUE (UCSFOLLOW) << 2) | FIELD_VALUE (UCSVP));
+      FIELD_RS (VIEWMODE, 71); // UCSFOLLOW is bit 3 of 71, UCSVP bit 0, ucs_at_origin bit 1
+    }
+    FIELD_RS (circle_zoom, 72);
+    FIELD_RS (FASTZOOM, 73);
+    FIELD_RS (UCSICON, 74);
+    FIELD_RS (SNAPMODE, 75);
+    FIELD_RS (GRIDMODE, 76);
+    FIELD_RS (SNAPSTYLE, 77);
+    FIELD_RS (SNAPISOPAIR, 78);
 
-  SINCE (R_2000) {
-    FIELD_RC (render_mode, 281);
-    FIELD_B (UCSVP, 65); // bit 0 of 71. ODA bug. documented as 71
-    FIELD_3BD (ucsorg, 110);
-    FIELD_3BD (ucsxdir, 111);
-    FIELD_3BD (ucsydir, 112);
-    FIELD_HANDLE0 (named_ucs, 5, 345);
-    if (FIELD_VALUE (UCSORTHOVIEW))
-      FIELD_HANDLE (base_ucs, 5, 346);
-    FIELD_BS (UCSORTHOVIEW, 79);
-    FIELD_BD (ucs_elevation, 146);
-  }
-  SINCE (R_2007) {
-    FIELD_HANDLE0 (background, 4, 332);
-    FIELD_HANDLE0 (visualstyle, 5, 348);
-    FIELD_BS (grid_flags, 60);
-    FIELD_BS (grid_major, 61);
-    FIELD_B (use_default_lights, 292);
-    FIELD_RC (default_lightning_type, 282);
-    FIELD_BD (brightness, 141);
-    FIELD_BD (contrast, 142);
-    FIELD_CMC (ambient_color, 63);
-    FIELD_HANDLE0 (sun, 5, 361);
-  }
+    SINCE (R_2000) {
+      FIELD_RC (render_mode, 281);
+      FIELD_RS (UCSVP, 65); // bit 0 of 71. ODA bug. documented as 71
+      FIELD_3BD (ucsorg, 110);
+      FIELD_3BD (ucsxdir, 111);
+      FIELD_3BD (ucsydir, 112);
+      FIELD_HANDLE0 (named_ucs, 5, 345);
+      if (FIELD_VALUE (UCSORTHOVIEW))
+        FIELD_HANDLE (base_ucs, 5, 346);
+      FIELD_RS (UCSORTHOVIEW, 79);
+      FIELD_RD (ucs_elevation, 146);
+    }
+    SINCE (R_2007) {
+      FIELD_HANDLE0 (background, 4, 332);
+      FIELD_HANDLE0 (visualstyle, 5, 348);
+      FIELD_RS (grid_flags, 60);
+      FIELD_RS (grid_major, 61);
+      FIELD_B (use_default_lights, 292);
+      FIELD_RC (default_lightning_type, 282);
+      FIELD_RD (brightness, 141);
+      FIELD_RD (contrast, 142);
+      FIELD_CMC (ambient_color, 63);
+      FIELD_HANDLE0 (sun, 5, 361);
+    }
 
-  //TODO convert back 1001 1070 xdata
-  REACTORS (4);
-  XDICOBJHANDLE (3);
+    //TODO convert back 1001 1070 xdata
+    REACTORS (4);
+    XDICOBJHANDLE (3);
 
   }
   /* end of DXF: now DWG */
