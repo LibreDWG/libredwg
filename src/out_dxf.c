@@ -1111,7 +1111,7 @@ dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
               //VALUE_RL (data->u.eed_3.layer, dxf);
               break;
             case 4: VALUE_BINARY (data->u.eed_4.data, data->u.eed_4.length, dxf); break;
-            case 5: break; // not in DXF. VALUE_RLL (data->u.eed_5.entity, dxf); break; (hex handle?)
+            case 5: VALUE_H (data->u.eed_5.entity, dxf); break; // not in DXF
             case 10:
             case 11:
             case 12:

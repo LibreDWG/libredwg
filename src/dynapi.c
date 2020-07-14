@@ -363,7 +363,7 @@ static const Dwg_DYNAPI_field _dwg_header_variables_fields[] = {
   { "AUPREC",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_header_variables, AUPREC),
     0,0,0, 70 },
   { "BLIPMODE",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_header_variables, BLIPMODE),
-    0,0,0, 0 },
+    0,0,0, 70 },
   { "BLOCK_CONTROL_OBJECT",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_header_variables, BLOCK_CONTROL_OBJECT),
     1,0,0, 0 },
   { "BLOCK_RECORD_MSPACE",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_header_variables, BLOCK_RECORD_MSPACE),
@@ -10715,7 +10715,7 @@ static const Dwg_DYNAPI_field _dwg_XRECORD_fields[] = {
   { "num_objid_handles",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_XRECORD, num_objid_handles),
     0,0,0, 0 },
   { "objid_handles",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_XRECORD, objid_handles),
-    1,1,0, 0 },
+    1,1,0, 340 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 

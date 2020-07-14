@@ -3930,9 +3930,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
       LOG_TRACE_TF (data->u.eed_4.data, data->u.eed_4.length);
       break;
     case 5:
-      bit_write_RLL (dat, data->u.eed_5.entity);
-      LOG_TRACE ("entity: 0x%lX [RLL]",
-                 (unsigned long)data->u.eed_5.entity);
+      bit_write_RLL (dat, (BITCODE_RLL)data->u.eed_5.entity);
+      LOG_TRACE ("entity: 0x%lX [ulong]", data->u.eed_5.entity);
       break;
     case 10:
     case 11:

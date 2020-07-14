@@ -30,7 +30,7 @@ BS,	DXF 70
 @item AUPREC
 BS,	DXF 70
 @item BLIPMODE
-B
+B,	DXF 70
 @item BLOCK_CONTROL_OBJECT
 H
 @item BLOCK_RECORD_MSPACE
@@ -12524,7 +12524,7 @@ Dwg_Resbuf*
 @item num_objid_handles
 BL
 @item objid_handles
-H*
+H*,	DXF 340
 
 @end vtable
 @end indentedblock

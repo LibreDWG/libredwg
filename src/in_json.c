@@ -1272,7 +1272,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                }
               else if (strEQc (key, "handle"))
                 {
-                  BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, name, "eed[i].handle", NULL, -1);
+                  BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, name, "eed[i].handles", NULL, -1);
                   memcpy (&obj->eed[i].handle, &hdl->handleref, sizeof (Dwg_Handle));
                   if (isize != (int)i || isize > (int)obj->num_eed)
                     {
@@ -1372,12 +1372,15 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         break;
                       }
                     case 5:
-                      if (eed_need_size (dat, obj->eed, i, 8, &have))
-                        data = obj->eed[i].data;
-                      data->u.eed_5.entity = (BITCODE_RLL)json_long (dat, tokens);
-                      LOG_TRACE ("eed[%u].data.value " FORMAT_RLL "\n", i,
-                                 (BITCODE_RLL)data->u.eed_5.entity);
-                      break;
+                      {
+                        BITCODE_H hdl
+                            = json_HANDLE (dat, dwg, tokens, name,
+                                           "eed[i].u.eed_5.entity", NULL, -1);
+                        JSON_TOKENS_CHECK_OVERFLOW_VOID
+                        memcpy (&data->u.eed_5.entity, &hdl->handleref.value,
+                                sizeof (hdl->handleref.value));
+                        break;
+                      }
                     case 10:
                     case 11:
                     case 12:

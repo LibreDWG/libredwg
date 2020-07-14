@@ -3860,8 +3860,8 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
     case 5:
       if (eed_need_size (8, size))
         return DWG_ERR_INVALIDEED;
-      data->u.eed_5.entity = bit_read_RLL (dat);
-      LOG_TRACE ("entity: 0x%" PRIx64 " [RLL]\n", data->u.eed_5.entity);
+      data->u.eed_5.entity = (unsigned long)bit_read_RLL (dat);
+      LOG_TRACE ("entity: 0x%lX [ulong]\n", data->u.eed_5.entity);
       break;
     case 10:
     case 11:

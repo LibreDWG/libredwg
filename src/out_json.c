@@ -985,7 +985,7 @@ json_eed (Bit_Chain *restrict dat,
             case 2: VALUE_RC (data->u.eed_2.byte, 0); break;
             case 3: VALUE_RL (data->u.eed_3.layer, 0); break;
             case 4: VALUE_BINARY (data->u.eed_4.data, data->u.eed_4.length, 0); break;
-            case 5: VALUE_RLL (data->u.eed_5.entity, 0); break;
+            case 5: fprintf (dat->fh, FORMAT_H "", 5, data->u.eed_5.entity); break;
             case 10:
             case 11:
             case 12:
