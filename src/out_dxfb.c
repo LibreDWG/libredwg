@@ -224,6 +224,16 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
     if (_obj->nam != 0)                                                       \
       FIELD_RC (nam, dxf)                                                     \
   }
+#define FIELD_RS0(nam, dxf)                                                   \
+  {                                                                           \
+    if (_obj->nam != 0)                                                       \
+      FIELD_RS (nam, dxf)                                                     \
+  }
+#define FIELD_RL0(nam, dxf)                                                   \
+  {                                                                           \
+    if (_obj->nam != 0)                                                       \
+      FIELD_RL (nam, dxf)                                                     \
+  }
 #define FIELD_BT0(nam, dxf)                                                   \
   {                                                                           \
     if (_obj->nam != 0)                                                       \
@@ -1050,10 +1060,6 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
   SINCE (R_13) { VALUE_TV ("AcDbSymbolTable", 100); }
 
 #define COMMON_TABLE_FLAGS(acdbname)                                          \
-  SINCE (R_14)                                                                \
-  {                                                                           \
-    VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);         \
-  }                                                                           \
   SINCE (R_13)                                                                \
   {                                                                           \
     VALUE_TV ("AcDbSymbolTableRecord", 100)                                   \
@@ -1088,14 +1094,14 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
   if (strEQc (#acdbname, "Layer") && dat->version >= R_2000)                  \
     {                                                                         \
       /* mask off plotflag and linewt */                                      \
-      VALUE_RC (_obj->flag & ~0x3f0, 70);                                     \
+      VALUE_RS (_obj->flag & ~0x3f0, 70);                                     \
     }                                                                         \
   else if (strEQc (#acdbname, "Block") && dat->version >= R_2000)             \
     ; /* skip 70 for AcDbBlockTableRecord here. done in AcDbBlockBegin */     \
   else                                                                        \
     {                                                                         \
       /* mask off 64, the loaded bit 6 */                                     \
-      VALUE_RC (_obj->flag & ~64, 70);                                        \
+      VALUE_RS (_obj->flag & ~64, 70);                                        \
     }
 
 #define LAYER_TABLE_FLAGS(acdbname)                                           \
@@ -1612,7 +1618,7 @@ dxfb_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       SINCE (R_2004) {
         VALUE_RL (dwg->dwg_class[j].num_instances, 91);
       }
-      VALUE_RS (dwg->dwg_class[j].is_zombie, 280); // acad calls it was_a_zombie
+      VALUE_RS (dwg->dwg_class[j].is_zombie, 280); // acad: was-a-zombie
       // Is-an-entity. 1f2 for entities, 1f3 for objects
       VALUE_RS (dwg->dwg_class[j].item_class_id == 0x1F2 ? 1 : 0, 281);
     }
@@ -1627,6 +1633,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   unsigned int i;
 
   SECTION (TABLES);
+  SINCE (R_9c1)
   {
     Dwg_Object_VPORT_CONTROL *_ctrl = &dwg->vport_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
@@ -1748,6 +1755,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         ENDTAB ();
       }
   }
+  SINCE (R_9c1)
   {
     Dwg_Object_UCS_CONTROL *_ctrl = &dwg->ucs_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
@@ -1768,7 +1776,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         ENDTAB ();
       }
   }
-  SINCE (R_13)
+  SINCE (R_10c1)
   {
     Dwg_Object_APPID_CONTROL *_ctrl = &dwg->appid_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
@@ -1789,6 +1797,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         ENDTAB ();
       }
   }
+  SINCE (R_10c1)
   {
     Dwg_Object_DIMSTYLE_CONTROL *_ctrl = &dwg->dimstyle_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
@@ -1834,7 +1843,7 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           ENDTAB ();
         }
     }
-  SINCE (R_13)
+  SINCE (R_12)
   {
     Dwg_Object_BLOCK_CONTROL *_ctrl = &dwg->block_control;
     Dwg_Object *ctrl = _ctrl ? &dwg->object[_ctrl->objid] : NULL;

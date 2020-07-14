@@ -3377,7 +3377,11 @@ DWG_OBJECT (APPID)
 
   COMMON_TABLE_FLAGS (RegApp)
   SINCE (R_13) {
-    FIELD_RC0 (unknown, 71); // in DXF only with ADE_PROJECTION
+    DXF {
+      FIELD_RS0 (unknown, 71); // in DXF only with ADE_PROJECTION
+    } else {
+      FIELD_RC (unknown, 71);
+    }
   }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END

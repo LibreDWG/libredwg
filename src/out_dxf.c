@@ -549,6 +549,16 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
     if (_obj->nam != 0)                                                       \
       FIELD_RC (nam, dxf)                                                     \
   }
+#define FIELD_RS0(nam, dxf)                                                   \
+  {                                                                           \
+    if (_obj->nam != 0)                                                       \
+      FIELD_RS (nam, dxf)                                                     \
+  }
+#define FIELD_RL0(nam, dxf)                                                   \
+  {                                                                           \
+    if (_obj->nam != 0)                                                       \
+      FIELD_RL (nam, dxf)                                                     \
+  }
 #define FIELD_BT0(nam, dxf)                                                   \
   {                                                                           \
     if (_obj->nam != 0)                                                       \
@@ -2516,6 +2526,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_BL vcount;
 
   SECTION (TABLES);
+  SINCE (R_9c1)
   {
     Dwg_Object_VPORT_CONTROL *_ctrl = &dwg->vport_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
@@ -2637,6 +2648,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         ENDTAB ();
       }
   }
+  SINCE (R_9c1)
   {
     Dwg_Object_UCS_CONTROL *_ctrl = &dwg->ucs_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
@@ -2657,7 +2669,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         ENDTAB ();
       }
   }
-  SINCE (R_13)
+  SINCE (R_10c1)
   {
     Dwg_Object_APPID_CONTROL *_ctrl = &dwg->appid_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
@@ -2678,6 +2690,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         ENDTAB ();
       }
   }
+  SINCE (R_10c1)
   {
     Dwg_Object_DIMSTYLE_CONTROL *_ctrl = &dwg->dimstyle_control;
     Dwg_Object *ctrl = &dwg->object[_ctrl->objid];
@@ -2722,7 +2735,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
     }
 
-  SINCE (R_13)
+  SINCE (R_12)
   {
     Dwg_Object *ctrl, *obj;
     Dwg_Object_BLOCK_CONTROL *_ctrl = dwg_block_control (dwg);
