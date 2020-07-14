@@ -1,0 +1,102 @@
+#!/bin/bash
+# dwg -> dxfb
+# dxfb -> dwg2
+# teigha dxfb -> dwg (check out_dxfb)
+# teigha dwg2 -> dxf (check in_dxf) 
+d="${1:-example_2000}"
+b="$(basename "$d" .dwg)"
+dir="$(dirname "$d")"
+r="$(basename "$dir")"
+case $dir in
+    *test/test-data)   ;;
+    *test/test-data/*) b="${b}_${r}" ;;
+    *td)               ;;
+    *td/*)             b="${b}_${r}" ;;
+    .)                 ;;
+    *)                 b="${b}_${r}" ;;
+esac
+case $r in
+    20*)          ;;
+    r9)       r=9 ;;
+    r1[0234]) r=${r:1} ;;
+    *)  case $b in
+            *_20*)      r=${b:(-4)} ;;
+            *_r9)       r=9         ;;
+            *_r1[0234]) r=${b:(-2)} ;;
+        esac
+        ;;
+esac
+
+# first create a dwg log to compare against
+./log -v3 "$d"
+mv "$b.log" "$b.log.orig"
+rm "./$b.dxf" "./$b.dwg" 2>/dev/null
+
+./dxf -b -y -v4 -o "$b.dxfb" "$d"
+if [ -f "$b.dxfb" ]; then
+    mv "./$b.log" "$b.dwg2dxfb.log"
+
+    case $(uname) in
+        Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
+        Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
+        Windows) TeighaFileConverter=TeighaFileConverter ;;
+    esac
+    if [ -x $TeighaFileConverter ]; then
+        echo TeighaFileConverter "." "test" "ACAD$r" DWG 0 1 "$b.dxfb"
+        $TeighaFileConverter "." "test" "ACAD$r" DWG 0 1 "$b.dxfb"
+        mv "test/$b.dwg.err" "$b.dxfb2dwg.err"
+        cat "$b.dxfb2dwg.err"
+    else
+        rm "$b.dxfb2dwg.err" 2>/dev/null
+        echo TeighaFileConverter not installed
+    fi
+
+    ./dwg -y -v4 "$b.dxfb"
+fi
+
+if [ -f "$b.dwg" ]; then
+    case $(uname) in
+        Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
+        Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
+        Windows) TeighaFileConverter=TeighaFileConverter ;;
+    esac
+    if [ -x $TeighaFileConverter ]; then
+        echo TeighaFileConverter "." "test" "ACAD$r" DXF 0 1 "$b.dwg"
+        $TeighaFileConverter "." "test" "ACAD$r" DXF 0 1 "$b.dwg"
+        mv "test/$b.dxf.err" "$b.dxfb.err"
+        cat "$b.dxfb.err"
+    else
+        rm "$b.dxfb.err" 2>/dev/null
+        echo TeighaFileConverter not installed
+    fi
+
+    ./log -v3 "$b.dwg"
+    log1="$b.log.orig"
+    log2="$b.log"
+    echo diff -bu "log1" "$log2"
+    diff -I '^-(objref|found:)' -bu "$log1" "$log2"
+
+    test -f "$b.dxfb.err" && cat "$b.dxfb.err"
+
+    if false && [ -f "$log1" ] && [ -f "$log2" ]; then
+        # Really interesting is the Section BLOCKS here. vs BLOCK_HEADER
+        # we dont write unstable entities yet.
+        grep -E '^Add entity' "$log1" | grep -E -v 'entity (ARC_DIMENSION|HELIX|SECTIONOBJECT|UNKNOWN_ENT)' >"$log1.tmp"
+        grep -E '^Add entity' "$log2" >"$log2.tmp"
+        if diff -bu0 "$log1.tmp" "$log2.tmp" >/dev/null 2>/dev/null; then
+            echo entities roundtrip ok
+            rm "$log1.tmp" "$log2.tmp" 2>/dev/null
+        else
+            c1=$(grep -c entity "$log1.tmp")
+            c2=$(grep -c entity "$log2.tmp")
+            if [ "$c1" = "$c2" ]; then
+                echo entities roundtrip in different order
+                diff -I '^-(objref|found:)' -bu0 <(perl -lpe's/ \[.\d+\]//' "$log1.tmp" | sort -u) \
+                          <(perl -lpe's/ \[.\d+\]//' "$log2.tmp" | sort -u)
+            else
+                echo "$b roundtrip failed, $c1 vs $c2 entities"
+                diff -I '^-(objref|found:)' -bu0 "$log1.tmp" "$log2.tmp" | grep -v '^@@'
+            fi
+        fi
+    fi
+fi

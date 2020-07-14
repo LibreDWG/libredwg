@@ -48,7 +48,7 @@ VALGRIND_OPTS = --leak-check=full --show-reachable=no --num-callers=30
 JSON_DIST = jsmn/jsmn.h jsmn/LICENSE jsmn/README.md
 doc_DIST = README HACKING NEWS TODO
 EXTRA_DIST = $(top_srcdir)/.version libredwg.spec Dockerfile \
-	     dwg.in dxf.in dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh dxf-check json-check \
+	     dwg.in dxf.in dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check json-check \
 	     log.in svg.in rw.in logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
 	     cmp-objs.pl \
 	     build-aux/swig_python.patch \
@@ -122,7 +122,7 @@ if HAVE_SHELLCHECK
 # fragile, serial-tests only. SPEC_LOG_COMPILER does not work there,
 # and parallel cannot do srcdir TESTS
 TESTS += log dwg dxf json svg rw logs-all.sh dynapi_test_all.sh unit_testing_all.sh \
-	 $(srcdir)/json-check $(srcdir)/dxf-check \
+	 $(srcdir)/json-check $(srcdir)/dxf-check $(srcdir)/dxfb-check \
 	 $(srcdir)/dxf-allcvt.sh $(srcdir)/test-dxf.sh $(srcdir)/unknown.sh \
          programs/dwgfilter \
 	 programs/alive.test programs/dxf.test programs/json.test programs/svg.test
@@ -161,6 +161,18 @@ check-dxf: all
 	-for d in r14 2000 2004 2007 2010 2013 2018; do \
           for f in $(srcdir)/test/test-data/$$d/*.dwg; do \
             env MAKEFLAGS= $(srcdir)/dxf-check $$f; \
+	  done; \
+	done
+check-dxfb: all
+	-for f in $(srcdir)/test/test-data/Drawing_*.dwg \
+                  $(srcdir)/test/test-data/sample_*.dwg \
+                  $(srcdir)/test/test-data/example_*.dwg; \
+          do \
+            env MAKEFLAGS= $(srcdir)/dxfb-check $$f; \
+          done
+	-for d in r14 2000 2004 2007 2010 2013 2018; do \
+          for f in $(srcdir)/test/test-data/$$d/*.dwg; do \
+            env MAKEFLAGS= $(srcdir)/dxfb-check $$f; \
 	  done; \
 	done
 check-json: all
