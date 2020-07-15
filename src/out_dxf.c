@@ -1340,17 +1340,11 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
       if (blk && blk->type == DWG_TYPE_BLOCK)                                 \
         {                                                                     \
           Dwg_Entity_BLOCK *_blk = blk->tio.entity->tio.BLOCK;                \
-          if (dat->from_version >= R_2007)                                    \
-            VALUE_TU (_blk->name, 2)                                          \
-          else                                                                \
-            VALUE_TV (_blk->name, 2)                                          \
+          VALUE_T (_blk->name, 2)                                       \
         }                                                                     \
       else if (_obj->name)                                                    \
         {                                                                     \
-          if (dat->from_version >= R_2007)                                    \
-            VALUE_TU (_obj->name, 2)                                          \
-          else                                                                \
-            VALUE_TV (_obj->name, 2)                                          \
+          VALUE_T (_obj->name, 2)                                             \
         }                                                                     \
       else                                                                    \
         VALUE_TV ("*", 2)                                                     \

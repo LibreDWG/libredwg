@@ -320,8 +320,41 @@ dxf_read_rd (Bit_Chain *dat)
     }
 }
 
+// Not yet done.
+// ASCII: series of 310 HEX encoded
+// BINARY: ??
+static unsigned char *
+dxf_read_binary (Bit_Chain *dat, unsigned char **p, int len)
+{
+  unsigned char *data;
+  const char *pos = (char*)&dat->chain[dat->byte];
+  const int is_binary = dat->opts & DWG_OPTS_DXFB;
+  const int size = len / 2;
+  if (dat->byte + size >= dat->size)
+    return NULL;
+  //if (is_binary)
+  data = p && *p ? (unsigned char *)realloc (*p, size) : (unsigned char *)malloc (size);
+  if (!data)
+    {
+      LOG_ERROR ("Out of memory");
+      return NULL;
+    }
+  LOG_TRACE ("binary[%d]: ", len);
+  for (int j = 0; j < len / 2; j++)
+    {
+      sscanf (pos, "%2hhX", &data[j]);
+      LOG_TRACE ("%02X", (unsigned char)*pos);
+      pos += 2;
+    }
+  LOG_TRACE (" [TF]\n");
+  dat->byte += size;
+  if (p)
+    *p = data;
+  return data;
+}
+
 // Unicode strings are UTF-8 with quoted \\U+
-// no length prefixes, just zero-terminated strings
+// BINARY: no length prefixes, just zero-terminated strings
 static void
 dxf_read_string (Bit_Chain *dat, char **string)
 {
@@ -330,6 +363,21 @@ dxf_read_string (Bit_Chain *dat, char **string)
     return;
   if (is_binary)
     {
+#if 1
+      int size = strlen ((char*)&dat->chain[dat->byte]) + 1;
+      if (!string)
+        {
+          strncpy (buf, (char*)&dat->chain[dat->byte], 4096);
+          if (size > 4095)
+            buf[4095] = '\0';
+        }
+      else
+        {
+          *string = !*string ? (char *)malloc (size) : (char *)realloc (*string, size);
+          strcpy (*string, (char*)&dat->chain[dat->byte]);
+        }
+      dat->byte += size;
+#else
       int size = sscanf ((char*)&dat->chain[dat->byte], "%s", (char*)buf);
       buf[4095] = '\0';
       if (size != EOF)
@@ -343,6 +391,7 @@ dxf_read_string (Bit_Chain *dat, char **string)
         }
       *string = !*string ? (char *)malloc (size) : (char *)realloc (*string, size);
       strcpy (*string, buf);
+#endif
     }
   else
     {
@@ -401,6 +450,8 @@ dxf_read_pair (Bit_Chain *dat)
       free (pair);
       return NULL;
     }
+  if (is_binary)
+    LOG_HANDLE ("%4lx: ", dat->byte);
   pair->code = (short)dxf_read_rs (dat);
   if (dat->size - dat->byte < 4) // at least EOF\n
     goto err;
@@ -435,22 +486,15 @@ dxf_read_pair (Bit_Chain *dat)
       LOG_TRACE ("  dxf (%d, %f)\n", pair->code, pair->value.d);
       break;
     case VT_BINARY:
-      //FIXME len?
+      // zero-terminated. TODO hex decode here already?
       dxf_read_string (dat, &pair->value.s);
       LOG_TRACE ("  dxf (%d, %s)\n", (int)pair->code, pair->value.s);
       break;
     case VT_HANDLE:
     case VT_OBJECTID:
-      if (is_binary)
-        {
-          // string without len
-          dat->byte += sscanf ((char*)&dat->chain[dat->byte], "%X", &pair->value.u);
-        }
-      else
-      {
-        dxf_read_string (dat, NULL);
-        sscanf (buf, "%X", &pair->value.u);
-      }
+      // BINARY: hex string without len
+      dxf_read_string (dat, NULL);
+      sscanf (buf, "%X", &pair->value.u);
       LOG_TRACE ("  dxf (%d, %X)\n", (int)pair->code, pair->value.u);
       break;
     case VT_INVALID:
