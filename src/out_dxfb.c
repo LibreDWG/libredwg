@@ -333,12 +333,34 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 #define VALUE_BS(value, dxf) VALUE_RS (value, dxf)
 #define VALUE_BL(value, dxf) VALUE_RL (value, dxf)
 #define VALUE_BD(value, dxf) VALUE_RD (value, dxf)
+// most DXFB FIELD_RC are written as int16 actually
+// we need to check dwg_resbuf_value_type()
 #define VALUE_RC(value, dxf)                                                  \
-  {                                                                           \
-    BITCODE_RC c = (BITCODE_RC)(value);                                       \
-    GROUP (dxf);                                                              \
-    fwrite (&c, 1, 1, dat->fh);                                               \
+  switch (dwg_resbuf_value_type (dxf))                                        \
+    {                                                                         \
+    case VT_INT8:                                                             \
+    case VT_BOOL:                                                             \
+      {                                                                       \
+        BITCODE_RC c = (BITCODE_RC) (value);                                  \
+        GROUP (dxf);                                                          \
+        fwrite (&c, 1, 1, dat->fh);                                           \
+        break;                                                                \
+      }                                                                       \
+    case VT_INT16:                                                            \
+      VALUE_RS (value, dxf);                                                  \
+      break;                                                                  \
+    case VT_INVALID:                                                          \
+    case VT_STRING:                                                           \
+    case VT_POINT3D:                                                          \
+    case VT_REAL:                                                             \
+    case VT_INT32:                                                            \
+    case VT_BINARY:                                                           \
+    case VT_HANDLE:                                                           \
+    case VT_OBJECTID:                                                         \
+    case VT_INT64:                                                            \
+    default: LOG_ERROR ("Unhandled VALUE_RC code %d", dxf);                   \
   }
+
 #define VALUE_3BD(value, dxf)                                                 \
   {                                                                           \
     VALUE_RD (value.x, dxf);                                                  \
