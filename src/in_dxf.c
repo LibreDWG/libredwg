@@ -199,6 +199,38 @@ dxf_skip_ws (Bit_Chain *dat)
   // clang-format on
 }
 
+static BITCODE_RC
+dxf_read_rc (Bit_Chain *dat)
+{
+  const int is_binary = dat->opts & DWG_OPTS_DXFB;
+  if (is_binary)
+    {
+      return bit_read_RC (dat);
+    }
+  else
+    {
+      char *endptr;
+      long num;
+      if (dat->byte + 1 >= dat->size)
+        return (BITCODE_RC)-1;
+      num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+      if (endptr)
+        dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+      if (errno == ERANGE)
+        return (BITCODE_RC)num;
+      if (dat->byte + 1 >= dat->size)
+        return (BITCODE_RC)num;
+      if (dat->chain[dat->byte] == '\r')
+        dat->byte++;
+      if (dat->chain[dat->byte] == '\n')
+        dat->byte++;
+      if (num > 65534)
+        LOG_ERROR ("%s: RC overflow %ld (at %lu)", __FUNCTION__, num,
+                   dat->byte);
+      return (BITCODE_RC)num;
+    }
+}
+
 static BITCODE_RS
 dxf_read_rs (Bit_Chain *dat)
 {
@@ -466,6 +498,9 @@ dxf_read_pair (Bit_Chain *dat)
       break;
     case VT_BOOL:
     case VT_INT8:
+      pair->value.i = dxf_read_rc (dat);
+      LOG_TRACE ("  dxf (%d, %d)\n", (int)pair->code, pair->value.i);
+      break;
     case VT_INT16:
       pair->value.i = dxf_read_rs (dat);
       LOG_TRACE ("  dxf (%d, %d)\n", (int)pair->code, pair->value.i);
