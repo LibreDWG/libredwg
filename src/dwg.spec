@@ -393,6 +393,11 @@ DWG_ENTITY_END
 DWG_ENTITY (BLOCK)
 
   SUBCLASS (AcDbBlockBegin)
+  UNTIL (R_12) {
+    if (obj->tio.entity->entmode == 1) {
+      VALUE_RS (1, 67); // is_paperspace
+    }
+  }
   BLOCK_NAME (name, 2) //special pre-R13 naming rules
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -402,7 +407,7 @@ DWG_ENTITY (BLOCK)
     Dwg_Object *o
         = _ent->ownerhandle && _ent->ownerhandle->obj
               ? _ent->ownerhandle->obj : NULL;
-    VALUE_BL (0, 70);
+    VALUE_BL (0, 70); // flags: anon, has_attribs, is_xref, is_overlaid, ...
     if (!o)
       o = dwg_ref_object (dwg, _ent->ownerhandle);
     if (!o || o->fixedtype != DWG_TYPE_BLOCK_HEADER)
@@ -416,7 +421,8 @@ DWG_ENTITY (BLOCK)
         VALUE_3BD (hdr->base_pt, 10);
       }
     BLOCK_NAME (name, 3); // special pre-R13 naming rules
-    VALUE_TFF ("", 1);
+    VALUE_TFF ("", 1); // fixme. name if not in mspace
+    //FIXME FIELD_T (filename. 4);
   }
 #endif
 
