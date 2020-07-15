@@ -326,39 +326,64 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
     fprintf (dat->fh, "$%s%c", #nam, 0);                                      \
   }
 #define VALUE(value, type, dxf) VALUE_##type (value, dxf)
-#define VALUE_B(value, dxf) VALUE_RC (value, dxf)
-#define VALUE_BB(value, dxf) VALUE_RC (value, dxf)
-#define VALUE_3B(value, dxf) VALUE_RC (value, dxf)
-#define VALUE_RCs(value, dxf) VALUE_RC (value, dxf)
-#define VALUE_BS(value, dxf) VALUE_RS (value, dxf)
-#define VALUE_BL(value, dxf) VALUE_RL (value, dxf)
+#define VALUE_B(value, dxf) VALUE_INT (value, dxf)
+#define VALUE_BB(value, dxf) VALUE_INT (value, dxf)
+#define VALUE_3B(value, dxf) VALUE_INT (value, dxf)
+#define VALUE_RCs(value, dxf) VALUE_INT (value, dxf)
+#define VALUE_BS(value, dxf) VALUE_INT (value, dxf)
+#define VALUE_BL(value, dxf) VALUE_INT (value, dxf)
 #define VALUE_BD(value, dxf) VALUE_RD (value, dxf)
+#define VALUE_RC(value, dxf)                                                  \
+  {                                                                           \
+    BITCODE_RC _c = (BITCODE_RC)(value);                                      \
+    GROUP (dxf);                                                              \
+    fwrite (&_c, 1, 1, dat->fh);                                              \
+  }
+#define VALUE_RS(value, dxf)                                                  \
+  {                                                                           \
+    BITCODE_RS _s = (BITCODE_RS)(value);                                      \
+    GROUP (dxf);                                                              \
+    fwrite (&_s, 2, 1, dat->fh);                                              \
+  }
+#define VALUE_RL(value, dxf)                                                  \
+  {                                                                           \
+    BITCODE_RL _s = (BITCODE_RL)value;                                        \
+    GROUP (dxf);                                                              \
+    fwrite (&_s, 4, 1, dat->fh);                                              \
+  }
+#define VALUE_RLL(value, dxf)                                                 \
+  {                                                                           \
+    BITCODE_RLL _s = (BITCODE_RLL)value;                                      \
+    GROUP (dxf);                                                              \
+    fwrite (&_s, 8, 1, dat->fh);                                              \
+  }
 // most DXFB FIELD_RC are written as int16 actually
 // we need to check dwg_resbuf_value_type()
-#define VALUE_RC(value, dxf)                                                  \
+#define FIELD_RC(nam, dxf) VALUE_INT (_obj->nam, dxf)
+#define VALUE_INT(value, dxf)                                                 \
   switch (dwg_resbuf_value_type (dxf))                                        \
     {                                                                         \
-    case VT_INT8:                                                             \
     case VT_BOOL:                                                             \
-      {                                                                       \
-        BITCODE_RC c = (BITCODE_RC) (value);                                  \
-        GROUP (dxf);                                                          \
-        fwrite (&c, 1, 1, dat->fh);                                           \
-        break;                                                                \
-      }                                                                       \
+    case VT_INT8:                                                             \
+      VALUE_RC (value, dxf);                                                  \
+      break;                                                                  \
     case VT_INT16:                                                            \
       VALUE_RS (value, dxf);                                                  \
+      break;                                                                  \
+    case VT_INT32:                                                            \
+      VALUE_RL (value, dxf);                                                  \
+      break;                                                                  \
+    case VT_INT64:                                                            \
+      VALUE_RLL (value, dxf);                                                 \
       break;                                                                  \
     case VT_INVALID:                                                          \
     case VT_STRING:                                                           \
     case VT_POINT3D:                                                          \
     case VT_REAL:                                                             \
-    case VT_INT32:                                                            \
     case VT_BINARY:                                                           \
     case VT_HANDLE:                                                           \
     case VT_OBJECTID:                                                         \
-    case VT_INT64:                                                            \
-    default: LOG_ERROR ("Unhandled VALUE_RC code %d", dxf);                   \
+    default: LOG_ERROR ("Unhandled VALUE_INT code %d", dxf);                  \
   }
 
 #define VALUE_3BD(value, dxf)                                                 \
@@ -367,17 +392,16 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
     VALUE_RD (value.y, dxf + 10);                                             \
     VALUE_RD (value.z, dxf + 20);                                             \
   }
-#define FIELD_RC(nam, dxf) VALUE_RC (_obj->nam, dxf)
 #define HEADER_RC(nam, dxf)                                                   \
   {                                                                           \
     HEADER_9 (nam);                                                           \
-    VALUE_RC (dwg->header_vars.nam, dxf);                                     \
+    VALUE_INT (dwg->header_vars.nam, dxf);                                    \
   }
 #define HEADER_RC0(nam, dxf)                                                  \
   if (dwg->header_vars.nam)                                                   \
     {                                                                         \
       HEADER_9 (nam);                                                         \
-      VALUE_RC (dwg->header_vars.nam, dxf);                                   \
+      VALUE_INT (dwg->header_vars.nam, dxf);                                  \
     }
 #define HEADER_RS0(nam, dxf)                                                  \
   if (dwg->header_vars.nam)                                                   \
@@ -386,14 +410,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
       VALUE_RS (dwg->header_vars.nam, dxf);                                   \
     }
 #define HEADER_B(nam, dxf) HEADER_RC (nam, dxf)
-
-#define VALUE_RS(value, dxf)                                                  \
-  {                                                                           \
-    BITCODE_RS s = (BITCODE_RS)(value);                                       \
-    GROUP (dxf);                                                              \
-    fwrite (&s, 2, 1, dat->fh);                                               \
-  }
-#define FIELD_RS(nam, dxf) VALUE_RS (_obj->nam, dxf)
+#define FIELD_RS(nam, dxf) VALUE_INT (_obj->nam, dxf)
 #define HEADER_RS(nam, dxf)                                                   \
   {                                                                           \
     HEADER_9 (nam);                                                           \
@@ -412,13 +429,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
     VALUE_RD (dwg->header_vars.nam, dxf);                                     \
   }
 
-#define VALUE_RL(value, dxf)                                                  \
-  {                                                                           \
-    BITCODE_RL _s = (BITCODE_RL)value;                                        \
-    GROUP (dxf);                                                              \
-    fwrite (&_s, 4, 1, dat->fh);                                              \
-  }
-#define FIELD_RL(nam, dxf) VALUE_RL (_obj->nam, dxf)
+#define FIELD_RL(nam, dxf) VALUE_INT (_obj->nam, dxf)
 #define HEADER_RL(nam, dxf)                                                   \
   {                                                                           \
     HEADER_9 (nam);                                                           \
@@ -486,7 +497,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
     GROUP (dxf);                                                              \
     fwrite (&s, 8, 1, dat->fh);                                               \
   }
-#define FIELD_RLL(nam, dxf) FIELD_BLL (nam, dxf)
+#define FIELD_RLL(nam, dxf) FIELD_RLL (nam, dxf)
 #define HEADER_RLL(nam, dxf)                                                  \
   {                                                                           \
     GROUP (9);                                                                \
@@ -900,7 +911,7 @@ dxfb_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
             case 42: VALUE_RD (data->u.eed_40.real, dxf); break;
             case 70: VALUE_RS (data->u.eed_70.rs, dxf); break;
             case 71: VALUE_RL (data->u.eed_71.rl, dxf); break;
-            default: VALUE_RC (0, dxf);
+            default: VALUE_INT (0, dxf);
             }
         }
     }

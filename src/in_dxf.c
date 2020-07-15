@@ -488,6 +488,8 @@ dxf_read_pair (Bit_Chain *dat)
   if (dat->size - dat->byte < 4) // at least EOF\n
     goto err;
   pair->type = dwg_resbuf_value_type (pair->code);
+  //if (pair->code == 280) // && strEQc (key, "ENDCAPS")
+  //  pair->type = VT_INT16; // for HEADER.ENDCAPS - CEPSNTYPE
   switch (pair->type)
     {
     case VT_STRING:
@@ -849,6 +851,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
+  const int is_binary = dat->opts & DWG_OPTS_DXFB;
   // const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
   int is_tu = 1;
   int i = 0;
@@ -862,7 +865,6 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // here SECTION (HEADER) was already consumed
   // read the first group 9, $field pair
   pair = dxf_read_pair (dat);
-
   while (pair != NULL && pair->code == 9 && pair->value.s)
     {
       char field[80];
@@ -881,6 +883,9 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       DXF_BREAK_ENDSEC;
     next_hdrvalue:
+      if (is_binary && pair->code == 280 &&
+          (strEQc (field, "$ENDCAPS") || strEQc (field, "$JOINSTYLE")))
+        dat->byte++; // B => RS
       if (pair->code == 1 && strEQc (field, "$ACADVER")
           && pair->value.s != NULL)
         {
@@ -1292,6 +1297,7 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_BL i;
   Dxf_Pair *pair = dxf_read_pair (dat);
   Dwg_Class *klass;
+  const int is_binary = dat->opts & DWG_OPTS_DXFB;
   const char* t_type = dat->version >= R_2007 ? "TU" : "TV";
 
   while (pair)
@@ -1390,6 +1396,8 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               klass->is_zombie = (BITCODE_B)pair->value.i;
               LOG_TRACE ("CLASS[%d].is_zombie = %d [B 280]\n", i,
                          pair->value.i);
+              if (is_binary)
+                dat->byte++; // B => RS
               break;
             case 281: // ie is_entity
               // 1f2 for entities, 1f3 for objects
@@ -1397,6 +1405,8 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               LOG_TRACE ("CLASS[%d].item_class_id = 0x%x [BSx 281] (%s)\n", i,
                          klass->item_class_id,
                          pair->value.i ? "is_entity" : "is_object");
+              if (is_binary)
+                dat->byte++; // B => RS
               break;
             default:
               LOG_WARN ("Unknown DXF code for class[%d].%d", i, pair->code);
