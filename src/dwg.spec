@@ -449,9 +449,8 @@ DWG_ENTITY (INSERT)
 
   SUBCLASS (AcDbBlockReference)
 #ifdef IS_DXF
+    FIELD_RS0 (has_attribs, 66);
     FIELD_HANDLE_NAME (block_header, 2, BLOCK_HEADER);
-    if (FIELD_VALUE (has_attribs))
-      FIELD_B (has_attribs, 66);
 #endif
   PRE (R_13) {
     FIELD_2RD (ins_pt, 10);
@@ -544,10 +543,16 @@ DWG_ENTITY (INSERT)
     }
 
   PRE (R_13) {
-    FIELD_RD (rotation, 50);
-  } else {
-    FIELD_BD (rotation, 50);
-    FIELD_3DPOINT (extrusion, 210);
+    FIELD_RD0 (rotation, 50);
+    DXF { FIELD_BE (extrusion, 210); } // in DWG?
+  }
+  LATER_VERSIONS {
+    FIELD_BD0 (rotation, 50);
+    DXF {
+      FIELD_BE (extrusion, 210);
+    } else {
+      FIELD_3DPOINT (extrusion, 0);
+    }
     FIELD_B (has_attribs, 0); // 66 above
   }
 
@@ -559,8 +564,6 @@ DWG_ENTITY (INSERT)
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (block_header, 5, 0);
-  //There is a typo in the spec. it says "R13-R200:".
-  //I guess it means "R13-R2000:" (just like in MINSERT)
   VERSIONS (R_13, R_2000)
     {
       if (FIELD_VALUE (has_attribs))
@@ -2703,7 +2706,7 @@ DWG_OBJECT (BLOCK_HEADER)
         }
     }
 
-  SINCE (R_2007)
+  SINCE (R_2007) // AC1020 aka R_2006
     {
       FIELD_BS (insert_units, 70);
       FIELD_B (explodable, 280);

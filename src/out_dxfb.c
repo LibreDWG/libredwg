@@ -197,9 +197,16 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 #define FIELD_TFF(nam, len, dxf) VALUE_TV (_obj->nam, dxf)
 
 // skip if 0
+#define FIELD_RD0(nam, dxf) FIELD_BD0(nam, dxf)
 #define FIELD_BD0(nam, dxf)                                                   \
   {                                                                           \
     if (_obj->nam != 0.0)                                                     \
+      FIELD_BD (nam, dxf)                                                     \
+  }
+// for scale (1.0, 1.0, 1.0)
+#define FIELD_BD1(nam, dxf)                                                   \
+  {                                                                           \
+    if (_obj->nam != 1.0)                                                     \
       FIELD_BD (nam, dxf)                                                     \
   }
 #define FIELD_BL0(nam, dxf)                                                   \

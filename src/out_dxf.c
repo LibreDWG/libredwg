@@ -523,9 +523,16 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
       FIELD_3RD (nam, dxf)                                                    \
   }
 // skip if 0
+#define FIELD_RD0(nam, dxf) FIELD_BD0(nam, dxf)
 #define FIELD_BD0(nam, dxf)                                                   \
   {                                                                           \
     if (_obj->nam != 0.0)                                                     \
+      FIELD_BD (nam, dxf)                                                     \
+  }
+// for scale (1.0, 1.0, 1.0)
+#define FIELD_BD1(nam, dxf)                                                   \
+  {                                                                           \
+    if (_obj->nam != 1.0)                                                     \
       FIELD_BD (nam, dxf)                                                     \
   }
 #define FIELD_BL0(nam, dxf)                                                   \

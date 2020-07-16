@@ -351,7 +351,9 @@
 #endif
 // on DXF skip if 0
 #ifndef FIELD_BD0
+#  define FIELD_RD0(name, dxf) FIELD_RD (name, dxf)
 #  define FIELD_BD0(name, dxf) FIELD_BD (name, dxf)
+#  define FIELD_BD1(name, dxf) FIELD_BD (name, dxf)
 #  define FIELD_BL0(name, dxf) FIELD_BL (name, dxf)
 #  define SUB_FIELD_BL0(o, name, dxf) SUB_FIELD_BL (o, name, dxf)
 #  define FIELD_B0(name, dxf) FIELD_B (name, dxf)
