@@ -305,7 +305,6 @@ main (int argc, char *argv[])
   // allow stdin, but require -I|--format then
   memset (&dwg, 0, sizeof (Dwg_Data));
   dat.opts = dwg.opts = opts;
-  dat.version = dwg.header.version = dwg_version;
 
   if (infile)
     {
@@ -389,8 +388,12 @@ main (int argc, char *argv[])
     goto free;
 
   if (dwg.header.from_version == R_INVALID)
-    dwg.header.from_version = dwg.header.version;
-  dat.version = dwg.header.version = dwg_version;
+    fprintf (stderr, "Unknown DWG header.from_version");
+  // FIXME: for now only R_13 - R_2000. later remove this line.
+  if (dwg.header.from_version < R_13 || dwg.header.from_version >= R_2004)
+    dat.version = dwg.header.version = dwg_version;
+  else
+    dat.version = dwg.header.version = dwg.header.from_version;
 
   if (!outfile)
     {

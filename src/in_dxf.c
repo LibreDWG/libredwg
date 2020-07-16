@@ -899,7 +899,9 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               if (strEQ (version, version_codes[v]))
                 {
                   dwg->header.from_version = v;
-                  is_tu = dat->from_version >= R_2007;
+                  if (dwg->header.from_version <= R_2004)
+                    dat->from_version = v;
+                  is_tu = dat->version >= R_2007;
                   LOG_TRACE ("HEADER.from_version = %s,\tdat->from_version = %s\n",
                              version_codes[dwg->header.from_version],
                              version_codes[dat->from_version]);
@@ -917,6 +919,9 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               if (v == R_AFTER)
                 LOG_ERROR ("Invalid HEADER: 9 %s, 1 %s", field, version)
             }
+          // currently we can only encode DWGs to r13-r2000, but DXF's to almost everything.
+          if (dwg->header.from_version >= R_13 && dwg->header.from_version <= R_2000)
+            dwg->header.version = dat->version = dwg->header.from_version;
           LOG_TRACE ("HEADER.version = %s,\tdat->version = %s\n",
                      version_codes[dwg->header.version],
                      version_codes[dat->version]);

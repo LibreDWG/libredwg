@@ -876,19 +876,10 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               if (strEQ (version, version_codes[v]))
                 {
-                  dwg->header.from_version = v;
+                  dat->from_version = dwg->header.from_version = v;
                   // is_tu = dat->version >= R_2007;
                   LOG_TRACE ("FILEHEADER.from_version = %s (%s)\n",
                              version, dwg_version_type (v));
-                  if (!dwg->header.version) // not already set
-                    dwg->header.version = dat->version;
-                  else
-                    {
-                      //dat->version = dwg->header.version;
-                      LOG_TRACE ("FILEHEADER.version = %s (%s)\n",
-                                 version_codes[dwg->header.version],
-                                 dwg_version_type (dwg->header.version));
-                    }
                   break;
                 }
             }
