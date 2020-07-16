@@ -63,8 +63,7 @@ DWG_ENTITY (TEXT)
         FIELD_BD (height, 40);
         FIELD_TV (text_value, 1);
         FIELD_BD0 (rotation, 50);
-        if (FIELD_VALUE (width_factor) != 1.0)
-          FIELD_BD (width_factor, 41);
+        FIELD_BD1 (width_factor, 41);
         FIELD_BD0 (oblique_angle, 51);
         FIELD_HANDLE0 (style, 5, 7);
         FIELD_BS (generation, 71);
@@ -3536,14 +3535,7 @@ DWG_OBJECT (DIMSTYLE)
     {
       FIELD_T0 (DIMPOST, 3);
       FIELD_T0 (DIMAPOST, 4)
-      DXF {
-        if (FIELD_VALUE (DIMSCALE) != 1.0)
-          {
-            FIELD_BD (DIMSCALE, 40);
-          }
-      } else {
-        FIELD_BD (DIMSCALE, 40);
-      }
+      FIELD_BD1 (DIMSCALE, 40);
       FIELD_BD (DIMASZ, 41);
       FIELD_BD (DIMEXO, 42);
       FIELD_BD (DIMDLI, 43);
@@ -3998,7 +3990,7 @@ DWG_ENTITY (HATCH)
   if (!FIELD_VALUE (is_solid_fill))
     {
       FIELD_BD (angle, 52);
-      FIELD_BD (scale_spacing, 41); //default 1.0
+      FIELD_BD1 (scale_spacing, 41); //default 1.0
       FIELD_B (double_flag, 77);
       FIELD_BS (num_deflines, 78);
       REPEAT (num_deflines, deflines, Dwg_HATCH_DefLine)
@@ -4206,7 +4198,7 @@ DWG_ENTITY (MPOLYGON)
     //FIELD_BS (pattern_type, 76); // 0=user; 1=predefined; 2=custom
     FIELD_BL (is_solid_fill, 0);
     FIELD_BD (angle, 52);
-    FIELD_BD (scale_spacing, 41); //default 1.0
+    FIELD_BD1 (scale_spacing, 41); //default 1.0
     FIELD_B (double_flag, 77);
     FIELD_BL (num_deflines, 78);
     REPEAT (num_deflines, deflines, Dwg_HATCH_DefLine)

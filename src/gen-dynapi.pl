@@ -296,6 +296,7 @@ sub dxf_in {
       $f = $2;
       my $dxf = $3;
       $type =~ s/0$//; # strip ending 0, optional dxf (default 0 not printed)
+      $type =~ s/^BD1$/BD/;
       # inlined unions
       $f =~ s/^(?:fmt|sty|name|value)\.//;
       # inlined struct: ctx.

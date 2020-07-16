@@ -177,12 +177,7 @@
       FIELD_CMC (color, 62);
   }
 
-  DXF {
-    if (FIELD_VALUE (ltype_scale) != 1.0)
-      FIELD_BD (ltype_scale, 48);
-  } else {
-    FIELD_BD (ltype_scale, 48);
-  }
+  FIELD_BD1 (ltype_scale, 48);
   SINCE (R_2000)
     {
       // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 ltype handle
