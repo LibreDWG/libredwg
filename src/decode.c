@@ -4996,9 +4996,8 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
           break;
         case VT_INVALID:
         default:
-          LOG_ERROR ("Invalid group code in xdata[%u]: %d", num_xdata,
-                     rbuf->type)
-          LOG_WARN ("xdata Read %lu, expected %d", dat->byte - start_address, obj->xdata_size);
+          LOG_ERROR ("Invalid group code in xdata[%u]: %d", num_xdata, rbuf->type)
+          LOG_WARN ("xdata read %lu, expected %d", dat->byte - start_address, obj->xdata_size);
           dwg_free_xdata_resbuf (rbuf);
           if (curr)
             curr->nextrb = NULL;
@@ -5019,8 +5018,8 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
         }
       curr_address = dat->byte;
     }
-  if (curr_address < end_address)
-    LOG_WARN ("xdata Read %lu, expected %d", dat->byte - start_address, obj->xdata_size);
+  if (dat->byte - start_address != obj->xdata_size )
+    LOG_WARN ("xdata read %lu, expected %d", dat->byte - start_address, obj->xdata_size);
   obj->num_xdata = num_xdata;
   return root;
 }
