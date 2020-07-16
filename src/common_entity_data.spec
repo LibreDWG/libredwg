@@ -4,8 +4,7 @@
   //Dwg_Object_Entity* _obj = ent;
 
   // p20.4.1
-  {
-    // unsigned long pos = bit_position(dat);
+  SINCE (R_13) {
     FIELD_B (preview_exists, 0);
     if (ent->preview_exists)
       {
@@ -38,7 +37,6 @@
           {
             LOG_ERROR ("Invalid preview_size: %lu kB",
                       (unsigned long)(ent->preview_size / 1000));
-            //bit_set_position(dat, pos+1);
             error |= DWG_ERR_VALUEOUTOFBOUNDS;
           }
 #endif

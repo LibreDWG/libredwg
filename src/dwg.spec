@@ -393,11 +393,6 @@ DWG_ENTITY_END
 DWG_ENTITY (BLOCK)
 
   SUBCLASS (AcDbBlockBegin)
-  UNTIL (R_12) {
-    if (obj->tio.entity->entmode == 1) {
-      VALUE_RS (1, 67); // is_paperspace
-    }
-  }
   BLOCK_NAME (name, 2) //special pre-R13 naming rules
 
   COMMON_ENTITY_HANDLE_DATA;
