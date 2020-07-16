@@ -9573,9 +9573,9 @@ BS,	DXF 70
 @item design_pt
 3BD,	DXF 10
 @item ref_pt
-3BD,	DXF 11
+3BD_1,	DXF 11
 @item obs_pt
-3BD
+3BD,	DXF 11
 @item scale_vec
 3BD_1,	DXF 43
 @item unit_scale_horiz
@@ -9613,7 +9613,7 @@ T,	DXF 305
 @item observation_to_tag
 T,	DXF 306
 @item observation_coverage_tag
-T
+T,	DXF 307
 @item num_geomesh_pts
 BL,	DXF 93
 @item geomesh_pts
@@ -9625,21 +9625,21 @@ Dwg_GEODATA_meshface*
 @item has_civil_data
 B
 @item obsolete_false
-B
+B,	DXF 292
 @item ref_pt2d
-2RD
+2RD,	DXF 15
 @item zero1
-3BD
+3BD,	DXF 16
 @item unknown1
-BL
+BL,	DXF 93
 @item unknown2
-BL
+BL,	DXF 94
 @item unknown_b
-B
+B,	DXF 293
 @item north_dir_angle_deg
-BD,	DXF 52
+BD,	DXF 54
 @item north_dir_angle_rad
-BD
+BD,	DXF 140
 
 @end vtable
 @end indentedblock

@@ -5022,16 +5022,16 @@ DWG_OBJECT (GEODATA)
       FIELD_HANDLE (host_block, 4, 330);
       FIELD_BS (coord_type, 0); // 0 unknown, 1 local grid, 2 projected grid,
                                 // 3 geographic (defined by latitude/longitude) (default)
-      FIELD_3BD (ref_pt, 11);   // wrong in ODA docs
+      FIELD_3BD_1 (ref_pt, 40); // wrong in ODA docs?
       FIELD_BL (units_value_horiz, 91); // 0-12, hor_units
       FIELD_3BD (design_pt, 10);
-      FIELD_3BD (obs_pt, 0);    // always 0,0,0
+      FIELD_3BD (obs_pt, 11);    // always 0,0,0
       FIELD_3BD (up_dir, 210);
       // TODO compute if downgrading
       FIELD_BD (north_dir_angle_deg, 52);
       FIELD_3BD_1 (scale_vec, 43); // always 1,1,1
 
-      FIELD_T (coord_system_def, 301); // & 303
+      FIELD_T (coord_system_def, 301); // & 303 if too long
       FIELD_T (geo_rss_tag, 302);
       FIELD_BD (unit_scale_horiz, 46); // hor_unit_scale
       FIELD_T (coord_system_datum, 303); //obsolete, ""
@@ -5070,7 +5070,7 @@ DWG_OBJECT (GEODATA)
     return DWG_ERR_VALUEOUTOFBOUNDS;
   FIELD_T (observation_from_tag, 305);
   FIELD_T (observation_to_tag, 306);
-  FIELD_T (observation_coverage_tag, 0);
+  FIELD_T (observation_coverage_tag, 307);
   FIELD_BL (num_geomesh_pts, 93);
   VALUEOUTOFBOUNDS (num_geomesh_pts, 50000)
   REPEAT_N (FIELD_VALUE (num_geomesh_pts), geomesh_pts, Dwg_GEODATA_meshpt)
@@ -5094,22 +5094,25 @@ DWG_OBJECT (GEODATA)
       ENCODER {
         _obj->ref_pt2d.x = _obj->ref_pt.y; _obj->ref_pt2d.y = _obj->ref_pt.x;
       }
+      DXF { VALUE_TFF ("CIVIL3D_DATA_BEGIN", 3); }
       FIELD_B (has_civil_data, 0); // 1
-      FIELD_B (obsolete_false, 0); // 0
-      FIELD_2RD (ref_pt2d, 0);     // (y, x)
-      FIELD_2RD (ref_pt2d, 0);
-      FIELD_BL (unknown1, 0); // 0
-      FIELD_BL (unknown2, 0); // 0
-      FIELD_2RD (zero1, 0);   // origin (0,0)
-      FIELD_2RD (zero2, 0);
+      FIELD_B (obsolete_false, 292); // 0
+      FIELD_2RD (ref_pt2d, 14);     // (y, x)
+      FIELD_2RD (ref_pt2d, 15);
+      FIELD_BL (unknown1, 93); // always 0
+      FIELD_BL (unknown2, 94); // always 0
+      FIELD_B (unknown_b, 293); // 0
+      FIELD_2RD (zero1, 16);   // always origin (0,0)
+      FIELD_2RD (zero2, 17);
       FIELD_B (unknown_b, 0); // 0
-      FIELD_BD (north_dir_angle_deg, 0);
-      FIELD_BD (north_dir_angle_rad, 0);
-      FIELD_BL (scale_est, 0);
-      FIELD_BD (user_scale_factor, 0);
-      FIELD_B (do_sea_level_corr, 0);
-      FIELD_BD (sea_level_elev, 0);
-      FIELD_BD (coord_proj_radius, 0);
+      FIELD_BD (north_dir_angle_deg, 54);
+      FIELD_BD (north_dir_angle_rad, 140);
+      FIELD_BL (scale_est, 95);
+      FIELD_BD (user_scale_factor, 141);
+      FIELD_B (do_sea_level_corr, 294);
+      FIELD_BD (sea_level_elev, 142);
+      FIELD_BD (coord_proj_radius, 143);
+      DXF { VALUE_TFF ("CIVIL3D_DATA_END", 4); }
     }
   START_OBJECT_HANDLE_STREAM;
 
@@ -9368,7 +9371,7 @@ DWG_OBJECT (DETAILVIEWSTYLE)
 
   SUBCLASS (AcDbDetailViewStyle)
   FIELD_BS (class_version, 70); // 0
-  DXF { VALUE_BS (0, 71); }
+  DXF { VALUE_BS (0, 71); }     // version_minor?
   FIELD_BL (flags, 90);
   DXF { VALUE_BS (1, 71); }
   FIELD_HANDLE (identifier_style, 5, 340); // textstyle
@@ -9448,7 +9451,7 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
 
   SUBCLASS (AcDbSectionViewStyle)
   FIELD_BS (class_version, 70); // 0
-  DXF { VALUE_BS (0, 71); }
+  DXF { VALUE_BS (0, 71); }     // version_minor?
   FIELD_BL (flags, 90); // 102
   DXF { VALUE_BS (1, 71); }
   FIELD_HANDLE (identifier_style, 5, 340); // textstyle
