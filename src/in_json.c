@@ -876,17 +876,18 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               if (strEQ (version, version_codes[v]))
                 {
-                  dat->from_version = dwg->header.from_version = v;
+                  dwg->header.from_version = v;
                   // is_tu = dat->version >= R_2007;
                   LOG_TRACE ("FILEHEADER.from_version = %s (%s)\n",
                              version, dwg_version_type (v));
                   if (!dwg->header.version) // not already set
-                    dwg->header.version = dat->version = dat->from_version;
+                    dwg->header.version = dat->version;
                   else
                     {
-                      dat->version = dwg->header.version;
-                      LOG_TRACE ("FILEHEADER.version = %s (%s)\n", version_codes[dat->version],
-                                 dwg_version_type (dat->version));
+                      //dat->version = dwg->header.version;
+                      LOG_TRACE ("FILEHEADER.version = %s (%s)\n",
+                                 version_codes[dwg->header.version],
+                                 dwg_version_type (dwg->header.version));
                     }
                   break;
                 }
@@ -1221,7 +1222,8 @@ eed_need_size (Bit_Chain *restrict dat, Dwg_Eed *restrict eed, const unsigned in
       for (isize = i; !eed[isize].size && isize > 0; isize--)
         ;
       size = eed[isize].size;
-      LOG_TRACE (" extend eed[%u].size to %d (+%d)\n", isize, size, diff)
+      LOG_TRACE (" extend eed[%u].size %d +%d (have: %d, need: %d)\n", isize,
+                 size, diff, *havep, need)
       eed[i].data = (Dwg_Eed_Data*)realloc (eed[i].data, size + diff);
       eed[isize].size += diff;
       *havep = size + diff - need;
@@ -1272,11 +1274,15 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                }
               else if (strEQc (key, "handle"))
                 {
-                  BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, name, "eed[i].handles", NULL, -1);
-                  memcpy (&obj->eed[i].handle, &hdl->handleref, sizeof (Dwg_Handle));
+                  BITCODE_H hdl = json_HANDLE (dat, dwg, tokens, name,
+                                               "eed[i].handles", NULL, -1);
+                  memcpy (&obj->eed[i].handle, &hdl->handleref,
+                          sizeof (Dwg_Handle));
                   if (isize != (int)i || isize > (int)obj->num_eed)
                     {
-                      LOG_ERROR ("Missing eed[%u].size field %d or overflow at %s", i, isize, key)
+                      LOG_ERROR (
+                          "Missing eed[%u].size field %d or overflow at %s", i,
+                          isize, key)
                       break;
                     }
                 }
@@ -1287,8 +1293,10 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     {
                       if (have > 0)
                         {
-                          obj->eed[i - 1].data = (Dwg_Eed_Data *)realloc (obj->eed[i - 1].data, size - have);
-                          LOG_INSANE (" realloc eed[%u].data: %d\n", i-1, (int)(size - have))
+                          obj->eed[i - 1].data = (Dwg_Eed_Data *)realloc (
+                              obj->eed[i - 1].data, size - have);
+                          LOG_INSANE (" realloc eed[%u].data: %d\n", i - 1,
+                                      (int)(size - have))
                         }
                       have = size - have - 1;
                       obj->eed[i].data = (Dwg_Eed_Data *)calloc (have, 1);
@@ -4184,6 +4192,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   /* if (!dwg->header.version)
     dwg->header.version = dat->version = R_2000;
   */
+  dat->version = R_2000;
 
   jsmn_init (&parser); // reset pos to 0
   error = jsmn_parse (&parser, (char *)dat->chain, dat->size, tokens.tokens,
