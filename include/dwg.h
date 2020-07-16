@@ -3337,8 +3337,8 @@ typedef struct _dwg_object_DICTIONARYVAR
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_RC intval;
-  BITCODE_TV str;
+  BITCODE_RC schema;
+  BITCODE_T  strvalue;
 } Dwg_Object_DICTIONARYVAR;
 
 /**

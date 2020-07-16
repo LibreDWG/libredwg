@@ -2215,7 +2215,7 @@ DWG_OBJECT (DICTIONARY)
   SINCE (R_13c3)
     FIELD_RC0 (is_hardowner, 280);
   SINCE (R_2000)
-    FIELD_BS0 (cloning, 281);
+    FIELD_RC0 (cloning, 281);
 #else
   FIELD_BL (numitems, 0);
   SINCE (R_13c3) {
@@ -3772,8 +3772,8 @@ DWG_OBJECT_END
 DWG_OBJECT (DICTIONARYVAR)
 
   SUBCLASS (DictionaryVariables)
-  FIELD_RC (intval, 280);
-  FIELD_T (str, 1);
+  FIELD_RCd (schema, 280);
+  FIELD_T (strvalue, 1);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

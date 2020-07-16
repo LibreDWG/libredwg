@@ -7948,9 +7948,9 @@ static const Dwg_DYNAPI_field _dwg_DICTIONARY_fields[] = {
 static const Dwg_DYNAPI_field _dwg_DICTIONARYVAR_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_DICTIONARYVAR, parent),
     1,1,0, 0 },
-  { "intval",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_DICTIONARYVAR, intval),
+  { "schema",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_DICTIONARYVAR, schema),
     0,0,0, 280 },
-  { "str",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_DICTIONARYVAR, str),
+  { "strvalue",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_DICTIONARYVAR, strvalue),
     1,1,1, 1 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };

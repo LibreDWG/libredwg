@@ -150,6 +150,7 @@ API breaking changes:
     TOLERANCE.text_string => text_value
     STYLE.vertical => is_vertical, shape_file => is_shape, fixed_height => text_size,
       extref => xref
+    DICTIONARYVAR.intval => schema, str => strvalue
 
     COMMON_TABLE_FIELDS: xrefref => is_xref_ref, xrefindex_plus1 => is_xref_resolved,
       xrefdep => is_xref_dep. new common xref HANDLE field (was null_handle in many objects)

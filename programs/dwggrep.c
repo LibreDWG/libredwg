@@ -608,7 +608,7 @@ match_DICTIONARYVAR (const char *restrict filename,
 {
   char *text;
   int found = 0;
-  MATCH_OBJECT (DICTIONARYVAR, str, 1);
+  MATCH_OBJECT (DICTIONARYVAR, strvalue, 1);
   return found;
 }
 

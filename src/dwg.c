@@ -2424,7 +2424,7 @@ dwg_variable_dict (Dwg_Data *restrict dwg, const char *restrict name)
   if (!obj || obj->fixedtype != DWG_TYPE_DICTIONARYVAR)
     return NULL;
   _obj = obj->tio.object->tio.DICTIONARYVAR;
-  return _obj->str;
+  return _obj->strvalue;
 }
 
 static bool

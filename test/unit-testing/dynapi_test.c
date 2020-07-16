@@ -45059,21 +45059,6 @@ static int test_DICTIONARYVAR (const Dwg_Object *obj)
   Dwg_Object_DICTIONARYVAR *restrict dictionaryvar = obj->tio.object->tio.DICTIONARYVAR;
   failed = 0;
   {
-    BITCODE_RC intval;
-    if (dwg_dynapi_entity_value (dictionaryvar, "DICTIONARYVAR", "intval", &intval, NULL)
-        && intval == dictionaryvar->intval)
-      pass ();
-    else
-      fail ("DICTIONARYVAR.intval [RC] %u != %u", dictionaryvar->intval, intval);
-    intval++;
-    if (dwg_dynapi_entity_set_value (dictionaryvar, "DICTIONARYVAR", "intval", &intval, 0)
-        && intval == dictionaryvar->intval)
-      pass ();
-    else
-      fail ("DICTIONARYVAR.intval [RC] set+1 %u != %u", dictionaryvar->intval, intval);
-    dictionaryvar->intval--;
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (dictionaryvar, "DICTIONARYVAR", "parent", &parent, NULL)
         && !memcmp (&parent, &dictionaryvar->parent, sizeof (struct _dwg_object_object*)))
@@ -45082,14 +45067,29 @@ static int test_DICTIONARYVAR (const Dwg_Object *obj)
         fail ("DICTIONARYVAR.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_T str;
-    if (dwg_dynapi_entity_value (dictionaryvar, "DICTIONARYVAR", "str", &str, NULL)
-        && str
-           ? strEQ ((char *)str, (char *)dictionaryvar->str)
-           : !dictionaryvar->str)
+    BITCODE_RC schema;
+    if (dwg_dynapi_entity_value (dictionaryvar, "DICTIONARYVAR", "schema", &schema, NULL)
+        && schema == dictionaryvar->schema)
       pass ();
     else
-      fail ("DICTIONARYVAR.str [T] '%s' <> '%s'", str, dictionaryvar->str);
+      fail ("DICTIONARYVAR.schema [RC] %u != %u", dictionaryvar->schema, schema);
+    schema++;
+    if (dwg_dynapi_entity_set_value (dictionaryvar, "DICTIONARYVAR", "schema", &schema, 0)
+        && schema == dictionaryvar->schema)
+      pass ();
+    else
+      fail ("DICTIONARYVAR.schema [RC] set+1 %u != %u", dictionaryvar->schema, schema);
+    dictionaryvar->schema--;
+  }
+  {
+    BITCODE_T strvalue;
+    if (dwg_dynapi_entity_value (dictionaryvar, "DICTIONARYVAR", "strvalue", &strvalue, NULL)
+        && strvalue
+           ? strEQ ((char *)strvalue, (char *)dictionaryvar->strvalue)
+           : !dictionaryvar->strvalue)
+      pass ();
+    else
+      fail ("DICTIONARYVAR.strvalue [T] '%s' <> '%s'", strvalue, dictionaryvar->strvalue);
   }
   if (failed && (is_class_unstable ("DICTIONARYVAR") || is_class_debugging ("DICTIONARYVAR")))
     {

@@ -9063,9 +9063,9 @@ RC
 
 @item parent
 struct _dwg_object_object*
-@item intval
+@item schema
 RC,	DXF 280
-@item str
+@item strvalue
 T,	DXF 1
 
 @end vtable
