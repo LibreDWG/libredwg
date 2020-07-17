@@ -2229,7 +2229,8 @@ bit_convert_TU (BITCODE_TU restrict wstr)
 }
 
 /** converts UTF-8 (dxf,json) to ASCII TV.
-    Unquotes \" to ", undo json_cquote(), \uxxxx or other unicode => \U+XXXX.
+    Unquotes \" to ", \\ to \,
+    undo json_cquote(), \uxxxx or other unicode => \U+XXXX.
     Returns NULL if not enough room in dest.
 */
 char *
@@ -2247,7 +2248,8 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src, const in
           return NULL;
         }
       else if (c == '\\' && dest+1 < endp &&
-          (*s == '"' || *s == 'r' || *s == 'n'))
+          // skip \" to " and \\ to \.
+          (*s == '"' || *s == '\\' || *s == 'r' || *s == 'n'))
         {
             if (*s == 'r')
               {

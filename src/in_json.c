@@ -341,6 +341,7 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
       return NULL;
     }
   // Unquote \", convert Unicode to \\U+xxxx as in bit_embed_TU
+  // unquote \\ to \.
   if (memchr (&dat->chain[t->start], '\\', len))
     {
       len += 8;
