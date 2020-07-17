@@ -877,7 +877,9 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               if (strEQ (version, version_codes[v]))
                 {
-                  dat->from_version = dwg->header.from_version = v;
+                  dwg->header.from_version = v;
+                  // importer hack
+                  dat->from_version = R_2000;
                   // is_tu = dat->version >= R_2007;
                   LOG_TRACE ("FILEHEADER.from_version = %s (%s)\n",
                              version, dwg_version_type (v));
