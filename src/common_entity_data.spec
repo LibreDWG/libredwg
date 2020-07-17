@@ -15,7 +15,7 @@
         if (obj->klass && obj->klass->is_zombie)
           ent->preview_is_proxy = 1;
 #endif
-#if defined(IS_JSON) || defined(IS_PRINT)
+#if defined(IS_JSON)
         FIELD_B (preview_is_proxy, 0);
         FIELD_BLL (preview_size, 0);
 #else
