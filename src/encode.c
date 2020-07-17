@@ -4474,14 +4474,14 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
           break;
         }
       rbuf = rbuf->nextrb;
-      if (j > _obj->num_xdata)
+      j++;
+      if (j >= _obj->num_xdata)
         break;
       if (dat->byte >= end)
         {
           LOG_WARN ("xdata overflow %u", xdata_size);
           break;
         }
-      j++;
     }
   if (_obj->xdata_size != dat->byte - start)
     {
