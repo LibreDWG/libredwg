@@ -7040,7 +7040,7 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
   owhdls = memBEGINc (owner->name, "POLYLINE_") ? "vertex" : "attribs";
   // not the same layout for all possible owners
   ow = owner->tio.entity->tio.POLYLINE_2D;
-  if (!num_owned && !owned)
+  if (!num_owned || !owned)
     {
       dwg_dynapi_entity_value (ow, owner->name, "num_owned", &num_owned, 0);
       dwg_dynapi_entity_value (ow, owner->name, owhdls, &owned, 0);
@@ -7059,7 +7059,7 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
       lastfield = "last_attrib";
     }
   // store all these fields, or just the ones for the requested version?
-  if (dwg->header.from_version > R_2000) // if downconvert to r2000
+  if (dwg->header.from_version > R_2000 && owned) // if downconvert to r2000
     {
       Dwg_Object *owned_obj;
       dwg_dynapi_entity_set_value (ow, owner->name, firstfield, &owned[0], 0);
