@@ -6166,6 +6166,7 @@ add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
 /* read to ent->preview, r2010+ code 160, earlier code 92.
    like WIPEOUT, LIGHT, MULTILEADER, ARC_DIMENSION or PROXY GRAPHICS vector
    data.
+   Also handle empty preview_size, such as with MULTILEADER r2000.
 */
 static Dxf_Pair *
 add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
@@ -6179,13 +6180,15 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       LOG_ERROR ("%s is no entity for a preview", obj->name);
       return pair;
     }
-  ent->preview_size = pair->code == 160 ? pair->value.bll : pair->value.u;
-  if (!ent->preview_size)
+  ent->preview_size =
+    pair->code == 160 ? pair->value.bll :
+    pair->code == 92 ? pair->value.u : 0;
+  if (!ent->preview_size && pair->code != 310)
     {
       dxf_free_pair (pair);
       return dxf_read_pair (dat);
     }
-  ent->preview = (BITCODE_TF)calloc (ent->preview_size, 1);
+  ent->preview = (BITCODE_TF)calloc (ent->preview_size ? ent->preview_size : 127, 1);
   if (!ent->preview)
     {
       LOG_ERROR ("Out of memory");
@@ -6193,23 +6196,28 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }
   LOG_TRACE ("%s.preview_size = " FORMAT_BLL " [BLL %d]\n", obj->name,
              ent->preview_size, pair->code);
-  ent->preview_exists = 1;
 
-  dxf_free_pair (pair);
-  pair = dxf_read_pair (dat);
+  if (pair->code != 310)
+    {
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
   while (pair != NULL && pair->code == 310 && pair->value.s)
     {
       unsigned len = strlen (pair->value.s);
       unsigned blen = len / 2;
       const char *pos = pair->value.s;
-      BITCODE_TF s = &ent->preview[written];
-      if (blen + written > ent->preview_size)
+      BITCODE_TF s;
+
+      if (!ent->preview_size)
+        ent->preview = (BITCODE_TF)realloc (ent->preview, written + blen);
+      else if (blen + written > ent->preview_size)
         {
-          LOG_ERROR (
-              "%s.preview overflow: %u + written %u > size: " FORMAT_BLL,
-              obj->name, blen, written, ent->preview_size);
+          LOG_ERROR ("%s.preview overflow: %u + written %u > size: " FORMAT_BLL,
+                     obj->name, blen, written, ent->preview_size);
           return pair;
         }
+      s = &ent->preview[written];
       for (unsigned i = 0; i < blen; i++)
         {
           sscanf (pos, "%2hhX", &s[i]);
@@ -6222,6 +6230,10 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
     }
+  if (!ent->preview_size)
+    ent->preview_size = written;
+  if (ent->preview_size)
+    ent->preview_exists = 1;
   return pair;
 }
 
@@ -10001,6 +10013,14 @@ new_object (char *restrict name, char *restrict dxfname,
                                          "material_flags", flags);
                             }
                           goto next_pair; // found, early exit
+                        }
+                      else if (pair->code == 310 && is_entity
+                               && !obj->tio.entity->preview_size
+                               && obj->fixedtype > DWG_TYPE_LAYOUT
+                               && strEQc (subclass, "AcDbEntity"))
+                        {
+                          pair = add_ent_preview (obj, dat, pair);
+                          goto start_loop;
                         }
                       else if (pair->code == 310 && is_entity
                                && obj->tio.entity->preview_size
