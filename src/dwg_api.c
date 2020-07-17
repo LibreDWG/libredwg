@@ -20865,9 +20865,11 @@ dwg_obj_table_get_name (const dwg_object *restrict obj, int *restrict error)
       // HACK: we can guarantee that the table name is always the first field,
       // by using COMMON_TABLE_FLAGS.
       // TODO: Dictionary also?
+      const Dwg_Data *dwg = obj->parent;
       Dwg_Object_STYLE *table = obj->tio.object->tio.STYLE;
       *error = 0;
-      if (obj->parent->header.version >= R_2007)
+      // importers are still a hack and don't store TU
+      if (dwg->header.version >= R_2007 && !(dwg->opts & DWG_OPTS_IN))
         return bit_convert_TU ((BITCODE_TU)table->name); // creates a copy
       else
         return table->name;
