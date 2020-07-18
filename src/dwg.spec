@@ -2810,7 +2810,7 @@ DWG_OBJECT (LAYER)
   DXF {
     int lw = dxf_cvt_lweight (FIELD_VALUE (linewt));
     SINCE (R_2000) {
-      FIELD_B0 (plotflag, 290);
+      FIELD_B (plotflag, 290);
     }
     SINCE (R_13) {
       KEY (linewt); VALUE_RS ((signed char)lw, 370);
