@@ -1,1 +1,1 @@
-{"version":1,"ops":[{"type":3,"author":{"id":"b57a4f5420adf835b8b83469143e813bd4f12c78"},"timestamp":1578297559,"metadata":{"github-id":"MDEyOklzc3VlQ29tbWVudDU3MTA0Mjc2NQ==","github-url":"https://github.com/LibreDWG/libredwg/issues/151#issuecomment-571042765"},"message":"Fixed the UAF crashes witj 0.10, only a few leaks remaining (=\u003e 0.11)","files":null}]}
+{"version":1,"ops":[{"type":5,"author":{"id":"b57a4f5420adf835b8b83469143e813bd4f12c78"},"timestamp":1578297615,"metadata":{"github-id":"MDEyOkxhYmVsZWRFdmVudDI5MjMzODczNTE="},"added":["enhancement"],"removed":[]}]}
