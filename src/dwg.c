@@ -90,6 +90,7 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
   dat->chain = (unsigned char *)calloc (1, dat->size);
   if (!dat->chain)
     {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("Not enough memory.\n")
       fclose (fp);
       return DWG_ERR_OUTOFMEM;
@@ -98,6 +99,7 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
   size = fread (dat->chain, sizeof (char), dat->size, fp);
   if (size != dat->size)
     {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("Could not read file (%lu out of %lu): %s\n",
                  (long unsigned int)size, dat->size, filename)
       fclose (fp);
@@ -138,6 +140,7 @@ EXPORT int
 dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
 {
   size_t size = 0;
+  loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
 
   do
     {
@@ -150,7 +153,6 @@ dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
         }
       if (!dat->chain)
         {
-          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("Not enough memory.\n");
           fclose (fp);
           return DWG_ERR_OUTOFMEM;

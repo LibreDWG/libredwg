@@ -314,7 +314,7 @@ main (int argc, char *argv[])
           fprintf (stderr, "Missing input file '%s'\n", infile);
           exit (1);
         }
-      dat.fh = fopen (infile, "r");
+      dat.fh = fopen (infile, "rb");
       if (!dat.fh)
         {
           fprintf (stderr, "Could not read file '%s'\n", infile);
