@@ -394,9 +394,6 @@ main (int argc, char *argv[])
     dat.version = dwg.header.version = dwg_version;
   else
     dat.version = dwg.header.version = dwg.header.from_version;
-  // importer hack: fixup dat->from_version for TU
-  if (dat.from_version >= R_2007 && (dwg.opts & DWG_OPTS_IN))
-    dat.from_version = R_2000;
 
   if (!outfile)
     {

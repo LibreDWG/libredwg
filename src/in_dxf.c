@@ -898,9 +898,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               if (strEQ (version, version_codes[v]))
                 {
-                  dwg->header.from_version = v;
-                  if (dwg->header.from_version <= R_2004)
-                    dat->from_version = v;
+                  dat->from_version = dwg->header.from_version = v;
                   is_tu = dat->version >= R_2007;
                   LOG_TRACE ("HEADER.from_version = %s,\tdat->from_version = %s\n",
                              version_codes[dwg->header.from_version],

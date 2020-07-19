@@ -495,7 +495,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
     }
 #define FIELD_T(nam, dxf)                                                     \
   {                                                                           \
-    if (dat->from_version >= R_2007)                                          \
+    if (dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN))            \
       {                                                                       \
         FIELD_TU (nam, dxf);                                                  \
       }                                                                       \
@@ -506,7 +506,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
   }
 #define VALUE_T(value, dxf)                                                   \
   {                                                                           \
-    if (dat->from_version >= R_2007)                                          \
+    if (dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN))            \
       {                                                                       \
         VALUE_TU (value, dxf);                                                \
       }                                                                       \
@@ -574,7 +574,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
   {                                                                           \
     if (_obj->nam)                                                            \
       {                                                                       \
-        if (dat->from_version >= R_2007)                                      \
+        if (dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN))        \
           {                                                                   \
             char *u8 = bit_convert_TU ((BITCODE_TU)_obj->nam);                \
             if (u8 && *u8)                                                    \
@@ -988,7 +988,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
       if (color->flag & 2 && color->book_name)
         {
           char name[80];
-          if (dat->from_version >= R_2007)
+          if (dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN))
             {
               char *u8 = bit_convert_TU ((BITCODE_TU)color->book_name);
               strcpy (name, u8);
@@ -1277,7 +1277,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
       fprintf (dat->fh, "%3i\r\n\r\n", dxf);
       return;
     }
-  if (dat->from_version >= R_2007) // r2007+ unicode names
+  if (dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN)) // r2007+ unicode names
     {
       name = bit_convert_TU ((BITCODE_TU)name);
     }
@@ -1311,7 +1311,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
       else
         fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
     }
-  if (dat->from_version >= R_2007)
+  if (dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN))
     free (name);
 }
 
@@ -3038,7 +3038,7 @@ dwg_write_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   if (dat->from_version == R_INVALID)
-    dat->from_version = dat->version;
+    dat->from_version = dwg->header.from_version;
   if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)
     dwg_fixup_BLOCKS_entities (dwg);
 

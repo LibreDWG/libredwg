@@ -327,9 +327,6 @@ static bool env_var_checked_p;
 
 #define FIELD_CMC(color, dxf)                                                 \
   {                                                                           \
-    /* Importer hack */                                                       \
-    Dwg_Version_Type orig_from = dat->from_version;                           \
-    dat->from_version = dwg ? dwg->header.from_version : orig_from;           \
     bit_write_CMC (dat, str_dat, &_obj->color);                               \
     LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->color.index, dxf);    \
     LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
@@ -346,13 +343,9 @@ static bool env_var_checked_p;
                      _obj->color.book_name);                                  \
         LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
       }                                                                       \
-    dat->from_version = orig_from;                                            \
   }
 #define SUB_FIELD_CMC(o, color, dxf)                                          \
   {                                                                           \
-    /* Importer hack */                                                       \
-    Dwg_Version_Type orig_from = dat->from_version;                           \
-    dat->from_version = dwg ? dwg->header.from_version : orig_from;           \
     bit_write_CMC (dat, str_dat, &_obj->o.color);                             \
     LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->o.color.index, dxf);  \
     LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte,     \
@@ -371,7 +364,6 @@ static bool env_var_checked_p;
         LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, \
                     dat->bit)                                                 \
       }                                                                       \
-    dat->from_version = orig_from;                                            \
   }
 
 #define LOG_TF(level, var, len)                                               \
@@ -3846,7 +3838,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
       {
         PRE (R_2007)
         {
-          if (dat->from_version >= R_2007)
+          // only if from r2007+ DWG, not JSON, DXF
+          if (dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN))
             {
               BITCODE_RS length = data->u.eed_0_r2007.length;
               BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
@@ -3883,7 +3876,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
         }
         LATER_VERSIONS
         {
-          if (dat->from_version < R_2007)
+          // from ASCII DWG or JSON, DXF
+          if (dat->from_version < R_2007 || (dat->opts & DWG_OPTS_IN))
             {
               BITCODE_RS length = data->u.eed_0.length;
               BITCODE_TU dest = bit_utf8_to_TU (data->u.eed_0.string);
@@ -4352,7 +4346,9 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
         case VT_STRING:
           PRE (R_2007)
           {
-            if (rbuf->value.str.size && dat->from_version >= R_2007)
+            // from TU DWG only
+            if (rbuf->value.str.size && dat->from_version >= R_2007
+                && !(dat->opts & DWG_OPTS_IN))
               {
                 BITCODE_TV new = bit_embed_TU_size (rbuf->value.str.u.wdata,
                                                     rbuf->value.str.size);
@@ -4386,7 +4382,8 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
             if (dat->byte + 2 + (2 * rbuf->value.str.size) > end
                 || rbuf->value.str.size < 0)
               break;
-            if (rbuf->value.str.size && dat->from_version < R_2007)
+            if (rbuf->value.str.size &&
+                (dat->from_version < R_2007 || (dat->opts & DWG_OPTS_IN)))
               {
                 // TODO: same len when converted to TU? normally yes
                 BITCODE_TU new = bit_utf8_to_TU (rbuf->value.str.u.data);
