@@ -2586,7 +2586,37 @@ bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
         bit_write_RC (dat, 0); // ignore the flag
     }
   else
-    bit_write_BS (dat, color->index);
+    {
+      // from truecolor to palette
+      if (dat->from_version >= R_2004)
+        {
+          if (!color->method && color->rgb & 0xFF000000)
+            color->method = color->rgb >> 0x18;
+          color->rgb &= 0x00FFFFFF;
+          color->index = dwg_find_color_index (color->rgb);
+          switch (color->method)
+            {
+            case 0x0:
+            case 0xc0:
+              color->index = 256;
+              break; // ByLayer
+            case 0xc1:
+              color->index = 0;
+              break;   // ByBlock
+            case 0xc2: // Entity
+            case 0xc3: // TrueColor
+              if (color->index == 256)
+                color->index = color->rgb & 0xff;
+              break;
+            case 0xc8:
+              color->index = 0;
+              break; // none
+            default:
+              break;
+            }
+        }
+      bit_write_BS (dat, color->index);
+    }
 }
 
 /** Read entity color (2004+) (truecolor rgb and alpha support)

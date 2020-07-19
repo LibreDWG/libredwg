@@ -327,6 +327,9 @@ static bool env_var_checked_p;
 
 #define FIELD_CMC(color, dxf)                                                 \
   {                                                                           \
+    /* Importer hack */                                                       \
+    Dwg_Version_Type orig_from = dat->from_version;                           \
+    dat->from_version = dwg ? dwg->header.from_version : orig_from;           \
     bit_write_CMC (dat, str_dat, &_obj->color);                               \
     LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->color.index, dxf);    \
     LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
@@ -343,9 +346,13 @@ static bool env_var_checked_p;
                      _obj->color.book_name);                                  \
         LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
       }                                                                       \
+    dat->from_version = orig_from;                                            \
   }
 #define SUB_FIELD_CMC(o, color, dxf)                                          \
   {                                                                           \
+    /* Importer hack */                                                       \
+    Dwg_Version_Type orig_from = dat->from_version;                           \
+    dat->from_version = dwg ? dwg->header.from_version : orig_from;           \
     bit_write_CMC (dat, str_dat, &_obj->o.color);                             \
     LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->o.color.index, dxf);  \
     LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte,     \
@@ -364,6 +371,7 @@ static bool env_var_checked_p;
         LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, \
                     dat->bit)                                                 \
       }                                                                       \
+    dat->from_version = orig_from;                                            \
   }
 
 #define LOG_TF(level, var, len)                                               \
@@ -1702,7 +1710,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   Object_Map *omap;
   Bit_Chain *old_dat = NULL, *str_dat, *hdl_dat;
   int sec_id;
-  Dwg_Version_Type orig_from_version = dat->from_version;
+  Dwg_Version_Type orig_from_version = dwg->header.from_version;
   Bit_Chain sec_dat[SECTION_SYSTEM_MAP + 1]; // to encode each r2004 section
 
   if (dwg->opts)
