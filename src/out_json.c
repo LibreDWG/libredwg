@@ -446,7 +446,7 @@ static char *_path_field (const char *path);
 #define FIELD_T32(nam, dxf) FIELD_T (nam, dxf)
 #define FIELD_T(nam, dxf)                                                     \
   {                                                                           \
-    if (dat->version >= R_2007)                                               \
+    if (IS_FROM_TU (dat))                                                     \
       {                                                                       \
         FIELD_TU (nam, dxf);                                                  \
       }                                                                       \
@@ -457,7 +457,7 @@ static char *_path_field (const char *path);
   }
 #define _FIELD_T(nam, str)                                                    \
   {                                                                           \
-    if (dat->version >= R_2007)                                               \
+    if (IS_FROM_TU (dat))                                                     \
       {                                                                       \
         FIELD_TEXT_TU (nam, str);                                             \
       }                                                                       \
@@ -468,7 +468,7 @@ static char *_path_field (const char *path);
   }
 #define VALUE_T(str)                                                          \
   {                                                                           \
-    if (dat->version >= R_2007)                                               \
+    if (IS_FROM_TU (dat))                                                     \
       {                                                                       \
         VALUE_TEXT_TU (str);                                                  \
       }                                                                       \
@@ -496,7 +496,7 @@ static char *_path_field (const char *path);
 
 #define SUB_FIELD_T(o, nam, dxf)                                              \
   {                                                                           \
-    if (dat->version >= R_2007)                                               \
+    if (IS_FROM_TU (dat))                                                     \
       {                                                                       \
         KEY (nam);                                                            \
         VALUE_TEXT_TU ((BITCODE_TU)_obj->o.nam);                              \
@@ -610,18 +610,18 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
   if (_obj->nam)                                                              \
     {                                                                         \
       BITCODE_BL _size = (BITCODE_BL)_obj->size;                              \
-      PRE (R_2007)                                                            \
+      if (IS_FROM_TU (dat))                                                     \
       {                                                                       \
         for (vcount = 0; vcount < _size; vcount++)                            \
           {                                                                   \
-            FIRSTPREFIX VALUE_TEXT (_obj->nam[vcount])                        \
+            FIRSTPREFIX VALUE_TEXT_TU (_obj->nam[vcount]);                    \
           }                                                                   \
       }                                                                       \
       else                                                                    \
       {                                                                       \
         for (vcount = 0; vcount < _size; vcount++)                            \
           {                                                                   \
-            FIRSTPREFIX VALUE_TEXT_TU (_obj->nam[vcount]);                    \
+            FIRSTPREFIX VALUE_TEXT (_obj->nam[vcount])                        \
           }                                                                   \
       }                                                                       \
     }                                                                         \
@@ -975,10 +975,10 @@ json_eed (Bit_Chain *restrict dat,
           switch (data->code)
             {
             case 0:
-              PRE (R_2007) {
+              if (!(IS_FROM_TU (dat)))
                 VALUE_TEXT (data->u.eed_0.string);
               }
-              LATER_VERSIONS {
+              else {
                 VALUE_TEXT_TU (data->u.eed_0_r2007.string);
               }
               break;
@@ -1025,10 +1025,10 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
       switch (type)
         {
         case VT_STRING:
-          PRE (R_2007) {
+          if (!(IS_FROM_TU (dat)))
             VALUE_TEXT (rbuf->value.str.u.data);
           }
-          LATER_VERSIONS {
+          else {
             VALUE_TEXT_TU (rbuf->value.str.u.data);
           }
           LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]\n", i, rbuf->value.str.u.data,

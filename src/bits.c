@@ -1749,7 +1749,7 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
   int i, length;
 
   // only if from r2007+ DWG, not JSON, DXF
-  if (dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN))
+  if (IS_FROM_TU (dat))
     {
       // downconvert TU to TV
       if (dat->version < R_2007)
@@ -1897,7 +1897,7 @@ bit_read_T32 (Bit_Chain *restrict dat)
 
   size = bit_read_RL (dat);
   // only if from r2007+ DWG, not JSON, DXF
-  if (dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN))
+  if (IS_FROM_TU (dat))
     {
       BITCODE_TU wstr;
       BITCODE_RL len = size / 2;
@@ -1953,7 +1953,7 @@ bit_read_TU32 (Bit_Chain *restrict dat)
 
   size = bit_read_RL (dat);
   // only if from r2007+ DWG, not JSON, DXF
-  if (dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN))
+  if (IS_FROM_TU (dat))
     {
       BITCODE_TU wstr;
       BITCODE_RL rl1, len = size / 4;
@@ -2109,7 +2109,7 @@ void bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
 BITCODE_T
 bit_read_T (Bit_Chain *restrict dat)
 {
-  if (dat->from_version >= R_2007)
+  if (IS_FROM_TU (dat))
     return (BITCODE_T)bit_read_TU (dat);
   else
     return (BITCODE_T)bit_read_TV (dat);
@@ -2423,7 +2423,7 @@ int bit_empty_T (Bit_Chain *restrict dat, BITCODE_T restrict str)
   if (!str)
     return 1;
   // importer hack: in_json/dxf still write all strings as TV
-  if (dat->from_version < R_2007 || dat->opts & DWG_OPTS_IN)
+  if (!(IS_FROM_TU (dat)))
     return !*str;
   else
     {
@@ -2444,7 +2444,7 @@ int bit_empty_T (Bit_Chain *restrict dat, BITCODE_T restrict str)
 BITCODE_T
 bit_set_T (Bit_Chain *dat, const char* restrict src)
 {
-  if (dat->from_version < R_2007)
+  if (!(IS_FROM_TU (dat)))
     return strdup (src);
   else
     return (BITCODE_T)bit_utf8_to_TU ((char*)src);

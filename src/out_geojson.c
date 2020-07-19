@@ -326,7 +326,7 @@ static unsigned int cur_ver = 0;
 
 #define FIELD_VECTOR_T(name, type, size, dxf)                                 \
   ARRAY;                                                                      \
-  PRE (R_2007)                                                                \
+  if (!(IS_FROM_TU (dat)))                                                    \
   {                                                                           \
     for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)               \
       {                                                                       \
@@ -424,7 +424,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           if (!error)
             {
               PAIR_S (Layer, name);
-              if (dat->version >= R_2007)
+              if (IS_FROM_TU (dat))
                 free (name);
             }
         }
@@ -453,7 +453,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       if (!error && strNE (name, "ByLayer")) // skip the default
         {
           PAIR_S (Linetype, name);
-          if (dat->version >= R_2007)
+          if (IS_FROM_TU (dat))
             free (name);
         }
     }
@@ -483,14 +483,14 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         {
           Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
           char *text;
-          if (dat->version >= R_2007)
+          if (IS_FROM_TU (dat))
             text = bit_convert_TU ((BITCODE_TU)_hdr->name);
           else
             text = _hdr->name;
           if (text)
             {
               PAIR_S (name, text);
-              if (dat->version >= R_2007)
+              if (IS_FROM_TU (dat))
                 free (text);
             }
         }
@@ -503,14 +503,14 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         {
           Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
           char *text;
-          if (dat->version >= R_2007)
+          if (IS_FROM_TU (dat))
             text = bit_convert_TU ((BITCODE_TU)_hdr->name);
           else
             text = _hdr->name;
           if (text)
             {
               PAIR_S (name, text);
-              if (dat->version >= R_2007)
+              if (IS_FROM_TU (dat))
                 free (text);
             }
         }

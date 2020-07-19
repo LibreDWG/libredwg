@@ -495,7 +495,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
     }
 #define FIELD_T(nam, dxf)                                                     \
   {                                                                           \
-    if (dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN))            \
+    if (IS_FROM_TU (dat))                                                     \
       {                                                                       \
         FIELD_TU (nam, dxf);                                                  \
       }                                                                       \
@@ -506,7 +506,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
   }
 #define VALUE_T(value, dxf)                                                   \
   {                                                                           \
-    if (dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN))            \
+    if (IS_FROM_TU (dat))                                                     \
       {                                                                       \
         VALUE_TU (value, dxf);                                                \
       }                                                                       \
@@ -574,7 +574,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
   {                                                                           \
     if (_obj->nam)                                                            \
       {                                                                       \
-        if (dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN))        \
+        if (IS_FROM_TU (dat))                                                 \
           {                                                                   \
             char *u8 = bit_convert_TU ((BITCODE_TU)_obj->nam);                \
             if (u8 && *u8)                                                    \
@@ -691,15 +691,15 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define FIELD_VECTOR_T(nam, type, size, dxf)                                  \
   if (dxf && _obj->nam)                                                       \
     {                                                                         \
-      PRE (R_2007)                                                            \
+      if (IS_FROM_TU (dat))                                                   \
       {                                                                       \
         for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)           \
-          VALUE_TV (_obj->nam[vcount], dxf);                                  \
+          VALUE_TU (_obj->nam[vcount], dxf);                                  \
       }                                                                       \
       else                                                                    \
       {                                                                       \
         for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)           \
-          VALUE_TU (_obj->nam[vcount], dxf);                                  \
+          VALUE_TV (_obj->nam[vcount], dxf);                                  \
       }                                                                       \
     }
 
@@ -937,7 +937,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
             char *_name = dwg_obj_table_get_name (obj, &error);               \
             LOG_TRACE ("Object handle: " FORMAT_H ", name: %s\n",             \
                        ARGS_H (obj->handle), _name);                          \
-            SINCE (R_2007)                                                    \
+            if (IS_FROM_TU (dat))                                             \
               free (_name);                                                   \
           }                                                                   \
         else                                                                  \
@@ -988,7 +988,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
       if (color->flag & 2 && color->book_name)
         {
           char name[80];
-          if (dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN))
+          if (IS_FROM_TU (dat))
             {
               char *u8 = bit_convert_TU ((BITCODE_TU)color->book_name);
               strcpy (name, u8);
@@ -1100,7 +1100,7 @@ dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
           switch (data->code)
             {
             case 0:
-              if (dwg->header.from_version >= R_2007)
+              if (IS_FROM_TU (dat))
                 VALUE_TU (data->u.eed_0_r2007.string, 1000)
               else
                 VALUE_TV (data->u.eed_0.string, 1000)
@@ -1178,8 +1178,8 @@ dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       switch (type)
         {
         case VT_STRING:
-          UNTIL (R_2007) { VALUE_TV (rbuf->value.str.u.data, dxftype); }
-          LATER_VERSIONS { VALUE_TU (rbuf->value.str.u.wdata, dxftype); }
+          if (IS_FROM_TU (dat)) { VALUE_TU (rbuf->value.str.u.wdata, dxftype); }
+          else                  { VALUE_TV (rbuf->value.str.u.data, dxftype); }
           break;
         case VT_REAL:
           VALUE_RD (rbuf->value.dbl, dxftype);
@@ -1225,7 +1225,7 @@ dxf_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
 {
   if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT && name != NULL)
     {
-      if (dat->version >= R_2007) // r2007+ unicode names
+      if (IS_FROM_TU (dat))
         {
           name = bit_convert_TU ((BITCODE_TU)name);
         }
@@ -1255,7 +1255,7 @@ dxf_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else
             fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
         }
-      if (dat->version >= R_2007)
+      if (IS_FROM_TU (dat))
         free (name);
     }
   else
@@ -1277,7 +1277,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
       fprintf (dat->fh, "%3i\r\n\r\n", dxf);
       return;
     }
-  if (dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN)) // r2007+ unicode names
+  if (IS_FROM_TU (dat)) // r2007+ unicode names
     {
       name = bit_convert_TU ((BITCODE_TU)name);
     }
@@ -1311,7 +1311,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
       else
         fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
     }
-  if (dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN))
+  if (IS_FROM_TU (dat))
     free (name);
 }
 
@@ -2842,7 +2842,7 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
       SINCE (R_2004)
         {
           // first_owned_block
-          SINCE (R_2007)
+          if (IS_FROM_TU (dat))
             {
               char *s = bit_convert_TU ((BITCODE_TU)_hdr->name);
               LOG_ERROR ("BLOCK_HEADER %s block_entity[0] missing", s);
