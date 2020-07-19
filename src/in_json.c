@@ -139,9 +139,9 @@ static Bit_Chain *g_dat;
                &dat->chain[t->start]);                                        \
     if (t->type == JSMN_STRING)                                               \
       {                                                                       \
-        if (dwg->header.version >= R_2007)                                    \
+        /*if (dwg->header.version >= R_2007)                                  \
           _obj->nam = (BITCODE_T)json_wstring (dat, tokens);                  \
-        else                                                                  \
+        else*/                                                                \
           _obj->nam = json_string (dat, tokens);                              \
       }                                                                       \
     else                                                                      \
@@ -155,7 +155,7 @@ static Bit_Chain *g_dat;
                &dat->chain[t->start]);                                        \
     if (t->type == JSMN_STRING)                                               \
       {                                                                       \
-        _obj->nam = (BITCODE_T32)json_wstring (dat, tokens);                  \
+        _obj->nam = (BITCODE_T32)json_string (dat, tokens);                   \
       }                                                                       \
     else                                                                      \
       json_advance_unknown (dat, tokens, t->type, 0);                         \
@@ -168,7 +168,7 @@ static Bit_Chain *g_dat;
                &dat->chain[t->start]);                                        \
     if (t->type == JSMN_STRING)                                               \
       {                                                                       \
-        _obj->nam = (BITCODE_TU)json_wstring (dat, tokens);                   \
+        _obj->nam = (BITCODE_TU)json_string (dat, tokens);                    \
       }                                                                       \
     else                                                                      \
       json_advance_unknown (dat, tokens, t->type, 0);                         \
@@ -1142,18 +1142,18 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               LOG_TRACE ("cppname: \"%.*s\"\n", t->end - t->start,
                          &dat->chain[t->start])
-              if (dwg->header.version >= R_2007)
+              /*if (dwg->header.version >= R_2007)
                 klass->cppname = (char*)json_wstring (dat, tokens);
-              else
+              else*/
                 klass->cppname = json_string (dat, tokens);
             }
           else if (strEQc (key, "appname"))
             {
               LOG_TRACE ("appname \"%.*s\"\n",  t->end - t->start,
                          &dat->chain[t->start])
-              if (dwg->header.version >= R_2007)
+              /*if (dwg->header.version >= R_2007)
                 klass->appname = (char*)json_wstring (dat, tokens);
-              else
+              else*/
                 klass->appname = json_string (dat, tokens);
             }
           else if (strEQc (key, "proxyflag"))
@@ -1310,7 +1310,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     {
                     case 0:
                       {
-                        PRE (R_2007)
+                        /*PRE (R_2007)*/
                           {
                             char *s = json_string (dat, tokens);
                             int len = strlen (s);
@@ -1331,6 +1331,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                                 obj->eed[isize].size -= (oldsize - size);
                               }
                           }
+                          /*
                         LATER_VERSIONS
                           {
                             BITCODE_TU s = json_wstring (dat, tokens);
@@ -1346,6 +1347,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                                        &dat->chain[t->start]);
                             free (s);
                           }
+                          */
                       }
                       break;
                     case 2:
@@ -3009,9 +3011,9 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     {
                       JSON_TOKENS_CHECK_OVERFLOW(goto harderr);
                       t = &tokens->tokens[tokens->index];
-                      SINCE (R_2007)
+                      /*SINCE (R_2007)
                         o->texts[k] = (BITCODE_T)json_wstring (dat, tokens);
-                      else
+                      else*/
                         o->texts[k] = json_string (dat, tokens);
                       LOG_TRACE ("texts[%d]: %.*s\t => ", k, t->end - t->start, &dat->chain[t->start]);
                       JSON_TOKENS_CHECK_OVERFLOW(goto harderr);

@@ -73,7 +73,7 @@ typedef struct _bit_chain
 
 #define EMPTY_CHAIN(size) { NULL, size, 0L, 0, 0, 0, 0, NULL }
 
-#define IS_FROM_TU(dat) dat->from_version >= R_2007 && !(dat->opts & DWG_OPT_IN)
+#define IS_FROM_TU(dat) dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN)
 
 /* Functions for raw data manipulations.
  */

@@ -277,8 +277,10 @@ static char *_path_field (const char *path);
 #  define VALUE_TEXT_TU(wstr) print_wcquote (dat, (BITCODE_TU)wstr)
 #endif
 #define FIELD_TEXT_TU(nam, wstr)                                              \
-  KEY (nam);                                                                  \
-  VALUE_TEXT_TU ((BITCODE_TU)wstr)
+  {                                                                           \
+    KEY (nam);                                                                \
+    VALUE_TEXT_TU ((BITCODE_TU)wstr);                                         \
+  }
 
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1
@@ -474,7 +476,7 @@ static char *_path_field (const char *path);
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        VALUE_TEXT (str);                                                     \
+        VALUE_TEXT (str)                                                      \
       }                                                                       \
   }
 #define _FIELD_TV_ALPHA(nam, str)                                             \
@@ -610,7 +612,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
   if (_obj->nam)                                                              \
     {                                                                         \
       BITCODE_BL _size = (BITCODE_BL)_obj->size;                              \
-      if (IS_FROM_TU (dat))                                                     \
+      if (IS_FROM_TU (dat))                                                   \
       {                                                                       \
         for (vcount = 0; vcount < _size; vcount++)                            \
           {                                                                   \
@@ -976,8 +978,7 @@ json_eed (Bit_Chain *restrict dat,
             {
             case 0:
               if (!(IS_FROM_TU (dat)))
-                VALUE_TEXT (data->u.eed_0.string);
-              }
+                VALUE_TEXT (data->u.eed_0.string)
               else {
                 VALUE_TEXT_TU (data->u.eed_0_r2007.string);
               }
@@ -1026,8 +1027,7 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
         {
         case VT_STRING:
           if (!(IS_FROM_TU (dat)))
-            VALUE_TEXT (rbuf->value.str.u.data);
-          }
+            VALUE_TEXT (rbuf->value.str.u.data)
           else {
             VALUE_TEXT_TU (rbuf->value.str.u.data);
           }
