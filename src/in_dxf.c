@@ -7070,17 +7070,27 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
       firstfield = "first_attrib";
       lastfield = "last_attrib";
     }
-  // store all these fields, or just the ones for the requested version?
+  // store all these fields, or just the ones for the requested version? we store all
   if (dwg->header.from_version > R_2000 && owned) // if downconvert to r2000
     {
       Dwg_Object *owned_obj;
-      dwg_dynapi_entity_set_value (ow, owner->name, firstfield, &owned[0], 0);
-      LOG_TRACE ("%s.%s = " FORMAT_REF "[H 0]\n", owner->name, firstfield,
-                 ARGS_REF (owned[0]));
-      dwg_dynapi_entity_set_value (ow, owner->name, lastfield,
-                                   &owned[num_owned - 1], 0);
-      LOG_TRACE ("%s.%s = " FORMAT_REF "[H 0]\n", owner->name, lastfield,
-                 ARGS_REF (owned[num_owned - 1]));
+      Dwg_Object_Ref *hdl;
+      // need to turn code 3 into absolute 4.
+      if (owned[0])
+        {
+          hdl = dwg_add_handleref (dwg, 4, owned[0]->handleref.value, NULL);
+          dwg_dynapi_entity_set_value (ow, owner->name, firstfield, &hdl, 0);
+          LOG_TRACE ("%s.%s = " FORMAT_REF "[H 0]\n", owner->name, firstfield,
+                     ARGS_REF (hdl));
+        }
+      if (owned[num_owned - 1])
+        {
+          hdl = dwg_add_handleref (dwg, 4, owned[num_owned - 1]->handleref.value, NULL);
+          dwg_dynapi_entity_set_value (ow, owner->name, lastfield,
+                                       &hdl, 0);
+          LOG_TRACE ("%s.%s = " FORMAT_REF "[H 0]\n", owner->name, lastfield,
+                     ARGS_REF (hdl));
+        }
       // link the list, because the children have entmode, different to the
       // owner.
       owned_obj = dwg_ref_object (dwg, owned[0]);
