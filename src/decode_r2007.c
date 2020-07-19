@@ -632,6 +632,14 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
   pesize = ((size_comp + 7) & ~7) * repeat_count;
   // Divide pre encoded size by RS k-value (239)
   block_count = (pesize + 238) / 239;
+  if (!block_count)
+    {
+      LOG_ERROR ("Empty r2007 system page block_count. size_comp: %" PRId64
+                 ", repeat_count: %" PRId64,
+                 size_comp, repeat_count);
+      return NULL;
+    }
+
   // Multiply with codeword size (255) and round to a multiple of 8
   page_size = (block_count * 255 + 7) & ~7;
 
