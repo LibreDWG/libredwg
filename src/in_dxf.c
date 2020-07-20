@@ -7073,7 +7073,8 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
       lastfield = "last_attrib";
     }
   // store all these fields, or just the ones for the requested version?
-  if (dwg->header.from_version > R_2000 && dwg->header.version <= R_2000
+  if ((dwg->header.from_version > R_2000 || dwg->opts & DWG_OPTS_INDXF)
+      && dwg->header.version <= R_2000
       && owned) // if downconvert to r2000
     {
       Dwg_Object *owned_obj;
@@ -7127,7 +7128,8 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
                        ARGS_REF (ent->next_entity));
         }
     }
-  else if (dwg->header.from_version <= R_2000 && dwg->header.version > R_2000
+  else if ((dwg->header.from_version <= R_2000 || dwg->opts & DWG_OPTS_INDXF)
+           && dwg->header.version > R_2000
            && !owned)
     {
       BITCODE_H first, last, ref;
