@@ -1586,8 +1586,10 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   const Dwg_Data *dwg = obj ? obj->parent : NULL;
   Dwg_Version_Type dwg_version = dwg ? dwg->header.version : R_2000;
   // Hack: For DXF dont write n the AcDs vs format. No history, no ASM, early versions.
+#ifndef CAN_ACIS_IN_DS_DATA
   if (dwg_version >= R_2013)
     dwg_version = R_2004;
+#endif
 
   if (_obj->num_blocks)
     num_blocks = _obj->num_blocks;
@@ -1661,8 +1663,10 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   num_entities = bit_read_RL (&src); // named top in the ACIS docs
   has_history = bit_read_RL (&src);  // named as flags in the ACIS docs
   LOG_TRACE ("%d %d %d %d \n", version, num_records, num_entities, has_history);
+#ifndef CAN_ACIS_HISTORY
   if (dwg_version < R_2010)
     has_history = 0; // FIXME: need to delete all persubent-acadSolidHistory-attrib lines then.
+#endif
   if (dwg_version >= R_2013)
     version = 21800;
   else if (dwg_version >= R_2010)
@@ -1739,6 +1743,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
                 LOG_TRACE ("%d ", len);
               }
             LOG_TRACE ("%.*s%s", len, &src.chain[src.byte], c == 14 ? "-" : " ");
+#ifndef CAN_ACIS_IN_DS_DATA
             // fixup End-of-ASM-data => End-of-ACIS-data if >= r2013
             // downconvert ASM (AcDs) to ACIS for DXF
             if (len == 3 && c == 14 && !memcmp (&src.chain[src.byte], "ASM", 3))
@@ -1747,12 +1752,15 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
                 bit_write_TF (&dest, (BITCODE_TF)"ACIS", 4);
               }
             else
+#endif
               bit_write_TF (&dest, &src.chain[src.byte], len);
+#ifndef CAN_ACIS_HISTORY
             if (c == 14 && len == strlen ("acadSolidHistory") &&
                 !memcmp (&src.chain[src.byte], "acadSolidHistory", len))
               {
                 skip_hist = 1; // skip the whole line
               }
+#endif
             if (c == 13 && len < 80)
               {
                 memcpy (act_record, &src.chain[src.byte], len);

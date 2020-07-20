@@ -139,6 +139,8 @@
 #  endif
 #endif
 
+#undef CAN_ACIS_IN_DS_DATA
+#undef CAN_ACIS_HISTORY
 #define TODO_ENCODER HANDLER (OUTPUT, "TODO: Encoder\n");
 #define TODO_DECODER HANDLER (OUTPUT, "TODO: Decoder\n");
 
