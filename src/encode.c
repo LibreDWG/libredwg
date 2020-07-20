@@ -4346,33 +4346,34 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
         case VT_STRING:
           PRE (R_2007)
           {
+            if (dat->byte + 3 + rbuf->value.str.size > end)
+              break;
             // from TU DWG only
             if (rbuf->value.str.size && IS_FROM_TU (dat))
               {
                 BITCODE_TV new = bit_embed_TU_size (rbuf->value.str.u.wdata,
                                                     rbuf->value.str.size);
-                bit_write_RS (dat, rbuf->value.str.size);
+                int len = strlen(new);
+                bit_write_RS (dat, len);
                 bit_write_RC (dat, rbuf->value.str.codepage);
                 if (rbuf->value.str.u.data)
-                  bit_write_TF (dat, (BITCODE_TF)new, strlen(new));
+                  bit_write_TF (dat, (BITCODE_TF)new, len);
                 else
                   bit_write_TF (dat, (BITCODE_TF)"", 0);
-                LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]", j,
-                           rbuf->value.str.u.data, rbuf->type);
+                LOG_TRACE ("xdata[%u]: \"%s\" [TF %d %d]", j,
+                           rbuf->value.str.u.data, len, rbuf->type);
                 free (new);
               }
             else
               {
-                if (dat->byte + 3 + rbuf->value.str.size > end)
-                  break;
                 bit_write_RS (dat, rbuf->value.str.size);
                 bit_write_RC (dat, rbuf->value.str.codepage);
                 if (rbuf->value.str.u.data)
                   bit_write_TF (dat, (BITCODE_TF)rbuf->value.str.u.data, rbuf->value.str.size);
                 else
                   bit_write_TF (dat, (BITCODE_TF)"", 0);
-                LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]", j,
-                           rbuf->value.str.u.data, rbuf->type);
+                LOG_TRACE ("xdata[%u]: \"%s\" [TF %d %d]", j,
+                           rbuf->value.str.u.data, rbuf->value.str.size, rbuf->type);
               }
             LOG_POS;
           }
