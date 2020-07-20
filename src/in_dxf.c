@@ -7105,11 +7105,15 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
       ent->prev_entity = dwg_link_prev (NULL, owned_obj);
       if (ent->prev_entity)
         LOG_TRACE ("%s.prev_entity = " FORMAT_REF "[H 0]\n", owned_obj->name,
-                   ARGS_REF (ent->prev_entity));
+                   ARGS_REF (ent->prev_entity))
+      else
+        ent->nolinks = 0;
       ent->next_entity = dwg_link_next (num_owned > 1 ? owned[1] : NULL, owned_obj);
       if (ent->next_entity)
         LOG_TRACE ("%s.next_entity = " FORMAT_REF "[H 0]\n", owned_obj->name,
-                   ARGS_REF (ent->next_entity));
+                   ARGS_REF (ent->next_entity))
+      else
+        ent->nolinks = 0;
 
       for (unsigned i = 1; i < num_owned; i++)
         {
@@ -7120,12 +7124,16 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
           ent->prev_entity = dwg_link_prev (owned[i - 1], owned_obj);
           if (ent->prev_entity)
             LOG_TRACE ("%s.prev_entity = " FORMAT_REF "[H 0]\n", owned_obj->name,
-                       ARGS_REF (ent->prev_entity));
+                       ARGS_REF (ent->prev_entity))
+          else
+            ent->nolinks = 0;
           ent->next_entity = dwg_link_next (
               (i < num_owned - 1) ? owned[i + 1] : NULL, owned_obj);
           if (ent->next_entity)
             LOG_TRACE ("%s.next_entity = " FORMAT_REF "[H 0]\n", owned_obj->name,
-                       ARGS_REF (ent->next_entity));
+                       ARGS_REF (ent->next_entity))
+          else
+            ent->nolinks = 0;
         }
     }
   else if ((dwg->header.from_version <= R_2000 || dwg->opts & DWG_OPTS_INDXF)
