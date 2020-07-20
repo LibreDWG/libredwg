@@ -6266,6 +6266,7 @@ void dxf_3dsolid_revisionguid (Dwg_Entity_3DSOLID *_obj)
            _obj->revision_bytes[0], _obj->revision_bytes[1],
            _obj->revision_bytes[2], _obj->revision_bytes[3], _obj->revision_bytes[4], _obj->revision_bytes[5],
            _obj->revision_bytes[6], _obj->revision_bytes[7]);
+  LOG_TRACE ("revision_guid: %s\n", (char*)_obj->revision_guid)
 }
 
 // set internal type from BACKGROUND.dxfname
