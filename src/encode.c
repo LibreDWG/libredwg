@@ -4302,11 +4302,31 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
 
   if (!_obj->HANDSEED) // minimal or broken DXF
     {
+      BITCODE_H last_hdl;
+      unsigned long seed = 0;
       dwg->opts |= DWG_OPTS_MINIMAL;
       dat->from_version = (Dwg_Version_Type)((int)dat->version - 1);
       LOG_TRACE ("encode from minimal DXF\n");
+
       _obj->HANDSEED = (Dwg_Object_Ref*)calloc (1, sizeof (Dwg_Object_Ref));
-      _obj->HANDSEED->absolute_ref = 0x72E;
+      // check the object map for the next available handle
+      last_hdl = dwg->num_object_refs ? dwg->object_ref[ dwg->num_object_refs - 1] : NULL;
+      if (last_hdl)
+        {
+          // find the largest handle
+          seed = last_hdl->absolute_ref;
+          LOG_TRACE ("compute HANDSEED %lu ", seed);
+          for (unsigned i = 0; i < dwg->num_object_refs; i++)
+            {
+              Dwg_Object_Ref *ref = dwg->object_ref[i];
+              if (ref->absolute_ref > seed)
+                seed = ref->absolute_ref;
+            }
+          _obj->HANDSEED->absolute_ref = seed + 1;
+          LOG_TRACE ("-> %lu\n", seed);
+        }
+      else
+        _obj->HANDSEED->absolute_ref = 0x72E;
     }
 
     // clang-format off
