@@ -8,7 +8,6 @@
     FIELD_B (preview_exists, 0);
     if (ent->preview_exists)
       {
-        int dxf = dat->version < R_2010 ? 92 : 160;
         // was DXF 160 (used for block previews?).
         // 92 also for all PROXY vector preview data with klass->is_zombie
 #ifdef IS_DECODER

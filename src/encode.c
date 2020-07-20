@@ -972,7 +972,7 @@ int dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
 static int dwg_encode_xdata (Bit_Chain *restrict dat,
                              Dwg_Object_XRECORD *restrict obj, unsigned size);
-static unsigned long add_LibreDWG_APPID (Dwg_Data *dwg, BITCODE_RL index);
+static unsigned long add_LibreDWG_APPID (Dwg_Data *dwg);
 static BITCODE_BL add_DUMMY_eed (Dwg_Object *obj);
 static void fixup_NOD (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
 
@@ -1025,7 +1025,7 @@ is_section_r13_critical (Dwg_Section_Type_R13 i)
 /* Limitations: */
 
 static unsigned long
-add_LibreDWG_APPID (Dwg_Data *dwg, BITCODE_RL index)
+add_LibreDWG_APPID (Dwg_Data *dwg)
 {
   BITCODE_H appid = dwg_find_tablehandle_silent (dwg, "LibreDWG", "APPID");
   BITCODE_H appctl;
@@ -1033,7 +1033,7 @@ add_LibreDWG_APPID (Dwg_Data *dwg, BITCODE_RL index)
   Dwg_Object_APPID *_obj;
   Dwg_Object_APPID_CONTROL *o;
   unsigned long ref;
-  int error = 0;
+  //int error = 0;
 
   if (appid)
     return appid->absolute_ref;
@@ -1233,7 +1233,6 @@ encode_unknown_as_dummy (Dwg_Object *obj, BITCODE_BS placeholder_type)
     }
   else
     {
-      BITCODE_BS klass_id = 0;
       const char *name;
       const char *dxfname;
 
@@ -1692,9 +1691,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   int error = 0;
   BITCODE_BL i, j;
   long unsigned int section_address;
-  unsigned char pvzbit;
   long unsigned int pvzadr;
-  long unsigned int pvzadr_2;
   unsigned int ckr;
   unsigned int sec_size = 0;
   long unsigned int last_offset;
@@ -1754,7 +1751,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           unsigned long new_appid;
           BITCODE_BS placeholder_type = 0;
           LOG_TRACE ("Found unsupported objects, add APPID LibreDWG\n");
-          new_appid = add_LibreDWG_APPID (dwg, 0);
+          new_appid = add_LibreDWG_APPID (dwg);
           if (new_appid)
             {
               fixup = 0;
@@ -2254,7 +2251,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       BITCODE_BL index = omap[i].index;
       unsigned long hdloff = omap[i].handle - (i ? omap[i - 1].handle : 0);
       int off = dat->byte - (i ? omap[i - 1].address : 0);
-      unsigned long address, end_address;
+      unsigned long end_address;
       LOG_TRACE ("\n> Next object: " FORMAT_BL
                  " Handleoff: %lX [UMC] Offset: %d [MC] @%lu\n"
                  "==========================================\n",
@@ -2686,7 +2683,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     // get together all the section sizes, and set the addresses
     {
       int ssize;
-      int salloc, si, info_id;
+      int si, info_id;
       unsigned address;
 
       const Dwg_Section_Type section_map_order[] = {
@@ -2904,7 +2901,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                  dwg->r2004_header.section_map_id);
       sec_id = type = SECTION_SYSTEM_MAP;
       {
-        Dwg_Section_InfoHdr *_obj = &dwg->header.section_infohdr;
+        //Dwg_Section_InfoHdr *_obj = &dwg->header.section_infohdr;
         Dwg_Section *sec = &dwg->header.section[si - 1];
         Dwg_Section_Info *info = find_section_info_type (dwg, type);
         if (!info || !info->sections)
@@ -3276,7 +3273,7 @@ static int
 dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                           Dwg_Object *restrict obj)
 {
-  int error = 0;
+  //int error = 0;
   int is_entity;
   Dwg_Class *klass = dwg_encode_get_class (dwg, obj);
 
@@ -3365,11 +3362,11 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                        unsigned long address)
 {
   int error = 0;
-  unsigned long oldpos;
+  //unsigned long oldpos;
   unsigned long end_address = address + obj->size;
   Dwg_Data *dwg = obj->parent;
 
-  oldpos = bit_position (dat);
+  //oldpos = bit_position (dat);
 #ifndef NDEBUG
   PRE (R_2004)
     assert (address);
@@ -3979,8 +3976,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
 static int
 dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
-  unsigned long off = obj->address;
-  unsigned dat_size = 0;
+  //unsigned long off = obj->address;
+  //unsigned dat_size = 0;
   Dwg_Handle *last_handle = NULL;
   Bit_Chain dat1 = { 0 };
   int i, num_eed = obj->tio.object->num_eed;
@@ -4347,7 +4344,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
   int error = 0;
   int i;
   unsigned j = 0;
-  BITCODE_BL num_xdata = _obj->num_xdata;
+  //BITCODE_BL num_xdata = _obj->num_xdata;
   unsigned long start = dat->byte, end = start + xdata_size;
   Dwg_Data *dwg = _obj->parent->dwg;
   Dwg_Object *obj = &dwg->object[_obj->parent->objid];
