@@ -62,7 +62,7 @@ static int dxf_3dsolid (Bit_Chain *restrict dat,
                         const Dwg_Object *restrict obj,
                         Dwg_Entity_3DSOLID *restrict _obj);
 static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
-static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, const int dxf);
+static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf);
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -643,8 +643,8 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
   }
 #define FIELD_3DPOINT(nam, dxf) FIELD_3BD (nam, dxf)
 
-#define FIELD_CMC(color, dxf) dxf_CMC (dat, &_obj->color, dxf)
-#define SUB_FIELD_CMC(o, color, dxf) dxf_CMC (dat, &_obj->o.color, dxf)
+#define FIELD_CMC(color, dxf) dxf_CMC (dat, (Dwg_Color*)&_obj->color, dxf)
+#define SUB_FIELD_CMC(o, color, dxf) dxf_CMC (dat, (Dwg_Color*)&_obj->o.color, dxf)
 
 #define HEADER_TIMEBLL(nam, dxf)                                              \
   HEADER_9 (nam);                                                             \
@@ -967,16 +967,23 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
 // Skip index 256 bylayer
 // 257 is for method c8 NONE. Which index is for ByBlock?
 // If the dxf code is 90-99 rather emit the rgb only
-static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, const int dxf)
+static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf)
 {
   if (dat->version >= R_2004)
     {
+      if (dat->from_version < R_2004)
+        bit_upconvert_CMC (dat, color);
       if (dxf >= 90)
         {
           VALUE_RLd (color->rgb, dxf);
           return;
         }
-      if (color->method == 0xc8)
+      else if (color->method == 0xc3)
+        {
+          VALUE_RS (color->rgb & 0x00ffffff, dxf);
+          return;
+        }
+      else if (color->method == 0xc8)
         {
           VALUE_RS (257, dxf);
           return;
@@ -984,7 +991,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
       VALUE_RS (color->index, dxf);
       if (color->method != 0xc2)
         return;
-      VALUE_RL (color->rgb & 0x00ffffff, dxf + 420 - 62);
+      VALUE_RL (color->rgb, dxf + 420 - 62);
       if (color->flag & 2 && color->book_name)
         {
           char name[80];
@@ -1020,6 +1027,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, const Dwg_Color *restrict color, c
     }
   else
     {
+      bit_downconvert_CMC (dat, color);
       VALUE_RS (color->index, dxf);
     }
 }

@@ -2562,6 +2562,58 @@ bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
   return 0;
 }
 
+// from old palette to r2004+ truecolor (FIXME)
+void
+bit_upconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color)
+{
+  if (dat->version >= R_2004 && dat->from_version < R_2004)
+    {
+      if (!color->method)
+        color->method = 0xc3;
+      if (color->index == 256)
+        color->method = 0xc0;
+      else if (color->index == 0)
+        color->method = 0xc1;
+
+      color->rgb = color->method << 0x18;
+      if (color->method == 0xc3)
+        color->rgb |= dwg_rgb_palette_index (color->index);
+    }
+}
+
+// from r2004+ truecolor to old palette index
+void
+bit_downconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color)
+{
+  if (dat->version < R_2004 && dat->from_version >= R_2004)
+    {
+      if (!color->method && color->rgb & 0xFF000000)
+        color->method = color->rgb >> 0x18;
+      color->rgb &= 0x00FFFFFF;
+      color->index = dwg_find_color_index (color->rgb);
+      switch (color->method)
+        {
+        case 0x0:
+        case 0xc0:
+          color->index = 256;
+          break; // ByLayer
+        case 0xc1:
+          color->index = 0;
+          break;   // ByBlock
+        case 0xc2: // Entity
+        case 0xc3: // TrueColor
+          if (color->index == 256)
+            color->index = color->rgb & 0xff;
+          break;
+        case 0xc8:
+          color->index = 0;
+          break; // none
+        default:
+          break;
+        }
+    }
+}
+
 /** Write color
  */
 void
@@ -2569,6 +2621,8 @@ bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
 {
   if (dat->version >= R_2004) // truecolor
     {
+      if (dat->from_version < R_2004)
+        bit_upconvert_CMC (dat, color);
       bit_write_BS (dat, 0);  // index override
       bit_write_BL (dat, color->rgb);
       if (!color->method && color->rgb & 0xFF000000)
@@ -2590,34 +2644,7 @@ bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
     }
   else
     {
-      // from truecolor to palette
-      if (dat->from_version >= R_2004)
-        {
-          if (!color->method && color->rgb & 0xFF000000)
-            color->method = color->rgb >> 0x18;
-          color->rgb &= 0x00FFFFFF;
-          color->index = dwg_find_color_index (color->rgb);
-          switch (color->method)
-            {
-            case 0x0:
-            case 0xc0:
-              color->index = 256;
-              break; // ByLayer
-            case 0xc1:
-              color->index = 0;
-              break;   // ByBlock
-            case 0xc2: // Entity
-            case 0xc3: // TrueColor
-              if (color->index == 256)
-                color->index = color->rgb & 0xff;
-              break;
-            case 0xc8:
-              color->index = 0;
-              break; // none
-            default:
-              break;
-            }
-        }
+      bit_downconvert_CMC (dat, color);
       bit_write_BS (dat, color->index);
     }
 }

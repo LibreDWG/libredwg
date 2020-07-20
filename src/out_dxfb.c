@@ -562,18 +562,31 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
   {                                                                           \
     if (dat->version < R_2004)                                                \
       {                                                                       \
-        VALUE_RS ((_obj->color.index & 255), dxf);                            \
+        if (dat->from_version >= R_2004)                                      \
+          bit_downconvert_CMC (dat, (Dwg_Color*)&_obj->color);                \
+        VALUE_RS (_obj->color.index, dxf);                                    \
       }                                                                       \
     else                                                                      \
       {                                                                       \
+        if (dat->from_version < R_2004)                                       \
+          bit_upconvert_CMC (dat, (Dwg_Color*)&_obj->color);                  \
         if (dxf >= 90)                                                        \
+          {                                                                   \
+            VALUE_RL (_obj->color.rgb, dxf);                                  \
+          }                                                                   \
+        else if (_obj->color.method == 0xc3)                                  \
           {                                                                   \
             VALUE_RL (_obj->color.rgb & 0x00ffffff, dxf);                     \
           }                                                                   \
+        else if (_obj->color.method == 0xc8)                                  \
+          {                                                                   \
+            VALUE_RS (257, dxf);                                              \
+          }                                                                   \
         else                                                                  \
           {                                                                   \
-            VALUE_RS ((_obj->color.index & 255), dxf);                        \
-            VALUE_RL (_obj->color.rgb & 0x00ffffff, (unsigned)(dxf + 420 - 62)); \
+            VALUE_RS (_obj->color.index, dxf);                                \
+            if (_obj->color.method == 0xc2)                                   \
+              VALUE_RL (_obj->color.rgb, (unsigned)(dxf + 420 - 62));         \
           }                                                                   \
       }                                                                       \
   }
@@ -581,18 +594,31 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
   {                                                                           \
     if (dat->version < R_2004)                                                \
       {                                                                       \
-        VALUE_RS ((_obj->o.color.index & 255), dxf);                          \
+        if (dat->from_version >= R_2004)                                      \
+          bit_downconvert_CMC (dat, (Dwg_Color*)&_obj->o.color);              \
+        VALUE_RS (_obj->o.color.index, dxf);                                  \
       }                                                                       \
     else                                                                      \
       {                                                                       \
+        if (dat->from_version < R_2004)                                       \
+          bit_upconvert_CMC (dat, (Dwg_Color*)&_obj->o.color);                \
         if (dxf >= 90)                                                        \
+          {                                                                   \
+            VALUE_RL (_obj->o.color.rgb, dxf);                                \
+          }                                                                   \
+        else if (_obj->o.color.method == 0xc8)                                \
+          {                                                                   \
+            VALUE_RS (257, dxf);                                              \
+          }                                                                   \
+        else if (_obj->o.color.method == 0xc3)                                \
           {                                                                   \
             VALUE_RL (_obj->o.color.rgb & 0x00ffffff, dxf);                   \
           }                                                                   \
         else                                                                  \
           {                                                                   \
-            VALUE_RS ((_obj->o.color.index & 255), dxf);                      \
-            VALUE_RL (_obj->o.color.rgb & 0x00ffffff, (unsigned)(dxf + 420 - 62)); \
+            VALUE_RS (_obj->o.color.index, dxf);                              \
+            if (_obj->o.color.method == 0xc2)                                 \
+              VALUE_RL (_obj->o.color.rgb, (unsigned)(dxf + 420 - 62));       \
           }                                                                   \
       }                                                                       \
   }

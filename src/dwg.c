@@ -2647,6 +2647,17 @@ EXPORT const Dwg_RGB_Palette *dwg_rgb_palette (void)
   return rgb_palette;
 }
 
+EXPORT BITCODE_BL dwg_rgb_palette_index (BITCODE_BS index)
+{
+  if (index < 256)
+    return 0;
+  else
+    {
+      const Dwg_RGB_Palette rgb = rgb_palette[index];
+      return (rgb.r << 16) | (rgb.g << 8) | rgb.b;
+    }
+}
+
 EXPORT BITCODE_BS dwg_find_color_index (BITCODE_BL rgb)
 {
   Dwg_RGB_Palette pal;

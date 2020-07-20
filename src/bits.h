@@ -293,6 +293,9 @@ void bit_write_TIMERLL (Bit_Chain *dat, BITCODE_TIMERLL date);
 
 int bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color);
 void bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color);
+// Convert from truecolor (r2004+) to palette (-r2000)
+void bit_downconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color);
+void bit_upconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color);
 
 void bit_read_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
                    Dwg_Color *restrict color);
