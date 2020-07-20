@@ -1047,13 +1047,14 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
   if (!appctl)
     {
       LOG_ERROR ("APPID_CONTROL not found")
-      return 0x12;
+      return 0;
     }
   ref = dwg->object[dwg->num_objects - 1].handle.value + 1;
   // add APPID
   dwg_add_object (dwg);
   obj = &dwg->object[dwg->num_objects - 1];
-  error = dwg_setup_APPID (obj);
+  if (dwg_setup_APPID (obj) >= DWG_ERR_CRITICAL)
+    return 0;
   dwg_add_handle (&obj->handle, 0, ref, obj);
   //obj->type = obj->fixedtype = DWG_TYPE_APPID;
   _obj = obj->tio.object->tio.APPID;
@@ -1074,7 +1075,7 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
   if (!obj)
     {
       LOG_ERROR ("APPID_CONTROL not found")
-      return 0x12;
+      return 0;
     }
   o = obj->tio.object->tio.APPID_CONTROL;
   PUSH_HV (o, num_entries, entries, dwg_add_handleref (dwg, 2, ref, NULL));
