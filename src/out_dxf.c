@@ -1578,6 +1578,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   // const char enddata1[] = "\016\003End\016\002of\016\003ASM\r\004data";
   int first = 1;
   int forward = 0;
+  int skip_hist = 0;
   char act_record [80];
   int error;
   // We need dwg->header.version for the target ACIS version.
@@ -1586,7 +1587,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   Dwg_Version_Type dwg_version = dwg ? dwg->header.version : R_2000;
   // Hack: For DXF dont write n the AcDs vs format. No history, no ASM, early versions.
   if (dwg_version >= R_2013)
-    dwg_version = R_2000;
+    dwg_version = R_2004;
 
   if (_obj->num_blocks)
     num_blocks = _obj->num_blocks;
@@ -1660,8 +1661,8 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   num_entities = bit_read_RL (&src); // named top in the ACIS docs
   has_history = bit_read_RL (&src);  // named as flags in the ACIS docs
   LOG_TRACE ("%d %d %d %d \n", version, num_records, num_entities, has_history);
-  //if (dwg_version < R_2010)
-  //  has_history = 0; // FIXME: need to delete all persubent-acadSolidHistory-attrib lines then.
+  if (dwg_version < R_2010)
+    has_history = 0; // FIXME: need to delete all persubent-acadSolidHistory-attrib lines then.
   if (dwg_version >= R_2013)
     version = 21800;
   else if (dwg_version >= R_2010)
@@ -1703,10 +1704,24 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
           forward = 0;
           if (dest.byte + 2 >= dest.size)
             bit_chain_alloc (&dest);
-          dest.byte += sprintf ((char*)&dest.chain[dest.byte], "#\n");
-          LOG_TRACE ("#\n")
-          // FIXME: if !has_history/ dwg_version < r2013 delete any persubent-acadSolidHistory-attrib line
+          if (skip_hist && !has_history)
+            {
+              // delete any persubent-acadSolidHistory-attrib line
+              char *s = strrchr ((char*)dest.chain, '#');
+              int diff = s ? (char*)&dest.chain[dest.byte] - s : 0;
+              if (diff > 0 && dest.chain[dest.byte - diff + 1] == '\n')
+                {
+                  dest.byte -= (diff - 2);
+                }
+              LOG_TRACE ("# --deleted--\n");
+            }
+          else
+            {
+              dest.byte += sprintf ((char*)&dest.chain[dest.byte], "#\n");
+              LOG_TRACE ("#\n");
+            }
           //i = new_encr_sat_data_line (_obj, &dest, i);
+          skip_hist = 0;
           break;
         case 13:   // ident
           first = 1;
@@ -1733,6 +1748,11 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
               }
             else
               bit_write_TF (&dest, &src.chain[src.byte], len);
+            if (c == 14 && len == strlen ("acadSolidHistory") &&
+                !memcmp (&src.chain[src.byte], "acadSolidHistory", len))
+              {
+                skip_hist = 1; // skip the whole line
+              }
             if (c == 13 && len < 80)
               {
                 memcpy (act_record, &src.chain[src.byte], len);
