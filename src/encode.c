@@ -571,7 +571,7 @@ static bool env_var_checked_p;
     RESET_VER                                                                 \
     if (!hdlptr)                                                              \
       {                                                                       \
-        Dwg_Handle null_handle = { 0, 0, 0 };                                 \
+        Dwg_Handle null_handle = { 0, 0, 0UL, 0 };                            \
         null_handle.code = handle_code;                                       \
         bit_write_H (hdl_dat, &null_handle);                                  \
         LOG_TRACE (#nam ": (%d.0.0) abs:0 [H %d]", handle_code, dxf)          \
@@ -3046,7 +3046,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     {
       Dwg_R2004_Header *_obj = &dwg->r2004_header;
-      Bit_Chain file_dat = { NULL, sizeof (Dwg_R2004_Header), 0 };
+      Bit_Chain file_dat = { NULL, sizeof (Dwg_R2004_Header), 0UL, 0, 0, 0, 0, NULL };
       Bit_Chain *orig_dat = dat;
       /* "AcFssFcAJMB" encrypted: 6840F8F7922AB5EF18DD0BF1 */
       const unsigned char enc_file_ID_string[]
