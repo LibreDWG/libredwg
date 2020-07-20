@@ -107,6 +107,7 @@ int main (int argc, char *argv[])
 
   __AFL_INIT();
   dat.chain = NULL;
+  dat.version = R_2000;
   printf ("Fuzzing in_json + encode from shared memory\n");
 
   while (__AFL_LOOP(10000)) { // llvm_mode persistent, non-forking mode
@@ -305,6 +306,7 @@ main (int argc, char *argv[])
   // allow stdin, but require -I|--format then
   memset (&dwg, 0, sizeof (Dwg_Data));
   dat.opts = dwg.opts = opts;
+  dat.version = R_2000; // initial target for the importer
 
   if (infile)
     {

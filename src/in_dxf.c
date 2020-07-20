@@ -7002,7 +7002,7 @@ dwg_link_next (Dwg_Object_Ref *restrict next_ref, Dwg_Object *restrict obj)
   Dwg_Data *dwg = obj ? obj->parent : NULL;
   if (!next_ref)
     return dwg_add_handleref (dwg, 4, 0, NULL);
-  if (!obj)
+  if (!obj || obj->supertype != DWG_SUPERTYPE_ENTITY)
     return NULL;
   next = dwg_ref_object (dwg, next_ref);
   if (!next || next->supertype != DWG_SUPERTYPE_ENTITY)
@@ -7014,9 +7014,11 @@ dwg_link_next (Dwg_Object_Ref *restrict next_ref, Dwg_Object *restrict obj)
       if (prev_ref && prev_ref->handleref.code == 8 && prev_ref->handleref.value == 0)
         {
           obj->tio.entity->nolinks = 1;
+          LOG_TRACE ("%s.nolinks = 1\n", obj->name);
           return NULL;
         }
     }
+  obj->tio.entity->nolinks = 0;
   return dwg_add_handleref (dwg, 4, next->handle.value, obj);
 }
 
@@ -7034,6 +7036,7 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
   const char *firstfield;
   const char *lastfield;
 
+  LOG_TRACE ("in_postprocess_SEQEND (%u):\n", (unsigned)num_owned);
   if (obj->fixedtype != DWG_TYPE_SEQEND)
     return;
   owner = dwg_ref_object (dwg, obj->tio.entity->ownerhandle);
@@ -7069,10 +7072,12 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
       firstfield = "first_attrib";
       lastfield = "last_attrib";
     }
-  // store all these fields, or just the ones for the requested version? we store all
-  if (dwg->header.from_version > R_2000 && owned) // if downconvert to r2000
+  // store all these fields, or just the ones for the requested version?
+  if (dwg->header.from_version > R_2000 && dwg->header.version <= R_2000
+      && owned) // if downconvert to r2000
     {
       Dwg_Object *owned_obj;
+      Dwg_Object_Entity *ent;
       Dwg_Object_Ref *hdl;
       // need to turn code 3 into absolute 4.
       if (owned[0])
@@ -7095,21 +7100,35 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
       owned_obj = dwg_ref_object (dwg, owned[0]);
       if (!owned_obj || owned_obj->supertype != DWG_SUPERTYPE_ENTITY)
         return;
-      owned_obj->tio.entity->prev_entity = dwg_link_prev (NULL, owned_obj);
-      owned_obj->tio.entity->next_entity
-          = dwg_link_next (num_owned > 1 ? owned[1] : NULL, owned_obj);
+      ent = owned_obj->tio.entity;
+      ent->prev_entity = dwg_link_prev (NULL, owned_obj);
+      if (ent->prev_entity)
+        LOG_TRACE ("%s.prev_entity = " FORMAT_REF "[H 0]\n", owned_obj->name,
+                   ARGS_REF (ent->prev_entity));
+      ent->next_entity = dwg_link_next (num_owned > 1 ? owned[1] : NULL, owned_obj);
+      if (ent->next_entity)
+        LOG_TRACE ("%s.next_entity = " FORMAT_REF "[H 0]\n", owned_obj->name,
+                   ARGS_REF (ent->next_entity));
+
       for (unsigned i = 1; i < num_owned; i++)
         {
           owned_obj = dwg_ref_object (dwg, owned[i]);
           if (!owned_obj || owned_obj->supertype != DWG_SUPERTYPE_ENTITY)
             continue;
-          owned_obj->tio.entity->prev_entity
-              = dwg_link_prev (owned[i - 1], owned_obj);
-          owned_obj->tio.entity->next_entity = dwg_link_next (
+          ent = owned_obj->tio.entity;
+          ent->prev_entity = dwg_link_prev (owned[i - 1], owned_obj);
+          if (ent->prev_entity)
+            LOG_TRACE ("%s.prev_entity = " FORMAT_REF "[H 0]\n", owned_obj->name,
+                       ARGS_REF (ent->prev_entity));
+          ent->next_entity = dwg_link_next (
               (i < num_owned - 1) ? owned[i + 1] : NULL, owned_obj);
+          if (ent->next_entity)
+            LOG_TRACE ("%s.next_entity = " FORMAT_REF "[H 0]\n", owned_obj->name,
+                       ARGS_REF (ent->next_entity));
         }
     }
-  else if (dwg->header.from_version <= R_2000 && !owned)
+  else if (dwg->header.from_version <= R_2000 && dwg->header.version > R_2000
+           && !owned)
     {
       BITCODE_H first, last, ref;
       unsigned i = 0;
@@ -7134,6 +7153,9 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
             if (!ref_obj || ref_obj->supertype != DWG_SUPERTYPE_ENTITY)
               continue;
             owned[i] = ref;
+            if (ref)
+              LOG_TRACE ("%s.%s[%u] = " FORMAT_REF "[H 0]\n", owner->name,
+                         owhdls, i, ARGS_REF (ref));
             ref = ref_obj->tio.entity->next_entity;
             i++;
             if (i > 1)
@@ -7160,8 +7182,9 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
   BITCODE_H *owned = NULL;
   const char *owhdls;
 
+  LOG_TRACE ("dxf_postprocess_SEQEND:\n");
   // r12 and earlier: search for owner backwards
-  if (dwg->header.version < R_13 && !owner && !obj->tio.entity->ownerhandle)
+  if (dwg->header.from_version < R_13 && !owner && !obj->tio.entity->ownerhandle)
     {
       for (i = obj->index - 1; i > 0; i--)
         {
@@ -7204,7 +7227,7 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
     {
       Dwg_Object *_o = &dwg->object[i];
       num_owned = j + 1;
-      if (dwg->header.version >= R_13)
+      if (dwg->header.from_version >= R_13)
         {
           owned = (BITCODE_H *)realloc (owned, num_owned * sizeof (BITCODE_H));
           owned[j] = dwg_add_handleref (dwg, 3, _o->handle.value, owner);
