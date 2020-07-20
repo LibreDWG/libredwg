@@ -3328,7 +3328,7 @@ static const Dwg_DYNAPI_field _dwg_POLYLINE_MESH_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_POLYLINE_MESH, parent),
     1,1,0, 0 },
   { "has_vertex",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_POLYLINE_MESH, has_vertex),
-    0,0,0, 0 },
+    0,0,0, 66 },
   { "num_owned",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_POLYLINE_MESH, num_owned),
     0,0,0, 0 },
   { "first_vertex",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_POLYLINE_MESH, first_vertex),

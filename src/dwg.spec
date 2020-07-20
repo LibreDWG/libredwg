@@ -965,13 +965,17 @@ DWG_ENTITY (POLYLINE_3D)
 
   SUBCLASS (AcDb3dPolyline)
   DXF {
+    BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
+    BITCODE_RC flag = FIELD_VALUE (flag);
     FIELD_B (has_vertex, 66);
+    KEY (elevation); VALUE_3BD (pt, 10);
+    KEY (flag); VALUE_RC (flag | 8, 70);
   }
   else {
     FIELD_VALUE (has_vertex) = 1;
   }
-  FIELD_RC (curve_type, 75);
-  FIELD_RC (flag, 70);
+  FIELD_RC0 (curve_type, 75);
+  FIELD_RC (flag, 0);
 
   SINCE (R_2004) {
     FIELD_BL (num_owned, 0);
@@ -1423,7 +1427,7 @@ DWG_ENTITY (POLYLINE_PFACE)
     BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
     FIELD_B (has_vertex, 66);
     KEY (elevation); VALUE_3BD (pt, 10);
-    KEY (flag); VALUE_BL (64, 70);
+    KEY (flag); VALUE_RC (64, 70);
   }
   else {
     FIELD_VALUE (has_vertex) = 1;
@@ -1453,7 +1457,14 @@ DWG_ENTITY_END
 DWG_ENTITY (POLYLINE_MESH)
 
   SUBCLASS (AcDbPolygonMesh)
-  FIELD_BS (flag, 70);
+  DXF {
+    BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
+    BITCODE_RC flag = FIELD_VALUE (flag);
+    FIELD_B (has_vertex, 66);
+    KEY (elevation); VALUE_3BD (pt, 10);
+    KEY (flag); VALUE_BS (flag | 16, 70);
+  }
+  FIELD_BS (flag, 0);
   FIELD_BS (curve_type, 75);
   FIELD_BS (num_m_verts, 71);
   FIELD_BS (num_n_verts, 72);

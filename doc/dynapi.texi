@@ -3376,7 +3376,7 @@ RC,	DXF 70
 @item parent
 struct _dwg_object_entity*
 @item has_vertex
-B
+B,	DXF 66
 @item num_owned
 BL
 @item first_vertex

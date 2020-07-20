@@ -410,6 +410,8 @@ dxfin_spec "$srcdir/dwg.spec";
 $DXF{'BLOCK'}->{'name'} = 2; # and 3
 $DXF{'INSERT'}->{'block_header'} = 2;
 $DXF{'MINSERT'}->{'block_header'} = 2;
+$DXF{'POLYLINE_3D'}->{'flag'} = 70;
+$DXF{'POLYLINE_MESH'}->{'flag'} = 70;
 $DXF{'HATCH'}->{'boundary_handles'} = 330; # special DXF logic
 $DXF{'VISUALSTYLE'}->{'edge_hide_precision_flag'} = 290;
 $DXF{'VISUALSTYLE'}->{'is_internal_use_only'} = 291;
