@@ -2125,6 +2125,7 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   return NULL;
                 }
               o->num_bulges = num_points;
+              o->flag |= 16;
             }
           CHK_array (j, bulges);
           o->bulges[j] = pair->value.d;

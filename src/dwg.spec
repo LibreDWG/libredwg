@@ -4524,6 +4524,7 @@ DWG_ENTITY (LWPOLYLINE)
   FIELD_BL (num_points, 90);
   // 1 closed, 128 plinegen
   VALUE_BS ((FIELD_VALUE (flag) & 128) + (FIELD_VALUE (flag) & 512 ? 1 : 0), 70);
+  FIELD_BD (const_width, 43);
 #else
   FIELD_BS (flag, 70); // 512 closed, 128 plinegen, 4 constwidth, 8 elevation, 2 thickness
                        // 1 extrusion, 16 num_bulges, 1024 vertexidcount, 32 numwidths
