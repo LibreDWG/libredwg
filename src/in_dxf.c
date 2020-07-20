@@ -9630,9 +9630,19 @@ new_object (char *restrict name, char *restrict dxfname,
                                 color.method = 0xc2;
                               else if (pair->value.i == 257)
                                 color.method = 0xc8;
+                              else if (pair->value.i < 256 && dat->from_version >= R_2004)
+                                {
+                                  color.method = 0xc3;
+                                  color.rgb = 0xc3000000 | color.index;
+                                  color.index = 256;
+                                }
                               LOG_TRACE ("%s.%s.index = %d [%s %d]\n", name,
-                                         f->name, pair->value.i, "CMC",
+                                         f->name, color.index, "CMC",
                                          pair->code);
+                              if (color.rgb)
+                                LOG_TRACE ("%s.%s.rgb = 0x%08x [%s %d]\n", name,
+                                           f->name, color.rgb, "CMC",
+                                           pair->code);
                             }
                           else if (pair->code < 430)
                             {
