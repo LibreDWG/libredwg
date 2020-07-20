@@ -52,6 +52,10 @@ static BITCODE_BL rcount1, rcount2;
 // imported
 char *dwg_obj_table_get_name (const Dwg_Object *restrict obj,
                               int *restrict error);
+#ifndef _DWG_API_H_
+Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
+                                       int *restrict error);
+#endif
 
 // private
 static int dxf_common_entity_handle_data (Bit_Chain *restrict dat,
@@ -1555,7 +1559,8 @@ SAT_boolean (const char *act_record, bool value)
 
 /* Converts v2 SAB acis_data in-place to SAT v1 encr_sat_data[].
    Sets dxf_sab_converted to 1, denoting that encr_sat_data is NOT the
-   encrypted acis_data anymore, rather the converted from SAB for DXF */
+   encrypted acis_data anymore, rather the converted from SAB for DXF.
+*/
 EXPORT int
 dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
 {
@@ -1574,6 +1579,14 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   int first = 1;
   int forward = 0;
   char act_record [80];
+  int error;
+  // We need dwg->header.version for the target ACIS version.
+  const Dwg_Object* obj = dwg_obj_generic_to_object (_obj, &error);
+  const Dwg_Data *dwg = obj ? obj->parent : NULL;
+  Dwg_Version_Type dwg_version = dwg ? dwg->header.version : R_2000;
+  // Hack: For DXF dont write n the AcDs vs format. No history, no ASM, early versions.
+  if (dwg_version >= R_2013)
+    dwg_version = R_2000;
 
   if (_obj->num_blocks)
     num_blocks = _obj->num_blocks;
@@ -1646,9 +1659,24 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   num_records = bit_read_RL (&src);  // if 0 until end marker. total
   num_entities = bit_read_RL (&src); // named top in the ACIS docs
   has_history = bit_read_RL (&src);  // named as flags in the ACIS docs
+  LOG_TRACE ("%d %d %d %d \n", version, num_records, num_entities, has_history);
+  //if (dwg_version < R_2010)
+  //  has_history = 0; // FIXME: need to delete all persubent-acadSolidHistory-attrib lines then.
+  if (dwg_version >= R_2013)
+    version = 21800;
+  else if (dwg_version >= R_2010)
+    version = 21500;
+  else if (dwg_version >= R_2007)
+    version = 21200;
+  else if (dwg_version >= R_2004)
+    version = 20800;
+  else if (dwg_version >= R_2000)
+    version = 400;
+  else if (dwg_version < R_2000)
+    version = 106;
   dest.byte += sprintf ((char*)dest.chain, "%d %d %d %d ", version, num_records,
                         num_entities, has_history);
-  LOG_TRACE ("%d %d %d %d \n", version, num_records, num_entities, has_history);
+  LOG_TRACE ("=> %d %d %d %d \n", version, num_records, num_entities, has_history);
   i = new_encr_sat_data_line (_obj, &dest, i);
 
   SAB_T (product_string)
@@ -1677,6 +1705,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
             bit_chain_alloc (&dest);
           dest.byte += sprintf ((char*)&dest.chain[dest.byte], "#\n");
           LOG_TRACE ("#\n")
+          // FIXME: if !has_history/ dwg_version < r2013 delete any persubent-acadSolidHistory-attrib line
           //i = new_encr_sat_data_line (_obj, &dest, i);
           break;
         case 13:   // ident
@@ -1694,8 +1723,16 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
                 dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%d ", len);
                 LOG_TRACE ("%d ", len);
               }
-            LOG_TRACE ("%.*s%s", len, &src.chain[src.byte], c == 14 ? "-" : " ")
-            bit_write_TF (&dest, &src.chain[src.byte], len);
+            LOG_TRACE ("%.*s%s", len, &src.chain[src.byte], c == 14 ? "-" : " ");
+            // fixup End-of-ASM-data => End-of-ACIS-data if >= r2013
+            // downconvert ASM (AcDs) to ACIS for DXF
+            if (len == 3 && c == 14 && !memcmp (&src.chain[src.byte], "ASM", 3))
+              {
+                LOG_TRACE ("=>ACIS-");
+                bit_write_TF (&dest, (BITCODE_TF)"ACIS", 4);
+              }
+            else
+              bit_write_TF (&dest, &src.chain[src.byte], len);
             if (c == 13 && len < 80)
               {
                 memcpy (act_record, &src.chain[src.byte], len);
