@@ -82,6 +82,7 @@ testobjects = \
 	block_header \
 	blockgriplocationcomponent \
 	blockbasepointparameter \
+	blockflipaction \
 	blockflipparameter \
 	blocklinearparameter \
 	blockmoveaction \
@@ -313,7 +314,6 @@ testdebug = \
 	blockangularconstraintparameter \
 	blockarrayaction \
 	blockdiametricconstraintparameter \
-	blockflipaction \
 	blockflipgrip \
 	blockhorizontalconstraintparameter \
 	blocklinearconstraintparameter \

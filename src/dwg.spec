@@ -8279,6 +8279,16 @@ DWG_OBJECT (BLOCKMOVEACTION)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+DWG_OBJECT (BLOCKFLIPACTION)
+  AcDbBlockAction_fields;
+  SUBCLASS (AcDbBlockFlipAction)
+  BlockAction_ConnectionPt (conn_pt1, 92, 301);
+  BlockAction_ConnectionPt (conn_pt2, 93, 302);
+  BlockAction_ConnectionPt (conn_pt3, 94, 303);
+  BlockAction_ConnectionPt (conn_pt4, 95, 304);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 DWG_OBJECT (BLOCKSCALEACTION)
   AcDbBlockActionWithBasePt_fields;
   SUBCLASS (AcDbBlockScaleAction)
@@ -10425,17 +10435,6 @@ DWG_OBJECT (BLOCKRADIALCONSTRAINTPARAMETER)
   FIELD_T (expr_description, 306);
   FIELD_BD (distance, 140);
   AcDbBlockParamValueSet_fields (value_set,96,128,175,307);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (BLOCKFLIPACTION)
-  DECODE_UNKNOWN_BITS
-  AcDbBlockAction_fields;
-  SUBCLASS (AcDbBlockFlipAction)
-  BlockAction_ConnectionPt (conn_pt1, 92, 301);
-  BlockAction_ConnectionPt (conn_pt2, 93, 302);
-  BlockAction_ConnectionPt (conn_pt3, 94, 303);
-  BlockAction_ConnectionPt (conn_pt4, 95, 304);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

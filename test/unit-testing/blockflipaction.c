@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_BLOCKFLIPACTION
 #include "common.c"
 
@@ -15,7 +14,6 @@ api_process (dwg_object *obj)
   BITCODE_T info_text3;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_blockflipaction *_obj = dwg_object_to_BLOCKFLIPACTION (obj);
 
   // AcDbBlockAction
@@ -31,6 +29,4 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt2, BLOCKACTION_connectionpts, name);
   CHK_SUBCLASS_TYPE     (_obj->conn_pt3, BLOCKACTION_connectionpts, code, BL);
   CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt3, BLOCKACTION_connectionpts, name);
-  // ..
-#endif
 }

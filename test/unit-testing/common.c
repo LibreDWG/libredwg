@@ -362,6 +362,7 @@ main (int argc, char *argv[])
               DWG_TYPE == DWG_TYPE_BLOCKFLIPPARAMETER ||
               DWG_TYPE == DWG_TYPE_BLOCKLINEARPARAMETER ||
               DWG_TYPE == DWG_TYPE_BLOCKROTATIONPARAMETER ||
+              DWG_TYPE == DWG_TYPE_BLOCKFLIPACTION ||
               DWG_TYPE == DWG_TYPE_BLOCKSTRETCHACTION)
             {
               error += test_code (
