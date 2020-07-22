@@ -8279,6 +8279,15 @@ DWG_OBJECT (BLOCKMOVEACTION)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+DWG_OBJECT (BLOCKSCALEACTION)
+  AcDbBlockActionWithBasePt_fields;
+  SUBCLASS (AcDbBlockScaleAction)
+  BlockAction_ConnectionPt (conn_pt3, 94, 303);
+  BlockAction_ConnectionPt (conn_pt4, 95, 304);
+  BlockAction_ConnectionPt (conn_pt5, 96, 305);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 DWG_OBJECT (BLOCKROTATIONPARAMETER)
   AcDbBlock2PtParameter_fields;
   SUBCLASS (AcDbBlockRotationParameter)
@@ -10602,16 +10611,6 @@ DWG_OBJECT (BLOCKROTATIONGRIP)
   DECODE_UNKNOWN_BITS
   AcDbBlockGrip_fields;
   SUBCLASS (AcDbBlockRotationGrip)
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (BLOCKSCALEACTION)
-  DECODE_UNKNOWN_BITS
-  AcDbBlockActionWithBasePt_fields;
-  SUBCLASS (AcDbBlockScaleAction)
-  BlockAction_ConnectionPt (conn_pt3, 94, 303);
-  BlockAction_ConnectionPt (conn_pt4, 95, 304);
-  BlockAction_ConnectionPt (conn_pt5, 96, 305);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

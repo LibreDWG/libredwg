@@ -85,6 +85,7 @@ testobjects = \
 	blockflipparameter \
 	blocklinearparameter \
 	blockmoveaction \
+	blockscaleaction \
 	blockrotationparameter \
 	blockxyparameter \
 	blockvisibilitygrip \
@@ -330,7 +331,6 @@ testdebug = \
 	blockrepresentation \
 	blockrotateaction \
 	blockrotationgrip \
-	blockscaleaction \
 	blockstretchaction \
 	blockuserparameter \
 	blockverticalconstraintparameter \

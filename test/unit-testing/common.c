@@ -384,6 +384,14 @@ main (int argc, char *argv[])
                   "blocks_and_tables_-_metric.dwg",
                   cov);
             }
+          if (DWG_TYPE == DWG_TYPE_BLOCKSCALEACTION)
+            {
+              error += test_code (prefix, "2010/sun_and_sky_demo.dwg", cov);
+              error += test_code (
+                  prefix,
+                  "../test-old/AC1015/1/Ashraf_Basic_File-1_Feet_input_2.dwg",
+                  cov);
+            }
           if (DWG_TYPE == DWG_TYPE_BLOCKMOVEACTION ||
               DWG_TYPE == DWG_TYPE_BLOCKLOOKUPPARAMETER ||
               DWG_TYPE == DWG_TYPE_BLOCKXYPARAMETER)
