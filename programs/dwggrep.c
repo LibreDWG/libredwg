@@ -1226,6 +1226,220 @@ match_BLOCKPARAMDEPENDENCYBODY (const char *restrict filename,
   return found;
 }
 static int
+match_BLOCKMOVEACTION (const char *restrict filename,
+                          const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (BLOCKMOVEACTION, conn_pt1.name, 301);
+  MATCH_OBJECT (BLOCKMOVEACTION, conn_pt2.name, 302);
+  return found;
+}
+static int
+match_BLOCKSTRETCHACTION (const char *restrict filename,
+                          const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (BLOCKSTRETCHACTION, conn_pt1.name, 301);
+  MATCH_OBJECT (BLOCKSTRETCHACTION, conn_pt2.name, 302);
+  return found;
+}
+static int
+match_BLOCKVISIBILITYGRIP (const char *restrict filename,
+                               const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  Dwg_Object_BLOCKVISIBILITYGRIP *_obj = obj->tio.object->tio.BLOCKVISIBILITYGRIP;
+
+  if (_obj->evalexpr.value_code == 1)
+    {
+      MATCH_OBJECT (BLOCKVISIBILITYGRIP, evalexpr.value.text1, 1);
+    }
+  MATCH_OBJECT (BLOCKVISIBILITYGRIP, name, 1);
+  return found;
+}
+static int
+match_BLOCKGRIPLOCATIONCOMPONENT (const char *restrict filename,
+                               const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT *_obj = obj->tio.object->tio.BLOCKGRIPLOCATIONCOMPONENT;
+
+  if (_obj->evalexpr.value_code == 1)
+    {
+      MATCH_OBJECT (BLOCKGRIPLOCATIONCOMPONENT, evalexpr.value.text1, 1);
+    }
+  MATCH_OBJECT (BLOCKGRIPLOCATIONCOMPONENT, grip_expr, 91);
+  return found;
+}
+static int
+match_BLOCKBASEPOINTPARAMETER (const char *restrict filename,
+                               const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  Dwg_Object_BLOCKBASEPOINTPARAMETER *_obj = obj->tio.object->tio.BLOCKBASEPOINTPARAMETER;
+
+  if (_obj->evalexpr.value_code == 1)
+    {
+      MATCH_OBJECT (BLOCKBASEPOINTPARAMETER, evalexpr.value.text1, 1);
+    }
+  MATCH_OBJECT (BLOCKBASEPOINTPARAMETER, name, 1);
+  for (unsigned i = 0; i < _obj->prop1.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKROTATIONPARAMETER, prop1.connections[i].name, 301);
+    }
+  for (unsigned i = 0; i < _obj->prop2.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKROTATIONPARAMETER, prop2.connections[i].name, 302);
+    }
+  return found;
+}
+static int
+match_BLOCKLINEARPARAMETER (const char *restrict filename,
+                          const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  Dwg_Object_BLOCKLINEARPARAMETER *_obj = obj->tio.object->tio.BLOCKLINEARPARAMETER;
+
+  if (_obj->evalexpr.value_code == 1)
+    {
+      MATCH_OBJECT (BLOCKLINEARPARAMETER, evalexpr.value.text1, 1);
+    }
+  MATCH_OBJECT (BLOCKLINEARPARAMETER, name, 1);
+  for (unsigned i = 0; i < _obj->prop1.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKLINEARPARAMETER, prop1.connections[i].name, 301);
+    }
+  for (unsigned i = 0; i < _obj->prop2.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKLINEARPARAMETER, prop2.connections[i].name, 302);
+    }
+  for (unsigned i = 0; i < _obj->prop3.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKLINEARPARAMETER, prop3.connections[i].name, 303);
+    }
+  for (unsigned i = 0; i < _obj->prop4.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKLINEARPARAMETER, prop4.connections[i].name, 304);
+    }
+  MATCH_OBJECT (BLOCKLINEARPARAMETER, distance_name, 305);
+  MATCH_OBJECT (BLOCKLINEARPARAMETER, distance_desc, 306);
+  MATCH_OBJECT (BLOCKLINEARPARAMETER, value_set.desc, 307);
+  return found;
+}
+static int
+match_BLOCKFLIPPARAMETER (const char *restrict filename,
+                          const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  Dwg_Object_BLOCKFLIPPARAMETER *_obj = obj->tio.object->tio.BLOCKFLIPPARAMETER;
+
+  if (_obj->evalexpr.value_code == 1)
+    {
+      MATCH_OBJECT (BLOCKFLIPPARAMETER, evalexpr.value.text1, 1);
+    }
+  MATCH_OBJECT (BLOCKFLIPPARAMETER, name, 1);
+  for (unsigned i = 0; i < _obj->prop1.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKFLIPPARAMETER, prop1.connections[i].name, 301);
+    }
+  for (unsigned i = 0; i < _obj->prop2.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKFLIPPARAMETER, prop2.connections[i].name, 302);
+    }
+  for (unsigned i = 0; i < _obj->prop3.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKFLIPPARAMETER, prop3.connections[i].name, 303);
+    }
+  for (unsigned i = 0; i < _obj->prop4.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKFLIPPARAMETER, prop4.connections[i].name, 304);
+    }
+  MATCH_OBJECT (BLOCKFLIPPARAMETER, flip_label, 305);
+  MATCH_OBJECT (BLOCKFLIPPARAMETER, flip_label_desc, 306);
+  MATCH_OBJECT (BLOCKFLIPPARAMETER, base_state_label, 307);
+  MATCH_OBJECT (BLOCKFLIPPARAMETER, flipped_state_label, 308);
+  MATCH_OBJECT (BLOCKFLIPPARAMETER, tooltip, 309);
+  return found;
+}
+static int
+match_BLOCKROTATIONPARAMETER (const char *restrict filename,
+                          const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  Dwg_Object_BLOCKROTATIONPARAMETER *_obj = obj->tio.object->tio.BLOCKROTATIONPARAMETER;
+
+  if (_obj->evalexpr.value_code == 1)
+    {
+      MATCH_OBJECT (BLOCKROTATIONPARAMETER, evalexpr.value.text1, 1);
+    }
+  MATCH_OBJECT (BLOCKROTATIONPARAMETER, name, 1);
+  for (unsigned i = 0; i < _obj->prop1.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKROTATIONPARAMETER, prop1.connections[i].name, 301);
+    }
+  for (unsigned i = 0; i < _obj->prop2.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKROTATIONPARAMETER, prop2.connections[i].name, 302);
+    }
+  for (unsigned i = 0; i < _obj->prop3.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKROTATIONPARAMETER, prop3.connections[i].name, 303);
+    }
+  for (unsigned i = 0; i < _obj->prop4.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKROTATIONPARAMETER, prop4.connections[i].name, 304);
+    }
+  MATCH_OBJECT (BLOCKROTATIONPARAMETER, angle_name, 305);
+  MATCH_OBJECT (BLOCKROTATIONPARAMETER, angle_desc, 306);
+  MATCH_OBJECT (BLOCKROTATIONPARAMETER, angle_value_set.desc, 307);
+  return found;
+}
+static int
+match_BLOCKXYPARAMETER (const char *restrict filename,
+                          const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  Dwg_Object_BLOCKXYPARAMETER *_obj = obj->tio.object->tio.BLOCKXYPARAMETER;
+
+  if (_obj->evalexpr.value_code == 1)
+    {
+      MATCH_OBJECT (BLOCKXYPARAMETER, evalexpr.value.text1, 1);
+    }
+  MATCH_OBJECT (BLOCKXYPARAMETER, name, 1);
+  for (unsigned i = 0; i < _obj->prop1.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKXYPARAMETER, prop1.connections[i].name, 301);
+    }
+  for (unsigned i = 0; i < _obj->prop2.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKXYPARAMETER, prop2.connections[i].name, 302);
+    }
+  for (unsigned i = 0; i < _obj->prop3.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKXYPARAMETER, prop3.connections[i].name, 303);
+    }
+  for (unsigned i = 0; i < _obj->prop4.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKXYPARAMETER, prop4.connections[i].name, 304);
+    }
+  MATCH_OBJECT (BLOCKXYPARAMETER, x_label, 305);
+  MATCH_OBJECT (BLOCKXYPARAMETER, x_label_desc, 306);
+  MATCH_OBJECT (BLOCKXYPARAMETER, y_label, 307);
+  MATCH_OBJECT (BLOCKXYPARAMETER, y_label_desc, 308);
+  MATCH_OBJECT (BLOCKXYPARAMETER, x_value_set.desc, 410);
+  MATCH_OBJECT (BLOCKXYPARAMETER, y_value_set.desc, 309);
+  return found;
+}
+static int
 match_NAVISWORKSMODELDEF (const char *restrict filename,
                           const Dwg_Object *restrict obj)
 {
@@ -1327,6 +1541,15 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       ELSEMATCH (ASSOCORDINATEDIMACTIONBODY)
       ELSEMATCH (ASSOCROTATEDDIMACTIONBODY)
       ELSEMATCH (BLOCKPARAMDEPENDENCYBODY)
+      ELSEMATCH (BLOCKBASEPOINTPARAMETER)
+      ELSEMATCH (BLOCKFLIPPARAMETER)
+      ELSEMATCH (BLOCKLINEARPARAMETER)
+      ELSEMATCH (BLOCKROTATIONPARAMETER)
+      ELSEMATCH (BLOCKXYPARAMETER)
+      ELSEMATCH (BLOCKMOVEACTION)
+      ELSEMATCH (BLOCKSTRETCHACTION)
+      ELSEMATCH (BLOCKVISIBILITYGRIP)
+      ELSEMATCH (BLOCKGRIPLOCATIONCOMPONENT)
       ELSEMATCH (NAVISWORKSMODELDEF)
     }
   return found;
