@@ -969,6 +969,19 @@
                       _obj->o.name[vcount])                                   \
         }                                                                     \
     }
+#define SUB_FIELD_VECTOR(o, name, sizefield, type, dxf)                       \
+  if (_obj->o.sizefield > 0)                                                  \
+    {                                                                         \
+      SUB_VECTOR_CHKCOUNT (o, name, type, _obj->o.sizefield, dat)             \
+      _obj->o.name = (BITCODE_##type *)calloc (_obj->o.sizefield,             \
+                                               sizeof (BITCODE_##type));      \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.sizefield; vcount++)      \
+        {                                                                     \
+          _obj->o.name[vcount] = bit_read_##type (dat);                       \
+          LOG_TRACE (#name "[%ld]: " FORMAT_##type "\n", (long)vcount,        \
+                     _obj->o.name[vcount])                                    \
+        }                                                                     \
+    }
 // inlined, with const size and without malloc
 #define FIELD_VECTOR_INL(name, type, size, dxf)                               \
   if (size > 0)                                                               \
