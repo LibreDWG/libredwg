@@ -8225,6 +8225,24 @@ DWG_OBJECT (BLOCKLINEARPARAMETER)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+DWG_OBJECT (BLOCKXYPARAMETER)
+  AcDbBlock2PtParameter_fields;
+  SUBCLASS (AcDbBlockXYParameter)
+  FIELD_T (x_label, 305);
+  FIELD_T (x_label_desc, 306);
+  FIELD_T (y_label, 307);
+  FIELD_T (y_label_desc, 308);
+  FIELD_BD (x_value, 142);
+  FIELD_BD (y_value, 141);
+  DXF {
+    AcDbBlockParamValueSet_fields (y_value_set,97,146,176,309);
+    AcDbBlockParamValueSet_fields (x_value_set,96,142,175,410);
+  } else {
+    AcDbBlockParamValueSet_fields (x_value_set,96,142,175,410);
+    AcDbBlockParamValueSet_fields (y_value_set,97,146,176,309);
+  }
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
 
 /*=============================================================================*/
 
@@ -10651,26 +10669,6 @@ DWG_OBJECT (BLOCKXYGRIP)
   DECODE_UNKNOWN_BITS
   AcDbBlockGrip_fields;
   SUBCLASS (AcDbBlockXYParameter)
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (BLOCKXYPARAMETER)
-  DECODE_UNKNOWN_BITS
-  AcDbBlock2PtParameter_fields;
-  SUBCLASS (AcDbBlockXYParameter)
-  FIELD_T (x_label, 305);
-  FIELD_T (x_label_desc, 306);
-  FIELD_T (y_label, 307);
-  FIELD_T (y_label_desc, 308);
-  FIELD_BD (x_value, 142);
-  FIELD_BD (y_value, 141);
-  DXF {
-    AcDbBlockParamValueSet_fields (y_value_set,97,146,176,309);
-    AcDbBlockParamValueSet_fields (x_value_set,96,142,175,410);
-  } else {
-    AcDbBlockParamValueSet_fields (x_value_set,96,142,175,410);
-    AcDbBlockParamValueSet_fields (y_value_set,97,146,176,309);
-  }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

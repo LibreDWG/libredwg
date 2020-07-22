@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// looks stable
 #define DWG_TYPE DWG_TYPE_BLOCKXYPARAMETER
 #include "common.c"
 
@@ -18,7 +18,6 @@ api_process (dwg_object *obj)
   Dwg_BLOCKPARAMVALUESET y_value_set;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_blockxyparameter *_obj = dwg_object_to_BLOCKXYPARAMETER (obj);
 
   CHK_EVALEXPR (BLOCKXYPARAMETER);
@@ -68,5 +67,4 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE (_obj->y_value_set, BLOCKPARAMVALUESET, num_valuelist, BS);
   CHK_SUBCLASS_VECTOR_TYPE (_obj->y_value_set, BLOCKPARAMVALUESET, valuelist,
                             _obj->y_value_set.num_valuelist, BD);
-#endif
 }

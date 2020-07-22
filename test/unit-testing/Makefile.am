@@ -82,6 +82,7 @@ testobjects = \
 	block_header \
 	blockgriplocationcomponent \
 	blocklinearparameter \
+	blockxyparameter \
 	blockvisibilitygrip \
 	body \
 	camera \
@@ -334,7 +335,6 @@ testdebug = \
 	blockuserparameter \
 	blockverticalconstraintparameter \
 	blockxygrip \
-	blockxyparameter \
 	dynamicblockproxynode \
 	flipparameterentity \
 	linearparameterentity \
