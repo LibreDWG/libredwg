@@ -6740,41 +6740,46 @@ DWG_OBJECT_END
  */
 
 // abstract subclass. as field value
-#define AcDbEvalVariant_fields(value)                                   \
-  {                                                                     \
-    int dxf;                                                            \
-    SUB_FIELD_BSd (value,code, 70);                                     \
-    dxf = FIELD_VALUE (value.code);                                     \
-    switch (dwg_resbuf_value_type (dxf))                                \
-    {                                                                   \
-    case VT_REAL:                                                       \
-      SUB_FIELD_BD (value,u.bd, dxf);                                   \
-      break;                                                            \
-    case VT_INT32:                                                      \
-      SUB_FIELD_BL (value,u.bl, dxf);                                   \
-      break;                                                            \
-    case VT_INT16:                                                      \
-      SUB_FIELD_BS (value,u.bs, dxf);                                   \
-      break;                                                            \
-    case VT_INT8:                                                       \
-      SUB_FIELD_RC (value,u.rc, dxf);                                   \
-      break;                                                            \
-    case VT_STRING:                                                     \
-      SUB_FIELD_T (value,u.text, dxf);                                  \
-      break;                                                            \
-    case VT_HANDLE:                                                     \
-      SUB_FIELD_HANDLE (value,u.handle, 5, dxf);                        \
-      break;                                                            \
-    case VT_BINARY:                                                     \
-    case VT_OBJECTID:                                                   \
-    case VT_POINT3D:                                                    \
-    case VT_INVALID:                                                    \
-    case VT_INT64:                                                      \
-    case VT_BOOL:                                                       \
-    default:                                                            \
-      LOG_ERROR ("Invalid EvalVariant.value.type %d", _obj->value.code) \
-      break;                                                            \
-    }                                                                   \
+#define AcDbEvalVariant_fields(value)                                         \
+  {                                                                           \
+    int dxf;                                                                  \
+    SUB_FIELD_BSd (value, code, 70);                                          \
+    dxf = FIELD_VALUE (value.code);                                           \
+    if (dxf)                                                                  \
+      switch (dwg_resbuf_value_type (dxf))                                    \
+        {                                                                     \
+        case VT_REAL:                                                         \
+          SUB_FIELD_BD (value, u.bd, dxf);                                    \
+          break;                                                              \
+        case VT_INT32:                                                        \
+          SUB_FIELD_BL (value, u.bl, dxf);                                    \
+          break;                                                              \
+        case VT_INT16:                                                        \
+          SUB_FIELD_BS (value, u.bs, dxf);                                    \
+          break;                                                              \
+        case VT_INT8:                                                         \
+          SUB_FIELD_RC (value, u.rc, dxf);                                    \
+          break;                                                              \
+        case VT_STRING:                                                       \
+          SUB_FIELD_T (value, u.text, dxf);                                   \
+          break;                                                              \
+        case VT_HANDLE:                                                       \
+          SUB_FIELD_HANDLE (value, u.handle, 5, dxf);                         \
+          break;                                                              \
+        case VT_BINARY:                                                       \
+        case VT_OBJECTID:                                                     \
+        case VT_POINT3D:                                                      \
+        case VT_INVALID:                                                      \
+        case VT_INT64:                                                        \
+        case VT_BOOL:                                                         \
+        default:                                                              \
+          LOG_ERROR ("Invalid EvalVariant.value.type %d", _obj->value.code)   \
+          break;                                                              \
+        }                                                                     \
+    else /* dxf */                                                            \
+      {                                                                       \
+        DXF { VALUE_TFF ("AcDbEvalVariant NULL = -9999", 309) }               \
+      }                                                                       \
   }
 
 #define AcDbValueParam_fields(valprefix)                                \
@@ -10643,12 +10648,7 @@ DWG_OBJECT (BLOCKUSERPARAMETER)
   FIELD_T (expr, 301);
   //FIELD_T (name, 302);
   //FIELD_T (desc, 303);
-  if (!FIELD_VALUE (value.code))
-    {
-      DXF { VALUE_TFF ("AcDbEvalVariant NULL = -9999", 309); }
-    }
-  else
-    AcDbEvalVariant_fields (value);
+  AcDbEvalVariant_fields (value);
   FIELD_BS (type, 170);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
