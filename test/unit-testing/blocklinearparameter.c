@@ -1,4 +1,4 @@
-// TODO coverage
+// TODO crashes
 #define DWG_TYPE DWG_TYPE_BLOCKLINEARPARAMETER
 #include "common.c"
 
@@ -11,7 +11,7 @@ api_process (dwg_object *obj)
   BITCODE_T distance_name;
   BITCODE_T distance_desc;
   BITCODE_BD distance;
-  Dwg_BLOCKPARAMVALUESET value_set;
+  //Dwg_BLOCKPARAMVALUESET value_set;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES

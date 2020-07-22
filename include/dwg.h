@@ -7346,7 +7346,7 @@ typedef struct _dwg_object_BLOCKLINEARPARAMETER
   BITCODE_T distance_name;	/*!< DXF 305 */
   BITCODE_T distance_desc;	/*!< DXF 306 */
   BITCODE_BD distance;		/*!< DXF 306 */
-  Dwg_BLOCKPARAMVALUESET value_set;
+  BLOCKPARAMVALUESET_fields;
 } Dwg_Object_BLOCKLINEARPARAMETER;
 
 typedef struct _dwg_BLOCKLOOKUPACTION_lut
