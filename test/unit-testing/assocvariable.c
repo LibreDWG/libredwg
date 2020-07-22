@@ -24,6 +24,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, av_class_version, BS);
 
+  // ASSOCACTION
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, class_version, BS);
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, geometry_status, BL);
   CHK_ENTITY_MAX (_obj, ASSOCVARIABLE, geometry_status, BL, 10);
@@ -34,14 +35,15 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, num_deps, BL);
   for (unsigned i=0; i < num_deps; i++)
     {
-      CHK_SUBCLASS_TYPE (_obj->deps[i], ASSOCACTION_Deps, is_soft, B);
+      CHK_SUBCLASS_TYPE (_obj->deps[i], ASSOCACTION_Deps, is_owned, B);
       CHK_SUBCLASS_H (_obj->deps[i], ASSOCACTION_Deps, dep);
     }
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, num_owned_params, BL);
   CHK_ENTITY_HV (_obj, ASSOCVARIABLE, owned_params, num_owned_params);
-  CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, num_owned_value_param_names, BL);
-  CHK_ENTITY_HV (_obj, ASSOCVARIABLE, owned_value_param_names, num_owned_value_param_names);
+  CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, num_values, BL);
+  CHK_VALUEPARAM (num_values, values);
 
+  // ASSOCVARIABLE
   CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, name);
   CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, t58);
   CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, evaluator);

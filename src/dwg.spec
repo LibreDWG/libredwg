@@ -4180,7 +4180,7 @@ DWG_ENTITY (MPOLYGON)
           END_REPEAT (polyline_paths);
 #undef polyline_paths
         }
-      SUB_FIELD_BL (paths[rcount1],num_boundary_handles, 97);
+      SUB_FIELD_BL (paths[rcount1],numboundary_handles, 97);
 #if defined (IS_DXF) && !defined (IS_ENCODER)
       DXF {
         if (_obj->boundary_handles && rcount1 < _obj->num_boundary_handles) {

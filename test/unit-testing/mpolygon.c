@@ -157,7 +157,7 @@ api_process (dwg_object *obj)
                             paths[i].polyline_paths[j].bulge);
                   }
               }
-            CHK_SUBCLASS_TYPE (paths[i], HATCH_Path, num_boundary_handles, BL);
+            CHK_SUBCLASS_TYPE (paths[i], HATCH_Path, numboundary_handles, BL);
           }
     }
 
@@ -200,7 +200,6 @@ api_process (dwg_object *obj)
     }
   else if (boundary_handles)
     fail ("MPOLYGON.boundary_handles with !num_boundary_handles");
-
 
   CHK_ENTITY_CMC (_obj, MPOLYGON, color);
   CHK_ENTITY_2RD (_obj, MPOLYGON, x_dir);
