@@ -81,6 +81,7 @@ testobjects = \
 	block_control \
 	block_header \
 	blockgriplocationcomponent \
+	blocklinearparameter \
 	blockvisibilitygrip \
 	body \
 	camera \
@@ -313,7 +314,6 @@ testdebug = \
 	blockhorizontalconstraintparameter \
 	blocklinearconstraintparameter \
 	blocklineargrip \
-	blocklinearparameter \
 	blocklookupaction \
 	blocklookupgrip \
 	blocklookupparameter \

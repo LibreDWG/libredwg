@@ -8215,6 +8215,16 @@ DWG_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+DWG_OBJECT (BLOCKLINEARPARAMETER)
+  AcDbBlock2PtParameter_fields;
+  SUBCLASS (AcDbBlockLinearParameter)
+  FIELD_T (distance_name, 305);
+  FIELD_T (distance_desc, 306);
+  FIELD_BD (distance, 141);
+  AcDbBlockParamValueSet_fields (value_set,96,141,175,307);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 
 /*=============================================================================*/
 
@@ -10415,16 +10425,6 @@ DWG_OBJECT (BLOCKLINEARGRIP)
   AcDbBlockGrip_fields;
   SUBCLASS (AcDbBlockLinearGrip)
   FIELD_3BD_1 (orientation, 140);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (BLOCKLINEARPARAMETER)
-  AcDbBlock2PtParameter_fields;
-  SUBCLASS (AcDbBlockLinearParameter)
-  FIELD_T (distance_name, 305);
-  FIELD_T (distance_desc, 306);
-  FIELD_BD (distance, 141);
-  AcDbBlockParamValueSet_fields (value_set,96,141,175,307);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

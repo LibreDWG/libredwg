@@ -1,4 +1,4 @@
-// TODO crashes
+// looks stable
 #define DWG_TYPE DWG_TYPE_BLOCKLINEARPARAMETER
 #include "common.c"
 
@@ -14,7 +14,6 @@ api_process (dwg_object *obj)
   //Dwg_BLOCKPARAMVALUESET value_set;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_blocklinearparameter *_obj = dwg_object_to_BLOCKLINEARPARAMETER (obj);
 
   CHK_EVALEXPR (BLOCKLINEARPARAMETER);
@@ -52,5 +51,4 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE (_obj->value_set, BLOCKPARAMVALUESET, num_valuelist, BS);
   CHK_SUBCLASS_VECTOR_TYPE (_obj->value_set, BLOCKPARAMVALUESET, valuelist,
                             _obj->value_set.num_valuelist, BD);
-#endif
 }
