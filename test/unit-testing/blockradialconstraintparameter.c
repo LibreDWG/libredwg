@@ -47,13 +47,13 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKRADIALCONSTRAINTPARAMETER, expr_description);
   CHK_ENTITY_TYPE (_obj, BLOCKRADIALCONSTRAINTPARAMETER, distance, BD);
   // AcDbBlockParamValueSet
-  CHK_SUBCLASS_UTF8TEXT (_obj->value_set, "BLOCKPARAMVALUESET", desc);
-  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", flags, BL);
-  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", minimum, BD);
-  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", maximum, BD);
-  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", increment, BD);
-  CHK_SUBCLASS_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", num_valuelist, BS);
-  CHK_SUBCLASS_VECTOR_TYPE (_obj->value_set, "BLOCKPARAMVALUESET", valuelist,
+  CHK_SUBCLASS_UTF8TEXT (_obj->value_set, BLOCKPARAMVALUESET, desc);
+  CHK_SUBCLASS_TYPE (_obj->value_set, BLOCKPARAMVALUESET, flags, BL);
+  CHK_SUBCLASS_TYPE (_obj->value_set, BLOCKPARAMVALUESET, minimum, BD);
+  CHK_SUBCLASS_TYPE (_obj->value_set, BLOCKPARAMVALUESET, maximum, BD);
+  CHK_SUBCLASS_TYPE (_obj->value_set, BLOCKPARAMVALUESET, increment, BD);
+  CHK_SUBCLASS_TYPE (_obj->value_set, BLOCKPARAMVALUESET, num_valuelist, BS);
+  CHK_SUBCLASS_VECTOR_TYPE (_obj->value_set, BLOCKPARAMVALUESET, valuelist,
                             _obj->value_set.num_valuelist, BD);
 #endif
 }

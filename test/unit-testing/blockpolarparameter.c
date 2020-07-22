@@ -50,21 +50,21 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKPOLARPARAMETER, offset, BD);
   //CHK_ENTITY_3BD (_obj, BLOCKPOLARPARAMETER, base_angle_pt);
   // AcDbBlockParamValueSet
-  CHK_SUBCLASS_UTF8TEXT (_obj->angle_value_set, "BLOCKPARAMVALUESET", desc);
-  CHK_SUBCLASS_TYPE (_obj->angle_value_set, "BLOCKPARAMVALUESET", flags, BL);
-  CHK_SUBCLASS_TYPE (_obj->angle_value_set, "BLOCKPARAMVALUESET", minimum, BD);
-  CHK_SUBCLASS_TYPE (_obj->angle_value_set, "BLOCKPARAMVALUESET", maximum, BD);
-  CHK_SUBCLASS_TYPE (_obj->angle_value_set, "BLOCKPARAMVALUESET", increment, BD);
-  CHK_SUBCLASS_TYPE (_obj->angle_value_set, "BLOCKPARAMVALUESET", num_valuelist, BS);
-  CHK_SUBCLASS_VECTOR_TYPE (_obj->angle_value_set, "BLOCKPARAMVALUESET", valuelist,
+  CHK_SUBCLASS_UTF8TEXT (_obj->angle_value_set, BLOCKPARAMVALUESET, desc);
+  CHK_SUBCLASS_TYPE (_obj->angle_value_set, BLOCKPARAMVALUESET, flags, BL);
+  CHK_SUBCLASS_TYPE (_obj->angle_value_set, BLOCKPARAMVALUESET, minimum, BD);
+  CHK_SUBCLASS_TYPE (_obj->angle_value_set, BLOCKPARAMVALUESET, maximum, BD);
+  CHK_SUBCLASS_TYPE (_obj->angle_value_set, BLOCKPARAMVALUESET, increment, BD);
+  CHK_SUBCLASS_TYPE (_obj->angle_value_set, BLOCKPARAMVALUESET, num_valuelist, BS);
+  CHK_SUBCLASS_VECTOR_TYPE (_obj->angle_value_set, BLOCKPARAMVALUESET, valuelist,
                             _obj->angle_value_set.num_valuelist, BD);
-  CHK_SUBCLASS_UTF8TEXT (_obj->distance_value_set, "BLOCKPARAMVALUESET", desc);
-  CHK_SUBCLASS_TYPE (_obj->distance_value_set, "BLOCKPARAMVALUESET", flags, BL);
-  CHK_SUBCLASS_TYPE (_obj->distance_value_set, "BLOCKPARAMVALUESET", minimum, BD);
-  CHK_SUBCLASS_TYPE (_obj->distance_value_set, "BLOCKPARAMVALUESET", maximum, BD);
-  CHK_SUBCLASS_TYPE (_obj->distance_value_set, "BLOCKPARAMVALUESET", increment, BD);
-  CHK_SUBCLASS_TYPE (_obj->distance_value_set, "BLOCKPARAMVALUESET", num_valuelist, BS);
-  CHK_SUBCLASS_VECTOR_TYPE (_obj->distance_value_set, "BLOCKPARAMVALUESET", valuelist,
+  CHK_SUBCLASS_UTF8TEXT (_obj->distance_value_set, BLOCKPARAMVALUESET, desc);
+  CHK_SUBCLASS_TYPE (_obj->distance_value_set, BLOCKPARAMVALUESET, flags, BL);
+  CHK_SUBCLASS_TYPE (_obj->distance_value_set, BLOCKPARAMVALUESET, minimum, BD);
+  CHK_SUBCLASS_TYPE (_obj->distance_value_set, BLOCKPARAMVALUESET, maximum, BD);
+  CHK_SUBCLASS_TYPE (_obj->distance_value_set, BLOCKPARAMVALUESET, increment, BD);
+  CHK_SUBCLASS_TYPE (_obj->distance_value_set, BLOCKPARAMVALUESET, num_valuelist, BS);
+  CHK_SUBCLASS_VECTOR_TYPE (_obj->distance_value_set, BLOCKPARAMVALUESET, valuelist,
                             _obj->distance_value_set.num_valuelist, BD);
 #endif
 }

@@ -51,22 +51,22 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE     (_obj, BLOCKXYPARAMETER, x_value, BD);
   CHK_ENTITY_TYPE     (_obj, BLOCKXYPARAMETER, y_value, BD);
   // AcDbBlockParamValueSet
-  CHK_SUBCLASS_UTF8TEXT (_obj->x_value_set, "BLOCKPARAMVALUESET", desc);
-  CHK_SUBCLASS_TYPE (_obj->x_value_set, "BLOCKPARAMVALUESET", flags, BL);
-  CHK_SUBCLASS_TYPE (_obj->x_value_set, "BLOCKPARAMVALUESET", minimum, BD);
-  CHK_SUBCLASS_TYPE (_obj->x_value_set, "BLOCKPARAMVALUESET", maximum, BD);
-  CHK_SUBCLASS_TYPE (_obj->x_value_set, "BLOCKPARAMVALUESET", increment, BD);
-  CHK_SUBCLASS_TYPE (_obj->x_value_set, "BLOCKPARAMVALUESET", num_valuelist, BS);
-  CHK_SUBCLASS_VECTOR_TYPE (_obj->x_value_set, "BLOCKPARAMVALUESET", valuelist,
+  CHK_SUBCLASS_UTF8TEXT (_obj->x_value_set, BLOCKPARAMVALUESET, desc);
+  CHK_SUBCLASS_TYPE (_obj->x_value_set, BLOCKPARAMVALUESET, flags, BL);
+  CHK_SUBCLASS_TYPE (_obj->x_value_set, BLOCKPARAMVALUESET, minimum, BD);
+  CHK_SUBCLASS_TYPE (_obj->x_value_set, BLOCKPARAMVALUESET, maximum, BD);
+  CHK_SUBCLASS_TYPE (_obj->x_value_set, BLOCKPARAMVALUESET, increment, BD);
+  CHK_SUBCLASS_TYPE (_obj->x_value_set, BLOCKPARAMVALUESET, num_valuelist, BS);
+  CHK_SUBCLASS_VECTOR_TYPE (_obj->x_value_set, BLOCKPARAMVALUESET, valuelist,
                             _obj->x_value_set.num_valuelist, BD);
 
-  CHK_SUBCLASS_UTF8TEXT (_obj->y_value_set, "BLOCKPARAMVALUESET", desc);
-  CHK_SUBCLASS_TYPE (_obj->y_value_set, "BLOCKPARAMVALUESET", flags, BL);
-  CHK_SUBCLASS_TYPE (_obj->y_value_set, "BLOCKPARAMVALUESET", minimum, BD);
-  CHK_SUBCLASS_TYPE (_obj->y_value_set, "BLOCKPARAMVALUESET", maximum, BD);
-  CHK_SUBCLASS_TYPE (_obj->y_value_set, "BLOCKPARAMVALUESET", increment, BD);
-  CHK_SUBCLASS_TYPE (_obj->y_value_set, "BLOCKPARAMVALUESET", num_valuelist, BS);
-  CHK_SUBCLASS_VECTOR_TYPE (_obj->y_value_set, "BLOCKPARAMVALUESET", valuelist,
+  CHK_SUBCLASS_UTF8TEXT (_obj->y_value_set, BLOCKPARAMVALUESET, desc);
+  CHK_SUBCLASS_TYPE (_obj->y_value_set, BLOCKPARAMVALUESET, flags, BL);
+  CHK_SUBCLASS_TYPE (_obj->y_value_set, BLOCKPARAMVALUESET, minimum, BD);
+  CHK_SUBCLASS_TYPE (_obj->y_value_set, BLOCKPARAMVALUESET, maximum, BD);
+  CHK_SUBCLASS_TYPE (_obj->y_value_set, BLOCKPARAMVALUESET, increment, BD);
+  CHK_SUBCLASS_TYPE (_obj->y_value_set, BLOCKPARAMVALUESET, num_valuelist, BS);
+  CHK_SUBCLASS_VECTOR_TYPE (_obj->y_value_set, BLOCKPARAMVALUESET, valuelist,
                             _obj->y_value_set.num_valuelist, BD);
 #endif
 }
