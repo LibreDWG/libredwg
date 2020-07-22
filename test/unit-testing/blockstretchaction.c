@@ -1,4 +1,4 @@
-// TODO Crashes
+// looks stable, but some structs still missing
 #define DWG_TYPE DWG_TYPE_BLOCKSTRETCHACTION
 #include "common.c"
 

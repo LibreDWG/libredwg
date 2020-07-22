@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_BLOCKMOVEACTION
 #include "common.c"
 
@@ -11,7 +11,6 @@ api_process (dwg_object *obj)
   BLOCKACTION_doubles_fields;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_blockmoveaction *_obj = dwg_object_to_BLOCKMOVEACTION (obj);
 
   // AcDbBlockAction
@@ -28,5 +27,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKMOVEACTION, action_offset_x, BD);
   CHK_ENTITY_TYPE (_obj, BLOCKMOVEACTION, action_offset_y, BD);
   CHK_ENTITY_TYPE (_obj, BLOCKMOVEACTION, angle_offset, BD);
-#endif
 }

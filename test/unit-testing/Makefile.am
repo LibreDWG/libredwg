@@ -81,7 +81,11 @@ testobjects = \
 	block_control \
 	block_header \
 	blockgriplocationcomponent \
+	blockbasepointparameter \
+	blockflipparameter \
 	blocklinearparameter \
+	blockmoveaction \
+	blockrotationparameter \
 	blockxyparameter \
 	blockvisibilitygrip \
 	body \
@@ -307,18 +311,15 @@ testdebug = \
 	blockalignmentparameter \
 	blockangularconstraintparameter \
 	blockarrayaction \
-	blockbasepointparameter \
 	blockdiametricconstraintparameter \
 	blockflipaction \
 	blockflipgrip \
-	blockflipparameter \
 	blockhorizontalconstraintparameter \
 	blocklinearconstraintparameter \
 	blocklineargrip \
 	blocklookupaction \
 	blocklookupgrip \
 	blocklookupparameter \
-	blockmoveaction \
 	blockpointparameter \
 	blockpolargrip \
 	blockpolarparameter \
@@ -329,7 +330,6 @@ testdebug = \
 	blockrepresentation \
 	blockrotateaction \
 	blockrotationgrip \
-	blockrotationparameter \
 	blockscaleaction \
 	blockstretchaction \
 	blockuserparameter \

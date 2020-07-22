@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_BLOCKBASEPOINTPARAMETER
 #include "common.c"
 
@@ -12,7 +12,6 @@ api_process (dwg_object *obj)
   BITCODE_3BD base_pt;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_blockbasepointparameter *_obj = dwg_object_to_BLOCKBASEPOINTPARAMETER (obj);
 
   CHK_EVALEXPR (BLOCKBASEPOINTPARAMETER);
@@ -33,5 +32,4 @@ api_process (dwg_object *obj)
   // AcDbBlockBasepointParameter
   CHK_ENTITY_3RD (_obj, BLOCKBASEPOINTPARAMETER, pt);
   CHK_ENTITY_3RD (_obj, BLOCKBASEPOINTPARAMETER, base_pt);
-#endif
 }

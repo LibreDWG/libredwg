@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_BLOCKROTATIONPARAMETER
 #include "common.c"
 
@@ -12,11 +12,10 @@ api_process (dwg_object *obj)
   BITCODE_T angle_name;	/*!< DXF 305 */
   BITCODE_T angle_desc;	/*!< DXF 306 */
   BITCODE_BD angle;		/*!< DXF 306 */
-  Dwg_BLOCKPARAMVALUESET value_set;
+  //Dwg_BLOCKPARAMVALUESET value_set;
   BITCODE_3BD base_angle_pt;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_blockrotationparameter *_obj = dwg_object_to_BLOCKROTATIONPARAMETER (obj);
 
   CHK_EVALEXPR (BLOCKROTATIONPARAMETER);
@@ -56,5 +55,4 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE (_obj->angle_value_set, BLOCKPARAMVALUESET, num_valuelist, BS);
   CHK_SUBCLASS_VECTOR_TYPE (_obj->angle_value_set, BLOCKPARAMVALUESET, valuelist,
                             _obj->angle_value_set.num_valuelist, BD);
-#endif
 }
