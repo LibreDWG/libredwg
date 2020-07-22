@@ -7039,17 +7039,17 @@ typedef struct _dwg_object_CSACDOCUMENTOPTIONS
   BITCODE_BLd bg_insert_cycling_weight
 
 // same as BLOCKACTION_connectionpts
-typedef  struct _dwg_BLOCKPARAMETER_connection {
+typedef struct _dwg_BLOCKPARAMETER_connection {
   BITCODE_BL code;
   BITCODE_T name;
 } Dwg_BLOCKPARAMETER_connection;
 
-typedef  struct dwg_BLOCKPARAMETER_PropInfo {
+typedef  struct _dwg_BLOCKPARAMETER_PropInfo {
   BITCODE_BL num_connections;
   Dwg_BLOCKPARAMETER_connection *connections;
 } Dwg_BLOCKPARAMETER_PropInfo;
 
-typedef  struct dwg_BLOCKPARAMVALUESET {
+typedef  struct _dwg_BLOCKPARAMVALUESET {
   BITCODE_T desc;
   BITCODE_BL flags;
   BITCODE_BD minimum;

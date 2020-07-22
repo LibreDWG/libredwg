@@ -13429,6 +13429,20 @@ B,	DXF 281
 @end vtable
 @end indentedblock
 
+@strong{Dwg_BLOCKPARAMETER_PropInfo} @anchor{Dwg_BLOCKPARAMETER_PropInfo}
+@vindex Dwg_BLOCKPARAMETER_PropInfo
+
+@indentedblock
+@vtable @code
+
+@item num_connections
+BL
+@item connections
+Dwg_BLOCKPARAMETER_connection*
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_BLOCKPARAMETER_connection} @anchor{Dwg_BLOCKPARAMETER_connection}
 @vindex Dwg_BLOCKPARAMETER_connection
 
@@ -13438,7 +13452,31 @@ B,	DXF 281
 @item code
 BL
 @item name
+T
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_BLOCKPARAMVALUESET} @anchor{Dwg_BLOCKPARAMVALUESET}
+@vindex Dwg_BLOCKPARAMVALUESET
+
+@indentedblock
+@vtable @code
+
+@item desc
 TV
+@item flags
+BL
+@item minimum
+BD
+@item maximum
+BD
+@item increment
+BD
+@item num_valuelist
+BS
+@item valuelist
+BD*
 
 @end vtable
 @end indentedblock

@@ -65406,12 +65406,28 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"BLOCKLOOKUPACTION_lut\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_BLOCKPARAMETER_PropInfo);
+  size2 = dwg_dynapi_fields_size ("BLOCKPARAMETER_PropInfo");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_BLOCKPARAMETER_PropInfo): %d != "
+               "dwg_dynapi_fields_size (\"BLOCKPARAMETER_PropInfo\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_BLOCKPARAMETER_connection);
   size2 = dwg_dynapi_fields_size ("BLOCKPARAMETER_connection");
   if (size1 != size2)
     {
       fprintf (stderr, "sizeof(struct _dwg_BLOCKPARAMETER_connection): %d != "
                "dwg_dynapi_fields_size (\"BLOCKPARAMETER_connection\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_BLOCKPARAMVALUESET);
+  size2 = dwg_dynapi_fields_size ("BLOCKPARAMVALUESET");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_BLOCKPARAMVALUESET): %d != "
+               "dwg_dynapi_fields_size (\"BLOCKPARAMVALUESET\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_BLOCKVISIBILITYPARAMETER_state);
