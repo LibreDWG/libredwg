@@ -1037,6 +1037,21 @@ api_common_entity (dwg_object *obj)
             fail ("%s.%s[%d]: memcmp", #name, #field, i);                     \
         }                                                                     \
     }
+// i must be defined as type of num
+#define CHK_ENTITY_2DPOINTS(ent, name, field, num)                            \
+  if (!dwg_dynapi_entity_value (ent, #name, #field, &field, NULL))            \
+    fail (#name "." #field);                                                  \
+  else if (!field)                                                            \
+    pass ();                                                                  \
+  else                                                                        \
+    {                                                                         \
+      for (i = 0; i < (num); i++)                                             \
+        {                                                                     \
+          ok ("%s.%s[%d]: (%f, %f)", #name, #field, i, field[i].x, field[i].y); \
+          if (memcmp (&ent->field[i], &field[i], sizeof (field[i])))          \
+            fail ("%s.%s[%d]: memcmp", #name, #field, i);                     \
+        }                                                                     \
+    }
 
 #define CHK_ENTITY_2RD(ent, name, field)                                      \
   if (!dwg_dynapi_entity_value (ent, #name, #field, &field, NULL))            \

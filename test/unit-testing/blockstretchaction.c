@@ -33,7 +33,7 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE     (_obj->conn_pt2, BLOCKACTION_connectionpts, code, BL);
   CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt2, BLOCKACTION_connectionpts, name);
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, num_pts, BL);
-  //CHK_ENTITY_2DPOINTS (_obj, BLOCKSTRETCHACTION, pts, num_pts);
+  CHK_ENTITY_2DPOINTS (_obj, BLOCKSTRETCHACTION, pts, num_pts);
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, num_hdls, BL);
   CHK_ENTITY_HV (_obj, BLOCKSTRETCHACTION, hdls, num_hdls);
   CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKSTRETCHACTION, shorts, num_hdls, BS);
