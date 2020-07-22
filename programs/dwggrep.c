@@ -1440,6 +1440,36 @@ match_BLOCKXYPARAMETER (const char *restrict filename,
   return found;
 }
 static int
+match_BLOCKVISIBILITYPARAMETER (const char *restrict filename,
+                          const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  Dwg_Object_BLOCKVISIBILITYPARAMETER *_obj = obj->tio.object->tio.BLOCKVISIBILITYPARAMETER;
+
+  if (_obj->evalexpr.value_code == 1)
+    {
+      MATCH_OBJECT (BLOCKVISIBILITYPARAMETER, evalexpr.value.text1, 1);
+    }
+  MATCH_OBJECT (BLOCKVISIBILITYPARAMETER, name, 1);
+  for (unsigned i = 0; i < _obj->prop1.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKVISIBILITYPARAMETER, prop1.connections[i].name, 301);
+    }
+  for (unsigned i = 0; i < _obj->prop2.num_connections; i++)
+    {
+      MATCH_OBJECT (BLOCKVISIBILITYPARAMETER, prop2.connections[i].name, 302);
+    }
+  MATCH_OBJECT (BLOCKVISIBILITYPARAMETER, blockvisi_name, 301);
+  MATCH_OBJECT (BLOCKVISIBILITYPARAMETER, blockvisi_desc, 302);
+  for (unsigned i = 0; i < _obj->num_states; i++)
+    {
+      MATCH_OBJECT (BLOCKVISIBILITYPARAMETER, states[i].name, 303);
+    }
+  MATCH_OBJECT (BLOCKVISIBILITYPARAMETER, cur_state_name, 0);
+  return found;
+}
+static int
 match_NAVISWORKSMODELDEF (const char *restrict filename,
                           const Dwg_Object *restrict obj)
 {
@@ -1546,6 +1576,7 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       ELSEMATCH (BLOCKLINEARPARAMETER)
       ELSEMATCH (BLOCKROTATIONPARAMETER)
       ELSEMATCH (BLOCKXYPARAMETER)
+      ELSEMATCH (BLOCKVISIBILITYPARAMETER)
       ELSEMATCH (BLOCKMOVEACTION)
       ELSEMATCH (BLOCKSTRETCHACTION)
       ELSEMATCH (BLOCKVISIBILITYGRIP)

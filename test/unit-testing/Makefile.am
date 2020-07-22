@@ -88,6 +88,7 @@ testobjects = \
 	blockrotationparameter \
 	blockxyparameter \
 	blockvisibilitygrip \
+	blockvisibilityparameter \
 	body \
 	camera \
 	cellstylemap \
@@ -252,7 +253,6 @@ testdebug = \
 	blkrefobjectcontextdata \
 	assocdimdependencybody \
 	blockparamdependencybody \
-	blockvisibilityparameter \
 	contextdatamanager \
 	csacdocumentoptions \
 	curvepath \

@@ -13490,7 +13490,7 @@ BD*
 @item parent
 struct _dwg_object_BLOCKVISIBILITYPARAMETER*
 @item name
-T,	DXF 301
+T,	DXF 303
 @item num_blocks
 BL,	DXF 94
 @item blocks

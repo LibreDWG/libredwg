@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// looks stable
 #define DWG_TYPE DWG_TYPE_BLOCKVISIBILITYPARAMETER
 #include "common.c"
 
@@ -20,7 +20,6 @@ api_process (dwg_object *obj)
   BITCODE_BL cur_state;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_blockvisibilityparameter *_obj = dwg_object_to_BLOCKVISIBILITYPARAMETER (obj);
 
   CHK_EVALEXPR (BLOCKVISIBILITYPARAMETER);
@@ -60,5 +59,4 @@ api_process (dwg_object *obj)
       }
   CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYPARAMETER, cur_state, B);
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKVISIBILITYPARAMETER, cur_state_name);
-#endif
 }

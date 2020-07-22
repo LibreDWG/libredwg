@@ -11400,7 +11400,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKVISIBILITYPARAMETER_state_fields[] = {
   { "parent",	"struct _dwg_object_BLOCKVISIBILITYPARAMETER*", sizeof (void *),  OFF (struct _dwg_BLOCKVISIBILITYPARAMETER_state, parent),
     1,1,0, 0 },
   { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_BLOCKVISIBILITYPARAMETER_state, name),
-    1,1,1, 301 },
+    1,1,1, 303 },
   { "num_blocks",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_BLOCKVISIBILITYPARAMETER_state, num_blocks),
     0,0,0, 94 },
   { "blocks",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_BLOCKVISIBILITYPARAMETER_state, blocks),

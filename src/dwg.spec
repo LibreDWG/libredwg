@@ -8292,6 +8292,32 @@ DWG_OBJECT (BLOCKROTATIONPARAMETER)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+// ACAD_ENHANCEDBLOCK
+DWG_OBJECT (BLOCKVISIBILITYPARAMETER)
+  AcDbBlock1PtParameter_fields;
+  SUBCLASS (AcDbBlockVisibilityParameter)
+  FIELD_B (is_initialized, 281);
+  FIELD_T (blockvisi_name, 301);
+  FIELD_T (blockvisi_desc, 302);
+  FIELD_B (unknown_bool, 91);
+  FIELD_BL (num_blocks, 93);
+  HANDLE_VECTOR (blocks, num_blocks, 5, 331);
+  FIELD_BL (num_states, 92);
+  REPEAT (num_states, states, Dwg_BLOCKVISIBILITYPARAMETER_state)
+  REPEAT_BLOCK
+      SUB_FIELD_T (states[rcount1], name, 303);
+      SUB_FIELD_BL (states[rcount1], num_blocks, 94);
+      SUB_HANDLE_VECTOR (states[rcount1], blocks, num_blocks, 5, 332);
+      SUB_FIELD_BL (states[rcount1], num_params, 95);
+      SUB_HANDLE_VECTOR (states[rcount1], params, num_params, 5, 333);
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (states);
+  END_REPEAT (states)
+  FIELD_T (cur_state_name, 0);
+  FIELD_BL (cur_state, 0);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 /*=============================================================================*/
 
 /* In work area:
@@ -10301,33 +10327,6 @@ DWG_ENTITY (ROTATIONPARAMETERENTITY)
 DWG_ENTITY_END
 
 // DYNBLOCKs:
-
-// ACAD_ENHANCEDBLOCK
-DWG_OBJECT (BLOCKVISIBILITYPARAMETER)
-  DECODE_UNKNOWN_BITS
-  AcDbBlock1PtParameter_fields;
-  SUBCLASS (AcDbBlockVisibilityParameter)
-  FIELD_B (is_initialized, 281);
-  FIELD_T (blockvisi_name, 301);
-  FIELD_T (blockvisi_desc, 302);
-  FIELD_B (unknown_bool, 91);
-  FIELD_BL (num_blocks, 93);
-  HANDLE_VECTOR (blocks, num_blocks, 5, 331);
-  FIELD_BL (num_states, 92);
-  REPEAT (num_states, states, Dwg_BLOCKVISIBILITYPARAMETER_state)
-  REPEAT_BLOCK
-      SUB_FIELD_T (states[rcount1], name, 301);
-      SUB_FIELD_BL (states[rcount1], num_blocks, 94);
-      SUB_HANDLE_VECTOR (states[rcount1], blocks, num_blocks, 5, 332);
-      SUB_FIELD_BL (states[rcount1], num_params, 95);
-      SUB_HANDLE_VECTOR (states[rcount1], params, num_params, 5, 333);
-  END_REPEAT_BLOCK
-  SET_PARENT_OBJ (states);
-  END_REPEAT (states)
-  FIELD_T (cur_state_name, 0);
-  FIELD_BL (cur_state, 0);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKALIGNMENTGRIP)
   DECODE_UNKNOWN_BITS
