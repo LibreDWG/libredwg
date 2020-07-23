@@ -8847,6 +8847,13 @@ new_object (char *restrict name, char *restrict dxfname,
               LOG_TRACE ("LAYER.flag = 0x%x [BS 70]\n", layer->flag);
               goto next_pair;
             }
+          else if (pair->code == 370 && obj->supertype == DWG_SUPERTYPE_ENTITY)
+            {
+              BITCODE_RC linewt = dxf_find_lweight (pair->value.i);
+              dwg_dynapi_common_set_value (_obj, "linewt", &linewt, 0);
+              LOG_TRACE ("COMMON.linewt => %d [RC 370]\n", linewt);
+              goto next_pair;
+            }
           else if (pair->code == 49 && obj->fixedtype == DWG_TYPE_LTYPE)
             {
               pair = add_LTYPE_dashes (obj, dat, pair);
