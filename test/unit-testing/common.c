@@ -363,6 +363,7 @@ main (int argc, char *argv[])
               DWG_TYPE == DWG_TYPE_BLOCKLINEARPARAMETER ||
               DWG_TYPE == DWG_TYPE_BLOCKROTATIONPARAMETER ||
               DWG_TYPE == DWG_TYPE_BLOCKFLIPACTION ||
+              DWG_TYPE == DWG_TYPE_BLOCKFLIPGRIP ||
               DWG_TYPE == DWG_TYPE_BLOCKSTRETCHACTION)
             {
               error += test_code (
@@ -385,7 +386,8 @@ main (int argc, char *argv[])
                   "blocks_and_tables_-_metric.dwg",
                   cov);
             }
-          if (DWG_TYPE == DWG_TYPE_BLOCKSCALEACTION)
+          if (DWG_TYPE == DWG_TYPE_BLOCKSCALEACTION ||
+              DWG_TYPE == DWG_TYPE_BLOCKSTRETCHACTION)
             {
               error += test_code (prefix, "2010/sun_and_sky_demo.dwg", cov);
               error += test_code (

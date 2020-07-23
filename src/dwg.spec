@@ -8298,6 +8298,26 @@ DWG_OBJECT (BLOCKSCALEACTION)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+DWG_OBJECT (BLOCKSTRETCHACTION)
+  AcDbBlockAction_fields;
+  SUBCLASS (AcDbBlockStretchAction)
+  BlockAction_ConnectionPt (conn_pt1, 92, 301);
+  BlockAction_ConnectionPt (conn_pt2, 93, 302);
+  FIELD_BL (num_pts, 72);
+  FIELD_2RD_VECTOR (pts, num_pts, 10);
+  FIELD_BL (num_hdls, 73);
+  // TODO one struct
+  HANDLE_VECTOR (hdls, num_hdls, 0, 331);
+  FIELD_VECTOR (shorts, BS, num_hdls, 74);
+
+  FIELD_BL (num_codes, 75);
+  // FIXME 3x BL?
+  FIELD_VECTOR (codes, BL, num_codes, 76);
+  // ...
+  AcDbBlockAction_doubles_fields;
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 DWG_OBJECT (BLOCKROTATIONPARAMETER)
   AcDbBlock2PtParameter_fields;
   SUBCLASS (AcDbBlockRotationParameter)
@@ -10610,27 +10630,6 @@ DWG_OBJECT (BLOCKROTATIONGRIP)
   DECODE_UNKNOWN_BITS
   AcDbBlockGrip_fields;
   SUBCLASS (AcDbBlockRotationGrip)
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (BLOCKSTRETCHACTION)
-  DECODE_UNKNOWN_BITS
-  AcDbBlockAction_fields;
-  SUBCLASS (AcDbBlockStretchAction)
-  BlockAction_ConnectionPt (conn_pt1, 92, 301);
-  BlockAction_ConnectionPt (conn_pt2, 93, 302);
-  FIELD_BL (num_pts, 72);
-  FIELD_2RD_VECTOR (pts, num_pts, 10);
-  FIELD_BL (num_hdls, 73);
-  // TODO one struct
-  HANDLE_VECTOR (hdls, num_hdls, 0, 331);
-  FIELD_VECTOR (shorts, BS, num_hdls, 74);
-
-  FIELD_BL (num_codes, 75);
-  // FIXME 3x BL?
-  FIELD_VECTOR (codes, BL, num_codes, 76);
-  // ...
-  AcDbBlockAction_doubles_fields;
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
