@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_BLOCKFLIPGRIP
 #include "common.c"
 
@@ -13,7 +12,6 @@ api_process (dwg_object *obj)
   //BITCODE_BS state;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_blockflipgrip *_obj = dwg_object_to_BLOCKFLIPGRIP (obj);
 
   CHK_EVALEXPR (BLOCKFLIPGRIP);
@@ -33,5 +31,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD  (_obj, BLOCKFLIPGRIP, orientation);
   //CHK_ENTITY_TYPE  (_obj, BLOCKFLIPGRIP, upd_state, BS);
   //CHK_ENTITY_TYPE  (_obj, BLOCKFLIPGRIP, state, BS);
-#endif
 }

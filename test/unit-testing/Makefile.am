@@ -84,7 +84,10 @@ testobjects = \
 	blockbasepointparameter \
 	blockflipaction \
 	blockflipparameter \
+	blockflipgrip \
 	blocklinearparameter \
+	blocklineargrip \
+	blocklookupgrip \
 	blockmoveaction \
 	blockscaleaction \
 	blockstretchaction \
@@ -315,12 +318,9 @@ testdebug = \
 	blockangularconstraintparameter \
 	blockarrayaction \
 	blockdiametricconstraintparameter \
-	blockflipgrip \
 	blockhorizontalconstraintparameter \
 	blocklinearconstraintparameter \
-	blocklineargrip \
 	blocklookupaction \
-	blocklookupgrip \
 	blocklookupparameter \
 	blockpointparameter \
 	blockpolargrip \

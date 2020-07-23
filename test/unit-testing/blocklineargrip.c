@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_BLOCKLINEARGRIP
 #include "common.c"
 
@@ -10,7 +9,6 @@ api_process (dwg_object *obj)
   BITCODE_3BD orientation;  
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_blocklineargrip *_obj = dwg_object_to_BLOCKLINEARGRIP (obj);
 
   CHK_EVALEXPR (BLOCKLINEARGRIP);
@@ -27,5 +25,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKLINEARGRIP, bg_insert_cycling_weight, BLd);
   // AcDbBlockLinearGrip
   CHK_ENTITY_3RD  (_obj, BLOCKLINEARGRIP, orientation);
-#endif
 }
