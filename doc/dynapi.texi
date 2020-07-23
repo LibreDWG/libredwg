@@ -6957,13 +6957,13 @@ struct _dwg_object_object*
 @item evalexpr
 Dwg_EvalExpr
 @item name
-TV
+T,	DXF 300
 @item be_major
-BL
+BL,	DXF 98
 @item be_minor
-BL
+BL,	DXF 99
 @item eed1071
-BL
+BL,	DXF 1071
 @item bg_version
 BL,	DXF 91
 @item bg_bl92
@@ -7306,13 +7306,13 @@ struct _dwg_object_object*
 @item evalexpr
 Dwg_EvalExpr
 @item name
-TV
+T,	DXF 300
 @item be_major
-BL
+BL,	DXF 98
 @item be_minor
-BL
+BL,	DXF 99
 @item eed1071
-BL
+BL,	DXF 1071
 @item bg_version
 BL,	DXF 91
 @item bg_bl92
@@ -7553,13 +7553,13 @@ struct _dwg_object_object*
 @item evalexpr
 Dwg_EvalExpr
 @item name
-TV
+T,	DXF 300
 @item be_major
-BL
+BL,	DXF 98
 @item be_minor
-BL
+BL,	DXF 99
 @item eed1071
-BL
+BL,	DXF 1071
 @item bg_version
 BL,	DXF 91
 @item bg_bl92
@@ -7692,13 +7692,13 @@ struct _dwg_object_object*
 @item evalexpr
 Dwg_EvalExpr
 @item name
-TV
+T,	DXF 300
 @item be_major
-BL
+BL,	DXF 98
 @item be_minor
-BL
+BL,	DXF 99
 @item eed1071
-BL
+BL,	DXF 1071
 @item bg_version
 BL,	DXF 91
 @item bg_bl92
@@ -7873,13 +7873,13 @@ struct _dwg_object_object*
 @item evalexpr
 Dwg_EvalExpr
 @item name
-TV
+T,	DXF 300
 @item be_major
-BL
+BL,	DXF 98
 @item be_minor
-BL
+BL,	DXF 99
 @item eed1071
-BL
+BL,	DXF 1071
 @item bg_version
 BL,	DXF 91
 @item bg_bl92
@@ -8043,13 +8043,13 @@ struct _dwg_object_object*
 @item evalexpr
 Dwg_EvalExpr
 @item name
-TV
+T,	DXF 300
 @item be_major
-BL
+BL,	DXF 98
 @item be_minor
-BL
+BL,	DXF 99
 @item eed1071
-BL
+BL,	DXF 1071
 @item bg_version
 BL,	DXF 91
 @item bg_bl92
@@ -8197,13 +8197,13 @@ struct _dwg_object_object*
 @item evalexpr
 Dwg_EvalExpr
 @item name
-TV
+T,	DXF 300
 @item be_major
-BL
+BL,	DXF 98
 @item be_minor
-BL
+BL,	DXF 99
 @item eed1071
-BL
+BL,	DXF 1071
 @item bg_version
 BL,	DXF 91
 @item bg_bl92
@@ -8593,13 +8593,13 @@ struct _dwg_object_object*
 @item evalexpr
 Dwg_EvalExpr
 @item name
-TV
+T,	DXF 300
 @item be_major
-BL
+BL,	DXF 98
 @item be_minor
-BL
+BL,	DXF 99
 @item eed1071
-BL
+BL,	DXF 1071
 @item bg_version
 BL,	DXF 91
 @item bg_bl92

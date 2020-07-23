@@ -35517,14 +35517,24 @@ static int test_BLOCKALIGNMENTGRIP (const Dwg_Object *obj)
         fail ("BLOCKALIGNMENTGRIP.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_TV name;
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blockalignmentgrip->evalexpr.value.text1)
+           : !blockalignmentgrip->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKALIGNMENTGRIP.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockalignmentgrip->evalexpr.value.text1);
+  }
+  {
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)blockalignmentgrip->name)
            : !blockalignmentgrip->name)
       pass ();
     else
-      fail ("BLOCKALIGNMENTGRIP.name [TV] '%s' <> '%s'", name, blockalignmentgrip->name);
+      fail ("BLOCKALIGNMENTGRIP.name [T] '%s' <> '%s'", name, blockalignmentgrip->name);
   }
   {
     BITCODE_3BD orientation;
@@ -37163,14 +37173,24 @@ static int test_BLOCKFLIPGRIP (const Dwg_Object *obj)
         fail ("BLOCKFLIPGRIP.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_TV name;
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blockflipgrip->evalexpr.value.text1)
+           : !blockflipgrip->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKFLIPGRIP.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockflipgrip->evalexpr.value.text1);
+  }
+  {
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)blockflipgrip->name)
            : !blockflipgrip->name)
       pass ();
     else
-      fail ("BLOCKFLIPGRIP.name [TV] '%s' <> '%s'", name, blockflipgrip->name);
+      fail ("BLOCKFLIPGRIP.name [T] '%s' <> '%s'", name, blockflipgrip->name);
   }
   {
     BITCODE_3BD orientation;
@@ -38278,14 +38298,24 @@ static int test_BLOCKLINEARGRIP (const Dwg_Object *obj)
         fail ("BLOCKLINEARGRIP.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_TV name;
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blocklineargrip, "BLOCKLINEARGRIP", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blocklineargrip->evalexpr.value.text1)
+           : !blocklineargrip->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKLINEARGRIP.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blocklineargrip->evalexpr.value.text1);
+  }
+  {
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (blocklineargrip, "BLOCKLINEARGRIP", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)blocklineargrip->name)
            : !blocklineargrip->name)
       pass ();
     else
-      fail ("BLOCKLINEARGRIP.name [TV] '%s' <> '%s'", name, blocklineargrip->name);
+      fail ("BLOCKLINEARGRIP.name [T] '%s' <> '%s'", name, blocklineargrip->name);
   }
   {
     BITCODE_3BD orientation;
@@ -38941,14 +38971,24 @@ static int test_BLOCKLOOKUPGRIP (const Dwg_Object *obj)
         fail ("BLOCKLOOKUPGRIP.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_TV name;
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blocklookupgrip->evalexpr.value.text1)
+           : !blocklookupgrip->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKLOOKUPGRIP.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blocklookupgrip->evalexpr.value.text1);
+  }
+  {
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)blocklookupgrip->name)
            : !blocklookupgrip->name)
       pass ();
     else
-      fail ("BLOCKLOOKUPGRIP.name [TV] '%s' <> '%s'", name, blocklookupgrip->name);
+      fail ("BLOCKLOOKUPGRIP.name [T] '%s' <> '%s'", name, blocklookupgrip->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -39780,14 +39820,24 @@ static int test_BLOCKPOLARGRIP (const Dwg_Object *obj)
         fail ("BLOCKPOLARGRIP.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_TV name;
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blockpolargrip, "BLOCKPOLARGRIP", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blockpolargrip->evalexpr.value.text1)
+           : !blockpolargrip->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKPOLARGRIP.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockpolargrip->evalexpr.value.text1);
+  }
+  {
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (blockpolargrip, "BLOCKPOLARGRIP", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)blockpolargrip->name)
            : !blockpolargrip->name)
       pass ();
     else
-      fail ("BLOCKPOLARGRIP.name [TV] '%s' <> '%s'", name, blockpolargrip->name);
+      fail ("BLOCKPOLARGRIP.name [T] '%s' <> '%s'", name, blockpolargrip->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -40537,14 +40587,24 @@ static int test_BLOCKPROPERTIESTABLEGRIP (const Dwg_Object *obj)
         fail ("BLOCKPROPERTIESTABLEGRIP.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_TV name;
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blockpropertiestablegrip->evalexpr.value.text1)
+           : !blockpropertiestablegrip->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKPROPERTIESTABLEGRIP.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockpropertiestablegrip->evalexpr.value.text1);
+  }
+  {
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)blockpropertiestablegrip->name)
            : !blockpropertiestablegrip->name)
       pass ();
     else
-      fail ("BLOCKPROPERTIESTABLEGRIP.name [TV] '%s' <> '%s'", name, blockpropertiestablegrip->name);
+      fail ("BLOCKPROPERTIESTABLEGRIP.name [T] '%s' <> '%s'", name, blockpropertiestablegrip->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -41204,14 +41264,24 @@ static int test_BLOCKROTATIONGRIP (const Dwg_Object *obj)
         fail ("BLOCKROTATIONGRIP.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_TV name;
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blockrotationgrip, "BLOCKROTATIONGRIP", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blockrotationgrip->evalexpr.value.text1)
+           : !blockrotationgrip->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKROTATIONGRIP.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockrotationgrip->evalexpr.value.text1);
+  }
+  {
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (blockrotationgrip, "BLOCKROTATIONGRIP", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)blockrotationgrip->name)
            : !blockrotationgrip->name)
       pass ();
     else
-      fail ("BLOCKROTATIONGRIP.name [TV] '%s' <> '%s'", name, blockrotationgrip->name);
+      fail ("BLOCKROTATIONGRIP.name [T] '%s' <> '%s'", name, blockrotationgrip->name);
   }
   {
     struct _dwg_object_object* parent;
@@ -43112,14 +43182,24 @@ static int test_BLOCKXYGRIP (const Dwg_Object *obj)
         fail ("BLOCKXYGRIP.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_TV name;
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (blockxygrip, "BLOCKXYGRIP", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)blockxygrip->evalexpr.value.text1)
+           : !blockxygrip->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("BLOCKXYGRIP.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockxygrip->evalexpr.value.text1);
+  }
+  {
+    BITCODE_T name;
     if (dwg_dynapi_entity_value (blockxygrip, "BLOCKXYGRIP", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)blockxygrip->name)
            : !blockxygrip->name)
       pass ();
     else
-      fail ("BLOCKXYGRIP.name [TV] '%s' <> '%s'", name, blockxygrip->name);
+      fail ("BLOCKXYGRIP.name [T] '%s' <> '%s'", name, blockxygrip->name);
   }
   {
     struct _dwg_object_object* parent;

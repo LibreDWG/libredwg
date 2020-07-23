@@ -8081,6 +8081,7 @@ DWG_OBJECT_END
   FIELD_BL (eed1071, 1071)
 
 #define AcDbBlockGrip_fields                    \
+  AcDbBlockElement_fields;                      \
   SUBCLASS (AcDbBlockGrip)                      \
   FIELD_BL (bg_version, 91);                    \
   FIELD_BL (bg_bl92, 92);                       \
@@ -8208,7 +8209,6 @@ DWG_OBJECT_END
 
 
 DWG_OBJECT (BLOCKVISIBILITYGRIP)
-  AcDbBlockElement_fields;
   AcDbBlockGrip_fields;
   SUBCLASS (AcDbBlockVisibilityGrip)
   START_OBJECT_HANDLE_STREAM;

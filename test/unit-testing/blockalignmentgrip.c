@@ -13,7 +13,7 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_blockalignmentgrip *_obj = dwg_object_to_BLOCKALIGNMENTGRIP (obj);
 
-  CHK_EVALEXPR (BLOCKVISIBILITYGRIP);
+  CHK_EVALEXPR (BLOCKALIGNMENTGRIP);
   // AcDbBlockElement
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKALIGNMENTGRIP, name);
   CHK_ENTITY_TYPE (_obj, BLOCKALIGNMENTGRIP, be_major, BL);
