@@ -20,7 +20,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKLINEARGRIP, be_minor, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKLINEARGRIP, eed1071, BL);
   // AcDbBlockGrip
-  CHK_ENTITY_TYPE (_obj, BLOCKLINEARGRIP, bg_version, BL);
+  CHK_ENTITY_TYPE (_obj, BLOCKLINEARGRIP, bg_bl91, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKLINEARGRIP, bg_bl92, BL);
   CHK_ENTITY_3RD  (_obj, BLOCKLINEARGRIP, bg_location);
   CHK_ENTITY_TYPE (_obj, BLOCKLINEARGRIP, bg_insert_cycling, B);

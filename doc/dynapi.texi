@@ -6964,7 +6964,7 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item bg_version
+@item bg_bl91
 BL,	DXF 91
 @item bg_bl92
 BL,	DXF 92
@@ -7313,7 +7313,7 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item bg_version
+@item bg_bl91
 BL,	DXF 91
 @item bg_bl92
 BL,	DXF 92
@@ -7324,7 +7324,7 @@ B,	DXF 280
 @item bg_insert_cycling_weight
 BLd,	DXF 93
 @item combined_state
-BL,	DXF 140
+BL,	DXF 93
 @item orientation
 3BD_1,	DXF 140
 @item upd_state
@@ -7560,7 +7560,7 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item bg_version
+@item bg_bl91
 BL,	DXF 91
 @item bg_bl92
 BL,	DXF 92
@@ -7699,7 +7699,7 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item bg_version
+@item bg_bl91
 BL,	DXF 91
 @item bg_bl92
 BL,	DXF 92
@@ -7880,7 +7880,7 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item bg_version
+@item bg_bl91
 BL,	DXF 91
 @item bg_bl92
 BL,	DXF 92
@@ -8050,7 +8050,7 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item bg_version
+@item bg_bl91
 BL,	DXF 91
 @item bg_bl92
 BL,	DXF 92
@@ -8204,7 +8204,7 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item bg_version
+@item bg_bl91
 BL,	DXF 91
 @item bg_bl92
 BL,	DXF 92
@@ -8512,7 +8512,7 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item bg_version
+@item bg_bl91
 BL,	DXF 91
 @item bg_bl92
 BL,	DXF 92
@@ -8600,7 +8600,7 @@ BL,	DXF 98
 BL,	DXF 99
 @item eed1071
 BL,	DXF 1071
-@item bg_version
+@item bg_bl91
 BL,	DXF 91
 @item bg_bl92
 BL,	DXF 92

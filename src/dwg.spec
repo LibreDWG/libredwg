@@ -8083,7 +8083,7 @@ DWG_OBJECT_END
 #define AcDbBlockGrip_fields                    \
   AcDbBlockElement_fields;                      \
   SUBCLASS (AcDbBlockGrip)                      \
-  FIELD_BL (bg_version, 91);                    \
+  FIELD_BL (bg_bl91, 91);                       \
   FIELD_BL (bg_bl92, 92);                       \
   FIELD_3BD (bg_location, 1010);                \
   FIELD_B (bg_insert_cycling, 280);             \
@@ -10463,9 +10463,9 @@ DWG_OBJECT (BLOCKFLIPGRIP)
   SUBCLASS (AcDbBlockFlipGrip)
   FIELD_BL (combined_state, 0);
   FIELD_3BD_1 (orientation, 140);
-  DXF { FIELD_BL (combined_state, 140); }
-  FIELD_BS (upd_state, 0);
-  FIELD_BS (state, 0);
+  DXF { FIELD_BL (combined_state, 93); }
+  /*FIELD_BS (upd_state, 0);
+    FIELD_BS (state, 0);*/
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

@@ -7032,7 +7032,7 @@ typedef struct _dwg_object_CSACDOCUMENTOPTIONS
 
 #define BLOCKGRIP_fields                        \
   BLOCKELEMENT_fields;                          \
-  BITCODE_BL bg_version;                        \
+  BITCODE_BL bg_bl91;                           \
   BITCODE_BL bg_bl92;                           \
   BITCODE_3BD bg_location;                      \
   BITCODE_B bg_insert_cycling;                  \

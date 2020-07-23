@@ -18,7 +18,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, be_minor, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, eed1071, BL);
   // AcDbBlockGrip
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, bg_version, BL);
+  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, bg_bl91, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, bg_bl92, BL);
   CHK_ENTITY_3RD  (_obj, BLOCKVISIBILITYGRIP, bg_location);
   CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYGRIP, bg_insert_cycling, B);
