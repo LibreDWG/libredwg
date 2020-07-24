@@ -153,6 +153,35 @@ static Dxf_Objs *dxf_objs;
       pair = dxf_read_pair (dat);                                             \
       EXPECT_DBL_DXF (#field, dxf, BD);                                       \
     }
+#define FIELD_3BD(field, dxf)                                                 \
+  if (dxf)                                                                    \
+    {                                                                         \
+      double x, y;                                                            \
+      strcpy (buf, #field);                                                   \
+      strcat (buf, ".x");                                                     \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_DXF (obj->name, #field, dxf);                                    \
+      dwg_dynapi_entity_set_value (o, obj->name, buf, &pair->value, 1);       \
+      x = pair->value.d;                                                      \
+      dxf_free_pair (pair);                                                   \
+                                                                              \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_DXF (obj->name, #field, dxf + 10);                               \
+      strcpy (buf, #field);                                                   \
+      strcat (buf, ".y");                                                     \
+      dwg_dynapi_entity_set_value (o, obj->name, buf, &pair->value, 1);       \
+      y = pair->value.d;                                                      \
+      dxf_free_pair (pair);                                                   \
+                                                                              \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_DXF (obj->name, #field, dxf + 20);                               \
+      strcpy (buf, #field);                                                   \
+      strcat (buf, ".z");                                                     \
+      dwg_dynapi_entity_set_value (o, obj->name, buf, &pair->value, 1);       \
+      dxf_free_pair (pair);                                                   \
+      LOG_TRACE ("%s.%s = (%f, %f, %f) [3BD %d]\n", obj->name, #field, x, y,  \
+                 pair->value.d, pair->code);                                  \
+    }
 #define FIELD_HANDLE(field, code, dxf)                                        \
   if (dxf)                                                                    \
     {                                                                         \
@@ -6816,6 +6845,36 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj, char *_obj,
   return pair;
 }
 
+
+// starts with T 300
+// returns NULL on success
+static Dxf_Pair *
+add_AcDbBlockElement (Dwg_Object *restrict obj, char *o,
+                      Bit_Chain *restrict dat, Dxf_Pair *restrict pair)
+{
+  Dwg_Data *dwg = obj->parent;
+  FIELD_T (name, 300);
+  FIELD_BL (be_major, 98);
+  FIELD_BL (be_minor, 99);
+  FIELD_BL (eed1071, 1071);
+  return NULL;
+}
+
+// starts with BL 91
+// returns NULL on success
+static Dxf_Pair *
+add_AcDbBlockGrip (Dwg_Object *restrict obj, char *o,
+                   Bit_Chain *restrict dat, Dxf_Pair *restrict pair)
+{
+  Dwg_Data *dwg = obj->parent;
+  FIELD_BL (bg_bl91, 91);
+  FIELD_BL (bg_bl92, 92);
+  FIELD_3BD (bg_location, 1010);
+  FIELD_B (bg_insert_cycling, 280);
+  FIELD_BLd (bg_insert_cycling_weight, 93);
+  return NULL;
+}
+
 #define FIELD_CMC(field, dxf)                                                 \
   {                                                                           \
     dxf_read_CMC (dwg, dat, &o->field, dxf);                                  \
@@ -8849,11 +8908,19 @@ new_object (char *restrict name, char *restrict dxfname,
               LOG_TRACE ("LAYER.flag = 0x%x [BS 70]\n", layer->flag);
               goto next_pair;
             }
-          else if (pair->code == 370 && obj->supertype == DWG_SUPERTYPE_ENTITY)
+          else if (pair->code == 370 && obj->supertype == DWG_SUPERTYPE_ENTITY
+                   && strEQc (subclass, "AcDbEntity"))
             {
               BITCODE_RC linewt = dxf_find_lweight (pair->value.i);
               dwg_dynapi_common_set_value (_obj, "linewt", &linewt, 0);
               LOG_TRACE ("COMMON.linewt => %d [RC 370]\n", linewt);
+              goto next_pair;
+            }
+          else if (pair->code == 48 && obj->supertype == DWG_SUPERTYPE_ENTITY
+                   && strEQc (subclass, "AcDbEntity"))
+            {
+              dwg_dynapi_common_set_value (_obj, "ltype_scale", &pair->value.d, 0);
+              LOG_TRACE ("COMMON.ltype_scale = %f [BD 48]\n", pair->value.d);
               goto next_pair;
             }
           else if (pair->code == 49 && obj->fixedtype == DWG_TYPE_LTYPE)
@@ -8929,7 +8996,7 @@ new_object (char *restrict name, char *restrict dxfname,
             }
           else if (obj->fixedtype == DWG_TYPE_HATCH)
             {
-              if (pair->code == 10 || pair->code == 20)
+              if ((pair->code == 10 || pair->code == 20) && pair->value.d == 0.0)
                 break; // elevation
               else if (pair->code == 91 || pair->code == 78
                        || pair->code == 453)
@@ -9246,6 +9313,22 @@ new_object (char *restrict name, char *restrict dxfname,
             {
               pair = add_AcDbDetailViewStyle (obj, dat);
               if (pair && pair->code == 100) // success
+                goto start_loop;
+              else
+                goto search_field;
+            }
+          else if (pair->code == 300 && strEQc (subclass, "AcDbBlockElement"))
+            {
+              pair = add_AcDbBlockElement (obj, (char *)_obj, dat, pair);
+              if (!pair) // success
+                goto start_loop;
+              else
+                goto search_field;
+            }
+          else if (pair->code == 91 && strEQc (subclass, "AcDbBlockgrip"))
+            {
+              pair = add_AcDbBlockGrip (obj, (char *)_obj, dat, pair);
+              if (!pair) // success
                 goto start_loop;
               else
                 goto search_field;
