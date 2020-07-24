@@ -7669,7 +7669,7 @@ new_object (char *restrict name, char *restrict dxfname,
         }
       else
         {
-// clang-format off
+          // clang-format off
           // ADD_ENTITY by name
           // check all objects
           #undef DWG_ENTITY
@@ -9064,7 +9064,7 @@ new_object (char *restrict name, char *restrict dxfname,
               else
                 goto search_field;
             }
-          else if (obj->fixedtype == DWG_TYPE_MTEXT && pair->code == 50)
+          else if (obj->fixedtype == DWG_TYPE_MTEXT && pair->code == 46)
             {
               Dwg_Entity_MTEXT *o = obj->tio.entity->tio.MTEXT;
               if (!o->num_column_heights)
@@ -9084,7 +9084,7 @@ new_object (char *restrict name, char *restrict dxfname,
                 goto invalid_dxf;
               assert (j < (int)o->num_column_heights);
               o->column_heights[j] = pair->value.d;
-              LOG_TRACE ("MTEXT.column_heights[%d] = %f [BD* 50]\n", j,
+              LOG_TRACE ("MTEXT.column_heights[%d] = %f [BD* 46]\n", j,
                          pair->value.d);
             }
           else if (obj->fixedtype == DWG_TYPE_GEODATA)
