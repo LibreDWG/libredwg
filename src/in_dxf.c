@@ -8888,6 +8888,24 @@ new_object (char *restrict name, char *restrict dxfname,
                 LOG_WARN ("Unhandled LAYOUT.1 in subclass %s", subclass);
               goto next_pair;
             }
+          else if (pair->code == 3 && obj->fixedtype == DWG_TYPE_MTEXT)
+            {
+              Dwg_Entity_MTEXT *o = obj->tio.entity->tio.MTEXT;
+              unsigned len = strlen (pair->value.s);
+              if (!o->text)
+                {
+                  o->text = strdup (pair->value.s);
+                  written = len;
+                  LOG_TRACE ("MTEXT.text = %s (%u) [TV 3]\n", pair->value.s, len);
+                }
+              else
+                {
+                  assert (o->text);
+                  strcpy (o->text, pair->value.s);
+                  written += len;
+                  LOG_TRACE ("MTEXT.text += %u/%u [TV 3]\n", len, written);
+                }
+            }
           /*
           else if (pair->code == 2 && obj->fixedtype == DWG_TYPE_LAYOUT)
             {

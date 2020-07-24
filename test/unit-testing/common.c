@@ -237,14 +237,14 @@ main (int argc, char *argv[])
             }
           if (DWG_TYPE == DWG_TYPE_DBCOLOR)
             {
-              error += test_code (prefix, "2004/dbcolor.dwg", cov);
-              error += test_code (prefix, "2004/Truecolor.dwg", cov);
+              error += test_code (prefix, "2004/dbcolor.dwg", cov);   // not in DIST
+              error += test_code (prefix, "2004/Truecolor.dwg", cov); // not in DIST
             }
           if (DWG_TYPE == DWG_TYPE_HELIX)
             {
-              error += test_code (prefix, "2000/work.dwg", cov);
               error += test_code (prefix, "2004/Helix.dwg", cov);
               error += test_code (prefix, "2018/Helix.dwg", cov);
+              error += test_code (prefix, "2000/work.dwg", cov);  // not in DIST
             }
           if (DWG_TYPE == DWG_TYPE_ASSOCPLANESURFACEACTIONBODY ||
               DWG_TYPE == DWG_TYPE_ASSOCEXTRUDEDSURFACEACTIONBODY ||
@@ -269,7 +269,7 @@ main (int argc, char *argv[])
             {
               error += test_code (prefix, "2004/Visualstyle.dwg", cov);
               error += test_code (prefix, "2018/Visualstyle.dwg", cov);
-              error += test_code (prefix, "2010/ACI_20160321_A_30_east.dwg",
+              error += test_code (prefix, "2010/ACI_20160321_A_30_east.dwg",   // not in DIST
                                   cov);
             }
           if (DWG_TYPE == DWG_TYPE_LEADEROBJECTCONTEXTDATA)
@@ -281,11 +281,13 @@ main (int argc, char *argv[])
           if (DWG_TYPE == DWG_TYPE_MLEADEROBJECTCONTEXTDATA
               || DWG_TYPE == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
             {
+              // not in DIST!
               error += test_code (prefix, "2010/ACI_20160321_A_30_east.dwg",
                                   cov);
             }
           if (DWG_TYPE == DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA)
             {
+              // not in DIST!
               error += test_code (prefix, "2013/gh55-ltype.dwg", cov);
               error += test_code (prefix, "2010/ACI_20160321_A_30_east.dwg",
                                   cov);
@@ -293,10 +295,11 @@ main (int argc, char *argv[])
           if (DWG_TYPE == DWG_TYPE_FIELD || DWG_TYPE == DWG_TYPE_FIELDLIST)
             {
               error += test_code (prefix, "2000/TS1.dwg", cov);
-              error += test_code (prefix, "2010/5151-024.dwg", cov);
+              error += test_code (prefix, "2010/5151-024.dwg", cov);  // not in DIST
             }
           if (DWG_TYPE == DWG_TYPE_DATALINK)
             {
+              // not in DIST!
               error += test_code (prefix, "2010/5151-019.dwg", cov);
               error += test_code (prefix, "2010/5151-022.dwg", cov);
               error += test_code (prefix, "2010/5151-023.dwg", cov);
@@ -304,9 +307,9 @@ main (int argc, char *argv[])
             }
           if (DWG_TYPE == DWG_TYPE_DATATABLE)
             {
-              error += test_code (prefix, "2004/fr05_b101_ref.dwg", cov);
               error += test_code (prefix, "2000/TS1.dwg", cov);
-              error += test_code (prefix, "r13/TS1.dwg", cov);
+              error += test_code (prefix, "r13/TS1.dwg", cov);  // not in DIST
+              error += test_code (prefix, "2004/fr05_b101_ref.dwg", cov);  // not in DIST
             }
           if (DWG_TYPE == DWG_TYPE_SORTENTSTABLE)
             {
@@ -317,6 +320,7 @@ main (int argc, char *argv[])
             }
           if (DWG_TYPE == DWG_TYPE_SUN)
             {
+              // not in DIST!
               error += test_code (prefix, "2000/2.dwg", cov);
               error += test_code (prefix, "2000/3.dwg", cov);
               error += test_code (prefix, "2000/4.dwg", cov);
@@ -324,6 +328,7 @@ main (int argc, char *argv[])
             }
           if (DWG_TYPE == DWG_TYPE_SPATIAL_FILTER)
             {
+              // not in DIST!
               error += test_code (prefix, "2013/gh44-error.dwg", cov);
               if (g_countmax == 1000) // only with -a
                 error += test_code (prefix, "../test-big/2007/big.dwg", cov);
@@ -347,63 +352,71 @@ main (int argc, char *argv[])
               DWG_TYPE == DWG_TYPE_ACSH_WEDGE_CLASS)
             {
               error += test_code (prefix, "2007/ATMOS-DC22S.dwg", cov);
-              error += test_code (prefix, "2013/JW.dwg", cov);
+              error += test_code (prefix, "2013/JW.dwg", cov); // not in DIST
             }
-          if (DWG_TYPE == DWG_TYPE_BLOCKVISIBILITYPARAMETER)
+          if (DWG_TYPE == DWG_TYPE_ASSOCVARIABLE ||
+              DWG_TYPE == DWG_TYPE_ASSOCVALUEDEPENDENCY ||
+              DWG_TYPE == DWG_TYPE_ASSOCGEOMDEPENDENCY ||
+              DWG_TYPE == DWG_TYPE_BLOCKBASEPOINTPARAMETER ||
+              DWG_TYPE == DWG_TYPE_BLOCKFLIPACTION ||
+              DWG_TYPE == DWG_TYPE_BLOCKFLIPGRIP ||
+              DWG_TYPE == DWG_TYPE_BLOCKFLIPPARAMETER ||
+              DWG_TYPE == DWG_TYPE_BLOCKLINEARPARAMETER ||
+              DWG_TYPE == DWG_TYPE_BLOCKLINEARGRIP ||
+              DWG_TYPE == DWG_TYPE_BLOCKLOOKUPGRIP ||
+              DWG_TYPE == DWG_TYPE_BLOCKREPRESENTATION ||
+              DWG_TYPE == DWG_TYPE_BLOCKROTATIONACTION ||
+              DWG_TYPE == DWG_TYPE_BLOCKROTATIONPARAMETER ||
+              DWG_TYPE == DWG_TYPE_BLOCKROTATIONGRIP)
             {
-              error += test_code (prefix, "2013/gh44-error.dwg", cov);
               error += test_code (prefix, "2018/Dynblocks.dwg", cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_BLOCKSCALEACTION ||
+              DWG_TYPE == DWG_TYPE_BLOCKMOVEACTION ||
+              DWG_TYPE == DWG_TYPE_BLOCKSTRETCHACTION)
+            {
+              error += test_code (prefix, "2018/Dynblocks.dwg", cov);
+              error += test_code (prefix, "2010/sun_and_sky_demo.dwg", cov); // not in DIST
+            }
+          if (DWG_TYPE == DWG_TYPE_BLOCKVISIBILITYPARAMETER ||
+              DWG_TYPE == DWG_TYPE_BLOCKVISIBILITYGRIP ||
+              DWG_TYPE == DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT)
+            {
+              error += test_code (prefix, "2018/Dynblocks.dwg", cov);
+              error += test_code (prefix, "2013/gh44-error.dwg", cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_BLOCKALIGNMENTPARAMETER ||
+              DWG_TYPE == DWG_TYPE_BLOCKALIGNMENTGRIP)
+            {
+              error += test_code (prefix, "2018/Dynblocks.dwg", cov);
+              error += test_code (prefix, "2013/flipped.dwg", cov); // not in DIST
             }
           if (DWG_TYPE == DWG_TYPE_BLOCKVISIBILITYGRIP ||
               DWG_TYPE == DWG_TYPE_EVALUATION_GRAPH ||
               DWG_TYPE == DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT ||
-              DWG_TYPE == DWG_TYPE_BLOCKLINEARPARAMETER ||
               DWG_TYPE == DWG_TYPE_BLOCKPOINTPARAMETER ||
               DWG_TYPE == DWG_TYPE_ALDIMOBJECTCONTEXTDATA ||
               DWG_TYPE == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
             {
               error += test_code (prefix, "2013/gh44-error.dwg", cov);
+              // not in DIST!
               error += test_code (
                   prefix,
                   "../test-old/AC1021/from_knowledge.autodesk.com/"
                   "blocks_and_tables_-_metric.dwg",
                   cov);
             }
-          if (DWG_TYPE == DWG_TYPE_BLOCKSCALEACTION ||
-              DWG_TYPE == DWG_TYPE_BLOCKMOVEACTION ||
-              DWG_TYPE == DWG_TYPE_BLOCKSTRETCHACTION)
-            {
-              error += test_code (prefix, "2010/sun_and_sky_demo.dwg", cov);
-              error += test_code (prefix, "2018/Dynblocks.dwg", cov);
-            }
-          if (DWG_TYPE == DWG_TYPE_BLOCKMOVEACTION ||
-              DWG_TYPE == DWG_TYPE_BLOCKLOOKUPACTION ||
+          if (DWG_TYPE == DWG_TYPE_BLOCKLOOKUPACTION ||
               DWG_TYPE == DWG_TYPE_BLOCKLOOKUPPARAMETER ||
               DWG_TYPE == DWG_TYPE_BLOCKLOOKUPGRIP ||
               DWG_TYPE == DWG_TYPE_BLOCKXYPARAMETER)
             {
+              // not in DIST!
               error += test_code (prefix, "2010/sun_and_sky_demo.dwg", cov);
-            }
-          if (DWG_TYPE == DWG_TYPE_BLOCKALIGNMENTPARAMETER)
-            {
-              error += test_code (prefix, "2013/flipped.dwg", cov);
-              error += test_code (prefix, "2018/Dynblocks.dwg", cov);
-            }
-          if (DWG_TYPE == DWG_TYPE_ASSOCVARIABLE ||
-              DWG_TYPE == DWG_TYPE_BLOCKBASEPOINTPARAMETER ||
-              DWG_TYPE == DWG_TYPE_BLOCKFLIPPARAMETER ||
-              DWG_TYPE == DWG_TYPE_BLOCKLINEARPARAMETER ||
-              DWG_TYPE == DWG_TYPE_BLOCKROTATIONPARAMETER ||
-              DWG_TYPE == DWG_TYPE_BLOCKFLIPACTION ||
-              DWG_TYPE == DWG_TYPE_BLOCKFLIPGRIP ||
-              DWG_TYPE == DWG_TYPE_BLOCKLINEARGRIP ||
-              DWG_TYPE == DWG_TYPE_BLOCKLOOKUPGRIP ||
-              DWG_TYPE == DWG_TYPE_BLOCKSTRETCHACTION)
-            {
-              error += test_code (prefix, "2018/Dynblocks.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_POINTCLOUDCOLORMAP)
             {
+              // not in DIST!
               error += test_code (prefix, "2004/double_free_example.dwg", cov);
             }
         }
