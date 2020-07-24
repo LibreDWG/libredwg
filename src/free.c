@@ -242,6 +242,13 @@ static BITCODE_BL rcount1, rcount2;
         }                                                                     \
       FREE_IF (_obj->o.name)                                                  \
     }
+#define SUB_FIELD_VECTOR(o, nam, sizefield, type, dxf)                        \
+  if (_obj->o.sizefield && _obj->o.nam)                                       \
+    {                                                                         \
+      for (vcount = 0; vcount < (BITCODE_BL) (_obj->o.sizefield); vcount++)   \
+        SUB_FIELD_##type (o, nam[vcount], dxf);                               \
+    }                                                                         \
+  FREE_IF (_obj->o.nam)
 
 #define FIELD_NUM_INSERTS(num_inserts, type, dxf)
 #define FIELD_XDATA(name, size) dwg_free_xdata (_obj, _obj->size)
