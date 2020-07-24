@@ -276,6 +276,8 @@ TESTDATA = \
     test-data/2018/ConstructionLine.txt \
     test-data/2018/Donut.dwg \
     test-data/2018/Donut.txt \
+    test-data/2018/Dynblocks.dwg \
+    test-data/2018/Dynblocks.dxf \
     test-data/2018/Ellipse.dwg \
     test-data/2018/Ellipse.txt \
     test-data/2018/Helix.dwg \

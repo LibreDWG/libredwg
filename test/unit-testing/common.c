@@ -352,10 +352,7 @@ main (int argc, char *argv[])
           if (DWG_TYPE == DWG_TYPE_BLOCKVISIBILITYPARAMETER)
             {
               error += test_code (prefix, "2013/gh44-error.dwg", cov);
-              error += test_code (
-                  prefix,
-                  "../test-old/AC1015/1/Ashraf_Basic_File-1_Feet_input_2.dwg",
-                  cov);
+              error += test_code (prefix, "2018/Dynblocks.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_BLOCKVISIBILITYGRIP ||
               DWG_TYPE == DWG_TYPE_EVALUATION_GRAPH ||
@@ -377,10 +374,7 @@ main (int argc, char *argv[])
               DWG_TYPE == DWG_TYPE_BLOCKSTRETCHACTION)
             {
               error += test_code (prefix, "2010/sun_and_sky_demo.dwg", cov);
-              error += test_code (
-                  prefix,
-                  "../test-old/AC1015/1/Ashraf_Basic_File-1_Feet_input_2.dwg",
-                  cov);
+              error += test_code (prefix, "2018/Dynblocks.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_BLOCKMOVEACTION ||
               DWG_TYPE == DWG_TYPE_BLOCKLOOKUPACTION ||
@@ -393,10 +387,7 @@ main (int argc, char *argv[])
           if (DWG_TYPE == DWG_TYPE_BLOCKALIGNMENTPARAMETER)
             {
               error += test_code (prefix, "2013/flipped.dwg", cov);
-              error += test_code (
-                  prefix,
-                  "../test-old/AC1015/1/Ashraf_Basic_File-1_Feet_input_2.dwg",
-                  cov);
+              error += test_code (prefix, "2018/Dynblocks.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_ASSOCVARIABLE ||
               DWG_TYPE == DWG_TYPE_BLOCKBASEPOINTPARAMETER ||
@@ -409,10 +400,7 @@ main (int argc, char *argv[])
               DWG_TYPE == DWG_TYPE_BLOCKLOOKUPGRIP ||
               DWG_TYPE == DWG_TYPE_BLOCKSTRETCHACTION)
             {
-              error += test_code (
-                  prefix,
-                  "../test-old/AC1015/1/Ashraf_Basic_File-1_Feet_input_2.dwg",
-                  cov);
+              error += test_code (prefix, "2018/Dynblocks.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_POINTCLOUDCOLORMAP)
             {
@@ -1199,14 +1187,14 @@ api_common_entity (dwg_object *obj)
     BITCODE_##typ _value;                                                     \
     bool _ok;                                                                 \
     if (dwg_dynapi_entity_fields (#name))                                     \
-      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);      \
+      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);     \
     else                                                                      \
-      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &_value, NULL);    \
+      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &_value, NULL);   \
     if (!_ok)                                                                 \
       fail (#name "." #field);                                                \
     else                                                                      \
       {                                                                       \
-        if (ptr.field == _value)                                               \
+        if (ptr.field == _value)                                              \
           {                                                                   \
             if (g_counter > g_countmax)                                       \
               pass ();                                                        \
@@ -1220,56 +1208,56 @@ api_common_entity (dwg_object *obj)
   }
 #define CHK_SUBCLASS_3RD(ptr, name, field)                                    \
   {                                                                           \
-    BITCODE_3RD _value;                                                        \
+    BITCODE_3RD _value;                                                       \
     bool _ok;                                                                 \
     if (dwg_dynapi_entity_fields (#name))                                     \
-      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);      \
+      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);     \
     else                                                                      \
-      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &_value, NULL);    \
+      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &_value, NULL);   \
     if (!_ok)                                                                 \
       fail (#name "." #field);                                                \
     else                                                                      \
       {                                                                       \
-        if (_value.x == ptr.field.x && _value.y == ptr.field.y                  \
-            && _value.z == ptr.field.z)                                        \
+        if (_value.x == ptr.field.x && _value.y == ptr.field.y                \
+            && _value.z == ptr.field.z)                                       \
           {                                                                   \
             if (g_counter > g_countmax)                                       \
               pass ();                                                        \
             else                                                              \
-              ok (#name "." #field ":\t(%f, %f, %f)", _value.x, _value.y,       \
-                  _value.z);                                                   \
+              ok (#name "." #field ":\t(%f, %f, %f)", _value.x, _value.y,     \
+                  _value.z);                                                  \
           }                                                                   \
         else                                                                  \
-          fail (#name "." #field ":\t(%f, %f, %f)", _value.x, _value.y,         \
-                _value.z);                                                     \
+          fail (#name "." #field ":\t(%f, %f, %f)", _value.x, _value.y,       \
+                _value.z);                                                    \
       }                                                                       \
   }
 
 #define CHK_SUBCLASS_3DPOINTS(ptr, name, field, num)                          \
   {                                                                           \
-    BITCODE_3RD *_value = NULL;                                                \
+    BITCODE_3RD *_value = NULL;                                               \
     bool _ok;                                                                 \
     if (dwg_dynapi_entity_fields (#name))                                     \
-      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);      \
+      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);     \
     else                                                                      \
-      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &_value, NULL);    \
+      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &_value, NULL);   \
     if (!_ok)                                                                 \
       fail (#name "." #field);                                                \
-    else if (!_value)                                                          \
+    else if (!_value)                                                         \
       pass ();                                                                \
     else                                                                      \
       {                                                                       \
         for (unsigned _i = 0; _i < (num); _i++)                               \
           {                                                                   \
-            if (_value[_i].x == ptr.field[_i].x                                \
-                && _value[_i].y == ptr.field[_i].y                             \
-                && _value[_i].z == ptr.field[_i].z)                            \
+            if (_value[_i].x == ptr.field[_i].x                               \
+                && _value[_i].y == ptr.field[_i].y                            \
+                && _value[_i].z == ptr.field[_i].z)                           \
               {                                                               \
                 if (g_counter > g_countmax)                                   \
                   pass ();                                                    \
                 else                                                          \
-                  ok (#name "." #field "[%d]:\t(%f, %f, %f)", i, _value[_i].x, \
-                      _value[_i].y, _value[_i].z);                            \
+                  ok (#name "." #field "[%d]:\t(%f, %f, %f)", i,              \
+                      _value[_i].x, _value[_i].y, _value[_i].z);              \
               }                                                               \
             else                                                              \
               fail (#name "." #field "[%d]:\t(%f, %f, %f)", i, _value[_i].x,  \
@@ -1363,11 +1351,11 @@ api_common_entity (dwg_object *obj)
               pass ();                                                        \
             else                                                              \
               ok (#name "." #field ":\t %s " FORMAT_REF, _hdlname ?: "",      \
-                  ARGS_REF (_value));                                          \
+                  ARGS_REF (_value));                                         \
           }                                                                   \
         else                                                                  \
           fail (#name "." #field ":\t %s " FORMAT_REF, _hdlname ?: "",        \
-                ARGS_REF (_value));                                            \
+                ARGS_REF (_value));                                           \
         if (_hdlname && dwg_version >= R_2007)                                \
           free (_hdlname);                                                    \
       }                                                                       \
@@ -1387,11 +1375,13 @@ api_common_entity (dwg_object *obj)
               if (g_counter > g_countmax)                                     \
                 pass ();                                                      \
               else                                                            \
-                ok (#name "." #field "[%d]: " FORMAT_REF, _i, ARGS_REF (_hdl)); \
+                ok (#name "." #field "[%d]: " FORMAT_REF, _i,                 \
+                    ARGS_REF (_hdl));                                         \
             }                                                                 \
           else                                                                \
             {                                                                 \
-              fail (#name "." #field "[%d]: " FORMAT_REF, _i, ARGS_REF (_hdl)); \
+              fail (#name "." #field "[%d]: " FORMAT_REF, _i,                 \
+                    ARGS_REF (_hdl));                                         \
             }                                                                 \
         }                                                                     \
     }
@@ -1400,50 +1390,50 @@ api_common_entity (dwg_object *obj)
     BITCODE_##type *_value = NULL;                                            \
     bool _ok;                                                                 \
     if (dwg_dynapi_entity_fields (#name))                                     \
-      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);      \
+      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);     \
     else                                                                      \
-      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &_value, NULL);    \
+      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &_value, NULL);   \
     if (!_ok)                                                                 \
       fail (#name "." #field);                                                \
-    else if (!_value)                                                          \
+    else if (!_value)                                                         \
       pass ();                                                                \
     else                                                                      \
       {                                                                       \
         for (unsigned _i = 0; _i < (num); _i++)                               \
           {                                                                   \
-            if (_value[_i] == ptr.field[_i])                                   \
+            if (_value[_i] == ptr.field[_i])                                  \
               {                                                               \
                 if (g_counter > g_countmax)                                   \
                   pass ();                                                    \
                 else                                                          \
                   ok (#name "." #field "[%d]:\t " FORMAT_##type, _i,          \
-                      _value[_i]);                                             \
+                      _value[_i]);                                            \
               }                                                               \
             else                                                              \
               fail (#name "." #field "[%d]:\t " FORMAT_##type, _i,            \
-                    _value[_i]);                                               \
+                    _value[_i]);                                              \
           }                                                                   \
       }                                                                       \
   }
 #define CHK_SUBCLASS_UTF8TEXT(ptr, name, field)                               \
   {                                                                           \
-    BITCODE_TV _value;                                                         \
+    BITCODE_TV _value;                                                        \
     bool _ok;                                                                 \
     if (dwg_dynapi_entity_fields (#name))                                     \
-      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);      \
+      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);     \
     else                                                                      \
-      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &_value, NULL);    \
+      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &_value, NULL);   \
     if (_ok)                                                                  \
       {                                                                       \
         if (g_counter > g_countmax)                                           \
           pass ();                                                            \
         else                                                                  \
-          ok (#name "." #field ":\t\"%s\"", _value);                           \
+          ok (#name "." #field ":\t\"%s\"", _value);                          \
       }                                                                       \
     else                                                                      \
       {                                                                       \
         if (dwg_version < R_2007)                                             \
-          fail (#name "." #field ":\t\"%s\"", _value);                         \
+          fail (#name "." #field ":\t\"%s\"", _value);                        \
         else                                                                  \
           fail (#name "." #field);                                            \
       }                                                                       \
@@ -1486,69 +1476,69 @@ api_common_object (dwg_object *obj)
   CHK_COMMON_TYPE (_obj, num_eed, BL);
 }
 
-#define CHK_EVALEXPR(type)                                           \
-  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, parentid, BLd);       \
-  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, major, BL);           \
-  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, minor, BL);           \
-  /* variant_DXF type */                                             \
-  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value_code, BSd);     \
-  /* variant_value's */                                              \
-  switch (_obj->evalexpr.value_code)                                 \
-    {                                                                \
-    case 40:                                                         \
-      CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value.num40, BD); \
-      break;                                                         \
-    case 10:                                                         \
-      CHK_SUBCLASS_2RD (_obj->evalexpr, EvalExpr, value.pt2d);       \
-      break;                                                         \
-    case 11:                                                         \
-      CHK_SUBCLASS_3RD (_obj->evalexpr, EvalExpr, value.pt3d);       \
-      break;                                                         \
-    case 1:                                                          \
-      CHK_SUBCLASS_UTF8TEXT (_obj->evalexpr, EvalExpr, value.text1); \
-      break;                                                         \
-    case 90:                                                         \
-      CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value.long90, BL);\
-      break;                                                         \
-    case 91:                                                         \
-      CHK_SUBCLASS_H (_obj->evalexpr, EvalExpr, value.handle91);     \
-      break;                                                         \
-    case 70:                                                         \
-      CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value.short70, BS);\
-      break;                                                         \
-    case -9999:                                                      \
-    default:                                                         \
-      break;                                                         \
-    }                                                                \
+#define CHK_EVALEXPR(type)                                                    \
+  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, parentid, BLd);                \
+  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, major, BL);                    \
+  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, minor, BL);                    \
+  /* variant_DXF type */                                                      \
+  CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value_code, BSd);              \
+  /* variant_value's */                                                       \
+  switch (_obj->evalexpr.value_code)                                          \
+    {                                                                         \
+    case 40:                                                                  \
+      CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value.num40, BD);          \
+      break;                                                                  \
+    case 10:                                                                  \
+      CHK_SUBCLASS_2RD (_obj->evalexpr, EvalExpr, value.pt2d);                \
+      break;                                                                  \
+    case 11:                                                                  \
+      CHK_SUBCLASS_3RD (_obj->evalexpr, EvalExpr, value.pt3d);                \
+      break;                                                                  \
+    case 1:                                                                   \
+      CHK_SUBCLASS_UTF8TEXT (_obj->evalexpr, EvalExpr, value.text1);          \
+      break;                                                                  \
+    case 90:                                                                  \
+      CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value.long90, BL);         \
+      break;                                                                  \
+    case 91:                                                                  \
+      CHK_SUBCLASS_H (_obj->evalexpr, EvalExpr, value.handle91);              \
+      break;                                                                  \
+    case 70:                                                                  \
+      CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, value.short70, BS);        \
+      break;                                                                  \
+    case -9999:                                                               \
+    default:                                                                  \
+      break;                                                                  \
+    }                                                                         \
   CHK_SUBCLASS_TYPE (_obj->evalexpr, EvalExpr, nodeid, BL)
 
-#define CHK_ACSH_HISTORYNODE()                                          \
-  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, major, BL);  \
-  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, minor, BL);  \
-  /* last 16x nums 40-55 */                                             \
-  if (!dwg_dynapi_subclass_value (&_obj->history_node,                  \
-               "ACSH_HistoryNode", "trans", &trans, NULL))              \
-    fail ("ACSH_HistoryNode.trans");                                    \
-  else                                                                  \
-    {                                                                   \
-      bool good = 1;                                                    \
-      for (int i = 0; i < 16; i += 4)                                   \
-        {                                                               \
-          for (int j = i; j < i+4; j++)                                 \
-            { /* catches nan */                                         \
-              if (trans[j] != _obj->history_node.trans[j])              \
-                good = 0;                                               \
-            }                                                           \
-          if (good)                                                     \
-            ok ("ACSH_HistoryNode.trans[%d]: (%f, %f, %f, %f)", i,      \
-              trans[i], trans[i+1], trans[i+2], trans[i+3]);            \
-          else                                                          \
-            fail ("ACSH_HistoryNode.trans[%d]: (%f, %f, %f, %f)", i,    \
-              trans[i], trans[i+1], trans[i+2], trans[i+3]);            \
-        }                                                               \
-    }                                                                   \
-  CHK_SUBCLASS_CMC (_obj->history_node, ACSH_HistoryNode, color);       \
-  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, step_id, BL);\
+#define CHK_ACSH_HISTORYNODE()                                                \
+  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, major, BL);        \
+  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, minor, BL);        \
+  /* last 16x nums 40-55 */                                                   \
+  if (!dwg_dynapi_subclass_value (&_obj->history_node, "ACSH_HistoryNode",    \
+                                  "trans", &trans, NULL))                     \
+    fail ("ACSH_HistoryNode.trans");                                          \
+  else                                                                        \
+    {                                                                         \
+      bool good = 1;                                                          \
+      for (int i = 0; i < 16; i += 4)                                         \
+        {                                                                     \
+          for (int j = i; j < i + 4; j++)                                     \
+            { /* catches nan */                                               \
+              if (trans[j] != _obj->history_node.trans[j])                    \
+                good = 0;                                                     \
+            }                                                                 \
+          if (good)                                                           \
+            ok ("ACSH_HistoryNode.trans[%d]: (%f, %f, %f, %f)", i, trans[i],  \
+                trans[i + 1], trans[i + 2], trans[i + 3]);                    \
+          else                                                                \
+            fail ("ACSH_HistoryNode.trans[%d]: (%f, %f, %f, %f)", i,          \
+                  trans[i], trans[i + 1], trans[i + 2], trans[i + 3]);        \
+        }                                                                     \
+    }                                                                         \
+  CHK_SUBCLASS_CMC (_obj->history_node, ACSH_HistoryNode, color);             \
+  CHK_SUBCLASS_TYPE (_obj->history_node, ACSH_HistoryNode, step_id, BL);      \
   CHK_SUBCLASS_H (_obj->history_node, ACSH_HistoryNode, material)
 
 #define CHK_VALUEPARAM(numfield, valprefix)                                   \
@@ -1618,21 +1608,23 @@ api_common_object (dwg_object *obj)
     CHK_VALUEPARAM (pab.num_values, pab.values);                              \
   }
 
-#define BLOCKPARAMETER_PropInfo(_prop)                                  \
-  {                                                                     \
-    Dwg_BLOCKPARAMETER_connection *connections;                         \
-    CHK_SUBCLASS_TYPE (_obj->_prop, BLOCKPARAMETER_PropInfo, num_connections, BL); \
-    if (!dwg_dynapi_subclass_value (&_obj->_prop, "BLOCKPARAMETER_PropInfo", \
-                                    "connections", &connections, NULL)) \
-      fail ("BLOCKPARAMETER." #_prop ".connections");                   \
-    else                                                                \
-      for (i = 0; i < _obj->_prop.num_connections; i++)                 \
-        {                                                               \
-          CHK_SUBCLASS_TYPE (_obj->_prop.connections[i], BLOCKPARAMETER_connection, code, BL); \
-          CHK_SUBCLASS_UTF8TEXT (_obj->_prop.connections[i], BLOCKPARAMETER_connection, name); \
-        }                                                               \
+#define BLOCKPARAMETER_PropInfo(_prop)                                        \
+  {                                                                           \
+    Dwg_BLOCKPARAMETER_connection *connections;                               \
+    CHK_SUBCLASS_TYPE (_obj->_prop, BLOCKPARAMETER_PropInfo, num_connections, \
+                       BL);                                                   \
+    if (!dwg_dynapi_subclass_value (&_obj->_prop, "BLOCKPARAMETER_PropInfo",  \
+                                    "connections", &connections, NULL))       \
+      fail ("BLOCKPARAMETER." #_prop ".connections");                         \
+    else                                                                      \
+      for (i = 0; i < _obj->_prop.num_connections; i++)                       \
+        {                                                                     \
+          CHK_SUBCLASS_TYPE (_obj->_prop.connections[i],                      \
+                             BLOCKPARAMETER_connection, code, BL);            \
+          CHK_SUBCLASS_UTF8TEXT (_obj->_prop.connections[i],                  \
+                                 BLOCKPARAMETER_connection, name);            \
+        }                                                                     \
   }
-
 
 // allow old deprecated API
 GCC31_DIAG_IGNORE (-Wdeprecated-declarations)
