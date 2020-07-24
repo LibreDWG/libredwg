@@ -2946,8 +2946,10 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           CHK_paths;
 
 #define CHK_polyline_paths                                                    \
-  if (!o->paths[j].segs || k < 0 || k >= (int)o->paths[j].num_segs_or_paths)  \
+  if (!o->paths[j].polyline_paths || k < 0                                    \
+      || k >= (int)o->paths[j].num_segs_or_paths)                             \
     return NULL;                                                              \
+  assert (o->paths[j].polyline_paths);                                        \
   assert (k >= 0);                                                            \
   assert (k < (int)o->paths[j].num_segs_or_paths)
 
