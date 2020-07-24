@@ -1431,6 +1431,8 @@ static const Dwg_DYNAPI_field _dwg_BLOCK_fields[] = {
     1,1,0, 0 },
   { "name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_BLOCK, name),
     1,1,1, 2 },
+  { "filename",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_entity_BLOCK, filename),
+    1,1,1, 4 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_CAMERA: (sorted by offset) */

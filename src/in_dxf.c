@@ -10261,7 +10261,8 @@ new_object (char *restrict name, char *restrict dxfname,
               else if (strEQc (name, "BLOCK")
                        && (pair->code == 70 || pair->code == 10
                            || pair->code == 20 || pair->code == 30
-                           || pair->code == 3 || pair->code == 1))
+                           || pair->code == 3 || pair->code == 1
+                           || pair->code == 4))
                 ; // ignore those BLOCK fields. DXF artifacts
               else if (strEQc (name, "DIMENSION")
                        && (pair->code == 2 || pair->code == 210

@@ -1174,6 +1174,8 @@ struct _dwg_object_entity*
 struct _dwg_object_entity*
 @item name
 T,	DXF 2
+@item filename
+T,	DXF 4
 
 @end vtable
 @end indentedblock

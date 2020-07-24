@@ -1247,7 +1247,8 @@ typedef struct _dwg_entity_BLOCK
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_T name;
+  BITCODE_T name;     // DXF 1, 2 and 3
+  BITCODE_T filename; // DXF 4
 } Dwg_Entity_BLOCK;
 
 /**

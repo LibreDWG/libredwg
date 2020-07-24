@@ -416,7 +416,7 @@ DWG_ENTITY (BLOCK)
       }
     BLOCK_NAME (name, 3); // special pre-R13 naming rules
     VALUE_TFF ("", 1); // fixme. name if not in mspace
-    //FIXME FIELD_T (filename. 4);
+    FIELD_T0 (filename, 4);
   }
 #endif
 

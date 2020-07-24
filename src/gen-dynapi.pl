@@ -408,6 +408,7 @@ sub dxfin_spec {
 }
 dxfin_spec "$srcdir/dwg.spec";
 $DXF{'BLOCK'}->{'name'} = 2; # and 3
+$DXF{'BLOCK'}->{'filename'} = 4;
 $DXF{'INSERT'}->{'block_header'} = 2;
 $DXF{'MINSERT'}->{'block_header'} = 2;
 $DXF{'POLYLINE_3D'}->{'flag'} = 70;

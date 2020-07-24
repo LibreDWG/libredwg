@@ -7583,6 +7583,16 @@ static int test_BLOCK (const Dwg_Object *obj)
   Dwg_Entity_BLOCK *restrict block = obj->tio.entity->tio.BLOCK;
   failed = 0;
   {
+    BITCODE_T filename;
+    if (dwg_dynapi_entity_value (block, "BLOCK", "filename", &filename, NULL)
+        && filename
+           ? strEQ ((char *)filename, (char *)block->filename)
+           : !block->filename)
+      pass ();
+    else
+      fail ("BLOCK.filename [T] '%s' <> '%s'", filename, block->filename);
+  }
+  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (block, "BLOCK", "name", &name, NULL)
         && name
