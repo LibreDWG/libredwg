@@ -514,10 +514,12 @@ if test -n "$TIMEOUT"; then
   AC_MSG_RESULT([$timeout_version])
   TIMEOUT_10="$TIMEOUT 10"
   TIMEOUT_30="$TIMEOUT 30"
+  TIMEOUT_50="$TIMEOUT 50"
 fi
 AM_CONDITIONAL([HAVE_TIMEOUT], [test -n "$TIMEOUT"])
 AC_SUBST([TIMEOUT_10])
 AC_SUBST([TIMEOUT_30])
+AC_SUBST([TIMEOUT_50])
 
 dnl build-aux/missing catches an outdated /usr/bin/makeinfo 4.8 on darwin 10.11
 dnl the texi2any version >6 is needed for @indentedblock
