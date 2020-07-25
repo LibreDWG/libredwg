@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_BLOCKALIGNMENTGRIP
 #include "common.c"
 
@@ -10,7 +9,6 @@ api_process (dwg_object *obj)
   BITCODE_3BD orientation;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_blockalignmentgrip *_obj = dwg_object_to_BLOCKALIGNMENTGRIP (obj);
 
   CHK_EVALEXPR (BLOCKALIGNMENTGRIP);
@@ -27,5 +25,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKALIGNMENTGRIP, bg_insert_cycling_weight, BLd);
   // AcDbBlockAlignmentGrip
   CHK_ENTITY_3RD  (_obj, BLOCKALIGNMENTGRIP, orientation);
-#endif
 }

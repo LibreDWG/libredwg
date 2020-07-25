@@ -365,7 +365,7 @@ main (int argc, char *argv[])
               DWG_TYPE == DWG_TYPE_BLOCKLINEARGRIP ||
               DWG_TYPE == DWG_TYPE_BLOCKLOOKUPGRIP ||
               DWG_TYPE == DWG_TYPE_BLOCKREPRESENTATION ||
-              DWG_TYPE == DWG_TYPE_BLOCKROTATIONACTION ||
+              DWG_TYPE == DWG_TYPE_BLOCKROTATEACTION ||
               DWG_TYPE == DWG_TYPE_BLOCKROTATIONPARAMETER ||
               DWG_TYPE == DWG_TYPE_BLOCKROTATIONGRIP)
             {

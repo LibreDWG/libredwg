@@ -8220,6 +8220,20 @@ DWG_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+DWG_OBJECT (BLOCKALIGNMENTGRIP)
+  AcDbBlockGrip_fields;
+  SUBCLASS (AcDbBlockAlignmentGrip)
+  FIELD_3BD_1 (orientation, 140);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKALIGNMENTPARAMETER)
+  AcDbBlock2PtParameter_fields;
+  SUBCLASS (AcDbBlockAlignmentParameter)
+  FIELD_B (align_perpendicular, 280)
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 DWG_OBJECT (BLOCKLINEARPARAMETER)
   AcDbBlock2PtParameter_fields;
   SUBCLASS (AcDbBlockLinearParameter)
@@ -8313,6 +8327,32 @@ DWG_OBJECT (BLOCKFLIPACTION)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+DWG_OBJECT (BLOCKROTATIONPARAMETER)
+  AcDbBlock2PtParameter_fields;
+  SUBCLASS (AcDbBlockRotationParameter)
+  FIELD_3BD (def_base_angle_pt, 0);
+  FIELD_T (angle_name, 305);
+  FIELD_T (angle_desc, 306);
+  DXF { FIELD_3BD (def_base_angle_pt, 1011); }
+  FIELD_BD (angle, 140);
+  AcDbBlockParamValueSet_fields (angle_value_set,96,141,175,307);
+  //FIELD_3BD (base_angle_pt, 0);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKROTATEACTION)
+  AcDbBlockActionWithBasePt_fields;
+  SUBCLASS (AcDbBlockRotateAction)
+  BlockAction_ConnectionPt (conn_pt3, 94, 303);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKROTATIONGRIP)
+  AcDbBlockGrip_fields;
+  SUBCLASS (AcDbBlockRotationGrip)
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 DWG_OBJECT (BLOCKSCALEACTION)
   AcDbBlockActionWithBasePt_fields;
   SUBCLASS (AcDbBlockScaleAction)
@@ -8339,19 +8379,6 @@ DWG_OBJECT (BLOCKSTRETCHACTION)
   FIELD_VECTOR (codes, BL, num_codes, 76);
   // ...
   AcDbBlockAction_doubles_fields;
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (BLOCKROTATIONPARAMETER)
-  AcDbBlock2PtParameter_fields;
-  SUBCLASS (AcDbBlockRotationParameter)
-  FIELD_3BD (def_base_angle_pt, 0);
-  FIELD_T (angle_name, 305);
-  FIELD_T (angle_desc, 306);
-  DXF { FIELD_3BD (def_base_angle_pt, 1011); }
-  FIELD_BD (angle, 140);
-  AcDbBlockParamValueSet_fields (angle_value_set,96,141,175,307);
-  //FIELD_3BD (base_angle_pt, 0);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -10391,20 +10418,12 @@ DWG_ENTITY_END
 
 // DYNBLOCKs:
 
-DWG_OBJECT (BLOCKALIGNMENTGRIP)
+DWG_OBJECT (BLOCKREPRESENTATION)
   DECODE_UNKNOWN_BITS
-  AcDbBlockGrip_fields;
-  SUBCLASS (AcDbBlockAlignmentGrip)
-  FIELD_3BD_1 (orientation, 140);
+  // 2 byte missing
+  SUBCLASS (AcDbBlockRepresentationData)
   START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (BLOCKALIGNMENTPARAMETER)
-  DECODE_UNKNOWN_BITS
-  AcDbBlock2PtParameter_fields; //?
-  SUBCLASS (AcDbBlockAlignmentParameter)
-  FIELD_B (align_perpendicular, 280)
-  START_OBJECT_HANDLE_STREAM;
+  // 1-2 handles missing (@13.1-20.0)
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKARRAYACTION)
@@ -10609,27 +10628,6 @@ DWG_OBJECT (BLOCKPROPERTIESTABLEGRIP)
   DECODE_UNKNOWN_BITS
   AcDbBlockGrip_fields;
   SUBCLASS (AcDbBlockPropertiesTableGrip)
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (BLOCKREPRESENTATION)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbBlockRepresentationData)
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (BLOCKROTATEACTION)
-  DECODE_UNKNOWN_BITS
-  AcDbBlockActionWithBasePt_fields;
-  SUBCLASS (AcDbBlockRotateAction)
-  BlockAction_ConnectionPt (conn_pt3, 94, 303);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (BLOCKROTATIONGRIP)
-  DECODE_UNKNOWN_BITS
-  AcDbBlockGrip_fields;
-  SUBCLASS (AcDbBlockRotationGrip)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

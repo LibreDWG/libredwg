@@ -5090,6 +5090,8 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               i++;
               while (!(o->associativity & (1 << i)) && i < 4) // popcount x
                 i++;
+              if (i > 3)
+                i = 3;
               assert (i >= 0 && i <= 3);
             }
           if (dwg->header.version >= R_2007)

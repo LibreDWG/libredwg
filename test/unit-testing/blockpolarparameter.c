@@ -38,10 +38,10 @@ api_process (dwg_object *obj)
   BLOCKPARAMETER_PropInfo (prop4)
   CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKPOLARPARAMETER, prop_states, 4, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKPOLARPARAMETER, parameter_base_location, BS);
-  CHK_ENTITY_3RD  (_obj, BLOCKPOLARPARAMETER, upd_basept);
-  CHK_ENTITY_3RD  (_obj, BLOCKPOLARPARAMETER, basept);
-  CHK_ENTITY_3RD  (_obj, BLOCKPOLARPARAMETER, upd_endpt);
-  CHK_ENTITY_3RD  (_obj, BLOCKPOLARPARAMETER, endpt);
+  //CHK_ENTITY_3RD  (_obj, BLOCKPOLARPARAMETER, upd_basept);
+  //CHK_ENTITY_3RD  (_obj, BLOCKPOLARPARAMETER, basept);
+  //CHK_ENTITY_3RD  (_obj, BLOCKPOLARPARAMETER, upd_endpt);
+  //CHK_ENTITY_3RD  (_obj, BLOCKPOLARPARAMETER, endpt);
   // AcDbBlockPolarParameter
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKPOLARPARAMETER, angle_name);
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKPOLARPARAMETER, angle_desc);
