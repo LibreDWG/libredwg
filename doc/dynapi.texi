@@ -11290,7 +11290,7 @@ BD,	DXF 40
 @item arrow_position
 BLd,	DXF 90
 @item arrow_symbol_extension_length
-BD
+BD,	DXF 40
 @item plane_ltype
 H,	DXF 340
 @item plane_linewt

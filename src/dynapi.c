@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1926 "gen-dynapi.pl"
+#line 1927 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -9717,7 +9717,7 @@ static const Dwg_DYNAPI_field _dwg_SECTIONVIEWSTYLE_fields[] = {
   { "arrow_position",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, arrow_position),
     0,0,0, 90 },
   { "arrow_symbol_extension_length",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, arrow_symbol_extension_length),
-    0,0,0, 0 },
+    0,0,0, 40 },
   { "plane_ltype",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, plane_ltype),
     1,0,0, 340 },
   { "plane_linewt",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_object_SECTIONVIEWSTYLE, plane_linewt),
@@ -13657,7 +13657,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 
 };
 
-#line 2010 "gen-dynapi.pl"
+#line 2011 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

@@ -6877,6 +6877,107 @@ add_AcDbBlockGrip (Dwg_Object *restrict obj, char *o,
   return NULL;
 }
 
+typedef int t_codes[4];
+
+// varying dxf codes per object
+// returns NULL on success
+static Dxf_Pair *
+add_AcDbBlockParamValueSet (Dwg_Object *restrict obj, Dwg_BLOCKPARAMVALUESET *o,
+                            Bit_Chain *restrict dat, Dxf_Pair *restrict pair)
+{
+  Dwg_Data *dwg = obj->parent;
+  // i_code,d_code,s_code,t_code
+  const t_codes codes[] = {
+                   { 96, 128, 175, 307 }, // 0 AcDbBlock{Linear,Diametric,Radial,Angular}ConstraintParameter{,Entity}
+                   { 96, 141, 175, 307 }, // 1 BLOCKLINEARPARAMETER.value_set
+                   { 96, 141, 175, 307 }, // 2 BLOCKROTATIONPARAMETER.angle_value_set
+                   { 97, 146, 176, 309 }, // 3 BLOCKXYPARAMETER.y_value_set
+                   { 96, 142, 175, 410 }, // 4 BLOCKXYPARAMETER.x_value_set
+                   { 96, 142, 175, 410 }, // 5 BLOCKPOLARPARAMETER.angle_value_set
+                   { 97, 146, 176, 309 }, // 6 BLOCKPOLARPARAMETER.distance_value_set
+  };
+  const t_codes *code;
+
+  // T at first
+  if (pair->code == 307)
+    {
+      if (strEQc (obj->name, "BLOCKLINEARPARAMETER"))
+        code = &codes[1];
+      else if (strEQc (obj->name, "BLOCKROTATIONPARAMETER"))
+        code = &codes[2];
+      else
+        code = &codes[0]; // AcDbBlock{Linear,Diametric,Radial,Angular}ConstraintParameter{,Entity}
+    }
+  else if (pair->code == 309)
+    {
+      if (strEQc (obj->name, "BLOCKXYPARAMETER"))
+        code = &codes[3];
+      else if (strEQc (obj->name, "BLOCKPOLARPARAMETER"))
+        code = &codes[6];
+    }
+  else if (pair->code == 410)
+    {
+      if (strEQc (obj->name, "BLOCKXYPARAMETER"))
+        code = &codes[4];
+      else if (strEQc (obj->name, "BLOCKPOLARPARAMETER"))
+        code = &codes[5];
+    }
+  // subclass not object
+  EXPECT_DXF ("BlockParamValueSet", "desc", (*code)[3]); // t_code
+  o->desc = strdup (pair->value.s);
+  LOG_TRACE ("%s.BlockParamValueSet.desc = \"%s\"\n", obj->name, pair->value.s);
+  dxf_free_pair (pair);
+
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF ("BlockParamValueSet", "flags", (*code)[0]); // i_code
+  o->flags = pair->value.i;
+  LOG_TRACE ("%s.BlockParamValueSet.flags = %d\n", obj->name, pair->value.i);
+  dxf_free_pair (pair);
+
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF ("BlockParamValueSet", "minimum", (*code)[1]); // d_code
+  o->minimum = pair->value.d;
+  LOG_TRACE ("%s.BlockParamValueSet.minimum = %f\n", obj->name, pair->value.d);
+  dxf_free_pair (pair);
+
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF ("BlockParamValueSet", "maximum", (*code)[1]+1);
+  o->maximum = pair->value.d;
+  LOG_TRACE ("%s.BlockParamValueSet.maximum = %f\n", obj->name, pair->value.d);
+  dxf_free_pair (pair);
+
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF ("BlockParamValueSet", "increment", (*code)[1]+2);
+  o->increment = pair->value.d;
+  LOG_TRACE ("%s.BlockParamValueSet.increment = %f\n", obj->name, pair->value.d);
+  dxf_free_pair (pair);
+
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF ("BlockParamValueSet", "num_valuelist", (*code)[2]); // s_code
+  o->num_valuelist = pair->value.i;
+  LOG_TRACE ("%s.BlockParamValueSet.num_valuelist = %d\n", obj->name, pair->value.i);
+  dxf_free_pair (pair);
+
+  //FIELD_VECTOR (valuelist, num_valuelist, BD, code[1]+3);
+  if (!o->num_valuelist)
+    return NULL;
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF ("BLOCKPARAMVALUESET", valuelist[0], (*code)[1]+3);
+  o->valuelist = xcalloc (o->num_valuelist, sizeof (double));
+  if (!o->valuelist)
+    return pair;
+  o->valuelist[0] = pair->value.d;
+  dxf_free_pair (pair);
+  for (unsigned i = 1; i < o->num_valuelist; i++)
+    {
+      pair = dxf_read_pair (dat);
+      EXPECT_DXF ("BLOCKPARAMVALUESET", valuelist[i], (*code)[1]+3);
+      o->valuelist[i] = pair->value.d;
+      dxf_free_pair (pair);
+    }
+  return NULL;
+}
+
 #define FIELD_CMC(field, dxf)                                                 \
   {                                                                           \
     dxf_read_CMC (dwg, dat, &o->field, dxf);                                  \
@@ -9348,6 +9449,117 @@ new_object (char *restrict name, char *restrict dxfname,
           else if (pair->code == 91 && strEQc (subclass, "AcDbBlockgrip"))
             {
               pair = add_AcDbBlockGrip (obj, (char *)_obj, dat, pair);
+              if (!pair) // success
+                goto start_loop;
+              else
+                goto search_field;
+            }
+          else if (pair->code == 307
+                   && strEQc (subclass, "AcDbBlockLinearConstraintParameter"))
+            {
+              Dwg_BLOCKPARAMVALUESET *value_set
+                  = &((Dwg_Object_BLOCKALIGNEDCONSTRAINTPARAMETER *)_obj)
+                         ->value_set;
+              pair = add_AcDbBlockParamValueSet (obj, value_set, dat, pair);
+              if (!pair) // success
+                goto start_loop;
+              else
+                goto search_field;
+            }
+          else if (pair->code == 307 && strEQc (obj->name, "BLOCKLINEARPARAMETER"))
+            {
+              Dwg_BLOCKPARAMVALUESET *value_set
+                  = &((Dwg_Object_BLOCKLINEARPARAMETER *)_obj)
+                         ->value_set;
+              pair = add_AcDbBlockParamValueSet (obj, value_set, dat, pair);
+              if (!pair) // success
+                goto start_loop;
+              else
+                goto search_field;
+            }
+          else if (pair->code == 307 && strEQc (obj->name, "BLOCKROTATIONPARAMETER"))
+            {
+              Dwg_BLOCKPARAMVALUESET *value_set
+                  = &((Dwg_Object_BLOCKROTATIONPARAMETER *)_obj)
+                         ->angle_value_set;
+              pair = add_AcDbBlockParamValueSet (obj, value_set, dat, pair);
+              if (!pair) // success
+                goto start_loop;
+              else
+                goto search_field;
+            }
+          else if (pair->code == 307 && strEQc (obj->name, "BLOCKANGULARCONSTRAINTPARAMETER"))
+            {
+              Dwg_BLOCKPARAMVALUESET *value_set
+                  = &((Dwg_Object_BLOCKANGULARCONSTRAINTPARAMETER *)_obj)
+                         ->value_set;
+              pair = add_AcDbBlockParamValueSet (obj, value_set, dat, pair);
+              if (!pair) // success
+                goto start_loop;
+              else
+                goto search_field;
+            }
+          else if (pair->code == 307 && strEQc (obj->name, "BLOCKDIAMETRICCONSTRAINTPARAMETER"))
+            {
+              Dwg_BLOCKPARAMVALUESET *value_set
+                  = &((Dwg_Object_BLOCKDIAMETRICCONSTRAINTPARAMETER *)_obj)
+                         ->value_set;
+              pair = add_AcDbBlockParamValueSet (obj, value_set, dat, pair);
+              if (!pair) // success
+                goto start_loop;
+              else
+                goto search_field;
+            }
+          else if (pair->code == 307 && strEQc (obj->name, "BLOCKRADIALCONSTRAINTPARAMETER"))
+            {
+              Dwg_BLOCKPARAMVALUESET *value_set
+                  = &((Dwg_Object_BLOCKRADIALCONSTRAINTPARAMETER *)_obj)
+                         ->value_set;
+              pair = add_AcDbBlockParamValueSet (obj, value_set, dat, pair);
+              if (!pair) // success
+                goto start_loop;
+              else
+                goto search_field;
+            }
+          else if (pair->code == 309 && strEQc (obj->name, "BLOCKXYPARAMETER"))
+            {
+              Dwg_BLOCKPARAMVALUESET *value_set
+                  = &((Dwg_Object_BLOCKXYPARAMETER *)_obj)
+                         ->y_value_set;
+              pair = add_AcDbBlockParamValueSet (obj, value_set, dat, pair);
+              if (!pair) // success
+                goto start_loop;
+              else
+                goto search_field;
+            }
+          else if (pair->code == 309 && strEQc (obj->name, "BLOCKPOLARPARAMETER"))
+            {
+              Dwg_BLOCKPARAMVALUESET *value_set
+                  = &((Dwg_Object_BLOCKPOLARPARAMETER *)_obj)
+                         ->distance_value_set;
+              pair = add_AcDbBlockParamValueSet (obj, value_set, dat, pair);
+              if (!pair) // success
+                goto start_loop;
+              else
+                goto search_field;
+            }
+          else if (pair->code == 410 && strEQc (obj->name, "BLOCKXYPARAMETER"))
+            {
+              Dwg_BLOCKPARAMVALUESET *value_set
+                  = &((Dwg_Object_BLOCKXYPARAMETER *)_obj)
+                         ->x_value_set;
+              pair = add_AcDbBlockParamValueSet (obj, value_set, dat, pair);
+              if (!pair) // success
+                goto start_loop;
+              else
+                goto search_field;
+            }
+          else if (pair->code == 410 && strEQc (obj->name, "BLOCKPOLARPARAMETER"))
+            {
+              Dwg_BLOCKPARAMVALUESET *value_set
+                  = &((Dwg_Object_BLOCKPOLARPARAMETER *)_obj)
+                         ->angle_value_set;
+              pair = add_AcDbBlockParamValueSet (obj, value_set, dat, pair);
               if (!pair) // success
                 goto start_loop;
               else
