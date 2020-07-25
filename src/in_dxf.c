@@ -821,7 +821,7 @@ dxf_find_lweight (const int lw)
 // FIXME: support 430 (name), 440 (alpha)
 static int
 dxf_read_CMC (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
-              BITCODE_CMC *restrict color, const int dxf)
+              BITCODE_CMC *restrict color, const char *fieldname, const int dxf)
 {
   int error = 1;
   unsigned long pos = bit_position (dat);
@@ -838,31 +838,33 @@ dxf_read_CMC (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           color->index = 256;
           color->rgb = pair->value.l;
           color->rgb |= 0xc2000000;
+          LOG_TRACE ("%s.rgb = 0x%08x [%s %d]\n", fieldname, color->rgb, "CMC",
+                     pair->code);
         }
-      LOG_TRACE ("color.index = %d [%s %d]\n", pair->value.i, "CMC",
+      LOG_TRACE ("%s.index = %d [%s %d]\n", fieldname, color->index, "CMC",
                  pair->code);
       // optional 420, 430, 440 fields
       pos = bit_position (dat);
-      error = dxf_read_CMC (dwg, dat, color, dxf);
+      error = dxf_read_CMC (dwg, dat, color, fieldname, dxf);
     }
   else if (pair->code < 430 && pair->code == (dxf + 420 - 62)) // truecolor
     {
       color->rgb = pair->value.l;
       color->rgb |= 0xc3000000;
-      LOG_TRACE ("color.rgb = 0x%08x [%s %d]\n", color->rgb, "CMC",
+      LOG_TRACE ("%s.rgb = 0x%08x [%s %d]\n", fieldname, color->rgb, "CMC",
                  pair->code);
       error = 0;
     }
   // TODO 430, 440
   else if (pair->code < 440 && pair->code == (dxf + 430 - 62)) // name
     {
-      LOG_WARN ("color.name %s ignored [%s %d]", pair->value.s, "CMC",
+      LOG_WARN ("%s.name %s ignored [%s %d]", fieldname, pair->value.s, "CMC",
                  pair->code);
       error = 0;
     }
   else if (pair->code < 450 && pair->code == (dxf + 440 - 62)) // alpha
     {
-      LOG_WARN ("color.alpha %ld ignored [%s %d]", pair->value.l, "CMC",
+      LOG_WARN ("%s.alpha %ld ignored [%s %d]", fieldname, pair->value.l, "CMC",
                  pair->code);
       error = 0;
     }
@@ -6855,7 +6857,7 @@ add_AcDbBlockElement (Dwg_Object *restrict obj, char *o,
                       Bit_Chain *restrict dat, Dxf_Pair *restrict pair)
 {
   Dwg_Data *dwg = obj->parent;
-  FIELD_T (name, 300);
+  EXPECT_T_DXF ("name", 300);
   FIELD_BL (be_major, 98);
   FIELD_BL (be_minor, 99);
   FIELD_BL (eed1071, 1071);
@@ -6869,7 +6871,7 @@ add_AcDbBlockGrip (Dwg_Object *restrict obj, char *o,
                    Bit_Chain *restrict dat, Dxf_Pair *restrict pair)
 {
   Dwg_Data *dwg = obj->parent;
-  FIELD_BL (bg_bl91, 91);
+  EXPECT_INT_DXF ("bg_bl91", 91, BL);
   FIELD_BL (bg_bl92, 92);
   FIELD_3BD (bg_location, 1010);
   FIELD_B (bg_insert_cycling, 280);
@@ -6979,15 +6981,12 @@ add_AcDbBlockParamValueSet (Dwg_Object *restrict obj, Dwg_BLOCKPARAMVALUESET *o,
 }
 
 #define FIELD_CMC(field, dxf)                                                 \
-  {                                                                           \
-    dxf_read_CMC (dwg, dat, &o->field, dxf);                                  \
-  }
+  dxf_read_CMC (dwg, dat, &o->field, #field, dxf)
 #define FIELD_CMC2004(field, dxf)                                             \
-  if (dwg->header.from_version >= R_2004)                                     \
-  {                                                                           \
-    dxf_read_CMC (dwg, dat, &o->field, dxf);                                  \
-  }
+  SINCE (R_2004)                                                              \
+    FIELD_CMC (field, dxf)
 
+// starts with 71 . 0
 // returns NULL on success
 static Dxf_Pair *
 add_AcDbSectionViewStyle (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
@@ -6995,7 +6994,7 @@ add_AcDbSectionViewStyle (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   Dwg_Data *dwg = obj->parent;
   Dwg_Object_SECTIONVIEWSTYLE *o = obj->tio.object->tio.SECTIONVIEWSTYLE;
   BITCODE_BD *av;
-  // starting with 71 . 0
+  // starting with 71 . 0 (skipped)
   Dxf_Pair *pair;
   FIELD_BL (flags, 90);
   pair = dxf_read_pair (dat);              // skip 71 . 1
@@ -7007,6 +7006,8 @@ add_AcDbSectionViewStyle (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_CMC2004 (arrow_symbol_color, 62);
   FIELD_BD (arrow_symbol_size, 40);
   FIELD_T (identifier_exclude_characters, 300); // I, O, Q, S, X, Z
+  // 40 90 40 90 71
+  FIELD_BD (arrow_symbol_extension_length, 40);
   FIELD_BLd (identifier_position, 90);
   FIELD_BD (identifier_offset, 40);
   FIELD_BLd (arrow_position, 90);

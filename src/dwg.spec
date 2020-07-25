@@ -9676,13 +9676,13 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
   }
   FIELD_BD (arrow_symbol_size, 40);
   FIELD_T (identifier_exclude_characters, 300); // I, O, Q, S, X, Z
+  FIELD_BD (arrow_symbol_extension_length, 40);
   DXF {
     FIELD_BLd (identifier_position, 90);
     FIELD_BD (identifier_offset, 40);
     FIELD_BLd (arrow_position, 90);
     VALUE_BS (2, 71);
   }
-  FIELD_BD (arrow_symbol_extension_length, 0);
   FIELD_HANDLE (plane_ltype, 5, 340); // ltype
   FIELD_BLd (plane_linewt, 90);
   DXF { SINCE (R_2004) {
