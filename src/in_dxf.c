@@ -5495,7 +5495,7 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   EXPECT_INT_DXF ("class_version", 90, BS);
   FIELD_BL (geometry_status, 90);
   FIELD_HANDLE (owningnetwork, 4, 330);
-  FIELD_HANDLE (actionbody, 4, 330);
+  FIELD_HANDLE (actionbody, 3, 360);
   FIELD_BL (action_index, 90);
   FIELD_BL (max_assoc_dep_index, 90);
 
