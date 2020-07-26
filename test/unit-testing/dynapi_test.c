@@ -42859,31 +42859,6 @@ static int test_BLOCKVISIBILITYPARAMETER (const Dwg_Object *obj)
     blockvisibilityparameter->chain_actions--;
   }
   {
-    BITCODE_BL cur_state;
-    if (dwg_dynapi_entity_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "cur_state", &cur_state, NULL)
-        && cur_state == blockvisibilityparameter->cur_state)
-      pass ();
-    else
-      fail ("BLOCKVISIBILITYPARAMETER.cur_state [BL] %u != %u", blockvisibilityparameter->cur_state, cur_state);
-    cur_state++;
-    if (dwg_dynapi_entity_set_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "cur_state", &cur_state, 0)
-        && cur_state == blockvisibilityparameter->cur_state)
-      pass ();
-    else
-      fail ("BLOCKVISIBILITYPARAMETER.cur_state [BL] set+1 %u != %u", blockvisibilityparameter->cur_state, cur_state);
-    blockvisibilityparameter->cur_state--;
-  }
-  {
-    BITCODE_T cur_state_name;
-    if (dwg_dynapi_entity_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "cur_state_name", &cur_state_name, NULL)
-        && cur_state_name
-           ? strEQ ((char *)cur_state_name, (char *)blockvisibilityparameter->cur_state_name)
-           : !blockvisibilityparameter->cur_state_name)
-      pass ();
-    else
-      fail ("BLOCKVISIBILITYPARAMETER.cur_state_name [T] '%s' <> '%s'", cur_state_name, blockvisibilityparameter->cur_state_name);
-  }
-  {
     BITCODE_3BD def_pt;
     if (dwg_dynapi_entity_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "def_pt", &def_pt, NULL)
         && !memcmp (&def_pt, &blockvisibilityparameter->def_pt, sizeof (BITCODE_3BD)))

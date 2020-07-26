@@ -1466,7 +1466,6 @@ match_BLOCKVISIBILITYPARAMETER (const char *restrict filename,
     {
       MATCH_OBJECT (BLOCKVISIBILITYPARAMETER, states[i].name, 303);
     }
-  MATCH_OBJECT (BLOCKVISIBILITYPARAMETER, cur_state_name, 0);
   return found;
 }
 static int

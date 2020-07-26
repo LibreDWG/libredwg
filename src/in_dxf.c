@@ -6879,6 +6879,99 @@ add_AcDbBlockGrip (Dwg_Object *restrict obj, char *o,
   return NULL;
 }
 
+// starts with BL 93
+// returns NULL on success
+static Dxf_Pair *
+add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
+                                  Dwg_Object_BLOCKVISIBILITYPARAMETER *o,
+                                  Bit_Chain *restrict dat, Dxf_Pair *restrict pair)
+{
+  Dwg_Data *dwg = obj->parent;
+  EXPECT_INT_DXF ("num_blocks", 93, BL);
+  if (o->num_blocks)
+    {
+      o->blocks = xcalloc (o->num_blocks, sizeof (BITCODE_H));
+      if (!o->blocks)
+        return pair;
+      for (unsigned i = 0; i < o->num_blocks; i++)
+        {
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, o->blocks[i], 331);
+          o->blocks[i] = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+          LOG_TRACE ("%s.blocks[%d] = " FORMAT_REF " [H 331]\n", obj->name, i,
+                     ARGS_REF (o->blocks[i]));
+          dxf_free_pair (pair);
+        }
+    }
+
+  FIELD_BL (num_states, 92);
+  if (o->num_states)
+    {
+      o->states = xcalloc (o->num_states, sizeof (Dwg_BLOCKVISIBILITYPARAMETER_state));
+      if (!o->states)
+        return pair;
+      for (unsigned i = 0; i < o->num_states; i++)
+        {
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, o->states[i].name, 303);
+          o->states[i].name = strdup (pair->value.s);
+          LOG_TRACE ("%s.states[%d].name = %s [T 303]\n", obj->name, i, o->states[i].name);
+          dxf_free_pair (pair);
+
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, o->states[i].num_blocks, 94);
+          o->states[i].num_blocks = pair->value.u;
+          LOG_TRACE ("%s.states[%d].num_blocks = %u [BL 94]\n", obj->name, i,
+                     o->states[i].num_blocks);
+          dxf_free_pair (pair);
+
+          if (o->states[i].num_blocks)
+            {
+              o->states[i].blocks = xcalloc (o->states[i].num_blocks, sizeof (BITCODE_H));
+              if (!o->states[i].blocks)
+                return pair;
+              for (unsigned j = 0; j < o->states[i].num_blocks; j++)
+                {
+                  pair = dxf_read_pair (dat);
+                  EXPECT_DXF (obj->name, o->states[i].blocks[j], 332);
+                  o->states[i].blocks[j]
+                      = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+                  LOG_TRACE (
+                      "%s.states[%d].blocks[%d] = " FORMAT_REF " [H 332]\n",
+                      obj->name, i, j, ARGS_REF (o->states[i].blocks[j]));
+                  dxf_free_pair (pair);
+                }
+            }
+
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, o->states[i].num_params, 95);
+          o->states[i].num_params = pair->value.u;
+          LOG_TRACE ("%s.states[%d].num_params = %u [BL 95]\n", obj->name, i,
+                     o->states[i].num_params);
+          dxf_free_pair (pair);
+
+          if (o->states[i].num_params)
+            {
+              o->states[i].params = xcalloc (o->states[i].num_params, sizeof (BITCODE_H));
+              if (!o->states[i].params)
+                return pair;
+              for (unsigned j = 0; j < o->states[i].num_params; j++)
+                {
+                  pair = dxf_read_pair (dat);
+                  EXPECT_DXF (obj->name, o->states[i].params[j], 333);
+                  o->states[i].params[j]
+                      = dwg_add_handleref (dwg, 5, pair->value.u, NULL);
+                  LOG_TRACE (
+                      "%s.states[%d].params[%d] = " FORMAT_REF " [H 333]\n",
+                      obj->name, i, j, ARGS_REF (o->states[i].params[j]));
+                  dxf_free_pair (pair);
+                }
+            }
+        }
+    }
+  return NULL;
+}
+
 // starts empty
 // returns NULL on success
 static Dxf_Pair *
@@ -6947,6 +7040,7 @@ add_AcDbBlock1PtParameter (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   pair = dxf_read_pair (dat);
   EXPECT_DXF (obj->name, "num_propinfos", 93); // 2
   o->num_propinfos = pair->value.u;
+  LOG_TRACE ("%s.num_propinfos = %u [BL 93]\n", obj->name, pair->value.u);
   dxf_free_pair (pair);
 
   pair = add_BlockParam_PropInfo (obj, dat, &o->prop1, 1, 170, 91, 301);
@@ -9622,6 +9716,15 @@ new_object (char *restrict name, char *restrict dxfname,
           else if (pair->code == 91 && strEQc (subclass, "AcDbBlockgrip"))
             {
               pair = add_AcDbBlockGrip (obj, (char *)_obj, dat, pair);
+              if (!pair) // success
+                goto start_loop;
+              else
+                goto search_field;
+            }
+          else if (pair->code == 93 && strEQc (subclass, "AcDbBlockVisibilityParameter"))
+            {
+              pair = add_AcDbBlockVisibilityParameter (
+                  obj, (Dwg_Object_BLOCKVISIBILITYPARAMETER *)_obj, dat, pair);
               if (!pair) // success
                 goto start_loop;
               else

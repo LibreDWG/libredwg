@@ -7133,8 +7133,8 @@ typedef struct _dwg_object_BLOCKVISIBILITYPARAMETER
   BITCODE_H *blocks;		// DXF 331
   BITCODE_BL num_states;	// DXF 92
   Dwg_BLOCKVISIBILITYPARAMETER_state *states;
-  BITCODE_T cur_state_name;
-  BITCODE_BL cur_state;
+  //BITCODE_T cur_state_name;
+  //BITCODE_BL cur_state;
 } Dwg_Object_BLOCKVISIBILITYPARAMETER;
 
 typedef struct _dwg_object_BLOCKVISIBILITYGRIP

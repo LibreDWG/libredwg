@@ -16,8 +16,8 @@ api_process (dwg_object *obj)
   BITCODE_BL num_states;
   Dwg_BLOCKVISIBILITYPARAMETER_state *states;
   BITCODE_H *params;
-  BITCODE_T cur_state_name;
-  BITCODE_BL cur_state;
+  //BITCODE_T cur_state_name;
+  //BITCODE_BL cur_state;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_blockvisibilityparameter *_obj = dwg_object_to_BLOCKVISIBILITYPARAMETER (obj);
@@ -57,6 +57,6 @@ api_process (dwg_object *obj)
         CHK_SUBCLASS_TYPE (states[i], BLOCKVISIBILITYPARAMETER_state, num_params, BL);
         CHK_SUBCLASS_HV (states[i], BLOCKVISIBILITYPARAMETER_state, params, states[i].num_params);
       }
-  CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYPARAMETER, cur_state, B);
-  CHK_ENTITY_UTF8TEXT (_obj, BLOCKVISIBILITYPARAMETER, cur_state_name);
+  //CHK_ENTITY_TYPE (_obj, BLOCKVISIBILITYPARAMETER, cur_state, B);
+  //CHK_ENTITY_UTF8TEXT (_obj, BLOCKVISIBILITYPARAMETER, cur_state_name);
 }

@@ -8575,10 +8575,6 @@ H*,	DXF 331
 BL,	DXF 92
 @item states
 Dwg_BLOCKVISIBILITYPARAMETER_state*
-@item cur_state_name
-T
-@item cur_state
-BL
 
 @end vtable
 @end indentedblock

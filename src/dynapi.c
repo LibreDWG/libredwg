@@ -7566,10 +7566,6 @@ static const Dwg_DYNAPI_field _dwg_BLOCKVISIBILITYPARAMETER_fields[] = {
     0,0,0, 92 },
   { "states",	"Dwg_BLOCKVISIBILITYPARAMETER_state*", sizeof (Dwg_BLOCKVISIBILITYPARAMETER_state*),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, states),
     1,1,0, 0 },
-  { "cur_state_name",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, cur_state_name),
-    1,1,1, 0 },
-  { "cur_state",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKVISIBILITYPARAMETER, cur_state),
-    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_BLOCKXYGRIP: (sorted by offset) */
