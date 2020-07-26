@@ -6849,7 +6849,6 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj, char *_obj,
   return pair;
 }
 
-
 // starts with T 300
 // returns NULL on success
 static Dxf_Pair *
@@ -6861,6 +6860,54 @@ add_AcDbBlockElement (Dwg_Object *restrict obj, char *o,
   FIELD_BL (be_major, 98);
   FIELD_BL (be_minor, 99);
   FIELD_BL (eed1071, 1071);
+  return NULL;
+}
+
+// starts with 100
+// returns NULL on success
+static Dxf_Pair *
+add_AcDbBlockAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Data *dwg = obj->parent;
+  // all with the same offset
+  Dwg_Object_BLOCKMOVEACTION *o = obj->tio.object->tio.BLOCKMOVEACTION;
+  Dxf_Pair *pair;
+
+  FIELD_BL (num_actions, 70);
+  if (o->num_actions)
+    {
+      //FIELD_VECTOR (actions, BL, num_actions, 91);
+      o->actions = xcalloc (o->num_actions, sizeof (BITCODE_BL));
+      if (!o->actions)
+        return pair;
+      for (unsigned i = 0; i < o->num_actions; i++)
+        {
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, o->actions[i], 91);
+          o->actions[i] = pair->value.u;
+          LOG_TRACE ("%s.actions[%d] = %u [BL 91]\n", obj->name, i,
+                     o->actions[i]);
+          dxf_free_pair (pair);
+        }
+    }
+  FIELD_BL (num_deps, 71);
+  //HANDLE_VECTOR (deps, num_deps, 5, 330);
+  if (o->num_deps)
+    {
+      o->deps = xcalloc (o->num_deps, sizeof (BITCODE_H));
+      if (!o->deps)
+        return pair;
+      for (unsigned i = 0; i < o->num_deps; i++)
+        {
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, o->deps[i], 330);
+          o->deps[i] = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+          LOG_TRACE ("%s.deps[%d] = " FORMAT_REF " [H 330]\n", obj->name, i,
+                     ARGS_REF (o->deps[i]));
+          dxf_free_pair (pair);
+        }
+    }
+  FIELD_3BD (display_location, 1010);
   return NULL;
 }
 
@@ -8506,6 +8553,15 @@ new_object (char *restrict name, char *restrict dxfname,
                 {
                   dxf_free_pair (pair);
                   pair = add_AcDbBlock2PtParameter (obj, dat);
+                  if (!pair) // NULL for success
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              else if (strEQc (subclass, "AcDbBlockAction"))
+                {
+                  dxf_free_pair (pair);
+                  pair = add_AcDbBlockAction (obj, dat);
                   if (!pair) // NULL for success
                     goto next_pair;
                   else
