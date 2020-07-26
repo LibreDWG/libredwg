@@ -156,31 +156,24 @@ static Dxf_Objs *dxf_objs;
 #define FIELD_3BD(field, dxf)                                                 \
   if (dxf)                                                                    \
     {                                                                         \
-      double x, y;                                                            \
-      strcpy (buf, #field);                                                   \
-      strcat (buf, ".x");                                                     \
+      BITCODE_3BD pt;                                                         \
       pair = dxf_read_pair (dat);                                             \
       EXPECT_DXF (obj->name, #field, dxf);                                    \
-      dwg_dynapi_entity_set_value (o, obj->name, buf, &pair->value, 1);       \
-      x = pair->value.d;                                                      \
+      pt.x = pair->value.d;                                                   \
       dxf_free_pair (pair);                                                   \
                                                                               \
       pair = dxf_read_pair (dat);                                             \
       EXPECT_DXF (obj->name, #field, dxf + 10);                               \
-      strcpy (buf, #field);                                                   \
-      strcat (buf, ".y");                                                     \
-      dwg_dynapi_entity_set_value (o, obj->name, buf, &pair->value, 1);       \
-      y = pair->value.d;                                                      \
+      pt.y = pair->value.d;                                                   \
       dxf_free_pair (pair);                                                   \
                                                                               \
       pair = dxf_read_pair (dat);                                             \
       EXPECT_DXF (obj->name, #field, dxf + 20);                               \
-      strcpy (buf, #field);                                                   \
-      strcat (buf, ".z");                                                     \
-      dwg_dynapi_entity_set_value (o, obj->name, buf, &pair->value, 1);       \
+      pt.z = pair->value.d;                                                   \
+      dwg_dynapi_entity_set_value (o, obj->name, #field, &pt, 1);             \
+      LOG_TRACE ("%s.%s = (%f, %f, %f) [3BD %d]\n", obj->name, #field, pt.x,  \
+                 pt.y, pt.z, pair->code - 20);                                \
       dxf_free_pair (pair);                                                   \
-      LOG_TRACE ("%s.%s = (%f, %f, %f) [3BD %d]\n", obj->name, #field, x, y,  \
-                 pair->value.d, pair->code);                                  \
     }
 #define FIELD_HANDLE(field, code, dxf)                                        \
   if (dxf)                                                                    \
