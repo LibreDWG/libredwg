@@ -8159,7 +8159,7 @@ DWG_OBJECT_END
   FIELD_3BD (def_basept, 1010);                   \
   FIELD_3BD (def_endpt, 1011);                    \
   DXF {                                           \
-    VALUE_BL (4, 170);                            \
+    VALUE_BL (4, 170); /* =num_prop_states */     \
     FIELD_VECTOR_N (prop_states, BL, 4, 91);      \
   }                                               \
   BlockParam_PropInfo (prop1, 171, 92, 301);      \

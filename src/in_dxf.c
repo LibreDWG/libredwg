@@ -6879,6 +6879,119 @@ add_AcDbBlockGrip (Dwg_Object *restrict obj, char *o,
   return NULL;
 }
 
+// starts empty
+// returns NULL on success
+static Dxf_Pair *
+add_BlockParam_PropInfo (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                         Dwg_BLOCKPARAMETER_PropInfo *prop, const int i,
+                         const int num_code, const int d_code, const int t_code)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
+
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, prop->num_connections, num_code);
+  prop->num_connections = pair->value.u;
+  LOG_TRACE ("%s.prop%d.num_connections = %u [BL %d]\n", obj->name, i,
+             pair->value.u, num_code);
+  dxf_free_pair (pair);
+  if (prop->num_connections)
+    {
+      prop->connections = xcalloc (prop->num_connections, sizeof (Dwg_BLOCKPARAMETER_connection));
+      if (!prop->connections)
+        return pair;
+      for (unsigned j = 0; j < prop->num_connections; j++)
+        {
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, prop->connections[j].code, d_code);
+          prop->connections[j].code = pair->value.u;
+          LOG_TRACE ("%s.prop[%d].connections[%u].code = %u [BL %d]\n", obj->name, i, j,
+                     pair->value.u, d_code);
+          dxf_free_pair (pair);
+
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, prop->connections[j].name, t_code);
+          prop->connections[j].name = strdup (pair->value.s);
+          LOG_TRACE ("%s.prop[%d].connections[%u].name = %s [T %d]\n", obj->name, i, j,
+                     pair->value.s, t_code);
+          dxf_free_pair (pair);
+        }
+    }
+  return NULL;
+}
+
+// starts empty (on 100 . subclass)
+// returns NULL on success
+static Dxf_Pair *
+add_AcDbBlock2PtParameter (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Object_BLOCKALIGNMENTPARAMETER *o = obj->tio.object->tio.BLOCKALIGNMENTPARAMETER;
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair * pair;
+
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, "def_basept.x", 1010);
+  o->def_basept.x = pair->value.d;
+  dxf_free_pair (pair);
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, "def_basept.y", 1020);
+  o->def_basept.y = pair->value.d;
+  dxf_free_pair (pair);
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, "def_basept.z", 1030);
+  o->def_basept.z = pair->value.d;
+  LOG_TRACE ("%s.def_basept = (%f, %f, %f) [3BD 1010]\n", obj->name, o->def_basept.x,
+             o->def_basept.y, pair->value.d);
+  dxf_free_pair (pair);
+
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, "def_endpt.x", 1011);
+  o->def_endpt.x = pair->value.d;
+  dxf_free_pair (pair);
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, "def_endpt.y", 1021);
+  o->def_endpt.y = pair->value.d;
+  dxf_free_pair (pair);
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, "def_endpt.z", 1031);
+  o->def_endpt.z = pair->value.d;
+  LOG_TRACE ("%s.def_endpt = (%f, %f, %f) [3BD 1011]\n", obj->name, o->def_endpt.x,
+             o->def_endpt.y, pair->value.d);
+  dxf_free_pair (pair);
+
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, "num_prop_states", 170);
+  LOG_TRACE ("%s.num_prop_states = %d [BL 170]\n", obj->name, pair->value.u);
+  dxf_free_pair (pair);
+  o->prop_states = xcalloc (4, sizeof (double));
+  if (!o->prop_states)
+    return pair;
+  for (unsigned i = 0; i < 4; i++)
+    {
+      pair = dxf_read_pair (dat);
+      EXPECT_DXF (obj->name, prop_states[i], 91);
+      o->prop_states[i] = pair->value.u;
+      LOG_TRACE ("%s.prop_states[%d] = %u [BL 91]\n", obj->name, i, pair->value.u);
+      dxf_free_pair (pair);
+    }
+
+  pair = add_BlockParam_PropInfo (obj, dat, &o->prop1, 1, 171, 92, 301);
+  if (pair)
+    return pair;
+  pair = add_BlockParam_PropInfo (obj, dat, &o->prop2, 2, 172, 93, 302);
+  if (pair)
+    return pair;
+  pair = add_BlockParam_PropInfo (obj, dat, &o->prop3, 3, 173, 94, 303);
+  if (pair)
+    return pair;
+  pair = add_BlockParam_PropInfo (obj, dat, &o->prop4, 4, 174, 95, 304);
+  if (pair)
+    return pair;
+
+  FIELD_BS (parameter_base_location, 177);
+  return NULL;
+}
+
 typedef int t_codes[4];
 
 // varying dxf codes per object
@@ -6888,16 +7001,17 @@ add_AcDbBlockParamValueSet (Dwg_Object *restrict obj, Dwg_BLOCKPARAMVALUESET *o,
                             Bit_Chain *restrict dat, Dxf_Pair *restrict pair)
 {
   Dwg_Data *dwg = obj->parent;
-  // i_code,d_code,s_code,t_code
-  const t_codes codes[] = {
-                   { 96, 128, 175, 307 }, // 0 AcDbBlock{Linear,Diametric,Radial,Angular}ConstraintParameter{,Entity}
-                   { 96, 141, 175, 307 }, // 1 BLOCKLINEARPARAMETER.value_set
-                   { 96, 141, 175, 307 }, // 2 BLOCKROTATIONPARAMETER.angle_value_set
-                   { 97, 146, 176, 309 }, // 3 BLOCKXYPARAMETER.y_value_set
-                   { 96, 142, 175, 410 }, // 4 BLOCKXYPARAMETER.x_value_set
-                   { 96, 142, 175, 410 }, // 5 BLOCKPOLARPARAMETER.angle_value_set
-                   { 97, 146, 176, 309 }, // 6 BLOCKPOLARPARAMETER.distance_value_set
-  };
+  // i_code, d_code, s_code, t_code
+  const t_codes codes[] =
+    {
+     { 96, 128, 175, 307 }, // 0 AcDbBlock{Linear,Diametric,Radial,Angular}ConstraintParameter{,Entity}
+     { 96, 141, 175, 307 }, // 1 BLOCKLINEARPARAMETER.value_set
+     { 96, 141, 175, 307 }, // 2 BLOCKROTATIONPARAMETER.angle_value_set
+     { 97, 146, 176, 309 }, // 3 BLOCKXYPARAMETER.y_value_set
+     { 96, 142, 175, 410 }, // 4 BLOCKXYPARAMETER.x_value_set
+     { 96, 142, 175, 410 }, // 5 BLOCKPOLARPARAMETER.angle_value_set
+     { 97, 146, 176, 309 }, // 6 BLOCKPOLARPARAMETER.distance_value_set
+    };
   const t_codes *code;
 
   // T at first
@@ -8241,6 +8355,16 @@ new_object (char *restrict name, char *restrict dxfname,
                   pair = dxf_read_pair (dat);
                   pair = add_ASSOCNETWORK (obj, dat, pair); // NULL for success
                   if (!pair)
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              // DYNBLOCK
+              else if (strEQc (subclass, "AcDbBlock2PtParameter"))
+                {
+                  dxf_free_pair (pair);
+                  pair = add_AcDbBlock2PtParameter (obj, dat);
+                  if (!pair) // NULL for success
                     goto next_pair;
                   else
                     goto start_loop; /* failure */
