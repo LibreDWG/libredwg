@@ -6904,6 +6904,187 @@ add_AcDbBlockAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   return NULL;
 }
 
+// starts with 100
+// returns NULL on success
+static Dxf_Pair *
+add_BlockAction_ConnectionPt (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                              const char *field, const int bl_code, const int t_code)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_BLOCKFLIPACTION *o = obj->tio.object->tio.BLOCKFLIPACTION;
+  Dxf_Pair *pair;
+  Dwg_BLOCKACTION_connectionpts conn_pt;
+  const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field (obj->name, field);
+  pair = dxf_read_pair (dat);
+  if (!f)
+    return pair;
+  EXPECT_DXF (obj->name, field, bl_code);
+  conn_pt.code = pair->value.u;
+  LOG_TRACE ("%s.%s.code = %u [BL %d]\n", obj->name, field, pair->value.u, bl_code);
+  dxf_free_pair (pair);
+
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, field, t_code);
+  conn_pt.name = pair->value.s;
+  dwg_dynapi_field_set_value (dwg, o, f, &conn_pt, 0);
+  LOG_TRACE ("%s.%s.name = %s [BL %d]\n", obj->name, field, pair->value.s, t_code);
+  dxf_free_pair (pair);
+  return NULL;
+}
+
+// starts with 100
+// returns NULL on success
+static Dxf_Pair *
+add_AcDbBlockFlipAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
+  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt1", 92, 301);
+  if (pair)
+    return pair;
+  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt2", 93, 302);
+  if (pair)
+    return pair;
+  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt3", 94, 303);
+  if (pair)
+    return pair;
+  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt4", 95, 304);
+  if (pair)
+    return pair;
+  return NULL;
+}
+
+// starts with 100
+// returns NULL on success
+static Dxf_Pair *
+add_AcDbBlockMoveAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_BLOCKMOVEACTION *o = obj->tio.object->tio.BLOCKMOVEACTION;
+  Dxf_Pair *pair;
+
+  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt1", 92, 301);
+  if (pair)
+    return pair;
+  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt2", 93, 302);
+  if (pair)
+    return pair;
+  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt3", 94, 303);
+  if (pair)
+    return pair;
+  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt4", 95, 304);
+  if (pair)
+    return pair;
+
+  // AcDbBlockAction_doubles
+  FIELD_BD (action_offset_x, 140);
+  FIELD_BD (action_offset_y, 141);
+  FIELD_BD (angle_offset, 0);
+  /* VALUE_RC (1, 280); Action XY type. 1? */
+  pair = dxf_read_pair (dat);
+  dxf_free_pair (pair);
+  return NULL;
+}
+
+// starts with 100
+// returns NULL on success
+static Dxf_Pair *
+add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_BLOCKSTRETCHACTION *o = obj->tio.object->tio.BLOCKSTRETCHACTION;
+  Dxf_Pair *pair;
+
+  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt1", 92, 301);
+  if (pair)
+    return pair;
+  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt2", 93, 302);
+  if (pair)
+    return pair;
+
+  FIELD_BL (num_pts, 72);
+  //FIELD_2RD_VECTOR (pts, num_pts, 10);
+  if (o->num_pts)
+    {
+      o->pts = xcalloc (o->num_pts, sizeof (BITCODE_2RD));
+      if (!o->pts)
+        return pair;
+      for (unsigned i = 0; i < o->num_pts; i++)
+        {
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, o->pts[i], 10);
+          o->pts[i].x = pair->value.d;
+          dxf_free_pair (pair);
+
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, o->pts[i], 20);
+          o->pts[i].y = pair->value.d;
+          dxf_free_pair (pair);
+          LOG_TRACE ("%s.pts[%d] = (%f, %f) [2RD 10]\n", obj->name, i,
+                     o->pts[i].x, o->pts[i].y);
+        }
+    }
+  FIELD_BL (num_hdls, 73);
+  // TODO one struct
+  //HANDLE_VECTOR (hdls, num_hdls, 0, 331);
+  if (o->num_hdls)
+    {
+      o->hdls = xcalloc (o->num_hdls, sizeof (BITCODE_H));
+      if (!o->hdls)
+        return pair;
+      for (unsigned i = 0; i < o->num_hdls; i++)
+        {
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, o->hdls[i], 331);
+          o->hdls[i] = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+          LOG_TRACE ("%s.hdls[%d] = " FORMAT_REF " [H 330]\n", obj->name, i,
+                     ARGS_REF (o->hdls[i]));
+          dxf_free_pair (pair);
+        }
+      //FIELD_VECTOR (shorts, BS, num_hdls, 74);
+      o->shorts = xcalloc (o->num_hdls, sizeof (BITCODE_BS));
+      if (!o->shorts)
+        return pair;
+      for (unsigned i = 0; i < o->num_hdls; i++)
+        {
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, o->shorts[i], 74);
+          o->shorts[i] = pair->value.i;
+          LOG_TRACE ("%s.shorts[%d] = %u [BS 74]\n", obj->name, i,
+                     (unsigned)o->shorts[i]);
+          dxf_free_pair (pair);
+        }
+    }
+
+  FIELD_BL (num_codes, 75);
+  // FIXME 3x BL?
+  //FIELD_VECTOR (codes, BL, num_codes, 76);
+  if (o->num_codes)
+    {
+      o->codes = xcalloc (o->num_codes, sizeof (BITCODE_BS));
+      if (!o->codes)
+        return pair;
+      for (unsigned i = 0; i < o->num_pts; i++)
+        {
+          pair = dxf_read_pair (dat);
+          EXPECT_DXF (obj->name, o->codes[i], 76);
+          o->codes[i] = pair->value.i;
+          LOG_TRACE ("%s.codes[%d] = %d [BL 76]\n", obj->name, i,
+                     o->codes[i]);
+          dxf_free_pair (pair);
+        }
+    }
+
+  // AcDbBlockAction_doubles
+  FIELD_BD (action_offset_x, 140);
+  FIELD_BD (action_offset_y, 141);
+  FIELD_BD (angle_offset, 0);
+  /* VALUE_RC (1, 280); Action XY type. 1? */
+  pair = dxf_read_pair (dat);
+  dxf_free_pair (pair);
+  return NULL;
+}
+
 // starts with BL 91
 // returns NULL on success
 static Dxf_Pair *
@@ -8555,6 +8736,33 @@ new_object (char *restrict name, char *restrict dxfname,
                 {
                   dxf_free_pair (pair);
                   pair = add_AcDbBlockAction (obj, dat);
+                  if (!pair) // NULL for success
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              else if (strEQc (subclass, "AcDbBlockFlipAction"))
+                {
+                  dxf_free_pair (pair);
+                  pair = add_AcDbBlockFlipAction (obj, dat);
+                  if (!pair) // NULL for success
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              else if (strEQc (subclass, "AcDbBlockMoveAction"))
+                {
+                  dxf_free_pair (pair);
+                  pair = add_AcDbBlockMoveAction (obj, dat);
+                  if (!pair) // NULL for success
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              else if (strEQc (subclass, "AcDbBlockStretchAction"))
+                {
+                  dxf_free_pair (pair);
+                  pair = add_AcDbBlockStretchAction (obj, dat);
                   if (!pair) // NULL for success
                     goto next_pair;
                   else
