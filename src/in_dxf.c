@@ -6923,6 +6923,45 @@ add_BlockParam_PropInfo (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 // starts empty (on 100 . subclass)
 // returns NULL on success
 static Dxf_Pair *
+add_AcDbBlock1PtParameter (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Object_BLOCKBASEPOINTPARAMETER *o = obj->tio.object->tio.BLOCKBASEPOINTPARAMETER;
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair * pair;
+
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, "def_pt.x", 1010);
+  o->def_pt.x = pair->value.d;
+  dxf_free_pair (pair);
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, "def_pt.y", 1020);
+  o->def_pt.y = pair->value.d;
+  dxf_free_pair (pair);
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, "def_pt.z", 1030);
+  o->def_pt.z = pair->value.d;
+  LOG_TRACE ("%s.def_pt = (%f, %f, %f) [3BD 1010]\n", obj->name, o->def_pt.x,
+             o->def_pt.y, pair->value.d);
+  dxf_free_pair (pair);
+
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, "num_propinfos", 93); // 2
+  o->num_propinfos = pair->value.u;
+  dxf_free_pair (pair);
+
+  pair = add_BlockParam_PropInfo (obj, dat, &o->prop1, 1, 170, 91, 301);
+  if (pair)
+    return pair;
+  pair = add_BlockParam_PropInfo (obj, dat, &o->prop2, 2, 171, 92, 302);
+  if (pair)
+    return pair;
+
+  return NULL;
+}
+
+// starts empty (on 100 . subclass)
+// returns NULL on success
+static Dxf_Pair *
 add_AcDbBlock2PtParameter (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
 {
   Dwg_Object_BLOCKALIGNMENTPARAMETER *o = obj->tio.object->tio.BLOCKALIGNMENTPARAMETER;
@@ -8360,6 +8399,15 @@ new_object (char *restrict name, char *restrict dxfname,
                     goto start_loop; /* failure */
                 }
               // DYNBLOCK
+              else if (strEQc (subclass, "AcDbBlock1PtParameter"))
+                {
+                  dxf_free_pair (pair);
+                  pair = add_AcDbBlock1PtParameter (obj, dat);
+                  if (!pair) // NULL for success
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
               else if (strEQc (subclass, "AcDbBlock2PtParameter"))
                 {
                   dxf_free_pair (pair);
