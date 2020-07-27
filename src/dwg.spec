@@ -8328,7 +8328,8 @@ DWG_OBJECT_END
 DWG_OBJECT (BLOCKMOVEACTION)
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockMoveAction)
-  BlockAction_ConnectionPts (conn_pts, 0, 2, 92, 301);
+  BlockAction_ConnectionPt (conn_pts[0], 92, 301);
+  BlockAction_ConnectionPt (conn_pts[1], 93, 302);
   AcDbBlockAction_doubles_fields;
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
