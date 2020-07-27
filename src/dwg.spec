@@ -8336,7 +8336,7 @@ DWG_OBJECT_END
 DWG_OBJECT (BLOCKFLIPACTION)
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockFlipAction)
-    BlockAction_ConnectionPts (conn_pts, 0, 4, 92, 301);
+  BlockAction_ConnectionPts (conn_pts, 0, 4, 92, 301);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -8355,7 +8355,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKROTATEACTION)
   AcDbBlockActionWithBasePt_fields;
-  SUBCLASS (AcDbBlockRotateAction)
+  SUBCLASS (AcDbBlockRotationAction)
   BlockAction_ConnectionPts (conn_pts, 2, 1, 94, 303);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END

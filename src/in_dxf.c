@@ -6945,6 +6945,22 @@ add_BlockAction_ConnectionPts (Dwg_Object *restrict obj, Bit_Chain *restrict dat
   return NULL;
 }
 
+// returns NULL on success
+static Dxf_Pair *
+add_AcDbBlockActionWithBasePt (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_BLOCKROTATEACTION *o = obj->tio.object->tio.BLOCKROTATEACTION;
+  Dxf_Pair *pair;
+  pair = add_BlockAction_ConnectionPts (obj, dat, 0, 2, 92, 301);
+  if (pair)
+    return pair;
+  FIELD_3BD (offset, 1011);
+  FIELD_B (dependent, 280);
+  FIELD_3BD (base_pt, 1012);
+  return NULL;
+}
+
 // starts with 100
 // returns NULL on success
 static Dxf_Pair *
@@ -6953,6 +6969,32 @@ add_AcDbBlockFlipAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   Dwg_Data *dwg = obj->parent;
   Dxf_Pair *pair;
   pair = add_BlockAction_ConnectionPts (obj, dat, 0, 4, 92, 301);
+  if (pair)
+    return pair;
+  return NULL;
+}
+
+// starts with 100
+// returns NULL on success
+static Dxf_Pair *
+add_AcDbBlockRotationAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
+  pair = add_BlockAction_ConnectionPts (obj, dat, 2, 1, 94, 303);
+  if (pair)
+    return pair;
+  return NULL;
+}
+
+// starts with 100
+// returns NULL on success
+static Dxf_Pair *
+add_AcDbBlockScaleAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
+  pair = add_BlockAction_ConnectionPts (obj, dat, 2, 3, 94, 303);
   if (pair)
     return pair;
   return NULL;
@@ -8699,6 +8741,7 @@ new_object (char *restrict name, char *restrict dxfname,
                 {
                   dxf_free_pair (pair);
                   pair = dxf_read_pair (dat);
+                  LOG_TRACE ("add_ASSOCNETWORK\n")
                   pair = add_ASSOCNETWORK (obj, dat, pair); // NULL for success
                   if (!pair)
                     goto next_pair;
@@ -8709,6 +8752,7 @@ new_object (char *restrict name, char *restrict dxfname,
               else if (strEQc (subclass, "AcDbBlock1PtParameter"))
                 {
                   dxf_free_pair (pair);
+                  LOG_TRACE ("add_AcDbBlock1PtParameter\n")
                   pair = add_AcDbBlock1PtParameter (obj, dat);
                   if (!pair) // NULL for success
                     goto next_pair;
@@ -8718,6 +8762,7 @@ new_object (char *restrict name, char *restrict dxfname,
               else if (strEQc (subclass, "AcDbBlock2PtParameter"))
                 {
                   dxf_free_pair (pair);
+                  LOG_TRACE ("add_AcDbBlock2PtParameter\n")
                   pair = add_AcDbBlock2PtParameter (obj, dat);
                   if (!pair) // NULL for success
                     goto next_pair;
@@ -8727,7 +8772,18 @@ new_object (char *restrict name, char *restrict dxfname,
               else if (strEQc (subclass, "AcDbBlockAction"))
                 {
                   dxf_free_pair (pair);
+                  LOG_TRACE ("add_AcDbBlockAction\n")
                   pair = add_AcDbBlockAction (obj, dat);
+                  if (!pair) // NULL for success
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              else if (strEQc (subclass, "AcDbBlockActionWithBasePt"))
+                {
+                  dxf_free_pair (pair);
+                  LOG_TRACE ("add_AcDbBlockActionWithBasePt\n")
+                  pair = add_AcDbBlockActionWithBasePt (obj, dat);
                   if (!pair) // NULL for success
                     goto next_pair;
                   else
@@ -8736,6 +8792,7 @@ new_object (char *restrict name, char *restrict dxfname,
               else if (strEQc (subclass, "AcDbBlockFlipAction"))
                 {
                   dxf_free_pair (pair);
+                  LOG_TRACE ("add_AcDbBlockFlipAction\n")
                   pair = add_AcDbBlockFlipAction (obj, dat);
                   if (!pair) // NULL for success
                     goto next_pair;
@@ -8745,7 +8802,28 @@ new_object (char *restrict name, char *restrict dxfname,
               else if (strEQc (subclass, "AcDbBlockMoveAction"))
                 {
                   dxf_free_pair (pair);
+                  LOG_TRACE ("add_AcDbBlockMoveAction\n")
                   pair = add_AcDbBlockMoveAction (obj, dat);
+                  if (!pair) // NULL for success
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              else if (strEQc (subclass, "AcDbBlockRotationAction"))
+                {
+                  dxf_free_pair (pair);
+                  LOG_TRACE ("add_AcDbBlockRotationAction\n")
+                  pair = add_AcDbBlockRotationAction (obj, dat);
+                  if (!pair) // NULL for success
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              else if (strEQc (subclass, "AcDbBlockScaleAction"))
+                {
+                  dxf_free_pair (pair);
+                  LOG_TRACE ("add_AcDbBlockScaleAction\n")
+                  pair = add_AcDbBlockScaleAction (obj, dat);
                   if (!pair) // NULL for success
                     goto next_pair;
                   else
@@ -8754,6 +8832,7 @@ new_object (char *restrict name, char *restrict dxfname,
               else if (strEQc (subclass, "AcDbBlockStretchAction"))
                 {
                   dxf_free_pair (pair);
+                  LOG_TRACE ("add_AcDbBlockStretchAction\n")
                   pair = add_AcDbBlockStretchAction (obj, dat);
                   if (!pair) // NULL for success
                     goto next_pair;
