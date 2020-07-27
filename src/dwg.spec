@@ -8376,7 +8376,8 @@ DWG_OBJECT_END
 DWG_OBJECT (BLOCKSTRETCHACTION)
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockStretchAction)
-  BlockAction_ConnectionPts (conn_pts, 0, 2, 92, 301);
+  BlockAction_ConnectionPt (conn_pts[0], 92, 301);
+  BlockAction_ConnectionPt (conn_pts[1], 93, 302);
   FIELD_BL (num_pts, 72);
   FIELD_2RD_VECTOR (pts, num_pts, 10);
   FIELD_BL (num_hdls, 73);

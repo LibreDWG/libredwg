@@ -7032,9 +7032,26 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   Dwg_Object_BLOCKSTRETCHACTION *o = obj->tio.object->tio.BLOCKSTRETCHACTION;
   Dxf_Pair *pair;
 
-  pair = add_BlockAction_ConnectionPts (obj, dat, 0, 2, 92, 301);
-  if (pair)
-    return pair;
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, conn_pts[0].code, 92);
+  o->conn_pts[0].code = pair->value.u;
+  dxf_free_pair (pair);
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, conn_pts[0].name, 301);
+  o->conn_pts[0].name = strdup (pair->value.s);
+  LOG_TRACE ("%s.conn_pts[0] = (%u, %s)\n", obj->name,
+             o->conn_pts[0].code, o->conn_pts[0].name);
+  dxf_free_pair (pair);
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, conn_pts[0].code, 93);
+  o->conn_pts[1].code = pair->value.u;
+  dxf_free_pair (pair);
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, conn_pts[0].name, 302);
+  o->conn_pts[1].name = strdup (pair->value.s);
+  LOG_TRACE ("%s.conn_pts[1] = (%u, %s)\n", obj->name,
+             o->conn_pts[1].code, o->conn_pts[1].name);
+  dxf_free_pair (pair);
 
   FIELD_BL (num_pts, 72);
   //FIELD_2RD_VECTOR (pts, num_pts, 10);
