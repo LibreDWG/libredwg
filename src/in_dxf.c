@@ -7353,7 +7353,7 @@ add_AcDbBlock2PtParameter (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   dxf_free_pair (pair);
   o->prop_states = xcalloc (4, sizeof (double));
   if (!o->prop_states)
-    return pair;
+    return dxf_read_pair (dat);
   for (unsigned i = 0; i < 4; i++)
     {
       pair = dxf_read_pair (dat);
@@ -7429,54 +7429,53 @@ add_AcDbBlockParamValueSet (Dwg_Object *restrict obj, Dwg_BLOCKPARAMVALUESET *o,
   // subclass not object
   EXPECT_DXF ("BlockParamValueSet", "desc", (*code)[3]); // t_code
   o->desc = strdup (pair->value.s);
-  LOG_TRACE ("%s.BlockParamValueSet.desc = \"%s\"\n", obj->name, pair->value.s);
+  LOG_TRACE ("%s.value_set.desc = \"%s\"\n", obj->name, pair->value.s);
   dxf_free_pair (pair);
 
   pair = dxf_read_pair (dat);
   EXPECT_DXF ("BlockParamValueSet", "flags", (*code)[0]); // i_code
   o->flags = pair->value.i;
-  LOG_TRACE ("%s.BlockParamValueSet.flags = %d\n", obj->name, pair->value.i);
+  LOG_TRACE ("%s.value_set.flags = %d\n", obj->name, pair->value.i);
   dxf_free_pair (pair);
 
   pair = dxf_read_pair (dat);
   EXPECT_DXF ("BlockParamValueSet", "minimum", (*code)[1]); // d_code
   o->minimum = pair->value.d;
-  LOG_TRACE ("%s.BlockParamValueSet.minimum = %f\n", obj->name, pair->value.d);
+  LOG_TRACE ("%s.value_set.minimum = %f\n", obj->name, pair->value.d);
   dxf_free_pair (pair);
 
   pair = dxf_read_pair (dat);
   EXPECT_DXF ("BlockParamValueSet", "maximum", (*code)[1]+1);
   o->maximum = pair->value.d;
-  LOG_TRACE ("%s.BlockParamValueSet.maximum = %f\n", obj->name, pair->value.d);
+  LOG_TRACE ("%s.value_set.maximum = %f\n", obj->name, pair->value.d);
   dxf_free_pair (pair);
 
   pair = dxf_read_pair (dat);
   EXPECT_DXF ("BlockParamValueSet", "increment", (*code)[1]+2);
   o->increment = pair->value.d;
-  LOG_TRACE ("%s.BlockParamValueSet.increment = %f\n", obj->name, pair->value.d);
+  LOG_TRACE ("%s.value_set.increment = %f\n", obj->name, pair->value.d);
   dxf_free_pair (pair);
 
   pair = dxf_read_pair (dat);
   EXPECT_DXF ("BlockParamValueSet", "num_valuelist", (*code)[2]); // s_code
   o->num_valuelist = pair->value.i;
-  LOG_TRACE ("%s.BlockParamValueSet.num_valuelist = %d\n", obj->name, pair->value.i);
+  LOG_TRACE ("%s.value_set.num_valuelist = %d\n", obj->name, pair->value.i);
   dxf_free_pair (pair);
 
   //FIELD_VECTOR (valuelist, num_valuelist, BD, code[1]+3);
   if (!o->num_valuelist)
     return NULL;
-  pair = dxf_read_pair (dat);
-  EXPECT_DXF ("BLOCKPARAMVALUESET", valuelist[0], (*code)[1]+3);
   o->valuelist = xcalloc (o->num_valuelist, sizeof (double));
   if (!o->valuelist)
-    return pair;
-  o->valuelist[0] = pair->value.d;
-  dxf_free_pair (pair);
-  for (unsigned i = 1; i < o->num_valuelist; i++)
+    return dxf_read_pair (dat);
+
+  for (unsigned i = 0; i < o->num_valuelist; i++)
     {
       pair = dxf_read_pair (dat);
       EXPECT_DXF ("BLOCKPARAMVALUESET", valuelist[i], (*code)[1]+3);
       o->valuelist[i] = pair->value.d;
+      LOG_TRACE ("%s.value_set.valuelist[%d] = %f [BD %d]\n", obj->name, i,
+                 pair->value.d, pair->code);
       dxf_free_pair (pair);
     }
   return NULL;

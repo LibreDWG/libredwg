@@ -8256,7 +8256,7 @@ DWG_OBJECT (BLOCKLINEARPARAMETER)
   SUBCLASS (AcDbBlockLinearParameter)
   FIELD_T (distance_name, 305);
   FIELD_T (distance_desc, 306);
-  FIELD_BD (distance, 141);
+  FIELD_BD (distance, 140);
   AcDbBlockParamValueSet_fields (value_set,96,141,175,307);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END

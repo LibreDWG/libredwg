@@ -6763,7 +6763,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKLINEARPARAMETER_fields[] = {
   { "distance_desc",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_BLOCKLINEARPARAMETER, distance_desc),
     1,1,1, 306 },
   { "distance",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_BLOCKLINEARPARAMETER, distance),
-    0,0,0, 141 },
+    0,0,0, 140 },
   { "value_set",	"Dwg_BLOCKPARAMVALUESET", sizeof (Dwg_BLOCKPARAMVALUESET),  OFF (struct _dwg_object_BLOCKLINEARPARAMETER, value_set),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},

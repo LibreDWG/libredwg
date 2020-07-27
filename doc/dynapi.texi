@@ -7618,7 +7618,7 @@ T,	DXF 305
 @item distance_desc
 T,	DXF 306
 @item distance
-BD,	DXF 141
+BD,	DXF 140
 @item value_set
 Dwg_BLOCKPARAMVALUESET
 
