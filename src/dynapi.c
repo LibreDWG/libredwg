@@ -7345,7 +7345,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKSTRETCHACTION_fields[] = {
   { "num_pts",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKSTRETCHACTION, num_pts),
     0,0,0, 72 },
   { "pts",	"2RD*", sizeof (BITCODE_2RD*),  OFF (struct _dwg_object_BLOCKSTRETCHACTION, pts),
-    1,1,0, 10 },
+    1,1,0, 1011 },
   { "num_hdls",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKSTRETCHACTION, num_hdls),
     0,0,0, 73 },
   { "hdls",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_BLOCKSTRETCHACTION, hdls),

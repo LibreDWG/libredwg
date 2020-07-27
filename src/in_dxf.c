@@ -7063,15 +7063,15 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
       for (unsigned i = 0; i < o->num_pts; i++)
         {
           pair = dxf_read_pair (dat);
-          EXPECT_DXF (obj->name, o->pts[i], 10);
+          EXPECT_DXF (obj->name, o->pts[i], 1011);
           o->pts[i].x = pair->value.d;
           dxf_free_pair (pair);
 
           pair = dxf_read_pair (dat);
-          EXPECT_DXF (obj->name, o->pts[i], 20);
+          EXPECT_DXF (obj->name, o->pts[i], 1021);
           o->pts[i].y = pair->value.d;
           dxf_free_pair (pair);
-          LOG_TRACE ("%s.pts[%d] = (%f, %f) [2RD 10]\n", obj->name, i,
+          LOG_TRACE ("%s.pts[%d] = (%f, %f) [2RD 1011]\n", obj->name, i,
                      o->pts[i].x, o->pts[i].y);
         }
     }
@@ -7088,7 +7088,7 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
           pair = dxf_read_pair (dat);
           EXPECT_DXF (obj->name, o->hdls[i], 331);
           o->hdls[i] = dwg_add_handleref (dwg, 5, pair->value.u, obj);
-          LOG_TRACE ("%s.hdls[%d] = " FORMAT_REF " [H 330]\n", obj->name, i,
+          LOG_TRACE ("%s.hdls[%d] = " FORMAT_REF " [H 331]\n", obj->name, i,
                      ARGS_REF (o->hdls[i]));
           dxf_free_pair (pair);
         }

@@ -8326,7 +8326,7 @@ Dwg_BLOCKACTION_connectionpts
 @item num_pts
 BL,	DXF 72
 @item pts
-2RD*,	DXF 10
+2RD*,	DXF 1011
 @item num_hdls
 BL,	DXF 73
 @item hdls

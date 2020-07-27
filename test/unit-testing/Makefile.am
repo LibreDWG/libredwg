@@ -90,7 +90,6 @@ testobjects = \
 	blocklookupgrip \
 	blockmoveaction \
 	blockscaleaction \
-	blockstretchaction \
 	blockrotationparameter \
 	blockxyparameter \
 	blockvisibilitygrip \
@@ -332,6 +331,7 @@ testdebug = \
 	blockrepresentation \
 	blockrotateaction \
 	blockrotationgrip \
+	blockstretchaction \
 	blockuserparameter \
 	blockverticalconstraintparameter \
 	blockxygrip \
