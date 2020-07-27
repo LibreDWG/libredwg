@@ -6780,11 +6780,11 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj, char *_obj,
           LOG_TRACE ("%s.%s.%s = %d [BSd %d]\n", obj->name, evalexpr,
                      "value_code", pair->value.i, pair->code);
         }
-      else if (pair->code == 40)
+      else if (pair->code == 40 || pair->code == 140)
         {
           ee->value.num40 = pair->value.d;
           LOG_TRACE ("%s.%s.%s = %f [BD %d]\n", obj->name, evalexpr,
-                     "value.num_40", pair->value.d, pair->code);
+                     "value.num40", pair->value.d, pair->code);
         }
       else if (pair->code == 10)
         {
@@ -7186,7 +7186,7 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
         {
           pair = dxf_read_pair (dat);
           EXPECT_DXF (obj->name, o->blocks[i], 331);
-          o->blocks[i] = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+          o->blocks[i] = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
           LOG_TRACE ("%s.blocks[%d] = " FORMAT_REF " [H 331]\n", obj->name, i,
                      ARGS_REF (o->blocks[i]));
           dxf_free_pair (pair);
@@ -7224,7 +7224,7 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
                   pair = dxf_read_pair (dat);
                   EXPECT_DXF (obj->name, o->states[i].blocks[j], 332);
                   o->states[i].blocks[j]
-                      = dwg_add_handleref (dwg, 4, pair->value.u, obj);
+                      = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
                   LOG_TRACE (
                       "%s.states[%d].blocks[%d] = " FORMAT_REF " [H 332]\n",
                       obj->name, i, j, ARGS_REF (o->states[i].blocks[j]));
@@ -7249,7 +7249,7 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
                   pair = dxf_read_pair (dat);
                   EXPECT_DXF (obj->name, o->states[i].params[j], 333);
                   o->states[i].params[j]
-                      = dwg_add_handleref (dwg, 5, pair->value.u, NULL);
+                      = dwg_add_handleref (dwg, 4, pair->value.u, NULL);
                   LOG_TRACE (
                       "%s.states[%d].params[%d] = " FORMAT_REF " [H 333]\n",
                       obj->name, i, j, ARGS_REF (o->states[i].params[j]));
