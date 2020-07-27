@@ -7482,6 +7482,28 @@ add_AcDbBlockParamValueSet (Dwg_Object *restrict obj, Dwg_BLOCKPARAMVALUESET *o,
   return NULL;
 }
 
+// starts with 100
+// returns NULL on success
+static Dxf_Pair *
+add_AcDbBlockRotationParameter (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_BLOCKROTATIONPARAMETER *o = obj->tio.object->tio.BLOCKROTATIONPARAMETER;
+  Dwg_BLOCKPARAMVALUESET *value_set = &o->angle_value_set;
+  Dxf_Pair *pair;
+
+  FIELD_T (angle_name, 305);
+  FIELD_T (angle_desc, 306);
+  FIELD_3BD (def_base_angle_pt, 1011);
+  FIELD_BD (angle, 140);
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, angle_value_set, 307);
+  pair = add_AcDbBlockParamValueSet (obj, value_set, dat, pair);
+  if (pair)
+    return pair;
+  return NULL;
+}
+
 #define FIELD_CMC(field, dxf)                                                 \
   dxf_read_CMC (dwg, dat, &o->field, #field, dxf)
 #define FIELD_CMC2004(field, dxf)                                             \
@@ -8748,97 +8770,30 @@ new_object (char *restrict name, char *restrict dxfname,
                   else
                     goto start_loop; /* failure */
                 }
+              // strict subclasses (functable?)
               // DYNBLOCK
-              else if (strEQc (subclass, "AcDbBlock1PtParameter"))
-                {
-                  dxf_free_pair (pair);
-                  LOG_TRACE ("add_AcDbBlock1PtParameter\n")
-                  pair = add_AcDbBlock1PtParameter (obj, dat);
-                  if (!pair) // NULL for success
-                    goto next_pair;
-                  else
-                    goto start_loop; /* failure */
-                }
-              else if (strEQc (subclass, "AcDbBlock2PtParameter"))
-                {
-                  dxf_free_pair (pair);
-                  LOG_TRACE ("add_AcDbBlock2PtParameter\n")
-                  pair = add_AcDbBlock2PtParameter (obj, dat);
-                  if (!pair) // NULL for success
-                    goto next_pair;
-                  else
-                    goto start_loop; /* failure */
-                }
-              else if (strEQc (subclass, "AcDbBlockAction"))
-                {
-                  dxf_free_pair (pair);
-                  LOG_TRACE ("add_AcDbBlockAction\n")
-                  pair = add_AcDbBlockAction (obj, dat);
-                  if (!pair) // NULL for success
-                    goto next_pair;
-                  else
-                    goto start_loop; /* failure */
-                }
-              else if (strEQc (subclass, "AcDbBlockActionWithBasePt"))
-                {
-                  dxf_free_pair (pair);
-                  LOG_TRACE ("add_AcDbBlockActionWithBasePt\n")
-                  pair = add_AcDbBlockActionWithBasePt (obj, dat);
-                  if (!pair) // NULL for success
-                    goto next_pair;
-                  else
-                    goto start_loop; /* failure */
-                }
-              else if (strEQc (subclass, "AcDbBlockFlipAction"))
-                {
-                  dxf_free_pair (pair);
-                  LOG_TRACE ("add_AcDbBlockFlipAction\n")
-                  pair = add_AcDbBlockFlipAction (obj, dat);
-                  if (!pair) // NULL for success
-                    goto next_pair;
-                  else
-                    goto start_loop; /* failure */
-                }
-              else if (strEQc (subclass, "AcDbBlockMoveAction"))
-                {
-                  dxf_free_pair (pair);
-                  LOG_TRACE ("add_AcDbBlockMoveAction\n")
-                  pair = add_AcDbBlockMoveAction (obj, dat);
-                  if (!pair) // NULL for success
-                    goto next_pair;
-                  else
-                    goto start_loop; /* failure */
-                }
-              else if (strEQc (subclass, "AcDbBlockRotationAction"))
-                {
-                  dxf_free_pair (pair);
-                  LOG_TRACE ("add_AcDbBlockRotationAction\n")
-                  pair = add_AcDbBlockRotationAction (obj, dat);
-                  if (!pair) // NULL for success
-                    goto next_pair;
-                  else
-                    goto start_loop; /* failure */
-                }
-              else if (strEQc (subclass, "AcDbBlockScaleAction"))
-                {
-                  dxf_free_pair (pair);
-                  LOG_TRACE ("add_AcDbBlockScaleAction\n")
-                  pair = add_AcDbBlockScaleAction (obj, dat);
-                  if (!pair) // NULL for success
-                    goto next_pair;
-                  else
-                    goto start_loop; /* failure */
-                }
-              else if (strEQc (subclass, "AcDbBlockStretchAction"))
-                {
-                  dxf_free_pair (pair);
-                  LOG_TRACE ("add_AcDbBlockStretchAction\n")
-                  pair = add_AcDbBlockStretchAction (obj, dat);
-                  if (!pair) // NULL for success
-                    goto next_pair;
-                  else
-                    goto start_loop; /* failure */
-                }
+#define else_do_strict_subclass(SUBCLASS)                                     \
+  else if (strEQc (subclass, #SUBCLASS))                                      \
+  {                                                                           \
+    dxf_free_pair (pair);                                                     \
+    LOG_TRACE ("add_" #SUBCLASS "\n")                                         \
+    pair = add_##SUBCLASS (obj, dat);                                         \
+    if (!pair) /* NULL for success */                                         \
+      goto next_pair;                                                         \
+    else                                                                      \
+      goto start_loop; /* failure */                                          \
+  }
+
+              else_do_strict_subclass (AcDbBlock1PtParameter)
+              else_do_strict_subclass (AcDbBlock2PtParameter)
+              else_do_strict_subclass (AcDbBlockAction)
+              else_do_strict_subclass (AcDbBlockActionWithBasePt)
+              else_do_strict_subclass (AcDbBlockFlipAction)
+              else_do_strict_subclass (AcDbBlockMoveAction)
+              else_do_strict_subclass (AcDbBlockRotationAction)
+              else_do_strict_subclass (AcDbBlockScaleAction)
+              else_do_strict_subclass (AcDbBlockStretchAction)
+              else_do_strict_subclass (AcDbBlockRotationParameter)
             }
           break;
         case 101:
