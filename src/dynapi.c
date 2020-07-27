@@ -8190,6 +8190,8 @@ static const Dwg_DYNAPI_field _dwg_DUMMY_fields[] = {
 static const Dwg_DYNAPI_field _dwg_DYNAMICBLOCKPROXYNODE_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_DYNAMICBLOCKPROXYNODE, parent),
     1,1,0, 0 },
+  { "evalexpr",	"Dwg_EvalExpr", sizeof (Dwg_EvalExpr),  OFF (struct _dwg_object_DYNAMICBLOCKPROXYNODE, evalexpr),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER: (sorted by offset) */

@@ -9362,6 +9362,8 @@ struct _dwg_object_object*
 
 @item parent
 struct _dwg_object_object*
+@item evalexpr
+Dwg_EvalExpr
 
 @end vtable
 @end indentedblock

@@ -7529,6 +7529,7 @@ typedef struct _dwg_object_BLOCKXYPARAMETER
 typedef struct _dwg_object_DYNAMICBLOCKPROXYNODE
 {
   struct _dwg_object_object *parent;
+  Dwg_EvalExpr evalexpr;
   // ??
 } Dwg_Object_DYNAMICBLOCKPROXYNODE;
 

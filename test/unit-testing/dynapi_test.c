@@ -46726,6 +46726,24 @@ static int test_DYNAMICBLOCKPROXYNODE (const Dwg_Object *obj)
   Dwg_Object_DYNAMICBLOCKPROXYNODE *restrict dynamicblockproxynode = obj->tio.object->tio.DYNAMICBLOCKPROXYNODE;
   failed = 0;
   {
+    Dwg_EvalExpr evalexpr;
+    if (dwg_dynapi_entity_value (dynamicblockproxynode, "DYNAMICBLOCKPROXYNODE", "evalexpr", &evalexpr, NULL)
+        && !memcmp (&evalexpr, &dynamicblockproxynode->evalexpr, sizeof (Dwg_EvalExpr)))
+        pass ();
+    else
+        fail ("DYNAMICBLOCKPROXYNODE.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_T evalexpr_value_text1;
+    if (dwg_dynapi_entity_value (dynamicblockproxynode, "DYNAMICBLOCKPROXYNODE", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
+        && evalexpr_value_text1
+           ? strEQ ((char *)evalexpr_value_text1, (char *)dynamicblockproxynode->evalexpr.value.text1)
+           : !dynamicblockproxynode->evalexpr.value.text1)
+      pass ();
+    else
+      fail ("DYNAMICBLOCKPROXYNODE.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, dynamicblockproxynode->evalexpr.value.text1);
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (dynamicblockproxynode, "DYNAMICBLOCKPROXYNODE", "parent", &parent, NULL)
         && !memcmp (&parent, &dynamicblockproxynode->parent, sizeof (struct _dwg_object_object*)))
