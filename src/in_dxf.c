@@ -6904,31 +6904,44 @@ add_AcDbBlockAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   return NULL;
 }
 
-// starts with 100
 // returns NULL on success
 static Dxf_Pair *
-add_BlockAction_ConnectionPt (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
-                              const char *field, const int bl_code, const int t_code)
+add_BlockAction_ConnectionPts (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+                               const int first, const int repeat,
+                               const int bl_code, const int t_code)
 {
   Dwg_Data *dwg = obj->parent;
   Dwg_Object_BLOCKFLIPACTION *o = obj->tio.object->tio.BLOCKFLIPACTION;
   Dxf_Pair *pair;
-  Dwg_BLOCKACTION_connectionpts conn_pt;
+  Dwg_BLOCKACTION_connectionpts conn_pts[6];
+  const char *const field = "conn_pts";
   const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field (obj->name, field);
-  pair = dxf_read_pair (dat);
-  if (!f)
-    return pair;
-  EXPECT_DXF (obj->name, field, bl_code);
-  conn_pt.code = pair->value.u;
-  LOG_TRACE ("%s.%s.code = %u [BL %d]\n", obj->name, field, pair->value.u, bl_code);
-  dxf_free_pair (pair);
 
-  pair = dxf_read_pair (dat);
-  EXPECT_DXF (obj->name, field, t_code);
-  conn_pt.name = pair->value.s;
-  dwg_dynapi_field_set_value (dwg, o, f, &conn_pt, 0);
-  LOG_TRACE ("%s.%s.name = %s [BL %d]\n", obj->name, field, pair->value.s, t_code);
-  dxf_free_pair (pair);
+  if (!f)
+    return (Dxf_Pair *)-1;
+  if (first)
+    dwg_dynapi_field_get_value (o, f, &conn_pts);
+  for (int i = first; i < (first + repeat); i++)
+    {
+      pair = dxf_read_pair (dat);
+      EXPECT_DXF (obj->name, "conn_pts[i].code", bl_code + i - first);
+      conn_pts[i].code = pair->value.u;
+      LOG_TRACE ("%s.conn_pts[%d].code = %u [BL %d]\n", obj->name, i,
+                 pair->value.u, bl_code + i - first);
+      dxf_free_pair (pair);
+    }
+
+  for (int i = first; i < (first + repeat); i++)
+    {
+      pair = dxf_read_pair (dat);
+      EXPECT_DXF (obj->name, "conn_pts[].name", t_code + i - first);
+      conn_pts[i].name = strdup (pair->value.s);
+      LOG_TRACE ("%s.conn_pts[%d].name = %s [BL %d]\n", obj->name, i,
+                 pair->value.s, t_code + i - first);
+      dxf_free_pair (pair);
+    }
+  // memcpy'ing back the content
+  dwg_dynapi_field_set_value (dwg, o, f, &conn_pts, 0);
   return NULL;
 }
 
@@ -6939,16 +6952,7 @@ add_AcDbBlockFlipAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
 {
   Dwg_Data *dwg = obj->parent;
   Dxf_Pair *pair;
-  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt1", 92, 301);
-  if (pair)
-    return pair;
-  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt2", 93, 302);
-  if (pair)
-    return pair;
-  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt3", 94, 303);
-  if (pair)
-    return pair;
-  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt4", 95, 304);
+  pair = add_BlockAction_ConnectionPts (obj, dat, 0, 4, 92, 301);
   if (pair)
     return pair;
   return NULL;
@@ -6963,16 +6967,7 @@ add_AcDbBlockMoveAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   Dwg_Object_BLOCKMOVEACTION *o = obj->tio.object->tio.BLOCKMOVEACTION;
   Dxf_Pair *pair;
 
-  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt1", 92, 301);
-  if (pair)
-    return pair;
-  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt2", 93, 302);
-  if (pair)
-    return pair;
-  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt3", 94, 303);
-  if (pair)
-    return pair;
-  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt4", 95, 304);
+  pair = add_BlockAction_ConnectionPts (obj, dat, 0, 2, 92, 301);
   if (pair)
     return pair;
 
@@ -6995,10 +6990,7 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   Dwg_Object_BLOCKSTRETCHACTION *o = obj->tio.object->tio.BLOCKSTRETCHACTION;
   Dxf_Pair *pair;
 
-  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt1", 92, 301);
-  if (pair)
-    return pair;
-  pair = add_BlockAction_ConnectionPt (obj, dat, "conn_pt2", 93, 302);
+  pair = add_BlockAction_ConnectionPts (obj, dat, 0, 2, 92, 301);
   if (pair)
     return pair;
 

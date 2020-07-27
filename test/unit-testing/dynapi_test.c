@@ -36186,36 +36186,12 @@ static int test_BLOCKARRAYACTION (const Dwg_Object *obj)
     blockarrayaction->column_offset--;
   }
   {
-    Dwg_BLOCKACTION_connectionpts conn_pt1;
-    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "conn_pt1", &conn_pt1, NULL)
-        && !memcmp (&conn_pt1, &blockarrayaction->conn_pt1, sizeof (Dwg_BLOCKACTION_connectionpts)))
+    Dwg_BLOCKACTION_connectionpts conn_pts;
+    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "conn_pts[4]", &conn_pts, NULL)
+        && !memcmp (&conn_pts, &blockarrayaction->conn_pts, sizeof (Dwg_BLOCKACTION_connectionpts)))
         pass ();
     else
-        fail ("BLOCKARRAYACTION.conn_pt1 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt2;
-    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "conn_pt2", &conn_pt2, NULL)
-        && !memcmp (&conn_pt2, &blockarrayaction->conn_pt2, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKARRAYACTION.conn_pt2 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt3;
-    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "conn_pt3", &conn_pt3, NULL)
-        && !memcmp (&conn_pt3, &blockarrayaction->conn_pt3, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKARRAYACTION.conn_pt3 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt4;
-    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "conn_pt4", &conn_pt4, NULL)
-        && !memcmp (&conn_pt4, &blockarrayaction->conn_pt4, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKARRAYACTION.conn_pt4 [Dwg_BLOCKACTION_connectionpts]");
+        fail ("BLOCKARRAYACTION.conn_pts[4] [Dwg_BLOCKACTION_connectionpts]");
   }
   {
     BITCODE_H* deps;
@@ -36904,36 +36880,12 @@ static int test_BLOCKFLIPACTION (const Dwg_Object *obj)
     blockflipaction->be_minor--;
   }
   {
-    Dwg_BLOCKACTION_connectionpts conn_pt1;
-    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "conn_pt1", &conn_pt1, NULL)
-        && !memcmp (&conn_pt1, &blockflipaction->conn_pt1, sizeof (Dwg_BLOCKACTION_connectionpts)))
+    Dwg_BLOCKACTION_connectionpts conn_pts;
+    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "conn_pts[4]", &conn_pts, NULL)
+        && !memcmp (&conn_pts, &blockflipaction->conn_pts, sizeof (Dwg_BLOCKACTION_connectionpts)))
         pass ();
     else
-        fail ("BLOCKFLIPACTION.conn_pt1 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt2;
-    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "conn_pt2", &conn_pt2, NULL)
-        && !memcmp (&conn_pt2, &blockflipaction->conn_pt2, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKFLIPACTION.conn_pt2 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt3;
-    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "conn_pt3", &conn_pt3, NULL)
-        && !memcmp (&conn_pt3, &blockflipaction->conn_pt3, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKFLIPACTION.conn_pt3 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt4;
-    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "conn_pt4", &conn_pt4, NULL)
-        && !memcmp (&conn_pt4, &blockflipaction->conn_pt4, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKFLIPACTION.conn_pt4 [Dwg_BLOCKACTION_connectionpts]");
+        fail ("BLOCKFLIPACTION.conn_pts[4] [Dwg_BLOCKACTION_connectionpts]");
   }
   {
     BITCODE_H* deps;
@@ -39315,20 +39267,12 @@ static int test_BLOCKMOVEACTION (const Dwg_Object *obj)
     blockmoveaction->be_minor--;
   }
   {
-    Dwg_BLOCKACTION_connectionpts conn_pt1;
-    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "conn_pt1", &conn_pt1, NULL)
-        && !memcmp (&conn_pt1, &blockmoveaction->conn_pt1, sizeof (Dwg_BLOCKACTION_connectionpts)))
+    Dwg_BLOCKACTION_connectionpts conn_pts;
+    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "conn_pts[2]", &conn_pts, NULL)
+        && !memcmp (&conn_pts, &blockmoveaction->conn_pts, sizeof (Dwg_BLOCKACTION_connectionpts)))
         pass ();
     else
-        fail ("BLOCKMOVEACTION.conn_pt1 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt2;
-    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "conn_pt2", &conn_pt2, NULL)
-        && !memcmp (&conn_pt2, &blockmoveaction->conn_pt2, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKMOVEACTION.conn_pt2 [Dwg_BLOCKACTION_connectionpts]");
+        fail ("BLOCKMOVEACTION.conn_pts[2] [Dwg_BLOCKACTION_connectionpts]");
   }
   {
     BITCODE_H* deps;
@@ -40221,52 +40165,12 @@ static int test_BLOCKPOLARSTRETCHACTION (const Dwg_Object *obj)
       fail ("BLOCKPOLARSTRETCHACTION.codes [BL*] * %u num_codes", count);
   }
   {
-    Dwg_BLOCKACTION_connectionpts conn_pt1;
-    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "conn_pt1", &conn_pt1, NULL)
-        && !memcmp (&conn_pt1, &blockpolarstretchaction->conn_pt1, sizeof (Dwg_BLOCKACTION_connectionpts)))
+    Dwg_BLOCKACTION_connectionpts conn_pts;
+    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "conn_pts[6]", &conn_pts, NULL)
+        && !memcmp (&conn_pts, &blockpolarstretchaction->conn_pts, sizeof (Dwg_BLOCKACTION_connectionpts)))
         pass ();
     else
-        fail ("BLOCKPOLARSTRETCHACTION.conn_pt1 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt2;
-    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "conn_pt2", &conn_pt2, NULL)
-        && !memcmp (&conn_pt2, &blockpolarstretchaction->conn_pt2, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKPOLARSTRETCHACTION.conn_pt2 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt3;
-    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "conn_pt3", &conn_pt3, NULL)
-        && !memcmp (&conn_pt3, &blockpolarstretchaction->conn_pt3, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKPOLARSTRETCHACTION.conn_pt3 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt4;
-    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "conn_pt4", &conn_pt4, NULL)
-        && !memcmp (&conn_pt4, &blockpolarstretchaction->conn_pt4, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKPOLARSTRETCHACTION.conn_pt4 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt5;
-    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "conn_pt5", &conn_pt5, NULL)
-        && !memcmp (&conn_pt5, &blockpolarstretchaction->conn_pt5, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKPOLARSTRETCHACTION.conn_pt5 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt6;
-    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "conn_pt6", &conn_pt6, NULL)
-        && !memcmp (&conn_pt6, &blockpolarstretchaction->conn_pt6, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKPOLARSTRETCHACTION.conn_pt6 [Dwg_BLOCKACTION_connectionpts]");
+        fail ("BLOCKPOLARSTRETCHACTION.conn_pts[6] [Dwg_BLOCKACTION_connectionpts]");
   }
   {
     BITCODE_H* deps;
@@ -40987,28 +40891,12 @@ static int test_BLOCKROTATEACTION (const Dwg_Object *obj)
     blockrotateaction->be_minor--;
   }
   {
-    Dwg_BLOCKACTION_connectionpts conn_pt1;
-    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "conn_pt1", &conn_pt1, NULL)
-        && !memcmp (&conn_pt1, &blockrotateaction->conn_pt1, sizeof (Dwg_BLOCKACTION_connectionpts)))
+    Dwg_BLOCKACTION_connectionpts conn_pts;
+    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "conn_pts[3]", &conn_pts, NULL)
+        && !memcmp (&conn_pts, &blockrotateaction->conn_pts, sizeof (Dwg_BLOCKACTION_connectionpts)))
         pass ();
     else
-        fail ("BLOCKROTATEACTION.conn_pt1 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt2;
-    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "conn_pt2", &conn_pt2, NULL)
-        && !memcmp (&conn_pt2, &blockrotateaction->conn_pt2, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKROTATEACTION.conn_pt2 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt3;
-    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "conn_pt3", &conn_pt3, NULL)
-        && !memcmp (&conn_pt3, &blockrotateaction->conn_pt3, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKROTATEACTION.conn_pt3 [Dwg_BLOCKACTION_connectionpts]");
+        fail ("BLOCKROTATEACTION.conn_pts[3] [Dwg_BLOCKACTION_connectionpts]");
   }
   {
     BITCODE_B dependent;
@@ -41131,14 +41019,6 @@ static int test_BLOCKROTATEACTION (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKROTATEACTION.parent [struct _dwg_object_object*]");
-  }
-  {
-    BITCODE_3BD stretch_pt;
-    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "stretch_pt", &stretch_pt, NULL)
-        && !memcmp (&stretch_pt, &blockrotateaction->stretch_pt, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("BLOCKROTATEACTION.stretch_pt [3BD]");
   }
   if (failed && (is_class_unstable ("BLOCKROTATEACTION") || is_class_debugging ("BLOCKROTATEACTION")))
     {
@@ -41643,44 +41523,12 @@ static int test_BLOCKSCALEACTION (const Dwg_Object *obj)
     blockscaleaction->be_minor--;
   }
   {
-    Dwg_BLOCKACTION_connectionpts conn_pt1;
-    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "conn_pt1", &conn_pt1, NULL)
-        && !memcmp (&conn_pt1, &blockscaleaction->conn_pt1, sizeof (Dwg_BLOCKACTION_connectionpts)))
+    Dwg_BLOCKACTION_connectionpts conn_pts;
+    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "conn_pts[5]", &conn_pts, NULL)
+        && !memcmp (&conn_pts, &blockscaleaction->conn_pts, sizeof (Dwg_BLOCKACTION_connectionpts)))
         pass ();
     else
-        fail ("BLOCKSCALEACTION.conn_pt1 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt2;
-    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "conn_pt2", &conn_pt2, NULL)
-        && !memcmp (&conn_pt2, &blockscaleaction->conn_pt2, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKSCALEACTION.conn_pt2 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt3;
-    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "conn_pt3", &conn_pt3, NULL)
-        && !memcmp (&conn_pt3, &blockscaleaction->conn_pt3, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKSCALEACTION.conn_pt3 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt4;
-    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "conn_pt4", &conn_pt4, NULL)
-        && !memcmp (&conn_pt4, &blockscaleaction->conn_pt4, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKSCALEACTION.conn_pt4 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt5;
-    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "conn_pt5", &conn_pt5, NULL)
-        && !memcmp (&conn_pt5, &blockscaleaction->conn_pt5, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKSCALEACTION.conn_pt5 [Dwg_BLOCKACTION_connectionpts]");
+        fail ("BLOCKSCALEACTION.conn_pts[5] [Dwg_BLOCKACTION_connectionpts]");
   }
   {
     BITCODE_B dependent;
@@ -41804,14 +41652,6 @@ static int test_BLOCKSCALEACTION (const Dwg_Object *obj)
     else
         fail ("BLOCKSCALEACTION.parent [struct _dwg_object_object*]");
   }
-  {
-    BITCODE_3BD stretch_pt;
-    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "stretch_pt", &stretch_pt, NULL)
-        && !memcmp (&stretch_pt, &blockscaleaction->stretch_pt, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("BLOCKSCALEACTION.stretch_pt [3BD]");
-  }
   if (failed && (is_class_unstable ("BLOCKSCALEACTION") || is_class_debugging ("BLOCKSCALEACTION")))
     {
       ok ("%s failed %d tests (TODO unstable)", "BLOCKSCALEACTION", failed);
@@ -41921,20 +41761,12 @@ static int test_BLOCKSTRETCHACTION (const Dwg_Object *obj)
       fail ("BLOCKSTRETCHACTION.codes [BL*] * %u num_codes", count);
   }
   {
-    Dwg_BLOCKACTION_connectionpts conn_pt1;
-    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "conn_pt1", &conn_pt1, NULL)
-        && !memcmp (&conn_pt1, &blockstretchaction->conn_pt1, sizeof (Dwg_BLOCKACTION_connectionpts)))
+    Dwg_BLOCKACTION_connectionpts conn_pts;
+    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "conn_pts[2]", &conn_pts, NULL)
+        && !memcmp (&conn_pts, &blockstretchaction->conn_pts, sizeof (Dwg_BLOCKACTION_connectionpts)))
         pass ();
     else
-        fail ("BLOCKSTRETCHACTION.conn_pt1 [Dwg_BLOCKACTION_connectionpts]");
-  }
-  {
-    Dwg_BLOCKACTION_connectionpts conn_pt2;
-    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "conn_pt2", &conn_pt2, NULL)
-        && !memcmp (&conn_pt2, &blockstretchaction->conn_pt2, sizeof (Dwg_BLOCKACTION_connectionpts)))
-        pass ();
-    else
-        fail ("BLOCKSTRETCHACTION.conn_pt2 [Dwg_BLOCKACTION_connectionpts]");
+        fail ("BLOCKSTRETCHACTION.conn_pts[2] [Dwg_BLOCKACTION_connectionpts]");
   }
   {
     BITCODE_H* deps;

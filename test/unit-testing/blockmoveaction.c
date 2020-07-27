@@ -20,10 +20,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKMOVEACTION, num_deps, BL);
   CHK_ENTITY_HV (_obj, BLOCKMOVEACTION, deps, num_deps);
   // AcDbBlockMoveAction
-  CHK_SUBCLASS_TYPE     (_obj->conn_pt1, BLOCKACTION_connectionpts, code, BL);
-  CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt1, BLOCKACTION_connectionpts, name);
-  CHK_SUBCLASS_TYPE     (_obj->conn_pt2, BLOCKACTION_connectionpts, code, BL);
-  CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt2, BLOCKACTION_connectionpts, name);
+  for (i = 0; i < 2; i++)
+    {
+      CHK_SUBCLASS_TYPE     (_obj->conn_pts[i], BLOCKACTION_connectionpts, code, BL);
+      CHK_SUBCLASS_UTF8TEXT (_obj->conn_pts[i], BLOCKACTION_connectionpts, name);
+    }
   CHK_ENTITY_TYPE (_obj, BLOCKMOVEACTION, action_offset_x, BD);
   CHK_ENTITY_TYPE (_obj, BLOCKMOVEACTION, action_offset_y, BD);
   CHK_ENTITY_TYPE (_obj, BLOCKMOVEACTION, angle_offset, BD);

@@ -714,6 +714,7 @@ sub out_declarator {
     $is_malloc = 0;
     $size = "$1 * $size";
     $sname =~ s/\[(\d+)\]$//;
+    $name = $sname if $sname eq 'conn_pts';
   }
   if ($type =~ /^TF/ && exists $SIZE{$key}->{$name}) {
     $size = $SIZE{$key}->{$name};
@@ -1176,9 +1177,10 @@ EOF
       $svar =~ s/\./_/g;
       $var = $svar;
     }
-    if ($var  =~ /\[\d+\]$/) {
+    if ($var =~ /\[\d+\]$/) {
       $svar =~ s/\[\d+\]$//g;
       $skey =~ s/\[\d+\]$//g;
+      $var = $svar if $var =~ /^conn_pts\[\d\]$/;
     }
     my $stype = $type;
     $type =~ s/D_1$/D/;
@@ -1923,7 +1925,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1927 "gen-dynapi.pl"
+#line 1929 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2007,7 +2009,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 2011 "gen-dynapi.pl"
+#line 2013 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

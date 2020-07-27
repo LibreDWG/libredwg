@@ -29,12 +29,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKLOOKUPACTION, numrows, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKLOOKUPACTION, numcols, BL);
   for (i = 0; i < numrows * numcols; i++) {
-    CHK_SUBCLASS_TYPE     (_obj->lut[i].conn_pt1, BLOCKACTION_connectionpts, code, BL);
-    CHK_SUBCLASS_UTF8TEXT (_obj->lut[i].conn_pt1, BLOCKACTION_connectionpts, name);
-    CHK_SUBCLASS_TYPE     (_obj->lut[i].conn_pt2, BLOCKACTION_connectionpts, code, BL);
-    CHK_SUBCLASS_UTF8TEXT (_obj->lut[i].conn_pt2, BLOCKACTION_connectionpts, name);
-    CHK_SUBCLASS_TYPE     (_obj->lut[i].conn_pt3, BLOCKACTION_connectionpts, code, BL);
-    CHK_SUBCLASS_UTF8TEXT (_obj->lut[i].conn_pt3, BLOCKACTION_connectionpts, name);
+    for (int j = 0; j < 3; j++)
+      {
+        CHK_SUBCLASS_TYPE     (_obj->lut[i].conn_pts[j], BLOCKACTION_connectionpts, code, BL);
+        CHK_SUBCLASS_UTF8TEXT (_obj->lut[i].conn_pts[j], BLOCKACTION_connectionpts, name);
+      }
     CHK_SUBCLASS_TYPE     (_obj->lut[i], "BLOCKLOOKUPACTION_lut", b282, BL);
     CHK_SUBCLASS_TYPE     (_obj->lut[i], "BLOCKLOOKUPACTION_lut", b281, BL);
   }

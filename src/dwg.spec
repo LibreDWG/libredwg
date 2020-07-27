@@ -8095,45 +8095,63 @@ DWG_OBJECT_END
   FIELD_B (show_properties, 280);               \
   FIELD_B (chain_actions, 281)
 
-#define AcDbBlockAction_fields                  \
-  AcDbBlockElement_fields;                      \
-  SUBCLASS (AcDbBlockAction)                    \
-  DXF {                                         \
-    FIELD_BL (num_actions, 70);                 \
-    FIELD_VECTOR (actions, BL, num_actions, 91);\
-    FIELD_BL (num_deps, 71);                    \
-    HANDLE_VECTOR (deps, num_deps, 5, 330);     \
-    FIELD_3BD (display_location, 1010);         \
-  } else {                                      \
-    FIELD_3BD (display_location, 0);            \
-    FIELD_BL (num_deps, 71);                    \
-    HANDLE_VECTOR (deps, num_deps, 5, 330);     \
-    FIELD_BL (num_actions, 70);                 \
-    FIELD_VECTOR (actions, BL, num_actions, 91); \
+#define AcDbBlockAction_fields                                                \
+  AcDbBlockElement_fields;                                                    \
+  SUBCLASS (AcDbBlockAction)                                                  \
+  DXF                                                                         \
+  {                                                                           \
+    FIELD_BL (num_actions, 70);                                               \
+    FIELD_VECTOR (actions, BL, num_actions, 91);                              \
+    FIELD_BL (num_deps, 71);                                                  \
+    HANDLE_VECTOR (deps, num_deps, 5, 330);                                   \
+    FIELD_3BD (display_location, 1010);                                       \
+  }                                                                           \
+  else                                                                        \
+  {                                                                           \
+    FIELD_3BD (display_location, 0);                                          \
+    FIELD_BL (num_deps, 71);                                                  \
+    HANDLE_VECTOR (deps, num_deps, 5, 330);                                   \
+    FIELD_BL (num_actions, 70);                                               \
+    FIELD_VECTOR (actions, BL, num_actions, 91);                              \
   }
 
-#define AcDbBlockGripExpr_fields                \
-  SUBCLASS (AcDbBlockGripExpr);                 \
-  FIELD_BL (grip_type, 91); /* ?? */            \
+#define AcDbBlockGripExpr_fields                                              \
+  SUBCLASS (AcDbBlockGripExpr);                                               \
+  FIELD_BL (grip_type, 91); /* ?? */                                          \
   FIELD_T (grip_expr, 300)
 
-#define BlockParam_Connection(conn, dxf1, dxf2)    \
-  FIELD_BL (conn.code, dxf1);                      \
+#define BlockParam_Connection(conn, dxf1, dxf2)                               \
+  FIELD_BL (conn.code, dxf1);                                                 \
   FIELD_T (conn.name, dxf2)
 
-#define BlockAction_ConnectionPt(conn_pt, dxf1, dxf2) \
-  FIELD_BL (conn_pt.code, dxf1);                      \
+#define BlockAction_ConnectionPt(conn_pt, dxf1, dxf2)                         \
+  FIELD_BL (conn_pt.code, dxf1);                                              \
   FIELD_T (conn_pt.name, dxf2)
 
-#define AcDbBlockParamValueSet_fields(var,i_code,d_code,s_code,t_code)  \
-  DXF  { SUB_FIELD_T (var,desc, t_code); }              \
-  JSON { SUB_FIELD_T (var,desc, t_code); }              \
-  SUB_FIELD_BL (var,flags, i_code)                      \
-  SUB_FIELD_BD (var,minimum, d_code)                    \
-  SUB_FIELD_BD (var,maximum, d_code+1)                  \
-  SUB_FIELD_BD (var,increment, d_code+2)                \
-  SUB_FIELD_BS (var,num_valuelist, s_code)              \
-  SUB_FIELD_VECTOR (var,valuelist, num_valuelist, BD, d_code+3)
+#define BlockAction_ConnectionPts(conn_pts, start, n, dxf1, dxf2)             \
+  DXF {                                                                       \
+    for (vcount = start; vcount < (start + n); vcount++) {                    \
+      FIELD_BL (conn_pts[vcount].code, dxf1 + vcount);                        \
+    }                                                                         \
+    for (vcount = start; vcount < (start + n); vcount++) {                    \
+      FIELD_T (conn_pts[vcount].name, dxf2 + vcount);                         \
+    }                                                                         \
+  } else {                                                                    \
+    for (vcount = start; vcount < (start + n); vcount++) {                    \
+      FIELD_BL (conn_pts[vcount].code, 0);                                    \
+      FIELD_T (conn_pts[vcount].name, 0);                                     \
+    }                                                                         \
+  }
+
+#define AcDbBlockParamValueSet_fields(var, i_code, d_code, s_code, t_code)    \
+  DXF { SUB_FIELD_T (var, desc, t_code); }                                    \
+  JSON { SUB_FIELD_T (var, desc, t_code); }                                   \
+  SUB_FIELD_BL (var, flags, i_code)                                           \
+  SUB_FIELD_BD (var, minimum, d_code)                                         \
+  SUB_FIELD_BD (var, maximum, d_code + 1)                                     \
+  SUB_FIELD_BD (var, increment, d_code + 2)                                   \
+  SUB_FIELD_BS (var, num_valuelist, s_code)                                   \
+  SUB_FIELD_VECTOR (var, valuelist, num_valuelist, BD, d_code + 3)
 
 #define BlockParam_PropInfo(_prop, num_code, d_code, t_code)         \
   SUB_FIELD_BL (_prop, num_connections, num_code)                    \
@@ -8179,14 +8197,13 @@ DWG_OBJECT_END
   AcDbBlockAction_fields;                         \
   SUBCLASS (AcDbBlockActionWithBasePt)            \
   FIELD_3BD (offset, 0);                          \
-  BlockAction_ConnectionPt (conn_pt1, 92, 301);   \
-  BlockAction_ConnectionPt (conn_pt2, 93, 302);   \
+  BlockAction_ConnectionPts (conn_pts, 0, 2, 92, 301); \
   DXF { FIELD_3BD (offset, 1011); }               \
   FIELD_B (dependent, 280);                       \
-  FIELD_3BD (base_pt, 1012)                       \
-  if (0) {                                        \
-    FIELD_3BD (stretch_pt, 0);                    \
-  }
+  FIELD_3BD (base_pt, 1012)
+  /* if (0) {
+    FIELD_3BD (stretch_pt, 0);
+  } */
 
 #define AcDbBlockAction_doubles_fields            \
   FIELD_BD (action_offset_x, 140);                \
@@ -8311,8 +8328,7 @@ DWG_OBJECT_END
 DWG_OBJECT (BLOCKMOVEACTION)
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockMoveAction)
-  BlockAction_ConnectionPt (conn_pt1, 92, 301);
-  BlockAction_ConnectionPt (conn_pt2, 93, 302);
+  BlockAction_ConnectionPts (conn_pts, 0, 2, 92, 301);
   AcDbBlockAction_doubles_fields;
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -8320,10 +8336,7 @@ DWG_OBJECT_END
 DWG_OBJECT (BLOCKFLIPACTION)
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockFlipAction)
-  BlockAction_ConnectionPt (conn_pt1, 92, 301);
-  BlockAction_ConnectionPt (conn_pt2, 93, 302);
-  BlockAction_ConnectionPt (conn_pt3, 94, 303);
-  BlockAction_ConnectionPt (conn_pt4, 95, 304);
+    BlockAction_ConnectionPts (conn_pts, 0, 4, 92, 301);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -8343,7 +8356,7 @@ DWG_OBJECT_END
 DWG_OBJECT (BLOCKROTATEACTION)
   AcDbBlockActionWithBasePt_fields;
   SUBCLASS (AcDbBlockRotateAction)
-  BlockAction_ConnectionPt (conn_pt3, 94, 303);
+  BlockAction_ConnectionPts (conn_pts, 2, 1, 94, 303);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -8356,17 +8369,14 @@ DWG_OBJECT_END
 DWG_OBJECT (BLOCKSCALEACTION)
   AcDbBlockActionWithBasePt_fields;
   SUBCLASS (AcDbBlockScaleAction)
-  BlockAction_ConnectionPt (conn_pt3, 94, 303);
-  BlockAction_ConnectionPt (conn_pt4, 95, 304);
-  BlockAction_ConnectionPt (conn_pt5, 96, 305);
+  BlockAction_ConnectionPts (conn_pts, 2, 3, 94, 303);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKSTRETCHACTION)
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockStretchAction)
-  BlockAction_ConnectionPt (conn_pt1, 92, 301);
-  BlockAction_ConnectionPt (conn_pt2, 93, 302);
+  BlockAction_ConnectionPts (conn_pts, 0, 2, 92, 301);
   FIELD_BL (num_pts, 72);
   FIELD_2RD_VECTOR (pts, num_pts, 10);
   FIELD_BL (num_hdls, 73);
@@ -10430,10 +10440,7 @@ DWG_OBJECT (BLOCKARRAYACTION)
   DECODE_UNKNOWN_BITS
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockArrayAction)
-  BlockAction_ConnectionPt (conn_pt1, 92, 301);
-  BlockAction_ConnectionPt (conn_pt2, 93, 302);
-  BlockAction_ConnectionPt (conn_pt3, 94, 303);
-  BlockAction_ConnectionPt (conn_pt4, 95, 304);
+  BlockAction_ConnectionPts (conn_pts, 0, 4, 92, 301);
   FIELD_BD (column_offset, 140);
   FIELD_BD (row_offset, 141);
   START_OBJECT_HANDLE_STREAM;
@@ -10540,9 +10547,7 @@ DWG_OBJECT (BLOCKLOOKUPACTION)
   DXF { VALUE_TFF ("", 301); }
   REPEAT (numelems, lut, Dwg_BLOCKLOOKUPACTION_lut)
   REPEAT_BLOCK
-    BlockAction_ConnectionPt (lut[rcount1].conn_pt1, 94, 303);
-    BlockAction_ConnectionPt (lut[rcount1].conn_pt2, 95, 303);
-    BlockAction_ConnectionPt (lut[rcount1].conn_pt3, 96, 303);
+    BlockAction_ConnectionPts (lut[rcount1].conn_pts, 0, 3, 94, 303);
     SUB_FIELD_B (lut[rcount1], b282, 282);
     SUB_FIELD_B (lut[rcount1], b281, 281);
   END_REPEAT_BLOCK
@@ -10598,12 +10603,7 @@ DWG_OBJECT (BLOCKPOLARSTRETCHACTION)
   DECODE_UNKNOWN_BITS
   AcDbBlockAction_fields;
   SUBCLASS (AcDbBlockPolarStretchAction)
-  BlockAction_ConnectionPt (conn_pt1, 92, 301);
-  BlockAction_ConnectionPt (conn_pt2, 93, 302);
-  BlockAction_ConnectionPt (conn_pt3, 94, 303);
-  BlockAction_ConnectionPt (conn_pt4, 95, 304);
-  BlockAction_ConnectionPt (conn_pt5, 96, 305);
-  BlockAction_ConnectionPt (conn_pt6, 97, 306);
+  BlockAction_ConnectionPts (conn_pts, 0, 6, 92, 301);
   FIELD_BL (num_pts, 72);
   FIELD_2RD_VECTOR (pts, num_pts, 10);
   FIELD_BL (num_hdls, 73);

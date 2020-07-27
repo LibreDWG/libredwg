@@ -7131,13 +7131,7 @@ BL*,	DXF 91
 BL,	DXF 71
 @item deps
 H*,	DXF 330
-@item conn_pt1
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt2
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt3
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt4
+@item conn_pts
 Dwg_BLOCKACTION_connectionpts
 @item column_offset
 BD,	DXF 140
@@ -7278,13 +7272,7 @@ BL*,	DXF 91
 BL,	DXF 71
 @item deps
 H*,	DXF 330
-@item conn_pt1
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt2
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt3
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt4
+@item conn_pts
 Dwg_BLOCKACTION_connectionpts
 @item action_offset_x
 BD
@@ -7787,9 +7775,7 @@ BL*,	DXF 91
 BL,	DXF 71
 @item deps
 H*,	DXF 330
-@item conn_pt1
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt2
+@item conn_pts
 Dwg_BLOCKACTION_connectionpts
 @item action_offset_x
 BD,	DXF 140
@@ -7990,17 +7976,7 @@ BL*,	DXF 91
 BL,	DXF 71
 @item deps
 H*,	DXF 330
-@item conn_pt1
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt2
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt3
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt4
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt5
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt6
+@item conn_pts
 Dwg_BLOCKACTION_connectionpts
 @item num_pts
 BL,	DXF 72
@@ -8171,18 +8147,12 @@ BL,	DXF 71
 H*,	DXF 330
 @item offset
 3BD,	DXF 1011
-@item conn_pt1
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt2
+@item conn_pts
 Dwg_BLOCKACTION_connectionpts
 @item dependent
 B,	DXF 280
 @item base_pt
 3BD,	DXF 1012
-@item stretch_pt
-3BD
-@item conn_pt3
-Dwg_BLOCKACTION_connectionpts
 
 @end vtable
 @end indentedblock
@@ -8312,22 +8282,12 @@ BL,	DXF 71
 H*,	DXF 330
 @item offset
 3BD,	DXF 1011
-@item conn_pt1
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt2
+@item conn_pts
 Dwg_BLOCKACTION_connectionpts
 @item dependent
 B,	DXF 280
 @item base_pt
 3BD,	DXF 1012
-@item stretch_pt
-3BD
-@item conn_pt3
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt4
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt5
-Dwg_BLOCKACTION_connectionpts
 
 @end vtable
 @end indentedblock
@@ -8361,9 +8321,7 @@ BL*,	DXF 91
 BL,	DXF 71
 @item deps
 H*,	DXF 330
-@item conn_pt1
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt2
+@item conn_pts
 Dwg_BLOCKACTION_connectionpts
 @item num_pts
 BL,	DXF 72
@@ -13413,11 +13371,7 @@ TV
 
 @item parent
 struct _dwg_object_BLOCKLOOKUPACTION*
-@item conn_pt1
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt2
-Dwg_BLOCKACTION_connectionpts
-@item conn_pt3
+@item conn_pts
 Dwg_BLOCKACTION_connectionpts
 @item b282
 B,	DXF 282

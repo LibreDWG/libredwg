@@ -7088,14 +7088,13 @@ typedef  struct _dwg_BLOCKACTION_connectionpts
   BITCODE_T name;
 } Dwg_BLOCKACTION_connectionpts;
 
-#define BLOCKACTION_WITHBASEPT_fields           \
+#define BLOCKACTION_WITHBASEPT_fields(n)        \
   BLOCKACTION_fields;                           \
   BITCODE_3BD offset;                           \
-  Dwg_BLOCKACTION_connectionpts conn_pt1;       \
-  Dwg_BLOCKACTION_connectionpts conn_pt2;       \
+  Dwg_BLOCKACTION_connectionpts conn_pts[n];    \
   BITCODE_B dependent;                          \
-  BITCODE_3BD base_pt;                          \
-  BITCODE_3BD stretch_pt
+  BITCODE_3BD base_pt
+  /* BITCODE_3BD stretch_pt */
 
 #define BLOCKPARAMVALUESET_fields               \
   Dwg_BLOCKPARAMVALUESET value_set
@@ -7259,10 +7258,7 @@ typedef struct _dwg_object_BLOCKARRAYACTION
 {
   struct _dwg_object_object *parent;
   BLOCKACTION_fields;
-  Dwg_BLOCKACTION_connectionpts conn_pt1; /*!< DXF 92, 301 */
-  Dwg_BLOCKACTION_connectionpts conn_pt2; /*!< DXF 93, 302 */
-  Dwg_BLOCKACTION_connectionpts conn_pt3; /*!< DXF 94, 303 */
-  Dwg_BLOCKACTION_connectionpts conn_pt4; /*!< DXF 95, 304 */
+  Dwg_BLOCKACTION_connectionpts conn_pts[4]; /*!< DXF 92-95, 301-304 */
   BITCODE_BD column_offset; /*!< DXF 140 */
   BITCODE_BD row_offset;    /*!< DXF 141 */
 } Dwg_Object_BLOCKARRAYACTION;
@@ -7279,10 +7275,7 @@ typedef struct _dwg_object_BLOCKFLIPACTION
 {
   struct _dwg_object_object *parent;
   BLOCKACTION_fields;
-  Dwg_BLOCKACTION_connectionpts conn_pt1; /*!< DXF 92, 301 */
-  Dwg_BLOCKACTION_connectionpts conn_pt2; /*!< DXF 93, 302 */
-  Dwg_BLOCKACTION_connectionpts conn_pt3; /*!< DXF 94, 303 */
-  Dwg_BLOCKACTION_connectionpts conn_pt4; /*!< DXF 95, 304 */
+  Dwg_BLOCKACTION_connectionpts conn_pts[4]; /*!< DXF 92-95, 301-304 */
   BLOCKACTION_doubles_fields;
 } Dwg_Object_BLOCKFLIPACTION;
 
@@ -7353,9 +7346,7 @@ typedef struct _dwg_object_BLOCKLINEARPARAMETER
 typedef struct _dwg_BLOCKLOOKUPACTION_lut
 {
   struct _dwg_object_BLOCKLOOKUPACTION *parent;
-  Dwg_BLOCKACTION_connectionpts conn_pt1; /*!< DXF 94, 303 */
-  Dwg_BLOCKACTION_connectionpts conn_pt2; /*!< DXF 95, 304 */
-  Dwg_BLOCKACTION_connectionpts conn_pt3; /*!< DXF 962, 305 */
+  Dwg_BLOCKACTION_connectionpts conn_pts[3]; /*!< DXF 94-96, 303-305*/
   BITCODE_B b282;
   BITCODE_B b281;
 } Dwg_BLOCKLOOKUPACTION_lut;
@@ -7392,8 +7383,7 @@ typedef struct _dwg_object_BLOCKMOVEACTION
 {
   struct _dwg_object_object *parent;
   BLOCKACTION_fields;
-  Dwg_BLOCKACTION_connectionpts conn_pt1; /*!< DXF 92, 301 */
-  Dwg_BLOCKACTION_connectionpts conn_pt2; /*!< DXF 93, 302 */
+  Dwg_BLOCKACTION_connectionpts conn_pts[2]; /*!< DXF 92-93, 301-302 */
   BLOCKACTION_doubles_fields;
 } Dwg_Object_BLOCKMOVEACTION;
 
@@ -7430,12 +7420,7 @@ typedef struct _dwg_object_BLOCKPOLARSTRETCHACTION
 {
   struct _dwg_object_object *parent;
   BLOCKACTION_fields;
-  Dwg_BLOCKACTION_connectionpts conn_pt1; /*!< DXF 92, 301 */
-  Dwg_BLOCKACTION_connectionpts conn_pt2; /*!< DXF 93, 302 */
-  Dwg_BLOCKACTION_connectionpts conn_pt3; /*!< DXF 94, 303 */
-  Dwg_BLOCKACTION_connectionpts conn_pt4; /*!< DXF 95, 304 */
-  Dwg_BLOCKACTION_connectionpts conn_pt5; /*!< DXF 96, 305 */
-  Dwg_BLOCKACTION_connectionpts conn_pt6; /*!< DXF 97, 306 */
+  Dwg_BLOCKACTION_connectionpts conn_pts[6]; /*!< DXF 92-97, 301-306 */
   BITCODE_BL num_pts;   // 72
   BITCODE_2RD *pts;     // 10
   BITCODE_BL num_hdls;  // 72
@@ -7467,8 +7452,7 @@ typedef struct _dwg_object_BLOCKREPRESENTATION
 typedef struct _dwg_object_BLOCKROTATEACTION
 {
   struct _dwg_object_object *parent;
-  BLOCKACTION_WITHBASEPT_fields;
-  Dwg_BLOCKACTION_connectionpts conn_pt3; /*!< DXF 94, 303 */
+  BLOCKACTION_WITHBASEPT_fields(3);
 } Dwg_Object_BLOCKROTATEACTION;
 
 typedef struct _dwg_object_BLOCKROTATIONGRIP
@@ -7492,18 +7476,14 @@ typedef struct _dwg_object_BLOCKROTATIONPARAMETER
 typedef struct _dwg_object_BLOCKSCALEACTION
 {
   struct _dwg_object_object *parent;
-  BLOCKACTION_WITHBASEPT_fields;
-  Dwg_BLOCKACTION_connectionpts conn_pt3; /*!< DXF 94, 303 */
-  Dwg_BLOCKACTION_connectionpts conn_pt4; /*!< DXF 95, 304 */
-  Dwg_BLOCKACTION_connectionpts conn_pt5; /*!< DXF 96, 305 */
+  BLOCKACTION_WITHBASEPT_fields(5);
 } Dwg_Object_BLOCKSCALEACTION;
 
 typedef struct _dwg_object_BLOCKSTRETCHACTION
 {
   struct _dwg_object_object *parent;
   BLOCKACTION_fields;
-  Dwg_BLOCKACTION_connectionpts conn_pt1; /*!< DXF 92, 301 */
-  Dwg_BLOCKACTION_connectionpts conn_pt2; /*!< DXF 93, 302 */
+  Dwg_BLOCKACTION_connectionpts conn_pts[2]; /*!< DXF 92-93, 301-302 */
   BITCODE_BL num_pts;   // 72
   BITCODE_2RD *pts;     // 10
   BITCODE_BL num_hdls;  // 72

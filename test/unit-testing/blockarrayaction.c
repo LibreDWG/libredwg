@@ -29,14 +29,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKARRAYACTION, num_deps, BL);
   CHK_ENTITY_HV (_obj, BLOCKARRAYACTION, deps, num_deps);
   // AcDbBlockArrayAction
-  CHK_SUBCLASS_TYPE     (_obj->conn_pt1, BLOCKACTION_connectionpts, code, BL);
-  CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt1, BLOCKACTION_connectionpts, name);
-  CHK_SUBCLASS_TYPE     (_obj->conn_pt2, BLOCKACTION_connectionpts, code, BL);
-  CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt2, BLOCKACTION_connectionpts, name);
-  CHK_SUBCLASS_TYPE     (_obj->conn_pt3, BLOCKACTION_connectionpts, code, BL);
-  CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt3, BLOCKACTION_connectionpts, name);
-  CHK_SUBCLASS_TYPE     (_obj->conn_pt4, BLOCKACTION_connectionpts, code, BL);
-  CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt4, BLOCKACTION_connectionpts, name);
+  for (i = 0; i < 4; i++)
+    {
+      CHK_SUBCLASS_TYPE     (_obj->conn_pts[i], BLOCKACTION_connectionpts, code, BL);
+      CHK_SUBCLASS_UTF8TEXT (_obj->conn_pts[i], BLOCKACTION_connectionpts, name);
+    }
   CHK_ENTITY_TYPE (_obj, BLOCKARRAYACTION, column_offset, BD);
   CHK_ENTITY_TYPE (_obj, BLOCKARRAYACTION, row_offset, BD);
 #endif

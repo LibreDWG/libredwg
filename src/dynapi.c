@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1927 "gen-dynapi.pl"
+#line 1929 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -6346,13 +6346,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKARRAYACTION_fields[] = {
     0,0,0, 71 },
   { "deps",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_BLOCKARRAYACTION, deps),
     1,1,0, 330 },
-  { "conn_pt1",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKARRAYACTION, conn_pt1),
-    0,0,0, 0 },
-  { "conn_pt2",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKARRAYACTION, conn_pt2),
-    0,0,0, 0 },
-  { "conn_pt3",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKARRAYACTION, conn_pt3),
-    0,0,0, 0 },
-  { "conn_pt4",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKARRAYACTION, conn_pt4),
+  { "conn_pts",	"Dwg_BLOCKACTION_connectionpts", 4 * sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKARRAYACTION, conn_pts),
     0,0,0, 0 },
   { "column_offset",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_BLOCKARRAYACTION, column_offset),
     0,0,0, 140 },
@@ -6472,13 +6466,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKFLIPACTION_fields[] = {
     0,0,0, 71 },
   { "deps",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_BLOCKFLIPACTION, deps),
     1,1,0, 330 },
-  { "conn_pt1",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKFLIPACTION, conn_pt1),
-    0,0,0, 0 },
-  { "conn_pt2",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKFLIPACTION, conn_pt2),
-    0,0,0, 0 },
-  { "conn_pt3",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKFLIPACTION, conn_pt3),
-    0,0,0, 0 },
-  { "conn_pt4",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKFLIPACTION, conn_pt4),
+  { "conn_pts",	"Dwg_BLOCKACTION_connectionpts", 4 * sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKFLIPACTION, conn_pts),
     0,0,0, 0 },
   { "action_offset_x",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_BLOCKFLIPACTION, action_offset_x),
     0,0,0, 0 },
@@ -6904,9 +6892,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKMOVEACTION_fields[] = {
     0,0,0, 71 },
   { "deps",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_BLOCKMOVEACTION, deps),
     1,1,0, 330 },
-  { "conn_pt1",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKMOVEACTION, conn_pt1),
-    0,0,0, 0 },
-  { "conn_pt2",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKMOVEACTION, conn_pt2),
+  { "conn_pts",	"Dwg_BLOCKACTION_connectionpts", 2 * sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKMOVEACTION, conn_pts),
     0,0,0, 0 },
   { "action_offset_x",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_object_BLOCKMOVEACTION, action_offset_x),
     0,0,0, 140 },
@@ -7072,17 +7058,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKPOLARSTRETCHACTION_fields[] = {
     0,0,0, 71 },
   { "deps",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_BLOCKPOLARSTRETCHACTION, deps),
     1,1,0, 330 },
-  { "conn_pt1",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKPOLARSTRETCHACTION, conn_pt1),
-    0,0,0, 0 },
-  { "conn_pt2",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKPOLARSTRETCHACTION, conn_pt2),
-    0,0,0, 0 },
-  { "conn_pt3",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKPOLARSTRETCHACTION, conn_pt3),
-    0,0,0, 0 },
-  { "conn_pt4",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKPOLARSTRETCHACTION, conn_pt4),
-    0,0,0, 0 },
-  { "conn_pt5",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKPOLARSTRETCHACTION, conn_pt5),
-    0,0,0, 0 },
-  { "conn_pt6",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKPOLARSTRETCHACTION, conn_pt6),
+  { "conn_pts",	"Dwg_BLOCKACTION_connectionpts", 6 * sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKPOLARSTRETCHACTION, conn_pts),
     0,0,0, 0 },
   { "num_pts",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKPOLARSTRETCHACTION, num_pts),
     0,0,0, 72 },
@@ -7218,18 +7194,12 @@ static const Dwg_DYNAPI_field _dwg_BLOCKROTATEACTION_fields[] = {
     1,1,0, 330 },
   { "offset",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKROTATEACTION, offset),
     1,0,0, 1011 },
-  { "conn_pt1",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKROTATEACTION, conn_pt1),
-    0,0,0, 0 },
-  { "conn_pt2",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKROTATEACTION, conn_pt2),
+  { "conn_pts",	"Dwg_BLOCKACTION_connectionpts", 3 * sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKROTATEACTION, conn_pts),
     0,0,0, 0 },
   { "dependent",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKROTATEACTION, dependent),
     0,0,0, 280 },
   { "base_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKROTATEACTION, base_pt),
     1,0,0, 1012 },
-  { "stretch_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKROTATEACTION, stretch_pt),
-    1,0,0, 0 },
-  { "conn_pt3",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKROTATEACTION, conn_pt3),
-    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_BLOCKROTATIONGRIP: (sorted by offset) */
@@ -7338,22 +7308,12 @@ static const Dwg_DYNAPI_field _dwg_BLOCKSCALEACTION_fields[] = {
     1,1,0, 330 },
   { "offset",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKSCALEACTION, offset),
     1,0,0, 1011 },
-  { "conn_pt1",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKSCALEACTION, conn_pt1),
-    0,0,0, 0 },
-  { "conn_pt2",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKSCALEACTION, conn_pt2),
+  { "conn_pts",	"Dwg_BLOCKACTION_connectionpts", 5 * sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKSCALEACTION, conn_pts),
     0,0,0, 0 },
   { "dependent",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCKSCALEACTION, dependent),
     0,0,0, 280 },
   { "base_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKSCALEACTION, base_pt),
     1,0,0, 1012 },
-  { "stretch_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_BLOCKSCALEACTION, stretch_pt),
-    1,0,0, 0 },
-  { "conn_pt3",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKSCALEACTION, conn_pt3),
-    0,0,0, 0 },
-  { "conn_pt4",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKSCALEACTION, conn_pt4),
-    0,0,0, 0 },
-  { "conn_pt5",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKSCALEACTION, conn_pt5),
-    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_BLOCKSTRETCHACTION: (sorted by offset) */
@@ -7380,9 +7340,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKSTRETCHACTION_fields[] = {
     0,0,0, 71 },
   { "deps",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_BLOCKSTRETCHACTION, deps),
     1,1,0, 330 },
-  { "conn_pt1",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKSTRETCHACTION, conn_pt1),
-    0,0,0, 0 },
-  { "conn_pt2",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKSTRETCHACTION, conn_pt2),
+  { "conn_pts",	"Dwg_BLOCKACTION_connectionpts", 2 * sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_object_BLOCKSTRETCHACTION, conn_pts),
     0,0,0, 0 },
   { "num_pts",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_BLOCKSTRETCHACTION, num_pts),
     0,0,0, 72 },
@@ -11347,11 +11305,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCKACTION_connectionpts_fields[] = {
 static const Dwg_DYNAPI_field _dwg_BLOCKLOOKUPACTION_lut_fields[] = {
   { "parent",	"struct _dwg_object_BLOCKLOOKUPACTION*", sizeof (void *),  OFF (struct _dwg_BLOCKLOOKUPACTION_lut, parent),
     1,1,0, 0 },
-  { "conn_pt1",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_BLOCKLOOKUPACTION_lut, conn_pt1),
-    0,0,0, 0 },
-  { "conn_pt2",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_BLOCKLOOKUPACTION_lut, conn_pt2),
-    0,0,0, 0 },
-  { "conn_pt3",	"Dwg_BLOCKACTION_connectionpts", sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_BLOCKLOOKUPACTION_lut, conn_pt3),
+  { "conn_pts",	"Dwg_BLOCKACTION_connectionpts", 3 * sizeof (Dwg_BLOCKACTION_connectionpts),  OFF (struct _dwg_BLOCKLOOKUPACTION_lut, conn_pts),
     0,0,0, 0 },
   { "b282",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_BLOCKLOOKUPACTION_lut, b282),
     0,0,0, 282 },
@@ -13653,7 +13607,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 
 };
 
-#line 2011 "gen-dynapi.pl"
+#line 2013 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

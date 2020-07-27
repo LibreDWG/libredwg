@@ -1231,8 +1231,8 @@ match_BLOCKMOVEACTION (const char *restrict filename,
 {
   char *text;
   int found = 0;
-  MATCH_OBJECT (BLOCKMOVEACTION, conn_pt1.name, 301);
-  MATCH_OBJECT (BLOCKMOVEACTION, conn_pt2.name, 302);
+  MATCH_OBJECT (BLOCKMOVEACTION, conn_pts[0].name, 301);
+  MATCH_OBJECT (BLOCKMOVEACTION, conn_pts[1].name, 302);
   return found;
 }
 static int
@@ -1241,8 +1241,19 @@ match_BLOCKSTRETCHACTION (const char *restrict filename,
 {
   char *text;
   int found = 0;
-  MATCH_OBJECT (BLOCKSTRETCHACTION, conn_pt1.name, 301);
-  MATCH_OBJECT (BLOCKSTRETCHACTION, conn_pt2.name, 302);
+  MATCH_OBJECT (BLOCKSTRETCHACTION, conn_pts[0].name, 301);
+  MATCH_OBJECT (BLOCKSTRETCHACTION, conn_pts[1].name, 302);
+  return found;
+}
+static int
+match_BLOCKROTATEACTION (const char *restrict filename,
+                          const Dwg_Object *restrict obj)
+{
+  char *text;
+  int found = 0;
+  MATCH_OBJECT (BLOCKROTATEACTION, conn_pts[0].name, 301);
+  MATCH_OBJECT (BLOCKROTATEACTION, conn_pts[1].name, 302);
+  MATCH_OBJECT (BLOCKROTATEACTION, conn_pts[2].name, 303);
   return found;
 }
 static int
@@ -1578,6 +1589,7 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       ELSEMATCH (BLOCKVISIBILITYPARAMETER)
       ELSEMATCH (BLOCKMOVEACTION)
       ELSEMATCH (BLOCKSTRETCHACTION)
+      ELSEMATCH (BLOCKROTATEACTION)
       ELSEMATCH (BLOCKVISIBILITYGRIP)
       ELSEMATCH (BLOCKGRIPLOCATIONCOMPONENT)
       ELSEMATCH (NAVISWORKSMODELDEF)

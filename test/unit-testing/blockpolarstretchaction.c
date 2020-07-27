@@ -27,18 +27,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKPOLARSTRETCHACTION, num_deps, BL);
   CHK_ENTITY_HV (_obj, BLOCKPOLARSTRETCHACTION, deps, num_deps);
   // AcDbBlockPolarStretchAction
-  CHK_SUBCLASS_TYPE     (_obj->conn_pt1, BLOCKACTION_connectionpts, code, BL);
-  CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt1, BLOCKACTION_connectionpts, name);
-  CHK_SUBCLASS_TYPE     (_obj->conn_pt2, BLOCKACTION_connectionpts, code, BL);
-  CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt2, BLOCKACTION_connectionpts, name);
-  CHK_SUBCLASS_TYPE     (_obj->conn_pt3, BLOCKACTION_connectionpts, code, BL);
-  CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt3, BLOCKACTION_connectionpts, name);
-  CHK_SUBCLASS_TYPE     (_obj->conn_pt4, BLOCKACTION_connectionpts, code, BL);
-  CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt4, BLOCKACTION_connectionpts, name);
-  CHK_SUBCLASS_TYPE     (_obj->conn_pt5, BLOCKACTION_connectionpts, code, BL);
-  CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt5, BLOCKACTION_connectionpts, name);
-  CHK_SUBCLASS_TYPE     (_obj->conn_pt6, BLOCKACTION_connectionpts, code, BL);
-  CHK_SUBCLASS_UTF8TEXT (_obj->conn_pt6, BLOCKACTION_connectionpts, name);
+  for (i = 0; i < 6; i++)
+    {
+      CHK_SUBCLASS_TYPE     (_obj->conn_pts[i], BLOCKACTION_connectionpts, code, BL);
+      CHK_SUBCLASS_UTF8TEXT (_obj->conn_pts[i], BLOCKACTION_connectionpts, name);
+    }
   CHK_ENTITY_TYPE (_obj, BLOCKPOLARSTRETCHACTION, num_pts, BL);
   CHK_ENTITY_2DPOINTS (_obj, BLOCKPOLARSTRETCHACTION, pts, num_pts);
   CHK_ENTITY_TYPE (_obj, BLOCKPOLARSTRETCHACTION, num_hdls, BL);
