@@ -2543,6 +2543,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   int j = -1;
   int k = -1;
   int l = -1;
+  int hdl_idx = -1;
 
   // valid entry codes
   if (pair->code == 91)
@@ -3165,21 +3166,28 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                      pair->value.d);
         }
       else if (pair->code == 330 && o->num_boundary_handles
-               && (BITCODE_BL)k < o->num_boundary_handles)
+               && (unsigned)hdl_idx < o->num_boundary_handles)
         {
           BITCODE_H ref
               = dwg_add_handleref (obj->parent, 4, pair->value.u, obj);
+          hdl_idx++;
+          if ((unsigned)hdl_idx > o->num_boundary_handles)
+            o->num_boundary_handles = (unsigned)hdl_idx;
           if (!o->boundary_handles)
-            o->boundary_handles = (BITCODE_H *)xcalloc (
-                o->num_boundary_handles, sizeof (BITCODE_H));
+            o->boundary_handles = (BITCODE_H *)xcalloc (o->num_boundary_handles, sizeof (BITCODE_H));
+          else
+            o->boundary_handles = (BITCODE_H *)realloc (o->boundary_handles,
+                                                        o->num_boundary_handles * sizeof (BITCODE_H));
+          LOG_TRACE ("HATCH.num_boundary_handles = %u\n", (unsigned)o->num_boundary_handles);
           if (!o->boundary_handles)
             {
               o->num_boundary_handles = 0;
+              LOG_ERROR ("! HATCH.boundary_handles");
               return NULL;
             }
-          o->boundary_handles[k] = ref;
+          o->boundary_handles[hdl_idx] = ref;
           LOG_TRACE ("HATCH.boundary_handles[%d] = " FORMAT_REF " [H 330]\n",
-                     k, ARGS_REF (ref));
+                     hdl_idx, ARGS_REF (ref));
         }
       else if (pair->code == 453)
         {
