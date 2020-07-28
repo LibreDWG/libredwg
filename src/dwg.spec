@@ -8103,14 +8103,14 @@ DWG_OBJECT_END
     FIELD_BL (num_actions, 70);                                               \
     FIELD_VECTOR (actions, BL, num_actions, 91);                              \
     FIELD_BL (num_deps, 71);                                                  \
-    HANDLE_VECTOR (deps, num_deps, 5, 330);                                   \
+    HANDLE_VECTOR (deps, num_deps, 4, 330);                                   \
     FIELD_3BD (display_location, 1010);                                       \
   }                                                                           \
   else                                                                        \
   {                                                                           \
     FIELD_3BD (display_location, 0);                                          \
     FIELD_BL (num_deps, 71);                                                  \
-    HANDLE_VECTOR (deps, num_deps, 5, 330);                                   \
+    HANDLE_VECTOR (deps, num_deps, 4, 330);                                   \
     FIELD_BL (num_actions, 70);                                               \
     FIELD_VECTOR (actions, BL, num_actions, 91);                              \
   }
