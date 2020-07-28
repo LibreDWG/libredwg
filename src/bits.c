@@ -3068,24 +3068,24 @@ bool does_cross_unicode_datversion (Bit_Chain *restrict dat)
 void bit_copy_chain (Bit_Chain *restrict dat, Bit_Chain *restrict tmp_dat)
 {
   unsigned long i;
-  unsigned long dat_size = bit_position (tmp_dat);
+  unsigned long dat_bits = bit_position (tmp_dat);
+  unsigned long size = tmp_dat->byte;
+  while (dat->byte + size > dat->size)
+    bit_chain_alloc (dat);
   // check if dat is byte aligned, tmp_dat always is. we can use memcpy then.
   if (!dat->bit)
     {
-      unsigned long size = tmp_dat->byte;
-      if (dat->byte + size > dat->size)
-        bit_chain_alloc (dat);
       memcpy (&dat->chain[dat->byte], &tmp_dat->chain[0], size);
       dat->byte += size;
     }
   else
     {
       bit_set_position (tmp_dat, 0);
-      for (i = 0; i < dat_size / 8; i++)
+      for (i = 0; i < size; i++)
         {
           bit_write_RC (dat, bit_read_RC (tmp_dat));
         }
-      for (i = 0; i < dat_size % 8; i++)
+      for (i = 0; i < dat_bits % 8; i++)
         {
           bit_write_B (dat, bit_read_B (tmp_dat));
         }

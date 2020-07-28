@@ -718,7 +718,7 @@ static bool env_var_checked_p;
         Bit_Chain dat2;                                                       \
         bit_chain_init_dat (&dat2, 12, dat);                                  \
         hdl_dat = &dat2;                                                      \
-        ENCODE_COMMON_HANDLES                                          \
+        ENCODE_COMMON_HANDLES                                                 \
         obj_flush_hdlstream (obj, dat, hdl_dat); /* common */                 \
         obj_flush_hdlstream (obj, dat, &dat1); /* special accumulated */      \
         bit_chain_free (&dat1);                                               \
