@@ -55,7 +55,7 @@ script:
     fi
     # ASAN just became too slow. skip unit-tests there.
   - if [ -n "$DISTCHECK" ]; then
-      travis_wait make -j4 distcheck && sha256sum libredwg-*.tar.* ;
+      travis_wait 30 make -j4 distcheck && sha256sum libredwg-*.tar.* ;
     else
       if [ -n "$ASAN" ]; then
         make -j4 check -C src ;
