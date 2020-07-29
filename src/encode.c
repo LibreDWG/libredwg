@@ -1169,10 +1169,6 @@ add_DUMMY_eed (Dwg_Object *obj)
 
 #ifdef ENCODE_UNKNOWN_AS_DUMMY
 
-// from free.c
-int dwg_free_WIPEOUT_private (Bit_Chain *, Bit_Chain *, Bit_Chain *, Dwg_Object *restrict);
-int dwg_free_TABLEGEOMETRY_private (Bit_Chain *, Bit_Chain *, Bit_Chain *, Dwg_Object *restrict);
-
 /** We cannot write unknown bits into another version. Also with indxf we don't
  * have that luxury. Write a DUMMY/PLACEHOLDER or POINT instead. Later maybe
  * PROXY. This leaks and is controversial. But it silences many ACAD import
@@ -1188,14 +1184,11 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   obj->size = 0;
   obj->bitsize = 0;
 
-  // TODO free the old to avoid leaks
   if (is_entity)
     { // POINT is better than DUMMY to preserve the next_entity chain.
       // TODO much better would be PROXY_ENTITY
       Dwg_Entity_POINT *_obj = obj->tio.entity->tio.POINT;
       LOG_WARN ("fixup unsupported %s %lX as POINT", obj->dxfname, obj->handle.value);
-      // TODO dwg_free_##token##_private (dat, obj); // keeping eed and
-      // common
       if (!obj->tio.entity->xdicobjhandle)
         obj->tio.entity->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
       /*
@@ -1207,8 +1200,7 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         }
       */
       add_DUMMY_eed (obj);
-      if (obj->fixedtype == DWG_TYPE_WIPEOUT)
-        dwg_free_WIPEOUT_private (dat, dat, dat, obj);
+      dwg_free_object_private (obj);
       free (obj->unknown_bits);
       obj->tio.entity->tio.POINT = _obj
           = realloc (_obj, sizeof (Dwg_Entity_POINT));
@@ -1245,8 +1237,7 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       const char *dxfname;
 
       add_DUMMY_eed (obj);
-      if (obj->fixedtype == DWG_TYPE_TABLEGEOMETRY)
-        dwg_free_TABLEGEOMETRY_private (dat, dat, dat, obj);
+      dwg_free_object_private (obj);
       // if PLACEHOLDER is available, or even PROXY_OBJECT.
       // PLOTSETTINGS uses PLACEHOLDER though
       if (placeholder_type)
@@ -1282,8 +1273,6 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         }
       else
         obj->dxfname = (char *)dxfname;
-      // TODO dwg_free_##token##_private (dat, obj); // keeping eed and
-      // common
       free (obj->unknown_bits);
     }
   obj->hdlpos = 0;
@@ -1738,7 +1727,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 #ifdef ENCODE_UNKNOWN_AS_DUMMY
   // We cannot write unknown_bits into another version, or when it's coming
   // from DXF. Write a PLACEHOLDER/DUMMY or POINT instead. Later maybe PROXY.
-  // This leaks and is controversial. Also breaks roundtrip tests, but helps
+  // This is controversial and breaks roundtrip tests, but helps
   // ACAD imports.
   if (dwg->header.version != dwg->header.from_version
       || (dwg->opts & DWG_OPTS_IN))
@@ -1752,6 +1741,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           Dwg_Object *obj = &dwg->object[i];
           if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
               || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
+              // WIPEOUT causes hang, TABLEGEOMETRY crash
               || (dwg->opts & DWG_OPTS_IN &&
                   (obj->fixedtype == DWG_TYPE_WIPEOUT ||
                    obj->fixedtype == DWG_TYPE_TABLEGEOMETRY)))

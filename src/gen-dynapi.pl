@@ -1426,11 +1426,11 @@ sub mv_if_not_same {
     warn "keep $orig\n";
   }
 }
- 
+
 # find DEBUGGING classes
-my $classesinc = "$srcdir/classes.inc";
+my $classes_inc = "$srcdir/classes.inc";
  my (%STABLE, %UNSTABLE, %DEBUGGING, %UNHANDLED, %FIXED, %STABLEVAR);
-open $in, "<", $classesinc or die "$classesinc: $!";
+open $in, "<", $classes_inc or die "$classes_inc: $!";
 while (<$in>) {
   if (/^\s*STABLE_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+?)[,\)]/) {
       $STABLE{$1}++;
@@ -1459,6 +1459,8 @@ for (@object_names) {
     $STABLE{$_}++;
   }
 }
+$STABLE{_3DSOLID}++;
+$STABLE{_3DFACE}++;
 $FIXED{_3DSOLID}++;
 $FIXED{_3DFACE}++;
 for (keys %STABLE) {
@@ -1864,6 +1866,46 @@ close $in;
 close $out;
 mv_if_not_same ("$dwg_h.tmp", $dwg_h);
 
+if (0) {
+my $free_h = "$topdir/src/free.h";
+open $in, "<", $free_h or die "$free_h: $!";
+open $out, ">", "$free_h.tmp" or die "$free_h.tmp: $!";
+$gen = 0;
+while (<$in>) {
+  if (m/^\/\* Start auto-generated content/) {
+    print $out $_;
+
+    $tmpl = "int dwg_free_\$name (Bit_Chain *restrict dat, Dwg_Object *restrict obj);\n" .
+      "int dwg_free_\$name_private (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat, Dwg_Object *restrict obj);\n";
+    out_classes ($out, \@entity_names, \%STABLE, $tmpl);
+    out_classes ($out, \@object_names, \%STABLE, $tmpl);
+    print $out "/* unstable */\n";
+    out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
+    out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
+    print $out "/* DEBUG_CLASSES */\n";
+    my $dbgtmpl = $tmpl;
+    $dbgtmpl =~ s/^int dwg_free/  int dwg_free/gmaa;
+    out_classes ($out, \@entity_names, \%DEBUGGING, $dbgtmpl);
+    out_classes ($out, \@object_names, \%DEBUGGING, $dbgtmpl);
+    my $unhtmpl = $tmpl;
+    $unhtmpl =~ s{^int dwg_free}{//  int dwg_free}gmaa;
+    out_classes ($out, \@entity_names, \%UNHANDLED, $unhtmpl);
+    out_classes ($out, \@object_names, \%UNHANDLED, $unhtmpl);
+    print $out "/* End auto-generated content */\n";
+    $gen = 1;
+  }
+  if (!$gen) {
+    print $out $_;
+  }
+  if (m/^\s*\/\* End auto-generated/) {
+    $gen = 0;
+  }
+}
+close $in;
+close $out;
+mv_if_not_same ("$free_h.tmp", $free_h);
+}
+
 my $done = 0;
 my $ifile = "$topdir/bindings/dwg.i";
 open $in, "<", $ifile or die "$ifile: $!";
@@ -1925,7 +1967,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1929 "gen-dynapi.pl"
+#line 1971 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2009,7 +2051,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 2013 "gen-dynapi.pl"
+#line 2055 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

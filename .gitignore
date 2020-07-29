@@ -214,5 +214,6 @@ gcov.log
 /src/config.h
 /src/stamp-h1
 /src/dwg_api.c.bak
+/src/free.h.bak
 /include/dwg.h.bak
 /include/dwg_api.h.bak
