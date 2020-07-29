@@ -8336,6 +8336,17 @@ new_object (char *restrict name, char *restrict dxfname,
         { // the biggest
           ADD_ENTITY (DIMENSION_ANG2LN);
         }
+      // broken (causes acad to hang on audit redraw)
+      /*
+      else if (is_class_unstable (name)
+               && strEQc (name, "WIPEOUT"))
+        {
+          LOG_ERROR ("Unhandled DXF entity %s", name);
+          name = (char*)"UNKNOWN_ENT";
+          ADD_ENTITY (UNKNOWN_ENT);
+          return pair;
+        }
+      */
       else
         {
           // clang-format off
@@ -8367,22 +8378,22 @@ new_object (char *restrict name, char *restrict dxfname,
       obj->tio.object->is_xdic_missing = 1;
       if (!ctrl_id) // no table
         {
-// clang-format off
-
+          // clang-format off
           // ADD_OBJECT by name
           // check all objects
           #undef DWG_OBJECT
           #define DWG_OBJECT(token)         \
-            if (strEQc (name, #token))      \
-              {                             \
-                ADD_OBJECT (token);         \
-                goto found_obj;             \
-              }
+              if (strEQc (name, #token))    \
+                {                           \
+                  ADD_OBJECT (token);       \
+                  goto found_obj;           \
+                }
 
           #include "objects.inc"
 
           #undef DWG_OBJECT
           #define DWG_OBJECT(token)
+
         found_obj:
           ;
           // clang-format on
@@ -11697,7 +11708,8 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
         }
       DXF_RETURN_ENDSEC (0)
-      else LOG_WARN ("Unhandled 0 %s (%s)", name, "entities");
+      else
+        LOG_WARN ("Unhandled 0 %s (%s)", name, "entities");
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
       DXF_CHECK_EOF;

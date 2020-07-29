@@ -1169,13 +1169,18 @@ add_DUMMY_eed (Dwg_Object *obj)
 
 #ifdef ENCODE_UNKNOWN_AS_DUMMY
 
+// from free.c
+int dwg_free_WIPEOUT_private (Bit_Chain *, Bit_Chain *, Bit_Chain *, Dwg_Object *restrict);
+int dwg_free_TABLEGEOMETRY_private (Bit_Chain *, Bit_Chain *, Bit_Chain *, Dwg_Object *restrict);
+
 /** We cannot write unknown bits into another version. Also with indxf we don't
  * have that luxury. Write a DUMMY/PLACEHOLDER or POINT instead. Later maybe
  * PROXY. This leaks and is controversial. But it silences many ACAD import
  * warnings, and preserves information.
  */
 static void
-encode_unknown_as_dummy (Dwg_Object *obj, BITCODE_BS placeholder_type)
+encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                         BITCODE_BS placeholder_type)
 {
   Dwg_Data *dwg = obj->parent;
   int is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
@@ -1202,6 +1207,8 @@ encode_unknown_as_dummy (Dwg_Object *obj, BITCODE_BS placeholder_type)
         }
       */
       add_DUMMY_eed (obj);
+      if (obj->fixedtype == DWG_TYPE_WIPEOUT)
+        dwg_free_WIPEOUT_private (dat, dat, dat, obj);
       free (obj->unknown_bits);
       obj->tio.entity->tio.POINT = _obj
           = realloc (_obj, sizeof (Dwg_Entity_POINT));
@@ -1238,6 +1245,8 @@ encode_unknown_as_dummy (Dwg_Object *obj, BITCODE_BS placeholder_type)
       const char *dxfname;
 
       add_DUMMY_eed (obj);
+      if (obj->fixedtype == DWG_TYPE_TABLEGEOMETRY)
+        dwg_free_TABLEGEOMETRY_private (dat, dat, dat, obj);
       // if PLACEHOLDER is available, or even PROXY_OBJECT.
       // PLOTSETTINGS uses PLACEHOLDER though
       if (placeholder_type)
@@ -1728,11 +1737,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
 #ifdef ENCODE_UNKNOWN_AS_DUMMY
   // We cannot write unknown_bits into another version, or when it's coming
-  // from DXF. Write a PLACEHOLDER?DUMMY or POINT instead. Later maybe PROXY.
+  // from DXF. Write a PLACEHOLDER/DUMMY or POINT instead. Later maybe PROXY.
   // This leaks and is controversial. Also breaks roundtrip tests, but helps
   // ACAD imports.
   if (dwg->header.version != dwg->header.from_version
-      || (dwg->opts & DWG_OPTS_INDXF))
+      || (dwg->opts & DWG_OPTS_IN))
     {
       int fixup = 0;
       // Scan for invalid/unstable/unsupported objects and entities
@@ -1740,8 +1749,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       LOG_TRACE ("Scan for unsupported objects\n");
       for (i = 0; i < dwg->num_objects; i++)
         {
-          if (dwg->object[i].fixedtype == DWG_TYPE_UNKNOWN_OBJ
-              || dwg->object[i].fixedtype == DWG_TYPE_UNKNOWN_ENT)
+          Dwg_Object *obj = &dwg->object[i];
+          if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
+              || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
+              || (dwg->opts & DWG_OPTS_IN &&
+                  (obj->fixedtype == DWG_TYPE_WIPEOUT ||
+                   obj->fixedtype == DWG_TYPE_TABLEGEOMETRY)))
             {
               fixup++;
               break;
@@ -1762,12 +1775,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 {
                   Dwg_Object *obj = &dwg->object[i];
                   if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
-                      || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
+                      || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
+                      || (dwg->opts & DWG_OPTS_IN &&
+                          (obj->fixedtype == DWG_TYPE_WIPEOUT ||
+                           obj->fixedtype == DWG_TYPE_TABLEGEOMETRY)))
                     {
                       fixup++;
                       // replace entities with points, objects with
                       // placeholders
-                      encode_unknown_as_dummy (obj, placeholder_type);
+                      encode_unknown_as_dummy (dat, obj, placeholder_type);
                     }
                   // what to do with links to MATERIAL/...
                   if (obj->handle.value == 0xC
@@ -3334,9 +3350,19 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         }
     }
 
-  if (dwg->opts & DWG_OPTS_IN) // DXF import
+  if (dwg->opts & DWG_OPTS_IN) // DXF or JSON import
     {
       unsigned long pos = bit_position (dat);
+
+      /* Should not be triggered. Only when undef ENCODE_UNKNOWN_AS_DUMMY */
+      if (is_type_unstable (obj->fixedtype) &&
+          (obj->fixedtype == DWG_TYPE_WIPEOUT ||
+           obj->fixedtype == DWG_TYPE_TABLEGEOMETRY))
+        {
+          LOG_WARN ("Skip broken %s", obj->name); // acad crashes still
+          obj->type = is_entity ? DWG_TYPE_UNKNOWN_ENT : DWG_TYPE_PLACEHOLDER;
+          klass->dxfname = strdup (is_entity ? "UNKNOWN_ENT" : "UNKNOWN_OBJ");
+        }
       dat->byte = obj->address;
       dat->bit = 0;
       LOG_TRACE ("fixup Type: %d [BS] @%lu\n", obj->type, obj->address);

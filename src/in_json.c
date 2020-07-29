@@ -32,6 +32,7 @@
 #include "hash.h"
 #include "decode.h"
 #include "dynapi.h"
+#include "classes.h"
 #include "in_json.h"
 
 static unsigned int loglevel;
@@ -2703,6 +2704,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               if (!fields || !objsize || !is_dwg_object (name))
                 {
                   LOG_ERROR ("Unknown object %s", name);
+                //skip_object:
                   obj->type = obj->fixedtype = DWG_TYPE_DUMMY;
                   // exhaust the rest
                   for (; j < keys; j++)
@@ -2714,6 +2716,16 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   tokens->index--;
                   break;
                 }
+              // crashing acad import, but dxfin might be okay
+              /*
+              if (is_class_unstable (name) &&
+                  (strEQc (name, "TABLEGEOMETRY") ||
+                   strEQc (name, "WIPEOUT")))
+                {
+                  LOG_ERROR ("Unhandled object %s", name);
+                  goto skip_object;
+                }
+              */
               LOG_TRACE ("\nnew object %s [%d] (size: %d)\n", name, i,
                          objsize);
               obj->tio.object = (Dwg_Object_Object*)calloc (1, sizeof (Dwg_Object_Object));

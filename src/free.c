@@ -305,12 +305,12 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
                                  Dwg_Object *restrict obj);
 
 #define DWG_ENTITY(token)                                                     \
-  static int dwg_free_##token##_private                                       \
+  int dwg_free_##token##_private                                              \
     (Bit_Chain *dat, Bit_Chain *hdl_dat,                                      \
      Bit_Chain *str_dat, Dwg_Object *restrict obj);                           \
                                                                               \
-  static int dwg_free_##token (Bit_Chain *restrict dat,                       \
-                               Dwg_Object *restrict obj)                      \
+  int dwg_free_##token (Bit_Chain *restrict dat,                              \
+                        Dwg_Object *restrict obj)                             \
   {                                                                           \
     int error = 0;                                                            \
     if (obj->tio.entity)                                                      \
@@ -330,7 +330,7 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
     obj->parent = NULL;                                                       \
     return error;                                                             \
   }                                                                           \
-  static int dwg_free_##token##_private                                       \
+  int dwg_free_##token##_private                                              \
     (Bit_Chain *dat, Bit_Chain *hdl_dat,                                      \
      Bit_Chain *str_dat, Dwg_Object *restrict obj)                            \
   {                                                                           \
@@ -349,12 +349,12 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
   }
 
 #define DWG_OBJECT(token)                                                     \
-  static int dwg_free_##token##_private                                       \
+  int dwg_free_##token##_private                                              \
     (Bit_Chain *dat, Bit_Chain *hdl_dat,                                      \
      Bit_Chain *str_dat, Dwg_Object *restrict obj);                           \
                                                                               \
-  static int dwg_free_##token (Bit_Chain *restrict dat,                       \
-                               Dwg_Object *restrict obj)                      \
+  int dwg_free_##token (Bit_Chain *restrict dat,                              \
+                        Dwg_Object *restrict obj)                             \
   {                                                                           \
     int error = 0;                                                            \
     Dwg_Object_##token *_obj = NULL;                                          \
@@ -372,7 +372,7 @@ static int dwg_free_UNKNOWN_OBJ (Bit_Chain *restrict dat,
     return error;                                                             \
   }                                                                           \
                                                                               \
-  static int dwg_free_##token##_private                                       \
+  int dwg_free_##token##_private                                              \
     (Bit_Chain *dat, Bit_Chain *hdl_dat,                                      \
      Bit_Chain *str_dat, Dwg_Object *restrict obj)                            \
   {                                                                           \

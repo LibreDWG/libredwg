@@ -6057,9 +6057,10 @@ DWG_OBJECT (CELLSTYLEMAP)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-//pg.246 20.4.103
-//stable
+// pg.246 20.4.103
+// unstable. Cannot be encoded for now
 DWG_OBJECT (TABLEGEOMETRY)
+  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbTableGeometry)
   FIELD_BL (numrows, 90);
   VALUEOUTOFBOUNDS (numrows, 5000)
@@ -6517,8 +6518,10 @@ DWG_OBJECT (WIPEOUTVARIABLES)
 DWG_OBJECT_END
 
 // R2000+ picture. undocumented (varies)
+// unstable. cannot be encoded for now
 DWG_ENTITY (WIPEOUT)
 
+  DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbWipeout)
   // this must be an exact copy of AcDbRasterImage
   FIELD_BL (class_version, 90);

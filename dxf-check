@@ -63,8 +63,9 @@ if [ -f "$b.dwg" ]; then
 
     if [ -f "$log1" ] && [ -f "$log2" ]; then
         # Really interesting is the Section BLOCKS here. vs BLOCK_HEADER
-        # we dont write unstable entities yet.
-        grep -E '^Add entity' "$log1" | grep -E -v 'entity (ARC_DIMENSION|HELIX|SECTIONOBJECT|UNKNOWN_ENT)' >"$log1.tmp"
+        # We dont write unstable entities yet. WIPEOUT is converted to POINT in encode, but skipped at out_dxf
+        grep -E '^Add entity' "$log1" | \
+            grep -E -v 'entity (WIPEOUT|ARC_DIMENSION|HELIX|SECTIONOBJECT|UNKNOWN_ENT)' >"$log1.tmp"
         grep -E '^Add entity' "$log2" >"$log2.tmp"
         if diff -bu0 "$log1.tmp" "$log2.tmp" >/dev/null 2>/dev/null; then
             echo entities roundtrip ok
