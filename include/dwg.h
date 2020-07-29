@@ -7846,11 +7846,11 @@ typedef struct _dwg_object_entity
     Dwg_Entity_OLE2FRAME *OLE2FRAME;
     Dwg_Entity_SECTIONOBJECT *SECTIONOBJECT;
     Dwg_Entity_UNDERLAY *UNDERLAY;
-    Dwg_Entity_WIPEOUT *WIPEOUT;
     /* unstable */
     Dwg_Entity_ARC_DIMENSION *ARC_DIMENSION;
     Dwg_Entity_HELIX *HELIX;
     Dwg_Entity_LARGE_RADIAL_DIMENSION *LARGE_RADIAL_DIMENSION;
+    Dwg_Entity_WIPEOUT *WIPEOUT;
     /* debugging */
     Dwg_Entity_ALIGNMENTPARAMETERENTITY *ALIGNMENTPARAMETERENTITY;
     Dwg_Entity_ATEXT *ATEXT;
@@ -9223,7 +9223,6 @@ EXPORT int dwg_setup_MULTILEADER (Dwg_Object *obj);
 EXPORT int dwg_setup_OLE2FRAME (Dwg_Object *obj);
 EXPORT int dwg_setup_SECTIONOBJECT (Dwg_Object *obj);
 EXPORT int dwg_setup_UNDERLAY (Dwg_Object *obj);
-EXPORT int dwg_setup_WIPEOUT (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BOOLEAN_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BOX_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CYLINDER_CLASS (Dwg_Object *obj);
@@ -9275,6 +9274,7 @@ EXPORT int dwg_setup_XRECORD (Dwg_Object *obj);
 EXPORT int dwg_setup_ARC_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_HELIX (Dwg_Object *obj);
 EXPORT int dwg_setup_LARGE_RADIAL_DIMENSION (Dwg_Object *obj);
+EXPORT int dwg_setup_WIPEOUT (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BREP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CHAMFER_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CONE_CLASS (Dwg_Object *obj);

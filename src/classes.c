@@ -67,6 +67,7 @@ static const Dwg_Object_Type _classes_unstable[] =
    DWG_TYPE_SPATIAL_INDEX,
    DWG_TYPE_SUN,
    DWG_TYPE_TABLESTYLE,
+   DWG_TYPE_WIPEOUT,
   };
 static const Dwg_Object_Type _classes_debugging[] =
   {

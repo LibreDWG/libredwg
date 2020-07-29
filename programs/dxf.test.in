@@ -169,9 +169,9 @@ check_roundtrip() {
         @LTEXEC@ ./dwgread -v2 "$tgt" 2>"$log2" >/dev/null
         # we dont write unstable entities yet
         if [ -n "$enable_debug" ]; then
-            expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (UNKNOWN_ENT)')"
+            expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (WIPEOUT|UNKNOWN_ENT)')"
         else
-            expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (ARC_DIMENSION|HELIX|UNKNOWN_ENT)')"
+            expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (WIPEOUT|ARC_DIMENSION|HELIX|UNKNOWN_ENT)')"
         fi
         got="$(grep -E -c '^Add entity' "$log2")"
         rm "./$dxf" "./$tgt" 2>/dev/null

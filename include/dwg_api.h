@@ -545,11 +545,11 @@ typedef struct _dwg_entity_MULTILEADER		dwg_ent_mleader;
 typedef struct _dwg_entity_OLE2FRAME		dwg_ent_ole2frame;
 typedef struct _dwg_entity_SECTIONOBJECT		dwg_ent_sectionobject;
 typedef struct _dwg_entity_UNDERLAY		dwg_ent_underlay;
-typedef struct _dwg_entity_WIPEOUT		dwg_ent_wipeout;
 /* unstable */
 typedef struct _dwg_entity_ARC_DIMENSION		dwg_ent_arc_dimension;
 typedef struct _dwg_entity_HELIX		dwg_ent_helix;
 typedef struct _dwg_entity_LARGE_RADIAL_DIMENSION		dwg_ent_large_radial_dimension;
+typedef struct _dwg_entity_WIPEOUT		dwg_ent_wipeout;
 /* debugging */
 typedef struct _dwg_entity_ALIGNMENTPARAMETERENTITY		dwg_ent_alignmentparameterentity;
 typedef struct _dwg_entity_ATEXT		dwg_ent_atext;
@@ -843,11 +843,11 @@ dwg_get_OBJECT_DECL (ent_mleader, MULTILEADER);
 dwg_get_OBJECT_DECL (ent_ole2frame, OLE2FRAME);
 dwg_get_OBJECT_DECL (ent_sectionobject, SECTIONOBJECT);
 dwg_get_OBJECT_DECL (ent_underlay, UNDERLAY);
-dwg_get_OBJECT_DECL (ent_wipeout, WIPEOUT);
 /* unstable */
 dwg_get_OBJECT_DECL (ent_arc_dimension, ARC_DIMENSION);
 dwg_get_OBJECT_DECL (ent_helix, HELIX);
 dwg_get_OBJECT_DECL (ent_large_radial_dimension, LARGE_RADIAL_DIMENSION);
+dwg_get_OBJECT_DECL (ent_wipeout, WIPEOUT);
 #ifdef DEBUG_CLASSES
   dwg_get_OBJECT_DECL (ent_alignmentparameterentity, ALIGNMENTPARAMETERENTITY);
   dwg_get_OBJECT_DECL (ent_atext, ATEXT);
@@ -1153,11 +1153,11 @@ DWG_GETALL_ENTITY_DECL (MULTILEADER);
 DWG_GETALL_ENTITY_DECL (OLE2FRAME);
 DWG_GETALL_ENTITY_DECL (SECTIONOBJECT);
 DWG_GETALL_ENTITY_DECL (UNDERLAY);
-DWG_GETALL_ENTITY_DECL (WIPEOUT);
 /* unstable */
 DWG_GETALL_ENTITY_DECL (ARC_DIMENSION);
 DWG_GETALL_ENTITY_DECL (HELIX);
 DWG_GETALL_ENTITY_DECL (LARGE_RADIAL_DIMENSION);
+DWG_GETALL_ENTITY_DECL (WIPEOUT);
 /* debugging */
 DWG_GETALL_ENTITY_DECL (ALIGNMENTPARAMETERENTITY);
 DWG_GETALL_ENTITY_DECL (ATEXT);
@@ -1478,11 +1478,11 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (MULTILEADER);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (OLE2FRAME);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (SECTIONOBJECT);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (UNDERLAY);
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (WIPEOUT);
 /* unstable */
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ARC_DIMENSION);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (HELIX);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LARGE_RADIAL_DIMENSION);
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (WIPEOUT);
 #ifdef DEBUG_CLASSES
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ALIGNMENTPARAMETERENTITY);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ATEXT);
