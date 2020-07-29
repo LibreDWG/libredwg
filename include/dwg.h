@@ -7694,6 +7694,15 @@ typedef struct _dwg_object_POINTCLOUDCOLORMAP
   Dwg_POINTCLOUDCOLORMAP_Ramp *classification_colorramps;
 } Dwg_Object_POINTCLOUDCOLORMAP;
 
+// unhandled. some subclass
+typedef struct _dwg_COMPOUNDOBJECTID
+{
+  struct _dwg_object_object *parent;
+  BITCODE_B has_object;
+  BITCODE_T name;
+  BITCODE_H object;
+} Dwg_COMPOUNDOBJECTID;
+
 /**
  -----------------------------------
  */
@@ -8162,6 +8171,12 @@ typedef struct _dwg_object_object
     Dwg_Object_TABLECONTENT *TABLECONTENT;
     Dwg_Object_TEXTOBJECTCONTEXTDATA *TEXTOBJECTCONTEXTDATA;
     Dwg_Object_TVDEVICEPROPERTIES *TVDEVICEPROPERTIES;
+//    Dwg_Object_ACDSRECORD *ACDSRECORD;
+//    Dwg_Object_ACDSSCHEMA *ACDSSCHEMA;
+//    Dwg_Object_NPOCOLLECTION *NPOCOLLECTION;
+//    Dwg_Object_PROXY_LWPOLYLINE *PROXY_LWPOLYLINE;
+//    Dwg_Object_RAPIDRTRENDERENVIRONMENT *RAPIDRTRENDERENVIRONMENT;
+//    Dwg_Object_XREFPANELOBJECT *XREFPANELOBJECT;
     /* End auto-generated object-union */
   } tio;
 
@@ -9438,6 +9453,12 @@ EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
   EXPORT int dwg_setup_TABLECONTENT (Dwg_Object *obj);
   EXPORT int dwg_setup_TEXTOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_TVDEVICEPROPERTIES (Dwg_Object *obj);
+  //EXPORT int dwg_setup_ACDSRECORD (Dwg_Object *obj);
+  //EXPORT int dwg_setup_ACDSSCHEMA (Dwg_Object *obj);
+  //EXPORT int dwg_setup_NPOCOLLECTION (Dwg_Object *obj);
+  //EXPORT int dwg_setup_PROXY_LWPOLYLINE (Dwg_Object *obj);
+  //EXPORT int dwg_setup_RAPIDRTRENDERENVIRONMENT (Dwg_Object *obj);
+  //EXPORT int dwg_setup_XREFPANELOBJECT (Dwg_Object *obj);
 #endif
 /* End auto-generated content */
 

@@ -85,7 +85,7 @@ $c->parse_file($hdr);
 #print Data::Dumper->Dump([$c->struct('_dwg_entity_TEXT')], ['_dwg_entity_TEXT']);
 #print Data::Dumper->Dump([$c->struct('struct _dwg_header_variables')], ['Dwg_Header_Variables']);
 
-my (%h, $n, %structs, %unions, %ENT, %DXF, %SIZE, %SUBCLASS, %DWG_TYPE);
+my (%h, $n, %structs, %unions, %ENT, %DXF, %SIZE, %SUBCLASS, %DWG_TYPE, @unhandled_names);
 local (@entity_names, @object_names, @subclasses, $max_entity_names, $max_object_names);
 # todo: harmonize more subclasses
 for (sort $c->struct_names) {
@@ -1441,11 +1441,16 @@ while (<$in>) {
   elsif (/^\s*DEBUGGING_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+?)[,\)]/) {
       $DEBUGGING{$1}++;
   }
-  elsif (/^\s*UNHANDLED_CLASS(?:_DXF|_CPP|)\s*\(ACTION,\s+(.+?)[,\)]/) {
+  elsif (/^\s*UNHANDLED_CLASS(?:_DXF|_CPP|)\s+\(ACTION,\s+(\S+?)[,\)]/) {
       $UNHANDLED{$1}++;
   }
 }
 close $in;
+my %entity_names = map {$_ => 1} @entity_names;
+my %object_names = map {$_ => 1} @object_names;
+for (sort keys %UNHANDLED) {
+  push @unhandled_names, $_ if !exists $entity_names{$_} and !exists $object_names{$_};
+}
 # many stable/fixed names are not in classes.inc
 for (@entity_names) {
   if (!$STABLE{$_} && !$UNSTABLE{$_} && !$DEBUGGING{$_} && !$UNHANDLED{$_}) {
@@ -1493,7 +1498,7 @@ sub out_classes {
       }
     }
 }
- 
+
 # generate API's lists per stabilty
 my $tmpl;
 my $api_c = "$srcdir/dwg_api.c";
@@ -1524,6 +1529,7 @@ while (<$in>) {
     print $out "#ifdef DEBUG_CLASSES\n";
     out_classes ($out, \@object_names, \%DEBUGGING, "  ".$tmpl);
     out_classes ($out, \@object_names, \%UNHANDLED, "  //".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "  //".$tmpl);
     print $out "#endif\n";
 
     print $out <<'EOF';
@@ -1573,6 +1579,7 @@ EOF
     print $out "#ifdef DEBUG_CLASSES\n";
     out_classes ($out, \@object_names, \%DEBUGGING, "  ".$tmpl);
     out_classes ($out, \@object_names, \%UNHANDLED, "  //".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "  //".$tmpl);
     print $out "#endif\n";
 
     print $out <<'EOF';
@@ -1622,6 +1629,7 @@ EOF
     print $out "#ifdef DEBUG_CLASSES\n";
     out_classes ($out, \@object_names, \%DEBUGGING, "  ".$tmpl);
     out_classes ($out, \@object_names, \%UNHANDLED, "  //".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "  //".$tmpl);
     print $out "#endif\n";
     print $out "// clang-format: on\n";
     print $out "/* End auto-generated content */\n";
@@ -1665,6 +1673,7 @@ while (<$in>) {
     print $out "/* debugging */\n";
     out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
     out_classes ($out, \@object_names, \%UNHANDLED, "//".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "//".$tmpl);
     print $out "\n\n";
 
     $tmpl = "dwg_get_OBJECT_DECL (ent_\$lname, \$name);\n";
@@ -1687,6 +1696,7 @@ while (<$in>) {
     print $out "#ifdef DEBUG_CLASSES\n";
     out_classes ($out, \@object_names, \%DEBUGGING, "  ".$tmpl);
     out_classes ($out, \@object_names, \%UNHANDLED, "  //".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "  //".$tmpl);
     print $out "#endif\n";
 
     print $out <<'EOF';
@@ -1731,6 +1741,7 @@ EOF
     print $out "#ifdef DEBUG_CLASSES\n";
     out_classes ($out, \@object_names, \%DEBUGGING, "  ".$tmpl);
     out_classes ($out, \@object_names, \%UNHANDLED, "  //".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "  //".$tmpl);
     print $out "#endif\n";
 
     print $out <<'EOF';
@@ -1782,6 +1793,7 @@ EOF
     print $out "#ifdef DEBUG_CLASSES\n";
     out_classes ($out, \@object_names, \%DEBUGGING, "  ".$tmpl);
     out_classes ($out, \@object_names, \%UNHANDLED, "  //".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "  //".$tmpl);
     print $out "#endif\n";
 
     print $out "/* End auto-generated content */\n";
@@ -1830,6 +1842,7 @@ while (<$in>) {
     print $out "    /* debugging */\n";
     out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
     out_classes ($out, \@object_names, \%UNHANDLED, "//".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "//".$tmpl);
     print $out "    /* End auto-generated object-union */\n";
     $gen = 1;
   }
@@ -1850,6 +1863,7 @@ while (<$in>) {
     out_classes ($out, \@object_names, \%DEBUGGING, "  ".$tmpl);
     out_classes ($out, \@entity_names, \%UNHANDLED, "  //".$tmpl);
     out_classes ($out, \@object_names, \%UNHANDLED, "  //".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "  //".$tmpl);
     print $out "#endif\n";
 
     print $out "/* End auto-generated content */\n";
@@ -1891,6 +1905,7 @@ while (<$in>) {
     $unhtmpl =~ s{^int dwg_free}{//  int dwg_free}gmaa;
     out_classes ($out, \@entity_names, \%UNHANDLED, $unhtmpl);
     out_classes ($out, \@object_names, \%UNHANDLED, $unhtmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, $unhtmpl);
     print $out "/* End auto-generated content */\n";
     $gen = 1;
   }
@@ -1931,6 +1946,7 @@ while (<$in>) {
     print $out "#ifdef DEBUG_CLASSES\n";
     out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
     out_classes ($out, \@object_names, \%UNHANDLED, "//".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "//".$tmpl);
     print $out "#endif\n";
 
     print $out "\n/* dwg_object_to_ API */\n";
@@ -1950,6 +1966,7 @@ while (<$in>) {
     print $out "#ifdef DEBUG_CLASSES\n";
     out_classes ($out, \@object_names, \%DEBUGGING, "  ".$tmpl);
     out_classes ($out, \@object_names, \%UNHANDLED, "  //".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "  //".$tmpl);
     print $out "#endif\n";
     print $out "/* End auto-generated content */\n";
     close $out;
@@ -1967,7 +1984,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1971 "gen-dynapi.pl"
+#line 1988 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -1997,7 +2014,7 @@ __DATA__
 #include "decode.h"
 #include "dwg.h"
 #include "bits.h"
-  
+
 #ifndef _DWG_API_H_
 Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
                                        int *restrict error);
@@ -2051,7 +2068,7 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 2055 "gen-dynapi.pl"
+#line 2072 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -2397,7 +2414,7 @@ dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
       {
         const Dwg_Header_Variables *const _obj = &dwg->header_vars;
         const Dwg_Version_Type dwg_version = dwg->header.version;
-        
+
         if (fp)
           memcpy (fp, f, sizeof (Dwg_DYNAPI_field));
 

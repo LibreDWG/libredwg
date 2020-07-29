@@ -10095,6 +10095,15 @@ DWG_OBJECT_END
       FIELD_HANDLE (h330_3, 3, 330); \
     }
 
+#define AcDbCompoundObjectId_fields                                           \
+    SUBCLASS (AcDbCompoundObjectId)                                           \
+    FIELD_B (has_object, 290);                                                \
+    if (FIELD_VALUE (has_object))                                             \
+      {                                                                       \
+        FIELD_T (name, 1);                                                    \
+        CALL_SUBENT (_obj->object, 0)                                         \
+      }
+
 // DEBUGGING
 DWG_OBJECT (ASSOCCOMPOUNDACTIONPARAM)
   DECODE_UNKNOWN_BITS
@@ -10964,19 +10973,6 @@ DWG_OBJECT_END
 
 DWG_OBJECT (RAPIDRTRENDERENVIRONMENT)
   DECODE_UNKNOWN_BITS
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (COMPOUNDOBJECT)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbCompoundObjectId)
-  FIELD_B (has_data, 290);
-  if (FIELD_VALUE (has_data))
-    {
-      //...
-      FIELD_T (name, 1);
-      //...
-    }
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

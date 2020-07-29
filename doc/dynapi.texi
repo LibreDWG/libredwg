@@ -13457,6 +13457,24 @@ H*,	DXF 333
 @end vtable
 @end indentedblock
 
+@strong{Dwg_COMPOUNDOBJECTID} @anchor{Dwg_COMPOUNDOBJECTID}
+@vindex Dwg_COMPOUNDOBJECTID
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item has_object
+B
+@item name
+T
+@item object
+H
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_CONSTRAINTGROUPNODE} @anchor{Dwg_CONSTRAINTGROUPNODE}
 @vindex Dwg_CONSTRAINTGROUPNODE
 

@@ -788,6 +788,12 @@ typedef struct _dwg_object_SUNSTUDY		dwg_obj_sunstudy;
 typedef struct _dwg_object_TABLECONTENT		dwg_obj_tablecontent;
 typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA		dwg_obj_textobjectcontextdata;
 typedef struct _dwg_object_TVDEVICEPROPERTIES		dwg_obj_tvdeviceproperties;
+//typedef struct _dwg_object_ACDSRECORD		dwg_obj_acdsrecord;
+//typedef struct _dwg_object_ACDSSCHEMA		dwg_obj_acdsschema;
+//typedef struct _dwg_object_NPOCOLLECTION		dwg_obj_npocollection;
+//typedef struct _dwg_object_PROXY_LWPOLYLINE		dwg_obj_proxy_lwpline;
+//typedef struct _dwg_object_RAPIDRTRENDERENVIRONMENT		dwg_obj_rapidrtrenderenvironment;
+//typedef struct _dwg_object_XREFPANELOBJECT		dwg_obj_xrefpanelobject;
 
 
 dwg_get_OBJECT_DECL (ent__3dface, _3DFACE);
@@ -1088,6 +1094,12 @@ dwg_get_OBJECT_DECL (obj_tablestyle, TABLESTYLE);
   dwg_get_OBJECT_DECL (obj_tablecontent, TABLECONTENT);
   dwg_get_OBJECT_DECL (obj_textobjectcontextdata, TEXTOBJECTCONTEXTDATA);
   dwg_get_OBJECT_DECL (obj_tvdeviceproperties, TVDEVICEPROPERTIES);
+  //dwg_get_OBJECT_DECL (obj_acdsrecord, ACDSRECORD);
+  //dwg_get_OBJECT_DECL (obj_acdsschema, ACDSSCHEMA);
+  //dwg_get_OBJECT_DECL (obj_npocollection, NPOCOLLECTION);
+  //dwg_get_OBJECT_DECL (obj_proxy_lwpline, PROXY_LWPOLYLINE);
+  //dwg_get_OBJECT_DECL (obj_rapidrtrenderenvironment, RAPIDRTRENDERENVIRONMENT);
+  //dwg_get_OBJECT_DECL (obj_xrefpanelobject, XREFPANELOBJECT);
 #endif
 
 /********************************************************************
@@ -1407,6 +1419,12 @@ DWG_GETALL_OBJECT_DECL (TABLESTYLE);
   DWG_GETALL_OBJECT_DECL (TABLECONTENT);
   DWG_GETALL_OBJECT_DECL (TEXTOBJECTCONTEXTDATA);
   DWG_GETALL_OBJECT_DECL (TVDEVICEPROPERTIES);
+  //DWG_GETALL_OBJECT_DECL (ACDSRECORD);
+  //DWG_GETALL_OBJECT_DECL (ACDSSCHEMA);
+  //DWG_GETALL_OBJECT_DECL (NPOCOLLECTION);
+  //DWG_GETALL_OBJECT_DECL (PROXY_LWPOLYLINE);
+  //DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERENVIRONMENT);
+  //DWG_GETALL_OBJECT_DECL (XREFPANELOBJECT);
 #endif
 
 /*******************************************************************
@@ -1732,6 +1750,12 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLESTYLE);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLECONTENT);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (TEXTOBJECTCONTEXTDATA);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (TVDEVICEPROPERTIES);
+  //CAST_DWG_OBJECT_TO_OBJECT_DECL (ACDSRECORD);
+  //CAST_DWG_OBJECT_TO_OBJECT_DECL (ACDSSCHEMA);
+  //CAST_DWG_OBJECT_TO_OBJECT_DECL (NPOCOLLECTION);
+  //CAST_DWG_OBJECT_TO_OBJECT_DECL (PROXY_LWPOLYLINE);
+  //CAST_DWG_OBJECT_TO_OBJECT_DECL (RAPIDRTRENDERENVIRONMENT);
+  //CAST_DWG_OBJECT_TO_OBJECT_DECL (XREFPANELOBJECT);
 #endif
 /* End auto-generated content */
 

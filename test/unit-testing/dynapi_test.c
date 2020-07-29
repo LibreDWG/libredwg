@@ -65353,6 +65353,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"BLOCKVISIBILITYPARAMETER_state\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (struct _dwg_COMPOUNDOBJECTID);
+  size2 = dwg_dynapi_fields_size ("COMPOUNDOBJECTID");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_COMPOUNDOBJECTID): %d != "
+               "dwg_dynapi_fields_size (\"COMPOUNDOBJECTID\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (struct _dwg_CONSTRAINTGROUPNODE);
   size2 = dwg_dynapi_fields_size ("CONSTRAINTGROUPNODE");
   if (size1 != size2)
@@ -66047,6 +66055,7 @@ main (int argc, char *argv[])
          "example_2018.dwg",
          "example_r14.dwg",
          "2007/PolyLine3D.dwg",
+         //"2018/Dynblocks.dwg",
          NULL
         };
       for (ptr = (char**)&files[0]; *ptr; ptr++)
