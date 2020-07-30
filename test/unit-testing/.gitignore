@@ -173,6 +173,7 @@
 /acsh_sweep_class
 /aldimobjectcontextdata
 /angdimobjectcontextdata
+/annotscaleobjectcontextdata
 /assoc2dconstraintgroup
 /assocmleaderactionbody
 /assocarrayactionbody
@@ -229,7 +230,6 @@
 /navisworksmodel
 /navisworksmodeldef
 /nurbsurface
-/objectcontextdata
 /orddimobjectcontextdata
 /persubentmgr
 /planesurface

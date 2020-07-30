@@ -28075,6 +28075,80 @@ static int test_ANGDIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ANNOTSCALEOBJECTCONTEXTDATA (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_ANNOTSCALEOBJECTCONTEXTDATA *restrict annotscaleobjectcontextdata = obj->tio.object->tio.ANNOTSCALEOBJECTCONTEXTDATA;
+  failed = 0;
+  {
+    BITCODE_BS class_version;
+    if (dwg_dynapi_entity_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "class_version", &class_version, NULL)
+        && class_version == annotscaleobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("ANNOTSCALEOBJECTCONTEXTDATA.class_version [BS] %hu != %hu", annotscaleobjectcontextdata->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "class_version", &class_version, 0)
+        && class_version == annotscaleobjectcontextdata->class_version)
+      pass ();
+    else
+      fail ("ANNOTSCALEOBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", annotscaleobjectcontextdata->class_version, class_version);
+    annotscaleobjectcontextdata->class_version--;
+  }
+  {
+    BITCODE_B has_xdic;
+    if (dwg_dynapi_entity_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "has_xdic", &has_xdic, NULL)
+        && has_xdic == annotscaleobjectcontextdata->has_xdic)
+      pass ();
+    else
+      fail ("ANNOTSCALEOBJECTCONTEXTDATA.has_xdic [B] " FORMAT_B " != " FORMAT_B "", annotscaleobjectcontextdata->has_xdic, has_xdic);
+    has_xdic++;
+    if (dwg_dynapi_entity_set_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "has_xdic", &has_xdic, 0)
+        && has_xdic == annotscaleobjectcontextdata->has_xdic)
+      pass ();
+    else
+      fail ("ANNOTSCALEOBJECTCONTEXTDATA.has_xdic [B] set+1 " FORMAT_B " != " FORMAT_B "", annotscaleobjectcontextdata->has_xdic, has_xdic);
+    annotscaleobjectcontextdata->has_xdic--;
+  }
+  {
+    BITCODE_B is_default;
+    if (dwg_dynapi_entity_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "is_default", &is_default, NULL)
+        && is_default == annotscaleobjectcontextdata->is_default)
+      pass ();
+    else
+      fail ("ANNOTSCALEOBJECTCONTEXTDATA.is_default [B] " FORMAT_B " != " FORMAT_B "", annotscaleobjectcontextdata->is_default, is_default);
+    is_default++;
+    if (dwg_dynapi_entity_set_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "is_default", &is_default, 0)
+        && is_default == annotscaleobjectcontextdata->is_default)
+      pass ();
+    else
+      fail ("ANNOTSCALEOBJECTCONTEXTDATA.is_default [B] set+1 " FORMAT_B " != " FORMAT_B "", annotscaleobjectcontextdata->is_default, is_default);
+    annotscaleobjectcontextdata->is_default--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "parent", &parent, NULL)
+        && !memcmp (&parent, &annotscaleobjectcontextdata->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("ANNOTSCALEOBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_H scale;
+    if (dwg_dynapi_entity_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "scale", &scale, NULL)
+        && !memcmp (&scale, &annotscaleobjectcontextdata->scale, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ANNOTSCALEOBJECTCONTEXTDATA.scale [H]");
+  }
+  if (failed && (is_class_unstable ("ANNOTSCALEOBJECTCONTEXTDATA") || is_class_debugging ("ANNOTSCALEOBJECTCONTEXTDATA")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ANNOTSCALEOBJECTCONTEXTDATA", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_APPID (const Dwg_Object *obj)
 {
   int error = 0;
@@ -51929,72 +52003,6 @@ static int test_NAVISWORKSMODELDEF (const Dwg_Object *obj)
     }
   return failed;
 }
-static int test_OBJECTCONTEXTDATA (const Dwg_Object *obj)
-{
-  int error = 0;
-  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
-  Dwg_Object_OBJECTCONTEXTDATA *restrict objectcontextdata = obj->tio.object->tio.OBJECTCONTEXTDATA;
-  failed = 0;
-  {
-    BITCODE_BS class_version;
-    if (dwg_dynapi_entity_value (objectcontextdata, "OBJECTCONTEXTDATA", "class_version", &class_version, NULL)
-        && class_version == objectcontextdata->class_version)
-      pass ();
-    else
-      fail ("OBJECTCONTEXTDATA.class_version [BS] %hu != %hu", objectcontextdata->class_version, class_version);
-    class_version++;
-    if (dwg_dynapi_entity_set_value (objectcontextdata, "OBJECTCONTEXTDATA", "class_version", &class_version, 0)
-        && class_version == objectcontextdata->class_version)
-      pass ();
-    else
-      fail ("OBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", objectcontextdata->class_version, class_version);
-    objectcontextdata->class_version--;
-  }
-  {
-    BITCODE_B has_xdic;
-    if (dwg_dynapi_entity_value (objectcontextdata, "OBJECTCONTEXTDATA", "has_xdic", &has_xdic, NULL)
-        && has_xdic == objectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("OBJECTCONTEXTDATA.has_xdic [B] " FORMAT_B " != " FORMAT_B "", objectcontextdata->has_xdic, has_xdic);
-    has_xdic++;
-    if (dwg_dynapi_entity_set_value (objectcontextdata, "OBJECTCONTEXTDATA", "has_xdic", &has_xdic, 0)
-        && has_xdic == objectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("OBJECTCONTEXTDATA.has_xdic [B] set+1 " FORMAT_B " != " FORMAT_B "", objectcontextdata->has_xdic, has_xdic);
-    objectcontextdata->has_xdic--;
-  }
-  {
-    BITCODE_B is_default;
-    if (dwg_dynapi_entity_value (objectcontextdata, "OBJECTCONTEXTDATA", "is_default", &is_default, NULL)
-        && is_default == objectcontextdata->is_default)
-      pass ();
-    else
-      fail ("OBJECTCONTEXTDATA.is_default [B] " FORMAT_B " != " FORMAT_B "", objectcontextdata->is_default, is_default);
-    is_default++;
-    if (dwg_dynapi_entity_set_value (objectcontextdata, "OBJECTCONTEXTDATA", "is_default", &is_default, 0)
-        && is_default == objectcontextdata->is_default)
-      pass ();
-    else
-      fail ("OBJECTCONTEXTDATA.is_default [B] set+1 " FORMAT_B " != " FORMAT_B "", objectcontextdata->is_default, is_default);
-    objectcontextdata->is_default--;
-  }
-  {
-    struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (objectcontextdata, "OBJECTCONTEXTDATA", "parent", &parent, NULL)
-        && !memcmp (&parent, &objectcontextdata->parent, sizeof (struct _dwg_object_object*)))
-        pass ();
-    else
-        fail ("OBJECTCONTEXTDATA.parent [struct _dwg_object_object*]");
-  }
-  if (failed && (is_class_unstable ("OBJECTCONTEXTDATA") || is_class_debugging ("OBJECTCONTEXTDATA")))
-    {
-      ok ("%s failed %d tests (TODO unstable)", "OBJECTCONTEXTDATA", failed);
-      failed = 0;
-    }
-  return failed;
-}
 static int test_OBJECT_PTR (const Dwg_Object *obj)
 {
   int error = 0;
@@ -60901,7 +60909,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 60904 "dynapi_test.c"
+#line 60912 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -61111,6 +61119,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ALDIMOBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_ANGDIMOBJECTCONTEXTDATA)
     error += test_ANGDIMOBJECTCONTEXTDATA(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ANNOTSCALEOBJECTCONTEXTDATA)
+    error += test_ANNOTSCALEOBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID)
     error += test_APPID(obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID_CONTROL)
@@ -61389,8 +61399,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_MTEXTOBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_NAVISWORKSMODELDEF)
     error += test_NAVISWORKSMODELDEF(obj);
-  else  if (obj->fixedtype == DWG_TYPE_OBJECTCONTEXTDATA)
-    error += test_OBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_OBJECT_PTR)
     error += test_OBJECT_PTR(obj);
   else  if (obj->fixedtype == DWG_TYPE_ORDDIMOBJECTCONTEXTDATA)
@@ -61697,6 +61705,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ALDIMOBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_ANGDIMOBJECTCONTEXTDATA)
     error += test_ANGDIMOBJECTCONTEXTDATA (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ANNOTSCALEOBJECTCONTEXTDATA)
+    error += test_ANNOTSCALEOBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID)
     error += test_APPID (obj);
   else  if (obj->fixedtype == DWG_TYPE_APPID_CONTROL)
@@ -61975,8 +61985,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_MTEXTOBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_NAVISWORKSMODELDEF)
     error += test_NAVISWORKSMODELDEF (obj);
-  else  if (obj->fixedtype == DWG_TYPE_OBJECTCONTEXTDATA)
-    error += test_OBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_OBJECT_PTR)
     error += test_OBJECT_PTR (obj);
   else  if (obj->fixedtype == DWG_TYPE_ORDDIMOBJECTCONTEXTDATA)
@@ -62085,7 +62093,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 62088 "dynapi_test.c"
+#line 62096 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");
@@ -62925,6 +62933,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_ANGDIMOBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"ANGDIMOBJECTCONTEXTDATA\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_object_ANNOTSCALEOBJECTCONTEXTDATA);
+  size2 = dwg_dynapi_fields_size ("ANNOTSCALEOBJECTCONTEXTDATA");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_object_ANNOTSCALEOBJECTCONTEXTDATA): %d != "
+               "dwg_dynapi_fields_size (\"ANNOTSCALEOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_APPID);
@@ -64037,14 +64053,6 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_object_NAVISWORKSMODELDEF): %d != "
                "dwg_dynapi_fields_size (\"NAVISWORKSMODELDEF\"): %d\n", size1, size2);
-      error++;
-    }
-  size1 = sizeof (struct _dwg_object_OBJECTCONTEXTDATA);
-  size2 = dwg_dynapi_fields_size ("OBJECTCONTEXTDATA");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(struct _dwg_object_OBJECTCONTEXTDATA): %d != "
-               "dwg_dynapi_fields_size (\"OBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_object_OBJECT_PTR);

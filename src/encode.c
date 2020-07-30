@@ -4052,7 +4052,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
                 {
 
 // FIXME DXF import of ACAD EED crashes (GH #244)
-// on BLOCK_HEADER with "DesignCenter Data"
+// on BLOCK_HEADER with 0 . "DesignCenter Data"
 #define EED_ALLOWED !(dat->opts & DWG_OPTS_INDXF) || last_handle->value != 0x12 \
                     || obj->fixedtype != DWG_TYPE_BLOCK_HEADER
 
@@ -4069,7 +4069,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
                     }
                   else
                     {
-                      LOG_TRACE ("skip EED[%d] handle: " FORMAT_H " [H]", last_size,
+                      LOG_WARN ("skip EED[%d] handle: " FORMAT_H " [H] for DesignCenter Data", last_size,
                                  ARGS_H (*last_handle)); LOG_POS;
                       dat1.byte = 0;
                     }
@@ -4102,7 +4102,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         }
       else
         {
-          LOG_TRACE ("skip EED[%d] handle: " FORMAT_H " [H]", last_size,
+          LOG_TRACE ("skip EED[%d] handle: " FORMAT_H " [H] for DesignCenter Data", last_size,
                      ARGS_H (*last_handle)); LOG_POS;
           dat1.byte = 0;
         }

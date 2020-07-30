@@ -226,6 +226,7 @@ testdebug = \
 	acsh_sweep_class \
 	aldimobjectcontextdata \
 	angdimobjectcontextdata \
+	annotscaleobjectcontextdata \
 	assoc2dconstraintgroup \
 	assocmleaderactionbody \
 	assocarrayactionbody \
@@ -282,7 +283,6 @@ testdebug = \
 	navisworksmodel \
 	navisworksmodeldef \
 	nurbsurface \
-	objectcontextdata \
 	orddimobjectcontextdata \
 	persubentmgr \
 	planesurface \

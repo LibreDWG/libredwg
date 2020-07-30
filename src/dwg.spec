@@ -8561,24 +8561,24 @@ DWG_OBJECT (ASSOCROTATEDDIMACTIONBODY)
   FIELD_HANDLE (d_node, 5, 330);
 DWG_OBJECT_END
 
-DWG_OBJECT (OBJECTCONTEXTDATA)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbObjectContextData)
-  SINCE (R_2010) {
-    FIELD_BS (class_version, 70);
-    if (FIELD_VALUE (class_version) > 10)
-      return DWG_ERR_VALUEOUTOFBOUNDS;
-  }
-  else {
-    IF_ENCODE_FROM_EARLIER {
-      FIELD_VALUE (class_version) = 3;
-    }
-  }
-  FIELD_B (is_default, 290);
-  FIELD_B (has_xdic, 0);
-
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
+// subclass only
+//DWG_OBJECT (OBJECTCONTEXTDATA)
+//  DECODE_UNKNOWN_BITS
+//  SUBCLASS (AcDbObjectContextData)
+//  SINCE (R_2010) {
+//    FIELD_BS (class_version, 70);
+//    if (FIELD_VALUE (class_version) > 10)
+//      return DWG_ERR_VALUEOUTOFBOUNDS;
+//  }
+//  else {
+//    IF_ENCODE_FROM_EARLIER {
+//      FIELD_VALUE (class_version) = 3;
+//    }
+//  }
+//  FIELD_B (is_default, 290);
+//  FIELD_B (has_xdic, 0);
+//  START_OBJECT_HANDLE_STREAM;
+//DWG_OBJECT_END
 
 DWG_OBJECT (CONTEXTDATAMANAGER)
   DECODE_UNKNOWN_BITS
@@ -9304,6 +9304,12 @@ DWG_OBJECT_END
   FIELD_B (dimension.has_arrow2, 295);                  \
   FIELD_B (dimension.flip_arrow2, 296);                 \
   FIELD_B (dimension.flip_arrow1, 297)
+
+DWG_OBJECT (ANNOTSCALEOBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
+  AcDbAnnotScaleObjectContextData_fields;
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
 
 DWG_OBJECT (ALDIMOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
