@@ -4009,6 +4009,22 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   dat1.version = dat->version;
   dat1.opts = dat->opts;
 
+  // Skip DICTIONARY AE3 AcDsRecords/AcDsSchemas 1070 . 2, wrong ACIS version
+  if (dat->opts & DWG_OPTS_INDXF &&
+      dat->version < R_2007 &&
+      obj->fixedtype == DWG_TYPE_DICTIONARY &&
+      num_eed == 1)
+    {
+      Dwg_Eed *eed = &obj->tio.object->eed[0];
+      if (eed->handle.value == 0x12 &&
+          eed->data->code == 70 &&
+          eed->data->u.eed_70.rs > 1)
+        {
+          LOG_TRACE ("skip AcDs DICTIONARY EED to use ACIS ver 2\n");
+          num_eed = 0;
+        }
+    }
+
   for (i = 0; i < num_eed; i++)
     {
       Dwg_Eed *eed = &obj->tio.object->eed[i];
@@ -4035,8 +4051,10 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
               if (new_size) // flush old
                 {
 
-// FIXME dxf import of non-ACAD EED crashes (GH #244)
-#define EED_ALLOWED !(dat->opts & DWG_OPTS_INDXF) || last_handle->value == 12
+// FIXME DXF import of ACAD EED crashes (GH #244)
+// on BLOCK_HEADER with "DesignCenter Data"
+#define EED_ALLOWED !(dat->opts & DWG_OPTS_INDXF) || last_handle->value != 0x12 \
+                    || obj->fixedtype != DWG_TYPE_BLOCK_HEADER
 
                   if (EED_ALLOWED)
                     {
