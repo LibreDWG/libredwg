@@ -1182,6 +1182,7 @@ EOF
       $skey =~ s/\[\d+\]$//g;
       $var = $svar if $var =~ /^conn_pts\[\d\]$/;
     }
+    next if $key eq 'evalexpr.value.text1'; # already handled by evalexpr memcmp
     my $stype = $type;
     $type =~ s/D_1$/D/;
     $type = 'BITCODE_'.$type unless ($type =~ /^(struct|Dwg_)/ or $type =~ /^[a-z]/);

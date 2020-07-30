@@ -24999,16 +24999,6 @@ static int test_ACSH_BOOLEAN_CLASS (const Dwg_Object *obj)
         fail ("ACSH_BOOLEAN_CLASS.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)acsh_boolean_class->evalexpr.value.text1)
-           : !acsh_boolean_class->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("ACSH_BOOLEAN_CLASS.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, acsh_boolean_class->evalexpr.value.text1);
-  }
-  {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_boolean_class, "ACSH_BOOLEAN_CLASS", "history_node", &history_node, NULL)
         && !memcmp (&history_node, &acsh_boolean_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
@@ -25119,16 +25109,6 @@ static int test_ACSH_BOX_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_BOX_CLASS.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (acsh_box_class, "ACSH_BOX_CLASS", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)acsh_box_class->evalexpr.value.text1)
-           : !acsh_box_class->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("ACSH_BOX_CLASS.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, acsh_box_class->evalexpr.value.text1);
   }
   {
     BITCODE_BD height;
@@ -25342,16 +25322,6 @@ static int test_ACSH_BREP_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_BREP_CLASS.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (acsh_brep_class, "ACSH_BREP_CLASS", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)acsh_brep_class->evalexpr.value.text1)
-           : !acsh_brep_class->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("ACSH_BREP_CLASS.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, acsh_brep_class->evalexpr.value.text1);
   }
   {
     struct _dwg_entity_3DSOLID* extra_acis_data;
@@ -25771,16 +25741,6 @@ static int test_ACSH_CHAMFER_CLASS (const Dwg_Object *obj)
         fail ("ACSH_CHAMFER_CLASS.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)acsh_chamfer_class->evalexpr.value.text1)
-           : !acsh_chamfer_class->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("ACSH_CHAMFER_CLASS.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, acsh_chamfer_class->evalexpr.value.text1);
-  }
-  {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_chamfer_class, "ACSH_CHAMFER_CLASS", "history_node", &history_node, NULL)
         && !memcmp (&history_node, &acsh_chamfer_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
@@ -25893,16 +25853,6 @@ static int test_ACSH_CONE_CLASS (const Dwg_Object *obj)
         fail ("ACSH_CONE_CLASS.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)acsh_cone_class->evalexpr.value.text1)
-           : !acsh_cone_class->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("ACSH_CONE_CLASS.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, acsh_cone_class->evalexpr.value.text1);
-  }
-  {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "history_node", &history_node, NULL)
         && !memcmp (&history_node, &acsh_cone_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
@@ -26013,16 +25963,6 @@ static int test_ACSH_CYLINDER_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_CYLINDER_CLASS.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (acsh_cylinder_class, "ACSH_CYLINDER_CLASS", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)acsh_cylinder_class->evalexpr.value.text1)
-           : !acsh_cylinder_class->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("ACSH_CYLINDER_CLASS.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, acsh_cylinder_class->evalexpr.value.text1);
   }
   {
     BITCODE_BD height;
@@ -26263,16 +26203,6 @@ static int test_ACSH_EXTRUSION_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_EXTRUSION_CLASS.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (acsh_extrusion_class, "ACSH_EXTRUSION_CLASS", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)acsh_extrusion_class->evalexpr.value.text1)
-           : !acsh_extrusion_class->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("ACSH_EXTRUSION_CLASS.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, acsh_extrusion_class->evalexpr.value.text1);
   }
   {
     BITCODE_B has_align_start;
@@ -26582,16 +26512,6 @@ static int test_ACSH_FILLET_CLASS (const Dwg_Object *obj)
         fail ("ACSH_FILLET_CLASS.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)acsh_fillet_class->evalexpr.value.text1)
-           : !acsh_fillet_class->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("ACSH_FILLET_CLASS.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, acsh_fillet_class->evalexpr.value.text1);
-  }
-  {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_fillet_class, "ACSH_FILLET_CLASS", "history_node", &history_node, NULL)
         && !memcmp (&history_node, &acsh_fillet_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
@@ -26769,16 +26689,6 @@ static int test_ACSH_HISTORY_CLASS (const Dwg_Object *obj)
         fail ("ACSH_HISTORY_CLASS.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)acsh_history_class->evalexpr.value.text1)
-           : !acsh_history_class->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("ACSH_HISTORY_CLASS.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, acsh_history_class->evalexpr.value.text1);
-  }
-  {
     BITCODE_BL h_nodeid;
     if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "h_nodeid", &h_nodeid, NULL)
         && h_nodeid == acsh_history_class->h_nodeid)
@@ -26877,16 +26787,6 @@ static int test_ACSH_LOFT_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_LOFT_CLASS.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (acsh_loft_class, "ACSH_LOFT_CLASS", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)acsh_loft_class->evalexpr.value.text1)
-           : !acsh_loft_class->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("ACSH_LOFT_CLASS.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, acsh_loft_class->evalexpr.value.text1);
   }
   {
     BITCODE_H* guides;
@@ -26994,16 +26894,6 @@ static int test_ACSH_PYRAMID_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_PYRAMID_CLASS.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (acsh_pyramid_class, "ACSH_PYRAMID_CLASS", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)acsh_pyramid_class->evalexpr.value.text1)
-           : !acsh_pyramid_class->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("ACSH_PYRAMID_CLASS.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, acsh_pyramid_class->evalexpr.value.text1);
   }
   {
     BITCODE_BD height;
@@ -27209,16 +27099,6 @@ static int test_ACSH_REVOLVE_CLASS (const Dwg_Object *obj)
         fail ("ACSH_REVOLVE_CLASS.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)acsh_revolve_class->evalexpr.value.text1)
-           : !acsh_revolve_class->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("ACSH_REVOLVE_CLASS.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, acsh_revolve_class->evalexpr.value.text1);
-  }
-  {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_revolve_class, "ACSH_REVOLVE_CLASS", "history_node", &history_node, NULL)
         && !memcmp (&history_node, &acsh_revolve_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
@@ -27352,16 +27232,6 @@ static int test_ACSH_SPHERE_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_SPHERE_CLASS.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (acsh_sphere_class, "ACSH_SPHERE_CLASS", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)acsh_sphere_class->evalexpr.value.text1)
-           : !acsh_sphere_class->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("ACSH_SPHERE_CLASS.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, acsh_sphere_class->evalexpr.value.text1);
   }
   {
     Dwg_ACSH_HistoryNode history_node;
@@ -27557,16 +27427,6 @@ static int test_ACSH_SWEEP_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_SWEEP_CLASS.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (acsh_sweep_class, "ACSH_SWEEP_CLASS", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)acsh_sweep_class->evalexpr.value.text1)
-           : !acsh_sweep_class->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("ACSH_SWEEP_CLASS.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, acsh_sweep_class->evalexpr.value.text1);
   }
   {
     BITCODE_B has_align_start;
@@ -27841,16 +27701,6 @@ static int test_ACSH_TORUS_CLASS (const Dwg_Object *obj)
         fail ("ACSH_TORUS_CLASS.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (acsh_torus_class, "ACSH_TORUS_CLASS", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)acsh_torus_class->evalexpr.value.text1)
-           : !acsh_torus_class->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("ACSH_TORUS_CLASS.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, acsh_torus_class->evalexpr.value.text1);
-  }
-  {
     Dwg_ACSH_HistoryNode history_node;
     if (dwg_dynapi_entity_value (acsh_torus_class, "ACSH_TORUS_CLASS", "history_node", &history_node, NULL)
         && !memcmp (&history_node, &acsh_torus_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
@@ -27946,16 +27796,6 @@ static int test_ACSH_WEDGE_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_WEDGE_CLASS.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (acsh_wedge_class, "ACSH_WEDGE_CLASS", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)acsh_wedge_class->evalexpr.value.text1)
-           : !acsh_wedge_class->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("ACSH_WEDGE_CLASS.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, acsh_wedge_class->evalexpr.value.text1);
   }
   {
     BITCODE_BD height;
@@ -35235,16 +35075,6 @@ static int test_BLOCKALIGNEDCONSTRAINTPARAMETER (const Dwg_Object *obj)
         fail ("BLOCKALIGNEDCONSTRAINTPARAMETER.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockalignedconstraintparameter, "BLOCKALIGNEDCONSTRAINTPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockalignedconstraintparameter->evalexpr.value.text1)
-           : !blockalignedconstraintparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKALIGNEDCONSTRAINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockalignedconstraintparameter->evalexpr.value.text1);
-  }
-  {
     BITCODE_T expr_description;
     if (dwg_dynapi_entity_value (blockalignedconstraintparameter, "BLOCKALIGNEDCONSTRAINTPARAMETER", "expr_description", &expr_description, NULL)
         && expr_description
@@ -35527,16 +35357,6 @@ static int test_BLOCKALIGNMENTGRIP (const Dwg_Object *obj)
         fail ("BLOCKALIGNMENTGRIP.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockalignmentgrip->evalexpr.value.text1)
-           : !blockalignmentgrip->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKALIGNMENTGRIP.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockalignmentgrip->evalexpr.value.text1);
-  }
-  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (blockalignmentgrip, "BLOCKALIGNMENTGRIP", "name", &name, NULL)
         && name
@@ -35689,16 +35509,6 @@ static int test_BLOCKALIGNMENTPARAMETER (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKALIGNMENTPARAMETER.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockalignmentparameter, "BLOCKALIGNMENTPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockalignmentparameter->evalexpr.value.text1)
-           : !blockalignmentparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKALIGNMENTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockalignmentparameter->evalexpr.value.text1);
   }
   {
     BITCODE_T name;
@@ -35957,16 +35767,6 @@ static int test_BLOCKANGULARCONSTRAINTPARAMETER (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKANGULARCONSTRAINTPARAMETER.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockangularconstraintparameter, "BLOCKANGULARCONSTRAINTPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockangularconstraintparameter->evalexpr.value.text1)
-           : !blockangularconstraintparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKANGULARCONSTRAINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockangularconstraintparameter->evalexpr.value.text1);
   }
   {
     BITCODE_T expr_description;
@@ -36235,16 +36035,6 @@ static int test_BLOCKARRAYACTION (const Dwg_Object *obj)
         fail ("BLOCKARRAYACTION.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockarrayaction->evalexpr.value.text1)
-           : !blockarrayaction->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKARRAYACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockarrayaction->evalexpr.value.text1);
-  }
-  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (blockarrayaction, "BLOCKARRAYACTION", "name", &name, NULL)
         && name
@@ -36403,16 +36193,6 @@ static int test_BLOCKBASEPOINTPARAMETER (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKBASEPOINTPARAMETER.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockbasepointparameter, "BLOCKBASEPOINTPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockbasepointparameter->evalexpr.value.text1)
-           : !blockbasepointparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKBASEPOINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockbasepointparameter->evalexpr.value.text1);
   }
   {
     BITCODE_T name;
@@ -36621,16 +36401,6 @@ static int test_BLOCKDIAMETRICCONSTRAINTPARAMETER (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKDIAMETRICCONSTRAINTPARAMETER.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockdiametricconstraintparameter, "BLOCKDIAMETRICCONSTRAINTPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockdiametricconstraintparameter->evalexpr.value.text1)
-           : !blockdiametricconstraintparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKDIAMETRICCONSTRAINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockdiametricconstraintparameter->evalexpr.value.text1);
   }
   {
     BITCODE_T expr_description;
@@ -36929,16 +36699,6 @@ static int test_BLOCKFLIPACTION (const Dwg_Object *obj)
         fail ("BLOCKFLIPACTION.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockflipaction->evalexpr.value.text1)
-           : !blockflipaction->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKFLIPACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockflipaction->evalexpr.value.text1);
-  }
-  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (blockflipaction, "BLOCKFLIPACTION", "name", &name, NULL)
         && name
@@ -37133,16 +36893,6 @@ static int test_BLOCKFLIPGRIP (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKFLIPGRIP.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockflipgrip, "BLOCKFLIPGRIP", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockflipgrip->evalexpr.value.text1)
-           : !blockflipgrip->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKFLIPGRIP.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockflipgrip->evalexpr.value.text1);
   }
   {
     BITCODE_T name;
@@ -37347,16 +37097,6 @@ static int test_BLOCKFLIPPARAMETER (const Dwg_Object *obj)
         fail ("BLOCKFLIPPARAMETER.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockflipparameter->evalexpr.value.text1)
-           : !blockflipparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKFLIPPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockflipparameter->evalexpr.value.text1);
-  }
-  {
     BITCODE_T flip_label;
     if (dwg_dynapi_entity_value (blockflipparameter, "BLOCKFLIPPARAMETER", "flip_label", &flip_label, NULL)
         && flip_label
@@ -37524,16 +37264,6 @@ static int test_BLOCKGRIPLOCATIONCOMPONENT (const Dwg_Object *obj)
         fail ("BLOCKGRIPLOCATIONCOMPONENT.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockgriplocationcomponent->evalexpr.value.text1)
-           : !blockgriplocationcomponent->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKGRIPLOCATIONCOMPONENT.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockgriplocationcomponent->evalexpr.value.text1);
-  }
-  {
     BITCODE_T grip_expr;
     if (dwg_dynapi_entity_value (blockgriplocationcomponent, "BLOCKGRIPLOCATIONCOMPONENT", "grip_expr", &grip_expr, NULL)
         && grip_expr
@@ -37686,16 +37416,6 @@ static int test_BLOCKHORIZONTALCONSTRAINTPARAMETER (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKHORIZONTALCONSTRAINTPARAMETER.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockhorizontalconstraintparameter, "BLOCKHORIZONTALCONSTRAINTPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockhorizontalconstraintparameter->evalexpr.value.text1)
-           : !blockhorizontalconstraintparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKHORIZONTALCONSTRAINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockhorizontalconstraintparameter->evalexpr.value.text1);
   }
   {
     BITCODE_T expr_description;
@@ -37966,16 +37686,6 @@ static int test_BLOCKLINEARCONSTRAINTPARAMETER (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKLINEARCONSTRAINTPARAMETER.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blocklinearconstraintparameter, "BLOCKLINEARCONSTRAINTPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blocklinearconstraintparameter->evalexpr.value.text1)
-           : !blocklinearconstraintparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKLINEARCONSTRAINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blocklinearconstraintparameter->evalexpr.value.text1);
   }
   {
     BITCODE_T expr_description;
@@ -38260,16 +37970,6 @@ static int test_BLOCKLINEARGRIP (const Dwg_Object *obj)
         fail ("BLOCKLINEARGRIP.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blocklineargrip, "BLOCKLINEARGRIP", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blocklineargrip->evalexpr.value.text1)
-           : !blocklineargrip->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKLINEARGRIP.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blocklineargrip->evalexpr.value.text1);
-  }
-  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (blocklineargrip, "BLOCKLINEARGRIP", "name", &name, NULL)
         && name
@@ -38442,16 +38142,6 @@ static int test_BLOCKLINEARPARAMETER (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKLINEARPARAMETER.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blocklinearparameter, "BLOCKLINEARPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blocklinearparameter->evalexpr.value.text1)
-           : !blocklinearparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKLINEARPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blocklinearparameter->evalexpr.value.text1);
   }
   {
     BITCODE_T name;
@@ -38675,16 +38365,6 @@ static int test_BLOCKLOOKUPACTION (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKLOOKUPACTION.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blocklookupaction, "BLOCKLOOKUPACTION", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blocklookupaction->evalexpr.value.text1)
-           : !blocklookupaction->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKLOOKUPACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blocklookupaction->evalexpr.value.text1);
   }
   {
     BITCODE_TV* exprs;
@@ -38933,16 +38613,6 @@ static int test_BLOCKLOOKUPGRIP (const Dwg_Object *obj)
         fail ("BLOCKLOOKUPGRIP.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blocklookupgrip->evalexpr.value.text1)
-           : !blocklookupgrip->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKLOOKUPGRIP.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blocklookupgrip->evalexpr.value.text1);
-  }
-  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (blocklookupgrip, "BLOCKLOOKUPGRIP", "name", &name, NULL)
         && name
@@ -39048,16 +38718,6 @@ static int test_BLOCKLOOKUPPARAMETER (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKLOOKUPPARAMETER.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blocklookupparameter, "BLOCKLOOKUPPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blocklookupparameter->evalexpr.value.text1)
-           : !blocklookupparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKLOOKUPPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blocklookupparameter->evalexpr.value.text1);
   }
   {
     BITCODE_BL index;
@@ -39316,16 +38976,6 @@ static int test_BLOCKMOVEACTION (const Dwg_Object *obj)
         fail ("BLOCKMOVEACTION.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockmoveaction->evalexpr.value.text1)
-           : !blockmoveaction->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKMOVEACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockmoveaction->evalexpr.value.text1);
-  }
-  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (blockmoveaction, "BLOCKMOVEACTION", "name", &name, NULL)
         && name
@@ -39547,16 +39197,6 @@ static int test_BLOCKPOINTPARAMETER (const Dwg_Object *obj)
         fail ("BLOCKPOINTPARAMETER.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockpointparameter, "BLOCKPOINTPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockpointparameter->evalexpr.value.text1)
-           : !blockpointparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKPOINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockpointparameter->evalexpr.value.text1);
-  }
-  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (blockpointparameter, "BLOCKPOINTPARAMETER", "name", &name, NULL)
         && name
@@ -39774,16 +39414,6 @@ static int test_BLOCKPOLARGRIP (const Dwg_Object *obj)
         fail ("BLOCKPOLARGRIP.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockpolargrip, "BLOCKPOLARGRIP", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockpolargrip->evalexpr.value.text1)
-           : !blockpolargrip->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKPOLARGRIP.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockpolargrip->evalexpr.value.text1);
-  }
-  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (blockpolargrip, "BLOCKPOLARGRIP", "name", &name, NULL)
         && name
@@ -39969,16 +39599,6 @@ static int test_BLOCKPOLARPARAMETER (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKPOLARPARAMETER.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockpolarparameter, "BLOCKPOLARPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockpolarparameter->evalexpr.value.text1)
-           : !blockpolarparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKPOLARPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockpolarparameter->evalexpr.value.text1);
   }
   {
     BITCODE_T name;
@@ -40212,16 +39832,6 @@ static int test_BLOCKPOLARSTRETCHACTION (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKPOLARSTRETCHACTION.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockpolarstretchaction, "BLOCKPOLARSTRETCHACTION", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockpolarstretchaction->evalexpr.value.text1)
-           : !blockpolarstretchaction->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKPOLARSTRETCHACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockpolarstretchaction->evalexpr.value.text1);
   }
   {
     BITCODE_H* hdls;
@@ -40501,16 +40111,6 @@ static int test_BLOCKPROPERTIESTABLEGRIP (const Dwg_Object *obj)
         fail ("BLOCKPROPERTIESTABLEGRIP.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockpropertiestablegrip->evalexpr.value.text1)
-           : !blockpropertiestablegrip->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKPROPERTIESTABLEGRIP.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockpropertiestablegrip->evalexpr.value.text1);
-  }
-  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (blockpropertiestablegrip, "BLOCKPROPERTIESTABLEGRIP", "name", &name, NULL)
         && name
@@ -40663,16 +40263,6 @@ static int test_BLOCKRADIALCONSTRAINTPARAMETER (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKRADIALCONSTRAINTPARAMETER.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockradialconstraintparameter, "BLOCKRADIALCONSTRAINTPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockradialconstraintparameter->evalexpr.value.text1)
-           : !blockradialconstraintparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKRADIALCONSTRAINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockradialconstraintparameter->evalexpr.value.text1);
   }
   {
     BITCODE_T expr_description;
@@ -40955,16 +40545,6 @@ static int test_BLOCKROTATEACTION (const Dwg_Object *obj)
         fail ("BLOCKROTATEACTION.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockrotateaction->evalexpr.value.text1)
-           : !blockrotateaction->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKROTATEACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockrotateaction->evalexpr.value.text1);
-  }
-  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (blockrotateaction, "BLOCKROTATEACTION", "name", &name, NULL)
         && name
@@ -41154,16 +40734,6 @@ static int test_BLOCKROTATIONGRIP (const Dwg_Object *obj)
         fail ("BLOCKROTATIONGRIP.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockrotationgrip, "BLOCKROTATIONGRIP", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockrotationgrip->evalexpr.value.text1)
-           : !blockrotationgrip->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKROTATIONGRIP.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockrotationgrip->evalexpr.value.text1);
-  }
-  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (blockrotationgrip, "BLOCKROTATIONGRIP", "name", &name, NULL)
         && name
@@ -41344,16 +40914,6 @@ static int test_BLOCKROTATIONPARAMETER (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKROTATIONPARAMETER.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockrotationparameter, "BLOCKROTATIONPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockrotationparameter->evalexpr.value.text1)
-           : !blockrotationparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKROTATIONPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockrotationparameter->evalexpr.value.text1);
   }
   {
     BITCODE_T name;
@@ -41587,16 +41147,6 @@ static int test_BLOCKSCALEACTION (const Dwg_Object *obj)
         fail ("BLOCKSCALEACTION.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockscaleaction->evalexpr.value.text1)
-           : !blockscaleaction->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKSCALEACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockscaleaction->evalexpr.value.text1);
-  }
-  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (blockscaleaction, "BLOCKSCALEACTION", "name", &name, NULL)
         && name
@@ -41808,16 +41358,6 @@ static int test_BLOCKSTRETCHACTION (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKSTRETCHACTION.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockstretchaction, "BLOCKSTRETCHACTION", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockstretchaction->evalexpr.value.text1)
-           : !blockstretchaction->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKSTRETCHACTION.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockstretchaction->evalexpr.value.text1);
   }
   {
     BITCODE_H* hdls;
@@ -42038,16 +41578,6 @@ static int test_BLOCKUSERPARAMETER (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKUSERPARAMETER.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockuserparameter, "BLOCKUSERPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockuserparameter->evalexpr.value.text1)
-           : !blockuserparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKUSERPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockuserparameter->evalexpr.value.text1);
   }
   {
     BITCODE_T expr;
@@ -42281,16 +41811,6 @@ static int test_BLOCKVERTICALCONSTRAINTPARAMETER (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKVERTICALCONSTRAINTPARAMETER.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockverticalconstraintparameter, "BLOCKVERTICALCONSTRAINTPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockverticalconstraintparameter->evalexpr.value.text1)
-           : !blockverticalconstraintparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKVERTICALCONSTRAINTPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockverticalconstraintparameter->evalexpr.value.text1);
   }
   {
     BITCODE_T expr_description;
@@ -42575,16 +42095,6 @@ static int test_BLOCKVISIBILITYGRIP (const Dwg_Object *obj)
         fail ("BLOCKVISIBILITYGRIP.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockvisibilitygrip->evalexpr.value.text1)
-           : !blockvisibilitygrip->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKVISIBILITYGRIP.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockvisibilitygrip->evalexpr.value.text1);
-  }
-  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (blockvisibilitygrip, "BLOCKVISIBILITYGRIP", "name", &name, NULL)
         && name
@@ -42720,16 +42230,6 @@ static int test_BLOCKVISIBILITYPARAMETER (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKVISIBILITYPARAMETER.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockvisibilityparameter, "BLOCKVISIBILITYPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockvisibilityparameter->evalexpr.value.text1)
-           : !blockvisibilityparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKVISIBILITYPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockvisibilityparameter->evalexpr.value.text1);
   }
   {
     BITCODE_B is_initialized;
@@ -42999,16 +42499,6 @@ static int test_BLOCKXYGRIP (const Dwg_Object *obj)
         fail ("BLOCKXYGRIP.evalexpr [Dwg_EvalExpr]");
   }
   {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockxygrip, "BLOCKXYGRIP", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockxygrip->evalexpr.value.text1)
-           : !blockxygrip->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKXYGRIP.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockxygrip->evalexpr.value.text1);
-  }
-  {
     BITCODE_T name;
     if (dwg_dynapi_entity_value (blockxygrip, "BLOCKXYGRIP", "name", &name, NULL)
         && name
@@ -43138,16 +42628,6 @@ static int test_BLOCKXYPARAMETER (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCKXYPARAMETER.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (blockxyparameter, "BLOCKXYPARAMETER", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)blockxyparameter->evalexpr.value.text1)
-           : !blockxyparameter->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("BLOCKXYPARAMETER.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, blockxyparameter->evalexpr.value.text1);
   }
   {
     BITCODE_T name;
@@ -46732,16 +46212,6 @@ static int test_DYNAMICBLOCKPROXYNODE (const Dwg_Object *obj)
         pass ();
     else
         fail ("DYNAMICBLOCKPROXYNODE.evalexpr [Dwg_EvalExpr]");
-  }
-  {
-    BITCODE_T evalexpr_value_text1;
-    if (dwg_dynapi_entity_value (dynamicblockproxynode, "DYNAMICBLOCKPROXYNODE", "evalexpr.value.text1", &evalexpr_value_text1, NULL)
-        && evalexpr_value_text1
-           ? strEQ ((char *)evalexpr_value_text1, (char *)dynamicblockproxynode->evalexpr.value.text1)
-           : !dynamicblockproxynode->evalexpr.value.text1)
-      pass ();
-    else
-      fail ("DYNAMICBLOCKPROXYNODE.evalexpr.value.text1 [T] '%s' <> '%s'", evalexpr_value_text1, dynamicblockproxynode->evalexpr.value.text1);
   }
   {
     struct _dwg_object_object* parent;
@@ -61431,7 +60901,7 @@ static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 61434 "dynapi_test.c"
+#line 60904 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -62615,7 +62085,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 62618 "dynapi_test.c"
+#line 62088 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");
