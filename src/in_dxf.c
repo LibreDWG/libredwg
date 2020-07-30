@@ -8764,6 +8764,11 @@ new_object (char *restrict name, char *restrict dxfname,
                       UPGRADE_ENTITY (VERTEX_2D, VERTEX_PFACE_FACE)
                     }
                 }
+              else if (strEQc (obj->name, "INSERT")
+                  && strEQc (subclass, "AcDbMInsertBlock"))
+                {
+                  UPGRADE_ENTITY (INSERT, MINSERT)
+                }
               // with PERSUBENTMGR
               else if (obj->fixedtype == DWG_TYPE_PERSUBENTMGR
                        && strEQc (subclass, "AcDbPersSubentManager"))

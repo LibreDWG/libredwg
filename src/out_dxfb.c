@@ -799,6 +799,8 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
       RECORD (POLYLINE)                                                       \
     else if (strlen (#token) > 7 && !memcmp (#token, "VERTEX_", 7))           \
       RECORD (VERTEX)                                                         \
+    else if (strEQc (#token, "MINSERT"))                                      \
+      RECORD (INSERT)                                                         \
     else if (dat->version >= R_2010 && strEQc (#token, "TABLE"))              \
       {                                                                       \
         RECORD (ACAD_TABLE);                                                  \

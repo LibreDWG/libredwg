@@ -586,7 +586,7 @@ DWG_ENTITY_END
 /* (8) 20.4.10*/
 DWG_ENTITY (MINSERT)
 
-  SUBCLASS (AcDbBlockReference)
+  SUBCLASS (AcDbMInsertBlock)
 #ifdef IS_DXF
     FIELD_HANDLE_NAME (block_header, 2, BLOCK_HEADER);
     if (FIELD_VALUE (has_attribs))
@@ -678,9 +678,13 @@ DWG_ENTITY (MINSERT)
         }
     }
 
-  FIELD_BD (rotation, 50);
-  FIELD_3BD (extrusion, 210);
-  FIELD_B (has_attribs, 0);
+  FIELD_BD0 (rotation, 50);
+  DXF {
+    FIELD_BE (extrusion, 210);
+  } else {
+    FIELD_3DPOINT (extrusion, 0);
+  }
+  FIELD_B (has_attribs, 0); // 66 above
 
   SINCE (R_2004)
     {
