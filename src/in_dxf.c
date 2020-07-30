@@ -374,7 +374,8 @@ dxf_read_rd (Bit_Chain *dat)
     }
 }
 
-// Not yet done.
+#if 0
+// not yet needed. only with write2004
 // ASCII: series of 310 HEX encoded
 // BINARY: ??
 static unsigned char *
@@ -406,6 +407,7 @@ dxf_read_binary (Bit_Chain *dat, unsigned char **p, int len)
     *p = data;
   return data;
 }
+#endif
 
 // Unicode strings are UTF-8 with quoted \\U+
 // BINARY: no length prefixes, just zero-terminated strings

@@ -384,6 +384,8 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
   return NULL;
 }
 
+#if 0
+// not yet needed. only with write2004
 ATTRIBUTE_MALLOC
 static BITCODE_TU
 json_wstring (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
@@ -400,6 +402,7 @@ json_wstring (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
   dat->chain[t->end] = '\0';
   return bit_utf8_to_TU ((char *)&dat->chain[t->start]);
 }
+#endif
 
 ATTRIBUTE_MALLOC
 static char *
