@@ -600,19 +600,36 @@ output_test (dwg_data *dwg)
 #endif
 
 #ifdef DWG_TYPE
-  obj = &dwg->object[0];
-  while ((obj = dwg_next_object (obj)))
+  if (DWG_TYPE == DWG_TYPE_BLOCK_CONTROL)
     {
-      LOG_TRACE ("  %s [%d]\n", obj->name, obj->index);
-      // printf ("%s [%d]\n", obj->name, obj->index);
-      if (obj->fixedtype == DWG_TYPE)
+      for (unsigned i = 0; i < dwg->num_objects; i++)
         {
-          g_counter++;
-          LOG_INFO ("  %s [%d] (%s)\n", obj->name, obj->index, stability);
-          output_process (obj);
+          obj = &dwg->object[i];
+          LOG_TRACE ("  %s [%d]\n", obj->name, obj->index);
+          if (obj->fixedtype == DWG_TYPE)
+            {
+              g_counter++;
+              LOG_INFO ("  %s [%d] (%s)\n", obj->name, obj->index, stability);
+              output_process (obj);
+            }
         }
     }
-    /* also process blocks? we better find DWGs with these */
+  else
+    {
+      obj = &dwg->object[0];
+      while ((obj = dwg_next_object (obj)))
+        {
+          LOG_TRACE ("  %s [%d]\n", obj->name, obj->index);
+          // printf ("%s [%d]\n", obj->name, obj->index);
+          if (obj->fixedtype == DWG_TYPE)
+            {
+              g_counter++;
+              LOG_INFO ("  %s [%d] (%s)\n", obj->name, obj->index, stability);
+              output_process (obj);
+            }
+        }
+    }
+  /* also process blocks? we better find DWGs with these */
   if (!numpassed () && !numfailed ())
     {
       /* and now also all subtypes and entities in blocks */
