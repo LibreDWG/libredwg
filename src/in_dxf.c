@@ -7442,7 +7442,7 @@ add_AcDbBlockParamValueSet (Dwg_Object *restrict obj, Dwg_BLOCKPARAMVALUESET *o,
      { 96, 142, 175, 410 }, // 5 BLOCKPOLARPARAMETER.angle_value_set
      { 97, 146, 176, 309 }, // 6 BLOCKPOLARPARAMETER.distance_value_set
     };
-  const t_codes *code;
+  const t_codes *code = &codes[0]; // AcDbBlock{Linear,Diametric,Radial,Angular}ConstraintParameter{,Entity}
 
   // T at first
   if (pair->code == 307)
@@ -7451,8 +7451,6 @@ add_AcDbBlockParamValueSet (Dwg_Object *restrict obj, Dwg_BLOCKPARAMVALUESET *o,
         code = &codes[1];
       else if (strEQc (obj->name, "BLOCKROTATIONPARAMETER"))
         code = &codes[2];
-      else
-        code = &codes[0]; // AcDbBlock{Linear,Diametric,Radial,Angular}ConstraintParameter{,Entity}
     }
   else if (pair->code == 309)
     {
