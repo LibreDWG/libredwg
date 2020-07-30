@@ -4034,14 +4034,27 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
               did_raw = 0;
               if (new_size) // flush old
                 {
-                  eed->size = new_size;
-                  bit_write_BS (dat, new_size);
-                  LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]", last_size, new_size); LOG_POS;
-                  bit_write_H (dat, last_handle);
-                  LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]", last_size,
-                             ARGS_H (*last_handle)); LOG_POS;
-                  LOG_TRACE ("flush eed_data %lu.%d\n", dat1.byte, dat1.bit);
-                  dat_flush (dat, &dat1);
+
+// FIXME dxf import of non-ACAD EED crashes (GH #244)
+#define EED_ALLOWED !(dat->opts & DWG_OPTS_INDXF) || last_handle->value == 12
+
+                  if (EED_ALLOWED)
+                    {
+                      eed->size = new_size;
+                      bit_write_BS (dat, new_size);
+                      LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]", last_size, new_size); LOG_POS;
+                      bit_write_H (dat, last_handle);
+                      LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]", last_size,
+                                 ARGS_H (*last_handle)); LOG_POS;
+                      LOG_TRACE ("flush eed_data %lu.%d\n", dat1.byte, dat1.bit);
+                      dat_flush (dat, &dat1);
+                    }
+                  else
+                    {
+                      LOG_TRACE ("skip EED[%d] handle: " FORMAT_H " [H]", last_size,
+                                 ARGS_H (*last_handle)); LOG_POS;
+                      dat1.byte = 0;
+                    }
                   new_size = 0;
                 }
               new_size = dwg_encode_eed_data (&dat1, eed->data, i);
@@ -4059,12 +4072,22 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     }
   if (new_size && last_handle) // flush remaining rest
     {
-      bit_write_BS (dat, new_size);
-      LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]", last_size, new_size); LOG_POS;
-      bit_write_H (dat, last_handle);
-      LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]", last_size,
-                 ARGS_H (*last_handle)); LOG_POS;
-      last_handle = NULL;
+      // FIXME HACK, see above
+      if (EED_ALLOWED)
+        {
+          bit_write_BS (dat, new_size);
+          LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]", last_size, new_size); LOG_POS;
+          bit_write_H (dat, last_handle);
+          LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]", last_size,
+                     ARGS_H (*last_handle)); LOG_POS;
+          last_handle = NULL;
+        }
+      else
+        {
+          LOG_TRACE ("skip EED[%d] handle: " FORMAT_H " [H]", last_size,
+                     ARGS_H (*last_handle)); LOG_POS;
+          dat1.byte = 0;
+        }
     }
   if (dat1.byte)
     LOG_TRACE ("flush eed_data %lu.%d\n", dat1.byte, dat1.bit);
