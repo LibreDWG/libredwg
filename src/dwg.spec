@@ -3014,8 +3014,10 @@ DWG_OBJECT (LTYPE)
             if (_obj->dashes[rcount1].shape_flag & 2)
               {
                 static int dash_i = 0;
+                if (dash_i >= 512)
+                  break;
                 _obj->dashes[rcount1].text = (char*)&_obj->strings_area[dash_i];
-                dash_i += bit_wcs2len ((BITCODE_TU)_obj->dashes[rcount1].text) + 2;
+                dash_i += bit_wcs2nlen ((BITCODE_TU)_obj->dashes[rcount1].text, 512 - dash_i) + 2;
               }
           }
       }

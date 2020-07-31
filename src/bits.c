@@ -1602,6 +1602,45 @@ bit_embed_TU_size (BITCODE_TU restrict wstr, const int len)
   return str;
 }
 
+/* len of wide string (unix-only) */
+int
+bit_wcs2nlen (BITCODE_TU restrict wstr, const size_t maxlen)
+{
+  size_t len;
+
+  if (!wstr)
+    return 0;
+  len = 0;
+#  ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+  // for strict alignment CPU's like sparc only. also for UBSAN.
+  if ((uintptr_t)wstr % SIZEOF_SIZE_T)
+    {
+      unsigned char *b = (unsigned char *)wstr;
+      uint16_t c = (b[0] << 8) + b[1];
+      while (c)
+        {
+          len++;
+          if (len > maxlen)
+            return 0;
+          b += 2;
+          c = (b[0] << 8) + b[1];
+        }
+      return (int)len;
+    }
+  else
+#  endif
+  {
+    BITCODE_TU c = wstr;
+    while (*c++)
+      {
+        len++;
+        if (len > maxlen)
+          return 0;
+      }
+    return (int)len;
+  }
+}
+
 #ifndef HAVE_NATIVE_WCHAR2
 
 /* len of wide string (unix-only) */

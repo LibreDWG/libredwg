@@ -260,6 +260,9 @@ int bit_wcs2len (BITCODE_TU restrict wstr);
 BITCODE_TU bit_wcs2cpy (BITCODE_TU restrict dest, const BITCODE_TU restrict src);
 int bit_wcs2cmp (BITCODE_TU restrict s1, const BITCODE_TU restrict s2);
 #endif
+/* bounded length of UCS-2 string. stops scanning at maxlen.
+   Beware: might overflow to negative lengths */
+int bit_wcs2nlen (BITCODE_TU restrict wstr, const size_t maxlen);
 
 /* Converts UCS-2 to UTF-8, returning a copy. */
 EXPORT char *bit_convert_TU (BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
