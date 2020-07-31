@@ -5107,7 +5107,7 @@ check_POLYLINE_handles (Dwg_Object *obj)
                     }
                   else
                     {
-                      seq = dwg_next_object (seqend->obj);
+                      seq = seqend ? dwg_next_object (seqend->obj) : NULL;
                       if (seq && seq->type == DWG_TYPE_SEQEND)
                         {
                           LOG_WARN ("POLYLINE.seqend = VERTEX+1 %lX",
@@ -5505,12 +5505,12 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
       break;
     case DWG_TYPE_POLYLINE_2D:
       error = dwg_decode_POLYLINE_2D (dat, obj);
-      if (dat->from_version >= R_2010)
+      if (dat->from_version >= R_2010 && error < DWG_ERR_CRITICAL)
         check_POLYLINE_handles (obj);
       break;
     case DWG_TYPE_POLYLINE_3D:
       error = dwg_decode_POLYLINE_3D (dat, obj);
-      if (dat->from_version >= R_2010)
+      if (dat->from_version >= R_2010 && error < DWG_ERR_CRITICAL)
         check_POLYLINE_handles (obj);
       break;
     case DWG_TYPE_ARC:
@@ -5551,7 +5551,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
       break;
     case DWG_TYPE_POLYLINE_PFACE:
       error = dwg_decode_POLYLINE_PFACE (dat, obj);
-      if (dat->from_version >= R_2010)
+      if (dat->from_version >= R_2010 && error < DWG_ERR_CRITICAL)
         check_POLYLINE_handles (obj);
       break;
     case DWG_TYPE_POLYLINE_MESH:
