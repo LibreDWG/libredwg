@@ -515,9 +515,9 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
 
   osize = bit_read_RL (&dat); /* overall size of all images */
   LOG_TRACE ("overall size: " FORMAT_RL " [RL]\n", osize);
-  if (osize > dat.size)
+  if (osize > (dat.size - dat.byte))
     {
-      LOG_ERROR ("Preview overflow > %lu", dat.size);
+      LOG_ERROR ("Preview overflow > %ld", dat.size - dat.byte);
       return NULL;
     }
   num_pictures = bit_read_RC (&dat);

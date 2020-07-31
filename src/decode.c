@@ -993,22 +993,30 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           BITCODE_RL bmpsize;
           LOG_TRACE ("         Thumbnail (end): %4u\n",
                      (unsigned int)dat->byte)
-          dwg->thumbnail.size = (dat->byte - 16) - start_address;
-          dwg->thumbnail.chain
-              = (unsigned char *)calloc (dwg->thumbnail.size, 1);
-          dwg->thumbnail.byte = 0;
-          if (!dwg->thumbnail.chain)
+          if ((dat->byte - 16) < start_address)
             {
-              LOG_ERROR ("Out of memory");
-              return DWG_ERR_OUTOFMEM;
+              LOG_ERROR ("Illegal HEADER.thumbnail_size: %lu < %lu",
+                         dat->byte - 16, start_address);
             }
-          memcpy (dwg->thumbnail.chain, &dat->chain[start_address],
-                  dwg->thumbnail.size);
-          dat->byte += dwg->thumbnail.size;
-
-          dwg_bmp (dwg, &bmpsize);
-          if (bmpsize > dwg->thumbnail.size)
-            LOG_ERROR ("BMP size overflow: %i > %lu\n", bmpsize, dwg->thumbnail.size)
+          else
+            {
+              assert ((dat->byte - 16) >= start_address);
+              dwg->thumbnail.size = (dat->byte - 16) - start_address;
+              dwg->thumbnail.chain
+                = (unsigned char *)calloc (dwg->thumbnail.size, 1);
+              dwg->thumbnail.byte = 0;
+              if (!dwg->thumbnail.chain)
+                {
+                  LOG_ERROR ("Out of memory");
+                  return DWG_ERR_OUTOFMEM;
+                }
+              memcpy (dwg->thumbnail.chain, &dat->chain[start_address],
+                      dwg->thumbnail.size);
+              dat->byte += dwg->thumbnail.size;
+              dwg_bmp (dwg, &bmpsize);
+              if (bmpsize > dwg->thumbnail.size)
+                LOG_ERROR ("BMP size overflow: %i > %lu\n", bmpsize, dwg->thumbnail.size)
+            }
         }
     }
 
@@ -3458,7 +3466,7 @@ read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     LOG_WARN ("thumbnail_address mismatch: " FORMAT_RL " != %lu",
               dwg->header.thumbnail_address, dat->byte);
   LOG_TRACE ("Preview (%lu)\n-------------------\n", sec_dat.size);
-  if (!sec_dat.chain || sec_dat.size < 16)
+  if (!sec_dat.chain || sec_dat.size < 32)
     {
       LOG_WARN ("Empty thumbnail");
       if (sec_dat.chain)
@@ -3472,7 +3480,8 @@ read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       free (sec_dat.chain);
       return error;
     }
-
+  assert (sec_dat.size >= 32);
+  assert (sec_dat.chain);
   dwg->thumbnail.size = sec_dat.size - 32; // 2x sentinel
   dwg->thumbnail.chain = sec_dat.chain;
   dwg->thumbnail.byte = 16; // sentinel

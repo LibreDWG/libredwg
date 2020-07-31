@@ -2239,7 +2239,7 @@ read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     LOG_WARN ("thumbnail_address mismatch: " FORMAT_RL " != %lu",
               dwg->header.thumbnail_address, dat->byte);
   LOG_TRACE ("\nPreview (%lu)\n-------------------\n", sec_dat.size)
-  if (!sec_dat.chain || sec_dat.size < 16)
+  if (!sec_dat.chain || sec_dat.size < 32)
     {
       LOG_WARN ("Empty thumbnail");
       if (sec_dat.chain)
@@ -2254,6 +2254,8 @@ read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       return error |= DWG_ERR_WRONGCRC;
     }
 
+  assert (sec_dat.size >= 32);
+  assert (sec_dat.chain);
   dwg->thumbnail.size = sec_dat.size - 32; // 2x sentinel
   dwg->thumbnail.chain = sec_dat.chain;
   dwg->thumbnail.byte = 16; // sentinel
