@@ -2988,7 +2988,7 @@ appinfo_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   #include "appinfo.spec"
   // clang-format on
 
-  if (_obj->version && *_obj->version)
+  if (_obj->version && bit_wcs2len (_obj->version) >= 6)
     {
       is_teigha = memcmp (_obj->version, "T\0e\0i\0g\0h\0a\0", 12) == 0;
       LOG_TRACE ("is_teigha: %s\n", is_teigha ? "true" : "false")
