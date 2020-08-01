@@ -7623,15 +7623,15 @@ DWG_SUBCLASS_DECL (MATERIAL, Texture_diffusemap);
   }
 
 #define MAT_MAP(map, dxf1, dxf2, dxf3, dxf4, dxf5, dxf6, dxf7)                \
-    FIELD_BD (map.blendfactor, dxf1);                                         \
-    MAT_MAPPER (map, dxf4, dxf5, dxf6, dxf7);                                 \
-    FIELD_RC (map.source, dxf2); /* 0 scene, 1 file (def), 2 procedural */    \
-    if (FIELD_VALUE (map.source) == 1)                                        \
-      {                                                                       \
-        FIELD_T (map.filename, dxf3); /* if NULL no map */                    \
-      }                                                                       \
-    else if (FIELD_VALUE (map.source) == 2)                                   \
-      MAT_MAPPER (map, dxf4, dxf5, dxf6, dxf7)
+  FIELD_BD (map.blendfactor, dxf1);                                           \
+  MAT_MAPPER (map, dxf4, dxf5, dxf6, dxf7);                                   \
+  FIELD_RC (map.source, dxf2); /* 0 scene, 1 file (def), 2 procedural */      \
+  if (FIELD_VALUE (map.source) == 1)                                          \
+    {                                                                         \
+      FIELD_T (map.filename, dxf3); /* if NULL no map */                      \
+    }                                                                         \
+  else if (FIELD_VALUE (map.source) == 2)                                     \
+    MAT_TEXTURE (map, 0)
 
 #define Texture_diffusemap_fields MAT_TEXTURE (diffusemap, 0)
 DWG_SUBCLASS (MATERIAL, Texture_diffusemap);
