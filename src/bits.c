@@ -1602,9 +1602,11 @@ bit_embed_TU_size (BITCODE_TU restrict wstr, const int len)
   return str;
 }
 
+#if !(defined (HAVE_NATIVE_WCHAR2) && defined (HAVE_WCSNLEN))
+
 /* len of wide string (unix-only) */
-int
-bit_wcs2nlen (BITCODE_TU restrict wstr, const size_t maxlen)
+size_t
+bit_wcs2nlen (const BITCODE_TU restrict wstr, const size_t maxlen)
 {
   size_t len;
 
@@ -1625,7 +1627,7 @@ bit_wcs2nlen (BITCODE_TU restrict wstr, const size_t maxlen)
           b += 2;
           c = (b[0] << 8) + b[1];
         }
-      return (int)len;
+      return len;
     }
   else
 #  endif
@@ -1637,17 +1639,18 @@ bit_wcs2nlen (BITCODE_TU restrict wstr, const size_t maxlen)
         if (len > maxlen)
           return 0;
       }
-    return (int)len;
+    return len;
   }
 }
 
+#endif
 #ifndef HAVE_NATIVE_WCHAR2
 
 /* len of wide string (unix-only) */
-int
-bit_wcs2len (BITCODE_TU restrict wstr)
+size_t
+bit_wcs2len (const BITCODE_TU restrict wstr)
 {
-  int len;
+  size_t len;
 
   if (!wstr)
     return 0;
