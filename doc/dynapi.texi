@@ -14441,24 +14441,24 @@ struct _dwg_object_MATERIAL*
 struct _dwg_object_object*
 @item blendfactor
 BD
-@item source
-RC
+@item transmatrix
+BD*
 @item filename
 T
+@item color1
+Dwg_MATERIAL_color
+@item color2
+Dwg_MATERIAL_color
+@item source
+RC
 @item projection
 RC
 @item tiling
 RC
 @item autotransform
 RC
-@item transmatrix
-BD*
 @item texturemode
 BS
-@item color1
-Dwg_MATERIAL_color
-@item color2
-Dwg_MATERIAL_color
 
 @end vtable
 @end indentedblock

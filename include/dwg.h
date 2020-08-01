@@ -4466,17 +4466,17 @@ typedef struct _dwg_MATERIAL_mapper
 {
   struct _dwg_object_object *parent;
   BITCODE_BD blendfactor;   /*!< DXF 42  def: 1.0 */
-  BITCODE_RC source;        /*!< DXF 72  0 current, 1 image file (def), 2 2nd map? */
+  BITCODE_BD* transmatrix;  /*!< DXF 43: 16x BD */
   BITCODE_T filename;       /*!< DXF 3   if NULL no diffuse map */
+  Dwg_MATERIAL_color color1;
+  Dwg_MATERIAL_color color2;
+  BITCODE_RC source;        /*!< DXF 72  0 current, 1 image file (def), 2 2nd map? */
   BITCODE_RC projection;    /*!< DXF 73  1 Planar (def), 2 Box, 3 Cylinder, 4 Sphere */
   BITCODE_RC tiling;        /*!< DXF 74  1 = Tile (def), 2 = Crop, 3 = Clamp */
   BITCODE_RC autotransform; /*!< DXF 75  1 no, 2: scale to curr ent,
                                          4: w/ current block transform */
-  BITCODE_BD* transmatrix;  /*!< DXF 43: 16x BD */
   /* marble, wood and procedural modes */
   BITCODE_BS texturemode;
-  Dwg_MATERIAL_color color1;
-  Dwg_MATERIAL_color color2;
 } Dwg_MATERIAL_mapper;
 
 typedef struct _dwg_MATERIAL_gentexture

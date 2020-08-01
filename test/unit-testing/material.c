@@ -33,6 +33,8 @@ api_process (dwg_object *obj)
   BITCODE_BL illumination_model;
   BITCODE_BL channel_flags;
   BITCODE_BL mode;
+  BITCODE_T genprocname;
+  BITCODE_BS genproctype;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_material *_obj = dwg_object_to_MATERIAL (obj);
@@ -40,113 +42,64 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (_obj, MATERIAL, name);
   CHK_ENTITY_UTF8TEXT (_obj, MATERIAL, description);
 
-  CHK_SUBCLASS_TYPE (ambient_color, MATERIAL_color, flag, BS);
-  CHK_SUBCLASS_TYPE (ambient_color, MATERIAL_color, factor, BD);
-  CHK_SUBCLASS_TYPE (ambient_color, MATERIAL_color, rgb, BL);
-  /*
-  CHK_ENTITY_TYPE (_obj, MATERIAL, ambient_color_flag, BS);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, ambient_color_factor, BD);
-  CHK_ENTITY_CMC (_obj, MATERIAL, ambient_color);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, diffuse_color_flag, BS);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, diffuse_color_factor, BD);
-  CHK_ENTITY_CMC (_obj, MATERIAL, diffuse_color);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, diffusemap_source, BS);
-  CHK_ENTITY_UTF8TEXT (_obj, MATERIAL, diffusemap_filename);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, diffusemap_blendfactor, BD);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, diffusemap_projection, BS);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, diffusemap_tiling, BS);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, diffusemap_autotransform, BS);
-  if (!dwg_dynapi_entity_value (_obj, "MATERIAL", "diffusemap_transmatrix",
-                                &diffusemap_transmatrix, NULL) || !diffusemap_transmatrix)
-    fail ("MATERIAL.diffusemap_transmatrix");
-  else
-    for (int i = 0; i < 16; i++)
-      {
-        ok ("MATERIAL.diffusemap_transmatrix[%d]: %f", i,
-            diffusemap_transmatrix[i]);
-      }
-  CHK_ENTITY_TYPE (_obj, MATERIAL, specular_gloss_factor, BD,
-                   specular_gloss_factor);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, specular_color_flag, BS);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, specular_color_factor, BD);
-  CHK_ENTITY_CMC (_obj, MATERIAL, specular_color);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, specularmap_source, BS);
-  CHK_ENTITY_UTF8TEXT (_obj, MATERIAL, specularmap_filename);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, specularmap_blendfactor, BD);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, specularmap_projection, BS);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, specularmap_tiling, BS);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, specularmap_autotransform, BS);
-  if (!dwg_dynapi_entity_value (_obj, "MATERIAL", "specularmap_transmatrix",
-                                &specularmap_transmatrix, NULL) || !specularmap_transmatrix)
-    fail ("MATERIAL.specularmap_transmatrix");
-  else
-    for (int i = 0; i < 16; i++)
-      {
-        ok ("MATERIAL.specularmap_transmatrix[%d]: %f", i,
-            specularmap_transmatrix[i]);
-      }
-  CHK_ENTITY_TYPE (_obj, MATERIAL, reflectionmap_source, BS);
-  CHK_ENTITY_UTF8TEXT (_obj, MATERIAL, reflectionmap_filename);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, reflectionmap_blendfactor, BD);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, reflectionmap_projection, BS);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, reflectionmap_tiling, BS);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, reflectionmap_autotransform, BS);
-  if (!dwg_dynapi_entity_value (_obj, "MATERIAL", "reflectionmap_transmatrix",
-                                &reflectionmap_transmatrix, NULL) || !reflectionmap_transmatrix)
-    fail ("MATERIAL.reflectionmap_transmatrix");
-  else
-    for (int i = 0; i < 16; i++)
-      {
-        ok ("MATERIAL.reflectionmap_transmatrix[%d]: %f", i,
-            reflectionmap_transmatrix[i]);
-      }
+#define CHK_MATERIAL_COLOR(ambient_color)                                     \
+  if (!dwg_dynapi_entity_value (_obj, "MATERIAL", #ambient_color,             \
+                                &ambient_color, NULL))                        \
+    fail (#ambient_color);                                                    \
+  CHK_SUBCLASS_TYPE (ambient_color, MATERIAL_color, flag, RC);                \
+  CHK_SUBCLASS_TYPE (ambient_color, MATERIAL_color, factor, BD);              \
+  if (ambient_color.flag == 1)                                                \
+  CHK_SUBCLASS_TYPE (ambient_color, MATERIAL_color, rgb, BLx)
+
+  CHK_MATERIAL_COLOR (ambient_color);
+  CHK_MATERIAL_COLOR (diffuse_color);
+
+#define CHK_MATERIAL_MAP(diffusemap)                                          \
+  if (!dwg_dynapi_entity_value (_obj, "MATERIAL", #diffusemap, &diffusemap,   \
+                                NULL))                                        \
+    fail (#diffusemap);                                                       \
+  CHK_SUBCLASS_TYPE (diffusemap, MATERIAL_mapper, blendfactor, BD);           \
+  CHK_SUBCLASS_TYPE (diffusemap, MATERIAL_mapper, projection, RC);            \
+  CHK_SUBCLASS_TYPE (diffusemap, MATERIAL_mapper, tiling, RC);                \
+  CHK_SUBCLASS_TYPE (diffusemap, MATERIAL_mapper, autotransform, RC);         \
+  CHK_SUBCLASS_VECTOR_TYPE (diffusemap, MATERIAL_mapper, transmatrix, 16,     \
+                            BD);                                              \
+  CHK_SUBCLASS_TYPE (diffusemap, MATERIAL_mapper, source, RC);                \
+  if (diffusemap.source == 1)                                                 \
+    CHK_SUBCLASS_UTF8TEXT (diffusemap, MATERIAL_mapper, filename);            \
+  if (diffusemap.source == 2)                                                 \
+    {                                                                         \
+      CHK_SUBCLASS_TYPE (diffusemap, MATERIAL_mapper, texturemode, BS);       \
+      if (diffusemap.texturemode < 2) /* not procedural */                    \
+        {                                                                     \
+          CHK_SUBCLASS_TYPE (diffusemap.color1, MATERIAL_color, flag, RC);    \
+          CHK_SUBCLASS_TYPE (diffusemap.color1, MATERIAL_color, factor, BD);  \
+          if (_obj->diffusemap.color1.flag == 1)                              \
+            CHK_SUBCLASS_TYPE (diffusemap.color1, MATERIAL_color, rgb, BLx);  \
+          CHK_SUBCLASS_TYPE (diffusemap.color2, MATERIAL_color, flag, RC);    \
+          CHK_SUBCLASS_TYPE (diffusemap.color2, MATERIAL_color, factor, BD);  \
+          if (_obj->diffusemap.color2.flag == 1)                              \
+            CHK_SUBCLASS_TYPE (diffusemap.color2, MATERIAL_color, rgb, BLx);  \
+        }                                                                     \
+      else                                                                    \
+        {                                                                     \
+          CHK_ENTITY_TYPE (_obj, MATERIAL, genproctype, BS);                  \
+          /* TODO procedural...*/                                             \
+        }                                                                     \
+    }
+
+  CHK_MATERIAL_MAP (diffusemap)
+  CHK_MATERIAL_COLOR (specular_color);
+  CHK_ENTITY_TYPE (_obj, MATERIAL, specular_gloss_factor, BD);
+  CHK_MATERIAL_MAP (specularmap)
+  CHK_MATERIAL_MAP (reflectionmap)
   CHK_ENTITY_TYPE (_obj, MATERIAL, opacity_percent, BD);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, opacitymap_source, BS);
-  CHK_ENTITY_UTF8TEXT (_obj, MATERIAL, opacitymap_filename);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, opacitymap_blendfactor, BD);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, opacitymap_projection, BS);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, opacitymap_tiling, BS);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, opacitymap_autotransform, BS);
-  if (!dwg_dynapi_entity_value (_obj, "MATERIAL", "opacitymap_transmatrix",
-                                &opacitymap_transmatrix, NULL) || !opacitymap_transmatrix)
-    fail ("MATERIAL.opacitymap_transmatrix");
-  else
-    for (int i = 0; i < 16; i++)
-      {
-        ok ("MATERIAL.opacitymap_transmatrix[%d]: %f", i,
-            opacitymap_transmatrix[i]);
-      }
-  CHK_ENTITY_TYPE (_obj, MATERIAL, bumpmap_source, BS);
-  CHK_ENTITY_UTF8TEXT (_obj, MATERIAL, bumpmap_filename);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, bumpmap_blendfactor, BD);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, bumpmap_projection, BS);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, bumpmap_tiling, BS);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, bumpmap_autotransform, BS);
-  if (!dwg_dynapi_entity_value (_obj, "MATERIAL", "bumpmap_transmatrix",
-                                &bumpmap_transmatrix, NULL) || !bumpmap_transmatrix)
-    fail ("MATERIAL.bumpmap_transmatrix");
-  else
-    for (int i = 0; i < 16; i++)
-      {
-        ok ("MATERIAL.bumpmap_transmatrix[%d]: %f", i,
-            bumpmap_transmatrix[i]);
-      }
+  CHK_MATERIAL_MAP (opacitymap)
+  CHK_MATERIAL_MAP (bumpmap)
   CHK_ENTITY_TYPE (_obj, MATERIAL, refraction_index, BD);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, refractionmap_source, BS);
-  CHK_ENTITY_UTF8TEXT (_obj, MATERIAL, refractionmap_filename);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, refractionmap_blendfactor, BD);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, refractionmap_projection, BS);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, refractionmap_tiling, BS);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, refractionmap_autotransform, BS);
-  if (!dwg_dynapi_entity_value (_obj, "MATERIAL", "refractionmap_transmatrix",
-                                &refractionmap_transmatrix, NULL) || !refractionmap_transmatrix)
-    fail ("MATERIAL.refractionmap_transmatrix");
-  else
-    for (int i = 0; i < 16; i++)
-      {
-        ok ("MATERIAL.refractionmap_transmatrix[%d]: %f", i,
-            refractionmap_transmatrix[i]);
-      }
+  CHK_MATERIAL_MAP (refractionmap)
+
+#if 0
   CHK_ENTITY_TYPE (_obj, MATERIAL, color_bleed_scale, BD);
   CHK_ENTITY_TYPE (_obj, MATERIAL, indirect_bump_scale, BD);
   CHK_ENTITY_TYPE (_obj, MATERIAL, reflectance_scale, BD);
@@ -183,11 +136,14 @@ api_process (dwg_object *obj)
   CHK_ENTITY_CMC (_obj, MATERIAL, genprocvalcolorindex);
   CHK_ENTITY_TYPE (_obj, MATERIAL, genprocvalcolorrgb, BS);
   CHK_ENTITY_UTF8TEXT (_obj, MATERIAL, genprocvalcolorname);
-  */
-  CHK_ENTITY_TYPE (_obj, MATERIAL, translucence, BD);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, self_illumination, BD);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, reflectivity, BD);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, illumination_model, BL);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, channel_flags, BL);
-  CHK_ENTITY_TYPE (_obj, MATERIAL, mode, BL);
+#endif
+
+  SINCE (R_2007) {
+    CHK_ENTITY_TYPE (_obj, MATERIAL, translucence, BD);
+    CHK_ENTITY_TYPE (_obj, MATERIAL, self_illumination, BD);
+    CHK_ENTITY_TYPE (_obj, MATERIAL, reflectivity, BD);
+    CHK_ENTITY_TYPE (_obj, MATERIAL, illumination_model, BL);
+    CHK_ENTITY_TYPE (_obj, MATERIAL, channel_flags, BL);
+    CHK_ENTITY_TYPE (_obj, MATERIAL, mode, BL);
+  }
 }
