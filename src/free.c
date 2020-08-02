@@ -1165,8 +1165,6 @@ dwg_free_header_vars (Dwg_Data *dwg)
   #include "header_variables.spec"
   // clang-format on
 
-  if (dwg->opts & DWG_OPTS_MINIMAL)
-    FREE_IF (_obj->HANDSEED);
   return 0;
 }
 
