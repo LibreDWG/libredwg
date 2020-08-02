@@ -3571,6 +3571,8 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     LOG_INSANE ("@0x%lx\n", dat->byte)
 
     LOG_TRACE ("\n=== Read System Section (Section Page Map) ===\n\n")
+    if (!dwg->r2004_header.section_map_address)
+      return DWG_ERR_SECTIONNOTFOUND;
     assert (dwg->r2004_header.section_map_address);
     dat->byte = dwg->r2004_header.section_map_address + 0x100;
     start = dwg->r2004_header.section_map_address;
