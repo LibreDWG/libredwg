@@ -25,6 +25,7 @@ bash -lc "pacman -U --noconfirm msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz"
 rem bash -lc "pacman -U --config <(echo) msys2-keyring-r21.b39fb11-1-any.pkg.tar.xz"
 
 echo Updating pacman...
+bash -lc "pacman -Syy --noconfirm pacman"
 bash -lc "pacman -S --needed --noconfirm pacman-mirrors"
 bash -lc "pacman -Syyu --noconfirm"
 rem need it twice, really
