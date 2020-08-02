@@ -1622,7 +1622,7 @@ bit_wcs2nlen (const BITCODE_TU restrict wstr, const size_t maxlen)
       while (c)
         {
           len++;
-          if (len > maxlen)
+          if (len >= maxlen)
             return 0;
           b += 2;
           c = (b[0] << 8) + b[1];
@@ -1633,11 +1633,12 @@ bit_wcs2nlen (const BITCODE_TU restrict wstr, const size_t maxlen)
 #  endif
   {
     BITCODE_TU c = wstr;
-    while (*c++)
+    while (*c)
       {
         len++;
-        if (len > maxlen)
+        if (len >= maxlen)
           return 0;
+        c++;
       }
     return len;
   }
@@ -1749,6 +1750,28 @@ bit_wcs2cmp (BITCODE_TU restrict dest, const BITCODE_TU restrict src)
 #endif
 
 #endif /* HAVE_NATIVE_WCHAR2 */
+
+#ifndef HAVE_STRNLEN
+/* bounds-checked len of string */
+size_t
+bit_strnlen (const char *restrict str, const size_t maxlen)
+{
+  size_t len;
+  char *c = str;
+
+  if (!str)
+    return 0;
+  len = 0;
+  while (*c)
+    {
+      len++;
+      if (len >= maxlen)
+        return 0;
+      c++;
+    }
+  return len;
+}
+#endif
 
 /* converts TU to ASCII with embedded \U+XXXX */
 char *

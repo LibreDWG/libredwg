@@ -270,6 +270,11 @@ BITCODE_TU bit_wcs2cpy (BITCODE_TU restrict dest,
 int bit_wcs2cmp (BITCODE_TU restrict s1, const BITCODE_TU restrict s2);
 #endif
 
+#ifndef HAVE_STRNLEN
+size_t bit_strnlen (const char *restrict str, const size_t maxlen);
+#define strnlen (str, maxlen) bit_strnlen(str, maxlen)
+#endif
+
 /* Converts UCS-2 to UTF-8, returning a copy. */
 EXPORT char *bit_convert_TU (BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
 

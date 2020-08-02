@@ -249,7 +249,7 @@ AC_CHECK_FUNCS([scandir],[],
 AC_CHECK_FUNCS([floor sqrt])
 AC_CHECK_LIB([m],[floor])
 AC_CHECK_LIB([m],[sqrt])
-AC_CHECK_FUNCS([memchr memmove strcasecmp strchr strrchr strtol strtoul strtoull])
+AC_CHECK_FUNCS([memchr memmove strcasecmp strchr strrchr strtol strtoul strtoull strnlen])
 AC_CHECK_FUNCS([memmem],[],
   AC_MSG_WARN([memmem not found. Using a slower workaround.]))
 AC_CHECK_FUNCS([wcslen wcsnlen wcscpy wcscmp])
