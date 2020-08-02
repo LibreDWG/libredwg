@@ -44,6 +44,11 @@
   FIELD_RL (file_size, 0);
 #ifdef IS_DECODER
   dat->byte = _obj->segidx_offset;
+  if (_obj->num_segidx * sizeof (Dwg_AcDs_Segment) > (dat->size - dat->byte))
+    {
+      LOG_ERROR ("Invalid num_segidx");
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
   _obj->segments = calloc (_obj->num_segidx, sizeof (Dwg_AcDs_Segment));
 #endif
 #ifndef IS_JSON
