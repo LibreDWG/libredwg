@@ -643,6 +643,15 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
   // Multiply with codeword size (255) and round to a multiple of 8
   page_size = (block_count * 255 + 7) & ~7;
 
+  if (!((uint64_t)size_comp < dat->size &&
+        (uint64_t)size_uncomp < dat->size &&
+        (uint64_t)repeat_count < DBG_MAX_COUNT &&
+        (uint64_t)page_size < DBG_MAX_COUNT))
+    {
+      LOG_ERROR ("Invalid r2007 system page size_comp: %" PRId64
+                 ", size_uncomp: %" PRId64, size_comp, size_uncomp);
+      return NULL;
+    }
   assert ((uint64_t)size_comp < dat->size);
   assert ((uint64_t)size_uncomp < dat->size);
   assert ((uint64_t)repeat_count < DBG_MAX_COUNT);
@@ -2305,7 +2314,16 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   // Pages Map
   dat->byte += 0x28; // overread check data
   dat->byte += file_header.pages_map_offset;
-
+  if ((unsigned long)file_header.pages_map_size_comp
+      > dat->size - dat->byte)
+    {
+      LOG_ERROR ("%s Invalid pages_map_size_comp %lu > %lu bytes left",
+                 __FUNCTION__,
+                 (unsigned long)file_header.pages_map_size_comp,
+                 dat->size - dat->byte)
+      error |= DWG_ERR_VALUEOUTOFBOUNDS;
+      goto error;
+    }
   pages_map = read_pages_map (dat, file_header.pages_map_size_comp,
                               file_header.pages_map_size_uncomp,
                               file_header.pages_map_correction);
@@ -2323,7 +2341,7 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
     }
   dat->byte = page->offset;
   if ((unsigned long)file_header.sections_map_size_comp
-      > dat->byte - dat->size)
+      > dat->size - dat->byte)
     {
       LOG_ERROR ("%s Invalid comp_data_size %lu > %lu bytes left",
                  __FUNCTION__,
