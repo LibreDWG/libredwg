@@ -42,9 +42,15 @@
   FIELD_RL (search_segidx, 0);
   FIELD_RL (prvsav_segidx, 0);
   FIELD_RL (file_size, 0);
-#ifdef IS_DECODER
   dat->byte = _obj->segidx_offset;
-  if (_obj->num_segidx * sizeof (Dwg_AcDs_Segment) > (dat->size - dat->byte))
+#ifdef IS_DECODER
+  if (dat->byte > dat->size)
+    {
+      LOG_ERROR ("Invalid segidx_offset");
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
+  if ((size_t)(_obj->num_segidx * sizeof (Dwg_AcDs_Segment)) >
+      (size_t)(dat->size - dat->byte))
     {
       LOG_ERROR ("Invalid num_segidx");
       return DWG_ERR_VALUEOUTOFBOUNDS;
