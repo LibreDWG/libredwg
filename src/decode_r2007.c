@@ -1307,7 +1307,12 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
   if (str->byte >= old_size - old_byte)
     {
-      LOG_WARN ("obj_string_stream overflow");
+      LOG_ERROR ("obj_string_stream overflow, bitsize " FORMAT_RL " => " FORMAT_RL,
+                 obj->bitsize, obj->size * 8);
+      str->byte = old_byte;
+      str->size = old_size;
+      obj->has_strings = 0;
+      obj->bitsize = obj->size * 8;
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
   LOG_HANDLE (" obj string stream +%u: @%lu.%u (%lu)", start, str->byte,
