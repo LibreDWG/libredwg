@@ -2298,7 +2298,7 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
                       Dwg_Data *restrict dwg)
 {
   r2007_file_header file_header;
-  r2007_page *restrict pages_map, *restrict page;
+  r2007_page *restrict pages_map = NULL, *restrict page;
   r2007_section *restrict sections_map = NULL;
   int error;
 #ifdef USE_TRACING
