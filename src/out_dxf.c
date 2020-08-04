@@ -1171,12 +1171,12 @@ dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       if (obj->fixedtype == DWG_TYPE_XRECORD && dxftype >= 80 && dxftype < 90)
         {
           fmt = "(unknown code)";
-          type = VT_INVALID;
+          type = DWG_VT_INVALID;
         }
 
       if (strEQc (fmt, "(unknown code)"))
         {
-          if (type == VT_INVALID)
+          if (type == DWG_VT_INVALID)
             {
               LOG_WARN ("Invalid xdata code %d", dxftype);
             }
@@ -1190,37 +1190,37 @@ dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       tmp = rbuf->nextrb;
       switch (type)
         {
-        case VT_STRING:
+        case DWG_VT_STRING:
           if (IS_FROM_TU (dat)) { VALUE_TU (rbuf->value.str.u.wdata, dxftype); }
           else                  { VALUE_TV (rbuf->value.str.u.data, dxftype); }
           break;
-        case VT_REAL:
+        case DWG_VT_REAL:
           VALUE_RD (rbuf->value.dbl, dxftype);
           break;
-        case VT_BOOL:
-        case VT_INT8:
+        case DWG_VT_BOOL:
+        case DWG_VT_INT8:
           VALUE_RC (rbuf->value.i8, dxftype);
           break;
-        case VT_INT16:
+        case DWG_VT_INT16:
           VALUE_RS (rbuf->value.i16, dxftype);
           break;
-        case VT_INT32:
+        case DWG_VT_INT32:
           VALUE_RL (rbuf->value.i32, dxftype);
           break;
-        case VT_POINT3D:
+        case DWG_VT_POINT3D:
           VALUE_RD (rbuf->value.pt[0], dxftype);
           VALUE_RD (rbuf->value.pt[1], dxftype + 10);
           VALUE_RD (rbuf->value.pt[2], dxftype + 20);
           break;
-        case VT_BINARY:
+        case DWG_VT_BINARY:
           VALUE_BINARY (rbuf->value.str.u.data, rbuf->value.str.size, dxftype);
           break;
-        case VT_HANDLE:
-        case VT_OBJECTID:
+        case DWG_VT_HANDLE:
+        case DWG_VT_OBJECTID:
           fprintf (dat->fh, "%3i\r\n%lX\r\n", dxftype,
                    (unsigned long)*(uint64_t *)rbuf->value.hdl);
           break;
-        case VT_INVALID:
+        case DWG_VT_INVALID:
           break; // skip
         default:
           fprintf (dat->fh, "%3i\r\n\r\n", dxftype);

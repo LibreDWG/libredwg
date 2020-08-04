@@ -1464,7 +1464,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           vtype = dwg_resbuf_value_type (rbuf->type);
           switch (vtype)
             {
-            case VT_STRING:
+            case DWG_VT_STRING:
               {
                 char *s = json_string (dat, tokens);
                 int len = strlen (s);
@@ -1488,8 +1488,8 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 }
               }
               break;
-            case VT_BOOL:
-            case VT_INT8:
+            case DWG_VT_BOOL:
+            case DWG_VT_INT8:
               {
                 long l = json_long (dat, tokens);
                 JSON_TOKENS_CHECK_OVERFLOW_ERR
@@ -1498,7 +1498,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 size += 1;
               }
               break;
-            case VT_INT16:
+            case DWG_VT_INT16:
               {
                 long l = json_long (dat, tokens);
                 JSON_TOKENS_CHECK_OVERFLOW_ERR
@@ -1507,7 +1507,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 size += 2;
               }
               break;
-            case VT_INT32:
+            case DWG_VT_INT32:
               {
                 long l = json_long (dat, tokens);
                 JSON_TOKENS_CHECK_OVERFLOW_ERR
@@ -1516,7 +1516,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 size += 4;
               }
               break;
-            case VT_INT64:
+            case DWG_VT_INT64:
               {
                 long l = json_long (dat, tokens);
                 JSON_TOKENS_CHECK_OVERFLOW_ERR
@@ -1525,14 +1525,14 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 size += 8;
               }
               break;
-            case VT_REAL:
+            case DWG_VT_REAL:
               rbuf->value.dbl = json_float (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW_ERR
               LOG_TRACE ("xdata[%u]: %f [RD %d]\n", i, rbuf->value.dbl,
                          (int)rbuf->type);
               size += 8;
               break;
-            case VT_POINT3D:
+            case DWG_VT_POINT3D:
               {
                 BITCODE_3BD pt;
                 json_3DPOINT (dat, tokens, name, "xdata", "3RD", &pt);
@@ -1541,7 +1541,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 size += 24;
               }
               break;
-            case VT_BINARY:
+            case DWG_VT_BINARY:
               {
                 unsigned long len;
                 char *s = json_binary (dat, tokens, "xdata", &len);
@@ -1551,8 +1551,8 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 size += len + 1;
                 break;
               }
-            case VT_HANDLE:
-            case VT_OBJECTID:
+            case DWG_VT_HANDLE:
+            case DWG_VT_OBJECTID:
               {
                 BITCODE_H hdl;
                 hdl = json_HANDLE (dat, dwg, tokens, name, key, NULL, -1);
@@ -1562,7 +1562,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 size += 8;
               }
               break;
-            case VT_INVALID:
+            case DWG_VT_INVALID:
             default:
               break;
             }

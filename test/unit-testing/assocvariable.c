@@ -51,28 +51,28 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE (_obj->value, EvalVariant, code, BS);
   switch (dwg_resbuf_value_type (_obj->value.code))
     {
-    case VT_REAL:
+    case DWG_VT_REAL:
       CHK_SUBCLASS_TYPE (_obj->value, EvalVariant, u.bd, BD);
       break;
-    case VT_INT32:
+    case DWG_VT_INT32:
       CHK_SUBCLASS_TYPE (_obj->value, EvalVariant, u.bl, BL);
       break;
-    case VT_INT16:
+    case DWG_VT_INT16:
       CHK_SUBCLASS_TYPE (_obj->value, EvalVariant, u.bs, BS);
       break;
-    case VT_STRING:
+    case DWG_VT_STRING:
       CHK_SUBCLASS_UTF8TEXT (_obj->value, EvalVariant, u.text);
       break;
-    case VT_HANDLE:
+    case DWG_VT_HANDLE:
       CHK_SUBCLASS_H (_obj->value, EvalVariant, u.handle);
       break;
-    case VT_BINARY:
-    case VT_OBJECTID:
-    case VT_POINT3D:
-    case VT_INVALID:
-    case VT_INT64:
-    case VT_INT8:
-    case VT_BOOL:
+    case DWG_VT_BINARY:
+    case DWG_VT_OBJECTID:
+    case DWG_VT_POINT3D:
+    case DWG_VT_INVALID:
+    case DWG_VT_INT64:
+    case DWG_VT_INT8:
+    case DWG_VT_BOOL:
     default:
       fail ("Unknown ASSOCVARIABLE.value.code %u", _obj->value.code);
     }

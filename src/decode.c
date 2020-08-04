@@ -4819,7 +4819,7 @@ dwg_free_xdata_resbuf (Dwg_Resbuf *rbuf)
     {
       Dwg_Resbuf *next = rbuf->nextrb;
       short type = dwg_resbuf_value_type (rbuf->type);
-      if (type == VT_STRING || type == VT_BINARY)
+      if (type == DWG_VT_STRING || type == DWG_VT_BINARY)
         free (rbuf->value.str.u.data);
       free (rbuf);
       rbuf = next;
@@ -4888,7 +4888,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
       vtype = dwg_resbuf_value_type (rbuf->type);
       switch (vtype)
         {
-        case VT_STRING:
+        case DWG_VT_STRING:
           PRE (R_2007)
           {
             length = bit_read_RS (dat);
@@ -4938,43 +4938,43 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
               }
           }
           break;
-        case VT_REAL:
+        case DWG_VT_REAL:
           if (dat->byte + 8 > end_address)
             break;
           rbuf->value.dbl = bit_read_RD (dat);
           LOG_TRACE ("xdata[%u]: %f [RD %d]\n", num_xdata, rbuf->value.dbl,
                      rbuf->type);
           break;
-        case VT_BOOL:
-        case VT_INT8:
+        case DWG_VT_BOOL:
+        case DWG_VT_INT8:
           if (dat->byte + 1 > end_address)
             break;
           rbuf->value.i8 = bit_read_RC (dat);
           LOG_TRACE ("xdata[%u]: %d [RC %d]\n", num_xdata, (int)rbuf->value.i8,
                      rbuf->type);
           break;
-        case VT_INT16:
+        case DWG_VT_INT16:
           if (dat->byte + 2 > end_address)
             break;
           rbuf->value.i16 = bit_read_RS (dat);
           LOG_TRACE ("xdata[%u]: %d [RS %d]\n", num_xdata,
                      (int)rbuf->value.i16, rbuf->type);
           break;
-        case VT_INT32:
+        case DWG_VT_INT32:
           if (dat->byte + 4 > end_address)
             break;
           rbuf->value.i32 = bit_read_RL (dat);
           LOG_TRACE ("xdata[%u]: %d [RL %d]\n", num_xdata,
                      (int)rbuf->value.i32, rbuf->type);
           break;
-        case VT_INT64:
+        case DWG_VT_INT64:
           if (dat->byte + 8 > end_address)
             break;
           rbuf->value.i64 = bit_read_BLL (dat);
           LOG_TRACE ("xdata[%u]: " FORMAT_BLL " [BLL %d]\n", num_xdata,
                      rbuf->value.i64, rbuf->type);
           break;
-        case VT_POINT3D:
+        case DWG_VT_POINT3D:
           if (dat->byte + 24 > end_address)
             break;
           rbuf->value.pt[0] = bit_read_RD (dat);
@@ -4984,7 +4984,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
                      rbuf->value.pt[0], rbuf->value.pt[1], rbuf->value.pt[2],
                      rbuf->type);
           break;
-        case VT_BINARY:
+        case DWG_VT_BINARY:
           rbuf->value.str.size = bit_read_RC (dat);
           if (dat->byte + rbuf->value.str.size > end_address)
             {
@@ -4997,15 +4997,15 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
                      rbuf->type);
           LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
           break;
-        case VT_HANDLE:
-        case VT_OBJECTID:
+        case DWG_VT_HANDLE:
+        case DWG_VT_OBJECTID:
           if (dat->byte + 8 > end_address)
             break;
           bit_read_fixed (dat, rbuf->value.hdl, 8);
           LOG_TRACE ("xdata[%u]: " FORMAT_H " [H %d]\n", num_xdata,
                      ARGS_H (rbuf->value.h), rbuf->type);
           break;
-        case VT_INVALID:
+        case DWG_VT_INVALID:
         default:
           LOG_ERROR ("Invalid group code in xdata[%u]: %d", num_xdata, rbuf->type)
           LOG_WARN ("xdata read %lu, expected %d", dat->byte - start_address, obj->xdata_size);

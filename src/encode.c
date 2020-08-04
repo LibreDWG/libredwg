@@ -4417,7 +4417,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
       type = dwg_resbuf_value_type (rbuf->type);
       switch (type)
         {
-        case VT_STRING:
+        case DWG_VT_STRING:
           PRE (R_2007)
           {
             if (dat->byte + 3 + rbuf->value.str.size > end)
@@ -4476,7 +4476,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
             LOG_POS;
           }
           break;
-        case VT_REAL:
+        case DWG_VT_REAL:
           if (dat->byte + 8 > end)
             break;
           bit_write_RD (dat, rbuf->value.dbl);
@@ -4484,14 +4484,14 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
                      rbuf->type);
           LOG_POS;
           break;
-        case VT_BOOL:
-        case VT_INT8:
+        case DWG_VT_BOOL:
+        case DWG_VT_INT8:
           bit_write_RC (dat, rbuf->value.i8);
           LOG_TRACE ("xdata[%u]: %d [RC %d]", j, (int)rbuf->value.i8,
                      rbuf->type);
           LOG_POS;
           break;
-        case VT_INT16:
+        case DWG_VT_INT16:
           if (dat->byte + 2 > end)
             break;
           bit_write_RS (dat, rbuf->value.i16);
@@ -4499,7 +4499,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
                      rbuf->type);
           LOG_POS;
           break;
-        case VT_INT32:
+        case DWG_VT_INT32:
           if (dat->byte + 4 > end)
             break;
           bit_write_RL (dat, rbuf->value.i32);
@@ -4507,7 +4507,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
                      rbuf->type);
           LOG_POS;
           break;
-        case VT_INT64:
+        case DWG_VT_INT64:
           if (dat->byte + 8 > end)
             break;
           bit_write_BLL (dat, rbuf->value.i64);
@@ -4515,7 +4515,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
                      rbuf->value.i64, rbuf->type);
           LOG_POS;
           break;
-        case VT_POINT3D:
+        case DWG_VT_POINT3D:
           if (dat->byte + 24 > end)
             break;
           bit_write_RD (dat, rbuf->value.pt[0]);
@@ -4525,7 +4525,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
                      rbuf->value.pt[1], rbuf->value.pt[2], rbuf->type);
           LOG_POS;
           break;
-        case VT_BINARY:
+        case DWG_VT_BINARY:
           if (dat->byte + rbuf->value.str.size > end)
             break;
           bit_write_RC (dat, rbuf->value.str.size);
@@ -4535,8 +4535,8 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
           LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
           LOG_POS;
           break;
-        case VT_HANDLE:
-        case VT_OBJECTID:
+        case DWG_VT_HANDLE:
+        case DWG_VT_OBJECTID:
           if (dat->byte + 8 > end)
             break;
           for (i = 0; i < 8; i++)
@@ -4545,7 +4545,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
                      ARGS_H (rbuf->value.h), rbuf->type);
           LOG_POS;
           break;
-        case VT_INVALID:
+        case DWG_VT_INVALID:
         default:
           LOG_ERROR ("Invalid group code in xdata: %d", rbuf->type);
           error = DWG_ERR_INVALIDEED;

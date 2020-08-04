@@ -6767,30 +6767,30 @@ DWG_OBJECT_END
     if (dxf)                                                                  \
       switch (dwg_resbuf_value_type (dxf))                                    \
         {                                                                     \
-        case VT_REAL:                                                         \
+        case DWG_VT_REAL:                                                     \
           SUB_FIELD_BD (value, u.bd, dxf);                                    \
           break;                                                              \
-        case VT_INT32:                                                        \
+        case DWG_VT_INT32:                                                    \
           SUB_FIELD_BL (value, u.bl, dxf);                                    \
           break;                                                              \
-        case VT_INT16:                                                        \
+        case DWG_VT_INT16:                                                    \
           SUB_FIELD_BS (value, u.bs, dxf);                                    \
           break;                                                              \
-        case VT_INT8:                                                         \
+        case DWG_VT_INT8:                                                     \
           SUB_FIELD_RC (value, u.rc, dxf);                                    \
           break;                                                              \
-        case VT_STRING:                                                       \
+        case DWG_VT_STRING:                                                   \
           SUB_FIELD_T (value, u.text, dxf);                                   \
           break;                                                              \
-        case VT_HANDLE:                                                       \
+        case DWG_VT_HANDLE:                                                   \
           SUB_FIELD_HANDLE (value, u.handle, 5, dxf);                         \
           break;                                                              \
-        case VT_BINARY:                                                       \
-        case VT_OBJECTID:                                                     \
-        case VT_POINT3D:                                                      \
-        case VT_INVALID:                                                      \
-        case VT_INT64:                                                        \
-        case VT_BOOL:                                                         \
+        case DWG_VT_BINARY:                                                   \
+        case DWG_VT_OBJECTID:                                                 \
+        case DWG_VT_POINT3D:                                                  \
+        case DWG_VT_INVALID:                                                  \
+        case DWG_VT_INT64:                                                    \
+        case DWG_VT_BOOL:                                                     \
         default:                                                              \
           LOG_ERROR ("Invalid EvalVariant.value.type %d", _obj->value.code)   \
           break;                                                              \

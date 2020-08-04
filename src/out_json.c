@@ -1025,7 +1025,7 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
       type = dwg_resbuf_value_type (rbuf->type);
       switch (type)
         {
-        case VT_STRING:
+        case DWG_VT_STRING:
           if (!(IS_FROM_TU (dat)))
             VALUE_TEXT (rbuf->value.str.u.data)
           else {
@@ -1034,48 +1034,48 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
           LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]\n", i, rbuf->value.str.u.data,
                      rbuf->type);
           break;
-        case VT_BINARY:
+        case DWG_VT_BINARY:
           VALUE_BINARY (rbuf->value.str.u.data, rbuf->value.str.size, 0);
           LOG_TRACE ("xdata[%u]: \"%s\" [TF %d]\n", i, rbuf->value.str.u.data,
                      rbuf->type);
           break;
-        case VT_REAL:
+        case DWG_VT_REAL:
           VALUE_RD (rbuf->value.dbl, 0);
           LOG_TRACE ("xdata[%u]: %f [RD %d]\n", i, rbuf->value.dbl,
                      rbuf->type);
           break;
-        case VT_BOOL:
-        case VT_INT8:
+        case DWG_VT_BOOL:
+        case DWG_VT_INT8:
           VALUE_RC (rbuf->value.i8, 0);
           LOG_TRACE ("xdata[%u]: %d [RC %d]\n", i, (int)rbuf->value.i8,
                      rbuf->type);
           break;
-        case VT_INT16:
+        case DWG_VT_INT16:
           VALUE_RS (rbuf->value.i16, 0);
           LOG_TRACE ("xdata[%u]: %d [RS %d]\n", i, (int)rbuf->value.i16,
                      rbuf->type);
           break;
-        case VT_INT32:
+        case DWG_VT_INT32:
           VALUE_RL (rbuf->value.i32, 0);
           LOG_TRACE ("xdata[%u]: %d [RL %d]\n", i, (int)rbuf->value.i32,
                      rbuf->type);
           break;
-        case VT_INT64:
+        case DWG_VT_INT64:
           VALUE_RLL (rbuf->value.i64, 0);
           LOG_TRACE ("xdata[%u]: %ld [RLL %d]\n", i, (long)rbuf->value.i64,
                      rbuf->type);
           break;
-        case VT_POINT3D:
+        case DWG_VT_POINT3D:
           fprintf (dat->fh, "[ " FORMAT_RD ", " FORMAT_RD ", " FORMAT_RD " ]",
                    rbuf->value.pt[0], rbuf->value.pt[1], rbuf->value.pt[2]);
           LOG_TRACE ("xdata[%u]: (%f,%f,%f) [3RD %d]\n", i, rbuf->value.pt[0],
                      rbuf->value.pt[1], rbuf->value.pt[2], rbuf->type);
           break;
-        case VT_HANDLE:
-        case VT_OBJECTID:
+        case DWG_VT_HANDLE:
+        case DWG_VT_OBJECTID:
           fprintf (dat->fh, FORMAT_H "", ARGS_H (rbuf->value.h));
           break;
-        case VT_INVALID:
+        case DWG_VT_INVALID:
         default:
           break;
         }

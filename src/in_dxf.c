@@ -483,7 +483,7 @@ dxf_free_pair (Dxf_Pair *pair)
 {
   if (!pair)
     return;
-  if (pair->type == VT_STRING || pair->type == VT_BINARY)
+  if (pair->type == DWG_VT_STRING || pair->type == DWG_VT_BINARY)
     {
       free (pair->value.s);
       pair->value.s = NULL;
@@ -513,52 +513,52 @@ dxf_read_pair (Bit_Chain *dat)
     goto err;
   pair->type = dwg_resbuf_value_type (pair->code);
   //if (pair->code == 280) // && strEQc (key, "ENDCAPS")
-  //  pair->type = VT_INT16; // for HEADER.ENDCAPS - CEPSNTYPE
+  //  pair->type = DWG_VT_INT16; // for HEADER.ENDCAPS - CEPSNTYPE
   switch (pair->type)
     {
-    case VT_STRING:
+    case DWG_VT_STRING:
       dxf_read_string (dat, &pair->value.s);
       LOG_TRACE ("  dxf (%d, \"%s\")\n", (int)pair->code, pair->value.s);
       // dynapi_set_helper converts from utf-8 to unicode, not here.
       // we need to know the type of the target field, if TV or T
       break;
-    case VT_BOOL:
-    case VT_INT8:
+    case DWG_VT_BOOL:
+    case DWG_VT_INT8:
       pair->value.i = dxf_read_rc (dat);
       LOG_TRACE ("  dxf (%d, %d)\n", (int)pair->code, pair->value.i);
       break;
-    case VT_INT16:
+    case DWG_VT_INT16:
       pair->value.i = dxf_read_rs (dat);
       LOG_TRACE ("  dxf (%d, %d)\n", (int)pair->code, pair->value.i);
       break;
-    case VT_INT32:
+    case DWG_VT_INT32:
       pair->value.l = dxf_read_rl (dat);
       LOG_TRACE ("  dxf (%d, %ld)\n", (int)pair->code, pair->value.l);
       break;
-    case VT_INT64:
+    case DWG_VT_INT64:
       pair->value.bll = dxf_read_rll (dat);
       LOG_TRACE ("  dxf (%d, " FORMAT_BLL ")\n", (int)pair->code,
                  pair->value.bll);
       break;
-    case VT_REAL:
-    case VT_POINT3D:
+    case DWG_VT_REAL:
+    case DWG_VT_POINT3D:
       dxf_skip_ws (dat);
       pair->value.d = dxf_read_rd (dat);
       LOG_TRACE ("  dxf (%d, %f)\n", pair->code, pair->value.d);
       break;
-    case VT_BINARY:
+    case DWG_VT_BINARY:
       // zero-terminated. TODO hex decode here already?
       dxf_read_string (dat, &pair->value.s);
       LOG_TRACE ("  dxf (%d, %s)\n", (int)pair->code, pair->value.s);
       break;
-    case VT_HANDLE:
-    case VT_OBJECTID:
+    case DWG_VT_HANDLE:
+    case DWG_VT_OBJECTID:
       // BINARY: hex string without len
       dxf_read_string (dat, NULL);
       sscanf (buf, "%X", &pair->value.u);
       LOG_TRACE ("  dxf (%d, %X)\n", (int)pair->code, pair->value.u);
       break;
-    case VT_INVALID:
+    case DWG_VT_INVALID:
     default:
       LOG_ERROR ("Invalid DXF group code: %d", pair->code);
       dxf_free_pair (pair);
@@ -704,23 +704,23 @@ matches_type (Dxf_Pair *restrict pair, const Dwg_DYNAPI_field *restrict f)
 {
   switch (pair->type)
     {
-    case VT_STRING:
+    case DWG_VT_STRING:
       if (f->is_string)
         return 1;
       if (f->type[0] == 'H')
         return 1; // handles can be just names
       break;
-    case VT_INT64:
+    case DWG_VT_INT64:
       // BLL or RLL
       if (f->size == 8 && f->type[1] == 'L' && f->type[2] == 'L')
         return 1;
       // fall through
-    case VT_INT32:
+    case DWG_VT_INT32:
       // BL or RL
       if (f->size == 4 && f->type[1] == 'L')
         return 1;
       // fall through
-    case VT_INT16:
+    case DWG_VT_INT16:
       // BS or RS or CMC
       if (f->size == 2 && f->type[1] == 'S')
         return 1;
@@ -729,22 +729,22 @@ matches_type (Dxf_Pair *restrict pair, const Dwg_DYNAPI_field *restrict f)
       if (strEQc (f->type, "BSd"))
         return 1;
       // fall through
-    case VT_INT8:
+    case DWG_VT_INT8:
       if (strEQc (f->type, "RC"))
         return 1;
       // fall through
-    case VT_BOOL:
+    case DWG_VT_BOOL:
       if (strEQc (f->type, "B"))
         return 1;
       break;
-    case VT_REAL:
+    case DWG_VT_REAL:
       // BD or RD
       if (f->size == 8 && f->type[1] == 'D')
         return 1;
       if (strEQc (f->type, "TIMEBLL"))
         return 1;
       break;
-    case VT_POINT3D:
+    case DWG_VT_POINT3D:
       // 3BD or 3RD or 3DPOINT or BE
       if (f->size == 24 && (f->type[0] == '3' || strEQc (f->type, "BE")))
         return 1;
@@ -752,16 +752,16 @@ matches_type (Dxf_Pair *restrict pair, const Dwg_DYNAPI_field *restrict f)
       if (f->size == 16 && f->type[0] == '2')
         return 1;
       break;
-    case VT_BINARY:
+    case DWG_VT_BINARY:
       if (f->is_string)
         return 1;
       break;
-    case VT_HANDLE:
-    case VT_OBJECTID:
+    case DWG_VT_HANDLE:
+    case DWG_VT_OBJECTID:
       if (f->type[0] == 'H')
         return 1;
       break;
-    case VT_INVALID:
+    case DWG_VT_INVALID:
     default:
       LOG_ERROR ("Invalid DXF group code: %d", pair->code);
     }
@@ -1026,7 +1026,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   "skipping HEADER: 9 %s, wrong type code %d <=> field %s",
                   field, pair->code, f->type);
             }
-          else if (pair->type == VT_POINT3D)
+          else if (pair->type == DWG_VT_POINT3D)
             {
               BITCODE_3BD pt = { 0.0, 0.0, 0.0 };
               if (i)
@@ -1051,7 +1051,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   i++;
                 }
             }
-          else if (pair->type == VT_STRING && strEQc (f->type, "H"))
+          else if (pair->type == DWG_VT_STRING && strEQc (f->type, "H"))
             {
               char *key, *str;
               if (pair->value.s && strlen (pair->value.s))
@@ -1091,7 +1091,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   dwg_dynapi_header_set_value (dwg, &field[1], &color, 0);
                 }
             }
-          else if (pair->type == VT_REAL && strEQc (f->type, "TIMEBLL"))
+          else if (pair->type == DWG_VT_REAL && strEQc (f->type, "TIMEBLL"))
             {
               static BITCODE_TIMEBLL date = { 0, 0, 0 };
               date.value = pair->value.d;
@@ -1103,7 +1103,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                          pair->code);
               dwg_dynapi_header_set_value (dwg, &field[1], &date, 0);
             }
-          else if (pair->type == VT_STRING)
+          else if (pair->type == DWG_VT_STRING)
             {
               LOG_TRACE ("HEADER.%s [%s %d]\n", &field[1], f->type,
                          pair->code);
@@ -1661,7 +1661,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         eed[i].size += size;
       }
       break;
-    case 10: // VT_POINT3D
+    case 10: // DWG_VT_POINT3D
     case 11:
     case 12:
     case 13:
@@ -5287,44 +5287,44 @@ add_EVALVARIANT (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     return pair;
   switch (dwg_resbuf_value_type (pair->value.i))
     {
-    case VT_REAL:
+    case DWG_VT_REAL:
       value->u.bd = pair->value.d;
       LOG_TRACE ("%s.%s = %f [BD %d]\n", "EvalVariant", "value", pair->value.d,
                  pair->code);
       break;
-    case VT_INT32:
+    case DWG_VT_INT32:
       value->u.bl = pair->value.u;
       LOG_TRACE ("%s.%s = %u [BL %d]\n", "EvalVariant", "value", pair->value.u,
                  pair->code);
       break;
-    case VT_INT16:
+    case DWG_VT_INT16:
       value->u.bs = pair->value.i;
       LOG_TRACE ("%s.%s = %d [BS %d]\n", "EvalVariant", "value", pair->value.i,
                  pair->code);
       break;
-    case VT_INT8:
+    case DWG_VT_INT8:
       value->u.rc = pair->value.i;
       LOG_TRACE ("%s.%s = %d [RC %d]\n", "EvalVariant", "value", pair->value.i,
                  pair->code);
       break;
-    case VT_STRING:
+    case DWG_VT_STRING:
       value->u.text = dat->version >= R_2007
                           ? (BITCODE_T)bit_utf8_to_TU (pair->value.s)
                           : strdup (pair->value.s);
       LOG_TRACE ("%s.%s = %s [T %d]\n", "EvalVariant", "value", pair->value.s,
                  pair->code);
       break;
-    case VT_HANDLE:
+    case DWG_VT_HANDLE:
       value->u.handle = dwg_add_handleref (dwg, 5, pair->value.u, NULL);
       LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", "EvalVariant", "value",
                  ARGS_REF (value->u.handle), pair->code);
       break;
-    case VT_BINARY:
-    case VT_OBJECTID:
-    case VT_POINT3D:
-    case VT_INVALID:
-    case VT_INT64:
-    case VT_BOOL:
+    case DWG_VT_BINARY:
+    case DWG_VT_OBJECTID:
+    case DWG_VT_POINT3D:
+    case DWG_VT_INVALID:
+    case DWG_VT_INT64:
+    case DWG_VT_BOOL:
     default:
       LOG_ERROR ("Invalid EvalVariant.value.type %d", pair->code)
       break;
@@ -5543,7 +5543,7 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           BITCODE_H hdl;
           pair = dxf_read_pair (dat);
-          if (!pair || pair->type != VT_HANDLE)
+          if (!pair || pair->type != DWG_VT_HANDLE)
             {
               LOG_ERROR ("Invalid ASSOCACTION.owned_params[%d] DXF code %d", i,
                          pair ? pair->code : 0);
@@ -6038,7 +6038,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   rbuf->type = pair->code;
   switch (dwg_resbuf_value_type (rbuf->type))
     {
-    case VT_STRING:
+    case DWG_VT_STRING:
       if (!pair->value.s)
         goto invalid;
       PRE (R_2007) // TODO: nice would be the proper target version.
@@ -6062,38 +6062,38 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         xdata_size += 2 + 2 * rbuf->value.str.size;
       }
       break;
-    case VT_REAL:
+    case DWG_VT_REAL:
       rbuf->value.dbl = pair->value.d;
       LOG_TRACE ("xdata[%d]: %f [%d]\n", num_xdata, rbuf->value.dbl,
                  rbuf->type);
       xdata_size += 8;
       break;
-    case VT_BOOL:
-    case VT_INT8:
+    case DWG_VT_BOOL:
+    case DWG_VT_INT8:
       rbuf->value.i8 = pair->value.i;
       LOG_TRACE ("xdata[%d]: %d [%d]\n", num_xdata, (int)rbuf->value.i8,
                  rbuf->type);
       xdata_size += 1;
       break;
-    case VT_INT16:
+    case DWG_VT_INT16:
       rbuf->value.i16 = pair->value.i;
       LOG_TRACE ("xdata[%d]: %d [%d]\n", num_xdata, (int)rbuf->value.i16,
                  rbuf->type);
       xdata_size += 2;
       break;
-    case VT_INT32:
+    case DWG_VT_INT32:
       rbuf->value.i32 = pair->value.l;
       LOG_TRACE ("xdata[%d]: %ld [%d]\n", num_xdata, (long)rbuf->value.i32,
                  rbuf->type);
       xdata_size += 4;
       break;
-    case VT_INT64:
+    case DWG_VT_INT64:
       rbuf->value.i64 = (BITCODE_BLL)pair->value.bll;
       LOG_TRACE ("xdata[%d]: " FORMAT_BLL " [%d]\n", num_xdata,
                  rbuf->value.i64, rbuf->type);
       xdata_size += 8;
       break;
-    case VT_POINT3D:
+    case DWG_VT_POINT3D:
       rbuf->value.pt[0] = pair->value.d;
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
@@ -6107,7 +6107,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         pair = dxf_read_pair (dat);
         if (!pair)
           return NULL;
-        if (dwg_resbuf_value_type (pair->code) == VT_POINT3D)
+        if (dwg_resbuf_value_type (pair->code) == DWG_VT_POINT3D)
           {
             rbuf->value.pt[2] = pair->value.d;
             LOG_TRACE ("xdata[%d]: (%f,%f,%f) [%d]\n", num_xdata,
@@ -6123,7 +6123,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           }
       }
       break;
-    case VT_BINARY:
+    case DWG_VT_BINARY:
       // convert from hex
       if (!pair->value.s)
         goto invalid;
@@ -6145,14 +6145,14 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         // LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
       }
       break;
-    case VT_HANDLE:
-    case VT_OBJECTID:
+    case DWG_VT_HANDLE:
+    case DWG_VT_OBJECTID:
       xdata_size += 8;
       dwg_add_handle (&rbuf->value.h, 0, pair->value.u, obj);
       LOG_TRACE ("xdata[%d]: " FORMAT_H " [H %d]\n", num_xdata,
                  ARGS_H (rbuf->value.h), rbuf->type);
       break;
-    case VT_INVALID:
+    case DWG_VT_INVALID:
     default:
     invalid:
       LOG_ERROR ("Invalid group code in rbuf: %d", rbuf->type)
@@ -8562,12 +8562,12 @@ new_object (char *restrict name, char *restrict dxfname,
         }
 #if 0
       // don't set defaults. TODO but needed to reset counters j, k, l
-      if ((pair->type == VT_INT8 || pair->type == VT_INT16 || pair->type == VT_BOOL) &&
+      if ((pair->type == DWG_VT_INT8 || pair->type == DWG_VT_INT16 || pair->type == DWG_VT_BOOL) &&
           pair->value.i == 0)
         goto next_pair;
-      else if (pair->type == VT_REAL && pair->value.d == 0.0)
+      else if (pair->type == DWG_VT_REAL && pair->value.d == 0.0)
         goto next_pair;
-      else if ((pair->type == VT_INT32 || pair->type == VT_INT64) &&
+      else if ((pair->type == DWG_VT_INT32 || pair->type == DWG_VT_INT64) &&
                pair->value.l == 0L)
         goto next_pair;
 #endif
@@ -10443,7 +10443,7 @@ new_object (char *restrict name, char *restrict dxfname,
                         }
                       // convert double to text (e.g. ATEXT)
                       else if (strEQc (f->type, "D2T")
-                               && pair->type == VT_REAL)
+                               && pair->type == DWG_VT_REAL)
                         {
                           // TODO: for now we need to do double-conversion
                           // (str->dbl->str), because we don't have the initial
@@ -10505,7 +10505,7 @@ new_object (char *restrict name, char *restrict dxfname,
                                              name, f->name, ARGS_REF (ref),
                                              pair->code);
                                 }
-                              else if (pair->type == VT_INT32 && pair->value.u)
+                              else if (pair->type == DWG_VT_INT32 && pair->value.u)
                                 {
                                   ref = dwg_add_handleref (dwg, 5,
                                                            pair->value.u, obj);
@@ -10513,8 +10513,8 @@ new_object (char *restrict name, char *restrict dxfname,
                                              name, f->name, ARGS_REF (ref),
                                              pair->code);
                                 }
-                              else if ((pair->type == VT_STRING
-                                        || pair->type == VT_HANDLE)
+                              else if ((pair->type == DWG_VT_STRING
+                                        || pair->type == DWG_VT_HANDLE)
                                        && pair->value.s)
                                 {
                                   obj_hdls = array_push (
@@ -10552,7 +10552,7 @@ new_object (char *restrict name, char *restrict dxfname,
                                      pair->value.d, f->type, pair->code);
                           goto next_pair; // found
                         }
-                      else if (pair->type == VT_REAL
+                      else if (pair->type == DWG_VT_REAL
                                && strEQc (f->type, "TIMEBLL"))
                         {
                           static BITCODE_TIMEBLL date = { 0, 0, 0 };
@@ -11882,7 +11882,7 @@ resolve_postponed_header_refs (Dwg_Data *restrict dwg)
   for (i = 0; i < header_hdls->nitems; i++)
     {
       char *field = header_hdls->items[i].field;
-      Dxf_Pair p = { 0, VT_STRING };
+      Dxf_Pair p = { 0, DWG_VT_STRING };
       BITCODE_H hdl = NULL;
       p.value.s = header_hdls->items[i].name;
       if (!p.value.s || !*p.value.s)
@@ -11933,7 +11933,7 @@ resolve_postponed_object_refs (Dwg_Data *restrict dwg)
   for (i = 0; i < obj_hdls->nitems; i++)
     {
       char *field = obj_hdls->items[i].field;
-      Dxf_Pair p = { 0, VT_STRING };
+      Dxf_Pair p = { 0, DWG_VT_STRING };
       BITCODE_H hdl = NULL;
       int objid = obj_hdls->items[i].code;
       Dwg_Object *obj = &dwg->object[objid];
@@ -12172,7 +12172,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       pair = dxf_read_pair (dat);
       pair = dxf_expect_code (dat, pair, 0);
       DXF_BREAK_EOF;
-      if (pair->type == VT_STRING && strEQc (pair->value.s, "SECTION"))
+      if (pair->type == DWG_VT_STRING && strEQc (pair->value.s, "SECTION"))
         {
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);

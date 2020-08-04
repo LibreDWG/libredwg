@@ -8911,18 +8911,18 @@ typedef struct _dwg_struct
 
 typedef enum RESBUF_VALUE_TYPE
 {
-  VT_INVALID = 0,
-  VT_STRING = 1,
-  VT_POINT3D = 2,
-  VT_REAL = 3,
-  VT_INT16 = 4,
-  VT_INT32 = 5,
-  VT_INT8 = 6,
-  VT_BINARY = 7,
-  VT_HANDLE = 8,
-  VT_OBJECTID = 9,
-  VT_BOOL = 10,
-  VT_INT64 = 11, // BLL
+  DWG_VT_INVALID = 0,
+  DWG_VT_STRING = 1,
+  DWG_VT_POINT3D = 2,
+  DWG_VT_REAL = 3,
+  DWG_VT_INT16 = 4,
+  DWG_VT_INT32 = 5,
+  DWG_VT_INT8 = 6,
+  DWG_VT_BINARY = 7,
+  DWG_VT_HANDLE = 8,
+  DWG_VT_OBJECTID = 9,
+  DWG_VT_BOOL = 10,    // VT_BOOL clashes with /usr/x86_64-w64-mingw32/sys-root/mingw/include/wtypes.h
+  DWG_VT_INT64 = 11,   // BLL
 } Dwg_Resbuf_Value_Type;
 
 /*--------------------------------------------------
