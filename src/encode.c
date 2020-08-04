@@ -247,10 +247,10 @@ static bool env_var_checked_p;
       LOG_TRACE (#nam ": %f [DD/%d %d]", _obj->nam, b1, dxf)                  \
     LOG_POS                                                                   \
   }
-#define FIELD_2DD(nam, d1, d2, dxf)                                           \
+#define FIELD_2DD(nam, def, dxf)                                              \
   {                                                                           \
-    BITCODE_BB b2, b1 = _FIELD_DD (nam.x, d1, dxf);                           \
-    b2 = _FIELD_DD (nam.y, d2, dxf + 10);                                     \
+    BITCODE_BB b2, b1 = _FIELD_DD (nam.x, FIELD_VALUE (def.x), dxf);          \
+    b2 = _FIELD_DD (nam.y, FIELD_VALUE (def.y), dxf + 10);                    \
     if (b1 == 3 && b2 == 3)                                                   \
       LOG_TRACE (#nam ": (%f, %f) [2DD %d]", _obj->nam.x, _obj->nam.y, dxf)   \
     else                                                                      \
@@ -426,8 +426,7 @@ static bool env_var_checked_p;
     FIELD_2RD (nam[0], dxf);                                                  \
   for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)                 \
     {                                                                         \
-      FIELD_2DD (nam[vcount], FIELD_VALUE (nam[vcount - 1].x),                \
-                 FIELD_VALUE (nam[vcount - 1].y), dxf);                       \
+      FIELD_2DD (nam[vcount], nam[vcount - 1], dxf);                          \
     }
 
 #define FIELD_3DPOINT_VECTOR(nam, size, dxf)                                  \

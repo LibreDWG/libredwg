@@ -157,7 +157,7 @@ static BITCODE_BL rcount1, rcount2;
 #define FIELD_DD(name, _default, dxf)                                         \
   {                                                                           \
   }
-#define FIELD_2DD(name, d1, d2, dxf)                                          \
+#define FIELD_2DD(name, def, dxf)                                             \
   {                                                                           \
   }
 #define FIELD_3DD(name, def, dxf)                                             \

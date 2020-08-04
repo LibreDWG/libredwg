@@ -110,7 +110,7 @@ DWG_ENTITY (TEXT)
         FIELD_T (text_value, 1);
       }
       if (!(dataflags & 0x02))
-        FIELD_2DD (alignment_pt, 10.0, 20.0, 0);
+        FIELD_2DD (alignment_pt, ins_pt, 0);
       FIELD_BE (extrusion, 0);
       FIELD_BT (thickness, 0);
 
@@ -138,7 +138,7 @@ DWG_ENTITY (TEXT)
         FIELD_BS0 (vert_alignment, 73);
 
       DXF {
-        FIELD_2DD (alignment_pt, 10.0, 20.0, 11);
+        FIELD_2DD (alignment_pt, ins_pt, 0);
         FIELD_RD (elevation, 31);
         FIELD_BE (extrusion, 210);
         SUBCLASS (AcDbText) // not in ODA, but ACAD
@@ -203,7 +203,7 @@ DWG_ENTITY (ATTRIB)
       FIELD_2RD (ins_pt, 10);
 
       if (!(dataflags & 0x02))
-        FIELD_2DD (alignment_pt, 10.0, 20.0, 11);
+        FIELD_2DD (alignment_pt, ins_pt, 0);
 
       FIELD_BE (extrusion, 210);
       FIELD_BT0 (thickness, 39);
@@ -313,7 +313,7 @@ DWG_ENTITY (ATTDEF)
       FIELD_2RD (ins_pt, 10);
 
       if (!(dataflags & 0x02))
-        FIELD_2DD (alignment_pt, 10.0, 20.0, 11);
+        FIELD_2DD (alignment_pt, ins_pt, 0);
 
       FIELD_BE (extrusion, 210);
       FIELD_BT0 (thickness, 39);

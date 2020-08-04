@@ -185,7 +185,7 @@ static char *_path_field (const char *path);
     VALUE_RD (pt.y, 0);                                                       \
     fprintf (dat->fh, " ]");                                                  \
   }
-#define VALUE_2DD(pt, d1, d2, dxf) VALUE_2RD (pt, dxf)
+#define VALUE_2DD(pt, def, dxf) VALUE_2RD (pt, dxf)
 #define VALUE_3RD(pt, dxf)                                                    \
   {                                                                           \
     fprintf (dat->fh, "[ ");                                                  \
@@ -490,7 +490,7 @@ static char *_path_field (const char *path);
 #define FIELD_DD(nam, _default, dxf) FIELD_BD (nam, dxf)
 #define FIELD_2BD(nam, dxf) FIELD_2RD (nam, dxf)
 #define FIELD_2BD_1(nam, dxf) FIELD_2RD (nam, dxf)
-#define FIELD_2DD(nam, d1, d2, dxf) FIELD_2RD (nam, dxf)
+#define FIELD_2DD(nam, def, dxf) FIELD_2RD (nam, dxf)
 #define FIELD_3DD(nam, def, dxf) FIELD_3RD (nam, dxf)
 #define FIELD_3BD(nam, dxf) FIELD_3RD (nam, dxf)
 #define FIELD_3BD_1(nam, dxf) FIELD_3RD (nam, dxf)

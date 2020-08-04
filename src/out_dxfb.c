@@ -522,10 +522,10 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
       FIELD_3RD (nam, dxf)                                                    \
   }
 #define FIELD_DD(nam, _default, dxf) FIELD_RD (nam, dxf)
-#define FIELD_2DD(nam, d1, d2, dxf)                                           \
+#define FIELD_2DD(nam, def, dxf)                                              \
   {                                                                           \
-    FIELD_DD (nam.x, d1, dxf);                                                \
-    FIELD_DD (nam.y, d2, dxf + 10);                                           \
+    FIELD_DD (nam.x, FIELD_VALUE (def.x), dxf);                               \
+    FIELD_DD (nam.y, FIELD_VALUE (def.y), dxf + 10);                          \
   }
 #define FIELD_3DD(nam, def, dxf)                                              \
   {                                                                           \
@@ -676,8 +676,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
       FIELD_2RD (nam[0], 0);                                                  \
       for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
-          FIELD_2DD (nam[vcount], FIELD_VALUE (nam[vcount - 1].x),            \
-                     FIELD_VALUE (nam[vcount - 1].y), dxf);                   \
+          FIELD_2DD (nam[vcount], nam[vcount - 1], dxf);                      \
         }                                                                     \
     }
 

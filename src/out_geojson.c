@@ -227,7 +227,7 @@ static unsigned int cur_ver = 0;
 #define FIELD_BT(name, dxf) FIELD (name, BT, dxf)
 #define FIELD_4BITS(name, dxf) FIELD (name, 4BITS, dxf)
 #define FIELD_BE(name, dxf) FIELD_3RD (name, dxf)
-#define FIELD_2DD(name, d1, d2, dxf)
+#define FIELD_2DD(name, def, dxf)
 #define FIELD_3DD(name, def, dxf)
 #define FIELD_2RD(name, dxf)
 #define FIELD_2BD(name, dxf)

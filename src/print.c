@@ -142,7 +142,7 @@ static BITCODE_BL rcount1, rcount2;
   }
 #define FIELD_BE(name, dxf) FIELD_3RD (name, dxf)
 #define FIELD_DD(name, _default, dxf)
-#define FIELD_2DD(name, d1, d2, dxf) FIELD_2PT_TRACE (name, DD, dxf)
+#define FIELD_2DD(name, def, dxf) FIELD_2PT_TRACE (name, DD, dxf)
 #define FIELD_3DD(name, def, dxf) FIELD_3PT_TRACE (name, DD, dxf)
 #define FIELD_2RD(name, dxf) FIELD_2PT_TRACE (name, RD, dxf)
 #define FIELD_2BD(name, dxf) FIELD_2PT_TRACE (name, BD, dxf)
@@ -257,8 +257,7 @@ static BITCODE_BL rcount1, rcount2;
       FIELD_2RD (name[0], 0);                                                 \
       for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
-          FIELD_2DD (name[vcount], FIELD_VALUE (name[vcount - 1].x),          \
-                     FIELD_VALUE (name[vcount - 1].y), dxf);                  \
+          FIELD_2DD (name[vcount], name[vcount - 1], dxf);                    \
         }                                                                     \
     }
 

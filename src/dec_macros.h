@@ -561,10 +561,10 @@
         return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
       }                                                                       \
   }
-#define FIELD_2DD(nam, dx, dy, dxf)                                           \
+#define FIELD_2DD(nam, def, dxf)                                              \
   {                                                                           \
-    FIELD_DD (nam.x, dx, dxf);                                                \
-    FIELD_DD (nam.y, dy, dxf + 10);                                           \
+    FIELD_DD (nam.x, FIELD_VALUE (def.x), dxf);                               \
+    FIELD_DD (nam.y, FIELD_VALUE (def.y), dxf + 10);                          \
     FIELD_2PT_TRACE (nam, 2DD, dxf);                                          \
   }
 #define FIELD_3DD(nam, def, dxf)                                              \
