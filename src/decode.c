@@ -2244,6 +2244,14 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 uint32_t size;
                 uint64_t address;
               } page;
+
+              if (ptr + 16 >= decomp_end)
+                {
+                  LOG_ERROR ("read_R2004_section_info[%u] out of range, abort", j);
+                  info->num_sections = j;
+                  error |= DWG_ERR_SECTIONNOTFOUND;
+                  break;
+                }
               /* endian specific code: */
               bfr_read (&page, &ptr, 16);
               sum_decomp += page.size; /* TODO: uncompressed size */
@@ -2253,7 +2261,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   /* ODA: "If the start offset is smaller than the sum of the decompressed
                    * size of all previous pages, then this page is to be preceded by
                    * zero pages until this condition is met. */
-                  LOG_WARN("address %lu < sum_decomp %lu", page.address, sum_decomp)
+                  LOG_WARN ("address %lu < sum_decomp %lu", page.address, sum_decomp)
                 }
 #endif
               info->sections[j] = find_section (dwg, page.number);
