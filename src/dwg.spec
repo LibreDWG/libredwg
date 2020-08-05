@@ -7406,9 +7406,9 @@ DWG_ENTITY_END
 // types: Sphere|Cylinder|Cone|Torus|Box|Wedge|Pyramid
 DWG_ENTITY (MESH)
   SUBCLASS (AcDbSubDMesh)
-  FIELD_BS (dlevel, 71);       // 2
-  FIELD_B (is_watertight, 72); // 0
-  FIELD_BL (num_subdiv_vertex, 91); //0
+  FIELD_BS (dlevel, 71);       // version, 2
+  FIELD_B (is_watertight, 72); // blend_crease 0
+  FIELD_BL (num_subdiv_vertex, 91); // subdivision_levels 0
   FIELD_3DPOINT_VECTOR (subdiv_vertex, num_subdiv_vertex, 10);
   FIELD_BL (num_vertex, 92); //14 @14
   FIELD_3DPOINT_VECTOR (vertex, num_vertex, 10);
@@ -7424,7 +7424,7 @@ DWG_ENTITY (MESH)
   SET_PARENT_OBJ (edges);
   END_REPEAT (edges);
   //FIELD_VECTOR (edges, Dwg_MESH_edge, num_edges * 2, 90);
-  FIELD_BL (num_crease, 95); // 19
+  FIELD_BL (num_crease, 95); // edge creases 19
   FIELD_VECTOR (crease, BD, num_crease, 140);
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
