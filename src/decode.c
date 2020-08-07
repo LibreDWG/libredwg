@@ -5192,7 +5192,7 @@ decode_preR13_entities (unsigned long start, unsigned long end,
 
       if (!num)
         dwg->object
-            = (Dwg_Object *)malloc (REFS_PER_REALLOC * sizeof (Dwg_Object));
+          = (Dwg_Object *)calloc (REFS_PER_REALLOC, sizeof (Dwg_Object));
       else if (num % REFS_PER_REALLOC == 0)
         dwg->object = (Dwg_Object *)realloc (
             dwg->object, (num + REFS_PER_REALLOC) * sizeof (Dwg_Object));
