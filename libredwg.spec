@@ -1,6 +1,6 @@
 # -*- sh -*-
 Name:           libredwg
-Version:        0.10.1.2915
+Version:        0.11
 Release:        1%{?dist}
 Summary:        GNU C library and programs to read and write DWG files
 
@@ -99,7 +99,7 @@ fi
 %{_bindir}/dwgwrite
 %{_bindir}/dxf2dwg
 %{_libdir}/libredwg.so.0
-%{_libdir}/libredwg.so.0.0.10
+%{_libdir}/libredwg.so.0.0.11
 %{_mandir}/man1/dwg2SVG.1.gz
 %{_mandir}/man1/dwg2dxf.1.gz
 %{_mandir}/man1/dwg2ps.1.gz
@@ -131,6 +131,8 @@ fi
 #TODO add to {_libdir}/perl5/perllocal.pod
 
 %changelog
+* Fri Aug 7 2020 Reini Urban <reini.urban@gmail.com> 0.11-1
+- upstream update
 * Wed Feb 19 2020 Reini Urban <reini.urban@gmail.com> 0.10.1.2915-1
 - with dwgfilter and dwgwrite, from github pre-releases
 * Mon Feb 17 2020 Reini Urban <reini.urban@gmail.com> 0.10.1-2
