@@ -5348,7 +5348,7 @@ dwg_add_object (Dwg_Data *restrict dwg)
   Dwg_Object *restrict obj;
   BITCODE_BL num = dwg->num_objects;
   int realloced = 0;
-  if (!num)
+  if (!num && !dwg->object)
     {
       dwg->object = (Dwg_Object *)calloc (REFS_PER_REALLOC, sizeof (Dwg_Object));
       dwg->dirty_refs = 1;
