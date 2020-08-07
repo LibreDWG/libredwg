@@ -1,6 +1,6441 @@
 Full history from the git log
 -----------------------------
 
+2020-08-07  Reini Urban  <rurban@cpan.org>
+
+	Release 0.11
+	See NEWS.
+	Many new features, esp. json, dwgfilter, dxfwrite,
+	all sections, ACIS v2 support, assoc and constraint objects,
+	many bugfixes.
+	Also minor breaking API changes.
+
+	decode: fix dwg->object leak
+	when the very first object[0] is invalid.
+	Detected by fuzzing hangs35 id:000034,src:001498,time:242855345,op:its,rep:32
+
+	free: fix acis_sab_hdl leaks
+	Detected by fuzzing crashes35 id:000034,src:001498,time:242855345,op:its,rep:32
+
+2020-08-05  Reini Urban  <rurban@cpan.org>
+
+	spec: add comments for alternate MESH field names
+	from dxfgrabber/blender
+
+2020-08-04  Reini Urban  <rurban@cpan.org>
+
+	decode: protect from illegal ACDS.segidx_offset
+	to avoid out of memory calloc
+
+	decode: -Wmaybe-uninitialized r2007 pages_map
+
+	decode: add another read_R2004_section_info out of range check
+	we already check ptr overflow for all num_sections before, but
+	somehow this fuzzing case bypassed that.
+	Fixes GH #265 by @seviezhou
+
+	api: VT_BOOL clashes with mingw64 wtypes.h
+	Thanks to @ZalivahaAM GH #264
+
+	spec: fixup wrong FIELD_2DD used with DXF only
+	no idea what drove me there. Thanks to @ZalivahaAM GH #264
+
+	decode: fix obj_string_stream overflow handling
+	to avoid heap overflows, such as in fuzzing GH #262.
+	Fixup not only str_dat to avoid wrong bounds,
+	but also the culprit, obj->bitsize.
+
+2020-08-03  Reini Urban  <rurban@cpan.org>
+
+	decode_r2007: prevent from read_sections_map overflows
+	wrong file_header.pages_map_size_comp or sections_map_size_comp
+	or repeat_count.
+
+2020-08-02  Reini Urban  <rurban@cpan.org>
+
+	msys2: another pacman update attempt
+
+	decode: protect empty r2004_header.section_map_address
+	Found by fuzzing GH #260 by @seviezhou
+
+	decode: protect from invalid ACDS.num_segidx
+	Fixes fuzzing GH #259 by @seviezhou
+
+	fixup LTYPE.dashes overflows
+	4b99edb0ea26 as fix for GH #255 was wrong by *2, the offset is wide.
+	Also apply the same boundschecks to the ASCII case pre-r2007,
+	via strnlen.
+	Fixes fuzzing GH #258 by @seviezhou
+
+	free: fix HANDSEED double-free
+	with dxf --minimal. It really is a global ref now.
+	Found via fuzzing GH #257 by @seviezhou
+
+2020-08-01  Reini Urban  <rurban@cpan.org>
+
+	unit-testing: improve MATERIAL
+	and re-arrange the field decl a bit, for properly aligned BD*
+
+	spec: fix MATERIAL.map
+	the 2nd mapper transmatrix was wrong, we need a texture here.
+	This caused a double-free if map.source == 2.
+	Only found via fuzzing GH #256 by @seviezhou.
+
+2020-08-01  Reini Urban  <rurban@cpan.org>
+
+	probe for wcsnlen et al
+	to use the native wchar funcs on windows/aix/solaris,
+	also for wcsnlen
+
+	fixup wcs2*len decl to POSIX compat.
+	use POSIX compat decl, which broke cygwin.
+	cygwin declared both, and reported the mismatch.
+
+2020-07-31  Reini Urban  <rurban@cpan.org>
+
+	decode: protect LTYPE.dash_i from overflowing 512
+	Add bit_wcs2nlen with maxlen. Fixes fuzzing GH #255 by @seviezhou
+
+	decode: prevent thumbnail overflows
+	the thumbnail size may not be negative.
+	Fixes fuzzing GH #253 by @seviezhou
+
+2020-07-31  Reini Urban  <rurban@cpan.org>
+
+	decode: improve appinfo is_teigha check
+	with corrupt APPINFO.version string shorter than 6 chars.
+	e.g. by fuzzing. Fixes GH #252 fuzzing by @seviezhou
+
+	Also extract 2 more common fields upfront.
+
+2020-07-31  Reini Urban  <rurban@cpan.org>
+
+	decode: fix check_POLYLINE_handles NULL deref
+	detected by @seviezhou via fuzzing. Fixes GH #251
+
+2020-07-30  Reini Urban  <rurban@cpan.org>
+
+	unit-testing: enable BLOCK_CONTROL
+	which needs a different loop. selected at run-time!
+
+	disable 2 yet unneeded functions
+	only needed when we can write 2004/ resp. turn off the importer
+	string hacks
+
+	dxf: fix MINSERT / AcDbMInsertBlock
+	upgrade INSERT to MINSERT on indxf.
+	the 0 . dxfname is just INSERT
+
+	indxf: -Wuninitialized with -O
+
+	spec: replace OBJECTCONTEXTDATA by ANNOTSCALEOBJECTCONTEXTDATA
+	OBJECTCONTEXTDATA is apparently only a subclass,
+	but ANNOTSCALEOBJECTCONTEXTDATA does exist as DXF . 0
+
+	encode: fixup EED for indxf ACAD.BLOCK_HEADER
+	"DesignCenter Data" EED crashes ACAD with r2000-r2004.
+	Closes GH #244
+
+	encode: disable some indxf EED blocks
+	otherwise ACAD import crashes, see blocking GH #244
+
+	unit-testing: fix dynapi_test for evalexpr.value.text1
+	this pointer is only valid for some evalexpr types.
+	which is already checked by a full evalexpr memcmp
+
+2020-07-30  Reini Urban  <rurban@cpan.org>
+
+	appveyor: import msys packager keys
+	See https://www.msys2.org/news/
+
+	"Alexey is stepping down from his role as the main packager and two new
+	packagers have been appointed in his place:
+
+	  David Macek with signing key 0x9078f532
+	  Christoph Reiter with signing key 0xa0aa7f57
+
+	You can see the keys in full without relying on keyservers in the
+	msys2-keyring GitHub repository.
+
+	We have released a new msys2-keyring package from that source (and a
+	new installer that includes them) and we are waiting for a bit before
+	uploading new databases and packages to give people time to update."
+
+2020-07-30  Reini Urban  <rurban@cpan.org>
+
+	dynapi: re-add UNHANDLED names
+	and add COMPOUNDOBJECT subclass (we guessed two fields already)
+
+	free: add _private API
+	needed for type conversions.
+	not exported, but to free.h so that it can be used by encode.
+	dispatch only by type, not dxfname.
+
+2020-07-30  Reini Urban  <rurban@cpan.org>
+
+	encode: skip unstable objs WIPEOUT and TABLEGEOMETRY
+	which will crash/hang acad open.
+	See GH #244.
+
+	We rather dont skip them at import (indxf/injson), because it might be
+	dxfwrite.
+
+2020-07-30  Reini Urban  <rurban@cpan.org>
+
+	demote WIPEOUT to unstable
+	looks stable (even after bitwise comparison), but causes
+	acad import to crash on redraw, See GH #244.
+	Now dxf-check with example_2000 works again.
+	Fixes GH #244
+
+2020-07-29  Reini Urban  <rurban@cpan.org>
+
+	travis: extend distcheck timeout to 30
+	from the default 20m for make distcheck
+
+	indxf: fixup HATCH.boundary_handles
+	use a seperate counter, realloc with path[1].
+
+	spec: fix AcDbBlockAction.deps handle code
+
+	dwg.in: support --big and overlarge input files
+	and skip timeout then.
+	No extra TIMEOUT_50 needed.
+
+	encode: fix bit_copy_chain for huge hdl_dat
+	For large handle buffers we might need to allocate more than one
+	CHAIN_BLOCK. Fixes crashes in Dynblocks BLOCKVISIBILITYPARAMATER
+	at "Flush handle stream of size 28488 (@3561.0) to @429.0"
+
+	spec: BlockVisibilityParameter and BLOCKGRIPLOCATIONCOMPONENT fixups
+	wrong handle and dxf codes
+
+	spec: add EvalExpr to DYNAMICBLOCKPROXYNODE
+
+	dxf: fixup AcDbBlockMoveAction
+	same natural DXF order as AcDbBlockStretchAction
+
+	demote BLOCKSTRETCHACTION back to debugging
+	definit. wrong DXF
+
+	dxf: fixup AcDbBlockStretchAction
+	this has the natural DXF BlockAction_ConnectionPt order
+
+	indxf: minor DYNBLOCK fixups
+	fix BLOCKLINEARPARAMETER.distance DXF code
+	add BLOCKPARAMVALUESET logging
+
+2020-07-29  Reini Urban  <rurban@cpan.org>
+
+	indxf: add_AcDbBlockRotationParameter
+	esp. for the 1011 pt, which should not be EED
+
+	simplify the else_do_strict_subclass dispatch
+
+2020-07-29  Reini Urban  <rurban@cpan.org>
+
+	indxf: AcDbBlockActionWithBasePt and AcDbBlockRotationAction
+	promote BLOCKROTATEACTION to stable
+
+2020-07-29  Reini Urban  <rurban@cpan.org>
+
+	spec: refactor BlockAction_ConnectionPts
+	use an array afterall.
+	DXF uses a different vector layout, not array of structs.
+
+	represent the key in dynapi without the [n] size, as there are different sizes
+	per objects.
+
+2020-07-27  Reini Urban  <rurban@cpan.org>
+
+	add BLOCK{FLIP,MOVE,STRETCH}ACTION
+
+	indxf: improve FIELD_3BD
+
+	indxf: add_AcDbBlockAction
+
+	indxf: add_AcDbBlockVisibilityParameter
+
+	indxf: add_AcDbBlock1PtParameter
+
+	indxf: add_AcDbBlock2PtParameter and add_BlockParam_PropInfo
+
+	indxf: fix ASSOCACTION.actionbody
+	already fixed in the spec, but forgot in indxf.
+
+	dxf: fixup AcDbSectionViewStyle.identifier_position order
+	and few more minor indxf fixes
+
+	indxf: read AcDbBlockParamValueSet values
+	needed for stable dynblocks
+
+	promote to unstable: BLOCKALIGNMENT{GRIP,PARAMETER}
+	and BLOCKROTATE{ACTION,GRIP}, which can be promoted to stable with indxf
+
+2020-07-27  Reini Urban  <rurban@cpan.org>
+
+	promote most unstable DYNBLOCKS to stable
+	BLOCKVISIBILITYPARAMETER: one minor error
+	BLOCKLOOKUPGRIP, BLOCKXYPARAMETER: no coverage
+
+	re-arrange coverage blocks. The first occurance must
+	have coverage, else it will fail (for stable objects).
+
+2020-07-27  Reini Urban  <rurban@cpan.org>
+
+	add TIMEOUT_50 for dwg
+	in_dxf nees some more time than others.
+	e.g. indxf Dynblocks with asan needs 35sec on my fastest CPU
+
+	indxf: fix MTEXT.column_heights to 46
+
+	indxf: BLOCK.filename 4
+	in some DXFs
+
+	indxf: add AcDbBlockElement, AcDbBlockgrip support
+	and FIELD_3BD, COMMON.ltype_scale
+
+	indxf: fix HATCH CHK_polyline_paths
+	wrong check.
+
+	free SUB_FIELD_VECTOR
+	fixes acds leaks
+
+	test-data: add Dynblocks.dwg
+	for dynblocks coverage.
+	from test-old, which is not distributed.
+	so that many dynblocks can be promoted to stable. (just indxf missing yet)
+
+2020-07-24  Reini Urban  <rurban@cpan.org>
+
+	promote to unstable: BLOCK{FLIP,LINEAR,LOOKUP}GRIP
+
+2020-07-23  Reini Urban  <rurban@cpan.org>
+
+	indxf: convert common ENTITY 370 linewt
+
+	spec: fixup some BlockGrip fields
+	the first bg_version is rather some state, like bl92.
+	the dxf code for combined_state was wrong
+
+	spec: add AcDbBlockElement to AcDbBlockGrip subclass
+
+	promote to unstable: BLOCKSTRETCHACTION
+
+2020-07-22  Reini Urban  <rurban@cpan.org>
+
+	promote to unstable: BLOCKFLIPACTION
+
+	unit-tests: improve BLOCKSTRETCHACTION
+	add CHK_ENTITY_2DPOINTS
+
+	promote to unstable: BLOCKSCALEACTION
+
+	docs: fixup classes for its stability
+
+	promote to unstable: BLOCKVISIBILITYPARAMETER
+
+	dwggrep: add new objects
+
+	promote to unstable: BLOCKBASEPOINTPARAMETER, ...
+	and BLOCKFLIPPARAMETER, BLOCKMOVEACTION, BLOCKROTATIONPARAMETER
+
+	spec: fix BLOCKUSERPARAMETER AcDbEvalVariant NULL = -9999
+	we cannot decide on a not read value
+
+	promote BLOCKXYPARAMETER to unstable
+	just indxf missing, analog to BLOCKLINEARPARAMETER
+
+	promote BLOCKLINEARPARAMETER to unstable
+	just indxf missing
+
+	unit-tests: fix BlockParamValueSet subclass checks
+
+	decode: fix AcDbBlockParamValueSet
+	SUB_FIELD_VECTOR did not allocate BD* valuelist
+
+	dynapi: add BLOCKPARAMETER_* subclasses
+	missed a _ prefix.
+	Fixes the BLOCKPARAMETER_PropInfo unit-test failures (DEBUGGING only)
+
+	dynapi: fixup line #
+
+	fix DEBUGGING unit-tests
+	some renamed fields
+
+2020-07-20  Reini Urban  <rurban@cpan.org>
+
+	indxf: more ent->nolinks fixups
+	reset nolinks if any prev or next_entity is empty.
+
+	convert_SAB_to_SAT1: use CAN_ACIS_* feature macros
+
+	convert_SAB_to_SAT1: skip history lines r2013+
+	We cannot deal with them yet, preventing 3DSOLID's
+	to be imported at all.
+
+	convert_SAB_to_SAT1: for old-style DXF fixup the End-of-ASM-data line
+	adjust the ACIS data for the DXF according to the target version.
+	Just not the history lines yet
+
+2020-07-20  Reini Urban  <rurban@cpan.org>
+
+	indxf: handle truecolors
+	set the correct index on c3 colors. Fixes LAYER colors
+
+	dxf: convert colors across r2004
+
+	postprocess_SEQEND: log links
+	from dxf or json, when converting linked list from/to vector
+	unset nolinks when needed. (first or last vertex)
+
+	dxf: fix POLYLINE_* flag values
+	always set the type flag and the elevation pt
+	POLYLINE_3D.curve_type 75 is optional
+
+2020-07-20  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix LWPOLYLINE.num_bulges
+	always write const_width 43
+	set bulges flag.
+
+	Fixes dxf roundtrip error with example_2013 on LWPOLYLINE 156
+
+2020-07-20  Reini Urban  <rurban@cpan.org>
+
+	decode: log computed revision_guid
+
+	encode: fix add_LibreDWG_APPID error handling
+	critical errors should not add PLACEHOLDERs.
+	Like Out of memory, control not found, and such.
+
+	spec: -Wunused-variable
+
+	encode: add missing initializers
+
+	encode: compute HANDSEED
+	the next available handle from dwg->object_refs
+
+	encode: simplify xdata strings a bit
+
+2020-07-19  Reini Urban  <rurban@cpan.org>
+
+	injson: disable wstring
+	always import as TV/UTF8
+
+	bits: add IS_FROM_TU(dat) macro
+	to have the importer hack logic for strings in one place
+
+2020-07-19  Reini Urban  <rurban@cpan.org>
+
+	undo parts of the importer hack
+	keep a proper dat->from_version, synced to dwg->header.from_version
+
+	rather check all encode write_T (fields, eed, xdata) if it came from an
+	imported string (indxf or injson), which would be UTF8, never TU.
+	This way we can keep all the right structure checks PRE (R_*)...
+	and only checks strings if imported from UTF8 or not.
+
+2020-07-19  Reini Urban  <rurban@cpan.org>
+
+	indxf/json: fixup in_postprocess_SEQEND code 3 => 4
+	r2000 linked attribs/vertices need to be handle code 4, but the vector
+	is code 3. fix that
+
+	encode: downconvert CMC colors
+	from r2004+ to r2000
+
+	decode: protect r2007 empty system_page map
+	Check file_header.sections_map_correction and
+	file_header.sections_map_size_comp params.
+	Found via fuzzing by @yangjiageng, GH #248.
+
+	dwgwrite: windows fopen fixups
+	we need to open the infile rb, otherwise
+	dat_read_file will read less than the filesize
+	(collapsing \r\n to \n).
+	and the error message was never printed.
+
+2020-07-18  Reini Urban  <rurban@cpan.org>
+
+	dxf: LAYER.plotflag 290 not optional
+	It is with ODA, but ACAD complains when it's missing.
+
+	spec: silence -Wduplicated-branches warning
+	with print and free
+
+	dxf: fix missing ENTITY.preview_size
+	the bug that was worked around in the previous commit.
+	DXF has IS_PRINT
+
+	indxf: support ENTITY.preview without preview_size code 92/160
+	realloc it along.
+	Fixes MULTILEADER.preview in example_2000.dxf, though technically
+	it is illegal and an OUTDXF bug omitting the code 92 . preview_size
+
+	injson: importer hack for xdata strings
+
+	indxf: protect in_postprocess_SEQEND from !owned
+	but the bug/regression must be happened before
+
+	programs: more importers hacks faking dat->from_version
+	reset to R_2000 (no unicode stored) when importing from DXF or JSON
+	for now we check the structure with dwg->header.version and TU with
+	dat->from_version
+
+	injson: unquote \\ back to \
+	e.g. in viewlabel_pattern like
+	%<\AcVar ViewDetailId>% (%<\AcVar ViewScale \f "%sn">%)
+	which had two \\
+	but every ordinary test also.
+
+	encode: fix XRECORD.num_xdata
+	off by one. repro with example_r14 json-roundtrips.
+
+	write to r13-r14, not just r2000
+	this is a target version hack, until we can write all versions.
+	the helpers wrote only r2000
+
+	injson: keep target dat.version at R_2000
+	fixes unicode EED strings
+
+	change TU logging to UTF-8
+
+	decode xdata: avoid wrong xdata_size warning
+
+	dxf: fixup GEODATA dxf fields
+
+	dxf: simplify ENTITY.ltype_scale spec
+	to BD1, as with the scale vector.
+	and more such scale/x_factor fields.
+
+	dxf: fixup BLOCK 67 . 1 is_paperspace DXF-only flag
+	it is already in common_entity_handle_data.spec
+	entity previews exist only since r13
+
+	api: rename DICTIONARYVAR .intval => schema, .str => strvalue
+
+2020-07-18  Reini Urban  <rurban@cpan.org>
+
+	dxf: optional INSERT fields
+	and some re-ordering, 66 before 2.
+
+	TODO: extrusion in R12 dwgs?
+
+2020-07-15  Reini Urban  <rurban@cpan.org>
+
+	indxfb: some B=>RS fixups, generalize VALUE_INT out_dxfb
+	out_dxfb fields should all look at the resbuf type width, not just RC => RS.
+	in_dxf unfortunately has some exceptions, with 280 DWG being B, but DXF being RS,
+	and such. This needs to be adjusted in the spec.
+
+	we can now read and write until TABLES (HEADER and CLASSES), until the first objects.
+
+2020-07-15  Reini Urban  <rurban@cpan.org>
+
+	indxfb: support RC, B types
+	before we only read RS for RC/B
+
+	dxf: BLOCk entity comments
+
+	dxfb: generalize VALUE_RC for all objects
+	we really need to check the dwg_resbuf_value_type for the width
+	with DXFB, not the DWG RC/RS/B suffix.
+
+	dxbf: minor simplifications
+	no changes but VPORT.render_mode to RS in dxfb
+
+2020-07-14  Reini Urban  <rurban@cpan.org>
+
+	dxfb: start fixing OBJECTS
+	harmonize with out_dxf
+
+	api: change eed[].u.eed_5.entity from RLL to unsigned long
+
+	add dxfb-check and check-dxfb target
+	analog to dxf-check, just no proper roundtrip checks yet,
+	instead of that we try teigha for out_dxfb and in_dxf
+
+	dxfb: fix TABLES version-specifics
+	and 1 wrong APPID type
+
+	dxfb: fix CLASSES types
+	wrong RL and RS
+
+	in_dxfb: fix dxf_read_string
+	dxfb strings are not len-prefixed, just ordinary ASCIIZ strings (like handles).
+
+	dxfb: fix handles
+	They are just %lX strings.
+
+	dxfb: more HEADER DXFB improvements
+	more version checks, more type fixes.
+	consistent bracketing to allow if() HEADER_ groups
+
+2020-07-13  Reini Urban  <rurban@cpan.org>
+
+	dxfb: fix HEADER_RC types to RS
+	2 bytes short, not 1
+
+	./dxf: fix bashism, check for dash
+	and use awk for substrings then
+
+	dxfb: let dxf support dxfb and -o
+	to override the output file with -b/dxfb, like $base_bin.dxf
+	our old dxfb example was r2018, not r2000.
+
+	dxfb: fix $ACADMAINTVER type to RS/RL
+	2/4 byte, not 1
+
+	dxfb: fix TU strings, no 999 comments
+	The documentation says 999 comments are not supported.
+	Unicode strings need to be converted to UTF8, as in Ascii DXF
+
+	add dat_read_size, a fast bulk file read
+	dat_read_stream was a bit slow.
+	later we need to switch to mmap anyway
+
+	indxfb: major fixes in dwgwrite: fill dat, ...
+
+2020-07-12  Reini Urban  <rurban@cpan.org>
+
+	indxf: change the experimental warning messages
+	works now mostly, but still can cause crashes or misses some tricky entities
+
+	indxf: add VISUALSTYLE.props, more version hacks
+	props needed for r2013+
+	handle FIELD_CMC with optional 420 pairs
+
+2020-07-12  Reini Urban  <rurban@cpan.org>
+
+	indxf: help dwg_fixup_BLOCKS_entities by creating entities[]
+	without a list of block entities we cannot create a linked list.
+
+	The helper add_to_BLOCK_HEADER is only used with ENTITES (adding to mspace)
+	but not the BLOCKS entities yet.
+
+2020-07-12  Reini Urban  <rurban@cpan.org>
+
+	indxf: dwg_fixup_BLOCKS_entities for adjacent refs
+	nolinks must be set for all adjacent refs, to skip 8.0.0, 6.0.0 links
+
+2020-07-12  Reini Urban  <rurban@cpan.org>
+
+	dxf: more version hacks for strings
+	treat DXF like JSON, only decoding to TV (R_2000 alike)
+	and then when encoding use a fake dat->from_version.
+
+	dat->from_version is fake with INJSON and INDXF,
+	dwg->header.from_version is real.
+	use the dwg->version for structural checks.
+
+2020-07-12  Reini Urban  <rurban@cpan.org>
+
+	dwgwrite: simplify dwg_version default
+
+	add bit_eq_T, support r2007+ *Paper_Space checks...
+	looks like the last r2007 indxf limitation is now fixed
+
+	indxf: fixup BLOCK_HEADER.{first,last}_entity
+	relying on the new_object &i was too fragile.
+
+2020-07-11  Reini Urban  <rurban@cpan.org>
+
+	encode: create r2004+ entity vector in SEQEND
+	when upconverting r2000 linked lists to the attribs/vertex vector
+
+	also adjust the versions logic, while we dont set the target version yet
+	in the importer. so we have to provide variants for all possible versions.
+	(just not unicode strings yet)
+
+2020-07-11  Reini Urban  <rurban@cpan.org>
+
+	encode: create r2000 linked entity list in SEQEND
+	in_postprocess_SEQEND needs to link the vertex[] or attribs[] entities
+	when downconverting.
+	This is normally done in in_postprcess_handles, but prevented from
+	entmode=0 there.
+
+	with indxf this is not yet enabled, because dwg->header.version
+	is higher than R_2000 on downconvert. it is not yet set to the target version,
+	dat neither.
+
+2020-07-11  Reini Urban  <rurban@cpan.org>
+
+	api: rename field attrib_handles back to attribs
+	was renamed for TABLE, but also used in INSERT.
+	This is much more consistent with the POLYLINE*.vertex[] vector
+
+	indxf: fix owned vertex[]/attrib[] handle types
+	POLYLINE/BLOCKS own entities via handle code 3, not 4.
+	dxf_postprocess_SEQEND (See also #138)
+
+2020-07-11  Reini Urban  <rurban@cpan.org>
+
+	encode: fix r2004+ incompatible version error
+	Acad import failed to import r2004+ versions (saved as r2000),
+	because of dwg->header.zero_one_or_three being 0.
+	Adjust the header versions (dwg_version/maint_version being the
+	version of the app writing it).
+
+	This bypasses now the "Drawing file created by an incompatible version."
+	error and crashes later with an original r2004 dxf2dwg when importing
+	the mspace block. Converted r2007+ DXF's do work fine though.
+	JSON imported r2004 DWGs (as r2000) can be ACAD opened also, just indxf not.
+
+2020-07-10  Reini Urban  <rurban@cpan.org>
+
+	clang-format -i in_dxf.c
+	reformat only
+
+	indxf: start simplifying FIELDs
+
+	promote DETAILVIEWSTYLE SECTIONVIEWSTYLE to stable
+	implement indxf importer.
+	They are needed for the NOD (Named Object Dictionary)
+	and were easy enough to implement. The spec was stable for some time
+
+2020-07-09  Reini Urban  <rurban@cpan.org>
+
+	dxf: defer in_postprocess_handles to after entmode
+	we cannot find the prev entity when we haven't set ent->entmode yet.
+	This fixes r2000 next_entity linking when there's a obj between to skip, like
+	a GROUP.
+
+	Fixup relative handles for all entities (prev/next chains).
+	indxf: Fixup HATCH.boundary_handles code.
+
+2020-07-09  Reini Urban  <rurban@cpan.org>
+
+	dxf: optional common_entity_handle_data fields
+	6 . ByLayer
+	62 . 256
+
+2020-07-09  Reini Urban  <rurban@cpan.org>
+
+	dxf: fixup BLOCK_RECORD 70
+	not optional. actually not printed at all
+
+	harmonize DXFB with DXF
+
+2020-07-09  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix FIELD_BINARY
+	it repeated the first 310 block all over, oops
+
+	api: rename VPORT_ENTITY_HEADER => VX_TABLE_RECORD, VPORT_ENTITY_CONTROL
+	to VX_CONTROL.
+	rename SECTION_VPORT_ENTITY to SECTION_VX.
+	As in DXF (But there only VX_TABLE_RECORD)
+
+2020-07-09  Reini Urban  <rurban@cpan.org>
+
+	dxf: enable VBA_PROJECT
+	310 blob.
+
+	This now can import dxf-check DWGs as first for a long time.
+
+2020-07-09  Reini Urban  <rurban@cpan.org>
+
+	dxf: add missing BLOCK_HEADER 310, 102
+	preview was missing and also {BLKREFS 331 }
+
+	dxf: re-order XDICOBJHANDLE for tables
+	after the handle, before the ownerhandle.
+
+	dxf: re-order BLOCK_RECORD
+	1st mspace, 2nd pspace, and then the rest.
+	flag 70 is optional there.
+
+2020-07-08  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix TIMEBLL ms value
+	ms, not seconds
+
+	json: fix HATCH.boundary_handles
+	path.num_boundary_handles was ignored on injson,
+	leading to empty boundary_handles in the DWG export
+
+2020-07-08  Reini Urban  <rurban@cpan.org>
+
+	api: BlockReference renames insertion_pt, data_flags
+	harmonize all insertion_pt to ins_pt,
+	TABLE.data_flags to TABLE.scale_flag
+
+	also fix JSON export/import for most scale fields.
+	This fixes Acad Zero scale warnings on such imported blocks.
+
+2020-07-08  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix VISUALSTYLE.color 62/420
+	ignore those, always index 5
+
+	indxf: implement add_ASSOCNETWORK
+	analog to ASSOCACTION
+
+	indxf: implement ASSOCACTION VALUEPARAM and EVALVARIANT
+	imports.
+
+	api: promote TABLEGEOMETRY back to stable
+	Was stable in 0.10.1
+	There is one unknown geom field 95
+
+	indxf: fix TABLEGEOMETRY.tablegeometry handle code from 5 to 4
+
+	rename TABLEGEOMETRY num_rows/cols to numrows/numcols for json
+	json ignores all num_ fields, because the can be computed from the array.
+	but those two are not bound to the cells array, only num_cells.
+	This broke TableGeometry JSON roundtrips when importing into acad, with empty
+	values for both.
+	This fix could push TABLEGEOMETRY from unstable to stable.
+
+2020-07-08  Reini Urban  <rurban@cpan.org>
+
+	spec: ASSOCACTION add VALUEPARAM *values
+	acad can now read them properly, but values are still missing
+	to be imported from DXF.
+
+	fix more DXF and Handle codes.
+
+2020-07-08  Reini Urban  <rurban@cpan.org>
+
+	spec: fix ASSOCNETWORK AcDbAssocAction
+	ASSOCNETWORK was too small, caused by missing AcDbAssocAction fields.
+	We really should be able to call ASSOCACTION_private already.
+	For now duplicate the fields into its macro.
+
+	Also fix the handle eWrongObjectType codes.
+	Fixes the ASSOCNETWORK acad dwgin errors, can be promoted to stable.
+
+2020-07-08  Reini Urban  <rurban@cpan.org>
+
+	spec: fix _3DFACE
+	didn't read the spec properly, the invis_flag is absent on has_no_flags.
+	Fixes acad dwgin of 3DFACE entities.
+
+	encode: fix eed handles
+	we did write the wrong handles without raw (e.g injson, indxf)
+
+	encode: fix START_HANDLE_STREAM for entities
+	dump the common entity handles same as common object handles,
+	before writing the specific handles.
+	interestingly only broke WIPEOUT and a few r2000 prev/next chains
+
+	dynapi: fix CMC imports
+	CMC is an inlined struct, not indirect. Also the r2000 shortcut to
+	copy only the short index is wrong for all truecolor colors even with r2000.
+	such as CELLSTYLEMAP bg_color with 0xc8000000 colors (none) all over.
+
+	indxf: fixup color.method and color.rgb
+	esp. with method c8 None.
+	But also with injson and encode.
+
+	spec: analog add all missing HANDLE_STREAM markers
+	some entities even had wrong END markers
+
+	spec: fix SCALE streams
+	json roundtrips (encode) missed the SCALE std streams:
+	ownerhandle, reactors, xdicobjhandle
+
+	spec: demote DIMASSOC back to DEBUGGING
+	acad dwgin fails with DIMASSOC, as encoded by json.
+
+	dxf: ENTITY.thickness 39 is optional
+
+2020-07-08  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix ENTITY.preview_size dxf code
+	<r2010: 92
+	r2010+: 160 (new BLL type)
+
+	It's not related to the zombie flag, just the new type.
+
+2020-07-08  Reini Urban  <rurban@cpan.org>
+
+	dxf: *_CONTROL.num_entries 70 is already correct
+	do not subtract the default entries.
+
+	indxf: fix first BLOCK_HEADER.entry
+	when we move out an ctrl.entry of the list, destructively change the
+	entry index in the caller. Otherwise we get the next one at 1,
+	even we just deleted index 0.
+
+	encode: fix eed_data size calc.
+	byte size, not bitsize
+
+	downgrade TABLEGEOMETRY to unstable
+	it breaks acad dwg open. as unstable dwgin works now
+
+	indxf: SET_CTRL_BIT from flag
+	set the various extra table control bits from flag 70
+	doing it in encode in the dwg.spec is not good enough.
+
+	dxf: mask off loaded bit 6 from COMMON_TABLE_FLAGS
+	no 70 . 64
+
+	dxf: optional DIMSTYLE fields
+	3, 4 and 40 are optional.
+	re-DXFOUT example_2000.dxf from r2018. It had many different
+	handles from the DWG, and it used as reference.
+
+	indxf: improve postponed eed APPID logging
+	print which object had a postponed EED APPID handle
+
+	dxf: re-order LAYER 290, 370, 390
+	put plotflag 290, linewt 370 and plotstyle 390 after ltype 6.
+	mask off linewt and plotstyle from LAYER.flag 70
+
+2020-07-08  Khaled  <Khaled.Reguieg@gmail.com>
+
+	Update README, Fix typo in install instructions
+
+2020-07-05  Reini Urban  <rurban@cpan.org>
+
+	encode: fix add_LibreDWG_APPID use-after-free
+	set dirty_refs when we move the objects around.
+	crashes 33, id: 0, when adding the LibreDWG_APPID
+	triggered a realloc
+
+	dxf: minor fixes
+	wider format of group 90-99
+	fixup class->dxfname DATATABLE
+	fix USCVP code to 65 (ODA bug, documented as 71)
+
+	spec: fix r2000 MEASUREMENT section value
+	RL_LE == 256 for 1
+	was wrong for dxf, decode and encode.
+
+	dxf: optional PICKSTYLE, set TEMPLATE.MEASUREMENT
+	from HEADER
+
+	dxf: limit printed double precision
+	similar to AutoCAD DXF Ascii output.
+	At all 17 or 18 chars (18 if negative)
+
+        dxf: handle color method c8 (none) => 257
+
+	travis: ASAN switch from clang to gcc (7.4)
+
+	travis: switch from xenial to bionic
+
+	travis: another ASAN try
+	failed weirdly
+
+	encode: fix fixup_BLOCKS_entities NULL deref
+	with an Illegal BLOCK_HEADER.entities[]
+	reset num_owned if wrong.
+
+	fuzzer: crashes 32, id: 0
+
+2020-07-05  Reini Urban  <rurban@cpan.org>
+
+	EXPORT 4 major functions for dwgfuzz
+	dwg_decode, dwg_encode, dat_read_stream and dat_read_file.
+	They cannot be moved to dwg.h because of the internal Bit_Chain*,
+	but are essential enough to be exported, and needed for dwgfuzz.
+
+	Silence initialization warning for dwgfuzz mode. Exit if uninit
+
+2020-07-04  Reini Urban  <rurban@cpan.org>
+
+	add dwgfuzz check target
+
+	dwgfuzz: add man page
+	but not installed
+
+	doc: add dwgfuzz item to examples
+
+	improve dat_read_file
+	fp must be open for fread already, but now
+	we need not know the size before.
+	if dat->size is empty, it is now filled.
+
+	new examples/dwgfuzz
+	for easier fuzzing, and debugging the
+	three afl-clang-fuzz strategies: INMEM, STDIN or FILE.
+	~10x faster. STDIN fails still.
+
+	dxf: add HEADER_RC0 for two optional header fields
+	DIMFIT, DIMUNIT
+
+2020-07-04  Reini Urban  <rurban@cpan.org>
+
+	fuzz: improve to persistent shared-mem mode
+	for dwgwrite with injson hardcoded (json import + dwg export),
+	for dxf2dwg with indxf hardcoded,
+	for dwgrewrite with dwg hardcoded.
+
+	They ignore args now.
+
+2020-07-03  Reini Urban  <rurban@cpan.org>
+
+	indxf: forgot one add_TABLEGEOMETRY_Cell assert
+	fuzzer 30, id:18
+
+2020-07-02  Reini Urban  <rurban@cpan.org>
+
+	api: rename DICTIONARY*.hard_owner
+	to is_hardowner
+
+	dxf: reorder and default VERTEX_2D
+
+	dxf: reorder TEXT r2000+
+
+	dxf: reorder TEXT r13-r2000
+
+2020-07-02  Reini Urban  <rurban@cpan.org>
+
+	indxf: improve BL CONTROL overlarge num_entries fixup
+	adjust wrong num_entries faster, which avoids DDOS attacks on overlarge
+	numbers. esp. with BL types (layer, block, ...)
+
+	Fixes fuzzer 29, id: 12, 29, 69, 80 hangs.
+
+2020-07-02  Reini Urban  <rurban@cpan.org>
+
+	indxf: protect from APPID_CONTROL....num_entries BS overflow
+	several CONTROL tables have only BS num_entries, which lead
+	to import hangs on overlarge (fuzzed) numbers.
+
+	fuzzer 28, id:4, 6 hangs
+
+2020-07-02  Reini Urban  <rurban@cpan.org>
+
+	dynapi: add missing D2T support
+	needed for indxf ATEXT
+	fuzzer 28, id: 7
+
+2020-07-02  Reini Urban  <rurban@cpan.org>
+
+	indxf: Invalid ASSOCACTION.*param_names handle vectors
+	and invalid num fields
+
+	fuzzer 28, id:71
+
+2020-07-02  Reini Urban  <rurban@cpan.org>
+
+	indxf: Skip invalid postponed eed APPID
+	check resolve_postponed_eed_ref field and code.
+	fuzzer 28, id:3
+
+	indxf: fix wrong EED without matching 1000 pair
+	fuzzer 30, id:0
+	(this is the new afl++ 2.65d with CFG instrumentation)
+
+	indxf: fix 101 !Embedded Object hang
+	handle 101 which is not Embedded Object
+	hanged fuzzer 28, id:0
+
+2020-07-02  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix AcDbEvalExpr hang on false pair
+	need to seperate success from fail otherwise
+	it will hand going into add_AcDbEvalExpr endlessly
+
+	fuzzer 27, id:0 and probably many more.
+
+2020-07-02  Reini Urban  <rurban@cpan.org>
+
+	indxf: Invalid ASSOCACTION.deps[%d].is_soft DXF code
+	fuzzer 29. id:75
+
+2020-07-01  Reini Urban  <rurban@cpan.org>
+
+	dxfwrite: INJSON unicode hack
+	in_json is the only importer which still writes all strings as TV, not TU.
+	(for valid perfofmance reasons, which we can only write r2000)
+	dxfwrite is currently the only which tries to write TU,
+	which came up with the new empty CUSTOMPROPERTY strings, which is
+	only one byte long, not two.
+
+	support version macros in the section specs
+
+2020-07-01  Reini Urban  <rurban@cpan.org>
+
+	dxf: add CUSTOMPROPERTY
+	in DXF header from SummaryInfo. Rename key to tag.
+
+	add HEADER_VALUE_TU0 helper (not if empty)
+
+2020-07-01  Reini Urban  <rurban@cpan.org>
+
+	add Auxheader support for r2004+
+	change AUXHEADER.maint_version* from RS to RL.
+	changed with r2017
+
+2020-06-30  Reini Urban  <rurban@cpan.org>
+
+	finish AcDbPointCloudObj
+
+	more AcDbPointCloudObj objects
+
+	add debuging POINTCLOUD
+
+	doc: LibreDWG.info too large
+	was automatically split into two
+
+2020-06-30  Reini Urban  <rurban@cpan.org>
+
+	decode: protect r2000 last_handle
+	as with r2004. dwg_decode_add_object could have failed,
+	so 0-1 would be invalid
+
+	fuzzer 15, id:149
+
+2020-06-30  Reini Urban  <rurban@cpan.org>
+
+	logging: avoid fprintf overflow on non terminated buffer
+	FIELD_TFF on acis_data does nto guarantee NULL-termination
+	in its logger.
+
+	fuzzer 15, id:110
+
+2020-06-29  Reini Urban  <rurban@cpan.org>
+
+	decode: skip INVALIDTYPE objects
+	which don't have a name nor dxfname.
+	Dont add those.
+	Fixes fuzzer 14, id: 217
+
+2020-06-29  Reini Urban  <rurban@cpan.org>
+
+	indxf: dont accept DXF 0 fields
+	which would be parent 0, and setting parent
+	to some random value is certainly wrong.
+
+	fuzzer 27, id: 476
+
+2020-06-29  Reini Urban  <rurban@cpan.org>
+
+	regen-dynapi: fixup #line's
+
+	indxf: protect wrong 3dsolid again
+	now the 350 history_id.
+	fuzzer 27, id: 469
+
+	indexf: protect empty 2 name
+	skip it then
+	fuzzer 27, id: 463
+
+	indxf: check empty 3DSOLID 1 encr lines
+	fuzzer 27, id: 447
+
+	indxf: add generic CHK_array()
+	should cover all array access now
+
+	indxf: oops, forgot more asserts
+
+	indxf: protect from invalid 3DSOLID
+	fuzzer 27, id: 417
+
+	gen-dynapi: normalize topdir
+	without inspecting it.
+
+	indxf: exit AcDbEvalExpr with code 0
+	fuzzer 27, id: 415
+
+	indxf: more NULL deref protections
+	fuzzer 27, id: 394, 408, 418
+
+	afl-fuzz: add some funcs
+	dwgwrite needs some api functions which are excluded from
+	afl-fuzz.
+
+	NEWS for the 0.11 release
+
+	indxf: protected all asserts
+	Fixes GH #187
+	All asserts (array bounds checks) are now protected by
+	explicit range and NULL checks.
+
+2020-06-29  Reini Urban  <rurban@cpan.org>
+
+	bits overflow: bisect mingw64 failure
+	mingw64 started failing between
+
+	decode: error earlier on wrong obj->size
+	some fuzzing cases at 6 are just unrepairable.
+	0.10.1.3507
+	smoke/dxf 431a9826
+	https://ci.appveyor.com/project/rurban/libredwg/builds/33538209
+
+	decode: error earlier on overflow
+	when obj->size is too large
+	some fuzzing cases at 6 are just inrepairable.
+	0.10.1.3506
+	smoke/dxf 40c2cb70
+
+	which is only the added overflow checks in bits.
+
+2020-06-29  Reini Urban  <rurban@cpan.org>
+
+	indxf: CELLSTYLE NULL deref
+	fuzzer crashes27, id:424
+
+	indxf: remove more asserts
+	MULTILEADER_leaders, MULTILEADER_lines. More bounds checks.
+	fuzzer crashes27, id:417
+
+	indxf: remove more asserts
+	HATCH, MLINE. More bounds checks.
+	the fuzzer likes to crash on those asserts.
+	crashes27, id:349
+
+	indxf: fix plotsettings.2dpt crash
+	when fuzzing 27, id 348
+
+	travis: asan is now at 16min, re-add check-minimal and programs
+	and fix the check-minimal syntax
+
+2020-06-28  Reini Urban  <rurban@cpan.org>
+
+	Merge branch 'dynblocks'
+
+	finish BLOCK*PARAMETER fields
+
+	add missing BLOCK*GRIP fields
+
+	apply changed BLOCKPARAMETER_PropInfo
+	and add BLOCKXYPARAMETER fields
+
+	refactor BLOCK*PTPARAMETER subclasses
+
+2020-06-27  Reini Urban  <rurban@cpan.org>
+
+	fix BlockAction DWG order
+	compared to DXF
+
+	forgot about BlockActionWithBasePt
+	for BLOCKSCALEACTION and BLOCKROTATEACTION.
+	This explains the conn_pts offsets
+
+	unit-testing: fix CHK_ENTITY_HV
+	for NULL hdls. such as in BLOCKSTRETCHACTION
+
+	rename AcDbBlockAction.ba_pt to display_location
+
+	more BLOCKSTRETCHACTION
+	but not yet done
+
+	refactor Block*Action fields
+	use 1-6 connection points
+
+	add some Block*Action fields and tests
+	also add a nice unit-testing check-debug target
+
+	unit-testing: add some test files
+	for the new dynblocks
+
+	spec; disable broken SCALE Embedded Object for now
+	see the work/impl branch
+
+	spec: add BLOCKFLIPPARAMETER fields
+
+	spec: BLOCKBASEPOINTPARAMETER fields
+
+	travis: even longer asan timeouts
+	add make -C test/unit-testing check-minimal
+
+	Change some ConstraintParameter field names
+
+	unit-testing: update-ignorance
+
+	promote BLOCKGRIPLOCATIONCOMPONENT, BLOCKVISIBILITYGRIP
+	to unstable
+
+	BlockGrip fields
+
+2020-06-26  Reini Urban  <rurban@cpan.org>
+
+	bits: avoid wrong unknown buffer overflow warning
+
+	fix BLOCKGRIPLOCATIONCOMPONENT crash
+
+	Add a couple new dynblock objects
+	generated unit-tests with a small perl script
+
+	spec: promote VISIBILITYGRIPENTITY, VISIBILITYPARAMETERENTITY
+	to DEBUGGING
+
+	api: auto-generate dwg.h entity and object unions
+
+	api: auto-generate the dwg_setup_NAME functions also
+	in dwg.h. Closes GH #239
+
+	api: move dwg_setup_PERSUBENTMGR to debugging
+	this broke the freecad python bindings. See #239
+	But we really should autogenerate these setup functions as the others.
+	And let's move them to dwg_api.h
+
+	rename AcDbObjectContextData in_dwg to has_xdic
+
+	dxf: fix MTEXTOBJECTCONTEXTDATA rect_height order
+
+	decode: add MTEXTOBJECTCONTEXTDATA.columns_type
+	out of bounds check. some examples are corrupt, but long before.
+	already with the points.
+
+	unknown: fixup double-free
+	rather leak some g[j].bytes
+
+	make regen-unknown
+
+	full-regen-unknown
+
+	examples: update bd-unknown.inc
+
+	examples: add EMPTY_CHAIN initializer
+	I switched the fields around recently, which broke unknown.
+
+2020-06-26  Reini Urban  <rurban@cpan.org>
+
+	spec: improve HELIX
+	also rename num_turns to turns, so that it shows up in JSON.
+	It's a double, not just full turns.
+
+	Update from SPLINE (could use define or subclass, but not so far)
+
+2020-06-26  Reini Urban  <rurban@cpan.org>
+
+	dxf: reorder IMAGEDEF
+
+	spec: add UNDERLAY.clip_inverts
+	improve DXF for WIPEOUT a bit. order of clip_mode and handles.
+
+	spec: add INDEX object
+	seen registered as App, even if I only seen that as subclass for
+	LAYER_INDEX and SPATIAL_INDEX.
+
+	api: add more Dwg_Version_Type enums
+	These are all the versions ODA detects.
+	Dont know for sure the Release names, but the 4byte magic are certain
+
+	spec: add LARGE_RADIAL_DIMENSION
+
+	spec: NURBSURFACE fields
+	fails in the 3DSOLID part (missing AcDs SAB)
+
+	spec: NAVISWORKSMODEL add flags
+
+	spec: NAVISWORKSMODELDEF add flags
+
+	api: MTEXT.is_not_annotative
+	and fix some DXF fields: extents_*
+
+2020-06-24  Reini Urban  <rurban@cpan.org>
+
+	spec: harmonize MTEXTOBJECTCONTEXTDATA with MTEXT
+	esp. its Embedded object spec
+
+	spec: MTEXTATTRIBUTEOBJECTCONTEXTDATA fields
+	analog to GEOPOSITIONMARKER
+
+	dxf: missed the 70 invis_flag
+
+	dxf: improve VERTEX_PFACE_FACE dxf values
+
+	fix GEOPOSITIONMARKER DXF detector
+	improve DXF, add the 101 marker.
+	rename type to class_version (always 0)
+
+	api: rename MTEXT.annotative to is_annotative
+	and unknown_bit to unknown_b0 (always 0)
+	fix the is_annotative r2018+ logic and the DXF codes.
+
+	api: rename MTEXT.drawing_dir to flow_dir
+
+	unit-test: disable ACSH_HISTORY_CLASS history_node
+	it crashes there
+
+2020-06-24  Reini Urban  <rurban@cpan.org>
+
+	spec: more Constraints
+	objects:
+	ASSOCDIMDEPENDENCYBODY
+	ASSOCPOINTREFACTIONPARAM,
+	ASSOCEDGECHAMFERACTIONBODY,
+	ASSOCEDGEFILLETACTIONBODY,
+	ASSOCDIMDEPENDENCYBODY,
+
+	subclasses:
+	ASSOCEDGEPERSSUBENTID
+	ASSOCINDEXPERSSUBENTID
+
+2020-06-24  Reini Urban  <rurban@cpan.org>
+
+	spec: add 4 missing ASSOCARRAYPARAMETERS objects
+	all with the same structure, so should be typedef'ed such as
+	REGION/BODY/3DSOLID, but I hate those exceptions.
+
+	dxf: move MULTILEADER.ctx around
+	in dxf before the leader.
+	also fix dxf_CMC colors for 90+
+
+2020-06-23  Reini Urban  <rurban@cpan.org>
+
+	indxf: wrong WIPEOUT.num_* overflow 12 > 12 ERROR
+
+	indxf: TABLESTYLE asserts => errors
+
+	geojson: normalize_polygon_orient
+	for RFC7946. Polygons should follow the right-hand rule
+
+	unit-tests: fix darwin scandir
+	DT_DIR is only defined unless _POSIX_C_SOURCE or _DARWIN_C_SOURCE
+
+2020-06-23  Reini Urban  <rurban@cpan.org>
+
+	geojson: improve color support
+	rgb truecolor strings now with '#' prefix,
+	only with entity and truecolor methods.
+
+	skip ByLayer, ByBlock colors.
+
+2020-06-23  Reini Urban  <rurban@cpan.org>
+
+	doc: Describe our GeoJSON format
+
+2020-06-23  Reini Urban  <rurban@cpan.org>
+
+	geojson: Dummy, fix the linters
+	the last Dummy feature MUST have a geometry object, which MAY be null.
+	https://tools.ietf.org/html/rfc7946#section-3.2
+
+	While we are here also make the properties object empty.
+
+2020-06-23  Reini Urban  <rurban@cpan.org>
+
+	geojson: fix Point arrays
+	MTEXT, TEXT, INSERT elements had wrong Point arrays
+
+	geojson: optional z in coordinates
+	See https://tools.ietf.org/html/rfc7946#section-3.1.1
+	Altitude or elevation MAY be included as an optional third
+	element.
+
+	geojson: closed Polygon also for POLYLINE_2D
+	MulitLineString was wrong.
+	Either LineString if open, or Polygon if closed.
+	MultiLineString would be for MLINE.
+
+	geojson: skip Dummy?
+	write last Dummy Feature only if we did not write a single feature
+	before.
+	Nope, this breaks JSON compat, as we need to known the last feature to
+	end without comma.
+
+	geojson: add support for closed Polygon
+
+2020-06-23  Reini Urban  <rurban@cpan.org>
+
+	geojson: move id to Feature, skip color ByLayer
+	https://tools.ietf.org/html/rfc7946#section-3.2
+	If a Feature has a commonly used identifier, that identifier
+	SHOULD be included as a member of the Feature object with the name
+	"id", and the value of this member is either a JSON string or
+	number.
+
+	Keep property.EntityHandle value for the lastcomma quirks.
+
+2020-06-23  Reini Urban  <rurban@cpan.org>
+
+	add 2nd geojson-validation linter support
+	as fallback for mapbox/geojsonhint
+
+	add geojsonhint check
+	which detected various errors in our geojson output
+
+2020-06-22  Reini Urban  <rurban@cpan.org>
+
+	dynapi: fix shadow warnings
+
+	spec: whitespace only
+
+	indxf: fix ASSOCACTION, ASSOCDEPENDENCY, PERSUBENTMGR fields
+
+	indxf: protect from illegal ASSOCACTION.num_deps
+	fuzzer 27, id:142
+
+	2007: defatalize some missing optional sections
+	analog to r2004. Thanks to @zhengf312 with GH #236
+
+	api: add dwg_get_OBJECT
+	and handle the few aliases (REGSION, BODY, XLINE, ...)
+	also handle the lowercase shortened names.
+	do if DEBUG indentation
+
+	api: generate dwg_api.h lists automatically
+	_3DFACE still manually, as the entity_name for these is without _
+
+	api: generate dwg_api.c lists automatically
+
+	api: add missing _3DFACE, _3DSOLID
+	api functions. Move Dwg_Entity_PROXY_LWPOLYLINE to a subclass.
+	The entity is PROXY_ENTITY
+
+	dynapi: simplify dwg.i generation
+	abstract into out_clases, because we want to do the same for
+	more files.
+
+	bindings: fix list of classes in dwg.i
+
+2020-06-21  Reini Urban  <rurban@cpan.org>
+
+	Merge branch 'smoke/dxf'
+	Most Constraints objects are now in. Just the final
+	ASSOC2DCONSTRAINTGROUP misses the subent curve code.
+
+	Some WIP commits in this branch broke compilation.
+
+2020-06-21  Reini Urban  <rurban@cpan.org>
+
+	add BLOCKPARAMDEPENDENCYBODY
+
+	add more action params and bodies
+	ARRAYITEMLOCATOR subclass,
+	ASSOCACTIONPARAM, ASSOCVALUEDEPENDENCY, ASSOCARRAYACTIONBODY, ASSOCARRAYMODIFYACTIONBODY
+	and a few more AC*CONSTRAINT subclasses
+
+	add ASSOCRESTOREENTITYSTATEACTIONBODY
+	demote failung ASSOCSWEPTSURFACEACTIONBODY
+
+2020-06-20  Reini Urban  <rurban@cpan.org>
+
+	add ASSOCMLEADERACTIONBODY
+
+	add ASSOCEXTENDSURFACEACTIONBODY
+	forgot one more
+
+	refactor ASSOC2DCONSTRAINTGROUP
+	with AcConstraintGroupNode
+
+	add missing ASSOC*SURFACEACTIONBODY
+	OFFSET and TRIM
+
+	spec: add remaining ASSOC*DIMACTIONBODY
+
+	spec: add ASSOCOBJECTACTIONPARAM
+
+	spec: add ASSOCNETWORKSURFACEACTIONBODY
+	like ASSOCPATCHSURFACEACTIONBODY
+
+	promote ASSOCNETWORK to unstable
+
+	spec: fix ASSOCNETWORK
+	almost the same as ASSOCACTION, just a bit smaller.
+
+	spec: fix AcDbAssocSurfaceActionBody
+	it uses ASSOCACTIONBODY, not ASSOCACTIONPARAM, as the name already says.
+	rename most ASSOCSURFACEACTIONBODY fields, now a subclass.
+
+	api: export dwg_resbuf_value_type
+	renamed from get_base_value_type.
+	needed for dwggrep, because it is used in some public datatype
+	AcDbEvalVariant.
+
+	spec: promote ASSOCGEOMDEPENDENCY, ASSOCACTION to unstable
+	actually it is stable already, just need to test in_dxf.
+	assocaligneddimactionbody looks stable, but crashes.
+
+	fix EvalVariant values
+	dispatch on the DXF code
+
+	AcDbValueParam protections
+	but still crashes
+
+2020-06-20  Reini Urban  <rurban@cpan.org>
+
+	add ASSOCCOMPOUNDACTIONPARAM
+	which is mostly a subclass for Path and OsnapRef,
+	but exists as class also.
+
+	and fix more unit-tests
+
+2020-06-19  Reini Urban  <rurban@cpan.org>
+
+	add ASSOCASMBODYACTIONPARAM
+
+	fix new debug classes
+
+	ASSOCACTIONPARAM et al unit-tests
+	esp. ASSOCPARAMBASEDACTIONBODY macro
+
+	add ASSOCFILLETSURFACEACTIONBODY and more refactoring
+	add framework for AssocArrays
+
+	spec: finish ASSOCACTIONPARAM refactor
+
+	wip more ASSOCACTIONPARAM work
+
+2020-06-18  Reini Urban  <rurban@cpan.org>
+
+	spec: WIP more ASSOCACTION subclasses
+	more embedded structs, which we need for indxf
+
+	wip: some more assoc actions
+
+	simplify ASSOCPATHBASEDSURFACEACTIONBODY
+	all those have the same struct
+
+	indxf: fixup ASSOCACTION (renames)
+
+	indxf: fix empty 1001 code
+	new fuzzer 26 testcase id:439
+
+	rename some ASSOCDEPENDENCY fields
+	minor refactoring
+
+2020-06-17  Reini Urban  <rurban@cpan.org>
+
+	spec: add ASSOCVARIABLE debugging
+	lots of assoc subclasses missing
+
+	api: rename RASTERVARIABLES.display_* to image_*
+
+	dxf: image re-orderings (minor)
+	 IMAGEDEF_REACTOR has a double 330 ownerhandle in out_dxf
+
+	add more covered DXF names
+	but just the class declarations, no objects unfortunat.
+	looks like most are not filed to DWG.
+
+	add missing unhandled decls
+	VISIBILITYGRIPENTITY, VISIBILITYPARAMETERENTITY
+	and re-sort
+
+	api: promote ACSH_BOOLEAN_CLASS to stable
+	enough coverage
+
+	unit-tests: log stability
+
+	adjust tests for --enable-debug
+	dxf.test and json.test are now stable with --enable-debug
+	Just acsh_history_class crashes
+
+	indxf: support TABLESTYLE.sty.cellstyle
+	and fix TABLESTYLE.name (not sty.name).
+	Fixes DEBUG_CLASSES assertions on indxf
+
+	spec: add debugging MPOLYGON
+	which is a hatch plus boundary
+
+	api: rename XRECORD.cloning_flags to cloning
+	as with DICTIONARY. Add docs.
+
+	dxf: VIEW r12 dxf order
+
+	spec: replace PLOTVIEW table lookup by VIEW (6)
+	There is no PLOTVIEW table, but the VIEW table. This was an oversight.
+
+	unit-tests: fixup CHK_SUBCLASS_VECTOR_TYPE typos
+
+	more C++ compat
+	now just the in_dxf.h ADD_OBJECT/ENTITY calloc assignment is wrong.
+
+	indxf: mingw gcc 9.2 -Wmaybe-uninitialized warning
+
+	indxf: detect for more DWG magic
+	earlier versions
+
+	indxf: ioerror on too small input file
+	fixes a new fuzzing crash, 26 id:299
+
+	indxf: fix unicode EED strings likewise
+	but here we need to operate on the real string length,
+	after conversion from UTF8 to UCS2.
+	Also acccount the size for the added padding.
+
+	injson: fix importing empty EED strings
+	heap-overflow with memcpy on len=0
+
+	decode: fix EED unicode strings byte-swapped
+	also add a padding byte to the eed_data struct, to match
+	the ASCIIZ string, but esp. to allow reading unaligned
+	2byte values with ubsan. now it's aligned.
+
+	injson: fix from_version mishmash
+
+	extract importer version macros to importer.h
+	there we need to look at from_version.
+	for export (encoder, out_*) we need the target version
+
+	dxf: fix 3DSOLID DXF output and encrypt_SAT1
+	wrong dxf codes for acis_empty/has_revison_guid
+	wrong num_blocks
+	wrong encryption.
+
+	decode: fix invalid bitsize also r2007+
+	which did caused std_dat overflows in fuzzing 7, id:90
+
+	bits: add earlier read_CMC overflow checks
+	some fuzzing 7 testcase id:90 keeps overflowing
+
+	json: fix printing unicode EED strings
+	off-by-one, missing the first character, and then byte swapped.
+
+	decode: error earlier on wrong obj->size
+	some fuzzing cases at 6 are just unrepairable.
+
+	bits: more overflow protections
+	for some special fuzzing cases with wrong obj->size.
+	better check before some cases, to return earlier.
+
+	decode: don't forget DWG_ERR_VALUEOUTOFBOUNDS
+	when size overflowed, but was adjusted.
+
+	indxf: ACSH.history_node.trans followed by 0
+	detected by fuzzing, crashes6, id 459
+
+	indxf: fix hang on wrong 2 CLASSES
+	not followed by 0 CLASS. Fixes 2 crashes26 hangs
+	error early
+
+	indxf: protect CellStyle.orders[grid] overflow
+	detected by fuzzing round 26. fixes all 7 crashes26
+
+	free: classes even with 0 num_classes
+	fuzzer 26 indxf leaks
+
+	simplify object_alias for ACDB_*OBJECTCONTEXTDATA_CLASS
+
+	fix OCD_Dimension unit-tests
+
+	add {DM,ORD,RA}DIMOBJECTCONTEXTDATA
+
+	.gitignore: two more private dirs
+
+	add ANGDIMOBJECTCONTEXTDATA
+
+	spec: add AcDbDimensionObjectContextData and RADIMLGOBJECTCONTEXTDATA
+	for large Radial Dimension ObjectContextData
+
+2020-06-15  Reini Urban  <rurban@cpan.org>
+
+	indxf: add_AcDbEvalExpr
+
+	dxf: ACSH_HISTORY_CLASS different DXF order
+
+	indxf: fix lshift problem with temp int
+	keep the long type to be able to represent 0xc2 << 18
+	src/in_dxf.c:7457:37: runtime error: left shift of 194 by 24 places cannot be represented in type 'int'
+
+	spec: 3DSOLID.revision_guid off-by-one
+	not large enough. strlen is 38, not 37
+
+	indxf: 3DSOLID.revision_guid DXF 2 for r2013+
+
+2020-06-14  Reini Urban  <rurban@cpan.org>
+
+	importer: abstract decode_BACKGROUND_type
+	for decode, in_json, in_dxf.
+
+	docs: more stability fixups
+
+	spec: promote BACKGROUND to unstable
+
+	spec: more BACKGROUND changes
+	set type by dxfname on decode/import,
+	add object_alias.
+	looks even stable now
+
+	spec: more seperate structs, enable BACKGROUND
+	AcDbBlockGripExpr, BLOCKGRIPLOCATIONCOMPONENT
+	BACKGROUND subclasses, now promoted to debugging
+
+	spec: make a seperate evalexpr struct
+	same as with history_node, to be able seperate the same DXF codes in in_dxf.
+
+	dxf: added more 3DSOLID dxf codes
+	to regen-dynapi.
+
+	indxf: AcDbShHistoryNode support
+	but AcDbEvalExpr really should be a struct/subclass, not inlined
+
+2020-06-13  Reini Urban  <rurban@cpan.org>
+
+	dwg.h: harmonize SWEEPOPTIONS_fields macro
+	SweepOptions_FIELDS is different to all other header macros.
+	_fields needs to be all lowercase, and to seperate it from the
+	specs macros make the name all UPPERCASE.
+
+	unit-testing: simplify test_code call
+
+	travis: shorter asan
+	skip unit-tests, always reaching the 50min hard limit now
+
+	api: stabilize most ACSH classes
+	just 5 are unfinished, and 6 are a bit unstable.
+	TODO: indxf of the trans vector_n1,
+	and some subclass specifics
+
+2020-06-12  Reini Urban  <rurban@cpan.org>
+
+	test-data: add coverage dwg for some ACSH classes
+	to be able to put them into stable.
+
+	unit-testing: improve CHK_ACSH_HISTORYNODE trans matrix
+
+	spec: a bit AcDbEvalExpr
+	comments and rename one field. This is a single node
+	in the EVALUATION_GRAPH
+
+	spec: more ASSOCPERSUBENTMANAGER
+	but not much. still missing the subent structure.
+
+	spec: more ACSH subtypes
+	finish material and color acis subclasses.
+	yet unused.
+
+	spec: add ACSH_CONE and CYLINDER classes
+	this should be all ACIS History_Node classes now, I think
+
+2020-06-12  Reini Urban  <rurban@cpan.org>
+
+	spec: add ACSH_BOOLEAN_CLASS
+	and rename EvalExpr.ee_class_version to ee_int
+
+	the default is -1, a signed int32. Not in DXF.
+	It could be a nodeid, but then it would be in DXF.
+
+2020-06-12  Reini Urban  <rurban@cpan.org>
+
+	spec: ACSH classes major/minor, fix unit-tests
+	abstract EvalExpr and HistoryNode subclasses
+
+	spec: add AcDbShHistory to ACSH_HISTORY_CLASS
+
+2020-06-12  Reini Urban  <rurban@cpan.org>
+
+	Unify 3DSOLID layout, extend AcDbEvalExpr
+	ensure all 3DSOLID objects have the same layout (one is an object, not an entity).
+	implement the AcDbEvalExpr fields, and use it.
+	Not as extra struct as history_node, just inline it.
+	A history_node is an seldom used extension, the evalexpr is a major feature
+	(and already used)
+
+	AcDbEvalExpr really should have the values as union, but does not work yet.
+	Try later.
+
+2020-06-12  Reini Urban  <rurban@cpan.org>
+
+	add dwg_add_handleref_free
+	for non-global free'able handlerefs
+
+2020-06-12  Reini Urban  <rurban@cpan.org>
+
+	ACIS 2: fix order of applied entities
+	we need to shift from the beginning, not from the end.
+	we need to use the same order of entities and SAB streams.
+
+	also clear acis_empty on converted acds acis_data, otherwise it
+	will be skipped.
+
+2020-06-12  Reini Urban  <rurban@cpan.org>
+
+	ACIS 2: Fix SAB stream detection r2013+
+	r2013+ uses a new End-of-ASM-data marker, deviating from ACIS.
+	They forked it to ShapeManager afterall.
+	This new marker is only used in AcDs streams
+
+	ACIS 2: assign r2013+ 3DSOLID sab data
+	store the handles when seeing them globally,
+	in acds.spec assigne them directly one after the other,
+	assuming the order is the same in both.
+
+	fix one -Wformat - nonliteral
+
+	fix memmem decl
+	freebsd and macos fail on memmem calls, probably due
+	to a missing decl. relying on _GNU_SOURCE is fragile
+	for a non-GNU libc header.
+	The only regression is a -Wdedundant-decl warning.
+	We really should check the header for it, not just the library.
+
+	api: export dwg_encrypt_SAT1, dwg_convert_SAB_to_SAT1
+	Better this way.
+	Move dwg_encrypt_SAT1 to a place not affected by --disable-write,
+	as it is now also needed by out_dxf for r2013+ 3DSOLIDs.
+
+	api: add dwg_obj_is_3dsolid
+	which is needed when we read the AcDs section after
+	the OBJECTS, and need to assign the acis_sab_data[] to 3dsolid
+	entities.
+
+	ACIS 2: scan the AcDs data for ACIS
+	and store them globally, to be picked up later.
+
+	ACIS 2: change v2 to num_blocks = 1 only
+	rather add newlines, not now blocks for each line.
+	This is counterprodutive and different to the v1 format
+
+2020-06-12  Reini Urban  <rurban@cpan.org>
+
+	ACIS 2: class-specific boolean strings
+	finally found some 1996 ACIS documentation,
+	which I collected then (as ps).
+	add and fix some tags, this is now almost complete,
+	just enums not yet
+
+	also fix a couple of overflows, allocate enough.
+
+2020-06-12  Reini Urban  <rurban@cpan.org>
+
+	ACIS 2: final encryption for the DXF v1
+
+	ACIS 2: convert_SAB_to_encrypted_SAT abstractions
+	No errors anymore.
+
+2020-06-10  Reini Urban  <rurban@cpan.org>
+
+	WIP ACIS 2: convert_SAB_to_encrypted_SAT with Bit_Chain
+	This way all the underflow checks are done automatically.
+	And we can use the simplier bit_read/write functions, instead of sprintf.
+
+	Found a couple new opcodes, and a documentation for the header and indices.
+	No opcode docs yet.
+
+2020-06-10  Reini Urban  <rurban@cpan.org>
+
+	WIP ACIS 2: dxf needs convert_SAB_to_encrypted_SAT
+	dxf without AcDs just converts the SAB to an encrypted ASCII SAT.
+	SAB looks pretty easy to decipher. A very primitive format,
+	and I even found my own stdlib documentation which I wrote 1998.
+
+	spec: add ACSH_BREP_CLASS
+	A simple AcDbShPrimitive with 3DSOLID
+
+	Prepare NEWS for 0.11
+
+2020-06-09  Reini Urban  <rurban@cpan.org>
+
+	extend 3dsolid unit-tests
+
+	travis: start the slowest tests first
+	so that the overall time goes down
+
+	ACIS 2: add encode and json support
+	split the acis_data lines into 2. first the readable
+	magic to identify it, the rest as binary (hex)
+
+2020-06-08  Reini Urban  <rurban@cpan.org>
+
+	add HAVE_MEMMEM, implement workaround
+	A naive O(n^2) variant, but good enough for us
+
+	ACIS 2: read the whole SAB
+	and then try to find the "End of ACIS data" marker for the
+	size. This is without has_ds_data, e.g. 2004.
+
+2020-06-08  Reini Urban  <rurban@cpan.org>
+
+	api: minor MULTILEADER B renames
+	neg_textdir, text_extended -> is_ prefix
+	abstract CMLContent_fields common fields for the Content union
+	add calc. type field to check at run-time.
+
+	.h formatting (clang-format)
+
+2020-06-08  Reini Urban  <rurban@cpan.org>
+
+	unit-tests: simplify some checks
+	more vector macros, applied to multileader.
+	catch more nan's
+
+2020-06-07  Reini Urban  <rurban@cpan.org>
+
+	automake distcleancheck for the info came back
+	despite info-in-builddir
+
+	add FCFOBJECTCONTEXTDATA decls
+
+	fix more debugging unit-tests
+
+	fix arc_dimension unit-test
+	looks stable now. need to check the importers still.
+
+	add CONTEXTDATAMANAGER class
+	and re-enable OBJECTCONTEXTDATA
+
+	api: rename VIEW.pspace_flag to is_pspace
+
+2020-06-07  Reini Urban  <rurban@cpan.org>
+
+	fix CALL_SUBENT types
+	but still disabled. dynamic dispatch on an entity
+
+	changed to hold a handleref, not an object
+
+2020-06-07  Reini Urban  <rurban@cpan.org>
+
+	ACSH unit-tests
+
+	new ACSH decls
+
+	spec: more ACSH entities
+	TODO: need CALL_ENTITY by dynamic int type, not
+	static by NAME. Some kind of dwg_##action##_dispatch_private().
+
+2020-06-06  Reini Urban  <rurban@cpan.org>
+
+	regen-dynapi: fix RTEXT.extrusion dxf
+
+	json: fix PROXY_OBJECT
+	binary data and data_size
+
+	json: add missing PROXY_OBJECT
+	which fixes the empty json object {}.
+	esp. for r13, which has many such proxies
+
+	STYLE: comments only
+
+	swig: silence wrong swig cpp parser error warning 305
+	"DWG_TYPE_POLYLINE_2D = 0x0f,"
+	is a valid enum line, and not a #define bla = num statement
+
+	api: next is a perl keyword
+	rename ResBuf.next to nextrb
+
+	indxf: fix -Wmaybe-uninitialized mode warning
+	in add_CellStyle
+
+	api: from is a python keyword
+	rename MESH.edges.from to idxfrom, "to" to idxto
+
+	api: self is a python keyword
+	rename MATERIAL.gentextures.self to material
+
+	C++: template is a C++ keyword
+
+	MLEADER_Content union changed: fix unit-test
+
+2020-06-06  Reini Urban  <rurban@cpan.org>
+
+	Enable C++ compat
+	To compile with g++/clang++
+	reserved keywords, inner structs, malloc casts, ...
+
+	Needed for some bindings in C++
+
+2020-06-06  Reini Urban  <rurban@cpan.org>
+
+	deocde: fix preR13 TABLE offsets
+	can read now again older files, partially
+
+	.gitignore: add bindings/gambas/
+	will be a submodule eventually
+	needs to be compiled in the gambas sourcetree, not here.
+	i.e. copy it over, not symlink.
+
+2020-06-06  Reini Urban  <rurban@cpan.org>
+
+	spec: fix whitespace
+	add comments of broken fields.
+
+	fix RTEXT.extrusion dxf detection.
+	lost the 210, needs to be on a seperate line.
+	Fixes a 5645c0ce00b120491c9bf6c771d3de87b119cb9d regression
+
+2020-06-05  Reini Urban  <rurban@cpan.org>
+
+	unit-testing: rm duplicate tests
+
+	spec: aesthetics
+
+	indxf: support point vectors, get array numfields
+	allocate and set point vectors generically.
+	only dxf 10-19
+
+	indxf: PLOTSETTINGS indentation only
+
+2020-06-05  Reini Urban  <rurban@cpan.org>
+
+	fix gen-dynapi for spec define _fields
+	copy the DXF and ENT fields over. got many missing dynapi DXF values.
+
+	improve EXTRUDEDSURFACE more (dxf vs dwg)
+
+2020-06-05  Reini Urban  <rurban@cpan.org>
+
+	spec: abstract common SweepOptions
+
+	more NULL ptr protections
+	failing with the new testcase LiveSection1.
+	NULL blk->name
+
+	add 2018/LiveSection1.dwg for livesection coverage
+	in the unit-tests
+
+	promote DETAILVIEWSTYLE to unstable
+	just indxf missing
+
+	spec: fix DETAILVIEWSTYLE
+	analog to SECTIONVIEWSTYLE
+
+	promote SECTIONVIEWSTYLE to unstable
+	indxf missing
+
+	spec: fix SECTIONVIEWSTYLE
+	looks stable, just indxf is missing.
+
+	SECTION_SETTINGS: promote to unstable
+	add to the unit-test
+
+	spec: more SECTION_SETTINGS
+	default hatch_pattern to SOLID (if empty)
+	add bit_set_T api to convert from ASCII to T.
+	fixup the unit test
+
+2020-06-04  Reini Urban  <rurban@cpan.org>
+
+	SECTION_SETTINGS refactor
+	multiple types and geometry settings in fact.
+	for all max 4 types, if activated (2d, 3d, and for both live on/off)
+
+2020-06-03  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix DIMASSOC crash
+
+	unit-testing: dont test DEBUG_CLASSES
+	to speed up asan testing mostly
+
+	SECTIONOBJECT: promote to stable
+
+	SECTION_MANAGER: promote to stable
+	fix and add DXF codes
+
+	encode: fix -Wmaybe-uninitialized warning
+
+	SECTIONOBJECT: fix alpha type, rename settings handle
+
+	ASSOCPERSSUBENTMANAGER: try the BL vectors
+
+2020-06-03  Reini Urban  <rurban@cpan.org>
+
+	api: move PERSUBENTMGR back to debugging
+	totally unstable. need to find out about CALL_SUBENTITY first
+
+	(dispatch_private via objects.inc-like list or a functable)
+
+2020-06-03  Reini Urban  <rurban@cpan.org>
+
+	spec: even more PERSUBENTMGR
+	this is a frozen repr of ASSOCPERSSUBENTMANAGER
+	with two BL vectors
+
+	spec: more PERSUBENTMGR
+	the last BL is an array of BL
+
+2020-06-02  Reini Urban  <rurban@cpan.org>
+
+	dxf: some DICTIONARY keys are always hard 360
+	ACAD_SORTENTS, ACAD_FILTER and SPATIAL are always hard.
+	also fix the RC hard_owner version checks, starts already with r13c3.
+
+	travis: 2x asan make check timeout (10 -> 20 min)
+
+	encode: add bit_chain_init_dat helper
+	to set opts and versions.
+	move fh to the end of the struct, used the least.
+
+	encode: refactor dwg_encode_eed, part 3
+	fix the flush logic a bit.
+	there are mult. data lines for each handle/size.
+
+	optimize bit_copy_chain
+	do memcpy on byte-aligned target.
+
+2020-06-01  Reini Urban  <rurban@cpan.org>
+
+	encode: refactor dwg_encode_eed, part 2
+	add bit_copy_chain.
+	remove size checks, we write the size at the end
+
+	encode: refactor dwg_encode_eed
+	on need_recalc split the out stream into two,
+	let _data return the size, and copy the 2nd data stream.
+
+2020-05-31  Reini Urban  <rurban@cpan.org>
+
+	travis: -fno-var-tracking for asan
+	it is expensive, maybe it helps
+
+	Revert "travis: try gcc for asan"
+	This reverts commit 96233ad611e752efa7efa24ece3a8039206e033e.
+	gcc 5.4 asan does not obey env ASAN_OPTIONS (indxf leaks)
+
+	bit_embed_TU_size: support UBSAN
+	and fix the len argument, which was offbyone
+
+	encode: convert EED strings
+	from/to unicode
+
+	free: fix in_json created_by leak
+	we dont currently store that string in the Dwg_Data struct.
+	gcc on travis detected that leak, my gcc 9.3 not (it's static
+	so not really a leak), travis clang neither.
+
+	travis: try gcc for asan
+	clang is extremely slow
+
+2020-05-30  Reini Urban  <rurban@cpan.org>
+
+	api: harmonize VIEW fields with VPORT/VIEWPORT
+	s,target,view_target,
+	s,center,VIEWCTR,
+	s,width,view_width,
+	s,height,VIEWSIZE,
+
+	harmonize entity VIEWPORT SNAPANG r2006 logic with
+	object VPORT
+
+2020-05-30  Reini Urban  <rurban@cpan.org>
+
+	api: even more VIEW/VIEWPORT changes
+	all the HEADER value overrides in its special *Active tables:
+
+	s,ucs_per_viewport,UCSVP
+	s,ucs_orthoview_type,UCSORTHOVIEW,
+	s,grid_spacing,GRIDUNIT,
+	s,snap_spacing,SNAPUNIT,
+	s,snap_angle,SNAPANG,
+	s,snap_base,SNAPBASE,
+	s,view_height,VIEWSIZE,
+
+2020-05-30  Reini Urban  <rurban@cpan.org>
+
+	api: more VIEW/VIEWPORT changes
+	s,view_direction,VIEWDIR,
+	s,view_center,VIEWCTR,
+	s,view_twist,twist_angle,
+	s,{front,back}_clip{,_dist},\1_clip_z,
+
+	also SPATIAL_FILTER.*_clip_z
+
+2020-05-30  Reini Urban  <rurban@cpan.org>
+
+	api: VPORT changes
+	check for R_2006/AC1020 just for VPORT.SNAPANG
+	only in this version VPORT is different.
+
+	rename VPORT.viewwidth to view_width
+	fixup the DXF order a bit.
+
+2020-05-29  Reini Urban  <rurban@cpan.org>
+
+	major api changes for UCS, VIEWPORT, VIEW
+	another mass rename, for consistency:
+
+	s,orthographic_view_type,ucs_orthoview_type,
+	s,ucs_ortho_view_type,ucs_orthoview_type,
+	s,ucs_orthografic_type,ucs_orthoview_type,
+	s,ucs_origin,ucsorg,
+	s,ucs_x_axis,ucsxdir,
+	s,ucs_y_axis,ucsydir,
+
+	VIEW.camera_plottable => VIEW.is_camera_plottable
+	{VIEW,UCS}.x_direction => ucsxdir
+	{VIEW,UCS}.x_direction => ucsxdir
+	{VIEW,UCS}.elevation => ucs_elevation
+
+2020-05-29  Reini Urban  <rurban@cpan.org>
+
+	spec: minor
+
+	dxf: sort LAYOUT dxf fields
+
+	dxf: XRECORD.cloning_flags 280 are optional
+
+	api: add two more versions, R_2_4 and R13c3
+	for which we have now DWGs.
+	encode: fix some wrong old header.dwg_version values (also see common.c)
+
+	logs-all.sh: add test/test-old files
+	with two nested dirs
+
+	spec: refactor VPORT_ENTITY_HEADER
+	thanks to the old dwgs
+
+	dxf: UCS some optional fields
+
+	spec: fix STYLE
+	no direct ttf_ fields, just in xdata.
+	might need some kind of xdata stream handler:
+	  FIELD_XDATA_CLASS ("ACAD", 1001)
+	  FIELD_XDATA (ttf_typeface, T, 1000)
+	  FIELD_XDATA (ttf_flags, RL, 1071)
+
+	add 2013/gh44-error.dwg for SPATIAL_FILTER coverage
+	otherwise it cannot be stable
+
+	spec: SPATIAL_INDEX is unstable
+	refactor
+
+	api: SPATIAL_FILTER changes
+	rename some fields.
+	add and fix unit-test
+
+	spec: improve SORTENTSTABLE
+	dxf has pairs of handles, not 2 vectors.
+	dwg seperates the two streams.
+
+	spec: simplify SCALE
+
+	travis: make check also times out with ASAN
+
+2020-05-28  Reini Urban  <rurban@cpan.org>
+
+	dxf: APPID simplify, use FIELD_RC0
+	undocumented, not in ODA, but as DXF 71 in the wild, for ADE_PROJECTION
+
+	injson: support embedded entity classes, not just subclasses
+	for PLOTSETTINGS, embedded into LAYOUT.
+
+	indxf: add generic subclass code
+	only used for LAYOUT.plotsettings for now, but is generic enough for
+	all subclasses.
+
+	embed PLOTSETTINGS into LAYOUT
+	it is the very same. promote PLOTSETTINGS to stable
+	remove PLOTSETTINGS.page_setup_name, it was a mixup.
+
+2020-05-27  Reini Urban  <rurban@cpan.org>
+
+	LAYOUT, PLOTSETTINGS: api changes
+	rename a lot of fields.
+	PLOTSETTINGS really is a parent of LAYOUT.
+
+	indxf: more derefered handles
+	like our layer handles, which are not read yet, if in DXF by name.
+	TODO: check VIEW, VIEWPORT handles.
+
+	LAYER: add visualstyle field r2013+
+
+	travis: asan times out again at unit-testing
+	add a unit-testing check-prep target
+	and add a seperate timeout for that.
+
+2020-05-26  Reini Urban  <rurban@cpan.org>
+
+	spec: promote CELLSTYLEMAP to stable
+
+	indxf: more add_CellStyle fields
+	CELLSTYLEMAP becomes now a stable candidate,
+	joining TABLEGEOMETRY
+
+	log: extend to test-old files
+	which are two dirs deep
+
+	indxf: use add_CellStyle for CELLSTYLEMAP
+	not for the other TABLE objects yet
+
+	spec: promote LAYERFILTER to stable
+
+	spec: promote LAYERFILTER to unstable
+	found an example
+
+2020-05-25  Reini Urban  <rurban@cpan.org>
+
+	GEODATA: promote to stable, add indxf code
+	indxf catched GEODATA before checking the dxf codes, so we can intercept
+	the arrays to allocate them. If not belonging to the 2 arrays, pass the pair
+	along to the generic search.
+
+	spec: more GEODATA improvements
+	2d points are generally 2RD, not 2BD.
+	looks stable now
+
+2020-05-24  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix MLINE segparms and areafillparms
+	make it independent on the order of the 72 and 73 DXF fields.
+
+	indxf: 4 more HATCH gradient fields
+
+	unit-testing: fix a visualstyle signedness
+
+	dynapi_test: skip wrong ovr.name test
+	ovr.name is not a known fields, we would need to test for
+	the subclass instead, as in the unit-test. so skip it.
+	crashes on travis, but not at home
+
+	MLEADERSTYLE fails dynapi_test
+	via decode class_version is 2, but via dynapi_test it is 0
+	on example_2018. The reason is that we picked up a wrong
+	./example_2018.dwg
+
+	spec: whitespace only
+
+2020-05-23  Reini Urban  <rurban@cpan.org>
+
+	DIMASSOC: minor changes
+	intsectobj[] is a H*. Still WIP.
+	Also fix json SUB_HANDLE_VECTOR
+
+2020-05-22  Reini Urban  <rurban@cpan.org>
+
+	make VISUALSTYLE.display_brightness_bl signed
+	apparently there is a double value of -50.0
+
+	VISUALSTYLE: fix ubsan error
+	-50 is outside the range of representable values of type unsigned int,
+	for the double->uint conversion of display_brightness
+
+	indxf: fix null deref, Out of memory checks
+
+	fix free for lt. union
+	since 1d2f5c7b5d3e1becc8b5b499632b6ef6cf0120ce
+	we follow both version branches, so the MLINESTYLE.lt.ltype union
+	has a wrong pointer, which crashes on free when following it.
+	seperate the values.
+
+	injson: add more Out of memory checks
+	facebook infer complains. also it found some dead assignments
+
+	bits: add more Out of memory checks
+	facebook infer complains. It is right
+
+	injson: refactor _set_struct_field
+	search keys at first, then process the result.
+	remove dead code now handled in _set_struct_field.
+
+2020-05-21  Reini Urban  <rurban@cpan.org>
+
+	injson: search all keys for valid embedded structs
+	not just the very first.
+
+	injson: trace the current subclass (name)
+	not just the key, ie fieldname.
+	the name is now also used for subclass field lookup for embedded structs,
+	so fixup the MLEADER subclass names also.
+
+	injson: skip wrong Out of memory error
+	when the binary string is just empty "".
+	also log add the name.key, esp for recursive subclasses.
+
+	json: fix FIELD_2RD_VECTOR indentation
+	e.g. clip_verts
+
+	.gitignore: vscode, more tests
+
+	dynapi: fix TABLESTYLE.ovr.name
+	ovr.name is an invalid C variable name. use ovr_name instead.
+
+	spec: add SUB_FIELD_HANDLE0 for TABLE.cell.text_style
+	optional handle 344
+
+	injson: support primitive inlined structs
+	as CellStyle, MATERIAL_color and such.
+	When the key was not found, check for the . and recurse into the remainder.
+
+2020-05-20  Reini Urban  <rurban@cpan.org>
+
+	TABLE unit-test fixups
+
+	TABLE_value fixups
+
+	spec: TABLE_AttrDef*
+
+	spec: more work on TABLE. add SUB_FIELD_CAST
+
+2020-05-19  Reini Urban  <rurban@cpan.org>
+
+	TABLECONTENT: more dxf markers
+	and one more truecolor field: indicator_color
+
+	ditto CMTC for TABLESTYLE <r2004
+
+	support <r2004 CELLSTYLEMAP/... FIELD_CMTC
+	Support truecolor colors also earlier, as they appear as such
+	in CellStyle.
+
+	free: fix more TABLESTYLE leaks on dwgrewrite downconverts
+	override all version check macros, not just SINCE.
+	This is now a proper general solution.
+
+	SCALE: no unknown_bits, it is stable
+
+	TABLESTYLE: use hex format for flags
+
+	injson: support more cellstyle subclasses
+	for now special-cased cellstyle
+
+	CellStyle: add unit-testing in TABLESTYLE
+
+	CellStyle: more fixes, start in_dxf
+	start with in_dxf support. yet unused.
+
+	TABLESTYLE: revert debugging
+
+2020-05-18  Reini Urban  <rurban@cpan.org>
+
+	move TABLESTYLE back to debugging
+	r2010+ is wrong still
+
+	TABLESTYLE: add overrides r2010+
+	just an idea, but fixes the leaks
+
+	injson: improve json_binary
+	no extra str allocation, no unicode quote detection and conversion
+
+	injson: please valgrind
+	Uninitialized memory in stack strings.
+
+	comments only
+
+	json: strip key[rcount*] from CMC
+	CELLSTYLEMAP.cells[rcount1].cellstyle.bg_color
+
+	CELLSTYLEMAP: enable, promote to unstable
+
+2020-05-16  Reini Urban  <rurban@cpan.org>
+
+	TABLESTYLE: more 2010 work
+	and rename some more fields
+
+	api: rename some TABLESTYLE structs
+	more according to the DXF subclasses.
+	TABLESTYLE_Cell => TABLESTYLE_CellStyle
+	BorderStyle => GridFormat
+
+	spec: TABLESTYLE, merge with CELLSTYLEMAP
+	support for r2007+, add sty.cellstyle
+
+	unknown: regen with B::cstring quote
+	for illegal strings in the C .inc files, caused by foreign encodings
+	(ANSI_1251 e.g.). We'd really need to decode these properly.
+
+2020-05-15  Reini Urban  <rurban@cpan.org>
+
+	api: add R_1_3 version
+	see the file magic database
+
+	spec: fix MLEADERSTYLE.class_version 2
+	no extra is_new_format field, just class_version 1 (not in DWG) or 2.
+	it is the code 70 value from EED ACAD_MLEADERVER.
+	One new fields text_angle_type is class_version 2 only
+
+	dynapi_test_all.sh: fix test-data dir
+
+2020-05-15  Michal Josef Špaček  <michal.josef.spacek@gmail.com>
+
+	Fix 1.4 version
+	DWG magic for this version is "AC1.40", not "AC1.4".
+
+2020-05-14  Reini Urban  <rurban@cpan.org>
+
+	configure: missed a comma
+	broken with -fno-common
+
+	spec: normalize_BE HATCH.extrusion.z
+	and for indxf LWPOLYLINE.extrusion
+
+2020-05-14  Reini Urban  <rurban@cpan.org>
+
+	spec: work on HATCH
+	rename some fields:
+	type_status => curve_type
+	solid_fill => is_solid_fill
+	annotative => is_annotative
+
+	the bitvalues of HATCH.paths.flag
+
+2020-05-14  Reini Urban  <rurban@cpan.org>
+
+	bits: normalize extrusion.z, fix write_BT for <=R_14
+	the extrusion vector needs to be normalized.
+	early thickness has no B (default bit)
+
+	extend 3DSOLID unit-tests
+
+	spec: 3DSOLID.wires.color is BL r2004* not BS
+
+	spec: add 3DSOLID r2013+ revision guid
+	in DXF as 2 {} guid
+	in DWG as BL, BS, BS and TFFx 8
+
+2020-05-13  Reini Urban  <rurban@cpan.org>
+
+	spec: add 3DSOLID r2007+ materials
+
+	dxf-check: MULTILEADER is now stable
+
+2020-05-13  Reini Urban  <rurban@cpan.org>
+
+	unit-testing: final manual CHK_ fixups
+	api: rename all insertion_point to insertion_pt, also
+	TABLE fields and dwg_api funcs.
+
+	rename all dwg_api 3DSOLID num_isolines functions to isolines
+
+2020-05-13  Reini Urban  <rurban@cpan.org>
+
+	unit-testing: simplify CHK_ENTITY_H and 23RD
+	perl -i -p -e's/CHK_(.+), (\w+), \2\);/CHK_\1, \2);/' test/unit-testing/*.c
+
+	unit-testing: simplify CHK_ENTITY_TYPE
+	perl has backtracking regexp, elisp not.
+	perl -i -p -e's/CHK_(.+), (\w+), ([A-Z0-3]+), \2\);/CHK_\1, \2, \3);/' test/unit-testing/*.c
+
+	unit-testing: simplify CHK macros
+	dedup the value arg
+
+	DIMENSION_ANG2LN: fix def_pt
+	keep the type as 3BD, but read/write only 2D.
+	Just json (and dxf) needs the real type. DXF with z.
+
+	dxf_test: ARC_DIMENSION fixes
+	wrong names in the .inc file
+
+	ditto for DIMENSION_ANG2LN
+	merge arc_def_pt with def_pt
+
+2020-05-12  Reini Urban  <rurban@cpan.org>
+
+	ARC_DIMENSION: merge arc_pt with def_pt 10
+	only use the default name
+
+	spec: promote MULTILEADER to stable
+
+	spec: stabilize MULTILEADER
+	wrong arrowheads.is_default type
+	rename attach_type to text_aligment, the prev. text_alignment is the angletype
+
+	indxf: rename cur_vstyle var to prev_vstyle
+
+	unit-tests: add SINCE/PRE version macros
+	some versions have wider types
+
+	spec: promote VISUALSTYLE to stable
+
+2020-05-11  Reini Urban  <rurban@cpan.org>
+
+	indxf: support r2010+ VISUALSTYLE group 176 fields
+
+	Revert "spec: remove LAYER_TABLE_FLAGS special-case"
+	This reverts commit a51939c7bba5d91f8f1f724845b800f7bee94a8c.
+
+	unit-testing: RS flag
+	use RC instead (the layer exception)
+
+2020-05-11  Reini Urban  <rurban@cpan.org>
+
+	spec: VISUALSTYLE r2013+ support
+	rename some fields (again)
+	flip some wrong fields
+
+	add r2013+ version 3 layout with its 58 props
+	(yet unknown field names)
+
+2020-05-11  Reini Urban  <rurban@cpan.org>
+
+	spec: MLEADERSTYLE add r2013+
+	and rename some B fields
+
+	spec: add FCFOBJECTCONTEXTDATA
+	debugging
+
+2020-05-10  Reini Urban  <rurban@cpan.org>
+
+	api: rename DIMENSION_ANG3PT.first_arc_pt to center_pt
+
+	bits: fix TIMEBLL julian fraction
+	calculation. it's millisecs since midnight, not secs.
+
+	api: rename LAYER_INDEX.timestamp to last_updated
+	it is a cache
+
+	indxf: add TIMEBLL support
+	for LAYER_INDEX.timestamp
+
+	spec: re-add LAYER_INDEX.timestamp
+	reverts 39ff601a7b261eb74182b04255802e56bd82c41a
+	add LAYER_entry support to indxf.
+
+	indxf: change to DIMENSION_LINEAR on 50 also
+	dim_rotation has the subclass marker after 50, not before.
+
+	outdxf: bulges are optional
+	fix assert
+
+	spec: promote VBA_PROJECT from debugging to stable
+	2 fields only
+
+	write2004: limit compression to MIN_COMPRESSED_SECTION size of 19
+	and assert it. switch the compressed flag before.
+
+	write2004: more compress_R2004_section work
+	more work on it, the lz77-like encoder.
+	the reverse part of the decompressor.
+	enable now all functions.
+
+2020-05-09  Reini Urban  <rurban@cpan.org>
+
+	free: fix CMC double-free from injson
+	CMC was static there, keeping the previous name/book_names
+	pointers.
+
+	encode: trace SUB_FIELD_CMC values
+
+	dxfb: add optional BL0, ... variants
+
+	dxf: add FIELD_T0
+	optional text, only print to DXF if not empty
+
+	free: fix TABLESTYLE leaks
+
+2020-05-09  Reini Urban  <rurban@cpan.org>
+
+	CMC: improve in_dxf and in_json
+	detect book_name from $, otherwise set only the name,
+	plus its proper flag.
+
+	TODO alpha/alpha_type only for ENC.
+	Maybe seperate CMC from ENC (different flag, alpha)
+
+2020-05-09  Reini Urban  <rurban@cpan.org>
+
+	CMC: fixup color.index by palette lookup
+	needed for DXF. for the DWG we need to write 0 as index for
+	truecolors
+
+	CMC: better diagnostics
+	print dwg_color_method_name of the known methods
+
+	bit_read_CMC: add more snaity checks
+	fixup invalid method, invalid flag
+
+	actions: add more _private functions
+	with the end goal to also call free on them
+
+	gcc10: add -fno-common explicitly
+	we are safe due to windows compat already.
+	but for older compilers ensure it.
+
+	spec: more DIMASSOC_Ref work
+
+	TABLESTYLE r2010+ support
+
+	spec: avoid -Wduplicate-branches warning
+	on non-dxf actions both bodies are empty, leading to this warning.
+
+	regen-unknown
+	with updated field names
+
+2020-05-09  Reini Urban  <rurban@cpan.org>
+
+	api: rename ext_line_rotation and _13,14_pt
+	in TEXT,ATTDEF,ATTRIB,STYLE
+	and DIMENSION_ALIGNED, DIMENSION_LINEAR, DIMENSION_ANG3PT
+
+	oblique => oblique_angle
+	oblique_ang => oblique_angle
+	ext_line_rotation => oblique_angle
+	_13_pt => xline1_pt
+	_14_pt => xline2_pt
+
+2020-05-08  Reini Urban  <rurban@cpan.org>
+
+	spec: use calling _private: GEOPOSITIONMARKER -> MTEXT
+	and some more.
+	fix DIMASSOC spec types.
+	more GEOMPOSITIONMARKER fixes.
+	add unhandled COMPOUNDOBJECT.
+
+2020-05-07  Reini Urban  <rurban@cpan.org>
+
+	spec: DATATABLE spec
+	WIP. roughly, but looks good.
+
+	spec: use callable subclass for MAT_TEXTURE
+	WIP
+
+	spec: callable subclasses
+	embed the calling of subclasses into a function wrapper,
+	so that it can call itself or others.
+	needed for recursive procedural MATERIAL.MAT_TEXTURE calls.
+
+	2004: fix some -Wnull-dereference in encode
+	detected by the new gcc with -O2
+
+	dxf: improve CMC truecolors
+	always set method 0xc2 when reading rgb 420.
+	allow a hypothetical truecolor DIMSTYLE.DIMTFILL.
+	don't write non 0xc2 truecolors with DXF, just the index 62.
+	fix in_json leaks, we do assign the color names now.
+
+	dxf: CMC.color optional
+	esp. to skip DIMSTYLE.DIMTFILL 428 0 and such.
+	TODO: with method c2 we should emit truecolor black nevertheless
+
+2020-05-07  Reini Urban  <rurban@cpan.org>
+
+	dxf: const some read-only args
+	add const dwg to common_entity_handle_data.spec
+	const the dxf ent and _obj args for the common_entity_*data.spec
+	output must not change the objects.
+
+	protect those write areas with ifdef's, DECODER {} is not good enough.
+	the compiler shouts, rightfully so.
+
+2020-05-07  Reini Urban  <rurban@cpan.org>
+
+	dxf: oops, enforce -y
+	we rather ignored it
+
+	dxf.test: fix roundtrip tests
+	skip all unstable entities
+
+	dxf.test: improve check_subentity diagnostics
+	when the hardowner 330 value changed, display it with the code, not
+	just the changed value. otherwise we won't know which field changed.
+
+	spec: add BLOCKVISIBILITYGRIP
+	move BLOCKGRIPLOCATIONCOMPONENT to debugging
+	I am having a rough idea
+
+	fixup debugging unit-tests
+
+2020-05-07  Reini Urban  <rurban@cpan.org>
+
+	spec: add BLOCKVISIBILITYPARAMETER and friends
+	BLOCKVISIBILITYPARAMETER as debugging,
+
+	BLOCKGRIPLOCATIONCOMPONENT, VISIBILITYGRIPENTITY, VISIBILITYPARAMETERENTITY
+	unhandled.
+
+2020-05-07  Reini Urban  <rurban@cpan.org>
+
+	spec: improve DIMENSION_ANG2LN
+	fix the spec
+	rename pt fields (not in the old dwg_api)
+
+	spec: more DATALINK fields
+
+	examples: update unstable.pm status
+
+	ARC_DIMENSION: promote to unstable
+	fields do look good now
+
+	spec: add ARC_DIMENSION
+	still debugging
+
+	encode: improve add_LibreDWG_APPID error handling
+
+	spec: DBCOLOR
+	is just a normal CMC color
+
+	spec: BLKREFOBJECTCONTEXTDATA
+
+	spec: more permissive CMC colors
+
+2020-05-07  Reini Urban  <rurban@cpan.org>
+
+	spec: rewrite CMC colors
+	the first byte of the rgb is some method/flag.
+	0xc0 for ByLayer
+	0xc2 for entities, with names with an additional name flag RC,
+	0xc3 for truecolor, 0xc5 for foreground color, ...
+
+	fix DWG and DXF methods.
+	the 2nd dxf2 is not needed, it is always the same offset from 420.
+
+2020-05-05  Reini Urban  <rurban@cpan.org>
+
+	injson: fix wrong overflow at very last json_binary
+	padding in AcDs
+
+	spec: add CELLSTYLE dxf hints
+	and fix some logic. some structs are optional.
+
+	dynapi: fix set CMC <r2004
+	when writing a CMC color <r2004 we are only writing the color.index, which is a BS.
+	not the whole struct.
+
+	injson: support embedded structs (TABLESTYLE.data_rowstyle)
+
+	injson: minor embedded struct optim
+	dont call strchr twice
+
+	alive.test: shorter log names
+	strip the dwg2 and dwg prefix
+
+	alive.test: add --as=rNNNN tests
+	for the new experimental write2004 feature.
+	still disabled.
+
+2020-05-05  Reini Urban  <rurban@cpan.org>
+
+	injson: improve overflow error handling
+	dont return, provide label targets
+
+	so we can fix dwg->num_objects, to strip later objects, but keep the good ones.
+	excess objects lead to invalid Handleoffset 0, sorted to the front,
+	leading to early dwgread errors.
+
+2020-05-05  Reini Urban  <rurban@cpan.org>
+
+	decode r2010+: avoid bogus bit_advance_position warnings
+	when we have no strings, and set the size to 0
+
+	first advance and then restrict
+
+2020-05-05  Reini Urban  <rurban@cpan.org>
+
+	spec: change COMMON_TABLE xref layout
+	for r2007+. cross-tested with examples which do import xrefs.
+	a major change.
+
+	UCS: add orthopts
+	undocumented, but in DXF and DWG
+
+	api,spec: rename xref COMMON_TABLE_FLAGS, null_handle => xref
+	rename SymbolTableRecord with xref
+	  xrefref => is_xref_ref
+	  xrefindex_plus1 => is_xref_resolved
+	  xrefdep => is_xref_dep
+	  extref and null_handle => xref
+
+	spec: remove LAYER_TABLE_FLAGS special-case
+	which is only relevant pre-r13 also
+
+	spec: cosmetics
+
+	api: rename OBJECT.xdic_missing_flag to is_xdic_missing
+
+	get_bmp: there is a 3rd PNG type
+	TODO: dwgbmp: add a flag to extract WMF and PNG
+
+2020-05-05  Reini Urban  <rurban@cpan.org>
+
+	API: rename most fields in STYLE, add 2 new
+	rename fixed_height to text_size.
+	*font_name to font_file. (it includes the extension)
+	shape_file to is_shape (SHX)
+	vertical to is_vertical
+
+	add 2 BL fields; ttf_flags, typeface
+
+2020-05-05  Reini Urban  <rurban@cpan.org>
+
+	promote MATERIAL back to unstable
+	importers are missing
+
+	fixup layer_index.c unit-test
+
+	fixup ATEXT.color_index => color
+
+	dxf: skip if 0: BL0, BD0
+
+	injson: ignore MATERIAL.num_transmatrix error
+	it does not exist
+
+2020-05-02  Reini Urban  <rurban@cpan.org>
+
+	MATERIAL: use structs
+	for color, mapper and textures.
+	This works now fine for all <r2007 materials.
+	TODO: gen-dynapi and importers
+
+	more MATERAL work
+
+	spec: improve MATERIAL
+	with some fieldname changes
+
+	improve VISUALSTYLE
+	refactor the versions, it became too complicated. esp. with DXF mixed around.
+	fixed the pre2010 instabilities.
+
+	VISUALSTYLE: error on wrong edge_crease_angle
+	before we skipped that without DEBUG_CLASSES, but
+	now we are confident to have it fixed soon.
+	The wrong edge_color.name leaked
+
+	injson: fix wrong invalid R2004_Header.file_ID_string error
+
+	spec: start work on ASSOCACTION
+	dependent on class_version 1 or 2 (r2013+)
+
+	spec: fixup LAYER_INDEX
+	remove the fantasy timestamp fields
+
+	fixup SUN
+
+	api: finish text_string rename
+
+2020-05-02  Reini Urban  <rurban@cpan.org>
+
+	add RTEXT
+	also expresstools ent, DEBUGGING so far,
+	but looks ok
+
+	also change TOLERANCE.text_string and TABLE_Cell.text_string to text_value.
+
+2020-05-01  Reini Urban  <rurban@cpan.org>
+
+	finish ATEXT, promote to debugging
+	the fields do look ok
+
+	spec: start with ATEXT WIP
+
+	spec: improve GEODATA, LIGHT
+	clean up GEODATA a bit.
+	enable PhotoMetric LIGHT (web IES specs)
+	abstract OBJECTCONTEXTDATA and ANNOTSCALEOBJECTCONTEXTDATA subclasses.
+
+	spec: fixup PLOTSETTINGS
+	some type changes. esp. 2 handles are text.
+	rename PLOTSETTINGS.plot_layout to flags (i.e. a bitmask)
+
+	add RENDERENTRY and unhandled BACKGROUND
+	I know the various BACKGROUND types, but not yet
+	how to select them
+
+	fix CURVEPATH, add POINTPATH
+
+	promote the 3 *RENDERSETTINGS to unstable
+	found most field names, fix the remaining type withs.
+
+	SUN: now unstable
+	add CURVEPATH object
+	minor VISYALSTYLE type improvements
+
+2020-05-01  Reini Urban  <rurban@cpan.org>
+
+	api: rename dwg_find_dicthandle
+	it really does something else. rename to dwg_find_dicthandle_objname
+	improve dwg_variable_dict to use the new dwg_find_dicthandle,
+	finding a dicthandle by name.
+
+	add unused wcs2cmp to compare two wcs2 strings.
+	cache the value of LIGHTINGUNITS for the LIGHTS.is_photometric check
+
+2020-05-01  Reini Urban  <rurban@cpan.org>
+
+	spec: fixup LIGHT, LIGHTLIST, 3DSOLID, add 3 more
+	add MOTIONPATH, RENDERSETTINGS and TVDEVICEPROPERTIES halfway debugging.
+	rename has_ds_binary_data to has_ds_data.
+	simplify LAYER_INDEX, add handle to struct.
+
+	add str_dat to CMC color, WIP
+
+2020-04-27  Reini Urban  <rurban@cpan.org>
+
+	LIGHTLIST: promote to unstable
+
+	LIGHTLIST: use a struct
+
+	LIGHTSLIST: the text-handle vector
+	but it really is a DICTIONARY
+
+	add NURBSURFACE entity DEBUGGING only
+	no coverage
+
+2020-04-25  Reini Urban  <rurban@cpan.org>
+
+	write2004: more compression work
+	fix write_long_compression_offset
+
+	write2004: move R2004_Header to last
+	we need to set some values, and it is encrypted.
+
+	write2004: set System Map section[].address
+
+2020-04-25  Reini Urban  <rurban@cpan.org>
+
+	write2004: needed to add section_info_rebuild
+	when we invalidate all info->sections pointers by realloc
+
+	Delete duplicate "empty R2004 slack" and unneeded
+	Unknown Section 128-256: it is the encrypted R2004_Header section.
+
+2020-04-25  Reini Urban  <rurban@cpan.org>
+
+	write2004: rename back to SECTION_UNKNOWN
+	fix SECTION_INFO SECTION_SYSTEM_MAP order, we missed SECTION_INFO.
+	Init both. Reformat
+	fixup the r2044_header info_id and map_id indices. we already added
+	those to the sections.
+
+	UNKNOWN[0] is compressed, not encrypted.
+
+2020-04-24  Reini Urban  <rurban@cpan.org>
+
+	write2004: write info and system_map sections before.
+	Also into temp sec_dat buffers. They are compressed.
+	Handle them as all other sections, so move some code around.
+
+	write2004: add more type checks
+
+	write2004: pre-alloc sections and info
+	info->num_sections is easily calculated.
+	so there is no need for realloc in the loop
+
+	write2004: cleanup the sections a bit
+	wrong types, indices.
+	init sections before, analog to r2000
+
+2020-04-23  Reini Urban  <rurban@cpan.org>
+
+	bits: much smaller initial dat sizes
+	from file or stream we set it in d*_read_file/stream already.
+	for encode we mostly have small streams and only one big one.
+
+	write2004: re-sort the sections
+	EMPTY is now at 0 (as in the stream).
+	type the sections to catch evtl. missing ones.
+
+	writes2004: encrypt the sections
+	as we already do with the R2004_Header.
+
+	write2004: sort the section maps
+	They have another sort order. Not by type, and not by stream order.
+
+	api: rename FILEHEADER.rl_28_80 to r2004_header_address
+	and dump some empty slack bytes for verification
+
+	write2004: the section info map
+	WIP
+
+	move section_max_decomp_size to decode
+	decode_test complains, as usual
+
+	write2004: start with compress_R2004_section
+	a simple LZ77 variant
+
+	write2004: start writing the sections
+	in stream_order. WIP
+
+	decode: fix wrong Skip section %s with max decompression size
+	with 2007-2010 Preview eg.
+
+	write2004: add more section map helpers
+	dwg_section_name (dwg, id)
+	_max_decomp_size (which is version specific)
+	section_compressed
+
+	write2004: work on compress_R2004_section
+	wrote 2 of 3 write helpers, the reverse of the read funcs
+
+	HATCH comments for type_status/edge_type
+
+2020-04-21  Reini Urban  <rurban@cpan.org>
+
+	write2004: disable some wrong asserts
+	r2004 starts writing with fresh streams.
+
+	write2004: add bit_chain_set_version
+	initialize the section streams. did have dat->version R_INVALID
+
+	write2004: write Section Page Map at last
+	WIP
+
+	write2004: init the sections
+
+	bits: add missing bit_write_TU?{16,32} funcs
+	for the additional sections
+
+	encode the r2004 sections WIP
+
+	dwgrewrite: keep reading partially written files
+	when using --as=r2004 and failing with SECTIONNOTFOUND in encode,
+	i.e. halfway written files in the write2004 work
+
+	rw: support --as=r2004
+	as the others. here we actually need it.
+
+	write2004: add uncompressed compress_R2004_section (unused)
+	we'll leave compression to later
+
+2020-04-21  Reini Urban  <rurban@cpan.org>
+
+	r2004_header: revert field_ID_string back to string
+	part of 9169fae084413a28b535b0477c0e7e4aabf18e8f
+	strings are easier to check than hex.
+
+	encode the system sections map (no info yet)
+
+2020-04-21  Reini Urban  <rurban@cpan.org>
+
+	dwg_bmp: fix overwriting into r2004_header
+	setting thumbnail->version wrote into the next struct r2004_header.
+	A thumbnail was only a dwg.h Dwg_Chain without those Bit_Chain version
+	fields.
+	Change dwg_bmp to copy the contents of thumbnail into a proper Bit_Chain,
+	without destructive sideffects.
+
+	This really fixes the problems encountered in the previous commit.
+
+2020-04-21  Reini Urban  <rurban@cpan.org>
+
+	r2004_header: change file_ID_string and padding to binary
+	avoid \uxxxx encoding issues with fixed size buffers.
+
+	write2004: simplify dwg->r2004_header access
+
+2020-04-20  Reini Urban  <rurban@cpan.org>
+
+	ename R2004_Header.num_ fields
+	injson skips num_, so rename them to num
+
+	extract Dwg_R2004_Header for pack(1)
+
+	clang -Wdouble-promotion
+
+	dwg.in: enable --as=r2004
+	to test encode as r2004. analog to dxf
+
+	check r2004_file_header encryption error
+	against known AcFssFcA file_ID_string
+
+2020-04-20  Reini Urban  <rurban@cpan.org>
+
+	share and simplify decrypt_R2004_header
+	its symetric, so can be reused for encode also.
+
+	add a pack(1) to the struct Dwg_R2004_Header, analog to eed.
+	it is easier to caclculate the crc32 this way. No need to write
+	the R2004 File Header temporarily.
+
+2020-04-20  Reini Urban  <rurban@cpan.org>
+
+	encode: fix r2004 File Header crc32
+	calculation. wrong algo, wrong size.
+	also log the encrypted header, to check the encyption encoder.
+	looks right, as it's only xor with some one-time pad.
+
+	write2004: encrypt r2004_file_header
+
+	dwg_section_page_checksum implemented
+	calculated section_checksum seed/offset/size
+	by brute-force.
+
+	WIP dwg_section_page_checksum
+
+	add r2004_file_header.crc32 check (TODO)
+
+	move dwg_section_page_checksum to decode
+	testcases/decode_test failed with clang
+
+	section: add dwg_section_page_checksum check
+	for the first r2004_header.checksum, according to ODA p.27
+	Section page checksum of the System section page.
+	TODO
+
+	windows: move exported functions from common to dwg
+	public functions need to be public, not private, esp. for windows.
+	the problem is mostly decode_test, including common.lo for some private
+	functions, clashing with these ones.
+
+2020-04-19  Reini Urban  <rurban@cpan.org>
+
+	api: remove unused header.is_tu
+	we encode everything to TU on version >= r2007+ now
+
+	doc: 2007 EED string
+	has no codepage.
+
+	more programs documentation
+
+	export dwg_version_type
+	useful for all sort of helpers
+
+	dwg.c: resolve refs in iterators
+	not always do we have ref->obj, eg. on in_dxf or in_json
+
+	out_dxf: handle class T types
+
+	dxf.in:  handle non-dwg extensions
+	thats why we have dxfwrite
+
+	in_dxf: handle class T types
+
+	encode: handle class T types
+	dxfname is always there though
+
+	injson: more wstring cases
+	classes, eed (WIP).
+
+	fixup version handling
+	See GH #230.
+	So far we only targetted DWG r2000, but we also need to write DXF,
+	and there we can create all versions.
+	So remove various hardcoded version = R_2000 assignments,
+	and handle the from_version/version when reading it from the FILEHEADER
+	(dwg, dxf, json).
+	json has json_wstring, but use it consistently: classes, xdata, eed.
+
+	dwg_block_control: create dwg->block_control copy
+	if not existing. E.g. when importing from JSON
+	and exporting to DXF.
+
+	dxfwrite: simplify
+
+	injson: less unneeded overflow checks
+	esp. it errored on the very last FIELD_RL zero_8
+
+2020-04-19  Reini Urban  <rurban@cpan.org>
+
+	add programs dxfwrite
+	create DXF from DWG, JSON or other DXF (or binary).
+	Highly experimental.
+
+	I wanted to create debugging SECTIONOBJECT's and such
+	by myself easier, via JSON and then to DXF. Needs some work still.
+
+2020-04-19  Reini Urban  <rurban@cpan.org>
+
+	dxf.in: enhance to more input formats
+	not just dwg. also json, dxf, dxfb.
+	analog to the dwg helper.
+
+	on intermediate dwg format we need to pass --as=rxxxx
+
+2020-04-17  Reini Urban  <rurban@cpan.org>
+
+	encode: enhance more OVERFLOW_CHECKs
+	on array <-> size mismatches
+
+	MESH: 3DPOINT* is handled by in_json
+	3BD* not.
+	the vertex numfield was num_owned, special-case that.
+	Fix encode OVERFLOW_NULL_CHECK_LV for empty array
+	only error when the num_field was not empty. Emoty 3DPOINT
+	arrays are allowed.
+
+	promote MESH to stable
+	enabling it as DXF entity
+	all dxf_test's pass
+
+	MESH: promote to unstable
+	works for all my examples, and simple enough.
+
+	decode: fix FIELD_3DPOINT_VECTOR for 0 points
+	0 point vectors are valid
+
+	spec: fix some COMMON_3DSOLID parent warnings
+	cast to the base parent type.
+	for now only with -DDEBUG_CLASSES with the *SURFACE subtypes
+
+	MESH: fix some types
+
+	test-dxf.sh: adjust for one-level outoftree builddir
+
+	tail -n2 log in helpers
+	harmonize dwgread with dwgwrite to display the error status lines
+	at the very end, not before free. Let the helpers display it.
+
+2020-04-16  Reini Urban  <rurban@cpan.org>
+
+	injson: reject old json format for DICTIONARY
+	it is too much of a hassle to synch both arrays.
+	most fuzzing errors and crashes are only because of this.
+
+	json: simplify DICTIONARY.items map
+	See GH #228
+
+	indxf: fixup DIMSTYLE.flag and
+	similar for LWPOLYLINE and VPORT_ENTITY_HEADER.
+	The other LWPOLYLINE.flag settings are done in new_LWPOLYLINE.
+
+	json,dxf: enhance timeout to 30s
+	testing larger drawings
+
+	rename PLOTSETTINGS.shade_plot_id to shadeplot
+	DEBUGGING only
+
+2020-04-16  Reini Urban  <rurban@cpan.org>
+
+	add missing VIEWPORT handles
+	detected by cmp-objs.pl
+
+	add more in_dxf handle codes to write if different to a soft
+	pointer 5.
+
+2020-04-15  Reini Urban  <rurban@cpan.org>
+
+	encode: don't recalc bitsize for UNKNOWN bits
+	even for INJSON. We rather dump the unknown_bits asis.
+
+	MLEADRSTYLE: preserve is_new_format for indxf and json
+	fixes MLEADERSTYLE dxf errors.
+
+	formatting
+
+	unit-testing: skip next_entity traversal
+	got broken somehow, looping
+
+	stabilize VPORT_ENTITY_HEADER
+	2000/plan.dwg e.g. had an viewports overflow.
+	check for it beforehand.
+
+	bits: improve wcs2* for ubsan and HAVE_ALIGNED_ACCESS_REQUIRED
+	even if such processors don't exist anymore. ubsan is too picky.
+
+	bits: improve wcs2* for NATIVE_WCHAR2 (Windows)
+	where we can use the native libc.
+
+2020-04-15  Reini Urban  <rurban@cpan.org>
+
+	spec: change VPORT_ENTITY_HEADER.viewport to H* viewports
+	we have a null-delimited list (delim by 5.0.0).
+
+	This is still not binary eq as the original. The original stores
+	5.0.0 asis, we store it now as NULL HDL. But Teigha does the same.
+
+2020-04-15  Reini Urban  <rurban@cpan.org>
+
+	spec: rename VPORT_ENTITY_HEADER.vport_entity to .viewport
+	it links to a VIEWPORT entity afterall
+
+	spec: add extref to VPORT_ENTITY_HEADER
+
+	fix dxf and dxfb 3dsolid also
+	analog to encode and json in 9f45b00f08f03eae4844ac2847bff279c5ef05c4
+
+	fix encode and injson 3dsolid
+	we forgot to write the last block_size[1] of 0.
+	Abstract COMMON_3DSOLID, which was missing for all actions but decode and free.
+
+	json: rename 3DSOLID.num_isolines to isolines
+	it is not a REPEAT counter, it needs to be preserved in json.
+	it looks like it is calculated from the acis_data. TODO DXF
+
+2020-04-14  Reini Urban  <rurban@cpan.org>
+
+	spec: found subclass for VPORT_ENTITY, VX it is
+	relevant only for out_dxf
+
+2020-04-14  Reini Urban  <rurban@cpan.org>
+
+	fix bit_read_RC and bit_advance_position overflow checks
+	when reading the very last byte of a stream, as e.g. in LTYPE.extref
+	it incorrectly and silently returned 0, where it should be allowed
+	to set the new position at the very end. Just subsequent reads should fail.
+
+	Fixes the LTYPE import error from #225, detected with the new
+	cmp-objs.pl
+	No fuzzer regressions.
+
+2020-04-14  Reini Urban  <rurban@cpan.org>
+
+	json: fix xdicobjhandle, reactors for CONTROL objects
+
+	add cmp-objs.pl: compare binaries via xxd
+	check all binary differences of all objects,
+	from the original logfile to the created logfile.
+	e.g. after dxf-check or json-check
+
+2020-04-13  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix 1002 and 1000 EED codes
+	1002 is either { or }
+	1000 needs to check if TU
+
+2020-04-13  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix LTYPE.dashes.text 9 types
+	pointing into the strings_area for the text to be repeated.
+
+	Also avoid NULL text fields to be printed as "(null)".
+
+2020-04-13  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix LTYPE order for 40 and dashes
+
+	api: rename dwg_add_OBJECT to dwg_setup_OBJECT
+	and setup its type if static. The variable type from the class
+	is currently setup seperately. See dwg_encode_get_class
+
+2020-04-13  Reini Urban  <rurban@cpan.org>
+
+	encode: fix UNKNOWN_OBJ hdlpos
+	certain versions (json 2000, dwg 2000) do write the UNKNOWN_OBJ
+	asis. ensure that we don't write the comon handles twice.
+	See DWG_OBJECT_END
+
+	Also ensure that UNKNOWN_ENT doesn't overwrite a good bitsize.
+
+2020-04-13  Reini Urban  <rurban@cpan.org>
+
+	dwg: only one env ASAN_OPTIONS=detect_leaks=0
+	if you convert many DXFs
+
+	more encode_unknown_as_dummy fixups
+	set_handle_size of the generated APPID
+	fix free problems by improving the dwg_add_OBJECT API
+	accounting for imported objects (INJSON, INDXF)
+
+2020-04-12  Reini Urban  <rurban@cpan.org>
+
+	encode: refactor ENCODE_UNKNOWN_AS_DUMMY, do it upfront
+	because we need to change APPID_CONTROL, which was already
+	written by then.
+	We also fixup the NOD earlier, before we have written anything.
+
+	encode: use PLACEHOLDER if exists for UNKNOWN_OBJ
+	and prepare APPID.LibreDWG (not yet enabled)
+
+	DIMSTYLE: rename extref_handle to extref
+	for consistency
+
+2020-04-12  Reini Urban  <rurban@cpan.org>
+
+	encode LTYPE: fix ownerhandle, xdicobjhandle. obj_flush_hdlstream
+	1st problem was in the Flush handle stream logic.
+	We need to save first the COMMON handles, like ownerhandle, ...
+	and then afterwards the accumulated hdl_dat special handles.
+
+	2nd problems was that we didn't reset the hdl stream to write into dat.
+
+	Fixes the LTYPE part of GH #225
+
+	Also fix the bitsize calc logging to be relative to obj.
+
+2020-04-12  Reini Urban  <rurban@cpan.org>
+
+	LTYPE: rename and move extref_handle
+	with dashes.style extref needs to be before.
+	There are still some unhandled non-bull bytes at the end
+
+2020-04-11  Reini Urban  <rurban@cpan.org>
+
+	encode: rather remove_NOD_item
+	ACAD even complains with a NOD item linking to a DICT,
+	which has no link to a disabled object.
+	ACAD removes this item, so do we.
+
+	encode: add fixup_NOD
+	to disable links to not-existing (unstable) objects/styles
+
+	api: rename PERSSUBENTMANAGER to PERSUBENTMGR
+	this is the name used in the NOD (named object dictionary)
+
+	indxf: fix more ownerhandle abs vs rel issues
+	less exceptions: All entities are relative.
+
+	indxf: fix BLOCK_HEADER.first_entity eWrongObjectType
+	Fixes this from GH #225
+	  Reading handle 1F object type AcDbBlockTableRecord
+	      Error 34 (eWrongObjectType)                       Object discarded
+
+	indxf: fix DIMSTYLE.morehandles type
+	Fixes this
+	  Reading handle A object type AcDbDimStyleTable
+	      Error 34 (eWrongObjectType)                       Object discarded
+	  Missing AcDbDimStyleTable
+	from GH #225
+
+2020-04-10  Reini Urban  <rurban@cpan.org>
+
+	add_DUMMY_eed: add unknown_bits
+	as chunks of code 4, which has a maxlen of 255
+
+2020-04-10  Reini Urban  <rurban@cpan.org>
+
+	encode: add_DUMMY_eed
+	when importing from a different version,
+	save the old name in the DUMMY/POINT eed as code 0.
+
+	Maybe save under a new LibreDWG APPID, and save the unknown_bits
+	also.
+
+2020-04-10  Reini Urban  <rurban@cpan.org>
+
+	bits_test: align the strings at bit 0
+	so we can check and print it directly
+
+2020-04-10  Reini Urban  <rurban@cpan.org>
+
+	encode: xdata twice on size mismatch
+	Closes GH #224. Teigha throws no XRecord errors anymore.
+
+	We could also try to just patch the xdata_size BL, but this is easiest
+	and does not much harm.
+	There are no other side-effects than encode was re-using the space
+	for converted texts. don't do that anymore.
+
+2020-04-10  Reini Urban  <rurban@cpan.org>
+
+	encode: calculate xdata_size on imports
+	On imports we cannot trust the xdata_size,
+	or we dont even have it. Remaining problem is that we already wrote
+	the xdata_size BL before.
+	See GH #224.
+
+	log: use a bashism to support log file overrides
+	e.g. ./log -lexample_2000.log.orig example_2000
+
+	dxf: change CMC with 90-99 dxf codes
+	then emit/parse only the rgb part, not the index (which is 0 or 256)
+	see e.g. MULTILEADER colors.
+
+	unknown: fix field names regression
+	@avail was exhausted via find_name().
+	re-fill it for every object, to find again names for
+	all subsequent objects.
+	which is needed for dxf_test and picat
+
+2020-04-09  Reini Urban  <rurban@cpan.org>
+
+	indxf: overflow checks also in json_fixed_key
+	fuzzing 24: id 22
+
+	stable LIGHT, remove OBJECTCONTEXTDATA
+	OBJECTCONTEXTDATA is only a subclass.
+	LIGHT loooks good now, and there are a couple of examples.
+	It's also an entity, and we don't want them to converted to a POINT.
+
+	dxf_test: fix degrees (deg2rad)
+	e.g. LIGHT
+
+	stabilize LIGHT
+	fixed now all examples.
+	all unit-tests pass, just not DXF color.index. but this is
+	broken for all CMC.
+
+	bindings: update dwg.i (manually)
+
+	rename DOCUMENTOPTIONS back to CSACDOCUMENTOPTIONS
+	but still debugging
+
+	delete all ACDSSCOPE comments
+	it was ACMESCOPE afterall
+
+	promote SECTION_MANAGER to unstable
+	and sort the api decls
+
+	add SECTION_MANAGER and SECTION_SETTINGS objects
+
+	change SECTIONOBJECT to unstable
+	looks good
+
+	api: rename SECTION to SECTIONOBJECT
+	and document some fields
+
+2020-04-08  Reini Urban  <rurban@cpan.org>
+
+	add unhandled ACSH_PYRAMID_CLASS
+
+2020-04-08  Reini Urban  <rurban@cpan.org>
+
+	dwg_free_variable_no_class switch
+	make it a function jumptable.
+	so we won't stump onto more optimizer bugs with extensive if (type) stmnts:
+	MESH, SECTION, NAVISWORKSMODEL not defined as free.
+
+	At least dwg_free_MESH.isra.0 appears now in `nm free.o`
+
+2020-04-08  Reini Urban  <rurban@cpan.org>
+
+	spec: remove duplicate DWG_ENTITY (SECTION)
+	but harmless, was in #if 0
+
+	distcheck: clean LibreDWG.info and .pdf
+	now that we build it properly
+
+	encode: fix injson obj->size
+	and also its CRC. The size starts after the size
+	and ends before the CRC.
+
+	dwg_bmp: reset dat->byte
+	we advance dwg->thumbnail.byte to the start of the bmp,
+	skipping the header.
+	But when re-reading or writing it, we need to reset it.
+	Fixes esp. dwgrewrite.
+
+	travis: enhance make encode.lo also
+	runs into a timeout also.
+
+	add rw helper: dwgrewrite
+
+2020-04-08  Reini Urban  <rurban@cpan.org>
+
+	distcheck: failed to write to info
+	don't know how to enable am__skip_mode_fix.
+	but info-in-builddir works now. let's see if it breaks bsd make.
+	requires automake 1.14 though.
+
+	it might fix GH #211
+
+2020-04-08  Reini Urban  <rurban@cpan.org>
+
+	SECTION: rename geomsetting handle
+	and add unit-test vector macros
+
+	extend .gitignore
+	I am missing too many new files. lets be stricter
+	and sort it better.
+
+	regen-unknown with new testcase LiveSection_2018
+	but no new entities yet. will try again later.
+
+	acds: found another freesp segment type
+	in the wild
+
+	add NAVISWORKSMODEL, DEBUGGING only
+	no coverage, only detected in the DXF documentation.
+	undocumented in the ODA.
+	In DXF as COORDINATION_MODEL
+
+	add SECTION entity, DEBUGGING only
+	no coverage, only detected in the DXF documentation.
+	undocumented in the ODA.
+	It might be ptr of VIEW.livesection 334
+
+2020-04-07  Reini Urban  <rurban@cpan.org>
+
+	bits: add more overflow checks
+	with a macro.
+	Fixes fuzzing crashes15, id 121
+
+	indxf: special r14 PROXY_ENTITY dxf groups
+	a bit different
+
+	VIEW: wrong center dxf code 20
+	it is 10,20
+
+	indxf: skip more unhandled DXF fields
+	esp. with 2018, for stable objects
+
+	indxf: LAYER misses color 420 in its fields
+	do it manually
+
+	indxf: fatalize ERROR: Unknown DXF for stable objects
+	to abort on structurally broken DXF's, as with fuzzing.
+	Before we ignored indxf errors.
+
+	AcDs: protect from empty num_segidx
+	fuzzers doing their thing
+
+2020-04-06  Reini Urban  <rurban@cpan.org>
+
+	indxf: error on Unknown DXF code on stable objects
+	but not fatal so far, just complain loudly.
+
+	SPLINE: let indxf create points
+	not fitting the scenario. They are ignored.
+	TODO free them, but we are having leaks in indxf all over.
+
+	indxf: protect SPLINE array ptrs
+	regressions: indxf-crashes4: id 95, 5: 40, 3: 101
+
+	add precise bit_read_bits
+	to protect from rare heap-overflows in decode_unknown, when reading the very
+	last byte.  now we read the avail. bits precisely.
+	Fixes a fuzzer regression with a new object.
+
+	afl-fuzz: disable LOG at all
+	afl-fuzz: avoid costly branch checks by disabling logging centrally
+
+	encode: fix heap overflow on overlage size memmove
+	fuzzing crashes24, id 13
+
+	encode: fix some NULL ptr derefs
+	fixes fuzzing crashes24: 0-8
+	and 2 regressions at crashes18 at the same location.
+	also the 23 regression.
+
+	injson: more JSON_TOKENS_CHECK_OVERFLOW_ERR
+	fixes fuzzing regressions
+	  20: id 182, 328
+	  23: id 79
+	but not the new cases 24.
+
+	json: fix shellcheck violation
+
+	protect from redefining FORMAT_BD by in_dxf.h
+	affected was only dwg.c, in_dxf_.c, dwgwrite.c
+
+	appveyor: copy libssp-0.dll to zip
+	See GH #220, #218, #103, #166
+
+	json.test: shellcheck wants some {} grouping, na
+
+	dxf_test: add --big
+	only test slow test-big/ DWGs with --big
+	not via make check, needs too much time.
+
+	sortentstable: ents[i] may be NULL
+
+2020-04-06  Reini Urban  <rurban@cpan.org>
+
+	move fixup_BLOCK_HEADER to decode.c
+	in in_dxf.c it was skipped for --disable-write
+	but used in several read-only programs (e.g. dwgread).
+
+	rename from-postprocess_entity_linkedlist to dwg_fixup_BLOCKS_entities.
+	thanks to .travis.yml first task, finding linker errors with --disable-write
+
+	also fix -Wmaybe-uninitialized warnings for rcount3.
+
+2020-04-05  Reini Urban  <rurban@cpan.org>
+
+	encode: enable ENCODE_UNKNOWN_AS_DUMMY
+	to check both features, old and new
+
+	PROXY: fix data_numbits for r14 and encode from DXF
+	r14 has no restricted dat stream yet,
+	DXF has no numbits field, so align it. Which is ok,
+	because we control the stream start, and set bitsize accordingly.
+
+	injson: fix json_advance_unknown
+	once again. looks good now though
+
+	injson: add json_vector helper, array of primitives
+
+	encode: disabling POINT/DUMMY does not help neither
+
+	work on PROXY OBJECT/ENTITY
+	also fix bit_read_H is_global, and stabilize it on overflows.
+	detected with the new PROXY loop in unit tests with certain DWGs
+
+	encode: convert UNKNOWN_ENT to POINT
+	To preserve the next_entity chain
+	on unhandled entities, like LIGHT, HELIX, MULTILEADER, TABLE,
+	SURFACE, ARC_DIMENSION, GEOPOSITIONMAKRKER, MESH.
+
+2020-04-05  Reini Urban  <rurban@cpan.org>
+
+	encode: convert UNKNOWN_* to DUMMY
+	when the version differs. Then we cannot use the unknown_bits.
+	maybe we should add an EED with the previous data then (type, bits)
+
+	The biggest problem with this breaking the next_entity chain
+	on unhandled entities, like LIGHT, HELIX, MULTILEADER, TABLE,
+	SURFACE, ARC_DIMENSION, GEOPOSITIONMAKRKER, MESH, RTEXT.
+	Maybe convert there to a POINT or PROXY_ENTITY instead.
+
+2020-04-05  Reini Urban  <rurban@cpan.org>
+
+	3DSOLID: add missing COMMON_ENTITY_HANDLE_DATA
+	which mostly was missing xdicobjhandle on encode
+
+	injson: fix json_advance_unknown
+	an object has an additional key upfront
+
+	dxf: postpone linewt 370 to after ltype 6
+	which is in a different file, common_entity_handle_data.spec
+
+	dxf: skip duplicate color 62
+	first for the index (if 0 ByBlock)
+	second for the RGB flag, which is wrong
+
+	dxf: entmode 67 1 when in paperspace
+
+	dxf: skip duplicate TABLE ownerhandle 330
+	appeared twice for LAYER.
+	Already done in DWG_OBJECT.
+	Ditto for _XDICOBJHANDLE, but this was a wrong comment only.
+
+2020-04-05  Reini Urban  <rurban@cpan.org>
+
+	indxf: add_to_BLOCK_HEADER
+	instead of postprocess_BLOCK_HEADER, we do it for every new entity
+	adding it to entities, and setting the 4 handles.
+	Now only out_dxf is wrong
+
+	Closes GH #222
+
+2020-04-05  Reini Urban  <rurban@cpan.org>
+
+	postprocess_entity_linkedlist: log unicode BLOCK_HEADER names
+
+	injson, indxf: always set the hashmap
+	on the initial code 0 handles. This helps with subsequent handle searches
+
+	dwg: default to .json and .dxf, not .dwg
+
+	dwg,dxf: default to -y
+	it is annoying, and we always overwrite while testing
+
+	refactor Handle, add is_global flag
+	greatly simplifies free, avoids leaks and double-frees
+
+	add postprocess_entity_linkedlist GH #221
+	targetting r2000, our only write format, we need to convert all entity
+	arrays (like BLOCK_HEADER) to a linked list of entities, via prev and
+	next_entity.
+
+2020-04-05  Reini Urban  <rurban@cpan.org>
+
+	decode: loosen invalid handlemap offset fixup
+	With a lot of deleted objects the "Invalid handleoff" warning might be bogus,
+	max_handle (hash size) might be too small yet.
+	Plus the offset fixup relied on a wrong calculation of the previous size.
+	The CRC is included in the size.
+
+	While we are here, just warn and dont fixup the offset, in my case from a
+	good value to a broken one.
+	Fixes example_2007-2010 json roundtrip
+
+2020-04-05  Reini Urban  <rurban@cpan.org>
+
+	encode: fix FIELD_VECTOR_T
+	on unicode conversion boundaries. Use bit_write_T
+	for down and up conversion.
+	e.g. DICTIONARY.texts[]
+
+	encode: convert xdata TU/TV
+	so far we only converted FIELD_T types, xdata had a length (like TF)
+	but really are strings
+
+	dwg: skip msan leaks with dwg (to dwg)
+	GH #151
+
+	dxf/json.test: harden the roundtrip checks
+	with json also check the number of objects (Unstable ignored in dxf).
+	improve the helpers and diagnostics
+
+2020-04-05  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix SPLINE.flag from scenario
+	write proper DXF 70 flag.
+	indxf scenario from this flag (mask 32).
+
+	improve DSYMUTIL on non-macOS
+
+2020-04-05  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix SPLINE flags
+	1024 does not describe the scenario, only if
+	there are fit_pts does.
+
+2020-04-05  Reini Urban  <rurban@cpan.org>
+
+	encode: loose write_DD eq-check
+	check for fabs < 1e-12, so that some
+	strtold dxf values are suddenly as equal as native.
+
+	Fixes the example_2000/2004 LWPOLYLINE size overflow problem,
+	which needed to memmove the whole object by 2 to make room
+	for a 2nd MS RS.
+
+2020-04-05  Reini Urban  <rurban@cpan.org>
+
+	dwggrep: add --tables, search objects, refactor
+	previously we only search BLOCK_HEADER and its entities.
+	now also search all objects.
+	Support --tables (only table names)
+	Support --blocks (all block deifnitions)
+	Add many missing objects
+
+	dwg2SVG: support -m --mspace
+	default to paperspace and count the printed entities there.
+	if none are printed, fall back to modelspace.
+	With -m ignore paperspace.
+
+	dxf: use get_next_owned_block_entity for ENTITIES
+	to keep the same linked-list order for <=r2000
+
+	api: add dwg_next_entity
+	on r2000 follow the next_entity handle linked list.
+	This may jump around in some cases.
+
+2020-04-05  Reini Urban  <rurban@cpan.org>
+
+	dxf: more r2000 BLOCKS fixes WIP
+	revert most of c18a040e960e301c2afd3c0c1a3cc05f934c6814
+	the r2000 logic was wrong, last_entity may be far behind the endblk_entity.
+	rather follow the next_entity chain until the last_entity.
+
+	change get_next_owned_block_entity from inserts to entites (r2004+). oops.
+
+	missing:
+	one LWPOLYLINE MS size overflow
+	one wrong SPLINE scenario.
+
+2020-04-05  Reini Urban  <rurban@cpan.org>
+
+	dxf.test: make roundtrip failures fatal
+	fix the dxf.test roundtrip test: Unstable entities are skipped on out_dxf,
+	we cannot count them. (LIGHT|MULTILEADER|UNKNOWN_ENT)
+
+	the last remaining errors are:
+	* wrong DIMENSION types, the previous change did more damage than good.
+	* one LWPOLYLINE MS size overflow,
+	* one wrong SPLINE scenario.
+
+	See GH #219
+
+2020-04-05  Reini Urban  <rurban@cpan.org>
+
+	encode: fix overlarge size memmove before bit_write_MS
+	an overlarge obj->size writes two RS instead of one.
+	so move by 2, and enlarge the 2 sizes by two bytes.
+	Same for the other direction, if an overlarge entity becomes smaller.
+
+	See entity LWPOLYLINE 75A with 3695 points in example_2000
+
+2020-04-03  Reini Urban  <rurban@cpan.org>
+
+	AcDs: json fixes
+
+2020-04-02  Reini Urban  <rurban@cpan.org>
+
+	add/fix AcDs_SchemaData
+
+	AcDs: more DXF prep
+
+	AcDsProtype => AcDS as in DXF
+	we need to keep those names for long, so go with the
+	proper names. DXF already uses ACDS* not prototype.
+	It is also shorter
+
+	AcDsProtoype: harmonize the names a bit
+	but not more. It will be eventually be AcDs aka datastorage,
+	and the protype will be gone. let's what happens in r2021.
+
+	extend AcDsProtoype.segments
+	with all the subclass decls. but not parsed yet
+
+2020-04-02  Reini Urban  <rurban@cpan.org>
+
+	start with optional r2004+ AcDsProtoype_1b datastorage section
+	which does contain the ACIS SAB v2 data.
+	See ODA p.252, 24 Section AcDb:AcDsPrototype_1b (DataStorage)
+
+	The Signature section is unfortunately not documented
+
+2020-04-02  Reini Urban  <rurban@cpan.org>
+
+	improve common_entity_data.spec ENC + proxy
+	add Dwg_Color.raw to seperate to computed index and flag (used only internally).
+	Seperate between preview graphics 160 or proxydata 92.
+	Add computed entity.preview_is_proxy to reflect that.
+	Add obj->klass for each variable obj (to check for klass->is_zombie for now)
+
+	We dont want to seperate ENC into its own type, as done in the savekov patch,
+	because this does not scale. We do have spec files to support all our actions at once
+	in one place.
+
+2020-04-02  Reini Urban  <rurban@cpan.org>
+
+	gen-dynapi: abstract embedded_struct
+	also support embedded structs for ldata, tdata and fdata
+
+	dxf: fix FIELDLIST subclass and num_fields 90
+
+	formatting only
+
+	gen-dynapi: improve MULTILEADER and more embedded structs
+	find more DXF codes for these. Detect the . in fields. . is no \w
+
+	dxf-check: harmonize .dxf.err path
+	to check for teigha errors.
+	defer cat to last.
+
+	cleanup resolve_postponed_object_refs
+	diagnostics only, and remove dead (duplicate) code.
+
+	travis: improve asan timeouts
+
+	dxf: fixup ATTRIB, ATTDEF order
+	cross tested against ACAD
+
+	dxf: log table names on out_dxf
+
+2020-04-02  Reini Urban  <rurban@cpan.org>
+
+	dxf: more r2000 BLOCKS fixes WIP
+	With r2000 some BLOCK_HEADER.first_entity and last_entity are
+	unreliable, at least for the very last BLOCK.
+	The first can be before, e.g. right the next after BLOCK_HEADER, and
+	the real last can be far behind the last_entity. Rather check the
+	ownerhandle of all entities.
+
+	Change get_first_owned_entity and get_next_owned_block_entity to
+	compare the ownerhandles with r13-r2000.
+
+	See GH #219
+
+2020-04-02  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix r2000 BLOCKS
+	emit until last_entity, and dont skip ATTDEF and such.
+	Fixes lost entities on dxf roundtrips
+
+	add is_type_unstable_all, is_type_stable
+
+	add --enable-release to distcheck
+	and therefore the uploaded nightly tarball.
+	fix an uninit error in unit-testing/dimension_linear
+
+	travis: extend travis_wait for ASAN build
+	complation of in_json.o needs longer than 10m
+
+	distcheck: one more distcheck-hook attempt
+	GH #211 still not fixed
+
+	dxf.test: print missing rountrip entities
+	quite a surprise
+
+	no helper script timeouts with --enable-debug
+
+	TODO/SKIP some failing --enable-debug tests
+	dwgwrite -Ojson crashes with DEBUG_CLASSES still.
+	failing at TABLECONTENT and CELLSTYLEMAP subclasses, in in_json.
+	crashing with r2010+ at encode.
+
+	add MENTALRAYRENDERSETTINGS to debugging
+	I recently added unknown support for some test-big files,
+	and therefore added coverage for MENTALRAYRENDERSETTINGS
+	(2004/double_free_example).
+
+	document DIMENSION.flag 70
+
+	indxf: revert DIMENSION type earlier
+	It is wrong, just print the potention flag type
+
+2020-03-30  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix DIMENSION type earlier
+	via the flag 70, not the subclass, which might be too late.
+	plus it is only optional.
+
+	no dxf code for DIMENSION.ins_scale, fixes lspace_factor
+
+	The subclass checker looks now obsolete (possible dead code),
+	but for now leave it in. maybe check later with asserts.
+	the testdata only shows flag 128, which is suspicious.
+
+2020-03-30  Reini Urban  <rurban@cpan.org>
+
+	DIMASSOC: document and unit test updates
+
+2020-03-30  Reini Urban  <rurban@cpan.org>
+
+	improve regen-unknown
+	log not found $obj $hdl in $dxf when already past it (sorted by hex value)
+	and skip the dxf. ~2x faster.
+
+	and we missed out all directly subsequent objects. this fixes that.
+
+2020-03-29  Reini Urban  <rurban@cpan.org>
+
+	gcc-9.3.1 tested ok on fc31 x86_64
+	sudo dnf --enablerepo=updates-testing update gcc
+	so adjust the compile-time warning.
+
+	Not ok over at cperl XSConfig still, so let's be sceptical and alert.
+
+2020-03-29  Reini Urban  <rurban@cpan.org>
+
+	unknown: sort alldwg.inc by handle
+	otherwise we cannot find previous handles in log_unknown_dxf.pl
+	which skipped many interesting objects.
+
+	bd-unknown.inc: skip uniq checks for the comments (GNU only?)
+	  only sort by some initial characters (with fixed width).
+	skip imprecise (cut) results. rather check only precise found doubles,
+	but check for RD and BD.
+
+2020-03-29  Reini Urban  <rurban@cpan.org>
+
+	make regen-unkown with added 2000/plan.dxf
+	for the previous DIMASSOC change
+
+2020-03-28  Reini Urban  <rurban@cpan.org>
+
+	DIMASSOC: handle main_subent_type: 0
+	found some examples with main_subent_type 0
+	which does not have some subsequent fields.
+	fixes 2000/plan and 2004/double_free_example
+
+	encode: refactor and fix HANDLE_STREAM processing
+	only flush when necessary, reset hdl_dat to ref of dat.
+	copy only needed for the small buffer for DIMASSOC, ACAD_TABLE handles before.
+	refactor and unify LOG_POS logging
+
+	injson: read 3DSOLID fields
+
+	json: split acis_data at newlines, as ARRAY
+
+	json: write 3DSOLID fields
+	TODO: split acis_data at newlines, as ARRAY.
+
+	encode: fix obj->size, off by 2
+	we haven't written the CRC yet
+
+	DEBUG_HERE_OBJ: avoid overflow
+	at the end of the stream, with -v5
+
+	encode: seperate hdl_dat stream earlier
+	as in decode, almost:
+	write the common handles later on START_OBJECT_HANDLE_STREAM
+	or when that is missing at DWG_OBJECT_END.
+	no special cases for CONTROL objs needed here
+
+2020-03-27  Reini Urban  <rurban@cpan.org>
+
+	encode: allow writing bigger dat chunks
+	allocate in a while loop, with abort()
+
+	injson: skip useless DICTIONARY warnings
+	Warning: Skip some itemhandles, only accept 21 of 21
+
+	indxf: add TABLEGEOMETRY support
+	indxf is still a big bull of mud. dxf_test would be
+	the proper way, like the generic in_json.
+	But as we still don't have that many subclass loops to support,
+	we can still tolerate it.
+
+	promote TABLEGEOMETRY to stable
+	found complicated coverage files, all ok.
+	TODO in_dxf
+
+	json: fix FileDepList end of object indices
+	it's a mischmasch, but now it works with multiple array entries.
+	at the end of each array loop advance the end-of-object index,
+	at the end of each object advance it,
+	at the end of each section back off.
+
+	encode: decide between critical or skipping section errors
+	on section address or size overflows only error critically
+	on critical sections, not just some AcDb:Template error. set to 0 then
+
+	json: fix structure error fatality
+	if in some unimportant section like FileDepList a structure error
+	occurs, dont fail critically with INVALIDDWG, just INVALIDTYPE.
+
+	json: fix DIMASSOC hack
+	and SORTENTSTABLE in some examples
+
+2020-03-26  Reini Urban  <rurban@cpan.org>
+
+	promote TABLEGEOMETRY to unstable
+	doc ok, coverage fair, no errors so far
+
+	unit-testing: improve TABLE
+
+	improve TABLEGEOMETRY
+	harmonize with TABLECONTENT.
+	The main problem was an ODA bug for geometry.unknown 95
+
+	doc: update classes status
+
+	make regen-unknown
+	and split off a full-regen-unknown.
+	mostly we can re-use the existing alldwg.inc,
+	when we just change some fields in some objects
+
+	add ASSOCGEOMDEPENDENCY fields
+
+	add remaining unknown objects
+	all those with dxf coverage:
+	ACMECOMMANDHISTORY
+	ACMESCOPE
+	ACMESTATEMGR
+	ACSH_HISTORY_CLASS
+	ASSOCGEOMDEPENDENCY
+	ASSOCOSNAPPOINTREFACTIONPARAM
+	ASSOCVERTEXACTIONPARAM
+	DOCUMENTOPTIONS
+	RAPIDRTRENDERSETTINGS
+
+2020-03-26  Reini Urban  <rurban@cpan.org>
+
+	improve regen-unknown perf to 1m
+	Don't linear search each handle in each dxf from the beginning again.
+	In each dxf per obj the handles are sorted, just continue.
+	time went down to 1m5s
+
+	also remove a lof of unsorted handles, unneeded.
+
+2020-03-26  Reini Urban  <rurban@cpan.org>
+
+	improve LEADEROBJECTCONTEXTDATA
+	more fields
+
+	add 2 more debuging classes
+	LAYERFILTER, LAYOUTPRINTCONFIG with poor coverage
+
+	unknown: split up alldxf_1 by dxfname
+	for easier editor handling. One big became just too big.
+	add more MATERIAL fields to unknown to increase matching accuracy.
+
+2020-03-25  Reini Urban  <rurban@cpan.org>
+
+	add Dockerfile to EXTRA_DIST
+	and add minor improvements:
+
+	--enable-trace is default
+
+	--enable-release is needed for production services using
+	a git checkout, and not a release tarball.
+	It skips invalid nan fields, ...
+
+2020-03-25  yossefazoulay  <azoulayos@protonmail.com>
+
+	Dockerfile for libredwg with python3 base image for build and test
+
+	Dockerfile for libredwg created CodeFactor validate
+
+	Dockerfile for libredwg created
+
+	Dockerfile for libredwg created
+
+2020-03-25  Reini Urban  <rurban@cpan.org>
+
+	json: change NOCOMMA logic to first
+	special-case the first entry of an array/hash, as this is what we
+	known beforehand.
+	the first field prints no ",\n" at the start, all others do.
+
+	This was an out-json.c TODO
+	Closes GH #75
+
+2020-03-25  Reini Urban  <rurban@cpan.org>
+
+	WIP fix NOCOMMA hack also for json
+	but here we need to use nested ISLAST/SETLAST/CLEARLAST checks.
+	refactor VECTOR and REPEAT blocks for json.
+
+	But with this attempt we'd need to mark all last fields, in each
+	DWG_OBJECT. Better try the initial idea, as outlined in the comment:
+	ISFIRST, ...
+
+2020-03-25  Reini Urban  <rurban@cpan.org>
+
+	fix json NOCOMMA hack for simple geojson
+	when writing to stdout or a pipe.
+	In this trivial case check all paths for is_last.
+	For json we would need a flag in dat->opts.
+
+	See GH #75, and an attempt at PR #213
+
+2020-03-24  Reini Urban  <rurban@cpan.org>
+
+	even more unknown fields
+	we can now detect more switched fields of the same type.
+
+	add more unknown fields
+	with empty field text, unknown and dxf_test will not work
+
+	add debugging SECTIONVIEWSTYLE
+	very similar to DETAILVIEWSTYLE
+
+	re-enable LAYERFILTER (unhandled)
+	it does appear in DXF and DWG. Use this name, as it appears in the
+	named object dict as ACAD_LAYERFILTER.
+
+	add debugging DETAILVIEWSTYLE
+	best .pi coverage > 90%
+	and known fieldnames
+
+	make regen-unknown
+	The previous GH #214 init handles changes fixed
+	DICTIONARYWDFLT handles and some DIMASSOC objects.
+	No known regressions so far.
+
+	CONTROL_HANDLE_STREAM: honor the r2007+ has_strings bit
+	wrong HANDLE_STREAM overflow check, without honoring it.
+	likewise in CONTROL_HANDLE_STREAM we cannot overwrite hdl_dat,
+	which honored it.
+	Fixes r2007+ issues with *_CONTROL objects, and related MLEADERSTYLE
+	has_new_format logic, with off-by-one bit
+
+2020-03-23  Reini Urban  <rurban@cpan.org>
+
+	unit-testing: add NULL checks
+
+	add CONTROL_HANDLE_STREAM exception
+	there num_entries is before the handles, because
+	with r14 we cannot init hdl_dat that early
+
+	dxf: add eed
+	the dxf_format logic is not correct for code - 1000.
+
+	decode: extract common_object_handle_data.spec
+
+	decode: init handle_stream earlier <r2007 also
+	unify hdl_dat init, now also pre-r2007.
+	call dwg_decode_common_entity_handle_data and START_OBJECT_HANDLE_STREAM earlier
+
+	DIMASSOC: more referred handle stuff WIP
+	we really need to init hdl_dat earlier pre-r2007
+
+2020-03-23  Reini Urban  <rurban@cpan.org>
+
+	dxf_test: support subclass fields
+	either extra malloced vectors (_obj->field[i]), or embedded with simple _obj offset
+
+	also fix the dxf_test -a flag
+
+2020-03-23  Reini Urban  <rurban@cpan.org>
+
+	DIMASSOC: add num_mainobjs BS for mainobjs SUB_HANDLE_VECTOR
+	not a single one.
+
+2020-03-22  Reini Urban  <rurban@cpan.org>
+
+	move DIMASSOC.ref.rotated_type 71 to DIMASSOC
+	and the previous BS slot looks like a type or num_mainobjs
+
+2020-03-21  Reini Urban  <rurban@cpan.org>
+
+	dxf_test: handle wrong dxf codes
+	check against the dynapi type on known mismatches
+
+	restore DIMASSOC (is unstable)
+
+	unknown: set some DIMASSOC field type hints
+	where the dxf code is wrong, eg BS instead of B, and such.
+
+	unknown: split pi files into chunks of max 50 goals
+	otherwise we get nasty PICAT timeouts or even out-of-memory
+
+	make regen-unknown for added UNKNOWN_BITS via LOG_TRACE_TF
+
+	fix LOG_TRACE_TF, esp. for DECODE_UNKNOWN_BITS
+	unknown did not catch most unknown_bits TF
+
+	more DIMASSOC
+
+	make regen-unknown for DIMASSOC
+
+	dynapi: support SUB_FIELD_HANDLE dxf code
+
+	extend DIMASSOC
+
+	dwg.spec: REPEAT_BLOCK indent 4
+
+	harmonize some ASSOCACTION fields
+
+	unit-testing: observed higher angles
+	so angles are obviously not normalized when filed to DWG.
+	some end_angles exceed 2*pi, so use 4*pi instead.
+
+2020-03-20  Reini Urban  <rurban@cpan.org>
+
+	unit-testing: silence some warnings
+	when iterating over NULLHDL block entries e.g.
+
+	unit-testing: fix subdir recursion
+	big oops
+
+2020-03-20  Reini Urban  <rurban@cpan.org>
+
+	unit-testing: support -a and -an
+	to show all results. for unit_testing_all.sh.
+
+	fix LTEXEC path in unit_testing_all.sh, parallelize the initial make.
+
+2020-03-20  Reini Urban  <rurban@cpan.org>
+
+	make regen-unkown
+
+	add debugging DATALINK
+	almost good
+
+	replace ANNOTSCALEOBJECTCONTEXTDATA with subtypes
+	new BLKREF*, LEADER*, MLEADER*, MTEXT*, MTEXTATTRIBUTE*,
+	TESTOBJECTCONTEXTDATA objects
+
+	unit-testing: 50% dxf_test ok logging
+	display only the first 6 objects per file.
+	size went from 2924419 to 1315383. still mostly VISUALSTYLE
+
+	configure: add -fno-semantic-interposition
+	with gcc and --enable-shared (default).
+	This disallows many LD_PRELOAD tricks.
+
+2020-03-20  Reini Urban  <rurban@cpan.org>
+
+	limit the travis log size
+	The 4th distcheck failed because of it.
+
+	Only log max 10 objects for dxf_test ok(),
+	and max 6 objects with the individual unit tests.
+	This shortened the unit-testing make check log size from
+	3771627 to 3678755.
+	The complete log size was 6184698, mostly consisting of
+	dxf_test VISUALSTYLE logging.
+
+	Leave out make check with distcheck.
+
+2020-03-20  Reini Urban  <rurban@cpan.org>
+
+	add extra object ALDIMOBJECTCONTEXTDATA
+	which has more fields than ANNOTSCALEOBJECTCONTEXTDATA
+	(to which it previously resolved to)
+
+	fix make regen-unknown
+	more fixes for out-of-tree builds.
+	skip all overlarge num_bits > 30000 (out of memory in picat).
+	added a lot of new objects, detected a lot of more BD/RD values.
+
+	add missing ASSOC*SURFACEACTIONBODY objects
+	They could be just one object, but so far seperate them.
+	They are so in DXF and as class, even if it looks like
+	that they have the same fields.
+
+	fix make regen-unknown
+	dont trigger it by dependency with distcheck
+
+	api: remove SURFACE type
+	it is most likely either just a PLANESURFACE,
+	or a generic type a la DIMENSION.
+
+	rename unhandled (not persistent) LAYER_FILTER to LAYERFILTER
+	and remove it as unhandled type, because it very likely not persistent to a DWG.
+	maybe it is even LAYERFILTERS as in the central DICTIONARY_NAMED_OBJECT.
+
+	fix unit-testing/check-objects.pl failures
+
+2020-03-20  Reini Urban  <rurban@cpan.org>
+
+	add unit-testing/check-objects.pl
+	to check if all known objects have unit-tests.
+	against generated src/objects.inc (make regen-dynapi)
+
+	hereby we can ensure all the necessary dwg_api declarations and
+	functions are not absent.
+
+2020-03-19  Reini Urban  <rurban@cpan.org>
+
+	minor LTYPE.dash spec rearrangement
+
+	unit-testing: add all missing objects
+	and the missing dwg_api types and funcs
+
+	unit-test: limit ok() to max 10 objects
+	else just be silent. In some DWG's we just have too many objects,
+	like LINE, XRECORD, ...
+
+	unit-testing: fix debugging surface
+	--enable-debug only
+
+2020-03-18  Reini Urban  <rurban@cpan.org>
+
+	fix dxf_test unusual points
+	some points do have DXF 46, ..., such as PLOTSETTINGS.plot_origin.
+	Check our dynapi type instead
+
+	api: fix missing EXPORT dwg_obj_mlinestyle_get_flag
+	detected by the new unit tests
+
+	unstable MULTILEADER: skip if wrong
+
+	dxf_test: allow NULL strings
+
+	fix examples/alldxf_0.inc paths
+	for dxf_test.
+
+	dynapi: fix NULL strings
+	NULL converted to utf8 is also NULL, not an error.
+	Fixes a couple of unit-tests.
+	Also initialize the old API for wide strings.
+	And add old API checks for some objects
+
+	unit-tests: support obj with old API, and unicode text tests
+
+	api: rename unimplemented dwg_obj_polyline_pface_get_points
+	to dwg_ent_polyline_pface_get_points. deprecated, use the dynapi instead
+
+	WIP SCALE.name r2007 problem
+	This object has no has_strings bit.
+	detected with the new unit-tests.
+
+	unit-testing: revise coverage logic
+	only process a new file, if:
+	* there is no coverage yet, or
+	* if the file is r2007 or r2018 (crossing unicode or latest)
+	  starting with 2000.
+
+	Update test-data/example_2000.dwg with VIEW
+	store a VIEW, to get unit-testing coverage
+
+	unit-testing: improve coverage warning
+	VIEW has no coverage
+
+2020-03-17  Reini Urban  <rurban@cpan.org>
+
+	unit-testing: add missing debugging objects
+
+	unit-testing: add missing stable objects
+
+	unit-testing: add unstable PERSSUBENTMANAGER
+
+	add 2004/Surface.dwg/dxf, check dynapi unstable
+	for ASSOCPERSSUBENTMANAGER coverage.
+
+	dwg_getall_*: skip unneeded init
+
+	unit-testing: add dimassoc (unstable)
+
+	unit-testing: add assocperssubentmanager DEBUGGING
+
+	unit-testing: add assocplanesurfaceactionbody
+
+	promote ASSOCALIGNEDDIMACTIONBODY to unstable
+	add unit-test
+
+	unit-testing: add unstable assocdependency
+
+	add classes.c/unknown.pm stability helpers
+	get unstable/debugging/unhandled per name or type.
+	convert type to name (e.g. for logging)
+	strip dxf_test dependencies, move funcs around a bit
+
+	move PLOTSETTINGS to unstable
+	regen-unknown, with MULTILEADER added back.
+
+	dynapi_test: relax unstable VISUALSTYLE
+	lot of nan's
+
+	dxf_test: support points
+	e.g LIGHT
+
+2020-03-16  Reini Urban  <rurban@cpan.org>
+
+	free: avoid double dwg_free
+	dxf_test: support env LIBREDWG_TRACE tracing.
+	avoid double-free and use-after-free on broken DWGs
+
+	dxf_test: fix dwgfile leak
+
+	dxf_test: support CMC types
+	ptr vs value
+
+	dxf_test: add --class, --file args
+	and don't calc the name alias twice
+
+	unit-testing: add dbcolor
+	which crashes in dxf_test
+
+	disable dxf_test on --disable-write or -dxf
+
+	unit-testing: TODO ARC_DIMENSION.user_text
+
+	dxf_test: add needed objects
+
+	unit-testing: add dxf_test
+	compare against examples/alldxf_1.inc values from unknown.
+	See GH #212
+
+	improve PLOTSETTINGS
+	but only got coverage for 2013
+
+	improve VISUALSTYLE for r2010+
+
+	regen-unknown for changed API
+
+	unit-testing: add max angle checks
+	2*pi for radians
+
+2020-03-15  Reini Urban  <rurban@cpan.org>
+
+	api: rename desc to description, ...
+	VISUALSTYLE fixes for r2018, add and rename fields.
+	add mlinestyle unit test
+
+	json: fix CMC output in REPEAT loops
+	i.e. CELLSTYLEMAP cells[rcount1].style.background_color
+
+	spec: improve VISUALSTYLE
+	some more stable fields without DEBUG_CLASSES
+
+2020-03-14  Reini Urban  <rurban@cpan.org>
+
+	rm AC_PROG_RANLIB
+	rendered obsolete with LT_INIT
+
+	indxf: check SPLINE.scenario
+
+	in_dxf: fix strdup(dxfname) leaks
+
+	autoscan, check for HAVE_SCANDIR
+	add proper autoconf probes
+
+	scan-build: fix dead assignments
+
+	scan-build: store in srcdir
+
+	fix dwg_find_dicthandle NULL deref
+	found via scan-build
+
+	unit-testing: extend mline, fix leak
+
+2020-03-14  Reini Urban  <rurban@cpan.org>
+
+	unit-testing: support a dir arg
+	scan all DWGs in all subdirs.
+	speeds up unit_testing_all.sh.
+
+	But not on mingw, as there's no scandir(). Too lazy to port that for
+	now. You can test it via cygwin though.
+
+2020-03-13  Reini Urban  <rurban@cpan.org>
+
+	unit-testing: fix leaks
+
+	add 2010/gh209_1.dwg testcase for GEODATA
+	See GH #209
+
+2020-03-12  Reini Urban  <rurban@cpan.org>
+
+	unit_testing_all: add -n (coverage) argument
+	to all unit-tests. to silence coverage warnings, and more messages,
+	when being run with an INPUT env arg.
+
+	so only errors are printed.
+
+2020-03-12  Reini Urban  <rurban@cpan.org>
+
+	add unit_testing_all.sh.in
+	test all DWGs with all unit-testing/dynapi tests
+	(but not for all objects yet)
+
+	add PLOTSETTINGS coverage test-data
+
+	api: layout+plotsettings harmonization
+	same fields, same names. add unit-tests.
+
+	unit-testing: add unstable HELIX
+	copied from SPLINE
+
+	configure: add --enable-release
+	to test IS_RELEASE features with a .git subdir
+
+	no nan doubles in exports, GH #210
+	IN_RELEASE replace with 0.0
+
+	more distcheck: DISTCLEANFILES examples/alldxf*
+	when regen-unknown is triggered
+
+2020-03-12  Reini Urban  <rurban@cpan.org>
+
+	fix automake distcheck bug GH #211
+	We could avoid building LibreDWG.info in srcdir, but I don't know how.
+	For now we allow creating the backupdir in $srcdir/doc.
+
+	We also disable distcheck the bindings, if the builddir has the
+	bindings disabled.
+
+2020-03-12  Reini Urban  <rurban@cpan.org>
+
+	unit-testing: fixup geodata coverage
+
+2020-03-11  Reini Urban  <rurban@cpan.org>
+
+	GEODATA: fix typo, extend
+	found the bug via unknown, north_dir is a 2RD.
+	add missing class v1 fields
+
+	debug GEODATA, with unknown
+
+	make regen-unknown for GEODATA
+
+	debug GEODATA. add UNKNOWN
+
+	fix dwgread fmt outout with corrupt dwg
+	error earlier. Fixes GH #209
+
+	fix geojson for GEODATA object
+	we dont know geometry fields yet, so skip it.
+	Thanks to @yossefaz for a testcase with GEODATA.
+	Fixes GH #209 case 1
+
+	unit-testing: add unstable geodata
+	without any coverage
+
+	unit-testing: add unstable light, debugging table
+
+	unit-testing: add underlaydefinition
+
+	unit-testing: add unstable visualstyle
+
+	add test/unit-testing/tablestyl.c
+	an unstable OBJECT
+	change dwg_api for TABLESTYLE to unstable.
+
+	unit-testing: handle vectors can be NULL
+	esp. with objects
+
+	unit-testing: CHK_SUBCLASS in hatch
+
+	unit-testing: TODO unstable objects
+
+	unit-testing: stricter multileader checks
+	check for valid value ranges (alignment, flags, ...).
+	Found interesting bugs
+
+	unit-testing: simplify CHK_SUBCLASS_*
+	use the subclass API for all fields.
+
+2020-03-10  Reini Urban  <rurban@cpan.org>
+
+	add dwg_dynapi_subclass_value, more unit-testing multileader
+	add subclass dynapi checks, as needed in in_json.
+
+	unit-testing: add gradient HATCH coverage
+
+	unit-testing: add CHK_ENTITY_CMC
+
+	add test/unit-testing/multileader.c WIP
+
+	add test/unit-testing/leader
+
+	unit-testing: fix CHK_ENTITY_H leak
+
+	add test/unit-testing/viewport.c
+
+	add test-data/2004/Underlay.dwg
+	needed for underlay coverage
+
+	add test/unit-testing/underlay.c
+
+	fixup test/unit-testing/ preview_size
+	BLL since r2010 already.
+	Detected by asan overflow with new wipeout coverage.
+
+	add test/unit-testing/wipeout.c
+
+	fixup encode FIELD_VECTOR_T -Wincompatible-pointer-types
+	we added the T type argument, so a unicode cast is not needed anymore.
+	T texts vs TU
+
+2020-03-09  Reini Urban  <rurban@cpan.org>
+
+	fix TU32 type for r2007+, either UCS-2 or UCS-4
+	I suspect this is either a Teigha or AutoCAD bug.
+	But the TU32 feature strings can be either 4 or 2 byte.
+
+	add TU32 type for FileDepList.features
+	on r2007+
+
+	injson: fix eed 1005 size to 8
+	and error on wrong FileDepList_Files type.
+	testcase: 2007/Leader
+
+2020-03-08  Reini Urban  <rurban@cpan.org>
+
+	injson: fix xdata_size calculation with BINARY
+	causing encode overflows on overlarge xdata_size
+
+	injson: also set eed.size correctly
+	realloc and count
+
+	injson: count eed.size correctly
+	realloc data precisely, but don't yet set the size.
+
+	injson: fix Unknown HATCH num_polyline_paths field
+	and wrong "polyline_paths[rcount2],point" key
+
+	injson: protect from NULL dwg_dynapi_subclass_name
+	or empty dwg_dynapi_subclass_fields results.
+	Found via fuzzing, with e.g. a json field like "name.: "..."
+
+	json: fix json_thumbnail_write
+	skip the sentinel, which is included in the thumbnail.chain,
+	when being read from a R_2004+ SECTION_PREVIEW. There it has
+	an dat->byte = 16 offset, but the dat->byte position is advanced
+	by dwg_bmp() in decode to the real BMP offset.
+
+2020-03-07  Reini Urban  <rurban@cpan.org>
+
+	injson: ignore R2004_Header.padding
+	This is done by encode (eventually)
+
+	unit-testing: silence gnu_printf warnings
+	only without __USE_MINGW_ANSI_STDIO use ms_printf,
+	else gnu_printf.
+
+2020-03-06  Reini Urban  <rurban@cpan.org>
+
+	fix dwg_dynapi_common_value for preview_size <r2010
+	wrong size. Fixes unit-testing/image crash
+
+	unit-testing: more coverage
+
+	add test/unit-testing/image.c (uncovered)
+
+	add test/unit-testing/camera.c (uncovered)
+	fix the type chooser, always use fixedtype
+	for the variale-typed entities.
+
+	api: support ARC_DIMENSION, add unit-testing arc_dimension
+	But note that this type is still in DEBUGGING => UNKNOWN_ENT
+
+	api: fix dwg_ent_3dface_* api to 3d
+	add dwg_object_to__3DFACE().
+	add a unit-test for 3dface
+
+	add test/unit-testing/spline.c
+
+	more test/unit-testing/hatch
+
+	unit-testing: fix dwg_dynapi_handle_name leak
+	with unicode texts.
+	declare dwg and version for our macros.
+
+	add test/unit-testing/hatch.c
+
+2020-03-05  Reini Urban  <rurban@cpan.org>
+
+	in_json: more DICTIONARY.numitems mismatches
+	crashes at free with fuzzing (again).
+	add more checks
+
+	dwg: support -Ijson for testing fuzzing results
+	which have no json or dxf extension
+
+2020-03-05  Reini Urban  <rurban@cpan.org>
+
+	encode: support overlarge objects size > 0x7fff
+	only for wrongly calculated sizes. mostly not in_json.
+
+	when bit_write_MS (obj->size) needs more than one word,
+	but we wrote only one word for it.
+
+2020-03-05  Reini Urban  <rurban@cpan.org>
+
+	api: add dwg_dynapi_subclass_field
+	linear search in the subclass.
+	used in in_json, for keys like value.data_type,
+	embedded structs. call _set_struct_field() then recursively.
+	This fixes all the remaining embdedded structs, like TABLE_value, ...
+
+	We still need the MULTILEADER.ctx.* exception, because this is a union.
+	Note: Just some such . fields have no seperate subclass, like
+	color.index or lt.index.
+
+2020-03-04  Reini Urban  <rurban@cpan.org>
+
+	fixup {dxf,json}-check
+	overwrite.
+	use correct b
+	dxf: support -y
+
+2020-03-03  Reini Urban  <rurban@cpan.org>
+
+	fixup echo 2\>
+
+	svg: improve RAY/XLINE
+	check intersections if out of bounds.
+	avoid div by zero
+
+	svg: echo the jing validation cmdline
+
+	svg: add experimental RAY/XLINE
+
+	svg: honor invisible, comment entity types
+
+	README: document new optional checkers
+
+	programs/*test: simplify
+
+	tests: support LTEXEC with nested builddirs
+	replace hardcoded ../libtool --mode=execute with LTEXEC.
+	Allow empty PROGS and DATADIR in tests
+
+	svg.test: added to run jing
+	formal SVG validation via make check (to catch regressions)
+
+	dwg2SGV: list TODOs
+
+	bsd: declare strcasestr
+	FreeBSD doesn't honor _POSIX_C_SOURCE for strcasestr,
+	only __BSD_VISIBLE.
+
+	cirrus: freebsd-12-1-snap fails
+	better use the stable, or the upcoming 13-0-snap
+
+	even more shell scripts in top_srcdir
+	to test with shellcheck, and fix quoting and other issues.
+
+	add {dxf,json}-check shellchecks
+	with bashisms
+
+	fix programs shell scripts against shellcheck
+
+	fix all root shell scripts against shellcheck
+
+2020-03-02  Reini Urban  <rurban@cpan.org>
+
+	add shellcheck tests
+	but cannot be used together with the rpmlint test.
+	only with the autoconf parallel-tests option,
+	but this does not work with srcdir/TESTS.
+
+	fix dwg/dxf/... scripts for shared lib
+	LTEXEC requires top_builddir (which is always .)
+
+	dwgfilter: shellcheck fixes
+
+	dxf: shellcheck fixes
+
+	dwg: shellcheck fixes
+
+	json: shellcheck fixes
+
+	svg: shellcheck fixes
+
+	fix configure dash/sh Syntax error: Unterminated quoted string
+	e.g. as on freebsd
+
+2020-03-01  Reini Urban  <rurban@cpan.org>
+
+	LaTeXML has broken relaxng svg11-basic.rng
+	See https://github.com/brucemiller/LaTeXML/issues/1237
+	Probe for our, or a fixed LaTeXML one.
+	There is none in any fedora repo.
+	Maybe debian has a working svg schema somewhere.
+
+	svg: probe for jinq and LaTeXML svg validator
+	for svg.in
+
+	decode: accept optional empty sections
+	don't fail fataly then. e.g. with Teigha DWG's
+
+	add check-svg target, via ./svg
+	by adding a validator to the svg, like
+	        jing svg11/svg11-basic.rng $out
+	we can catch all svg errors also.
+
+	svg-validator: fatal: The string "--" is not permitted within comments
+
+	svg: don't group the *Model_Space entities
+
+	decode_test: fix leak
+	improve when to realloc the bit chain.
+	avoid excessive realloc from 1 to 40k.
+
+2020-03-01  Reini Urban  <rurban@cpan.org>
+
+	refactor dwg_rgb_palette, fix odr_violation
+	Define every object only once: ODR (One-Definition-Rule).
+	Use a functional accessor, not a global.
+	Failed only as shared lib on clang with asan.
+
+	Fixup for 2592a4c8ea081649f0d63a5007834c5660fd92d8
+
+2020-02-29  Reini Urban  <rurban@cpan.org>
+
+	add dwg_rgb_palette[256], support svg rgb/true colors
+	more colors than just 0-8,256.
+	The palette struct is from my old site xarch.tu-graz.ac.at acadrgb.txt
+
+	svg: add common_entity with color
+	static color indices 0-8 first only, no rgb or higher palette colors yet
+
+2020-02-29  Reini Urban  <rurban@cpan.org>
+
+	programs: free on asan only without detect_leaks=0
+	don't free with asan and detect_leaks=0.
+	In all other cases the leak detector is on.
+
+	Add some missing --force-free options.
+
+2020-02-29  Reini Urban  <rurban@cpan.org>
+
+	svg: add --force-free option
+	skip free on large DWGs (performance)
+
+	svg: add 3DFACE
+
+	svg: add SOLID (as filled polygon)
+
+	svg: use viewBox, add ELLIPSE (partially)
+
+2020-02-28  Reini Urban  <rurban@cpan.org>
+
+	svg: add helper and POINT
+	a POINT is represented as CIRCLE with radius 0.1 (TODO relative to extends)
+
+	print Ignored ENTITY name to stderr.
+
+2020-02-28  Reini Urban  <rurban@cpan.org>
+
+	dwg2SVG: add lweight to some entities
+
+2020-02-27  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix *_CONTROL.entites[] NULL hdl regression #204
+	We fill the num_entries at the i-th index
+
+2020-02-25  Reini Urban  <rurban@cpan.org>
+
+	json: enable DECODER_OR_ENCODER
+	e.g. needed for DIMENSION*.def_pt, POLYLINE_2D, ...
+	it just means NOT_DXF {}
+
+	injson: add RevHistory, ObjFreeSpace sections
+
+	json: add Security section
+
+	json: add section AppInfoHistory
+	which is not decodable yet. just binary unknown_bits
+
+	injson: fix one more DICTIONARY.numitems case
+	fixes .fuzz-out21/crashes/id:000001,sig:06,src:001316,time:68072970+001732,op:MOpt_core_splice,rep:2
+
+2020-02-21  Reini Urban  <rurban@cpan.org>
+
+	Minor free inconsistencies
+	pointed out by @ManSoSec. Totally harmless.
+	Closes GH #206
+
+	injson: protect Illegal CLASS [0] check
+	NULL deref
+
+	configure.ac: bump Copyright year
+
+	free: fix 2PT_TRACE artefacts
+	from FIELD_DD in LINE
+
+2020-02-21  Reini Urban  <rurban@cpan.org>
+
+	encode: init hdl_dat stream earlier #205
+	add obj_flush_hdlstream to START_HANDLE_STREAM.
+	initially handles are written to a fresh hdl stream.
+	When we reach START_HANDLE_STREAM (entity and object) we flush this to dat.
+	On encode we usually don't know obj->bitsize and obj->hdlpos beforehand.
+
+	This greatly simplifies the dwg.spec, avoiding 2nd loops just for
+	the handles, and avoiding free problems.
+
+2020-02-19  Reini Urban  <rurban@cpan.org>
+
+	encode: fix bit_write_DD
+	check the first 2 or 4 byte of the double for eq
+
+2020-02-19  Reini Urban  <rurban@cpan.org>
+
+	injson: recalc eed.size on wstrings
+	if does_cross_unicode_datversion, i.e. from r2007+ to r2000
+	we need to shorten the eed size of the size frame.
+	encode does not do that for us, we need to do that in the importers.
+	in_dxf already did that by necessity.
+	The XRECORD.xdata_size and obj->size,bitsize are always calculated.
+
+	No more INVALIDEED check-json errors in all samples.
+
+2020-02-19  Reini Urban  <rurban@cpan.org>
+
+	encode: finally fix eed sizes
+	and warn about overflows.
+	we cannot write eed data with size=0, take
+	the previous size from the proper size frame then.
+
+2020-02-18  Reini Urban  <rurban@cpan.org>
+
+	injson: set XRECORD.xdata_size
+
+2020-02-18  Reini Urban  <rurban@cpan.org>
+
+	injson: DD bitsizes can vary
+	read/write via json can change double values,
+	which can influence if a DD value is code 2 or 3,
+	which changes the whole element bitsize.
+
+	DXF also, but there we don't store the bitsize.
+
+2020-02-18  Reini Urban  <rurban@cpan.org>
+
+	injson: fix eed encoding
+	write data not only when no raw was written anymore.
+	with in_json we dont have raw at all.
+	This writes now all non-starting eed data, and fixes
+	many INVALIDEED encoding errors.
+
+	fixup TIMEBLL calculation in all modules
+	julian dates: date->ms are seconds (86400 per day)
+	problematic is only DXF which persists reading TIMEBLL
+	as 40 from double. we could speccial-case that, but we don't.
+
+	simplify LINE ENCODER
+	There is still a bug in LINE.end.x in some cases (bit 2) I think
+
+	injson: fix ENTITY.linewt roundtrips
+	only convert to mm for DXF, not print nor json
+
+2020-02-18  Reini Urban  <rurban@cpan.org>
+
+	injson: change DICTIONARY.numitems logic
+	always keep the lower number, but not 0, because
+	this entry might not have existed yet.
+	texts come before itemhandles, so only fixup itemhandles.
+	This still might fail on illegal json with itemhandles before texts,
+	so ignore those texts.
+
+	Better leak superflouos handles or texts, than a buffer-overflow.
+
+2020-02-18  Reini Urban  <rurban@cpan.org>
+
+	injson: skip illegal CLASSES
+	same as illegal OBJECTS
+
+	Change development version formats for rpm, no -
+	fix git-version-gen.
+	rpm versions may not contain a -, just _.
+	=> like 0.5.0.1093.1_967f
+
+2020-02-17  Reini Urban  <rurban@cpan.org>
+
+	injson: more JSON_TOKENS_CHECK_OVERFLOW_ERR
+	this time in the _set_struct_field loops.
+	fixes a fuzzing case, one remaining.
+
+	injson: fix bit_utf8_to_TV overflow
+	add a final check, when the last \0 cannot be written.
+	Found via fuzzing
+
+	add rpmlint libredwg.spec check-TESTS
+	This variant works with serial-tests only. When switching to
+	parallel-testing use the commented SPEC_LOG_COMPILER instead.
+
+	in_dxf: remove exit() on out of mem
+	handle differently
+
+	injson: fix SummaryInfo.props, add AppInfo
+
+2020-02-17  Reini Urban  <rurban@cpan.org>
+
+	injson: JSON_TOKENS_CHECK_OVERFLOW
+	found via fuzzing.
+	Almost proper error handling now.
+	But still a few void functions which could overflow the parser tokens.
+
+	ignore Template.desc, but handle it
+
+2020-02-17  Reini Urban  <rurban@cpan.org>
+
+	spec: add pslib
+
+2020-02-16  Reini Urban  <rurban@cpan.org>
+
+	injson: fix Required %s. missing, skipped
+	we set the previous object, but later we still check for [i].*
+	so we need to fixup both loop vars to properly skip it.
+
+	Found via a new injson fuzzing round 20
+
+2020-02-16  Reini Urban  <rurban@cpan.org>
+
+	add doc_DIST targets
+	found from rpm spec errors
+
+	no libredwg.spec.in
+	the git test builders require a .spec beforehand, e.g. copr
+
+	support --with-perl-install=vendor
+	needed for packaging
+
+	Integrate and improve libredwg.spec
+
+2020-02-15  Reini Urban  <rurban@cpan.org>
+
+	add rpm libredwg.spec
+	targetting fedora core 31.
+	just libps-devel is not yet packaged there.
+	jq for 0.11
+
+	fix arm cross-compilation
+	which defaults to MB_LEN_MAX 1.
+	include wchar.h in a single place for the needed fixup
+
+2020-02-14  Reini Urban  <rurban@cpan.org>
+
+	dxf: fixup previous commit, no double cast loss
+	casting a double to intptr_t could loose half of the bits on 32bit, 8 => 4
+	rather seperate the remaining test value macros.
+
+	dxf: simplify printing doubles
+	use only dxf_print_rd, no duplicate code
+
+	cirrus: fails with pkg install git...
+	it has a pre-installed go=git instead.
+
+	indxf: LAYOUT needs absolute ownerhandle
+	and with DICTIONARY it varies.
+
+	dxf: enhance static REPEAT limit from 0x7ff to 20000
+	example_2000 LWPOLYLINE has 3695 points, which failed.
+
+	dxf: strip ending .00 also in VALUE_RD
+	not just the generic VALUE macro
+
+	dxf-check: cosmetics
+	convert to test as DXF, to check reading the created DWG.
+	Keeps our DXF in ., creates the audit in test/*.dxf.err
+	Can be check against the Teigha DXF if successful.
+
+2020-02-14  Reini Urban  <rurban@cpan.org>
+
+	json: add DIMENSION.flag (dxf 70) and _subclass
+	just for commenting and to compare against DXF.
+	"_subclass" with a _ prefix to denote that it's not stored in a field.
+	flag is stored, but computed.
+
+	Note: _subclass is a duplicate key in an json object, which some json
+	parsers ignore. jq uses the last (as most).
+
+2020-02-14  Reini Urban  <rurban@cpan.org>
+
+	decode DIMENSION: fixup flag
+	don't clear the set bits, which we set before.
+	Thanks to Lyubomir Savekov
+
+	dxf: simplify INSERT
+	harmonize dxfb
+
+	dxf: fix SUB_FIELD_BD
+	which is special-cased for DXF angles (rad2deg).
+	Fixes HATCH angles 50, 51, and LTYPE.dashes.rotation 50 in out_dxf
+
+	indxf: import HATCH.boundary_handles 330
+
+	log: trace TF, not just insane
+	just set a length limit to avoid overlarge binary data (ole2frame, preview) on -v3.
+	emit json LTYPE.strings_area only if has_strings_area.
+
+	api: refactor LTYPE
+	move style [H*] into dashes, same as in DXF (code 340 in the dashes loop)
+	simplify R_13 loop
+	still need 2 loops for non-handles and hanldes at the end, beware of free.
+	fixup wrong DXF codes for complex_shapecode and shape_flag, mixed up.
+	fixup wrong shape_flag check for has_strings_area
+	rename LTYPE.text_area_is_present to LTYPE.has_strings_area
+	implement LTYPE.style 340 import in in_dxf
+
+2020-02-13  Reini Urban  <rurban@cpan.org>
+
+	add dwgfilter shell script
+	Closes GH #64
+	Need a few good examples still.
+
+	add dwgfilter (WIP #64)
+	custom query and search/replace filters on all objects.
+	probably in a XPath-like expr language.
+	(or maybe just jsonpath dot notation, but XPath has much more features)
+	idea: just pass it through jq https://stedolan.github.io/jq/manual/ via json.
+
+	dynapi: regen => LAYER.linewt 370
+
+	json: added to DXF_OR_PRINT
+	minus one special case: LAYER.linewt untranslated.
+	Now LINE points showing up.
+
+	json: use bit_utf8_to_TV
+
+	api: add bit_utf8_to_TV (untested, needs dest buffer)
+	to undo json_cquote
+
+2020-02-12  Reini Urban  <rurban@cpan.org>
+
+	indxf: better xcalloc
+	check wrong value before calloc() call.
+	fuzzer indxf6 regression.
+
+	json: fix json_wstring
+	need an ending delimiter, just overwrite the ending " of the string.
+	Ideally we should restore the " after the utf8 conversion, but we don't
+	need the json later. so leave it.
+
+	json: parse json_FileDepList_Files()
+	as array of objects
+
+	out_dxf,_json: improve ending .x00 stripper
+	Only msvcrt has this sprintf feature, POSIX not.
+	Do it manually.
+	Now for all numbers, not just a few.
+
+	json.test: fatalize json roundtrip errors
+	when entities get lost.
+	Fixed with the previous commit
+
+	encode: fix [MS] obj->size > 0x7fff
+	mixed up the order of RS.
+	This fixes json roundtrips with large objects, e.g. with size 0xd1c9
+
+	json: strip ending excessive .0000000000 as in dxf
+
+	out_json: increase %f precision as in DXF
+	we still have a floating-point roundtrip precision loss in PEXTMIN,
+	causing the HEADER.crc to be different.
+
+	auxheader: unknown_5rl defaults
+
+	add FIELD_VECTOR_INL
+	pre-allocated inlined vectors of a type, with const size,
+	like RC name[5]
+	Turn back AuxHeader.aux_intro into an array of 3
+
+	auxheader: change RC unknown_20rc[20] to RL unknown_5rl[5]
+	and use TFFx (binary) for JSON, arrays for the rest.
+	TODO: create an inlined vector without malloc:
+	FIELD_VECTOR_INL (nam, type, size, dxf)
+
+	encode: remove dat->byte -= 6 fixup
+	dont write empty strings ending \0 byte on length 0.
+	roundtrips do match now.
+	add @bitpos to -v5 insane loggings to find out about
+	the wrong TV encoding on empty strings.
+
+2020-02-11  Reini Urban  <rurban@cpan.org>
+
+	json: fix TIMEBLL repr
+	with the single float value we always the lost two digits.
+	represent it as array of 2 BLs, as in the DWG
+
+	in_json: protect wrong supertypes
+	with assert, since it's fatal and not fixable.
+	It comes from a wrong mixup of name, dxfname and/or type.
+	Here from a wrong dxfname.
+
+	encode: fixup header_variables size
+	wrong patchup size logic, needs -6.
+	checked via json-check
+
+	api: add auxheader to json
+	rename some fields, add RCx type.
+	num_saves would be suppressed by json, rename to numsaves
+
+	decode: fix the example_2000 3dsolid leak
+	improve the decoding a bit, check bounds.
+	The leak was an improperly read encr_sat_data
+
+	alive.test: TODO more failing tests
+	dwgrewrite leaks with example_2000 3DSOLID
+	dwgwrite crashes on cygwin
+	dwgrewrite crashes on mingw
+
+	{dxf,json}-check: support handy td symlink
+	for test/test-data
+
+	json: change xdata to ARRAY [ type, value ]
+
+	harmonize xdata tracing
+	TV strings, not TF.
+	convert to TU strings in json if targetting TU (not yet)
+
+2020-02-10  Reini Urban  <rurban@cpan.org>
+
+	dwg_add_handle: allow actual relative handle codes
+	from json.
+	not just the theoretical code types from the spec.
+	Fixes the json handle inconsistencies, and we could do now
+	2 handle values only again. but we rather keep it precise.
+
+	json: add a 2nd HANDLE repr
+	array of 2 [code, absref] or array of 4 [code, size, value, absref]
+	to overcome problem with reverse relative offset calculation in dwg_add_handle
+
+	free: skip entity color.rgb tracing messages
+
+	free: skip entity bitsize tracing messages
+	for r13 and r14
+
+	encode: fixup wrong comment
+
+	json: avoid null TU strings
+	TV never prints null, just ""
+
+	dwggrep: AM_CFLAGS before CFLAGS
+	In case we added -I/usr/local/include to CFLAGS, and had an older
+	libredwg dwg.h installed there, we would pick up the wrong header.
+
+2020-02-10  Reini Urban  <rurban@cpan.org>
+
+	encode: no bitsize re-calculation with handles
+	Already calculated at HANDLE_STREAM, but them overridden again
+	at the very end, with INJSON only (which does have size and
+	bitsize keys, just unreliable, when down-converting)
+
+	Avoid that when we have handles. No "bitsize calc from address (no handle)".
+	Fixes acad import/teigha conversion of DICTIONARY et al.
+
+2020-02-09  Reini Urban  <rurban@cpan.org>
+
+	import: generalize in_postprocess_SEQEND/handles
+	for dxf and json.
+	Create the list of owner children from each SEQEND, esp.
+	when converting r2004+ down to r2000 (with only first/list pairs).
+
+	Also create common_entity handles when downconverting, taken from in_dxf:
+	prev_/next_entity handles, nolinks flag,
+	xdicobjhandle.
+
+2020-02-09  Reini Urban  <rurban@cpan.org>
+
+	out_json: fix -Wformat eed.code type
+
+	encode: undo CRC pos fixup on Wrong object size
+	Fixes import Teigha error for DICTIONARYVAR 1A2
+
+	harmonize decode T logging
+
+	{dxf,json}-check: fix some r calc
+	error: r=test-data which failed on Teigha
+
+	harmonize encode TV with TU logging
+	See a810101b168da4a954d539c82708da46c0eb3136
+
+2020-02-08  Reini Urban  <rurban@cpan.org>
+
+	comment formatting only
+
+	fix -Wsign-compare from mingw
+
+	fix remaining injson leaks for r14
+	See GH #197
+
+	alive.test: no TODO for dwgwrite
+	all tests must pass, just indxf leaks are allowed.
+	dwgrewrite still fails on mingw64
+
+	alive.test: dwgwrite with json does not leak anymore
+	See GH #197
+	Just example_r14.json and invalid fuzzing json's leak still (TODO)
+
+	free: fix MLINESTYLE.lines leak
+	again. wrong logic, we need to check against dat->from_version
+
+	harmonize decode TV with TU logging
+	with quotes and add the type/dxf,
+	for easier json-check roundtrip checks.
+
+	encode: Imported json sizes are unreliable when changing versions
+	set dat->from_version and dwg->header.from_version differently
+	on in_json. dat->from_version should be R_2000 to keep strings asis,
+	only keep the dwg from_version as proper.
+
+2020-02-08  Reini Urban  <rurban@cpan.org>
+
+	encode: keep dat.from_version
+	undo the previous minimal DXF import hack.
+
+	process higher versions on free, because there we need from_version also.
+	(HATCH_gradientfill)
+
+2020-02-08  Reini Urban  <rurban@cpan.org>
+
+	in_json: fixup invalid DIMASSOC_Ref elems if != 4
+	don't crash on invalid free of an unallocated ref.
+	Always allocate at least 4, and handle only 4.
+	This new error came up when free of DIMASSOC was enabled.
+
+	api: simplified new DWG_OPTS_IN
+	infxf or injson
+
+2020-02-08  Reini Urban  <rurban@cpan.org>
+
+	free: add dwg_free_variable_no_class
+	for leaks with the error-case on a missing class.
+
+	define all declared classes to be DEBUGGING, because
+	they show up in objects.inc, and can be imported
+	by DXF or JSON, even if we have not defined any order of
+	fields yet. we've just declared them, which is enough.
+
+2020-02-08  Reini Urban  <rurban@cpan.org>
+
+	in_json: fix version specific HANDLE_VECTOR leaks
+	esp. the 2004 entity lists, which are allocated by an importer,
+	but not encoded nor freed.
+
+	in_json: fix MLINE.verts/num_lines leak
+	the spec sets MLINE.num_lines from verts[].num_lines,
+	so we need to set in in the importer
+
+	in_json: fix HEADER.unknown_text1 leak
+	of the IF_ENCODE_FROM_EARLIER_OR_DXF strdup("m")
+
+	dynapi: add missing VERTEX_3D aliases
+	VERTEX_MESH VERTEX_PFACE.
+	Fixes json roundtrips
+
+	fatal roundtrip tests on 0 entities
+	only allow some missing entities for now
+
+	suppress dsymutil echo
+	in some helper tools
+
+	check-json: fix make -jN jobserver warning
+	See https://www.gnu.org/software/make/manual/html_node/Options_002fRecursion.html
+
+	out_json: fix SPLINE_control_point
+	to be compatible with dynapi, and in_json
+
+	in_json: revise invalid object error handling
+	no DUMMY, ignore and free it.
+
+2020-02-08  Reini Urban  <rurban@cpan.org>
+
+	in_json: improve invalid object error handling
+	set type to DUMMY, don't skip it.
+	set supertype, parent, index.
+
+	if inside the object, read all the remaining keys to start at the next.
+
+2020-02-08  Reini Urban  <rurban@cpan.org>
+
+	in_json: valgrind cosmetics
+	avoid 0 byte leak stats
+
+	in_json: better fixup numfield logging
+	show ignored value, show assignment.
+
+2020-02-07  Reini Urban  <rurban@cpan.org>
+
+	stable DYNAMICBLOCKPURGEPREVENTER
+	now fixed
+
+	examples: update bd-unknown.inc and fix target
+	when in builddir
+
+	in_json: protect from wrong LTYPE.strings_area length
+	Found via GH #197 fuzzing
+
+	in_json: stricter object+entity check
+	to avoid mismatches with wrong supertypes, heap-overflows
+	on common_data access and such.
+	Found by fuzzing GH #197
+
+	unknown: add more objects/field names
+
+	update unknown
+	use-after-free, convert to TU, double-free, ...
+
+	add more ANNOTSCALEOBJECTCONTEXTDATA types
+	unhandled
+
+	add some AcDbSh DEBUG_CLASSES
+
+	add more unhandled classes with DXF counterparts
+	from the JW testcase. GH #200
+
+	add 3 new unhandled ACME classes
+	AutoCAD Mechanical.
+	from the JW testcase, GH #200
+
+	unknown: regen and fixup for builddir
+
+2020-02-07  Reini Urban  <rurban@cpan.org>
+
+	json: fix filedeplist and FIELD path keys
+	key only, without obj[rcount1].
+	use FIELD_VECTOR for filedeplist (much easier than a REPEAT block).
+	Thanks to Vimal Pillai for his testcase in GH #200
+
+	Now the features array is always present, an empty files array not.
+
+2020-02-06  Reini Urban  <rurban@cpan.org>
+
+	in_json: add BL* support
+	for LWPOLYLINE.vertexids r2010+.
+	Thanks to Vimal Pillai for his testcase in GH #200
+
+	check programs: display roundtrip fail (TODO)
+
+	fixed unit-testing/ole2frame
+	now with proper TF support
+
+	more TF -Wpointer-sign fixes from clang
+
+2020-02-05  Reini Urban  <rurban@cpan.org>
+
+	wrong loop, detected by latest clang
+	 -Wfor-loop-analysis
+
+	TF unsigned char*: fix out_json %02X for char > 127
+	set BITCODE_TF as unsigned, avoiding printing FIELD_BINARY/FIELD_TF
+	as FFFFFFxx (negative sign extended to -int)
+	Fixes GH #199
+
+	dynapi: ent->preview TF not just char*
+	but the fields already had it.
+
+	harmonize FIELD_TF loggins
+	%02X not %02x, to be easier comparable to FIELD_BINARY
+	output with JSON and DXF
+
+2020-02-05  Reini Urban  <rurban@cpan.org>
+
+	add dynapi_test_all.sh
+	for all test-data DWGs. Higher coverage, lot's of nan's
+
+	Improve *clean rules a bit.
+
+2020-02-03  Reini Urban  <rurban@cpan.org>
+
+	check: add json and dxf roundtrip checks
+	still TODO. count the number of created entities, how many are lost
+
+	in_json: fix more string leaks
+	they are allocated fresh in the dynapi
+
+	in_json: fix eed string leaks
+	they are copied into data.
+	See GH #198
+
+2020-02-03  Reini Urban  <rurban@cpan.org>
+
+	dwgwrite: free on critical importer errors
+	to avoid leaks.
+
+	Also tune the in_json object_map hash.
+
+2020-02-03  Reini Urban  <rurban@cpan.org>
+
+	make json-check -v3 easier comparable
+	absolute offsets only with LOG_HANDLE -v4
+
+	in_json: type the missing names
+
+	api: rename XRECORD.num_databytes to xdata_size
+	it is a size after all, not a num_
+
+	in_json: add missing XRECORD.xdata
+	Closes GH #198
+
+	out_json: add missing XRECORD.xdata
+	See GH #198
+
+	in_json: fix Unknown CLASS key
+	proper error handling, fixing a fuzzing heap-overflow GH #197
+
+	in_json: Improve fatal error on required keys
+	check on next object also.
+	Fixed all but one GH #197 fuzzing crashes.
+
+	in_json: Fatal error on missing OBJECTS type
+	though theoretically we could search for the type, as
+	we do for our internal fixedtype.
+	Fixes GH #178 fuzzing crashes
+
+	in_json: fatal error if OBJECTS handle is missing
+	Fixes GH #178 fuzzing crashes
+
+2020-02-03  Reini Urban  <rurban@cpan.org>
+
+	in_json: ignore OBJECTS index field
+	we really need to use our own for an reliable objid.
+	It is treated just as a comment.
+
+	Also fixup TableCellContent_Attr.index subclass field.
+	Fixes GH #178 fuzzing crashes
+
+2020-02-03  Reini Urban  <rurban@cpan.org>
+
+	in_json: log empty arrays, key: [ ]
+
+	in_json: read eed[]
+	See GH #198, fixes the EED part.
+
+	out_json: add eed array of objects
+	some with size and handle, the others only code and value.
+	See GH #198
+
+	in_json: wrong DICTIONARY.numitems fixup
+
+2020-02-02  Reini Urban  <rurban@cpan.org>
+
+	in_json: fix heap-overflow on parser errmsg
+	fix another head overflow to the right side this time.
+	Found by the 2nd fuzzing round GH #179
+
+	encode: fix null deref with empty klass->dxfname
+	Fixed now all fuzzing crashes GH #197 (for now)
+
+	in_json: ignore DICTIONARY.numitems also
+	we still have a wrong Inconsistent warning though
+
+	in_json: set target version to R_2000
+	to avoid unnecessary widestring back and forth conversions,
+	because we can only write R_2000 for now. Later turn it back on.
+
+	in_json: add wstring and FileDepList
+
+	in_json: clang-format
+
+	in_json: error on duplicate OBJECTS or CLASSES arrays
+
+	in_json: !obj->dxfname error case
+	when it is not a string, set a default.
+	Fixes a double-free, GH #197
+
+	in_json: add json_binary helper
+
+	out_json: workaround FileDepList NOCOMMA hack
+	on empty content. we dont emit the num_ fields anymore, and here
+	no empty arrays neither.
+
+2020-02-01  Reini Urban  <rurban@cpan.org>
+
+	in_json: set all num_ and _size fields from the ARRAY
+	and skip it's explicit keys.
+
+	out_json: skip all num_ fields
+	to avoid in_json array mismatches
+
+	{json,dxf}-check: fixup r for teigha
+
+	in_json: fix object/entity name stack overflows
+	See GH #197
+
+	in_json: support Template section
+	which is actually used by r2000 encode
+
+	in_json: support SummaryInfo section
+	with some parsing problems
+
+	in_json: support R2004_Header section
+	even if it's yet unused for R2000 encode
+
+	fixup in_json: protect from NULL json_HANDLE
+	Don't get the hdl[] twice.
+	And log the H* index
+	See GH #197
+
+	in_json: handle all 310 strings as FIELD_BINARY
+	i.e. TF
+	See GH #197
+
+2020-02-01  Reini Urban  <rurban@cpan.org>
+
+	api: harmonize _size suffix for FIELD_BINARY
+	all FIELD_TF/FIELD_BINARY (310) fields, get an
+	associated name_size field (not _length, ...).
+
+	And don't emit it on out_json, rather emit the binary string only.
+
+2020-02-01  Reini Urban  <rurban@cpan.org>
+
+	in_json: initialize dwg->object_map
+	Needed for dwg_add_handle()
+	See GH #197
+
+	in_json: add json_update_sizefield
+	fixup a wrong preview_size field, (and later maybe more)
+	TODO: remove those redundant sizefields, and rather encode
+	the binary string properly "\000\000...."
+	See GH #197
+
+	in_json: Improve fixup of Invalid type
+	fixedtype is calc. from the name (which is our stromgest assertion).
+	Fixup any wrong type < 500, or fixedtype <= OLE2FRAME (above can be a class)
+	See GH #197
+
+2020-02-01  Reini Urban  <rurban@cpan.org>
+
+	in_json: fixup DICTIONARY.numitems which is used for 2 arrays
+	keep the smaller numfield of the two arrays itemhandles[] and texts[].
+	Also for DICTIONARYWDFLT.
+
+	Also add missing H* and TV* logging.
+	See GH #197
+
+2020-01-31  Reini Urban  <rurban@cpan.org>
+
+	in_json: check Invalid type
+	when the name and the type do not match.
+	Fixes fuzzer crashes
+
+	in_json: protect from NULL json_HANDLE
+
+	forgot one NULL klass->dxfname check
+	detected by in_json fuzzing.
+
+	in_json: change num_tokens to signed
+	to detect parse errors.
+
+	in_json: fix stack-overflow on parser error
+
+	dwgwrite: disable llvm_mode persistent mode
+	The loop crashes. Don't know why yet, works fine with dwgrewrite.
+
+	dwgread: support reading from stdin
+	when no optional infile argument was given.
+	print a notice to stderr on -v1.
+	Analog to dwgwrite to support pipes
+
+	dwgwrite: support -y -o /dev/null for fuzzing
+	much faster fuzzing
+
+2020-01-30  Reini Urban  <rurban@cpan.org>
+
+	fix last clang -Wtautological-constant-out-of-range-compare
+	Do a compile-time range check.
+
+	Note: The taylor-series approximation for log2 does not help here.
+	we only have 7 values to check against, and we want to avoid -lm.
+	__clz would be better, but our current check is better.
+
+2020-01-30  Reini Urban  <rurban@cpan.org>
+
+	in_json: wrong version comparison, always false
+
+	out_json: remove IS_PRINT
+	for DXF_OR_PRINT: don't do the DXF conversions, just do the mundane
+	simplier FIELD_* instead. E.g. linewt not converted (0x1d/29, not -3)
+
+	in_json: no relative handles for reactors
+	observe the original code, if >=6 for relative or not.
+
+	change check-dxf and add check-json targets
+	check roundtrips for all our test DWG's,
+	if the re-created DWG is valid (via Teigha).
+	See GH #195
+
+	json-check: new checker analog to dxf-check
+	check proper roundtrips, if the dwg generated from a json
+	can be read by Teigha
+
+	dxf: improve dxf analog to dwg
+	and fix a typo
+
+	dwgwrite: add --force-free
+	for leakage testing
+
+	dwg: add JSON support, not just DXF
+	and rather use dwgwrite, not dxf2dwg
+
+	in_json: check and update numfield
+	for all objects arrays. Fixes GH #169
+
+2020-01-29  Reini Urban  <rurban@cpan.org>
+
+	dwgwrite: add afl-clang-fast support
+
+	api: change num_unknown_bits from ulong to RL
+	was problematic on 32bit, uint32_t is enough
+
+	cirrus: autogen.sh requires now git
+
+	in_dxf: warn -> trace Misleading num_entries
+	see comment and GH #195. It is not a problem.
+
+2020-01-29  Reini Urban  <rurban@cpan.org>
+
+	in_json leaks: add DWG_OPTS_INJSON
+	where even obj->name is dynamic, and needs to be freed.
+	Free the temp. obj->unknown_bits.
+
+	leaks in_dxf: 533 (mostly strings)
+	      in_json: 1884 (strings)
+
+2020-01-28  Reini Urban  <rurban@cpan.org>
+
+	in_json: fix the biggest leaks
+	and fix wrong tokens->tokens++, it is tokens->index++!
+	Otherwise we cannot free it.
+	66k remaining, mostly the unknown_bits strings.
+
+	doc: Update manual
+
+	in_json: fix HANDLE double-frees analog to in_dxf
+	dwgwrite: support JSON now officially.
+	many large leaks remaining (1MB per example_2004)
+
+	doc: FreeCAD uses now LibreDWG
+	See GH #195
+
+	in_json: fixup subclass elem[] index
+	it is a char* pointer only
+
+	dynapi: fixup T types
+	esp. needed for TF and TFF types.
+	TF, TV, TU, T or even TFF. BINARY is TF.
+
+	in_json: special-case LTYPE.strings_area TF (256/512)
+	otherwise we get a heap-overflow in encode
+
+	json,encode: add num_unknown_bits
+	to avoid overflows on encode.
+	actually encode the bits.
+
+2020-01-27  Reini Urban  <rurban@cpan.org>
+
+	json: rename unknown to unknown_bits
+	and encode it. The size may overflow on writing.
+	TODO eed, common_size to calculate num_unknown_bits. Or emit it
+
+	-Wmaybe-uninitialized with older compilers
+
+	in_json: parse unhandled sections
+
+	in_json: harmonize error messages
+	and delete dead code.
+
+	in_json: support the 3 known static arrays
+	and add a symetric dwg_dynapi_field_get_value (no text yet needed)
+
+	in_json: fixup MULTILEADER.ctx.content
+	with new dynapi union keys.
+	Closes #194
+
+	dynapi: support unions and inlined structs
+	MULTILEADER.ctx not yet, but MLEADER_Content.txt.default_text.
+	The idea is to support both, inlined and extra.
+	See #194
+
+	json: fix MLEADERSTYLE.block_scale to 3DPOINT
+	so that it can be easily read via the dynapi
+
+	fixup dynapi.c #line
+	for debugging only
+
+	in_json: delete dead exporter code
+	We will need FIELD_TV and more strings later, for the other
+	sections. Maybe even VECTOR and REPEAT.
+
+	in_json: set obj->fixedtype
+	via linear search in objects.inc,
+	not in CLASSES. CLASSES only have the real dynamic type,
+	not our fixed enum.
+
+	in_json: add unknown bits (binary)
+
+	json: add unknown bits (binary)
+
+	fix bits_test
+	make it fail,
+	adjust offsets
+
+2020-01-27  Reini Urban  <rurban@cpan.org>
+
+	dynapi: fix dwg_dynapi_fields_size
+	add size for each struct.
+	add helpers _find_entity and _find_subclass,
+	add exported dwg_dynapi_entity_size() and dwg_dynapi_subclass_size()
+
+	fix dynapi_test for test_sizes (just cygwin got it right)
+	TODO one missing PROXY_LWPOLYLINE size/fields entry in dynapi.
+
+2020-01-27  Reini Urban  <rurban@cpan.org>
+
+	in_json: start handling inlined MULTILEADER structs
+	and unions. TODO: add the keys with . to the dynapi,
+	like ctx.has_content_txt and ctx.content.txt.default_text
+	See GH #194
+
+	json: disable HANDLES section
+	it is not really the HANDLES section omap, which
+	would be relative in both. And it is not needed
+	to encode, it is created only from the objects[] there
+
+2020-01-26  Reini Urban  <rurban@cpan.org>
+
+	dynapi: test sizes
+	if the sum of all fields equals the builtin sizeof(struct)
+
+	dynapi: fix dwg_dynapi_fields_size
+	for something like VERTEX_PFACE (VERTEX_3D alias)
+
+	dynapi: fix DIMASSOC_ref => DIMASSOC_Ref
+	find the subclass
+
+	json: fix _names, like _3DFACE
+	strip the _ prefix then. These names are not exported,
+	the dynapi accepts only names without
+
+	json: fix duplicate object key with classes
+	on dwg_json_variable_type success don't jump to invalid_type:,
+	adding all object keys again.
+
+	in_json: fix json_advance_unknown
+	for objects and arrays. Improve duplicate objetc/entity check,
+	e.g. DICTIONARYDFLT with mult. object, index, ...
+	Handles this out_json bug correctly.
+
+	dynapi: add union support
+	add recursive out_declarator(),
+	for MLINESTYLE_liine.lt.{index,ltype}
+	Closes #194
+
+	in_json: enable _obj->size
+	skip obj->size if already done. and other
+	similar fields.
+	Fixes WIPEOUT.size
+
+	in_json: improve FILEHEADER
+	add HANDLES, but ignored. encode creates a new omap on the fly.
+	TODO lt.index is not in dynapi, and a wrong field name
+
+	json: improve color fields
+	CMC can be index alone with <r2004, not an OBJECT {}.
+	use field_cmc for common entity->color also, to
+	fix unknown color.flag in out_json. either index alone or object.
+
+	in_json: support BINARY strings (dxf 310)
+	and add more, faster json type checks
+
+	out_json: fixup fields for nested struct paths
+	only print the field name, not the full path with "[rcount1]." included.
+	Needed for in_json
+
+2020-01-26  Reini Urban  <rurban@cpan.org>
+
+	api: change Dwg_SPLINE_point* to BITCODE_3DPOINT*
+	Use an ordinary 3DPOINT vector fit_pts, without parent.
+	We use that type for LEADER.points also.
+
+	The problem appeared in in_json
+
+2020-01-26  Reini Urban  <rurban@cpan.org>
+
+	in_json: fix array of subclasses
+	Add entity types: BT, 2RD*, BD*
+
+2020-01-26  Reini Urban  <rurban@cpan.org>
+
+	dynapi: add dwg_dynapi_field_set_value()
+	set field value in arbitray struct, if entity, object, common or subclass.
+	Needed for in_json, the very generic way.
+
+	api: const some handle api args.
+	in_json:
+	  add _set_struct_field() using dwg_dynapi_field_set_value()
+	    recursively (for subclasses).
+	    use it for all kind of structs.
+	  add missing obj->parent dwg's
+
+2020-01-26  Reini Urban  <rurban@cpan.org>
+
+	dynapi: add internal dwg_dynapi_subclass_name
+	to get the subclass name from the f->type. To get the size of the
+	struct
+
+	in_json: more OBJECTS: arrays H*,TV*,...
+	fixup cfields (common overwriting specific fields)
+
+	api: protect from empty obj->parent or objid
+	with in_json even the first BLOCK_HEADER objid = 0 will be used
+	with the dynapi to set the ownerhandle, ...
+	Allow objid 0 there.
+
+	in_json: add OBJECTS, and dwg_dynapi_fields_size()
+	to avoid the objects.inc linear search. We just need to dynamic
+	size to allocate the object-specific _obj, no static typing needed.
+	Much simpler than in the DXF importer.
+
+	in_json: parse POINTS, CLASSES
+
+	in_json: parse TIMEBLL, CMC, HANDLE types
+
+	in_json: start working on it
+	parents not needed. only different from i-1 for primitives
+	(keys, array members).
+
+2020-01-26  Reini Urban  <rurban@cpan.org>
+
+	Update jsmn: modernized
+	no jsmn.c anymore, just a single header.
+
+	tune the importer for the new jsmn header,
+	esp. use JSMN_STATIC. we only need it once, in in_json.c
+
+2020-01-26  Reini Urban  <rurban@cpan.org>
+
+	add in_json with MIT jsmn WIP
+	as a submodule
+
+2020-01-18  Reini Urban  <rurban@cpan.org>
+
+	preR13: fix logical PREP_TABLE error
+	always returned an error, missing braces (Ouch)
+
+2020-01-18  Reini Urban  <rurban@cpan.org>
+
+	fix leak in 2nd HANDLE loops
+	e.g. MLINESTYLE.lines or LEADER.arrowheads.
+	On FREE don't free the array after the first loop,
+	otherwise we cannot free the handles from the 2nd
+	handlestream loop later.
+
+	Closes GH #191. Only preR13 leaks in fuzzed DWG's remaining,
+	all other fuzzed test DWG's (>1000) don't leak on decode anymore.
+
+2020-01-18  Reini Urban  <rurban@cpan.org>
+
+	fix XRECORD.objid_handles leak
+	on num_objid_handles == 0.
+	See GH #161
+
+	free: fix minimal encoded HEADER.HANDSEED leak
+	See GH #191
+
+2020-01-17  Reini Urban  <rurban@cpan.org>
+
+	free all NULL handles
+	just not with INDXF.
+	Fixes more handleref leaks, see GH #191
+
+	free: fix DICTIONARYWDFLT.texts[] leak
+	on overflow errors.
+	don't reset numitems to 0 in the 2nd VECTOR using the same
+	numitems. We still need to free the first VECTOR_T.
+	This was already fixed for DICTIONARY.texts[]
+	See GH #191
+
+	free: fix entity 2007+ color.handle leak
+	See GH #191
+
+	free: fix entity color.*name leaks
+	fixup flags, so that the mask matches.
+	See GH #191
+
+	decode: fix 2007 class section leak
+	on error Invalid max class number.
+	See GH #191
+
+	MLINE: fix leaks with invalid num_* fields
+	FIELD_VECTOR overflows apparently dont free all fields
+	See GH #191
+
+	free: fix MLINESTYLE color leaks
+	esp. wrongly allocated names.
+	See GH #191
+
+	spec: change RC NUM_* to RCu
+	no hex logging for num_ fields
+
+	free: fix UNKNOWN_OBJ leak on ERROR: Wrong TABLECONTENT.type
+	for obj != TABLE. Some dxfname mixup should not be fatal
+	for free. Check the types.
+	See GH #191
+
+	decode: fix 2007 system page leaks
+	on ERROR: Invalid section->pages[0].*size and similar early aborts.
+	See GH #191
+
+	remove .gitlab-ci.yml
+	it is not free, you have to find a runner by yourself.
+	(or use some limited Google Cloud runner)
+	The gnu gitlab instance recently started to annoy with CI errors,
+	because there was no runner configured
+
+	decode: fix 2007 data_page leak on errors
+	On the OUTOFMEM decode_rs() error.
+	See GH #191
+
+	decode: fix EED leaks on ERROR No EED[%d].handle
+	See GH #191
+
+	decode: fix class leak with Invalid max class number
+	See GH #191
+
+2020-01-17  Reini Urban  <rurban@cpan.org>
+
+	decode: skip EED parsing on illegal bitsize
+	Also fail early on invalid owner handles (not 0.x.x).
+	TODO: We might try to reconstruct the handle (previous plus one, with known
+	handleoffset) and search for it, to re-align the lost position.
+
+	It's next to impossible that with an illegal size/bitsize, EED can be parsed
+	correctly, which is then subsequently leaked.  Try at least the other Common
+	EED Handles then.
+	Fixes fuzzed dwgrewrite leaks of EED.
+	See GH #191
+
+2020-01-17  Reini Urban  <rurban@cpan.org>
+
+	fix FUNDING.yml format for patreon
+
+	Create github FUNDING.yml
+
+	logs-all.sh: larger timeout for test-big
+
+2020-01-16  Reini Urban  <rurban@cpan.org>
+
+	README: list more supported optional tools
+
+	decode: section info types and formats
+
+	decode: protect overlarge section sizes
+	> 2GB. Fixes crashes7, id 1
+	Also protect the right side of dat->chain and decomp.
+	Fixes the remaining GH #188 case, id 168.
+
+	indxf: more NULL ptr protections
+	and illegal MLINE asserts.
+	Closes GH #189 and GH #190
+
+	dynapi: allow setting NULL ptr
+	to a string.
+	Fixes case null_pointer29 of GH #189
+
+	indxf: protect from uninitialized object
+	undo NEW_OBJECT when unknown.
+	Fixes null_pointer25 of GH #189
+
+	indxf: protect from invalid DXF 0 null (EOF and ENDSEC checks)
+	Fixes 16 GH #189 cases
+
+	indxf: fix 3x NULL pair SEGV
+	Fixes GH #186, and 2 cases of GH #189
+
+	decode: re-add one more sections check
+	Fixing id 31 of GH #188.
+	check for NULL sections (Template), and info->size overflow
+
+	decode: fix section size check for TEMPLATE 0 bug
+	with Teigha.
+	Fixes e.g. 2004/dbcolor.dwg
+
+2020-01-16  Reini Urban  <rurban@cpan.org>
+
+	decode: fix uncompressed section overflow
+	for the last block, the size may be smaller. only read this then.
+
+	Fixes all but 2 id's of GH #188: id's: 6,15,31,91
+
+2020-01-16  Reini Urban  <rurban@cpan.org>
+
+	decode: check section sizes
+	skip section on outofbounds sizes: max_decomp_size (block size) > 0x8000
+	or impossible overall size. Also, with mult. blocks the size
+	must exceed the size of the first block.
+
+	in case of errors calc the true sec_dat->size to avoid heap overflows.
+
+	Fixes id's 0,4,8,9,16,34,36,46,171,203 of GH #188
+
+2020-01-16  Reini Urban  <rurban@cpan.org>
+
+	dwgbmp: protect against BMP size overflow
+	do the same dwgbmp checks as in decode.
+	"Invalid thumbnail data" on overflow.
+	Fixes Case 2, id 203 of GH #188
+
+2020-01-15  Reini Urban  <rurban@cpan.org>
+
+	strings: add FIELD_T conversion tests, NEWS
+	Closes GH #185
+
+	indxf: ditto from_version and TU conversions
+
+2020-01-15  Reini Urban  <rurban@cpan.org>
+
+	encode: add bit_write_T, clarify from_version <=> version
+	do the necessary up and down conversions TF <=> TU.
+
+	reading always stores in the from_version format,
+	writing always writes in the version format.
+	but reading does not seperate the both yet, only
+	when writing dat->version/dwg->header.version is set.
+
+	This e.g. fixes reading EED wstrings from
+	-EED[0] code: 0 [RC], wstring: len=24 [RS] "䄀挀䐀戀匀愀瘀攀搀䈀礀伀戀樀攀挀琀嘀攀爀猀椀漀渀" [TU]
+	+EED[0] code: 0 [RC], wstring: len=24 [RS] "AcDbSavedByObjectVersion" [TU]
+
+	and all the dwgrewrite to r2000 strings.
+
+2020-01-14  Reini Urban  <rurban@cpan.org>
+
+	silence wrong -Wuninitialized
+	with older compilers.
+
+	fix test/unit-testing/hash_test leak
+
+	indxf: more NULL pair protections
+	Fixes GH #186
+
+	json: fix NULL deref of obj->dxfname
+
+	json_cquote: fix Invalid characters in \uXXXX escape
+	add a hex helper and fix a off-by-one bug, resulting
+	in \u000:
+
+	add json helper analog to dxf,dwg,log
+
+2020-01-13  Reini Urban  <rurban@cpan.org>
+
+	add make regen-dynapi target
+	and remove the automatic dynapi generation,
+	which was problematic with git and dwg.h updates.
+	See GH #184
+
+	json: fix cquoting for text vectors
+	and convert \U+xxxx to \uxxxx notation. E.g. with ASCII
+	strings (<r2007) storing unicode chars
+
+	json: stabilize json output
+	esp. for unknown/invalid objects
+
+	decode: improve empty sections checks
+
+	json: add sections
+
+	improve RevHistory.spec, add section sizes
+	guess some RevHistory field names.
+
+	read_R2004_section_info: fixup Teigha TEMPLATE.num_sections: 0
+	to 1, a Teigha bug.
+	Also fixup the section size to info->size, the actual size. not max_decomp_size
+
+	api: rename AppInfo.unknown_rl to num_strings
+	and add a few example values
+
+	fixup mandatory Template section
+	Teigha 4.3.2 saved 2018/PolyLine3D.dwg does not have this section,
+	so relax the error level. Just report it.
+
+	fixup read_2004_compressed_section overflow check
+	For 2018/PolyLine3D.dwg from Teigha 4.3.2
+
+2020-01-13  Reini Urban  <rurban@cpan.org>
+
+	api: add dwg_obj_layer_set_name
+	And add type checks.
+	For all other objects this kind of API is deprecated, hmm.
+	We should really use the dynapi for this.
+
+	Closes GH #74
+
+2020-01-13  Reini Urban  <rurban@cpan.org>
+
+	document section changes in NEWS
+
+	read_2004_compressed_section: adjust for empty sections
+	Add a seperate writer index j for the info->size chunks being written.
+	Fix the uncompressed write overflow check.
+	Fixes GH #183 (fuzzed)
+
+2020-01-12  Reini Urban  <rurban@cpan.org>
+
+	add template and objfreespace sections
+	template is the 2000 MEASUREMENT section (maybe rename the old one),
+
+	free the new sections
+	no new decode leaks
+
+	decode: fix read_2004_compressed_section overflow
+	with uncompressed pages, for the rest of the last page.
+	don't overwrite the next malloc via memcpy.
+	e.g. DS_Libereco_R2004.dwg for AcDb::AppInfo[1]
+
+	decode: improve 2004 section type search
+	add fixedtype, the static enum DWG_SECTION_TYPE
+	as resolved by name to search for. Not the type id as
+	read from. Helps in searching dynamic types, such as FILEDEPLIST
+	or APPINFO which types do vary
+
+	decode: set all section->type
+	for all 2004-style sections
+
+	api: rename dwg_section_type to dwg_section_wtype
+	have seperate functions for char* and wchar*, later
+	needed for 2004 decode to search for dynamic types from name
+	as with 2007. to get rid of our section_*_type hack.
+
+	decode: add unknown RevHistory, AppInfoHistory sections
+
+	decode: add unknown VBAProject section
+
+2020-01-12  Reini Urban  <rurban@cpan.org>
+
+	decode AppInfo, FileDepList, Security sections, T16, T32 types
+	Add T16/TU16, T32 string types (different length encoding)
+	TODO encode, free.
+	Maybe use an array for the variable types.
+
+	The Security section is yet untested.
+
+	dwg.h: re-sort Dwg_Data, most used first
+
 2020-01-10  Reini Urban  <rurban@cpan.org>
 
 	Release 0.10.1

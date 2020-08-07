@@ -2,7 +2,7 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2020 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.11 - planned 2020/06 - beta:
+LibreDWG version 0.11 - 2020/08/07 - beta:
 
 New features:
   * new programs dwgfilter, dxfwrite.
@@ -47,8 +47,8 @@ New features:
     Demoted to Unstable: SPATIAL_INDEX
     Demoted to Debugging: PERSSUBENTMANAGER DIMASSOC
 
-    Note: Unstable objects are not preserved via DXF conversion, just the external import
-    is supported.
+    Note: Unstable objects are not preserved via DXF conversion, just
+    the external import is supported.
 
     Add most Constraint (ASSOC*) and DYNBLOCK objects (BLOCK*).
     Debugging classes added (needs --with-debug option):
