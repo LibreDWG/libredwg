@@ -80,7 +80,7 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
                const char *restrict filename)
 {
   size_t size;
-  if (!dat->size)
+  if (!dat->size && fp)
     {
       struct stat attrib;
       int fd = fileno (fp);
