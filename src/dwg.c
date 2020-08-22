@@ -2649,7 +2649,8 @@ EXPORT const Dwg_RGB_Palette *dwg_rgb_palette (void)
 
 EXPORT BITCODE_BL dwg_rgb_palette_index (BITCODE_BS index)
 {
-  if (index < 256)
+  // BS in unsigned
+  if (index >= 256)
     return 0;
   else
     {
