@@ -843,10 +843,15 @@ main (int argc, char *argv[])
   char name[80];
   char olddxf[80];
   int big = 0;
+  int is_docker = 0;
+  char *docker;
   // clang-format off
   #include "../../examples/alldxf_2.inc"
   // clang-format on
 
+  docker = getenv("DOCKER");
+  if (docker && strNE (docker, "0"))
+    is_docker = 1;
   g_max_count = MAX_COUNTER;
   g_all = 0;
   name[0] = '\0';
@@ -918,6 +923,13 @@ main (int argc, char *argv[])
         }
       if (file && strNE (file, dwgfile))
         {
+          free (dwgfile);
+          continue;
+        }
+      // GH #268. skip 2018/Helix.dwg. podman works fine.
+      if (is_docker && strEQ (dxffile, "test/test-data/2018/Helix.dxf"))
+        {
+          fprintf (stderr, "Skip %s in docker\n", dwgfile);
           free (dwgfile);
           continue;
         }
