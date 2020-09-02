@@ -2654,7 +2654,9 @@ EXPORT BITCODE_BL dwg_rgb_palette_index (BITCODE_BS index)
     return 0;
   else
     {
-      const Dwg_RGB_Palette rgb = rgb_palette[index];
+      Dwg_RGB_Palette rgb;
+      assert (index < 256);
+      rgb = rgb_palette[index];
       return (rgb.r << 16) | (rgb.g << 8) | rgb.b;
     }
 }
