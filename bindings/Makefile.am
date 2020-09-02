@@ -29,24 +29,17 @@ endif
 
 if HAVE_SWIG_PERL
 
-dist_perl_PERL = perl/LibreDWG.c perl/LibreDWG.pm perl/LibreDWG.xs \
-                 perl/Makefile.PL perl/MANIFEST
-EXTRA_DIST     = perl/LibreDWG.c perl/LibreDWG.pm perl/LibreDWG.xs \
-                 perl/Makefile.PL perl/MANIFEST
+dist_perl_PERL = perl/LibreDWG.c perl/LibreDWG.pm \
+                 perl/Makefile.PL perl/MANIFEST perl/t/0_basic.t
+EXTRA_DIST     = $(dist_perl_PERL)
 
 all-am: $(dist_perl_PERL)
 	@echo Making all for perl
 
-#$(builddir)/perl/LibreDWG.xs: $(srcdir)/perl/LibreDWG.xs
-#	cp -f $(srcdir)/perl/LibreDWG.xs $@
-#
-#$(builddir)/perl/MANIFEST: $(srcdir)/perl/MANIFEST
-#	cp -f $(srcdir)/perl/MANIFEST $@
-
 # building perl bindings is optional. Most setup's don't have all the deps, like
 # crypt.h, sys/wait.h on windows.
 # grep rem: with a command.com compat Makefile we cannot continue from bash
-perl/LibreDWG.$(OBJEXT): perl/LibreDWG.pm perl/Makefile perl/LibreDWG.xs
+perl/LibreDWG.$(OBJEXT): perl/LibreDWG.pm perl/Makefile
 	@echo Note LibreDWG.c is huge. This will need some time...
 	-if test -f perl/pm_to_blib; then rm perl/pm_to_blib; fi
 	-if test -d perl/blib; then rm -rf perl/blib; fi
