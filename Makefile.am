@@ -196,6 +196,9 @@ check-svg: all
 	   for f in $(srcdir)/test/test-data/$$d/*.dwg; \
        do env MAKEFLAGS= ./svg $$f; done; \
 	done
+check-docker: dist
+	docker build --build-arg distdir="$(distdir)" --rm -t $(distdir) \
+	             -f $(srcdir)/Dockerfile-dist .
 
 # clang-analyzer.llvm.org, debian: clang-tools-{6.0,7}, redhat: clang-analyzer
 SCAN_BUILD = scan-build

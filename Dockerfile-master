@@ -1,15 +1,15 @@
-# podman/docker build -t libredwg . 
+# podman/docker build -t libredwg-master -f Dockerfile-master .
 ############################
-# STEP 1 build package from latest tar.xz
+# STEP 1 build package from latest git master
 ############################
 
 FROM python:3.7.7-buster AS extracting
 # libxml2-dev is broken so we need to compile it by our own
 ARG LIBXML2VER=2.9.9
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends autoconf libtool swig texinfo \
-            build-essential gcc libxml2 python3-libxml2 libpcre2-dev libpcre2-32-0 curl \
-            libperl-dev libxml2-dev && \
+    apt-get install -y --no-install-recommends git autoconf libtool swig texinfo \
+            build-essential gcc libxml2 libxml2-dev python3-libxml2 libpcre2-dev libpcre2-32-0 \
+            wget libperl-dev && \
     mkdir libxmlInstall && cd libxmlInstall && \
     wget ftp://xmlsoft.org/libxml2/libxml2-$LIBXML2VER.tar.gz && \
     tar xf libxml2-$LIBXML2VER.tar.gz && \
@@ -20,12 +20,9 @@ RUN apt-get update && \
     cd /libxmlInstall && \
     rm -rf gg libxml2-$LIBXML2VER.tar.gz libxml2-$LIBXML2VER            
 WORKDIR /app
-RUN tarxz=`curl --silent 'https://ftp.gnu.org/gnu/libredwg/?C=M;O=D' | grep '.tar.xz<' | \
-         head -n1|sed -E 's/.*href="([^"]+)".*/\1/'`; \
-    echo "latest release $tarxz"; \
-    curl --silent --output "$tarxz" https://ftp.gnu.org/gnu/libredwg/$tarxz && \
-    tar xfJ "$tarxz" && \
-    cd `echo "$tarxz" | sed s'/.tar.xz//'` && \
+RUN git clone --depth=1 git://git.sv.gnu.org/libredwg.git && \
+    cd libredwg && \
+    sh autogen.sh && \
     ./configure --enable-release && \
     make && \
     mkdir install && \
