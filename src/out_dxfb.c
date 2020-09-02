@@ -132,9 +132,9 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 #define VALUE_HANDLE(ref, nam, handle_code, dxf)                              \
   if (dxf)                                                                    \
     {                                                                         \
-      char _s[16];                                                            \
-      snprintf (_s, 16, "%lX", ref ? ref->absolute_ref : 0UL);                \
-      _s[15] = '\0';                                                          \
+      char _s[18];                                                            \
+      snprintf (_s, 18, "%lX", ref ? ref->absolute_ref : 0UL);                \
+      _s[17] = '\0';                                                          \
       VALUE_TV (_s, dxf);                                                     \
     }
 // TODO: try to resolve the handle. rather write 0 than in invalid handle:
@@ -459,9 +459,9 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 #define VALUE_H(value, dxf)                                                   \
   if (dxf)                                                                    \
     {                                                                         \
-      char _s[16];                                                            \
-      snprintf (_s, 16, "%lX", value);                                        \
-      _s[15] = '\0';                                                          \
+      char _s[18];                                                            \
+      snprintf (_s, 18, "%lX", value);                                        \
+      _s[17] = '\0';                                                          \
       VALUE_TV (_s, dxf);                                                     \
     }
 #define HEADER_H(nam, dxf)                                                    \
