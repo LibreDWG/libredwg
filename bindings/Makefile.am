@@ -49,6 +49,10 @@ perl/LibreDWG.$(OBJEXT): perl/LibreDWG.pm perl/Makefile
 	                       OTHERLDFLAGS="-L$(abs_top_builddir)/src/.libs"; fi
 
 perl/Makefile: perl/Makefile.PL
+if !HAVE_INSRCDIR
+	-mkdir -p perl/t
+	-cp -f $(srcdir)/perl/t/0_basic.t perl/t/
+endif
 	-cd perl && \
 	  $(PERL) Makefile.PL PERL="$(PERL)" INSTALLDIRS=@with_perl_install@
 
@@ -72,6 +76,9 @@ clean-am:
 
 distclean-am:
 	-$(MAKE) -C perl distclean
+if !HAVE_INSRCDIR
+	rm -rf perl/t
+endif
 
 PERL_sources =  $(top_srcdir)/bindings/dwg.i \
 		$(top_srcdir)/include/dwg.h \
