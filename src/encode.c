@@ -94,7 +94,7 @@ static bool env_var_checked_p;
 #define VALUE(value, type, dxf)                                               \
   {                                                                           \
     bit_write_##type (dat, value);                                            \
-    LOG_TRACE (FORMAT_##type " [" #type " %d]", value, dxf);                  \
+    LOG_TRACE (FORMAT_##type " [" #type " %d]", (BITCODE_##type)value, dxf);  \
     LOG_POS                                                                   \
   }
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)

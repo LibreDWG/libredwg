@@ -39,7 +39,7 @@
 #include "importer.h"
 
 #define VALUE(value, type, dxf)                                               \
-  LOG_TRACE (FORMAT_##type " [" #type " %d]\n", value, dxf)
+  LOG_TRACE (FORMAT_##type " [" #type " %d]\n", (BITCODE_##type)value, dxf)
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)
 #define VALUE_BS(value, dxf) VALUE (value, BS, dxf)
 #define VALUE_BL(value, dxf) VALUE (value, BL, dxf)
