@@ -17,6 +17,7 @@ Makefile
 site.exp
 TAGS
 gcov.log
+compile_commands.json
 
 # dirs
 /.analysis/
