@@ -990,7 +990,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   BITCODE_BL j = dwg->summaryinfo.num_props;
                   dwg->summaryinfo.num_props++;
                   dwg->summaryinfo.props
-                      = realloc (dwg->summaryinfo.props,
+                    = (Dwg_SummaryInfo_Property*)realloc (dwg->summaryinfo.props,
                                  (j + 1) * sizeof (Dwg_SummaryInfo_Property));
                   LOG_TRACE ("SUMMARY.props[%u].tag = %s [T 1]\n", j,
                              pair->value.s);
@@ -6880,7 +6880,7 @@ add_AcDbBlockAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   if (o->num_actions)
     {
       //FIELD_VECTOR (actions, BL, num_actions, 91);
-      o->actions = xcalloc (o->num_actions, sizeof (BITCODE_BL));
+      o->actions = (BITCODE_BL*)xcalloc (o->num_actions, sizeof (BITCODE_BL));
       if (!o->actions)
         return pair;
       for (unsigned i = 0; i < o->num_actions; i++)
@@ -6897,7 +6897,7 @@ add_AcDbBlockAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   //HANDLE_VECTOR (deps, num_deps, 5, 330);
   if (o->num_deps)
     {
-      o->deps = xcalloc (o->num_deps, sizeof (BITCODE_H));
+      o->deps = (BITCODE_H*)xcalloc (o->num_deps, sizeof (BITCODE_H));
       if (!o->deps)
         return pair;
       for (unsigned i = 0; i < o->num_deps; i++)
@@ -7084,7 +7084,7 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   //FIELD_2RD_VECTOR (pts, num_pts, 10);
   if (o->num_pts)
     {
-      o->pts = xcalloc (o->num_pts, sizeof (BITCODE_2RD));
+      o->pts = (BITCODE_2RD*)xcalloc (o->num_pts, sizeof (BITCODE_2RD));
       if (!o->pts)
         return pair;
       for (unsigned i = 0; i < o->num_pts; i++)
@@ -7107,7 +7107,7 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   //HANDLE_VECTOR (hdls, num_hdls, 0, 331);
   if (o->num_hdls)
     {
-      o->hdls = xcalloc (o->num_hdls, sizeof (BITCODE_H));
+      o->hdls = (BITCODE_H*)xcalloc (o->num_hdls, sizeof (BITCODE_H));
       if (!o->hdls)
         return pair;
       for (unsigned i = 0; i < o->num_hdls; i++)
@@ -7120,7 +7120,7 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
           dxf_free_pair (pair);
         }
       //FIELD_VECTOR (shorts, BS, num_hdls, 74);
-      o->shorts = xcalloc (o->num_hdls, sizeof (BITCODE_BS));
+      o->shorts = (BITCODE_BS*)xcalloc (o->num_hdls, sizeof (BITCODE_BS));
       if (!o->shorts)
         return pair;
       for (unsigned i = 0; i < o->num_hdls; i++)
@@ -7139,7 +7139,7 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   //FIELD_VECTOR (codes, BL, num_codes, 76);
   if (o->num_codes)
     {
-      o->codes = xcalloc (o->num_codes, sizeof (BITCODE_BS));
+      o->codes = (BITCODE_BL*)xcalloc (o->num_codes, sizeof (BITCODE_BL));
       if (!o->codes)
         return pair;
       for (unsigned i = 0; i < o->num_pts; i++)
@@ -7189,7 +7189,7 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
   EXPECT_INT_DXF ("num_blocks", 93, BL);
   if (o->num_blocks)
     {
-      o->blocks = xcalloc (o->num_blocks, sizeof (BITCODE_H));
+      o->blocks = (BITCODE_H*)xcalloc (o->num_blocks, sizeof (BITCODE_H));
       if (!o->blocks)
         return pair;
       for (unsigned i = 0; i < o->num_blocks; i++)
@@ -7206,7 +7206,8 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
   FIELD_BL (num_states, 92);
   if (o->num_states)
     {
-      o->states = xcalloc (o->num_states, sizeof (Dwg_BLOCKVISIBILITYPARAMETER_state));
+      o->states = (Dwg_BLOCKVISIBILITYPARAMETER_state*)xcalloc (o->num_states,
+                     sizeof (Dwg_BLOCKVISIBILITYPARAMETER_state));
       if (!o->states)
         return pair;
       for (unsigned i = 0; i < o->num_states; i++)
@@ -7226,7 +7227,8 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
 
           if (o->states[i].num_blocks)
             {
-              o->states[i].blocks = xcalloc (o->states[i].num_blocks, sizeof (BITCODE_H));
+              o->states[i].blocks = (BITCODE_H*)xcalloc (o->states[i].num_blocks,
+                                        sizeof (BITCODE_H));
               if (!o->states[i].blocks)
                 return pair;
               for (unsigned j = 0; j < o->states[i].num_blocks; j++)
@@ -7251,7 +7253,8 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
 
           if (o->states[i].num_params)
             {
-              o->states[i].params = xcalloc (o->states[i].num_params, sizeof (BITCODE_H));
+              o->states[i].params = (BITCODE_H*)xcalloc (o->states[i].num_params,
+                                                         sizeof (BITCODE_H));
               if (!o->states[i].params)
                 return pair;
               for (unsigned j = 0; j < o->states[i].num_params; j++)
