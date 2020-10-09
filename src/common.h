@@ -283,8 +283,8 @@ void *memmem (const void *h0, size_t k, const void *n0, size_t l) __nonnull((1, 
 // push to handle vector at the end. It really is unshift.
 #define PUSH_HV(_obj, numfield, hvfield, ref)                                 \
   {                                                                           \
-    _obj->hvfield                                                             \
-        = realloc (_obj->hvfield, (_obj->numfield + 1) * sizeof (BITCODE_H)); \
+    _obj->hvfield = (BITCODE_H *)realloc (                                    \
+        _obj->hvfield, (_obj->numfield + 1) * sizeof (BITCODE_H));            \
     _obj->hvfield[_obj->numfield] = ref;                                      \
     LOG_TRACE ("%s[%d] = " FORMAT_REF " [H]\n", #hvfield, _obj->numfield,     \
                ARGS_REF (_obj->hvfield[_obj->numfield]));                     \

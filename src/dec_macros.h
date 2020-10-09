@@ -1049,7 +1049,7 @@
 #define SUB_FIELD_VECTOR_TYPESIZE(o, name, size, typesize, dxf)               \
   if (_obj->o.size > 0)                                                       \
     {                                                                         \
-      _obj->o.name = calloc (_obj->o.size, typesize);                         \
+     _obj->o.name = calloc (_obj->o.size, typesize);                          \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
         {                                                                     \
           switch (typesize)                                                   \

@@ -5385,7 +5385,8 @@ add_VALUEPARAMs (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   value->num_vars = pair->value.u;
   LOG_TRACE ("%s.%s = %d [BL %d]\n", "VALUEPARAM", "num_vars", pair->value.i,
              pair->code);
-  value->vars = xcalloc (value->num_vars, sizeof (Dwg_VALUEPARAM_vars));
+  value->vars = (Dwg_VALUEPARAM_vars*)xcalloc (value->num_vars,
+                                               sizeof (Dwg_VALUEPARAM_vars));
   if (!value->vars)
     return 0;
   for (unsigned j = 0; j < value->num_vars; j++)
@@ -5425,7 +5426,7 @@ add_ASSOCNETWORK (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   FIELD_BL (num_actions, 90);
   num = o->num_actions;
 
-  deps = xcalloc (num, sizeof (Dwg_ASSOCACTION_Deps));
+  deps = (Dwg_ASSOCACTION_Deps*)xcalloc (num, sizeof (Dwg_ASSOCACTION_Deps));
   if (!deps)
     return NULL;
   for (unsigned i = 0; i < num; i++)
@@ -5454,7 +5455,7 @@ add_ASSOCNETWORK (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   EXPECT_INT_DXF ("num_owned_actions", 90, BL);
   if (num)
     {
-      hv = xcalloc (num, sizeof (BITCODE_H));
+      hv = (BITCODE_H*)xcalloc (num, sizeof (BITCODE_H));
       if (!hv)
         return NULL;
     }
@@ -5504,7 +5505,7 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
   FIELD_BL (num_deps, 90);
   num = o->num_deps;
-  deps = xcalloc (num, sizeof (Dwg_ASSOCACTION_Deps));
+  deps = (Dwg_ASSOCACTION_Deps*)xcalloc (num, sizeof (Dwg_ASSOCACTION_Deps));
   if (!deps)
     return NULL;
   for (unsigned i = 0; i < num; i++)
@@ -5535,7 +5536,7 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       EXPECT_INT_DXF ("num_owned_params", 90, BL);
       if (num)
         {
-          hv = xcalloc (num, sizeof (BITCODE_H));
+          hv = (BITCODE_H *)xcalloc (num, sizeof (BITCODE_H));
           if (!hv)
             return NULL;
         }
@@ -5575,7 +5576,8 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       for (unsigned i = 0; i < num; i++)
         {
-          Dwg_VALUEPARAM *value = xcalloc (1, sizeof (Dwg_VALUEPARAM));
+          Dwg_VALUEPARAM *value
+              = (Dwg_VALUEPARAM *)xcalloc (1, sizeof (Dwg_VALUEPARAM));
           int success = add_VALUEPARAMs (dwg, dat, value);
           values[i] = *value;
           if (!success)
@@ -5607,7 +5609,7 @@ add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   EXPECT_INT_DXF ("num_steps", 90, BL);
   if (o->num_steps)
     {
-      o->steps = xcalloc (o->num_steps, sizeof (BITCODE_BL));
+      o->steps = (BITCODE_BL*)xcalloc (o->num_steps, sizeof (BITCODE_BL));
       if (!o->steps)
         return NULL;
       for (unsigned i = 0; i < o->num_steps; i++)
@@ -7292,7 +7294,8 @@ add_BlockParam_PropInfo (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   dxf_free_pair (pair);
   if (prop->num_connections)
     {
-      prop->connections = xcalloc (prop->num_connections, sizeof (Dwg_BLOCKPARAMETER_connection));
+      prop->connections = (Dwg_BLOCKPARAMETER_connection *)xcalloc (
+          prop->num_connections, sizeof (Dwg_BLOCKPARAMETER_connection));
       if (!prop->connections)
         return pair;
       for (unsigned j = 0; j < prop->num_connections; j++)
@@ -7398,7 +7401,7 @@ add_AcDbBlock2PtParameter (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   EXPECT_DXF (obj->name, "num_prop_states", 170);
   LOG_TRACE ("%s.num_prop_states = %d [BL 170]\n", obj->name, pair->value.u);
   dxf_free_pair (pair);
-  o->prop_states = xcalloc (4, sizeof (double));
+  o->prop_states = (double *)xcalloc (4, sizeof (double));
   if (!o->prop_states)
     return dxf_read_pair (dat);
   for (unsigned i = 0; i < 4; i++)
@@ -7510,7 +7513,7 @@ add_AcDbBlockParamValueSet (Dwg_Object *restrict obj, Dwg_BLOCKPARAMVALUESET *o,
   //FIELD_VECTOR (valuelist, num_valuelist, BD, code[1]+3);
   if (!o->num_valuelist)
     return NULL;
-  o->valuelist = xcalloc (o->num_valuelist, sizeof (double));
+  o->valuelist = (double *)xcalloc (o->num_valuelist, sizeof (double));
   if (!o->valuelist)
     return dxf_read_pair (dat);
 
@@ -7875,7 +7878,7 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
     {
       BITCODE_H first, last, ref;
       unsigned i = 0;
-      owned = xcalloc (1, sizeof (BITCODE_H));
+      owned = (BITCODE_H *)xcalloc (1, sizeof (BITCODE_H));
       dwg_dynapi_entity_value (ow, owner->name, firstfield, &first, 0);
       dwg_dynapi_entity_value (ow, owner->name, lastfield, &last, 0);
       ref = first;

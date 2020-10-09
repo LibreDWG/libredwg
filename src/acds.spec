@@ -55,7 +55,8 @@
       LOG_ERROR ("Invalid num_segidx");
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
-  _obj->segments = calloc (_obj->num_segidx, sizeof (Dwg_AcDs_Segment));
+  _obj->segments = (Dwg_AcDs_Segment *)calloc (_obj->num_segidx,
+                                               sizeof (Dwg_AcDs_Segment));
 #endif
 #ifndef IS_JSON
   if (FIELD_VALUE(num_segidx))
@@ -329,10 +330,11 @@
     const char end[] = "\016\003End\016\002of\016\003ASM\r\004data";
     LOG_TRACE ("\nSearch for ACIS BinaryFile data:\n");
     num_acis_sab_data = 0;
-    while ((s = memmem (&dat->chain[i], dat->size - i, start, strlen (start))))
+    while ((s = (char *)memmem (&dat->chain[i], dat->size - i, start,
+                                strlen (start))))
       {
         unsigned j = s - (char*)&dat->chain[0]; // absolute_offset of found range
-        if ((e = memmem (s, dat->size - j, end, strlen (end))))
+        if ((e = (char *)memmem (s, dat->size - j, end, strlen (end))))
           {
             BITCODE_H hdl;
             Dwg_Object *o;
@@ -361,7 +363,7 @@
               }
             sol = o->tio.entity->tio._3DSOLID;
             // not NULL terminated
-            acis_sab_data = malloc (size);
+            acis_sab_data = (char*)malloc (size);
             memcpy (acis_sab_data, s, size);
             num_acis_sab_data++;
             dwg_dynapi_entity_set_value (sol, o->name, "acis_data", &acis_sab_data, 0);
