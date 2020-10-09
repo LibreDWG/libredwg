@@ -7401,7 +7401,7 @@ add_AcDbBlock2PtParameter (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   EXPECT_DXF (obj->name, "num_prop_states", 170);
   LOG_TRACE ("%s.num_prop_states = %d [BL 170]\n", obj->name, pair->value.u);
   dxf_free_pair (pair);
-  o->prop_states = (double *)xcalloc (4, sizeof (double));
+  o->prop_states = (BITCODE_BL *)xcalloc (4, sizeof (BITCODE_BL));
   if (!o->prop_states)
     return dxf_read_pair (dat);
   for (unsigned i = 0; i < 4; i++)
