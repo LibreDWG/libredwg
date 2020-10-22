@@ -1,4 +1,4 @@
-# podman/docker build -t libredwg . 
+# podman/docker build -t libredwg .
 ############################
 # STEP 1 build package from latest tar.xz
 ############################
@@ -18,16 +18,18 @@ RUN apt-get update && \
     make && \
     make install && \
     cd /libxmlInstall && \
-    rm -rf gg libxml2-$LIBXML2VER.tar.gz libxml2-$LIBXML2VER            
+    rm -rf gg libxml2-$LIBXML2VER.tar.gz libxml2-$LIBXML2VER
 WORKDIR /app
 RUN tarxz=`curl --silent 'https://ftp.gnu.org/gnu/libredwg/?C=M;O=D' | grep '.tar.xz<' | \
          head -n1|sed -E 's/.*href="([^"]+)".*/\1/'`; \
     echo "latest release $tarxz"; \
     curl --silent --output "$tarxz" https://ftp.gnu.org/gnu/libredwg/$tarxz && \
-    tar xfJ "$tarxz" && \
-    cd `echo "$tarxz" | sed s'/.tar.xz//'` && \
-    ./configure --enable-release && \
-    make && \
+    mkdir libredwg && \
+    tar -C libredwg --xz --strip-components 1 -xf "$tarxz" && \
+    rm "$tarxz" && \
+    cd libredwg && \
+    ./configure --disable-bindings --enable-release && \
+    make -j `nproc` && \
     mkdir install && \
     make install DESTDIR="$PWD/install" && \
     make check DOCKER=1 DESTDIR="$PWD/install"
