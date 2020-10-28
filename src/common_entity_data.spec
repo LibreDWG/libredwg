@@ -191,7 +191,7 @@
         if (FIELD_VALUE (material_flags))
           FIELD_HANDLE (material, 0, 347)
       }
-      FIELD_RC (shadow_flags, 284); /* r2007+: 0 both, 1 receives, 2 casts, 3 no */
+      FIELD_RC0 (shadow_flags, 284); /* r2007+: 0 both, 1 receives, 2 casts, 3 no */
     }
   SINCE (R_2010)
     {
