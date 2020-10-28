@@ -532,28 +532,28 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 // skip if 0
 #define FIELD_RD0(nam, dxf) FIELD_BD0(nam, dxf)
 #define FIELD_BD0(nam, dxf)                                                   \
-  {                                                                           \
+  if (dxf) {                                                                  \
     if (_obj->nam != 0.0)                                                     \
       FIELD_BD (nam, dxf)                                                     \
   }
 // for scale (1.0, 1.0, 1.0)
 #define FIELD_BD1(nam, dxf)                                                   \
-  {                                                                           \
+  if (dxf) {                                                                  \
     if (_obj->nam != 1.0)                                                     \
       FIELD_BD (nam, dxf)                                                     \
   }
 #define FIELD_BL0(nam, dxf)                                                   \
-  {                                                                           \
+  if (dxf) {                                                                  \
     if (_obj->nam != 0)                                                       \
       FIELD_BL (nam, dxf)                                                     \
   }
 #define FIELD_BS0(nam, dxf)                                                   \
-  {                                                                           \
+  if (dxf) {                                                                  \
     if (_obj->nam != 0)                                                       \
       FIELD_BS (nam, dxf)                                                     \
   }
 #define FIELD_B0(nam, dxf)                                                    \
-  {                                                                           \
+  if (dxf) {                                                                  \
     if (_obj->nam)                                                            \
       FIELD_B (nam, dxf)                                                      \
   }
@@ -605,45 +605,45 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 
 #define FIELD_DD(nam, _default, dxf) FIELD_BD (nam, dxf)
 #define FIELD_2DD(nam, def, dxf)                                              \
-  {                                                                           \
+  if (dxf) {                                                                  \
     FIELD_DD (nam.x, FIELD_VALUE (def.x), dxf);                               \
     FIELD_DD (nam.y, FIELD_VALUE (def.y), dxf + 10);                          \
   }
 #define FIELD_3DD(nam, def, dxf)                                              \
-  {                                                                           \
+  if (dxf) {                                                                  \
     FIELD_DD (nam.x, FIELD_VALUE (def.x), dxf);                               \
     FIELD_DD (nam.y, FIELD_VALUE (def.y), dxf + 10);                          \
     FIELD_DD (nam.z, FIELD_VALUE (def.z), dxf + 20);                          \
   }
 #define FIELD_2RD(nam, dxf)                                                   \
-  {                                                                           \
+  if (dxf) {                                                                  \
     FIELD_RD (nam.x, dxf);                                                    \
     FIELD_RD (nam.y, dxf + 10);                                               \
   }
 #define FIELD_2BD(nam, dxf)                                                   \
-  {                                                                           \
+  if (dxf) {                                                                  \
     FIELD_BD (nam.x, dxf);                                                    \
     FIELD_BD (nam.y, dxf + 10);                                               \
   }
 #define FIELD_2BD_1(nam, dxf)                                                 \
-  {                                                                           \
+  if (dxf) {                                                                  \
     FIELD_BD (nam.x, dxf);                                                    \
     FIELD_BD (nam.y, dxf + 1);                                                \
   }
 #define FIELD_3RD(nam, dxf)                                                   \
-  {                                                                           \
+  if (dxf) {                                                                  \
     FIELD_RD (nam.x, dxf);                                                    \
     FIELD_RD (nam.y, dxf + 10);                                               \
     FIELD_RD (nam.z, dxf + 20);                                               \
   }
 #define FIELD_3BD(nam, dxf)                                                   \
-  {                                                                           \
+  if (dxf) {                                                                  \
     FIELD_BD (nam.x, dxf);                                                    \
     FIELD_BD (nam.y, dxf + 10);                                               \
     FIELD_BD (nam.z, dxf + 20);                                               \
   }
 #define FIELD_3BD_1(nam, dxf)                                                 \
-  {                                                                           \
+  if (dxf) {                                                                  \
     FIELD_BD (nam.x, dxf);                                                    \
     FIELD_BD (nam.y, dxf + 1);                                                \
     FIELD_BD (nam.z, dxf + 2);                                                \

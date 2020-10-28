@@ -1110,15 +1110,17 @@ DWG_ENTITY (LINE)
   //SUBCLASS (AcDbCurve)
   SUBCLASS (AcDbLine)
   PRE (R_13) {
-    if (R11FLAG (4))
+    if (R11FLAG (4)) {
       FIELD_3RD (start, 10)
-    else
+    } else {
       FIELD_2RD (start, 10)
+    }
 
-    if (R11FLAG (4))
+    if (R11FLAG (4)) {
       FIELD_3RD (end, 11)
-    else
+    } else {
       FIELD_2RD (end, 11)
+    }
 
     if (R11OPTS (1))
       FIELD_3RD (extrusion, 210);
