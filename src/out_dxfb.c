@@ -518,7 +518,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 #define FIELD_4BITS(nam, dxf) FIELD_RC (nam, dxf)
 #define FIELD_BE(nam, dxf)                                                    \
   {                                                                           \
-    if (!(_obj->nam.x == 0.0 && _obj->nam.y == 0.0 && _obj->nam.z == 1.0))    \
+    if (dxf && !(_obj->nam.x == 0.0 && _obj->nam.y == 0.0 && _obj->nam.z == 1.0)) \
       FIELD_3RD (nam, dxf)                                                    \
   }
 #define FIELD_DD(nam, _default, dxf) FIELD_RD (nam, dxf)

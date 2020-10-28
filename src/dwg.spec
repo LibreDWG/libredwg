@@ -25,10 +25,6 @@
 /* (1/7) */
 DWG_ENTITY (TEXT)
 
-  DXF {
-    //TODO can be skipped with DXF if STANDARD
-    FIELD_HANDLE (style, 5, 7);
-  }
   SUBCLASS (AcDbText)
   PRE (R_13) {
     FIELD_2RD (ins_pt, 10);
@@ -58,8 +54,8 @@ DWG_ENTITY (TEXT)
     {
       DXF {
         FIELD_BD0 (thickness, 39);
-        FIELD_BD0 (elevation, 30);
         FIELD_2RD (ins_pt, 10);
+        FIELD_BD (elevation, 30);
         FIELD_BD (height, 40);
         FIELD_TV (text_value, 1);
         FIELD_BD0 (rotation, 50);
@@ -77,8 +73,8 @@ DWG_ENTITY (TEXT)
         FIELD_2RD (alignment_pt, 11);
         FIELD_3BD (extrusion, 210);
         FIELD_BD0 (thickness, 39);
-        FIELD_BD (oblique_angle, 51);
-        FIELD_BD (rotation, 50);
+        FIELD_BD0 (oblique_angle, 51);
+        FIELD_BD0 (rotation, 50);
         FIELD_BD (height, 40);
         FIELD_BD (width_factor, 41);
         FIELD_TV (text_value, 1);
@@ -100,35 +96,37 @@ DWG_ENTITY (TEXT)
 
       DXF {
         FIELD_BT0 (thickness, 39);
-      }
-      if (!(dataflags & 0x01))
-        FIELD_RD (elevation, 0);
-      FIELD_2RD (ins_pt, 10);
-      DXF {
+        FIELD_2RD (ins_pt, 10);
         FIELD_RD (elevation, 30);
+      } else {
+        if (!(dataflags & 0x01))
+          FIELD_RD (elevation, 0);
+        FIELD_2RD (ins_pt, 10);
+      }
+      DXF {
         FIELD_RD (height, 40);
         FIELD_T (text_value, 1);
+      } else {
+        if (!(dataflags & 0x02))
+          FIELD_2DD (alignment_pt, ins_pt, 0);
+        FIELD_BE (extrusion, 0);
+        FIELD_BT (thickness, 0);
       }
-      if (!(dataflags & 0x02))
-        FIELD_2DD (alignment_pt, ins_pt, 0);
-      FIELD_BE (extrusion, 0);
-      FIELD_BT (thickness, 0);
-
       DXF {
-        FIELD_RD (rotation, 50);
-        FIELD_RD (width_factor, 41);
-        FIELD_RD (oblique_angle, 51);
+        FIELD_RD0 (rotation, 50);
+        FIELD_RD0 (width_factor, 41);
+        FIELD_RD0 (oblique_angle, 51);
         FIELD_HANDLE0 (style, 5, 7);
+      } else {
+        if (!(dataflags & 0x04))
+          FIELD_RD (oblique_angle, 0);
+        if (!(dataflags & 0x08))
+          FIELD_RD (rotation, 0);
+        FIELD_RD (height, 0);
+        if (!(dataflags & 0x10))
+          FIELD_RD (width_factor, 0);
+        FIELD_T (text_value, 0);
       }
-
-      if (!(dataflags & 0x04))
-        FIELD_RD (oblique_angle, 0);
-      if (!(dataflags & 0x08))
-        FIELD_RD (rotation, 0);
-      FIELD_RD (height, 0);
-      if (!(dataflags & 0x10))
-        FIELD_RD (width_factor, 0);
-      FIELD_T (text_value, 0);
 
       if (!(dataflags & 0x20))
         FIELD_BS (generation, 71);
@@ -138,7 +136,7 @@ DWG_ENTITY (TEXT)
         FIELD_BS0 (vert_alignment, 73);
 
       DXF {
-        FIELD_2DD (alignment_pt, ins_pt, 0);
+        FIELD_2DD (alignment_pt, ins_pt, 11);
         FIELD_RD (elevation, 31);
         FIELD_BE (extrusion, 210);
         SUBCLASS (AcDbText) // not in ODA, but ACAD
@@ -162,10 +160,6 @@ DWG_ENTITY_END
 /* (2/16) */
 DWG_ENTITY (ATTRIB)
 
-  DXF {
-    //TODO can be skipped with DXF if STANDARD
-    FIELD_HANDLE (style, 5, 7);
-  }
   SUBCLASS (AcDbText)
   PRE (R_13)
     {
@@ -173,13 +167,21 @@ DWG_ENTITY (ATTRIB)
     }
   VERSIONS (R_13, R_14)
     {
-      FIELD_BD (elevation, 30);
-      FIELD_2RD (ins_pt, 10);
+      DXF {
+        FIELD_2RD (ins_pt, 10);
+        FIELD_RD (elevation, 30);
+      } else {
+        FIELD_BD (elevation, 30);
+        FIELD_2RD (ins_pt, 10);
+      }
       FIELD_2RD (alignment_pt, 11);
       FIELD_3BD (extrusion, 210);
       FIELD_BD (thickness, 39);
-      FIELD_BD (oblique_angle, 51);
-      FIELD_BD (rotation, 50);
+      FIELD_BD0 (oblique_angle, 51);
+      DXF {
+        FIELD_HANDLE0 (style, 5, 7);
+      }
+      FIELD_BD0 (rotation, 50);
       FIELD_BD (height, 40);
       FIELD_BD (width_factor, 41);
       FIELD_TV (text_value, 1);
@@ -198,34 +200,51 @@ DWG_ENTITY (ATTRIB)
       FIELD_RC (dataflags, 0);
       dataflags = FIELD_VALUE (dataflags);
 
-      if (!(dataflags & 0x01))
+      DXF {
+        FIELD_BT0 (thickness, 39);
+        FIELD_2RD (ins_pt, 10);
         FIELD_RD (elevation, 30);
-      FIELD_2RD (ins_pt, 10);
-
-      if (!(dataflags & 0x02))
-        FIELD_2DD (alignment_pt, ins_pt, 0);
-
-      FIELD_BE (extrusion, 210);
-      FIELD_BT0 (thickness, 39);
-
-      if (!(dataflags & 0x04))
-        FIELD_RD (oblique_angle, 51);
-      if (!(dataflags & 0x08))
-        FIELD_RD (rotation, 50);
-
-      FIELD_RD (height, 40);
-
-      if (!(dataflags & 0x10))
-        FIELD_RD (width_factor, 41);
-
-      FIELD_T (text_value, 1);
+      } else {
+        if (!(dataflags & 0x01))
+          FIELD_RD (elevation, 0);
+        FIELD_2RD (ins_pt, 10);
+      }
+      DXF {
+        FIELD_RD (height, 40);
+        FIELD_T (text_value, 1);
+      } else {
+        if (!(dataflags & 0x02))
+          FIELD_2DD (alignment_pt, ins_pt, 0);
+        FIELD_BE (extrusion, 0);
+        FIELD_BT (thickness, 0);
+      }
+      DXF {
+        FIELD_RD0 (rotation, 50);
+        FIELD_RD0 (width_factor, 41);
+        FIELD_RD0 (oblique_angle, 51);
+        FIELD_HANDLE0 (style, 5, 7);
+      } else {
+        if (!(dataflags & 0x04))
+          FIELD_RD (oblique_angle, 51);
+        if (!(dataflags & 0x08))
+          FIELD_RD (rotation, 50);
+        FIELD_RD (height, 40);
+        if (!(dataflags & 0x10))
+          FIELD_RD (width_factor, 41);
+        FIELD_T (text_value, 1);
+      }
 
       if (!(dataflags & 0x20))
         FIELD_BS (generation, 71);
       if (!(dataflags & 0x40))
         FIELD_BS (horiz_alignment, 72);
       if (!(dataflags & 0x80))
-        FIELD_BS (vert_alignment, 74);
+        FIELD_BS (vert_alignment, 73); // or 74?
+      DXF {
+        FIELD_2DD (alignment_pt, ins_pt, 11);
+        FIELD_RD (elevation, 31);
+        FIELD_BE (extrusion, 210);
+      }
     }
 
   SUBCLASS (AcDbAttribute)
@@ -272,10 +291,6 @@ DWG_ENTITY_END
 /* (3/15) */
 DWG_ENTITY (ATTDEF)
 
-  DXF {
-    //TODO can be skipped with DXF if STANDARD
-    FIELD_HANDLE (style, 5, 7);
-  }
   SUBCLASS (AcDbText)
   PRE (R_13)
     {
@@ -283,19 +298,32 @@ DWG_ENTITY (ATTDEF)
     }
   VERSIONS (R_13, R_14)
     {
-      FIELD_BD (elevation, 30);
-      FIELD_2RD (ins_pt, 10);
-      FIELD_2RD (alignment_pt, 11);
-      FIELD_3BD (extrusion, 210);
+      DXF {
+        FIELD_2RD (ins_pt, 10);
+        FIELD_RD (elevation, 30);
+      } else {
+        FIELD_BD (elevation, 30);
+        FIELD_2RD (ins_pt, 10);
+      }
+      FIELD_2RD (alignment_pt, 0);
+      FIELD_3BD (extrusion, 0);
       FIELD_BD0 (thickness, 39);
-      FIELD_BD (oblique_angle, 51);
-      FIELD_BD (rotation, 50);
+      FIELD_BD0 (oblique_angle, 51);
+      DXF {
+        FIELD_HANDLE0 (style, 5, 7);
+      }
+      FIELD_BD0 (rotation, 50);
       FIELD_BD (height, 40);
       FIELD_BD (width_factor, 41);
       FIELD_T (default_value, 1);
       FIELD_BS (generation, 71);
       FIELD_BS (horiz_alignment, 72);
       FIELD_BS (vert_alignment, 74);
+      DXF {
+        FIELD_2DD (alignment_pt, ins_pt, 11);
+        FIELD_RD (elevation, 31);
+        FIELD_BE (extrusion, 210);
+      }
     }
 
   IF_FREE_OR_SINCE (R_2000)
@@ -308,34 +336,51 @@ DWG_ENTITY (ATTDEF)
       FIELD_RC (dataflags, 0);
       dataflags = FIELD_VALUE (dataflags);
 
-      if (!(dataflags & 0x01))
+      DXF {
+        FIELD_BT0 (thickness, 39);
+        FIELD_2RD (ins_pt, 10);
         FIELD_RD (elevation, 30);
-      FIELD_2RD (ins_pt, 10);
-
-      if (!(dataflags & 0x02))
-        FIELD_2DD (alignment_pt, ins_pt, 0);
-
-      FIELD_BE (extrusion, 210);
-      FIELD_BT0 (thickness, 39);
-
-      if (!(dataflags & 0x04))
-        FIELD_RD (oblique_angle, 51);
-      if (!(dataflags & 0x08))
-        FIELD_RD (rotation, 50);
-
-      FIELD_RD (height, 40);
-
-      if (!(dataflags & 0x10))
-        FIELD_RD (width_factor, 41);
-
-      FIELD_T (default_value, 1);
+      } else {
+        if (!(dataflags & 0x01))
+          FIELD_RD (elevation, 30);
+        FIELD_2RD (ins_pt, 10);
+      }
+      DXF {
+        FIELD_RD (height, 40);
+        FIELD_T (default_value, 1);
+      } else {
+        if (!(dataflags & 0x02))
+          FIELD_2DD (alignment_pt, ins_pt, 0);
+        FIELD_BE (extrusion, 0);
+        FIELD_BT (thickness, 0);
+      }
+      DXF {
+        FIELD_RD0 (rotation, 50);
+        FIELD_RD0 (width_factor, 41);
+        FIELD_RD0 (oblique_angle, 51);
+        FIELD_HANDLE0 (style, 5, 7);
+      } else {
+        if (!(dataflags & 0x04))
+          FIELD_RD (oblique_angle, 51);
+        if (!(dataflags & 0x08))
+          FIELD_RD0 (rotation, 50);
+        FIELD_RD (height, 40);
+        if (!(dataflags & 0x10))
+          FIELD_RD (width_factor, 41);
+        FIELD_T (default_value, 1);
+      }
 
       if (!(dataflags & 0x20))
         FIELD_BS (generation, 71);
       if (!(dataflags & 0x40))
         FIELD_BS (horiz_alignment, 72);
       if (!(dataflags & 0x80))
-        FIELD_BS (vert_alignment, 74);
+        FIELD_BS (vert_alignment, 73); // or 74?
+      DXF {
+        FIELD_2DD (alignment_pt, ins_pt, 11);
+        FIELD_RD (elevation, 31);
+        FIELD_BE (extrusion, 210);
+      }
     }
 
   SUBCLASS (AcDbAttributeDefinition);
@@ -928,7 +973,7 @@ DWG_ENTITY (POLYLINE_2D)
       FIELD_BD (start_width, 40);
       FIELD_BD (end_width, 41);
       FIELD_BT (thickness, 39);
-      FIELD_BD (elevation, 30);
+      FIELD_BD (elevation, 0);
     }
     DXF {
       BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
@@ -1553,7 +1598,6 @@ DWG_ENTITY_END
 /* (33/4) */
 DWG_ENTITY (SHAPE)
 
-  DXF { FIELD_HANDLE (style, 5, 7); }
   SUBCLASS (AcDbShape)
   PRE (R_13) {
     FIELD_HANDLE (style, 5, 0);
@@ -1567,9 +1611,10 @@ DWG_ENTITY (SHAPE)
   LATER_VERSIONS {
     FIELD_3BD (ins_pt, 10);
     FIELD_BD (scale, 40);  // documented as size
-    FIELD_BD (rotation, 50);
+    FIELD_BD0 (rotation, 50);
     FIELD_BD (width_factor, 41);
     FIELD_BD (oblique_angle, 51);
+    DXF { FIELD_HANDLE (style, 5, 7); }
     FIELD_BD0 (thickness, 39);
 #ifdef IS_DXF
     {
@@ -2404,9 +2449,6 @@ DWG_ENTITY_END
 /*(44)*/
 DWG_ENTITY (MTEXT)
 
-  DXF { UNTIL (R_2007) {
-    FIELD_HANDLE (style, 5, 7);
-  } }
   SUBCLASS (AcDbMText)
   FIELD_3BD (ins_pt, 10);
   FIELD_3BD (extrusion, 210);
@@ -2432,7 +2474,7 @@ DWG_ENTITY (MTEXT)
   // FIXME DXF break
   FIELD_T (text, 1); // or 3 if len >250
   /* in DXF only if non-default style */
-  FIELD_HANDLE (style, 5, 0);
+  FIELD_HANDLE0 (style, 5, 7);
 
   SINCE (R_2000)
     {
@@ -5566,7 +5608,7 @@ DWG_ENTITY (TABLE)
       }
     }
   
-    FIELD_BD (rotation, 50);
+    FIELD_BD0 (rotation, 50);
     FIELD_3BD (extrusion, 210);
     FIELD_B (has_attribs, 66);
   

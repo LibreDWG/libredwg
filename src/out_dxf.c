@@ -526,7 +526,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define FIELD_4BITS(nam, dxf) FIELDG (nam, 4BITS, dxf)
 #define FIELD_BE(nam, dxf)                                                    \
   {                                                                           \
-    if (!(_obj->nam.x == 0.0 && _obj->nam.y == 0.0 && _obj->nam.z == 1.0))    \
+    if (dxf && !(_obj->nam.x == 0.0 && _obj->nam.y == 0.0 && _obj->nam.z == 1.0)) \
       FIELD_3RD (nam, dxf)                                                    \
   }
 // skip if 0
