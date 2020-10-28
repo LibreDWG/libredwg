@@ -463,17 +463,44 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     {
       Dwg_Entity_GEOPOSITIONMARKER *_obj
           = obj->tio.entity->tio.GEOPOSITIONMARKER;
-      PAIR_S (Text, _obj->notes)
+      if (IS_FROM_TU (dat))
+        {
+          char *utf8 = bit_convert_TU ((BITCODE_TU)_obj->notes);
+          PAIR_S (Text, utf8)
+          free (utf8);
+        }
+      else
+        {
+          PAIR_S (Text, _obj->notes)
+        }
     }
   else if (obj->type == DWG_TYPE_TEXT)
     {
       Dwg_Entity_TEXT *_obj = obj->tio.entity->tio.TEXT;
-      PAIR_S (Text, _obj->text_value)
+      if (IS_FROM_TU (dat))
+        {
+          char *utf8 = bit_convert_TU ((BITCODE_TU)_obj->text_value);
+          PAIR_S (Text, utf8)
+          free (utf8);
+        } 
+      else
+        {      
+          PAIR_S (Text, _obj->text_value)
+        }
     }
   else if (obj->type == DWG_TYPE_MTEXT)
     {
       Dwg_Entity_MTEXT *_obj = obj->tio.entity->tio.MTEXT;
-      PAIR_S (Text, _obj->text)
+      if (IS_FROM_TU (dat))
+        {
+          char *utf8 = bit_convert_TU ((BITCODE_TU)_obj->text);
+          PAIR_S (Text, utf8)
+          free (utf8);
+        } 
+      else
+        {      
+          PAIR_S (Text, _obj->text)
+        }
     }
   else if (obj->type == DWG_TYPE_INSERT)
     {
