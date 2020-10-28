@@ -182,12 +182,12 @@ DWG_ENTITY (ATTRIB)
         FIELD_HANDLE0 (style, 5, 7);
       }
       FIELD_BD0 (rotation, 50);
-      FIELD_BD (height, 40);
-      FIELD_BD (width_factor, 41);
+      FIELD_BD0 (height, 40);
+      FIELD_BD0 (width_factor, 41);
       FIELD_TV (text_value, 1);
-      FIELD_BS (generation, 71);
-      FIELD_BS (horiz_alignment, 72);
-      FIELD_BS (vert_alignment, 74);
+      FIELD_BS0 (generation, 71);
+      FIELD_BS0 (horiz_alignment, 72);
+      FIELD_BS0 (vert_alignment, 74);
     }
 
   IF_FREE_OR_SINCE (R_2000)
