@@ -91,7 +91,7 @@
 #ifdef IS_DXF
       if (FIELD_VALUE (linewt) != 29) {
         int lw = dxf_cvt_lweight (FIELD_VALUE (linewt));
-        KEY (linewt); VALUE_RC ((signed char)lw, 370);
+        KEY (linewt); VALUE_BSd (lw, 370);
       }
 #endif
     }

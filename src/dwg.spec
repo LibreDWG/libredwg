@@ -2900,12 +2900,12 @@ DWG_OBJECT (LAYER)
   }
   FIELD_HANDLE (ltype, 5, 6);
   DXF {
-    int lw = dxf_cvt_lweight (FIELD_VALUE (linewt));
     SINCE (R_2000) {
       FIELD_B0 (plotflag, 290);
     }
     SINCE (R_13) {
-      KEY (linewt); VALUE_RS ((signed char)lw, 370);
+      int lw = dxf_cvt_lweight (FIELD_VALUE (linewt));
+      KEY (linewt); VALUE_BSd (lw, 370);
     }
     SINCE (R_2000) {
       FIELD_HANDLE (plotstyle, 5, 390);

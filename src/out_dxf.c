@@ -280,6 +280,8 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const i
         }                                                                     \
       else                                                                    \
         {                                                                     \
+          /* -Wpointer-to-int-cast */                                         \
+          const int32_t _si = (int32_t) (intptr_t) (value);                   \
           GROUP (dxf);                                                        \
           GCC46_DIAG_IGNORE (-Wformat-nonliteral)                             \
           snprintf (buf, 255, _fmt, value);                                   \
@@ -289,8 +291,6 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const i
             fprintf (dat->fh, "0\r\n");                                       \
           else if (90 <= dxf && dxf < 100)                                    \
             {                                                                 \
-              /* -Wpointer-to-int-cast */                                     \
-              const int32_t _si = (int32_t) (intptr_t) (value);               \
               fprintf (dat->fh, "%9i\r\n", _si);                              \
             }                                                                 \
           else                                                                \
