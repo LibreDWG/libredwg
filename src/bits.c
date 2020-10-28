@@ -2237,7 +2237,7 @@ bit_convert_TU (BITCODE_TU restrict wstr)
       c = (b[0] << 8) + b[1];
       while (c)
         {
-          if (c < 256)
+          if (c < 0x80)
             {
               str[i++] = c & 0xFF;
             }
@@ -2261,7 +2261,7 @@ bit_convert_TU (BITCODE_TU restrict wstr)
 #endif
   while ((c = *wstr++))
     {
-      if (c < 256)
+      if (c < 0x80)
         {
           str[i++] = c & 0xFF;
         }
