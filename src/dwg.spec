@@ -187,7 +187,7 @@ DWG_ENTITY (ATTRIB)
       FIELD_TV (text_value, 1);
       FIELD_BS0 (generation, 71);
       FIELD_BS0 (horiz_alignment, 72);
-      FIELD_BS0 (vert_alignment, 74);
+      FIELD_BS0 (vert_alignment, 0);
     }
 
   IF_FREE_OR_SINCE (R_2000)
@@ -239,7 +239,7 @@ DWG_ENTITY (ATTRIB)
       if (!(dataflags & 0x40))
         FIELD_BS (horiz_alignment, 72);
       if (!(dataflags & 0x80))
-        FIELD_BS (vert_alignment, 74);
+        FIELD_BS (vert_alignment, 0);
       DXF {
         FIELD_2DD (alignment_pt, ins_pt, 11);
         FIELD_RD (elevation, 31);
@@ -248,16 +248,23 @@ DWG_ENTITY (ATTRIB)
     }
 
   SUBCLASS (AcDbAttribute)
+  DXF {
+    FIELD_T (tag, 2);
+    FIELD_RC (type, 70);
+    FIELD_BS0 (field_length, 73);
+    FIELD_BS0 (vert_alignment, 74);
+    SINCE (R_2007) {
+      FIELD_RC (class_version, 280);
+    }
+  }
   SINCE (R_2010)
     {
-      int dxf = dat->version == R_2010 ? 280: 0;
-      FIELD_RC (class_version, dxf); // 0 = r2010
+      FIELD_RC (class_version, 0); // 0 = r2010
       VALUEOUTOFBOUNDS (class_version, 10)
     }
   SINCE (R_2018)
     {
-      FIELD_RC (type, 70); // 1=single line, 2=multi line attrib, 4=multi line attdef
-
+      FIELD_RC (type, 0); // 1=single line, 2=multi line attrib, 4=multi line attdef
       if (FIELD_VALUE (type) > 1)
         {
           SUBCLASS (AcDbMText)
@@ -275,9 +282,9 @@ DWG_ENTITY (ATTRIB)
         }
     }
 
-  FIELD_T (tag, 2);
-  FIELD_BS (field_length, 73);
-  FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
+  FIELD_T (tag, 0);
+  FIELD_BS0 (field_length, 0);
+  FIELD_RC (flags, 0); // 1 invisible, 2 constant, 4 verify, 8 preset
 
   SINCE (R_2007) {
     FIELD_B (lock_position_flag, 0); // 70
