@@ -98,7 +98,10 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const i
         char *u8 = bit_convert_TU ((BITCODE_TU)wstr);                         \
         GROUP (dxf);                                                          \
         if (u8)                                                               \
-          fprintf (dat->fh, "%s\r\n", u8);                                    \
+          {                                                                   \
+            /* FIXME: ensure line length limits */                            \
+            dxf_fixup_string (dat, u8);                                       \
+          }                                                                   \
         else                                                                  \
           fprintf (dat->fh, "\r\n");                                          \
         free (u8);                                                            \
