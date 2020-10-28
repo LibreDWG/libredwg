@@ -74,12 +74,12 @@ help (void)
 /* handles r2007 wide chars (=> utf8) */
 static int
 set_info (PSDoc *restrict ps, Dwg_Data *restrict dwg, const char *restrict key,
-          char *restrict text)
+          BITCODE_TU restrict text)
 {
   int ret = 0;
-  if (dwg->header.version >= R_2007 && text)
+  if (text)
     {
-      char *u8 = bit_convert_TU ((BITCODE_TU)text);
+      char *u8 = bit_convert_TU (text);
       if (u8 && strlen (u8))
         {
           PS_set_info (ps, key, u8);
@@ -87,14 +87,6 @@ set_info (PSDoc *restrict ps, Dwg_Data *restrict dwg, const char *restrict key,
         }
       if (u8)
         free (u8);
-    }
-  else
-    {
-      if (text && strlen (text))
-        {
-          PS_set_info (ps, key, text);
-          ret = 1;
-        }
     }
   return ret;
 }

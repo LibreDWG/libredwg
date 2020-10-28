@@ -169,7 +169,7 @@ static Bit_Chain *g_dat;
                &dat->chain[t->start]);                                        \
     if (t->type == JSMN_STRING)                                               \
       {                                                                       \
-        _obj->nam = (BITCODE_TU)json_string (dat, tokens);                    \
+        _obj->nam = (BITCODE_TU)json_wstring (dat, tokens);                   \
       }                                                                       \
     else                                                                      \
       json_advance_unknown (dat, tokens, t->type, 0);                         \
@@ -384,7 +384,6 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
   return NULL;
 }
 
-#if 0
 // not yet needed. only with write2004
 ATTRIBUTE_MALLOC
 static BITCODE_TU
@@ -402,7 +401,6 @@ json_wstring (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
   dat->chain[t->end] = '\0';
   return bit_utf8_to_TU ((char *)&dat->chain[t->start]);
 }
-#endif
 
 ATTRIBUTE_MALLOC
 static char *
@@ -3376,7 +3374,10 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               JSON_TOKENS_CHECK_OVERFLOW_ERR
               t = &tokens->tokens[tokens->index];
               if (t->type == JSMN_STRING) // CUSTOMPROPERTYTAG
-                _obj->props[j].tag = json_string (dat, tokens);
+                {
+                  _obj->props[j].tag = json_wstring (dat, tokens);
+                  LOG_TRACE ("props[%d] = (%.*s", j, t->end - t->start, &dat->chain[t->start])
+                }
               else if (t->type == JSMN_PRIMITIVE)
                 tokens->index++;
               else
@@ -3386,25 +3387,26 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               JSON_TOKENS_CHECK_OVERFLOW_ERR
               t = &tokens->tokens[tokens->index];
               if (t->type == JSMN_STRING) // CUSTOMPROPERTY
-                _obj->props[j].value = json_string (dat, tokens);
+                {
+                  _obj->props[j].value = json_wstring (dat, tokens);
+                  LOG_TRACE (",%.*s)", t->end - t->start, &dat->chain[t->start])
+                }
               else if (t->type == JSMN_PRIMITIVE)
                 tokens->index++;
               else
                 json_advance_unknown (dat, tokens, t->type, 0);
-              if (_obj->props[j].tag || _obj->props[j].value)
-                LOG_TRACE ("props[%d] = (%s,%s)\n", j, _obj->props[j].tag,
-                           _obj->props[j].value)
+              LOG_TRACE ("\n")
             }
         }
       // clang-format off
-      FIELD_T (TITLE, 1)
-      FIELD_T (SUBJECT, 1)
-      FIELD_T (AUTHOR, 1)
-      FIELD_T (KEYWORDS, 1)
-      FIELD_T (COMMENTS, 1)
-      FIELD_T (LASTSAVEDBY, 1)
-      FIELD_T (REVISIONNUMBER, 1)
-      FIELD_T (HYPERLINKBASE, 1)
+      FIELD_TU16 (TITLE, 1)
+      FIELD_TU16 (SUBJECT, 1)
+      FIELD_TU16 (AUTHOR, 1)
+      FIELD_TU16 (KEYWORDS, 1)
+      FIELD_TU16 (COMMENTS, 1)
+      FIELD_TU16 (LASTSAVEDBY, 1)
+      FIELD_TU16 (REVISIONNUMBER, 1)
+      FIELD_TU16 (HYPERLINKBASE, 1)
       FIELD_TIMERLL (TDINDWG, 0)
       FIELD_TIMERLL (TDCREATE, 0)
       FIELD_TIMERLL (TDUPDATE, 0)

@@ -23,19 +23,24 @@
       FIELD_VALUE (TDINDWG)    = dwg->header_vars.TDINDWG;
       FIELD_VALUE (TDCREATE)   = dwg->header_vars.TDCREATE;
       FIELD_VALUE (TDUPDATE)   = dwg->header_vars.TDUPDATE;
-      FIELD_VALUE (HYPERLINKBASE) = dwg->header_vars.HYPERLINKBASE;
+      if (dat->version < R_2007 ||       /* if 2004 -> 2004: TV -> TV */
+          dat->from_version >= R_2007) { /* or already TU */
+        FIELD_VALUE (HYPERLINKBASE) = (BITCODE_TU)dwg->header_vars.HYPERLINKBASE;
+      }
+      else { /* 2004 -> 2007+ */
+        FIELD_VALUE (HYPERLINKBASE) = bit_utf8_to_TU (dwg->header_vars.HYPERLINKBASE);
+      }
     }
   }
 
-  //DEBUG_HERE
-  FIELD_T (TITLE, 1);
-  FIELD_T (SUBJECT, 1);
-  FIELD_T (AUTHOR, 1);
-  FIELD_T (KEYWORDS, 1);
-  FIELD_T (COMMENTS, 1);
-  FIELD_T (LASTSAVEDBY, 1);
-  FIELD_T (REVISIONNUMBER, 1);
-  FIELD_T (HYPERLINKBASE, 1);
+  FIELD_TU16 (TITLE, 1);
+  FIELD_TU16 (SUBJECT, 1);
+  FIELD_TU16 (AUTHOR, 1);
+  FIELD_TU16 (KEYWORDS, 1);
+  FIELD_TU16 (COMMENTS, 1);
+  FIELD_TU16 (LASTSAVEDBY, 1);
+  FIELD_TU16 (REVISIONNUMBER, 1);
+  FIELD_TU16 (HYPERLINKBASE, 1);
   //DEBUG_HERE;
   FIELD_TIMERLL (TDINDWG, 0);
   FIELD_TIMERLL (TDCREATE, 0);
@@ -45,8 +50,8 @@
   FIELD_RS (num_props, 0);
   REPEAT (num_props, props, Dwg_SummaryInfo_Property)
   REPEAT_BLOCK
-    FIELD_T (props[rcount1].tag, 0);   // CUSTOMPROPERTYTAG
-    FIELD_T (props[rcount1].value, 0); // CUSTOMPROPERTY
+    FIELD_TU16 (props[rcount1].tag, 0);   // CUSTOMPROPERTYTAG
+    FIELD_TU16 (props[rcount1].value, 0); // CUSTOMPROPERTY
   END_REPEAT_BLOCK
   END_REPEAT (props)
 

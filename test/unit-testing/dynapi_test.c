@@ -4178,13 +4178,13 @@ test_header (const Dwg_Data *dwg)
 
   }
   {
-    BITCODE_TV hyperlinkbase;
+    BITCODE_T hyperlinkbase;
     if (dwg_dynapi_header_value (dwg, "HYPERLINKBASE", &hyperlinkbase, NULL)
         && !memcmp (&hyperlinkbase, &dwg->header_vars.HYPERLINKBASE, sizeof (dwg->header_vars.HYPERLINKBASE))
        )
       pass ();
     else
-      fail ("HEADER.HYPERLINKBASE [TV]");
+      fail ("HEADER.HYPERLINKBASE [T]");
   }
   {
     BITCODE_TV stylesheet;

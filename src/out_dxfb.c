@@ -83,7 +83,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 #define HEADER_VALUE_TV(nam, dxf, value) HEADER_VALUE (nam, TV, dxf, value)
 #define HEADER_VALUE_TU(nam, dxf, value) HEADER_VALUE (nam, TU, dxf, value)
 #define HEADER_VALUE_TU0(nam, dxf, value)                                     \
-  if (dxf && value && !bit_empty_T (dat, value))                              \
+  if (dxf && value && !bit_empty_T (dat, (BITCODE_T)value))                   \
     {                                                                         \
       HEADER_VALUE (nam, TU, dxf, value);                                     \
     }

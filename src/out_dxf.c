@@ -230,7 +230,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const i
       VALUE_TU (value, dxf);                                                  \
     }
 #define HEADER_VALUE_TU0(nam, dxf, value)                                     \
-  if (dxf && value && !bit_empty_T (dat, value))                              \
+  if (dxf && !bit_empty_T (dat, (BITCODE_T)value))                            \
     {                                                                         \
       GROUP (9);                                                              \
       fprintf (dat->fh, "$" #nam "\r\n");                                     \

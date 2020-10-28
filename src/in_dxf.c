@@ -965,11 +965,8 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 #define SUMMARY_T(name)                                                       \
   (pair->code == 1 && strEQc (field, "$" #name) && pair->value.s != NULL)     \
   {                                                                           \
-    LOG_TRACE ("SUMMARY.%s = %s [T 1]\n", &field[1], pair->value.s);          \
-    if (dwg->header.version >= R_2007)                                        \
-      dwg->summaryinfo.name = (BITCODE_T)bit_utf8_to_TU (pair->value.s);      \
-    else                                                                      \
-      dwg->summaryinfo.name = strdup (pair->value.s);                         \
+    LOG_TRACE ("SUMMARY.%s = %s [TU16 1]\n", &field[1], pair->value.s);       \
+    dwg->summaryinfo.name = bit_utf8_to_TU (pair->value.s);                   \
   }
 
               else if
@@ -992,26 +989,18 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   dwg->summaryinfo.props
                     = (Dwg_SummaryInfo_Property*)realloc (dwg->summaryinfo.props,
                                  (j + 1) * sizeof (Dwg_SummaryInfo_Property));
-                  LOG_TRACE ("SUMMARY.props[%u].tag = %s [T 1]\n", j,
+                  LOG_TRACE ("SUMMARY.props[%u].tag = %s [TU16 1]\n", j,
                              pair->value.s);
-                  if (dwg->header.version >= R_2007)
-                    dwg->summaryinfo.props[j].tag
-                        = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
-                  else
-                    dwg->summaryinfo.props[j].tag = strdup (pair->value.s);
+                  dwg->summaryinfo.props[j].tag = bit_utf8_to_TU (pair->value.s);
                 }
               else if (pair->code == 1 && strEQc (field, "$CUSTOMPROPERTY")
                        && pair->value.s != NULL && dwg->summaryinfo.props
                        && dwg->summaryinfo.num_props > 0)
                 {
                   BITCODE_BL j = dwg->summaryinfo.num_props - 1;
-                  LOG_TRACE ("SUMMARY.props[%u].value = %s [T 1]\n", j,
+                  LOG_TRACE ("SUMMARY.props[%u].value = %s [TU16 1]\n", j,
                              pair->value.s);
-                  if (dwg->header.version >= R_2007)
-                    dwg->summaryinfo.props[j].value
-                        = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
-                  else
-                    dwg->summaryinfo.props[j].value = strdup (pair->value.s);
+                  dwg->summaryinfo.props[j].value = bit_utf8_to_TU (pair->value.s);
                 }
               else
                 LOG_ERROR ("skipping HEADER: 9 %s, unknown field with code %d",

@@ -334,7 +334,7 @@ H,	DXF 5
 @item HIDETEXT
 RC,	DXF 280
 @item HYPERLINKBASE
-TV,	DXF 1
+T,	DXF 1
 @item INDEXCTL
 RC,	DXF 280
 @item INSBASE
@@ -15034,9 +15034,9 @@ BL,	DXF 90
 @vtable @code
 
 @item tag
-T
+TU
 @item value
-T
+TU
 
 @end vtable
 @end indentedblock
@@ -15728,19 +15728,19 @@ All Section SummaryInfo fields.
 @vtable @code
 
 @item AUTHOR
-T,	DXF 1
+TU16,	DXF 1
 @item COMMENTS
-T,	DXF 1
+TU16,	DXF 1
 @item HYPERLINKBASE
-T,	DXF 1
+TU16,	DXF 1
 @item KEYWORDS
-T,	DXF 1
+TU16,	DXF 1
 @item LASTSAVEDBY
-T,	DXF 1
+TU16,	DXF 1
 @item REVISIONNUMBER
-T,	DXF 1
+TU16,	DXF 1
 @item SUBJECT
-T,	DXF 1
+TU16,	DXF 1
 @item TDCREATE
 TIMERLL
 @item TDINDWG
@@ -15748,7 +15748,7 @@ TIMERLL
 @item TDUPDATE
 TIMERLL
 @item TITLE
-T,	DXF 1
+TU16,	DXF 1
 @item num_props
 RS
 @item props

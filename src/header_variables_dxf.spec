@@ -48,7 +48,7 @@
     HEADER_VALUE_TU0 (REVISIONNUMBER, 1, dwg->summaryinfo.REVISIONNUMBER);
     for (rcount2 = 0; rcount2 < dwg->summaryinfo.num_props; rcount2++)
       {
-        if (!bit_empty_T (dat, dwg->summaryinfo.props[rcount2].tag))
+        if (!bit_empty_T (dat, (BITCODE_T)dwg->summaryinfo.props[rcount2].tag))
           {
             HEADER_VALUE_TU (CUSTOMPROPERTYTAG, 1, dwg->summaryinfo.props[rcount2].tag);
             HEADER_VALUE_TU (CUSTOMPROPERTY, 1, dwg->summaryinfo.props[rcount2].value);
