@@ -1671,27 +1671,43 @@ DWG_ENTITY (VIEWPORT)
   }
 
   SINCE (R_2000) {
-    FIELD_3BD (view_target, 17);
-    FIELD_3BD (VIEWDIR, 16);
-    FIELD_BD (twist_angle, 51);
-    FIELD_BD (VIEWSIZE, 45);
-    FIELD_BD (lens_length, 42);
-    FIELD_BD (front_clip_z, 43);
-    FIELD_BD (back_clip_z, 44);
-    if (dwg->header.dwg_version != 0x1a) { // AC1020/R_2006 only here
-      FIELD_BD (SNAPANG, 50);
+    DXF {
       FIELD_2RD (VIEWCTR, 12);
       FIELD_2RD (SNAPBASE, 13);
+      FIELD_2RD (SNAPUNIT, 14);
+      FIELD_2RD (GRIDUNIT, 15);
+      FIELD_3BD (VIEWDIR, 16);
+      FIELD_3BD (view_target, 17);
+      FIELD_BD (lens_length, 42);
+      FIELD_BD (front_clip_z, 43);
+      FIELD_BD (back_clip_z, 44);
+      FIELD_BD (VIEWSIZE, 45);
+      FIELD_BD (SNAPANG, 50);
+      FIELD_BD (twist_angle, 51);
+      FIELD_BS (circle_zoom, 72);
     } else {
-      // on R_2006: no SNAPANG, SNAPBASE
-      FIELD_2RD (VIEWCTR, 12);
+      FIELD_3BD (view_target, 17);
+      FIELD_3BD (VIEWDIR, 16);
+      FIELD_BD (twist_angle, 51);
+      FIELD_BD (VIEWSIZE, 45);
+      FIELD_BD (lens_length, 42);
+      FIELD_BD (front_clip_z, 43);
+      FIELD_BD (back_clip_z, 44);
+      if (dwg->header.dwg_version != 0x1a) { // AC1020/R_2006 only here
+        FIELD_BD (SNAPANG, 50);
+        FIELD_2RD (VIEWCTR, 12);
+        FIELD_2RD (SNAPBASE, 13);
+      } else {
+        // on R_2006: no SNAPANG, SNAPBASE
+        FIELD_2RD (VIEWCTR, 12);
+      }
+      FIELD_2RD (SNAPUNIT, 14);
+      FIELD_2RD (GRIDUNIT, 15);
+      FIELD_BS (circle_zoom, 72);
+      SINCE (R_2007) {
+        FIELD_BS (grid_major, 61);
+      }
     }
-    FIELD_2RD (SNAPUNIT, 14);
-    FIELD_2RD (GRIDUNIT, 15);
-    FIELD_BS (circle_zoom, 72);
-  }
-  SINCE (R_2007) {
-    FIELD_BS (grid_major, 61);
   }
 
   SINCE (R_2000) {
@@ -1699,18 +1715,37 @@ DWG_ENTITY (VIEWPORT)
     FIELD_BL (status_flag, 90);
     FIELD_T (style_sheet, 1);
     FIELD_RC (render_mode, 281);
-    FIELD_B (ucs_at_origin, 74);
-    FIELD_B (UCSVP, 71);
-    FIELD_3BD (ucsorg, 110);
-    FIELD_3BD (ucsxdir, 111);
-    FIELD_3BD (ucsydir, 112);
-    FIELD_BD (ucs_elevation, 146);
-    FIELD_BS (UCSORTHOVIEW, 79);
+    DXF {
+      FIELD_B (UCSVP, 71);
+      FIELD_B (ucs_at_origin, 74);
+      FIELD_3BD (ucsorg, 110);
+      FIELD_3BD (ucsxdir, 111);
+      FIELD_3BD (ucsydir, 112);
+      FIELD_BS (UCSORTHOVIEW, 79);
+      FIELD_BD (ucs_elevation, 146);
+      SINCE (R_2004) {
+        FIELD_BS (shadeplot_mode, 170);
+      }
+      SINCE (R_2007) {
+        FIELD_BS (grid_major, 61);
+      }
+    } else {
+      FIELD_B (ucs_at_origin, 74);
+      FIELD_B (UCSVP, 71);
+      FIELD_3BD (ucsorg, 110);
+      FIELD_3BD (ucsxdir, 111);
+      FIELD_3BD (ucsydir, 112);
+      FIELD_BD (ucs_elevation, 146);
+      FIELD_BS (UCSORTHOVIEW, 79);
+      SINCE (R_2004) {
+        FIELD_BS (shadeplot_mode, 170);
+      }
+    }
+  }
+  DXF {
+    FIELD_HANDLE (visualstyle, 5, 348);
   }
 
-  SINCE (R_2004) {
-    FIELD_BS (shadeplot_mode, 170);
-  }
   SINCE (R_2007) {
     FIELD_B (use_default_lights, 292);
     FIELD_RC (default_lighting_type, 282);
@@ -1740,7 +1775,7 @@ DWG_ENTITY (VIEWPORT)
   }
   SINCE (R_2007) {
     FIELD_HANDLE (background, 4, 332);
-    FIELD_HANDLE (visualstyle, 5, 348);
+    FIELD_HANDLE (visualstyle, 5, 0);
     FIELD_HANDLE (shadeplot, 4, 333);
     FIELD_HANDLE (sun, 3, 361);
   }
