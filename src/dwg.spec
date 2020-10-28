@@ -2901,7 +2901,12 @@ DWG_OBJECT (LAYER)
   FIELD_HANDLE (ltype, 5, 6);
   DXF {
     SINCE (R_2000) {
-      FIELD_B0 (plotflag, 290);
+      if (bit_eq_T (dat, _obj->name, "Defpoints")) {
+        _obj->plotflag = 0;
+        FIELD_B (plotflag, 290);
+      } else {
+        FIELD_B0 (plotflag, 290);
+      }
     }
     SINCE (R_13) {
       int lw = dxf_cvt_lweight (FIELD_VALUE (linewt));
