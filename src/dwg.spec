@@ -64,7 +64,6 @@ DWG_ENTITY (TEXT)
         FIELD_HANDLE0 (style, 5, 7);
         FIELD_BS (generation, 71);
         FIELD_BS (horiz_alignment, 72);
-        FIELD_BS (vert_alignment, 73);
         FIELD_2RD (alignment_pt, 11);
         FIELD_3BD (extrusion, 210);
       } else {
@@ -133,13 +132,14 @@ DWG_ENTITY (TEXT)
       if (!(dataflags & 0x40))
         FIELD_BS (horiz_alignment, 72);
       if (!(dataflags & 0x80))
-        FIELD_BS0 (vert_alignment, 73);
+        FIELD_BS0 (vert_alignment, 0);
 
       DXF {
         FIELD_2DD (alignment_pt, ins_pt, 11);
         FIELD_RD (elevation, 31);
         FIELD_BE (extrusion, 210);
         SUBCLASS (AcDbText) // not in ODA, but ACAD
+        FIELD_BS0 (vert_alignment, 73);
       }
     }
 
@@ -187,7 +187,7 @@ DWG_ENTITY (ATTRIB)
       FIELD_TV (text_value, 1);
       FIELD_BS (generation, 71);
       FIELD_BS (horiz_alignment, 72);
-      FIELD_BS (vert_alignment, 73);
+      FIELD_BS (vert_alignment, 74);
     }
 
   IF_FREE_OR_SINCE (R_2000)
@@ -239,7 +239,7 @@ DWG_ENTITY (ATTRIB)
       if (!(dataflags & 0x40))
         FIELD_BS (horiz_alignment, 72);
       if (!(dataflags & 0x80))
-        FIELD_BS (vert_alignment, 73); // or 74?
+        FIELD_BS (vert_alignment, 74);
       DXF {
         FIELD_2DD (alignment_pt, ins_pt, 11);
         FIELD_RD (elevation, 31);
