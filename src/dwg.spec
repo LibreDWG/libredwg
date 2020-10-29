@@ -3968,7 +3968,15 @@ DWG_ENTITY (HATCH)
   ENCODER { normalize_BE (FIELD_VALUE (extrusion)); }
   FIELD_3BD (extrusion, 210);
   DECODER { normalize_BE (FIELD_VALUE (extrusion)); }
-  FIELD_T (name, 2); //default: SOLID
+  DXF {
+    if (FIELD_VALUE (is_solid_fill)) {
+      VALUE_TFF ("SOLID", 2); // not "SOLID,_I"
+    } else {
+      FIELD_T (name, 2);
+    }
+  } else {
+    FIELD_T (name, 2); //default: SOLID
+   }
   FIELD_B (is_solid_fill, 70); //default: 1, pattern_fill: 0
   FIELD_B (is_associative, 71);
   FIELD_BL (num_paths, 91);
@@ -4089,17 +4097,7 @@ DWG_ENTITY (HATCH)
           END_REPEAT (polyline_paths);
 #undef polyline_paths
         }
-      SUB_FIELD_BL (paths[rcount1],numboundary_handles, 97);
-#if defined (IS_DXF) && !defined (IS_ENCODER)
-      DXF {
-        if (_obj->boundary_handles && rcount1 < _obj->num_boundary_handles) {
-          FIELD_HANDLE (boundary_handles[rcount1], 0, 330)
-        } else {
-          LOG_WARN ("HATCH.num_path < num_boundary_handles or empty boundary_handles")
-          VALUE_H (0UL, 330);
-        }
-      }
-#endif
+      SUB_FIELD_BL (paths[rcount1],numboundary_handles, 0);
       DECODER {
         FIELD_VALUE (num_boundary_handles) += FIELD_VALUE (paths[rcount1].numboundary_handles);
         FIELD_VALUE (has_derived) =
@@ -4108,19 +4106,20 @@ DWG_ENTITY (HATCH)
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (paths)
   END_REPEAT (paths);
+
 #ifdef IS_DXF
-  SINCE (R_2004)
-    {
-      error |= DWG_FUNC_N (ACTION,_HATCH_gradientfill)(dat,str_dat,obj,_obj);
-    }
+  FIELD_BL (num_boundary_handles, 97);
+  VALUEOUTOFBOUNDS (num_boundary_handles, 10000)
+  HANDLE_VECTOR (boundary_handles, num_boundary_handles, 4, 330);
 #endif
-  FIELD_BS (style, 75); // 0=normal (odd parity); 1=outer; 2=whole
+  FIELD_BS (style, 75);        // 0=normal (odd parity); 1=outer; 2=whole
   FIELD_BS (pattern_type, 76); // 0=user; 1=predefined; 2=custom
   if (!FIELD_VALUE (is_solid_fill))
     {
       FIELD_BD (angle, 52);
       FIELD_BD1 (scale_spacing, 41); //default 1.0
       FIELD_B (double_flag, 77);
+      
       FIELD_BS (num_deflines, 78);
       REPEAT (num_deflines, deflines, Dwg_HATCH_DefLine)
       REPEAT_BLOCK
@@ -4139,10 +4138,19 @@ DWG_ENTITY (HATCH)
   FIELD_BL (num_seeds, 98);
   VALUEOUTOFBOUNDS (num_seeds, 10000)
   FIELD_2RD_VECTOR (seeds, num_seeds, 10);
+#ifdef IS_DXF
+  SINCE (R_2004)
+    {
+      if (_obj->is_gradient_fill)
+        error |= DWG_FUNC_N (ACTION,_HATCH_gradientfill)(dat,str_dat,obj,_obj);
+    }
+#endif
   VALUEOUTOFBOUNDS (num_boundary_handles, 10000)
 
   COMMON_ENTITY_HANDLE_DATA;
-  HANDLE_VECTOR (boundary_handles, num_boundary_handles, 4, 0); /* DXF: inlined above */
+#ifndef IS_DXF
+  HANDLE_VECTOR (boundary_handles, num_boundary_handles, 4, 330);
+#endif
 
 DWG_ENTITY_END
 
