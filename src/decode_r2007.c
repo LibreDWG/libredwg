@@ -1297,13 +1297,11 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   old_size = str->size;
   old_byte = str->byte;
 
-  str->chain += str->byte;
-  // obj->strpos = str->byte * 8 + str->bit;
+  //str->chain += str->byte;
+  //obj->strpos = str->byte * 8 + str->bit;
 
-  str->byte = 0;
-  str->bit = 0;
   str->size = (obj->bitsize / 8) + ((obj->bitsize % 8) ? 1 : 0);
-  bit_advance_position (str, start - 8);
+  bit_set_position (str, start);
 
   if (str->byte >= old_size - old_byte)
     {
@@ -1333,17 +1331,18 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   str->byte -= 2;
   LOG_HANDLE (" @%lu.%u", str->byte, str->bit & 7);
   data_size = (BITCODE_RL)bit_read_RS (str);
-  LOG_HANDLE (" data_size: %u/0x%x", data_size, data_size);
+  LOG_HANDLE (" data_size: %u/0x%x [RS]", data_size, data_size);
 
-  if (data_size & 0x8000)
+  if (data_size & 0x8000 && 0)
     {
       BITCODE_RS hi_size;
-      bit_advance_position (str, -1); //-33
       str->byte -= 4;
       data_size &= 0x7FFF;
+      LOG_HANDLE (" @%lu.%u", str->byte, str->bit & 7);
       hi_size = bit_read_RS (str);
+      LOG_HANDLE (" hi_size " FORMAT_RS "/" FORMAT_RSx " [RS]", hi_size, hi_size);
       data_size |= (hi_size << 15);
-      LOG_HANDLE (" data_size: %u/0x%x\n", data_size, data_size);
+      LOG_HANDLE (" => data_size: %u/0x%x\n", data_size, data_size);
       // LOG_TRACE("  -33: @%lu\n", str->byte);
     }
   else
@@ -1351,14 +1350,25 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   str->byte -= 2;
   if (data_size > obj->bitsize)
     {
-      LOG_WARN ("Invalid string stream data_size: @%lu.%u\n", str->byte,
-                str->bit & 7);
+      LOG_WARN ("Invalid string stream data_size %u > bitsize %u at @%lu.%u\n",
+                (unsigned)data_size, (unsigned)obj->bitsize, str->byte, str->bit & 7);
+      if (dat->from_version == R_2007)
+        {
+          return 0;
+        }
       obj->has_strings = 0;
       bit_reset_chain (str);
       return DWG_ERR_NOTYETSUPPORTED; // a very low severity error
     }
-  obj->stringstream_size = data_size;
-  bit_advance_position (str, -(int)data_size);
+  if (data_size < obj->bitsize)
+    {
+      obj->stringstream_size = data_size;
+      bit_advance_position (str, -(int)data_size);
+    }
+  else
+    {
+      bit_set_position (str, 0);
+    }
   // bit_reset_chain (str);
   // LOG_TRACE(" %d: @%lu.%u (%lu)\n", -(int)data_size - 16, str->byte,
   // str->bit & 7,

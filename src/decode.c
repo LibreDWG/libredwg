@@ -4361,20 +4361,18 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   }
   SINCE (R_2007)
   {
-    SINCE (R_2010)
+    SINCE (R_2010) {
       LOG_HANDLE (" bitsize: " FORMAT_RL ",", obj->bitsize);
-    // restrict the hdl_dat stream
-    error |= obj_handle_stream (dat, obj, hdl_dat);
+      // restrict the hdl_dat stream
+      error |= obj_handle_stream (dat, obj, hdl_dat);
+    }
     // and set the string stream (restricted to size)
     // skip for all types without strings
     if (obj->type >= 500 || obj_has_strings (obj->type))
       error |= obj_string_stream (dat, obj, str_dat);
     else
       {
-        str_dat->chain += str_dat->byte;
-        str_dat->byte = 0;
-        str_dat->bit = 0;
-        bit_advance_position (str_dat, obj->bitsize - 1 - 8);
+        bit_set_position (str_dat, obj->bitsize - 1);
         str_dat->size = 0;
       }
   }
@@ -4465,8 +4463,9 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
         error |= DWG_ERR_VALUEOUTOFBOUNDS;
         LOG_HANDLE (" (fixed)");
       }
-    // restrict the hdl_dat stream
-    error |= obj_handle_stream (dat, obj, hdl_dat);
+    // restrict the hdl_dat stream. already done for r2007
+    SINCE (R_2010)
+      error |= obj_handle_stream (dat, obj, hdl_dat);
     // and set the string stream (restricted to size)
     if (obj->type >= 500 || obj_has_strings (obj->type))
       error |= obj_string_stream (dat, obj, str_dat);
