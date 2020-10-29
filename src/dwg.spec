@@ -251,9 +251,9 @@ DWG_ENTITY (ATTRIB)
   DXF {
     FIELD_T (tag, 2);
     FIELD_RC (type, 70);
-    FIELD_BS0 (field_length, 73);
+    //FIELD_BS (field_length, 73);
     FIELD_BS0 (vert_alignment, 74);
-    SINCE (R_2007) {
+    SINCE (R_2004) {
       FIELD_RC (class_version, 280);
     }
   }
@@ -382,7 +382,7 @@ DWG_ENTITY (ATTDEF)
       if (!(dataflags & 0x40))
         FIELD_BS (horiz_alignment, 72);
       if (!(dataflags & 0x80))
-        FIELD_BS (vert_alignment, 73); // or 74?
+        FIELD_BS (vert_alignment, 0);
       DXF {
         FIELD_2DD (alignment_pt, ins_pt, 11);
         FIELD_RD (elevation, 31);
@@ -391,17 +391,27 @@ DWG_ENTITY (ATTDEF)
     }
 
   SUBCLASS (AcDbAttributeDefinition);
+  DXF {
+    FIELD_T (prompt, 3);
+    FIELD_T (tag, 2);
+    FIELD_RC (type, 70);
+    SINCE (R_13) {
+      //FIELD_BS (field_length, 73);
+      FIELD_BS0 (vert_alignment, 74);
+    }
+    SINCE (R_2004) {
+      FIELD_RC (class_version, 280);
+    }
+  }
   SINCE (R_2010)
     {
-      int dxf = dat->version == R_2010 ? 280: 0;
-      FIELD_RC (class_version, dxf); // 0 = r2010
+      //int dxf = dat->version == R_2010 ? 280: 0;
+      FIELD_RC (class_version, 0); // 0 = r2010
       VALUEOUTOFBOUNDS (class_version, 10)
     }
-  DXF { FIELD_T (prompt, 3); }
-  DXF { FIELD_T (tag, 2); }
   IF_FREE_OR_SINCE (R_2018)
     {
-      FIELD_RC (type, 70); // 1=single line, 2=multi line attrib, 4=multi line attdef
+      FIELD_RC (type, 0); // 1=single line, 2=multi line attrib, 4=multi line attdef
 
       if (FIELD_VALUE (type) > 1)
         {
@@ -422,15 +432,14 @@ DWG_ENTITY (ATTDEF)
 
   FIELD_T (tag, 0);
   FIELD_BS (field_length, 0); //DXF 73, unused
-  FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
-
+  FIELD_RC (flags, 0); // 1 invisible, 2 constant, 4 verify, 8 preset
   SINCE (R_2007) {
-    FIELD_B (lock_position_flag, 70);
+    FIELD_B (lock_position_flag, 0);
   }
 
   // specific to ATTDEF
   SINCE (R_2010) {
-    FIELD_RC (attdef_class_version, 280);
+    FIELD_RC (attdef_class_version, 0);
     VALUEOUTOFBOUNDS (attdef_class_version, 10)
   }
   FIELD_T (prompt, 0);
