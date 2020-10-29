@@ -274,7 +274,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const i
     {                                                                         \
       const char *_fmt = dxf_format (dxf);                                    \
       assert (_fmt);                                                          \
-      if (strEQc (_fmt, "%-16.14f"))                                          \
+      if (strEQc (_fmt, DXF_FORMAT_FLT))                                          \
         {                                                                     \
           dxf_print_rd (dat, (double)(value), dxf);                           \
         }                                                                     \
@@ -310,7 +310,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
       if (bit_isnan (value))
         value = 0.0;
 #endif
-        snprintf (_buf, 127, "%-16.14f", value);
+      snprintf (_buf, 127, DXF_FORMAT_FLT, value);
       k = strlen (_buf);
       if (strrchr (_buf, '.') && _buf[k - 1] == '0')
         {
@@ -319,9 +319,9 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
         }
       // max len 17 resp. 18 with -
       if (value < 0.0)
-        _buf[18] = '\0';
+        _buf[DXF_FLT_MAXLEN+1] = '\0';
       else
-        _buf[17] = '\0';
+        _buf[DXF_FLT_MAXLEN] = '\0';
       fprintf (dat->fh, "%s\r\n", _buf);
     }
 }
@@ -2362,7 +2362,7 @@ dxf_format (int code)
   if (5 < code && code < 10)
     return "%s";
   if (code < 60)
-    return "%-16.14f";
+    return DXF_FORMAT_FLT;
   if (code < 80)
     return "%6i";
   if (80 <= code && code <= 99) // BL int32 lgtm [cpp/constant-comparison]
@@ -2374,13 +2374,13 @@ dxf_format (int code)
   if (code == 105)
     return "%lX";
   if (110 <= code && code <= 149)
-    return "%-16.14f";
+    return DXF_FORMAT_FLT;
   if (160 <= code && code <= 169)
     return "%12li";
   if (170 <= code && code <= 179)
     return "%6i";
   if (210 <= code && code <= 239)
-    return "%-16.14f";
+    return DXF_FORMAT_FLT;
   if (270 <= code && code <= 289)
     return "%6i";
   if (290 <= code && code <= 299)
@@ -2406,7 +2406,7 @@ dxf_format (int code)
   if (450 <= code && code <= 459)
     return "%12li"; // long
   if (460 <= code && code <= 469)
-    return "%-16.14f";
+    return DXF_FORMAT_FLT;
   if (470 <= code && code <= 479)
     return "%s";
   if (480 <= code && code <= 481)
@@ -2416,7 +2416,7 @@ dxf_format (int code)
   if (1000 <= code && code <= 1009)
     return "%s";
   if (1010 <= code && code <= 1059)
-    return "%-16.14f";
+    return DXF_FORMAT_FLT;
   if (1060 <= code && code <= 1070)
     return "%6i";
   if (code == 1071)
