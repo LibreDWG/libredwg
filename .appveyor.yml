@@ -23,9 +23,9 @@ environment:
       ISETUP: setup-x86_64
   global:
     CYG_MIRROR: http://mirrors.kernel.org/sourceware/cygwin/
-#matrix:
-#  allow_failures:
-#    - MINGW: 1
+matrix:
+  allow_failures:
+    - CYGWIN: 1
 clone_depth: 1
 # we tag only already tested and deployed commits
 skip_tags: true
@@ -76,7 +76,8 @@ build_script:
   - bash -c "make"
 
 test_script:
-  - bash -c "make check"
+  - if not "%CYGWIN%"=="1" bash -c "make check"
+  - if "%CYGWIN%"=="1" bash -c "make check -C programs && make check -C examples"
   - if "%MINGW%"=="1" call build-aux\appveyor-deploy.bat
 
 #before_deploy:
