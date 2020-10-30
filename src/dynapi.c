@@ -2742,7 +2742,7 @@ static const Dwg_DYNAPI_field _dwg_MPOLYGON_fields[] = {
   { "style",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_MPOLYGON, style),
     0,0,0, 75 },
   { "pattern_type",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_MPOLYGON, pattern_type),
-    0,0,0, 0 },
+    0,0,0, 76 },
   { "angle",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_MPOLYGON, angle),
     0,0,0, 52 },
   { "scale_spacing",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_MPOLYGON, scale_spacing),

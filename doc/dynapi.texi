@@ -2692,7 +2692,7 @@ Dwg_HATCH_Path*
 @item style
 BS,	DXF 75
 @item pattern_type
-BS
+BS,	DXF 76
 @item angle
 BD,	DXF 52
 @item scale_spacing

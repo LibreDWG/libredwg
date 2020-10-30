@@ -4099,22 +4099,15 @@ DWG_ENTITY (HATCH)
         }
       SUB_FIELD_BL (paths[rcount1],num_boundary_handles, 97);
       DECODER {
-        //FIELD_VALUE (sum_boundary_handles) += FIELD_VALUE (paths[rcount1].num_boundary_handles);
         FIELD_VALUE (has_derived) =
           FIELD_VALUE (has_derived) || (FIELD_VALUE (paths[rcount1].flag) & 0x4);
       }
-      //VALUEOUTOFBOUNDS (sum_boundary_handles, 10000)
       VALUEOUTOFBOUNDS (paths[rcount1].num_boundary_handles, 10000)
       SUB_HANDLE_VECTOR (paths[rcount1], boundary_handles, num_boundary_handles, 4, 330);
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (paths)
   END_REPEAT (paths);
 
-#ifdef IS_DXF
-  //FIELD_BL (num_boundary_handles, 97);
-  //VALUEOUTOFBOUNDS (num_boundary_handles, 10000)
-  //HANDLE_VECTOR (boundary_handles, num_boundary_handles, 4, 330);
-#endif
   FIELD_BS (style, 75);        // 0=normal (odd parity); 1=outer; 2=whole
   FIELD_BS (pattern_type, 76); // 0=user; 1=predefined; 2=custom
   if (!FIELD_VALUE (is_solid_fill))
@@ -4150,9 +4143,6 @@ DWG_ENTITY (HATCH)
 #endif
 
   COMMON_ENTITY_HANDLE_DATA;
-#ifndef IS_DXF
-  //HANDLE_VECTOR (boundary_handles, num_boundary_handles, 4, 330);
-#endif
 
 DWG_ENTITY_END
 
@@ -4165,13 +4155,19 @@ DWG_ENTITY (MPOLYGON)
   SUBCLASS (AcDbMPolygon)
 
   FIELD_BS (style, 75); // 0=normal (odd parity); 1=outer; 2=whole //??
+
 #if !defined (IS_DXF) && !defined (IS_INDXF)
   SINCE (R_2004)
     {
       error |= DWG_FUNC_N (ACTION,_HATCH_gradientfill)(dat,str_dat,obj,(Dwg_Entity_HATCH *)_obj);
     }
 #endif
-
+#ifdef IS_FREE
+  if (dat->from_version >= R_2004)
+    {
+      error |= DWG_FUNC_N (ACTION,_HATCH_gradientfill)(dat,str_dat,obj,(Dwg_Entity_HATCH *)_obj);
+    }
+#endif
   DXF {
     BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
     pt.z = FIELD_VALUE (elevation);
@@ -4182,12 +4178,17 @@ DWG_ENTITY (MPOLYGON)
   ENCODER { normalize_BE (FIELD_VALUE (extrusion)); }
   FIELD_3BD (extrusion, 210);
   DECODER { normalize_BE (FIELD_VALUE (extrusion)); }
-  FIELD_T (name, 2);
-
-  //??
-  FIELD_BS (is_solid_fill, 70); //default: 1, pattern_fill: 0
+  DXF {
+    if (FIELD_VALUE (is_solid_fill)) {
+      VALUE_TFF ("SOLID", 2); // not "SOLID,_I"
+    } else {
+      FIELD_T (name, 2);
+    }
+  } else {
+    FIELD_T (name, 2); //default: SOLID
+   }
+  FIELD_B (is_solid_fill, 70); //default: 1, pattern_fill: 0
   FIELD_B (is_associative, 71);
-
   FIELD_BL (num_paths, 91);
   VALUEOUTOFBOUNDS (num_paths, 10000)
   REPEAT (num_paths, paths, Dwg_HATCH_Path)
@@ -4306,59 +4307,56 @@ DWG_ENTITY (MPOLYGON)
           END_REPEAT (polyline_paths);
 #undef polyline_paths
         }
-      SUB_FIELD_BL (paths[rcount1],numboundary_handles, 97);
-#if defined (IS_DXF) && !defined (IS_ENCODER)
-      DXF {
-        if (_obj->boundary_handles && rcount1 < _obj->num_boundary_handles) {
-          FIELD_HANDLE (boundary_handles[rcount1], 0, 330)
-        } else {
-          LOG_WARN ("HATCH.num_path < num_boundary_handles or empty boundary_handles")
-          VALUE_H (0UL, 330);
-        }
-      }
-#endif
+      SUB_FIELD_BL (paths[rcount1],num_boundary_handles, 97);
+      //DECODER {
+      //  FIELD_VALUE (has_derived) =
+      //        FIELD_VALUE (has_derived) || (FIELD_VALUE (paths[rcount1].flag) & 0x4);
+      //}
+      VALUEOUTOFBOUNDS (paths[rcount1].num_boundary_handles, 10000)
+      SUB_HANDLE_VECTOR (paths[rcount1], boundary_handles, num_boundary_handles, 4, 330);
   END_REPEAT_BLOCK
-  SET_PARENT (paths, (Dwg_Entity_HATCH*)_obj)
+  SET_PARENT_OBJ (paths)
   END_REPEAT (paths);
+
+  FIELD_BS (style, 75);        // 0=normal (odd parity); 1=outer; 2=whole
+  FIELD_BS (pattern_type, 76); // 0=user; 1=predefined; 2=custom
+  if (!FIELD_VALUE (is_solid_fill))
+    {
+      FIELD_BD (angle, 52);
+      FIELD_BD1 (scale_spacing, 41); //default 1.0
+      FIELD_B (double_flag, 77);
+      
+      FIELD_BS (num_deflines, 78);
+      REPEAT (num_deflines, deflines, Dwg_HATCH_DefLine)
+      REPEAT_BLOCK
+          SUB_FIELD_BD (deflines[rcount1], angle, 53);
+          SUB_FIELD_2BD_1 (deflines[rcount1], pt0, 43);
+          SUB_FIELD_2BD_1 (deflines[rcount1], offset, 45);
+          SUB_FIELD_BS (deflines[rcount1], num_dashes, 79);
+          FIELD_VECTOR (deflines[rcount1].dashes, BD, deflines[rcount1].num_dashes, 49)
+      END_REPEAT_BLOCK
+      SET_PARENT_OBJ (deflines)
+      END_REPEAT (deflines);
+    }
+
+  //if (FIELD_VALUE (has_derived))
+  //  FIELD_BD (pixel_size, 47);
+  //FIELD_BL (num_seeds, 98);
+  //VALUEOUTOFBOUNDS (num_seeds, 10000)
+  //FIELD_2RD_VECTOR (seeds, num_seeds, 10);
 #ifdef IS_DXF
   SINCE (R_2004)
     {
-      error |= DWG_FUNC_N (ACTION,_HATCH_gradientfill)(dat,str_dat,obj,(Dwg_Entity_HATCH *)_obj);
+      if (_obj->is_gradient_fill)
+        error |= DWG_FUNC_N (ACTION,_HATCH_gradientfill)(dat,str_dat,obj,_obj);
     }
 #endif
 
-  DXF {
-    FIELD_CMC (color, 62);
-    FIELD_2RD (x_dir, 11);
-    FIELD_BL (num_boundary_handles, 99);
-  }
-
-  SINCE (R_2013) {
-    //FIELD_BS (pattern_type, 76); // 0=user; 1=predefined; 2=custom
-    FIELD_BL (is_solid_fill, 0);
-    FIELD_BD (angle, 52);
-    FIELD_BD1 (scale_spacing, 41); //default 1.0
-    FIELD_B (double_flag, 77);
-    FIELD_BL (num_deflines, 78);
-    REPEAT (num_deflines, deflines, Dwg_HATCH_DefLine)
-    REPEAT_BLOCK
-        SUB_FIELD_BD (deflines[rcount1], angle, 53);
-        SUB_FIELD_2BD_1 (deflines[rcount1], pt0, 43);
-        SUB_FIELD_2BD_1 (deflines[rcount1], offset, 45);
-        SUB_FIELD_BS (deflines[rcount1], num_dashes, 79);
-        FIELD_VECTOR (deflines[rcount1].dashes, BD, deflines[rcount1].num_dashes, 49)
-    END_REPEAT_BLOCK
-    SET_PARENT (deflines, (Dwg_Entity_HATCH*)_obj)
-    END_REPEAT (deflines);
-  }
-
-  // not DXF
-  FIELD_CMC (color, 0);
-  FIELD_2RD (x_dir, 0);
-  FIELD_BL (num_boundary_handles, 0);
+  FIELD_CMC (color, 62);
+  FIELD_2RD (x_dir, 11);
+  FIELD_BL (num_boundary_handles, 99);
 
   COMMON_ENTITY_HANDLE_DATA;
-  HANDLE_VECTOR (boundary_handles, num_boundary_handles, 4, 0); /* DXF: inlined above */
 DWG_ENTITY_END
 
 #endif
