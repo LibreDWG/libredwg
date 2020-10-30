@@ -72,7 +72,7 @@ api_process (dwg_object *obj)
   if (hatch->pixel_size != 0.0 && !hatch->has_derived)
     fail ("Invalid HATCH.pixel_size %f without HATCH.has_derived", hatch->pixel_size);
   CHK_ENTITY_TYPE (hatch, HATCH, num_seeds, BL);
-  CHK_ENTITY_TYPE (hatch, HATCH, num_boundary_handles, BL);
+  //CHK_ENTITY_TYPE (hatch, HATCH, num_boundary_handles, BL);
 
   if (!dwg_dynapi_entity_value (hatch, "HATCH", "colors", &colors, NULL))
     fail ("HATCH.colors");
@@ -162,7 +162,8 @@ api_process (dwg_object *obj)
                             paths[i].polyline_paths[j].bulge);
                   }
               }
-            CHK_SUBCLASS_TYPE (paths[i], HATCH_Path, numboundary_handles, BL);
+            CHK_SUBCLASS_TYPE (paths[i], HATCH_Path, num_boundary_handles, BL);
+            // boundary_handles SUB HV
           }
     }
 
@@ -206,6 +207,7 @@ api_process (dwg_object *obj)
   else if (seeds)
     fail ("HATCH.seeds with !num_seeds");
 
+  /*
   if (!dwg_dynapi_entity_value (hatch, "HATCH", "boundary_handles", &boundary_handles, NULL))
     fail ("HATCH.boundary_handles");
   if (num_boundary_handles)
@@ -220,4 +222,5 @@ api_process (dwg_object *obj)
     }
   else if (boundary_handles)
     fail ("HATCH.boundary_handles with !num_boundary_handles");
+  */
 }

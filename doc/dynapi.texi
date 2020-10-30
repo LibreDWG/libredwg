@@ -1062,9 +1062,9 @@ T,	DXF 2
 @item field_length
 BS
 @item flags
-RC,	DXF 70
+RC
 @item lock_position_flag
-B,	DXF 70
+B
 @item style
 H,	DXF 7
 @item mtext_handles
@@ -1078,7 +1078,7 @@ H
 @item annotative_short
 BS
 @item attdef_class_version
-RC,	DXF 280
+RC
 @item prompt
 T,	DXF 3
 
@@ -1129,9 +1129,9 @@ RC,	DXF 70
 @item tag
 T,	DXF 2
 @item field_length
-BS,	DXF 73
+BS
 @item flags
-RC,	DXF 70
+RC
 @item lock_position_flag
 B
 @item style
@@ -1949,10 +1949,6 @@ BD,	DXF 47
 BL,	DXF 98
 @item seeds
 2RD*,	DXF 10
-@item num_boundary_handles
-BL
-@item boundary_handles
-H*,	DXF 330
 
 @end vtable
 @end indentedblock
@@ -3332,7 +3328,7 @@ BD,	DXF 41
 @item thickness
 BT,	DXF 39
 @item elevation
-BD,	DXF 30
+BD
 @item extrusion
 BE,	DXF 210
 
@@ -4212,7 +4208,7 @@ struct _dwg_object_entity*
 @item dataflags
 RC
 @item elevation
-RD,	DXF 31
+RD,	DXF 30
 @item ins_pt
 2DPOINT,	DXF 10
 @item alignment_pt
@@ -14085,8 +14081,10 @@ B,	DXF 72
 B,	DXF 73
 @item polyline_paths
 Dwg_HATCH_PolylinePath*
-@item numboundary_handles
+@item num_boundary_handles
 BL,	DXF 97
+@item boundary_handles
+H*,	DXF 330
 
 @end vtable
 @end indentedblock

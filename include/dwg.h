@@ -2841,7 +2841,8 @@ typedef struct _dwg_HATCH_Path
   BITCODE_B closed;
   Dwg_HATCH_PolylinePath* polyline_paths;
 
-  BITCODE_BL numboundary_handles;
+  BITCODE_BL num_boundary_handles;
+  BITCODE_H* boundary_handles;
 } Dwg_HATCH_Path;
 
 typedef struct _dwg_HATCH_DefLine
@@ -2886,8 +2887,8 @@ typedef struct _dwg_entity_HATCH
   BITCODE_BD pixel_size;
   BITCODE_BL num_seeds;
   BITCODE_2RD * seeds;
-  BITCODE_BL num_boundary_handles;
-  BITCODE_H* boundary_handles;
+  //BITCODE_BL sum_boundary_handles;
+  //BITCODE_H* boundary_handles;
 } Dwg_Entity_HATCH;
 
 // derived from Hatch

@@ -2998,9 +2998,9 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           CHK_segs;
           if (k < 0 || o->paths[j].segs[k].curve_type != 4)
             {
-              o->paths[j].numboundary_handles = pair->value.l;
-              o->num_boundary_handles += pair->value.l;
-              LOG_TRACE ("HATCH.paths[%d].numboundary_handles = %ld [BL 97]\n",
+              o->paths[j].num_boundary_handles = pair->value.l;
+              //o->num_boundary_handles += pair->value.l;
+              LOG_TRACE ("HATCH.paths[%d].num_boundary_handles = %ld [BL 97]\n",
                          j, pair->value.l);
               k = 0;
             }
@@ -3015,9 +3015,9 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 97 && is_plpath)
         {
           CHK_paths;
-          o->paths[j].numboundary_handles = pair->value.l;
-          o->num_boundary_handles += pair->value.l;
-          LOG_TRACE ("HATCH.paths[%d].numboundary_handles = %ld [BL 97]\n", j,
+          o->paths[j].num_boundary_handles = pair->value.l;
+          //o->num_boundary_handles += pair->value.l;
+          LOG_TRACE ("HATCH.paths[%d].num_boundary_handles = %ld [BL 97]\n", j,
                      pair->value.l);
           k = 0;
         }
@@ -3156,29 +3156,34 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_TRACE ("HATCH.seeds[%d] = (%f, %f) [2RD 10]\n", k, o->seeds[k].x,
                      pair->value.d);
         }
-      else if (pair->code == 330 && o->num_boundary_handles
-               && (unsigned)hdl_idx < o->num_boundary_handles)
+      else if (pair->code == 330
+               && j >= 0 && j < (int)o->num_paths
+               && o->paths[j].num_boundary_handles
+               && (unsigned)hdl_idx < o->paths[j].num_boundary_handles)
         {
           BITCODE_H ref
               = dwg_add_handleref (obj->parent, 4, pair->value.u, obj);
+          CHK_paths;
+          o->paths[j].num_boundary_handles = pair->value.l;
           hdl_idx++;
-          if ((unsigned)hdl_idx > o->num_boundary_handles)
-            o->num_boundary_handles = (unsigned)hdl_idx;
-          if (!o->boundary_handles)
-            o->boundary_handles = (BITCODE_H *)xcalloc (o->num_boundary_handles, sizeof (BITCODE_H));
+          if ((unsigned)hdl_idx > o->paths[j].num_boundary_handles)
+            o->paths[j].num_boundary_handles = (unsigned)hdl_idx;
+          if (!o->paths[j].boundary_handles)
+            o->paths[j].boundary_handles = (BITCODE_H *)xcalloc (o->paths[j].num_boundary_handles, sizeof (BITCODE_H));
           else
-            o->boundary_handles = (BITCODE_H *)realloc (o->boundary_handles,
-                                                        o->num_boundary_handles * sizeof (BITCODE_H));
-          LOG_TRACE ("HATCH.num_boundary_handles = %u\n", (unsigned)o->num_boundary_handles);
-          if (!o->boundary_handles)
+            o->paths[j].boundary_handles = (BITCODE_H *)realloc (o->paths[j].boundary_handles,
+                                                        o->paths[j].num_boundary_handles * sizeof (BITCODE_H));
+          LOG_TRACE ("HATCH.paths[%d].num_boundary_handles = %u\n", j,
+                     (unsigned)o->paths[j].num_boundary_handles);
+          if (!o->paths[j].boundary_handles)
             {
-              o->num_boundary_handles = 0;
-              LOG_ERROR ("! HATCH.boundary_handles");
+              o->paths[j].num_boundary_handles = 0;
+              LOG_ERROR ("! HATCH.paths[%d].boundary_handles", j);
               return NULL;
             }
-          o->boundary_handles[hdl_idx] = ref;
-          LOG_TRACE ("HATCH.boundary_handles[%d] = " FORMAT_REF " [H 330]\n",
-                     hdl_idx, ARGS_REF (ref));
+          o->paths[j].boundary_handles[hdl_idx] = ref;
+          LOG_TRACE ("HATCH.paths[%d].boundary_handles[%d] = " FORMAT_REF " [H 330]\n",
+                     j, hdl_idx, ARGS_REF (ref));
         }
       else if (pair->code == 453)
         {

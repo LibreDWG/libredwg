@@ -437,6 +437,7 @@ $DXF{'ACSH_HistoryNode'}->{'trans'} = 40; # but inc by 1 for 16
 # $DXF{'DIMENSION_ORDINATE'}->{'dimstyle'} = 3;
 # $DXF{'DIMENSION_ORDINATE'}->{'block'} = 2;
 $DXF{$_}->{'class_version'} = 280 for qw(ATTRIB ATTDEF); #r2010 only
+$DXF{$_}->{'elevation'} = 30 for qw(TEXT ATTRIB ATTDEF); # not 31
 $DXF{$_}->{'has_attribs'} = 66 for qw(INSERT MINSERT);
 #$DXF{$_}->{'has_vertex'} = 66 for qw(POLYLINE_2D POLYLINE_3D POLYLINE_PFACE);
 $DXF{$_}->{'flag'} = 70 for qw(VERTEX_3D VERTEX_MESH VERTEX_PFACE_FACE POLYLINE_PFACE);

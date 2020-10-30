@@ -11143,16 +11143,6 @@ static int test_HATCH (const Dwg_Object *obj)
     hatch->angle--;
   }
   {
-    BITCODE_H* boundary_handles;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (hatch, "HATCH", "num_boundary_handles", &count, NULL)
-        && dwg_dynapi_entity_value (hatch, "HATCH", "boundary_handles", &boundary_handles, NULL)
-        && boundary_handles == hatch->boundary_handles)
-      pass ();
-    else
-      fail ("HATCH.boundary_handles [H*] * %u num_boundary_handles", count);
-  }
-  {
     Dwg_HATCH_Color* colors;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (hatch, "HATCH", "num_colors", &count, NULL)
@@ -11334,21 +11324,6 @@ static int test_HATCH (const Dwg_Object *obj)
       pass ();
     else
       fail ("HATCH.name [T] '%s' <> '%s'", name, hatch->name);
-  }
-  {
-    BITCODE_BL num_boundary_handles;
-    if (dwg_dynapi_entity_value (hatch, "HATCH", "num_boundary_handles", &num_boundary_handles, NULL)
-        && num_boundary_handles == hatch->num_boundary_handles)
-      pass ();
-    else
-      fail ("HATCH.num_boundary_handles [BL] %u != %u", hatch->num_boundary_handles, num_boundary_handles);
-    num_boundary_handles++;
-    if (dwg_dynapi_entity_set_value (hatch, "HATCH", "num_boundary_handles", &num_boundary_handles, 0)
-        && num_boundary_handles == hatch->num_boundary_handles)
-      pass ();
-    else
-      fail ("HATCH.num_boundary_handles [BL] set+1 %u != %u", hatch->num_boundary_handles, num_boundary_handles);
-    hatch->num_boundary_handles--;
   }
   {
     BITCODE_BL num_colors;

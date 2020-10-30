@@ -4097,20 +4097,23 @@ DWG_ENTITY (HATCH)
           END_REPEAT (polyline_paths);
 #undef polyline_paths
         }
-      SUB_FIELD_BL (paths[rcount1],numboundary_handles, 0);
+      SUB_FIELD_BL (paths[rcount1],num_boundary_handles, 97);
       DECODER {
-        FIELD_VALUE (num_boundary_handles) += FIELD_VALUE (paths[rcount1].numboundary_handles);
+        //FIELD_VALUE (sum_boundary_handles) += FIELD_VALUE (paths[rcount1].num_boundary_handles);
         FIELD_VALUE (has_derived) =
           FIELD_VALUE (has_derived) || (FIELD_VALUE (paths[rcount1].flag) & 0x4);
       }
+      //VALUEOUTOFBOUNDS (sum_boundary_handles, 10000)
+      VALUEOUTOFBOUNDS (paths[rcount1].num_boundary_handles, 10000)
+      SUB_HANDLE_VECTOR (paths[rcount1], boundary_handles, num_boundary_handles, 4, 330);
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (paths)
   END_REPEAT (paths);
 
 #ifdef IS_DXF
-  FIELD_BL (num_boundary_handles, 97);
-  VALUEOUTOFBOUNDS (num_boundary_handles, 10000)
-  HANDLE_VECTOR (boundary_handles, num_boundary_handles, 4, 330);
+  //FIELD_BL (num_boundary_handles, 97);
+  //VALUEOUTOFBOUNDS (num_boundary_handles, 10000)
+  //HANDLE_VECTOR (boundary_handles, num_boundary_handles, 4, 330);
 #endif
   FIELD_BS (style, 75);        // 0=normal (odd parity); 1=outer; 2=whole
   FIELD_BS (pattern_type, 76); // 0=user; 1=predefined; 2=custom
@@ -4145,11 +4148,10 @@ DWG_ENTITY (HATCH)
         error |= DWG_FUNC_N (ACTION,_HATCH_gradientfill)(dat,str_dat,obj,_obj);
     }
 #endif
-  VALUEOUTOFBOUNDS (num_boundary_handles, 10000)
 
   COMMON_ENTITY_HANDLE_DATA;
 #ifndef IS_DXF
-  HANDLE_VECTOR (boundary_handles, num_boundary_handles, 4, 330);
+  //HANDLE_VECTOR (boundary_handles, num_boundary_handles, 4, 330);
 #endif
 
 DWG_ENTITY_END
