@@ -1198,8 +1198,7 @@ DWG_ENTITY_END
       } \
     DXF { \
       FIELD_VALUE (blockname) = dwg_dim_blockname (dwg, obj); \
-      FIELD_BE (extrusion, 210); \
-      FIELD_T (blockname, 2); \
+      FIELD_T0 (blockname, 2); \
       FIELD_3BD (def_pt, 10); \
     } else { \
       FIELD_3BD (extrusion, 210); \
@@ -1224,38 +1223,42 @@ DWG_ENTITY_END
       else if (obj->fixedtype == DWG_TYPE_DIMENSION_RADIUS)   flag |= 4; \
       else if (obj->fixedtype == DWG_TYPE_DIMENSION_ANG3PT)   flag |= 5; \
       else if (obj->fixedtype == DWG_TYPE_DIMENSION_ORDINATE) flag |= 6; \
-      FIELD_VALUE (flag) = flag; \
-      LOG_TRACE ("flag => 0x%x [RC 70]\n", flag); \
-    } \
-    DXF { \
-      if (dat->from_version >= R_2007) { \
-        FIELD_T (user_text, 1); \
+      FIELD_VALUE (flag) = flag;                                \
+      LOG_TRACE ("flag => 0x%x [RC 70]\n", flag);               \
+    }                                                           \
+    DXF {                                                       \
+      if (dat->from_version >= R_2007) {                        \
+        FIELD_T (user_text, 1);                                 \
       } else if (_obj->user_text && strlen (_obj->user_text)) { \
-        FIELD_TV (user_text, 1); \
-      } \
-    } else { \
-      FIELD_T (user_text, 1); \
-    } \
-    FIELD_BD0 (text_rotation, 53); \
-    FIELD_BD0 (horiz_dir, 51); \
-    FIELD_3BD_1 (ins_scale, 0); \
-    FIELD_BD0 (ins_rotation, 54); \
-    SINCE (R_2000) \
-      { \
-        FIELD_BS (attachment, 71); \
-        FIELD_BS1 (lspace_style, 72); \
-        FIELD_BD1 (lspace_factor, 41); \
-        FIELD_BD (act_measurement, 42); \
-      } \
-    SINCE (R_2007) \
-      { \
-        FIELD_B (unknown, 73); \
-        FIELD_B (flip_arrow1, 74); \
-        FIELD_B (flip_arrow2, 75); \
-      } \
-    FIELD_2RD (clone_ins_pt, 12); \
-    DXF { \
-      FIELD_HANDLE (dimstyle, 5, 3); \
+        FIELD_TV (user_text, 1);                                \
+      }                                                         \
+    } else {                                                    \
+      FIELD_T (user_text, 1);                                   \
+      FIELD_BD0 (text_rotation, 53);                            \
+      FIELD_BD0 (horiz_dir, 51);                                \
+      FIELD_3BD_1 (ins_scale, 0);                               \
+      FIELD_BD0 (ins_rotation, 54);                             \
+    }                                                           \
+    SINCE (R_2000)                                              \
+    {                                                           \
+      FIELD_BS (attachment, 71);                                \
+      FIELD_BS1 (lspace_style, 72);                             \
+      FIELD_BD1 (lspace_factor, 41);                            \
+      FIELD_BD (act_measurement, 42);                           \
+    }                                                           \
+    SINCE (R_2007)                                              \
+    {                                                           \
+      FIELD_B (unknown, 73); /* always 0 */                     \
+      FIELD_B (flip_arrow1, 74);                                \
+      FIELD_B (flip_arrow2, 75);                                \
+    }                                                           \
+    FIELD_2RD0 (clone_ins_pt, 12);                              \
+    DXF {                                                       \
+      FIELD_BD0 (ins_rotation, 54);                             \
+      FIELD_BD0 (horiz_dir, 51);                                \
+      FIELD_BE (extrusion, 210);                                \
+      FIELD_BD0 (text_rotation, 53);                            \
+      FIELD_HANDLE (dimstyle, 5, 3);                            \
     }
 #endif
 
@@ -1293,7 +1296,9 @@ DWG_ENTITY (DIMENSION_LINEAR)
   SUBCLASS (AcDbAlignedDimension)
   FIELD_3BD (xline1_pt, 13);
   FIELD_3BD (xline2_pt, 14);
-  FIELD_3BD (def_pt, 10);
+  DECODER_OR_ENCODER {
+    FIELD_3BD (def_pt, 10);
+  }
   FIELD_BD0 (oblique_angle, 52);
   FIELD_BD0 (dim_rotation, 50);
   SUBCLASS (AcDbRotatedDimension)

@@ -543,6 +543,11 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
     FIELD_RD (nam.x, dxf);                                                    \
     FIELD_RD (nam.y, dxf + 10);                                               \
   }
+#define FIELD_2RD0(nam, dxf)                                                  \
+  if (dxf && _obj->nam.x != 0.0 && _obj->nam.y != 0.0) {                      \
+    FIELD_RD (nam.x, dxf);                                                    \
+    FIELD_RD (nam.y, dxf + 10);                                               \
+  }
 #define FIELD_2BD(nam, dxf) FIELD_2RD (nam, dxf)
 #define FIELD_2BD_1(nam, dxf)                                                 \
   if (dxf) {                                                                  \

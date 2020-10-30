@@ -625,6 +625,11 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
     FIELD_RD (nam.x, dxf);                                                    \
     FIELD_RD (nam.y, dxf + 10);                                               \
   }
+#define FIELD_2RD0(nam, dxf)                                                  \
+  if (dxf && _obj->nam.x != 0.0 && _obj->nam.y != 0.0) {                      \
+    FIELD_RD (nam.x, dxf);                                                    \
+    FIELD_RD (nam.y, dxf + 10);                                               \
+  }
 #define FIELD_2BD(nam, dxf)                                                   \
   if (dxf) {                                                                  \
     FIELD_BD (nam.x, dxf);                                                    \
