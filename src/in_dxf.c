@@ -9310,8 +9310,8 @@ new_object (char *restrict name, char *restrict dxfname,
               o->flag = o->flag1 = pair->value.i;
               LOG_TRACE ("DIMENSION.flag = %d [RC 70]\n", pair->value.i);
               o->flag1 &= 0xE0; /* clear the upper flag bits, and fix them: */
-              o->flag1 = (o->flag1 & 1) ? o->flag1 & 0x7F : o->flag1 | 0x80;
-              o->flag1 = (o->flag1 & 2) ? o->flag1 | 0x20 : o->flag1 & 0xDF;
+              o->flag1 = (o->flag1 & 0x80) ? o->flag1 & 0x7F : o->flag1 | 1;
+              o->flag1 = (o->flag1 & 0x20) ? o->flag1 | 2 : o->flag1 & 0xDF;
               LOG_TRACE ("DIMENSION.flag1 => %d [RC]\n", o->flag1);
               // Skip this flag logic, it is unreliable. Detecting subclasses
               // is far better.
