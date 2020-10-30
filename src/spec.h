@@ -359,6 +359,7 @@
 #  define SUB_FIELD_BL0(o, name, dxf) SUB_FIELD_BL (o, name, dxf)
 #  define FIELD_B0(name, dxf) FIELD_B (name, dxf)
 #  define FIELD_BS0(name, dxf) FIELD_BS (name, dxf)
+#  define FIELD_BS1(name, dxf) FIELD_BS (name, dxf)
 #  define FIELD_RC0(name, dxf) FIELD_RC (name, dxf)
 #  define FIELD_RS0(name, dxf) FIELD_RS (name, dxf)
 #  define FIELD_RL0(name, dxf) FIELD_RL (name, dxf)

@@ -1243,8 +1243,8 @@ DWG_ENTITY_END
     SINCE (R_2000) \
       { \
         FIELD_BS (attachment, 71); \
-        FIELD_BS (lspace_style, 72); \
-        FIELD_BD (lspace_factor, 41); \
+        FIELD_BS1 (lspace_style, 72); \
+        FIELD_BD1 (lspace_factor, 41); \
         FIELD_BD (act_measurement, 42); \
       } \
     SINCE (R_2007) \

@@ -552,6 +552,11 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
     if (_obj->nam != 0)                                                       \
       FIELD_BS (nam, dxf)                                                     \
   }
+#define FIELD_BS1(nam, dxf)                                                   \
+  if (dxf) {                                                                  \
+    if (_obj->nam != 1)                                                       \
+      FIELD_BS (nam, dxf)                                                     \
+  }
 #define FIELD_B0(nam, dxf)                                                    \
   if (dxf) {                                                                  \
     if (_obj->nam)                                                            \
