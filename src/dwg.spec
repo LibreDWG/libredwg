@@ -7236,72 +7236,116 @@ DWG_OBJECT (VISUALSTYLE)
     FIELD_B (internal_only, 0);
   }
   SINCE (R_2010) {
-    ENCODER { _obj->ext_lighting_model = 2; }
+    if (!_obj->ext_lighting_model) {
+      DXF { _obj->ext_lighting_model = dat->version < R_2013 ? 2 : 3; }
+      ENCODER { _obj->ext_lighting_model = 2; }
+    }
     FIELD_BS (ext_lighting_model, 177);
     FIELD_B (internal_only, 291);
+    if (!IF_IS_DXF || dat->version == R_2010) {
+      FIELD_BL (face_lighting_model, 71);       FIELD_BS (face_lighting_model_int, 176);   /* 0 */
+      FIELD_BL (face_lighting_quality, 72);     FIELD_BS (face_lighting_quality_int, 176); /* 1 */
+      FIELD_BL (face_color_mode, 73);           FIELD_BS (face_color_mode_int, 176);       /* 2 */
+      FIELD_BS (face_modifier, 90);             FIELD_BS (face_modifier_int, 176);
+      FIELD_BD (face_opacity, 40);              FIELD_BS (face_opacity_int, 176);
+      FIELD_BD (face_specular, 41);             FIELD_BS (face_specular_int, 176);
+      FIELD_CMC (face_mono_color, 63);          FIELD_BS (face_mono_color_int, 176);
+      FIELD_BL (edge_model, 74);                FIELD_BS (edge_model_int, 176);
+      FIELD_BL (edge_style, 91);                FIELD_BS (edge_style_int, 176);
+      FIELD_CMC (edge_intersection_color, 64);  FIELD_BS (edge_intersection_color_int, 176);
+      FIELD_CMC (edge_obscured_color, 65);      FIELD_BS (edge_obscured_color_int, 176);
+      FIELD_BL (edge_obscured_ltype, 75);       FIELD_BS (edge_obscured_ltype_int, 176);
+      FIELD_BL (edge_intersection_ltype, 175);  FIELD_BS (edge_intersection_ltype_int, 176);
+      FIELD_BD (edge_crease_angle, 42);         FIELD_BS (edge_crease_angle_int, 176);
+      FIELD_BL (edge_modifier, 92);             FIELD_BS (edge_modifier_int, 176); // this may be 0,1, or 2
+      FIELD_CMC (edge_color, 66);               FIELD_BS (edge_color_int, 176);
+      FIELD_BD (edge_opacity, 43);              FIELD_BS (edge_opacity_int, 176);
+      FIELD_BL (edge_width, 76);                FIELD_BS (edge_width_int, 176);
+      FIELD_BL (edge_overhang, 77);             FIELD_BS (edge_overhang_int, 176);
+      FIELD_BL (edge_jitter, 78);               FIELD_BS (edge_jitter_int, 176);
+      FIELD_CMC (edge_silhouette_color, 67);    FIELD_BS (edge_silhouette_color_int, 176);
+      FIELD_BL (edge_silhouette_width, 79);     FIELD_BS (edge_silhouette_width_int, 176);
+      FIELD_BL (edge_halo_gap, 170);            FIELD_BS (edge_halo_gap_int, 176);
+      FIELD_BL (edge_isolines, 171);
+      VALUEOUTOFBOUNDS (edge_isolines, 5000)    FIELD_BS (edge_isolines_int, 176);
+      FIELD_B (edge_do_hide_precision, 290);    FIELD_BS (edge_do_hide_precision_int, 176);
 
-    FIELD_BL (face_lighting_model, 71);       FIELD_BS (face_lighting_model_int, 176);
-    FIELD_BL (face_lighting_quality, 72);     FIELD_BS (face_lighting_quality_int, 176);
-    FIELD_BL (face_color_mode, 73);           FIELD_BS (face_color_mode_int, 176);
-    FIELD_BS (face_modifier, 90);             FIELD_BS (face_modifier_int, 0);
-    FIELD_BD (face_opacity, 40);              FIELD_BS (face_opacity_int, 176);
-    FIELD_BD (face_specular, 41);             FIELD_BS (face_specular_int, 176);
-    FIELD_CMC (face_mono_color, 63);          FIELD_BS (face_mono_color_int, 176);
-    FIELD_BL (edge_model, 74);                FIELD_BS (edge_model_int, 176);
-    FIELD_BL (edge_style, 91);                FIELD_BS (edge_style_int, 176);
-    FIELD_CMC (edge_intersection_color, 64);  FIELD_BS (edge_intersection_color_int, 176);
-    FIELD_CMC (edge_obscured_color, 65);      FIELD_BS (edge_obscured_color_int, 176);
-    FIELD_BL (edge_obscured_ltype, 75);       FIELD_BS (edge_obscured_ltype_int, 176);
-    FIELD_BL (edge_intersection_ltype, 175);  FIELD_BS (edge_intersection_ltype_int, 176);
-    FIELD_BD (edge_crease_angle, 42);         FIELD_BS (edge_crease_angle_int, 176);
-    FIELD_BL (edge_modifier, 92);             FIELD_BS (edge_modifier_int, 176); // this may be 0,1, or 2
-    FIELD_CMC (edge_color, 66);               FIELD_BS (edge_color_int, 176);
-    FIELD_BD (edge_opacity, 43);              FIELD_BS (edge_opacity_int, 176);
-    FIELD_BL (edge_width, 76);                FIELD_BS (edge_width_int, 176);
-    FIELD_BL (edge_overhang, 77);             FIELD_BS (edge_overhang_int, 176);
-    FIELD_BL (edge_jitter, 78);               FIELD_BS (edge_jitter_int, 176);
-    FIELD_CMC (edge_silhouette_color, 67);    FIELD_BS (edge_silhouette_color_int, 176);
-    FIELD_BL (edge_silhouette_width, 79);     FIELD_BS (edge_silhouette_width_int, 176);
-    FIELD_BL (edge_halo_gap, 170);            FIELD_BS (edge_halo_gap_int, 176);
-    FIELD_BL (edge_isolines, 171);
-    VALUEOUTOFBOUNDS (edge_isolines, 5000)    FIELD_BS (edge_isolines_int, 176);
-    FIELD_B (edge_do_hide_precision, 290);    FIELD_BS (edge_do_hide_precision_int, 176);
-
-    FIELD_BL (display_settings, 93);          FIELD_BS (display_settings_int, 176);
-    FIELD_BD (display_brightness, 44);        FIELD_BS (display_brightness_int, 176);
-    DECODER {
-      if (FIELD_VALUE (display_brightness) >= -INT32_MAX && FIELD_VALUE (display_brightness) < INT32_MAX)
-        FIELD_VALUE (display_brightness_bl) = (BITCODE_BLd)FIELD_VALUE (display_brightness);
-    }
-    FIELD_BL (display_shadow_type, 173);      FIELD_BS (display_shadow_type_int, 176);
+      FIELD_BL (display_settings, 93);          FIELD_BS (display_settings_int, 176);
+      FIELD_BD (display_brightness, 44);        FIELD_BS (display_brightness_int, 176);
+      DECODER {
+        if (FIELD_VALUE (display_brightness) >= -INT32_MAX && FIELD_VALUE (display_brightness) < INT32_MAX)
+          FIELD_VALUE (display_brightness_bl) = (BITCODE_BLd)FIELD_VALUE (display_brightness);
+      }
+      FIELD_BL (display_shadow_type, 173);      FIELD_BS (display_shadow_type_int, 176);
+    } /* DXF 2010 */
 
     SINCE (R_2013) {
-      DXF { FIELD_BS (num_props, 70); }
-      else { FIELD_VALUE (num_props) = 58; }
+      // dxf types:
+      // 90 90 90 90 40 40 62 90 90 62 62 90 90 40 90 62
+      // 40 90 90 90 62 90 90 90 290 90 40 90
+      DXF {
+        if (!_obj->num_props) _obj->num_props = 58;
+        FIELD_BS (num_props, 70);
+        FIELD_BL (face_lighting_model, 90);       FIELD_BS (face_lighting_model_int, 176);   /* 0 */
+        FIELD_BL (face_lighting_quality, 90);     FIELD_BS (face_lighting_quality_int, 176); /* 1 */
+        FIELD_BL (face_color_mode, 90);           FIELD_BS (face_color_mode_int, 176);       /* 2 */
+        FIELD_BS (face_modifier, 90);             FIELD_BS (face_modifier_int, 176);
+        FIELD_BD (face_opacity, 40);              FIELD_BS (face_opacity_int, 176);
+        FIELD_BD (face_specular, 40);             FIELD_BS (face_specular_int, 176);
+        FIELD_CMC (face_mono_color, 62);          FIELD_BS (face_mono_color_int, 176);
+        FIELD_BL (edge_model, 90);                FIELD_BS (edge_model_int, 176);
+        FIELD_BL (edge_style, 90);                FIELD_BS (edge_style_int, 176);
+        FIELD_CMC (edge_intersection_color, 62);  FIELD_BS (edge_intersection_color_int, 176);
+        FIELD_CMC (edge_obscured_color, 62);      FIELD_BS (edge_obscured_color_int, 176);
+        FIELD_BL (edge_obscured_ltype, 90);       FIELD_BS (edge_obscured_ltype_int, 176);
+        FIELD_BL (edge_intersection_ltype, 90);   FIELD_BS (edge_intersection_ltype_int, 176);
+        FIELD_BD (edge_crease_angle, 40);         FIELD_BS (edge_crease_angle_int, 176);
+        FIELD_BL (edge_modifier, 90);             FIELD_BS (edge_modifier_int, 176);
+        FIELD_CMC (edge_color, 62);               FIELD_BS (edge_color_int, 176);
+        FIELD_BD (edge_opacity, 40);              FIELD_BS (edge_opacity_int, 176);
+        FIELD_BL (edge_width, 90);                FIELD_BS (edge_width_int, 176);
+        FIELD_BL (edge_overhang, 90);             FIELD_BS (edge_overhang_int, 176);
+        FIELD_BL (edge_jitter, 90);               FIELD_BS (edge_jitter_int, 176);
+        FIELD_CMC (edge_silhouette_color, 62);    FIELD_BS (edge_silhouette_color_int, 176);
+        FIELD_BL (edge_silhouette_width, 90);     FIELD_BS (edge_silhouette_width_int, 176);
+        FIELD_BL (edge_halo_gap, 90);             FIELD_BS (edge_halo_gap_int, 176);
+        FIELD_BL (edge_isolines, 90);             FIELD_BS (edge_isolines_int, 176);
+        FIELD_B (edge_do_hide_precision, 290);    FIELD_BS (edge_do_hide_precision_int, 176);
+        FIELD_BL (display_settings, 90);          FIELD_BS (display_settings_int, 176);
+        FIELD_BD (display_brightness, 40);        FIELD_BS (display_brightness_int, 176);
+        FIELD_BL (display_shadow_type, 90);       FIELD_BS (display_shadow_type_int, 176);
+      }
+
+      DECODER { FIELD_VALUE (num_props) = 58; }
+      // 290 290 290 290 290 290 290 290 290 90 40 40
+      // 90 62 90 90 62 290 90 90 90 290 90 62
+      // 40 90 1 290 40 40
       FIELD_B (b_prop1c, 290);                FIELD_BS (b_prop1c_int, 176);
       FIELD_B (b_prop1d, 290);                FIELD_BS (b_prop1d_int, 176);
       FIELD_B (b_prop1e, 290);                FIELD_BS (b_prop1e_int, 176);
-      FIELD_B (b_prop1f, 90);                 FIELD_BS (b_prop1f_int, 176);
+      FIELD_B (b_prop1f, 290);                FIELD_BS (b_prop1f_int, 0);
       FIELD_B (b_prop20, 290);                FIELD_BS (b_prop20_int, 176);
-      FIELD_B (b_prop21, 90);                 FIELD_BS (b_prop21_int, 176);
+      FIELD_B (b_prop21, 290);                FIELD_BS (b_prop21_int, 0);
       FIELD_B (b_prop22, 290);                FIELD_BS (b_prop22_int, 176);
       FIELD_B (b_prop23, 290);                FIELD_BS (b_prop23_int, 176);
       FIELD_B (b_prop24, 290);                FIELD_BS (b_prop24_int, 176);
       FIELD_BL (bl_prop25, 90);               FIELD_BS (bl_prop25_int, 176);
       FIELD_BD (bd_prop26, 40);               FIELD_BS (bd_prop26_int, 176);
       FIELD_BD (bd_prop27, 40);               FIELD_BS (bd_prop27_int, 176);
+
       FIELD_BL (bl_prop28, 90);               FIELD_BS (bl_prop28_int, 176);
       FIELD_CMC (c_prop29, 62);               FIELD_BS (c_prop29_int, 176);
       FIELD_BL (bl_prop2a, 90);               FIELD_BS (bl_prop2a_int, 176);
       FIELD_BL (bl_prop2b, 90);               FIELD_BS (bl_prop2b_int, 176);
       FIELD_CMC (c_prop2c, 62);               FIELD_BS (c_prop2c_int, 176);
-      FIELD_B (b_prop2d, 0);                  FIELD_BS (b_prop2d_int, 176);
-      FIELD_BL (bl_prop2e, 290);              FIELD_BS (bl_prop2e_int, 176);
+      FIELD_B (b_prop2d, 290);                FIELD_BS (b_prop2d_int, 176);
+      FIELD_BL (bl_prop2e, 90);               FIELD_BS (bl_prop2e_int, 176);
       FIELD_BL (bl_prop2f, 90);               FIELD_BS (bl_prop2f_int, 176);
       FIELD_BL (bl_prop30, 90);               FIELD_BS (bl_prop30_int, 176);
       FIELD_B (b_prop31, 290);                FIELD_BS (b_prop31_int, 176);
       FIELD_BL (bl_prop32, 90);               FIELD_BS (bl_prop32_int, 176);
       FIELD_CMC (c_prop33, 62);               FIELD_BS (c_prop33_int, 176);
+
       FIELD_BD (bd_prop34, 40);               FIELD_BS (bd_prop34_int, 176);
       FIELD_BL (edge_wiggle, 90);             FIELD_BS (edge_wiggle_int, 176);  // prop 0x35
       FIELD_T (strokes, 1);                   FIELD_BS (strokes_int, 176);      // prop 0x36
