@@ -12130,7 +12130,7 @@ B,	DXF 290
 @item b_prop1e_int
 BS,	DXF 176
 @item b_prop1f
-B,	DXF 90
+B,	DXF 290
 @item b_prop1f_int
 BS,	DXF 176
 @item b_prop20
@@ -12138,7 +12138,7 @@ B,	DXF 290
 @item b_prop20_int
 BS,	DXF 176
 @item b_prop21
-B,	DXF 90
+B,	DXF 290
 @item b_prop21_int
 BS,	DXF 176
 @item b_prop22
@@ -12186,11 +12186,11 @@ CMC,	DXF 62
 @item c_prop2c_int
 BS,	DXF 176
 @item b_prop2d
-B
+B,	DXF 290
 @item b_prop2d_int
 BS,	DXF 176
 @item bl_prop2e
-BL,	DXF 290
+BL,	DXF 90
 @item bl_prop2e_int
 BS,	DXF 176
 @item bl_prop2f

@@ -7280,9 +7280,6 @@ DWG_OBJECT (VISUALSTYLE)
     } /* DXF 2010 */
 
     SINCE (R_2013) {
-      // dxf types:
-      // 90 90 90 90 40 40 62 90 90 62 62 90 90 40 90 62
-      // 40 90 90 90 62 90 90 90 290 90 40 90
       DXF {
         if (!_obj->num_props) _obj->num_props = 58;
         FIELD_BS (num_props, 70);

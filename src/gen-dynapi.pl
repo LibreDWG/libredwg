@@ -311,14 +311,15 @@ sub dxf_in {
       embedded_struct ('tdata', 'LinkedTableData');
       embedded_struct ('fdata', 'FormattedTableData');
       embedded_struct ('dimension', 'OCD_Dimension');
+      if ($n eq 'VISUALSTYLE') {
+        $DXF{$n}->{$f."_int"} = 176;
+        next if $DXF{$n}->{$f};
+      }
       # (scale.x, 41) as is
       $DXF{$n}->{$f} = $dxf if $dxf;
       $ENT{$n}->{$f} = 'TF' if $type eq 'BINARY';
       $ENT{$n}->{$f} = $type if $type =~ /^T/;
       $ENT{$n}->{$f} = $type if $type =~ /^[23][RB]D_1/;
-      if ($n eq 'VISUALSTYLE') {
-        $DXF{$n}->{$f."_int"} = 176;
-      }
     } elsif (@old && /^\s+SUB_FIELD_HANDLE\s*\($v,\s*(\w+),\s*\d+,\s*(\d+)\)/) {
       my $type = $1;
       $f = $1;
@@ -416,6 +417,7 @@ $DXF{'POLYLINE_MESH'}->{'flag'} = 70;
 $DXF{'HATCH'}->{'boundary_handles'} = 330; # special DXF logic
 $DXF{'VISUALSTYLE'}->{'edge_hide_precision_flag'} = 290;
 $DXF{'VISUALSTYLE'}->{'is_internal_use_only'} = 291;
+# $DXF{'VISUALSTYLE'}->{'face_lighting_model'} = 71;
 $DXF{'DIMSTYLE_CONTROL'}->{'morehandles'} = 340;
 # $DXF{'DIMSTYLE'}->{'DIMFIT'} = 287;   # <= r14 only
 $DXF{'PROXY_ENTITY'}->{'version'} = 95; # or 91 <= r14
