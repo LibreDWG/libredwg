@@ -3530,9 +3530,10 @@ DWG_OBJECT_END
 DWG_OBJECT (DIMSTYLE_CONTROL)
 
   FIELD_BS (num_entries, 70);
-  SUBCLASS (AcDbDimStyleTable)
   SINCE (R_2000)
-    { /* number of additional hard handles, undocumented */
+    {
+      SUBCLASS (AcDbDimStyleTable)
+      /* number of additional hard handles, undocumented */
       FIELD_RCu (num_morehandles, 71);
     }
 
