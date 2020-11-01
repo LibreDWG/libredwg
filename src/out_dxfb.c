@@ -868,6 +868,10 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
                    DWG_TYPE_##token, #token);                                 \
         return DWG_ERR_INVALIDTYPE;                                           \
       }                                                                       \
+    PRE (R_14) {                                                              \
+      if (obj->fixedtype == DWG_TYPE_PLACEHOLDER)                             \
+        return 0;                                                             \
+    }                                                                         \
     if (!dwg_obj_is_control (obj))                                            \
       {                                                                       \
         if (obj->fixedtype == DWG_TYPE_TABLE)                                 \
