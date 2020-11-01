@@ -226,7 +226,7 @@ BD,	DXF 40
 @item DIMSAH
 B,	DXF 70
 @item DIMSAV
-B,	DXF 70
+B
 @item DIMSCALE
 BD,	DXF 40
 @item DIMSD1

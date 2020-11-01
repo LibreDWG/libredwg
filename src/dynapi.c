@@ -559,7 +559,7 @@ static const Dwg_DYNAPI_field _dwg_header_variables_fields[] = {
   { "DIMSAH",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_header_variables, DIMSAH),
     0,0,0, 70 },
   { "DIMSAV",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_header_variables, DIMSAV),
-    0,0,0, 70 },
+    0,0,0, 0 },
   { "DIMSCALE",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_header_variables, DIMSCALE),
     0,0,0, 40 },
   { "DIMSD1",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_header_variables, DIMSD1),
