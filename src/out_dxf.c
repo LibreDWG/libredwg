@@ -663,9 +663,10 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define FIELD_CMC(color, dxf) dxf_CMC (dat, (Dwg_Color*)&_obj->color, dxf)
 #define SUB_FIELD_CMC(o, color, dxf) dxf_CMC (dat, (Dwg_Color*)&_obj->o.color, dxf)
 
-#define HEADER_TIMEBLL(nam, dxf)                                              \
+#define HEADER_TIMEBLL(nam, dxf) {                                            \
   HEADER_9 (nam);                                                             \
-  FIELD_TIMEBLL (nam, dxf)
+  FIELD_TIMEBLL (nam, dxf);                                                   \
+}
 #define FIELD_TIMEBLL(nam, dxf)                                               \
   GROUP (dxf);                                                                \
   fprintf (dat->fh, "%.09f\r\n", _obj->nam.value)
