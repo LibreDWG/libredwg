@@ -2,6 +2,24 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2020 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+LibreDWG version 0.11.1 - 2020/11/?? - beta:
+
+Major bugfixes:
+  * Fixed decode of r2007 string streams (GH #279)
+  * Fixed UCS-2 to UTF-8 conversion for the chars 128-255.
+  * Fixed DXF output of many objects: VISUALSTYLE, HATCH, DIMENSION, ATTDEF,
+    ATTRIB, TEXT, VIEWPORT.
+    Common: lineweight, shadow_flags, LAYER.plotflags (GH #275)
+  * Fixed \r\n quoting in DXF texts (GH #275)
+  * Fixed SummaryInfo types from T to TU16, relevant for DXF headers also (GH #275)
+  * Add missing UTF-8 conversion in geojson for TEXT, MTEXT, GEOPOSITIONMARKER. (GH #271)
+  * Fixed and improved some Dockerfile, added a check-docker target.
+  * Drop unneeded perl/LibreDWG.xs, we rather use the generated c directly.
+Minor features:
+  * Add CMake basic library support, so the library can be included into cmake projects.
+    (no programs)
+  * Improved header C++ compat.
+
 LibreDWG version 0.11 - 2020/08/07 - beta:
 
 New features:
@@ -200,7 +218,7 @@ API breaking changes:
 Major bugfixes:
   * Fixed converting ASCII from and to Unicode strings, when converting across
     versions. Embed Unicode as \U+XXXX into ASCII, and decode it back to Unicode.
-    Honor dat,dwg->from_version and use the new FIELD_T as seperate type. (#185)
+    Honor dat,dwg->from_version and use the new FIELD_T as seperate type. (GH #185)
   * Invalid numbers (read failures) are converted to 0.0 in the released version.
   * Fixed wrong CMC color reads and writes, check the method, lookup the index,
     support a CMTC truecolor-only type.
@@ -235,12 +253,12 @@ impl subclasses, and subent and curve support.
 LibreDWG version 0.10.1 - released 2020/01/13 - beta:
 
 Major bugfixes:
-  * Fixed dwg2SVG htmlescape overflows and off-by-ones (#182)
+  * Fixed dwg2SVG htmlescape overflows and off-by-ones (GH #182)
   * Removed direct usages of fprintf and stderr in the lib. All can be
-    redefined now. (#181)
+    redefined now. (GH #181)
 
 Minor bugfixes:
-  * Fuzzing fixes for dwg2SVG, dwgread. (#182)
+  * Fuzzing fixes for dwg2SVG, dwgread. (GH #182)
   * Fixed eed.raw leaks
 
 LibreDWG version 0.10 - released 2020/01/08 - beta:
@@ -257,19 +275,19 @@ API breaking changes:
 Major bugfixes:
   * Improved building the perl5 binding, proper dependencies.
     Set proper -I and -L paths, create LibreDWG.c not swig_perl.c
-  * Harmonized INDXFB with INDXF, removed extra src/in_dxfb.c (#134).
+  * Harmonized INDXFB with INDXF, removed extra src/in_dxfb.c (GH #134).
     Slimmed the .so size by 260Kb. Still untested though.
   * Fixed encoding of added r2000 AUXHEADER address (broken since 0.9)
-  * Fixed EED encoding from dwgrewrite (a dxf2dwg regression from 0.9) (#180)
+  * Fixed EED encoding from dwgrewrite (a dxf2dwg regression from 0.9) (GH #180)
 
 Minor bugfixes:
   * Many fuzzing and static analyzer fixes for dwg2dxf, dxf2dwg, dwgrewrite,
-    including a stack-overflow on outdxf cquote. (#172-174, #178, #179).
+    including a stack-overflow on outdxf cquote. (GH #172-174, #178, #179).
     dwgrewrite and indxf are pretty robust now, but still highly experimental,
     as many dxf2dwg import and DWG validity tests are missing.
     indxf still has many asserts on many structural DXF errors.
   * Protect indxf from many NULL ptr, overflows and truncation.
-  * Fixed most indxf and encode leaks. (#151)
+  * Fixed most indxf and encode leaks. (GH #151)
   * More section decoders protections from invalid (fuzzed) values.
   * Stabilized the ASAN leak tests for make check.
   * Fix MULTILEADER.ctx.lline handles <r2010
@@ -286,30 +304,30 @@ Other newsworthy changes:
     UAF or double-free's.
   * Allow -o /dev/null sinks for dxf2dwg and dwg2dxf, for faster fuzzing.
   * Harmonized *.spec formatting and adjusted gen-dynapi.pl
-  * Harmonized out_dxfb with out_dxf, e.g. the new mspace improvements (#173).
+  * Harmonized out_dxfb with out_dxf, e.g. the new mspace improvements (GH #173).
 
 LibreDWG version 0.9.3 - released 2019/12/25 - beta:
 
 Minor bugfixes:
-  * Added several overflow checks from fuzzing (#176)
+  * Added several overflow checks from fuzzing (GH #176)
     CVE-2019-20009, CVE-2019-20010, CVE-2019-20011, CVE-2019-20012,
     CVE-2019-20013, CVE-2019-20014, CVE-2019-20015
-  * Enabled AX_RESTRICT, undefining restrict in broken compilers (#141)
+  * Enabled AX_RESTRICT, undefining restrict in broken compilers (GH #141)
   * Fixed AX_ADD_FORTIFY_SOURCE warnings with gcc-9 -Wcpp
-  * Disallow illegal SPLINE scenarios (#176)
+  * Disallow illegal SPLINE scenarios (GH #176)
 
 LibreDWG version 0.9.2 - released 2019/11/08 - beta:
 
 new API:
   * Added the -x,--extnames option to dwglayers for r13-r14 DWGs,
     displaying the extended variants with spaces. Since r2000 only
-    those "extended" names are stored. (#167)
+    those "extended" names are stored. (GH #167)
 
 Minor bugfixes:
   * Fixed some leaks: SORTENTSTABLE, PROXY_ENTITY.ownerhandle for r13.
   * Add DICTIONARY.itemhandles[] for r13 and r14
   * Fixed some dwglayers null pointer derefs, and flush its output
-    for each layer. (#166)
+    for each layer. (GH #166)
 
 Other newsworthy changes:
   * Add geom utils to some programs: dwg2SVG and dwg2ps to transcode
@@ -329,7 +347,7 @@ Minor bugfixes:
     for _FORTIFY_SOURCE (a mingw-w64 libc headers bug).
   * Do not use gcc-9.0 - gcc-9.2! This series is seriously broken, not
     just for this project.
-  * dwg2SVG: honor TTF font styles => Verdana or Courier (#156)
+  * dwg2SVG: honor TTF font styles => Verdana or Courier (GH #156)
 
 LibreDWG version 0.9 - released 2019/10/6 - beta:
 
@@ -368,7 +386,7 @@ API breaking changes:
       and the ownerhandle)
     * Remove xrecord,proxy get_ownerhandle API
     * Move ownerhandle to parent Object_Object along reactors and xdicobjhandle.
-      This field is common to all objects. (#118)
+      This field is common to all objects. (GH #118)
     * Remove unneeded ownerhandle fields.
     * Renamed STYLE.null_handle to STYLE.extref_handle
   * Changed DIMASSOC spec
@@ -387,18 +405,18 @@ Important bugfixes:
     a smoke with asan, ubsan and lsan. Only the dxf importer is leaking.
   * Fixed dwg_dynapi_common_*
   * Fixed get_next_owned_entity, which omitted the last entity for r13-r2000.
-    (#143)
+    (GH #143)
   * Fixed the UCS-2 to utf-8 converter, causing corrupt DXF with unicode names
-    and strings. (#143)
-  * Fixed wrong object address (#112). handlestream_size is not part of obj->size.
+    and strings. (GH #143)
+  * Fixed wrong object address (GH #112). handlestream_size is not part of obj->size.
     This fixes the hdlpos += 8 FIXME's and many handles.
-  * Fixed FIELDLIST standard handles (#118)
-  * Fixed FIELD.childs and objects (#117)
-  * Fixed MLINESTYLE.ltype handles (#116)
-  * Fixed MULTILEADER content_block (#113)
-  * Added many missing handles 2007+ (#115)
+  * Fixed FIELDLIST standard handles (GH #118)
+  * Fixed FIELD.childs and objects (GH #117)
+  * Fixed MLINESTYLE.ltype handles (GH #116)
+  * Fixed MULTILEADER content_block (GH #113)
+  * Added many missing handles 2007+ (GH #115)
     Due to the fixed handle_stream offset, we can now reliably read many
-    more handles (#114):
+    more handles (GH #114):
       DIMENSION_ORDINATE
       DIMENSION_LINEAR
       DIMENSION_ALIGNED
@@ -414,10 +432,10 @@ Important bugfixes:
       DICTIONARYVAR
       VPORT_ENTITY_HEADER
   * Fixed OLE2FRAME encoder.
-  * Fixed EED code 5 as int64 (#110)
+  * Fixed EED code 5 as int64 (GH #110)
   * More stable eed decoder with overflow, e.g. when dat does not advance error earlier.
     Avoid endless loops on eed decoding errors.
-  * Various minor improvements in the dxf writer. (#143)
+  * Various minor improvements in the dxf writer. (GH #143)
   * Major improvements in the dxf reader. Most r2000 entities and many objects
     can be imported, and read from acad dwg's.
   * Various minor improvements in the dwg writer, esp. calculating the object
@@ -430,7 +448,7 @@ Other newsworthy changes:
     offset to the current object to detect every overflow. And report this
     overflow.
   * Read COMMON_ENTITY_HANDLE_DATA earlier, so that we can remove extra 2nd
-    handle loops at the end for r2007+ (#85)
+    handle loops at the end for r2007+ (GH #85)
   * Support reading uncompressed sections (e.g SummaryInfo)
   * Added -y/--overwrite flag to most programs.
   * Better LOG_TRACE [rcount1], [rcount2] logging, expanded to the actual
@@ -458,13 +476,13 @@ API breaking changes:
     get_next_owned_object to get_next_owned_entity.
   * Changed these iterators in handling subentites (VERTEX, ATTRIB),
     these are now skipped.
-  * rename <TABLE>.entry_name to name (#76)
+  * rename <TABLE>.entry_name to name (GH #76)
   * rename VPORT.shade_plot_handle back to sun_handle, dxf 361
   * rename POLYLINE_3D.flag2 to curvetype, dxf 75.
-  * rename linewidth fields to linewt (#79)
+  * rename linewidth fields to linewt (GH #79)
   * rename DIMENSION_ORDINATE.ucsorigin_pt to def.pt
-  * rename parenthandle fields to ownerhandle (#80)
-  * rename ent->parent to ent->ownerhandle (#82)
+  * rename parenthandle fields to ownerhandle (GH #80)
+  * rename ent->parent to ent->ownerhandle (GH #82)
   * replace ENTITY.subentity by ownerhandle 330
   * rename _ent->entity_mode to entmode (as in ODA)
 
@@ -472,42 +490,42 @@ Important bugfixes:
   * dwg.h now always includes stdint.h and inttypes.h, no more
     int vs int32_t confusion
   * Fixed many errors in DXF output:
-    * split BLOCKS and ENTITIES (#88)
-      esp. in respect to Paper_Space (#81) and Model_Space entities.
+    * split BLOCKS and ENTITIES (GH #88)
+      esp. in respect to Paper_Space (GH #81) and Model_Space entities.
     * DICTIONARY: fix hard_owner DXF 350/360.
     * Fix xdata dxf groups: +1000 or XRECORD.
-    * Fix block names (#81), take it from its linked BLOCK entity
-    * Fix DIMENSION blocknames, ditto (#81).
+    * Fix block names (GH #81), take it from its linked BLOCK entity
+    * Fix DIMENSION blocknames, ditto (GH #81).
     * Fix c-quote of strings with different quoting rules than json.
     * Fix _3DSOLID,_3DFACE dxfname and 3DSOLID, BODY subclass names
     * Add missing DIMSTYLE 3 handle
     * Support DXF elevation and extrusion as pt,
     * Add dxf.test to be shell compatible
-    * convert CELWEIGHT and linewt values (#79)
-    * Support proper 330 ent->parent->handle (#82) which is not always the
+    * convert CELWEIGHT and linewt values (GH #79)
+    * Support proper 330 ent->parent->handle (GH #82) which is not always the
       MSPACE record.
     * fix colors a bit
-    * print HANDSEED as hex (#71)
+    * print HANDSEED as hex (GH #71)
   * Fixed JSON output, add tests with jq. just not yet via pipes (NOCOMMA hack).
     make HEADER a hash, better ARRAY, POINTS, VECTORs, c-quote strings.
     Resemble more to the DWG structure, not DXF: Rename ENTITIES to OBJECTS,
-    TODO: FILEHEADER sections (#76)
+    TODO: FILEHEADER sections (GH #76)
   * Validate decoded and sort DXF output of entities with subentities
-    (POLYLINE, INSERT) (#83). In DWG they have different orderings,
+    (POLYLINE, INSERT) (GH #83). In DWG they have different orderings,
     fixup some off-by-one decoding errors (e.g. wrong handle stream offset).
-  * Fixed HATCH gradientfill color (#89)
+  * Fixed HATCH gradientfill color (GH #89)
   * decode: set proper ->dxfname from classes.inc, Fixes ACDBDICTIONARYWDFLT
     DXF object and simplifies out_dxf.
   * Fix some CRC checks: RSx vs RS_LE, add unused crc64 code.
   * More overflow and free protections added by Denis Pruchkovsky
   * Extend read/write bit_MC/UMC from 4 to 5 bytes (denis #70, PR #65)
     This is broken in all other dwg libraries.
-  * Fix bit_convert_TU for >U+800 (#80)
+  * Fix bit_convert_TU for >U+800 (GH #80)
   * Fixed more memory leaks (denis and rurban)
-  * Fixed some double-free's and oob errors in EED (#99, #104)
+  * Fixed some double-free's and oob errors in EED (GH #99, #104)
 
 Other newsworthy changes:
-  * add --disable-bindings configure switch (#86)
+  * add --disable-bindings configure switch (GH #86)
   * add more codepages to dxf: ANSI_1253, ANSI_1254, ANSI_936, ANSI_949
   * add cirrus FreeBSD smoker
   * rename dxf_example.{lsp,sh} to dxf-allcvt.*
@@ -526,26 +544,26 @@ new API:
   dwg_get_ENTITY(blkhdr) to dwg_getall_ENTITY(blkhdr).
 
 API breaking changes:
-  * Changed BITCODE_RC from signed to unsigned char (#44)
+  * Changed BITCODE_RC from signed to unsigned char (GH #44)
   * LEADER changes: rename hooklineonxdir to hookline_dir,
     rename unknown_bit_4 to hookline_on,
     endptproj only until r2007. (but still not 100% correct)
   * MULTILEADER changes: rename num_vertex to numpts (analog to LEADER),
     change vertex to points[] (PR #49 Denis Pryt)
-  * Fixed dwg_get_ENTITY(hdr): NULL-terminate the result (#60)
+  * Fixed dwg_get_ENTITY(hdr): NULL-terminate the result (GH #60)
 
 Important bugfixes:
-  * Fixed all memory leaks and double-free's (#43, #42, PR #58 Denis Pryt)
+  * Fixed all memory leaks and double-free's (GH #43, #42, PR #58 Denis Pryt)
   * Fixed EED sizes (PR #48, Denis Pryt)
-  * Fixed BLOCK_HEADER.num_inserts, esp. with xref's (#44).
+  * Fixed BLOCK_HEADER.num_inserts, esp. with xref's (GH #44).
     For decode and encode.
-  * Fixed LTYPE.dash (#44)
+  * Fixed LTYPE.dash (GH #44)
   * Fixup LEADER DXF values and path_type with annot_type mixup.
-  * Fixed TABLE.value.data_type with flags kGeneral (#54 Denis Pryt)
+  * Fixed TABLE.value.data_type with flags kGeneral (GH #54 Denis Pryt)
   * Fixes VECTOR_CHKCOUNT segfault on unassigned obj->dxfname's
-    (esp. for <=R12), and fix overflows (#56)
-  * dwglayers: fix for DICTIONARY breaking the list output (#51)
-  * dxf: fix dxf_blocks_write for empty paper_space (#52)
+    (esp. for <=R12), and fix overflows (GH #56)
+  * dwglayers: fix for DICTIONARY breaking the list output (GH #51)
+  * dxf: fix dxf_blocks_write for empty paper_space (GH #52)
   * Fixed example/load_dwg.py allowing non-critical error codes
 
 Other newsworthy changes:
@@ -559,7 +577,7 @@ Other newsworthy changes:
 LibreDWG version 0.6.2 - released 2018/11/07 - still alpha:
 
 Important bugfixes:
-  * Fixed several out_dxf segfaults (#39)
+  * Fixed several out_dxf segfaults (GH #39)
   * Enhanced the section size limit from 2032 to 2040.
     There were several DWG files with a section size of 2035
     in the wild. (PR #41, Denis Pryt)
@@ -570,7 +588,7 @@ Important bugfixes:
 LibreDWG version 0.6.1 - released 2018/11/05 - still alpha:
 
 Important bugfixes:
-  * fix wrong FIELD_2DD_VECTOR in dwg decode (#40).
+  * fix wrong FIELD_2DD_VECTOR in dwg decode (GH #40).
 
 
 
@@ -590,20 +608,20 @@ Other newsworthy changes:
   * Support for GNU parallel and coreutils timeout logfile and picat processing.
 
 Important bugfixes:
-  * Fixed previously empty strings for r2007+ for some objects and entities (#34).
+  * Fixed previously empty strings for r2007+ for some objects and entities (GH #34).
   * Fixed r2010+ picture size calculation (DXF 160, 310), leading to wrong entity offsets.
   * Added more checks for unstable objects: empty handles, controls, overflows, isnan.
   * Fixed some common_entity_data, mostly with non-indexed colors and gradient filled HATCH
-    (#27, #28, #31)
+    (GH #27, #28, #31)
   * Fixed some proper relative handles, which were previously treated as NULL handle.
   * Fixed writing TV strings, now the length includes the final \0 char.
   * Fixed the initial minimal hash size, fixing an endless loop on very small
     (truncated) DWG's (<1000 bytes).
   * Much less memory leaks.
-  * Improved free, i.e. no more double free with EED data. (#33)
+  * Improved free, i.e. no more double free with EED data. (GH #33)
   * Better perl bindings build support on Windows, prefer local dwg.h over
-    installed dwg.h on testing (#29).
-  * Fixed dejagnu compilation on C11 by using -fgnu89-inline (#2)
+    installed dwg.h on testing (GH #29).
+  * Fixed dejagnu compilation on C11 by using -fgnu89-inline (GH #2)
 
 New features:
   * Added unstable support for the objects ASSOCDEPENDENCY, ASSOCPLANESURFACEACTIONBODY,
@@ -618,7 +636,7 @@ New features:
   * Added dwg_ent_minsert_set_num_cols(), dwg_ent_minsert_set_num_rows()
   * Added --disable-dxf, --enable--debug configure options. With debug there are many
     more unstable objects available.
-  * Added libredwg.pc (#30)
+  * Added libredwg.pc (GH #30)
   * Added valgrind supressions for known darwin/glibc leaks.
   * Changed and clarified the semver version numbering on development checkouts with
     major.minor[.patch[.build.nonmastercommits-gittag]]. See HACKING.
