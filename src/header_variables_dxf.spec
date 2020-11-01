@@ -340,7 +340,7 @@
   HEADER_HANDLE_NAME (CMLSTYLE, 2, MLINESTYLE); //default: Standard
   HEADER_RS (CMLJUST, 70);
   HEADER_RD (CMLSCALE, 40); //default: 20
-  VERSIONS (R_13, R_14) {
+  VERSION (R_13) {
     HEADER_9 (SAVEIMAGES);
     VALUE (1, RS, 70);
   }
