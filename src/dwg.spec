@@ -2606,9 +2606,16 @@ DWG_ENTITY (LEADER)
 
   //SUBCLASS (AcDbCurve)
   SUBCLASS (AcDbLeader)
+  DXF { FIELD_HANDLE (dimstyle, 5, 3); }
   FIELD_B (unknown_bit_1, 0);
+  DXF { FIELD_B (arrowhead_on, 71); }
   FIELD_BS (path_type, 72);
   FIELD_BS (annot_type, 73); //0: text, 1: tol, 2: insert, 3 (def): none
+  DXF {
+    FIELD_B (hookline_dir, 74);
+    FIELD_BD (box_height, 40);
+    FIELD_BD (box_width , 41);
+  }
   FIELD_BL (num_points, 76);
   FIELD_3DPOINT_VECTOR (points, num_points, 10);
   FIELD_3DPOINT (origin, 0);
@@ -2623,10 +2630,10 @@ DWG_ENTITY (LEADER)
     FIELD_BD (dimgap, 0);
   }
 
-  FIELD_BD (box_height, 40);
-  FIELD_BD (box_width , 41);
-  FIELD_B (hookline_dir, 74);
-  FIELD_B (arrowhead_on, 71);
+  FIELD_BD (box_height, 0);
+  FIELD_BD (box_width , 0);
+  FIELD_B (hookline_dir, 0);
+  FIELD_B (arrowhead_on, 0);
   FIELD_BS (arrowhead_type, 0);
 
   VERSIONS (R_13, R_14)
@@ -2650,7 +2657,7 @@ DWG_ENTITY (LEADER)
   SINCE (R_13) {
     FIELD_HANDLE (associated_annotation, 2, 340);
   }
-  FIELD_HANDLE (dimstyle, 5, 3); // ODA bug, DXF documented as 2
+  FIELD_HANDLE (dimstyle, 5, 0); // ODA bug, DXF documented as 2
 
 DWG_ENTITY_END
 
