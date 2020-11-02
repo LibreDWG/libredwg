@@ -306,7 +306,7 @@ static void dxfb_cvt_tablerecord (Bit_Chain *restrict dat,
 #define ENDTAB() VALUE_TV ("ENDTAB", 0)
 #define RECORD(token) VALUE_TV (#token, 0)
 #define SUBCLASS(text)                                                        \
-  if (dat->from_version >= R_13)                                              \
+  if (dat->version >= R_13)                                                   \
     {                                                                         \
       VALUE_TV (#text, 100)                                                   \
     }

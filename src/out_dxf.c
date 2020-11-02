@@ -262,7 +262,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const i
 #define RECORD(record) fprintf (dat->fh, "  0\r\n" #record "\r\n")
 #define record(record) fprintf (dat->fh, "  0\r\n%s\r\n", record)
 #define SUBCLASS(text)                                                        \
-  if (dat->from_version >= R_13)                                              \
+  if (dat->version >= R_13)                                                   \
     {                                                                         \
       VALUE_TV (#text, 100);                                                  \
     }
