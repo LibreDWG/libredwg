@@ -322,14 +322,18 @@ DWG_ENTITY (ATTDEF)
       }
       FIELD_BD0 (rotation, 50);
       FIELD_BD (height, 40);
-      FIELD_BD (width_factor, 41);
+      FIELD_BD0 (width_factor, 41);
       FIELD_T (default_value, 1);
-      FIELD_BS (generation, 71);
-      FIELD_BS (horiz_alignment, 72);
-      FIELD_BS (vert_alignment, 74);
+      FIELD_BS0 (generation, 71);
+      FIELD_BS0 (horiz_alignment, 72);
+      FIELD_BS (vert_alignment, 0);
       DXF {
-        FIELD_2DD (alignment_pt, ins_pt, 11);
-        FIELD_RD (elevation, 31);
+        if (_obj->alignment_pt.x != 0.0 &&
+            _obj->alignment_pt.y != 0.0)
+          {
+            FIELD_2RD (alignment_pt, 11);
+            FIELD_RD (elevation, 31);
+          }
         FIELD_BE (extrusion, 210);
       }
     }
