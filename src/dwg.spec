@@ -65,7 +65,8 @@ DWG_ENTITY (TEXT)
         FIELD_BS (generation, 71);
         FIELD_BS (horiz_alignment, 72);
         FIELD_2RD (alignment_pt, 11);
-        FIELD_3BD (extrusion, 210);
+        FIELD_BE (extrusion, 210);
+        SUBCLASS (AcDbText)
       } else {
         FIELD_BD (elevation, 30);
         FIELD_2RD (ins_pt, 10);
