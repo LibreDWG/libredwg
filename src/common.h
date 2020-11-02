@@ -258,6 +258,7 @@ char *strrplc (const char *s, const char *from, const char *to);
 #define strEQ(s1, s2) !strcmp ((s1), (s2))
 #define strNE(s1, s2) strcmp ((s1), (s2))
 #define strEQc(s1, s2) !strcmp ((s1), s2 "")
+#define strNEc(s1, s2) strcmp ((s1), s2 "")
 
 #define memBEGIN(s1, s2, len) (strlen (s1) >= len && !memcmp (s1, s2, len))
 #define memBEGINc(s1, s2)                                                     \

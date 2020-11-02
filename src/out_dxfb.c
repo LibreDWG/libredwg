@@ -1286,6 +1286,29 @@ dwg_dxfb_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     return DWG_ERR_INTERNALERROR;
   // almost always false
   is_entity = dwg_class_is_entity (klass);
+  if (dat->version < R_2000)
+    {
+      // keep only: IMAGE, LWPOLYLINE, HATCH
+      if (is_entity &&
+          strNE (klass->dxfname, "IMAGE") &&
+          strNEc (klass->dxfname, "LWPOLYLINE") &&
+          strNEc (klass->dxfname, "HATCH"))
+        {
+          LOG_WARN ("Skip %s\n", klass->dxfname)
+          return DWG_ERR_UNHANDLEDCLASS;
+        }
+      // keep only: DICTIONARYVAR, MATERIAL, RASTERVARIABLES, IMAGEDEF_REACTOR, XRECORD
+      else if (!is_entity &&
+               strNEc (klass->dxfname, "DICTIONARYVAR") &&
+               strNEc (klass->dxfname, "MATERIAL") &&
+               strNEc (klass->dxfname, "RASTERVARIABLES") &&
+               strNEc (klass->dxfname, "IMAGEDEF_REACTOR") &&
+               strNEc (klass->dxfname, "XRECORD"))
+        {
+          LOG_WARN ("Skip %s\n", klass->dxfname)
+          return DWG_ERR_UNHANDLEDCLASS;
+        }
+    }
 
   // clang-format off
   #include "classes.inc"
@@ -2165,9 +2188,9 @@ dwg_write_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   if (!minimal)
     {
-      // if downgraded from r2000 to r14, but we still have classes, keep the
+      // if downgraded to r13, but we still have classes, keep the
       // classes
-      if ((dat->from_version >= R_2000 && dwg->num_classes)
+      if ((dat->from_version >= R_13 && dwg->num_classes)
           || dat->version >= R_2000)
         {
           if (dxfb_classes_write (dat, dwg) >= DWG_ERR_CRITICAL)
