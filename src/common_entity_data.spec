@@ -176,7 +176,9 @@
       FIELD_CMC (color, 62);
   }
 
+#ifndef IS_DXF
   FIELD_BD1 (ltype_scale, 48);
+#endif
   SINCE (R_2000)
     {
       // 00 BYLAYER, 01 BYBLOCK, 10 CONTINUOUS, 11 ltype handle

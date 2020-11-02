@@ -89,6 +89,7 @@
       if (FIELD_VALUE (ltype_flags) == 3)
         FIELD_HANDLE (ltype, 5, 6);
 #ifdef IS_DXF
+      FIELD_BD1 (ltype_scale, 48);
       if (FIELD_VALUE (linewt) != 29) {
         int lw = dxf_cvt_lweight (FIELD_VALUE (linewt));
         KEY (linewt); VALUE_BSd (lw, 370);
