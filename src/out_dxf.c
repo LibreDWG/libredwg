@@ -1167,6 +1167,31 @@ dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
   return error;
 }
 
+bool
+dxf_has_STYLE_eed(Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
+{
+  bool result = false;
+  bool has_acadappid = false;
+  Dwg_Data *dwg = obj->dwg;
+  for (BITCODE_BL i = 0; i < obj->num_eed; i++)
+    {
+      const Dwg_Eed* _obj = &obj->eed[i];
+      if (_obj->size)
+        {
+          // check for APPID ACAD and first data to be a string 0. TODO 2nd to be 71
+          Dwg_Object *appid = dwg_resolve_handle (dwg, _obj->handle.value);
+          if (appid && appid->fixedtype == DWG_TYPE_APPID &&
+              bit_eq_T (dat, appid->tio.object->tio.APPID->name, "ACAD"))
+            {
+              has_acadappid = true;
+              if (_obj->data && _obj->data->code == 0)
+                return true;
+            }
+        }
+    }
+  return result;
+}
+
 GCC30_DIAG_IGNORE (-Wformat-nonliteral)
 static int
 dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,

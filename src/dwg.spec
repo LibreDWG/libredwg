@@ -2993,10 +2993,12 @@ DWG_OBJECT (STYLE)
     FIELD_T (bigfont_file, 4);
     //1001 1000 1071 mandatory r2007+ if .ttf
     //long truetype font’s pitch and family, charset, and italic and bold flags
-    DXF {
+#ifdef IS_DXF
+    {
       char _buf[256];
       char *s;
-      if (FIELD_VALUE (font_file))
+      // only print to DXF, if not in EED already
+      if (FIELD_VALUE (font_file) && !dxf_has_STYLE_eed (dat, obj->tio.object))
         {
           SINCE (R_2007) {
             s = bit_convert_TU ((BITCODE_TU)FIELD_VALUE (font_file));
@@ -3017,6 +3019,7 @@ DWG_OBJECT (STYLE)
             }
         }
     }
+#endif
 
     START_OBJECT_HANDLE_STREAM;
   }
