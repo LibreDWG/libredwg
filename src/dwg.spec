@@ -6334,6 +6334,7 @@ DWG_OBJECT (VBA_PROJECT)
 DWG_OBJECT_END
 
 #define MLEADER_CONTEXT_DATA_fields                                                \
+  DXF_OR_PRINT { VALUE_TFF ("CONTEXT_DATA{", 300); } /* AcDbObjectContextData */   \
   FIELD_BD (ctx.scale_factor, 40);                                                 \
   FIELD_3BD (ctx.content_base, 10);                                                \
   FIELD_BD (ctx.text_height, 41);                                                  \
@@ -6375,6 +6376,7 @@ DWG_OBJECT_END
       FIELD_VECTOR (ctx.content.txt.col_sizes, BD, ctx.content.txt.num_col_sizes, 144); \
       FIELD_B (ctx.content.txt.word_break, 295);                                   \
       FIELD_B (ctx.content.txt.unknown, 0);                                        \
+      DXF { VALUE_B (0, 296); }                                                    \
     }                                                                              \
   else /* a union. either txt or blk */                                            \
     {                                                                              \
@@ -6396,12 +6398,6 @@ DWG_OBJECT_END
   FIELD_3BD (ctx.base_dir, 111);  /* dxf only 2d? */                               \
   FIELD_3BD (ctx.base_vert, 112); /* dxf only 2d */                                \
   FIELD_B (ctx.is_normal_reversed, 297);                                           \
-  SINCE (R_2010)                                                                   \
-    {                                                                              \
-      FIELD_BS (ctx.text_top, 273);                                                \
-      FIELD_BS (ctx.text_bottom, 272);                                             \
-    }                                                                              \
-  DXF_OR_PRINT { VALUE_TFF ("}", 301); } /* end CONTEXT_DATA */                    \
   /* END MLEADER_AnnotContext */
 
 
@@ -6416,7 +6412,6 @@ DWG_ENTITY (MULTILEADER)
     FIELD_BS (class_version, 270); // default 2. 1 <= r2004
     VALUEOUTOFBOUNDS (class_version, 10)
   }
-  DXF_OR_PRINT { VALUE_TFF ("CONTEXT_DATA{", 300); } //AcDbObjectContextData
 #ifdef IS_DXF
   MLEADER_CONTEXT_DATA_fields;
 #endif
@@ -6483,10 +6478,18 @@ DWG_ENTITY (MULTILEADER)
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (ctx.leaders)
   END_REPEAT (ctx.leaders)
-  DXF_OR_PRINT { VALUE_TFF ("}", 303); }
+
 #ifndef IS_DXF
   MLEADER_CONTEXT_DATA_fields;
 #endif
+  DXF_OR_PRINT { VALUE_TFF ("}", 303); }
+  SINCE (R_2010)
+    {
+      FIELD_BS (ctx.text_top, 273);
+      FIELD_BS (ctx.text_bottom, 272);
+    }
+  DXF_OR_PRINT { VALUE_TFF ("}", 301); }
+  /* end CONTEXT_DATA */
 
   FIELD_HANDLE (mleaderstyle, 5, 340);
   FIELD_BLx (flags, 90); // override flags
