@@ -1804,7 +1804,7 @@ static const Dwg_DYNAPI_field _dwg_DIMENSION_ORDINATE_fields[] = {
   { "leader_endpt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_DIMENSION_ORDINATE, leader_endpt),
     1,0,0, 14 },
   { "flag2",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_DIMENSION_ORDINATE, flag2),
-    0,0,0, 70 },
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_DIMENSION_RADIUS: (sorted by offset) */

@@ -1277,7 +1277,7 @@ DWG_ENTITY (DIMENSION_ORDINATE)
   }
   FIELD_3BD (feature_location_pt, 13);
   FIELD_3BD (leader_endpt, 14);
-  FIELD_RC (flag2, 70);
+  FIELD_RC (flag2, 0);
   DECODER {
     BITCODE_RC flag = FIELD_VALUE (flag);
     flag = (FIELD_VALUE (flag2) & 1)

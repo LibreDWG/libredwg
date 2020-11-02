@@ -1607,7 +1607,7 @@ H
 @item leader_endpt
 3BD,	DXF 14
 @item flag2
-RC,	DXF 70
+RC
 
 @end vtable
 @end indentedblock
