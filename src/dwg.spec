@@ -3105,11 +3105,11 @@ DWG_OBJECT (LTYPE)
     else {
       FIELD_BINARY (strings_area, 256, 0);
       DECODER {
+        unsigned int dash_i = 0;
         for (rcount1 = 0; rcount1 < _obj->num_dashes; rcount1++)
           {
             if (_obj->dashes[rcount1].shape_flag & 2)
               {
-                static unsigned int dash_i = 0;
                 if (dash_i >= 256)
                   {
                     LOG_ERROR ("dashes[%u] overflow @%u", rcount1, dash_i)
@@ -3127,11 +3127,11 @@ DWG_OBJECT (LTYPE)
     if (FIELD_VALUE (has_strings_area)) {
       FIELD_BINARY (strings_area, 512, 0);
       DECODER {
+        unsigned int dash_i = 0;
         for (rcount1 = 0; rcount1 < _obj->num_dashes; rcount1++)
           {
             if (_obj->dashes[rcount1].shape_flag & 2)
               {
-                static unsigned int dash_i = 0;
                 if (dash_i >= 512)
                   {
                     LOG_ERROR ("dashes[%u] overflow @%u", rcount1, dash_i)
