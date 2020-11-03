@@ -2925,7 +2925,9 @@ DWG_OBJECT (LAYER)
   FIELD_HANDLE (ltype, 5, 6);
   DXF {
     SINCE (R_2000) {
-      if (bit_eq_T (dat, _obj->name, "Defpoints")) {
+      if (bit_eq_T (dat, _obj->name, "Defpoints") ||
+          bit_eq_T (dat, _obj->name, "DEFPOINTS"))
+      {
         _obj->plotflag = 0;
         FIELD_B (plotflag, 290);
       } else {

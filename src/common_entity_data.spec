@@ -122,7 +122,7 @@
       if (ent->color.index != ent->color.raw)
         LOG_TRACE (" color.index: %d [ENC 62]\n", ent->color.index);
       if (ent->color.flag > 1)
-        LOG_TRACE (" color.flag: 0x%x [ENC]\n", ent->color.flag);
+        LOG_TRACE (" color.flag: 0x%x\n", ent->color.flag);
 #endif
       flags = ent->color.flag;
       if (flags & 0x20)
@@ -134,7 +134,7 @@
           /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
           ent->color.alpha_type = ent->color.alpha >> 24;
           ent->color.alpha = ent->color.alpha & 0xFF;
-          LOG_TRACE (" color.alpha_type: %d [ENV 440]\n", ent->color.alpha_type);
+          LOG_TRACE (" color.alpha_type: %d [ENC 440]\n", ent->color.alpha_type);
 #endif
           JSON {
             FIELD_BB (color.alpha_type, 0);
