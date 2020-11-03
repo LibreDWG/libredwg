@@ -1723,7 +1723,10 @@ dxfb_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       RECORD (CLASS);
       VALUE_TV (dxfname, 1);
       VALUE_T (dwg->dwg_class[j].cppname, 2);
-      VALUE_T (dwg->dwg_class[j].appname, 3);
+      if (strEQc (dxfname, "SPATIAL_INDEX"))
+        VALUE_TFF ("AutoCAD 2000", 3)
+      else
+        VALUE_T (dwg->dwg_class[j].appname, 3)
       VALUE_RL (dwg->dwg_class[j].proxyflag, 90);
       SINCE (R_2004) {
         VALUE_RL (dwg->dwg_class[j].num_instances, 91);
