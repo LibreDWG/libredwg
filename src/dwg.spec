@@ -6724,7 +6724,7 @@ DWG_ENTITY (UNDERLAY)
   }
   DXF {
     FIELD_BD0 (angle, 50);
-    FIELD_3BD (extrusion, 210);
+    FIELD_BE (extrusion, 210);
   }
   FIELD_RC0 (flag, 280);
   FIELD_RCd (contrast, 281); // 20-100. def: 100. DXF optional
@@ -6734,7 +6734,7 @@ DWG_ENTITY (UNDERLAY)
   FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 11);
   if (FIELD_VALUE (flag) & 16)
     {
-      FIELD_BS (num_clip_inverts, 170);
+      FIELD_BS0 (num_clip_inverts, 170);
       FIELD_2RD_VECTOR (clip_inverts, num_clip_inverts, 12);
     }
   COMMON_ENTITY_HANDLE_DATA;
