@@ -203,8 +203,9 @@
     }
 
   DXF {
-    if (FIELD_VALUE (invisible))
-      FIELD_BS (invisible, 60);
+    if (FIELD_VALUE (invisible) & 1) { // skip bit 1
+      VALUE_BS (1, 60)
+    }
   } else {
     FIELD_BS (invisible, 60); //bit 0: 0 visible, 1 invisible
   }
