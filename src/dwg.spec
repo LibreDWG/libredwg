@@ -3875,13 +3875,17 @@ DWG_OBJECT (MLINESTYLE)
   DXF { FIELD_T (description, 3); }
   FIELD_CMC (fill_color, 62); /*!< default 256 */
 #ifdef IS_DXF
-  // 0 - 90
-  FIELD_VALUE (start_angle) = rad2deg (FIELD_VALUE (start_angle));
-  FIELD_VALUE (end_angle)   = rad2deg (FIELD_VALUE (end_angle));
-  while (FIELD_VALUE (start_angle) > 90.0) FIELD_VALUE (start_angle) -= 90.0;
-  while (FIELD_VALUE (end_angle)   > 90.0) FIELD_VALUE (end_angle)   -= 90.0;
-  VALUE (FIELD_VALUE (start_angle), RD, 51)
-  VALUE (FIELD_VALUE (end_angle), RD, 52)
+  {
+    // 0 - 91.0
+    BITCODE_BD start_angle = rad2deg (FIELD_VALUE (start_angle));
+    BITCODE_BD end_angle   = rad2deg (FIELD_VALUE (end_angle));
+    if (start_angle < 0.0) start_angle += 360.0;
+    if (end_angle < 0.0)   end_angle   += 360.0;
+    while (start_angle > 91.0) start_angle -= 90.0;
+    while (end_angle   > 91.0) end_angle   -= 90.0;
+    VALUE_RD (start_angle, 51);
+    VALUE_RD (end_angle, 52);
+  }
 #else
   FIELD_BD (start_angle, 51); /*!< default 90 deg */
   FIELD_BD (end_angle, 52);   /*!< default 90 deg */
