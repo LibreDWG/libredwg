@@ -4126,7 +4126,7 @@ DWG_ENTITY (HATCH)
   if (!FIELD_VALUE (is_solid_fill))
     {
       FIELD_BD (angle, 52);
-      FIELD_BD1 (scale_spacing, 41); //default 1.0
+      FIELD_BD (scale_spacing, 41);
       FIELD_B (double_flag, 77);
       
       FIELD_BS (num_deflines, 78);
