@@ -1167,8 +1167,47 @@ dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
   return error;
 }
 
+/* Layer names with active dependent xref have a name like "REF|name",
+   or "REF|REFNAME$0$name" name.
+   Otherwise we get Layer name with vertical bar is not marked dependent
+   (gh44-error_2013)
+ */
 bool
-dxf_has_STYLE_eed(Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
+dxf_has_xrefdep_vertbar (Bit_Chain *restrict dat,
+                         const char *name)
+{
+  if (IS_FROM_TU (dat))
+    {
+      BITCODE_TU wstr = (BITCODE_TU)name;
+#if defined (HAVE_NATIVE_WCHAR2) && defined (HAVE_WCSCHR)
+      if (wstr && *wstr && wcschr (&wstr[1], L'|'))
+        return true;
+      else
+        return false;
+#else
+      bool result;
+      char* u8 = bit_convert_TU (wstr);
+      if (u8 && *u8 && strchr (&u8[1], '|'))
+        result = true;
+      else
+        result = false;
+      if (u8)
+        free (u8);
+      return result;
+#endif
+    }
+  else
+    {
+      if (name && *name && strchr (&name[1], '|'))
+        return true;
+      else
+        return false;
+    }
+}
+
+bool
+dxf_has_STYLE_eed (Bit_Chain *restrict dat,
+                   const Dwg_Object_Object *restrict obj)
 {
   bool result = false;
   bool has_acadappid = false;
@@ -1418,8 +1457,12 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     VALUE_TV ("*", 2)                                                         \
   if (strEQc (#acdbname, "Layer") && dat->version >= R_2000)                  \
     {                                                                         \
-      /* mask off plotflag and linewt */                                      \
-      VALUE_RC (_obj->flag & ~0x3f0, 70);                                     \
+      /* Mask off plotflag and linewt. */                                     \
+      BITCODE_RC _flag = _obj->flag & ~0x3e0;                                 \
+      /* Don't keep bit 16 when not xrefdep like "XREF|name" */               \
+      if (_flag & 0x10 && !dxf_has_xrefdep_vertbar (dat, _obj->name))         \
+        _flag &= ~0x10;                                                       \
+      VALUE_RC (_flag, 70);                                                   \
     }                                                                         \
   else if (strEQc (#acdbname, "Block") && dat->version >= R_2000)             \
     ; /* skip 70 for AcDbBlockTableRecord here. done in AcDbBlockBegin */     \
