@@ -8109,7 +8109,7 @@ postprocess_TEXTlike (Dwg_Object *obj)
     dataflags |= 4;
   if (rotation == 0.0)
     dataflags |= 8;
-  if (width_factor == 0.0)
+  if (width_factor == 1.0)
     dataflags |= 0x10;
   if (generation == 0)
     dataflags |= 0x20;
@@ -8462,6 +8462,13 @@ new_object (char *restrict name, char *restrict dxfname,
         dwg_dynapi_entity_set_value (_obj, obj->name, "scale_flag",
                                      &scale_flag, 0);
         LOG_TRACE ("%s.scale_flag = 3 (default)\n", obj->name);
+      }
+    if (dwg_dynapi_entity_field (obj->name, "width_factor"))
+      {
+        BITCODE_BD width_factor = 1.0;
+        dwg_dynapi_entity_set_value (_obj, obj->name, "width_factor",
+                                     &width_factor, 0);
+        LOG_TRACE ("%s.width_factor = 1.0 (default)\n", obj->name);
       }
     if (dwg_dynapi_entity_field (obj->name, "scale"))
       {

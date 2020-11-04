@@ -114,7 +114,7 @@ DWG_ENTITY (TEXT)
       }
       DXF {
         FIELD_RD0 (rotation, 50);
-        FIELD_RD0 (width_factor, 41);
+        FIELD_RD1 (width_factor, 41);
         FIELD_RD0 (oblique_angle, 51);
         FIELD_HANDLE0 (style, 5, 7);
       } else {
@@ -123,8 +123,13 @@ DWG_ENTITY (TEXT)
         if (!(dataflags & 0x08))
           FIELD_RD (rotation, 0);
         FIELD_RD (height, 0);
-        if (!(dataflags & 0x10))
+        if (!(dataflags & 0x10)) {
           FIELD_RD (width_factor, 0);
+        }
+#ifdef IS_DECODER
+        else
+          FIELD_VALUE (width_factor) = 1.0;
+#endif
         FIELD_T (text_value, 0);
       }
 
@@ -184,7 +189,7 @@ DWG_ENTITY (ATTRIB)
       }
       FIELD_BD0 (rotation, 50);
       FIELD_BD0 (height, 40);
-      FIELD_BD0 (width_factor, 41);
+      FIELD_BD1 (width_factor, 41);
       FIELD_TV (text_value, 1);
       FIELD_BS0 (generation, 71);
       FIELD_BS0 (horiz_alignment, 72);
@@ -221,7 +226,7 @@ DWG_ENTITY (ATTRIB)
       }
       DXF {
         FIELD_RD0 (rotation, 50);
-        FIELD_RD0 (width_factor, 41);
+        FIELD_RD1 (width_factor, 41);
         FIELD_RD0 (oblique_angle, 51);
         FIELD_HANDLE0 (style, 5, 7);
       } else {
@@ -230,8 +235,13 @@ DWG_ENTITY (ATTRIB)
         if (!(dataflags & 0x08))
           FIELD_RD (rotation, 50);
         FIELD_RD (height, 40);
-        if (!(dataflags & 0x10))
+        if (!(dataflags & 0x10)) {
           FIELD_RD (width_factor, 41);
+        }
+#ifdef IS_DECODER
+        else
+          FIELD_VALUE (width_factor) = 1.0;
+#endif
         FIELD_T (text_value, 1);
       }
 
@@ -322,7 +332,7 @@ DWG_ENTITY (ATTDEF)
       }
       FIELD_BD0 (rotation, 50);
       FIELD_BD (height, 40);
-      FIELD_BD0 (width_factor, 41);
+      FIELD_BD1 (width_factor, 41);
       FIELD_T (default_value, 1);
       FIELD_BS0 (generation, 71);
       FIELD_BS0 (horiz_alignment, 72);
@@ -368,7 +378,7 @@ DWG_ENTITY (ATTDEF)
       }
       DXF {
         FIELD_RD0 (rotation, 50);
-        FIELD_RD0 (width_factor, 41);
+        FIELD_RD1 (width_factor, 41);
         FIELD_RD0 (oblique_angle, 51);
         FIELD_HANDLE0 (style, 5, 7);
       } else {
@@ -377,8 +387,13 @@ DWG_ENTITY (ATTDEF)
         if (!(dataflags & 0x08))
           FIELD_RD0 (rotation, 50);
         FIELD_RD (height, 40);
-        if (!(dataflags & 0x10))
+        if (!(dataflags & 0x10)) {
           FIELD_RD (width_factor, 41);
+        }
+#ifdef IS_DECODER
+        else
+          FIELD_VALUE (width_factor) = 1.0;
+#endif
         FIELD_T (default_value, 1);
       }
 

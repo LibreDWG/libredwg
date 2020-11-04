@@ -354,6 +354,7 @@
 #ifndef FIELD_BD0
 #  define FIELD_2RD0(name, dxf) FIELD_2RD (name, dxf)
 #  define FIELD_RD0(name, dxf) FIELD_RD (name, dxf)
+#  define FIELD_RD1(name, dxf) FIELD_RD (name, dxf)
 #  define FIELD_BD0(name, dxf) FIELD_BD (name, dxf)
 #  define FIELD_BD1(name, dxf) FIELD_BD (name, dxf)
 #  define FIELD_BL0(name, dxf) FIELD_BL (name, dxf)
