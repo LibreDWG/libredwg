@@ -2942,7 +2942,10 @@ DWG_OBJECT (LAYER)
       FIELD_HANDLE (plotstyle, 5, 390);
     }
     SINCE (R_2007) {
-      FIELD_HANDLE (material, 5, 347);
+      DXF { FIELD_HANDLE (material, 5, 0); } // yet unstable class
+      else {
+        FIELD_HANDLE (material, 5, 347);
+      }
     }
   }
   SINCE (R_2013) {
