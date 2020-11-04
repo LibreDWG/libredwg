@@ -2986,9 +2986,11 @@ DWG_OBJECT (STYLE)
   {
     FIELD_B (is_shape, 0);        //wrong oda doc
     FIELD_B (is_vertical, 0);     //
-    FIELD_VALUE (flag) |= (FIELD_VALUE (is_vertical) ? 4 : 0) +
-                          (FIELD_VALUE (is_shape) ? 1 : 0);
-    LOG_TRACE ("flag => %d [RC 70]\n", FIELD_VALUE (flag));
+    DECODER_OR_ENCODER {
+      FIELD_VALUE (flag) |= (FIELD_VALUE (is_vertical) ? 4 : 0) +
+                            (FIELD_VALUE (is_shape) ? 1 : 0);
+      LOG_TRACE ("flag => %d [RC 70]\n", FIELD_VALUE (flag));
+    }
   }
   PRE (R_13)
   {
