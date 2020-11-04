@@ -9773,7 +9773,7 @@ static const Dwg_DYNAPI_field _dwg_SPATIAL_FILTER_fields[] = {
   { "extrusion",	"BE", sizeof (BITCODE_BE),  OFF (struct _dwg_object_SPATIAL_FILTER, extrusion),
     0,0,0, 210 },
   { "origin",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_object_SPATIAL_FILTER, origin),
-    1,0,0, 10 },
+    1,0,0, 11 },
   { "display_boundary_on",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SPATIAL_FILTER, display_boundary_on),
     0,0,0, 71 },
   { "front_clip_on",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_SPATIAL_FILTER, front_clip_on),

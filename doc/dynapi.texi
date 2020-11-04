@@ -11374,7 +11374,7 @@ BS,	DXF 70
 @item extrusion
 BE,	DXF 210
 @item origin
-3BD,	DXF 10
+3BD,	DXF 11
 @item display_boundary_on
 BS,	DXF 71
 @item front_clip_on

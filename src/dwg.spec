@@ -5315,7 +5315,7 @@ DWG_OBJECT (SPATIAL_FILTER)
   VALUEOUTOFBOUNDS (num_clip_verts, 10000)
   FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 10);
   FIELD_3BD (extrusion, 210);
-  FIELD_3BD (origin, 10);
+  FIELD_3BD (origin, 11);
   FIELD_BS (display_boundary_on, 71);
   FIELD_BS (front_clip_on, 72);
   if (FIELD_VALUE (front_clip_on))
