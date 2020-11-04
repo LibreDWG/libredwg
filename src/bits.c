@@ -2222,7 +2222,7 @@ bit_convert_TU (BITCODE_TU restrict wstr)
         LOG_INSANE ("U+%04X ", c);
 #endif
     }
-  str = (char*)malloc (len + 1);
+  str = (char*)malloc (len + 2);
   if (!str)
     {
       loglevel = 1;
@@ -2235,7 +2235,7 @@ bit_convert_TU (BITCODE_TU restrict wstr)
     {
       unsigned char *b = (unsigned char*)wstr;
       c = (b[0] << 8) + b[1];
-      while (c)
+      while (c && i < len)
         {
           if (c < 0x80)
             {
@@ -2259,7 +2259,7 @@ bit_convert_TU (BITCODE_TU restrict wstr)
     }
   else
 #endif
-  while ((c = *wstr++))
+  while ((c = *wstr++) && i < len)
     {
       if (c < 0x80)
         {
