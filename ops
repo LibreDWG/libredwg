@@ -1,1 +1,1 @@
-{"version":1,"ops":[{"type":1,"author":{"id":"b57a4f5420adf835b8b83469143e813bd4f12c78"},"timestamp":1604559331,"title":"dxf: 3DSOLID: Class separator for class AcDb3dSolid expected","message":"versions: 2013, 2018\nfiles: JW_2013, example_201{3,8}","files":null}]}
+{"version":1,"ops":[{"type":8,"author":{"id":"b57a4f5420adf835b8b83469143e813bd4f12c78"},"timestamp":1604559717,"target":"525a9bb817a856b4090843f772202bbed994be8648a071b99039bca6e398471a","new_metadata":{"github-id":"MDU6SXNzdWU3MzY2NzEwOTM=","github-url":"https://github.com/LibreDWG/libredwg/issues/282"}}]}
