@@ -9018,6 +9018,7 @@ EXPORT Dwg_Object_BLOCK_CONTROL * dwg_block_control (Dwg_Data *restrict dwg);
 EXPORT Dwg_Object_Ref * dwg_model_space_ref (Dwg_Data *restrict dwg);
 EXPORT Dwg_Object_Ref * dwg_paper_space_ref (Dwg_Data *restrict dwg);
 EXPORT Dwg_Object * dwg_model_space_object (Dwg_Data *restrict dwg);
+EXPORT Dwg_Object * dwg_paper_space_object (Dwg_Data *restrict dwg);
 
 EXPORT unsigned int dwg_get_layer_count (const Dwg_Data *restrict dwg);
 

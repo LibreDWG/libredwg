@@ -958,6 +958,26 @@ dwg_model_space_object (Dwg_Data *dwg)
   return dwg_resolve_handle (dwg, dwg->header.version >= R_2000 ? 0x1F : 0x17);
 }
 
+/** Returns the paper space block object for the DWG.
+ */
+EXPORT Dwg_Object *
+dwg_paper_space_object (Dwg_Data *dwg)
+{
+  Dwg_Object_Ref *psref = dwg_paper_space_ref (dwg);
+  Dwg_Object_BLOCK_CONTROL *ctrl;
+
+  if (psref && psref->obj && psref->obj->type == DWG_TYPE_BLOCK_HEADER)
+    return psref->obj;
+  ctrl = dwg_block_control (dwg);
+  if (ctrl && ctrl->paper_space && ctrl->paper_space->obj)
+    return ctrl->paper_space->obj;
+  if (dwg->header_vars.BLOCK_RECORD_PSPACE
+      && dwg->header_vars.BLOCK_RECORD_PSPACE->obj)
+    return dwg->header_vars.BLOCK_RECORD_PSPACE->obj;
+  else
+    return NULL;
+}
+
 /** Returns the first entity owned by the block hdr, or NULL.
  */
 EXPORT Dwg_Object *
@@ -990,7 +1010,7 @@ get_first_owned_entity (const Dwg_Object *hdr)
   return NULL;
 }
 
-/** Returns the next entity or NULL.
+/** Returns the next entity owned by mspace or pspace or NULL.
  */
 EXPORT Dwg_Object *
 dwg_next_entity (const Dwg_Object *restrict obj)
@@ -1042,19 +1062,17 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
           || current->handle.value >= _hdr->last_entity->absolute_ref)
         return NULL;
       obj = dwg_next_entity (current);
-      while (obj
-             && (obj->supertype != DWG_SUPERTYPE_ENTITY
-                 || obj->type == DWG_TYPE_ATTDEF
-                 || obj->type == DWG_TYPE_ATTRIB
-                 || obj->type == DWG_TYPE_VERTEX_2D
-                 || obj->type == DWG_TYPE_VERTEX_3D
-                 || obj->type == DWG_TYPE_VERTEX_MESH
-                 || obj->type == DWG_TYPE_VERTEX_PFACE
-                 || obj->type == DWG_TYPE_VERTEX_PFACE_FACE))
+      while (obj && (obj->type == DWG_TYPE_ATTDEF
+                     || obj->type == DWG_TYPE_ATTRIB
+                     || obj->type == DWG_TYPE_VERTEX_2D
+                     || obj->type == DWG_TYPE_VERTEX_3D
+                     || obj->type == DWG_TYPE_VERTEX_MESH
+                     || obj->type == DWG_TYPE_VERTEX_PFACE
+                     || obj->type == DWG_TYPE_VERTEX_PFACE_FACE))
         {
           obj = dwg_next_entity (obj);
           // this may happen with r2000 attribs
-          if (obj && obj->supertype == DWG_SUPERTYPE_ENTITY
+          if (obj
               && obj->tio.entity != NULL
               && obj->tio.entity->ownerhandle != NULL
               && obj->tio.entity->ownerhandle->absolute_ref

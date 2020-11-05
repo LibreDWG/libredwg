@@ -3749,7 +3749,7 @@ BE,	DXF 210
 @item parent
 struct _dwg_object_entity*
 @item flag
-RS,	DXF 70
+RS
 @item scenario
 BS
 @item degree
@@ -9156,7 +9156,7 @@ BS,	DXF 283
 @item DIMJUST
 BS,	DXF 280
 @item DIMFIT
-BS,	DXF 289
+BS,	DXF 287
 @item DIMUPT
 B,	DXF 288
 @item DIMTZIN
@@ -9264,7 +9264,7 @@ BS,	DXF 285
 @item DIMALTTZ
 BS,	DXF 286
 @item DIMATFIT
-BS
+BS,	DXF 289
 @item DIMFXLON
 B,	DXF 290
 @item DIMTXTDIRECTION
