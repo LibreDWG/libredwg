@@ -1168,6 +1168,41 @@ dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
   return error;
 }
 
+/* If the name contains "$0$"
+ */
+bool
+dxf_is_xrefdep_name (Bit_Chain *restrict dat,
+                     const char *name)
+{
+  if (IS_FROM_TU (dat))
+    {
+      BITCODE_TU wstr = (BITCODE_TU)name;
+#if defined (HAVE_NATIVE_WCHAR2) && defined (HAVE_WCSSTR)
+      if (wstr && *wstr && wcsstr (&wstr[1], L"$0$"))
+        return true;
+      else
+        return false;
+#else
+      bool result;
+      char* u8 = bit_convert_TU (wstr);
+      if (u8 && *u8 && strstr (&u8[1], "$0$"))
+        result = true;
+      else
+        result = false;
+      if (u8)
+        free (u8);
+      return result;
+#endif
+    }
+  else
+    {
+      if (name && *name && strstr (&name[1], "$0$"))
+        return true;
+      else
+        return false;
+    }
+}
+
 /* Layer names with active dependent xref have a name like "REF|name",
    or "REF|REFNAME$0$name" name.
    Otherwise we get Layer name with vertical bar is not marked dependent
@@ -1446,7 +1481,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
       if (blk && blk->type == DWG_TYPE_BLOCK)                                 \
         {                                                                     \
           Dwg_Entity_BLOCK *_blk = blk->tio.entity->tio.BLOCK;                \
-          VALUE_T (_blk->name, 2)                                       \
+          VALUE_T (_blk->name, 2)                                             \
         }                                                                     \
       else if (_obj->name)                                                    \
         {                                                                     \
@@ -1455,6 +1490,11 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
       else                                                                    \
         VALUE_TV ("*", 2)                                                     \
     }                                                                         \
+  /* Empty name with xref shape names */                                      \
+  else if (strEQc (#acdbname, "TextStyle") &&                                 \
+           _obj->flag & 1 &&                                                  \
+           dxf_is_xrefdep_name (dat, _obj->name))                             \
+    VALUE_TV ("", 2)                                                          \
   else if (_obj->name)                                                        \
     dxf_cvt_tablerecord (dat, obj, _obj->name, 2);                            \
   else                                                                        \

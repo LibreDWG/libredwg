@@ -249,10 +249,10 @@ AC_CHECK_FUNCS([scandir],[],
 AC_CHECK_FUNCS([floor sqrt])
 AC_CHECK_LIB([m],[floor])
 AC_CHECK_LIB([m],[sqrt])
-AC_CHECK_FUNCS([memchr memmove strcasecmp strchr strrchr strtol strtoul strtoull strnlen])
+AC_CHECK_FUNCS([memchr memmove strcasecmp strchr strstr strrchr strtol strtoul strtoull strnlen])
 AC_CHECK_FUNCS([memmem],[],
   AC_MSG_WARN([memmem not found. Using a slower workaround.]))
-AC_CHECK_FUNCS([wcslen wcsnlen wcscpy wcscmp])
+AC_CHECK_FUNCS([wcslen wcsnlen wcscpy wcscmp wcsstr])
 
 dnl mingw-w64 7.0 bug with _FORTIFY_SOURCE, need -lssp
 case $host in

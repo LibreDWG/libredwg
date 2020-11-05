@@ -1179,6 +1179,11 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
       else                                                                    \
         VALUE_TV ("*", 2)                                                     \
     }                                                                         \
+  /* Empty name with xref shape names */                                      \
+  else if (strEQc (#acdbname, "TextStyle") &&                                 \
+           _obj->flag & 1 &&                                                  \
+           dxf_is_xrefdep_name (dat, _obj->name))                             \
+    VALUE_TV ("", 2)                                                          \
   else if (_obj->name)                                                        \
     dxfb_cvt_tablerecord (dat, obj, _obj->name, 2);                           \
   else                                                                        \

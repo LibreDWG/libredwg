@@ -35,6 +35,7 @@ int dxf_is_sorted_POLYLINE (const Dwg_Object *restrict obj);
 int dxf_validate_DICTIONARY (Dwg_Object *obj);
 bool dxf_has_STYLE_eed(Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj);
 bool dxf_has_xrefdep_vertbar(Bit_Chain *restrict dat, const char *name);
+bool dxf_is_xrefdep_name (Bit_Chain *restrict dat, const char *name);
 
 EXPORT int dwg_write_dxf (Bit_Chain *dat, Dwg_Data *dwg);
 EXPORT int dwg_write_dxfb (Bit_Chain *dat, Dwg_Data *dwg);

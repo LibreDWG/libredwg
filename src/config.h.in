@@ -162,6 +162,9 @@
 /* Define to 1 if you have the `strrchr' function. */
 #undef HAVE_STRRCHR
 
+/* Define to 1 if you have the `strstr' function. */
+#undef HAVE_STRSTR
+
 /* Define to 1 if you have the `strtol' function. */
 #undef HAVE_STRTOL
 
@@ -197,6 +200,9 @@
 
 /* Define to 1 if you have the `wcsnlen' function. */
 #undef HAVE_WCSNLEN
+
+/* Define to 1 if you have the `wcsstr' function. */
+#undef HAVE_WCSSTR
 
 /* Define to 1 if the system has the type `_Bool'. */
 #undef HAVE__BOOL
