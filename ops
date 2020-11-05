@@ -1,1 +1,1 @@
-{"version":1,"ops":[{"type":1,"author":{"id":"b57a4f5420adf835b8b83469143e813bd4f12c78"},"timestamp":1604559416,"title":"dxf: MLEADERSTYLE: DXF read error","message":"Multileader_2004","files":null}]}
+{"version":1,"ops":[{"type":8,"author":{"id":"b57a4f5420adf835b8b83469143e813bd4f12c78"},"timestamp":1604559725,"target":"023cda5694dbe016926a374fc35dc7ac6911d4a61baa7bd5d3b99899e92ed1c9","new_metadata":{"github-id":"MDU6SXNzdWU3MzY2NzExODM=","github-url":"https://github.com/LibreDWG/libredwg/issues/284"}}]}
