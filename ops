@@ -1,1 +1,1 @@
-{"version":1,"ops":[{"type":1,"author":{"id":"b57a4f5420adf835b8b83469143e813bd4f12c78"},"timestamp":1604559976,"title":"dxf: STYLE Invalid textstyle name for shapeFile: \"SHAPE$0$REF\"","message":"flipped_2013 only","files":null}]}
+{"version":1,"ops":[{"type":8,"author":{"id":"b57a4f5420adf835b8b83469143e813bd4f12c78"},"timestamp":1604560369,"target":"ad14668be681b07d5e908cb07672131693d22092f7dc0dd71c7bdb71fb19fe4d","new_metadata":{"github-id":"MDU6SXNzdWU3MzY2NzY3NDk=","github-url":"https://github.com/LibreDWG/libredwg/issues/287"}}]}
