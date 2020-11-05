@@ -1,1 +1,1 @@
-{"version":1,"ops":[{"type":1,"author":{"id":"b57a4f5420adf835b8b83469143e813bd4f12c78"},"timestamp":1599037515,"metadata":{"github-id":"MDU6SXNzdWU2OTA4NTEwMDY=","github-url":"https://github.com/LibreDWG/libredwg/issues/269","origin":"github"},"title":"add gambas bindings","message":"see the `work/gambas` branch","files":null}]}
+{"version":1,"ops":[{"type":5,"author":{"id":"b57a4f5420adf835b8b83469143e813bd4f12c78"},"timestamp":1599037515,"metadata":{"github-id":"MDEyOkxhYmVsZWRFdmVudDM3MTg2NzEwMDY="},"added":["enhancement"],"removed":[]}]}
