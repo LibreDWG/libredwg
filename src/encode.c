@@ -4510,8 +4510,8 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
         case DWG_VT_INT64:
           if (dat->byte + 8 > end)
             break;
-          bit_write_BLL (dat, rbuf->value.i64);
-          LOG_TRACE ("xdata[%u]: " FORMAT_BLL " [BLL %d]", j,
+          bit_write_RLL (dat, rbuf->value.i64);
+          LOG_TRACE ("xdata[%u]: " FORMAT_RLL " [RLL %d]", j,
                      rbuf->value.i64, rbuf->type);
           LOG_POS;
           break;

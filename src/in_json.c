@@ -1518,8 +1518,8 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               {
                 long l = json_long (dat, tokens);
                 JSON_TOKENS_CHECK_OVERFLOW_ERR
-                rbuf->value.i64 = (BITCODE_BLL)l;
-                LOG_TRACE ("xdata[%u]: %ld [BLL %d]\n", i, l, (int)rbuf->type);
+                rbuf->value.i64 = (BITCODE_RLL)l;
+                LOG_TRACE ("xdata[%u]: %ld [RLL %d]\n", i, l, (int)rbuf->type);
                 size += 8;
               }
               break;

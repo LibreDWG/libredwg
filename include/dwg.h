@@ -8923,7 +8923,7 @@ typedef enum RESBUF_VALUE_TYPE
   DWG_VT_HANDLE = 8,
   DWG_VT_OBJECTID = 9,
   DWG_VT_BOOL = 10,    // VT_BOOL clashes with /usr/x86_64-w64-mingw32/sys-root/mingw/include/wtypes.h
-  DWG_VT_INT64 = 11,   // BLL
+  DWG_VT_INT64 = 11,   // RLL
 } Dwg_Resbuf_Value_Type;
 
 /*--------------------------------------------------

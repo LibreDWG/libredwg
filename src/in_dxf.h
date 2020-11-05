@@ -53,7 +53,7 @@ typedef struct _dxf_pair
     int i;
     char *s;
     long l;
-    uint64_t bll;
+    uint64_t rll;
     double d;
   } value;
 } Dxf_Pair;

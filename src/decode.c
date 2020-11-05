@@ -4977,8 +4977,8 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
         case DWG_VT_INT64:
           if (dat->byte + 8 > end_address)
             break;
-          rbuf->value.i64 = bit_read_BLL (dat);
-          LOG_TRACE ("xdata[%u]: " FORMAT_BLL " [BLL %d]\n", num_xdata,
+          rbuf->value.i64 = bit_read_RLL (dat);
+          LOG_TRACE ("xdata[%u]: " FORMAT_RLL " [RLL %d]\n", num_xdata,
                      rbuf->value.i64, rbuf->type);
           break;
         case DWG_VT_POINT3D:

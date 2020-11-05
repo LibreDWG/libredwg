@@ -536,9 +536,9 @@ dxf_read_pair (Bit_Chain *dat)
       LOG_TRACE ("  dxf (%d, %ld)\n", (int)pair->code, pair->value.l);
       break;
     case DWG_VT_INT64:
-      pair->value.bll = dxf_read_rll (dat);
-      LOG_TRACE ("  dxf (%d, " FORMAT_BLL ")\n", (int)pair->code,
-                 pair->value.bll);
+      pair->value.rll = dxf_read_rll (dat);
+      LOG_TRACE ("  dxf (%d, " FORMAT_RLL ")\n", (int)pair->code,
+                 pair->value.rll);
       break;
     case DWG_VT_REAL:
     case DWG_VT_POINT3D:
@@ -6084,8 +6084,8 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       xdata_size += 4;
       break;
     case DWG_VT_INT64:
-      rbuf->value.i64 = (BITCODE_BLL)pair->value.bll;
-      LOG_TRACE ("xdata[%d]: " FORMAT_BLL " [%d]\n", num_xdata,
+      rbuf->value.i64 = (BITCODE_BLL)pair->value.rll;
+      LOG_TRACE ("xdata[%d]: " FORMAT_RLL " [%d]\n", num_xdata,
                  rbuf->value.i64, rbuf->type);
       xdata_size += 8;
       break;
@@ -6214,7 +6214,7 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       return pair;
     }
   ent->preview_size =
-    pair->code == 160 ? pair->value.bll :
+    pair->code == 160 ? pair->value.rll :
     pair->code == 92 ? pair->value.u : 0;
   if (!ent->preview_size && pair->code != 310)
     {

@@ -322,10 +322,10 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
     case DWG_VT_INT64:
     DWG_VT_INT64:
       {
-        BITCODE_BLL value;
+        BITCODE_RLL value;
         if (dwg_dynapi_subclass_value (ptr, subclass, key, &value, &field))
           {
-            BITCODE_BLL i = (BITCODE_BLL)strtol (f->value, NULL, 10);
+            BITCODE_RLL i = (BITCODE_RLL)strtol (f->value, NULL, 10);
             if (i == value)
               {
                 if (g_counter > g_max_count)
@@ -722,11 +722,11 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           break;
         case DWG_VT_INT64:
         DWG_VT_INT64: {
-            BITCODE_BLL value;
+            BITCODE_RLL value;
             if (dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
                                          f->name, &value, &field))
               {
-                BITCODE_BLL i = (BITCODE_BLL)strtol (f->value, NULL, 10);
+                BITCODE_RLL i = (BITCODE_RLL)strtol (f->value, NULL, 10);
                 if (i == value)
                   {
                     if (g_counter > g_max_count)

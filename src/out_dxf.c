@@ -1290,6 +1290,9 @@ dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         case DWG_VT_INT32:
           VALUE_RL (rbuf->value.i32, dxftype);
           break;
+        case DWG_VT_INT64:
+          VALUE_RLL (rbuf->value.i64, dxftype);
+          break;
         case DWG_VT_POINT3D:
           VALUE_RD (rbuf->value.pt[0], dxftype);
           VALUE_RD (rbuf->value.pt[1], dxftype + 10);
