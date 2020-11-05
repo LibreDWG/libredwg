@@ -600,6 +600,40 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
           }                                                                   \
       }                                                                       \
   }
+#define FIELD_CMC0(color, dxf)                                                \
+  {                                                                           \
+    if (dat->version < R_2004)                                                \
+      {                                                                       \
+        if (dat->from_version >= R_2004)                                      \
+          bit_downconvert_CMC (dat, (Dwg_Color*)&_obj->color);                \
+        if (_obj->color.index)                                                \
+          VALUE_RS (_obj->color.index, dxf);                                  \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        if (dat->from_version < R_2004)                                       \
+          bit_upconvert_CMC (dat, (Dwg_Color*)&_obj->color);                  \
+        if (dxf >= 90)                                                        \
+          {                                                                   \
+            VALUE_RL (_obj->color.rgb, dxf);                                  \
+          }                                                                   \
+        else if (_obj->color.method == 0xc3)                                  \
+          {                                                                   \
+            VALUE_RL (_obj->color.rgb & 0x00ffffff, dxf);                     \
+          }                                                                   \
+        else if (_obj->color.method == 0xc8)                                  \
+          {                                                                   \
+            VALUE_RS (257, dxf);                                              \
+          }                                                                   \
+        else                                                                  \
+          {                                                                   \
+            if (_obj->color.index)                                            \
+                VALUE_RS (_obj->color.index, dxf);                            \
+            if (_obj->color.method == 0xc2)                                   \
+              VALUE_RL (_obj->color.rgb, (unsigned)(dxf + 420 - 62));         \
+          }                                                                   \
+      }                                                                       \
+  }
 #define SUB_FIELD_CMC(o, color, dxf)                                          \
   {                                                                           \
     if (dat->version < R_2004)                                                \

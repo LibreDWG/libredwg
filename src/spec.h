@@ -367,6 +367,7 @@
 #  define FIELD_RL0(name, dxf) FIELD_RL (name, dxf)
 #  define FIELD_BT0(name, dxf) FIELD_BT (name, dxf)
 #  define FIELD_T0(name, dxf) FIELD_T (name, dxf)
+#  define FIELD_CMC0(color, dxf) FIELD_CMC (color, dxf)
 #  define FIELD_HANDLE0(name, code, dxf) FIELD_HANDLE (name, code, dxf)
 #  define SUB_FIELD_HANDLE0(o, name, code, dxf) SUB_FIELD_HANDLE (o, name, code, dxf)
 #endif

@@ -66,7 +66,8 @@ static int dxf_3dsolid (Bit_Chain *restrict dat,
                         const Dwg_Object *restrict obj,
                         Dwg_Entity_3DSOLID *restrict _obj);
 static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
-static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf);
+static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
+                     const int dxf, const int opt);
 
 /*--------------------------------------------------------------------------------
  * MACROS
@@ -661,8 +662,9 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
   }
 #define FIELD_3DPOINT(nam, dxf) FIELD_3BD (nam, dxf)
 
-#define FIELD_CMC(color, dxf) dxf_CMC (dat, (Dwg_Color*)&_obj->color, dxf)
-#define SUB_FIELD_CMC(o, color, dxf) dxf_CMC (dat, (Dwg_Color*)&_obj->o.color, dxf)
+#define FIELD_CMC(color, dxf) dxf_CMC (dat, (Dwg_Color*)&_obj->color, dxf, 0)
+#define SUB_FIELD_CMC(o, color, dxf) dxf_CMC (dat, (Dwg_Color*)&_obj->o.color, dxf, 0)
+#define FIELD_CMC0(color, dxf) dxf_CMC (dat, (Dwg_Color*)&_obj->color, dxf, 1)
 
 #define HEADER_TIMEBLL(nam, dxf) {                                            \
   HEADER_9 (nam);                                                             \
@@ -991,7 +993,8 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
 // Skip index 256 bylayer
 // 257 is for method c8 NONE. Which index is for ByBlock?
 // If the dxf code is 90-99 rather emit the rgb only
-static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf)
+static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
+                     const int dxf, const int opt)
 {
   if (dat->version >= R_2004)
     {
@@ -1012,7 +1015,10 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const i
           VALUE_RS (257, dxf);
           return;
         }
-      VALUE_RS (color->index, dxf);
+      if (!opt || color->index)
+        {
+          VALUE_RS (color->index, dxf);
+        }
       if (color->method != 0xc2)
         return;
       VALUE_RL (color->rgb, dxf + 420 - 62);
