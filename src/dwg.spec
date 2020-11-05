@@ -1864,7 +1864,7 @@ DWG_ENTITY (SPLINE)
 
   // extrusion on planar
   DXF { VALUE_RD (0.0, 210); VALUE_RD (0.0, 220); VALUE_RD (1.0, 230);
-        FIELD_BL (flag, 70);
+        VALUE_BL (_obj->flag & ~0x420, 70);
       }
   FIELD_BL (degree, 71);
 
@@ -1872,11 +1872,16 @@ DWG_ENTITY (SPLINE)
     FIELD_B (rational, 0); // flag bit 2
     FIELD_B (closed_b, 0); // flag bit 0
     FIELD_B (periodic, 0); // flag bit 1
-    FIELD_BD (knot_tol, 42); // def: 0.0000001
-    FIELD_BD (ctrl_tol, 43); // def: 0.0000001
+    FIELD_BD (knot_tol, 0); // def: 0.0000001
+    FIELD_BD (ctrl_tol, 0); // def: 0.0000001
     FIELD_BL (num_knots, 72);
     FIELD_BL (num_ctrl_pts, 73);
     FIELD_B (weighted, 0);
+    DXF {
+      FIELD_BL (num_fit_pts, 74); // i.e. 0
+      FIELD_BD (knot_tol, 42);
+      FIELD_BD (ctrl_tol, 43);
+    }
 
     DECODER {
       // not 32
@@ -1908,11 +1913,21 @@ DWG_ENTITY (SPLINE)
         // ignore method fit points and closed bits
         ((FIELD_VALUE (splineflags1) & ~5) << 7);
       LOG_TRACE ("=> flag: %d [70]\n", FIELD_VALUE (flag));
+      FIELD_VALUE (knot_tol) = 0.0000001;
+      FIELD_VALUE (ctrl_tol) = 0.0000001;
+    }
+    DXF {
+      FIELD_BL (num_knots, 72);
+      //FIXME: calculate knots and ctrl_pts from fit_pts for DXF
+      FIELD_BL (num_ctrl_pts, 73);
+      FIELD_BL (num_fit_pts, 74);
+      FIELD_BD (knot_tol, 42);
+      FIELD_BD (ctrl_tol, 43);
     }
     FIELD_BD (fit_tol, 44); // def: 0.0000001
     FIELD_3BD (beg_tan_vec, 12);
     FIELD_3BD (end_tan_vec, 13);
-    FIELD_BL (num_fit_pts, 74);
+    FIELD_BL (num_fit_pts, 0);
     FIELD_3DPOINT_VECTOR (fit_pts, num_fit_pts, 11);
   }
 
