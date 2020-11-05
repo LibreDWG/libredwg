@@ -2,15 +2,15 @@
 make -s
 make -s -j4 -C src && \
 make -s -j4 -C programs dwg2dxf && \
-  programs/dwg2dxf -m -o Drawing_2000_min.dxf test/test-data/Drawing_2000.dwg
+  programs/dwg2dxf -m -y -o Drawing_2000_min.dxf test/test-data/Drawing_2000.dwg
 
 for f in test/test-data/Drawing_2*.dwg \
          test/test-data/sample_2*.dwg \
          test/test-data/example_*.dwg
 do
     echo
-    echo programs/dwg2dxf -v0 "$f"
-    programs/dwg2dxf -v0 "$f"
+    echo programs/dwg2dxf -v0 -y "$f"
+    programs/dwg2dxf -v0 -y "$f"
 done
 
 for d in r9 r10 r11 r12 r13 r14 2000 2004 2007 2010 2013 2018; do
@@ -18,16 +18,20 @@ for d in r9 r10 r11 r12 r13 r14 2000 2004 2007 2010 2013 2018; do
         if [ "$f" != "test/test-data/$d/*.dwg" ]; then
             b="$(basename "$f" .dwg)"
             echo
-            echo programs/dwg2dxf -v0 -o "${b}_${d}.dxf" "$f"
-            programs/dwg2dxf -v0 -o "${b}_${d}.dxf" "$f"
+            echo programs/dwg2dxf -v0 -y -o "${b}_${d}.dxf" "$f"
+            programs/dwg2dxf -v0 -y -o "${b}_${d}.dxf" "$f"
         fi
     done
     for f in test/test-big/"$d"/*.dwg; do
         if [ "$f" != "test/test-big/$d/*.dwg" ]; then
             b="$(basename "$f" .dwg)"
             echo
-            echo programs/dwg2dxf -v0 -o "${b}_${d}.dxf" "$f"
-            programs/dwg2dxf -v0 -o "${b}_${d}.dxf" "$f"
+            echo programs/dwg2dxf -v0 -y -o "${b}_${d}.dxf" "$f"
+            programs/dwg2dxf -v0 -y -o "${b}_${d}.dxf" "$f"
         fi
     done
+done
+
+for f in test/test-old/AC*/*/*.dwg; do
+    ./dxf -v0 "$f"
 done

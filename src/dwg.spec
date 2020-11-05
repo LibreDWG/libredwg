@@ -2387,9 +2387,11 @@ DWG_OBJECT (DICTIONARY)
         else if (dxf == 350)
           {
             char *text = FIELD_VALUE (texts[rcount1]);
-            if (strEQc (text, "ACAD_SORTENTS") ||
-                strEQc (text, "ACAD_FILTER") ||
-                strEQc (text, "SPATIAL"))
+            if (!text)
+              ;
+            else if (strEQc (text, "ACAD_SORTENTS") ||
+                     strEQc (text, "ACAD_FILTER") ||
+                     strEQc (text, "SPATIAL"))
               dxf = 360;
           }
         FIELD_T (texts[rcount1], 3);
