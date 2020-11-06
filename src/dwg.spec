@@ -479,25 +479,32 @@ DWG_ENTITY (BLOCK)
 
 #ifdef IS_DXF
   {
-    Dwg_Object *o
+    Dwg_Object_BLOCK_HEADER *_hdr = NULL;
+    Dwg_Object *hdr
         = _ent->ownerhandle && _ent->ownerhandle->obj
               ? _ent->ownerhandle->obj : NULL;
-    VALUE_BL (0, 70); // flags: anon, has_attribs, is_xref, is_overlaid, ...
-    if (!o)
-      o = dwg_ref_object (dwg, _ent->ownerhandle);
-    if (!o || o->fixedtype != DWG_TYPE_BLOCK_HEADER)
+    if (!hdr)
+      hdr = dwg_ref_object (dwg, _ent->ownerhandle);
+
+    if (!hdr || hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
       {
         Dwg_Bitcode_3RD nullpt = { 0.0, 0.0, 0.0 };
+        VALUE_BL (0, 70); // flags: anon, has_attribs, is_xref, is_overlaid, ...
         VALUE_3BD (nullpt, 10);
       }
     else
       {
-        Dwg_Object_BLOCK_HEADER *hdr = o->tio.object->tio.BLOCK_HEADER;
-        VALUE_3BD (hdr->base_pt, 10);
+        _hdr = hdr->tio.object->tio.BLOCK_HEADER;
+        VALUE_BL (_hdr->flag & 0x3f, 70);
+        VALUE_3BD (_hdr->base_pt, 10);
       }
-    BLOCK_NAME (name, 3); // special pre-R13 naming rules
-    VALUE_TFF ("", 1); // fixme. name if not in mspace
-    FIELD_T0 (filename, 4);
+    BLOCK_NAME (name, 3); // for entget() from BLOCK_HEADER
+    if (_hdr) {
+      VALUE_T (_hdr->xref_pname, 1);   // from BLOCK_HEADER
+      VALUE_T0 (_hdr->description, 4); // from BLOCK_HEADER
+    } else {
+      VALUE_TFF ("", 1);
+    }
   }
 #endif
 

@@ -175,11 +175,13 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
     }
 #define VALUE_T(value, dxf)                                                   \
   {                                                                           \
-    if (dat->version >= R_2007)                                               \
+    if (IS_FROM_TU (dat))                                                     \
       VALUE_TU (value, dxf)                                                   \
     else                                                                      \
       VALUE_TV (value, dxf)                                                   \
   }
+#define VALUE_T0(value, dxf)                                                  \
+  if (!bit_empty_T (dat, value)) VALUE_T (value,dxf)
 #define FIELD_T(nam, dxf)                                                     \
   {                                                                           \
     if (dat->version >= R_2007)                                               \

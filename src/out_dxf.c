@@ -523,6 +523,8 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
         VALUE_TV (value, dxf);                                                \
       }                                                                       \
   }
+#define VALUE_T0(value, dxf)                                                  \
+  if (!bit_empty_T (dat, value)) VALUE_T (value,dxf)
 #define FIELD_BT(nam, dxf) FIELDG (nam, BT, dxf);
 #define FIELD_4BITS(nam, dxf) FIELDG (nam, 4BITS, dxf)
 #define FIELD_BE(nam, dxf)                                                    \
