@@ -1582,6 +1582,8 @@ new_encr_sat_data_line (Dwg_Entity_3DSOLID *restrict _obj,Bit_Chain *dest,
   return i;
 }
 
+// TODO SAT_enum
+
 // logical values are class-specific, and must be strings.
 static const char*
 SAT_boolean (const char *act_record, bool value)
@@ -1972,7 +1974,8 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
             LOG_TRACE ("%" PRId16 " ", l)
           }
           break;
-        case 4: // long constant
+        case 4:  // long constant
+        case 21: // enum <ident>
           {
             BITCODE_RLd l = (BITCODE_RLd)bit_read_RL (&src);
             if (dest.byte + 8 >= dest.size)
