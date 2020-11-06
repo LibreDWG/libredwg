@@ -1546,18 +1546,18 @@ EXPORT char *
 dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
                   int *restrict acis_data_idx)
 {
-  char *encr_sat_data = (char*)calloc (blocksize, 1);
+  BITCODE_RC* encr_sat_data = (BITCODE_RC*)calloc (blocksize, 1);
   int i = *acis_data_idx;
   int j;
   for (j = 0; j < (int)blocksize; j++)
     {
-      if ((char)acis_data[j] <= 32)
+      if (acis_data[j] <= 32)
         encr_sat_data[i++] = acis_data[j];
       else
         encr_sat_data[i++] = 159 - acis_data[j];
     }
   *acis_data_idx = i;
-  return encr_sat_data;
+  return (char*)encr_sat_data;
 }
 
 static int
@@ -2075,6 +2075,7 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             {
               char *n = strchr (s, '\n');
               int l = len > 255 ? 255 : len;
+              char *caret = strchr (s, '^');
               if (n && (n - s < len))
                 l = n - s;
               if (l)
@@ -2083,6 +2084,17 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                     GROUP (1);
                   else
                     GROUP (3);
+                  // replace "^" by "^ "
+                  while (caret && caret < n)
+                    {
+                      int lc = caret - s;
+                      fprintf (dat->fh, "%.*s^ ", lc, s);
+                      lc++;
+                      l -= lc;
+                      len -= lc;
+                      s += lc;
+                      caret = strchr (s, '^'); // looks safe
+                    }
                   if (s[l - 1] == '\r')
                     fprintf (dat->fh, "%.*s\n", l, s);
                   else

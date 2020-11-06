@@ -2019,15 +2019,15 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
             {
               for (j = 0; j < FIELD_VALUE (block_size[i]); j++)
                 {
-                  if (FIELD_VALUE (encr_sat_data[i][j]) <= 32)
+                  if ((BITCODE_RC)FIELD_VALUE (encr_sat_data[i][j]) <= 32)
                     {
                       FIELD_VALUE (acis_data)[acis_data_idx++]
-                        = FIELD_VALUE (encr_sat_data[i][j]);
+                        = (BITCODE_RC)FIELD_VALUE (encr_sat_data[i][j]);
                     }
                   else
                     {
                       FIELD_VALUE (acis_data)[acis_data_idx++]
-                        = 159 - FIELD_VALUE (encr_sat_data[i][j]);
+                        = 159 - (BITCODE_RC)FIELD_VALUE (encr_sat_data[i][j]);
                     }
                 }
             }

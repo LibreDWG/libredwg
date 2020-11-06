@@ -2261,6 +2261,7 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           strcat ((char *)o->encr_sat_data[0], pair->value.s);
         }
       strcat ((char *)o->encr_sat_data[0], "\n");
+      // For the replacement of "^ " with "^" see below
       i++;
 
       dxf_free_pair (pair);
