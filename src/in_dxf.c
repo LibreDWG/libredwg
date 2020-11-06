@@ -11274,7 +11274,8 @@ new_object (char *restrict name, char *restrict dxfname,
                   LOG_TRACE ("%s.%s = %f (from DEG %f°) [%s %d]\n", name,
                              "dim_rotation", ang, pair->value.d, "BD", 50);
                 }
-              else if (is_class_stable (obj->name))
+              // accept wrong colors
+              else if (is_class_stable (obj->name) && (pair->code < 60 || pair->code > 68))
                 {
                   goto invalid_dxf;
                 }
