@@ -1512,7 +1512,7 @@ static const Dwg_DYNAPI_field _dwg_DIMENSION_ALIGNED_fields[] = {
   { "xline2_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_DIMENSION_ALIGNED, xline2_pt),
     1,0,0, 14 },
   { "oblique_angle",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_DIMENSION_ALIGNED, oblique_angle),
-    0,0,0, 52 },
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_DIMENSION_ANG2LN: (sorted by offset) */

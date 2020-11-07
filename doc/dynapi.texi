@@ -1280,7 +1280,7 @@ H
 @item xline2_pt
 3BD,	DXF 14
 @item oblique_angle
-BD,	DXF 52
+BD
 
 @end vtable
 @end indentedblock

@@ -1319,11 +1319,21 @@ DWG_ENTITY (DIMENSION_LINEAR)
   COMMON_ENTITY_DIMENSION
   JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbAlignedDimension)
-  FIELD_3BD (xline1_pt, 13);
-  FIELD_3BD (xline2_pt, 14);
+  UNTIL (R_9) {
+    FIELD_2RD (xline1_pt, 13);
+    FIELD_2RD (xline2_pt, 14);
+  } LATER_VERSIONS {
+    FIELD_3BD (xline1_pt, 13);
+    FIELD_3BD (xline2_pt, 14);
+  }
   FIELD_3BD (def_pt, 0);
-  FIELD_BD0 (oblique_angle, 52);
-  FIELD_BD0 (dim_rotation, 50);
+  UNTIL (R_12) {
+    FIELD_BD0 (dim_rotation, 50);
+    FIELD_BD0 (oblique_angle, 52); // ext_line_rotation
+  } LATER_VERSIONS {
+    FIELD_BD (oblique_angle, 0);
+    FIELD_BD0 (dim_rotation, 50);
+  }
   SUBCLASS (AcDbRotatedDimension)
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -1346,7 +1356,7 @@ DWG_ENTITY (DIMENSION_ALIGNED)
     FIELD_3BD (xline2_pt, 14);
   }
   FIELD_3BD (def_pt, 0);
-  FIELD_BD0 (oblique_angle, 52);
+  FIELD_BD (oblique_angle, 0);
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (dimstyle, 5, 0);
