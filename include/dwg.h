@@ -2728,7 +2728,7 @@ typedef struct _dwg_PROXY_LWPOLYLINE
 } Dwg_PROXY_LWPOLYLINE;
 
 /**
- PROXY_ENTITY (498, 0x1f2) object
+ (ACAD_)PROXY_ENTITY (498, 0x1f2) object
  */
 typedef struct _dwg_entity_PROXY_ENTITY
 {
@@ -2746,7 +2746,7 @@ typedef struct _dwg_entity_PROXY_ENTITY
 } Dwg_Entity_PROXY_ENTITY;
 
 /**
- PROXY OBJECT (499, 0x1f3) object
+ (ACAD_)PROXY OBJECT (499, 0x1f3) object
  */
 typedef struct _dwg_object_PROXY_OBJECT
 {

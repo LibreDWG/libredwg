@@ -886,7 +886,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
       }                                                                       \
     else if (strlen (#token) > 3 && !memcmp (#token, "_3D", 3))               \
       record (obj->dxfname);                                                  \
-    else if (obj->type >= 500 && obj->dxfname)                                \
+    else if (obj->type >= 498 && obj->dxfname)                                \
       record (obj->dxfname);                                                  \
     else                                                                      \
       RECORD (token);                                                         \
@@ -942,6 +942,8 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
           fprintf (dat->fh, "  0\r\n%s\r\n", obj->dxfname);                   \
         else if (obj->type == DWG_TYPE_PLACEHOLDER)                           \
           RECORD (ACDBPLACEHOLDER);                                           \
+        else if (obj->fixedtype == DWG_TYPE_PROXY_OBJECT)                     \
+          RECORD (ACAD_PROXY_OBJECT);                                         \
         else if (obj->type != DWG_TYPE_BLOCK_HEADER)                          \
           RECORD (token);                                                     \
                                                                               \

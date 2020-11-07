@@ -3749,7 +3749,7 @@ BE,	DXF 210
 @item parent
 struct _dwg_object_entity*
 @item flag
-RS,	DXF 70
+RS
 @item scenario
 BS
 @item degree

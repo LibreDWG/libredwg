@@ -3620,7 +3620,7 @@ static const Dwg_DYNAPI_field _dwg_SPLINE_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_SPLINE, parent),
     1,1,0, 0 },
   { "flag",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_SPLINE, flag),
-    0,0,0, 70 },
+    0,0,0, 0 },
   { "scenario",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_SPLINE, scenario),
     0,0,0, 0 },
   { "degree",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_SPLINE, degree),

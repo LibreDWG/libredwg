@@ -1421,6 +1421,11 @@
       {                                                                       \
         if (strlen (#token) > 3 && !memcmp (#token, "_3D", 3))                \
           obj->name = obj->dxfname = (char *)&#token[1];                      \
+        else if (strEQc (#token, "PROXY_ENTITY"))                             \
+          {                                                                   \
+            obj->dxfname = (char *)"ACAD_PROXY_ENTITY";                       \
+            obj->name = (char *)#token;                                       \
+          }                                                                   \
         else                                                                  \
           obj->name = obj->dxfname = (char *)#token;                          \
       }                                                                       \
@@ -1540,8 +1545,10 @@
       }                                                                       \
     if (!obj->dxfname)                                                        \
       {                                                                       \
-        if (!strcmp (#token, "PLACEHOLDER"))                                  \
+        if (strEQc (#token, "PLACEHOLDER"))                                   \
           obj->dxfname = (char *)"ACDBPLACEHOLDER";                           \
+        else if (strEQc (#token, "PROXY_OBJECT"))                             \
+          obj->dxfname = (char *)"ACAD_PROXY_OBJECT";                         \
         else                                                                  \
           obj->dxfname = (char *)#token;                                      \
       }                                                                       \
