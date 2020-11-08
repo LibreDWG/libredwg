@@ -2307,11 +2307,9 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
     }                                                                                              \
                                                                                                    \
     COMMON_ENTITY_HANDLE_DATA;                                                                     \
-    if (FIELD_VALUE (version) > 1) {                                                               \
+    SINCE (R_2007) {                                                                               \
       SUBCLASS (AcDb3dSolid);                                                                      \
-      SINCE (R_2007) {                                                                             \
-        FIELD_HANDLE (history_id, 4, 350);                                                         \
-      }                                                                                            \
+      FIELD_HANDLE (history_id, 4, 350);                                                           \
     }
 
 #define ACTION_3DSOLID \
