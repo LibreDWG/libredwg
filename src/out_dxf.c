@@ -65,7 +65,8 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
 static int dxf_3dsolid (Bit_Chain *restrict dat,
                         const Dwg_Object *restrict obj,
                         Dwg_Entity_3DSOLID *restrict _obj);
-static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str);
+static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str,
+                              const int opts, const int dxf);
 static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
                      const int dxf, const int opt);
 
@@ -85,7 +86,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define VALUE_TV(value, dxf)                                                  \
   {                                                                           \
     GROUP (dxf);                                                              \
-    dxf_fixup_string (dat, (char *)value);                                    \
+    dxf_fixup_string (dat, (char *)value, 1, dxf);                            \
   }
 // in_json writes all strings as TV, in_dxf and decode not.
 #define VALUE_TU(wstr, dxf)                                                   \
@@ -100,8 +101,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
         GROUP (dxf);                                                          \
         if (u8)                                                               \
           {                                                                   \
-            /* FIXME: ensure line length limits */                            \
-            dxf_fixup_string (dat, u8);                                       \
+            dxf_fixup_string (dat, u8, 1, dxf);                               \
           }                                                                   \
         else                                                                  \
           fprintf (dat->fh, "\r\n");                                          \
@@ -111,7 +111,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define VALUE_TFF(str, dxf)                                                   \
   {                                                                           \
     GROUP (dxf);                                                              \
-    fprintf (dat->fh, "%s\r\n", str);                                         \
+    dxf_fixup_string (dat, (char*)str, 0, dxf);                               \
   }
 #define VALUE_BINARY(value, size, dxf)                                        \
   {                                                                           \
@@ -1098,21 +1098,53 @@ cquote (char *restrict dest, const char *restrict src, const int len)
   return d;
 }
 
-/* \n => ^J */
+/* If opts 1: quote \n => ^J */
+/* Splits overlong (len>255) lines into dxf 3 chunks with group 1
+ */
 static void
-dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str)
+dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str,
+                  const int opts, const int dxf)
 {
   if (str)
     {
-      if (strchr (str, '\n') || strchr (str, '\r'))
+      if (opts && (strchr (str, '\n') || strchr (str, '\r')))
         {
-          const int len = 2 * strlen (str) + 1;
+          int len = 2 * strlen (str) + 1;
           char *_buf = (char *)alloca (len);
-          fprintf (dat->fh, "%s\r\n", cquote (_buf, str, len));
+          _buf = cquote (_buf, str, len);
+          len = strlen (_buf);
+          if (len > 255 && dxf == 1)
+            {
+              // GROUP 1 already printed
+              while (len > 0)
+                {
+                  fprintf (dat->fh, "%*.s\r\n", len > 255 ? 255 : len, _buf);
+                  len -= 255;
+                  if (len > 0)
+                    fprintf (dat->fh, "  3\r\n");
+                }
+            }
+          else
+            fprintf (dat->fh, "%s\r\n", _buf);
           freea (_buf);
         }
       else
-        fprintf (dat->fh, "%s\r\n", str);
+        {
+          int len = strlen (str);
+          if (len > 255 && dxf == 1)
+            {
+              // GROUP 1 already printed
+              while (len > 0)
+                {
+                  fprintf (dat->fh, "%*.s\r\n", len > 255 ? 255 : len, str);
+                  len -= 255;
+                  if (len > 0)
+                    fprintf (dat->fh, "  3\r\n");
+                }
+            }
+          else
+            fprintf (dat->fh, "%s\r\n", str);
+        }
     }
   else
     fprintf (dat->fh, "\r\n");
@@ -1719,7 +1751,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   // Note that r2013+ has ASM data instead.
   // const char enddata[] = "\016\003End\016\002of\016\004ACIS\r\004data";
   // const char enddata1[] = "\016\003End\016\002of\016\003ASM\r\004data";
-  int first = 1;
+  int l = 0;
   int forward = 0;
   int skip_hist = 0;
   char act_record [80];
@@ -1768,31 +1800,55 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
 #define SAB_RD1()                                                       \
   {                                                                     \
     double f = bit_read_RD (&src);                                      \
-    if (dest.byte + 16 >= dest.size)                                     \
+    int s;                                                              \
+    if (dest.byte + 16 >= dest.size)                                    \
       bit_chain_alloc (&dest);                                          \
-    dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%g ", f);     \
+    if (l + 16 > 255)                                                   \
+      {                                                                 \
+        bit_write_TF (&dest, (BITCODE_TF) "\n", 1);                     \
+        LOG_TRACE ("Split overlong SAT line\n");                        \
+        l = 0;                                                          \
+      }                                                                 \
+    s = sprintf ((char*)&dest.chain[dest.byte], "%g ", f);              \
+    dest.byte += s; l += s;                                             \
     LOG_TRACE ("%g ", f);                                               \
   }
 // key is ignored here. header only
 #define SAB_T(key)                                                      \
   {                                                                     \
-    int len;                                                            \
+    int len, s;                                                         \
     c = bit_read_RC (&src);                                             \
     LOG_HANDLE (#key " [%d] ", c)                                       \
     len = bit_read_RC (&src);                                           \
-    dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%d ", len);   \
+    s = sprintf ((char*)&dest.chain[dest.byte], "%d ", len);            \
+    dest.byte += s; l += s;                                             \
     LOG_TRACE ("%d %.*s ", len, len, &src.chain[src.byte]);             \
     bit_write_TF (&dest, &src.chain[src.byte], len);                    \
     bit_write_TF (&dest, (BITCODE_TF) " ", 1);                          \
+    l += len + 1;                                                       \
     src.byte += len;                                                    \
   }
 #define SAB_TF(x)                                                       \
+  if (l + sizeof(x) > 255)                                              \
+    {                                                                   \
+      bit_write_TF (&dest, (BITCODE_TF) "\n", 1);                       \
+      LOG_TRACE ("Split overlong SAT line\n");                          \
+      l = 0;                                                            \
+    }                                                                   \
   bit_write_TF (&dest, (BITCODE_TF) x, sizeof (x) - 1);                 \
   bit_write_TF (&dest, (BITCODE_TF) " ", 1);                            \
+  l += sizeof (x);                                                      \
   LOG_TRACE ("%s ", x)
 #define SAB_TV(x)                                                       \
+  if (l + strlen (x) > 255)                                             \
+    {                                                                   \
+      bit_write_TF (&dest, (BITCODE_TF) "\n", 1);                       \
+      LOG_TRACE ("Split overlong SAT line\n");                          \
+      l = 0;                                                            \
+    }                                                                   \
   bit_write_TF (&dest, (BITCODE_TF) x, strlen (x));                     \
   bit_write_TF (&dest, (BITCODE_TF) " ", 1);                            \
+  l += strlen (x) + 1;                                                  \
   LOG_TRACE ("%s ", x)
 
   // create the two vectors encr_sat_data[] and block_size[] on the fly from the SAB
@@ -1847,7 +1903,6 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
         {
         // check size, realloc encr_sat_data[i], set dest
         case 17:   //  # end of record
-          first = 1;
           forward = 0;
           if (dest.byte + 2 >= dest.size)
             bit_chain_alloc (&dest);
@@ -1864,14 +1919,15 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
             }
           else
             {
-              dest.byte += sprintf ((char*)&dest.chain[dest.byte], "#\n");
+              int s = sprintf ((char*)&dest.chain[dest.byte], "#\n");
+              dest.byte += s; l += s;
               LOG_TRACE ("#\n");
             }
           //i = new_encr_sat_data_line (_obj, &dest, i);
+          l = 0;
           skip_hist = 0;
           break;
         case 13:   // ident
-          first = 1;
           _obj->encr_sat_data[i] = (char*)dest.chain;
           // fallthru
         case 7:  // char len
@@ -1882,7 +1938,8 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
               bit_chain_alloc (&dest);
             if (c == 7 && i < 3)
               {
-                dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%d ", len);
+                int s = sprintf ((char*)&dest.chain[dest.byte], "%d ", len);
+                dest.byte += s; l += s;
                 LOG_TRACE ("%d ", len);
               }
             LOG_TRACE ("%.*s%s", len, &src.chain[src.byte], c == 14 ? "-" : " ");
@@ -1892,6 +1949,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
             if (len == 3 && c == 14 && !memcmp (&src.chain[src.byte], "ASM", 3))
               {
                 LOG_TRACE ("=>ACIS-");
+                skip_hist = 1;
                 bit_write_TF (&dest, (BITCODE_TF)"ACIS", 4);
               }
             else
@@ -1918,6 +1976,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
               bit_write_TF (&dest, (BITCODE_TF)"-", 1);
             else
               bit_write_TF (&dest, (BITCODE_TF)" ", 1);
+            l++;
             break;
           }
         case 8:  // short len
@@ -1927,15 +1986,23 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
             bit_write_TF (&dest, &src.chain[src.byte], len);
             src.byte += len;
             bit_write_TF (&dest, (BITCODE_TF)" ", 1);
+            l += len + 1;
             break;
           }
         case 9:  // long len
           {
             int len = bit_read_RL (&src);
+            if (l + len > 255)
+              {
+                bit_write_TF (&dest, (BITCODE_TF) "\n", 1);
+                LOG_TRACE ("Split overlong SAT line\n");
+                l = 0;
+              }
             LOG_TRACE ("%.*s%s", len, &src.chain[src.byte], " ")
             bit_write_TF (&dest, &src.chain[src.byte], len);
             src.byte += len;
             bit_write_TF (&dest, (BITCODE_TF)" ", 1);
+            l += len + 1;
             break;
           }
         case 10: // 0 byte TRUE
@@ -1960,48 +2027,76 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
           break;
         case 2: // char constant
           {
-            int8_t l = (int8_t)bit_read_RC (&src);
+            int s;
+            int8_t ll = (int8_t)bit_read_RC (&src);
             if (dest.byte + 4 >= dest.size)
               bit_chain_alloc (&dest);
-            dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%" PRId8 " ", l);
-            LOG_TRACE ("%" PRId8 " ", l)
+            if (l + 3 > 255)
+              {
+                bit_write_TF (&dest, (BITCODE_TF) "\n", 1);
+                LOG_TRACE ("Split overlong SAT line\n");
+                l = 0;
+              }
+            s = sprintf ((char*)&dest.chain[dest.byte], "%" PRId8 " ", ll);
+            dest.byte += s; l += s;
+            LOG_TRACE ("%" PRId8 " ", ll)
           }
           break;
         case 3: // short constant
           {
-            int16_t l = (int16_t)bit_read_RS (&src);
+            int s;
+            int16_t ll = (int16_t)bit_read_RS (&src);
             if (dest.byte + 8 >= dest.size)
               bit_chain_alloc (&dest);
-            dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%" PRId16 " ", l);
-            LOG_TRACE ("%" PRId16 " ", l)
+            s = sprintf ((char*)&dest.chain[dest.byte], "%" PRId16 " ", ll);
+            dest.byte += s; l += s;
+            LOG_TRACE ("%" PRId16 " ", ll)
           }
           break;
         case 4:  // long constant
         case 21: // enum value. See GH jmplonka/InventorLoader:Acis.py
           {
-            BITCODE_RLd l = (BITCODE_RLd)bit_read_RL (&src);
+            int s;
+            BITCODE_RLd ll = (BITCODE_RLd)bit_read_RL (&src);
             if (dest.byte + 8 >= dest.size)
               bit_chain_alloc (&dest);
-            dest.byte += sprintf ((char*)&dest.chain[dest.byte], "$%" PRId32 " ", l);
-            LOG_TRACE ("$%" PRId32 " ", l)
+            s = sprintf ((char*)&dest.chain[dest.byte], "$%" PRId32 " ", ll);
+            dest.byte += s; l += s;
+            LOG_TRACE ("$%" PRId32 " ", ll)
           }
           break;
         case 5: // float constant
           {
+            int s;
             float f = bit_read_RL (&src);
             if (dest.byte + 8 >= dest.size)
               bit_chain_alloc (&dest);
-            dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%g ", (double)f);
+            if (l + 16 > 255)
+              {
+                bit_write_TF (&dest, (BITCODE_TF) "\n", 1);
+                LOG_TRACE ("Split overlong SAT line\n");
+                l = 0;
+              }
+            s = sprintf ((char*)&dest.chain[dest.byte], "%g ", (double)f);
+            dest.byte += s; l += s;
             LOG_TRACE ("%g ", (double)f)
           }
           break;
         case 12: // 4 byte pointer index
           {
-            BITCODE_RLd l = (BITCODE_RLd)bit_read_RL (&src);
+            int s;
+            BITCODE_RLd ll = (BITCODE_RLd)bit_read_RL (&src);
             if (dest.byte + 8 >= dest.size)
               bit_chain_alloc (&dest);
-            dest.byte += sprintf ((char*)&dest.chain[dest.byte], "$%" PRId32 " ", l);
-            LOG_TRACE ("$%" PRId32 " ", l)
+            if (l + 6 > 255)
+              {
+                bit_write_TF (&dest, (BITCODE_TF) "\n", 1);
+                LOG_TRACE ("Split overlong SAT line\n");
+                l = 0;
+              }
+            s = sprintf ((char*)&dest.chain[dest.byte], "$%" PRId32 " ", ll);
+            dest.byte += s; l += s;
+            LOG_TRACE ("$%" PRId32 " ", ll)
           }
           break;
         case 19: // 3x double-float position
@@ -2016,10 +2111,18 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
         //  break;
         case 23:  // int64
           {
+            int s;
             int64_t i64 = (int64_t)bit_read_RLL (&src);
             if (dest.byte + 16 >= dest.size)
               bit_chain_alloc (&dest);
-            dest.byte += sprintf ((char*)&dest.chain[dest.byte], "$%" PRId64 " ", i64);
+            if (l + 16 > 255)
+              {
+                bit_write_TF (&dest, (BITCODE_TF) "\n", 1);
+                LOG_TRACE ("Split overlong SAT line\n");
+                l = 0;
+              }
+            s = sprintf ((char*)&dest.chain[dest.byte], "$%" PRId64 " ", i64);
+            dest.byte += s; l += s;
             LOG_TRACE ("$%" PRId64 " ", i64)
           }
           break;
@@ -2030,6 +2133,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
     }
 
   //if (c != 17) // last line didn't end with #, but End-of-ACIS-data or End-of-ASM-data
+  // FIXME for DXF skip End-of-ACIS-data
   //  i = new_encr_sat_data_line (_obj, &dest, i);
   num_blocks = _obj->num_blocks = 1;
   bit_write_TF (&dest, (BITCODE_TF)"\n", 1);
@@ -2082,22 +2186,21 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         {
           char *s = FIELD_VALUE (encr_sat_data[i]);
           // FIXME
+          // only DXF 1, always keep len <255
           //int len = _obj->_dxf_sab_converted ? FIELD_VALUE (block_size[i]) : strlen (s);
           int len = FIELD_VALUE (block_size[i]);
-          // DXF 1 + 3 if >255
           while (len > 0)
             {
               char *n = strchr (s, '\n');
               int l = len > 255 ? 255 : len;
               char *caret = strchr (s, '^');
               if (n && (n - s < len))
-                l = n - s;
+                {
+                  l = n - s;
+                }
               if (l)
                 {
-                  if (l < 255)
-                    GROUP (1);
-                  else
-                    GROUP (3);
+                  GROUP (1);
                   // replace "^" by "^ "
                   while (caret && caret < n)
                     {
@@ -2109,6 +2212,8 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       s += lc;
                       caret = strchr (s, '^'); // looks safe
                     }
+                  if (l > 255)
+                    LOG_ERROR ("Overlong SAT line \"%s\" len=%d", s, l)
                   if (s[l - 1] == '\r')
                     fprintf (dat->fh, "%.*s\n", l, s);
                   else
