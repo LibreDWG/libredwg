@@ -28,7 +28,7 @@
     )
   )
 
-(defun C:dxf-allcvt (/ match files)
+(defun C:dxf-allcvt (/ match files prompt erase)
   (setvar "FILEDIA" 0)
   (setvar "CMDDIA" 1)
   (setvar "CMDECHO" 1)
@@ -37,26 +37,38 @@
   (setq active (getvar "DWGNAME"))
   (setq path (getvar "DWGPREFIX")) ; should end with libredwg
   (setq all (vl-directory-files path "*.dxf" 1)) ; globbing does not work for me
+  (setq prompt (getstring "Optional prompt <N> : ")
+        prompt (if (and prompt (or (= prompt "Y") (= prompt "y"))) 1 nil))
+  (setq erase (getstring "Optional erase <N> : ")
+        erase (if (and erase (or (= erase "Y") (= erase "y"))) 1 nil))
   (setq match (getstring "Optional match <*.dxf> : ")
         match (if (or (not match) (= match "")) "*.dxf" match))
   (setq files (apply 'append
                      (mapcar '(lambda (fn)
                                 (if (wcmatch fn match)
-                                    (list (strcat path fn)) nil))
+                                    (list fn) nil))
                              all)))
   (foreach dxf files
-    (if (or (wcmatch dxf "*/SALLE_DES_MACHINES_2007.dxf") ; xdata TU hang
-            (wcmatch dxf "*/Leader_20*.dxf")) ; silent crash
+    (if (or (wcmatch dxf "SALLE_DES_MACHINES_2007.dxf") ; xdata TU hang
+            (wcmatch dxf "Leader_20*.dxf") ; silent crash
+            (wcmatch dxf "1_*from_cadforum.cz_AC1018.dxf") ; dbobji.cpp@306 assert
+            (wcmatch dxf "3_*from_cadforum.cz_AC1018.dxf") ; dbobji.cpp@306 assert
+            (wcmatch dxf "kacena_from_cadforum.cz_AC1018.dxf") ; silent crash
+            (wcmatch dxf "5151-019_2010.dxf")  ; silent crash
+            )
         (print (strcat dxf " skipped"))
       (progn
-        (command "._DXFIN" dxf)
-        ;(getstring "Enter for next DXF :") (command)
+        (if prompt
+            (progn (getstring (strcat "Enter for next DXF " dxf ":"))
+                   (command)))
+        (command "._DXFIN" (strcat path dxf))
         (setvar "CMDECHO" 0)
         ;(close-all-but active)
-        ;(getstring "Enter for next DXF :") (command)
         ; This produes annoying Duplicate Block warnings in the log
-        ;(command "._ERASE" "All" "")
-        ;(command "._PURGE" "All" "*" "N")
+        (if erase
+            (progn
+              (command "._ERASE" "All" "")
+              (command "._PURGE" "All" "*" "N")))
         (setvar "CMDECHO" 1)
         ;;;(command "._CLOSE")
         )
