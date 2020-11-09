@@ -1977,7 +1977,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
           }
           break;
         case 4:  // long constant
-        case 21: // enum <ident>
+        case 21: // enum value. See GH jmplonka/InventorLoader:Acis.py
           {
             BITCODE_RLd l = (BITCODE_RLd)bit_read_RL (&src);
             if (dest.byte + 8 >= dest.size)
@@ -1989,7 +1989,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
         case 5: // float constant
           {
             float f = bit_read_RL (&src);
-            if (dest.byte + 16 >= dest.size)
+            if (dest.byte + 8 >= dest.size)
               bit_chain_alloc (&dest);
             dest.byte += sprintf ((char*)&dest.chain[dest.byte], "%g ", (double)f);
             LOG_TRACE ("%g ", (double)f)
@@ -2012,8 +2012,17 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
         case 6:  // 8 byte double-float, e.g. in the 2nd header line
           SAB_RD1();
           break;
-        //case 21:  // enum <identifier>
+        //case 22:  // U-V-Vector
         //  break;
+        case 23:  // int64
+          {
+            int64_t i64 = (int64_t)bit_read_RLL (&src);
+            if (dest.byte + 16 >= dest.size)
+              bit_chain_alloc (&dest);
+            dest.byte += sprintf ((char*)&dest.chain[dest.byte], "$%" PRId64 " ", i64);
+            LOG_TRACE ("$%" PRId64 " ", i64)
+          }
+          break;
         default:
           LOG_ERROR ("Unknown SAB tag %d", c);
         }
