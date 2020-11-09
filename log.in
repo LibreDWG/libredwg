@@ -37,6 +37,10 @@ for d in "$@"; do
         dir=_$(basename "$xd")
         if [ -z "$log" ]; then
             case "$d" in
+                *to/*)
+                    x1=$(dirname "$xd")
+                    dir=_$(basename "$xd")_$(basename "$x1")
+                    ;;
                 *test-old/*)
                     x1=$(dirname "$xd")
                     dir=_$(basename "$xd")_$(basename "$x1")

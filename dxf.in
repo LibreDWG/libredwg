@@ -65,6 +65,16 @@ for d in "$@"; do
                 fi
                 xd=$(dirname "$d")
                 dir=_$(basename "$xd")
+                case "$d" in
+                    *to/*)
+                        x1=$(dirname "$xd")
+                        dir=_$(basename "$xd")_$(basename "$x1")
+                        ;;
+                    *test-old/*)
+                        x1=$(dirname "$xd")
+                        dir=_$(basename "$xd")_$(basename "$x1")
+                        ;;
+                esac
                 if [ "$dir" = "_test-data" ]; then dir=""; fi
                 if [ "$dir" = "_td" ]; then dir=""; fi
                 if [ "$dir" = "_." ]; then dir=""; fi
