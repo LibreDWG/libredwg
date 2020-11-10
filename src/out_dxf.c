@@ -425,6 +425,12 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define HEADER_T(nam, dxf)                                                    \
   HEADER_9 (nam);                                                             \
   VALUE_T ((char *)_obj->nam, dxf)
+#define HEADER_T0(nam, dxf)                                                   \
+  if (dxf && !bit_empty_T (dat, _obj->nam))                                   \
+    {                                                                         \
+      HEADER_9 (nam);                                                         \
+      VALUE_T ((char*)_obj->nam, dxf);                                        \
+    }
 #define HEADER_B(nam, dxf)                                                    \
   HEADER_9 (nam);                                                             \
   FIELD_B (nam, dxf)

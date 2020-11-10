@@ -648,8 +648,8 @@
     FIELD_T (DIMPOST, 1);
     FIELD_T (DIMAPOST, 1);
     SINCE (R_2010) {
-      FIELD_T (DIMALTMZS, 70);
-      FIELD_T (DIMMZS, 70);
+      FIELD_T (DIMALTMZS, 1);
+      FIELD_T (DIMMZS, 1);
     }
     FIELD_T (HYPERLINKBASE, 1); // see SummaryInfo
     FIELD_T (STYLESHEET, 1);

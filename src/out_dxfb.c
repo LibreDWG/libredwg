@@ -276,6 +276,12 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
     HEADER_9 (nam);                                                           \
     VALUE_T (dwg->header_vars.nam, dxf);                                      \
   }
+#define HEADER_T0(nam, dxf)                                                   \
+  if (dxf && !bit_empty_T (dat, _obj->nam))                                   \
+    {                                                                         \
+      HEADER_9 (nam);                                                         \
+      VALUE_T ((char*)_obj->nam, dxf);                                        \
+    }
 #define POINT_3D(nam, var, c1, c2, c3)                                        \
   {                                                                           \
     VALUE_RD (dwg->var.x, c1);                                                \
