@@ -1,6 +1,7 @@
 #include "../../src/config.h"
 #define _DEFAULT_SOURCE
 #define _BSD_SOURCE
+#define _NETBSD_SOURCE
 #define __BSD_VISIBLE 1
 #include <stdio.h>
 #include <stdlib.h>
