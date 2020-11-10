@@ -32,6 +32,6 @@ for d in r9 r10 r11 r12 r13 r14 2000 2004 2007 2010 2013 2018; do
     done
 done
 
-for f in test/test-old/AC*/*/*.dwg; do
+for f in test/test-old/r*/*/*.DWG test/test-old/r*/*/*.dwg test/test-old/2*/*/*.dwg; do
     ./dxf -v0 "$f"
 done
