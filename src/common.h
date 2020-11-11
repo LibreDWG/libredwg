@@ -299,4 +299,8 @@ void *memmem (const void *h0, size_t k, const void *n0, size_t l) __nonnull((1, 
 #define SHIFT_HV(_obj, numfield, hvfield) shift_hv (_obj->hvfield, &_obj->numfield)
 BITCODE_H shift_hv (BITCODE_H *hv, BITCODE_BL *num_p);
 
+// used in dwg.spec
+Dwg_Handle *dwg_find_first_type_handle (Dwg_Data *restrict dwg,
+                                        enum DWG_OBJECT_TYPE type);
+
 #endif

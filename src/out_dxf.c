@@ -2162,6 +2162,35 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   return 0;
 }
 
+/* Add history_id for old version 1 SAT if there's one */
+static void
+dxf_check_history_id (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
+                      Dwg_Entity_3DSOLID *restrict _obj)
+{
+  if (!_obj->history_id || !_obj->history_id->absolute_ref)
+    {
+      Dwg_Data *dwg = obj->parent;
+      Dwg_Handle *hdl = NULL;
+      if (_obj->history_id)
+        { /* Avoid NULL HDL */
+          Dwg_Object *o = dwg_ref_object (dwg, _obj->history_id);
+          if (o)
+            hdl = &o->handle;
+        }
+      if (!hdl)
+        /* FIXME Just take the first HISTORY_CLASS
+           TODO Check HISTORY_CLASS.owner (2, 360) */
+        hdl = dwg_find_first_type_handle (dwg, DWG_TYPE_ACSH_HISTORY_CLASS);
+      if (hdl)
+        _obj->history_id = dwg_add_handleref (dwg, 4, hdl->value, obj);
+      if (_obj->history_id)
+        LOG_TRACE ("Empty %s.history_id => " FORMAT_REF "\n", obj->name,
+                  ARGS_REF (_obj->history_id))
+      else
+        LOG_WARN ("Empty %s.history_id\n", obj->name)
+    }
+}
+
 static int
 dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
              Dwg_Entity_3DSOLID *restrict _obj)
@@ -2241,6 +2270,7 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             }
         }
     }
+  dxf_check_history_id (dat, obj, _obj);
   // the rest is done in COMMON_3DSOLID in the spec.
   return error;
 }

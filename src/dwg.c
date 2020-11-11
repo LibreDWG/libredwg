@@ -1837,8 +1837,8 @@ set_handle_size (Dwg_Handle *restrict hdl)
 }
 
 /** For encode:
- * May need obj to shorten the code to a relative offset, but not in
- * header_vars. There obj is NULL.
+ *  May need obj to shorten the code to a relative offset, but not in
+ *  header_vars. There obj is NULL.
  */
 EXPORT int
 dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
@@ -2093,6 +2093,18 @@ dwg_find_dicthandle_objname (Dwg_Data *restrict dwg, BITCODE_H dict, const char 
         }
       if (ok && isnew && hdlname)
         free (hdlname);
+    }
+  return NULL;
+}
+
+/* Return the handle of the first object of the given type. */
+Dwg_Handle *
+dwg_find_first_type_handle (Dwg_Data *restrict dwg, enum DWG_OBJECT_TYPE type)
+{
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      if (dwg->object[i].fixedtype == type)
+        return &dwg->object[i].handle;
     }
   return NULL;
 }
