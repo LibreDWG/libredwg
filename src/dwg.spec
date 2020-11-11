@@ -7999,8 +7999,13 @@ DWG_OBJECT_END
   SUBCLASS (AcDbEvalExpr)                                                     \
   DXF { FIELD_BL (evalexpr.nodeid, 90); }                                     \
   FIELD_BLd (evalexpr.parentid, 0);                                           \
-  FIELD_BL (evalexpr.major, 98);                                              \
-  FIELD_BL (evalexpr.minor, 99);                                              \
+  DXF {                                                                       \
+    VALUE_BL (33, 98);                                                        \
+    VALUE_BL (29, 99);                                                        \
+  } else {                                                                    \
+    FIELD_BL (evalexpr.major, 98);                                            \
+    FIELD_BL (evalexpr.minor, 99);                                            \
+  }                                                                           \
   if (IF_IS_DXF && FIELD_VALUE (evalexpr.value_code) == -9999)                \
     {                                                                         \
       ; /* 70 -9999 not in DXF */                                             \
@@ -8344,8 +8349,8 @@ DWG_OBJECT_END
       VALUE_BL (25, 98);                        \
       VALUE_BL (104, 99);                       \
     } LATER_VERSIONS {                          \
-      VALUE_BL (27, 98);                        \
-      VALUE_BL (1, 99);                         \
+      VALUE_BL (33, 98);                        \
+      VALUE_BL (29, 99);                        \
     }                                           \
   }                                             \
   FIELD_BL (eed1071, 1071)
