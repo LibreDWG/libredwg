@@ -1,4 +1,3 @@
-// TODO UNSTABLE
 #define DWG_TYPE DWG_TYPE_ACSH_HISTORY_CLASS
 #include "common.c"
 
