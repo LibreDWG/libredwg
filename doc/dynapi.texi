@@ -110,7 +110,7 @@ BD,	DXF 40
 @item DIMALTMZF
 BD
 @item DIMALTMZS
-T
+T,	DXF 1
 @item DIMALTRND
 BD,	DXF 40
 @item DIMALTTD
@@ -216,7 +216,7 @@ BS
 @item DIMMZF
 BD
 @item DIMMZS
-T
+T,	DXF 1
 @item DIMPOST
 TV,	DXF 1
 @item DIMPOST_T
@@ -5002,10 +5002,6 @@ BD*,	DXF 43
 
 @item parent
 struct _dwg_object_object*
-@item evalexpr
-Dwg_EvalExpr
-@item history_node
-Dwg_ACSH_HistoryNode
 @item major
 BL,	DXF 90
 @item minor
@@ -5014,9 +5010,9 @@ BL,	DXF 91
 H,	DXF 360
 @item h_nodeid
 BL,	DXF 92
-@item b280
+@item show_history
 B,	DXF 280
-@item b281
+@item record_history
 B,	DXF 281
 
 @end vtable

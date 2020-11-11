@@ -9361,26 +9361,6 @@ DWG_OBJECT (ACSH_EXTRUSION_CLASS)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-DWG_OBJECT (ACSH_HISTORY_CLASS)
-  DECODE_UNKNOWN_BITS
-#ifndef IS_DXF
-  AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields (history_node);
-#endif
-  SUBCLASS (AcDbShHistory)
-  FIELD_BL (major, 90);
-  FIELD_BL (minor, 91);
-  FIELD_HANDLE (owner, 2, 360);
-  FIELD_BL (h_nodeid, 92);
-  FIELD_B (b280, 280);
-  FIELD_B (b281, 281);
-#ifdef IS_DXF
-  AcDbEvalExpr_fields;
-  AcDbShHistoryNode_fields (history_node);
-#endif
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
 DWG_OBJECT (ACSH_LOFT_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
@@ -9833,6 +9813,18 @@ DWG_OBJECT (DATALINK)
 DWG_OBJECT_END
 
 #endif /* DEBUG_CLASS || IS_FREE */
+
+DWG_OBJECT (ACSH_HISTORY_CLASS)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbShHistory)
+  FIELD_BL (major, 90);
+  FIELD_BL (minor, 91);
+  FIELD_HANDLE (owner, 2, 360);
+  FIELD_BL (h_nodeid, 92);
+  FIELD_B (show_history, 280);
+  FIELD_B (record_history, 281);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
 
 // stable and needed for the NOD
 DWG_OBJECT (DETAILVIEWSTYLE)

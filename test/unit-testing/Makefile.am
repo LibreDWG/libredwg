@@ -50,6 +50,7 @@ testobjects = \
 	acsh_cone_class \
 	acsh_cylinder_class \
 	acsh_fillet_class \
+	acsh_history_class \
 	acsh_pyramid_class \
 	acsh_torus_class \
 	acsh_wedge_class \
@@ -220,7 +221,6 @@ testdebug = \
 	acmescope \
 	acmestatemgr \
 	acsh_extrusion_class \
-	acsh_history_class \
 	acsh_loft_class \
 	acsh_revolve_class \
 	acsh_sweep_class \

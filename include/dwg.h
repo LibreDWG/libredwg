@@ -5915,14 +5915,12 @@ typedef struct _dwg_ACSH_HistoryNode
 typedef struct _dwg_object_ACSH_HISTORY_CLASS
 {
   struct _dwg_object_object *parent;
-  Dwg_EvalExpr evalexpr;
-  Dwg_ACSH_HistoryNode history_node;
   BITCODE_BL major;
   BITCODE_BL minor;
   BITCODE_H owner;
-  BITCODE_BL h_nodeid;
-  BITCODE_B b280;
-  BITCODE_B b281;
+  BITCODE_BL h_nodeid; // the last nodeid, i.e. num_nodes
+  BITCODE_B show_history;
+  BITCODE_B record_history;
 } Dwg_Object_ACSH_HISTORY_CLASS;
 
 // i.e. planesurf?
@@ -8032,6 +8030,7 @@ typedef struct _dwg_object_object
     Dwg_Object_ACSH_BREP_CLASS *ACSH_BREP_CLASS;
     Dwg_Object_ACSH_CHAMFER_CLASS *ACSH_CHAMFER_CLASS;
     Dwg_Object_ACSH_CONE_CLASS *ACSH_CONE_CLASS;
+    Dwg_Object_ACSH_HISTORY_CLASS *ACSH_HISTORY_CLASS;
     Dwg_Object_ACSH_PYRAMID_CLASS *ACSH_PYRAMID_CLASS;
     Dwg_Object_ACSH_TORUS_CLASS *ACSH_TORUS_CLASS;
     Dwg_Object_ASSOCACTION *ASSOCACTION;
@@ -8076,7 +8075,6 @@ typedef struct _dwg_object_object
     Dwg_Object_ACMESCOPE *ACMESCOPE;
     Dwg_Object_ACMESTATEMGR *ACMESTATEMGR;
     Dwg_Object_ACSH_EXTRUSION_CLASS *ACSH_EXTRUSION_CLASS;
-    Dwg_Object_ACSH_HISTORY_CLASS *ACSH_HISTORY_CLASS;
     Dwg_Object_ACSH_LOFT_CLASS *ACSH_LOFT_CLASS;
     Dwg_Object_ACSH_REVOLVE_CLASS *ACSH_REVOLVE_CLASS;
     Dwg_Object_ACSH_SWEEP_CLASS *ACSH_SWEEP_CLASS;
@@ -9292,6 +9290,7 @@ EXPORT int dwg_setup_WIPEOUT (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BREP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CHAMFER_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CONE_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_HISTORY_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_PYRAMID_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_TORUS_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCACTION (Dwg_Object *obj);
@@ -9359,7 +9358,6 @@ EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
   EXPORT int dwg_setup_ACMESCOPE (Dwg_Object *obj);
   EXPORT int dwg_setup_ACMESTATEMGR (Dwg_Object *obj);
   EXPORT int dwg_setup_ACSH_EXTRUSION_CLASS (Dwg_Object *obj);
-  EXPORT int dwg_setup_ACSH_HISTORY_CLASS (Dwg_Object *obj);
   EXPORT int dwg_setup_ACSH_LOFT_CLASS (Dwg_Object *obj);
   EXPORT int dwg_setup_ACSH_REVOLVE_CLASS (Dwg_Object *obj);
   EXPORT int dwg_setup_ACSH_SWEEP_CLASS (Dwg_Object *obj);

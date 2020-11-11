@@ -26626,44 +26626,6 @@ static int test_ACSH_HISTORY_CLASS (const Dwg_Object *obj)
   Dwg_Object_ACSH_HISTORY_CLASS *restrict acsh_history_class = obj->tio.object->tio.ACSH_HISTORY_CLASS;
   failed = 0;
   {
-    BITCODE_B b280;
-    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "b280", &b280, NULL)
-        && b280 == acsh_history_class->b280)
-      pass ();
-    else
-      fail ("ACSH_HISTORY_CLASS.b280 [B] " FORMAT_B " != " FORMAT_B "", acsh_history_class->b280, b280);
-    b280++;
-    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "b280", &b280, 0)
-        && b280 == acsh_history_class->b280)
-      pass ();
-    else
-      fail ("ACSH_HISTORY_CLASS.b280 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_history_class->b280, b280);
-    acsh_history_class->b280--;
-  }
-  {
-    BITCODE_B b281;
-    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "b281", &b281, NULL)
-        && b281 == acsh_history_class->b281)
-      pass ();
-    else
-      fail ("ACSH_HISTORY_CLASS.b281 [B] " FORMAT_B " != " FORMAT_B "", acsh_history_class->b281, b281);
-    b281++;
-    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "b281", &b281, 0)
-        && b281 == acsh_history_class->b281)
-      pass ();
-    else
-      fail ("ACSH_HISTORY_CLASS.b281 [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_history_class->b281, b281);
-    acsh_history_class->b281--;
-  }
-  {
-    Dwg_EvalExpr evalexpr;
-    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "evalexpr", &evalexpr, NULL)
-        && !memcmp (&evalexpr, &acsh_history_class->evalexpr, sizeof (Dwg_EvalExpr)))
-        pass ();
-    else
-        fail ("ACSH_HISTORY_CLASS.evalexpr [Dwg_EvalExpr]");
-  }
-  {
     BITCODE_BL h_nodeid;
     if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "h_nodeid", &h_nodeid, NULL)
         && h_nodeid == acsh_history_class->h_nodeid)
@@ -26677,14 +26639,6 @@ static int test_ACSH_HISTORY_CLASS (const Dwg_Object *obj)
     else
       fail ("ACSH_HISTORY_CLASS.h_nodeid [BL] set+1 %u != %u", acsh_history_class->h_nodeid, h_nodeid);
     acsh_history_class->h_nodeid--;
-  }
-  {
-    Dwg_ACSH_HistoryNode history_node;
-    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "history_node", &history_node, NULL)
-        && !memcmp (&history_node, &acsh_history_class->history_node, sizeof (Dwg_ACSH_HistoryNode)))
-        pass ();
-    else
-        fail ("ACSH_HISTORY_CLASS.history_node [Dwg_ACSH_HistoryNode]");
   }
   {
     BITCODE_BL major;
@@ -26731,6 +26685,36 @@ static int test_ACSH_HISTORY_CLASS (const Dwg_Object *obj)
         pass ();
     else
         fail ("ACSH_HISTORY_CLASS.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_B record_history;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "record_history", &record_history, NULL)
+        && record_history == acsh_history_class->record_history)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.record_history [B] " FORMAT_B " != " FORMAT_B "", acsh_history_class->record_history, record_history);
+    record_history++;
+    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "record_history", &record_history, 0)
+        && record_history == acsh_history_class->record_history)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.record_history [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_history_class->record_history, record_history);
+    acsh_history_class->record_history--;
+  }
+  {
+    BITCODE_B show_history;
+    if (dwg_dynapi_entity_value (acsh_history_class, "ACSH_HISTORY_CLASS", "show_history", &show_history, NULL)
+        && show_history == acsh_history_class->show_history)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.show_history [B] " FORMAT_B " != " FORMAT_B "", acsh_history_class->show_history, show_history);
+    show_history++;
+    if (dwg_dynapi_entity_set_value (acsh_history_class, "ACSH_HISTORY_CLASS", "show_history", &show_history, 0)
+        && show_history == acsh_history_class->show_history)
+      pass ();
+    else
+      fail ("ACSH_HISTORY_CLASS.show_history [B] set+1 " FORMAT_B " != " FORMAT_B "", acsh_history_class->show_history, show_history);
+    acsh_history_class->show_history--;
   }
   if (failed && (is_class_unstable ("ACSH_HISTORY_CLASS") || is_class_debugging ("ACSH_HISTORY_CLASS")))
     {
