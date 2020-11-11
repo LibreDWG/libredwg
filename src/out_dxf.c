@@ -311,7 +311,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
       char _buf[128];
       int k;
       fprintf (dat->fh, "%3i\r\n", dxf);
-#ifdef IS_RELEASE
+#ifndef DEBUG_CLASSES
       if (bit_isnan (value))
         value = 0.0;
 #endif
