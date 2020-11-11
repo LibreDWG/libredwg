@@ -8165,7 +8165,6 @@ DWG_OBJECT (ACSH_CHAMFER_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShChamfer)
   FIELD_BL (major, 90); //33
   FIELD_BL (minor, 91); //1
