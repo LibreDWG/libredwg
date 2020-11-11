@@ -8146,10 +8146,9 @@ DWG_OBJECT (ACSH_FILLET_CLASS)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShFillet)
   FIELD_BL (major, 90); //33
-  FIELD_BL (minor, 91); //1
+  FIELD_BL (minor, 91); //1 or 29
   FIELD_BL (bl92, 92);
   FIELD_BL (num_edges, 93);
   FIELD_VECTOR (edges, BL, num_edges, 94)
@@ -8207,7 +8206,6 @@ DWG_OBJECT_END
 DWG_OBJECT (ACSH_BOOLEAN_CLASS)
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
-  SUBCLASS (AcDbShPrimitive)
   SUBCLASS (AcDbShBoolean)
   FIELD_BL (major, 90);
   FIELD_BL (minor, 91);
