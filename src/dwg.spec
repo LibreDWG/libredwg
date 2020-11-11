@@ -8640,7 +8640,7 @@ DWG_OBJECT_END
 DWG_OBJECT (BLOCKSCALEACTION)
   AcDbBlockActionWithBasePt_fields;
   SUBCLASS (AcDbBlockScaleAction)
-  BlockAction_ConnectionPts (conn_pts, 2, 3, 94, 303);
+  BlockAction_ConnectionPts (conn_pts, 0, 3, 94, 303);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
