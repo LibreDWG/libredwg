@@ -4413,7 +4413,7 @@ DWG_ENTITY (MPOLYGON)
       VALUEOUTOFBOUNDS (paths[rcount1].num_boundary_handles, 10000)
       SUB_HANDLE_VECTOR (paths[rcount1], boundary_handles, num_boundary_handles, 4, 330);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (paths)
+  SET_PARENT (paths, (Dwg_Entity_HATCH *)_obj)
   END_REPEAT (paths);
 
   FIELD_BS (style, 75);        // 0=normal (odd parity); 1=outer; 2=whole
@@ -4433,7 +4433,7 @@ DWG_ENTITY (MPOLYGON)
           SUB_FIELD_BS (deflines[rcount1], num_dashes, 79);
           FIELD_VECTOR (deflines[rcount1].dashes, BD, deflines[rcount1].num_dashes, 49)
       END_REPEAT_BLOCK
-      SET_PARENT_OBJ (deflines)
+      SET_PARENT (deflines, (Dwg_Entity_HATCH *)_obj)
       END_REPEAT (deflines);
     }
 
@@ -4446,7 +4446,7 @@ DWG_ENTITY (MPOLYGON)
   SINCE (R_2004)
     {
       if (_obj->is_gradient_fill)
-        error |= DWG_FUNC_N (ACTION,_HATCH_gradientfill)(dat,str_dat,obj,_obj);
+        error |= DWG_FUNC_N (ACTION,_HATCH_gradientfill)(dat,str_dat,obj,(Dwg_Entity_HATCH *)_obj);
     }
 #endif
 
