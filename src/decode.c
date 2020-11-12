@@ -5923,6 +5923,7 @@ dwg_dim_blockname (Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
   BITCODE_BL id = obj->tio.entity->objid;
   Dwg_Object *restrict hdr = &dwg->object[id + 1];
   Dwg_Object *restrict blk = &dwg->object[id + 2];
+  BITCODE_H block = NULL;
 
   if ((hdr->type == DWG_TYPE_LAYER || hdr->type == DWG_TYPE_DICTIONARY)
       && blk->type == DWG_TYPE_BLOCK_HEADER)
@@ -5934,6 +5935,11 @@ dwg_dim_blockname (Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     {
       Dwg_Entity_BLOCK *restrict _blk = blk->tio.entity->tio.BLOCK;
       return _blk->name;
+    }
+  if (dwg_dynapi_entity_value (obj->tio.entity->tio.DIMENSION_LINEAR, obj->name, "block",
+                               &block, NULL))
+    {
+      return dwg_handle_name (dwg, "BLOCK", block);
     }
   return NULL;
 }
