@@ -1789,7 +1789,7 @@ const int lweights[] = { 0,
                          100,
                          106,
                          120,
-                         140, /* 20 */
+                         /*20:*/ 140,
                          158,
                          200,
                          211,
@@ -1797,8 +1797,8 @@ const int lweights[] = { 0,
                          0,
                          0,
                          0,
-                         0,
-                         /*29:*/ -1, // BYLAYER
+                         /*28:*/ 0,  // 0x1c
+                         /*29:*/ -1, // 0x1d BYLAYER
                          -2,         // BYBLOCK
                          -3 };       // BYLWDEFAULT
 

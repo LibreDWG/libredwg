@@ -90,7 +90,10 @@
         FIELD_HANDLE (ltype, 5, 6);
 #ifdef IS_DXF
       FIELD_BD1 (ltype_scale, 48);
-      if (FIELD_VALUE (linewt) != 29) {
+      // for entities with lines 29 is the default, without lines 28
+      if (FIELD_VALUE (entmode) == 0 && FIELD_VALUE (linewt) == 28)
+        ; // SEQEND, VERTEX* have entmode 0
+      else if (FIELD_VALUE (linewt) != 29) { /* ByLayer */
         int lw = dxf_cvt_lweight (FIELD_VALUE (linewt));
         KEY (linewt); VALUE_BSd (lw, 370);
       }

@@ -8325,7 +8325,10 @@ new_object (char *restrict name, char *restrict dxfname,
       obj->tio.entity->is_xdic_missing = 1;
       obj->tio.entity->color.index = 256; // ByLayer
       obj->tio.entity->ltype_scale = 1.0;
-      obj->tio.entity->linewt = 0x1d;
+      if (strEQc (name, "SEQEND") || memBEGINc (name, "VERTEX"))
+        obj->tio.entity->linewt = 0x1c;
+      else
+        obj->tio.entity->linewt = 0x1d;
 
       if (*name == '3')
         {
