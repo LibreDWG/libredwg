@@ -3322,7 +3322,7 @@ DWG_OBJECT_END
 /* (63/7) */
 DWG_OBJECT (UCS)
 
-  COMMON_TABLE_FLAGS (Ucs)
+  COMMON_TABLE_FLAGS (UCS)
   PRE (R_13)
   {
     FIELD_3RD (ucsorg, 10);
@@ -3337,9 +3337,17 @@ DWG_OBJECT (UCS)
   }
   SINCE (R_2000)
   {
-    FIELD_BD0 (ucs_elevation, 146);
-    FIELD_BS (UCSORTHOVIEW, 79);
-    FIELD_HANDLE0 (base_ucs, 5, 346);
+    DXF {
+      FIELD_BS (UCSORTHOVIEW, 79);
+      FIELD_BD (ucs_elevation, 146);
+      if (FIELD_VALUE (UCSORTHOVIEW)) {
+        FIELD_HANDLE0 (base_ucs, 5, 346);
+      }
+    } else {
+      FIELD_BD0 (ucs_elevation, 146);
+      FIELD_BS (UCSORTHOVIEW, 79);
+    }
+    FIELD_HANDLE (base_ucs, 5, 0);
     FIELD_HANDLE (named_ucs, 5, 0);
 
     FIELD_BS (num_orthopts, 0);
