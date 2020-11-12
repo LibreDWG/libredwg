@@ -2333,11 +2333,12 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           LOG_WARN ("Skip %s\n", klass->dxfname)
           return DWG_ERR_UNHANDLEDCLASS;
         }
-      // keep only: DICTIONARYVAR, MATERIAL, RASTERVARIABLES, IMAGEDEF_REACTOR, XRECORD
+      // keep only: DICTIONARYVAR, MATERIAL, RASTERVARIABLES, IMAGEDEF_REACTOR, XRECORD, IDBUFFER
       else if (!is_entity &&
                strNEc (klass->dxfname, "DICTIONARYVAR") &&
                strNEc (klass->dxfname, "MATERIAL") &&
                strNEc (klass->dxfname, "RASTERVARIABLES") &&
+               strNEc (klass->dxfname, "IDBUFFER") &&
                strNEc (klass->dxfname, "IMAGEDEF_REACTOR") &&
                strNEc (klass->dxfname, "XRECORD"))
         {
