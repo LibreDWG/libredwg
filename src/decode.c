@@ -61,6 +61,9 @@ static bool env_var_checked_p;
 #include "logging.h"
 #include "dec_macros.h"
 
+#undef LOG_POS
+#define LOG_POS LOG_INSANE (" @%lu.%u\n", dat->byte, dat->bit)
+
 /*------------------------------------------------------------------------------
  * Private functions
  */
@@ -850,7 +853,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   unsigned char sgdc[2];
   unsigned int crc, crc2;
   long unsigned int size;
-  long unsigned int lasta;
+  long unsigned int endpos;
   long unsigned int lastmap;
   long unsigned int startpos;
   long unsigned int object_begin;
@@ -1093,22 +1096,37 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
    */
 classes_section:
   LOG_INFO ("\n"
-            "=======> CLASS (start): %4lu\n",
+            "=======> Classes (start): %4lu\n",
             (long)dwg->header.section[SECTION_CLASSES_R13].address)
-  LOG_INFO ("         CLASS (end)  : %4lu\n",
+  LOG_INFO ("         Classes (end)  : %4lu\n",
             (long)(dwg->header.section[SECTION_CLASSES_R13].address
                    + dwg->header.section[SECTION_CLASSES_R13].size))
-  dat->byte = dwg->header.section[SECTION_CLASSES_R13].address + 16;
+  LOG_INFO ("         Length         : %4lu\n",
+            (long)dwg->header.section[SECTION_CLASSES_R13].size)
+  // check sentinel
+  dat->byte = dwg->header.section[SECTION_CLASSES_R13].address;
+  if (memcmp (dwg_sentinel (DWG_SENTINEL_CLASS_BEGIN), &dat->chain[dat->byte], 16) == 0)
+    dat->byte += 16;
+  else
+    LOG_TRACE ("no class sentinel\n");
   dat->bit = 0;
-
   size = bit_read_RL (dat);
-  lasta = dat->byte + size;
-  LOG_TRACE ("         Length: %lu [RL]\n", size);
+  LOG_TRACE ("         Size : %lu [RL]\n", size)
+  if (size != dwg->header.section[SECTION_CLASSES_R13].size - 38)
+    {
+      endpos = dwg->header.section[SECTION_CLASSES_R13].address
+             + dwg->header.section[SECTION_CLASSES_R13].size - 16;
+      LOG_WARN ("Invalid size %lu, endpos: %lu\n", size, endpos)
+    }
+  else
+    endpos = dat->byte + size;
+  LOG_INSANE ("endpos: %lu", endpos); LOG_POS;
 
   /* Read the classes
    */
   dwg->layout_type = 0;
   dwg->num_classes = 0;
+#if 0
   SINCE (R_2004) { // dead code. looks better than the current.
     BITCODE_B btrue;
     BITCODE_BL max_num = bit_read_BL (dat);
@@ -1116,7 +1134,8 @@ classes_section:
     btrue = bit_read_B (dat); // always 1
     LOG_TRACE ("2004 btrue: " FORMAT_B " [B]\n", btrue);
   }
-  do
+#endif
+  while (dat->byte < endpos - 1)
     {
       BITCODE_BS i;
       Dwg_Class *klass;
@@ -1135,23 +1154,40 @@ classes_section:
       klass = &dwg->dwg_class[i];
       memset (klass, 0, sizeof (Dwg_Class));
       klass->number = bit_read_BS (dat);
+      LOG_HANDLE ("number: " FORMAT_BS " [BS] ", klass->number); LOG_POS;
       klass->proxyflag = bit_read_BS (dat);
+      LOG_HANDLE ("proxyflag: " FORMAT_BS " [BS] ", klass->proxyflag); LOG_POS;
+      if (dat->byte >= endpos)
+        break;
       klass->appname = bit_read_TV (dat);
+      LOG_HANDLE ("appname: %s [TV] ", klass->appname); LOG_POS;
+      if (dat->byte >= endpos)
+        break;
+      LOG_HANDLE ("\n  ");
       klass->cppname = bit_read_TV (dat);
+      LOG_HANDLE ("cppname: %s [TV] ", klass->cppname); LOG_POS;
       klass->dxfname = bit_read_TV (dat);
+      LOG_HANDLE ("dxfname: %s [TV] ", klass->dxfname); LOG_POS;
       klass->is_zombie = bit_read_B (dat); // was_a_proxy
+      LOG_HANDLE ("is_zombie: " FORMAT_B " [B] ", klass->is_zombie); LOG_POS;
       // 1f2 for entities, 1f3 for objects
       klass->item_class_id = bit_read_BS (dat);
-      LOG_TRACE ("Class %d 0x%x %s\n"
+      LOG_HANDLE ("item_class_id: " FORMAT_BS " [BS]", klass->item_class_id); LOG_POS;
+      LOG_HANDLE ("\n");
+      if (DWG_LOGLEVEL == DWG_LOGLEVEL_TRACE)
+        {
+          LOG (TRACE, "Class %d 0x%x %s\n"
                  " %s \"%s\" %d 0x%x\n",
                  klass->number, klass->proxyflag, klass->dxfname,
                  klass->cppname, klass->appname, klass->is_zombie,
                  klass->item_class_id)
+       }
 
 #if 0
       SINCE (R_2007) //? dead code it seems. see read_2004_section_classes()
       {
         klass->num_instances = bit_read_BL (dat);
+        LOG_HANDLE ("num_instances: " FORMAT_BL " [BL]", klass->num_instances); LOG_POS;
         klass->dwg_version = bit_read_BL (dat); // nope: class_version
         klass->maint_version = bit_read_BL (dat);
         klass->unknown_1 = bit_read_BL (dat);
@@ -1173,7 +1209,6 @@ classes_section:
           break;
         }
     }
-  while (dat->byte < (lasta - 1));
 
   // Check Section CRC
   dat->byte = dwg->header.section[SECTION_CLASSES_R13].address
@@ -3791,9 +3826,6 @@ eed_need_size (BITCODE_BS need, BITCODE_BS have)
     }
   return 0;
 }
-
-#undef LOG_POS
-#define LOG_POS LOG_INSANE (" @%lu.%u\n", dat->byte, dat->bit)
 
 static int
 dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
