@@ -1,9 +1,8 @@
 #!/bin/sh
 # create logs for all DWGs with GNU parallel (fast)
-# shellcheck disable=SC1001,SC1083,SC2086
+# shellcheck disable=SC1001,SC1083
 srcdir="@srcdir@"
 abs_builddir="@abs_builddir@"
-abs_dwgread="@abs_builddir@/libtool --mode=execute @abs_builddir@/programs/dwgread"
 
 make -s -j4
 
@@ -12,14 +11,14 @@ echo test/test-data
 
 echo test/test-data/
 cd "$srcdir/test/test-data" || exit
-@PARALLEL@ @TIMEOUT_10@ $abs_dwgread -v4 {} \2\>$abs_builddir/{/.}_{//}.log ::: */*.dwg
+@PARALLEL@ @TIMEOUT_30@ "$abs_builddir/libtool" --mode=execute "$abs_builddir/programs/dwgread" -v4 {} \2\>$abs_builddir/{/.}_{//}.log ::: */*.dwg
 cd "$abs_builddir" || exit
 
 if test -d "$srcdir/test/test-big"
 then
     echo test/test-big
     cd "$srcdir/test/test-big" || exit
-    @PARALLEL@ @TIMEOUT_30@ $abs_dwgread -v3 {} \2\>$abs_builddir/{/.}_{//}.log ::: */*.dwg
+    @PARALLEL@ @TIMEOUT_30@ "$abs_builddir/libtool" --mode=execute "$abs_builddir/programs/dwgread" -v3 {} \2\>$abs_builddir/{/.}_{//}.log ::: */*.dwg
     cd "$abs_builddir" || exit
 fi
 
@@ -27,10 +26,10 @@ if test -d "$srcdir/test/test-old"
 then
     echo test/test-old
     cd "$srcdir/test/test-old" || exit
-    for d in AC*
+    for d in r* 20*
     do
         cd "$d" || exit
-        @PARALLEL@ @TIMEOUT_10@ $abs_dwgread -v4 {} \2\>$abs_builddir/{/.}_{//}_"$d".log ::: */*.dwg
+        @PARALLEL@ @TIMEOUT_30@ "$abs_builddir/libtool" --mode=execute "$abs_builddir/programs/dwgread" -v4 {} \2\>$abs_builddir/{/.}_{//}_"$d".log ::: */*.dwg
         cd .. || exit
     done
     cd "$abs_builddir" || exit

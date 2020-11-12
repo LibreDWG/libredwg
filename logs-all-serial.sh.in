@@ -11,7 +11,7 @@ for d in "$srcdir"/test/test-data/2*/*.dwg "$srcdir"/test/test-data/r*/*.dwg; do
     dir="$(basename "$xd")"
     log="$(basename "$d" .dwg)_${dir}.log"
     echo "$d" || exit
-    @TIMEOUT_10@ ./libtool --mode=execute programs/dwgread -v4 "$d" 2>"$log"
+    @TIMEOUT_30@ ./libtool --mode=execute programs/dwgread -v4 "$d" 2>"$log"
     #(sleep 10s; kill %1 2>/dev/null) &
 done
 echo test/test-data
@@ -38,7 +38,7 @@ if test -d "$srcdir/test/test-old"
 then
     echo test/test-old
     cd "$srcdir/test/test-old" || exit
-    for d in AC*
+    for d in r* 20*
     do
         cd "$d" || exit
         for f in */*.dwg
@@ -46,7 +46,7 @@ then
             xd="$(dirname "$f")"
             dir="$(basename "$xd")"
             log="$(basename "$f" .dwg)_${dir}_${d}.log"
-            @TIMEOUT_10@ "$abs_builddir"/libtool --mode=execute "$abs_builddir"/programs/dwgread -v4 "$f" 2>"$abs_builddir/$log"
+            @TIMEOUT_30@ "$abs_builddir/libtool" --mode=execute "$abs_builddir/programs/dwgread" -v4 "$f" 2>"$abs_builddir/$log"
         done
         cd .. || exit
     done
