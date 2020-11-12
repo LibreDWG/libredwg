@@ -65,7 +65,7 @@ static int dxf_3dsolid (Bit_Chain *restrict dat,
                         const Dwg_Object *restrict obj,
                         Dwg_Entity_3DSOLID *restrict _obj);
 static void dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str,
-                              const int opts, const int dxf);
+                              const int opts, const int dxf, const int dxfcont);
 static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
                      const int dxf, const int opt);
 
@@ -85,7 +85,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define VALUE_TV(value, dxf)                                                  \
   {                                                                           \
     GROUP (dxf);                                                              \
-    dxf_fixup_string (dat, (char *)value, 1, dxf);                            \
+    dxf_fixup_string (dat, (char *)value, 1, dxf, dxf);                       \
   }
 // in_json writes all strings as TV, in_dxf and decode not.
 #define VALUE_TU(wstr, dxf)                                                   \
@@ -100,7 +100,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
         GROUP (dxf);                                                          \
         if (u8)                                                               \
           {                                                                   \
-            dxf_fixup_string (dat, u8, 1, dxf);                               \
+            dxf_fixup_string (dat, u8, 1, dxf, dxf);                          \
           }                                                                   \
         else                                                                  \
           fprintf (dat->fh, "\r\n");                                          \
@@ -110,7 +110,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 #define VALUE_TFF(str, dxf)                                                   \
   {                                                                           \
     GROUP (dxf);                                                              \
-    dxf_fixup_string (dat, (char*)str, 0, dxf);                               \
+    dxf_fixup_string (dat, (char*)str, 0, dxf, dxf);                          \
   }
 #define VALUE_BINARY(value, size, dxf)                                        \
   {                                                                           \
@@ -131,7 +131,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
   }
 #define FIELD_BINARY(name, size, dxf)                                         \
   if (dxf)                                                                    \
-  VALUE_BINARY (_obj->name, size, dxf)
+    VALUE_BINARY (_obj->name, size, dxf)
 
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1
@@ -1110,6 +1110,7 @@ cquote (char *restrict dest, const char *restrict src, const int len)
           uint32_t x;
           sscanf (&s[3], "%4X", &x);
           // just convert a small subset, Hiragana + Katakana letters
+          // see https://www.unicode.org/Public/MAPPINGS/OBSOLETE/EASTASIA/JIS/SHIFTJIS.TXT
           if (x < 0x829f) // < Hiragana: 8140 -> 3000: FULLWIDTH LATIN LETTER
             x -= 0x5140;
           else if (x >= 0x889f) {    // CJK
@@ -1139,7 +1140,7 @@ cquote (char *restrict dest, const char *restrict src, const int len)
  */
 static void
 dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str,
-                  const int opts, const int dxf)
+                  const int opts, const int dxf, const int dxfcont)
 {
   if (str)
     {
@@ -1158,7 +1159,7 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str,
                   len -= 255;
                   _buf += 255;
                   if (len > 0)
-                    fprintf (dat->fh, "  3\r\n");
+                    fprintf (dat->fh, "%3d\r\n", dxfcont);
                 }
             }
           else
