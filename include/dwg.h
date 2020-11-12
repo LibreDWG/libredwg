@@ -7442,7 +7442,8 @@ typedef struct _dwg_object_BLOCKPROPERTIESTABLEGRIP
 typedef struct _dwg_object_BLOCKREPRESENTATION
 {
   struct _dwg_object_object *parent;
-  // ??
+  BITCODE_BS flag;
+  BITCODE_H block;
 } Dwg_Object_BLOCKREPRESENTATION;
 
 typedef struct _dwg_object_BLOCKROTATEACTION

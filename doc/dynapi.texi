@@ -8125,6 +8125,10 @@ Dwg_BLOCKPARAMVALUESET
 
 @item parent
 struct _dwg_object_object*
+@item flag
+BS,	DXF 70
+@item block
+H,	DXF 340
 
 @end vtable
 @end indentedblock

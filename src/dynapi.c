@@ -7172,6 +7172,10 @@ static const Dwg_DYNAPI_field _dwg_BLOCKRADIALCONSTRAINTPARAMETER_fields[] = {
 static const Dwg_DYNAPI_field _dwg_BLOCKREPRESENTATION_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_BLOCKREPRESENTATION, parent),
     1,1,0, 0 },
+  { "flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_BLOCKREPRESENTATION, flag),
+    0,0,0, 70 },
+  { "block",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLOCKREPRESENTATION, block),
+    1,0,0, 340 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_BLOCKROTATEACTION: (sorted by offset) */

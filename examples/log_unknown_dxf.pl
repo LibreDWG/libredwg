@@ -2027,6 +2027,10 @@ my $known = {
       70 => 'flags',
       1 => 'text_value',
     ],
+  ACDB_BLOCKREPRESENTATION_DATA => [
+    70 => 'flag',
+    340 => 'block',
+    ],
   ACMECOMMANDHISTORY => [
     ],
   ACMESCOPE => [

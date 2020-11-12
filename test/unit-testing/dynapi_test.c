@@ -40445,6 +40445,29 @@ static int test_BLOCKREPRESENTATION (const Dwg_Object *obj)
   Dwg_Object_BLOCKREPRESENTATION *restrict blockrepresentation = obj->tio.object->tio.BLOCKREPRESENTATION;
   failed = 0;
   {
+    BITCODE_H block;
+    if (dwg_dynapi_entity_value (blockrepresentation, "BLOCKREPRESENTATION", "block", &block, NULL)
+        && !memcmp (&block, &blockrepresentation->block, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("BLOCKREPRESENTATION.block [H]");
+  }
+  {
+    BITCODE_BS flag;
+    if (dwg_dynapi_entity_value (blockrepresentation, "BLOCKREPRESENTATION", "flag", &flag, NULL)
+        && flag == blockrepresentation->flag)
+      pass ();
+    else
+      fail ("BLOCKREPRESENTATION.flag [BS] %hu != %hu", blockrepresentation->flag, flag);
+    flag++;
+    if (dwg_dynapi_entity_set_value (blockrepresentation, "BLOCKREPRESENTATION", "flag", &flag, 0)
+        && flag == blockrepresentation->flag)
+      pass ();
+    else
+      fail ("BLOCKREPRESENTATION.flag [BS] set+1 %hu != %hu", blockrepresentation->flag, flag);
+    blockrepresentation->flag--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (blockrepresentation, "BLOCKREPRESENTATION", "parent", &parent, NULL)
         && !memcmp (&parent, &blockrepresentation->parent, sizeof (struct _dwg_object_object*)))
