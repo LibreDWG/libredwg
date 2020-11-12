@@ -550,11 +550,7 @@ DWG_ENTITY (INSERT)
         FIELD_BB (scale_flag, 0);
         FIELD_3BD_1 (scale, 41);
       }
-      PRINT {
-        FIELD_BB (scale_flag, 0);
-        FIELD_3BD_1 (scale, 41);
-      }
-      DXF {
+      DXF_OR_PRINT {
         if (_obj->scale.x != 1.0 || _obj->scale.y != 1.0 || _obj->scale.z != 1.0)
           FIELD_3BD_1 (scale, 41);
       }
@@ -691,11 +687,7 @@ DWG_ENTITY (MINSERT)
         FIELD_BB (scale_flag, 0);
         FIELD_3BD_1 (scale, 41);
       }
-      PRINT {
-        FIELD_BB (scale_flag, 0);
-        FIELD_3BD_1 (scale, 41);
-      }
-      DXF {
+      DXF_OR_PRINT {
         if (_obj->scale.x != 1.0 || _obj->scale.y != 1.0 || _obj->scale.z != 1.0)
           FIELD_3BD_1 (scale, 41);
       }
@@ -5726,11 +5718,7 @@ DWG_ENTITY (TABLE)
       FIELD_BB (scale_flag, 0);
       FIELD_3BD_1 (scale, 41);
     }
-    PRINT {
-      FIELD_BB (scale_flag, 0);
-      FIELD_3BD_1 (scale, 41);
-    }
-    DXF {
+    DXF_OR_PRINT {
       if (_obj->scale.x != 1.0 || _obj->scale.y != 1.0 || _obj->scale.z != 1.0)
         FIELD_3BD_1 (scale, 41);
     }

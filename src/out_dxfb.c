@@ -22,7 +22,6 @@
 #include <string.h>
 #include <assert.h>
 
-#define IS_PRINT
 #define IS_DXF
 #include "common.h"
 #include "bits.h"

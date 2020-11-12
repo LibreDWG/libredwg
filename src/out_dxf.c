@@ -30,7 +30,6 @@
 #include <assert.h>
 //#include <math.h>
 
-#define IS_PRINT
 #define IS_DXF
 #include "common.h"
 #include "bits.h"
