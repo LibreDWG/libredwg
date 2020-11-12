@@ -544,7 +544,6 @@ DWG_ENTITY (INSERT)
     {
       FIELD_3BD_1 (scale, 41); // 42,43
     }
-
   SINCE (R_2000)
     {
       JSON {

@@ -1,6 +1,6 @@
 #!/bin/sh
 # Print a version string.
-scriptversion=2020-02-17.18; # UTC
+scriptversion=2020-11-12.07; # UTC
 
 # Copyright (C) 2007-2018 Free Software Foundation, Inc.
 #
@@ -198,7 +198,7 @@ fi
 
 v=`echo "$v" |sed "s/^$prefix//"`
 
-# Test whether to append the "-dirty" suffix only if the version
+# Test whether to append the "_dirty" suffix only if the version
 # string we're using came from git.  I.e., skip the test if it's "UNKNOWN"
 # or if it came from .tarball-version.
 if test "x$v_from_git" != x; then
@@ -210,8 +210,8 @@ if test "x$v_from_git" != x; then
       '') ;;
       *) # Append the suffix only if there isn't one already.
           case $v in
-            *-dirty) ;;
-            *) v="$v_dirty" ;;
+            *_dirty) ;;
+            *) v="${v}_dirty" ;;
           esac ;;
   esac
 fi
