@@ -1276,7 +1276,7 @@ DWG_ENTITY_END
       FIELD_BD0 (horiz_dir, 51);                                \
       FIELD_BE (extrusion, 210);                                \
       FIELD_BD0 (text_rotation, 53);                            \
-      FIELD_HANDLE (dimstyle, 5, 3);                            \
+      FIELD_HANDLE0 (dimstyle, 5, 3);                           \
     }
 #endif
 
