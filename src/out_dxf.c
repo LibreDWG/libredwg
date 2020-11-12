@@ -1154,8 +1154,9 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str,
               // GROUP 1 already printed
               while (len > 0)
                 {
-                  fprintf (dat->fh, "%*.s\r\n", len > 255 ? 255 : len, _buf);
+                  fprintf (dat->fh, "%.*s\r\n", len > 255 ? 255 : len, _buf);
                   len -= 255;
+                  _buf += 255;
                   if (len > 0)
                     fprintf (dat->fh, "  3\r\n");
                 }
@@ -1172,8 +1173,9 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str,
               // GROUP 1 already printed
               while (len > 0)
                 {
-                  fprintf (dat->fh, "%*.s\r\n", len > 255 ? 255 : len, str);
+                  fprintf (dat->fh, "%.*s\r\n", len > 255 ? 255 : len, str);
                   len -= 255;
+                  str += 255;
                   if (len > 0)
                     fprintf (dat->fh, "  3\r\n");
                 }
