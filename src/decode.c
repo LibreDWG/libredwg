@@ -1109,6 +1109,13 @@ classes_section:
    */
   dwg->layout_type = 0;
   dwg->num_classes = 0;
+  SINCE (R_2004) { // dead code. looks better than the current.
+    BITCODE_B btrue;
+    BITCODE_BL max_num = bit_read_BL (dat);
+    LOG_TRACE ("2004 max_num: " FORMAT_BL " [BL]\n", max_num);
+    btrue = bit_read_B (dat); // always 1
+    LOG_TRACE ("2004 btrue: " FORMAT_B " [B]\n", btrue);
+  }
   do
     {
       BITCODE_BS i;
@@ -1145,7 +1152,7 @@ classes_section:
       SINCE (R_2007) //? dead code it seems. see read_2004_section_classes()
       {
         klass->num_instances = bit_read_BL (dat);
-        klass->dwg_version = bit_read_BL (dat);
+        klass->dwg_version = bit_read_BL (dat); // nope: class_version
         klass->maint_version = bit_read_BL (dat);
         klass->unknown_1 = bit_read_BL (dat);
         klass->unknown_2 = bit_read_BL (dat);
@@ -2580,6 +2587,10 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_TRACE ("\nClasses\n-------------------\n")
       size = bit_read_RL (&sec_dat); // size of class data area
       LOG_TRACE ("size: " FORMAT_RL " [RL]\n", size)
+      /* TODO other idea:
+           BL max_num (not BS)
+           B btrue
+       */
       if ((dat->from_version >= R_2010 && dwg->header.maint_version > 3)
           || dat->from_version >= R_2018)
         {
