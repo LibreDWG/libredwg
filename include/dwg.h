@@ -1456,7 +1456,7 @@ typedef struct _dwg_entity_LINE
 #define DIMENSION_COMMON                         \
   struct _dwg_object_entity *parent;             \
   BITCODE_RC class_version; /* R2010+ */         \
-  BITCODE_T blockname;                           \
+  char *blockname; /* only set by out_dxf, UTF-8 */ \
   BITCODE_BE extrusion;                          \
   BITCODE_3BD def_pt;                            \
   BITCODE_2RD text_midpt;                        \
@@ -8965,8 +8965,8 @@ EXPORT BITCODE_H dwg_find_tablehandle (Dwg_Data *restrict dwg,
                                        const char *restrict table);
 
 
-/* Search for handle in associated table, and return its name. */
-EXPORT char*
+/* Search for handle in associated table, and return its name (as UTF-8) */
+EXPORT char *
 dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
                  const BITCODE_H restrict handle);
 

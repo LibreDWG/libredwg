@@ -2363,8 +2363,8 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
   return NULL;
 }
 
-// Search for handle in associated table, and return its name.
-EXPORT char*
+// Search for handle in associated table, and return its name. (as UTF-8)
+EXPORT char *
 dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
                  const BITCODE_H restrict handle)
 {

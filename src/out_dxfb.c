@@ -93,16 +93,25 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
     GROUP (dxf);                                                              \
     fprintf (dat->fh, "%s%c", value, 0);                                      \
   }
-#define VALUE_TU(wstr, dxf)                                                   \
+#define VALUE_TV0(value, dxf)                                                 \
+  if (dxf && value && *value)                                                 \
     {                                                                         \
-      char *_u8 = bit_convert_TU ((BITCODE_TU)wstr);                          \
       GROUP (dxf);                                                            \
-      if (_u8)                                                                \
-        fprintf (dat->fh, "%s%c", _u8, 0);                                    \
-      else                                                                    \
-        fprintf (dat->fh, "%c", 0);                                           \
-      free (_u8);                                                             \
+      fprintf (dat->fh, "%s%c", value, 0);                                    \
     }
+#define VALUE_TU(wstr, dxf)                                                   \
+  {                                                                           \
+    if (dxf)                                                                  \
+      {                                                                       \
+        char *_u8 = bit_convert_TU ((BITCODE_TU)wstr);                        \
+        GROUP (dxf);                                                          \
+        if (_u8)                                                              \
+          fprintf (dat->fh, "%s%c", _u8, 0);                                  \
+        else                                                                  \
+          fprintf (dat->fh, "%c", 0);                                         \
+        free (_u8);                                                           \
+      }                                                                       \
+  }
 #define VALUE_TFF(str, dxf) VALUE_TV (str, dxf)
 #define VALUE_BINARY(value, size, dxf)                                        \
   {                                                                           \
@@ -139,14 +148,14 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \
   VALUE_HANDLE (_obj->nam, nam, handle_code, dxf)
 #define FIELD_HANDLE0(nam, handle_code, dxf)                                  \
-  if (_obj->nam && _obj->nam->absolute_ref)                                   \
+  if (dxf && _obj->nam && _obj->nam->absolute_ref)                            \
     {                                                                         \
       FIELD_HANDLE (nam, handle_code, dxf);                                   \
     }
 #define SUB_FIELD_HANDLE(o, nam, handle_code, dxf)                            \
   VALUE_HANDLE (_obj->o.nam, nam, handle_code, dxf)
 #define SUB_FIELD_HANDLE0(o, nam, handle_code, dxf)                           \
-  if (_obj->o.nam && _obj->o.nam->absolute_ref)                               \
+  if (dxf && _obj->o.nam && _obj->o.nam->absolute_ref)                        \
     {                                                                         \
       VALUE_HANDLE (_obj->o.nam, nam, handle_code, dxf)                       \
     }
@@ -259,6 +268,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
     {                                                                         \
       FIELD_T (nam, dxf)                                                      \
     }
+#define FIELD_TV0(nam, dxf) VALUE_TV0 (_obj->nam, dxf)
 
 #define HEADER_TV(nam, dxf)                                                   \
   {                                                                           \

@@ -1215,12 +1215,14 @@ DWG_ENTITY_END
         VALUEOUTOFBOUNDS (class_version, 10) \
       } \
     DXF { \
+      /* already converted to utf8 */ \
       FIELD_VALUE (blockname) = dwg_dim_blockname (dwg, obj); \
-      FIELD_T0 (blockname, 2); \
+      FIELD_TV0 (blockname, 2); \
       FIELD_3BD (def_pt, 10); \
     } else { \
       FIELD_3BD (extrusion, 210); \
     } \
+    FREE { FIELD_TV (blockname, 2); } \
     FIELD_2RD (text_midpt, 11); \
     FIELD_BD (elevation, 31); \
     DXF { \

@@ -5958,27 +5958,13 @@ dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   return 0;
 }
 
-/* A dimension is immediately followed by BLOCK_HEADER - BLOCK.name - ENDBLK */
-/* sometimes also by a layer */
+/* We need the full block name, not from BLOCK_HEADER, but the BLOCK entity.
+   unicode is allocated as utf-8.
+ */
 char *
 dwg_dim_blockname (Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
-  BITCODE_BL id = obj->tio.entity->objid;
-  Dwg_Object *restrict hdr = &dwg->object[id + 1];
-  Dwg_Object *restrict blk = &dwg->object[id + 2];
   BITCODE_H block = NULL;
-
-  if ((hdr->type == DWG_TYPE_LAYER || hdr->type == DWG_TYPE_DICTIONARY)
-      && blk->type == DWG_TYPE_BLOCK_HEADER)
-    {
-      hdr = blk;
-      blk = &dwg->object[id + 3];
-    }
-  if (hdr->type == DWG_TYPE_BLOCK_HEADER && blk->type == DWG_TYPE_BLOCK)
-    {
-      Dwg_Entity_BLOCK *restrict _blk = blk->tio.entity->tio.BLOCK;
-      return _blk->name;
-    }
   if (dwg_dynapi_entity_value (obj->tio.entity->tio.DIMENSION_LINEAR, obj->name, "block",
                                &block, NULL))
     {

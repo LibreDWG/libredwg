@@ -87,6 +87,11 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
     GROUP (dxf);                                                              \
     dxf_fixup_string (dat, (char *)value, 1, dxf, dxf);                       \
   }
+#define VALUE_TV0(value, dxf)                                                 \
+  if (dxf && value && *value) {                                               \
+    GROUP (dxf);                                                              \
+    dxf_fixup_string (dat, (char *)value, 1, dxf, dxf);                       \
+  }
 // in_json writes all strings as TV, in_dxf and decode not.
 #define VALUE_TU(wstr, dxf)                                                   \
   {                                                                           \
@@ -94,7 +99,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
       {                                                                       \
         VALUE_TV (wstr, dxf);                                                 \
       }                                                                       \
-    else                                                                      \
+    else if (dxf)                                                             \
       {                                                                       \
         char *u8 = bit_convert_TU ((BITCODE_TU)wstr);                         \
         GROUP (dxf);                                                          \
@@ -109,12 +114,15 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
   }
 #define VALUE_TFF(str, dxf)                                                   \
   {                                                                           \
-    GROUP (dxf);                                                              \
-    dxf_fixup_string (dat, (char*)str, 0, dxf, dxf);                          \
+    if (dxf)                                                                  \
+      {                                                                       \
+        GROUP (dxf);                                                          \
+        dxf_fixup_string (dat, (char *)str, 0, dxf, dxf);                     \
+      }                                                                       \
   }
 #define VALUE_BINARY(value, size, dxf)                                        \
   {                                                                           \
-    if (value)                                                                \
+    if (value && dxf)                                                         \
       {                                                                       \
         for (unsigned long j = 0; j < (unsigned long)(size); j++)             \
           {                                                                   \
@@ -615,6 +623,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
           }                                                                   \
       }                                                                       \
   }
+#define FIELD_TV0(nam, dxf) VALUE_TV0 (_obj->nam, dxf)
 #define SUB_FIELD_BL0(o, nam, dxf)                                            \
   {                                                                           \
     if (_obj->o.nam != 0)                                                     \

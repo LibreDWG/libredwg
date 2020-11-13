@@ -20869,6 +20869,7 @@ dwg_ref_get_table_name (const dwg_object_ref *restrict ref,
 /** Get name of the table object entry (utf-8 encoded)
     Since r2007 it returns a malloc'd copy, before the direct reference to the
     dwg field.
+    Should not be used for a BLOCK, rather use dwg_handle_name() then.
 \code Usage: char* name = dwg_obj_table_get_name(obj, &error);
 \endcode
 \param[in]  obj    a TABLE dwg_object*
