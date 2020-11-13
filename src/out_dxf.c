@@ -1628,7 +1628,7 @@ EXPORT char *
 dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
                   int *restrict acis_data_idx)
 {
-  BITCODE_RC* encr_sat_data = (BITCODE_RC*)calloc (blocksize, 1);
+  BITCODE_RC* encr_sat_data = (BITCODE_RC*)calloc (blocksize + 1, 1);
   int i = *acis_data_idx;
   int j;
   for (j = 0; j < (int)blocksize; j++)
@@ -2288,7 +2288,7 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       l -= lc;
                       len -= lc;
                       s += lc;
-                      caret = strchr (s, '^'); // looks safe
+                      caret = l > 1 ? strchr (s, '^') : NULL;
                     }
                   if (l > 255)
                     LOG_ERROR ("Overlong SAT line \"%s\" len=%d", s, l)
