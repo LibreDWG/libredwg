@@ -2306,7 +2306,8 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
     }                                                                         \
   } else if (FIELD_VALUE (version) > 1) {                                     \
       FIELD_HANDLE (history_id, 4, 350);                                      \
-  }
+  }                                                                           \
+  FREE { FIELD_HANDLE (history_id, 4, 350); }
 
 #define ACTION_3DSOLID \
   SUBCLASS (AcDbModelerGeometry); \
