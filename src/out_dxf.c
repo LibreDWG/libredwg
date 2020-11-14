@@ -1536,7 +1536,10 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
         fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
     }
   if (IS_FROM_TU (dat))
-    free (name);
+    {
+      free (name);
+      name = NULL;
+    }
 }
 
 #define START_OBJECT_HANDLE_STREAM

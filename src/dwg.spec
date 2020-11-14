@@ -1222,7 +1222,10 @@ DWG_ENTITY_END
     } else { \
       FIELD_3BD (extrusion, 210); \
     } \
-    FREE { FIELD_TV (blockname, 2); } \
+    FREE { \
+      SINCE (R_2007) \
+        FIELD_TV (blockname, 2); \
+    } \
     FIELD_2RD (text_midpt, 11); \
     FIELD_BD (elevation, 31); \
     DXF { \
