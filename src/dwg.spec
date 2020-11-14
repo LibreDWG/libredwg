@@ -3865,7 +3865,8 @@ DWG_OBJECT (DIMSTYLE)
     FIELD_VALUE (flag) |= FIELD_VALUE (flag0); //dimtofl?
 
     START_OBJECT_HANDLE_STREAM;
-    FIELD_HANDLE (DIMTXSTY, 5, 0); /* Text style (DIMTXSTY) */
+    UNTIL (R_14)
+      FIELD_HANDLE (DIMTXSTY, 5, 0); // 2000+ already before
   }
   IF_FREE_OR_SINCE (R_2000)
     {
