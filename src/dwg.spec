@@ -2154,7 +2154,7 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                       VALUE_RL (0, 0);
                       return error;
                     }
-                  // global acis_data_idx is need for the global acis_data
+                  // global acis_data_idx is needed for the global acis_data
                   FIELD_VALUE (encr_sat_data[i])
                     = dwg_encrypt_SAT1 (FIELD_VALUE (block_size[i]),
                                     FIELD_VALUE (acis_data), &acis_data_idx);

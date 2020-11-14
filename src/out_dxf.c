@@ -1789,10 +1789,11 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
 {
   Bit_Chain dest = { NULL, 0, 0, 0 };
   Bit_Chain src = { NULL, 0, 0, 0 };
-  unsigned int i = 0, num_blocks = 2, size = 0;
+  unsigned int i = 0, num_blocks = 2;
   BITCODE_RC c;
   char *p = (char*)&_obj->acis_data[15];
   //char *end, *dest, *enddest;
+  long unsigned int size;
   BITCODE_RL version, num_records, num_entities, has_history;
   //char *product_string, *acis_version, *date;
   BITCODE_RD num_mm_units, resabs, resnor;
@@ -2106,7 +2107,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
           {
             int s;
             BITCODE_RLd ll = (BITCODE_RLd)bit_read_RL (&src);
-            if (dest.byte + 8 >= dest.size)
+            if (dest.byte + 16 >= dest.size)
               bit_chain_alloc (&dest);
             s = sprintf ((char*)&dest.chain[dest.byte], "$%" PRId32 " ", ll);
             dest.byte += s; l += s;
@@ -2117,7 +2118,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
           {
             int s;
             float f = bit_read_RL (&src);
-            if (dest.byte + 8 >= dest.size)
+            if (dest.byte + 16 >= dest.size)
               bit_chain_alloc (&dest);
             if (l + 16 > 255)
               {
@@ -2134,7 +2135,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
           {
             int s;
             BITCODE_RLd ll = (BITCODE_RLd)bit_read_RL (&src);
-            if (dest.byte + 8 >= dest.size)
+            if (dest.byte + 16 >= dest.size)
               bit_chain_alloc (&dest);
             if (l + 6 > 255)
               {
@@ -2182,13 +2183,40 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
 
   //if (c != 17) // last line didn't end with #, but End-of-ACIS-data or End-of-ASM-data
   //  i = new_encr_sat_data_line (_obj, &dest, i);
-  num_blocks = _obj->num_blocks = 1; // TODO split into chunks of 1024?
-  if (strEQc((char*)&dest.chain[dest.byte-17], "End-of-ACIS-data "))
-    dest.byte -= 17;
+  num_blocks = _obj->num_blocks = 1;
+  // Nope, keep it. Teigha always adds it, ASM not.
+  //if (strEQc((char*)&dest.chain[dest.byte-17], "End-of-ACIS-data "))
+  //  dest.byte -= 17;
   bit_write_TF (&dest, (BITCODE_TF)"\n", 1);
-  _obj->encr_sat_data[i] = calloc (dest.byte, 1); // shrink it
-  memcpy (_obj->encr_sat_data[i], dest.chain, dest.byte);
-  _obj->block_size[i] = dest.byte;
+  size = dest.byte; // total size
+  {
+    unsigned long off = 0;
+    while (size > 4096)
+      { // chunks of 4096
+        if (i >= num_blocks) {
+          _obj->block_size = realloc (_obj->block_size, (i + 2) * sizeof (BITCODE_BL));
+          _obj->encr_sat_data = realloc (_obj->encr_sat_data, (i + 1) * sizeof (char**));
+          num_blocks = i + 1;
+        }
+        _obj->encr_sat_data[i] = calloc (4096, 1);
+        memcpy (_obj->encr_sat_data[i], &dest.chain[off], 4096);
+        _obj->block_size[i] = 4096;
+        LOG_TRACE ("block_size[%d] = 4096\n", i);
+        i++;
+        size -= 4096;
+        off += 4096;
+      }
+    // and the smaller rest
+    if (i >= num_blocks) {
+      _obj->block_size = realloc (_obj->block_size, (i + 2) * sizeof (BITCODE_BL));
+      _obj->encr_sat_data = realloc (_obj->encr_sat_data, (i + 1) * sizeof (char**));
+      num_blocks = i + 1;
+    }
+    _obj->encr_sat_data[i] = calloc (size + 1, 1); // shrink it
+    memcpy (_obj->encr_sat_data[i], &dest.chain[off], size);
+    _obj->block_size[i] = size;
+    LOG_TRACE ("block_size[%d] = %lu\n", i, size);
+  }
   bit_chain_free (&dest);
   LOG_TRACE ("\n");
   _obj->acis_empty = 0;
