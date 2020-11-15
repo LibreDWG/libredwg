@@ -821,6 +821,11 @@ dxf_read_CMC (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   int error = 1;
   unsigned long pos = bit_position (dat);
   Dxf_Pair *pair = dxf_read_pair (dat);
+  if (!color)
+    {
+      LOG_ERROR ("empty CMC field %s", fieldname);
+      return 1;
+    }
   if (pair->code < 90 && dxf == pair->code)
     {
       color->index = pair->value.i;
@@ -8731,6 +8736,14 @@ new_object (char *restrict name, char *restrict dxfname,
                       UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ANG3PT)
                     }
                 }
+              // FIXME: check proper subclasses here. is_derived_from() or has_subclass()
+              // if the subclass is allowed in this object.
+              if (strEQc (subclass, "AcDbDetailViewStyle")
+                  && obj->fixedtype != DWG_TYPE_DETAILVIEWSTYLE)
+                {
+                  LOG_ERROR ("Invalid subclass %s in object %s", subclass, obj->name);
+                  return NULL;
+                }
               if (strEQc (obj->name, "DIMENSION_ALIGNED")
                   && strEQc (subclass, "AcDbRotatedDimension"))
                 {
@@ -10048,7 +10061,9 @@ new_object (char *restrict name, char *restrict dxfname,
                 goto search_field;
             }
           else if (pair->code == 71
-                   && strEQc (subclass, "AcDbDetailViewStyle"))
+                   && strEQc (subclass, "AcDbDetailViewStyle")
+                   // TODO we'd really need a isa function here (is_derived_from)
+                   && obj->fixedtype == DWG_TYPE_DETAILVIEWSTYLE)
             {
               pair = add_AcDbDetailViewStyle (obj, dat);
               if (pair && pair->code == 100) // success
