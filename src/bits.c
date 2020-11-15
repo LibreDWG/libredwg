@@ -2200,10 +2200,12 @@ bit_convert_TU (BITCODE_TU restrict wstr)
       while (c)
         {
           len++;
-          if (c >= 256)
-            len++;
-          if (c >= 0x800)
-            len++;
+          if (c >= 0x80)
+            {
+              len++;
+              if (c >= 0x800)
+                len++;
+            }
           b += 2;
           c = (b[0] << 8) + b[1];
         }
@@ -2213,10 +2215,12 @@ bit_convert_TU (BITCODE_TU restrict wstr)
   while ((c = *tmp++))
     {
       len++;
-      if (c >= 256)
-        len++;
-      if (c >= 0x800)
-        len++;
+      if (c >= 0x80)
+        {
+          len++;
+          if (c >= 0x800)
+            len++;
+        }
 #if 0
         loglevel = 5;
         LOG_INSANE ("U+%04X ", c);
@@ -2292,7 +2296,8 @@ bit_convert_TU (BITCODE_TU restrict wstr)
         HANDLER (OUTPUT, "ERROR: overlarge unicode codepoint U+%0X", c);
      */
     }
-  str[i] = '\0';
+  if (i <= len + 1)
+    str[i] = '\0';
   return str;
 }
 
