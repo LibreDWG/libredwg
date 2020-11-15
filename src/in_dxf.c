@@ -8736,14 +8736,6 @@ new_object (char *restrict name, char *restrict dxfname,
                       UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_ANG3PT)
                     }
                 }
-              // FIXME: check proper subclasses here. is_derived_from() or has_subclass()
-              // if the subclass is allowed in this object.
-              if (strEQc (subclass, "AcDbDetailViewStyle")
-                  && obj->fixedtype != DWG_TYPE_DETAILVIEWSTYLE)
-                {
-                  LOG_ERROR ("Invalid subclass %s in object %s", subclass, obj->name);
-                  return NULL;
-                }
               if (strEQc (obj->name, "DIMENSION_ALIGNED")
                   && strEQc (subclass, "AcDbRotatedDimension"))
                 {
@@ -8795,8 +8787,22 @@ new_object (char *restrict name, char *restrict dxfname,
                 {
                   UPGRADE_ENTITY (INSERT, MINSERT)
                 }
+
+              // When we have all proper types, check proper subclasses.
+              // If the subclass is allowed in this object.
+#if 1
+              if (!dwg_has_subclass ((int)obj->fixedtype, subclass))
+#else
+              if (strEQc (subclass, "AcDbDetailViewStyle")
+                  && obj->fixedtype != DWG_TYPE_DETAILVIEWSTYLE)
+#endif
+                {
+                  LOG_ERROR ("Invalid subclass %s in object %s", subclass, obj->name);
+                  return NULL;
+                }
+
               // with PERSUBENTMGR
-              else if (obj->fixedtype == DWG_TYPE_PERSUBENTMGR
+              if (obj->fixedtype == DWG_TYPE_PERSUBENTMGR
                        && strEQc (subclass, "AcDbPersSubentManager"))
                 {
                   dxf_free_pair (pair);
@@ -10062,7 +10068,6 @@ new_object (char *restrict name, char *restrict dxfname,
             }
           else if (pair->code == 71
                    && strEQc (subclass, "AcDbDetailViewStyle")
-                   // TODO we'd really need a isa function here (is_derived_from)
                    && obj->fixedtype == DWG_TYPE_DETAILVIEWSTYLE)
             {
               pair = add_AcDbDetailViewStyle (obj, dat);

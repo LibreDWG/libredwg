@@ -46632,6 +46632,16 @@ static int test_FIELD (const Dwg_Object *obj)
       fail ("FIELD.code [T] '%s' <> '%s'", code, field->code);
   }
   {
+    BITCODE_T data_string;
+    if (dwg_dynapi_entity_value (field, "FIELD", "data_string", &data_string, NULL)
+        && data_string
+           ? strEQ ((char *)data_string, (char *)field->data_string)
+           : !field->data_string)
+      pass ();
+    else
+      fail ("FIELD.data_string [T] '%s' <> '%s'", data_string, field->data_string);
+  }
+  {
     BITCODE_BL evaluation_error_code;
     if (dwg_dynapi_entity_value (field, "FIELD", "evaluation_error_code", &evaluation_error_code, NULL)
         && evaluation_error_code == field->evaluation_error_code)
@@ -46725,6 +46735,16 @@ static int test_FIELD (const Dwg_Object *obj)
       pass ();
     else
       fail ("FIELD.format [TV] '%s' <> '%s'", format, field->format);
+  }
+  {
+    BITCODE_T format_string;
+    if (dwg_dynapi_entity_value (field, "FIELD", "format_string", &format_string, NULL)
+        && format_string
+           ? strEQ ((char *)format_string, (char *)field->format_string)
+           : !field->format_string)
+      pass ();
+    else
+      fail ("FIELD.format_string [T] '%s' <> '%s'", format_string, field->format_string);
   }
   {
     BITCODE_T id;
@@ -56784,6 +56804,16 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     else
       fail ("TABLESTYLE.unknown_rc [RC] set+1 %u != %u", tablestyle->unknown_rc, unknown_rc);
     tablestyle->unknown_rc--;
+  }
+  {
+    BITCODE_T value_format_string;
+    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "value_format_string", &value_format_string, NULL)
+        && value_format_string
+           ? strEQ ((char *)value_format_string, (char *)tablestyle->value_format_string)
+           : !tablestyle->value_format_string)
+      pass ();
+    else
+      fail ("TABLESTYLE.value_format_string [T] '%s' <> '%s'", value_format_string, tablestyle->value_format_string);
   }
   {
     BITCODE_BD vert_cell_margin;

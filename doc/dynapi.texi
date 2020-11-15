@@ -13564,7 +13564,7 @@ BL,	DXF 90
 @item data_flags
 BS,	DXF 170
 @item property_override_flags
-BL,	DXF 91
+BL,	DXF 90
 @item merge_flags
 BL,	DXF 92
 @item bg_color

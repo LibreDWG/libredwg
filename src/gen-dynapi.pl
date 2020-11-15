@@ -20,7 +20,7 @@
 use strict;
 use warnings;
 use vars qw(@entity_names @object_names @subclasses
-            $max_entity_names $max_object_names);
+            $max_entity_names $max_object_names $max_subclasses);
 use Convert::Binary::C;
 #use Data::Dumper; # if DEBUG
 #BEGIN { chdir 'src' if $0 =~ /src/; }
@@ -85,8 +85,10 @@ $c->parse_file($hdr);
 #print Data::Dumper->Dump([$c->struct('_dwg_entity_TEXT')], ['_dwg_entity_TEXT']);
 #print Data::Dumper->Dump([$c->struct('struct _dwg_header_variables')], ['Dwg_Header_Variables']);
 
-my (%h, $n, %structs, %unions, %ENT, %DXF, %SIZE, %SUBCLASS, %DWG_TYPE, @unhandled_names);
-local (@entity_names, @object_names, @subclasses, $max_entity_names, $max_object_names);
+my (%h, $n, %structs, %unions, %ENT, %DXF, %SIZE, %SUBCLASS, %SUBCLASSES, %DWG_TYPE,
+    @unhandled_names);
+local (@entity_names, @object_names, @subclasses, $max_entity_names, $max_object_names,
+       $max_subclasses);
 # todo: harmonize more subclasses
 for (sort $c->struct_names) {
   if (/_dwg_entity_([A-Z0-9_]+)/) {
@@ -165,9 +167,43 @@ while (<$in>) {
 $ENT{LAYER}->{flag} = 'BS';
 $ENT{LAYER}->{name} = 'T';
 $ENT{DIMSTYLE}->{name} = 'T';
+$SUBCLASSES{ACTION_3DSOLID} = [ 'AcDModelerGeometry' ];
 #$ENT{LTYPE}->{strings_area} = 'TF';
 close $in;
 my @old;
+
+sub expand_define {
+  my ($def, $n, $defined) = @_;
+  if (exists $defined->{$def}) {
+    warn "expand defined $def fields";
+    for (keys %{$DXF{$def}}) {
+      $DXF{$n}->{$_} = $DXF{$def}->{$_};
+    }
+    for (keys %{$ENT{$def}}) {
+      $ENT{$n}->{$_} = $ENT{$def}->{$_};
+    }
+    my $aref = $SUBCLASSES{$n};
+    for my $k (@{$SUBCLASSES{$def}}) {
+      # if defined subclass is not in the main subclass yet
+      if (!grep $_ eq $k, @$aref) {
+        if (@$aref) {
+          push @$aref, $k;
+        } else {
+          $aref = [ $k ];
+        }
+        $SUBCLASSES{$n} = $aref;
+      }
+    }
+  } else {
+    unless (/(DXF|DECODE|ENCODE|JSON|FREE)_3DSOLID/) {
+      warn "TODO $def fields not defined";
+    } else {
+      $n = 'ACTION_3DSOLID';
+      $defined->{$n}++;
+      @old = (); # TODO pop 3DSOLID_material
+    }
+  }
+}
 
 sub embedded_struct {
   my ($pre, $subclass) = @_;
@@ -207,7 +243,11 @@ sub dxf_in {
         warn $n;
       } elsif (/^\#define (COMMON_ENTITY_(?:POLYLINE|DIMENSION|))/) {
         $n = $1;
-        warn $n;
+        warn "define $n";
+      } elsif (/^\#define (COMMON_3DSOLID|ACTION_3DSOLID)/) {
+        $n = $1;
+        $defined{$n}++;
+        warn "define $n";
       } elsif (/^\#define (\w+)_fields/) {
         $n = $1;
         $defined{$n}++;
@@ -380,19 +420,24 @@ sub dxf_in {
       $f = $2;
       $DXF{$n}->{$f} = $3 if $3;
       $ENT{$n}->{$f} = $type if $type =~ /^T/;
-    } elsif (/^\s+(\w+)_fields;/) {
-      my $def = $1;
-      if (exists $defined{$def}) {
-        warn "expand defined $def fields";
-        for (keys %{$DXF{$def}}) {
-          $DXF{$n}->{$_} = $DXF{$def}->{$_};
-        }
-        for (keys %{$ENT{$def}}) {
-          $ENT{$n}->{$_} = $ENT{$def}->{$_};
-        }
+    } elsif (/^\s+SUBCLASS\s*\((\w.+)\)/) {
+      my $sc = $1;
+      # i.e. resolve AcGeomConstraint in ASSOC2DCONSTRAINTGROUP, ...
+      if (exists $SUBCLASSES{$n}) {
+        my $aref = $SUBCLASSES{$n};
+        push @$aref, $sc;
+        $SUBCLASSES{$n} = $aref;
       } else {
-        warn "TODO $def fields not defined";
+        $SUBCLASSES{$n} = [ $sc ];
       }
+    } elsif (/^\s+(\w+)_fields[; ]/) {
+      expand_define ($1, $n, \%defined);
+    } elsif (/^\s+(\w+_3DSOLID)/) { # special defines
+      expand_define ($1, $n, \%defined);
+    } elsif (/^$/ && $defined{$n} && $n ne 'TABLECONTENT') {
+      warn "undef $n\n";
+      @old = ();
+      undef $n;
     }
     if ($f and $n and exists $DXF{$n}->{$f}) {
       warn "  $f $DXF{$n}->{$f}\n";
@@ -797,6 +842,39 @@ sub maxlen {
 }
 $max_entity_names = 1+maxlen(@entity_names);
 $max_object_names = 1+maxlen(@object_names);
+my %entity_names = map {$_ => 1} @entity_names;
+my %object_names = map {$_ => 1} @object_names;
+$max_subclasses = 0;
+for (keys %SUBCLASSES) {
+  if (!exists $entity_names{$_} and !exists $object_names{$_}) {
+    # FIXME: find parent class and add array to it.
+    # delete $SUBCLASSES{$_};
+  }
+}
+for (sort @entity_names) {
+# FIXME: fixup duplicates in TEXT
+  if ($_ eq 'TEXT') {
+    $SUBCLASSES{$_} = [ 'AcDbText' ];
+  }
+  my $aref = $SUBCLASSES{$_};
+  unshift @$aref, 'AcDbEntity';
+  $SUBCLASSES{$_} = $aref; # if it didnt exist
+  my $len = @$aref;
+  $max_subclasses = $len if $len > $max_subclasses;
+}
+for (sort @object_names) {
+  my $aref = $SUBCLASSES{$_};
+  if (is_table ($_)) {
+    unshift @$aref, 'AcDbSymbolTableRecord';
+  } elsif (is_table_control ($_)) {
+    unshift @$aref, 'AcDbSymbolTable';
+  } else {
+    unshift @$aref, 'AcDbObject';
+  }
+  $SUBCLASSES{$_} = $aref; # if it didnt exist
+  my $len = @$aref;
+  $max_subclasses = $len if $len > $max_subclasses;
+}
 
 for (<DATA>) {
   # expand enum or struct
@@ -887,6 +965,27 @@ for (<DATA>) {
             }
             printf $fh "  { \"%s\", %s, %s, %s, %s },\t/* %d */\n",
               $n, $type, $subclass, $_ . "_fields", $size, $i++;
+          }
+        }
+      } elsif ($n eq 'type_subclasses') {
+        #print Dumper \%SUBCLASSES;
+        for (sort keys %SUBCLASSES) {
+          my $cl = $_;
+          if (exists $entity_names{$cl} or exists $object_names{$cl}) {
+            my $a = $SUBCLASSES{$cl};
+            $cl =~ s/^3D/_3D/;
+            printf $fh "  { DWG_TYPE_%s, {", $cl;
+            for (0 .. $max_subclasses-1) {
+              if ($a->[$_]) {
+                printf $fh "\"%s\"", $a->[$_];
+              } else {
+                printf $fh "NULL";
+              }
+              if ($_ < $max_subclasses - 1) {
+                printf $fh ", ";
+              }
+            }
+            printf $fh "} },\n";
           }
         }
       } else {
@@ -1450,8 +1549,6 @@ while (<$in>) {
   }
 }
 close $in;
-my %entity_names = map {$_ => 1} @entity_names;
-my %object_names = map {$_ => 1} @object_names;
 for (sort keys %UNHANDLED) {
   push @unhandled_names, $_ if !exists $entity_names{$_} and !exists $object_names{$_};
 }
@@ -1988,7 +2085,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 1988 "gen-dynapi.pl"
+#line 2089 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2072,7 +2169,17 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-#line 2072 "gen-dynapi.pl"
+struct _type_subclasses {
+  const int type;
+  const char *const subclasses[@@scalar max_subclasses@@];
+};
+
+/* List of all allowed subclasses per class. type is sorted for bsearch. */
+static const struct _type_subclasses dwg_type_subclasses[] = {
+@@list type_subclasses@@
+};
+
+#line 2183 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -2091,6 +2198,15 @@ _name_struct_cmp (const void *restrict key, const void *restrict elem)
   //https://en.cppreference.com/w/c/algorithm/bsearch
   const struct _name *f = (struct _name *)elem;
   return strcmp ((const char *)key, f->name); //deref
+}
+
+static int
+_type_struct_cmp (const void *ptr1, const void *ptr2)
+{
+  //https://en.cppreference.com/w/c/algorithm/bsearch
+  const struct _type_subclasses *i1 = (struct _type_subclasses *)ptr1;
+  const struct _type_subclasses *i2 = (struct _type_subclasses *)ptr2;
+  return i1->type > i2->type ? 1 : i1->type == i2->type ? 0 : -1;
 }
 
 #define NUM_ENTITIES    ARRAY_SIZE(dwg_entity_names)
@@ -2961,6 +3077,28 @@ dwg_dynapi_subclass_name (const char *restrict type)
   return name;
 }
 
+EXPORT bool
+dwg_has_subclass (int type, const char *restrict name)
+{
+  struct _type_subclasses *f;
+#ifndef HAVE_NONNULL
+  if (!name)
+    return false;
+#endif
+  f = (struct _type_subclasses *)bsearch (&type, dwg_type_subclasses,
+                                          ARRAY_SIZE (dwg_type_subclasses),
+                                          sizeof (dwg_type_subclasses[0]),
+                                          _type_struct_cmp);
+  if (f) {
+    for (unsigned i = 0; i < @@scalar max_subclasses@@ /* max_subclasses */; i++) {
+      if (!f->subclasses[i]) // already at NULL
+        return false;
+      if (strEQ (name, f->subclasses[i]))
+        return true;
+    }
+  }
+  return false;
+}
 /* Local Variables: */
 /* mode: c */
 /* End: */

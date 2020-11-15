@@ -186,4 +186,9 @@ dwg_dynapi_subclass_name (const char *restrict type);
 
 #endif
 
+/* FIXME: Not yet ready. Need to expand all defines in the spec. 
+   Not yet public in 0.11.1 */
+EXPORT bool
+dwg_has_subclass (int type, const char *restrict name);
+
 #endif
