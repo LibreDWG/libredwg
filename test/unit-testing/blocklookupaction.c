@@ -28,6 +28,11 @@ api_process (dwg_object *obj)
   // AcDbBlockLookupAction
   CHK_ENTITY_TYPE (_obj, BLOCKLOOKUPACTION, numrows, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKLOOKUPACTION, numcols, BL);
+  if (!_obj->lut)
+    {
+      fail ("BLOCKLOOKUPACTION.lut[]: NULL");
+      return;
+    }
   for (i = 0; i < numrows * numcols; i++) {
     for (int j = 0; j < 3; j++)
       {
