@@ -1,6 +1,678 @@
 Full history from the git log
 -----------------------------
 
+2020-11-16  Reini Urban  <rurban@cpan.org>
+
+	Release 0.11.1
+	See NEWS.
+	Mostly out_dxf fixes to enable acad dxfin for most generated DXF (~90%).
+	No API changes
+
+	dynapi: adjust line numbers
+
+	unit-testing: fix a SEGV with NULL BLOCKLOOKUPACTION.lut
+	in 2010/sun_and_sky_demo
+
+	indxf: make failing dwg_has_subclass check non-fatal
+	Several subclasses still missing. Fix them over time.
+	For now fixed all stable and unstable classes.
+	Fixes GH #295
+
+	dynapi: change _type_subclasses to _name_subclasses
+	we cannot yet sort by enum Dwg_Object_type (fixedtype), so we need strings.
+	Add more subclasses: AcDbDimension
+	Fixup wrong subclasses for LAYOUT, VERTEX_3D, PLOTSETTINGS.
+	Fixup fields macros with args. Skip them for DXF/ENT defaults. Fixes
+	TABLE_value.data_string
+	See GH #295
+
+2020-11-16  Reini Urban  <rurban@cpan.org>
+
+	WIP add has_subclass API
+	for the previous indxf fix.
+	We need to check if a subclass belongs to a class,
+	or which subclasses are valid in a class.
+	Parse dwg.spec for all SUBCLASSes and fill in
+	a new dwg_type_subclasses[] array, sorted for bsearch.
+
+	We expand more defines now. Also parametric _fields ().
+	See GH #295
+
+2020-11-15  Reini Urban  <rurban@cpan.org>
+
+	indxf: check 1 proper DETAILVIEWSTYLE for subclass
+	TODO: this needs to be generalized.
+	A shorter subclass into a wrong class will overwrite unallocated memory.
+	heap-buffer-overflow, such as in crashes29 id 73
+
+	fix oob in bit_convert_TU
+	wrong length calculation. e.g. crashes8
+
+	free: fix BLOCK.name double-free <r2007
+	== DIMENSION.blockname
+
+2020-11-15  Reini Urban  <rurban@cpan.org>
+
+	dxf sab: max 4096 encr_sat_data block_size
+	Split it up into chunks.
+	The blocksize should not exceed 4096. Error 30004
+	e.g. The 3DSOLID 2E1 in example_20*
+
+	Also keep the End-of-ACIS-Data
+	teigha always writes it, and it can be imported.
+
+2020-11-14  Reini Urban  <rurban@cpan.org>
+
+	fixup DIMSTYLE re-order, duplicate DIMTXSTY
+	leading to messed up handles and a leak.
+
+2020-11-13  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix read oob in SAB 2 caret expansion
+
+	free 3DSOLID.history_id
+	The few history_id (3.0.0) handles still leak though.
+
+2020-11-13  Reini Urban  <rurban@cpan.org>
+
+	dxf: fixup improve dwg_dim_blockname
+	r2007+ it is already converted to utf-8.
+	don't convert it twice, use FIELD_TV0 instead.
+
+	fixes model-mechanical_from_uloz.to_2013
+
+2020-11-13  Reini Urban  <rurban@cpan.org>
+
+	decode: fix empty classes, e.g. r13c3
+	And add -v5,6 logging to r2000 classes
+	Fixes GH #294
+
+	fix debugging unit-testing/blockuserparameter
+	changed API
+
+	comments: new idea for classes
+	the problem is that some r13c3 classes fail to be read.
+	See GH #294
+
+	debug: silence MPOLYGON cast warnings
+
+	logs-all.sh: revise
+	abstract abs_dwgread,
+	longer timeouts,
+	adapt to renamed test-old dirs
+
+2020-11-12  Reini Urban  <rurban@cpan.org>
+
+	spec: add DEBUGGING BLOCKREPRESENTATION fields
+
+	dxf: don't skip IDBUFFER r13-r14
+
+	dxf: fix UCS
+	misspelled the UCSTableRecord
+
+	dxf: change the T dxf continuation group 1 from 3 to 1
+	TODO: investigate which field switches from 1 to 3 for continuations...
+	Fixes overlong TEXT.text_value (jis_a0)
+
+	fixup dxf: split overlong 1 strings into groups of 3
+	forgot to advance the str, and used a wrong format template.
+
+	dxf: convert shift-jis text \M+1xxxx to \U+xxxx
+	but overly simplistic. for just the hiragana and katagana letters,
+	not the full cjk range yet.
+
+	dxf: optional DIMENSION.dimstyle
+	fixes "Invalid dimension style name."
+
+	dxf: improve dwg_dim_blockname() and dwg_handle_name()
+	needed for DXF <r2000 dimensions eg.
+	For BLOCK search the BLOCK entities instead.
+	The BLOCK_HEADER has only the abbrevated name, but we want "*D30", not "*D".
+
+	dxf: fix duplicate INSERT.scale
+	dxf has a wrong IS_PRINT. Thus it called PRINT {} blocks also.
+	See GH #275
+
+	fix build-aux/git-version-gen with _dirty
+
+2020-11-12  Reini Urban  <rurban@cpan.org>
+
+	dxf: skip linewt 370 0 for non-lines (SEQEND, VERTEX*)
+	when are dxf 370 default?
+	with lines 1d (ByLayer) is default, without 1c (0).
+
+	also fix the indxf default linewt.
+
+2020-11-11  Reini Urban  <rurban@cpan.org>
+
+	spec: promote ACSH_HISTORY_CLASS to stable
+
+	spec: work on ACSH_HISTORY_CLASS => unstable
+	needed for the previous commit.
+	r2007+ 3DSOLIDs need that.
+	add fieldnames, no evalexpr nor historynodes.
+
+	dxf: dxf_check_history_id
+	r2007+ needs the 350 history_id for the DXF.
+	search all our objects and assign the first one
+
+	dxf: remove AcDbShPrimitive from ACSH_CHAMFER_CLASS
+
+	dxf: remove AcDbShPrimitive from ACSH_FILLET,BOOLEAN_CLASS
+	e.g. 2007/ATMOS-DC22S_from_cadforum.cz
+
+2020-11-11  Reini Urban  <rurban@cpan.org>
+
+	dxf: avoid nan, only with DEBUG_CLASSES
+	fixes BLOCKBASEPOINTPARAMETER in 2007/blocks_and_tables_-_imperial
+
+	which would be a PROXY_OBJECT without AEC.
+	Before we avoided nan only for releases.
+
+2020-11-11  Reini Urban  <rurban@cpan.org>
+
+	dxf: hardcode major.minor for EvalExpr and BlockElement
+	fixes 2007/blocks_and_tables_-_metric
+
+	dxf: fix AcDbBlockScaleAction BlockAction_ConnectionPts offsets
+
+	dxf: fix some HEADER texttypes
+	e.g. $STYLESHEET, $HYPERLINKBASE
+
+	dxf-allcvt.sh: renamed the test-old dirs
+	and adjust crashing dxf imports
+
+	dxf: fixup AcDb3dSolid subclass
+	with DXF only print 100, 350 if r2007+. e.g. example_2007, 2007/ATMOS-DC22S
+	with DWG read 350 only for version 2.
+	fixes up 991808b3280aa2034e3177e19efa3f2195dd9d49
+
+2020-11-10  Reini Urban  <rurban@cpan.org>
+
+	dxf: skip final SAB End-of-ACIS-data line
+	this is only SAB relevant, but not for the DXF
+
+2020-11-10  Reini Urban  <rurban@cpan.org>
+
+	dxf: split overlong 1 strings into groups of 3
+	with max chunk length 255.
+	enhance dxf_fixup_string to do the quoting and splitting.
+
+	With SAB->SAT conversion do the splitting in the SAT file already.
+	This has no groups 3.
+
+2020-11-10  Reini Urban  <rurban@cpan.org>
+
+	improve dxf-allcvt.lsp
+	optional prompt for next,
+	optional erasure to avoid Duplicate block warnings
+	filter out more crashes
+
+	dxf.in: name the dxf as in log
+	for the test-old data. eg.
+	Reading DWG file test/test-old/AC1012/from_autocad_r14/overhead.dwg
+	Writing DXF file overhead_from_autocad_r14_AC1012.dxf
+
+	dxf: add SAB tag 23 for int64
+	see https://github.com/jmplonka/InventorLoader/
+
+	scandir() needs also _NETBSD_SOURCE
+	why they dont take just _BSD_SOURCE is beyond my comfort level.
+	See https://nxr.netbsd.org/xref/src/include/dirent.h#111
+	Thanks to Iain Hibbert for the report and suggestion.
+
+2020-11-08  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix 3DSOLID r2007+
+	Add missing 100 . AcDb3dSolid and 350 . history_id
+	even for version 1 SAT data.
+	Fixes GH #282
+
+2020-11-07  Reini Urban  <rurban@cpan.org>
+
+	add examples/filt_sat.pl, dec_sat.pl
+	filt_sat.pl: to compare two decoded sat files.
+	dec_sat.pl: decode DXF encrypted sat files.
+
+	e.g.
+	rem extract the encrypted 1 groups from a DXF into a seperate file
+	for s in "`cat TS1_2000.dxf.encr`"
+	do
+		./dec_sat.pl "$s" | grep -v "^  n"
+	done | ./filt_sat.pl > TS1_2000.dxf.decr
+
+2020-11-07  Reini Urban  <rurban@cpan.org>
+
+	dxf: remove AcDbAlignedDimension.oblique_angle 52 from DXF
+	Unexpected DXF group code: 52
+	for in_dxf looks like we need to calculate it, but actually
+	it's always the default 0.0
+
+	dxf: use ACAD_ prefix for PROXY_{ENTITY,OBJECT}
+	not a variable class
+
+2020-11-07  Reini Urban  <rurban@cpan.org>
+
+	SAB: accept tag 21 as enum long constant
+	just guessing what the exact format is.
+	The enum seems to be the previous identifier.
+	e.g. exact_int_cur <21> $0 means the identifier int_cur
+	has the value exact and a constant $0 ??
+
+	See GH #291
+
+2020-11-07  Reini Urban  <rurban@cpan.org>
+
+	indxf: accept some invalid color groups
+	as acad dxfin does also.
+	those dxf's appear in the wild, probably from other dxf exporters.
+	Fixes GH #290
+
+2020-11-07  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix 3DSOLID dxf encoding
+	Replace all "^" chars by "^ ".
+	For the decoding in in_dxf we already do the reverse.
+
+	Fixes GH #283
+
+2020-11-07  Reini Urban  <rurban@cpan.org>
+
+	WIP dxf: SPLINE re-ordering
+	provide defaults for tolerances.
+	TODO: knots and ctrl_pts with Bezier (scenario 2) for DXF only
+
+	dxf: optional 3DSOLID.acic_ampty 290
+
+	dxf: improve BLOCK groups 70, 1, 4
+	when taking the BLOCK_HEADER values.
+	esp. fix the groups 70 (hdr flags),
+	1 (xref path name) and
+	4 the optional description.
+
+2020-11-07  Reini Urban  <rurban@cpan.org>
+
+	dxf: re-order DIMSTYLE
+	and many optional values, even CMC0 (color)
+
+	TODO: There are many different default values, not just 0 and 1.
+	esp. with DIMSTYLE. The Standard style has no values at all in DXF.
+	maybe add FIELD_B_opt (name, dxf, def)
+
+2020-11-07  Reini Urban  <rurban@cpan.org>
+
+	dxf: Move PSPACE entities from BLOCKS to ENTITIES
+	Iterate over all ENTITIES not just from model space, but also
+	from paper space.
+	There would be three variants how to order them.
+	We choose to list first all owned mspace, and then all owned pspace
+	entities.
+
+	Should fix these DXFIN error messages:
+	  * Entities not allowed in *Paper_Space block definition
+	  * Error: Block "*Paper_Space" was not defined
+
+	Thanks to @mozman for explaining the problem to me, and coming with the
+	nice dxfpp tool with ezdxf.
+	Fixes GH #277
+
+2020-11-07  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix STYLE Invalid textstyle name for shapeFile: "SHAPE$0$REF"
+	Such names need to be empty in the DXF output, when STYLE.is_shape is set.
+	Fixes GH #287
+
+	dxf: fix r13c3 crashes in DICTIONARY with empty text
+	also extend dxf-allcvt.sh
+
+2020-11-07  Reini Urban  <rurban@cpan.org>
+
+	fix XRECORD VT_INT64 xdata from BLL to RLL
+	for all VT_INT64 xdata values.
+	also add the missing INT64 case to out_dxf for XRECORD xdata.
+
+	Fixes #289
+	This did not change the public API, only a comment in dwg.h
+
+2020-11-07  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix MLINESTYLE angles
+	keep the DWG angles (and hope they are in range)
+	but range restrict the rad2deg DXF variants.
+	accept 90.0001 or such.
+
+	Don't use FIELD_BD(), this would do rad2deg again.
+	The DXFIN fix is: MLINESTYLE Bad mlstyle start angle.
+
+2020-11-07  Reini Urban  <rurban@cpan.org>
+
+	spec: avoid STYLE.flag logging at free
+	only needed at en/decode
+
+	fix bit_convert_TU out-of-bounds by 1
+	2013/flipped_cleaned at TEXT.text_value
+
+	spec: default TEXT.width_factor = 1.0
+	and skip if default on DXF
+
+	dxf: skip LAYER.material 347
+	which is an unstable class.
+	it would point to an invalid handle.
+
+	dxf_file.pl: improve rounding of all numbers
+	honor negative numbers.
+	keep only 6 after-comma places.
+	do so by rounding float numbers in perl by ourself.
+
+	dxf: fix SPATIAL_FILTER.origin to 11
+	SPATIAL_FILTER Error: expected group code 11
+
+	dxf: fix HATCH.scale_spacing 41
+	Error: expected group code 41
+	41 is not optional if 1.0, with 2013
+
+	dxf: fix Layer name with vertical bar is not marked dependent
+	wrong flag 70 mask. Only mask of plotflag and linewt, but not 0x10 (xref dep)
+
+	spec: fix LTYPE with shape_flag 74: 2
+	the dashes.text value calc. was wrong.
+
+	dxf: fix PDFUNDERLAY: Unexpected DXF group code: 170
+	i.e. num_clip_inverts
+
+	dxf: SPATIAL_INDEX has no ObjectDBX
+	but only in DXF
+
+2020-11-07  Reini Urban  <rurban@cpan.org>
+
+	dxf: extend LAYER.plotflag for DEFPOINTS
+	extend the special-case of f53d2deb820bf2fb300345c78d1a95fb9d2ff4d5
+	to be case-insensitive.
+	Fixes Publish_2004.dxf
+
+	Also a typo of the color logs
+
+2020-11-07  Reini Urban  <rurban@cpan.org>
+
+	dxf: re-order MULTILEADER
+	failed all over with DXFIN, from r14-2018.
+	This crashes now Leader_200{0,4}, but fixed all MULTILEADER errors.
+
+	dxf: fix VERTEX: Bad visibility value 2
+	take only bit 0 of ENTITY.invisible => 60 . 1
+
+	dxf: avoid duplicate STYLE eed 1000/1001/1071
+	for ttf data
+
+	dxf: re-order LEADER
+
+	dxf: re-order ENTITY.ltype_scale 48
+	right after ltype 6
+
+2020-11-07  Reini Urban  <rurban@cpan.org>
+
+	dxf, json: fix DIMENSION_ANG2LN
+	Unexpected DXF group code 10
+
+	Fix missing JSON def_pt 10 for most DIMENSION entities.
+
+2020-11-07  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix SUBCLASS version check
+
+	dxf: no 70 in AcDbOrdinateDimension
+	Unexpected DXF group code: 70
+
+2020-11-07  Reini Urban  <rurban@cpan.org>
+
+	improve dxf-allcvt.lsp to autoimport all
+	now with custom match filter, with logging to file,
+	fast (no safety prompt).
+
+	we cannot close the fresh DXFIN tab, as within autolisp it is not.
+	and purging the new blocks produces too many lines in the log file.
+	so rather keep up with our Duplicate block warnings
+
+2020-11-03  Reini Urban  <rurban@cpan.org>
+
+	dxf: fix ATTDEF for r13-r14
+
+	dxf r13-r14: fix Class separator for class AcDbText expected
+
+	dxf: before r2000 keep only some variable objects
+	which should also handle PLACEHOLDER from before
+
+	dxf: skip ACDBPLACEHOLDER before r14
+	e.g. r13/RAY
+	The following error was encountered while reading in ACDBPLACEHOLDER starting at line 1918:
+	Class separator for class AcDbPlaceHolder expected
+	Invalid or incomplete DXF input -- drawing discarded.
+
+	dxf: skip 100 . AcDbDimStyleTable before r2000
+	Fixes a couple of r14 dxf's.
+
+	dxf: fix STYLE.flag calc from is_vertical and is_shape bits
+	the other way round. is_shape is bit 1
+
+	dxf: no $SAVEIMAGES with r14
+	only r13/AC1012
+
+	dxf: fix pre-r2000 HEADER starting with $TDCREATE
+	if without {}.
+	Error 372 in drawing header on line 428
+
+	dxf: remove $DIMSAV from HEADER
+	not in DXF at all
+
+2020-11-01  Reini Urban  <rurban@cpan.org>
+
+	dynapi: regen VISUALSTYLE changes
+	here we need to take the first decl, not the last one
+
+	prelim NEWS for 0.11.1
+	Summarize the fixes so far
+
+	dxf: re-order VISUALSTYLE
+	esp for r2013.
+	This fixes DXFIN for VISUALSTYLE.
+
+2020-10-31  Reini Urban  <rurban@cpan.org>
+
+	dxf: re-order more common DIMENSION fields
+	flip extrusion with ins_scale in DXF.
+	move the group around text_rotation 54,51,210,53 to the end.
+	there's no ins_scale and 2nd def_pt 10 in DXF.
+	blockname 2 is optional
+
+	Fixup 2018/Dynblocks.dwg to be r2018, not r2004.
+
+2020-10-30  Reini Urban  <rurban@cpan.org>
+
+	dxf: skip DIMENSION 72 and 41 defaults of 1
+	add BS1 and use BD1 for lspace_style and lspace_factor
+
+	dxf: fix wrong DIMENSION.flag 70 calc
+	e.g. flag1 = 11 (LINEAR) should be converted to flag 32 [70]
+	untested: inverse indxf conversion flag => flag1
+
+	refactor MPOLYGON analog to HATCH
+
+	refactor HATCH.boundary_handles
+	move to paths[].
+	This fixes GH #280, dxf.
+
+2020-10-30  Reini Urban  <rurban@cpan.org>
+
+	dxf: re-order HATCH
+	move 97 and 330 out of loop.
+	330 boundary_handles as vector before 75.
+	no gradient_fill if off. move to the very end.
+	write SOLID instead of SOLID,_I
+
+	Partial fix for GH #280. see next commit.
+
+2020-10-30  Reini Urban  <rurban@cpan.org>
+
+	appveyor: less cygwin tests
+	we constantly run into test timeouts
+
+	dxf: use "%-16.16f" for floats, maxlen 18
+	to match acad ascii dxfout better
+
+2020-10-30  Reini Urban  <rurban@cpan.org>
+
+	decode_r2007: repair Invalid string stream data_size
+	which happens with type>500 objects on r2007.
+	start all 3 streams at the same offset, the obj->address.
+	The problem was to assume str->byte == 1 (8 bit offset)
+	which was wrong with larger obj->type or obj->size MS sizes.
+
+	avoid duplicate obj_handle_stream()
+	Fixes GH #279
+
+2020-10-30  Reini Urban  <rurban@cpan.org>
+
+	dxf: ATTDEF re-ordering
+
+	dxf: honor dxf 0 for points
+	some points need to be skipped, e.g. BLOCKSCALEACTION
+
+	dxf: ATTRIB re-ordering
+
+	dxf: always print LAYER.plotflag 290 with Defpoints
+	See GH #275
+
+	dxf: ATTRIB defaults
+
+	dxf: re-order TEXT.vert_alignment 73
+	must be after SUBCLASS (AcDbText).
+	And fix ATTRIB.vert_alignment to group 74.
+
+	dxf: flip lineweight sign
+	use BSd not RC, which represented 140 as -116.
+	See GH #275. Tested all lineweights.
+
+	dxf: re-order VIEWPORT
+
+	fix bit_convert_TU for 128-255
+	wrong UCS-2 to UTF-8 conversion for the chars 128-255
+
+	skip more DXF defaults: 290, 284
+	ENTITY.shadow_flags 284 is optional
+	LAYER.plotflag 290 also.
+
+	fix DXF 10<=>30 for TEXT
+	the elevation is after the ins_pt 10,20 of course.
+	Also fix DXF for 11 and 210.
+	Thanks to GH #275.
+
+2020-10-30  Reini Urban  <rurban@cpan.org>
+
+	summaryinfo: fix types T to TU16
+	The length is RS prefixed.
+
+	fix HYPERLINKBASE default:
+	when encoding to later versions, we might need to convert the type
+
+	This fixes the 2007/colorwh dxf part for the SummaryInfo section,
+	GH #275
+
+2020-10-30  Reini Urban  <rurban@cpan.org>
+
+	dxf: fixup TU strings
+	convert \r\n to ^M^J for ASCII dxf. See GH #275 with 2007/colorwh,
+	an AutoDesk example dwg
+
+2020-10-28  Reini Urban  <rurban@cpan.org>
+
+	Fix out_geojson with r2007+
+	Text must be converted from UTF-16 to UTF-8
+	for MTEXT, TEXT and GEOPOSITIONMARKER.
+	Thanks to @chensscode, GH #271
+
+2020-10-22  Matthew Broadway  <matthew.broadway@navenio.com>
+
+	fixed dockerfile
+
+2020-10-09  Reini Urban  <rurban@cpan.org>
+
+	in_dxf: fix one wrong BLOCKALIGNMENTPARAMETER.prop_states type
+	we allocated for double but need only BITCODE_BL.
+	harmless bug, but found when looking at hardened -Wincompatible-pointer-types
+
+	c++: more c++ compat
+
+	revert some c++ compat casts
+	from 6d0295d60b1a3ea589ed44c5290fb07c3f38894b.
+	Avoid -Wincompatible-pointer-types with DWG_ENTITY and ADD_TABLE_IF
+
+2020-10-08  Reini Urban  <rurban@cpan.org>
+
+	msys2: fix broken msys2 mirror
+	update to latest image VS 2019, which does not need a complete update.
+
+2020-09-18  Reini Urban  <rurban@cpan.org>
+
+	c++: more c++ compat
+	at least for some private headers also.
+
+	cmake: add basic library support
+	Only for external cmake apps, like for the solvespace integration.
+	Only the lib, no programs yet.
+
+2020-09-14  Reini Urban  <rurban@cpan.org>
+
+	.gitignore: support clangd/lsp server
+	hint: make clean; bear make
+
+2020-09-05  Reini Urban  <rurban@cpan.org>
+
+	fixup {en,de}code VALUE types
+	for -Wformat with int immediates, such as
+	VALUE_BS (1, 70), where int i must be cast to unsigned short.
+
+2020-09-04  Reini Urban  <rurban@cpan.org>
+
+	perl: enable tests out-of-tree
+
+	perl: drop unneeded LibreDWG.xs
+	swig creates the .c for us
+
+	fix latest -Wformat-truncation=
+	which thinks that %lX can be 2-17 byte long
+
+	dxf_test: skip 2018/Helix inside docker
+	Closes GH #268
+
+2020-09-04  Reini Urban  <rurban@cpan.org>
+
+	Dockerfile: get latest release via tar
+	add another Dockerfile-master for testing git master.
+
+	add a check-docker target to test the current state, which needs
+	a distdir build-arg.
+
+2020-09-02  Reini Urban  <rurban@cpan.org>
+
+	Improve Dockerfile (GH #268)
+	add pcre2 dep.
+	pass DOCKER=1 to make check to skip testing unstable objects
+
+	Workaround bogus -Warray-bounds
+
+2020-08-22  Reini Urban  <rurban@cpan.org>
+
+	fix dwg_rgb_palette_index
+	detected by gcc-10.2 -Warray-bounds
+
+2020-08-10  Reini Urban  <rurban@cpan.org>
+
+	dat_read_file: protect fileno
+
+2020-08-07  Reini Urban  <rurban@cpan.org>
+
+        spec: post-release fixup
+
 2020-08-07  Reini Urban  <rurban@cpan.org>
 
 	Release 0.11

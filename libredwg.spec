@@ -1,6 +1,6 @@
 # -*- sh -*-
 Name:           libredwg
-Version:        0.11
+Version:        0.11.1
 Release:        1%{?dist}
 Summary:        GNU C library and programs to read and write DWG files
 
@@ -13,7 +13,7 @@ BuildRequires:  gcc, texinfo-tex, texinfo, pcre2-devel, swig, python3-devel
 BuildRequires:  python3-libxml2, perl-devel, perl-Convert-Binary-C, pslib-devel
 Requires:       pcre2, pcre2-utf16
 # no big-endian. s390 untested
-ExcludeArch:    sparc alpha ppc64 ppc
+ExcludeArch:    sparc alpha ppc64 ppc s390
 
 %description
 LibreDWG is a free C library to read and write DWG files. At the moment
@@ -98,6 +98,7 @@ fi
 %{_bindir}/dwgrewrite
 %{_bindir}/dwgwrite
 %{_bindir}/dxf2dwg
+%{_bindir}/dxfwrite
 %{_libdir}/libredwg.so.0
 %{_libdir}/libredwg.so.0.0.11
 %{_mandir}/man1/dwg2SVG.1.gz
@@ -111,6 +112,7 @@ fi
 %{_mandir}/man1/dwgrewrite.1.gz
 %{_mandir}/man1/dwgwrite.1.gz
 %{_mandir}/man1/dxf2dwg.1.gz
+%{_mandir}/man1/dxfwrite.1.gz
 %{_infodir}/LibreDWG.info.gz
 
 %files devel
@@ -131,11 +133,17 @@ fi
 #TODO add to {_libdir}/perl5/perllocal.pod
 
 %changelog
+* Mon 16 Nov 2020 Reini Urban <reini.urban@gmail.com> 0.11.1-1
+- upstream update. Add dxfwrite
+
 * Fri Aug 7 2020 Reini Urban <reini.urban@gmail.com> 0.11-1
 - upstream update
+
 * Wed Feb 19 2020 Reini Urban <reini.urban@gmail.com> 0.10.1.2915-1
 - with dwgfilter and dwgwrite, from github pre-releases
+
 * Mon Feb 17 2020 Reini Urban <reini.urban@gmail.com> 0.10.1-2
 - installvendor patch, added pslib
+
 * Sat Feb 15 2020 Reini Urban <reini.urban@gmail.com> 0.10.1-1
 - Initial version tested on fc31

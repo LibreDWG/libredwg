@@ -2,15 +2,33 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2020 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.11.1 - 2020/11/?? - beta:
+LibreDWG version 0.11.1 - 2020/11/16 - beta:
 
 Major bugfixes:
-  * Fixed decode of r2007 string streams (GH #279)
+  * Fixed decode of Unicode string streams (GH #279)
   * Fixed UCS-2 to UTF-8 conversion for the chars 128-255.
-  * Fixed DXF output of many objects: VISUALSTYLE, HATCH, DIMENSION, ATTDEF,
-    ATTRIB, TEXT, VIEWPORT.
-    Common: lineweight, shadow_flags, LAYER.plotflags (GH #275)
+  * Fixed DXF output of many objects: VISUALSTYLE, HATCH, DIMENSION*, ATTDEF,
+    ATTRIB, TEXT, VIEWPORT, INSERT, SEQEND, VERTEX, BLOCK, STYLE, MULTILEADER,
+    DICTIONARY, XRECORD INT64 type, MLINESTYLE angles, SPATIAL_FILTER.origin,
+    SPATIAL_INDEX class appname, duplicate STYLE eed, ACDBPLACEHOLDER for r13-r14,
+    LAYER.name with |, LAYER.plotflag for Defpoints, LTYPE.shape_flag, STLYE.flag,
+    PDFUNDERLAY group 170,
+    ACSH_CHAMFER_CLASS, ACSH_FILLET_CLASS, ACSH_BOOLEAN_CLASS, BLOCKBASEPOINTPARAMETER,
+    PROXY_OBJECT, PROXY_ENTITY.
+    HEADER.DIMSAV.
+    Common: lineweight, shadow_flags (GH #275)
+  * Moved PSPACE entities from BLOCKS to ENTITIES (GH #277)
   * Fixed \r\n quoting in DXF texts (GH #275)
+  * Generalize and fix DXF text splitup into 255 chunks and quoting, add basic
+    shift-jis quoting support for Katagana and Hiragana letters
+    (Japanese \M+1xxxx => Unicode \U+XXXX)
+  * Added indxf dwg_has_subclass check to avoid buffer overflows when writing to
+    wrong subclasses. (GH #295)
+  * Fixed dwg_dim_blockname calculation, esp. for anonymous blocks.
+  * Improved SAB 2 to SAT 1 conversion: Split overlarge blocks into block_size of max 4096.
+    Add "^ " quoting rule.
+  * Fixed decode of empty classes section, esp. for r13c3 and r14.
+  * Keep IDBUFFER for old DXFs (r13-r14)
   * Fixed SummaryInfo types from T to TU16, relevant for DXF headers also (GH #275)
   * Add missing UTF-8 conversion in geojson for TEXT, MTEXT, GEOPOSITIONMARKER. (GH #271)
   * Fixed and improved some Dockerfile, added a check-docker target.
@@ -19,6 +37,8 @@ Minor features:
   * Add CMake basic library support, so the library can be included into cmake projects.
     (no programs)
   * Improved header C++ compat.
+  * Promoted ACSH_HISTORY_CLASS to stable. Needed for ACIS entities in DXF.
+  * Added to examples: filt_sat.pl and dec_sat.pl to compare and decode DXF sat parts.
 
 LibreDWG version 0.11 - 2020/08/07 - beta:
 
