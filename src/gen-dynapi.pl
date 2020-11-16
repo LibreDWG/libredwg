@@ -2112,7 +2112,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2110 "gen-dynapi.pl"
+#line 2116 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2206,7 +2206,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 @@list name_subclasses@@
 };
 
-#line 2204 "gen-dynapi.pl"
+#line 2210 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
