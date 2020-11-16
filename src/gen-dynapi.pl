@@ -167,9 +167,9 @@ while (<$in>) {
 $ENT{LAYER}->{flag} = 'BS';
 $ENT{LAYER}->{name} = 'T';
 $ENT{DIMSTYLE}->{name} = 'T';
-$SUBCLASSES{DIMENSION_common} = [ 'AcDbDimension' ];
-$SUBCLASSES{ACTION_3DSOLID} = [ 'AcDbModelerGeometry' ];
-$SUBCLASSES{TABLECONTENTs} = [ 'AcDbLinkedTableData' ];
+$SUBCLASSES{DIMENSION_common} = [ qw(AcDbDimension) ];
+$SUBCLASSES{ACTION_3DSOLID} = [ qw(AcDbModelerGeometry AcDb3dSolid) ];
+$SUBCLASSES{TABLECONTENTs} = [ qw( AcDbLinkedTableData AcDbFormattedTableData AcDbTableContent) ];
 #$ENT{LTYPE}->{strings_area} = 'TF';
 close $in;
 my @old;

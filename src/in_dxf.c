@@ -8790,12 +8790,20 @@ new_object (char *restrict name, char *restrict dxfname,
 
               // When we have all proper types, check proper subclasses.
               // If the subclass is allowed in this object.
-#if 1
               if (!dwg_has_subclass (obj->name, subclass))
-#else
+                {
+                  if (is_type_stable (obj->fixedtype))
+                    {
+                      LOG_ERROR ("FIXME Unknown subclass %s in object %s", subclass, obj->name);
+                      return NULL;
+                    }
+                  else
+                    {
+                      LOG_WARN ("TODO Unknown subclass %s in object %s", subclass, obj->name);
+                    }
+                }
               if (strEQc (subclass, "AcDbDetailViewStyle")
                   && obj->fixedtype != DWG_TYPE_DETAILVIEWSTYLE)
-#endif
                 {
                   LOG_ERROR ("Invalid subclass %s in object %s", subclass, obj->name);
                   return NULL;

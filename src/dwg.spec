@@ -922,7 +922,7 @@ DWG_ENTITY_END
 DWG_ENTITY (VERTEX_MESH)
 
   SUBCLASS (AcDbVertex)
-  SUBCLASS (AcDbPolyFaceMeshVertex) //?
+  SUBCLASS (AcDbPolyFaceMeshVertex)
   FIELD_RC (flag, 0);
   FIELD_3BD (point, 10);
   DXF { FIELD_RC (flag, 70); }
@@ -7655,6 +7655,8 @@ DWG_ENTITY_END
   UNTIL (R_2010) {                           \
   if (FIELD_VALUE (actionbody))              \
     {                                        \
+      SUBCLASS (AcDbAssocActionBody);        \
+      FIELD_BL (aab_version, 90);            \
       AcDbAssocParamBasedActionBody_fields (pab); \
     }                                        \
   }
@@ -8806,7 +8808,7 @@ DWG_OBJECT_END
 DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
   DECODE_UNKNOWN_BITS
   AcDbAssocAnnotationActionBody_fields;
-  SUBCLASS (AcDbAssocAlignedDimActionBody)
+  SUBCLASS (ACDBASSOCALIGNEDDIMACTIONBODY)
   FIELD_BL (class_version, 90);
   //or status, 90 //has d_node or r_node?
   START_OBJECT_HANDLE_STREAM;
@@ -9757,7 +9759,7 @@ DWG_OBJECT (DATATABLE)
   DECODE_UNKNOWN_BITS
 #ifdef IS_DXF
   UNTIL (R_2000) {
-    SUBCLASS (ACDBDATABLE)
+    SUBCLASS (ACDBDATATABLE)
   } LATER_VERSIONS {
     SUBCLASS (AcDbDataTable)
   }
@@ -10388,6 +10390,7 @@ DWG_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM)
   AcDbAssocActionParam_fields;
   AcDbAssocCompoundActionParam_fields;
   SUBCLASS (AcDbAssocPathActionParam);
+  SUBCLASS (ACDBASSOCOSNAPPOINTREFACTIONPARAM);
   FIELD_BS (status, 90);
   FIELD_RC (osnap_mode, 90);
   FIELD_BD (param, 40);
