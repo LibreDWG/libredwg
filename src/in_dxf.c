@@ -8791,7 +8791,7 @@ new_object (char *restrict name, char *restrict dxfname,
               // When we have all proper types, check proper subclasses.
               // If the subclass is allowed in this object.
 #if 1
-              if (!dwg_has_subclass ((int)obj->fixedtype, subclass))
+              if (!dwg_has_subclass (obj->name, subclass))
 #else
               if (strEQc (subclass, "AcDbDetailViewStyle")
                   && obj->fixedtype != DWG_TYPE_DETAILVIEWSTYLE)

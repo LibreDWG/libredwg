@@ -909,7 +909,7 @@ DWG_ENTITY_END
 DWG_ENTITY (VERTEX_3D)
 
   SUBCLASS (AcDbVertex)
-  SUBCLASS (AcDb3dPolylineVertex) //SUBCLASS (AcDb3dVertex)?
+  SUBCLASS (AcDb3dPolylineVertex)
   FIELD_RC (flag, 0);
   FIELD_3BD (point, 10);
   DXF { FIELD_RC (flag, 70); }
@@ -5532,7 +5532,7 @@ DWG_OBJECT_END
 #define merged fdata.merged_cells[rcount1]
 
 // pg.237 20.4.97 for TABLE (2010+) and TABLECONTENT
-#define TABLECONTENT_fields					\
+#define TABLECONTENTs_fields					\
   SUBCLASS (AcDbLinkedData)                                     \
   FIELD_T (ldata.name, 1);					\
   FIELD_T (ldata.description, 300);				\
@@ -5692,7 +5692,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (TABLECONTENT)
   DECODE_UNKNOWN_BITS
-  TABLECONTENT_fields;
+  TABLECONTENTs_fields;
 
   START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (tablestyle, 3, 340);
@@ -5715,7 +5715,7 @@ DWG_ENTITY (TABLE)
       VERSION (R_2013)
         FIELD_BL (unknown_bl1, 0);
       // i.e. TABLECONTENT: 20.4.96.2 AcDbTableContent subclass: 20.4.97
-      TABLECONTENT_fields;
+      TABLECONTENTs_fields;
 
 #undef row
 #undef cell

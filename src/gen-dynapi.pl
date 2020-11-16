@@ -167,20 +167,24 @@ while (<$in>) {
 $ENT{LAYER}->{flag} = 'BS';
 $ENT{LAYER}->{name} = 'T';
 $ENT{DIMSTYLE}->{name} = 'T';
-$SUBCLASSES{ACTION_3DSOLID} = [ 'AcDModelerGeometry' ];
+$SUBCLASSES{DIMENSION_common} = [ 'AcDbDimension' ];
+$SUBCLASSES{ACTION_3DSOLID} = [ 'AcDbModelerGeometry' ];
+$SUBCLASSES{TABLECONTENTs} = [ 'AcDbLinkedTableData' ];
 #$ENT{LTYPE}->{strings_area} = 'TF';
 close $in;
 my @old;
 
 sub expand_define {
-  my ($def, $n, $defined) = @_;
+  my ($def, $n, $defined, $param) = @_;
   if (exists $defined->{$def}) {
     warn "expand defined $def fields";
-    for (keys %{$DXF{$def}}) {
-      $DXF{$n}->{$_} = $DXF{$def}->{$_};
-    }
-    for (keys %{$ENT{$def}}) {
-      $ENT{$n}->{$_} = $ENT{$def}->{$_};
+    if (!$param) { # replace the macro arg with $param? no. for now ignore
+      for (keys %{$DXF{$def}}) {
+        $DXF{$n}->{$_} = $DXF{$def}->{$_};
+      }
+      for (keys %{$ENT{$def}}) {
+        $ENT{$n}->{$_} = $ENT{$def}->{$_};
+      }
     }
     my $aref = $SUBCLASSES{$n};
     for my $k (@{$SUBCLASSES{$def}}) {
@@ -241,10 +245,10 @@ sub dxf_in {
       } elsif (/^int DWG_FUNC_N\s?\(ACTION,_HATCH(\w+)\)/) {
         $n = 'HATCH';
         warn $n;
-      } elsif (/^\#define (COMMON_ENTITY_(?:POLYLINE|DIMENSION|))/) {
+      } elsif (/^\#define (COMMON_ENTITY_POLYLINE)/) {
         $n = $1;
         warn "define $n";
-      } elsif (/^\#define (COMMON_3DSOLID|ACTION_3DSOLID)/) {
+      } elsif (/^\#define (COMMON_3DSOLID|ACTION_3DSOLID|COMMON_ENTITY_DIMENSION)/) {
         $n = $1;
         $defined{$n}++;
         warn "define $n";
@@ -422,7 +426,12 @@ sub dxf_in {
       $ENT{$n}->{$f} = $type if $type =~ /^T/;
     } elsif (/^\s+SUBCLASS\s*\((\w.+)\)/) {
       my $sc = $1;
-      # i.e. resolve AcGeomConstraint in ASSOC2DCONSTRAINTGROUP, ...
+      if ($sc eq 'AcDbLayout') { # FIXME: pop PLOTSETTINGS earlier in LAYOUT
+        if (@old && $old[0] eq 'LAYOUT') {
+          $n = pop @old;
+          warn "$n popped";
+        }
+      }
       if (exists $SUBCLASSES{$n}) {
         my $aref = $SUBCLASSES{$n};
         push @$aref, $sc;
@@ -430,11 +439,15 @@ sub dxf_in {
       } else {
         $SUBCLASSES{$n} = [ $sc ];
       }
-    } elsif (/^\s+(\w+)_fields[; ]/) {
+    } elsif (/^\s+(\w+)_fields;/) {
       expand_define ($1, $n, \%defined);
     } elsif (/^\s+(\w+_3DSOLID)/) { # special defines
       expand_define ($1, $n, \%defined);
-    } elsif (/^$/ && $defined{$n} && $n ne 'TABLECONTENT') {
+    } elsif (/^\s+(\w+)_fields \((\w+)\)/) { # parametric macro
+      expand_define ($1, $n, \%defined, $2);
+    } elsif (/^\s+(COMMON_ENTITY_DIMENSION)/) {
+      expand_define ($1, $n, \%defined);
+    } elsif (/^$/ && $defined{$n}) {
       warn "undef $n\n";
       @old = ();
       undef $n;
@@ -474,6 +487,7 @@ $DXF{'SORTENTSTABLE'}->{'ents'} = 331;
 $DXF{'SORTENTSTABLE'}->{'sort_ents'} = 5;
 $DXF{'PLOTSETTINGS'}->{'shadeplot'} = 333;
 $DXF{'OCD_Dimension'}->{'block'} = 2;
+$DXF{'TABLECONTENT'}->{'tablestyle'} = 340;
 $DXF{'TABLESTYLE'}->{'name'} = 3; # not 300
 $DXF{'TABLE_Cell'}->{'cell_flag_override'} = 177;
 $DXF{'ACSH_HistoryNode'}->{'trans'} = 40; # but inc by 1 for 16
@@ -862,10 +876,23 @@ for (sort @entity_names) {
   my $len = @$aref;
   $max_subclasses = $len if $len > $max_subclasses;
 }
+# /^(BLOCK_HEADER|LAYER|STYLE|LTYPE|VIEW|UCS|VPORT|APPID|DIMSTYLE|VX_TABLE_RECORD)$/
+my %table_dxfname = ( # See COMMON_TABLE_FLAGS
+  BLOCK_HEADER => 'Block',
+  LAYER => 'Layer',
+  STYLE => 'TextStyle',
+  LTYPE => 'Linetype',
+  VIEW => 'View',
+  UCS => 'UCS',
+  VPORT => 'Viewport',
+  APPID => 'RegApp',
+  DIMSTYLE => 'DimStyle',
+  VX_TABLE_RECORD => 'VX',
+);
 for (sort @object_names) {
   my $aref = $SUBCLASSES{$_};
   if (is_table ($_)) {
-    unshift @$aref, 'AcDbSymbolTableRecord';
+    unshift @$aref, ('AcDbSymbolTableRecord', 'AcDb' . $table_dxfname{$_} . 'TableRecord');
   } elsif (is_table_control ($_)) {
     unshift @$aref, 'AcDbSymbolTable';
   } else {
@@ -967,14 +994,14 @@ for (<DATA>) {
               $n, $type, $subclass, $_ . "_fields", $size, $i++;
           }
         }
-      } elsif ($n eq 'type_subclasses') {
+      } elsif ($n eq 'name_subclasses') {
         #print Dumper \%SUBCLASSES;
         for (sort keys %SUBCLASSES) {
           my $cl = $_;
           if (exists $entity_names{$cl} or exists $object_names{$cl}) {
             my $a = $SUBCLASSES{$cl};
-            $cl =~ s/^3D/_3D/;
-            printf $fh "  { DWG_TYPE_%s, {", $cl;
+            # $cl =~ s/^3D/_3D/;
+            printf $fh "  { \"%s\", {", $cl;
             for (0 .. $max_subclasses-1) {
               if ($a->[$_]) {
                 printf $fh "\"%s\"", $a->[$_];
@@ -2085,7 +2112,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2089 "gen-dynapi.pl"
+#line 2110 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2169,17 +2196,17 @@ static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
 
-struct _type_subclasses {
-  const int type;
+struct _name_subclasses {
+  const char *const name;
   const char *const subclasses[@@scalar max_subclasses@@];
 };
 
-/* List of all allowed subclasses per class. type is sorted for bsearch. */
-static const struct _type_subclasses dwg_type_subclasses[] = {
-@@list type_subclasses@@
+/* List of all allowed subclasses per class. sorted for bsearch. */
+static const struct _name_subclasses dwg_name_subclasses[] = {
+@@list name_subclasses@@
 };
 
-#line 2183 "gen-dynapi.pl"
+#line 2204 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -2198,15 +2225,6 @@ _name_struct_cmp (const void *restrict key, const void *restrict elem)
   //https://en.cppreference.com/w/c/algorithm/bsearch
   const struct _name *f = (struct _name *)elem;
   return strcmp ((const char *)key, f->name); //deref
-}
-
-static int
-_type_struct_cmp (const void *ptr1, const void *ptr2)
-{
-  //https://en.cppreference.com/w/c/algorithm/bsearch
-  const struct _type_subclasses *i1 = (struct _type_subclasses *)ptr1;
-  const struct _type_subclasses *i2 = (struct _type_subclasses *)ptr2;
-  return i1->type > i2->type ? 1 : i1->type == i2->type ? 0 : -1;
 }
 
 #define NUM_ENTITIES    ARRAY_SIZE(dwg_entity_names)
@@ -3078,22 +3096,22 @@ dwg_dynapi_subclass_name (const char *restrict type)
 }
 
 EXPORT bool
-dwg_has_subclass (int type, const char *restrict name)
+dwg_has_subclass (const char *restrict classname, const char *restrict subclass)
 {
-  struct _type_subclasses *f;
+  struct _name_subclasses *f;
 #ifndef HAVE_NONNULL
-  if (!name)
+  if (!classname || !name)
     return false;
 #endif
-  f = (struct _type_subclasses *)bsearch (&type, dwg_type_subclasses,
-                                          ARRAY_SIZE (dwg_type_subclasses),
-                                          sizeof (dwg_type_subclasses[0]),
-                                          _type_struct_cmp);
+  f = (struct _name_subclasses *)bsearch (classname, dwg_name_subclasses,
+                                          ARRAY_SIZE (dwg_name_subclasses),
+                                          sizeof (dwg_name_subclasses[0]),
+                                          _name_struct_cmp);
   if (f) {
     for (unsigned i = 0; i < @@scalar max_subclasses@@ /* max_subclasses */; i++) {
       if (!f->subclasses[i]) // already at NULL
         return false;
-      if (strEQ (name, f->subclasses[i]))
+      if (strEQ (subclass, f->subclasses[i]))
         return true;
     }
   }

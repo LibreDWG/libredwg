@@ -6276,7 +6276,7 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         && !memcmp (&ins_scale, &arc_dimension->ins_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("ARC_DIMENSION.ins_scale [3BD]");
+        fail ("ARC_DIMENSION.ins_scale [3BD_1]");
   }
   {
     BITCODE_B is_partial;
@@ -6386,14 +6386,14 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
     arc_dimension->unknown--;
   }
   {
-    BITCODE_TV user_text;
+    BITCODE_T user_text;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "user_text", &user_text, NULL)
         && user_text
            ? strEQ ((char *)user_text, (char *)arc_dimension->user_text)
            : !arc_dimension->user_text)
       pass ();
     else
-      fail ("ARC_DIMENSION.user_text [TV] '%s' <> '%s'", user_text, arc_dimension->user_text);
+      fail ("ARC_DIMENSION.user_text [T] '%s' <> '%s'", user_text, arc_dimension->user_text);
   }
   {
     BITCODE_3BD xline1_pt;
@@ -7937,7 +7937,7 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
         && !memcmp (&ins_scale, &dimension_aligned->ins_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("DIMENSION_ALIGNED.ins_scale [3BD]");
+        fail ("DIMENSION_ALIGNED.ins_scale [3BD_1]");
   }
   {
     BITCODE_BD lspace_factor;
@@ -8031,14 +8031,14 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
     dimension_aligned->unknown--;
   }
   {
-    BITCODE_TV user_text;
+    BITCODE_T user_text;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "user_text", &user_text, NULL)
         && user_text
            ? strEQ ((char *)user_text, (char *)dimension_aligned->user_text)
            : !dimension_aligned->user_text)
       pass ();
     else
-      fail ("DIMENSION_ALIGNED.user_text [TV] '%s' <> '%s'", user_text, dimension_aligned->user_text);
+      fail ("DIMENSION_ALIGNED.user_text [T] '%s' <> '%s'", user_text, dimension_aligned->user_text);
   }
   {
     BITCODE_3BD xline1_pt;
@@ -8275,7 +8275,7 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
         && !memcmp (&ins_scale, &dimension_ang2ln->ins_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("DIMENSION_ANG2LN.ins_scale [3BD]");
+        fail ("DIMENSION_ANG2LN.ins_scale [3BD_1]");
   }
   {
     BITCODE_BD lspace_factor;
@@ -8354,14 +8354,14 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
     dimension_ang2ln->unknown--;
   }
   {
-    BITCODE_TV user_text;
+    BITCODE_T user_text;
     if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "user_text", &user_text, NULL)
         && user_text
            ? strEQ ((char *)user_text, (char *)dimension_ang2ln->user_text)
            : !dimension_ang2ln->user_text)
       pass ();
     else
-      fail ("DIMENSION_ANG2LN.user_text [TV] '%s' <> '%s'", user_text, dimension_ang2ln->user_text);
+      fail ("DIMENSION_ANG2LN.user_text [T] '%s' <> '%s'", user_text, dimension_ang2ln->user_text);
   }
   {
     BITCODE_3BD xline1end_pt;
@@ -8622,7 +8622,7 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
         && !memcmp (&ins_scale, &dimension_ang3pt->ins_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("DIMENSION_ANG3PT.ins_scale [3BD]");
+        fail ("DIMENSION_ANG3PT.ins_scale [3BD_1]");
   }
   {
     BITCODE_BD lspace_factor;
@@ -8701,14 +8701,14 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     dimension_ang3pt->unknown--;
   }
   {
-    BITCODE_TV user_text;
+    BITCODE_T user_text;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "user_text", &user_text, NULL)
         && user_text
            ? strEQ ((char *)user_text, (char *)dimension_ang3pt->user_text)
            : !dimension_ang3pt->user_text)
       pass ();
     else
-      fail ("DIMENSION_ANG3PT.user_text [TV] '%s' <> '%s'", user_text, dimension_ang3pt->user_text);
+      fail ("DIMENSION_ANG3PT.user_text [T] '%s' <> '%s'", user_text, dimension_ang3pt->user_text);
   }
   {
     BITCODE_3BD xline1_pt;
@@ -8953,7 +8953,7 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
         && !memcmp (&ins_scale, &dimension_diameter->ins_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("DIMENSION_DIAMETER.ins_scale [3BD]");
+        fail ("DIMENSION_DIAMETER.ins_scale [3BD_1]");
   }
   {
     BITCODE_BD leader_len;
@@ -9047,14 +9047,14 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
     dimension_diameter->unknown--;
   }
   {
-    BITCODE_TV user_text;
+    BITCODE_T user_text;
     if (dwg_dynapi_entity_value (dimension_diameter, "DIMENSION_DIAMETER", "user_text", &user_text, NULL)
         && user_text
            ? strEQ ((char *)user_text, (char *)dimension_diameter->user_text)
            : !dimension_diameter->user_text)
       pass ();
     else
-      fail ("DIMENSION_DIAMETER.user_text [TV] '%s' <> '%s'", user_text, dimension_diameter->user_text);
+      fail ("DIMENSION_DIAMETER.user_text [T] '%s' <> '%s'", user_text, dimension_diameter->user_text);
   }
   if (failed && (is_class_unstable ("DIMENSION_DIAMETER") || is_class_debugging ("DIMENSION_DIAMETER")))
     {
@@ -9290,7 +9290,7 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         && !memcmp (&ins_scale, &dimension_linear->ins_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("DIMENSION_LINEAR.ins_scale [3BD]");
+        fail ("DIMENSION_LINEAR.ins_scale [3BD_1]");
   }
   {
     BITCODE_BD lspace_factor;
@@ -9384,14 +9384,14 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
     dimension_linear->unknown--;
   }
   {
-    BITCODE_TV user_text;
+    BITCODE_T user_text;
     if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "user_text", &user_text, NULL)
         && user_text
            ? strEQ ((char *)user_text, (char *)dimension_linear->user_text)
            : !dimension_linear->user_text)
       pass ();
     else
-      fail ("DIMENSION_LINEAR.user_text [TV] '%s' <> '%s'", user_text, dimension_linear->user_text);
+      fail ("DIMENSION_LINEAR.user_text [T] '%s' <> '%s'", user_text, dimension_linear->user_text);
   }
   {
     BITCODE_3BD xline1_pt;
@@ -9651,7 +9651,7 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
         && !memcmp (&ins_scale, &dimension_ordinate->ins_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("DIMENSION_ORDINATE.ins_scale [3BD]");
+        fail ("DIMENSION_ORDINATE.ins_scale [3BD_1]");
   }
   {
     BITCODE_3BD leader_endpt;
@@ -9738,14 +9738,14 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
     dimension_ordinate->unknown--;
   }
   {
-    BITCODE_TV user_text;
+    BITCODE_T user_text;
     if (dwg_dynapi_entity_value (dimension_ordinate, "DIMENSION_ORDINATE", "user_text", &user_text, NULL)
         && user_text
            ? strEQ ((char *)user_text, (char *)dimension_ordinate->user_text)
            : !dimension_ordinate->user_text)
       pass ();
     else
-      fail ("DIMENSION_ORDINATE.user_text [TV] '%s' <> '%s'", user_text, dimension_ordinate->user_text);
+      fail ("DIMENSION_ORDINATE.user_text [T] '%s' <> '%s'", user_text, dimension_ordinate->user_text);
   }
   if (failed && (is_class_unstable ("DIMENSION_ORDINATE") || is_class_debugging ("DIMENSION_ORDINATE")))
     {
@@ -9974,7 +9974,7 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
         && !memcmp (&ins_scale, &dimension_radius->ins_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("DIMENSION_RADIUS.ins_scale [3BD]");
+        fail ("DIMENSION_RADIUS.ins_scale [3BD_1]");
   }
   {
     BITCODE_BD leader_len;
@@ -10068,14 +10068,14 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
     dimension_radius->unknown--;
   }
   {
-    BITCODE_TV user_text;
+    BITCODE_T user_text;
     if (dwg_dynapi_entity_value (dimension_radius, "DIMENSION_RADIUS", "user_text", &user_text, NULL)
         && user_text
            ? strEQ ((char *)user_text, (char *)dimension_radius->user_text)
            : !dimension_radius->user_text)
       pass ();
     else
-      fail ("DIMENSION_RADIUS.user_text [TV] '%s' <> '%s'", user_text, dimension_radius->user_text);
+      fail ("DIMENSION_RADIUS.user_text [T] '%s' <> '%s'", user_text, dimension_radius->user_text);
   }
   if (failed && (is_class_unstable ("DIMENSION_RADIUS") || is_class_debugging ("DIMENSION_RADIUS")))
     {
@@ -12512,7 +12512,7 @@ static int test_LARGE_RADIAL_DIMENSION (const Dwg_Object *obj)
         && !memcmp (&ins_scale, &large_radial_dimension->ins_scale, sizeof (BITCODE_3BD)))
         pass ();
     else
-        fail ("LARGE_RADIAL_DIMENSION.ins_scale [3BD]");
+        fail ("LARGE_RADIAL_DIMENSION.ins_scale [3BD_1]");
   }
   {
     BITCODE_3BD jog_point;
@@ -12622,14 +12622,14 @@ static int test_LARGE_RADIAL_DIMENSION (const Dwg_Object *obj)
     large_radial_dimension->unknown--;
   }
   {
-    BITCODE_TV user_text;
+    BITCODE_T user_text;
     if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "user_text", &user_text, NULL)
         && user_text
            ? strEQ ((char *)user_text, (char *)large_radial_dimension->user_text)
            : !large_radial_dimension->user_text)
       pass ();
     else
-      fail ("LARGE_RADIAL_DIMENSION.user_text [TV] '%s' <> '%s'", user_text, large_radial_dimension->user_text);
+      fail ("LARGE_RADIAL_DIMENSION.user_text [T] '%s' <> '%s'", user_text, large_radial_dimension->user_text);
   }
   if (failed && (is_class_unstable ("LARGE_RADIAL_DIMENSION") || is_class_debugging ("LARGE_RADIAL_DIMENSION")))
     {
@@ -46632,16 +46632,6 @@ static int test_FIELD (const Dwg_Object *obj)
       fail ("FIELD.code [T] '%s' <> '%s'", code, field->code);
   }
   {
-    BITCODE_T data_string;
-    if (dwg_dynapi_entity_value (field, "FIELD", "data_string", &data_string, NULL)
-        && data_string
-           ? strEQ ((char *)data_string, (char *)field->data_string)
-           : !field->data_string)
-      pass ();
-    else
-      fail ("FIELD.data_string [T] '%s' <> '%s'", data_string, field->data_string);
-  }
-  {
     BITCODE_BL evaluation_error_code;
     if (dwg_dynapi_entity_value (field, "FIELD", "evaluation_error_code", &evaluation_error_code, NULL)
         && evaluation_error_code == field->evaluation_error_code)
@@ -46735,16 +46725,6 @@ static int test_FIELD (const Dwg_Object *obj)
       pass ();
     else
       fail ("FIELD.format [TV] '%s' <> '%s'", format, field->format);
-  }
-  {
-    BITCODE_T format_string;
-    if (dwg_dynapi_entity_value (field, "FIELD", "format_string", &format_string, NULL)
-        && format_string
-           ? strEQ ((char *)format_string, (char *)field->format_string)
-           : !field->format_string)
-      pass ();
-    else
-      fail ("FIELD.format_string [T] '%s' <> '%s'", format_string, field->format_string);
   }
   {
     BITCODE_T id;
@@ -56804,16 +56784,6 @@ static int test_TABLESTYLE (const Dwg_Object *obj)
     else
       fail ("TABLESTYLE.unknown_rc [RC] set+1 %u != %u", tablestyle->unknown_rc, unknown_rc);
     tablestyle->unknown_rc--;
-  }
-  {
-    BITCODE_T value_format_string;
-    if (dwg_dynapi_entity_value (tablestyle, "TABLESTYLE", "value_format_string", &value_format_string, NULL)
-        && value_format_string
-           ? strEQ ((char *)value_format_string, (char *)tablestyle->value_format_string)
-           : !tablestyle->value_format_string)
-      pass ();
-    else
-      fail ("TABLESTYLE.value_format_string [T] '%s' <> '%s'", value_format_string, tablestyle->value_format_string);
   }
   {
     BITCODE_BD vert_cell_margin;

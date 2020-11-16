@@ -896,13 +896,13 @@ RC,	DXF 70
 @item flag1
 RC
 @item user_text
-TV,	DXF 1
+T,	DXF 1
 @item text_rotation
 BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD
+3BD_1
 @item ins_rotation
 BD,	DXF 54
 @item attachment
@@ -1246,13 +1246,13 @@ RC,	DXF 70
 @item flag1
 RC
 @item user_text
-TV,	DXF 1
+T,	DXF 1
 @item text_rotation
 BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD
+3BD_1
 @item ins_rotation
 BD,	DXF 54
 @item attachment
@@ -1311,13 +1311,13 @@ RC,	DXF 70
 @item flag1
 RC
 @item user_text
-TV,	DXF 1
+T,	DXF 1
 @item text_rotation
 BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD
+3BD_1
 @item ins_rotation
 BD,	DXF 54
 @item attachment
@@ -1378,13 +1378,13 @@ RC,	DXF 70
 @item flag1
 RC
 @item user_text
-TV,	DXF 1
+T,	DXF 1
 @item text_rotation
 BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD
+3BD_1
 @item ins_rotation
 BD,	DXF 54
 @item attachment
@@ -1443,13 +1443,13 @@ RC,	DXF 70
 @item flag1
 RC
 @item user_text
-TV,	DXF 1
+T,	DXF 1
 @item text_rotation
 BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD
+3BD_1
 @item ins_rotation
 BD,	DXF 54
 @item attachment
@@ -1506,13 +1506,13 @@ RC,	DXF 70
 @item flag1
 RC
 @item user_text
-TV,	DXF 1
+T,	DXF 1
 @item text_rotation
 BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD
+3BD_1
 @item ins_rotation
 BD,	DXF 54
 @item attachment
@@ -1573,13 +1573,13 @@ RC,	DXF 70
 @item flag1
 RC
 @item user_text
-TV,	DXF 1
+T,	DXF 1
 @item text_rotation
 BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD
+3BD_1
 @item ins_rotation
 BD,	DXF 54
 @item attachment
@@ -1638,13 +1638,13 @@ RC,	DXF 70
 @item flag1
 RC
 @item user_text
-TV,	DXF 1
+T,	DXF 1
 @item text_rotation
 BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD
+3BD_1
 @item ins_rotation
 BD,	DXF 54
 @item attachment
@@ -2134,13 +2134,13 @@ RC,	DXF 70
 @item flag1
 RC
 @item user_text
-TV,	DXF 1
+T,	DXF 1
 @item text_rotation
 BD,	DXF 53
 @item horiz_dir
 BD,	DXF 51
 @item ins_scale
-3BD
+3BD_1
 @item ins_rotation
 BD,	DXF 54
 @item attachment
@@ -13564,7 +13564,7 @@ BL,	DXF 90
 @item data_flags
 BS,	DXF 170
 @item property_override_flags
-BL,	DXF 90
+BL,	DXF 91
 @item merge_flags
 BL,	DXF 92
 @item bg_color
