@@ -57,10 +57,12 @@
             (wcmatch dxf "3_*from_cadforum.cz_2004.dxf") ; dbobji.cpp@306 assert
             (wcmatch dxf "V_[69]*from_cadforum.cz_2000.dxf") ; dbobji.cpp@306 assert
             (wcmatch dxf "*_from_cadforum.cz_2004.dxf") ; silent crash
-            (wcmatch dxf "Ashraf_Basic_File-1_Feet_input_2_1_2000.dxf")  ; silent crash. Meter works
-            (wcmatch dxf "budweiser_from_cadforum.cz_2000.dxf")  ; silent crash
-            (wcmatch dxf "5151-0??_2010.dxf")  ; silent crash
-            (wcmatch dxf "ACI_20160321_A_30_east_2010.dxf")
+            (wcmatch dxf "00_001_Z*.to_2004.dxf"); silent crash
+            (wcmatch dxf "Ashraf_B*_2000.dxf")   ; silent crash. Meter works
+            (wcmatch dxf "budweiser_*_2000.dxf") ; silent crash
+            (wcmatch dxf "5151-0??_2010.dxf")    ; silent crash
+            (wcmatch dxf "ACI_20160321_A_30_east_2010.dxf") ; silent crash
+            (wcmatch dxf "blocks_and_tables_-_metric_2007.dxf") ; silent crash. imperial works
             )
         (print (strcat dxf " skipped"))
       (progn
