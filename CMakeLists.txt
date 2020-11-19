@@ -1,3 +1,6 @@
+project(libredwg C)
+cmake_minimum_required(VERSION 2.8)
+
 if(MSVC)
     # Disable some overly strict MSVC warnings.
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -wd4244 -wd4800 -wd4805")
@@ -12,6 +15,7 @@ else()
                     OUTPUT_VARIABLE NL_PACKAGE_VERSION)
 endif()
 string(STRIP "${NL_PACKAGE_VERSION}" PACKAGE_VERSION)
+
 include(CheckIncludeFile)
 CHECK_INCLUDE_FILE("stddef.h" HAVE_STDDEF_H)
 CHECK_INCLUDE_FILE("stdlib.h" HAVE_STDLIB_H)
@@ -31,7 +35,29 @@ check_type_size(wchar_t WCHAR_T)
 if (WCHAR_T EQUAL 2)
   set(HAVE_PCRE2_16 1)
 endif()
+#include(CheckCCompilerFlag)
 configure_file(src/cmakeconfig.h.in src/config.h)
+if(CMAKE_MAJOR_VERSION GREATER 2)
+  include(TestBigEndian)
+  test_big_endian(IS_BIG_ENDIAN)
+  if(IS_BIG_ENDIAN)
+    message(ERROR "Big Endian not supported: <${error}>")
+    #add_definitions(-DBIG_ENDIAN)
+  endif()
+endif()
+option(BUILD_SHARED_LIBS "shared libredwg library" ON)
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "Release"
+      CACHE STRING "Choose the type of build, options are: Debug Release
+  RelWithDebInfo MinSizeRel Asan." FORCE)
+endif()
+
+if((CMAKE_MAJOR_VERSION EQUAL 3 AND CMAKE_MINOR_VERSION GREATER_EQUAL 9)
+   AND (CMAKE_BUILD_TYPE STREQUAL "Release"))
+  cmake_policy(SET CMP0069 NEW)
+  include(CheckIPOSupported)
+  check_ipo_supported(RESULT ipo_supported OUTPUT error)
+endif()
 
 set(libredwg_HEADERS
     include/dwg.h
@@ -49,22 +75,88 @@ set(libredwg_SOURCES
     src/dwg_api.c
     src/dynapi.c
     src/free.c
-    src/in_dxf.c
     src/out_dxf.c
-    #src/in_json.c
     src/out_json.c
     src/out_dxfb.c
     src/out_geojson.c
+    src/in_dxf.c
+    src/in_json.c
     src/reedsolomon.c
     src/print.c)
 
-add_library(redwg STATIC
+add_library(redwg
     ${libredwg_HEADERS}
     ${libredwg_SOURCES})
-
+set_target_properties(redwg PROPERTIES PUBLIC_HEADER include/dwg_api.h)
+set_target_properties(redwg PROPERTIES PUBLIC_HEADER include/dwg.h)
 target_include_directories(redwg PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_BINARY_DIR}/src)
-
 target_include_directories(redwg PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include)
+  ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+link_libraries(redwg -lm ${CMAKE_THREAD_LIBS_INIT})
+
+add_executable(dwgread programs/dwgread.c)
+add_executable(dwgwrite programs/dwgwrite.c)
+add_executable(dwg2dxf programs/dwg2dxf.c)
+add_executable(dxf2dwg programs/dxf2dwg.c)
+add_executable(dwggrep programs/dwggrep.c)
+add_executable(dwglayers programs/dwglayers.c)
+add_executable(dwgbmp programs/dwgbmp.c)
+add_executable(dwg2SVG programs/dwg2SVG.c
+                       programs/escape.c programs/geom.c)
+
+if (HAVE_PCRE2_H)
+  if(HAVE_PCRE2_16)
+    target_link_libraries(dwggrep redwg -lpcre2-8 -lpcre2-16)
+  else()
+    target_link_libraries(dwggrep redwg -lpcre2-8)
+  endif()
+  #target_include_directories(dwggrep PUBLIC pcre2)
+endif()
+
+if(ipo_supported)
+  message(STATUS "IPO / LTO enabled")
+  set_property(GLOBAL PROPERTY INTERPROCEDURAL_OPTIMIZATION True)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DLTO")
+else()
+  message(STATUS "IPO / LTO not supported: <${error}>")
+endif()
+
+include_directories(BEFORE
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/src
+  ${CMAKE_CURRENT_BINARY_DIR}/src)
+
+if(NOT (CMAKE_CROSSCOMPILING))
+  enable_testing()
+  add_test(programs cd programs; ./alive.test)
+endif()
+
+add_custom_target(
+  TAGS
+  COMMAND etags --language=c++ *.c *.h
+  DEPENDS ${SRCS}
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+if(MSVC)
+  #untested
+  install(TARGETS redwg RUNTIME PUBLIC_HEADER
+         DESTINATION libredwg-${PACKAGE_VERSION})
+else()
+  include(GNUInstallDirs)
+endif()
+#install(TARGETS PUBLIC_HEADER include/dwg_api.h)
+install(TARGETS redwg
+  LIBRARY
+    COMPONENT redwg
+    )
+install(TARGETS RUNTIME)
+
+if(MSVC)
+  #untested
+  add_custom_target(dist
+    COMMAND zip libredwg-${PACKAGE_VERSION}.zip dwg*.exe dxf*.exe libredwg-*.dll
+    DEPENDS redwg)
+endif()

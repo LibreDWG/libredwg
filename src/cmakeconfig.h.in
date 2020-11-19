@@ -107,10 +107,10 @@
 #define HAVE_MEMORY_H 1
 
 /* Define to 1 if -lpcre2-16 is used also */
-#cmakedefine01 HAVE_PCRE2_16
+#cmakedefine HAVE_PCRE2_16
 
 /* Define to 1 if you have the <pcre2.h> header file. */
-#cmakedefine01 HAVE_PCRE2_H
+#cmakedefine HAVE_PCRE2_H
 
 /* If available, contains the Python version number currently in use. */
 /* #undef HAVE_PYTHON */
