@@ -44,11 +44,13 @@ api_process (dwg_object *obj)
   /* radius */
   CHK_ENTITY_3RD_W_OLD (dim_radius, DIMENSION_RADIUS, first_arc_pt);
   CHK_ENTITY_TYPE (dim_radius, DIMENSION_RADIUS, leader_len, BD);
+#ifdef USE_DEPRECATED_API
   if (leader_len != dwg_ent_dim_radius_get_leader_length (dim_radius, &error)
       || error)
     fail ("old API dwg_ent_dim_radius_get_leader_length");
   else
     pass ();
+#endif
 
   CHK_ENTITY_H (dim_radius, DIMENSION_RADIUS, dimstyle);
   CHK_ENTITY_H (dim_radius, DIMENSION_RADIUS, block);

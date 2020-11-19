@@ -45,18 +45,22 @@ api_process (dwg_object *obj)
   /* aligned */
   CHK_ENTITY_3RD_W_OLD (dim_aligned, DIMENSION_ALIGNED, def_pt);
   CHK_ENTITY_3RD (dim_aligned, DIMENSION_ALIGNED, xline1_pt);
+#ifdef USE_DEPRECATED_API
   dwg_ent_dim_aligned_get_13_pt (dim_aligned, &pt3d, &error);
   if (error || memcmp (&xline1_pt, &pt3d, sizeof (xline1_pt)))
     fail ("old API dwg_ent_dim_aligned_get_13_pt");
   else
     pass ();
+#endif
 
   CHK_ENTITY_3RD (dim_aligned, DIMENSION_ALIGNED, xline2_pt);
+#ifdef USE_DEPRECATED_API
   dwg_ent_dim_aligned_get_14_pt (dim_aligned, &pt3d, &error);
   if (error || memcmp (&xline2_pt, &pt3d, sizeof (xline2_pt)))
     fail ("old API dwg_ent_dim_aligned_get_14_pt");
   else
     pass ();
+#endif
 
   CHK_ENTITY_TYPE (dim_aligned, DIMENSION_ALIGNED, oblique_angle, BD);
 

@@ -44,23 +44,29 @@ api_process (dwg_object *obj)
   /* ang3pt */
   CHK_ENTITY_3RD_W_OLD (dim_ang3pt, DIMENSION_ANG3PT, def_pt);
   CHK_ENTITY_3RD (dim_ang3pt, DIMENSION_ANG3PT, center_pt);
+#ifdef USE_DEPRECATED_API
   dwg_ent_dim_ang3pt_get_first_arc_pt (dim_ang3pt, &pt3d, &error);
   if (error || memcmp (&center_pt, &pt3d, sizeof (center_pt)))
     fail ("old API dwg_ent_dim_ang3pt_get_first_arc_pt");
   else
     pass ();
+#endif
   CHK_ENTITY_3RD (dim_ang3pt, DIMENSION_ANG3PT, xline1_pt);
+#ifdef USE_DEPRECATED_API
   dwg_ent_dim_ang3pt_get_13_pt (dim_ang3pt, &pt3d, &error);
   if (error || memcmp (&xline1_pt, &pt3d, sizeof (xline1_pt)))
     fail ("old API dwg_ent_dim_ang3pt_get_13_pt");
   else
     pass ();
+#endif
   CHK_ENTITY_3RD (dim_ang3pt, DIMENSION_ANG3PT, xline2_pt);
+#ifdef USE_DEPRECATED_API
   dwg_ent_dim_ang3pt_get_14_pt (dim_ang3pt, &pt3d, &error);
   if (error || memcmp (&xline2_pt, &pt3d, sizeof (xline2_pt)))
     fail ("old API dwg_ent_dim_ang3pt_get_14_pt");
   else
     pass ();
+#endif
 
   CHK_ENTITY_H (dim_ang3pt, DIMENSION_ANG3PT, dimstyle);
   CHK_ENTITY_H (dim_ang3pt, DIMENSION_ANG3PT, block);

@@ -37,10 +37,14 @@ api_process (dwg_object *obj)
 
   if (!dwg_dynapi_entity_value (image, "IMAGE", "clip_verts", &clip_verts, NULL))
     fail ("IMAGE.clip_verts");
+#ifdef USE_DEPRECATED_API
   cpts = dwg_ent_image_get_clip_verts (image, &error);
   if (error)
     fail ("IMAGE.clip_verts");
   else
+#else
+  cpts = image->clip_verts;
+#endif
     {
       for (BITCODE_BL i = 0; i < num_clip_verts; i++)
         {
@@ -50,7 +54,9 @@ api_process (dwg_object *obj)
             fail ("IMAGE.clip_verts[%d]", i);
         }
     }
+#ifdef USE_DEPRECATED_API
   free (cpts);
+#endif
 
   CHK_ENTITY_H (image, IMAGE, imagedef);
   CHK_ENTITY_H (image, IMAGE, imagedefreactor);

@@ -45,17 +45,21 @@ api_process (dwg_object *obj)
   /* linear */
   CHK_ENTITY_3RD_W_OLD (dim_linear, DIMENSION_LINEAR, def_pt);
   CHK_ENTITY_3RD (dim_linear, DIMENSION_LINEAR, xline1_pt);
+#ifdef USE_DEPRECATED_API
   dwg_ent_dim_linear_get_13_pt (dim_linear, &pt3d, &error);
   if (error || memcmp (&xline1_pt, &pt3d, sizeof (xline1_pt)))
     fail ("DIMENSION_LINEAR.xline1_pt");
   else
     pass ();
+#endif
   CHK_ENTITY_3RD (dim_linear, DIMENSION_LINEAR, xline2_pt);
+#ifdef USE_DEPRECATED_API
   dwg_ent_dim_linear_get_14_pt (dim_linear, &pt3d, &error);
   if (error || memcmp (&xline2_pt, &pt3d, sizeof (xline2_pt)))
     fail ("DIMENSION_LINEAR.xline2_pt");
   else
     pass ();
+#endif
   CHK_ENTITY_TYPE (dim_linear, DIMENSION_LINEAR, oblique_angle, BD);
   CHK_ENTITY_TYPE_W_OLD (dim_linear, DIMENSION_LINEAR, dim_rotation, BD);
 

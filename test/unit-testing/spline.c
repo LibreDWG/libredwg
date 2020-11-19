@@ -62,7 +62,12 @@ api_process (dwg_object *obj)
       if (num_fit_pts)
         fail ("SPLINE.num_fit_pts with scenario 1");
 
+#ifdef USE_DEPRECATED_API
       cpts = dwg_ent_spline_get_ctrl_pts (spline, &error);
+#else
+      cpts = spline->ctrl_pts;
+      error = 0;
+#endif
       if (error)
         fail ("SPLINE.ctrl_pts");
       else
@@ -75,9 +80,16 @@ api_process (dwg_object *obj)
                 fail ("SPLINE.ctrl_pts[%d]", i);
             }
         }
+#ifdef USE_DEPRECATED_API
       free (cpts);
+#endif
 
+#ifdef USE_DEPRECATED_API
       knots1 = dwg_ent_spline_get_knots (spline, &error);
+#else
+      knots1 = spline->knots;
+      error = 0;
+#endif
       if (error)
         fail ("SPLINE.knots");
       else
@@ -89,7 +101,9 @@ api_process (dwg_object *obj)
                 fail ("SPLINE.knots[%d]", i);
             }
         }
+#ifdef USE_DEPRECATED_API
       free (knots1);
+#endif
     }
   else
     {
@@ -99,7 +113,12 @@ api_process (dwg_object *obj)
       if (num_ctrl_pts)
         fail ("SPLINE.num_ctrl_pts with scenario 2");
 
+#ifdef USE_DEPRECATED_API
       pts = dwg_ent_spline_get_fit_pts (spline, &error);
+#else
+      pts = (dwg_point_3d *)spline->fit_pts;
+      error = 0;
+#endif
       if (error)
         fail ("SPLINE.fit_pts");
       else
@@ -112,6 +131,8 @@ api_process (dwg_object *obj)
                 fail ("SPLINE.fit_pts[%d]", i);
             }
         }
+#ifdef USE_DEPRECATED_API
       free (pts);
+#endif
     }
 }

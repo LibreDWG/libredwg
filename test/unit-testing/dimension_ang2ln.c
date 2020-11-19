@@ -50,17 +50,21 @@ api_process (dwg_object *obj)
 
   /* ang2ln */
   CHK_ENTITY_3RD (dim_ang2ln, DIMENSION_ANG2LN, xline1start_pt);
+#ifdef USE_DEPRECATED_API
   dwg_ent_dim_ang2ln_get_13_pt (dim_ang2ln, &pt3d, &error);
   if (error || memcmp (&xline1start_pt, &pt3d, sizeof (xline1start_pt)))
     fail ("old API dwg_ent_dim_ang2ln_get_13_pt");
   else
     pass ();
+#endif
   CHK_ENTITY_3RD (dim_ang2ln, DIMENSION_ANG2LN, xline1end_pt);
+#ifdef USE_DEPRECATED_API
   dwg_ent_dim_ang2ln_get_14_pt (dim_ang2ln, &pt3d, &error);
   if (error || memcmp (&xline1end_pt, &pt3d, sizeof (xline1end_pt)))
     fail ("old API dwg_ent_dim_ang2ln_get_14_pt");
   else
     pass ();
+#endif
   CHK_ENTITY_3RD (dim_ang2ln, DIMENSION_ANG2LN, xline2start_pt);
   /*
   dwg_ent_dim_ang2ln_get_15_pt (dim_ang2ln, &pt3d, &error);
@@ -70,11 +74,13 @@ api_process (dwg_object *obj)
     pass ();
   */
   CHK_ENTITY_3RD (dim_ang2ln, DIMENSION_ANG2LN, xline2end_pt);
+#ifdef USE_DEPRECATED_API
   dwg_ent_dim_ang2ln_get_16_pt (dim_ang2ln, &pt3d, &error);
   if (error || memcmp (&xline2end_pt, &pt3d, sizeof (xline2end_pt)))
     fail ("old API dwg_ent_dim_ang2ln_get_16_pt");
   else
     pass ();
+#endif
 
   CHK_ENTITY_H (dim_ang2ln, DIMENSION_ANG2LN, dimstyle);
   CHK_ENTITY_H (dim_ang2ln, DIMENSION_ANG2LN, block);

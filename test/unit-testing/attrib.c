@@ -18,10 +18,12 @@ api_process (dwg_object *obj)
   dwg_ent_attrib *attrib = dwg_object_to_ATTRIB (obj);
 
   CHK_ENTITY_UTF8TEXT (attrib, ATTRIB, text_value);
+#ifdef USE_DEPRECATED_API
   if (version < R_2007
       && (strcmp (dwg_ent_attrib_get_text (attrib, &error), text_value)
           || error))
     fail ("old API dwg_ent_attrib_get_text");
+#endif
   CHK_ENTITY_2RD (attrib, ATTRIB, ins_pt);
   CHK_ENTITY_2RD (attrib, ATTRIB, alignment_pt);
   CHK_ENTITY_3RD_W_OLD (attrib, ATTRIB, extrusion);

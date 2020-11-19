@@ -576,7 +576,9 @@ output_test (dwg_data *dwg)
 
   if (!dwg)
     return;
+#ifdef USE_DEPRECATED_API
   dwg_api_init_version (dwg);
+#endif
   _hdr = dwg_get_block_header (dwg, &error);
   if (!_hdr || error)
     return;
@@ -1133,6 +1135,12 @@ api_common_entity (dwg_object *obj)
     ? _DWGAPI_OBJ_NAME (ent, field)                                           \
     : _DWGAPI_ENT_NAME (ent, field))
 
+#ifndef USE_DEPRECATED_API
+#  define CHK_ENTITY_UTF8TEXT_W_OLD(ent, name, field)     \
+  CHK_ENTITY_UTF8TEXT(ent, name, field)
+#  define CHK_ENTITY_UTF8TEXT_W_OBJ(ent, name, field)     \
+  CHK_ENTITY_UTF8TEXT(ent, name, field)
+#else
 #define CHK_ENTITY_UTF8TEXT_W_OLD(ent, name, field)                           \
   _CHK_ENTITY_UTF8TEXT (ent, name, field);                                    \
   {                                                                           \
@@ -1165,7 +1173,14 @@ api_common_entity (dwg_object *obj)
     if (isnew)                                                                \
       free (field);                                                           \
   }
+#endif
 
+#ifndef USE_DEPRECATED_API
+#  define CHK_ENTITY_TYPE_W_OLD(ent, name, field, type)        \
+  CHK_ENTITY_TYPE(ent, name, field, type)
+#  define CHK_ENTITY_TYPE_W_OBJ(ent, name, field, type)        \
+  CHK_ENTITY_TYPE(ent, name, field, type)
+#else
 #define CHK_ENTITY_TYPE_W_OLD(ent, name, field, type)                         \
   {                                                                           \
     BITCODE_##type old;                                                       \
@@ -1190,7 +1205,12 @@ api_common_entity (dwg_object *obj)
     else                                                                      \
       pass ();                                                                \
   }
+#endif
 
+#ifndef USE_DEPRECATED_API
+#  define CHK_ENTITY_2RD_W_OLD(ent, name, field) CHK_ENTITY_2RD (ent, name, field)
+#  define CHK_ENTITY_3RD_W_OLD(ent, name, field) CHK_ENTITY_3RD (ent, name, field)
+#else
 #define CHK_ENTITY_2RD_W_OLD(ent, name, field)                                \
   CHK_ENTITY_2RD (ent, name, field);                                          \
   {                                                                           \
@@ -1201,7 +1221,6 @@ api_common_entity (dwg_object *obj)
     else                                                                      \
       pass ();                                                                \
   }
-
 #define CHK_ENTITY_3RD_W_OLD(ent, name, field)                         	      \
   CHK_ENTITY_3RD (ent, name, field);                                          \
   {                                                                           \
@@ -1212,6 +1231,7 @@ api_common_entity (dwg_object *obj)
     else                                                                      \
       pass ();                                                                \
   }
+#endif
 
 #define CHK_SUBCLASS_TYPE(ptr, name, field, typ)                              \
   {                                                                           \

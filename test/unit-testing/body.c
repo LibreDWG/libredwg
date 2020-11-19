@@ -10,14 +10,17 @@ api_process (dwg_object *obj)
 
   dwg_ent_body *body = dwg_object_to_BODY (obj);
   Dwg_Version_Type dwg_version = obj->parent->header.version;
+  error = 0;
 
   CHK_ENTITY_TYPE_W_OLD (body, BODY, acis_empty, B);
   CHK_ENTITY_TYPE_W_OLD (body, BODY, version, BS);
   CHK_ENTITY_TYPE (body, BODY, acis_data, TV);
+#ifdef USE_DEPRECATED_API
   if (strcmp ((char *)dwg_ent_body_get_acis_data (body, &error),
               (char *)acis_data)
       || error)
     fail ("old API dwg_ent_body_get_acis_data");
+#endif
   CHK_ENTITY_TYPE_W_OLD (body, BODY, wireframe_data_present, B);
   CHK_ENTITY_TYPE_W_OLD (body, BODY, point_present, B);
   CHK_ENTITY_3RD_W_OLD (body, BODY, point);
@@ -26,7 +29,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (body, BODY, num_wires, BL);
   CHK_ENTITY_TYPE_W_OLD (body, BODY, num_silhouettes, BL);
 
+#ifdef USE_DEPRECATED_API
   wires = dwg_ent_body_get_wires (body, &error);
+#else
+  wires = body->wires;
+#endif
   if (!error)
     {
       for (i = 0; i < num_wires; i++)
@@ -59,7 +66,11 @@ api_process (dwg_object *obj)
   else
     fail ("dwg_ent_body_get_wires");
 
+#ifdef USE_DEPRECATED_API
   silhouettes = dwg_ent_body_get_silhouettes (body, &error);
+#else
+  silhouettes = body->silhouettes;
+#endif
   if (!error)
     {
       for (i = 0; i < num_silhouettes; i++)

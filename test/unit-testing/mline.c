@@ -25,14 +25,23 @@ api_process (dwg_object *obj)
 
   if (!dwg_dynapi_entity_value (mline, "MLINE", "verts", &v1, NULL))
     fail ("MLINE.verts");
+#ifdef USE_DEPRECATED_API
   verts = dwg_ent_mline_get_verts (mline, &error);
+#else
+  verts = (dwg_mline_vertex *)mline->verts;
+  error = 0;
+#endif
   if (error)
     fail ("MLINE.verts");
   else
     {
       for (i = 0; i < num_verts; i++)
         {
+#ifdef USE_DEPRECATED_API
           dwg_mline_line *lines = dwg_mline_vertex_get_lines (&verts[i], &error);
+#else
+          dwg_mline_line *lines = (dwg_mline_line *)verts[i].lines;
+#endif
           if (error)
             fail ("MLINE.verts[%d].lines", i);
           else
@@ -51,7 +60,9 @@ api_process (dwg_object *obj)
                     }
                 }
             }
+#ifdef USE_DEPRECATED_API
           free (lines);
+#endif
 
           ok ("MLINE.verts[%d]: (%f, %f, %f)", i, verts[i].vertex.x,
               verts[i].vertex.y, verts[i].vertex.z);
@@ -60,7 +71,9 @@ api_process (dwg_object *obj)
             fail ("MLINE.verts[%d]", i);
         }
     }
+#ifdef USE_DEPRECATED_API
   free (verts);
+#endif
 
   CHK_ENTITY_H (mline, MLINE, mlinestyle);
 }

@@ -1906,6 +1906,8 @@ EXPORT bool dwg_ent_set_BOOL (void *restrict _obj,
 
 #ifndef SWIGIMPORTED
 
+#ifdef USE_DEPRECATED_API
+
 /********************************************************************
 *                    FUNCTIONS FOR CIRCLE ENTITY                    *
 *********************************************************************/
@@ -3901,10 +3903,6 @@ EXPORT void dwg_ent_lwpline_set_extrusion (dwg_ent_lwpline *restrict lwpline,
                                            int *restrict error)
     __nonnull ((2, 3)) _deprecated_dynapi_setter;
 
-EXPORT BITCODE_BL dwg_ent_lwpline_get_numpoints (
-    const dwg_ent_lwpline *restrict lwpline, int *restrict error)
-    __nonnull ((2));
-
 EXPORT BITCODE_BL dwg_ent_lwpline_get_numbulges (
     const dwg_ent_lwpline *restrict lwpline, int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
@@ -3912,18 +3910,6 @@ EXPORT BITCODE_BL dwg_ent_lwpline_get_numbulges (
 EXPORT BITCODE_BL dwg_ent_lwpline_get_numwidths (
     const dwg_ent_lwpline *restrict lwpline, int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
-
-EXPORT double *
-dwg_ent_lwpline_get_bulges (const dwg_ent_lwpline *restrict lwpline,
-                            int *restrict error) __nonnull ((2));
-
-EXPORT dwg_point_2d *
-dwg_ent_lwpline_get_points (const dwg_ent_lwpline *restrict lwpline,
-                            int *restrict error) __nonnull ((2));
-
-EXPORT dwg_lwpline_widths *
-dwg_ent_lwpline_get_widths (const dwg_ent_lwpline *restrict lwpline,
-                            int *restrict error) __nonnull ((2));
 
 /********************************************************************
  *                  FUNCTIONS FOR OLE2FRAME ENTITY                   *
@@ -4567,13 +4553,6 @@ EXPORT void dwg_ent_polyline_2d_set_curve_type (
     dwg_ent_polyline_2d *restrict pline2d, const BITCODE_BS curve_type,
     int *restrict error) __nonnull ((3)) _deprecated_dynapi_setter;
 
-EXPORT BITCODE_BL dwg_object_polyline_2d_get_numpoints (
-    const dwg_object *restrict obj, int *restrict error) __nonnull ((2));
-
-EXPORT dwg_point_2d *
-dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
-                                   int *restrict error) __nonnull ((2));
-
 /********************************************************************
  *                 FUNCTIONS FOR POLYLINE_3D ENTITY                  *
  ********************************************************************/
@@ -4594,13 +4573,6 @@ EXPORT BITCODE_RC dwg_ent_polyline_3d_get_curve_type (
 EXPORT void dwg_ent_polyline_3d_set_curve_type (
     dwg_ent_polyline_3d *restrict pline3d, const BITCODE_RC curve_type,
     int *restrict error) __nonnull ((3)) _deprecated_dynapi_setter;
-
-EXPORT BITCODE_BL dwg_object_polyline_3d_get_numpoints (
-    const dwg_object *restrict obj, int *restrict error) __nonnull ((2));
-
-EXPORT dwg_point_3d *
-dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
-                                   int *restrict error) __nonnull ((2));
 
 /********************************************************************
  *                   FUNCTIONS FOR 3DFACE ENTITY                     *
@@ -5740,6 +5712,40 @@ EXPORT dwg_object_ref **
 dwg_obj_xrecord_get_objid_handles (const dwg_obj_xrecord *restrict xrecord,
                                    int *restrict error)
     __nonnull ((2)) _deprecated_dynapi_getter;
+
+#endif /* USE_DEPRECATED_API */
+
+/* ************************************************************** */
+
+EXPORT BITCODE_BL dwg_object_polyline_2d_get_numpoints (
+    const dwg_object *restrict obj, int *restrict error) __nonnull ((2));
+
+EXPORT dwg_point_2d *
+dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
+                                   int *restrict error) __nonnull ((2));
+
+EXPORT BITCODE_BL dwg_object_polyline_3d_get_numpoints (
+    const dwg_object *restrict obj, int *restrict error) __nonnull ((2));
+
+EXPORT dwg_point_3d *
+dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
+                                   int *restrict error) __nonnull ((2));
+
+EXPORT double *
+dwg_ent_lwpline_get_bulges (const dwg_ent_lwpline *restrict lwpline,
+                            int *restrict error) __nonnull ((2));
+
+EXPORT BITCODE_BL dwg_ent_lwpline_get_numpoints (
+    const dwg_ent_lwpline *restrict lwpline, int *restrict error)
+    __nonnull ((2));
+
+EXPORT dwg_point_2d *
+dwg_ent_lwpline_get_points (const dwg_ent_lwpline *restrict lwpline,
+                            int *restrict error) __nonnull ((2));
+
+EXPORT dwg_lwpline_widths *
+dwg_ent_lwpline_get_widths (const dwg_ent_lwpline *restrict lwpline,
+                            int *restrict error) __nonnull ((2));
 
 #endif /* SWIGIMPORTED */
 

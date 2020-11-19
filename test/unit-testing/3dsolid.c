@@ -11,53 +11,78 @@ api_process (dwg_object *obj)
 
   dwg_ent_3dsolid *_3dsolid = obj->tio.entity->tio._3DSOLID;
   Dwg_Version_Type dwg_version = obj->parent->header.version;
+  error = 0;
 
   CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, acis_empty, B);
+#ifdef USE_DEPRECATED_API
   if (dwg_ent_3dsolid_get_acis_empty (_3dsolid, &error) != acis_empty || error)
     fail ("old API dwg_ent_3dsolid_get_acis_empty");
+#endif
   CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, version, BS);
+#ifdef USE_DEPRECATED_API
   if (dwg_ent_3dsolid_get_version (_3dsolid, &error) != version || error)
     fail ("old API dwg_ent_3dsolid_get_version");
+#endif
   CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, num_blocks, BL);
   CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, acis_data, TV);
+#ifdef USE_DEPRECATED_API
   if ((acis_data
        && strcmp ((char *)dwg_ent_3dsolid_get_acis_data (_3dsolid, &error),
                   (char *)acis_data))
       || error)
     fail ("old API dwg_ent_3dsolid_get_acis_data");
+#endif
 
   CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, wireframe_data_present, B);
+#ifdef USE_DEPRECATED_API
   if (dwg_ent_3dsolid_get_wireframe_data_present (_3dsolid, &error)
           != wireframe_data_present
       || error)
     fail ("old API dwg_ent_3dsolid_get_wireframe_data_present");
+#endif
   CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, point_present, B);
+#ifdef USE_DEPRECATED_API
   if (dwg_ent_3dsolid_get_point_present (_3dsolid, &error) != point_present
       || error)
     fail ("old API dwg_ent_3dsolid_get_point_present");
+#endif
 
   CHK_ENTITY_3RD (_3dsolid, 3DSOLID, point);
+#ifdef USE_DEPRECATED_API
   dwg_ent_3dsolid_get_point (_3dsolid, &pt3d, &error);
   if (error || memcmp (&point, &pt3d, sizeof (point)))
     fail ("old API dwg_ent_3dsolid_get_point");
+#endif
 
   CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, isoline_present, B);
+#ifdef USE_DEPRECATED_API
   if (dwg_ent_3dsolid_get_isoline_present (_3dsolid, &error) != isoline_present
       || error)
     fail ("old API dwg_ent_3dsolid_get_isoline_present");
+#endif
   CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, isolines, BL);
+#ifdef USE_DEPRECATED_API
   if (dwg_ent_3dsolid_get_isolines (_3dsolid, &error) != isolines
       || error)
     fail ("old API dwg_ent_3dsolid_get_isolines");
+#endif
   CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, num_wires, BL);
+#ifdef USE_DEPRECATED_API
   if (dwg_ent_3dsolid_get_num_wires (_3dsolid, &error) != num_wires || error)
     fail ("old API dwg_ent_3dsolid_get_num_wires");
+#endif
   CHK_ENTITY_TYPE (_3dsolid, 3DSOLID, num_silhouettes, BL);
+#ifdef USE_DEPRECATED_API
   if (dwg_ent_3dsolid_get_num_silhouettes (_3dsolid, &error) != num_silhouettes
       || error)
     fail ("old API dwg_ent_3dsolid_get_num_sil");
+#endif
 
+#ifdef USE_DEPRECATED_API
   wires = dwg_ent_3dsolid_get_wires (_3dsolid, &error);
+#else
+  wires = _3dsolid->wires;
+#endif
   if (!error)
     {
       for (i = 0; i < num_wires; i++)
@@ -82,7 +107,11 @@ api_process (dwg_object *obj)
   else
     fail ("wires");
 
+#ifdef USE_DEPRECATED_API
   silhouettes = dwg_ent_3dsolid_get_silhouettes (_3dsolid, &error);
+#else
+  silhouettes = _3dsolid->silhouettes;
+#endif
   if (!error)
     {
       for (i = 0; i < num_silhouettes; i++)

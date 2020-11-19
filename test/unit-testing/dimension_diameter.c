@@ -46,12 +46,14 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD_W_OLD (dim_diameter, DIMENSION_DIAMETER, def_pt);
   CHK_ENTITY_3RD_W_OLD (dim_diameter, DIMENSION_DIAMETER, first_arc_pt);
   CHK_ENTITY_TYPE (dim_diameter, DIMENSION_DIAMETER, leader_len, BD);
+#ifdef USE_DEPRECATED_API
   if (leader_len
           != dwg_ent_dim_diameter_get_leader_length (dim_diameter, &error)
       || error)
     fail ("old API dwg_ent_dim_diameter_get_leader_length");
   else
     pass ();
+#endif
 
   CHK_ENTITY_H (dim_diameter, DIMENSION_DIAMETER, dimstyle);
   CHK_ENTITY_H (dim_diameter, DIMENSION_DIAMETER, block);

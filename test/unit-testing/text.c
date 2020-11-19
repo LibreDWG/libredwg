@@ -17,9 +17,11 @@ api_process (dwg_object *obj)
   dwg_ent_text *text = dwg_object_to_TEXT (obj);
 
   CHK_ENTITY_UTF8TEXT (text, TEXT, text_value);
+#ifdef USE_DEPRECATED_API
   if (version < R_2007
       && (strcmp (dwg_ent_text_get_text (text, &error), text_value) || error))
     fail ("old API dwg_ent_text_get_text");
+#endif
 
   CHK_ENTITY_2RD (text, TEXT, ins_pt);
   CHK_ENTITY_2RD (text, TEXT, alignment_pt);
