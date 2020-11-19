@@ -21875,3 +21875,186 @@ dwg_ref_get_absref (const dwg_object_ref *restrict ref, int *restrict error)
       return (BITCODE_BL)-1;
     }
 }
+
+/********************************************************************
+ *                    FUNCTIONS FOR ADDING OBJECTS                  *
+ ********************************************************************/
+
+/* Should be similar to the public VBA interface */
+
+/* Initialize a new dwg. Which template, imperial or metric */
+EXPORT Dwg_Data*
+dwg_add_document (const int imperial)
+{
+  return NULL;
+}
+
+EXPORT void
+dwg_add_to_mspace (const bool yes_or_no)
+{
+  ;
+  //g_add_to_mspace = yes_or_no;
+}
+
+EXPORT int
+dwg_add_class (Dwg_Data *restrict dwg, const BITCODE_TV restrict dxfname,
+               const BITCODE_TV restrict cppname, const BITCODE_TV restrict appname,
+               const bool is_entity)
+{
+  /* calc. new number, no proxy, no is_zombie */
+  return 0;
+}
+
+Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
+
+#define NEW_ENTITY(dwg, obj)                                                  \
+  {                                                                           \
+    BITCODE_BL idx = dwg->num_objects;                                        \
+    (void)dwg_add_object (dwg);                                               \
+    obj = &dwg->object[idx];                                                  \
+    obj->supertype = DWG_SUPERTYPE_ENTITY;                                    \
+    obj->tio.entity                                                           \
+        = (Dwg_Object_Entity *)calloc (1, sizeof (Dwg_Object_Entity));        \
+    obj->tio.entity->objid = obj->index;                                      \
+    obj->tio.entity->dwg = dwg;                                               \
+  }
+
+#define ADD_ENTITY(token)                                                     \
+  obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
+  if (strlen (#token) > 3 && !memcmp (#token, "_3D", 3))                      \
+    obj->name = (char *)&#token[1];                                           \
+  else                                                                        \
+    obj->name = (char *)#token;                                               \
+  obj->dxfname = (char*)dxfname;                                              \
+  if (obj->type >= DWG_TYPE_GROUP)                                            \
+    (void)dwg_encode_get_class (obj->parent, obj);                            \
+  LOG_TRACE ("  ADD_ENTITY %s [%d]\n", obj->name, obj->index)                 \
+  _obj = calloc (1, sizeof (Dwg_Entity_##token));                             \
+  obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;                    \
+  obj->tio.entity->tio.token->parent = obj->tio.entity;                       \
+  obj->tio.entity->objid = obj->index;                                        \
+  obj->tio.entity->is_xdic_missing = 1;                                       \
+  obj->tio.entity->color.index = 256; /* ByLayer */                           \
+  obj->tio.entity->ltype_scale = 1.0;                                         \
+  if (strEQc (#token, "SEQEND") || memBEGINc (#token, "VERTEX"))              \
+    obj->tio.entity->linewt = 0x1c;                                           \
+  else                                                                        \
+    obj->tio.entity->linewt = 0x1d;                                           \
+  obj->tio.entity->entmode = 2
+
+/* -- For now only the entities needed for SolveSpace -- */
+
+/* default to mspace. needs a global static switch if added to mspace or pspace,
+   as we dont have the vba mspcae collection. */
+EXPORT Dwg_Object*
+dwg_add_LINE (Dwg_Data *restrict dwg,
+              const dwg_point_3d *restrict start_pt,
+              const dwg_point_3d *restrict end_pt)
+{
+  /* TODO: check if to add to mspace or pspace */
+  Dwg_Object *obj;
+  Dwg_Entity_LINE *_obj;
+  const char *dxfname = "LINE";
+  NEW_ENTITY(dwg, obj);
+  ADD_ENTITY (LINE);
+  _obj->start.x = start_pt->x;
+  _obj->start.y = start_pt->y;
+  _obj->start.z = start_pt->z;
+  _obj->end.x   = end_pt->x;
+  _obj->end.y   = end_pt->y;
+  _obj->end.z   = end_pt->z;
+  return obj;
+}
+
+EXPORT Dwg_Object*
+dwg_add_CIRCLE (Dwg_Data *restrict dwg,
+                const dwg_point_3d *restrict center,
+                const double radius)
+{
+  return NULL;
+}
+
+EXPORT Dwg_Object*
+dwg_add_ARC (Dwg_Data *restrict dwg,
+             const dwg_point_3d *restrict center,
+             const double radius,
+             const double start_angle,
+             const double end_angle)
+{
+  return NULL;
+}
+
+EXPORT Dwg_Object*
+dwg_add_DIMENSION_ALIGNED (Dwg_Data *restrict dwg,
+                           const dwg_point_3d *restrict xline1_pt,
+                           const dwg_point_3d *restrict xline2_pt,
+                           const dwg_point_3d *restrict def_pt,
+                           const dwg_point_3d *restrict text_pt)
+// The rest can be default
+{
+  return NULL;
+}
+
+EXPORT Dwg_Object* /* DimAngular */
+dwg_add_DIMENSION_ANG2LN (Dwg_Data *restrict dwg,
+                          const dwg_point_3d *restrict center_pt,
+                          const dwg_point_3d *restrict xline1end_pt,
+                          const dwg_point_3d *restrict xline2end_pt,
+                          const dwg_point_3d *restrict text_pt)
+// The rest can be default
+{
+  return NULL;
+}
+
+EXPORT Dwg_Object*
+dwg_add_DIMENSION_ANG3PT (Dwg_Data *restrict dwg,
+                          const dwg_point_3d *restrict center_pt,
+                          const dwg_point_3d *restrict xline1_pt,
+                          const dwg_point_3d *restrict xline2_pt,
+                          const dwg_point_3d *restrict text_pt)
+// The rest can be default
+{
+  return NULL;
+}
+
+EXPORT Dwg_Object*
+dwg_add_DIMENSION_DIAMETER (Dwg_Data *restrict dwg,
+                            const dwg_point_3d *restrict chord_pt,
+                            const dwg_point_3d *restrict far_chord_pt,
+                            const double leader_len)
+// The rest can be default
+{
+  return NULL;
+}
+
+EXPORT Dwg_Object*
+dwg_add_DIMENSION_ORDINATE (Dwg_Data *restrict dwg,
+                            const dwg_point_3d *restrict def_pt, /* = feature_location_pt */
+                            const dwg_point_3d *restrict leader_endpt,
+                            const bool use_x_axis)
+// The rest can be default
+{
+  return NULL;
+}
+
+EXPORT Dwg_Object*
+dwg_add_DIMENSION_RADIUS (Dwg_Data *restrict dwg,
+                          const dwg_point_3d *restrict center_pt,
+                          const dwg_point_3d *restrict chord_pt,
+                          const double leader_len)
+// The rest can be default
+{
+  return NULL;
+}
+
+EXPORT Dwg_Object*
+dwg_add_LARGE_RADIAL_DIMENSION (Dwg_Data *restrict dwg,
+                                const dwg_point_3d *restrict center_pt,
+                                const dwg_point_3d *restrict first_arc_pt,
+                                const dwg_point_3d *restrict ovr_center,
+                                const dwg_point_3d *restrict jog_point,
+                                const double leader_len)
+// The rest can be default
+{
+  return NULL;
+}

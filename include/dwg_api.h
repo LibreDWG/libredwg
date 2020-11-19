@@ -58,10 +58,12 @@
 #if (defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 303)
 #  undef __nonnull
 #  define __nonnull(params) __attribute__ ((__nonnull__ params))
+#  define __nonnull_all __attribute__ ((__nonnull__))
 #  define HAVE_NONNULL
 #else
 #  undef HAVE_NONNULL
 #  define __nonnull(params)
+#  define __nonnull_all
 #endif
 
 #ifdef __cplusplus
@@ -72,6 +74,8 @@ extern "C" {
 # define LOG_ERROR(msg,name,type) \
    fprintf(stderr, msg, name, (type))
 #endif
+
+//static bool g_add_to_mspace = true;
 
 /** dynapi */
 typedef struct dwg_field_name_type_offset
@@ -6091,6 +6095,80 @@ EXPORT dwg_object *dwg_absref_get_object (const dwg_data *dwg,
 EXPORT unsigned int dwg_get_num_classes (const dwg_data *dwg);
 
 EXPORT dwg_class *dwg_get_class (const dwg_data *dwg, unsigned int index);
+
+/*******************************************************************
+ *                    FUNCTIONS FOR ADDING OBJECTS                  *
+ ********************************************************************/
+
+EXPORT Dwg_Data* dwg_add_document (const int imperial);
+
+/* Defaults to yes */
+EXPORT void dwg_add_to_mspace (const bool yes_or_no);
+
+/* no proxy, no is_zombie */
+EXPORT int dwg_add_class (Dwg_Data *restrict dwg,
+                          const BITCODE_TV restrict dxfname,
+                          const BITCODE_TV restrict cppname,
+                          const BITCODE_TV restrict appname,
+                          const bool is_entity) __nonnull ((1, 2, 3));
+
+EXPORT Dwg_Object*
+dwg_add_LINE (Dwg_Data *restrict dwg,
+              const dwg_point_3d *restrict start_pt,
+              const dwg_point_3d *restrict end_pt) __nonnull_all;
+
+EXPORT Dwg_Object*
+dwg_add_CIRCLE (Dwg_Data *restrict dwg,
+                const dwg_point_3d *restrict center,
+                const double radius) __nonnull_all;
+
+EXPORT Dwg_Object*
+dwg_add_ARC (Dwg_Data *restrict dwg,
+             const dwg_point_3d *restrict center,
+             const double radius,
+             const double start_angle,
+             const double end_angle) __nonnull_all;
+
+EXPORT Dwg_Object*
+dwg_add_DIMENSION_ALIGNED (Dwg_Data *restrict dwg,
+                           const dwg_point_3d *restrict xline1_pt,
+                           const dwg_point_3d *restrict xline2_pt,
+                           const dwg_point_3d *restrict def_pt,
+                           const dwg_point_3d *restrict text_pt) __nonnull_all;
+EXPORT Dwg_Object* /* DimAngular */
+dwg_add_DIMENSION_ANG2LN (Dwg_Data *restrict dwg,
+                          const dwg_point_3d *restrict center_pt,
+                          const dwg_point_3d *restrict xline1end_pt,
+                          const dwg_point_3d *restrict xline2end_pt,
+                          const dwg_point_3d *restrict text_pt) __nonnull_all;
+EXPORT Dwg_Object*
+dwg_add_DIMENSION_ANG3PT (Dwg_Data *restrict dwg,
+                          const dwg_point_3d *restrict center_pt,
+                          const dwg_point_3d *restrict xline1_pt,
+                          const dwg_point_3d *restrict xline2_pt,
+                          const dwg_point_3d *restrict text_pt) __nonnull_all;
+EXPORT Dwg_Object*
+dwg_add_DIMENSION_DIAMETER (Dwg_Data *restrict dwg,
+                            const dwg_point_3d *restrict chord_pt,
+                            const dwg_point_3d *restrict far_chord_pt,
+                            const double leader_len) __nonnull_all;
+EXPORT Dwg_Object*
+dwg_add_DIMENSION_ORDINATE (Dwg_Data *restrict dwg,
+                            const dwg_point_3d *restrict def_pt, /* = feature_location_pt */
+                            const dwg_point_3d *restrict leader_endpt,
+                            const bool use_x_axis) __nonnull_all;
+EXPORT Dwg_Object*
+dwg_add_DIMENSION_RADIUS (Dwg_Data *restrict dwg,
+                          const dwg_point_3d *restrict center_pt,
+                          const dwg_point_3d *restrict chord_pt,
+                          const double leader_len) __nonnull_all;
+EXPORT Dwg_Object*
+dwg_add_LARGE_RADIAL_DIMENSION (Dwg_Data *restrict dwg,
+                                const dwg_point_3d *restrict center_pt,
+                                const dwg_point_3d *restrict first_arc_pt,
+                                const dwg_point_3d *restrict ovr_center,
+                                const dwg_point_3d *restrict jog_point,
+                                const double leader_len) __nonnull_all;
 
 #ifdef __cplusplus
 }
