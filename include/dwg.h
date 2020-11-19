@@ -64,6 +64,8 @@
 
 #ifdef __cplusplus
 extern "C" {
+#undef restrict
+#define restrict __restrict
 #endif
 
 #define BITCODE_DOUBLE double
