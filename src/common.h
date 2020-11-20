@@ -264,6 +264,9 @@ char *strrplc (const char *s, const char *from, const char *to);
 #define memBEGINc(s1, s2)                                                     \
   (strlen (s1) >= sizeof (s2 "") - 1 && !memcmp (s1, s2, sizeof (s2 "") - 1))
 
+#ifndef M_PI
+#  define M_PI 3.14159265358979323846
+#endif
 #ifndef M_PI_2
 #  define M_PI_2 1.57079632679489661923132169163975144
 #endif

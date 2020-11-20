@@ -1159,7 +1159,7 @@ typedef struct _dwg_entity_TEXT
   BITCODE_RD rotation;        /*!< DXF 50 */
   BITCODE_RD height;          /*!< DXF 40 */
   BITCODE_RD width_factor;    /*!< DXF 41 */
-  BITCODE_TV text_value;      /*!< DXF 1 */
+  BITCODE_T  text_value;      /*!< DXF 1 */
   BITCODE_BS generation;      /*!< DXF 71 */
   BITCODE_BS horiz_alignment; /*!< DXF 72. options 0-5:
                                  0 = Left; 1= Center; 2 = Right; 3 = Aligned;
@@ -1185,7 +1185,7 @@ typedef struct _dwg_entity_ATTRIB
   BITCODE_RD rotation;
   BITCODE_RD height;
   BITCODE_RD width_factor;
-  BITCODE_TV text_value;
+  BITCODE_T text_value;
   BITCODE_BS generation;
   BITCODE_BS horiz_alignment;
   BITCODE_BS vert_alignment;
@@ -1220,7 +1220,7 @@ typedef struct _dwg_entity_ATTDEF
   BITCODE_RD rotation;
   BITCODE_RD height;
   BITCODE_RD width_factor;
-  BITCODE_TV default_value;
+  BITCODE_T default_value;
   BITCODE_BS generation;
   BITCODE_BS horiz_alignment;
   BITCODE_BS vert_alignment;
@@ -1494,7 +1494,7 @@ typedef struct _dwg_entity_DIMENSION_ORDINATE
   DIMENSION_COMMON;
   BITCODE_3BD feature_location_pt;
   BITCODE_3BD leader_endpt;
-  BITCODE_RC flag2;
+  BITCODE_RC flag2; // use_x_axis
 } Dwg_Entity_DIMENSION_ORDINATE;
 
 /**
