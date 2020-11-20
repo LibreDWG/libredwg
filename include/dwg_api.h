@@ -5748,9 +5748,14 @@ EXPORT dwg_point_2d *
 dwg_ent_lwpline_get_points (const dwg_ent_lwpline *restrict lwpline,
                             int *restrict error) __nonnull ((2));
 
+EXPORT int
+dwg_ent_lwpline_set_points (dwg_ent_lwpline *restrict lwpline,
+                            const BITCODE_BL num_pts2d,
+                            const dwg_point_2d **restrict pts2d) __nonnull_all;
+
 EXPORT dwg_lwpline_widths *
 dwg_ent_lwpline_get_widths (const dwg_ent_lwpline *restrict lwpline,
-                            int *restrict error) __nonnull ((2));
+                            int *restrict error) __nonnull_all;
 
 #endif /* SWIGIMPORTED */
 
@@ -6113,63 +6118,68 @@ EXPORT int dwg_add_class (Dwg_Data *restrict dwg,
                           const BITCODE_TV restrict appname,
                           const bool is_entity) __nonnull ((1, 2, 3));
 
-EXPORT Dwg_Object*
-dwg_add_LINE (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_LINE*
+dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const dwg_point_3d *restrict start_pt,
               const dwg_point_3d *restrict end_pt) __nonnull_all;
 
-EXPORT Dwg_Object*
-dwg_add_CIRCLE (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_CIRCLE*
+dwg_add_CIRCLE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const dwg_point_3d *restrict center,
                 const double radius) __nonnull_all;
 
-EXPORT Dwg_Object*
-dwg_add_ARC (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_ARC*
+dwg_add_ARC (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
              const dwg_point_3d *restrict center,
              const double radius,
              const double start_angle,
              const double end_angle) __nonnull_all;
 
-EXPORT Dwg_Object*
-dwg_add_DIMENSION_ALIGNED (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_DIMENSION_ALIGNED*
+dwg_add_DIMENSION_ALIGNED (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                            const dwg_point_3d *restrict xline1_pt,
                            const dwg_point_3d *restrict xline2_pt,
                            const dwg_point_3d *restrict def_pt,
                            const dwg_point_3d *restrict text_pt) __nonnull_all;
-EXPORT Dwg_Object* /* DimAngular */
-dwg_add_DIMENSION_ANG2LN (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_DIMENSION_ANG2LN* /* DimAngular */
+dwg_add_DIMENSION_ANG2LN (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict center_pt,
                           const dwg_point_3d *restrict xline1end_pt,
                           const dwg_point_3d *restrict xline2end_pt,
                           const dwg_point_3d *restrict text_pt) __nonnull_all;
-EXPORT Dwg_Object*
-dwg_add_DIMENSION_ANG3PT (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_DIMENSION_ANG3PT*
+dwg_add_DIMENSION_ANG3PT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict center_pt,
                           const dwg_point_3d *restrict xline1_pt,
                           const dwg_point_3d *restrict xline2_pt,
                           const dwg_point_3d *restrict text_pt) __nonnull_all;
-EXPORT Dwg_Object*
-dwg_add_DIMENSION_DIAMETER (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_DIMENSION_DIAMETER*
+dwg_add_DIMENSION_DIAMETER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                             const dwg_point_3d *restrict chord_pt,
                             const dwg_point_3d *restrict far_chord_pt,
                             const double leader_len) __nonnull_all;
-EXPORT Dwg_Object*
-dwg_add_DIMENSION_ORDINATE (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_DIMENSION_ORDINATE*
+dwg_add_DIMENSION_ORDINATE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                             const dwg_point_3d *restrict def_pt, /* = feature_location_pt */
                             const dwg_point_3d *restrict leader_endpt,
                             const bool use_x_axis) __nonnull_all;
-EXPORT Dwg_Object*
-dwg_add_DIMENSION_RADIUS (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_DIMENSION_RADIUS*
+dwg_add_DIMENSION_RADIUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict center_pt,
                           const dwg_point_3d *restrict chord_pt,
                           const double leader_len) __nonnull_all;
-EXPORT Dwg_Object*
-dwg_add_LARGE_RADIAL_DIMENSION (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION*
+dwg_add_LARGE_RADIAL_DIMENSION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                                 const dwg_point_3d *restrict center_pt,
                                 const dwg_point_3d *restrict first_arc_pt,
                                 const dwg_point_3d *restrict ovr_center,
                                 const dwg_point_3d *restrict jog_point,
                                 const double leader_len) __nonnull_all;
+
+EXPORT Dwg_Entity_LWPOLYLINE*
+dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                    const int num_pts2d,
+                    const dwg_point_2d **restrict pts2d) __nonnull_all;
 
 #ifdef __cplusplus
 }

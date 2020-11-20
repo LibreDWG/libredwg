@@ -20174,7 +20174,7 @@ dwg_object_polyline_3d_get_numpoints (const dwg_object *restrict obj,
 /** Returns the _dwg_object:: POLYLINE_3D vertices,
     the list of associated _dwg_object_VERTEX_3D:: points.
 */
-dwg_point_3d *
+EXPORT dwg_point_3d *
 dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
                                    int *restrict error)
 {
@@ -20283,7 +20283,7 @@ dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
 
 /** Returns lwpline bulges
  */
-double *
+EXPORT double *
 dwg_ent_lwpline_get_bulges (const dwg_ent_lwpline *restrict lwpline,
                             int *restrict error)
 {
@@ -20309,7 +20309,7 @@ dwg_ent_lwpline_get_bulges (const dwg_ent_lwpline *restrict lwpline,
 
 /** Returns lwpline point count
  */
-BITCODE_BL
+EXPORT BITCODE_BL
 dwg_ent_lwpline_get_numpoints (const dwg_ent_lwpline *restrict lwpline,
                                int *restrict error)
 {
@@ -20328,7 +20328,7 @@ dwg_ent_lwpline_get_numpoints (const dwg_ent_lwpline *restrict lwpline,
 
 /** Returns lwpline points
  */
-dwg_point_2d *
+EXPORT dwg_point_2d *
 dwg_ent_lwpline_get_points (const dwg_ent_lwpline *restrict lwpline,
                             int *restrict error)
 {
@@ -20353,9 +20353,38 @@ dwg_ent_lwpline_get_points (const dwg_ent_lwpline *restrict lwpline,
     }
 }
 
+EXPORT int
+dwg_ent_lwpline_set_points (dwg_ent_lwpline *restrict lwpline,
+                            const BITCODE_BL num_pts2d,
+                            const dwg_point_2d **restrict pts2d)
+{
+  lwpline->points = (BITCODE_2RD *)malloc (sizeof (dwg_point_2d) * num_pts2d);
+  if (lwpline->points)
+    {
+      lwpline->num_points = num_pts2d;
+      for (BITCODE_BL i = 0; i < num_pts2d; i++)
+        {
+          const dwg_point_2d *pt = pts2d[i];
+          if (bit_isnan(pt->x) || bit_isnan(pt->y))
+            goto isnan;
+          lwpline->points[i].x = pt->x;
+          lwpline->points[i].y = pt->y;
+        }
+      return 0;
+    }
+  else
+    {
+      LOG_ERROR ("%s: Out of memory", __FUNCTION__)
+      return 1;
+    }
+ isnan:
+  LOG_ERROR ("%s: Invalid vertex nan", __FUNCTION__);
+  return 2;
+}
+
 /** Returns lwpline widths
  */
-dwg_lwpline_widths *
+EXPORT dwg_lwpline_widths *
 dwg_ent_lwpline_get_widths (const dwg_ent_lwpline *restrict lwpline,
                             int *restrict error)
 {
@@ -21942,119 +21971,149 @@ Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict ob
     obj->tio.entity->linewt = 0x1d;                                           \
   obj->tio.entity->entmode = 2
 
+#define API_ADD_ENTITY(token)                                  \
+  int error;                                                   \
+  Dwg_Object *obj;                                             \
+  Dwg_Entity_##token *_obj;                                    \
+  Dwg_Object *blkobj = dwg_obj_obj_to_object ((dwg_obj_obj *)blkhdr, &error); \
+  Dwg_Data *dwg = blkobj && !error ? blkobj->parent : NULL;    \
+  const char *dxfname = #token;                                \
+  if (!dwg)                                                    \
+    return NULL;                                               \
+  NEW_ENTITY(dwg, obj);                                        \
+  ADD_ENTITY (token)
+
+
 /* -- For now only the entities needed for SolveSpace -- */
 
 /* default to mspace. needs a global static switch if added to mspace or pspace,
    as we dont have the vba mspcae collection. */
-EXPORT Dwg_Object*
-dwg_add_LINE (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_LINE*
+dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const dwg_point_3d *restrict start_pt,
               const dwg_point_3d *restrict end_pt)
 {
-  /* TODO: check if to add to mspace or pspace */
-  Dwg_Object *obj;
-  Dwg_Entity_LINE *_obj;
-  const char *dxfname = "LINE";
-  NEW_ENTITY(dwg, obj);
-  ADD_ENTITY (LINE);
+  API_ADD_ENTITY (LINE);
   _obj->start.x = start_pt->x;
   _obj->start.y = start_pt->y;
   _obj->start.z = start_pt->z;
   _obj->end.x   = end_pt->x;
   _obj->end.y   = end_pt->y;
   _obj->end.z   = end_pt->z;
-  return obj;
+  return _obj;
 }
 
-EXPORT Dwg_Object*
-dwg_add_CIRCLE (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_CIRCLE*
+dwg_add_CIRCLE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const dwg_point_3d *restrict center,
                 const double radius)
 {
-  return NULL;
+  API_ADD_ENTITY (CIRCLE);
+  _obj->center.x    = center->x;
+  _obj->center.y    = center->y;
+  _obj->center.z    = center->z;
+  _obj->radius      = radius;
+  return _obj;
 }
 
-EXPORT Dwg_Object*
-dwg_add_ARC (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_ARC*
+dwg_add_ARC (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
              const dwg_point_3d *restrict center,
              const double radius,
              const double start_angle,
              const double end_angle)
 {
-  return NULL;
+  API_ADD_ENTITY (ARC);
+  _obj->center.x    = center->x;
+  _obj->center.y    = center->y;
+  _obj->center.z    = center->z;
+  _obj->radius      = radius;
+  _obj->start_angle = start_angle;
+  _obj->end_angle   = end_angle;
+  return _obj;
 }
 
-EXPORT Dwg_Object*
-dwg_add_DIMENSION_ALIGNED (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_DIMENSION_ALIGNED*
+dwg_add_DIMENSION_ALIGNED (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                            const dwg_point_3d *restrict xline1_pt,
                            const dwg_point_3d *restrict xline2_pt,
                            const dwg_point_3d *restrict def_pt,
                            const dwg_point_3d *restrict text_pt)
-// The rest can be default
 {
-  return NULL;
+  API_ADD_ENTITY (DIMENSION_ALIGNED);
+  return _obj;
 }
 
-EXPORT Dwg_Object* /* DimAngular */
-dwg_add_DIMENSION_ANG2LN (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_DIMENSION_ANG2LN* /* DimAngular */
+dwg_add_DIMENSION_ANG2LN (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict center_pt,
                           const dwg_point_3d *restrict xline1end_pt,
                           const dwg_point_3d *restrict xline2end_pt,
                           const dwg_point_3d *restrict text_pt)
-// The rest can be default
 {
-  return NULL;
+  API_ADD_ENTITY (DIMENSION_ANG2LN);
+  return _obj;
 }
 
-EXPORT Dwg_Object*
-dwg_add_DIMENSION_ANG3PT (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_DIMENSION_ANG3PT*
+dwg_add_DIMENSION_ANG3PT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict center_pt,
                           const dwg_point_3d *restrict xline1_pt,
                           const dwg_point_3d *restrict xline2_pt,
                           const dwg_point_3d *restrict text_pt)
-// The rest can be default
 {
-  return NULL;
+  API_ADD_ENTITY (DIMENSION_ANG3PT);
+  return _obj;
 }
 
-EXPORT Dwg_Object*
-dwg_add_DIMENSION_DIAMETER (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_DIMENSION_DIAMETER*
+dwg_add_DIMENSION_DIAMETER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                             const dwg_point_3d *restrict chord_pt,
                             const dwg_point_3d *restrict far_chord_pt,
                             const double leader_len)
-// The rest can be default
 {
-  return NULL;
+  API_ADD_ENTITY (DIMENSION_DIAMETER);
+  return _obj;
 }
 
-EXPORT Dwg_Object*
-dwg_add_DIMENSION_ORDINATE (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_DIMENSION_ORDINATE*
+dwg_add_DIMENSION_ORDINATE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                             const dwg_point_3d *restrict def_pt, /* = feature_location_pt */
                             const dwg_point_3d *restrict leader_endpt,
                             const bool use_x_axis)
-// The rest can be default
 {
-  return NULL;
+  API_ADD_ENTITY (DIMENSION_ORDINATE);
+  return _obj;
 }
 
-EXPORT Dwg_Object*
-dwg_add_DIMENSION_RADIUS (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_DIMENSION_RADIUS*
+dwg_add_DIMENSION_RADIUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict center_pt,
                           const dwg_point_3d *restrict chord_pt,
                           const double leader_len)
-// The rest can be default
 {
-  return NULL;
+  API_ADD_ENTITY (DIMENSION_RADIUS);
+  return _obj;
 }
 
-EXPORT Dwg_Object*
-dwg_add_LARGE_RADIAL_DIMENSION (Dwg_Data *restrict dwg,
+EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION*
+dwg_add_LARGE_RADIAL_DIMENSION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                                 const dwg_point_3d *restrict center_pt,
                                 const dwg_point_3d *restrict first_arc_pt,
                                 const dwg_point_3d *restrict ovr_center,
                                 const dwg_point_3d *restrict jog_point,
                                 const double leader_len)
-// The rest can be default
 {
-  return NULL;
+  API_ADD_ENTITY (LARGE_RADIAL_DIMENSION);
+  return _obj;
+}
+
+EXPORT Dwg_Entity_LWPOLYLINE*
+dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                    const int num_pts2d,
+                    const dwg_point_2d **restrict pts2d)
+{
+  API_ADD_ENTITY (LWPOLYLINE);
+  error = dwg_ent_lwpline_set_points (_obj, num_pts2d, pts2d);
+  return _obj;
 }
