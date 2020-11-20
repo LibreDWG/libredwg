@@ -6108,15 +6108,23 @@ EXPORT dwg_class *dwg_get_class (const dwg_data *dwg, unsigned int index);
 
 EXPORT Dwg_Data* dwg_add_document (const int imperial);
 
-/* Defaults to yes */
-EXPORT void dwg_add_to_mspace (const bool yes_or_no);
-
 /* no proxy, no is_zombie */
 EXPORT int dwg_add_class (Dwg_Data *restrict dwg,
                           const BITCODE_TV restrict dxfname,
                           const BITCODE_TV restrict cppname,
                           const BITCODE_TV restrict appname,
                           const bool is_entity) __nonnull ((1, 2, 3));
+/* check if already exists, and if not add dxfname-specific defaults */
+EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
+                              const BITCODE_TV restrict dxfname) __nonnull_all;
+/* insert entity into mspace, pspace or other block */
+EXPORT int dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                              Dwg_Object *restrict obj) __nonnull_all;
+
+/* Set defaults from HEADER: CLAYER, linewt, ltype_scale, color, ... */
+EXPORT int
+dwg_add_entity_defaults (Dwg_Data *restrict dwg,
+                         Dwg_Object_Entity *restrict ent) __nonnull_all;
 
 EXPORT Dwg_Entity_LINE*
 dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,

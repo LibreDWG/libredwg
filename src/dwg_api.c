@@ -21918,13 +21918,6 @@ dwg_add_document (const int imperial)
   return NULL;
 }
 
-EXPORT void
-dwg_add_to_mspace (const bool yes_or_no)
-{
-  ;
-  //g_add_to_mspace = yes_or_no;
-}
-
 EXPORT int
 dwg_add_class (Dwg_Data *restrict dwg, const BITCODE_TV restrict dxfname,
                const BITCODE_TV restrict cppname, const BITCODE_TV restrict appname,
@@ -21948,6 +21941,7 @@ Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict ob
     obj->tio.entity->dwg = dwg;                                               \
   }
 
+/* globals: dwg, obj, _obj, dxfname */
 #define ADD_ENTITY(token)                                                     \
   obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
   if (strlen (#token) > 3 && !memcmp (#token, "_3D", 3))                      \
@@ -21962,15 +21956,11 @@ Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict ob
   obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;                    \
   obj->tio.entity->tio.token->parent = obj->tio.entity;                       \
   obj->tio.entity->objid = obj->index;                                        \
-  obj->tio.entity->is_xdic_missing = 1;                                       \
-  obj->tio.entity->color.index = 256; /* ByLayer */                           \
-  obj->tio.entity->ltype_scale = 1.0;                                         \
+  dwg_add_entity_defaults (dwg, obj->tio.entity);                             \
   if (strEQc (#token, "SEQEND") || memBEGINc (#token, "VERTEX"))              \
-    obj->tio.entity->linewt = 0x1c;                                           \
-  else                                                                        \
-    obj->tio.entity->linewt = 0x1d;                                           \
-  obj->tio.entity->entmode = 2
+    obj->tio.entity->linewt = 0x1c
 
+/* globals: blkhdr */
 #define API_ADD_ENTITY(token)                                  \
   int error;                                                   \
   Dwg_Object *obj;                                             \
@@ -21981,8 +21971,83 @@ Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict ob
   if (!dwg)                                                    \
     return NULL;                                               \
   NEW_ENTITY(dwg, obj);                                        \
-  ADD_ENTITY (token)
+  ADD_ENTITY (token);                                          \
+  dwg_insert_entity (blkhdr, obj)
 
+
+EXPORT int
+dwg_add_entity_defaults (Dwg_Data *restrict dwg,
+                         Dwg_Object_Entity *restrict ent)
+{
+  //const Dwg_Version_Type version = dwg->header.version;
+  ent->is_xdic_missing = 1;
+  ent->color.index = 256; /* ByLayer */
+  ent->ltype_scale = 1.0;
+  // ltype_flags = 0; ByLayer
+  // plotstyle_flags  = 0; ByLayer
+  ent->linewt = 0x1d;
+  if (dwg->header_vars.CLAYER)
+    ent->layer = dwg_dup_handleref (dwg, dwg->header_vars.CLAYER);
+  // we cannot yet write >r2000, so no material, visualstyle, yet ...
+  return 0;
+}
+
+/* Insert new entity into the block.
+   We have two entity chains, one in the BLOCK_HEADER (not relative, obj always NULL)
+   and the 2nd in the entities itself, these are always relative, so different ref.
+ */
+EXPORT int
+dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict hdr,
+                   Dwg_Object *restrict obj)
+{
+  int error;
+  Dwg_Data *dwg = obj->parent;
+  const Dwg_Version_Type version = dwg->header.version;
+  Dwg_Object *blkobj = dwg_obj_obj_to_object ((dwg_obj_obj *)hdr, &error);
+  const Dwg_Object_Ref *mspace =  dwg_model_space_ref (dwg);
+  const Dwg_Object_Ref *pspace =  dwg_paper_space_ref (dwg);
+
+  assert (mspace);
+  // set entmode and ownerhandle
+  if (blkobj->handle.value == mspace->absolute_ref)
+    obj->tio.entity->entmode = 2;
+  else if (pspace && blkobj->handle.value == pspace->absolute_ref)
+    obj->tio.entity->entmode = 1;
+  else
+    obj->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, blkobj->handle.value, obj);
+  if (!obj->tio.entity->ownerhandle &&
+      (obj->fixedtype == DWG_TYPE_BLOCK ||
+       obj->fixedtype == DWG_TYPE_ENDBLK))
+    // BLOCK,ENDBLK always have the ownerhandle set.
+    obj->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, blkobj->handle.value, obj);
+
+  // TODO 2004+
+  if (version < R_2004)
+    {
+      if (!hdr->first_entity && !hdr->num_owned)
+        {
+          hdr->first_entity = hdr->last_entity
+              = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
+          hdr->num_owned++;
+          obj->tio.entity->nolinks = 1;
+        }
+      else
+        {
+          BITCODE_H lastref = hdr->last_entity;
+          Dwg_Object *prev = lastref ? dwg_ref_object (dwg, lastref) : NULL; // may fail!
+          hdr->last_entity = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
+          // link prev. last to curr last
+          if (prev)
+            {
+              prev->tio.entity->next_entity = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
+              obj->tio.entity->prev_entity = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
+              prev->tio.entity->nolinks = 0;
+            }
+          hdr->num_owned++;
+        }
+    }
+  return 0;
+}
 
 /* -- For now only the entities needed for SolveSpace -- */
 
