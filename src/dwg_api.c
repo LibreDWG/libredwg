@@ -21941,6 +21941,18 @@ Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict ob
     obj->tio.entity->dwg = dwg;                                               \
   }
 
+#define NEW_OBJECT(dwg, obj)                                                  \
+  {                                                                           \
+    BITCODE_BL idx = dwg->num_objects;                                        \
+    (void)dwg_add_object (dwg);                                               \
+    obj = &dwg->object[idx];                                                  \
+    obj->supertype = DWG_SUPERTYPE_OBJECT;                                    \
+    obj->tio.object                                                           \
+        = (Dwg_Object_Object *)calloc (1, sizeof (Dwg_Object_Object));        \
+    obj->tio.object->objid = obj->index;                                      \
+    obj->tio.object->dwg = dwg;                                               \
+  }
+
 /* globals: dwg, obj, _obj, dxfname */
 #define ADD_ENTITY(token)                                                     \
   obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
@@ -21974,13 +21986,26 @@ Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict ob
   ADD_ENTITY (token);                                          \
   dwg_insert_entity (blkhdr, obj)
 
-#define SECOND_API_ADD_ENTITY(token)                           \
-  dxfname = #token;                                            \
-  if (!dwg)                                                    \
-    return NULL;                                               \
-  NEW_ENTITY(dwg, obj);                                        \
-  ADD_ENTITY (token);                                          \
-  dwg_insert_entity (blkhdr, obj)
+#define ADD_OBJECT(token)                                                     \
+  obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
+  obj->name = (char *)#token;                                                 \
+  obj->dxfname = (char*)dxfname;                                              \
+  if (obj->type >= DWG_TYPE_GROUP)                                            \
+    (void)dwg_encode_get_class (obj->parent, obj);                            \
+  LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index)                 \
+  _obj = calloc (1, sizeof (Dwg_Object_##token));                             \
+  obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;                    \
+  obj->tio.object->tio.token->parent = obj->tio.object;                       \
+  obj->tio.object->objid = obj->index
+
+/* globals: dwg */
+#define API_ADD_OBJECT(token)                                  \
+  int error;                                                   \
+  Dwg_Object *obj;                                             \
+  Dwg_Object_##token *_obj;                                    \
+  const char *dxfname = #token;                                \
+  NEW_OBJECT(dwg, obj);                                        \
+  ADD_OBJECT (token)
 
 EXPORT int
 dwg_add_entity_defaults (Dwg_Data *restrict dwg,
@@ -22767,14 +22792,22 @@ dwg_add_XLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-/*
 EXPORT Dwg_Object_DICTIONARY*
-dwg_add_DICTIONARY (Dwg_Object_BLOCK_HEADER *restrict blkhdr)
+dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
+                    const BITCODE_T restrict text /*maybe NULL */,
+                    const BITCODE_H restrict itemhandle)
 {
   API_ADD_OBJECT (DICTIONARY);
+  if (text)
+    {
+      _obj->numitems = 1;
+      _obj->texts = (BITCODE_T*)calloc (1, sizeof (BITCODE_T));
+      _obj->itemhandles = (BITCODE_H*)calloc (1, sizeof (BITCODE_H));
+      _obj->texts[0] = text;
+      _obj->itemhandles[0] = itemhandle;
+    }
   return _obj;
 }
-*/
 
 EXPORT Dwg_Entity_OLEFRAME*
 dwg_add_OLEFRAME (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
@@ -22850,7 +22883,20 @@ dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 }
 
  // HATCH
- // XRECORD
+
+EXPORT Dwg_Object_XRECORD*
+dwg_add_XRECORD (Dwg_Object_DICTIONARY* restrict dict,
+                 const BITCODE_T restrict keyword)
+{
+  int err;
+  Dwg_Object *dictobj = dwg_obj_obj_to_object ((dwg_obj_obj *)dict, &err);
+  Dwg_Data *dwg = dictobj->parent;
+  API_ADD_OBJECT (XRECORD);
+  _obj->cloning = dict->cloning;
+  // ...
+  return _obj;
+}
+
  // PLACEHOLDER
  // VBA_PROJECT
  // LAYOUT

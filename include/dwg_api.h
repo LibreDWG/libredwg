@@ -6299,10 +6299,21 @@ dwg_add_XLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict point,
                const dwg_point_3d *restrict vector)  __nonnull_all;
 
+EXPORT Dwg_Object_DICTIONARY *
+dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
+                    const BITCODE_T restrict text /*maybe NULL */,
+                    const BITCODE_H restrict itemhandle) __nonnull ((1));
+
 EXPORT Dwg_Entity_LWPOLYLINE*
 dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                     const int num_pts2d,
                     const dwg_point_2d **restrict pts2d) __nonnull_all;
+
+/* Add to DICTIONARY */
+EXPORT Dwg_Object_XRECORD*
+dwg_add_XRECORD (Dwg_Object_DICTIONARY* restrict dict,
+                 const BITCODE_T restrict keyword) __nonnull_all;
+
 EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION*
 dwg_add_LARGE_RADIAL_DIMENSION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                                 const dwg_point_3d *restrict center_pt,
