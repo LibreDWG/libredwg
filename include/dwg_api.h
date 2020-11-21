@@ -6377,6 +6377,9 @@ dwg_add_UNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                   const dwg_point_3d *restrict ins_pt) __nonnull_all;
 
 /* Tables */
+EXPORT Dwg_Object_BLOCK_CONTROL*
+dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps) __nonnull_all;
+
 EXPORT Dwg_Object_BLOCK_HEADER*
 dwg_add_BLOCKS (Dwg_Data *restrict dwg,
                 const dwg_point_3d *restrict ins_pt,

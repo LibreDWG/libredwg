@@ -42,6 +42,11 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
   dwg_point_3d pt2 = {2.5, 1.5, 0.0};
   char *name = dwg_type_name (type);
 
+  if (!mspace)
+    {
+      fail ("empty mspace");
+      return 1;
+    }
   switch (type)
     {
     case DWG_TYPE_LINE:

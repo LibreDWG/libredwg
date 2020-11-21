@@ -955,6 +955,8 @@ dwg_model_space_object (Dwg_Data *dwg)
   if (dwg->header_vars.BLOCK_RECORD_MSPACE
       && dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
     return dwg->header_vars.BLOCK_RECORD_MSPACE->obj;
+  if (!dwg->object_map) // for dwg_add_document()
+    dwg->object_map = hash_new (100);
   return dwg_resolve_handle (dwg, dwg->header.version >= R_2000 ? 0x1F : 0x17);
 }
 
@@ -2908,4 +2910,28 @@ dwg_color_method_name (unsigned m)
   case 0xc8: return "none";
   default: return "";
   }
+}
+
+EXPORT unsigned long
+dwg_next_handle (const Dwg_Data *dwg)
+{
+  BITCODE_H last_hdl;
+  unsigned long seed = 0;
+  // check the object map for the next available handle
+  last_hdl = dwg->num_object_refs ? dwg->object_ref[ dwg->num_object_refs - 1] : NULL;
+  if (last_hdl)
+    {
+      // find the largest handle
+      seed = last_hdl->absolute_ref;
+      //LOG_TRACE ("compute HANDSEED %lu ", seed);
+      for (unsigned i = 0; i < dwg->num_object_refs; i++)
+        {
+          Dwg_Object_Ref *ref = dwg->object_ref[i];
+          if (ref->absolute_ref > seed)
+            seed = ref->absolute_ref;
+        }
+      return seed + 1;
+    }
+  else
+    return 0UL;
 }

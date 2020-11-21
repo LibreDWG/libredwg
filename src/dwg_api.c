@@ -21909,13 +21909,172 @@ dwg_ref_get_absref (const dwg_object_ref *restrict ref, int *restrict error)
  *                    FUNCTIONS FOR ADDING OBJECTS                  *
  ********************************************************************/
 
+#define NEW_OBJECT(dwg, obj)                                                  \
+  {                                                                           \
+    BITCODE_BL idx = dwg->num_objects;                                        \
+    (void)dwg_add_object (dwg);                                               \
+    obj = &dwg->object[idx];                                                  \
+    obj->supertype = DWG_SUPERTYPE_OBJECT;                                    \
+    obj->tio.object                                                           \
+        = (Dwg_Object_Object *)calloc (1, sizeof (Dwg_Object_Object));        \
+    obj->tio.object->objid = obj->index;                                      \
+    obj->tio.object->dwg = dwg;                                               \
+  }
+
 /* Should be similar to the public VBA interface */
 
 /* Initialize a new dwg. Which template, imperial or metric */
 EXPORT Dwg_Data*
 dwg_add_document (const int imperial)
 {
-  return NULL;
+  Dwg_Data *dwg = calloc (1, sizeof (Dwg_Data));
+  //dwg->object_map = hash_new (200);
+
+  dwg->header.version = R_2000;
+  dwg->header.from_version = R_2000;
+  //dwg->header.is_maint = 0xf;
+  //dwg->header.zero_one_or_three = 1;
+  dwg->header.dwg_version = 0x19;
+  //dwg->header.maint_version = 0x4d;
+  dwg->header.codepage = 30;
+  //dwg->header.num_sections = 5;
+  //dwg->header.section = (Dwg_Section *)calloc (
+  //    dwg->header.num_sections, sizeof (Dwg_Section));
+
+  dwg->header_vars.unknown_0 = 412148564080.0;
+  dwg->header_vars.unknown_1 = 1.0;
+  dwg->header_vars.unknown_2 = 1.0;
+  dwg->header_vars.unknown_3 = 1.0;
+  dwg->header_vars.unknown_text1 = strdup ("m");
+  dwg->header_vars.DIMASO = 1;
+  dwg->header_vars.DIMSHO = 1;
+  dwg->header_vars.REGENMODE = 1;
+  dwg->header_vars.FILLMODE = 1;
+  dwg->header_vars.PSLTSCALE = 1;
+  dwg->header_vars.USRTIMER = 1;
+  dwg->header_vars.SKPOLY = 1;
+  dwg->header_vars.WORLDVIEW = 1;
+  dwg->header_vars.TILEMODE = 1;
+  dwg->header_vars.VISRETAIN = 1;
+  dwg->header_vars.ATTREQ = 1;
+  dwg->header_vars.MIRRTEXT = 1;
+  dwg->header_vars.WORLDVIEW = 1;
+  dwg->header_vars.TILEMODE = 1;
+  dwg->header_vars.VISRETAIN = 1;
+  dwg->header_vars.DELOBJ = 1;
+  dwg->header_vars.PROXYGRAPHICS = 1;
+  dwg->header_vars.DRAGMODE = 2;
+  dwg->header_vars.TREEDEPTH = 3020;
+  dwg->header_vars.LUNITS = 2;
+  dwg->header_vars.LUPREC = 4;
+  dwg->header_vars.ATTMODE = 1;
+  dwg->header_vars.COORDS = 1;
+  dwg->header_vars.PICKSTYLE = 1;
+  dwg->header_vars.SPLINESEGS = 8;
+  dwg->header_vars.SURFU = 6;
+  dwg->header_vars.SURFV = 6;
+  dwg->header_vars.SURFTYPE = 6;
+  dwg->header_vars.SURFTAB1 = 6;
+  dwg->header_vars.SURFTAB2 = 6;
+  dwg->header_vars.SPLINETYPE = 6;
+  dwg->header_vars.SHADEDGE = 3;
+  dwg->header_vars.SHADEDIF = 70;
+  dwg->header_vars.MAXACTVP = 48;
+  dwg->header_vars.ISOLINES = 4;
+  dwg->header_vars.TEXTQLTY = 50;
+  dwg->header_vars.LTSCALE = 1.0;
+  dwg->header_vars.TEXTSIZE = 0.2;
+  dwg->header_vars.TRACEWID = 0.05;
+  dwg->header_vars.SKETCHINC = 0.1;
+  dwg->header_vars.FILLETRAD = 0.5;
+  dwg->header_vars.CHAMFERA = 0.5;
+  dwg->header_vars.CHAMFERB = 0.5;
+  dwg->header_vars.CHAMFERC = 1.0;
+  dwg->header_vars.FACETRES = 0.5;
+  dwg->header_vars.CMLSCALE = 1.0;
+  dwg->header_vars.CELTSCALE = 1.0;
+  dwg->header_vars.MENU = strdup(".");
+  // CECOLOR.index: 256 [CMC.BS 62]
+  // HANDSEED: 0.1.49 [H 0]
+  // CLAYER: (5.1.F) abs:F [H 8]
+  // TEXTSTYLE: (5.1.10) abs:10 [H 7]
+  // CELTYPE: (5.1.14) abs:14 [H 6]
+  // DIMSTYLE: (5.1.1D) abs:1D [H 2]
+  // CMLSTYLE: (5.1.1C) abs:1C [H 2]
+  dwg->header_vars.PEXTMIN
+      = (BITCODE_3BD){ 100000000000000000000.0, 100000000000000000000.0,
+                       100000000000000000000.0 };
+  dwg->header_vars.PEXTMAX
+      = (BITCODE_3BD){ -100000000000000000000.0, -100000000000000000000.0,
+                       -100000000000000000000.0 };
+  dwg->header_vars.PLIMMAX = (BITCODE_2RD){ 12.0, 9.0 };
+  // dwg->header_vars.PUCSORG = { 0.0, 0.0, 0.0 };
+  dwg->header_vars.PUCSXDIR = (BITCODE_3BD){ 1.0, 0.0, 0.0 };
+  dwg->header_vars.PUCSYDIR = (BITCODE_3BD){ 0.0, 1.0, 0.0 };
+  // PUCSNAME: (5.0.0) abs:0 [H 2]
+  dwg->header_vars.EXTMIN
+      = (BITCODE_3BD){ 100000000000000000000.0, 100000000000000000000.0,
+                       100000000000000000000.0 };
+  dwg->header_vars.EXTMAX
+      = (BITCODE_3BD){ -100000000000000000000.0, -100000000000000000000.0,
+                       -100000000000000000000.0 };
+  dwg->header_vars.LIMMAX = (BITCODE_2RD){ 12.0, 9.0 };
+  // UCSORG: (0.0, 0.0, 0.0) [3BD 10]
+  // UCSXDIR: (1.0, 0.0, 0.0) [3BD 10]
+  // UCSYDIR: (0.0, 1.0, 0.0) [3BD 10]
+  // UCSNAME: (5.0.0) abs:0 [H 2]
+  dwg->header_vars.DIMTIH = 1;
+  dwg->header_vars.DIMTOH = 1;
+  dwg->header_vars.DIMALTD = 2;
+  dwg->header_vars.DIMTOLJ = 1;
+  dwg->header_vars.DIMFIT = 3;
+  dwg->header_vars.DIMUNIT = 2;
+  dwg->header_vars.DIMDEC = 4;
+  dwg->header_vars.DIMTDEC = 4;
+  dwg->header_vars.DIMALTU = 2;
+  dwg->header_vars.DIMALTTD = 2;
+  // DIMTXSTY: (5.1.10) abs:10 [H 7]
+  dwg->header_vars.DIMSCALE = 1.0;
+  dwg->header_vars.DIMASZ = 0.18;
+  dwg->header_vars.DIMEXO = 0.0625;
+  dwg->header_vars.DIMDLI = 0.38;
+  dwg->header_vars.DIMEXE = 0.18;
+  dwg->header_vars.DIMTXT = 0.18;
+  dwg->header_vars.DIMCEN = 0.09;
+  dwg->header_vars.DIMALTF = 25.4;
+  dwg->header_vars.DIMLFAC = 1.0;
+  dwg->header_vars.DIMTFAC = 1.0;
+  dwg->header_vars.DIMGAP = 0.09;
+  //dwg->header_vars.DIMPOST = strdup ("");
+  //dwg->header_vars.DIMAPOST = strdup ("");
+  //dwg->header_vars.DIMBLK_T = strdup ("");
+  //dwg->header_vars.DIMBLK1_T = strdup ("");
+  //dwg->header_vars.DIMBLK2_T = strdup ("");
+
+  dwg->header_vars.DIMCLRD = (BITCODE_CMC){ 0 };
+  dwg->header_vars.DIMCLRE = (BITCODE_CMC){ 0 };
+  dwg->header_vars.DIMCLRT = (BITCODE_CMC){ 0 };
+  // BLOCK_CONTROL_OBJECT: (3.1.1) abs:1 [H 0]
+  dwg_add_BLOCK_CONTROL (dwg, 0x16, 0x19);
+  // LAYER_CONTROL_OBJECT: (3.1.2) abs:2 [H 0]
+  // STYLE_CONTROL_OBJECT: (3.1.3) abs:3 [H 0]
+  // LTYPE_CONTROL_OBJECT: (3.1.5) abs:5 [H 0]
+  // VIEW_CONTROL_OBJECT: (3.1.6) abs:6 [H 0]
+  // UCS_CONTROL_OBJECT: (3.1.7) abs:7 [H 0]
+  // VPORT_CONTROL_OBJECT: (3.1.8) abs:8 [H 0]
+  // APPID_CONTROL_OBJECT: (3.1.9) abs:9 [H 0]
+  // DIMSTYLE_CONTROL_OBJECT: (3.1.A) abs:A [H 0]
+  // VX_CONTROL_OBJECT: (3.1.B) abs:B [H 0]
+  // DICTIONARY_NAMED_OBJECT: (3.1.C) abs:C [H 0]
+  // DICTIONARY_ACAD_GROUP: (5.1.D) abs:D [H 0]
+  // DICTIONARY_ACAD_MLINESTYLE: (5.1.E) abs:E [H 0]
+  // LTYPE_BYLAYER: (5.1.14) abs:14 [H 0]
+  // LTYPE_BYBLOCK: (5.1.13) abs:13 [H 0]
+  // LTYPE_CONTINUOUS: (5.1.15) abs:15 [H 0]
+  // BLOCK_RECORD_PSPACE: (5.1.16) abs:16 [H 0]
+  // BLOCK_RECORD_MSPACE: (5.1.19) abs:19 [H 0]
+
+  return dwg;
 }
 
 // returns -1 on error, 0 on success
@@ -21987,7 +22146,7 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
 
 Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
 
-#define NEW_ENTITY(dwg, obj)                                                  \
+#define NEW_ENTITY(dwg, obj)                                            \
   {                                                                           \
     BITCODE_BL idx = dwg->num_objects;                                        \
     (void)dwg_add_object (dwg);                                               \
@@ -21997,18 +22156,6 @@ Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict ob
         = (Dwg_Object_Entity *)calloc (1, sizeof (Dwg_Object_Entity));        \
     obj->tio.entity->objid = obj->index;                                      \
     obj->tio.entity->dwg = dwg;                                               \
-  }
-
-#define NEW_OBJECT(dwg, obj)                                                  \
-  {                                                                           \
-    BITCODE_BL idx = dwg->num_objects;                                        \
-    (void)dwg_add_object (dwg);                                               \
-    obj = &dwg->object[idx];                                                  \
-    obj->supertype = DWG_SUPERTYPE_OBJECT;                                    \
-    obj->tio.object                                                           \
-        = (Dwg_Object_Object *)calloc (1, sizeof (Dwg_Object_Object));        \
-    obj->tio.object->objid = obj->index;                                      \
-    obj->tio.object->dwg = dwg;                                               \
   }
 
 /* globals: dwg, obj, _obj, dxfname */
@@ -22042,6 +22189,7 @@ Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict ob
     return NULL;                                               \
   NEW_ENTITY(dwg, obj);                                        \
   ADD_ENTITY (token);                                          \
+  obj->handle.value = dwg_next_handle (dwg);                   \
   dwg_insert_entity (blkhdr, obj)
 
 #define ADD_OBJECT(token)                                                     \
@@ -22062,8 +22210,9 @@ Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict ob
   Dwg_Object *obj;                                             \
   Dwg_Object_##token *_obj;                                    \
   const char *dxfname = #token;                                \
-  NEW_OBJECT(dwg, obj);                                        \
-  ADD_OBJECT (token)
+  NEW_OBJECT (dwg, obj);                                       \
+  ADD_OBJECT (token);                                          \
+  obj->handle.value = dwg_next_handle (dwg)
 
 EXPORT int
 dwg_add_entity_defaults (Dwg_Data *restrict dwg,
@@ -22923,6 +23072,17 @@ dwg_add_XLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
+EXPORT Dwg_Object_BLOCK_CONTROL*
+dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
+{
+  API_ADD_OBJECT (BLOCK_CONTROL);
+  if (ms)
+    _obj->model_space = dwg_add_handleref (dwg, 3, ms, NULL);
+  if (ms)
+    _obj->paper_space = dwg_add_handleref (dwg, 3, ps, NULL);
+  return _obj;
+}
+
 EXPORT Dwg_Object_DICTIONARY*
 dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
                     const BITCODE_T restrict text /*maybe NULL */,
@@ -23279,26 +23439,28 @@ dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   Dwg_Object *img;
   Dwg_Entity_IMAGE *_img;
 
-  API_ADD_ENTITY (IMAGE);
-  dwg_require_class (dwg, "IMAGE");
-  dwg_require_class (dwg, "IMAGEDEF");
-  img = obj;
-  _img = _obj;
-  _obj->pt0.x  = ins_pt->x;
-  _obj->pt0.y  = ins_pt->y;
-  _obj->pt0.z  = ins_pt->z;
-  // TODO rotation cos()
-  _obj->uvec.x = scale_factor;
-  _obj->uvec.y = scale_factor;
-  _obj->uvec.z = 1.0;
-  _obj->vvec.x = scale_factor;
-  _obj->vvec.y = scale_factor;
-  _obj->vvec.z = 1.0;
-  _obj->brightness = 0x32;
-  _obj->contrast = 0x32;
-
+  {
+    API_ADD_ENTITY (IMAGE);
+    dwg_require_class (dwg, "IMAGE");
+    dwg_require_class (dwg, "IMAGEDEF");
+    img = obj;
+    _img = _obj;
+    _obj->pt0.x  = ins_pt->x;
+    _obj->pt0.y  = ins_pt->y;
+    _obj->pt0.z  = ins_pt->z;
+    // TODO rotation cos()
+    _obj->uvec.x = scale_factor;
+    _obj->uvec.y = scale_factor;
+    _obj->uvec.z = 1.0;
+    _obj->vvec.x = scale_factor;
+    _obj->vvec.y = scale_factor;
+    _obj->vvec.z = 1.0;
+    _obj->brightness = 0x32;
+    _obj->contrast = 0x32;
+  }
   // TODO normally a DICTIONARY owns an IMAGEDEF
   {
+    Dwg_Data *dwg = img->parent;
     API_ADD_OBJECT (IMAGEDEF);
     //_obj->class_version = 0;
     _obj->file_path = file_path;

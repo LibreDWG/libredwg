@@ -9047,6 +9047,7 @@ dwg_get_entity_layer (const Dwg_Object_Entity *restrict);
 
 EXPORT Dwg_Object *dwg_next_object (const Dwg_Object *obj);
 EXPORT Dwg_Object *dwg_next_entity (const Dwg_Object *obj);
+EXPORT unsigned long dwg_next_handle (const Dwg_Data *dwg);
 
 EXPORT Dwg_Object *dwg_ref_object (const Dwg_Data *restrict dwg,
                                    Dwg_Object_Ref *restrict ref);
