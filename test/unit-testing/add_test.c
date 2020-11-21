@@ -95,9 +95,10 @@ main (int argc, char *argv[])
 {
   int error;
   char *trace = getenv ("LIBREDWG_TRACE");
-  loglevel = 0;
   if (trace)
     loglevel = atoi (trace);
+  else
+    loglevel = 0;
 
   error = test_add (DWG_TYPE_LINE, "add_line_2000.dwg");
 

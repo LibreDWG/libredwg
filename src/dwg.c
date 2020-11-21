@@ -918,12 +918,34 @@ dwg_block_control (Dwg_Data *dwg)
 EXPORT Dwg_Object_Ref *
 dwg_model_space_ref (Dwg_Data *dwg)
 {
+  Dwg_Object *obj;
+  Dwg_Object_BLOCK_CONTROL *block_control;
   if (dwg->header_vars.BLOCK_RECORD_MSPACE
       && dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
     return dwg->header_vars.BLOCK_RECORD_MSPACE;
-  return dwg->block_control.model_space && dwg->block_control.model_space->obj
-             ? dwg->block_control.model_space
-             : NULL;
+  if (dwg->block_control.model_space && dwg->block_control.model_space->obj)
+    {
+      dwg->header_vars.BLOCK_RECORD_MSPACE = dwg->block_control.model_space;
+      return dwg->block_control.model_space;
+    }
+  block_control = dwg_block_control (dwg);
+  if (block_control && block_control->model_space && block_control->model_space->obj)
+    {
+      dwg->block_control.model_space = block_control->model_space;
+      dwg->header_vars.BLOCK_RECORD_MSPACE = block_control->model_space;
+      return block_control->model_space;
+    }
+  obj = dwg_get_first_object (dwg, DWG_TYPE_BLOCK_CONTROL);
+  if (!obj)
+    return NULL;
+  block_control = obj->tio.object->tio.BLOCK_CONTROL;
+  if (block_control && block_control->model_space && block_control->model_space->obj)
+    {
+      dwg->block_control.model_space = block_control->model_space;
+      dwg->header_vars.BLOCK_RECORD_MSPACE = block_control->model_space;
+      return block_control->model_space;
+    }
+  return NULL;
 }
 
 /** Returns the paper space block object for the DWG.
@@ -1379,6 +1401,18 @@ get_last_owned_block (const Dwg_Object *restrict hdr)
     }
 
   LOG_ERROR ("Unsupported version: %d\n", version);
+  return NULL;
+}
+
+EXPORT Dwg_Object *
+dwg_get_first_object (const Dwg_Data *dwg, const Dwg_Object_Type type)
+{
+  for (unsigned i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *const obj = &dwg->object[i];
+      if (obj->fixedtype == type)
+        return obj;
+    }
   return NULL;
 }
 
@@ -2934,5 +2968,45 @@ dwg_next_handle (const Dwg_Data *dwg)
       return seed + 1;
     }
   else
-    return 0UL;
+    {
+      Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
+      return obj->handle.value + 1;
+    }
+}
+
+// on init some handles have holes on purpose.
+void dwg_set_next_hdl (Dwg_Data *dwg, const unsigned long value);
+void dwg_set_next_objhandle (Dwg_Object *obj);
+
+void dwg_set_next_hdl (Dwg_Data *dwg, const unsigned long value)
+{
+  dwg->next_hdl = value;
+}
+
+void dwg_set_next_objhandle (Dwg_Object *obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  if (dwg->next_hdl)
+    {
+      obj->handle.value = dwg->next_hdl;
+      set_handle_size (&obj->handle);
+      dwg->next_hdl = 0;
+      return;
+    }
+  if (!dwg->num_objects)
+    {
+      obj->handle.size = 1;
+      obj->handle.value = 1UL;
+    }
+  else
+    {
+      Dwg_Object *lastobj = &dwg->object[dwg->num_objects - 1];
+      /* ADD_OBJECT might have just added a zeroed object */
+      if (!lastobj->handle.value && dwg->num_objects > 1)
+        lastobj = &dwg->object[dwg->num_objects - 2];
+      obj->handle.value = lastobj->handle.value + 1;
+      set_handle_size (&obj->handle);
+    }
+  dwg->next_hdl = 0;
+  return;
 }

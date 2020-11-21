@@ -21909,6 +21909,10 @@ dwg_ref_get_absref (const dwg_object_ref *restrict ref, int *restrict error)
  *                    FUNCTIONS FOR ADDING OBJECTS                  *
  ********************************************************************/
 
+/* I don't want to export this. It's an initialization hack only */
+void dwg_set_next_hdl (Dwg_Data *dwg, unsigned long value);
+void dwg_set_next_objhandle (Dwg_Object *obj);
+
 #define NEW_OBJECT(dwg, obj)                                                  \
   {                                                                           \
     BITCODE_BL idx = dwg->num_objects;                                        \
@@ -21928,6 +21932,19 @@ EXPORT Dwg_Data*
 dwg_add_document (const int imperial)
 {
   Dwg_Data *dwg = calloc (1, sizeof (Dwg_Data));
+  int error;
+  Dwg_Object_BLOCK_CONTROL *block_control;
+  Dwg_Object_BLOCK_HEADER *blk;
+  Dwg_Object_STYLE *style;
+  Dwg_Object_LTYPE *ltype;
+  dwg_point_3d pt0 = { 0.0, 1.0, 0.0 };
+  Dwg_Object *ctrl;
+  char *trace = getenv ("LIBREDWG_TRACE");
+  if (trace)
+    loglevel = atoi (trace);
+  else
+    loglevel = DWG_LOGLEVEL_ERROR;
+
   //dwg->object_map = hash_new (200);
 
   dwg->header.version = R_2000;
@@ -22055,25 +22072,94 @@ dwg_add_document (const int imperial)
   dwg->header_vars.DIMCLRE = (BITCODE_CMC){ 0 };
   dwg->header_vars.DIMCLRT = (BITCODE_CMC){ 0 };
   // BLOCK_CONTROL_OBJECT: (3.1.1) abs:1 [H 0]
-  dwg_add_BLOCK_CONTROL (dwg, 0x16, 0x19);
+  block_control = dwg_add_BLOCK_CONTROL (dwg, 0x1F, 0x20);
   // LAYER_CONTROL_OBJECT: (3.1.2) abs:2 [H 0]
-  dwg_add_LAYER (dwg, "0");
+  dwg_add_LAYER (dwg, NULL);
   // STYLE_CONTROL_OBJECT: (3.1.3) abs:3 [H 0]
+  dwg_add_STYLE (dwg, NULL);
+  // hole at 4
+  dwg_set_next_hdl (dwg, 0x5);
   // LTYPE_CONTROL_OBJECT: (3.1.5) abs:5 [H 0]
+  dwg_add_LTYPE (dwg, NULL);
   // VIEW_CONTROL_OBJECT: (3.1.6) abs:6 [H 0]
+  dwg_add_VIEW (dwg, NULL);
+  dwg->view_control = *dwg->object[4].tio.object->tio.VIEW_CONTROL;
   // UCS_CONTROL_OBJECT: (3.1.7) abs:7 [H 0]
+  dwg_add_UCS (dwg, &pt0, NULL, NULL, NULL);
+  dwg->ucs_control = *dwg->object[5].tio.object->tio.UCS_CONTROL;
   // VPORT_CONTROL_OBJECT: (3.1.8) abs:8 [H 0]
+  dwg_add_VPORT (dwg, NULL);
+  dwg->vport_control = *dwg->object[6].tio.object->tio.VPORT_CONTROL;
   // APPID_CONTROL_OBJECT: (3.1.9) abs:9 [H 0]
+  dwg_add_APPID (dwg, NULL);
   // DIMSTYLE_CONTROL_OBJECT: (3.1.A) abs:A [H 0]
+  dwg_add_DIMSTYLE (dwg, NULL);
   // VX_CONTROL_OBJECT: (3.1.B) abs:B [H 0]
+  dwg_add_VX (dwg, NULL); // TODO only <r2000
   // DICTIONARY_NAMED_OBJECT: (3.1.C) abs:C [H 0]
+  dwg_add_DICTIONARY (dwg, "NAMED_OBJECT", NULL);
+  dwg->header_vars.DICTIONARY_NAMED_OBJECT = dwg_add_handleref (dwg, 5, 0xC, NULL);
   // DICTIONARY_ACAD_GROUP: (5.1.D) abs:D [H 0]
-  // DICTIONARY_ACAD_MLINESTYLE: (5.1.E) abs:E [H 0]
-  // LTYPE_BYLAYER: (5.1.14) abs:14 [H 0]
-  // LTYPE_BYBLOCK: (5.1.13) abs:13 [H 0]
-  // LTYPE_CONTINUOUS: (5.1.15) abs:15 [H 0]
-  // BLOCK_RECORD_PSPACE: (5.1.16) abs:16 [H 0]
-  // BLOCK_RECORD_MSPACE: (5.1.19) abs:19 [H 0]
+  dwg_add_DICTIONARY (dwg, "ACAD_GROUP", NULL);
+  dwg->header_vars.DICTIONARY_ACAD_GROUP = dwg_add_handleref (dwg, 5, 0xD, NULL);
+  // DICTIONARY (5.1.E)
+  dwg_add_DICTIONARYWDFLT (dwg, "Normal", dwg_add_handleref (dwg, 2, 0xF, NULL));
+  dwg->header_vars.DICTIONARY_PLOTSTYLENAME = dwg_add_handleref (dwg, 5, 0xE, NULL);
+  // PLOTSTYLE (2.1.F)
+  dwg_add_PLACEHOLDER (dwg); // PLOTSTYLE
+  // LAYER: (0.1.10)
+  dwg_add_LAYER (dwg, "0");
+  dwg->layer_control = *dwg->object[1].tio.object->tio.LAYER_CONTROL;
+  // STYLE: (0.1.11)
+  style = dwg_add_STYLE (dwg, "Standard");
+  style->font_file = strdup ("txt");
+  style->last_height = 100.0;
+  dwg->style_control = *dwg->object[2].tio.object->tio.STYLE_CONTROL;
+  // APPID "ACAD": (0.1.12)
+  dwg_add_APPID (dwg, "ACAD");
+  dwg->appid_control = *dwg->object[7].tio.object->tio.APPID_CONTROL;
+  // hole at 13
+  dwg_set_next_hdl (dwg, 0x14);
+  // LTYPE_BYBLOCK: (5.1.14)
+  ltype = dwg_add_LTYPE (dwg, "BYBLOCK");
+  // LTYPE_BYLAYER: (5.1.15)
+  // LTYPE_CONTINUOUS: (5.1.16)
+  dwg_add_LTYPE (dwg, "BYLAYER");
+  dwg->header_vars.LTYPE_BYLAYER = dwg_add_handleref (dwg, 5, 0x15, NULL);
+  ltype = dwg_add_LTYPE (dwg, "CONTINUOUS");
+  ltype->description = strdup ("Solid line");
+  dwg->header_vars.LTYPE_CONTINUOUS = dwg_add_handleref (dwg, 5, 0x16, NULL);
+  dwg->ltype_control = *dwg->object[3].tio.object->tio.LTYPE_CONTROL;
+  // DICTIONARY ACAD_MLINESTYLE: (5.1.17) abs:E [H 0]
+  dwg_add_DICTIONARY (dwg, "ACAD_MLINESTYLE", NULL);
+  dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE = dwg_add_handleref (dwg, 5, 0x17, NULL);
+  dwg_add_PLACEHOLDER (dwg); // MLINESTYLE 0.1.18
+  dwg_add_DICTIONARY (dwg, NULL, NULL);
+  // DICTIONARY ACAD_LAYOUT: (5.1.1A)
+  dwg_add_DICTIONARY (dwg, "ACAD_LAYOUT", NULL);
+  // hole until 1F
+  dwg_set_next_hdl (dwg, 0x1F);
+  // BLOCK_RECORD_MSPACE: (5.1.1F)
+  blk = dwg_add_BLOCK_HEADER (dwg, "*Model_Space");
+  block_control->model_space->obj
+      = dwg_obj_generic_to_object ((dwg_obj_generic *)blk, &error);
+  block_control->num_entries--;
+  // BLOCK_RECORD_PSPACE: (5.1.20)
+  blk = dwg_add_BLOCK_HEADER (dwg, "*Paper_Space");
+  block_control->paper_space->obj
+      = dwg_obj_generic_to_object ((dwg_obj_generic *)blk, &error);
+  block_control->num_entries--;
+  dwg->block_control = *block_control;
+
+  // a non-invasive variant of resolve_objectref_vector()
+  for (unsigned i = 0; i < dwg->num_object_refs; i++)
+    {
+      Dwg_Object_Ref *ref = dwg->object_ref[i];
+      Dwg_Object *obj;
+      // possibly update the obj if realloced
+      if ((obj = dwg_resolve_handle (dwg, ref->absolute_ref)))
+        ref->obj = obj;
+    }
 
   return dwg;
 }
@@ -22183,14 +22269,15 @@ Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict ob
   int error;                                                   \
   Dwg_Object *obj;                                             \
   Dwg_Entity_##token *_obj;                                    \
-  Dwg_Object *blkobj = dwg_obj_obj_to_object ((dwg_obj_obj *)blkhdr, &error); \
+  Dwg_Object *blkobj = dwg_obj_generic_to_object ((dwg_obj_generic *)blkhdr, &error); \
   Dwg_Data *dwg = blkobj && !error ? blkobj->parent : NULL;    \
   const char *dxfname = #token;                                \
   if (!dwg)                                                    \
     return NULL;                                               \
   NEW_ENTITY(dwg, obj);                                        \
   ADD_ENTITY (token);                                          \
-  obj->handle.value = dwg_next_handle (dwg);                   \
+  dwg_set_next_objhandle (obj);                                \
+  LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H(obj->handle));  \
   dwg_insert_entity (blkhdr, obj)
 
 #define ADD_OBJECT(token)                                                     \
@@ -22213,7 +22300,8 @@ Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict ob
   const char *dxfname = #token;                                \
   NEW_OBJECT (dwg, obj);                                       \
   ADD_OBJECT (token);                                          \
-  obj->handle.value = dwg_next_handle (dwg)
+  dwg_set_next_objhandle (obj);                                \
+  LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H(obj->handle))
 
 EXPORT int
 dwg_add_entity_defaults (Dwg_Data *restrict dwg,
@@ -22243,7 +22331,7 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict hdr,
   int error;
   Dwg_Data *dwg = obj->parent;
   const Dwg_Version_Type version = dwg->header.version;
-  Dwg_Object *blkobj = dwg_obj_obj_to_object ((dwg_obj_obj *)hdr, &error);
+  Dwg_Object *blkobj = dwg_obj_generic_to_object ((dwg_obj_generic *)hdr, &error);
   const Dwg_Object_Ref *mspace =  dwg_model_space_ref (dwg);
   const Dwg_Object_Ref *pspace =  dwg_paper_space_ref (dwg);
 
@@ -22268,22 +22356,34 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict hdr,
         {
           hdr->first_entity = hdr->last_entity
               = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
+          LOG_TRACE ("hdr.first_entity = " FORMAT_REF "\n", ARGS_REF(hdr->first_entity));
           hdr->num_owned++;
           obj->tio.entity->nolinks = 1;
         }
       else
         {
           BITCODE_H lastref = hdr->last_entity;
-          Dwg_Object *prev = lastref ? dwg_ref_object (dwg, lastref) : NULL; // may fail!
-          hdr->last_entity = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
+          Dwg_Object *prev
+              = lastref ? dwg_ref_object (dwg, lastref) : NULL; // may fail!
+          hdr->last_entity
+              = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
+          LOG_TRACE ("hdr.last_entity = " FORMAT_REF "\n",
+                     ARGS_REF (hdr->last_entity));
           // link prev. last to curr last
           if (prev)
             {
-              prev->tio.entity->next_entity = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
-              obj->tio.entity->prev_entity = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
+              prev->tio.entity->next_entity
+                  = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
+              LOG_TRACE ("prev.next_entity = " FORMAT_REF "\n",
+                         ARGS_REF (prev->tio.entity->next_entity));
+              obj->tio.entity->prev_entity
+                  = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
+              LOG_TRACE ("obj.prev_entity = " FORMAT_REF "\n",
+                         ARGS_REF (obj->tio.entity->prev_entity));
               prev->tio.entity->nolinks = 0;
             }
           hdr->num_owned++;
+          LOG_TRACE ("hdr.num_owned = %u\n", hdr->num_owned);
         }
     }
   return 0;
@@ -22516,14 +22616,14 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   for (int i = 0; i < num_pts; i++)
     {
       _vtx = dwg_add_VERTEX_2D (blkhdr, pts[i]);
-      obj = dwg_obj_obj_to_object ((dwg_obj_obj *)_vtx, &error);
+      obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
       if (i == 0)
         _pl->first_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
       if (i == num_pts - 1)
         _pl->last_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
     }
   _seq = dwg_add_SEQEND (blkhdr);
-  obj = dwg_obj_obj_to_object ((dwg_obj_obj *)_seq, &error);
+  obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_seq, &error);
   _pl->seqend  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
   return _pl;
 }
@@ -22544,14 +22644,14 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   for (int i = 0; i < num_pts; i++)
     {
       _vtx = dwg_add_VERTEX_3D (blkhdr, pts[i]);
-      obj = dwg_obj_obj_to_object ((dwg_obj_obj *)_vtx, &error);
+      obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
       if (i == 0)
         _pl->first_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
       if (i == num_pts - 1)
         _pl->last_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
     }
   _seq = dwg_add_SEQEND (blkhdr);
-  obj = dwg_obj_obj_to_object ((dwg_obj_obj *)_seq, &error);
+  obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_seq, &error);
   _pl->seqend  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
   return _pl;
 }
@@ -22826,19 +22926,19 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   for (unsigned i = 0; i < numverts; i++)
     {
       _vtx = dwg_add_VERTEX_PFACE (blkhdr, verts[i]);
-      obj = dwg_obj_obj_to_object ((dwg_obj_obj *)_vtx, &error);
+      obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
       if (i == 0)
         _pl->first_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
     }
   for (unsigned i = 0; i < numfaces; i++)
     {
       _vtxf = dwg_add_VERTEX_PFACE_FACE (blkhdr, faces[i]);
-      obj = dwg_obj_obj_to_object ((dwg_obj_obj *)_vtxf, &error);
+      obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtxf, &error);
       if (i == numfaces - 1)
         _pl->last_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
     }
   _seq = dwg_add_SEQEND (blkhdr);
-  obj = dwg_obj_obj_to_object ((dwg_obj_obj *)_seq, &error);
+  obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_seq, &error);
   _pl->seqend  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
   return _pl;
 }
@@ -22861,14 +22961,14 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   for (unsigned i = 0; i < _pl->num_owned; i++)
     {
       _vtx = dwg_add_VERTEX_MESH (blkhdr, verts[i]);
-      obj = dwg_obj_obj_to_object ((dwg_obj_obj *)_vtx, &error);
+      obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
       if (i == 0)
         _pl->first_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
       if (i == _pl->num_owned - 1)
         _pl->last_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
     }
   _seq = dwg_add_SEQEND (blkhdr);
-  obj = dwg_obj_obj_to_object ((dwg_obj_obj *)_seq, &error);
+  obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_seq, &error);
   _pl->seqend  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
   return _pl;
 }
@@ -23090,6 +23190,25 @@ dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
   return _obj;
 }
 
+//dwg_add_DICTIONARYWDFLT (dwg, "Normal", 0xF);
+EXPORT Dwg_Object_DICTIONARYWDFLT*
+dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
+                         const BITCODE_T restrict text /*maybe NULL */,
+                         const BITCODE_H restrict itemhandle)
+{
+  API_ADD_OBJECT (DICTIONARYWDFLT);
+  if (text)
+    {
+      _obj->numitems = 1;
+      _obj->cloning = 1;
+      _obj->texts = (BITCODE_T*)calloc (1, sizeof (BITCODE_T));
+      _obj->itemhandles = (BITCODE_H*)calloc (1, sizeof (BITCODE_H));
+      _obj->texts[0] = text;
+      _obj->itemhandles[0] = itemhandle;
+    }
+  return _obj;
+}
+
 EXPORT Dwg_Entity_OLEFRAME*
 dwg_add_OLEFRAME (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
 {
@@ -23161,16 +23280,15 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
 }
 
 // Tables:
-// BLOCK_CONTROL
 
 /* This is a singleton and must be at 1. Must only be called from dwg_add_document() */
 Dwg_Object_BLOCK_CONTROL*
 dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
 {
   API_ADD_OBJECT (BLOCK_CONTROL);
-  obj->handle.value = 1;
-  obj->handle.size = 1;
-  //dwg->block_control = _obj;
+  //obj->handle.value = 1;
+  //obj->handle.size = 1;
+  //dwg->block_control = _obj; // but will be realloc'ed soon
   dwg->header_vars.BLOCK_CONTROL_OBJECT = dwg_add_handleref (dwg, 3, 1, obj);
   dwg->header_vars.BLOCK_CONTROL_OBJECT->obj = obj;
   if (ms)
@@ -23178,89 +23296,107 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
       // Usually this does not exist yet.
       _obj->model_space = dwg_add_handleref (dwg, 3, ms, obj);
        dwg->header_vars.BLOCK_RECORD_MSPACE = _obj->model_space;
+       LOG_TRACE ("blkctrl.model_space = " FORMAT_REF "\n",
+                  ARGS_REF (_obj->model_space));
     }
   if (ps)
     {
       // This neither
       _obj->paper_space = dwg_add_handleref (dwg, 3, ps, obj);
        dwg->header_vars.BLOCK_RECORD_PSPACE = _obj->paper_space;
+       LOG_TRACE ("blkctrl.paper_space = " FORMAT_REF "\n",
+                  ARGS_REF (_obj->paper_space));
     }
+  dwg->block_control = *_obj;
   return _obj;
 }
 
-// BLOCK_HEADER
-// LAYER_CONTROL
-// LAYER
-
-#define API_ADD_TABLE(token)                                                  \
-  /* first check LAYER_CONTROL */                                             \
-  Dwg_Object_##token##_CONTROL **ctrls = dwg_getall_##token##_CONTROL (dwg);  \
-  Dwg_Object_##token##_CONTROL *_ctrl;                                        \
-  if (!ctrls || !!ctrls[0])                                                   \
+#define API_ADD_TABLE(record, control, ...)                                   \
+  /* first check TABLE_CONTROL */                                             \
+  Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_##control);          \
+  Dwg_Object_##control *_ctrl;                                                \
+  if (!ctrl)                                                                  \
     {                                                                         \
-      API_ADD_OBJECT (token##_CONTROL);                                       \
-      dwg->header_vars.token##_CONTROL_OBJECT                                 \
+      API_ADD_OBJECT (control);                                               \
+      dwg->header_vars.control##_OBJECT                                       \
           = dwg_add_handleref (dwg, 3, obj->handle.value, obj);               \
-      dwg->header_vars.token##_CONTROL_OBJECT->obj = obj;                     \
+      LOG_TRACE (#control "_OBJECT = " FORMAT_REF "\n",                       \
+                 ARGS_REF (dwg->header_vars.control##_OBJECT));               \
+      dwg->header_vars.control##_OBJECT->obj = obj;                           \
       _ctrl = _obj;                                                           \
-      _ctrl->num_entries = 1;                                                 \
-      _ctrl->entries = calloc (1, sizeof (BITCODE_H));                        \
     }                                                                         \
-  else if (ctrls[0])                                                          \
+  else                                                                        \
     {                                                                         \
-      _ctrl = ctrls[0];                                                       \
-      _ctrl->num_entries++;                                                   \
-      _ctrl->entries = realloc (_ctrl->entries,                               \
-                                _ctrl->num_entries * sizeof (BITCODE_H));     \
+      _ctrl = ctrl->tio.object->tio.control;                                  \
     }                                                                         \
-  {                                                                           \
-    API_ADD_OBJECT (token);                                                   \
-    _obj->name = strdup (name); /* FIXME <r2007 only */                       \
-    _ctrl->entries[_ctrl->num_entries]                                        \
-        = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);                \
-    return _obj;                                                              \
-  }
+  if (name)                                                                   \
+    {                                                                         \
+      API_ADD_OBJECT (record);                                                \
+      _obj->name = strdup (name); /* FIXME write <r2007 only */               \
+      LOG_TRACE (#record ".name = %s\n", name);                               \
+      __VA_ARGS__                                                             \
+      if (_ctrl->entries)                                                     \
+        _ctrl->entries = realloc (_ctrl->entries, (_ctrl->num_entries + 1)    \
+                                                      * sizeof (BITCODE_H));  \
+      else                                                                    \
+        _ctrl->entries = calloc (_ctrl->num_entries + 1, sizeof (BITCODE_H)); \
+      _ctrl->entries[_ctrl->num_entries]                                      \
+          = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);              \
+      LOG_TRACE (#control ".entries[%d] = " FORMAT_REF "\n",                  \
+                 _ctrl->num_entries,                                          \
+                 ARGS_REF (_ctrl->entries[_ctrl->num_entries]));              \
+      _ctrl->num_entries++;                                                   \
+      return _obj;                                                            \
+    }                                                                         \
+  else                                                                        \
+    return NULL
+
+EXPORT Dwg_Object_BLOCK_HEADER *
+dwg_add_BLOCK_HEADER (Dwg_Data *restrict dwg, const char* restrict name)
+{
+  API_ADD_TABLE (BLOCK_HEADER, BLOCK_CONTROL);
+}
 
 EXPORT Dwg_Object_LAYER *
 dwg_add_LAYER (Dwg_Data *restrict dwg, const char* restrict name)
 {
-  API_ADD_TABLE (LAYER);
+  API_ADD_TABLE (LAYER, LAYER_CONTROL);
 }
 
 EXPORT Dwg_Object_STYLE *
 dwg_add_STYLE (Dwg_Data *restrict dwg, const char* restrict name)
 {
-  API_ADD_TABLE (STYLE);
+  API_ADD_TABLE (STYLE, STYLE_CONTROL, { _obj->width_factor = 1.0; });
 }
 
 EXPORT Dwg_Object_LTYPE *
 dwg_add_LTYPE (Dwg_Data *restrict dwg, const char *restrict name)
 {
-  API_ADD_TABLE (LTYPE);
+  API_ADD_TABLE (LTYPE, LTYPE_CONTROL, { _obj->alignment = 0x41; });
 }
 
 EXPORT Dwg_Object_VIEW *
 dwg_add_VIEW (Dwg_Data *restrict dwg, const char* restrict name)
 {
-  API_ADD_TABLE (VIEW);
+  API_ADD_TABLE (VIEW, VIEW_CONTROL);
 }
 
 EXPORT Dwg_Object_VPORT *
 dwg_add_VPORT (Dwg_Data *restrict dwg, const char* restrict name)
 {
-  API_ADD_TABLE (VPORT);
+  API_ADD_TABLE (VPORT, VPORT_CONTROL);
 }
 
 EXPORT Dwg_Object_APPID *
 dwg_add_APPID (Dwg_Data *restrict dwg, const char* restrict name)
 {
-  API_ADD_TABLE (APPID);
+  API_ADD_TABLE (APPID, APPID_CONTROL);
 }
 
 EXPORT Dwg_Object_DIMSTYLE *
 dwg_add_DIMSTYLE (Dwg_Data *restrict dwg, const char* restrict name)
 {
-  API_ADD_TABLE (DIMSTYLE);
+  API_ADD_TABLE (DIMSTYLE, DIMSTYLE_CONTROL);
 }
 
 EXPORT Dwg_Object_UCS *
@@ -23270,41 +23406,17 @@ dwg_add_UCS (Dwg_Data *restrict dwg,
              const dwg_point_3d *restrict y_axis,
              const char* restrict name)
 {
-  Dwg_Object_UCS_CONTROL **ctrls = dwg_getall_UCS_CONTROL (dwg);
-  Dwg_Object_UCS_CONTROL *_ctrl;
-  if (!ctrls || !!ctrls[0])
-    {
-      API_ADD_OBJECT (UCS_CONTROL);
-      dwg->header_vars.UCS_CONTROL_OBJECT
-          = dwg_add_handleref (dwg, 3, obj->handle.value, obj);
-      dwg->header_vars.UCS_CONTROL_OBJECT->obj = obj;
-      _ctrl = _obj;
-      _ctrl->num_entries = 1;
-      _ctrl->entries = calloc (1, sizeof (BITCODE_H));
-    }
-  else if (ctrls[0])
-    {
-      _ctrl = ctrls[0];
-      _ctrl->num_entries++;
-      _ctrl->entries
-          = realloc (_ctrl->entries, _ctrl->num_entries * sizeof (BITCODE_H));
-    }
-  {
-    API_ADD_OBJECT (UCS);
-    _obj->name = strdup (name); /* FIXME <r2007 only */
-    _obj->ucsorg.x = origin->x;
-    _obj->ucsorg.y = origin->y;
-    _obj->ucsorg.z = origin->z;
-    _obj->ucsxdir.x = x_axis->x;
-    _obj->ucsxdir.y = x_axis->y;
-    _obj->ucsxdir.z = x_axis->z;
-    _obj->ucsydir.x = y_axis->x;
-    _obj->ucsydir.y = y_axis->y;
-    _obj->ucsydir.z = y_axis->z;
-    _ctrl->entries[_ctrl->num_entries]
-        = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);
-    return _obj;
-  }
+  API_ADD_TABLE (UCS, UCS_CONTROL,
+                 { _obj->ucsorg.x = origin->x;
+                   _obj->ucsorg.y = origin->y;
+                   _obj->ucsorg.z = origin->z;
+                   _obj->ucsxdir.x = x_axis->x;
+                   _obj->ucsxdir.y = x_axis->y;
+                   _obj->ucsxdir.z = x_axis->z;
+                   _obj->ucsydir.x = y_axis->x;
+                   _obj->ucsydir.y = y_axis->y;
+                   _obj->ucsydir.z = y_axis->z;
+                 });
 }
 
 // VX_CONTROL
@@ -23312,32 +23424,7 @@ dwg_add_UCS (Dwg_Data *restrict dwg,
 EXPORT Dwg_Object_VX_TABLE_RECORD *
 dwg_add_VX (Dwg_Data *restrict dwg, const char* restrict name)
 {
-  Dwg_Object_VX_CONTROL **ctrls = dwg_getall_VX_CONTROL (dwg);
-  Dwg_Object_VX_CONTROL *_ctrl;
-  if (!ctrls || !!ctrls[0])
-    {
-      API_ADD_OBJECT (VX_CONTROL);
-      dwg->header_vars.VX_CONTROL_OBJECT
-          = dwg_add_handleref (dwg, 3, obj->handle.value, obj);
-      dwg->header_vars.VX_CONTROL_OBJECT->obj = obj;
-      _ctrl = _obj;
-      _ctrl->num_entries = 1;
-      _ctrl->entries = calloc (1, sizeof (BITCODE_H));
-    }
-  else if (ctrls[0])
-    {
-      _ctrl = ctrls[0];
-      _ctrl->num_entries++;
-      _ctrl->entries
-          = realloc (_ctrl->entries, _ctrl->num_entries * sizeof (BITCODE_H));
-    }
-  {
-    API_ADD_OBJECT (VX_TABLE_RECORD);
-    _obj->name = strdup (name); /* FIXME <r2007 only */
-    _ctrl->entries[_ctrl->num_entries]
-        = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);
-    return _obj;
-  }
+  API_ADD_TABLE (VX_TABLE_RECORD, VX_CONTROL);
 }
 
   // GROUP
@@ -23396,7 +23483,7 @@ dwg_add_VX (Dwg_Data *restrict dwg, const char* restrict name)
       Dwg_Object_DICTIONARY * restrict dict, const BITCODE_T restrict keyword)
   {
     int err;
-    Dwg_Object *dictobj = dwg_obj_obj_to_object ((dwg_obj_obj *)dict, &err);
+    Dwg_Object *dictobj = dwg_obj_generic_to_object ((dwg_obj_generic *)dict, &err);
     Dwg_Data *dwg = dictobj->parent;
     API_ADD_OBJECT (XRECORD);
     _obj->cloning = dict->cloning;
@@ -23410,7 +23497,7 @@ dwg_add_VX (Dwg_Data *restrict dwg, const char* restrict name)
       const BITCODE_T restrict classname)
   {
     int err;
-    Dwg_Object *dictobj = dwg_obj_obj_to_object ((dwg_obj_obj *)dict, &err);
+    Dwg_Object *dictobj = dwg_obj_generic_to_object ((dwg_obj_generic *)dict, &err);
     Dwg_Data *dwg = dictobj->parent;
     //
     return dict;

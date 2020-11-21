@@ -321,6 +321,9 @@ Dwg_Entity_##token **dwg_getall_##token (Dwg_Object_Ref * hdr) \
 EXPORT \
 Dwg_Object_##token **dwg_getall_##token (Dwg_Data *dwg)
 
+#define DWG_GET_FIRST_OBJECT_DECL(token) \
+EXPORT Dwg_Object_##token *dwg_get_first_##token (Dwg_Data *dwg)
+
 #define DWG_GETALL_OBJECT(token) \
 EXPORT \
 Dwg_Object_##token **dwg_getall_##token (Dwg_Data *dwg) \
@@ -352,6 +355,21 @@ Dwg_Object_##token **dwg_getall_##token (Dwg_Data *dwg) \
   ret_##token[i] = NULL; \
   return ret_##token; \
 }
+
+#define DWG_GET_FIRST_OBJECT(token)                                           \
+EXPORT Dwg_Object_##token *dwg_get_first_##token (Dwg_Data *dwg)              \
+  {                                                                           \
+    for (i = 0; i < dwg->num_objects; i++)                                    \
+      {                                                                       \
+        const Dwg_Object *const obj = &dwg->object[i];                        \
+        if (obj->supertype == DWG_SUPERTYPE_OBJECT                            \
+            && obj->fixedtype == DWG_TYPE_##token)                            \
+          {                                                                   \
+            return obj->tio.object->tio.token;                                \
+          }                                                                   \
+      }                                                                       \
+    return NULL;                                                              \
+  }
 
 // Cast a Dwg_Object to Entity
 #define CAST_DWG_OBJECT_TO_ENTITY_DECL(token) \
@@ -6326,6 +6344,10 @@ EXPORT Dwg_Object_DICTIONARY *
 dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
                     const BITCODE_T restrict text /*maybe NULL */,
                     const BITCODE_H restrict itemhandle) __nonnull ((1));
+EXPORT Dwg_Object_DICTIONARYWDFLT *
+dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
+                         const BITCODE_T restrict text /*maybe NULL */,
+                         const BITCODE_H restrict itemhandle) __nonnull ((1));
 EXPORT Dwg_Entity_MTEXT*
 dwg_add_MTEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict ins_pt,
@@ -6382,42 +6404,40 @@ dwg_add_UNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 Dwg_Object_BLOCK_CONTROL*
 dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps) __nonnull_all;
 
-EXPORT Dwg_Object_BLOCK_HEADER*
-dwg_add_BLOCKS (Dwg_Data *restrict dwg,
-                const dwg_point_3d *restrict ins_pt,
-                const char* restrict name) __nonnull_all;
-EXPORT Dwg_Object_UCS*
-dwg_add_UCS (Dwg_Data *restrict dwg,
-             const dwg_point_3d *restrict origin,
-             const dwg_point_3d *restrict x_axis,
-             const dwg_point_3d *restrict y_axis,
-             const char* restrict name) __nonnull_all;
+EXPORT Dwg_Object_BLOCK_HEADER *
+dwg_add_BLOCK_HEADER (Dwg_Data *restrict dwg,
+                      const char *restrict name) __nonnull_all;
+EXPORT Dwg_Object_UCS *dwg_add_UCS (Dwg_Data *restrict dwg,
+                                    const dwg_point_3d *restrict origin,
+                                    const dwg_point_3d *restrict x_axis,
+                                    const dwg_point_3d *restrict y_axis,
+                                    const char *restrict name) __nonnull ((1,2));
 EXPORT Dwg_Object_LAYER*
 dwg_add_LAYER (Dwg_Data *restrict dwg,
-               const char* restrict name) __nonnull_all;
+               const char* restrict name) __nonnull ((1));
 EXPORT Dwg_Object_STYLE*
 dwg_add_STYLE (Dwg_Data *restrict dwg,
-               const char* restrict name) __nonnull_all;
+               const char* restrict name) __nonnull ((1));
 EXPORT Dwg_Object_LTYPE*
 dwg_add_LTYPE (Dwg_Data *restrict dwg,
-               const char* restrict name) __nonnull_all;
+               const char* restrict name) __nonnull ((1));
 EXPORT Dwg_Object_VIEW*
 dwg_add_VIEW (Dwg_Data *restrict dwg,
-              const char* restrict name) __nonnull_all;
+              const char* restrict name) __nonnull ((1));
 EXPORT Dwg_Object_DIMSTYLE*
 dwg_add_DIMSTYLE (Dwg_Data *restrict dwg,
-                  const char* restrict name) __nonnull_all;
+                  const char* restrict name) __nonnull ((1));
 EXPORT Dwg_Object_VPORT*
 dwg_add_VPORT (Dwg_Data *restrict dwg,
-               const char* restrict name) __nonnull_all;
+               const char* restrict name) __nonnull ((1));
 EXPORT Dwg_Object_VX_TABLE_RECORD*
 dwg_add_VX (Dwg_Data *restrict dwg,
-            const char* restrict name) __nonnull_all;
-EXPORT Dwg_Object_GROUP*
-dwg_add_GROUP (Dwg_Data *restrict dwg,
-               const char* restrict name) __nonnull_all;
+            const char* restrict name) __nonnull ((1));
 EXPORT Dwg_Object_APPID*
 dwg_add_APPID (Dwg_Data *restrict dwg,
+               const char* restrict name) __nonnull ((1));
+EXPORT Dwg_Object_GROUP*
+dwg_add_GROUP (Dwg_Data *restrict dwg,
                const char* restrict name) __nonnull_all;
 
 #ifdef __cplusplus

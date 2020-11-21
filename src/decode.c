@@ -68,8 +68,6 @@ static bool env_var_checked_p;
  * Private functions
  */
 
-static int resolve_objectref_vector (Bit_Chain *restrict dat,
-                                     Dwg_Data *restrict dwg);
 
 static void decode_preR13_section_ptr (const char *restrict name,
                                        Dwg_Section_Type_r11 id,
@@ -113,6 +111,8 @@ static const char *dwg_ref_objname (const Dwg_Data *restrict dwg,
                                     Dwg_Object_Ref *restrict ref);
 static const char *dwg_ref_tblname (const Dwg_Data *restrict dwg,
                                     Dwg_Object_Ref *restrict ref);
+static int resolve_objectref_vector (Bit_Chain *restrict dat,
+                                     Dwg_Data *restrict dwg);
 
 /*----------------------------------------------------------------------------
  * Public variables

@@ -8901,6 +8901,7 @@ typedef struct _dwg_struct
   unsigned int layout_type;
   unsigned int num_acis_sab_hdl;  // temporary, until we can parse acds for SAB data, r2013+
   BITCODE_H *acis_sab_hdl;
+  unsigned long next_hdl; // for add_document handle holes
 } Dwg_Data;
 
 #define DWG_OPTS_LOGLEVEL 0xf
@@ -9063,14 +9064,17 @@ EXPORT Dwg_Object *get_first_owned_entity (const Dwg_Object *restrict hdr);
 EXPORT Dwg_Object *get_next_owned_entity (const Dwg_Object *restrict hdr,
                                           const Dwg_Object *restrict current);
 EXPORT Dwg_Object *get_first_owned_subentity (const Dwg_Object *restrict owner);
-EXPORT Dwg_Object *get_next_owned_subentity (const Dwg_Object *restrict owner,
-                                             const Dwg_Object *restrict current);
+EXPORT Dwg_Object *
+get_next_owned_subentity (const Dwg_Object *restrict owner,
+                          const Dwg_Object *restrict current);
 EXPORT Dwg_Object *get_first_owned_block (const Dwg_Object *hdr);
 EXPORT Dwg_Object *get_last_owned_block (const Dwg_Object *hdr);
 EXPORT Dwg_Object *get_next_owned_block (const Dwg_Object *restrict hdr,
                                          const Dwg_Object *restrict current);
 EXPORT Dwg_Object *get_next_owned_block_entity (const Dwg_Object *restrict hdr,
                                                 const Dwg_Object *restrict current);
+EXPORT Dwg_Object *dwg_get_first_object (const Dwg_Data *dwg,
+                                         const Dwg_Object_Type type);
 
 EXPORT Dwg_Object *dwg_resolve_handle (const Dwg_Data *restrict dwg,
                                        const unsigned long absref);
