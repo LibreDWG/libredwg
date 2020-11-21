@@ -2018,7 +2018,7 @@ typedef struct _dwg_entity_MTEXT
                               from the associated text style) */
   BITCODE_BD extents_width;  /*!< DXF 42 */
   BITCODE_BD extents_height; /*!< DXF 43 the actual height */
-  BITCODE_TV text;           /*!< DXF 1 */
+  BITCODE_T text;           /*!< DXF 1 */
   BITCODE_H style;           /*!< DXF 7 */
   BITCODE_BS linespace_style; /*!< DXF 73. r2000+ */
   BITCODE_BD linespace_factor;/*!< DXF 44. r2000+. Mtext line spacing factor (optional):
@@ -2910,7 +2910,7 @@ typedef struct _dwg_entity_MPOLYGON
 
   BITCODE_BD elevation;
   BITCODE_BE extrusion;
-  BITCODE_TV name;
+  BITCODE_T name;
   BITCODE_B is_solid_fill;
   BITCODE_B is_associative;
   BITCODE_BL num_paths;

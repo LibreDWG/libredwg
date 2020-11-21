@@ -276,6 +276,8 @@ typedef struct _dwg_LWPLINE_widths
   double end;
 } dwg_lwpline_widths;
 
+typedef BITCODE_BS dwg_face[4];
+
 /* Returns a NULL-terminated array of all entities of a specific type from a BLOCK */
 #define DWG_GETALL_ENTITY_DECL(token) \
 EXPORT Dwg_Entity_##token **dwg_getall_##token (Dwg_Object_Ref * hdr)
@@ -6174,12 +6176,22 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                  const int num_cols,
                  const double row_spacing,
                  const double col_spacing) __nonnull_all;
+// fixme: Dwg_Entity_POLYLINE_2D* as 1st owner arg
 EXPORT Dwg_Entity_VERTEX_2D*
 dwg_add_VERTEX_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                    const dwg_point_2d *restrict point) __nonnull_all;
 EXPORT Dwg_Entity_VERTEX_3D*
 dwg_add_VERTEX_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                    const dwg_point_3d *restrict point) __nonnull_all;
+EXPORT Dwg_Entity_VERTEX_MESH*
+dwg_add_VERTEX_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                      const dwg_point_3d *restrict point) __nonnull_all;
+EXPORT Dwg_Entity_VERTEX_PFACE*
+dwg_add_VERTEX_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                      const dwg_point_3d *restrict point) __nonnull_all;
+EXPORT Dwg_Entity_VERTEX_PFACE_FACE*
+dwg_add_VERTEX_PFACE_FACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                           const dwg_face vertind) __nonnull_all;
 EXPORT Dwg_Entity_POLYLINE_2D*
 dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                     const int num_pts,
@@ -6251,6 +6263,17 @@ dwg_add_3DFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const dwg_point_3d *restrict pt3,
                 const dwg_point_3d *restrict pt4 /* may be NULL */)
   __nonnull ((1,2,3,4));
+EXPORT Dwg_Entity_POLYLINE_PFACE*
+dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                        const unsigned numverts,
+                        const unsigned numfaces,
+                        const dwg_point_3d **restrict verts,
+                        const dwg_face *restrict faces) __nonnull_all;
+EXPORT Dwg_Entity_POLYLINE_MESH*
+dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                       const unsigned num_m_verts,
+                       const unsigned num_n_verts,
+                       const dwg_point_3d **restrict verts) __nonnull_all;
 EXPORT Dwg_Entity_SOLID*
 dwg_add_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict pt1,
@@ -6303,16 +6326,37 @@ EXPORT Dwg_Object_DICTIONARY *
 dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
                     const BITCODE_T restrict text /*maybe NULL */,
                     const BITCODE_H restrict itemhandle) __nonnull ((1));
+EXPORT Dwg_Entity_MTEXT*
+dwg_add_MTEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+               const dwg_point_3d *restrict ins_pt,
+               const double rect_width,
+               const BITCODE_T restrict text_value) __nonnull_all;
+EXPORT Dwg_Entity_TOLERANCE*
+dwg_add_TOLERANCE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                   const BITCODE_T restrict text_value,
+                   const dwg_point_3d *restrict ins_pt,
+                   const dwg_point_3d *restrict x_direction /* maybe NULL */) __nonnull ((1,2,3));
 
 EXPORT Dwg_Entity_LWPOLYLINE*
 dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                     const int num_pts2d,
                     const dwg_point_2d **restrict pts2d) __nonnull_all;
 
+EXPORT Dwg_Entity_HATCH*
+dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+               const int pattern_type,
+               const BITCODE_TV restrict name,
+               const bool is_associative,
+               const unsigned num_paths,
+               // Line, Polyline, Circle, Ellipse, Spline or Region as boundary_handles
+               const Dwg_Object *pathobjs) __nonnull_all;
+
 /* Add to DICTIONARY */
 EXPORT Dwg_Object_XRECORD*
 dwg_add_XRECORD (Dwg_Object_DICTIONARY* restrict dict,
                  const BITCODE_T restrict keyword) __nonnull_all;
+EXPORT Dwg_Object_PLACEHOLDER*
+dwg_add_PLACEHOLDER (Dwg_Data *restrict dwg) __nonnull_all;
 
 EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION*
 dwg_add_LARGE_RADIAL_DIMENSION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
@@ -6321,6 +6365,45 @@ dwg_add_LARGE_RADIAL_DIMENSION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                                 const dwg_point_3d *restrict ovr_center,
                                 const dwg_point_3d *restrict jog_point,
                                 const double leader_len) __nonnull_all;
+
+/* Tables */
+EXPORT Dwg_Object_BLOCK_HEADER*
+dwg_add_BLOCKS (Dwg_Data *restrict dwg,
+                const dwg_point_3d *restrict ins_pt,
+                const BITCODE_T restrict name) __nonnull_all;
+EXPORT Dwg_Object_UCS*
+dwg_add_UCS (Dwg_Data *restrict dwg,
+             const dwg_point_3d *restrict origin,
+             const dwg_point_3d *restrict x_axis,
+             const dwg_point_3d *restrict y_axis,
+             const BITCODE_T restrict name) __nonnull_all;
+EXPORT Dwg_Object_LAYER*
+dwg_add_LAYER (Dwg_Data *restrict dwg,
+               const BITCODE_T restrict name) __nonnull_all;
+EXPORT Dwg_Object_STYLE*
+dwg_add_STYLE (Dwg_Data *restrict dwg,
+               const BITCODE_T restrict name) __nonnull_all;
+EXPORT Dwg_Object_LTYPE*
+dwg_add_LTYPE (Dwg_Data *restrict dwg,
+               const BITCODE_T restrict name) __nonnull_all;
+EXPORT Dwg_Object_VIEW*
+dwg_add_VIEW (Dwg_Data *restrict dwg,
+              const BITCODE_T restrict name) __nonnull_all;
+EXPORT Dwg_Object_DIMSTYLE*
+dwg_add_DIMSTYLE (Dwg_Data *restrict dwg,
+                  const BITCODE_T restrict name) __nonnull_all;
+EXPORT Dwg_Object_VPORT*
+dwg_add_VPORT (Dwg_Data *restrict dwg,
+               const BITCODE_T restrict name) __nonnull_all;
+EXPORT Dwg_Object_VX_TABLE_RECORD*
+dwg_add_VX (Dwg_Data *restrict dwg,
+            const BITCODE_T restrict name) __nonnull_all;
+EXPORT Dwg_Object_GROUP*
+dwg_add_GROUP (Dwg_Data *restrict dwg,
+               const BITCODE_T restrict name) __nonnull_all;
+EXPORT Dwg_Object_APPID*
+dwg_add_APPID (Dwg_Data *restrict dwg,
+               const BITCODE_T restrict name) __nonnull_all;
 
 #ifdef __cplusplus
 }

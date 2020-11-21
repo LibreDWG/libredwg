@@ -22095,6 +22095,8 @@ dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->ins_pt.y   = ins_pt->y;
   _obj->elevation  = ins_pt->z;
   _obj->height     = height;
+  if (dwg->header_vars.TEXTSTYLE)
+    _obj->style = dwg_dup_handleref (dwg, dwg->header_vars.TEXTSTYLE);
   return _obj;
 }
 
@@ -22119,6 +22121,8 @@ dwg_add_ATTRIB (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   //_def->prompt     = prompt;
   // relink into ENDBLK chain
   // block handles
+  if (dwg->header_vars.TEXTSTYLE)
+    _obj->style = dwg_dup_handleref (dwg, dwg->header_vars.TEXTSTYLE);
   return _obj;
 }
 
@@ -22142,6 +22146,8 @@ dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->height     = height;
   // mode => AFLAGS ...
   // block handles
+  if (dwg->header_vars.TEXTSTYLE)
+    _obj->style = dwg_dup_handleref (dwg, dwg->header_vars.TEXTSTYLE);
   return _obj;
 }
 
@@ -22226,6 +22232,7 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
+// TODO blkhdr => pline owner
 EXPORT Dwg_Entity_VERTEX_2D*
 dwg_add_VERTEX_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                    const dwg_point_2d *restrict point)
@@ -22250,23 +22257,38 @@ dwg_add_VERTEX_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 }
 
 EXPORT Dwg_Entity_VERTEX_MESH*
-dwg_add_VERTEX_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
+dwg_add_VERTEX_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                      const dwg_point_3d *restrict point)
 {
   API_ADD_ENTITY (VERTEX_MESH);
+  _obj->point.x = point->x;
+  _obj->point.y = point->y;
+  _obj->point.z = point->z;
+  _obj->flag = 0x40;
   return _obj;
 }
 
 EXPORT Dwg_Entity_VERTEX_PFACE*
-dwg_add_VERTEX_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
+dwg_add_VERTEX_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                      const dwg_point_3d *restrict point)
 {
   API_ADD_ENTITY (VERTEX_PFACE);
+  _obj->point.x = point->x;
+  _obj->point.y = point->y;
+  _obj->point.z = point->z;
+  _obj->flag = 0xc0;
   return _obj;
 }
 
 EXPORT Dwg_Entity_VERTEX_PFACE_FACE*
-dwg_add_VERTEX_PFACE_FACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
+dwg_add_VERTEX_PFACE_FACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                           const dwg_face vertind)
 {
   API_ADD_ENTITY (VERTEX_PFACE_FACE);
+  _obj->vertind[0] = vertind[0];
+  _obj->vertind[1] = vertind[1];
+  _obj->vertind[2] = vertind[2];
+  _obj->vertind[3] = vertind[3];
   return _obj;
 }
 
@@ -22371,6 +22393,11 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
+#define DIMENSION_DEFAULTS                                              \
+  _obj->extrusion.z = 1.0;                                              \
+  if (dwg->header_vars.DIMSTYLE)                                        \
+    _obj->dimstyle = dwg_dup_handleref (dwg, dwg->header_vars.DIMSTYLE)
+
 EXPORT Dwg_Entity_DIMENSION_ALIGNED*
 dwg_add_DIMENSION_ALIGNED (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                            const dwg_point_3d *restrict xline1_pt,
@@ -22379,8 +22406,7 @@ dwg_add_DIMENSION_ALIGNED (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                            const dwg_point_3d *restrict text_midpt)
 {
   API_ADD_ENTITY (DIMENSION_ALIGNED);
-  _obj->extrusion.z = 1.0;
-  // TODO dimstyle from HEADER
+  DIMENSION_DEFAULTS;
   _obj->def_pt.x    = def_pt->x;
   _obj->def_pt.y    = def_pt->y;
   _obj->def_pt.z    = def_pt->z;
@@ -22405,8 +22431,7 @@ dwg_add_DIMENSION_ANG2LN (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict text_midpt)
 {
   API_ADD_ENTITY (DIMENSION_ANG2LN);
-  _obj->extrusion.z = 1.0;
-  // TODO dimstyle from HEADER
+  DIMENSION_DEFAULTS;
   _obj->def_pt.x    = center_pt->x;
   _obj->def_pt.y    = center_pt->y;
   _obj->def_pt.z    = center_pt->z;
@@ -22431,8 +22456,7 @@ dwg_add_DIMENSION_ANG3PT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict text_midpt)
 {
   API_ADD_ENTITY (DIMENSION_ANG3PT);
-  _obj->extrusion.z = 1.0;
-  // TODO dimstyle from HEADER
+  DIMENSION_DEFAULTS;
   _obj->center_pt.x = center_pt->x;
   _obj->center_pt.y = center_pt->y;
   _obj->center_pt.z = center_pt->z;
@@ -22455,8 +22479,7 @@ dwg_add_DIMENSION_DIAMETER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                             const double leader_len)
 {
   API_ADD_ENTITY (DIMENSION_DIAMETER);
-  _obj->extrusion.z    = 1.0;
-  // TODO dimstyle from HEADER
+  DIMENSION_DEFAULTS;
   _obj->def_pt.x       = far_chord_pt->x;
   _obj->def_pt.y       = far_chord_pt->y;
   _obj->def_pt.z       = far_chord_pt->z;
@@ -22474,8 +22497,7 @@ dwg_add_DIMENSION_ORDINATE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                             const bool use_x_axis)
 {
   API_ADD_ENTITY (DIMENSION_ORDINATE);
-  _obj->extrusion.z    = 1.0;
-  // TODO dimstyle from HEADER
+  DIMENSION_DEFAULTS;
   _obj->feature_location_pt.x = feature_location_pt->x;
   _obj->feature_location_pt.y = feature_location_pt->y;
   _obj->feature_location_pt.z = feature_location_pt->z;
@@ -22493,8 +22515,7 @@ dwg_add_DIMENSION_RADIUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const double leader_len)
 {
   API_ADD_ENTITY (DIMENSION_RADIUS);
-  _obj->extrusion.z    = 1.0;
-  // TODO dimstyle from HEADER
+  DIMENSION_DEFAULTS;
   _obj->def_pt.x       = center_pt->x;
   _obj->def_pt.y       = center_pt->y;
   _obj->def_pt.z       = center_pt->z;
@@ -22513,8 +22534,7 @@ dwg_add_DIMENSION_LINEAR (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const double rotation_angle)
 {
   API_ADD_ENTITY (DIMENSION_LINEAR);
-  _obj->extrusion.z    = 1.0;
-  // TODO dimstyle from HEADER
+  DIMENSION_DEFAULTS;
   _obj->def_pt.x    = def_pt->x; // dimline_pt
   _obj->def_pt.y    = def_pt->y;
   _obj->def_pt.z    = def_pt->z;
@@ -22578,18 +22598,71 @@ dwg_add_3DFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
- EXPORT Dwg_Entity_POLYLINE_PFACE*
-dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
+// Polyface Mesh
+EXPORT Dwg_Entity_POLYLINE_PFACE*
+dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                        const unsigned numverts,
+                        const unsigned numfaces,
+                        const dwg_point_3d **restrict verts,
+                        const dwg_face *restrict faces)
 {
+  Dwg_Object *pl;
+  Dwg_Entity_POLYLINE_PFACE *_pl;
+  Dwg_Entity_VERTEX_PFACE *_vtx;
+  Dwg_Entity_VERTEX_PFACE_FACE *_vtxf;
+  Dwg_Entity_SEQEND *_seq;
+
   API_ADD_ENTITY (POLYLINE_PFACE);
-  return _obj;
+  pl = obj;
+  _pl = _obj;
+  for (unsigned i = 0; i < numverts; i++)
+    {
+      _vtx = dwg_add_VERTEX_PFACE (blkhdr, verts[i]);
+      obj = dwg_obj_obj_to_object ((dwg_obj_obj *)_vtx, &error);
+      if (i == 0)
+        _pl->first_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
+    }
+  for (unsigned i = 0; i < numfaces; i++)
+    {
+      _vtxf = dwg_add_VERTEX_PFACE_FACE (blkhdr, faces[i]);
+      obj = dwg_obj_obj_to_object ((dwg_obj_obj *)_vtxf, &error);
+      if (i == numfaces - 1)
+        _pl->last_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
+    }
+  _seq = dwg_add_SEQEND (blkhdr);
+  obj = dwg_obj_obj_to_object ((dwg_obj_obj *)_seq, &error);
+  _pl->seqend  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
+  return _pl;
 }
 
- EXPORT Dwg_Entity_POLYLINE_MESH*
-dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
+EXPORT Dwg_Entity_POLYLINE_MESH*
+dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                       const unsigned num_m_verts,
+                       const unsigned num_n_verts,
+                       const dwg_point_3d **restrict verts)
 {
+  Dwg_Object *pl;
+  Dwg_Entity_POLYLINE_MESH *_pl;
+  Dwg_Entity_VERTEX_MESH *_vtx;
+  Dwg_Entity_SEQEND *_seq;
+
   API_ADD_ENTITY (POLYLINE_MESH);
-  return _obj;
+  pl = obj;
+  _pl = _obj;
+  _pl->num_owned = num_m_verts * num_n_verts;
+  for (unsigned i = 0; i < _pl->num_owned; i++)
+    {
+      _vtx = dwg_add_VERTEX_MESH (blkhdr, verts[i]);
+      obj = dwg_obj_obj_to_object ((dwg_obj_obj *)_vtx, &error);
+      if (i == 0)
+        _pl->first_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
+      if (i == _pl->num_owned - 1)
+        _pl->last_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
+    }
+  _seq = dwg_add_SEQEND (blkhdr);
+  obj = dwg_obj_obj_to_object ((dwg_obj_obj *)_seq, &error);
+  _pl->seqend  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
+  return _pl;
 }
 
 EXPORT Dwg_Entity_SOLID*
@@ -22817,9 +22890,24 @@ dwg_add_OLEFRAME (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
 }
 
 EXPORT Dwg_Entity_MTEXT*
-dwg_add_MTEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
+dwg_add_MTEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+               const dwg_point_3d *restrict ins_pt,
+               const double rect_width,
+               const BITCODE_T restrict text)
 {
   API_ADD_ENTITY (MTEXT);
+  _obj->text = text;
+  _obj->ins_pt.x   = ins_pt->x;
+  _obj->ins_pt.y   = ins_pt->y;
+  _obj->ins_pt.z   = ins_pt->z;
+  _obj->rect_width = rect_width;
+  // defaults:
+  _obj->extrusion.z = 1.0;
+  _obj->x_axis_dir.x = 1.0;
+  _obj->linespace_style = 1;
+  _obj->linespace_factor = 1.0;
+  if (dwg->header_vars.TEXTSTYLE)
+    _obj->style = dwg_dup_handleref (dwg, dwg->header_vars.TEXTSTYLE);
   return _obj;
 }
 
@@ -22831,9 +22919,29 @@ dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
 }
 
 EXPORT Dwg_Entity_TOLERANCE*
-dwg_add_TOLERANCE (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
+dwg_add_TOLERANCE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                   const BITCODE_T restrict text_value,
+                   const dwg_point_3d *restrict ins_pt,
+                   const dwg_point_3d *restrict x_direction /* maybe NULL */)
 {
   API_ADD_ENTITY (TOLERANCE);
+  _obj->text_value    = text_value;
+  _obj->ins_pt.x      = ins_pt->x;
+  _obj->ins_pt.y      = ins_pt->y;
+  _obj->ins_pt.z      = ins_pt->z;
+  if (x_direction)
+    {
+      _obj->x_direction.x = x_direction->x;
+      _obj->x_direction.y = x_direction->y;
+      _obj->x_direction.z = x_direction->z;
+    }
+  else
+    _obj->x_direction.x = 1.0;
+  // defaults:
+  _obj->extrusion.z = 1.0;
+  if (dwg->header_vars.DIMSTYLE)
+    _obj->dimstyle = dwg_dup_handleref (dwg, dwg->header_vars.DIMSTYLE);
+  _obj->dimgap = dwg->header_vars.DIMGAP;
   return _obj;
 }
 
@@ -22882,7 +22990,46 @@ dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
- // HATCH
+EXPORT Dwg_Entity_HATCH*
+dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+               const int pattern_type,
+               const BITCODE_TV restrict name,
+               const bool is_associative,
+               const unsigned num_paths,
+               // Line, Polyline, Circle, Ellipse, Spline or Region
+               const Dwg_Object *pathobjs)
+{
+  API_ADD_ENTITY (HATCH);
+  if (strEQc (name, "SPHERICAL") ||
+      strEQc (name, "HEMISPHERICAL") ||
+      strEQc (name, "CURVED") ||
+      strEQc (name, "LINEAR") ||
+      strEQc (name, "CYLINDER"))
+    {
+      _obj->is_gradient_fill = 1;
+      _obj->gradient_name = name;
+    }
+  else
+    {
+      _obj->name = name;
+      // predefined (acad.pat), user-defined (ltype), custom (some.pat file)
+      _obj->pattern_type = pattern_type;
+    }
+  _obj->is_associative = is_associative;
+  _obj->extrusion.z  = 1.0;
+  _obj->num_paths = num_paths;
+  _obj->paths = calloc (num_paths, sizeof (Dwg_HATCH_Path));
+  for (unsigned i = 0; i < num_paths; i++)
+    {
+      _obj->paths[i].num_boundary_handles = 1;
+      _obj->paths[i].boundary_handles = calloc (1, sizeof (BITCODE_H));
+      _obj->paths[i].boundary_handles[0]
+          = dwg_add_handleref (dwg, 4, pathobjs[i].handle.value, obj);
+      // TODO split geometry into paths per pathobject:
+      // Line, Polyline, Circle, Ellipse, Spline or Region
+    }
+  return _obj;
+}
 
 EXPORT Dwg_Object_XRECORD*
 dwg_add_XRECORD (Dwg_Object_DICTIONARY* restrict dict,
@@ -22897,7 +23044,26 @@ dwg_add_XRECORD (Dwg_Object_DICTIONARY* restrict dict,
   return _obj;
 }
 
- // PLACEHOLDER
+// add or replace an object in the dictionary?
+EXPORT Dwg_Object_DICTIONARY*
+dwg_DICTIONARY_add_object (Dwg_Object_DICTIONARY* restrict dict,
+                           const BITCODE_T restrict keyword,
+                           const BITCODE_T restrict classname)
+{
+  int err;
+  Dwg_Object *dictobj = dwg_obj_obj_to_object ((dwg_obj_obj *)dict, &err);
+  Dwg_Data *dwg = dictobj->parent;
+  // 
+  return dict;
+}
+
+EXPORT Dwg_Object_PLACEHOLDER*
+dwg_add_PLACEHOLDER (Dwg_Data *restrict dwg)
+{
+  API_ADD_OBJECT (PLACEHOLDER);
+  return _obj;
+}
+
  // VBA_PROJECT
  // LAYOUT
  // PROXY_ENTITY
