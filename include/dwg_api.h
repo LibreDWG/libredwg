@@ -6376,47 +6376,49 @@ EXPORT Dwg_Entity_UNDERLAY*
 dwg_add_UNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                   const dwg_point_3d *restrict ins_pt) __nonnull_all;
 
-/* Tables */
-EXPORT Dwg_Object_BLOCK_CONTROL*
+/* Tables.
+   The names are really BITCODE_T, but we dont support writing TU yet.
+ */
+Dwg_Object_BLOCK_CONTROL*
 dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps) __nonnull_all;
 
 EXPORT Dwg_Object_BLOCK_HEADER*
 dwg_add_BLOCKS (Dwg_Data *restrict dwg,
                 const dwg_point_3d *restrict ins_pt,
-                const BITCODE_T restrict name) __nonnull_all;
+                const char* restrict name) __nonnull_all;
 EXPORT Dwg_Object_UCS*
 dwg_add_UCS (Dwg_Data *restrict dwg,
              const dwg_point_3d *restrict origin,
              const dwg_point_3d *restrict x_axis,
              const dwg_point_3d *restrict y_axis,
-             const BITCODE_T restrict name) __nonnull_all;
+             const char* restrict name) __nonnull_all;
 EXPORT Dwg_Object_LAYER*
 dwg_add_LAYER (Dwg_Data *restrict dwg,
-               const BITCODE_T restrict name) __nonnull_all;
+               const char* restrict name) __nonnull_all;
 EXPORT Dwg_Object_STYLE*
 dwg_add_STYLE (Dwg_Data *restrict dwg,
-               const BITCODE_T restrict name) __nonnull_all;
+               const char* restrict name) __nonnull_all;
 EXPORT Dwg_Object_LTYPE*
 dwg_add_LTYPE (Dwg_Data *restrict dwg,
-               const BITCODE_T restrict name) __nonnull_all;
+               const char* restrict name) __nonnull_all;
 EXPORT Dwg_Object_VIEW*
 dwg_add_VIEW (Dwg_Data *restrict dwg,
-              const BITCODE_T restrict name) __nonnull_all;
+              const char* restrict name) __nonnull_all;
 EXPORT Dwg_Object_DIMSTYLE*
 dwg_add_DIMSTYLE (Dwg_Data *restrict dwg,
-                  const BITCODE_T restrict name) __nonnull_all;
+                  const char* restrict name) __nonnull_all;
 EXPORT Dwg_Object_VPORT*
 dwg_add_VPORT (Dwg_Data *restrict dwg,
-               const BITCODE_T restrict name) __nonnull_all;
+               const char* restrict name) __nonnull_all;
 EXPORT Dwg_Object_VX_TABLE_RECORD*
 dwg_add_VX (Dwg_Data *restrict dwg,
-            const BITCODE_T restrict name) __nonnull_all;
+            const char* restrict name) __nonnull_all;
 EXPORT Dwg_Object_GROUP*
 dwg_add_GROUP (Dwg_Data *restrict dwg,
-               const BITCODE_T restrict name) __nonnull_all;
+               const char* restrict name) __nonnull_all;
 EXPORT Dwg_Object_APPID*
 dwg_add_APPID (Dwg_Data *restrict dwg,
-               const BITCODE_T restrict name) __nonnull_all;
+               const char* restrict name) __nonnull_all;
 
 #ifdef __cplusplus
 }

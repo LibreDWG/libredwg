@@ -1854,7 +1854,8 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
       Dwg_Data *dwg = obj->parent;
       LOG_HANDLE ("object_map{%lX} = %u\n", absref, obj->index);
       assert (dwg);
-      assert (dwg->object_map);
+      if (!dwg->object_map) // for dwg_add_document()
+        dwg->object_map = hash_new (100);
       hash_set (dwg->object_map, absref, (uint32_t)obj->index);
     }
 

@@ -8866,6 +8866,7 @@ typedef struct _dwg_struct
 
   Dwg_R2004_Header r2004_header; /* encrypted, packed */
 
+  /* Should only be initialized after the read/write is complete. */
   Dwg_Object *mspace_block;
   Dwg_Object *pspace_block;
   /* Those TABLES might be empty with num_entries=0 */
