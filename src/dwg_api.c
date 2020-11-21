@@ -21918,13 +21918,71 @@ dwg_add_document (const int imperial)
   return NULL;
 }
 
+// returns -1 on error, 0 on success
 EXPORT int
-dwg_add_class (Dwg_Data *restrict dwg, const BITCODE_TV restrict dxfname,
-               const BITCODE_TV restrict cppname, const BITCODE_TV restrict appname,
+dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
+               const char *const restrict cppname, const char *const restrict appname,
                const bool is_entity)
 {
   /* calc. new number, no proxy, no is_zombie */
+  BITCODE_BS i = dwg->num_classes;
+  Dwg_Class *klass;
+  if (i == 0)
+    dwg->dwg_class = (Dwg_Class *)malloc (sizeof (Dwg_Class));
+  else
+    dwg->dwg_class = (Dwg_Class *)realloc (dwg->dwg_class,
+                                           (i + 1) * sizeof (Dwg_Class));
+  if (!dwg->dwg_class)
+    {
+      LOG_ERROR ("Out of memory");
+      return -1;
+    }
+  klass = &dwg->dwg_class[i];
+  memset (klass, 0, sizeof (Dwg_Class));
+  klass->number = i + 500;
+  klass->dxfname = strdup (dxfname);
+  klass->appname = strdup (appname);
+  klass->cppname = strdup (cppname);
+  klass->item_class_id = is_entity ? 0x1f2: 0x1f3;
   return 0;
+}
+
+// returns 1 if already in CLASSES, 0 if successfully added, -1 on error.
+EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
+                              const char *const restrict dxfname)
+{
+  for (BITCODE_BL i = 0; i < dwg->num_classes; i++)
+    {
+      Dwg_Class *klass = &dwg->dwg_class[i];
+      if (strEQ (klass->dxfname, dxfname))
+        return 1;
+    }
+  if (strEQc (dxfname, "IMAGE"))
+    return dwg_add_class (dwg, "IMAGE", "AcDbRasterImage", "ISM", true);
+  if (strEQc (dxfname, "IMAGEDEF"))
+    return dwg_add_class (dwg, "IMAGEDEF", "AcDbRasterImageDef", "ISM", false);
+  if (strEQc (dxfname, "DICTIONARYVAR"))
+    return dwg_add_class (dwg, "DICTIONARYVAR", "AcDbDictionaryVar", "AutoCAD 2000", false);
+  if (strEQc (dxfname, "ACDBDICTIONARYWDFLT"))
+    return dwg_add_class (dwg, "ACDBDICTIONARYWDFLT", "AcDbDictionaryWithDefault",
+                          dwg->header.from_version <= R_2000 ? "AutoCAD 2000" : "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "ACDBPLACEHOLDER"))
+    return dwg_add_class (dwg, "ACDBPLACEHOLDER", "AcDbPlaceHolder",
+                          dwg->header.from_version <= R_2000 ? "AutoCAD 2000" : "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "LAYOUT"))
+    return dwg_add_class (dwg, "LAYOUT", "AcDbLayout", "AutoCAD 2000", false);
+  if (strEQc (dxfname, "SORTENTSTABLE"))
+    return dwg_add_class (dwg, "SORTENTSTABLE", "AcDbSortentsTable", "AutoCAD 2000", false);
+  if (strEQc (dxfname, "RASTERVARIABLES"))
+    return dwg_add_class (dwg, "RASTERVARIABLES", "AcDbRasterVariables", "ISM", false);
+  if (strEQc (dxfname, "VISUALSTYLE"))
+    return dwg_add_class (dwg, "VISUALSTYLE", "AcDbVisualStyle", "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "DIMASSOC"))
+    return dwg_add_class (dwg, "DIMASSOC", "AcDbDimAssoc", "AcDbDimAssoc|"
+                          "Product Desc:     AcDim ARX App For Dimension", false);
+
+  LOG_ERROR ("Unhandled CLASS %s", dxfname);
+  return -1;
 }
 
 Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
@@ -23209,8 +23267,47 @@ dwg_add_PLACEHOLDER (Dwg_Data *restrict dwg)
  // GEOPOSITIONMARKER
  // HELIX
  // IDBUFFER
- // IMAGE
- // IMAGEDEF
+
+// Called Raster in VBA
+EXPORT Dwg_Entity_IMAGE*
+dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+               const BITCODE_T restrict file_path,
+               const dwg_point_3d *restrict ins_pt,
+               const double scale_factor,
+               const double rotation_angle)
+{
+  Dwg_Object *img;
+  Dwg_Entity_IMAGE *_img;
+
+  API_ADD_ENTITY (IMAGE);
+  dwg_require_class (dwg, "IMAGE");
+  dwg_require_class (dwg, "IMAGEDEF");
+  img = obj;
+  _img = _obj;
+  _obj->pt0.x  = ins_pt->x;
+  _obj->pt0.y  = ins_pt->y;
+  _obj->pt0.z  = ins_pt->z;
+  // TODO rotation cos()
+  _obj->uvec.x = scale_factor;
+  _obj->uvec.y = scale_factor;
+  _obj->uvec.z = 1.0;
+  _obj->vvec.x = scale_factor;
+  _obj->vvec.y = scale_factor;
+  _obj->vvec.z = 1.0;
+  _obj->brightness = 0x32;
+  _obj->contrast = 0x32;
+
+  // TODO normally a DICTIONARY owns an IMAGEDEF
+  {
+    API_ADD_OBJECT (IMAGEDEF);
+    //_obj->class_version = 0;
+    _obj->file_path = file_path;
+    // TODO: get pixel props from the image. is_loaded, pixel_size, ...
+    _img->imagedef = dwg_add_handleref (dwg, 4, obj->handle.value, img);
+  }
+  return _img;
+}
+
  // IMAGEDEF_REACTOR
  // INDEX
 
@@ -23304,7 +23401,24 @@ dwg_add_LARGE_RADIAL_DIMENSION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
  // TABLESTYLE
  // TEXTOBJECTCONTEXTDATA
  // TVDEVICEPROPERTIES
- // UNDERLAY
+
+EXPORT Dwg_Entity_UNDERLAY*
+dwg_add_UNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                  const dwg_point_3d *restrict ins_pt)
+{
+  API_ADD_ENTITY (UNDERLAY);
+  _obj->ins_pt.x      = ins_pt->x;
+  _obj->ins_pt.y      = ins_pt->y;
+  _obj->ins_pt.z      = ins_pt->z;
+  // defaults:
+  _obj->extrusion.z = 1.0;
+  _obj->scale.x = 1.0;
+  _obj->scale.y = 1.0;
+  _obj->scale.z = 1.0;
+  // TODO UNDERLAYDEFINITION
+  return _obj;
+}
+
  // UNDERLAYDEFINITION
  // VISIBILITYGRIPENTITY
  // VISIBILITYPARAMETERENTITY

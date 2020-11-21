@@ -8488,7 +8488,7 @@ static const Dwg_DYNAPI_field _dwg_IMAGEDEF_fields[] = {
     0,0,0, 90 },
   { "image_size",	"2RD", sizeof (BITCODE_2RD),  OFF (struct _dwg_object_IMAGEDEF, image_size),
     1,0,0, 10 },
-  { "file_path",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_IMAGEDEF, file_path),
+  { "file_path",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_IMAGEDEF, file_path),
     1,1,1, 1 },
   { "is_loaded",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_IMAGEDEF, is_loaded),
     0,0,0, 280 },

@@ -6111,14 +6111,14 @@ EXPORT dwg_class *dwg_get_class (const dwg_data *dwg, unsigned int index);
 EXPORT Dwg_Data* dwg_add_document (const int imperial);
 
 /* no proxy, no is_zombie */
-EXPORT int dwg_add_class (Dwg_Data *restrict dwg,
-                          const BITCODE_TV restrict dxfname,
-                          const BITCODE_TV restrict cppname,
-                          const BITCODE_TV restrict appname,
-                          const bool is_entity) __nonnull ((1, 2, 3));
+// returns -1 on error, 0 on success
+EXPORT int
+dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
+               const char *const restrict cppname, const char *const restrict appname,
+               const bool is_entity) __nonnull ((1, 2, 3));
 /* check if already exists, and if not add dxfname-specific defaults */
 EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
-                              const BITCODE_TV restrict dxfname) __nonnull_all;
+                              const char *const restrict dxfname) __nonnull_all;
 /* insert entity into mspace, pspace or other block */
 EXPORT int dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                               Dwg_Object *restrict obj) __nonnull_all;
@@ -6357,6 +6357,13 @@ dwg_add_XRECORD (Dwg_Object_DICTIONARY* restrict dict,
                  const BITCODE_T restrict keyword) __nonnull_all;
 EXPORT Dwg_Object_PLACEHOLDER*
 dwg_add_PLACEHOLDER (Dwg_Data *restrict dwg) __nonnull_all;
+// Called Raster in VBA
+EXPORT Dwg_Entity_IMAGE*
+dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+               const BITCODE_T restrict file_path,
+               const dwg_point_3d *restrict ins_pt,
+               const double scale_factor,
+               const double rotation_angle) __nonnull_all;
 
 EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION*
 dwg_add_LARGE_RADIAL_DIMENSION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
@@ -6365,6 +6372,9 @@ dwg_add_LARGE_RADIAL_DIMENSION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                                 const dwg_point_3d *restrict ovr_center,
                                 const dwg_point_3d *restrict jog_point,
                                 const double leader_len) __nonnull_all;
+EXPORT Dwg_Entity_UNDERLAY*
+dwg_add_UNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                  const dwg_point_3d *restrict ins_pt) __nonnull_all;
 
 /* Tables */
 EXPORT Dwg_Object_BLOCK_HEADER*

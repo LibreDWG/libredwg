@@ -4109,7 +4109,7 @@ typedef struct _dwg_object_IMAGEDEF
 
   BITCODE_BL class_version;
   BITCODE_2RD image_size;
-  BITCODE_TV file_path;
+  BITCODE_T file_path;
   BITCODE_B is_loaded;
   BITCODE_RC resunits;
   BITCODE_2RD pixel_size;  // resolution MM/pixel
