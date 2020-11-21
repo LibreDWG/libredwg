@@ -2,6 +2,25 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2020 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+LibreDWG version 0.12 - 2020/12/?? - beta:
+
+New features:
+  * Add a new experimental dwg_add_ENTITY/OBJECT API for easier CAD write support,
+    starting with GauchoCAD and SolveSpace. Most entities and some objects.
+    Similar to the VBA interface, just with our names.
+  * cmake support enhanced to programs and LTO. Should be usable now by its own,
+    but MSVC is untested.
+API breaking changes:
+  * Disable old deprecated functional API, all object-specific field getters
+    and setters. Re-enable with -DUSE_DEPRECATED_API
+Minor features:
+  * fix more C++ compatiblity: restrict is __restrict, disable __nonnull.
+    Now successfully used in SolveSpace.
+Major bugfixes:
+  * Enable python shared lib, add -no-undefined and PYTHON_LIBS.
+  * Disable static for Windows. This shrinks the released Windows zip file
+    from 41MB to 24MB. The 0.10.1 had 20MB, 0.6.1 15MB.
+
 LibreDWG version 0.11.1 - 2020/11/16 - beta:
 
 Major bugfixes:
@@ -676,7 +695,7 @@ some functions or names for better consistency and add more encoding API.
 
 Copyright information:
 
-Copyright (C) 2009-2019 Free Software Foundation, Inc.
+Copyright (C) 2009-2020 Free Software Foundation, Inc.
 
 This library is free software, licensed under the terms of the GNU
 General Public License as published by the Free Software Foundation,
