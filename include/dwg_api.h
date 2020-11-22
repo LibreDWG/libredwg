@@ -6344,6 +6344,10 @@ EXPORT Dwg_Object_DICTIONARY *
 dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
                     const BITCODE_T restrict text /*maybe NULL */,
                     const BITCODE_H restrict itemhandle) __nonnull ((1));
+EXPORT Dwg_Object_DICTIONARY*
+dwg_add_DICTIONARY_item (Dwg_Object_DICTIONARY* _obj,
+                         const BITCODE_T restrict text,
+                         const BITCODE_H restrict itemhandle)  __nonnull_all;
 EXPORT Dwg_Object_DICTIONARYWDFLT *
 dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
                          const BITCODE_T restrict text /*maybe NULL */,

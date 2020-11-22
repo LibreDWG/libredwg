@@ -21934,9 +21934,12 @@ dwg_add_document (const int imperial)
   Dwg_Data *dwg = calloc (1, sizeof (Dwg_Data));
   int error;
   Dwg_Object_BLOCK_CONTROL *block_control;
-  Dwg_Object_BLOCK_HEADER *blk;
+  Dwg_Object_BLOCK_HEADER *mspace, *pspace;
   Dwg_Object_STYLE *style;
+  Dwg_Object_LAYER *layer;
   Dwg_Object_LTYPE *ltype;
+  Dwg_Object_LTYPE_CONTROL *ltype_ctrl;
+  Dwg_Object_DICTIONARY *dict;
   dwg_point_3d pt0 = { 0.0, 1.0, 0.0 };
   Dwg_Object *ctrl;
   char *trace = getenv ("LIBREDWG_TRACE");
@@ -21962,24 +21965,24 @@ dwg_add_document (const int imperial)
   dwg->header_vars.unknown_1 = 1.0;
   dwg->header_vars.unknown_2 = 1.0;
   dwg->header_vars.unknown_3 = 1.0;
-  dwg->header_vars.unknown_text1 = strdup ("m");
+  dwg->header_vars.unknown_text1 = strdup ("meter");
   dwg->header_vars.DIMASO = 1;
-  dwg->header_vars.DIMSHO = 1;
+  //dwg->header_vars.DIMSHO = 0;
   dwg->header_vars.REGENMODE = 1;
   dwg->header_vars.FILLMODE = 1;
-  dwg->header_vars.PSLTSCALE = 1;
+  //dwg->header_vars.PSLTSCALE = 1;
+  dwg->header_vars.BLIPMODE = 1;
   dwg->header_vars.USRTIMER = 1;
-  dwg->header_vars.SKPOLY = 1;
-  dwg->header_vars.WORLDVIEW = 1;
+  //dwg->header_vars.SKPOLY = 1;
   dwg->header_vars.TILEMODE = 1;
-  dwg->header_vars.VISRETAIN = 1;
+  //dwg->header_vars.VISRETAIN = 1;
   dwg->header_vars.ATTREQ = 1;
   dwg->header_vars.MIRRTEXT = 1;
   dwg->header_vars.WORLDVIEW = 1;
   dwg->header_vars.TILEMODE = 1;
-  dwg->header_vars.VISRETAIN = 1;
+  //dwg->header_vars.VISRETAIN = 1;
   dwg->header_vars.DELOBJ = 1;
-  dwg->header_vars.PROXYGRAPHICS = 1;
+  //dwg->header_vars.PROXYGRAPHICS = 1;
   dwg->header_vars.DRAGMODE = 2;
   dwg->header_vars.TREEDEPTH = 3020;
   dwg->header_vars.LUNITS = 2;
@@ -22003,15 +22006,17 @@ dwg_add_document (const int imperial)
   dwg->header_vars.TEXTSIZE = 0.2;
   dwg->header_vars.TRACEWID = 0.05;
   dwg->header_vars.SKETCHINC = 0.1;
-  dwg->header_vars.FILLETRAD = 0.5;
-  dwg->header_vars.CHAMFERA = 0.5;
-  dwg->header_vars.CHAMFERB = 0.5;
-  dwg->header_vars.CHAMFERC = 1.0;
+  //dwg->header_vars.FILLETRAD = 0.5;
+  //dwg->header_vars.CHAMFERA = 0.5;
+  //dwg->header_vars.CHAMFERB = 0.5;
+  //dwg->header_vars.CHAMFERC = 1.0;
   dwg->header_vars.FACETRES = 0.5;
   dwg->header_vars.CMLSCALE = 1.0;
   dwg->header_vars.CELTSCALE = 1.0;
-  dwg->header_vars.MENU = strdup(".");
+  dwg->header_vars.MENU = strdup("acad");
+  // TODO TDCREATE
   // CECOLOR.index: 256 [CMC.BS 62]
+  dwg->header_vars.CECOLOR = (BITCODE_CMC){ 256, 0 };
   // HANDSEED: 0.1.49 [H 0]
   // CLAYER: (5.1.F) abs:F [H 8]
   // TEXTSTYLE: (5.1.10) abs:10 [H 7]
@@ -22100,7 +22105,9 @@ dwg_add_document (const int imperial)
   // VX_CONTROL_OBJECT: (3.1.B) abs:B [H 0]
   dwg_add_VX (dwg, NULL); // TODO only <r2000
   // DICTIONARY_NAMED_OBJECT: (3.1.C) abs:C [H 0]
-  dwg_add_DICTIONARY (dwg, "NAMED_OBJECT", NULL);
+  dict = dwg_add_DICTIONARY (dwg, "NAMED_OBJECT", NULL);
+  dwg_add_DICTIONARY_item (dict, "ACAD_GROUP", dwg_add_handleref (dwg, 2, 0xD, NULL));
+  dwg_add_DICTIONARY_item (dict, "ACAD_MLINESTYLE", dwg_add_handleref (dwg, 2, 0x17, NULL));
   dwg->header_vars.DICTIONARY_NAMED_OBJECT = dwg_add_handleref (dwg, 5, 0xC, NULL);
   // DICTIONARY_ACAD_GROUP: (5.1.D) abs:D [H 0]
   dwg_add_DICTIONARY (dwg, "ACAD_GROUP", NULL);
@@ -22111,28 +22118,38 @@ dwg_add_document (const int imperial)
   // PLOTSTYLE (2.1.F)
   dwg_add_PLACEHOLDER (dwg); // PLOTSTYLE
   // LAYER: (0.1.10)
-  dwg_add_LAYER (dwg, "0");
+  layer = dwg_add_LAYER (dwg, "0");
+  layer->color = (BITCODE_CMC){ 7 };
+  layer->ltype = dwg_add_handleref (dwg, 5, 0x16, NULL); // Continuous
+  dwg->header_vars.CLAYER = dwg_add_handleref (dwg, 5, 0x10, NULL);
   dwg->layer_control = *dwg->object[1].tio.object->tio.LAYER_CONTROL;
   // STYLE: (0.1.11)
   style = dwg_add_STYLE (dwg, "Standard");
   style->font_file = strdup ("txt");
-  style->last_height = 100.0;
+  style->last_height = 0.2;
   dwg->style_control = *dwg->object[2].tio.object->tio.STYLE_CONTROL;
   // APPID "ACAD": (0.1.12)
   dwg_add_APPID (dwg, "ACAD");
   dwg->appid_control = *dwg->object[7].tio.object->tio.APPID_CONTROL;
   // hole at 13
   dwg_set_next_hdl (dwg, 0x14);
+  ltype_ctrl = dwg->object[3].tio.object->tio.LTYPE_CONTROL;
   // LTYPE_BYBLOCK: (5.1.14)
   ltype = dwg_add_LTYPE (dwg, "BYBLOCK");
+  ltype_ctrl->num_entries--;
+  ltype_ctrl->byblock = dwg_add_handleref (dwg, 3, 0x14, NULL);
+  dwg->header_vars.LTYPE_BYBLOCK = dwg_add_handleref (dwg, 5, 0x14, NULL);
   // LTYPE_BYLAYER: (5.1.15)
-  // LTYPE_CONTINUOUS: (5.1.16)
   dwg_add_LTYPE (dwg, "BYLAYER");
+  ltype_ctrl->num_entries--;
+  ltype_ctrl->bylayer = dwg_add_handleref (dwg, 3, 0x15, NULL);
   dwg->header_vars.LTYPE_BYLAYER = dwg_add_handleref (dwg, 5, 0x15, NULL);
+  dwg->header_vars.CELTYPE = dwg_add_handleref (dwg, 5, 0x15, NULL);
+  // LTYPE_CONTINUOUS: (5.1.16)
   ltype = dwg_add_LTYPE (dwg, "CONTINUOUS");
   ltype->description = strdup ("Solid line");
   dwg->header_vars.LTYPE_CONTINUOUS = dwg_add_handleref (dwg, 5, 0x16, NULL);
-  dwg->ltype_control = *dwg->object[3].tio.object->tio.LTYPE_CONTROL;
+  dwg->ltype_control = *ltype_ctrl;
   // DICTIONARY ACAD_MLINESTYLE: (5.1.17) abs:E [H 0]
   dwg_add_DICTIONARY (dwg, "ACAD_MLINESTYLE", NULL);
   dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE = dwg_add_handleref (dwg, 5, 0x17, NULL);
@@ -22140,19 +22157,32 @@ dwg_add_document (const int imperial)
   dwg_add_DICTIONARY (dwg, NULL, NULL);
   // DICTIONARY ACAD_LAYOUT: (5.1.1A)
   dwg_add_DICTIONARY (dwg, "ACAD_LAYOUT", NULL);
+
   // hole until 1F
   dwg_set_next_hdl (dwg, 0x1F);
   // BLOCK_RECORD_MSPACE: (5.1.1F)
-  blk = dwg_add_BLOCK_HEADER (dwg, "*Model_Space");
+  mspace = dwg_add_BLOCK_HEADER (dwg, "*MODEL_SPACE");
   block_control->model_space->obj
-      = dwg_obj_generic_to_object ((dwg_obj_generic *)blk, &error);
+      = dwg_obj_generic_to_object ((dwg_obj_generic *)mspace, &error);
   block_control->num_entries--;
+  //mspace->block_entity = dwg_add_handleref (dwg, 5, 0x23, NULL);
+  //mspace->endblk_entity = dwg_add_handleref (dwg, 5, 0x24, NULL);
   // BLOCK_RECORD_PSPACE: (5.1.20)
-  blk = dwg_add_BLOCK_HEADER (dwg, "*Paper_Space");
+  pspace = dwg_add_BLOCK_HEADER (dwg, "*PAPER_SPACE");
   block_control->paper_space->obj
-      = dwg_obj_generic_to_object ((dwg_obj_generic *)blk, &error);
+      = dwg_obj_generic_to_object ((dwg_obj_generic *)pspace, &error);
   block_control->num_entries--;
+  //pspace->block_entity = dwg_add_handleref (dwg, 5, 0x21, NULL);
+  //pspace->endblk_entity = dwg_add_handleref (dwg, 5, 0x22, NULL);
   dwg->block_control = *block_control;
+  // BLOCK: (5.1.21)
+  dwg_add_BLOCK (pspace, "*PAPER_SPACE");
+  // ENDBLK: (5.1.22)
+  dwg_add_ENDBLK (pspace);
+  // BLOCK: (5.1.23)
+  dwg_add_BLOCK (mspace, "*MODEL_SPACE");
+  // ENDBLK: (5.1.24)
+  dwg_add_ENDBLK (mspace);
 
   // a non-invasive variant of resolve_objectref_vector()
   for (unsigned i = 0; i < dwg->num_object_refs; i++)
@@ -22310,9 +22340,14 @@ EXPORT int
 dwg_add_entity_defaults (Dwg_Data *restrict dwg,
                          Dwg_Object_Entity *restrict ent)
 {
+  int error;
+  Dwg_Object *obj = dwg_obj_obj_to_object ((void*)ent, &error);
   //const Dwg_Version_Type version = dwg->header.version;
   ent->is_xdic_missing = 1;
   ent->color.index = 256; /* ByLayer */
+  // ltype either Bylayer or Continuous. if it has an ltype field, assume Cont
+  if (!error && !dwg_dynapi_entity_field (obj->name, "ltype"))
+    ent->isbylayerlt = 1;
   ent->ltype_scale = 1.0;
   // ltype_flags = 0; ByLayer
   // plotstyle_flags  = 0; ByLayer
@@ -22355,7 +22390,17 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict hdr,
   // TODO 2004+
   if (version < R_2004)
     {
-      if (!hdr->first_entity && !hdr->num_owned)
+      if (obj->fixedtype == DWG_TYPE_BLOCK)
+        {
+          hdr->block_entity = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
+          LOG_TRACE ("MSPACE.block_entity = " FORMAT_REF "\n", ARGS_REF(hdr->block_entity));
+        }
+      else if (obj->fixedtype == DWG_TYPE_ENDBLK)
+        {
+          hdr->endblk_entity = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
+          LOG_TRACE ("MSPACE.endblk_entity = " FORMAT_REF "\n", ARGS_REF(hdr->endblk_entity));
+        }
+      else if (!hdr->first_entity && !hdr->num_owned)
         {
           hdr->first_entity = hdr->last_entity
               = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
@@ -22369,7 +22414,7 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict hdr,
           Dwg_Object *prev
               = lastref ? dwg_ref_object (dwg, lastref) : NULL; // may fail!
           hdr->last_entity
-              = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
+            = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
           LOG_TRACE ("MSPACE.last_entity = " FORMAT_REF "\n",
                      ARGS_REF (hdr->last_entity));
           // link prev. last to curr last
@@ -22467,7 +22512,7 @@ dwg_add_BLOCK (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const BITCODE_T restrict name)
 {
   API_ADD_ENTITY (BLOCK);
-  _obj->name = name;
+  _obj->name = strdup (name);
   return _obj;
 }
 
@@ -23182,14 +23227,37 @@ dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
                     const BITCODE_H restrict itemhandle)
 {
   API_ADD_OBJECT (DICTIONARY);
-  if (text)
+  if (itemhandle)
     {
       _obj->numitems = 1;
       _obj->texts = (BITCODE_T*)calloc (1, sizeof (BITCODE_T));
       _obj->itemhandles = (BITCODE_H*)calloc (1, sizeof (BITCODE_H));
-      _obj->texts[0] = text;
+      _obj->texts[0] = strdup (text);
       _obj->itemhandles[0] = itemhandle;
     }
+  return _obj;
+}
+
+EXPORT Dwg_Object_DICTIONARY*
+dwg_add_DICTIONARY_item (Dwg_Object_DICTIONARY* _obj,
+                         const BITCODE_T restrict text,
+                         const BITCODE_H restrict itemhandle)
+{
+  if (!_obj->numitems)
+    {
+      _obj->texts = (BITCODE_T *)calloc (1, sizeof (BITCODE_T));
+      _obj->itemhandles = (BITCODE_H *)calloc (1, sizeof (BITCODE_H));
+    }
+  else
+    {
+      _obj->texts = (BITCODE_T *)realloc (
+          _obj->texts, (_obj->numitems + 1) * sizeof (BITCODE_T));
+      _obj->itemhandles = (BITCODE_H *)realloc (
+          _obj->itemhandles, (_obj->numitems + 1) * sizeof (BITCODE_H));
+    }
+  _obj->texts[_obj->numitems] = strdup (text);
+  _obj->itemhandles[_obj->numitems] = itemhandle;
+  _obj->numitems++;
   return _obj;
 }
 
@@ -23206,7 +23274,7 @@ dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
       _obj->cloning = 1;
       _obj->texts = (BITCODE_T*)calloc (1, sizeof (BITCODE_T));
       _obj->itemhandles = (BITCODE_H*)calloc (1, sizeof (BITCODE_H));
-      _obj->texts[0] = text;
+      _obj->texts[0] = strdup (text);
       _obj->itemhandles[0] = itemhandle;
     }
   return _obj;
@@ -23436,383 +23504,376 @@ dwg_add_VX (Dwg_Data *restrict dwg, const char* restrict name)
   // DUMMY
   // LONG_TRANSACTION
 
-  EXPORT Dwg_Entity_LWPOLYLINE *dwg_add_LWPOLYLINE (
-      Dwg_Object_BLOCK_HEADER * restrict blkhdr, const int num_pts2d,
-      const dwg_point_2d **restrict pts2d)
-  {
-    API_ADD_ENTITY (LWPOLYLINE);
-    error = dwg_ent_lwpline_set_points (_obj, num_pts2d, pts2d);
-    return _obj;
-  }
+EXPORT Dwg_Entity_LWPOLYLINE *
+dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                    const int num_pts2d, const dwg_point_2d **restrict pts2d)
+{
+  API_ADD_ENTITY (LWPOLYLINE);
+  error = dwg_ent_lwpline_set_points (_obj, num_pts2d, pts2d);
+  return _obj;
+}
 
-  EXPORT Dwg_Entity_HATCH *dwg_add_HATCH (
-      Dwg_Object_BLOCK_HEADER * restrict blkhdr, const int pattern_type,
-      const BITCODE_TV restrict name, const bool is_associative,
-      const unsigned num_paths,
+EXPORT Dwg_Entity_HATCH *
+dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+               const int pattern_type, const BITCODE_TV restrict name,
+               const bool is_associative, const unsigned num_paths,
+               // Line, Polyline, Circle, Ellipse, Spline or Region
+               const Dwg_Object *pathobjs)
+{
+  API_ADD_ENTITY (HATCH);
+  if (strEQc (name, "SPHERICAL") || strEQc (name, "HEMISPHERICAL")
+      || strEQc (name, "CURVED") || strEQc (name, "LINEAR")
+      || strEQc (name, "CYLINDER"))
+    {
+      _obj->is_gradient_fill = 1;
+      _obj->gradient_name = name;
+    }
+  else
+    {
+      _obj->name = name;
+      // predefined (acad.pat), user-defined (ltype), custom (some.pat file)
+      _obj->pattern_type = pattern_type;
+    }
+  _obj->is_associative = is_associative;
+  _obj->extrusion.z = 1.0;
+  _obj->num_paths = num_paths;
+  _obj->paths = calloc (num_paths, sizeof (Dwg_HATCH_Path));
+  for (unsigned i = 0; i < num_paths; i++)
+    {
+      _obj->paths[i].num_boundary_handles = 1;
+      _obj->paths[i].boundary_handles = calloc (1, sizeof (BITCODE_H));
+      _obj->paths[i].boundary_handles[0]
+          = dwg_add_handleref (dwg, 4, pathobjs[i].handle.value, obj);
+      // TODO split geometry into paths per pathobject:
       // Line, Polyline, Circle, Ellipse, Spline or Region
-      const Dwg_Object *pathobjs)
-  {
-    API_ADD_ENTITY (HATCH);
-    if (strEQc (name, "SPHERICAL") || strEQc (name, "HEMISPHERICAL")
-        || strEQc (name, "CURVED") || strEQc (name, "LINEAR")
-        || strEQc (name, "CYLINDER"))
-      {
-        _obj->is_gradient_fill = 1;
-        _obj->gradient_name = name;
-      }
-    else
-      {
-        _obj->name = name;
-        // predefined (acad.pat), user-defined (ltype), custom (some.pat file)
-        _obj->pattern_type = pattern_type;
-      }
-    _obj->is_associative = is_associative;
-    _obj->extrusion.z = 1.0;
-    _obj->num_paths = num_paths;
-    _obj->paths = calloc (num_paths, sizeof (Dwg_HATCH_Path));
-    for (unsigned i = 0; i < num_paths; i++)
-      {
-        _obj->paths[i].num_boundary_handles = 1;
-        _obj->paths[i].boundary_handles = calloc (1, sizeof (BITCODE_H));
-        _obj->paths[i].boundary_handles[0]
-            = dwg_add_handleref (dwg, 4, pathobjs[i].handle.value, obj);
-        // TODO split geometry into paths per pathobject:
-        // Line, Polyline, Circle, Ellipse, Spline or Region
-      }
-    return _obj;
-  }
-
-  EXPORT Dwg_Object_XRECORD *dwg_add_XRECORD (
-      Dwg_Object_DICTIONARY * restrict dict, const BITCODE_T restrict keyword)
-  {
-    int err;
-    Dwg_Object *dictobj = dwg_obj_generic_to_object ((dwg_obj_generic *)dict, &err);
-    Dwg_Data *dwg = dictobj->parent;
-    API_ADD_OBJECT (XRECORD);
-    _obj->cloning = dict->cloning;
-    // ...
-    return _obj;
-  }
-
-  // add or replace an object in the dictionary?
-  EXPORT Dwg_Object_DICTIONARY *dwg_DICTIONARY_add_object (
-      Dwg_Object_DICTIONARY * restrict dict, const BITCODE_T restrict keyword,
-      const BITCODE_T restrict classname)
-  {
-    int err;
-    Dwg_Object *dictobj = dwg_obj_generic_to_object ((dwg_obj_generic *)dict, &err);
-    Dwg_Data *dwg = dictobj->parent;
-    //
-    return dict;
-  }
-
-  EXPORT Dwg_Object_PLACEHOLDER *dwg_add_PLACEHOLDER (Dwg_Data * restrict dwg)
-  {
-    API_ADD_OBJECT (PLACEHOLDER);
-    return _obj;
-  }
-
-  // VBA_PROJECT
-  // LAYOUT
-  // PROXY_ENTITY
-  // PROXY_OBJECT
-
-  // ACDSRECORD
-  // ACDSSCHEMA
-  // ACMECOMMANDHISTORY
-  // ACMESCOPE
-  // ACMESTATEMGR
-  // ACSH_BOOLEAN_CLASS
-  // ACSH_BOX_CLASS
-  // ACSH_BREP_CLASS
-  // ACSH_CHAMFER_CLASS
-  // ACSH_CONE_CLASS
-  // ACSH_CYLINDER_CLASS
-  // ACSH_EXTRUSION_CLASS
-  // ACSH_FILLET_CLASS
-  // ACSH_HISTORY_CLASS
-  // ACSH_LOFT_CLASS
-  // ACSH_PYRAMID_CLASS
-  // ACSH_REVOLVE_CLASS
-  // ACSH_SPHERE_CLASS
-  // ACSH_SWEEP_CLASS
-  // ACSH_TORUS_CLASS
-  // ACSH_WEDGE_CLASS
-  // ALDIMOBJECTCONTEXTDATA
-  // ALIGNMENTPARAMETERENTITY
-  // ANGDIMOBJECTCONTEXTDATA
-  // ANNOTSCALEOBJECTCONTEXTDATA
-  // ARC_DIMENSION
-  // ASSOC2DCONSTRAINTGROUP
-  // ASSOC3POINTANGULARDIMACTIONBODY
-  // ASSOCACTION
-  // ASSOCACTIONPARAM
-  // ASSOCALIGNEDDIMACTIONBODY
-  // ASSOCARRAYACTIONBODY
-  // ASSOCARRAYMODIFYACTIONBODY
-  // ASSOCARRAYMODIFYPARAMETERS
-  // ASSOCARRAYPATHPARAMETERS
-  // ASSOCARRAYPOLARPARAMETERS
-  // ASSOCARRAYRECTANGULARPARAMETERS
-  // ASSOCASMBODYACTIONPARAM
-  // ASSOCBLENDSURFACEACTIONBODY
-  // ASSOCCOMPOUNDACTIONPARAM
-  // ASSOCDEPENDENCY
-  // ASSOCDIMDEPENDENCYBODY
-  // ASSOCEDGEACTIONPARAM
-  // ASSOCEDGECHAMFERACTIONBODY
-  // ASSOCEDGEFILLETACTIONBODY
-  // ASSOCEXTENDSURFACEACTIONBODY
-  // ASSOCEXTRUDEDSURFACEACTIONBODY
-  // ASSOCFACEACTIONPARAM
-  // ASSOCFILLETSURFACEACTIONBODY
-  // ASSOCGEOMDEPENDENCY
-  // ASSOCLOFTEDSURFACEACTIONBODY
-  // ASSOCMLEADERACTIONBODY
-  // ASSOCNETWORK
-  // ASSOCNETWORKSURFACEACTIONBODY
-  // ASSOCOBJECTACTIONPARAM
-  // ASSOCOFFSETSURFACEACTIONBODY
-  // ASSOCORDINATEDIMACTIONBODY
-  // ASSOCOSNAPPOINTREFACTIONPARAM
-  // ASSOCPATCHSURFACEACTIONBODY
-  // ASSOCPATHACTIONPARAM
-  // ASSOCPERSSUBENTMANAGER
-  // ASSOCPLANESURFACEACTIONBODY
-  // ASSOCPOINTREFACTIONPARAM
-  // ASSOCRESTOREENTITYSTATEACTIONBODY
-  // ASSOCREVOLVEDSURFACEACTIONBODY
-  // ASSOCROTATEDDIMACTIONBODY
-  // ASSOCSWEPTSURFACEACTIONBODY
-  // ASSOCTRIMSURFACEACTIONBODY
-  // ASSOCVALUEDEPENDENCY
-  // ASSOCVARIABLE
-  // ASSOCVERTEXACTIONPARAM
-  // ATEXT
-  // BACKGROUND
-  // BASEPOINTPARAMETERENTITY
-  // BLKREFOBJECTCONTEXTDATA
-  // BLOCKALIGNEDCONSTRAINTPARAMETER
-  // BLOCKALIGNMENTGRIP
-  // BLOCKALIGNMENTPARAMETER
-  // BLOCKANGULARCONSTRAINTPARAMETER
-  // BLOCKARRAYACTION
-  // BLOCKBASEPOINTPARAMETER
-  // BLOCKDIAMETRICCONSTRAINTPARAMETER
-  // BLOCKFLIPACTION
-  // BLOCKFLIPGRIP
-  // BLOCKFLIPPARAMETER
-  // BLOCKGRIPLOCATIONCOMPONENT
-  // BLOCKHORIZONTALCONSTRAINTPARAMETER
-  // BLOCKLINEARCONSTRAINTPARAMETER
-  // BLOCKLINEARGRIP
-  // BLOCKLINEARPARAMETER
-  // BLOCKLOOKUPACTION
-  // BLOCKLOOKUPGRIP
-  // BLOCKLOOKUPPARAMETER
-  // BLOCKMOVEACTION
-  // BLOCKPARAMDEPENDENCYBODY
-  // BLOCKPOINTPARAMETER
-  // BLOCKPOLARGRIP
-  // BLOCKPOLARPARAMETER
-  // BLOCKPOLARSTRETCHACTION
-  // BLOCKPROPERTIESTABLE
-  // BLOCKPROPERTIESTABLEGRIP
-  // BLOCKRADIALCONSTRAINTPARAMETER
-  // BLOCKREPRESENTATION
-  // BLOCKROTATEACTION
-  // BLOCKROTATIONGRIP
-  // BLOCKROTATIONPARAMETER
-  // BLOCKSCALEACTION
-  // BLOCKSTRETCHACTION
-  // BLOCKUSERPARAMETER
-  // BLOCKVERTICALCONSTRAINTPARAMETER
-  // BLOCKVISIBILITYGRIP
-  // BLOCKVISIBILITYPARAMETER
-  // BLOCKXYGRIP
-  // BLOCKXYPARAMETER
-  // CAMERA
-  // CELLSTYLEMAP
-  // CONTEXTDATAMANAGER
-  // CSACDOCUMENTOPTIONS
-  // CURVEPATH
-  // DATALINK
-  // DATATABLE
-  // DBCOLOR
-  // DETAILVIEWSTYLE
-  // DICTIONARYVAR
-  // DICTIONARYWDFLT
-  // DIMASSOC
-  // DMDIMOBJECTCONTEXTDATA
-  // DYNAMICBLOCKPROXYNODE
-  // DYNAMICBLOCKPURGEPREVENTER
-  // EVALUATION_GRAPH
-  // EXTRUDEDSURFACE
-  // FCFOBJECTCONTEXTDATA
-  // FIELD
-  // FIELDLIST
-  // FLIPPARAMETERENTITY
-  // GEODATA
-  // GEOMAPIMAGE
-  // GEOPOSITIONMARKER
-  // HELIX
-  // IDBUFFER
-
-  // Called Raster in VBA
-  EXPORT Dwg_Entity_IMAGE *dwg_add_IMAGE (
-      Dwg_Object_BLOCK_HEADER * restrict blkhdr,
-      const BITCODE_T restrict file_path, const dwg_point_3d *restrict ins_pt,
-      const double scale_factor, const double rotation_angle)
-  {
-    Dwg_Object *img;
-    Dwg_Entity_IMAGE *_img;
-
-    {
-      API_ADD_ENTITY (IMAGE);
-      dwg_require_class (dwg, "IMAGE");
-      dwg_require_class (dwg, "IMAGEDEF");
-      img = obj;
-      _img = _obj;
-      _obj->pt0.x = ins_pt->x;
-      _obj->pt0.y = ins_pt->y;
-      _obj->pt0.z = ins_pt->z;
-      // TODO rotation cos()
-      _obj->uvec.x = scale_factor;
-      _obj->uvec.y = scale_factor;
-      _obj->uvec.z = 1.0;
-      _obj->vvec.x = scale_factor;
-      _obj->vvec.y = scale_factor;
-      _obj->vvec.z = 1.0;
-      _obj->brightness = 0x32;
-      _obj->contrast = 0x32;
     }
-    // TODO normally a DICTIONARY owns an IMAGEDEF
-    {
-      Dwg_Data *dwg = img->parent;
-      API_ADD_OBJECT (IMAGEDEF);
-      //_obj->class_version = 0;
-      _obj->file_path = file_path;
-      // TODO: get pixel props from the image. is_loaded, pixel_size, ...
-      _img->imagedef = dwg_add_handleref (dwg, 4, obj->handle.value, img);
-    }
-    return _img;
-  }
+  return _obj;
+}
 
-  // IMAGEDEF_REACTOR
-  // INDEX
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD (Dwg_Object_DICTIONARY *restrict dict,
+                 const BITCODE_T restrict keyword)
+{
+  int err;
+  Dwg_Object *dictobj
+      = dwg_obj_generic_to_object ((dwg_obj_generic *)dict, &err);
+  Dwg_Data *dwg = dictobj->parent;
+  API_ADD_OBJECT (XRECORD);
+  _obj->cloning = dict->cloning;
+  // ...
+  return _obj;
+}
 
-  EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION *dwg_add_LARGE_RADIAL_DIMENSION (
-      Dwg_Object_BLOCK_HEADER * restrict blkhdr,
-      const dwg_point_3d *restrict center_pt,
-      const dwg_point_3d *restrict first_arc_pt,
-      const dwg_point_3d *restrict ovr_center,
-      const dwg_point_3d *restrict jog_point, const double leader_len)
+EXPORT Dwg_Object_PLACEHOLDER *
+dwg_add_PLACEHOLDER (Dwg_Data *restrict dwg)
+{
+  API_ADD_OBJECT (PLACEHOLDER);
+  return _obj;
+}
+
+// VBA_PROJECT
+// LAYOUT
+// PROXY_ENTITY
+// PROXY_OBJECT
+
+// ACDSRECORD
+// ACDSSCHEMA
+// ACMECOMMANDHISTORY
+// ACMESCOPE
+// ACMESTATEMGR
+// ACSH_BOOLEAN_CLASS
+// ACSH_BOX_CLASS
+// ACSH_BREP_CLASS
+// ACSH_CHAMFER_CLASS
+// ACSH_CONE_CLASS
+// ACSH_CYLINDER_CLASS
+// ACSH_EXTRUSION_CLASS
+// ACSH_FILLET_CLASS
+// ACSH_HISTORY_CLASS
+// ACSH_LOFT_CLASS
+// ACSH_PYRAMID_CLASS
+// ACSH_REVOLVE_CLASS
+// ACSH_SPHERE_CLASS
+// ACSH_SWEEP_CLASS
+// ACSH_TORUS_CLASS
+// ACSH_WEDGE_CLASS
+// ALDIMOBJECTCONTEXTDATA
+// ALIGNMENTPARAMETERENTITY
+// ANGDIMOBJECTCONTEXTDATA
+// ANNOTSCALEOBJECTCONTEXTDATA
+// ARC_DIMENSION
+// ASSOC2DCONSTRAINTGROUP
+// ASSOC3POINTANGULARDIMACTIONBODY
+// ASSOCACTION
+// ASSOCACTIONPARAM
+// ASSOCALIGNEDDIMACTIONBODY
+// ASSOCARRAYACTIONBODY
+// ASSOCARRAYMODIFYACTIONBODY
+// ASSOCARRAYMODIFYPARAMETERS
+// ASSOCARRAYPATHPARAMETERS
+// ASSOCARRAYPOLARPARAMETERS
+// ASSOCARRAYRECTANGULARPARAMETERS
+// ASSOCASMBODYACTIONPARAM
+// ASSOCBLENDSURFACEACTIONBODY
+// ASSOCCOMPOUNDACTIONPARAM
+// ASSOCDEPENDENCY
+// ASSOCDIMDEPENDENCYBODY
+// ASSOCEDGEACTIONPARAM
+// ASSOCEDGECHAMFERACTIONBODY
+// ASSOCEDGEFILLETACTIONBODY
+// ASSOCEXTENDSURFACEACTIONBODY
+// ASSOCEXTRUDEDSURFACEACTIONBODY
+// ASSOCFACEACTIONPARAM
+// ASSOCFILLETSURFACEACTIONBODY
+// ASSOCGEOMDEPENDENCY
+// ASSOCLOFTEDSURFACEACTIONBODY
+// ASSOCMLEADERACTIONBODY
+// ASSOCNETWORK
+// ASSOCNETWORKSURFACEACTIONBODY
+// ASSOCOBJECTACTIONPARAM
+// ASSOCOFFSETSURFACEACTIONBODY
+// ASSOCORDINATEDIMACTIONBODY
+// ASSOCOSNAPPOINTREFACTIONPARAM
+// ASSOCPATCHSURFACEACTIONBODY
+// ASSOCPATHACTIONPARAM
+// ASSOCPERSSUBENTMANAGER
+// ASSOCPLANESURFACEACTIONBODY
+// ASSOCPOINTREFACTIONPARAM
+// ASSOCRESTOREENTITYSTATEACTIONBODY
+// ASSOCREVOLVEDSURFACEACTIONBODY
+// ASSOCROTATEDDIMACTIONBODY
+// ASSOCSWEPTSURFACEACTIONBODY
+// ASSOCTRIMSURFACEACTIONBODY
+// ASSOCVALUEDEPENDENCY
+// ASSOCVARIABLE
+// ASSOCVERTEXACTIONPARAM
+// ATEXT
+// BACKGROUND
+// BASEPOINTPARAMETERENTITY
+// BLKREFOBJECTCONTEXTDATA
+// BLOCKALIGNEDCONSTRAINTPARAMETER
+// BLOCKALIGNMENTGRIP
+// BLOCKALIGNMENTPARAMETER
+// BLOCKANGULARCONSTRAINTPARAMETER
+// BLOCKARRAYACTION
+// BLOCKBASEPOINTPARAMETER
+// BLOCKDIAMETRICCONSTRAINTPARAMETER
+// BLOCKFLIPACTION
+// BLOCKFLIPGRIP
+// BLOCKFLIPPARAMETER
+// BLOCKGRIPLOCATIONCOMPONENT
+// BLOCKHORIZONTALCONSTRAINTPARAMETER
+// BLOCKLINEARCONSTRAINTPARAMETER
+// BLOCKLINEARGRIP
+// BLOCKLINEARPARAMETER
+// BLOCKLOOKUPACTION
+// BLOCKLOOKUPGRIP
+// BLOCKLOOKUPPARAMETER
+// BLOCKMOVEACTION
+// BLOCKPARAMDEPENDENCYBODY
+// BLOCKPOINTPARAMETER
+// BLOCKPOLARGRIP
+// BLOCKPOLARPARAMETER
+// BLOCKPOLARSTRETCHACTION
+// BLOCKPROPERTIESTABLE
+// BLOCKPROPERTIESTABLEGRIP
+// BLOCKRADIALCONSTRAINTPARAMETER
+// BLOCKREPRESENTATION
+// BLOCKROTATEACTION
+// BLOCKROTATIONGRIP
+// BLOCKROTATIONPARAMETER
+// BLOCKSCALEACTION
+// BLOCKSTRETCHACTION
+// BLOCKUSERPARAMETER
+// BLOCKVERTICALCONSTRAINTPARAMETER
+// BLOCKVISIBILITYGRIP
+// BLOCKVISIBILITYPARAMETER
+// BLOCKXYGRIP
+// BLOCKXYPARAMETER
+// CAMERA
+// CELLSTYLEMAP
+// CONTEXTDATAMANAGER
+// CSACDOCUMENTOPTIONS
+// CURVEPATH
+// DATALINK
+// DATATABLE
+// DBCOLOR
+// DETAILVIEWSTYLE
+// DICTIONARYVAR
+// DICTIONARYWDFLT
+// DIMASSOC
+// DMDIMOBJECTCONTEXTDATA
+// DYNAMICBLOCKPROXYNODE
+// DYNAMICBLOCKPURGEPREVENTER
+// EVALUATION_GRAPH
+// EXTRUDEDSURFACE
+// FCFOBJECTCONTEXTDATA
+// FIELD
+// FIELDLIST
+// FLIPPARAMETERENTITY
+// GEODATA
+// GEOMAPIMAGE
+// GEOPOSITIONMARKER
+// HELIX
+// IDBUFFER
+
+// Called Raster in VBA
+EXPORT Dwg_Entity_IMAGE *
+dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+               const BITCODE_T restrict file_path,
+               const dwg_point_3d *restrict ins_pt, const double scale_factor,
+               const double rotation_angle)
+{
+  Dwg_Object *img;
+  Dwg_Entity_IMAGE *_img;
+
   {
-    API_ADD_ENTITY (LARGE_RADIAL_DIMENSION);
-    _obj->def_pt.x = center_pt->x;
-    _obj->def_pt.y = center_pt->y;
-    _obj->def_pt.z = center_pt->z;
-    _obj->first_arc_pt.x = first_arc_pt->x;
-    _obj->first_arc_pt.y = first_arc_pt->y;
-    _obj->first_arc_pt.z = first_arc_pt->z;
-    _obj->ovr_center.x = ovr_center->x;
-    _obj->ovr_center.y = ovr_center->y;
-    _obj->ovr_center.z = ovr_center->z;
-    _obj->jog_point.x = jog_point->x;
-    _obj->jog_point.y = jog_point->y;
-    _obj->jog_point.z = jog_point->z;
-    _obj->leader_len = leader_len;
-    return _obj;
+    API_ADD_ENTITY (IMAGE);
+    dwg_require_class (dwg, "IMAGE");
+    dwg_require_class (dwg, "IMAGEDEF");
+    img = obj;
+    _img = _obj;
+    _obj->pt0.x = ins_pt->x;
+    _obj->pt0.y = ins_pt->y;
+    _obj->pt0.z = ins_pt->z;
+    // TODO rotation cos()
+    _obj->uvec.x = scale_factor;
+    _obj->uvec.y = scale_factor;
+    _obj->uvec.z = 1.0;
+    _obj->vvec.x = scale_factor;
+    _obj->vvec.y = scale_factor;
+    _obj->vvec.z = 1.0;
+    _obj->brightness = 0x32;
+    _obj->contrast = 0x32;
   }
-
-  // LAYERFILTER
-  // LAYER_INDEX
-  // LAYOUTPRINTCONFIG
-  // LEADEROBJECTCONTEXTDATA
-  // LIGHT
-  // LIGHTLIST
-  // LINEARPARAMETERENTITY
-  // LOFTEDSURFACE
-  // MATERIAL
-  // MENTALRAYRENDERSETTINGS
-  // MESH
-  // MLEADEROBJECTCONTEXTDATA
-  // MLEADERSTYLE
-  // MOTIONPATH
-  // MPOLYGON
-  // MTEXTATTRIBUTEOBJECTCONTEXTDATA
-  // MTEXTOBJECTCONTEXTDATA
-  // MULTILEADER
-  // NAVISWORKSMODEL
-  // NAVISWORKSMODELDEF
-  // NPOCOLLECTION
-  // NURBSURFACE
-  // OBJECT_PTR
-  // ORDDIMOBJECTCONTEXTDATA
-  // PERSUBENTMGR
-  // PLANESURFACE
-  // PLOTSETTINGS
-  // POINTCLOUD
-  // POINTCLOUDEX
-  // POINTCLOUDDEF
-  // POINTCLOUDDEFEX
-  // POINTCLOUDDEF_REACTOR
-  // POINTCLOUDDEF_REACTOR_EX
-  // POINTCLOUDCOLORMAP
-  // POINTPARAMETERENTITY
-  // POINTPATH
-  // RADIMLGOBJECTCONTEXTDATA
-  // RADIMOBJECTCONTEXTDATA
-  // RAPIDRTRENDERENVIRONMENT
-  // RAPIDRTRENDERSETTINGS
-  // RASTERVARIABLES
-  // RENDERENTRY
-  // RENDERENVIRONMENT
-  // RENDERGLOBAL
-  // RENDERSETTINGS
-  // REVOLVEDSURFACE
-  // ROTATIONPARAMETERENTITY
-  // RTEXT
-  // SCALE
-  // SECTIONOBJECT
-  // SECTIONVIEWSTYLE
-  // SECTION_MANAGER
-  // SECTION_SETTINGS
-  // SORTENTSTABLE
-  // SPATIAL_FILTER
-  // SPATIAL_INDEX
-  // SUN
-  // SUNSTUDY
-  // SWEPTSURFACE
-  // TABLE
-  // TABLECONTENT
-  // TABLEGEOMETRY
-  // TABLESTYLE
-  // TEXTOBJECTCONTEXTDATA
-  // TVDEVICEPROPERTIES
-
-  EXPORT Dwg_Entity_UNDERLAY *dwg_add_UNDERLAY (
-      Dwg_Object_BLOCK_HEADER * restrict blkhdr,
-      const dwg_point_3d *restrict ins_pt)
+  // TODO normally a DICTIONARY owns an IMAGEDEF
   {
-    API_ADD_ENTITY (UNDERLAY);
-    _obj->ins_pt.x = ins_pt->x;
-    _obj->ins_pt.y = ins_pt->y;
-    _obj->ins_pt.z = ins_pt->z;
-    // defaults:
-    _obj->extrusion.z = 1.0;
-    _obj->scale.x = 1.0;
-    _obj->scale.y = 1.0;
-    _obj->scale.z = 1.0;
-    // TODO UNDERLAYDEFINITION
-    return _obj;
+    Dwg_Data *dwg = img->parent;
+    API_ADD_OBJECT (IMAGEDEF);
+    //_obj->class_version = 0;
+    _obj->file_path = file_path;
+    // TODO: get pixel props from the image. is_loaded, pixel_size, ...
+    _img->imagedef = dwg_add_handleref (dwg, 4, obj->handle.value, img);
   }
+  return _img;
+}
 
-  // UNDERLAYDEFINITION
-  // VISIBILITYGRIPENTITY
-  // VISIBILITYPARAMETERENTITY
-  // VISUALSTYLE
-  // WIPEOUT
-  // WIPEOUTVARIABLES
-  // XREFPANELOBJECT
-  // XYPARAMETERENTITY
+// IMAGEDEF_REACTOR
+// INDEX
+
+EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION *
+dwg_add_LARGE_RADIAL_DIMENSION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                                const dwg_point_3d *restrict center_pt,
+                                const dwg_point_3d *restrict first_arc_pt,
+                                const dwg_point_3d *restrict ovr_center,
+                                const dwg_point_3d *restrict jog_point,
+                                const double leader_len)
+{
+  API_ADD_ENTITY (LARGE_RADIAL_DIMENSION);
+  _obj->def_pt.x = center_pt->x;
+  _obj->def_pt.y = center_pt->y;
+  _obj->def_pt.z = center_pt->z;
+  _obj->first_arc_pt.x = first_arc_pt->x;
+  _obj->first_arc_pt.y = first_arc_pt->y;
+  _obj->first_arc_pt.z = first_arc_pt->z;
+  _obj->ovr_center.x = ovr_center->x;
+  _obj->ovr_center.y = ovr_center->y;
+  _obj->ovr_center.z = ovr_center->z;
+  _obj->jog_point.x = jog_point->x;
+  _obj->jog_point.y = jog_point->y;
+  _obj->jog_point.z = jog_point->z;
+  _obj->leader_len = leader_len;
+  return _obj;
+}
+
+// LAYERFILTER
+// LAYER_INDEX
+// LAYOUTPRINTCONFIG
+// LEADEROBJECTCONTEXTDATA
+// LIGHT
+// LIGHTLIST
+// LINEARPARAMETERENTITY
+// LOFTEDSURFACE
+// MATERIAL
+// MENTALRAYRENDERSETTINGS
+// MESH
+// MLEADEROBJECTCONTEXTDATA
+// MLEADERSTYLE
+// MOTIONPATH
+// MPOLYGON
+// MTEXTATTRIBUTEOBJECTCONTEXTDATA
+// MTEXTOBJECTCONTEXTDATA
+// MULTILEADER
+// NAVISWORKSMODEL
+// NAVISWORKSMODELDEF
+// NPOCOLLECTION
+// NURBSURFACE
+// OBJECT_PTR
+// ORDDIMOBJECTCONTEXTDATA
+// PERSUBENTMGR
+// PLANESURFACE
+// PLOTSETTINGS
+// POINTCLOUD
+// POINTCLOUDEX
+// POINTCLOUDDEF
+// POINTCLOUDDEFEX
+// POINTCLOUDDEF_REACTOR
+// POINTCLOUDDEF_REACTOR_EX
+// POINTCLOUDCOLORMAP
+// POINTPARAMETERENTITY
+// POINTPATH
+// RADIMLGOBJECTCONTEXTDATA
+// RADIMOBJECTCONTEXTDATA
+// RAPIDRTRENDERENVIRONMENT
+// RAPIDRTRENDERSETTINGS
+// RASTERVARIABLES
+// RENDERENTRY
+// RENDERENVIRONMENT
+// RENDERGLOBAL
+// RENDERSETTINGS
+// REVOLVEDSURFACE
+// ROTATIONPARAMETERENTITY
+// RTEXT
+// SCALE
+// SECTIONOBJECT
+// SECTIONVIEWSTYLE
+// SECTION_MANAGER
+// SECTION_SETTINGS
+// SORTENTSTABLE
+// SPATIAL_FILTER
+// SPATIAL_INDEX
+// SUN
+// SUNSTUDY
+// SWEPTSURFACE
+// TABLE
+// TABLECONTENT
+// TABLEGEOMETRY
+// TABLESTYLE
+// TEXTOBJECTCONTEXTDATA
+// TVDEVICEPROPERTIES
+
+EXPORT Dwg_Entity_UNDERLAY *
+dwg_add_UNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                  const dwg_point_3d *restrict ins_pt)
+{
+  API_ADD_ENTITY (UNDERLAY);
+  _obj->ins_pt.x = ins_pt->x;
+  _obj->ins_pt.y = ins_pt->y;
+  _obj->ins_pt.z = ins_pt->z;
+  // defaults:
+  _obj->extrusion.z = 1.0;
+  _obj->scale.x = 1.0;
+  _obj->scale.y = 1.0;
+  _obj->scale.z = 1.0;
+  // TODO UNDERLAYDEFINITION
+  return _obj;
+}
+
+// UNDERLAYDEFINITION
+// VISIBILITYGRIPENTITY
+// VISIBILITYPARAMETERENTITY
+// VISUALSTYLE
+// WIPEOUT
+// WIPEOUTVARIABLES
+// XREFPANELOBJECT
+// XYPARAMETERENTITY
