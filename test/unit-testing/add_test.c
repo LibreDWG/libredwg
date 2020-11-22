@@ -35,6 +35,7 @@ static int
 test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
 {
   int error;
+  struct stat attrib;
   Dwg_Data *dwg = dwg_add_document(0);
   Dwg_Object *mspace =  dwg_model_space_object (dwg);
   Dwg_Object_Ref *mspace_ref =  dwg_model_space_ref (dwg);
@@ -56,10 +57,13 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       fail ("Unknown type %s", name);
     }
 
+  if (!stat (dwgfile, &attrib))
+      unlink (dwgfile);
   error = dwg_write_file (dwgfile, dwg);
   if (error >= DWG_ERR_CRITICAL)
     return 1;
   dwg_free (dwg);
+
   error = dwg_read_file (dwgfile, dwg);
   if (error >= DWG_ERR_CRITICAL)
     {

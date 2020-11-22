@@ -22071,6 +22071,9 @@ dwg_add_document (const int imperial)
   dwg->header_vars.DIMCLRD = (BITCODE_CMC){ 0 };
   dwg->header_vars.DIMCLRE = (BITCODE_CMC){ 0 };
   dwg->header_vars.DIMCLRT = (BITCODE_CMC){ 0 };
+
+  dwg->header_vars.MEASUREMENT = imperial ? 0 : 256;
+
   // BLOCK_CONTROL_OBJECT: (3.1.1) abs:1 [H 0]
   block_control = dwg_add_BLOCK_CONTROL (dwg, 0x1F, 0x20);
   // LAYER_CONTROL_OBJECT: (3.1.2) abs:2 [H 0]
@@ -22356,7 +22359,7 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict hdr,
         {
           hdr->first_entity = hdr->last_entity
               = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
-          LOG_TRACE ("hdr.first_entity = " FORMAT_REF "\n", ARGS_REF(hdr->first_entity));
+          LOG_TRACE ("MSPACE.{first,last}_entity = " FORMAT_REF "\n", ARGS_REF(hdr->first_entity));
           hdr->num_owned++;
           obj->tio.entity->nolinks = 1;
         }
@@ -22367,7 +22370,7 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict hdr,
               = lastref ? dwg_ref_object (dwg, lastref) : NULL; // may fail!
           hdr->last_entity
               = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
-          LOG_TRACE ("hdr.last_entity = " FORMAT_REF "\n",
+          LOG_TRACE ("MSPACE.last_entity = " FORMAT_REF "\n",
                      ARGS_REF (hdr->last_entity));
           // link prev. last to curr last
           if (prev)
@@ -22378,12 +22381,12 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict hdr,
                          ARGS_REF (prev->tio.entity->next_entity));
               obj->tio.entity->prev_entity
                   = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
-              LOG_TRACE ("obj.prev_entity = " FORMAT_REF "\n",
+              LOG_TRACE ("%s.prev_entity = " FORMAT_REF "\n", obj->name,
                          ARGS_REF (obj->tio.entity->prev_entity));
               prev->tio.entity->nolinks = 0;
             }
           hdr->num_owned++;
-          LOG_TRACE ("hdr.num_owned = %u\n", hdr->num_owned);
+          LOG_TRACE ("MSPACE.num_owned = %u\n", hdr->num_owned);
         }
     }
   return 0;
