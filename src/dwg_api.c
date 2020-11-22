@@ -21941,7 +21941,7 @@ dwg_add_document (const int imperial)
   Dwg_Object_LTYPE_CONTROL *ltype_ctrl;
   Dwg_Object_DICTIONARY *dict;
   dwg_point_3d pt0 = { 0.0, 1.0, 0.0 };
-  Dwg_Object *ctrl;
+  Dwg_Object *obj, *ctrl;
   char *trace = getenv ("LIBREDWG_TRACE");
   if (trace)
     loglevel = atoi (trace);
@@ -22162,18 +22162,20 @@ dwg_add_document (const int imperial)
   dwg_set_next_hdl (dwg, 0x1F);
   // BLOCK_RECORD_MSPACE: (5.1.1F)
   mspace = dwg_add_BLOCK_HEADER (dwg, "*MODEL_SPACE");
-  block_control->model_space->obj
-      = dwg_obj_generic_to_object ((dwg_obj_generic *)mspace, &error);
+  obj = dwg_obj_generic_to_object ((dwg_obj_generic *)mspace, &error);
   block_control->num_entries--;
-  //mspace->block_entity = dwg_add_handleref (dwg, 5, 0x23, NULL);
-  //mspace->endblk_entity = dwg_add_handleref (dwg, 5, 0x24, NULL);
+  dwg->header_vars.BLOCK_RECORD_MSPACE = dwg_add_handleref (
+      dwg, 5, obj->handle.value, NULL);
+  dwg->header_vars.BLOCK_RECORD_MSPACE->obj = obj;
+  block_control->model_space = dwg->header_vars.BLOCK_RECORD_MSPACE;
   // BLOCK_RECORD_PSPACE: (5.1.20)
   pspace = dwg_add_BLOCK_HEADER (dwg, "*PAPER_SPACE");
-  block_control->paper_space->obj
-      = dwg_obj_generic_to_object ((dwg_obj_generic *)pspace, &error);
+  obj = dwg_obj_generic_to_object ((dwg_obj_generic *)pspace, &error);
   block_control->num_entries--;
-  //pspace->block_entity = dwg_add_handleref (dwg, 5, 0x21, NULL);
-  //pspace->endblk_entity = dwg_add_handleref (dwg, 5, 0x22, NULL);
+  dwg->header_vars.BLOCK_RECORD_PSPACE = dwg_add_handleref (
+      dwg, 5, obj->handle.value, NULL);
+  dwg->header_vars.BLOCK_RECORD_PSPACE->obj = obj;
+  block_control->paper_space = dwg->header_vars.BLOCK_RECORD_PSPACE;
   dwg->block_control = *block_control;
   // BLOCK: (5.1.21)
   dwg_add_BLOCK (pspace, "*PAPER_SPACE");
@@ -22188,7 +22190,6 @@ dwg_add_document (const int imperial)
   for (unsigned i = 0; i < dwg->num_object_refs; i++)
     {
       Dwg_Object_Ref *ref = dwg->object_ref[i];
-      Dwg_Object *obj;
       // possibly update the obj if realloced
       if ((obj = dwg_resolve_handle (dwg, ref->absolute_ref)))
         ref->obj = obj;

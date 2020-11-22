@@ -70,7 +70,8 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       fail ("read %s", name);
       return 2;
     }
-
+  // now we have a different ref!
+  mspace_ref =  dwg_model_space_ref (dwg);
   // look for a single written entity
   switch (type)
     {
