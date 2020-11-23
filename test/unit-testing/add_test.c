@@ -30,6 +30,7 @@ static unsigned int loglevel;
 #include "dwg.h"
 #include "dwg_api.h"
 #include "tests_common.h"
+#include "../../src/classes.h"
 
 static int
 test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
@@ -41,15 +42,15 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
   Dwg_Object_Ref *mspace_ref =  dwg_model_space_ref (dwg);
   dwg_point_3d pt1 = {1.5, 2.5, 0.2};
   dwg_point_3d pt2 = {2.5, 1.5, 0.0};
-  char *name = dwg_type_name (type);
-  int failed;
+  const char *name = dwg_type_name (type);
+  int n_failed;
 
   if (!mspace)
     {
       fail ("empty mspace");
       return 1;
     }
-  switch (type)
+  switch ((int)type)
     {
     case DWG_TYPE_LINE:
       dwg_add_LINE (mspace->tio.object->tio.BLOCK_HEADER, &pt1, &pt2);
@@ -74,7 +75,7 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
   // now we have a different ref!
   mspace_ref =  dwg_model_space_ref (dwg);
   // look for a single written entity
-  switch (type)
+  switch ((int)type)
     {
     case DWG_TYPE_LINE:
       {
@@ -92,10 +93,10 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
     }
   
   ok ("read %s", name);
-  failed = numfailed();
-  if (!failed)
+  n_failed = numfailed();
+  if (!n_failed)
     unlink (dwgfile);
-  return failed;
+  return n_failed;
 }
 
 int
