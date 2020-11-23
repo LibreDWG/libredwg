@@ -42,6 +42,7 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
   dwg_point_3d pt1 = {1.5, 2.5, 0.2};
   dwg_point_3d pt2 = {2.5, 1.5, 0.0};
   char *name = dwg_type_name (type);
+  int failed;
 
   if (!mspace)
     {
@@ -91,8 +92,10 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
     }
   
   ok ("read %s", name);
-  //unlink (dwgfile);
-  return numfailed();
+  failed = numfailed();
+  if (!failed)
+    unlink (dwgfile);
+  return failed;
 }
 
 int
