@@ -43,6 +43,15 @@
 static Dwg_Version_Type dwg_version = R_INVALID;
 static unsigned int loglevel = DWG_LOGLEVEL_ERROR;
 
+/* Non-public imports */
+/* I don't want to export these. */
+BITCODE_H dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
+                                       const char *restrict table);
+Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
+/* Initialization hack only */
+void dwg_set_next_hdl (Dwg_Data *dwg, unsigned long value);
+void dwg_set_next_objhandle (Dwg_Object *obj);
+
 /**
  * Return an object fieldvalue
  */
@@ -21909,10 +21918,6 @@ dwg_ref_get_absref (const dwg_object_ref *restrict ref, int *restrict error)
  *                    FUNCTIONS FOR ADDING OBJECTS                  *
  ********************************************************************/
 
-/* I don't want to export this. It's an initialization hack only */
-void dwg_set_next_hdl (Dwg_Data *dwg, unsigned long value);
-void dwg_set_next_objhandle (Dwg_Object *obj);
-
 #define NEW_OBJECT(dwg, obj)                                                  \
   {                                                                           \
     BITCODE_BL idx = dwg->num_objects;                                        \
@@ -22265,8 +22270,6 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
   return -1;
 }
 
-Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
-
 #define NEW_ENTITY(dwg, obj)                                            \
   {                                                                           \
     BITCODE_BL idx = dwg->num_objects;                                        \
@@ -22447,7 +22450,7 @@ dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const double height)
 {
   API_ADD_ENTITY (TEXT);
-  _obj->text_value = text_value;
+  _obj->text_value = strdup (text_value);
   _obj->ins_pt.x   = ins_pt->x;
   _obj->ins_pt.y   = ins_pt->y;
   _obj->elevation  = ins_pt->z;
@@ -22467,8 +22470,8 @@ dwg_add_ATTRIB (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const BITCODE_T restrict text_value)
 {
   API_ADD_ENTITY (ATTRIB);
-  _obj->tag        = tag;
-  _obj->text_value = text_value;
+  _obj->tag        = strdup (tag);
+  _obj->text_value = strdup (text_value);
   _obj->ins_pt.x   = ins_pt->x;
   _obj->ins_pt.y   = ins_pt->y;
   _obj->elevation  = ins_pt->z;
@@ -22494,9 +22497,9 @@ dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const BITCODE_T restrict default_value)
 {
   API_ADD_ENTITY (ATTDEF);
-  _obj->prompt     = prompt;
-  _obj->tag        = tag;
-  _obj->default_value = default_value;
+  _obj->prompt     = strdup (prompt);
+  _obj->tag        = strdup (tag);
+  _obj->default_value = strdup (default_value);
   _obj->ins_pt.x   = ins_pt->x;
   _obj->ins_pt.y   = ins_pt->y;
   _obj->elevation  = ins_pt->z;
@@ -22541,18 +22544,16 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const double rotation)
 {
   API_ADD_ENTITY (INSERT);
-  _obj->ins_pt.x   = ins_pt->x;
-  _obj->ins_pt.y   = ins_pt->y;
-  _obj->ins_pt.z   = ins_pt->z;
-  _obj->scale.x    = xscale;
-  _obj->scale.y    = yscale;
-  _obj->scale.z    = zscale;
+  _obj->ins_pt.x     = ins_pt->x;
+  _obj->ins_pt.y     = ins_pt->y;
+  _obj->ins_pt.z     = ins_pt->z;
+  _obj->scale.x      = xscale;
+  _obj->scale.y      = yscale;
+  _obj->scale.z      = zscale;
   //TODO scale_flag
-  //_obj->extrusion.x = 0.0;
-  //_obj->extrusion.y = 0.0;
-  _obj->extrusion.z = 1.0;
-  _obj->rotation   = rotation;
-  // TODO block_header via name
+  _obj->extrusion.z  = 1.0;
+  _obj->rotation     = rotation;
+  _obj->block_header = dwg_find_tablehandle_silent (dwg, name, "BLOCK");
   return _obj;
 }
 
@@ -22570,22 +22571,20 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                  const double col_spacing)
 {
   API_ADD_ENTITY (MINSERT);
-  _obj->ins_pt.x   = ins_pt->x;
-  _obj->ins_pt.y   = ins_pt->y;
-  _obj->ins_pt.z   = ins_pt->z;
-  _obj->scale.x    = xscale;
-  _obj->scale.y    = yscale;
-  _obj->scale.z    = zscale;
+  _obj->ins_pt.x     = ins_pt->x;
+  _obj->ins_pt.y     = ins_pt->y;
+  _obj->ins_pt.z     = ins_pt->z;
+  _obj->scale.x      = xscale;
+  _obj->scale.y      = yscale;
+  _obj->scale.z      = zscale;
   //TODO scale_flag
-  //_obj->extrusion.x = 0.0;
-  //_obj->extrusion.y = 0.0;
-  _obj->extrusion.z= 1.0;
-  _obj->rotation   = rotation;
-  _obj->num_rows   = (BITCODE_BS)num_rows;
-  _obj->num_cols   = (BITCODE_BS)num_cols;
-  _obj->row_spacing= row_spacing;
-  _obj->col_spacing= col_spacing;
-  // TODO block_header via name
+  _obj->extrusion.z  = 1.0;
+  _obj->rotation     = rotation;
+  _obj->num_rows     = (BITCODE_BS)num_rows;
+  _obj->num_cols     = (BITCODE_BS)num_cols;
+  _obj->row_spacing  = row_spacing;
+  _obj->col_spacing  = col_spacing;
+  _obj->block_header = dwg_find_tablehandle_silent (dwg, name, "BLOCK");
   return _obj;
 }
 
@@ -23295,7 +23294,7 @@ dwg_add_MTEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const BITCODE_T restrict text)
 {
   API_ADD_ENTITY (MTEXT);
-  _obj->text = text;
+  _obj->text       = strdup (text);
   _obj->ins_pt.x   = ins_pt->x;
   _obj->ins_pt.y   = ins_pt->y;
   _obj->ins_pt.z   = ins_pt->z;
@@ -23324,10 +23323,10 @@ dwg_add_TOLERANCE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                    const dwg_point_3d *restrict x_direction /* maybe NULL */)
 {
   API_ADD_ENTITY (TOLERANCE);
-  _obj->text_value    = text_value;
-  _obj->ins_pt.x      = ins_pt->x;
-  _obj->ins_pt.y      = ins_pt->y;
-  _obj->ins_pt.z      = ins_pt->z;
+  _obj->text_value = strdup (text_value);
+  _obj->ins_pt.x   = ins_pt->x;
+  _obj->ins_pt.y   = ins_pt->y;
+  _obj->ins_pt.z   = ins_pt->z;
   if (x_direction)
     {
       _obj->x_direction.x = x_direction->x;

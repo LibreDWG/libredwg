@@ -42,6 +42,7 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
   Dwg_Object_Ref *mspace_ref =  dwg_model_space_ref (dwg);
   dwg_point_3d pt1 = {1.5, 2.5, 0.2};
   dwg_point_3d pt2 = {2.5, 1.5, 0.0};
+  Dwg_Object_BLOCK_HEADER *hdr = mspace->tio.object->tio.BLOCK_HEADER;
   const char *name = dwg_type_name (type);
   int n_failed;
 
@@ -53,7 +54,16 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
   switch ((int)type)
     {
     case DWG_TYPE_LINE:
-      dwg_add_LINE (mspace->tio.object->tio.BLOCK_HEADER, &pt1, &pt2);
+      dwg_add_LINE (hdr, &pt1, &pt2);
+      break;
+    case DWG_TYPE_TEXT:
+      dwg_add_TEXT (hdr, (char *const)"testtekst", &pt1, 0.5);
+      break;
+    case DWG_TYPE_CIRCLE:
+      dwg_add_CIRCLE (hdr, &pt1, 0.5);
+      break;
+    case DWG_TYPE_ARC:
+      dwg_add_ARC (hdr, &pt1, 0.5, 0.0, M_PI_2);
       break;
     default:
       fail ("Unknown type %s", name);
@@ -74,20 +84,27 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
     }
   // now we have a different ref!
   mspace_ref =  dwg_model_space_ref (dwg);
+
   // look for a single written entity
+#define TEST_ENTITY(token)                                              \
+  case DWG_TYPE_##token:                                                \
+  {                                                                     \
+    Dwg_Entity_##token **objs = dwg_getall_##token (mspace_ref);        \
+    if (objs && objs[0] && !objs[1])                                    \
+      ok ("found 1 " #token);                                           \
+    else if (!objs)                                                     \
+      fail ("found no " #token " at all");                              \
+    else if (!objs[0])                                                  \
+      fail ("found no " #token);                                        \
+  }                                                                     \
+  break
+
   switch ((int)type)
     {
-    case DWG_TYPE_LINE:
-      {
-        Dwg_Entity_LINE **objs = dwg_getall_LINE (mspace_ref);
-        if (objs && objs[0] && !objs[1])
-          ok ("found 1 LINE");
-        else if (!objs)
-          fail ("found no LINE at all");
-        else if (!objs[0])
-          fail ("found no LINE");
-      }
-      break;
+      TEST_ENTITY (LINE);
+      TEST_ENTITY (TEXT);
+      TEST_ENTITY (CIRCLE);
+      TEST_ENTITY (ARC);
     default:
       fail ("Unknown type %s", name);
     }
@@ -110,6 +127,9 @@ main (int argc, char *argv[])
     loglevel = 0;
 
   error = test_add (DWG_TYPE_LINE, "add_line_2000.dwg");
+  error = test_add (DWG_TYPE_TEXT, "add_text_2000.dwg");
+  error = test_add (DWG_TYPE_CIRCLE, "add_circle_2000.dwg");
+  error = test_add (DWG_TYPE_ARC, "add_arc_2000.dwg");
 
   return error;
 }
