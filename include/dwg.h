@@ -1193,7 +1193,12 @@ typedef struct _dwg_entity_ATTRIB
   BITCODE_RC type;    /* R2018+ */
   BITCODE_T tag;
   BITCODE_BS field_length; /* DXF 73 but unused */
-  BITCODE_RC flags;
+  BITCODE_RC flags; /* bitmask of:
+                       0 none
+                       1 invisible, overridden by ATTDISP
+                       2 constant, no prompt
+                       4 verify on insert
+                       8 preset, inserted only with its default values, not editable. */
   BITCODE_B lock_position_flag;
   BITCODE_H style;
   BITCODE_H mtext_handles; /* R2018+ TODO */
@@ -1228,7 +1233,7 @@ typedef struct _dwg_entity_ATTDEF
   BITCODE_RC type;    /* R2018+ */
   BITCODE_T tag;
   BITCODE_BS field_length;
-  BITCODE_RC flags;
+  BITCODE_RC flags; /* => HEADER.AFLAGS */
   BITCODE_B lock_position_flag;
   BITCODE_H style;
   BITCODE_H mtext_handles; /* R2018+ TODO */

@@ -21918,6 +21918,44 @@ dwg_ref_get_absref (const dwg_object_ref *restrict ref, int *restrict error)
  *                    FUNCTIONS FOR ADDING OBJECTS                  *
  ********************************************************************/
 
+/* internally used only by dwg_add_Attribute only */
+Dwg_Entity_ATTRIB*
+dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert,
+                const double height,
+                const int flags,
+                const dwg_point_3d *restrict ins_pt,
+                const BITCODE_T restrict tag,
+                const BITCODE_T restrict text_value) __nonnull_all;
+/* internally used only by dwg_add_ATTRIB only */
+Dwg_Entity_ATTDEF*
+dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                const double height,
+                const int mode,
+                const BITCODE_T restrict prompt,
+                const dwg_point_3d *restrict ins_pt,
+                const BITCODE_T restrict tag,
+                const BITCODE_T restrict default_value) __nonnull_all;
+
+/* internally used only by dwg_add_POLYLINE* only */
+// fixme: Dwg_Entity_POLYLINE_2D* as 1st owner arg
+Dwg_Entity_VERTEX_2D*
+dwg_add_VERTEX_2D (Dwg_Entity_POLYLINE_2D *restrict pline,
+                   const dwg_point_2d *restrict point) __nonnull_all;
+Dwg_Entity_VERTEX_3D*
+dwg_add_VERTEX_3D (Dwg_Entity_POLYLINE_3D *restrict pline,
+                   const dwg_point_3d *restrict point) __nonnull_all;
+Dwg_Entity_VERTEX_MESH*
+dwg_add_VERTEX_MESH (Dwg_Entity_POLYLINE_MESH *restrict pline,
+                      const dwg_point_3d *restrict point) __nonnull_all;
+Dwg_Entity_VERTEX_PFACE*
+dwg_add_VERTEX_PFACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
+                      const dwg_point_3d *restrict point) __nonnull_all;
+Dwg_Entity_VERTEX_PFACE_FACE*
+dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
+                           const dwg_face vertind) __nonnull_all;
+Dwg_Entity_SEQEND *
+dwg_add_SEQEND (Dwg_Object_BLOCK_HEADER *restrict blkhdr) __nonnull_all;
+
 #define NEW_OBJECT(dwg, obj)                                                  \
   {                                                                           \
     BITCODE_BL idx = dwg->num_objects;                                        \
@@ -21929,6 +21967,24 @@ dwg_ref_get_absref (const dwg_object_ref *restrict ref, int *restrict error)
     obj->tio.object->objid = obj->index;                                      \
     obj->tio.object->dwg = dwg;                                               \
   }
+
+// returns BLOCK_HEADER owner for generic entity from ent->ownerhandle.
+EXPORT Dwg_Object_BLOCK_HEADER*
+dwg_entity_owner (dwg_ent_generic* _ent)
+{
+  int error;
+  Dwg_Object *ent = dwg_ent_generic_to_object (_ent, &error);
+  Dwg_Object_Ref *owner;
+  Dwg_Object *hdr;
+
+  if (error || !ent || ent->supertype != DWG_SUPERTYPE_ENTITY)
+    return NULL;
+  owner = ent->tio.entity->ownerhandle;
+  hdr = dwg_ref_object (ent->parent, owner);
+  if (!hdr || hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
+    return NULL;
+  return hdr->tio.object->tio.BLOCK_HEADER;
+}
 
 /* Should be similar to the public VBA interface */
 
@@ -22110,7 +22166,8 @@ dwg_add_document (const int imperial)
   // VX_CONTROL_OBJECT: (3.1.B) abs:B [H 0]
   dwg_add_VX (dwg, NULL); // TODO only <r2000
   // DICTIONARY_NAMED_OBJECT: (3.1.C) abs:C [H 0]
-  dict = dwg_add_DICTIONARY (dwg, NULL, (const BITCODE_T) "NAMED_OBJECT", NULL);
+  dict
+      = dwg_add_DICTIONARY (dwg, NULL, (const BITCODE_T) "NAMED_OBJECT", NULL);
   dwg_add_DICTIONARY_item (dict, (const BITCODE_T) "ACAD_GROUP",
                            dwg_add_handleref (dwg, 2, 0xD, NULL));
   dwg_add_DICTIONARY_item (dict, (const BITCODE_T) "ACAD_MLINESTYLE",
@@ -22118,8 +22175,9 @@ dwg_add_document (const int imperial)
   dwg->header_vars.DICTIONARY_NAMED_OBJECT
       = dwg_add_handleref (dwg, 5, 0xC, NULL);
   // DICTIONARY_ACAD_GROUP: (5.1.D) abs:D [H 0]
-  dwg_add_DICTIONARY (dwg, (const BITCODE_T)"ACAD_GROUP", NULL, NULL);
-  dwg->header_vars.DICTIONARY_ACAD_GROUP = dwg_add_handleref (dwg, 5, 0xD, NULL);
+  dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_GROUP", NULL, NULL);
+  dwg->header_vars.DICTIONARY_ACAD_GROUP
+      = dwg_add_handleref (dwg, 5, 0xD, NULL);
   // DICTIONARY (5.1.E)
   dwg_add_DICTIONARYWDFLT (dwg, (const BITCODE_T) "ACAD_PLOTSTYLENAME",
                            (const BITCODE_T) "Normal",
@@ -22129,67 +22187,68 @@ dwg_add_document (const int imperial)
   // PLOTSTYLE (2.1.F)
   dwg_add_PLACEHOLDER (dwg); // PLOTSTYLE?
   // LAYER: (0.1.10)
-  layer = dwg_add_LAYER (dwg, (const BITCODE_T)"0");
+  layer = dwg_add_LAYER (dwg, (const BITCODE_T) "0");
   layer->color = (BITCODE_CMC){ 7 };
   layer->ltype = dwg_add_handleref (dwg, 5, 0x16, NULL); // Continuous
   dwg->header_vars.CLAYER = dwg_add_handleref (dwg, 5, 0x10, NULL);
   dwg->layer_control = *dwg->object[1].tio.object->tio.LAYER_CONTROL;
   // STYLE: (0.1.11)
-  style = dwg_add_STYLE (dwg, (const BITCODE_T)"Standard");
+  style = dwg_add_STYLE (dwg, (const BITCODE_T) "Standard");
   style->font_file = strdup ("txt");
   style->last_height = 0.2;
   dwg->style_control = *dwg->object[2].tio.object->tio.STYLE_CONTROL;
   // APPID "ACAD": (0.1.12)
-  dwg_add_APPID (dwg, (const BITCODE_T)"ACAD");
+  dwg_add_APPID (dwg, (const BITCODE_T) "ACAD");
   dwg->appid_control = *dwg->object[7].tio.object->tio.APPID_CONTROL;
   // hole at 13
   dwg_set_next_hdl (dwg, 0x14);
   ltype_ctrl = dwg->object[3].tio.object->tio.LTYPE_CONTROL;
   // LTYPE_BYBLOCK: (5.1.14)
-  ltype = dwg_add_LTYPE (dwg, (const BITCODE_T)"BYBLOCK");
+  ltype = dwg_add_LTYPE (dwg, (const BITCODE_T) "BYBLOCK");
   ltype_ctrl->num_entries--;
   ltype_ctrl->byblock = dwg_add_handleref (dwg, 3, 0x14, NULL);
   dwg->header_vars.LTYPE_BYBLOCK = dwg_add_handleref (dwg, 5, 0x14, NULL);
   // LTYPE_BYLAYER: (5.1.15)
-  dwg_add_LTYPE (dwg, (const BITCODE_T)"BYLAYER");
+  dwg_add_LTYPE (dwg, (const BITCODE_T) "BYLAYER");
   ltype_ctrl->num_entries--;
   ltype_ctrl->bylayer = dwg_add_handleref (dwg, 3, 0x15, NULL);
   dwg->header_vars.LTYPE_BYLAYER = dwg_add_handleref (dwg, 5, 0x15, NULL);
   dwg->header_vars.CELTYPE = dwg_add_handleref (dwg, 5, 0x15, NULL);
   // LTYPE_CONTINUOUS: (5.1.16)
-  ltype = dwg_add_LTYPE (dwg, (const BITCODE_T)"CONTINUOUS");
+  ltype = dwg_add_LTYPE (dwg, (const BITCODE_T) "CONTINUOUS");
   ltype->description = strdup ("Solid line");
   dwg->header_vars.LTYPE_CONTINUOUS = dwg_add_handleref (dwg, 5, 0x16, NULL);
   dwg->ltype_control = *ltype_ctrl;
   // DICTIONARY ACAD_MLINESTYLE: (5.1.17) abs:E [H 0]
-  dwg_add_DICTIONARY (dwg, (const BITCODE_T)"ACAD_MLINESTYLE", NULL, NULL);
-  dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE = dwg_add_handleref (dwg, 5, 0x17, NULL);
+  dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_MLINESTYLE", NULL, NULL);
+  dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE
+      = dwg_add_handleref (dwg, 5, 0x17, NULL);
   dwg_add_PLACEHOLDER (dwg); // MLINESTYLE 0.1.18
   dwg_add_DICTIONARY (dwg, NULL, NULL, NULL);
   // DICTIONARY ACAD_LAYOUT: (5.1.1A)
-  dwg_add_DICTIONARY (dwg, (const BITCODE_T)"ACAD_LAYOUT", NULL, NULL);
+  dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_LAYOUT", NULL, NULL);
 
   // hole until 1F
   dwg_set_next_hdl (dwg, 0x1F);
   // BLOCK_RECORD_MSPACE: (5.1.1F)
-  mspace = dwg_add_BLOCK_HEADER (dwg, (const BITCODE_T)"*MODEL_SPACE");
+  mspace = dwg_add_BLOCK_HEADER (dwg, (const BITCODE_T) "*MODEL_SPACE");
   obj = dwg_obj_generic_to_object ((dwg_obj_generic *)mspace, &error);
   block_control->num_entries--;
-  dwg->header_vars.BLOCK_RECORD_MSPACE = dwg_add_handleref (
-      dwg, 5, obj->handle.value, NULL);
+  dwg->header_vars.BLOCK_RECORD_MSPACE
+      = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
   dwg->header_vars.BLOCK_RECORD_MSPACE->obj = obj;
   block_control->model_space = dwg->header_vars.BLOCK_RECORD_MSPACE;
   // BLOCK_RECORD_PSPACE: (5.1.20)
-  pspace = dwg_add_BLOCK_HEADER (dwg, (const BITCODE_T)"*PAPER_SPACE");
+  pspace = dwg_add_BLOCK_HEADER (dwg, (const BITCODE_T) "*PAPER_SPACE");
   obj = dwg_obj_generic_to_object ((dwg_obj_generic *)pspace, &error);
   block_control->num_entries--;
-  dwg->header_vars.BLOCK_RECORD_PSPACE = dwg_add_handleref (
-      dwg, 5, obj->handle.value, NULL);
+  dwg->header_vars.BLOCK_RECORD_PSPACE
+      = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
   dwg->header_vars.BLOCK_RECORD_PSPACE->obj = obj;
   block_control->paper_space = dwg->header_vars.BLOCK_RECORD_PSPACE;
   dwg->block_control = *block_control;
   // BLOCK: (5.1.21)
-  dwg_add_BLOCK (pspace, (const BITCODE_T)"*PAPER_SPACE");
+  dwg_add_BLOCK (pspace, (const BITCODE_T) "*PAPER_SPACE");
   // ENDBLK: (5.1.22)
   dwg_add_ENDBLK (pspace);
   // BLOCK: (5.1.23)
@@ -22209,7 +22268,8 @@ dwg_add_document (const int imperial)
   return dwg;
 }
 
-// returns -1 on error, 0 on success
+/* Returns -1 on error, 0 on success.
+   Takes ASCII strings only */
 EXPORT int
 dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
                const char *const restrict cppname, const char *const restrict appname,
@@ -22235,6 +22295,7 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
   klass->appname = strdup (appname);
   klass->cppname = strdup (cppname);
   klass->item_class_id = is_entity ? 0x1f2: 0x1f3;
+  dwg->num_classes++;
   return 0;
 }
 
@@ -22466,15 +22527,71 @@ dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
+/* This adds the ATTRIB and ENDBLK to the insert,
+   and the ATTDEF and ENDBLK to the block. */
 EXPORT Dwg_Entity_ATTRIB*
-dwg_add_ATTRIB (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert,
+                   const double height,
+                   const int flags,
+                   const BITCODE_T restrict prompt,
+                   const dwg_point_3d *restrict ins_pt,
+                   const BITCODE_T restrict tag,
+                   const BITCODE_T restrict text_value)
+{
+  Dwg_Object *hdr, *attobj, *insobj;
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr;
+  Dwg_Entity_ENDBLK *endblk;
+  Dwg_Entity_ATTDEF *attdef;
+  Dwg_Entity_ATTRIB *attrib;
+  int err;
+
+  insobj = dwg_obj_generic_to_object ((dwg_obj_generic *)insert, &err);
+  if (!insobj || err)
+    return NULL;
+  hdr = dwg_ref_object (insobj->parent, insert->block_header);
+  if (!hdr)
+    return NULL;
+  blkhdr = hdr->tio.object->tio.BLOCK_HEADER;
+
+  // TODO check if this ATTDEF already exists.
+  attdef = dwg_add_ATTDEF (blkhdr, height, flags, prompt,
+                           ins_pt, tag, text_value);
+  // ENDBLK must exist already though
+  attrib = dwg_add_ATTRIB (insert, height, flags, ins_pt, tag, text_value);
+  attobj = dwg_obj_generic_to_object ((dwg_obj_generic *)attrib, &err);
+  if (!attobj || err)
+    return NULL;
+  //dwg->header_vars.AFLAGS = flags; FIXME
+  insert->last_attrib = dwg_add_handleref (attobj->parent, 4, attobj->handle.value, insobj);
+  if (!insert->has_attribs) // no ATTRIB and SEQEND yet
+    {
+      API_ADD_ENTITY (SEQEND);
+      insert->has_attribs = 1;
+      insert->first_attrib = dwg_add_handleref (dwg, 4, attobj->handle.value, insobj);
+      insert->last_attrib = insert->first_attrib;
+      insert->seqend = dwg_add_handleref (dwg, 3, obj->handle.value, insobj);
+    }
+  else
+    {
+      Dwg_Data *dwg = insobj->parent;
+      Dwg_Object *lastobj = dwg_ref_object (dwg, insert->last_attrib);
+      lastobj->tio.entity->next_entity = dwg_add_handleref (dwg, 3, attobj->handle.value, insobj);
+      insert->last_attrib = dwg_add_handleref (dwg, 4, attobj->handle.value, insobj);
+    }
+  return attrib;
+}
+
+/* internally used only by dwg_add_Attribute only */
+Dwg_Entity_ATTRIB*
+dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert,
                 const double height,
-                const int mode,
-                //const BITCODE_T restrict prompt,
+                const int flags,
                 const dwg_point_3d *restrict ins_pt,
                 const BITCODE_T restrict tag,
                 const BITCODE_T restrict text_value)
 {
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)insert);
+  // TODO check blkhdr != mspace/pspace
   API_ADD_ENTITY (ATTRIB);
   _obj->tag        = strdup (tag);
   _obj->text_value = strdup (text_value);
@@ -22482,26 +22599,23 @@ dwg_add_ATTRIB (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->ins_pt.y   = ins_pt->y;
   _obj->elevation  = ins_pt->z;
   _obj->height     = height;
-  // mode => AFLAGS ...
-  //_def = API_ADD_ENTITY (ATTDEF);
-  //_def->prompt     = prompt;
-  // relink into ENDBLK chain
   // block handles
   if (dwg->header_vars.TEXTSTYLE)
     _obj->style = dwg_dup_handleref (dwg, dwg->header_vars.TEXTSTYLE);
   return _obj;
 }
 
-/* done via ATTRIB? */
-EXPORT Dwg_Entity_ATTDEF*
+/* internally used only by dwg_add_Attribute only */
+Dwg_Entity_ATTDEF*
 dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const double height,
-                const int mode,
+                const int flags,
                 const BITCODE_T restrict prompt,
                 const dwg_point_3d *restrict ins_pt,
                 const BITCODE_T restrict tag,
                 const BITCODE_T restrict default_value)
 {
+  // TODO check blkhdr != mspace/pspace or ignore (no error)
   API_ADD_ENTITY (ATTDEF);
   _obj->prompt     = strdup (prompt);
   _obj->tag        = strdup (tag);
@@ -22510,7 +22624,6 @@ dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->ins_pt.y   = ins_pt->y;
   _obj->elevation  = ins_pt->z;
   _obj->height     = height;
-  // mode => AFLAGS ...
   // block handles
   if (dwg->header_vars.TEXTSTYLE)
     _obj->style = dwg_dup_handleref (dwg, dwg->header_vars.TEXTSTYLE);
@@ -22533,7 +22646,7 @@ dwg_add_ENDBLK (Dwg_Object_BLOCK_HEADER *restrict blkhdr)
   return _obj;
 }
 
-EXPORT Dwg_Entity_SEQEND*
+Dwg_Entity_SEQEND*
 dwg_add_SEQEND (Dwg_Object_BLOCK_HEADER *restrict blkhdr)
 {
   API_ADD_ENTITY (SEQEND);
@@ -22595,10 +22708,11 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 }
 
 // TODO blkhdr => pline owner
-EXPORT Dwg_Entity_VERTEX_2D*
-dwg_add_VERTEX_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+Dwg_Entity_VERTEX_2D*
+dwg_add_VERTEX_2D (Dwg_Entity_POLYLINE_2D *restrict pline,
                    const dwg_point_2d *restrict point)
 {
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)pline);
   API_ADD_ENTITY (VERTEX_2D);
   _obj->point.x = point->x;
   _obj->point.y = point->y;
@@ -22606,51 +22720,16 @@ dwg_add_VERTEX_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_VERTEX_3D*
-dwg_add_VERTEX_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+Dwg_Entity_VERTEX_3D*
+dwg_add_VERTEX_3D (Dwg_Entity_POLYLINE_3D *restrict pline,
                    const dwg_point_3d *restrict point)
 {
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)pline);
   API_ADD_ENTITY (VERTEX_3D);
   _obj->point.x = point->x;
   _obj->point.y = point->y;
   _obj->point.z = point->z;
   _obj->flag = 0x20;
-  return _obj;
-}
-
-EXPORT Dwg_Entity_VERTEX_MESH*
-dwg_add_VERTEX_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                      const dwg_point_3d *restrict point)
-{
-  API_ADD_ENTITY (VERTEX_MESH);
-  _obj->point.x = point->x;
-  _obj->point.y = point->y;
-  _obj->point.z = point->z;
-  _obj->flag = 0x40;
-  return _obj;
-}
-
-EXPORT Dwg_Entity_VERTEX_PFACE*
-dwg_add_VERTEX_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                      const dwg_point_3d *restrict point)
-{
-  API_ADD_ENTITY (VERTEX_PFACE);
-  _obj->point.x = point->x;
-  _obj->point.y = point->y;
-  _obj->point.z = point->z;
-  _obj->flag = 0xc0;
-  return _obj;
-}
-
-EXPORT Dwg_Entity_VERTEX_PFACE_FACE*
-dwg_add_VERTEX_PFACE_FACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                           const dwg_face vertind)
-{
-  API_ADD_ENTITY (VERTEX_PFACE_FACE);
-  _obj->vertind[0] = vertind[0];
-  _obj->vertind[1] = vertind[1];
-  _obj->vertind[2] = vertind[2];
-  _obj->vertind[3] = vertind[3];
   return _obj;
 }
 
@@ -22669,7 +22748,7 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _pl = _obj;
   for (int i = 0; i < num_pts; i++)
     {
-      _vtx = dwg_add_VERTEX_2D (blkhdr, pts[i]);
+      _vtx = dwg_add_VERTEX_2D (_pl, pts[i]);
       obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
       if (i == 0)
         _pl->first_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
@@ -22697,7 +22776,7 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _pl = _obj;
   for (int i = 0; i < num_pts; i++)
     {
-      _vtx = dwg_add_VERTEX_3D (blkhdr, pts[i]);
+      _vtx = dwg_add_VERTEX_3D (_pl, pts[i]);
       obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
       if (i == 0)
         _pl->first_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
@@ -22960,6 +23039,32 @@ dwg_add_3DFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
+Dwg_Entity_VERTEX_PFACE*
+dwg_add_VERTEX_PFACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
+                      const dwg_point_3d *restrict point)
+{
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)pline);
+  API_ADD_ENTITY (VERTEX_PFACE);
+  _obj->point.x = point->x;
+  _obj->point.y = point->y;
+  _obj->point.z = point->z;
+  _obj->flag = 0xc0;
+  return _obj;
+}
+
+Dwg_Entity_VERTEX_PFACE_FACE*
+dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
+                           const dwg_face vertind)
+{
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)pline);
+  API_ADD_ENTITY (VERTEX_PFACE_FACE);
+  _obj->vertind[0] = vertind[0];
+  _obj->vertind[1] = vertind[1];
+  _obj->vertind[2] = vertind[2];
+  _obj->vertind[3] = vertind[3];
+  return _obj;
+}
+
 // Polyface Mesh
 EXPORT Dwg_Entity_POLYLINE_PFACE*
 dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
@@ -22979,14 +23084,14 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _pl = _obj;
   for (unsigned i = 0; i < numverts; i++)
     {
-      _vtx = dwg_add_VERTEX_PFACE (blkhdr, verts[i]);
+      _vtx = dwg_add_VERTEX_PFACE (_pl, verts[i]);
       obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
       if (i == 0)
         _pl->first_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
     }
   for (unsigned i = 0; i < numfaces; i++)
     {
-      _vtxf = dwg_add_VERTEX_PFACE_FACE (blkhdr, faces[i]);
+      _vtxf = dwg_add_VERTEX_PFACE_FACE (_pl, faces[i]);
       obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtxf, &error);
       if (i == numfaces - 1)
         _pl->last_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
@@ -22995,6 +23100,19 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_seq, &error);
   _pl->seqend  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
   return _pl;
+}
+
+Dwg_Entity_VERTEX_MESH*
+dwg_add_VERTEX_MESH (Dwg_Entity_POLYLINE_MESH *restrict pline,
+                     const dwg_point_3d *restrict point)
+{
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)pline);
+  API_ADD_ENTITY (VERTEX_MESH);
+  _obj->point.x = point->x;
+  _obj->point.y = point->y;
+  _obj->point.z = point->z;
+  _obj->flag = 0x40;
+  return _obj;
 }
 
 EXPORT Dwg_Entity_POLYLINE_MESH*
@@ -23011,10 +23129,15 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (POLYLINE_MESH);
   pl = obj;
   _pl = _obj;
+  _pl->num_m_verts = num_m_verts;
+  _pl->num_n_verts = num_n_verts;
   _pl->num_owned = num_m_verts * num_n_verts;
+  _pl->flag = 16;
+  if (_pl->num_owned)
+    _pl->has_vertex = 1;
   for (unsigned i = 0; i < _pl->num_owned; i++)
     {
-      _vtx = dwg_add_VERTEX_MESH (blkhdr, verts[i]);
+      _vtx = dwg_add_VERTEX_MESH (_pl, verts[i]);
       obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
       if (i == 0)
         _pl->first_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);

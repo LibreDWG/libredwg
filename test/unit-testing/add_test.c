@@ -23,6 +23,7 @@
 #include <sys/stat.h>
 
 static unsigned int loglevel;
+static unsigned int debug;
 #define DWG_LOGLEVEL loglevel
 #include "../../src/config.h"
 //#include "../../src/common.h"
@@ -57,13 +58,26 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       dwg_add_LINE (hdr, &pt1, &pt2);
       break;
     case DWG_TYPE_TEXT:
-      dwg_add_TEXT (hdr, (char *const)"testtekst", &pt1, 0.5);
+      dwg_add_TEXT (hdr, (const BITCODE_T) "testtekst", &pt1, 0.5);
       break;
     case DWG_TYPE_CIRCLE:
       dwg_add_CIRCLE (hdr, &pt1, 0.5);
       break;
     case DWG_TYPE_ARC:
       dwg_add_ARC (hdr, &pt1, 0.5, 0.0, M_PI_2);
+      break;
+    case DWG_TYPE_ATTRIB:
+      {
+        Dwg_Entity_INSERT *insert;
+        dwg_add_BLOCK (hdr, (const BITCODE_T) "block");
+        dwg_add_LINE (hdr, &pt1, &pt2);
+        dwg_add_ENDBLK (hdr);
+        insert = dwg_add_INSERT (hdr, &pt1, (const BITCODE_T) "block", 1.0, 1.0, 1.0, 0.0);
+        // adds ATTDEF to BLOCK, redefines it (??)
+        dwg_add_Attribute (insert, 1.0, 0, (const BITCODE_T) "prompt", &pt1,
+                           (const BITCODE_T) "tag",
+                           (const BITCODE_T) "testtekst");
+      }
       break;
     default:
       fail ("Unknown type %s", name);
@@ -105,13 +119,14 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       TEST_ENTITY (TEXT);
       TEST_ENTITY (CIRCLE);
       TEST_ENTITY (ARC);
+      TEST_ENTITY (ATTRIB);
     default:
       fail ("Unknown type %s", name);
     }
   
   ok ("read %s", name);
   n_failed = numfailed();
-  if (!n_failed)
+  if (!n_failed && !debug)
     unlink (dwgfile);
   return n_failed;
 }
@@ -121,15 +136,21 @@ main (int argc, char *argv[])
 {
   int error;
   char *trace = getenv ("LIBREDWG_TRACE");
+  char *debugenv = getenv ("LIBREDWG_DEBUG");
   if (trace)
     loglevel = atoi (trace);
   else
     loglevel = 0;
+  if (debugenv)
+    debug = atoi (debugenv);
+  else
+    debug = 0;
 
   error = test_add (DWG_TYPE_LINE, "add_line_2000.dwg");
   error = test_add (DWG_TYPE_TEXT, "add_text_2000.dwg");
   error = test_add (DWG_TYPE_CIRCLE, "add_circle_2000.dwg");
   error = test_add (DWG_TYPE_ARC, "add_arc_2000.dwg");
+  error = test_add (DWG_TYPE_ATTRIB, "add_attrib_2000.dwg");
 
   return error;
 }

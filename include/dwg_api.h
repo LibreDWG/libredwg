@@ -6140,7 +6140,7 @@ EXPORT dwg_class *dwg_get_class (const dwg_data *dwg, unsigned int index);
 EXPORT Dwg_Data* dwg_add_document (const int imperial);
 
 /* no proxy, no is_zombie */
-// returns -1 on error, 0 on success
+/* returns -1 on error, 0 on success */
 EXPORT int
 dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
                const char *const restrict cppname, const char *const restrict appname,
@@ -6151,6 +6151,9 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
 /* insert entity into mspace, pspace or other block */
 EXPORT int dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                               Dwg_Object *restrict obj) __nonnull_all;
+/* returns BLOCK_HEADER owner for generic entity from ent->ownerhandle */
+Dwg_Object_BLOCK_HEADER *
+dwg_entity_owner (dwg_ent_generic *_ent) __nonnull_all;
 
 /* Set defaults from HEADER: CLAYER, linewt, ltype_scale, color, ... */
 EXPORT int
@@ -6162,29 +6165,30 @@ dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const BITCODE_T restrict text_value,
               const dwg_point_3d *restrict ins_pt,
               const double height) __nonnull_all;
+
+/* This adds the ATTRIB and ENDBLK to the insert,
+   and the ATTDEF and ENDBLK to the block, if missing.
+   flags, bitmask of:
+   0 none
+   1 invisible, overridden by ATTDISP
+   2 constant, no prompt
+   4 verify on insert
+   8 preset, inserted only with its default values, not editable.
+*/
 EXPORT Dwg_Entity_ATTRIB*
-dwg_add_ATTRIB (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                const double height,
-                const int mode,
-                //const BITCODE_T restrict prompt,
-                const dwg_point_3d *restrict ins_pt,
-                const BITCODE_T restrict tag,
-                const BITCODE_T restrict text_value) __nonnull_all;
-EXPORT Dwg_Entity_ATTDEF*
-dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                const double height,
-                const int mode,
-                const BITCODE_T restrict prompt,
-                const dwg_point_3d *restrict ins_pt,
-                const BITCODE_T restrict tag,
-                const BITCODE_T restrict default_value) __nonnull_all;
+dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert,
+                   const double height,
+                   const int flags,
+                   const BITCODE_T restrict prompt,
+                   const dwg_point_3d *restrict ins_pt,
+                   const BITCODE_T restrict tag,
+                   const BITCODE_T restrict text_value)  __nonnull_all;
 EXPORT Dwg_Entity_BLOCK*
 dwg_add_BLOCK (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const BITCODE_T restrict name) __nonnull_all;
 EXPORT Dwg_Entity_ENDBLK*
 dwg_add_ENDBLK (Dwg_Object_BLOCK_HEADER *restrict blkhdr) __nonnull_all;
-EXPORT Dwg_Entity_SEQEND*
-dwg_add_SEQEND (Dwg_Object_BLOCK_HEADER *restrict blkhdr) __nonnull_all;
+
 EXPORT Dwg_Entity_INSERT*
 dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const dwg_point_3d *restrict ins_pt,
@@ -6205,22 +6209,6 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                  const int num_cols,
                  const double row_spacing,
                  const double col_spacing) __nonnull_all;
-// fixme: Dwg_Entity_POLYLINE_2D* as 1st owner arg
-EXPORT Dwg_Entity_VERTEX_2D*
-dwg_add_VERTEX_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                   const dwg_point_2d *restrict point) __nonnull_all;
-EXPORT Dwg_Entity_VERTEX_3D*
-dwg_add_VERTEX_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                   const dwg_point_3d *restrict point) __nonnull_all;
-EXPORT Dwg_Entity_VERTEX_MESH*
-dwg_add_VERTEX_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                      const dwg_point_3d *restrict point) __nonnull_all;
-EXPORT Dwg_Entity_VERTEX_PFACE*
-dwg_add_VERTEX_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                      const dwg_point_3d *restrict point) __nonnull_all;
-EXPORT Dwg_Entity_VERTEX_PFACE_FACE*
-dwg_add_VERTEX_PFACE_FACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                           const dwg_face vertind) __nonnull_all;
 EXPORT Dwg_Entity_POLYLINE_2D*
 dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                     const int num_pts,
