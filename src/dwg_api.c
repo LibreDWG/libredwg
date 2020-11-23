@@ -22018,7 +22018,7 @@ dwg_add_document (const int imperial)
   dwg->header_vars.FACETRES = 0.5;
   dwg->header_vars.CMLSCALE = 1.0;
   dwg->header_vars.CELTSCALE = 1.0;
-  dwg->header_vars.MENU = strdup("acad");
+  dwg->header_vars.MENU = strdup ("acad");
   // TODO TDCREATE
   // CECOLOR.index: 256 [CMC.BS 62]
   dwg->header_vars.CECOLOR = (BITCODE_CMC){ 256, 0 };
@@ -22110,63 +22110,69 @@ dwg_add_document (const int imperial)
   // VX_CONTROL_OBJECT: (3.1.B) abs:B [H 0]
   dwg_add_VX (dwg, NULL); // TODO only <r2000
   // DICTIONARY_NAMED_OBJECT: (3.1.C) abs:C [H 0]
-  dict = dwg_add_DICTIONARY (dwg, "NAMED_OBJECT", NULL);
-  dwg_add_DICTIONARY_item (dict, "ACAD_GROUP", dwg_add_handleref (dwg, 2, 0xD, NULL));
-  dwg_add_DICTIONARY_item (dict, "ACAD_MLINESTYLE", dwg_add_handleref (dwg, 2, 0x17, NULL));
-  dwg->header_vars.DICTIONARY_NAMED_OBJECT = dwg_add_handleref (dwg, 5, 0xC, NULL);
+  dict = dwg_add_DICTIONARY (dwg, NULL, (const BITCODE_T) "NAMED_OBJECT", NULL);
+  dwg_add_DICTIONARY_item (dict, (const BITCODE_T) "ACAD_GROUP",
+                           dwg_add_handleref (dwg, 2, 0xD, NULL));
+  dwg_add_DICTIONARY_item (dict, (const BITCODE_T) "ACAD_MLINESTYLE",
+                           dwg_add_handleref (dwg, 2, 0x17, NULL));
+  dwg->header_vars.DICTIONARY_NAMED_OBJECT
+      = dwg_add_handleref (dwg, 5, 0xC, NULL);
   // DICTIONARY_ACAD_GROUP: (5.1.D) abs:D [H 0]
-  dwg_add_DICTIONARY (dwg, "ACAD_GROUP", NULL);
+  dwg_add_DICTIONARY (dwg, (const BITCODE_T)"ACAD_GROUP", NULL, NULL);
   dwg->header_vars.DICTIONARY_ACAD_GROUP = dwg_add_handleref (dwg, 5, 0xD, NULL);
   // DICTIONARY (5.1.E)
-  dwg_add_DICTIONARYWDFLT (dwg, "Normal", dwg_add_handleref (dwg, 2, 0xF, NULL));
-  dwg->header_vars.DICTIONARY_PLOTSTYLENAME = dwg_add_handleref (dwg, 5, 0xE, NULL);
+  dwg_add_DICTIONARYWDFLT (dwg, (const BITCODE_T) "ACAD_PLOTSTYLENAME",
+                           (const BITCODE_T) "Normal",
+                           dwg_add_handleref (dwg, 2, 0xF, NULL));
+  dwg->header_vars.DICTIONARY_PLOTSTYLENAME
+      = dwg_add_handleref (dwg, 5, 0xE, NULL);
   // PLOTSTYLE (2.1.F)
-  dwg_add_PLACEHOLDER (dwg); // PLOTSTYLE
+  dwg_add_PLACEHOLDER (dwg); // PLOTSTYLE?
   // LAYER: (0.1.10)
-  layer = dwg_add_LAYER (dwg, "0");
+  layer = dwg_add_LAYER (dwg, (const BITCODE_T)"0");
   layer->color = (BITCODE_CMC){ 7 };
   layer->ltype = dwg_add_handleref (dwg, 5, 0x16, NULL); // Continuous
   dwg->header_vars.CLAYER = dwg_add_handleref (dwg, 5, 0x10, NULL);
   dwg->layer_control = *dwg->object[1].tio.object->tio.LAYER_CONTROL;
   // STYLE: (0.1.11)
-  style = dwg_add_STYLE (dwg, "Standard");
+  style = dwg_add_STYLE (dwg, (const BITCODE_T)"Standard");
   style->font_file = strdup ("txt");
   style->last_height = 0.2;
   dwg->style_control = *dwg->object[2].tio.object->tio.STYLE_CONTROL;
   // APPID "ACAD": (0.1.12)
-  dwg_add_APPID (dwg, "ACAD");
+  dwg_add_APPID (dwg, (const BITCODE_T)"ACAD");
   dwg->appid_control = *dwg->object[7].tio.object->tio.APPID_CONTROL;
   // hole at 13
   dwg_set_next_hdl (dwg, 0x14);
   ltype_ctrl = dwg->object[3].tio.object->tio.LTYPE_CONTROL;
   // LTYPE_BYBLOCK: (5.1.14)
-  ltype = dwg_add_LTYPE (dwg, "BYBLOCK");
+  ltype = dwg_add_LTYPE (dwg, (const BITCODE_T)"BYBLOCK");
   ltype_ctrl->num_entries--;
   ltype_ctrl->byblock = dwg_add_handleref (dwg, 3, 0x14, NULL);
   dwg->header_vars.LTYPE_BYBLOCK = dwg_add_handleref (dwg, 5, 0x14, NULL);
   // LTYPE_BYLAYER: (5.1.15)
-  dwg_add_LTYPE (dwg, "BYLAYER");
+  dwg_add_LTYPE (dwg, (const BITCODE_T)"BYLAYER");
   ltype_ctrl->num_entries--;
   ltype_ctrl->bylayer = dwg_add_handleref (dwg, 3, 0x15, NULL);
   dwg->header_vars.LTYPE_BYLAYER = dwg_add_handleref (dwg, 5, 0x15, NULL);
   dwg->header_vars.CELTYPE = dwg_add_handleref (dwg, 5, 0x15, NULL);
   // LTYPE_CONTINUOUS: (5.1.16)
-  ltype = dwg_add_LTYPE (dwg, "CONTINUOUS");
+  ltype = dwg_add_LTYPE (dwg, (const BITCODE_T)"CONTINUOUS");
   ltype->description = strdup ("Solid line");
   dwg->header_vars.LTYPE_CONTINUOUS = dwg_add_handleref (dwg, 5, 0x16, NULL);
   dwg->ltype_control = *ltype_ctrl;
   // DICTIONARY ACAD_MLINESTYLE: (5.1.17) abs:E [H 0]
-  dwg_add_DICTIONARY (dwg, "ACAD_MLINESTYLE", NULL);
+  dwg_add_DICTIONARY (dwg, (const BITCODE_T)"ACAD_MLINESTYLE", NULL, NULL);
   dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE = dwg_add_handleref (dwg, 5, 0x17, NULL);
   dwg_add_PLACEHOLDER (dwg); // MLINESTYLE 0.1.18
-  dwg_add_DICTIONARY (dwg, NULL, NULL);
+  dwg_add_DICTIONARY (dwg, NULL, NULL, NULL);
   // DICTIONARY ACAD_LAYOUT: (5.1.1A)
-  dwg_add_DICTIONARY (dwg, "ACAD_LAYOUT", NULL);
+  dwg_add_DICTIONARY (dwg, (const BITCODE_T)"ACAD_LAYOUT", NULL, NULL);
 
   // hole until 1F
   dwg_set_next_hdl (dwg, 0x1F);
   // BLOCK_RECORD_MSPACE: (5.1.1F)
-  mspace = dwg_add_BLOCK_HEADER (dwg, "*MODEL_SPACE");
+  mspace = dwg_add_BLOCK_HEADER (dwg, (const BITCODE_T)"*MODEL_SPACE");
   obj = dwg_obj_generic_to_object ((dwg_obj_generic *)mspace, &error);
   block_control->num_entries--;
   dwg->header_vars.BLOCK_RECORD_MSPACE = dwg_add_handleref (
@@ -22174,7 +22180,7 @@ dwg_add_document (const int imperial)
   dwg->header_vars.BLOCK_RECORD_MSPACE->obj = obj;
   block_control->model_space = dwg->header_vars.BLOCK_RECORD_MSPACE;
   // BLOCK_RECORD_PSPACE: (5.1.20)
-  pspace = dwg_add_BLOCK_HEADER (dwg, "*PAPER_SPACE");
+  pspace = dwg_add_BLOCK_HEADER (dwg, (const BITCODE_T)"*PAPER_SPACE");
   obj = dwg_obj_generic_to_object ((dwg_obj_generic *)pspace, &error);
   block_control->num_entries--;
   dwg->header_vars.BLOCK_RECORD_PSPACE = dwg_add_handleref (
@@ -22183,11 +22189,11 @@ dwg_add_document (const int imperial)
   block_control->paper_space = dwg->header_vars.BLOCK_RECORD_PSPACE;
   dwg->block_control = *block_control;
   // BLOCK: (5.1.21)
-  dwg_add_BLOCK (pspace, "*PAPER_SPACE");
+  dwg_add_BLOCK (pspace, (const BITCODE_T)"*PAPER_SPACE");
   // ENDBLK: (5.1.22)
   dwg_add_ENDBLK (pspace);
   // BLOCK: (5.1.23)
-  dwg_add_BLOCK (mspace, "*MODEL_SPACE");
+  dwg_add_BLOCK (mspace, (const BITCODE_T)"*MODEL_SPACE");
   // ENDBLK: (5.1.24)
   dwg_add_ENDBLK (mspace);
 
@@ -22445,7 +22451,7 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict hdr,
 
 EXPORT Dwg_Entity_TEXT*
 dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-              const BITCODE_T text_value,
+              const BITCODE_T restrict text_value,
               const dwg_point_3d *restrict ins_pt,
               const double height)
 {
@@ -23083,7 +23089,8 @@ dwg_add_SHAPE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 }
 
 EXPORT Dwg_Entity_VIEWPORT*
-dwg_add_VIEWPORT (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
+dwg_add_VIEWPORT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                  const BITCODE_T restrict name)
 {
   API_ADD_ENTITY (VIEWPORT);
   // ...
@@ -23221,11 +23228,14 @@ dwg_add_XLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
+// TODO name, to be added to NOD
 EXPORT Dwg_Object_DICTIONARY*
 dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
-                    const BITCODE_T restrict text /*maybe NULL */,
+                    const BITCODE_T restrict name, /* the NOD entry */
+                    const BITCODE_T restrict text /* maybe NULL */,
                     const BITCODE_H restrict itemhandle)
 {
+  Dwg_Object* nod;
   API_ADD_OBJECT (DICTIONARY);
   if (itemhandle)
     {
@@ -23234,6 +23244,14 @@ dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
       _obj->itemhandles = (BITCODE_H*)calloc (1, sizeof (BITCODE_H));
       _obj->texts[0] = strdup (text);
       _obj->itemhandles[0] = itemhandle;
+    }
+  if (name)
+    {
+      nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
+      if (nod)
+        dwg_add_DICTIONARY_item (
+            nod->tio.object->tio.DICTIONARY, name,
+            dwg_add_handleref (dwg, 2, obj->handle.value, obj));
     }
   return _obj;
 }
@@ -23250,6 +23268,7 @@ dwg_add_DICTIONARY_item (Dwg_Object_DICTIONARY* _obj,
     }
   else
     {
+      // TODO check if text already exists, and if so just replace handle.
       _obj->texts = (BITCODE_T *)realloc (
           _obj->texts, (_obj->numitems + 1) * sizeof (BITCODE_T));
       _obj->itemhandles = (BITCODE_H *)realloc (
@@ -23264,7 +23283,8 @@ dwg_add_DICTIONARY_item (Dwg_Object_DICTIONARY* _obj,
 //dwg_add_DICTIONARYWDFLT (dwg, "Normal", 0xF);
 EXPORT Dwg_Object_DICTIONARYWDFLT*
 dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
-                         const BITCODE_T restrict text /*maybe NULL */,
+                         const BITCODE_T restrict name, /* the NOD entry */
+                         const BITCODE_T restrict text, /* maybe NULL */
                          const BITCODE_H restrict itemhandle)
 {
   API_ADD_OBJECT (DICTIONARYWDFLT);
@@ -23280,10 +23300,22 @@ dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
   return _obj;
 }
 
-EXPORT Dwg_Entity_OLEFRAME*
-dwg_add_OLEFRAME (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
+EXPORT Dwg_Entity_OLE2FRAME*
+dwg_add_OLE2FRAME (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                   const dwg_point_3d *restrict pt1,
+                   const dwg_point_3d *restrict pt2)
 {
-  API_ADD_ENTITY (OLEFRAME);
+  //const Dwg_Object_Ref *pspace =  dwg_paper_space_ref (dwg);
+  API_ADD_ENTITY (OLE2FRAME);
+  _obj->pt1.x   = pt1->x;
+  _obj->pt1.y   = pt1->y;
+  _obj->pt1.z   = pt1->z;
+  _obj->pt2.x   = pt2->x;
+  _obj->pt2.y   = pt2->y;
+  _obj->pt2.z   = pt2->z;
+  _obj->oleversion = 2;
+  if (strEQ (blkhdr->name, "*PAPER_SPACE"))
+    _obj->mode = 1;
   return _obj;
 }
 
@@ -23310,9 +23342,33 @@ dwg_add_MTEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 }
 
 EXPORT Dwg_Entity_LEADER*
-dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
+dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                const unsigned num_points,
+                const dwg_point_3d **restrict points,
+                const Dwg_Object *associated_annotation, /* maybe NULL */
+                const unsigned type)
 {
   API_ADD_ENTITY (LEADER);
+  _obj->points = calloc (num_points, sizeof (BITCODE_3BD));
+  _obj->num_points = num_points;
+  for (unsigned i = 0; i < num_points; i++)
+    {
+      _obj->points[i].x = points[i]->x;
+      _obj->points[i].y = points[i]->y;
+      _obj->points[i].z = points[i]->z;
+    }
+  // TODO type => path_type + annot_type + arrowhead_on
+  if (associated_annotation) // TODO check valid types
+    _obj->associated_annotation =
+            dwg_add_handleref (dwg, 2, associated_annotation->handle.value, obj);
+  // defaults:
+  _obj->x_direction.x = 1.0;
+  _obj->extrusion.z = 1.0;
+  if (dwg->header_vars.DIMSTYLE)
+    _obj->dimstyle = dwg_dup_handleref (dwg, dwg->header_vars.DIMSTYLE);
+  _obj->dimgap = dwg->header_vars.DIMGAP;
+  _obj->box_height = dwg->header_vars.DIMTXT;
+  // TODO more calcs ...
   return _obj;
 }
 
@@ -23344,9 +23400,22 @@ dwg_add_TOLERANCE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 }
 
 EXPORT Dwg_Entity_MLINE*
-dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
+dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+               const unsigned num_verts,
+               const dwg_point_3d **restrict verts)
 {
   API_ADD_ENTITY (MLINE);
+  _obj->verts = calloc (num_verts, sizeof (Dwg_MLINE_vertex));
+  _obj->num_verts = num_verts;
+  for (unsigned i = 0; i < num_verts; i++)
+    {
+      _obj->verts[i].vertex.x = verts[i]->x;
+      _obj->verts[i].vertex.y = verts[i]->y;
+      _obj->verts[i].vertex.z = verts[i]->z;
+    }
+  _obj->extrusion.z = 1.0;
+  //via nod -> name
+  //_obj->mlinestyle = dwg_dup_handleref (dwg, );
   return _obj;
 }
 
@@ -23423,49 +23492,49 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
     return NULL
 
 EXPORT Dwg_Object_BLOCK_HEADER *
-dwg_add_BLOCK_HEADER (Dwg_Data *restrict dwg, const char* restrict name)
+dwg_add_BLOCK_HEADER (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
 {
   API_ADD_TABLE (BLOCK_HEADER, BLOCK_CONTROL);
 }
 
 EXPORT Dwg_Object_LAYER *
-dwg_add_LAYER (Dwg_Data *restrict dwg, const char* restrict name)
+dwg_add_LAYER (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
 {
   API_ADD_TABLE (LAYER, LAYER_CONTROL);
 }
 
 EXPORT Dwg_Object_STYLE *
-dwg_add_STYLE (Dwg_Data *restrict dwg, const char* restrict name)
+dwg_add_STYLE (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
 {
   API_ADD_TABLE (STYLE, STYLE_CONTROL, { _obj->width_factor = 1.0; });
 }
 
 EXPORT Dwg_Object_LTYPE *
-dwg_add_LTYPE (Dwg_Data *restrict dwg, const char *restrict name)
+dwg_add_LTYPE (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
 {
   API_ADD_TABLE (LTYPE, LTYPE_CONTROL, { _obj->alignment = 0x41; });
 }
 
 EXPORT Dwg_Object_VIEW *
-dwg_add_VIEW (Dwg_Data *restrict dwg, const char* restrict name)
+dwg_add_VIEW (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
 {
   API_ADD_TABLE (VIEW, VIEW_CONTROL);
 }
 
 EXPORT Dwg_Object_VPORT *
-dwg_add_VPORT (Dwg_Data *restrict dwg, const char* restrict name)
+dwg_add_VPORT (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
 {
   API_ADD_TABLE (VPORT, VPORT_CONTROL);
 }
 
 EXPORT Dwg_Object_APPID *
-dwg_add_APPID (Dwg_Data *restrict dwg, const char* restrict name)
+dwg_add_APPID (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
 {
   API_ADD_TABLE (APPID, APPID_CONTROL);
 }
 
 EXPORT Dwg_Object_DIMSTYLE *
-dwg_add_DIMSTYLE (Dwg_Data *restrict dwg, const char* restrict name)
+dwg_add_DIMSTYLE (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
 {
   API_ADD_TABLE (DIMSTYLE, DIMSTYLE_CONTROL);
 }
@@ -23475,7 +23544,7 @@ dwg_add_UCS (Dwg_Data *restrict dwg,
              const dwg_point_3d *restrict origin,
              const dwg_point_3d *restrict x_axis,
              const dwg_point_3d *restrict y_axis,
-             const char* restrict name)
+             const BITCODE_T restrict name)
 {
   API_ADD_TABLE (UCS, UCS_CONTROL,
                  { _obj->ucsorg.x = origin->x;
@@ -23492,6 +23561,7 @@ dwg_add_UCS (Dwg_Data *restrict dwg,
 
 // VX_CONTROL
 // VX_TABLE_RECORD
+// only until r14
 EXPORT Dwg_Object_VX_TABLE_RECORD *
 dwg_add_VX (Dwg_Data *restrict dwg, const char* restrict name)
 {
@@ -23515,7 +23585,7 @@ dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
 EXPORT Dwg_Entity_HATCH *
 dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-               const int pattern_type, const BITCODE_TV restrict name,
+               const int pattern_type, const BITCODE_T restrict name,
                const bool is_associative, const unsigned num_paths,
                // Line, Polyline, Circle, Ellipse, Spline or Region
                const Dwg_Object *pathobjs)
@@ -23526,11 +23596,11 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       || strEQc (name, "CYLINDER"))
     {
       _obj->is_gradient_fill = 1;
-      _obj->gradient_name = name;
+      _obj->gradient_name = strdup (name);
     }
   else
     {
-      _obj->name = name;
+      _obj->name = strdup (name);
       // predefined (acad.pat), user-defined (ltype), custom (some.pat file)
       _obj->pattern_type = pattern_type;
     }
