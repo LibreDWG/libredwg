@@ -20365,7 +20365,7 @@ dwg_ent_lwpline_get_points (const dwg_ent_lwpline *restrict lwpline,
 EXPORT int
 dwg_ent_lwpline_set_points (dwg_ent_lwpline *restrict lwpline,
                             const BITCODE_BL num_pts2d,
-                            const dwg_point_2d **restrict pts2d)
+                            const dwg_point_2d *restrict pts2d)
 {
   lwpline->points = (BITCODE_2RD *)malloc (sizeof (dwg_point_2d) * num_pts2d);
   if (lwpline->points)
@@ -20373,11 +20373,11 @@ dwg_ent_lwpline_set_points (dwg_ent_lwpline *restrict lwpline,
       lwpline->num_points = num_pts2d;
       for (BITCODE_BL i = 0; i < num_pts2d; i++)
         {
-          const dwg_point_2d *pt = pts2d[i];
-          if (bit_isnan(pt->x) || bit_isnan(pt->y))
+          const dwg_point_2d pt = pts2d[i];
+          if (bit_isnan(pt.x) || bit_isnan(pt.y))
             goto isnan;
-          lwpline->points[i].x = pt->x;
-          lwpline->points[i].y = pt->y;
+          lwpline->points[i].x = pt.x;
+          lwpline->points[i].y = pt.y;
         }
       return 0;
     }
@@ -21956,6 +21956,12 @@ dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
 Dwg_Entity_SEQEND *
 dwg_add_SEQEND (Dwg_Object_BLOCK_HEADER *restrict blkhdr) __nonnull_all;
 
+// imported from in_dxf.c
+void in_postprocess_handles (Dwg_Object *restrict obj);
+void in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
+                            BITCODE_H *restrict owned);
+int dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg);
+
 #define NEW_OBJECT(dwg, obj)                                                  \
   {                                                                           \
     BITCODE_BL idx = dwg->num_objects;                                        \
@@ -21990,7 +21996,7 @@ dwg_entity_owner (dwg_ent_generic* _ent)
 
 /* Initialize a new dwg. Which template, imperial or metric */
 EXPORT Dwg_Data*
-dwg_add_document (const int imperial)
+dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int lglevel)
 {
   Dwg_Data *dwg = calloc (1, sizeof (Dwg_Data));
   int error;
@@ -22003,20 +22009,17 @@ dwg_add_document (const int imperial)
   Dwg_Object_DICTIONARY *dict;
   dwg_point_3d pt0 = { 0.0, 1.0, 0.0 };
   Dwg_Object *obj, *ctrl;
-  char *trace = getenv ("LIBREDWG_TRACE");
-  if (trace)
-    loglevel = atoi (trace);
-  else
-    loglevel = DWG_LOGLEVEL_ERROR;
+
+  loglevel = lglevel;
 
   //dwg->object_map = hash_new (200);
 
-  dwg->header.version = R_2000;
-  dwg->header.from_version = R_2000;
+  dwg->header.version = version;
+  dwg->header.from_version = version;
   //dwg->header.is_maint = 0xf;
   //dwg->header.zero_one_or_three = 1;
-  dwg->header.dwg_version = 0x19;
-  //dwg->header.maint_version = 0x4d;
+  //dwg->header.dwg_version = 0x17; // prefer encode if dwg_version is 0
+  //dwg->header.maint_version = 29;
   dwg->header.codepage = 30;
   //dwg->header.num_sections = 5;
   //dwg->header.section = (Dwg_Section *)calloc (
@@ -22382,6 +22385,7 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
   ADD_ENTITY (token);                                          \
   dwg_set_next_objhandle (obj);                                \
   LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H(obj->handle));  \
+  in_postprocess_handles (obj);                                \
   dwg_insert_entity (blkhdr, obj)
 
 #define ADD_OBJECT(token)                                                     \
@@ -22405,7 +22409,8 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
   NEW_OBJECT (dwg, obj);                                       \
   ADD_OBJECT (token);                                          \
   dwg_set_next_objhandle (obj);                                \
-  LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H(obj->handle))
+  LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H(obj->handle));  \
+  in_postprocess_handles (obj)
 
 EXPORT int
 dwg_add_entity_defaults (Dwg_Data *restrict dwg,
@@ -22567,16 +22572,26 @@ dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert,
     {
       API_ADD_ENTITY (SEQEND);
       insert->has_attribs = 1;
+      insert->num_owned = 1;
       insert->first_attrib = dwg_add_handleref (dwg, 4, attobj->handle.value, insobj);
       insert->last_attrib = insert->first_attrib;
       insert->seqend = dwg_add_handleref (dwg, 3, obj->handle.value, insobj);
+      insert->attribs = malloc (sizeof (BITCODE_H));
+      insert->attribs[0] = insert->last_attrib;
+      in_postprocess_SEQEND (obj, insert->num_owned, insert->attribs);
     }
   else
     {
       Dwg_Data *dwg = insobj->parent;
+      Dwg_Object *seqend;
       Dwg_Object *lastobj = dwg_ref_object (dwg, insert->last_attrib);
+      insert->num_owned++;
+      insert->attribs = realloc (insert->attribs, insert->num_owned * sizeof (BITCODE_H));
       lastobj->tio.entity->next_entity = dwg_add_handleref (dwg, 3, attobj->handle.value, insobj);
-      insert->last_attrib = dwg_add_handleref (dwg, 4, attobj->handle.value, insobj);
+      insert->attribs[insert->num_owned - 1] = insert->last_attrib
+          = dwg_add_handleref (dwg, 4, attobj->handle.value, insobj);
+      seqend = dwg_ref_object (dwg, insert->seqend);
+      in_postprocess_SEQEND (seqend, insert->num_owned, insert->attribs);
     }
   return attrib;
 }
@@ -22643,6 +22658,7 @@ EXPORT Dwg_Entity_ENDBLK*
 dwg_add_ENDBLK (Dwg_Object_BLOCK_HEADER *restrict blkhdr)
 {
   API_ADD_ENTITY (ENDBLK);
+  dwg_fixup_BLOCKS_entities (dwg);
   return _obj;
 }
 
@@ -22736,7 +22752,7 @@ dwg_add_VERTEX_3D (Dwg_Entity_POLYLINE_3D *restrict pline,
 EXPORT Dwg_Entity_POLYLINE_2D*
 dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                     const int num_pts,
-                    const dwg_point_2d **restrict pts)
+                    const dwg_point_2d *restrict pts)
 {
   Dwg_Object *pl;
   Dwg_Entity_POLYLINE_2D *_pl;
@@ -22746,25 +22762,32 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (POLYLINE_2D);
   pl = obj;
   _pl = _obj;
+  _pl->vertex = malloc (num_pts * sizeof (BITCODE_H));
   for (int i = 0; i < num_pts; i++)
     {
-      _vtx = dwg_add_VERTEX_2D (_pl, pts[i]);
+      _vtx = dwg_add_VERTEX_2D (_pl, &pts[i]);
+      if (!_vtx)
+        return NULL;
       obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
+      _pl->vertex[i] = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
       if (i == 0)
-        _pl->first_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
+        _pl->first_vertex  = _pl->vertex[i];
       if (i == num_pts - 1)
-        _pl->last_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
+        _pl->last_vertex  = _pl->vertex[i];
     }
   _seq = dwg_add_SEQEND (blkhdr);
   obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_seq, &error);
-  _pl->seqend  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
+  _pl->seqend  = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
+
+  _pl->num_owned = num_pts;
+  in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
   return _pl;
 }
 
 EXPORT Dwg_Entity_POLYLINE_3D*
 dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                     const int num_pts,
-                    const dwg_point_3d **restrict pts)
+                    const dwg_point_3d *restrict pts)
 {
   Dwg_Object *pl;
   Dwg_Entity_POLYLINE_3D *_pl;
@@ -22774,18 +22797,148 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (POLYLINE_3D);
   pl = obj;
   _pl = _obj;
+  _pl->vertex = malloc (num_pts * sizeof (BITCODE_H));
   for (int i = 0; i < num_pts; i++)
     {
-      _vtx = dwg_add_VERTEX_3D (_pl, pts[i]);
+      _vtx = dwg_add_VERTEX_3D (_pl, &pts[i]);
+      if (!_vtx)
+        return NULL;
       obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
+      _pl->vertex[i] = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
       if (i == 0)
-        _pl->first_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
+        _pl->first_vertex  = _pl->vertex[i];
       if (i == num_pts - 1)
-        _pl->last_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
+        _pl->last_vertex  = _pl->vertex[i];
     }
   _seq = dwg_add_SEQEND (blkhdr);
   obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_seq, &error);
-  _pl->seqend  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
+  _pl->seqend  = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
+
+  _pl->num_owned = num_pts;
+  in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
+  return _pl;
+}
+
+Dwg_Entity_VERTEX_PFACE*
+dwg_add_VERTEX_PFACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
+                      const dwg_point_3d *restrict point)
+{
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)pline);
+  API_ADD_ENTITY (VERTEX_PFACE);
+  _obj->point.x = point->x;
+  _obj->point.y = point->y;
+  _obj->point.z = point->z;
+  _obj->flag = 0xc0;
+  return _obj;
+}
+
+Dwg_Entity_VERTEX_PFACE_FACE*
+dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
+                           const dwg_face vertind)
+{
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)pline);
+  API_ADD_ENTITY (VERTEX_PFACE_FACE);
+  _obj->vertind[0] = vertind[0];
+  _obj->vertind[1] = vertind[1];
+  _obj->vertind[2] = vertind[2];
+  _obj->vertind[3] = vertind[3];
+  return _obj;
+}
+
+// Polyface Mesh
+EXPORT Dwg_Entity_POLYLINE_PFACE*
+dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                        const unsigned numverts,
+                        const unsigned numfaces,
+                        const dwg_point_3d *restrict verts,
+                        const dwg_face *restrict faces)
+{
+  Dwg_Object *pl;
+  Dwg_Entity_POLYLINE_PFACE *_pl;
+  Dwg_Entity_VERTEX_PFACE *_vtx;
+  Dwg_Entity_VERTEX_PFACE_FACE *_vtxf;
+  Dwg_Entity_SEQEND *_seq;
+
+  API_ADD_ENTITY (POLYLINE_PFACE);
+  pl = obj;
+  _pl = _obj;
+  _pl->num_owned = numverts + numfaces;
+  _pl->vertex = malloc (_pl->num_owned * sizeof (BITCODE_H));
+  for (unsigned i = 0; i < numverts; i++)
+    {
+      _vtx = dwg_add_VERTEX_PFACE (_pl, &verts[i]);
+      if (!_vtx)
+        return NULL;
+      obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
+      _pl->vertex[i] = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
+      if (i == 0)
+        _pl->first_vertex = _pl->vertex[i];
+    }
+  for (unsigned j = 0; j < numfaces; j++)
+    {
+      _vtxf = dwg_add_VERTEX_PFACE_FACE (_pl, faces[j]);
+      obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtxf, &error);
+      _pl->vertex[numverts + j] = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
+      if (j == numfaces - 1)
+        _pl->last_vertex  = _pl->vertex[numverts + j];
+    }
+  _seq = dwg_add_SEQEND (blkhdr);
+  obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_seq, &error);
+  _pl->seqend  = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
+  in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
+  return _pl;
+}
+
+Dwg_Entity_VERTEX_MESH*
+dwg_add_VERTEX_MESH (Dwg_Entity_POLYLINE_MESH *restrict pline,
+                     const dwg_point_3d *restrict point)
+{
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)pline);
+  API_ADD_ENTITY (VERTEX_MESH);
+  _obj->point.x = point->x;
+  _obj->point.y = point->y;
+  _obj->point.z = point->z;
+  _obj->flag = 0x40;
+  return _obj;
+}
+
+EXPORT Dwg_Entity_POLYLINE_MESH*
+dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                       const unsigned num_m_verts,
+                       const unsigned num_n_verts,
+                       const dwg_point_3d *restrict verts)
+{
+  Dwg_Object *pl;
+  Dwg_Entity_POLYLINE_MESH *_pl;
+  Dwg_Entity_VERTEX_MESH *_vtx;
+  Dwg_Entity_SEQEND *_seq;
+
+  API_ADD_ENTITY (POLYLINE_MESH);
+  pl = obj;
+  _pl = _obj;
+  _pl->num_m_verts = num_m_verts;
+  _pl->num_n_verts = num_n_verts;
+  _pl->num_owned = num_m_verts * num_n_verts;
+  _pl->flag = 16;
+  if (_pl->num_owned)
+    _pl->has_vertex = 1;
+  _pl->vertex = malloc (_pl->num_owned * sizeof (BITCODE_H));
+  for (unsigned i = 0; i < _pl->num_owned; i++)
+    {
+      _vtx = dwg_add_VERTEX_MESH (_pl, &verts[i]);
+      if (!_vtx)
+        return NULL;
+      obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
+      _pl->vertex[i] = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
+      if (i == 0)
+        _pl->first_vertex  = _pl->vertex[i];
+      if (i == _pl->num_owned - 1)
+        _pl->last_vertex  = _pl->vertex[i];
+    }
+  _seq = dwg_add_SEQEND (blkhdr);
+  obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_seq, &error);
+  _pl->seqend  = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
+  in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
   return _pl;
 }
 
@@ -22873,11 +23026,11 @@ dwg_add_DIMENSION_ANG2LN (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 {
   API_ADD_ENTITY (DIMENSION_ANG2LN);
   DIMENSION_DEFAULTS;
-  _obj->def_pt.x    = center_pt->x;
-  _obj->def_pt.y    = center_pt->y;
-  _obj->def_pt.z    = center_pt->z;
-  _obj->text_midpt.x= text_midpt->x;
-  _obj->text_midpt.y= text_midpt->y;
+  _obj->def_pt.x     = center_pt->x;
+  _obj->def_pt.y     = center_pt->y;
+  _obj->def_pt.z     = center_pt->z;
+  _obj->text_midpt.x = text_midpt->x;
+  _obj->text_midpt.y = text_midpt->y;
   //_obj->text_midpt.z= text_midpt->z;
   // TODO calc xline1start_pt, xline2start_pt
   _obj->xline1end_pt.x = xline1end_pt->x;
@@ -22898,18 +23051,18 @@ dwg_add_DIMENSION_ANG3PT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 {
   API_ADD_ENTITY (DIMENSION_ANG3PT);
   DIMENSION_DEFAULTS;
-  _obj->center_pt.x = center_pt->x;
-  _obj->center_pt.y = center_pt->y;
-  _obj->center_pt.z = center_pt->z;
-  _obj->text_midpt.x= text_midpt->x;
-  _obj->text_midpt.y= text_midpt->y;
-  //_obj->text_midpt.z= text_midpt->z;
-  _obj->xline1_pt.x = xline1_pt->x;
-  _obj->xline1_pt.y = xline1_pt->y;
-  _obj->xline1_pt.z = xline1_pt->z;
-  _obj->xline2_pt.x = xline2_pt->x;
-  _obj->xline2_pt.y = xline2_pt->y;
-  _obj->xline2_pt.z = xline2_pt->z;
+  _obj->center_pt.x  = center_pt->x;
+  _obj->center_pt.y  = center_pt->y;
+  _obj->center_pt.z  = center_pt->z;
+  _obj->text_midpt.x = text_midpt->x;
+  _obj->text_midpt.y = text_midpt->y;
+  //_obj->text_midpt.z = text_midpt->z;
+  _obj->xline1_pt.x  = xline1_pt->x;
+  _obj->xline1_pt.y  = xline1_pt->y;
+  _obj->xline1_pt.z  = xline1_pt->z;
+  _obj->xline2_pt.x  = xline2_pt->x;
+  _obj->xline2_pt.y  = xline2_pt->y;
+  _obj->xline2_pt.z  = xline2_pt->z;
   return _obj;
 }
 
@@ -23039,117 +23192,6 @@ dwg_add_3DFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-Dwg_Entity_VERTEX_PFACE*
-dwg_add_VERTEX_PFACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
-                      const dwg_point_3d *restrict point)
-{
-  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)pline);
-  API_ADD_ENTITY (VERTEX_PFACE);
-  _obj->point.x = point->x;
-  _obj->point.y = point->y;
-  _obj->point.z = point->z;
-  _obj->flag = 0xc0;
-  return _obj;
-}
-
-Dwg_Entity_VERTEX_PFACE_FACE*
-dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
-                           const dwg_face vertind)
-{
-  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)pline);
-  API_ADD_ENTITY (VERTEX_PFACE_FACE);
-  _obj->vertind[0] = vertind[0];
-  _obj->vertind[1] = vertind[1];
-  _obj->vertind[2] = vertind[2];
-  _obj->vertind[3] = vertind[3];
-  return _obj;
-}
-
-// Polyface Mesh
-EXPORT Dwg_Entity_POLYLINE_PFACE*
-dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                        const unsigned numverts,
-                        const unsigned numfaces,
-                        const dwg_point_3d **restrict verts,
-                        const dwg_face *restrict faces)
-{
-  Dwg_Object *pl;
-  Dwg_Entity_POLYLINE_PFACE *_pl;
-  Dwg_Entity_VERTEX_PFACE *_vtx;
-  Dwg_Entity_VERTEX_PFACE_FACE *_vtxf;
-  Dwg_Entity_SEQEND *_seq;
-
-  API_ADD_ENTITY (POLYLINE_PFACE);
-  pl = obj;
-  _pl = _obj;
-  for (unsigned i = 0; i < numverts; i++)
-    {
-      _vtx = dwg_add_VERTEX_PFACE (_pl, verts[i]);
-      obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
-      if (i == 0)
-        _pl->first_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
-    }
-  for (unsigned i = 0; i < numfaces; i++)
-    {
-      _vtxf = dwg_add_VERTEX_PFACE_FACE (_pl, faces[i]);
-      obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtxf, &error);
-      if (i == numfaces - 1)
-        _pl->last_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
-    }
-  _seq = dwg_add_SEQEND (blkhdr);
-  obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_seq, &error);
-  _pl->seqend  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
-  return _pl;
-}
-
-Dwg_Entity_VERTEX_MESH*
-dwg_add_VERTEX_MESH (Dwg_Entity_POLYLINE_MESH *restrict pline,
-                     const dwg_point_3d *restrict point)
-{
-  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)pline);
-  API_ADD_ENTITY (VERTEX_MESH);
-  _obj->point.x = point->x;
-  _obj->point.y = point->y;
-  _obj->point.z = point->z;
-  _obj->flag = 0x40;
-  return _obj;
-}
-
-EXPORT Dwg_Entity_POLYLINE_MESH*
-dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                       const unsigned num_m_verts,
-                       const unsigned num_n_verts,
-                       const dwg_point_3d **restrict verts)
-{
-  Dwg_Object *pl;
-  Dwg_Entity_POLYLINE_MESH *_pl;
-  Dwg_Entity_VERTEX_MESH *_vtx;
-  Dwg_Entity_SEQEND *_seq;
-
-  API_ADD_ENTITY (POLYLINE_MESH);
-  pl = obj;
-  _pl = _obj;
-  _pl->num_m_verts = num_m_verts;
-  _pl->num_n_verts = num_n_verts;
-  _pl->num_owned = num_m_verts * num_n_verts;
-  _pl->flag = 16;
-  if (_pl->num_owned)
-    _pl->has_vertex = 1;
-  for (unsigned i = 0; i < _pl->num_owned; i++)
-    {
-      _vtx = dwg_add_VERTEX_MESH (_pl, verts[i]);
-      obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
-      if (i == 0)
-        _pl->first_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
-      if (i == _pl->num_owned - 1)
-        _pl->last_vertex  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
-    }
-  _seq = dwg_add_SEQEND (blkhdr);
-  obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_seq, &error);
-  _pl->seqend  = dwg_add_handleref (dwg, 4, obj->handle.value, pl);
-  return _pl;
-}
-
 EXPORT Dwg_Entity_SOLID*
 dwg_add_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict pt1,
@@ -23200,13 +23242,13 @@ dwg_add_SHAPE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const double oblique_angle)
 {
   API_ADD_ENTITY (SHAPE);
-  _obj->ins_pt.x     = ins_pt->x;
-  _obj->ins_pt.y     = ins_pt->y;
-  _obj->ins_pt.z     = ins_pt->z;
-  _obj->scale        = scale;
-  _obj->oblique_angle= oblique_angle;
-  _obj->width_factor = 1.0;
-  _obj->extrusion.z  = 1.0;
+  _obj->ins_pt.x      = ins_pt->x;
+  _obj->ins_pt.y      = ins_pt->y;
+  _obj->ins_pt.z      = ins_pt->z;
+  _obj->scale         = scale;
+  _obj->oblique_angle = oblique_angle;
+  _obj->width_factor  = 1.0;
+  _obj->extrusion.z   = 1.0;
   // style, thickness from HEADER
   return _obj;
 }
@@ -23242,9 +23284,9 @@ dwg_add_ELLIPSE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 EXPORT Dwg_Entity_SPLINE*
 dwg_add_SPLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const int num_fit_pts,
-                const dwg_point_3d **restrict fit_pts,
-                const dwg_point_3d *beg_tan_vec,
-                const dwg_point_3d *end_tan_vec)
+                const dwg_point_3d *restrict fit_pts,
+                const dwg_point_3d *restrict beg_tan_vec,
+                const dwg_point_3d *restrict end_tan_vec)
 {
   API_ADD_ENTITY (SPLINE);
   _obj->beg_tan_vec.x = beg_tan_vec->x;
@@ -23254,7 +23296,9 @@ dwg_add_SPLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->end_tan_vec.y = end_tan_vec->y;
   _obj->end_tan_vec.z = end_tan_vec->z;
   _obj->num_fit_pts = (BITCODE_BL)num_fit_pts;
-  _obj->fit_pts = (BITCODE_3BD*)fit_pts;
+  assert (sizeof (BITCODE_3BD) == sizeof (dwg_point_3d));
+  _obj->fit_pts = malloc (num_fit_pts * sizeof(BITCODE_3BD));
+  memcpy (_obj->fit_pts, fit_pts, num_fit_pts * sizeof(BITCODE_3BD));
   return _obj;
 }
 
@@ -23467,8 +23511,8 @@ dwg_add_MTEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 EXPORT Dwg_Entity_LEADER*
 dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const unsigned num_points,
-                const dwg_point_3d **restrict points,
-                const Dwg_Object *associated_annotation, /* maybe NULL */
+                const dwg_point_3d *restrict points,
+                const Dwg_Object *restrict associated_annotation, /* maybe NULL */
                 const unsigned type)
 {
   API_ADD_ENTITY (LEADER);
@@ -23476,9 +23520,9 @@ dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->num_points = num_points;
   for (unsigned i = 0; i < num_points; i++)
     {
-      _obj->points[i].x = points[i]->x;
-      _obj->points[i].y = points[i]->y;
-      _obj->points[i].z = points[i]->z;
+      _obj->points[i].x = points[i].x;
+      _obj->points[i].y = points[i].y;
+      _obj->points[i].z = points[i].z;
     }
   // TODO type => path_type + annot_type + arrowhead_on
   if (associated_annotation) // TODO check valid types
@@ -23525,16 +23569,16 @@ dwg_add_TOLERANCE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 EXPORT Dwg_Entity_MLINE*
 dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const unsigned num_verts,
-               const dwg_point_3d **restrict verts)
+               const dwg_point_3d *restrict verts)
 {
   API_ADD_ENTITY (MLINE);
   _obj->verts = calloc (num_verts, sizeof (Dwg_MLINE_vertex));
   _obj->num_verts = num_verts;
   for (unsigned i = 0; i < num_verts; i++)
     {
-      _obj->verts[i].vertex.x = verts[i]->x;
-      _obj->verts[i].vertex.y = verts[i]->y;
-      _obj->verts[i].vertex.z = verts[i]->z;
+      _obj->verts[i].vertex.x = verts[i].x;
+      _obj->verts[i].vertex.y = verts[i].y;
+      _obj->verts[i].vertex.z = verts[i].z;
     }
   _obj->extrusion.z = 1.0;
   //via nod -> name
@@ -23699,10 +23743,11 @@ dwg_add_VX (Dwg_Data *restrict dwg, const char* restrict name)
 
 EXPORT Dwg_Entity_LWPOLYLINE *
 dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                    const int num_pts2d, const dwg_point_2d **restrict pts2d)
+                    const int num_pts2d, const dwg_point_2d *restrict pts2d)
 {
   API_ADD_ENTITY (LWPOLYLINE);
-  error = dwg_ent_lwpline_set_points (_obj, num_pts2d, pts2d);
+  error = dwg_ent_lwpline_set_points (
+      _obj, num_pts2d, pts2d);
   return _obj;
 }
 

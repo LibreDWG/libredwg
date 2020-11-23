@@ -38,7 +38,7 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
 {
   int error;
   struct stat attrib;
-  Dwg_Data *dwg = dwg_add_document(0);
+  Dwg_Data *dwg = dwg_add_Document(R_2000, 0 /*metric/iso */, loglevel /* static global */);
   Dwg_Object *mspace =  dwg_model_space_object (dwg);
   Dwg_Object_Ref *mspace_ref =  dwg_model_space_ref (dwg);
   dwg_point_3d pt1 = {1.5, 2.5, 0.2};
@@ -77,6 +77,60 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
         dwg_add_Attribute (insert, 1.0, 0, (const BITCODE_T) "prompt", &pt1,
                            (const BITCODE_T) "tag",
                            (const BITCODE_T) "testtekst");
+      }
+      break;
+    case DWG_TYPE_LWPOLYLINE:
+      {
+        const dwg_point_2d pts[] = {
+          { 2.5, 0.0 }, { 0.5, 0.0 }, { 0.5, 2.0 }, { 0.5, 1.0 }, { 1.5, 1.0 }
+        };
+        dwg_add_LWPOLYLINE (hdr, 5, pts);
+      }
+      break;
+    case DWG_TYPE_POLYLINE_2D:
+      {
+        const dwg_point_2d pts[] = {
+          { 2.5, 0.0 }, { 0.5, 0.0 }, { 0.5, 2.0 }, { 0.5, 1.0 }, { 1.5, 1.0 }
+        };
+        dwg_add_POLYLINE_2D (hdr, 5, pts);
+      }
+      break;
+    case DWG_TYPE_POLYLINE_3D:
+      {
+        const dwg_point_3d pts[] = { { 2.5, 0.0, 0.0 },
+                                     { 0.5, 0.0, 0.0 },
+                                     { 0.5, 2.0, 1.0 },
+                                     { 0.5, 1.0, 1.0 },
+                                     { 1.5, 1.0, 0.0 } };
+        dwg_add_POLYLINE_3D (hdr, 5, pts);
+      }
+      break;
+    case DWG_TYPE_POLYLINE_PFACE:
+      {
+        const dwg_point_3d verts[] = { { 2.5, 0.0, 0.0 },
+                                       { 0.5, 0.0, 0.0 },
+                                       { 0.5, 2.0, 1.0 },
+                                       { 0.5, 1.0, 1.0 },
+                                       { 1.5, 1.0, 0.0 } };
+        const dwg_face faces[]
+            = { { 0, 1, 2, 3 }, { 1, 2, 3, 4 }, { 2, 3, 4, 5 } };
+        dwg_add_POLYLINE_PFACE (hdr, 5, 3, verts, faces);
+      }
+      break;
+    case DWG_TYPE_POLYLINE_MESH:
+      {
+        const dwg_point_3d verts[]
+            = { { 2.5, 0.0, 0.0 }, { 0.5, 0.0, 0.0 }, { 0.5, 2.0, 1.0 },
+                { 0.5, 1.0, 1.0 }, { 0.5, 1.0, 0.0 }, { 1.5, 1.0, 0.0 } };
+        dwg_add_POLYLINE_MESH (hdr, 3, 2, verts);
+      }
+      break;
+    case DWG_TYPE_SPLINE:
+      {
+        const dwg_point_3d fit_pts[]
+            = { { 2.5, 0.0, 0.0 }, { 0.5, 0.0, 0.0 }, { 0.5, 2.0, 1.0 },
+                { 0.5, 1.0, 1.0 }, { 0.5, 1.0, 0.0 }, { 1.5, 1.0, 0.0 } };
+        dwg_add_SPLINE (hdr, 6, fit_pts, &pt1, &pt2);
       }
       break;
     default:
@@ -120,6 +174,12 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       TEST_ENTITY (CIRCLE);
       TEST_ENTITY (ARC);
       TEST_ENTITY (ATTRIB);
+      TEST_ENTITY (LWPOLYLINE);
+      TEST_ENTITY (POLYLINE_2D);
+      TEST_ENTITY (POLYLINE_3D);
+      TEST_ENTITY (POLYLINE_MESH);
+      TEST_ENTITY (POLYLINE_PFACE);
+      TEST_ENTITY (SPLINE);
     default:
       fail ("Unknown type %s", name);
     }
@@ -151,6 +211,11 @@ main (int argc, char *argv[])
   error = test_add (DWG_TYPE_CIRCLE, "add_circle_2000.dwg");
   error = test_add (DWG_TYPE_ARC, "add_arc_2000.dwg");
   error = test_add (DWG_TYPE_ATTRIB, "add_attrib_2000.dwg");
+  error = test_add (DWG_TYPE_LWPOLYLINE, "add_lwpline_2000.dwg");
+  error = test_add (DWG_TYPE_POLYLINE_2D, "add_pl2d_2000.dwg");
+  error = test_add (DWG_TYPE_POLYLINE_3D, "add_pl3d_2000.dwg");
+  error = test_add (DWG_TYPE_POLYLINE_MESH, "add_pmesh_2000.dwg");
+  error = test_add (DWG_TYPE_POLYLINE_PFACE, "add_pface_2000.dwg");
 
   return error;
 }

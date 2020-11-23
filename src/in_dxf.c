@@ -7758,11 +7758,12 @@ dwg_link_next (Dwg_Object_Ref *restrict next_ref, Dwg_Object *restrict obj)
   return dwg_add_handleref (dwg, 4, next->handle.value, obj);
 }
 
-// Also exported to in_json. To set to linked list of children in POLYLINE_*/*INSERT
+// Also exported to in_json and dwg_api.
+// To set to linked list of children in POLYLINE_*/*INSERT
 // similar to dwg_fixup_BLOCKS_entities()
 void
 in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
-                       BITCODE_H *owned)
+                       BITCODE_H *restrict owned)
 {
   Dwg_Data *dwg = obj->parent;
   Dwg_Entity_SEQEND *o = obj->tio.entity->tio.SEQEND;

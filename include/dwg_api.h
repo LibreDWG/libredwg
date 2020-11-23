@@ -5771,7 +5771,7 @@ dwg_ent_lwpline_get_points (const dwg_ent_lwpline *restrict lwpline,
 EXPORT int
 dwg_ent_lwpline_set_points (dwg_ent_lwpline *restrict lwpline,
                             const BITCODE_BL num_pts2d,
-                            const dwg_point_2d **restrict pts2d) __nonnull_all;
+                            const dwg_point_2d *restrict pts2d) __nonnull_all;
 
 EXPORT dwg_lwpline_widths *
 dwg_ent_lwpline_get_widths (const dwg_ent_lwpline *restrict lwpline,
@@ -6137,7 +6137,8 @@ EXPORT dwg_class *dwg_get_class (const dwg_data *dwg, unsigned int index);
    and acis_data. This is not copied.
  */
 
-EXPORT Dwg_Data* dwg_add_document (const int imperial);
+EXPORT Dwg_Data *dwg_add_Document (const Dwg_Version_Type version,
+                                   const int imperial, const int lglevel);
 
 /* no proxy, no is_zombie */
 /* returns -1 on error, 0 on success */
@@ -6212,11 +6213,22 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 EXPORT Dwg_Entity_POLYLINE_2D*
 dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                     const int num_pts,
-                    const dwg_point_2d **restrict pts) __nonnull_all;
+                    const dwg_point_2d *restrict pts) __nonnull_all;
 EXPORT Dwg_Entity_POLYLINE_3D*
 dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                      const int num_pts,
-                     const dwg_point_3d **restrict pts) __nonnull_all;
+                     const dwg_point_3d *restrict pts) __nonnull_all;
+EXPORT Dwg_Entity_POLYLINE_PFACE*
+dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                        const unsigned numverts,
+                        const unsigned numfaces,
+                        const dwg_point_3d *restrict verts,
+                        const dwg_face *restrict faces) __nonnull_all;
+EXPORT Dwg_Entity_POLYLINE_MESH*
+dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                       const unsigned num_m_verts,
+                       const unsigned num_n_verts,
+                       const dwg_point_3d *restrict verts) __nonnull_all;
 EXPORT Dwg_Entity_ARC*
 dwg_add_ARC (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
              const dwg_point_3d *restrict center,
@@ -6280,17 +6292,6 @@ dwg_add_3DFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const dwg_point_3d *restrict pt3,
                 const dwg_point_3d *restrict pt4 /* may be NULL */)
   __nonnull ((1,2,3,4));
-EXPORT Dwg_Entity_POLYLINE_PFACE*
-dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                        const unsigned numverts,
-                        const unsigned numfaces,
-                        const dwg_point_3d **restrict verts,
-                        const dwg_face *restrict faces) __nonnull_all;
-EXPORT Dwg_Entity_POLYLINE_MESH*
-dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                       const unsigned num_m_verts,
-                       const unsigned num_n_verts,
-                       const dwg_point_3d **restrict verts) __nonnull_all;
 EXPORT Dwg_Entity_SOLID*
 dwg_add_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict pt1,
@@ -6320,9 +6321,9 @@ dwg_add_ELLIPSE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 EXPORT Dwg_Entity_SPLINE*
 dwg_add_SPLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const int num_fit_pts,
-                const dwg_point_3d **restrict fit_pts,
-                const dwg_point_3d *beg_tan_vec,
-                const dwg_point_3d *end_tan_vec) __nonnull_all;
+                const dwg_point_3d *restrict fit_pts,
+                const dwg_point_3d *restrict beg_tan_vec,
+                const dwg_point_3d *restrict end_tan_vec) __nonnull_all;
 EXPORT Dwg_Entity_REGION*
 dwg_add_REGION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const char *acis_data) __nonnull_all;
@@ -6368,8 +6369,8 @@ dwg_add_MTEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 EXPORT Dwg_Entity_LEADER*
 dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const unsigned num_points,
-                const dwg_point_3d **restrict points,
-                const Dwg_Object *associated_annotation, /* maybe NULL */
+                const dwg_point_3d *restrict points,
+                const Dwg_Object *restrict associated_annotation, /* maybe NULL */
                 const unsigned type) __nonnull ((1, 3));
 EXPORT Dwg_Entity_TOLERANCE*
 dwg_add_TOLERANCE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
@@ -6379,12 +6380,12 @@ dwg_add_TOLERANCE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 EXPORT Dwg_Entity_MLINE*
 dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const unsigned num_verts,
-               const dwg_point_3d **restrict verts) __nonnull_all;
+               const dwg_point_3d *restrict verts) __nonnull_all;
 
 EXPORT Dwg_Entity_LWPOLYLINE*
 dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                     const int num_pts2d,
-                    const dwg_point_2d **restrict pts2d) __nonnull_all;
+                    const dwg_point_2d *restrict pts2d) __nonnull_all;
 
 EXPORT Dwg_Entity_HATCH*
 dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
