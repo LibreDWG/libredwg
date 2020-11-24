@@ -212,12 +212,12 @@ main (int argc, char *argv[])
   error = test_add (DWG_TYPE_TEXT, "add_text_2000.dwg");
   error = test_add (DWG_TYPE_CIRCLE, "add_circle_2000.dwg");
   error = test_add (DWG_TYPE_ARC, "add_arc_2000.dwg");
-  error = test_add (DWG_TYPE_ATTRIB, "add_attrib_2000.dwg");
   error = test_add (DWG_TYPE_LWPOLYLINE, "add_lwpline_2000.dwg");
   error = test_add (DWG_TYPE_POLYLINE_2D, "add_pl2d_2000.dwg");
   error = test_add (DWG_TYPE_POLYLINE_3D, "add_pl3d_2000.dwg");
   error = test_add (DWG_TYPE_POLYLINE_MESH, "add_pmesh_2000.dwg");
   error = test_add (DWG_TYPE_POLYLINE_PFACE, "add_pface_2000.dwg");
+  error = test_add (DWG_TYPE_ATTRIB, "add_attrib_2000.dwg");
 
   return error;
 }

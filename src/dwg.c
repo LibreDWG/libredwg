@@ -2986,10 +2986,13 @@ void dwg_set_next_hdl (Dwg_Data *dwg, const unsigned long value)
 void dwg_set_next_objhandle (Dwg_Object *obj)
 {
   Dwg_Data *dwg = obj->parent;
+  if (!dwg->object_map)
+    dwg->object_map = hash_new (200);
   if (dwg->next_hdl)
     {
       obj->handle.value = dwg->next_hdl;
       set_handle_size (&obj->handle);
+      hash_set (dwg->object_map, obj->handle.value, (uint32_t)obj->index);
       dwg->next_hdl = 0;
       return;
     }
@@ -3007,6 +3010,7 @@ void dwg_set_next_objhandle (Dwg_Object *obj)
       obj->handle.value = lastobj->handle.value + 1;
       set_handle_size (&obj->handle);
     }
+  hash_set (dwg->object_map, obj->handle.value, (uint32_t)obj->index);
   dwg->next_hdl = 0;
   return;
 }

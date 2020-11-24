@@ -22668,7 +22668,6 @@ dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert,
                 const BITCODE_T restrict text_value)
 {
   Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)insert);
-  // TODO check blkhdr != mspace/pspace
   API_ADD_ENTITY (ATTRIB);
   _obj->tag        = strdup (tag);
   _obj->text_value = strdup (text_value);
@@ -22680,6 +22679,7 @@ dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert,
   if (dwg->header_vars.TEXTSTYLE)
     _obj->style = dwg_add_handleref (
         dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
+  //blkhdr->hasattrs = 1;
   return _obj;
 }
 
@@ -22693,7 +22693,6 @@ dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const BITCODE_T restrict tag,
                 const BITCODE_T restrict default_value)
 {
-  // TODO check blkhdr != mspace/pspace or ignore (no error)
   API_ADD_ENTITY (ATTDEF);
   _obj->prompt     = strdup (prompt);
   _obj->tag        = strdup (tag);
@@ -22756,9 +22755,19 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (_obj->block_header)
     {
       Dwg_Object *hdr = dwg_ref_object (dwg, _obj->block_header);
-      if (!hdr || hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
+      if (!hdr)
         return _obj;
-      hdr->tio.object->tio.BLOCK_HEADER->num_inserts++;
+      blkhdr = hdr->tio.object->tio.BLOCK_HEADER;
+      blkhdr->used = 1;
+      blkhdr->is_xref_ref = 1;
+      blkhdr->num_inserts++;
+      if (!blkhdr->inserts)
+        blkhdr->inserts = calloc (1, sizeof (BITCODE_H));
+      else
+        blkhdr->inserts = realloc (blkhdr->inserts,
+                                   blkhdr->num_inserts * sizeof (BITCODE_H));
+      blkhdr->inserts[blkhdr->num_inserts - 1]
+          = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
     }
   return _obj;
 }
@@ -22794,9 +22803,19 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (_obj->block_header)
     {
       Dwg_Object *hdr = dwg_ref_object (dwg, _obj->block_header);
-      if (!hdr || hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
+      if (!hdr)
         return _obj;
-      hdr->tio.object->tio.BLOCK_HEADER->num_inserts++;
+      blkhdr = hdr->tio.object->tio.BLOCK_HEADER;
+      blkhdr->used = 1;
+      blkhdr->is_xref_ref = 1;
+      blkhdr->num_inserts++;
+      if (!blkhdr->inserts)
+        blkhdr->inserts = calloc (1, sizeof (BITCODE_H));
+      else
+        blkhdr->inserts = realloc (blkhdr->inserts,
+                                   blkhdr->num_inserts * sizeof (BITCODE_H));
+      blkhdr->inserts[blkhdr->num_inserts - 1]
+          = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
     }
   return _obj;
 }
