@@ -22353,10 +22353,12 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
       if (strEQ (klass->dxfname, dxfname))
         return 1;
     }
-  if (strEQc (dxfname, "IMAGE"))
-    return dwg_add_class (dwg, "IMAGE", "AcDbRasterImage", "ISM", true);
-  if (strEQc (dxfname, "IMAGEDEF"))
-    return dwg_add_class (dwg, "IMAGEDEF", "AcDbRasterImageDef", "ISM", false);
+  if (strEQc (dxfname, "LWPOLYLINE"))
+    return dwg_add_class (dwg, "LWPOLYLINE", "AcDbPolyline", "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "XRECORD"))
+    return dwg_add_class (dwg, "XRECORD", "AcDbXrecord", "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "HATCH"))
+    return dwg_add_class (dwg, "HATCH", "AcDbHatch", "ObjectDBX Classes", false);
   if (strEQc (dxfname, "DICTIONARYVAR"))
     return dwg_add_class (dwg, "DICTIONARYVAR", "AcDbDictionaryVar", "AutoCAD 2000", false);
   if (strEQc (dxfname, "ACDBDICTIONARYWDFLT"))
@@ -22369,13 +22371,108 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
     return dwg_add_class (dwg, "LAYOUT", "AcDbLayout", "AutoCAD 2000", false);
   if (strEQc (dxfname, "SORTENTSTABLE"))
     return dwg_add_class (dwg, "SORTENTSTABLE", "AcDbSortentsTable", "AutoCAD 2000", false);
-  if (strEQc (dxfname, "RASTERVARIABLES"))
-    return dwg_add_class (dwg, "RASTERVARIABLES", "AcDbRasterVariables", "ISM", false);
+  if (strEQc (dxfname, "LAYOUT"))
+    return dwg_add_class (dwg, "LAYOUT", "AcDbLayout", "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "LAYER_INDEX"))
+    return dwg_add_class (dwg, "LAYER_INDEX", "AcDbLayerIndex", "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "SPATIAL_INDEX"))
+    return dwg_add_class (dwg, "SPATIAL_INDEX", "AcDbSpatialIndex", "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "IDBUFFER"))
+    return dwg_add_class (dwg, "IDBUFFER", "AcDbIdBuffer", "ObjectDBX Classes", false);
   if (strEQc (dxfname, "VISUALSTYLE"))
     return dwg_add_class (dwg, "VISUALSTYLE", "AcDbVisualStyle", "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "TABLESTYLE"))
+    return dwg_add_class (dwg, "TABLESTYLE", "AcDbTableStyle", "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "ACAD_TABLE"))
+    return dwg_add_class (dwg, "ACAD_TABLE", "AcDbTable", "ObjectDBX Classes", true);
+  if (strEQc (dxfname, "TABLECONTENT"))
+    return dwg_add_class (dwg, "TABLECONTENT", "AcDbTableContent", "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "TABLEGEOMETRY"))
+    return dwg_add_class (dwg, "TABLEGEOMETRY", "AcDbTableGeometry", "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "CELLSTYLEMAP"))
+    return dwg_add_class (dwg, "CELLSTYLEMAP", "AcDbCellStyleMap", "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "DATATABLE"))
+    return dwg_add_class (dwg, "DATATABLE", "AcDbDataTable", "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "MULTILEADER"))
+    return dwg_add_class (dwg, "MULTILEADER", "AcDbMLeader", "ObjectDBX Classes", true);
+  if (strEQc (dxfname, "IMAGE"))
+    return dwg_add_class (dwg, "IMAGE", "AcDbRasterImage", "ISM", true);
+  if (strEQc (dxfname, "IMAGEDEF"))
+    return dwg_add_class (dwg, "IMAGEDEF", "AcDbRasterImageDef", "ISM", false);
+  if (strEQc (dxfname, "RASTERVARIABLES"))
+    return dwg_add_class (dwg, "RASTERVARIABLES", "AcDbRasterVariables", "ISM", false);
+  if (strEQc (dxfname, "LIGHT"))
+    return dwg_add_class (dwg, "LIGHT", "AcDbLight", "SCENEOE", true);
+  if (strEQc (dxfname, "SUN"))
+    return dwg_add_class (dwg, "SUN", "AcDbSun", "SCENEOE", false);
+  if (strEQc (dxfname, "SCALE"))
+    return dwg_add_class (dwg, "SCALE", "AcDbScale", "ObjectDBX Classes", false);
   if (strEQc (dxfname, "DIMASSOC"))
     return dwg_add_class (dwg, "DIMASSOC", "AcDbDimAssoc", "AcDbDimAssoc|"
                           "Product Desc:     AcDim ARX App For Dimension", false);
+  if (strEQc (dxfname, "WIPEOUT"))
+    return dwg_add_class (dwg, "WIPEOUT", "AcDbWipeout", "Wipeout|"
+                          "Product Desc:     WipeOut Dbx Application", false);
+  if (strEQc (dxfname, "WIPEOUTVARIABLES"))
+    return dwg_add_class (dwg, "WIPEOUTVARIABLES", "AcDbWipeoutVariables",
+                          "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "MATERIAL"))
+    return dwg_add_class (dwg, "MATERIAL", "AcDbMaterial",
+                          "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "MLEADERSTYLE"))
+    return dwg_add_class (dwg, "MLEADERSTYLE", "AcDbMLeaderStyle",
+                          "ACDB_MLEADERSTYLE_CLASS", false);
+  if (strEQc (dxfname, "ACDBSECTIONVIEWSTYLE"))
+    return dwg_add_class (dwg, "ACDBSECTIONVIEWSTYLE", "AcDbSectionViewStyle",
+                          "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "ACDBDETAILVIEWSTYLE"))
+    return dwg_add_class (dwg, "ACDBDETAILVIEWSTYLE", "AcDbDetailViewStyle",
+                          "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "ACDBASSOCPERSSUBENTMANAGER"))
+    return dwg_add_class (dwg, "ACDBASSOCPERSSUBENTMANAGER",
+                          "AcDbAssocPersSubentManager", "ObjectDBX Classes",
+                          false);
+  if (strEQc (dxfname, "ACDBPERSSUBENTMANAGER"))
+    return dwg_add_class (dwg, "ACDBPERSSUBENTMANAGER",
+                          "AcDbPersSubentManager", "AcDbPersSubentManager",
+                          false);
+  if (strEQc (dxfname, "ACSH_SWEEP_CLASS"))
+    return dwg_add_class (dwg, "ACSH_SWEEP_CLASS", "AcDbShSweep",
+                          "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "ACAD_EVALUATION_GRAPH"))
+    return dwg_add_class (dwg, "ACAD_EVALUATION_GRAPH", "AcDbEvalGraph",
+                          "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "ACSH_HISTORY_CLASS"))
+    return dwg_add_class (dwg, "ACSH_HISTORY_CLASS", "AcDbShHistory",
+                          "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "ACDBASSOCNETWORK"))
+    return dwg_add_class (dwg, "ACDBASSOCNETWORK", "AcDbAssocNetwork",
+                          "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "ACDBASSOCACTION"))
+    return dwg_add_class (dwg, "ACDBASSOCACTION", "AcDbAssocAction",
+                          "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "ACDBASSOCALIGNEDDIMACTIONBODY"))
+    return dwg_add_class (dwg, "ACDBASSOCALIGNEDDIMACTIONBODY",
+                          "AcDbAssocAlignedDimActionBody", "ObjectDBX Classes",
+                          false);
+  if (strEQc (dxfname, "ACDBASSOCOSNAPPOINTREFACTIONPARAM"))
+    return dwg_add_class (dwg, "ACDBASSOCOSNAPPOINTREFACTIONPARAM",
+                          "AcDbAssocOsnapPointRefActionParam",
+                          "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "ACDBASSOCVERTEXACTIONPARAM"))
+    return dwg_add_class (dwg, "ACDBASSOCVERTEXACTIONPARAM",
+                          "AcDbAssocVertexActionParam", "ObjectDBX Classes",
+                          false);
+  if (strEQc (dxfname, "ACDBASSOCGEOMDEPENDENCY"))
+    return dwg_add_class (dwg, "ACDBASSOCGEOMDEPENDENCY",
+                          "AcDbAssocGeomDependency", "ObjectDBX Classes",
+                          false);
+  if (strEQc (dxfname, "ACDBASSOCDEPENDENCY"))
+    return dwg_add_class (dwg, "ACDBASSOCDEPENDENCY", "AcDbAssocDependency",
+                          "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "ARC_DIMENSION"))
+    return dwg_add_class (dwg, "ARC_DIMENSION", "AcDbArcDimension",
+                          "ObjectDBX Classes", true);
 
   LOG_ERROR ("Unhandled CLASS %s", dxfname);
   return -1;
@@ -23888,6 +23985,8 @@ dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                     const int num_pts2d, const dwg_point_2d *restrict pts2d)
 {
   API_ADD_ENTITY (LWPOLYLINE);
+  if (dwg->header.version < R_2000)
+    dwg_require_class (dwg, "LWPOLYLINE");
   error = dwg_ent_lwpline_set_points (
       _obj, num_pts2d, pts2d);
   return _obj;
@@ -23901,6 +24000,8 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const Dwg_Object *pathobjs)
 {
   API_ADD_ENTITY (HATCH);
+  if (dwg->header.version < R_2000)
+    dwg_require_class (dwg, "HATCH");
   if (strEQc (name, "SPHERICAL") || strEQc (name, "HEMISPHERICAL")
       || strEQc (name, "CURVED") || strEQc (name, "LINEAR")
       || strEQc (name, "CYLINDER"))
@@ -23939,6 +24040,8 @@ dwg_add_XRECORD (Dwg_Object_DICTIONARY *restrict dict,
       = dwg_obj_generic_to_object ((dwg_obj_generic *)dict, &err);
   Dwg_Data *dwg = dictobj->parent;
   API_ADD_OBJECT (XRECORD);
+  if (dwg->header.version < R_2000)
+    dwg_require_class (dwg, "XRECORD");
   _obj->cloning = dict->cloning;
   // ...
   return _obj;
@@ -23948,6 +24051,7 @@ EXPORT Dwg_Object_PLACEHOLDER *
 dwg_add_PLACEHOLDER (Dwg_Data *restrict dwg)
 {
   API_ADD_OBJECT (PLACEHOLDER);
+  dwg_require_class (dwg, "ACDBPLACEHOLDER");
   return _obj;
 }
 
