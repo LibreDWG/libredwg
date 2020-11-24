@@ -7763,7 +7763,7 @@ dwg_link_next (Dwg_Object_Ref *restrict next_ref, Dwg_Object *restrict obj)
 // similar to dwg_fixup_BLOCKS_entities()
 void
 in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
-                       BITCODE_H *restrict owned)
+                       BITCODE_H *owned)
 {
   Dwg_Data *dwg = obj->parent;
   Dwg_Entity_SEQEND *o = obj->tio.entity->tio.SEQEND;

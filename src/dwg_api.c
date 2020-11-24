@@ -21977,7 +21977,7 @@ dwg_add_SEQEND (Dwg_Object_BLOCK_HEADER *restrict blkhdr) __nonnull_all;
 // imported from in_dxf.c
 void in_postprocess_handles (Dwg_Object *restrict obj);
 void in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
-                            BITCODE_H *restrict owned);
+                            BITCODE_H *owned);
 int dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg);
 
 #define NEW_OBJECT(dwg, obj)                                                  \

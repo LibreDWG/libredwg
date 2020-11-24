@@ -93,7 +93,7 @@ int is_table_name (const char *restrict name);
 int is_textlike (Dwg_Object *restrict obj);
 void in_postprocess_handles (Dwg_Object *restrict obj);
 void in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
-                            BITCODE_H *restrict owned);
+                            BITCODE_H *owned);
 
 BITCODE_RC dxf_find_lweight (const int lw);
 
