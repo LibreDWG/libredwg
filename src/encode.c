@@ -1859,10 +1859,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             _obj->dwg_version = 0x21;
             _obj->is_maint = 0x1d;
             break;
-          case R_2021:
-            _obj->dwg_version = 0x24;
-            //_obj->is_maint = 0x4;
-            break;
           case R_INVALID:
           case R_AFTER:
           case R_1_1:

@@ -2885,8 +2885,6 @@ dwg_version_type (const Dwg_Version_Type version)
       return "r2013";
     case R_2018:
       return "r2018";
-    case R_2021:
-      return "r2021";
     case R_AFTER:
       return "invalid after";
     default:

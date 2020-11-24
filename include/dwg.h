@@ -276,11 +276,10 @@ typedef enum DWG_VERSION_TYPE
   R_14,		/* AC1014 AutoCAD Release 14 */
   R_2000,	/* AC1015 AutoCAD Release 2000 */
   R_2004,	/* AC1018 AutoCAD Release 2004 (includes versions AC1019/0x19 and AC1020/0x1a) */
-  R_2007,	/* AC1021 AutoCAD Release 2007 */
-  R_2010,	/* AC1024 AutoCAD Release 2010 */
-  R_2013,	/* AC1027 AutoCAD Release 2013 */
-  R_2018,	/* AC1032 AutoCAD Release 2018 */
-  R_2021,	/* AC1035 ?? AutoCAD Release 2021 */
+  R_2007,	/* AC1021 AutoCAD Release 2007 - 2019*/
+  R_2010,	/* AC1024 AutoCAD Release 2010 - 2012 */
+  R_2013,	/* AC1027 AutoCAD Release 2013 - 2017 */
+  R_2018,	/* AC1032 AutoCAD Release 2018 - 2021 */
   R_AFTER
 } Dwg_Version_Type;
 #define DWG_VERSIONS (int)(R_AFTER+1)
