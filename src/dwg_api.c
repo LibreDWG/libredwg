@@ -21817,6 +21817,7 @@ dwg_obj_generic_to_object (const dwg_obj_generic *restrict _obj,
           return NULL;
         }
       *error = 0;
+      loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
       if (dwg && dwg_version == R_INVALID)
         dwg_version = (Dwg_Version_Type)dwg->header.version;
       return retval;
@@ -21999,14 +22000,35 @@ dwg_entity_owner (dwg_ent_generic* _ent)
   Dwg_Object *ent = dwg_ent_generic_to_object (_ent, &error);
   Dwg_Object_Ref *owner;
   Dwg_Object *hdr;
+  Dwg_Data *dwg = ent->parent;
+  int iter = 0;
 
   if (error || !ent || ent->supertype != DWG_SUPERTYPE_ENTITY)
     return NULL;
+  dwg = ent->parent;
   owner = ent->tio.entity->ownerhandle;
-  hdr = dwg_ref_object (ent->parent, owner);
+  hdr = dwg_ref_object (dwg, owner);
+ hdr_again:
   if (!hdr || hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
-    return NULL;
-  return hdr->tio.object->tio.BLOCK_HEADER;
+    {
+      if (iter)
+        return NULL;
+      if (ent->tio.entity->entmode == 2)
+        {
+          iter++;
+          hdr = dwg_ref_object (dwg, dwg->header_vars.BLOCK_RECORD_MSPACE);
+          goto hdr_again;
+        }
+      else if (ent->tio.entity->entmode == 1)
+        {
+          iter++;
+          hdr = dwg_ref_object (dwg, dwg->header_vars.BLOCK_RECORD_PSPACE);
+          goto hdr_again;
+        }
+      return NULL;
+    }
+  else
+    return hdr->tio.object->tio.BLOCK_HEADER;
 }
 
 /* Should be similar to the public VBA interface */
@@ -22027,7 +22049,9 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   dwg_point_3d pt0 = { 0.0, 1.0, 0.0 };
   Dwg_Object *obj, *ctrl;
 
-  loglevel = lglevel;
+  loglevel = lglevel & DWG_OPTS_LOGLEVEL;
+  dwg->opts = loglevel;
+  dwg->dirty_refs = 0;
 
   //dwg->object_map = hash_new (200);
 
@@ -22284,7 +22308,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
       if ((obj = dwg_resolve_handle (dwg, ref->absolute_ref)))
         ref->obj = obj;
     }
-
+  dwg->dirty_refs = 0;
   return dwg;
 }
 
@@ -23681,7 +23705,7 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
     {                                                                         \
       _ctrl = ctrl->tio.object->tio.control;                                  \
     }                                                                         \
-  if (name)                                                                   \
+  if (strEQc(#record, "BLOCK_HEADER") || name)                                \
     {                                                                         \
       API_ADD_OBJECT (record);                                                \
       _obj->name = strdup (name); /* FIXME write <r2007 only */               \

@@ -1535,7 +1535,6 @@ resolve_objectref_vector (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_BL i;
   Dwg_Object *obj;
 
-  dwg->dirty_refs = 0;
   for (i = 0; i < dwg->num_object_refs; i++)
     {
       Dwg_Object_Ref *ref = dwg->object_ref[i];
@@ -1562,6 +1561,7 @@ resolve_objectref_vector (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
 #endif
     }
+  dwg->dirty_refs = 0;
   return dwg->num_object_refs ? 0 : DWG_ERR_VALUEOUTOFBOUNDS;
 }
 
@@ -1597,6 +1597,7 @@ dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg)
       obj = dwg_resolve_handle (dwg, dwg->object_ref[i]->absolute_ref);
       dwg->object_ref[i]->obj = obj;
     }
+  dwg->dirty_refs = 0;
   // TODO: scan dwg->num_objects also to update it's handlerefs
   loglevel = oldloglevel;
 }
@@ -5390,6 +5391,7 @@ dwg_add_object (Dwg_Data *restrict dwg)
   Dwg_Object *restrict obj;
   BITCODE_BL num = dwg->num_objects;
   int realloced = 0;
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   if (!num && !dwg->object)
     {
       dwg->object = (Dwg_Object *)calloc (REFS_PER_REALLOC, sizeof (Dwg_Object));

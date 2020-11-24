@@ -6430,7 +6430,7 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps) __non
 
 EXPORT Dwg_Object_BLOCK_HEADER *
 dwg_add_BLOCK_HEADER (Dwg_Data *restrict dwg,
-                      const BITCODE_T restrict name) __nonnull_all;
+                      const BITCODE_T restrict name) __nonnull ((1,2));
 EXPORT Dwg_Object_UCS *dwg_add_UCS (Dwg_Data *restrict dwg,
                                     const dwg_point_3d *restrict origin,
                                     const dwg_point_3d *restrict x_axis,
