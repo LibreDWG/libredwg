@@ -22629,7 +22629,6 @@ dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert,
       return NULL;
     }
   //dwg->header_vars.AFLAGS = flags; FIXME
-  insert->last_attrib = dwg_add_handleref (attobj->parent, 4, attobj->handle.value, insobj);
   if (!insert->has_attribs) // no ATTRIB and SEQEND yet
     {
       API_ADD_ENTITY (SEQEND);
@@ -22646,7 +22645,9 @@ dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert,
     {
       Dwg_Data *dwg = insobj->parent;
       Dwg_Object *seqend;
-      Dwg_Object *lastobj = dwg_ref_object (dwg, insert->last_attrib);
+      Dwg_Object *lastobj = dwg_ref_object (dwg, insert->last_attrib); // prev attrib
+      insert->last_attrib = dwg_add_handleref (attobj->parent, 4, attobj->handle.value, insobj);
+      attobj->tio.entity->prev_entity = insert->last_attrib;
       insert->num_owned++;
       insert->attribs = realloc (insert->attribs, insert->num_owned * sizeof (BITCODE_H));
       lastobj->tio.entity->next_entity = dwg_add_handleref (dwg, 3, attobj->handle.value, insobj);
