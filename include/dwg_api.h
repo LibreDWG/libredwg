@@ -6082,7 +6082,8 @@ EXPORT Dwg_Handle *dwg_obj_get_handleref (const dwg_obj_obj *restrict obj,
 EXPORT dwg_object *
 dwg_obj_generic_to_object (const dwg_obj_generic *restrict obj,
                            int *restrict error) __nonnull ((2));
-
+EXPORT unsigned long
+dwg_obj_generic_handlevalue (void *_obj) __nonnull_all;
 EXPORT dwg_obj_obj *
 dwg_obj_generic_parent (const dwg_obj_generic *restrict obj,
                         int *restrict error) __nonnull ((2));

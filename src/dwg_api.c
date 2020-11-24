@@ -21829,6 +21829,23 @@ dwg_obj_generic_to_object (const dwg_obj_generic *restrict _obj,
     }
 }
 
+/** Returns the handle value for any dwg_obj_*
+\code Usage: handle = dwg_obj_generic_handlevalue(_obj);
+\endcode
+\return The handle value or 0;
+\param[in]  obj   dwg_obj_generic* (layer, block_header, xrecord, ...) as void * to avoid casts.
+*/
+unsigned long
+dwg_obj_generic_handlevalue (void *_obj)
+{
+  int error;
+  Dwg_Object *obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_obj, &error);
+  if (obj && !error)
+    return obj->handle.value;
+  else
+    return 0UL;
+}
+
 /** Returns dwg_obj_obj* from any dwg_obj_*
 \code Usage: dwg_obj_obj* obj = dwg_obj_generic_parent(_obj, &error);
 \endcode
@@ -22429,7 +22446,8 @@ dwg_add_entity_defaults (Dwg_Data *restrict dwg,
   // plotstyle_flags  = 0; ByLayer
   ent->linewt = 0x1d;
   if (dwg->header_vars.CLAYER)
-    ent->layer = dwg_dup_handleref (dwg, dwg->header_vars.CLAYER);
+    ent->layer = dwg_add_handleref (
+        dwg, 5, dwg->header_vars.CLAYER->absolute_ref, NULL);
   // we cannot yet write >r2000, so no material, visualstyle, yet ...
   return 0;
 }
@@ -22528,7 +22546,8 @@ dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->elevation  = ins_pt->z;
   _obj->height     = height;
   if (dwg->header_vars.TEXTSTYLE)
-    _obj->style = dwg_dup_handleref (dwg, dwg->header_vars.TEXTSTYLE);
+    _obj->style = dwg_add_handleref (
+        dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
   return _obj;
 }
 
@@ -22616,7 +22635,8 @@ dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert,
   _obj->height     = height;
   // block handles
   if (dwg->header_vars.TEXTSTYLE)
-    _obj->style = dwg_dup_handleref (dwg, dwg->header_vars.TEXTSTYLE);
+    _obj->style = dwg_add_handleref (
+        dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
   return _obj;
 }
 
@@ -22641,7 +22661,8 @@ dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->height     = height;
   // block handles
   if (dwg->header_vars.TEXTSTYLE)
-    _obj->style = dwg_dup_handleref (dwg, dwg->header_vars.TEXTSTYLE);
+    _obj->style = dwg_add_handleref (
+        dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
   return _obj;
 }
 
@@ -22768,16 +22789,15 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _vtx = dwg_add_VERTEX_2D (_pl, &pts[i]);
       if (!_vtx)
         return NULL;
-      obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
-      _pl->vertex[i] = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
+      _pl->vertex[i] = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_vtx), pl);
       if (i == 0)
         _pl->first_vertex  = _pl->vertex[i];
       if (i == num_pts - 1)
         _pl->last_vertex  = _pl->vertex[i];
     }
   _seq = dwg_add_SEQEND (blkhdr);
-  obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_seq, &error);
-  _pl->seqend  = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
+  _pl->seqend = dwg_add_handleref (
+      dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
 
   _pl->num_owned = num_pts;
   in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
@@ -22803,16 +22823,14 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _vtx = dwg_add_VERTEX_3D (_pl, &pts[i]);
       if (!_vtx)
         return NULL;
-      obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
-      _pl->vertex[i] = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
+      _pl->vertex[i] = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_vtx), pl);
       if (i == 0)
         _pl->first_vertex  = _pl->vertex[i];
       if (i == num_pts - 1)
         _pl->last_vertex  = _pl->vertex[i];
     }
   _seq = dwg_add_SEQEND (blkhdr);
-  obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_seq, &error);
-  _pl->seqend  = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
+  _pl->seqend  = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
 
   _pl->num_owned = num_pts;
   in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
@@ -22869,16 +22887,16 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _vtx = dwg_add_VERTEX_PFACE (_pl, &verts[i]);
       if (!_vtx)
         return NULL;
-      obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
-      _pl->vertex[i] = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
+      _pl->vertex[i]
+          = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_vtx), pl);
       if (i == 0)
         _pl->first_vertex = _pl->vertex[i];
     }
   for (unsigned j = 0; j < numfaces; j++)
     {
       _vtxf = dwg_add_VERTEX_PFACE_FACE (_pl, faces[j]);
-      obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtxf, &error);
-      _pl->vertex[numverts + j] = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
+      _pl->vertex[numverts + j] = dwg_add_handleref (
+          dwg, 3, dwg_obj_generic_handlevalue (_vtxf), pl);
       if (j == numfaces - 1)
         _pl->last_vertex  = _pl->vertex[numverts + j];
     }
@@ -22928,16 +22946,14 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _vtx = dwg_add_VERTEX_MESH (_pl, &verts[i]);
       if (!_vtx)
         return NULL;
-      obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_vtx, &error);
-      _pl->vertex[i] = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
+      _pl->vertex[i] = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_vtx), pl);
       if (i == 0)
         _pl->first_vertex  = _pl->vertex[i];
       if (i == _pl->num_owned - 1)
         _pl->last_vertex  = _pl->vertex[i];
     }
   _seq = dwg_add_SEQEND (blkhdr);
-  obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_seq, &error);
-  _pl->seqend  = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
+  _pl->seqend  = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
   in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
   return _pl;
 }
@@ -22990,7 +23006,8 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 #define DIMENSION_DEFAULTS                                              \
   _obj->extrusion.z = 1.0;                                              \
   if (dwg->header_vars.DIMSTYLE)                                        \
-    _obj->dimstyle = dwg_dup_handleref (dwg, dwg->header_vars.DIMSTYLE)
+    _obj->dimstyle = dwg_add_handleref (                                \
+        dwg, 5, dwg->header_vars.DIMSTYLE->absolute_ref, NULL)
 
 EXPORT Dwg_Entity_DIMENSION_ALIGNED*
 dwg_add_DIMENSION_ALIGNED (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
@@ -23504,7 +23521,8 @@ dwg_add_MTEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->linespace_style = 1;
   _obj->linespace_factor = 1.0;
   if (dwg->header_vars.TEXTSTYLE)
-    _obj->style = dwg_dup_handleref (dwg, dwg->header_vars.TEXTSTYLE);
+    _obj->style = dwg_add_handleref (
+        dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
   return _obj;
 }
 
@@ -23532,7 +23550,8 @@ dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->x_direction.x = 1.0;
   _obj->extrusion.z = 1.0;
   if (dwg->header_vars.DIMSTYLE)
-    _obj->dimstyle = dwg_dup_handleref (dwg, dwg->header_vars.DIMSTYLE);
+    _obj->dimstyle = dwg_add_handleref (
+        dwg, 5, dwg->header_vars.DIMSTYLE->absolute_ref, NULL);
   _obj->dimgap = dwg->header_vars.DIMGAP;
   _obj->box_height = dwg->header_vars.DIMTXT;
   // TODO more calcs ...
@@ -23561,7 +23580,8 @@ dwg_add_TOLERANCE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   // defaults:
   _obj->extrusion.z = 1.0;
   if (dwg->header_vars.DIMSTYLE)
-    _obj->dimstyle = dwg_dup_handleref (dwg, dwg->header_vars.DIMSTYLE);
+    _obj->dimstyle = dwg_add_handleref (
+        dwg, 5, dwg->header_vars.DIMSTYLE->absolute_ref, NULL);
   _obj->dimgap = dwg->header_vars.DIMGAP;
   return _obj;
 }
@@ -23571,6 +23591,8 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const unsigned num_verts,
                const dwg_point_3d *restrict verts)
 {
+  BITCODE_H ref;
+  Dwg_Object_DICTIONARY *dict;
   API_ADD_ENTITY (MLINE);
   _obj->verts = calloc (num_verts, sizeof (Dwg_MLINE_vertex));
   _obj->num_verts = num_verts;
@@ -23581,8 +23603,28 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _obj->verts[i].vertex.z = verts[i].z;
     }
   _obj->extrusion.z = 1.0;
-  //via nod -> name
-  //_obj->mlinestyle = dwg_dup_handleref (dwg, );
+
+  // find current mlinestyle
+  ref = dwg_ctrl_table (dwg, "MLINESTYLE");
+  if (!ref)
+    return _obj;
+  obj = dwg_ref_object (dwg, ref);
+  if (!obj
+      || !(obj->fixedtype == DWG_TYPE_DICTIONARY
+           || obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT))
+    return _obj;
+  dict = obj->tio.object->tio.DICTIONARY;
+  if (dict->numitems)
+    {
+      ref = dict->itemhandles[0];
+      _obj->mlinestyle = dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL);
+    }
+  else if (obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT)
+    {
+      Dwg_Object_DICTIONARYWDFLT *dflt = (Dwg_Object_DICTIONARYWDFLT *)dict;
+      ref = dflt->defaultid;
+      _obj->mlinestyle = ref ? dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL) : NULL;
+    }
   return _obj;
 }
 
