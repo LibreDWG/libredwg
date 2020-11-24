@@ -22389,20 +22389,23 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
     obj->tio.entity->linewt = 0x1c
 
 /* globals: blkhdr */
-#define API_ADD_ENTITY(token)                                  \
-  int error;                                                   \
-  Dwg_Object *obj;                                             \
-  Dwg_Entity_##token *_obj;                                    \
-  Dwg_Object *blkobj = dwg_obj_generic_to_object ((dwg_obj_generic *)blkhdr, &error); \
-  Dwg_Data *dwg = blkobj && !error ? blkobj->parent : NULL;    \
-  const char *dxfname = #token;                                \
-  if (!dwg)                                                    \
-    return NULL;                                               \
-  NEW_ENTITY(dwg, obj);                                        \
-  ADD_ENTITY (token);                                          \
-  dwg_set_next_objhandle (obj);                                \
-  LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H(obj->handle));  \
-  in_postprocess_handles (obj);                                \
+#define API_ADD_ENTITY(token)                                                 \
+  int error;                                                                  \
+  Dwg_Object *obj;                                                            \
+  Dwg_Entity_##token *_obj;                                                   \
+  Dwg_Object *blkobj                                                          \
+      = dwg_obj_generic_to_object ((dwg_obj_generic *)blkhdr, &error);        \
+  Dwg_Data *dwg = blkobj && !error ? blkobj->parent : NULL;                   \
+  const char *dxfname = #token;                                               \
+  if (!dwg)                                                                   \
+    return NULL;                                                              \
+  NEW_ENTITY (dwg, obj);                                                      \
+  ADD_ENTITY (token);                                                         \
+  obj->tio.entity->ownerhandle = dwg_add_handleref (dwg,                      \
+                                   4, blkobj->handle.value, obj);             \
+  dwg_set_next_objhandle (obj);                                               \
+  LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H (obj->handle));                \
+  in_postprocess_handles (obj);                                               \
   dwg_insert_entity (blkhdr, obj)
 
 #define ADD_OBJECT(token)                                                     \
