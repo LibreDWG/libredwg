@@ -22513,19 +22513,24 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict hdr,
     {
       if (obj->fixedtype == DWG_TYPE_BLOCK)
         {
-          hdr->block_entity = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
-          LOG_TRACE ("MSPACE.block_entity = " FORMAT_REF "\n", ARGS_REF(hdr->block_entity));
+          hdr->block_entity
+              = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
+          LOG_TRACE ("%s.block_entity = " FORMAT_REF "\n", hdr->name,
+                     ARGS_REF (hdr->block_entity));
         }
       else if (obj->fixedtype == DWG_TYPE_ENDBLK)
         {
-          hdr->endblk_entity = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
-          LOG_TRACE ("MSPACE.endblk_entity = " FORMAT_REF "\n", ARGS_REF(hdr->endblk_entity));
+          hdr->endblk_entity
+              = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
+          LOG_TRACE ("%s.endblk_entity = " FORMAT_REF "\n", hdr->name,
+                     ARGS_REF (hdr->endblk_entity));
         }
       else if (!hdr->first_entity && !hdr->num_owned)
         {
           hdr->first_entity = hdr->last_entity
               = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
-          LOG_TRACE ("MSPACE.{first,last}_entity = " FORMAT_REF "\n", ARGS_REF(hdr->first_entity));
+          LOG_TRACE ("%s.{first,last}_entity = " FORMAT_REF "\n", hdr->name,
+                     ARGS_REF (hdr->first_entity));
           hdr->num_owned++;
           obj->tio.entity->nolinks = 1;
         }
@@ -22536,8 +22541,8 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict hdr,
               = lastref ? dwg_ref_object (dwg, lastref) : NULL; // may fail!
           hdr->last_entity
             = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
-          LOG_TRACE ("MSPACE.last_entity = " FORMAT_REF "\n",
-                     ARGS_REF (hdr->last_entity));
+          LOG_TRACE ("%s.last_entity = " FORMAT_REF "\n",
+                     hdr->name, ARGS_REF (hdr->last_entity));
           // link prev. last to curr last
           if (prev)
             {
@@ -22552,7 +22557,7 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict hdr,
               prev->tio.entity->nolinks = 0;
             }
           hdr->num_owned++;
-          LOG_TRACE ("MSPACE.num_owned = %u\n", hdr->num_owned);
+          LOG_TRACE ("%s.num_owned = %u\n", hdr->name, hdr->num_owned);
         }
     }
   return 0;
@@ -22598,20 +22603,31 @@ dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert,
 
   insobj = dwg_obj_generic_to_object ((dwg_obj_generic *)insert, &err);
   if (!insobj || err)
-    return NULL;
+    {
+      LOG_ERROR ("add_Attribute: No INSERT found");
+      return NULL;
+    }
   hdr = dwg_ref_object (insobj->parent, insert->block_header);
   if (!hdr)
-    return NULL;
+    {
+      LOG_ERROR ("add_Attribute: No INSERT.block_header found");
+      return NULL;
+    }
   blkhdr = hdr->tio.object->tio.BLOCK_HEADER;
 
   // TODO check if this ATTDEF already exists.
   attdef = dwg_add_ATTDEF (blkhdr, height, flags, prompt,
                            ins_pt, tag, text_value);
+  if (!attdef)
+    LOG_WARN ("No ATTDEF %s added", tag)
   // ENDBLK must exist already though
   attrib = dwg_add_ATTRIB (insert, height, flags, ins_pt, tag, text_value);
   attobj = dwg_obj_generic_to_object ((dwg_obj_generic *)attrib, &err);
   if (!attobj || err)
-    return NULL;
+    {
+      LOG_ERROR ("No ATTRIB %s added", tag);
+      return NULL;
+    }
   //dwg->header_vars.AFLAGS = flags; FIXME
   insert->last_attrib = dwg_add_handleref (attobj->parent, 4, attobj->handle.value, insobj);
   if (!insert->has_attribs) // no ATTRIB and SEQEND yet
@@ -22736,7 +22752,14 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   //TODO scale_flag
   _obj->extrusion.z  = 1.0;
   _obj->rotation     = rotation;
-  _obj->block_header = dwg_find_tablehandle_silent (dwg, name, "BLOCK");
+  _obj->block_header = dwg_find_tablehandle (dwg, name, "BLOCK");
+  if (_obj->block_header)
+    {
+      Dwg_Object *hdr = dwg_ref_object (dwg, _obj->block_header);
+      if (!hdr || hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
+        return _obj;
+      hdr->tio.object->tio.BLOCK_HEADER->num_inserts++;
+    }
   return _obj;
 }
 
@@ -22767,7 +22790,14 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->num_cols     = (BITCODE_BS)num_cols;
   _obj->row_spacing  = row_spacing;
   _obj->col_spacing  = col_spacing;
-  _obj->block_header = dwg_find_tablehandle_silent (dwg, name, "BLOCK");
+  _obj->block_header = dwg_find_tablehandle (dwg, name, "BLOCK");
+  if (_obj->block_header)
+    {
+      Dwg_Object *hdr = dwg_ref_object (dwg, _obj->block_header);
+      if (!hdr || hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
+        return _obj;
+      hdr->tio.object->tio.BLOCK_HEADER->num_inserts++;
+    }
   return _obj;
 }
 
@@ -22815,7 +22845,10 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     {
       _vtx = dwg_add_VERTEX_2D (_pl, &pts[i]);
       if (!_vtx)
-        return NULL;
+        {
+          LOG_ERROR ("No VERTEX_2D[%d] added", i);
+          return NULL;
+        }
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_vtx), pl);
       if (i == 0)
         _pl->first_vertex  = _pl->vertex[i];
@@ -22849,7 +22882,10 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     {
       _vtx = dwg_add_VERTEX_3D (_pl, &pts[i]);
       if (!_vtx)
-        return NULL;
+        {
+          LOG_ERROR ("No VERTEX_3D[%d] added", i);
+          return NULL;
+        }
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_vtx), pl);
       if (i == 0)
         _pl->first_vertex  = _pl->vertex[i];
@@ -22913,7 +22949,10 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     {
       _vtx = dwg_add_VERTEX_PFACE (_pl, &verts[i]);
       if (!_vtx)
-        return NULL;
+        {
+          LOG_ERROR ("No VERTEX_PFACE[%d] added", i);
+          return NULL;
+        }
       _pl->vertex[i]
           = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_vtx), pl);
       if (i == 0)
@@ -22922,6 +22961,11 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   for (unsigned j = 0; j < numfaces; j++)
     {
       _vtxf = dwg_add_VERTEX_PFACE_FACE (_pl, faces[j]);
+      if (!_vtxf)
+        {
+          LOG_ERROR ("No VERTEX_PFACE_FACE[%d] added", j);
+          return NULL;
+        }
       _pl->vertex[numverts + j] = dwg_add_handleref (
           dwg, 3, dwg_obj_generic_handlevalue (_vtxf), pl);
       if (j == numfaces - 1)
@@ -22972,7 +23016,10 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     {
       _vtx = dwg_add_VERTEX_MESH (_pl, &verts[i]);
       if (!_vtx)
-        return NULL;
+        {
+          LOG_ERROR ("No VERTEX_MESH[%d] added", i);
+          return NULL;
+        }
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_vtx), pl);
       if (i == 0)
         _pl->first_vertex  = _pl->vertex[i];
@@ -23634,12 +23681,18 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   // find current mlinestyle
   ref = dwg_ctrl_table (dwg, "MLINESTYLE");
   if (!ref)
-    return _obj;
+    {
+      LOG_WARN ("No ACAD_MLINESTYLE in Named Dictionary Object found");
+      return _obj;
+    }
   obj = dwg_ref_object (dwg, ref);
   if (!obj
       || !(obj->fixedtype == DWG_TYPE_DICTIONARY
            || obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT))
-    return _obj;
+    {
+      LOG_WARN ("Empty ACAD_MLINESTYLE in Named Dictionary Object");
+      return _obj;
+    }
   dict = obj->tio.object->tio.DICTIONARY;
   if (dict->numitems)
     {

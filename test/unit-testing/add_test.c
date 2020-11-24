@@ -69,9 +69,11 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
     case DWG_TYPE_ATTRIB:
       {
         Dwg_Entity_INSERT *insert;
-        dwg_add_BLOCK (hdr, (const BITCODE_T) "block");
-        dwg_add_LINE (hdr, &pt1, &pt2);
-        dwg_add_ENDBLK (hdr);
+        Dwg_Object_BLOCK_HEADER *newhdr;
+        newhdr = dwg_add_BLOCK_HEADER (dwg, (const BITCODE_T) "block");
+        dwg_add_BLOCK (newhdr, (const BITCODE_T) "block");
+        dwg_add_LINE (newhdr, &pt1, &pt2);
+        dwg_add_ENDBLK (newhdr);
         insert = dwg_add_INSERT (hdr, &pt1, (const BITCODE_T) "block", 1.0, 1.0, 1.0, 0.0);
         // adds ATTDEF to BLOCK, redefines it (??)
         dwg_add_Attribute (insert, 1.0, 0, (const BITCODE_T) "prompt", &pt1,
