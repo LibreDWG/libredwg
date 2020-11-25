@@ -6401,6 +6401,40 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 EXPORT Dwg_Object_XRECORD*
 dwg_add_XRECORD (Dwg_Object_DICTIONARY* restrict dict,
                  const BITCODE_T restrict keyword) __nonnull_all;
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_bool (Dwg_Object_XRECORD *restrict _obj,
+                      const short dxf, const BITCODE_B value) __nonnull ((1));
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_int8 (Dwg_Object_XRECORD *restrict _obj,
+                      const short dxf, const BITCODE_RC value) __nonnull ((1));
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_int16 (Dwg_Object_XRECORD *restrict _obj,
+                      const short dxf, const BITCODE_BS value) __nonnull ((1));
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_int32 (Dwg_Object_XRECORD *restrict _obj,
+                      const short dxf, const BITCODE_BL value) __nonnull ((1));
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_int64 (Dwg_Object_XRECORD *restrict _obj,
+                      const short dxf, const BITCODE_BLL value) __nonnull ((1));
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_real (Dwg_Object_XRECORD *restrict _obj,
+                      const short dxf, const BITCODE_BD value) __nonnull ((1));
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_pointd3d (Dwg_Object_XRECORD *restrict _obj,
+                          const short dxf, const BITCODE_3DPOINT *pt) __nonnull ((1));
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_binary (Dwg_Object_XRECORD *restrict _obj,
+                        const short dxf,
+                        const int size, const BITCODE_RC* data) __nonnull_all;
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_string (Dwg_Object_XRECORD *restrict _obj,
+                        const short dxf,
+                        const BITCODE_BS len,
+                        const BITCODE_T str) __nonnull_all;
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_handle (Dwg_Object_XRECORD *restrict _obj,
+                        const short dxf, const Dwg_Handle hdl) __nonnull_all;
+
 EXPORT Dwg_Object_PLACEHOLDER*
 dwg_add_PLACEHOLDER (Dwg_Data *restrict dwg) __nonnull_all;
 // Called Raster in VBA

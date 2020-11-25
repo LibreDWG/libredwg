@@ -24187,44 +24187,182 @@ dwg_add_XRECORD (Dwg_Object_DICTIONARY *restrict dict,
     dwg_require_class (dwg, "XRECORD");
   _obj->cloning = dict->cloning;
   itemhandle = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);
-  // find the key in the dict
-  for (unsigned i = 0; i < dict->numitems; i++)
+  // find the key in the dict, and set the handle. or add it
+  dwg_add_DICTIONARY_item (dict, key, itemhandle);
+  return _obj;
+}
+
+static Dwg_Resbuf *rbuf_last (Dwg_Resbuf *rbuf)
+{
+  Dwg_Resbuf *xdata = rbuf;
+  while (rbuf)
     {
-      BITCODE_T *texts = dict->texts;
-      BITCODE_H *hdlv = dict->itemhandles;
-      if (!hdlv || !texts || !texts[i])
-        continue;
-      if (dwg->header.from_version >= R_2007)
-        {
-          if (bit_eq_TU (key, (BITCODE_TU)texts[i]))
-            {
-              dict->itemhandles[i] = itemhandle;
-              LOG_TRACE ("set XRECORD to DICTIONARY_item %s => " FORMAT_REF "\n",
-                         key, ARGS_REF (itemhandle));
-              return _obj;
-            }
-        }
-      else
-        {
-          if (strEQ (key, texts[i]))
-            {
-              dict->itemhandles[i] = itemhandle;
-              LOG_TRACE ("set XRECORD to DICTIONARY_item %s => " FORMAT_REF "\n",
-                         key, ARGS_REF (itemhandle));
-              return _obj;
-            }
-        }
+      xdata = rbuf;
+      rbuf = rbuf->nextrb;
     }
-  // not found:
-  dict->texts = (BITCODE_T *)realloc (dict->texts, (dict->numitems + 1)
-                                                       * sizeof (BITCODE_T));
-  dict->itemhandles = (BITCODE_H *)realloc (
-      dict->itemhandles, (dict->numitems + 1) * sizeof (BITCODE_H));
-  LOG_TRACE ("add XRECORD to DICTIONARY %s => " FORMAT_REF "\n", key,
-             ARGS_REF (itemhandle));
-  dict->texts[dict->numitems] = strdup (key);
-  dict->itemhandles[dict->numitems] = itemhandle;
-  dict->numitems++;
+  return xdata;
+}
+
+static Dwg_Resbuf * rbuf_add (Dwg_Resbuf **rbuf)
+{
+  Dwg_Resbuf *xdata = rbuf_last (*rbuf);
+  if (!xdata)
+    {
+      *rbuf = (Dwg_Resbuf *)calloc (1, sizeof (Dwg_Resbuf));
+    }
+  else
+    {
+      xdata->nextrb = (Dwg_Resbuf *)calloc (1, sizeof (Dwg_Resbuf));
+      *rbuf = xdata->nextrb;
+    }
+  return *rbuf;
+}
+
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_bool (Dwg_Object_XRECORD *restrict _obj,
+                      const short dxf, const BITCODE_B value)
+{
+  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  _obj->num_xdata++;
+  rbuf->type = dxf;
+  rbuf->value.i8 = value;
+  _obj->xdata_size += 3;
+  return _obj;
+}
+
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_int8 (Dwg_Object_XRECORD *restrict _obj,
+                       const short dxf, const BITCODE_RC value)
+{
+  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  _obj->num_xdata++;
+  rbuf->type = dxf;
+  rbuf->value.i8 = value;
+  _obj->xdata_size += 3;
+  return _obj;
+}
+
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_int16 (Dwg_Object_XRECORD *restrict _obj,
+                       const short dxf, const BITCODE_BS value)
+{
+  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  _obj->num_xdata++;
+  rbuf->type = dxf;
+  rbuf->value.i16 = value;
+  return _obj;
+}
+
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_int32 (Dwg_Object_XRECORD *restrict _obj,
+                       const short dxf, const BITCODE_BL value)
+{
+  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  _obj->num_xdata++;
+  rbuf->type = dxf;
+  rbuf->value.i32 = value;
+  _obj->xdata_size += 6;
+  return _obj;
+}
+
+
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_int64 (Dwg_Object_XRECORD *restrict _obj,
+                       const short dxf, const BITCODE_BLL value)
+{
+  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  _obj->num_xdata++;
+  rbuf->type = dxf;
+  rbuf->value.i64 = value;
+  _obj->xdata_size += 10;
+  return _obj;
+}
+
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_real (Dwg_Object_XRECORD *restrict _obj,
+                      const short dxf, const BITCODE_BD value)
+{
+  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  _obj->num_xdata++;
+  rbuf->type = dxf;
+  rbuf->value.dbl = value;
+  _obj->xdata_size += 10;
+  return _obj;
+}
+
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_pointd3d (Dwg_Object_XRECORD *restrict _obj,
+                          const short dxf, const BITCODE_3DPOINT *pt)
+{
+  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  _obj->num_xdata++;
+  rbuf->type = dxf;
+  rbuf->value.pt[0] = pt->x;
+  rbuf->value.pt[1] = pt->y;
+  rbuf->value.pt[2] = pt->z;
+  _obj->xdata_size += 26;
+  return _obj;
+}
+
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_binary (Dwg_Object_XRECORD *restrict _obj,
+                        const short dxf,
+                        const int size, const BITCODE_RC* data)
+{
+  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  _obj->num_xdata++;
+  rbuf->type = dxf;
+  rbuf->value.str.size = size;
+  rbuf->value.str.u.data = malloc (size);
+  memcpy (rbuf->value.str.u.data, data, size);
+  _obj->xdata_size += 3 + size;
+  return _obj;
+}
+
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_string (Dwg_Object_XRECORD *restrict _obj,
+                        const short dxf,
+                        const BITCODE_BS len,
+                        const BITCODE_T str)
+{
+  int error;
+  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+  Dwg_Data *dwg = obj ? obj->parent : NULL;
+  _obj->num_xdata++;
+  rbuf->type = dxf;
+  rbuf->value.str.size = len;
+  if (dwg && dwg->header.version < R_2007)
+    {
+      rbuf->value.str.codepage = dwg->header.codepage;
+      rbuf->value.str.u.data = malloc (len);
+      memcpy (rbuf->value.str.u.data, str, len);
+      _obj->xdata_size += 4 + len;
+    }
+  else if (dwg && dwg->header.version >= R_2007)
+    {
+      rbuf->value.str.u.data = malloc (2 * len);
+      memcpy (rbuf->value.str.u.data, str, 2 * len);
+      _obj->xdata_size += 4 + (2 * len);
+    }
+  else
+    {
+      rbuf->value.str.u.data = malloc (len);
+      memcpy (rbuf->value.str.u.data, str, len);
+      _obj->xdata_size += 4 + len;
+    }
+  return _obj;
+}
+
+EXPORT Dwg_Object_XRECORD *
+dwg_add_XRECORD_handle (Dwg_Object_XRECORD *restrict _obj,
+                        const short dxf, const Dwg_Handle hdl)
+{
+  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  _obj->num_xdata++;
+  rbuf->type = dxf;
+  memcpy (rbuf->value.hdl, &hdl, sizeof (Dwg_Handle));
+  _obj->xdata_size += 10;
   return _obj;
 }
 

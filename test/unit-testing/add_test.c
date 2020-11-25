@@ -291,7 +291,7 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
         Dwg_Object_DICTIONARY *dict
             = dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_MATERIAL",
                                   (const BITCODE_T) "Global", NULL);
-        Dwg_Object_XRECORD *xrecord = dwg_add_XRECORD (dict, "REFRACTIONTILE");
+        Dwg_Object_XRECORD *xrecord = dwg_add_XRECORD (dict, (const BITCODE_T) "REFRACTIONTILE");
         dwg_add_XRECORD_int16 (xrecord, 270, 1);
         dwg_add_XRECORD_int16 (xrecord, 271, 1);
       }
