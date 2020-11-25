@@ -2011,38 +2011,31 @@ EXPORT BITCODE_H
 dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
 {
   // The NOD (Named Object Dict) is always the very first DICTIONARY
-  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+  Dwg_Object *obj = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
+  Dwg_Object_DICTIONARY *nod = obj->tio.object->tio.DICTIONARY;
+  for (BITCODE_BL j = 0; j < nod->numitems; j++)
     {
-      Dwg_Object *obj = &dwg->object[i];
-      // ACAD_GROUP => 1st DICTIONARY: search handle to "ACAD_GROUP"
-      if (obj->fixedtype == DWG_TYPE_DICTIONARY)
+      char *u8;
+      if (!nod->texts || !nod->itemhandles)
+        continue;
+      u8 = nod->texts[j];
+      if (!u8)
+        continue;
+      if (dwg->header.version >= R_2007)
+        u8 = bit_convert_TU ((BITCODE_TU)u8);
+      if (u8 && strEQ (u8, name))
         {
-          Dwg_Object_DICTIONARY *_obj = obj->tio.object->tio.DICTIONARY;
-          for (BITCODE_BL j = 0; j < _obj->numitems; j++)
-            {
-              char *u8;
-              if (!_obj->texts || !_obj->itemhandles)
-                continue;
-              u8 = _obj->texts[j];
-              if (!u8)
-                continue;
-              if (dwg->header.version >= R_2007)
-                u8 = bit_convert_TU ((BITCODE_TU)u8);
-              if (u8 && strEQ (u8, name))
-                {
-                  Dwg_Object_Ref *ref = _obj->itemhandles[j];
-                  if (!ref)
-                    continue;
-                  // relative? (8.0.0, 6.0.0, ...)
-                  dwg_resolve_handleref (ref, obj);
-                  if (dwg->header.version >= R_2007)
-                    free (u8);
-                  return dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL);
-                }
-              if (dwg->header.version >= R_2007)
-                free (u8);
-            }
+          Dwg_Object_Ref *ref = nod->itemhandles[j];
+          if (!ref)
+            continue;
+          // relative? (8.0.0, 6.0.0, ...)
+          dwg_resolve_handleref (ref, obj);
+          if (dwg->header.version >= R_2007)
+            free (u8);
+          return dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL);
         }
+      if (dwg->header.version >= R_2007)
+        free (u8);
     }
   LOG_TRACE ("dwg_find_dictionary: DICTIONARY with %s not found\n", name)
   return NULL;

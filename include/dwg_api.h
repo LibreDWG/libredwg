@@ -6464,6 +6464,10 @@ EXPORT Dwg_Object_GROUP*
 dwg_add_GROUP (Dwg_Data *restrict dwg,
                const BITCODE_T restrict name) __nonnull_all;
 
+EXPORT Dwg_Object_MLINESTYLE *
+dwg_add_MLINESTYLE (Dwg_Data *restrict dwg,
+                    const BITCODE_T restrict name) __nonnull_all;
+
 #ifdef __cplusplus
 }
 #endif

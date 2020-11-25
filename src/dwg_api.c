@@ -6891,7 +6891,7 @@ dwg_ent_minsert_get_block_header (const dwg_ent_minsert *restrict minsert,
  *                FUNCTIONS FOR MLINESTYLE OBJECT                    *
  ********************************************************************/
 
-/** Returns the  _dwg_entity_MLINESTYLE::name, DXF 2 (utf-8 encoded)
+/** Returns the  _dwg_object_MLINESTYLE::name, DXF 2 (utf-8 encoded)
 \code Usage: char * name = dwg_obj_mlinestyle_get_name(mlinestyle, &error);
 \endcode
 \param[in]  mlinestyle dwg_obj_mlinestyle
@@ -6918,7 +6918,7 @@ dwg_obj_mlinestyle_get_name (const dwg_obj_mlinestyle *restrict mlinestyle,
     }
 }
 
-/** Sets the _dwg_entity_MLINESTYLE::name
+/** Sets the _dwg_object_MLINESTYLE::name
 \code Usage: dwg_obj_mlinestyle_set_name(minsert, "mstylename", &error);
 \endcode
 \param[out] mlinestyle dwg_obj_mlinestyle
@@ -6945,7 +6945,7 @@ dwg_obj_mlinestyle_set_name (dwg_obj_mlinestyle *restrict mlinestyle,
     }
 }
 
-/** Returns the _dwg_entity_MLINESTYLE::desc, DXF 3 (utf-8 encoded)
+/** Returns the _dwg_object_MLINESTYLE::desc, DXF 3 (utf-8 encoded)
 \code Usage: char * desc = dwg_obj_mlinestyle_get_desc(mlinestyle, &error);
 \endcode
 \param[in]  mlinestyle dwg_obj_mlinestyle
@@ -6972,7 +6972,7 @@ dwg_obj_mlinestyle_get_desc (const dwg_obj_mlinestyle *restrict mlinestyle,
     }
 }
 
-/** Sets the _dwg_entity_MLINESTYLE::desc, DXF 3. (utf-8 encoded)
+/** Sets the _dwg_object_MLINESTYLE::desc, DXF 3. (utf-8 encoded)
 \code Usage: dwg_obj_mlinestyle_set_desc(minsert, desc, &error);
 \endcode
 \param[out] mlinestyle dwg_obj_mlinestyle
@@ -6999,7 +6999,7 @@ dwg_obj_mlinestyle_set_desc (dwg_obj_mlinestyle *restrict mlinestyle,
     }
 }
 
-/** Returns the _dwg_entity_MLINESTYLE::flag, DXF 70
+/** Returns the _dwg_object_MLINESTYLE::flag, DXF 70
 \code Usage: int flag = dwg_obj_mlinestyle_get_flag(minsert, &error);
 \endcode
 \param[in]  mlinestyle dwg_obj_mlinestyle
@@ -7023,7 +7023,7 @@ dwg_obj_mlinestyle_get_flag (const dwg_obj_mlinestyle *restrict mlinestyle,
     }
 }
 
-/** Sets the _dwg_entity_MLINESTYLE::flag, DXF 70
+/** Sets the _dwg_object_MLINESTYLE::flag, DXF 70
 \code Usage: dwg_obj_mlinestyle_set_flag(mlinestyle, 1+2, &error);
 \endcode
 \param[out] mlinestyle  dwg_ent_mlinestyle*
@@ -7047,7 +7047,7 @@ dwg_obj_mlinestyle_set_flag (dwg_obj_mlinestyle *restrict mlinestyle,
     }
 }
 
-/** Returns the _dwg_entity_MLINESTYLE::start_angle, DXF 51 (radians)
+/** Returns the _dwg_object_MLINESTYLE::start_angle, DXF 51 (radians)
 \code Usage: double start_angle =
 dwg_obj_mlinestyle_get_start_angle(mlinestyle, &error); \endcode \param[in]
 mlinestyle  dwg_obj_mlinestyle \param[out] error   int*, is set to 0 for ok, 1
@@ -7070,7 +7070,7 @@ dwg_obj_mlinestyle_get_start_angle (
     }
 }
 
-/** Sets the _dwg_entity_MLINESTYLE::start_angle, DXF 51 (radians)
+/** Sets the _dwg_object_MLINESTYLE::start_angle, DXF 51 (radians)
 \code Usage: dwg_obj_mlinestyle_set_start_angle(mlinestyle, M_PI_2, &error);
 \endcode
 \param[out] mlinestyle  dwg_obj_mlinestyle
@@ -7095,7 +7095,7 @@ dwg_obj_mlinestyle_set_start_angle (dwg_obj_mlinestyle *restrict mlinestyle,
     }
 }
 
-/** Returns the _dwg_entity_MLINESTYLE::end_angle, DXF 52 (radians)
+/** Returns the _dwg_object_MLINESTYLE::end_angle, DXF 52 (radians)
 \code Usage: double angle = dwg_obj_mlinestyle_get_end_angle(mlinestyle,
 &error); \endcode \param[in]  mlinestyle dwg_obj_mlinestyle \param[out] error
 int*, is set to 0 for ok, 1 on error \deprecated
@@ -7117,7 +7117,7 @@ dwg_obj_mlinestyle_get_end_angle (
     }
 }
 
-/** Sets the _dwg_entity_MLINESTYLE::end_angle, DXF 51 (radians)
+/** Sets the _dwg_object_MLINESTYLE::end_angle, DXF 51 (radians)
 \code Usage: dwg_obj_mlinestyle_set_end_angle(mlinestyle, M_PI_2, &error);
 \endcode
 \param[out] mlinestyle dwg_obj_mlinestyle
@@ -7141,7 +7141,7 @@ dwg_obj_mlinestyle_set_end_angle (dwg_obj_mlinestyle *restrict mlinestyle,
     }
 }
 
-/** Returns the _dwg_entity_MLINESTYLE::num_lines, DXF 71.
+/** Returns the _dwg_object_MLINESTYLE::num_lines, DXF 71.
 \code Usage: char lines = dwg_obj_mlinestyle_get_num_lines(mlinestyle, &error);
 \endcode
 \param[in]  mlinestyle dwg_obj_mlinestyle
@@ -23654,9 +23654,10 @@ dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
 
 EXPORT Dwg_Object_DICTIONARY*
 dwg_add_DICTIONARY_item (Dwg_Object_DICTIONARY* _obj,
-                         const BITCODE_T restrict text,
+                         const BITCODE_T restrict key,
                          const BITCODE_H restrict itemhandle)
 {
+  int error;
   if (!_obj->numitems)
     {
       _obj->texts = (BITCODE_T *)calloc (1, sizeof (BITCODE_T));
@@ -23664,19 +23665,56 @@ dwg_add_DICTIONARY_item (Dwg_Object_DICTIONARY* _obj,
     }
   else
     {
-      // TODO check if text already exists, and if so just replace handle.
+      Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+      Dwg_Data *dwg = (obj && !error) ? obj->parent : NULL;
+      if (!dwg)
+        {
+          LOG_ERROR ("dwg_add_DICTIONARY_item: no obj from DICTIONARY");
+          return NULL;
+        }
+      // check if text already exists, and if so just replace handle.
+      for (i = 0; i < _obj->numitems; i++)
+        {
+          BITCODE_T *texts = _obj->texts;
+          BITCODE_H *hdlv = _obj->itemhandles;
+          if (!hdlv || !texts || !texts[i])
+            continue;
+          if (dwg->header.from_version >= R_2007)
+            {
+              if (bit_eq_TU (key, (BITCODE_TU)texts[i]))
+                {
+                  LOG_TRACE ("replace DICTIONARY_item %s=> " FORMAT_REF "\n",
+                             key, ARGS_REF (itemhandle));
+                  _obj->itemhandles[i] = itemhandle;
+                  return _obj;
+                }
+            }
+          else
+            {
+              if (strEQ (key, texts[i]))
+                {
+                  LOG_TRACE ("replace DICTIONARY_item %s => " FORMAT_REF "\n",
+                             key, ARGS_REF (itemhandle));
+                  _obj->itemhandles[i] = itemhandle;
+                  return _obj;
+                }
+            }
+        }
+      // not found:
       _obj->texts = (BITCODE_T *)realloc (
           _obj->texts, (_obj->numitems + 1) * sizeof (BITCODE_T));
       _obj->itemhandles = (BITCODE_H *)realloc (
           _obj->itemhandles, (_obj->numitems + 1) * sizeof (BITCODE_H));
     }
-  _obj->texts[_obj->numitems] = strdup (text);
+  LOG_TRACE ("add DICTIONARY_item %s => " FORMAT_REF "\n", key,
+             ARGS_REF (itemhandle));
+  _obj->texts[_obj->numitems] = strdup (key);
   _obj->itemhandles[_obj->numitems] = itemhandle;
   _obj->numitems++;
   return _obj;
 }
 
-//dwg_add_DICTIONARYWDFLT (dwg, "Normal", 0xF);
+//dwg_add_DICTIONARYWDFLT (dwg, "Normal", handle (0xF));
 EXPORT Dwg_Object_DICTIONARYWDFLT*
 dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
                          const BITCODE_T restrict name, /* the NOD entry */
@@ -23820,7 +23858,9 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   ref = dwg_ctrl_table (dwg, "MLINESTYLE");
   if (!ref)
     {
-      LOG_WARN ("No ACAD_MLINESTYLE in Named Dictionary Object found");
+      Dwg_Object_MLINESTYLE *mlstyle = dwg_add_MLINESTYLE (dwg, "STANDARD");
+      _obj->mlinestyle = dwg_add_handleref (dwg, 5, dwg_obj_generic_handlevalue (mlstyle), obj);
+      //LOG_WARN ("No ACAD_MLINESTYLE in Named Dictionary Object found");
       return _obj;
     }
   obj = dwg_ref_object (dwg, ref);
@@ -23828,20 +23868,27 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       || !(obj->fixedtype == DWG_TYPE_DICTIONARY
            || obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT))
     {
-      LOG_WARN ("Empty ACAD_MLINESTYLE in Named Dictionary Object");
+      Dwg_Object_MLINESTYLE *mlstyle = dwg_add_MLINESTYLE (dwg, "STANDARD");
+      _obj->mlinestyle = dwg_add_handleref (dwg, 5, dwg_obj_generic_handlevalue (mlstyle), obj);
+      //LOG_WARN ("Empty ACAD_MLINESTYLE in Named Dictionary Object");
       return _obj;
     }
   dict = obj->tio.object->tio.DICTIONARY;
-  if (dict->numitems)
-    {
-      ref = dict->itemhandles[0];
-      _obj->mlinestyle = dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL);
-    }
-  else if (obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT)
+  if (obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT)
     {
       Dwg_Object_DICTIONARYWDFLT *dflt = (Dwg_Object_DICTIONARYWDFLT *)dict;
       ref = dflt->defaultid;
-      _obj->mlinestyle = ref ? dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL) : NULL;
+      if (ref)
+        {
+          _obj->mlinestyle = dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL);
+          return _obj;
+        }
+    }
+  if (dict->numitems)
+    {
+      // take the first as default? There is no HEADER.CMLINESTYLE
+      ref = dict->itemhandles[0];
+      _obj->mlinestyle = dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL);
     }
   return _obj;
 }
@@ -23995,8 +24042,83 @@ dwg_add_VX (Dwg_Data *restrict dwg, const char* restrict name)
   API_ADD_TABLE (VX_TABLE_RECORD, VX_CONTROL);
 }
 
-  // GROUP
-  // MLINESTYLE
+EXPORT Dwg_Object_GROUP *
+dwg_add_GROUP (Dwg_Data *restrict dwg, const BITCODE_T restrict name /* maybe NULL */)
+{
+  Dwg_Object_DICTIONARY *dict;
+  Dwg_Object *dictobj;
+  Dwg_Object_Ref *groupdict;
+  Dwg_Object *nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
+  API_ADD_OBJECT (GROUP);
+  // find nod dict
+  groupdict = dwg_ctrl_table (dwg, "GROUP");
+  if (!groupdict)
+    {
+      dict = dwg_add_DICTIONARY (
+          dwg, "ACAD_GROUP", name,
+          dwg_add_handleref (dwg, 2, obj->handle.value, NULL));
+    }
+  else
+    {
+      Dwg_Object *group = dwg_ref_object (dwg, groupdict);
+      if (group)
+        dict = dwg_add_DICTIONARY_item (obj->tio.object->tio.DICTIONARY, "ACAD_GROUP",
+                                         dwg_add_handleref (dwg, 2, group->handle.value, NULL));
+    }
+  if (dict)
+    {
+      dictobj = dwg_ref_object (dwg, dict);
+      obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, dict->handle.value, NULL);
+      if (!obj->tio.object->reactors)
+        {
+          obj->tio.object->num_reactors = 1;
+          obj->tio.object->reactors = malloc (sizeof (BITCODE_H));
+          obj->tio.object->reactors[0] = obj->tio.object->ownerhandle;
+        }
+    }
+ 
+   _obj->selectable = 1;
+  if (name)
+    _obj->name = strdup (name);
+  else
+    _obj->unnamed = 1; 
+  return _obj;
+}
+
+EXPORT Dwg_Object_MLINESTYLE *
+dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
+{
+  Dwg_Object_DICTIONARY *nod;
+  Dwg_Object_DICTIONARY *dict;
+  API_ADD_OBJECT (MLINESTYLE);
+  // find nod dict
+  dictref = dwg_find_dictionary (dwg, name);
+  if (!dictref)
+    {
+      // add to NOD item
+      Dwg_Object *nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
+      dwg_add_DICTIONARY_item (nod->tio.object->tio.DICTIONARY, name,
+                               dwg_add_handleref (dwg, 2, obj->handle.value, NULL));
+      
+    }
+
+  _obj->name = strdup (name);
+  _obj->fill_color = (BITCODE_CMC){ 256, 0 };
+  if (strEQ (name, "STANDARD"))
+    {
+      _obj->start_angle = _obj->end_angle = deg2rad (90.0);
+      _obj->num_lines = 2;
+      _obj->lines = calloc (2, sizeof (Dwg_MLINESTYLE_line));
+      _obj->lines[0].offset = 0.5;
+      _obj->lines[0].color = (BITCODE_CMC){ 256, 0 };
+      _obj->lines[0].lt_index = 32767;
+      _obj->lines[1].offset = -0.5;
+      _obj->lines[1].color = (BITCODE_CMC){ 256, 0 };
+      _obj->lines[1].lt_index = 32767;
+    }
+  return _obj;
+}
+
   // OLE2FRAME
   // DUMMY
   // LONG_TRANSACTION
@@ -24205,7 +24327,6 @@ dwg_add_PLACEHOLDER (Dwg_Data *restrict dwg)
 // DBCOLOR
 // DETAILVIEWSTYLE
 // DICTIONARYVAR
-// DICTIONARYWDFLT
 // DIMASSOC
 // DMDIMOBJECTCONTEXTDATA
 // DYNAMICBLOCKPROXYNODE
