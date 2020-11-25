@@ -1331,8 +1331,7 @@ EXPORT dwg_point_2d *dwg_ent_get_POINT2D (const void *restrict _obj,
     dwg_point_2d *point;
     Dwg_DYNAPI_field field = {0};
     int error;
-    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        (const dwg_obj_generic *)_obj, &error);
+    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return NULL;
 
@@ -1372,7 +1371,7 @@ dwg_ent_set_POINT2D (void *restrict _obj, const char *restrict fieldname,
     Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        (const dwg_obj_generic *)_obj, &error);
+        _obj, &error);
     if (!obj || !obj->name)
       return false;
 
@@ -1409,7 +1408,7 @@ dwg_ent_get_POINT3D (const void *restrict _obj, const char *restrict fieldname)
     Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        (const dwg_obj_generic *)_obj, &error);
+        _obj, &error);
     if (!obj || !obj->name)
       return NULL;
 
@@ -1449,7 +1448,7 @@ dwg_ent_set_POINT3D (void *restrict _obj, const char *restrict fieldname,
     Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        (const dwg_obj_generic *)_obj, &error);
+        _obj, &error);
     if (!obj || !obj->name)
       return false;
 
@@ -1484,7 +1483,7 @@ dwg_ent_get_STRING (const void *restrict _obj, const char *restrict fieldname)
     Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        (const dwg_obj_generic *)_obj, &error);
+        _obj, &error);
     if (!obj || !obj->name)
       return NULL;
 
@@ -1519,7 +1518,7 @@ dwg_ent_get_UTF8 (const void *restrict _obj, const char *restrict fieldname, int
     Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        (const dwg_obj_generic *)_obj, &error);
+        _obj, &error);
     if (!obj || !obj->name)
       return NULL;
 
@@ -1552,7 +1551,7 @@ dwg_ent_set_STRING (void *restrict _obj, const char *restrict fieldname,
     Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        (const dwg_obj_generic *)_obj, &error);
+        _obj, &error);
     if (!obj || !obj->name)
       return false;
 
@@ -1586,7 +1585,7 @@ dwg_ent_set_UTF8 (void *restrict _obj, const char *restrict fieldname,
     Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        (const dwg_obj_generic *)_obj, &error);
+        _obj, &error);
     if (!obj || !obj->name)
       return false;
 
@@ -1619,7 +1618,7 @@ dwg_ent_get_REAL (const void *restrict _obj, const char *restrict fieldname)
     Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        (const dwg_obj_generic *)_obj, &error);
+        _obj, &error);
     if (!obj || !obj->name)
       return 0.0;
 
@@ -1652,7 +1651,7 @@ dwg_ent_set_REAL (void *restrict _obj, const char *restrict fieldname,
     Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        (const dwg_obj_generic *)_obj, &error);
+        _obj, &error);
     if (!obj || !obj->name)
       return false;
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
@@ -1684,7 +1683,7 @@ dwg_ent_get_INT16 (const void *restrict _obj, const char *restrict fieldname)
     Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        (const dwg_obj_generic *)_obj, &error);
+        _obj, &error);
     if (!obj || !obj->name)
       return 0;
 
@@ -1717,7 +1716,7 @@ dwg_ent_set_INT16 (void *restrict _obj, const char *restrict fieldname,
     Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        (const dwg_obj_generic *)_obj, &error);
+        _obj, &error);
     if (!obj || !obj->name)
       return false;
 
@@ -1750,7 +1749,7 @@ dwg_ent_get_INT32 (const void *restrict _obj, const char *restrict fieldname)
     Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        (const dwg_obj_generic *)_obj, &error);
+        _obj, &error);
     if (!obj || !obj->name)
       return 0;
 
@@ -1784,7 +1783,7 @@ dwg_ent_set_INT32 (void *restrict _obj, const char *restrict fieldname,
     Dwg_DYNAPI_field field = {0};
     int error;
     const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        (const dwg_obj_generic *)_obj, &error);
+        _obj, &error);
     if (!obj || !obj->name)
       return false;
 
@@ -20654,8 +20653,7 @@ dwg_obj_layer_get_name (const dwg_obj_layer *restrict layer,
 {
   if (layer)
     {
-      const Dwg_Object *obj
-          = dwg_obj_generic_to_object ((const dwg_obj_generic *)layer, error);
+      const Dwg_Object *obj = dwg_obj_generic_to_object (layer, error);
       if (*error || obj->fixedtype != DWG_TYPE_LAYER)
         {
           *error = 1;
@@ -20691,8 +20689,7 @@ dwg_obj_layer_set_name (dwg_obj_layer *restrict layer,
 {
   if (layer)
     {
-      const Dwg_Object *obj
-          = dwg_obj_generic_to_object ((const dwg_obj_generic *)layer, error);
+      const Dwg_Object *obj = dwg_obj_generic_to_object (layer, error);
       if (*error || obj->fixedtype != DWG_TYPE_LAYER)
         {
           LOG_ERROR ("%s: arg not a LAYER", __FUNCTION__)
@@ -21354,10 +21351,10 @@ dwg_ent_to_object (const dwg_obj_ent *restrict obj, int *restrict error)
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_object *
-dwg_ent_generic_to_object (const dwg_ent_generic *restrict obj,
+dwg_ent_generic_to_object (const void *restrict obj,
                            int *restrict error)
 {
-  return dwg_obj_generic_to_object ((dwg_obj_generic * restrict) obj, error);
+  return dwg_obj_generic_to_object (obj, error);
 }
 
 /** Returns dwg_obj_ent* from any dwg_ent_* entity
@@ -21367,12 +21364,13 @@ dwg_ent_generic_to_object (const dwg_ent_generic *restrict obj,
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_obj_ent *
-dwg_ent_generic_parent (const dwg_ent_generic *restrict ent,
+dwg_ent_generic_parent (const void *restrict ent,
                         int *restrict error)
 {
-  if (ent && ent->parent)
+  const dwg_ent_generic *xent = (const dwg_ent_generic *)ent;
+  if (xent && xent->parent)
     {
-      dwg_obj_ent *retval = ent->parent;
+      dwg_obj_ent *retval = xent->parent;
       *error = 0;
       return retval;
     }
@@ -21802,9 +21800,10 @@ dwg_obj_obj_to_object (const dwg_obj_obj *restrict obj, int *restrict error)
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_object *
-dwg_obj_generic_to_object (const dwg_obj_generic *restrict _obj,
+dwg_obj_generic_to_object (const void *restrict _vobj,
                            int *restrict error)
 {
+  const dwg_obj_generic *_obj = (const dwg_obj_generic *)_vobj;
   if (_obj && _obj->parent)
     {
       dwg_data *dwg = _obj->parent->dwg;
@@ -21841,7 +21840,7 @@ unsigned long
 dwg_obj_generic_handlevalue (void *_obj)
 {
   int error;
-  Dwg_Object *obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_obj, &error);
+  Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
   if (obj && !error)
     return obj->handle.value;
   else
@@ -21855,12 +21854,13 @@ dwg_obj_generic_handlevalue (void *_obj)
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_obj_obj *
-dwg_obj_generic_parent (const dwg_obj_generic *restrict obj,
+dwg_obj_generic_parent (const void *restrict _vobj,
                         int *restrict error)
 {
-  if (obj && obj->parent)
+  const dwg_obj_generic *_obj = (const dwg_obj_generic *)_vobj;
+  if (_obj && _obj->parent)
     {
-      dwg_obj_obj *retval = obj->parent;
+      dwg_obj_obj *retval = _obj->parent;
       *error = 0;
       return retval;
     }
@@ -21995,7 +21995,7 @@ int dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg);
 
 // returns BLOCK_HEADER owner for generic entity from ent->ownerhandle.
 EXPORT Dwg_Object_BLOCK_HEADER*
-dwg_entity_owner (dwg_ent_generic* _ent)
+dwg_entity_owner (const void* _ent)
 {
   int error;
   Dwg_Object *ent = dwg_ent_generic_to_object (_ent, &error);
@@ -22281,7 +22281,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   dwg_set_next_hdl (dwg, 0x1F);
   // BLOCK_RECORD_MSPACE: (5.1.1F)
   mspace = dwg_add_BLOCK_HEADER (dwg, (const BITCODE_T) "*MODEL_SPACE");
-  obj = dwg_obj_generic_to_object ((dwg_obj_generic *)mspace, &error);
+  obj = dwg_obj_generic_to_object (mspace, &error);
   block_control->num_entries--;
   dwg->header_vars.BLOCK_RECORD_MSPACE
       = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
@@ -22289,7 +22289,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   block_control->model_space = dwg->header_vars.BLOCK_RECORD_MSPACE;
   // BLOCK_RECORD_PSPACE: (5.1.20)
   pspace = dwg_add_BLOCK_HEADER (dwg, (const BITCODE_T) "*PAPER_SPACE");
-  obj = dwg_obj_generic_to_object ((dwg_obj_generic *)pspace, &error);
+  obj = dwg_obj_generic_to_object (pspace, &error);
   block_control->num_entries--;
   dwg->header_vars.BLOCK_RECORD_PSPACE
       = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
@@ -22536,7 +22536,7 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
   Dwg_Object *obj;                                                            \
   Dwg_Entity_##token *_obj;                                                   \
   Dwg_Object *blkobj                                                          \
-      = dwg_obj_generic_to_object ((dwg_obj_generic *)blkhdr, &error);        \
+      = dwg_obj_generic_to_object (blkhdr, &error);        \
   Dwg_Data *dwg = blkobj && !error ? blkobj->parent : NULL;                   \
   const char *dxfname = #token;                                               \
   if (!dwg)                                                                   \
@@ -22608,7 +22608,7 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict hdr,
   int error;
   Dwg_Data *dwg = obj->parent;
   const Dwg_Version_Type version = dwg->header.version;
-  Dwg_Object *blkobj = dwg_obj_generic_to_object ((dwg_obj_generic *)hdr, &error);
+  Dwg_Object *blkobj = dwg_obj_generic_to_object (hdr, &error);
   const Dwg_Object_Ref *mspace =  dwg_model_space_ref (dwg);
   const Dwg_Object_Ref *pspace =  dwg_paper_space_ref (dwg);
 
@@ -22719,7 +22719,7 @@ dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert,
   Dwg_Entity_ATTRIB *attrib;
   int err;
 
-  insobj = dwg_obj_generic_to_object ((dwg_obj_generic *)insert, &err);
+  insobj = dwg_obj_generic_to_object (insert, &err);
   if (!insobj || err)
     {
       LOG_ERROR ("add_Attribute: No INSERT found");
@@ -22740,7 +22740,7 @@ dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert,
     LOG_WARN ("No ATTDEF %s added", tag)
   // ENDBLK must exist already though
   attrib = dwg_add_ATTRIB (insert, height, flags, ins_pt, tag, text_value);
-  attobj = dwg_obj_generic_to_object ((dwg_obj_generic *)attrib, &err);
+  attobj = dwg_obj_generic_to_object (attrib, &err);
   if (!attobj || err)
     {
       LOG_ERROR ("No ATTRIB %s added", tag);
@@ -23110,7 +23110,7 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         _pl->last_vertex  = _pl->vertex[numverts + j];
     }
   _seq = dwg_add_SEQEND (blkhdr);
-  obj = dwg_obj_generic_to_object ((dwg_obj_generic *)_seq, &error);
+  obj = dwg_obj_generic_to_object (_seq, &error);
   _pl->seqend  = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
   in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
   return _pl;
@@ -23673,7 +23673,7 @@ dwg_add_DICTIONARY_item (Dwg_Object_DICTIONARY* _obj,
           return NULL;
         }
       // check if text already exists, and if so just replace handle.
-      for (i = 0; i < _obj->numitems; i++)
+      for (unsigned i = 0; i < _obj->numitems; i++)
         {
           BITCODE_T *texts = _obj->texts;
           BITCODE_H *hdlv = _obj->itemhandles;
@@ -23858,7 +23858,7 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   ref = dwg_ctrl_table (dwg, "MLINESTYLE");
   if (!ref)
     {
-      Dwg_Object_MLINESTYLE *mlstyle = dwg_add_MLINESTYLE (dwg, "STANDARD");
+      Dwg_Object_MLINESTYLE *mlstyle = dwg_add_MLINESTYLE (dwg, (const BITCODE_T) "STANDARD");
       _obj->mlinestyle = dwg_add_handleref (dwg, 5, dwg_obj_generic_handlevalue (mlstyle), obj);
       //LOG_WARN ("No ACAD_MLINESTYLE in Named Dictionary Object found");
       return _obj;
@@ -23868,7 +23868,7 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       || !(obj->fixedtype == DWG_TYPE_DICTIONARY
            || obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT))
     {
-      Dwg_Object_MLINESTYLE *mlstyle = dwg_add_MLINESTYLE (dwg, "STANDARD");
+      Dwg_Object_MLINESTYLE *mlstyle = dwg_add_MLINESTYLE (dwg, (const BITCODE_T) "STANDARD");
       _obj->mlinestyle = dwg_add_handleref (dwg, 5, dwg_obj_generic_handlevalue (mlstyle), obj);
       //LOG_WARN ("Empty ACAD_MLINESTYLE in Named Dictionary Object");
       return _obj;
@@ -24045,7 +24045,7 @@ dwg_add_VX (Dwg_Data *restrict dwg, const char* restrict name)
 EXPORT Dwg_Object_GROUP *
 dwg_add_GROUP (Dwg_Data *restrict dwg, const BITCODE_T restrict name /* maybe NULL */)
 {
-  Dwg_Object_DICTIONARY *dict;
+  Dwg_Object_DICTIONARY *dict = NULL;
   Dwg_Object *dictobj;
   Dwg_Object_Ref *groupdict;
   Dwg_Object *nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
@@ -24055,20 +24055,20 @@ dwg_add_GROUP (Dwg_Data *restrict dwg, const BITCODE_T restrict name /* maybe NU
   if (!groupdict)
     {
       dict = dwg_add_DICTIONARY (
-          dwg, "ACAD_GROUP", name,
+          dwg, (const BITCODE_T) "ACAD_GROUP", name,
           dwg_add_handleref (dwg, 2, obj->handle.value, NULL));
     }
   else
     {
       Dwg_Object *group = dwg_ref_object (dwg, groupdict);
       if (group)
-        dict = dwg_add_DICTIONARY_item (obj->tio.object->tio.DICTIONARY, "ACAD_GROUP",
-                                         dwg_add_handleref (dwg, 2, group->handle.value, NULL));
+        dict = dwg_add_DICTIONARY_item (obj->tio.object->tio.DICTIONARY, (const BITCODE_T) "ACAD_GROUP",
+                                        dwg_add_handleref (dwg, 2, group->handle.value, NULL));
     }
   if (dict)
     {
-      dictobj = dwg_ref_object (dwg, dict);
-      obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, dict->handle.value, NULL);
+      dictobj = dwg_obj_generic_to_object (dict, &error);
+      obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, dictobj->handle.value, NULL);
       if (!obj->tio.object->reactors)
         {
           obj->tio.object->num_reactors = 1;
@@ -24088,8 +24088,8 @@ dwg_add_GROUP (Dwg_Data *restrict dwg, const BITCODE_T restrict name /* maybe NU
 EXPORT Dwg_Object_MLINESTYLE *
 dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
 {
-  Dwg_Object_DICTIONARY *nod;
   Dwg_Object_DICTIONARY *dict;
+  Dwg_Object_Ref *dictref;
   API_ADD_OBJECT (MLINESTYLE);
   // find nod dict
   dictref = dwg_find_dictionary (dwg, name);
@@ -24176,17 +24176,55 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
 EXPORT Dwg_Object_XRECORD *
 dwg_add_XRECORD (Dwg_Object_DICTIONARY *restrict dict,
-                 const BITCODE_T restrict keyword)
+                 const BITCODE_T restrict key)
 {
   int err;
-  Dwg_Object *dictobj
-      = dwg_obj_generic_to_object ((dwg_obj_generic *)dict, &err);
+  Dwg_Object *dictobj = dwg_obj_generic_to_object (dict, &err);
   Dwg_Data *dwg = dictobj->parent;
+  BITCODE_H itemhandle;
   API_ADD_OBJECT (XRECORD);
   if (dwg->header.version < R_2000)
     dwg_require_class (dwg, "XRECORD");
   _obj->cloning = dict->cloning;
-  // ...
+  itemhandle = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);
+  // find the key in the dict
+  for (unsigned i = 0; i < dict->numitems; i++)
+    {
+      BITCODE_T *texts = dict->texts;
+      BITCODE_H *hdlv = dict->itemhandles;
+      if (!hdlv || !texts || !texts[i])
+        continue;
+      if (dwg->header.from_version >= R_2007)
+        {
+          if (bit_eq_TU (key, (BITCODE_TU)texts[i]))
+            {
+              dict->itemhandles[i] = itemhandle;
+              LOG_TRACE ("set XRECORD to DICTIONARY_item %s => " FORMAT_REF "\n",
+                         key, ARGS_REF (itemhandle));
+              return _obj;
+            }
+        }
+      else
+        {
+          if (strEQ (key, texts[i]))
+            {
+              dict->itemhandles[i] = itemhandle;
+              LOG_TRACE ("set XRECORD to DICTIONARY_item %s => " FORMAT_REF "\n",
+                         key, ARGS_REF (itemhandle));
+              return _obj;
+            }
+        }
+    }
+  // not found:
+  dict->texts = (BITCODE_T *)realloc (dict->texts, (dict->numitems + 1)
+                                                       * sizeof (BITCODE_T));
+  dict->itemhandles = (BITCODE_H *)realloc (
+      dict->itemhandles, (dict->numitems + 1) * sizeof (BITCODE_H));
+  LOG_TRACE ("add XRECORD to DICTIONARY %s => " FORMAT_REF "\n", key,
+             ARGS_REF (itemhandle));
+  dict->texts[dict->numitems] = strdup (key);
+  dict->itemhandles[dict->numitems] = itemhandle;
+  dict->numitems++;
   return _obj;
 }
 

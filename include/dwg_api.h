@@ -5882,11 +5882,11 @@ EXPORT dwg_object *dwg_ent_to_object (const dwg_obj_ent *restrict obj,
                                       int *restrict error) __nonnull ((2));
 
 EXPORT dwg_object *
-dwg_ent_generic_to_object (const dwg_ent_generic *restrict obj,
+dwg_ent_generic_to_object (const void *restrict obj,
                            int *restrict error) __nonnull ((2));
 
 EXPORT dwg_obj_ent *
-dwg_ent_generic_parent (const dwg_ent_generic *restrict ent,
+dwg_ent_generic_parent (const void *restrict ent,
                         int *restrict error) __nonnull ((2));
 
 EXPORT BITCODE_RL dwg_ent_get_bitsize (const dwg_obj_ent *restrict ent,
@@ -6080,12 +6080,12 @@ EXPORT Dwg_Handle *dwg_obj_get_handleref (const dwg_obj_obj *restrict obj,
                                           int *restrict error) __nonnull ((2));
 
 EXPORT dwg_object *
-dwg_obj_generic_to_object (const dwg_obj_generic *restrict obj,
+dwg_obj_generic_to_object (const void *restrict obj,
                            int *restrict error) __nonnull ((2));
 EXPORT unsigned long
 dwg_obj_generic_handlevalue (void *_obj) __nonnull_all;
 EXPORT dwg_obj_obj *
-dwg_obj_generic_parent (const dwg_obj_generic *restrict obj,
+dwg_obj_generic_parent (const void *restrict obj,
                         int *restrict error) __nonnull ((2));
 
 EXPORT dwg_object *dwg_get_object (dwg_data *dwg, BITCODE_BL index);
@@ -6155,7 +6155,7 @@ EXPORT int dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                               Dwg_Object *restrict obj) __nonnull_all;
 /* returns BLOCK_HEADER owner for generic entity from ent->ownerhandle */
 Dwg_Object_BLOCK_HEADER *
-dwg_entity_owner (dwg_ent_generic *_ent) __nonnull_all;
+dwg_entity_owner (const void *_ent) __nonnull_all;
 
 /* Set defaults from HEADER: CLAYER, linewt, ltype_scale, color, ... */
 EXPORT int
@@ -6424,6 +6424,8 @@ dwg_add_UNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
 /* Tables.
    The names are really BITCODE_T, but we dont support writing TU yet.
+   TODO: take utf8 and convert to TU if needed (dxf).
+   On NULL names just create the CONTROL object/resp. NOD entry.
  */
 Dwg_Object_BLOCK_CONTROL*
 dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps) __nonnull_all;
@@ -6438,31 +6440,31 @@ EXPORT Dwg_Object_UCS *dwg_add_UCS (Dwg_Data *restrict dwg,
                                     const BITCODE_T restrict name) __nonnull ((1,2));
 EXPORT Dwg_Object_LAYER*
 dwg_add_LAYER (Dwg_Data *restrict dwg,
-               const BITCODE_T restrict name) __nonnull ((1));
+               const BITCODE_T restrict name /* maybe NULL */) __nonnull ((1));
 EXPORT Dwg_Object_STYLE*
 dwg_add_STYLE (Dwg_Data *restrict dwg,
-               const BITCODE_T restrict name) __nonnull ((1));
+               const BITCODE_T restrict name /* maybe NULL */) __nonnull ((1));
 EXPORT Dwg_Object_LTYPE*
 dwg_add_LTYPE (Dwg_Data *restrict dwg,
-               const BITCODE_T restrict name) __nonnull ((1));
+               const BITCODE_T restrict name /* maybe NULL */) __nonnull ((1));
 EXPORT Dwg_Object_VIEW*
 dwg_add_VIEW (Dwg_Data *restrict dwg,
-              const BITCODE_T restrict name) __nonnull ((1));
+              const BITCODE_T restrict name /* maybe NULL */) __nonnull ((1));
 EXPORT Dwg_Object_DIMSTYLE*
 dwg_add_DIMSTYLE (Dwg_Data *restrict dwg,
-                  const BITCODE_T restrict name) __nonnull ((1));
+                  const BITCODE_T restrict name /* maybe NULL */) __nonnull ((1));
 EXPORT Dwg_Object_VPORT*
 dwg_add_VPORT (Dwg_Data *restrict dwg,
-               const BITCODE_T restrict name) __nonnull ((1));
+               const BITCODE_T restrict name /* maybe NULL */) __nonnull ((1));
 EXPORT Dwg_Object_VX_TABLE_RECORD*
 dwg_add_VX (Dwg_Data *restrict dwg,
-            const char* restrict name) __nonnull ((1));
+            const char* restrict name /* maybe NULL */) __nonnull ((1));
 EXPORT Dwg_Object_APPID*
 dwg_add_APPID (Dwg_Data *restrict dwg,
-               const BITCODE_T restrict name) __nonnull ((1));
+               const BITCODE_T restrict name /* maybe NULL */) __nonnull ((1));
 EXPORT Dwg_Object_GROUP*
 dwg_add_GROUP (Dwg_Data *restrict dwg,
-               const BITCODE_T restrict name) __nonnull_all;
+               const BITCODE_T restrict name /* maybe NULL */) __nonnull ((1));
 
 EXPORT Dwg_Object_MLINESTYLE *
 dwg_add_MLINESTYLE (Dwg_Data *restrict dwg,
