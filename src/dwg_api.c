@@ -22210,8 +22210,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   // VX_CONTROL_OBJECT: (3.1.B) abs:B [H 0]
   dwg_add_VX (dwg, NULL); // TODO only <r2000
   // DICTIONARY_NAMED_OBJECT: (3.1.C) abs:C [H 0]
-  dict
-      = dwg_add_DICTIONARY (dwg, NULL, (const BITCODE_T) "NAMED_OBJECT", NULL);
+  dict = dwg_add_DICTIONARY (dwg, NULL, (const BITCODE_T) "NAMED_OBJECT", NULL);
   dwg_add_DICTIONARY_item (dict, (const BITCODE_T) "ACAD_GROUP",
                            dwg_add_handleref (dwg, 2, 0xD, NULL));
   dwg_add_DICTIONARY_item (dict, (const BITCODE_T) "ACAD_MLINESTYLE",
@@ -22354,11 +22353,14 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
         return 1;
     }
   if (strEQc (dxfname, "LWPOLYLINE"))
-    return dwg_add_class (dwg, "LWPOLYLINE", "AcDbPolyline", "ObjectDBX Classes", false);
+    return dwg_add_class (dwg, "LWPOLYLINE", "AcDbPolyline", "ObjectDBX Classes", true);
+  if (strEQc (dxfname, "HATCH"))
+    return dwg_add_class (dwg, "HATCH", "AcDbHatch", "ObjectDBX Classes", true);
+  if (strEQc (dxfname, "OLE2FRAME"))
+    return dwg_add_class (dwg, "OLE2FRAME", "AcDbOle2Frame", "ObjectDBX Classes", true);
+
   if (strEQc (dxfname, "XRECORD"))
     return dwg_add_class (dwg, "XRECORD", "AcDbXrecord", "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "HATCH"))
-    return dwg_add_class (dwg, "HATCH", "AcDbHatch", "ObjectDBX Classes", false);
   if (strEQc (dxfname, "DICTIONARYVAR"))
     return dwg_add_class (dwg, "DICTIONARYVAR", "AcDbDictionaryVar", "AutoCAD 2000", false);
   if (strEQc (dxfname, "ACDBDICTIONARYWDFLT"))
@@ -22379,6 +22381,8 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
     return dwg_add_class (dwg, "SPATIAL_INDEX", "AcDbSpatialIndex", "ObjectDBX Classes", false);
   if (strEQc (dxfname, "IDBUFFER"))
     return dwg_add_class (dwg, "IDBUFFER", "AcDbIdBuffer", "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "VBA_PROJECT"))
+    return dwg_add_class (dwg, "VBA_PROJECT", "AcDbVbaProject", "ObjectDBX Classes", false);
   if (strEQc (dxfname, "VISUALSTYLE"))
     return dwg_add_class (dwg, "VISUALSTYLE", "AcDbVisualStyle", "ObjectDBX Classes", false);
   if (strEQc (dxfname, "TABLESTYLE"))
@@ -22399,6 +22403,8 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
     return dwg_add_class (dwg, "IMAGE", "AcDbRasterImage", "ISM", true);
   if (strEQc (dxfname, "IMAGEDEF"))
     return dwg_add_class (dwg, "IMAGEDEF", "AcDbRasterImageDef", "ISM", false);
+  if (strEQc (dxfname, "IMAGEDEF_REACTOR"))
+    return dwg_add_class (dwg, "IMAGEDEF_REACTOR", "AcDbRasterImageDefReactor", "ISM", false);
   if (strEQc (dxfname, "RASTERVARIABLES"))
     return dwg_add_class (dwg, "RASTERVARIABLES", "AcDbRasterVariables", "ISM", false);
   if (strEQc (dxfname, "LIGHT"))
@@ -22412,12 +22418,21 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
                           "Product Desc:     AcDim ARX App For Dimension", false);
   if (strEQc (dxfname, "WIPEOUT"))
     return dwg_add_class (dwg, "WIPEOUT", "AcDbWipeout", "Wipeout|"
-                          "Product Desc:     WipeOut Dbx Application", false);
+                          "Product Desc:     WipeOut Dbx Application", true);
   if (strEQc (dxfname, "WIPEOUTVARIABLES"))
     return dwg_add_class (dwg, "WIPEOUTVARIABLES", "AcDbWipeoutVariables",
                           "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "RTEXT"))
+    return dwg_add_class (dwg, "RTEXT", "AcDbRText", "RText|"
+                          "AutoCAD Express Tool", true);
+  if (strEQc (dxfname, "ARCALIGNEDTEXT"))
+    return dwg_add_class (dwg, "ARCALIGNEDTEXT", "AcDbArcAlignedText", "ATEXT|"
+                          "AutoCAD Express Tool", true);
   if (strEQc (dxfname, "MATERIAL"))
     return dwg_add_class (dwg, "MATERIAL", "AcDbMaterial",
+                          "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "PLOTSETTINGS"))
+    return dwg_add_class (dwg, "PLOTSETTINGS", "AcDbPlotSettings",
                           "ObjectDBX Classes", false);
   if (strEQc (dxfname, "MLEADERSTYLE"))
     return dwg_add_class (dwg, "MLEADERSTYLE", "AcDbMLeaderStyle",
