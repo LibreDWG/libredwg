@@ -1928,7 +1928,6 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
 }
 
 
-
 // Returns an existing ref with the same ownership (hard/soft, owner/pointer)
 // or creates it. May return a freshly allocated ref via dwg_new_ref.
 EXPORT Dwg_Object_Ref *

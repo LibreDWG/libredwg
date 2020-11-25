@@ -23,7 +23,8 @@
 #include <sys/stat.h>
 
 static unsigned int loglevel;
-static unsigned int debug;
+static int debug;
+static int cnt = 0;
 #define DWG_LOGLEVEL loglevel
 #include "../../src/config.h"
 #include "../../src/logging.h"
@@ -37,14 +38,23 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
 {
   int error;
   struct stat attrib;
-  Dwg_Data *dwg = dwg_add_Document(R_2000, 0 /*metric/iso */, loglevel /* static global */);
-  Dwg_Object *mspace =  dwg_model_space_object (dwg);
-  Dwg_Object_Ref *mspace_ref =  dwg_model_space_ref (dwg);
+  const char *name = dwg_type_name (type);
+  Dwg_Data *dwg;
+  Dwg_Object *mspace;
+  Dwg_Object_Ref *mspace_ref;
   dwg_point_3d pt1 = {1.5, 2.5, 0.2};
   dwg_point_3d pt2 = {2.5, 1.5, 0.0};
-  Dwg_Object_BLOCK_HEADER *hdr = mspace->tio.object->tio.BLOCK_HEADER;
-  const char *name = dwg_type_name (type);
+  Dwg_Object_BLOCK_HEADER *hdr;
   int n_failed;
+
+  if (debug && debug != cnt && debug != -1)
+    return 0;
+  cnt++;
+
+  dwg = dwg_add_Document(R_2000, 0 /*metric/iso */, loglevel /* static global */);
+  mspace =  dwg_model_space_object (dwg);
+  mspace_ref =  dwg_model_space_ref (dwg);
+  hdr = mspace->tio.object->tio.BLOCK_HEADER;
 
   if (!mspace)
     {
@@ -119,19 +129,40 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
         dwg_add_SPLINE (hdr, 6, fit_pts, &pt1, &pt2);
       }
       break;
+    case DWG_TYPE_INSERT:
+      {
+        Dwg_Object_BLOCK_HEADER *blk;
+        blk = dwg_add_BLOCK_HEADER (dwg, (const BITCODE_T) "bloko");
+        dwg_add_BLOCK (blk, (const BITCODE_T) "bloko");
+        dwg_add_LINE (blk, &pt1, &pt2);
+        dwg_add_ENDBLK (blk);
+        dwg_add_INSERT (hdr, &pt1, (const BITCODE_T) "bloko", 1.0, 1.0, 1.0, 0.0);
+      }
+      break;
+    case DWG_TYPE_MINSERT:
+      {
+        Dwg_Object_BLOCK_HEADER *blk;
+        blk = dwg_add_BLOCK_HEADER (dwg, (const BITCODE_T) "bloko");
+        dwg_add_BLOCK (blk, (const BITCODE_T) "bloko");
+        dwg_add_LINE (blk, &pt1, &pt2);
+        dwg_add_ENDBLK (blk);
+        dwg_add_MINSERT (hdr, &pt1, (const BITCODE_T) "bloko", 1.0, 1.0, 1.0,
+                         0.0, 2, 1, 1.0, 0.0);
+      }
+      break;
     case DWG_TYPE_ATTRIB:
       {
         Dwg_Entity_INSERT *insert;
         Dwg_Object_BLOCK_HEADER *newhdr;
-        newhdr = dwg_add_BLOCK_HEADER (dwg, (const BITCODE_T) "block");
-        dwg_add_BLOCK (newhdr, (const BITCODE_T) "block");
+        newhdr = dwg_add_BLOCK_HEADER (dwg, (const BITCODE_T) "bloko");
+        dwg_add_BLOCK (newhdr, (const BITCODE_T) "bloko");
         dwg_add_LINE (newhdr, &pt1, &pt2);
         dwg_add_ENDBLK (newhdr);
-        insert = dwg_add_INSERT (hdr, &pt1, (const BITCODE_T) "block", 1.0, 1.0, 1.0, 0.0);
+        insert = dwg_add_INSERT (hdr, &pt1, (const BITCODE_T) "bloko", 1.0, 1.0, 1.0, 0.0);
         // adds ATTDEF to BLOCK, redefines it (??)
-        dwg_add_Attribute (insert, 1.0, 0, (const BITCODE_T) "prompt", &pt1,
-                           (const BITCODE_T) "tag",
-                           (const BITCODE_T) "testtekst");
+        dwg_add_Attribute (insert, 1.0, 0, (const BITCODE_T) "blokoprompt", &pt1,
+                           (const BITCODE_T) "blokotag",
+                           (const BITCODE_T) "blokotekst");
       }
       break;
     default:
@@ -179,15 +210,17 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       TEST_ENTITY (POLYLINE_3D);
       TEST_ENTITY (POLYLINE_MESH);
       TEST_ENTITY (POLYLINE_PFACE);
-      TEST_ENTITY (ATTRIB);
       TEST_ENTITY (SPLINE);
+      TEST_ENTITY (INSERT);
+      TEST_ENTITY (MINSERT);
+      TEST_ENTITY (ATTRIB);
     default:
       fail ("Unknown type %s", name);
     }
   
   ok ("read %s", name);
   n_failed = numfailed();
-  if (!n_failed && !debug)
+  if (!n_failed && (!debug || debug != -1))
     unlink (dwgfile);
   return n_failed;
 }
@@ -202,7 +235,7 @@ main (int argc, char *argv[])
     loglevel = atoi (trace);
   else
     loglevel = 0;
-  if (debugenv)
+  if (debugenv) // -1 for all, 0 for none, 12 for ATTRIB only
     debug = atoi (debugenv);
   else
     debug = 0;
@@ -217,8 +250,12 @@ main (int argc, char *argv[])
   error = test_add (DWG_TYPE_POLYLINE_MESH, "add_pmesh_2000.dwg");
   error = test_add (DWG_TYPE_POLYLINE_PFACE, "add_pface_2000.dwg");
   error = test_add (DWG_TYPE_SPLINE, "add_spline_2000.dwg");
-  LOG_WARN ("Skipped ATTRIB");
-  //error = test_add (DWG_TYPE_ATTRIB, "add_attrib_2000.dwg");
+  error = test_add (DWG_TYPE_INSERT, "add_insert_2000.dwg");
+  error = test_add (DWG_TYPE_MINSERT, "add_minsert_2000.dwg");
+  if (debug != cnt)
+    error = test_add (DWG_TYPE_ATTRIB, "add_attrib_2000.dwg");
+  else
+    LOG_WARN ("Skipped ATTRIB");
 
   return error;
 }

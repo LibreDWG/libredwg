@@ -22068,11 +22068,11 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   //dwg->header.section = (Dwg_Section *)calloc (
   //    dwg->header.num_sections, sizeof (Dwg_Section));
 
-  dwg->header_vars.unknown_0 = 412148564080.0;
+  dwg->header_vars.unknown_0 = 412148564080.0; // unit1_ration
   dwg->header_vars.unknown_1 = 1.0;
   dwg->header_vars.unknown_2 = 1.0;
   dwg->header_vars.unknown_3 = 1.0;
-  dwg->header_vars.unknown_text1 = strdup ("meter");
+  dwg->header_vars.unknown_text1 = strdup ("m"); // also meter sometimes. unit1_text
   dwg->header_vars.DIMASO = 1;
   dwg->header_vars.DIMSHO = 1; // Obsolete
   dwg->header_vars.REGENMODE = 1;
