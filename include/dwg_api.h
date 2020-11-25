@@ -6129,13 +6129,13 @@ EXPORT dwg_class *dwg_get_class (const dwg_data *dwg, unsigned int index);
 
 /* Most names are of type BITCODE_T, i.e. TV for <r2007, TU since r2007.
    But we dont support writing to r2007+ yet, so we only take ASCII strings yet.
+   TODO: change the strings to UTF-8.
 
    Most names are copied, since most names are considered to be constant.
    If not, you need to free them by yourself.
 
    Exceptions are dxfname (there exists a seperate dxfname_u variant),
-   the VX name, which does not exists anymore since r2000,
-   and acis_data. This is not copied.
+   the VX name, which does not exists anymore since r2000.
  */
 
 EXPORT Dwg_Data *dwg_add_Document (const Dwg_Version_Type version,

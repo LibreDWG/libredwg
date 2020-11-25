@@ -23541,6 +23541,7 @@ dwg_add_REGION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->num_blocks = (int)(len / 4096);
   if (len % 4096)
     _obj->num_blocks++;
+  _obj->acis_data = (BITCODE_RC*)strdup (acis_data);
   _obj->block_size = calloc (_obj->num_blocks + 1, sizeof (BITCODE_BL));
   _obj->encr_sat_data = calloc (_obj->num_blocks + 1, sizeof (BITCODE_BL));
   _obj->version = 1;
@@ -23562,6 +23563,7 @@ dwg_add_3DSOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->num_blocks = (int)(len / 4096);
   if (len % 4096)
     _obj->num_blocks++;
+  _obj->acis_data = (BITCODE_RC*)strdup (acis_data);
   _obj->block_size = calloc (_obj->num_blocks + 1, sizeof (BITCODE_BL));
   _obj->encr_sat_data = calloc (_obj->num_blocks + 1, sizeof (BITCODE_BL));
   _obj->version = 1;
@@ -23583,6 +23585,7 @@ dwg_add_BODY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->num_blocks = (int)(len / 4096);
   if (len % 4096)
     _obj->num_blocks++;
+  _obj->acis_data = (BITCODE_RC*)strdup (acis_data);
   _obj->block_size = calloc (_obj->num_blocks + 1, sizeof (BITCODE_BL));
   _obj->encr_sat_data = calloc (_obj->num_blocks + 1, sizeof (BITCODE_BL));
   _obj->version = 1;
