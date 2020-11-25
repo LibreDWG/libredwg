@@ -23631,7 +23631,7 @@ dwg_add_XLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 EXPORT Dwg_Object_DICTIONARY*
 dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
                     const BITCODE_T restrict name, /* the NOD entry */
-                    const BITCODE_T restrict text /* maybe NULL */,
+                    const BITCODE_T restrict key,  /* maybe NULL */
                     const BITCODE_H restrict itemhandle)
 {
   Dwg_Object* nod;
@@ -23641,7 +23641,7 @@ dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
       _obj->numitems = 1;
       _obj->texts = (BITCODE_T*)calloc (1, sizeof (BITCODE_T));
       _obj->itemhandles = (BITCODE_H*)calloc (1, sizeof (BITCODE_H));
-      _obj->texts[0] = strdup (text);
+      _obj->texts[0] = strdup (key);
       _obj->itemhandles[0] = itemhandle;
     }
   if (name)
@@ -23721,19 +23721,20 @@ dwg_add_DICTIONARY_item (Dwg_Object_DICTIONARY* _obj,
 EXPORT Dwg_Object_DICTIONARYWDFLT*
 dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
                          const BITCODE_T restrict name, /* the NOD entry */
-                         const BITCODE_T restrict text, /* maybe NULL */
+                         const BITCODE_T restrict key, /* maybe NULL */
                          const BITCODE_H restrict itemhandle)
 {
   API_ADD_OBJECT (DICTIONARYWDFLT);
-  if (text)
+  if (key)
     {
       _obj->numitems = 1;
       _obj->cloning = 1;
       _obj->texts = (BITCODE_T*)calloc (1, sizeof (BITCODE_T));
       _obj->itemhandles = (BITCODE_H*)calloc (1, sizeof (BITCODE_H));
-      _obj->texts[0] = strdup (text);
+      _obj->texts[0] = strdup (key);
       _obj->itemhandles[0] = itemhandle;
     }
+  _obj->defaultid = itemhandle;
   return _obj;
 }
 
