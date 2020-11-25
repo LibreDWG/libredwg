@@ -21,6 +21,7 @@
 #include <stdint.h>
 #include <inttypes.h>
 #include <math.h>
+#include <time.h>
 #include <assert.h>
 
 #include "config.h"
@@ -22048,6 +22049,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   Dwg_Object_DICTIONARY *dict;
   dwg_point_3d pt0 = { 0.0, 1.0, 0.0 };
   Dwg_Object *obj, *ctrl;
+  time_t now;
 
   loglevel = lglevel & DWG_OPTS_LOGLEVEL;
   dwg->opts = loglevel;
@@ -22072,22 +22074,21 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   dwg->header_vars.unknown_3 = 1.0;
   dwg->header_vars.unknown_text1 = strdup ("meter");
   dwg->header_vars.DIMASO = 1;
-  //dwg->header_vars.DIMSHO = 0;
+  dwg->header_vars.DIMSHO = 1; // Obsolete
   dwg->header_vars.REGENMODE = 1;
   dwg->header_vars.FILLMODE = 1;
-  //dwg->header_vars.PSLTSCALE = 1;
+  dwg->header_vars.PSLTSCALE = 1;
   dwg->header_vars.BLIPMODE = 1;
   dwg->header_vars.USRTIMER = 1;
-  //dwg->header_vars.SKPOLY = 1;
+  //dwg->header_vars.SKPOLY = 0;
   dwg->header_vars.TILEMODE = 1;
-  //dwg->header_vars.VISRETAIN = 1;
+  dwg->header_vars.VISRETAIN = 1;
   dwg->header_vars.ATTREQ = 1;
   dwg->header_vars.MIRRTEXT = 1;
   dwg->header_vars.WORLDVIEW = 1;
   dwg->header_vars.TILEMODE = 1;
-  //dwg->header_vars.VISRETAIN = 1;
   dwg->header_vars.DELOBJ = 1;
-  //dwg->header_vars.PROXYGRAPHICS = 1;
+  dwg->header_vars.PROXYGRAPHICS = 1;
   dwg->header_vars.DRAGMODE = 2;
   dwg->header_vars.TREEDEPTH = 3020;
   dwg->header_vars.LUNITS = 2;
@@ -22111,23 +22112,20 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   dwg->header_vars.TEXTSIZE = 0.2;
   dwg->header_vars.TRACEWID = 0.05;
   dwg->header_vars.SKETCHINC = 0.1;
-  //dwg->header_vars.FILLETRAD = 0.5;
-  //dwg->header_vars.CHAMFERA = 0.5;
-  //dwg->header_vars.CHAMFERB = 0.5;
-  //dwg->header_vars.CHAMFERC = 1.0;
   dwg->header_vars.FACETRES = 0.5;
-  dwg->header_vars.CMLSCALE = 1.0;
+  dwg->header_vars.CMLSCALE = imperial ? 1.0 : 20.0;
   dwg->header_vars.CELTSCALE = 1.0;
+  dwg->header_vars.INSUNITS = imperial ? 1 : 4;
   dwg->header_vars.MENU = strdup ("acad");
-  // TODO TDCREATE
+
+  dwg->header_vars.FLAGS = 0x2a1d; // or 0x281d
+  dwg->header_vars.CELWEIGHT = -1; // => FLAGS & 0x1f
+  now = time(NULL);
+  dwg->header_vars.TDCREATE = (BITCODE_TIMEBLL){ now / 3600, now / 86400 };
   // CECOLOR.index: 256 [CMC.BS 62]
-  dwg->header_vars.CECOLOR = (BITCODE_CMC){ 256, 0 };
-  // HANDSEED: 0.1.49 [H 0]
-  // CLAYER: (5.1.F) abs:F [H 8]
-  // TEXTSTYLE: (5.1.10) abs:10 [H 7]
-  // CELTYPE: (5.1.14) abs:14 [H 6]
-  // DIMSTYLE: (5.1.1D) abs:1D [H 2]
-  // CMLSTYLE: (5.1.1C) abs:1C [H 2]
+  dwg->header_vars.CECOLOR = (BITCODE_CMC){ 256, 0 }; // ByLayer
+  // HANDSEED: 0.1.49 [H 0] // FIXME needs to be updated on encode
+  dwg->header_vars.HANDSEED = dwg_add_handleref (dwg, 0, 0x25, NULL);
   dwg->header_vars.PEXTMIN
       = (BITCODE_3BD){ 100000000000000000000.0, 100000000000000000000.0,
                        100000000000000000000.0 };
@@ -22149,6 +22147,8 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   // UCSORG: (0.0, 0.0, 0.0) [3BD 10]
   // UCSXDIR: (1.0, 0.0, 0.0) [3BD 10]
   // UCSYDIR: (0.0, 1.0, 0.0) [3BD 10]
+  dwg->header_vars.UCSXDIR = (BITCODE_3BD){ 1.0, 0.0, 0.0 };
+  dwg->header_vars.UCSYDIR = (BITCODE_3BD){ 0.0, 1.0, 0.0 };
   // UCSNAME: (5.0.0) abs:0 [H 2]
   dwg->header_vars.DIMTIH = 1;
   dwg->header_vars.DIMTOH = 1;
@@ -22160,7 +22160,6 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   dwg->header_vars.DIMTDEC = 4;
   dwg->header_vars.DIMALTU = 2;
   dwg->header_vars.DIMALTTD = 2;
-  // DIMTXSTY: (5.1.10) abs:10 [H 7]
   dwg->header_vars.DIMSCALE = 1.0;
   dwg->header_vars.DIMASZ = 0.18;
   dwg->header_vars.DIMEXO = 0.0625;
@@ -22211,16 +22210,14 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   dwg_add_VX (dwg, NULL); // TODO only <r2000
   // DICTIONARY_NAMED_OBJECT: (3.1.C) abs:C [H 0]
   dict = dwg_add_DICTIONARY (dwg, NULL, (const BITCODE_T) "NAMED_OBJECT", NULL);
-  dwg_add_DICTIONARY_item (dict, (const BITCODE_T) "ACAD_GROUP",
-                           dwg_add_handleref (dwg, 2, 0xD, NULL));
-  dwg_add_DICTIONARY_item (dict, (const BITCODE_T) "ACAD_MLINESTYLE",
-                           dwg_add_handleref (dwg, 2, 0x17, NULL));
   dwg->header_vars.DICTIONARY_NAMED_OBJECT
       = dwg_add_handleref (dwg, 5, 0xC, NULL);
   // DICTIONARY_ACAD_GROUP: (5.1.D) abs:D [H 0]
   dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_GROUP", NULL, NULL);
   dwg->header_vars.DICTIONARY_ACAD_GROUP
       = dwg_add_handleref (dwg, 5, 0xD, NULL);
+  dwg_add_DICTIONARY_item (dict, (const BITCODE_T) "ACAD_GROUP",
+                           dwg_add_handleref (dwg, 2, 0xD, NULL));
   // DICTIONARY (5.1.E)
   dwg_add_DICTIONARYWDFLT (dwg, (const BITCODE_T) "ACAD_PLOTSTYLENAME",
                            (const BITCODE_T) "Normal",
@@ -22233,12 +22230,16 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   layer = dwg_add_LAYER (dwg, (const BITCODE_T) "0");
   layer->color = (BITCODE_CMC){ 7 };
   layer->ltype = dwg_add_handleref (dwg, 5, 0x16, NULL); // Continuous
+  // CLAYER: (5.1.F) abs:F [H 8]
   dwg->header_vars.CLAYER = dwg_add_handleref (dwg, 5, 0x10, NULL);
   dwg->layer_control = *dwg->object[1].tio.object->tio.LAYER_CONTROL;
   // STYLE: (0.1.11)
   style = dwg_add_STYLE (dwg, (const BITCODE_T) "Standard");
   style->font_file = strdup ("txt");
   style->last_height = 0.2;
+  // TEXTSTYLE: (5.1.11) [H 7]
+  dwg->header_vars.TEXTSTYLE = dwg_add_handleref (dwg, 5, 0x11, NULL);
+  dwg->header_vars.DIMTXSTY = dwg->header_vars.TEXTSTYLE;
   dwg->style_control = *dwg->object[2].tio.object->tio.STYLE_CONTROL;
   // APPID "ACAD": (0.1.12)
   dwg_add_APPID (dwg, (const BITCODE_T) "ACAD");
@@ -22256,6 +22257,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   ltype_ctrl->num_entries--;
   ltype_ctrl->bylayer = dwg_add_handleref (dwg, 3, 0x15, NULL);
   dwg->header_vars.LTYPE_BYLAYER = dwg_add_handleref (dwg, 5, 0x15, NULL);
+  // CELTYPE: (5.1.14) abs:14 [H 6]
   dwg->header_vars.CELTYPE = dwg_add_handleref (dwg, 5, 0x15, NULL);
   // LTYPE_CONTINUOUS: (5.1.16)
   ltype = dwg_add_LTYPE (dwg, (const BITCODE_T) "CONTINUOUS");
@@ -22264,12 +22266,16 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   dwg->ltype_control = *ltype_ctrl;
   // DICTIONARY ACAD_MLINESTYLE: (5.1.17) abs:E [H 0]
   dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_MLINESTYLE", NULL, NULL);
+  dwg_add_DICTIONARY_item (dict, (const BITCODE_T) "ACAD_MLINESTYLE",
+                           dwg_add_handleref (dwg, 2, 0x17, NULL));
   dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE
       = dwg_add_handleref (dwg, 5, 0x17, NULL);
   dwg_add_PLACEHOLDER (dwg); // MLINESTYLE 0.1.18
   dwg_add_DICTIONARY (dwg, NULL, NULL, NULL);
   // DICTIONARY ACAD_LAYOUT: (5.1.1A)
   dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_LAYOUT", NULL, NULL);
+  // DIMSTYLE: (5.1.1D) abs:1D [H 2]
+  // CMLSTYLE: (5.1.1C) abs:1C [H 2]
 
   // hole until 1F
   dwg_set_next_hdl (dwg, 0x1F);
