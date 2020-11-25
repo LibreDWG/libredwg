@@ -92,7 +92,6 @@ const char version_codes[DWG_VERSIONS][7] = {
   "AC1024", // R_2010                            0x1d
   "AC1027", // R_2013                            0x1f
   "AC1032", // R_2018                            0x21
-  //"AC1035", // R_2021                          0x24 ??
   "------"  // R_AFTER
 };
 
