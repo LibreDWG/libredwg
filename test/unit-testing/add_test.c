@@ -165,8 +165,186 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
                            (const BITCODE_T) "blokotekst");
       }
       break;
+    case DWG_TYPE_DIMENSION_ALIGNED:
+      {
+        const dwg_point_3d def_pt = { 2.5, 0.0, 0.0 };
+        const dwg_point_3d text_midpt = { 2.5, 0.0, 0.0 };
+        dwg_add_DIMENSION_ALIGNED (hdr, &pt1, &pt2, &def_pt, &text_midpt);
+      }
+      break;
+    case DWG_TYPE_DIMENSION_ANG2LN:
+      {
+        const dwg_point_3d center_pt = { 2.5, 0.0, 0.0 };
+        const dwg_point_3d text_midpt = { 2.5, 0.0, 0.0 };
+        dwg_add_DIMENSION_ANG2LN (hdr, &center_pt, &pt1, &pt2, &text_midpt);
+      }
+      break;
+    case DWG_TYPE_DIMENSION_ANG3PT:
+      {
+        const dwg_point_3d center_pt = { 2.5, 0.0, 0.0 };
+        const dwg_point_3d text_midpt = { 2.5, 0.0, 0.0 };
+        dwg_add_DIMENSION_ANG3PT (hdr, &center_pt, &pt1, &pt2, &text_midpt);
+      }
+      break;
+    case DWG_TYPE_DIMENSION_DIAMETER:
+      dwg_add_DIMENSION_DIAMETER (hdr, &pt1, &pt2, 2.0);
+      break;
+    case DWG_TYPE_DIMENSION_ORDINATE:
+      dwg_add_DIMENSION_ORDINATE (hdr, &pt1, &pt2, true);
+      break;
+    case DWG_TYPE_DIMENSION_RADIUS:
+      dwg_add_DIMENSION_RADIUS (hdr, &pt1, &pt2, 2.0);
+      break;
+    case DWG_TYPE_DIMENSION_LINEAR:
+      {
+        const dwg_point_3d def_pt = { 2.5, 0.0, 0.0 };
+        dwg_add_DIMENSION_LINEAR (hdr, &pt1, &pt2, &def_pt, deg2rad (90.0));
+      }
+      break;
+    case DWG_TYPE_POINT:
+      dwg_add_POINT (hdr, &pt1);
+      break;
+    case DWG_TYPE__3DFACE:
+      {
+        const dwg_point_3d pt3 = { 2.5, 0.0, 0.0 };
+        dwg_add_3DFACE (hdr, &pt1, &pt2, &pt3, NULL);
+      }
+      break;
+    case DWG_TYPE_SOLID:
+      {
+        const dwg_point_2d pt2_2d = { 1.5, 0.0 };
+        const dwg_point_2d pt3 = { 2.5, 0.0 };
+        const dwg_point_2d pt4 = { 3.5, 2.0 };
+        dwg_add_SOLID (hdr, &pt1, &pt2_2d, &pt3, &pt4);
+      }
+      break;
+    case DWG_TYPE_TRACE:
+      {
+        const dwg_point_2d pt2_2d = { 1.5, 0.0 };
+        const dwg_point_2d pt3 = { 2.5, 0.0 };
+        const dwg_point_2d pt4 = { 3.5, 2.0 };
+        dwg_add_TRACE (hdr, &pt1, &pt2_2d, &pt3, &pt4);
+      }
+      break;
+    case DWG_TYPE_SHAPE:
+      dwg_add_SHAPE (hdr, (const BITCODE_T) "romand.shx", &pt1, 1.0, 0.0); //??
+      break;
+    case DWG_TYPE_VIEWPORT:
+      dwg_add_VIEWPORT (hdr, (const BITCODE_T) "viewport1"); // FIXME
+      break;
+    case DWG_TYPE_ELLIPSE:
+      dwg_add_ELLIPSE (hdr, &pt1, 0.0, 2.0);
+      break;
+    case DWG_TYPE_REGION:
+      dwg_add_REGION (hdr, "400 26 1 0\n"
+                      "16 Autodesk AutoCAD 20 ASM 223.0.1.1930 OSX 24 Wed Mar 18 07:23:29 2020 \n"
+                      "1 9.999999999999999547e-07 1.000000000000000036e-10 \n"
+                      "body $-1 $1 $-1 $-1 #\n"
+                      "lump $-1 $-1 $2 $0 #\n"
+                      "shell $-1 $-1 $-1 $3 $-1 $1 #\n"
+                      "face $-1 $-1 $4 $2 $-1 $5 forward double out #\n"
+                      "loop $-1 $-1 $6 $3 #\n"
+                      "plane-surface $-1 -5234.186669031270867 1968.766094356862595 0 0 0 1 1 0 0 forward_v I I I I #\n"
+                      "coedge $-1 $7 $8 $-1 $9 reversed $4 $-1 #\n"
+                      "coedge $-1 $10 $6 $-1 $11 reversed $4 $-1 #\n"
+                      "coedge $-1 $6 $10 $-1 $12 reversed $4 $-1 #\n"
+                      "edge $-1 $13 $14 $6 $15 forward #\n"
+                      "coedge $-1 $8 $7 $-1 $16 reversed $4 $-1 #\n"
+                      "edge $-1 $17 $13 $7 $18 forward #\n"
+                      "edge $-1 $14 $19 $8 $20 forward #\n"
+                      "vertex $-1 $9 $21 #\n"
+                      "vertex $-1 $9 $22 #\n"
+                      "straight-curve $-1 -6836.331483613786986 3983.339979056661832 0 1 0 0 I I #\n"
+                      "edge $-1 $19 $17 $10 $23 forward #\n"
+                      "vertex $-1 $16 $24 #\n"
+                      "straight-curve $-1 -6836.331483613786986 -45.80779034293664154 0 0 1 0 I I #\n"
+                      "vertex $-1 $12 $25 #\n"
+                      "straight-curve $-1 -3632.041854448754748 3983.339979056661832 0 0 -1 0 I I #\n"
+                      "point $-1 -6836.331483613786986 3983.339979056661832 0 #\n"
+                      "point $-1 -3632.041854448754748 3983.339979056661832 0 #\n"
+                      "straight-curve $-1 -3632.041854448754748 -45.80779034293664154 0 -1 0 0 I I #\n"
+                      "point $-1 -6836.331483613786986 -45.80779034293664154 0 #\n"
+                      "point $-1 -3632.041854448754748 -45.80779034293664154 0 #\n");
+      break;
+    case DWG_TYPE_RAY:
+      dwg_add_RAY (hdr, &pt1, &pt2);
+      break;
+    case DWG_TYPE_XLINE:
+      dwg_add_XLINE (hdr, &pt1, &pt2);
+      break;
+    case DWG_TYPE_DICTIONARY:
+      dwg_add_DICTIONARY (dwg, (const BITCODE_T) "TEST_DICT",
+                          (const BITCODE_T) "testkey", NULL);
+      break;
+    case DWG_TYPE_DICTIONARYWDFLT:
+      dwg_add_DICTIONARYWDFLT (dwg, (const BITCODE_T) "TEST_DICT",
+                               (const BITCODE_T) "testkey", NULL);
+      break;
+    // case DWG_TYPE_DICTIONARYVAR:
+    //  {
+    //    dwg_add_DICTIONARYVAR (dict, "testvar");
+    //  }
+    //  break;
+    case DWG_TYPE_OLE2FRAME:
+      dwg_add_OLE2FRAME (hdr, &pt1, &pt2);
+      break;
+    case DWG_TYPE_MTEXT:
+      dwg_add_MTEXT (hdr, &pt1, 10.0, (const BITCODE_T) "test\ntext");
+      break;
+    case DWG_TYPE_LEADER:
+      {
+        const dwg_point_3d pts[] = { { 2.5, 0.0, 0.0 }, { 0.5, 0.0, 0.0 } };
+        dwg_add_LEADER (hdr, 2, pts, NULL, 15);
+      }
+      break;
+    case DWG_TYPE_TOLERANCE:
+      dwg_add_TOLERANCE (hdr, (const BITCODE_T) "testtekst", &pt1, NULL);
+      break;
+    case DWG_TYPE_MLINE:
+      {
+        const dwg_point_3d pts[]
+            = { { 2.5, 0.0, 0.0 }, { 0.5, 0.0, 0.0 }, { 0.5, 2.0, 1.0 },
+                { 0.5, 1.0, 1.0 }, { 0.5, 1.0, 0.0 }, { 1.5, 1.0, 0.0 } };
+        dwg_add_MLINE (hdr, 6, pts);
+      }
+      break;
+    case DWG_TYPE_DIMSTYLE:
+      {
+        Dwg_Object_DIMSTYLE *dim = dwg_add_DIMSTYLE (dwg, (const BITCODE_T) "dim1");
+        dim->DIMSCALE = 2.0;
+        dim->DIMUPT = 1;
+      }
+      break;
+    case DWG_TYPE_UCS:
+      {
+        const dwg_point_3d ydir = { 2.5, 0.0, 0.0 };
+        Dwg_Object_UCS *ucs = dwg_add_UCS (dwg, &pt1, &pt2, &ydir, (const BITCODE_T) "ucs1");
+        ucs->ucs_elevation = 1.0;
+      }
+      break;
+      // VX_TABLE_RECORD
+    case DWG_TYPE_HATCH:
+      {
+        const dwg_point_2d pts[] = {
+          { 2.5, 0.0 }, { 0.5, 0.0 }, { 0.5, 2.0 }, { 0.5, 1.0 }, { 1.5, 1.0 }
+        };
+        Dwg_Entity_LWPOLYLINE *pline = dwg_add_LWPOLYLINE (hdr, 5, pts);
+        Dwg_Object *obj;
+        const Dwg_Object *objs[1];
+        obj = dwg_obj_generic_to_object ((const dwg_obj_generic *)pline, &error);
+        objs[0] = obj;
+        dwg_add_HATCH (hdr, 0, (const BITCODE_T) "SOLID", false, 1, objs);
+      }
+      break;
+    //case DWG_TYPE_XRECORD:
+    //  {
+    //    Dwg_Object_XRECORD *xrecord = dwg_add_XRECORD (dict, "test");
+    //    dwg_add_XRECORD_int32 (xrecord, 1);
+    //  }
+    //  break;
+
     default:
-      fail ("Unknown type %s", name);
+      fail ("No add method yet type %s", name);
     }
 
   if (!stat (dwgfile, &attrib))
@@ -185,11 +363,25 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
   // now we have a different ref!
   mspace_ref =  dwg_model_space_ref (dwg);
 
-  // look for a single written entity
+// look for a single written entity
 #define TEST_ENTITY(token)                                              \
   case DWG_TYPE_##token:                                                \
   {                                                                     \
     Dwg_Entity_##token **objs = dwg_getall_##token (mspace_ref);        \
+    if (objs && objs[0] && !objs[1])                                    \
+      ok ("found 1 " #token);                                           \
+    else if (!objs)                                                     \
+      fail ("found no " #token " at all");                              \
+    else if (!objs[0])                                                  \
+      fail ("found no " #token);                                        \
+  }                                                                     \
+  break
+
+// look for a single written object
+#define TEST_OBJECT(token)                                              \
+  case DWG_TYPE_##token:                                                \
+  {                                                                     \
+    Dwg_Object_##token **objs = dwg_getall_##token (dwg);               \
     if (objs && objs[0] && !objs[1])                                    \
       ok ("found 1 " #token);                                           \
     else if (!objs)                                                     \
@@ -214,8 +406,38 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       TEST_ENTITY (INSERT);
       TEST_ENTITY (MINSERT);
       TEST_ENTITY (ATTRIB);
+      TEST_ENTITY (DIMENSION_ALIGNED);
+      TEST_ENTITY (DIMENSION_ANG2LN);
+      TEST_ENTITY (DIMENSION_ANG3PT);
+      TEST_ENTITY (DIMENSION_DIAMETER);
+      TEST_ENTITY (DIMENSION_ORDINATE);
+      TEST_ENTITY (DIMENSION_RADIUS);
+      TEST_ENTITY (DIMENSION_LINEAR);
+      TEST_ENTITY (POINT);
+      TEST_ENTITY (_3DFACE);
+      TEST_ENTITY (SOLID);
+      TEST_ENTITY (TRACE);
+      TEST_ENTITY (SHAPE);
+      TEST_ENTITY (VIEWPORT);
+      TEST_ENTITY (ELLIPSE);
+      TEST_ENTITY (REGION);
+      TEST_ENTITY (RAY);
+      TEST_ENTITY (XLINE);
+      TEST_OBJECT (DICTIONARY);
+      TEST_OBJECT (DICTIONARYWDFLT);
+      TEST_OBJECT (DICTIONARYVAR);
+      TEST_ENTITY (OLE2FRAME);
+      TEST_ENTITY (MTEXT);
+      TEST_ENTITY (LEADER);
+      TEST_ENTITY (TOLERANCE);
+      TEST_ENTITY (MLINE);
+      TEST_OBJECT (DIMSTYLE);
+      TEST_OBJECT (UCS);
+      //TEST_OBJECT (VX_TABLE_RECORD);
+      TEST_ENTITY (HATCH);
+      TEST_OBJECT (XRECORD);
     default:
-      fail ("Unknown type %s", name);
+      fail ("No test yet for type %s", name);
     }
   
   ok ("read %s", name);
@@ -256,6 +478,35 @@ main (int argc, char *argv[])
     error = test_add (DWG_TYPE_ATTRIB, "add_attrib_2000.dwg");
   else
     LOG_WARN ("Skipped ATTRIB");
+  error = test_add (DWG_TYPE_DIMENSION_ALIGNED, "add_dimali_2000.dwg");
+  error = test_add (DWG_TYPE_DIMENSION_ANG2LN, "add_dimang_2000.dwg");
+  error = test_add (DWG_TYPE_DIMENSION_ANG3PT, "add_dim3pt_2000.dwg");
+  error = test_add (DWG_TYPE_DIMENSION_DIAMETER, "add_dimdia_2000.dwg");
+  error = test_add (DWG_TYPE_DIMENSION_ORDINATE, "add_dimord_2000.dwg");
+  error = test_add (DWG_TYPE_DIMENSION_RADIUS, "add_dimrad_2000.dwg");
+  error = test_add (DWG_TYPE_DIMENSION_LINEAR, "add_dimlin_2000.dwg");
+  error = test_add (DWG_TYPE_POINT, "add_point_2000.dwg");
+  error = test_add (DWG_TYPE__3DFACE, "add_3dface_2000.dwg");
+  error = test_add (DWG_TYPE_SOLID, "add_solid_2000.dwg");
+  error = test_add (DWG_TYPE_TRACE, "add_trace_2000.dwg");
+  error = test_add (DWG_TYPE_SHAPE, "add_shape_2000.dwg");
+  error = test_add (DWG_TYPE_VIEWPORT, "add_viewport_2000.dwg");
+  error = test_add (DWG_TYPE_ELLIPSE, "add_ellipse_2000.dwg");
+  error = test_add (DWG_TYPE_REGION, "add_region_2000.dwg");
+  error = test_add (DWG_TYPE_RAY, "add_ray_2000.dwg");
+  error = test_add (DWG_TYPE_XLINE, "add_xline_2000.dwg");
+  error = test_add (DWG_TYPE_DICTIONARY, "add_dict_2000.dwg");
+  error = test_add (DWG_TYPE_DICTIONARYWDFLT, "add_dictwdflt_2000.dwg");
+  error = test_add (DWG_TYPE_OLE2FRAME, "add_ole2frame_2000.dwg");
+  error = test_add (DWG_TYPE_MTEXT, "add_mtext_2000.dwg");
+  error = test_add (DWG_TYPE_LEADER, "add_leader_2000.dwg");
+  error = test_add (DWG_TYPE_TOLERANCE, "add_tolerance_2000.dwg");
+  error = test_add (DWG_TYPE_MLINE, "add_mline_2000.dwg");
+  error = test_add (DWG_TYPE_DIMSTYLE, "add_dimstyle_2000.dwg");
+  error = test_add (DWG_TYPE_UCS, "add_ucs_2000.dwg");
+  //error = test_add (DWG_TYPE_VX_TABLE_RECORD, "add_vx_2000.dwg");
+  error = test_add (DWG_TYPE_HATCH, "add_hatch_2000.dwg");
+  error = test_add (DWG_TYPE_XRECORD, "add_xrecord_2000.dwg");
 
   return error;
 }

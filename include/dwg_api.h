@@ -6395,7 +6395,7 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const bool is_associative,
                const unsigned num_paths,
                // Line, Polyline, Circle, Ellipse, Spline or Region as boundary_handles
-               const Dwg_Object *pathobjs) __nonnull_all;
+               const Dwg_Object **pathobjs) __nonnull_all;
 
 /* Add to DICTIONARY */
 EXPORT Dwg_Object_XRECORD*

@@ -24018,7 +24018,7 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const int pattern_type, const BITCODE_T restrict name,
                const bool is_associative, const unsigned num_paths,
                // Line, Polyline, Circle, Ellipse, Spline or Region
-               const Dwg_Object *pathobjs)
+               const Dwg_Object **pathobjs)
 {
   API_ADD_ENTITY (HATCH);
   if (dwg->header.version < R_2000)
@@ -24045,7 +24045,7 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _obj->paths[i].num_boundary_handles = 1;
       _obj->paths[i].boundary_handles = calloc (1, sizeof (BITCODE_H));
       _obj->paths[i].boundary_handles[0]
-          = dwg_add_handleref (dwg, 4, pathobjs[i].handle.value, obj);
+          = dwg_add_handleref (dwg, 4, pathobjs[i]->handle.value, obj);
       // TODO split geometry into paths per pathobject:
       // Line, Polyline, Circle, Ellipse, Spline or Region
     }
