@@ -23725,6 +23725,7 @@ dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
                          const BITCODE_H restrict itemhandle)
 {
   API_ADD_OBJECT (DICTIONARYWDFLT);
+  dwg_require_class (dwg, "ACDBDICTIONARYWDFLT");
   if (key)
     {
       _obj->numitems = 1;
