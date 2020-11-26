@@ -23724,19 +23724,23 @@ dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
                          const BITCODE_T restrict key, /* maybe NULL */
                          const BITCODE_H restrict itemhandle)
 {
-  API_ADD_OBJECT (DICTIONARYWDFLT);
-  dwg_require_class (dwg, "ACDBDICTIONARYWDFLT");
-  if (key)
-    {
-      _obj->numitems = 1;
-      _obj->cloning = 1;
-      _obj->texts = (BITCODE_T*)calloc (1, sizeof (BITCODE_T));
-      _obj->itemhandles = (BITCODE_H*)calloc (1, sizeof (BITCODE_H));
-      _obj->texts[0] = strdup (key);
-      _obj->itemhandles[0] = itemhandle;
-    }
-  _obj->defaultid = itemhandle;
-  return _obj;
+  {
+    dwg_require_class (dwg, "ACDBDICTIONARYWDFLT");
+  }
+  {
+    API_ADD_OBJECT (DICTIONARYWDFLT);
+    if (key)
+      {
+        _obj->numitems = 1;
+        _obj->cloning = 1;
+        _obj->texts = (BITCODE_T*)calloc (1, sizeof (BITCODE_T));
+        _obj->itemhandles = (BITCODE_H*)calloc (1, sizeof (BITCODE_H));
+        _obj->texts[0] = strdup (key);
+        _obj->itemhandles[0] = itemhandle;
+      }
+    _obj->defaultid = itemhandle;
+    return _obj;
+  }
 }
 
 EXPORT Dwg_Entity_OLE2FRAME*
@@ -24132,12 +24136,18 @@ EXPORT Dwg_Entity_LWPOLYLINE *
 dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                     const int num_pts2d, const dwg_point_2d *restrict pts2d)
 {
-  API_ADD_ENTITY (LWPOLYLINE);
-  if (dwg->header.version < R_2000)
-    dwg_require_class (dwg, "LWPOLYLINE");
-  error = dwg_ent_lwpline_set_points (
-      _obj, num_pts2d, pts2d);
-  return _obj;
+  {
+    int err;
+    Dwg_Object *hdr = dwg_obj_generic_to_object (blkhdr, &err);
+    Dwg_Data *dwg = hdr ? hdr->parent : NULL;
+    if (dwg && dwg->header.version < R_2000)
+      dwg_require_class (dwg, "LWPOLYLINE");
+  }
+  {
+    API_ADD_ENTITY (LWPOLYLINE);
+    error = dwg_ent_lwpline_set_points (_obj, num_pts2d, pts2d);
+    return _obj;
+  }
 }
 
 EXPORT Dwg_Entity_HATCH *
@@ -24147,36 +24157,43 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                // Line, Polyline, Circle, Ellipse, Spline or Region
                const Dwg_Object **pathobjs)
 {
-  API_ADD_ENTITY (HATCH);
-  if (dwg->header.version < R_2000)
-    dwg_require_class (dwg, "HATCH");
-  if (strEQc (name, "SPHERICAL") || strEQc (name, "HEMISPHERICAL")
-      || strEQc (name, "CURVED") || strEQc (name, "LINEAR")
-      || strEQc (name, "CYLINDER"))
-    {
-      _obj->is_gradient_fill = 1;
-      _obj->gradient_name = strdup (name);
-    }
-  else
-    {
-      _obj->name = strdup (name);
-      // predefined (acad.pat), user-defined (ltype), custom (some.pat file)
-      _obj->pattern_type = pattern_type;
-    }
-  _obj->is_associative = is_associative;
-  _obj->extrusion.z = 1.0;
-  _obj->num_paths = num_paths;
-  _obj->paths = calloc (num_paths, sizeof (Dwg_HATCH_Path));
-  for (unsigned i = 0; i < num_paths; i++)
-    {
-      _obj->paths[i].num_boundary_handles = 1;
-      _obj->paths[i].boundary_handles = calloc (1, sizeof (BITCODE_H));
-      _obj->paths[i].boundary_handles[0]
-          = dwg_add_handleref (dwg, 4, pathobjs[i]->handle.value, obj);
-      // TODO split geometry into paths per pathobject:
-      // Line, Polyline, Circle, Ellipse, Spline or Region
-    }
-  return _obj;
+  {
+    int err;
+    Dwg_Object *hdr = dwg_obj_generic_to_object (blkhdr, &err);
+    Dwg_Data *dwg = hdr ? hdr->parent : NULL;
+    if (dwg && dwg->header.version < R_2000)
+      dwg_require_class (dwg, "HATCH");
+  }
+  {
+    API_ADD_ENTITY (HATCH);
+    if (strEQc (name, "SPHERICAL") || strEQc (name, "HEMISPHERICAL")
+        || strEQc (name, "CURVED") || strEQc (name, "LINEAR")
+        || strEQc (name, "CYLINDER"))
+      {
+        _obj->is_gradient_fill = 1;
+        _obj->gradient_name = strdup (name);
+      }
+    else
+      {
+        _obj->name = strdup (name);
+        // predefined (acad.pat), user-defined (ltype), custom (some.pat file)
+        _obj->pattern_type = pattern_type;
+      }
+    _obj->is_associative = is_associative;
+    _obj->extrusion.z = 1.0;
+    _obj->num_paths = num_paths;
+    _obj->paths = calloc (num_paths, sizeof (Dwg_HATCH_Path));
+    for (unsigned i = 0; i < num_paths; i++)
+      {
+        _obj->paths[i].num_boundary_handles = 1;
+        _obj->paths[i].boundary_handles = calloc (1, sizeof (BITCODE_H));
+        _obj->paths[i].boundary_handles[0]
+            = dwg_add_handleref (dwg, 4, pathobjs[i]->handle.value, obj);
+        // TODO split geometry into paths per pathobject:
+        // Line, Polyline, Circle, Ellipse, Spline or Region
+      }
+    return _obj;
+  }
 }
 
 EXPORT Dwg_Object_XRECORD *
@@ -24187,14 +24204,18 @@ dwg_add_XRECORD (Dwg_Object_DICTIONARY *restrict dict,
   Dwg_Object *dictobj = dwg_obj_generic_to_object (dict, &err);
   Dwg_Data *dwg = dictobj->parent;
   BITCODE_H itemhandle;
-  API_ADD_OBJECT (XRECORD);
-  if (dwg->header.version < R_2000)
-    dwg_require_class (dwg, "XRECORD");
-  _obj->cloning = dict->cloning;
-  itemhandle = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);
-  // find the key in the dict, and set the handle. or add it
-  dwg_add_DICTIONARY_item (dict, key, itemhandle);
-  return _obj;
+  {
+    if (dwg->header.version < R_2000)
+      dwg_require_class (dwg, "XRECORD");
+  }
+  {
+    API_ADD_OBJECT (XRECORD);
+    _obj->cloning = dict->cloning;
+    itemhandle = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);
+    // find the key in the dict, and set the handle. or add it
+    dwg_add_DICTIONARY_item (dict, key, itemhandle);
+    return _obj;
+  }
 }
 
 static Dwg_Resbuf *rbuf_last (Dwg_Resbuf *rbuf)
@@ -24374,9 +24395,13 @@ dwg_add_XRECORD_handle (Dwg_Object_XRECORD *restrict _obj,
 EXPORT Dwg_Object_PLACEHOLDER *
 dwg_add_PLACEHOLDER (Dwg_Data *restrict dwg)
 {
-  API_ADD_OBJECT (PLACEHOLDER);
-  dwg_require_class (dwg, "ACDBPLACEHOLDER");
-  return _obj;
+  {
+    dwg_require_class (dwg, "ACDBPLACEHOLDER");
+  }
+  {
+    API_ADD_OBJECT (PLACEHOLDER);
+    return _obj;
+  }
 }
 
 // VBA_PROJECT
@@ -24533,11 +24558,18 @@ dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 {
   Dwg_Object *img;
   Dwg_Entity_IMAGE *_img;
-
+  {
+    int err;
+    Dwg_Object *hdr = dwg_obj_generic_to_object (blkhdr, &err);
+    Dwg_Data *dwg = hdr ? hdr->parent : NULL;
+    if (dwg)
+      {
+        dwg_require_class (dwg, "IMAGE");
+        dwg_require_class (dwg, "IMAGEDEF");
+      }
+  }
   {
     API_ADD_ENTITY (IMAGE);
-    dwg_require_class (dwg, "IMAGE");
-    dwg_require_class (dwg, "IMAGEDEF");
     img = obj;
     _img = _obj;
     _obj->pt0.x = ins_pt->x;
