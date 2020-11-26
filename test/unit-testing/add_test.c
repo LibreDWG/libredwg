@@ -509,10 +509,7 @@ main (int argc, char *argv[])
   error = test_add (DWG_TYPE_RAY, "add_ray_2000.dwg");
   error = test_add (DWG_TYPE_XLINE, "add_xline_2000.dwg");
   error = test_add (DWG_TYPE_DICTIONARY, "add_dict_2000.dwg");
-  if (debug == cnt || debug == -1)
-    error = test_add (DWG_TYPE_DICTIONARYWDFLT, "add_dictwdflt_2000.dwg");
-  else
-    ok ("skip DICTIONARYWDFLT TODO wrong variable type");
+  error = test_add (DWG_TYPE_DICTIONARYWDFLT, "add_dictwdflt_2000.dwg");
   error = test_add (DWG_TYPE_OLE2FRAME, "add_ole2frame_2000.dwg");
   error = test_add (DWG_TYPE_MTEXT, "add_mtext_2000.dwg");
   error = test_add (DWG_TYPE_LEADER, "add_leader_2000.dwg");
