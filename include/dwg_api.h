@@ -295,7 +295,7 @@ Dwg_Entity_##token **dwg_getall_##token (Dwg_Object_Ref * hdr) \
   obj = get_first_owned_entity (hdr->obj); \
   while (obj) \
     { \
-      if (obj->type == DWG_TYPE_##token || obj->fixedtype == DWG_TYPE_##token) \
+      if (obj->fixedtype == DWG_TYPE_##token) \
         counts++; \
       obj = get_next_owned_entity (hdr->obj, obj); \
     } \
@@ -305,10 +305,12 @@ Dwg_Entity_##token **dwg_getall_##token (Dwg_Object_Ref * hdr) \
   obj = get_first_owned_entity (hdr->obj); \
   while (obj) \
     { \
-      if (obj->type == DWG_TYPE_##token || obj->fixedtype == DWG_TYPE_##token) \
+      if (obj->fixedtype == DWG_TYPE_##token) \
         { \
           ret_##token[i] = obj->tio.entity->tio.token; \
           i++; \
+          if (i >= counts) \
+            break; \
         } \
         obj = get_next_owned_entity (hdr->obj, obj); \
     } \
@@ -328,13 +330,13 @@ EXPORT Dwg_Object_##token *dwg_get_first_##token (Dwg_Data *dwg)
 EXPORT \
 Dwg_Object_##token **dwg_getall_##token (Dwg_Data *dwg) \
 { \
-  BITCODE_BL i, counts=0; \
+  BITCODE_BL i, c, counts = 0; \
   Dwg_Object_##token ** ret_##token; \
-  for (i=0; i < dwg->num_objects; i++) \
+  for (i = 0; i < dwg->num_objects; i++) \
     { \
-      if (dwg->object[i].supertype == DWG_SUPERTYPE_OBJECT \
-          && (dwg->object[i].type == DWG_TYPE_##token \
-              || dwg->object[i].fixedtype == DWG_TYPE_##token)) \
+      const Dwg_Object *const obj = &dwg->object[i]; \
+      if (obj->supertype == DWG_SUPERTYPE_OBJECT \
+          && obj->fixedtype == DWG_TYPE_##token) \
         { \
           counts++; \
         } \
@@ -342,17 +344,19 @@ Dwg_Object_##token **dwg_getall_##token (Dwg_Data *dwg) \
   if (!counts) \
     return NULL; \
   ret_##token = (Dwg_Object_##token **)malloc ((counts + 1) * sizeof(Dwg_Object_##token *)); \
-  for (i=0; i < dwg->num_objects; i++) \
+  for (c = 0, i = 0; i < dwg->num_objects; i++) \
     { \
       const Dwg_Object *const obj = &dwg->object[i]; \
       if (obj->supertype == DWG_SUPERTYPE_OBJECT \
-          && (obj->type == DWG_TYPE_##token || obj->fixedtype == DWG_TYPE_##token)) \
+          && obj->fixedtype == DWG_TYPE_##token) \
         { \
-          ret_##token[i] = obj->tio.object->tio.token; \
-          i++; \
+          ret_##token[c] = obj->tio.object->tio.token; \
+          c++; \
+          if (c >= counts) \
+            break; \
         } \
     } \
-  ret_##token[i] = NULL; \
+  ret_##token[c] = NULL; \
   return ret_##token; \
 }
 
