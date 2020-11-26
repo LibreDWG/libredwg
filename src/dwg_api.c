@@ -23542,14 +23542,16 @@ dwg_add_REGION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (len % 4096)
     _obj->num_blocks++;
   _obj->acis_data = (BITCODE_RC*)strdup (acis_data);
-  _obj->block_size = calloc (_obj->num_blocks + 1, sizeof (BITCODE_BL));
-  _obj->encr_sat_data = calloc (_obj->num_blocks + 1, sizeof (BITCODE_BL));
+  _obj->block_size = malloc ((_obj->num_blocks + 1) * sizeof (BITCODE_BL));
+  _obj->encr_sat_data = calloc (_obj->num_blocks + 1, sizeof (char*));
   _obj->version = 1;
   for (unsigned i = 0; i < _obj->num_blocks; i++)
     {
+      _obj->block_size[i] = i == _obj->num_blocks - 1 ? len % 4096 : 4096;
       _obj->encr_sat_data[i] = dwg_encrypt_SAT1 (
           _obj->block_size[i], _obj->acis_data, &acis_data_idx);
     }
+  _obj->block_size[_obj->num_blocks] = 0;
   return _obj;
 }
 
