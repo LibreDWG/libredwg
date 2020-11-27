@@ -6441,6 +6441,15 @@ dwg_add_XRECORD_handle (Dwg_Object_XRECORD *restrict _obj,
 
 EXPORT Dwg_Object_PLACEHOLDER*
 dwg_add_PLACEHOLDER (Dwg_Data *restrict dwg) __nonnull_all;
+EXPORT Dwg_Object_VBA_PROJECT *
+dwg_add_VBA_PROJECT (Dwg_Data *restrict dwg, const BITCODE_BL size,
+                     const BITCODE_RC *data) __nonnull_all;
+/* either added to VIEWPORT entity in pspace, or VPORT object in mspace. */
+EXPORT Dwg_Object_LAYOUT *
+dwg_add_LAYOUT (Dwg_Object *restrict vp,
+                const BITCODE_T restrict name,
+                const BITCODE_T restrict canonical_media_name) __nonnull_all;
+
 // Called Raster in VBA
 EXPORT Dwg_Entity_IMAGE*
 dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,

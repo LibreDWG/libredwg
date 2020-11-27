@@ -23873,7 +23873,7 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     {
       Dwg_Object_MLINESTYLE *mlstyle = dwg_add_MLINESTYLE (dwg, (const BITCODE_T) "STANDARD");
       _obj->mlinestyle = dwg_add_handleref (dwg, 5, dwg_obj_generic_handlevalue (mlstyle), obj);
-      //LOG_WARN ("No ACAD_MLINESTYLE in Named Dictionary Object found");
+      LOG_WARN ("No ACAD_MLINESTYLE in Named Dictionary Object found");
       return _obj;
     }
   obj = dwg_ref_object (dwg, ref);
@@ -23883,7 +23883,7 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     {
       Dwg_Object_MLINESTYLE *mlstyle = dwg_add_MLINESTYLE (dwg, (const BITCODE_T) "STANDARD");
       _obj->mlinestyle = dwg_add_handleref (dwg, 5, dwg_obj_generic_handlevalue (mlstyle), obj);
-      //LOG_WARN ("Empty ACAD_MLINESTYLE in Named Dictionary Object");
+      LOG_WARN ("Empty ACAD_MLINESTYLE in Named Dictionary Object");
       return _obj;
     }
   dict = obj->tio.object->tio.DICTIONARY;
@@ -24105,14 +24105,19 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
   Dwg_Object_Ref *dictref;
   API_ADD_OBJECT (MLINESTYLE);
   // find nod dict
-  dictref = dwg_find_dictionary (dwg, name);
+  dictref = dwg_find_dictionary (dwg, "MLINESTYLE");
   if (!dictref)
     {
-      // add to NOD item
-      Dwg_Object *nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
-      dwg_add_DICTIONARY_item (nod->tio.object->tio.DICTIONARY, name,
-                               dwg_add_handleref (dwg, 2, obj->handle.value, NULL));
-      
+      dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_MLINESTYLE", name,
+                          dwg_add_handleref (dwg, 2, obj->handle.value, NULL));
+    }
+  else
+    {
+      Dwg_Object *mlsty = dwg_ref_object (dwg, dictref);
+      if (mlsty)
+        // add to dict item
+        dwg_add_DICTIONARY_item (mlsty->tio.object->tio.DICTIONARY, name,
+                                 dwg_add_handleref (dwg, 2, obj->handle.value, NULL));
     }
 
   _obj->name = strdup (name);
@@ -24408,8 +24413,95 @@ dwg_add_PLACEHOLDER (Dwg_Data *restrict dwg)
   }
 }
 
-// VBA_PROJECT
-// LAYOUT
+EXPORT Dwg_Object_VBA_PROJECT *
+dwg_add_VBA_PROJECT (Dwg_Data *restrict dwg, const BITCODE_BL size,
+                     const BITCODE_RC *data)
+{
+  if (dwg->header.version >= R_2000)
+    {
+      API_ADD_OBJECT (VBA_PROJECT);
+      _obj->data = malloc (size);
+      memcpy (_obj->data, data, size);
+      _obj->data_size = size;
+      return _obj;
+    }
+  else
+    return NULL;
+}
+
+// either added to VIEWPORT entity in pspace, or VPORT object in mspace.
+EXPORT Dwg_Object_LAYOUT *
+dwg_add_LAYOUT (Dwg_Object *restrict vp,
+                const BITCODE_T restrict name,
+                const BITCODE_T restrict canonical_media_name)
+{
+  int err;
+  Dwg_Data *dwg = vp->parent;
+  if (vp->fixedtype != DWG_TYPE_VPORT && vp->fixedtype != DWG_TYPE_VIEWPORT)
+    {
+      LOG_ERROR ("LAYOUT can only be added to VPORT (in mspace) or VIEWPORT (in pspace)");
+      return NULL;
+    }
+  {
+    dwg_require_class (dwg, "LAYOUT");
+  }
+  {
+    Dwg_Object_DICTIONARY *dict;
+    Dwg_Object *dictobj;
+    Dwg_Object_Ref *dictref;
+    Dwg_Object *nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
+
+    API_ADD_OBJECT (LAYOUT);
+
+    _obj->layout_name = strdup (name);
+    _obj->plotsettings.canonical_media_name = strdup (canonical_media_name);
+    // either VIEWPORT or VPORT
+    _obj->active_viewport = dwg_add_handleref (
+        dwg, 4, vp->handle.value, NULL);
+    _obj->block_header = dwg_add_handleref (
+        dwg, 4, vp->tio.entity->ownerhandle->absolute_ref, NULL);
+    // TODO copy the plotsettings and viewport settings as default
+
+    // find nod dict and add entry
+    dictref = dwg_ctrl_table (dwg, "LAYOUT");
+    if (!dictref)
+      {
+        dict = dwg_add_DICTIONARY (
+            dwg, (const BITCODE_T) "ACAD_LAYOUT", name,
+            dwg_add_handleref (dwg, 2, obj->handle.value, NULL));
+      }
+    else
+      {
+        Dwg_Object *layout = dwg_ref_object (dwg, dictref);
+        if (layout)
+          dict = dwg_add_DICTIONARY_item (
+              nod->tio.object->tio.DICTIONARY, (const BITCODE_T) "ACAD_LAYOUT",
+              dwg_add_handleref (dwg, 2, layout->handle.value, NULL));
+        else
+          dict = NULL;
+      }
+    if (dict)
+      {
+        dictobj = dwg_obj_generic_to_object (dict, &error);
+        obj->tio.object->ownerhandle
+            = dwg_add_handleref (dwg, 4, dictobj->handle.value, NULL);
+        if (!dwg->header_vars.DICTIONARY_LAYOUT)
+          dwg->header_vars.DICTIONARY_LAYOUT
+              = dwg_add_handleref (dwg, 5, dictobj->handle.value, NULL);
+      }
+    {
+      // attach to block_header also. *Paper_Space mostly
+      Dwg_Object_Ref *blkref = _obj->block_header;
+      Dwg_Object *blk = dwg_ref_object (dwg, blkref);
+      if (!blk)
+        return _obj;
+      blk->tio.object->tio.BLOCK_HEADER->layout
+            = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
+    }
+    return _obj;
+  }
+}
+
 // PROXY_ENTITY
 // PROXY_OBJECT
 

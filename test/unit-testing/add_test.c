@@ -319,11 +319,16 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
     case DWG_TYPE_TOLERANCE:
       dwg_add_TOLERANCE (hdr, (const BITCODE_T) "testtekst", &pt1, NULL);
       break;
+    case DWG_TYPE_MLINESTYLE:
+      dwg_add_MLINESTYLE (dwg, (const BITCODE_T) "STANDARD");
+      break;
     case DWG_TYPE_MLINE:
       {
+        Dwg_Object_MLINESTYLE *mlstyle;
         const dwg_point_3d pts[]
             = { { 2.5, 0.0, 0.0 }, { 0.5, 0.0, 0.0 }, { 0.5, 2.0, 1.0 },
                 { 0.5, 1.0, 1.0 }, { 0.5, 1.0, 0.0 }, { 1.5, 1.0, 0.0 } };
+        mlstyle = dwg_add_MLINESTYLE (dwg, (const BITCODE_T) "STANDARD");
         dwg_add_MLINE (hdr, 6, pts);
       }
       break;
@@ -353,6 +358,20 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
         obj = dwg_obj_generic_to_object ((const dwg_obj_generic *)pline, &error);
         objs[0] = obj;
         dwg_add_HATCH (hdr, 0, (const BITCODE_T) "SOLID", false, 1, objs);
+      }
+      break;
+    case DWG_TYPE_VBA_PROJECT:
+      dwg_add_VBA_PROJECT (dwg, 2, (const unsigned char*) "xx");
+      break;
+    case DWG_TYPE_LAYOUT:
+      {
+        Dwg_Entity_VIEWPORT *viewport = dwg_add_VIEWPORT (hdr, (const BITCODE_T) "Model");
+        Dwg_Object *vp = dwg_obj_generic_to_object (viewport, &error);
+        if (vp && !error)
+          dwg_add_LAYOUT (vp, (const BITCODE_T) "Model",
+                          (const BITCODE_T) "ANSI_A_(8.50_x_11.00_Inches)");
+        else
+          fail ("no VIEWPORT created");
       }
       break;
 
@@ -443,12 +462,32 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       TEST_ENTITY (MTEXT);
       TEST_ENTITY (LEADER);
       TEST_ENTITY (TOLERANCE);
-      TEST_ENTITY (MLINE);
+      TEST_OBJECT (MLINESTYLE);
+    case DWG_TYPE_MLINE:
+      {
+        Dwg_Entity_MLINE **ents = dwg_getall_MLINE (mspace_ref);
+        Dwg_Object_MLINESTYLE **objs = dwg_getall_MLINESTYLE (dwg);
+        if (ents && ents[0] && !ents[1])
+          ok ("found 1 " "MLINE");
+        else if (!ents)
+          fail ("found no " "MLINE" " at all");
+        else if (!ents[0])
+          fail ("found no " "MLINE");
+        if (objs && objs[0] && !objs[1])
+          ok ("found 1 " "MLINESTYLE");
+        else if (!objs)
+          fail ("found no " "MLINESTYLE" " at all");
+        else if (!objs[0])
+          fail ("found no " "MLINESTYLE");
+      }
+      break;
       TEST_OBJECT (DIMSTYLE);
       TEST_OBJECT (UCS);
       //TEST_OBJECT (VX_TABLE_RECORD);
       TEST_ENTITY (HATCH);
       TEST_OBJECT (XRECORD);
+      TEST_OBJECT (VBA_PROJECT);
+      TEST_OBJECT (LAYOUT);
     default:
       fail ("No test yet for type %s", name);
     }
@@ -514,12 +553,15 @@ main (int argc, char *argv[])
   error = test_add (DWG_TYPE_MTEXT, "add_mtext_2000.dwg");
   error = test_add (DWG_TYPE_LEADER, "add_leader_2000.dwg");
   error = test_add (DWG_TYPE_TOLERANCE, "add_tolerance_2000.dwg");
+  error = test_add (DWG_TYPE_MLINESTYLE, "add_mlstyle_2000.dwg");
   error = test_add (DWG_TYPE_MLINE, "add_mline_2000.dwg");
   error = test_add (DWG_TYPE_DIMSTYLE, "add_dimstyle_2000.dwg");
   error = test_add (DWG_TYPE_UCS, "add_ucs_2000.dwg");
   //error = test_add (DWG_TYPE_VX_TABLE_RECORD, "add_vx_2000.dwg");
   error = test_add (DWG_TYPE_HATCH, "add_hatch_2000.dwg");
   error = test_add (DWG_TYPE_XRECORD, "add_xrecord_2000.dwg");
+  error = test_add (DWG_TYPE_VBA_PROJECT, "add_vba_2000.dwg");
+  error = test_add (DWG_TYPE_LAYOUT, "add_layout_2000.dwg");
 
   return error;
 }
