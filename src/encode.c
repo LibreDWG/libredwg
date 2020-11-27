@@ -3652,8 +3652,9 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       (void)dwg_encode_get_class (dwg, obj);
       break;
     case DWG_TYPE_VBA_PROJECT:
-      LOG_ERROR ("Unhandled Object VBA_PROJECT. Has its own section");
-      // dwg_encode_VBA_PROJECT(dat, obj);
+      //LOG_ERROR ("Unhandled Object VBA_PROJECT. Has its own AcDb::VBAProject section");
+      error = dwg_encode_VBA_PROJECT (dat, obj);
+      (void)dwg_encode_get_class (dwg, obj);
       break;
     case DWG_TYPE_LAYOUT:
       error |= dwg_encode_LAYOUT (dat, obj);

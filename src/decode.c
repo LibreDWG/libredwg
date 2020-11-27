@@ -3242,7 +3242,10 @@ read_2004_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error;
   Dwg_VBAProject *_obj = &dwg->vbaproject;
   if (!dwg->header.vbaproj_address)
-    return 0;
+    {
+      LOG_INFO ("No %s section. Empty header.vbaproj_address\n", "VBAProject");
+      return 0;
+    }
   // compressed
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_VBAPROJECT);
   if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
@@ -3258,7 +3261,8 @@ read_2004_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-  //DEBUG_HERE dwg_decode_ole2 ()
+  //DEBUG_HERE dwg_decode_ole2 () (MS-CFB starts at offset 0x10)
+  //https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-ovba/575462ba-bf67-4190-9fac-c275523c75fc
   _obj->size = dat->size;
   _obj->unknown_bits = bit_read_TF (dat, _obj->size);
   LOG_TRACE_TF (_obj->unknown_bits, _obj->size)
@@ -5820,9 +5824,9 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
       error = dwg_decode_OLEFRAME (dat, obj);
       break;
     case DWG_TYPE_VBA_PROJECT:
-      LOG_ERROR ("Unhandled Object VBA_PROJECT. Has its own section");
-      // dwg_decode_VBA_PROJECT(dat, obj);
-      error = DWG_ERR_UNHANDLEDCLASS;
+      //LOG_ERROR ("Unhandled Object VBA_PROJECT. Has its own section");
+      error = dwg_decode_VBA_PROJECT (dat, obj);
+      //error = DWG_ERR_UNHANDLEDCLASS;
       break;
     case DWG_TYPE_LAYOUT:
       error = dwg_decode_LAYOUT (dat, obj);

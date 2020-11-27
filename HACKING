@@ -361,6 +361,12 @@ reverse-engineering them never stops. So it has to be automated somehow.
 There are also two more helpers bd and bits in examples/, which decode a bit
 pattern to the most likely value/type combination or all.
 
+* Convert unknown_bits HEX to binary
+
+Store the HEX string from the log into a file, like acds.hex.
+
+    perl -ne'$_ =~ s/(..)/chr(hex($1))/ge; print' acds.hex >acds.dat
+
 * etc
 #+STARTUP: odd
   Local variables:

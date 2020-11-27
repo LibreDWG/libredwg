@@ -22361,14 +22361,14 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
       if (strEQ (klass->dxfname, dxfname))
         return 1;
     }
-  if (strEQc (dxfname, "LWPOLYLINE"))
+  if (strEQc (dxfname, "LWPOLYLINE")) // dwg_version 20
     return dwg_add_class (dwg, "LWPOLYLINE", "AcDbPolyline", "ObjectDBX Classes", true);
-  if (strEQc (dxfname, "HATCH"))
+  if (strEQc (dxfname, "HATCH"))  // dwg_version 20
     return dwg_add_class (dwg, "HATCH", "AcDbHatch", "ObjectDBX Classes", true);
   if (strEQc (dxfname, "OLE2FRAME"))
     return dwg_add_class (dwg, "OLE2FRAME", "AcDbOle2Frame", "ObjectDBX Classes", true);
 
-  if (strEQc (dxfname, "XRECORD"))
+  if (strEQc (dxfname, "XRECORD")) // dwg_version 21
     return dwg_add_class (dwg, "XRECORD", "AcDbXrecord", "ObjectDBX Classes", false);
   if (strEQc (dxfname, "DICTIONARYVAR"))
     return dwg_add_class (dwg, "DICTIONARYVAR", "AcDbDictionaryVar", "AutoCAD 2000", false);
@@ -22390,7 +22390,7 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
     return dwg_add_class (dwg, "SPATIAL_INDEX", "AcDbSpatialIndex", "ObjectDBX Classes", false);
   if (strEQc (dxfname, "IDBUFFER"))
     return dwg_add_class (dwg, "IDBUFFER", "AcDbIdBuffer", "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "VBA_PROJECT"))
+  if (strEQc (dxfname, "VBA_PROJECT")) // dwg_version 19
     return dwg_add_class (dwg, "VBA_PROJECT", "AcDbVbaProject", "ObjectDBX Classes", false);
   if (strEQc (dxfname, "VISUALSTYLE"))
     return dwg_add_class (dwg, "VISUALSTYLE", "AcDbVisualStyle", "ObjectDBX Classes", false);
@@ -24492,16 +24492,22 @@ EXPORT Dwg_Object_VBA_PROJECT *
 dwg_add_VBA_PROJECT (Dwg_Data *restrict dwg, const BITCODE_BL size,
                      const BITCODE_RC *data)
 {
-  if (dwg->header.version >= R_2000)
-    {
-      API_ADD_OBJECT (VBA_PROJECT);
-      _obj->data = malloc (size);
-      memcpy (_obj->data, data, size);
-      _obj->data_size = size;
-      return _obj;
-    }
-  else
+  if (dwg->header.version < R_2000)
     return NULL;
+  {
+    dwg_require_class (dwg, "VBA_PROJECT");
+  }
+  {
+    API_ADD_OBJECT (VBA_PROJECT);
+    _obj->data_size = size;
+    // add the data to dwg->vbaproject, the SECTION_VBAPROJECT
+    dwg->vbaproject.size = size;
+    dwg->vbaproject.unknown_bits = malloc (size);
+    //memcpy (_obj->data, data, size);
+    memcpy (dwg->vbaproject.unknown_bits, data, size);
+    // header.vbaproj_address is set in encode
+    return _obj;
+  }
 }
 
 /* either added to VIEWPORT entity in pspace, or VPORT object in mspace. */
