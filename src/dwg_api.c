@@ -34,6 +34,7 @@
 #include "logging.h"
 #include "bits.h"
 #include "dwg_api.h"
+#include "classes.h"
 
 /** We don't pass in Dwg_Object*'s, so we don't know if the object
  *  is >= r2007 or <r13 or what. Default is r2000.
@@ -22537,12 +22538,15 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
   int error;                                                                  \
   Dwg_Object *obj;                                                            \
   Dwg_Entity_##token *_obj;                                                   \
-  Dwg_Object *blkobj                                                          \
-      = dwg_obj_generic_to_object (blkhdr, &error);        \
-  Dwg_Data *dwg = blkobj && !error ? blkobj->parent : NULL;                   \
   const char *dxfname = #token;                                               \
-  if (!dwg)                                                                   \
-    return NULL;                                                              \
+  Dwg_Object *blkobj = dwg_obj_generic_to_object (blkhdr, &error);            \
+  Dwg_Data *dwg = blkobj && !error ? blkobj->parent : NULL;                   \
+  if (!dwg || blkobj->fixedtype != DWG_TYPE_BLOCK_HEADER)                     \
+    {                                                                         \
+      LOG_ERROR ("Entity %s must be added to a BLOCK_HEADER, not %s",         \
+                 #token, blkobj ? dwg_type_name (blkobj->fixedtype) : "NULL");\
+      return NULL;                                                            \
+    }                                                                         \
   NEW_ENTITY (dwg, obj);                                                      \
   ADD_ENTITY (token);                                                         \
   obj->tio.entity->ownerhandle = dwg_add_handleref (dwg,                      \
@@ -24213,6 +24217,12 @@ dwg_add_XRECORD (Dwg_Object_DICTIONARY *restrict dict,
   Dwg_Object *dictobj = dwg_obj_generic_to_object (dict, &err);
   Dwg_Data *dwg = dictobj->parent;
   BITCODE_H itemhandle;
+  if (dictobj->fixedtype != DWG_TYPE_DICTIONARY) // allow WDFLT? not seen in the wild
+    {
+      LOG_ERROR ("Object XRECORD must be added to a DICTIONARY, not %s",
+                 dwg_type_name (dictobj->fixedtype));
+      return NULL;
+    }
   {
     if (dwg->header.version < R_2000)
       dwg_require_class (dwg, "XRECORD");
@@ -24253,11 +24263,22 @@ static Dwg_Resbuf * rbuf_add (Dwg_Resbuf **rbuf)
   return *rbuf;
 }
 
+#define CHECK_XRECORD                                                   \
+  int error;                                                            \
+  Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);           \
+  if (!obj || obj->fixedtype != DWG_TYPE_XRECORD)                       \
+    {                                                                   \
+      LOG_ERROR ("Not a XRECORD, but %s", obj ? dwg_type_name (obj->fixedtype) : "NULL"); \
+      return NULL;                                                      \
+    }
+
 EXPORT Dwg_Object_XRECORD *
 dwg_add_XRECORD_bool (Dwg_Object_XRECORD *restrict _obj,
                       const short dxf, const BITCODE_B value)
 {
-  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  Dwg_Resbuf *rbuf;
+  CHECK_XRECORD;
+  rbuf = rbuf_add (&_obj->xdata);
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.i8 = value;
@@ -24269,7 +24290,15 @@ EXPORT Dwg_Object_XRECORD *
 dwg_add_XRECORD_int8 (Dwg_Object_XRECORD *restrict _obj,
                        const short dxf, const BITCODE_RC value)
 {
-  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  int error;
+  Dwg_Resbuf *rbuf;
+  Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+  if (obj->fixedtype != DWG_TYPE_XRECORD)
+    {
+      LOG_ERROR ("Not a XRECORD, but %s", dwg_type_name (obj->fixedtype));
+      return NULL;
+    }
+  rbuf = rbuf_add (&_obj->xdata);
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.i8 = value;
@@ -24281,7 +24310,15 @@ EXPORT Dwg_Object_XRECORD *
 dwg_add_XRECORD_int16 (Dwg_Object_XRECORD *restrict _obj,
                        const short dxf, const BITCODE_BS value)
 {
-  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  int error;
+  Dwg_Resbuf *rbuf;
+  Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+  if (obj->fixedtype != DWG_TYPE_XRECORD)
+    {
+      LOG_ERROR ("Not a XRECORD, but %s", dwg_type_name (obj->fixedtype));
+      return NULL;
+    }
+  rbuf = rbuf_add (&_obj->xdata);
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.i16 = value;
@@ -24292,7 +24329,15 @@ EXPORT Dwg_Object_XRECORD *
 dwg_add_XRECORD_int32 (Dwg_Object_XRECORD *restrict _obj,
                        const short dxf, const BITCODE_BL value)
 {
-  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  int error;
+  Dwg_Resbuf *rbuf;
+  Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+  if (!obj || obj->fixedtype != DWG_TYPE_XRECORD)
+    {
+      LOG_ERROR ("Not a XRECORD, but %s", obj ? dwg_type_name (obj->fixedtype) : "NULL");
+      return NULL;
+    }
+  rbuf = rbuf_add (&_obj->xdata);
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.i32 = value;
@@ -24305,7 +24350,15 @@ EXPORT Dwg_Object_XRECORD *
 dwg_add_XRECORD_int64 (Dwg_Object_XRECORD *restrict _obj,
                        const short dxf, const BITCODE_BLL value)
 {
-  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  int err;
+  Dwg_Resbuf *rbuf;
+  Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &err);
+  if (obj->fixedtype != DWG_TYPE_XRECORD)
+    {
+      LOG_ERROR ("Not a XRECORD, but %s", dwg_type_name (obj->fixedtype));
+      return NULL;
+    }
+  rbuf = rbuf_add (&_obj->xdata);
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.i64 = value;
@@ -24317,7 +24370,15 @@ EXPORT Dwg_Object_XRECORD *
 dwg_add_XRECORD_real (Dwg_Object_XRECORD *restrict _obj,
                       const short dxf, const BITCODE_BD value)
 {
-  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  int err;
+  Dwg_Resbuf *rbuf;
+  Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &err);
+  if (obj->fixedtype != DWG_TYPE_XRECORD)
+    {
+      LOG_ERROR ("Not a XRECORD, but %s", dwg_type_name (obj->fixedtype));
+      return NULL;
+    }
+  rbuf = rbuf_add (&_obj->xdata);
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.dbl = value;
@@ -24329,7 +24390,15 @@ EXPORT Dwg_Object_XRECORD *
 dwg_add_XRECORD_pointd3d (Dwg_Object_XRECORD *restrict _obj,
                           const short dxf, const BITCODE_3DPOINT *pt)
 {
-  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  int err;
+  Dwg_Resbuf *rbuf;
+  Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &err);
+  if (obj->fixedtype != DWG_TYPE_XRECORD)
+    {
+      LOG_ERROR ("Not a XRECORD, but %s", dwg_type_name (obj->fixedtype));
+      return NULL;
+    }
+  rbuf = rbuf_add (&_obj->xdata);
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.pt[0] = pt->x;
@@ -24361,9 +24430,15 @@ dwg_add_XRECORD_string (Dwg_Object_XRECORD *restrict _obj,
                         const BITCODE_T str)
 {
   int error;
-  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  Dwg_Resbuf *rbuf;
   Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
   Dwg_Data *dwg = obj ? obj->parent : NULL;
+  if (obj->fixedtype != DWG_TYPE_XRECORD)
+    {
+      LOG_ERROR ("Not a XRECORD, but %s", dwg_type_name (obj->fixedtype));
+      return NULL;
+    }
+  rbuf = rbuf_add (&_obj->xdata);
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.str.size = len;
@@ -24429,7 +24504,7 @@ dwg_add_VBA_PROJECT (Dwg_Data *restrict dwg, const BITCODE_BL size,
     return NULL;
 }
 
-// either added to VIEWPORT entity in pspace, or VPORT object in mspace.
+/* either added to VIEWPORT entity in pspace, or VPORT object in mspace. */
 EXPORT Dwg_Object_LAYOUT *
 dwg_add_LAYOUT (Dwg_Object *restrict vp,
                 const BITCODE_T restrict name,
