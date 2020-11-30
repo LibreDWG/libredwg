@@ -22289,7 +22289,8 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   dwg->header_vars.BLOCK_RECORD_MSPACE
       = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
   dwg->header_vars.BLOCK_RECORD_MSPACE->obj = obj;
-  block_control->model_space = dwg->header_vars.BLOCK_RECORD_MSPACE;
+  block_control->model_space
+      = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
   // BLOCK_RECORD_PSPACE: (5.1.20)
   pspace = dwg_add_BLOCK_HEADER (dwg, (const BITCODE_T) "*PAPER_SPACE");
   obj = dwg_obj_generic_to_object (pspace, &error);
@@ -22297,7 +22298,8 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   dwg->header_vars.BLOCK_RECORD_PSPACE
       = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
   dwg->header_vars.BLOCK_RECORD_PSPACE->obj = obj;
-  block_control->paper_space = dwg->header_vars.BLOCK_RECORD_PSPACE;
+  block_control->paper_space
+      = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
   dwg->block_control = *block_control;
   // BLOCK: (5.1.21)
   dwg_add_BLOCK (pspace, (const BITCODE_T) "*PAPER_SPACE");
@@ -23635,7 +23637,7 @@ dwg_add_XLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-// TODO name, to be added to NOD
+/* The name is the NOD entry. On NULL this is the NOD 0.1.C ("Named Object Dictionary") */
 EXPORT Dwg_Object_DICTIONARY*
 dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
                     const BITCODE_T restrict name, /* the NOD entry */
@@ -23656,9 +23658,19 @@ dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
     {
       nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
       if (nod)
-        dwg_add_DICTIONARY_item (
-            nod->tio.object->tio.DICTIONARY, name,
-            dwg_add_handleref (dwg, 2, obj->handle.value, obj));
+        {
+          dwg_add_DICTIONARY_item (nod->tio.object->tio.DICTIONARY, name,
+                                   dwg_add_handleref (dwg, 2, obj->handle.value, obj));
+          obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, nod->handle.value, NULL);
+          obj->tio.object->num_reactors = 1;
+          obj->tio.object->reactors = calloc (1, sizeof (BITCODE_H));
+          obj->tio.object->reactors[0] = obj->tio.object->ownerhandle;
+        }
+    }
+  else
+    {
+      obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 0, NULL);
+      _obj->cloning = 1;
     }
   return _obj;
 }
@@ -23960,7 +23972,7 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
     {                                                                         \
       _ctrl = ctrl->tio.object->tio.control;                                  \
     }                                                                         \
-  if (strEQc(#record, "BLOCK_HEADER") || name)                                \
+  if (name || strEQc(#record, "BLOCK_HEADER"))                                \
     {                                                                         \
       API_ADD_OBJECT (record);                                                \
       _obj->name = strdup (name); /* FIXME write <r2007 only */               \
@@ -23977,6 +23989,7 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
                  _ctrl->num_entries,                                          \
                  ARGS_REF (_ctrl->entries[_ctrl->num_entries]));              \
       _ctrl->num_entries++;                                                   \
+      _obj->is_xref_ref = 1;                                                  \
       return _obj;                                                            \
     }                                                                         \
   else                                                                        \
