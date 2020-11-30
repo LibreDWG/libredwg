@@ -23972,7 +23972,7 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
     {                                                                         \
       _ctrl = ctrl->tio.object->tio.control;                                  \
     }                                                                         \
-  if (name || strEQc(#record, "BLOCK_HEADER"))                                \
+  if (name || strEQc (#record, "BLOCK_HEADER"))                               \
     {                                                                         \
       API_ADD_OBJECT (record);                                                \
       _obj->name = strdup (name); /* FIXME write <r2007 only */               \
@@ -23989,6 +23989,8 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
                  _ctrl->num_entries,                                          \
                  ARGS_REF (_ctrl->entries[_ctrl->num_entries]));              \
       _ctrl->num_entries++;                                                   \
+      obj->tio.object->ownerhandle                                            \
+          = dwg_add_handleref (dwg, 4, ctrl->handle.value, obj);              \
       _obj->is_xref_ref = 1;                                                  \
       return _obj;                                                            \
     }                                                                         \
