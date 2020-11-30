@@ -10094,7 +10094,7 @@ static const Dwg_DYNAPI_field _dwg_UCS_fields[] = {
     1,0,0, 346 },
   { "named_ucs",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_UCS, named_ucs),
     1,0,0, 0 },
-  { "num_orthopts",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_UCS, num_orthopts),
+  { "num_orthopts",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_UCS, num_orthopts),
     0,0,0, 0 },
   { "orthopts",	"Dwg_UCS_orthopts*", sizeof (Dwg_UCS_orthopts*),  OFF (struct _dwg_object_UCS, orthopts),
     1,1,0, 0 },

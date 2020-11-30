@@ -11785,7 +11785,7 @@ H,	DXF 346
 @item named_ucs
 H
 @item num_orthopts
-BL
+BS
 @item orthopts
 Dwg_UCS_orthopts*
 

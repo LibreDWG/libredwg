@@ -2404,7 +2404,7 @@ typedef struct _dwg_object_UCS
   BITCODE_BS UCSORTHOVIEW;
   BITCODE_H base_ucs;
   BITCODE_H named_ucs;
-  BITCODE_BL num_orthopts; // missing in ODA docs
+  BITCODE_BS num_orthopts; // missing in ODA docs
   Dwg_UCS_orthopts *orthopts;
 } Dwg_Object_UCS;
 

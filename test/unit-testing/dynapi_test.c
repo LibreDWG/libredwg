@@ -57188,18 +57188,18 @@ static int test_UCS (const Dwg_Object *obj)
         fail ("UCS.named_ucs [H]");
   }
   {
-    BITCODE_BL num_orthopts;
+    BITCODE_BS num_orthopts;
     if (dwg_dynapi_entity_value (ucs, "UCS", "num_orthopts", &num_orthopts, NULL)
         && num_orthopts == ucs->num_orthopts)
       pass ();
     else
-      fail ("UCS.num_orthopts [BL] %u != %u", ucs->num_orthopts, num_orthopts);
+      fail ("UCS.num_orthopts [BS] %hu != %hu", ucs->num_orthopts, num_orthopts);
     num_orthopts++;
     if (dwg_dynapi_entity_set_value (ucs, "UCS", "num_orthopts", &num_orthopts, 0)
         && num_orthopts == ucs->num_orthopts)
       pass ();
     else
-      fail ("UCS.num_orthopts [BL] set+1 %u != %u", ucs->num_orthopts, num_orthopts);
+      fail ("UCS.num_orthopts [BS] set+1 %hu != %hu", ucs->num_orthopts, num_orthopts);
     ucs->num_orthopts--;
   }
   {
