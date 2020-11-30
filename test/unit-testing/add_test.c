@@ -658,6 +658,7 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       fail ("found no " #token " at all");                              \
     else if (!objs[0])                                                  \
       fail ("found no " #token);                                        \
+    free (objs);                                                        \
   }                                                                     \
   break
 
@@ -672,6 +673,7 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       fail ("found no " #token " at all");                              \
     else if (!objs[0])                                                  \
       fail ("found no " #token);                                        \
+    free (objs);                                                        \
   }                                                                     \
   break
 
@@ -725,12 +727,14 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
           fail ("found no " "MLINE" " at all");
         else if (!ents[0])
           fail ("found no " "MLINE");
+        free (ents);
         if (objs && objs[0] && !objs[1])
           ok ("found 1 " "MLINESTYLE");
         else if (!objs)
           fail ("found no " "MLINESTYLE" " at all");
         else if (!objs[0])
           fail ("found no " "MLINESTYLE");
+        free (objs);
       }
       break;
       TEST_OBJECT (DIMSTYLE);
@@ -745,6 +749,9 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
     }
   
   ok ("read %s", name);
+  dwg_free (dwg);
+  free (dwg);
+
   n_failed = numfailed();
   if (!n_failed && (!debug || debug != -1))
     unlink (dwgfile);
