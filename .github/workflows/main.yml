@@ -13,36 +13,62 @@ on:
 jobs:
   linux:
     name: linux
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        CONFIGURE_ARGS:
+          #- ""
+          - "--disable-bindings"
+          - "--enable-release"
+          #- "--enable-trace"
+          - CC="clang"
+          - CC="gcc -O0 -fno-omit-frame-pointer -fsanitize=address,undefined -fno-var-tracking"
     steps:
+    #- name: init
+    #  run: |
+    #      apt-get update ||:
+    #      apt-get -y install texinfo texlive libxml2 python-libxml2 swig help2man dejagnu libpcre2-dev libpcre2-32-0 libconvert-binary-c-perl
+    #- run: pip install --user libxml2
     - name: checkout
-      uses: actions/checkout@v2
-    - run: apt-get install texinfo texlive libxml2 python-libxml2 swig help2man dejagnu libpcre2-dev libpcre2-32-0 libconvert-binary-c-perl
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
     - run: sh autogen.sh
     # TODO: configure args matrix
-    - run: ./configure
+    - run: ./configure ${{ matrix.CONFIGURE_ARGS }}
     - run: make
     - run: make check
+      # TODO only on "--enable-release"
     - run: make distcheck
   macOS:
     name: macOS
     runs-on: macOS-latest
     steps:
+    - name: init
+      run: brew install automake
     - name: checkout
       uses: actions/checkout@v2
     - run: sh autogen.sh
     - run: ./configure
     - run: make
     - run: make check
-    - run: make distcheck
+    #- run: make distcheck
   mingw:
     name: mingw
     runs-on: windows-latest
+    env:
+      MSYS2_DIR: msys64
+      MSYS2_ARCH: x86_64
+      MSYSTEM: MINGW64
+      ARCH: win64
+      PLATFORM: x64
     steps:
     - name: checkout
       uses: actions/checkout@v2
     - run: reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1
-    - run: call build-aux\msys2.bat
+    - run: build-aux\msys2.bat
     - run: bash -c "sh ./autogen.sh"
     - run: bash -c "./configure"
     - run: bash -c "make"
