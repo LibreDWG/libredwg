@@ -7346,7 +7346,7 @@ DWG_OBJECT (VISUALSTYLE)
       FIELD_BL (face_lighting_model, 71);       FIELD_BS (face_lighting_model_int, 176);   /* 0 */
       FIELD_BL (face_lighting_quality, 72);     FIELD_BS (face_lighting_quality_int, 176); /* 1 */
       FIELD_BL (face_color_mode, 73);           FIELD_BS (face_color_mode_int, 176);       /* 2 */
-      FIELD_BS (face_modifier, 90);             FIELD_BS (face_modifier_int, 176);
+      FIELD_CAST (face_modifier, BS, BL, 90);   FIELD_BS (face_modifier_int, 176);
       FIELD_BD (face_opacity, 40);              FIELD_BS (face_opacity_int, 176);
       FIELD_BD (face_specular, 41);             FIELD_BS (face_specular_int, 176);
       FIELD_CMC (face_mono_color, 63);          FIELD_BS (face_mono_color_int, 176);

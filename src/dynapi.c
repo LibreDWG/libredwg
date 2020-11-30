@@ -4151,7 +4151,7 @@ static const Dwg_DYNAPI_field _dwg_UNDERLAY_fields[] = {
     0,0,0, 0 },
   { "clip_verts",	"2RD*", sizeof (BITCODE_2RD*),  OFF (struct _dwg_entity_UNDERLAY, clip_verts),
     1,1,0, 11 },
-  { "num_clip_inverts",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_UNDERLAY, num_clip_inverts),
+  { "num_clip_inverts",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_UNDERLAY, num_clip_inverts),
     0,0,0, 170 },
   { "clip_inverts",	"2RD*", sizeof (BITCODE_2RD*),  OFF (struct _dwg_entity_UNDERLAY, clip_inverts),
     1,1,0, 12 },

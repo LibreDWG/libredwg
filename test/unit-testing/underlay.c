@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
   BITCODE_RC fade;
   BITCODE_BL num_clip_verts;
   dwg_point_2d* clip_verts;
-  BITCODE_BL num_clip_inverts;
+  BITCODE_BS num_clip_inverts;
   dwg_point_2d *clip_inverts;
   BITCODE_H definition_id;
 

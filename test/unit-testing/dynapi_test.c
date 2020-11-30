@@ -23723,18 +23723,18 @@ static int test_UNDERLAY (const Dwg_Object *obj)
         fail ("UNDERLAY.ins_pt [3BD]");
   }
   {
-    BITCODE_BL num_clip_inverts;
+    BITCODE_BS num_clip_inverts;
     if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "num_clip_inverts", &num_clip_inverts, NULL)
         && num_clip_inverts == underlay->num_clip_inverts)
       pass ();
     else
-      fail ("UNDERLAY.num_clip_inverts [BL] %u != %u", underlay->num_clip_inverts, num_clip_inverts);
+      fail ("UNDERLAY.num_clip_inverts [BS] %hu != %hu", underlay->num_clip_inverts, num_clip_inverts);
     num_clip_inverts++;
     if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "num_clip_inverts", &num_clip_inverts, 0)
         && num_clip_inverts == underlay->num_clip_inverts)
       pass ();
     else
-      fail ("UNDERLAY.num_clip_inverts [BL] set+1 %u != %u", underlay->num_clip_inverts, num_clip_inverts);
+      fail ("UNDERLAY.num_clip_inverts [BS] set+1 %hu != %hu", underlay->num_clip_inverts, num_clip_inverts);
     underlay->num_clip_inverts--;
   }
   {

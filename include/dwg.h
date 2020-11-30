@@ -3936,7 +3936,7 @@ typedef struct _dwg_entity_UNDERLAY
   /* Note that neither Wipeout nor RasterImage has these inverted clips, allowing one hole.
      They just have an clip_mode flag for is_inverted.
      GeoJSON/GIS has multiple polygons, allowing multiple nested holes. */
-  BITCODE_BL num_clip_inverts; /*!< DXF 170 */
+  BITCODE_BS num_clip_inverts; /*!< DXF 170 */
   BITCODE_2RD *clip_inverts;   /*!< DXF 12  */
   BITCODE_H definition_id;     /*!< DXF 340 */
 } Dwg_Entity_UNDERLAY;
