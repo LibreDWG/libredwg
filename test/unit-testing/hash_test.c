@@ -1,6 +1,6 @@
 #define HASH_TEST_C
-#include "../../src/hash.h"
-#include "../../src/common.h"
+#include "hash.h"
+#include "common.h"
 #include <string.h>
 #include <stdlib.h>
 #include "tests_common.h"

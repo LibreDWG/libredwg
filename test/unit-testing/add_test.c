@@ -26,12 +26,12 @@ static unsigned int loglevel;
 static int debug;
 static int cnt = 0;
 #define DWG_LOGLEVEL loglevel
-#include "../../src/config.h"
-#include "../../src/logging.h"
+#include "config.h"
+#include "logging.h"
 #include "dwg.h"
 #include "dwg_api.h"
 #include "tests_common.h"
-#include "../../src/classes.h"
+#include "classes.h"
 
 static int
 test_add (const Dwg_Object_Type type, const char *restrict dwgfile)

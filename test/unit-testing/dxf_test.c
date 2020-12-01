@@ -24,9 +24,9 @@
 
 static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
-#include "../../src/config.h"
-#include "../../src/common.h"
-#include "../../src/decode.h"
+#include "config.h"
+#include "common.h"
+#include "decode.h"
 #include "dwg.h"
 #include "dwg_api.h"
 #include "tests_common.h"

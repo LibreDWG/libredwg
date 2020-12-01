@@ -53,13 +53,7 @@ endif()
 option(BUILD_SHARED_LIBS "shared libredwg library" ON)
 option(LIBREDWG_LIBONLY "only the libredwg library" OFF)
 option(LIBREDWG_DISABLE_WRITE "no libredwg write support" OFF)
-if (LIBREDWG_DISABLE_WRITE)
-  add_definitions(-UUSE_WRITE)
-endif()
 option(LIBREDWG_DISABLE_JSON "no libredwg json support" OFF)
-if (LIBREDWG_DISABLE_JSON)
-  add_definitions(-DDISABLE_JSON)
-endif()
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release"

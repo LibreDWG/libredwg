@@ -4,7 +4,7 @@
 #ifdef CLANG_DIAG_IGNORE
   CLANG_DIAG_IGNORE (-Wpragma-pack)
 #endif
-#include "../../src/decode.c"
+#include "decode.c"
 #ifdef CLANG_DIAG_IGNORE
   CLANG_DIAG_RESTORE
 #endif

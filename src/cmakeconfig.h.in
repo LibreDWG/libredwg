@@ -1,5 +1,8 @@
 /* src/config.h.  Generated from cmakeconfig.h.in by cmake.  */
 
+/* Defined to 1 on a cmake build */
+#define CMAKE_BUILD 1
+
 /* Defined to <strings.h> or <string.h> if strcasecmp is found */
 #define AX_STRCASECMP_HEADER <strings.h>
 
@@ -8,204 +11,212 @@
    */
 /* #undef CRAY_STACKSEG_END */
 
-/* Define to 1 if using `alloca.c'. */
+/* Define if using `alloca.c'. */
 /* #undef C_ALLOCA */
 
-/* Define to disable bindings. */
+/* Define to disable bindings. Not yet supported by cmake */
 #define DISABLE_BINDINGS 1
 
-/* Define to disable DXF and other in/out modules. */
+/* Define to disable DXF, JSON and other in/out modules. Not yet supported by cmake. */
 /* #undef DISABLE_DXF */
 
-/* Define to 1 if a shared library will be built */
+/* Define to disable JSON, GeoJSON in/out modules. */
+#cmakedefine LIBREDWG_DISABLE_JSON
+#ifdef LIBREDWG_DISABLE_JSON
+#  define DISABLE_JSON
+#else
+#  undef DISABLE_JSON
+#endif   
+
+/* Define if a shared library will be built */
 #define ENABLE_SHARED @BUILD_SHARED_LIBS@
 
 /* Define if pointers to integers require aligned access */
 /* #undef HAVE_ALIGNED_ACCESS_REQUIRED */
 
-/* Define to 1 if you have `alloca', as a function or macro. */
+/* Define if you have `alloca', as a function or macro. */
 #define HAVE_ALLOCA 1
 
-/* Define to 1 if you have <alloca.h> and it should be used (not on Ultrix).
+/* Define if you have <alloca.h> and it should be used (not on Ultrix).
    */
 #define HAVE_ALLOCA_H 1
 
 /* Define if __attribute__((visibility("default"))) is supported. */
 #define HAVE_ATTRIBUTE_VISIBILITY_DEFAULT 1
 
-/* Define to 1 if you have the `basename' function. */
+/* Define if you have the `basename' function. */
 #define HAVE_BASENAME 1
 
 /* Defined to 1 when the compiler supports c99, mostly (...) macros */
 #define HAVE_C99 1
 
-/* Define to 1 if you have the <ctype.h> header file. */
-#cmakedefine01 HAVE_CTYPE_H
+/* Define if you have the <ctype.h> header file. */
+#cmakedefine HAVE_CTYPE_H
 
-/* Define to 1 if you have the <dlfcn.h> header file. */
+/* Define if you have the <dlfcn.h> header file. */
 #define HAVE_DLFCN_H 1
 
-/* Define to 1 if you have the <float.h> header file. */
+/* Define if you have the <float.h> header file. */
 #define HAVE_FLOAT_H 1
 
-/* Define to 1 if you have the `floor' function. */
+/* Define if you have the `floor' function. */
 /* #undef HAVE_FLOOR */
 
-/* Define to 1 if the system has the `format' function attribute */
+/* Define if the system has the `format' function attribute */
 #define HAVE_FUNC_ATTRIBUTE_FORMAT 1
 
-/* Define to 1 if the system has the `gnu_format' function attribute */
+/* Define if the system has the `gnu_format' function attribute */
 #define HAVE_FUNC_ATTRIBUTE_GNU_FORMAT 1
 
-/* Define to 1 if the system has the `malloc' function attribute */
+/* Define if the system has the `malloc' function attribute */
 #define HAVE_FUNC_ATTRIBUTE_MALLOC 1
 
-/* Define to 1 if the system has the `ms_format' function attribute */
+/* Define if the system has the `ms_format' function attribute */
 #define HAVE_FUNC_ATTRIBUTE_MS_FORMAT 1
 
-/* Define to 1 if the system has the `returns_nonnull' function attribute */
+/* Define if the system has the `returns_nonnull' function attribute */
 #define HAVE_FUNC_ATTRIBUTE_RETURNS_NONNULL 1
 
-/* Define to 1 if you have the <getopt.h> header file. */
+/* Define if you have the <getopt.h> header file. */
 #define HAVE_GETOPT_H 1
 
-/* Define to 1 if you have the `getopt_long' function. */
+/* Define if you have the `getopt_long' function. */
 #define HAVE_GETOPT_LONG 1
 
-/* Define to 1 if you have the <inttypes.h> header file. */
+/* Define if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
 
-/* Define to 1 if you have the <libgen.h> header file. */
+/* Define if you have the <libgen.h> header file. */
 #define HAVE_LIBGEN_H 1
 
-/* Define to 1 if you have the `m' library (-lm). */
+/* Define if you have the `m' library (-lm). */
 #define HAVE_LIBM 1
 
-/* Define to 1 if you have the <libps/pslib.h> header file. */
+/* Define if you have the <libps/pslib.h> header file. */
 #undef HAVE_LIBPS_PSLIB_H
 
-/* Define to 1 if you have the <limits.h> header file. */
+/* Define if you have the <limits.h> header file. */
 #define HAVE_LIMITS_H 1
 
-/* Define to 1 if your system has a GNU libc compatible `malloc' function, and
+/* Define if your system has a GNU libc compatible `malloc' function, and
    to 0 otherwise. */
 #define HAVE_MALLOC 1
 
-/* Define to 1 if you have the <malloc.h> header file. */
-#cmakedefine01 HAVE_MALLOC_H
+/* Define if you have the <malloc.h> header file. */
+#cmakedefine HAVE_MALLOC_H
 
-/* Define to 1 if you have the `memchr' function. */
+/* Define if you have the `memchr' function. */
 #define HAVE_MEMCHR 1
 
-/* Define to 1 if you have the `memmem' function. */
+/* Define if you have the `memmem' function. */
 #define HAVE_MEMMEM 1
 
-/* Define to 1 if you have the `memmove' function. */
+/* Define if you have the `memmove' function. */
 #define HAVE_MEMMOVE 1
 
-/* Define to 1 if you have the <memory.h> header file. */
+/* Define if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
 
-/* Define to 1 if -lpcre2-16 is used also */
+/* Define if -lpcre2-16 is used also */
 #cmakedefine HAVE_PCRE2_16
 
-/* Define to 1 if you have the <pcre2.h> header file. */
+/* Define if you have the <pcre2.h> header file. */
 #cmakedefine HAVE_PCRE2_H
 
 /* If available, contains the Python version number currently in use. */
 /* #undef HAVE_PYTHON */
 
-/* Define to 1 if your system has a GNU libc compatible `realloc' function,
+/* Define if your system has a GNU libc compatible `realloc' function,
    and to 0 otherwise. */
 #define HAVE_REALLOC 1
 
-/* Define to 1 if you have the `scandir' function. */
+/* Define if you have the `scandir' function. */
 #define HAVE_SCANDIR 1
 
-/* Define to 1 if you have the `setenv' function. */
+/* Define if you have the `setenv' function. */
 #define HAVE_SETENV 1
 
-/* Define to 1 if you have the `sqrt' function. */
+/* Define if you have the `sqrt' function. */
 /* #undef HAVE_SQRT */
 
-/* Define to 1 if `stat' has the bug that it succeeds when given the
+/* Define if `stat' has the bug that it succeeds when given the
    zero-length file name argument. */
 /* #undef HAVE_STAT_EMPTY_STRING_BUG */
 
-/* Define to 1 if you have the <stddef.h> header file. */
-#cmakedefine01 HAVE_STDDEF_H
+/* Define if you have the <stddef.h> header file. */
+#cmakedefine HAVE_STDDEF_H
 
-/* Define to 1 if you have the <stdint.h> header file. */
+/* Define if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
 
-/* Define to 1 if you have the <stdlib.h> header file. */
-#cmakedefine01 HAVE_STDLIB_H
+/* Define if you have the <stdlib.h> header file. */
+#cmakedefine HAVE_STDLIB_H
 
-/* Define to 1 if you have the `strcasecmp' function. */
+/* Define if you have the `strcasecmp' function. */
 #define HAVE_STRCASECMP 1
 
-/* Define to 1 if you have the `strcasestr' function. */
+/* Define if you have the `strcasestr' function. */
 #define HAVE_STRCASESTR 1
 
-/* Define to 1 if you have the `strchr' function. */
+/* Define if you have the `strchr' function. */
 #define HAVE_STRCHR 1
 
-/* Define to 1 if you have the <strings.h> header file. */
-#cmakedefine01 HAVE_STRINGS_H
+/* Define if you have the <strings.h> header file. */
+#cmakedefine HAVE_STRINGS_H
 
-/* Define to 1 if you have the <string.h> header file. */
-#cmakedefine01 HAVE_STRING_H
+/* Define if you have the <string.h> header file. */
+#cmakedefine HAVE_STRING_H
 
-/* Define to 1 if you have the `strnlen' function. */
+/* Define if you have the `strnlen' function. */
 #define HAVE_STRNLEN 1
 
-/* Define to 1 if you have the `strrchr' function. */
+/* Define if you have the `strrchr' function. */
 #define HAVE_STRRCHR 1
 
-/* Define to 1 if you have the `strtol' function. */
+/* Define if you have the `strtol' function. */
 #define HAVE_STRTOL 1
 
-/* Define to 1 if you have the `strtoul' function. */
+/* Define if you have the `strtoul' function. */
 #define HAVE_STRTOUL 1
 
-/* Define to 1 if you have the `strtoull' function. */
+/* Define if you have the `strtoull' function. */
 #define HAVE_STRTOULL 1
 
-/* Define to 1 if you have the <sys/stat.h> header file. */
+/* Define if you have the <sys/stat.h> header file. */
 #define HAVE_SYS_STAT_H 1
 
-/* Define to 1 if you have the <sys/types.h> header file. */
+/* Define if you have the <sys/types.h> header file. */
 #define HAVE_SYS_TYPES_H 1
 
-/* Define to 1 if you have the <unistd.h> header file. */
-#cmakedefine01 HAVE_UNISTD_H
+/* Define if you have the <unistd.h> header file. */
+#cmakedefine HAVE_UNISTD_H
 
-/* Define to 1 if you have the <valgrind/valgrind.h> header file. */
+/* Define if you have the <valgrind/valgrind.h> header file. */
 #undef HAVE_VALGRIND_VALGRIND_H
 
-/* Define to 1 if you have the <wchar.h> header file. */
-#cmakedefine01 HAVE_WCHAR_H
+/* Define if you have the <wchar.h> header file. */
+#cmakedefine HAVE_WCHAR_H
 
-/* Define to 1 if you have the `wcscmp' function. */
+/* Define if you have the `wcscmp' function. */
 #define HAVE_WCSCMP 1
 
-/* Define to 1 if you have the `wcscpy' function. */
+/* Define if you have the `wcscpy' function. */
 #define HAVE_WCSCPY 1
 
-/* Define to 1 if you have the `wcslen' function. */
+/* Define if you have the `wcslen' function. */
 #define HAVE_WCSLEN 1
 
-/* Define to 1 if you have the `wcsnlen' function. */
+/* Define if you have the `wcsnlen' function. */
 #define HAVE_WCSNLEN 1
 
-/* Define to 1 if the system has the type `_Bool'. */
+/* Define if the system has the type `_Bool'. */
 #define HAVE__BOOL 1
 
-/* Define to 1 if this is a release, skipping unstable DWG features, unknown
+/* Define if this is a release, skipping unstable DWG features, unknown
    DWG versions and objects. */
 /* #undef IS_RELEASE */
 
-/* Define to 1 if `lstat' dereferences a symlink specified with a trailing
+/* Define if `lstat' dereferences a symlink specified with a trailing
    slash. */
 #define LSTAT_FOLLOWS_SLASHED_SYMLINK 1
 
@@ -244,14 +255,19 @@
 	STACK_DIRECTION = 0 => direction of growth unknown */
 /* #undef STACK_DIRECTION */
 
-/* Define to 1 if you have the ANSI C header files. */
+/* Define if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 
-/* Define to 1 to enable runtime tracing support. */
+/* Define to enable runtime tracing support. */
 /* #undef USE_TRACING */
 
-/* Undefine to disable write support. */
-#define USE_WRITE 1
+/* Define to enable write support. */
+#cmakedefine LIBREDWG_DISABLE_WRITE
+#ifdef LIBREDWG_DISABLE_WRITE
+#  undef USE_WRITE
+#else
+#  define USE_WRITE
+#endif   
 
 /* Needed for strdup */
 #define _POSIX_C_SOURCE 200809L

@@ -1,6 +1,7 @@
 #define BITS_TEST_C
-#include "../../src/bits.h"
-#include "../../src/common.h"
+#include "config.h"
+#include "bits.h"
+#include "common.h"
 #include <string.h>
 #include <stdlib.h>
 #include "tests_common.h"
