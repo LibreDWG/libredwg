@@ -96,8 +96,8 @@ AC_SUBST([PCRE2_LIBS])
 dnl PKG_CHECK_MODULES([LIBXML2], [libxml-2.0], [],
 dnl    AC_MSG_ERROR([Install libxml-2.0 first]))
 if pkg-config --exists libxml-2.0; then
-  XML2_CFLAGS=`pkg-config libxml-2.0 --cflags`
-  XML2_LIBS=`pkg-config libxml-2.0 --libs`
+  XML2_CFLAGS="`pkg-config libxml-2.0 --cflags`"
+  XML2_LIBS="`pkg-config libxml-2.0 --libs`"
 fi
 AC_SUBST([XML2_CFLAGS])
 AC_SUBST([XML2_LIBS])
@@ -438,6 +438,22 @@ else
       fi
     fi
 fi
+
+if test x$enable_python != xno && test -n $XML2_LIBS; then
+  AC_MSG_CHECKING([for the libxml2 Python package])
+  ac_python_libxml2_result=`$PYTHON -c "import libxml2" 2>&1`
+  if test $? -eq 0; then
+    ac_have_python_libxml2=1
+    AC_MSG_RESULT([yes])
+  else
+    ac_have_python_libxml2=
+    AC_MSG_RESULT([no])
+    AC_MSG_WARN([disable test/xmlsuite.
+The import error was:
+$ac_python_libxml2_result])
+  fi
+fi
+AM_CONDITIONAL([HAVE_PYTHON_LIBXML2], [test x$ac_have_python_libxml2 = x1])
 
 if test -n "$PERL"; then
   ac_cv_perl="$PERL"
