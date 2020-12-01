@@ -310,10 +310,10 @@ AC_CHECK_FUNCS([setenv],[],
 dnl --disable-dxf only useful for faster debug/test cycles
 AC_MSG_CHECKING([--disable-dxf])
 AC_ARG_ENABLE([dxf],AS_HELP_STRING([--disable-dxf],[
-    Disable DXF and other in/out modules (default: no).]),[],[enable_dxf=yes])
+    Disable DXF, JSON and other in/out modules (default: no).]),[],[enable_dxf=yes])
 AM_CONDITIONAL([DISABLE_DXF], [test x$enable_dxf = xno])
 AS_IF([test x$enable_dxf = xno],
-  AC_DEFINE([DISABLE_DXF],1,[Define to disable DXF and other in/out modules.])
+  AC_DEFINE([DISABLE_DXF],1,[Define to disable DXF, JSON and other in/out modules.])
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
 
@@ -324,6 +324,7 @@ AC_ARG_ENABLE([json],AS_HELP_STRING([--disable-json],[
 AM_CONDITIONAL([DISABLE_JSON], [test x$enable_json = xno])
 AS_IF([test x$enable_json = xno],
   AC_DEFINE([DISABLE_JSON],1,[Define to disable JSON and GeoJSON in/out modules.])
+  AC_SUBST(DISABLE_JSON, 1)
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
 

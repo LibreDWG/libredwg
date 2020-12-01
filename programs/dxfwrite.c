@@ -34,7 +34,9 @@
 #include "bits.h"
 #include "suffix.inc"
 #include "decode.h"
-#include "in_json.h"
+#ifndef DISABLE_JSON
+#  include "in_json.h"
+#endif
 #include "out_dxf.h"
 
 // avoid the slow fork loop, for afl-clang-fast
@@ -70,7 +72,11 @@ help (void)
   printf ("  --as rNNNN                save as version\n");
   printf ("              Valid versions:\n");
   printf ("                r12, r13, r14, r2000, r2004, r2007, r2010, r2013, r2018\n");
+#   ifndef DISABLE_JSON
   printf ("  -I fmt,  --format fmt     DWG, DXF, DXFB, JSON\n");
+#  else
+  printf ("  -I fmt,  --format fmt     DWG, DXF, DXFB\n");
+#  endif
   printf (
       "           Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
   printf ("  -o dxffile, --file        \n");
@@ -90,7 +96,11 @@ help (void)
   printf ("              Planned versions:\n");
   printf ("                r9, r10, r11, r12\n");
   */
+#  ifndef DISABLE_JSON
   printf ("  -I fmt      fmt: DWG, DXF, DXFB, JSON\n");
+#  else
+  printf ("  -I fmt      fmt: DWG, DXF, DXFB\n");
+#  endif
   printf ("              Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
   printf ("  -o dxffile\n");
   printf ("  -m          minimal, only $ACADVER, HANDSEED and ENTITIES\n");
@@ -263,8 +273,10 @@ main (int argc, char *argv[])
           if (strstr (infile, ".dwg") || strstr (infile, ".DWG"))
             fmt = (char *)"dwg";
 #ifndef DISABLE_DXF
+#  ifndef DISABLE_JSON
           else if (strstr (infile, ".json") || strstr (infile, ".JSON"))
             fmt = (char *)"json";
+#  endif
           else if (strstr (infile, ".dxfb") || strstr (infile, ".DXFB"))
             fmt = (char *)"dxfb";
           else if (strstr (infile, ".dxf") || strstr (infile, ".DXF"))
@@ -309,6 +321,7 @@ main (int argc, char *argv[])
       error = dwg_read_file (infile ? infile : "-", &dwg);
     }
 #ifndef DISABLE_DXF
+#  ifndef DISABLE_JSON
   else if ((fmt && !strcasecmp (fmt, "json"))
       || (infile && !strcasecmp (infile, ".json")))
     {
@@ -317,6 +330,7 @@ main (int argc, char *argv[])
                  infile ? infile : "from stdin");
       error = dwg_read_json (&dat, &dwg);
     }
+#  endif
   else if ((fmt && !strcasecmp (fmt, "dxfb"))
            || (infile && !strcasecmp (infile, ".dxfb")))
     {

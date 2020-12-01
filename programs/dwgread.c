@@ -36,15 +36,23 @@
 
 #include "dwg.h"
 #include "common.h"
-#include "out_json.h"
-#include "out_dxf.h"
+#ifndef DISABLE_DXF
+#  include "out_dxf.h"
+#  ifndef DISABLE_JSON
+#    include "out_json.h"
+#  endif
+#endif
 
 static int opts = 1;
 
 static int
 usage (void)
 {
+#ifndef DISABLE_DXF
   printf ("\nUsage: dwgread [-v[0-9]] [-O FMT] [-o OUTFILE] [DWGFILE|-]\n");
+#else
+  printf ("\nUsage: dwgread [-v[0-9]] [DWGFILE|-]\n");
+#endif
   return 1;
 }
 static int
@@ -63,18 +71,30 @@ help (void)
           "\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
+#ifndef DISABLE_DXF
+#  ifndef DISABLE_JSON
   printf ("  -O fmt,  --format fmt     fmt: DXF, DXFB, JSON, GeoJSON\n");
+#  else
+  printf ("  -O fmt,  --format fmt     fmt: DXF, DXFB\n");
+#  endif
   printf ("           Planned output formats:  YAML, XML/OGR, GPX, SVG, PS\n");
   printf ("  -o outfile                also defines the output fmt. Default: "
           "stdout\n");
+#endif
   printf ("           --help           display this help and exit\n");
   printf ("           --version        output version information and exit\n"
           "\n");
 #else
   printf ("  -v[0-9]     verbosity\n");
+#ifndef DISABLE_DXF
+#  ifndef DISABLE_JSON
   printf ("  -O fmt      fmt: DXF, DXFB, JSON, GeoJSON\n");
+#  else
+  printf ("  -O fmt      fmt: DXF, DXFB\n");
+#  endif
   printf ("              Planned output formats:  YAML, XML/OGR, GPX, SVG, PS\n");
   printf ("  -o outfile  also defines the output fmt. Default: stdout\n");
+#endif
   printf ("  -h          display this help and exit\n");
   printf ("  -i          output version information and exit\n"
           "\n");
@@ -167,15 +187,20 @@ main (int argc, char *argv[])
           if (!fmt && outfile != NULL)
             {
 #ifndef DISABLE_DXF
+#ifndef DISABLE_JSON
               if (strstr (outfile, ".json") || strstr (outfile, ".JSON"))
                 fmt = (char *)"json";
-              else if (strstr (outfile, ".dxf") || strstr (outfile, ".DXF"))
+              else
+#endif
+              if (strstr (outfile, ".dxf") || strstr (outfile, ".DXF"))
                 fmt = (char *)"dxf";
               else if (strstr (outfile, ".dxfb") || strstr (outfile, ".DXFB"))
                 fmt = (char *)"dxfb";
+#ifndef DISABLE_JSON
               else if (strstr (outfile, ".geojson")
                        || strstr (outfile, ".GeoJSON"))
                 fmt = (char *)"geojson";
+#endif
               else
 #endif
                 fprintf (stderr, "Unknown output format for %s\n", outfile);
@@ -247,13 +272,16 @@ main (int argc, char *argv[])
       // TODO --as-rNNNN version? for now not.
       // we want the native dump, converters are separate.
 #ifndef DISABLE_DXF
+#ifndef DISABLE_JSON
       if (!strcasecmp (fmt, "json"))
         {
           if (opts > 1 && outfile)
             fprintf (stderr, "Writing JSON file %s\n", outfile);
           error = dwg_write_json (&dat, &dwg);
         }
-      else if (!strcasecmp (fmt, "dxfb"))
+      else
+#endif
+      if (!strcasecmp (fmt, "dxfb"))
         {
           if (opts > 1 && outfile)
             fprintf (stderr, "Writing Binary DXF file %s\n", outfile);
@@ -265,6 +293,7 @@ main (int argc, char *argv[])
             fprintf (stderr, "Writing Binary DXF file %s\n", outfile);
           error = dwg_write_dxf (&dat, &dwg);
         }
+#ifndef DISABLE_JSON
       else if (!strcasecmp (fmt, "geojson"))
         {
           if (opts > 1 && outfile)
@@ -272,6 +301,7 @@ main (int argc, char *argv[])
           error = dwg_write_geojson (&dat, &dwg);
         }
       else
+#endif
 #endif
         fprintf (stderr, "Invalid output format '%s'\n", fmt);
 

@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2019 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2020 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -34,7 +34,9 @@
 #include "bits.h"
 #include "suffix.inc"
 #include "decode.h"
-#include "in_json.h"
+#ifndef DISABLE_JSON
+#  include "in_json.h"
+#endif
 #include "in_dxf.h"
 
 static int opts = 1;
@@ -68,7 +70,11 @@ help (void)
   printf ("             r12, r14, r2000 (default)\n");
   printf ("           Planned versions:\n");
   printf ("             r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
+#  ifndef DISABLE_JSON
   printf ("  -I fmt,  --format fmt     DXF, DXFB, JSON\n");
+#else
+  printf ("  -I fmt,  --format fmt     DXF, DXFB\n");
+#  endif
   printf (
       "           Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
   printf ("  -o dwgfile, --file        \n");
@@ -83,7 +89,11 @@ help (void)
   printf ("                r12, r14, r2000 (default)\n");
   printf ("              Planned versions:\n");
   printf ("                r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
+#  ifndef DISABLE_JSON
+  printf ("  -I fmt      fmt: DXF, DXFB, JSON\n");
+#  else
   printf ("  -I fmt      fmt: DXF, DXFB\n");
+#endif
   printf ("              Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
   printf ("  -o dwgfile\n");
   printf ("  -y          overwrite existing files\n");
@@ -291,9 +301,12 @@ main (int argc, char *argv[])
       if (!fmt)
         {
 #ifndef DISABLE_DXF
+#  ifndef DISABLE_JSON
           if (strstr (infile, ".json") || strstr (infile, ".JSON"))
             fmt = (char *)"json";
-          else if (strstr (infile, ".dxfb") || strstr (infile, ".DXFB"))
+          else
+#  endif
+          if (strstr (infile, ".dxfb") || strstr (infile, ".DXFB"))
             fmt = (char *)"dxfb";
           else if (strstr (infile, ".dxf") || strstr (infile, ".DXF"))
             fmt = (char *)"dxf";
@@ -330,6 +343,7 @@ main (int argc, char *argv[])
     }
 
 #ifndef DISABLE_DXF
+#  ifndef DISABLE_JSON
   if ((fmt && !strcasecmp (fmt, "json"))
       || (infile && !strcasecmp (infile, ".json")))
     {
@@ -340,7 +354,9 @@ main (int argc, char *argv[])
         dat_read_file (&dat, dat.fh, infile);
       error = dwg_read_json (&dat, &dwg);
     }
-  else if ((fmt && !strcasecmp (fmt, "dxfb"))
+  else
+#  endif
+  if ((fmt && !strcasecmp (fmt, "dxfb"))
            || (infile && !strcasecmp (infile, ".dxfb")))
     {
       if (opts > 1)

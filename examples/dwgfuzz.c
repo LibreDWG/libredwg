@@ -34,10 +34,14 @@
 #include "decode.h"
 #include "encode.h"
 #include "bits.h"
-#include "in_json.h"
-#include "out_dxf.h"
-#include "out_json.h"
-#include "in_dxf.h"
+#ifndef DISABLE_DXF
+#  include "out_dxf.h"
+#  ifndef DISABLE_JSON
+#    include "in_json.h"
+#    include "out_json.h"
+#  endif
+#  include "in_dxf.h"
+#endif
 
 #define FUZZ_INMEM 0
 #define FUZZ_STDIN 1
@@ -94,16 +98,26 @@ help (void)
   printf ("afl++ clang-fast shared-memory backend, using many importers and exporters.\n"
           "\n");
   printf ("MODE:\n");
+#ifdef USE_WRITE
+#  ifndef DISABLE_DXF
   printf ("  -indxf:   import from DXF,  export as r2000 DWG\n");
+#  endif
+#  ifndef DISABLE_JSON
   printf ("  -injson:  import from JSON, export as r2000 DWG\n");
+#  endif
   printf ("  -rw:      import from DWG,  export as r2000 DWG, re-import from this DWG (rewrite)\n");
+#endif
   printf ("  -dwg:     import from DWG only\n");
+#ifndef DISABLE_DXF
   printf ("  -dxf:     import from DWG,  export as DXF\n");
   printf ("  -dxfb:    import from DWG,  export as binary DXF\n");
+#endif
+#ifndef DISABLE_JSON
   printf ("  -json:    import from DWG,  export as JSON\n");
-  printf ("  -geojson: import from DWG,  export as GeoJSON\n"
-          "\n");
-  printf (" --version        display the version and exit\n");
+  printf ("  -geojson: import from DWG,  export as GeoJSON\n");
+#endif
+  printf ("\n"
+          " --version        display the version and exit\n");
   printf (" --help           display this help and exit\n");
   exit (0);
 }
@@ -120,34 +134,54 @@ main (int argc, char *argv[])
   enum
   {
     INVALID,
-    INDXF,
-    INJSON,
-    RW,
     DWG,
+#if defined(USE_WRITE) && !defined(DISABLE_DXF)
+    INDXF,
+#endif
+#if defined(USE_WRITE) && !defined(DISABLE_JSON)
+    INJSON,
+#endif
+#if defined(USE_WRITE)
+    RW,
+#endif
+#if !defined(DISABLE_DXF)
     DXF,
     DXFB,
+#endif
+#if !defined(DISABLE_JSON)
     JSON,
     GEOJSON,
+#endif
   } mode = INVALID;
 
   if (argc <= 1 || !*argv[1])
     return 1;
-  if (strEQc (argv[1], "-indxf"))
+  if (strEQc (argv[1], "-dwg"))
+    mode = DWG;
+#ifdef USE_WRITE
+#  ifndef DISABLE_DXF
+  else if (strEQc (argv[1], "-indxf"))
     mode = INDXF;
+#  endif
+#  ifndef DISABLE_JSON
   else if (strEQc (argv[1], "-injson"))
     mode = INJSON;
+#  endif
   else if (strEQc (argv[1], "-rw"))
     mode = RW;
-  else if (strEQc (argv[1], "-dwg"))
-    mode = DWG;
+#endif /* USE_WRITE */
+#ifndef DISABLE_DXF
   else if (strEQc (argv[1], "-dxf"))
     mode = DXF;
   else if (strEQc (argv[1], "-dxfb"))
     mode = DXFB;
+#endif
+#ifndef DISABLE_JSON
   else if (strEQc (argv[1], "-json"))
     mode = JSON;
   else if (strEQc (argv[1], "-geojson"))
     mode = GEOJSON;
+#endif
   else if (strEQc (argv[1], "--version"))
     version();
   else if (strEQc (argv[1], "--help"))
@@ -209,6 +243,11 @@ main (int argc, char *argv[])
         continue; // useful minimum input length
       switch (mode)
         {
+        case DWG:
+          if (dwg_decode (&dat, &dwg) >= DWG_ERR_CRITICAL)
+            exit (0);
+          break;
+#if defined(USE_WRITE) && !defined(DISABLE_DXF)
         case INDXF:
           if (dwg_read_dxf (&dat, &dwg) < DWG_ERR_CRITICAL)
             {
@@ -220,6 +259,8 @@ main (int argc, char *argv[])
               free (out_dat.chain);
             }
           break;
+#endif
+#if defined(USE_WRITE)
         case RW:
           if (dwg_decode (&dat, &dwg) < DWG_ERR_CRITICAL)
             {
@@ -233,6 +274,8 @@ main (int argc, char *argv[])
               free (out_dat.chain);
             }
           break;
+#endif
+#if defined(USE_WRITE) && !defined(DISABLE_JSON)
         case INJSON:
           if (dwg_read_json (&dat, &dwg) < DWG_ERR_CRITICAL)
             {
@@ -244,10 +287,8 @@ main (int argc, char *argv[])
               free (out_dat.chain);
             }
           break;
-        case DWG:
-          if (dwg_decode (&dat, &dwg) >= DWG_ERR_CRITICAL)
-            exit (0);
-          break;
+#endif
+#ifndef DISABLE_DXF
         case DXF:
           if (dwg_decode (&dat, &dwg) < DWG_ERR_CRITICAL)
             {
@@ -268,6 +309,8 @@ main (int argc, char *argv[])
               free (out_dat.chain);
             }
           break;
+#endif
+#ifndef DISABLE_JSON
         case JSON:
           if (dwg_decode (&dat, &dwg) < DWG_ERR_CRITICAL)
             {
@@ -288,6 +331,7 @@ main (int argc, char *argv[])
               free (out_dat.chain);
             }
           break;
+#endif
         case INVALID:
         default:
           exit (1);

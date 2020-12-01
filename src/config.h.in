@@ -14,7 +14,7 @@
 /* Define to disable bindings. */
 #undef DISABLE_BINDINGS
 
-/* Define to disable DXF and other in/out modules. */
+/* Define to disable DXF, JSON and other in/out modules. */
 #undef DISABLE_DXF
 
 /* Define to disable JSON and GeoJSON in/out modules. */

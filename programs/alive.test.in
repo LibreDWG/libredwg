@@ -36,6 +36,7 @@ top_builddir="@top_builddir@"
 # artefact for "shellcheck"
 [ -z "$top_builddir" ] && echo $top_builddir
 CFLAGS="@CFLAGS@"
+DISABLE_JSON="@DISABLE_JSON@"
 
 i=0
 rm -f ./*-dxf*.log ./*-read,.log ./*-write.log ./*-json.log ./*-rw.log
@@ -75,22 +76,42 @@ run ()
                     arg="-y $arg"
                 fi
                 ;;
-    dwgread)    if [ -n "$addarg" ]; then
-                    arg="-v2 $addarg -o $bdwg-$out.json $arg"
+    dwgread)    if [ -z "$DISABLE_JSON" ]; then
+                    if [ -n "$addarg" ]; then
+                        arg="-v2 $addarg -o $bdwg-$out.json $arg"
+                    else
+                        arg="-v2 -o $dwg.json $arg"
+                    fi
                 else
-                    arg="-v2 -o $dwg.json $arg"
+                    arg="-v2 $arg"
                 fi
                 ;;
-    dwgwrite)   if [ -n "$addarg" ]; then
-                    arg="-y -v2 $addarg -o $bdwg-$out.dwg $dwg.json"
+    dwgwrite)   if [ -z "$DISABLE_JSON" ]; then
+                    if [ -n "$addarg" ]; then
+                        arg="-y -v2 $addarg -o $bdwg-$out.dwg $dwg.json"
+                    else
+                        arg="-y -v2 $dwg.json"
+                    fi
                 else
-                    arg="-y -v2 $dwg.json"
+                    if [ -n "$addarg" ]; then
+                        arg="-y -v2 $addarg -o $bdwg-$out.dwg $dwg.dxf"
+                    else
+                        arg="-y -v2 $dwg.dxf"
+                    fi
                 fi
                 ;;
-    dxfwrite)   if [ -n "$addarg" ]; then
-                    arg="-y -v2 $addarg -o $bdwg-$out.dxf $dwg.json"
+    dxfwrite)   if [ -z "$DISABLE_JSON" ]; then
+                    if [ -n "$addarg" ]; then
+                        arg="-y -v2 $addarg -o $bdwg-$out.dxf $dwg.json"
+                    else
+                        arg="-y -v2 $dwg.json"
+                    fi
                 else
-                    arg="-y -v2 $dwg.json"
+                    if [ -n "$addarg" ]; then
+                        arg="-y -v2 $addarg -o $bdwg-$out.dxf $dwg.dwg"
+                    else
+                        arg="-y -v2 $dwg.dwg"
+                    fi
                 fi
                 ;;
     dxf2dwg)    if [ -n "$addarg" ]; then

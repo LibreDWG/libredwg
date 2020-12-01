@@ -61,9 +61,6 @@ Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
 BITCODE_H
 dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
                              const char *restrict table);
-// from in_json.c
-const Dwg_DYNAPI_field *find_numfield (const Dwg_DYNAPI_field *restrict fields,
-                                       const char *restrict key);
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;
@@ -766,6 +763,65 @@ matches_type (Dxf_Pair *restrict pair, const Dwg_DYNAPI_field *restrict f)
       LOG_ERROR ("Invalid DXF group code: %d", pair->code);
     }
   return 0;
+}
+
+/* Also used by in_json */
+const Dwg_DYNAPI_field *
+find_numfield (const Dwg_DYNAPI_field *restrict fields,
+               const char *restrict key)
+{
+  const Dwg_DYNAPI_field *f;
+  char s[80];
+  strcpy (s, "num_");
+  strcat (s, key);
+  // see gen-dynapi.pl:1102
+  if (strEQc (key, "attribs"))
+    strcpy (s, "num_owned");
+  else if (strEQc (key, "attribs"))
+    strcpy (s, "num_owned");
+  else if (strEQc (key, "items"))
+    strcpy (s, "numitems");
+  else if (strEQc (key, "entities"))
+    strcpy (s, "num_owned");
+  else if (strEQc (key, "sort_ents"))
+    strcpy (s, "num_ents");
+  else if (strEQc (key, "attr_def_id"))
+    strcpy (s, "num_attr_defs");
+  else if (strEQc (key, "layer_entries"))
+    strcpy (s, "num_entries");
+  else if (strEQc (key, "readdeps"))
+    strcpy (s, "num_deps");
+  else if (strEQc (key, "writedeps"))
+    strcpy (s, "num_deps");
+  else if (strEQc (key, "encr_sat_data"))
+    strcpy (s, "num_blocks");
+  else if (strEQc (key, "styles")) // conflicts? only for LTYPE
+    strcpy (s, "num_dashes");
+  else if (strEQc (key, "cellstyle.borders"))
+    strcpy (s, "cellstyle.num_borders");
+  else if (strEQc (key, "segs") || strEQc (key, "polyline_paths"))
+    strcpy (s, "num_segs_or_paths");
+  else if (strEQc (key, "txt.col_sizes"))
+    strcpy (s, "txt.num_col_sizes");
+search:
+  for (f = &fields[0]; f->name; f++)
+    {
+      if (strEQ (s, f->name))
+        return f;
+    }
+  // or num_owner
+  if (strEQc (key, "vertex"))
+    {
+      strcpy (s, "num_owned");
+      goto search;
+    }
+  // there are two of them
+  if (strEQc (key, "paths") && strNE (s, "num_segs_or_paths"))
+    {
+      strcpy (s, "num_segs_or_paths");
+      goto search;
+    }
+  return NULL;
 }
 
 /* convert to flag */

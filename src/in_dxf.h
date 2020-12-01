@@ -87,7 +87,8 @@ void dxf_add_field (Dwg_Object *restrict obj, const char *restrict name,
 Dxf_Field *dxf_search_field (Dwg_Object *restrict obj,
                              const char *restrict name,
                              const char *restrict type, int dxf);
-
+const Dwg_DYNAPI_field *find_numfield (const Dwg_DYNAPI_field *restrict fields,
+                                       const char *restrict key);
 BITCODE_H find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair);
 int is_table_name (const char *restrict name);
 int is_textlike (Dwg_Object *restrict obj);
