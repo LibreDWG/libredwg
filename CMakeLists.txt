@@ -1,5 +1,7 @@
 project(libredwg C)
 cmake_minimum_required(VERSION 2.8)
+# Supported options -DLIBREDWG_LIBONLY=On, -DLIBREDWG_DISABLE_WRITE=On,
+#                   -DLIBREDWG_DISABLE_JSON=On for smaller builds and lib.
 
 if(MSVC)
     # Disable some overly strict MSVC warnings.
@@ -45,7 +47,12 @@ if(CMAKE_MAJOR_VERSION GREATER 2)
     #add_definitions(-DBIG_ENDIAN)
   endif()
 endif()
+
 option(BUILD_SHARED_LIBS "shared libredwg library" ON)
+option(LIBREDWG_LIBONLY "only the libredwg library" OFF)
+option(LIBREDWG_DISABLE_WRITE "no libredwg write support" OFF)
+option(LIBREDWG_DISABLE_JSON "no libredwg json support" OFF)
+
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release"
       CACHE STRING "Choose the type of build, options are: Debug Release
@@ -63,25 +70,37 @@ set(libredwg_HEADERS
     include/dwg.h
     include/dwg_api.h)
 
+if(NOT LIBREDWG_DISABLE_JSON)
+  set(outjson_SOURCES
+    src/out_json.c
+    src/out_geojson.c)
+  set(injson_SOURCES
+    src/in_json.c)
+endif()
+
+if(NOT LIBREDWG_DISABLE_WRITE)
+ set(write_SOURCES
+    src/encode.c
+    src/in_dxf.c
+    ${injson_SOURCES}
+    src/reedsolomon.c)
+endif()
+
 set(libredwg_SOURCES
     src/bits.c
     src/common.c
     src/classes.c
     src/decode.c
     src/decode_r2007.c
-    src/encode.c
     src/dwg.c
     src/hash.c
     src/dwg_api.c
     src/dynapi.c
     src/free.c
     src/out_dxf.c
-    src/out_json.c
+    ${outjson_SOURCES}
     src/out_dxfb.c
-    src/out_geojson.c
-    src/in_dxf.c
-    src/in_json.c
-    src/reedsolomon.c
+    ${write_SOURCES}
     src/print.c)
 
 add_library(redwg
@@ -97,24 +116,31 @@ target_include_directories(redwg PUBLIC
 
 link_libraries(redwg -lm ${CMAKE_THREAD_LIBS_INIT})
 
-add_executable(dwgread programs/dwgread.c)
-add_executable(dwgwrite programs/dwgwrite.c)
-add_executable(dwg2dxf programs/dwg2dxf.c)
-add_executable(dxf2dwg programs/dxf2dwg.c)
-add_executable(dwggrep programs/dwggrep.c)
-add_executable(dwglayers programs/dwglayers.c)
-add_executable(dwgbmp programs/dwgbmp.c)
-add_executable(dwg2SVG programs/dwg2SVG.c
-                       programs/escape.c programs/geom.c)
+if(NOT LIBREDWG_LIBONLY)
 
-if (HAVE_PCRE2_H)
-  if(HAVE_PCRE2_16)
-    target_link_libraries(dwggrep redwg -lpcre2-8 -lpcre2-16)
-  else()
-    target_link_libraries(dwggrep redwg -lpcre2-8)
-  endif()
-  #target_include_directories(dwggrep PUBLIC pcre2)
-endif()
+  add_executable(dwgread programs/dwgread.c)
+  add_executable(dwg2dxf programs/dwg2dxf.c)
+  if(NOT LIBREDWG_DISABLE_WRITE)
+    add_executable(dwgrewrite programs/dwgrewrite.c)
+    add_executable(dwgwrite programs/dwgwrite.c)
+    add_executable(dxf2dwg programs/dxf2dwg.c)
+  endif(NOT LIBREDWG_DISABLE_WRITE)
+  add_executable(dwggrep programs/dwggrep.c)
+  add_executable(dwglayers programs/dwglayers.c)
+  add_executable(dwgbmp programs/dwgbmp.c)
+  add_executable(dwg2SVG programs/dwg2SVG.c
+                         programs/escape.c programs/geom.c)
+
+  if (HAVE_PCRE2_H)
+    if(HAVE_PCRE2_16)
+      target_link_libraries(dwggrep redwg -lpcre2-8 -lpcre2-16)
+    else()
+      target_link_libraries(dwggrep redwg -lpcre2-8)
+    endif(HAVE_PCRE2_16)
+    #target_include_directories(dwggrep PUBLIC pcre2)
+  endif(HAVE_PCRE2_H)
+
+endif(NOT LIBREDWG_LIBONLY)
 
 if(ipo_supported)
   message(STATUS "IPO / LTO enabled")
@@ -129,10 +155,35 @@ include_directories(BEFORE
   ${CMAKE_CURRENT_SOURCE_DIR}/src
   ${CMAKE_CURRENT_BINARY_DIR}/src)
 
-if(NOT (CMAKE_CROSSCOMPILING))
+if(NOT CMAKE_CROSSCOMPILING)
   enable_testing()
-  add_test(programs cd programs; ./alive.test)
-endif()
+  if(NOT LIBREDWG_LIBONLY)
+    set(top_builddir ${CMAKE_CURRENT_BINARY_DIR})
+    set(top_srcdir ${CMAKE_CURRENT_SOURCE_DIR})
+    set(CFLAGS ${CMAKE_C_FLAGS})
+    set(SED "sed")
+    set(JSON_SED_NAN "true")
+    set(JQ "jq")
+    set(RUN_JING "true")
+    if (LIBREDWG_DISABLE_JSON)
+      set(DISABLE_JSON 1)
+    else()
+      set(DISABLE_JSON )
+    endif()
+    configure_file(programs/alive.test.in alive.test @ONLY)
+    add_test(alive.test "sh ./alive.test")
+    if(NOT LIBREDWG_DISABLE_DXF)
+      configure_file(programs/dxf.test.in dxf.test @ONLY)
+      add_test(dxf.test "sh ./dxf.test")
+      if(NOT LIBREDWG_DISABLE_JSON)
+        configure_file(programs/json.test.in json.test @ONLY)
+        add_test(json.test "sh ./json.test")
+      endif()
+    endif()
+    configure_file(programs/svg.test.in svg.test @ONLY)
+    add_test(svg.test "sh ./svg.test")
+  endif(NOT LIBREDWG_LIBONLY)
+endif(NOT CMAKE_CROSSCOMPILING)
 
 add_custom_target(
   TAGS

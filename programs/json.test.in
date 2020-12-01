@@ -80,7 +80,7 @@ for dwg in $DATA; do
     fi
 
     geojson="$(basename "$dwg" .dwg).geojson"
-    echo dwgread -o"$geojson" "$dwg"
+    echo ./dwgread -o"$geojson" "$dwg"
     if @LTEXEC@ ./dwgread -Ogeojson -o"$geojson" "$dwg" 2>/dev/null && \
        @JSON_SED_NAN@ "$geojson" && \
        $JQ . "$geojson" >>"$json.log" 2>&1
