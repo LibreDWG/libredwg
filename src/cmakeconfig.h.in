@@ -259,9 +259,9 @@
 #define STDC_HEADERS 1
 
 /* Define to enable runtime tracing support. */
-/* #undef USE_TRACING */
+#define USE_TRACING 1
 
-/* Define to enable write support. */
+/* Define to disable write support. */
 #cmakedefine LIBREDWG_DISABLE_WRITE
 #ifdef LIBREDWG_DISABLE_WRITE
 #  undef USE_WRITE

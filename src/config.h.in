@@ -259,7 +259,7 @@
 /* Define to 1 to enable runtime tracing support. */
 #undef USE_TRACING
 
-/* Undefine to disable write support. */
+/* Define to enable write support. */
 #undef USE_WRITE
 
 /* Needed for strdup */

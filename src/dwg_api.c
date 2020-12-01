@@ -21937,6 +21937,8 @@ dwg_ref_get_absref (const dwg_object_ref *restrict ref, int *restrict error)
  *                    FUNCTIONS FOR ADDING OBJECTS                  *
  ********************************************************************/
 
+#ifdef USE_WRITE
+
 /* internally used only by dwg_add_Attribute only */
 Dwg_Entity_ATTRIB*
 dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert,
@@ -24718,3 +24720,5 @@ dwg_add_UNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 // WIPEOUTVARIABLES
 // XREFPANELOBJECT
 // XYPARAMETERENTITY
+
+#endif /* USE_WRITE */

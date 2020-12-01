@@ -54,6 +54,14 @@ option(BUILD_SHARED_LIBS "shared libredwg library" ON)
 option(LIBREDWG_LIBONLY "only the libredwg library" OFF)
 option(LIBREDWG_DISABLE_WRITE "no libredwg write support" OFF)
 option(LIBREDWG_DISABLE_JSON "no libredwg json support" OFF)
+# Rather disable installing a crippled shared lib.
+# Only use these for static in-tree libs.
+if (LIBREDWG_DISABLE_JSON)
+  set(BUILD_SHARED_LIBS OFF)
+endif()
+if (LIBREDWG_DISABLE_WRITE)
+  set(BUILD_SHARED_LIBS OFF)
+endif()
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release"
