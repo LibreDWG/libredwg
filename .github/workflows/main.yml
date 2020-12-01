@@ -8,11 +8,10 @@ on:
 
 #strategy:
 #  matrix:
-#    os: [ubuntu-14.04, ubuntu-18.04]
+#    os: [ubuntu-14.04, ubuntu-18.04, ubuntu-latest]
 
 jobs:
   linux:
-    name: linux
     runs-on: ubuntu-latest
     timeout-minutes: 50
     strategy:
@@ -26,22 +25,47 @@ jobs:
           - CC="clang"
           - CC="gcc -O0 -fno-omit-frame-pointer -fsanitize=address,undefined -fno-var-tracking"
     steps:
-    #- name: init
-    #  run: |
-    #      apt-get update ||:
-    #      apt-get -y install texinfo texlive libxml2 python-libxml2 swig help2man dejagnu libpcre2-dev libpcre2-32-0 libconvert-binary-c-perl
-    #- run: pip install --user libxml2
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+    - name: setup-python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: setup-python-libxml2
+      run: |
+        python -m pip install --upgrade pip libxml2-python3
+    #run: |
+    #   apt-get update ||:
+    #   apt-get -y install texinfo texlive libxml2 python-libxml2 swig help2man dejagnu libpcre2-dev libpcre2-32-0 libconvert-binary-c-perl
+    - run: sh autogen.sh
+    - run: ./configure ${{ matrix.CONFIGURE_ARGS }}
+    - run: make
+    - run: make check
+    - if: ${{ matrix.CONFIGURE_ARGS }} == '--enable-release'
+      run: make distcheck
+  linux-cmake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: true
+      matrix:
+        CMAKE_ARGS:
+          - "-DLIBREDWG_LIBONLY=On"
+          - "-DLIBREDWG_LIBONLY=On -DLIBREDWG_DISABLE_JSON=On"
+          - "-DLIBREDWG_DISABLE_WRITE=On"
+    steps:
+    - name: setup-python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
     - name: checkout
       uses: actions/checkout@v1
       with:
         fetch-depth: 1
-    - run: sh autogen.sh
-    # TODO: configure args matrix
-    - run: ./configure ${{ matrix.CONFIGURE_ARGS }}
+    - run: cmake ${{ matrix.CMAKE_ARGS }} .
     - run: make
-    - run: make check
-      # TODO only on "--enable-release"
-    - run: make distcheck
+    - run: make test
   macOS:
     name: macOS
     runs-on: macOS-latest
@@ -64,13 +88,33 @@ jobs:
       MSYSTEM: MINGW64
       ARCH: win64
       PLATFORM: x64
+      #PATH: "C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
     steps:
+      # see https://github.com/msys2/setup-msys2
+    - name: setup-msys2
+      uses: msys2/setup-msys2@v2
+      with:
+        path-type: minimal
+        update: true
+        install: >-
+          git
+          base-devel
+          mingw-w64-x86_64-toolchain
+          mingw-w64-x86_64-libtool
+          mingw-w64-x86_64-libiconv
+          mingw-w64-x86_64-libxml2
+          mingw-w64-x86_64-swig
+          mingw-w64-x86_64-python2
+          texinfo
+          mingw-w64-x86_64-perl
+          mingw-w64-x86_64-pcre2
+    - run: reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1
     - name: checkout
       uses: actions/checkout@v2
-    - run: reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1
-    - run: build-aux\msys2.bat
-    - run: bash -c "sh ./autogen.sh"
-    - run: bash -c "./configure"
-    - run: bash -c "make"
-    - run: bash -c "make check"
-    #- run: call build-aux\appveyor-deploy.bat
+    #- run: build-aux\msys2.bat
+    - shell: msys2 {0}
+      run: |
+        sh ./autogen.sh
+        ./configure
+        make
+        make check
