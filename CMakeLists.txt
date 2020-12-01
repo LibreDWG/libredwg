@@ -1,7 +1,9 @@
 project(libredwg C)
 cmake_minimum_required(VERSION 2.8)
-# Supported options -DLIBREDWG_LIBONLY=On, -DLIBREDWG_DISABLE_WRITE=On,
-#                   -DLIBREDWG_DISABLE_JSON=On for smaller builds and lib.
+# Supported options -DLIBREDWG_LIBONLY=On
+#                   -DLIBREDWG_DISABLE_WRITE=On
+#                   -DLIBREDWG_DISABLE_JSON=On
+# for smaller builds and lib.
 
 if(MSVC)
     # Disable some overly strict MSVC warnings.
@@ -44,14 +46,20 @@ if(CMAKE_MAJOR_VERSION GREATER 2)
   test_big_endian(IS_BIG_ENDIAN)
   if(IS_BIG_ENDIAN)
     message(ERROR "Big Endian not supported: <${error}>")
-    #add_definitions(-DBIG_ENDIAN)
+    add_definitions(-DBIG_ENDIAN)
   endif()
 endif()
 
 option(BUILD_SHARED_LIBS "shared libredwg library" ON)
 option(LIBREDWG_LIBONLY "only the libredwg library" OFF)
 option(LIBREDWG_DISABLE_WRITE "no libredwg write support" OFF)
+if (LIBREDWG_DISABLE_WRITE)
+  add_definitions(-UUSE_WRITE)
+endif()
 option(LIBREDWG_DISABLE_JSON "no libredwg json support" OFF)
+if (LIBREDWG_DISABLE_JSON)
+  add_definitions(-DDISABLE_JSON)
+endif()
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release"
@@ -183,6 +191,7 @@ if(NOT CMAKE_CROSSCOMPILING)
     configure_file(programs/svg.test.in svg.test @ONLY)
     add_test(svg.test "sh ./svg.test")
   endif(NOT LIBREDWG_LIBONLY)
+  add_subdirectory(test/unit-testing)
 endif(NOT CMAKE_CROSSCOMPILING)
 
 add_custom_target(

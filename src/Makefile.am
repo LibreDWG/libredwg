@@ -38,12 +38,15 @@ libredwg_la_SOURCES = \
 	$(EXTRA_HEADERS)
 if !DISABLE_DXF
 libredwg_la_SOURCES += \
-        out_json.c \
         out_dxf.c \
-        out_dxfb.c \
-        out_geojson.c
+        out_dxfb.c
 #       out_xml.c \
 #       out_yaml.c
+if !DISABLE_JSON
+libredwg_la_SOURCES += \
+        out_json.c \
+        out_geojson.c
+endif
 endif
 if USE_WRITE
 libredwg_la_SOURCES += \
@@ -51,10 +54,13 @@ libredwg_la_SOURCES += \
 #       encode_r2007.c
 if !DISABLE_DXF
 libredwg_la_SOURCES += \
-	in_dxf.c \
-	in_json.c
+	in_dxf.c
 #       in_xml.c
 #       in_yaml.c
+if !DISABLE_JSON
+libredwg_la_SOURCES += \
+	in_json.c
+endif
 endif
 endif
 
@@ -106,10 +112,13 @@ EXTRA_HEADERS += \
 	encode.h
 if !DISABLE_DXF
 EXTRA_HEADERS += \
-	in_dxf.h \
-	in_json.h
+	in_dxf.h
 #       in_xml.h
 #       in_yaml.h
+if !DISABLE_JSON
+EXTRA_HEADERS += \
+	in_json.h
+endif
 endif
 endif
 

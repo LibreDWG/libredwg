@@ -17,6 +17,9 @@
 /* Define to disable DXF and other in/out modules. */
 #undef DISABLE_DXF
 
+/* Define to disable JSON and GeoJSON in/out modules. */
+#undef DISABLE_JSON
+
 /* Define to 1 if a shared library will be built */
 #undef ENABLE_SHARED
 

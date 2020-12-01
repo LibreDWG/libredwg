@@ -317,6 +317,16 @@ AS_IF([test x$enable_dxf = xno],
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
 
+dnl --disable-json only useful for slim libraries (i.e. SolveSpace)
+AC_MSG_CHECKING([--disable-json])
+AC_ARG_ENABLE([json],AS_HELP_STRING([--disable-json],[
+    Disable JSON and GeoJSON in/out modules (default: no).]),[],[enable_json=yes])
+AM_CONDITIONAL([DISABLE_JSON], [test x$enable_json = xno])
+AS_IF([test x$enable_json = xno],
+  AC_DEFINE([DISABLE_JSON],1,[Define to disable JSON and GeoJSON in/out modules.])
+  AC_MSG_RESULT([yes]),
+  AC_MSG_RESULT([no (default)]))
+
 dnl --disable-bindings
 AC_MSG_CHECKING([--disable-bindings])
 AC_ARG_ENABLE([bindings],AS_HELP_STRING([--disable-bindings],[
