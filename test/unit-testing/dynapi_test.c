@@ -26,10 +26,10 @@
 #define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
 #include "config.h"
 #include "common.h"
-#include "classes.h"
 #include "dwg.h"
 #include "dwg_api.h"
 #include "tests_common.h"
+#include "classes.h"
 
 /* for all objects/entities/header_vars:
    compare direct api vs dynapi values

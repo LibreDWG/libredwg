@@ -145,7 +145,7 @@ run ()
     then
        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
     fi
-    # rewrite leaked 3DSOLID
+    # rewrite leaking 3DSOLID
     #if test $bprog = dwgrewrite -a -n "@HAVE_ASAN@" -a "$bdwg" = example_2000
     #then
     #   TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
