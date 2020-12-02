@@ -6586,6 +6586,21 @@ EXPORT Dwg_Object_MLINESTYLE *
 dwg_add_MLINESTYLE (Dwg_Data *restrict dwg,
                     const BITCODE_T restrict name) __nonnull_all;
 
+/* Experimental API's. Will change. */
+EXPORT Dwg_Object_PROXY_OBJECT *
+dwg_add_PROXY_OBJECT (Dwg_Data *restrict dwg, BITCODE_T name, BITCODE_T key
+                      /*, size, data */) __nonnull_all;
+EXPORT Dwg_Entity_PROXY_ENTITY *
+dwg_add_PROXY_ENTITY (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */) __nonnull_all;
+EXPORT Dwg_Object_LAYERFILTER *
+dwg_add_LAYERFILTER (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
+EXPORT Dwg_Object_LAYER_INDEX *
+dwg_add_LAYER_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
+EXPORT Dwg_Object_SPATIAL_FILTER *
+dwg_add_SPATIAL_FILTER (Dwg_Entity_INSERT *restrict insert /*, clip_verts... */) __nonnull_all;
+EXPORT Dwg_Object_SPATIAL_INDEX *
+dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
+
 /* List of yet supported and unsupported add entity and object API from object.inc,
    so we can auto-generate API's, i.e. for gambas.
 
@@ -6741,7 +6756,7 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg,
 #define HAVE_NO_DWG_ADD_IMAGEDEF_REACTOR
 #define HAVE_NO_DWG_ADD_INDEX
 #define HAVE_NO_DWG_ADD_LAYER_CONTROL
-#define HAVE_NO_DWG_ADD_LAYERFILTER
+#define HAVE_DWG_ADD_LAYERFILTER
 #define HAVE_NO_DWG_ADD_LAYER_INDEX
 #define HAVE_NO_DWG_ADD_LAYOUTPRINTCONFIG
 #define HAVE_NO_DWG_ADD_LEADEROBJECTCONTEXTDATA
@@ -6779,8 +6794,8 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg,
 #define HAVE_NO_DWG_ADD_POINTCLOUDEX
 #define HAVE_NO_DWG_ADD_POINTPARAMETERENTITY
 #define HAVE_NO_DWG_ADD_POINTPATH
-#define HAVE_NO_DWG_ADD_PROXY_ENTITY
-#define HAVE_NO_DWG_ADD_PROXY_OBJECT
+#define HAVE_DWG_ADD_PROXY_ENTITY
+#define HAVE_DWG_ADD_PROXY_OBJECT
 #define HAVE_NO_DWG_ADD_RADIMLGOBJECTCONTEXTDATA
 #define HAVE_NO_DWG_ADD_RADIMOBJECTCONTEXTDATA
 #define HAVE_NO_DWG_ADD_RAPIDRTRENDERSETTINGS
@@ -6799,8 +6814,8 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg,
 #define HAVE_NO_DWG_ADD_SECTIONVIEWSTYLE
 #define HAVE_NO_DWG_ADD_SEQEND
 #define HAVE_NO_DWG_ADD_SORTENTSTABLE
-#define HAVE_NO_DWG_ADD_SPATIAL_FILTER
-#define HAVE_NO_DWG_ADD_SPATIAL_INDEX
+#define HAVE_DWG_ADD_SPATIAL_FILTER
+#define HAVE_DWG_ADD_SPATIAL_INDEX
 #define HAVE_NO_DWG_ADD_STYLE_CONTROL
 #define HAVE_NO_DWG_ADD_SUN
 #define HAVE_NO_DWG_ADD_SUNSTUDY

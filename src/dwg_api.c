@@ -22380,6 +22380,12 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
   if (strEQc (dxfname, "ACDBPLACEHOLDER"))
     return dwg_add_class (dwg, "ACDBPLACEHOLDER", "AcDbPlaceHolder",
                           dwg->header.from_version <= R_2000 ? "AutoCAD 2000" : "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "ACAD_PROXY_ENTITY_WRAPPER"))
+    return dwg_add_class (dwg, "ACAD_PROXY_ENTITY_WRAPPER", "AcDbProxyEntityWrapper",
+                          dwg->header.from_version <= R_2000 ? "AutoCAD 2000" : "ObjectDBX Classes", true);
+  if (strEQc (dxfname, "ACAD_PROXY_OBJECT_WRAPPER"))
+    return dwg_add_class (dwg, "ACAD_PROXY_OBJECT_WRAPPER", "AcDbProxyObjectWrapper",
+                          dwg->header.from_version <= R_2000 ? "AutoCAD 2000" : "ObjectDBX Classes", false);
   if (strEQc (dxfname, "LAYOUT"))
     return dwg_add_class (dwg, "LAYOUT", "AcDbLayout", "AutoCAD 2000", false);
   if (strEQc (dxfname, "SORTENTSTABLE"))
@@ -22390,6 +22396,8 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
     return dwg_add_class (dwg, "LAYER_INDEX", "AcDbLayerIndex", "ObjectDBX Classes", false);
   if (strEQc (dxfname, "SPATIAL_INDEX"))
     return dwg_add_class (dwg, "SPATIAL_INDEX", "AcDbSpatialIndex", "ObjectDBX Classes", false);
+  if (strEQc (dxfname, "SPATIAL_FILTER"))
+    return dwg_add_class (dwg, "SPATIAL_FILTER", "AcDbSpatialFilter", "ObjectDBX Classes", false);
   if (strEQc (dxfname, "IDBUFFER"))
     return dwg_add_class (dwg, "IDBUFFER", "AcDbIdBuffer", "ObjectDBX Classes", false);
   if (strEQc (dxfname, "VBA_PROJECT")) // dwg_version 19
@@ -23633,6 +23641,21 @@ dwg_add_XLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
+static void add_reactor (Dwg_Object_Object *obj, Dwg_Object_Ref *ref)
+{
+  if (obj->num_reactors)
+    {
+      obj->num_reactors++;
+      obj->reactors = realloc (obj->reactors, obj->num_reactors * sizeof (BITCODE_H));
+    }
+  else
+    {
+      obj->num_reactors = 1;
+      obj->reactors = calloc (1, sizeof (BITCODE_H));
+    }
+  obj->reactors[obj->num_reactors - 1] = ref;
+}
+
 /* The name is the NOD entry. On NULL this is the NOD 0.1.C ("Named Object Dictionary") */
 EXPORT Dwg_Object_DICTIONARY*
 dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
@@ -23658,9 +23681,7 @@ dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
           dwg_add_DICTIONARY_item (nod->tio.object->tio.DICTIONARY, name,
                                    dwg_add_handleref (dwg, 2, obj->handle.value, obj));
           obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, nod->handle.value, NULL);
-          obj->tio.object->num_reactors = 1;
-          obj->tio.object->reactors = calloc (1, sizeof (BITCODE_H));
-          obj->tio.object->reactors[0] = obj->tio.object->ownerhandle;
+          add_reactor (obj->tio.object, obj->tio.object->ownerhandle);
         }
     }
   else
@@ -24097,12 +24118,7 @@ dwg_add_GROUP (Dwg_Data *restrict dwg, const BITCODE_T restrict name /* maybe NU
     {
       dictobj = dwg_obj_generic_to_object (dict, &error);
       obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, dictobj->handle.value, NULL);
-      if (!obj->tio.object->reactors)
-        {
-          obj->tio.object->num_reactors = 1;
-          obj->tio.object->reactors = malloc (sizeof (BITCODE_H));
-          obj->tio.object->reactors[0] = obj->tio.object->ownerhandle;
-        }
+      add_reactor (obj->tio.object, obj->tio.object->ownerhandle);
     }
  
    _obj->selectable = 1;
@@ -24594,8 +24610,49 @@ dwg_add_LAYOUT (Dwg_Object *restrict vp,
   }
 }
 
-// PROXY_ENTITY
-// PROXY_OBJECT
+EXPORT Dwg_Entity_PROXY_ENTITY *
+dwg_add_PROXY_ENTITY (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
+{
+  {
+    int err;
+    Dwg_Object *hdr = dwg_obj_generic_to_object (blkhdr, &err);
+    Dwg_Data *dwg = hdr ? hdr->parent : NULL;
+    if (dwg && dwg->header.version < R_2000)
+      dwg_require_class (dwg, "ACAD_PROXY_ENTITY_WRAPPER");
+  }
+  {
+    API_ADD_ENTITY (PROXY_ENTITY);
+    return _obj;
+  }
+}
+
+// owned by a DICT: name: nod key, e.g. HOST_DOC_SETTINGS, key: e.g. NCDOCPARAMETERS
+EXPORT Dwg_Object_PROXY_OBJECT *
+dwg_add_PROXY_OBJECT (Dwg_Data *restrict dwg, BITCODE_T name, BITCODE_T key
+                      /*, size, data */)
+{
+  Dwg_Object_DICTIONARY *dict;
+  Dwg_Object *nod, *dictobj;
+  {
+    int error;
+    dwg_require_class (dwg, "ACAD_PROXY_OBJECT_WRAPPER");
+
+    // add name to NOD
+    dict = dwg_add_DICTIONARY (dwg, name, key, NULL);
+    nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
+    dictobj = dwg_obj_generic_to_object (dict, &error);
+  }
+
+  {
+    API_ADD_OBJECT (PROXY_OBJECT);
+    dwg_add_DICTIONARY_item (nod->tio.object->tio.DICTIONARY, key,
+                             dwg_add_handleref (dwg, 2, obj->handle.value, NULL));
+    obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, dictobj->handle.value, NULL);
+    add_reactor (obj->tio.object, obj->tio.object->ownerhandle);
+    _obj->class_id = 499;
+    return _obj;
+  }
+}
 
 // ACDSRECORD
 // ACDSSCHEMA
@@ -24746,14 +24803,16 @@ dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 {
   Dwg_Object *img;
   Dwg_Entity_IMAGE *_img;
+  Dwg_Object *imgdef;
   {
     int err;
     Dwg_Object *hdr = dwg_obj_generic_to_object (blkhdr, &err);
     Dwg_Data *dwg = hdr ? hdr->parent : NULL;
     if (dwg)
       {
-        dwg_require_class (dwg, "IMAGE");
         dwg_require_class (dwg, "IMAGEDEF");
+        dwg_require_class (dwg, "IMAGEDEF_REACTOR");
+        dwg_require_class (dwg, "IMAGE");
       }
   }
   {
@@ -24777,15 +24836,26 @@ dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   {
     Dwg_Data *dwg = img->parent;
     API_ADD_OBJECT (IMAGEDEF);
+    imgdef = obj;
     //_obj->class_version = 0;
     _obj->file_path = file_path;
     // TODO: get pixel props from the image. is_loaded, pixel_size, ...
+    // needs -lpng -ljpeg ... load dynamically?
     _img->imagedef = dwg_add_handleref (dwg, 4, obj->handle.value, img);
+  }
+  {
+    Dwg_Data *dwg = img->parent;
+    API_ADD_OBJECT (IMAGEDEF_REACTOR);
+    obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 5, img->handle.value, obj);
+    _obj->class_version = 2;
+    _img->imagedefreactor = dwg_add_handleref (dwg, 3, obj->handle.value, img);
   }
   return _img;
 }
 
-// IMAGEDEF_REACTOR (needed for IMAGE)
+// IMAGEDEF_REACTOR
+// added automatically by add_IMAGE, see above
+
 // INDEX
 
 EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION *
@@ -24813,8 +24883,89 @@ dwg_add_LARGE_RADIAL_DIMENSION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-// LAYERFILTER
-// LAYER_INDEX
+// TODO, no coverage
+// LAYER_CONTROL->owner DICTIONARY with ACAD_LAYERFILTERS => DICTIONARY,
+// which is xdicobjhandle of LAYER_CONTROL
+EXPORT Dwg_Object_LAYERFILTER *
+dwg_add_LAYERFILTER (Dwg_Data *restrict dwg /* ... */)
+{
+  API_ADD_OBJECT (LAYERFILTER);
+  return _obj;
+}
+
+// no coverage
+EXPORT Dwg_Object_LAYER_INDEX *
+dwg_add_LAYER_INDEX (Dwg_Data *restrict dwg /* ... */)
+{
+  {
+    dwg_require_class (dwg, "LAYER_INDEX");
+  }
+  {
+    API_ADD_OBJECT (LAYER_INDEX);
+    return _obj;
+  }
+}
+
+// TODO
+// INSERT.xdicobjhandle ->
+// DICT_item "ACAD_FILTER" ->
+// DICT_item "SPATIAL" -> obj
+EXPORT Dwg_Object_SPATIAL_FILTER *
+dwg_add_SPATIAL_FILTER (Dwg_Entity_INSERT *restrict insert /*, clip_verts... */)
+{
+  int err;
+  Dwg_Object *ins;
+  Dwg_Object_DICTIONARY *_filter, *_spatial;
+  Dwg_Object *filter, *spatial;
+  Dwg_Data *dwg;
+
+  ins = dwg_ent_generic_to_object (insert, &err);
+  dwg = ins ? ins->parent : NULL;
+  if (!dwg || err)
+    return NULL;
+  {
+    dwg_require_class (dwg, "SPATIAL_FILTER");
+
+    _filter = dwg_add_DICTIONARY (dwg, NULL, (BITCODE_T) "ACAD_FILTER", NULL);
+    filter = dwg_obj_generic_to_object (_filter, &err);
+    filter->tio.object->ownerhandle = dwg_add_handleref (dwg, 5, ins->handle.value, filter);
+    _filter->is_hardowner = 1;
+
+    ins->tio.entity->xdicobjhandle = dwg_add_handleref (dwg, 3, filter->handle.value, ins);
+
+    _spatial = dwg_add_DICTIONARY (dwg, NULL, (BITCODE_T) "SPATIAL", NULL);
+    _spatial->is_hardowner = 1;
+    spatial = dwg_obj_generic_to_object (_spatial, &err);
+    _filter->itemhandles[0] = dwg_add_handleref (dwg, 2, spatial->handle.value, filter);
+    spatial->tio.object->ownerhandle = dwg_add_handleref (dwg, 5, filter->handle.value, spatial);
+    add_reactor (spatial->tio.object, dwg_add_handleref (dwg, 4, filter->handle.value, NULL));
+  }
+  {
+    API_ADD_OBJECT (SPATIAL_FILTER);
+    _spatial->itemhandles[0] = dwg_add_handleref (dwg, 2, obj->handle.value, filter);
+    obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 5, spatial->handle.value, obj);
+    add_reactor (obj->tio.object, dwg_add_handleref (dwg, 4, spatial->handle.value, obj));
+    _obj->extrusion.z = 1.0;
+    _obj->transform[0] = 1.0;
+    _obj->transform[5] = 1.0;
+    _obj->transform[10] = 1.0;
+    return _obj;
+  }
+}
+
+// no coverage
+EXPORT Dwg_Object_SPATIAL_INDEX *
+dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */)
+{
+  {
+    dwg_require_class (dwg, "SPATIAL_INDEX");
+  }
+  {
+    API_ADD_OBJECT (SPATIAL_INDEX);
+    return _obj;
+  }
+}
+
 // LAYOUTPRINTCONFIG
 // LEADEROBJECTCONTEXTDATA
 // LIGHT

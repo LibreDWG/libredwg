@@ -661,6 +661,8 @@ entity_alias (char *restrict name)
     strcpy (name, "TABLE");
   else if (strEQc (name, "ACAD_PROXY_ENTITY"))
     strcpy (name, "PROXY_ENTITY");
+  /* else if (strEQc (name, "ACAD_PROXY_ENTITY_WRAPPER"))
+    strcpy (name, "PROXY_ENTITY_WRAPPER"); */
   else if (strEQc (name, "ACDBPLACEHOLDER"))
     strcpy (name, "PLACEHOLDER");
   else if (strEQc (name, "POLYLINE"))
