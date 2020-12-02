@@ -1,5 +1,8 @@
 @echo off
 
+cd %APPVEYOR_BUILD_FOLDER%
+set MSYS2_DIR=msys6
+
 echo ARCH: %ARCH%
 echo Compiler: %COMPILER%
 echo MSYS2_ARCH: %MSYS2_ARCH%
