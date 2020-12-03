@@ -112,7 +112,6 @@ jobs:
     - run: reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1
     - name: checkout
       uses: actions/checkout@v2
-    #- run: build-aux\msys2.bat
     - shell: msys2 {0}
       run: |
         sh ./autogen.sh
