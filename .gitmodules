@@ -1,3 +1,6 @@
 [submodule "jsmn"]
 	path = jsmn
 	url = https://github.com/zserge/jsmn
+[submodule "bindings/gambas"]
+	path = bindings/gambas
+	url = https://github.com/LibreDWG/gambas3-bindings
