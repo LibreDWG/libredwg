@@ -8942,10 +8942,8 @@ EXPORT int dwg_read_file (const char *restrict filename,
 EXPORT int dxf_read_file (const char *restrict filename,
                           Dwg_Data *restrict dwg);
 
-#ifdef USE_WRITE
 EXPORT int dwg_write_file (const char *restrict filename,
                            const Dwg_Data *restrict dwg);
-#endif
 
 EXPORT unsigned char *dwg_bmp (const Dwg_Data *restrict, BITCODE_RL *restrict);
 
