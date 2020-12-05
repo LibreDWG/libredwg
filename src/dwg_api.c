@@ -23233,14 +23233,10 @@ EXPORT Dwg_Entity_DIMENSION_ALIGNED*
 dwg_add_DIMENSION_ALIGNED (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                            const dwg_point_3d *restrict xline1_pt,
                            const dwg_point_3d *restrict xline2_pt,
-                           const dwg_point_3d *restrict def_pt,
                            const dwg_point_3d *restrict text_midpt)
 {
   API_ADD_ENTITY (DIMENSION_ALIGNED);
   DIMENSION_DEFAULTS;
-  _obj->def_pt.x    = def_pt->x;
-  _obj->def_pt.y    = def_pt->y;
-  _obj->def_pt.z    = def_pt->z;
   _obj->text_midpt.x= text_midpt->x;
   _obj->text_midpt.y= text_midpt->y;
   //_obj->text_midpt.z= text_midpt->z;
@@ -24607,11 +24603,11 @@ dwg_add_LAYOUT (Dwg_Object *restrict vp,
 // ACMESCOPE
 // ACMESTATEMGR
 // ACSH_BOOLEAN_CLASS
-// ACSH_BOX_CLASS
+// ACSH_BOX_CLASS (needed)
 // ACSH_BREP_CLASS
 // ACSH_CHAMFER_CLASS
-// ACSH_CONE_CLASS
-// ACSH_CYLINDER_CLASS
+// ACSH_CONE_CLASS (needed)
+// ACSH_CYLINDER_CLASS (needed)
 // ACSH_EXTRUSION_CLASS
 // ACSH_FILLET_CLASS
 // ACSH_HISTORY_CLASS
@@ -24626,7 +24622,7 @@ dwg_add_LAYOUT (Dwg_Object *restrict vp,
 // ALIGNMENTPARAMETERENTITY
 // ANGDIMOBJECTCONTEXTDATA
 // ANNOTSCALEOBJECTCONTEXTDATA
-// ARC_DIMENSION
+// ARC_DIMENSION  (needed)
 // ASSOC2DCONSTRAINTGROUP
 // ASSOC3POINTANGULARDIMACTIONBODY
 // ASSOCACTION

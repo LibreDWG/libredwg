@@ -6253,7 +6253,6 @@ EXPORT Dwg_Entity_DIMENSION_ALIGNED*
 dwg_add_DIMENSION_ALIGNED (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                            const dwg_point_3d *restrict xline1_pt,
                            const dwg_point_3d *restrict xline2_pt,
-                           const dwg_point_3d *restrict def_pt,
                            const dwg_point_3d *restrict text_pt) __nonnull_all;
 EXPORT Dwg_Entity_DIMENSION_ANG2LN* /* DimAngular */
 dwg_add_DIMENSION_ANG2LN (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
@@ -6399,7 +6398,7 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const BITCODE_TV restrict name,
                const bool is_associative,
                const unsigned num_paths,
-               // Line, Polyline, Circle, Ellipse, Spline or Region as boundary_handles
+               // Line, Polyline, Circle, Ellipse, Spline or Region objs as boundary_handles
                const Dwg_Object **pathobjs) __nonnull_all;
 
 /* Add to DICTIONARY */

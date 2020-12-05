@@ -186,9 +186,8 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       break;
     case DWG_TYPE_DIMENSION_ALIGNED:
       {
-        const dwg_point_3d def_pt = { 2.5, 0.0, 0.0 };
         const dwg_point_3d text_midpt = { 2.5, 0.0, 0.0 };
-        dwg_add_DIMENSION_ALIGNED (hdr, &pt1, &pt2, &def_pt, &text_midpt);
+        dwg_add_DIMENSION_ALIGNED (hdr, &pt1, &pt2, &text_midpt);
       }
       break;
     case DWG_TYPE_DIMENSION_ANG2LN:
