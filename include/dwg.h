@@ -8941,7 +8941,7 @@ EXPORT int dwg_read_file (const char *restrict filename,
                           Dwg_Data *restrict dwg);
 EXPORT int dxf_read_file (const char *restrict filename,
                           Dwg_Data *restrict dwg);
-
+// You might need to probe for that.
 EXPORT int dwg_write_file (const char *restrict filename,
                            const Dwg_Data *restrict dwg);
 
