@@ -6469,18 +6469,73 @@ EXPORT Dwg_Entity_UNDERLAY*
 dwg_add_UNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                   const dwg_point_3d *restrict ins_pt) __nonnull_all;
 
-/* not yet:
+Dwg_Object_ACSH_BOX_CLASS*
+dwg_add_ACSH_BOX_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+             const dwg_point_3d *restrict origin_pt,
+             const double length,
+             const double width,
+             const double height) __nonnull_all;
+Dwg_Object_ACSH_CHAMFER_CLASS*
+dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                            const int bl92, const double base_dist,
+                            const double other_dist, const int num_edges,
+                            const int32_t* edges, const int bl95) __nonnull_all;
+Dwg_Object_ACSH_CONE_CLASS*
+dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                         const double base_radius, const double top_major_radius,
+                         const double top_minor_radius, const double top_x_radius)
+  __nonnull_all;
+Dwg_Object_ACSH_CYLINDER_CLASS*
+dwg_add_ACSH_CYLINDER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                             const double height, const double major_radius,
+                             const double minor_radius, const double x_radius)
+  __nonnull_all;
+Dwg_Object_ACSH_PYRAMID_CLASS*
+dwg_add_ACSH_PYRAMID_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                            const double height, const int sides,
+                            const double radius, const double topradius)
+  __nonnull_all;
+Dwg_Object_ACSH_SPHERE_CLASS*
+dwg_add_ACSH_SPHERE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                           const double radius)
+  __nonnull_all;
+Dwg_Object_ACSH_TORUS_CLASS*
+dwg_add_ACSH_TORUS_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                          const double major_radius, const double minor_radius)
+  __nonnull_all;
+Dwg_Object_ACSH_WEDGE_CLASS*
+dwg_add_ACSH_WEDGE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                          const dwg_point_3d *restrict origin_pt,
+                          const double length, const double width,
+                          const double height) __nonnull_all;
+Dwg_Object_EVALUATION_GRAPH*
+dwg_add_EVALUATION_GRAPH (Dwg_Object_ACSH_HISTORY_CLASS *restrict history,
+                          const int has_graph,
+                          const int nodeid,
+                          const int num_evalexpr,
+                          const BITCODE_H *restrict evalexpr) __nonnull ((1));
+Dwg_Object_ACSH_HISTORY_CLASS*
+dwg_add_ACSH_HISTORY_CLASS (Dwg_Entity_3DSOLID *restrict region,
+                            const int h_nodeid) __nonnull_all;
+
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
              const dwg_point_3d *restrict origin_pt,
              const double length,
              const double width,
              const double height) __nonnull_all;
+
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const dwg_point_3d *restrict center_pt,
-              const double base_radius,
-              const double height) __nonnull_all;
+              const double base_radius, const double top_major_radius,
+              const double top_minor_radius, const double top_x_radius) __nonnull_all;
+EXPORT Dwg_Entity_3DSOLID*
+dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                 const dwg_point_3d *restrict origin_pt,
+                 const int bl92, const double base_dist,
+                 const double other_dist, const int num_edges,
+                 const int32_t* edges, const int bl95)  __nonnull ((1,2));
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_ELLIPTICAL_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                          const dwg_point_3d *restrict center_pt,
@@ -6490,8 +6545,8 @@ dwg_add_ELLIPTICAL_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                   const dwg_point_3d *restrict center_pt,
-                  const double radius,
-                  const double height) __nonnull_all;
+                  const double height, const double major_radius,
+                  const double minor_radius, const double x_radius) __nonnull_all;
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_ELLIPTICAL_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                              const dwg_point_3d *restrict center_pt,
@@ -6508,6 +6563,11 @@ dwg_add_EXTRUDED_PATH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                        const Dwg_Object *restrict profile,
                        const double height,
                        const double taper_angle) __nonnull_all;
+EXPORT Dwg_Entity_3DSOLID*
+dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                  const dwg_point_3d *restrict origin_pt,
+                  const double height, const int sides,
+                  const double radius, const double topradius) __nonnull_all;
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_REVOLVED_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                         const Dwg_Object *restrict profile,
@@ -6529,6 +6589,7 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const double length,
                const double width,
                const double height) __nonnull_all;
+/*
 EXPORT Dwg_Entity_TABLE*
 dwg_add_TABLE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict ins_pt,
@@ -6614,21 +6675,21 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_NO_DWG_ADD_ACMESCOPE
 #define HAVE_NO_DWG_ADD_ACMESTATEMGR
 #define HAVE_NO_DWG_ADD_ACSH_BOOLEAN_CLASS
-#define HAVE_NO_DWG_ADD_ACSH_BOX_CLASS
+#define HAVE_DWG_ADD_ACSH_BOX_CLASS
 #define HAVE_NO_DWG_ADD_ACSH_BREP_CLASS
-#define HAVE_NO_DWG_ADD_ACSH_CHAMFER_CLASS
-#define HAVE_NO_DWG_ADD_ACSH_CONE_CLASS
-#define HAVE_NO_DWG_ADD_ACSH_CYLINDER_CLASS
+#define HAVE_DWG_ADD_ACSH_CHAMFER_CLASS
+#define HAVE_DWG_ADD_ACSH_CONE_CLASS
+#define HAVE_DWG_ADD_ACSH_CYLINDER_CLASS
 #define HAVE_NO_DWG_ADD_ACSH_EXTRUSION_CLASS
 #define HAVE_NO_DWG_ADD_ACSH_FILLET_CLASS
-#define HAVE_NO_DWG_ADD_ACSH_HISTORY_CLASS
+#define HAVE_DWG_ADD_ACSH_HISTORY_CLASS
 #define HAVE_NO_DWG_ADD_ACSH_LOFT_CLASS
-#define HAVE_NO_DWG_ADD_ACSH_PYRAMID_CLASS
+#define HAVE_DWG_ADD_ACSH_PYRAMID_CLASS
 #define HAVE_NO_DWG_ADD_ACSH_REVOLVE_CLASS
-#define HAVE_NO_DWG_ADD_ACSH_SPHERE_CLASS
+#define HAVE_DWG_ADD_ACSH_SPHERE_CLASS
 #define HAVE_NO_DWG_ADD_ACSH_SWEEP_CLASS
-#define HAVE_NO_DWG_ADD_ACSH_TORUS_CLASS
-#define HAVE_NO_DWG_ADD_ACSH_WEDGE_CLASS
+#define HAVE_DWG_ADD_ACSH_TORUS_CLASS
+#define HAVE_DWG_ADD_ACSH_WEDGE_CLASS
 #define HAVE_NO_DWG_ADD_ALDIMOBJECTCONTEXTDATA
 #define HAVE_NO_DWG_ADD_ALIGNMENTPARAMETERENTITY
 #define HAVE_NO_DWG_ADD_ANGDIMOBJECTCONTEXTDATA
@@ -6741,7 +6802,7 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_NO_DWG_ADD_DUMMY
 #define HAVE_NO_DWG_ADD_DYNAMICBLOCKPROXYNODE
 #define HAVE_NO_DWG_ADD_DYNAMICBLOCKPURGEPREVENTER
-#define HAVE_NO_DWG_ADD_EVALUATION_GRAPH
+#define HAVE_DWG_ADD_EVALUATION_GRAPH
 #define HAVE_NO_DWG_ADD_EXTRUDEDSURFACE
 #define HAVE_NO_DWG_ADD_FCFOBJECTCONTEXTDATA
 #define HAVE_NO_DWG_ADD_FIELD
@@ -6846,7 +6907,7 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_NO_DWG_ADD_WIPEOUTVARIABLES
 #define HAVE_NO_DWG_ADD_XYPARAMETERENTITY
 
-#define HAVE_NO_DWG_ADD_BOX
+#define HAVE_DWG_ADD_BOX
 #define HAVE_NO_DWG_ADD_CONE
 #define HAVE_NO_DWG_ADD_CYLINDER
 #define HAVE_NO_DWG_ADD_ELLIPTICAL_CONE
