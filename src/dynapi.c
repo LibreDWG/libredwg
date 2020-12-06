@@ -10729,7 +10729,7 @@ static const Dwg_DYNAPI_field _dwg_3DSOLID_wire_fields[] = {
     0,0,0, 0 },
   { "color",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_3DSOLID_wire, color),
     0,0,0, 0 },
-  { "acis_index",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_3DSOLID_wire, acis_index),
+  { "acis_index",	"BLd", sizeof (BITCODE_BLd),  OFF (struct _dwg_3DSOLID_wire, acis_index),
     0,0,0, 0 },
   { "num_points",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_3DSOLID_wire, num_points),
     0,0,0, 0 },

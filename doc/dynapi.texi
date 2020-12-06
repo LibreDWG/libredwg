@@ -12556,7 +12556,7 @@ BL
 @item color
 BL
 @item acis_index
-BL
+BLd
 @item num_points
 BL
 @item points

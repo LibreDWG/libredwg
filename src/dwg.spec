@@ -1949,7 +1949,7 @@ DWG_ENTITY_END
     FIELD_CAST (name.color, BS, BL, 0);               \
   } else {                                            \
     FIELD_BL (name.color, 0); }                       \
-  FIELD_BL (name.acis_index, 0);                      \
+  FIELD_BLd (name.acis_index, 0);                     \
   /* TODO: align num_points to 255 */                 \
   FIELD_BL (name.num_points, 0);                      \
   FIELD_3DPOINT_VECTOR (name.points, name.num_points, 0); \
