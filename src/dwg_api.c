@@ -22353,7 +22353,11 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
   return 0;
 }
 
-// returns 1 if already in CLASSES, 0 if successfully added, -1 on error.
+/* Create classes on demand.
+   Returns 1 if already in CLASSES, 0 if successfully added, -1 on error.
+   Of course this should be a gperf hash. Or at least a list of class.inc macros, as
+   in gambas names.inc
+*/
 EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
                               const char *const restrict dxfname)
 {
@@ -22363,61 +22367,51 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
       if (strEQ (klass->dxfname, dxfname))
         return 1;
     }
-  if (strEQc (dxfname, "LWPOLYLINE")) // dwg_version 20
-    return dwg_add_class (dwg, "LWPOLYLINE", "AcDbPolyline", "ObjectDBX Classes", true);
-  if (strEQc (dxfname, "HATCH"))  // dwg_version 20
-    return dwg_add_class (dwg, "HATCH", "AcDbHatch", "ObjectDBX Classes", true);
-  if (strEQc (dxfname, "OLE2FRAME"))
-    return dwg_add_class (dwg, "OLE2FRAME", "AcDbOle2Frame", "ObjectDBX Classes", true);
 
-  if (strEQc (dxfname, "XRECORD")) // dwg_version 21
-    return dwg_add_class (dwg, "XRECORD", "AcDbXrecord", "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "DICTIONARYVAR"))
-    return dwg_add_class (dwg, "DICTIONARYVAR", "AcDbDictionaryVar", "AutoCAD 2000", false);
-  if (strEQc (dxfname, "ACDBDICTIONARYWDFLT"))
-    return dwg_add_class (dwg, "ACDBDICTIONARYWDFLT", "AcDbDictionaryWithDefault",
-                          dwg->header.from_version <= R_2000 ? "AutoCAD 2000" : "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "ACDBPLACEHOLDER"))
-    return dwg_add_class (dwg, "ACDBPLACEHOLDER", "AcDbPlaceHolder",
-                          dwg->header.from_version <= R_2000 ? "AutoCAD 2000" : "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "ACAD_PROXY_ENTITY_WRAPPER"))
-    return dwg_add_class (dwg, "ACAD_PROXY_ENTITY_WRAPPER", "AcDbProxyEntityWrapper",
-                          dwg->header.from_version <= R_2000 ? "AutoCAD 2000" : "ObjectDBX Classes", true);
-  if (strEQc (dxfname, "ACAD_PROXY_OBJECT_WRAPPER"))
-    return dwg_add_class (dwg, "ACAD_PROXY_OBJECT_WRAPPER", "AcDbProxyObjectWrapper",
-                          dwg->header.from_version <= R_2000 ? "AutoCAD 2000" : "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "LAYOUT"))
-    return dwg_add_class (dwg, "LAYOUT", "AcDbLayout", "AutoCAD 2000", false);
-  if (strEQc (dxfname, "SORTENTSTABLE"))
-    return dwg_add_class (dwg, "SORTENTSTABLE", "AcDbSortentsTable", "AutoCAD 2000", false);
-  if (strEQc (dxfname, "LAYOUT"))
-    return dwg_add_class (dwg, "LAYOUT", "AcDbLayout", "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "LAYER_INDEX"))
-    return dwg_add_class (dwg, "LAYER_INDEX", "AcDbLayerIndex", "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "SPATIAL_INDEX"))
-    return dwg_add_class (dwg, "SPATIAL_INDEX", "AcDbSpatialIndex", "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "SPATIAL_FILTER"))
-    return dwg_add_class (dwg, "SPATIAL_FILTER", "AcDbSpatialFilter", "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "IDBUFFER"))
-    return dwg_add_class (dwg, "IDBUFFER", "AcDbIdBuffer", "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "VBA_PROJECT")) // dwg_version 19
-    return dwg_add_class (dwg, "VBA_PROJECT", "AcDbVbaProject", "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "VISUALSTYLE"))
-    return dwg_add_class (dwg, "VISUALSTYLE", "AcDbVisualStyle", "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "TABLESTYLE"))
-    return dwg_add_class (dwg, "TABLESTYLE", "AcDbTableStyle", "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "ACAD_TABLE"))
-    return dwg_add_class (dwg, "ACAD_TABLE", "AcDbTable", "ObjectDBX Classes", true);
-  if (strEQc (dxfname, "TABLECONTENT"))
-    return dwg_add_class (dwg, "TABLECONTENT", "AcDbTableContent", "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "TABLEGEOMETRY"))
-    return dwg_add_class (dwg, "TABLEGEOMETRY", "AcDbTableGeometry", "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "CELLSTYLEMAP"))
-    return dwg_add_class (dwg, "CELLSTYLEMAP", "AcDbCellStyleMap", "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "DATATABLE"))
-    return dwg_add_class (dwg, "DATATABLE", "AcDbDataTable", "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "MULTILEADER"))
-    return dwg_add_class (dwg, "MULTILEADER", "AcDbMLeader", "ObjectDBX Classes", true);
+#define IF_ODBX_OR_A2000CLASS(name, cppname, isent)                     \
+  if (strEQc (dxfname, #name))                                          \
+    return dwg_add_class (dwg, #name, #cppname,                         \
+      dwg->header.from_version <= R_2000 ? "AutoCAD 2000" : "ObjectDBX Classes", \
+                          isent)
+#define IF_A2000CLASS(name, cppname, isent)     \
+  if (strEQc (dxfname, #name))                  \
+    return dwg_add_class (dwg, #name, #cppname, \
+                          "AutoCAD 2000", isent)
+#define IF_ODBXCLASS(name, cppname, isent)      \
+  if (strEQc (dxfname, #name))                  \
+    return dwg_add_class (dwg, #name, #cppname, \
+                          "ObjectDBX Classes", isent)
+  
+  IF_ODBXCLASS (LWPOLYLINE, AcDbPolyline, true); // dwg_version 20
+  IF_ODBXCLASS (HATCH, AcDbHatch, true);         // dwg_version 20
+  IF_ODBXCLASS (OLE2FRAME, AcDbOle2Frame, true);
+  IF_ODBXCLASS (ARC_DIMENSION, AcDbArcDimension, true);
+  IF_ODBXCLASS (MULTILEADER, AcDbMLeader, true);
+  
+  IF_ODBX_OR_A2000CLASS (ACDBDICTIONARYWDFLT, AcDbDictionaryWithDefault, false);
+  IF_ODBX_OR_A2000CLASS (ACDBPLACEHOLDER, AcDbPlaceHolder, false);
+  IF_ODBX_OR_A2000CLASS (ACAD_PROXY_ENTITY_WRAPPER, AcDbProxyEntityWrapper, false);
+  IF_ODBX_OR_A2000CLASS (ACAD_PROXY_OBJECT_WRAPPER, AcDbProxyObjectWrapper, false);
+
+  IF_A2000CLASS (DICTIONARYVAR, AcDbDictionaryVar, false);
+  IF_A2000CLASS (LAYOUT, AcDbLayout, false);
+  IF_A2000CLASS (SORTENTSTABLE, AcDbSortentsTable, false);
+
+  IF_ODBXCLASS (VBA_PROJECT, AcDbVbaProject, false); // dwg_version 19
+  IF_ODBXCLASS (XRECORD, AcDbXrecord, false);    // dwg_version 21
+  IF_ODBXCLASS (LAYER_INDEX, AcDbLayerIndex, false);
+  IF_ODBXCLASS (SPATIAL_INDEX, AcDbSpatialIndex, false);
+  IF_ODBXCLASS (SPATIAL_FILTER, AcDbSpatialFilter, false);
+  IF_ODBXCLASS (IDBUFFER, AcDbIdBuffer, false);
+  IF_ODBXCLASS (VISUALSTYLE, AcDbVisualStyle, false);
+  IF_ODBXCLASS (TABLESTYLE, AcDbTableStyle, false);
+  IF_ODBXCLASS (ACAD_TABLE, AcDbTable, true);
+  IF_ODBXCLASS (TABLECONTENT, AcDbTableContent, false);
+  IF_ODBXCLASS (TABLEGEOMETRY, AcDbTableGeometry, false);
+  IF_ODBXCLASS (CELLSTYLEMAP, AcDbCellStyleMap, false);
+  IF_ODBXCLASS (DATATABLE, AcDbDataTable, false);
+  IF_ODBXCLASS (SCALE, AcDbScale, false);
+
   if (strEQc (dxfname, "IMAGE"))
     return dwg_add_class (dwg, "IMAGE", "AcDbRasterImage", "ISM", true);
   if (strEQc (dxfname, "IMAGEDEF"))
@@ -22430,83 +22424,107 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
     return dwg_add_class (dwg, "LIGHT", "AcDbLight", "SCENEOE", true);
   if (strEQc (dxfname, "SUN"))
     return dwg_add_class (dwg, "SUN", "AcDbSun", "SCENEOE", false);
-  if (strEQc (dxfname, "SCALE"))
-    return dwg_add_class (dwg, "SCALE", "AcDbScale", "ObjectDBX Classes", false);
   if (strEQc (dxfname, "DIMASSOC"))
     return dwg_add_class (dwg, "DIMASSOC", "AcDbDimAssoc", "AcDbDimAssoc|"
                           "Product Desc:     AcDim ARX App For Dimension", false);
   if (strEQc (dxfname, "WIPEOUT"))
     return dwg_add_class (dwg, "WIPEOUT", "AcDbWipeout", "Wipeout|"
                           "Product Desc:     WipeOut Dbx Application", true);
-  if (strEQc (dxfname, "WIPEOUTVARIABLES"))
-    return dwg_add_class (dwg, "WIPEOUTVARIABLES", "AcDbWipeoutVariables",
-                          "ObjectDBX Classes", false);
+  IF_ODBXCLASS (WIPEOUTVARIABLES, AcDbWipeoutVariables, false);
   if (strEQc (dxfname, "RTEXT")) // Remote Text
     return dwg_add_class (dwg, "RTEXT", "AcDbRText", "RText|"
                           "AutoCAD Express Tool", true);
   if (strEQc (dxfname, "ARCALIGNEDTEXT"))
     return dwg_add_class (dwg, "ARCALIGNEDTEXT", "AcDbArcAlignedText", "ATEXT|"
                           "AutoCAD Express Tool", true);
-  if (strEQc (dxfname, "MATERIAL"))
-    return dwg_add_class (dwg, "MATERIAL", "AcDbMaterial",
-                          "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "PLOTSETTINGS"))
-    return dwg_add_class (dwg, "PLOTSETTINGS", "AcDbPlotSettings",
-                          "ObjectDBX Classes", false);
   if (strEQc (dxfname, "MLEADERSTYLE"))
     return dwg_add_class (dwg, "MLEADERSTYLE", "AcDbMLeaderStyle",
                           "ACDB_MLEADERSTYLE_CLASS", false);
-  if (strEQc (dxfname, "ACDBSECTIONVIEWSTYLE"))
-    return dwg_add_class (dwg, "ACDBSECTIONVIEWSTYLE", "AcDbSectionViewStyle",
-                          "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "ACDBDETAILVIEWSTYLE"))
-    return dwg_add_class (dwg, "ACDBDETAILVIEWSTYLE", "AcDbDetailViewStyle",
-                          "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "ACDBASSOCPERSSUBENTMANAGER"))
-    return dwg_add_class (dwg, "ACDBASSOCPERSSUBENTMANAGER",
-                          "AcDbAssocPersSubentManager", "ObjectDBX Classes",
-                          false);
+
+  IF_ODBXCLASS (MATERIAL, AcDbMaterial, false);
+  IF_ODBXCLASS (PLOTSETTINGS, AcDbPlotSettings, false);
+  IF_ODBXCLASS (ACDBSECTIONVIEWSTYLE, AcDbSectionViewStyle, false);
+  IF_ODBXCLASS (ACDBDETAILVIEWSTYLE, AcDbDetailViewStyle, false);
+  IF_ODBXCLASS (ACAD_EVALUATION_GRAPH, AcDbEvalGraph, false);
+
+  IF_ODBXCLASS (ACSH_BOOLEAN_CLASS, AcDbShBoolean, false);
+  IF_ODBXCLASS (ACSH_BOX_CLASS, AcDbShBox, false);
+  IF_ODBXCLASS (ACSH_BREP_CLASS, AcDbShBrep, false);
+  IF_ODBXCLASS (ACSH_CHAMFER_CLASS, AcDbShChamfer, false);
+  IF_ODBXCLASS (ACSH_CONE_CLASS, AcDbShCone, false);
+  IF_ODBXCLASS (ACSH_CYLINDER_CLASS, AcDbShCylinder, false);
+  IF_ODBXCLASS (ACSH_EXTRUSION_CLASS, AcDbShExtrusion, false);
+  IF_ODBXCLASS (ACSH_FILLET_CLASS, AcDbShFillet, false);
+  IF_ODBXCLASS (ACSH_HISTORY_CLASS, AcDbShHistory, false);
+  IF_ODBXCLASS (ACSH_LOFT_CLASS, AcDbShLoft, false);
+  IF_ODBXCLASS (ACSH_PYRAMID_CLASS, AcDbShPyramid, false);
+  IF_ODBXCLASS (ACSH_REVOLVE_CLASS, AcDbShRevolve, false);
+  IF_ODBXCLASS (ACSH_SPHERE_CLASS, AcDbShSphere, false);
+  IF_ODBXCLASS (ACSH_SWEEP_CLASS, AcDbShSweep, false);
+  IF_ODBXCLASS (ACSH_TORUS_CLASS, AcDbShTorus, false);
+  IF_ODBXCLASS (ACSH_WEDGE_CLASS, AcDbShWedge, false);
+
+  IF_ODBXCLASS (ACDBASSOCPERSSUBENTMANAGER, AcDbAssocPersSubentManager, false);
   if (strEQc (dxfname, "ACDBPERSSUBENTMANAGER"))
     return dwg_add_class (dwg, "ACDBPERSSUBENTMANAGER",
                           "AcDbPersSubentManager", "AcDbPersSubentManager",
                           false);
-  if (strEQc (dxfname, "ACSH_SWEEP_CLASS"))
-    return dwg_add_class (dwg, "ACSH_SWEEP_CLASS", "AcDbShSweep",
-                          "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "ACAD_EVALUATION_GRAPH"))
-    return dwg_add_class (dwg, "ACAD_EVALUATION_GRAPH", "AcDbEvalGraph",
-                          "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "ACSH_HISTORY_CLASS"))
-    return dwg_add_class (dwg, "ACSH_HISTORY_CLASS", "AcDbShHistory",
-                          "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "ACDBASSOCNETWORK"))
-    return dwg_add_class (dwg, "ACDBASSOCNETWORK", "AcDbAssocNetwork",
-                          "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "ACDBASSOCACTION"))
-    return dwg_add_class (dwg, "ACDBASSOCACTION", "AcDbAssocAction",
-                          "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "ACDBASSOCALIGNEDDIMACTIONBODY"))
-    return dwg_add_class (dwg, "ACDBASSOCALIGNEDDIMACTIONBODY",
-                          "AcDbAssocAlignedDimActionBody", "ObjectDBX Classes",
-                          false);
-  if (strEQc (dxfname, "ACDBASSOCOSNAPPOINTREFACTIONPARAM"))
-    return dwg_add_class (dwg, "ACDBASSOCOSNAPPOINTREFACTIONPARAM",
-                          "AcDbAssocOsnapPointRefActionParam",
-                          "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "ACDBASSOCVERTEXACTIONPARAM"))
-    return dwg_add_class (dwg, "ACDBASSOCVERTEXACTIONPARAM",
-                          "AcDbAssocVertexActionParam", "ObjectDBX Classes",
-                          false);
-  if (strEQc (dxfname, "ACDBASSOCGEOMDEPENDENCY"))
-    return dwg_add_class (dwg, "ACDBASSOCGEOMDEPENDENCY",
-                          "AcDbAssocGeomDependency", "ObjectDBX Classes",
-                          false);
-  if (strEQc (dxfname, "ACDBASSOCDEPENDENCY"))
-    return dwg_add_class (dwg, "ACDBASSOCDEPENDENCY", "AcDbAssocDependency",
-                          "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "ARC_DIMENSION"))
-    return dwg_add_class (dwg, "ARC_DIMENSION", "AcDbArcDimension",
-                          "ObjectDBX Classes", true);
+  IF_ODBXCLASS (ACDBASSOCNETWORK, AcDbAssocNetwork, false);
+  IF_ODBXCLASS (ACDBASSOCACTION, AcDbAssocAction, false);
+  IF_ODBXCLASS (ACDBASSOCALIGNEDDIMACTIONBODY, AcDbAssocAlignedDimActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCOSNAPPOINTREFACTIONPARAM, AcDbAssocOsnapPointRefActionParam, false);
+  IF_ODBXCLASS (ACDBASSOCVERTEXACTIONPARAM, AcDbAssocVertexActionParam, false);
+  IF_ODBXCLASS (ACDBASSOCGEOMDEPENDENCY, AcDbAssocGeomDependency, false);
+  IF_ODBXCLASS (ACDBASSOCDEPENDENCY, AcDbAssocDependency, false);
+  IF_ODBXCLASS (ACDBASSOCDIMDEPENDENCYBODY, AcDbAssocDimDependencyBody, false);
+
+  IF_ODBXCLASS (ACDBASSOC3POINTANGULARDIMACTIONBODY, AcDbAssoc3PointAngularDimActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCALIGNEDIMACTIONBODY, AcDbAssocAlignedDimActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCORDINATEDIMACTIONBODY, AcDbAssocOrdinatedDimActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCROTATEDDIMACTIONBODY, AcDbAssocRotatedDimActionBody, false);
+
+  IF_ODBXCLASS (ACDBASSOCARRAYMODIFYACTIONBODY, AcDbAssocArrayModifyActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCARRAYACTIONBODY, AcDbAssocArrayActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCEDGECHAMFERACTIONBODY, AcDbAssocEdgeChamferActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCEDGEFILLETACTIONBODY, AcDbAssocEdgeFilletActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCMLEADERACTIONBODY, AcDbAssocMLeaderActionBody, false);
+
+  IF_ODBXCLASS (ACDBASSOCBLENDSURFACEACTIONBODY, AcDbAssocBlendSurfaceActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCEXTENDSURFACEACTIONBODY, AcDbAssocExtendSurfaceActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCEXTRUDEDSURFACEACTIONBODY, AcDbAssocExtrudedSurfaceActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCFILLETSURFACEACTIONBODY, AcDbAssocFilletSurfaceActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCLOFTEDSURFACEACTIONBODY, AcDbAssocLoftedSurfaceActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCNETWORKSURFACEACTIONBODY, AcDbAssocNetworkSurfaceActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCOFFSETSURFACEACTIONBODY, AcDbAssocOffsetSurfaceActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCPLANESURFACEACTIONBODY, AcDbAssocPlaneSurfaceActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCPATCHSURFACEACTIONBODY, AcDbAssocPatchSurfaceActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCRESTOREENTITYSTATEACTIONBODY, AcDbAssocRestoreEntityStateActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCREVOLVEDSURFACEACTIONBODY, AcDbAssocRevolvedSurfaceActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCSWEPTSURFACEACTIONBODY, AcDbAssocSweptSurfaceActionBody, false);
+  IF_ODBXCLASS (ACDBASSOCTRIMSURFACEACTIONBODY, AcDbAssocTrimSurfaceActionBody, false);
+
+  IF_ODBXCLASS (ACDBASSOCACTIONPARAM, AcDbAssocActionParam, false);
+  IF_ODBXCLASS (ACDBASSOCASMBODYACTIONPARAM, AcDbAssocAsmbodyActionParam, false);
+  IF_ODBXCLASS (ACDBASSOCCOMPOUNDACTIONPARAM, AcDbAssocCompoundActionParam, false);
+  IF_ODBXCLASS (ACDBASSOCEDGEACTIONPARAM, AcDbAssocEdgeActionParam, false);
+  IF_ODBXCLASS (ACDBASSOCFACEACTIONPARAM, AcDbAssocFaceActionParam, false);
+  IF_ODBXCLASS (ACDBASSOCPATHACTIONPARAM, AcDbAssocPathActionParam, false);
+  IF_ODBXCLASS (ACDBASSOCOBJECTACTIONPARAM, AcDbAssocObjectActionParam, false);
+  IF_ODBXCLASS (ACDBASSOCPOINTREFACTIONPARAM, AcDbAssocPointRefActionParam, false);
+  //IF_ODBXCLASS (ACDBASSOCVERTEXACTIONPARAM, AcDbAssocVertexActionParam, false);
+  // ??
+  IF_ODBXCLASS (ACDB_ALDIMOBJECTCONTEXTDATA_CLASS, AcDbAlignedDimensionObjectContextData, false);
+  IF_ODBXCLASS (ACDB_ANGDIMOBJECTCONTEXTDATA_CLASS, AcDbAngularDimensionObjectContextData, false);
+  IF_ODBXCLASS (ACDB_ANNOTSCALEOBJECTCONTEXTDATA_CLASS, AcDbAnnotScaleObjectContextData, false);
+  IF_ODBXCLASS (ACDB_BLKREFOBJECTCONTEXTDATA_CLASS, AcDbBlkrefObjectContextData, false);
+  IF_ODBXCLASS (ACDB_DMDIMOBJECTCONTEXTDATA_CLASS, AcDbDiametricDimensionObjectContextData, false);
+  IF_ODBXCLASS (ACDB_FCFOBJECTCONTEXTDATA_CLASS, AcDbFcfObjectContextData, false);
+  IF_ODBXCLASS (ACDB_LEADEROBJECTCONTEXTDATA_CLASS, AcDbLeaderObjectContextData, false);
+  IF_ODBXCLASS (ACDB_MLEADEROBJECTCONTEXTDATA_CLASS, AcDbMLeaderObjectContextData, false);
+  IF_ODBXCLASS (ACDB_ORDDIMOBJECTCONTEXTDATA_CLASS, AcDbOrdinateDimensionObjectContextData, false);
+  IF_ODBXCLASS (ACDB_RADIMLGOBJECTCONTEXTDATA_CLASS, AcDbRadialDimensionLargeObjectContextData, false);
+  IF_ODBXCLASS (ACDB_RADIMOBJECTCONTEXTDATA_CLASS, AcDbRadialDimensionObjectContextData, false);
+  IF_ODBXCLASS (ACDB_TEXTOBJECTCONTEXTDATA_CLASS, AcDbTextObjectContextData, false);
 
   LOG_ERROR ("Unhandled CLASS %s", dxfname);
   return -1;
