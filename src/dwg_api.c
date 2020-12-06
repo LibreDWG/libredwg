@@ -22433,7 +22433,7 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
   if (strEQc (dxfname, "WIPEOUTVARIABLES"))
     return dwg_add_class (dwg, "WIPEOUTVARIABLES", "AcDbWipeoutVariables",
                           "ObjectDBX Classes", false);
-  if (strEQc (dxfname, "RTEXT"))
+  if (strEQc (dxfname, "RTEXT")) // Remote Text
     return dwg_add_class (dwg, "RTEXT", "AcDbRText", "RText|"
                           "AutoCAD Express Tool", true);
   if (strEQc (dxfname, "ARCALIGNEDTEXT"))

@@ -6957,6 +6957,7 @@ typedef struct _dwg_entity_ARCALIGNEDTEXT
   BITCODE_H arc_handle;		/*!< DXF 330 */
 } Dwg_Entity_ARCALIGNEDTEXT;
 
+// Remote Text with external src or Diesel expr
 typedef struct _dwg_entity_RTEXT
 {
   struct _dwg_object_entity *parent;

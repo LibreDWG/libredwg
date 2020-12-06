@@ -10233,10 +10233,10 @@ DWG_ENTITY (ARCALIGNEDTEXT)
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
-// r2000+ expresstools. ROTATEDTEXT
+// r2000+ expresstools. Remote Text
 DWG_ENTITY (RTEXT)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbRotatedText);
+  SUBCLASS (AcDbRText);
   FIELD_3BD (pt, 10);
   DXF  {
     FIELD_BE (extrusion, 210);
@@ -10248,7 +10248,7 @@ DWG_ENTITY (RTEXT)
     FIELD_HANDLE (style, 5, 7);
   }
   FIELD_BS (flags, 70);
-  FIELD_T (text_value, 1); // TODO can be split into mult.
+  FIELD_T (text_value, 1); // TODO can be split into mult. remote text src or diesel expr
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (style, 5, 0);
 DWG_ENTITY_END

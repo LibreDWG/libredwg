@@ -13880,7 +13880,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
   { "RENDERSETTINGS", {"AcDbObject", "AcDbRenderSettings", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "REVOLVEDSURFACE", {"AcDbEntity", "AcDbModelerGeometry", "AcDb3dSolid", "AcDbSurface", "AcDbRevolvedSurface", NULL, NULL, NULL} },
   { "ROTATIONPARAMETERENTITY", {"AcDbEntity", "AcDbBlockRotationParameterEntity", NULL, NULL, NULL, NULL, NULL, NULL} },
-  { "RTEXT", {"AcDbEntity", "AcDbRotatedText", NULL, NULL, NULL, NULL, NULL, NULL} },
+  { "RTEXT", {"AcDbEntity", "AcDbRText", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "SCALE", {"AcDbObject", "AcDbScale", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "SECTIONOBJECT", {"AcDbEntity", "AcDbSection", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "SECTIONVIEWSTYLE", {"AcDbObject", "AcDbModelDocViewStyle", "AcDbSectionViewStyle", NULL, NULL, NULL, NULL, NULL} },
