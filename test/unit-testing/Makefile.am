@@ -227,6 +227,7 @@ testdebug = \
 	aldimobjectcontextdata \
 	angdimobjectcontextdata \
 	annotscaleobjectcontextdata \
+	arcalignedtext \
 	assoc2dconstraintgroup \
 	assocmleaderactionbody \
 	assocarrayactionbody \
@@ -255,7 +256,6 @@ testdebug = \
 	assocarraypathparameters \
 	assocarraypolarparameters \
 	assocarrayrectangularparameters \
-	atext \
 	blkrefobjectcontextdata \
 	assocdimdependencybody \
 	blockparamdependencybody \

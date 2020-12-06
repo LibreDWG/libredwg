@@ -5456,6 +5456,8 @@ struct _dwg_object_object*
 BS,	DXF 90
 @item assoc_dep
 H,	DXF 330
+@item aab_version
+BS,	DXF 90
 @item actionbody
 H,	DXF 360
 @item pab
@@ -5541,6 +5543,8 @@ struct _dwg_object_object*
 BS,	DXF 90
 @item assoc_dep
 H,	DXF 330
+@item aab_version
+BS,	DXF 90
 @item actionbody
 H,	DXF 360
 @item pab
@@ -6188,6 +6192,8 @@ struct _dwg_object_object*
 BS,	DXF 90
 @item assoc_dep
 H,	DXF 330
+@item aab_version
+BS,	DXF 90
 @item actionbody
 H,	DXF 360
 @item pab
@@ -6337,6 +6343,8 @@ struct _dwg_object_object*
 BS,	DXF 90
 @item assoc_dep
 H,	DXF 330
+@item aab_version
+BS,	DXF 90
 @item actionbody
 H,	DXF 360
 @item pab
@@ -6680,6 +6688,8 @@ struct _dwg_object_object*
 BS,	DXF 90
 @item assoc_dep
 H,	DXF 330
+@item aab_version
+BS,	DXF 90
 @item actionbody
 H,	DXF 360
 @item pab

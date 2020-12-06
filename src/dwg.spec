@@ -7121,8 +7121,7 @@ DWG_OBJECT_END
   SUB_FIELD_BS (sab,grip_status, 70)
 
 #define AcDbAssocPathBasedSurfaceActionBody_fields          \
-  SUBCLASS (AcDbAssocActionBody);                           \
-  FIELD_BL (aab_version, 90);                               \
+  AcDbAssocActionBody_fields;                               \
   AcDbAssocParamBasedActionBody_fields (pab);               \
   AcDbAssocSurfaceActionBody_fields (sab);                  \
   SUBCLASS (AcDbAssocPathBasedSurfaceActionBody)            \
@@ -7655,8 +7654,7 @@ DWG_ENTITY_END
   UNTIL (R_2010) {                           \
   if (FIELD_VALUE (actionbody))              \
     {                                        \
-      SUBCLASS (AcDbAssocActionBody);        \
-      FIELD_BL (aab_version, 90);            \
+      AcDbAssocActionBody_fields;            \
       AcDbAssocParamBasedActionBody_fields (pab); \
     }                                        \
   }

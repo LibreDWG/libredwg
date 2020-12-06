@@ -28588,6 +28588,21 @@ static int test_ASSOC3POINTANGULARDIMACTIONBODY (const Dwg_Object *obj)
     assoc3pointangulardimactionbody->aaab_version--;
   }
   {
+    BITCODE_BS aab_version;
+    if (dwg_dynapi_entity_value (assoc3pointangulardimactionbody, "ASSOC3POINTANGULARDIMACTIONBODY", "aab_version", &aab_version, NULL)
+        && aab_version == assoc3pointangulardimactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOC3POINTANGULARDIMACTIONBODY.aab_version [BS] %hu != %hu", assoc3pointangulardimactionbody->aab_version, aab_version);
+    aab_version++;
+    if (dwg_dynapi_entity_set_value (assoc3pointangulardimactionbody, "ASSOC3POINTANGULARDIMACTIONBODY", "aab_version", &aab_version, 0)
+        && aab_version == assoc3pointangulardimactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOC3POINTANGULARDIMACTIONBODY.aab_version [BS] set+1 %hu != %hu", assoc3pointangulardimactionbody->aab_version, aab_version);
+    assoc3pointangulardimactionbody->aab_version--;
+  }
+  {
     BITCODE_H actionbody;
     if (dwg_dynapi_entity_value (assoc3pointangulardimactionbody, "ASSOC3POINTANGULARDIMACTIONBODY", "actionbody", &actionbody, NULL)
         && !memcmp (&actionbody, &assoc3pointangulardimactionbody->actionbody, sizeof (BITCODE_H)))
@@ -28918,6 +28933,21 @@ static int test_ASSOCALIGNEDDIMACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCALIGNEDDIMACTIONBODY.aaab_version [BS] set+1 %hu != %hu", assocaligneddimactionbody->aaab_version, aaab_version);
     assocaligneddimactionbody->aaab_version--;
+  }
+  {
+    BITCODE_BS aab_version;
+    if (dwg_dynapi_entity_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "aab_version", &aab_version, NULL)
+        && aab_version == assocaligneddimactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCALIGNEDDIMACTIONBODY.aab_version [BS] %hu != %hu", assocaligneddimactionbody->aab_version, aab_version);
+    aab_version++;
+    if (dwg_dynapi_entity_set_value (assocaligneddimactionbody, "ASSOCALIGNEDDIMACTIONBODY", "aab_version", &aab_version, 0)
+        && aab_version == assocaligneddimactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCALIGNEDDIMACTIONBODY.aab_version [BS] set+1 %hu != %hu", assocaligneddimactionbody->aab_version, aab_version);
+    assocaligneddimactionbody->aab_version--;
   }
   {
     BITCODE_H actionbody;
@@ -31734,6 +31764,21 @@ static int test_ASSOCMLEADERACTIONBODY (const Dwg_Object *obj)
     assocmleaderactionbody->aaab_version--;
   }
   {
+    BITCODE_BS aab_version;
+    if (dwg_dynapi_entity_value (assocmleaderactionbody, "ASSOCMLEADERACTIONBODY", "aab_version", &aab_version, NULL)
+        && aab_version == assocmleaderactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCMLEADERACTIONBODY.aab_version [BS] %hu != %hu", assocmleaderactionbody->aab_version, aab_version);
+    aab_version++;
+    if (dwg_dynapi_entity_set_value (assocmleaderactionbody, "ASSOCMLEADERACTIONBODY", "aab_version", &aab_version, 0)
+        && aab_version == assocmleaderactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCMLEADERACTIONBODY.aab_version [BS] set+1 %hu != %hu", assocmleaderactionbody->aab_version, aab_version);
+    assocmleaderactionbody->aab_version--;
+  }
+  {
     BITCODE_H actionbody;
     if (dwg_dynapi_entity_value (assocmleaderactionbody, "ASSOCMLEADERACTIONBODY", "actionbody", &actionbody, NULL)
         && !memcmp (&actionbody, &assocmleaderactionbody->actionbody, sizeof (BITCODE_H)))
@@ -32362,6 +32407,21 @@ static int test_ASSOCORDINATEDIMACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCORDINATEDIMACTIONBODY.aaab_version [BS] set+1 %hu != %hu", assocordinatedimactionbody->aaab_version, aaab_version);
     assocordinatedimactionbody->aaab_version--;
+  }
+  {
+    BITCODE_BS aab_version;
+    if (dwg_dynapi_entity_value (assocordinatedimactionbody, "ASSOCORDINATEDIMACTIONBODY", "aab_version", &aab_version, NULL)
+        && aab_version == assocordinatedimactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCORDINATEDIMACTIONBODY.aab_version [BS] %hu != %hu", assocordinatedimactionbody->aab_version, aab_version);
+    aab_version++;
+    if (dwg_dynapi_entity_set_value (assocordinatedimactionbody, "ASSOCORDINATEDIMACTIONBODY", "aab_version", &aab_version, 0)
+        && aab_version == assocordinatedimactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCORDINATEDIMACTIONBODY.aab_version [BS] set+1 %hu != %hu", assocordinatedimactionbody->aab_version, aab_version);
+    assocordinatedimactionbody->aab_version--;
   }
   {
     BITCODE_H actionbody;
@@ -34059,6 +34119,21 @@ static int test_ASSOCROTATEDDIMACTIONBODY (const Dwg_Object *obj)
     else
       fail ("ASSOCROTATEDDIMACTIONBODY.aaab_version [BS] set+1 %hu != %hu", assocrotateddimactionbody->aaab_version, aaab_version);
     assocrotateddimactionbody->aaab_version--;
+  }
+  {
+    BITCODE_BS aab_version;
+    if (dwg_dynapi_entity_value (assocrotateddimactionbody, "ASSOCROTATEDDIMACTIONBODY", "aab_version", &aab_version, NULL)
+        && aab_version == assocrotateddimactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCROTATEDDIMACTIONBODY.aab_version [BS] %hu != %hu", assocrotateddimactionbody->aab_version, aab_version);
+    aab_version++;
+    if (dwg_dynapi_entity_set_value (assocrotateddimactionbody, "ASSOCROTATEDDIMACTIONBODY", "aab_version", &aab_version, 0)
+        && aab_version == assocrotateddimactionbody->aab_version)
+      pass ();
+    else
+      fail ("ASSOCROTATEDDIMACTIONBODY.aab_version [BS] set+1 %hu != %hu", assocrotateddimactionbody->aab_version, aab_version);
+    assocrotateddimactionbody->aab_version--;
   }
   {
     BITCODE_H actionbody;

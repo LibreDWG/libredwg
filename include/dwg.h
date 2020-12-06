@@ -5759,6 +5759,7 @@ typedef struct _dwg_object_ASSOCPATCHSURFACEACTIONBODY
 #define ASSOCANNOTATIONACTIONBODY_fields \
   BITCODE_BS aaab_version; \
   BITCODE_H assoc_dep; \
+  BITCODE_BS aab_version; \
   BITCODE_H actionbody
 
 typedef struct _dwg_ASSOCACTIONBODY_action
