@@ -25021,7 +25021,7 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
-    solid = dwg_add_3DSOLID (blkhdr, "cylinder"); // origin_pt
+    solid = dwg_add_3DSOLID (blkhdr, "ellipse-curve"); // origin_pt
     solidobj = dwg_obj_generic_to_object (solid, &err);
     solid->point_present = 1;
     solid->point.x = origin_pt->x;
@@ -25238,11 +25238,22 @@ dwg_add_ACSH_TORUS_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   return _obj;
 }
 
+static size_t dwg_acis_date (char *date, size_t size)
+{
+  time_t rawtime;
+  struct tm *tm;
+
+  time (&rawtime);
+  tm = localtime (&rawtime);
+  // "Thu Mar 26 22:02:42 2009"
+  return strftime (date, size, "%a %b %d %H:%M:%S %Y", tm);
+}
+
 // ACSH_TORUS_CLASS (needed)
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                  const dwg_point_3d *restrict origin_pt,
-                  const double major_radius, const double minor_radius)
+               const dwg_point_3d *restrict origin_pt,
+               const double major_radius, const double minor_radius)
 {
   int err;
   Dwg_Data *dwg;
@@ -25264,7 +25275,34 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
-    solid = dwg_add_3DSOLID (blkhdr, "torus"); // origin_pt
+    char acis_data[1600];
+    char date[48];
+    unsigned date_size = dwg_acis_date (date, 48);
+    const char torus_acis_format[] =
+      "21200 0 2 0 \n"
+      "16 Autodesk AutoCAD 17 ASM 12.0.1.915 NT %u %s \n"
+      "1 1e-06 1e-10 \n"
+      "asmheader $-1 $-1 11 212.0.1.915 #\n"
+      "body $2 $-1 $-1 $3 $-1 $-1 #\n"
+      "ref_vt-eye-attrib $-1 $-1 $-1 $-1 $1 $4 $5 #\n"
+      "lump $6 $-1 $-1 $-1 $7 $1 #\n"
+      "eye_refinement $-1 $-1 5 grid  $1 3 tri $1 4 surf $0 3 adj $0 4 grad $0 9 postcheck $0 4 stol 12.1701 4 ntol 30 4 dsil 0 8 flatness 0 7 pixarea 0 4 hmax 0 6 gridar 0 5 mgrid $3000 5 ugrid $0 5 vgrid $0 10 end_fields #\n"
+      "vertex_template $-1 $-1 $3 $0 $1 $8 #\n"
+      "ref_vt-eye-attrib $-1 $-1 $-1 $-1 $3 $4 $5 #\n"
+      "shell $8 $-1 $-1 $-1 $-1 $9 $-1 $3 #\n"
+      "ref_vt-eye-attrib $-1 $-1 $-1 $-1 $7 $4 $5 #\n"
+      "face $10 $-1 $-1 $-1 $-1 $7 $-1 $11 forward single #\n"
+      "fmesh-eye-attrib $-1 $-1 $12 $-1 $9 #\n"
+      "torus-surface $-1 $-1 $-1 %f %f %f %f %f %f %f %f %f %f %f F F F F F #\n"
+      "ref_vt-eye-attrib $-1 $-1 $-1 $10 $9 $4 $5 #\n"
+      "End-of-ASM-data";
+    snprintf (acis_data, 2000, torus_acis_format,
+              date_size, date,
+              origin_pt->x, origin_pt->y, origin_pt->z,
+              -0.501424, -1.64317e-16, -0.865202,
+              major_radius, minor_radius,
+              -0.865202, -3.89454e-17, 0.501424);
+    solid = dwg_add_3DSOLID (blkhdr, acis_data);
     solidobj = dwg_obj_generic_to_object (solid, &err);
     solid->point_present = 1;
     solid->point.x = origin_pt->x;

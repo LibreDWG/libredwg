@@ -8182,7 +8182,6 @@ DWG_OBJECT (ACSH_CHAMFER_CLASS)
 DWG_OBJECT_END
 
 DWG_OBJECT (ACSH_TORUS_CLASS)
-  DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
   AcDbShHistoryNode_fields (history_node);
   SUBCLASS (AcDbShPrimitive)
