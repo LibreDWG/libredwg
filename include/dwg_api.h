@@ -581,7 +581,7 @@ typedef struct _dwg_entity_LARGE_RADIAL_DIMENSION		dwg_ent_large_radial_dimensio
 typedef struct _dwg_entity_WIPEOUT		dwg_ent_wipeout;
 /* debugging */
 typedef struct _dwg_entity_ALIGNMENTPARAMETERENTITY		dwg_ent_alignmentparameterentity;
-typedef struct _dwg_entity_ATEXT		dwg_ent_atext;
+typedef struct _dwg_entity_ARCALIGNEDTEXT		dwg_ent_arcalignedtext;
 typedef struct _dwg_entity_BASEPOINTPARAMETERENTITY		dwg_ent_basepointparameterentity;
 typedef struct _dwg_entity_EXTRUDEDSURFACE		dwg_ent_extrudedsurface;
 typedef struct _dwg_entity_FLIPPARAMETERENTITY		dwg_ent_flipparameterentity;
@@ -885,7 +885,7 @@ dwg_get_OBJECT_DECL (ent_large_radial_dimension, LARGE_RADIAL_DIMENSION);
 dwg_get_OBJECT_DECL (ent_wipeout, WIPEOUT);
 #ifdef DEBUG_CLASSES
   dwg_get_OBJECT_DECL (ent_alignmentparameterentity, ALIGNMENTPARAMETERENTITY);
-  dwg_get_OBJECT_DECL (ent_atext, ATEXT);
+  dwg_get_OBJECT_DECL (ent_arcalignedtext, ARCALIGNEDTEXT);
   dwg_get_OBJECT_DECL (ent_basepointparameterentity, BASEPOINTPARAMETERENTITY);
   dwg_get_OBJECT_DECL (ent_extrudedsurface, EXTRUDEDSURFACE);
   dwg_get_OBJECT_DECL (ent_flipparameterentity, FLIPPARAMETERENTITY);
@@ -1201,7 +1201,7 @@ DWG_GETALL_ENTITY_DECL (LARGE_RADIAL_DIMENSION);
 DWG_GETALL_ENTITY_DECL (WIPEOUT);
 /* debugging */
 DWG_GETALL_ENTITY_DECL (ALIGNMENTPARAMETERENTITY);
-DWG_GETALL_ENTITY_DECL (ATEXT);
+DWG_GETALL_ENTITY_DECL (ARCALIGNEDTEXT);
 DWG_GETALL_ENTITY_DECL (BASEPOINTPARAMETERENTITY);
 DWG_GETALL_ENTITY_DECL (EXTRUDEDSURFACE);
 DWG_GETALL_ENTITY_DECL (FLIPPARAMETERENTITY);
@@ -1532,7 +1532,7 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LARGE_RADIAL_DIMENSION);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (WIPEOUT);
 #ifdef DEBUG_CLASSES
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ALIGNMENTPARAMETERENTITY);
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ATEXT);
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ARCALIGNEDTEXT);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (BASEPOINTPARAMETERENTITY);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (EXTRUDEDSURFACE);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (FLIPPARAMETERENTITY);
@@ -6469,6 +6469,75 @@ EXPORT Dwg_Entity_UNDERLAY*
 dwg_add_UNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                   const dwg_point_3d *restrict ins_pt) __nonnull_all;
 
+/* not yet:
+EXPORT Dwg_Entity_3DSOLID*
+dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+             const dwg_point_3d *restrict origin_pt,
+             const double length,
+             const double width,
+             const double height) __nonnull_all;
+EXPORT Dwg_Entity_3DSOLID*
+dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+              const dwg_point_3d *restrict center_pt,
+              const double base_radius,
+              const double height) __nonnull_all;
+EXPORT Dwg_Entity_3DSOLID*
+dwg_add_ELLIPTICAL_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                         const dwg_point_3d *restrict center_pt,
+                         const double major_radius,
+                         const double minor_radius,
+                         const double height) __nonnull_all;
+EXPORT Dwg_Entity_3DSOLID*
+dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                  const dwg_point_3d *restrict center_pt,
+                  const double radius,
+                  const double height) __nonnull_all;
+EXPORT Dwg_Entity_3DSOLID*
+dwg_add_ELLIPTICAL_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                             const dwg_point_3d *restrict center_pt,
+                             const double major_radius,
+                             const double minor_radius,
+                             const double height) __nonnull_all;
+EXPORT Dwg_Entity_3DSOLID*
+dwg_add_EXTRUDED_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                        const Dwg_Object *restrict profile,
+                        const double height,
+                        const double taper_angle) __nonnull_all;
+EXPORT Dwg_Entity_3DSOLID*
+dwg_add_EXTRUDED_PATH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                       const Dwg_Object *restrict profile,
+                       const double height,
+                       const double taper_angle) __nonnull_all;
+EXPORT Dwg_Entity_3DSOLID*
+dwg_add_REVOLVED_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                        const Dwg_Object *restrict profile,
+                        const dwg_point_3d *restrict axis_pt,
+                        const dwg_point_3d *restrict axis_dir,
+                        const double angle) __nonnull_all;
+EXPORT Dwg_Entity_3DSOLID*
+dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                const dwg_point_3d *restrict center_pt,
+                const double radius) __nonnull_all;
+EXPORT Dwg_Entity_3DSOLID*
+dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+               const dwg_point_3d *restrict center_pt,
+               const double torus_radius,
+               const double tube_radius) __nonnull_all;
+EXPORT Dwg_Entity_3DSOLID*
+dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+               const dwg_point_3d *restrict center_pt,
+               const double length,
+               const double width,
+               const double height) __nonnull_all;
+EXPORT Dwg_Entity_TABLE*
+dwg_add_TABLE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+               const dwg_point_3d *restrict ins_pt,
+               const int num_rows,
+               const int num_cols,
+               const double row_height,
+               const double col_width) __nonnull_all;
+*/
+
 /* Tables.
    The names are really BITCODE_T, but we dont support writing TU yet.
    TODO: take utf8 and convert to TU if needed (dxf).
@@ -6761,6 +6830,18 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg,
 #define HAVE_NO_DWG_ADD_WIPEOUT
 #define HAVE_NO_DWG_ADD_WIPEOUTVARIABLES
 #define HAVE_NO_DWG_ADD_XYPARAMETERENTITY
+
+#define HAVE_NO_DWG_ADD_BOX
+#define HAVE_NO_DWG_ADD_CONE
+#define HAVE_NO_DWG_ADD_CYLINDER
+#define HAVE_NO_DWG_ADD_ELLIPTICAL_CONE
+#define HAVE_NO_DWG_ADD_ELLIPTICAL_CYLINDER
+#define HAVE_NO_DWG_ADD_EXTRUDED_SOLID
+#define HAVE_NO_DWG_ADD_EXTRUDED_PATH
+#define HAVE_NO_DWG_ADD_REVOLVED_SOLID
+#define HAVE_NO_DWG_ADD_SPHERE
+#define HAVE_NO_DWG_ADD_TORUS
+#define HAVE_NO_DWG_ADD_WEDGE
 
 #define HAVE_DWG_ADD_3DFACE
 #define HAVE_DWG_ADD_3DSOLID

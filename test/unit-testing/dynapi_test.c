@@ -6011,6 +6011,400 @@ static int test_ARC (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ARCALIGNEDTEXT (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_ARCALIGNEDTEXT *restrict arcalignedtext = obj->tio.entity->tio.ARCALIGNEDTEXT;
+  failed = 0;
+  {
+    BITCODE_BS alignment;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "alignment", &alignment, NULL)
+        && alignment == arcalignedtext->alignment)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.alignment [BS] %hu != %hu", arcalignedtext->alignment, alignment);
+    alignment++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "alignment", &alignment, 0)
+        && alignment == arcalignedtext->alignment)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.alignment [BS] set+1 %hu != %hu", arcalignedtext->alignment, alignment);
+    arcalignedtext->alignment--;
+  }
+  {
+    BITCODE_H arc_handle;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "arc_handle", &arc_handle, NULL)
+        && !memcmp (&arc_handle, &arcalignedtext->arc_handle, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("ARCALIGNEDTEXT.arc_handle [H]");
+  }
+  {
+    BITCODE_BS bs1;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "bs1", &bs1, NULL)
+        && bs1 == arcalignedtext->bs1)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.bs1 [BS] %hu != %hu", arcalignedtext->bs1, bs1);
+    bs1++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "bs1", &bs1, 0)
+        && bs1 == arcalignedtext->bs1)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.bs1 [BS] set+1 %hu != %hu", arcalignedtext->bs1, bs1);
+    arcalignedtext->bs1--;
+  }
+  {
+    BITCODE_BS bs2;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "bs2", &bs2, NULL)
+        && bs2 == arcalignedtext->bs2)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.bs2 [BS] %hu != %hu", arcalignedtext->bs2, bs2);
+    bs2++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "bs2", &bs2, 0)
+        && bs2 == arcalignedtext->bs2)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.bs2 [BS] set+1 %hu != %hu", arcalignedtext->bs2, bs2);
+    arcalignedtext->bs2--;
+  }
+  {
+    BITCODE_3BD center;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "center", &center, NULL)
+        && !memcmp (&center, &arcalignedtext->center, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("ARCALIGNEDTEXT.center [3BD]");
+  }
+  {
+    BITCODE_D2T char_spacing;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "char_spacing", &char_spacing, NULL)
+        && char_spacing == arcalignedtext->char_spacing)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.char_spacing [D2T] %s != %s", arcalignedtext->char_spacing, char_spacing);
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "char_spacing", &char_spacing, 0)
+        && char_spacing == arcalignedtext->char_spacing)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.char_spacing [D2T] set+1 %s != %s", arcalignedtext->char_spacing, char_spacing);
+    arcalignedtext->char_spacing--;
+  }
+  {
+    BITCODE_BL color;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "color", &color, NULL)
+        && color == arcalignedtext->color)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.color [BL] %u != %u", arcalignedtext->color, color);
+    color++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "color", &color, 0)
+        && color == arcalignedtext->color)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.color [BL] set+1 %u != %u", arcalignedtext->color, color);
+    arcalignedtext->color--;
+  }
+  {
+    BITCODE_BD end_angle;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "end_angle", &end_angle, NULL)
+        && end_angle == arcalignedtext->end_angle)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.end_angle [BD] %g != %g", arcalignedtext->end_angle, end_angle);
+    end_angle++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "end_angle", &end_angle, 0)
+        && end_angle == arcalignedtext->end_angle)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.end_angle [BD] set+1 %g != %g", arcalignedtext->end_angle, end_angle);
+    arcalignedtext->end_angle--;
+  }
+  {
+    BITCODE_3BD extrusion;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "extrusion", &extrusion, NULL)
+        && !memcmp (&extrusion, &arcalignedtext->extrusion, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("ARCALIGNEDTEXT.extrusion [3BD]");
+  }
+  {
+    BITCODE_BS font;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "font", &font, NULL)
+        && font == arcalignedtext->font)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.font [BS] %hu != %hu", arcalignedtext->font, font);
+    font++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "font", &font, 0)
+        && font == arcalignedtext->font)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.font [BS] set+1 %hu != %hu", arcalignedtext->font, font);
+    arcalignedtext->font--;
+  }
+  {
+    BITCODE_BS font_19;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "font_19", &font_19, NULL)
+        && font_19 == arcalignedtext->font_19)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.font_19 [BS] %hu != %hu", arcalignedtext->font_19, font_19);
+    font_19++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "font_19", &font_19, 0)
+        && font_19 == arcalignedtext->font_19)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.font_19 [BS] set+1 %hu != %hu", arcalignedtext->font_19, font_19);
+    arcalignedtext->font_19--;
+  }
+  {
+    BITCODE_BS is_reverse;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "is_reverse", &is_reverse, NULL)
+        && is_reverse == arcalignedtext->is_reverse)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.is_reverse [BS] %hu != %hu", arcalignedtext->is_reverse, is_reverse);
+    is_reverse++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "is_reverse", &is_reverse, 0)
+        && is_reverse == arcalignedtext->is_reverse)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.is_reverse [BS] set+1 %hu != %hu", arcalignedtext->is_reverse, is_reverse);
+    arcalignedtext->is_reverse--;
+  }
+  {
+    BITCODE_BS is_shx;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "is_shx", &is_shx, NULL)
+        && is_shx == arcalignedtext->is_shx)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.is_shx [BS] %hu != %hu", arcalignedtext->is_shx, is_shx);
+    is_shx++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "is_shx", &is_shx, 0)
+        && is_shx == arcalignedtext->is_shx)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.is_shx [BS] set+1 %hu != %hu", arcalignedtext->is_shx, is_shx);
+    arcalignedtext->is_shx--;
+  }
+  {
+    BITCODE_BS is_underlined;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "is_underlined", &is_underlined, NULL)
+        && is_underlined == arcalignedtext->is_underlined)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.is_underlined [BS] %hu != %hu", arcalignedtext->is_underlined, is_underlined);
+    is_underlined++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "is_underlined", &is_underlined, 0)
+        && is_underlined == arcalignedtext->is_underlined)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.is_underlined [BS] set+1 %hu != %hu", arcalignedtext->is_underlined, is_underlined);
+    arcalignedtext->is_underlined--;
+  }
+  {
+    BITCODE_D2T left_offset;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "left_offset", &left_offset, NULL)
+        && left_offset == arcalignedtext->left_offset)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.left_offset [D2T] %s != %s", arcalignedtext->left_offset, left_offset);
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "left_offset", &left_offset, 0)
+        && left_offset == arcalignedtext->left_offset)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.left_offset [D2T] set+1 %s != %s", arcalignedtext->left_offset, left_offset);
+    arcalignedtext->left_offset--;
+  }
+  {
+    BITCODE_D2T offset_from_arc;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "offset_from_arc", &offset_from_arc, NULL)
+        && offset_from_arc == arcalignedtext->offset_from_arc)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.offset_from_arc [D2T] %s != %s", arcalignedtext->offset_from_arc, offset_from_arc);
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "offset_from_arc", &offset_from_arc, 0)
+        && offset_from_arc == arcalignedtext->offset_from_arc)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.offset_from_arc [D2T] set+1 %s != %s", arcalignedtext->offset_from_arc, offset_from_arc);
+    arcalignedtext->offset_from_arc--;
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "parent", &parent, NULL)
+        && !memcmp (&parent, &arcalignedtext->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("ARCALIGNEDTEXT.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_BD radius;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "radius", &radius, NULL)
+        && radius == arcalignedtext->radius)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.radius [BD] %g != %g", arcalignedtext->radius, radius);
+    radius++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "radius", &radius, 0)
+        && radius == arcalignedtext->radius)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.radius [BD] set+1 %g != %g", arcalignedtext->radius, radius);
+    arcalignedtext->radius--;
+  }
+  {
+    BITCODE_D2T right_offset;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "right_offset", &right_offset, NULL)
+        && right_offset == arcalignedtext->right_offset)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.right_offset [D2T] %s != %s", arcalignedtext->right_offset, right_offset);
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "right_offset", &right_offset, 0)
+        && right_offset == arcalignedtext->right_offset)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.right_offset [D2T] set+1 %s != %s", arcalignedtext->right_offset, right_offset);
+    arcalignedtext->right_offset--;
+  }
+  {
+    BITCODE_BD start_angle;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "start_angle", &start_angle, NULL)
+        && start_angle == arcalignedtext->start_angle)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.start_angle [BD] %g != %g", arcalignedtext->start_angle, start_angle);
+    start_angle++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "start_angle", &start_angle, 0)
+        && start_angle == arcalignedtext->start_angle)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.start_angle [BD] set+1 %g != %g", arcalignedtext->start_angle, start_angle);
+    arcalignedtext->start_angle--;
+  }
+  {
+    BITCODE_T style;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "style", &style, NULL)
+        && style
+           ? strEQ ((char *)style, (char *)arcalignedtext->style)
+           : !arcalignedtext->style)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.style [T] '%s' <> '%s'", style, arcalignedtext->style);
+  }
+  {
+    BITCODE_T t2;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "t2", &t2, NULL)
+        && t2
+           ? strEQ ((char *)t2, (char *)arcalignedtext->t2)
+           : !arcalignedtext->t2)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.t2 [T] '%s' <> '%s'", t2, arcalignedtext->t2);
+  }
+  {
+    BITCODE_T t3;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "t3", &t3, NULL)
+        && t3
+           ? strEQ ((char *)t3, (char *)arcalignedtext->t3)
+           : !arcalignedtext->t3)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.t3 [T] '%s' <> '%s'", t3, arcalignedtext->t3);
+  }
+  {
+    BITCODE_BS text_direction;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "text_direction", &text_direction, NULL)
+        && text_direction == arcalignedtext->text_direction)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.text_direction [BS] %hu != %hu", arcalignedtext->text_direction, text_direction);
+    text_direction++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "text_direction", &text_direction, 0)
+        && text_direction == arcalignedtext->text_direction)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.text_direction [BS] set+1 %hu != %hu", arcalignedtext->text_direction, text_direction);
+    arcalignedtext->text_direction--;
+  }
+  {
+    BITCODE_BS text_position;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "text_position", &text_position, NULL)
+        && text_position == arcalignedtext->text_position)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.text_position [BS] %hu != %hu", arcalignedtext->text_position, text_position);
+    text_position++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "text_position", &text_position, 0)
+        && text_position == arcalignedtext->text_position)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.text_position [BS] set+1 %hu != %hu", arcalignedtext->text_position, text_position);
+    arcalignedtext->text_position--;
+  }
+  {
+    BITCODE_D2T text_size;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "text_size", &text_size, NULL)
+        && text_size == arcalignedtext->text_size)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.text_size [D2T] %s != %s", arcalignedtext->text_size, text_size);
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "text_size", &text_size, 0)
+        && text_size == arcalignedtext->text_size)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.text_size [D2T] set+1 %s != %s", arcalignedtext->text_size, text_size);
+    arcalignedtext->text_size--;
+  }
+  {
+    BITCODE_T text_value;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "text_value", &text_value, NULL)
+        && text_value
+           ? strEQ ((char *)text_value, (char *)arcalignedtext->text_value)
+           : !arcalignedtext->text_value)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.text_value [T] '%s' <> '%s'", text_value, arcalignedtext->text_value);
+  }
+  {
+    BITCODE_BS wizard_flag;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "wizard_flag", &wizard_flag, NULL)
+        && wizard_flag == arcalignedtext->wizard_flag)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.wizard_flag [BS] %hu != %hu", arcalignedtext->wizard_flag, wizard_flag);
+    wizard_flag++;
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "wizard_flag", &wizard_flag, 0)
+        && wizard_flag == arcalignedtext->wizard_flag)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.wizard_flag [BS] set+1 %hu != %hu", arcalignedtext->wizard_flag, wizard_flag);
+    arcalignedtext->wizard_flag--;
+  }
+  {
+    BITCODE_D2T xscale;
+    if (dwg_dynapi_entity_value (arcalignedtext, "ARCALIGNEDTEXT", "xscale", &xscale, NULL)
+        && xscale == arcalignedtext->xscale)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.xscale [D2T] %s != %s", arcalignedtext->xscale, xscale);
+    if (dwg_dynapi_entity_set_value (arcalignedtext, "ARCALIGNEDTEXT", "xscale", &xscale, 0)
+        && xscale == arcalignedtext->xscale)
+      pass ();
+    else
+      fail ("ARCALIGNEDTEXT.xscale [D2T] set+1 %s != %s", arcalignedtext->xscale, xscale);
+    arcalignedtext->xscale--;
+  }
+  if (failed && (is_class_unstable ("ARCALIGNEDTEXT") || is_class_debugging ("ARCALIGNEDTEXT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ARCALIGNEDTEXT", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ARC_DIMENSION (const Dwg_Object *obj)
 {
   int error = 0;
@@ -6414,400 +6808,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("ARC_DIMENSION") || is_class_debugging ("ARC_DIMENSION")))
     {
       ok ("%s failed %d tests (TODO unstable)", "ARC_DIMENSION", failed);
-      failed = 0;
-    }
-  return failed;
-}
-static int test_ATEXT (const Dwg_Object *obj)
-{
-  int error = 0;
-  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
-  Dwg_Entity_ATEXT *restrict atext = obj->tio.entity->tio.ATEXT;
-  failed = 0;
-  {
-    BITCODE_BS alignment;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "alignment", &alignment, NULL)
-        && alignment == atext->alignment)
-      pass ();
-    else
-      fail ("ATEXT.alignment [BS] %hu != %hu", atext->alignment, alignment);
-    alignment++;
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "alignment", &alignment, 0)
-        && alignment == atext->alignment)
-      pass ();
-    else
-      fail ("ATEXT.alignment [BS] set+1 %hu != %hu", atext->alignment, alignment);
-    atext->alignment--;
-  }
-  {
-    BITCODE_H arc_handle;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "arc_handle", &arc_handle, NULL)
-        && !memcmp (&arc_handle, &atext->arc_handle, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("ATEXT.arc_handle [H]");
-  }
-  {
-    BITCODE_BS bs1;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "bs1", &bs1, NULL)
-        && bs1 == atext->bs1)
-      pass ();
-    else
-      fail ("ATEXT.bs1 [BS] %hu != %hu", atext->bs1, bs1);
-    bs1++;
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "bs1", &bs1, 0)
-        && bs1 == atext->bs1)
-      pass ();
-    else
-      fail ("ATEXT.bs1 [BS] set+1 %hu != %hu", atext->bs1, bs1);
-    atext->bs1--;
-  }
-  {
-    BITCODE_BS bs2;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "bs2", &bs2, NULL)
-        && bs2 == atext->bs2)
-      pass ();
-    else
-      fail ("ATEXT.bs2 [BS] %hu != %hu", atext->bs2, bs2);
-    bs2++;
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "bs2", &bs2, 0)
-        && bs2 == atext->bs2)
-      pass ();
-    else
-      fail ("ATEXT.bs2 [BS] set+1 %hu != %hu", atext->bs2, bs2);
-    atext->bs2--;
-  }
-  {
-    BITCODE_3BD center;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "center", &center, NULL)
-        && !memcmp (&center, &atext->center, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("ATEXT.center [3BD]");
-  }
-  {
-    BITCODE_D2T char_spacing;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "char_spacing", &char_spacing, NULL)
-        && char_spacing == atext->char_spacing)
-      pass ();
-    else
-      fail ("ATEXT.char_spacing [D2T] %s != %s", atext->char_spacing, char_spacing);
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "char_spacing", &char_spacing, 0)
-        && char_spacing == atext->char_spacing)
-      pass ();
-    else
-      fail ("ATEXT.char_spacing [D2T] set+1 %s != %s", atext->char_spacing, char_spacing);
-    atext->char_spacing--;
-  }
-  {
-    BITCODE_BL color;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "color", &color, NULL)
-        && color == atext->color)
-      pass ();
-    else
-      fail ("ATEXT.color [BL] %u != %u", atext->color, color);
-    color++;
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "color", &color, 0)
-        && color == atext->color)
-      pass ();
-    else
-      fail ("ATEXT.color [BL] set+1 %u != %u", atext->color, color);
-    atext->color--;
-  }
-  {
-    BITCODE_BD end_angle;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "end_angle", &end_angle, NULL)
-        && end_angle == atext->end_angle)
-      pass ();
-    else
-      fail ("ATEXT.end_angle [BD] %g != %g", atext->end_angle, end_angle);
-    end_angle++;
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "end_angle", &end_angle, 0)
-        && end_angle == atext->end_angle)
-      pass ();
-    else
-      fail ("ATEXT.end_angle [BD] set+1 %g != %g", atext->end_angle, end_angle);
-    atext->end_angle--;
-  }
-  {
-    BITCODE_3BD extrusion;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &atext->extrusion, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("ATEXT.extrusion [3BD]");
-  }
-  {
-    BITCODE_BS font;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "font", &font, NULL)
-        && font == atext->font)
-      pass ();
-    else
-      fail ("ATEXT.font [BS] %hu != %hu", atext->font, font);
-    font++;
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "font", &font, 0)
-        && font == atext->font)
-      pass ();
-    else
-      fail ("ATEXT.font [BS] set+1 %hu != %hu", atext->font, font);
-    atext->font--;
-  }
-  {
-    BITCODE_BS font_19;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "font_19", &font_19, NULL)
-        && font_19 == atext->font_19)
-      pass ();
-    else
-      fail ("ATEXT.font_19 [BS] %hu != %hu", atext->font_19, font_19);
-    font_19++;
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "font_19", &font_19, 0)
-        && font_19 == atext->font_19)
-      pass ();
-    else
-      fail ("ATEXT.font_19 [BS] set+1 %hu != %hu", atext->font_19, font_19);
-    atext->font_19--;
-  }
-  {
-    BITCODE_BS is_reverse;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "is_reverse", &is_reverse, NULL)
-        && is_reverse == atext->is_reverse)
-      pass ();
-    else
-      fail ("ATEXT.is_reverse [BS] %hu != %hu", atext->is_reverse, is_reverse);
-    is_reverse++;
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "is_reverse", &is_reverse, 0)
-        && is_reverse == atext->is_reverse)
-      pass ();
-    else
-      fail ("ATEXT.is_reverse [BS] set+1 %hu != %hu", atext->is_reverse, is_reverse);
-    atext->is_reverse--;
-  }
-  {
-    BITCODE_BS is_shx;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "is_shx", &is_shx, NULL)
-        && is_shx == atext->is_shx)
-      pass ();
-    else
-      fail ("ATEXT.is_shx [BS] %hu != %hu", atext->is_shx, is_shx);
-    is_shx++;
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "is_shx", &is_shx, 0)
-        && is_shx == atext->is_shx)
-      pass ();
-    else
-      fail ("ATEXT.is_shx [BS] set+1 %hu != %hu", atext->is_shx, is_shx);
-    atext->is_shx--;
-  }
-  {
-    BITCODE_BS is_underlined;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "is_underlined", &is_underlined, NULL)
-        && is_underlined == atext->is_underlined)
-      pass ();
-    else
-      fail ("ATEXT.is_underlined [BS] %hu != %hu", atext->is_underlined, is_underlined);
-    is_underlined++;
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "is_underlined", &is_underlined, 0)
-        && is_underlined == atext->is_underlined)
-      pass ();
-    else
-      fail ("ATEXT.is_underlined [BS] set+1 %hu != %hu", atext->is_underlined, is_underlined);
-    atext->is_underlined--;
-  }
-  {
-    BITCODE_D2T left_offset;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "left_offset", &left_offset, NULL)
-        && left_offset == atext->left_offset)
-      pass ();
-    else
-      fail ("ATEXT.left_offset [D2T] %s != %s", atext->left_offset, left_offset);
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "left_offset", &left_offset, 0)
-        && left_offset == atext->left_offset)
-      pass ();
-    else
-      fail ("ATEXT.left_offset [D2T] set+1 %s != %s", atext->left_offset, left_offset);
-    atext->left_offset--;
-  }
-  {
-    BITCODE_D2T offset_from_arc;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "offset_from_arc", &offset_from_arc, NULL)
-        && offset_from_arc == atext->offset_from_arc)
-      pass ();
-    else
-      fail ("ATEXT.offset_from_arc [D2T] %s != %s", atext->offset_from_arc, offset_from_arc);
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "offset_from_arc", &offset_from_arc, 0)
-        && offset_from_arc == atext->offset_from_arc)
-      pass ();
-    else
-      fail ("ATEXT.offset_from_arc [D2T] set+1 %s != %s", atext->offset_from_arc, offset_from_arc);
-    atext->offset_from_arc--;
-  }
-  {
-    struct _dwg_object_entity* parent;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "parent", &parent, NULL)
-        && !memcmp (&parent, &atext->parent, sizeof (struct _dwg_object_entity*)))
-        pass ();
-    else
-        fail ("ATEXT.parent [struct _dwg_object_entity*]");
-  }
-  {
-    BITCODE_BD radius;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "radius", &radius, NULL)
-        && radius == atext->radius)
-      pass ();
-    else
-      fail ("ATEXT.radius [BD] %g != %g", atext->radius, radius);
-    radius++;
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "radius", &radius, 0)
-        && radius == atext->radius)
-      pass ();
-    else
-      fail ("ATEXT.radius [BD] set+1 %g != %g", atext->radius, radius);
-    atext->radius--;
-  }
-  {
-    BITCODE_D2T right_offset;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "right_offset", &right_offset, NULL)
-        && right_offset == atext->right_offset)
-      pass ();
-    else
-      fail ("ATEXT.right_offset [D2T] %s != %s", atext->right_offset, right_offset);
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "right_offset", &right_offset, 0)
-        && right_offset == atext->right_offset)
-      pass ();
-    else
-      fail ("ATEXT.right_offset [D2T] set+1 %s != %s", atext->right_offset, right_offset);
-    atext->right_offset--;
-  }
-  {
-    BITCODE_BD start_angle;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "start_angle", &start_angle, NULL)
-        && start_angle == atext->start_angle)
-      pass ();
-    else
-      fail ("ATEXT.start_angle [BD] %g != %g", atext->start_angle, start_angle);
-    start_angle++;
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "start_angle", &start_angle, 0)
-        && start_angle == atext->start_angle)
-      pass ();
-    else
-      fail ("ATEXT.start_angle [BD] set+1 %g != %g", atext->start_angle, start_angle);
-    atext->start_angle--;
-  }
-  {
-    BITCODE_T style;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "style", &style, NULL)
-        && style
-           ? strEQ ((char *)style, (char *)atext->style)
-           : !atext->style)
-      pass ();
-    else
-      fail ("ATEXT.style [T] '%s' <> '%s'", style, atext->style);
-  }
-  {
-    BITCODE_T t2;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "t2", &t2, NULL)
-        && t2
-           ? strEQ ((char *)t2, (char *)atext->t2)
-           : !atext->t2)
-      pass ();
-    else
-      fail ("ATEXT.t2 [T] '%s' <> '%s'", t2, atext->t2);
-  }
-  {
-    BITCODE_T t3;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "t3", &t3, NULL)
-        && t3
-           ? strEQ ((char *)t3, (char *)atext->t3)
-           : !atext->t3)
-      pass ();
-    else
-      fail ("ATEXT.t3 [T] '%s' <> '%s'", t3, atext->t3);
-  }
-  {
-    BITCODE_BS text_direction;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "text_direction", &text_direction, NULL)
-        && text_direction == atext->text_direction)
-      pass ();
-    else
-      fail ("ATEXT.text_direction [BS] %hu != %hu", atext->text_direction, text_direction);
-    text_direction++;
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "text_direction", &text_direction, 0)
-        && text_direction == atext->text_direction)
-      pass ();
-    else
-      fail ("ATEXT.text_direction [BS] set+1 %hu != %hu", atext->text_direction, text_direction);
-    atext->text_direction--;
-  }
-  {
-    BITCODE_BS text_position;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "text_position", &text_position, NULL)
-        && text_position == atext->text_position)
-      pass ();
-    else
-      fail ("ATEXT.text_position [BS] %hu != %hu", atext->text_position, text_position);
-    text_position++;
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "text_position", &text_position, 0)
-        && text_position == atext->text_position)
-      pass ();
-    else
-      fail ("ATEXT.text_position [BS] set+1 %hu != %hu", atext->text_position, text_position);
-    atext->text_position--;
-  }
-  {
-    BITCODE_D2T text_size;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "text_size", &text_size, NULL)
-        && text_size == atext->text_size)
-      pass ();
-    else
-      fail ("ATEXT.text_size [D2T] %s != %s", atext->text_size, text_size);
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "text_size", &text_size, 0)
-        && text_size == atext->text_size)
-      pass ();
-    else
-      fail ("ATEXT.text_size [D2T] set+1 %s != %s", atext->text_size, text_size);
-    atext->text_size--;
-  }
-  {
-    BITCODE_T text_value;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "text_value", &text_value, NULL)
-        && text_value
-           ? strEQ ((char *)text_value, (char *)atext->text_value)
-           : !atext->text_value)
-      pass ();
-    else
-      fail ("ATEXT.text_value [T] '%s' <> '%s'", text_value, atext->text_value);
-  }
-  {
-    BITCODE_BS wizard_flag;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "wizard_flag", &wizard_flag, NULL)
-        && wizard_flag == atext->wizard_flag)
-      pass ();
-    else
-      fail ("ATEXT.wizard_flag [BS] %hu != %hu", atext->wizard_flag, wizard_flag);
-    wizard_flag++;
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "wizard_flag", &wizard_flag, 0)
-        && wizard_flag == atext->wizard_flag)
-      pass ();
-    else
-      fail ("ATEXT.wizard_flag [BS] set+1 %hu != %hu", atext->wizard_flag, wizard_flag);
-    atext->wizard_flag--;
-  }
-  {
-    BITCODE_D2T xscale;
-    if (dwg_dynapi_entity_value (atext, "ATEXT", "xscale", &xscale, NULL)
-        && xscale == atext->xscale)
-      pass ();
-    else
-      fail ("ATEXT.xscale [D2T] %s != %s", atext->xscale, xscale);
-    if (dwg_dynapi_entity_set_value (atext, "ATEXT", "xscale", &xscale, 0)
-        && xscale == atext->xscale)
-      pass ();
-    else
-      fail ("ATEXT.xscale [D2T] set+1 %s != %s", atext->xscale, xscale);
-    atext->xscale--;
-  }
-  if (failed && (is_class_unstable ("ATEXT") || is_class_debugging ("ATEXT")))
-    {
-      ok ("%s failed %d tests (TODO unstable)", "ATEXT", failed);
       failed = 0;
     }
   return failed;
@@ -60901,10 +60901,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ALIGNMENTPARAMETERENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ARC)
     error += test_ARC(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ARCALIGNEDTEXT)
+    error += test_ARCALIGNEDTEXT(obj);
   else  if (obj->fixedtype == DWG_TYPE_ARC_DIMENSION)
     error += test_ARC_DIMENSION(obj);
-  else  if (obj->fixedtype == DWG_TYPE_ATEXT)
-    error += test_ATEXT(obj);
   else  if (obj->fixedtype == DWG_TYPE_ATTDEF)
     error += test_ATTDEF(obj);
   else  if (obj->fixedtype == DWG_TYPE_ATTRIB)
@@ -61487,10 +61487,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ALIGNMENTPARAMETERENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ARC)
     error += test_ARC (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ARCALIGNEDTEXT)
+    error += test_ARCALIGNEDTEXT (obj);
   else  if (obj->fixedtype == DWG_TYPE_ARC_DIMENSION)
     error += test_ARC_DIMENSION (obj);
-  else  if (obj->fixedtype == DWG_TYPE_ATEXT)
-    error += test_ATEXT (obj);
   else  if (obj->fixedtype == DWG_TYPE_ATTDEF)
     error += test_ATTDEF (obj);
   else  if (obj->fixedtype == DWG_TYPE_ATTRIB)
@@ -62109,20 +62109,20 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"ARC\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (Dwg_Entity_ARCALIGNEDTEXT);
+  size2 = dwg_dynapi_fields_size ("ARCALIGNEDTEXT");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_ARCALIGNEDTEXT): %d != "
+               "dwg_dynapi_fields_size (\"ARCALIGNEDTEXT\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (Dwg_Entity_ARC_DIMENSION);
   size2 = dwg_dynapi_fields_size ("ARC_DIMENSION");
   if (size1 != size2)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_ARC_DIMENSION): %d != "
                "dwg_dynapi_fields_size (\"ARC_DIMENSION\"): %d\n", size1, size2);
-      error++;
-    }
-  size1 = sizeof (Dwg_Entity_ATEXT);
-  size2 = dwg_dynapi_fields_size ("ATEXT");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(Dwg_Entity_ATEXT): %d != "
-               "dwg_dynapi_fields_size (\"ATEXT\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_ATTDEF);

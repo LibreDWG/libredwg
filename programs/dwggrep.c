@@ -347,15 +347,15 @@ match_TEXT (const char *restrict filename, const Dwg_Object *restrict obj)
 }
 
 static int
-match_ATEXT (const char *restrict filename, const Dwg_Object *restrict obj)
+match_ARCALIGNEDTEXT (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  MATCH_ENTITY (ATEXT, text_value, 1);
+  MATCH_ENTITY (ARCALIGNEDTEXT, text_value, 1);
   if (!opt_text)
     {
       // ignore the various sizes stored as text
-      MATCH_ENTITY (ATEXT, style, 7);
+      MATCH_ENTITY (ARCALIGNEDTEXT, style, 7);
     }
   return found;
 }
@@ -1650,7 +1650,7 @@ match_BLOCK_HEADER (const char *restrict filename,
 #endif
       ELSEMATCH (ATTDEF)
       ELSEMATCH (MTEXT)
-      ELSEMATCH (ATEXT)
+      ELSEMATCH (ARCALIGNEDTEXT)
       else if (obj->type == DWG_TYPE_INSERT)
         {
 #ifndef WITH_SUBENTS

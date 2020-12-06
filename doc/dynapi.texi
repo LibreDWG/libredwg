@@ -870,6 +870,75 @@ BD,	DXF 51
 @end vtable
 @end indentedblock
 
+@strong{ARCALIGNEDTEXT} @anchor{ARCALIGNEDTEXT}
+@cindex entity, ARCALIGNEDTEXT
+@vindex ARCALIGNEDTEXT
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item text_size
+D2T,	DXF 42
+@item xscale
+D2T,	DXF 41
+@item char_spacing
+D2T,	DXF 43
+@item style
+T,	DXF 7
+@item t2
+T,	DXF 2
+@item t3
+T,	DXF 3
+@item text_value
+T,	DXF 1
+@item offset_from_arc
+D2T,	DXF 44
+@item right_offset
+D2T,	DXF 45
+@item left_offset
+D2T,	DXF 46
+@item center
+3BD,	DXF 10
+@item radius
+BD,	DXF 40
+@item start_angle
+BD,	DXF 50
+@item end_angle
+BD,	DXF 51
+@item extrusion
+3BD,	DXF 210
+@item color
+BL,	DXF 90
+@item is_reverse
+BS,	DXF 70
+@item text_direction
+BS,	DXF 71
+@item alignment
+BS,	DXF 72
+@item text_position
+BS,	DXF 73
+@item font_19
+BS,	DXF 74
+@item bs2
+BS,	DXF 75
+@item is_underlined
+BS,	DXF 76
+@item bs1
+BS,	DXF 77
+@item font
+BS,	DXF 78
+@item is_shx
+BS,	DXF 79
+@item wizard_flag
+BS,	DXF 280
+@item arc_handle
+H,	DXF 330
+
+@end vtable
+@end indentedblock
+
 @strong{ARC_DIMENSION} @anchor{ARC_DIMENSION}
 @cindex entity, ARC_DIMENSION
 @vindex ARC_DIMENSION
@@ -943,75 +1012,6 @@ B,	DXF 71
 3BD,	DXF 16
 @item leader2_pt
 3BD,	DXF 17
-
-@end vtable
-@end indentedblock
-
-@strong{ATEXT} @anchor{ATEXT}
-@cindex entity, ATEXT
-@vindex ATEXT
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_entity*
-@item text_size
-D2T,	DXF 42
-@item xscale
-D2T,	DXF 41
-@item char_spacing
-D2T,	DXF 43
-@item style
-T,	DXF 7
-@item t2
-T,	DXF 2
-@item t3
-T,	DXF 3
-@item text_value
-T,	DXF 1
-@item offset_from_arc
-D2T,	DXF 44
-@item right_offset
-D2T,	DXF 45
-@item left_offset
-D2T,	DXF 46
-@item center
-3BD,	DXF 10
-@item radius
-BD,	DXF 40
-@item start_angle
-BD,	DXF 50
-@item end_angle
-BD,	DXF 51
-@item extrusion
-3BD,	DXF 210
-@item color
-BL,	DXF 90
-@item is_reverse
-BS,	DXF 70
-@item text_direction
-BS,	DXF 71
-@item alignment
-BS,	DXF 72
-@item text_position
-BS,	DXF 73
-@item font_19
-BS,	DXF 74
-@item bs2
-BS,	DXF 75
-@item is_underlined
-BS,	DXF 76
-@item bs1
-BS,	DXF 77
-@item font
-BS,	DXF 78
-@item is_shx
-BS,	DXF 79
-@item wizard_flag
-BS,	DXF 280
-@item arc_handle
-H,	DXF 330
 
 @end vtable
 @end indentedblock

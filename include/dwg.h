@@ -186,7 +186,7 @@ typedef BITCODE_DOUBLE BITCODE_BD;
 #define FORMAT_BD "%f"
 typedef BITCODE_RC BITCODE_4BITS;
 #define FORMAT_4BITS "%1x"
-/* double stored as string. ATEXT */
+/* double stored as string. ARCALIGNEDTEXT */
 typedef BITCODE_TV BITCODE_D2T;
 #define FORMAT_D2T "%s"
 
@@ -457,7 +457,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_ASSOCVALUEDEPENDENCY,
   DWG_TYPE_ASSOCVARIABLE,
   DWG_TYPE_ASSOCVERTEXACTIONPARAM,
-  DWG_TYPE_ATEXT,
+  DWG_TYPE_ARCALIGNEDTEXT,
   DWG_TYPE_BACKGROUND,
   DWG_TYPE_BASEPOINTPARAMETERENTITY,
   DWG_TYPE_BLKREFOBJECTCONTEXTDATA,
@@ -6923,7 +6923,7 @@ typedef struct _dwg_object_LAYERFILTER
   BITCODE_T *names;
 } Dwg_Object_LAYERFILTER;
 
-typedef struct _dwg_entity_ATEXT
+typedef struct _dwg_entity_ARCALIGNEDTEXT
 {
   struct _dwg_object_entity *parent;
   BITCODE_D2T text_size;	/*!< DXF 42 */
@@ -6954,7 +6954,7 @@ typedef struct _dwg_entity_ATEXT
   BITCODE_BS is_shx;		/*!< DXF 79 */
   BITCODE_BS wizard_flag;	/*!< DXF 280 */
   BITCODE_H arc_handle;		/*!< DXF 330 */
-} Dwg_Entity_ATEXT;
+} Dwg_Entity_ARCALIGNEDTEXT;
 
 typedef struct _dwg_entity_RTEXT
 {
@@ -7865,7 +7865,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_WIPEOUT *WIPEOUT;
     /* debugging */
     Dwg_Entity_ALIGNMENTPARAMETERENTITY *ALIGNMENTPARAMETERENTITY;
-    Dwg_Entity_ATEXT *ATEXT;
+    Dwg_Entity_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
     Dwg_Entity_BASEPOINTPARAMETERENTITY *BASEPOINTPARAMETERENTITY;
     Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;
     Dwg_Entity_FLIPPARAMETERENTITY *FLIPPARAMETERENTITY;
@@ -9347,7 +9347,7 @@ EXPORT int dwg_setup_SUN (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
 #ifdef DEBUG_CLASSES
   EXPORT int dwg_setup_ALIGNMENTPARAMETERENTITY (Dwg_Object *obj);
-  EXPORT int dwg_setup_ATEXT (Dwg_Object *obj);
+  EXPORT int dwg_setup_ARCALIGNEDTEXT (Dwg_Object *obj);
   EXPORT int dwg_setup_BASEPOINTPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_EXTRUDEDSURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_FLIPPARAMETERENTITY (Dwg_Object *obj);

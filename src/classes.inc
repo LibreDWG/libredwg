@@ -299,7 +299,7 @@
   DEBUGGING_CLASS     (ACTION, REVOLVEDSURFACE)   /* ent */
   DEBUGGING_CLASS     (ACTION, SWEPTSURFACE)      /* ent */
   DEBUGGING_CLASS_DXF (ACTION, TABLE, ACAD_TABLE) /* ent, r2010+ needs subclassing */
-  DEBUGGING_CLASS     (ACTION, ATEXT)             // ent expresstools
+  DEBUGGING_CLASS     (ACTION, ARCALIGNEDTEXT)    // ent expresstools
   DEBUGGING_CLASS     (ACTION, RTEXT)             // ent expresstools
   DEBUGGING_CLASS     (ACTION, MPOLYGON)          // hatch-like ent
   DEBUGGING_CLASS_CPP (ACTION, NAVISWORKSMODEL, AcDbNavisworksModel)   /* ent,
