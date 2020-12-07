@@ -312,7 +312,7 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
                                   (const BITCODE_T) "Global", NULL);
         Dwg_Object_XRECORD *xrecord = dwg_add_XRECORD (dict, (const BITCODE_T) "REFRACTIONTILE");
         dwg_add_XRECORD_int16 (xrecord, 270, 1);
-        dwg_add_XRECORD_int16 (xrecord, 271, 1);
+        dwg_add_XRECORD_int32 (xrecord, 90, 1);
       }
       break;
     case DWG_TYPE_OLE2FRAME:

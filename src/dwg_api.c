@@ -24293,28 +24293,27 @@ dwg_add_XRECORD (Dwg_Object_DICTIONARY *restrict dict,
 
 static Dwg_Resbuf *rbuf_last (Dwg_Resbuf *rbuf)
 {
-  Dwg_Resbuf *xdata = rbuf;
+  Dwg_Resbuf *prev = rbuf;
   while (rbuf)
     {
-      xdata = rbuf;
+      prev = rbuf;
       rbuf = rbuf->nextrb;
     }
-  return xdata;
+  return prev;
 }
 
-static Dwg_Resbuf * rbuf_add (Dwg_Resbuf **rbuf)
+static Dwg_Resbuf * rbuf_add (Dwg_Resbuf *rbuf)
 {
-  Dwg_Resbuf *xdata = rbuf_last (*rbuf);
-  if (!xdata)
+  rbuf = rbuf_last (rbuf);
+  if (!rbuf)
     {
-      *rbuf = (Dwg_Resbuf *)calloc (1, sizeof (Dwg_Resbuf));
+      return (Dwg_Resbuf *)calloc (1, sizeof (Dwg_Resbuf));
     }
   else
     {
-      xdata->nextrb = (Dwg_Resbuf *)calloc (1, sizeof (Dwg_Resbuf));
-      *rbuf = xdata->nextrb;
+      rbuf->nextrb = (Dwg_Resbuf *)calloc (1, sizeof (Dwg_Resbuf));
+      return rbuf->nextrb;
     }
-  return *rbuf;
 }
 
 #define CHECK_XRECORD                                                   \
@@ -24331,8 +24330,10 @@ dwg_add_XRECORD_bool (Dwg_Object_XRECORD *restrict _obj,
                       const short dxf, const BITCODE_B value)
 {
   Dwg_Resbuf *rbuf;
-  CHECK_XRECORD;
-  rbuf = rbuf_add (&_obj->xdata);
+  CHECK_XRECORD;    
+  rbuf = rbuf_add (_obj->xdata);
+  if (!_obj->xdata)
+    _obj->xdata = rbuf;
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.i8 = value;
@@ -24352,11 +24353,13 @@ dwg_add_XRECORD_int8 (Dwg_Object_XRECORD *restrict _obj,
       LOG_ERROR ("Not a XRECORD, but %s", dwg_type_name (obj->fixedtype));
       return NULL;
     }
-  rbuf = rbuf_add (&_obj->xdata);
+  rbuf = rbuf_add (_obj->xdata);
+  if (!_obj->xdata)
+    _obj->xdata = rbuf;
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.i8 = value;
-  _obj->xdata_size += 3;
+  _obj->xdata_size += 3; // 2 + 1
   return _obj;
 }
 
@@ -24372,10 +24375,13 @@ dwg_add_XRECORD_int16 (Dwg_Object_XRECORD *restrict _obj,
       LOG_ERROR ("Not a XRECORD, but %s", dwg_type_name (obj->fixedtype));
       return NULL;
     }
-  rbuf = rbuf_add (&_obj->xdata);
+  rbuf = rbuf_add (_obj->xdata);
+  if (!_obj->xdata)
+    _obj->xdata = rbuf;
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.i16 = value;
+  _obj->xdata_size += 4; // 2 + 2
   return _obj;
 }
 
@@ -24391,11 +24397,13 @@ dwg_add_XRECORD_int32 (Dwg_Object_XRECORD *restrict _obj,
       LOG_ERROR ("Not a XRECORD, but %s", obj ? dwg_type_name (obj->fixedtype) : "NULL");
       return NULL;
     }
-  rbuf = rbuf_add (&_obj->xdata);
+  rbuf = rbuf_add (_obj->xdata);
+  if (!_obj->xdata)
+    _obj->xdata = rbuf;
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.i32 = value;
-  _obj->xdata_size += 6;
+  _obj->xdata_size += 6; // 2 + 4
   return _obj;
 }
 
@@ -24412,11 +24420,13 @@ dwg_add_XRECORD_int64 (Dwg_Object_XRECORD *restrict _obj,
       LOG_ERROR ("Not a XRECORD, but %s", dwg_type_name (obj->fixedtype));
       return NULL;
     }
-  rbuf = rbuf_add (&_obj->xdata);
+  rbuf = rbuf_add (_obj->xdata);
+  if (!_obj->xdata)
+    _obj->xdata = rbuf;
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.i64 = value;
-  _obj->xdata_size += 10;
+  _obj->xdata_size += 10; // 2 + 8
   return _obj;
 }
 
@@ -24432,11 +24442,13 @@ dwg_add_XRECORD_real (Dwg_Object_XRECORD *restrict _obj,
       LOG_ERROR ("Not a XRECORD, but %s", dwg_type_name (obj->fixedtype));
       return NULL;
     }
-  rbuf = rbuf_add (&_obj->xdata);
+  rbuf = rbuf_add (_obj->xdata);
+  if (!_obj->xdata)
+    _obj->xdata = rbuf;
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.dbl = value;
-  _obj->xdata_size += 10;
+  _obj->xdata_size += 10; // 2 + 8
   return _obj;
 }
 
@@ -24452,13 +24464,15 @@ dwg_add_XRECORD_pointd3d (Dwg_Object_XRECORD *restrict _obj,
       LOG_ERROR ("Not a XRECORD, but %s", dwg_type_name (obj->fixedtype));
       return NULL;
     }
-  rbuf = rbuf_add (&_obj->xdata);
+  rbuf = rbuf_add (_obj->xdata);
+  if (!_obj->xdata)
+    _obj->xdata = rbuf;
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.pt[0] = pt->x;
   rbuf->value.pt[1] = pt->y;
   rbuf->value.pt[2] = pt->z;
-  _obj->xdata_size += 26;
+  _obj->xdata_size += 26; // 2 + 3*8
   return _obj;
 }
 
@@ -24467,13 +24481,24 @@ dwg_add_XRECORD_binary (Dwg_Object_XRECORD *restrict _obj,
                         const short dxf,
                         const int size, const BITCODE_RC* data)
 {
-  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  int error;
+  Dwg_Resbuf *rbuf;
+  Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+  Dwg_Data *dwg = obj ? obj->parent : NULL;
+  if (obj->fixedtype != DWG_TYPE_XRECORD)
+    {
+      LOG_ERROR ("Not a XRECORD, but %s", dwg_type_name (obj->fixedtype));
+      return NULL;
+    }
+  rbuf = rbuf_add (_obj->xdata);
+  if (!_obj->xdata)
+    _obj->xdata = rbuf;
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.str.size = size;
   rbuf->value.str.u.data = malloc (size);
   memcpy (rbuf->value.str.u.data, data, size);
-  _obj->xdata_size += 3 + size;
+  _obj->xdata_size += 3 + size; // 2 + 1 + len
   return _obj;
 }
 
@@ -24492,7 +24517,9 @@ dwg_add_XRECORD_string (Dwg_Object_XRECORD *restrict _obj,
       LOG_ERROR ("Not a XRECORD, but %s", dwg_type_name (obj->fixedtype));
       return NULL;
     }
-  rbuf = rbuf_add (&_obj->xdata);
+  rbuf = rbuf_add (_obj->xdata);
+  if (!_obj->xdata)
+    _obj->xdata = rbuf;
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.str.size = len;
@@ -24522,11 +24549,22 @@ EXPORT Dwg_Object_XRECORD *
 dwg_add_XRECORD_handle (Dwg_Object_XRECORD *restrict _obj,
                         const short dxf, const Dwg_Handle hdl)
 {
-  Dwg_Resbuf *rbuf = rbuf_add (&_obj->xdata);
+  int error;
+  Dwg_Resbuf *rbuf;
+  Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
+  Dwg_Data *dwg = obj ? obj->parent : NULL;
+  if (obj->fixedtype != DWG_TYPE_XRECORD)
+    {
+      LOG_ERROR ("Not a XRECORD, but %s", dwg_type_name (obj->fixedtype));
+      return NULL;
+    }
+  rbuf = rbuf_add (_obj->xdata);
+  if (!_obj->xdata)
+    _obj->xdata = rbuf;
   _obj->num_xdata++;
   rbuf->type = dxf;
   memcpy (rbuf->value.hdl, &hdl, sizeof (Dwg_Handle));
-  _obj->xdata_size += 10;
+  _obj->xdata_size += 10; // 2 + 8
   return _obj;
 }
 
