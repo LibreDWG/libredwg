@@ -25298,40 +25298,46 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
-    char acis_data[1024];
+    dwg_point_3d ext;
+    char acis_data[1048];
     char date[48];
     unsigned date_size = dwg_acis_date (date, 48);
-    const char torus_acis_format[] = /* len = 815 */
-      "21200 0 2 0 \n"
-      "16 Autodesk AutoCAD 17 ASM 12.0.1.915 NT %u %s \n"
-      "1 1e-06 1e-10 \n"
-      "asmheader $-1 $-1 11 212.0.1.915 #\n"
-      "body $2 $-1 $-1 $3 $-1 $-1 #\n"
-      "ref_vt-eye-attrib $-1 $-1 $-1 $-1 $1 $4 $5 #\n"
-      "lump $6 $-1 $-1 $-1 $7 $1 #\n"
-      "eye_refinement $-1 $-1 5 grid  $1 3 tri $1 4 surf $0 3 adj $0 4 grad $0 9 postcheck $0 4 stol 12.1701 4 ntol 30 4 dsil 0 8 flatness 0 7 pixarea 0 4 hmax 0 6 gridar 0 5 mgrid $3000 5 ugrid $0 5 vgrid $0 10 end_fields #\n"
-      "vertex_template $-1 $-1 $3 $0 $1 $8 #\n"
-      "ref_vt-eye-attrib $-1 $-1 $-1 $-1 $3 $4 $5 #\n"
-      "shell $8 $-1 $-1 $-1 $-1 $9 $-1 $3 #\n"
-      "ref_vt-eye-attrib $-1 $-1 $-1 $-1 $7 $4 $5 #\n"
-      "face $10 $-1 $-1 $-1 $-1 $7 $-1 $11 forward single #\n"
-      "fmesh-eye-attrib $-1 $-1 $12 $-1 $9 #\n"
-      "torus-surface $-1 $-1 $-1 " "%g %g %g "
-                                   "%g %g %g "
-                                   "%g %g "
-                                   "%g %g %g " "F F F F F #\n"
-      "ref_vt-eye-attrib $-1 $-1 $-1 $10 $9 $4 $5 #\n"
-      "End-of-ASM-data";
-    snprintf (acis_data, 1024, torus_acis_format,
+    // acis version 106 (r14) would be nicer
+    const char torus_acis_format[] = /* len = 890 => 957 */
+      "700 19 1 0          \n"
+      "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+      "%f %f %f \n"
+      "body $-1 -1 $-1 $1 $-1 $2 # \n"
+      "lump $-1 -1 $-1 $-1 $3 $0 # \n"
+      "transform $-1 -1 " "1 0 0 " "0 1 0 " "0 0 1 " "%g %g %g " "1 no_rotate no_reflect no_shear # \n"
+      "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 # \n"
+      "face $5 -1 $-1 $-1 $6 $3 $-1 $7 forward single # \n"
+      "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 # \n"
+      "loop $-1 -1 $-1 $8 $9 $4 # \n"
+      "torus-surface $-1 -1 $-1 0 0 0 0 0 1 %g %g 1 0 0 forward_v I I I I # \n"
+      "loop $-1 -1 $-1 $-1 $10 $4 # \n"
+      "coedge $-1 -1 $-1 $9 $9 $-1 $11 reversed $6 $-1 # \n"
+      "coedge $-1 -1 $-1 $10 $10 $-1 $12 reversed $8 $-1 # \n"
+      "edge $13 -1 $-1 $14 1 $14 0 $9 $-1 forward @7 unknown # \n"
+      "edge $15 -1 $-1 $16 1 $16 0 $10 $-1 forward @7 unknown # \n"
+      "color-adesk-attrib $-1 -1 $-1 $-1 $11 256 # \n"
+      "vertex $-1 -1 $-1 $11 $17 # \n"
+      "color-adesk-attrib $-1 -1 $-1 $-1 $12 256 # \n"
+      "vertex $-1 -1 $-1 $12 $18 # \n"
+      "point $-1 -1 $-1 0 0 %g # \n"
+      "point $-1 -1 $-1 0 0 %g # \n";
+    ext.x = origin_pt->x + major_radius;
+    ext.y = origin_pt->y + major_radius;
+    ext.z = origin_pt->z + minor_radius;
+    snprintf (acis_data, 1048, torus_acis_format,
               date_size, date,
+              ext.x, ext.y, ext.z,
               origin_pt->x, origin_pt->y, origin_pt->z,
-              // => history_node.trans[8-10] (=rotation)
-              0.0, 0.0, 0.0,
               major_radius, minor_radius,
-              // => history_node.trans[0-3] (=rotation)
-              0.0, 0.0, 0.0);
+              major_radius, -major_radius);
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
     solidobj = dwg_obj_generic_to_object (solid, &err);
+    solid->wireframe_data_present = 1;
     solid->point_present = 1;
     solid->point.x = origin_pt->x;
     solid->point.y = origin_pt->y;

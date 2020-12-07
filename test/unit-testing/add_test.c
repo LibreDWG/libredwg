@@ -256,7 +256,7 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
     case DWG_TYPE_REGION:
       dwg_add_REGION (hdr,
         "400 26 1 0\n"
-        "16 Autodesk AutoCAD 20 ASM 223.0.1.1930 OSX 24 Wed Mar 18 07:23:29 2020 \n"
+        "8 LibreDWG 20 ASM 223.0.1.1930 OSX 24 Wed Mar 18 07:23:29 2020 \n"
         "1 9.999999999999999547e-07 1.000000000000000036e-10 \n"
         "body $-1 $1 $-1 $-1 #\n"
         "lump $-1 $-1 $2 $0 #\n"
