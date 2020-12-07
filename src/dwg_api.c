@@ -25208,8 +25208,8 @@ dwg_add_ACSH_SPHERE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
 
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                  const dwg_point_3d *restrict origin_pt, // no rotation
-                  const double radius)
+                const dwg_point_3d *restrict origin_pt, // no rotation
+                const double radius)
 {
   int err;
   Dwg_Data *dwg;
@@ -25231,8 +25231,31 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
-    solid = dwg_add_3DSOLID (blkhdr, "sphere"); // origin_pt
+    dwg_point_3d ext;
+    char acis_data[650];
+    char date[48];
+    unsigned date_size = dwg_acis_date (date, 48);
+    const char sphere_acis_format[] = /* len = 524 => 552 */
+      "700 19 1 0          \n"
+      "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+      "%f 9.999999999999999547e-07 1.000000000000000036e-10 \n"
+      "body $-1 -1 $-1 $1 $-1 $2 #\n"
+      "lump $-1 -1 $-1 $-1 $3 $0 #\n"
+      "transform $-1 -1 " "1 0 0 " "0 1 0 " "0 0 1 " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
+      "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
+      "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
+      "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
+      "sphere-surface $-1 -1 $-1 0 0 0 %g 1 0 0 0 0 1 forward_v I I I I #\n";
+    ext.x = origin_pt->x + (radius * 2);
+    ext.y = origin_pt->y + radius;
+    ext.z = origin_pt->z + radius;
+    snprintf (acis_data, 650, sphere_acis_format,
+              date_size, date,
+              ext.x, origin_pt->x, origin_pt->y, origin_pt->z,
+              radius);
+    solid = dwg_add_3DSOLID (blkhdr, acis_data);
     solidobj = dwg_obj_generic_to_object (solid, &err);
+    solid->wireframe_data_present = 1;
     solid->point_present = 1;
     solid->point.x = origin_pt->x;
     solid->point.y = origin_pt->y;
@@ -25306,7 +25329,7 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     const char torus_acis_format[] = /* len = 890 => 957 */
       "700 19 1 0          \n"
       "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
-      "%f %f %f \n"
+      "%f 9.999999999999999547e-07 1.000000000000000036e-10 \n"
       "body $-1 -1 $-1 $1 $-1 $2 # \n"
       "lump $-1 -1 $-1 $-1 $3 $0 # \n"
       "transform $-1 -1 " "1 0 0 " "0 1 0 " "0 0 1 " "%g %g %g " "1 no_rotate no_reflect no_shear # \n"
@@ -25326,13 +25349,12 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "vertex $-1 -1 $-1 $12 $18 # \n"
       "point $-1 -1 $-1 0 0 %g # \n"
       "point $-1 -1 $-1 0 0 %g # \n";
-    ext.x = origin_pt->x + major_radius;
+    ext.x = origin_pt->x + (2 * major_radius);
     ext.y = origin_pt->y + major_radius;
     ext.z = origin_pt->z + minor_radius;
     snprintf (acis_data, 1048, torus_acis_format,
               date_size, date,
-              ext.x, ext.y, ext.z,
-              origin_pt->x, origin_pt->y, origin_pt->z,
+              ext.x, origin_pt->x, origin_pt->y, origin_pt->z,
               major_radius, minor_radius,
               major_radius, -major_radius);
     solid = dwg_add_3DSOLID (blkhdr, acis_data);

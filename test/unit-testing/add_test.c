@@ -631,6 +631,12 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
         dwg_add_TORUS (hdr, &pt, 19.0, 2.789983);
       }
       break;
+    case DWG_TYPE_ACSH_SPHERE_CLASS:
+      {
+        const dwg_point_3d pt = { 10.0, 10.0, 0 };
+        dwg_add_SPHERE (hdr, &pt, 15.0);
+      }
+      break;
 
     default:
       fail ("No add method yet type %s", name);
@@ -750,6 +756,7 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       TEST_OBJECT (VBA_PROJECT);
       TEST_OBJECT (LAYOUT);
       TEST_OBJECT (ACSH_TORUS_CLASS);
+      TEST_OBJECT (ACSH_SPHERE_CLASS);
     default:
       fail ("No test yet for type %s", name);
     }
@@ -828,6 +835,7 @@ main (int argc, char *argv[])
   error = test_add (DWG_TYPE_VBA_PROJECT, "add_vba_2000.dwg");
   error = test_add (DWG_TYPE_LAYOUT, "add_layout_2000.dwg");
   error = test_add (DWG_TYPE_ACSH_TORUS_CLASS, "add_torus_2000.dwg");
+  error = test_add (DWG_TYPE_ACSH_SPHERE_CLASS, "add_sphere_2000.dwg");
 
   return error;
 }

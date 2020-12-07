@@ -6920,7 +6920,7 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_NO_DWG_ADD_EXTRUDED_SOLID
 #define HAVE_NO_DWG_ADD_EXTRUDED_PATH
 #define HAVE_NO_DWG_ADD_REVOLVED_SOLID
-#define HAVE_NO_DWG_ADD_SPHERE
+#define HAVE_DWG_ADD_SPHERE
 #define HAVE_DWG_ADD_TORUS
 #define HAVE_NO_DWG_ADD_WEDGE
 
