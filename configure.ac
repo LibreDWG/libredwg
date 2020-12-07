@@ -133,8 +133,20 @@ case $CFLAGS in
      *-fsanitize=undefined*)   ax_cv_have_aligned_access_required=yes  ;;
      *-fsanitize=*,undefined*) ax_cv_have_aligned_access_required=yes  ;;
 esac
+case $CC in
+     *-fsanitize=undefined*)   ax_cv_have_aligned_access_required=yes  ;;
+     *-fsanitize=*,undefined*) ax_cv_have_aligned_access_required=yes  ;;
+esac
 AX_CHECK_ALIGNED_ACCESS_REQUIRED
 
+case $CC in
+     *-fsanitize=address*)     HAVE_ASAN=yes ;;
+     *-fsanitize=*,address*)   HAVE_ASAN=yes ;;
+esac
+case $CC in
+     *-fsanitize=leak*)        HAVE_ASAN=yes ;;
+     *-fsanitize=*,leak*)      HAVE_ASAN=yes ;;
+esac
 case $CFLAGS in
      *-fsanitize=address*)     HAVE_ASAN=yes ;;
      *-fsanitize=*,address*)   HAVE_ASAN=yes ;;
