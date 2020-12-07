@@ -2141,6 +2141,7 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                   VALUE_RL (0, 0);
                   return error;
                 }
+              // FIXME: Split into 4096 blocks
               FIELD_VALUE (block_size) = (BITCODE_BL*)calloc (2, sizeof (BITCODE_BL));
               FIELD_VALUE (block_size[0]) = strlen ((char*)FIELD_VALUE (acis_data));
               FIELD_VALUE (block_size[1]) = 0;

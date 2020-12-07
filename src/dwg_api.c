@@ -23608,6 +23608,10 @@ dwg_add_3DSOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->version = 1;
   for (unsigned i = 0; i < j; i++)
     {
+      if (i == j - 1)
+        _obj->block_size[i] = len % 4096;
+      else
+        _obj->block_size[i] = 4096;
       _obj->encr_sat_data[i] = dwg_encrypt_SAT1 (
           _obj->block_size[i], _obj->acis_data, &acis_data_idx);
     }
