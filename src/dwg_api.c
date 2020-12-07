@@ -24736,26 +24736,30 @@ dwg_add_EVALUATION_GRAPH (Dwg_Object_ACSH_HISTORY_CLASS *restrict history,
   int err;
   Dwg_Object *hdr = dwg_obj_generic_to_object (history, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
-  API_ADD_OBJECT (EVALUATION_GRAPH);
-  obj->tio.object->ownerhandle = dwg_add_handleref (
-      dwg, 5, dwg_obj_generic_handlevalue (history), obj);
-  _obj->has_graph = has_graph;
-  _obj->unknown1 = 2;
-  _obj->unknown2 = 2;
-  _obj->nodeid = nodeid;
-  _obj->node_edge1 = -1;
-  _obj->node_edge2 = -1;
-  _obj->node_edge3 = 0;
-  _obj->node_edge4 = 0;
-  if (!num_evalexpr)
+  if (!dwg)
+    return NULL;
+  {
+    API_ADD_OBJECT (EVALUATION_GRAPH);
+    obj->tio.object->ownerhandle = dwg_add_handleref (
+        dwg, 5, dwg_obj_generic_handlevalue (history), obj);
+    _obj->has_graph = has_graph;
+    _obj->unknown1 = 2;
+    _obj->unknown2 = 2;
+    _obj->nodeid = nodeid;
+    _obj->node_edge1 = -1;
+    _obj->node_edge2 = -1;
+    _obj->node_edge3 = 0;
+    _obj->node_edge4 = 0;
+    if (!num_evalexpr)
+      return _obj;
+    _obj->num_evalexpr = num_evalexpr;
+    _obj->evalexpr = calloc (num_evalexpr, sizeof (BITCODE_H));
+    for (int i = 0; i < num_evalexpr; i++)
+      {
+        _obj->evalexpr[i] = evalexpr[i];
+      }
     return _obj;
-  _obj->num_evalexpr = num_evalexpr;
-  _obj->evalexpr = calloc (num_evalexpr, sizeof (BITCODE_H));
-  for (int i = 0; i < num_evalexpr; i++)
-    {
-      _obj->evalexpr[i] = evalexpr[i];
-    }
-  return _obj;
+  }
 }
 Dwg_Object_ACSH_HISTORY_CLASS*
 dwg_add_ACSH_HISTORY_CLASS (Dwg_Entity_3DSOLID *restrict region,
@@ -24764,14 +24768,18 @@ dwg_add_ACSH_HISTORY_CLASS (Dwg_Entity_3DSOLID *restrict region,
   int err;
   Dwg_Object *hdr = dwg_obj_generic_to_object (region, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
-  API_ADD_OBJECT (ACSH_HISTORY_CLASS);
-  obj->tio.object->ownerhandle = dwg_add_handleref (
-      dwg, 5, dwg_obj_generic_handlevalue (region), obj);
-  _obj->major = 27;
-  _obj->minor = 52;
-  _obj->h_nodeid = h_nodeid;
-  _obj->record_history = 1;
-  return _obj;
+  if (!dwg)
+    return NULL;
+  {
+    API_ADD_OBJECT (ACSH_HISTORY_CLASS);
+    obj->tio.object->ownerhandle = dwg_add_handleref (
+        dwg, 5, dwg_obj_generic_handlevalue (region), obj);
+    _obj->major = 27;
+    _obj->minor = 52;
+    _obj->h_nodeid = h_nodeid;
+    _obj->record_history = 1;
+    return _obj;
+  }
 }
 
 static void
@@ -24825,12 +24833,16 @@ dwg_add_ACSH_BOX_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   int err;
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
-  API_ADD_OBJECT (ACSH_BOX_CLASS);
-  dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, rotation);
-  _obj->length = length;
-  _obj->width = width;
-  _obj->height = height;
-  return _obj;
+  if (!dwg)
+    return NULL;
+  {
+    API_ADD_OBJECT (ACSH_BOX_CLASS);
+    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, rotation);
+    _obj->length = length;
+    _obj->width = width;
+    _obj->height = height;
+    return _obj;
+  }
 }
 
 EXPORT Dwg_Entity_3DSOLID*
@@ -24891,19 +24903,23 @@ dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   int err;
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
-  API_ADD_OBJECT (ACSH_CHAMFER_CLASS);
-  dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, rotation);
-  _obj->bl92 = bl92;
-  _obj->base_dist = base_dist;
-  _obj->other_dist = other_dist;
-  _obj->num_edges = num_edges;
-  if (num_edges)
-    {
-      _obj->edges = calloc (num_edges, 4);
-      memcpy (_obj->edges, edges, num_edges * 4);
-    }
-  _obj->bl95 = bl95;
-  return _obj;
+  if (!dwg)
+    return NULL;
+  {
+    API_ADD_OBJECT (ACSH_CHAMFER_CLASS);
+    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, rotation);
+    _obj->bl92 = bl92;
+    _obj->base_dist = base_dist;
+    _obj->other_dist = other_dist;
+    _obj->num_edges = num_edges;
+    if (num_edges)
+      {
+        _obj->edges = calloc (num_edges, 4);
+        memcpy (_obj->edges, edges, num_edges * 4);
+      }
+    _obj->bl95 = bl95;
+    return _obj;
+  }
 }
 
 // ACSH_CHAMFER_CLASS
@@ -24964,13 +24980,17 @@ dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   int err;
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
-  API_ADD_OBJECT (ACSH_CONE_CLASS);
-  dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, rotation);
-  _obj->base_radius = base_radius;
-  _obj->top_major_radius = top_major_radius;
-  _obj->top_minor_radius = top_minor_radius;
-  _obj->top_x_radius = top_x_radius;
-  return _obj;
+  if (!dwg)
+    return NULL;
+  {
+    API_ADD_OBJECT (ACSH_CONE_CLASS);
+    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, rotation);
+    _obj->base_radius = base_radius;
+    _obj->top_major_radius = top_major_radius;
+    _obj->top_minor_radius = top_minor_radius;
+    _obj->top_x_radius = top_x_radius;
+    return _obj;
+  }
 }
 
 EXPORT Dwg_Entity_3DSOLID*
@@ -25030,13 +25050,17 @@ dwg_add_ACSH_CYLINDER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   int err;
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
-  API_ADD_OBJECT (ACSH_CYLINDER_CLASS);
-  dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, 0.0);
-  _obj->height = height;
-  _obj->major_radius = major_radius;
-  _obj->minor_radius = minor_radius;
-  _obj->x_radius = x_radius;
-  return _obj;
+  if (!dwg)
+    return NULL;
+  {
+    API_ADD_OBJECT (ACSH_CYLINDER_CLASS);
+    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, 0.0);
+    _obj->height = height;
+    _obj->major_radius = major_radius;
+    _obj->minor_radius = minor_radius;
+    _obj->x_radius = x_radius;
+    return _obj;
+  }
 }
 
 EXPORT Dwg_Entity_3DSOLID*
@@ -25095,13 +25119,17 @@ dwg_add_ACSH_PYRAMID_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   int err;
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
-  API_ADD_OBJECT (ACSH_PYRAMID_CLASS);
-  dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, rotation);
-  _obj->height = height;
-  _obj->sides = sides;
-  _obj->radius = radius;
-  _obj->topradius = topradius;
-  return _obj;
+  if (!dwg)
+    return NULL;
+  {
+    API_ADD_OBJECT (ACSH_PYRAMID_CLASS);
+    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, rotation);
+    _obj->height = height;
+    _obj->sides = sides;
+    _obj->radius = radius;
+    _obj->topradius = topradius;
+    return _obj;
+  }
 }
 
 EXPORT Dwg_Entity_3DSOLID*
@@ -25164,10 +25192,14 @@ dwg_add_ACSH_SPHERE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   int err;
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
-  API_ADD_OBJECT (ACSH_SPHERE_CLASS);
-  dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, 0.0);
-  _obj->radius = radius;
-  return _obj;
+  if (!dwg)
+    return NULL;
+  {
+    API_ADD_OBJECT (ACSH_SPHERE_CLASS);
+    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, 0.0);
+    _obj->radius = radius;
+    return _obj;
+  }
 }
 
 EXPORT Dwg_Entity_3DSOLID*
@@ -25225,11 +25257,15 @@ dwg_add_ACSH_TORUS_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   int err;
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
-  API_ADD_OBJECT (ACSH_TORUS_CLASS);
-  dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, 0.0);
-  _obj->major_radius = major_radius;
-  _obj->minor_radius = minor_radius;
-  return _obj;
+  if (!dwg)
+    return NULL;
+  {
+    API_ADD_OBJECT (ACSH_TORUS_CLASS);
+    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, 0.0);
+    _obj->major_radius = major_radius;
+    _obj->minor_radius = minor_radius;
+    return _obj;
+  }
 }
 
 // ACSH_TORUS_CLASS (needed)
@@ -25258,10 +25294,10 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
-    char acis_data[1600];
+    char acis_data[1024];
     char date[48];
     unsigned date_size = dwg_acis_date (date, 48);
-    const char torus_acis_format[] =
+    const char torus_acis_format[] = /* len = 815 */
       "21200 0 2 0 \n"
       "16 Autodesk AutoCAD 17 ASM 12.0.1.915 NT %u %s \n"
       "1 1e-06 1e-10 \n"
@@ -25276,10 +25312,13 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "ref_vt-eye-attrib $-1 $-1 $-1 $-1 $7 $4 $5 #\n"
       "face $10 $-1 $-1 $-1 $-1 $7 $-1 $11 forward single #\n"
       "fmesh-eye-attrib $-1 $-1 $12 $-1 $9 #\n"
-      "torus-surface $-1 $-1 $-1 %g %g %g %g %g %g %g %g %g %g %g F F F F F #\n"
+      "torus-surface $-1 $-1 $-1 " "%g %g %g "
+                                   "%g %g %g "
+                                   "%g %g "
+                                   "%g %g %g " "F F F F F #\n"
       "ref_vt-eye-attrib $-1 $-1 $-1 $10 $9 $4 $5 #\n"
       "End-of-ASM-data";
-    snprintf (acis_data, 2000, torus_acis_format,
+    snprintf (acis_data, 1024, torus_acis_format,
               date_size, date,
               origin_pt->x, origin_pt->y, origin_pt->z,
               // => history_node.trans[8-10] (=rotation)
@@ -25320,12 +25359,16 @@ dwg_add_ACSH_WEDGE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   int err;
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
-  API_ADD_OBJECT (ACSH_WEDGE_CLASS);
-  dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, rotation);
-  _obj->length = length;
-  _obj->width = width;
-  _obj->height = height;
-  return _obj;
+  if (!dwg)
+    return NULL;
+  {
+    API_ADD_OBJECT (ACSH_WEDGE_CLASS);
+    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, rotation);
+    _obj->length = length;
+    _obj->width = width;
+    _obj->height = height;
+    return _obj;
+  }
 }
 
 EXPORT Dwg_Entity_3DSOLID*
@@ -25518,6 +25561,8 @@ dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   {
     API_ADD_ENTITY (IMAGE);
     img = obj;
+    if (!img)
+      return NULL;
     _img = _obj;
     _obj->pt0.x = ins_pt->x;
     _obj->pt0.y = ins_pt->y;
