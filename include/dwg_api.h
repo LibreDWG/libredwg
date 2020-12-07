@@ -635,6 +635,7 @@ typedef struct _dwg_object_ACSH_CYLINDER_CLASS		dwg_obj_acsh_cylinder_class;
 typedef struct _dwg_object_ACSH_FILLET_CLASS		dwg_obj_acsh_fillet_class;
 typedef struct _dwg_object_ACSH_HISTORY_CLASS		dwg_obj_acsh_history_class;
 typedef struct _dwg_object_ACSH_SPHERE_CLASS		dwg_obj_acsh_sphere_class;
+typedef struct _dwg_object_ACSH_TORUS_CLASS		dwg_obj_acsh_torus_class;
 typedef struct _dwg_object_ACSH_WEDGE_CLASS		dwg_obj_acsh_wedge_class;
 typedef struct _dwg_object_BLOCKBASEPOINTPARAMETER		dwg_obj_blockbasepointparameter;
 typedef struct _dwg_object_BLOCKFLIPACTION		dwg_obj_blockflipaction;
@@ -682,7 +683,6 @@ typedef struct _dwg_object_ACSH_BREP_CLASS		dwg_obj_acsh_brep_class;
 typedef struct _dwg_object_ACSH_CHAMFER_CLASS		dwg_obj_acsh_chamfer_class;
 typedef struct _dwg_object_ACSH_CONE_CLASS		dwg_obj_acsh_cone_class;
 typedef struct _dwg_object_ACSH_PYRAMID_CLASS		dwg_obj_acsh_pyramid_class;
-typedef struct _dwg_object_ACSH_TORUS_CLASS		dwg_obj_acsh_torus_class;
 typedef struct _dwg_object_ASSOCACTION		dwg_obj_assocaction;
 typedef struct _dwg_object_ASSOCBLENDSURFACEACTIONBODY		dwg_obj_assocblendsurfaceactionbody;
 typedef struct _dwg_object_ASSOCDEPENDENCY		dwg_obj_assocdependency;
@@ -941,6 +941,7 @@ dwg_get_OBJECT_DECL (obj_acsh_cylinder_class, ACSH_CYLINDER_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_fillet_class, ACSH_FILLET_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_history_class, ACSH_HISTORY_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_sphere_class, ACSH_SPHERE_CLASS);
+dwg_get_OBJECT_DECL (obj_acsh_torus_class, ACSH_TORUS_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_wedge_class, ACSH_WEDGE_CLASS);
 dwg_get_OBJECT_DECL (obj_blockbasepointparameter, BLOCKBASEPOINTPARAMETER);
 dwg_get_OBJECT_DECL (obj_blockflipaction, BLOCKFLIPACTION);
@@ -988,7 +989,6 @@ dwg_get_OBJECT_DECL (obj_acsh_brep_class, ACSH_BREP_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_chamfer_class, ACSH_CHAMFER_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_cone_class, ACSH_CONE_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_pyramid_class, ACSH_PYRAMID_CLASS);
-dwg_get_OBJECT_DECL (obj_acsh_torus_class, ACSH_TORUS_CLASS);
 dwg_get_OBJECT_DECL (obj_assocaction, ASSOCACTION);
 dwg_get_OBJECT_DECL (obj_assocblendsurfaceactionbody, ASSOCBLENDSURFACEACTIONBODY);
 dwg_get_OBJECT_DECL (obj_assocdependency, ASSOCDEPENDENCY);
@@ -1266,6 +1266,7 @@ DWG_GETALL_OBJECT_DECL (ACSH_CYLINDER_CLASS);
 DWG_GETALL_OBJECT_DECL (ACSH_FILLET_CLASS);
 DWG_GETALL_OBJECT_DECL (ACSH_HISTORY_CLASS);
 DWG_GETALL_OBJECT_DECL (ACSH_SPHERE_CLASS);
+DWG_GETALL_OBJECT_DECL (ACSH_TORUS_CLASS);
 DWG_GETALL_OBJECT_DECL (ACSH_WEDGE_CLASS);
 DWG_GETALL_OBJECT_DECL (BLOCKBASEPOINTPARAMETER);
 DWG_GETALL_OBJECT_DECL (BLOCKFLIPACTION);
@@ -1313,7 +1314,6 @@ DWG_GETALL_OBJECT_DECL (ACSH_BREP_CLASS);
 DWG_GETALL_OBJECT_DECL (ACSH_CHAMFER_CLASS);
 DWG_GETALL_OBJECT_DECL (ACSH_CONE_CLASS);
 DWG_GETALL_OBJECT_DECL (ACSH_PYRAMID_CLASS);
-DWG_GETALL_OBJECT_DECL (ACSH_TORUS_CLASS);
 DWG_GETALL_OBJECT_DECL (ASSOCACTION);
 DWG_GETALL_OBJECT_DECL (ASSOCBLENDSURFACEACTIONBODY);
 DWG_GETALL_OBJECT_DECL (ASSOCDEPENDENCY);
@@ -1597,6 +1597,7 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_CYLINDER_CLASS);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_FILLET_CLASS);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_HISTORY_CLASS);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_SPHERE_CLASS);
+CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_TORUS_CLASS);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_WEDGE_CLASS);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKBASEPOINTPARAMETER);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKFLIPACTION);
@@ -1644,7 +1645,6 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_BREP_CLASS);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_CHAMFER_CLASS);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_CONE_CLASS);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_PYRAMID_CLASS);
-CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_TORUS_CLASS);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCACTION);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCBLENDSURFACEACTIONBODY);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCDEPENDENCY);
@@ -6471,36 +6471,41 @@ dwg_add_UNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
 Dwg_Object_ACSH_BOX_CLASS*
 dwg_add_ACSH_BOX_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-             const dwg_point_3d *restrict origin_pt,
-             const double length,
-             const double width,
-             const double height) __nonnull_all;
+                        const dwg_point_3d *restrict origin_pt,
+                        const double length, const double width,
+                        const double height) __nonnull_all;
 Dwg_Object_ACSH_CHAMFER_CLASS*
 dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                            const dwg_point_3d *restrict origin_pt,
                             const int bl92, const double base_dist,
                             const double other_dist, const int num_edges,
                             const int32_t* edges, const int bl95) __nonnull_all;
 Dwg_Object_ACSH_CONE_CLASS*
 dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                         const dwg_point_3d *restrict origin_pt,
                          const double base_radius, const double top_major_radius,
                          const double top_minor_radius, const double top_x_radius)
   __nonnull_all;
 Dwg_Object_ACSH_CYLINDER_CLASS*
 dwg_add_ACSH_CYLINDER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                             const dwg_point_3d *restrict origin_pt,
                              const double height, const double major_radius,
                              const double minor_radius, const double x_radius)
   __nonnull_all;
 Dwg_Object_ACSH_PYRAMID_CLASS*
 dwg_add_ACSH_PYRAMID_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                            const dwg_point_3d *restrict origin_pt,
                             const double height, const int sides,
                             const double radius, const double topradius)
   __nonnull_all;
 Dwg_Object_ACSH_SPHERE_CLASS*
 dwg_add_ACSH_SPHERE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                           const dwg_point_3d *restrict origin_pt,
                            const double radius)
   __nonnull_all;
 Dwg_Object_ACSH_TORUS_CLASS*
 dwg_add_ACSH_TORUS_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                          const dwg_point_3d *restrict origin_pt,
                           const double major_radius, const double minor_radius)
   __nonnull_all;
 Dwg_Object_ACSH_WEDGE_CLASS*

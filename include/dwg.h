@@ -5911,7 +5911,7 @@ typedef struct _dwg_ACSH_HistoryNode
 {
   BITCODE_BL major;    //33
   BITCODE_BL minor;    //29
-  BITCODE_BD* trans;   //last 16x nums 40-55
+  BITCODE_BD *trans;   //last 16x nums 40-55
   BITCODE_CMC color;   /*!< DXF 62 */
   BITCODE_BL step_id;  /*!< DXF 92 */
   BITCODE_H  material; /*!< DXF 347 */
@@ -7994,6 +7994,7 @@ typedef struct _dwg_object_object
     Dwg_Object_ACSH_FILLET_CLASS *ACSH_FILLET_CLASS;
     Dwg_Object_ACSH_HISTORY_CLASS *ACSH_HISTORY_CLASS;
     Dwg_Object_ACSH_SPHERE_CLASS *ACSH_SPHERE_CLASS;
+    Dwg_Object_ACSH_TORUS_CLASS *ACSH_TORUS_CLASS;
     Dwg_Object_ACSH_WEDGE_CLASS *ACSH_WEDGE_CLASS;
     Dwg_Object_BLOCKBASEPOINTPARAMETER *BLOCKBASEPOINTPARAMETER;
     Dwg_Object_BLOCKFLIPACTION *BLOCKFLIPACTION;
@@ -8041,7 +8042,6 @@ typedef struct _dwg_object_object
     Dwg_Object_ACSH_CHAMFER_CLASS *ACSH_CHAMFER_CLASS;
     Dwg_Object_ACSH_CONE_CLASS *ACSH_CONE_CLASS;
     Dwg_Object_ACSH_PYRAMID_CLASS *ACSH_PYRAMID_CLASS;
-    Dwg_Object_ACSH_TORUS_CLASS *ACSH_TORUS_CLASS;
     Dwg_Object_ASSOCACTION *ASSOCACTION;
     Dwg_Object_ASSOCBLENDSURFACEACTIONBODY *ASSOCBLENDSURFACEACTIONBODY;
     Dwg_Object_ASSOCDEPENDENCY *ASSOCDEPENDENCY;
@@ -9258,6 +9258,7 @@ EXPORT int dwg_setup_ACSH_CYLINDER_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_FILLET_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_HISTORY_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_SPHERE_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_TORUS_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_WEDGE_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCKBASEPOINTPARAMETER (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCKFLIPACTION (Dwg_Object *obj);
@@ -9309,7 +9310,6 @@ EXPORT int dwg_setup_ACSH_BREP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CHAMFER_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CONE_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_PYRAMID_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_TORUS_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCACTION (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCBLENDSURFACEACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCDEPENDENCY (Dwg_Object *obj);

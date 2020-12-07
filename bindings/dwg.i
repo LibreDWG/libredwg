@@ -271,6 +271,7 @@ EXPORT Dwg_Object_ACSH_CYLINDER_CLASS** dwg_getall_ACSH_CYLINDER_CLASS (Dwg_Data
 EXPORT Dwg_Object_ACSH_FILLET_CLASS** dwg_getall_ACSH_FILLET_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ACSH_HISTORY_CLASS** dwg_getall_ACSH_HISTORY_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ACSH_SPHERE_CLASS** dwg_getall_ACSH_SPHERE_CLASS (Dwg_Data* dwg);
+EXPORT Dwg_Object_ACSH_TORUS_CLASS** dwg_getall_ACSH_TORUS_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ACSH_WEDGE_CLASS** dwg_getall_ACSH_WEDGE_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_APPID** dwg_getall_APPID (Dwg_Data* dwg);
 EXPORT Dwg_Object_APPID_CONTROL** dwg_getall_APPID_CONTROL (Dwg_Data* dwg);
@@ -343,7 +344,6 @@ EXPORT Dwg_Object_ACSH_BREP_CLASS** dwg_getall_ACSH_BREP_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ACSH_CHAMFER_CLASS** dwg_getall_ACSH_CHAMFER_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ACSH_CONE_CLASS** dwg_getall_ACSH_CONE_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ACSH_PYRAMID_CLASS** dwg_getall_ACSH_PYRAMID_CLASS (Dwg_Data* dwg);
-EXPORT Dwg_Object_ACSH_TORUS_CLASS** dwg_getall_ACSH_TORUS_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ASSOCACTION** dwg_getall_ASSOCACTION (Dwg_Data* dwg);
 EXPORT Dwg_Object_ASSOCBLENDSURFACEACTIONBODY** dwg_getall_ASSOCBLENDSURFACEACTIONBODY (Dwg_Data* dwg);
 EXPORT Dwg_Object_ASSOCDEPENDENCY** dwg_getall_ASSOCDEPENDENCY (Dwg_Data* dwg);
@@ -580,6 +580,7 @@ EXPORT Dwg_Object_ACSH_CYLINDER_CLASS* dwg_object_to_ACSH_CYLINDER_CLASS (Dwg_Ob
 EXPORT Dwg_Object_ACSH_FILLET_CLASS* dwg_object_to_ACSH_FILLET_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ACSH_HISTORY_CLASS* dwg_object_to_ACSH_HISTORY_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ACSH_SPHERE_CLASS* dwg_object_to_ACSH_SPHERE_CLASS (Dwg_Object* obj);
+EXPORT Dwg_Object_ACSH_TORUS_CLASS* dwg_object_to_ACSH_TORUS_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ACSH_WEDGE_CLASS* dwg_object_to_ACSH_WEDGE_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_APPID* dwg_object_to_APPID (Dwg_Object* obj);
 EXPORT Dwg_Object_APPID_CONTROL* dwg_object_to_APPID_CONTROL (Dwg_Object* obj);
@@ -652,7 +653,6 @@ EXPORT Dwg_Object_ACSH_BREP_CLASS* dwg_object_to_ACSH_BREP_CLASS (Dwg_Object* ob
 EXPORT Dwg_Object_ACSH_CHAMFER_CLASS* dwg_object_to_ACSH_CHAMFER_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ACSH_CONE_CLASS* dwg_object_to_ACSH_CONE_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ACSH_PYRAMID_CLASS* dwg_object_to_ACSH_PYRAMID_CLASS (Dwg_Object* obj);
-EXPORT Dwg_Object_ACSH_TORUS_CLASS* dwg_object_to_ACSH_TORUS_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ASSOCACTION* dwg_object_to_ASSOCACTION (Dwg_Object* obj);
 EXPORT Dwg_Object_ASSOCBLENDSURFACEACTIONBODY* dwg_object_to_ASSOCBLENDSURFACEACTIONBODY (Dwg_Object* obj);
 EXPORT Dwg_Object_ASSOCDEPENDENCY* dwg_object_to_ASSOCDEPENDENCY (Dwg_Object* obj);

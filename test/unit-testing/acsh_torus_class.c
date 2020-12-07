@@ -1,4 +1,3 @@
-// unstable
 #define DWG_TYPE DWG_TYPE_ACSH_TORUS_CLASS
 #include "common.c"
 
@@ -6,8 +5,6 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  //Dwg_EvalExpr evalexpr;
-  //Dwg_ACSH_HistoryNode history_node;
   BITCODE_BD *trans;
   BITCODE_BL major;
   BITCODE_BL minor;

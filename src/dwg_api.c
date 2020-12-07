@@ -236,6 +236,7 @@ dwg_get_OBJECT (obj_acsh_cylinder_class, ACSH_CYLINDER_CLASS)
 dwg_get_OBJECT (obj_acsh_fillet_class, ACSH_FILLET_CLASS)
 dwg_get_OBJECT (obj_acsh_history_class, ACSH_HISTORY_CLASS)
 dwg_get_OBJECT (obj_acsh_sphere_class, ACSH_SPHERE_CLASS)
+dwg_get_OBJECT (obj_acsh_torus_class, ACSH_TORUS_CLASS)
 dwg_get_OBJECT (obj_acsh_wedge_class, ACSH_WEDGE_CLASS)
 dwg_get_OBJECT (obj_blockbasepointparameter, BLOCKBASEPOINTPARAMETER)
 dwg_get_OBJECT (obj_blockflipaction, BLOCKFLIPACTION)
@@ -283,7 +284,6 @@ dwg_get_OBJECT (obj_acsh_brep_class, ACSH_BREP_CLASS)
 dwg_get_OBJECT (obj_acsh_chamfer_class, ACSH_CHAMFER_CLASS)
 dwg_get_OBJECT (obj_acsh_cone_class, ACSH_CONE_CLASS)
 dwg_get_OBJECT (obj_acsh_pyramid_class, ACSH_PYRAMID_CLASS)
-dwg_get_OBJECT (obj_acsh_torus_class, ACSH_TORUS_CLASS)
 dwg_get_OBJECT (obj_assocaction, ASSOCACTION)
 dwg_get_OBJECT (obj_assocblendsurfaceactionbody, ASSOCBLENDSURFACEACTIONBODY)
 dwg_get_OBJECT (obj_assocdependency, ASSOCDEPENDENCY)
@@ -543,6 +543,7 @@ DWG_GETALL_OBJECT (ACSH_CYLINDER_CLASS)
 DWG_GETALL_OBJECT (ACSH_FILLET_CLASS)
 DWG_GETALL_OBJECT (ACSH_HISTORY_CLASS)
 DWG_GETALL_OBJECT (ACSH_SPHERE_CLASS)
+DWG_GETALL_OBJECT (ACSH_TORUS_CLASS)
 DWG_GETALL_OBJECT (ACSH_WEDGE_CLASS)
 DWG_GETALL_OBJECT (APPID)
 DWG_GETALL_OBJECT (APPID_CONTROL)
@@ -615,7 +616,6 @@ DWG_GETALL_OBJECT (ACSH_BREP_CLASS)
 DWG_GETALL_OBJECT (ACSH_CHAMFER_CLASS)
 DWG_GETALL_OBJECT (ACSH_CONE_CLASS)
 DWG_GETALL_OBJECT (ACSH_PYRAMID_CLASS)
-DWG_GETALL_OBJECT (ACSH_TORUS_CLASS)
 DWG_GETALL_OBJECT (ASSOCACTION)
 DWG_GETALL_OBJECT (ASSOCBLENDSURFACEACTIONBODY)
 DWG_GETALL_OBJECT (ASSOCDEPENDENCY)
@@ -873,6 +873,7 @@ CAST_DWG_OBJECT_TO_OBJECT (ACSH_CYLINDER_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT (ACSH_FILLET_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT (ACSH_HISTORY_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT (ACSH_SPHERE_CLASS)
+CAST_DWG_OBJECT_TO_OBJECT (ACSH_TORUS_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT (ACSH_WEDGE_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT (APPID)
 CAST_DWG_OBJECT_TO_OBJECT (APPID_CONTROL)
@@ -945,7 +946,6 @@ CAST_DWG_OBJECT_TO_OBJECT (ACSH_BREP_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT (ACSH_CHAMFER_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT (ACSH_CONE_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT (ACSH_PYRAMID_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_TORUS_CLASS)
 CAST_DWG_OBJECT_TO_OBJECT (ASSOCACTION)
 CAST_DWG_OBJECT_TO_OBJECT (ASSOCBLENDSURFACEACTIONBODY)
 CAST_DWG_OBJECT_TO_OBJECT (ASSOCDEPENDENCY)
@@ -24678,7 +24678,6 @@ dwg_add_PROXY_OBJECT (Dwg_Data *restrict dwg, BITCODE_T name, BITCODE_T key
 // ACMESCOPE
 // ACMESTATEMGR
 // ACSH_BOOLEAN_CLASS
-// ACSH_BOX_CLASS (needed)
 
 Dwg_Object_EVALUATION_GRAPH*
 dwg_add_EVALUATION_GRAPH (Dwg_Object_ACSH_HISTORY_CLASS *restrict history,
@@ -24728,6 +24727,48 @@ dwg_add_ACSH_HISTORY_CLASS (Dwg_Entity_3DSOLID *restrict region,
   return _obj;
 }
 
+static void
+dwg_init_ACSH_CLASS (Dwg_Data *restrict dwg, Dwg_Object *restrict obj,
+                     void *restrict acsh,
+                     Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                     const dwg_point_3d *restrict origin_pt)
+{
+  Dwg_Object_ACSH_BOX_CLASS* _obj = (Dwg_Object_ACSH_BOX_CLASS*)acsh;
+  obj->tio.object->ownerhandle = dwg_add_handleref (
+      dwg, 5, dwg_obj_generic_handlevalue (evalgraph), obj);
+  _obj->evalexpr.parentid = -1;
+  _obj->evalexpr.major = 27;
+  _obj->evalexpr.minor = 52;
+  _obj->evalexpr.value_code = -9999;
+  _obj->evalexpr.nodeid = 1;
+  _obj->history_node.major = 27;
+  _obj->history_node.minor = 52;
+  _obj->history_node.color.index = 256;
+  _obj->history_node.color.rgb = 0xc3000001;
+  _obj->history_node.color.method = 0xc3;
+  _obj->history_node.color.flag = 0x0;
+  _obj->history_node.step_id = 97; //?
+  _obj->history_node.material = NULL; // => MATERIAL of LAYER "0"
+  _obj->history_node.trans = calloc (16, 8);
+  _obj->history_node.trans[3] = origin_pt->x;
+  _obj->history_node.trans[7] = origin_pt->y;
+  _obj->history_node.trans[11] = origin_pt->z;
+  _obj->history_node.trans[15] = 1.0;
+  _obj->major = 27;
+  _obj->minor = 52;
+}
+
+static size_t dwg_acis_date (char *date, size_t size)
+{
+  time_t rawtime;
+  struct tm *tm;
+
+  time (&rawtime);
+  tm = localtime (&rawtime);
+  // "Thu Mar 26 22:02:42 2009"
+  return strftime (date, size, "%a %b %d %H:%M:%S %Y", tm);
+}
+
 Dwg_Object_ACSH_BOX_CLASS*
 dwg_add_ACSH_BOX_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                         const dwg_point_3d *restrict origin_pt,
@@ -24738,6 +24779,8 @@ dwg_add_ACSH_BOX_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
   API_ADD_OBJECT (ACSH_BOX_CLASS);
+  dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt);
+  /*
   obj->tio.object->ownerhandle = dwg_add_handleref (
       dwg, 5, dwg_obj_generic_handlevalue (evalgraph), obj);
   _obj->evalexpr.parentid = -1;
@@ -24753,8 +24796,14 @@ dwg_add_ACSH_BOX_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   _obj->history_node.color.flag = 0x0;
   _obj->history_node.step_id = 97;
   _obj->history_node.material = NULL; // => MATERIAL of LAYER "0"
+  _obj->history_node.trans = calloc (16, 8);
+  _obj->history_node.trans[3] = origin_pt->x;
+  _obj->history_node.trans[7] = origin_pt->y;
+  _obj->history_node.trans[11] = origin_pt->z;
+  _obj->history_node.trans[15] = 1.0;
   _obj->major = 27;
   _obj->minor = 52;
+  */
   _obj->length = length;
   _obj->width = width;
   _obj->height = height;
@@ -24808,9 +24857,10 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 }
 
 // ACSH_BREP_CLASS
-// ACSH_CHAMFER_CLASS
+
 Dwg_Object_ACSH_CHAMFER_CLASS*
 dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                            const dwg_point_3d *restrict origin_pt,
                             const int bl92, const double base_dist,
                             const double other_dist, const int num_edges,
                             const int32_t* edges, const int bl95)
@@ -24819,6 +24869,8 @@ dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
   API_ADD_OBJECT (ACSH_CHAMFER_CLASS);
+  dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt);
+  /*
   obj->tio.object->ownerhandle = dwg_add_handleref (
       dwg, 5, dwg_obj_generic_handlevalue (evalgraph), obj);
   _obj->evalexpr.parentid = -1;
@@ -24834,8 +24886,14 @@ dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   _obj->history_node.color.flag = 0x0;
   _obj->history_node.step_id = 97;
   _obj->history_node.material = NULL; // => MATERIAL of LAYER "0"
+  _obj->history_node.trans = calloc (16, 8);
+  _obj->history_node.trans[3] = origin_pt->x;
+  _obj->history_node.trans[7] = origin_pt->y;
+  _obj->history_node.trans[11] = origin_pt->z;
+  _obj->history_node.trans[15] = 1.0;
   _obj->major = 27;
   _obj->minor = 52;
+  */
   _obj->bl92 = bl92;
   _obj->base_dist = base_dist;
   _obj->other_dist = other_dist;
@@ -24892,14 +24950,15 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
-    _obj = dwg_add_ACSH_CHAMFER_CLASS (eval, bl92, base_dist, other_dist, num_edges,
-                                       edges, bl95);
+    _obj = dwg_add_ACSH_CHAMFER_CLASS (eval, origin_pt, bl92, base_dist,
+                                       other_dist, num_edges, edges, bl95);
     return solid;
   }
 }
 
 Dwg_Object_ACSH_CONE_CLASS*
 dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                         const dwg_point_3d *restrict origin_pt,
                          const double base_radius, const double top_major_radius,
                          const double top_minor_radius, const double top_x_radius)
 {
@@ -24907,6 +24966,8 @@ dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
   API_ADD_OBJECT (ACSH_CONE_CLASS);
+  dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt);
+  /*
   obj->tio.object->ownerhandle = dwg_add_handleref (
       dwg, 5, dwg_obj_generic_handlevalue (evalgraph), obj);
   _obj->evalexpr.parentid = -1;
@@ -24922,8 +24983,14 @@ dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   _obj->history_node.color.flag = 0x0;
   _obj->history_node.step_id = 97;
   _obj->history_node.material = NULL; // => MATERIAL of LAYER "0"
+  _obj->history_node.trans = calloc (16, 8);
+  _obj->history_node.trans[3] = origin_pt->x;
+  _obj->history_node.trans[7] = origin_pt->y;
+  _obj->history_node.trans[11] = origin_pt->z;
+  _obj->history_node.trans[15] = 1.0;
   _obj->major = 27;
   _obj->minor = 52;
+  */
   _obj->base_radius = base_radius;
   _obj->top_major_radius = top_major_radius;
   _obj->top_minor_radius = top_minor_radius;
@@ -24931,7 +24998,6 @@ dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   return _obj;
 }
 
-// ACSH_CONE_CLASS (needed)
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const dwg_point_3d *restrict origin_pt,
@@ -24973,14 +25039,16 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
-    _obj = dwg_add_ACSH_CONE_CLASS (eval, base_radius, top_major_radius,
-                                    top_minor_radius, top_x_radius);
+    _obj = dwg_add_ACSH_CONE_CLASS (eval, origin_pt, base_radius,
+                                    top_major_radius, top_minor_radius,
+                                    top_x_radius);
     return solid;
   }
 }
 
 Dwg_Object_ACSH_CYLINDER_CLASS*
 dwg_add_ACSH_CYLINDER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                             const dwg_point_3d *restrict origin_pt,
                              const double height, const double major_radius,
                              const double minor_radius, const double x_radius)
 {
@@ -24988,6 +25056,8 @@ dwg_add_ACSH_CYLINDER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
   API_ADD_OBJECT (ACSH_CYLINDER_CLASS);
+  dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt);
+  /*
   obj->tio.object->ownerhandle = dwg_add_handleref (
       dwg, 5, dwg_obj_generic_handlevalue (evalgraph), obj);
   _obj->evalexpr.parentid = -1;
@@ -25003,8 +25073,14 @@ dwg_add_ACSH_CYLINDER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   _obj->history_node.color.flag = 0x0;
   _obj->history_node.step_id = 97;
   _obj->history_node.material = NULL; // => MATERIAL of LAYER "0"
+  _obj->history_node.trans = calloc (16, 8);
+  _obj->history_node.trans[3] = origin_pt->x;
+  _obj->history_node.trans[7] = origin_pt->y;
+  _obj->history_node.trans[11] = origin_pt->z;
+  _obj->history_node.trans[15] = 1.0;
   _obj->major = 27;
   _obj->minor = 52;
+  */
   _obj->height = height;
   _obj->major_radius = major_radius;
   _obj->minor_radius = minor_radius;
@@ -25012,7 +25088,6 @@ dwg_add_ACSH_CYLINDER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   return _obj;
 }
 
-// ACSH_CYLINDER_CLASS (needed)
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                   const dwg_point_3d *restrict origin_pt,
@@ -25054,7 +25129,7 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
-    _obj = dwg_add_ACSH_CYLINDER_CLASS (eval, height, major_radius,
+    _obj = dwg_add_ACSH_CYLINDER_CLASS (eval, origin_pt, height, major_radius,
                                         minor_radius, x_radius);
     return solid;
   }
@@ -25062,6 +25137,7 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
 Dwg_Object_ACSH_PYRAMID_CLASS*
 dwg_add_ACSH_PYRAMID_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                            const dwg_point_3d *restrict origin_pt,
                             const double height, const int sides,
                             const double radius, const double topradius)
 {
@@ -25069,6 +25145,8 @@ dwg_add_ACSH_PYRAMID_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
   API_ADD_OBJECT (ACSH_PYRAMID_CLASS);
+  dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt);
+  /*
   obj->tio.object->ownerhandle = dwg_add_handleref (
       dwg, 5, dwg_obj_generic_handlevalue (evalgraph), obj);
   _obj->evalexpr.parentid = -1;
@@ -25084,8 +25162,14 @@ dwg_add_ACSH_PYRAMID_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   _obj->history_node.color.flag = 0x0;
   _obj->history_node.step_id = 97;
   _obj->history_node.material = NULL; // => MATERIAL of LAYER "0"
+  _obj->history_node.trans = calloc (16, 8);
+  _obj->history_node.trans[3] = origin_pt->x;
+  _obj->history_node.trans[7] = origin_pt->y;
+  _obj->history_node.trans[11] = origin_pt->z;
+  _obj->history_node.trans[15] = 1.0;
   _obj->major = 27;
   _obj->minor = 52;
+  */
   _obj->height = height;
   _obj->sides = sides;
   _obj->radius = radius;
@@ -25093,7 +25177,6 @@ dwg_add_ACSH_PYRAMID_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   return _obj;
 }
 
-// ACSH_PYRAMID_CLASS
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                   const dwg_point_3d *restrict origin_pt,
@@ -25135,27 +25218,28 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
-    _obj = dwg_add_ACSH_PYRAMID_CLASS (eval, height, sides, radius, topradius);
+    _obj = dwg_add_ACSH_PYRAMID_CLASS (eval, origin_pt, height, sides, radius,
+                                       topradius);
     return solid;
   }
 }
 
 // ACSH_EXTRUSION_CLASS (needed)
 // ACSH_FILLET_CLASS
-// ACSH_HISTORY_CLASS (needed)
 // ACSH_LOFT_CLASS
-// ACSH_PYRAMID_CLASS
 // ACSH_REVOLVE_CLASS (needed)
-// ACSH_SPHERE_CLASS (needed)
 
 Dwg_Object_ACSH_SPHERE_CLASS*
 dwg_add_ACSH_SPHERE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                           const dwg_point_3d *restrict origin_pt,
                            const double radius)
 {
   int err;
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
   API_ADD_OBJECT (ACSH_SPHERE_CLASS);
+  dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt);
+  /*
   obj->tio.object->ownerhandle = dwg_add_handleref (
       dwg, 5, dwg_obj_generic_handlevalue (evalgraph), obj);
   _obj->evalexpr.parentid = -1;
@@ -25171,13 +25255,18 @@ dwg_add_ACSH_SPHERE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   _obj->history_node.color.flag = 0x0;
   _obj->history_node.step_id = 97;
   _obj->history_node.material = NULL; // => MATERIAL of LAYER "0"
+  _obj->history_node.trans = calloc (16, 8);
+  _obj->history_node.trans[3] = origin_pt->x;
+  _obj->history_node.trans[7] = origin_pt->y;
+  _obj->history_node.trans[11] = origin_pt->z;
+  _obj->history_node.trans[15] = 1.0;
   _obj->major = 27;
   _obj->minor = 52;
+  */
   _obj->radius = radius;
   return _obj;
 }
 
-// ACSH_SPHERE_CLASS
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                   const dwg_point_3d *restrict origin_pt,
@@ -25218,22 +25307,24 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
-    _obj = dwg_add_ACSH_SPHERE_CLASS (eval, radius);
+    _obj = dwg_add_ACSH_SPHERE_CLASS (eval, origin_pt, radius);
     return solid;
   }
 }
 
 // ACSH_SWEEP_CLASS
-// ACSH_TORUS_CLASS (needed)
 
 Dwg_Object_ACSH_TORUS_CLASS*
 dwg_add_ACSH_TORUS_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                             const double major_radius, const double minor_radius)
+                          const dwg_point_3d *restrict origin_pt,
+                          const double major_radius, const double minor_radius)
 {
   int err;
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
   API_ADD_OBJECT (ACSH_TORUS_CLASS);
+  dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt);
+  /*
   obj->tio.object->ownerhandle = dwg_add_handleref (
       dwg, 5, dwg_obj_generic_handlevalue (evalgraph), obj);
   _obj->evalexpr.parentid = -1;
@@ -25249,22 +25340,17 @@ dwg_add_ACSH_TORUS_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   _obj->history_node.color.flag = 0x0;
   _obj->history_node.step_id = 97;
   _obj->history_node.material = NULL; // => MATERIAL of LAYER "0"
+  _obj->history_node.trans = calloc (16, 8);
+  _obj->history_node.trans[3] = origin_pt->x;
+  _obj->history_node.trans[7] = origin_pt->y;
+  _obj->history_node.trans[11] = origin_pt->z;
+  _obj->history_node.trans[15] = 1.0;
   _obj->major = 27;
   _obj->minor = 52;
+  */
   _obj->major_radius = major_radius;
   _obj->minor_radius = minor_radius;
   return _obj;
-}
-
-static size_t dwg_acis_date (char *date, size_t size)
-{
-  time_t rawtime;
-  struct tm *tm;
-
-  time (&rawtime);
-  tm = localtime (&rawtime);
-  // "Thu Mar 26 22:02:42 2009"
-  return strftime (date, size, "%a %b %d %H:%M:%S %Y", tm);
 }
 
 // ACSH_TORUS_CLASS (needed)
@@ -25311,14 +25397,16 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "ref_vt-eye-attrib $-1 $-1 $-1 $-1 $7 $4 $5 #\n"
       "face $10 $-1 $-1 $-1 $-1 $7 $-1 $11 forward single #\n"
       "fmesh-eye-attrib $-1 $-1 $12 $-1 $9 #\n"
-      "torus-surface $-1 $-1 $-1 %f %f %f %f %f %f %f %f %f %f %f F F F F F #\n"
+      "torus-surface $-1 $-1 $-1 %g %g %g %g %g %g %g %g %g %g %g F F F F F #\n"
       "ref_vt-eye-attrib $-1 $-1 $-1 $10 $9 $4 $5 #\n"
       "End-of-ASM-data";
     snprintf (acis_data, 2000, torus_acis_format,
               date_size, date,
               origin_pt->x, origin_pt->y, origin_pt->z,
+              // => history_node.trans[8-10] (=rotation)
               -0.501424, -1.64317e-16, -0.865202,
               major_radius, minor_radius,
+              // => history_node.trans[0-3] (=rotation)
               -0.865202, -3.89454e-17, 0.501424);
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
     solidobj = dwg_obj_generic_to_object (solid, &err);
@@ -25335,7 +25423,7 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
-    _obj = dwg_add_ACSH_TORUS_CLASS (eval, major_radius, minor_radius);
+    _obj = dwg_add_ACSH_TORUS_CLASS (eval, origin_pt, major_radius, minor_radius);
     return solid;
   }
 }
@@ -25352,6 +25440,8 @@ dwg_add_ACSH_WEDGE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
   Dwg_Data *dwg = hdr ? hdr->parent : NULL;
   API_ADD_OBJECT (ACSH_WEDGE_CLASS);
+  dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt);
+  /*
   obj->tio.object->ownerhandle = dwg_add_handleref (
       dwg, 5, dwg_obj_generic_handlevalue (evalgraph), obj);
   _obj->evalexpr.parentid = -1;
@@ -25367,8 +25457,14 @@ dwg_add_ACSH_WEDGE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   _obj->history_node.color.flag = 0x0;
   _obj->history_node.step_id = 97;
   _obj->history_node.material = NULL; // => MATERIAL of LAYER "0"
+  _obj->history_node.trans = calloc (16, 8);
+  _obj->history_node.trans[3] = origin_pt->x;
+  _obj->history_node.trans[7] = origin_pt->y;
+  _obj->history_node.trans[11] = origin_pt->z;
+  _obj->history_node.trans[15] = 1.0;
   _obj->major = 27;
   _obj->minor = 52;
+  */
   _obj->length = length;
   _obj->width = width;
   _obj->height = height;
