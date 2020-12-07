@@ -3,8 +3,8 @@ on:
   push:
     branches:
       - master
-      #- work/*
       - smoke/*
+      - gh/*
 
 #strategy:
 #  matrix:
@@ -18,12 +18,9 @@ jobs:
       fail-fast: false
       matrix:
         CONFIGURE_ARGS:
-          #- ""
-          - "--disable-bindings"
-          - "--enable-release"
-          #- "--enable-trace"
+          - --disable-bindings CC="gcc -O0 -fno-omit-frame-pointer -fsanitize=address,undefined -fno-var-tracking"
+          - --enable-release
           - CC="clang"
-          - CC="gcc -O0 -fno-omit-frame-pointer -fsanitize=address,undefined -fno-var-tracking"
     steps:
     - uses: actions/checkout@v2
       with:
