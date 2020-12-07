@@ -23590,20 +23590,24 @@ dwg_add_3DSOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const char *acis_data)
 {
   const int len = strlen (acis_data);
+  unsigned j;
   int acis_data_idx = 0;
   API_ADD_ENTITY (_3DSOLID);
   _obj->num_blocks = (int)(len / 4096);
   if (len % 4096)
     _obj->num_blocks++;
+  j = _obj->num_blocks;
   _obj->acis_data = (BITCODE_RC*)strdup (acis_data);
-  _obj->block_size = calloc (_obj->num_blocks + 1, sizeof (BITCODE_BL));
-  _obj->encr_sat_data = calloc (_obj->num_blocks + 1, sizeof (BITCODE_BL));
+  _obj->block_size = calloc (j + 1, sizeof (BITCODE_BL));
+  _obj->encr_sat_data = calloc (j + 1, sizeof (char*));
   _obj->version = 1;
-  for (unsigned i = 0; i < _obj->num_blocks; i++)
+  for (unsigned i = 0; i < j; i++)
     {
       _obj->encr_sat_data[i] = dwg_encrypt_SAT1 (
           _obj->block_size[i], _obj->acis_data, &acis_data_idx);
     }
+  //_obj->encr_sat_data[j] = NULL;
+  //_obj->block_size[j] = 0;
   return _obj;
 }
 
