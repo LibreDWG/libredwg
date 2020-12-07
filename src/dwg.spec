@@ -1944,7 +1944,7 @@ DWG_ENTITY_END
 // 37, 38 and 39 are ACIS entities
 #define WIRESTRUCT_fields(name)                       \
   FIELD_RC (name.type, 0);                            \
-  FIELD_BL (name.selection_marker, 0);                \
+  FIELD_BLd (name.selection_marker, 0);               \
   PRE (R_2004) {                                      \
     FIELD_CAST (name.color, BS, BL, 0);               \
   } else {                                            \

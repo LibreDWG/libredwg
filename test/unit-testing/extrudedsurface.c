@@ -60,7 +60,7 @@ api_process (dwg_object *obj)
   else
     {
       for (BITCODE_BL i = 0; i < num_wires; i++)
-        printf ("EXTRUDEDSURFACE.wires[%u]: " FORMAT_BL "\n", i, wires[i].selection_marker);
+        printf ("EXTRUDEDSURFACE.wires[%u]: " FORMAT_BLd "\n", i, wires[i].selection_marker);
     }
   if (!dwg_dynapi_entity_value (_obj, "EXTRUDEDSURFACE", "silhouettes", &silhouettes, NULL))
     fail ("EXTRUDEDSURFACE.silhouettes");

@@ -88,13 +88,13 @@ api_process (dwg_object *obj)
       for (i = 0; i < num_wires; i++)
         {
           CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, type, RC);
-          CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, selection_marker, BL);
+          CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, selection_marker, BLd);
           PRE (R_2004) {
             CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, color, BS);
           } else {
             CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, color, BL);
           }
-          CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, acis_index, BL);
+          CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, acis_index, BLd);
           CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, num_points, BL);
           CHK_SUBCLASS_3RD (wires[i], 3DSOLID_wire, axis_x);
           CHK_SUBCLASS_3RD (wires[i], 3DSOLID_wire, axis_y);
@@ -129,13 +129,13 @@ api_process (dwg_object *obj)
               for (unsigned j = 0; j < silhouettes[i].num_wires; j++)
                 {
                   CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, type, RC);
-                  CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, selection_marker, BL);
+                  CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, selection_marker, BLd);
                   PRE (R_2004) {
                     CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, color, BS);
                   } else {
                     CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, color, BL);
                   }
-                  CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, acis_index, BL);
+                  CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, acis_index, BLd);
                   CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, num_points, BL);
                   CHK_SUBCLASS_3DPOINTS (wires[j], 3DSOLID_wire, points, wires[i].num_points);
                   CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, transform_present, B);

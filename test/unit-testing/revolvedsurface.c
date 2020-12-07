@@ -45,7 +45,7 @@ api_process (dwg_object *obj)
   else
     {
       for (i = 0; i < num_wires; i++)
-        printf ("REVOLVEDSURFACE.wires[%u]: " FORMAT_BL "\n", i, wires[i].selection_marker);
+        printf ("REVOLVEDSURFACE.wires[%u]: " FORMAT_BLd "\n", i, wires[i].selection_marker);
     }
   if (!dwg_dynapi_entity_value (_obj, "REVOLVEDSURFACE", "silhouettes", &silhouettes, NULL))
     fail ("REVOLVEDSURFACE.silhouettes");

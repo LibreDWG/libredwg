@@ -12552,7 +12552,7 @@ struct _dwg_entity_3DSOLID*
 @item type
 RC
 @item selection_marker
-BL
+BLd
 @item color
 BL
 @item acis_index
