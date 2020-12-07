@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         CONFIGURE_ARGS:
-          - --disable-bindings CC="gcc -O0 -fno-omit-frame-pointer -fsanitize=address,undefined -fno-var-tracking"
+          - --disable-bindings CFLAGS="-O0 -fno-omit-frame-pointer -fsanitize=address,undefined -fno-var-tracking"
           - --enable-release
           - CC="clang"
     steps:
