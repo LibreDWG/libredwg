@@ -1038,8 +1038,8 @@
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           _obj->name[vcount] = bit_read_##type (dat);                         \
-          LOG_INSANE (#name "[%d]: " FORMAT_##type " [" #type " %d]\n",       \
-                      (int)vcount, _obj->name[vcount], _dxf++)                \
+          LOG_TRACE (#name "[%d]: " FORMAT_##type " [" #type " %d]\n",        \
+                     (int)vcount, _obj->name[vcount], _dxf++)                 \
         }                                                                     \
     }
 
