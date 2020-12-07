@@ -1,4 +1,5 @@
-// TODO DEBUGGING
+// TODO unstable. field names are wrong for sure, but types look ok.
+// Needed for ACSH_CLASS primitives
 #define DWG_TYPE DWG_TYPE_EVALUATION_GRAPH
 #include "common.c"
 

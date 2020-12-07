@@ -116,6 +116,7 @@ testobjects = \
 	dynamicblockpurgepreventer \
 	ellipse \
 	endblk \
+	evaluation_graph \
 	field \
 	fieldlist \
 	geodata \
@@ -266,7 +267,6 @@ testdebug = \
 	datatable \
 	dmdimobjectcontextdata \
 	dimassoc \
-	evaluation_graph \
 	extrudedsurface \
 	fcfobjectcontextdata \
 	geomapimage \
