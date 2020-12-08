@@ -6996,6 +6996,20 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_DWG_ADD_XLINE
 #define HAVE_DWG_ADD_XRECORD
 
+/* Some geometric helpers */
+
+dwg_point_3d *
+dwg_geom_normalize (dwg_point_3d *out, const dwg_point_3d pt) __nonnull_all;
+
+dwg_point_3d *
+dwg_geom_cross (dwg_point_3d *out, const dwg_point_3d pt1, const dwg_point_3d pt2) __nonnull_all;
+
+/* Transform a 3D point via its OCS (extrusion or normal) */
+EXPORT dwg_point_3d *
+dwg_geom_transform_OCS (dwg_point_3d *out,
+                        const dwg_point_3d pt,
+                        const dwg_point_3d ext) __nonnull_all;
+
 #ifdef __cplusplus
 }
 #endif

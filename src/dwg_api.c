@@ -24797,8 +24797,83 @@ dwg_add_ACSH_HISTORY_CLASS (Dwg_Entity_3DSOLID *restrict region,
   }
 }
 
+/* Some geometric helpers */
+
+dwg_point_3d *
+dwg_geom_normalize (dwg_point_3d *out, const dwg_point_3d pt)
+{
+  double l = sqrt ((pt.x * pt.x) + (pt.y * pt.y) + (pt.z * pt.z));
+  *out = pt;
+  if (l != 1.0 && l != 0.0)
+    {
+      out->x = pt.x / l;
+      out->y = pt.y / l;
+      out->z = pt.z / l;
+    }
+  return out;
+}
+
+dwg_point_3d *
+dwg_geom_cross (dwg_point_3d *out, const dwg_point_3d pt1, const dwg_point_3d pt2)
+{
+  out->x = pt1.y * pt2.z - pt1.z * pt2.y;
+  out->y = pt1.z * pt2.x - pt1.x * pt2.z;
+  out->z = pt1.x * pt2.y - pt1.y * pt2.x;
+  return out;
+}
+
+// Transform a 3D point via its OCS (extrusion or normal)
+EXPORT dwg_point_3d *
+dwg_geom_transform_OCS (dwg_point_3d *out,
+                        const dwg_point_3d pt,
+                        const dwg_point_3d ext)
+{
+  if (ext.x == 0.0 && ext.y == 0.0 && ext.z == 1.0)
+    {
+      *out = pt;
+    }
+  else if (ext.x == 0.0 && ext.y == 0.0 && ext.z == -1.0)
+    {
+      *out = pt;
+      out->x = - out->x;
+    }
+  else
+    {
+      /* This is called the "Arbitrary Axis Algorithm" to calculate
+         the OCS x-axis from the extrusion z-vector */
+      dwg_point_3d ax, ay, az, be;
+      be = ext;
+      dwg_geom_normalize (&az, be);
+      if ((fabs (az.x) < 1 / 64.0) && (fabs (az.y) < 1 / 64.0))
+        {
+          dwg_point_3d tmp = { 0.0, 1.0, 0.0 };
+          dwg_geom_cross (&tmp, tmp, az);
+          dwg_geom_normalize (&ax, tmp);
+        }
+      else
+        {
+          dwg_point_3d tmp = { 0.0, 0.0, 1.0 };
+          dwg_geom_cross (&tmp, tmp, az);
+          dwg_geom_normalize (&ax, tmp);
+        }
+      dwg_geom_cross (&ay, az, ax);
+      dwg_geom_normalize (&ay, ay);
+      out->x = pt.x * ax.x + pt.y * ax.y + pt.z * ax.z;
+      out->y = pt.x * ay.x + pt.y * ay.y + pt.z * ay.z;
+      out->z = pt.x * az.x + pt.y * az.y + pt.z * az.z;
+    }
+  return out;
+}
+
+// A limited rotation matrix, defining the 3 3d-axis rotations.
+// Geometry uses a double[16] transformation matrix with the
+// origin/offset on the right side columns.
+// and the scale vector as last row.
 typedef double dwg_matrix9[9];
 
+// Via the arbitray axis algorithm we can define the 3 rotations (dwg_matrix9)
+// as a single normal. This helper function creates the rotation matrix from the
+// normal vector.
 static void
 dwg_normal_to_matrix9 (const dwg_point_3d *restrict normal, dwg_matrix9 *matrix)
 {

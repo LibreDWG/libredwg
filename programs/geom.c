@@ -42,7 +42,7 @@ cross (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt1, BITCODE_3DPOINT pt2)
   out->z = pt1.x * pt2.y - pt1.y * pt2.x;
 }
 
-// transform a 2D point via its OCS (extrusion) to 2D
+// transform a 2D point via its OCS (extrusion or normal) to 2D
 void
 transform_OCS_2d (BITCODE_2DPOINT *out, BITCODE_2DPOINT pt, BITCODE_BE ext)
 {
@@ -58,7 +58,7 @@ transform_OCS_2d (BITCODE_2DPOINT *out, BITCODE_2DPOINT pt, BITCODE_BE ext)
   else
     {
       /* This is called the "Arbitrary Axis Algorithm" to calculate
-         the OCS x-axis from the extrusion z-vector */
+         the OCS x-axis from the extrusion z-vector (the "normal") */
       BITCODE_3DPOINT ax, ay, az, be;
       be = (BITCODE_3DPOINT)ext;
       normalize (&az, be);
@@ -82,7 +82,7 @@ transform_OCS_2d (BITCODE_2DPOINT *out, BITCODE_2DPOINT pt, BITCODE_BE ext)
   return;
 }
 
-// transform a 3D point via its OCS (extrusion) to 2D
+// transform a 3D point via its OCS (extrusion or normal) to 3D
 void
 transform_OCS (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt, BITCODE_BE ext)
 {
