@@ -24797,12 +24797,26 @@ dwg_add_ACSH_HISTORY_CLASS (Dwg_Entity_3DSOLID *restrict region,
   }
 }
 
+typedef double dwg_matrix9[9];
+
+static void
+dwg_normal_to_matrix9 (const dwg_point_3d *restrict normal, dwg_matrix9 *matrix)
+{
+  // TODO for now we keep the unrotated defaults
+  ;
+}
+
 static void
 dwg_init_ACSH_CLASS (Dwg_Data *restrict dwg, Dwg_Object *restrict obj,
                      void *restrict acsh, Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                      const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal)
 {
   Dwg_Object_ACSH_BOX_CLASS* _obj = (Dwg_Object_ACSH_BOX_CLASS*)acsh;
+  dwg_matrix9 matrix = {
+    1.0, 0.0, 0.0,
+    0.0, 1.0, 0.0,
+    0.0, 0.0, 1.0 };
+
   obj->tio.object->ownerhandle = dwg_add_handleref (
       dwg, 5, dwg_obj_generic_handlevalue (evalgraph), obj);
   _obj->evalexpr.parentid = -1;
@@ -24818,11 +24832,21 @@ dwg_init_ACSH_CLASS (Dwg_Data *restrict dwg, Dwg_Object *restrict obj,
   _obj->history_node.color.flag = 0x0;
   _obj->history_node.step_id = 97; //?
   _obj->history_node.material = NULL; // => MATERIAL of LAYER "0"
+  dwg_normal_to_matrix9 (normal, &matrix);
   _obj->history_node.trans = calloc (16, 8);
-  // TODO normal
+  _obj->history_node.trans[0] = matrix[0];
+  _obj->history_node.trans[1] = matrix[1];
+  _obj->history_node.trans[2] = matrix[2];
   _obj->history_node.trans[3] = origin_pt->x;
+  _obj->history_node.trans[4] = matrix[3];
+  _obj->history_node.trans[5] = matrix[4];
+  _obj->history_node.trans[6] = matrix[5];
   _obj->history_node.trans[7] = origin_pt->y;
+  _obj->history_node.trans[8] = matrix[6];
+  _obj->history_node.trans[9] = matrix[7];
+  _obj->history_node.trans[10] = matrix[8];
   _obj->history_node.trans[11] = origin_pt->z;
+  // no scale, keep it at 0.0 from calloc
   _obj->history_node.trans[15] = 1.0;
   _obj->major = 27;
   _obj->minor = 52;
@@ -24887,6 +24911,10 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
+    dwg_matrix9 matrix = {
+      1.0, 0.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 0.0, 1.0 };
 
     solid = dwg_add_3DSOLID (blkhdr, "box"); // origin_pt
     solidobj = dwg_obj_generic_to_object (solid, &err);
@@ -24969,6 +24997,10 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
+    dwg_matrix9 matrix = {
+      1.0, 0.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 0.0, 1.0 };
 
     solid = dwg_add_3DSOLID (blkhdr, "chamfer"); // origin_pt
     solidobj = dwg_obj_generic_to_object (solid, &err);
@@ -25041,6 +25073,10 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
+    dwg_matrix9 matrix = {
+      1.0, 0.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 0.0, 1.0 };
 
     solid = dwg_add_3DSOLID (blkhdr, "cone"); // origin_pt
     solidobj = dwg_obj_generic_to_object (solid, &err);
@@ -25113,6 +25149,10 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
+    dwg_matrix9 matrix = {
+      1.0, 0.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 0.0, 1.0 };
 
     solid = dwg_add_3DSOLID (blkhdr, "ellipse-curve"); // origin_pt
     solidobj = dwg_obj_generic_to_object (solid, &err);
@@ -25184,6 +25224,10 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
+    dwg_matrix9 matrix = {
+      1.0, 0.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 0.0, 1.0 };
 
     solid = dwg_add_3DSOLID (blkhdr, "pyramid"); // origin_pt
     solidobj = dwg_obj_generic_to_object (solid, &err);
@@ -25255,6 +25299,10 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
+    dwg_matrix9 matrix = {
+      1.0, 0.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 0.0, 1.0 };
     dwg_point_3d ext;
     char acis_data[650];
     char date[48];
@@ -25265,18 +25313,21 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "%f 9.999999999999999547e-07 1.000000000000000036e-10 \n"
       "body $-1 -1 $-1 $1 $-1 $2 #\n"
       "lump $-1 -1 $-1 $-1 $3 $0 #\n"
-      "transform $-1 -1 " "1 0 0 " "0 1 0 " "0 0 1 " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
+      "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
       "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
       "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
       "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
       "sphere-surface $-1 -1 $-1 0 0 0 %g 1 0 0 0 0 1 forward_v I I I I #\n";
-    // TODO normal
     ext.x = origin_pt->x + (radius * 2);
     ext.y = origin_pt->y + radius;
     ext.z = origin_pt->z + radius;
+    dwg_normal_to_matrix9 (normal, &matrix);
     snprintf (acis_data, 650, sphere_acis_format,
-              date_size, date,
-              ext.x, origin_pt->x, origin_pt->y, origin_pt->z,
+              date_size, date, ext.x,
+              matrix[0], matrix[1], matrix[2],
+              matrix[3], matrix[4], matrix[5],
+              matrix[6], matrix[7], matrix[8],
+              origin_pt->x, origin_pt->y, origin_pt->z,
               radius);
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
     solidobj = dwg_obj_generic_to_object (solid, &err);
@@ -25347,6 +25398,10 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
+    dwg_matrix9 matrix = {
+      1.0, 0.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 0.0, 1.0 };
     dwg_point_3d ext;
     char acis_data[1048];
     char date[48];
@@ -25358,7 +25413,7 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "%f 9.999999999999999547e-07 1.000000000000000036e-10 \n"
       "body $-1 -1 $-1 $1 $-1 $2 # \n"
       "lump $-1 -1 $-1 $-1 $3 $0 # \n"
-      "transform $-1 -1 " "1 0 0 " "0 1 0 " "0 0 1 " "%g %g %g " "1 no_rotate no_reflect no_shear # \n"
+      "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear # \n"
       "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 # \n"
       "face $5 -1 $-1 $-1 $6 $3 $-1 $7 forward single # \n"
       "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 # \n"
@@ -25375,13 +25430,16 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "vertex $-1 -1 $-1 $12 $18 # \n"
       "point $-1 -1 $-1 0 0 %g # \n"
       "point $-1 -1 $-1 0 0 %g # \n";
-    // TODO normal
     ext.x = origin_pt->x + (2 * major_radius);
     ext.y = origin_pt->y + major_radius;
     ext.z = origin_pt->z + minor_radius;
+    dwg_normal_to_matrix9 (normal, &matrix);
     snprintf (acis_data, 1048, torus_acis_format,
-              date_size, date,
-              ext.x, origin_pt->x, origin_pt->y, origin_pt->z,
+              date_size, date, ext.x,
+              matrix[0], matrix[1], matrix[2],
+              matrix[3], matrix[4], matrix[5],
+              matrix[6], matrix[7], matrix[8],
+              origin_pt->x, origin_pt->y, origin_pt->z,
               major_radius, minor_radius,
               major_radius, -major_radius);
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
@@ -25457,6 +25515,10 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
+    dwg_matrix9 matrix = {
+      1.0, 0.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 0.0, 1.0 };
 
     solid = dwg_add_3DSOLID (blkhdr, "wedge"); // origin_pt
     solidobj = dwg_obj_generic_to_object (solid, &err);
