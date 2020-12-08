@@ -24878,7 +24878,7 @@ typedef double dwg_matrix9[9];
 // as a single normal. This helper function creates the rotation matrix from the
 // normal vector.
 static void
-dwg_normal_to_matrix9 (const dwg_point_3d *restrict normal, dwg_matrix9 *matrix)
+dwg_geom_normal_to_matrix9 (const dwg_point_3d *restrict normal, dwg_matrix9 *matrix)
 {
   // TODO for now we keep the unrotated defaults
   ;
@@ -24910,7 +24910,7 @@ dwg_init_ACSH_CLASS (Dwg_Data *restrict dwg, Dwg_Object *restrict obj,
   _obj->history_node.color.flag = 0x0;
   _obj->history_node.step_id = 97; //?
   _obj->history_node.material = NULL; // => MATERIAL of LAYER "0"
-  dwg_normal_to_matrix9 (normal, &matrix);
+  dwg_geom_normal_to_matrix9 (normal, &matrix);
   _obj->history_node.trans = calloc (16, 8);
   _obj->history_node.trans[0] = matrix[0];
   _obj->history_node.trans[1] = matrix[1];
@@ -25231,8 +25231,63 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       1.0, 0.0, 0.0,
       0.0, 1.0, 0.0,
       0.0, 0.0, 1.0 };
-
-    solid = dwg_add_3DSOLID (blkhdr, "ellipse-curve"); // origin_pt
+    double h2 = height / 2.0;
+    double dbl_pi = 2.0 * M_PI; // i.e. 360
+    dwg_point_3d ext;
+    char acis_data[2000];
+    char date[48];
+    unsigned date_size = dwg_acis_date (date, 48);
+    // acis version 106 (r14) would be nicer
+    const char cylinder_acis_format[] = /* len = 890 => 1609 */
+      "700 19 1 0          \n"
+      "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+      "%f 9.999999999999999547e-07 1.000000000000000036e-10\n"
+      "body $-1 -1 $-1 $1 $-1 $2 #\n"
+      "lump $-1 -1 $-1 $-1 $3 $0 #\n"
+      "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
+      "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
+      "face $5 -1 $-1 $6 $7 $3 $-1 $8 forward single #\n"
+      "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
+      "face $9 -1 $-1 $10 $11 $3 $-1 $12 forward single #\n"
+      "loop $-1 -1 $-1 $13 $14 $4 #\n"
+      "cone-surface $-1 -1 $-1 0 0 0 0 0 1 %g 0 0 1 I I 0 1 %g forward I I I I #\n"
+      "color-adesk-attrib $-1 -1 $-1 $-1 $6 256 #\n"
+      "face $15 -1 $-1 $-1 $16 $3 $-1 $17 forward single #\n"
+      "loop $-1 -1 $-1 $-1 $18 $6 #\n"
+      "plane-surface $-1 -1 $-1 0 0 %g 0 0 -1 -1 0 0 forward_v I I I I #\n" // -height/2
+      "loop $-1 -1 $-1 $-1 $19 $4 #\n"
+      "coedge $-1 -1 $-1 $14 $14 $18 $20 reversed $7 $-1 #\n"
+      "color-adesk-attrib $-1 -1 $-1 $-1 $10 256 #\n"
+      "loop $-1 -1 $-1 $-1 $21 $10 #\n"
+      "plane-surface $-1 -1 $-1 0 0 %g 0 0 1 1 0 0 forward_v I I I I #\n" // height/2
+      "coedge $-1 -1 $-1 $18 $18 $14 $20 forward $11 $-1 #\n"
+      "coedge $-1 -1 $-1 $19 $19 $21 $22 reversed $13 $-1 #\n"
+      "edge $23 -1 $-1 $24 0 $24 %g $18 $25 forward @7 unknown #\n" // 2*pi
+      "coedge $-1 -1 $-1 $21 $21 $19 $22 forward $16 $-1 #\n"
+      "edge $26 -1 $-1 $27 0 $27 %g $21 $28 forward @7 unknown #\n" // 2*pi
+      "color-adesk-attrib $-1 -1 $-1 $-1 $20 256 #\n"
+      "vertex $-1 -1 $-1 $20 $29 #\n"
+      "ellipse-curve $-1 -1 $-1 0 0 %g 0 0 -1 %g 0 0 1 I I #\n" // -height/2, major_radius
+      "color-adesk-attrib $-1 -1 $-1 $-1 $22 256 #\n"
+      "vertex $-1 -1 $-1 $22 $30 #\n"
+      "ellipse-curve $-1 -1 $-1 0 0 %g 0 0 1 %g 0 0 1 I I #\n"   // -height/2, minor_radius
+      "point $-1 -1 $-1 %g 0 %g #\n"  // major_radius, -height/2,
+      "point $-1 -1 $-1 %g 0 %g #\n"; // major_radius, height/2,
+    ext.x = origin_pt->x + (2 * major_radius);
+    ext.y = origin_pt->y + major_radius;
+    ext.z = origin_pt->z + minor_radius;
+    dwg_geom_normal_to_matrix9 (normal, &matrix);
+    snprintf (acis_data, 2000, cylinder_acis_format,
+              date_size, date, ext.x,
+              matrix[0], matrix[1], matrix[2],
+              matrix[3], matrix[4], matrix[5],
+              matrix[6], matrix[7], matrix[8],
+              origin_pt->x, origin_pt->y, origin_pt->z,
+              major_radius, minor_radius,
+              -h2, h2, dbl_pi, dbl_pi,
+              -h2, major_radius, -h2, major_radius,
+              major_radius, -h2, major_radius, h2);
+    solid = dwg_add_3DSOLID (blkhdr, acis_data);
     solidobj = dwg_obj_generic_to_object (solid, &err);
     solid->point_present = 1;
     solid->point.x = origin_pt->x;
@@ -25399,7 +25454,7 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     ext.x = origin_pt->x + (radius * 2);
     ext.y = origin_pt->y + radius;
     ext.z = origin_pt->z + radius;
-    dwg_normal_to_matrix9 (normal, &matrix);
+    dwg_geom_normal_to_matrix9 (normal, &matrix);
     snprintf (acis_data, 650, sphere_acis_format,
               date_size, date, ext.x,
               matrix[0], matrix[1], matrix[2],
@@ -25511,7 +25566,7 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     ext.x = origin_pt->x + (2 * major_radius);
     ext.y = origin_pt->y + major_radius;
     ext.z = origin_pt->z + minor_radius;
-    dwg_normal_to_matrix9 (normal, &matrix);
+    dwg_geom_normal_to_matrix9 (normal, &matrix);
     snprintf (acis_data, 1048, torus_acis_format,
               date_size, date, ext.x,
               matrix[0], matrix[1], matrix[2],
