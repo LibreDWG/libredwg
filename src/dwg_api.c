@@ -53,6 +53,8 @@ Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict ob
 /* Initialization hack only */
 void dwg_set_next_hdl (Dwg_Data *dwg, unsigned long value);
 void dwg_set_next_objhandle (Dwg_Object *obj);
+// from dxfclasses */
+int dwg_dxfclass_require (Dwg_Data *restrict dwg, const char *restrict dxfname);
 
 /**
  * Return an object fieldvalue
@@ -22358,14 +22360,23 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
   return 0;
 }
 
-/* Create classes on demand.
+#define REQUIRE_CLASS(name) dwg_require_class (dwg, name, sizeof(name)-1)
+
+#if 0
+/* Create classes on demand. => Moved to dxfclasses.in
    Returns 1 if already in CLASSES, 0 if successfully added, -1 on error.
    Of course this should be a gperf hash. Or at least a list of class.inc macros, as
    in gambas names.inc
 */
 EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
-                              const char *const restrict dxfname)
+                              const char *const restrict dxfname,
+                              const int len)
 {
+  int result = dwg_dxfclass_require (dwg, dxfname);
+  if (result < 0)
+    LOG_ERROR ("Unhandled CLASS %s", dxfname);
+  return result;
+
   for (BITCODE_BL i = 0; i < dwg->num_classes; i++)
     {
       Dwg_Class *klass = &dwg->dwg_class[i];
@@ -22516,7 +22527,6 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
   IF_ODBXCLASS (ACDBASSOCPATHACTIONPARAM, AcDbAssocPathActionParam, false);
   IF_ODBXCLASS (ACDBASSOCOBJECTACTIONPARAM, AcDbAssocObjectActionParam, false);
   IF_ODBXCLASS (ACDBASSOCPOINTREFACTIONPARAM, AcDbAssocPointRefActionParam, false);
-  //IF_ODBXCLASS (ACDBASSOCVERTEXACTIONPARAM, AcDbAssocVertexActionParam, false);
   // ??
   IF_ODBXCLASS (ACDB_ALDIMOBJECTCONTEXTDATA_CLASS, AcDbAlignedDimensionObjectContextData, false);
   IF_ODBXCLASS (ACDB_ANGDIMOBJECTCONTEXTDATA_CLASS, AcDbAngularDimensionObjectContextData, false);
@@ -22534,8 +22544,9 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
   LOG_ERROR ("Unhandled CLASS %s", dxfname);
   return -1;
 }
+#endif
 
-#define NEW_ENTITY(dwg, obj)                                            \
+#define NEW_ENTITY(dwg, obj)                                                  \
   {                                                                           \
     BITCODE_BL idx = dwg->num_objects;                                        \
     (void)dwg_add_object (dwg);                                               \
@@ -23793,7 +23804,7 @@ dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
                          const BITCODE_H restrict itemhandle)
 {
   {
-    dwg_require_class (dwg, "ACDBDICTIONARYWDFLT");
+    REQUIRE_CLASS ("ACDBDICTIONARYWDFLT");
   }
   {
     API_ADD_OBJECT (DICTIONARYWDFLT);
@@ -24212,7 +24223,7 @@ dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object *hdr = dwg_obj_generic_to_object (blkhdr, &err);
     Dwg_Data *dwg = hdr ? hdr->parent : NULL;
     if (dwg && dwg->header.version < R_2000)
-      dwg_require_class (dwg, "LWPOLYLINE");
+      REQUIRE_CLASS ("LWPOLYLINE");
   }
   {
     API_ADD_ENTITY (LWPOLYLINE);
@@ -24233,7 +24244,7 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object *hdr = dwg_obj_generic_to_object (blkhdr, &err);
     Dwg_Data *dwg = hdr ? hdr->parent : NULL;
     if (dwg && dwg->header.version < R_2000)
-      dwg_require_class (dwg, "HATCH");
+      REQUIRE_CLASS ("HATCH");
   }
   {
     API_ADD_ENTITY (HATCH);
@@ -24283,7 +24294,7 @@ dwg_add_XRECORD (Dwg_Object_DICTIONARY *restrict dict,
     }
   {
     if (dwg->header.version < R_2000)
-      dwg_require_class (dwg, "XRECORD");
+      REQUIRE_CLASS ("XRECORD");
   }
   {
     API_ADD_OBJECT (XRECORD);
@@ -24576,7 +24587,7 @@ EXPORT Dwg_Object_PLACEHOLDER *
 dwg_add_PLACEHOLDER (Dwg_Data *restrict dwg)
 {
   {
-    dwg_require_class (dwg, "ACDBPLACEHOLDER");
+    REQUIRE_CLASS ("ACDBPLACEHOLDER");
   }
   {
     API_ADD_OBJECT (PLACEHOLDER);
@@ -24591,7 +24602,7 @@ dwg_add_VBA_PROJECT (Dwg_Data *restrict dwg, const BITCODE_BL size,
   if (dwg->header.version < R_2000)
     return NULL;
   {
-    dwg_require_class (dwg, "VBA_PROJECT");
+    REQUIRE_CLASS ("VBA_PROJECT");
   }
   {
     API_ADD_OBJECT (VBA_PROJECT);
@@ -24620,7 +24631,7 @@ dwg_add_LAYOUT (Dwg_Object *restrict vp,
       return NULL;
     }
   {
-    dwg_require_class (dwg, "LAYOUT");
+    REQUIRE_CLASS ("LAYOUT");
   }
   {
     Dwg_Object_DICTIONARY *dict;
@@ -24687,7 +24698,7 @@ dwg_add_PROXY_ENTITY (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
     Dwg_Object *hdr = dwg_obj_generic_to_object (blkhdr, &err);
     Dwg_Data *dwg = hdr ? hdr->parent : NULL;
     if (dwg && dwg->header.version < R_2000)
-      dwg_require_class (dwg, "ACAD_PROXY_ENTITY_WRAPPER");
+      REQUIRE_CLASS ("ACAD_PROXY_ENTITY_WRAPPER");
   }
   {
     API_ADD_ENTITY (PROXY_ENTITY);
@@ -24704,7 +24715,7 @@ dwg_add_PROXY_OBJECT (Dwg_Data *restrict dwg, BITCODE_T name, BITCODE_T key
   Dwg_Object *nod, *dictobj;
   {
     int error;
-    dwg_require_class (dwg, "ACAD_PROXY_OBJECT_WRAPPER");
+    REQUIRE_CLASS ("ACAD_PROXY_OBJECT_WRAPPER");
 
     // add name to NOD
     dict = dwg_add_DICTIONARY (dwg, name, key, NULL);
@@ -24862,9 +24873,9 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     dwg = hdr ? hdr->parent : NULL;
     if (dwg)
       {
-        dwg_require_class (dwg, "ACAD_EVALUATION_GRAPH");
-        dwg_require_class (dwg, "ACSH_HISTORY_CLASS");
-        dwg_require_class (dwg, "ACSH_BOX_CLASS");
+        REQUIRE_CLASS ("ACAD_EVALUATION_GRAPH");
+        REQUIRE_CLASS ("ACSH_HISTORY_CLASS");
+        REQUIRE_CLASS ("ACSH_BOX_CLASS");
       }
     else
       return NULL;
@@ -24941,9 +24952,9 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     dwg = hdr ? hdr->parent : NULL;
     if (dwg)
       {
-        dwg_require_class (dwg, "ACAD_EVALUATION_GRAPH");
-        dwg_require_class (dwg, "ACSH_HISTORY_CLASS");
-        dwg_require_class (dwg, "ACSH_CHAMFER_CLASS");
+        REQUIRE_CLASS ("ACAD_EVALUATION_GRAPH");
+        REQUIRE_CLASS ("ACSH_HISTORY_CLASS");
+        REQUIRE_CLASS ("ACSH_CHAMFER_CLASS");
       }
     else
       return NULL;
@@ -25010,9 +25021,9 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     dwg = hdr ? hdr->parent : NULL;
     if (dwg)
       {
-        dwg_require_class (dwg, "ACAD_EVALUATION_GRAPH");
-        dwg_require_class (dwg, "ACSH_HISTORY_CLASS");
-        dwg_require_class (dwg, "ACSH_CONE_CLASS");
+        REQUIRE_CLASS ("ACAD_EVALUATION_GRAPH");
+        REQUIRE_CLASS ("ACSH_HISTORY_CLASS");
+        REQUIRE_CLASS ("ACSH_CONE_CLASS");
       }
     else
       return NULL;
@@ -25080,9 +25091,9 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     dwg = hdr ? hdr->parent : NULL;
     if (dwg)
       {
-        dwg_require_class (dwg, "ACAD_EVALUATION_GRAPH");
-        dwg_require_class (dwg, "ACSH_HISTORY_CLASS");
-        dwg_require_class (dwg, "ACSH_CYLINDER_CLASS");
+        REQUIRE_CLASS ("ACAD_EVALUATION_GRAPH");
+        REQUIRE_CLASS ("ACSH_HISTORY_CLASS");
+        REQUIRE_CLASS ("ACSH_CYLINDER_CLASS");
       }
     else
       return NULL;
@@ -25149,9 +25160,9 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     dwg = hdr ? hdr->parent : NULL;
     if (dwg)
       {
-        dwg_require_class (dwg, "ACAD_EVALUATION_GRAPH");
-        dwg_require_class (dwg, "ACSH_HISTORY_CLASS");
-        dwg_require_class (dwg, "ACSH_PYRAMID_CLASS");
+        REQUIRE_CLASS ("ACAD_EVALUATION_GRAPH");
+        REQUIRE_CLASS ("ACSH_HISTORY_CLASS");
+        REQUIRE_CLASS ("ACSH_PYRAMID_CLASS");
       }
     else
       return NULL;
@@ -25218,9 +25229,9 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     dwg = hdr ? hdr->parent : NULL;
     if (dwg)
       {
-        dwg_require_class (dwg, "ACAD_EVALUATION_GRAPH");
-        dwg_require_class (dwg, "ACSH_HISTORY_CLASS");
-        dwg_require_class (dwg, "ACSH_SPHERE_CLASS");
+        REQUIRE_CLASS ("ACAD_EVALUATION_GRAPH");
+        REQUIRE_CLASS ("ACSH_HISTORY_CLASS");
+        REQUIRE_CLASS ("ACSH_SPHERE_CLASS");
       }
     else
       return NULL;
@@ -25308,9 +25319,9 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     dwg = hdr ? hdr->parent : NULL;
     if (dwg)
       {
-        dwg_require_class (dwg, "ACAD_EVALUATION_GRAPH");
-        dwg_require_class (dwg, "ACSH_HISTORY_CLASS");
-        dwg_require_class (dwg, "ACSH_TORUS_CLASS");
+        REQUIRE_CLASS ("ACAD_EVALUATION_GRAPH");
+        REQUIRE_CLASS ("ACSH_HISTORY_CLASS");
+        REQUIRE_CLASS ("ACSH_TORUS_CLASS");
       }
     else
       return NULL;
@@ -25416,9 +25427,9 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     dwg = hdr ? hdr->parent : NULL;
     if (dwg)
       {
-        dwg_require_class (dwg, "ACAD_EVALUATION_GRAPH");
-        dwg_require_class (dwg, "ACSH_HISTORY_CLASS");
-        dwg_require_class (dwg, "ACSH_WEDGE_CLASS");
+        REQUIRE_CLASS ("ACAD_EVALUATION_GRAPH");
+        REQUIRE_CLASS ("ACSH_HISTORY_CLASS");
+        REQUIRE_CLASS ("ACSH_WEDGE_CLASS");
       }
     else
       return NULL;
@@ -25585,9 +25596,9 @@ dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Data *dwg = hdr ? hdr->parent : NULL;
     if (dwg)
       {
-        dwg_require_class (dwg, "IMAGEDEF");
-        dwg_require_class (dwg, "IMAGEDEF_REACTOR");
-        dwg_require_class (dwg, "IMAGE");
+        REQUIRE_CLASS ("IMAGEDEF");
+        REQUIRE_CLASS ("IMAGEDEF_REACTOR");
+        REQUIRE_CLASS ("IMAGE");
       }
   }
   {
@@ -25673,7 +25684,7 @@ EXPORT Dwg_Object_LAYER_INDEX *
 dwg_add_LAYER_INDEX (Dwg_Data *restrict dwg /* ... */)
 {
   {
-    dwg_require_class (dwg, "LAYER_INDEX");
+    REQUIRE_CLASS ("LAYER_INDEX");
   }
   {
     API_ADD_OBJECT (LAYER_INDEX);
@@ -25699,7 +25710,7 @@ dwg_add_SPATIAL_FILTER (Dwg_Entity_INSERT *restrict insert /*, clip_verts... */)
   if (!dwg || err)
     return NULL;
   {
-    dwg_require_class (dwg, "SPATIAL_FILTER");
+    REQUIRE_CLASS ("SPATIAL_FILTER");
 
     _filter = dwg_add_DICTIONARY (dwg, NULL, (BITCODE_T) "ACAD_FILTER", NULL);
     filter = dwg_obj_generic_to_object (_filter, &err);
@@ -25741,7 +25752,7 @@ EXPORT Dwg_Object_SPATIAL_INDEX *
 dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */)
 {
   {
-    dwg_require_class (dwg, "SPATIAL_INDEX");
+    REQUIRE_CLASS ("SPATIAL_INDEX");
   }
   {
     API_ADD_OBJECT (SPATIAL_INDEX);

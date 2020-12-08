@@ -1,0 +1,264 @@
+%{// -*- mode: c -*-
+/*****************************************************************************/
+/*  LibreDWG - free implementation of the DWG file format                    */
+/*                                                                           */
+/*  Copyright (C) 2020 Free Software Foundation, Inc.                        */
+/*                                                                           */
+/*  This library is free software, licensed under the terms of the GNU       */
+/*  General Public License as published by the Free Software Foundation,     */
+/*  either version 3 of the License, or (at your option) any later version.  */
+/*  You should have received a copy of the GNU General Public License        */
+/*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
+/*****************************************************************************/
+
+/*
+ * dxfclasses.c: create classes, lookup the initial class values from its DXF name.
+ *               generated via gperf from dxfclass.in
+ *
+ * written Reini Urban
+ */
+
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+#include <stdbool.h>
+#include "config.h"
+#include "dwg.h"
+#include "common.h"
+// other imports
+int dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
+                   const char *const restrict cppname, const char *const restrict appname,
+                   const bool is_entity);
+// export
+EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
+                              const char *const restrict dxfname, const int len);
+// internal
+const struct Dwg_DXFClass * in_word_set (register const char *str, register size_t len);
+
+enum apptypes {
+  ODBXCLASS,
+  ODBX_OR_A2000CLASS,
+  A2000CLASS,
+  SCENEOECLASS,
+  ISMCLASS,
+  EXPRESSCLASS,
+  SPECIALCLASS,
+};
+#define ODBX ODBXCLASS
+#define ISM ISMCLASS
+#define SCENEOE SCENEOECLASS
+#define EXPRESS EXPRESSCLASS
+#define SPECIAL SPECIALCLASS
+//%null-strings
+
+%}
+%language=ANSI-C
+%struct-type
+%readonly-tables
+%pic
+
+struct Dwg_DXFClass {int name; const char *const cppname; unsigned apptype:4; unsigned isent:1;};
+
+%%
+# Entities
+LWPOLYLINE,	"AcDbPolyline",		ODBX,	1
+HATCH,		"AcDbHatch",		ODBX,	1
+OLE2FRAME,	"AcDbOle2Frame",	ODBX,	1
+ARC_DIMENSION,	"AcDbArcDimension",	ODBX,	1
+MULTILEADER,	"AcDbMLeader",		ODBX,	1
+ACAD_TABLE,	"AcDbTable",		ODBX,	1
+#
+ACDBDICTIONARYWDFLT,		"AcDbDictionaryWithDefault",	ODBX_OR_A2000CLASS,	0
+ACDBPLACEHOLDER,		"AcDbPlaceHolder",		ODBX_OR_A2000CLASS,	0
+ACAD_PROXY_ENTITY_WRAPPER,	"AcDbProxyEntityWrapper",	ODBX_OR_A2000CLASS,	0
+ACAD_PROXY_OBJECT_WRAPPER,	"AcDbProxyObjectWrapper",	ODBX_OR_A2000CLASS,	0
+#
+DICTIONARYVAR,	"AcDbDictionaryVar",	A2000CLASS,	0
+LAYOUT,		"AcDbLayout",		A2000CLASS,	0
+SORTENTSTABLE,	"AcDbSortentsTable",	A2000CLASS,	0
+#
+VBA_PROJECT,	"AcDbVbaProject",	ODBX,	0
+XRECORD,	"AcDbXrecord",		ODBX,	0
+LAYER_INDEX,	"AcDbLayerIndex",	ODBX,	0
+SPATIAL_INDEX,	"AcDbSpatialIndex",	ODBX,	0
+SPATIAL_FILTER,	"AcDbSpatialFilter",	ODBX,	0
+IDBUFFER,	"AcDbIdBuffer",		ODBX,	0
+VISUALSTYLE,	"AcDbVisualStyle",	ODBX,	0
+TABLESTYLE,	"AcDbTableStyle",	ODBX,	0
+TABLECONTENT,	"AcDbTableContent",	ODBX,	0
+TABLEGEOMETRY,	"AcDbTableGeometry",	ODBX,	0
+CELLSTYLEMAP,	"AcDbCellStyleMap",	ODBX,	0
+DATATABLE,	"AcDbDataTable",	ODBX,	0
+SCALE,		"AcDbScale",		ODBX,	0
+#
+IMAGE,		"AcDbRasterImage",	ISM,	1
+IMAGEDEF,	"AcDbRasterImageDef",	ISM,	0
+IMAGEDEF_REACTOR,"AcDbRasterImageDefReactor",	ISM,	0
+RASTERVARIABLES,"AcDbRasterVariables",	ISM,	0
+#
+LIGHT,		"AcDbLight",		SCENEOE, 1
+SUN, 		"AcDbSun",		SCENEOE, 0
+#
+DIMASSOC, 	"AcDbDimAssoc",		SPECIAL, 0
+WIPEOUT,	"AcDbWipeout", 		SPECIAL, 1
+WIPEOUTVARIABLES,"AcDbWipeoutVariables",	ODBX,	0
+RTEXT, 		"AcDbRText", 		EXPRESS, 1
+ARCALIGNEDTEXT, "AcDbArcAlignedText",	EXPRESS, 1
+MLEADERSTYLE,	"AcDbMLeaderStyle",	SPECIAL, 0
+#
+MATERIAL,		"AcDbMaterial",		ODBX,	0
+PLOTSETTINGS,		"AcDbPlotSettings",	ODBX,	0
+ACDBSECTIONVIEWSTYLE,	"AcDbSectionViewStyle",	ODBX,	0
+ACDBDETAILVIEWSTYLE,	"AcDbDetailViewStyle",	ODBX,	0
+ACAD_EVALUATION_GRAPH,	"AcDbEvalGraph",	ODBX,	0
+#
+ACSH_BOOLEAN_CLASS,	"AcDbShBoolean",	ODBX,	0
+ACSH_BOX_CLASS,		"AcDbShBox",		ODBX,	0
+ACSH_BREP_CLASS,	"AcDbShBrep",		ODBX,	0
+ACSH_CHAMFER_CLASS,	"AcDbShChamfer",	ODBX,	0
+ACSH_CONE_CLASS,	"AcDbShCone",		ODBX,	0
+ACSH_CYLINDER_CLASS,	"AcDbShCylinder",	ODBX,	0
+ACSH_EXTRUSION_CLASS,	"AcDbShExtrusion",	ODBX,	0
+ACSH_FILLET_CLASS,	"AcDbShFillet",		ODBX,	0
+ACSH_HISTORY_CLASS,	"AcDbShHistory",	ODBX,	0
+ACSH_LOFT_CLASS,	"AcDbShLoft",		ODBX,	0
+ACSH_PYRAMID_CLASS,	"AcDbShPyramid",	ODBX,	0
+ACSH_REVOLVE_CLASS,	"AcDbShRevolve",	ODBX,	0
+ACSH_SPHERE_CLASS,	"AcDbShSphere",		ODBX,	0
+ACSH_SWEEP_CLASS,	"AcDbShSweep",		ODBX,	0
+ACSH_TORUS_CLASS,	"AcDbShTorus",		ODBX,	0
+ACSH_WEDGE_CLASS,	"AcDbShWedge",		ODBX,	0
+#
+ACDBASSOCPERSSUBENTMANAGER,	"AcDbAssocPersSubentManager",	ODBX,	0
+ACDBPERSSUBENTMANAGER, 		"AcDbPersSubentManager",	ODBX, 0
+ACDBASSOCNETWORK,		"AcDbAssocNetwork",		ODBX,	0
+ACDBASSOCACTION,		"AcDbAssocAction",		ODBX,	0
+ACDBASSOCALIGNEDDIMACTIONBODY,	"AcDbAssocAlignedDimActionBody",	ODBX,	0
+ACDBASSOCOSNAPPOINTREFACTIONPARAM,"AcDbAssocOsnapPointRefActionParam",	ODBX,	0
+ACDBASSOCVERTEXACTIONPARAM,	"AcDbAssocVertexActionParam",	ODBX,	0
+ACDBASSOCGEOMDEPENDENCY,	"AcDbAssocGeomDependency",	ODBX,	0
+ACDBASSOCDEPENDENCY,		"AcDbAssocDependency",		ODBX,	0
+ACDBASSOCDIMDEPENDENCYBODY,	"AcDbAssocDimDependencyBody",	ODBX,	0
+#
+ACDBASSOC3POINTANGULARDIMACTIONBODY,"AcDbAssoc3PointAngularDimActionBody",	ODBX,	0
+ACDBASSOCALIGNEDIMACTIONBODY,	"AcDbAssocAlignedDimActionBody",	ODBX,	0
+ACDBASSOCORDINATEDIMACTIONBODY,	"AcDbAssocOrdinatedDimActionBody",	ODBX,	0
+ACDBASSOCROTATEDDIMACTIONBODY,	"AcDbAssocRotatedDimActionBody",	ODBX,	0
+#
+ACDBASSOCARRAYMODIFYACTIONBODY,	"AcDbAssocArrayModifyActionBody",	ODBX,	0
+ACDBASSOCARRAYACTIONBODY,	"AcDbAssocArrayActionBody",		ODBX,	0
+ACDBASSOCEDGECHAMFERACTIONBODY,	"AcDbAssocEdgeChamferActionBody",	ODBX,	0
+ACDBASSOCEDGEFILLETACTIONBODY,	"AcDbAssocEdgeFilletActionBody",	ODBX,	0
+ACDBASSOCMLEADERACTIONBODY,	"AcDbAssocMLeaderActionBody",		ODBX,	0
+#
+ACDBASSOCBLENDSURFACEACTIONBODY,	"AcDbAssocBlendSurfaceActionBody",	ODBX,	0
+ACDBASSOCEXTENDSURFACEACTIONBODY,	"AcDbAssocExtendSurfaceActionBody",	ODBX,	0
+ACDBASSOCEXTRUDEDSURFACEACTIONBODY,	"AcDbAssocExtrudedSurfaceActionBody",	ODBX,	0
+ACDBASSOCFILLETSURFACEACTIONBODY,	"AcDbAssocFilletSurfaceActionBody",	ODBX,	0
+ACDBASSOCLOFTEDSURFACEACTIONBODY,	"AcDbAssocLoftedSurfaceActionBody",	ODBX,	0
+ACDBASSOCNETWORKSURFACEACTIONBODY,	"AcDbAssocNetworkSurfaceActionBody",	ODBX,	0
+ACDBASSOCOFFSETSURFACEACTIONBODY,	"AcDbAssocOffsetSurfaceActionBody",	ODBX,	0
+ACDBASSOCPLANESURFACEACTIONBODY,	"AcDbAssocPlaneSurfaceActionBody",	ODBX,	0
+ACDBASSOCPATCHSURFACEACTIONBODY,	"AcDbAssocPatchSurfaceActionBody",	ODBX,	0
+ACDBASSOCRESTOREENTITYSTATEACTIONBODY,	"AcDbAssocRestoreEntityStateActionBody",	ODBX,	0
+ACDBASSOCREVOLVEDSURFACEACTIONBODY,	"AcDbAssocRevolvedSurfaceActionBody",	ODBX,	0
+ACDBASSOCSWEPTSURFACEACTIONBODY,	"AcDbAssocSweptSurfaceActionBody",	ODBX,	0
+ACDBASSOCTRIMSURFACEACTIONBODY,		"AcDbAssocTrimSurfaceActionBody",		ODBX,	0
+#
+ACDBASSOCACTIONPARAM,			"AcDbAssocActionParam",		ODBX,	0
+ACDBASSOCASMBODYACTIONPARAM,		"AcDbAssocAsmbodyActionParam",	ODBX,	0
+ACDBASSOCCOMPOUNDACTIONPARAM,		"AcDbAssocCompoundActionParam",	ODBX,	0
+ACDBASSOCEDGEACTIONPARAM,		"AcDbAssocEdgeActionParam",	ODBX,	0
+ACDBASSOCFACEACTIONPARAM,		"AcDbAssocFaceActionParam",	ODBX,	0
+ACDBASSOCPATHACTIONPARAM,		"AcDbAssocPathActionParam",	ODBX,	0
+ACDBASSOCOBJECTACTIONPARAM,		"AcDbAssocObjectActionParam",	ODBX,	0
+ACDBASSOCPOINTREFACTIONPARAM,		"AcDbAssocPointRefActionParam",	ODBX,	0
+ACDB_ALDIMOBJECTCONTEXTDATA_CLASS,	"AcDbAlignedDimensionObjectContextData",ODBX,	0
+ACDB_ANGDIMOBJECTCONTEXTDATA_CLASS,	"AcDbAngularDimensionObjectContextData",ODBX,	0
+ACDB_ANNOTSCALEOBJECTCONTEXTDATA_CLASS,	"AcDbAnnotScaleObjectContextData",	ODBX,	0
+ACDB_BLKREFOBJECTCONTEXTDATA_CLASS,	"AcDbBlkrefObjectContextData",		ODBX,	0
+ACDB_DMDIMOBJECTCONTEXTDATA_CLASS,	"AcDbDiametricDimensionObjectContextData",ODBX,	0
+ACDB_FCFOBJECTCONTEXTDATA_CLASS,	"AcDbFcfObjectContextData",		ODBX,	0
+ACDB_LEADEROBJECTCONTEXTDATA_CLASS,	"AcDbLeaderObjectContextData",		ODBX,	0
+ACDB_MLEADEROBJECTCONTEXTDATA_CLASS,	"AcDbMLeaderObjectContextData",		ODBX,	0
+ACDB_ORDDIMOBJECTCONTEXTDATA_CLASS,	"AcDbOrdinateDimensionObjectContextData",	ODBX,	0
+ACDB_RADIMLGOBJECTCONTEXTDATA_CLASS,	"AcDbRadialDimensionLargeObjectContextData",	ODBX,	0
+ACDB_RADIMOBJECTCONTEXTDATA_CLASS,	"AcDbRadialDimensionObjectContextData",	ODBX,	0
+ACDB_TEXTOBJECTCONTEXTDATA_CLASS,	"AcDbTextObjectContextData",		ODBX,	0
+%%
+
+/* Create classes on demand.
+   Returns 1 if already in CLASSES, 0 if successfully added, -1 on error.
+*/
+EXPORT int
+dwg_require_class (Dwg_Data *restrict dwg, const char *const restrict dxfname, const int len)
+{
+  const struct Dwg_DXFClass* result;
+  for (BITCODE_BL i = 0; i < dwg->num_classes; i++)
+    {
+      Dwg_Class *klass = &dwg->dwg_class[i];
+      if (strEQ (klass->dxfname, dxfname))
+        return 1;
+    }
+
+  result = in_word_set (dxfname, len);
+  if (result)
+    {
+      switch ((enum apptypes)result->apptype)
+        {
+        case ODBXCLASS:
+          dwg_add_class (dwg, dxfname, result->cppname, "ObjectDBX Classes", result->isent);
+          break;
+        case ODBX_OR_A2000CLASS:
+          dwg_add_class (dwg, dxfname, result->cppname,
+                         dwg->header.from_version <= R_2000 ? "AutoCAD 2000" : "ObjectDBX Classes",
+                         result->isent);
+          break;
+        case A2000CLASS:
+          dwg_add_class (dwg, dxfname, result->cppname, "AutoCAD 2000", result->isent);
+          break;
+        case SCENEOECLASS:
+          dwg_add_class (dwg, dxfname, result->cppname, "SCENEOE", result->isent);
+          break;
+        case ISMCLASS:
+          dwg_add_class (dwg, dxfname, result->cppname, "ISM", result->isent);
+          break;
+        case EXPRESSCLASS:
+          {
+            char appname[128];
+            strcpy (appname, dxfname);
+            strcat (appname, "|AutoCAD Express Tool");
+            dwg_add_class (dwg, dxfname, result->cppname, appname, result->isent);
+          }
+          break;
+        case SPECIALCLASS:
+          {
+            char appname[128];
+            if (strEQc (dxfname, "MLEADERSTYLE"))
+              strcpy (appname, "ACDB_MLEADERSTYLE_CLASS");
+            else if (strEQc (dxfname, "WIPEOUT"))
+              strcpy (appname, "Wipeout|Product Desc:     WipeOut Dbx Application");
+            else if (strEQc (dxfname, "DIMASSOC"))
+              strcpy (appname, "AcDbDimAssoc|Product Desc:     AcDim ARX App For Dimension");
+            else
+              {
+                strcpy (appname, result->cppname);
+                strcat (appname, "|Unknown ARX App");
+              }
+            dwg_add_class (dwg, dxfname, result->cppname, appname, result->isent);
+          }
+          break;
+        default:
+          fprintf (stderr, "dxfclass_require: Invalid apptype %d", (int)result->apptype);
+          return -1;
+        }
+    }
+  return -1;
+}
+
+/*
+ * Local variables:
+ *   c-file-style: "gnu"
+ * End:
+ * vim: expandtab shiftwidth=4 cinoptions='\:2=2' :
+ */

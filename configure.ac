@@ -382,6 +382,10 @@ else
 fi
 AM_CONDITIONAL(ENABLE_GCOV, test "x$enable_gcov" = "xtrue")
 
+AC_CHECK_PROGS([GPERF], [gperf])
+AC_SUBST(GPERF)
+AM_CONDITIONAL(HAVE_GPERF, test -n "$GPERF")
+
 AC_MSG_CHECKING([for latest clang-format])
 CLANG_FORMAT=
 for clangfmt in clang-format{-mp,}{-devel,-{8,7,6,5,4,3}{,.9,.8,.7,.6,.5,.4,.3,.2,.1,.0},}

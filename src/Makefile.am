@@ -35,6 +35,7 @@ libredwg_la_SOURCES = \
 	dynapi.c \
 	classes.c \
 	dwg_api.c \
+	dxfclasses.c \
 	$(EXTRA_HEADERS)
 if !DISABLE_DXF
 libredwg_la_SOURCES += \
@@ -125,10 +126,16 @@ endif
 EXTRA_DIST = \
 	$(include_HEADERS) \
 	$(EXTRA_HEADERS) \
-	gen-dynapi.pl
+	gen-dynapi.pl \
+	dxfclasses.in
 
+# maintainer only:
 $(srcdir)/dynapi.c: $(srcdir)/gen-dynapi.pl $(top_srcdir)/include/dwg.h
 	echo make regen-dynapi might be needed
+if HAVE_GPERF
+$(srcdir)/dxfclasses.c: $(srcdir)/dxfclasses.in
+	$(GPERF) --output-file $@ $<
+endif
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

@@ -6154,7 +6154,7 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
                const bool is_entity) __nonnull ((1, 2, 3));
 /* check if already exists, and if not add dxfname-specific defaults */
 EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
-                              const char *const restrict dxfname) __nonnull_all;
+                              const char *const restrict dxfname, const int len) __nonnull_all;
 /* insert entity into mspace, pspace or other block */
 EXPORT int dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                               Dwg_Object *restrict obj) __nonnull_all;
