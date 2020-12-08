@@ -5465,6 +5465,77 @@ add_VALUEPARAMs (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   return 1;
 }
 
+/* Starts with first AcDbEvalGraph 91 */
+static Dxf_Pair *
+add_EVAL_Node (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+               Dxf_Pair *restrict pair)
+{
+  Dwg_Object_EVALUATION_GRAPH *o = obj->tio.object->tio.EVALUATION_GRAPH;
+  Dwg_Data *dwg = obj->parent;
+  int i = -1, j = 0;
+  o->nodes = (Dwg_EVAL_Node *)xcalloc (1, sizeof (Dwg_EVAL_Node));
+  o->num_nodes = 1;
+  if (!o->nodes)
+    {
+      return NULL;
+    }
+  while (pair != NULL && pair->code != 0)
+    {
+      switch (pair->code)
+        {
+        case 91:
+          i++;
+          o->nodes = (Dwg_EVAL_Node *)realloc (o->nodes, (i + 1) * sizeof (Dwg_EVAL_Node));
+          if (!o->nodes)
+            break;
+          o->num_nodes = i + 1;
+          o->nodes[i].id = pair->value.i;
+          LOG_TRACE ("%s.nodes[%d].id = %d [BL %d]\n", obj->name, i,
+                     pair->value.i, pair->code);
+          break;
+        case 93: // must be 32
+          o->nodes[i].edge_flags = pair->value.i;
+          LOG_TRACE ("%s.nodes[%d].edge_flags = %d [BL %d]\n", obj->name, i,
+                     pair->value.i, pair->code);
+          break;
+        case 95:
+          o->nodes[i].edge_flags = pair->value.i;
+          if (pair->value.i != 32)
+            LOG_WARN ("%s.nodes[%d].edge_flags = %d [BL %d] != 32\n", obj->name, i,
+                       pair->value.i, pair->code)
+          else
+            LOG_TRACE ("%s.nodes[%d].edge_flags = %d [BL %d]\n", obj->name, i,
+                       pair->value.i, pair->code)
+          break;
+        case 360:
+          o->nodes[i].evalexpr
+              = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+          LOG_TRACE ("%s.nodes[%d].evalexpr = " FORMAT_REF " [H %d]\n",
+                     obj->name, i, ARGS_REF (o->nodes[i].evalexpr),
+                     pair->code);
+          break;
+        case 92:
+          if (j > 3) // 0 - 3
+            {
+              LOG_ERROR ("Max 4 edges for %s", obj->name);
+              return NULL;
+            }
+          o->nodes[i].edge[j] = pair->value.i;
+          LOG_TRACE ("%s.nodes[%d].edge[%d] = %d [BL %d]\n", obj->name, i, j,
+                     pair->value.i, pair->code);
+          j++;
+          break;
+        default:
+          LOG_ERROR ("Unknown DXF code %d for %s", pair->code, obj->name);
+          return NULL;
+        }
+      dxf_free_pair (pair);
+      pair = dxf_read_pair (dat);
+    }
+  LOG_TRACE ("%s.num_nodes = %d [BL]\n", obj->name, o->num_nodes);
+  return pair;
+}
+
 static Dxf_Pair *
 add_ASSOCNETWORK (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   Dxf_Pair *restrict pair)
@@ -9624,6 +9695,15 @@ new_object (char *restrict name, char *restrict dxfname,
                    && obj->fixedtype == DWG_TYPE_LAYER_INDEX)
             {
               pair = add_LAYER_entry (obj, dat, pair);
+              // returns with 0
+              if (pair != NULL && pair->code == 0)
+                goto start_loop;
+              else
+                goto search_field;
+            }
+          else if (pair->code == 91 && obj->fixedtype == DWG_TYPE_EVALUATION_GRAPH)
+            {
+              pair = add_EVAL_Node (obj, dat, pair);
               // returns with 0
               if (pair != NULL && pair->code == 0)
                 goto start_loop;
