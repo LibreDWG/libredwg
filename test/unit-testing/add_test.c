@@ -628,13 +628,13 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
     case DWG_TYPE_ACSH_TORUS_CLASS:
       {
         const dwg_point_3d pt = { 1383.62, 418.5, 1158.76 };
-        dwg_add_TORUS (hdr, &pt, 19.0, 2.789983);
+        dwg_add_TORUS (hdr, &pt, NULL, 19.0, 2.789983);
       }
       break;
     case DWG_TYPE_ACSH_SPHERE_CLASS:
       {
         const dwg_point_3d pt = { 10.0, 10.0, 0 };
-        dwg_add_SPHERE (hdr, &pt, 15.0);
+        dwg_add_SPHERE (hdr, &pt, NULL, 15.0);
       }
       break;
 

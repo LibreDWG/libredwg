@@ -24800,7 +24800,7 @@ dwg_add_ACSH_HISTORY_CLASS (Dwg_Entity_3DSOLID *restrict region,
 static void
 dwg_init_ACSH_CLASS (Dwg_Data *restrict dwg, Dwg_Object *restrict obj,
                      void *restrict acsh, Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                     const dwg_point_3d *restrict origin_pt, const double rotation)
+                     const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal)
 {
   Dwg_Object_ACSH_BOX_CLASS* _obj = (Dwg_Object_ACSH_BOX_CLASS*)acsh;
   obj->tio.object->ownerhandle = dwg_add_handleref (
@@ -24819,7 +24819,7 @@ dwg_init_ACSH_CLASS (Dwg_Data *restrict dwg, Dwg_Object *restrict obj,
   _obj->history_node.step_id = 97; //?
   _obj->history_node.material = NULL; // => MATERIAL of LAYER "0"
   _obj->history_node.trans = calloc (16, 8);
-  // TODO rotation cos()
+  // TODO normal
   _obj->history_node.trans[3] = origin_pt->x;
   _obj->history_node.trans[7] = origin_pt->y;
   _obj->history_node.trans[11] = origin_pt->z;
@@ -24841,7 +24841,7 @@ static size_t dwg_acis_date (char *date, size_t size)
 
 Dwg_Object_ACSH_BOX_CLASS*
 dwg_add_ACSH_BOX_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                        const dwg_point_3d *restrict origin_pt, const double rotation,
+                        const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                         const double length, const double width,
                         const double height)
 {
@@ -24852,7 +24852,7 @@ dwg_add_ACSH_BOX_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
     return NULL;
   {
     API_ADD_OBJECT (ACSH_BOX_CLASS);
-    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, rotation);
+    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, normal);
     _obj->length = length;
     _obj->width = width;
     _obj->height = height;
@@ -24862,7 +24862,7 @@ dwg_add_ACSH_BOX_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
 
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-             const dwg_point_3d *restrict origin_pt, const double rotation,
+             const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
              const double length, const double width,
              const double height)
 {
@@ -24886,6 +24886,8 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
+    dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
+
     solid = dwg_add_3DSOLID (blkhdr, "box"); // origin_pt
     solidobj = dwg_obj_generic_to_object (solid, &err);
     solid->point_present = 1;
@@ -24901,7 +24903,8 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
-    _obj = dwg_add_ACSH_BOX_CLASS (eval, origin_pt, rotation, length, width, height);
+    _obj = dwg_add_ACSH_BOX_CLASS (eval, origin_pt, normal ? normal : &defnormal,
+                                   length, width, height);
     return solid;
   }
 }
@@ -24910,7 +24913,7 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
 Dwg_Object_ACSH_CHAMFER_CLASS*
 dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                            const dwg_point_3d *restrict origin_pt, const double rotation,
+                            const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                             const int bl92, const double base_dist,
                             const double other_dist, const int num_edges,
                             const int32_t* edges, const int bl95)
@@ -24922,7 +24925,7 @@ dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
     return NULL;
   {
     API_ADD_OBJECT (ACSH_CHAMFER_CLASS);
-    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, rotation);
+    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, normal);
     _obj->bl92 = bl92;
     _obj->base_dist = base_dist;
     _obj->other_dist = other_dist;
@@ -24940,7 +24943,7 @@ dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
 // ACSH_CHAMFER_CLASS
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                 const dwg_point_3d *restrict origin_pt, const double rotation,
+                 const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                  const int bl92, const double base_dist,
                  const double other_dist, const int num_edges,
                  const int32_t* edges, const int bl95)
@@ -24965,6 +24968,8 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
+    dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
+
     solid = dwg_add_3DSOLID (blkhdr, "chamfer"); // origin_pt
     solidobj = dwg_obj_generic_to_object (solid, &err);
     solid->point_present = 1;
@@ -24980,15 +24985,16 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
-    _obj = dwg_add_ACSH_CHAMFER_CLASS (eval, origin_pt, rotation, bl92, base_dist,
-                                       other_dist, num_edges, edges, bl95);
+    _obj = dwg_add_ACSH_CHAMFER_CLASS (eval, origin_pt, normal ? normal : &defnormal,
+                                       bl92, base_dist, other_dist, num_edges, edges,
+                                       bl95);
     return solid;
   }
 }
 
 Dwg_Object_ACSH_CONE_CLASS*
 dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                         const dwg_point_3d *restrict origin_pt, const double rotation,
+                         const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                          const double base_radius, const double top_major_radius,
                          const double top_minor_radius, const double top_x_radius)
 {
@@ -24999,7 +25005,7 @@ dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
     return NULL;
   {
     API_ADD_OBJECT (ACSH_CONE_CLASS);
-    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, rotation);
+    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, normal);
     _obj->base_radius = base_radius;
     _obj->top_major_radius = top_major_radius;
     _obj->top_minor_radius = top_minor_radius;
@@ -25010,7 +25016,7 @@ dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
 
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-              const dwg_point_3d *restrict origin_pt, const double rotation,
+              const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
               const double base_radius, const double top_major_radius,
               const double top_minor_radius, const double top_x_radius)
 {
@@ -25034,6 +25040,8 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
+    dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
+
     solid = dwg_add_3DSOLID (blkhdr, "cone"); // origin_pt
     solidobj = dwg_obj_generic_to_object (solid, &err);
     solid->point_present = 1;
@@ -25049,8 +25057,8 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
-    _obj = dwg_add_ACSH_CONE_CLASS (eval, origin_pt, rotation, base_radius,
-                                    top_major_radius, top_minor_radius,
+    _obj = dwg_add_ACSH_CONE_CLASS (eval, origin_pt, normal ? normal : &defnormal,
+                                    base_radius, top_major_radius, top_minor_radius,
                                     top_x_radius);
     return solid;
   }
@@ -25058,7 +25066,7 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
 Dwg_Object_ACSH_CYLINDER_CLASS*
 dwg_add_ACSH_CYLINDER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                             const dwg_point_3d *restrict origin_pt,
+                             const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                              const double height, const double major_radius,
                              const double minor_radius, const double x_radius)
 {
@@ -25069,7 +25077,7 @@ dwg_add_ACSH_CYLINDER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
     return NULL;
   {
     API_ADD_OBJECT (ACSH_CYLINDER_CLASS);
-    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, 0.0);
+    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, normal);
     _obj->height = height;
     _obj->major_radius = major_radius;
     _obj->minor_radius = minor_radius;
@@ -25080,7 +25088,7 @@ dwg_add_ACSH_CYLINDER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
 
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                  const dwg_point_3d *restrict origin_pt,
+                  const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                   const double height, const double major_radius,
                   const double minor_radius, const double x_radius)
 {
@@ -25104,6 +25112,8 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
+    dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
+
     solid = dwg_add_3DSOLID (blkhdr, "ellipse-curve"); // origin_pt
     solidobj = dwg_obj_generic_to_object (solid, &err);
     solid->point_present = 1;
@@ -25119,15 +25129,15 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
-    _obj = dwg_add_ACSH_CYLINDER_CLASS (eval, origin_pt, height, major_radius,
-                                        minor_radius, x_radius);
+    _obj = dwg_add_ACSH_CYLINDER_CLASS (eval, origin_pt, normal ? normal : &defnormal,
+                                        height, major_radius, minor_radius, x_radius);
     return solid;
   }
 }
 
 Dwg_Object_ACSH_PYRAMID_CLASS*
 dwg_add_ACSH_PYRAMID_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                            const dwg_point_3d *restrict origin_pt, const double rotation,
+                            const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                             const double height, const int sides,
                             const double radius, const double topradius)
 {
@@ -25138,7 +25148,7 @@ dwg_add_ACSH_PYRAMID_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
     return NULL;
   {
     API_ADD_OBJECT (ACSH_PYRAMID_CLASS);
-    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, rotation);
+    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, normal);
     _obj->height = height;
     _obj->sides = sides;
     _obj->radius = radius;
@@ -25149,9 +25159,9 @@ dwg_add_ACSH_PYRAMID_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
 
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                  const dwg_point_3d *restrict origin_pt, const double rotation,
-                  const double height, const int sides,
-                  const double radius, const double topradius)
+                 const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
+                 const double height, const int sides,
+                 const double radius, const double topradius)
 {
   int err;
   Dwg_Data *dwg;
@@ -25173,6 +25183,8 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
+    dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
+
     solid = dwg_add_3DSOLID (blkhdr, "pyramid"); // origin_pt
     solidobj = dwg_obj_generic_to_object (solid, &err);
     solid->point_present = 1;
@@ -25188,8 +25200,8 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
-    _obj = dwg_add_ACSH_PYRAMID_CLASS (eval, origin_pt, rotation, height, sides, radius,
-                                       topradius);
+    _obj = dwg_add_ACSH_PYRAMID_CLASS (eval, origin_pt, normal ? normal : &defnormal,
+                                       height, sides, radius, topradius);
     return solid;
   }
 }
@@ -25201,7 +25213,7 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
 Dwg_Object_ACSH_SPHERE_CLASS*
 dwg_add_ACSH_SPHERE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                           const dwg_point_3d *restrict origin_pt, // no rotation
+                           const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                            const double radius)
 {
   int err;
@@ -25211,7 +25223,7 @@ dwg_add_ACSH_SPHERE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
     return NULL;
   {
     API_ADD_OBJECT (ACSH_SPHERE_CLASS);
-    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, 0.0);
+    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, normal);
     _obj->radius = radius;
     return _obj;
   }
@@ -25219,7 +25231,7 @@ dwg_add_ACSH_SPHERE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
 
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                const dwg_point_3d *restrict origin_pt, // no rotation
+                const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                 const double radius)
 {
   int err;
@@ -25242,6 +25254,7 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
+    dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_point_3d ext;
     char acis_data[650];
     char date[48];
@@ -25257,6 +25270,7 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
       "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
       "sphere-surface $-1 -1 $-1 0 0 0 %g 1 0 0 0 0 1 forward_v I I I I #\n";
+    // TODO normal
     ext.x = origin_pt->x + (radius * 2);
     ext.y = origin_pt->y + radius;
     ext.z = origin_pt->z + radius;
@@ -25280,7 +25294,7 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
-    _obj = dwg_add_ACSH_SPHERE_CLASS (eval, origin_pt, radius);
+    _obj = dwg_add_ACSH_SPHERE_CLASS (eval, origin_pt, normal ? normal : &defnormal, radius);
     return solid;
   }
 }
@@ -25289,7 +25303,7 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
 Dwg_Object_ACSH_TORUS_CLASS*
 dwg_add_ACSH_TORUS_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                          const dwg_point_3d *restrict origin_pt, // no rotation
+                          const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                           const double major_radius, const double minor_radius)
 {
   int err;
@@ -25299,7 +25313,7 @@ dwg_add_ACSH_TORUS_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
     return NULL;
   {
     API_ADD_OBJECT (ACSH_TORUS_CLASS);
-    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, 0.0);
+    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, normal);
     _obj->major_radius = major_radius;
     _obj->minor_radius = minor_radius;
     return _obj;
@@ -25309,7 +25323,7 @@ dwg_add_ACSH_TORUS_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
 // ACSH_TORUS_CLASS (needed)
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-               const dwg_point_3d *restrict origin_pt, // no rotation
+               const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                const double major_radius, const double minor_radius)
 {
   int err;
@@ -25332,6 +25346,7 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
+    dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_point_3d ext;
     char acis_data[1048];
     char date[48];
@@ -25360,6 +25375,7 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "vertex $-1 -1 $-1 $12 $18 # \n"
       "point $-1 -1 $-1 0 0 %g # \n"
       "point $-1 -1 $-1 0 0 %g # \n";
+    // TODO normal
     ext.x = origin_pt->x + (2 * major_radius);
     ext.y = origin_pt->y + major_radius;
     ext.z = origin_pt->z + minor_radius;
@@ -25385,8 +25401,9 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
-    _obj = dwg_add_ACSH_TORUS_CLASS (eval, origin_pt, major_radius,
-                                     minor_radius);
+    _obj = dwg_add_ACSH_TORUS_CLASS (eval, origin_pt,
+                                     normal ? normal : &defnormal,
+                                     major_radius, minor_radius);
     return solid;
   }
 }
@@ -25395,9 +25412,9 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
 Dwg_Object_ACSH_WEDGE_CLASS*
 dwg_add_ACSH_WEDGE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                        const dwg_point_3d *restrict origin_pt, const double rotation,
-                        const double length, const double width,
-                        const double height)
+                          const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
+                          const double length, const double width,
+                          const double height)
 {
   int err;
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
@@ -25406,7 +25423,7 @@ dwg_add_ACSH_WEDGE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
     return NULL;
   {
     API_ADD_OBJECT (ACSH_WEDGE_CLASS);
-    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, rotation);
+    dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, normal);
     _obj->length = length;
     _obj->width = width;
     _obj->height = height;
@@ -25416,9 +25433,8 @@ dwg_add_ACSH_WEDGE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
 
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-             const dwg_point_3d *restrict origin_pt, const double rotation,
-             const double length, const double width,
-             const double height)
+               const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
+               const double length, const double width, const double height)
 {
   int err;
   Dwg_Data *dwg;
@@ -25440,6 +25456,8 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj;
+    dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
+
     solid = dwg_add_3DSOLID (blkhdr, "wedge"); // origin_pt
     solidobj = dwg_obj_generic_to_object (solid, &err);
     solid->point_present = 1;
@@ -25456,8 +25474,8 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
-    _obj = dwg_add_ACSH_WEDGE_CLASS (eval, origin_pt, rotation, length, width,
-                                     height);
+    _obj = dwg_add_ACSH_WEDGE_CLASS (
+        eval, origin_pt, normal ? normal : &defnormal, length, width, height);
     return solid;
   }
 }
