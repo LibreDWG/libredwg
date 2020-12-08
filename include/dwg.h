@@ -5332,28 +5332,28 @@ typedef struct _dwg_VALUEPARAM
   BITCODE_H controlled_objdep;
 } Dwg_VALUEPARAM;
 
-/* or maybe the nodes are laid out like this */
+// NodeInfo
 typedef struct _dwg_EVAL_Node
 {
   struct _dwg_object_EVALUATION_GRAPH *parent;
-  BITCODE_BL  edge[4];   // 4x 92, def: 4x -1
-  //BITCODE_H   evalexpr;   // 360
+  BITCODE_BLd id;         /* 91 */
+  BITCODE_BL  edge_flags; // 93, always 32
+  BITCODE_BL  nextid;     // 95
+  BITCODE_H   evalexpr;   // 360
+  BITCODE_BL  edge[4];    // 4x 92, def: 4x -1
+  BITCODE_B   active_cycles;
 } Dwg_EVAL_Node;
 
 typedef struct _dwg_object_EVALUATION_GRAPH
 {
   struct _dwg_object_object *parent;
-  BITCODE_BL has_graph;   // 96
-  BITCODE_BL unknown1;    // 97
-  BITCODE_BL unknown2;
-  BITCODE_BL nodeid;      // 91
-  BITCODE_BL edge_flags;  // 93
-  BITCODE_BL num_evalexpr;// 95
-  BITCODE_BLd node_edge1;  // 92
-  BITCODE_BLd node_edge2;  // 92
-  BITCODE_BLd node_edge3;  // 92
-  BITCODE_BLd node_edge4;  // 92
-  BITCODE_H  *evalexpr;    //360
+  BITCODE_BL major;
+  BITCODE_BL minor;
+  BITCODE_BL first_nodeid;   // 96
+  BITCODE_BL first_nodeid_copy; // 97
+  BITCODE_BL num_nodes;
+  Dwg_EVAL_Node *nodes;
+  BITCODE_B has_graph;
 } Dwg_Object_EVALUATION_GRAPH;
 
 // stable

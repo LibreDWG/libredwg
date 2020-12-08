@@ -8688,28 +8688,37 @@ DWG_OBJECT (BLOCKVISIBILITYPARAMETER)
 DWG_OBJECT_END
 
 // unstable, but fields still wrong
+// arrays of nodes (of EvalExpr) and edges
 DWG_OBJECT (EVALUATION_GRAPH)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbEvalGraph)
-  FIELD_BL (has_graph, 96);        // 1 more likely a node_id
-  FIELD_BL (unknown1, 97);         // 1
-  FIELD_BL (unknown2, 0);          // 1
-  FIELD_BL (nodeid, 91);           // 0
-  if (FIELD_VALUE (has_graph))
-    {
-      FIELD_BL (edge_flags, 93);   // 32 which to set?
-      FIELD_BL (num_evalexpr, 95); // 1  how many to set?
-      // maybe REPEAT num_evalexpr: edge1-4, evalexpr
-      FIELD_BLd (node_edge1, 92);   // -1
-      FIELD_BLd (node_edge2, 92);   // -1
-      FIELD_BLd (node_edge3, 92);   // -1
-      FIELD_BLd (node_edge4, 92);   // -1
-      VALUEOUTOFBOUNDS (num_evalexpr, 20)
-    }
+  FIELD_BL (first_nodeid, 96);
+  FIELD_BL (first_nodeid_copy, 97);// always same as first_nodeid
+  FIELD_BL (num_nodes, 0);
+  REPEAT (num_nodes, nodes, Dwg_EVAL_Node)
+  REPEAT_BLOCK
+      SUB_FIELD_BL (nodes[rcount1], id, 91); // starting with 0
+      SUB_FIELD_BL (nodes[rcount1], edge_flags, 93); // always 32
+      if (_obj->nodes[rcount1].edge_flags != 32) {
+        _obj->nodes[rcount1].edge_flags = 0;
+        _obj->num_nodes = rcount1;
+        break;
+      }
+      SUB_FIELD_BL (nodes[rcount1], nextid, 95); // 1
+      SUB_FIELD_HANDLE (nodes[rcount1], evalexpr, 5, 360);
+      SUB_FIELD_BLd (nodes[rcount1], edge[0], 92);   // -1
+      SUB_FIELD_BLd (nodes[rcount1], edge[1], 92);   // -1
+      SUB_FIELD_BLd (nodes[rcount1], edge[2], 92);   // -1
+      SUB_FIELD_BLd (nodes[rcount1], edge[3], 92);   // -1
+      if (FIELD_VALUE(has_graph))
+        SUB_FIELD_B (nodes[rcount1], active_cycles, 0);
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (nodes)
+  END_REPEAT (nodes)
 
   START_OBJECT_HANDLE_STREAM;
-  HANDLE_VECTOR (evalexpr, num_evalexpr, 5, 360);
+  //HANDLE_VECTOR (evalexpr, num_evalexpr, 5, 360);
 DWG_OBJECT_END
 
 /*=============================================================================*/

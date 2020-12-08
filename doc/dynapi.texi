@@ -9421,28 +9421,20 @@ H
 
 @item parent
 struct _dwg_object_object*
-@item has_graph
-BL,	DXF 96
-@item unknown1
-BL,	DXF 97
-@item unknown2
+@item major
 BL
-@item nodeid
-BL,	DXF 91
-@item edge_flags
-BL,	DXF 93
-@item num_evalexpr
-BL,	DXF 95
-@item node_edge1
-BLd,	DXF 92
-@item node_edge2
-BLd,	DXF 92
-@item node_edge3
-BLd,	DXF 92
-@item node_edge4
-BLd,	DXF 92
-@item evalexpr
-H*,	DXF 360
+@item minor
+BL
+@item first_nodeid
+BL,	DXF 96
+@item first_nodeid_copy
+BL,	DXF 97
+@item num_nodes
+BL
+@item nodes
+Dwg_EVAL_Node*
+@item has_graph
+B
 
 @end vtable
 @end indentedblock
@@ -13813,8 +13805,18 @@ H
 
 @item parent
 struct _dwg_object_EVALUATION_GRAPH*
+@item id
+BLd,	DXF 91
+@item edge_flags
+BL,	DXF 93
+@item nextid
+BL,	DXF 95
+@item evalexpr
+H,	DXF 360
 @item edge[4]
 BL
+@item active_cycles
+B
 
 @end vtable
 @end indentedblock

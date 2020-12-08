@@ -44,6 +44,7 @@
  */
 static Dwg_Version_Type dwg_version = R_INVALID;
 static unsigned int loglevel = DWG_LOGLEVEL_ERROR;
+static unsigned nodeid = 0;
 
 /* Non-public imports */
 /* I don't want to export these. */
@@ -24744,8 +24745,8 @@ dwg_add_PROXY_OBJECT (Dwg_Data *restrict dwg, BITCODE_T name, BITCODE_T key
 Dwg_Object_EVALUATION_GRAPH*
 dwg_add_EVALUATION_GRAPH (Dwg_Object_ACSH_HISTORY_CLASS *restrict history,
                           const int has_graph,
-                          const int nodeid,
-                          const int num_evalexpr,
+                          const int e_nodeid,
+                          const int num_nodes,
                           const BITCODE_H *restrict evalexpr)
 {
   int err;
@@ -24757,21 +24758,23 @@ dwg_add_EVALUATION_GRAPH (Dwg_Object_ACSH_HISTORY_CLASS *restrict history,
     API_ADD_OBJECT (EVALUATION_GRAPH);
     obj->tio.object->ownerhandle = dwg_add_handleref (
         dwg, 5, dwg_obj_generic_handlevalue (history), obj);
+    _obj->major = 27;
+    _obj->minor = 52;
     _obj->has_graph = has_graph;
-    _obj->unknown1 = 2;
-    _obj->unknown2 = 2;
-    _obj->nodeid = nodeid;
-    _obj->node_edge1 = -1;
-    _obj->node_edge2 = -1;
-    _obj->node_edge3 = 0;
-    _obj->node_edge4 = 0;
-    if (!num_evalexpr)
-      return _obj;
-    _obj->num_evalexpr = num_evalexpr;
-    _obj->evalexpr = calloc (num_evalexpr, sizeof (BITCODE_H));
-    for (int i = 0; i < num_evalexpr; i++)
+    _obj->first_nodeid = e_nodeid;
+    _obj->first_nodeid_copy = e_nodeid;
+    _obj->num_nodes = num_nodes;
+    _obj->nodes = calloc (_obj->num_nodes, sizeof (Dwg_EVAL_Node));
+    for (int i = 0; i < num_nodes; i++)
       {
-        _obj->evalexpr[i] = evalexpr[i];
+        _obj->nodes[i].id = i;
+        _obj->nodes[i].edge_flags = 32;
+        _obj->nodes[i].nextid = i + 1;
+        _obj->nodes[i].evalexpr = evalexpr[i];
+        _obj->nodes[i].edge[0] = -1;
+        _obj->nodes[i].edge[1] = -1;
+        _obj->nodes[i].edge[2] = -1;
+        _obj->nodes[i].edge[3] = -1;
       }
     return _obj;
   }
@@ -24898,7 +24901,7 @@ dwg_init_ACSH_CLASS (Dwg_Data *restrict dwg, Dwg_Object *restrict obj,
   _obj->evalexpr.major = 27;
   _obj->evalexpr.minor = 52;
   _obj->evalexpr.value_code = -9999;
-  _obj->evalexpr.nodeid = 1;
+  _obj->evalexpr.nodeid = nodeid;
   _obj->history_node.major = 27;
   _obj->history_node.minor = 52;
   _obj->history_node.color.index = 256;
@@ -25002,7 +25005,7 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     histobj = dwg_obj_generic_to_object (hist, &err);
     solid->history_id = dwg_add_handleref (dwg, 5, histobj->handle.value, solidobj);
 
-    eval = dwg_add_EVALUATION_GRAPH (hist, 0, 0, 0, NULL);
+    eval = dwg_add_EVALUATION_GRAPH (hist, 0, nodeid++, 0, NULL);
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
@@ -25088,7 +25091,7 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     histobj = dwg_obj_generic_to_object (hist, &err);
     solid->history_id = dwg_add_handleref (dwg, 5, histobj->handle.value, solidobj);
 
-    eval = dwg_add_EVALUATION_GRAPH (hist, 0, 0, 0, NULL);
+    eval = dwg_add_EVALUATION_GRAPH (hist, 0, nodeid++, 0, NULL);
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
@@ -25164,7 +25167,7 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     histobj = dwg_obj_generic_to_object (hist, &err);
     solid->history_id = dwg_add_handleref (dwg, 5, histobj->handle.value, solidobj);
 
-    eval = dwg_add_EVALUATION_GRAPH (hist, 0, 0, 0, NULL);
+    eval = dwg_add_EVALUATION_GRAPH (hist, 0, nodeid++, 0, NULL);
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
@@ -25240,7 +25243,7 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     histobj = dwg_obj_generic_to_object (hist, &err);
     solid->history_id = dwg_add_handleref (dwg, 5, histobj->handle.value, solidobj);
 
-    eval = dwg_add_EVALUATION_GRAPH (hist, 0, 0, 0, NULL);
+    eval = dwg_add_EVALUATION_GRAPH (hist, 0, nodeid++, 0, NULL);
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
@@ -25315,7 +25318,7 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     histobj = dwg_obj_generic_to_object (hist, &err);
     solid->history_id = dwg_add_handleref (dwg, 5, histobj->handle.value, solidobj);
 
-    eval = dwg_add_EVALUATION_GRAPH (hist, 0, 0, 0, NULL);
+    eval = dwg_add_EVALUATION_GRAPH (hist, 0, nodeid++, 0, NULL);
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
@@ -25416,7 +25419,7 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     histobj = dwg_obj_generic_to_object (hist, &err);
     solid->history_id = dwg_add_handleref (dwg, 5, histobj->handle.value, solidobj);
 
-    eval = dwg_add_EVALUATION_GRAPH (hist, 0, 0, 0, NULL);
+    eval = dwg_add_EVALUATION_GRAPH (hist, 0, nodeid++, 0, NULL);
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
@@ -25530,7 +25533,7 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->history_id
         = dwg_add_handleref (dwg, 5, histobj->handle.value, solidobj);
 
-    eval = dwg_add_EVALUATION_GRAPH (hist, 0, 0, 0, NULL);
+    eval = dwg_add_EVALUATION_GRAPH (hist, 0, nodeid++, 0, NULL);
     evalobj = dwg_obj_generic_to_object (eval, &err);
     hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
 
