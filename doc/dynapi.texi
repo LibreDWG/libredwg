@@ -9435,6 +9435,10 @@ BL
 Dwg_EVAL_Node*
 @item has_graph
 B
+@item num_edges
+BL
+@item edges
+Dwg_EVAL_Edge*
 
 @end vtable
 @end indentedblock
@@ -13797,6 +13801,30 @@ H
 @end vtable
 @end indentedblock
 
+@strong{Dwg_EVAL_Edge} @anchor{Dwg_EVAL_Edge}
+@vindex Dwg_EVAL_Edge
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_EVALUATION_GRAPH*
+@item id
+BLd,	DXF 91
+@item nextid
+BLd,	DXF 93
+@item e1
+BLd,	DXF 94
+@item e2
+BLd,	DXF 91
+@item e3
+BLd,	DXF 91
+@item out_edge[5]
+BLd
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_EVAL_Node} @anchor{Dwg_EVAL_Node}
 @vindex Dwg_EVAL_Node
 
@@ -13813,8 +13841,8 @@ BL,	DXF 93
 BL,	DXF 95
 @item evalexpr
 H,	DXF 360
-@item edge[4]
-BL
+@item node[4]
+BLd
 @item active_cycles
 B
 

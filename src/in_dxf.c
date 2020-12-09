@@ -5465,7 +5465,89 @@ add_VALUEPARAMs (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   return 1;
 }
 
-/* Starts with first AcDbEvalGraph 91 */
+static Dxf_Pair *
+add_EVAL_Edge (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
+               Dxf_Pair *restrict pair)
+{
+  Dwg_Object_EVALUATION_GRAPH *o = obj->tio.object->tio.EVALUATION_GRAPH;
+  Dwg_Data *dwg = obj->parent;
+  int i = -1;
+  o->edges = (Dwg_EVAL_Edge *)xcalloc (1, sizeof (Dwg_EVAL_Edge));
+  o->num_edges = 0;
+  if (!o->edges)
+    return NULL;
+
+  while (pair != NULL && pair->code == 92)
+    {
+      i++;
+      o->edges = (Dwg_EVAL_Edge *)realloc (o->edges, o->num_edges * sizeof (Dwg_EVAL_Edge));
+      if (!o->edges)
+        return NULL;
+      o->num_edges++;
+      o->edges[i].id = pair->value.i; // 92
+      LOG_TRACE ("%s.edges[%d].id = %d [BL %d]\n", obj->name, i, pair->value.i, pair->code);
+      dxf_free_pair (pair);
+
+      pair = dxf_read_pair (dat);
+      if (!pair || pair->code != 93)
+        {
+          LOG_ERROR ("Unknown DXF code %d for %s", pair->code, obj->name);
+          return pair;
+        }
+      o->edges[i].nextid = pair->value.i; // 93
+      LOG_TRACE ("%s.edges[%d].nextid = %d [BL %d]\n", obj->name, i, pair->value.i, pair->code);
+      dxf_free_pair (pair);
+
+      pair = dxf_read_pair (dat);
+      if (!pair || pair->code != 94)
+        {
+          LOG_ERROR ("Unknown DXF code %d for %s", pair->code, obj->name);
+          return pair;
+        }
+      o->edges[i].e1 = pair->value.i; // 94
+      LOG_TRACE ("%s.edges[%d].e1 = %d [BL %d]\n", obj->name, i, pair->value.i, pair->code);
+      dxf_free_pair (pair);
+
+      pair = dxf_read_pair (dat);
+      if (!pair || pair->code != 91)
+        {
+          LOG_ERROR ("Unknown DXF code %d for %s", pair->code, obj->name);
+          return pair;
+        }
+      o->edges[i].e2 = pair->value.i; // 91
+      LOG_TRACE ("%s.edges[%d].e2 = %d [BL %d]\n", obj->name, i, pair->value.i, pair->code);
+      dxf_free_pair (pair);
+
+      pair = dxf_read_pair (dat);
+      if (!pair || pair->code != 91)
+        {
+          LOG_ERROR ("Unknown DXF code %d for %s", pair->code, obj->name);
+          return pair;
+        }
+      o->edges[i].e3 = pair->value.i; // 91
+      LOG_TRACE ("%s.edges[%d].e3 = %d [BL %d]\n", obj->name, i, pair->value.i, pair->code);
+      dxf_free_pair (pair);
+
+      for (int j = 0; j < 5; j++)
+        {
+          pair = dxf_read_pair (dat);
+          if (!pair || pair->code != 92)
+            {
+              LOG_ERROR ("Unknown DXF code %d for %s", pair->code, obj->name);
+              return pair;
+            }
+          o->edges[i].out_edge[j] = pair->value.i; // 92
+          LOG_TRACE ("%s.edges[%d].out_edge[%d] = %d [BL %d]\n", obj->name, i, j, pair->value.i, pair->code);
+          dxf_free_pair (pair);
+        }
+
+      pair = dxf_read_pair (dat);
+    }
+  LOG_TRACE ("%s.num_edges = %d [BL]\n", obj->name, o->num_edges);
+  return pair;
+}
+
+/* Starts with first AcDbEvalGraph 91. FIXME edges */
 static Dxf_Pair *
 add_EVAL_Node (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                Dxf_Pair *restrict pair)
@@ -5516,11 +5598,10 @@ add_EVAL_Node (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           break;
         case 92:
           if (j > 3) // 0 - 3
-            {
-              LOG_ERROR ("Max 4 edges for %s", obj->name);
-              return NULL;
+            { // list of edges
+              return add_EVAL_Edge (obj, dat, pair);
             }
-          o->nodes[i].edge[j] = pair->value.i;
+          o->nodes[i].node[j] = pair->value.i;
           LOG_TRACE ("%s.nodes[%d].edge[%d] = %d [BL %d]\n", obj->name, i, j,
                      pair->value.i, pair->code);
           j++;

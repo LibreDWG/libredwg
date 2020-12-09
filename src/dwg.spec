@@ -8707,15 +8707,32 @@ DWG_OBJECT (EVALUATION_GRAPH)
       }
       SUB_FIELD_BL (nodes[rcount1], nextid, 95); // 1
       SUB_FIELD_HANDLE (nodes[rcount1], evalexpr, 5, 360);
-      SUB_FIELD_BLd (nodes[rcount1], edge[0], 92);   // -1
-      SUB_FIELD_BLd (nodes[rcount1], edge[1], 92);   // -1
-      SUB_FIELD_BLd (nodes[rcount1], edge[2], 92);   // -1
-      SUB_FIELD_BLd (nodes[rcount1], edge[3], 92);   // -1
+      SUB_FIELD_BLd (nodes[rcount1], node[0], 92);   // -1
+      SUB_FIELD_BLd (nodes[rcount1], node[1], 92);   // -1
+      SUB_FIELD_BLd (nodes[rcount1], node[2], 92);   // -1
+      SUB_FIELD_BLd (nodes[rcount1], node[3], 92);   // -1
       if (FIELD_VALUE(has_graph))
         SUB_FIELD_B (nodes[rcount1], active_cycles, 0);
   END_REPEAT_BLOCK
   SET_PARENT_OBJ (nodes)
   END_REPEAT (nodes)
+
+  FIELD_BL (num_edges, 0);
+  REPEAT (num_edges, edges, Dwg_EVAL_Edge)
+  REPEAT_BLOCK
+      SUB_FIELD_BL (edges[rcount1], id, 92); // starting with 0
+      SUB_FIELD_BLd (edges[rcount1], nextid, 93); //
+      SUB_FIELD_BLd (edges[rcount1], e1, 94); // incoming edges
+      SUB_FIELD_BLd (edges[rcount1], e2, 91); //
+      SUB_FIELD_BLd (edges[rcount1], e3, 91); //
+      SUB_FIELD_BLd (edges[rcount1], out_edge[0], 92); //
+      SUB_FIELD_BLd (edges[rcount1], out_edge[1], 92); //
+      SUB_FIELD_BLd (edges[rcount1], out_edge[2], 92); //
+      SUB_FIELD_BLd (edges[rcount1], out_edge[3], 92); //
+      SUB_FIELD_BLd (edges[rcount1], out_edge[4], 92); //
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (edges)
+  END_REPEAT (edges)
 
   START_OBJECT_HANDLE_STREAM;
   //HANDLE_VECTOR (evalexpr, num_evalexpr, 5, 360);

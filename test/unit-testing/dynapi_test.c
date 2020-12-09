@@ -46410,6 +46410,16 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
   Dwg_Object_EVALUATION_GRAPH *restrict evaluation_graph = obj->tio.object->tio.EVALUATION_GRAPH;
   failed = 0;
   {
+    Dwg_EVAL_Edge* edges;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (evaluation_graph, "EVALUATION_GRAPH", "num_edges", &count, NULL)
+        && dwg_dynapi_entity_value (evaluation_graph, "EVALUATION_GRAPH", "edges", &edges, NULL)
+        && edges == evaluation_graph->edges)
+      pass ();
+    else
+      fail ("EVALUATION_GRAPH.edges [Dwg_EVAL_Edge*] * %u num_edges", count);
+  }
+  {
     BITCODE_BL first_nodeid;
     if (dwg_dynapi_entity_value (evaluation_graph, "EVALUATION_GRAPH", "first_nodeid", &first_nodeid, NULL)
         && first_nodeid == evaluation_graph->first_nodeid)
@@ -46493,6 +46503,21 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
       pass ();
     else
       fail ("EVALUATION_GRAPH.nodes [Dwg_EVAL_Node*] * %u num_nodes", count);
+  }
+  {
+    BITCODE_BL num_edges;
+    if (dwg_dynapi_entity_value (evaluation_graph, "EVALUATION_GRAPH", "num_edges", &num_edges, NULL)
+        && num_edges == evaluation_graph->num_edges)
+      pass ();
+    else
+      fail ("EVALUATION_GRAPH.num_edges [BL] %u != %u", evaluation_graph->num_edges, num_edges);
+    num_edges++;
+    if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "num_edges", &num_edges, 0)
+        && num_edges == evaluation_graph->num_edges)
+      pass ();
+    else
+      fail ("EVALUATION_GRAPH.num_edges [BL] set+1 %u != %u", evaluation_graph->num_edges, num_edges);
+    evaluation_graph->num_edges--;
   }
   {
     BITCODE_BL num_nodes;
@@ -64934,6 +64959,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_DIMENSION_common): %d != "
                "dwg_dynapi_fields_size (\"DIMENSION_common\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_EVAL_Edge);
+  size2 = dwg_dynapi_fields_size ("EVAL_Edge");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_EVAL_Edge): %d != "
+               "dwg_dynapi_fields_size (\"EVAL_Edge\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_EVAL_Node);

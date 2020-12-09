@@ -5340,9 +5340,21 @@ typedef struct _dwg_EVAL_Node
   BITCODE_BL  edge_flags; // 93, always 32
   BITCODE_BL  nextid;     // 95
   BITCODE_H   evalexpr;   // 360
-  BITCODE_BL  edge[4];    // 4x 92, def: 4x -1
+  BITCODE_BLd node[4];    // 4x 92, def: 4x -1
   BITCODE_B   active_cycles;
 } Dwg_EVAL_Node;
+
+// EdgeInfo
+typedef struct _dwg_EVAL_Edge
+{
+  struct _dwg_object_EVALUATION_GRAPH *parent;
+  BITCODE_BLd id;         /* 92 */
+  BITCODE_BLd nextid;     /* 93 */
+  BITCODE_BLd e1;         /* 94 */
+  BITCODE_BLd e2;         /* 91 */
+  BITCODE_BLd e3;         /* 91 */
+  BITCODE_BLd out_edge[5]; /* 5x 92 */
+} Dwg_EVAL_Edge;
 
 typedef struct _dwg_object_EVALUATION_GRAPH
 {
@@ -5354,6 +5366,8 @@ typedef struct _dwg_object_EVALUATION_GRAPH
   BITCODE_BL num_nodes;
   Dwg_EVAL_Node *nodes;
   BITCODE_B has_graph;
+  BITCODE_BL num_edges;
+  Dwg_EVAL_Edge *edges;
 } Dwg_Object_EVALUATION_GRAPH;
 
 // stable

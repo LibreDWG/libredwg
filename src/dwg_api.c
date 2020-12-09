@@ -24746,7 +24746,7 @@ Dwg_Object_EVALUATION_GRAPH*
 dwg_add_EVALUATION_GRAPH (Dwg_Object_ACSH_HISTORY_CLASS *restrict history,
                           const int has_graph,
                           const int e_nodeid,
-                          const int num_nodes,
+                          const unsigned num_nodes,
                           const BITCODE_H *restrict evalexpr)
 {
   int err;
@@ -24765,16 +24765,30 @@ dwg_add_EVALUATION_GRAPH (Dwg_Object_ACSH_HISTORY_CLASS *restrict history,
     _obj->first_nodeid_copy = e_nodeid;
     _obj->num_nodes = num_nodes;
     _obj->nodes = calloc (_obj->num_nodes, sizeof (Dwg_EVAL_Node));
-    for (int i = 0; i < num_nodes; i++)
+    for (unsigned i = 0; i < num_nodes; i++)
       {
         _obj->nodes[i].id = i;
         _obj->nodes[i].edge_flags = 32;
         _obj->nodes[i].nextid = i + 1;
         _obj->nodes[i].evalexpr = evalexpr[i];
-        _obj->nodes[i].edge[0] = -1;
-        _obj->nodes[i].edge[1] = -1;
-        _obj->nodes[i].edge[2] = -1;
-        _obj->nodes[i].edge[3] = -1;
+        _obj->nodes[i].node[0] = -1;
+        _obj->nodes[i].node[1] = -1;
+        _obj->nodes[i].node[2] = -1;
+        _obj->nodes[i].node[3] = -1;
+      }
+    _obj->edges = calloc (_obj->num_edges, sizeof (Dwg_EVAL_Edge));
+    for (unsigned i = 0; i < _obj->num_edges; i++)
+      {
+        _obj->edges[i].id = i;
+        _obj->edges[i].nextid = -1;
+        _obj->edges[i].e1 = -1; // incoming edges
+        _obj->edges[i].e2 = -1;
+        _obj->edges[i].e3 = -1;
+        _obj->edges[i].out_edge[0] = -1;
+        _obj->edges[i].out_edge[1] = -1;
+        _obj->edges[i].out_edge[2] = -1;
+        _obj->edges[i].out_edge[3] = -1;
+        _obj->edges[i].out_edge[4] = -1;
       }
     return _obj;
   }

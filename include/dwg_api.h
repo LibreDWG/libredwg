@@ -6517,7 +6517,7 @@ Dwg_Object_EVALUATION_GRAPH*
 dwg_add_EVALUATION_GRAPH (Dwg_Object_ACSH_HISTORY_CLASS *restrict history,
                           const int has_graph,
                           const int nodeid,
-                          const int num_evalexpr,
+                          const unsigned num_evalexpr,
                           const BITCODE_H *restrict evalexpr) __nonnull ((1));
 Dwg_Object_ACSH_HISTORY_CLASS*
 dwg_add_ACSH_HISTORY_CLASS (Dwg_Entity_3DSOLID *restrict region,
