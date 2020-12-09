@@ -22242,13 +22242,17 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
                            dwg_add_handleref (dwg, 2, 0xD, NULL));
   if (version >= R_2000)
     {
+      Dwg_Object_PLACEHOLDER *plh;
       // DICTIONARY (5.1.E) //FIXME
       dwg_add_DICTIONARYWDFLT (dwg, (const BITCODE_T) "ACAD_PLOTSTYLENAME",
                                (const BITCODE_T) "Normal",
                                dwg_add_handleref (dwg, 2, 0xF, NULL));
       dwg->header_vars.DICTIONARY_PLOTSTYLENAME = dwg_add_handleref (dwg, 5, 0xE, NULL);
       // PLOTSTYLE (2.1.F)
-      dwg_add_PLACEHOLDER (dwg); // PLOTSTYLE?
+      plh = dwg_add_PLACEHOLDER (dwg); // PLOTSTYLE
+      obj = dwg_obj_generic_to_object (plh, &error);
+      obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 0xE, obj);
+      add_reactor (obj->tio.object, dwg_add_handleref (dwg, 4, 0xE, NULL));
     }
   else
     {
