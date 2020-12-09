@@ -22069,7 +22069,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   //dwg->header.zero_one_or_three = 1;
   //dwg->header.dwg_version = 0x17; // prefer encode if dwg_version is 0
   //dwg->header.maint_version = 29;
-  dwg->header.codepage = 30;
+  dwg->header.codepage = 30; // FIXME: local codepage if <r2007
   //dwg->header.num_sections = 5;
   //dwg->header.section = (Dwg_Section *)calloc (
   //    dwg->header.num_sections, sizeof (Dwg_Section));
@@ -22217,21 +22217,26 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   // DICTIONARY_NAMED_OBJECT: (3.1.C) abs:C [H 0]
   dict = dwg_add_DICTIONARY (dwg, NULL, (const BITCODE_T) "NAMED_OBJECT", NULL);
   dwg->header_vars.DICTIONARY_NAMED_OBJECT
-      = dwg_add_handleref (dwg, 5, 0xC, NULL);
+      = dwg_add_handleref (dwg, 3, 0xC, NULL);
   // DICTIONARY_ACAD_GROUP: (5.1.D) abs:D [H 0]
   dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_GROUP", NULL, NULL);
   dwg->header_vars.DICTIONARY_ACAD_GROUP
       = dwg_add_handleref (dwg, 5, 0xD, NULL);
   dwg_add_DICTIONARY_item (dict, (const BITCODE_T) "ACAD_GROUP",
                            dwg_add_handleref (dwg, 2, 0xD, NULL));
-  // DICTIONARY (5.1.E)
-  dwg_add_DICTIONARYWDFLT (dwg, (const BITCODE_T) "ACAD_PLOTSTYLENAME",
-                           (const BITCODE_T) "Normal",
-                           dwg_add_handleref (dwg, 2, 0xF, NULL));
-  dwg->header_vars.DICTIONARY_PLOTSTYLENAME
-      = dwg_add_handleref (dwg, 5, 0xE, NULL);
-  // PLOTSTYLE (2.1.F)
-  dwg_add_PLACEHOLDER (dwg); // PLOTSTYLE?
+  if (version >= R_2004)
+    {
+      // DICTIONARY (5.1.E) //FIXME
+      dwg_add_DICTIONARYWDFLT (dwg, (const BITCODE_T) "ACAD_PLOTSTYLENAME",
+                               (const BITCODE_T) "Normal",
+                               dwg_add_handleref (dwg, 2, 0xF, NULL));
+      dwg->header_vars.DICTIONARY_PLOTSTYLENAME
+        = dwg_add_handleref (dwg, 5, 0xE, NULL);
+      // PLOTSTYLE (2.1.F)
+      dwg_add_PLACEHOLDER (dwg); // PLOTSTYLE?
+    }
+  else
+    dwg_set_next_hdl (dwg, 0x10);
   // LAYER: (0.1.10)
   layer = dwg_add_LAYER (dwg, (const BITCODE_T) "0");
   layer->color = (BITCODE_CMC){ 7 };
@@ -22256,12 +22261,12 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   // LTYPE_BYBLOCK: (5.1.14)
   ltype = dwg_add_LTYPE (dwg, (const BITCODE_T) "BYBLOCK");
   ltype_ctrl->num_entries--;
-  ltype_ctrl->byblock = dwg_add_handleref (dwg, 3, 0x14, NULL);
+  ltype_ctrl->byblock = dwg_add_handleref (dwg, 5, 0x14, NULL);
   dwg->header_vars.LTYPE_BYBLOCK = dwg_add_handleref (dwg, 5, 0x14, NULL);
   // LTYPE_BYLAYER: (5.1.15)
   dwg_add_LTYPE (dwg, (const BITCODE_T) "BYLAYER");
   ltype_ctrl->num_entries--;
-  ltype_ctrl->bylayer = dwg_add_handleref (dwg, 3, 0x15, NULL);
+  ltype_ctrl->bylayer = dwg_add_handleref (dwg, 5, 0x15, NULL);
   dwg->header_vars.LTYPE_BYLAYER = dwg_add_handleref (dwg, 5, 0x15, NULL);
   // CELTYPE: (5.1.14) abs:14 [H 6]
   dwg->header_vars.CELTYPE = dwg_add_handleref (dwg, 5, 0x15, NULL);
@@ -22278,10 +22283,13 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
       = dwg_add_handleref (dwg, 5, 0x17, NULL);
   dwg_add_PLACEHOLDER (dwg); // MLINESTYLE 0.1.18
   dwg_add_DICTIONARY (dwg, NULL, NULL, NULL);
-  // DICTIONARY ACAD_LAYOUT: (5.1.1A)
-  dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_LAYOUT", NULL, NULL);
+  if (version >= R_2000)
+    {
+      // DICTIONARY ACAD_LAYOUT: (5.1.1A)
+      dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_LAYOUT", NULL, NULL);
+    }
+  // CMLSTYLE: (5.1.1C) abs:1C [H 2] or .18
   // DIMSTYLE: (5.1.1D) abs:1D [H 2]
-  // CMLSTYLE: (5.1.1C) abs:1C [H 2]
 
   // hole until 1F
   dwg_set_next_hdl (dwg, 0x1F);
@@ -22595,7 +22603,7 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
   NEW_ENTITY (dwg, obj);                                                      \
   ADD_ENTITY (token);                                                         \
   obj->tio.entity->ownerhandle = dwg_add_handleref (dwg,                      \
-                                   4, blkobj->handle.value, obj);             \
+                                   5, blkobj->handle.value, obj);             \
   dwg_set_next_objhandle (obj);                                               \
   LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H (obj->handle));                \
   in_postprocess_handles (obj);                                               \
@@ -23040,9 +23048,9 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         }
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_vtx), pl);
       if (i == 0)
-        _pl->first_vertex  = _pl->vertex[i];
+        _pl->first_vertex  = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (_vtx), pl);
       if (i == num_pts - 1)
-        _pl->last_vertex  = _pl->vertex[i];
+        _pl->last_vertex  = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (_vtx), pl);
     }
   _seq = dwg_add_SEQEND (blkhdr);
   _pl->seqend = dwg_add_handleref (
@@ -23077,9 +23085,9 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         }
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_vtx), pl);
       if (i == 0)
-        _pl->first_vertex  = _pl->vertex[i];
+        _pl->first_vertex = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (_vtx), pl);
       if (i == num_pts - 1)
-        _pl->last_vertex  = _pl->vertex[i];
+        _pl->last_vertex = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (_vtx), pl);
     }
   _seq = dwg_add_SEQEND (blkhdr);
   _pl->seqend  = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
@@ -23145,7 +23153,7 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _pl->vertex[i]
           = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_vtx), pl);
       if (i == 0)
-        _pl->first_vertex = _pl->vertex[i];
+        _pl->first_vertex = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (_vtx), pl);
     }
   for (unsigned j = 0; j < numfaces; j++)
     {
@@ -23158,7 +23166,8 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _pl->vertex[numverts + j] = dwg_add_handleref (
           dwg, 3, dwg_obj_generic_handlevalue (_vtxf), pl);
       if (j == numfaces - 1)
-        _pl->last_vertex  = _pl->vertex[numverts + j];
+        _pl->last_vertex  = dwg_add_handleref (
+          dwg, 4, dwg_obj_generic_handlevalue (_vtxf), pl);
     }
   _seq = dwg_add_SEQEND (blkhdr);
   obj = dwg_obj_generic_to_object (_seq, &error);
@@ -23211,9 +23220,9 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         }
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_vtx), pl);
       if (i == 0)
-        _pl->first_vertex  = _pl->vertex[i];
+        _pl->first_vertex  = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (_vtx), pl);
       if (i == _pl->num_owned - 1)
-        _pl->last_vertex  = _pl->vertex[i];
+        _pl->last_vertex  = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (_vtx), pl);
     }
   _seq = dwg_add_SEQEND (blkhdr);
   _pl->seqend  = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
@@ -23723,11 +23732,12 @@ dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
         {
           dwg_add_DICTIONARY_item (nod->tio.object->tio.DICTIONARY, name,
                                    dwg_add_handleref (dwg, 2, obj->handle.value, obj));
-          obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, nod->handle.value, NULL);
-          add_reactor (obj->tio.object, obj->tio.object->ownerhandle);
+          /* owner is relative, reactor absolute */
+          obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, nod->handle.value, obj);
+          add_reactor (obj->tio.object, dwg_add_handleref (dwg, 4, nod->handle.value, NULL));
         }
     }
-  else
+  else /* not a direct NOD item */
     {
       obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 0, NULL);
       _obj->cloning = 1;
@@ -24182,15 +24192,15 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
   dictref = dwg_find_dictionary (dwg, "MLINESTYLE");
   if (!dictref)
     {
-      dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_MLINESTYLE", name,
+      dict = dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_MLINESTYLE", name,
                           dwg_add_handleref (dwg, 2, obj->handle.value, NULL));
     }
   else
     {
-      Dwg_Object *mlsty = dwg_ref_object (dwg, dictref);
-      if (mlsty)
+      Dwg_Object *dictobj = dwg_ref_object (dwg, dictref);
+      if (dictobj)
         // add to dict item
-        dwg_add_DICTIONARY_item (mlsty->tio.object->tio.DICTIONARY, name,
+        dwg_add_DICTIONARY_item (dictobj->tio.object->tio.DICTIONARY, name,
                                  dwg_add_handleref (dwg, 2, obj->handle.value, NULL));
     }
 
