@@ -22038,6 +22038,21 @@ dwg_entity_owner (const void* _ent)
     return hdr->tio.object->tio.BLOCK_HEADER;
 }
 
+static void add_reactor (Dwg_Object_Object *obj, Dwg_Object_Ref *ref)
+{
+  if (obj->num_reactors)
+    {
+      obj->num_reactors++;
+      obj->reactors = realloc (obj->reactors, obj->num_reactors * sizeof (BITCODE_H));
+    }
+  else
+    {
+      obj->num_reactors = 1;
+      obj->reactors = calloc (1, sizeof (BITCODE_H));
+    }
+  obj->reactors[obj->num_reactors - 1] = ref;
+}
+
 /* Should be similar to the public VBA interface */
 
 /* Initialize a new dwg. Which template, imperial or metric */
@@ -22052,7 +22067,9 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   Dwg_Object_LAYER *layer;
   Dwg_Object_LTYPE *ltype;
   Dwg_Object_LTYPE_CONTROL *ltype_ctrl;
-  Dwg_Object_DICTIONARY *dict;
+  Dwg_Object_DICTIONARY *nod, *dict;
+  Dwg_Object_MLINESTYLE *mlstyle;
+  Dwg_Object_LAYOUT *layout;
   dwg_point_3d pt0 = { 0.0, 1.0, 0.0 };
   Dwg_Object *obj, *ctrl;
   time_t now;
@@ -22215,28 +22232,28 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   // VX_CONTROL_OBJECT: (3.1.B) abs:B [H 0]
   dwg_add_VX (dwg, NULL); // TODO only <r2000
   // DICTIONARY_NAMED_OBJECT: (3.1.C) abs:C [H 0]
-  dict = dwg_add_DICTIONARY (dwg, NULL, (const BITCODE_T) "NAMED_OBJECT", NULL);
+  nod = dwg_add_DICTIONARY (dwg, NULL, (const BITCODE_T) "NAMED_OBJECT", NULL);
   dwg->header_vars.DICTIONARY_NAMED_OBJECT
       = dwg_add_handleref (dwg, 3, 0xC, NULL);
   // DICTIONARY_ACAD_GROUP: (5.1.D) abs:D [H 0]
   dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_GROUP", NULL, NULL);
-  dwg->header_vars.DICTIONARY_ACAD_GROUP
-      = dwg_add_handleref (dwg, 5, 0xD, NULL);
-  dwg_add_DICTIONARY_item (dict, (const BITCODE_T) "ACAD_GROUP",
+  dwg->header_vars.DICTIONARY_ACAD_GROUP = dwg_add_handleref (dwg, 5, 0xD, NULL);
+  dwg_add_DICTIONARY_item (nod, (const BITCODE_T) "ACAD_GROUP",
                            dwg_add_handleref (dwg, 2, 0xD, NULL));
-  if (version >= R_2004)
+  if (version >= R_2000)
     {
       // DICTIONARY (5.1.E) //FIXME
       dwg_add_DICTIONARYWDFLT (dwg, (const BITCODE_T) "ACAD_PLOTSTYLENAME",
                                (const BITCODE_T) "Normal",
                                dwg_add_handleref (dwg, 2, 0xF, NULL));
-      dwg->header_vars.DICTIONARY_PLOTSTYLENAME
-        = dwg_add_handleref (dwg, 5, 0xE, NULL);
+      dwg->header_vars.DICTIONARY_PLOTSTYLENAME = dwg_add_handleref (dwg, 5, 0xE, NULL);
       // PLOTSTYLE (2.1.F)
       dwg_add_PLACEHOLDER (dwg); // PLOTSTYLE?
     }
   else
-    dwg_set_next_hdl (dwg, 0x10);
+    {
+      dwg_set_next_hdl (dwg, 0x10);
+    }
   // LAYER: (0.1.10)
   layer = dwg_add_LAYER (dwg, (const BITCODE_T) "0");
   layer->color = (BITCODE_CMC){ 7 };
@@ -22275,18 +22292,28 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   ltype->description = strdup ("Solid line");
   dwg->header_vars.LTYPE_CONTINUOUS = dwg_add_handleref (dwg, 5, 0x16, NULL);
   dwg->ltype_control = *ltype_ctrl;
+
   // DICTIONARY ACAD_MLINESTYLE: (5.1.17) abs:E [H 0]
-  dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_MLINESTYLE", NULL, NULL);
-  dwg_add_DICTIONARY_item (dict, (const BITCODE_T) "ACAD_MLINESTYLE",
-                           dwg_add_handleref (dwg, 2, 0x17, NULL));
-  dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE
-      = dwg_add_handleref (dwg, 5, 0x17, NULL);
-  dwg_add_PLACEHOLDER (dwg); // MLINESTYLE 0.1.18
-  dwg_add_DICTIONARY (dwg, NULL, NULL, NULL);
+  dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_MLINESTYLE",
+                      (const BITCODE_T) "Standard",
+                      dwg_add_handleref (dwg, 2, 0x18, NULL));
+  dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE = dwg_add_handleref (dwg, 5, 0x17, NULL);
+  // MLINESTYLE: (0.1.18)
+  mlstyle = dwg_add_MLINESTYLE (dwg, (const BITCODE_T) "Standard");
+  obj = dwg_obj_generic_to_object (mlstyle, &error);
+  obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 0x17, obj);
+  add_reactor (obj->tio.object, dwg_add_handleref (dwg, 4, 0x17, NULL));
+  //dwg_add_PLACEHOLDER (dwg); // MLINESTYLE 0.1.18
+
+  // DICTIONARY ACAD_PLOTSETTINGS: (5.1.19)
+  dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_PLOTSETTINGS", NULL, NULL);
+  dwg->header_vars.DICTIONARY_PLOTSETTINGS = dwg_add_handleref (dwg, 5, 0x19, NULL);
+
   if (version >= R_2000)
     {
       // DICTIONARY ACAD_LAYOUT: (5.1.1A)
       dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_LAYOUT", NULL, NULL);
+      // TODO LAYOUT.Model
     }
   // CMLSTYLE: (5.1.1C) abs:1C [H 2] or .18
   // DIMSTYLE: (5.1.1D) abs:1D [H 2]
@@ -23510,21 +23537,6 @@ dwg_add_XLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-static void add_reactor (Dwg_Object_Object *obj, Dwg_Object_Ref *ref)
-{
-  if (obj->num_reactors)
-    {
-      obj->num_reactors++;
-      obj->reactors = realloc (obj->reactors, obj->num_reactors * sizeof (BITCODE_H));
-    }
-  else
-    {
-      obj->num_reactors = 1;
-      obj->reactors = calloc (1, sizeof (BITCODE_H));
-    }
-  obj->reactors[obj->num_reactors - 1] = ref;
-}
-
 /* The name is the NOD entry. On NULL this is the NOD 0.1.C ("Named Object Dictionary") */
 EXPORT Dwg_Object_DICTIONARY*
 dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
@@ -23774,7 +23786,7 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   ref = dwg_ctrl_table (dwg, "MLINESTYLE");
   if (!ref)
     {
-      Dwg_Object_MLINESTYLE *mlstyle = dwg_add_MLINESTYLE (dwg, (const BITCODE_T) "STANDARD");
+      Dwg_Object_MLINESTYLE *mlstyle = dwg_add_MLINESTYLE (dwg, (const BITCODE_T) "Standard");
       _obj->mlinestyle = dwg_add_handleref (dwg, 5, dwg_obj_generic_handlevalue (mlstyle), obj);
       LOG_WARN ("No ACAD_MLINESTYLE in Named Dictionary Object found");
       return _obj;
@@ -23784,7 +23796,7 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       || !(obj->fixedtype == DWG_TYPE_DICTIONARY
            || obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT))
     {
-      Dwg_Object_MLINESTYLE *mlstyle = dwg_add_MLINESTYLE (dwg, (const BITCODE_T) "STANDARD");
+      Dwg_Object_MLINESTYLE *mlstyle = dwg_add_MLINESTYLE (dwg, (const BITCODE_T) "Standard");
       _obj->mlinestyle = dwg_add_handleref (dwg, 5, dwg_obj_generic_handlevalue (mlstyle), obj);
       LOG_WARN ("Empty ACAD_MLINESTYLE in Named Dictionary Object");
       return _obj;
@@ -24006,7 +24018,7 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
   Dwg_Object_Ref *dictref;
   API_ADD_OBJECT (MLINESTYLE);
   // find nod dict
-  dictref = dwg_find_dictionary (dwg, "MLINESTYLE");
+  dictref = dwg_find_dictionary (dwg, "ACAD_MLINESTYLE");
   if (!dictref)
     {
       dict = dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_MLINESTYLE", name,
@@ -24023,7 +24035,7 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
 
   _obj->name = strdup (name);
   _obj->fill_color = (BITCODE_CMC){ 256, 0 };
-  if (strEQ (name, "STANDARD"))
+  if (strEQ (name, "Standard") || strEQ (name, "STANDARD"))
     {
       _obj->start_angle = _obj->end_angle = deg2rad (90.0);
       _obj->num_lines = 2;
@@ -24501,7 +24513,7 @@ dwg_add_LAYOUT (Dwg_Object *restrict vp,
         dictobj = dwg_obj_generic_to_object (dict, &error);
         obj->tio.object->ownerhandle
             = dwg_add_handleref (dwg, 4, dictobj->handle.value, NULL);
-        if (!dwg->header_vars.DICTIONARY_LAYOUT)
+        if (!dwg->header_vars.DICTIONARY_LAYOUT || !dwg->header_vars.DICTIONARY_LAYOUT->absolute_ref)
           dwg->header_vars.DICTIONARY_LAYOUT
               = dwg_add_handleref (dwg, 5, dictobj->handle.value, NULL);
       }
