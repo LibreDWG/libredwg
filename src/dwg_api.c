@@ -22279,15 +22279,15 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   // hole at 13
   dwg_set_next_hdl (dwg, 0x14);
   ltype_ctrl = dwg->object[3].tio.object->tio.LTYPE_CONTROL;
-  // LTYPE_BYBLOCK: (5.1.14)
+  // LTYPE->byblock: (3.1.14)
   ltype = dwg_add_LTYPE (dwg, (const BITCODE_T) "BYBLOCK");
   ltype_ctrl->num_entries--;
-  ltype_ctrl->byblock = dwg_add_handleref (dwg, 5, 0x14, NULL);
+  ltype_ctrl->byblock = dwg_add_handleref (dwg, 3, 0x14, NULL);
   dwg->header_vars.LTYPE_BYBLOCK = dwg_add_handleref (dwg, 5, 0x14, NULL);
-  // LTYPE_BYLAYER: (5.1.15)
+  // LTYPE->bylayer: (3.1.15)
   dwg_add_LTYPE (dwg, (const BITCODE_T) "BYLAYER");
   ltype_ctrl->num_entries--;
-  ltype_ctrl->bylayer = dwg_add_handleref (dwg, 5, 0x15, NULL);
+  ltype_ctrl->bylayer = dwg_add_handleref (dwg, 3, 0x15, NULL);
   dwg->header_vars.LTYPE_BYLAYER = dwg_add_handleref (dwg, 5, 0x15, NULL);
   // CELTYPE: (5.1.14) abs:14 [H 6]
   dwg->header_vars.CELTYPE = dwg_add_handleref (dwg, 5, 0x15, NULL);
