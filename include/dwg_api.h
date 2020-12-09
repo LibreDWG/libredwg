@@ -6352,16 +6352,16 @@ EXPORT Dwg_Object_DICTIONARY *
 dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
                     const BITCODE_T restrict name, /* the NOD entry */
                     const BITCODE_T restrict text, /* maybe NULL */
-                    const BITCODE_H restrict itemhandle) __nonnull ((1));
+                    const unsigned long absolute_ref) __nonnull ((1));
 EXPORT Dwg_Object_DICTIONARY*
 dwg_add_DICTIONARY_item (Dwg_Object_DICTIONARY* _obj,
                          const BITCODE_T restrict text,
-                         const BITCODE_H restrict itemhandle)  __nonnull_all;
+                         const unsigned long absolute_ref)  __nonnull_all;
 EXPORT Dwg_Object_DICTIONARYWDFLT *
 dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
                          const BITCODE_T restrict name, /* the NOD entry */
                          const BITCODE_T restrict text, /* maybe NULL */
-                         const BITCODE_H restrict itemhandle) __nonnull ((1));
+                         const unsigned long absolute_ref) __nonnull ((1));
 EXPORT Dwg_Entity_OLE2FRAME*
 dwg_add_OLE2FRAME (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                    const dwg_point_3d *restrict pt1,

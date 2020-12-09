@@ -2099,22 +2099,22 @@ test_header (const Dwg_Data *dwg)
       fail ("HEADER.PEXTMAX [3BD]");
   }
   {
-    BITCODE_2RD plimmin;
+    BITCODE_2DPOINT plimmin;
     if (dwg_dynapi_header_value (dwg, "PLIMMIN", &plimmin, NULL)
         && !memcmp (&plimmin, &dwg->header_vars.PLIMMIN, sizeof (dwg->header_vars.PLIMMIN))
        )
       pass ();
     else
-      fail ("HEADER.PLIMMIN [2RD]");
+      fail ("HEADER.PLIMMIN [2DPOINT]");
   }
   {
-    BITCODE_2RD plimmax;
+    BITCODE_2DPOINT plimmax;
     if (dwg_dynapi_header_value (dwg, "PLIMMAX", &plimmax, NULL)
         && !memcmp (&plimmax, &dwg->header_vars.PLIMMAX, sizeof (dwg->header_vars.PLIMMAX))
        )
       pass ();
     else
-      fail ("HEADER.PLIMMAX [2RD]");
+      fail ("HEADER.PLIMMAX [2DPOINT]");
   }
   {
     BITCODE_BD pelevation;
@@ -2288,22 +2288,22 @@ test_header (const Dwg_Data *dwg)
       fail ("HEADER.EXTMAX [3BD]");
   }
   {
-    BITCODE_2RD limmin;
+    BITCODE_2DPOINT limmin;
     if (dwg_dynapi_header_value (dwg, "LIMMIN", &limmin, NULL)
         && !memcmp (&limmin, &dwg->header_vars.LIMMIN, sizeof (dwg->header_vars.LIMMIN))
        )
       pass ();
     else
-      fail ("HEADER.LIMMIN [2RD]");
+      fail ("HEADER.LIMMIN [2DPOINT]");
   }
   {
-    BITCODE_2RD limmax;
+    BITCODE_2DPOINT limmax;
     if (dwg_dynapi_header_value (dwg, "LIMMAX", &limmax, NULL)
         && !memcmp (&limmax, &dwg->header_vars.LIMMAX, sizeof (dwg->header_vars.LIMMAX))
        )
       pass ();
     else
-      fail ("HEADER.LIMMAX [2RD]");
+      fail ("HEADER.LIMMAX [2DPOINT]");
   }
   {
     BITCODE_2RD viewctr;

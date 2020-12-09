@@ -366,9 +366,9 @@ RC,	DXF 280
 @item LIMCHECK
 B,	DXF 70
 @item LIMMAX
-2RD,	DXF 20
+2DPOINT,	DXF 20
 @item LIMMIN
-2RD,	DXF 20
+2DPOINT,	DXF 20
 @item LOFTANG1
 BD,	DXF 40
 @item LOFTANG2
@@ -438,9 +438,9 @@ BS,	DXF 70
 @item PLIMCHECK
 B,	DXF 70
 @item PLIMMAX
-2RD,	DXF 20
+2DPOINT,	DXF 20
 @item PLIMMIN
-2RD,	DXF 20
+2DPOINT,	DXF 20
 @item PLINEGEN
 B,	DXF 70
 @item PLINEWID
@@ -13810,7 +13810,7 @@ H
 @item parent
 struct _dwg_object_EVALUATION_GRAPH*
 @item id
-BLd,	DXF 91
+BLd,	DXF 92
 @item nextid
 BLd,	DXF 93
 @item e1

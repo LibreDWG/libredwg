@@ -293,11 +293,11 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       break;
     case DWG_TYPE_DICTIONARY:
       dwg_add_DICTIONARY (dwg, (const BITCODE_T) "TEST_DICT",
-                          (const BITCODE_T) "testkey", NULL);
+                          (const BITCODE_T) "testkey", 0);
       break;
     case DWG_TYPE_DICTIONARYWDFLT:
       dwg_add_DICTIONARYWDFLT (dwg, (const BITCODE_T) "TEST_DICT",
-                               (const BITCODE_T) "testkey", NULL);
+                               (const BITCODE_T) "testkey", 0);
       break;
     // case DWG_TYPE_DICTIONARYVAR:
     //  {
@@ -309,7 +309,7 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
         // but you can also add a DICT to any object/entity to its xdicobjhandle
         Dwg_Object_DICTIONARY *dict
             = dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_MATERIAL",
-                                  (const BITCODE_T) "Global", NULL);
+                                  (const BITCODE_T) "Global", 0);
         Dwg_Object_XRECORD *xrecord = dwg_add_XRECORD (dict, (const BITCODE_T) "REFRACTIONTILE");
         dwg_add_XRECORD_int16 (xrecord, 270, 1);
         dwg_add_XRECORD_int32 (xrecord, 90, 1);
