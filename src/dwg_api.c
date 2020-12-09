@@ -23643,6 +23643,7 @@ dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
                          const BITCODE_T restrict key, /* maybe NULL */
                          const BITCODE_H restrict itemhandle)
 {
+  Dwg_Object* nod;
   {
     REQUIRE_CLASS ("ACDBDICTIONARYWDFLT");
   }
@@ -23651,13 +23652,35 @@ dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
     if (key)
       {
         _obj->numitems = 1;
-        _obj->cloning = 1;
         _obj->texts = (BITCODE_T*)calloc (1, sizeof (BITCODE_T));
         _obj->itemhandles = (BITCODE_H*)calloc (1, sizeof (BITCODE_H));
         _obj->texts[0] = strdup (key);
         _obj->itemhandles[0] = itemhandle;
       }
-    _obj->defaultid = itemhandle;
+    if (itemhandle)
+      {
+        _obj->cloning = 1;
+        _obj->defaultid = dwg_add_handleref (dwg, 5, itemhandle->absolute_ref, obj);
+      }
+
+    if (name)
+      {
+        nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
+        if (nod)
+          {
+            dwg_add_DICTIONARY_item (nod->tio.object->tio.DICTIONARY, name,
+                                     dwg_add_handleref (dwg, 2, obj->handle.value, obj));
+            /* owner is relative, reactor absolute */
+            obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, nod->handle.value, obj);
+            add_reactor (obj->tio.object, dwg_add_handleref (dwg, 4, nod->handle.value, NULL));
+          }
+      }
+    else /* not a direct NOD item */
+      {
+        obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 0, NULL);
+        _obj->cloning = 1;
+      }
+
     return _obj;
   }
 }
