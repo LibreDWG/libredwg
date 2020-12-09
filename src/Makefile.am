@@ -134,7 +134,7 @@ $(srcdir)/dynapi.c: $(srcdir)/gen-dynapi.pl $(top_srcdir)/include/dwg.h
 	echo make regen-dynapi might be needed
 if HAVE_GPERF
 $(srcdir)/dxfclasses.c: $(srcdir)/dxfclasses.in
-	$(GPERF) --output-file $@ $<
+	-$(GPERF) --output-file dxfclasses.tmp $< && mv -f dxfclasses.tmp $@
 endif
 
 .c.i:
