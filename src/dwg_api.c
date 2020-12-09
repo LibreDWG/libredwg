@@ -22316,7 +22316,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   if (version >= R_2000)
     {
       // DICTIONARY ACAD_LAYOUT: (5.1.1A)
-      dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_LAYOUT", NULL, NULL);
+      // dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_LAYOUT", NULL, NULL);
       // TODO LAYOUT.Model
     }
   // CMLSTYLE: (5.1.1C) abs:1C [H 2] or .18
