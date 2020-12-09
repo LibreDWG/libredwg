@@ -365,7 +365,7 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
               }
             else
               fail ("%s[%d].%s: %lX <=> \"%s\" [H]", fieldname, index, key,
-                    (unsigned long)value, f->value);
+                    l, f->value);
           }
       }
       break;
@@ -767,7 +767,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
                   }
                 else
                   fail ("%s.%s: %lX <=> \"%s\" [H %d]", name, f->name,
-                        (unsigned long)value, f->value, field.dxf);
+                        l, f->value, field.dxf);
               }
           }
           break;
