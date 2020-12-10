@@ -24871,57 +24871,49 @@ dwg_add_PROXY_OBJECT (Dwg_Data *restrict dwg, BITCODE_T name, BITCODE_T key
 // ACMESTATEMGR
 // ACSH_BOOLEAN_CLASS
 
-Dwg_Object_EVALUATION_GRAPH*
-dwg_add_EVALUATION_GRAPH (Dwg_Object_ACSH_HISTORY_CLASS *restrict history,
-                          const int has_graph,
-                          const int e_nodeid,
-                          const unsigned num_nodes,
+Dwg_Object_EVALUATION_GRAPH *
+dwg_add_EVALUATION_GRAPH (Dwg_Data *restrict dwg, const int has_graph,
+                          const int e_nodeid, const unsigned num_nodes,
                           const BITCODE_H *restrict evalexpr)
 {
-  int err;
-  Dwg_Object *hdr = dwg_obj_generic_to_object (history, &err);
-  Dwg_Data *dwg = hdr ? hdr->parent : NULL;
-  if (!dwg)
-    return NULL;
-  {
-    API_ADD_OBJECT (EVALUATION_GRAPH);
-    obj->tio.object->ownerhandle = dwg_add_handleref (
-        dwg, 5, dwg_obj_generic_handlevalue (history), obj);
-    _obj->major = 27;
-    _obj->minor = 52;
-    _obj->has_graph = has_graph;
-    _obj->first_nodeid = e_nodeid;
-    _obj->first_nodeid_copy = e_nodeid;
-    _obj->num_nodes = num_nodes;
-    _obj->nodes = calloc (_obj->num_nodes, sizeof (Dwg_EVAL_Node));
-    for (unsigned i = 0; i < num_nodes; i++)
-      {
-        _obj->nodes[i].id = i;
-        _obj->nodes[i].edge_flags = 32;
-        _obj->nodes[i].nextid = i + 1;
-        _obj->nodes[i].evalexpr = evalexpr[i];
-        _obj->nodes[i].node[0] = -1;
-        _obj->nodes[i].node[1] = -1;
-        _obj->nodes[i].node[2] = -1;
-        _obj->nodes[i].node[3] = -1;
-      }
-    _obj->edges = calloc (_obj->num_edges, sizeof (Dwg_EVAL_Edge));
-    for (unsigned i = 0; i < _obj->num_edges; i++)
-      {
-        _obj->edges[i].id = i;
-        _obj->edges[i].nextid = -1;
-        _obj->edges[i].e1 = -1; // incoming edges
-        _obj->edges[i].e2 = -1;
-        _obj->edges[i].e3 = -1;
-        _obj->edges[i].out_edge[0] = -1;
-        _obj->edges[i].out_edge[1] = -1;
-        _obj->edges[i].out_edge[2] = -1;
-        _obj->edges[i].out_edge[3] = -1;
-        _obj->edges[i].out_edge[4] = -1;
-      }
-    return _obj;
-  }
+  API_ADD_OBJECT (EVALUATION_GRAPH);
+  obj->tio.object->ownerhandle
+      = dwg_add_handleref (dwg, 4, obj->handle.value + 1, obj);
+  _obj->major = 27;
+  _obj->minor = 52;
+  _obj->has_graph = has_graph;
+  _obj->first_nodeid = e_nodeid;
+  _obj->first_nodeid_copy = e_nodeid;
+  _obj->num_nodes = num_nodes;
+  _obj->nodes = calloc (_obj->num_nodes, sizeof (Dwg_EVAL_Node));
+  for (unsigned i = 0; i < num_nodes; i++)
+    {
+      _obj->nodes[i].id = i;
+      _obj->nodes[i].edge_flags = 32;
+      _obj->nodes[i].nextid = i + 1;
+      _obj->nodes[i].evalexpr = evalexpr[i];
+      _obj->nodes[i].node[0] = -1;
+      _obj->nodes[i].node[1] = -1;
+      _obj->nodes[i].node[2] = -1;
+      _obj->nodes[i].node[3] = -1;
+    }
+  _obj->edges = calloc (_obj->num_edges, sizeof (Dwg_EVAL_Edge));
+  for (unsigned i = 0; i < _obj->num_edges; i++)
+    {
+      _obj->edges[i].id = i;
+      _obj->edges[i].nextid = -1;
+      _obj->edges[i].e1 = -1; // incoming edges
+      _obj->edges[i].e2 = -1;
+      _obj->edges[i].e3 = -1;
+      _obj->edges[i].out_edge[0] = -1;
+      _obj->edges[i].out_edge[1] = -1;
+      _obj->edges[i].out_edge[2] = -1;
+      _obj->edges[i].out_edge[3] = -1;
+      _obj->edges[i].out_edge[4] = -1;
+    }
+  return _obj;
 }
+
 Dwg_Object_ACSH_HISTORY_CLASS*
 dwg_add_ACSH_HISTORY_CLASS (Dwg_Entity_3DSOLID *restrict region,
                             const int h_nodeid)
@@ -24934,7 +24926,7 @@ dwg_add_ACSH_HISTORY_CLASS (Dwg_Entity_3DSOLID *restrict region,
   {
     API_ADD_OBJECT (ACSH_HISTORY_CLASS);
     obj->tio.object->ownerhandle = dwg_add_handleref (
-        dwg, 5, dwg_obj_generic_handlevalue (region), obj);
+        dwg, 4, dwg_obj_generic_handlevalue (region), obj);
     _obj->major = 27;
     _obj->minor = 52;
     _obj->h_nodeid = h_nodeid;
@@ -25105,6 +25097,34 @@ dwg_add_ACSH_BOX_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   }
 }
 
+static void
+ACSH_init_evalgraph (Dwg_Data *restrict dwg, void *restrict _acsh,
+                     Dwg_Entity_3DSOLID *restrict solid)
+{
+  int error;
+  Dwg_Object_ACSH_HISTORY_CLASS *hist;
+  Dwg_Object_EVALUATION_GRAPH *eval;
+  Dwg_Object *solidobj, *histobj, *evalobj, *acsh;
+  BITCODE_H *evalexpr = calloc (1, sizeof (BITCODE_H));
+
+  acsh = dwg_obj_generic_to_object (_acsh, &error);
+  solidobj = dwg_obj_generic_to_object (solid, &error);
+
+  evalexpr[0] = dwg_add_handleref (dwg, 3, acsh->handle.value, NULL);
+  eval = dwg_add_EVALUATION_GRAPH (dwg, 0, nodeid++, 1, evalexpr);
+  evalobj = dwg_obj_generic_to_object (eval, &error);
+  acsh->tio.object->ownerhandle
+      = dwg_add_handleref (dwg, 4, evalobj->handle.value, acsh);
+
+  hist = dwg_add_ACSH_HISTORY_CLASS (solid, 1);
+  hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
+  histobj = dwg_obj_generic_to_object (hist, &error);
+  solid->history_id
+      = dwg_add_handleref (dwg, 5, histobj->handle.value, solidobj);
+  evalobj->tio.object->ownerhandle
+      = dwg_add_handleref (dwg, 4, histobj->handle.value, evalobj);
+}
+
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
              const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
@@ -25128,10 +25148,6 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   {
     Dwg_Entity_3DSOLID *solid;
     Dwg_Object_ACSH_BOX_CLASS *_obj;
-    Dwg_Object_ACSH_HISTORY_CLASS *hist;
-    Dwg_Object_EVALUATION_GRAPH *eval;
-    Dwg_Object *solidobj, *histobj, *evalobj;
-    BITCODE_H *evalexpr = calloc (1, sizeof (BITCODE_H));
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_matrix9 matrix = {
       1.0, 0.0, 0.0,
@@ -25139,24 +25155,16 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       0.0, 0.0, 1.0 };
 
     solid = dwg_add_3DSOLID (blkhdr, "box"); // origin_pt
-    solidobj = dwg_obj_generic_to_object (solid, &err);
     solid->wireframe_data_present = 1;
     solid->point_present = 1;
     solid->point.x = origin_pt->x;
     solid->point.y = origin_pt->y;
     solid->point.z = origin_pt->z;
+    solid->acis_empty_bit = 1;
 
-    hist = dwg_add_ACSH_HISTORY_CLASS (solid, 0);
-    histobj = dwg_obj_generic_to_object (hist, &err);
-    solid->history_id = dwg_add_handleref (dwg, 5, histobj->handle.value, solidobj);
-
-    evalexpr[0] = dwg_add_handleref (dwg, 3, histobj->handle.value + 2, NULL);
-    eval = dwg_add_EVALUATION_GRAPH (hist, 0, nodeid++, 1, evalexpr);
-    evalobj = dwg_obj_generic_to_object (eval, &err);
-    hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
-
-    _obj = dwg_add_ACSH_BOX_CLASS (eval, origin_pt, normal ? normal : &defnormal,
+    _obj = dwg_add_ACSH_BOX_CLASS ((void*)solid, origin_pt, normal ? normal : &defnormal,
                                    length, width, height);
+    ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
 }
@@ -25219,7 +25227,7 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_CHAMFER_CLASS *_obj;
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
-    Dwg_Object *solidobj, *histobj, *evalobj;
+    Dwg_Object *solidobj, *histobj, *evalobj, *acsh;
     BITCODE_H *evalexpr = calloc (1, sizeof (BITCODE_H));
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_matrix9 matrix = {
@@ -25234,19 +25242,12 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.x = origin_pt->x;
     solid->point.y = origin_pt->y;
     solid->point.z = origin_pt->z;
+    solid->acis_empty_bit = 1;
 
-    hist = dwg_add_ACSH_HISTORY_CLASS (solid, 0);
-    histobj = dwg_obj_generic_to_object (hist, &err);
-    solid->history_id = dwg_add_handleref (dwg, 5, histobj->handle.value, solidobj);
-
-    evalexpr[0] = dwg_add_handleref (dwg, 3, histobj->handle.value + 2, NULL);
-    eval = dwg_add_EVALUATION_GRAPH (hist, 0, nodeid++, 1, evalexpr);
-    evalobj = dwg_obj_generic_to_object (eval, &err);
-    hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
-
-    _obj = dwg_add_ACSH_CHAMFER_CLASS (eval, origin_pt, normal ? normal : &defnormal,
-                                       bl92, base_dist, other_dist, num_edges, edges,
-                                       bl95);
+    _obj = dwg_add_ACSH_CHAMFER_CLASS (
+        (void *)solid, origin_pt, normal ? normal : &defnormal, bl92,
+        base_dist, other_dist, num_edges, edges, bl95);
+    ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
 }
@@ -25298,7 +25299,7 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_CONE_CLASS *_obj;
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
-    Dwg_Object *solidobj, *histobj, *evalobj;
+    Dwg_Object *solidobj, *histobj, *evalobj, *acsh;
     BITCODE_H *evalexpr = calloc (1, sizeof (BITCODE_H));
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_matrix9 matrix = {
@@ -25368,19 +25369,12 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.x = origin_pt->x;
     solid->point.y = origin_pt->y;
     solid->point.z = origin_pt->z;
+    solid->acis_empty_bit = 1;
 
-    hist = dwg_add_ACSH_HISTORY_CLASS (solid, 0);
-    histobj = dwg_obj_generic_to_object (hist, &err);
-    solid->history_id = dwg_add_handleref (dwg, 5, histobj->handle.value, solidobj);
-
-    evalexpr[0] = dwg_add_handleref (dwg, 3, histobj->handle.value + 2, NULL);
-    eval = dwg_add_EVALUATION_GRAPH (hist, 0, nodeid++, 1, evalexpr);
-    evalobj = dwg_obj_generic_to_object (eval, &err);
-    hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
-
-    _obj = dwg_add_ACSH_CONE_CLASS (eval, origin_pt, normal ? normal : &defnormal,
-                                    base_radius, top_major_radius, top_minor_radius,
-                                    top_x_radius);
+    _obj = dwg_add_ACSH_CONE_CLASS (
+        (void *)solid, origin_pt, normal ? normal : &defnormal, base_radius,
+        top_major_radius, top_minor_radius, top_x_radius);
+    ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
 }
@@ -25432,7 +25426,7 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_CYLINDER_CLASS *_obj;
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
-    Dwg_Object *solidobj, *histobj, *evalobj;
+    Dwg_Object *solidobj, *histobj, *evalobj, *acsh;
     BITCODE_H *evalexpr = calloc (1, sizeof (BITCODE_H));
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_matrix9 matrix = {
@@ -25502,18 +25496,11 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.x = origin_pt->x;
     solid->point.y = origin_pt->y;
     solid->point.z = origin_pt->z;
+    solid->acis_empty_bit = 1;
 
-    hist = dwg_add_ACSH_HISTORY_CLASS (solid, 0);
-    histobj = dwg_obj_generic_to_object (hist, &err);
-    solid->history_id = dwg_add_handleref (dwg, 5, histobj->handle.value, solidobj);
-
-    evalexpr[0] = dwg_add_handleref (dwg, 3, histobj->handle.value + 2, NULL);
-    eval = dwg_add_EVALUATION_GRAPH (hist, 0, nodeid++, 1, evalexpr);
-    evalobj = dwg_obj_generic_to_object (eval, &err);
-    hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
-
-    _obj = dwg_add_ACSH_CYLINDER_CLASS (eval, origin_pt, normal ? normal : &defnormal,
+    _obj = dwg_add_ACSH_CYLINDER_CLASS ((void*)solid, origin_pt, normal ? normal : &defnormal,
                                         height, major_radius, minor_radius, x_radius);
+    ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
 }
@@ -25565,7 +25552,7 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_PYRAMID_CLASS *_obj;
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
-    Dwg_Object *solidobj, *histobj, *evalobj;
+    Dwg_Object *solidobj, *histobj, *evalobj, *acsh;
     BITCODE_H *evalexpr = calloc (1, sizeof (BITCODE_H));
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_matrix9 matrix = {
@@ -25580,18 +25567,11 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.x = origin_pt->x;
     solid->point.y = origin_pt->y;
     solid->point.z = origin_pt->z;
+    solid->acis_empty_bit = 1;
 
-    hist = dwg_add_ACSH_HISTORY_CLASS (solid, 0);
-    histobj = dwg_obj_generic_to_object (hist, &err);
-    solid->history_id = dwg_add_handleref (dwg, 5, histobj->handle.value, solidobj);
-
-    evalexpr[0] = dwg_add_handleref (dwg, 3, histobj->handle.value + 2, NULL);
-    eval = dwg_add_EVALUATION_GRAPH (hist, 0, nodeid++, 1, evalexpr);
-    evalobj = dwg_obj_generic_to_object (eval, &err);
-    hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
-
-    _obj = dwg_add_ACSH_PYRAMID_CLASS (eval, origin_pt, normal ? normal : &defnormal,
+    _obj = dwg_add_ACSH_PYRAMID_CLASS ((void*)solid, origin_pt, normal ? normal : &defnormal,
                                        height, sides, radius, topradius);
+    ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
 }
@@ -25643,7 +25623,7 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_SPHERE_CLASS *_obj;
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
-    Dwg_Object *solidobj, *histobj, *evalobj;
+    Dwg_Object *solidobj, *histobj, *evalobj, *acsh;
     BITCODE_H *evalexpr = calloc (1, sizeof (BITCODE_H));
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_matrix9 matrix = {
@@ -25683,17 +25663,11 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.x = origin_pt->x;
     solid->point.y = origin_pt->y;
     solid->point.z = origin_pt->z;
+    solid->acis_empty_bit = 1;
 
-    hist = dwg_add_ACSH_HISTORY_CLASS (solid, 0);
-    histobj = dwg_obj_generic_to_object (hist, &err);
-    solid->history_id = dwg_add_handleref (dwg, 5, histobj->handle.value, solidobj);
-
-    evalexpr[0] = dwg_add_handleref (dwg, 3, histobj->handle.value + 2, NULL);
-    eval = dwg_add_EVALUATION_GRAPH (hist, 0, nodeid++, 1, evalexpr);
-    evalobj = dwg_obj_generic_to_object (eval, &err);
-    hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
-
-    _obj = dwg_add_ACSH_SPHERE_CLASS (eval, origin_pt, normal ? normal : &defnormal, radius);
+    _obj = dwg_add_ACSH_SPHERE_CLASS ((void *)solid, origin_pt,
+                                      normal ? normal : &defnormal, radius);
+    ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
 }
@@ -25744,7 +25718,7 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_TORUS_CLASS *_obj;
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
-    Dwg_Object *solidobj, *histobj, *evalobj;
+    Dwg_Object *solidobj, *histobj, *evalobj, *acsh;
     BITCODE_H *evalexpr = calloc (1, sizeof (BITCODE_H));
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_matrix9 matrix = {
@@ -25798,20 +25772,12 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.x = origin_pt->x;
     solid->point.y = origin_pt->y;
     solid->point.z = origin_pt->z;
+    solid->acis_empty_bit = 1;
 
-    hist = dwg_add_ACSH_HISTORY_CLASS (solid, 0);
-    histobj = dwg_obj_generic_to_object (hist, &err);
-    solid->history_id
-        = dwg_add_handleref (dwg, 5, histobj->handle.value, solidobj);
-
-    evalexpr[0] = dwg_add_handleref (dwg, 3, histobj->handle.value + 2, NULL);
-    eval = dwg_add_EVALUATION_GRAPH (hist, 0, nodeid++, 1, evalexpr);
-    evalobj = dwg_obj_generic_to_object (eval, &err);
-    hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
-
-    _obj = dwg_add_ACSH_TORUS_CLASS (eval, origin_pt,
+    _obj = dwg_add_ACSH_TORUS_CLASS ((void*)solid, origin_pt,
                                      normal ? normal : &defnormal,
                                      major_radius, minor_radius);
+    ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
 }
@@ -25863,7 +25829,7 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_WEDGE_CLASS *_obj;
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
-    Dwg_Object *solidobj, *histobj, *evalobj;
+    Dwg_Object *solidobj, *histobj, *evalobj, *acsh;
     BITCODE_H *evalexpr = calloc (1, sizeof (BITCODE_H));
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_matrix9 matrix = {
@@ -25878,19 +25844,12 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.x = origin_pt->x;
     solid->point.y = origin_pt->y;
     solid->point.z = origin_pt->z;
+    solid->acis_empty_bit = 1;
 
-    hist = dwg_add_ACSH_HISTORY_CLASS (solid, 0);
-    histobj = dwg_obj_generic_to_object (hist, &err);
-    solid->history_id
-        = dwg_add_handleref (dwg, 5, histobj->handle.value, solidobj);
-
-    evalexpr[0] = dwg_add_handleref (dwg, 3, histobj->handle.value + 2, NULL);
-    eval = dwg_add_EVALUATION_GRAPH (hist, 0, nodeid++, 1, evalexpr);
-    evalobj = dwg_obj_generic_to_object (eval, &err);
-    hist->owner = dwg_add_handleref (dwg, 3, evalobj->handle.value, NULL);
-
-    _obj = dwg_add_ACSH_WEDGE_CLASS (
-        eval, origin_pt, normal ? normal : &defnormal, length, width, height);
+    _obj = dwg_add_ACSH_WEDGE_CLASS ((void *)solid, origin_pt,
+                                     normal ? normal : &defnormal, length,
+                                     width, height);
+    ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
 }

@@ -6524,7 +6524,7 @@ dwg_add_ACSH_WEDGE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                           const double length, const double width,
                           const double height) __nonnull_all;
 Dwg_Object_EVALUATION_GRAPH*
-dwg_add_EVALUATION_GRAPH (Dwg_Object_ACSH_HISTORY_CLASS *restrict history,
+dwg_add_EVALUATION_GRAPH (Dwg_Data *restrict dwg,
                           const int has_graph,
                           const int nodeid,
                           const unsigned num_evalexpr,
