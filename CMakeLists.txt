@@ -106,6 +106,7 @@ set(libredwg_SOURCES
     src/hash.c
     src/dwg_api.c
     src/dynapi.c
+    src/dxfclasses.c
     src/free.c
     src/out_dxf.c
     ${outjson_SOURCES}
@@ -195,6 +196,17 @@ if(NOT CMAKE_CROSSCOMPILING)
   endif(NOT LIBREDWG_LIBONLY)
   add_subdirectory(test/unit-testing)
 endif(NOT CMAKE_CROSSCOMPILING)
+
+add_custom_target(
+  regen-dynapi
+  COMMAND perl src/gen-dynapi.pl
+  DEPENDS src/gen-dynapi.pl include/dwg.h)
+
+add_custom_target(
+  regen-gperf
+  COMMAND gperf --output-file src/dxfclasses.c src/dxfclasses.in
+  DEPENDS src/dxfclasses.in
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 add_custom_target(
   TAGS

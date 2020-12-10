@@ -57,7 +57,7 @@ EXTRA_DIST = $(top_srcdir)/.version libredwg.spec Dockerfile \
 
 .PHONY: check-dwg check-dxf check-json check-dwg-valgrind \
         regen-man man manual refman scan-build gcov \
-	unknown regen-unknown full-regen-unknown
+	unknown regen-unknown full-regen-unknown regen-gperf regen-dynapi
 
 dist-hook:
 	echo dist-hook distdir="$(distdir)"
@@ -100,6 +100,9 @@ endif
 
 regen-dynapi: $(srcdir)/src/gen-dynapi.pl $(srcdir)/include/dwg.h
 	-$(PERL) $(srcdir)/src/gen-dynapi.pl
+# $(MAKE) -C src $(abs_top_srcdir)/src/dxfclasses.c
+regen-gperf:
+	-$(GPERF) --output-file src/dxfclasses.c src/dxfclasses.in
 regen-unknown:
 	$(MAKE) -C examples $@
 full-regen-unknown:

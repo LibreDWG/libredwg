@@ -104,6 +104,7 @@ jobs:
           mingw-w64-x86_64-swig
           mingw-w64-x86_64-python2
           texinfo
+          gperf
           mingw-w64-x86_64-perl
           mingw-w64-x86_64-pcre2
     - run: reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1

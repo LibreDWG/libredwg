@@ -22,7 +22,6 @@ add_executable(decode_test
   ../../src/hash.c
   ../../src/decode_r2007.c
   ../../src/common.c
-  ../../src/dxfclasses.c
   ../../src/print.c
   tests_common.h)
 add_test(decode_test ./decode_test)
