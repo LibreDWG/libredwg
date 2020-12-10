@@ -25931,10 +25931,10 @@ dwg_add_LAYER_INDEX (Dwg_Data *restrict dwg /* ... */)
   }
 }
 
-// TODO
+// Untested, experimental.
 // INSERT.xdicobjhandle ->
-// DICT_item "ACAD_FILTER" ->
-// DICT_item "SPATIAL" -> obj
+//   DICT_item "ACAD_FILTER" ->
+//   DICT_item "SPATIAL" -> obj
 EXPORT Dwg_Object_SPATIAL_FILTER *
 dwg_add_SPATIAL_FILTER (Dwg_Entity_INSERT *restrict insert /*, clip_verts... */)
 {
@@ -26051,8 +26051,6 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */)
 // SECTION_MANAGER
 // SECTION_SETTINGS
 // SORTENTSTABLE
-// SPATIAL_FILTER
-// SPATIAL_INDEX
 // SUN
 // SUNSTUDY
 // SWEPTSURFACE

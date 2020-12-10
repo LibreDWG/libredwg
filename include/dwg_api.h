@@ -6134,13 +6134,16 @@ EXPORT dwg_class *dwg_get_class (const dwg_data *dwg, unsigned int index);
 
 /* Most names are of type BITCODE_T, i.e. TV for <r2007, TU since r2007.
    But we dont support writing to r2007+ yet, so we only take ASCII strings yet.
-   TODO: change the strings to UTF-8.
+   TODO: Change all strings to take UTF-8 instead, as with the dynapi.
 
    Most names are copied, since most names are considered to be constant.
    If not, you need to free them by yourself.
 
    Exceptions are dxfname (there exists a seperate dxfname_u variant),
    the VX name, which does not exists anymore since r2000.
+
+   When writing DWG, a version of R_2000 is recommended, only R_13 - R-2000
+   are supported yet. For DXF you can try all versions >= R_13.
  */
 
 EXPORT Dwg_Data *dwg_add_Document (const Dwg_Version_Type version,
@@ -6216,20 +6219,24 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                  const int num_cols,
                  const double row_spacing,
                  const double col_spacing) __nonnull_all;
+/* Experimental. May crash acad */
 EXPORT Dwg_Entity_POLYLINE_2D*
 dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                     const int num_pts,
                     const dwg_point_2d *restrict pts) __nonnull_all;
+/* Experimental. May crash acad */
 EXPORT Dwg_Entity_POLYLINE_3D*
 dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                      const int num_pts,
                      const dwg_point_3d *restrict pts) __nonnull_all;
+/* Experimental. May crash acad */
 EXPORT Dwg_Entity_POLYLINE_PFACE*
 dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                         const unsigned numverts,
                         const unsigned numfaces,
                         const dwg_point_3d *restrict verts,
                         const dwg_face *restrict faces) __nonnull_all;
+/* Experimental. May crash acad */
 EXPORT Dwg_Entity_POLYLINE_MESH*
 dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                        const unsigned num_m_verts,
@@ -6329,12 +6336,15 @@ dwg_add_SPLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const dwg_point_3d *restrict fit_pts,
                 const dwg_point_3d *restrict beg_tan_vec,
                 const dwg_point_3d *restrict end_tan_vec) __nonnull_all;
+/* Experimental. Does not work yet properly */
 EXPORT Dwg_Entity_REGION*
 dwg_add_REGION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const char *acis_data) __nonnull_all;
+/* Experimental. Does not work yet properly */
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_3DSOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                  const char *acis_data) __nonnull_all;
+/* Experimental. Does not work yet properly */
 EXPORT Dwg_Entity_BODY*
 dwg_add_BODY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const char *acis_data) __nonnull_all;
@@ -6371,6 +6381,7 @@ dwg_add_MTEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict ins_pt,
                const double rect_width,
                const BITCODE_T restrict text_value) __nonnull_all;
+/* Experimental. Does not work yet properly */
 EXPORT Dwg_Entity_LEADER*
 dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const unsigned num_points,
@@ -6392,6 +6403,7 @@ dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                     const int num_pts2d,
                     const dwg_point_2d *restrict pts2d) __nonnull_all;
 
+/* Experimental. Does not work yet properly */
 EXPORT Dwg_Entity_HATCH*
 dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const int pattern_type,
@@ -6444,7 +6456,7 @@ dwg_add_PLACEHOLDER (Dwg_Data *restrict dwg) __nonnull_all;
 EXPORT Dwg_Object_VBA_PROJECT *
 dwg_add_VBA_PROJECT (Dwg_Data *restrict dwg, const BITCODE_BL size,
                      const BITCODE_RC *data) __nonnull_all;
-/* either added to VIEWPORT entity in pspace, or VPORT object in mspace. */
+/* Either added to mspace, pspace, or VIEWPORT entity in pspace, or VPORT object in mspace. */
 EXPORT Dwg_Object_LAYOUT *
 dwg_add_LAYOUT (Dwg_Object *restrict vp,
                 const BITCODE_T restrict name,
@@ -6469,6 +6481,8 @@ EXPORT Dwg_Entity_UNDERLAY*
 dwg_add_UNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                   const dwg_point_3d *restrict ins_pt) __nonnull_all;
 
+/* All the ACSH methods and 3d primitives are still experimental.
+   They do not work yet properly */
 Dwg_Object_ACSH_BOX_CLASS*
 dwg_add_ACSH_BOX_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                         const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
@@ -6677,41 +6691,30 @@ dwg_add_SPATIAL_FILTER (Dwg_Entity_INSERT *restrict insert /*, clip_verts... */)
 EXPORT Dwg_Object_SPATIAL_INDEX *
 dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 
-/* List of yet supported and unsupported add entity and object API from object.inc,
+/* List of yet supported and unsupported add entity and object API from objects.inc,
    so we can auto-generate API's, i.e. for gambas.
 
    _3D* are defined without underscore.
    add_<TABLE>_CONTROL are not needed, they are added on dwg_add_Document()
    and via add_<TABLE>.
  */
-#define HAVE_NO_DWG_ADD__3DFACE
-#define HAVE_NO_DWG_ADD__3DSOLID
 #define HAVE_NO_DWG_ADD_ACMECOMMANDHISTORY
 #define HAVE_NO_DWG_ADD_ACMESCOPE
 #define HAVE_NO_DWG_ADD_ACMESTATEMGR
 #define HAVE_NO_DWG_ADD_ACSH_BOOLEAN_CLASS
-#define HAVE_DWG_ADD_ACSH_BOX_CLASS
 #define HAVE_NO_DWG_ADD_ACSH_BREP_CLASS
-#define HAVE_DWG_ADD_ACSH_CHAMFER_CLASS
-#define HAVE_DWG_ADD_ACSH_CONE_CLASS
-#define HAVE_DWG_ADD_ACSH_CYLINDER_CLASS
 #define HAVE_NO_DWG_ADD_ACSH_EXTRUSION_CLASS
 #define HAVE_NO_DWG_ADD_ACSH_FILLET_CLASS
-#define HAVE_DWG_ADD_ACSH_HISTORY_CLASS
 #define HAVE_NO_DWG_ADD_ACSH_LOFT_CLASS
-#define HAVE_DWG_ADD_ACSH_PYRAMID_CLASS
 #define HAVE_NO_DWG_ADD_ACSH_REVOLVE_CLASS
-#define HAVE_DWG_ADD_ACSH_SPHERE_CLASS
 #define HAVE_NO_DWG_ADD_ACSH_SWEEP_CLASS
-#define HAVE_DWG_ADD_ACSH_TORUS_CLASS
-#define HAVE_DWG_ADD_ACSH_WEDGE_CLASS
 #define HAVE_NO_DWG_ADD_ALDIMOBJECTCONTEXTDATA
 #define HAVE_NO_DWG_ADD_ALIGNMENTPARAMETERENTITY
 #define HAVE_NO_DWG_ADD_ANGDIMOBJECTCONTEXTDATA
 #define HAVE_NO_DWG_ADD_ANNOTSCALEOBJECTCONTEXTDATA
 #define HAVE_NO_DWG_ADD_APPID_CONTROL
-#define HAVE_NO_DWG_ADD_ARC_DIMENSION
 #define HAVE_NO_DWG_ADD_ARCALIGNEDTEXT
+#define HAVE_NO_DWG_ADD_ARC_DIMENSION
 #define HAVE_NO_DWG_ADD_ASSOC2DCONSTRAINTGROUP
 #define HAVE_NO_DWG_ADD_ASSOC3POINTANGULARDIMACTIONBODY
 #define HAVE_NO_DWG_ADD_ASSOCACTION
@@ -6817,7 +6820,6 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_NO_DWG_ADD_DUMMY
 #define HAVE_NO_DWG_ADD_DYNAMICBLOCKPROXYNODE
 #define HAVE_NO_DWG_ADD_DYNAMICBLOCKPURGEPREVENTER
-#define HAVE_DWG_ADD_EVALUATION_GRAPH
 #define HAVE_NO_DWG_ADD_EXTRUDEDSURFACE
 #define HAVE_NO_DWG_ADD_FCFOBJECTCONTEXTDATA
 #define HAVE_NO_DWG_ADD_FIELD
@@ -6832,8 +6834,6 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_NO_DWG_ADD_IMAGEDEF_REACTOR
 #define HAVE_NO_DWG_ADD_INDEX
 #define HAVE_NO_DWG_ADD_LAYER_CONTROL
-#define HAVE_DWG_ADD_LAYERFILTER
-#define HAVE_NO_DWG_ADD_LAYER_INDEX
 #define HAVE_NO_DWG_ADD_LAYOUTPRINTCONFIG
 #define HAVE_NO_DWG_ADD_LEADEROBJECTCONTEXTDATA
 #define HAVE_NO_DWG_ADD_LIGHT
@@ -6870,8 +6870,6 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_NO_DWG_ADD_POINTCLOUDEX
 #define HAVE_NO_DWG_ADD_POINTPARAMETERENTITY
 #define HAVE_NO_DWG_ADD_POINTPATH
-#define HAVE_DWG_ADD_PROXY_ENTITY
-#define HAVE_DWG_ADD_PROXY_OBJECT
 #define HAVE_NO_DWG_ADD_RADIMLGOBJECTCONTEXTDATA
 #define HAVE_NO_DWG_ADD_RADIMOBJECTCONTEXTDATA
 #define HAVE_NO_DWG_ADD_RAPIDRTRENDERSETTINGS
@@ -6884,14 +6882,12 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_NO_DWG_ADD_ROTATIONPARAMETERENTITY
 #define HAVE_NO_DWG_ADD_RTEXT
 #define HAVE_NO_DWG_ADD_SCALE
-#define HAVE_NO_DWG_ADD_SECTION_MANAGER
 #define HAVE_NO_DWG_ADD_SECTIONOBJECT
-#define HAVE_NO_DWG_ADD_SECTION_SETTINGS
 #define HAVE_NO_DWG_ADD_SECTIONVIEWSTYLE
+#define HAVE_NO_DWG_ADD_SECTION_MANAGER
+#define HAVE_NO_DWG_ADD_SECTION_SETTINGS
 #define HAVE_NO_DWG_ADD_SEQEND
 #define HAVE_NO_DWG_ADD_SORTENTSTABLE
-#define HAVE_DWG_ADD_SPATIAL_FILTER
-#define HAVE_DWG_ADD_SPATIAL_INDEX
 #define HAVE_NO_DWG_ADD_STYLE_CONTROL
 #define HAVE_NO_DWG_ADD_SUN
 #define HAVE_NO_DWG_ADD_SUNSTUDY
@@ -6936,6 +6932,15 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 
 #define HAVE_DWG_ADD_3DFACE
 #define HAVE_DWG_ADD_3DSOLID
+#define HAVE_DWG_ADD_ACSH_BOX_CLASS
+#define HAVE_DWG_ADD_ACSH_CHAMFER_CLASS
+#define HAVE_DWG_ADD_ACSH_CONE_CLASS
+#define HAVE_DWG_ADD_ACSH_CYLINDER_CLASS
+#define HAVE_DWG_ADD_ACSH_HISTORY_CLASS
+#define HAVE_DWG_ADD_ACSH_PYRAMID_CLASS
+#define HAVE_DWG_ADD_ACSH_SPHERE_CLASS
+#define HAVE_DWG_ADD_ACSH_TORUS_CLASS
+#define HAVE_DWG_ADD_ACSH_WEDGE_CLASS
 #define HAVE_DWG_ADD_APPID
 #define HAVE_DWG_ADD_ARC
 #define HAVE_DWG_ADD_BLOCK
@@ -6955,12 +6960,15 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_DWG_ADD_DIMSTYLE
 #define HAVE_DWG_ADD_ELLIPSE
 #define HAVE_DWG_ADD_ENDBLK
+#define HAVE_DWG_ADD_EVALUATION_GRAPH
 #define HAVE_DWG_ADD_GROUP
 #define HAVE_DWG_ADD_HATCH
 #define HAVE_DWG_ADD_IMAGE
 #define HAVE_DWG_ADD_INSERT
 #define HAVE_DWG_ADD_LARGE_RADIAL_DIMENSION
 #define HAVE_DWG_ADD_LAYER
+#define HAVE_DWG_ADD_LAYERFILTER
+#define HAVE_DWG_ADD_LAYER_INDEX
 #define HAVE_DWG_ADD_LAYOUT
 #define HAVE_DWG_ADD_LEADER
 #define HAVE_DWG_ADD_LINE
@@ -6977,10 +6985,14 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_DWG_ADD_POLYLINE_3D
 #define HAVE_DWG_ADD_POLYLINE_MESH
 #define HAVE_DWG_ADD_POLYLINE_PFACE
+#define HAVE_DWG_ADD_PROXY_ENTITY
+#define HAVE_DWG_ADD_PROXY_OBJECT
 #define HAVE_DWG_ADD_RAY
 #define HAVE_DWG_ADD_REGION
 #define HAVE_DWG_ADD_SHAPE
 #define HAVE_DWG_ADD_SOLID
+#define HAVE_DWG_ADD_SPATIAL_FILTER
+#define HAVE_DWG_ADD_SPATIAL_INDEX
 #define HAVE_DWG_ADD_SPLINE
 #define HAVE_DWG_ADD_STYLE
 #define HAVE_DWG_ADD_TEXT
