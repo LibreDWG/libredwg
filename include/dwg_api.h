@@ -6219,24 +6219,20 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                  const int num_cols,
                  const double row_spacing,
                  const double col_spacing) __nonnull_all;
-/* Experimental. May crash acad */
 EXPORT Dwg_Entity_POLYLINE_2D*
 dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                     const int num_pts,
                     const dwg_point_2d *restrict pts) __nonnull_all;
-/* Experimental. May crash acad */
 EXPORT Dwg_Entity_POLYLINE_3D*
 dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                      const int num_pts,
                      const dwg_point_3d *restrict pts) __nonnull_all;
-/* Experimental. May crash acad */
 EXPORT Dwg_Entity_POLYLINE_PFACE*
 dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                         const unsigned numverts,
                         const unsigned numfaces,
                         const dwg_point_3d *restrict verts,
                         const dwg_face *restrict faces) __nonnull_all;
-/* Experimental. May crash acad */
 EXPORT Dwg_Entity_POLYLINE_MESH*
 dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                        const unsigned num_m_verts,
