@@ -5336,9 +5336,9 @@ typedef struct _dwg_VALUEPARAM
 typedef struct _dwg_EVAL_Node
 {
   struct _dwg_object_EVALUATION_GRAPH *parent;
-  BITCODE_BLd id;         /* 91 */
+  BITCODE_BL  id;         /* 91 */
   BITCODE_BL  edge_flags; // 93, always 32
-  BITCODE_BL  nextid;     // 95
+  BITCODE_BLd nextid;     // 95
   BITCODE_H   evalexpr;   // 360
   BITCODE_BLd node[4];    // 4x 92, def: 4x -1
   BITCODE_B   active_cycles;
@@ -5348,7 +5348,7 @@ typedef struct _dwg_EVAL_Node
 typedef struct _dwg_EVAL_Edge
 {
   struct _dwg_object_EVALUATION_GRAPH *parent;
-  BITCODE_BLd id;         /* 92 */
+  BITCODE_BL  id;         /* 92 */
   BITCODE_BLd nextid;     /* 93 */
   BITCODE_BLd e1;         /* 94 */
   BITCODE_BLd e2;         /* 91 */
@@ -5361,8 +5361,8 @@ typedef struct _dwg_object_EVALUATION_GRAPH
   struct _dwg_object_object *parent;
   BITCODE_BL major;
   BITCODE_BL minor;
-  BITCODE_BL first_nodeid;   // 96
-  BITCODE_BL first_nodeid_copy; // 97
+  BITCODE_BLd first_nodeid;      // 96
+  BITCODE_BLd first_nodeid_copy; // 97
   BITCODE_BL num_nodes;
   Dwg_EVAL_Node *nodes;
   BITCODE_B has_graph;

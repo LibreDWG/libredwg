@@ -8693,8 +8693,8 @@ DWG_OBJECT (EVALUATION_GRAPH)
 
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbEvalGraph)
-  FIELD_BL (first_nodeid, 96);
-  FIELD_BL (first_nodeid_copy, 97);// always same as first_nodeid
+  FIELD_BLd (first_nodeid, 96);
+  FIELD_BLd (first_nodeid_copy, 97);// always same as first_nodeid
   FIELD_BL (num_nodes, 0);
   REPEAT (num_nodes, nodes, Dwg_EVAL_Node)
   REPEAT_BLOCK
@@ -8705,7 +8705,7 @@ DWG_OBJECT (EVALUATION_GRAPH)
         _obj->num_nodes = rcount1;
         break;
       }
-      SUB_FIELD_BL (nodes[rcount1], nextid, 95); // 1
+      SUB_FIELD_BLd (nodes[rcount1], nextid, 95); // 1
       SUB_FIELD_HANDLE (nodes[rcount1], evalexpr, 5, 360);
       SUB_FIELD_BLd (nodes[rcount1], node[0], 92);   // -1
       SUB_FIELD_BLd (nodes[rcount1], node[1], 92);   // -1

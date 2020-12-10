@@ -46420,33 +46420,31 @@ static int test_EVALUATION_GRAPH (const Dwg_Object *obj)
       fail ("EVALUATION_GRAPH.edges [Dwg_EVAL_Edge*] * %u num_edges", count);
   }
   {
-    BITCODE_BL first_nodeid;
+    BITCODE_BLd first_nodeid;
     if (dwg_dynapi_entity_value (evaluation_graph, "EVALUATION_GRAPH", "first_nodeid", &first_nodeid, NULL)
         && first_nodeid == evaluation_graph->first_nodeid)
       pass ();
     else
-      fail ("EVALUATION_GRAPH.first_nodeid [BL] %u != %u", evaluation_graph->first_nodeid, first_nodeid);
-    first_nodeid++;
+      fail ("EVALUATION_GRAPH.first_nodeid [BLd] " FORMAT_BLd " != " FORMAT_BLd "", evaluation_graph->first_nodeid, first_nodeid);
     if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "first_nodeid", &first_nodeid, 0)
         && first_nodeid == evaluation_graph->first_nodeid)
       pass ();
     else
-      fail ("EVALUATION_GRAPH.first_nodeid [BL] set+1 %u != %u", evaluation_graph->first_nodeid, first_nodeid);
+      fail ("EVALUATION_GRAPH.first_nodeid [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", evaluation_graph->first_nodeid, first_nodeid);
     evaluation_graph->first_nodeid--;
   }
   {
-    BITCODE_BL first_nodeid_copy;
+    BITCODE_BLd first_nodeid_copy;
     if (dwg_dynapi_entity_value (evaluation_graph, "EVALUATION_GRAPH", "first_nodeid_copy", &first_nodeid_copy, NULL)
         && first_nodeid_copy == evaluation_graph->first_nodeid_copy)
       pass ();
     else
-      fail ("EVALUATION_GRAPH.first_nodeid_copy [BL] %u != %u", evaluation_graph->first_nodeid_copy, first_nodeid_copy);
-    first_nodeid_copy++;
+      fail ("EVALUATION_GRAPH.first_nodeid_copy [BLd] " FORMAT_BLd " != " FORMAT_BLd "", evaluation_graph->first_nodeid_copy, first_nodeid_copy);
     if (dwg_dynapi_entity_set_value (evaluation_graph, "EVALUATION_GRAPH", "first_nodeid_copy", &first_nodeid_copy, 0)
         && first_nodeid_copy == evaluation_graph->first_nodeid_copy)
       pass ();
     else
-      fail ("EVALUATION_GRAPH.first_nodeid_copy [BL] set+1 %u != %u", evaluation_graph->first_nodeid_copy, first_nodeid_copy);
+      fail ("EVALUATION_GRAPH.first_nodeid_copy [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", evaluation_graph->first_nodeid_copy, first_nodeid_copy);
     evaluation_graph->first_nodeid_copy--;
   }
   {

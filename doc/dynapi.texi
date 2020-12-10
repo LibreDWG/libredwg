@@ -9426,9 +9426,9 @@ BL
 @item minor
 BL
 @item first_nodeid
-BL,	DXF 96
+BLd,	DXF 96
 @item first_nodeid_copy
-BL,	DXF 97
+BLd,	DXF 97
 @item num_nodes
 BL
 @item nodes
@@ -13810,7 +13810,7 @@ H
 @item parent
 struct _dwg_object_EVALUATION_GRAPH*
 @item id
-BLd,	DXF 92
+BL,	DXF 92
 @item nextid
 BLd,	DXF 93
 @item e1
@@ -13834,11 +13834,11 @@ BLd
 @item parent
 struct _dwg_object_EVALUATION_GRAPH*
 @item id
-BLd,	DXF 91
+BL,	DXF 91
 @item edge_flags
 BL,	DXF 93
 @item nextid
-BL,	DXF 95
+BLd,	DXF 95
 @item evalexpr
 H,	DXF 360
 @item node[4]
