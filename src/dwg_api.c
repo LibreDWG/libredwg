@@ -22569,20 +22569,25 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict hdr,
   Dwg_Object *blkobj = dwg_obj_generic_to_object (hdr, &error);
   const Dwg_Object_Ref *mspace =  dwg_model_space_ref (dwg);
   const Dwg_Object_Ref *pspace =  dwg_paper_space_ref (dwg);
+  Dwg_Object_Entity *ent = obj->tio.entity;
 
   assert (mspace);
   // set entmode and ownerhandle
-  if (blkobj->handle.value == mspace->absolute_ref)
-    obj->tio.entity->entmode = 2;
-  else if (pspace && blkobj->handle.value == pspace->absolute_ref)
-    obj->tio.entity->entmode = 1;
+  if (blkobj->fixedtype == DWG_TYPE_BLOCK_HEADER &&
+      blkobj->handle.value == mspace->absolute_ref)
+    ent->entmode = 2;
+  else
+  if (blkobj->fixedtype == DWG_TYPE_BLOCK_HEADER &&
+      pspace && blkobj->handle.value == pspace->absolute_ref)
+    ent->entmode = 1;
   else
     obj->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, blkobj->handle.value, obj);
   if (!obj->tio.entity->ownerhandle &&
       (obj->fixedtype == DWG_TYPE_BLOCK ||
-       obj->fixedtype == DWG_TYPE_ENDBLK))
-    // BLOCK,ENDBLK always have the ownerhandle set.
-    obj->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, blkobj->handle.value, obj);
+       obj->fixedtype == DWG_TYPE_ENDBLK ||
+       obj->fixedtype == DWG_TYPE_SEQEND))
+    // BLOCK,ENDBLK,SEQEND always have the ownerhandle set.
+    ent->ownerhandle = dwg_add_handleref (dwg, 4, blkobj->handle.value, obj);
 
   // TODO 2004+
   if (version < R_2004)
@@ -22601,37 +22606,62 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict hdr,
           LOG_TRACE ("%s.endblk_entity = " FORMAT_REF "\n", hdr->name,
                      ARGS_REF (hdr->endblk_entity));
         }
-      else if (!hdr->first_entity && !hdr->num_owned)
+      else if (obj->fixedtype == DWG_TYPE_SEQEND)
+        {
+          ent->prev_entity = ent->next_entity
+            = dwg_add_handleref (dwg, 4, 0, NULL);
+        }
+      else if (!hdr->first_entity && !hdr->num_owned && !dwg_obj_is_subentity (obj))
         {
           hdr->first_entity = hdr->last_entity
               = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
           LOG_TRACE ("%s.{first,last}_entity = " FORMAT_REF "\n", hdr->name,
                      ARGS_REF (hdr->first_entity));
           hdr->num_owned++;
-          obj->tio.entity->nolinks = 1;
+          //ent->nolinks = 1;
         }
       else
         {
           BITCODE_H lastref = hdr->last_entity;
           Dwg_Object *prev
               = lastref ? dwg_ref_object (dwg, lastref) : NULL; // may fail!
-          hdr->last_entity
-            = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
-          LOG_TRACE ("%s.last_entity = " FORMAT_REF "\n",
-                     hdr->name, ARGS_REF (hdr->last_entity));
-          // link prev. last to curr last
-          if (prev)
+          if (dwg_obj_is_subentity (obj) && obj->index)
             {
-              prev->tio.entity->next_entity
-                  = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
-              LOG_TRACE ("prev.next_entity = " FORMAT_REF "\n",
-                         ARGS_REF (prev->tio.entity->next_entity));
-              obj->tio.entity->prev_entity
-                  = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
-              LOG_TRACE ("%s.prev_entity = " FORMAT_REF "\n", obj->name,
-                         ARGS_REF (obj->tio.entity->prev_entity));
-              prev->tio.entity->nolinks = 0;
+              prev = &dwg->object[obj->index - 1];
+              if (!dwg_obj_is_subentity (prev))
+                prev = NULL;
             }
+          else
+            {
+              hdr->last_entity
+                = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
+              LOG_TRACE ("%s.last_entity = " FORMAT_REF "\n",
+                         hdr->name, ARGS_REF (hdr->last_entity));
+            }
+          // link prev. last to curr last
+          if (prev && prev->supertype == DWG_SUPERTYPE_ENTITY)
+            {
+              if (obj->handle.value == prev->handle.value + 1)
+                {
+                  ent->nolinks = 1;
+                  ent->prev_entity
+                    = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
+                }
+              else
+                {
+                  prev->tio.entity->next_entity
+                    = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
+                  LOG_TRACE ("prev.next_entity = " FORMAT_REF "\n",
+                             ARGS_REF (prev->tio.entity->next_entity));
+                  ent->prev_entity
+                    = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
+                  LOG_TRACE ("%s.prev_entity = " FORMAT_REF "\n", obj->name,
+                             ARGS_REF (obj->tio.entity->prev_entity));
+                  ent->nolinks = 0;
+                }
+            }
+          else
+            ent->prev_entity = dwg_add_handleref (dwg, 4, 0, NULL);
           hdr->num_owned++;
           LOG_TRACE ("%s.num_owned = %u\n", hdr->name, hdr->num_owned);
         }
@@ -22806,6 +22836,7 @@ Dwg_Entity_SEQEND*
 dwg_add_SEQEND (Dwg_Object_BLOCK_HEADER *restrict blkhdr)
 {
   API_ADD_ENTITY (SEQEND);
+  // needs fixups for the real owner!
   return _obj;
 }
 
@@ -22932,7 +22963,7 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                     const int num_pts,
                     const dwg_point_2d *restrict pts)
 {
-  Dwg_Object *pl, *vtx, *seq;
+  Dwg_Object *pl, *vtx;
   Dwg_Entity_POLYLINE_2D *_pl;
   Dwg_Entity_VERTEX_2D *_vtx;
   Dwg_Entity_SEQEND *_seq;
@@ -22941,6 +22972,10 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   pl = obj;
   _pl = _obj;
   _pl->vertex = malloc (num_pts * sizeof (BITCODE_H));
+  if (!_pl->vertex)
+    return NULL;
+  if (num_pts)
+    _pl->has_vertex = 1;
   for (int i = 0; i < num_pts; i++)
     {
       _vtx = dwg_add_VERTEX_2D (_pl, &pts[i]);
@@ -22953,22 +22988,27 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, vtx->handle.value, pl);
       if (i == 0)
         {
+          vtx->tio.entity->nolinks = 0;
           vtx->tio.entity->prev_entity = dwg_add_handleref (dwg, 4, 0, NULL);
           _pl->first_vertex  = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
         }
       if (i == num_pts - 1)
-        _pl->last_vertex  = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
+        {
+          vtx->tio.entity->nolinks = 0;
+          vtx->tio.entity->next_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+          _pl->last_vertex  = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
+        }
     }
   _seq = dwg_add_SEQEND (blkhdr);
+  if (!_seq)
+    {
+      LOG_ERROR ("No SEQEND added");
+      return NULL;
+    }
   _pl->seqend = dwg_add_handleref (
       dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
   vtx->tio.entity->next_entity = dwg_add_handleref (dwg, 4, 0, NULL);
   pl->tio.entity->next_entity = NULL;
-  seq = dwg_obj_generic_to_object (_seq, &error);
-  seq->tio.entity->entmode = 0;
-  seq->tio.entity->prev_entity = seq->tio.entity->next_entity
-      = dwg_add_handleref (dwg, 4, 0, NULL);
-  seq->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, pl->handle.value, seq);
 
   _pl->num_owned = num_pts;
   //in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
@@ -22980,7 +23020,7 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                     const int num_pts,
                     const dwg_point_3d *restrict pts)
 {
-  Dwg_Object *pl, *vtx, *seq;
+  Dwg_Object *pl, *vtx;
   Dwg_Entity_POLYLINE_3D *_pl;
   Dwg_Entity_VERTEX_3D *_vtx;
   Dwg_Entity_SEQEND *_seq;
@@ -22989,6 +23029,10 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   pl = obj;
   _pl = _obj;
   _pl->vertex = malloc (num_pts * sizeof (BITCODE_H));
+  if (!_pl->vertex)
+    return NULL;
+  if (num_pts)
+    _pl->has_vertex = 1;
   for (int i = 0; i < num_pts; i++)
     {
       _vtx = dwg_add_VERTEX_3D (_pl, &pts[i]);
@@ -23001,21 +23045,26 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, vtx->handle.value, pl);
       if (i == 0)
         {
+          vtx->tio.entity->nolinks = 0;
           vtx->tio.entity->prev_entity = dwg_add_handleref (dwg, 4, 0, NULL);
           _pl->first_vertex = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
         }
       if (i == num_pts - 1)
-        _pl->last_vertex = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
+        {
+          vtx->tio.entity->nolinks = 0;
+          vtx->tio.entity->next_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+          _pl->last_vertex = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
+        }
     }
   _seq = dwg_add_SEQEND (blkhdr);
+  if (!_seq)
+    {
+      LOG_ERROR ("No SEQEND added");
+      return NULL;
+    }
   _pl->seqend  = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
   vtx->tio.entity->next_entity = dwg_add_handleref (dwg, 4, 0, NULL);
   pl->tio.entity->next_entity = NULL;
-  seq = dwg_obj_generic_to_object (_seq, &error);
-  seq->tio.entity->entmode = 0;
-  seq->tio.entity->prev_entity = seq->tio.entity->next_entity
-      = dwg_add_handleref (dwg, 4, 0, NULL);
-  seq->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, pl->handle.value, seq);
 
   _pl->num_owned = num_pts;
   //in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
@@ -23045,6 +23094,7 @@ dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
   API_ADD_ENTITY (VERTEX_PFACE_FACE);
   obj->tio.entity->entmode = 0;
   obj->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (pline), obj);
+  _obj->flag = 70;
   _obj->vertind[0] = vertind[0];
   _obj->vertind[1] = vertind[1];
   _obj->vertind[2] = vertind[2];
@@ -23060,7 +23110,7 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                         const dwg_point_3d *restrict verts,
                         const dwg_face *restrict faces)
 {
-  Dwg_Object *pl, *vtx, *seq;
+  Dwg_Object *pl, *vtx;
   Dwg_Entity_POLYLINE_PFACE *_pl;
   Dwg_Entity_VERTEX_PFACE *_vtx;
   Dwg_Entity_VERTEX_PFACE_FACE *_vtxf;
@@ -23069,8 +23119,13 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (POLYLINE_PFACE);
   pl = obj;
   _pl = _obj;
+  _pl->vertex = malloc ((numverts + numfaces) * sizeof (BITCODE_H));
+  if (!_pl->vertex)
+    return NULL;
+  _pl->has_vertex = 1;
+  _pl->numverts = numverts;
+  _pl->numfaces = numfaces;
   _pl->num_owned = numverts + numfaces;
-  _pl->vertex = malloc (_pl->num_owned * sizeof (BITCODE_H));
   for (unsigned i = 0; i < numverts; i++)
     {
       _vtx = dwg_add_VERTEX_PFACE (_pl, &verts[i]);
@@ -23083,6 +23138,7 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, vtx->handle.value, pl);
       if (i == 0)
         {
+          vtx->tio.entity->nolinks = 0;
           vtx->tio.entity->prev_entity = dwg_add_handleref (dwg, 4, 0, NULL);
           _pl->first_vertex = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
         }
@@ -23098,18 +23154,19 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       vtx = dwg_obj_generic_to_object (_vtx, &error);
       _pl->vertex[numverts + j] = dwg_add_handleref (dwg, 3, vtx->handle.value, pl);
       if (j == numfaces - 1)
-        _pl->last_vertex  = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
+        {
+          vtx->tio.entity->nolinks = 0;
+          vtx->tio.entity->next_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+          _pl->last_vertex  = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
+        }
     }
   _seq = dwg_add_SEQEND (blkhdr);
-  obj = dwg_obj_generic_to_object (_seq, &error);
-  _pl->seqend  = dwg_add_handleref (dwg, 3, obj->handle.value, pl);
-  vtx->tio.entity->next_entity = dwg_add_handleref (dwg, 4, 0, NULL);
-  pl->tio.entity->next_entity = NULL;
-  seq = dwg_obj_generic_to_object (_seq, &error);
-  seq->tio.entity->entmode = 0;
-  seq->tio.entity->prev_entity = seq->tio.entity->next_entity
-      = dwg_add_handleref (dwg, 4, 0, NULL);
-  seq->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, pl->handle.value, seq);
+  if (!_seq)
+    {
+      LOG_ERROR ("No SEQEND added");
+      return NULL;
+    }
+  _pl->seqend  = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
   //in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
   return _pl;
 }
@@ -23135,7 +23192,7 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                        const unsigned num_n_verts,
                        const dwg_point_3d *restrict verts)
 {
-  Dwg_Object *pl, *vtx, *seq;
+  Dwg_Object *pl, *vtx;
   Dwg_Entity_POLYLINE_MESH *_pl;
   Dwg_Entity_VERTEX_MESH *_vtx;
   Dwg_Entity_SEQEND *_seq;
@@ -23143,13 +23200,15 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (POLYLINE_MESH);
   pl = obj;
   _pl = _obj;
+  _pl->vertex = malloc (num_m_verts * num_n_verts * sizeof (BITCODE_H));
+  if (!_pl->vertex)
+    return NULL;
+  _pl->flag = 16;
   _pl->num_m_verts = num_m_verts;
   _pl->num_n_verts = num_n_verts;
   _pl->num_owned = num_m_verts * num_n_verts;
-  _pl->flag = 16;
   if (_pl->num_owned)
     _pl->has_vertex = 1;
-  _pl->vertex = malloc (_pl->num_owned * sizeof (BITCODE_H));
   for (unsigned i = 0; i < _pl->num_owned; i++)
     {
       _vtx = dwg_add_VERTEX_MESH (_pl, &verts[i]);
@@ -23162,21 +23221,25 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, vtx->handle.value, pl);
       if (i == 0)
         {
+          vtx->tio.entity->nolinks = 0;
           vtx->tio.entity->prev_entity = dwg_add_handleref (dwg, 4, 0, NULL);
           _pl->first_vertex  = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
         }
       if (i == _pl->num_owned - 1)
-        _pl->last_vertex  = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
+        {
+          vtx->tio.entity->nolinks = 0;
+          vtx->tio.entity->next_entity = dwg_add_handleref (dwg, 4, 0, NULL);
+          _pl->last_vertex  = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
+        }
     }
   _seq = dwg_add_SEQEND (blkhdr);
+  if (!_seq)
+    {
+      LOG_ERROR ("No SEQEND added");
+      return NULL;
+    }
   _pl->seqend  = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
-  vtx->tio.entity->next_entity = dwg_add_handleref (dwg, 4, 0, NULL);
   pl->tio.entity->next_entity = NULL;
-  seq = dwg_obj_generic_to_object (_seq, &error);
-  seq->tio.entity->entmode = 0;
-  seq->tio.entity->prev_entity = seq->tio.entity->next_entity
-      = dwg_add_handleref (dwg, 4, 0, NULL);
-  seq->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, pl->handle.value, seq);
   //in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
   return _pl;
 }
