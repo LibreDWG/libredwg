@@ -25310,14 +25310,16 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     double majr2 = top_major_radius / 2.0;
     double minr2 = top_minor_radius / 2.0;
     double dbl_pi = 2.0 * M_PI; // i.e. 360
-    dwg_point_3d ext;
     char acis_data[1600];
     char date[48];
     unsigned date_size = dwg_acis_date (date, 48);
     const char cone_acis_format[] = /* len = 1200? => 1338 */
-      "700 19 1 0          \n"
+      // version num_records num_entities has_history
+      "400 25 1 1          \n"
+      // product acis_version date
       "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
-      "%f 9.999999999999999547e-07 1.000000000000000036e-10 \n"
+      // num_mm_units resabs resnor
+      "25.39999999999999858 9.999999999999999547e-07 1.000000000000000036e-10\n"
       "body $-1 -1 $-1 $1 $-1 $2 #\n"
       "lump $-1 -1 $-1 $-1 $3 $0 #\n"
       "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
@@ -25347,12 +25349,9 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     //top_major_radius: 5.000000 [BD 41]
     //top_minor_radius: 5.000000 [BD 42]
     //top_x_radius: 0.000000 [BD 43]
-    ext.x = origin_pt->x + (base_radius * 2);
-    ext.y = origin_pt->y + base_radius;
-    ext.z = origin_pt->z + base_radius;
     dwg_geom_normal_to_matrix9 (normal, &matrix);
     snprintf (acis_data, 1600, cone_acis_format,
-              date_size, date, ext.x,
+              date_size, date,
               matrix[0], matrix[1], matrix[2],
               matrix[3], matrix[4], matrix[5],
               matrix[6], matrix[7], matrix[8],
@@ -25435,15 +25434,17 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       0.0, 0.0, 1.0 };
     double h2 = height / 2.0;
     double dbl_pi = 2.0 * M_PI; // i.e. 360
-    dwg_point_3d ext;
     char acis_data[2000];
     char date[48];
     unsigned date_size = dwg_acis_date (date, 48);
     // acis version 106 (r14) would be nicer
     const char cylinder_acis_format[] = /* len = 890 => 1609 */
-      "700 19 1 0          \n"
+      // version num_records num_entities has_history
+      "400 31 1 1          \n"
+      // product acis_version date
       "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
-      "%f 9.999999999999999547e-07 1.000000000000000036e-10\n"
+      // num_mm_units resabs resnor
+      "25.39999999999999858 9.999999999999999547e-07 1.000000000000000036e-10\n"
       "body $-1 -1 $-1 $1 $-1 $2 #\n"
       "lump $-1 -1 $-1 $-1 $3 $0 #\n"
       "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
@@ -25475,12 +25476,9 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "ellipse-curve $-1 -1 $-1 0 0 %g 0 0 1 %g 0 0 1 I I #\n"   // -height/2, minor_radius
       "point $-1 -1 $-1 %g 0 %g #\n"  // major_radius, -height/2,
       "point $-1 -1 $-1 %g 0 %g #\n"; // major_radius, height/2,
-    ext.x = origin_pt->x + (2 * major_radius);
-    ext.y = origin_pt->y + major_radius;
-    ext.z = origin_pt->z + minor_radius;
     dwg_geom_normal_to_matrix9 (normal, &matrix);
     snprintf (acis_data, 2000, cylinder_acis_format,
-              date_size, date, ext.x,
+              date_size, date,
               matrix[0], matrix[1], matrix[2],
               matrix[3], matrix[4], matrix[5],
               matrix[6], matrix[7], matrix[8],
@@ -25630,14 +25628,16 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       1.0, 0.0, 0.0,
       0.0, 1.0, 0.0,
       0.0, 0.0, 1.0 };
-    dwg_point_3d ext;
     char acis_data[650];
     char date[48];
     unsigned date_size = dwg_acis_date (date, 48);
     const char sphere_acis_format[] = /* len = 524 => 552 */
-      "700 19 1 0          \n"
+      // version num_records num_entities has_history
+      "400 7 1 1          \n"
+      // product acis_version date
       "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
-      "%f 9.999999999999999547e-07 1.000000000000000036e-10 \n"
+      // num_mm_units resabs resnor
+      "25.39999999999999858 9.999999999999999547e-07 1.000000000000000036e-10\n"
       "body $-1 -1 $-1 $1 $-1 $2 #\n"
       "lump $-1 -1 $-1 $-1 $3 $0 #\n"
       "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
@@ -25645,12 +25645,9 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
       "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
       "sphere-surface $-1 -1 $-1 0 0 0 %g 1 0 0 0 0 1 forward_v I I I I #\n";
-    ext.x = origin_pt->x + (radius * 2);
-    ext.y = origin_pt->y + radius;
-    ext.z = origin_pt->z + radius;
     dwg_geom_normal_to_matrix9 (normal, &matrix);
     snprintf (acis_data, 650, sphere_acis_format,
-              date_size, date, ext.x,
+              date_size, date,
               matrix[0], matrix[1], matrix[2],
               matrix[3], matrix[4], matrix[5],
               matrix[6], matrix[7], matrix[8],
@@ -25725,40 +25722,39 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       1.0, 0.0, 0.0,
       0.0, 1.0, 0.0,
       0.0, 0.0, 1.0 };
-    dwg_point_3d ext;
     char acis_data[1048];
     char date[48];
     unsigned date_size = dwg_acis_date (date, 48);
     // acis version 106 (r14) would be nicer
     const char torus_acis_format[] = /* len = 890 => 957 */
-      "700 19 1 0          \n"
+      // version num_records num_entities has_history
+      "400 19 1 1          \n"
+      // product acis_version date
       "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
-      "%f 9.999999999999999547e-07 1.000000000000000036e-10 \n"
-      "body $-1 -1 $-1 $1 $-1 $2 # \n"
-      "lump $-1 -1 $-1 $-1 $3 $0 # \n"
-      "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear # \n"
-      "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 # \n"
-      "face $5 -1 $-1 $-1 $6 $3 $-1 $7 forward single # \n"
-      "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 # \n"
-      "loop $-1 -1 $-1 $8 $9 $4 # \n"
-      "torus-surface $-1 -1 $-1 0 0 0 0 0 1 %g %g 1 0 0 forward_v I I I I # \n"
-      "loop $-1 -1 $-1 $-1 $10 $4 # \n"
-      "coedge $-1 -1 $-1 $9 $9 $-1 $11 reversed $6 $-1 # \n"
-      "coedge $-1 -1 $-1 $10 $10 $-1 $12 reversed $8 $-1 # \n"
-      "edge $13 -1 $-1 $14 1 $14 0 $9 $-1 forward @7 unknown # \n"
-      "edge $15 -1 $-1 $16 1 $16 0 $10 $-1 forward @7 unknown # \n"
-      "color-adesk-attrib $-1 -1 $-1 $-1 $11 256 # \n"
-      "vertex $-1 -1 $-1 $11 $17 # \n"
-      "color-adesk-attrib $-1 -1 $-1 $-1 $12 256 # \n"
-      "vertex $-1 -1 $-1 $12 $18 # \n"
-      "point $-1 -1 $-1 0 0 %g # \n"
-      "point $-1 -1 $-1 0 0 %g # \n";
-    ext.x = origin_pt->x + (2 * major_radius);
-    ext.y = origin_pt->y + major_radius;
-    ext.z = origin_pt->z + minor_radius;
+      // num_mm_units resabs resnor
+      "25.39999999999999858 9.999999999999999547e-07 1.000000000000000036e-10\n"
+      "body $-1 -1 $-1 $1 $-1 $2 #\n"
+      "lump $-1 -1 $-1 $-1 $3 $0 #\n"
+      "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
+      "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
+      "face $5 -1 $-1 $-1 $6 $3 $-1 $7 forward single #\n"
+      "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
+      "loop $-1 -1 $-1 $8 $9 $4 #\n"
+      "torus-surface $-1 -1 $-1 0 0 0 0 0 1 %g %g 1 0 0 forward_v I I I I #\n"
+      "loop $-1 -1 $-1 $-1 $10 $4 #\n"
+      "coedge $-1 -1 $-1 $9 $9 $-1 $11 reversed $6 $-1 #\n"
+      "coedge $-1 -1 $-1 $10 $10 $-1 $12 reversed $8 $-1 #\n"
+      "edge $13 -1 $-1 $14 1 $14 0 $9 $-1 forward @7 unknown #\n"
+      "edge $15 -1 $-1 $16 1 $16 0 $10 $-1 forward @7 unknown #\n"
+      "color-adesk-attrib $-1 -1 $-1 $-1 $11 256 #\n"
+      "vertex $-1 -1 $-1 $11 $17 #\n"
+      "color-adesk-attrib $-1 -1 $-1 $-1 $12 256 #\n"
+      "vertex $-1 -1 $-1 $12 $18 #\n"
+      "point $-1 -1 $-1 0 0 %g #\n"
+      "point $-1 -1 $-1 0 0 %g #\n";
     dwg_geom_normal_to_matrix9 (normal, &matrix);
     snprintf (acis_data, 1048, torus_acis_format,
-              date_size, date, ext.x,
+              date_size, date,
               matrix[0], matrix[1], matrix[2],
               matrix[3], matrix[4], matrix[5],
               matrix[6], matrix[7], matrix[8],
