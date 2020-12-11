@@ -6147,7 +6147,7 @@ EXPORT dwg_class *dwg_get_class (const dwg_data *dwg, unsigned int index);
  */
 
 EXPORT Dwg_Data *dwg_add_Document (const Dwg_Version_Type version,
-                                   const int imperial, const int lglevel);
+                                   const int imperial, const int loglevel);
 
 /* no proxy, no is_zombie */
 /* returns -1 on error, 0 on success */

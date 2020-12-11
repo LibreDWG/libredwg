@@ -1,23 +1,23 @@
 * pre-R13: finish remaining entities and the blocks.
+* add API for more complex entities, like 3dsolids, hatch, ACSH solids, dynblocks.
 * PROXY subentities, PROXY_ENTITY
 * TABLE_Cell
 * Enabled, but un(der)tested:
   ASSOCDEPENDENCY ASSOC*SURFACEACTIONBODY DBCOLOR HELIX
   OBJECT_PTR PROXY_OBJECT PLOTSETTINGS VISUALSTYLE TABLESTYLE (works only pre-2010)
 * Unhandled (fields spec'ed but broken/untested):
-  GEOPOSITIONMARKER PLANESURFACE EXTRUDEDSURFACE DIMASSOC
+  ARCALIGNEDTEXT GEOPOSITIONMARKER PLANESURFACE EXTRUDEDSURFACE DIMASSOC
   LOFTEDSURFACE REVOLVEDSURFACE SWEPTSURFACE TABLE
   TABLECONTENT CELLSTYLEMAP MATERIAL PLOTSETTINGS SUN
-  SUNSTUDY VBA_PROJECT ASSOCACTION ASSOCNETWORK
-  ASSOCALIGNEDDIMACTIONBODY ASSOCOSNAPPOINTREFACTIONPARAM
+  SUNSTUDY ASSOCACTION ASSOCNETWORK ASSOCALIGNEDDIMACTIONBODY ASSOCOSNAPPOINTREFACTIONPARAM
   ASSOCPERSSUBENTMANAGER PERSUBENTMGR ASSOC2DCONSTRAINTGROUP EVALUATION_GRAPH
-  ACSH_HISTORY_CLASS ACSH_SWEEP_CLASS ACDBNAVISWORKSMODELDEF
+  ACSH_SWEEP_CLASS ACDBNAVISWORKSMODELDEF
   LIGHTLIST *OBJECTCONTEXTDATA ARC_DIMENSION ASSOCGEOMDEPENDENCY
   ASSOCOSNAPPOINTREFACTIONPARAM ASSOCVERTEXACTIONPARAM DATATABLE
   DATALINK LAYOUTPRINTCONFIG ...
 * Unhandled (i.e. passed through, no DXF and fields):
-  ARCALIGNEDTEXT CSACDOCUMENTOPTIONS NPOCOLLECTION
-  POINTCLOUD RTEXT XREFPANELOBJECT
+  ACDSRECORD ACDSSCHEMA NPOCOLLECTION RAPIDRTRENDERENVIRONMENT
+  XREFPANELOBJECT
 * add test coverage - i.e. an extended example_2018.dwg with all types,
   for the following missing entities:
   BODY CAMERA DIMENSION_ANG3PT DIMENSION_DIAMETER
@@ -26,7 +26,7 @@
   OLE2FRAME OLEFRAME POLYLINE_2D POLYLINE_MESH
   PROXY_ENTITY SHAPE TOLERANCE VERTEX_2D VERTEX_MESH BACKGROUND
 * likewise for the following missing objects:
-  ATEXT CSACDOCUMENTOPTIONS  DETAILVIEWSTYLE
+  ARCALIGNEDTEXT CSACDOCUMENTOPTIONS  DETAILVIEWSTYLE
   DWFDEFINITION DGNDEFINITION
   XREFPANELOBJECT IDBUFFER IMAGEDEF
   IMAGEDEF_REACTOR LIGHTLIST
@@ -43,11 +43,10 @@
 
 * convert XRECORD xdata linked-list ResBuf to array of eed[],
   same structure as common EED.
-* link VBA_PROJECT object to its section, and vice versa
 * merge decode_r2007 with the 2004 decoder. It is almost the same, just
   the sections have multiple pages. Only for this version. 2010+ uses
   the 2004 format.
-* encode for 2004+: move the local structs to the dwg, as union?
+* encode for 2004+: fix the reamining bugs, almost done.
 * finish binary DXF (easy). cross-check via: filedia 0, dxfout => Binary
 * finish GeoJSON http://geojson.org/geojson-spec.html
   ELLIPSE, ARC, CIRCLE: needs segmentation into lines
@@ -60,8 +59,9 @@
   See https://wiki.openstreetmap.org/wiki/Dxf2gpx
   https://grass.osgeo.org/grass74/manuals/v.in.dxf.html and dwg (teigha and opencad)
 * add more geom.c utils to tessellate curves (e.g. GeoJSON)
-* ACIS: Maybe convert binary SAB to ASCII SAT version 2 (ASM ShapeManager,
-  forked from ACIS 7.0)
+* ACIS: We already convert the binary SAB to ASCII SAT version 2 (ASM ShapeManager,
+  forked from ACIS 7.0), but the add API is still struggling to create them.
+  At least I found proper docs for the ACIS SDK.
 * map DWG constraints to FreeCAD and SolveSpace constraints
   https://www.freecadweb.org/wiki/Sketcher_Workbench#Sketcher_Constraints
 * check valabind vapi files to generate more and better bindings
@@ -69,9 +69,9 @@
   autolisp (via ARX).
   Did so, I dislike it. Too much work, valabind crashes and requires glib and gobject.
   See the work/vapi branch.
-* add gamba3 bindings, a Visual Basic variant for linux. See GauchoCAD on gitlab.
-  Should be driven from gen-dynapi.pl. Merge work/c++ branch for CXX
-* add some UI to inspect the DWG internal structs (dwgiview), and maybe a viewer (dwgview).
+* Finalize the gambas3 bindings, a Visual Basic variant for linux. See the gambas3-bindings
+  repo and GauchoCAD on gitlab.
+* Add some UI to inspect the DWG internal structs (dwgiview), and maybe a viewer (dwgview).
   Started with perl-tk
 
 * fix the remaining leaks: indxf

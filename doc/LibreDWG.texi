@@ -138,7 +138,10 @@ are skipped.
 
 @item Writing pre-R13 and R2004+ DWG
 Writing DWG formats for R2004 and later: R2007, R2010, R2013, R2018 is an
-ongoing effort and not yet implemented. We write as default in the R2000 format only.
+ongoing effort. You need to patch the code to enable writing to the R2004+ format.
+See the @code{work/2004} branch.
+Wriing to the specific R2007 format is not implemented.
+We write as default in the R2000 format only.
 
 @item Reading binary DXF
 DXF support is now mostly implemented.
@@ -152,7 +155,7 @@ Reading binary DXF is still under construction, done about 80%.
 For a detailed overview see the file @file{src/classes.inc} or @file{src/classes.c}.
 
   ACSH_BREP_CLASS ACSH_CHAMFER_CLASS ACSH_CONE_CLASS
-  ACSH_PYRAMID_CLASS ACSH_TORUS_CLASS ARC_DIMENSION ASSOCACTION
+  ACSH_PYRAMID_CLASS ARC_DIMENSION ASSOCACTION
   ASSOCBLENDSURFACEACTIONBODY ASSOCEXTENDSURFACEACTIONBODY
   ASSOCEXTRUDEDSURFACEACTIONBODY ASSOCFILLETSURFACEACTIONBODY
   ASSOCGEOMDEPENDENCY ASSOCLOFTEDSURFACEACTIONBODY ASSOCNETWORK
@@ -161,16 +164,16 @@ For a detailed overview see the file @file{src/classes.inc} or @file{src/classes
   ASSOCPLANESURFACEACTIONBODY ASSOCREVOLVEDSURFACEACTIONBODY
   ASSOCTRIMSURFACEACTIONBODY BACKGROUND BLOCKLINEARPARAMETER
   BLOCKROTATIONPARAMETER BLOCKXYPARAMETER BLOCKVISIBILITYGRIP
-  BLOCKVISIBILITYPARAMETER HELIX LARGE_RADIAL_DIMENSION LIGHTLIST
-  MATERIAL MENTALRAYRENDERSETTINGS OBJECT_PTR RAPIDRTRENDERSETTINGS
-  RENDERSETTINGS SECTION_SETTINGS SPATIAL_INDEX SUN TABLESTYLE (works
-  only pre-2010)
+  BLOCKVISIBILITYPARAMETER EVALUATION_GRAPH HELIX
+  LARGE_RADIAL_DIMENSION LIGHTLIST MATERIAL MENTALRAYRENDERSETTINGS
+  OBJECT_PTR RAPIDRTRENDERSETTINGS RENDERSETTINGS SECTION_SETTINGS
+  SPATIAL_INDEX SUN TABLESTYLE (works only pre-2010)
 
 @item Unhandled (fields spec'ed, but broken/undertested):
 
   ACMECOMMANDHISTORY ACMESCOPE ACMESTATEMGR ACSH_EXTRUSION_CLASS
-  ACSH_HISTORY_CLASS ACSH_LOFT_CLASS ACSH_REVOLVE_CLASS
-  ACSH_SWEEP_CLASS ALDIMOBJECTCONTEXTDATA ANNOTSCALEOBJECTCONTEXTDATA
+  ACSH_LOFT_CLASS ACSH_REVOLVE_CLASS ACSH_SWEEP_CLASS
+  ALDIMOBJECTCONTEXTDATA ANNOTSCALEOBJECTCONTEXTDATA
   ASSOC2DCONSTRAINTGROUP ASSOCACTION ASSOCALIGNEDDIMACTIONBODY
   ASSOCEXTRUDEDSURFACEACTIONBODY ASSOCGEOMDEPENDENCY
   ASSOCLOFTEDSURFACEACTIONBODY ASSOCNETWORK
@@ -178,8 +181,8 @@ For a detailed overview see the file @file{src/classes.inc} or @file{src/classes
   ASSOCPERSSUBENTMANAGER ASSOCREVOLVEDSURFACEACTIONBODY
   ASSOCVERTEXACTIONPARAM ATEXT BLKREFOBJECTCONTEXTDATA
   CONTEXTDATAMANAGER CSACDOCUMENTOPTIONS CURVEPATH DATALINK DATATABLE
-  DIMASSOC DYNAMICBLOCKPROXYNODE EVALUATION_GRAPH EXTRUDEDSURFACE
-  FCFOBJECTCONTEXTDATA GEOMAPIMAGE GEOPOSITIONMARKER LAYOUTPRINTCONFIG
+  DIMASSOC DYNAMICBLOCKPROXYNODE EXTRUDEDSURFACE FCFOBJECTCONTEXTDATA
+  GEOMAPIMAGE GEOPOSITIONMARKER LAYOUTPRINTCONFIG
   LEADEROBJECTCONTEXTDATA LOFTEDSURFACE MLEADEROBJECTCONTEXTDATA
   MOTIONPATH MTEXTATTRIBUTEOBJECTCONTEXTDATA MTEXTOBJECTCONTEXTDATA
   NAVISWORKSMODEL NAVISWORKSMODELDEF NURBSURFACE PERSUBENTMGR
@@ -327,7 +330,7 @@ want to specify @code{-llibredwg}, as that would (try to) link against
 
 LibreDWG types map closely to the type system of the DWG file format.
 This chapter describes the enums and structs used to define the single
-DWG structure, which is passed around the functions x(@pxref{Functions}).
+DWG structure, which is passed around the functions (@pxref{Functions}).
 
 @deftypevr {define} BITCODE_RC char
 1 raw unsigned char, uint8_t
@@ -518,7 +521,7 @@ to the APPID, which handles this XRECORD XDATA.
 @cindex functions
 
 You can use LibreDWG immediately upon loading, without any particular
-initialization. Only when using some @b{dwg_api} functions you might need to
+initialization. Only when using some @pxref{dynapi} functions you might need to
 initialize the version via @code{dwg_api_init_version(&dwg)}, when you
 need other formats than r2000 and you call an API function which does
 not store the version internally. Most do. This limitation will soon be fixed.
@@ -529,9 +532,14 @@ All functions return an error code, and the high-level functions for
 multiple objects add the error bitmask, which is sorted by severity.
 When the error exceeds DWG_ERR_CRITICAL, processing is stopped.
 
+The new @pxref{dynapi} has dynamic get and set functions for all objects and its fields.
+You can get and set a property value from any object pointer by the object name
+and the field name.
+
 @menu
 * Decoding::                    Functions on the DWG read path.
 * Encoding::                    Functions on the DWG write path.
+* dynapi::                      Dynamic object field access.
 * Other Formats::		Functions on the DWG to read or write other formats.
 @end menu
 
@@ -624,13 +632,47 @@ Sets the fields for the object from the DWG bitstream.
 Encoding DWG files, i.e. DWG write support, can be disabled via
 @code{./configure --disable-write}. The default format and only useful
 one is currently r13-r2000. See @file{src/in_dxf.c} for a high-level usage example.
+The default codepage is Latin-1, 30.
 
-The highest level function for encoding a bitstream to a file is @code{dwg_write_file}.
+The highest level function for encoding a bitstream to a file is @code{dwg_write_file},
+which dumps the dwg to a file.
 
 @deftypefn {Function} int dwg_write_file (char *@var{filename}, Dwg_Data *@var{dwg})
 Open @var{filename} and write the @var{dwg} to it.
 Return 0 if successful.
 @end deftypefn
+
+@deftypefn {Function} Dwg_Data* dwg_add_Document (const Dwg_Version_Type @var{version},
+                                            const int @var{imperial}, const int @var{loglevel})
+Creates an initial template dwg structure in memory, suitable to be written to a DWG or DXF file,
+without any additional table records or entities. Creates ModelSpace, PaperSpace and most Tables
+and basic Dictionaries.
+@end deftypefn
+
+For each OBJECT and ENTITY type there exists an @b{dwg_add_OBJECT} function, which takes the owner
+and some default arguments. Entities are normally added to a block header, like modelspace,
+paperspace or any block. Objects are normally added to the dwg, or to some other object or entity.
+E.g.
+@deftypefn {Function} Dwg_Entity_LINE *line = dwg_add_LINE (Dwg_Object_BLOCK_HEADER *modelspace,
+                                                            dwg_point_3d *start_pt, dwg_point_3d *end_pt)
+@end deftypefn
+@deftypefn {Function} Dwg_Object_LAYER *layer = dwg_add_LAYER (Dwg_Data *dwg, char *name)
+Adds a new layer the Layer Table, i.e. creates the new LAYER object, and adds it to LAYER_CONTROL object,
+the list of layers.
+@end deftypefn
+
+Names and strings are currently of type BITCODE_T (i.e. versions specific TU or TV types, either UCS-2 unicode or
+single-byte codepage), but will changed to UTF-8 only, as with the @b{dynapi}. Only internally you
+will have to deal with 2 different text represenations: unicode since r2007, ascii before.
+
+To understand the object model for the add API see some VBA Object model documentation, such as
+e.g. @url{http://entercad.ru/acadauto.en/}.
+
+The new add API mostly handles the direct @code{Dwg_Entity_ENTITY} structs, not the generic @code{Dwg_Object} structs.
+Thus you can access the object specific fields directly, the common fields, not so easily.
+
+The DWG Document consists of 3 basic entity containers @code{ModelSpace}, @code{PaperSpace} and @code{Blocks}, plus
+@code{Tables} (@code{Layers}, @code{Linetypes}, ...), @code{Dictionaries} as generic replacements of @code{Tables} with a root Dictionary, the @code{NOD} ("Named Object Dictionary"), and more support objects and complex entity groups.
 
 @deftypefn {Function} int dwg_add_object (Dwg_Data *@var{dwg})
 Adds a new uninitialized object to the @var{dwg->object}[] array.
@@ -646,16 +688,78 @@ This does not initialize the @var{obj} size, type, address, handlestream_size, b
 The encoder is driven by the fields definition in the @file{src/dwg.spec} and
 the generated @file{src/dynapi.c}, which adds each field to the object.
 This is done by @file{src/encode.c} or any @file{src/in_*.c} import module.
+
 @deftypefn {Function} int dwg_encode_OBJECT (Bit_Chain *@var{dat}, Dwg_Object *@var{obj})
 Encodes the DWG bitstream from the fields of the object.
 @end deftypefn
 
-The iterator is similar to above, but you want to encode all data
-structures, not just the entities. But note that you need many helper
-functions, such as the dynapi, to create all needed sections to store
-a DWG if you didn't read a DWG into the right a @var{Dwg_Data* dwg}
-struct already. This is especially important when importing from DXF
-or from an earlier or later DWG version.
+The iterator is similar to above, but you want to encode all data structures, not just the entities. But note that you need many helper functions, such as the @pxref{dynapi}, to create all needed sections to store a DWG if you didn't read a DWG into the right a @var{Dwg_Data* dwg} struct already. This is especially important when importing from DXF or from an earlier or later DWG version.
+
+@node dynapi
+@section dynapi
+
+@cindex functions, dynamic field access
+
+The new dynapi replaced the old dwg_api functions to access each object field. The old dwg_api functions
+were deprecated, and need to be re-enabled by defining @code{CFLAGS="-DUSE_DEPRECATED_API"}.
+See @pxref{Objects} for an description of each object and its fields..
+
+For each of header, entity, common or subclass there is a function to get and set the value of any type,
+or converted utf8 string.
+
+@deftypefn {Function} bool dwg_dynapi_entity_value (void *@var{entity}, const char *@var{dxfname}, const char *@var{fieldname}, void *@var{out}, Dwg_DYNAPI_field *@var{fp})
+@var{entity} is of type @code{dwg_ent_generic}, that is the pointer to the object specific struct.
+@var{dxfname} is the dxfname of the object, @var{fieldname} is the field or property name of the field to be read from,
+*@var{out} the result pointer and the optiona *@var{fp} is filled by the information for this field.
+@end deftypefn
+
+@deftypefn {Function} bool dwg_dynapi_common_value (void *@var{entity}, const char *@var{fieldname}, void *@var{out}, Dwg_DYNAPI_field *@var{fp})
+This accesses the common @code{Dwg_Object_Object*} or @code{Dwg_Object_Entity*} fields.
+@end deftypefn
+
+@deftypefn {Function} bool dwg_dynapi_header_value (void *@var{dwg}, const char *@var{fieldname}, void *@var{out}, Dwg_DYNAPI_field *@var{fp})
+This accesses the Header (or sometimes also called Database) fields.
+@end deftypefn
+
+@deftypefn {Function} bool dwg_dynapi_subclass_value (void *@var{ptr}, const char *@var{subclass}, const char *@var{fieldname}, void *@var{out}, Dwg_DYNAPI_field *@var{fp})
+This accesses a subclass, a structure within the object.
+@end deftypefn
+
+The utf8text functions convert version-specific text strings to UTF-8 strings. Internally the dwg stores strings
+as TU (unicode) or TV (single-byte codepage). The API treats all strings as UTF-8, as with JSON, DXF or the add API.
+
+@deftypefn {Function} bool dwg_dynapi_entity_utf8text (void *@var{entity}, const char *@var{dxfname}, const char *@var{fieldname}, char *@var{textp}, int *@var{isnewp}, Dwg_DYNAPI_field *@var{fp})
+isnewp is set to 1 f the string is a fresh copy, for unicode strings.
+@end deftypefn
+
+@deftypefn {Function} bool dwg_dynapi_common_utf8text (void *@var{entity}, const char *@var{fieldname}, char *@var{textp}, int *@var{isnewp}, Dwg_DYNAPI_field *@var{fp})
+@end deftypefn
+
+@deftypefn {Function} bool dwg_dynapi_header_utf8text (void *@var{dwg}, const char *@var{fieldname}, char *@var{textp}, int *@var{isnewp}, Dwg_DYNAPI_field *@var{fp})
+This accesses the Header (or sometimes also called Database) fields.
+@end deftypefn
+
+@deftypefn {Function} bool dwg_dynapi_subclass_utf8text (void *@var{ptr}, const char *@var{subclass}, const char *@var{fieldname}, char *@var{textp}, int *@var{isnewp}, Dwg_DYNAPI_field *@var{fp})
+This accesses a subclass, a structure within the object.
+@end deftypefn
+
+The setters don't differentiate betwen common values and strings.
+
+@deftypefn {Function} bool dwg_dynapi_entity_set_value (dwg_ent_generic *@var{_obj}, const char *@var{fieldname}, const void *@var{value}, const bool @var{is_utf8})
+Sets the ENTITY.fieldname to a value.
+A malloc'ed struct is passed by ptr, not by the content.
+A non-malloc'ed struct is set by content.
+Arrays or strings must be malloced before. We just set the new pointer, the old value will be freed.
+If is_utf8 is set, the given value is a UTF-8 string, and will be converted to TV or TU
+@end deftypefn
+
+@deftypefn {Function} bool dwg_dynapi_header_set_value (Dwg_Data *@var{dwg}, const char *@var{fieldname}, const void *@var{value}, const bool @var{is_utf8})
+@end deftypefn
+
+@deftypefn {Function} bool dwg_dynapi_common_set_value (dwg_ent_generic *@var{_obj}, const char *@var{fieldname}, const void *@var{value}, const bool @var{is_utf8})
+@end deftypefn
+
+See the sourcecode of the importers or programs for the usage of the API's.
 
 @node Other Formats
 @section Other Formats
@@ -676,7 +780,7 @@ or from an earlier or later DWG version.
 
 We can write ASCII DXF files in various versions, with much more data
 than other free DWG libraries, but not as stable as the unfree Teigha
-library yet.  AutoCAD fails to import some of our files still (~20%
+library yet.  AutoCAD fails to import some of our files still (~10%
 failure rate).
 
 Options: @code{--minimal} (see @code{dwg2dxf} or @code{dwgread}) creates
@@ -979,11 +1083,17 @@ See also @url{https://github.com/LibreDWG/libredwg-fuzz} for our fuzzing setup t
 
 @cindex python
 @cindex perl
+@cindex gambas
 
 LibreDWG generates library bindings to python and perl5 via
 swig. These can be quite huge, and it is recommended to use @file{ccache}.
 You can easily add bindings to other swig-supported languages, like Go, C#,
 ruby, php, D, lua, tcl, common lisp, ocaml, or others by yourself. Patches accepted.
+
+Bindings for gambas (which looks very close to VBA) are at
+@uref{https://github.com/LibreDWG/gambas3-bindings, GitHub} and will
+soon be added to gambas3 as gb.dwg component. This is in development
+and about 80% finished.
 
 @node Reference API
 @chapter Reference API
@@ -992,7 +1102,7 @@ ruby, php, D, lua, tcl, common lisp, ocaml, or others by yourself. Patches accep
 
 See the separate @uref{https://www.gnu.org/software/libredwg/refman/, refman} manual (in pdf or html format, the pdf has ~1800 pages) for a detailed API description, or see the relevant @file{dwg.h}, @file{dwg_api.h} or the @file{*.spec} files.
 
-For reference you might also want to check the public AutoCAD DXF reference manuals,
+For reference you might also want to check the public AutoCAD DXF reference manuals, the VBA object model
 and the ODA @file{OpenDesign_Specification_for_dwg_files.pdf}.
 
 @comment It is unfortunately not possible to include the doxygen generated tex
@@ -1011,8 +1121,7 @@ To report bugs or suggest enhancements for GNU LibreDWG, please
 or send electronic mail to @email{libredwg@@gnu.org}.
 (If you use the web interface, you don't need to also send email,
 since that is done automatically.)
-Pull requests at the github mirror at 
-@uref{https://github.com/LibreDWG/libredwg, Github} are also accepted for now.
+Pull requests at the @uref{https://github.com/LibreDWG/libredwg, github mirror} are also accepted for now.
 
 @cindex checklist for bug reports
 For bug reports, please include enough information for the maintainers
