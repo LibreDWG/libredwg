@@ -23669,10 +23669,13 @@ dwg_add_SHAPE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->oblique_angle = oblique_angle;
   ADD_CHECK_ANGLE (_obj->oblique_angle);
   _obj->width_factor  = 1.0;
-  // style, thickness defaults from HEADER
   if (dwg->header_vars.TEXTSTYLE && dwg->header_vars.TEXTSTYLE->absolute_ref)
-    _obj->style = dwg_add_handleref (
-        dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
+    {
+      _obj->style = dwg_add_handleref (dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
+      _obj->style_id = 1; // TODO STYLE_CONTROL index + 1
+    }
+  else
+    _obj->style_id = 1; // Standard
   return _obj;
 }
 
