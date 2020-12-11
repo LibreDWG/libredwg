@@ -648,10 +648,17 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
         const dwg_point_3d pt = { 10.0, 10.0, 0 };
         dwg_add_CONE (hdr, &pt, NULL, 15.0, 5.0, 5.0, 0.0);
       }
+      break;
     case DWG_TYPE_ACSH_WEDGE_CLASS:
       {
         const dwg_point_3d pt = { 10.0, 10.0, 0 };
         dwg_add_WEDGE (hdr, &pt, NULL, 3.348158, 2.489864, 4.886064);
+      }
+      break;
+    case DWG_TYPE_ACSH_BOX_CLASS:
+      {
+        const dwg_point_3d pt = { 7.791946, 11.0222066, 1.271660 };
+        dwg_add_BOX (hdr, &pt, NULL, 4.416106, 2.044413, 2.543320);
       }
       break;
 
@@ -777,6 +784,7 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       TEST_OBJECT (ACSH_CYLINDER_CLASS);
       TEST_OBJECT (ACSH_CONE_CLASS);
       TEST_OBJECT (ACSH_WEDGE_CLASS);
+      TEST_OBJECT (ACSH_BOX_CLASS);
     default:
       fail ("No test yet for type %s", name);
     }
@@ -859,6 +867,7 @@ main (int argc, char *argv[])
   error = test_add (DWG_TYPE_ACSH_CYLINDER_CLASS, "add_cylinder_2000.dwg");
   error = test_add (DWG_TYPE_ACSH_CONE_CLASS, "add_cone_2000.dwg");
   error = test_add (DWG_TYPE_ACSH_WEDGE_CLASS, "add_wedge_2000.dwg");
+  error = test_add (DWG_TYPE_ACSH_BOX_CLASS, "add_box_2000.dwg");
 
   return error;
 }

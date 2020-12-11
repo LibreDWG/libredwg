@@ -25153,30 +25153,212 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       1.0, 0.0, 0.0,
       0.0, 1.0, 0.0,
       0.0, 0.0, 1.0 };
-    char acis_data[1048];
+    #define ACIS_BOX_SIZE 7500
+    char acis_data[ACIS_BOX_SIZE];
     char date[48];
     unsigned date_size = dwg_acis_date (date, 48);
-    // acis version 106 (r14) would be nicer
-    const char base_acis_format[] = /* len = 890 => 957 */
-      // version num_records num_entities has_history
-      "400 6 1 0 \n"
-      // product acis_version date
-      "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
-      // num_mm_units resabs resnor
-      "25.39999999999999858 9.999999999999999547e-07 1.000000000000000036e-10\n"
-      "body $-1 -1 $-1 $1 $-1 $2 #\n"
-      "lump $-1 -1 $-1 $-1 $3 $0 #\n"
-      "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
-      "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
-      "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
-      "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n";
+    // origin: 7.791946762401224191 11.02220663951163004 1.271660108551718515
+    // length: 4.416106 [BD 40]
+    // width: 2.044413 [BD 41]
+    // height: 2.543320 [BD 42]
+    const double l2 = length / 2.0; // 2.208053237598775809
+    const double w2 = width / 2.0;  // 1.022206639511630044
+    const double h2 = height / 2.0; // 1.271660108551718515
+    const char box_acis_format[] =  /* len = 890 => 957 */
+        // version num_records num_entities has_history
+        "700 104 1 0 \n"
+        // product acis_version date
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+        // num_mm_units resabs resnor
+        "25.39999999999999858 9.999999999999999547e-07 1.000000000000000036e-10\n"
+        "body $-1 -1 $-1 $1 $-1 $2 #\n"
+        "lump $-1 -1 $-1 $-1 $3 $0 #\n"
+        "transform $-1 -1 ""%g %g %g ""%g %g %g ""%g %g %g ""%g %g %g ""1 no_rotate no_reflect no_shear #\n"
+        "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
+        "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
+        "face $9 -1 $-1 $10 $11 $3 $-1 $12 reversed single #\n"
+        "loop $-1 -1 $-1 $-1 $13 $4 #\n"
+      // h2
+        "plane-surface $-1 -1 $-1 0 0 %f 0 0 1 -1 0 0 reverse_v I I I I #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $6 256 #\n"
+        "face $14 -1 $-1 $15 $16 $3 $-1 $17 reversed single #\n"
+        "loop $-1 -1 $-1 $-1 $18 $6 #\n"
+      // -h2
+        "plane-surface $-1 -1 $-1 0 0 %f 0 0 1 -1 0 0 reverse_v I I I I #\n"
+        "coedge $-1 -1 $-1 $19 $20 $21 $22 reversed $7 $-1 #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $10 256 #\n"
+        "face $23 -1 $-1 $24 $25 $3 $-1 $26 reversed single #\n"
+        "loop $-1 -1 $-1 $-1 $27 $10 #\n"
+      // -w2
+        "plane-surface $-1 -1 $-1 0 %f 0 0 1 0 0 0 1 reverse_v I I I I #\n"
+        "coedge $-1 -1 $-1 $28 $29 $30 $31 reversed $11 $-1 #\n"
+        "coedge $-1 -1 $-1 $32 $13 $33 $34 reversed $7 $-1 #\n"
+        "coedge $-1 -1 $-1 $13 $32 $35 $36 reversed $7 $-1 #\n"
+        "coedge $-1 -1 $-1 $37 $38 $13 $22 forward $39 $-1 #\n"
+      // -w2, w2
+        "edge $40 -1 $-1 $41 %f $42 %f $21 $43 forward @7 unknown #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $15 256 #\n"
+        "face $44 -1 $-1 $45 $46 $3 $-1 $47 reversed single #\n"
+        "loop $-1 -1 $-1 $-1 $48 $15 #\n"
+        // l2
+        "plane-surface $-1 -1 $-1 %f 0 0 -1 0 0 0 0 -1 reverse_v I I I I #\n"
+        "coedge $-1 -1 $-1 $33 $49 $50 $51 reversed $16 $-1 #\n"
+        "coedge $-1 -1 $-1 $52 $18 $53 $54 reversed $11 $-1 #\n"
+        "coedge $-1 -1 $-1 $18 $52 $49 $55 reversed $11 $-1 #\n"
+        "coedge $-1 -1 $-1 $38 $37 $18 $31 forward $39 $-1 #\n"
+      // -w2, w2
+        "edge $56 -1 $-1 $57 %f $58 %f $30 $59 forward @7 unknown #\n"
+        "coedge $-1 -1 $-1 $20 $19 $60 $61 reversed $7 $-1 #\n"
+        "coedge $-1 -1 $-1 $62 $27 $19 $34 forward $16 $-1 #\n"
+        // -l2, l2
+        "edge $63 -1 $-1 $64 %f $41 %f $33 $65 forward @7 unknown #\n"
+        "coedge $-1 -1 $-1 $66 $67 $20 $36 forward $46 $-1 #\n"
+        // -l2, l2
+        "edge $68 -1 $-1 $42 %f $69 %f $35 $70 forward @7 unknown #\n"
+        "coedge $-1 -1 $-1 $30 $21 $67 $71 forward $39 $-1 #\n"
+        "coedge $-1 -1 $-1 $21 $30 $62 $72 reversed $39 $-1 #\n"
+        "loop $-1 -1 $-1 $-1 $38 $45 #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $22 256 #\n"
+        "vertex $-1 -1 $-1 $22 $73 #\n"
+        "vertex $-1 -1 $-1 $22 $74 #\n"
+        // -l2, h2
+        "straight-curve $-1 -1 $-1 %f 0 %f 0 1 0 I I #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $24 256 #\n"
+        "face $75 -1 $-1 $-1 $39 $3 $-1 $76 reversed single #\n"
+        "loop $-1 -1 $-1 $-1 $67 $24 #\n"
+      // w2
+        "plane-surface $-1 -1 $-1 0 %f 0 0 -1 0 0 0 -1 reverse_v I I I I #\n"
+        "coedge $-1 -1 $-1 $60 $77 $66 $78 reversed $25 $-1 #\n"
+        "coedge $-1 -1 $-1 $27 $62 $29 $55 forward $16 $-1 #\n"
+        "coedge $-1 -1 $-1 $77 $60 $27 $51 forward $25 $-1 #\n"
+      // -h2, h2
+        "edge $79 -1 $-1 $64 %f $80 %f $50 $81 forward @7 unknown #\n"
+        "coedge $-1 -1 $-1 $29 $28 $77 $82 reversed $11 $-1 #\n"
+        "coedge $-1 -1 $-1 $67 $66 $28 $54 forward $46 $-1 #\n"
+        // -l2, l2
+        "edge $83 -1 $-1 $84 %f $57 %f $53 $85 forward @7 unknown #\n"
+        // -l2, l2
+        "edge $86 -1 $-1 $58 %f $80 %f $49 $87 forward @7 unknown #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $31 256 #\n"
+        "vertex $-1 -1 $-1 $31 $88 #\n"
+        "vertex $-1 -1 $-1 $72 $89 #\n"
+        // -l2, -h2
+        "straight-curve $-1 -1 $-1 %f 0 %f 0 -1 0 I I #\n"
+        "coedge $-1 -1 $-1 $50 $48 $32 $61 forward $25 $-1 #\n"
+      // -w2, w2
+        "edge $90 -1 $-1 $69 %f $64 %f $60 $91 forward @7 unknown #\n"
+        "coedge $-1 -1 $-1 $49 $33 $38 $72 forward $16 $-1 #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $34 256 #\n"
+        "vertex $-1 -1 $-1 $61 $92 #\n"
+      // -w2, h2
+        "straight-curve $-1 -1 $-1 0 %f %f -1 0 0 I I #\n"
+        "coedge $-1 -1 $-1 $53 $35 $48 $78 forward $46 $-1 #\n"
+        "coedge $-1 -1 $-1 $35 $53 $37 $71 reversed $46 $-1 #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $36 256 #\n"
+        "vertex $-1 -1 $-1 $36 $93 #\n"
+      // w2, h2
+        "straight-curve $-1 -1 $-1 0 %f %f 1 0 0 I I #\n"
+      // -h2, h2
+        "edge $94 -1 $-1 $42 %f $57 %f $37 $95 forward @7 unknown #\n"
+      // -h2, h2
+        "edge $96 -1 $-1 $41 %f $58 %f $38 $97 forward @7 unknown #\n"
+      // -l2 -w2 h2
+        "point $-1 -1 $-1 %f %f %f #\n"
+      // -l2 w2 h2
+        "point $-1 -1 $-1 %f %f %f #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $45 256 #\n"
+      // -l2
+        "plane-surface $-1 -1 $-1 %f 0 0 1 0 0 0 0 1 reverse_v I I I I #\n"
+        "coedge $-1 -1 $-1 $48 $50 $52 $82 forward $25 $-1 #\n"
+      // -h2, h2
+        "edge $98 -1 $-1 $69 %f $84 %f $66 $99 forward @7 unknown #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $51 256 #\n"
+        "vertex $-1 -1 $-1 $82 $100 #\n"
+      // l2 -w2
+        "straight-curve $-1 -1 $-1 %f %f 0 0 0 -1 I I #\n"
+      // -w2 w2
+        "edge $101 -1 $-1 $80 %f $84 %f $77 $102 forward @7 unknown #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $54 256 #\n"
+        "vertex $-1 -1 $-1 $54 $103 #\n"
+      // w2 -h2
+        "straight-curve $-1 -1 $-1 0 %f %f -1 0 0 I I #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $55 256 #\n"
+      // -w2 -h2
+        "straight-curve $-1 -1 $-1 0 %f %f 1 0 0 I I #\n"
+      // -l2 w2 -h2
+        "point $-1 -1 $-1 %f %f %f #\n"
+      // -l2 -w2 -h2
+        "point $-1 -1 $-1 %f %f %f #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $61 256 #\n"
+      // l2, h2
+        "straight-curve $-1 -1 $-1 %f 0 %f 0 -1 0 I I #\n"
+      // l2 -w2 h2
+        "point $-1 -1 $-1 %f %f %f #\n"
+      // l2 w2 h2
+        "point $-1 -1 $-1 %f %f %f #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $71 256 #\n"
+      // -l2 w2
+        "straight-curve $-1 -1 $-1 %f %f 0 0 0 -1 I I #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $72 256 #\n"
+      // -l2 -w2
+        "straight-curve $-1 -1 $-1 %f %f 0 0 0 -1 I I #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $78 256 #\n"
+      // l2, w2
+        "straight-curve $-1 -1 $-1 %f %f 0 0 0 -1 I I #\n"
+      // l2 -w2 -h2
+        "point $-1 -1 $-1 %f %f %f #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $82 256 #\n"
+      // l2, -h2
+        "straight-curve $-1 -1 $-1 %f 0 %f 0 1 0 I I #\n"
+      // l2 w2 -h2
+        "point $-1 -1 $-1 %f %f %f #\n";
     dwg_geom_normal_to_matrix9 (normal, &matrix);
-    snprintf (acis_data, 1048, base_acis_format,
-              date_size, date,
-              matrix[0], matrix[1], matrix[2],
-              matrix[3], matrix[4], matrix[5],
+    snprintf (acis_data, ACIS_BOX_SIZE, box_acis_format, date_size, date,
+              matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5],
               matrix[6], matrix[7], matrix[8],
-              origin_pt->x, origin_pt->y, origin_pt->z);
+              // clang-format off
+              origin_pt->x, origin_pt->y, origin_pt->z,
+              h2,
+              -h2,
+              -w2,
+              -w2, w2,
+              l2,
+              -w2, w2,
+              -l2, l2,
+              -l2, l2,
+              -l2, h2,
+              w2,
+              -h2, h2,
+              -l2, l2,
+              -l2, l2,
+              -l2, -h2,
+              -w2, w2,
+              -w2, h2,
+              w2, h2,
+              -h2, h2,
+              -h2, h2,
+              -l2, -w2, h2,
+              -l2, w2, h2,
+              -l2,
+              -h2, h2,
+              l2, -w2,
+              -w2, w2,
+              w2, -h2,
+              -w2, -h2,
+              -l2, w2, -h2,
+              -l2, -w2, -h2,
+              l2, h2,
+              l2, -w2, h2,
+              l2, w2, h2,
+              -l2, w2,
+              -l2, -w2,
+              l2, w2,
+              l2, -w2, -h2,
+              l2, -h2,
+              l2, w2, -h2
+              );
+    // clang-format on
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
     solid->wireframe_data_present = 1;
     solid->point_present = 1;
@@ -25620,6 +25802,7 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
       "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
       "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n";
+    // TODO
     dwg_geom_normal_to_matrix9 (normal, &matrix);
     snprintf (acis_data, 1048, base_acis_format,
               date_size, date,
@@ -26038,6 +26221,7 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               matrix[3], matrix[4], matrix[5],
               matrix[6], matrix[7], matrix[8],
               origin_pt->x, origin_pt->y, origin_pt->z,
+              // clang-format off
               -l2, w2, -h2, -c1, 0, c2, -c2, -0, -c1,
               l2, w2, h2,
               l2, w2, -h2,
@@ -26058,6 +26242,7 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               l2, w2, h2,
               l2, w2, -h2,
               l2, w2, -h2
+              // clang-format on
               );
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
     solidobj = dwg_obj_generic_to_object (solid, &err);
