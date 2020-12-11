@@ -1632,14 +1632,13 @@ dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
                   int *restrict acis_data_idx)
 {
   BITCODE_RC* encr_sat_data = (BITCODE_RC*)calloc (blocksize + 1, 1);
-  int i = *acis_data_idx;
-  int j;
-  for (j = 0; j < (int)blocksize; j++)
+  int i;
+  for (i = 0; i < (int)blocksize; i++)
     {
-      if (acis_data[j] <= 32)
-        encr_sat_data[i++] = acis_data[j];
+      if (acis_data[i] <= 32)
+        encr_sat_data[i] = acis_data[i];
       else
-        encr_sat_data[i++] = 159 - acis_data[j];
+        encr_sat_data[i] = 159 - acis_data[i];
     }
   *acis_data_idx = i;
   return (char*)encr_sat_data;
@@ -2281,9 +2280,9 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           for (i = 0; i < FIELD_VALUE (num_blocks); i++)
             {
               int idx = 0; // here idx is just local, always starting at 0. ignored
-              char *ptr
-                  = dwg_encrypt_SAT1 (_obj->block_size[i],
-                                  (BITCODE_RC *)_obj->encr_sat_data[i], &idx);
+              char *ptr = dwg_encrypt_SAT1 (
+                  _obj->block_size[i], (BITCODE_RC *)_obj->encr_sat_data[i],
+                  &idx);
 
               free (_obj->encr_sat_data[i]);
               _obj->encr_sat_data[i] = ptr;
