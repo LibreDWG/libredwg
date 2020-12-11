@@ -22053,6 +22053,52 @@ static void add_reactor (Dwg_Object_Object *obj, Dwg_Object_Ref *ref)
   obj->reactors[obj->num_reactors - 1] = ref;
 }
 
+// check if radian or degree, need to normalize.
+// max observed angle: 10.307697 in some ELLIPSE.end_angle
+#define ADD_CHECK_ANGLE(angle)              \
+  if (isnan (angle))                        \
+    {                                       \
+      LOG_ERROR ("Invalid %s: NaN", #angle) \
+      return NULL;                          \
+    }                                       \
+  if (fabs (angle) > 12.0)                  \
+    {                                       \
+      LOG_ERROR ("Invalid %s: %f needs to " \
+                 "be radian (%f)", #angle,  \
+                 angle, deg2rad (angle))    \
+      return NULL;                          \
+    }                                       \
+  if (fabs (angle) > M_PI)                  \
+    {                                       \
+      const double old = angle;             \
+      while (angle > M_PI)                  \
+        angle -= (M_PI * 2.0);              \
+      while (angle < -M_PI)                 \
+        angle += (M_PI * 2.0);              \
+      LOG_WARN ("Bad angle %s: %f normalized "\
+                "to %f", #angle, old, angle) \
+    }
+
+#define ADD_CHECK_3DPOINT(pt)                \
+  if (isnan (pt->x) || isnan (pt->y) || isnan (pt->z)) \
+    {                                       \
+      LOG_ERROR ("Invalid %s: NaN", #pt)    \
+      return NULL;                          \
+    }
+#define ADD_CHECK_2DPOINT(pt)               \
+  if (isnan (pt->x) || isnan (pt->y))       \
+    {                                       \
+      LOG_ERROR ("Invalid %s: NaN", #pt)    \
+      return NULL;                          \
+    }
+#define ADD_CHECK_DOUBLE(dbl)               \
+ if (isnan (dbl))                           \
+    {                                       \
+      LOG_ERROR ("Invalid %s: NaN", #dbl)   \
+      return NULL;                          \
+    }                                       \
+
+
 /* Should be similar to the public VBA interface */
 
 /* Initialize a new dwg. Which template, imperial or metric */
@@ -22684,6 +22730,8 @@ dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const double height)
 {
   API_ADD_ENTITY (TEXT);
+  ADD_CHECK_3DPOINT (ins_pt);
+  ADD_CHECK_DOUBLE (height);
   _obj->text_value = strdup (text_value);
   _obj->ins_pt.x   = ins_pt->x;
   _obj->ins_pt.y   = ins_pt->y;
@@ -22713,6 +22761,8 @@ dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert,
   Dwg_Entity_ATTRIB *attrib;
   int err;
 
+  ADD_CHECK_3DPOINT (ins_pt);
+  ADD_CHECK_DOUBLE (height);
   insobj = dwg_obj_generic_to_object (insert, &err);
   if (!insobj || err)
     {
@@ -22782,6 +22832,8 @@ dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert,
 {
   Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)insert);
   API_ADD_ENTITY (ATTRIB);
+  ADD_CHECK_3DPOINT (ins_pt);
+  ADD_CHECK_DOUBLE (height);
   _obj->tag        = strdup (tag);
   _obj->text_value = strdup (text_value);
   _obj->ins_pt.x   = ins_pt->x;
@@ -22807,6 +22859,8 @@ dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const BITCODE_T restrict default_value)
 {
   API_ADD_ENTITY (ATTDEF);
+  ADD_CHECK_3DPOINT (ins_pt);
+  ADD_CHECK_DOUBLE (height);
   _obj->prompt     = strdup (prompt);
   _obj->tag        = strdup (tag);
   _obj->default_value = strdup (default_value);
@@ -22856,6 +22910,10 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const double rotation)
 {
   API_ADD_ENTITY (INSERT);
+  ADD_CHECK_3DPOINT (ins_pt);
+  ADD_CHECK_DOUBLE (xscale);
+  ADD_CHECK_DOUBLE (yscale);
+  ADD_CHECK_DOUBLE (zscale);
   _obj->ins_pt.x     = ins_pt->x;
   _obj->ins_pt.y     = ins_pt->y;
   _obj->ins_pt.z     = ins_pt->z;
@@ -22865,6 +22923,7 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   //TODO scale_flag
   _obj->extrusion.z  = 1.0;
   _obj->rotation     = rotation;
+  ADD_CHECK_ANGLE (_obj->rotation);
   _obj->block_header = dwg_find_tablehandle (dwg, name, "BLOCK");
   if (_obj->block_header)
     {
@@ -22900,6 +22959,10 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                  const double col_spacing)
 {
   API_ADD_ENTITY (MINSERT);
+  ADD_CHECK_3DPOINT (ins_pt);
+  ADD_CHECK_DOUBLE (xscale);
+  ADD_CHECK_DOUBLE (yscale);
+  ADD_CHECK_DOUBLE (zscale);
   _obj->ins_pt.x     = ins_pt->x;
   _obj->ins_pt.y     = ins_pt->y;
   _obj->ins_pt.z     = ins_pt->z;
@@ -22909,6 +22972,7 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   //TODO scale_flag
   _obj->extrusion.z  = 1.0;
   _obj->rotation     = rotation;
+  ADD_CHECK_ANGLE (_obj->rotation);
   _obj->num_rows     = (BITCODE_BS)num_rows;
   _obj->num_cols     = (BITCODE_BS)num_cols;
   _obj->row_spacing  = row_spacing;
@@ -22943,6 +23007,7 @@ dwg_add_VERTEX_2D (Dwg_Entity_POLYLINE_2D *restrict pline,
   API_ADD_ENTITY (VERTEX_2D);
   obj->tio.entity->entmode = 0;
   obj->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (pline), obj);
+  ADD_CHECK_2DPOINT (point);
   _obj->point.x = point->x;
   _obj->point.y = point->y;
   _obj->flag = 0x20;
@@ -22957,6 +23022,7 @@ dwg_add_VERTEX_3D (Dwg_Entity_POLYLINE_3D *restrict pline,
   API_ADD_ENTITY (VERTEX_3D);
   obj->tio.entity->entmode = 0;
   obj->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (pline), obj);
+  ADD_CHECK_3DPOINT (point);
   _obj->point.x = point->x;
   _obj->point.y = point->y;
   _obj->point.z = point->z;
@@ -23079,6 +23145,7 @@ dwg_add_VERTEX_PFACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
   API_ADD_ENTITY (VERTEX_PFACE);
   obj->tio.entity->entmode = 0;
   obj->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (pline), obj);
+  ADD_CHECK_3DPOINT (point);
   _obj->point.x = point->x;
   _obj->point.y = point->y;
   _obj->point.z = point->z;
@@ -23182,6 +23249,7 @@ dwg_add_VERTEX_MESH (Dwg_Entity_POLYLINE_MESH *restrict pline,
   API_ADD_ENTITY (VERTEX_MESH);
   obj->tio.entity->entmode = 0;
   obj->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (pline), obj);
+  ADD_CHECK_3DPOINT (point);
   _obj->point.x = point->x;
   _obj->point.y = point->y;
   _obj->point.z = point->z;
@@ -23253,12 +23321,15 @@ dwg_add_ARC (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
              const double end_angle)
 {
   API_ADD_ENTITY (ARC);
+  ADD_CHECK_3DPOINT (center);
   _obj->center.x    = center->x;
   _obj->center.y    = center->y;
   _obj->center.z    = center->z;
   _obj->radius      = radius;
   _obj->start_angle = start_angle;
   _obj->end_angle   = end_angle;
+  ADD_CHECK_ANGLE (_obj->start_angle);
+  ADD_CHECK_ANGLE (_obj->end_angle);
   return _obj;
 }
 
@@ -23268,6 +23339,7 @@ dwg_add_CIRCLE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const double radius)
 {
   API_ADD_ENTITY (CIRCLE);
+  ADD_CHECK_3DPOINT (center);
   _obj->center.x    = center->x;
   _obj->center.y    = center->y;
   _obj->center.z    = center->z;
@@ -23281,6 +23353,8 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const dwg_point_3d *restrict end_pt)
 {
   API_ADD_ENTITY (LINE);
+  ADD_CHECK_3DPOINT (start_pt);
+  ADD_CHECK_3DPOINT (end_pt);
   _obj->start.x = start_pt->x;
   _obj->start.y = start_pt->y;
   _obj->start.z = start_pt->z;
@@ -23304,6 +23378,9 @@ dwg_add_DIMENSION_ALIGNED (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 {
   API_ADD_ENTITY (DIMENSION_ALIGNED);
   DIMENSION_DEFAULTS;
+  ADD_CHECK_3DPOINT (xline1_pt);
+  ADD_CHECK_3DPOINT (xline2_pt);
+  ADD_CHECK_3DPOINT (text_midpt);
   _obj->text_midpt.x= text_midpt->x;
   _obj->text_midpt.y= text_midpt->y;
   //_obj->text_midpt.z= text_midpt->z;
@@ -23326,6 +23403,10 @@ dwg_add_DIMENSION_ANG2LN (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 {
   API_ADD_ENTITY (DIMENSION_ANG2LN);
   DIMENSION_DEFAULTS;
+  ADD_CHECK_3DPOINT (center_pt);
+  ADD_CHECK_3DPOINT (xline1end_pt);
+  ADD_CHECK_3DPOINT (xline2end_pt);
+  ADD_CHECK_3DPOINT (text_midpt);
   _obj->def_pt.x     = center_pt->x;
   _obj->def_pt.y     = center_pt->y;
   _obj->def_pt.z     = center_pt->z;
@@ -23351,6 +23432,10 @@ dwg_add_DIMENSION_ANG3PT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 {
   API_ADD_ENTITY (DIMENSION_ANG3PT);
   DIMENSION_DEFAULTS;
+  ADD_CHECK_3DPOINT (center_pt);
+  ADD_CHECK_3DPOINT (xline1_pt);
+  ADD_CHECK_3DPOINT (xline2_pt);
+  ADD_CHECK_3DPOINT (text_midpt);
   _obj->center_pt.x  = center_pt->x;
   _obj->center_pt.y  = center_pt->y;
   _obj->center_pt.z  = center_pt->z;
@@ -23374,6 +23459,9 @@ dwg_add_DIMENSION_DIAMETER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 {
   API_ADD_ENTITY (DIMENSION_DIAMETER);
   DIMENSION_DEFAULTS;
+  ADD_CHECK_3DPOINT (chord_pt);
+  ADD_CHECK_3DPOINT (far_chord_pt);
+  ADD_CHECK_DOUBLE (leader_len);
   _obj->def_pt.x       = far_chord_pt->x;
   _obj->def_pt.y       = far_chord_pt->y;
   _obj->def_pt.z       = far_chord_pt->z;
@@ -23392,6 +23480,8 @@ dwg_add_DIMENSION_ORDINATE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 {
   API_ADD_ENTITY (DIMENSION_ORDINATE);
   DIMENSION_DEFAULTS;
+  ADD_CHECK_3DPOINT (feature_location_pt);
+  ADD_CHECK_3DPOINT (leader_endpt);
   _obj->feature_location_pt.x = feature_location_pt->x;
   _obj->feature_location_pt.y = feature_location_pt->y;
   _obj->feature_location_pt.z = feature_location_pt->z;
@@ -23410,6 +23500,9 @@ dwg_add_DIMENSION_RADIUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 {
   API_ADD_ENTITY (DIMENSION_RADIUS);
   DIMENSION_DEFAULTS;
+  ADD_CHECK_3DPOINT (center_pt);
+  ADD_CHECK_3DPOINT (chord_pt);
+  ADD_CHECK_DOUBLE (leader_len);
   _obj->def_pt.x       = center_pt->x;
   _obj->def_pt.y       = center_pt->y;
   _obj->def_pt.z       = center_pt->z;
@@ -23429,6 +23522,9 @@ dwg_add_DIMENSION_LINEAR (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 {
   API_ADD_ENTITY (DIMENSION_LINEAR);
   DIMENSION_DEFAULTS;
+  ADD_CHECK_3DPOINT (xline1_pt);
+  ADD_CHECK_3DPOINT (xline2_pt);
+  ADD_CHECK_3DPOINT (def_pt);
   _obj->def_pt.x    = def_pt->x; // dimline_pt
   _obj->def_pt.y    = def_pt->y;
   _obj->def_pt.z    = def_pt->z;
@@ -23439,6 +23535,7 @@ dwg_add_DIMENSION_LINEAR (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->xline2_pt.y = xline2_pt->y;
   _obj->xline2_pt.z = xline2_pt->z;
   _obj->dim_rotation= rotation_angle;
+  ADD_CHECK_ANGLE (_obj->dim_rotation);
   // TODO calc oblique_angle
   return _obj;
 }
@@ -23448,6 +23545,7 @@ dwg_add_POINT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict pt)
 {
   API_ADD_ENTITY (POINT);
+  ADD_CHECK_3DPOINT (pt);
   _obj->x = pt->x;
   _obj->y = pt->y;
   _obj->z = pt->z;
@@ -23465,6 +23563,9 @@ dwg_add_3DFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const dwg_point_3d *restrict pt4 /* may be NULL */)
 {
   API_ADD_ENTITY (_3DFACE);
+  ADD_CHECK_3DPOINT (pt1);
+  ADD_CHECK_3DPOINT (pt2);
+  ADD_CHECK_3DPOINT (pt3);
   _obj->corner1.x = pt1->x;
   _obj->corner1.y = pt1->y;
   _obj->corner1.z = pt1->z;
@@ -23476,6 +23577,7 @@ dwg_add_3DFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->corner3.z = pt3->z;
   if (pt4)
     {
+      ADD_CHECK_3DPOINT (pt4);
       _obj->corner4.x = pt4->x;
       _obj->corner4.y = pt4->y;
       _obj->corner4.z = pt4->z;
@@ -23500,6 +23602,10 @@ dwg_add_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_2d *restrict pt4)
 {
   API_ADD_ENTITY (SOLID);
+  ADD_CHECK_3DPOINT (pt1);
+  ADD_CHECK_2DPOINT (pt2);
+  ADD_CHECK_2DPOINT (pt3);
+  ADD_CHECK_2DPOINT (pt4);
   _obj->extrusion.z = 1.0;
   _obj->corner1.x = pt1->x;
   _obj->corner1.y = pt1->y;
@@ -23521,6 +23627,10 @@ dwg_add_TRACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_2d *restrict pt4)
 {
   API_ADD_ENTITY (TRACE);
+  ADD_CHECK_3DPOINT (pt1);
+  ADD_CHECK_2DPOINT (pt2);
+  ADD_CHECK_2DPOINT (pt3);
+  ADD_CHECK_2DPOINT (pt4);
   _obj->extrusion.z = 1.0;
   _obj->corner1.x = pt1->x;
   _obj->corner1.y = pt1->y;
@@ -23542,11 +23652,14 @@ dwg_add_SHAPE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const double oblique_angle)
 {
   API_ADD_ENTITY (SHAPE);
+  ADD_CHECK_3DPOINT (ins_pt);
+  ADD_CHECK_DOUBLE (scale);
   _obj->ins_pt.x      = ins_pt->x;
   _obj->ins_pt.y      = ins_pt->y;
   _obj->ins_pt.z      = ins_pt->z;
   _obj->scale         = scale;
   _obj->oblique_angle = oblique_angle;
+  ADD_CHECK_ANGLE (_obj->oblique_angle);
   _obj->width_factor  = 1.0;
   _obj->extrusion.z   = 1.0;
   // style, thickness from HEADER
@@ -23584,6 +23697,9 @@ dwg_add_ELLIPSE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const double axis_ratio)
 {
   API_ADD_ENTITY (ELLIPSE);
+  ADD_CHECK_3DPOINT (center);
+  ADD_CHECK_DOUBLE (major_axis); // -1.0 - 1.0?
+  ADD_CHECK_DOUBLE (axis_ratio); // -1.0 - 1.0?
   _obj->center.x     = center->x;
   _obj->center.y     = center->y;
   _obj->center.z     = center->z;
@@ -23604,6 +23720,8 @@ dwg_add_SPLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const dwg_point_3d *restrict end_tan_vec)
 {
   API_ADD_ENTITY (SPLINE);
+  ADD_CHECK_3DPOINT (beg_tan_vec);
+  ADD_CHECK_3DPOINT (end_tan_vec);
   _obj->beg_tan_vec.x = beg_tan_vec->x;
   _obj->beg_tan_vec.y = beg_tan_vec->y;
   _obj->beg_tan_vec.z = beg_tan_vec->z;
@@ -23712,12 +23830,12 @@ dwg_add_RAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
              const dwg_point_3d *restrict vector) /* different to VBA */
 {
   API_ADD_ENTITY (RAY);
+  ADD_CHECK_3DPOINT (point);
+  ADD_CHECK_3DPOINT (vector);
   _obj->point.x  = point->x;
   _obj->point.y  = point->y;
   _obj->point.z  = point->z;
-  _obj->vector.x = vector->x;
-  _obj->vector.y = vector->y;
-  _obj->vector.z = vector->z;
+  dwg_geom_normalize ((dwg_point_3d*)&_obj->vector, *vector);
   return _obj;
 }
 
@@ -23727,12 +23845,12 @@ dwg_add_XLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
              const dwg_point_3d *restrict vector) /* different to VBA */
 {
   API_ADD_ENTITY (XLINE);
+  ADD_CHECK_3DPOINT (point);
+  ADD_CHECK_3DPOINT (vector);
   _obj->point.x  = point->x;
   _obj->point.y  = point->y;
   _obj->point.z  = point->z;
-  _obj->vector.x = vector->x;
-  _obj->vector.y = vector->y;
-  _obj->vector.z = vector->z;
+  dwg_geom_normalize ((dwg_point_3d*)&_obj->vector, *vector);
   return _obj;
 }
 
@@ -23910,6 +24028,8 @@ dwg_add_MTEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 {
   API_ADD_ENTITY (MTEXT);
   _obj->text       = strdup (text);
+  ADD_CHECK_3DPOINT (ins_pt);
+  ADD_CHECK_DOUBLE (rect_width);
   _obj->ins_pt.x   = ins_pt->x;
   _obj->ins_pt.y   = ins_pt->y;
   _obj->ins_pt.z   = ins_pt->z;
@@ -23937,6 +24057,9 @@ dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->num_points = num_points;
   for (unsigned i = 0; i < num_points; i++)
     {
+      ADD_CHECK_DOUBLE (points[i].x);
+      ADD_CHECK_DOUBLE (points[i].y);
+      ADD_CHECK_DOUBLE (points[i].z);
       _obj->points[i].x = points[i].x;
       _obj->points[i].y = points[i].y;
       _obj->points[i].z = points[i].z;
@@ -23965,14 +24088,14 @@ dwg_add_TOLERANCE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 {
   API_ADD_ENTITY (TOLERANCE);
   _obj->text_value = strdup (text_value);
+  ADD_CHECK_3DPOINT (ins_pt);
   _obj->ins_pt.x   = ins_pt->x;
   _obj->ins_pt.y   = ins_pt->y;
   _obj->ins_pt.z   = ins_pt->z;
   if (x_direction)
     {
-      _obj->x_direction.x = x_direction->x;
-      _obj->x_direction.y = x_direction->y;
-      _obj->x_direction.z = x_direction->z;
+      ADD_CHECK_3DPOINT (x_direction);
+      dwg_geom_normalize ((dwg_point_3d*)&_obj->x_direction, *x_direction);
     }
   else
     _obj->x_direction.x = 1.0;
@@ -24948,6 +25071,19 @@ dwg_add_ACSH_HISTORY_CLASS (Dwg_Entity_3DSOLID *restrict region,
 }
 
 /* Some geometric helpers */
+
+double
+dwg_geom_angle_normalize (double angle)
+{
+  if (fabs (angle) > M_PI)
+    {
+      while (angle > M_PI)
+        angle -= (M_PI * 2.0);
+      while (angle < -M_PI)
+        angle += (M_PI * 2.0);
+    }
+  return angle;
+}
 
 dwg_point_3d *
 dwg_geom_normalize (dwg_point_3d *out, const dwg_point_3d pt)
@@ -26399,6 +26535,7 @@ dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     _obj->pt0.y = ins_pt->y;
     _obj->pt0.z = ins_pt->z;
     // TODO rotation cos()
+    //ADD_CHECK_ANGLE (_obj->rotation);
     _obj->uvec.x = scale_factor;
     _obj->uvec.y = scale_factor;
     _obj->uvec.z = 1.0;
@@ -26528,6 +26665,7 @@ dwg_add_SPATIAL_FILTER (Dwg_Entity_INSERT *restrict insert /*, clip_verts... */)
     add_reactor (obj->tio.object,
                  dwg_add_handleref (dwg, 4, spatial->handle.value, obj));
     _obj->extrusion.z = 1.0;
+    // TODO normal -> matrix
     _obj->transform[0] = 1.0;
     _obj->transform[5] = 1.0;
     _obj->transform[10] = 1.0;

@@ -7006,6 +7006,10 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 
 /* Some geometric helpers */
 
+/* in_radians */
+EXPORT double
+dwg_geom_angle_normalize (double angle);
+
 dwg_point_3d *
 dwg_geom_normalize (dwg_point_3d *out, const dwg_point_3d pt) __nonnull_all;
 

@@ -1065,6 +1065,7 @@ bit_write_BE (Bit_Chain *dat, double x, double y, double z)
     }
 }
 
+// TODO ensure length 1, dwg_geom_normalize()
 void
 normalize_BE (BITCODE_3BD ext)
 {
