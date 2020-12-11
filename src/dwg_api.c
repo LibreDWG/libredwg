@@ -22585,7 +22585,7 @@ dwg_add_entity_defaults (Dwg_Data *restrict dwg,
                          Dwg_Object_Entity *restrict ent)
 {
   int error;
-  Dwg_Object *obj = dwg_obj_obj_to_object ((void*)ent, &error);
+  Dwg_Object *obj = dwg_ent_to_object (ent, &error);
   //const Dwg_Version_Type version = dwg->header.version;
   ent->is_xdic_missing = 1;
   ent->color.index = 256; /* ByLayer */
@@ -22595,11 +22595,26 @@ dwg_add_entity_defaults (Dwg_Data *restrict dwg,
   ent->ltype_scale = 1.0;
   // ltype_flags = 0; ByLayer
   // plotstyle_flags  = 0; ByLayer
-  ent->linewt = 0x1d;
+  if (!error & (strEQc (obj->name, "SEQEND") || memBEGINc (obj->name, "VERTEX")))
+    ent->linewt = 0x1c;
+  else
+    ent->linewt = 0x1d;
   if (dwg->header_vars.CLAYER)
     ent->layer = dwg_add_handleref (
         dwg, 5, dwg->header_vars.CLAYER->absolute_ref, NULL);
   // we cannot yet write >r2000, so no material, visualstyle, yet ...
+
+  if (dwg->header_vars.THICKNESS != 0.0
+      && !error && dwg_dynapi_entity_field (obj->name, "thickness"))
+    {
+      BITCODE_BD thickness = dwg->header_vars.THICKNESS;
+      dwg_dynapi_entity_set_value (obj, obj->name, "thickness", &thickness, 0);
+    }
+  if (!error && dwg_dynapi_entity_field (obj->name, "extrusion"))
+    {
+      BITCODE_BE extrusion = (BITCODE_BE){0.0, 0.0, 1.0};
+      dwg_dynapi_entity_set_value (ent->tio.POINT, obj->name, "extrusion", &extrusion, 0);
+    }
   return 0;
 }
 
@@ -22921,7 +22936,6 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->scale.y      = yscale;
   _obj->scale.z      = zscale;
   //TODO scale_flag
-  _obj->extrusion.z  = 1.0;
   _obj->rotation     = rotation;
   ADD_CHECK_ANGLE (_obj->rotation);
   _obj->block_header = dwg_find_tablehandle (dwg, name, "BLOCK");
@@ -22970,7 +22984,6 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->scale.y      = yscale;
   _obj->scale.z      = zscale;
   //TODO scale_flag
-  _obj->extrusion.z  = 1.0;
   _obj->rotation     = rotation;
   ADD_CHECK_ANGLE (_obj->rotation);
   _obj->num_rows     = (BITCODE_BS)num_rows;
@@ -23549,9 +23562,6 @@ dwg_add_POINT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->x = pt->x;
   _obj->y = pt->y;
   _obj->z = pt->z;
-  //_obj->extrusion.x = 0.0;
-  //_obj->extrusion.y = 0.0;
-  _obj->extrusion.z = 1.0;
   return _obj;
 }
 
@@ -23606,7 +23616,6 @@ dwg_add_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   ADD_CHECK_2DPOINT (pt2);
   ADD_CHECK_2DPOINT (pt3);
   ADD_CHECK_2DPOINT (pt4);
-  _obj->extrusion.z = 1.0;
   _obj->corner1.x = pt1->x;
   _obj->corner1.y = pt1->y;
   _obj->elevation = pt1->z;
@@ -23631,7 +23640,6 @@ dwg_add_TRACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   ADD_CHECK_2DPOINT (pt2);
   ADD_CHECK_2DPOINT (pt3);
   ADD_CHECK_2DPOINT (pt4);
-  _obj->extrusion.z = 1.0;
   _obj->corner1.x = pt1->x;
   _obj->corner1.y = pt1->y;
   _obj->elevation = pt1->z;
@@ -23661,8 +23669,10 @@ dwg_add_SHAPE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->oblique_angle = oblique_angle;
   ADD_CHECK_ANGLE (_obj->oblique_angle);
   _obj->width_factor  = 1.0;
-  _obj->extrusion.z   = 1.0;
-  // style, thickness from HEADER
+  // style, thickness defaults from HEADER
+  if (dwg->header_vars.TEXTSTYLE && dwg->header_vars.TEXTSTYLE->absolute_ref)
+    _obj->style = dwg_add_handleref (
+        dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
   return _obj;
 }
 
@@ -24035,7 +24045,6 @@ dwg_add_MTEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->ins_pt.z   = ins_pt->z;
   _obj->rect_width = rect_width;
   // defaults:
-  _obj->extrusion.z = 1.0;
   _obj->x_axis_dir.x = 1.0;
   _obj->linespace_style = 1;
   _obj->linespace_factor = 1.0;
@@ -24070,7 +24079,6 @@ dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
             dwg_add_handleref (dwg, 2, associated_annotation->handle.value, obj);
   // defaults:
   _obj->x_direction.x = 1.0;
-  _obj->extrusion.z = 1.0;
   if (dwg->header_vars.DIMSTYLE)
     _obj->dimstyle = dwg_add_handleref (
         dwg, 5, dwg->header_vars.DIMSTYLE->absolute_ref, NULL);
@@ -24100,7 +24108,6 @@ dwg_add_TOLERANCE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   else
     _obj->x_direction.x = 1.0;
   // defaults:
-  _obj->extrusion.z = 1.0;
   if (dwg->header_vars.DIMSTYLE)
     _obj->dimstyle = dwg_add_handleref (
         dwg, 5, dwg->header_vars.DIMSTYLE->absolute_ref, NULL);
@@ -24124,7 +24131,6 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _obj->verts[i].vertex.y = verts[i].y;
       _obj->verts[i].vertex.z = verts[i].z;
     }
-  _obj->extrusion.z = 1.0;
 
   // find current mlinestyle
   ref = dwg_ctrl_table (dwg, "MLINESTYLE");
@@ -24506,7 +24512,6 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         _obj->pattern_type = pattern_type;
       }
     _obj->is_associative = is_associative;
-    _obj->extrusion.z = 1.0;
     _obj->num_paths = num_paths;
     _obj->paths = calloc (num_paths, sizeof (Dwg_HATCH_Path));
     for (unsigned i = 0; i < num_paths; i++)
@@ -26664,7 +26669,6 @@ dwg_add_SPATIAL_FILTER (Dwg_Entity_INSERT *restrict insert /*, clip_verts... */)
         = dwg_add_handleref (dwg, 5, spatial->handle.value, obj);
     add_reactor (obj->tio.object,
                  dwg_add_handleref (dwg, 4, spatial->handle.value, obj));
-    _obj->extrusion.z = 1.0;
     // TODO normal -> matrix
     _obj->transform[0] = 1.0;
     _obj->transform[5] = 1.0;
@@ -26757,7 +26761,6 @@ dwg_add_UNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->ins_pt.y = ins_pt->y;
   _obj->ins_pt.z = ins_pt->z;
   // defaults:
-  _obj->extrusion.z = 1.0;
   _obj->scale.x = 1.0;
   _obj->scale.y = 1.0;
   _obj->scale.z = 1.0;
