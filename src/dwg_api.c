@@ -25324,7 +25324,8 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       // l2, -h2
         "straight-curve $-1 -1 $-1 %f 0 %f 0 1 0 I I #\n"
       // l2 w2 -h2
-        "point $-1 -1 $-1 %f %f %f #\n";
+        "point $-1 -1 $-1 %f %f %f #\n"
+        "End-of-ACIS-data\n";
     dwg_geom_normal_to_matrix9 (normal, &matrix);
     snprintf (acis_data, ACIS_BOX_SIZE, box_acis_format, date_size, date,
               matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5],
@@ -25466,7 +25467,8 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
       "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
       "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
-      "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n";
+      "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
+      "End-of-ACIS-data\n";
     dwg_geom_normal_to_matrix9 (normal, &matrix);
     snprintf (acis_data, 1048, base_acis_format,
               date_size, date,
@@ -25579,7 +25581,8 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "color-adesk-attrib $-1 -1 $-1 $-1 $17 256 #\n"
       "vertex $-1 -1 $-1 $17 $24 #\n"
       "point $-1 -1 $-1 %f 0 %f #\n"   // 5, -7.5
-      "point $-1 -1 $-1 %f 0 %f #\n";  // 0, 7.5
+      "point $-1 -1 $-1 %f 0 %f #\n"  // 0, 7.5
+      "End-of-ACIS-data\n";
     //base_radius: 15.000000 [BD 40]
     //top_major_radius: 5.000000 [BD 41]
     //top_minor_radius: 5.000000 [BD 42]
@@ -25705,7 +25708,8 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "vertex $-1 -1 $-1 $22 $30 #\n"
       "ellipse-curve $-1 -1 $-1 0 0 %g 0 0 1 %g 0 0 1 I I #\n"   // -height/2, minor_radius
       "point $-1 -1 $-1 %g 0 %g #\n"  // major_radius, -height/2,
-      "point $-1 -1 $-1 %g 0 %g #\n"; // major_radius, height/2,
+      "point $-1 -1 $-1 %g 0 %g #\n" // major_radius, height/2,
+      "End-of-ACIS-data\n";
     dwg_geom_normal_to_matrix9 (normal, &matrix);
     snprintf (acis_data, 2000, cylinder_acis_format,
               date_size, date,
@@ -25798,7 +25802,8 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
       "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
       "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
-      "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n";
+      "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
+      "End-of-ACIS-data\n";
     // TODO
     dwg_geom_normal_to_matrix9 (normal, &matrix);
     snprintf (acis_data, 1048, base_acis_format,
@@ -25888,7 +25893,8 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
       "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
       "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
-      "sphere-surface $-1 -1 $-1 0 0 0 %g 1 0 0 0 0 1 forward_v I I I I #\n";
+      "sphere-surface $-1 -1 $-1 0 0 0 %g 1 0 0 0 0 1 forward_v I I I I #\n"
+      "End-of-ACIS-data\n";
     dwg_geom_normal_to_matrix9 (normal, &matrix);
     snprintf (acis_data, 650, sphere_acis_format,
               date_size, date,
@@ -25990,7 +25996,8 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "color-adesk-attrib $-1 -1 $-1 $-1 $12 256 #\n"
       "vertex $-1 -1 $-1 $12 $18 #\n"
       "point $-1 -1 $-1 0 0 %g #\n"
-      "point $-1 -1 $-1 0 0 %g #\n";
+      "point $-1 -1 $-1 0 0 %g #\n"
+      "End-of-ACIS-data\n";
     dwg_geom_normal_to_matrix9 (normal, &matrix);
     snprintf (acis_data, 1048, torus_acis_format,
               date_size, date,
@@ -26190,7 +26197,8 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "point $-1 %f %f %f #\n"
       "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $78 1 1 15 0 #\n"
       // l2 w2 -h2
-      "straight-curve $-1 %f %f %f -1 0 0 I I #\n";
+      "straight-curve $-1 %f %f %f -1 0 0 I I #\n"
+      "End-of-ACIS-data\n";
     // origin: 8.325921, 8.755068, 2.443032
     // matrix -1 0 0, 0 -1 0, 0 0 1
     // length: 3.348158
