@@ -25445,7 +25445,6 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_HISTORY_CLASS *hist;
     Dwg_Object_EVALUATION_GRAPH *eval;
     Dwg_Object *solidobj, *histobj, *evalobj, *acsh;
-    BITCODE_H *evalexpr = calloc (1, sizeof (BITCODE_H));
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_matrix9 matrix = {
       1.0, 0.0, 0.0,
@@ -25537,10 +25536,6 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   {
     Dwg_Entity_3DSOLID *solid;
     Dwg_Object_ACSH_CONE_CLASS *_obj;
-    Dwg_Object_ACSH_HISTORY_CLASS *hist;
-    Dwg_Object_EVALUATION_GRAPH *eval;
-    Dwg_Object *solidobj, *histobj, *evalobj, *acsh;
-    BITCODE_H *evalexpr = calloc (1, sizeof (BITCODE_H));
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_matrix9 matrix = {
       1.0, 0.0, 0.0,
@@ -25602,7 +25597,6 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               top_minor_radius, -r2,
               top_x_radius, r2);
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
-    solidobj = dwg_obj_generic_to_object (solid, &err);
     solid->wireframe_data_present = 1;
     solid->point_present = 1;
     solid->point.x = origin_pt->x;
@@ -25663,10 +25657,6 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   {
     Dwg_Entity_3DSOLID *solid;
     Dwg_Object_ACSH_CYLINDER_CLASS *_obj;
-    Dwg_Object_ACSH_HISTORY_CLASS *hist;
-    Dwg_Object_EVALUATION_GRAPH *eval;
-    Dwg_Object *solidobj, *histobj, *evalobj, *acsh;
-    BITCODE_H *evalexpr = calloc (1, sizeof (BITCODE_H));
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_matrix9 matrix = {
       1.0, 0.0, 0.0,
@@ -25728,7 +25718,6 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               -h2, major_radius, -h2, major_radius,
               major_radius, -h2, major_radius, h2);
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
-    solidobj = dwg_obj_generic_to_object (solid, &err);
     solid->wireframe_data_present = 1;
     solid->point_present = 1;
     solid->point.x = origin_pt->x;
@@ -25788,10 +25777,6 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   {
     Dwg_Entity_3DSOLID *solid;
     Dwg_Object_ACSH_PYRAMID_CLASS *_obj;
-    Dwg_Object_ACSH_HISTORY_CLASS *hist;
-    Dwg_Object_EVALUATION_GRAPH *eval;
-    Dwg_Object *solidobj, *histobj, *evalobj, *acsh;
-    BITCODE_H *evalexpr = calloc (1, sizeof (BITCODE_H));
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_matrix9 matrix = {
       1.0, 0.0, 0.0,
@@ -25823,7 +25808,6 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               matrix[6], matrix[7], matrix[8],
               origin_pt->x, origin_pt->y, origin_pt->z);
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
-    solidobj = dwg_obj_generic_to_object (solid, &err);
     solid->wireframe_data_present = 1;
     solid->point_present = 1;
     solid->point.x = origin_pt->x;
@@ -25883,10 +25867,6 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   {
     Dwg_Entity_3DSOLID *solid;
     Dwg_Object_ACSH_SPHERE_CLASS *_obj;
-    Dwg_Object_ACSH_HISTORY_CLASS *hist;
-    Dwg_Object_EVALUATION_GRAPH *eval;
-    Dwg_Object *solidobj, *histobj, *evalobj, *acsh;
-    BITCODE_H *evalexpr = calloc (1, sizeof (BITCODE_H));
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_matrix9 matrix = {
       1.0, 0.0, 0.0,
@@ -25918,7 +25898,6 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               origin_pt->x, origin_pt->y, origin_pt->z,
               radius);
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
-    solidobj = dwg_obj_generic_to_object (solid, &err);
     solid->wireframe_data_present = 1;
     solid->point_present = 1;
     solid->point.x = origin_pt->x;
@@ -25977,10 +25956,6 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   {
     Dwg_Entity_3DSOLID *solid;
     Dwg_Object_ACSH_TORUS_CLASS *_obj;
-    Dwg_Object_ACSH_HISTORY_CLASS *hist;
-    Dwg_Object_EVALUATION_GRAPH *eval;
-    Dwg_Object *solidobj, *histobj, *evalobj, *acsh;
-    BITCODE_H *evalexpr = calloc (1, sizeof (BITCODE_H));
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_matrix9 matrix = {
       1.0, 0.0, 0.0,
@@ -26026,7 +26001,6 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               major_radius, minor_radius,
               major_radius, -major_radius);
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
-    solidobj = dwg_obj_generic_to_object (solid, &err);
     solid->wireframe_data_present = 1;
     solid->point_present = 1;
     solid->point.x = origin_pt->x;
@@ -26087,10 +26061,6 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   {
     Dwg_Entity_3DSOLID *solid;
     Dwg_Object_ACSH_WEDGE_CLASS *_obj;
-    Dwg_Object_ACSH_HISTORY_CLASS *hist;
-    Dwg_Object_EVALUATION_GRAPH *eval;
-    Dwg_Object *solidobj, *histobj, *evalobj, *acsh;
-    BITCODE_H *evalexpr = calloc (1, sizeof (BITCODE_H));
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_matrix9 matrix = {
       1.0, 0.0, 0.0,
@@ -26257,7 +26227,6 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               // clang-format on
               );
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
-    solidobj = dwg_obj_generic_to_object (solid, &err);
     solid->wireframe_data_present = 1;
     solid->point_present = 1;
     solid->point.x = origin_pt->x;
