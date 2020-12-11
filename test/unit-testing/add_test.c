@@ -251,7 +251,10 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       dwg_add_VIEWPORT (hdr, (const BITCODE_T) "viewport1"); // FIXME
       break;
     case DWG_TYPE_ELLIPSE:
-      dwg_add_ELLIPSE (hdr, &pt1, 0.0, 2.0);
+      {
+        const dwg_point_3d ctr = { 11.143259, 9.537395, 0.0 };
+        Dwg_Entity_ELLIPSE *ellipse = dwg_add_ELLIPSE (hdr, &ctr, -8.750802, 0.336109);
+      }
       break;
     case DWG_TYPE_REGION:
       dwg_add_REGION (hdr,

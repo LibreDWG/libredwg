@@ -23708,16 +23708,25 @@ dwg_add_ELLIPSE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 {
   API_ADD_ENTITY (ELLIPSE);
   ADD_CHECK_3DPOINT (center);
-  ADD_CHECK_DOUBLE (major_axis); // -1.0 - 1.0?
-  ADD_CHECK_DOUBLE (axis_ratio); // -1.0 - 1.0?
+  ADD_CHECK_DOUBLE (major_axis);
+  ADD_CHECK_DOUBLE (axis_ratio); // Only (0 - 1]
   _obj->center.x     = center->x;
   _obj->center.y     = center->y;
   _obj->center.z     = center->z;
   _obj->sm_axis.x    = major_axis;
-  _obj->sm_axis.y    = 1.0; /* ?? */
-  _obj->sm_axis.z    = 1.0;
+  _obj->sm_axis.y    = major_axis;
+  _obj->sm_axis.z    = center->z; // Error 150 (eGeneralModelingFailure) when not co-planar
   _obj->axis_ratio   = axis_ratio;
-  _obj->extrusion.z  = 1.0;
+  if (axis_ratio > 1.0 || axis_ratio <= 0.0)
+    {
+      LOG_ERROR ("Illegal ELLIPSE.axis_ratio %f. Set to 1.0", axis_ratio);
+      _obj->axis_ratio = 1.0;
+    }
+  if (major_axis == 0.0)
+    {
+      LOG_ERROR ("Illegal ELLIPSE.major_axis 0.0, needs to be != 0");
+      return NULL;
+    }
   _obj->end_angle    = M_PI * 2.0;
   return _obj;
 }
