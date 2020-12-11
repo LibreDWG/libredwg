@@ -25901,13 +25901,20 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       1.0, 0.0, 0.0,
       0.0, 1.0, 0.0,
       0.0, 0.0, 1.0 };
-    char acis_data[1048];
+    #define WEDGE_ACIS_SIZE 6500
+    char acis_data[WEDGE_ACIS_SIZE];
     char date[48];
     unsigned date_size = dwg_acis_date (date, 48);
+    // the center is in the middle
+    const double l2 = length / 2; // 1.674079
+    const double w2 = width / 2;  // 1.244932
+    const double h2 = height / 2; // 2.4430318
+    const double c1 = 0.8249088118009861859; // ??
+    const double c2 = 0.5652658243809589589; // ??
     // acis version 106 (r14) would be nicer
-    const char base_acis_format[] = /* len = 890 => 957 */
+    const char wedge_acis_format[] = /* len => 5320 */
       // version num_records num_entities has_history
-      "400 6 1 0 \n"
+      "400 87 1 0 \n"
       // product acis_version date
       "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
       // num_mm_units resabs resnor
@@ -25917,14 +25924,141 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
       "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
       "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
-      "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n";
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $4 1 1 1 0 #\n"
+      "face $9 $10 $11 $3 $-1 $12 forward single #\n"
+      "loop $-1 $-1 $13 $4 #\n"
+      // -l2 w2 -h2, -c1 0 c2, -c2 -0 -c1
+      "plane-surface $-1 " "%f %f %f " "%f %d %f " "%f %d %f " "forward_v I I I I #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $6 1 1 5 0 #\n"
+      "face $14 $15 $16 $3 $-1 $17 forward single #\n"
+      "loop $-1 $-1 $18 $6 #\n"
+      // l2 w2 h2
+      "plane-surface $-1 " "%f %f %f " "1 0 0 " "0 0 1 " "forward_v I I I I #\n"
+      "coedge $-1 $19 $20 $21 $22 forward $7 $-1 #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $10 1 1 9 0 #\n"
+      "face $23 $24 $25 $3 $-1 $26 reversed single #\n"
+      "loop $-1 $-1 $27 $10 #\n"
+      // l2 w2 -h2
+      "plane-surface $-1 " "%f %f %f " "0 0 -1 " "1 0 0 " "forward_v I I I I #\n"
+      "coedge $-1 $28 $29 $30 $31 forward $11 $-1 #\n"
+      "coedge $-1 $32 $13 $29 $33 reversed $7 $-1 #\n"
+      "coedge $-1 $13 $32 $34 $35 forward $7 $-1 #\n"
+      "coedge $-1 $36 $30 $13 $22 reversed $25 $-1 #\n"
+      "edge $37 $38 $39 $13 $40 forward #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $15 1 1 13 0 #\n"
+      "face $41 $-1 $42 $3 $-1 $43 forward single #\n"
+      "loop $-1 $-1 $21 $15 #\n"
+      // 0 -w2 0
+      "plane-surface $-1 " "%d %f %d " "0 1 0 " "0 0 -1 " "forward_v I I I I #\n"
+      "coedge $-1 $34 $44 $36 $45 forward $16 $-1 #\n"
+      "coedge $-1 $46 $18 $44 $47 reversed $11 $-1 #\n"
+      "coedge $-1 $18 $46 $19 $33 forward $11 $-1 #\n"
+      "coedge $-1 $21 $36 $18 $31 reversed $25 $-1 #\n"
+      "edge $48 $39 $49 $18 $50 forward #\n"
+      "coedge $-1 $20 $19 $51 $52 reversed $7 $-1 #\n"
+      "edge $53 $54 $39 $29 $55 forward #\n"
+      "coedge $-1 $56 $27 $20 $35 reversed $16 $-1 #\n"
+      "edge $57 $58 $38 $20 $59 forward #\n"
+      "coedge $-1 $30 $21 $27 $45 reversed $25 $-1 #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $22 1 1 2 0 #\n"
+      "vertex $60 $35 $61 #\n"
+      "vertex $62 $33 $63 #\n"
+      // -l2 -w2 -h2 c2 0 c1
+      "straight-curve $-1 " "%f %f %f " "%f %d %f " " I I #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $24 1 1 14 0 #\n"
+      "loop $-1 $-1 $64 $24 #\n"
+      // 0 w2 0
+      "plane-surface $-1 " "%d %f %d " "0 1 0 " "0 0 -1 " "forward_v I I I I #\n"
+      "coedge $-1 $27 $56 $28 $47 forward $16 $-1 #\n"
+      "edge $65 $49 $38 $27 $66 forward #\n"
+      "coedge $-1 $29 $28 $67 $68 reversed $11 $-1 #\n"
+      "edge $69 $70 $49 $44 $71 forward #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $31 1 1 6 0 #\n"
+      "vertex $72 $47 $73 #\n"
+      // l2 -w2 h2
+      "straight-curve $-1 " "%f %f %f " "0 0 -1 ""I I #\n"
+      "coedge $-1 $67 $64 $32 $52 forward $42 $-1 #\n"
+      "edge $74 $58 $54 $51 $75 forward #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $33 1 1 7 0 #\n"
+      "vertex $76 $52 $77 #\n"
+      // l2 w2 h2
+      "straight-curve $-1 " "%f %f %f " "0 -1 0 ""I I #\n"
+      "coedge $-1 $44 $34 $64 $78 reversed $16 $-1 #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $35 1 1 3 0 #\n"
+      "vertex $79 $78 $80 #\n"
+      // -l2 w2 -h2
+      "straight-curve $-1 " "%f %f %f " "0 -1 0 ""I I #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $38 1 1 4 0 #\n"
+      // -l2 -w2 -h2
+      "point $-1 %f %f %f #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $39 1 1 8 0 #\n"
+      // l2 -w2 h2
+      "point $-1 %f %f %f #\n"
+      "coedge $-1 $51 $67 $56 $78 forward $42 $-1 #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $45 1 1 10 0 #\n"
+      // l2 -w2 -h2
+      "straight-curve $-1 %f %f %f -1 0 0 I I #\n"
+      "coedge $-1 $64 $51 $46 $68 forward $42 $-1 #\n"
+      "edge $81 $54 $70 $67 $82 forward #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $47 1 1 11 0 #\n"
+      "vertex $83 $78 $84 #\n"
+      // l2 w2 -h2
+      "straight-curve $-1 %f %f %f 0 -1 0 I I #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $49 1 1 12 0 #\n"
+      // l2 -w2 -h2
+      "point $-1 %f %f %f #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $52 1 1 18 0 #\n"
+      // -l2 w2 -h2 c2 0 c1
+      "straight-curve $-1 %f %f %f %f %d %f I I #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $54 1 1 19 0 #\n"
+      // l2 w2 h2
+      "point $-1 %f %f %f #\n"
+      "edge $85 $70 $58 $64 $86 forward #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $58 1 1 17 0 #\n"
+      // -l2 w2 -h2
+      "point $-1 %f %f %f #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $68 1 1 20 0 #\n"
+      // l2 w2 h2
+      "straight-curve $-1 %f %f %f 0 0 -1 I I #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $70 1 1 16 0 #\n"
+      // l2 w2 -h2
+      "point $-1 %f %f %f #\n"
+      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $78 1 1 15 0 #\n"
+      // l2 w2 -h2
+      "straight-curve $-1 %f %f %f -1 0 0 I I #\n";
+    // origin: 8.325921, 8.755068, 2.443032
+    // matrix -1 0 0, 0 -1 0, 0 0 1
+    // length: 3.348158
+    // width: 2.489864
+    // height: 4.886064
     dwg_geom_normal_to_matrix9 (normal, &matrix);
-    snprintf (acis_data, 1048, base_acis_format,
+    snprintf (acis_data, WEDGE_ACIS_SIZE, wedge_acis_format,
               date_size, date,
               matrix[0], matrix[1], matrix[2],
               matrix[3], matrix[4], matrix[5],
               matrix[6], matrix[7], matrix[8],
-              origin_pt->x, origin_pt->y, origin_pt->z);
+              origin_pt->x, origin_pt->y, origin_pt->z,
+              -l2, w2, -h2, -c1, 0, c2, -c2, -0, -c1,
+              l2, w2, h2,
+              l2, w2, -h2,
+              0, -w2, 0,
+              -l2, -w2, -h2, c2, 0, c1,
+              0, w2, 0,
+              l2, -w2, h2,
+              l2, w2, h2,
+              -l2, w2, -h2,
+              -l2, -w2, -h2,
+              l2, -w2, h2,
+              l2, -w2, -h2,
+              l2, w2, -h2,
+              l2, -w2, -h2,
+              -l2, w2, -h2, c2, 0, c1,
+              l2, w2, h2,
+              -l2, w2, -h2,
+              l2, w2, h2,
+              l2, w2, -h2,
+              l2, w2, -h2
+              );
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
     solidobj = dwg_obj_generic_to_object (solid, &err);
     solid->wireframe_data_present = 1;
