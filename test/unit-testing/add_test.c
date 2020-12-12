@@ -335,15 +335,16 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       dwg_add_TOLERANCE (hdr, (const BITCODE_T) "testtekst", &pt1, NULL);
       break;
     case DWG_TYPE_MLINESTYLE:
-      dwg_add_MLINESTYLE (dwg, (const BITCODE_T) "STANDARD");
+      {
+        Dwg_Object_MLINESTYLE *mlsty = dwg_add_MLINESTYLE (dwg, (const BITCODE_T) "Double");
+        mlsty->start_angle = deg2rad (15.0);
+      }
       break;
     case DWG_TYPE_MLINE:
       {
-        Dwg_Object_MLINESTYLE *mlstyle;
         const dwg_point_3d pts[]
             = { { 2.5, 0.0, 0.0 }, { 0.5, 0.0, 0.0 }, { 0.5, 2.0, 1.0 },
                 { 0.5, 1.0, 1.0 }, { 0.5, 1.0, 0.0 }, { 1.5, 1.0, 0.0 } };
-        mlstyle = dwg_add_MLINESTYLE (dwg, (const BITCODE_T) "STANDARD");
         dwg_add_MLINE (hdr, 6, pts);
       }
       break;

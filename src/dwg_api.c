@@ -22367,9 +22367,6 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   obj = dwg_obj_generic_to_object (mlstyle, &error);
   dwg->header_vars.CMLSTYLE
       = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
-  obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 0x17, obj);
-  add_reactor (obj->tio.object, 0x17);
-  // dwg_add_PLACEHOLDER (dwg); // MLINESTYLE 0.1.18
 
   // DICTIONARY ACAD_PLOTSETTINGS: (5.1.19)
   dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_PLOTSETTINGS", NULL, 0);
@@ -23920,7 +23917,8 @@ dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
           dwg_add_DICTIONARY_item (nod->tio.object->tio.DICTIONARY, name, obj->handle.value);
           /* owner is relative, reactor absolute */
           obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, nod->handle.value, obj);
-          add_reactor (obj->tio.object, nod->handle.value);
+          if (!obj->tio.object->num_reactors)
+            add_reactor (obj->tio.object, nod->handle.value);
         }
     }
   else /* not a direct NOD item */
@@ -24029,7 +24027,8 @@ dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
             dwg_add_DICTIONARY_item (nod->tio.object->tio.DICTIONARY, name, obj->handle.value);
             /* owner is relative, reactor absolute */
             obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, nod->handle.value, obj);
-            add_reactor (obj->tio.object, nod->handle.value);
+            if (!obj->tio.object->num_reactors)
+              add_reactor (obj->tio.object, nod->handle.value);
           }
       }
     else /* not a direct NOD item */
@@ -24189,53 +24188,43 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const unsigned num_verts,
                const dwg_point_3d *restrict verts)
 {
-  BITCODE_H ref;
-  Dwg_Object_DICTIONARY *dict;
+  BITCODE_H mlstyref;
   API_ADD_ENTITY (MLINE);
+  if (!num_verts)
+    return NULL;
   _obj->verts = calloc (num_verts, sizeof (Dwg_MLINE_vertex));
   _obj->num_verts = num_verts;
+  _obj->base_point.x = verts[0].x;
+  _obj->base_point.y = verts[0].y;
+  _obj->base_point.z = verts[0].z;
+  // defaults:
+  _obj->scale = dwg->header_vars.CMLSCALE;
+  _obj->extrusion.z = 1.0;
+  // flags?
+  // set current mlinestyle
+  mlstyref = dwg->header_vars.CMLSTYLE;
+  _obj->mlinestyle = dwg_add_handleref (dwg, 5, mlstyref->absolute_ref, NULL);
+  obj = dwg_ref_object (dwg, mlstyref);
+  if (obj)
+    _obj->num_lines = obj->tio.object->tio.MLINESTYLE->num_lines;
   for (unsigned i = 0; i < num_verts; i++)
     {
+      _obj->verts[i].parent = _obj;
       _obj->verts[i].vertex.x = verts[i].x;
       _obj->verts[i].vertex.y = verts[i].y;
       _obj->verts[i].vertex.z = verts[i].z;
-    }
-
-  // find current mlinestyle
-  ref = dwg_ctrl_table (dwg, "MLINESTYLE");
-  if (!ref)
-    {
-      Dwg_Object_MLINESTYLE *mlstyle = dwg_add_MLINESTYLE (dwg, (const BITCODE_T) "Standard");
-      _obj->mlinestyle = dwg_add_handleref (dwg, 5, dwg_obj_generic_handlevalue (mlstyle), obj);
-      LOG_WARN ("No ACAD_MLINESTYLE in Named Dictionary Object found");
-      return _obj;
-    }
-  obj = dwg_ref_object (dwg, ref);
-  if (!obj
-      || !(obj->fixedtype == DWG_TYPE_DICTIONARY
-           || obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT))
-    {
-      Dwg_Object_MLINESTYLE *mlstyle = dwg_add_MLINESTYLE (dwg, (const BITCODE_T) "Standard");
-      _obj->mlinestyle = dwg_add_handleref (dwg, 5, dwg_obj_generic_handlevalue (mlstyle), obj);
-      LOG_WARN ("Empty ACAD_MLINESTYLE in Named Dictionary Object");
-      return _obj;
-    }
-  dict = obj->tio.object->tio.DICTIONARY;
-  if (obj->fixedtype == DWG_TYPE_DICTIONARYWDFLT)
-    {
-      Dwg_Object_DICTIONARYWDFLT *dflt = (Dwg_Object_DICTIONARYWDFLT *)dict;
-      ref = dflt->defaultid;
-      if (ref)
+      // TODO calc vertex_direction, miter_direction
+      _obj->verts[i].lines = calloc (_obj->num_lines, sizeof (Dwg_MLINE_line));
+      for (unsigned j = 0; j < _obj->num_lines; j++)
         {
-          _obj->mlinestyle = dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL);
-          return _obj;
+          _obj->verts[i].lines[j].parent = _obj->verts;
+          _obj->verts[i].lines[j].num_segparms = 2;
+          _obj->verts[i].lines[j].segparms = calloc (_obj->verts[i].lines[j].num_segparms, 8);
+          for (unsigned k = 0; k < _obj->verts[i].lines[j].num_segparms; k++)
+            { // TODO
+              _obj->verts[i].lines[j].segparms[k] = 0.0;
+            }
         }
-    }
-  if (dict->numitems)
-    {
-      // take the first as default? There is no HEADER.CMLINESTYLE
-      ref = dict->itemhandles[0];
-      _obj->mlinestyle = dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL);
     }
   return _obj;
 }
@@ -24511,26 +24500,40 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
     {
       dict = dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_MLINESTYLE", name,
                                  obj->handle.value);
+      if (dict)
+        {
+          obj->tio.object->ownerhandle = dwg_add_handleref (
+              dwg, 4, dwg_obj_generic_handlevalue (dict), obj);
+          if (!obj->tio.object->num_reactors)
+            add_reactor (obj->tio.object, dwg_obj_generic_handlevalue (dict));
+        }
     }
   else
     {
       Dwg_Object *dictobj = dwg_ref_object (dwg, dictref);
       if (dictobj)
-        // add to dict item
-        dwg_add_DICTIONARY_item (dictobj->tio.object->tio.DICTIONARY, name,
-                                 obj->handle.value);
+        {
+          dwg_add_DICTIONARY_item (dictobj->tio.object->tio.DICTIONARY, name,
+                                   obj->handle.value);
+          obj->tio.object->ownerhandle = dwg_add_handleref (
+              dwg, 4, dictobj->handle.value, obj);
+          if (!obj->tio.object->num_reactors)
+            add_reactor (obj->tio.object, dictobj->handle.value);
+        }
     }
 
-  _obj->name = strdup (name);
+  _obj->name = strEQc (name, "Standard") ? strdup ("STANDARD") : strdup (name);
   _obj->fill_color = (BITCODE_CMC){ 256, 0 };
-  if (strEQ (name, "Standard") || strEQ (name, "STANDARD"))
+  if (strEQc (name, "Standard") || strEQc (name, "STANDARD"))
     {
       _obj->start_angle = _obj->end_angle = deg2rad (90.0);
       _obj->num_lines = 2;
       _obj->lines = calloc (2, sizeof (Dwg_MLINESTYLE_line));
+      _obj->lines[0].parent = _obj;
       _obj->lines[0].offset = 0.5;
       _obj->lines[0].color = (BITCODE_CMC){ 256, 0 };
       _obj->lines[0].lt_index = 32767;
+      _obj->lines[0].parent = _obj;
       _obj->lines[1].offset = -0.5;
       _obj->lines[1].color = (BITCODE_CMC){ 256, 0 };
       _obj->lines[1].lt_index = 32767;
@@ -24594,6 +24597,7 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     _obj->paths = calloc (num_paths, sizeof (Dwg_HATCH_Path));
     for (unsigned i = 0; i < num_paths; i++)
       {
+        _obj->paths[i].parent = _obj;
         _obj->paths[i].num_boundary_handles = 1;
         _obj->paths[i].boundary_handles = calloc (1, sizeof (BITCODE_H));
         _obj->paths[i].boundary_handles[0]
@@ -25106,6 +25110,7 @@ dwg_add_EVALUATION_GRAPH (Dwg_Data *restrict dwg, const int has_graph,
   _obj->nodes = calloc (_obj->num_nodes, sizeof (Dwg_EVAL_Node));
   for (unsigned i = 0; i < num_nodes; i++)
     {
+      _obj->nodes[i].parent = _obj;
       _obj->nodes[i].id = i;
       _obj->nodes[i].edge_flags = 32;
       _obj->nodes[i].nextid = i + 1;
@@ -25118,6 +25123,7 @@ dwg_add_EVALUATION_GRAPH (Dwg_Data *restrict dwg, const int has_graph,
   _obj->edges = calloc (_obj->num_edges, sizeof (Dwg_EVAL_Edge));
   for (unsigned i = 0; i < _obj->num_edges; i++)
     {
+      _obj->edges[i].parent = _obj;
       _obj->edges[i].id = i;
       _obj->edges[i].nextid = -1;
       _obj->edges[i].e1 = -1; // incoming edges
