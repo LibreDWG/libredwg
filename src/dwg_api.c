@@ -22287,6 +22287,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   // APPID_CONTROL_OBJECT: (3.1.9) abs:9 [H 0]
   dwg_add_APPID (dwg, NULL);
   // DIMSTYLE_CONTROL_OBJECT: (3.1.A) abs:A [H 0]
+  // We don't create DIMSTYLE Standard upfront, only on demand.
   dwg_add_DIMSTYLE (dwg, NULL);
   // VX_CONTROL_OBJECT: (3.1.B) abs:B [H 0]
   dwg_add_VX (dwg, NULL); // TODO only <r2000
@@ -23377,10 +23378,24 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-#define DIMENSION_DEFAULTS                                              \
-  _obj->extrusion.z = 1.0;                                              \
-  if (dwg->header_vars.DIMSTYLE)                                        \
-    _obj->dimstyle = dwg_add_handleref (                                \
+static void
+dwg_require_DIMSTYLE_Standard (Dwg_Data *restrict dwg)
+{
+  if (!(dwg_find_tablehandle_silent (dwg, "Standard", "DIMSTYLE")))
+    {
+      Dwg_Object_DIMSTYLE *std
+          = dwg_add_DIMSTYLE (dwg, (const BITCODE_T) "Standard");
+      if (std)
+        dwg->header_vars.DIMSTYLE = dwg_add_handleref (
+            dwg, 5, dwg_obj_generic_handlevalue (std), NULL);
+    }
+}
+
+#define DIMENSION_DEFAULTS                                                    \
+    _obj->extrusion.z = 1.0;                                                  \
+    dwg_require_DIMSTYLE_Standard (dwg);                                      \
+    if (dwg->header_vars.DIMSTYLE)                                            \
+    _obj->dimstyle = dwg_add_handleref (                                      \
         dwg, 5, dwg->header_vars.DIMSTYLE->absolute_ref, NULL)
 
 EXPORT Dwg_Entity_DIMENSION_ALIGNED*
@@ -24105,7 +24120,7 @@ dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _obj->associated_annotation =
         dwg_add_handleref (dwg, 5, dwg_obj_generic_handlevalue ((void*)associated_annotation), obj);
       // use DIMSTYLE "Annotative"
-      annotative = dwg_find_tablehandle (dwg, "DIMSTYLE", "Annotative");
+      annotative = dwg_find_tablehandle (dwg, "Annotative", "DIMSTYLE");
       if (annotative)
         _obj->dimstyle
             = dwg_add_handleref (dwg, 5, annotative->absolute_ref, NULL);
@@ -24269,6 +24284,7 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
   if (name || strEQc (#record, "BLOCK_HEADER"))                               \
     {                                                                         \
       API_ADD_OBJECT (record);                                                \
+      _record = _obj;                                                         \
       _obj->name = strdup (name); /* FIXME write <r2007 only */               \
       LOG_TRACE (#record ".name = %s\n", name);                               \
       __VA_ARGS__                                                             \
@@ -24365,38 +24381,46 @@ EXPORT Dwg_Object_APPID *
 dwg_add_APPID (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
 {
   API_ADD_TABLE (APPID, APPID_CONTROL);
-  return _record;
 }
 
 EXPORT Dwg_Object_DIMSTYLE *
 dwg_add_DIMSTYLE (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
 {
-  API_ADD_TABLE (DIMSTYLE, DIMSTYLE_CONTROL, {
-    _obj->DIMTIH = 1;
-    _obj->DIMTOH = 1;
-    _obj->DIMALTD = 2;
-    _obj->DIMTOLJ = 1;
-    _obj->DIMFIT = 3;
-    _obj->DIMUNIT = 2;
-    _obj->DIMDEC = 4;
-    _obj->DIMTDEC = 4;
-    _obj->DIMALTU = 2;
-    _obj->DIMALTTD = 2;
-    _obj->DIMSCALE = 1.0;
-    _obj->DIMASZ = 0.18;
-    _obj->DIMEXO = 0.0625;
-    _obj->DIMDLI = 0.38;
-    _obj->DIMEXE = 0.18;
-    _obj->DIMTXT = 0.18;
-    _obj->DIMCEN = 0.09;
-    _obj->DIMALTF = 25.4;
-    _obj->DIMLFAC = 1.0;
-    _obj->DIMTFAC = 1.0;
-    _obj->DIMGAP = 0.09;
-    _obj->DIMCLRD = (BITCODE_CMC){ 0 };
-    _obj->DIMCLRE = (BITCODE_CMC){ 0 };
-    _obj->DIMCLRT = (BITCODE_CMC){ 0 };
-  });
+  if (name && strNE (name, "Standard"))
+    dwg_require_DIMSTYLE_Standard (dwg);
+  {
+    API_ADD_TABLE (DIMSTYLE, DIMSTYLE_CONTROL, {
+      _obj->DIMTIH = 1;
+      _obj->DIMTOH = 1;
+      _obj->DIMALTD = 2;
+      _obj->DIMTOLJ = 1;
+      _obj->DIMFIT = 3;
+      _obj->DIMUNIT = 2;
+      _obj->DIMDEC = 4;
+      _obj->DIMTDEC = 4;
+      _obj->DIMALTU = 2;
+      _obj->DIMALTTD = 2;
+      _obj->DIMLUNIT = 2;
+      _obj->DIMATFIT = 3;
+      _obj->DIMLWD = -2;
+      _obj->DIMLWE = -2;
+      _obj->DIMSCALE = strEQc (name, "Annotative") ? 0.0 : 1.0;
+      _obj->DIMASZ = 0.18;
+      _obj->DIMEXO = 0.0625;
+      _obj->DIMDLI = 0.38;
+      _obj->DIMEXE = 0.18;
+      _obj->DIMTXT = 0.18;
+      _obj->DIMCEN = 0.09;
+      _obj->DIMALTF = 25.4;
+      _obj->DIMLFAC = 1.0;
+      _obj->DIMTFAC = 1.0;
+      _obj->DIMGAP = 0.09;
+      _obj->DIMCLRD = (BITCODE_CMC){ 0 };
+      _obj->DIMCLRE = (BITCODE_CMC){ 0 };
+      _obj->DIMCLRT = (BITCODE_CMC){ 0 };
+      _obj->DIMTXSTY = dwg->header_vars.TEXTSTYLE;
+    });
+  }
 }
 
 EXPORT Dwg_Object_UCS *
