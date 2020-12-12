@@ -1,5 +1,5 @@
 /* ANSI-C code produced by gperf version 3.1 */
-/* Command-line: gperf --output-file src/dxfclasses.c src/dxfclasses.in  */
+/* Command-line: gperf --output-file src/dxfclasses.tmp src/dxfclasses.in  */
 /* Computed positions: -k'4,6,10,12' */
 
 #if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
