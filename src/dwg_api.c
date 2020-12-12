@@ -24070,10 +24070,12 @@ EXPORT Dwg_Entity_LEADER*
 dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const unsigned num_points,
                 const dwg_point_3d *restrict points,
-                const Dwg_Object *restrict associated_annotation, /* maybe NULL */
+                const Dwg_Entity_MTEXT *restrict associated_annotation, /* maybe NULL */
                 const unsigned type)
 {
   API_ADD_ENTITY (LEADER);
+  if (!num_points)
+    return NULL;
   _obj->points = calloc (num_points, sizeof (BITCODE_3BD));
   _obj->num_points = num_points;
   for (unsigned i = 0; i < num_points; i++)
@@ -24085,18 +24087,48 @@ dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _obj->points[i].y = points[i].y;
       _obj->points[i].z = points[i].z;
     }
+  _obj->origin.x = points[0].x;
+  _obj->origin.y = points[0].y;
+  _obj->origin.z = points[0].z;
   // TODO type => path_type + annot_type + arrowhead_on
-  if (associated_annotation) // TODO check valid types
-    _obj->associated_annotation =
-            dwg_add_handleref (dwg, 2, associated_annotation->handle.value, obj);
+  // TODO check more valid types
+  if (associated_annotation)
+    {
+      BITCODE_H annotative;
+      Dwg_Object *o = dwg_obj_generic_to_object (associated_annotation, &error);
+      if (error || !o || o->fixedtype != DWG_TYPE_MTEXT)
+        {
+          LOG_ERROR ("Invalid associated_annotation object");
+          return NULL;
+        }
+      _obj->annot_type = 1;
+      _obj->associated_annotation =
+        dwg_add_handleref (dwg, 5, dwg_obj_generic_handlevalue ((void*)associated_annotation), obj);
+      // use DIMSTYLE "Annotative"
+      annotative = dwg_find_tablehandle (dwg, "DIMSTYLE", "Annotative");
+      if (annotative)
+        _obj->dimstyle
+            = dwg_add_handleref (dwg, 5, annotative->absolute_ref, NULL);
+      else
+        { // create it
+          Dwg_Object_DIMSTYLE *annot
+              = dwg_add_DIMSTYLE (dwg, (const BITCODE_T) "Annotative");
+          if (annot)
+            _obj->dimstyle = dwg_add_handleref (
+                dwg, 5, dwg_obj_generic_handlevalue (annot), NULL);
+        }
+    }
   // defaults:
   _obj->x_direction.x = 1.0;
-  if (dwg->header_vars.DIMSTYLE)
+  if (!_obj->dimstyle && dwg->header_vars.DIMSTYLE)
     _obj->dimstyle = dwg_add_handleref (
         dwg, 5, dwg->header_vars.DIMSTYLE->absolute_ref, NULL);
   _obj->dimgap = dwg->header_vars.DIMGAP;
   _obj->box_height = dwg->header_vars.DIMTXT;
+  _obj->endptproj.y = -(_obj->box_height / 2.0);
   // TODO more calcs ...
+  _obj->box_width = 0.82;
+  _obj->arrowhead_type = 8;
   return _obj;
 }
 

@@ -327,7 +327,8 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
     case DWG_TYPE_LEADER:
       {
         const dwg_point_3d pts[] = { { 2.5, 0.0, 0.0 }, { 0.5, 0.0, 0.0 } };
-        dwg_add_LEADER (hdr, 2, pts, NULL, 15);
+        Dwg_Entity_MTEXT *annot = dwg_add_MTEXT (hdr, &pt1, 10.0, (const BITCODE_T) "test\ntext");
+        dwg_add_LEADER (hdr, 2, pts, annot, 15);
       }
       break;
     case DWG_TYPE_TOLERANCE:

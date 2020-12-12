@@ -6382,7 +6382,7 @@ EXPORT Dwg_Entity_LEADER*
 dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const unsigned num_points,
                 const dwg_point_3d *restrict points,
-                const Dwg_Object *restrict associated_annotation, /* maybe NULL */
+                const Dwg_Entity_MTEXT *restrict associated_annotation, /* maybe NULL */
                 const unsigned type) __nonnull ((1, 3));
 EXPORT Dwg_Entity_TOLERANCE*
 dwg_add_TOLERANCE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
