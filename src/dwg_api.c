@@ -17,6 +17,10 @@
  * modified by Reini Urban
  */
 
+#include "config.h"
+#ifdef HAVE_SINCOS
+#  define _GNU_SOURCE
+#endif
 #include <stdlib.h>
 #include <stdint.h>
 #include <inttypes.h>
@@ -24,7 +28,6 @@
 #include <time.h>
 #include <assert.h>
 
-#include "config.h"
 #ifdef HAVE_MALLOC_H
 #  include <malloc.h>
 #endif
@@ -24233,8 +24236,13 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       // to calculate the rotation matrix, starting with the start_angle.
       if (i == 0)
         {
+#if defined(HAVE_SINCOS) && !defined(__clang__)
+          double cosa, sina;
+          sincos (mlstyle->start_angle, &sina, &cosa);
+#else
           const double cosa = cos (mlstyle->start_angle);
           const double sina = sin (mlstyle->start_angle);
+#endif
           dir = _obj->verts[i].vertex_direction;
           // rotate by the mlstyle->start_angle
           dir.x = (dir.x * cosa) - (dir.y * sina);
