@@ -343,9 +343,9 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
     case DWG_TYPE_MLINE:
       {
         const dwg_point_3d pts[]
-            = { { 2.5, 0.0, 0.0 }, { 0.5, 0.0, 0.0 }, { 0.5, 2.0, 1.0 },
-                { 0.5, 1.0, 1.0 }, { 0.5, 1.0, 0.0 }, { 1.5, 1.0, 0.0 } };
-        dwg_add_MLINE (hdr, 6, pts);
+            = { { 3467.902646, 1494.544557, 0.0 }, { 3975.226253, 1705.812678, 0.0 },
+                { 4186.611142, 1579.051827, 0.0 }, { 3763.841434, 1198.769165, 0.0 } };
+        dwg_add_MLINE (hdr, 4, pts);
       }
       break;
     case DWG_TYPE_DIMSTYLE:

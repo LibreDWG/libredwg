@@ -24189,6 +24189,7 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict verts)
 {
   BITCODE_H mlstyref;
+  Dwg_Object_MLINESTYLE *mlstyle = NULL;
   API_ADD_ENTITY (MLINE);
   if (!num_verts)
     return NULL;
@@ -24206,14 +24207,63 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->mlinestyle = dwg_add_handleref (dwg, 5, mlstyref->absolute_ref, NULL);
   obj = dwg_ref_object (dwg, mlstyref);
   if (obj)
-    _obj->num_lines = obj->tio.object->tio.MLINESTYLE->num_lines;
+    {
+      mlstyle = obj->tio.object->tio.MLINESTYLE;
+      _obj->num_lines = mlstyle->num_lines;
+    }
   for (unsigned i = 0; i < num_verts; i++)
     {
+      //dwg_point_3d pt, ext;
+      BITCODE_3BD dir;
+      unsigned next = i + 1;
+      unsigned prev = i ? i - 1 : num_verts - 1;
+      if (next == num_verts)
+        next = 0;
       _obj->verts[i].parent = _obj;
       _obj->verts[i].vertex.x = verts[i].x;
       _obj->verts[i].vertex.y = verts[i].y;
       _obj->verts[i].vertex.z = verts[i].z;
-      // TODO calc vertex_direction, miter_direction
+      // calc vertex_direction
+      dwg_geom_normalize ((dwg_point_3d *)&dir,
+                              (dwg_point_3d){ verts[next].x - verts[i].x,
+                                              verts[next].y - verts[i].y,
+                                              verts[next].z - verts[i].z });
+      _obj->verts[i].vertex_direction = dir;
+      // FIXME miter_direction = seems to be the extrusion (=normal) of the vertex_direction
+      // to calculate the rotation matrix, starting with the start_angle.
+      if (i == 0)
+        {
+          const double cosa = cos (mlstyle->start_angle);
+          const double sina = sin (mlstyle->start_angle);
+          dir = _obj->verts[i].vertex_direction;
+          // rotate by the mlstyle->start_angle
+          dir.x = (dir.x * cosa) - (dir.y * sina);
+          dir.y = (dir.x * sina) + (dir.y * cosa);
+          //dwg_geom_normalize ((dwg_point_3d *)&_obj->verts[i].miter_direction, dir);
+          _obj->verts[i].miter_direction = dir; // already normalized
+        }
+      else
+        {
+          // TODO v[prev]->vert_dir, v[i]->vert_dir, extrusion, v[0]->miter_dir
+          dwg_point_3d ax, ay, az;
+          memcpy (&az, &dir, sizeof (dwg_point_3d));
+          if ((fabs (az.x) < 1 / 64.0) && (fabs (az.y) < 1 / 64.0))
+            {
+              dwg_point_3d tmp = { 0.0, 1.0, 0.0 };
+              dwg_geom_cross (&tmp, tmp, az);
+              dwg_geom_normalize (&ax, tmp);
+            }
+          else
+            {
+              dwg_point_3d tmp = { 0.0, 0.0, 1.0 };
+              dwg_geom_cross (&tmp, tmp, az);
+              dwg_geom_normalize (&ax, tmp);
+            }
+          dwg_geom_cross (&ay, az, ax);
+          dwg_geom_normalize (&ay, ay);
+          memcpy (&dir, &ay, sizeof (dwg_point_3d));
+          _obj->verts[i].miter_direction = dir;
+        }
       _obj->verts[i].lines = calloc (_obj->num_lines, sizeof (Dwg_MLINE_line));
       for (unsigned j = 0; j < _obj->num_lines; j++)
         {

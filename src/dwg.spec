@@ -2740,7 +2740,7 @@ DWG_ENTITY (MLINE)
   SUBCLASS (AcDbMline)
   DXF { FIELD_HANDLE (mlinestyle, 5, 340); }
   FIELD_BD (scale, 40);
-  FIELD_RC (justification, 70); /* spec-typo? Spec says EC instead of RC */
+  FIELD_RC (justification, 70); /* spec typo. spec says EC instead of RC */
   FIELD_3DPOINT (base_point, 10);
   FIELD_3DPOINT (extrusion, 210);
   FIELD_BS (flags, 71);
