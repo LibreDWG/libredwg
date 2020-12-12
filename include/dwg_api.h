@@ -6176,6 +6176,7 @@ dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const dwg_point_3d *restrict ins_pt,
               const double height) __nonnull_all;
 
+/* Experimental. Does not work yet properly */
 /* This adds the ATTRIB and ENDBLK to the insert,
    and the ATTDEF and ENDBLK to the block, if missing.
    flags, bitmask of:
@@ -6199,6 +6200,7 @@ dwg_add_BLOCK (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 EXPORT Dwg_Entity_ENDBLK*
 dwg_add_ENDBLK (Dwg_Object_BLOCK_HEADER *restrict blkhdr) __nonnull_all;
 
+/* Experimental. Does not work yet properly */
 EXPORT Dwg_Entity_INSERT*
 dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const dwg_point_3d *restrict ins_pt,
@@ -6207,6 +6209,7 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const double yscale,
                 const double zscale,
                 const double rotation) __nonnull_all;
+/* Experimental. Does not work yet properly */
 EXPORT Dwg_Entity_MINSERT*
 dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                  const dwg_point_3d *restrict ins_pt,
@@ -6312,6 +6315,7 @@ dwg_add_TRACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_2d *restrict pt2,
                const dwg_point_2d *restrict pt3,
                const dwg_point_2d *restrict pt4) __nonnull_all;
+/* Experimental. Does not work yet properly */
 EXPORT Dwg_Entity_SHAPE*
 dwg_add_SHAPE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const BITCODE_T restrict name,
@@ -6326,6 +6330,7 @@ dwg_add_ELLIPSE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict center,
                const double major_axis,
                const double axis_ratio) __nonnull_all;
+/* Experimental. Does not work yet properly */
 EXPORT Dwg_Entity_SPLINE*
 dwg_add_SPLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const int num_fit_pts,
@@ -6372,6 +6377,7 @@ EXPORT Dwg_Entity_OLE2FRAME*
 dwg_add_OLE2FRAME (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                    const dwg_point_3d *restrict pt1,
                    const dwg_point_3d *restrict pt2) __nonnull_all;
+/* Experimental. Does not work yet properly */
 EXPORT Dwg_Entity_MTEXT*
 dwg_add_MTEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict ins_pt,
@@ -6458,6 +6464,7 @@ dwg_add_LAYOUT (Dwg_Object *restrict vp,
                 const BITCODE_T restrict name,
                 const BITCODE_T restrict canonical_media_name) __nonnull_all;
 
+/* Experimental. Does not work yet properly. */
 // Called Raster in VBA
 EXPORT Dwg_Entity_IMAGE*
 dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
@@ -6668,6 +6675,7 @@ EXPORT Dwg_Object_GROUP*
 dwg_add_GROUP (Dwg_Data *restrict dwg,
                const BITCODE_T restrict name /* maybe NULL */) __nonnull ((1));
 
+/* Experimental. Does not work yet properly */
 EXPORT Dwg_Object_MLINESTYLE *
 dwg_add_MLINESTYLE (Dwg_Data *restrict dwg,
                     const BITCODE_T restrict name) __nonnull_all;
