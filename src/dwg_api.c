@@ -22038,7 +22038,7 @@ dwg_entity_owner (const void* _ent)
     return hdr->tio.object->tio.BLOCK_HEADER;
 }
 
-static void add_reactor (Dwg_Object_Object *obj, Dwg_Object_Ref *ref)
+static void add_reactor (Dwg_Object_Object *obj, unsigned long absolute_ref)
 {
   if (obj->num_reactors)
     {
@@ -22050,7 +22050,7 @@ static void add_reactor (Dwg_Object_Object *obj, Dwg_Object_Ref *ref)
       obj->num_reactors = 1;
       obj->reactors = calloc (1, sizeof (BITCODE_H));
     }
-  obj->reactors[obj->num_reactors - 1] = ref;
+  obj->reactors[obj->num_reactors - 1] = dwg_add_handleref (obj->dwg, 4, absolute_ref, NULL);
 }
 
 // check if radian or degree, need to normalize.
@@ -22311,7 +22311,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
       plh = dwg_add_PLACEHOLDER (dwg); // PLOTSTYLE
       obj = dwg_obj_generic_to_object (plh, &error);
       obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 0xE, obj);
-      add_reactor (obj->tio.object, dwg_add_handleref (dwg, 4, 0xE, NULL));
+      add_reactor (obj->tio.object, 0xE);
     }
   else
     {
@@ -22368,7 +22368,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   dwg->header_vars.CMLSTYLE
       = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
   obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 0x17, obj);
-  add_reactor (obj->tio.object, dwg_add_handleref (dwg, 4, 0x17, NULL));
+  add_reactor (obj->tio.object, 0x17);
   // dwg_add_PLACEHOLDER (dwg); // MLINESTYLE 0.1.18
 
   // DICTIONARY ACAD_PLOTSETTINGS: (5.1.19)
@@ -23920,7 +23920,7 @@ dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
           dwg_add_DICTIONARY_item (nod->tio.object->tio.DICTIONARY, name, obj->handle.value);
           /* owner is relative, reactor absolute */
           obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, nod->handle.value, obj);
-          add_reactor (obj->tio.object, dwg_add_handleref (dwg, 4, nod->handle.value, NULL));
+          add_reactor (obj->tio.object, nod->handle.value);
         }
     }
   else /* not a direct NOD item */
@@ -24029,7 +24029,7 @@ dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
             dwg_add_DICTIONARY_item (nod->tio.object->tio.DICTIONARY, name, obj->handle.value);
             /* owner is relative, reactor absolute */
             obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, nod->handle.value, obj);
-            add_reactor (obj->tio.object, dwg_add_handleref (dwg, 4, nod->handle.value, NULL));
+            add_reactor (obj->tio.object, nod->handle.value);
           }
       }
     else /* not a direct NOD item */
@@ -24123,6 +24123,7 @@ dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _obj->annot_type = 1;
       _obj->associated_annotation =
         dwg_add_handleref (dwg, 5, dwg_obj_generic_handlevalue ((void*)associated_annotation), obj);
+      add_reactor (o->tio.object, obj->handle.value);
       // use DIMSTYLE "Annotative"
       annotative = dwg_find_tablehandle (dwg, "Annotative", "DIMSTYLE");
       if (annotative)
@@ -24482,7 +24483,7 @@ dwg_add_GROUP (Dwg_Data *restrict dwg, const BITCODE_T restrict name /* maybe NU
     {
       dictobj = dwg_obj_generic_to_object (dict, &error);
       obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, dictobj->handle.value, NULL);
-      add_reactor (obj->tio.object, obj->tio.object->ownerhandle);
+      add_reactor (obj->tio.object, dictobj->handle.value);
     }
  
    _obj->selectable = 1;
@@ -25013,7 +25014,7 @@ dwg_add_LAYOUT (Dwg_Object *restrict vp,
         dictobj = dwg_obj_generic_to_object (dict, &error);
         obj->tio.object->ownerhandle
             = dwg_add_handleref (dwg, 4, dictobj->handle.value, obj);
-        add_reactor (obj->tio.object, dwg_add_handleref (dwg, 4, dictobj->handle.value, NULL));
+        add_reactor (obj->tio.object, dictobj->handle.value);
         if (!dwg->header_vars.DICTIONARY_LAYOUT || !dwg->header_vars.DICTIONARY_LAYOUT->absolute_ref)
           dwg->header_vars.DICTIONARY_LAYOUT
               = dwg_add_handleref (dwg, 5, dictobj->handle.value, NULL);
@@ -25070,7 +25071,7 @@ dwg_add_PROXY_OBJECT (Dwg_Data *restrict dwg, BITCODE_T name, BITCODE_T key
     API_ADD_OBJECT (PROXY_OBJECT);
     dwg_add_DICTIONARY_item (nod->tio.object->tio.DICTIONARY, key, obj->handle.value);
     obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, dictobj->handle.value, NULL);
-    add_reactor (obj->tio.object, obj->tio.object->ownerhandle);
+    add_reactor (obj->tio.object, dictobj->handle.value);
     _obj->class_id = 499;
     return _obj;
   }
@@ -26730,8 +26731,7 @@ dwg_add_SPATIAL_FILTER (Dwg_Entity_INSERT *restrict insert /*, clip_verts... */)
         = dwg_add_handleref (dwg, 2, spatial->handle.value, filter);
     spatial->tio.object->ownerhandle
         = dwg_add_handleref (dwg, 5, filter->handle.value, spatial);
-    add_reactor (spatial->tio.object,
-                 dwg_add_handleref (dwg, 4, filter->handle.value, NULL));
+    add_reactor (spatial->tio.object, filter->handle.value);
   }
   {
     API_ADD_OBJECT (SPATIAL_FILTER);
@@ -26739,8 +26739,7 @@ dwg_add_SPATIAL_FILTER (Dwg_Entity_INSERT *restrict insert /*, clip_verts... */)
         = dwg_add_handleref (dwg, 2, obj->handle.value, filter);
     obj->tio.object->ownerhandle
         = dwg_add_handleref (dwg, 5, spatial->handle.value, obj);
-    add_reactor (obj->tio.object,
-                 dwg_add_handleref (dwg, 4, spatial->handle.value, obj));
+    add_reactor (obj->tio.object, spatial->handle.value);
     // TODO normal -> matrix
     _obj->transform[0] = 1.0;
     _obj->transform[5] = 1.0;
