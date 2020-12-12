@@ -24075,10 +24075,15 @@ dwg_add_MTEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->ins_pt.y   = ins_pt->y;
   _obj->ins_pt.z   = ins_pt->z;
   _obj->rect_width = rect_width;
-  // defaults:
+  // defaults:  
   _obj->x_axis_dir.x = 1.0;
   _obj->linespace_style = 1;
   _obj->linespace_factor = 1.0;
+  _obj->text_height = dwg->header_vars.TEXTSIZE;
+  _obj->extents_height = dwg->header_vars.TEXTSIZE;
+  _obj->extents_width = _obj->rect_width;
+  _obj->attachment = 1;
+  _obj->flow_dir = 1;
   if (dwg->header_vars.TEXTSTYLE)
     _obj->style = dwg_add_handleref (
         dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
