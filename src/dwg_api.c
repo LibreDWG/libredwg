@@ -22925,6 +22925,7 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const double zscale,
                 const double rotation)
 {
+  BITCODE_H hdrref;
   API_ADD_ENTITY (INSERT);
   ADD_CHECK_3DPOINT (ins_pt);
   ADD_CHECK_DOUBLE (xscale);
@@ -22939,12 +22940,13 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   //TODO scale_flag
   _obj->rotation     = rotation;
   ADD_CHECK_ANGLE (_obj->rotation);
-  _obj->block_header = dwg_find_tablehandle (dwg, name, "BLOCK");
-  if (_obj->block_header)
+  hdrref = dwg_find_tablehandle (dwg, name, "BLOCK");
+  if (hdrref)
     {
-      Dwg_Object *hdr = dwg_ref_object (dwg, _obj->block_header);
+      Dwg_Object *hdr = dwg_ref_object (dwg, hdrref);
       if (!hdr)
         return _obj;
+      _obj->block_header = dwg_add_handleref (dwg, 5, hdr->handle.value, NULL);
       blkhdr = hdr->tio.object->tio.BLOCK_HEADER;
       blkhdr->used = 1;
       blkhdr->is_xref_ref = 1;
@@ -22973,6 +22975,7 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                  const double row_spacing,
                  const double col_spacing)
 {
+  BITCODE_H hdrref;
   API_ADD_ENTITY (MINSERT);
   ADD_CHECK_3DPOINT (ins_pt);
   ADD_CHECK_DOUBLE (xscale);
@@ -22991,12 +22994,13 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->num_cols     = (BITCODE_BS)num_cols;
   _obj->row_spacing  = row_spacing;
   _obj->col_spacing  = col_spacing;
-  _obj->block_header = dwg_find_tablehandle (dwg, name, "BLOCK");
-  if (_obj->block_header)
+  hdrref = dwg_find_tablehandle (dwg, name, "BLOCK");
+  if (hdrref)
     {
-      Dwg_Object *hdr = dwg_ref_object (dwg, _obj->block_header);
+      Dwg_Object *hdr = dwg_ref_object (dwg, hdrref);
       if (!hdr)
         return _obj;
+      _obj->block_header = dwg_add_handleref (dwg, 5, hdr->handle.value, NULL);
       blkhdr = hdr->tio.object->tio.BLOCK_HEADER;
       blkhdr->used = 1;
       blkhdr->is_xref_ref = 1;
