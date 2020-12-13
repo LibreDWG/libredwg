@@ -870,26 +870,26 @@ without any additional table records or entities. Creates ModelSpace, PaperSpace
 and basic Dictionaries.
 @end deftypefn
 
-For each OBJECT and ENTITY type there exists an @b{dwg_add_OBJECT} function, which takes the owner
+For each OBJECT and ENTITY type there exists a specific @code{dwg_add_<OBJECT>} function, which takes the owner
 and some default arguments. Entities are normally added to a block header, like modelspace,
 paperspace or any block. Objects are normally added to the dwg, or to some other object or entity.
 E.g.
 @deftypefn {Function} Dwg_Entity_LINE *line = dwg_add_LINE (Dwg_Object_BLOCK_HEADER *modelspace,
                                                             dwg_point_3d *start_pt, dwg_point_3d *end_pt)
 @end deftypefn
-@deftypefn {Function} Dwg_Object_LAYER *layer = dwg_add_LAYER (Dwg_Data *dwg, char *name)
+@deftypefn {Function} Dwg_Object_LAYER *layer = dwg_add_LAYER (Dwg_Data *dwg, const char *name)
 Adds a new layer the Layer Table, i.e. creates the new LAYER object, and adds it to LAYER_CONTROL object,
 the list of layers.
 @end deftypefn
 
-Names and strings are currently of type BITCODE_T (i.e. versions specific TU or TV types, either UCS-2 unicode or
-single-byte codepage), but will changed to UTF-8 only, as with the @b{dynapi}. Only internally you
-will have to deal with 2 different text represenations: unicode since r2007, ascii before.
+Names and strings are encoded as UTF-8 and will be translated to type BITCODE_T (i.e. versions specific
+TU or TV types, either UCS-2 unicode or single-byte codepage) internally, as with the @b{dynapi}. Only
+internally you will have to deal with 2 different text represenations: unicode since r2007, ascii before.
 
 To understand the object model for the add API see some VBA Object model documentation, such as
 e.g. @url{http://entercad.ru/acadauto.en/}.
 
-The new add API mostly handles the direct @code{Dwg_Entity_ENTITY} structs, not the generic @code{Dwg_Object} structs.
+The new add API mostly handles the direct @code{Dwg_Entity_ENTITY} structs, not all the generic @code{Dwg_Object} structs.
 Thus you can access the object specific fields directly, the common fields, not so easily.
 
 The DWG Document consists of 3 basic entity containers @code{ModelSpace}, @code{PaperSpace} and @code{Blocks}, plus
@@ -901,7 +901,7 @@ Return 0 or -1 if successful, otherwise DWG_ERR_OUTOFMEM. -1 is the array was re
 @end deftypefn
 
 Then for each object or entity type there is a
-@deftypefn {Function} int dwg_setup_OBJECT (Dwg_Object *@var{obj})
+@deftypefn {Function} int dwg_setup_<OBJECT> (Dwg_Object *@var{obj})
 Initializes an object for the given OBJECT or ENTITY type, with all fields being zero'ed.
 This does not initialize the @var{obj} size, type, address, handlestream_size, bitsize fields.
 @end deftypefn
@@ -910,7 +910,7 @@ The encoder is driven by the fields definition in the @file{src/dwg.spec} and
 the generated @file{src/dynapi.c}, which adds each field to the object.
 This is done by @file{src/encode.c} or any @file{src/in_*.c} import module.
 
-@deftypefn {Function} int dwg_encode_OBJECT (Bit_Chain *@var{dat}, Dwg_Object *@var{obj})
+@deftypefn {Function} int dwg_encode_<OBJECT> (Bit_Chain *@var{dat}, Dwg_Object *@var{obj})
 Encodes the DWG bitstream from the fields of the object.
 @end deftypefn
 
