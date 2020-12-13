@@ -6146,6 +6146,10 @@ EXPORT dwg_class *dwg_get_class (const dwg_data *dwg, unsigned int index);
 EXPORT Dwg_Data *dwg_add_Document (const Dwg_Version_Type version,
                                    const int imperial, const int loglevel);
 
+/* Convert UTF-8 strings to BITCODE_T fields. Returns a copy of the string. */
+EXPORT BITCODE_T dwg_add_u8_input (Dwg_Data *restrict dwg,
+                                   const char *restrict u8str) __nonnull_all;
+
 /* no proxy, no is_zombie */
 /* returns -1 on error, 0 on success */
 EXPORT int
@@ -6477,9 +6481,6 @@ dwg_add_LARGE_RADIAL_DIMENSION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                                 const dwg_point_3d *restrict ovr_center,
                                 const dwg_point_3d *restrict jog_point,
                                 const double leader_len) __nonnull_all;
-EXPORT Dwg_Entity_UNDERLAY*
-dwg_add_UNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                  const dwg_point_3d *restrict ins_pt) __nonnull_all;
 
 /* All the ACSH methods and 3d primitives are still experimental.
    They do not work yet properly */
@@ -6628,9 +6629,8 @@ dwg_add_TABLE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const double col_width) __nonnull_all;
 */
 
-/* Tables.
-   The names are really BITCODE_T, but we dont support writing TU yet.
-   TODO: take utf8 and convert to TU if needed (dxf).
+/* Tables:
+   The names are all accepted as UTF-8 only.
    On NULL names just create the CONTROL object/resp. NOD entry.
  */
 Dwg_Object_BLOCK_CONTROL*
@@ -6900,6 +6900,7 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_NO_DWG_ADD_TEXTOBJECTCONTEXTDATA
 #define HAVE_NO_DWG_ADD_TVDEVICEPROPERTIES
 #define HAVE_NO_DWG_ADD_UCS_CONTROL
+#define HAVE_NO_DWG_ADD_UNDERLAY
 #define HAVE_NO_DWG_ADD_UNDERLAYDEFINITION
 #define HAVE_NO_DWG_ADD_UNKNOWN_ENT
 #define HAVE_NO_DWG_ADD_UNKNOWN_OBJ
@@ -7001,7 +7002,6 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_DWG_ADD_TOLERANCE
 #define HAVE_DWG_ADD_TRACE
 #define HAVE_DWG_ADD_UCS
-#define HAVE_DWG_ADD_UNDERLAY
 #define HAVE_DWG_ADD_VBA_PROJECT
 #define HAVE_DWG_ADD_VIEW
 #define HAVE_DWG_ADD_VIEWPORT
