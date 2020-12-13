@@ -267,6 +267,7 @@ EXPORT Dwg_Entity_WIPEOUT** dwg_getall_WIPEOUT (Dwg_Object_Ref* hdr);
 
 EXPORT Dwg_Object_ACSH_BOOLEAN_CLASS** dwg_getall_ACSH_BOOLEAN_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ACSH_BOX_CLASS** dwg_getall_ACSH_BOX_CLASS (Dwg_Data* dwg);
+EXPORT Dwg_Object_ACSH_CONE_CLASS** dwg_getall_ACSH_CONE_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ACSH_CYLINDER_CLASS** dwg_getall_ACSH_CYLINDER_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ACSH_FILLET_CLASS** dwg_getall_ACSH_FILLET_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ACSH_HISTORY_CLASS** dwg_getall_ACSH_HISTORY_CLASS (Dwg_Data* dwg);
@@ -342,7 +343,6 @@ EXPORT Dwg_Object_XRECORD** dwg_getall_XRECORD (Dwg_Data* dwg);
 /* unstable */
 EXPORT Dwg_Object_ACSH_BREP_CLASS** dwg_getall_ACSH_BREP_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ACSH_CHAMFER_CLASS** dwg_getall_ACSH_CHAMFER_CLASS (Dwg_Data* dwg);
-EXPORT Dwg_Object_ACSH_CONE_CLASS** dwg_getall_ACSH_CONE_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ACSH_PYRAMID_CLASS** dwg_getall_ACSH_PYRAMID_CLASS (Dwg_Data* dwg);
 EXPORT Dwg_Object_ASSOCACTION** dwg_getall_ASSOCACTION (Dwg_Data* dwg);
 EXPORT Dwg_Object_ASSOCBLENDSURFACEACTIONBODY** dwg_getall_ASSOCBLENDSURFACEACTIONBODY (Dwg_Data* dwg);
@@ -576,6 +576,7 @@ EXPORT Dwg_Entity_WIPEOUT* dwg_object_to_WIPEOUT (Dwg_Object* obj);
 #endif
 EXPORT Dwg_Object_ACSH_BOOLEAN_CLASS* dwg_object_to_ACSH_BOOLEAN_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ACSH_BOX_CLASS* dwg_object_to_ACSH_BOX_CLASS (Dwg_Object* obj);
+EXPORT Dwg_Object_ACSH_CONE_CLASS* dwg_object_to_ACSH_CONE_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ACSH_CYLINDER_CLASS* dwg_object_to_ACSH_CYLINDER_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ACSH_FILLET_CLASS* dwg_object_to_ACSH_FILLET_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ACSH_HISTORY_CLASS* dwg_object_to_ACSH_HISTORY_CLASS (Dwg_Object* obj);
@@ -651,7 +652,6 @@ EXPORT Dwg_Object_XRECORD* dwg_object_to_XRECORD (Dwg_Object* obj);
 /* unstable */
 EXPORT Dwg_Object_ACSH_BREP_CLASS* dwg_object_to_ACSH_BREP_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ACSH_CHAMFER_CLASS* dwg_object_to_ACSH_CHAMFER_CLASS (Dwg_Object* obj);
-EXPORT Dwg_Object_ACSH_CONE_CLASS* dwg_object_to_ACSH_CONE_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ACSH_PYRAMID_CLASS* dwg_object_to_ACSH_PYRAMID_CLASS (Dwg_Object* obj);
 EXPORT Dwg_Object_ASSOCACTION* dwg_object_to_ASSOCACTION (Dwg_Object* obj);
 EXPORT Dwg_Object_ASSOCBLENDSURFACEACTIONBODY* dwg_object_to_ASSOCBLENDSURFACEACTIONBODY (Dwg_Object* obj);

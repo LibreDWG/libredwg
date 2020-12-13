@@ -8007,6 +8007,7 @@ typedef struct _dwg_object_object
     /* untyped > 500 */
     Dwg_Object_ACSH_BOOLEAN_CLASS *ACSH_BOOLEAN_CLASS;
     Dwg_Object_ACSH_BOX_CLASS *ACSH_BOX_CLASS;
+    Dwg_Object_ACSH_CONE_CLASS *ACSH_CONE_CLASS;
     Dwg_Object_ACSH_CYLINDER_CLASS *ACSH_CYLINDER_CLASS;
     Dwg_Object_ACSH_FILLET_CLASS *ACSH_FILLET_CLASS;
     Dwg_Object_ACSH_HISTORY_CLASS *ACSH_HISTORY_CLASS;
@@ -8057,7 +8058,6 @@ typedef struct _dwg_object_object
     /* unstable */
     Dwg_Object_ACSH_BREP_CLASS *ACSH_BREP_CLASS;
     Dwg_Object_ACSH_CHAMFER_CLASS *ACSH_CHAMFER_CLASS;
-    Dwg_Object_ACSH_CONE_CLASS *ACSH_CONE_CLASS;
     Dwg_Object_ACSH_PYRAMID_CLASS *ACSH_PYRAMID_CLASS;
     Dwg_Object_ASSOCACTION *ASSOCACTION;
     Dwg_Object_ASSOCBLENDSURFACEACTIONBODY *ASSOCBLENDSURFACEACTIONBODY;
@@ -9271,6 +9271,7 @@ EXPORT int dwg_setup_SECTIONOBJECT (Dwg_Object *obj);
 EXPORT int dwg_setup_UNDERLAY (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BOOLEAN_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BOX_CLASS (Dwg_Object *obj);
+EXPORT int dwg_setup_ACSH_CONE_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CYLINDER_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_FILLET_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_HISTORY_CLASS (Dwg_Object *obj);
@@ -9325,7 +9326,6 @@ EXPORT int dwg_setup_LARGE_RADIAL_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_WIPEOUT (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BREP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CHAMFER_CLASS (Dwg_Object *obj);
-EXPORT int dwg_setup_ACSH_CONE_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_PYRAMID_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCACTION (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCBLENDSURFACEACTIONBODY (Dwg_Object *obj);

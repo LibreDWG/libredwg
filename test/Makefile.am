@@ -9,6 +9,7 @@ TESTDATA = \
     test-data/2000/Arc.txt \
     test-data/2000/Constraints.dwg \
     test-data/2000/Constraints.dxf \
+    test-data/2000/Cone.dwg \
     test-data/2000/ConstructionLine.dwg \
     test-data/2000/ConstructionLine.jpg \
     test-data/2000/ConstructionLine.txt \

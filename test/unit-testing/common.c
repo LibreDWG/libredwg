@@ -355,6 +355,10 @@ main (int argc, char *argv[])
               error += test_code (prefix, "2007/ATMOS-DC22S.dwg", cov);
               error += test_code (prefix, "2013/JW.dwg", cov); // not in DIST
             }
+          if (DWG_TYPE == DWG_TYPE_ACSH_CONE_CLASS)
+            {
+              error += test_code (prefix, "2000/Cone.dwg", cov);
+            }
           if (DWG_TYPE == DWG_TYPE_ASSOCVARIABLE ||
               DWG_TYPE == DWG_TYPE_ASSOCVALUEDEPENDENCY ||
               DWG_TYPE == DWG_TYPE_ASSOCGEOMDEPENDENCY ||
