@@ -32,6 +32,8 @@ static int cnt = 0;
 #include "dwg_api.h"
 #include "tests_common.h"
 #include "classes.h"
+#include "bits.h"
+#include "out_dxf.h"
 
 static unsigned char* hex2bin (const char *hex)
 {
@@ -46,7 +48,7 @@ static unsigned char* hex2bin (const char *hex)
 }
 
 static int
-test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
+test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dxf)
 {
   int error;
   struct stat attrib;
@@ -58,6 +60,8 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
   dwg_point_3d pt2 = {2.5, 1.5, 0.0};
   Dwg_Object_BLOCK_HEADER *hdr;
   int n_failed;
+  char dwgfile[1024];
+  strcpy (dwgfile, file);
 
   cnt++;
   if (debug)
@@ -70,7 +74,9 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       ok ("LIBREDWG_DEBUG cnt %d %s", cnt, name);
     }
 
-  dwg = dwg_add_Document(R_2000, 0 /*metric/iso */, loglevel /* static global */);
+  dwg = dwg_add_Document (as_dxf ? R_2018 : R_2000,
+                          0 /*metric/iso */,
+                          loglevel /* static global */);
   mspace =  dwg_model_space_object (dwg);
   mspace_ref =  dwg_model_space_ref (dwg);
   hdr = mspace->tio.object->tio.BLOCK_HEADER;
@@ -677,19 +683,43 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
       fail ("No add method yet type %s", name);
     }
 
+  if (as_dxf)
+    strcat (dwgfile, ".dxf");
+  else
+    strcat (dwgfile, ".dwg");
   if (!stat (dwgfile, &attrib))
       unlink (dwgfile);
-  error = dwg_write_file (dwgfile, dwg);
-  if (error >= DWG_ERR_CRITICAL)
-    return 1;
-  dwg_free (dwg);
-
-  error = dwg_read_file (dwgfile, dwg);
+  if (as_dxf)
+    {
+      Bit_Chain dat = { 0 };
+      dat.version = dwg->header.version;
+      dat.from_version = dwg->header.from_version;
+      dat.fh = fopen (dwgfile, "wb");
+      error = dwg_write_dxf (&dat, dwg);
+      fclose (dat.fh);
+    }
+  else
+    error = dwg_write_file (dwgfile, dwg);
   if (error >= DWG_ERR_CRITICAL)
     {
-      fail ("read %s", name);
+      fail ("write %s to %s", name, dwgfile);
+      return 1;
+    }
+  else
+    ok ("write %s to %s", name, dwgfile);
+  dwg_free (dwg);
+
+  if (as_dxf)
+    error = dxf_read_file (dwgfile, dwg);
+  else
+    error = dwg_read_file (dwgfile, dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      fail ("read %s from %s", name, dwgfile);
       return 2;
     }
+  else
+    ok ("read %s from %s", name, dwgfile);
   // now we have a different ref!
   mspace_ref =  dwg_model_space_ref (dwg);
 
@@ -813,7 +843,7 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
 int
 main (int argc, char *argv[])
 {
-  int error;
+  int error = 0;
   char *trace = getenv ("LIBREDWG_TRACE");
   char *debugenv = getenv ("LIBREDWG_DEBUG");
   if (trace)
@@ -825,60 +855,63 @@ main (int argc, char *argv[])
   else
     debug = 0;
 
-  error = test_add (DWG_TYPE_LINE, "add_line_2000.dwg");
-  error = test_add (DWG_TYPE_TEXT, "add_text_2000.dwg");
-  error = test_add (DWG_TYPE_CIRCLE, "add_circle_2000.dwg");
-  error = test_add (DWG_TYPE_ARC, "add_arc_2000.dwg");
-  error = test_add (DWG_TYPE_LWPOLYLINE, "add_lwpline_2000.dwg");
-  error = test_add (DWG_TYPE_POLYLINE_2D, "add_pl2d_2000.dwg");
-  error = test_add (DWG_TYPE_POLYLINE_3D, "add_pl3d_2000.dwg");
-  error = test_add (DWG_TYPE_POLYLINE_MESH, "add_pmesh_2000.dwg");
-  error = test_add (DWG_TYPE_POLYLINE_PFACE, "add_pface_2000.dwg");
-  error = test_add (DWG_TYPE_SPLINE, "add_spline_2000.dwg");
-  error = test_add (DWG_TYPE_INSERT, "add_insert_2000.dwg");
-  error = test_add (DWG_TYPE_MINSERT, "add_minsert_2000.dwg");
-  if (debug == cnt || debug == -1)
-    error = test_add (DWG_TYPE_ATTRIB, "add_attrib_2000.dwg");
-  else
-    ok ("skip ATTRIB TODO add_Attribute");
-  error = test_add (DWG_TYPE_DIMENSION_ALIGNED, "add_dimali_2000.dwg");
-  error = test_add (DWG_TYPE_DIMENSION_ANG2LN, "add_dimang_2000.dwg");
-  error = test_add (DWG_TYPE_DIMENSION_ANG3PT, "add_dim3pt_2000.dwg");
-  error = test_add (DWG_TYPE_DIMENSION_DIAMETER, "add_dimdia_2000.dwg");
-  error = test_add (DWG_TYPE_DIMENSION_ORDINATE, "add_dimord_2000.dwg");
-  error = test_add (DWG_TYPE_DIMENSION_RADIUS, "add_dimrad_2000.dwg");
-  error = test_add (DWG_TYPE_DIMENSION_LINEAR, "add_dimlin_2000.dwg");
-  error = test_add (DWG_TYPE_POINT, "add_point_2000.dwg");
-  error = test_add (DWG_TYPE__3DFACE, "add_3dface_2000.dwg");
-  error = test_add (DWG_TYPE_SOLID, "add_solid_2000.dwg");
-  error = test_add (DWG_TYPE_TRACE, "add_trace_2000.dwg");
-  error = test_add (DWG_TYPE_SHAPE, "add_shape_2000.dwg");
-  error = test_add (DWG_TYPE_VIEWPORT, "add_viewport_2000.dwg");
-  error = test_add (DWG_TYPE_ELLIPSE, "add_ellipse_2000.dwg");
-  error = test_add (DWG_TYPE_REGION, "add_region_2000.dwg");
-  error = test_add (DWG_TYPE_RAY, "add_ray_2000.dwg");
-  error = test_add (DWG_TYPE_XLINE, "add_xline_2000.dwg");
-  error = test_add (DWG_TYPE_DICTIONARY, "add_dict_2000.dwg");
-  error = test_add (DWG_TYPE_DICTIONARYWDFLT, "add_dictwdflt_2000.dwg");
-  error = test_add (DWG_TYPE_OLE2FRAME, "add_ole2frame_2000.dwg");
-  error = test_add (DWG_TYPE_MTEXT, "add_mtext_2000.dwg");
-  error = test_add (DWG_TYPE_LEADER, "add_leader_2000.dwg");
-  error = test_add (DWG_TYPE_TOLERANCE, "add_tolerance_2000.dwg");
-  error = test_add (DWG_TYPE_MLINESTYLE, "add_mlstyle_2000.dwg");
-  error = test_add (DWG_TYPE_MLINE, "add_mline_2000.dwg");
-  error = test_add (DWG_TYPE_DIMSTYLE, "add_dimstyle_2000.dwg");
-  error = test_add (DWG_TYPE_UCS, "add_ucs_2000.dwg");
-  //error = test_add (DWG_TYPE_VX_TABLE_RECORD, "add_vx_2000.dwg");
-  error = test_add (DWG_TYPE_HATCH, "add_hatch_2000.dwg");
-  error = test_add (DWG_TYPE_XRECORD, "add_xrecord_2000.dwg");
-  error = test_add (DWG_TYPE_VBA_PROJECT, "add_vba_2000.dwg");
-  error = test_add (DWG_TYPE_LAYOUT, "add_layout_2000.dwg");
-  error = test_add (DWG_TYPE_ACSH_TORUS_CLASS, "add_torus_2000.dwg");
-  error = test_add (DWG_TYPE_ACSH_SPHERE_CLASS, "add_sphere_2000.dwg");
-  error = test_add (DWG_TYPE_ACSH_CYLINDER_CLASS, "add_cylinder_2000.dwg");
-  error = test_add (DWG_TYPE_ACSH_CONE_CLASS, "add_cone_2000.dwg");
-  error = test_add (DWG_TYPE_ACSH_WEDGE_CLASS, "add_wedge_2000.dwg");
-  error = test_add (DWG_TYPE_ACSH_BOX_CLASS, "add_box_2000.dwg");
+  for (int dxf = 0; dxf < 2; dxf++)
+    {
+      error += test_add (DWG_TYPE_LINE, "add_line_2000", dxf);
+      error += test_add (DWG_TYPE_TEXT, "add_text_2000", dxf);
+      error += test_add (DWG_TYPE_CIRCLE, "add_circle_2000", dxf);
+      error += test_add (DWG_TYPE_ARC, "add_arc_2000", dxf);
+      error += test_add (DWG_TYPE_LWPOLYLINE, "add_lwpline_2000", dxf);
+      error += test_add (DWG_TYPE_POLYLINE_2D, "add_pl2d_2000", dxf);
+      error += test_add (DWG_TYPE_POLYLINE_3D, "add_pl3d_2000", dxf);
+      error += test_add (DWG_TYPE_POLYLINE_MESH, "add_pmesh_2000", dxf);
+      error += test_add (DWG_TYPE_POLYLINE_PFACE, "add_pface_2000", dxf);
+      error += test_add (DWG_TYPE_SPLINE, "add_spline_2000", dxf);
+      error += test_add (DWG_TYPE_INSERT, "add_insert_2000", dxf);
+      error += test_add (DWG_TYPE_MINSERT, "add_minsert_2000", dxf);
+      if (debug == cnt || debug == -1)
+        error += test_add (DWG_TYPE_ATTRIB, "add_attrib_2000", dxf);
+      else
+        ok ("skip ATTRIB TODO add_Attribute");
+      error += test_add (DWG_TYPE_DIMENSION_ALIGNED, "add_dimali_2000", dxf);
+      error += test_add (DWG_TYPE_DIMENSION_ANG2LN, "add_dimang_2000", dxf);
+      error += test_add (DWG_TYPE_DIMENSION_ANG3PT, "add_dim3pt_2000", dxf);
+      error += test_add (DWG_TYPE_DIMENSION_DIAMETER, "add_dimdia_2000", dxf);
+      error += test_add (DWG_TYPE_DIMENSION_ORDINATE, "add_dimord_2000", dxf);
+      error += test_add (DWG_TYPE_DIMENSION_RADIUS, "add_dimrad_2000", dxf);
+      error += test_add (DWG_TYPE_DIMENSION_LINEAR, "add_dimlin_2000", dxf);
+      error += test_add (DWG_TYPE_POINT, "add_point_2000", dxf);
+      error += test_add (DWG_TYPE__3DFACE, "add_3dface_2000", dxf);
+      error += test_add (DWG_TYPE_SOLID, "add_solid_2000", dxf);
+      error += test_add (DWG_TYPE_TRACE, "add_trace_2000", dxf);
+      error += test_add (DWG_TYPE_SHAPE, "add_shape_2000", dxf);
+      error += test_add (DWG_TYPE_VIEWPORT, "add_viewport_2000", dxf);
+      error += test_add (DWG_TYPE_ELLIPSE, "add_ellipse_2000", dxf);
+      error += test_add (DWG_TYPE_REGION, "add_region_2000", dxf);
+      error += test_add (DWG_TYPE_RAY, "add_ray_2000", dxf);
+      error += test_add (DWG_TYPE_XLINE, "add_xline_2000", dxf);
+      error += test_add (DWG_TYPE_DICTIONARY, "add_dict_2000", dxf);
+      error += test_add (DWG_TYPE_DICTIONARYWDFLT, "add_dictwdflt_2000", dxf);
+      error += test_add (DWG_TYPE_OLE2FRAME, "add_ole2frame_2000", dxf);
+      error += test_add (DWG_TYPE_MTEXT, "add_mtext_2000", dxf);
+      error += test_add (DWG_TYPE_LEADER, "add_leader_2000", dxf);
+      error += test_add (DWG_TYPE_TOLERANCE, "add_tolerance_2000", dxf);
+      error += test_add (DWG_TYPE_MLINESTYLE, "add_mlstyle_2000", dxf);
+      error += test_add (DWG_TYPE_MLINE, "add_mline_2000", dxf);
+      error += test_add (DWG_TYPE_DIMSTYLE, "add_dimstyle_2000", dxf);
+      error += test_add (DWG_TYPE_UCS, "add_ucs_2000", dxf);
+      // error += test_add (DWG_TYPE_VX_TABLE_RECORD, "add_vx_2000", dxf);
+      error += test_add (DWG_TYPE_HATCH, "add_hatch_2000", dxf);
+      error += test_add (DWG_TYPE_XRECORD, "add_xrecord_2000", dxf);
+      error += test_add (DWG_TYPE_VBA_PROJECT, "add_vba_2000", dxf);
+      error += test_add (DWG_TYPE_LAYOUT, "add_layout_2000", dxf);
+      error += test_add (DWG_TYPE_ACSH_TORUS_CLASS, "add_torus_2000", dxf);
+      error += test_add (DWG_TYPE_ACSH_SPHERE_CLASS, "add_sphere_2000", dxf);
+      error += test_add (DWG_TYPE_ACSH_CYLINDER_CLASS, "add_cylinder_2000", dxf);
+      error += test_add (DWG_TYPE_ACSH_CONE_CLASS, "add_cone_2000", dxf);
+      error += test_add (DWG_TYPE_ACSH_WEDGE_CLASS, "add_wedge_2000", dxf);
+      error += test_add (DWG_TYPE_ACSH_BOX_CLASS, "add_box_2000", dxf);
+    }
 
   return error;
 }
