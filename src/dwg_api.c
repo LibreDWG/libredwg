@@ -26898,7 +26898,7 @@ dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     API_ADD_OBJECT (IMAGEDEF);
     imgdef = obj;
     //_obj->class_version = 0;
-    _obj->file_path = file_path;
+    _obj->file_path = strdup (file_path);
     // TODO: get pixel props from the image. is_loaded, pixel_size, ...
     // needs -lpng -ljpeg ... load dynamically?
     _img->imagedef = dwg_add_handleref (dwg, 4, obj->handle.value, img);
