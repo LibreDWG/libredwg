@@ -185,9 +185,11 @@ if test x$ax_is_release = xyes; then
 fi
 AM_CONDITIONAL([IS_RELEASE], [test x$ax_is_release = xyes])
 
-dnl Disable unwanted warnings here. These should be fixed before 1.0
+dnl Disable unwanted warnings here
 enable_Werror=no
 ax_enable_compile_warnings=yes
+dnl This is too intrusive for our DWG_TYPE_* switches
+ax_cv_check_cflags__Wswitch_enum=no
 if test x$enable_shared = xyes -a x$ac_compiler_gnu = xyes; then
   AX_COMPILER_FLAGS([WARN_CFLAGS],[AM_LDFLAGS],[$ax_is_release],
     [-fno-common -fvisibility=hidden -fno-semantic-interposition])

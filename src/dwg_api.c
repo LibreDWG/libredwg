@@ -24621,7 +24621,7 @@ dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   }
 }
 
-GCC33_DIAG_IGNORE (-Wswitch-enum)
+//GCC33_DIAG_IGNORE (-Wswitch-enum)
 EXPORT Dwg_Entity_HATCH *
 dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const int pattern_type, const BITCODE_T restrict name,
@@ -24663,7 +24663,7 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         _obj->paths[i].boundary_handles[0]
             = dwg_add_handleref (dwg, 4, pathobjs[i]->handle.value, obj);
         // Split geometry into paths per pathobject
-        GCC46_DIAG_IGNORE (-Wswitch-enum)
+        //GCC46_DIAG_IGNORE (-Wswitch-enum)
         switch (type)
           {
           case DWG_TYPE_LINE:
@@ -24681,7 +24681,7 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                        i, dwg_type_name (type));
             return NULL;
           }
-        GCC46_DIAG_RESTORE
+        //GCC46_DIAG_RESTORE
       }
     return _obj;
   }
