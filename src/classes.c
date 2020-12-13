@@ -522,6 +522,7 @@ const char *dwg_type_name (const Dwg_Object_Type type)
   return NULL;
 }
 
+// TODO: gperf would be preferred here. with name -> type, dxfname, stability, ...
 Dwg_Object_Type dwg_name_type (const char *name)
 {
   struct _obj_type_name *s = (struct _obj_type_name *)_dwg_type_name;
@@ -606,7 +607,7 @@ bool dwg_find_class (const Dwg_Data *restrict dwg, const char* dxfname, BITCODE_
   // linear search is good enough, with ~20 classes
   for (BITCODE_BS i = 0; i < dwg->num_classes; i++)
     {
-      // ->dxfname is always ASCII, dxfname_u is the TU counterpart
+      // ->dxfname is always ASCII/UTF-8, dxfname_u is the TU counterpart
       if (strEQ (dwg->dwg_class[i].dxfname, dxfname))
         {
           if (numberp)

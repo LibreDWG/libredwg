@@ -41,46 +41,69 @@
    GCC30_DIAG_IGNORE (-Wshadow)
 */
 #if defined(__GNUC__)
+#  define _GNUC_VERSION ((__GNUC__ * 100) + __GNUC_MINOR__)
 #  define CC_DIAG_PRAGMA(x) _Pragma (#x)
-#  define CLANG_DIAG_IGNORE(w)
-#  define CLANG_DIAG_RESTORE
-#elif defined(__clang__) || defined(__clang)
-#  define CC_DIAG_PRAGMA(x) _Pragma (#x)
+#else
+#  define _GNUC_VERSION 0
+#  define CC_DIAG_PRAGMA(x)
+#endif
+
+/*
+#define _STR(x)  #x
+#define STR(x)_STR(x)
+#pragma message("_GNUC_VERSION " STR(_GNUC_VERSION))
+*/
+
+// clang-specifics (rarely needed, as they mimic GCC dignostics closely, even down to bugs)
+#if defined(__clang__) || defined(__clang)
+#  define HAVE_CLANG
 #  define CLANG_DIAG_IGNORE(x)                                                \
     _Pragma ("clang diagnostic push")                                         \
     CC_DIAG_PRAGMA (clang diagnostic ignored #x)
 #  define CLANG_DIAG_RESTORE _Pragma ("clang diagnostic pop")
-#  define GCC31_DIAG_IGNORE(w)
-#  define GCC30_DIAG_IGNORE(w)
+#elif defined(__GNUC__)
+#  define CLANG_DIAG_IGNORE(w)
+#  define CLANG_DIAG_RESTORE
 #else
-#  define CC_DIAG_IGNORE(w)
+// MSVC has the __pragma() macro instead
 #  define CLANG_DIAG_IGNORE(w)
 #  define CLANG_DIAG_RESTORE
 #endif
-/* for GCC46_DIAG_IGNORE (-Wdeprecated-declarations) inside functions */
-#if (defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 460)         \
-    || defined(__clang__) || defined(__clang)
+
+/* for GCC46_DIAG_IGNORE (-Wdeprecated-declarations) or (-Wformat-nonliteral),
+   stacked inside functions.
+   clang 10.2 defines gcc compat version 4.2 though (402) */
+#if _GNUC_VERSION >= 460 || (defined(HAVE_CLANG) && _GNUC_VERSION >= 400)
+#  define HAVE_CC_DIAG_STACK
 #  define GCC46_DIAG_IGNORE(x)                                                \
      _Pragma ("GCC diagnostic push")                                          \
      CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
 #  define GCC46_DIAG_RESTORE _Pragma ("GCC diagnostic pop")
 #else
+#  undef HAVE_CC_DIAG_STACK
 #  define GCC46_DIAG_IGNORE(w)
 #  define GCC46_DIAG_RESTORE
 #endif
+
+/* For GCC30_DIAG_IGNORE (-Wformat-nonliteral) outside functions */
+#if _GNUC_VERSION >= 300 && !defined HAVE_CC_DIAG_STACK
+#  define GCC30_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
+#else
+#  define GCC30_DIAG_IGNORE(w)
+#endif
 /* for GCC31_DIAG_IGNORE (-Wdeprecated-declarations) outside functions */
-#if (defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 310          \
-     && ((__GNUC__ * 100) + __GNUC_MINOR__) < 460)
+#if _GNUC_VERSION >= 310 && !defined HAVE_CC_DIAG_STACK
 #  define GCC31_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
 #else
 #  define GCC31_DIAG_IGNORE(w)
 #endif
-/* For GCC30_DIAG_IGNORE (-Wformat-nonliteral) outside functions */
-#if (defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 300          \
-     && ((__GNUC__ * 100) + __GNUC_MINOR__) < 460)
-#  define GCC30_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
+/* for GCC33_DIAG_IGNORE (-Wswitch-enum) outside functions
+   -Wswitch-enum appeared first with gcc 3.3.6
+ */
+#if _GNUC_VERSION >= 330 && !defined HAVE_CC_DIAG_STACK
+#  define GCC33_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
 #else
-#  define GCC30_DIAG_IGNORE(w)
+#  define GCC33_DIAG_IGNORE(w)
 #endif
 
 #ifndef __has_feature
@@ -104,7 +127,7 @@
 
 /* The __nonnull function attribute marks pointer arguments which
    must not be NULL.  */
-#if (defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 303)
+#if _GNUC_VERSION >= 303
 #  undef __nonnull
 #  define __nonnull(params) __attribute__ ((__nonnull__ params))
 #  define HAVE_NONNULL
