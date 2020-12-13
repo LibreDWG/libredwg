@@ -2847,6 +2847,7 @@ typedef struct _dwg_HATCH_Path
   BITCODE_B closed;
   Dwg_HATCH_PolylinePath* polyline_paths;
 
+  // needed?
   BITCODE_BL num_boundary_handles;
   BITCODE_H* boundary_handles;
 } Dwg_HATCH_Path;
@@ -4166,7 +4167,9 @@ typedef struct _dwg_entity_LWPOLYLINE
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_BS flag;              /*!< DXF 70 */
+  BITCODE_BS flag;              /*!< DXF 70
+                                  512 closed, 128 plinegen, 4 constwidth, 8 elevation, 2 thickness
+                                  1 extrusion, 16 num_bulges, 1024 vertexidcount, 32 has_widths */
   BITCODE_BD const_width;       /*!< DXF 43 */
   BITCODE_BD elevation;         /*!< DXF 38 */
   BITCODE_BD thickness;         /*!< DXF 39 */

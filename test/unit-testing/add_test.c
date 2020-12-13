@@ -97,7 +97,7 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
     case DWG_TYPE_LWPOLYLINE:
       {
         const dwg_point_2d pts[] = {
-          { 2.5, 0.0 }, { 0.5, 0.0 }, { 0.5, 2.0 }, { 0.5, 1.0 }, { 1.5, 1.0 }
+          { 0.0, 0.0 }, { 2.5, 0.0 }, { 2.5, 2.0 }, { 0.0, 2.0 }, { 1.5, 1.0 }
         };
         dwg_add_LWPOLYLINE (hdr, 5, pts);
       }
@@ -105,27 +105,27 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
     case DWG_TYPE_POLYLINE_2D:
       {
         const dwg_point_2d pts[] = {
-          { 2.5, 0.0 }, { 0.5, 0.0 }, { 0.5, 2.0 }, { 0.5, 1.0 }, { 1.5, 1.0 }
+          { 0.0, 0.0 }, { 2.5, 0.0 }, { 2.5, 2.0 }, { 0.0, 2.0 }, { 1.5, 1.0 }
         };
         dwg_add_POLYLINE_2D (hdr, 5, pts);
       }
       break;
     case DWG_TYPE_POLYLINE_3D:
       {
-        const dwg_point_3d pts[] = { { 2.5, 0.0, 0.0 },
-                                     { 0.5, 0.0, 0.0 },
+        const dwg_point_3d pts[] = { { 0.0, 0.0, 0.0 },
+                                     { 2.5, 0.0, 0.0 },
+                                     { 2.5, 2.0, 1.0 },
                                      { 0.5, 2.0, 1.0 },
-                                     { 0.5, 1.0, 1.0 },
                                      { 1.5, 1.0, 0.0 } };
         dwg_add_POLYLINE_3D (hdr, 5, pts);
       }
       break;
     case DWG_TYPE_POLYLINE_PFACE:
       {
-        const dwg_point_3d verts[] = { { 2.5, 0.0, 0.0 },
-                                       { 0.5, 0.0, 0.0 },
+        const dwg_point_3d verts[] = { { 0.0, 0.0, 0.0 },
+                                       { 2.5, 0.0, 0.0 },
+                                       { 2.5, 2.0, 1.0 },
                                        { 0.5, 2.0, 1.0 },
-                                       { 0.5, 1.0, 1.0 },
                                        { 1.5, 1.0, 0.0 } };
         const dwg_face faces[]
             = { { 0, 1, 2, 3 }, { 1, 2, 3, 4 }, { 2, 3, 4, 5 } };
@@ -135,16 +135,16 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
     case DWG_TYPE_POLYLINE_MESH:
       {
         const dwg_point_3d verts[]
-            = { { 2.5, 0.0, 0.0 }, { 0.5, 0.0, 0.0 }, { 0.5, 2.0, 1.0 },
-                { 0.5, 1.0, 1.0 }, { 0.5, 1.0, 0.0 }, { 1.5, 1.0, 0.0 } };
+            = { { 0.0, 0.0, 0.0 }, { 2.5, 0.0, 0.0 }, { 2.5, 2.0, 0.0 },
+                { 0.5, 2.0, 0.0 }, { 1.5, 1.0, 0.0 }, { 0.0, 1.0, 0.0 } };
         dwg_add_POLYLINE_MESH (hdr, 3, 2, verts);
       }
       break;
     case DWG_TYPE_SPLINE:
       {
         const dwg_point_3d fit_pts[]
-            = { { 2.5, 0.0, 0.0 }, { 0.5, 0.0, 0.0 }, { 0.5, 2.0, 1.0 },
-                { 0.5, 1.0, 1.0 }, { 0.5, 1.0, 0.0 }, { 1.5, 1.0, 0.0 } };
+            = { { 0.0, 0.0, 0.0 }, { 2.5, 0.0, 0.0 }, { 2.5, 2.0, 0.0 },
+                { 0.5, 2.0, 0.0 }, { 1.5, 1.0, 0.0 }, { 0.0, 1.0, 0.0 } };
         dwg_add_SPLINE (hdr, 6, fit_pts, &pt1, &pt2);
       }
       break;
@@ -366,14 +366,20 @@ test_add (const Dwg_Object_Type type, const char *restrict dwgfile)
     case DWG_TYPE_HATCH:
       {
         const dwg_point_2d pts[] = {
-          { 2.5, 0.0 }, { 0.5, 0.0 }, { 0.5, 2.0 }, { 0.5, 1.0 }, { 1.5, 1.0 }
+          { 0.0, 0.0 }, { 2.5, 0.0 }, { 2.5, 2.0 }, { 0.0, 2.0 }, { 1.5, 1.0 }
         };
+        BITCODE_2RD* seeds = malloc (sizeof (BITCODE_2RD)); // this cannot be constant
+        Dwg_Entity_HATCH *hatch;
         Dwg_Entity_LWPOLYLINE *pline = dwg_add_LWPOLYLINE (hdr, 5, pts);
         Dwg_Object *obj;
         const Dwg_Object *objs[1];
+        pline->flag |= 512; // closed
         obj = dwg_obj_generic_to_object ((const dwg_obj_generic *)pline, &error);
         objs[0] = obj;
-        dwg_add_HATCH (hdr, 0, (const BITCODE_T) "SOLID", false, 1, objs);
+        hatch = dwg_add_HATCH (hdr, 1, (const BITCODE_T) "SOLID", true, 1, objs);
+        hatch->num_seeds = 1;
+        seeds[0] = (BITCODE_2RD){ 1.5, 0.3 }; // a pick point
+        hatch->seeds = seeds;
       }
       break;
     case DWG_TYPE_VBA_PROJECT:

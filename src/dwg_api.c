@@ -22041,7 +22041,22 @@ dwg_entity_owner (const void* _ent)
     return hdr->tio.object->tio.BLOCK_HEADER;
 }
 
-static void add_reactor (Dwg_Object_Object *obj, unsigned long absolute_ref)
+static void add_ent_reactor (Dwg_Object_Entity *obj, unsigned long absolute_ref)
+{
+  if (obj->num_reactors)
+    {
+      obj->num_reactors++;
+      obj->reactors = realloc (obj->reactors, obj->num_reactors * sizeof (BITCODE_H));
+    }
+  else
+    {
+      obj->num_reactors = 1;
+      obj->reactors = calloc (1, sizeof (BITCODE_H));
+    }
+  obj->reactors[obj->num_reactors - 1] = dwg_add_handleref (obj->dwg, 4, absolute_ref, NULL);
+}
+
+static void add_obj_reactor (Dwg_Object_Object *obj, unsigned long absolute_ref)
 {
   if (obj->num_reactors)
     {
@@ -22314,7 +22329,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
       plh = dwg_add_PLACEHOLDER (dwg); // PLOTSTYLE
       obj = dwg_obj_generic_to_object (plh, &error);
       obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, 0xE, obj);
-      add_reactor (obj->tio.object, 0xE);
+      add_obj_reactor (obj->tio.object, 0xE);
     }
   else
     {
@@ -23921,7 +23936,7 @@ dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
           /* owner is relative, reactor absolute */
           obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, nod->handle.value, obj);
           if (!obj->tio.object->num_reactors)
-            add_reactor (obj->tio.object, nod->handle.value);
+            add_obj_reactor (obj->tio.object, nod->handle.value);
         }
     }
   else /* not a direct NOD item */
@@ -24031,7 +24046,7 @@ dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
             /* owner is relative, reactor absolute */
             obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, nod->handle.value, obj);
             if (!obj->tio.object->num_reactors)
-              add_reactor (obj->tio.object, nod->handle.value);
+              add_obj_reactor (obj->tio.object, nod->handle.value);
           }
       }
     else /* not a direct NOD item */
@@ -24130,7 +24145,7 @@ dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _obj->annot_type = 1;
       _obj->associated_annotation =
         dwg_add_handleref (dwg, 5, dwg_obj_generic_handlevalue ((void*)associated_annotation), obj);
-      add_reactor (o->tio.object, obj->handle.value);
+      add_obj_reactor (o->tio.object, obj->handle.value);
       // use DIMSTYLE "Annotative"
       annotative = dwg_find_tablehandle (dwg, "Annotative", "DIMSTYLE");
       if (annotative)
@@ -24535,7 +24550,7 @@ dwg_add_GROUP (Dwg_Data *restrict dwg, const BITCODE_T restrict name /* maybe NU
     {
       dictobj = dwg_obj_generic_to_object (dict, &error);
       obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, dictobj->handle.value, NULL);
-      add_reactor (obj->tio.object, dictobj->handle.value);
+      add_obj_reactor (obj->tio.object, dictobj->handle.value);
     }
  
    _obj->selectable = 1;
@@ -24563,7 +24578,7 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
           obj->tio.object->ownerhandle = dwg_add_handleref (
               dwg, 4, dwg_obj_generic_handlevalue (dict), obj);
           if (!obj->tio.object->num_reactors)
-            add_reactor (obj->tio.object, dwg_obj_generic_handlevalue (dict));
+            add_obj_reactor (obj->tio.object, dwg_obj_generic_handlevalue (dict));
         }
     }
   else
@@ -24576,7 +24591,7 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const BITCODE_T restrict name)
           obj->tio.object->ownerhandle = dwg_add_handleref (
               dwg, 4, dictobj->handle.value, obj);
           if (!obj->tio.object->num_reactors)
-            add_reactor (obj->tio.object, dictobj->handle.value);
+            add_obj_reactor (obj->tio.object, dictobj->handle.value);
         }
     }
 
@@ -24626,7 +24641,7 @@ EXPORT Dwg_Entity_HATCH *
 dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const int pattern_type, const BITCODE_T restrict name,
                const bool is_associative, const unsigned num_paths,
-               // Line, Polyline, Circle, Ellipse, Spline or Region
+               // Line, Polyline, Circle, Arc, Ellipse, Spline or Region
                const Dwg_Object **pathobjs)
 {
   {
@@ -24651,37 +24666,202 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         // predefined (acad.pat), user-defined (ltype), custom (some.pat file)
         _obj->pattern_type = pattern_type;
       }
+    if (strEQc (_obj->name, "SOLID"))
+      _obj->is_solid_fill = 1;
     _obj->is_associative = is_associative;
+    _obj->scale_spacing = 1.0;
+    //_obj->x_dir.z = 1.0;
     _obj->num_paths = num_paths;
+    //_obj->num_boundary_handles = num_paths;
+    //_obj->boundary_handles = calloc (1, sizeof (BITCODE_H));
     _obj->paths = calloc (num_paths, sizeof (Dwg_HATCH_Path));
     for (unsigned i = 0; i < num_paths; i++)
       {
         Dwg_Object_Type type = pathobjs[i]->fixedtype;
-        _obj->paths[i].parent = _obj;
-        _obj->paths[i].num_boundary_handles = 1;
-        _obj->paths[i].boundary_handles = calloc (1, sizeof (BITCODE_H));
-        _obj->paths[i].boundary_handles[0]
-            = dwg_add_handleref (dwg, 4, pathobjs[i]->handle.value, obj);
-        // Split geometry into paths per pathobject
-        //GCC46_DIAG_IGNORE (-Wswitch-enum)
-        switch (type)
+        if (type != DWG_TYPE_LINE &&
+            type != DWG_TYPE_ARC &&
+            type != DWG_TYPE_CIRCLE &&
+            type != DWG_TYPE_ELLIPSE &&
+            type != DWG_TYPE_POLYLINE_2D &&
+            type != DWG_TYPE_LWPOLYLINE &&
+            type != DWG_TYPE_SPLINE &&
+            type != DWG_TYPE_REGION)
           {
-          case DWG_TYPE_LINE:
-          case DWG_TYPE_LWPOLYLINE:
-          case DWG_TYPE_POLYLINE_2D:
-          case DWG_TYPE_CIRCLE:
-          case DWG_TYPE_ELLIPSE:
-          case DWG_TYPE_SPLINE:
-          case DWG_TYPE_REGION:
-            LOG_WARN ("Path segment extraction for HATCH not yet implemented");
-            break;
-          default:
             LOG_ERROR ("Invalid HATCH.path[%d] object type %s. Only accept "
-                       "Line, Polyline, Circle, Ellipse, Spline or Region",
+                       "Line, Polyline, Circle, Arc, Ellipse, Spline or Region",
                        i, dwg_type_name (type));
             return NULL;
           }
-        //GCC46_DIAG_RESTORE
+        _obj->paths[i].parent = _obj;
+        // one path per object only here
+        _obj->paths[i].num_boundary_handles = 1;
+        _obj->paths[i].boundary_handles = calloc (1, sizeof (BITCODE_H));
+        _obj->paths[i].boundary_handles[0]
+            = dwg_add_handleref (dwg, 4, pathobjs[i]->handle.value, NULL);
+        if (is_associative)
+          add_ent_reactor (pathobjs[i]->tio.entity, obj->handle.value);
+        // Split geometry into paths per pathobject
+        switch (type)
+          {
+          case DWG_TYPE_LINE:
+            {
+              Dwg_Entity_LINE *line = pathobjs[i]->tio.entity->tio.LINE;
+              _obj->paths[i].flag = 1 + (is_associative ? 0x200 : 0);
+              _obj->paths[i].num_segs_or_paths = 1;
+              _obj->paths[i].segs = calloc (1, sizeof (Dwg_HATCH_PathSeg));
+              _obj->paths[i].segs[0].parent = &_obj->paths[i];
+              _obj->paths[i].segs[0].curve_type = 1;
+              _obj->paths[i].segs[0].first_endpoint.x = line->start.x;
+              _obj->paths[i].segs[0].first_endpoint.y = line->start.y;
+              _obj->paths[i].segs[0].second_endpoint.x = line->end.x;
+              _obj->paths[i].segs[0].second_endpoint.y = line->end.y;
+              break;
+            }
+          case DWG_TYPE_ARC:
+            {
+              Dwg_Entity_ARC *arc = pathobjs[i]->tio.entity->tio.ARC;
+              _obj->paths[i].flag = 0x21 + (is_associative ? 0x200 : 0); // is_open
+              _obj->paths[i].num_segs_or_paths = 1;
+              _obj->paths[i].segs = calloc (1, sizeof (Dwg_HATCH_PathSeg));
+              _obj->paths[i].segs[0].parent = &_obj->paths[i];
+              _obj->paths[i].segs[0].curve_type = 2;
+              _obj->paths[i].segs[0].center.x = arc->center.x;
+              _obj->paths[i].segs[0].center.y = arc->center.y;
+              _obj->paths[i].segs[0].radius = arc->radius;
+              _obj->paths[i].segs[0].start_angle = arc->start_angle;
+              _obj->paths[i].segs[0].end_angle = arc->end_angle;
+              _obj->paths[i].segs[0].is_ccw = 1;
+              break;
+            }
+          case DWG_TYPE_CIRCLE:
+            {
+              Dwg_Entity_CIRCLE *arc = pathobjs[i]->tio.entity->tio.CIRCLE;
+              _obj->paths[i].flag = 1 + (is_associative ? 0x200 : 0);
+              _obj->paths[i].num_segs_or_paths = 1;
+              _obj->paths[i].segs = calloc (1, sizeof (Dwg_HATCH_PathSeg));
+              _obj->paths[i].segs[0].parent = &_obj->paths[i];
+              _obj->paths[i].segs[0].curve_type = 2;
+              _obj->paths[i].segs[0].center.x = arc->center.x;
+              _obj->paths[i].segs[0].center.y = arc->center.y;
+              _obj->paths[i].segs[0].radius = arc->radius;
+              _obj->paths[i].segs[0].start_angle = 0;
+              _obj->paths[i].segs[0].end_angle = M_PI * 2;
+              _obj->paths[i].segs[0].is_ccw = 1; //?
+              break;
+            }
+          case DWG_TYPE_ELLIPSE:
+            {
+              Dwg_Entity_ELLIPSE *ell = pathobjs[i]->tio.entity->tio.ELLIPSE;
+              _obj->paths[i].flag = 1 + (is_associative ? 0x200 : 0);
+              _obj->paths[i].num_segs_or_paths = 1;
+              _obj->paths[i].segs = calloc (1, sizeof (Dwg_HATCH_PathSeg));
+              _obj->paths[i].segs[0].parent = &_obj->paths[i];
+              _obj->paths[i].segs[0].curve_type = 3;
+              _obj->paths[i].segs[0].center.x = ell->center.x;
+              _obj->paths[i].segs[0].center.y = ell->center.y;
+              _obj->paths[i].segs[0].endpoint.x = ell->sm_axis.x;
+              _obj->paths[i].segs[0].endpoint.y = ell->sm_axis.y;
+              _obj->paths[i].segs[0].minor_major_ratio = ell->axis_ratio;
+              _obj->paths[i].segs[0].start_angle = ell->start_angle;
+              _obj->paths[i].segs[0].end_angle = ell->end_angle;
+              _obj->paths[i].segs[0].is_ccw = 1; //?
+              break;
+            }
+          case DWG_TYPE_SPLINE:
+          case DWG_TYPE_REGION:
+            LOG_WARN ("Path segment extraction for HATCH from %s not yet implemented",
+                      dwg_type_name (type));
+            break;
+          case DWG_TYPE_LWPOLYLINE:
+            {
+              bool has_bulges = false;
+              Dwg_Entity_LWPOLYLINE *pline = pathobjs[i]->tio.entity->tio.LWPOLYLINE;
+              // If no bulges just use flag 1 as with LINE?? (but flag 2 would be much more compact)
+              // I have seen LWPOLYLINE's without bulges being HATCHed to segments.
+              if (pline->num_bulges && pline->flag & 16)
+                {
+                  for (unsigned j=0; j < pline->num_bulges; j++)
+                    {
+                      if (pline->bulges[j] != 0.0)
+                        {
+                          has_bulges = true;
+                          break;
+                        }
+                    }
+                }
+              if (!has_bulges) // use the segment path
+                {
+                  unsigned num;
+                  _obj->paths[i].flag = 1 + (is_associative ? 0x200 : 0);
+                  if (pline->flag & 512) // closed
+                    num = pline->num_points;
+                  else
+                    {
+                      _obj->paths[i].flag += 0x20;
+                      num = pline->num_points - 1;
+                    }
+                  _obj->paths[i].num_segs_or_paths = num;
+                  _obj->paths[i].segs = calloc (num, sizeof (Dwg_HATCH_PathSeg));
+                  for (unsigned j=0; j < num; j++)
+                    {
+                      unsigned k = j + 1;
+                      if (k == pline->num_points)
+                        k = 0;
+                      _obj->paths[i].segs[j].parent = &_obj->paths[i];
+                      _obj->paths[i].segs[j].curve_type = 1;
+                      _obj->paths[i].segs[j].first_endpoint.x = pline->points[j].x;
+                      _obj->paths[i].segs[j].first_endpoint.y = pline->points[j].y;
+                      _obj->paths[i].segs[j].second_endpoint.x = pline->points[k].x;
+                      _obj->paths[i].segs[j].second_endpoint.y = pline->points[k].y;
+                    }
+                }
+              else
+                {
+                  _obj->paths[i].flag = 2 + (is_associative ? 0x200 : 0);
+                  _obj->paths[i].bulges_present = 1;
+                  _obj->paths[i].closed = pline->flag & 512 ? 1 : 0;
+                  _obj->paths[i].num_segs_or_paths = pline->num_points;
+                  _obj->paths[i].polyline_paths = calloc (
+                      pline->num_points, sizeof (Dwg_HATCH_PolylinePath));
+                  for (unsigned j = 0; j < pline->num_points; j++)
+                    {
+                      _obj->paths[i].polyline_paths[j].parent = &_obj->paths[i];
+                      _obj->paths[i].polyline_paths[j].point.x = pline->points[j].x;
+                      _obj->paths[i].polyline_paths[j].point.y = pline->points[j].y;
+                      if (_obj->paths[i].bulges_present)
+                        _obj->paths[i].polyline_paths[j].bulge = pline->bulges[j];
+                    }
+                }
+            }
+            break;
+          case DWG_TYPE_POLYLINE_2D:
+            {
+              Dwg_Entity_POLYLINE_2D *pline = pathobjs[i]->tio.entity->tio.POLYLINE_2D;
+              dwg_point_2d *pts;
+              _obj->paths[i].flag = 2 + (is_associative ? 0x200 : 0);
+              _obj->paths[i].closed = pline->flag & 1 ? 1 : 0;
+              _obj->paths[i].num_segs_or_paths = pline->num_owned;
+              _obj->paths[i].polyline_paths
+                  = calloc (pline->num_owned, sizeof (Dwg_HATCH_PolylinePath));
+              pts = dwg_object_polyline_2d_get_points (pathobjs[i], &error);
+              if (error)
+                return NULL;
+              for (unsigned j=0; j < pline->num_owned; j++)
+                {
+                  _obj->paths[i].polyline_paths[j].parent = &_obj->paths[i];
+                  _obj->paths[i].polyline_paths[j].point.x = pts[j].x;
+                  _obj->paths[i].polyline_paths[j].point.y = pts[j].y;
+                }
+              // TODO bulges, curve_type
+              free (pts);
+            }
+            break;
+          default:
+            LOG_ERROR ("Invalid HATCH.path[%d] object type %s. Only accept "
+                       "Line, Polyline, Circle, Arc, Ellipse, Spline or Region",
+                       i, dwg_type_name (type));
+            return NULL;
+          }
       }
     return _obj;
   }
@@ -25101,7 +25281,7 @@ dwg_add_LAYOUT (Dwg_Object *restrict vp,
         dictobj = dwg_obj_generic_to_object (dict, &error);
         obj->tio.object->ownerhandle
             = dwg_add_handleref (dwg, 4, dictobj->handle.value, obj);
-        add_reactor (obj->tio.object, dictobj->handle.value);
+        add_obj_reactor (obj->tio.object, dictobj->handle.value);
         if (!dwg->header_vars.DICTIONARY_LAYOUT || !dwg->header_vars.DICTIONARY_LAYOUT->absolute_ref)
           dwg->header_vars.DICTIONARY_LAYOUT
               = dwg_add_handleref (dwg, 5, dictobj->handle.value, NULL);
@@ -25158,7 +25338,7 @@ dwg_add_PROXY_OBJECT (Dwg_Data *restrict dwg, BITCODE_T name, BITCODE_T key
     API_ADD_OBJECT (PROXY_OBJECT);
     dwg_add_DICTIONARY_item (nod->tio.object->tio.DICTIONARY, key, obj->handle.value);
     obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, dictobj->handle.value, NULL);
-    add_reactor (obj->tio.object, dictobj->handle.value);
+    add_obj_reactor (obj->tio.object, dictobj->handle.value);
     _obj->class_id = 499;
     return _obj;
   }
@@ -26820,7 +27000,7 @@ dwg_add_SPATIAL_FILTER (Dwg_Entity_INSERT *restrict insert /*, clip_verts... */)
         = dwg_add_handleref (dwg, 2, spatial->handle.value, filter);
     spatial->tio.object->ownerhandle
         = dwg_add_handleref (dwg, 5, filter->handle.value, spatial);
-    add_reactor (spatial->tio.object, filter->handle.value);
+    add_obj_reactor (spatial->tio.object, filter->handle.value);
   }
   {
     API_ADD_OBJECT (SPATIAL_FILTER);
@@ -26828,7 +27008,7 @@ dwg_add_SPATIAL_FILTER (Dwg_Entity_INSERT *restrict insert /*, clip_verts... */)
         = dwg_add_handleref (dwg, 2, obj->handle.value, filter);
     obj->tio.object->ownerhandle
         = dwg_add_handleref (dwg, 5, spatial->handle.value, obj);
-    add_reactor (obj->tio.object, spatial->handle.value);
+    add_obj_reactor (obj->tio.object, spatial->handle.value);
     // TODO normal -> matrix
     _obj->transform[0] = 1.0;
     _obj->transform[5] = 1.0;
