@@ -1672,7 +1672,9 @@ json_acis_data (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       BITCODE_BL *block_size = (BITCODE_BL*)calloc (2, sizeof (BITCODE_BL));
       block_size[0] = len;
       block_size[1] = 0;
-      LOG_TRACE ("block_size[0]: %d [BL]\n", block_size[0]);
+      LOG_TRACE (" num_blocks: " FORMAT_BL " [BL]\n", num_blocks);
+      LOG_TRACE (" sab_size: " FORMAT_BL " [BL]\n", sab_size);
+      LOG_TRACE (" block_size[0]: %d [BL]\n", block_size[0]);
       dwg_dynapi_entity_set_value (_obj, obj->name, "num_blocks", &num_blocks, true);
       dwg_dynapi_entity_set_value (_obj, obj->name, "block_size", &block_size, true);
       dwg_dynapi_entity_set_value (_obj, obj->name, "sab_size", &sab_size, true);

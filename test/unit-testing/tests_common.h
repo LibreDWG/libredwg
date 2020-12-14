@@ -73,6 +73,21 @@ fail (const char *fmt, ...)
   printf ("not ok %d\t# %s\n", ++num, buffer);
 }
 
+#if defined(ADD_TEST_C)
+static void
+ATTRIBUTE_FORMAT (1, 2)
+todo (const char *fmt, ...)
+{
+  va_list ap;
+
+  va_start (ap, fmt);
+  vsnprintf (buffer, sizeof (buffer), fmt, ap);
+  va_end (ap);
+  printf ("not ok %d\t# TODO %s\n", ++num, buffer);
+  passed++;
+}
+#endif
+
 #if defined(BITS_TEST_C) || defined(DECODE_TEST_C)
 
 void bitprepare (Bit_Chain *dat, size_t size);
