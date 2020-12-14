@@ -2226,6 +2226,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
 
   if (i + 2 >= num_blocks)
     _obj->block_size = realloc (_obj->block_size, (i + 2) * sizeof (BITCODE_BL));
+  _obj->num_blocks = i;
   _obj->block_size[i + 1] = 0;
   return 0;
 }
