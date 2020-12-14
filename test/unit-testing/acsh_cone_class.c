@@ -1,4 +1,3 @@
-// no coverage yet
 #define DWG_TYPE DWG_TYPE_ACSH_CONE_CLASS
 #include "common.c"
 

@@ -25511,6 +25511,38 @@ static void
 dwg_geom_normal_to_matrix9 (const dwg_point_3d *restrict normal, dwg_matrix9 *matrix)
 {
   // TODO for now we keep the unrotated defaults
+#if 0
+  if (normal.x == 0.0 && normal.y == 0.0 && normal.z == 1.0)
+    {
+      dwg_matrix9 def_matrix = {
+        1.0, 0.0, 0.0,
+        0.0, 1.0, 0.0,
+        0.0, 0.0, 1.0 };
+      memcpy (&matrix, &def_matrix, sizeof (dwg_point_3d));
+      return;
+    }
+  else
+    {
+      dwg_point_3d ax, ay, az;
+      memcpy (&az, &normal, sizeof (dwg_point_3d));
+      if ((fabs (az.x) < 1 / 64.0) && (fabs (az.y) < 1 / 64.0))
+        {
+          dwg_point_3d tmp = { 0.0, 1.0, 0.0 };
+          dwg_geom_cross (&tmp, tmp, az);
+          dwg_geom_normalize (&ax, tmp);
+        }
+      else
+        {
+          dwg_point_3d tmp = { 0.0, 0.0, 1.0 };
+          dwg_geom_cross (&tmp, tmp, az);
+          dwg_geom_normalize (&ax, tmp);
+        }
+      dwg_geom_cross (&ay, az, ax);
+      dwg_geom_normalize (&ay, ay);
+      //??
+      memcpy (&matrix, &ay, sizeof (dwg_point_3d));
+    }
+#endif
   ;
 }
 
@@ -25901,7 +25933,7 @@ dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   }
 }
 
-// ACSH_CHAMFER_CLASS ??
+#if 0
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                  const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
@@ -25975,6 +26007,7 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     return solid;
   }
 }
+#endif
 
 Dwg_Object_ACSH_CONE_CLASS*
 dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
@@ -26123,6 +26156,7 @@ dwg_add_ACSH_CYLINDER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   }
 }
 
+// TODO compare to a cone, it's the same
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                   const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
@@ -26313,6 +26347,60 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   }
 }
 
+//EXPORT Dwg_Entity_3DSOLID*
+//dwg_add_ELLIPTICAL_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+//                         const dwg_point_3d *restrict origin_pt,
+//                         const dwg_point_3d *restrict normal, /* maybe NULL */
+//                         const double major_radius,
+//                         const double minor_radius,
+//                         const double height)
+//{
+//  LOG_ERROR ("%s not yet implemented", __FUNCTION__)
+//  return NULL;
+//}
+//
+//EXPORT Dwg_Entity_3DSOLID*
+//dwg_add_ELLIPTICAL_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+//                             const dwg_point_3d *restrict origin_pt,
+//                             const dwg_point_3d *restrict normal, /* maybe NULL */
+//                             const double major_radius,
+//                             const double minor_radius,
+//                             const double height)
+//{
+//  LOG_ERROR ("%s not yet implemented", __FUNCTION__)
+//  return NULL;
+//}
+
+EXPORT Dwg_Entity_3DSOLID*
+dwg_add_EXTRUDED_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                        const Dwg_Object *restrict profile,
+                        const double height,
+                        const double taper_angle)
+{
+  LOG_ERROR ("%s not yet implemented", __FUNCTION__)
+  return NULL;
+}
+EXPORT Dwg_Entity_3DSOLID*
+dwg_add_EXTRUDED_PATH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                       const Dwg_Object *restrict profile,
+                       const double height,
+                       const double taper_angle)
+{
+  LOG_ERROR ("%s not yet implemented", __FUNCTION__)
+  return NULL;
+}
+
+EXPORT Dwg_Entity_3DSOLID*
+dwg_add_REVOLVED_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                        const Dwg_Object *restrict profile,
+                        const dwg_point_3d *restrict axis_pt,
+                        const dwg_point_3d *restrict axis_dir,
+                        const double angle)
+{
+  LOG_ERROR ("%s not yet implemented", __FUNCTION__)
+  return NULL;
+}
+
 // ACSH_EXTRUSION_CLASS (needed)
 // ACSH_FILLET_CLASS
 // ACSH_LOFT_CLASS
@@ -26425,7 +26513,6 @@ dwg_add_ACSH_TORUS_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   }
 }
 
-// ACSH_TORUS_CLASS (needed)
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
@@ -26508,8 +26595,6 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     return solid;
   }
 }
-
-// ACSH_WEDGE_CLASS (needed)
 
 Dwg_Object_ACSH_WEDGE_CLASS*
 dwg_add_ACSH_WEDGE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,

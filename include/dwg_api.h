@@ -6500,8 +6500,8 @@ dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
 Dwg_Object_ACSH_CONE_CLASS*
 dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                          const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
-                         const double base_radius, const double top_major_radius,
-                         const double top_minor_radius, const double top_x_radius)
+                         const double height, const double major_radius,
+                         const double minor_radius, const double x_radius)
   __nonnull_all;
 Dwg_Object_ACSH_CYLINDER_CLASS*
 dwg_add_ACSH_CYLINDER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
@@ -6554,6 +6554,12 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const dwg_point_3d *restrict normal, /* maybe NULL */
               const double height, const double major_radius,
               const double minor_radius, const double x_radius) __nonnull ((1,2));
+EXPORT Dwg_Entity_3DSOLID*
+dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                  const dwg_point_3d *restrict origin_pt,
+                  const dwg_point_3d *restrict normal, /* maybe NULL */
+                  const double height, const double major_radius,
+                  const double minor_radius, const double x_radius) __nonnull ((1,2));
 //EXPORT Dwg_Entity_3DSOLID*
 //dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 //                 const dwg_point_3d *restrict origin_pt,
@@ -6561,26 +6567,20 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 //                 const int bl92, const double base_dist,
 //                 const double other_dist, const int num_edges,
 //                 const int32_t* edges, const int bl95)  __nonnull ((1,2));
-EXPORT Dwg_Entity_3DSOLID*
-dwg_add_ELLIPTICAL_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                         const dwg_point_3d *restrict origin_pt,
-                         const dwg_point_3d *restrict normal, /* maybe NULL */
-                         const double major_radius,
-                         const double minor_radius,
-                         const double height) __nonnull ((1,2));
-EXPORT Dwg_Entity_3DSOLID*
-dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                  const dwg_point_3d *restrict origin_pt,
-                  const dwg_point_3d *restrict normal, /* maybe NULL */
-                  const double height, const double major_radius,
-                  const double minor_radius, const double x_radius) __nonnull ((1,2));
-EXPORT Dwg_Entity_3DSOLID*
-dwg_add_ELLIPTICAL_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                             const dwg_point_3d *restrict origin_pt,
-                             const dwg_point_3d *restrict normal, /* maybe NULL */
-                             const double major_radius,
-                             const double minor_radius,
-                             const double height) __nonnull ((1,2));
+//EXPORT Dwg_Entity_3DSOLID*
+//dwg_add_ELLIPTICAL_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+//                         const dwg_point_3d *restrict origin_pt,
+//                         const dwg_point_3d *restrict normal, /* maybe NULL */
+//                         const double major_radius,
+//                         const double minor_radius,
+//                         const double height) __nonnull ((1,2));
+//EXPORT Dwg_Entity_3DSOLID*
+//dwg_add_ELLIPTICAL_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+//                             const dwg_point_3d *restrict origin_pt,
+//                             const dwg_point_3d *restrict normal, /* maybe NULL */
+//                             const double major_radius,
+//                             const double minor_radius,
+//                             const double height) __nonnull ((1,2));
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_EXTRUDED_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                         const Dwg_Object *restrict profile,
