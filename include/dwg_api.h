@@ -6920,6 +6920,11 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_NO_DWG_ADD_WIPEOUTVARIABLES
 #define HAVE_NO_DWG_ADD_XYPARAMETERENTITY
 
+#define HAVE_NO_DWG_ADD_LAYERFILTER
+#define HAVE_NO_DWG_ADD_LAYER_INDEX
+#define HAVE_NO_DWG_ADD_SPATIAL_FILTER
+#define HAVE_NO_DWG_ADD_SPATIAL_INDEX
+
 #define HAVE_DWG_ADD_BOX
 #define HAVE_DWG_ADD_CONE
 #define HAVE_DWG_ADD_CYLINDER
@@ -6932,6 +6937,8 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_NO_DWG_ADD_EXTRUDED_SOLID
 #define HAVE_NO_DWG_ADD_EXTRUDED_PATH
 #define HAVE_NO_DWG_ADD_REVOLVED_SOLID
+#define HAVE_NO_DWG_ADD_CHAMFER
+#define HAVE_NO_DWG_ADD_PYRAMID
 
 #define HAVE_DWG_ADD_3DFACE
 #define HAVE_DWG_ADD_3DSOLID
@@ -6970,8 +6977,6 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_DWG_ADD_INSERT
 #define HAVE_DWG_ADD_LARGE_RADIAL_DIMENSION
 #define HAVE_DWG_ADD_LAYER
-#define HAVE_DWG_ADD_LAYERFILTER
-#define HAVE_DWG_ADD_LAYER_INDEX
 #define HAVE_DWG_ADD_LAYOUT
 #define HAVE_DWG_ADD_LEADER
 #define HAVE_DWG_ADD_LINE
@@ -6994,8 +6999,6 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_DWG_ADD_REGION
 #define HAVE_DWG_ADD_SHAPE
 #define HAVE_DWG_ADD_SOLID
-#define HAVE_DWG_ADD_SPATIAL_FILTER
-#define HAVE_DWG_ADD_SPATIAL_INDEX
 #define HAVE_DWG_ADD_SPLINE
 #define HAVE_DWG_ADD_STYLE
 #define HAVE_DWG_ADD_TEXT

@@ -11,7 +11,7 @@
 /*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
 /*****************************************************************************/
 
-/* test the dwg_add API for properly written DWG files */
+/* Test the dwg_add API for properly written DWG and DXF files */
 /* written by: Reini Urban */
 
 #define ADD_TEST_C
@@ -34,6 +34,14 @@ static int cnt = 0;
 #include "classes.h"
 #include "bits.h"
 #include "out_dxf.h"
+
+enum _temp_complex_types {
+  TEMP_ELLIPTICAL_CONE = 4000,
+  TEMP_ELLIPTICAL_CYLINDER,
+  TEMP_EXTRUDED_SOLID,
+  TEMP_EXTRUDED_PATH,
+  TEMP_REVOLVED_SOLID,
+};
 
 static unsigned char* hex2bin (const char *hex)
 {
@@ -642,6 +650,10 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
           fail ("no VIEWPORT created");
       }
       break;
+    //case DWG_TYPE_UNDERLAYDEFINITION:
+    //case DWG_TYPE_UNDERLAY:
+    //  dwg_add_UNDERLAY (hdr, "test.pdf", &pt2d, NULL, 0.0, 0, NULL);
+    //  break;
     case DWG_TYPE_ACSH_TORUS_CLASS:
       {
         const dwg_point_3d pt = { 1383.62, 418.5, 1158.76 };
@@ -820,6 +832,12 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       TEST_OBJECT (XRECORD);
       TEST_OBJECT (VBA_PROJECT);
       TEST_OBJECT (LAYOUT);
+      TEST_ENTITY (UNDERLAY);
+      TEST_OBJECT (UNDERLAYDEFINITION);
+      //TEST_OBJECT (LAYERFILTER);
+      //TEST_OBJECT (LAYER_INDEX);
+      //TEST_OBJECT (SPATIAL_FILTER);
+      //TEST_OBJECT (SPATIAL_INDEX);
       TEST_OBJECT (ACSH_TORUS_CLASS);
       TEST_OBJECT (ACSH_SPHERE_CLASS);
       TEST_OBJECT (ACSH_CYLINDER_CLASS);
@@ -900,17 +918,65 @@ main (int argc, char *argv[])
       error += test_add (DWG_TYPE_MLINE, "add_mline_2000", dxf);
       error += test_add (DWG_TYPE_DIMSTYLE, "add_dimstyle_2000", dxf);
       error += test_add (DWG_TYPE_UCS, "add_ucs_2000", dxf);
-      // error += test_add (DWG_TYPE_VX_TABLE_RECORD, "add_vx_2000", dxf);
+      //error += test_add (DWG_TYPE_VX_TABLE_RECORD, "add_vx_2000", dxf);
       error += test_add (DWG_TYPE_HATCH, "add_hatch_2000", dxf);
       error += test_add (DWG_TYPE_XRECORD, "add_xrecord_2000", dxf);
       error += test_add (DWG_TYPE_VBA_PROJECT, "add_vba_2000", dxf);
       error += test_add (DWG_TYPE_LAYOUT, "add_layout_2000", dxf);
+#ifdef HAVE_DWG_ADD_UNDERLAY
+      error += test_add (DWG_TYPE_UNDERLAY, "add_underlay_2000", dxf);
+#endif
+#ifdef HAVE_DWG_ADD_UNDERLAYDEFINITION
+      error += test_add (DWG_TYPE_UNDERLAYDEFINITION, "add_underlaydef_2000", dxf);
+#endif
+#ifdef HAVE_DWG_ADD_LAYERFILTER
+      error += test_add (DWG_TYPE_LAYERFILTER, "add_layfilt_2000", dxf);
+#endif
+#ifdef HAVE_DWG_ADD_LAYER_INDEX
+      error += test_add (DWG_TYPE_LAYER_INDEX, "add_layidx_2000", dxf);
+#endif
+#ifdef HAVE_DWG_ADD_SPATIAL_FILTER
+      error += test_add (DWG_TYPE_SPATIAL_FILTER, "add_spatialfilt_2000", dxf);
+#endif
+#ifdef HAVE_DWG_ADD_SPATIAL_INDEX
+      error += test_add (DWG_TYPE_SPATIAL_INDEX, "add_spatialidx_2000", dxf);
+#endif
       error += test_add (DWG_TYPE_ACSH_TORUS_CLASS, "add_torus_2000", dxf);
       error += test_add (DWG_TYPE_ACSH_SPHERE_CLASS, "add_sphere_2000", dxf);
       error += test_add (DWG_TYPE_ACSH_CYLINDER_CLASS, "add_cylinder_2000", dxf);
       error += test_add (DWG_TYPE_ACSH_CONE_CLASS, "add_cone_2000", dxf);
       error += test_add (DWG_TYPE_ACSH_WEDGE_CLASS, "add_wedge_2000", dxf);
       error += test_add (DWG_TYPE_ACSH_BOX_CLASS, "add_box_2000", dxf);
+#ifdef HAVE_DWG_ADD_CHAMFER
+      error += test_add (DWG_TYPE_ACSH_CHAMFER_CLASS, "add_chamfer_2000", dxf);
+#endif
+#ifdef HAVE_DWG_ADD_PYRAMID
+      error += test_add (DWG_TYPE_ACSH_PYRAMID_CLASS, "add_pyramid_2000", dxf);
+#endif
+#ifdef HAVE_DWG_ADD_ELLIPTICAL_CONE
+      //error += test_add (TEMP_ELLIPTICAL_CONE, "add_ellcone_2000", dxf);
+#endif
+#ifdef HAVE_DWG_ADD_ELLIPTICAL_CYLINDER
+      //error += test_add (TEMP_ELLIPTICAL_CYLINDER, "add_ellcyl_2000", dxf);
+#endif
+#ifdef HAVE_DWG_ADD_EXTRUDED_SOLID
+      //error += test_add (TEMP_EXTRUDED_SOLID, "add_extsolid_2000", dxf);
+#endif
+#ifdef HAVE_DWG_ADD_EXTRUDED_PATH
+      //error += test_add (TEMP_EXTRUDED_PATH, "add_extpath_2000", dxf);
+#endif
+#ifdef HAVE_DWG_ADD_REVOLVED_SOLID
+      //error += test_add (TEMP_REVOLVED_SOLID, "add_revsolid_2000", dxf);
+#endif
+#ifdef HAVE_DWG_ADD_TABLE
+      error += test_add (DWG_TYPE_TABLE, "add_table_2000", dxf);
+#endif
+#ifdef HAVE_DWG_ADD_TABLECONTENT
+      error += test_add (DWG_TYPE_TABLECONTENT, "add_tablecontent_2000", dxf);
+#endif
+#ifdef HAVE_DWG_ADD_TABLEGEOMETRY
+      error += test_add (DWG_TYPE_TABLEGEOMETRY, "add_tablegeometry_2000", dxf);
+#endif
     }
 
   return error;
