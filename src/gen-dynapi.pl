@@ -2107,7 +2107,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2116 "gen-dynapi.pl"
+#line 2111 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2201,7 +2201,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 @@list name_subclasses@@
 };
 
-#line 2210 "gen-dynapi.pl"
+#line 2205 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
@@ -2809,7 +2809,7 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
 }
 
 EXPORT bool
-dwg_dynapi_header_set_value (const Dwg_Data *restrict dwg,
+dwg_dynapi_header_set_value (Dwg_Data *restrict dwg,
                              const char *restrict fieldname,
                              const void *restrict value, const bool is_utf8)
 {
@@ -2830,6 +2830,29 @@ dwg_dynapi_header_set_value (const Dwg_Data *restrict dwg,
 
         old = &((char*)_obj)[f->offset];
         dynapi_set_helper (old, f, dwg->header.version, value, is_utf8);
+
+        // Set also FLAGS
+        if (strEQc (fieldname, "CELWEIGHT"))
+          {
+            dwg->header_vars.FLAGS &= ~0x1f; // delete old, and set new
+            dwg->header_vars.FLAGS |= dxf_revcvt_lweight (dwg->header_vars.CELWEIGHT);
+          }
+#define SET_HDR_FLAGS(name, bit, inverse)          \
+        else if (strEQc (fieldname, #name))        \
+          {                                        \
+            if (dwg->header_vars.name && !inverse) \
+              dwg->header_vars.FLAGS |= bit;       \
+            else                                   \
+              dwg->header_vars.FLAGS &= ~bit;      \
+          }
+        SET_HDR_FLAGS (ENDCAPS, 0x60, 0)
+        SET_HDR_FLAGS (JOINSTYLE, 0x180, 0)
+        SET_HDR_FLAGS (LWDISPLAY, 0x200, 1)
+        SET_HDR_FLAGS (XEDIT, 0x400, 1)
+        SET_HDR_FLAGS (EXTNAMES, 0x800, 0)
+        SET_HDR_FLAGS (PSTYLEMODE, 0x2000, 0)
+        SET_HDR_FLAGS (OLESTARTUP, 0x4000, 0)
+
         return true;
       }
     else

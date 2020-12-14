@@ -89,7 +89,7 @@ EXPORT bool dwg_dynapi_common_utf8text (void *restrict _obj,
                                         Dwg_DYNAPI_field *restrict fp)
     __nonnull ((1, 2, 3));
 
-EXPORT bool dwg_dynapi_header_set_value (const Dwg_Data *restrict dwg,
+EXPORT bool dwg_dynapi_header_set_value (Dwg_Data *restrict dwg,
                                          const char *restrict fieldname,
                                          const void *restrict value,
                                          const bool is_utf8)

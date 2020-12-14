@@ -22209,7 +22209,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   dwg->header_vars.MENU = strdup ("acad");
 
   dwg->header_vars.FLAGS = 0x2a1d; // or 0x281d
-  dwg->header_vars.CELWEIGHT = -1; // => FLAGS & 0x1f
+  dwg->header_vars.CELWEIGHT = -1; // => FLAGS & 0x1f + lweight lookup
   now = time(NULL);
   dwg->header_vars.TDCREATE = (BITCODE_TIMEBLL){ now / 3600, now / 86400 };
   // CECOLOR.index: 256 [CMC.BS 62]
