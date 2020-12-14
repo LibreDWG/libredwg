@@ -398,7 +398,9 @@ main (int argc, char *argv[])
 
   {
     struct stat attrib;
-    if (!stat (outfile, &attrib)) // exists
+    if (stat (outfile, &attrib))
+      dat.fh = fopen (outfile, "wb");
+    else // exists
       {
         if (!overwrite)
           {
