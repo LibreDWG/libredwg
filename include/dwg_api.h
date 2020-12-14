@@ -9913,27 +9913,27 @@ extern "C"
                     const double height, const double major_radius,
                     const double minor_radius, const double x_radius)
       __nonnull ((1, 2));
-  // EXPORT Dwg_Entity_3DSOLID*
-  // dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-  //                  const dwg_point_3d *restrict origin_pt,
-  //                  const dwg_point_3d *restrict normal, /* maybe NULL */
-  //                  const int method, const double base_dist,
-  //                  const double other_dist, const int num_edges,
-  //                  const int32_t* edges, const int bl95)  __nonnull ((1,2));
-  // EXPORT Dwg_Entity_3DSOLID*
-  // dwg_add_ELLIPTICAL_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-  //                          const dwg_point_3d *restrict origin_pt,
-  //                          const dwg_point_3d *restrict normal, /* maybe
-  //                          NULL */ const double major_radius, const double
-  //                          minor_radius, const double height) __nonnull
-  //                          ((1,2));
-  // EXPORT Dwg_Entity_3DSOLID*
-  // dwg_add_ELLIPTICAL_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-  //                              const dwg_point_3d *restrict origin_pt,
-  //                              const dwg_point_3d *restrict normal, /* maybe
-  //                              NULL */ const double major_radius, const
-  //                              double minor_radius, const double height)
-  //                              __nonnull ((1,2));
+  EXPORT Dwg_Entity_3DSOLID*
+  dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                   const dwg_point_3d *restrict origin_pt,
+                   const dwg_point_3d *restrict normal, /* maybe NULL */
+                   const int method, const double base_dist,
+                   const double other_dist, const int num_edges,
+                   const int32_t* edges, const int bl95)  __nonnull ((1,2));
+  EXPORT Dwg_Entity_3DSOLID*
+  dwg_add_ELLIPTICAL_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                           const dwg_point_3d *restrict origin_pt,
+                           const dwg_point_3d *restrict normal, /* maybe
+                           NULL */ const double major_radius, const double
+                           minor_radius, const double height) __nonnull
+                           ((1,2));
+  EXPORT Dwg_Entity_3DSOLID*
+  dwg_add_ELLIPTICAL_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                               const dwg_point_3d *restrict origin_pt,
+                               const dwg_point_3d *restrict normal, /* maybe
+                               NULL */ const double major_radius, const
+                               double minor_radius, const double height)
+                               __nonnull ((1,2));
   EXPORT Dwg_Entity_3DSOLID *
   dwg_add_EXTRUDED_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const Dwg_Object *restrict profile,
