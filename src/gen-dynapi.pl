@@ -2926,6 +2926,34 @@ dwg_dynapi_common_set_value (void *restrict _obj,
       }
     else
       dynapi_set_helper (old, f, dwg ? dwg->header.version : R_INVALID, value, is_utf8);
+
+    if (dwg && obj->supertype == DWG_SUPERTYPE_ENTITY && strEQc (fieldname, "ltype"))
+      { // set also isbylayerlt and ltype_flags
+        BITCODE_H ltype = *(BITCODE_H*)value;
+        Dwg_Object_Entity *ent = obj->tio.entity;
+        if (!dwg->header_vars.LTYPE_BYLAYER)
+          ;
+        else if (ent->ltype->absolute_ref == dwg->header_vars.LTYPE_BYLAYER->absolute_ref)
+          {
+            ent->isbylayerlt = 1; // r13-r14 only
+            ent->ltype_flags = 0;
+          }
+        else if (ent->ltype->absolute_ref == dwg->header_vars.LTYPE_BYBLOCK->absolute_ref)
+          {
+            ent->isbylayerlt = 0;
+            ent->ltype_flags = 1;
+          }
+        else if (ent->ltype->absolute_ref == dwg->header_vars.LTYPE_CONTINUOUS->absolute_ref)
+          {
+            ent->isbylayerlt = 0;
+            ent->ltype_flags = 2;
+          }
+        else
+          {
+            ent->isbylayerlt = 0;
+            ent->ltype_flags = 3;
+          }
+      }
     return true;
   }
 }
