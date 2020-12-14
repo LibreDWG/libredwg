@@ -30027,27 +30027,27 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   }
 }
 
-// EXPORT Dwg_Entity_3DSOLID*
-// dwg_add_ELLIPTICAL_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-//                          const dwg_point_3d *restrict origin_pt,
-//                          const dwg_point_3d *restrict normal, /* maybe NULL
-//                          */ const double major_radius, const double
-//                          minor_radius, const double height)
-//{
-//   LOG_ERROR ("%s not yet implemented", __FUNCTION__)
-//   return NULL;
-// }
-//
-// EXPORT Dwg_Entity_3DSOLID*
-// dwg_add_ELLIPTICAL_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-//                              const dwg_point_3d *restrict origin_pt,
-//                              const dwg_point_3d *restrict normal, /* maybe
-//                              NULL */ const double major_radius, const double
-//                              minor_radius, const double height)
-//{
-//   LOG_ERROR ("%s not yet implemented", __FUNCTION__)
-//   return NULL;
-// }
+EXPORT Dwg_Entity_3DSOLID *
+dwg_add_ELLIPTICAL_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                         const dwg_point_3d *restrict origin_pt,
+                         const dwg_point_3d *restrict normal, /* maybe NULL */
+                         const double major_radius, const double minor_radius,
+                         const double height)
+{
+  LOG_ERROR ("%s not yet implemented", __FUNCTION__)
+  return NULL;
+}
+
+EXPORT Dwg_Entity_3DSOLID *
+dwg_add_ELLIPTICAL_CYLINDER (
+    Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+    const dwg_point_3d *restrict origin_pt,
+    const dwg_point_3d *restrict normal, /* maybe NULL */
+    const double major_radius, const double minor_radius, const double height)
+{
+  LOG_ERROR ("%s not yet implemented", __FUNCTION__)
+  return NULL;
+}
 
 EXPORT Dwg_Entity_3DSOLID *
 dwg_add_EXTRUDED_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
