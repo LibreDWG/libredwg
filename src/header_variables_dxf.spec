@@ -353,15 +353,7 @@
     HEADER_RS (MEASUREMENT, 70);
   }
   SINCE (R_2000) {
-    DXF_OR_PRINT {
-      HEADER_9 (CELWEIGHT);
-      VALUE_RS (dxf_cvt_lweight(_obj->CELWEIGHT), 370);
-    }
-    /* ENCODER {
-      HEADER_9 (CELWEIGHT);
-      // reverse lookup
-      VALUE (dxf_revcvt_lweight(_obj->CELWEIGHT), RSd, 370);
-    } */
+    HEADER_RS (CELWEIGHT, 370);
     HEADER_RS (ENDCAPS, 280);
     HEADER_RS (JOINSTYLE, 280);
     HEADER_B (LWDISPLAY, 290);

@@ -1186,10 +1186,9 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   SINCE (R_2000)
   {
-    _obj->CELWEIGHT = dxf_revcvt_lweight (_obj->CELWEIGHT);
-    LOG_TRACE ("HEADER.%s => %d\n", "CELWEIGHT", _obj->CELWEIGHT);
+    BITCODE_BSd celweight = dxf_revcvt_lweight (_obj->CELWEIGHT);
     // clang-format off
-    _obj->FLAGS = (_obj->CELWEIGHT & 0x1f) |
+    _obj->FLAGS = (celweight & 0x1f)       |
           (_obj->ENDCAPS     ? 0x60   : 0) |
           (_obj->JOINSTYLE   ? 0x180  : 0) |
           (_obj->LWDISPLAY   ? 0 : 0x200)  |

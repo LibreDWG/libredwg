@@ -58,7 +58,7 @@
     }
   VERSIONS (R_13, R_2004) { // undocumented as such in the ODA spec
       IF_ENCODE_FROM_EARLIER_OR_DXF {
-        FIELD_VALUE (unknown_text1) = strdup("m");
+        FIELD_VALUE (unknown_text1) = strdup ("m");
       }
       FIELD_TV (unknown_text1, 0);
       FIELD_TV (unknown_text2, 0);
@@ -529,9 +529,15 @@
     }
   SINCE (R_2000)
     {
+      ENCODER {
+        // unneeded here. done in in_dxf.c:1189
+        FIELD_VALUE (FLAGS) |= dxf_revcvt_lweight (FIELD_VALUE (CELWEIGHT));
+        if (FIELD_VALUE (ENDCAPS)) FIELD_VALUE (FLAGS) |= 0x60;
+        // ...
+      }
       FIELD_BLx (FLAGS, 70);
       DECODER {
-          FIELD_VALUE (CELWEIGHT) = FIELD_VALUE (FLAGS) & 0x1f;
+          FIELD_VALUE (CELWEIGHT) = dxf_cvt_lweight (FIELD_VALUE (FLAGS) & 0x1f);
           FIELD_G_TRACE (CELWEIGHT, BSd, 370) // default: -1 ByLayer
           FIELD_VALUE (ENDCAPS)   = FIELD_VALUE (FLAGS) & 0x60 ? 1 : 0;
           FIELD_G_TRACE (ENDCAPS, RC, 280)

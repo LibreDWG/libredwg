@@ -381,7 +381,7 @@ static const Dwg_DYNAPI_field _dwg_header_variables_fields[] = {
   { "CELTYPE",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_header_variables, CELTYPE),
     1,0,0, 6 },
   { "CELWEIGHT",	"BSd", sizeof (BITCODE_BSd),  OFF (struct _dwg_header_variables, CELWEIGHT),
-    0,0,0, 0 },
+    0,0,0, 370 },
   { "CEPSNTYPE",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_header_variables, CEPSNTYPE),
     0,0,0, 380 },
   { "CHAMFERA",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_header_variables, CHAMFERA),
