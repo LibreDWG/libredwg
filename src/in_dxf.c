@@ -11941,7 +11941,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     {
                       BITCODE_H ref = dwg_add_handleref (
                           dwg, 3, obj->handle.value, NULL);
-                      PUSH_HV(_hdr, num_owned, entities, ref)
+                      PUSH_HV (_hdr, num_owned, entities, ref)
                     }
                   if (ent->ownerhandle
                       && (dwg->header.version >= R_13
@@ -12653,7 +12653,6 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   resolve_postponed_object_refs (dwg);
   LOG_HANDLE ("Resolving pointers from ObjectRef vector:\n");
   dwg_resolve_objectrefs_silent (dwg);
-  dwg->dirty_refs = 0;
   free_array_hdls (header_hdls);
   free_array_hdls (eed_hdls);
   free_array_hdls (obj_hdls);

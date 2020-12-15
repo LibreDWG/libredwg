@@ -896,8 +896,7 @@ main (int argc, char *argv[])
   else
     debug = 0;
 
-  // DXF entities are not yet written
-  for (int dxf = 0; dxf < (debug ? 2 : 1); dxf++)
+  for (int dxf = 0; dxf < 2; dxf++)
     {
       error += test_add (DWG_TYPE_LINE, "add_line_2000", dxf);
       error += test_add (DWG_TYPE_TEXT, "add_text_2000", dxf);

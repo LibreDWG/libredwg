@@ -53,6 +53,7 @@ static unsigned nodeid = 0;
 /* I don't want to export these. */
 BITCODE_H dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
                                        const char *restrict table);
+void dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg);
 Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
 /* Initialization hack only */
 void dwg_set_next_hdl (Dwg_Data *dwg, unsigned long value);
@@ -21993,7 +21994,8 @@ int dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg);
 #define NEW_OBJECT(dwg, obj)                                                  \
   {                                                                           \
     BITCODE_BL idx = dwg->num_objects;                                        \
-    (void)dwg_add_object (dwg);                                               \
+    if (dwg_add_object (dwg) < 0)                                             \
+      dwg_resolve_objectrefs_silent (dwg);                                    \
     obj = &dwg->object[idx];                                                  \
     obj->supertype = DWG_SUPERTYPE_OBJECT;                                    \
     obj->tio.object                                                           \
@@ -22553,7 +22555,8 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
 #define NEW_ENTITY(dwg, obj)                                                  \
   {                                                                           \
     BITCODE_BL idx = dwg->num_objects;                                        \
-    (void)dwg_add_object (dwg);                                               \
+    if (dwg_add_object (dwg) < 0)                                             \
+      dwg_resolve_objectrefs_silent (dwg);                                    \
     obj = &dwg->object[idx];                                                  \
     obj->supertype = DWG_SUPERTYPE_ENTITY;                                    \
     obj->tio.entity                                                           \
@@ -22704,20 +22707,20 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
     ent->ownerhandle = dwg_add_handleref (dwg, 4, owner->handle.value, obj);
 
   // TODO 2004+
-  if (version < R_2004)
+  if (1)
     {
       if (owner->fixedtype == DWG_TYPE_BLOCK_HEADER && obj->fixedtype == DWG_TYPE_BLOCK)
         {
           _owner->block_entity
               = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
-          LOG_TRACE ("%s.block_entity = " FORMAT_REF "\n", _owner->name,
+          LOG_TRACE ("%s.block_entity = " FORMAT_REF "\n", owner->name,
                      ARGS_REF (_owner->block_entity));
         }
       else if (owner->fixedtype == DWG_TYPE_BLOCK_HEADER && obj->fixedtype == DWG_TYPE_ENDBLK)
         {
           _owner->endblk_entity
               = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
-          LOG_TRACE ("%s.endblk_entity = " FORMAT_REF "\n", _owner->name,
+          LOG_TRACE ("%s.endblk_entity = " FORMAT_REF "\n", owner->name,
                      ARGS_REF (_owner->endblk_entity));
         }
       else if (obj->fixedtype == DWG_TYPE_SEQEND)
@@ -22730,12 +22733,17 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
                !_owner->num_owned &&
                !dwg_obj_is_subentity (obj))
         {
+          BITCODE_H ref;
           _owner->first_entity = _owner->last_entity
-              = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
-          LOG_TRACE ("%s.{first,last}_entity = " FORMAT_REF "\n", _owner->name,
+            = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
+          LOG_TRACE ("%s.{first,last}_entity = " FORMAT_REF "\n", owner->name,
                      ARGS_REF (_owner->first_entity));
-          _owner->num_owned++;
+          ref = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
+          LOG_TRACE ("%s.entities[%d] = " FORMAT_REF "\n",
+                     owner->name, _owner->num_owned, ARGS_REF (ref));
+          PUSH_HV (_owner, num_owned, entities, ref)
           //ent->nolinks = 1;
+          LOG_TRACE ("%s.num_owned = %u\n", owner->name, _owner->num_owned);
         }
       else
         {
@@ -22748,11 +22756,16 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
             }
           else if (owner->fixedtype == DWG_TYPE_BLOCK_HEADER)
             {
-              BITCODE_H lastref = _owner->last_entity;
-              prev = lastref ? dwg_ref_object (dwg, lastref) : NULL; // may fail!
+              BITCODE_H ref = _owner->last_entity;
+              prev = ref ? dwg_ref_object (dwg, ref) : NULL; // may fail!
               _owner->last_entity = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
               LOG_TRACE ("%s.last_entity = " FORMAT_REF "\n",
-                         _owner->name, ARGS_REF (_owner->last_entity));
+                         owner->name, ARGS_REF (_owner->last_entity));
+              ref = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
+              LOG_TRACE ("%s.entities[%d] = " FORMAT_REF "\n",
+                         owner->name, _owner->num_owned, ARGS_REF (ref));
+              PUSH_HV (_owner, num_owned, entities, ref)
+              LOG_TRACE ("%s.num_owned = %u\n", owner->name, _owner->num_owned);
             }
           // link prev. last to curr last
           if (prev && prev->supertype == DWG_SUPERTYPE_ENTITY)
@@ -22778,8 +22791,6 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
             }
           else
             ent->prev_entity = dwg_add_handleref (dwg, 4, 0, NULL);
-          _owner->num_owned++;
-          LOG_TRACE ("%s.num_owned = %u\n", _owner->name, _owner->num_owned);
         }
     }
   in_postprocess_handles (obj);

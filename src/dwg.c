@@ -1026,7 +1026,11 @@ get_first_owned_entity (const Dwg_Object *hdr)
     {
       _hdr->__iterator = 0;
       if (_hdr->entities && _hdr->num_owned && _hdr->entities[0])
-        return _hdr->entities[0]->obj;
+        {
+          if (!_hdr->entities[0]->obj)
+            dwg_resolve_objectrefs_silent (hdr->parent);
+          return _hdr->entities[0]->obj;
+        }
       else
         return NULL;
     }
@@ -1272,7 +1276,11 @@ get_first_owned_block (const Dwg_Object *hdr)
   if (version >= R_13)
     {
       if (_hdr->block_entity)
-        return dwg_ref_object (dwg, _hdr->block_entity);
+        {
+          if (!_hdr->block_entity->obj)
+            dwg_resolve_objectrefs_silent (dwg);
+          return dwg_ref_object (dwg, _hdr->block_entity);
+        }
       else
         {
           Dwg_Object *obj = (Dwg_Object *)hdr;
