@@ -11372,12 +11372,13 @@ new_object (char *restrict name, char *restrict dxfname,
                        && (pair->code == 2 || pair->code == 210
                            || pair->code == 220 || pair->code == 230))
                 ; // ignore the POLYLINE elevation.x,y. DXF artifacts
-              else if ((strEQc (name, "POLYLINE_2D")
-                        || strEQc (name, "POLYLINE_3D")
-                        || strEQc (name, "HATCH"))
+              else if (strEQc (name, "HATCH")
                        && (pair->code == 10 || pair->code == 20))
-                ; // ignore the VERTEX_PFACE_FACE 3BD 10
+                ; // ignore the whole PLINE and VERTEX_PFACE_FACE 3BD 10
               else if ((strEQc (name, "VERTEX_PFACE_FACE")
+                        || strEQc (name, "POLYLINE_3D")
+                        || strEQc (name, "POLYLINE_2D")
+                        || strEQc (name, "POLYLINE_MESH")
                         || strEQc (name, "POLYLINE_PFACE"))
                        && (pair->code == 10 || pair->code == 20
                            || pair->code == 30))
