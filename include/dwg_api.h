@@ -6694,6 +6694,9 @@ dwg_add_SPATIAL_FILTER (Dwg_Entity_INSERT *restrict insert /*, clip_verts... */)
 EXPORT Dwg_Object_SPATIAL_INDEX *
 dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 
+EXPORT Dwg_Object_WIPEOUTVARIABLES*
+dwg_add_WIPEOUTVARIABLES (Dwg_Data *dwg /* ... */) __nonnull_all;
+
 /* List of yet supported and unsupported add entity and object API from objects.inc,
    so we can auto-generate API's, i.e. for gambas.
 

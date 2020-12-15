@@ -935,8 +935,8 @@ const char* dwg_type_dxfname (const Dwg_Object_Type type)
 {
   if (type <= DWG_TYPE_LAYOUT)
     return _dwg_dxfnames_fixed[type];
-  else if ((unsigned)type >= 0x1ff + 1)
-    return _dwg_dxfnames_variable[type];
+  else if ((unsigned)type >= 0x200 && type <= DWG_TYPE_XYPARAMETERENTITY)
+    return _dwg_dxfnames_variable[type - 0x200];
   // DWG_TYPE_PROXY_ENTITY = 0x1f2, /* 498 */
   // DWG_TYPE_PROXY_OBJECT = 0x1f3, /* 499 */
   else if (type == DWG_TYPE_PROXY_ENTITY)

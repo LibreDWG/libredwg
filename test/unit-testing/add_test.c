@@ -690,6 +690,37 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
         dwg_add_BOX (hdr, &pt, NULL, 4.416106, 2.044413, 2.543320);
       }
       break;
+    case DWG_TYPE_ACSH_PYRAMID_CLASS:
+      {
+        const dwg_point_3d pt = { 7.791946, 11.0222066, 1.271660 };
+        dwg_add_PYRAMID (hdr, &pt, NULL, 4.5, 4, 2.0, 2.5);
+      }
+      break;
+    case DWG_TYPE_ACSH_CHAMFER_CLASS:
+      {
+        const dwg_point_3d pt = { 7.791946, 11.0222066, 1.271660 };
+        const int32_t edges[] = { 151 };
+        //?? normally you chamfer an existing 3dsolid
+        //dwg_add_CHAMFER (hdr, &pt, NULL, 1, 10.0, 10.0, 1, edges, 152);
+      }
+      break;
+    case DWG_TYPE_WIPEOUTVARIABLES:
+      dwg_add_WIPEOUTVARIABLES (dwg);
+      break;
+    case DWG_TYPE_ACSH_FILLET_CLASS:
+    case TEMP_ELLIPTICAL_CONE:
+    case TEMP_ELLIPTICAL_CYLINDER:
+    case TEMP_EXTRUDED_SOLID:
+    case TEMP_EXTRUDED_PATH:
+    case TEMP_REVOLVED_SOLID:
+    case DWG_TYPE_TABLE:
+    case DWG_TYPE_TABLECONTENT:
+    case DWG_TYPE_TABLEGEOMETRY:
+    case DWG_TYPE_TABLESTYLE:
+    case DWG_TYPE_LAYERFILTER:
+    case DWG_TYPE_LAYER_INDEX:
+    case DWG_TYPE_SPATIAL_FILTER:
+    case DWG_TYPE_SPATIAL_INDEX:
 
     default:
       fail ("No add method yet type %s", name);
@@ -850,6 +881,20 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       TEST_OBJECT (ACSH_CONE_CLASS);
       TEST_OBJECT (ACSH_WEDGE_CLASS);
       TEST_OBJECT (ACSH_BOX_CLASS);
+      //TEST_OBJECT (ACSH_PYRAMID_CLASS);
+      //TEST_OBJECT (ACSH_CHAMFER_CLASS);
+      //TEST_OBJECT (ACSH_FILLET_CLASS);
+      TEST_OBJECT (WIPEOUTVARIABLES); // just for testing, not for real yet
+
+    case TEMP_ELLIPTICAL_CONE:
+    case TEMP_ELLIPTICAL_CYLINDER:
+    case TEMP_EXTRUDED_SOLID:
+    case TEMP_EXTRUDED_PATH:
+    case TEMP_REVOLVED_SOLID:
+    //TEST_OBJECT (TABLE);
+    //TEST_OBJECT (TABLECONTENT);
+    //TEST_OBJECT (TABLEGEOMETRY);
+    //TEST_OBJECT (TABLESTYLE);
     default:
       fail ("No test yet for type %s", name);
     }
@@ -983,6 +1028,9 @@ main (int argc, char *argv[])
 #ifdef HAVE_DWG_ADD_TABLEGEOMETRY
       error += test_add (DWG_TYPE_TABLEGEOMETRY, "add_tablegeometry_2000", dxf);
 #endif
+
+      // just for testing yet
+      error += test_add (DWG_TYPE_WIPEOUTVARIABLES, "add_wipeoutvars_2000", dxf);
     }
 
   return error;

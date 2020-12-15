@@ -386,7 +386,7 @@ typedef enum DWG_OBJECT_TYPE
 
   /* non-fixed types > 500. not stored as type, but as fixedtype */
 
-  DWG_TYPE_ACDSRECORD = 0x1ff + 1,
+  DWG_TYPE_ACDSRECORD = 0x200,
   DWG_TYPE_ACDSSCHEMA,
   DWG_TYPE_ACMECOMMANDHISTORY,
   DWG_TYPE_ACMESCOPE,
