@@ -1061,7 +1061,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                           = dwg->object[0].tio.object->tio.BLOCK_HEADER;
                       free (o->name);
                       o->name
-                          = (char *)bit_utf8_to_TU ((char *)"*Model_Space");
+                        = (char *)bit_utf8_to_TU ((char *)"*Model_Space", 0);
                     }
                   break;
                 }
@@ -1091,7 +1091,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   (pair->code == 1 && strEQc (field, "$" #name) && pair->value.s != NULL)     \
   {                                                                           \
     LOG_TRACE ("SUMMARY.%s = %s [TU16 1]\n", &field[1], pair->value.s);       \
-    dwg->summaryinfo.name = bit_utf8_to_TU (pair->value.s);                   \
+    dwg->summaryinfo.name = bit_utf8_to_TU (pair->value.s, 0);                \
   }
 
               else if
@@ -1116,7 +1116,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                                  (j + 1) * sizeof (Dwg_SummaryInfo_Property));
                   LOG_TRACE ("SUMMARY.props[%u].tag = %s [TU16 1]\n", j,
                              pair->value.s);
-                  dwg->summaryinfo.props[j].tag = bit_utf8_to_TU (pair->value.s);
+                  dwg->summaryinfo.props[j].tag = bit_utf8_to_TU (pair->value.s, 0);
                 }
               else if (pair->code == 1 && strEQc (field, "$CUSTOMPROPERTY")
                        && pair->value.s != NULL && dwg->summaryinfo.props
@@ -1125,7 +1125,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   BITCODE_BL j = dwg->summaryinfo.num_props - 1;
                   LOG_TRACE ("SUMMARY.props[%u].value = %s [TU16 1]\n", j,
                              pair->value.s);
-                  dwg->summaryinfo.props[j].value = bit_utf8_to_TU (pair->value.s);
+                  dwg->summaryinfo.props[j].value = bit_utf8_to_TU (pair->value.s, 0);
                 }
               else
                 LOG_ERROR ("skipping HEADER: 9 %s, unknown field with code %d",
@@ -1492,7 +1492,7 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     }
                   STRADD_TV (klass->dxfname, n);
                   if (dat->version >= R_2007)
-                    klass->dxfname_u = bit_utf8_to_TU ((char *)n);
+                    klass->dxfname_u = bit_utf8_to_TU ((char *)n, 0);
                   LOG_TRACE ("CLASS[%d].dxfname = %s [TV 1]\n", i, n);
                 }
               break;
@@ -1672,7 +1672,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
             /* code [RC] + length [RS] + 2*len [TU] */
             if (len && len < 32767)
               {
-                BITCODE_TU tu = bit_utf8_to_TU (pair->value.s);
+                BITCODE_TU tu = bit_utf8_to_TU (pair->value.s, 0);
                 len = bit_wcs2len (tu);
                 size = 2 + 2 + (len * 2); // now with padding
                 eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size + 2);
@@ -2029,8 +2029,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           static int dash_i = 0;
           is_tu = obj->parent->header.version >= R_2007;
           CHK_array (j, dashes);
-          o->dashes[j].text
-              = is_tu ? (char *)bit_utf8_to_TU (pair->value.s) : pair->value.s;
+          o->dashes[j].text = dwg_add_u8_input (obj->parent, pair->value.s);
           LOG_TRACE ("LTYPE.dashes[%d].text = %s [T 9]\n", j, pair->value.s);
           // write into strings_area
           if (!o->strings_area)
@@ -3370,7 +3369,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (j < (int)o->num_colors);
           if (dat->version >= R_2007)
             o->colors[j].color.name
-                = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
+              = (BITCODE_T)bit_utf8_to_TU (pair->value.s, 0);
           else
             o->colors[j].color.name = strdup (pair->value.s);
           LOG_TRACE ("HATCH.colors[%d].color.name = %s [CMC 431]\n", j,
@@ -3883,7 +3882,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                     goto unknown_mleader;
                   if (dat->version >= R_2007)
                     ctx->content.txt.default_text
-                        = (char *)bit_utf8_to_TU (pair->value.s);
+                      = (char *)bit_utf8_to_TU (pair->value.s, 0);
                   else
                     ctx->content.txt.default_text = strdup (pair->value.s);
                   LOG_TRACE ("%s.ctx.content.txt.default_text = %s [%d T]\n",
@@ -4444,7 +4443,7 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
             {
               if (obj->parent->header.version >= R_2007)
                 o->content_format.value_format_string
-                    = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
+                  = (BITCODE_T)bit_utf8_to_TU (pair->value.s, 0);
               else
                 o->content_format.value_format_string = strdup (pair->value.s);
               LOG_TRACE (
@@ -4813,7 +4812,7 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
           break;
         case 1:
           CHK_array (i, rowstyles);
-          o->rowstyles[i].format_string = bit_utf8_to_TU (pair->value.s);
+          o->rowstyles[i].format_string = bit_utf8_to_TU (pair->value.s, 0);
           LOG_TRACE ("%s.rowstyles[%d].format_string = %s [TU %d]\n",
                      obj->name, i, pair->value.s, pair->code);
           break;
@@ -4917,7 +4916,7 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           break;
         case 1:
           CHK_rowstyles;
-          o->rowstyles[i].format_string = bit_utf8_to_TU (pair->value.s);
+          o->rowstyles[i].format_string = bit_utf8_to_TU (pair->value.s, 0);
           LOG_TRACE ("%s.rowstyles[%d].format_string = %s [TU %d]\n",
                      obj->name, i, pair->value.s, pair->code);
           break;
@@ -5224,10 +5223,7 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 i = 3;
               assert (i >= 0 && i <= 3);
             }
-          if (dwg->header.version >= R_2007)
-            o->ref[i].classname = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
-          else
-            o->ref[i].classname = strdup (pair->value.s);
+          o->ref[i].classname = dwg_add_u8_input (dwg, pair->value.s);
           LOG_TRACE ("%s.ref[%d].classname = %s [T %d]\n", obj->name, i,
                      pair->value.s, pair->code);
           have_rotated_type = 0;
@@ -5359,10 +5355,7 @@ add_LAYER_entry (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         case 0:
           break;
         case 8:
-          if (dwg->header.version >= R_2007)
-            o->entries[i].name = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
-          else
-            o->entries[i].name = strdup (pair->value.s);
+          o->entries[i].name = dwg_add_u8_input (dwg, pair->value.s);
           LOG_TRACE ("%s.entries[%d].name = %s [T %d]\n", obj->name, i,
                      pair->value.s, pair->code);
           break;
@@ -5433,9 +5426,7 @@ add_EVALVARIANT (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                  pair->code);
       break;
     case DWG_VT_STRING:
-      value->u.text = dat->version >= R_2007
-                          ? (BITCODE_T)bit_utf8_to_TU (pair->value.s)
-                          : strdup (pair->value.s);
+      value->u.text = dwg_add_u8_input (dwg, pair->value.s);
       LOG_TRACE ("%s.%s = %s [T %d]\n", "EvalVariant", "value", pair->value.s,
                  pair->code);
       break;
@@ -5481,9 +5472,7 @@ add_VALUEPARAMs (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                  "VALUEPARAM", pair ? pair->code : -1, 1, "name");
       return 0;
     }
-  value->name = dwg->header.version >= R_2007
-                    ? (BITCODE_T)bit_utf8_to_TU (pair->value.s)
-                    : strdup (pair->value.s);
+  value->name = dwg_add_u8_input (dwg, pair->value.s);
   LOG_TRACE ("%s.%s = %s [BL %d]\n", "VALUEPARAM", "name", pair->value.s,
              pair->code);
   dxf_free_pair (pair);
@@ -6335,7 +6324,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       {
         int length = rbuf->value.str.size = strlen (pair->value.s);
         if (length > 0)
-          rbuf->value.str.u.wdata = bit_utf8_to_TU (pair->value.s);
+          rbuf->value.str.u.wdata = bit_utf8_to_TU (pair->value.s, 0);
         LOG_TRACE ("xdata[%d]: \"%s\" [TU %d]\n", num_xdata,
                    pair->value.s, rbuf->type);
         xdata_size += 2 + 2 * rbuf->value.str.size;
@@ -6475,10 +6464,7 @@ add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
       return;
     }
   _obj->itemhandles[num] = hdl;
-  if (dwg->header.version >= R_2007)
-    _obj->texts[num] = (char *)bit_utf8_to_TU (text);
-  else
-    _obj->texts[num] = strdup (text);
+  _obj->texts[num] = dwg_add_u8_input (dwg, text);
   LOG_TRACE ("%s.texts[%d] = %s [T* 3]\n", obj->name, num, text);
   _obj->numitems = num + 1;
 }
@@ -10227,10 +10213,7 @@ new_object (char *restrict name, char *restrict dxfname,
                     }
                   if (tbl_sty && pair && pair->code == 300)
                     {
-                      if (dwg->header.version >= R_2007)
-                        tbl_sty->name = (char *)bit_utf8_to_TU (pair->value.s);
-                      else
-                        tbl_sty->name = strdup (pair->value.s);
+                      tbl_sty->name = dwg_add_u8_input (dwg, pair->value.s);
                       LOG_TRACE ("%s.%s.name = \"%s\" [BL %d]\n", obj->name,
                                  key, pair->value.s, pair->code);
                       dxf_free_pair (pair);
@@ -10542,10 +10525,7 @@ new_object (char *restrict name, char *restrict dxfname,
               if (!o->names || j < 0 || j >= (int)o->num_names)
                 goto invalid_dxf;
               assert (j >= 0 && j < (int)o->num_names && o->names);
-              if (dwg->header.version >= R_2007)
-                o->names[j] = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
-              else
-                o->names[j] = strdup (pair->value.s);
+              o->names[j] = dwg_add_u8_input (dwg, pair->value.s);
               LOG_TRACE ("%s.%s[%d] = %s [%s %d]\n", name, "names", j,
                          pair->value.s, "T", pair->code);
               j++;
@@ -10958,11 +10938,7 @@ new_object (char *restrict name, char *restrict dxfname,
                           else if (pair->code < 440)
                             {
                               color.flag |= 0x10;
-                              if (dwg->header.version >= R_2007)
-                                color.name = (BITCODE_T)bit_utf8_to_TU (
-                                    pair->value.s);
-                              else
-                                color.name = strdup (pair->value.s);
+                              color.name = dwg_add_u8_input (dwg, pair->value.s);
                               LOG_TRACE ("%s.%s.name = %s [%s %d]\n", name,
                                          f->name, pair->value.s, "CMC",
                                          pair->code);
@@ -11255,11 +11231,7 @@ new_object (char *restrict name, char *restrict dxfname,
                       else if (pair->code == 430)
                         {
                           color.flag |= 0x10;
-                          if (dwg->header.version >= R_2007)
-                            color.name
-                                = (BITCODE_T)bit_utf8_to_TU (pair->value.s);
-                          else
-                            color.name = strdup (pair->value.s);
+                          color.name = dwg_add_u8_input (dwg, pair->value.s);
                           // TODO: book_name or name?
                           LOG_TRACE ("COMMON.%s.name = %s [%s %d]\n", f->name,
                                      pair->value.s, "CMC", pair->code);
@@ -11556,7 +11528,7 @@ new_object (char *restrict name, char *restrict dxfname,
                             {
                               char *tmp = o->color.name;
                               o->color.name
-                                  = (BITCODE_T)bit_utf8_to_TU (o->color.name);
+                                = (BITCODE_T)bit_utf8_to_TU (o->color.name, 0);
                               free (tmp);
                             }
                         }
@@ -11569,11 +11541,11 @@ new_object (char *restrict name, char *restrict dxfname,
                             {
                               char *tmp = o->color.book_name;
                               o->color.book_name = (BITCODE_T)bit_utf8_to_TU (
-                                  o->color.book_name);
+                                  o->color.book_name, 0);
                               free (tmp);
                               tmp = o->color.name;
                               o->color.name
-                                  = (BITCODE_T)bit_utf8_to_TU (o->color.name);
+                                = (BITCODE_T)bit_utf8_to_TU (o->color.name, 0);
                               free (tmp);
                             }
                           LOG_TRACE ("%s.color.book+name = %s [%s %d]\n", name,
@@ -12514,10 +12486,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       ADD_OBJECT (BLOCK_HEADER);
       // dwg->header.version probably here still unknown. <r2000: 0x17
       // later fixed up when reading $ACADVER and the BLOCK_HEADER.name
-      if (dwg->header.version >= R_2007)
-        _obj->name = (char *)bit_utf8_to_TU ((char *)"*Model_Space");
-      else
-        _obj->name = strdup ((char *)"*Model_Space");
+      _obj->name = dwg_add_u8_input (dwg, "*Model_Space");
       _obj->is_xref_ref = 1;
       obj->tio.object->is_xdic_missing = 1;
       dwg_add_handle (&obj->handle, 0, 0x1F, obj);

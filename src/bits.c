@@ -1543,8 +1543,9 @@ static int heX (unsigned char c)
   return c >= 10 ? 'A' + c - 10 : '0' + c;
 }
 
-/* converts TU to ASCII with embedded \U+XXXX.
-   max len widechars.
+/* Converts TU to ASCII with embedded \U+XXXX.
+   Max len widechars.
+   No codepage support yet, only cp 30.
  */
 char *
 bit_embed_TU_size (BITCODE_TU restrict wstr, const int len)
@@ -2308,7 +2309,8 @@ bit_convert_TU (BITCODE_TU restrict wstr)
     Returns NULL if not enough room in dest.
 */
 char *
-bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src, const int destlen)
+bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
+                const int destlen, const unsigned cquoted)
 {
   unsigned char c;
   unsigned char *s = (unsigned char *)src;
@@ -2321,7 +2323,7 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src, const in
         {
           return NULL;
         }
-      else if (c == '\\' && dest+1 < endp &&
+      else if (cquoted && c == '\\' && dest+1 < endp &&
           // skip \" to " and \\ to \.
           (*s == '"' || *s == '\\' || *s == 'r' || *s == 'n'))
         {
@@ -2412,7 +2414,7 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src, const in
     TODO: unquote json_cquote as above.
  */
 BITCODE_TU
-bit_utf8_to_TU (char *restrict str)
+bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
 {
   BITCODE_TU wstr;
   int i = 0;
@@ -2518,7 +2520,7 @@ bit_set_T (Bit_Chain *dat, const char* restrict src)
   if (!(IS_FROM_TU (dat)))
     return strdup (src);
   else
-    return (BITCODE_T)bit_utf8_to_TU ((char*)src);
+    return (BITCODE_T)bit_utf8_to_TU ((char*)src, 0);
 }
 
 /** Read 1 bitlong according to normal order

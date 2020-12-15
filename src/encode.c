@@ -52,6 +52,9 @@
 bool is_dwg_object (const char *name);
 bool is_dwg_entity (const char *name);
 int dwg_dynapi_entity_size (const char *restrict name);
+// from dwg_api
+BITCODE_T dwg_add_u8_input (Dwg_Data *restrict dwg,
+                            const char *restrict u8str);
 
 /* The logging level for the write (encode) path.  */
 static unsigned int loglevel;
@@ -1062,10 +1065,8 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
   obj->bitsize = 164;
   obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, appctl->absolute_ref, NULL);
   obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
-  if (dwg->header.from_version >= R_2007)
-    _obj->name = (BITCODE_T)bit_utf8_to_TU ((char*)"LibreDWG");
-  else
-    _obj->name = strdup ("LibreDWG");
+
+  _obj->name = dwg_add_u8_input (dwg, "LibreDWG");
   _obj->is_xref_ref = 1;
   _obj->xref = dwg_add_handleref (dwg, 5, 0, NULL);
 
@@ -1118,7 +1119,7 @@ add_DUMMY_eed (Dwg_Object *obj)
   data->code = 0; // RC
   if (is_tu) // probably never used, write DUMMY placeholder to R_2007
     {
-      BITCODE_TU wstr = bit_utf8_to_TU (name);
+      BITCODE_TU wstr = bit_utf8_to_TU (name, 0);
       data->u.eed_0_r2007.length = len * 2; // RS
       memcpy (data->u.eed_0_r2007.string, wstr, (len + 1) * 2);
     }
@@ -3890,7 +3891,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
           if (!(IS_FROM_TU (dat)))
             {
               BITCODE_RS length = data->u.eed_0.length;
-              BITCODE_TU dest = bit_utf8_to_TU (data->u.eed_0.string);
+              BITCODE_TU dest = bit_utf8_to_TU (data->u.eed_0.string, 0);
               if ((length * 2) + 2 + dat->byte >= dat->size)
                 bit_chain_alloc (dat);
               bit_write_RS (dat, length);
@@ -4456,7 +4457,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
             if (rbuf->value.str.size && !(IS_FROM_TU (dat)))
               {
                 // TODO: same len when converted to TU? normally yes
-                BITCODE_TU new = bit_utf8_to_TU (rbuf->value.str.u.data);
+                BITCODE_TU new = bit_utf8_to_TU (rbuf->value.str.u.data, 0);
                 bit_write_RS (dat, rbuf->value.str.size);
                 for (i = 0; i < rbuf->value.str.size; i++)
                   bit_write_RS (dat, new[i]);

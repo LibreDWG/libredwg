@@ -14503,7 +14503,7 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
         {
           BITCODE_TU wstr;
           if (is_utf8)
-            wstr = bit_utf8_to_TU (*(char **)value);
+            wstr = bit_utf8_to_TU (*(char **)value, 0);
           else // source is already TU
             {
 #if defined(HAVE_WCHAR_H) && defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2

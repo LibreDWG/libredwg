@@ -5888,7 +5888,6 @@ EXPORT dwg_object *dwg_ent_to_object (const dwg_obj_ent *restrict obj,
 EXPORT dwg_object *
 dwg_ent_generic_to_object (const void *restrict obj,
                            int *restrict error) __nonnull ((2));
-
 EXPORT dwg_obj_ent *
 dwg_ent_generic_parent (const void *restrict ent,
                         int *restrict error) __nonnull ((2));
@@ -6088,6 +6087,9 @@ dwg_obj_generic_to_object (const void *restrict obj,
                            int *restrict error) __nonnull ((2));
 EXPORT unsigned long
 dwg_obj_generic_handlevalue (void *_obj) __nonnull_all;
+Dwg_Data *
+dwg_obj_generic_dwg (const void *restrict obj,
+                     int *restrict error) __nonnull_all;
 EXPORT dwg_obj_obj *
 dwg_obj_generic_parent (const void *restrict obj,
                         int *restrict error) __nonnull ((2));

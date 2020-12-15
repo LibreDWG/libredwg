@@ -116,7 +116,7 @@ static void
 bits_TU (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
   // the source is always utf8
-  BITCODE_TU wstr = bit_utf8_to_TU ((char*)g->value);
+  BITCODE_TU wstr = bit_utf8_to_TU ((char*)g->value, 0);
   bit_write_TU (dat, wstr);
   g->type = BITS_TU;
   free (wstr);

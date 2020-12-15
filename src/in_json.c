@@ -347,7 +347,7 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
       if (!key)
         goto outofmemory;
       dat->chain[t->end] = '\0';
-      while (!bit_utf8_to_TV (key, &dat->chain[t->start], len))
+      while (!bit_utf8_to_TV (key, &dat->chain[t->start], len, 1))
         {
           LOG_INSANE ("Not enough room in quoted string len=%d\n", len-8)
           len += 8;
@@ -396,7 +396,7 @@ json_wstring (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
   tokens->index++;
   JSON_TOKENS_CHECK_OVERFLOW_NULL
   dat->chain[t->end] = '\0';
-  return bit_utf8_to_TU ((char *)&dat->chain[t->start]);
+  return bit_utf8_to_TU ((char *)&dat->chain[t->start], 0);
 }
 
 ATTRIBUTE_MALLOC
@@ -1140,7 +1140,7 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               klass->dxfname = json_string (dat, tokens);
               if (dwg->header.version >= R_2007)
-                klass->dxfname_u = bit_utf8_to_TU (klass->dxfname);
+                klass->dxfname_u = bit_utf8_to_TU (klass->dxfname, 0);
               LOG_TRACE ("dxfname: \"%s\"\n", klass->dxfname);
             }
           else if (strEQc (key, "cppname"))
@@ -1482,7 +1482,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 }
                 LATER_VERSIONS
                 {
-                  rbuf->value.str.u.wdata = bit_utf8_to_TU (s);
+                  rbuf->value.str.u.wdata = bit_utf8_to_TU (s, 0);
                   free (s);
                   LOG_TRACE_TU ("xdata", rbuf->value.str.u.wdata, rbuf->type);
                   size += (len * 2) + 2;

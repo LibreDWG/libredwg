@@ -2921,13 +2921,10 @@ void
 dwg_ent_text_set_text (dwg_ent_text *restrict ent,
                        const char *restrict text_value, int *restrict error)
 {
-  if (ent)
+  Dwg_Data *dwg = dwg_obj_generic_dwg (ent, error);
+  if (ent && !error)
     {
-      *error = 0;
-      if (dwg_version >= R_2007)
-        ent->text_value = (char *)bit_utf8_to_TU ((char *)text_value);
-      else
-        ent->text_value = (char *)text_value;
+      ent->text_value = dwg_add_u8_input (dwg, text_value);
     }
   else
     {
@@ -3343,13 +3340,10 @@ void
 dwg_ent_attrib_set_text (dwg_ent_attrib *restrict ent,
                          const char *restrict text_value, int *restrict error)
 {
-  if (ent)
+  Dwg_Data *dwg = dwg_obj_generic_dwg (ent, error);
+  if (ent && !error)
     {
-      *error = 0;
-      if (dwg_version >= R_2007)
-        ent->text_value = (char *)bit_utf8_to_TU ((char *)text_value);
-      else
-        ent->text_value = (char *)text_value;
+      ent->text_value = dwg_add_u8_input (dwg, text_value);
     }
   else
     {
@@ -3761,13 +3755,10 @@ dwg_ent_attdef_set_default_value (dwg_ent_attdef *restrict ent,
                                   const char *restrict default_value,
                                   int *restrict error)
 {
-  if (ent)
+  Dwg_Data *dwg = dwg_obj_generic_dwg (ent, error);
+  if (ent && !error)
     {
-      *error = 0;
-      if (dwg_version >= R_2007)
-        ent->default_value = (char *)bit_utf8_to_TU ((char *)default_value);
-      else
-        ent->default_value = (char *)default_value;
+      ent->default_value = dwg_add_u8_input (dwg, default_value);
     }
   else
     {
@@ -4752,13 +4743,10 @@ void
 dwg_ent_block_set_name (dwg_ent_block *restrict ent, const char *name,
                         int *restrict error)
 {
-  if (ent)
+  Dwg_Data *dwg = dwg_obj_generic_dwg (ent, error);
+  if (ent && !error)
     {
-      *error = 0;
-      if (dwg_version >= R_2007)
-        ent->name = (char *)bit_utf8_to_TU ((char *)name);
-      else
-        ent->name = (char *)name;
+      ent->name = dwg_add_u8_input (dwg, default_value);
     }
   else
     {
@@ -6937,13 +6925,10 @@ void
 dwg_obj_mlinestyle_set_name (dwg_obj_mlinestyle *restrict mlinestyle,
                              const char *restrict name, int *restrict error)
 {
-  if (mlinestyle)
+  Dwg_Data *dwg = dwg_obj_generic_dwg (mlinestyle, error);
+  if (mlinestyle && !error)
     {
-      *error = 0;
-      if (dwg_version >= R_2007)
-        mlinestyle->name = (char *)bit_utf8_to_TU ((char *)name);
-      else
-        mlinestyle->name = (char *)name;
+      mlinestyle->name = dwg_add_u8_input (dwg, name);
     }
   else
     {
@@ -6991,13 +6976,10 @@ void
 dwg_obj_mlinestyle_set_desc (dwg_obj_mlinestyle *restrict mlinestyle,
                              const char *restrict desc, int *restrict error)
 {
-  if (mlinestyle)
+  Dwg_Data *dwg = dwg_obj_generic_dwg (mlinestyle, error);
+  if (mlinestyle && !error)
     {
-      *error = 0;
-      if (dwg_version >= R_2007)
-        mlinestyle->description = (char *)bit_utf8_to_TU ((char *)desc);
-      else
-        mlinestyle->description = (char *)desc;
+      mlinestyle->description = dwg_add_u8_input (dwg, desc);
     }
   else
     {
@@ -7792,13 +7774,10 @@ void
 dwg_ent_dim_set_user_text (dwg_ent_dim *restrict dim,
                            const char *restrict text, int *restrict error)
 {
-  if (dim)
+  Dwg_Data *dwg = dwg_obj_generic_dwg (ent, error);
+  if (ent && !error)
     {
-      *error = 0;
-      if (dwg_version >= R_2007)
-        dim->user_text = (char *)bit_utf8_to_TU ((char *)text);
-      else
-        dim->user_text = (char *)text;
+      ent->user_text = dwg_add_u8_input (dwg, text);
     }
   else
     {
@@ -10520,13 +10499,10 @@ void
 dwg_ent_mtext_set_text (dwg_ent_mtext *restrict ent, char *text,
                         int *restrict error)
 {
-  if (ent)
+  Dwg_Data *dwg = dwg_obj_generic_dwg (ent, error);
+  if (ent && !error)
     {
-      *error = 0;
-      if (dwg_version >= R_2007)
-        ent->text = (char *)bit_utf8_to_TU (text);
-      else
-        ent->text = text;
+      ent->text = dwg_add_u8_input (dwg, text);
     }
   else
     {
@@ -11438,13 +11414,10 @@ dwg_ent_tolerance_set_text_string (dwg_ent_tolerance *restrict tol,
                                    const char *restrict string,
                                    int *restrict error)
 {
-  if (tol)
+  Dwg_Data *dwg = dwg_obj_generic_dwg (ent, error);
+  if (ent && !error)
     {
-      *error = 0;
-      if (dwg_version >= R_2007)
-        tol->text_value = (char *)bit_utf8_to_TU ((char *)string);
-      else
-        tol->text_value = (char *)string;
+      ent->text_value = dwg_add_u8_input (dwg, string);
     }
   else
     {
@@ -12941,16 +12914,13 @@ dwg_ent_viewport_get_style_sheet (const dwg_ent_viewport *restrict vp,
 /** Sets viewport style sheet name (utf-8 encoded)
  */
 void
-dwg_ent_viewport_set_style_sheet (dwg_ent_viewport *restrict vp, char *sheet,
+dwg_ent_viewport_set_style_sheet (dwg_ent_viewport *restrict ent, char *sheet,
                                   int *restrict error)
 {
-  if (vp)
+  Dwg_Data *dwg = dwg_obj_generic_dwg (ent, error);
+  if (ent && !error)
     {
-      *error = 0;
-      if (dwg_version >= R_2007)
-        vp->style_sheet = (char *)bit_utf8_to_TU (sheet);
-      else
-        vp->style_sheet = sheet;
+      ent->style_sheet = dwg_add_u8_input (dwg, sheet);
     }
   else
     {
@@ -21359,10 +21329,19 @@ dwg_ent_to_object (const dwg_obj_ent *restrict obj, int *restrict error)
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_object *
-dwg_ent_generic_to_object (const void *restrict obj,
+dwg_ent_generic_to_object (const void *restrict _obj,
                            int *restrict error)
 {
-  return dwg_obj_generic_to_object (obj, error);
+  return dwg_obj_generic_to_object (_obj, error);
+}
+
+Dwg_Data *
+dwg_obj_generic_dwg (const void *restrict _obj,
+                        int *restrict error)
+{
+  dwg_obj_generic *o = (dwg_obj_generic *)_obj;
+  return (o && o->parent && o->parent->dwg)
+    ? o->parent->dwg : NULL;
 }
 
 /** Returns dwg_obj_ent* from any dwg_ent_* entity
@@ -22124,15 +22103,15 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
 {
   if (dwg->header.version >= R_2007)
     {
-      return (BITCODE_T)bit_utf8_to_TU ((char *restrict)u8str);
+      return (BITCODE_T)bit_utf8_to_TU ((char *restrict)u8str, 0);
     }
   else
     {
-      // TODO Encode unicode to \U+...
+      // TODO Encode unicode to \U+... bit_utf8_to_TV
 #if 0
       int size = 1024;
       char *dest = malloc (size);
-      char *tgt = bit_utf8_to_TV (dest, u8str, size);
+      char *tgt = bit_utf8_to_TV (dest, u8str, size, 0);
       if (!dest)
         {
           LOG_ERROR ("Out of memory");
@@ -22147,7 +22126,7 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
               return NULL;
             }
           dest = realloc (dest, size);
-          tgt = bit_utf8_to_TV (dest, u8str, size);
+          tgt = bit_utf8_to_TV (dest, u8str, size, 0);
         }
       return tgt;
 #endif
@@ -22541,7 +22520,7 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
   klass->number = i + 500;
   klass->dxfname = strdup (dxfname);
   if (dwg->header.version >= R_2007)
-    klass->dxfname_u = bit_utf8_to_TU ((char *restrict)dxfname);
+    klass->dxfname_u = bit_utf8_to_TU ((char *restrict)dxfname, 0);
   klass->appname = dwg_add_u8_input (dwg, appname);
   klass->cppname = dwg_add_u8_input (dwg, cppname);
   klass->item_class_id = is_entity ? 0x1f2: 0x1f3;

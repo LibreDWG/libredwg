@@ -1911,7 +1911,7 @@ main (int argc, char *argv[])
 
 #  ifdef HAVE_PCRE2_16
   pcre2_config_16 (PCRE2_CONFIG_JIT, &have_jit);
-  pattern16 = bit_utf8_to_TU (pattern);
+  pattern16 = bit_utf8_to_TU (pattern, 0);
   ri16 = pcre2_compile_16 ((PCRE2_SPTR16)pattern16, plen, /* pattern */
                            options,                       /* options */
                            &errcode,                      /* errors */

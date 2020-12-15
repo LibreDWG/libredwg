@@ -23,6 +23,10 @@
 #include "decode.h"
 #include "dynapi.h"
 
+// from dwg_api
+BITCODE_T dwg_add_u8_input (Dwg_Data *restrict dwg,
+                            const char *restrict u8str);
+
 EXPORT int dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 
@@ -173,13 +177,7 @@ BITCODE_RC dxf_find_lweight (const int lw);
 #define STRADD_T(field, string)                                               \
   if (string)                                                                 \
     {                                                                         \
-      if (dat->version >= R_2007)                                             \
-        field = (char*)bit_utf8_to_TU (string);                               \
-      else                                                                    \
-        {                                                                     \
-          field = (char*)malloc (strlen (string) + 1);                        \
-          strcpy (field, string);                                             \
-        }                                                                     \
+      field = dwg_add_u8_input (dwg, string);                                 \
     }
 
 #define UPGRADE_ENTITY(FROM, TO)                                              \

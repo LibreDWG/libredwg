@@ -279,14 +279,18 @@ size_t bit_strnlen (const char *restrict str, const size_t maxlen);
 EXPORT char *bit_convert_TU (BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
 
 /** Converts UTF-8 (dxf,json) to ASCII TV.
-    Unquotes \" to ", undo json_cquote(), \uxxxx or other unicode => \U+XXXX
+    \uxxxx or other unicode => \U+XXXX
+    If cquoted unquotes \" to ", undo json_cquote(),
     Returns NULL if not enough room in dest. */
 EXPORT char *
-bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src, const int len);
+bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
+                const int len, const unsigned cquoted);
 
 /** Converts UTF-8 to UCS-2. Returns a copy.
-    Needed by dwg importers, writers (e.g. dxf2dwg) */
-EXPORT BITCODE_TU bit_utf8_to_TU (char *restrict str) ATTRIBUTE_MALLOC;
+    Needed by dwg importers, writers (e.g. dxf2dwg)
+    cquoted is needed by in_json, to unquote \"
+ */
+EXPORT BITCODE_TU bit_utf8_to_TU (char *restrict str, const unsigned cquoted) ATTRIBUTE_MALLOC;
 
 /* compare an ASCII/TU string to ASCII name */
 int bit_eq_T (Bit_Chain *restrict dat, const BITCODE_T restrict str1, const char *restrict str2);
