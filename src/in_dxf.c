@@ -11385,6 +11385,10 @@ new_object (char *restrict name, char *restrict dxfname,
                 ; // ignore the POLYLINE_PFACE flag 70
               else if (pair->code == 70 && strEQc (name, "POLYLINE_PFACE"))
                 ;
+              // always OLE
+              else if (pair->code == 1 && strEQc (name, "OLE2FRAME")
+                       && strEQc (pair->value.s, "OLE"))
+                ;
               // the STYLE name, which is already defined by code 7
               else if (pair->code == 2 && strEQc (name, "SHAPE"))
                 ;
