@@ -11385,7 +11385,8 @@ new_object (char *restrict name, char *restrict dxfname,
                 ; // ignore the POLYLINE_PFACE flag 70
               else if (pair->code == 70 && strEQc (name, "POLYLINE_PFACE"))
                 ;
-              else if (pair->code == 30 && strEQc (name, "POLYLINE_3D"))
+              // the STYLE name, which is already defined by code 7
+              else if (pair->code == 2 && strEQc (name, "SHAPE"))
                 ;
               else if ((pair->code == 290 || pair->code == 2)
                        && ((obj->fixedtype == DWG_TYPE_REGION)
