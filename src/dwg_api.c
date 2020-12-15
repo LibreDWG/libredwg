@@ -22548,10 +22548,9 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
 #define ADD_ENTITY(token)                                                     \
   obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
   if (strlen (#token) > 3 && !memcmp (#token, "_3D", 3))                      \
-    obj->name = (char *)&#token[1];                                           \
+    dxfname = obj->name = obj->dxfname = (char *)&#token[1];                  \
   else                                                                        \
-    obj->name = (char *)#token;                                               \
-  obj->dxfname = (char*)dxfname;                                              \
+    dxfname = obj->name = obj->dxfname = (char *)#token;                      \
   if (obj->type >= DWG_TYPE_GROUP)                                            \
     (void)dwg_encode_get_class (obj->parent, obj);                            \
   LOG_TRACE ("  ADD_ENTITY %s [%d]\n", obj->name, obj->index)                 \
@@ -22568,7 +22567,7 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
   int error;                                                                  \
   Dwg_Object *obj;                                                            \
   Dwg_Entity_##token *_obj;                                                   \
-  const char *dxfname = #token;                                               \
+  const char *dxfname;                                                        \
   Dwg_Object *blkobj = dwg_obj_generic_to_object (blkhdr, &error);            \
   Dwg_Data *dwg = blkobj && !error ? blkobj->parent : NULL;                   \
   if (!dwg || !blkobj ||                                                      \
