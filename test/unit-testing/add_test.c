@@ -727,19 +727,8 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
     error = dwg_read_file (dwgfile, dwg);
   if (error >= DWG_ERR_CRITICAL)
     {
-      if (as_dxf && (type == DWG_TYPE_POLYLINE_2D
-                     || type == DWG_TYPE_POLYLINE_MESH
-                     || type == DWG_TYPE_OLE2FRAME
-                     || type == DWG_TYPE_SHAPE))
-        {
-          todo ("read %s from %s", name, dwgfile);
-          return 0;
-        }
-      else
-        {
-          fail ("read %s from %s", name, dwgfile);
-          return 1;
-        }
+      fail ("read %s from %s", name, dwgfile);
+      return 1;
     }
   else
     ok ("read %s from %s", name, dwgfile);
