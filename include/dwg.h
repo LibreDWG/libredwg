@@ -793,7 +793,7 @@ typedef struct _dwg_header_variables {
   BITCODE_BL unknown_8; /* 24L */
   BITCODE_BL unknown_9; /* 0L */
   BITCODE_BS unknown_10; /* 0 r13-r14 */
-  BITCODE_H VX_TABLE_RECORD; /*!< r11-r2000 */
+  BITCODE_H VX_TABLE_RECORD; /*!< r11-r2000 code 5, no DXF */
   BITCODE_B DIMASO;
   BITCODE_B DIMSHO;
   BITCODE_B DIMSAV; /* undocumented */
@@ -894,14 +894,14 @@ typedef struct _dwg_header_variables {
   BITCODE_BS HANDLING; /* <r14: default 1 */
   //BITCODE_RS HANDSEED_R11;
   BITCODE_H HANDSEED;
-  BITCODE_H CLAYER;
-  BITCODE_H TEXTSTYLE;
-  BITCODE_H CELTYPE;
-  BITCODE_H CMATERIAL;
-  BITCODE_H DIMSTYLE;
-  BITCODE_H CMLSTYLE;
+  BITCODE_H CLAYER;	/*!< code 5, DXF 8 */
+  BITCODE_H TEXTSTYLE;	/*!< code 5, DXF 7 */
+  BITCODE_H CELTYPE;	/*!< code 5, DXF 6 */
+  BITCODE_H CMATERIAL;	/*!< r2007+ code 5, no DXF */
+  BITCODE_H DIMSTYLE;	/*!< code 5, DXF 2 */
+  BITCODE_H CMLSTYLE;	/*!< code 5, DXF 2 */
   BITCODE_BD PSVPSCALE;
-  BITCODE_3BD PINSBASE;
+  BITCODE_3BD PINSBASE;		/*!< r13+ ... */
   BITCODE_3BD PEXTMIN;
   BITCODE_3BD PEXTMAX;
   BITCODE_2DPOINT PLIMMIN;
@@ -910,9 +910,9 @@ typedef struct _dwg_header_variables {
   BITCODE_3BD PUCSORG;
   BITCODE_3BD PUCSXDIR;
   BITCODE_3BD PUCSYDIR;
-  BITCODE_H PUCSNAME;
-  BITCODE_H PUCSBASE;
-  BITCODE_H PUCSORTHOREF;
+  BITCODE_H PUCSNAME;		/*!< r13+ code 5, DXF 2 */
+  BITCODE_H PUCSBASE;		/*!< r2000+ code 5, DXF 2 */
+  BITCODE_H PUCSORTHOREF;	/*!< r2000+ code 5, DXF 2 */
   BITCODE_BS PUCSORTHOVIEW;
   BITCODE_3BD PUCSORGTOP;
   BITCODE_3BD PUCSORGBOTTOM;
@@ -939,10 +939,10 @@ typedef struct _dwg_header_variables {
   BITCODE_3BD UCSORG;
   BITCODE_3BD UCSXDIR;
   BITCODE_3BD UCSYDIR;
-  BITCODE_H UCSNAME;
-  BITCODE_H UCSBASE;
+  BITCODE_H UCSNAME;		/*!< code 5, DXF 2 */
+  BITCODE_H UCSBASE;		/*!< code 5, DXF 2 */
   BITCODE_BS UCSORTHOVIEW;
-  BITCODE_H UCSORTHOREF;
+  BITCODE_H UCSORTHOREF;	/*!< code 5, DXF 2 */
   BITCODE_3BD UCSORGTOP;
   BITCODE_3BD UCSORGBOTTOM;
   BITCODE_3BD UCSORGLEFT;
@@ -980,7 +980,7 @@ typedef struct _dwg_header_variables {
   BITCODE_BS DIMTDEC;
   BITCODE_BS DIMALTU;
   BITCODE_BS DIMALTTD;
-  BITCODE_H DIMTXSTY;
+  BITCODE_H DIMTXSTY;	/*!< code 5, DXF 7 */
   BITCODE_BD DIMSCALE;
   BITCODE_BD DIMASZ;
   BITCODE_BD DIMEXO;
@@ -1031,52 +1031,52 @@ typedef struct _dwg_header_variables {
   BITCODE_BD DIMMZF;    /*!< r2010+ */
   BITCODE_T  DIMMZS;    /*!< r2010+ */
   /*BITCODE_H DIMTXSTY;*/  /*!< r2000+ */
-  BITCODE_H DIMLDRBLK;  /*!< r2000+ */
-  BITCODE_H DIMBLK;     /*!< r2000+ */
-  BITCODE_H DIMBLK1;    /*!< r2000+ */
-  BITCODE_H DIMBLK2;    /*!< r2000+ */
-  BITCODE_H DIMLTYPE; /*!< r2007+ */
-  BITCODE_H DIMLTEX1; /*!< r2007+ */
-  BITCODE_H DIMLTEX2; /*!< r2007+ */
+  BITCODE_H DIMLDRBLK;  /*!< r2000+ code 5, DXF 1 */
+  BITCODE_H DIMBLK;     /*!< r2000+ code 5, DXF 1 */
+  BITCODE_H DIMBLK1;    /*!< r2000+ code 5, DXF 1 */
+  BITCODE_H DIMBLK2;    /*!< r2000+ code 5, DXF 1 */
+  BITCODE_H DIMLTYPE; /*!< r2007+ code 5, DXF 6 */
+  BITCODE_H DIMLTEX1; /*!< r2007+ code 5, DXF 6 */
+  BITCODE_H DIMLTEX2; /*!< r2007+ code 5, DXF 6 */
   BITCODE_BSd DIMLWD;  /*!< r2000+ */
   BITCODE_BSd DIMLWE;  /*!< r2000+ */
-  BITCODE_H BLOCK_CONTROL_OBJECT;
-  BITCODE_H LAYER_CONTROL_OBJECT;
-  BITCODE_H STYLE_CONTROL_OBJECT;
-  BITCODE_H LTYPE_CONTROL_OBJECT;
-  BITCODE_H VIEW_CONTROL_OBJECT;
-  BITCODE_H UCS_CONTROL_OBJECT;
-  BITCODE_H VPORT_CONTROL_OBJECT;
-  BITCODE_H APPID_CONTROL_OBJECT;
-  BITCODE_H DIMSTYLE_CONTROL_OBJECT;
-  BITCODE_H VX_CONTROL_OBJECT; /*!< r11-r2000 */
-  BITCODE_H DICTIONARY_ACAD_GROUP;
-  BITCODE_H DICTIONARY_ACAD_MLINESTYLE;
-  BITCODE_H DICTIONARY_NAMED_OBJECT;
+  BITCODE_H BLOCK_CONTROL_OBJECT; /*!< code 3 */
+  BITCODE_H LAYER_CONTROL_OBJECT; /*!< code 3 */
+  BITCODE_H STYLE_CONTROL_OBJECT; /*!< code 3 */
+  BITCODE_H LTYPE_CONTROL_OBJECT; /*!< code 3 */
+  BITCODE_H VIEW_CONTROL_OBJECT; /*!< code 3 */
+  BITCODE_H UCS_CONTROL_OBJECT; /*!< code 3 */
+  BITCODE_H VPORT_CONTROL_OBJECT; /*!< code 3 */
+  BITCODE_H APPID_CONTROL_OBJECT; /*!< code 3 */
+  BITCODE_H DIMSTYLE_CONTROL_OBJECT; /*!< code 3 */
+  BITCODE_H VX_CONTROL_OBJECT; /*!< r11-r2000 code 3 */
+  BITCODE_H DICTIONARY_ACAD_GROUP;	/*!< code 5 */
+  BITCODE_H DICTIONARY_ACAD_MLINESTYLE;	/*!< code 5 */
+  BITCODE_H DICTIONARY_NAMED_OBJECT;	/*!< code 5, the "NOD" */
   BITCODE_BS TSTACKALIGN;           /*!< r2000+ */
   BITCODE_BS TSTACKSIZE;            /*!< r2000+ */
   BITCODE_T  HYPERLINKBASE;         /*!< r2000+ */
   BITCODE_TV STYLESHEET;            /*!< r2000+ */
-  BITCODE_H DICTIONARY_LAYOUT;      /*!< r2000+ */
-  BITCODE_H DICTIONARY_PLOTSETTINGS;   /*!< r2000+ */
-  BITCODE_H DICTIONARY_PLOTSTYLENAME;  /*!< r2000+ */
-  BITCODE_H DICTIONARY_MATERIAL;    /*!< r2004+ */
-  BITCODE_H DICTIONARY_COLOR;       /*!< r2004+ */
-  BITCODE_H DICTIONARY_VISUALSTYLE; /*!< r2007+ */
-  BITCODE_H DICTIONARY_LIGHTLIST;   /*!< r2010+ ?? */
-  BITCODE_H unknown_20;             /*!< r2013+ */
+  BITCODE_H DICTIONARY_LAYOUT;      /*!< r2000+ code 5 */
+  BITCODE_H DICTIONARY_PLOTSETTINGS;   /*!< r2000+ code 5 */
+  BITCODE_H DICTIONARY_PLOTSTYLENAME;  /*!< r2000+ code 5 */
+  BITCODE_H DICTIONARY_MATERIAL;    /*!< r2004+ code 5 */
+  BITCODE_H DICTIONARY_COLOR;       /*!< r2004+ code 5 */
+  BITCODE_H DICTIONARY_VISUALSTYLE; /*!< r2007+ code 5 */
+  BITCODE_H DICTIONARY_LIGHTLIST;   /*!< r2010+ code 5 ?? */
+  BITCODE_H unknown_20;             /*!< r2013+ code 5 LIGHTLIST? */
   BITCODE_BL FLAGS;
-  BITCODE_BSd CELWEIGHT; /* = FLAGS & 0x1f, see dxf_cvt_lweight() DXF 370 (int16) */
-  BITCODE_B  ENDCAPS;   /* = FLAGS & 0x60 */
-  BITCODE_B  JOINSTYLE; /* = FLAGS & 0x180 */
-  BITCODE_B  LWDISPLAY; /* = !(FLAGS & 0x200) */
-  BITCODE_B  XEDIT;     /* = !(FLAGS & 0x400) */
-  BITCODE_B  EXTNAMES;  /* = FLAGS & 0x800 */
-  BITCODE_B  PSTYLEMODE; /* = FLAGS & 0x2000 */
-  BITCODE_B  OLESTARTUP; /* = FLAGS & 0x4000 */
+  BITCODE_BSd CELWEIGHT; /*!< = FLAGS & 0x1f, see dxf_cvt_lweight() DXF 370 (int16) */
+  BITCODE_B  ENDCAPS;    /*!< = FLAGS & 0x60 */
+  BITCODE_B  JOINSTYLE;  /*!< = FLAGS & 0x180 */
+  BITCODE_B  LWDISPLAY;  /*!< = !(FLAGS & 0x200) */
+  BITCODE_B  XEDIT;      /*!< = !(FLAGS & 0x400) */
+  BITCODE_B  EXTNAMES;   /*!< = FLAGS & 0x800 */
+  BITCODE_B  PSTYLEMODE; /*!< = FLAGS & 0x2000 */
+  BITCODE_B  OLESTARTUP; /*!< = FLAGS & 0x4000 */
   BITCODE_BS INSUNITS;
   BITCODE_BS CEPSNTYPE;
-  BITCODE_H CPSNID;
+  BITCODE_H CPSNID;      /*!< when CEPSNTYPE = 3, code 5 */
   BITCODE_TV FINGERPRINTGUID;
   BITCODE_TV VERSIONGUID;
   BITCODE_RC SORTENTS;
@@ -1090,11 +1090,11 @@ typedef struct _dwg_header_variables {
   BITCODE_RC OBSLTYPE;
   BITCODE_RC INTERSECTIONDISPLAY;
   BITCODE_TV PROJECTNAME;
-  BITCODE_H BLOCK_RECORD_PSPACE;
-  BITCODE_H BLOCK_RECORD_MSPACE;
-  BITCODE_H LTYPE_BYLAYER;
-  BITCODE_H LTYPE_BYBLOCK;
-  BITCODE_H LTYPE_CONTINUOUS;
+  BITCODE_H BLOCK_RECORD_PSPACE;	/*!< code 5 */
+  BITCODE_H BLOCK_RECORD_MSPACE;	/*!< code 5 */
+  BITCODE_H LTYPE_BYLAYER;	/*!< code 5 */
+  BITCODE_H LTYPE_BYBLOCK;	/*!< code 5 */
+  BITCODE_H LTYPE_CONTINUOUS;	/*!< code 5 */
   BITCODE_B CAMERADISPLAY; /*!< r2007+ ... */
   BITCODE_BL unknown_21;
   BITCODE_BL unknown_22;
@@ -1124,9 +1124,9 @@ typedef struct _dwg_header_variables {
   BITCODE_RC DGNFRAME;
   BITCODE_B REALWORLDSCALE;
   BITCODE_CMC INTERFERECOLOR;
-  BITCODE_H INTERFEREOBJVS;
-  BITCODE_H INTERFEREVPVS;
-  BITCODE_H DRAGVS;
+  BITCODE_H INTERFEREOBJVS;	/*!< r2007+ code 5, DXF 345 VISUALSTYLE */
+  BITCODE_H INTERFEREVPVS;	/*!< r2007+ code 5, DXF 346 VISUALSTYLE */
+  BITCODE_H DRAGVS;		/*!< r2007+ code 5, DXF 349 VISUALSTYLE */
   BITCODE_RC CSHADOW;
   BITCODE_BD SHADOWPLANELOCATION;
   BITCODE_BS unknown_54; /*!< r14+ ... optional */
@@ -1165,7 +1165,7 @@ typedef struct _dwg_entity_TEXT
                                  4 = Middle; 5 = Fit */
   BITCODE_BS vert_alignment;  /*!< DXF 73. options 0-3:
                                  0 = Baseline; 1 = Bottom; 2 = Middle; 3 = Top */
-  BITCODE_H style;
+  BITCODE_H style;	      /*!< code 5, DXF 7, optional */
 } Dwg_Entity_TEXT;
 
 /** \ref Dwg_Entity_ATTRIB
@@ -7955,17 +7955,17 @@ typedef struct _dwg_object_entity
 
   /* Common Entity Handle Data */
   BITCODE_BL __iterator;
-  BITCODE_H ownerhandle; /*!< mspace, pspace or owner of subentity */
-  BITCODE_H* reactors;
-  BITCODE_H xdicobjhandle;
-  BITCODE_H prev_entity;  /*!< r13-r2000 */
-  BITCODE_H next_entity;  /*!< r13-r2000 */
-  BITCODE_H layer;
-  BITCODE_H ltype;
-  BITCODE_H material;     /*!< r2007+ */
-  BITCODE_H shadow;       /*!< r2007+ */
-  BITCODE_H plotstyle;    /*!< r2000+ */
-  BITCODE_H full_visualstyle; /*!< r2010+ */
+  BITCODE_H ownerhandle;   /*!< code 5, DXF 330 mspace, pspace or owner of subentity */
+  BITCODE_H* reactors;     /*!< r13+ code 4, DXF 102 {ACAD_XDICTIONARY, 330 */
+  BITCODE_H xdicobjhandle; /*!< r13+ code 3, DXF 102 {ACAD_REACTORS, 360 */
+  BITCODE_H prev_entity;  /*!< r13-r2000 code 4 */
+  BITCODE_H next_entity;  /*!< r13-r2000 code 4 */
+  BITCODE_H layer;        /*!< code 5, DXF 8 */
+  BITCODE_H ltype;        /*!< code 5, DXF 6 */
+  BITCODE_H material;     /*!< r2007+ code 5, DXF 347 */
+  BITCODE_H shadow;       /*!< r2007+ code 5 no DXF */
+  BITCODE_H plotstyle;    /*!< r2000+ code 5, DXF 390 */
+  BITCODE_H full_visualstyle; /*!< r2010+ code 5, DXF 348 */
   BITCODE_H face_visualstyle;
   BITCODE_H edge_visualstyle;
 } Dwg_Object_Entity;
@@ -8206,11 +8206,12 @@ typedef struct _dwg_object_object
   BITCODE_BL num_eed;
   Dwg_Eed *eed;
 
-  BITCODE_H ownerhandle;        /*!< DXF 330 */
+  /* Common Object Data */
+  BITCODE_H ownerhandle;        /*!< code 5, DXF 330 */
   BITCODE_BL num_reactors;
-  BITCODE_H* reactors;
-  BITCODE_H xdicobjhandle;
-  BITCODE_B is_xdic_missing;  /*!< r2004+ */
+  BITCODE_H* reactors;          /*!< r13+ code 4, DXF 102 {ACAD_XDICTIONARY, 330 */
+  BITCODE_H xdicobjhandle;      /*!< r13+ code 3, DXF 102 {ACAD_REACTORS, 360 */
+  BITCODE_B is_xdic_missing;    /*!< r2004+ */
   BITCODE_B has_ds_data;        /*!< r2013+  AcDs datastore */
 
   /*unsigned int num_handles;*/
