@@ -1846,13 +1846,18 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   char *buf = len ? (char*)malloc (blen + 1) : NULL;
                   char *pos = str;
                   char *old;
+                  /*
                   for (unsigned i = 0; i < blen; i++)
                     {
                       sscanf (pos, "%2hhX", &buf[i]);
                       pos += 2;
                     }
+                  */
                   if (buf)
                     {
+                      if ((read = in_hex2bin (buf, pos, blen) != blen))
+                        LOG_ERROR ("in_hex2bin with key %s at pos %u of %u",
+                                   key, read, blen);
                       buf[blen] = '\0';
                       LOG_TRACE ("%s.%s: '%.*s'... [BINARY %lu]\n", name, key, MIN((int)len, 60),
                                  str, (unsigned long)len);

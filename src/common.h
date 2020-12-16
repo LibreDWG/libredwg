@@ -130,10 +130,12 @@
 #if _GNUC_VERSION >= 303
 #  undef __nonnull
 #  define __nonnull(params) __attribute__ ((__nonnull__ params))
+#  define __nonnull_all __attribute__ ((__nonnull__))
 #  define HAVE_NONNULL
 #else
-#  undef HAVE_NONNULL
 #  define __nonnull(params)
+#  define __nonnull_all
+#  undef HAVE_NONNULL
 #endif
 
 #ifdef HAVE_FUNC_ATTRIBUTE_MALLOC
