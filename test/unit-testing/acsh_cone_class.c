@@ -9,10 +9,10 @@ api_process (dwg_object *obj)
   BITCODE_BD *trans;
   BITCODE_BL major;
   BITCODE_BL minor;
-  BITCODE_BD base_radius;     /*!< DXF 40 */
-  BITCODE_BD top_major_radius;/*!< DXF 41 */
-  BITCODE_BD top_minor_radius;/*!< DXF 42 */
-  BITCODE_BD top_x_radius;    /*!< DXF 43 */
+  BITCODE_BD height;     /*!< DXF 40 */
+  BITCODE_BD major_radius;/*!< DXF 41 */
+  BITCODE_BD minor_radius;/*!< DXF 42 */
+  BITCODE_BD x_radius;    /*!< DXF 43 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_acsh_cone_class *_obj = dwg_object_to_ACSH_CONE_CLASS (obj);
@@ -22,8 +22,8 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, ACSH_CONE_CLASS, major, BL);
   CHK_ENTITY_TYPE (_obj, ACSH_CONE_CLASS, minor, BL);
-  CHK_ENTITY_TYPE (_obj, ACSH_CONE_CLASS, base_radius, BD);
-  CHK_ENTITY_TYPE (_obj, ACSH_CONE_CLASS, top_major_radius, BD);
-  CHK_ENTITY_TYPE (_obj, ACSH_CONE_CLASS, top_minor_radius, BD);
-  CHK_ENTITY_TYPE (_obj, ACSH_CONE_CLASS, top_x_radius, BD);
+  CHK_ENTITY_TYPE (_obj, ACSH_CONE_CLASS, height, BD);
+  CHK_ENTITY_TYPE (_obj, ACSH_CONE_CLASS, major_radius, BD);
+  CHK_ENTITY_TYPE (_obj, ACSH_CONE_CLASS, minor_radius, BD);
+  CHK_ENTITY_TYPE (_obj, ACSH_CONE_CLASS, x_radius, BD);
 }

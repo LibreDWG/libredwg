@@ -6552,15 +6552,15 @@ EXPORT Dwg_Entity_3DSOLID*
 dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const dwg_point_3d *restrict origin_pt,
               const dwg_point_3d *restrict normal, /* maybe NULL */
-              const double base_radius, const double top_major_radius,
-              const double top_minor_radius, const double top_x_radius) __nonnull ((1,2));
-EXPORT Dwg_Entity_3DSOLID*
-dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                 const dwg_point_3d *restrict origin_pt,
-                 const dwg_point_3d *restrict normal, /* maybe NULL */
-                 const int bl92, const double base_dist,
-                 const double other_dist, const int num_edges,
-                 const int32_t* edges, const int bl95)  __nonnull ((1,2));
+              const double height, const double major_radius,
+              const double minor_radius, const double x_radius) __nonnull ((1,2));
+//EXPORT Dwg_Entity_3DSOLID*
+//dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+//                 const dwg_point_3d *restrict origin_pt,
+//                 const dwg_point_3d *restrict normal, /* maybe NULL */
+//                 const int bl92, const double base_dist,
+//                 const double other_dist, const int num_edges,
+//                 const int32_t* edges, const int bl95)  __nonnull ((1,2));
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_ELLIPTICAL_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                          const dwg_point_3d *restrict origin_pt,
@@ -6923,16 +6923,17 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_NO_DWG_ADD_XYPARAMETERENTITY
 
 #define HAVE_DWG_ADD_BOX
-#define HAVE_NO_DWG_ADD_CONE
-#define HAVE_NO_DWG_ADD_CYLINDER
+#define HAVE_DWG_ADD_CONE
+#define HAVE_DWG_ADD_CYLINDER
+#define HAVE_DWG_ADD_SPHERE
+#define HAVE_DWG_ADD_TORUS
+#define HAVE_DWG_ADD_WEDGE
+#define HAVE_NO_DWG_ADD_CHAMFER
 #define HAVE_NO_DWG_ADD_ELLIPTICAL_CONE
 #define HAVE_NO_DWG_ADD_ELLIPTICAL_CYLINDER
 #define HAVE_NO_DWG_ADD_EXTRUDED_SOLID
 #define HAVE_NO_DWG_ADD_EXTRUDED_PATH
 #define HAVE_NO_DWG_ADD_REVOLVED_SOLID
-#define HAVE_DWG_ADD_SPHERE
-#define HAVE_DWG_ADD_TORUS
-#define HAVE_NO_DWG_ADD_WEDGE
 
 #define HAVE_DWG_ADD_3DFACE
 #define HAVE_DWG_ADD_3DSOLID

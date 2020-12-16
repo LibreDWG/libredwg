@@ -6159,10 +6159,10 @@ typedef struct _dwg_object_ACSH_CONE_CLASS
   // AcDbShCone
   BITCODE_BL major;      /*!< DXF 90 */
   BITCODE_BL minor;      /*!< DXF 91 */
-  BITCODE_BD base_radius; /*!< DXF 40 */
-  BITCODE_BD top_major_radius;/*!< DXF 41 */
-  BITCODE_BD top_minor_radius;/*!< DXF 42 */
-  BITCODE_BD top_x_radius;    /*!< DXF 43 */
+  BITCODE_BD height; 	 /*!< DXF 40 */
+  BITCODE_BD major_radius; /*!< DXF 41 */
+  BITCODE_BD minor_radius; /*!< DXF 42 */
+  BITCODE_BD x_radius;    /*!< DXF 43 */
 } Dwg_Object_ACSH_CONE_CLASS;
 
 typedef struct _dwg_object_ACSH_PYRAMID_CLASS

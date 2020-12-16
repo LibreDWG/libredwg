@@ -25805,27 +25805,27 @@ static int test_ACSH_CONE_CLASS (const Dwg_Object *obj)
   Dwg_Object_ACSH_CONE_CLASS *restrict acsh_cone_class = obj->tio.object->tio.ACSH_CONE_CLASS;
   failed = 0;
   {
-    BITCODE_BD base_radius;
-    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "base_radius", &base_radius, NULL)
-        && base_radius == acsh_cone_class->base_radius)
-      pass ();
-    else
-      fail ("ACSH_CONE_CLASS.base_radius [BD] %g != %g", acsh_cone_class->base_radius, base_radius);
-    base_radius++;
-    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "base_radius", &base_radius, 0)
-        && base_radius == acsh_cone_class->base_radius)
-      pass ();
-    else
-      fail ("ACSH_CONE_CLASS.base_radius [BD] set+1 %g != %g", acsh_cone_class->base_radius, base_radius);
-    acsh_cone_class->base_radius--;
-  }
-  {
     Dwg_EvalExpr evalexpr;
     if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "evalexpr", &evalexpr, NULL)
         && !memcmp (&evalexpr, &acsh_cone_class->evalexpr, sizeof (Dwg_EvalExpr)))
         pass ();
     else
         fail ("ACSH_CONE_CLASS.evalexpr [Dwg_EvalExpr]");
+  }
+  {
+    BITCODE_BD height;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "height", &height, NULL)
+        && height == acsh_cone_class->height)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.height [BD] %g != %g", acsh_cone_class->height, height);
+    height++;
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "height", &height, 0)
+        && height == acsh_cone_class->height)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.height [BD] set+1 %g != %g", acsh_cone_class->height, height);
+    acsh_cone_class->height--;
   }
   {
     Dwg_ACSH_HistoryNode history_node;
@@ -25851,6 +25851,21 @@ static int test_ACSH_CONE_CLASS (const Dwg_Object *obj)
     acsh_cone_class->major--;
   }
   {
+    BITCODE_BD major_radius;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "major_radius", &major_radius, NULL)
+        && major_radius == acsh_cone_class->major_radius)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.major_radius [BD] %g != %g", acsh_cone_class->major_radius, major_radius);
+    major_radius++;
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "major_radius", &major_radius, 0)
+        && major_radius == acsh_cone_class->major_radius)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.major_radius [BD] set+1 %g != %g", acsh_cone_class->major_radius, major_radius);
+    acsh_cone_class->major_radius--;
+  }
+  {
     BITCODE_BL minor;
     if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "minor", &minor, NULL)
         && minor == acsh_cone_class->minor)
@@ -25866,6 +25881,21 @@ static int test_ACSH_CONE_CLASS (const Dwg_Object *obj)
     acsh_cone_class->minor--;
   }
   {
+    BITCODE_BD minor_radius;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "minor_radius", &minor_radius, NULL)
+        && minor_radius == acsh_cone_class->minor_radius)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.minor_radius [BD] %g != %g", acsh_cone_class->minor_radius, minor_radius);
+    minor_radius++;
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "minor_radius", &minor_radius, 0)
+        && minor_radius == acsh_cone_class->minor_radius)
+      pass ();
+    else
+      fail ("ACSH_CONE_CLASS.minor_radius [BD] set+1 %g != %g", acsh_cone_class->minor_radius, minor_radius);
+    acsh_cone_class->minor_radius--;
+  }
+  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "parent", &parent, NULL)
         && !memcmp (&parent, &acsh_cone_class->parent, sizeof (struct _dwg_object_object*)))
@@ -25874,49 +25904,19 @@ static int test_ACSH_CONE_CLASS (const Dwg_Object *obj)
         fail ("ACSH_CONE_CLASS.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_BD top_major_radius;
-    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "top_major_radius", &top_major_radius, NULL)
-        && top_major_radius == acsh_cone_class->top_major_radius)
+    BITCODE_BD x_radius;
+    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "x_radius", &x_radius, NULL)
+        && x_radius == acsh_cone_class->x_radius)
       pass ();
     else
-      fail ("ACSH_CONE_CLASS.top_major_radius [BD] %g != %g", acsh_cone_class->top_major_radius, top_major_radius);
-    top_major_radius++;
-    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "top_major_radius", &top_major_radius, 0)
-        && top_major_radius == acsh_cone_class->top_major_radius)
+      fail ("ACSH_CONE_CLASS.x_radius [BD] %g != %g", acsh_cone_class->x_radius, x_radius);
+    x_radius++;
+    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "x_radius", &x_radius, 0)
+        && x_radius == acsh_cone_class->x_radius)
       pass ();
     else
-      fail ("ACSH_CONE_CLASS.top_major_radius [BD] set+1 %g != %g", acsh_cone_class->top_major_radius, top_major_radius);
-    acsh_cone_class->top_major_radius--;
-  }
-  {
-    BITCODE_BD top_minor_radius;
-    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "top_minor_radius", &top_minor_radius, NULL)
-        && top_minor_radius == acsh_cone_class->top_minor_radius)
-      pass ();
-    else
-      fail ("ACSH_CONE_CLASS.top_minor_radius [BD] %g != %g", acsh_cone_class->top_minor_radius, top_minor_radius);
-    top_minor_radius++;
-    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "top_minor_radius", &top_minor_radius, 0)
-        && top_minor_radius == acsh_cone_class->top_minor_radius)
-      pass ();
-    else
-      fail ("ACSH_CONE_CLASS.top_minor_radius [BD] set+1 %g != %g", acsh_cone_class->top_minor_radius, top_minor_radius);
-    acsh_cone_class->top_minor_radius--;
-  }
-  {
-    BITCODE_BD top_x_radius;
-    if (dwg_dynapi_entity_value (acsh_cone_class, "ACSH_CONE_CLASS", "top_x_radius", &top_x_radius, NULL)
-        && top_x_radius == acsh_cone_class->top_x_radius)
-      pass ();
-    else
-      fail ("ACSH_CONE_CLASS.top_x_radius [BD] %g != %g", acsh_cone_class->top_x_radius, top_x_radius);
-    top_x_radius++;
-    if (dwg_dynapi_entity_set_value (acsh_cone_class, "ACSH_CONE_CLASS", "top_x_radius", &top_x_radius, 0)
-        && top_x_radius == acsh_cone_class->top_x_radius)
-      pass ();
-    else
-      fail ("ACSH_CONE_CLASS.top_x_radius [BD] set+1 %g != %g", acsh_cone_class->top_x_radius, top_x_radius);
-    acsh_cone_class->top_x_radius--;
+      fail ("ACSH_CONE_CLASS.x_radius [BD] set+1 %g != %g", acsh_cone_class->x_radius, x_radius);
+    acsh_cone_class->x_radius--;
   }
   if (failed && (is_class_unstable ("ACSH_CONE_CLASS") || is_class_debugging ("ACSH_CONE_CLASS")))
     {

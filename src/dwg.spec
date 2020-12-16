@@ -8125,10 +8125,11 @@ DWG_OBJECT (ACSH_CONE_CLASS)
   SUBCLASS (AcDbShCone)
   FIELD_BL (major, 90);
   FIELD_BL (minor, 91);
-  FIELD_BD (base_radius, 40);
-  FIELD_BD (top_major_radius, 41);
-  FIELD_BD (top_minor_radius, 42);
-  FIELD_BD (top_x_radius, 43);
+  /* same as Cylinder */
+  FIELD_BD (height, 40);
+  FIELD_BD (major_radius, 41);
+  FIELD_BD (minor_radius, 42);
+  FIELD_BD (x_radius, 43);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

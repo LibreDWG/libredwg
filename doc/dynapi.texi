@@ -4844,13 +4844,13 @@ Dwg_ACSH_HistoryNode
 BL,	DXF 90
 @item minor
 BL,	DXF 91
-@item base_radius
+@item height
 BD,	DXF 40
-@item top_major_radius
+@item major_radius
 BD,	DXF 41
-@item top_minor_radius
+@item minor_radius
 BD,	DXF 42
-@item top_x_radius
+@item x_radius
 BD,	DXF 43
 
 @end vtable

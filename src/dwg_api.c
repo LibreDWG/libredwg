@@ -25901,7 +25901,7 @@ dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   }
 }
 
-// ACSH_CHAMFER_CLASS
+// ACSH_CHAMFER_CLASS ??
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                  const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
@@ -25979,8 +25979,8 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 Dwg_Object_ACSH_CONE_CLASS*
 dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                          const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
-                         const double base_radius, const double top_major_radius,
-                         const double top_minor_radius, const double top_x_radius)
+                         const double height, const double major_radius,
+                         const double minor_radius, const double x_radius)
 {
   int err;
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
@@ -25990,19 +25990,20 @@ dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   {
     API_ADD_OBJECT (ACSH_CONE_CLASS);
     dwg_init_ACSH_CLASS (dwg, obj, _obj, evalgraph, origin_pt, normal);
-    _obj->base_radius = base_radius;
-    _obj->top_major_radius = top_major_radius;
-    _obj->top_minor_radius = top_minor_radius;
-    _obj->top_x_radius = top_x_radius;
+    _obj->height = height;
+    _obj->major_radius = major_radius;
+    _obj->minor_radius = minor_radius;
+    _obj->x_radius = x_radius;
     return _obj;
   }
 }
 
+// same as CYLINDER
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
-              const double base_radius, const double top_major_radius,
-              const double top_minor_radius, const double top_x_radius)
+              const double height, const double major_radius,
+              const double minor_radius, const double x_radius)
 {
   int err;
   Dwg_Data *dwg;
@@ -26026,9 +26027,10 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       1.0, 0.0, 0.0,
       0.0, 1.0, 0.0,
       0.0, 0.0, 1.0 };
-    double r2 = base_radius / 2.0;
-    double majr2 = top_major_radius / 2.0;
-    double minr2 = top_minor_radius / 2.0;
+    double h2 = height / 2.0;
+    double majr2 = major_radius / 2.0;
+    double minr2 = minor_radius / 2.0;
+    double x2 = x_radius / 2.0;
     double dbl_pi = 2.0 * M_PI; // i.e. 360
     char acis_data[1600];
     char date[48];
@@ -26066,10 +26068,11 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       "point $-1 -1 $-1 %f 0 %f #\n"   // 5, -7.5
       "point $-1 -1 $-1 %f 0 %f #\n"  // 0, 7.5
       "End-of-ACIS-data\n";
-    //base_radius: 15.000000 [BD 40]
-    //top_major_radius: 5.000000 [BD 41]
-    //top_minor_radius: 5.000000 [BD 42]
-    //top_x_radius: 0.000000 [BD 43]
+    // pt: 10, 10, 7.5
+    //height: 15.000000 [BD 40]
+    //major_radius: 5.000000 [BD 41]
+    //minor_radius: 5.000000 [BD 42]
+    //x_radius: 0.000000 [BD 43]
     dwg_geom_normal_to_matrix9 (normal, &matrix);
     snprintf (acis_data, 1600, cone_acis_format,
               date_size, date,
@@ -26077,11 +26080,11 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               matrix[3], matrix[4], matrix[5],
               matrix[6], matrix[7], matrix[8],
               origin_pt->x, origin_pt->y, origin_pt->z,
-              majr2, -0.3162277660168379412, 0.948683298050513768, minr2,
-              -r2, dbl_pi,
-              -r2, top_major_radius,
-              top_minor_radius, -r2,
-              top_x_radius, r2);
+              majr2, -0.3162277660168379412, 0.948683298050513768, minr2, //?
+              -majr2, dbl_pi,
+              -majr2, major_radius,
+              minor_radius, -h2,
+              x_radius, h2);
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
     solid->wireframe_data_present = 1;
     solid->point_present = 1;
@@ -26091,8 +26094,8 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->acis_empty_bit = 1;
 
     _obj = dwg_add_ACSH_CONE_CLASS (
-        (void *)solid, origin_pt, normal ? normal : &defnormal, base_radius,
-        top_major_radius, top_minor_radius, top_x_radius);
+        (void *)solid, origin_pt, normal ? normal : &defnormal, height,
+        major_radius, minor_radius, x_radius);
     ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
