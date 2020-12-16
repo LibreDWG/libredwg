@@ -55,6 +55,9 @@ int dwg_dynapi_entity_size (const char *restrict name);
 // from dwg_api
 BITCODE_T dwg_add_u8_input (Dwg_Data *restrict dwg,
                             const char *restrict u8str);
+Dwg_Object_APPID *dwg_add_APPID (Dwg_Data *restrict dwg,
+                                 const char *restrict name);
+unsigned long dwg_obj_generic_handlevalue (void *_obj);
 
 /* The logging level for the write (encode) path.  */
 static unsigned int loglevel;
@@ -1034,7 +1037,7 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
   Dwg_Object *obj;
   Dwg_Object_APPID *_obj;
   Dwg_Object_APPID_CONTROL *o;
-  unsigned long ref;
+  unsigned long absref;
   //int error = 0;
 
   if (appid)
@@ -1042,8 +1045,15 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
 
   // This breaks json.test roundtrips tests as it adds a new object.
   // But sooner or later we want to delete yet unsupported objects
-  // (DICTIONARIES, MATERIAL, VISUALSTYLE, ...)
+  // (Dictionaries, MATERIAL, VISUALSTYLE, dynblocks, surfaces, assoc*, ...)
+
+  // add APPID
 #if 1
+
+  _obj = dwg_add_APPID (dwg, "LibreDWG");
+  return dwg_obj_generic_handlevalue (_obj);
+
+#else
   if (!(appctl = dwg->header_vars.APPID_CONTROL_OBJECT))
     appctl = dwg_find_table_control (dwg, "APPID_CONTROL");
   if (!appctl)
@@ -1051,13 +1061,12 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
       LOG_ERROR ("APPID_CONTROL not found")
       return 0;
     }
-  ref = dwg->object[dwg->num_objects - 1].handle.value + 1;
-  // add APPID
+  absref = dwg->object[dwg->num_objects - 1].handle.value + 1;
   dwg_add_object (dwg);
   obj = &dwg->object[dwg->num_objects - 1];
   if (dwg_setup_APPID (obj) >= DWG_ERR_CRITICAL)
     return 0;
-  dwg_add_handle (&obj->handle, 0, ref, obj);
+  dwg_add_handle (&obj->handle, 0, absref, obj);
   //obj->type = obj->fixedtype = DWG_TYPE_APPID;
   _obj = obj->tio.object->tio.APPID;
   // precise size, bitsize done by encode
@@ -1078,8 +1087,9 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
       return 0;
     }
   o = obj->tio.object->tio.APPID_CONTROL;
-  PUSH_HV (o, num_entries, entries, dwg_add_handleref (dwg, 2, ref, NULL));
-  return ref;
+  PUSH_HV (o, num_entries, entries, dwg_add_handleref (dwg, 2, absref, NULL));
+  return absref;
+
 #endif
 
   return 0x12; // APPID.ACAD
@@ -1089,7 +1099,8 @@ static BITCODE_BL
 add_DUMMY_eed (Dwg_Object *obj)
 {
   Dwg_Object_Entity *ent = obj->tio.entity;
-  const BITCODE_BL num_eed = ent->num_eed;
+  //const int is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
+  const BITCODE_BL num_eed = ent->num_eed; // same offset for object
   Dwg_Data *dwg = obj->parent;
   BITCODE_H appid;
   Dwg_Eed_Data *data;
@@ -1099,6 +1110,11 @@ add_DUMMY_eed (Dwg_Object *obj)
   int len;
   int size;
   int off = 0;
+
+#ifdef HAVE_STDDEF_H /* just cygwin not */
+  assert (offsetof (Dwg_Object_Object, num_eed) == offsetof (Dwg_Object_Entity, num_eed));
+  assert (offsetof (Dwg_Object_Object, eed) == offsetof (Dwg_Object_Entity, eed));
+#endif
 
   if (num_eed) // replace it
     dwg_free_eed (obj);
