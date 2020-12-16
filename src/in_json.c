@@ -117,7 +117,7 @@ static Bit_Chain *g_dat;
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
     unsigned long slen;                                                       \
-    char *s = json_binary (dat, tokens, #nam, &slen);                         \
+    unsigned char *s = json_binary (dat, tokens, #nam, &slen);                \
     memcpy (&_obj->nam, s, slen);                                             \
     LOG_TRACE (#nam ": \"%.*s\"\n", (int)slen, _obj->nam);                    \
     free (s);                                                                 \
@@ -126,7 +126,7 @@ static Bit_Chain *g_dat;
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
     unsigned long slen;                                                       \
-    _obj->nam = (BITCODE_TF)json_binary (dat, tokens, #nam, &slen);           \
+    _obj->nam = json_binary (dat, tokens, #nam, &slen);                       \
     _obj->lenf = slen;                                                        \
     JSON_TOKENS_CHECK_OVERFLOW_ERR                                            \
   }
@@ -400,7 +400,7 @@ json_wstring (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
 }
 
 ATTRIBUTE_MALLOC
-static char *
+static unsigned char *
 json_binary (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
              const char *restrict key, unsigned long *lenp)
 {
@@ -408,8 +408,9 @@ json_binary (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   const size_t len = t->end - t->start;
   const char *str = (char *)&dat->chain[t->start];
-  const unsigned long blen = len / 2;
-  char *buf = len ? (char *)malloc (blen + 1) : NULL;
+  const unsigned blen = len / 2;
+  unsigned read;
+  unsigned char *buf = len ? (unsigned char *)malloc (blen + 1) : NULL;
   char *pos = (char *)str;
   char *old;
 
@@ -429,6 +430,10 @@ json_binary (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
       tokens->index++;
       return NULL;
     }
+  if ((read = in_hex2bin (buf, pos, blen) != blen))
+    LOG_ERROR ("json_binary in_hex2bin with key %s at pos %u of %u",
+               key, read, blen);
+  /*
   for (unsigned i = 0; i < blen; i++)
     {
       if (sscanf (pos, "%2hhX", &buf[i]) != EOF)
@@ -440,6 +445,7 @@ json_binary (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
           break;
         }
     }
+  */
   if (buf)
     {
       buf[blen] = '\0';
@@ -1363,7 +1369,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     case 4:
                       {
                         unsigned long len;
-                        char *s = json_binary (dat, tokens, "eed", &len);
+                        unsigned char *s = json_binary (dat, tokens, "eed", &len);
                         if (eed_need_size (dat, obj->eed, i, len + 2, &have))
                           data = obj->eed[i].data;
                         memcpy (&data->u.eed_4.data, s, len);
@@ -1539,9 +1545,9 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             case DWG_VT_BINARY:
               {
                 unsigned long len;
-                char *s = json_binary (dat, tokens, "xdata", &len);
+                unsigned char *s = json_binary (dat, tokens, "xdata", &len);
                 JSON_TOKENS_CHECK_OVERFLOW_ERR
-                rbuf->value.str.u.data = s;
+                rbuf->value.str.u.data = (char *)s;
                 rbuf->value.str.size = len;
                 size += len + 1;
                 break;
@@ -1630,22 +1636,28 @@ json_acis_data (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               else
                 {
                   // 15 is the length of the first line: "ACIS BinaryFile"
-                  const unsigned long blen = l / 2;
+                  const unsigned blen = l / 2;
+                  unsigned read;
                   char *pos = (char *)&dat->chain[t->start];
                   if ((len - l) != 15 || size != 2)
                     LOG_ERROR ("Invalid %s ACIS %u json format. len %d, size %d",
                                obj->name, acis_version, len - l, size);
+                  if ((read = in_hex2bin ((unsigned char*)&s[15], pos, blen) != blen))
+                    LOG_ERROR ("in_hex2bin with key %s at pos %u of %u",
+                               "acis_data", read, blen);
+                  /*
                   for (unsigned j = 15; j < blen + 15; j++)
                     {
                       if (sscanf (pos, "%2hhX", &s[j]) != EOF)
                         pos += 2;
                       else
                         {
-                          LOG_ERROR ("json_binary sscanf error %s with key %s at pos %u of %lu",
+                          LOG_ERROR ("sscanf error %s with key %s at pos %u of %lu",
                                      strerror(errno), "acis_data", j, blen);
                           break;
                         }
                     }
+                  */
                   len = 15 + blen;
                 }
             }
@@ -1843,7 +1855,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 {
                   // convert from hex
                   unsigned blen = len / 2;
-                  char *buf = len ? (char*)malloc (blen + 1) : NULL;
+                  unsigned read;
+                  unsigned char *buf = len ? (unsigned char*)malloc (blen + 1) : NULL;
                   char *pos = str;
                   char *old;
                   /*
@@ -2096,7 +2109,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             {
               BITCODE_BL num_blocks = t->size;
               BITCODE_BL *block_size = (BITCODE_BL*)calloc (num_blocks + 1, sizeof (BITCODE_BL));
-              char **data = (char**)calloc (num_blocks + 1, sizeof (char*));
+              unsigned char **data = (unsigned char**)calloc (num_blocks + 1, sizeof (unsigned char*));
               tokens->index++;
               LOG_TRACE ("num_blocks: " FORMAT_BL " [BL]\n", num_blocks);
               for (BITCODE_BL k = 0; k < num_blocks; k++)
@@ -2875,17 +2888,23 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else if (strEQc (key, "unknown_bits")
                    && memBEGINc (obj->name, "UNKNOWN_"))
             {
-              int len = t->end - t->start;
+              const int len = t->end - t->start;
               char *hex = json_string (dat, tokens);
-              unsigned blen = len / 2;
+              const unsigned blen = len / 2;
+              unsigned read;
               BITCODE_TF buf = (BITCODE_TF)malloc (blen + 1);
-              char *pos = hex;
-              char *old;
+              //char *pos = hex;
+              //char *old;
+              if ((read = in_hex2bin (buf, hex, blen) != blen))
+                LOG_ERROR ("in_hex2bin with key %s at pos %u of %u",
+                           key, read, blen);
+              /*
               for (unsigned k = 0; k < blen; k++)
                 {
                   sscanf (pos, "%2hhX", &buf[k]);
                   pos += 2;
                 }
+              */
               buf[blen] = '\0';
               free (hex);
               if (!obj->num_unknown_bits)
@@ -3069,8 +3088,7 @@ json_THUMBNAILIMAGE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else if (strEQc (key, "chain"))
         {
           unsigned long len;
-          dwg->thumbnail.chain
-              = (unsigned char *)json_binary (dat, tokens, key, &len);
+          dwg->thumbnail.chain = json_binary (dat, tokens, key, &len);
           JSON_TOKENS_CHECK_OVERFLOW_ERR
           dwg->thumbnail.size = len;
           if (size1 > 0 && size1 != (long)len)
@@ -3122,7 +3140,7 @@ json_R2004_Header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (strEQc (key, "file_ID_string"))
         {
           unsigned long slen;
-          char *s = json_binary (dat, tokens, key, &slen);
+          unsigned char *s = json_binary (dat, tokens, key, &slen);
           JSON_TOKENS_CHECK_OVERFLOW_ERR
           if (slen == 11)
             memcpy (&_obj->file_ID_string, s, 12);

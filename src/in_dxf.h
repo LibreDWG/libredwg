@@ -94,7 +94,7 @@ int is_table_name (const char *restrict name) __nonnull_all;
 int is_textlike (Dwg_Object *restrict obj) __nonnull_all;
 void in_postprocess_handles (Dwg_Object *restrict obj) __nonnull_all;
 void in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
-                            BITCODE_H *owned) __nonnull_all;
+                            BITCODE_H *owned) __nonnull ((1));
 // for in_dxf and in_json
 unsigned in_hex2bin (unsigned char *restrict dest, char *restrict src, unsigned destlen) __nonnull_all;
 

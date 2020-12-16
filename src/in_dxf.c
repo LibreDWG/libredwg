@@ -611,7 +611,7 @@ dxf_skip_comment (Bit_Chain *dat, Dxf_Pair *pair)
     if ((written = in_hex2bin (malloc (destlen), src, destlen)) != destlen)
       error
 
-    TODO: optimize for the typical line len
+    TODO: optimize for the typical line len 254 (destlen 127)
 
     benchmarks:
       checked hex2bin:   0.624826 sec (if < >)...
@@ -620,7 +620,7 @@ dxf_skip_comment (Bit_Chain *dat, Dxf_Pair *pair)
  */
 unsigned in_hex2bin (unsigned char *restrict dest, char *restrict src, unsigned destlen)
 {
-#if 1
+#if 0
   char *pos = (char *)src;
   for (unsigned i = 0; i < destlen; i++)
     {
@@ -641,6 +641,21 @@ unsigned in_hex2bin (unsigned char *restrict dest, char *restrict src, unsigned 
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // ...
   };
   const char *_end = pos + (destlen << 1);
+  /* slower
+  const char *_end4 = pos + ((destlen << 1) & ~0x3);
+  const int64_t magic = INT64_C(0x1001001000000000);
+  uint32_t *d32 = (uint32_t*)dest;
+  while (pos < _end4) {
+    uint32_t in;
+    uint64_t v, x;
+    memcpy (&in, pos, 4);
+    v = in;
+    x = (((0x00404040 & v) >> 6) * 9) + (v & 0x000F0F0F); // do 3
+    x = (((uint64_t)((int64_t)x * magic)) >> 48) & ~15;   // bswap and pack
+    v = ((v >> 30) * 9) + ((v >> 24) & 0x0F);             // do the 4th
+    *d32++ = (x | v);
+    pos += 4;
+  }*/
   while (pos < _end) {
     unsigned char v1 = h2b_lookup[(pos[0] & 0x1F) ^ 0x10];
     unsigned char v2 = h2b_lookup[(pos[1] & 0x1F) ^ 0x10];
