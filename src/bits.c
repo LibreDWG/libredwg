@@ -1815,7 +1815,7 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
 {
   int i, length;
 
-  // only if from r2007+ DWG, not JSON, DXF
+  // only if from r2007+ DWG, not JSON, DXF, add API
   if (IS_FROM_TU (dat))
     {
       // downconvert TU to TV

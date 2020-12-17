@@ -14226,13 +14226,14 @@ dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
       }
     {
       const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field (name, fieldname);
-      const Dwg_Version_Type dwg_version
-          = obj ? obj->parent->header.version : R_INVALID;
+      const Dwg_Data *dwg = obj ? obj->parent : NULL;
+      const bool is_tu = dwg ? IS_FROM_TU_DWG (dwg) : false;
+
       if (!f || !f->is_string)
         {
           int loglevel;
           if (obj)
-            loglevel = obj->parent->opts & DWG_OPTS_LOGLEVEL;
+            loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
           else
             loglevel = DWG_LOGLEVEL_ERROR;
           LOG_ERROR ("%s: Invalid %s text field %s", __FUNCTION__, name, fieldname);
@@ -14241,7 +14242,7 @@ dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
       if (fp)
         memcpy (fp, f, sizeof (Dwg_DYNAPI_field));
 
-      if (dwg_version >= R_2007 && strNE (f->type, "TF")) /* not TF */
+      if (is_tu && strNE (f->type, "TF")) /* not TF */
         {
           BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
           char *utf8 = bit_convert_TU (wstr);
@@ -14307,12 +14308,12 @@ dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
     if (f && f->is_string)
       {
         const Dwg_Header_Variables *const _obj = &dwg->header_vars;
-        const Dwg_Version_Type dwg_version = dwg->header.version;
+        const bool is_tu = IS_FROM_TU_DWG (dwg);
 
         if (fp)
           memcpy (fp, f, sizeof (Dwg_DYNAPI_field));
 
-        if (dwg_version >= R_2007 && strNE (f->type, "TF")) /* not TF */
+        if (is_tu && strNE (f->type, "TF")) /* not TF */
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
             char *utf8 = bit_convert_TU (wstr);
@@ -14444,12 +14445,12 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
 
     if (f && f->is_string)
       {
-        const Dwg_Version_Type dwg_version = dwg->header.version;
+        const bool is_tu = IS_FROM_TU_DWG (dwg);
 
         if (fp)
           memcpy (fp, f, sizeof(Dwg_DYNAPI_field));
 
-        if (dwg_version >= R_2007 && strNE (f->type, "TF")) /* not TF */
+        if (is_tu && strNE (f->type, "TF")) /* not TF */
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
             char *utf8 = bit_convert_TU (wstr);
@@ -14553,7 +14554,7 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
       const Dwg_Data *dwg
         = obj ? obj->parent
               : ((Dwg_Object_UNKNOWN_OBJ *)_obj)->parent->dwg;
-      const Dwg_Version_Type dwg_version = dwg ? dwg->header.version : R_INVALID;
+      const Dwg_Version_Type dwg_version = dwg ? dwg->header.from_version : R_INVALID;
 
       if (!f)
         {
@@ -14777,7 +14778,7 @@ dwg_dynapi_field_set_value (const Dwg_Data *restrict dwg, /* only needed if unic
 EXPORT char*
 dwg_dynapi_handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict hdl)
 {
-  const Dwg_Version_Type dwg_version = dwg->header.version;
+  const bool is_tu = IS_FROM_TU_DWG (dwg);
   Dwg_Object *obj;
 
 #ifndef HAVE_NONNULL
@@ -14795,7 +14796,7 @@ dwg_dynapi_handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict h
 
     if (!f || !f->is_string)
       return NULL;
-    if (dwg_version >= R_2007 && strNE (f->type, "TF")) /* not TF */
+    if (is_tu && strNE (f->type, "TF")) /* not TF */
       {
         BITCODE_TU wstr = *(BITCODE_TU *)((char *)_obj + f->offset);
         return bit_convert_TU (wstr);

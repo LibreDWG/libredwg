@@ -22101,7 +22101,7 @@ static void add_obj_reactor (Dwg_Object_Object *obj, unsigned long absolute_ref)
 EXPORT BITCODE_T
 dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
 {
-  if (dwg->header.version >= R_2007 && !(dwg->opts & DWG_OPTS_IN))
+  if (dwg->header.from_version >= R_2007 && !(dwg->opts & DWG_OPTS_IN))
     {
       return (BITCODE_T)bit_utf8_to_TU ((char *restrict)u8str, 0);
     }
@@ -25166,7 +25166,8 @@ dwg_add_XRECORD_string (Dwg_Object_XRECORD *restrict _obj,
     _obj->xdata = rbuf;
   _obj->num_xdata++;
   rbuf->type = dxf;
-  rbuf->value.str.codepage = dwg && dwg->header.version ? R_2007 ? dwg->header.codepage : 30;
+  rbuf->value.str.codepage
+      = (dwg && dwg->header.version < R_2007) ? dwg->header.codepage : 30;
   rbuf->value.str.is_tu = 0;
   rbuf->value.str.size = len;
   rbuf->value.str.u.data = malloc (len);
