@@ -22101,7 +22101,7 @@ static void add_obj_reactor (Dwg_Object_Object *obj, unsigned long absolute_ref)
 EXPORT BITCODE_T
 dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
 {
-  if (dwg->header.version >= R_2007)
+  if (dwg->header.version >= R_2007 && !(dwg->opts & DWG_OPTS_IN))
     {
       return (BITCODE_T)bit_utf8_to_TU ((char *restrict)u8str, 0);
     }
@@ -22159,7 +22159,8 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   const char *canonical_media_name;
 
   loglevel = lglevel & DWG_OPTS_LOGLEVEL;
-  dwg->opts = loglevel;
+  /* Set the import flag, so we don't encode to TU, just TV */
+  dwg->opts = loglevel | DWG_OPTS_IN;
   dwg->dirty_refs = 0;
 
   //dwg->object_map = hash_new (200);
@@ -25138,6 +25139,7 @@ dwg_add_XRECORD_binary (Dwg_Object_XRECORD *restrict _obj,
   _obj->num_xdata++;
   rbuf->type = dxf;
   rbuf->value.str.size = size;
+  rbuf->value.str.is_tu = 0;
   rbuf->value.str.u.data = malloc (size);
   memcpy (rbuf->value.str.u.data, data, size);
   _obj->xdata_size += 3 + size; // 2 + 1 + len
@@ -25148,7 +25150,7 @@ EXPORT Dwg_Object_XRECORD *
 dwg_add_XRECORD_string (Dwg_Object_XRECORD *restrict _obj,
                         const short dxf,
                         const BITCODE_BS len,
-                        const char *str)
+                        const char *str) // utf8
 {
   int error;
   Dwg_Resbuf *rbuf;
@@ -25164,26 +25166,12 @@ dwg_add_XRECORD_string (Dwg_Object_XRECORD *restrict _obj,
     _obj->xdata = rbuf;
   _obj->num_xdata++;
   rbuf->type = dxf;
+  rbuf->value.str.codepage = dwg && dwg->header.version ? R_2007 ? dwg->header.codepage : 30;
+  rbuf->value.str.is_tu = 0;
   rbuf->value.str.size = len;
-  if (dwg && dwg->header.version < R_2007)
-    {
-      rbuf->value.str.codepage = dwg->header.codepage;
-      rbuf->value.str.u.data = malloc (len);
-      memcpy (rbuf->value.str.u.data, str, len);
-      _obj->xdata_size += 4 + len;
-    }
-  else if (dwg && dwg->header.version >= R_2007)
-    {
-      rbuf->value.str.u.data = malloc (2 * len);
-      memcpy (rbuf->value.str.u.data, str, 2 * len);
-      _obj->xdata_size += 4 + (2 * len);
-    }
-  else
-    {
-      rbuf->value.str.u.data = malloc (len);
-      memcpy (rbuf->value.str.u.data, str, len);
-      _obj->xdata_size += 4 + len;
-    }
+  rbuf->value.str.u.data = malloc (len);
+  memcpy (rbuf->value.str.u.data, str, len); // utf-8 or single-byte
+  _obj->xdata_size += 4 + len;
   return _obj;
 }
 

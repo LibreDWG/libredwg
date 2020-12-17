@@ -738,8 +738,9 @@ EXPORT const char* dwg_color_method_name (unsigned method);
  */
 struct _dwg_binary_chunk
 {
-  short size;
-  int  codepage;
+  unsigned short size;
+  unsigned codepage:15;
+  unsigned is_tu:1;
   union {
     char *data;
     DWGCHAR *wdata;
@@ -7757,12 +7758,14 @@ typedef struct _dwg_entity_eed_data
   union eed_data_t {
     struct { /* 0 (1000) string */
       BITCODE_RS length;
-      BITCODE_RS codepage;
+      unsigned codepage:15;
+      unsigned is_tu:1;
       char string[1];      /* inlined */
     } eed_0;
     struct { /* R2007+ 0 (1000) string */
       BITCODE_RS length;
-      BITCODE_RS _padding;
+      unsigned _padding:15;
+      unsigned is_tu:1;
       DWGCHAR string[1]; /* inlined */
     } eed_0_r2007;
     struct { /* 1 (1001) handle, not in data */

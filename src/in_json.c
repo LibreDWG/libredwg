@@ -1319,8 +1319,9 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                           {
                             char *s = json_string (dat, tokens);
                             int len = strlen (s);
-                            if (eed_need_size (dat, obj->eed, i, len + 1 + 1 + 2, &have))
+                            if (eed_need_size (dat, obj->eed, i, len + 1 + 5, &have))
                               data = obj->eed[i].data;
+                            data->u.eed_0.is_tu = 0;
                             data->u.eed_0.length = len;
                             data->u.eed_0.codepage = dwg->header.codepage;
                             if (len)
@@ -1331,8 +1332,8 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                             // with PRE (R_2007), the size gets smaller
                             if (does_cross_unicode_datversion (dat))
                               {
-                                int oldsize = (len * 2) + 2;
-                                size = len + 3;
+                                int oldsize = (len * 2) + 5;
+                                size = len + 5;
                                 obj->eed[isize].size -= (oldsize - size);
                               }
                           }
@@ -1474,6 +1475,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 // here the xdata_size gets re-calculated from size
                 PRE (R_2007) // from version
                 {
+                  rbuf->value.str.is_tu = 0;
                   rbuf->value.str.u.data = s;
                   rbuf->value.str.codepage = dwg->header.codepage;
                   LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]\n", i, s,
@@ -1482,6 +1484,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 }
                 LATER_VERSIONS
                 {
+                  rbuf->value.str.is_tu = 1;
                   rbuf->value.str.u.wdata = bit_utf8_to_TU (s, 0);
                   free (s);
                   LOG_TRACE_TU ("xdata", rbuf->value.str.u.wdata, rbuf->type);

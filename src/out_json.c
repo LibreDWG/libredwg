@@ -977,7 +977,7 @@ json_eed (Bit_Chain *restrict dat,
           switch (data->code)
             {
             case 0:
-              if (!(IS_FROM_TU (dat)))
+              if (!data->u.eed_0.is_tu)
                 VALUE_TEXT (data->u.eed_0.string)
               else {
                 VALUE_TEXT_TU (data->u.eed_0_r2007.string);
@@ -1026,13 +1026,17 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
       switch (type)
         {
         case DWG_VT_STRING:
-          if (!(IS_FROM_TU (dat)))
-            VALUE_TEXT (rbuf->value.str.u.data)
-          else {
-            VALUE_TEXT_TU (rbuf->value.str.u.data);
-          }
-          LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]\n", i, rbuf->value.str.u.data,
-                     rbuf->type);
+          if (!rbuf->value.str.is_tu)
+            {
+              VALUE_TEXT (rbuf->value.str.u.data);
+              LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]\n", i, rbuf->value.str.u.data,
+                         rbuf->type);
+            }
+          else
+            {
+              VALUE_TEXT_TU (rbuf->value.str.u.data);
+              LOG_TRACE_TU ("xdata", rbuf->value.str.u.data, rbuf->type);
+            }
           break;
         case DWG_VT_BINARY:
           VALUE_BINARY (rbuf->value.str.u.data, rbuf->value.str.size, 0);

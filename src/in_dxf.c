@@ -1648,8 +1648,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         int len = pair->value.s ? strlen (pair->value.s) : 0;
         if (dwg->header.version < R_2007)
           {
-            /* code [RC] + len [RC] + cp [RS] + str[len] */
-            size = 1 + 1 + 2 + len;
+            /* code [RC] + len [RS] + cp [RS] + str[len] */
+            size = 1 + 2 + 2 + len;
             eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size + 1);
             if (!eed[i].data)
               {
@@ -1658,6 +1658,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
                 return;
               }
             eed[i].data->code = code; // 1000
+            eed[i].data->u.eed_0.is_tu = 0;
             eed[i].data->u.eed_0.length = len;
             eed[i].data->u.eed_0.codepage = dwg->header.codepage;
             if (len && len < 256)
@@ -1674,7 +1675,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
               {
                 BITCODE_TU tu = bit_utf8_to_TU (pair->value.s, 0);
                 len = bit_wcs2len (tu);
-                size = 2 + 2 + (len * 2); // now with padding
+                size = 1 + 2 + 2 + (len * 2); // now with padding
                 eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size + 2);
                 if (!eed[i].data)
                   {
@@ -1683,6 +1684,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
                     return;
                   }
                 eed[i].data->code = code;
+                eed[i].data->u.eed_0.is_tu = 1;
                 eed[i].data->u.eed_0_r2007.length = len;
                 LOG_TRACE ("wstring: \"%s\" [TU %d]\n", pair->value.s, len);
                 if (len)
@@ -6315,6 +6317,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         Dwg_Data *dwg = obj->parent;
         rbuf->value.str.size = strlen (pair->value.s);
         rbuf->value.str.codepage = dwg->header.codepage;
+        rbuf->value.str.is_tu = 0;
         rbuf->value.str.u.data = strdup (pair->value.s);
         LOG_TRACE ("xdata[%d]: \"%s\" [%d]\n", num_xdata,
                    rbuf->value.str.u.data, rbuf->type);
@@ -6325,6 +6328,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         int length = rbuf->value.str.size = strlen (pair->value.s);
         if (length > 0)
           rbuf->value.str.u.wdata = bit_utf8_to_TU (pair->value.s, 0);
+        rbuf->value.str.is_tu = 1;
         LOG_TRACE ("xdata[%d]: \"%s\" [TU %d]\n", num_xdata,
                    pair->value.s, rbuf->type);
         xdata_size += 2 + 2 * rbuf->value.str.size;

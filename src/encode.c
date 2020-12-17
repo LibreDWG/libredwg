@@ -1104,7 +1104,7 @@ add_DUMMY_eed (Dwg_Object *obj)
   Dwg_Data *dwg = obj->parent;
   BITCODE_H appid;
   Dwg_Eed_Data *data;
-  const bool is_tu = dwg->header.from_version >= R_2007;
+  const bool is_tu = dwg->header.version >= R_2007;
   int i = 1;
   char *name = obj->dxfname;
   int len;
@@ -3866,7 +3866,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
         PRE (R_2007)
         {
           // only if from r2007+ DWG, not JSON, DXF
-          if (IS_FROM_TU (dat))
+          if (data->u.eed_0.is_tu)
             {
               BITCODE_RS length = data->u.eed_0_r2007.length;
               BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
@@ -3904,7 +3904,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
         LATER_VERSIONS
         {
           // from ASCII DWG or JSON, DXF
-          if (!(IS_FROM_TU (dat)))
+          if (!data->u.eed_0.is_tu)
             {
               BITCODE_RS length = data->u.eed_0.length;
               BITCODE_TU dest = bit_utf8_to_TU (data->u.eed_0.string, 0);
@@ -4437,7 +4437,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
             if (dat->byte + 3 + rbuf->value.str.size > end)
               break;
             // from TU DWG only
-            if (rbuf->value.str.size && IS_FROM_TU (dat))
+            if (rbuf->value.str.size && rbuf->value.str.is_tu)
               {
                 BITCODE_TV new = bit_embed_TU_size (rbuf->value.str.u.wdata,
                                                     rbuf->value.str.size);
@@ -4467,10 +4467,9 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
           }
           LATER_VERSIONS
           {
-            if (dat->byte + 2 + (2 * rbuf->value.str.size) > end
-                || rbuf->value.str.size < 0)
+            if (dat->byte + 2 + (2 * rbuf->value.str.size) > end)
               break;
-            if (rbuf->value.str.size && !(IS_FROM_TU (dat)))
+            if (rbuf->value.str.size && !rbuf->value.str.is_tu)
               {
                 // TODO: same len when converted to TU? normally yes
                 BITCODE_TU new = bit_utf8_to_TU (rbuf->value.str.u.data, 0);

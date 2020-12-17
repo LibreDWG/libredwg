@@ -3849,6 +3849,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       {
         if (eed_need_size (3, size))
           return DWG_ERR_INVALIDEED;
+        data->u.eed_0.is_tu = 0;
         data->u.eed_0.length = lenc = bit_read_RC (dat);
         data->u.eed_0.codepage = bit_read_RS_LE (dat);
         if ((long)lenc > size - 4)
@@ -3880,6 +3881,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       {
         if (eed_need_size (2, size))
           return DWG_ERR_INVALIDEED;
+        data->u.eed_0.is_tu = 1;
         data->u.eed_0_r2007.length = lens = bit_read_RS (dat);
         if (eed_need_size ((lens * 2) + 2, size))
           return DWG_ERR_INVALIDEED;
@@ -4953,6 +4955,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
                         (int)rbuf->value.str.codepage)
             if (dat->byte + length > end_address || (short)length < 0)
               break;
+            rbuf->value.str.is_tu = 0;
             rbuf->value.str.size = length;
             rbuf->value.str.u.data = (char*)bit_read_TF (dat, length);
             LOG_INSANE ("STRING ")
@@ -4980,6 +4983,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
                       dwg_free_xdata_resbuf (rbuf);
                     return NULL;
                   }
+                rbuf->value.str.is_tu = 1;
                 rbuf->value.str.size = length;
                 for (i = 0; i < length; i++)
                   rbuf->value.str.u.wdata[i] = bit_read_RS (dat);
