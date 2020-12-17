@@ -7756,13 +7756,13 @@ typedef struct _dwg_entity_eed_data
   BITCODE_RC code;
   union eed_data_t {
     struct { /* 0 (1000) string */
-      BITCODE_RC length;
+      BITCODE_RS length;
       BITCODE_RS codepage;
       char string[1];      /* inlined */
     } eed_0;
     struct { /* R2007+ 0 (1000) string */
-      BITCODE_RC _padding;
       BITCODE_RS length;
+      BITCODE_RS _padding;
       DWGCHAR string[1]; /* inlined */
     } eed_0_r2007;
     struct { /* 1 (1001) handle, not in data */

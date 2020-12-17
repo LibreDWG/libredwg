@@ -1104,7 +1104,7 @@ add_DUMMY_eed (Dwg_Object *obj)
   Dwg_Data *dwg = obj->parent;
   BITCODE_H appid;
   Dwg_Eed_Data *data;
-  const bool is_tu = dwg->header.version >= R_2007;
+  const bool is_tu = dwg->header.from_version >= R_2007;
   int i = 1;
   char *name = obj->dxfname;
   int len;
@@ -1128,7 +1128,7 @@ add_DUMMY_eed (Dwg_Object *obj)
   ent->num_eed = 1;
   ent->eed = calloc (2, sizeof (Dwg_Eed));
   len = strlen (name);
-  size = is_tu ? 3 + ((len + 1) * 2) : len + 5;
+  size = is_tu ? 5 + ((len + 1) * 2) : 5 + len + 1; // RC + 2*RS + string
   data = ent->eed[0].data = (Dwg_Eed_Data *)calloc (size, 1);
   ent->eed[0].size = size;
   dwg_add_handle (&ent->eed[0].handle, 5, appid->absolute_ref, NULL);
@@ -1136,14 +1136,14 @@ add_DUMMY_eed (Dwg_Object *obj)
   if (is_tu) // probably never used, write DUMMY placeholder to R_2007
     {
       BITCODE_TU wstr = bit_utf8_to_TU (name, 0);
-      data->u.eed_0_r2007.length = len * 2; // RS
-      memcpy (data->u.eed_0_r2007.string, wstr, (len + 1) * 2);
+      data->u.eed_0_r2007.length = len; // RS
+      memcpy (data->u.eed_0_r2007.string, wstr, len * 2);
     }
   else
     {
       data->u.eed_0.length = len;  // RC
       data->u.eed_0.codepage = 30; // RS
-      memcpy (data->u.eed_0.string, name, len + 1);
+      memcpy (data->u.eed_0.string, name, len);
     }
   LOG_TRACE ("-EED[0]: code: 0, string: %s (len: %d)\n", name, len);
 
