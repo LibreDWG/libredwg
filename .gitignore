@@ -101,6 +101,7 @@ compile_commands.json
 
 # specific filenames
 /.rb.sh
+/.rb-*.sh
 /.upwork.sh
 /.version
 /.tarball-version
@@ -110,7 +111,6 @@ compile_commands.json
 /.patches
 /.analysis
 /.lbwork.sh
-/.rb-fail.sh
 /.upall.sh
 /GPATH
 /GRTAGS
