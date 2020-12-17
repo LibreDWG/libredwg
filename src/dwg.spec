@@ -1215,18 +1215,17 @@ DWG_ENTITY_END
         VALUEOUTOFBOUNDS (class_version, 10) \
       } \
     DXF { \
-      /* already converted to utf8 */ \
-      FIELD_VALUE (blockname) = dwg_dim_blockname (dwg, obj); \
-      FIELD_TV0 (blockname, 2); \
+      /* converted to utf8 */ \
+      char *blockname = dwg_dim_blockname (dwg, obj); \
+      VALUE_TV0 (blockname, 2); \
+      SINCE (R_2007) { \
+        if (blockname) \
+          free (blockname); \
+      } \
       FIELD_3BD (def_pt, 10); \
     } else { \
       FIELD_3BD (extrusion, 210); \
     } \
-    /* Freed by BLOCK already */            \
-    /*FREE {                                \
-      SINCE (R_2007)                        \
-        FIELD_TV (blockname, 2);            \
-    }*/                                     \
     FIELD_2RD (text_midpt, 11); \
     FIELD_BD (elevation, 31); \
     DXF { \

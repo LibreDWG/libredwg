@@ -950,8 +950,6 @@ H,	DXF 330
 struct _dwg_object_entity*
 @item class_version
 RC,	DXF 280
-@item blockname
-TV,	DXF 2
 @item extrusion
 BE,	DXF 210
 @item def_pt
@@ -1231,8 +1229,6 @@ BE,	DXF 210
 struct _dwg_object_entity*
 @item class_version
 RC,	DXF 280
-@item blockname
-TV,	DXF 2
 @item extrusion
 BE,	DXF 210
 @item def_pt
@@ -1296,8 +1292,6 @@ BD
 struct _dwg_object_entity*
 @item class_version
 RC,	DXF 280
-@item blockname
-TV,	DXF 2
 @item extrusion
 BE,	DXF 210
 @item def_pt
@@ -1363,8 +1357,6 @@ H
 struct _dwg_object_entity*
 @item class_version
 RC,	DXF 280
-@item blockname
-TV,	DXF 2
 @item extrusion
 BE,	DXF 210
 @item def_pt
@@ -1428,8 +1420,6 @@ H
 struct _dwg_object_entity*
 @item class_version
 RC,	DXF 280
-@item blockname
-TV,	DXF 2
 @item extrusion
 BE,	DXF 210
 @item def_pt
@@ -1491,8 +1481,6 @@ BD,	DXF 40
 struct _dwg_object_entity*
 @item class_version
 RC,	DXF 280
-@item blockname
-TV,	DXF 2
 @item extrusion
 BE,	DXF 210
 @item def_pt
@@ -1558,8 +1546,6 @@ BD,	DXF 50
 struct _dwg_object_entity*
 @item class_version
 RC,	DXF 280
-@item blockname
-TV,	DXF 2
 @item extrusion
 BE,	DXF 210
 @item def_pt
@@ -1623,8 +1609,6 @@ RC
 struct _dwg_object_entity*
 @item class_version
 RC,	DXF 280
-@item blockname
-TV,	DXF 2
 @item extrusion
 BE,	DXF 210
 @item def_pt
@@ -2119,8 +2103,6 @@ H
 struct _dwg_object_entity*
 @item class_version
 RC,	DXF 280
-@item blockname
-TV,	DXF 2
 @item extrusion
 BE,	DXF 210
 @item def_pt
@@ -13753,8 +13735,6 @@ H*,	DXF 332
 struct _dwg_object_entity*
 @item class_version
 RC,	DXF 280
-@item blockname
-TV,	DXF 2
 @item extrusion
 BE,	DXF 210
 @item def_pt

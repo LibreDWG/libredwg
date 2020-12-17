@@ -2464,7 +2464,7 @@ dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
     return NULL;
   for (i = 0; i < num_entries; i++)
     {
-      char *hdlname;
+      char *hdlname, *name;
       Dwg_Object *hobj;
       Dwg_Object_APPID *_o;
       int isnew = 0;
@@ -2478,19 +2478,20 @@ dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
       if (hdlv[i]->absolute_ref != handle->absolute_ref)
         continue;
       _o = hobj->tio.object->tio.APPID;
+      name = hobj->name;
       /* For BLOCK search the BLOCK entities instead.
          The BLOCK_HEADER has only the abbrevated name, but we want "*D30", not "*D" */
-      if (strEQc (table, "BLOCK"))
+      if (strEQc (table, "BLOCK") && hobj->fixedtype == DWG_TYPE_BLOCK_HEADER)
         {
           Dwg_Object_BLOCK_HEADER *_bh = hobj->tio.object->tio.BLOCK_HEADER;
           Dwg_Object *bo = dwg_ref_object (dwg, _bh->block_entity);
-          if (bo)
+          if (bo != NULL && bo->fixedtype == DWG_TYPE_BLOCK)
             {
               _o = (Dwg_Object_APPID *)bo->tio.entity->tio.BLOCK;
-              hobj->name = bo->name;
+              name = bo->name;
             }
         }
-      ok = dwg_dynapi_entity_utf8text (_o, hobj->name, "name", &hdlname, &isnew, NULL);
+      ok = dwg_dynapi_entity_utf8text (_o, name, "name", &hdlname, &isnew, NULL);
       LOG_HANDLE (" %s.%s[%d] => %s.name: %s\n", obj->name, "entries", i,
                   hobj->name, hdlname ? hdlname : "NULL");
       if (ok)

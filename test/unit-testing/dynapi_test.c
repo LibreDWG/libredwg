@@ -6480,16 +6480,6 @@ static int test_ARC_DIMENSION (const Dwg_Object *obj)
         fail ("ARC_DIMENSION.block [H]");
   }
   {
-    BITCODE_TV blockname;
-    if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "blockname", &blockname, NULL)
-        && blockname
-           ? strEQ ((char *)blockname, (char *)arc_dimension->blockname)
-           : !arc_dimension->blockname)
-      pass ();
-    else
-      fail ("ARC_DIMENSION.blockname [TV] '%s' <> '%s'", blockname, arc_dimension->blockname);
-  }
-  {
     BITCODE_3BD center_pt;
     if (dwg_dynapi_entity_value (arc_dimension, "ARC_DIMENSION", "center_pt", &center_pt, NULL)
         && !memcmp (&center_pt, &arc_dimension->center_pt, sizeof (BITCODE_3BD)))
@@ -7770,16 +7760,6 @@ static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
         fail ("DIMENSION_ALIGNED.block [H]");
   }
   {
-    BITCODE_TV blockname;
-    if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "blockname", &blockname, NULL)
-        && blockname
-           ? strEQ ((char *)blockname, (char *)dimension_aligned->blockname)
-           : !dimension_aligned->blockname)
-      pass ();
-    else
-      fail ("DIMENSION_ALIGNED.blockname [TV] '%s' <> '%s'", blockname, dimension_aligned->blockname);
-  }
-  {
     BITCODE_RC class_version;
     if (dwg_dynapi_entity_value (dimension_aligned, "DIMENSION_ALIGNED", "class_version", &class_version, NULL)
         && class_version == dimension_aligned->class_version)
@@ -8106,16 +8086,6 @@ static int test_DIMENSION_ANG2LN (const Dwg_Object *obj)
         pass ();
     else
         fail ("DIMENSION_ANG2LN.block [H]");
-  }
-  {
-    BITCODE_TV blockname;
-    if (dwg_dynapi_entity_value (dimension_ang2ln, "DIMENSION_ANG2LN", "blockname", &blockname, NULL)
-        && blockname
-           ? strEQ ((char *)blockname, (char *)dimension_ang2ln->blockname)
-           : !dimension_ang2ln->blockname)
-      pass ();
-    else
-      fail ("DIMENSION_ANG2LN.blockname [TV] '%s' <> '%s'", blockname, dimension_ang2ln->blockname);
   }
   {
     BITCODE_RC class_version;
@@ -8447,16 +8417,6 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
         fail ("DIMENSION_ANG3PT.block [H]");
   }
   {
-    BITCODE_TV blockname;
-    if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "blockname", &blockname, NULL)
-        && blockname
-           ? strEQ ((char *)blockname, (char *)dimension_ang3pt->blockname)
-           : !dimension_ang3pt->blockname)
-      pass ();
-    else
-      fail ("DIMENSION_ANG3PT.blockname [TV] '%s' <> '%s'", blockname, dimension_ang3pt->blockname);
-  }
-  {
     BITCODE_3BD center_pt;
     if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "center_pt", &center_pt, NULL)
         && !memcmp (&center_pt, &dimension_ang3pt->center_pt, sizeof (BITCODE_3BD)))
@@ -8778,16 +8738,6 @@ static int test_DIMENSION_DIAMETER (const Dwg_Object *obj)
         fail ("DIMENSION_DIAMETER.block [H]");
   }
   {
-    BITCODE_TV blockname;
-    if (dwg_dynapi_entity_value (dimension_diameter, "DIMENSION_DIAMETER", "blockname", &blockname, NULL)
-        && blockname
-           ? strEQ ((char *)blockname, (char *)dimension_diameter->blockname)
-           : !dimension_diameter->blockname)
-      pass ();
-    else
-      fail ("DIMENSION_DIAMETER.blockname [TV] '%s' <> '%s'", blockname, dimension_diameter->blockname);
-  }
-  {
     BITCODE_RC class_version;
     if (dwg_dynapi_entity_value (dimension_diameter, "DIMENSION_DIAMETER", "class_version", &class_version, NULL)
         && class_version == dimension_diameter->class_version)
@@ -9106,16 +9056,6 @@ static int test_DIMENSION_LINEAR (const Dwg_Object *obj)
         pass ();
     else
         fail ("DIMENSION_LINEAR.block [H]");
-  }
-  {
-    BITCODE_TV blockname;
-    if (dwg_dynapi_entity_value (dimension_linear, "DIMENSION_LINEAR", "blockname", &blockname, NULL)
-        && blockname
-           ? strEQ ((char *)blockname, (char *)dimension_linear->blockname)
-           : !dimension_linear->blockname)
-      pass ();
-    else
-      fail ("DIMENSION_LINEAR.blockname [TV] '%s' <> '%s'", blockname, dimension_linear->blockname);
   }
   {
     BITCODE_RC class_version;
@@ -9461,16 +9401,6 @@ static int test_DIMENSION_ORDINATE (const Dwg_Object *obj)
         fail ("DIMENSION_ORDINATE.block [H]");
   }
   {
-    BITCODE_TV blockname;
-    if (dwg_dynapi_entity_value (dimension_ordinate, "DIMENSION_ORDINATE", "blockname", &blockname, NULL)
-        && blockname
-           ? strEQ ((char *)blockname, (char *)dimension_ordinate->blockname)
-           : !dimension_ordinate->blockname)
-      pass ();
-    else
-      fail ("DIMENSION_ORDINATE.blockname [TV] '%s' <> '%s'", blockname, dimension_ordinate->blockname);
-  }
-  {
     BITCODE_RC class_version;
     if (dwg_dynapi_entity_value (dimension_ordinate, "DIMENSION_ORDINATE", "class_version", &class_version, NULL)
         && class_version == dimension_ordinate->class_version)
@@ -9797,16 +9727,6 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
         pass ();
     else
         fail ("DIMENSION_RADIUS.block [H]");
-  }
-  {
-    BITCODE_TV blockname;
-    if (dwg_dynapi_entity_value (dimension_radius, "DIMENSION_RADIUS", "blockname", &blockname, NULL)
-        && blockname
-           ? strEQ ((char *)blockname, (char *)dimension_radius->blockname)
-           : !dimension_radius->blockname)
-      pass ();
-    else
-      fail ("DIMENSION_RADIUS.blockname [TV] '%s' <> '%s'", blockname, dimension_radius->blockname);
   }
   {
     BITCODE_RC class_version;
@@ -12335,16 +12255,6 @@ static int test_LARGE_RADIAL_DIMENSION (const Dwg_Object *obj)
         pass ();
     else
         fail ("LARGE_RADIAL_DIMENSION.block [H]");
-  }
-  {
-    BITCODE_TV blockname;
-    if (dwg_dynapi_entity_value (large_radial_dimension, "LARGE_RADIAL_DIMENSION", "blockname", &blockname, NULL)
-        && blockname
-           ? strEQ ((char *)blockname, (char *)large_radial_dimension->blockname)
-           : !large_radial_dimension->blockname)
-      pass ();
-    else
-      fail ("LARGE_RADIAL_DIMENSION.blockname [TV] '%s' <> '%s'", blockname, large_radial_dimension->blockname);
   }
   {
     BITCODE_RC class_version;

@@ -1463,7 +1463,6 @@ typedef struct _dwg_entity_LINE
 #define DIMENSION_COMMON                         \
   struct _dwg_object_entity *parent;             \
   BITCODE_RC class_version; /* R2010+ */         \
-  char *blockname; /* only set by out_dxf, UTF-8 */ \
   BITCODE_BE extrusion;                          \
   BITCODE_3BD def_pt;                            \
   BITCODE_2RD text_midpt;                        \

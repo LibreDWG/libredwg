@@ -373,6 +373,9 @@
 #  define FIELD_HANDLE0(name, code, dxf) FIELD_HANDLE (name, code, dxf)
 #  define SUB_FIELD_HANDLE0(o, name, code, dxf) SUB_FIELD_HANDLE (o, name, code, dxf)
 #endif
+#ifndef VALUE_TV0
+#  define VALUE_TV0(name, dxf) VALUE_TV (name, dxf)
+#endif
 
 // double to text
 #ifndef FIELD_D2T
