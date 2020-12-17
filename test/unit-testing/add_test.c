@@ -737,6 +737,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       Bit_Chain dat = { 0 };
       dat.version = dwg->header.version;
       dat.from_version = dwg->header.from_version;
+      dat.opts = dwg->opts;
       dat.fh = fopen (dwgfile, "wb");
       error = dwg_write_dxf (&dat, dwg);
       fclose (dat.fh);

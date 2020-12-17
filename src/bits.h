@@ -74,8 +74,8 @@ typedef struct _bit_chain
 #define EMPTY_CHAIN(size) { NULL, size, 0L, 0, 0, 0, 0, NULL }
 
 // only if from r2007+ DWG, not JSON, DXF, add API
-#define IS_FROM_TU(dat) dat->from_version >= R_2007 && !(dat->opts & DWG_OPTS_IN)
-#define IS_FROM_TU_DWG(dwg) dwg->header.from_version >= R_2007 && !(dwg->opts & DWG_OPTS_IN)
+#define IS_FROM_TU(dat) (dat->from_version >= R_2007) && !(dat->opts & DWG_OPTS_IN)
+#define IS_FROM_TU_DWG(dwg) (dwg->header.from_version >= R_2007) && !(dwg->opts & DWG_OPTS_IN)
 
 /* Functions for raw data manipulations.
  */

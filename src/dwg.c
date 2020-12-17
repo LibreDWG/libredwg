@@ -2035,7 +2035,7 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
       u8 = nod->texts[j];
       if (!u8)
         continue;
-      if (dwg->header.version >= R_2007)
+      if (IS_FROM_TU_DWG (dwg))
         u8 = bit_convert_TU ((BITCODE_TU)u8);
       if (u8 && strEQ (u8, name))
         {
@@ -2044,11 +2044,11 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
             continue;
           // relative? (8.0.0, 6.0.0, ...)
           dwg_resolve_handleref (ref, obj);
-          if (dwg->header.version >= R_2007)
+          if (IS_FROM_TU_DWG (dwg))
             free (u8);
           return dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL);
         }
-      if (dwg->header.version >= R_2007)
+      if (IS_FROM_TU_DWG (dwg))
         free (u8);
     }
   LOG_TRACE ("dwg_find_dictionary: DICTIONARY with %s not found\n", name)
@@ -2085,7 +2085,7 @@ dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict, const char *restric
 
       if (!hdlv || !texts || !texts[i])
         continue;
-      if (dwg->header.from_version >= R_2007)
+      if (IS_FROM_TU_DWG (dwg))
         {
           if (bit_eq_TU (name, (BITCODE_TU)texts[i]))
             return hdlv[i];
@@ -2537,7 +2537,7 @@ xdata_string_match (Dwg_Data *restrict dwg, Dwg_Resbuf *restrict xdata,
 {
   if (xdata->type != type)
     return 0;
-  if (dwg->header.from_version < R_2007)
+  if (!IS_FROM_TU_DWG (dwg))
     {
       return strEQ (xdata->value.str.u.data, str);
     }
@@ -2628,7 +2628,7 @@ dwg_find_table_extname (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
       xdata = xdata->nextrb;
       if (xdata->type == 2) // new name
         {
-          if (dwg->header.from_version < R_2007)
+          if (!IS_FROM_TU_DWG (dwg))
             return xdata->value.str.u.data;
           else
             return (char *)xdata->value.str.u.wdata;

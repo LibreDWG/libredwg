@@ -20897,7 +20897,7 @@ dwg_obj_table_get_name (const dwg_object *restrict obj, int *restrict error)
       Dwg_Object_STYLE *table = obj->tio.object->tio.STYLE;
       *error = 0;
       // importers are still a hack and don't store TU
-      if (dwg->header.version >= R_2007 && !(dwg->opts & DWG_OPTS_IN))
+      if (IS_FROM_TU_DWG (dwg))
         return bit_convert_TU ((BITCODE_TU)table->name); // creates a copy
       else
         return table->name;
@@ -22101,7 +22101,7 @@ static void add_obj_reactor (Dwg_Object_Object *obj, unsigned long absolute_ref)
 EXPORT BITCODE_T
 dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
 {
-  if (dwg->header.from_version >= R_2007 && !(dwg->opts & DWG_OPTS_IN))
+  if (IS_FROM_TU_DWG (dwg))
     {
       return (BITCODE_T)bit_utf8_to_TU ((char *restrict)u8str, 0);
     }
@@ -24014,7 +24014,7 @@ dwg_add_DICTIONARY_item (Dwg_Object_DICTIONARY* _obj,
           BITCODE_H *hdlv = _obj->itemhandles;
           if (!hdlv || !texts || !texts[i])
             continue;
-          if (dwg->header.from_version >= R_2007)
+          if (IS_FROM_TU_DWG (dwg))
             {
               if (bit_eq_TU (key, (BITCODE_TU)texts[i]))
                 {
