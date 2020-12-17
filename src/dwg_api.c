@@ -22557,6 +22557,10 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
       LOG_TRACE ("Unknown dxfname for %s\n", obj->name)                       \
       obj->dxfname = obj->name;                                               \
     }                                                                         \
+  if (dwg->opts & DWG_OPTS_IN)                                                \
+    obj->dxfname = strdup (obj->dxfname);                                     \
+  if (dwg->opts & DWG_OPTS_INJSON)                                            \
+    obj->name = strdup (obj->name);                                           \
   if (obj->type >= DWG_TYPE_GROUP)                                            \
     (void)dwg_encode_get_class (obj->parent, obj);                            \
   LOG_TRACE ("  ADD_ENTITY %s [%d]\n", obj->name, obj->index)                 \
@@ -22601,6 +22605,10 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
       LOG_TRACE ("Unknown dxfname for %s\n", obj->name)                       \
       obj->dxfname = obj->name;                                               \
     }                                                                         \
+  if (dwg->opts & DWG_OPTS_IN)                                                \
+    obj->dxfname = strdup (obj->dxfname);                                     \
+  if (dwg->opts & DWG_OPTS_INJSON)                                            \
+    obj->name = strdup (obj->name);                                           \
   if (obj->type >= DWG_TYPE_GROUP)                                            \
     (void)dwg_encode_get_class (obj->parent, obj);                            \
   LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index)                 \
