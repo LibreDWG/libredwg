@@ -2419,6 +2419,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
 }
 
 // Search for handle in associated table, and return its name. (as UTF-8)
+// Always returns a copy.
 EXPORT char *
 dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
                  const BITCODE_H restrict handle)
@@ -2495,7 +2496,10 @@ dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
       LOG_HANDLE (" %s.%s[%d] => %s.name: %s\n", obj->name, "entries", i,
                   hobj->name, hdlname ? hdlname : "NULL");
       if (ok)
-        return hdlname;
+        {
+          if (!isnew) return strdup (hdlname);
+          else return hdlname;
+        }
       else
         return NULL;
     }

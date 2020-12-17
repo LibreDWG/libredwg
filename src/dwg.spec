@@ -1218,11 +1218,9 @@ DWG_ENTITY_END
       /* converted to utf8 */ \
       char *blockname = dwg_dim_blockname (dwg, obj); \
       VALUE_TV0 (blockname, 2); \
-      SINCE (R_2007) { \
-        if (blockname) \
-          free (blockname); \
-      } \
-      FIELD_3BD (def_pt, 10); \
+      if (blockname)            \
+        free (blockname);       \
+      FIELD_3BD (def_pt, 10);   \
     } else { \
       FIELD_3BD (extrusion, 210); \
     } \
