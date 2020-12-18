@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2111 "gen-dynapi.pl"
+#line 2268 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -38,7 +38,8 @@ Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
 #define MAXLEN_ENTITIES 26
 #define MAXLEN_OBJECTS 35
 
-/* sorted for bsearch. from typedef struct _dwg_entity_*: */
+/* Generated and sorted for bsearch. from typedef struct _dwg_entity_*:
+   FIXME: Remove and use the new hashmap via dwg_object_name() instead. */
 static const char dwg_entity_names[][MAXLEN_ENTITIES] = {
   "3DFACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 0 */
   "3DSOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 1 */
@@ -126,7 +127,8 @@ static const char dwg_entity_names[][MAXLEN_ENTITIES] = {
   "XYPARAMETERENTITY" "\0\0\0\0\0\0\0\0",	/* 83 */
 
 };
-/* sorted for bsearch. from typedef struct _dwg_object_*: */
+/* Generated and sorted for bsearch. from typedef struct _dwg_object_*
+   FIXME: Remove and use the new hashmap via dwg_object_name() instead. */
 static const char dwg_object_names[][MAXLEN_OBJECTS] = {
   "ACMECOMMANDHISTORY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 0 */
   "ACMESCOPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 1 */
@@ -13181,6 +13183,7 @@ static const Dwg_DYNAPI_field _dwg_summaryinfo_fields[] = {
 };
 
 
+/* FIXME: Remove name. Get type via dwg_object_name() */
 struct _name_type_fields {
   const char *const name;
   const enum DWG_OBJECT_TYPE type;
@@ -13196,7 +13199,10 @@ struct _name_subclass_fields {
   const int size;
 };
 
-/* Fields for all the objects, sorted for bsearch. from enum DWG_OBJECT_TYPE: */
+/* Generated fields for all the objects, sorted for bsearch. from enum DWG_OBJECT_TYPE.
+   FIXME: Replace name by type. Get type via dwg_object_name().
+   Make it an array of type for O(1) lookup.
+ */
 static const struct _name_type_fields dwg_name_types[] = {
   { "3DFACE", DWG_TYPE__3DFACE /*(28)*/, _dwg_3DFACE_fields, sizeof (struct _dwg_entity_3DFACE) },	/* 0 */
   { "3DSOLID", DWG_TYPE__3DSOLID /*(38)*/, _dwg_3DSOLID_fields, sizeof (struct _dwg_entity_3DSOLID) },	/* 1 */
@@ -13503,7 +13509,7 @@ static const struct _name_type_fields dwg_name_types[] = {
 
 };
 
-/* Fields for all the subclasses, sorted for bsearch */
+/* Generated fields for all the subclasses, sorted for bsearch */
 static const struct _name_subclass_fields dwg_list_subclasses[] = {
   { "3DSOLID_material", (int)DWG_TYPE__3DSOLID, NULL, _dwg_3DSOLID_material_fields, sizeof (Dwg_3DSOLID_material) },	/* 0 */
   { "3DSOLID_silhouette", (int)DWG_TYPE__3DSOLID, NULL, _dwg_3DSOLID_silhouette_fields, sizeof (Dwg_3DSOLID_silhouette) },	/* 1 */
@@ -13942,7 +13948,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 
 };
 
-#line 2205 "gen-dynapi.pl"
+#line 2368 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

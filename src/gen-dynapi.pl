@@ -2264,7 +2264,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2111 "gen-dynapi.pl"
+#line 2268 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2303,11 +2303,13 @@ Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
 #define MAXLEN_ENTITIES @@scalar max_entity_names@@
 #define MAXLEN_OBJECTS @@scalar max_object_names@@
 
-/* sorted for bsearch. from typedef struct _dwg_entity_*: */
+/* Generated and sorted for bsearch. from typedef struct _dwg_entity_*:
+   FIXME: Remove and use the new hashmap via dwg_object_name() instead. */
 static const char dwg_entity_names[][MAXLEN_ENTITIES] = {
 @@list entity_names@@
 };
-/* sorted for bsearch. from typedef struct _dwg_object_*: */
+/* Generated and sorted for bsearch. from typedef struct _dwg_object_*
+   FIXME: Remove and use the new hashmap via dwg_object_name() instead. */
 static const char dwg_object_names[][MAXLEN_OBJECTS] = {
 @@list object_names@@
 };
@@ -2323,6 +2325,7 @@ static const char dwg_object_names[][MAXLEN_OBJECTS] = {
 
 @@struct _dwg_summaryinfo@@
 
+/* FIXME: Remove name. Get type via dwg_object_name() */
 struct _name_type_fields {
   const char *const name;
   const enum DWG_OBJECT_TYPE type;
@@ -2338,12 +2341,15 @@ struct _name_subclass_fields {
   const int size;
 };
 
-/* Fields for all the objects, sorted for bsearch. from enum DWG_OBJECT_TYPE: */
+/* Generated fields for all the objects, sorted for bsearch. from enum DWG_OBJECT_TYPE.
+   FIXME: Replace name by type. Get type via dwg_object_name().
+   Make it an array of type for O(1) lookup.
+ */
 static const struct _name_type_fields dwg_name_types[] = {
 @@enum DWG_OBJECT_TYPE@@
 };
 
-/* Fields for all the subclasses, sorted for bsearch */
+/* Generated fields for all the subclasses, sorted for bsearch */
 static const struct _name_subclass_fields dwg_list_subclasses[] = {
 @@list subclasses@@
 };
@@ -2358,7 +2364,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 @@list name_subclasses@@
 };
 
-#line 2205 "gen-dynapi.pl"
+#line 2368 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {
