@@ -2780,6 +2780,8 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
               // Some objects have various subtypes under one name.
               // TODO UNDERLAY, UNDERLAYDEF, OBJECTCONTEXTDATA, ...
+              // FIXME: We really should seperate BACKGROUND and UNDERLAY the other
+              // way round, as with POLYLINE.
               if (strEQc (name, "BACKGROUND"))
                 {
                   decode_BACKGROUND_type (obj);
@@ -2796,8 +2798,49 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
           else if (strEQc (key, "type") && !obj->type)
             {
+              int isent;
+              const char *dxfname;
               obj->type = json_long (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
+
+              if (!dwg_object_name (name, &dxfname, &obj->fixedtype, &isent))
+                {
+                  LOG_ERROR ("Unknown object %s", name);
+                  // exhaust the rest
+                  for (; j < keys; j++)
+                    {
+                      json_advance_unknown (dat, tokens, t->type, 0); // value
+                      tokens->index++; // next key
+                      JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
+                    }
+                  tokens->index--;
+                  break;
+                }
+              else
+                {
+                  if (obj->dxfname && strNE (obj->dxfname, dxfname))
+                    {
+                      LOG_WARN ("Changed dxfname %s => %s", obj->dxfname, dxfname);
+                    }
+                  free (obj->dxfname);
+                  obj->dxfname = strdup (dxfname);
+                  if ((obj->supertype == DWG_SUPERTYPE_ENTITY && !isent)
+                      || (obj->supertype == DWG_SUPERTYPE_OBJECT && isent))
+                    {
+                      LOG_ERROR ("Illegal object supertype for %s", name);
+                      // exhaust the rest
+                      for (; j < keys; j++)
+                        {
+                          json_advance_unknown (dat, tokens, t->type, 0); // value
+                          tokens->index++; // next key
+                          JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
+                            }
+                      tokens->index--;
+                      break;
+                    }
+                }
+
+#if 0
               // clang-format off
               // ADD_ENTITY by name
               // check all objects
@@ -2838,6 +2881,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 #undef DWG_ENTITY
               // clang-format on
             found_ent:
+#endif
               LOG_TRACE ("type: %d,\tfixedtype: %d\n", obj->type,
                          obj->fixedtype)
             }
