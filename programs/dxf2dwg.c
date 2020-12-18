@@ -314,6 +314,8 @@ main (int argc, char *argv[])
       if (error >= DWG_ERR_CRITICAL)
         {
           fprintf (stderr, "READ ERROR 0x%x %s\n", error, filename_in);
+          if (need_free)
+            free (filename_out);
           continue;
         }
 
