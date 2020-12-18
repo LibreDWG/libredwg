@@ -1175,7 +1175,7 @@ my %FMT = (
 # The simple list of macro defs (linear search)
 my $objfile = "$srcdir/objects.inc";
 chmod 0644, $objfile if -e $objfile;
-open my $inc, ">", $objfile or die "$objfile: $!";
+open my $inc, ">", "$objfile.tmp" or die "$objfile: $!";
 print $inc <<"EOF";
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
 /*****************************************************************************/
@@ -1208,14 +1208,15 @@ print $inc "\n";
 for my $name (@object_names) {
   print $inc "DWG_OBJECT ($name)\n";
 }
-chmod 0444, $inc;
 close $inc;
+mv_if_not_same ("$objfile.tmp", $objfile);
+chmod 0444, $objfile;
 
 # ---------------------------------------------------------------
 # The gperf hash
 my $ofile = "$srcdir/objects.in";
 chmod 0644, $ofile if -e $ofile;
-open $inc, ">", $ofile or die "$ofile: $!";
+open $inc, ">", "$ofile.tmp" or die "$ofile: $!";
 print $inc <<'EOF';
 %{ // -*- mode: c -*-
 /*****************************************************************************/
@@ -1298,8 +1299,10 @@ EXPORT int dwg_object_name (const char *const restrict name, const char **restri
  * vim: expandtab shiftwidth=4 cinoptions='\:2=2' :
  */
 EOF
-chmod 0444, $inc;
 close $inc;
+mv_if_not_same ("$ofile.tmp", $ofile);
+chmod 0444, $ofile;
+
 # ---------------------------------------------------------------
 my $infile = "$topdir/test/unit-testing/dynapi_test.c.in";
 open $in, $infile or die "$infile: $!";
