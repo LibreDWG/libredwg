@@ -712,7 +712,10 @@ in_word_set (register const char *str, register size_t len)
 
 
 /* Create classes on demand.
-   Returns 1 if already in CLASSES, 0 if successfully added, -1 on error.
+   Returns found or new klass->number id (always >=500), <0 on error.
+   -1 out of memory (from dwg_add_class())
+   -2 unknown class for dxfname.
+   -3 invalid apptype for class. (should not happen)
 */
 EXPORT int
 dwg_require_class (Dwg_Data *restrict dwg, const char *const restrict dxfname, const int len)
@@ -722,7 +725,7 @@ dwg_require_class (Dwg_Data *restrict dwg, const char *const restrict dxfname, c
     {
       Dwg_Class *klass = &dwg->dwg_class[i];
       if (strEQ (klass->dxfname, dxfname))
-        return 1;
+        return klass->number;
     }
 
   result = in_word_set (dxfname, len);
@@ -731,30 +734,24 @@ dwg_require_class (Dwg_Data *restrict dwg, const char *const restrict dxfname, c
       switch ((enum apptypes)result->apptype)
         {
         case ODBXCLASS:
-          dwg_add_class (dwg, dxfname, result->cppname, "ObjectDBX Classes", result->isent);
-          break;
+          return dwg_add_class (dwg, dxfname, result->cppname, "ObjectDBX Classes", result->isent);
         case ODBX_OR_A2000CLASS:
-          dwg_add_class (dwg, dxfname, result->cppname,
+          return dwg_add_class (dwg, dxfname, result->cppname,
                          dwg->header.from_version <= R_2000 ? "AutoCAD 2000" : "ObjectDBX Classes",
                          result->isent);
-          break;
         case A2000CLASS:
-          dwg_add_class (dwg, dxfname, result->cppname, "AutoCAD 2000", result->isent);
-          break;
+          return dwg_add_class (dwg, dxfname, result->cppname, "AutoCAD 2000", result->isent);
         case SCENEOECLASS:
-          dwg_add_class (dwg, dxfname, result->cppname, "SCENEOE", result->isent);
-          break;
+          return dwg_add_class (dwg, dxfname, result->cppname, "SCENEOE", result->isent);
         case ISMCLASS:
-          dwg_add_class (dwg, dxfname, result->cppname, "ISM", result->isent);
-          break;
+          return dwg_add_class (dwg, dxfname, result->cppname, "ISM", result->isent);
         case EXPRESSCLASS:
           {
             char appname[128];
             strcpy (appname, dxfname);
             strcat (appname, "|AutoCAD Express Tool");
-            dwg_add_class (dwg, dxfname, result->cppname, appname, result->isent);
+            return dwg_add_class (dwg, dxfname, result->cppname, appname, result->isent);
           }
-          break;
         case SPECIALCLASS:
           {
             char appname[128];
@@ -769,15 +766,15 @@ dwg_require_class (Dwg_Data *restrict dwg, const char *const restrict dxfname, c
                 strcpy (appname, result->cppname);
                 strcat (appname, "|Unknown ARX App");
               }
-            dwg_add_class (dwg, dxfname, result->cppname, appname, result->isent);
+            return dwg_add_class (dwg, dxfname, result->cppname, appname, result->isent);
           }
           break;
         default:
           fprintf (stderr, "dxfclass_require: Invalid apptype %d", (int)result->apptype);
-          return -1;
+          return -3;
         }
     }
-  return -1;
+  return -2;
 }
 
 /*

@@ -22482,8 +22482,9 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   return dwg;
 }
 
-/* Returns -1 on error, 0 on success.
-   Takes ASCII strings only */
+/* Returns <0 on error, the new 50x klass id on success..
+   -1 out of memory.
+   Takes UTF-8 names only */
 EXPORT int
 dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
                const char *const restrict cppname,
@@ -22510,7 +22511,7 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
   klass->cppname = strdup (cppname);
   klass->item_class_id = is_entity ? 0x1f2: 0x1f3;
   dwg->num_classes++;
-  return 0;
+  return klass->number;
 }
 
 /* Now implemented in dxfclasses.c as gperf lookup */
