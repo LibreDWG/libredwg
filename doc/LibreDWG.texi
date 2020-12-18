@@ -756,7 +756,9 @@ and the field name.
 @menu
 * Decoding::                    Functions on the DWG read path.
 * Encoding::                    Functions on the DWG write path.
+* add api::                     How to create a DWG and objects from scratch
 * dynapi::                      Dynamic object field access.
+* strings::                     The various string types, how Unicode strings are handled
 * Other Formats::		Functions on the DWG to read or write other formats.
 @end menu
 
@@ -863,37 +865,16 @@ Open @var{filename} and write the @var{dwg} to it.
 Return 0 if successful.
 @end deftypefn
 
+@xref{add api} for:
 @deftypefn {Function} Dwg_Data* dwg_add_Document (const Dwg_Version_Type @var{version},
                                             const int @var{imperial}, const int @var{loglevel})
 Creates an initial template dwg structure in memory, suitable to be written to a DWG or DXF file,
 without any additional table records or entities. Creates ModelSpace, PaperSpace and most Tables
 and basic Dictionaries.
 @end deftypefn
+and how to add entities and objects from scratch.
 
-For each OBJECT and ENTITY type there exists a specific @code{dwg_add_<OBJECT>} function, which takes the owner
-and some default arguments. Entities are normally added to a block header, like modelspace,
-paperspace or any block. Objects are normally added to the dwg, or to some other object or entity.
-E.g.
-@deftypefn {Function} Dwg_Entity_LINE *line = dwg_add_LINE (Dwg_Object_BLOCK_HEADER *modelspace,
-                                                            dwg_point_3d *start_pt, dwg_point_3d *end_pt)
-@end deftypefn
-@deftypefn {Function} Dwg_Object_LAYER *layer = dwg_add_LAYER (Dwg_Data *dwg, const char *name)
-Adds a new layer the Layer Table, i.e. creates the new LAYER object, and adds it to LAYER_CONTROL object,
-the list of layers.
-@end deftypefn
-
-Names and strings are encoded as UTF-8 and will be translated to type BITCODE_T (i.e. versions specific
-TU or TV types, either UCS-2 unicode or single-byte codepage) internally, as with the @b{dynapi}. Only
-internally you will have to deal with 2 different text represenations: unicode since r2007, ascii before.
-
-To understand the object model for the add API see some VBA Object model documentation, such as
-e.g. @url{http://entercad.ru/acadauto.en/}.
-
-The new add API mostly handles the direct @code{Dwg_Entity_ENTITY} structs, not all the generic @code{Dwg_Object} structs.
-Thus you can access the object specific fields directly, the common fields, not so easily.
-
-The DWG Document consists of 3 basic entity containers @code{ModelSpace}, @code{PaperSpace} and @code{Blocks}, plus
-@code{Tables} (@code{Layers}, @code{Linetypes}, ...), @code{Dictionaries} as generic replacements of @code{Tables} with a root Dictionary, the @code{NOD} ("Named Object Dictionary"), and more support objects and complex entity groups.
+Low level-functions:
 
 @deftypefn {Function} int dwg_add_object (Dwg_Data *@var{dwg})
 Adds a new uninitialized object to the @var{dwg->object}[] array.
@@ -914,7 +895,73 @@ This is done by @file{src/encode.c} or any @file{src/in_*.c} import module.
 Encodes the DWG bitstream from the fields of the object.
 @end deftypefn
 
-The iterator is similar to above, but you want to encode all data structures, not just the entities. But note that you need many helper functions, such as the @pxref{dynapi}, to create all needed sections to store a DWG if you didn't read a DWG into the right a @var{Dwg_Data* dwg} struct already. This is especially important when importing from DXF or from an earlier or later DWG version.
+The iterator is similar to above, but you want to encode all data structures, not just the entities. But note that you need many helper functions, such as the @ref{dynapi}, to create all needed sections to store a DWG if you didn't read a DWG into the right a @var{Dwg_Data* dwg} struct already. This is especially important when importing from DXF or from an earlier or later DWG version.
+
+@node add api
+@section add api
+
+@cindex functions, create
+
+The add api functions are useful for CAD programs which want to write DWG.
+All the other API's are mostly to convert from and to DWG, so the main structures and links already do exist.
+With the add api you can easily create an empty DWG from scratch, add table entries (into fixed Tables
+or variables Dictionaries), and add entities. To set more entity fields use the @ref{dynapi}.
+
+For each almost each entity and table exists a function at to add it, with arguments to initialize some fields
+as in the VBA object model. The other objects are either created automatically, or handled seperately.
+
+All BITCODE_T strings are encoded as UTF-8, as with the dynapi. @xref{strings}.
+Most names are copied, since most names are considered to be constant.
+If not, you need to free them by yourself.
+Exceptions are dxfname (there exists a seperate dxfname_u variant),
+the VX name, which does not exists anymore since r2000.
+
+@deftypefn {Function} Dwg_Data dwg_add_Document (const Dwg_Version_Type @var{version}, const int @var{imperial}, const int @var{loglevel}))
+
+Creates an initial template dwg structure in memory, suitable to be written to a DWG or DXF file,
+without any additional table records or entities. Creates ModelSpace, PaperSpace and most Tables
+and basic Dictionaries.
+
+When writing DWG, a @var{version} of R_2000 is recommended, only R_13 - R-2000
+are supported yet. For DXF you can try all versions >= R_13.
+@end deftypefn
+
+
+For each OBJECT and ENTITY type there exists a specific @code{dwg_add_<OBJECT>} function, which takes the owner
+and some default arguments. Entities are normally added to a block header, like modelspace,
+paperspace or any block. Objects are normally added to the dwg, or to some other object or entity.
+E.g.
+@deftypefn {Function} Dwg_Entity_LINE *line = dwg_add_LINE (Dwg_Object_BLOCK_HEADER *modelspace,
+                                                            dwg_point_3d *start_pt, dwg_point_3d *end_pt)
+@end deftypefn
+@deftypefn {Function} Dwg_Entity_TEXT* dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict @var{blkhdr}, const char* restrict @var{text_value}, const dwg_point_3d *restrict @var{ins_pt}, const double {height})
+
+Adds a TEXT entity to the ModelSpace, PaperSpace or a Block. Entity specific arguments are here the text, the point (as pointer to the struct of 3 doubles), and the text height.
+@end deftypefn
+@deftypefn {Function} Dwg_Object_LAYER *layer = dwg_add_LAYER (Dwg_Data *dwg, const char *name)
+Adds a new layer the Layer Table, i.e. creates the new LAYER object, and adds it to LAYER_CONTROL object,
+the list of layers.
+@end deftypefn
+
+Names and strings are encoded as UTF-8 and will be translated to type BITCODE_T (i.e. versions specific
+TU or TV types, either UCS-2 unicode or single-byte codepage) internally, as with the @b{dynapi}. Only
+internally you will have to deal with 2 different DWG text representations: UCS-2 since r2007, single-byte before.
+@pxref{strings}.
+
+To understand the object model for the add API see some VBA Object model documentation, such as
+e.g. @url{http://entercad.ru/acadauto.en/}.
+
+The new add API mostly handles the direct @code{Dwg_Entity_ENTITY} structs, not all the generic @code{Dwg_Object} structs.
+Thus you can access the object specific fields directly, the common fields, not so easily.
+
+The DWG Document consists of 3 basic entity containers @code{ModelSpace}, @code{PaperSpace} and @code{Blocks}, plus
+@code{Tables} (@code{Layers}, @code{Linetypes}, ...), @code{Dictionaries} as generic replacements of @code{Tables} with a root Dictionary, the @code{NOD} ("Named Object Dictionary"), and more support objects and complex entity groups.
+
+Helper functions:
+
+@deftypefn {Function} dwg_add_u8_input (Dwg_Data *restrict @var{dwg}, const char *restrict @var{u8str})
+Convert UTF-8 strings to BITCODE_T fields. Returns a copy of the string. All external API's only deal with UTF-8 strings.
+@end deftypefn
 
 @node dynapi
 @section dynapi
@@ -981,6 +1028,42 @@ If is_utf8 is set, the given value is a UTF-8 string, and will be converted to T
 @end deftypefn
 
 See the sourcecode of the importers or programs for the usage of the API's.
+
+@node strings
+@section strings
+
+@cindex strings
+
+Internally the DWG consists of multiple different string formats, @pxref{Types}.
+The most important are @code{BITCODE_TV} (i.e. @code{char*}) encoded according to @code{dwg->header.codepage},
+and @code{BITCODE_TU} (i.e. @code{wchar_t} on Windows, UCS-2).
+
+Externally most functions get and set strings as UTF-8, as in DXF or JSON.
+
+Before r2007 DWG's the TV and T strings are encoded in its codepage, they are not yet converted from and
+to their proper codepage to UTF-8, but will eventually. Not via libiconv, just via the locale specific libc btowc().
+To encode unicode characters special \U+XXXX sequences are used, and with japanese shift-jis for
+Katagana and Hiregana \M+1XXXX sequences.
+
+On DWG's r2007 and later most strings (T and TU) are encoded in the Microsoft specific two-byte
+UCS-2 Unicode encoding, without proper support for surrogate pairs and the upper planes (i.e. emojis).
+
+Fixed TF strings are not encoded and have a length stored also. Normal strings are all zero-delimited.
+EED and XDATA strings do have a length though, but have length limitations.
+
+Strings in DXF and JSON also have quoting rules for special characters, like \r, \n, \" and so on.
+
+@b{Transformations}:
+
+DWG to DWG: decode reads the T and TU strings in its natural format into the field. encode translate it to TV or TU. encode needs @code{header.from_version} and how it was read, from DWG or from an importer (in_dxf or in_json) or the @ref{add api} (DWG_OPTS_IN).
+
+DXF/JSON to DWG: in_dxf/json keeps the T and TU strings as TV. encode to <r2007 keeps it as TV, r2007+ translates it to TU.
+it sets DWG_OPTS_IN.
+
+DWG to DXF/JSON: decode keeps the T and TU strings as TV or TU. out_dxf/json translate them to TV or UTF-8 and quote them via \U+XXXX
+
+add api to DWG/DXF: add reads strings as UTF-8, and encodes it from UTF-8 to TV or TU. (TU not yet, as we don't encode R2004+ yet). add sets DWG_OPTS_IN.
+
 
 @node Other Formats
 @section Other Formats
