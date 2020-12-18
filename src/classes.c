@@ -952,6 +952,7 @@ const char* dwg_type_dxfname (const Dwg_Object_Type type)
     }
 }
 
+// dxfname => name
 void
 object_alias (char *restrict name)
 {
@@ -986,6 +987,7 @@ object_alias (char *restrict name)
     memmove (name, &name[4], len - 3);
 }
 
+// dxfname => name
 void
 entity_alias (char *restrict name)
 {

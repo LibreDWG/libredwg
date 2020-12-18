@@ -9182,6 +9182,13 @@ EXPORT BITCODE_BS dwg_find_color_index (BITCODE_BL rgb);
 */
 EXPORT int dwg_add_object (Dwg_Data *restrict dwg);
 
+/* Find if an object name (our internal name, not anything used elsewhere)
+   is defined, and return our fixed type, the public dxfname and if it's an entity. */
+EXPORT int dwg_object_name (const char *const restrict name, // in
+                            const char **restrict dxfnamep,  // out
+                            Dwg_Object_Type *restrict typep, // out
+                            int *restrict is_entp);    // out
+
 /** Initialize the empty entity or object with its three structs.
     All fields are zero'd, some are initialized with default values, as
     defined in dwg.spec. obj->fixedtype is set, obj->type only for static types.

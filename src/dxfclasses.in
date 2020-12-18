@@ -33,7 +33,7 @@ int dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
 EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
                               const char *const restrict dxfname, const int len);
 // internal
-const struct Dwg_DXFClass * in_word_set (register const char *str, register size_t len);
+static const struct Dwg_DXFClass * in_word_set (register const char *str, register size_t len);
 
 enum apptypes {
   ODBXCLASS,
@@ -52,6 +52,7 @@ enum apptypes {
 //%null-strings
 
 %}
+%7bit
 %language=ANSI-C
 %struct-type
 %readonly-tables
