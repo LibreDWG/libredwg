@@ -298,238 +298,238 @@ static const char *const _dwg_type_names_fixed[] =
 //  "PROXY_ENTITY" 0x1f2 498
 //  "PROXY_OBJECT" 0x1f3 499
 
-// auto-generated array of names starting at index 500, with direct access by fixedtype.
+// Auto-generated array of names starting at index 500, with direct access by fixedtype.
 static const char *const _dwg_type_names_variable[] =
   {
-    /* Start auto-generated variable */
-    "ACDSRECORD",	/* 500 */
-    "ACDSSCHEMA",	/* 501 */
-    "ACMECOMMANDHISTORY",	/* 502 */
-    "ACMESCOPE",	/* 503 */
-    "ACMESTATEMGR",	/* 504 */
-    "ACSH_BOOLEAN_CLASS",	/* 505 */
-    "ACSH_BOX_CLASS",	/* 506 */
-    "ACSH_BREP_CLASS",	/* 507 */
-    "ACSH_CHAMFER_CLASS",	/* 508 */
-    "ACSH_CONE_CLASS",	/* 509 */
-    "ACSH_CYLINDER_CLASS",	/* 510 */
-    "ACSH_EXTRUSION_CLASS",	/* 511 */
-    "ACSH_FILLET_CLASS",	/* 512 */
-    "ACSH_HISTORY_CLASS",	/* 513 */
-    "ACSH_LOFT_CLASS",	/* 514 */
-    "ACSH_PYRAMID_CLASS",	/* 515 */
-    "ACSH_REVOLVE_CLASS",	/* 516 */
-    "ACSH_SPHERE_CLASS",	/* 517 */
-    "ACSH_SWEEP_CLASS",	/* 518 */
-    "ACSH_TORUS_CLASS",	/* 519 */
-    "ACSH_WEDGE_CLASS",	/* 520 */
-    "ALDIMOBJECTCONTEXTDATA",	/* 521 */
-    "ALIGNMENTPARAMETERENTITY",	/* 522 */
-    "ANGDIMOBJECTCONTEXTDATA",	/* 523 */
-    "ANNOTSCALEOBJECTCONTEXTDATA",	/* 524 */
-    "ARCALIGNEDTEXT",	/* 525 */
-    "ARC_DIMENSION",	/* 526 */
-    "ASSOC2DCONSTRAINTGROUP",	/* 527 */
-    "ASSOC3POINTANGULARDIMACTIONBODY",	/* 528 */
-    "ASSOCACTION",	/* 529 */
-    "ASSOCACTIONPARAM",	/* 530 */
-    "ASSOCALIGNEDDIMACTIONBODY",	/* 531 */
-    "ASSOCARRAYACTIONBODY",	/* 532 */
-    "ASSOCARRAYMODIFYACTIONBODY",	/* 533 */
-    "ASSOCARRAYMODIFYPARAMETERS",	/* 534 */
-    "ASSOCARRAYPATHPARAMETERS",	/* 535 */
-    "ASSOCARRAYPOLARPARAMETERS",	/* 536 */
-    "ASSOCARRAYRECTANGULARPARAMETERS",	/* 537 */
-    "ASSOCASMBODYACTIONPARAM",	/* 538 */
-    "ASSOCBLENDSURFACEACTIONBODY",	/* 539 */
-    "ASSOCCOMPOUNDACTIONPARAM",	/* 540 */
-    "ASSOCDEPENDENCY",	/* 541 */
-    "ASSOCDIMDEPENDENCYBODY",	/* 542 */
-    "ASSOCEDGEACTIONPARAM",	/* 543 */
-    "ASSOCEDGECHAMFERACTIONBODY",	/* 544 */
-    "ASSOCEDGEFILLETACTIONBODY",	/* 545 */
-    "ASSOCEXTENDSURFACEACTIONBODY",	/* 546 */
-    "ASSOCEXTRUDEDSURFACEACTIONBODY",	/* 547 */
-    "ASSOCFACEACTIONPARAM",	/* 548 */
-    "ASSOCFILLETSURFACEACTIONBODY",	/* 549 */
-    "ASSOCGEOMDEPENDENCY",	/* 550 */
-    "ASSOCLOFTEDSURFACEACTIONBODY",	/* 551 */
-    "ASSOCMLEADERACTIONBODY",	/* 552 */
-    "ASSOCNETWORK",	/* 553 */
-    "ASSOCNETWORKSURFACEACTIONBODY",	/* 554 */
-    "ASSOCOBJECTACTIONPARAM",	/* 555 */
-    "ASSOCOFFSETSURFACEACTIONBODY",	/* 556 */
-    "ASSOCORDINATEDIMACTIONBODY",	/* 557 */
-    "ASSOCOSNAPPOINTREFACTIONPARAM",	/* 558 */
-    "ASSOCPATCHSURFACEACTIONBODY",	/* 559 */
-    "ASSOCPATHACTIONPARAM",	/* 560 */
-    "ASSOCPERSSUBENTMANAGER",	/* 561 */
-    "ASSOCPLANESURFACEACTIONBODY",	/* 562 */
-    "ASSOCPOINTREFACTIONPARAM",	/* 563 */
-    "ASSOCRESTOREENTITYSTATEACTIONBODY",	/* 564 */
-    "ASSOCREVOLVEDSURFACEACTIONBODY",	/* 565 */
-    "ASSOCROTATEDDIMACTIONBODY",	/* 566 */
-    "ASSOCSWEPTSURFACEACTIONBODY",	/* 567 */
-    "ASSOCTRIMSURFACEACTIONBODY",	/* 568 */
-    "ASSOCVALUEDEPENDENCY",	/* 569 */
-    "ASSOCVARIABLE",	/* 570 */
-    "ASSOCVERTEXACTIONPARAM",	/* 571 */
-    "BASEPOINTPARAMETERENTITY",	/* 572 */
-    "BLKREFOBJECTCONTEXTDATA",	/* 573 */
-    "BLOCKALIGNEDCONSTRAINTPARAMETER",	/* 574 */
-    "BLOCKALIGNMENTGRIP",	/* 575 */
-    "BLOCKALIGNMENTPARAMETER",	/* 576 */
-    "BLOCKANGULARCONSTRAINTPARAMETER",	/* 577 */
-    "BLOCKARRAYACTION",	/* 578 */
-    "BLOCKBASEPOINTPARAMETER",	/* 579 */
-    "BLOCKDIAMETRICCONSTRAINTPARAMETER",	/* 580 */
-    "BLOCKFLIPACTION",	/* 581 */
-    "BLOCKFLIPGRIP",	/* 582 */
-    "BLOCKFLIPPARAMETER",	/* 583 */
-    "BLOCKGRIPLOCATIONCOMPONENT",	/* 584 */
-    "BLOCKHORIZONTALCONSTRAINTPARAMETER",	/* 585 */
-    "BLOCKLINEARCONSTRAINTPARAMETER",	/* 586 */
-    "BLOCKLINEARGRIP",	/* 587 */
-    "BLOCKLINEARPARAMETER",	/* 588 */
-    "BLOCKLOOKUPACTION",	/* 589 */
-    "BLOCKLOOKUPGRIP",	/* 590 */
-    "BLOCKLOOKUPPARAMETER",	/* 591 */
-    "BLOCKMOVEACTION",	/* 592 */
-    "BLOCKPARAMDEPENDENCYBODY",	/* 593 */
-    "BLOCKPOINTPARAMETER",	/* 594 */
-    "BLOCKPOLARGRIP",	/* 595 */
-    "BLOCKPOLARPARAMETER",	/* 596 */
-    "BLOCKPOLARSTRETCHACTION",	/* 597 */
-    "BLOCKPROPERTIESTABLE",	/* 598 */
-    "BLOCKPROPERTIESTABLEGRIP",	/* 599 */
-    "BLOCKRADIALCONSTRAINTPARAMETER",	/* 600 */
-    "BLOCKREPRESENTATION",	/* 601 */
-    "BLOCKROTATEACTION",	/* 602 */
-    "BLOCKROTATIONGRIP",	/* 603 */
-    "BLOCKROTATIONPARAMETER",	/* 604 */
-    "BLOCKSCALEACTION",	/* 605 */
-    "BLOCKSTRETCHACTION",	/* 606 */
-    "BLOCKUSERPARAMETER",	/* 607 */
-    "BLOCKVERTICALCONSTRAINTPARAMETER",	/* 608 */
-    "BLOCKVISIBILITYGRIP",	/* 609 */
-    "BLOCKVISIBILITYPARAMETER",	/* 610 */
-    "BLOCKXYGRIP",	/* 611 */
-    "BLOCKXYPARAMETER",	/* 612 */
-    "CAMERA",	/* 613 */
-    "CELLSTYLEMAP",	/* 614 */
-    "CONTEXTDATAMANAGER",	/* 615 */
-    "CSACDOCUMENTOPTIONS",	/* 616 */
-    "CURVEPATH",	/* 617 */
-    "DATALINK",	/* 618 */
-    "DATATABLE",	/* 619 */
-    "DBCOLOR",	/* 620 */
-    "DETAILVIEWSTYLE",	/* 621 */
-    "DGNDEFINITION",	/* 622 */
-    "DGNUNDERLAY",	/* 623 */
-    "DICTIONARYVAR",	/* 624 */
-    "DICTIONARYWDFLT",	/* 625 */
-    "DIMASSOC",	/* 626 */
-    "DMDIMOBJECTCONTEXTDATA",	/* 627 */
-    "DWFDEFINITION",	/* 628 */
-    "DWFUNDERLAY",	/* 629 */
-    "DYNAMICBLOCKPROXYNODE",	/* 630 */
-    "DYNAMICBLOCKPURGEPREVENTER",	/* 631 */
-    "EVALUATION_GRAPH",	/* 632 */
-    "EXTRUDEDSURFACE",	/* 633 */
-    "FCFOBJECTCONTEXTDATA",	/* 634 */
-    "FIELD",	/* 635 */
-    "FIELDLIST",	/* 636 */
-    "FLIPPARAMETERENTITY",	/* 637 */
-    "GEODATA",	/* 638 */
-    "GEOMAPIMAGE",	/* 639 */
-    "GEOPOSITIONMARKER",	/* 640 */
-    "GRADIENT_BACKGROUND",	/* 641 */
-    "GROUND_PLANE_BACKGROUND",	/* 642 */
-    "HELIX",	/* 643 */
-    "IBL_BACKGROUND",	/* 644 */
-    "IDBUFFER",	/* 645 */
-    "IMAGE",	/* 646 */
-    "IMAGEDEF",	/* 647 */
-    "IMAGEDEF_REACTOR",	/* 648 */
-    "IMAGE_BACKGROUND",	/* 649 */
-    "INDEX",	/* 650 */
-    "LARGE_RADIAL_DIMENSION",	/* 651 */
-    "LAYERFILTER",	/* 652 */
-    "LAYER_INDEX",	/* 653 */
-    "LAYOUTPRINTCONFIG",	/* 654 */
-    "LEADEROBJECTCONTEXTDATA",	/* 655 */
-    "LIGHT",	/* 656 */
-    "LIGHTLIST",	/* 657 */
-    "LINEARPARAMETERENTITY",	/* 658 */
-    "LOFTEDSURFACE",	/* 659 */
-    "MATERIAL",	/* 660 */
-    "MENTALRAYRENDERSETTINGS",	/* 661 */
-    "MESH",	/* 662 */
-    "MLEADEROBJECTCONTEXTDATA",	/* 663 */
-    "MLEADERSTYLE",	/* 664 */
-    "MOTIONPATH",	/* 665 */
-    "MPOLYGON",	/* 666 */
-    "MTEXTATTRIBUTEOBJECTCONTEXTDATA",	/* 667 */
-    "MTEXTOBJECTCONTEXTDATA",	/* 668 */
-    "MULTILEADER",	/* 669 */
-    "NAVISWORKSMODEL",	/* 670 */
-    "NAVISWORKSMODELDEF",	/* 671 */
-    "NPOCOLLECTION",	/* 672 */
-    "NURBSURFACE",	/* 673 */
-    "OBJECT_PTR",	/* 674 */
-    "ORDDIMOBJECTCONTEXTDATA",	/* 675 */
-    "PDFDEFINITION",	/* 676 */
-    "PDFUNDERLAY",	/* 677 */
-    "PERSUBENTMGR",	/* 678 */
-    "PLANESURFACE",	/* 679 */
-    "PLOTSETTINGS",	/* 680 */
-    "POINTCLOUD",	/* 681 */
-    "POINTCLOUDCOLORMAP",	/* 682 */
-    "POINTCLOUDDEF",	/* 683 */
-    "POINTCLOUDDEFEX",	/* 684 */
-    "POINTCLOUDDEF_REACTOR",	/* 685 */
-    "POINTCLOUDDEF_REACTOR_EX",	/* 686 */
-    "POINTCLOUDEX",	/* 687 */
-    "POINTPARAMETERENTITY",	/* 688 */
-    "POINTPATH",	/* 689 */
-    "RADIMLGOBJECTCONTEXTDATA",	/* 690 */
-    "RADIMOBJECTCONTEXTDATA",	/* 691 */
-    "RAPIDRTRENDERENVIRONMENT",	/* 692 */
-    "RAPIDRTRENDERSETTINGS",	/* 693 */
-    "RASTERVARIABLES",	/* 694 */
-    "RENDERENTRY",	/* 695 */
-    "RENDERENVIRONMENT",	/* 696 */
-    "RENDERGLOBAL",	/* 697 */
-    "RENDERSETTINGS",	/* 698 */
-    "REVOLVEDSURFACE",	/* 699 */
-    "ROTATIONPARAMETERENTITY",	/* 700 */
-    "RTEXT",	/* 701 */
-    "SCALE",	/* 702 */
-    "SECTIONOBJECT",	/* 703 */
-    "SECTIONVIEWSTYLE",	/* 704 */
-    "SECTION_MANAGER",	/* 705 */
-    "SECTION_SETTINGS",	/* 706 */
-    "SKYLIGHT_BACKGROUND",	/* 707 */
-    "SOLID_BACKGROUND",	/* 708 */
-    "SORTENTSTABLE",	/* 709 */
-    "SPATIAL_FILTER",	/* 710 */
-    "SPATIAL_INDEX",	/* 711 */
-    "SUN",	/* 712 */
-    "SUNSTUDY",	/* 713 */
-    "SWEPTSURFACE",	/* 714 */
-    "TABLE",	/* 715 */
-    "TABLECONTENT",	/* 716 */
-    "TABLEGEOMETRY",	/* 717 */
-    "TABLESTYLE",	/* 718 */
-    "TEXTOBJECTCONTEXTDATA",	/* 719 */
-    "TVDEVICEPROPERTIES",	/* 720 */
-    "VISIBILITYGRIPENTITY",	/* 721 */
-    "VISIBILITYPARAMETERENTITY",	/* 722 */
-    "VISUALSTYLE",	/* 723 */
-    "WIPEOUT",	/* 724 */
-    "WIPEOUTVARIABLES",	/* 725 */
-    "XREFPANELOBJECT",	/* 726 */
-    "XYPARAMETERENTITY",	/* 727 */
+    /* Start auto-generated variable. Do not modify */
+    "ACDSRECORD",                           	/* 500 */
+    "ACDSSCHEMA",                           	/* 501 */
+    "ACMECOMMANDHISTORY",                   	/* 502 */
+    "ACMESCOPE",                            	/* 503 */
+    "ACMESTATEMGR",                         	/* 504 */
+    "ACSH_BOOLEAN_CLASS",                   	/* 505 */
+    "ACSH_BOX_CLASS",                       	/* 506 */
+    "ACSH_BREP_CLASS",                      	/* 507 */
+    "ACSH_CHAMFER_CLASS",                   	/* 508 */
+    "ACSH_CONE_CLASS",                      	/* 509 */
+    "ACSH_CYLINDER_CLASS",                  	/* 510 */
+    "ACSH_EXTRUSION_CLASS",                 	/* 511 */
+    "ACSH_FILLET_CLASS",                    	/* 512 */
+    "ACSH_HISTORY_CLASS",                   	/* 513 */
+    "ACSH_LOFT_CLASS",                      	/* 514 */
+    "ACSH_PYRAMID_CLASS",                   	/* 515 */
+    "ACSH_REVOLVE_CLASS",                   	/* 516 */
+    "ACSH_SPHERE_CLASS",                    	/* 517 */
+    "ACSH_SWEEP_CLASS",                     	/* 518 */
+    "ACSH_TORUS_CLASS",                     	/* 519 */
+    "ACSH_WEDGE_CLASS",                     	/* 520 */
+    "ALDIMOBJECTCONTEXTDATA",               	/* 521 */
+    "ALIGNMENTPARAMETERENTITY",             	/* 522 */
+    "ANGDIMOBJECTCONTEXTDATA",              	/* 523 */
+    "ANNOTSCALEOBJECTCONTEXTDATA",          	/* 524 */
+    "ARCALIGNEDTEXT",                       	/* 525 */
+    "ARC_DIMENSION",                        	/* 526 */
+    "ASSOC2DCONSTRAINTGROUP",               	/* 527 */
+    "ASSOC3POINTANGULARDIMACTIONBODY",      	/* 528 */
+    "ASSOCACTION",                          	/* 529 */
+    "ASSOCACTIONPARAM",                     	/* 530 */
+    "ASSOCALIGNEDDIMACTIONBODY",            	/* 531 */
+    "ASSOCARRAYACTIONBODY",                 	/* 532 */
+    "ASSOCARRAYMODIFYACTIONBODY",           	/* 533 */
+    "ASSOCARRAYMODIFYPARAMETERS",           	/* 534 */
+    "ASSOCARRAYPATHPARAMETERS",             	/* 535 */
+    "ASSOCARRAYPOLARPARAMETERS",            	/* 536 */
+    "ASSOCARRAYRECTANGULARPARAMETERS",      	/* 537 */
+    "ASSOCASMBODYACTIONPARAM",              	/* 538 */
+    "ASSOCBLENDSURFACEACTIONBODY",          	/* 539 */
+    "ASSOCCOMPOUNDACTIONPARAM",             	/* 540 */
+    "ASSOCDEPENDENCY",                      	/* 541 */
+    "ASSOCDIMDEPENDENCYBODY",               	/* 542 */
+    "ASSOCEDGEACTIONPARAM",                 	/* 543 */
+    "ASSOCEDGECHAMFERACTIONBODY",           	/* 544 */
+    "ASSOCEDGEFILLETACTIONBODY",            	/* 545 */
+    "ASSOCEXTENDSURFACEACTIONBODY",         	/* 546 */
+    "ASSOCEXTRUDEDSURFACEACTIONBODY",       	/* 547 */
+    "ASSOCFACEACTIONPARAM",                 	/* 548 */
+    "ASSOCFILLETSURFACEACTIONBODY",         	/* 549 */
+    "ASSOCGEOMDEPENDENCY",                  	/* 550 */
+    "ASSOCLOFTEDSURFACEACTIONBODY",         	/* 551 */
+    "ASSOCMLEADERACTIONBODY",               	/* 552 */
+    "ASSOCNETWORK",                         	/* 553 */
+    "ASSOCNETWORKSURFACEACTIONBODY",        	/* 554 */
+    "ASSOCOBJECTACTIONPARAM",               	/* 555 */
+    "ASSOCOFFSETSURFACEACTIONBODY",         	/* 556 */
+    "ASSOCORDINATEDIMACTIONBODY",           	/* 557 */
+    "ASSOCOSNAPPOINTREFACTIONPARAM",        	/* 558 */
+    "ASSOCPATCHSURFACEACTIONBODY",          	/* 559 */
+    "ASSOCPATHACTIONPARAM",                 	/* 560 */
+    "ASSOCPERSSUBENTMANAGER",               	/* 561 */
+    "ASSOCPLANESURFACEACTIONBODY",          	/* 562 */
+    "ASSOCPOINTREFACTIONPARAM",             	/* 563 */
+    "ASSOCRESTOREENTITYSTATEACTIONBODY",    	/* 564 */
+    "ASSOCREVOLVEDSURFACEACTIONBODY",       	/* 565 */
+    "ASSOCROTATEDDIMACTIONBODY",            	/* 566 */
+    "ASSOCSWEPTSURFACEACTIONBODY",          	/* 567 */
+    "ASSOCTRIMSURFACEACTIONBODY",           	/* 568 */
+    "ASSOCVALUEDEPENDENCY",                 	/* 569 */
+    "ASSOCVARIABLE",                        	/* 570 */
+    "ASSOCVERTEXACTIONPARAM",               	/* 571 */
+    "BASEPOINTPARAMETERENTITY",             	/* 572 */
+    "BLKREFOBJECTCONTEXTDATA",              	/* 573 */
+    "BLOCKALIGNEDCONSTRAINTPARAMETER",      	/* 574 */
+    "BLOCKALIGNMENTGRIP",                   	/* 575 */
+    "BLOCKALIGNMENTPARAMETER",              	/* 576 */
+    "BLOCKANGULARCONSTRAINTPARAMETER",      	/* 577 */
+    "BLOCKARRAYACTION",                     	/* 578 */
+    "BLOCKBASEPOINTPARAMETER",              	/* 579 */
+    "BLOCKDIAMETRICCONSTRAINTPARAMETER",    	/* 580 */
+    "BLOCKFLIPACTION",                      	/* 581 */
+    "BLOCKFLIPGRIP",                        	/* 582 */
+    "BLOCKFLIPPARAMETER",                   	/* 583 */
+    "BLOCKGRIPLOCATIONCOMPONENT",           	/* 584 */
+    "BLOCKHORIZONTALCONSTRAINTPARAMETER",   	/* 585 */
+    "BLOCKLINEARCONSTRAINTPARAMETER",       	/* 586 */
+    "BLOCKLINEARGRIP",                      	/* 587 */
+    "BLOCKLINEARPARAMETER",                 	/* 588 */
+    "BLOCKLOOKUPACTION",                    	/* 589 */
+    "BLOCKLOOKUPGRIP",                      	/* 590 */
+    "BLOCKLOOKUPPARAMETER",                 	/* 591 */
+    "BLOCKMOVEACTION",                      	/* 592 */
+    "BLOCKPARAMDEPENDENCYBODY",             	/* 593 */
+    "BLOCKPOINTPARAMETER",                  	/* 594 */
+    "BLOCKPOLARGRIP",                       	/* 595 */
+    "BLOCKPOLARPARAMETER",                  	/* 596 */
+    "BLOCKPOLARSTRETCHACTION",              	/* 597 */
+    "BLOCKPROPERTIESTABLE",                 	/* 598 */
+    "BLOCKPROPERTIESTABLEGRIP",             	/* 599 */
+    "BLOCKRADIALCONSTRAINTPARAMETER",       	/* 600 */
+    "BLOCKREPRESENTATION",                  	/* 601 */
+    "BLOCKROTATEACTION",                    	/* 602 */
+    "BLOCKROTATIONGRIP",                    	/* 603 */
+    "BLOCKROTATIONPARAMETER",               	/* 604 */
+    "BLOCKSCALEACTION",                     	/* 605 */
+    "BLOCKSTRETCHACTION",                   	/* 606 */
+    "BLOCKUSERPARAMETER",                   	/* 607 */
+    "BLOCKVERTICALCONSTRAINTPARAMETER",     	/* 608 */
+    "BLOCKVISIBILITYGRIP",                  	/* 609 */
+    "BLOCKVISIBILITYPARAMETER",             	/* 610 */
+    "BLOCKXYGRIP",                          	/* 611 */
+    "BLOCKXYPARAMETER",                     	/* 612 */
+    "CAMERA",                               	/* 613 */
+    "CELLSTYLEMAP",                         	/* 614 */
+    "CONTEXTDATAMANAGER",                   	/* 615 */
+    "CSACDOCUMENTOPTIONS",                  	/* 616 */
+    "CURVEPATH",                            	/* 617 */
+    "DATALINK",                             	/* 618 */
+    "DATATABLE",                            	/* 619 */
+    "DBCOLOR",                              	/* 620 */
+    "DETAILVIEWSTYLE",                      	/* 621 */
+    "DGNDEFINITION",                        	/* 622 */
+    "DGNUNDERLAY",                          	/* 623 */
+    "DICTIONARYVAR",                        	/* 624 */
+    "DICTIONARYWDFLT",                      	/* 625 */
+    "DIMASSOC",                             	/* 626 */
+    "DMDIMOBJECTCONTEXTDATA",               	/* 627 */
+    "DWFDEFINITION",                        	/* 628 */
+    "DWFUNDERLAY",                          	/* 629 */
+    "DYNAMICBLOCKPROXYNODE",                	/* 630 */
+    "DYNAMICBLOCKPURGEPREVENTER",           	/* 631 */
+    "EVALUATION_GRAPH",                     	/* 632 */
+    "EXTRUDEDSURFACE",                      	/* 633 */
+    "FCFOBJECTCONTEXTDATA",                 	/* 634 */
+    "FIELD",                                	/* 635 */
+    "FIELDLIST",                            	/* 636 */
+    "FLIPPARAMETERENTITY",                  	/* 637 */
+    "GEODATA",                              	/* 638 */
+    "GEOMAPIMAGE",                          	/* 639 */
+    "GEOPOSITIONMARKER",                    	/* 640 */
+    "GRADIENT_BACKGROUND",                  	/* 641 */
+    "GROUND_PLANE_BACKGROUND",              	/* 642 */
+    "HELIX",                                	/* 643 */
+    "IBL_BACKGROUND",                       	/* 644 */
+    "IDBUFFER",                             	/* 645 */
+    "IMAGE",                                	/* 646 */
+    "IMAGEDEF",                             	/* 647 */
+    "IMAGEDEF_REACTOR",                     	/* 648 */
+    "IMAGE_BACKGROUND",                     	/* 649 */
+    "INDEX",                                	/* 650 */
+    "LARGE_RADIAL_DIMENSION",               	/* 651 */
+    "LAYERFILTER",                          	/* 652 */
+    "LAYER_INDEX",                          	/* 653 */
+    "LAYOUTPRINTCONFIG",                    	/* 654 */
+    "LEADEROBJECTCONTEXTDATA",              	/* 655 */
+    "LIGHT",                                	/* 656 */
+    "LIGHTLIST",                            	/* 657 */
+    "LINEARPARAMETERENTITY",                	/* 658 */
+    "LOFTEDSURFACE",                        	/* 659 */
+    "MATERIAL",                             	/* 660 */
+    "MENTALRAYRENDERSETTINGS",              	/* 661 */
+    "MESH",                                 	/* 662 */
+    "MLEADEROBJECTCONTEXTDATA",             	/* 663 */
+    "MLEADERSTYLE",                         	/* 664 */
+    "MOTIONPATH",                           	/* 665 */
+    "MPOLYGON",                             	/* 666 */
+    "MTEXTATTRIBUTEOBJECTCONTEXTDATA",      	/* 667 */
+    "MTEXTOBJECTCONTEXTDATA",               	/* 668 */
+    "MULTILEADER",                          	/* 669 */
+    "NAVISWORKSMODEL",                      	/* 670 */
+    "NAVISWORKSMODELDEF",                   	/* 671 */
+    "NPOCOLLECTION",                        	/* 672 */
+    "NURBSURFACE",                          	/* 673 */
+    "OBJECT_PTR",                           	/* 674 */
+    "ORDDIMOBJECTCONTEXTDATA",              	/* 675 */
+    "PDFDEFINITION",                        	/* 676 */
+    "PDFUNDERLAY",                          	/* 677 */
+    "PERSUBENTMGR",                         	/* 678 */
+    "PLANESURFACE",                         	/* 679 */
+    "PLOTSETTINGS",                         	/* 680 */
+    "POINTCLOUD",                           	/* 681 */
+    "POINTCLOUDCOLORMAP",                   	/* 682 */
+    "POINTCLOUDDEF",                        	/* 683 */
+    "POINTCLOUDDEFEX",                      	/* 684 */
+    "POINTCLOUDDEF_REACTOR",                	/* 685 */
+    "POINTCLOUDDEF_REACTOR_EX",             	/* 686 */
+    "POINTCLOUDEX",                         	/* 687 */
+    "POINTPARAMETERENTITY",                 	/* 688 */
+    "POINTPATH",                            	/* 689 */
+    "RADIMLGOBJECTCONTEXTDATA",             	/* 690 */
+    "RADIMOBJECTCONTEXTDATA",               	/* 691 */
+    "RAPIDRTRENDERENVIRONMENT",             	/* 692 */
+    "RAPIDRTRENDERSETTINGS",                	/* 693 */
+    "RASTERVARIABLES",                      	/* 694 */
+    "RENDERENTRY",                          	/* 695 */
+    "RENDERENVIRONMENT",                    	/* 696 */
+    "RENDERGLOBAL",                         	/* 697 */
+    "RENDERSETTINGS",                       	/* 698 */
+    "REVOLVEDSURFACE",                      	/* 699 */
+    "ROTATIONPARAMETERENTITY",              	/* 700 */
+    "RTEXT",                                	/* 701 */
+    "SCALE",                                	/* 702 */
+    "SECTIONOBJECT",                        	/* 703 */
+    "SECTIONVIEWSTYLE",                     	/* 704 */
+    "SECTION_MANAGER",                      	/* 705 */
+    "SECTION_SETTINGS",                     	/* 706 */
+    "SKYLIGHT_BACKGROUND",                  	/* 707 */
+    "SOLID_BACKGROUND",                     	/* 708 */
+    "SORTENTSTABLE",                        	/* 709 */
+    "SPATIAL_FILTER",                       	/* 710 */
+    "SPATIAL_INDEX",                        	/* 711 */
+    "SUN",                                  	/* 712 */
+    "SUNSTUDY",                             	/* 713 */
+    "SWEPTSURFACE",                         	/* 714 */
+    "TABLE",                                	/* 715 */
+    "TABLECONTENT",                         	/* 716 */
+    "TABLEGEOMETRY",                        	/* 717 */
+    "TABLESTYLE",                           	/* 718 */
+    "TEXTOBJECTCONTEXTDATA",                	/* 719 */
+    "TVDEVICEPROPERTIES",                   	/* 720 */
+    "VISIBILITYGRIPENTITY",                 	/* 721 */
+    "VISIBILITYPARAMETERENTITY",            	/* 722 */
+    "VISUALSTYLE",                          	/* 723 */
+    "WIPEOUT",                              	/* 724 */
+    "WIPEOUTVARIABLES",                     	/* 725 */
+    "XREFPANELOBJECT",                      	/* 726 */
+    "XYPARAMETERENTITY",                    	/* 727 */
   /* End auto-generated variable */
 };
 
@@ -682,7 +682,6 @@ bool dwg_find_class (const Dwg_Data *restrict dwg, const char* dxfname, BITCODE_
 }
 
 // Similar to _dwg_type_name, just with immediate access, no linear/binary search.
-// TODO auto-generate from objects.in
 static const char *_dwg_dxfnames_fixed[] = {
   NULL, /* UNUSED = 0x00, */
   "TEXT", /* 0x01 */
@@ -769,239 +768,238 @@ static const char *_dwg_dxfnames_fixed[] = {
   "LAYOUT" /* 0x52 */
 };
 
-/* non-fixed types > 500. not stored as type, but as fixedtype */
-// TODO auto-generate from objects.in
+/* Non-fixed types > 500. Not stored as type, but as fixedtype. */
 static const char *_dwg_dxfnames_variable[] =
   {
-    /* Start auto-generated dxfnames TODO */
-    "ACDSRECORD",	/* 500 */
-    "ACDSSCHEMA",	/* 501 */
-    "ACMECOMMANDHISTORY",	/* 502 */
-    "ACMESCOPE",	/* 503 */
-    "ACMESTATEMGR",	/* 504 */
-    "ACSH_BOOLEAN_CLASS",	/* 505 */
-    "ACSH_BOX_CLASS",	/* 506 */
-    "ACSH_BREP_CLASS",	/* 507 */
-    "ACSH_CHAMFER_CLASS",	/* 508 */
-    "ACSH_CONE_CLASS",	/* 509 */
-    "ACSH_CYLINDER_CLASS",	/* 510 */
-    "ACSH_EXTRUSION_CLASS",	/* 511 */
-    "ACSH_FILLET_CLASS",	/* 512 */
-    "ACSH_HISTORY_CLASS",	/* 513 */
-    "ACSH_LOFT_CLASS",	/* 514 */
-    "ACSH_PYRAMID_CLASS",	/* 515 */
-    "ACSH_REVOLVE_CLASS",	/* 516 */
-    "ACSH_SPHERE_CLASS",	/* 517 */
-    "ACSH_SWEEP_CLASS",	/* 518 */
-    "ACSH_TORUS_CLASS",	/* 519 */
-    "ACSH_WEDGE_CLASS",	/* 520 */
-    "ACDB_ALDIMOBJECTCONTEXTDATA_CLASS",
-    "ALIGNMENTPARAMETERENTITY",
-    "ACDB_ANGDIMOBJECTCONTEXTDATA_CLASS",
-    "ACDB_ANNOTSCALEOBJECTCONTEXTDATA_CLASS",
-    "ARCALIGNEDTEXT",	/* 525 */
-    "ARC_DIMENSION",
-    "ACDBASSOC2DCONSTRAINTGROUP",
-    "ACDBASSOC3POINTANGULARDIMACTIONBODY",
-    "ACDBASSOCACTION",
-    "ACDBASSOCACTIONPARAM",
-    "ACDBASSOCALIGNEDDIMACTIONBODY",
-    "ACDBASSOCARRAYACTIONBODY",
-    "ACDBASSOCARRAYMODIFYACTIONBODY",
-    "ACDBASSOCARRAYMODIFYPARAMETERS",
-    "ACDBASSOCARRAYPATHPARAMETERS",
-    "ACDBASSOCARRAYPOLARPARAMETERS",
-    "ACDBASSOCARRAYRECTANGULARPARAMETERS",
-    "ACDBASSOCASMBODYACTIONPARAM",
-    "ACDBASSOCBLENDSURFACEACTIONBODY",
-    "ACDBASSOCCOMPOUNDACTIONPARAM",
-    "ACDBASSOCDEPENDENCY",
-    "ACDBASSOCDIMDEPENDENCYBODY",
-    "ACDBASSOCEDGEACTIONPARAM",
-    "ACDBASSOCEDGECHAMFERACTIONBODY",
-    "ACDBASSOCEDGEFILLETACTIONBODY",
-    "ACDBASSOCEXTENDSURFACEACTIONBODY",
-    "ACDBASSOCEXTRUDEDSURFACEACTIONBODY",
-    "ACDBASSOCFACEACTIONPARAM",
-    "ACDBASSOCFILLETSURFACEACTIONBODY",
-    "ACDBASSOCGEOMDEPENDENCY",
-    "ACDBASSOCLOFTEDSURFACEACTIONBODY",
-    "ACDBASSOCMLEADERACTIONBODY",
-    "ACDBASSOCNETWORK",
-    "ACDBASSOCNETWORKSURFACEACTIONBODY",
-    "ACDBASSOCOBJECTACTIONPARAM",
-    "ACDBASSOCOFFSETSURFACEACTIONBODY",
-    "ACDBASSOCORDINATEDIMACTIONBODY",
-    "ACDBASSOCOSNAPPOINTREFACTIONPARAM",
-    "ACDBASSOCPATCHSURFACEACTIONBODY",
-    "ACDBASSOCPATHACTIONPARAM",
-    "ACDBASSOCPERSSUBENTMANAGER",
-    "ACDBASSOCPLANESURFACEACTIONBODY",
-    "ACDBASSOCPOINTREFACTIONPARAM",
-    "ACDBASSOCRESTOREENTITYSTATEACTIONBODY",
-    "ACDBASSOCREVOLVEDSURFACEACTIONBODY",
-    "ACDBASSOCROTATEDDIMACTIONBODY",
-    "ACDBASSOCSWEPTSURFACEACTIONBODY",
-    "ACDBASSOCTRIMSURFACEACTIONBODY",
-    "ACDBASSOCVALUEDEPENDENCY",
-    "ACDBASSOCVARIABLE",
-    "ACDBASSOCVERTEXACTIONPARAM",
-    "BASEPOINTPARAMETERENTITY",
-    "ACDB_BLKREFOBJECTCONTEXTDATA_CLASS",
-    "BLOCKALIGNEDCONSTRAINTPARAMETER",	/* 574 */
-    "BLOCKALIGNMENTGRIP",
-    "BLOCKALIGNMENTPARAMETER",
-    "BLOCKANGULARCONSTRAINTPARAMETER",
-    "BLOCKARRAYACTION",
-    "BLOCKBASEPOINTPARAMETER",
-    "BLOCKDIAMETRICCONSTRAINTPARAMETER",
-    "BLOCKFLIPACTION",
-    "BLOCKFLIPGRIP",
-    "BLOCKFLIPPARAMETER",
-    "BLOCKGRIPLOCATIONCOMPONENT",
-    "BLOCKHORIZONTALCONSTRAINTPARAMETER",
-    "BLOCKLINEARCONSTRAINTPARAMETER",
-    "BLOCKLINEARGRIP",
-    "BLOCKLINEARPARAMETER",
-    "BLOCKLOOKUPACTION",
-    "BLOCKLOOKUPGRIP",
-    "BLOCKLOOKUPPARAMETER",
-    "BLOCKMOVEACTION",
-    "BLOCKPARAMDEPENDENCYBODY",
-    "BLOCKPOINTPARAMETER",
-    "BLOCKPOLARGRIP",
-    "BLOCKPOLARPARAMETER",
-    "BLOCKPOLARSTRETCHACTION",
-    "BLOCKPROPERTIESTABLE",
-    "BLOCKPROPERTIESTABLEGRIP",
-    "BLOCKRADIALCONSTRAINTPARAMETER",
-    "ACDB_BLOCKREPRESENTATION_DATA",
-    "BLOCKROTATEACTION",
-    "BLOCKROTATIONGRIP",
-    "BLOCKROTATIONPARAMETER",
-    "BLOCKSCALEACTION",
-    "BLOCKSTRETCHACTION",
-    "BLOCKUSERPARAMETER",
-    "BLOCKVERTICALCONSTRAINTPARAMETER",
-    "BLOCKVISIBILITYGRIP",
-    "BLOCKVISIBILITYPARAMETER",
-    "BLOCKXYGRIP",
-    "BLOCKXYPARAMETER",
-    "CAMERA",
-    "CELLSTYLEMAP",
-    "CONTEXTDATAMANAGER",
-    "CSACDOCUMENTOPTIONS",
-    "ACDBCURVEPATH",
-    "DATALINK",
-    "DATATABLE",
-    "DBCOLOR",
-    "ACDBDETAILVIEWSTYLE",
-    "DGNDEFINITION",
-    "DGNUNDERLAY",
-    "DICTIONARYVAR",
-    "ACDBDICTIONARYWDFLT",
-    "DIMASSOC",
-    "ACDB_DMDIMOBJECTCONTEXTDATA_CLASS",
-    "DWFDEFINITION",
-    "DWFUNDERLAY",
-    "ACDB_DYNAMICBLOCKPROXYNODE",
-    "ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
-    "ACAD_EVALUATION_GRAPH",
-    "EXTRUDEDSURFACE",
-    "ACDB_FCFOBJECTCONTEXTDATA_CLASS",
-    "FIELD",
-    "FIELDLIST",
-    "FLIPPARAMETERENTITY",
-    "GEODATA",
-    "GEOMAPIMAGE",
-    "POSITIONMARKER", /*GEOPOSITIONMARKER */
-    "GRADIENT_BACKGROUND",	/* 641 */
-    "GROUND_PLANE_BACKGROUND",	/* 642 */
-    "HELIX",
-    "IBL_BACKGROUND",	/* 644 */
-    "IDBUFFER",
-    "IMAGE",
-    "IMAGEDEF",
-    "IMAGEDEF_REACTOR",
-    "IMAGE_BACKGROUND",	/* 649 */
-    "INDEX",
-    "LARGE_RADIAL_DIMENSION",
-    "LAYERFILTER",
-    "LAYER_INDEX",
-    "LAYOUTPRINTCONFIG",
-    "ACDB_LEADEROBJECTCONTEXTDATA_CLASS",
-    "LIGHT",
-    "LIGHTLIST",
-    "LINEARPARAMETERENTITY",
-    "LOFTEDSURFACE",
-    "MATERIAL",
-    "MENTALRAYRENDERSETTINGS",
-    "MESH",
-    "ACDB_MLEADEROBJECTCONTEXTDATA_CLASS",
-    "MLEADERSTYLE",
-    "MOTIONPATH",
-    "MPOLYGON",
-    "ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS",
-    "ACDB_MTEXTOBJECTCONTEXTDATA_CLASS",
-    "MULTILEADER",
-    "COORDINATION_MODEL", /* NAVISWORKSMODEL ? */
-    "ACDBNAVISWORKSMODELDEF",
-    "NPOCOLLECTION",
-    "NURBSURFACE",
-    "OBJECT_PTR",
-    "ACDB_ORDDIMOBJECTCONTEXTDATA_CLASS",
-    "PDFDEFINITION",
-    "PDFUNDERLAY",
-    "ACDBPERSSUBENTMANAGER",
-    "PLANESURFACE",
-    "PLOTSETTINGS",
-    "ACDBPOINTCLOUD",
-    "ACDBPOINTCLOUDEX",
-    "ACDBPOINTCLOUDDEF",
-    "ACDBPOINTCLOUDDEFEX",
-    "ACDBPOINTCLOUDDEF_REACTOR",
-    "ACDBPOINTCLOUDDEF_REACTOR_EX",
-    "ACDBPOINTCLOUDCOLORMAP",
-    "POINTPARAMETERENTITY",
-    "ACDBPOINTPATH",
-    "ACDB_RADIMLGOBJECTCONTEXTDATA_CLASS",
-    "ACDB_RADIMOBJECTCONTEXTDATA_CLASS",
-    "RAPIDRTRENDERENVIRONMENT",
-    "RAPIDRTRENDERSETTINGS",
-    "RASTERVARIABLES",
-    "RENDERENTRY",
-    "RENDERENVIRONMENT",
-    "RENDERGLOBAL",
-    "RENDERSETTINGS",
-    "REVOLVEDSURFACE",
-    "ROTATIONPARAMETERENTITY",
-    "RTEXT",
-    "SCALE",
-    "SECTIONOBJECT",
-    "ACDBSECTIONVIEWSTYLE",
-    "SECTION_MANAGER",
-    "SECTION_SETTINGS",
-    "SKYLIGHT_BACKGROUND",	/* 707 */
-    "SOLID_BACKGROUND",	/* 708 */
-    "SORTENTSTABLE",
-    "SPATIAL_FILTER",
-    "SPATIAL_INDEX",
-    "SUN",
-    "SUNSTUDY",
-    "SWEPTSURFACE",
-    "ACAD_TABLE",
-    "TABLE", /* TABLECONTENT */
-    "TABLEGEOMETRY",
-    "TABLESTYLE",
-    "ACDB_TEXTOBJECTCONTEXTDATA_CLASS",
-    "TVDEVICEPROPERTIES",
-    "VISIBILITYGRIPENTITY",
-    "VISIBILITYPARAMETERENTITY",
-    "VISUALSTYLE",
-    "WIPEOUT",
-    "WIPEOUTVARIABLES",	/* 725 */
-    "EXACXREFPANELOBJECT",
-    "XYPARAMETERENTITY"
+    /* Start auto-generated dxfnames. Do not modify */
+    "ACDSRECORD",                           	/* 500 */
+    "ACDSSCHEMA",                           	/* 501 */
+    "ACMECOMMANDHISTORY",                   	/* 502 */
+    "ACMESCOPE",                            	/* 503 */
+    "ACMESTATEMGR",                         	/* 504 */
+    "ACSH_BOOLEAN_CLASS",                   	/* 505 */
+    "ACSH_BOX_CLASS",                       	/* 506 */
+    "ACSH_BREP_CLASS",                      	/* 507 */
+    "ACSH_CHAMFER_CLASS",                   	/* 508 */
+    "ACSH_CONE_CLASS",                      	/* 509 */
+    "ACSH_CYLINDER_CLASS",                  	/* 510 */
+    "ACSH_EXTRUSION_CLASS",                 	/* 511 */
+    "ACSH_FILLET_CLASS",                    	/* 512 */
+    "ACSH_HISTORY_CLASS",                   	/* 513 */
+    "ACSH_LOFT_CLASS",                      	/* 514 */
+    "ACSH_PYRAMID_CLASS",                   	/* 515 */
+    "ACSH_REVOLVE_CLASS",                   	/* 516 */
+    "ACSH_SPHERE_CLASS",                    	/* 517 */
+    "ACSH_SWEEP_CLASS",                     	/* 518 */
+    "ACSH_TORUS_CLASS",                     	/* 519 */
+    "ACSH_WEDGE_CLASS",                     	/* 520 */
+    "ACDB_ALDIMOBJECTCONTEXTDATA_CLASS",    	/* 521 */
+    "ALIGNMENTPARAMETERENTITY",             	/* 522 */
+    "ACDB_ANGDIMOBJECTCONTEXTDATA_CLASS",   	/* 523 */
+    "ACDB_ANNOTSCALEOBJECTCONTEXTDATA_CLASS",	/* 524 */
+    "ARCALIGNEDTEXT",                       	/* 525 */
+    "ARC_DIMENSION",                        	/* 526 */
+    "ACDBASSOC2DCONSTRAINTGROUP",           	/* 527 */
+    "ACDBASSOC3POINTANGULARDIMACTIONBODY",  	/* 528 */
+    "ACDBASSOCACTION",                      	/* 529 */
+    "ACDBASSOCACTIONPARAM",                 	/* 530 */
+    "ACDBASSOCALIGNEDDIMACTIONBODY",        	/* 531 */
+    "ACDBASSOCARRAYACTIONBODY",             	/* 532 */
+    "ACDBASSOCARRAYMODIFYACTIONBODY",       	/* 533 */
+    "ACDBASSOCARRAYMODIFYPARAMETERS",       	/* 534 */
+    "ACDBASSOCARRAYPATHPARAMETERS",         	/* 535 */
+    "ACDBASSOCARRAYPOLARPARAMETERS",        	/* 536 */
+    "ACDBASSOCARRAYRECTANGULARPARAMETERS",  	/* 537 */
+    "ACDBASSOCASMBODYACTIONPARAM",          	/* 538 */
+    "ACDBASSOCBLENDSURFACEACTIONBODY",      	/* 539 */
+    "ACDBASSOCCOMPOUNDACTIONPARAM",         	/* 540 */
+    "ACDBASSOCDEPENDENCY",                  	/* 541 */
+    "ACDBASSOCDIMDEPENDENCYBODY",           	/* 542 */
+    "ACDBASSOCEDGEACTIONPARAM",             	/* 543 */
+    "ACDBASSOCEDGECHAMFERACTIONBODY",       	/* 544 */
+    "ACDBASSOCEDGEFILLETACTIONBODY",        	/* 545 */
+    "ACDBASSOCEXTENDSURFACEACTIONBODY",     	/* 546 */
+    "ACDBASSOCEXTRUDEDSURFACEACTIONBODY",   	/* 547 */
+    "ACDBASSOCFACEACTIONPARAM",             	/* 548 */
+    "ACDBASSOCFILLETSURFACEACTIONBODY",     	/* 549 */
+    "ACDBASSOCGEOMDEPENDENCY",              	/* 550 */
+    "ACDBASSOCLOFTEDSURFACEACTIONBODY",     	/* 551 */
+    "ACDBASSOCMLEADERACTIONBODY",           	/* 552 */
+    "ACDBASSOCNETWORK",                     	/* 553 */
+    "ACDBASSOCNETWORKSURFACEACTIONBODY",    	/* 554 */
+    "ACDBASSOCOBJECTACTIONPARAM",           	/* 555 */
+    "ACDBASSOCOFFSETSURFACEACTIONBODY",     	/* 556 */
+    "ACDBASSOCORDINATEDIMACTIONBODY",       	/* 557 */
+    "ACDBASSOCOSNAPPOINTREFACTIONPARAM",    	/* 558 */
+    "ACDBASSOCPATCHSURFACEACTIONBODY",      	/* 559 */
+    "ACDBASSOCPATHACTIONPARAM",             	/* 560 */
+    "ACDBASSOCPERSSUBENTMANAGER",           	/* 561 */
+    "ACDBASSOCPLANESURFACEACTIONBODY",      	/* 562 */
+    "ACDBASSOCPOINTREFACTIONPARAM",         	/* 563 */
+    "ACDBASSOCRESTOREENTITYSTATEACTIONBODY",	/* 564 */
+    "ACDBASSOCREVOLVEDSURFACEACTIONBODY",   	/* 565 */
+    "ACDBASSOCROTATEDDIMACTIONBODY",        	/* 566 */
+    "ACDBASSOCSWEPTSURFACEACTIONBODY",      	/* 567 */
+    "ACDBASSOCTRIMSURFACEACTIONBODY",       	/* 568 */
+    "ACDBASSOCVALUEDEPENDENCY",             	/* 569 */
+    "ACDBASSOCVARIABLE",                    	/* 570 */
+    "ACDBASSOCVERTEXACTIONPARAM",           	/* 571 */
+    "BASEPOINTPARAMETERENTITY",             	/* 572 */
+    "ACDB_BLKREFOBJECTCONTEXTDATA_CLASS",   	/* 573 */
+    "BLOCKALIGNEDCONSTRAINTPARAMETER",      	/* 574 */
+    "BLOCKALIGNMENTGRIP",                   	/* 575 */
+    "BLOCKALIGNMENTPARAMETER",              	/* 576 */
+    "BLOCKANGULARCONSTRAINTPARAMETER",      	/* 577 */
+    "BLOCKARRAYACTION",                     	/* 578 */
+    "BLOCKBASEPOINTPARAMETER",              	/* 579 */
+    "BLOCKDIAMETRICCONSTRAINTPARAMETER",    	/* 580 */
+    "BLOCKFLIPACTION",                      	/* 581 */
+    "BLOCKFLIPGRIP",                        	/* 582 */
+    "BLOCKFLIPPARAMETER",                   	/* 583 */
+    "BLOCKGRIPLOCATIONCOMPONENT",           	/* 584 */
+    "BLOCKHORIZONTALCONSTRAINTPARAMETER",   	/* 585 */
+    "BLOCKLINEARCONSTRAINTPARAMETER",       	/* 586 */
+    "BLOCKLINEARGRIP",                      	/* 587 */
+    "BLOCKLINEARPARAMETER",                 	/* 588 */
+    "BLOCKLOOKUPACTION",                    	/* 589 */
+    "BLOCKLOOKUPGRIP",                      	/* 590 */
+    "BLOCKLOOKUPPARAMETER",                 	/* 591 */
+    "BLOCKMOVEACTION",                      	/* 592 */
+    "BLOCKPARAMDEPENDENCYBODY",             	/* 593 */
+    "BLOCKPOINTPARAMETER",                  	/* 594 */
+    "BLOCKPOLARGRIP",                       	/* 595 */
+    "BLOCKPOLARPARAMETER",                  	/* 596 */
+    "BLOCKPOLARSTRETCHACTION",              	/* 597 */
+    "BLOCKPROPERTIESTABLE",                 	/* 598 */
+    "BLOCKPROPERTIESTABLEGRIP",             	/* 599 */
+    "BLOCKRADIALCONSTRAINTPARAMETER",       	/* 600 */
+    "ACDB_BLOCKREPRESENTATION_DATA",        	/* 601 */
+    "BLOCKROTATEACTION",                    	/* 602 */
+    "BLOCKROTATIONGRIP",                    	/* 603 */
+    "BLOCKROTATIONPARAMETER",               	/* 604 */
+    "BLOCKSCALEACTION",                     	/* 605 */
+    "BLOCKSTRETCHACTION",                   	/* 606 */
+    "BLOCKUSERPARAMETER",                   	/* 607 */
+    "BLOCKVERTICALCONSTRAINTPARAMETER",     	/* 608 */
+    "BLOCKVISIBILITYGRIP",                  	/* 609 */
+    "BLOCKVISIBILITYPARAMETER",             	/* 610 */
+    "BLOCKXYGRIP",                          	/* 611 */
+    "BLOCKXYPARAMETER",                     	/* 612 */
+    "CAMERA",                               	/* 613 */
+    "CELLSTYLEMAP",                         	/* 614 */
+    "CONTEXTDATAMANAGER",                   	/* 615 */
+    "CSACDOCUMENTOPTIONS",                  	/* 616 */
+    "ACDBCURVEPATH",                        	/* 617 */
+    "DATALINK",                             	/* 618 */
+    "DATATABLE",                            	/* 619 */
+    "DBCOLOR",                              	/* 620 */
+    "ACDBDETAILVIEWSTYLE",                  	/* 621 */
+    "DGNDEFINITION",                        	/* 622 */
+    "DGNUNDERLAY",                          	/* 623 */
+    "DICTIONARYVAR",                        	/* 624 */
+    "ACDBDICTIONARYWDFLT",                  	/* 625 */
+    "DIMASSOC",                             	/* 626 */
+    "ACDB_DMDIMOBJECTCONTEXTDATA_CLASS",    	/* 627 */
+    "DWFDEFINITION",                        	/* 628 */
+    "DWFUNDERLAY",                          	/* 629 */
+    "ACAD_DYNAMICBLOCKPROXYNODE",           	/* 630 */
+    "ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",	/* 631 */
+    "ACAD_EVALUATION_GRAPH",                	/* 632 */
+    "EXTRUDEDSURFACE",                      	/* 633 */
+    "ACDB_FCFOBJECTCONTEXTDATA_CLASS",      	/* 634 */
+    "FIELD",                                	/* 635 */
+    "FIELDLIST",                            	/* 636 */
+    "FLIPPARAMETERENTITY",                  	/* 637 */
+    "GEODATA",                              	/* 638 */
+    "GEOMAPIMAGE",                          	/* 639 */
+    "POSITIONMARKER",                       	/* 640 */
+    "GRADIENT_BACKGROUND",                  	/* 641 */
+    "GROUND_PLANE_BACKGROUND",              	/* 642 */
+    "HELIX",                                	/* 643 */
+    "IBL_BACKGROUND",                       	/* 644 */
+    "IDBUFFER",                             	/* 645 */
+    "IMAGE",                                	/* 646 */
+    "IMAGEDEF",                             	/* 647 */
+    "IMAGEDEF_REACTOR",                     	/* 648 */
+    "IMAGE_BACKGROUND",                     	/* 649 */
+    "INDEX",                                	/* 650 */
+    "LARGE_RADIAL_DIMENSION",               	/* 651 */
+    "LAYERFILTER",                          	/* 652 */
+    "LAYER_INDEX",                          	/* 653 */
+    "LAYOUTPRINTCONFIG",                    	/* 654 */
+    "ACDB_LEADEROBJECTCONTEXTDATA_CLASS",   	/* 655 */
+    "LIGHT",                                	/* 656 */
+    "LIGHTLIST",                            	/* 657 */
+    "LINEARPARAMETERENTITY",                	/* 658 */
+    "LOFTEDSURFACE",                        	/* 659 */
+    "MATERIAL",                             	/* 660 */
+    "MENTALRAYRENDERSETTINGS",              	/* 661 */
+    "MESH",                                 	/* 662 */
+    "ACDB_MLEADEROBJECTCONTEXTDATA_CLASS",  	/* 663 */
+    "MLEADERSTYLE",                         	/* 664 */
+    "MOTIONPATH",                           	/* 665 */
+    "MPOLYGON",                             	/* 666 */
+    "ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS",	/* 667 */
+    "ACDB_MTEXTOBJECTCONTEXTDATA_CLASS",    	/* 668 */
+    "MULTILEADER",                          	/* 669 */
+    "COORDINATION_MODEL",                   	/* 670 */
+    "ACDBNAVISWORKSMODELDEF",               	/* 671 */
+    "NPOCOLLECTION",                        	/* 672 */
+    "NURBSURFACE",                          	/* 673 */
+    "OBJECT_PTR",                           	/* 674 */
+    "ACDB_ORDDIMOBJECTCONTEXTDATA_CLASS",   	/* 675 */
+    "PDFDEFINITION",                        	/* 676 */
+    "PDFUNDERLAY",                          	/* 677 */
+    "ACDBPERSSUBENTMANAGER",                	/* 678 */
+    "PLANESURFACE",                         	/* 679 */
+    "PLOTSETTINGS",                         	/* 680 */
+    "ACDBPOINTCLOUD",                       	/* 681 */
+    "ACDBPOINTCLOUDCOLORMAP",               	/* 682 */
+    "ACDBPOINTCLOUDDEF",                    	/* 683 */
+    "ACDBPOINTCLOUDDEFEX",                  	/* 684 */
+    "ACDBPOINTCLOUDDEF_REACTOR",            	/* 685 */
+    "ACDBPOINTCLOUDDEF_REACTOR_EX",         	/* 686 */
+    "ACDBPOINTCLOUDEX",                     	/* 687 */
+    "POINTPARAMETERENTITY",                 	/* 688 */
+    "ACDBPOINTPATH",                        	/* 689 */
+    "ACDB_RADIMLGOBJECTCONTEXTDATA_CLASS",  	/* 690 */
+    "ACDB_RADIMOBJECTCONTEXTDATA_CLASS",    	/* 691 */
+    "RAPIDRTRENDERENVIRONMENT",             	/* 692 */
+    "RAPIDRTRENDERSETTINGS",                	/* 693 */
+    "RASTERVARIABLES",                      	/* 694 */
+    "RENDERENTRY",                          	/* 695 */
+    "RENDERENVIRONMENT",                    	/* 696 */
+    "RENDERGLOBAL",                         	/* 697 */
+    "RENDERSETTINGS",                       	/* 698 */
+    "REVOLVEDSURFACE",                      	/* 699 */
+    "ROTATIONPARAMETERENTITY",              	/* 700 */
+    "RTEXT",                                	/* 701 */
+    "SCALE",                                	/* 702 */
+    "SECTIONOBJECT",                        	/* 703 */
+    "ACDBSECTIONVIEWSTYLE",                 	/* 704 */
+    "SECTION_MANAGER",                      	/* 705 */
+    "SECTION_SETTINGS",                     	/* 706 */
+    "SKYLIGHT_BACKGROUND",                  	/* 707 */
+    "SOLID_BACKGROUND",                     	/* 708 */
+    "SORTENTSTABLE",                        	/* 709 */
+    "SPATIAL_FILTER",                       	/* 710 */
+    "SPATIAL_INDEX",                        	/* 711 */
+    "SUN",                                  	/* 712 */
+    "SUNSTUDY",                             	/* 713 */
+    "SWEPTSURFACE",                         	/* 714 */
+    "ACAD_TABLE",                           	/* 715 */
+    "TABLE",                                	/* 716 */
+    "TABLEGEOMETRY",                        	/* 717 */
+    "TABLESTYLE",                           	/* 718 */
+    "ACDB_TEXTOBJECTCONTEXTDATA_CLASS",     	/* 719 */
+    "TVDEVICEPROPERTIES",                   	/* 720 */
+    "VISIBILITYGRIPENTITY",                 	/* 721 */
+    "VISIBILITYPARAMETERENTITY",            	/* 722 */
+    "VISUALSTYLE",                          	/* 723 */
+    "WIPEOUT",                              	/* 724 */
+    "WIPEOUTVARIABLES",                     	/* 725 */
+    "EXACXREFPANELOBJECT",                  	/* 726 */
+    "XYPARAMETERENTITY",                    	/* 727 */
   /* End auto-generated dxfnames */
 };
 

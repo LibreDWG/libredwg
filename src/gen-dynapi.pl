@@ -2260,9 +2260,19 @@ if (1) {
       print $out $_;
       my $e = 500;
       for (@VARTYPES) {
-        printf $out "    \"%s\",	/* %d */\n", $_, $e++;
+        printf $out "    %-40s	/* %d */\n", "\"$_\",", $e++;
       }
       print $out "  /* End auto-generated variable */\n";
+      $gen = 1;
+    }
+    if (m/^\s+\/\* Start auto-generated dxfnames/) {
+      print $out $_;
+      my $e = 500;
+      for (@VARTYPES) {
+        my $dxfname = dxfname $_;
+        printf $out "    %-40s	/* %d */\n", "\"$dxfname\",", $e++;
+      }
+      print $out "  /* End auto-generated dxfnames */\n";
       $gen = 1;
     }
     if (!$gen) {
@@ -2340,7 +2350,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2344 "gen-dynapi.pl"
+#line 2354 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2426,7 +2436,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 @@list name_subclasses@@
 };
 
-#line 2430 "gen-dynapi.pl"
+#line 2440 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;

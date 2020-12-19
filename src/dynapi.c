@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2344 "gen-dynapi.pl"
+#line 2354 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -13733,7 +13733,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 
 };
 
-#line 2430 "gen-dynapi.pl"
+#line 2440 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;
