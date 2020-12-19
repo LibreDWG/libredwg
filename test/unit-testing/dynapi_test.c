@@ -35071,134 +35071,6 @@ static int test_ASSOCVERTEXACTIONPARAM (const Dwg_Object *obj)
     }
   return failed;
 }
-static int test_BACKGROUND (const Dwg_Object *obj)
-{
-  int error = 0;
-  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
-  Dwg_Object_BACKGROUND *restrict background = obj->tio.object->tio.BACKGROUND;
-  failed = 0;
-  {
-    BITCODE_BL class_version;
-    if (dwg_dynapi_entity_value (background, "BACKGROUND", "class_version", &class_version, NULL)
-        && class_version == background->class_version)
-      pass ();
-    else
-      fail ("BACKGROUND.class_version [BL] %u != %u", background->class_version, class_version);
-    class_version++;
-    if (dwg_dynapi_entity_set_value (background, "BACKGROUND", "class_version", &class_version, 0)
-        && class_version == background->class_version)
-      pass ();
-    else
-      fail ("BACKGROUND.class_version [BL] set+1 %u != %u", background->class_version, class_version);
-    background->class_version--;
-  }
-  {
-    struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (background, "BACKGROUND", "parent", &parent, NULL)
-        && !memcmp (&parent, &background->parent, sizeof (struct _dwg_object_object*)))
-        pass ();
-    else
-        fail ("BACKGROUND.parent [struct _dwg_object_object*]");
-  }
-  {
-    Dwg_BACKGROUND_type type;
-    if (dwg_dynapi_entity_value (background, "BACKGROUND", "type", &type, NULL)
-        && !memcmp (&type, &background->type, sizeof (Dwg_BACKGROUND_type)))
-        pass ();
-    else
-        fail ("BACKGROUND.type [Dwg_BACKGROUND_type]");
-  }
-  {
-    Dwg_BACKGROUND_Gradient u_gradient;
-    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.gradient", &u_gradient, NULL)
-        && !memcmp (&u_gradient, &background->u.gradient, sizeof (Dwg_BACKGROUND_Gradient)))
-        pass ();
-    else
-        fail ("BACKGROUND.u.gradient [Dwg_BACKGROUND_Gradient]");
-  }
-  {
-    Dwg_BACKGROUND_GroundPlane u_ground_plane;
-    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.ground_plane", &u_ground_plane, NULL)
-        && !memcmp (&u_ground_plane, &background->u.ground_plane, sizeof (Dwg_BACKGROUND_GroundPlane)))
-        pass ();
-    else
-        fail ("BACKGROUND.u.ground_plane [Dwg_BACKGROUND_GroundPlane]");
-  }
-  {
-    Dwg_BACKGROUND_IBL u_ibl;
-    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.ibl", &u_ibl, NULL)
-        && !memcmp (&u_ibl, &background->u.ibl, sizeof (Dwg_BACKGROUND_IBL)))
-        pass ();
-    else
-        fail ("BACKGROUND.u.ibl [Dwg_BACKGROUND_IBL]");
-  }
-  {
-    BITCODE_T u_ibl_name;
-    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.ibl.name", &u_ibl_name, NULL)
-        && u_ibl_name
-           ? strEQ ((char *)u_ibl_name, (char *)background->u.ibl.name)
-           : !background->u.ibl.name)
-      pass ();
-    else
-      fail ("BACKGROUND.u.ibl.name [T] '%s' <> '%s'", u_ibl_name, background->u.ibl.name);
-  }
-  {
-    Dwg_BACKGROUND_Image u_image;
-    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.image", &u_image, NULL)
-        && !memcmp (&u_image, &background->u.image, sizeof (Dwg_BACKGROUND_Image)))
-        pass ();
-    else
-        fail ("BACKGROUND.u.image [Dwg_BACKGROUND_Image]");
-  }
-  {
-    BITCODE_T u_image_filename;
-    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.image.filename", &u_image_filename, NULL)
-        && u_image_filename
-           ? strEQ ((char *)u_image_filename, (char *)background->u.image.filename)
-           : !background->u.image.filename)
-      pass ();
-    else
-      fail ("BACKGROUND.u.image.filename [T] '%s' <> '%s'", u_image_filename, background->u.image.filename);
-  }
-  {
-    BITCODE_2BD u_image_offset;
-    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.image.offset", &u_image_offset, NULL)
-        && !memcmp (&u_image_offset, &background->u.image.offset, sizeof (BITCODE_2BD)))
-        pass ();
-    else
-        fail ("BACKGROUND.u.image.offset [2BD_1]");
-  }
-  {
-    BITCODE_2BD u_image_scale;
-    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.image.scale", &u_image_scale, NULL)
-        && !memcmp (&u_image_scale, &background->u.image.scale, sizeof (BITCODE_2BD)))
-        pass ();
-    else
-        fail ("BACKGROUND.u.image.scale [2BD_1]");
-  }
-  {
-    Dwg_BACKGROUND_Sky u_sky;
-    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.sky", &u_sky, NULL)
-        && !memcmp (&u_sky, &background->u.sky, sizeof (Dwg_BACKGROUND_Sky)))
-        pass ();
-    else
-        fail ("BACKGROUND.u.sky [Dwg_BACKGROUND_Sky]");
-  }
-  {
-    Dwg_BACKGROUND_Solid u_solid;
-    if (dwg_dynapi_entity_value (background, "BACKGROUND", "u.solid", &u_solid, NULL)
-        && !memcmp (&u_solid, &background->u.solid, sizeof (Dwg_BACKGROUND_Solid)))
-        pass ();
-    else
-        fail ("BACKGROUND.u.solid [Dwg_BACKGROUND_Solid]");
-  }
-  if (failed && (is_class_unstable ("BACKGROUND") || is_class_debugging ("BACKGROUND")))
-    {
-      ok ("%s failed %d tests (TODO unstable)", "BACKGROUND", failed);
-      failed = 0;
-    }
-  return failed;
-}
 static int test_BLKREFOBJECTCONTEXTDATA (const Dwg_Object *obj)
 {
   int error = 0;
@@ -48038,6 +47910,249 @@ static int test_GEOMAPIMAGE (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_GRADIENT_BACKGROUND (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_GRADIENT_BACKGROUND *restrict gradient_background = obj->tio.object->tio.GRADIENT_BACKGROUND;
+  failed = 0;
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (gradient_background, "GRADIENT_BACKGROUND", "class_version", &class_version, NULL)
+        && class_version == gradient_background->class_version)
+      pass ();
+    else
+      fail ("GRADIENT_BACKGROUND.class_version [BL] %u != %u", gradient_background->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (gradient_background, "GRADIENT_BACKGROUND", "class_version", &class_version, 0)
+        && class_version == gradient_background->class_version)
+      pass ();
+    else
+      fail ("GRADIENT_BACKGROUND.class_version [BL] set+1 %u != %u", gradient_background->class_version, class_version);
+    gradient_background->class_version--;
+  }
+  {
+    BITCODE_BLx color_bottom;
+    if (dwg_dynapi_entity_value (gradient_background, "GRADIENT_BACKGROUND", "color_bottom", &color_bottom, NULL)
+        && color_bottom == gradient_background->color_bottom)
+      pass ();
+    else
+      fail ("GRADIENT_BACKGROUND.color_bottom [BLx] " FORMAT_BLx " != " FORMAT_BLx "", gradient_background->color_bottom, color_bottom);
+    if (dwg_dynapi_entity_set_value (gradient_background, "GRADIENT_BACKGROUND", "color_bottom", &color_bottom, 0)
+        && color_bottom == gradient_background->color_bottom)
+      pass ();
+    else
+      fail ("GRADIENT_BACKGROUND.color_bottom [BLx] set+1 " FORMAT_BLx " != " FORMAT_BLx "", gradient_background->color_bottom, color_bottom);
+    gradient_background->color_bottom--;
+  }
+  {
+    BITCODE_BLx color_middle;
+    if (dwg_dynapi_entity_value (gradient_background, "GRADIENT_BACKGROUND", "color_middle", &color_middle, NULL)
+        && color_middle == gradient_background->color_middle)
+      pass ();
+    else
+      fail ("GRADIENT_BACKGROUND.color_middle [BLx] " FORMAT_BLx " != " FORMAT_BLx "", gradient_background->color_middle, color_middle);
+    if (dwg_dynapi_entity_set_value (gradient_background, "GRADIENT_BACKGROUND", "color_middle", &color_middle, 0)
+        && color_middle == gradient_background->color_middle)
+      pass ();
+    else
+      fail ("GRADIENT_BACKGROUND.color_middle [BLx] set+1 " FORMAT_BLx " != " FORMAT_BLx "", gradient_background->color_middle, color_middle);
+    gradient_background->color_middle--;
+  }
+  {
+    BITCODE_BLx color_top;
+    if (dwg_dynapi_entity_value (gradient_background, "GRADIENT_BACKGROUND", "color_top", &color_top, NULL)
+        && color_top == gradient_background->color_top)
+      pass ();
+    else
+      fail ("GRADIENT_BACKGROUND.color_top [BLx] " FORMAT_BLx " != " FORMAT_BLx "", gradient_background->color_top, color_top);
+    if (dwg_dynapi_entity_set_value (gradient_background, "GRADIENT_BACKGROUND", "color_top", &color_top, 0)
+        && color_top == gradient_background->color_top)
+      pass ();
+    else
+      fail ("GRADIENT_BACKGROUND.color_top [BLx] set+1 " FORMAT_BLx " != " FORMAT_BLx "", gradient_background->color_top, color_top);
+    gradient_background->color_top--;
+  }
+  {
+    BITCODE_BD height;
+    if (dwg_dynapi_entity_value (gradient_background, "GRADIENT_BACKGROUND", "height", &height, NULL)
+        && height == gradient_background->height)
+      pass ();
+    else
+      fail ("GRADIENT_BACKGROUND.height [BD] %g != %g", gradient_background->height, height);
+    height++;
+    if (dwg_dynapi_entity_set_value (gradient_background, "GRADIENT_BACKGROUND", "height", &height, 0)
+        && height == gradient_background->height)
+      pass ();
+    else
+      fail ("GRADIENT_BACKGROUND.height [BD] set+1 %g != %g", gradient_background->height, height);
+    gradient_background->height--;
+  }
+  {
+    BITCODE_BD horizon;
+    if (dwg_dynapi_entity_value (gradient_background, "GRADIENT_BACKGROUND", "horizon", &horizon, NULL)
+        && horizon == gradient_background->horizon)
+      pass ();
+    else
+      fail ("GRADIENT_BACKGROUND.horizon [BD] %g != %g", gradient_background->horizon, horizon);
+    horizon++;
+    if (dwg_dynapi_entity_set_value (gradient_background, "GRADIENT_BACKGROUND", "horizon", &horizon, 0)
+        && horizon == gradient_background->horizon)
+      pass ();
+    else
+      fail ("GRADIENT_BACKGROUND.horizon [BD] set+1 %g != %g", gradient_background->horizon, horizon);
+    gradient_background->horizon--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (gradient_background, "GRADIENT_BACKGROUND", "parent", &parent, NULL)
+        && !memcmp (&parent, &gradient_background->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("GRADIENT_BACKGROUND.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BD rotation;
+    if (dwg_dynapi_entity_value (gradient_background, "GRADIENT_BACKGROUND", "rotation", &rotation, NULL)
+        && rotation == gradient_background->rotation)
+      pass ();
+    else
+      fail ("GRADIENT_BACKGROUND.rotation [BD] %g != %g", gradient_background->rotation, rotation);
+    rotation++;
+    if (dwg_dynapi_entity_set_value (gradient_background, "GRADIENT_BACKGROUND", "rotation", &rotation, 0)
+        && rotation == gradient_background->rotation)
+      pass ();
+    else
+      fail ("GRADIENT_BACKGROUND.rotation [BD] set+1 %g != %g", gradient_background->rotation, rotation);
+    gradient_background->rotation--;
+  }
+  if (failed && (is_class_unstable ("GRADIENT_BACKGROUND") || is_class_debugging ("GRADIENT_BACKGROUND")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "GRADIENT_BACKGROUND", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_GROUND_PLANE_BACKGROUND (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_GROUND_PLANE_BACKGROUND *restrict ground_plane_background = obj->tio.object->tio.GROUND_PLANE_BACKGROUND;
+  failed = 0;
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (ground_plane_background, "GROUND_PLANE_BACKGROUND", "class_version", &class_version, NULL)
+        && class_version == ground_plane_background->class_version)
+      pass ();
+    else
+      fail ("GROUND_PLANE_BACKGROUND.class_version [BL] %u != %u", ground_plane_background->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (ground_plane_background, "GROUND_PLANE_BACKGROUND", "class_version", &class_version, 0)
+        && class_version == ground_plane_background->class_version)
+      pass ();
+    else
+      fail ("GROUND_PLANE_BACKGROUND.class_version [BL] set+1 %u != %u", ground_plane_background->class_version, class_version);
+    ground_plane_background->class_version--;
+  }
+  {
+    BITCODE_BLx color_far;
+    if (dwg_dynapi_entity_value (ground_plane_background, "GROUND_PLANE_BACKGROUND", "color_far", &color_far, NULL)
+        && color_far == ground_plane_background->color_far)
+      pass ();
+    else
+      fail ("GROUND_PLANE_BACKGROUND.color_far [BLx] " FORMAT_BLx " != " FORMAT_BLx "", ground_plane_background->color_far, color_far);
+    if (dwg_dynapi_entity_set_value (ground_plane_background, "GROUND_PLANE_BACKGROUND", "color_far", &color_far, 0)
+        && color_far == ground_plane_background->color_far)
+      pass ();
+    else
+      fail ("GROUND_PLANE_BACKGROUND.color_far [BLx] set+1 " FORMAT_BLx " != " FORMAT_BLx "", ground_plane_background->color_far, color_far);
+    ground_plane_background->color_far--;
+  }
+  {
+    BITCODE_BLx color_near;
+    if (dwg_dynapi_entity_value (ground_plane_background, "GROUND_PLANE_BACKGROUND", "color_near", &color_near, NULL)
+        && color_near == ground_plane_background->color_near)
+      pass ();
+    else
+      fail ("GROUND_PLANE_BACKGROUND.color_near [BLx] " FORMAT_BLx " != " FORMAT_BLx "", ground_plane_background->color_near, color_near);
+    if (dwg_dynapi_entity_set_value (ground_plane_background, "GROUND_PLANE_BACKGROUND", "color_near", &color_near, 0)
+        && color_near == ground_plane_background->color_near)
+      pass ();
+    else
+      fail ("GROUND_PLANE_BACKGROUND.color_near [BLx] set+1 " FORMAT_BLx " != " FORMAT_BLx "", ground_plane_background->color_near, color_near);
+    ground_plane_background->color_near--;
+  }
+  {
+    BITCODE_BLx color_sky_horizon;
+    if (dwg_dynapi_entity_value (ground_plane_background, "GROUND_PLANE_BACKGROUND", "color_sky_horizon", &color_sky_horizon, NULL)
+        && color_sky_horizon == ground_plane_background->color_sky_horizon)
+      pass ();
+    else
+      fail ("GROUND_PLANE_BACKGROUND.color_sky_horizon [BLx] " FORMAT_BLx " != " FORMAT_BLx "", ground_plane_background->color_sky_horizon, color_sky_horizon);
+    if (dwg_dynapi_entity_set_value (ground_plane_background, "GROUND_PLANE_BACKGROUND", "color_sky_horizon", &color_sky_horizon, 0)
+        && color_sky_horizon == ground_plane_background->color_sky_horizon)
+      pass ();
+    else
+      fail ("GROUND_PLANE_BACKGROUND.color_sky_horizon [BLx] set+1 " FORMAT_BLx " != " FORMAT_BLx "", ground_plane_background->color_sky_horizon, color_sky_horizon);
+    ground_plane_background->color_sky_horizon--;
+  }
+  {
+    BITCODE_BLx color_sky_zenith;
+    if (dwg_dynapi_entity_value (ground_plane_background, "GROUND_PLANE_BACKGROUND", "color_sky_zenith", &color_sky_zenith, NULL)
+        && color_sky_zenith == ground_plane_background->color_sky_zenith)
+      pass ();
+    else
+      fail ("GROUND_PLANE_BACKGROUND.color_sky_zenith [BLx] " FORMAT_BLx " != " FORMAT_BLx "", ground_plane_background->color_sky_zenith, color_sky_zenith);
+    if (dwg_dynapi_entity_set_value (ground_plane_background, "GROUND_PLANE_BACKGROUND", "color_sky_zenith", &color_sky_zenith, 0)
+        && color_sky_zenith == ground_plane_background->color_sky_zenith)
+      pass ();
+    else
+      fail ("GROUND_PLANE_BACKGROUND.color_sky_zenith [BLx] set+1 " FORMAT_BLx " != " FORMAT_BLx "", ground_plane_background->color_sky_zenith, color_sky_zenith);
+    ground_plane_background->color_sky_zenith--;
+  }
+  {
+    BITCODE_BLx color_underground_azimuth;
+    if (dwg_dynapi_entity_value (ground_plane_background, "GROUND_PLANE_BACKGROUND", "color_underground_azimuth", &color_underground_azimuth, NULL)
+        && color_underground_azimuth == ground_plane_background->color_underground_azimuth)
+      pass ();
+    else
+      fail ("GROUND_PLANE_BACKGROUND.color_underground_azimuth [BLx] " FORMAT_BLx " != " FORMAT_BLx "", ground_plane_background->color_underground_azimuth, color_underground_azimuth);
+    if (dwg_dynapi_entity_set_value (ground_plane_background, "GROUND_PLANE_BACKGROUND", "color_underground_azimuth", &color_underground_azimuth, 0)
+        && color_underground_azimuth == ground_plane_background->color_underground_azimuth)
+      pass ();
+    else
+      fail ("GROUND_PLANE_BACKGROUND.color_underground_azimuth [BLx] set+1 " FORMAT_BLx " != " FORMAT_BLx "", ground_plane_background->color_underground_azimuth, color_underground_azimuth);
+    ground_plane_background->color_underground_azimuth--;
+  }
+  {
+    BITCODE_BLx color_underground_horizon;
+    if (dwg_dynapi_entity_value (ground_plane_background, "GROUND_PLANE_BACKGROUND", "color_underground_horizon", &color_underground_horizon, NULL)
+        && color_underground_horizon == ground_plane_background->color_underground_horizon)
+      pass ();
+    else
+      fail ("GROUND_PLANE_BACKGROUND.color_underground_horizon [BLx] " FORMAT_BLx " != " FORMAT_BLx "", ground_plane_background->color_underground_horizon, color_underground_horizon);
+    if (dwg_dynapi_entity_set_value (ground_plane_background, "GROUND_PLANE_BACKGROUND", "color_underground_horizon", &color_underground_horizon, 0)
+        && color_underground_horizon == ground_plane_background->color_underground_horizon)
+      pass ();
+    else
+      fail ("GROUND_PLANE_BACKGROUND.color_underground_horizon [BLx] set+1 " FORMAT_BLx " != " FORMAT_BLx "", ground_plane_background->color_underground_horizon, color_underground_horizon);
+    ground_plane_background->color_underground_horizon--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (ground_plane_background, "GROUND_PLANE_BACKGROUND", "parent", &parent, NULL)
+        && !memcmp (&parent, &ground_plane_background->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("GROUND_PLANE_BACKGROUND.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("GROUND_PLANE_BACKGROUND") || is_class_debugging ("GROUND_PLANE_BACKGROUND")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "GROUND_PLANE_BACKGROUND", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_GROUP (const Dwg_Object *obj)
 {
   int error = 0;
@@ -48120,6 +48235,105 @@ static int test_GROUP (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("GROUP") || is_class_debugging ("GROUP")))
     {
       ok ("%s failed %d tests (TODO unstable)", "GROUP", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_IBL_BACKGROUND (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_IBL_BACKGROUND *restrict ibl_background = obj->tio.object->tio.IBL_BACKGROUND;
+  failed = 0;
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (ibl_background, "IBL_BACKGROUND", "class_version", &class_version, NULL)
+        && class_version == ibl_background->class_version)
+      pass ();
+    else
+      fail ("IBL_BACKGROUND.class_version [BL] %u != %u", ibl_background->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (ibl_background, "IBL_BACKGROUND", "class_version", &class_version, 0)
+        && class_version == ibl_background->class_version)
+      pass ();
+    else
+      fail ("IBL_BACKGROUND.class_version [BL] set+1 %u != %u", ibl_background->class_version, class_version);
+    ibl_background->class_version--;
+  }
+  {
+    BITCODE_B display_image;
+    if (dwg_dynapi_entity_value (ibl_background, "IBL_BACKGROUND", "display_image", &display_image, NULL)
+        && display_image == ibl_background->display_image)
+      pass ();
+    else
+      fail ("IBL_BACKGROUND.display_image [B] " FORMAT_B " != " FORMAT_B "", ibl_background->display_image, display_image);
+    display_image++;
+    if (dwg_dynapi_entity_set_value (ibl_background, "IBL_BACKGROUND", "display_image", &display_image, 0)
+        && display_image == ibl_background->display_image)
+      pass ();
+    else
+      fail ("IBL_BACKGROUND.display_image [B] set+1 " FORMAT_B " != " FORMAT_B "", ibl_background->display_image, display_image);
+    ibl_background->display_image--;
+  }
+  {
+    BITCODE_B enable;
+    if (dwg_dynapi_entity_value (ibl_background, "IBL_BACKGROUND", "enable", &enable, NULL)
+        && enable == ibl_background->enable)
+      pass ();
+    else
+      fail ("IBL_BACKGROUND.enable [B] " FORMAT_B " != " FORMAT_B "", ibl_background->enable, enable);
+    enable++;
+    if (dwg_dynapi_entity_set_value (ibl_background, "IBL_BACKGROUND", "enable", &enable, 0)
+        && enable == ibl_background->enable)
+      pass ();
+    else
+      fail ("IBL_BACKGROUND.enable [B] set+1 " FORMAT_B " != " FORMAT_B "", ibl_background->enable, enable);
+    ibl_background->enable--;
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (ibl_background, "IBL_BACKGROUND", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)ibl_background->name)
+           : !ibl_background->name)
+      pass ();
+    else
+      fail ("IBL_BACKGROUND.name [T] '%s' <> '%s'", name, ibl_background->name);
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (ibl_background, "IBL_BACKGROUND", "parent", &parent, NULL)
+        && !memcmp (&parent, &ibl_background->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("IBL_BACKGROUND.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_BD rotation;
+    if (dwg_dynapi_entity_value (ibl_background, "IBL_BACKGROUND", "rotation", &rotation, NULL)
+        && rotation == ibl_background->rotation)
+      pass ();
+    else
+      fail ("IBL_BACKGROUND.rotation [BD] %g != %g", ibl_background->rotation, rotation);
+    rotation++;
+    if (dwg_dynapi_entity_set_value (ibl_background, "IBL_BACKGROUND", "rotation", &rotation, 0)
+        && rotation == ibl_background->rotation)
+      pass ();
+    else
+      fail ("IBL_BACKGROUND.rotation [BD] set+1 %g != %g", ibl_background->rotation, rotation);
+    ibl_background->rotation--;
+  }
+  {
+    BITCODE_H secondary_background;
+    if (dwg_dynapi_entity_value (ibl_background, "IBL_BACKGROUND", "secondary_background", &secondary_background, NULL)
+        && !memcmp (&secondary_background, &ibl_background->secondary_background, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("IBL_BACKGROUND.secondary_background [H]");
+  }
+  if (failed && (is_class_unstable ("IBL_BACKGROUND") || is_class_debugging ("IBL_BACKGROUND")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "IBL_BACKGROUND", failed);
       failed = 0;
     }
   return failed;
@@ -48309,6 +48523,113 @@ static int test_IMAGEDEF_REACTOR (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("IMAGEDEF_REACTOR") || is_class_debugging ("IMAGEDEF_REACTOR")))
     {
       ok ("%s failed %d tests (TODO unstable)", "IMAGEDEF_REACTOR", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_IMAGE_BACKGROUND (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_IMAGE_BACKGROUND *restrict image_background = obj->tio.object->tio.IMAGE_BACKGROUND;
+  failed = 0;
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (image_background, "IMAGE_BACKGROUND", "class_version", &class_version, NULL)
+        && class_version == image_background->class_version)
+      pass ();
+    else
+      fail ("IMAGE_BACKGROUND.class_version [BL] %u != %u", image_background->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (image_background, "IMAGE_BACKGROUND", "class_version", &class_version, 0)
+        && class_version == image_background->class_version)
+      pass ();
+    else
+      fail ("IMAGE_BACKGROUND.class_version [BL] set+1 %u != %u", image_background->class_version, class_version);
+    image_background->class_version--;
+  }
+  {
+    BITCODE_T filename;
+    if (dwg_dynapi_entity_value (image_background, "IMAGE_BACKGROUND", "filename", &filename, NULL)
+        && filename
+           ? strEQ ((char *)filename, (char *)image_background->filename)
+           : !image_background->filename)
+      pass ();
+    else
+      fail ("IMAGE_BACKGROUND.filename [T] '%s' <> '%s'", filename, image_background->filename);
+  }
+  {
+    BITCODE_B fit_to_screen;
+    if (dwg_dynapi_entity_value (image_background, "IMAGE_BACKGROUND", "fit_to_screen", &fit_to_screen, NULL)
+        && fit_to_screen == image_background->fit_to_screen)
+      pass ();
+    else
+      fail ("IMAGE_BACKGROUND.fit_to_screen [B] " FORMAT_B " != " FORMAT_B "", image_background->fit_to_screen, fit_to_screen);
+    fit_to_screen++;
+    if (dwg_dynapi_entity_set_value (image_background, "IMAGE_BACKGROUND", "fit_to_screen", &fit_to_screen, 0)
+        && fit_to_screen == image_background->fit_to_screen)
+      pass ();
+    else
+      fail ("IMAGE_BACKGROUND.fit_to_screen [B] set+1 " FORMAT_B " != " FORMAT_B "", image_background->fit_to_screen, fit_to_screen);
+    image_background->fit_to_screen--;
+  }
+  {
+    BITCODE_B maintain_aspect_ratio;
+    if (dwg_dynapi_entity_value (image_background, "IMAGE_BACKGROUND", "maintain_aspect_ratio", &maintain_aspect_ratio, NULL)
+        && maintain_aspect_ratio == image_background->maintain_aspect_ratio)
+      pass ();
+    else
+      fail ("IMAGE_BACKGROUND.maintain_aspect_ratio [B] " FORMAT_B " != " FORMAT_B "", image_background->maintain_aspect_ratio, maintain_aspect_ratio);
+    maintain_aspect_ratio++;
+    if (dwg_dynapi_entity_set_value (image_background, "IMAGE_BACKGROUND", "maintain_aspect_ratio", &maintain_aspect_ratio, 0)
+        && maintain_aspect_ratio == image_background->maintain_aspect_ratio)
+      pass ();
+    else
+      fail ("IMAGE_BACKGROUND.maintain_aspect_ratio [B] set+1 " FORMAT_B " != " FORMAT_B "", image_background->maintain_aspect_ratio, maintain_aspect_ratio);
+    image_background->maintain_aspect_ratio--;
+  }
+  {
+    BITCODE_2BD offset;
+    if (dwg_dynapi_entity_value (image_background, "IMAGE_BACKGROUND", "offset", &offset, NULL)
+        && !memcmp (&offset, &image_background->offset, sizeof (BITCODE_2BD)))
+        pass ();
+    else
+        fail ("IMAGE_BACKGROUND.offset [2BD_1]");
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (image_background, "IMAGE_BACKGROUND", "parent", &parent, NULL)
+        && !memcmp (&parent, &image_background->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("IMAGE_BACKGROUND.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_2BD scale;
+    if (dwg_dynapi_entity_value (image_background, "IMAGE_BACKGROUND", "scale", &scale, NULL)
+        && !memcmp (&scale, &image_background->scale, sizeof (BITCODE_2BD)))
+        pass ();
+    else
+        fail ("IMAGE_BACKGROUND.scale [2BD_1]");
+  }
+  {
+    BITCODE_B use_tiling;
+    if (dwg_dynapi_entity_value (image_background, "IMAGE_BACKGROUND", "use_tiling", &use_tiling, NULL)
+        && use_tiling == image_background->use_tiling)
+      pass ();
+    else
+      fail ("IMAGE_BACKGROUND.use_tiling [B] " FORMAT_B " != " FORMAT_B "", image_background->use_tiling, use_tiling);
+    use_tiling++;
+    if (dwg_dynapi_entity_set_value (image_background, "IMAGE_BACKGROUND", "use_tiling", &use_tiling, 0)
+        && use_tiling == image_background->use_tiling)
+      pass ();
+    else
+      fail ("IMAGE_BACKGROUND.use_tiling [B] set+1 " FORMAT_B " != " FORMAT_B "", image_background->use_tiling, use_tiling);
+    image_background->use_tiling--;
+  }
+  if (failed && (is_class_unstable ("IMAGE_BACKGROUND") || is_class_debugging ("IMAGE_BACKGROUND")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "IMAGE_BACKGROUND", failed);
       failed = 0;
     }
   return failed;
@@ -55538,6 +55859,100 @@ static int test_SECTION_SETTINGS (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_SKYLIGHT_BACKGROUND (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_SKYLIGHT_BACKGROUND *restrict skylight_background = obj->tio.object->tio.SKYLIGHT_BACKGROUND;
+  failed = 0;
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (skylight_background, "SKYLIGHT_BACKGROUND", "class_version", &class_version, NULL)
+        && class_version == skylight_background->class_version)
+      pass ();
+    else
+      fail ("SKYLIGHT_BACKGROUND.class_version [BL] %u != %u", skylight_background->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (skylight_background, "SKYLIGHT_BACKGROUND", "class_version", &class_version, 0)
+        && class_version == skylight_background->class_version)
+      pass ();
+    else
+      fail ("SKYLIGHT_BACKGROUND.class_version [BL] set+1 %u != %u", skylight_background->class_version, class_version);
+    skylight_background->class_version--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (skylight_background, "SKYLIGHT_BACKGROUND", "parent", &parent, NULL)
+        && !memcmp (&parent, &skylight_background->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("SKYLIGHT_BACKGROUND.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_H sunid;
+    if (dwg_dynapi_entity_value (skylight_background, "SKYLIGHT_BACKGROUND", "sunid", &sunid, NULL)
+        && !memcmp (&sunid, &skylight_background->sunid, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("SKYLIGHT_BACKGROUND.sunid [H]");
+  }
+  if (failed && (is_class_unstable ("SKYLIGHT_BACKGROUND") || is_class_debugging ("SKYLIGHT_BACKGROUND")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "SKYLIGHT_BACKGROUND", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_SOLID_BACKGROUND (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_SOLID_BACKGROUND *restrict solid_background = obj->tio.object->tio.SOLID_BACKGROUND;
+  failed = 0;
+  {
+    BITCODE_BL class_version;
+    if (dwg_dynapi_entity_value (solid_background, "SOLID_BACKGROUND", "class_version", &class_version, NULL)
+        && class_version == solid_background->class_version)
+      pass ();
+    else
+      fail ("SOLID_BACKGROUND.class_version [BL] %u != %u", solid_background->class_version, class_version);
+    class_version++;
+    if (dwg_dynapi_entity_set_value (solid_background, "SOLID_BACKGROUND", "class_version", &class_version, 0)
+        && class_version == solid_background->class_version)
+      pass ();
+    else
+      fail ("SOLID_BACKGROUND.class_version [BL] set+1 %u != %u", solid_background->class_version, class_version);
+    solid_background->class_version--;
+  }
+  {
+    BITCODE_BLx color;
+    if (dwg_dynapi_entity_value (solid_background, "SOLID_BACKGROUND", "color", &color, NULL)
+        && color == solid_background->color)
+      pass ();
+    else
+      fail ("SOLID_BACKGROUND.color [BLx] " FORMAT_BLx " != " FORMAT_BLx "", solid_background->color, color);
+    if (dwg_dynapi_entity_set_value (solid_background, "SOLID_BACKGROUND", "color", &color, 0)
+        && color == solid_background->color)
+      pass ();
+    else
+      fail ("SOLID_BACKGROUND.color [BLx] set+1 " FORMAT_BLx " != " FORMAT_BLx "", solid_background->color, color);
+    solid_background->color--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (solid_background, "SOLID_BACKGROUND", "parent", &parent, NULL)
+        && !memcmp (&parent, &solid_background->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("SOLID_BACKGROUND.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("SOLID_BACKGROUND") || is_class_debugging ("SOLID_BACKGROUND")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "SOLID_BACKGROUND", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_SORTENTSTABLE (const Dwg_Object *obj)
 {
   int error = 0;
@@ -61561,8 +61976,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCVARIABLE(obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCVERTEXACTIONPARAM)
     error += test_ASSOCVERTEXACTIONPARAM(obj);
-  else  if (obj->fixedtype == DWG_TYPE_BACKGROUND)
-    error += test_BACKGROUND(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLKREFOBJECTCONTEXTDATA)
     error += test_BLKREFOBJECTCONTEXTDATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCKALIGNEDCONSTRAINTPARAMETER)
@@ -61695,14 +62108,22 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_GEODATA(obj);
   else  if (obj->fixedtype == DWG_TYPE_GEOMAPIMAGE)
     error += test_GEOMAPIMAGE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_GRADIENT_BACKGROUND)
+    error += test_GRADIENT_BACKGROUND(obj);
+  else  if (obj->fixedtype == DWG_TYPE_GROUND_PLANE_BACKGROUND)
+    error += test_GROUND_PLANE_BACKGROUND(obj);
   else  if (obj->fixedtype == DWG_TYPE_GROUP)
     error += test_GROUP(obj);
+  else  if (obj->fixedtype == DWG_TYPE_IBL_BACKGROUND)
+    error += test_IBL_BACKGROUND(obj);
   else  if (obj->fixedtype == DWG_TYPE_IDBUFFER)
     error += test_IDBUFFER(obj);
   else  if (obj->fixedtype == DWG_TYPE_IMAGEDEF)
     error += test_IMAGEDEF(obj);
   else  if (obj->fixedtype == DWG_TYPE_IMAGEDEF_REACTOR)
     error += test_IMAGEDEF_REACTOR(obj);
+  else  if (obj->fixedtype == DWG_TYPE_IMAGE_BACKGROUND)
+    error += test_IMAGE_BACKGROUND(obj);
   else  if (obj->fixedtype == DWG_TYPE_INDEX)
     error += test_INDEX(obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYER)
@@ -61793,6 +62214,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_SECTION_MANAGER(obj);
   else  if (obj->fixedtype == DWG_TYPE_SECTION_SETTINGS)
     error += test_SECTION_SETTINGS(obj);
+  else  if (obj->fixedtype == DWG_TYPE_SKYLIGHT_BACKGROUND)
+    error += test_SKYLIGHT_BACKGROUND(obj);
+  else  if (obj->fixedtype == DWG_TYPE_SOLID_BACKGROUND)
+    error += test_SOLID_BACKGROUND(obj);
   else  if (obj->fixedtype == DWG_TYPE_SORTENTSTABLE)
     error += test_SORTENTSTABLE(obj);
   else  if (obj->fixedtype == DWG_TYPE_SPATIAL_FILTER)
@@ -62155,8 +62580,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCVARIABLE (obj);
   else  if (obj->fixedtype == DWG_TYPE_ASSOCVERTEXACTIONPARAM)
     error += test_ASSOCVERTEXACTIONPARAM (obj);
-  else  if (obj->fixedtype == DWG_TYPE_BACKGROUND)
-    error += test_BACKGROUND (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLKREFOBJECTCONTEXTDATA)
     error += test_BLKREFOBJECTCONTEXTDATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCKALIGNEDCONSTRAINTPARAMETER)
@@ -62289,14 +62712,22 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_GEODATA (obj);
   else  if (obj->fixedtype == DWG_TYPE_GEOMAPIMAGE)
     error += test_GEOMAPIMAGE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_GRADIENT_BACKGROUND)
+    error += test_GRADIENT_BACKGROUND (obj);
+  else  if (obj->fixedtype == DWG_TYPE_GROUND_PLANE_BACKGROUND)
+    error += test_GROUND_PLANE_BACKGROUND (obj);
   else  if (obj->fixedtype == DWG_TYPE_GROUP)
     error += test_GROUP (obj);
+  else  if (obj->fixedtype == DWG_TYPE_IBL_BACKGROUND)
+    error += test_IBL_BACKGROUND (obj);
   else  if (obj->fixedtype == DWG_TYPE_IDBUFFER)
     error += test_IDBUFFER (obj);
   else  if (obj->fixedtype == DWG_TYPE_IMAGEDEF)
     error += test_IMAGEDEF (obj);
   else  if (obj->fixedtype == DWG_TYPE_IMAGEDEF_REACTOR)
     error += test_IMAGEDEF_REACTOR (obj);
+  else  if (obj->fixedtype == DWG_TYPE_IMAGE_BACKGROUND)
+    error += test_IMAGE_BACKGROUND (obj);
   else  if (obj->fixedtype == DWG_TYPE_INDEX)
     error += test_INDEX (obj);
   else  if (obj->fixedtype == DWG_TYPE_LAYER)
@@ -62387,6 +62818,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_SECTION_MANAGER (obj);
   else  if (obj->fixedtype == DWG_TYPE_SECTION_SETTINGS)
     error += test_SECTION_SETTINGS (obj);
+  else  if (obj->fixedtype == DWG_TYPE_SKYLIGHT_BACKGROUND)
+    error += test_SKYLIGHT_BACKGROUND (obj);
+  else  if (obj->fixedtype == DWG_TYPE_SOLID_BACKGROUND)
+    error += test_SOLID_BACKGROUND (obj);
   else  if (obj->fixedtype == DWG_TYPE_SORTENTSTABLE)
     error += test_SORTENTSTABLE (obj);
   else  if (obj->fixedtype == DWG_TYPE_SPATIAL_FILTER)
@@ -63693,14 +64128,6 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"ASSOCVERTEXACTIONPARAM\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (Dwg_Object_BACKGROUND);
-  size2 = dwg_dynapi_fields_size ("BACKGROUND");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(Dwg_Object_BACKGROUND): %d != "
-               "dwg_dynapi_fields_size (\"BACKGROUND\"): %d\n", size1, size2);
-      error++;
-    }
   size1 = sizeof (Dwg_Object_BLKREFOBJECTCONTEXTDATA);
   size2 = dwg_dynapi_fields_size ("BLKREFOBJECTCONTEXTDATA");
   if (size1 != size2)
@@ -64229,12 +64656,36 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"GEOMAPIMAGE\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (Dwg_Object_GRADIENT_BACKGROUND);
+  size2 = dwg_dynapi_fields_size ("GRADIENT_BACKGROUND");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Object_GRADIENT_BACKGROUND): %d != "
+               "dwg_dynapi_fields_size (\"GRADIENT_BACKGROUND\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Object_GROUND_PLANE_BACKGROUND);
+  size2 = dwg_dynapi_fields_size ("GROUND_PLANE_BACKGROUND");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Object_GROUND_PLANE_BACKGROUND): %d != "
+               "dwg_dynapi_fields_size (\"GROUND_PLANE_BACKGROUND\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (Dwg_Object_GROUP);
   size2 = dwg_dynapi_fields_size ("GROUP");
   if (size1 != size2)
     {
       fprintf (stderr, "sizeof(Dwg_Object_GROUP): %d != "
                "dwg_dynapi_fields_size (\"GROUP\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Object_IBL_BACKGROUND);
+  size2 = dwg_dynapi_fields_size ("IBL_BACKGROUND");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Object_IBL_BACKGROUND): %d != "
+               "dwg_dynapi_fields_size (\"IBL_BACKGROUND\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Object_IDBUFFER);
@@ -64259,6 +64710,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Object_IMAGEDEF_REACTOR): %d != "
                "dwg_dynapi_fields_size (\"IMAGEDEF_REACTOR\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Object_IMAGE_BACKGROUND);
+  size2 = dwg_dynapi_fields_size ("IMAGE_BACKGROUND");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Object_IMAGE_BACKGROUND): %d != "
+               "dwg_dynapi_fields_size (\"IMAGE_BACKGROUND\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Object_INDEX);
@@ -64619,6 +65078,22 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Object_SECTION_SETTINGS): %d != "
                "dwg_dynapi_fields_size (\"SECTION_SETTINGS\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Object_SKYLIGHT_BACKGROUND);
+  size2 = dwg_dynapi_fields_size ("SKYLIGHT_BACKGROUND");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Object_SKYLIGHT_BACKGROUND): %d != "
+               "dwg_dynapi_fields_size (\"SKYLIGHT_BACKGROUND\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Object_SOLID_BACKGROUND);
+  size2 = dwg_dynapi_fields_size ("SOLID_BACKGROUND");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Object_SOLID_BACKGROUND): %d != "
+               "dwg_dynapi_fields_size (\"SOLID_BACKGROUND\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Object_SORTENTSTABLE);
@@ -65123,54 +65598,6 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_AcDs_SegmentIndex): %d != "
                "dwg_dynapi_fields_size (\"AcDs_SegmentIndex\"): %d\n", size1, size2);
-      error++;
-    }
-  size1 = sizeof (struct _dwg_BACKGROUND_Gradient);
-  size2 = dwg_dynapi_fields_size ("BACKGROUND_Gradient");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(struct _dwg_BACKGROUND_Gradient): %d != "
-               "dwg_dynapi_fields_size (\"BACKGROUND_Gradient\"): %d\n", size1, size2);
-      error++;
-    }
-  size1 = sizeof (struct _dwg_BACKGROUND_GroundPlane);
-  size2 = dwg_dynapi_fields_size ("BACKGROUND_GroundPlane");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(struct _dwg_BACKGROUND_GroundPlane): %d != "
-               "dwg_dynapi_fields_size (\"BACKGROUND_GroundPlane\"): %d\n", size1, size2);
-      error++;
-    }
-  size1 = sizeof (struct _dwg_BACKGROUND_IBL);
-  size2 = dwg_dynapi_fields_size ("BACKGROUND_IBL");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(struct _dwg_BACKGROUND_IBL): %d != "
-               "dwg_dynapi_fields_size (\"BACKGROUND_IBL\"): %d\n", size1, size2);
-      error++;
-    }
-  size1 = sizeof (struct _dwg_BACKGROUND_Image);
-  size2 = dwg_dynapi_fields_size ("BACKGROUND_Image");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(struct _dwg_BACKGROUND_Image): %d != "
-               "dwg_dynapi_fields_size (\"BACKGROUND_Image\"): %d\n", size1, size2);
-      error++;
-    }
-  size1 = sizeof (struct _dwg_BACKGROUND_Sky);
-  size2 = dwg_dynapi_fields_size ("BACKGROUND_Sky");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(struct _dwg_BACKGROUND_Sky): %d != "
-               "dwg_dynapi_fields_size (\"BACKGROUND_Sky\"): %d\n", size1, size2);
-      error++;
-    }
-  size1 = sizeof (struct _dwg_BACKGROUND_Solid);
-  size2 = dwg_dynapi_fields_size ("BACKGROUND_Solid");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(struct _dwg_BACKGROUND_Solid): %d != "
-               "dwg_dynapi_fields_size (\"BACKGROUND_Solid\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_BLOCKACTION_connectionpts);

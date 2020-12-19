@@ -10051,63 +10051,66 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-DWG_OBJECT (BACKGROUND)
-  DECODE_UNKNOWN_BITS
-  FIELD_BL (class_version, 90); // 1 or 2
-  DECODER { // subytped by dxfname
-    decode_BACKGROUND_type (obj);
-  }
-  switch (FIELD_VALUE (type))
-  {
-  case Dwg_BACKGROUND_type_Sky:
-    SUBCLASS (AcDbSkyBackground);
-    FIELD_HANDLE (u.sky.sunid, 5, 340);
-    break;
-  case Dwg_BACKGROUND_type_Image:
-    SUBCLASS (AcDbImageBackground)
-    FIELD_T (u.image.filename, 300);
-    FIELD_B (u.image.fit_to_screen, 290);
-    FIELD_B (u.image.maintain_aspect_ratio, 291);
-    FIELD_B (u.image.use_tiling, 292);
-    FIELD_2BD_1 (u.image.offset, 140);
-    FIELD_2BD_1 (u.image.scale, 142);
-    break;
-  case Dwg_BACKGROUND_type_Solid:
-    SUBCLASS (AcDbSolidBackground)
-    FIELD_BLx (u.solid.color, 90);
-    break;
-  case Dwg_BACKGROUND_type_IBL:
-    SUBCLASS (AcDbIBLBackground)
-    FIELD_B (u.ibl.enable, 290);
-    FIELD_T (u.ibl.name, 1);
-    FIELD_BD (u.ibl.rotation, 40);
-    FIELD_B (u.ibl.display_image, 290);
-    FIELD_HANDLE (u.ibl.secondary_background, 5, 340);
-    break;
-  case Dwg_BACKGROUND_type_GroundPlane:
-    SUBCLASS (AcDbGroundPlaneBackground)
-    // all rgb's with method c2
-    FIELD_BLx (u.ground_plane.color_sky_zenith, 90);
-    FIELD_BLx (u.ground_plane.color_sky_horizon, 91);
-    FIELD_BLx (u.ground_plane.color_underground_horizon, 92);
-    FIELD_BLx (u.ground_plane.color_underground_azimuth, 93);
-    FIELD_BLx (u.ground_plane.color_near, 94);
-    FIELD_BLx (u.ground_plane.color_far, 95);
-    break;
-  case Dwg_BACKGROUND_type_Gradient:
-    SUBCLASS (AcDbGradientBackground)
-    // all rgb's with method c2
-    FIELD_BLx (u.gradient.color_top, 90);
-    FIELD_BLx (u.gradient.color_middle, 91);
-    FIELD_BLx (u.gradient.color_bottom, 92);
-    FIELD_BD (u.gradient.horizon, 140);
-    FIELD_BD (u.gradient.height, 141);
-    FIELD_BD (u.gradient.rotation, 142);
-    break;
-  default:
-    LOG_ERROR ("Invalid BACKGROUND.type %d", _obj->type)
-    break;
-  }
+DWG_OBJECT (GRADIENT_BACKGROUND)
+  FIELD_BL (class_version, 90); /* 1 */
+  SUBCLASS (AcDbGradientBackground)
+  // all rgb's with method c2
+  FIELD_BLx (color_top, 90);
+  FIELD_BLx (color_middle, 91);
+  FIELD_BLx (color_bottom, 92);
+  FIELD_BD (horizon, 140);
+  FIELD_BD (height, 141);
+  FIELD_BD (rotation, 142);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (GROUND_PLANE_BACKGROUND)
+  FIELD_BL (class_version, 90); /* 1 */
+  SUBCLASS (AcDbGroundPlaneBackground)
+  // all rgb's with method c2
+  FIELD_BLx (color_sky_zenith, 90);
+  FIELD_BLx (color_sky_horizon, 91);
+  FIELD_BLx (color_underground_horizon, 92);
+  FIELD_BLx (color_underground_azimuth, 93);
+  FIELD_BLx (color_near, 94);
+  FIELD_BLx (color_far, 95);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (IBL_BACKGROUND)
+  FIELD_BL (class_version, 90); /* 2 */
+  SUBCLASS (AcDbIBLBackground)
+  FIELD_B (enable, 290);
+  FIELD_T (name, 1);
+  FIELD_BD (rotation, 40);
+  FIELD_B (display_image, 290);
+  FIELD_HANDLE (secondary_background, 5, 340);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (IMAGE_BACKGROUND)
+  FIELD_BL (class_version, 90); /* 1 */
+  SUBCLASS (AcDbImageBackground)
+  FIELD_T (filename, 300);
+  FIELD_B (fit_to_screen, 290);
+  FIELD_B (maintain_aspect_ratio, 291);
+  FIELD_B (use_tiling, 292);
+  FIELD_2BD_1 (offset, 140);
+  FIELD_2BD_1 (scale, 142);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (SKYLIGHT_BACKGROUND)
+  FIELD_BL (class_version, 90); /* 1 */
+  SUBCLASS (AcDbSkyBackground); 
+  FIELD_HANDLE (sunid, 5, 340);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (SOLID_BACKGROUND)
+  FIELD_BL (class_version, 90); /* 1 */
+  SUBCLASS (AcDbSolidBackground)
+  FIELD_BLx (color, 90);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

@@ -411,6 +411,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_ALIGNMENTPARAMETERENTITY,
   DWG_TYPE_ANGDIMOBJECTCONTEXTDATA,
   DWG_TYPE_ANNOTSCALEOBJECTCONTEXTDATA,
+  DWG_TYPE_ARCALIGNEDTEXT,
   DWG_TYPE_ARC_DIMENSION,
   DWG_TYPE_ASSOC2DCONSTRAINTGROUP,
   DWG_TYPE_ASSOC3POINTANGULARDIMACTIONBODY,
@@ -457,8 +458,6 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_ASSOCVALUEDEPENDENCY,
   DWG_TYPE_ASSOCVARIABLE,
   DWG_TYPE_ASSOCVERTEXACTIONPARAM,
-  DWG_TYPE_ARCALIGNEDTEXT,
-  DWG_TYPE_BACKGROUND,
   DWG_TYPE_BASEPOINTPARAMETERENTITY,
   DWG_TYPE_BLKREFOBJECTCONTEXTDATA,
   DWG_TYPE_BLOCKALIGNEDCONSTRAINTPARAMETER,
@@ -528,11 +527,15 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_GEODATA,
   DWG_TYPE_GEOMAPIMAGE,
   DWG_TYPE_GEOPOSITIONMARKER,
+  DWG_TYPE_GRADIENT_BACKGROUND,
+  DWG_TYPE_GROUND_PLANE_BACKGROUND,
   DWG_TYPE_HELIX,
+  DWG_TYPE_IBL_BACKGROUND,
   DWG_TYPE_IDBUFFER,
   DWG_TYPE_IMAGE,
   DWG_TYPE_IMAGEDEF,
   DWG_TYPE_IMAGEDEF_REACTOR,
+  DWG_TYPE_IMAGE_BACKGROUND,
   DWG_TYPE_INDEX,
   DWG_TYPE_LARGE_RADIAL_DIMENSION,
   DWG_TYPE_LAYERFILTER,
@@ -590,6 +593,8 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_SECTIONVIEWSTYLE,
   DWG_TYPE_SECTION_MANAGER,
   DWG_TYPE_SECTION_SETTINGS,
+  DWG_TYPE_SKYLIGHT_BACKGROUND,
+  DWG_TYPE_SOLID_BACKGROUND,
   DWG_TYPE_SORTENTSTABLE,
   DWG_TYPE_SPATIAL_FILTER,
   DWG_TYPE_SPATIAL_INDEX,
@@ -6476,91 +6481,67 @@ typedef struct _dwg_object_TVDEVICEPROPERTIES
   BITCODE_BD bd2;
 } Dwg_Object_TVDEVICEPROPERTIES;
 
-// SKYLIGHT_BACKGROUND
-typedef struct _dwg_BACKGROUND_Sky
+typedef struct _dwg_object_SKYLIGHT_BACKGROUND
 {
-  // version 1
+  struct _dwg_object_object *parent;
+  BITCODE_BL class_version;     /*!< DXF 90, default 1 */
   BITCODE_H sunid;		/*!< DXF 340 */
-} Dwg_BACKGROUND_Sky;
+} Dwg_Object_SKYLIGHT_BACKGROUND;
 
-// SOLID_BACKGROUND
-typedef struct _dwg_BACKGROUND_Solid
+typedef struct _dwg_object_SOLID_BACKGROUND
 {
-  // version 1
+  struct _dwg_object_object *parent;
+  BITCODE_BL class_version;     /*!< DXF 90, default 1 */
   BITCODE_BLx color;		/*!< DXF 90 */
-} Dwg_BACKGROUND_Solid;
+} Dwg_Object_SOLID_BACKGROUND;
 
-typedef struct _dwg_BACKGROUND_Image
+typedef struct _dwg_object_IMAGE_BACKGROUND
 {
-  // version 1
+  struct _dwg_object_object *parent;
+  BITCODE_BL class_version;     /*!< DXF 90, default 1 */
   BITCODE_T filename;		/*!< DXF 300 */
   BITCODE_B fit_to_screen;	/*!< DXF 290 */
   BITCODE_B maintain_aspect_ratio;	/*!< DXF 291 */
   BITCODE_B use_tiling;		/*!< DXF 292 */
   BITCODE_2BD offset;		/*!< DXF 140,141 */
   BITCODE_2BD scale;		/*!< DXF 142,143 */
-} Dwg_BACKGROUND_Image;
+} Dwg_Object_IMAGE_BACKGROUND;
 
 // Image Based Lightning
-typedef struct _dwg_BACKGROUND_IBL
+typedef struct _dwg_object_IBL_BACKGROUND
 {
-  // version 2
+  struct _dwg_object_object *parent;
+  BITCODE_BL class_version;     /*!< DXF 90, default 2 */
   BITCODE_B enable;             /*!< DXF 290 */
   BITCODE_T name;     		/*!< DXF 1 */
   BITCODE_BD rotation;          /*!< DXF 40, normalized -180 +180, in degrees */
   BITCODE_B display_image;      /*!< DXF 290 */
   BITCODE_H secondary_background;/*!< DXF 340 */
-} Dwg_BACKGROUND_IBL;
+} Dwg_Object_IBL_BACKGROUND;
 
-typedef struct _dwg_BACKGROUND_Gradient
+typedef struct _dwg_object_GRADIENT_BACKGROUND
 {
-  // version 1
+  struct _dwg_object_object *parent;
+  BITCODE_BL class_version;     /*!< DXF 90, default 1 */
   BITCODE_BLx color_top;	/*!< DXF 90 */
   BITCODE_BLx color_middle;	/*!< DXF 91 */
   BITCODE_BLx color_bottom;	/*!< DXF 91 */
   BITCODE_BD horizon;		/*!< DXF 140 */
   BITCODE_BD height;		/*!< DXF 141 */
   BITCODE_BD rotation;		/*!< DXF 142 */
-} Dwg_BACKGROUND_Gradient;
+} Dwg_Object_GRADIENT_BACKGROUND;
 
-// GROUND_PLANE_BACKGROUND
-typedef struct _dwg_BACKGROUND_GroundPlane
+typedef struct _dwg_object_GROUND_PLANE_BACKGROUND
 {
-  // version 1
+  struct _dwg_object_object *parent;
+  BITCODE_BL class_version;     	/*!< DXF 90, default 1 */
   BITCODE_BLx color_sky_zenith;		/*!< DXF 90 */
   BITCODE_BLx color_sky_horizon;	/*!< DXF 91 */
   BITCODE_BLx color_underground_horizon;/*!< DXF 92 */
   BITCODE_BLx color_underground_azimuth;/*!< DXF 93 */
   BITCODE_BLx color_near;		/*!< DXF 94 groundplane */
   BITCODE_BLx color_far;		/*!< DXF 95 groundplane */
-} Dwg_BACKGROUND_GroundPlane;
-
-// Debugging, ACAD_BACKGROUND
-// one of IBLBACKGROUND, SKY..., IMAGE..., SOLID..., GRADIENT..., GROUNDPLANE...
-typedef enum DWG_BACKGROUND_TYPE
-{
-  Dwg_BACKGROUND_type_Sky = 1,
-  Dwg_BACKGROUND_type_Image,
-  Dwg_BACKGROUND_type_Solid,
-  Dwg_BACKGROUND_type_IBL,
-  Dwg_BACKGROUND_type_GroundPlane,
-  Dwg_BACKGROUND_type_Gradient,
-} Dwg_BACKGROUND_type;
-
-typedef struct _dwg_object_BACKGROUND
-{
-  struct _dwg_object_object *parent;
-  BITCODE_BL class_version;     		/*!< DXF 90 */
-  Dwg_BACKGROUND_type type;
-  union {
-    Dwg_BACKGROUND_Sky sky;			// 1
-    Dwg_BACKGROUND_Image image;			// 2
-    Dwg_BACKGROUND_Solid solid;			// 3
-    Dwg_BACKGROUND_IBL ibl;			// 4
-    Dwg_BACKGROUND_GroundPlane ground_plane;	// 5
-    Dwg_BACKGROUND_Gradient gradient; 		// 6
-  } u;
-} Dwg_Object_BACKGROUND;
+} Dwg_Object_GROUND_PLANE_BACKGROUND;
 
 /**
  * Class AcDbAnnotScaleObjectContextData (varies)
@@ -8085,7 +8066,6 @@ typedef struct _dwg_object_object
     Dwg_Object_ASSOCREVOLVEDSURFACEACTIONBODY *ASSOCREVOLVEDSURFACEACTIONBODY;
     Dwg_Object_ASSOCTRIMSURFACEACTIONBODY *ASSOCTRIMSURFACEACTIONBODY;
     Dwg_Object_ASSOCVALUEDEPENDENCY *ASSOCVALUEDEPENDENCY;
-    Dwg_Object_BACKGROUND *BACKGROUND;
     Dwg_Object_BLOCKALIGNMENTGRIP *BLOCKALIGNMENTGRIP;
     Dwg_Object_BLOCKALIGNMENTPARAMETER *BLOCKALIGNMENTPARAMETER;
     Dwg_Object_BLOCKLINEARPARAMETER *BLOCKLINEARPARAMETER;
@@ -8096,6 +8076,10 @@ typedef struct _dwg_object_object
     Dwg_Object_BLOCKXYPARAMETER *BLOCKXYPARAMETER;
     Dwg_Object_DBCOLOR *DBCOLOR;
     Dwg_Object_EVALUATION_GRAPH *EVALUATION_GRAPH;
+    Dwg_Object_GRADIENT_BACKGROUND *GRADIENT_BACKGROUND;
+    Dwg_Object_GROUND_PLANE_BACKGROUND *GROUND_PLANE_BACKGROUND;
+    Dwg_Object_IBL_BACKGROUND *IBL_BACKGROUND;
+    Dwg_Object_IMAGE_BACKGROUND *IMAGE_BACKGROUND;
     Dwg_Object_LIGHTLIST *LIGHTLIST;
     Dwg_Object_MATERIAL *MATERIAL;
     Dwg_Object_MENTALRAYRENDERSETTINGS *MENTALRAYRENDERSETTINGS;
@@ -8104,6 +8088,8 @@ typedef struct _dwg_object_object
     Dwg_Object_RAPIDRTRENDERSETTINGS *RAPIDRTRENDERSETTINGS;
     Dwg_Object_RENDERSETTINGS *RENDERSETTINGS;
     Dwg_Object_SECTION_SETTINGS *SECTION_SETTINGS;
+    Dwg_Object_SKYLIGHT_BACKGROUND *SKYLIGHT_BACKGROUND;
+    Dwg_Object_SOLID_BACKGROUND *SOLID_BACKGROUND;
     Dwg_Object_SPATIAL_INDEX *SPATIAL_INDEX;
     Dwg_Object_SUN *SUN;
     Dwg_Object_TABLESTYLE *TABLESTYLE;
@@ -9365,7 +9351,6 @@ EXPORT int dwg_setup_ASSOCPLANESURFACEACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCREVOLVEDSURFACEACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCTRIMSURFACEACTIONBODY (Dwg_Object *obj);
 EXPORT int dwg_setup_ASSOCVALUEDEPENDENCY (Dwg_Object *obj);
-EXPORT int dwg_setup_BACKGROUND (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCKALIGNMENTGRIP (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCKALIGNMENTPARAMETER (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCKLINEARPARAMETER (Dwg_Object *obj);
@@ -9376,6 +9361,10 @@ EXPORT int dwg_setup_BLOCKVISIBILITYPARAMETER (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCKXYPARAMETER (Dwg_Object *obj);
 EXPORT int dwg_setup_DBCOLOR (Dwg_Object *obj);
 EXPORT int dwg_setup_EVALUATION_GRAPH (Dwg_Object *obj);
+EXPORT int dwg_setup_GRADIENT_BACKGROUND (Dwg_Object *obj);
+EXPORT int dwg_setup_GROUND_PLANE_BACKGROUND (Dwg_Object *obj);
+EXPORT int dwg_setup_IBL_BACKGROUND (Dwg_Object *obj);
+EXPORT int dwg_setup_IMAGE_BACKGROUND (Dwg_Object *obj);
 EXPORT int dwg_setup_LIGHTLIST (Dwg_Object *obj);
 EXPORT int dwg_setup_MATERIAL (Dwg_Object *obj);
 EXPORT int dwg_setup_MENTALRAYRENDERSETTINGS (Dwg_Object *obj);
@@ -9384,6 +9373,8 @@ EXPORT int dwg_setup_PROXY_OBJECT (Dwg_Object *obj);
 EXPORT int dwg_setup_RAPIDRTRENDERSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_RENDERSETTINGS (Dwg_Object *obj);
 EXPORT int dwg_setup_SECTION_SETTINGS (Dwg_Object *obj);
+EXPORT int dwg_setup_SKYLIGHT_BACKGROUND (Dwg_Object *obj);
+EXPORT int dwg_setup_SOLID_BACKGROUND (Dwg_Object *obj);
 EXPORT int dwg_setup_SPATIAL_INDEX (Dwg_Object *obj);
 EXPORT int dwg_setup_SUN (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);

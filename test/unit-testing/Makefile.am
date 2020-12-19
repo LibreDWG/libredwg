@@ -78,7 +78,12 @@ testobjects = \
 	assoctrimsurfaceactionbody \
 	attdef \
 	attrib \
-	background \
+	skylight_background \
+	solid_background \
+	ibl_background \
+	image_background \
+	gradient_background \
+	ground_plane_background \
 	block \
 	block_control \
 	block_header \

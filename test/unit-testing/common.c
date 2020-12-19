@@ -363,7 +363,7 @@ main (int argc, char *argv[])
               DWG_TYPE == DWG_TYPE_ACSH_EXTRUSION_CLASS ||
               DWG_TYPE == DWG_TYPE_ACSH_REVOLVE_CLASS ||
               DWG_TYPE == DWG_TYPE_ACSH_SWEEP_CLASS ||
-              //DWG_TYPE == DWG_TYPE_SKYLIGHT_BACKGROUND ||
+              DWG_TYPE == DWG_TYPE_SKYLIGHT_BACKGROUND ||
               DWG_TYPE == DWG_TYPE_RENDERGLOBAL)
             {
               // not in DIST!

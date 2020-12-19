@@ -2780,13 +2780,6 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
               // Some objects have various subtypes under one name.
               // TODO OBJECTCONTEXTDATA, ...
-              // FIXME: We really should seperate BACKGROUND the other way round
-              // as with POLYLINE and UNDERLAY.
-              if (strEQc (name, "BACKGROUND"))
-                {
-                  decode_BACKGROUND_type (obj);
-                  obj->fixedtype = DWG_TYPE_BACKGROUND;
-                }
             }
           else if (strEQc (key, "index") && strNE (name, "TableCellContent_Attr"))
             {

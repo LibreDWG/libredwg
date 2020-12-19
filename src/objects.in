@@ -194,7 +194,6 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "ASSOCVALUEDEPENDENCY",             "ACDBASSOCVALUEDEPENDENCY",          DWG_TYPE_ASSOCVALUEDEPENDENCY,	0
 "ASSOCVARIABLE",                    "ACDBASSOCVARIABLE",                 DWG_TYPE_ASSOCVARIABLE,	0
 "ASSOCVERTEXACTIONPARAM",           "ACDBASSOCVERTEXACTIONPARAM",        DWG_TYPE_ASSOCVERTEXACTIONPARAM,	0
-"BACKGROUND",                       "BACKGROUND",                        DWG_TYPE_BACKGROUND,	0
 "BLKREFOBJECTCONTEXTDATA",          "ACDB_BLKREFOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_BLKREFOBJECTCONTEXTDATA,	0
 "BLOCKALIGNEDCONSTRAINTPARAMETER",  "BLOCKALIGNEDCONSTRAINTPARAMETER",   DWG_TYPE_BLOCKALIGNEDCONSTRAINTPARAMETER,	0
 "BLOCKALIGNMENTGRIP",               "BLOCKALIGNMENTGRIP",                DWG_TYPE_BLOCKALIGNMENTGRIP,	0
@@ -263,10 +262,14 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "FIELDLIST",                        "FIELDLIST",                         DWG_TYPE_FIELDLIST,	0
 "GEODATA",                          "GEODATA",                           DWG_TYPE_GEODATA,	0
 "GEOMAPIMAGE",                      "GEOMAPIMAGE",                       DWG_TYPE_GEOMAPIMAGE,	0
+"GRADIENT_BACKGROUND",              "GRADIENT_BACKGROUND",               DWG_TYPE_GRADIENT_BACKGROUND,	0
+"GROUND_PLANE_BACKGROUND",          "GROUND_PLANE_BACKGROUND",           DWG_TYPE_GROUND_PLANE_BACKGROUND,	0
 "GROUP",                            "GROUP",                             DWG_TYPE_GROUP,	0
+"IBL_BACKGROUND",                   "IBL_BACKGROUND",                    DWG_TYPE_IBL_BACKGROUND,	0
 "IDBUFFER",                         "IDBUFFER",                          DWG_TYPE_IDBUFFER,	0
 "IMAGEDEF",                         "IMAGEDEF",                          DWG_TYPE_IMAGEDEF,	0
 "IMAGEDEF_REACTOR",                 "IMAGEDEF_REACTOR",                  DWG_TYPE_IMAGEDEF_REACTOR,	0
+"IMAGE_BACKGROUND",                 "IMAGE_BACKGROUND",                  DWG_TYPE_IMAGE_BACKGROUND,	0
 "INDEX",                            "INDEX",                             DWG_TYPE_INDEX,	0
 "LAYER",                            "LAYER",                             DWG_TYPE_LAYER,	0
 "LAYERFILTER",                      "LAYERFILTER",                       DWG_TYPE_LAYERFILTER,	0
@@ -313,6 +316,8 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "SECTIONVIEWSTYLE",                 "ACDBSECTIONVIEWSTYLE",              DWG_TYPE_SECTIONVIEWSTYLE,	0
 "SECTION_MANAGER",                  "SECTION_MANAGER",                   DWG_TYPE_SECTION_MANAGER,	0
 "SECTION_SETTINGS",                 "SECTION_SETTINGS",                  DWG_TYPE_SECTION_SETTINGS,	0
+"SKYLIGHT_BACKGROUND",              "SKYLIGHT_BACKGROUND",               DWG_TYPE_SKYLIGHT_BACKGROUND,	0
+"SOLID_BACKGROUND",                 "SOLID_BACKGROUND",                  DWG_TYPE_SOLID_BACKGROUND,	0
 "SORTENTSTABLE",                    "SORTENTSTABLE",                     DWG_TYPE_SORTENTSTABLE,	0
 "SPATIAL_FILTER",                   "SPATIAL_FILTER",                    DWG_TYPE_SPATIAL_FILTER,	0
 "SPATIAL_INDEX",                    "SPATIAL_INDEX",                     DWG_TYPE_SPATIAL_INDEX,	0
