@@ -245,6 +245,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "DATATABLE",                        "DATATABLE",                         DWG_TYPE_DATATABLE,	0
 "DBCOLOR",                          "DBCOLOR",                           DWG_TYPE_DBCOLOR,	0
 "DETAILVIEWSTYLE",                  "ACDBDETAILVIEWSTYLE",               DWG_TYPE_DETAILVIEWSTYLE,	0
+"DGNDEFINITION",                    "DGNDEFINITION",                     DWG_TYPE_DGNDEFINITION,	0
 "DICTIONARY",                       "DICTIONARY",                        DWG_TYPE_DICTIONARY,	0
 "DICTIONARYVAR",                    "DICTIONARYVAR",                     DWG_TYPE_DICTIONARYVAR,	0
 "DICTIONARYWDFLT",                  "ACDBDICTIONARYWDFLT",               DWG_TYPE_DICTIONARYWDFLT,	0
@@ -253,6 +254,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "DIMSTYLE_CONTROL",                 "DIMSTYLE_CONTROL",                  DWG_TYPE_DIMSTYLE_CONTROL,	0
 "DMDIMOBJECTCONTEXTDATA",           "ACDB_DMDIMOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_DMDIMOBJECTCONTEXTDATA,	0
 "DUMMY",                            "DUMMY",                             DWG_TYPE_DUMMY,	0
+"DWFDEFINITION",                    "DWFDEFINITION",                     DWG_TYPE_DWFDEFINITION,	0
 "DYNAMICBLOCKPROXYNODE",            "ACAD_DYNAMICBLOCKPROXYNODE",        DWG_TYPE_DYNAMICBLOCKPROXYNODE,	0
 "DYNAMICBLOCKPURGEPREVENTER",       "ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",  DWG_TYPE_DYNAMICBLOCKPURGEPREVENTER,	0
 "EVALUATION_GRAPH",                 "ACAD_EVALUATION_GRAPH",             DWG_TYPE_EVALUATION_GRAPH,	0
@@ -288,6 +290,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "NAVISWORKSMODELDEF",               "ACDBNAVISWORKSMODELDEF",            DWG_TYPE_NAVISWORKSMODELDEF,	0
 "OBJECT_PTR",                       "OBJECT_PTR",                        DWG_TYPE_OBJECT_PTR,	0
 "ORDDIMOBJECTCONTEXTDATA",          "ACDB_ORDDIMOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_ORDDIMOBJECTCONTEXTDATA,	0
+"PDFDEFINITION",                    "PDFDEFINITION",                     DWG_TYPE_PDFDEFINITION,	0
 "PERSUBENTMGR",                     "ACDBPERSSUBENTMANAGER",             DWG_TYPE_PERSUBENTMGR,	0
 "PLACEHOLDER",                      "ACDBPLACEHOLDER",                   DWG_TYPE_PLACEHOLDER,	0
 "PLOTSETTINGS",                     "PLOTSETTINGS",                      DWG_TYPE_PLOTSETTINGS,	0
@@ -335,9 +338,6 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "VX_TABLE_RECORD",                  "VX_TABLE_RECORD",                   DWG_TYPE_VX_TABLE_RECORD,	0
 "WIPEOUTVARIABLES",                 "WIPEOUTVARIABLES",                  DWG_TYPE_WIPEOUTVARIABLES,	0
 "XRECORD",                          "XRECORD",                           DWG_TYPE_XRECORD,	0
-"PDFDEFINITION",                    "PDFDEFINITION",                     DWG_TYPE_PDFDEFINITION,	0
-"DGNDEFINITION",                    "DGNDEFINITION",                     DWG_TYPE_DGNDEFINITION,	0
-"DWFDEFINITION",                    "DWFDEFINITION",                     DWG_TYPE_DWFDEFINITION,	0
 %%
 
 /* Find if an object name (our internal name, not anything used elsewhere)

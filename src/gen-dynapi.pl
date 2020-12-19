@@ -1295,7 +1295,7 @@ for my $name (@entity_names) {
 }
 print $inc "# Objects\n";
 $n = 35;
-for my $name (@object_names) {
+for my $name (sort @object_names) {
   my $dxfname = dxfname($name);
   printf $inc "%-${n}s %-${n}s  DWG_TYPE_%s,\t0\n", "\"$name\",", "\"$dxfname\",", $name;
 }
