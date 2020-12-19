@@ -359,6 +359,16 @@ main (int argc, char *argv[])
             {
               error += test_code (prefix, "2000/Cone.dwg", cov);
             }
+          if (DWG_TYPE == DWG_TYPE_ACSH_LOFT_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_EXTRUSION_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_REVOLVE_CLASS ||
+              DWG_TYPE == DWG_TYPE_ACSH_SWEEP_CLASS ||
+              //DWG_TYPE == DWG_TYPE_SKYLIGHT_BACKGROUND ||
+              DWG_TYPE == DWG_TYPE_RENDERGLOBAL)
+            {
+              // not in DIST!
+              error += test_code (prefix, "2010/visualization_-_condominium_with_skylight.dwg", cov);
+            }
           if (DWG_TYPE == DWG_TYPE_ASSOCVARIABLE ||
               DWG_TYPE == DWG_TYPE_ASSOCVALUEDEPENDENCY ||
               DWG_TYPE == DWG_TYPE_ASSOCGEOMDEPENDENCY ||

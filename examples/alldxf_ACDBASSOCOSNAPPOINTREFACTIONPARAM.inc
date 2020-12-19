@@ -3,7 +3,7 @@
 
 // code, value, bits, pre_bits, num_bits, type, name, num, pos[]
 /* ACDBASSOCOSNAPPOINTREFACTIONPARAM 393 in test/test-data/example_2000.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCOSNAPPOINTREFACTIONPARAM_234[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCOSNAPPOINTREFACTIONPARAM_558[] = {
   //{ 5, "393", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "392", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -24,7 +24,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCOSNAPPOINTREFACTIONPARAM_234[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCOSNAPPOINTREFACTIONPARAM 393 in test/test-data/example_2004.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCOSNAPPOINTREFACTIONPARAM_235[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCOSNAPPOINTREFACTIONPARAM_559[] = {
   //{ 5, "393", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "392", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -45,7 +45,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCOSNAPPOINTREFACTIONPARAM_235[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCOSNAPPOINTREFACTIONPARAM 393 in test/test-data/example_2007.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCOSNAPPOINTREFACTIONPARAM_236[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCOSNAPPOINTREFACTIONPARAM_560[] = {
   //{ 5, "393", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "392", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
@@ -66,7 +66,7 @@ static struct _unknown_field unknown_dxf_ACDBASSOCOSNAPPOINTREFACTIONPARAM_236[]
     { 0, NULL, NULL, 0, BITS_UNKNOWN, NULL, 0, {-1,-1,-1,-1,-1}}
 };
 /* ACDBASSOCOSNAPPOINTREFACTIONPARAM 393 in test/test-data/example_2013.dxf */
-static struct _unknown_field unknown_dxf_ACDBASSOCOSNAPPOINTREFACTIONPARAM_237[] = {
+static struct _unknown_field unknown_dxf_ACDBASSOCOSNAPPOINTREFACTIONPARAM_561[] = {
   //{ 5, "393", NULL, 0, BITS_UNKNOWN, "handle", 1, {-1,-1,-1,-1,-1} },
     { 330, "391", NULL, 0, BITS_UNKNOWN, "ownerhandle", 1, {-1,-1,-1,-1,-1} },
     { 100, "AcDbAssocActionParam", NULL, 0, BITS_UNKNOWN, "", 1, {-1,-1,-1,-1,-1} },
