@@ -100,6 +100,7 @@ set(libredwg_SOURCES
     src/bits.c
     src/common.c
     src/classes.c
+    src/objects.c
     src/decode.c
     src/decode_r2007.c
     src/dwg.c

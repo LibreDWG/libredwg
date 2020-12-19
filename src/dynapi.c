@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2294 "gen-dynapi.pl"
+#line 2344 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -34,319 +34,6 @@
 Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
                                        int *restrict error);
 #endif
-
-#define MAXLEN_ENTITIES 26
-#define MAXLEN_OBJECTS 35
-
-/* Generated and sorted for bsearch. from typedef struct _dwg_entity_*:
-   FIXME: Remove and use the new hashmap via dwg_object_name() instead. */
-static const char dwg_entity_names[][MAXLEN_ENTITIES] = {
-  "3DFACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 0 */
-  "3DSOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 1 */
-  "ALIGNMENTPARAMETERENTITY" "\0",	/* 2 */
-  "ARC" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 3 */
-  "ARCALIGNEDTEXT" "\0\0\0\0\0\0\0\0\0\0\0",	/* 4 */
-  "ARC_DIMENSION" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 5 */
-  "ATTDEF" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 6 */
-  "ATTRIB" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 7 */
-  "BASEPOINTPARAMETERENTITY" "\0",	/* 8 */
-  "BLOCK" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 9 */
-  "BODY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 10 */
-  "CAMERA" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 11 */
-  "CIRCLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 12 */
-  "DGNUNDERLAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 13 */
-  "DIMENSION_ALIGNED" "\0\0\0\0\0\0\0\0",	/* 14 */
-  "DIMENSION_ANG2LN" "\0\0\0\0\0\0\0\0\0",	/* 15 */
-  "DIMENSION_ANG3PT" "\0\0\0\0\0\0\0\0\0",	/* 16 */
-  "DIMENSION_DIAMETER" "\0\0\0\0\0\0\0",	/* 17 */
-  "DIMENSION_LINEAR" "\0\0\0\0\0\0\0\0\0",	/* 18 */
-  "DIMENSION_ORDINATE" "\0\0\0\0\0\0\0",	/* 19 */
-  "DIMENSION_RADIUS" "\0\0\0\0\0\0\0\0\0",	/* 20 */
-  "DWFUNDERLAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 21 */
-  "ELLIPSE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 22 */
-  "ENDBLK" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 23 */
-  "EXTRUDEDSURFACE" "\0\0\0\0\0\0\0\0\0\0",	/* 24 */
-  "FLIPPARAMETERENTITY" "\0\0\0\0\0\0",	/* 25 */
-  "GEOPOSITIONMARKER" "\0\0\0\0\0\0\0\0",	/* 26 */
-  "HATCH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 27 */
-  "HELIX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 28 */
-  "IMAGE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 29 */
-  "INSERT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 30 */
-  "LARGE_RADIAL_DIMENSION" "\0\0\0",	/* 31 */
-  "LEADER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 32 */
-  "LIGHT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 33 */
-  "LINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 34 */
-  "LINEARPARAMETERENTITY" "\0\0\0\0",	/* 35 */
-  "LOFTEDSURFACE" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 36 */
-  "LWPOLYLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 37 */
-  "MESH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 38 */
-  "MINSERT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 39 */
-  "MLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 40 */
-  "MPOLYGON" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 41 */
-  "MTEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 42 */
-  "MULTILEADER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 43 */
-  "NAVISWORKSMODEL" "\0\0\0\0\0\0\0\0\0\0",	/* 44 */
-  "NURBSURFACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 45 */
-  "OLE2FRAME" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 46 */
-  "OLEFRAME" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 47 */
-  "PDFUNDERLAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 48 */
-  "PLANESURFACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
-  "POINT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 50 */
-  "POINTCLOUD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 51 */
-  "POINTCLOUDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
-  "POINTPARAMETERENTITY" "\0\0\0\0\0",	/* 53 */
-  "POLYLINE_2D" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 54 */
-  "POLYLINE_3D" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 55 */
-  "POLYLINE_MESH" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 56 */
-  "POLYLINE_PFACE" "\0\0\0\0\0\0\0\0\0\0\0",	/* 57 */
-  "PROXY_ENTITY" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 58 */
-  "RAY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 59 */
-  "REGION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 60 */
-  "REVOLVEDSURFACE" "\0\0\0\0\0\0\0\0\0\0",	/* 61 */
-  "ROTATIONPARAMETERENTITY" "\0\0",	/* 62 */
-  "RTEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 63 */
-  "SECTIONOBJECT" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 64 */
-  "SEQEND" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 65 */
-  "SHAPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 66 */
-  "SOLID" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 67 */
-  "SPLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 68 */
-  "SWEPTSURFACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 69 */
-  "TABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
-  "TEXT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 71 */
-  "TOLERANCE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 72 */
-  "TRACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 73 */
-  "UNKNOWN_ENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 74 */
-  "VERTEX_2D" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 75 */
-  "VERTEX_3D" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 76 */
-  "VERTEX_MESH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 77 */
-  "VERTEX_PFACE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 78 */
-  "VERTEX_PFACE_FACE" "\0\0\0\0\0\0\0\0",	/* 79 */
-  "VIEWPORT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 80 */
-  "VISIBILITYGRIPENTITY" "\0\0\0\0\0",	/* 81 */
-  "VISIBILITYPARAMETERENTITY" "",	/* 82 */
-  "WIPEOUT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 83 */
-  "XLINE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 84 */
-  "XYPARAMETERENTITY" "\0\0\0\0\0\0\0\0",	/* 85 */
-
-};
-/* Generated and sorted for bsearch. from typedef struct _dwg_object_*
-   FIXME: Remove and use the new hashmap via dwg_object_name() instead. */
-static const char dwg_object_names[][MAXLEN_OBJECTS] = {
-  "ACMECOMMANDHISTORY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 0 */
-  "ACMESCOPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 1 */
-  "ACMESTATEMGR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 2 */
-  "ACSH_BOOLEAN_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 3 */
-  "ACSH_BOX_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 4 */
-  "ACSH_BREP_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 5 */
-  "ACSH_CHAMFER_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 6 */
-  "ACSH_CONE_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 7 */
-  "ACSH_CYLINDER_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 8 */
-  "ACSH_EXTRUSION_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 9 */
-  "ACSH_FILLET_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 10 */
-  "ACSH_HISTORY_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 11 */
-  "ACSH_LOFT_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 12 */
-  "ACSH_PYRAMID_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 13 */
-  "ACSH_REVOLVE_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 14 */
-  "ACSH_SPHERE_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 15 */
-  "ACSH_SWEEP_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 16 */
-  "ACSH_TORUS_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 17 */
-  "ACSH_WEDGE_CLASS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 18 */
-  "ALDIMOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 19 */
-  "ANGDIMOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0",	/* 20 */
-  "ANNOTSCALEOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0",	/* 21 */
-  "APPID" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 22 */
-  "APPID_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 23 */
-  "ASSOC2DCONSTRAINTGROUP" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 24 */
-  "ASSOC3POINTANGULARDIMACTIONBODY" "\0\0\0",	/* 25 */
-  "ASSOCACTION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 26 */
-  "ASSOCACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 27 */
-  "ASSOCALIGNEDDIMACTIONBODY" "\0\0\0\0\0\0\0\0\0",	/* 28 */
-  "ASSOCARRAYACTIONBODY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 29 */
-  "ASSOCARRAYMODIFYACTIONBODY" "\0\0\0\0\0\0\0\0",	/* 30 */
-  "ASSOCARRAYMODIFYPARAMETERS" "\0\0\0\0\0\0\0\0",	/* 31 */
-  "ASSOCARRAYPATHPARAMETERS" "\0\0\0\0\0\0\0\0\0\0",	/* 32 */
-  "ASSOCARRAYPOLARPARAMETERS" "\0\0\0\0\0\0\0\0\0",	/* 33 */
-  "ASSOCARRAYRECTANGULARPARAMETERS" "\0\0\0",	/* 34 */
-  "ASSOCASMBODYACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0",	/* 35 */
-  "ASSOCBLENDSURFACEACTIONBODY" "\0\0\0\0\0\0\0",	/* 36 */
-  "ASSOCCOMPOUNDACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0",	/* 37 */
-  "ASSOCDEPENDENCY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 38 */
-  "ASSOCDIMDEPENDENCYBODY" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 39 */
-  "ASSOCEDGEACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 40 */
-  "ASSOCEDGECHAMFERACTIONBODY" "\0\0\0\0\0\0\0\0",	/* 41 */
-  "ASSOCEDGEFILLETACTIONBODY" "\0\0\0\0\0\0\0\0\0",	/* 42 */
-  "ASSOCEXTENDSURFACEACTIONBODY" "\0\0\0\0\0\0",	/* 43 */
-  "ASSOCEXTRUDEDSURFACEACTIONBODY" "\0\0\0\0",	/* 44 */
-  "ASSOCFACEACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 45 */
-  "ASSOCFILLETSURFACEACTIONBODY" "\0\0\0\0\0\0",	/* 46 */
-  "ASSOCGEOMDEPENDENCY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 47 */
-  "ASSOCLOFTEDSURFACEACTIONBODY" "\0\0\0\0\0\0",	/* 48 */
-  "ASSOCMLEADERACTIONBODY" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 49 */
-  "ASSOCNETWORK" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 50 */
-  "ASSOCNETWORKSURFACEACTIONBODY" "\0\0\0\0\0",	/* 51 */
-  "ASSOCOBJECTACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 52 */
-  "ASSOCOFFSETSURFACEACTIONBODY" "\0\0\0\0\0\0",	/* 53 */
-  "ASSOCORDINATEDIMACTIONBODY" "\0\0\0\0\0\0\0\0",	/* 54 */
-  "ASSOCOSNAPPOINTREFACTIONPARAM" "\0\0\0\0\0",	/* 55 */
-  "ASSOCPATCHSURFACEACTIONBODY" "\0\0\0\0\0\0\0",	/* 56 */
-  "ASSOCPATHACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 57 */
-  "ASSOCPERSSUBENTMANAGER" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 58 */
-  "ASSOCPLANESURFACEACTIONBODY" "\0\0\0\0\0\0\0",	/* 59 */
-  "ASSOCPOINTREFACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0",	/* 60 */
-  "ASSOCRESTOREENTITYSTATEACTIONBODY" "\0",	/* 61 */
-  "ASSOCREVOLVEDSURFACEACTIONBODY" "\0\0\0\0",	/* 62 */
-  "ASSOCROTATEDDIMACTIONBODY" "\0\0\0\0\0\0\0\0\0",	/* 63 */
-  "ASSOCSWEPTSURFACEACTIONBODY" "\0\0\0\0\0\0\0",	/* 64 */
-  "ASSOCTRIMSURFACEACTIONBODY" "\0\0\0\0\0\0\0\0",	/* 65 */
-  "ASSOCVALUEDEPENDENCY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 66 */
-  "ASSOCVARIABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 67 */
-  "ASSOCVERTEXACTIONPARAM" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 68 */
-  "BACKGROUND" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 69 */
-  "BLKREFOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0",	/* 70 */
-  "BLOCKALIGNEDCONSTRAINTPARAMETER" "\0\0\0",	/* 71 */
-  "BLOCKALIGNMENTGRIP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 72 */
-  "BLOCKALIGNMENTPARAMETER" "\0\0\0\0\0\0\0\0\0\0\0",	/* 73 */
-  "BLOCKANGULARCONSTRAINTPARAMETER" "\0\0\0",	/* 74 */
-  "BLOCKARRAYACTION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 75 */
-  "BLOCKBASEPOINTPARAMETER" "\0\0\0\0\0\0\0\0\0\0\0",	/* 76 */
-  "BLOCKDIAMETRICCONSTRAINTPARAMETER" "\0",	/* 77 */
-  "BLOCKFLIPACTION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 78 */
-  "BLOCKFLIPGRIP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 79 */
-  "BLOCKFLIPPARAMETER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 80 */
-  "BLOCKGRIPLOCATIONCOMPONENT" "\0\0\0\0\0\0\0\0",	/* 81 */
-  "BLOCKHORIZONTALCONSTRAINTPARAMETER" "",	/* 82 */
-  "BLOCKLINEARCONSTRAINTPARAMETER" "\0\0\0\0",	/* 83 */
-  "BLOCKLINEARGRIP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 84 */
-  "BLOCKLINEARPARAMETER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 85 */
-  "BLOCKLOOKUPACTION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 86 */
-  "BLOCKLOOKUPGRIP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 87 */
-  "BLOCKLOOKUPPARAMETER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 88 */
-  "BLOCKMOVEACTION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 89 */
-  "BLOCKPARAMDEPENDENCYBODY" "\0\0\0\0\0\0\0\0\0\0",	/* 90 */
-  "BLOCKPOINTPARAMETER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 91 */
-  "BLOCKPOLARGRIP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 92 */
-  "BLOCKPOLARPARAMETER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 93 */
-  "BLOCKPOLARSTRETCHACTION" "\0\0\0\0\0\0\0\0\0\0\0",	/* 94 */
-  "BLOCKPROPERTIESTABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 95 */
-  "BLOCKPROPERTIESTABLEGRIP" "\0\0\0\0\0\0\0\0\0\0",	/* 96 */
-  "BLOCKRADIALCONSTRAINTPARAMETER" "\0\0\0\0",	/* 97 */
-  "BLOCKREPRESENTATION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 98 */
-  "BLOCKROTATEACTION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 99 */
-  "BLOCKROTATIONGRIP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 100 */
-  "BLOCKROTATIONPARAMETER" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 101 */
-  "BLOCKSCALEACTION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 102 */
-  "BLOCKSTRETCHACTION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 103 */
-  "BLOCKUSERPARAMETER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 104 */
-  "BLOCKVERTICALCONSTRAINTPARAMETER" "\0\0",	/* 105 */
-  "BLOCKVISIBILITYGRIP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 106 */
-  "BLOCKVISIBILITYPARAMETER" "\0\0\0\0\0\0\0\0\0\0",	/* 107 */
-  "BLOCKXYGRIP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 108 */
-  "BLOCKXYPARAMETER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 109 */
-  "BLOCK_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 110 */
-  "BLOCK_HEADER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 111 */
-  "CELLSTYLEMAP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 112 */
-  "CONTEXTDATAMANAGER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 113 */
-  "CSACDOCUMENTOPTIONS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 114 */
-  "CURVEPATH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 115 */
-  "DATALINK" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 116 */
-  "DATATABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 117 */
-  "DBCOLOR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 118 */
-  "DETAILVIEWSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 119 */
-  "DICTIONARY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 120 */
-  "DICTIONARYVAR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 121 */
-  "DICTIONARYWDFLT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 122 */
-  "DIMASSOC" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 123 */
-  "DIMSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 124 */
-  "DIMSTYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 125 */
-  "DMDIMOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 126 */
-  "DUMMY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 127 */
-  "DYNAMICBLOCKPROXYNODE" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 128 */
-  "DYNAMICBLOCKPURGEPREVENTER" "\0\0\0\0\0\0\0\0",	/* 129 */
-  "EVALUATION_GRAPH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 130 */
-  "FCFOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 131 */
-  "FIELD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 132 */
-  "FIELDLIST" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 133 */
-  "GEODATA" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 134 */
-  "GEOMAPIMAGE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 135 */
-  "GROUP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 136 */
-  "IDBUFFER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 137 */
-  "IMAGEDEF" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 138 */
-  "IMAGEDEF_REACTOR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 139 */
-  "INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 140 */
-  "LAYER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 141 */
-  "LAYERFILTER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 142 */
-  "LAYER_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 143 */
-  "LAYER_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 144 */
-  "LAYOUT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 145 */
-  "LAYOUTPRINTCONFIG" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 146 */
-  "LEADEROBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0",	/* 147 */
-  "LIGHTLIST" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 148 */
-  "LONG_TRANSACTION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 149 */
-  "LTYPE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 150 */
-  "LTYPE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 151 */
-  "MATERIAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 152 */
-  "MENTALRAYRENDERSETTINGS" "\0\0\0\0\0\0\0\0\0\0\0",	/* 153 */
-  "MLEADEROBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0",	/* 154 */
-  "MLEADERSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 155 */
-  "MLINESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 156 */
-  "MOTIONPATH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 157 */
-  "MTEXTATTRIBUTEOBJECTCONTEXTDATA" "\0\0\0",	/* 158 */
-  "MTEXTOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 159 */
-  "NAVISWORKSMODELDEF" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 160 */
-  "OBJECT_PTR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 161 */
-  "ORDDIMOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0",	/* 162 */
-  "PERSUBENTMGR" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 163 */
-  "PLACEHOLDER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 164 */
-  "PLOTSETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 165 */
-  "POINTCLOUDCOLORMAP" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 166 */
-  "POINTCLOUDDEF" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 167 */
-  "POINTCLOUDDEFEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 168 */
-  "POINTCLOUDDEF_REACTOR" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 169 */
-  "POINTCLOUDDEF_REACTOR_EX" "\0\0\0\0\0\0\0\0\0\0",	/* 170 */
-  "POINTPATH" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 171 */
-  "PROXY_OBJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 172 */
-  "RADIMLGOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0",	/* 173 */
-  "RADIMOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0",	/* 174 */
-  "RAPIDRTRENDERSETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 175 */
-  "RASTERVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 176 */
-  "RENDERENTRY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 177 */
-  "RENDERENVIRONMENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 178 */
-  "RENDERGLOBAL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 179 */
-  "RENDERSETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 180 */
-  "SCALE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 181 */
-  "SECTIONVIEWSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 182 */
-  "SECTION_MANAGER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 183 */
-  "SECTION_SETTINGS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 184 */
-  "SORTENTSTABLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 185 */
-  "SPATIAL_FILTER" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 186 */
-  "SPATIAL_INDEX" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 187 */
-  "STYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 188 */
-  "STYLE_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 189 */
-  "SUN" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 190 */
-  "SUNSTUDY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 191 */
-  "TABLECONTENT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 192 */
-  "TABLEGEOMETRY" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 193 */
-  "TABLESTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 194 */
-  "TEXTOBJECTCONTEXTDATA" "\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 195 */
-  "TVDEVICEPROPERTIES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 196 */
-  "UCS" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 197 */
-  "UCS_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 198 */
-  "UNKNOWN_OBJ" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 199 */
-  "VBA_PROJECT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 200 */
-  "VIEW" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 201 */
-  "VIEW_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 202 */
-  "VISUALSTYLE" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 203 */
-  "VPORT" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 204 */
-  "VPORT_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 205 */
-  "VX_CONTROL" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 206 */
-  "VX_TABLE_RECORD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 207 */
-  "WIPEOUTVARIABLES" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 208 */
-  "XRECORD" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 209 */
-  "PDFDEFINITION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 210 */
-  "DGNDEFINITION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 211 */
-  "DWFDEFINITION" "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",	/* 212 */
-
-};
 
 /* from typedef struct _dwg_header_variables: (sorted by name) */
 static const Dwg_DYNAPI_field _dwg_header_variables_fields[] = {
@@ -14040,14 +13727,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 
 };
 
-#line 2394 "gen-dynapi.pl"
-static int
-_name_inl_cmp (const void *restrict key, const void *restrict elem)
-{
-  //https://en.cppreference.com/w/c/algorithm/bsearch
-  return strcmp ((const char *)key, (const char *)elem); //inlined
-}
-
+#line 2430 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;
@@ -14061,14 +13741,13 @@ _name_struct_cmp (const void *restrict key, const void *restrict elem)
   return strcmp ((const char *)key, f->name); //deref
 }
 
-#define NUM_ENTITIES    ARRAY_SIZE(dwg_entity_names)
-#define NUM_OBJECTS     ARRAY_SIZE(dwg_object_names)
 #define NUM_NAME_TYPES  ARRAY_SIZE(dwg_name_types)
 #define NUM_SUBCLASSES  ARRAY_SIZE(dwg_list_subclasses)
 
 static
 const struct _name_type_fields*
  __nonnull ((1))
+// FIXME: use type arg only
 _find_entity (const char *name)
 {
   const char *p = (const char *)bsearch (name, dwg_name_types, NUM_NAME_TYPES,
@@ -14103,19 +13782,17 @@ _find_subclass (const char *name)
 EXPORT bool
 is_dwg_entity (const char *name)
 {
-  return bsearch (name, dwg_entity_names, NUM_ENTITIES, MAXLEN_ENTITIES,
-                  _name_inl_cmp)
-             ? true
-             : false;
+  int isent;
+  return dwg_object_name (name, NULL, NULL, &isent)
+         && isent;
 }
 
 EXPORT bool
 is_dwg_object (const char *name)
 {
-  return bsearch (name, dwg_object_names, NUM_OBJECTS, MAXLEN_OBJECTS,
-                  _name_inl_cmp)
-             ? true
-             : false;
+  int isent;
+  return dwg_object_name (name, NULL, NULL, &isent)
+         && !isent;
 }
 
 EXPORT const Dwg_DYNAPI_field *

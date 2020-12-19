@@ -1310,9 +1310,12 @@ EXPORT int dwg_object_name (const char *const restrict name, const char **restri
   const struct _dwg_dxfname* result = in_word_set (name, strlen (name));
   if (result)
     {
-      *dxfname = result->dxfname;
-      *typep   = result->type;
-      *is_entp = result->isent;
+      if (dxfname)
+        *dxfname = result->dxfname;
+      if (typep)
+        *typep   = result->type;
+      if (is_entp)
+        *is_entp = result->isent;
       return 1;
     }
   return 0;
@@ -2337,7 +2340,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2294 "gen-dynapi.pl"
+#line 2344 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2372,20 +2375,6 @@ __DATA__
 Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
                                        int *restrict error);
 #endif
-
-#define MAXLEN_ENTITIES @@scalar max_entity_names@@
-#define MAXLEN_OBJECTS @@scalar max_object_names@@
-
-/* Generated and sorted for bsearch. from typedef struct _dwg_entity_*:
-   FIXME: Remove and use the new hashmap via dwg_object_name() instead. */
-static const char dwg_entity_names[][MAXLEN_ENTITIES] = {
-@@list entity_names@@
-};
-/* Generated and sorted for bsearch. from typedef struct _dwg_object_*
-   FIXME: Remove and use the new hashmap via dwg_object_name() instead. */
-static const char dwg_object_names[][MAXLEN_OBJECTS] = {
-@@list object_names@@
-};
 
 @@struct _dwg_header_variables@@
 @@for dwg_entity_ENTITY@@
@@ -2437,14 +2426,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 @@list name_subclasses@@
 };
 
-#line 2394 "gen-dynapi.pl"
-static int
-_name_inl_cmp (const void *restrict key, const void *restrict elem)
-{
-  //https://en.cppreference.com/w/c/algorithm/bsearch
-  return strcmp ((const char *)key, (const char *)elem); //inlined
-}
-
+#line 2430 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;
@@ -2458,14 +2440,13 @@ _name_struct_cmp (const void *restrict key, const void *restrict elem)
   return strcmp ((const char *)key, f->name); //deref
 }
 
-#define NUM_ENTITIES    ARRAY_SIZE(dwg_entity_names)
-#define NUM_OBJECTS     ARRAY_SIZE(dwg_object_names)
 #define NUM_NAME_TYPES  ARRAY_SIZE(dwg_name_types)
 #define NUM_SUBCLASSES  ARRAY_SIZE(dwg_list_subclasses)
 
 static
 const struct _name_type_fields*
  __nonnull ((1))
+// FIXME: use type arg only
 _find_entity (const char *name)
 {
   const char *p = (const char *)bsearch (name, dwg_name_types, NUM_NAME_TYPES,
@@ -2500,19 +2481,17 @@ _find_subclass (const char *name)
 EXPORT bool
 is_dwg_entity (const char *name)
 {
-  return bsearch (name, dwg_entity_names, NUM_ENTITIES, MAXLEN_ENTITIES,
-                  _name_inl_cmp)
-             ? true
-             : false;
+  int isent;
+  return dwg_object_name (name, NULL, NULL, &isent)
+         && isent;
 }
 
 EXPORT bool
 is_dwg_object (const char *name)
 {
-  return bsearch (name, dwg_object_names, NUM_OBJECTS, MAXLEN_OBJECTS,
-                  _name_inl_cmp)
-             ? true
-             : false;
+  int isent;
+  return dwg_object_name (name, NULL, NULL, &isent)
+         && !isent;
 }
 
 EXPORT const Dwg_DYNAPI_field *

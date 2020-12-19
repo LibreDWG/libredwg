@@ -19,7 +19,8 @@
 
 WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
-LDADD     = $(top_builddir)/src/libredwg.la \
+LDADD = $(top_builddir)/src/libredwg.la \
+	$(top_builddir)/src/objects.lo \
 	$(top_builddir)/src/classes.lo
 
 bits_test_LDADD = $(LDADD) \
