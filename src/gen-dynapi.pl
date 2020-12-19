@@ -2136,7 +2136,7 @@ while (<$in>) {
     $VARTYPES{$n} = $enum++;
   }
   if (/^\s+DWG_TYPE_PROXY_OBJECT = 0x1f3/) {
-    $enum = 0x200;
+    $enum = 500;
   }
   if (/^} Dwg_Object_Type/) {
     $enum = 0;
@@ -2255,7 +2255,7 @@ if (1) {
   while (<$in>) {
     if (m/^\s+\/\* Start auto-generated variable/) {
       print $out $_;
-      my $e = 0x200;
+      my $e = 500;
       for (@VARTYPES) {
         printf $out "    \"%s\",	/* %d */\n", $_, $e++;
       }
