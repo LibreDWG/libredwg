@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <math.h>
 #include <sys/stat.h>
+#include <assert.h>
 
 static unsigned int loglevel;
 static int debug;
@@ -71,6 +72,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
   char dwgfile[1024];
   strcpy (dwgfile, file);
 
+  assert (name);
   failed = 0;
   cnt++;
   if (debug)

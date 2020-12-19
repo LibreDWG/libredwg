@@ -611,9 +611,9 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_XYPARAMETERENTITY,
   // after 1.0 add new types here for binary compat
 
-  DWG_TYPE_FREED       = 0xfffd,
-  DWG_TYPE_UNKNOWN_ENT = 0xfffe,
-  DWG_TYPE_UNKNOWN_OBJ = 0xffff,
+  DWG_TYPE_FREED        = 0xfffd,
+  DWG_TYPE_UNKNOWN_ENT  = 0xfffe,
+  DWG_TYPE_UNKNOWN_OBJ  = 0xffff,
 } Dwg_Object_Type;
 
 /**

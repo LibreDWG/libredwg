@@ -2120,7 +2120,27 @@ my $dwg_h = "$topdir/include/dwg.h";
 open $in, "<", $dwg_h or die "$dwg_h: $!";
 open $out, ">", "$dwg_h.tmp" or die "$dwg_h.tmp: $!";
 $gen = 0;
+my $enum = 0;
+my (@VARTYPES, %VARTYPES);
 while (<$in>) {
+  # generated sorted DWG_TYPE_ enum as array and hash.
+  # from PROXY_OBJECT to FREED
+  if ($enum and /^\s+DWG_TYPE_([^\t ,]+)/) {
+    my $n = $1;
+    if ($n =~ /^FREED\s?/) {
+      $enum = 0;
+      print $out $_; # because of the next shortcut
+      next;
+    }
+    push @VARTYPES, $n;
+    $VARTYPES{$n} = $enum++;
+  }
+  if (/^\s+DWG_TYPE_PROXY_OBJECT = 0x1f3/) {
+    $enum = 0x200;
+  }
+  if (/^} Dwg_Object_Type/) {
+    $enum = 0;
+  }
   if (m/    \/\* Start auto-generated entity-union/) {
     print $out $_;
     $tmpl = "    Dwg_Entity_\$name *\$name;\n";
@@ -2227,6 +2247,33 @@ close $out;
 mv_if_not_same ("$free_h.tmp", $free_h);
 }
 
+if (1) {
+  my $file = "$topdir/src/classes.c";
+  open $in, "<", $file or die "$file: $!";
+  open $out, ">", "$file.tmp" or die "$file.tmp: $!";
+  $gen = 0;
+  while (<$in>) {
+    if (m/^\s+\/\* Start auto-generated variable/) {
+      print $out $_;
+      my $e = 0x200;
+      for (@VARTYPES) {
+        printf $out "    \"%s\",	/* %d */\n", $_, $e++;
+      }
+      print $out "  /* End auto-generated variable */\n";
+      $gen = 1;
+    }
+    if (!$gen) {
+      print $out $_;
+    }
+    if (m/^\s*\/\* End auto-generated/) {
+      $gen = 0;
+    }
+  }
+  close $in;
+  close $out;
+  mv_if_not_same ("$file.tmp", $file);
+}
+ 
 my $done = 0;
 my $ifile = "$topdir/bindings/dwg.i";
 open $in, "<", $ifile or die "$ifile: $!";
