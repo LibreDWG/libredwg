@@ -520,6 +520,8 @@ dwg_get_OBJECT_DECL (ent_3dsolid, 3DSOLID);
 dwg_get_OBJECT_DECL (ent_xline, XLINE);
 
 /********************************************************************/
+typedef struct _dwg_abstractentity_UNDERLAY	      dwg_ent_underlay; /* same layout for all 3 */
+typedef struct _dwg_abstractobject_UNDERLAYDEFINITION dwg_obj_underlaydefinition;
 /* Start auto-generated content. Do not touch. */
 typedef struct _dwg_entity__3DFACE		dwg_ent__3dface;
 typedef struct _dwg_entity__3DSOLID		dwg_ent__3dsolid;
@@ -565,6 +567,8 @@ typedef struct _dwg_entity_VERTEX_PFACE_FACE		dwg_ent_vert_pface_face;
 typedef struct _dwg_entity_VIEWPORT		dwg_ent_viewport;
 /* untyped > 500 */
 typedef struct _dwg_entity_CAMERA		dwg_ent_camera;
+typedef struct _dwg_entity_DGNUNDERLAY		dwg_ent_dgnunderlay;
+typedef struct _dwg_entity_DWFUNDERLAY		dwg_ent_dwfunderlay;
 typedef struct _dwg_entity_HATCH		dwg_ent_hatch;
 typedef struct _dwg_entity_IMAGE		dwg_ent_image;
 typedef struct _dwg_entity_LIGHT		dwg_ent_light;
@@ -572,8 +576,8 @@ typedef struct _dwg_entity_LWPOLYLINE		dwg_ent_lwpline;
 typedef struct _dwg_entity_MESH		dwg_ent_mesh;
 typedef struct _dwg_entity_MULTILEADER		dwg_ent_mleader;
 typedef struct _dwg_entity_OLE2FRAME		dwg_ent_ole2frame;
+typedef struct _dwg_entity_PDFUNDERLAY		dwg_ent_pdfunderlay;
 typedef struct _dwg_entity_SECTIONOBJECT		dwg_ent_sectionobject;
-typedef struct _dwg_entity_UNDERLAY		dwg_ent_underlay;
 /* unstable */
 typedef struct _dwg_entity_ARC_DIMENSION		dwg_ent_arc_dimension;
 typedef struct _dwg_entity_HELIX		dwg_ent_helix;
@@ -674,11 +678,13 @@ typedef struct _dwg_object_SECTION_MANAGER		dwg_obj_section_manager;
 typedef struct _dwg_object_SORTENTSTABLE		dwg_obj_sortentstable;
 typedef struct _dwg_object_SPATIAL_FILTER		dwg_obj_spatial_filter;
 typedef struct _dwg_object_TABLEGEOMETRY		dwg_obj_tablegeometry;
-typedef struct _dwg_object_UNDERLAYDEFINITION		dwg_obj_underlaydefinition;
 typedef struct _dwg_object_VBA_PROJECT		dwg_obj_vba_project;
 typedef struct _dwg_object_VISUALSTYLE		dwg_obj_visualstyle;
 typedef struct _dwg_object_WIPEOUTVARIABLES		dwg_obj_wipeoutvariables;
 typedef struct _dwg_object_XRECORD		dwg_obj_xrecord;
+typedef struct _dwg_object_PDFDEFINITION		dwg_obj_pdfdefinition;
+typedef struct _dwg_object_DGNDEFINITION		dwg_obj_dgndefinition;
+typedef struct _dwg_object_DWFDEFINITION		dwg_obj_dwfdefinition;
 /* unstable */
 typedef struct _dwg_object_ACSH_BREP_CLASS		dwg_obj_acsh_brep_class;
 typedef struct _dwg_object_ACSH_CHAMFER_CLASS		dwg_obj_acsh_chamfer_class;
@@ -869,6 +875,8 @@ dwg_get_OBJECT_DECL (ent_vert_pface_face, VERTEX_PFACE_FACE);
 dwg_get_OBJECT_DECL (ent_viewport, VIEWPORT);
 /* untyped > 500 */
 dwg_get_OBJECT_DECL (ent_camera, CAMERA);
+dwg_get_OBJECT_DECL (ent_dgnunderlay, DGNUNDERLAY);
+dwg_get_OBJECT_DECL (ent_dwfunderlay, DWFUNDERLAY);
 dwg_get_OBJECT_DECL (ent_hatch, HATCH);
 dwg_get_OBJECT_DECL (ent_image, IMAGE);
 dwg_get_OBJECT_DECL (ent_light, LIGHT);
@@ -876,8 +884,8 @@ dwg_get_OBJECT_DECL (ent_lwpline, LWPOLYLINE);
 dwg_get_OBJECT_DECL (ent_mesh, MESH);
 dwg_get_OBJECT_DECL (ent_mleader, MULTILEADER);
 dwg_get_OBJECT_DECL (ent_ole2frame, OLE2FRAME);
+dwg_get_OBJECT_DECL (ent_pdfunderlay, PDFUNDERLAY);
 dwg_get_OBJECT_DECL (ent_sectionobject, SECTIONOBJECT);
-dwg_get_OBJECT_DECL (ent_underlay, UNDERLAY);
 /* unstable */
 dwg_get_OBJECT_DECL (ent_arc_dimension, ARC_DIMENSION);
 dwg_get_OBJECT_DECL (ent_helix, HELIX);
@@ -980,11 +988,13 @@ dwg_get_OBJECT_DECL (obj_section_manager, SECTION_MANAGER);
 dwg_get_OBJECT_DECL (obj_sortentstable, SORTENTSTABLE);
 dwg_get_OBJECT_DECL (obj_spatial_filter, SPATIAL_FILTER);
 dwg_get_OBJECT_DECL (obj_tablegeometry, TABLEGEOMETRY);
-dwg_get_OBJECT_DECL (obj_underlaydefinition, UNDERLAYDEFINITION);
 dwg_get_OBJECT_DECL (obj_vba_project, VBA_PROJECT);
 dwg_get_OBJECT_DECL (obj_visualstyle, VISUALSTYLE);
 dwg_get_OBJECT_DECL (obj_wipeoutvariables, WIPEOUTVARIABLES);
 dwg_get_OBJECT_DECL (obj_xrecord, XRECORD);
+dwg_get_OBJECT_DECL (obj_pdfdefinition, PDFDEFINITION);
+dwg_get_OBJECT_DECL (obj_dgndefinition, DGNDEFINITION);
+dwg_get_OBJECT_DECL (obj_dwfdefinition, DWFDEFINITION);
 /* unstable */
 dwg_get_OBJECT_DECL (obj_acsh_brep_class, ACSH_BREP_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_chamfer_class, ACSH_CHAMFER_CLASS);
@@ -1185,6 +1195,8 @@ DWG_GETALL_ENTITY_DECL (VIEWPORT);
 DWG_GETALL_ENTITY_DECL (XLINE);
 /* untyped > 500 */
 DWG_GETALL_ENTITY_DECL (CAMERA);
+DWG_GETALL_ENTITY_DECL (DGNUNDERLAY);
+DWG_GETALL_ENTITY_DECL (DWFUNDERLAY);
 DWG_GETALL_ENTITY_DECL (HATCH);
 DWG_GETALL_ENTITY_DECL (IMAGE);
 DWG_GETALL_ENTITY_DECL (LIGHT);
@@ -1192,8 +1204,8 @@ DWG_GETALL_ENTITY_DECL (LWPOLYLINE);
 DWG_GETALL_ENTITY_DECL (MESH);
 DWG_GETALL_ENTITY_DECL (MULTILEADER);
 DWG_GETALL_ENTITY_DECL (OLE2FRAME);
+DWG_GETALL_ENTITY_DECL (PDFUNDERLAY);
 DWG_GETALL_ENTITY_DECL (SECTIONOBJECT);
-DWG_GETALL_ENTITY_DECL (UNDERLAY);
 /* unstable */
 DWG_GETALL_ENTITY_DECL (ARC_DIMENSION);
 DWG_GETALL_ENTITY_DECL (HELIX);
@@ -1305,11 +1317,13 @@ DWG_GETALL_OBJECT_DECL (SECTION_MANAGER);
 DWG_GETALL_OBJECT_DECL (SORTENTSTABLE);
 DWG_GETALL_OBJECT_DECL (SPATIAL_FILTER);
 DWG_GETALL_OBJECT_DECL (TABLEGEOMETRY);
-DWG_GETALL_OBJECT_DECL (UNDERLAYDEFINITION);
 DWG_GETALL_OBJECT_DECL (VBA_PROJECT);
 DWG_GETALL_OBJECT_DECL (VISUALSTYLE);
 DWG_GETALL_OBJECT_DECL (WIPEOUTVARIABLES);
 DWG_GETALL_OBJECT_DECL (XRECORD);
+DWG_GETALL_OBJECT_DECL (PDFDEFINITION);
+DWG_GETALL_OBJECT_DECL (DGNDEFINITION);
+DWG_GETALL_OBJECT_DECL (DWFDEFINITION);
 /* unstable */
 DWG_GETALL_OBJECT_DECL (ACSH_BREP_CLASS);
 DWG_GETALL_OBJECT_DECL (ACSH_CHAMFER_CLASS);
@@ -1516,6 +1530,8 @@ CAST_DWG_OBJECT_TO_ENTITY_DECL (VIEWPORT);
 CAST_DWG_OBJECT_TO_ENTITY_DECL (XLINE);
 /* untyped > 500 */
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (CAMERA);
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (DGNUNDERLAY);
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (DWFUNDERLAY);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (HATCH);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (IMAGE);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LIGHT);
@@ -1523,8 +1539,8 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LWPOLYLINE);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (MESH);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (MULTILEADER);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (OLE2FRAME);
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (PDFUNDERLAY);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (SECTIONOBJECT);
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (UNDERLAY);
 /* unstable */
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ARC_DIMENSION);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (HELIX);
@@ -1636,11 +1652,13 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTION_MANAGER);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SORTENTSTABLE);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SPATIAL_FILTER);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLEGEOMETRY);
-CAST_DWG_OBJECT_TO_OBJECT_DECL (UNDERLAYDEFINITION);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (VBA_PROJECT);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (VISUALSTYLE);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (WIPEOUTVARIABLES);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (XRECORD);
+CAST_DWG_OBJECT_TO_OBJECT_DECL (PDFDEFINITION);
+CAST_DWG_OBJECT_TO_OBJECT_DECL (DGNDEFINITION);
+CAST_DWG_OBJECT_TO_OBJECT_DECL (DWFDEFINITION);
 /* unstable */
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_BREP_CLASS);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_CHAMFER_CLASS);
@@ -6905,8 +6923,12 @@ dwg_add_WIPEOUTVARIABLES (Dwg_Data *dwg /* ... */) __nonnull_all;
 #define HAVE_NO_DWG_ADD_TEXTOBJECTCONTEXTDATA
 #define HAVE_NO_DWG_ADD_TVDEVICEPROPERTIES
 #define HAVE_NO_DWG_ADD_UCS_CONTROL
-#define HAVE_NO_DWG_ADD_UNDERLAY
-#define HAVE_NO_DWG_ADD_UNDERLAYDEFINITION
+#define HAVE_NO_DWG_ADD_PDFUNDERLAY
+#define HAVE_NO_DWG_ADD_DGNUNDERLAY
+#define HAVE_NO_DWG_ADD_DWFPDFUNDERLAY
+#define HAVE_NO_DWG_ADD_PDFDEFINITION
+#define HAVE_NO_DWG_ADD_DGNDEFINITION
+#define HAVE_NO_DWG_ADD_DWFDEFINITION
 #define HAVE_NO_DWG_ADD_UNKNOWN_ENT
 #define HAVE_NO_DWG_ADD_UNKNOWN_OBJ
 #define HAVE_NO_DWG_ADD_VERTEX_2D

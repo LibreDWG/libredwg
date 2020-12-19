@@ -1218,6 +1218,43 @@ BE,	DXF 210
 @end vtable
 @end indentedblock
 
+@strong{DGNUNDERLAY} @anchor{DGNUNDERLAY}
+@cindex entity, DGNUNDERLAY
+@vindex DGNUNDERLAY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item extrusion
+BE
+@item ins_pt
+3BD
+@item scale
+3BD
+@item angle
+BD
+@item flag
+RC
+@item contrast
+RC
+@item fade
+RC
+@item num_clip_verts
+BL
+@item clip_verts
+2RD*
+@item num_clip_inverts
+BS
+@item clip_inverts
+2RD*
+@item definition_id
+H
+
+@end vtable
+@end indentedblock
+
 @strong{DIMENSION_ALIGNED} @anchor{DIMENSION_ALIGNED}
 @cindex entity, DIMENSION_ALIGNED
 @vindex DIMENSION_ALIGNED
@@ -1655,6 +1692,43 @@ H
 3BD,	DXF 15
 @item leader_len
 BD,	DXF 40
+
+@end vtable
+@end indentedblock
+
+@strong{DWFUNDERLAY} @anchor{DWFUNDERLAY}
+@cindex entity, DWFUNDERLAY
+@vindex DWFUNDERLAY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item extrusion
+BE
+@item ins_pt
+3BD
+@item scale
+3BD
+@item angle
+BD
+@item flag
+RC
+@item contrast
+RC
+@item fade
+RC
+@item num_clip_verts
+BL
+@item clip_verts
+2RD*
+@item num_clip_inverts
+BS
+@item clip_inverts
+2RD*
+@item definition_id
+H
 
 @end vtable
 @end indentedblock
@@ -3029,6 +3103,43 @@ TF,	DXF 310
 @end vtable
 @end indentedblock
 
+@strong{PDFUNDERLAY} @anchor{PDFUNDERLAY}
+@cindex entity, PDFUNDERLAY
+@vindex PDFUNDERLAY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item extrusion
+BE
+@item ins_pt
+3BD
+@item scale
+3BD
+@item angle
+BD
+@item flag
+RC
+@item contrast
+RC
+@item fade
+RC
+@item num_clip_verts
+BL
+@item clip_verts
+2RD*
+@item num_clip_inverts
+BS
+@item clip_inverts
+2RD*
+@item definition_id
+H
+
+@end vtable
+@end indentedblock
+
 @strong{PLANESURFACE} @anchor{PLANESURFACE}
 @cindex entity, PLANESURFACE
 @vindex PLANESURFACE
@@ -4273,43 +4384,6 @@ BD,	DXF 38
 2RD,	DXF 13
 @item extrusion
 BE,	DXF 210
-
-@end vtable
-@end indentedblock
-
-@strong{UNDERLAY} @anchor{UNDERLAY}
-@cindex entity, UNDERLAY
-@vindex UNDERLAY
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_entity*
-@item extrusion
-BE,	DXF 210
-@item ins_pt
-3BD,	DXF 10
-@item scale
-3BD_1,	DXF 41
-@item angle
-BD,	DXF 50
-@item flag
-RC,	DXF 280
-@item contrast
-RC,	DXF 281
-@item fade
-RC,	DXF 282
-@item num_clip_verts
-BL
-@item clip_verts
-2RD*,	DXF 11
-@item num_clip_inverts
-BS,	DXF 170
-@item clip_inverts
-2RD*,	DXF 12
-@item definition_id
-H,	DXF 340
 
 @end vtable
 @end indentedblock
@@ -11803,23 +11877,6 @@ BL
 @end vtable
 @end indentedblock
 
-@strong{UNDERLAYDEFINITION} @anchor{UNDERLAYDEFINITION}
-@cindex object, UNDERLAYDEFINITION
-@vindex UNDERLAYDEFINITION
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_object*
-@item filename
-T,	DXF 1
-@item name
-T,	DXF 2
-
-@end vtable
-@end indentedblock
-
 @strong{UNKNOWN_OBJ} @anchor{UNKNOWN_OBJ}
 @cindex object, UNKNOWN_OBJ
 @vindex UNKNOWN_OBJ
@@ -12469,6 +12526,57 @@ Dwg_Resbuf*
 BL
 @item objid_handles
 H*,	DXF 340
+
+@end vtable
+@end indentedblock
+
+@strong{PDFDEFINITION} @anchor{PDFDEFINITION}
+@cindex object, PDFDEFINITION
+@vindex PDFDEFINITION
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item filename
+T,	DXF 1
+@item name
+T,	DXF 2
+
+@end vtable
+@end indentedblock
+
+@strong{DGNDEFINITION} @anchor{DGNDEFINITION}
+@cindex object, DGNDEFINITION
+@vindex DGNDEFINITION
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item filename
+T,	DXF 1
+@item name
+T,	DXF 2
+
+@end vtable
+@end indentedblock
+
+@strong{DWFDEFINITION} @anchor{DWFDEFINITION}
+@cindex object, DWFDEFINITION
+@vindex DWFDEFINITION
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item filename
+T,	DXF 1
+@item name
+T,	DXF 2
 
 @end vtable
 @end indentedblock

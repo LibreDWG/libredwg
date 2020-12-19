@@ -191,8 +191,12 @@ testobjects = \
 	trace \
 	ucs \
 	ucs_control \
-	underlay \
-	underlaydefinition \
+	pdfunderlay \
+	pdfdefinition \
+	dgnunderlay \
+	dgndefinition \
+	dwfunderlay \
+	dwfdefinition \
 	unknown_ent \
 	unknown_obj \
 	vba_project \

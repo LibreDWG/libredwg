@@ -7715,6 +7715,169 @@ static int test_CIRCLE (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_DGNUNDERLAY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_DGNUNDERLAY *restrict dgnunderlay = obj->tio.entity->tio.DGNUNDERLAY;
+  failed = 0;
+  {
+    BITCODE_BD angle;
+    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "angle", &angle, NULL)
+        && angle == dgnunderlay->angle)
+      pass ();
+    else
+      fail ("DGNUNDERLAY.angle [BD] %g != %g", dgnunderlay->angle, angle);
+    angle++;
+    if (dwg_dynapi_entity_set_value (dgnunderlay, "DGNUNDERLAY", "angle", &angle, 0)
+        && angle == dgnunderlay->angle)
+      pass ();
+    else
+      fail ("DGNUNDERLAY.angle [BD] set+1 %g != %g", dgnunderlay->angle, angle);
+    dgnunderlay->angle--;
+  }
+  {
+    BITCODE_2RD* clip_inverts;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "num_clip_inverts", &count, NULL)
+        && dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "clip_inverts", &clip_inverts, NULL)
+        && clip_inverts == dgnunderlay->clip_inverts)
+      pass ();
+    else
+      fail ("DGNUNDERLAY.clip_inverts [2RD*] * %u num_clip_inverts", count);
+  }
+  {
+    BITCODE_2RD* clip_verts;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "num_clip_verts", &count, NULL)
+        && dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "clip_verts", &clip_verts, NULL)
+        && clip_verts == dgnunderlay->clip_verts)
+      pass ();
+    else
+      fail ("DGNUNDERLAY.clip_verts [2RD*] * %u num_clip_verts", count);
+  }
+  {
+    BITCODE_RC contrast;
+    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "contrast", &contrast, NULL)
+        && contrast == dgnunderlay->contrast)
+      pass ();
+    else
+      fail ("DGNUNDERLAY.contrast [RC] %u != %u", dgnunderlay->contrast, contrast);
+    contrast++;
+    if (dwg_dynapi_entity_set_value (dgnunderlay, "DGNUNDERLAY", "contrast", &contrast, 0)
+        && contrast == dgnunderlay->contrast)
+      pass ();
+    else
+      fail ("DGNUNDERLAY.contrast [RC] set+1 %u != %u", dgnunderlay->contrast, contrast);
+    dgnunderlay->contrast--;
+  }
+  {
+    BITCODE_H definition_id;
+    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "definition_id", &definition_id, NULL)
+        && !memcmp (&definition_id, &dgnunderlay->definition_id, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("DGNUNDERLAY.definition_id [H]");
+  }
+  {
+    BITCODE_BE extrusion;
+    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "extrusion", &extrusion, NULL)
+        && !memcmp (&extrusion, &dgnunderlay->extrusion, sizeof (BITCODE_BE)))
+        pass ();
+    else
+        fail ("DGNUNDERLAY.extrusion [BE]");
+  }
+  {
+    BITCODE_RC fade;
+    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "fade", &fade, NULL)
+        && fade == dgnunderlay->fade)
+      pass ();
+    else
+      fail ("DGNUNDERLAY.fade [RC] %u != %u", dgnunderlay->fade, fade);
+    fade++;
+    if (dwg_dynapi_entity_set_value (dgnunderlay, "DGNUNDERLAY", "fade", &fade, 0)
+        && fade == dgnunderlay->fade)
+      pass ();
+    else
+      fail ("DGNUNDERLAY.fade [RC] set+1 %u != %u", dgnunderlay->fade, fade);
+    dgnunderlay->fade--;
+  }
+  {
+    BITCODE_RC flag;
+    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "flag", &flag, NULL)
+        && flag == dgnunderlay->flag)
+      pass ();
+    else
+      fail ("DGNUNDERLAY.flag [RC] %u != %u", dgnunderlay->flag, flag);
+    flag++;
+    if (dwg_dynapi_entity_set_value (dgnunderlay, "DGNUNDERLAY", "flag", &flag, 0)
+        && flag == dgnunderlay->flag)
+      pass ();
+    else
+      fail ("DGNUNDERLAY.flag [RC] set+1 %u != %u", dgnunderlay->flag, flag);
+    dgnunderlay->flag--;
+  }
+  {
+    BITCODE_3BD ins_pt;
+    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "ins_pt", &ins_pt, NULL)
+        && !memcmp (&ins_pt, &dgnunderlay->ins_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("DGNUNDERLAY.ins_pt [3BD]");
+  }
+  {
+    BITCODE_BS num_clip_inverts;
+    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "num_clip_inverts", &num_clip_inverts, NULL)
+        && num_clip_inverts == dgnunderlay->num_clip_inverts)
+      pass ();
+    else
+      fail ("DGNUNDERLAY.num_clip_inverts [BS] %hu != %hu", dgnunderlay->num_clip_inverts, num_clip_inverts);
+    num_clip_inverts++;
+    if (dwg_dynapi_entity_set_value (dgnunderlay, "DGNUNDERLAY", "num_clip_inverts", &num_clip_inverts, 0)
+        && num_clip_inverts == dgnunderlay->num_clip_inverts)
+      pass ();
+    else
+      fail ("DGNUNDERLAY.num_clip_inverts [BS] set+1 %hu != %hu", dgnunderlay->num_clip_inverts, num_clip_inverts);
+    dgnunderlay->num_clip_inverts--;
+  }
+  {
+    BITCODE_BL num_clip_verts;
+    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "num_clip_verts", &num_clip_verts, NULL)
+        && num_clip_verts == dgnunderlay->num_clip_verts)
+      pass ();
+    else
+      fail ("DGNUNDERLAY.num_clip_verts [BL] %u != %u", dgnunderlay->num_clip_verts, num_clip_verts);
+    num_clip_verts++;
+    if (dwg_dynapi_entity_set_value (dgnunderlay, "DGNUNDERLAY", "num_clip_verts", &num_clip_verts, 0)
+        && num_clip_verts == dgnunderlay->num_clip_verts)
+      pass ();
+    else
+      fail ("DGNUNDERLAY.num_clip_verts [BL] set+1 %u != %u", dgnunderlay->num_clip_verts, num_clip_verts);
+    dgnunderlay->num_clip_verts--;
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "parent", &parent, NULL)
+        && !memcmp (&parent, &dgnunderlay->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("DGNUNDERLAY.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_3BD scale;
+    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "scale", &scale, NULL)
+        && !memcmp (&scale, &dgnunderlay->scale, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("DGNUNDERLAY.scale [3BD]");
+  }
+  if (failed && (is_class_unstable ("DGNUNDERLAY") || is_class_debugging ("DGNUNDERLAY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DGNUNDERLAY", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_DIMENSION_ALIGNED (const Dwg_Object *obj)
 {
   int error = 0;
@@ -10000,6 +10163,169 @@ static int test_DIMENSION_RADIUS (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("DIMENSION_RADIUS") || is_class_debugging ("DIMENSION_RADIUS")))
     {
       ok ("%s failed %d tests (TODO unstable)", "DIMENSION_RADIUS", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_DWFUNDERLAY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_DWFUNDERLAY *restrict dwfunderlay = obj->tio.entity->tio.DWFUNDERLAY;
+  failed = 0;
+  {
+    BITCODE_BD angle;
+    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "angle", &angle, NULL)
+        && angle == dwfunderlay->angle)
+      pass ();
+    else
+      fail ("DWFUNDERLAY.angle [BD] %g != %g", dwfunderlay->angle, angle);
+    angle++;
+    if (dwg_dynapi_entity_set_value (dwfunderlay, "DWFUNDERLAY", "angle", &angle, 0)
+        && angle == dwfunderlay->angle)
+      pass ();
+    else
+      fail ("DWFUNDERLAY.angle [BD] set+1 %g != %g", dwfunderlay->angle, angle);
+    dwfunderlay->angle--;
+  }
+  {
+    BITCODE_2RD* clip_inverts;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "num_clip_inverts", &count, NULL)
+        && dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "clip_inverts", &clip_inverts, NULL)
+        && clip_inverts == dwfunderlay->clip_inverts)
+      pass ();
+    else
+      fail ("DWFUNDERLAY.clip_inverts [2RD*] * %u num_clip_inverts", count);
+  }
+  {
+    BITCODE_2RD* clip_verts;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "num_clip_verts", &count, NULL)
+        && dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "clip_verts", &clip_verts, NULL)
+        && clip_verts == dwfunderlay->clip_verts)
+      pass ();
+    else
+      fail ("DWFUNDERLAY.clip_verts [2RD*] * %u num_clip_verts", count);
+  }
+  {
+    BITCODE_RC contrast;
+    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "contrast", &contrast, NULL)
+        && contrast == dwfunderlay->contrast)
+      pass ();
+    else
+      fail ("DWFUNDERLAY.contrast [RC] %u != %u", dwfunderlay->contrast, contrast);
+    contrast++;
+    if (dwg_dynapi_entity_set_value (dwfunderlay, "DWFUNDERLAY", "contrast", &contrast, 0)
+        && contrast == dwfunderlay->contrast)
+      pass ();
+    else
+      fail ("DWFUNDERLAY.contrast [RC] set+1 %u != %u", dwfunderlay->contrast, contrast);
+    dwfunderlay->contrast--;
+  }
+  {
+    BITCODE_H definition_id;
+    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "definition_id", &definition_id, NULL)
+        && !memcmp (&definition_id, &dwfunderlay->definition_id, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("DWFUNDERLAY.definition_id [H]");
+  }
+  {
+    BITCODE_BE extrusion;
+    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "extrusion", &extrusion, NULL)
+        && !memcmp (&extrusion, &dwfunderlay->extrusion, sizeof (BITCODE_BE)))
+        pass ();
+    else
+        fail ("DWFUNDERLAY.extrusion [BE]");
+  }
+  {
+    BITCODE_RC fade;
+    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "fade", &fade, NULL)
+        && fade == dwfunderlay->fade)
+      pass ();
+    else
+      fail ("DWFUNDERLAY.fade [RC] %u != %u", dwfunderlay->fade, fade);
+    fade++;
+    if (dwg_dynapi_entity_set_value (dwfunderlay, "DWFUNDERLAY", "fade", &fade, 0)
+        && fade == dwfunderlay->fade)
+      pass ();
+    else
+      fail ("DWFUNDERLAY.fade [RC] set+1 %u != %u", dwfunderlay->fade, fade);
+    dwfunderlay->fade--;
+  }
+  {
+    BITCODE_RC flag;
+    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "flag", &flag, NULL)
+        && flag == dwfunderlay->flag)
+      pass ();
+    else
+      fail ("DWFUNDERLAY.flag [RC] %u != %u", dwfunderlay->flag, flag);
+    flag++;
+    if (dwg_dynapi_entity_set_value (dwfunderlay, "DWFUNDERLAY", "flag", &flag, 0)
+        && flag == dwfunderlay->flag)
+      pass ();
+    else
+      fail ("DWFUNDERLAY.flag [RC] set+1 %u != %u", dwfunderlay->flag, flag);
+    dwfunderlay->flag--;
+  }
+  {
+    BITCODE_3BD ins_pt;
+    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "ins_pt", &ins_pt, NULL)
+        && !memcmp (&ins_pt, &dwfunderlay->ins_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("DWFUNDERLAY.ins_pt [3BD]");
+  }
+  {
+    BITCODE_BS num_clip_inverts;
+    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "num_clip_inverts", &num_clip_inverts, NULL)
+        && num_clip_inverts == dwfunderlay->num_clip_inverts)
+      pass ();
+    else
+      fail ("DWFUNDERLAY.num_clip_inverts [BS] %hu != %hu", dwfunderlay->num_clip_inverts, num_clip_inverts);
+    num_clip_inverts++;
+    if (dwg_dynapi_entity_set_value (dwfunderlay, "DWFUNDERLAY", "num_clip_inverts", &num_clip_inverts, 0)
+        && num_clip_inverts == dwfunderlay->num_clip_inverts)
+      pass ();
+    else
+      fail ("DWFUNDERLAY.num_clip_inverts [BS] set+1 %hu != %hu", dwfunderlay->num_clip_inverts, num_clip_inverts);
+    dwfunderlay->num_clip_inverts--;
+  }
+  {
+    BITCODE_BL num_clip_verts;
+    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "num_clip_verts", &num_clip_verts, NULL)
+        && num_clip_verts == dwfunderlay->num_clip_verts)
+      pass ();
+    else
+      fail ("DWFUNDERLAY.num_clip_verts [BL] %u != %u", dwfunderlay->num_clip_verts, num_clip_verts);
+    num_clip_verts++;
+    if (dwg_dynapi_entity_set_value (dwfunderlay, "DWFUNDERLAY", "num_clip_verts", &num_clip_verts, 0)
+        && num_clip_verts == dwfunderlay->num_clip_verts)
+      pass ();
+    else
+      fail ("DWFUNDERLAY.num_clip_verts [BL] set+1 %u != %u", dwfunderlay->num_clip_verts, num_clip_verts);
+    dwfunderlay->num_clip_verts--;
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "parent", &parent, NULL)
+        && !memcmp (&parent, &dwfunderlay->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("DWFUNDERLAY.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_3BD scale;
+    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "scale", &scale, NULL)
+        && !memcmp (&scale, &dwfunderlay->scale, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("DWFUNDERLAY.scale [3BD]");
+  }
+  if (failed && (is_class_unstable ("DWFUNDERLAY") || is_class_debugging ("DWFUNDERLAY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DWFUNDERLAY", failed);
       failed = 0;
     }
   return failed;
@@ -17197,6 +17523,169 @@ static int test_OLEFRAME (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_PDFUNDERLAY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_PDFUNDERLAY *restrict pdfunderlay = obj->tio.entity->tio.PDFUNDERLAY;
+  failed = 0;
+  {
+    BITCODE_BD angle;
+    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "angle", &angle, NULL)
+        && angle == pdfunderlay->angle)
+      pass ();
+    else
+      fail ("PDFUNDERLAY.angle [BD] %g != %g", pdfunderlay->angle, angle);
+    angle++;
+    if (dwg_dynapi_entity_set_value (pdfunderlay, "PDFUNDERLAY", "angle", &angle, 0)
+        && angle == pdfunderlay->angle)
+      pass ();
+    else
+      fail ("PDFUNDERLAY.angle [BD] set+1 %g != %g", pdfunderlay->angle, angle);
+    pdfunderlay->angle--;
+  }
+  {
+    BITCODE_2RD* clip_inverts;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "num_clip_inverts", &count, NULL)
+        && dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "clip_inverts", &clip_inverts, NULL)
+        && clip_inverts == pdfunderlay->clip_inverts)
+      pass ();
+    else
+      fail ("PDFUNDERLAY.clip_inverts [2RD*] * %u num_clip_inverts", count);
+  }
+  {
+    BITCODE_2RD* clip_verts;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "num_clip_verts", &count, NULL)
+        && dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "clip_verts", &clip_verts, NULL)
+        && clip_verts == pdfunderlay->clip_verts)
+      pass ();
+    else
+      fail ("PDFUNDERLAY.clip_verts [2RD*] * %u num_clip_verts", count);
+  }
+  {
+    BITCODE_RC contrast;
+    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "contrast", &contrast, NULL)
+        && contrast == pdfunderlay->contrast)
+      pass ();
+    else
+      fail ("PDFUNDERLAY.contrast [RC] %u != %u", pdfunderlay->contrast, contrast);
+    contrast++;
+    if (dwg_dynapi_entity_set_value (pdfunderlay, "PDFUNDERLAY", "contrast", &contrast, 0)
+        && contrast == pdfunderlay->contrast)
+      pass ();
+    else
+      fail ("PDFUNDERLAY.contrast [RC] set+1 %u != %u", pdfunderlay->contrast, contrast);
+    pdfunderlay->contrast--;
+  }
+  {
+    BITCODE_H definition_id;
+    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "definition_id", &definition_id, NULL)
+        && !memcmp (&definition_id, &pdfunderlay->definition_id, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("PDFUNDERLAY.definition_id [H]");
+  }
+  {
+    BITCODE_BE extrusion;
+    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "extrusion", &extrusion, NULL)
+        && !memcmp (&extrusion, &pdfunderlay->extrusion, sizeof (BITCODE_BE)))
+        pass ();
+    else
+        fail ("PDFUNDERLAY.extrusion [BE]");
+  }
+  {
+    BITCODE_RC fade;
+    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "fade", &fade, NULL)
+        && fade == pdfunderlay->fade)
+      pass ();
+    else
+      fail ("PDFUNDERLAY.fade [RC] %u != %u", pdfunderlay->fade, fade);
+    fade++;
+    if (dwg_dynapi_entity_set_value (pdfunderlay, "PDFUNDERLAY", "fade", &fade, 0)
+        && fade == pdfunderlay->fade)
+      pass ();
+    else
+      fail ("PDFUNDERLAY.fade [RC] set+1 %u != %u", pdfunderlay->fade, fade);
+    pdfunderlay->fade--;
+  }
+  {
+    BITCODE_RC flag;
+    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "flag", &flag, NULL)
+        && flag == pdfunderlay->flag)
+      pass ();
+    else
+      fail ("PDFUNDERLAY.flag [RC] %u != %u", pdfunderlay->flag, flag);
+    flag++;
+    if (dwg_dynapi_entity_set_value (pdfunderlay, "PDFUNDERLAY", "flag", &flag, 0)
+        && flag == pdfunderlay->flag)
+      pass ();
+    else
+      fail ("PDFUNDERLAY.flag [RC] set+1 %u != %u", pdfunderlay->flag, flag);
+    pdfunderlay->flag--;
+  }
+  {
+    BITCODE_3BD ins_pt;
+    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "ins_pt", &ins_pt, NULL)
+        && !memcmp (&ins_pt, &pdfunderlay->ins_pt, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("PDFUNDERLAY.ins_pt [3BD]");
+  }
+  {
+    BITCODE_BS num_clip_inverts;
+    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "num_clip_inverts", &num_clip_inverts, NULL)
+        && num_clip_inverts == pdfunderlay->num_clip_inverts)
+      pass ();
+    else
+      fail ("PDFUNDERLAY.num_clip_inverts [BS] %hu != %hu", pdfunderlay->num_clip_inverts, num_clip_inverts);
+    num_clip_inverts++;
+    if (dwg_dynapi_entity_set_value (pdfunderlay, "PDFUNDERLAY", "num_clip_inverts", &num_clip_inverts, 0)
+        && num_clip_inverts == pdfunderlay->num_clip_inverts)
+      pass ();
+    else
+      fail ("PDFUNDERLAY.num_clip_inverts [BS] set+1 %hu != %hu", pdfunderlay->num_clip_inverts, num_clip_inverts);
+    pdfunderlay->num_clip_inverts--;
+  }
+  {
+    BITCODE_BL num_clip_verts;
+    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "num_clip_verts", &num_clip_verts, NULL)
+        && num_clip_verts == pdfunderlay->num_clip_verts)
+      pass ();
+    else
+      fail ("PDFUNDERLAY.num_clip_verts [BL] %u != %u", pdfunderlay->num_clip_verts, num_clip_verts);
+    num_clip_verts++;
+    if (dwg_dynapi_entity_set_value (pdfunderlay, "PDFUNDERLAY", "num_clip_verts", &num_clip_verts, 0)
+        && num_clip_verts == pdfunderlay->num_clip_verts)
+      pass ();
+    else
+      fail ("PDFUNDERLAY.num_clip_verts [BL] set+1 %u != %u", pdfunderlay->num_clip_verts, num_clip_verts);
+    pdfunderlay->num_clip_verts--;
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "parent", &parent, NULL)
+        && !memcmp (&parent, &pdfunderlay->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("PDFUNDERLAY.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_3BD scale;
+    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "scale", &scale, NULL)
+        && !memcmp (&scale, &pdfunderlay->scale, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("PDFUNDERLAY.scale [3BD]");
+  }
+  if (failed && (is_class_unstable ("PDFUNDERLAY") || is_class_debugging ("PDFUNDERLAY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "PDFUNDERLAY", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_PLANESURFACE (const Dwg_Object *obj)
 {
   int error = 0;
@@ -23518,169 +24007,6 @@ static int test_TRACE (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("TRACE") || is_class_debugging ("TRACE")))
     {
       ok ("%s failed %d tests (TODO unstable)", "TRACE", failed);
-      failed = 0;
-    }
-  return failed;
-}
-static int test_UNDERLAY (const Dwg_Object *obj)
-{
-  int error = 0;
-  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
-  Dwg_Entity_UNDERLAY *restrict underlay = obj->tio.entity->tio.UNDERLAY;
-  failed = 0;
-  {
-    BITCODE_BD angle;
-    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "angle", &angle, NULL)
-        && angle == underlay->angle)
-      pass ();
-    else
-      fail ("UNDERLAY.angle [BD] %g != %g", underlay->angle, angle);
-    angle++;
-    if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "angle", &angle, 0)
-        && angle == underlay->angle)
-      pass ();
-    else
-      fail ("UNDERLAY.angle [BD] set+1 %g != %g", underlay->angle, angle);
-    underlay->angle--;
-  }
-  {
-    BITCODE_2RD* clip_inverts;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "num_clip_inverts", &count, NULL)
-        && dwg_dynapi_entity_value (underlay, "UNDERLAY", "clip_inverts", &clip_inverts, NULL)
-        && clip_inverts == underlay->clip_inverts)
-      pass ();
-    else
-      fail ("UNDERLAY.clip_inverts [2RD*] * %u num_clip_inverts", count);
-  }
-  {
-    BITCODE_2RD* clip_verts;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "num_clip_verts", &count, NULL)
-        && dwg_dynapi_entity_value (underlay, "UNDERLAY", "clip_verts", &clip_verts, NULL)
-        && clip_verts == underlay->clip_verts)
-      pass ();
-    else
-      fail ("UNDERLAY.clip_verts [2RD*] * %u num_clip_verts", count);
-  }
-  {
-    BITCODE_RC contrast;
-    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "contrast", &contrast, NULL)
-        && contrast == underlay->contrast)
-      pass ();
-    else
-      fail ("UNDERLAY.contrast [RC] %u != %u", underlay->contrast, contrast);
-    contrast++;
-    if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "contrast", &contrast, 0)
-        && contrast == underlay->contrast)
-      pass ();
-    else
-      fail ("UNDERLAY.contrast [RC] set+1 %u != %u", underlay->contrast, contrast);
-    underlay->contrast--;
-  }
-  {
-    BITCODE_H definition_id;
-    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "definition_id", &definition_id, NULL)
-        && !memcmp (&definition_id, &underlay->definition_id, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("UNDERLAY.definition_id [H]");
-  }
-  {
-    BITCODE_BE extrusion;
-    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &underlay->extrusion, sizeof (BITCODE_BE)))
-        pass ();
-    else
-        fail ("UNDERLAY.extrusion [BE]");
-  }
-  {
-    BITCODE_RC fade;
-    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "fade", &fade, NULL)
-        && fade == underlay->fade)
-      pass ();
-    else
-      fail ("UNDERLAY.fade [RC] %u != %u", underlay->fade, fade);
-    fade++;
-    if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "fade", &fade, 0)
-        && fade == underlay->fade)
-      pass ();
-    else
-      fail ("UNDERLAY.fade [RC] set+1 %u != %u", underlay->fade, fade);
-    underlay->fade--;
-  }
-  {
-    BITCODE_RC flag;
-    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "flag", &flag, NULL)
-        && flag == underlay->flag)
-      pass ();
-    else
-      fail ("UNDERLAY.flag [RC] %u != %u", underlay->flag, flag);
-    flag++;
-    if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "flag", &flag, 0)
-        && flag == underlay->flag)
-      pass ();
-    else
-      fail ("UNDERLAY.flag [RC] set+1 %u != %u", underlay->flag, flag);
-    underlay->flag--;
-  }
-  {
-    BITCODE_3BD ins_pt;
-    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "ins_pt", &ins_pt, NULL)
-        && !memcmp (&ins_pt, &underlay->ins_pt, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("UNDERLAY.ins_pt [3BD]");
-  }
-  {
-    BITCODE_BS num_clip_inverts;
-    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "num_clip_inverts", &num_clip_inverts, NULL)
-        && num_clip_inverts == underlay->num_clip_inverts)
-      pass ();
-    else
-      fail ("UNDERLAY.num_clip_inverts [BS] %hu != %hu", underlay->num_clip_inverts, num_clip_inverts);
-    num_clip_inverts++;
-    if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "num_clip_inverts", &num_clip_inverts, 0)
-        && num_clip_inverts == underlay->num_clip_inverts)
-      pass ();
-    else
-      fail ("UNDERLAY.num_clip_inverts [BS] set+1 %hu != %hu", underlay->num_clip_inverts, num_clip_inverts);
-    underlay->num_clip_inverts--;
-  }
-  {
-    BITCODE_BL num_clip_verts;
-    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "num_clip_verts", &num_clip_verts, NULL)
-        && num_clip_verts == underlay->num_clip_verts)
-      pass ();
-    else
-      fail ("UNDERLAY.num_clip_verts [BL] %u != %u", underlay->num_clip_verts, num_clip_verts);
-    num_clip_verts++;
-    if (dwg_dynapi_entity_set_value (underlay, "UNDERLAY", "num_clip_verts", &num_clip_verts, 0)
-        && num_clip_verts == underlay->num_clip_verts)
-      pass ();
-    else
-      fail ("UNDERLAY.num_clip_verts [BL] set+1 %u != %u", underlay->num_clip_verts, num_clip_verts);
-    underlay->num_clip_verts--;
-  }
-  {
-    struct _dwg_object_entity* parent;
-    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "parent", &parent, NULL)
-        && !memcmp (&parent, &underlay->parent, sizeof (struct _dwg_object_entity*)))
-        pass ();
-    else
-        fail ("UNDERLAY.parent [struct _dwg_object_entity*]");
-  }
-  {
-    BITCODE_3BD scale;
-    if (dwg_dynapi_entity_value (underlay, "UNDERLAY", "scale", &scale, NULL)
-        && !memcmp (&scale, &underlay->scale, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("UNDERLAY.scale [3BD_1]");
-  }
-  if (failed && (is_class_unstable ("UNDERLAY") || is_class_debugging ("UNDERLAY")))
-    {
-      ok ("%s failed %d tests (TODO unstable)", "UNDERLAY", failed);
       failed = 0;
     }
   return failed;
@@ -57302,47 +57628,6 @@ static int test_UCS_CONTROL (const Dwg_Object *obj)
     }
   return failed;
 }
-static int test_UNDERLAYDEFINITION (const Dwg_Object *obj)
-{
-  int error = 0;
-  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
-  Dwg_Object_UNDERLAYDEFINITION *restrict underlaydefinition = obj->tio.object->tio.UNDERLAYDEFINITION;
-  failed = 0;
-  {
-    BITCODE_T filename;
-    if (dwg_dynapi_entity_value (underlaydefinition, "UNDERLAYDEFINITION", "filename", &filename, NULL)
-        && filename
-           ? strEQ ((char *)filename, (char *)underlaydefinition->filename)
-           : !underlaydefinition->filename)
-      pass ();
-    else
-      fail ("UNDERLAYDEFINITION.filename [T] '%s' <> '%s'", filename, underlaydefinition->filename);
-  }
-  {
-    BITCODE_T name;
-    if (dwg_dynapi_entity_value (underlaydefinition, "UNDERLAYDEFINITION", "name", &name, NULL)
-        && name
-           ? strEQ ((char *)name, (char *)underlaydefinition->name)
-           : !underlaydefinition->name)
-      pass ();
-    else
-      fail ("UNDERLAYDEFINITION.name [T] '%s' <> '%s'", name, underlaydefinition->name);
-  }
-  {
-    struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (underlaydefinition, "UNDERLAYDEFINITION", "parent", &parent, NULL)
-        && !memcmp (&parent, &underlaydefinition->parent, sizeof (struct _dwg_object_object*)))
-        pass ();
-    else
-        fail ("UNDERLAYDEFINITION.parent [struct _dwg_object_object*]");
-  }
-  if (failed && (is_class_unstable ("UNDERLAYDEFINITION") || is_class_debugging ("UNDERLAYDEFINITION")))
-    {
-      ok ("%s failed %d tests (TODO unstable)", "UNDERLAYDEFINITION", failed);
-      failed = 0;
-    }
-  return failed;
-}
 static int test_VBA_PROJECT (const Dwg_Object *obj)
 {
   int error = 0;
@@ -60837,13 +61122,136 @@ static int test_XRECORD (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_PDFDEFINITION (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_PDFDEFINITION *restrict pdfdefinition = obj->tio.object->tio.PDFDEFINITION;
+  failed = 0;
+  {
+    BITCODE_T filename;
+    if (dwg_dynapi_entity_value (pdfdefinition, "PDFDEFINITION", "filename", &filename, NULL)
+        && filename
+           ? strEQ ((char *)filename, (char *)pdfdefinition->filename)
+           : !pdfdefinition->filename)
+      pass ();
+    else
+      fail ("PDFDEFINITION.filename [T] '%s' <> '%s'", filename, pdfdefinition->filename);
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (pdfdefinition, "PDFDEFINITION", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)pdfdefinition->name)
+           : !pdfdefinition->name)
+      pass ();
+    else
+      fail ("PDFDEFINITION.name [T] '%s' <> '%s'", name, pdfdefinition->name);
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (pdfdefinition, "PDFDEFINITION", "parent", &parent, NULL)
+        && !memcmp (&parent, &pdfdefinition->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("PDFDEFINITION.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("PDFDEFINITION") || is_class_debugging ("PDFDEFINITION")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "PDFDEFINITION", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_DGNDEFINITION (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_DGNDEFINITION *restrict dgndefinition = obj->tio.object->tio.DGNDEFINITION;
+  failed = 0;
+  {
+    BITCODE_T filename;
+    if (dwg_dynapi_entity_value (dgndefinition, "DGNDEFINITION", "filename", &filename, NULL)
+        && filename
+           ? strEQ ((char *)filename, (char *)dgndefinition->filename)
+           : !dgndefinition->filename)
+      pass ();
+    else
+      fail ("DGNDEFINITION.filename [T] '%s' <> '%s'", filename, dgndefinition->filename);
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (dgndefinition, "DGNDEFINITION", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)dgndefinition->name)
+           : !dgndefinition->name)
+      pass ();
+    else
+      fail ("DGNDEFINITION.name [T] '%s' <> '%s'", name, dgndefinition->name);
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (dgndefinition, "DGNDEFINITION", "parent", &parent, NULL)
+        && !memcmp (&parent, &dgndefinition->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("DGNDEFINITION.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("DGNDEFINITION") || is_class_debugging ("DGNDEFINITION")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DGNDEFINITION", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_DWFDEFINITION (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_DWFDEFINITION *restrict dwfdefinition = obj->tio.object->tio.DWFDEFINITION;
+  failed = 0;
+  {
+    BITCODE_T filename;
+    if (dwg_dynapi_entity_value (dwfdefinition, "DWFDEFINITION", "filename", &filename, NULL)
+        && filename
+           ? strEQ ((char *)filename, (char *)dwfdefinition->filename)
+           : !dwfdefinition->filename)
+      pass ();
+    else
+      fail ("DWFDEFINITION.filename [T] '%s' <> '%s'", filename, dwfdefinition->filename);
+  }
+  {
+    BITCODE_T name;
+    if (dwg_dynapi_entity_value (dwfdefinition, "DWFDEFINITION", "name", &name, NULL)
+        && name
+           ? strEQ ((char *)name, (char *)dwfdefinition->name)
+           : !dwfdefinition->name)
+      pass ();
+    else
+      fail ("DWFDEFINITION.name [T] '%s' <> '%s'", name, dwfdefinition->name);
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (dwfdefinition, "DWFDEFINITION", "parent", &parent, NULL)
+        && !memcmp (&parent, &dwfdefinition->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("DWFDEFINITION.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("DWFDEFINITION") || is_class_debugging ("DWFDEFINITION")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "DWFDEFINITION", failed);
+      failed = 0;
+    }
+  return failed;
+}
 
 #line 54 "dynapi_test.c.in"
 static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 60846 "dynapi_test.c"
+#line 61254 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -60871,6 +61279,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_CAMERA(obj);
   else  if (obj->fixedtype == DWG_TYPE_CIRCLE)
     error += test_CIRCLE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_DGNUNDERLAY)
+    error += test_DGNUNDERLAY(obj);
   else  if (obj->fixedtype == DWG_TYPE_DIMENSION_ALIGNED)
     error += test_DIMENSION_ALIGNED(obj);
   else  if (obj->fixedtype == DWG_TYPE_DIMENSION_ANG2LN)
@@ -60885,6 +61295,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_DIMENSION_ORDINATE(obj);
   else  if (obj->fixedtype == DWG_TYPE_DIMENSION_RADIUS)
     error += test_DIMENSION_RADIUS(obj);
+  else  if (obj->fixedtype == DWG_TYPE_DWFUNDERLAY)
+    error += test_DWFUNDERLAY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ELLIPSE)
     error += test_ELLIPSE(obj);
   else  if (obj->fixedtype == DWG_TYPE_ENDBLK)
@@ -60937,6 +61349,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_OLE2FRAME(obj);
   else  if (obj->fixedtype == DWG_TYPE_OLEFRAME)
     error += test_OLEFRAME(obj);
+  else  if (obj->fixedtype == DWG_TYPE_PDFUNDERLAY)
+    error += test_PDFUNDERLAY(obj);
   else  if (obj->fixedtype == DWG_TYPE_PLANESURFACE)
     error += test_PLANESURFACE(obj);
   else  if (obj->fixedtype == DWG_TYPE_POINT)
@@ -60987,8 +61401,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_TOLERANCE(obj);
   else  if (obj->fixedtype == DWG_TYPE_TRACE)
     error += test_TRACE(obj);
-  else  if (obj->fixedtype == DWG_TYPE_UNDERLAY)
-    error += test_UNDERLAY(obj);
   else  if (obj->fixedtype == DWG_TYPE_VERTEX_2D)
     error += test_VERTEX_2D(obj);
   else  if (obj->fixedtype == DWG_TYPE_VERTEX_3D)
@@ -61409,8 +61821,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_UCS(obj);
   else  if (obj->fixedtype == DWG_TYPE_UCS_CONTROL)
     error += test_UCS_CONTROL(obj);
-  else  if (obj->fixedtype == DWG_TYPE_UNDERLAYDEFINITION)
-    error += test_UNDERLAYDEFINITION(obj);
   else  if (obj->fixedtype == DWG_TYPE_VBA_PROJECT)
     error += test_VBA_PROJECT(obj);
   else  if (obj->fixedtype == DWG_TYPE_VIEW)
@@ -61431,6 +61841,12 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_WIPEOUTVARIABLES(obj);
   else  if (obj->fixedtype == DWG_TYPE_XRECORD)
     error += test_XRECORD(obj);
+  else  if (obj->fixedtype == DWG_TYPE_PDFDEFINITION)
+    error += test_PDFDEFINITION(obj);
+  else  if (obj->fixedtype == DWG_TYPE_DGNDEFINITION)
+    error += test_DGNDEFINITION(obj);
+  else  if (obj->fixedtype == DWG_TYPE_DWFDEFINITION)
+    error += test_DWFDEFINITION(obj);
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE (obj);
   else  if (obj->fixedtype == DWG_TYPE__3DSOLID)
@@ -61457,6 +61873,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_CAMERA (obj);
   else  if (obj->fixedtype == DWG_TYPE_CIRCLE)
     error += test_CIRCLE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_DGNUNDERLAY)
+    error += test_DGNUNDERLAY (obj);
   else  if (obj->fixedtype == DWG_TYPE_DIMENSION_ALIGNED)
     error += test_DIMENSION_ALIGNED (obj);
   else  if (obj->fixedtype == DWG_TYPE_DIMENSION_ANG2LN)
@@ -61471,6 +61889,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_DIMENSION_ORDINATE (obj);
   else  if (obj->fixedtype == DWG_TYPE_DIMENSION_RADIUS)
     error += test_DIMENSION_RADIUS (obj);
+  else  if (obj->fixedtype == DWG_TYPE_DWFUNDERLAY)
+    error += test_DWFUNDERLAY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ELLIPSE)
     error += test_ELLIPSE (obj);
   else  if (obj->fixedtype == DWG_TYPE_ENDBLK)
@@ -61523,6 +61943,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_OLE2FRAME (obj);
   else  if (obj->fixedtype == DWG_TYPE_OLEFRAME)
     error += test_OLEFRAME (obj);
+  else  if (obj->fixedtype == DWG_TYPE_PDFUNDERLAY)
+    error += test_PDFUNDERLAY (obj);
   else  if (obj->fixedtype == DWG_TYPE_PLANESURFACE)
     error += test_PLANESURFACE (obj);
   else  if (obj->fixedtype == DWG_TYPE_POINT)
@@ -61573,8 +61995,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_TOLERANCE (obj);
   else  if (obj->fixedtype == DWG_TYPE_TRACE)
     error += test_TRACE (obj);
-  else  if (obj->fixedtype == DWG_TYPE_UNDERLAY)
-    error += test_UNDERLAY (obj);
   else  if (obj->fixedtype == DWG_TYPE_VERTEX_2D)
     error += test_VERTEX_2D (obj);
   else  if (obj->fixedtype == DWG_TYPE_VERTEX_3D)
@@ -61995,8 +62415,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_UCS (obj);
   else  if (obj->fixedtype == DWG_TYPE_UCS_CONTROL)
     error += test_UCS_CONTROL (obj);
-  else  if (obj->fixedtype == DWG_TYPE_UNDERLAYDEFINITION)
-    error += test_UNDERLAYDEFINITION (obj);
   else  if (obj->fixedtype == DWG_TYPE_VBA_PROJECT)
     error += test_VBA_PROJECT (obj);
   else  if (obj->fixedtype == DWG_TYPE_VIEW)
@@ -62017,6 +62435,12 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_WIPEOUTVARIABLES (obj);
   else  if (obj->fixedtype == DWG_TYPE_XRECORD)
     error += test_XRECORD (obj);
+  else  if (obj->fixedtype == DWG_TYPE_PDFDEFINITION)
+    error += test_PDFDEFINITION (obj);
+  else  if (obj->fixedtype == DWG_TYPE_DGNDEFINITION)
+    error += test_DGNDEFINITION (obj);
+  else  if (obj->fixedtype == DWG_TYPE_DWFDEFINITION)
+    error += test_DWFDEFINITION (obj);
 #line 61 "dynapi_test.c.in"
   return error + failed;
 }
@@ -62027,7 +62451,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 62030 "dynapi_test.c"
+#line 62454 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");
@@ -62133,6 +62557,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"CIRCLE\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (Dwg_Entity_DGNUNDERLAY);
+  size2 = dwg_dynapi_fields_size ("DGNUNDERLAY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_DGNUNDERLAY): %d != "
+               "dwg_dynapi_fields_size (\"DGNUNDERLAY\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (Dwg_Entity_DIMENSION_ALIGNED);
   size2 = dwg_dynapi_fields_size ("DIMENSION_ALIGNED");
   if (size1 != size2)
@@ -62187,6 +62619,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_DIMENSION_RADIUS): %d != "
                "dwg_dynapi_fields_size (\"DIMENSION_RADIUS\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_DWFUNDERLAY);
+  size2 = dwg_dynapi_fields_size ("DWFUNDERLAY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_DWFUNDERLAY): %d != "
+               "dwg_dynapi_fields_size (\"DWFUNDERLAY\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_ELLIPSE);
@@ -62397,6 +62837,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"OLEFRAME\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (Dwg_Entity_PDFUNDERLAY);
+  size2 = dwg_dynapi_fields_size ("PDFUNDERLAY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_PDFUNDERLAY): %d != "
+               "dwg_dynapi_fields_size (\"PDFUNDERLAY\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (Dwg_Entity_PLANESURFACE);
   size2 = dwg_dynapi_fields_size ("PLANESURFACE");
   if (size1 != size2)
@@ -62597,14 +63045,6 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"TRACE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (Dwg_Entity_UNDERLAY);
-  size2 = dwg_dynapi_fields_size ("UNDERLAY");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(Dwg_Entity_UNDERLAY): %d != "
-               "dwg_dynapi_fields_size (\"UNDERLAY\"): %d\n", size1, size2);
-      error++;
-    }
   size1 = sizeof (Dwg_Entity_UNKNOWN_ENT);
   size2 = dwg_dynapi_fields_size ("UNKNOWN_ENT");
   if (size1 != size2)
@@ -62701,1692 +63141,1708 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"XYPARAMETERENTITY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACMECOMMANDHISTORY);
+  size1 = sizeof (Dwg_Object_ACMECOMMANDHISTORY);
   size2 = dwg_dynapi_fields_size ("ACMECOMMANDHISTORY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACMECOMMANDHISTORY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACMECOMMANDHISTORY): %d != "
                "dwg_dynapi_fields_size (\"ACMECOMMANDHISTORY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACMESCOPE);
+  size1 = sizeof (Dwg_Object_ACMESCOPE);
   size2 = dwg_dynapi_fields_size ("ACMESCOPE");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACMESCOPE): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACMESCOPE): %d != "
                "dwg_dynapi_fields_size (\"ACMESCOPE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACMESTATEMGR);
+  size1 = sizeof (Dwg_Object_ACMESTATEMGR);
   size2 = dwg_dynapi_fields_size ("ACMESTATEMGR");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACMESTATEMGR): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACMESTATEMGR): %d != "
                "dwg_dynapi_fields_size (\"ACMESTATEMGR\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACSH_BOOLEAN_CLASS);
+  size1 = sizeof (Dwg_Object_ACSH_BOOLEAN_CLASS);
   size2 = dwg_dynapi_fields_size ("ACSH_BOOLEAN_CLASS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_BOOLEAN_CLASS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACSH_BOOLEAN_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_BOOLEAN_CLASS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACSH_BOX_CLASS);
+  size1 = sizeof (Dwg_Object_ACSH_BOX_CLASS);
   size2 = dwg_dynapi_fields_size ("ACSH_BOX_CLASS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_BOX_CLASS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACSH_BOX_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_BOX_CLASS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACSH_BREP_CLASS);
+  size1 = sizeof (Dwg_Object_ACSH_BREP_CLASS);
   size2 = dwg_dynapi_fields_size ("ACSH_BREP_CLASS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_BREP_CLASS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACSH_BREP_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_BREP_CLASS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACSH_CHAMFER_CLASS);
+  size1 = sizeof (Dwg_Object_ACSH_CHAMFER_CLASS);
   size2 = dwg_dynapi_fields_size ("ACSH_CHAMFER_CLASS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_CHAMFER_CLASS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACSH_CHAMFER_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_CHAMFER_CLASS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACSH_CONE_CLASS);
+  size1 = sizeof (Dwg_Object_ACSH_CONE_CLASS);
   size2 = dwg_dynapi_fields_size ("ACSH_CONE_CLASS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_CONE_CLASS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACSH_CONE_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_CONE_CLASS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACSH_CYLINDER_CLASS);
+  size1 = sizeof (Dwg_Object_ACSH_CYLINDER_CLASS);
   size2 = dwg_dynapi_fields_size ("ACSH_CYLINDER_CLASS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_CYLINDER_CLASS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACSH_CYLINDER_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_CYLINDER_CLASS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACSH_EXTRUSION_CLASS);
+  size1 = sizeof (Dwg_Object_ACSH_EXTRUSION_CLASS);
   size2 = dwg_dynapi_fields_size ("ACSH_EXTRUSION_CLASS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_EXTRUSION_CLASS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACSH_EXTRUSION_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_EXTRUSION_CLASS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACSH_FILLET_CLASS);
+  size1 = sizeof (Dwg_Object_ACSH_FILLET_CLASS);
   size2 = dwg_dynapi_fields_size ("ACSH_FILLET_CLASS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_FILLET_CLASS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACSH_FILLET_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_FILLET_CLASS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACSH_HISTORY_CLASS);
+  size1 = sizeof (Dwg_Object_ACSH_HISTORY_CLASS);
   size2 = dwg_dynapi_fields_size ("ACSH_HISTORY_CLASS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_HISTORY_CLASS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACSH_HISTORY_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_HISTORY_CLASS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACSH_LOFT_CLASS);
+  size1 = sizeof (Dwg_Object_ACSH_LOFT_CLASS);
   size2 = dwg_dynapi_fields_size ("ACSH_LOFT_CLASS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_LOFT_CLASS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACSH_LOFT_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_LOFT_CLASS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACSH_PYRAMID_CLASS);
+  size1 = sizeof (Dwg_Object_ACSH_PYRAMID_CLASS);
   size2 = dwg_dynapi_fields_size ("ACSH_PYRAMID_CLASS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_PYRAMID_CLASS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACSH_PYRAMID_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_PYRAMID_CLASS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACSH_REVOLVE_CLASS);
+  size1 = sizeof (Dwg_Object_ACSH_REVOLVE_CLASS);
   size2 = dwg_dynapi_fields_size ("ACSH_REVOLVE_CLASS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_REVOLVE_CLASS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACSH_REVOLVE_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_REVOLVE_CLASS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACSH_SPHERE_CLASS);
+  size1 = sizeof (Dwg_Object_ACSH_SPHERE_CLASS);
   size2 = dwg_dynapi_fields_size ("ACSH_SPHERE_CLASS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_SPHERE_CLASS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACSH_SPHERE_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_SPHERE_CLASS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACSH_SWEEP_CLASS);
+  size1 = sizeof (Dwg_Object_ACSH_SWEEP_CLASS);
   size2 = dwg_dynapi_fields_size ("ACSH_SWEEP_CLASS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_SWEEP_CLASS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACSH_SWEEP_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_SWEEP_CLASS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACSH_TORUS_CLASS);
+  size1 = sizeof (Dwg_Object_ACSH_TORUS_CLASS);
   size2 = dwg_dynapi_fields_size ("ACSH_TORUS_CLASS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_TORUS_CLASS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACSH_TORUS_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_TORUS_CLASS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ACSH_WEDGE_CLASS);
+  size1 = sizeof (Dwg_Object_ACSH_WEDGE_CLASS);
   size2 = dwg_dynapi_fields_size ("ACSH_WEDGE_CLASS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ACSH_WEDGE_CLASS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ACSH_WEDGE_CLASS): %d != "
                "dwg_dynapi_fields_size (\"ACSH_WEDGE_CLASS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ALDIMOBJECTCONTEXTDATA);
+  size1 = sizeof (Dwg_Object_ALDIMOBJECTCONTEXTDATA);
   size2 = dwg_dynapi_fields_size ("ALDIMOBJECTCONTEXTDATA");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ALDIMOBJECTCONTEXTDATA): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ALDIMOBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"ALDIMOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ANGDIMOBJECTCONTEXTDATA);
+  size1 = sizeof (Dwg_Object_ANGDIMOBJECTCONTEXTDATA);
   size2 = dwg_dynapi_fields_size ("ANGDIMOBJECTCONTEXTDATA");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ANGDIMOBJECTCONTEXTDATA): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ANGDIMOBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"ANGDIMOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ANNOTSCALEOBJECTCONTEXTDATA);
+  size1 = sizeof (Dwg_Object_ANNOTSCALEOBJECTCONTEXTDATA);
   size2 = dwg_dynapi_fields_size ("ANNOTSCALEOBJECTCONTEXTDATA");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ANNOTSCALEOBJECTCONTEXTDATA): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ANNOTSCALEOBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"ANNOTSCALEOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_APPID);
+  size1 = sizeof (Dwg_Object_APPID);
   size2 = dwg_dynapi_fields_size ("APPID");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_APPID): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_APPID): %d != "
                "dwg_dynapi_fields_size (\"APPID\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_APPID_CONTROL);
+  size1 = sizeof (Dwg_Object_APPID_CONTROL);
   size2 = dwg_dynapi_fields_size ("APPID_CONTROL");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_APPID_CONTROL): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_APPID_CONTROL): %d != "
                "dwg_dynapi_fields_size (\"APPID_CONTROL\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOC2DCONSTRAINTGROUP);
+  size1 = sizeof (Dwg_Object_ASSOC2DCONSTRAINTGROUP);
   size2 = dwg_dynapi_fields_size ("ASSOC2DCONSTRAINTGROUP");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOC2DCONSTRAINTGROUP): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOC2DCONSTRAINTGROUP): %d != "
                "dwg_dynapi_fields_size (\"ASSOC2DCONSTRAINTGROUP\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOC3POINTANGULARDIMACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOC3POINTANGULARDIMACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOC3POINTANGULARDIMACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOC3POINTANGULARDIMACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOC3POINTANGULARDIMACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOC3POINTANGULARDIMACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCACTION);
+  size1 = sizeof (Dwg_Object_ASSOCACTION);
   size2 = dwg_dynapi_fields_size ("ASSOCACTION");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCACTION): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCACTION): %d != "
                "dwg_dynapi_fields_size (\"ASSOCACTION\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCACTIONPARAM);
+  size1 = sizeof (Dwg_Object_ASSOCACTIONPARAM);
   size2 = dwg_dynapi_fields_size ("ASSOCACTIONPARAM");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCACTIONPARAM): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCACTIONPARAM): %d != "
                "dwg_dynapi_fields_size (\"ASSOCACTIONPARAM\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCALIGNEDDIMACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCALIGNEDDIMACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCALIGNEDDIMACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCALIGNEDDIMACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCARRAYACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCARRAYACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCARRAYACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCARRAYACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCARRAYACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCARRAYACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCARRAYMODIFYACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCARRAYMODIFYACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCARRAYMODIFYACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCARRAYMODIFYACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS);
+  size1 = sizeof (Dwg_Object_ASSOCARRAYMODIFYPARAMETERS);
   size2 = dwg_dynapi_fields_size ("ASSOCARRAYMODIFYPARAMETERS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCARRAYMODIFYPARAMETERS): %d != "
                "dwg_dynapi_fields_size (\"ASSOCARRAYMODIFYPARAMETERS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCARRAYPATHPARAMETERS);
+  size1 = sizeof (Dwg_Object_ASSOCARRAYPATHPARAMETERS);
   size2 = dwg_dynapi_fields_size ("ASSOCARRAYPATHPARAMETERS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCARRAYPATHPARAMETERS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCARRAYPATHPARAMETERS): %d != "
                "dwg_dynapi_fields_size (\"ASSOCARRAYPATHPARAMETERS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS);
+  size1 = sizeof (Dwg_Object_ASSOCARRAYPOLARPARAMETERS);
   size2 = dwg_dynapi_fields_size ("ASSOCARRAYPOLARPARAMETERS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCARRAYPOLARPARAMETERS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCARRAYPOLARPARAMETERS): %d != "
                "dwg_dynapi_fields_size (\"ASSOCARRAYPOLARPARAMETERS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS);
+  size1 = sizeof (Dwg_Object_ASSOCARRAYRECTANGULARPARAMETERS);
   size2 = dwg_dynapi_fields_size ("ASSOCARRAYRECTANGULARPARAMETERS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCARRAYRECTANGULARPARAMETERS): %d != "
                "dwg_dynapi_fields_size (\"ASSOCARRAYRECTANGULARPARAMETERS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCASMBODYACTIONPARAM);
+  size1 = sizeof (Dwg_Object_ASSOCASMBODYACTIONPARAM);
   size2 = dwg_dynapi_fields_size ("ASSOCASMBODYACTIONPARAM");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCASMBODYACTIONPARAM): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCASMBODYACTIONPARAM): %d != "
                "dwg_dynapi_fields_size (\"ASSOCASMBODYACTIONPARAM\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCBLENDSURFACEACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCBLENDSURFACEACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCBLENDSURFACEACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCBLENDSURFACEACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCBLENDSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCBLENDSURFACEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCCOMPOUNDACTIONPARAM);
+  size1 = sizeof (Dwg_Object_ASSOCCOMPOUNDACTIONPARAM);
   size2 = dwg_dynapi_fields_size ("ASSOCCOMPOUNDACTIONPARAM");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCCOMPOUNDACTIONPARAM): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCCOMPOUNDACTIONPARAM): %d != "
                "dwg_dynapi_fields_size (\"ASSOCCOMPOUNDACTIONPARAM\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCDEPENDENCY);
+  size1 = sizeof (Dwg_Object_ASSOCDEPENDENCY);
   size2 = dwg_dynapi_fields_size ("ASSOCDEPENDENCY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCDEPENDENCY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCDEPENDENCY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCDEPENDENCY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCDIMDEPENDENCYBODY);
+  size1 = sizeof (Dwg_Object_ASSOCDIMDEPENDENCYBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCDIMDEPENDENCYBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCDIMDEPENDENCYBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCDIMDEPENDENCYBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCDIMDEPENDENCYBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCEDGEACTIONPARAM);
+  size1 = sizeof (Dwg_Object_ASSOCEDGEACTIONPARAM);
   size2 = dwg_dynapi_fields_size ("ASSOCEDGEACTIONPARAM");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCEDGEACTIONPARAM): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCEDGEACTIONPARAM): %d != "
                "dwg_dynapi_fields_size (\"ASSOCEDGEACTIONPARAM\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCEDGECHAMFERACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCEDGECHAMFERACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCEDGECHAMFERACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCEDGECHAMFERACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCEDGECHAMFERACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCEDGECHAMFERACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCEDGEFILLETACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCEDGEFILLETACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCEDGEFILLETACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCEDGEFILLETACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCEDGEFILLETACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCEDGEFILLETACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCEXTENDSURFACEACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCEXTENDSURFACEACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCEXTENDSURFACEACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCEXTENDSURFACEACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCEXTENDSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCEXTENDSURFACEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCEXTRUDEDSURFACEACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCEXTRUDEDSURFACEACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCEXTRUDEDSURFACEACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCEXTRUDEDSURFACEACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCEXTRUDEDSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCEXTRUDEDSURFACEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCFACEACTIONPARAM);
+  size1 = sizeof (Dwg_Object_ASSOCFACEACTIONPARAM);
   size2 = dwg_dynapi_fields_size ("ASSOCFACEACTIONPARAM");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCFACEACTIONPARAM): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCFACEACTIONPARAM): %d != "
                "dwg_dynapi_fields_size (\"ASSOCFACEACTIONPARAM\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCFILLETSURFACEACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCFILLETSURFACEACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCFILLETSURFACEACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCFILLETSURFACEACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCFILLETSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCFILLETSURFACEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCGEOMDEPENDENCY);
+  size1 = sizeof (Dwg_Object_ASSOCGEOMDEPENDENCY);
   size2 = dwg_dynapi_fields_size ("ASSOCGEOMDEPENDENCY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCGEOMDEPENDENCY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCGEOMDEPENDENCY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCGEOMDEPENDENCY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCLOFTEDSURFACEACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCLOFTEDSURFACEACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCLOFTEDSURFACEACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCLOFTEDSURFACEACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCLOFTEDSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCLOFTEDSURFACEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCMLEADERACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCMLEADERACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCMLEADERACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCMLEADERACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCMLEADERACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCMLEADERACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCNETWORK);
+  size1 = sizeof (Dwg_Object_ASSOCNETWORK);
   size2 = dwg_dynapi_fields_size ("ASSOCNETWORK");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCNETWORK): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCNETWORK): %d != "
                "dwg_dynapi_fields_size (\"ASSOCNETWORK\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCNETWORKSURFACEACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCNETWORKSURFACEACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCNETWORKSURFACEACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCNETWORKSURFACEACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCNETWORKSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCNETWORKSURFACEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCOBJECTACTIONPARAM);
+  size1 = sizeof (Dwg_Object_ASSOCOBJECTACTIONPARAM);
   size2 = dwg_dynapi_fields_size ("ASSOCOBJECTACTIONPARAM");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCOBJECTACTIONPARAM): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCOBJECTACTIONPARAM): %d != "
                "dwg_dynapi_fields_size (\"ASSOCOBJECTACTIONPARAM\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCOFFSETSURFACEACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCOFFSETSURFACEACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCOFFSETSURFACEACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCOFFSETSURFACEACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCOFFSETSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCOFFSETSURFACEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCORDINATEDIMACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCORDINATEDIMACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCORDINATEDIMACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCORDINATEDIMACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCORDINATEDIMACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCORDINATEDIMACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM);
+  size1 = sizeof (Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM);
   size2 = dwg_dynapi_fields_size ("ASSOCOSNAPPOINTREFACTIONPARAM");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCOSNAPPOINTREFACTIONPARAM): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCOSNAPPOINTREFACTIONPARAM): %d != "
                "dwg_dynapi_fields_size (\"ASSOCOSNAPPOINTREFACTIONPARAM\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCPATCHSURFACEACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCPATCHSURFACEACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCPATCHSURFACEACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCPATCHSURFACEACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCPATCHSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCPATCHSURFACEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCPATHACTIONPARAM);
+  size1 = sizeof (Dwg_Object_ASSOCPATHACTIONPARAM);
   size2 = dwg_dynapi_fields_size ("ASSOCPATHACTIONPARAM");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCPATHACTIONPARAM): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCPATHACTIONPARAM): %d != "
                "dwg_dynapi_fields_size (\"ASSOCPATHACTIONPARAM\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCPERSSUBENTMANAGER);
+  size1 = sizeof (Dwg_Object_ASSOCPERSSUBENTMANAGER);
   size2 = dwg_dynapi_fields_size ("ASSOCPERSSUBENTMANAGER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCPERSSUBENTMANAGER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCPERSSUBENTMANAGER): %d != "
                "dwg_dynapi_fields_size (\"ASSOCPERSSUBENTMANAGER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCPLANESURFACEACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCPLANESURFACEACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCPLANESURFACEACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCPLANESURFACEACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCPLANESURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCPLANESURFACEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCPOINTREFACTIONPARAM);
+  size1 = sizeof (Dwg_Object_ASSOCPOINTREFACTIONPARAM);
   size2 = dwg_dynapi_fields_size ("ASSOCPOINTREFACTIONPARAM");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCPOINTREFACTIONPARAM): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCPOINTREFACTIONPARAM): %d != "
                "dwg_dynapi_fields_size (\"ASSOCPOINTREFACTIONPARAM\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCRESTOREENTITYSTATEACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCRESTOREENTITYSTATEACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCRESTOREENTITYSTATEACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCRESTOREENTITYSTATEACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCRESTOREENTITYSTATEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCRESTOREENTITYSTATEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCREVOLVEDSURFACEACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCREVOLVEDSURFACEACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCREVOLVEDSURFACEACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCREVOLVEDSURFACEACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCREVOLVEDSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCREVOLVEDSURFACEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCROTATEDDIMACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCROTATEDDIMACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCROTATEDDIMACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCROTATEDDIMACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCROTATEDDIMACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCROTATEDDIMACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCSWEPTSURFACEACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCSWEPTSURFACEACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCSWEPTSURFACEACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCSWEPTSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCSWEPTSURFACEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCTRIMSURFACEACTIONBODY);
+  size1 = sizeof (Dwg_Object_ASSOCTRIMSURFACEACTIONBODY);
   size2 = dwg_dynapi_fields_size ("ASSOCTRIMSURFACEACTIONBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCTRIMSURFACEACTIONBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCTRIMSURFACEACTIONBODY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCTRIMSURFACEACTIONBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCVALUEDEPENDENCY);
+  size1 = sizeof (Dwg_Object_ASSOCVALUEDEPENDENCY);
   size2 = dwg_dynapi_fields_size ("ASSOCVALUEDEPENDENCY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCVALUEDEPENDENCY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCVALUEDEPENDENCY): %d != "
                "dwg_dynapi_fields_size (\"ASSOCVALUEDEPENDENCY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCVARIABLE);
+  size1 = sizeof (Dwg_Object_ASSOCVARIABLE);
   size2 = dwg_dynapi_fields_size ("ASSOCVARIABLE");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCVARIABLE): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCVARIABLE): %d != "
                "dwg_dynapi_fields_size (\"ASSOCVARIABLE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ASSOCVERTEXACTIONPARAM);
+  size1 = sizeof (Dwg_Object_ASSOCVERTEXACTIONPARAM);
   size2 = dwg_dynapi_fields_size ("ASSOCVERTEXACTIONPARAM");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ASSOCVERTEXACTIONPARAM): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ASSOCVERTEXACTIONPARAM): %d != "
                "dwg_dynapi_fields_size (\"ASSOCVERTEXACTIONPARAM\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BACKGROUND);
+  size1 = sizeof (Dwg_Object_BACKGROUND);
   size2 = dwg_dynapi_fields_size ("BACKGROUND");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BACKGROUND): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BACKGROUND): %d != "
                "dwg_dynapi_fields_size (\"BACKGROUND\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLKREFOBJECTCONTEXTDATA);
+  size1 = sizeof (Dwg_Object_BLKREFOBJECTCONTEXTDATA);
   size2 = dwg_dynapi_fields_size ("BLKREFOBJECTCONTEXTDATA");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLKREFOBJECTCONTEXTDATA): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLKREFOBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"BLKREFOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKALIGNEDCONSTRAINTPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKALIGNEDCONSTRAINTPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKALIGNEDCONSTRAINTPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKALIGNEDCONSTRAINTPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKALIGNEDCONSTRAINTPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKALIGNMENTGRIP);
+  size1 = sizeof (Dwg_Object_BLOCKALIGNMENTGRIP);
   size2 = dwg_dynapi_fields_size ("BLOCKALIGNMENTGRIP");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKALIGNMENTGRIP): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKALIGNMENTGRIP): %d != "
                "dwg_dynapi_fields_size (\"BLOCKALIGNMENTGRIP\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKALIGNMENTPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKALIGNMENTPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKALIGNMENTPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKALIGNMENTPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKALIGNMENTPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKALIGNMENTPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKANGULARCONSTRAINTPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKANGULARCONSTRAINTPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKANGULARCONSTRAINTPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKANGULARCONSTRAINTPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKARRAYACTION);
+  size1 = sizeof (Dwg_Object_BLOCKARRAYACTION);
   size2 = dwg_dynapi_fields_size ("BLOCKARRAYACTION");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKARRAYACTION): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKARRAYACTION): %d != "
                "dwg_dynapi_fields_size (\"BLOCKARRAYACTION\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKBASEPOINTPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKBASEPOINTPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKBASEPOINTPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKBASEPOINTPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKBASEPOINTPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKBASEPOINTPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKDIAMETRICCONSTRAINTPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKDIAMETRICCONSTRAINTPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKDIAMETRICCONSTRAINTPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKDIAMETRICCONSTRAINTPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKFLIPACTION);
+  size1 = sizeof (Dwg_Object_BLOCKFLIPACTION);
   size2 = dwg_dynapi_fields_size ("BLOCKFLIPACTION");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKFLIPACTION): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKFLIPACTION): %d != "
                "dwg_dynapi_fields_size (\"BLOCKFLIPACTION\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKFLIPGRIP);
+  size1 = sizeof (Dwg_Object_BLOCKFLIPGRIP);
   size2 = dwg_dynapi_fields_size ("BLOCKFLIPGRIP");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKFLIPGRIP): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKFLIPGRIP): %d != "
                "dwg_dynapi_fields_size (\"BLOCKFLIPGRIP\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKFLIPPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKFLIPPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKFLIPPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKFLIPPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKFLIPPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKFLIPPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT);
+  size1 = sizeof (Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT);
   size2 = dwg_dynapi_fields_size ("BLOCKGRIPLOCATIONCOMPONENT");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT): %d != "
                "dwg_dynapi_fields_size (\"BLOCKGRIPLOCATIONCOMPONENT\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKHORIZONTALCONSTRAINTPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKHORIZONTALCONSTRAINTPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKHORIZONTALCONSTRAINTPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKHORIZONTALCONSTRAINTPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKHORIZONTALCONSTRAINTPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKLINEARCONSTRAINTPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKLINEARCONSTRAINTPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKLINEARCONSTRAINTPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKLINEARCONSTRAINTPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKLINEARCONSTRAINTPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKLINEARGRIP);
+  size1 = sizeof (Dwg_Object_BLOCKLINEARGRIP);
   size2 = dwg_dynapi_fields_size ("BLOCKLINEARGRIP");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKLINEARGRIP): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKLINEARGRIP): %d != "
                "dwg_dynapi_fields_size (\"BLOCKLINEARGRIP\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKLINEARPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKLINEARPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKLINEARPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKLINEARPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKLINEARPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKLINEARPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKLOOKUPACTION);
+  size1 = sizeof (Dwg_Object_BLOCKLOOKUPACTION);
   size2 = dwg_dynapi_fields_size ("BLOCKLOOKUPACTION");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKLOOKUPACTION): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKLOOKUPACTION): %d != "
                "dwg_dynapi_fields_size (\"BLOCKLOOKUPACTION\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKLOOKUPGRIP);
+  size1 = sizeof (Dwg_Object_BLOCKLOOKUPGRIP);
   size2 = dwg_dynapi_fields_size ("BLOCKLOOKUPGRIP");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKLOOKUPGRIP): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKLOOKUPGRIP): %d != "
                "dwg_dynapi_fields_size (\"BLOCKLOOKUPGRIP\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKLOOKUPPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKLOOKUPPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKLOOKUPPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKLOOKUPPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKLOOKUPPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKLOOKUPPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKMOVEACTION);
+  size1 = sizeof (Dwg_Object_BLOCKMOVEACTION);
   size2 = dwg_dynapi_fields_size ("BLOCKMOVEACTION");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKMOVEACTION): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKMOVEACTION): %d != "
                "dwg_dynapi_fields_size (\"BLOCKMOVEACTION\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKPARAMDEPENDENCYBODY);
+  size1 = sizeof (Dwg_Object_BLOCKPARAMDEPENDENCYBODY);
   size2 = dwg_dynapi_fields_size ("BLOCKPARAMDEPENDENCYBODY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKPARAMDEPENDENCYBODY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKPARAMDEPENDENCYBODY): %d != "
                "dwg_dynapi_fields_size (\"BLOCKPARAMDEPENDENCYBODY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKPOINTPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKPOINTPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKPOINTPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKPOINTPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKPOINTPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKPOINTPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKPOLARGRIP);
+  size1 = sizeof (Dwg_Object_BLOCKPOLARGRIP);
   size2 = dwg_dynapi_fields_size ("BLOCKPOLARGRIP");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKPOLARGRIP): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKPOLARGRIP): %d != "
                "dwg_dynapi_fields_size (\"BLOCKPOLARGRIP\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKPOLARPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKPOLARPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKPOLARPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKPOLARPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKPOLARPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKPOLARPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKPOLARSTRETCHACTION);
+  size1 = sizeof (Dwg_Object_BLOCKPOLARSTRETCHACTION);
   size2 = dwg_dynapi_fields_size ("BLOCKPOLARSTRETCHACTION");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKPOLARSTRETCHACTION): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKPOLARSTRETCHACTION): %d != "
                "dwg_dynapi_fields_size (\"BLOCKPOLARSTRETCHACTION\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKPROPERTIESTABLE);
+  size1 = sizeof (Dwg_Object_BLOCKPROPERTIESTABLE);
   size2 = dwg_dynapi_fields_size ("BLOCKPROPERTIESTABLE");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKPROPERTIESTABLE): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKPROPERTIESTABLE): %d != "
                "dwg_dynapi_fields_size (\"BLOCKPROPERTIESTABLE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKPROPERTIESTABLEGRIP);
+  size1 = sizeof (Dwg_Object_BLOCKPROPERTIESTABLEGRIP);
   size2 = dwg_dynapi_fields_size ("BLOCKPROPERTIESTABLEGRIP");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKPROPERTIESTABLEGRIP): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKPROPERTIESTABLEGRIP): %d != "
                "dwg_dynapi_fields_size (\"BLOCKPROPERTIESTABLEGRIP\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKRADIALCONSTRAINTPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKRADIALCONSTRAINTPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKRADIALCONSTRAINTPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKRADIALCONSTRAINTPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKREPRESENTATION);
+  size1 = sizeof (Dwg_Object_BLOCKREPRESENTATION);
   size2 = dwg_dynapi_fields_size ("BLOCKREPRESENTATION");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKREPRESENTATION): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKREPRESENTATION): %d != "
                "dwg_dynapi_fields_size (\"BLOCKREPRESENTATION\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKROTATEACTION);
+  size1 = sizeof (Dwg_Object_BLOCKROTATEACTION);
   size2 = dwg_dynapi_fields_size ("BLOCKROTATEACTION");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKROTATEACTION): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKROTATEACTION): %d != "
                "dwg_dynapi_fields_size (\"BLOCKROTATEACTION\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKROTATIONGRIP);
+  size1 = sizeof (Dwg_Object_BLOCKROTATIONGRIP);
   size2 = dwg_dynapi_fields_size ("BLOCKROTATIONGRIP");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKROTATIONGRIP): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKROTATIONGRIP): %d != "
                "dwg_dynapi_fields_size (\"BLOCKROTATIONGRIP\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKROTATIONPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKROTATIONPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKROTATIONPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKROTATIONPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKROTATIONPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKROTATIONPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKSCALEACTION);
+  size1 = sizeof (Dwg_Object_BLOCKSCALEACTION);
   size2 = dwg_dynapi_fields_size ("BLOCKSCALEACTION");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKSCALEACTION): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKSCALEACTION): %d != "
                "dwg_dynapi_fields_size (\"BLOCKSCALEACTION\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKSTRETCHACTION);
+  size1 = sizeof (Dwg_Object_BLOCKSTRETCHACTION);
   size2 = dwg_dynapi_fields_size ("BLOCKSTRETCHACTION");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKSTRETCHACTION): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKSTRETCHACTION): %d != "
                "dwg_dynapi_fields_size (\"BLOCKSTRETCHACTION\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKUSERPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKUSERPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKUSERPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKUSERPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKUSERPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKUSERPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKVERTICALCONSTRAINTPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKVERTICALCONSTRAINTPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKVERTICALCONSTRAINTPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKVERTICALCONSTRAINTPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKVISIBILITYGRIP);
+  size1 = sizeof (Dwg_Object_BLOCKVISIBILITYGRIP);
   size2 = dwg_dynapi_fields_size ("BLOCKVISIBILITYGRIP");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKVISIBILITYGRIP): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKVISIBILITYGRIP): %d != "
                "dwg_dynapi_fields_size (\"BLOCKVISIBILITYGRIP\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKVISIBILITYPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKVISIBILITYPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKVISIBILITYPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKVISIBILITYPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKVISIBILITYPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKVISIBILITYPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKXYGRIP);
+  size1 = sizeof (Dwg_Object_BLOCKXYGRIP);
   size2 = dwg_dynapi_fields_size ("BLOCKXYGRIP");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKXYGRIP): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKXYGRIP): %d != "
                "dwg_dynapi_fields_size (\"BLOCKXYGRIP\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCKXYPARAMETER);
+  size1 = sizeof (Dwg_Object_BLOCKXYPARAMETER);
   size2 = dwg_dynapi_fields_size ("BLOCKXYPARAMETER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCKXYPARAMETER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCKXYPARAMETER): %d != "
                "dwg_dynapi_fields_size (\"BLOCKXYPARAMETER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCK_CONTROL);
+  size1 = sizeof (Dwg_Object_BLOCK_CONTROL);
   size2 = dwg_dynapi_fields_size ("BLOCK_CONTROL");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCK_CONTROL): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCK_CONTROL): %d != "
                "dwg_dynapi_fields_size (\"BLOCK_CONTROL\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_BLOCK_HEADER);
+  size1 = sizeof (Dwg_Object_BLOCK_HEADER);
   size2 = dwg_dynapi_fields_size ("BLOCK_HEADER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_BLOCK_HEADER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_BLOCK_HEADER): %d != "
                "dwg_dynapi_fields_size (\"BLOCK_HEADER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_CELLSTYLEMAP);
+  size1 = sizeof (Dwg_Object_CELLSTYLEMAP);
   size2 = dwg_dynapi_fields_size ("CELLSTYLEMAP");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_CELLSTYLEMAP): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_CELLSTYLEMAP): %d != "
                "dwg_dynapi_fields_size (\"CELLSTYLEMAP\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_CONTEXTDATAMANAGER);
+  size1 = sizeof (Dwg_Object_CONTEXTDATAMANAGER);
   size2 = dwg_dynapi_fields_size ("CONTEXTDATAMANAGER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_CONTEXTDATAMANAGER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_CONTEXTDATAMANAGER): %d != "
                "dwg_dynapi_fields_size (\"CONTEXTDATAMANAGER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_CSACDOCUMENTOPTIONS);
+  size1 = sizeof (Dwg_Object_CSACDOCUMENTOPTIONS);
   size2 = dwg_dynapi_fields_size ("CSACDOCUMENTOPTIONS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_CSACDOCUMENTOPTIONS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_CSACDOCUMENTOPTIONS): %d != "
                "dwg_dynapi_fields_size (\"CSACDOCUMENTOPTIONS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_CURVEPATH);
+  size1 = sizeof (Dwg_Object_CURVEPATH);
   size2 = dwg_dynapi_fields_size ("CURVEPATH");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_CURVEPATH): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_CURVEPATH): %d != "
                "dwg_dynapi_fields_size (\"CURVEPATH\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_DATALINK);
+  size1 = sizeof (Dwg_Object_DATALINK);
   size2 = dwg_dynapi_fields_size ("DATALINK");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_DATALINK): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_DATALINK): %d != "
                "dwg_dynapi_fields_size (\"DATALINK\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_DATATABLE);
+  size1 = sizeof (Dwg_Object_DATATABLE);
   size2 = dwg_dynapi_fields_size ("DATATABLE");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_DATATABLE): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_DATATABLE): %d != "
                "dwg_dynapi_fields_size (\"DATATABLE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_DBCOLOR);
+  size1 = sizeof (Dwg_Object_DBCOLOR);
   size2 = dwg_dynapi_fields_size ("DBCOLOR");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_DBCOLOR): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_DBCOLOR): %d != "
                "dwg_dynapi_fields_size (\"DBCOLOR\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_DETAILVIEWSTYLE);
+  size1 = sizeof (Dwg_Object_DETAILVIEWSTYLE);
   size2 = dwg_dynapi_fields_size ("DETAILVIEWSTYLE");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_DETAILVIEWSTYLE): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_DETAILVIEWSTYLE): %d != "
                "dwg_dynapi_fields_size (\"DETAILVIEWSTYLE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_DICTIONARY);
+  size1 = sizeof (Dwg_Object_DICTIONARY);
   size2 = dwg_dynapi_fields_size ("DICTIONARY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_DICTIONARY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_DICTIONARY): %d != "
                "dwg_dynapi_fields_size (\"DICTIONARY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_DICTIONARYVAR);
+  size1 = sizeof (Dwg_Object_DICTIONARYVAR);
   size2 = dwg_dynapi_fields_size ("DICTIONARYVAR");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_DICTIONARYVAR): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_DICTIONARYVAR): %d != "
                "dwg_dynapi_fields_size (\"DICTIONARYVAR\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_DICTIONARYWDFLT);
+  size1 = sizeof (Dwg_Object_DICTIONARYWDFLT);
   size2 = dwg_dynapi_fields_size ("DICTIONARYWDFLT");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_DICTIONARYWDFLT): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_DICTIONARYWDFLT): %d != "
                "dwg_dynapi_fields_size (\"DICTIONARYWDFLT\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_DIMASSOC);
+  size1 = sizeof (Dwg_Object_DIMASSOC);
   size2 = dwg_dynapi_fields_size ("DIMASSOC");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_DIMASSOC): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_DIMASSOC): %d != "
                "dwg_dynapi_fields_size (\"DIMASSOC\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_DIMSTYLE);
+  size1 = sizeof (Dwg_Object_DIMSTYLE);
   size2 = dwg_dynapi_fields_size ("DIMSTYLE");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_DIMSTYLE): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_DIMSTYLE): %d != "
                "dwg_dynapi_fields_size (\"DIMSTYLE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_DIMSTYLE_CONTROL);
+  size1 = sizeof (Dwg_Object_DIMSTYLE_CONTROL);
   size2 = dwg_dynapi_fields_size ("DIMSTYLE_CONTROL");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_DIMSTYLE_CONTROL): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_DIMSTYLE_CONTROL): %d != "
                "dwg_dynapi_fields_size (\"DIMSTYLE_CONTROL\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_DMDIMOBJECTCONTEXTDATA);
+  size1 = sizeof (Dwg_Object_DMDIMOBJECTCONTEXTDATA);
   size2 = dwg_dynapi_fields_size ("DMDIMOBJECTCONTEXTDATA");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_DMDIMOBJECTCONTEXTDATA): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_DMDIMOBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"DMDIMOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_DUMMY);
+  size1 = sizeof (Dwg_Object_DUMMY);
   size2 = dwg_dynapi_fields_size ("DUMMY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_DUMMY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_DUMMY): %d != "
                "dwg_dynapi_fields_size (\"DUMMY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_DYNAMICBLOCKPROXYNODE);
+  size1 = sizeof (Dwg_Object_DYNAMICBLOCKPROXYNODE);
   size2 = dwg_dynapi_fields_size ("DYNAMICBLOCKPROXYNODE");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_DYNAMICBLOCKPROXYNODE): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_DYNAMICBLOCKPROXYNODE): %d != "
                "dwg_dynapi_fields_size (\"DYNAMICBLOCKPROXYNODE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER);
+  size1 = sizeof (Dwg_Object_DYNAMICBLOCKPURGEPREVENTER);
   size2 = dwg_dynapi_fields_size ("DYNAMICBLOCKPURGEPREVENTER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_DYNAMICBLOCKPURGEPREVENTER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_DYNAMICBLOCKPURGEPREVENTER): %d != "
                "dwg_dynapi_fields_size (\"DYNAMICBLOCKPURGEPREVENTER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_EVALUATION_GRAPH);
+  size1 = sizeof (Dwg_Object_EVALUATION_GRAPH);
   size2 = dwg_dynapi_fields_size ("EVALUATION_GRAPH");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_EVALUATION_GRAPH): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_EVALUATION_GRAPH): %d != "
                "dwg_dynapi_fields_size (\"EVALUATION_GRAPH\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_FCFOBJECTCONTEXTDATA);
+  size1 = sizeof (Dwg_Object_FCFOBJECTCONTEXTDATA);
   size2 = dwg_dynapi_fields_size ("FCFOBJECTCONTEXTDATA");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_FCFOBJECTCONTEXTDATA): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_FCFOBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"FCFOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_FIELD);
+  size1 = sizeof (Dwg_Object_FIELD);
   size2 = dwg_dynapi_fields_size ("FIELD");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_FIELD): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_FIELD): %d != "
                "dwg_dynapi_fields_size (\"FIELD\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_FIELDLIST);
+  size1 = sizeof (Dwg_Object_FIELDLIST);
   size2 = dwg_dynapi_fields_size ("FIELDLIST");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_FIELDLIST): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_FIELDLIST): %d != "
                "dwg_dynapi_fields_size (\"FIELDLIST\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_GEODATA);
+  size1 = sizeof (Dwg_Object_GEODATA);
   size2 = dwg_dynapi_fields_size ("GEODATA");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_GEODATA): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_GEODATA): %d != "
                "dwg_dynapi_fields_size (\"GEODATA\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_GEOMAPIMAGE);
+  size1 = sizeof (Dwg_Object_GEOMAPIMAGE);
   size2 = dwg_dynapi_fields_size ("GEOMAPIMAGE");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_GEOMAPIMAGE): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_GEOMAPIMAGE): %d != "
                "dwg_dynapi_fields_size (\"GEOMAPIMAGE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_GROUP);
+  size1 = sizeof (Dwg_Object_GROUP);
   size2 = dwg_dynapi_fields_size ("GROUP");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_GROUP): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_GROUP): %d != "
                "dwg_dynapi_fields_size (\"GROUP\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_IDBUFFER);
+  size1 = sizeof (Dwg_Object_IDBUFFER);
   size2 = dwg_dynapi_fields_size ("IDBUFFER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_IDBUFFER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_IDBUFFER): %d != "
                "dwg_dynapi_fields_size (\"IDBUFFER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_IMAGEDEF);
+  size1 = sizeof (Dwg_Object_IMAGEDEF);
   size2 = dwg_dynapi_fields_size ("IMAGEDEF");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_IMAGEDEF): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_IMAGEDEF): %d != "
                "dwg_dynapi_fields_size (\"IMAGEDEF\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_IMAGEDEF_REACTOR);
+  size1 = sizeof (Dwg_Object_IMAGEDEF_REACTOR);
   size2 = dwg_dynapi_fields_size ("IMAGEDEF_REACTOR");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_IMAGEDEF_REACTOR): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_IMAGEDEF_REACTOR): %d != "
                "dwg_dynapi_fields_size (\"IMAGEDEF_REACTOR\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_INDEX);
+  size1 = sizeof (Dwg_Object_INDEX);
   size2 = dwg_dynapi_fields_size ("INDEX");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_INDEX): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_INDEX): %d != "
                "dwg_dynapi_fields_size (\"INDEX\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_LAYER);
+  size1 = sizeof (Dwg_Object_LAYER);
   size2 = dwg_dynapi_fields_size ("LAYER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_LAYER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_LAYER): %d != "
                "dwg_dynapi_fields_size (\"LAYER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_LAYERFILTER);
+  size1 = sizeof (Dwg_Object_LAYERFILTER);
   size2 = dwg_dynapi_fields_size ("LAYERFILTER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_LAYERFILTER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_LAYERFILTER): %d != "
                "dwg_dynapi_fields_size (\"LAYERFILTER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_LAYER_CONTROL);
+  size1 = sizeof (Dwg_Object_LAYER_CONTROL);
   size2 = dwg_dynapi_fields_size ("LAYER_CONTROL");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_LAYER_CONTROL): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_LAYER_CONTROL): %d != "
                "dwg_dynapi_fields_size (\"LAYER_CONTROL\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_LAYER_INDEX);
+  size1 = sizeof (Dwg_Object_LAYER_INDEX);
   size2 = dwg_dynapi_fields_size ("LAYER_INDEX");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_LAYER_INDEX): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_LAYER_INDEX): %d != "
                "dwg_dynapi_fields_size (\"LAYER_INDEX\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_LAYOUT);
+  size1 = sizeof (Dwg_Object_LAYOUT);
   size2 = dwg_dynapi_fields_size ("LAYOUT");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_LAYOUT): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_LAYOUT): %d != "
                "dwg_dynapi_fields_size (\"LAYOUT\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_LAYOUTPRINTCONFIG);
+  size1 = sizeof (Dwg_Object_LAYOUTPRINTCONFIG);
   size2 = dwg_dynapi_fields_size ("LAYOUTPRINTCONFIG");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_LAYOUTPRINTCONFIG): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_LAYOUTPRINTCONFIG): %d != "
                "dwg_dynapi_fields_size (\"LAYOUTPRINTCONFIG\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_LEADEROBJECTCONTEXTDATA);
+  size1 = sizeof (Dwg_Object_LEADEROBJECTCONTEXTDATA);
   size2 = dwg_dynapi_fields_size ("LEADEROBJECTCONTEXTDATA");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_LEADEROBJECTCONTEXTDATA): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_LEADEROBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"LEADEROBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_LIGHTLIST);
+  size1 = sizeof (Dwg_Object_LIGHTLIST);
   size2 = dwg_dynapi_fields_size ("LIGHTLIST");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_LIGHTLIST): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_LIGHTLIST): %d != "
                "dwg_dynapi_fields_size (\"LIGHTLIST\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_LONG_TRANSACTION);
+  size1 = sizeof (Dwg_Object_LONG_TRANSACTION);
   size2 = dwg_dynapi_fields_size ("LONG_TRANSACTION");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_LONG_TRANSACTION): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_LONG_TRANSACTION): %d != "
                "dwg_dynapi_fields_size (\"LONG_TRANSACTION\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_LTYPE);
+  size1 = sizeof (Dwg_Object_LTYPE);
   size2 = dwg_dynapi_fields_size ("LTYPE");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_LTYPE): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_LTYPE): %d != "
                "dwg_dynapi_fields_size (\"LTYPE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_LTYPE_CONTROL);
+  size1 = sizeof (Dwg_Object_LTYPE_CONTROL);
   size2 = dwg_dynapi_fields_size ("LTYPE_CONTROL");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_LTYPE_CONTROL): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_LTYPE_CONTROL): %d != "
                "dwg_dynapi_fields_size (\"LTYPE_CONTROL\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_MATERIAL);
+  size1 = sizeof (Dwg_Object_MATERIAL);
   size2 = dwg_dynapi_fields_size ("MATERIAL");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_MATERIAL): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_MATERIAL): %d != "
                "dwg_dynapi_fields_size (\"MATERIAL\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_MENTALRAYRENDERSETTINGS);
+  size1 = sizeof (Dwg_Object_MENTALRAYRENDERSETTINGS);
   size2 = dwg_dynapi_fields_size ("MENTALRAYRENDERSETTINGS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_MENTALRAYRENDERSETTINGS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_MENTALRAYRENDERSETTINGS): %d != "
                "dwg_dynapi_fields_size (\"MENTALRAYRENDERSETTINGS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_MLEADEROBJECTCONTEXTDATA);
+  size1 = sizeof (Dwg_Object_MLEADEROBJECTCONTEXTDATA);
   size2 = dwg_dynapi_fields_size ("MLEADEROBJECTCONTEXTDATA");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_MLEADEROBJECTCONTEXTDATA): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_MLEADEROBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"MLEADEROBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_MLEADERSTYLE);
+  size1 = sizeof (Dwg_Object_MLEADERSTYLE);
   size2 = dwg_dynapi_fields_size ("MLEADERSTYLE");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_MLEADERSTYLE): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_MLEADERSTYLE): %d != "
                "dwg_dynapi_fields_size (\"MLEADERSTYLE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_MLINESTYLE);
+  size1 = sizeof (Dwg_Object_MLINESTYLE);
   size2 = dwg_dynapi_fields_size ("MLINESTYLE");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_MLINESTYLE): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_MLINESTYLE): %d != "
                "dwg_dynapi_fields_size (\"MLINESTYLE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_MOTIONPATH);
+  size1 = sizeof (Dwg_Object_MOTIONPATH);
   size2 = dwg_dynapi_fields_size ("MOTIONPATH");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_MOTIONPATH): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_MOTIONPATH): %d != "
                "dwg_dynapi_fields_size (\"MOTIONPATH\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA);
+  size1 = sizeof (Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA);
   size2 = dwg_dynapi_fields_size ("MTEXTATTRIBUTEOBJECTCONTEXTDATA");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_MTEXTATTRIBUTEOBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"MTEXTATTRIBUTEOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_MTEXTOBJECTCONTEXTDATA);
+  size1 = sizeof (Dwg_Object_MTEXTOBJECTCONTEXTDATA);
   size2 = dwg_dynapi_fields_size ("MTEXTOBJECTCONTEXTDATA");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_MTEXTOBJECTCONTEXTDATA): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_MTEXTOBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"MTEXTOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_NAVISWORKSMODELDEF);
+  size1 = sizeof (Dwg_Object_NAVISWORKSMODELDEF);
   size2 = dwg_dynapi_fields_size ("NAVISWORKSMODELDEF");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_NAVISWORKSMODELDEF): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_NAVISWORKSMODELDEF): %d != "
                "dwg_dynapi_fields_size (\"NAVISWORKSMODELDEF\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_OBJECT_PTR);
+  size1 = sizeof (Dwg_Object_OBJECT_PTR);
   size2 = dwg_dynapi_fields_size ("OBJECT_PTR");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_OBJECT_PTR): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_OBJECT_PTR): %d != "
                "dwg_dynapi_fields_size (\"OBJECT_PTR\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_ORDDIMOBJECTCONTEXTDATA);
+  size1 = sizeof (Dwg_Object_ORDDIMOBJECTCONTEXTDATA);
   size2 = dwg_dynapi_fields_size ("ORDDIMOBJECTCONTEXTDATA");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_ORDDIMOBJECTCONTEXTDATA): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_ORDDIMOBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"ORDDIMOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_PERSUBENTMGR);
+  size1 = sizeof (Dwg_Object_PERSUBENTMGR);
   size2 = dwg_dynapi_fields_size ("PERSUBENTMGR");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_PERSUBENTMGR): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_PERSUBENTMGR): %d != "
                "dwg_dynapi_fields_size (\"PERSUBENTMGR\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_PLACEHOLDER);
+  size1 = sizeof (Dwg_Object_PLACEHOLDER);
   size2 = dwg_dynapi_fields_size ("PLACEHOLDER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_PLACEHOLDER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_PLACEHOLDER): %d != "
                "dwg_dynapi_fields_size (\"PLACEHOLDER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_PLOTSETTINGS);
+  size1 = sizeof (Dwg_Object_PLOTSETTINGS);
   size2 = dwg_dynapi_fields_size ("PLOTSETTINGS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_PLOTSETTINGS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_PLOTSETTINGS): %d != "
                "dwg_dynapi_fields_size (\"PLOTSETTINGS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_POINTCLOUDCOLORMAP);
+  size1 = sizeof (Dwg_Object_POINTCLOUDCOLORMAP);
   size2 = dwg_dynapi_fields_size ("POINTCLOUDCOLORMAP");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_POINTCLOUDCOLORMAP): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_POINTCLOUDCOLORMAP): %d != "
                "dwg_dynapi_fields_size (\"POINTCLOUDCOLORMAP\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_POINTCLOUDDEF);
+  size1 = sizeof (Dwg_Object_POINTCLOUDDEF);
   size2 = dwg_dynapi_fields_size ("POINTCLOUDDEF");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_POINTCLOUDDEF): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_POINTCLOUDDEF): %d != "
                "dwg_dynapi_fields_size (\"POINTCLOUDDEF\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_POINTCLOUDDEFEX);
+  size1 = sizeof (Dwg_Object_POINTCLOUDDEFEX);
   size2 = dwg_dynapi_fields_size ("POINTCLOUDDEFEX");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_POINTCLOUDDEFEX): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_POINTCLOUDDEFEX): %d != "
                "dwg_dynapi_fields_size (\"POINTCLOUDDEFEX\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_POINTCLOUDDEF_REACTOR);
+  size1 = sizeof (Dwg_Object_POINTCLOUDDEF_REACTOR);
   size2 = dwg_dynapi_fields_size ("POINTCLOUDDEF_REACTOR");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_POINTCLOUDDEF_REACTOR): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_POINTCLOUDDEF_REACTOR): %d != "
                "dwg_dynapi_fields_size (\"POINTCLOUDDEF_REACTOR\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_POINTCLOUDDEF_REACTOR_EX);
+  size1 = sizeof (Dwg_Object_POINTCLOUDDEF_REACTOR_EX);
   size2 = dwg_dynapi_fields_size ("POINTCLOUDDEF_REACTOR_EX");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_POINTCLOUDDEF_REACTOR_EX): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_POINTCLOUDDEF_REACTOR_EX): %d != "
                "dwg_dynapi_fields_size (\"POINTCLOUDDEF_REACTOR_EX\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_POINTPATH);
+  size1 = sizeof (Dwg_Object_POINTPATH);
   size2 = dwg_dynapi_fields_size ("POINTPATH");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_POINTPATH): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_POINTPATH): %d != "
                "dwg_dynapi_fields_size (\"POINTPATH\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_PROXY_OBJECT);
+  size1 = sizeof (Dwg_Object_PROXY_OBJECT);
   size2 = dwg_dynapi_fields_size ("PROXY_OBJECT");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_PROXY_OBJECT): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_PROXY_OBJECT): %d != "
                "dwg_dynapi_fields_size (\"PROXY_OBJECT\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_RADIMLGOBJECTCONTEXTDATA);
+  size1 = sizeof (Dwg_Object_RADIMLGOBJECTCONTEXTDATA);
   size2 = dwg_dynapi_fields_size ("RADIMLGOBJECTCONTEXTDATA");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_RADIMLGOBJECTCONTEXTDATA): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_RADIMLGOBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"RADIMLGOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_RADIMOBJECTCONTEXTDATA);
+  size1 = sizeof (Dwg_Object_RADIMOBJECTCONTEXTDATA);
   size2 = dwg_dynapi_fields_size ("RADIMOBJECTCONTEXTDATA");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_RADIMOBJECTCONTEXTDATA): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_RADIMOBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"RADIMOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_RAPIDRTRENDERSETTINGS);
+  size1 = sizeof (Dwg_Object_RAPIDRTRENDERSETTINGS);
   size2 = dwg_dynapi_fields_size ("RAPIDRTRENDERSETTINGS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_RAPIDRTRENDERSETTINGS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_RAPIDRTRENDERSETTINGS): %d != "
                "dwg_dynapi_fields_size (\"RAPIDRTRENDERSETTINGS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_RASTERVARIABLES);
+  size1 = sizeof (Dwg_Object_RASTERVARIABLES);
   size2 = dwg_dynapi_fields_size ("RASTERVARIABLES");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_RASTERVARIABLES): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_RASTERVARIABLES): %d != "
                "dwg_dynapi_fields_size (\"RASTERVARIABLES\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_RENDERENTRY);
+  size1 = sizeof (Dwg_Object_RENDERENTRY);
   size2 = dwg_dynapi_fields_size ("RENDERENTRY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_RENDERENTRY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_RENDERENTRY): %d != "
                "dwg_dynapi_fields_size (\"RENDERENTRY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_RENDERENVIRONMENT);
+  size1 = sizeof (Dwg_Object_RENDERENVIRONMENT);
   size2 = dwg_dynapi_fields_size ("RENDERENVIRONMENT");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_RENDERENVIRONMENT): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_RENDERENVIRONMENT): %d != "
                "dwg_dynapi_fields_size (\"RENDERENVIRONMENT\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_RENDERGLOBAL);
+  size1 = sizeof (Dwg_Object_RENDERGLOBAL);
   size2 = dwg_dynapi_fields_size ("RENDERGLOBAL");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_RENDERGLOBAL): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_RENDERGLOBAL): %d != "
                "dwg_dynapi_fields_size (\"RENDERGLOBAL\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_RENDERSETTINGS);
+  size1 = sizeof (Dwg_Object_RENDERSETTINGS);
   size2 = dwg_dynapi_fields_size ("RENDERSETTINGS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_RENDERSETTINGS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_RENDERSETTINGS): %d != "
                "dwg_dynapi_fields_size (\"RENDERSETTINGS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_SCALE);
+  size1 = sizeof (Dwg_Object_SCALE);
   size2 = dwg_dynapi_fields_size ("SCALE");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_SCALE): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_SCALE): %d != "
                "dwg_dynapi_fields_size (\"SCALE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_SECTIONVIEWSTYLE);
+  size1 = sizeof (Dwg_Object_SECTIONVIEWSTYLE);
   size2 = dwg_dynapi_fields_size ("SECTIONVIEWSTYLE");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_SECTIONVIEWSTYLE): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_SECTIONVIEWSTYLE): %d != "
                "dwg_dynapi_fields_size (\"SECTIONVIEWSTYLE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_SECTION_MANAGER);
+  size1 = sizeof (Dwg_Object_SECTION_MANAGER);
   size2 = dwg_dynapi_fields_size ("SECTION_MANAGER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_SECTION_MANAGER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_SECTION_MANAGER): %d != "
                "dwg_dynapi_fields_size (\"SECTION_MANAGER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_SECTION_SETTINGS);
+  size1 = sizeof (Dwg_Object_SECTION_SETTINGS);
   size2 = dwg_dynapi_fields_size ("SECTION_SETTINGS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_SECTION_SETTINGS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_SECTION_SETTINGS): %d != "
                "dwg_dynapi_fields_size (\"SECTION_SETTINGS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_SORTENTSTABLE);
+  size1 = sizeof (Dwg_Object_SORTENTSTABLE);
   size2 = dwg_dynapi_fields_size ("SORTENTSTABLE");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_SORTENTSTABLE): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_SORTENTSTABLE): %d != "
                "dwg_dynapi_fields_size (\"SORTENTSTABLE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_SPATIAL_FILTER);
+  size1 = sizeof (Dwg_Object_SPATIAL_FILTER);
   size2 = dwg_dynapi_fields_size ("SPATIAL_FILTER");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_SPATIAL_FILTER): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_SPATIAL_FILTER): %d != "
                "dwg_dynapi_fields_size (\"SPATIAL_FILTER\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_SPATIAL_INDEX);
+  size1 = sizeof (Dwg_Object_SPATIAL_INDEX);
   size2 = dwg_dynapi_fields_size ("SPATIAL_INDEX");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_SPATIAL_INDEX): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_SPATIAL_INDEX): %d != "
                "dwg_dynapi_fields_size (\"SPATIAL_INDEX\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_STYLE);
+  size1 = sizeof (Dwg_Object_STYLE);
   size2 = dwg_dynapi_fields_size ("STYLE");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_STYLE): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_STYLE): %d != "
                "dwg_dynapi_fields_size (\"STYLE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_STYLE_CONTROL);
+  size1 = sizeof (Dwg_Object_STYLE_CONTROL);
   size2 = dwg_dynapi_fields_size ("STYLE_CONTROL");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_STYLE_CONTROL): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_STYLE_CONTROL): %d != "
                "dwg_dynapi_fields_size (\"STYLE_CONTROL\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_SUN);
+  size1 = sizeof (Dwg_Object_SUN);
   size2 = dwg_dynapi_fields_size ("SUN");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_SUN): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_SUN): %d != "
                "dwg_dynapi_fields_size (\"SUN\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_SUNSTUDY);
+  size1 = sizeof (Dwg_Object_SUNSTUDY);
   size2 = dwg_dynapi_fields_size ("SUNSTUDY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_SUNSTUDY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_SUNSTUDY): %d != "
                "dwg_dynapi_fields_size (\"SUNSTUDY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_TABLECONTENT);
+  size1 = sizeof (Dwg_Object_TABLECONTENT);
   size2 = dwg_dynapi_fields_size ("TABLECONTENT");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_TABLECONTENT): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_TABLECONTENT): %d != "
                "dwg_dynapi_fields_size (\"TABLECONTENT\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_TABLEGEOMETRY);
+  size1 = sizeof (Dwg_Object_TABLEGEOMETRY);
   size2 = dwg_dynapi_fields_size ("TABLEGEOMETRY");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_TABLEGEOMETRY): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_TABLEGEOMETRY): %d != "
                "dwg_dynapi_fields_size (\"TABLEGEOMETRY\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_TABLESTYLE);
+  size1 = sizeof (Dwg_Object_TABLESTYLE);
   size2 = dwg_dynapi_fields_size ("TABLESTYLE");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_TABLESTYLE): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_TABLESTYLE): %d != "
                "dwg_dynapi_fields_size (\"TABLESTYLE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_TEXTOBJECTCONTEXTDATA);
+  size1 = sizeof (Dwg_Object_TEXTOBJECTCONTEXTDATA);
   size2 = dwg_dynapi_fields_size ("TEXTOBJECTCONTEXTDATA");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_TEXTOBJECTCONTEXTDATA): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_TEXTOBJECTCONTEXTDATA): %d != "
                "dwg_dynapi_fields_size (\"TEXTOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_TVDEVICEPROPERTIES);
+  size1 = sizeof (Dwg_Object_TVDEVICEPROPERTIES);
   size2 = dwg_dynapi_fields_size ("TVDEVICEPROPERTIES");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_TVDEVICEPROPERTIES): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_TVDEVICEPROPERTIES): %d != "
                "dwg_dynapi_fields_size (\"TVDEVICEPROPERTIES\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_UCS);
+  size1 = sizeof (Dwg_Object_UCS);
   size2 = dwg_dynapi_fields_size ("UCS");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_UCS): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_UCS): %d != "
                "dwg_dynapi_fields_size (\"UCS\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_UCS_CONTROL);
+  size1 = sizeof (Dwg_Object_UCS_CONTROL);
   size2 = dwg_dynapi_fields_size ("UCS_CONTROL");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_UCS_CONTROL): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_UCS_CONTROL): %d != "
                "dwg_dynapi_fields_size (\"UCS_CONTROL\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_UNDERLAYDEFINITION);
-  size2 = dwg_dynapi_fields_size ("UNDERLAYDEFINITION");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(struct _dwg_object_UNDERLAYDEFINITION): %d != "
-               "dwg_dynapi_fields_size (\"UNDERLAYDEFINITION\"): %d\n", size1, size2);
-      error++;
-    }
-  size1 = sizeof (struct _dwg_object_UNKNOWN_OBJ);
+  size1 = sizeof (Dwg_Object_UNKNOWN_OBJ);
   size2 = dwg_dynapi_fields_size ("UNKNOWN_OBJ");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_UNKNOWN_OBJ): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_UNKNOWN_OBJ): %d != "
                "dwg_dynapi_fields_size (\"UNKNOWN_OBJ\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_VBA_PROJECT);
+  size1 = sizeof (Dwg_Object_VBA_PROJECT);
   size2 = dwg_dynapi_fields_size ("VBA_PROJECT");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_VBA_PROJECT): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_VBA_PROJECT): %d != "
                "dwg_dynapi_fields_size (\"VBA_PROJECT\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_VIEW);
+  size1 = sizeof (Dwg_Object_VIEW);
   size2 = dwg_dynapi_fields_size ("VIEW");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_VIEW): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_VIEW): %d != "
                "dwg_dynapi_fields_size (\"VIEW\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_VIEW_CONTROL);
+  size1 = sizeof (Dwg_Object_VIEW_CONTROL);
   size2 = dwg_dynapi_fields_size ("VIEW_CONTROL");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_VIEW_CONTROL): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_VIEW_CONTROL): %d != "
                "dwg_dynapi_fields_size (\"VIEW_CONTROL\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_VISUALSTYLE);
+  size1 = sizeof (Dwg_Object_VISUALSTYLE);
   size2 = dwg_dynapi_fields_size ("VISUALSTYLE");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_VISUALSTYLE): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_VISUALSTYLE): %d != "
                "dwg_dynapi_fields_size (\"VISUALSTYLE\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_VPORT);
+  size1 = sizeof (Dwg_Object_VPORT);
   size2 = dwg_dynapi_fields_size ("VPORT");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_VPORT): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_VPORT): %d != "
                "dwg_dynapi_fields_size (\"VPORT\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_VPORT_CONTROL);
+  size1 = sizeof (Dwg_Object_VPORT_CONTROL);
   size2 = dwg_dynapi_fields_size ("VPORT_CONTROL");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_VPORT_CONTROL): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_VPORT_CONTROL): %d != "
                "dwg_dynapi_fields_size (\"VPORT_CONTROL\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_VX_CONTROL);
+  size1 = sizeof (Dwg_Object_VX_CONTROL);
   size2 = dwg_dynapi_fields_size ("VX_CONTROL");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_VX_CONTROL): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_VX_CONTROL): %d != "
                "dwg_dynapi_fields_size (\"VX_CONTROL\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_VX_TABLE_RECORD);
+  size1 = sizeof (Dwg_Object_VX_TABLE_RECORD);
   size2 = dwg_dynapi_fields_size ("VX_TABLE_RECORD");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_VX_TABLE_RECORD): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_VX_TABLE_RECORD): %d != "
                "dwg_dynapi_fields_size (\"VX_TABLE_RECORD\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_WIPEOUTVARIABLES);
+  size1 = sizeof (Dwg_Object_WIPEOUTVARIABLES);
   size2 = dwg_dynapi_fields_size ("WIPEOUTVARIABLES");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_WIPEOUTVARIABLES): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_WIPEOUTVARIABLES): %d != "
                "dwg_dynapi_fields_size (\"WIPEOUTVARIABLES\"): %d\n", size1, size2);
       error++;
     }
-  size1 = sizeof (struct _dwg_object_XRECORD);
+  size1 = sizeof (Dwg_Object_XRECORD);
   size2 = dwg_dynapi_fields_size ("XRECORD");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_XRECORD): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_XRECORD): %d != "
                "dwg_dynapi_fields_size (\"XRECORD\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Object_PDFDEFINITION);
+  size2 = dwg_dynapi_fields_size ("PDFDEFINITION");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Object_PDFDEFINITION): %d != "
+               "dwg_dynapi_fields_size (\"PDFDEFINITION\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Object_DGNDEFINITION);
+  size2 = dwg_dynapi_fields_size ("DGNDEFINITION");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Object_DGNDEFINITION): %d != "
+               "dwg_dynapi_fields_size (\"DGNDEFINITION\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Object_DWFDEFINITION);
+  size2 = dwg_dynapi_fields_size ("DWFDEFINITION");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Object_DWFDEFINITION): %d != "
+               "dwg_dynapi_fields_size (\"DWFDEFINITION\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_3DSOLID_material);

@@ -89,19 +89,21 @@ my (%h, $n, %structs, %unions, %ENT, %DXF, %SIZE, %SUBCLASS, %SUBCLASSES, %DWG_T
     @unhandled_names);
 local (@entity_names, @object_names, @subclasses, $max_entity_names, $max_object_names,
        $max_subclasses);
-# todo: harmonize more subclasses
+# todo: harmonize more subclasses, detect abstract classes with concrete typedefs
 for (sort $c->struct_names) {
-  if (/_dwg_entity_([A-Z0-9_]+)/) {
+  if (/^_dwg_entity_([A-Z0-9_]+)$/) {
     my $n = $1;
     $structs{$n}++;
     push @entity_names, $n;
-  } elsif (/_dwg_object_([A-Z0-9_]+)/) {
-    $structs{$1}++;
-    push @object_names, $1;
+  } elsif (/^_dwg_object_([A-Z0-9_]+)$/) {
+    my $n = $1;
+    $structs{$n}++;
+    push @object_names, $n;
   } elsif (/^_dwg_header_variables/) {
     ;
   } elsif (/^Dwg_([A-Z0-9]+)/) { # AuxHeader, Header, R2004_Header, SummaryInfo
     my $n = $1;
+    next if length $n <= 1;
     $structs{$n}++;
   } elsif (/_dwg_([A-Z0-9_]+)/ && !/_dwg_ODA/) {
     $structs{$_}++;
@@ -123,6 +125,11 @@ for (sort $c->union_names) {
 push @entity_names, qw(XLINE);                    # RAY
 push @entity_names, qw(VERTEX_MESH VERTEX_PFACE); # VERTEX_3D
 push @entity_names, qw(REGION BODY);              # 3DSOLID
+$structs{abstractobject_UNDERLAYDEFINITION}++;
+$structs{abstractentity_UNDERLAY}++;
+push @entity_names, qw(PDFUNDERLAY DGNUNDERLAY DWFUNDERLAY);
+push @object_names, qw(PDFDEFINITION DGNDEFINITION DWFDEFINITION);
+
 @entity_names = sort @entity_names;
 # get BITCODE_ macro types for each struct field
 open my $in, "<", $hdr or die "hdr: $!";
@@ -705,8 +712,6 @@ sub dxfname {
   #                       GRADIENT_BACKGROUND
   #                       IMAGE_BACKGROUND
   #                       IBL_BACKGROUND
-  # UNDERLAYDEFINITION => PDFDEFINITION, DGNDEFINITION, DWFDEFINITION
-  # UNDERLAY           => PDFUNDERLAY, DGNUNDERLAY, DWFUNDERLAY
   return $dxfname;
 }
 
@@ -864,16 +869,21 @@ sub out_struct {
   my ($tmpl, $n) = @_;
   #print $fh " /* ", Data::Dumper->Dump([$s], [$n]), "*/\n";
   my $key = $n;
-  $n = "_dwg_$n" unless $n =~ /^_dwg_/;
   my $sortedby = 'offset';
   my $s = $c->struct($tmpl);
   unless ($s) {
     $s = $c->union($tmpl);
   }
+  unless ($s) { # resolve abstract typedef
+    my $typedef; # =~ s/dwg_/dwg_abstract/;
+    # abstractentity
+    $s = $c->struct($tmpl);
+  }
   unless ($s->{declarations}) {
     delete $ENT{$n};   # don't show up in dynapi_test.c
     return;
   }
+  $n = "_dwg_$n" unless $n =~ /^_dwg_/;
   my @declarations = @{$s->{declarations}};
   if ($n =~ /^_dwg_(header_variables|object_object|object_entity)$/) {
     @declarations = sort {
@@ -1004,6 +1014,12 @@ for (<DATA>) {
           } elsif ($k eq 'XLINE') {
             $fields = "_dwg_RAY_fields";
             $size = "sizeof (struct _dwg_entity_RAY)";
+          } elsif ($k =~ /^(PDF|DWF|DGN)DEFINITION$/) {
+            $fields = "_dwg_${k}_fields";
+            $size = "sizeof (Dwg_Object_$k)";
+          } elsif ($k =~ /^(PDF|DWF|DGN)UNDERLAY$/) {
+            $fields = "_dwg_${k}_fields";
+            $size = "sizeof (Dwg_Entity_$k)";
           } elsif ($k =~ /^VERTEX_(MESH|PFACE)$/) {
             $fields = "_dwg_VERTEX_3D_fields";
             $size = "sizeof (struct _dwg_entity_VERTEX_3D)";
@@ -1093,14 +1109,24 @@ for (<DATA>) {
       for (@entity_names) {
         print $doc "\@strong{$_} \@anchor{$_}\n\@cindex entity, $_\n",
           "\@vindex $_\n\n" unless $_ eq 'DIMENSION_';
-        out_struct("struct _dwg_entity_$_", $_);
+        my $typedef = $c->typedef("Dwg_Entity_$_");
+        if ($typedef) {
+          out_struct($typedef->{type}, $_);
+        } else {
+          out_struct("struct _dwg_entity_$_", $_);
+        }
       }
     } elsif ($tmpl =~ /^for dwg_object_OBJECT/) {
       print $doc "\n\@node OBJECTS\n\@section OBJECTS\n\@cindex OBJECTS\n\n";
       print $doc "All non-graphical objects with its fields. \@xref{Common Object fields}\n\n";
       for (@object_names) {
         print $doc "\@strong{$_} \@anchor{$_}\n\@cindex object, $_\n\@vindex $_\n\n";
-        out_struct("struct _dwg_object_$_", $_);
+        my $typedef = $c->typedef("Dwg_Object_$_");
+        if ($typedef) {
+          out_struct($typedef->{type}, $_);
+        } else {
+          out_struct("struct _dwg_object_$_", $_);
+        }
       }
     } elsif ($tmpl =~ /^for dwg_subclasses/) {
       for (@subclasses) {
@@ -1663,11 +1689,11 @@ EOF
     for my $name (@object_names) {
       my $xname = $name;
       print $fh <<"EOF";
-  size1 = sizeof (struct _dwg_object_$xname);
+  size1 = sizeof (Dwg_Object_$xname);
   size2 = dwg_dynapi_fields_size (\"$name\");
   if (size1 != size2)
     {
-      fprintf (stderr, "sizeof(struct _dwg_object_$xname): %d != "
+      fprintf (stderr, "sizeof(Dwg_Object_$xname): %d != "
                "dwg_dynapi_fields_size (\\\"$name\\\"): %d\\n", size1, size2);
       error++;
     }
@@ -2264,7 +2290,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2268 "gen-dynapi.pl"
+#line 2294 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2364,7 +2390,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 @@list name_subclasses@@
 };
 
-#line 2368 "gen-dynapi.pl"
+#line 2394 "gen-dynapi.pl"
 static int
 _name_inl_cmp (const void *restrict key, const void *restrict elem)
 {

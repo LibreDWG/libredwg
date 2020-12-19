@@ -217,8 +217,8 @@ main (int argc, char *argv[])
             {
               error += test_code (prefix, "2004/HatchG.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_UNDERLAY ||
-              DWG_TYPE == DWG_TYPE_UNDERLAYDEFINITION)
+          if (DWG_TYPE == DWG_TYPE_PDFUNDERLAY ||
+              DWG_TYPE == DWG_TYPE_PDFDEFINITION)
             {
               error += test_code (prefix, "2004/Underlay.dwg", cov);
             }

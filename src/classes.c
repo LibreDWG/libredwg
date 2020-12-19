@@ -200,6 +200,7 @@ struct _obj_type_name {
   const char *name;
 };
 
+// FIXME: this is list is obsoleted by _fixed
 static const struct _obj_type_name _dwg_type_name[] =
   {
    { DWG_TYPE_UNUSED, "UNUSED" },
@@ -491,8 +492,12 @@ static const struct _obj_type_name _dwg_type_name[] =
    { DWG_TYPE_TABLESTYLE, "TABLESTYLE" },
    { DWG_TYPE_TEXTOBJECTCONTEXTDATA, "TEXTOBJECTCONTEXTDATA" },
    { DWG_TYPE_TVDEVICEPROPERTIES, "TVDEVICEPROPERTIES" }, /* not in DXF */
-   { DWG_TYPE_UNDERLAY, "UNDERLAY" }, /* not separate DGN,DWF,PDF types */
-   { DWG_TYPE_UNDERLAYDEFINITION, "UNDERLAYDEFINITION" }, /* not separate DGN,DWF,PDF types */
+   { DWG_TYPE_PDFUNDERLAY, "PDFUNDERLAY" },
+   { DWG_TYPE_DGNUNDERLAY, "DGNUNDERLAY" },
+   { DWG_TYPE_DWFUNDERLAY, "DWFUNDERLAY" },
+   { DWG_TYPE_PDFDEFINITION, "PDFDEFINITION" },
+   { DWG_TYPE_DGNDEFINITION, "DGNDEFINITION" },
+   { DWG_TYPE_DWFDEFINITION, "DWFDEFINITION" },
    { DWG_TYPE_VISIBILITYGRIPENTITY, "VISIBILITYGRIPENTITY" },
    { DWG_TYPE_VISIBILITYPARAMETERENTITY, "VISIBILITYPARAMETERENTITY" },
    { DWG_TYPE_VISUALSTYLE, "VISUALSTYLE" },
@@ -508,6 +513,8 @@ static const struct _obj_type_name _dwg_type_name[] =
    { DWG_TYPE_UNKNOWN_OBJ, "UNKNOWN_OBJ" }, // 0xffff
   };
 
+// FIXME: generate reverse objects.in array lookup. type -> name.
+// at least for variable types. best directly into objects.in after %%
 const char *dwg_type_name (const Dwg_Object_Type type)
 {
   const struct _obj_type_name *s = (struct _obj_type_name *)_dwg_type_name;
@@ -521,9 +528,20 @@ const char *dwg_type_name (const Dwg_Object_Type type)
   return NULL;
 }
 
-// TODO: gperf would be preferred here. with name -> type, dxfname, stability, ...
+// gperf lookup. name -> type, dxfname, stability, ...
 Dwg_Object_Type dwg_name_type (const char *name)
 {
+#if 1
+  const char *dxfname;
+  Dwg_Object_Type type;
+  int isent;
+  if (dwg_object_name (name, &dxfname, &type, &isent))
+    {
+      return type;
+    }
+  else
+    return DWG_TYPE_UNUSED;
+#else
   struct _obj_type_name *s = (struct _obj_type_name *)_dwg_type_name;
   for (; s->type != DWG_TYPE_UNKNOWN_OBJ; s++)
     {
@@ -531,6 +549,7 @@ Dwg_Object_Type dwg_name_type (const char *name)
         return s->type;
     }
   return DWG_TYPE_UNUSED;
+#endif
 }
 
 bool
@@ -617,7 +636,8 @@ bool dwg_find_class (const Dwg_Data *restrict dwg, const char* dxfname, BITCODE_
   return false;
 }
 
-// Similar to _dwg_type_name, just with immediate access, no linear/binary search
+// Similar to _dwg_type_name, just with immediate access, no linear/binary search.
+// obsoletes _dwg_type_name[]
 static const char *_dwg_dxfnames_fixed[] = {
   NULL, /* UNUSED = 0x00, */
   "TEXT", /* 0x01 */
@@ -705,6 +725,7 @@ static const char *_dwg_dxfnames_fixed[] = {
 };
 
 /* non-fixed types > 500. not stored as type, but as fixedtype */
+// TODO auto-generate
 static const char *_dwg_dxfnames_variable[] = {
   "ACDSRECORD",
   "ACDSSCHEMA",
@@ -829,10 +850,14 @@ static const char *_dwg_dxfnames_variable[] = {
   "DATATABLE",
   "DBCOLOR",
   "ACDBDETAILVIEWSTYLE",
+  "DGNDEFINITION",
+  "DGNUNDERLAY",
   "DICTIONARYVAR",
   "ACDBDICTIONARYWDFLT",
   "DIMASSOC",
   "ACDB_DMDIMOBJECTCONTEXTDATA_CLASS",
+  "DWFDEFINITION",
+  "DWFUNDERLAY",
   "ACDB_DYNAMICBLOCKPROXYNODE",
   "ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
   "ACAD_EVALUATION_GRAPH",
@@ -875,6 +900,8 @@ static const char *_dwg_dxfnames_variable[] = {
   "NURBSURFACE",
   "OBJECT_PTR",
   "ACDB_ORDDIMOBJECTCONTEXTDATA_CLASS",
+  "PDFDEFINITION",
+  "PDFUNDERLAY",
   "ACDBPERSSUBENTMANAGER",
   "PLANESURFACE",
   "PLOTSETTINGS",

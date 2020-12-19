@@ -8845,7 +8845,7 @@ new_object (char *restrict name, char *restrict dxfname,
         }
     }
   // Some objects have various subtypes under one name, like DIMENSION.
-  // TODO UNDERLAY, UNDERLAYDEF, OBJECTCONTEXTDATA, ...
+  // TODO OBJECTCONTEXTDATA, ...
   if (obj->fixedtype == DWG_TYPE_BACKGROUND)
     decode_BACKGROUND_type (obj);
 

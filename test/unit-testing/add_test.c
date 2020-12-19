@@ -650,9 +650,9 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
           fail ("no VIEWPORT created");
       }
       break;
-    //case DWG_TYPE_UNDERLAYDEFINITION:
-    //case DWG_TYPE_UNDERLAY:
-    //  dwg_add_UNDERLAY (hdr, "test.pdf", &pt2d, NULL, 0.0, 0, NULL);
+    //case DWG_TYPE_PDFDEFINITION:
+    //case DWG_TYPE_PDFUNDERLAY:
+    //  dwg_add_PDFUNDERLAY (hdr, "test.pdf", &pt2d, NULL, 0.0, 0, NULL);
     //  break;
     case DWG_TYPE_ACSH_TORUS_CLASS:
       {
@@ -870,8 +870,8 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       TEST_OBJECT (XRECORD);
       TEST_OBJECT (VBA_PROJECT);
       TEST_OBJECT (LAYOUT);
-      TEST_ENTITY (UNDERLAY);
-      TEST_OBJECT (UNDERLAYDEFINITION);
+      TEST_ENTITY (PDFUNDERLAY);
+      TEST_OBJECT (PDFDEFINITION);
       //TEST_OBJECT (LAYERFILTER);
       //TEST_OBJECT (LAYER_INDEX);
       //TEST_OBJECT (SPATIAL_FILTER);
@@ -975,11 +975,11 @@ main (int argc, char *argv[])
       error += test_add (DWG_TYPE_XRECORD, "add_xrecord_2000", dxf);
       error += test_add (DWG_TYPE_VBA_PROJECT, "add_vba_2000", dxf);
       error += test_add (DWG_TYPE_LAYOUT, "add_layout_2000", dxf);
-#ifdef HAVE_DWG_ADD_UNDERLAY
-      error += test_add (DWG_TYPE_UNDERLAY, "add_underlay_2000", dxf);
+#ifdef HAVE_DWG_ADD_PDFUNDERLAY
+      error += test_add (DWG_TYPE_PDFUNDERLAY, "add_pdfunderlay_2000", dxf);
 #endif
-#ifdef HAVE_DWG_ADD_UNDERLAYDEFINITION
-      error += test_add (DWG_TYPE_UNDERLAYDEFINITION, "add_underlaydef_2000", dxf);
+#ifdef HAVE_DWG_ADD_PDFDEFINITION
+      error += test_add (DWG_TYPE_PDFDEFINITION, "add_pdfdef_2000", dxf);
 #endif
 #ifdef HAVE_DWG_ADD_LAYERFILTER
       error += test_add (DWG_TYPE_LAYERFILTER, "add_layfilt_2000", dxf);

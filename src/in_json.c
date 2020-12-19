@@ -2666,7 +2666,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               objsize = dwg_dynapi_fields_size (name);
               if (!fields || !objsize || !is_dwg_object (name))
                 {
-                  LOG_ERROR ("Unknown object %s", name);
+                  LOG_ERROR ("Unknown object %s (no fields)", name);
                 //skip_object:
                   obj->type = obj->fixedtype = DWG_TYPE_DUMMY;
                   // exhaust the rest
@@ -2736,7 +2736,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               objsize = dwg_dynapi_fields_size (name);
               if (!fields || !objsize || !is_dwg_entity (name))
                 {
-                  LOG_ERROR ("Unknown entity %s", name);
+                  LOG_ERROR ("Unknown entity %s (no fields)", name);
                   obj->type = obj->fixedtype = DWG_TYPE_DUMMY;
                   // exhaust the rest
                   for (; j < keys; j++)
@@ -2779,9 +2779,9 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 obj->dxfname = strdup (name);
 
               // Some objects have various subtypes under one name.
-              // TODO UNDERLAY, UNDERLAYDEF, OBJECTCONTEXTDATA, ...
-              // FIXME: We really should seperate BACKGROUND and UNDERLAY the other
-              // way round, as with POLYLINE.
+              // TODO OBJECTCONTEXTDATA, ...
+              // FIXME: We really should seperate BACKGROUND the other way round
+              // as with POLYLINE and UNDERLAY.
               if (strEQc (name, "BACKGROUND"))
                 {
                   decode_BACKGROUND_type (obj);
@@ -2805,7 +2805,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
               if (!dwg_object_name (name, &dxfname, &obj->fixedtype, &isent))
                 {
-                  LOG_ERROR ("Unknown object %s", name);
+                  LOG_ERROR ("Unknown object %s failed dwg_object_name()", name);
                   // exhaust the rest
                   for (; j < keys; j++)
                     {

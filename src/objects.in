@@ -51,6 +51,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "BODY",                      "BODY",                       DWG_TYPE_BODY,	1
 "CAMERA",                    "CAMERA",                     DWG_TYPE_CAMERA,	1
 "CIRCLE",                    "CIRCLE",                     DWG_TYPE_CIRCLE,	1
+"DGNUNDERLAY",               "DGNUNDERLAY",                DWG_TYPE_DGNUNDERLAY,	1
 "DIMENSION_ALIGNED",         "DIMENSION",                  DWG_TYPE_DIMENSION_ALIGNED,	1
 "DIMENSION_ANG2LN",          "DIMENSION",                  DWG_TYPE_DIMENSION_ANG2LN,	1
 "DIMENSION_ANG3PT",          "DIMENSION",                  DWG_TYPE_DIMENSION_ANG3PT,	1
@@ -58,6 +59,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "DIMENSION_LINEAR",          "DIMENSION",                  DWG_TYPE_DIMENSION_LINEAR,	1
 "DIMENSION_ORDINATE",        "DIMENSION",                  DWG_TYPE_DIMENSION_ORDINATE,	1
 "DIMENSION_RADIUS",          "DIMENSION",                  DWG_TYPE_DIMENSION_RADIUS,	1
+"DWFUNDERLAY",               "DWFUNDERLAY",                DWG_TYPE_DWFUNDERLAY,	1
 "ELLIPSE",                   "ELLIPSE",                    DWG_TYPE_ELLIPSE,	1
 "ENDBLK",                    "ENDBLK",                     DWG_TYPE_ENDBLK,	1
 "EXTRUDEDSURFACE",           "EXTRUDEDSURFACE",            DWG_TYPE_EXTRUDEDSURFACE,	1
@@ -84,6 +86,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "NURBSURFACE",               "NURBSURFACE",                DWG_TYPE_NURBSURFACE,	1
 "OLE2FRAME",                 "OLE2FRAME",                  DWG_TYPE_OLE2FRAME,	1
 "OLEFRAME",                  "OLEFRAME",                   DWG_TYPE_OLEFRAME,	1
+"PDFUNDERLAY",               "PDFUNDERLAY",                DWG_TYPE_PDFUNDERLAY,	1
 "PLANESURFACE",              "PLANESURFACE",               DWG_TYPE_PLANESURFACE,	1
 "POINT",                     "POINT",                      DWG_TYPE_POINT,	1
 "POINTCLOUD",                "ACDBPOINTCLOUD",             DWG_TYPE_POINTCLOUD,	1
@@ -109,7 +112,6 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "TEXT",                      "TEXT",                       DWG_TYPE_TEXT,	1
 "TOLERANCE",                 "TOLERANCE",                  DWG_TYPE_TOLERANCE,	1
 "TRACE",                     "TRACE",                      DWG_TYPE_TRACE,	1
-"UNDERLAY",                  "UNDERLAY",                   DWG_TYPE_UNDERLAY,	1
 "UNKNOWN_ENT",               "UNKNOWN_ENT",                DWG_TYPE_UNKNOWN_ENT,	1
 "VERTEX_2D",                 "VERTEX",                     DWG_TYPE_VERTEX_2D,	1
 "VERTEX_3D",                 "VERTEX",                     DWG_TYPE_VERTEX_3D,	1
@@ -322,7 +324,6 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "TVDEVICEPROPERTIES",               "TVDEVICEPROPERTIES",                DWG_TYPE_TVDEVICEPROPERTIES,	0
 "UCS",                              "UCS",                               DWG_TYPE_UCS,	0
 "UCS_CONTROL",                      "UCS_CONTROL",                       DWG_TYPE_UCS_CONTROL,	0
-"UNDERLAYDEFINITION",               "UNDERLAYDEFINITION",                DWG_TYPE_UNDERLAYDEFINITION,	0
 "UNKNOWN_OBJ",                      "UNKNOWN_OBJ",                       DWG_TYPE_UNKNOWN_OBJ,	0
 "VBA_PROJECT",                      "VBA_PROJECT",                       DWG_TYPE_VBA_PROJECT,	0
 "VIEW",                             "VIEW",                              DWG_TYPE_VIEW,	0
@@ -334,6 +335,9 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "VX_TABLE_RECORD",                  "VX_TABLE_RECORD",                   DWG_TYPE_VX_TABLE_RECORD,	0
 "WIPEOUTVARIABLES",                 "WIPEOUTVARIABLES",                  DWG_TYPE_WIPEOUTVARIABLES,	0
 "XRECORD",                          "XRECORD",                           DWG_TYPE_XRECORD,	0
+"PDFDEFINITION",                    "PDFDEFINITION",                     DWG_TYPE_PDFDEFINITION,	0
+"DGNDEFINITION",                    "DGNDEFINITION",                     DWG_TYPE_DGNDEFINITION,	0
+"DWFDEFINITION",                    "DWFDEFINITION",                     DWG_TYPE_DWFDEFINITION,	0
 %%
 
 /* Find if an object name (our internal name, not anything used elsewhere)

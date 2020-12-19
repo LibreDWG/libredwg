@@ -6787,9 +6787,23 @@ DWG_ENTITY (WIPEOUT)
 DWG_ENTITY_END
 
 // (varies)
-// in DXF as {PDF,DWF,DGN}DEFINITION
-// no DWF, DGN coverage yet
-DWG_OBJECT (UNDERLAYDEFINITION)
+DWG_OBJECT (PDFDEFINITION)
+  SUBCLASS (AcDbUnderlayDefinition)
+  FIELD_T (filename, 1);
+  FIELD_T (name, 2);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// no coverage
+DWG_OBJECT (DGNDEFINITION)
+  SUBCLASS (AcDbUnderlayDefinition)
+  FIELD_T (filename, 1);
+  FIELD_T (name, 2);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// no coverage
+DWG_OBJECT (DWFDEFINITION)
   SUBCLASS (AcDbUnderlayDefinition)
   FIELD_T (filename, 1);
   FIELD_T (name, 2);
@@ -6797,39 +6811,49 @@ DWG_OBJECT (UNDERLAYDEFINITION)
 DWG_OBJECT_END
 
 // (varies)
-// in DXF as 0 DGNUNDERLAY DWFUNDERLAY PDFUNDERLAY
 // In C++ as UNDERLAYREFERENCE. A bit better than WIPEOUT.
-// no DWF, DGN coverage yet
-DWG_ENTITY (UNDERLAY)
-  //DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbUnderlayReference)
-  FIELD_HANDLE (definition_id, 5, 340);
-  FIELD_3BD (extrusion, 0);
-  FIELD_3DPOINT (ins_pt, 10);
-  FIELD_BD0 (angle, 0);
-  DXF {
-    if (_obj->scale.x != 1.0 || _obj->scale.y != 1.0 || _obj->scale.z != 1.0)
-      FIELD_3BD_1 (scale, 41);
-  }
-  else {
-    FIELD_3BD_1 (scale, 41);
-  }
-  DXF {
-    FIELD_BD0 (angle, 50);
-    FIELD_BE (extrusion, 210);
-  }
-  FIELD_RC0 (flag, 280);
-  FIELD_RCd (contrast, 281); // 20-100. def: 100. DXF optional
-  FIELD_RCd (fade, 282);     // 0-80. DXF opt
-  FIELD_BL (num_clip_verts, 0);
-  //VALUEOUTOFBOUNDS (num_clip_verts, 5000)
-  FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 11);
-  if (FIELD_VALUE (flag) & 16)
-    {
-      FIELD_BS0 (num_clip_inverts, 170);
-      FIELD_2RD_VECTOR (clip_inverts, num_clip_inverts, 12);
-    }
+#define UNDERLAY_fields                                                 \
+  SUBCLASS (AcDbUnderlayReference)                                      \
+  FIELD_HANDLE (definition_id, 5, 340);                                 \
+  FIELD_3BD (extrusion, 0);                                             \
+  FIELD_3DPOINT (ins_pt, 10);                                           \
+  FIELD_BD0 (angle, 0);                                                 \
+  DXF {                                                                 \
+    if (_obj->scale.x != 1.0 || _obj->scale.y != 1.0 || _obj->scale.z != 1.0) \
+      FIELD_3BD_1 (scale, 41);                                          \
+  }                                                                     \
+  else {                                                                \
+    FIELD_3BD_1 (scale, 41);                                            \
+  }                                                                     \
+  DXF {                                                                 \
+    FIELD_BD0 (angle, 50);                                              \
+    FIELD_BE (extrusion, 210);                                          \
+  }                                                                     \
+  FIELD_RC0 (flag, 280);                                                \
+  FIELD_RCd (contrast, 281); /* 20-100. def: 100. DXF optional */       \
+  FIELD_RCd (fade, 282);     /* 0-80. DXF opt */                        \
+  FIELD_BL (num_clip_verts, 0);                                         \
+  VALUEOUTOFBOUNDS (num_clip_verts, 5000)                               \
+    FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 11);                  \
+  if (FIELD_VALUE (flag) & 16)                                          \
+    {                                                                   \
+      FIELD_BS0 (num_clip_inverts, 170);                                \
+      FIELD_2RD_VECTOR (clip_inverts, num_clip_inverts, 12);            \
+    }                                                                   \
   COMMON_ENTITY_HANDLE_DATA;
+
+DWG_ENTITY (PDFUNDERLAY)
+  UNDERLAY_fields
+DWG_ENTITY_END
+
+// no coverage yet
+DWG_ENTITY (DGNUNDERLAY)
+  UNDERLAY_fields
+DWG_ENTITY_END
+
+// no coverage yet
+DWG_ENTITY (DWFUNDERLAY)
+  UNDERLAY_fields
 DWG_ENTITY_END
 
 DWG_ENTITY (CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=1

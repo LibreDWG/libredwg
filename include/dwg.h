@@ -509,10 +509,14 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_DATATABLE,
   DWG_TYPE_DBCOLOR,
   DWG_TYPE_DETAILVIEWSTYLE,
+  DWG_TYPE_DGNDEFINITION,
+  DWG_TYPE_DGNUNDERLAY,
   DWG_TYPE_DICTIONARYVAR,
   DWG_TYPE_DICTIONARYWDFLT,
   DWG_TYPE_DIMASSOC,
   DWG_TYPE_DMDIMOBJECTCONTEXTDATA,
+  DWG_TYPE_DWFDEFINITION,
+  DWG_TYPE_DWFUNDERLAY,
   DWG_TYPE_DYNAMICBLOCKPROXYNODE,
   DWG_TYPE_DYNAMICBLOCKPURGEPREVENTER,
   DWG_TYPE_EVALUATION_GRAPH,
@@ -555,16 +559,18 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_NURBSURFACE,
   DWG_TYPE_OBJECT_PTR,
   DWG_TYPE_ORDDIMOBJECTCONTEXTDATA,
+  DWG_TYPE_PDFDEFINITION,
+  DWG_TYPE_PDFUNDERLAY,
   DWG_TYPE_PERSUBENTMGR,
   DWG_TYPE_PLANESURFACE,
   DWG_TYPE_PLOTSETTINGS,
   DWG_TYPE_POINTCLOUD,
-  DWG_TYPE_POINTCLOUDEX,
+  DWG_TYPE_POINTCLOUDCOLORMAP,
   DWG_TYPE_POINTCLOUDDEF,
   DWG_TYPE_POINTCLOUDDEFEX,
   DWG_TYPE_POINTCLOUDDEF_REACTOR,
   DWG_TYPE_POINTCLOUDDEF_REACTOR_EX,
-  DWG_TYPE_POINTCLOUDCOLORMAP,
+  DWG_TYPE_POINTCLOUDEX,
   DWG_TYPE_POINTPARAMETERENTITY,
   DWG_TYPE_POINTPATH,
   DWG_TYPE_RADIMLGOBJECTCONTEXTDATA,
@@ -596,8 +602,6 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_TABLESTYLE,
   DWG_TYPE_TEXTOBJECTCONTEXTDATA,
   DWG_TYPE_TVDEVICEPROPERTIES,
-  DWG_TYPE_UNDERLAY, 		/* not separate DGN,DWF,PDF types */
-  DWG_TYPE_UNDERLAYDEFINITION,	/* not separate DGN,DWF,PDF types */
   DWG_TYPE_VISIBILITYGRIPENTITY,
   DWG_TYPE_VISIBILITYPARAMETERENTITY,
   DWG_TYPE_VISUALSTYLE,
@@ -3898,28 +3902,28 @@ typedef struct _dwg_object_TABLEGEOMETRY
 
 
 /**
- Class UNDERLAYDEFINITION (varies)
- in DXF as {PDF,DGN,DWF}DEFINITION
+  Abstract class UNDERLAYDEFINITION (varies)
+  Parent of {PDF,DGN,DWF}DEFINITION
  */
-typedef struct _dwg_object_UNDERLAYDEFINITION
+typedef struct _dwg_abstractobject_UNDERLAYDEFINITION
 {
   struct _dwg_object_object *parent;
 
-  BITCODE_TV filename; /*!< DXF 1, relative or absolute path to the image file */
-  BITCODE_TV name;     /*!< DXF 2, pdf: page number, dgn: default, dwf: ? */
+  BITCODE_T filename; /*!< DXF 1, relative or absolute path to the image file */
+  BITCODE_T name;     /*!< DXF 2, pdf: page number, dgn: default, dwf: ? */
 } Dwg_Object_UNDERLAYDEFINITION;
 
-typedef struct _dwg_object_UNDERLAYDEFINITION Dwg_Object_PDFDEFINITION;
-typedef struct _dwg_object_UNDERLAYDEFINITION Dwg_Object_DGNDEFINITION;
-typedef struct _dwg_object_UNDERLAYDEFINITION Dwg_Object_DWFDEFINITION;
+typedef struct _dwg_abstractobject_UNDERLAYDEFINITION Dwg_Object_PDFDEFINITION;
+typedef struct _dwg_abstractobject_UNDERLAYDEFINITION Dwg_Object_DGNDEFINITION;
+typedef struct _dwg_abstractobject_UNDERLAYDEFINITION Dwg_Object_DWFDEFINITION;
 
 /**
- Entity UNDERLAY, the reference (varies)
+ Abstract entity UNDERLAY, the reference (varies)
  As IMAGE or WIPEOUT but snappable, and with holes.
- In DXF as {PDF,DGN,DWF}UNDERLAY
+ Parent of {PDF,DGN,DWF}UNDERLAY
  In C++ as UnderlayReference
  */
-typedef struct _dwg_entity_UNDERLAY
+typedef struct _dwg_abstractentity_UNDERLAY
 {
   struct _dwg_object_entity *parent;
 
@@ -3942,9 +3946,9 @@ typedef struct _dwg_entity_UNDERLAY
   BITCODE_H definition_id;     /*!< DXF 340 */
 } Dwg_Entity_UNDERLAY;
 
-typedef struct _dwg_entity_UNDERLAY Dwg_Entity_PDFUNDERLAY;
-typedef struct _dwg_entity_UNDERLAY Dwg_Entity_DGNUNDERLAY;
-typedef struct _dwg_entity_UNDERLAY Dwg_Entity_DWFUNDERLAY;
+typedef struct _dwg_abstractentity_UNDERLAY Dwg_Entity_PDFUNDERLAY;
+typedef struct _dwg_abstractentity_UNDERLAY Dwg_Entity_DGNUNDERLAY;
+typedef struct _dwg_abstractentity_UNDERLAY Dwg_Entity_DWFUNDERLAY;
 
 /**
  Class DBCOLOR (varies)
@@ -7870,6 +7874,8 @@ typedef struct _dwg_object_entity
     Dwg_Entity_XLINE *XLINE;
     /* untyped > 500 */
     Dwg_Entity_CAMERA *CAMERA;
+    Dwg_Entity_DGNUNDERLAY *DGNUNDERLAY;
+    Dwg_Entity_DWFUNDERLAY *DWFUNDERLAY;
     Dwg_Entity_HATCH *HATCH;
     Dwg_Entity_IMAGE *IMAGE;
     Dwg_Entity_LIGHT *LIGHT;
@@ -7877,8 +7883,8 @@ typedef struct _dwg_object_entity
     Dwg_Entity_MESH *MESH;
     Dwg_Entity_MULTILEADER *MULTILEADER;
     Dwg_Entity_OLE2FRAME *OLE2FRAME;
+    Dwg_Entity_PDFUNDERLAY *PDFUNDERLAY;
     Dwg_Entity_SECTIONOBJECT *SECTIONOBJECT;
-    Dwg_Entity_UNDERLAY *UNDERLAY;
     /* unstable */
     Dwg_Entity_ARC_DIMENSION *ARC_DIMENSION;
     Dwg_Entity_HELIX *HELIX;
@@ -8052,11 +8058,13 @@ typedef struct _dwg_object_object
     Dwg_Object_SORTENTSTABLE *SORTENTSTABLE;
     Dwg_Object_SPATIAL_FILTER *SPATIAL_FILTER;
     Dwg_Object_TABLEGEOMETRY *TABLEGEOMETRY;
-    Dwg_Object_UNDERLAYDEFINITION *UNDERLAYDEFINITION;
     Dwg_Object_VBA_PROJECT *VBA_PROJECT;
     Dwg_Object_VISUALSTYLE *VISUALSTYLE;
     Dwg_Object_WIPEOUTVARIABLES *WIPEOUTVARIABLES;
     Dwg_Object_XRECORD *XRECORD;
+    Dwg_Object_PDFDEFINITION *PDFDEFINITION;
+    Dwg_Object_DGNDEFINITION *DGNDEFINITION;
+    Dwg_Object_DWFDEFINITION *DWFDEFINITION;
     /* unstable */
     Dwg_Object_ACSH_BREP_CLASS *ACSH_BREP_CLASS;
     Dwg_Object_ACSH_CHAMFER_CLASS *ACSH_CHAMFER_CLASS;
@@ -9270,6 +9278,8 @@ EXPORT int dwg_setup_VX_CONTROL (Dwg_Object *obj);
 EXPORT int dwg_setup_VX_TABLE_RECORD (Dwg_Object *obj);
 /* untyped > 500 */
 EXPORT int dwg_setup_CAMERA (Dwg_Object *obj);
+EXPORT int dwg_setup_DGNUNDERLAY (Dwg_Object *obj);
+EXPORT int dwg_setup_DWFUNDERLAY (Dwg_Object *obj);
 EXPORT int dwg_setup_HATCH (Dwg_Object *obj);
 EXPORT int dwg_setup_IMAGE (Dwg_Object *obj);
 EXPORT int dwg_setup_LIGHT (Dwg_Object *obj);
@@ -9277,8 +9287,8 @@ EXPORT int dwg_setup_LWPOLYLINE (Dwg_Object *obj);
 EXPORT int dwg_setup_MESH (Dwg_Object *obj);
 EXPORT int dwg_setup_MULTILEADER (Dwg_Object *obj);
 EXPORT int dwg_setup_OLE2FRAME (Dwg_Object *obj);
+EXPORT int dwg_setup_PDFUNDERLAY (Dwg_Object *obj);
 EXPORT int dwg_setup_SECTIONOBJECT (Dwg_Object *obj);
-EXPORT int dwg_setup_UNDERLAY (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BOOLEAN_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BOX_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CONE_CLASS (Dwg_Object *obj);
@@ -9324,11 +9334,13 @@ EXPORT int dwg_setup_SECTION_MANAGER (Dwg_Object *obj);
 EXPORT int dwg_setup_SORTENTSTABLE (Dwg_Object *obj);
 EXPORT int dwg_setup_SPATIAL_FILTER (Dwg_Object *obj);
 EXPORT int dwg_setup_TABLEGEOMETRY (Dwg_Object *obj);
-EXPORT int dwg_setup_UNDERLAYDEFINITION (Dwg_Object *obj);
 EXPORT int dwg_setup_VBA_PROJECT (Dwg_Object *obj);
 EXPORT int dwg_setup_VISUALSTYLE (Dwg_Object *obj);
 EXPORT int dwg_setup_WIPEOUTVARIABLES (Dwg_Object *obj);
 EXPORT int dwg_setup_XRECORD (Dwg_Object *obj);
+EXPORT int dwg_setup_PDFDEFINITION (Dwg_Object *obj);
+EXPORT int dwg_setup_DGNDEFINITION (Dwg_Object *obj);
+EXPORT int dwg_setup_DWFDEFINITION (Dwg_Object *obj);
 /* unstable */
 EXPORT int dwg_setup_ARC_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_HELIX (Dwg_Object *obj);
