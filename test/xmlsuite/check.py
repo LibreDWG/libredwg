@@ -29,8 +29,6 @@ for dir in dirs:
 
 # generate xml from txt files
 generatexml(path_to_dwg)
-# abort with libxml2-2.9.5 iter() returned non-iterator of type 'xmlCoreDepthFirstItertor'
-# print (libxml2mod.xmlTextReaderConstXmlVersion(None))
 
 # Now execute testsuite.c on all the DWG files found and create a separate directory structure
 for dir in dirs:

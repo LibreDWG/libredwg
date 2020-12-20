@@ -118,17 +118,19 @@ def xmlprocess(ideal, practical):
 
 		# collect original attributes. Removing the attributes here, so the
 		# total length is also set
-		if hasattr(original, 'properties'):
-			print (ideal + " original.properties")
+		try:
+			#print (ideal + " original.properties")
 			for attr in original.properties:
 				if attr.name not in excluded_attributes:
 					original_attributes[attr.name] = processattr(attr.content)
+		except (TypeError):
+			print ("Need python3 compatible libxml2 with __next__ iterator")
 
-		if hasattr(duplicate, 'properties'):
-			print (practical + " duplicate.properties")
+		try:
 			for attr in duplicate.properties:
 				duplicate_attributes[attr.name] = processattr(attr.content)
-
+		except (TypeError):
+			pass
 
 		unmatched_attr = []
 		# collect duplicate attributes and check if it matches with
