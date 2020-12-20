@@ -606,6 +606,19 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
   else                                                                        \
     FIRSTPREFIX                                                               \
   ENDARRAY;
+#define SUB_FIELD_VECTOR_N(o, nam, type, size, dxf)                           \
+  KEY (nam);                                                                  \
+  ARRAY;                                                                      \
+  if (_obj->o.nam)                                                              \
+    {                                                                         \
+      for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
+        {                                                                     \
+          FIRSTPREFIX fprintf (dat->fh, FORMAT_##type, _obj->o.nam[vcount]);  \
+        }                                                                     \
+    }                                                                         \
+  else                                                                        \
+    FIRSTPREFIX                                                               \
+  ENDARRAY;
 #define FIELD_VECTOR_T(nam, type, size, dxf)                                  \
   KEY (nam);                                                                  \
   ARRAY;                                                                      \

@@ -8731,10 +8731,14 @@ DWG_OBJECT (EVALUATION_GRAPH)
       }
       SUB_FIELD_BLd (nodes[rcount1], nextid, 95); // 1
       SUB_FIELD_HANDLE (nodes[rcount1], evalexpr, 5, 360);
+#ifndef IS_JSON
       SUB_FIELD_BLd (nodes[rcount1], node[0], 92);   // -1
       SUB_FIELD_BLd (nodes[rcount1], node[1], 92);   // -1
       SUB_FIELD_BLd (nodes[rcount1], node[2], 92);   // -1
       SUB_FIELD_BLd (nodes[rcount1], node[3], 92);   // -1
+#else
+      SUB_FIELD_VECTOR_N (nodes[rcount1], node, BLd, 4, 92)
+#endif
       if (FIELD_VALUE(has_graph))
         SUB_FIELD_B (nodes[rcount1], active_cycles, 0);
   END_REPEAT_BLOCK

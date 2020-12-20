@@ -2457,7 +2457,25 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               JSON_TOKENS_CHECK_OVERFLOW_ERR;
             }
         }
-        return error | (f && f->name ? 1 : 0); // found or not
+      else if (t->type == JSMN_ARRAY
+               && strEQc (key, "node[4]")
+               && (f = dwg_dynapi_entity_field (name, "node[4]")))
+        {
+          BITCODE_BLd arr[4];
+          int index;
+          sscanf (key, "node[%d]", &index);
+          if (index >= 0 && index < 4)
+            {
+              dwg_dynapi_field_get_value (_obj, f, &arr);
+              arr[index] = (BITCODE_BLd)json_long (dat, tokens);
+              LOG_TRACE ("%s: %d [%s]\n", key, (int)arr[index], f->type);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
+            }
+          else
+            json_advance_unknown (dat, tokens, t->type, 0);
+          JSON_TOKENS_CHECK_OVERFLOW_ERR;
+        }
+      return error | (f && f->name ? 1 : 0); // found or not
      }
   return error;
 }
@@ -2628,6 +2646,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       tokens->index++;
       for (int j = 0; j < keys; j++)
         {
+          bool saw_dxfname = false;
           char key[80];
           memset (key, 0, sizeof (key));
           LOG_INSANE ("[%d] ", j);
@@ -2773,6 +2792,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else if (strEQc (key, "dxfname"))
             {
               free (obj->dxfname);
+              saw_dxfname = true;
               obj->dxfname = json_string (dat, tokens);
               LOG_TRACE ("dxfname: %s\n", obj->dxfname)
               if (!obj->dxfname)
@@ -2813,7 +2833,10 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 {
                   if (obj->dxfname && strNE (obj->dxfname, dxfname))
                     {
-                      LOG_WARN ("Changed dxfname %s => %s", obj->dxfname, dxfname);
+                      if (memBEGINc (dxfname, "UNKNOWN_") || !saw_dxfname)
+                        LOG_TRACE ("Changed dxfname %s => %s", obj->dxfname, dxfname)
+                      else
+                        LOG_WARN ("Changed dxfname %s => %s", obj->dxfname, dxfname)
                     }
                   free (obj->dxfname);
                   obj->dxfname = strdup (dxfname);
