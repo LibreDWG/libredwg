@@ -23813,7 +23813,7 @@ dwg_add_ELLIPSE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (ELLIPSE);
   ADD_CHECK_3DPOINT (center);
   ADD_CHECK_DOUBLE (major_axis);
-  ADD_CHECK_DOUBLE (axis_ratio); // Only (0 - 1]
+  ADD_CHECK_DOUBLE (axis_ratio); // Only (0 - 1], ie. RadiusRatio
   _obj->center.x     = center->x;
   _obj->center.y     = center->y;
   _obj->center.z     = center->z;

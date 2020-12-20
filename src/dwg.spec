@@ -1833,7 +1833,7 @@ DWG_ENTITY (ELLIPSE)
   FIELD_3BD (center, 10);
   FIELD_3BD (sm_axis, 11);
   FIELD_3BD (extrusion, 210);
-  FIELD_BD (axis_ratio, 40);
+  FIELD_BD (axis_ratio, 40); // i.e RadiusRatio
   FIELD_BD (start_angle, 41);
   FIELD_BD (end_angle, 42);
 

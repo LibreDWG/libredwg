@@ -1781,7 +1781,7 @@ typedef struct _dwg_entity_ELLIPSE
   BITCODE_3BD center;
   BITCODE_3BD sm_axis;
   BITCODE_BE extrusion;
-  BITCODE_BD axis_ratio;
+  BITCODE_BD axis_ratio; /* i.e RadiusRatio */
   BITCODE_BD start_angle;
   BITCODE_BD end_angle;
 } Dwg_Entity_ELLIPSE;
