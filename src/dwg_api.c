@@ -22576,7 +22576,7 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
 #define ADD_ENTITY(token)                                                     \
   obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
   obj->dxfname = (char*)dwg_type_dxfname (DWG_TYPE_##token);                  \
-  if (strlen (#token) > 3 && !memcmp (#token, "_3D", 3))                      \
+  if (memBEGINc (#token, "_3D"))                                              \
     obj->name = (char *)&#token[1];                                           \
   else                                                                        \
     obj->name = (char *)#token;                                               \
