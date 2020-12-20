@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2014-2019 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2014-2020 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -11,9 +11,9 @@
 /*****************************************************************************/
 
 /*
- * testsuite.c: generate XML data per entity
- * similar to the out_xml backend, but this uses libxml2 to add bloat for
- * the "professional" company-type folks.
+ * testsuite.c: Generate XML data per entity.
+ *   Similar to the out_xml backend, but this uses libxml2 to add bloat for
+ *   the "professional" company-type folks.
  * written by Achyuta Piyush
  * modified by Reini Urban
  */
@@ -656,7 +656,7 @@ add_ray (xmlNodePtr rootnode, const Dwg_Object *obj)
 }
 
 /*
- * This function emits all the spline related attributes
+ * This function emits most the spline related attributes
  * @param xmlNodePtr rootnode The rootnode of the XML Document
  * @param const Dwg_Object *obj The DWG Object
  */
@@ -894,7 +894,7 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
           break;
 
         case DWG_TYPE_BLOCK:
-          add_block (rootnode, obj);
+          //add_block (rootnode, obj);
           break;
 
         case DWG_TYPE_INSERT:

@@ -38,11 +38,11 @@ for dir in dirs:
 		if file.endswith(".dwg"):
 			# filename of the XML File
 			dwg_xmlfile = file.rsplit(".", 1)[0] + ".xml"
-
-			# Start running testsuite on every DWG file
-			os.system("./testsuite " + path_to_dwg + "/"
-					  + dir + "/" + file + " " + outdir
-					  + "/" + dir + "/" + dwg_xmlfile + " 2> /dev/null")
+			if os.path.exists(path_to_dwg + "/" + dir + "/" + dwg_xmlfile):
+				# Start running testsuite on every DWG file
+				os.system("./testsuite " + path_to_dwg + "/"
+						  + dir + "/" + file + " " + outdir
+						  + "/" + dir + "/" + dwg_xmlfile + " 2> /dev/null")
 		pass
 
 # Now we have XML file. Next Up is Comparison
@@ -51,7 +51,7 @@ for dir in dirs:
 	for file in os.listdir(os.path.join(path_to_dwg, dir)):
 		if file.endswith(".xml"):
 
-			#Duplicate file has same directory structure
+			# Duplicate file has same directory structure
 			if os.path.exists(outdir + "/" + dir + "/" + file):
 				result = xmlprocess(path_to_dwg+ "/" + dir + "/" + file,
 									outdir + "/" + dir + "/" + file)
