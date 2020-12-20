@@ -13947,11 +13947,7 @@ dwg_dynapi_entity_value (void *restrict _obj, const char *restrict name,
       const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field (name, fieldname);
       if (!f)
         {
-          int loglevel;
-          if (obj)
-            loglevel = obj->parent->opts & DWG_OPTS_LOGLEVEL;
-          else
-            loglevel = DWG_LOGLEVEL_ERROR;
+          int loglevel = obj ? obj->parent->opts & DWG_OPTS_LOGLEVEL : DWG_LOGLEVEL_ERROR;
           LOG_ERROR ("%s: Invalid %s field %s", __FUNCTION__, name, fieldname);
           return false;
         }
@@ -13992,11 +13988,7 @@ dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
 
       if (!f || !f->is_string)
         {
-          int loglevel;
-          if (obj)
-            loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
-          else
-            loglevel = DWG_LOGLEVEL_ERROR;
+          int loglevel = dwg ? dwg->opts & DWG_OPTS_LOGLEVEL : DWG_LOGLEVEL_ERROR;
           LOG_ERROR ("%s: Invalid %s text field %s", __FUNCTION__, name, fieldname);
           return false;
         }
@@ -14171,7 +14163,7 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
     Dwg_DYNAPI_field *f;
     int error;
     const Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
-    Dwg_Data *dwg;
+    Dwg_Data *dwg = NULL;
 
     if (!obj)
       {
@@ -14231,7 +14223,7 @@ dwg_dynapi_common_utf8text(void *restrict _obj, const char *restrict fieldname,
       }
     else
       {
-        const int loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
+        const int loglevel = dwg ? dwg->opts & DWG_OPTS_LOGLEVEL : DWG_LOGLEVEL_ERROR;
         LOG_ERROR ("%s: Invalid common text field %s", __FUNCTION__, fieldname);
         return false;
       }
@@ -14319,7 +14311,7 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
 
       if (!f)
         {
-          const int loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
+          const int loglevel = dwg ? dwg->opts & DWG_OPTS_LOGLEVEL : 0;
           LOG_ERROR ("%s: Invalid %s field %s", __FUNCTION__, name, fieldname);
           return false;
         }
