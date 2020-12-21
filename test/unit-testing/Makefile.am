@@ -120,6 +120,7 @@ testobjects = \
 	dimstyle_control \
 	dummy \
 	dynamicblockpurgepreventer \
+	blockrepresentation \
 	ellipse \
 	endblk \
 	evaluation_graph \
@@ -339,7 +340,6 @@ testdebug = \
 	blockpropertiestable \
 	blockpropertiestablegrip \
 	blockradialconstraintparameter \
-	blockrepresentation \
 	blockrotateaction \
 	blockrotationgrip \
 	blockstretchaction \
