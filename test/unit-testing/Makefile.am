@@ -362,8 +362,10 @@ check_minimal = \
 	decode_test \
 	hash_test \
 	dynapi_test \
-	dxf_test \
-	add_test
+	dxf_test
+if USE_WRITE
+check_minimal += add_test
+endif
 
 check_PROGRAMS = \
 	$(check_minimal) \

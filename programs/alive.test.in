@@ -37,6 +37,7 @@ top_builddir="@top_builddir@"
 [ -z "$top_builddir" ] && echo $top_builddir
 CFLAGS="@CFLAGS@"
 DISABLE_JSON="@DISABLE_JSON@"
+DISABLE_WRITE="@DISABLE_WRITE@"
 
 i=0
 rm -f ./*-dxf*.log ./*-read,.log ./*-write.log ./*-json.log ./*-rw.log
@@ -126,7 +127,11 @@ run ()
                     arg="-v2 $arg"
                 fi
                 ;;
-    dwgfuzz)    arg="-rw $arg"
+    dwgfuzz)    if [ -n "$DISABLE_WRITE" ]; then
+                    arg="-dwg $arg"
+                else
+                    arg="-rw $arg"
+                fi
                 ;;
     esac
     if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then

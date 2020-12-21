@@ -309,9 +309,11 @@ AC_ARG_ENABLE([write],AS_HELP_STRING([--disable-write],[
     Disable write support (default: no).]),[],[enable_write=yes])
 AM_CONDITIONAL([USE_WRITE], [test x$enable_write != xno])
 AS_IF([test x$enable_write != xno],
-  AC_DEFINE([USE_WRITE],1,[Undefine to disable write support.])
-  AC_MSG_RESULT([no (default)]),
-  AC_MSG_RESULT([yes]))
+  [AC_DEFINE([USE_WRITE],1,[Undefine to disable write support.])
+   AC_SUBST(DISABLE_WRITE, 0)
+   AC_MSG_RESULT([no (default)])],
+  [AC_SUBST(DISABLE_WRITE, 1)
+   AC_MSG_RESULT([yes])])
 
 dnl Feature: --enable-trace
 AC_MSG_CHECKING([--enable-trace])
