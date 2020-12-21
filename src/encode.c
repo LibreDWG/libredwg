@@ -1105,13 +1105,11 @@ add_DUMMY_eed (Dwg_Object *obj)
   char *name = obj->dxfname;
   BITCODE_H appid;
   Dwg_Eed_Data *data;
-  int i = 1;
-  int len;
-  int size;
-  int off = 0;
+  int i = 1, off = 0;
+  int len, size;
   const bool is_tu = dwg->header.version >= R_2007;
 
-#ifdef HAVE_STDDEF_H /* just cygwin not */
+#ifdef HAVE_STDDEF_H /* windows (mingw32,cygwin) not */
   assert (offsetof (Dwg_Object_Object, num_eed) == offsetof (Dwg_Object_Entity, num_eed));
   assert (offsetof (Dwg_Object_Object, eed) == offsetof (Dwg_Object_Entity, eed));
 #endif
@@ -1128,8 +1126,9 @@ add_DUMMY_eed (Dwg_Object *obj)
   ent->num_eed = 1;
   ent->eed = calloc (2, sizeof (Dwg_Eed));
   len = strlen (name);
-  size = is_tu ? 5 + ((len + 1) * 2) : 5 + len + 1; // RC + 2*RS + string
-  data = ent->eed[0].data = (Dwg_Eed_Data *)calloc (size, 1);
+  size = is_tu ? 1 + 2 + ((len + 1) * 2) // RC + RS_LE + wstr
+               : 1 + 3 + len + 1;        // RC + RC+RS_LE + str
+  data = ent->eed[0].data = (Dwg_Eed_Data *)calloc (size + 3, 1);
   ent->eed[0].size = size;
   dwg_add_handle (&ent->eed[0].handle, 5, appid->absolute_ref, NULL);
   data->code = 0; // RC
@@ -3874,7 +3873,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
               BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
               BITCODE_RS codepage = 30; //FIXME
               char *dest;
-              if (length + 3 + dat->byte >= dat->size)
+              if (length + 5 + dat->byte >= dat->size)
                 bit_chain_alloc (dat);
               if (length > 255)
                 {
@@ -3893,7 +3892,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
             {
               if (!*data->u.eed_0.string)
                 data->u.eed_0.length = 0;
-              if (data->u.eed_0.length + 3 + dat->byte >= dat->size)
+              if (data->u.eed_0.length + 5 + dat->byte >= dat->size)
                 bit_chain_alloc (dat);
               bit_write_RC (dat, data->u.eed_0.length);
               bit_write_RS_LE (dat, data->u.eed_0.codepage);
@@ -3910,7 +3909,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
             {
               BITCODE_RS length = data->u.eed_0.length;
               BITCODE_TU dest = bit_utf8_to_TU (data->u.eed_0.string, 0);
-              if ((length * 2) + 2 + dat->byte >= dat->size)
+              if ((length * 2) + 5 + dat->byte >= dat->size)
                 bit_chain_alloc (dat);
               bit_write_RS (dat, length);
               for (int j = 0; j < length; j++)
@@ -3923,7 +3922,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
             {
               BITCODE_RS length = data->u.eed_0_r2007.length;
               BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
-              if ((length * 2) + 2 + dat->byte >= dat->size)
+              if ((length * 2) + 5 + dat->byte >= dat->size)
                 bit_chain_alloc (dat);
               bit_write_RS (dat, length);
               for (int j = 0; j < length; j++)

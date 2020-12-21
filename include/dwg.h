@@ -7755,21 +7755,21 @@ typedef struct _dwg_entity_eed_data
   BITCODE_RC code;
   union eed_data_t {
     struct { /* 0 (1000) string */
-      BITCODE_RS length;
-      unsigned codepage:15;
-      unsigned is_tu:1;
+      BITCODE_RS length;          /* RC */
+      unsigned short codepage:15; /* RS_LE */
+      unsigned short is_tu:1;
       char string[1];      /* inlined */
     } eed_0;
     struct { /* R2007+ 0 (1000) string */
       BITCODE_RS length;
-      unsigned _padding:15;
-      unsigned is_tu:1;
+      unsigned short _padding:15;
+      unsigned short is_tu:1;
       DWGCHAR string[1]; /* inlined */
     } eed_0_r2007;
     struct { /* 1 (1001) handle, not in data */
       char invalid[1]; // set the eed[0].handle to the used APPID instead
     } eed_1;
-    struct { /* 2 (1002) "{" => 0, or "}" => 1*/
+    struct { /* 2 (1002) "{" => 0 open, or "}" => 1 close */
       BITCODE_RC close;
     } eed_2;
     struct { /* 3 (1003) layer */
