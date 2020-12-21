@@ -576,6 +576,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_POINTCLOUDEX,
   DWG_TYPE_POINTPARAMETERENTITY,
   DWG_TYPE_POINTPATH,
+  DWG_TYPE_POLARGRIPENTITY,
   DWG_TYPE_RADIMLGOBJECTCONTEXTDATA,
   DWG_TYPE_RADIMOBJECTCONTEXTDATA,
   DWG_TYPE_RAPIDRTRENDERENVIRONMENT,
@@ -7164,6 +7165,12 @@ typedef struct _dwg_entity_VISIBILITYGRIPENTITY
   // ??
 } Dwg_Entity_VISIBILITYGRIPENTITY;
 
+typedef struct _dwg_entity_POLARGRIPENTITY
+{
+  struct _dwg_object_entity *parent;
+  // ??
+} Dwg_Entity_POLARGRIPENTITY;
+
 typedef struct _dwg_entity_ALIGNMENTPARAMETERENTITY
 {
   struct _dwg_object_entity *parent;
@@ -7887,6 +7894,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_POINTCLOUD *POINTCLOUD;
     Dwg_Entity_POINTCLOUDEX *POINTCLOUDEX;
     Dwg_Entity_POINTPARAMETERENTITY *POINTPARAMETERENTITY;
+    Dwg_Entity_POLARGRIPENTITY *POLARGRIPENTITY;
     Dwg_Entity_REVOLVEDSURFACE *REVOLVEDSURFACE;
     Dwg_Entity_ROTATIONPARAMETERENTITY *ROTATIONPARAMETERENTITY;
     Dwg_Entity_RTEXT *RTEXT;
@@ -9394,6 +9402,7 @@ EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
   EXPORT int dwg_setup_POINTCLOUD (Dwg_Object *obj);
   EXPORT int dwg_setup_POINTCLOUDEX (Dwg_Object *obj);
   EXPORT int dwg_setup_POINTPARAMETERENTITY (Dwg_Object *obj);
+  EXPORT int dwg_setup_POLARGRIPENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_REVOLVEDSURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_ROTATIONPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_RTEXT (Dwg_Object *obj);

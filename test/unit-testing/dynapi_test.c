@@ -18923,6 +18923,27 @@ static int test_POINTPARAMETERENTITY (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_POLARGRIPENTITY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_POLARGRIPENTITY *restrict polargripentity = obj->tio.entity->tio.POLARGRIPENTITY;
+  failed = 0;
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (polargripentity, "POLARGRIPENTITY", "parent", &parent, NULL)
+        && !memcmp (&parent, &polargripentity->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("POLARGRIPENTITY.parent [struct _dwg_object_entity*]");
+  }
+  if (failed && (is_class_unstable ("POLARGRIPENTITY") || is_class_debugging ("POLARGRIPENTITY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "POLARGRIPENTITY", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_POLYLINE_2D (const Dwg_Object *obj)
 {
   int error = 0;
@@ -61776,6 +61797,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_POINTCLOUDEX(obj);
   else  if (obj->fixedtype == DWG_TYPE_POINTPARAMETERENTITY)
     error += test_POINTPARAMETERENTITY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_POLARGRIPENTITY)
+    error += test_POLARGRIPENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_POLYLINE_2D)
     error += test_POLYLINE_2D(obj);
   else  if (obj->fixedtype == DWG_TYPE_POLYLINE_3D)
@@ -62380,6 +62403,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_POINTCLOUDEX (obj);
   else  if (obj->fixedtype == DWG_TYPE_POINTPARAMETERENTITY)
     error += test_POINTPARAMETERENTITY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_POLARGRIPENTITY)
+    error += test_POLARGRIPENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_POLYLINE_2D)
     error += test_POLYLINE_2D (obj);
   else  if (obj->fixedtype == DWG_TYPE_POLYLINE_3D)
@@ -63318,6 +63343,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_POINTPARAMETERENTITY): %d != "
                "dwg_dynapi_fields_size (\"POINTPARAMETERENTITY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_POLARGRIPENTITY);
+  size2 = dwg_dynapi_fields_size ("POLARGRIPENTITY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_POLARGRIPENTITY): %d != "
+               "dwg_dynapi_fields_size (\"POLARGRIPENTITY\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_POLYLINE_2D);

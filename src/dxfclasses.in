@@ -13,7 +13,7 @@
 
 /*
  * dxfclasses.c: create classes, lookup the initial class values from its DXF name.
- *               generated via gperf from dxfclass.in
+ *               generated via gperf from dxfclasses.in
  *
  * written Reini Urban
  */
@@ -42,12 +42,14 @@ enum apptypes {
   SCENEOECLASS,
   ISMCLASS,
   EXPRESSCLASS,
+  POINTCLOUDCLASS,
   SPECIALCLASS,
 };
 #define ODBX ODBXCLASS
 #define ISM ISMCLASS
 #define SCENEOE SCENEOECLASS
 #define EXPRESS EXPRESSCLASS
+#define POINTCLOUD POINTCLOUDCLASS
 #define SPECIAL SPECIALCLASS
 //%null-strings
 
@@ -99,6 +101,7 @@ RASTERVARIABLES,"AcDbRasterVariables",	ISM,	0
 #
 LIGHT,		"AcDbLight",		SCENEOE, 1
 SUN, 		"AcDbSun",		SCENEOE, 0
+SUNSTUDY,	"AcDbSunStudy",		SCENEOE, 0
 #
 DIMASSOC, 	"AcDbDimAssoc",		SPECIAL, 0
 WIPEOUT,	"AcDbWipeout", 		SPECIAL, 1
@@ -111,7 +114,16 @@ MATERIAL,		"AcDbMaterial",		ODBX,	0
 PLOTSETTINGS,		"AcDbPlotSettings",	ODBX,	0
 ACDBSECTIONVIEWSTYLE,	"AcDbSectionViewStyle",	ODBX,	0
 ACDBDETAILVIEWSTYLE,	"AcDbDetailViewStyle",	ODBX,	0
+POSITIONMARKER,		"AcDbGeoPositionMarker",ODBX,	0
 ACAD_EVALUATION_GRAPH,	"AcDbEvalGraph",	ODBX,	0
+#
+SURFACE,		"AcDbSurface",		ODBX,	1
+EXTRUDEDSURFACE,	"AcDbExtrudedSurface",	ODBX,	1
+LOFTEDSURFACE,		"AcDbLoftedSurface",	ODBX,	1
+NURBSURFACE,		"AcDbNurbSurface",	ODBX,	1
+PLANESURFACE,		"AcDbPlaneSurface",	ODBX,	1
+REVOLVEDSURFACE,	"AcDbRevolvedSurface",	ODBX,	1
+SWEPTSURFACE,		"AcDbSweptSurface",	ODBX,	1
 #
 ACSH_BOOLEAN_CLASS,	"AcDbShBoolean",	ODBX,	0
 ACSH_BOX_CLASS,		"AcDbShBox",		ODBX,	0
@@ -140,6 +152,7 @@ ACDBASSOCVERTEXACTIONPARAM,	"AcDbAssocVertexActionParam",	ODBX,	0
 ACDBASSOCGEOMDEPENDENCY,	"AcDbAssocGeomDependency",	ODBX,	0
 ACDBASSOCDEPENDENCY,		"AcDbAssocDependency",		ODBX,	0
 ACDBASSOCDIMDEPENDENCYBODY,	"AcDbAssocDimDependencyBody",	ODBX,	0
+ACDBBLOCKPARAMDEPENDENCYBODY,	"AcDbBlockParameterDependencyBody",	ODBX,	0
 #
 ACDBASSOC3POINTANGULARDIMACTIONBODY,"AcDbAssoc3PointAngularDimActionBody",	ODBX,	0
 ACDBASSOCALIGNEDIMACTIONBODY,	"AcDbAssocAlignedDimActionBody",	ODBX,	0
@@ -151,6 +164,7 @@ ACDBASSOCARRAYACTIONBODY,	"AcDbAssocArrayActionBody",		ODBX,	0
 ACDBASSOCEDGECHAMFERACTIONBODY,	"AcDbAssocEdgeChamferActionBody",	ODBX,	0
 ACDBASSOCEDGEFILLETACTIONBODY,	"AcDbAssocEdgeFilletActionBody",	ODBX,	0
 ACDBASSOCMLEADERACTIONBODY,	"AcDbAssocMLeaderActionBody",		ODBX,	0
+CONTEXTDATAMANAGER,		"AcDbContextDataManager",		ODBX,	0
 #
 ACDBASSOCBLENDSURFACEACTIONBODY,	"AcDbAssocBlendSurfaceActionBody",	ODBX,	0
 ACDBASSOCEXTENDSURFACEACTIONBODY,	"AcDbAssocExtendSurfaceActionBody",	ODBX,	0
@@ -161,10 +175,10 @@ ACDBASSOCNETWORKSURFACEACTIONBODY,	"AcDbAssocNetworkSurfaceActionBody",	ODBX,	0
 ACDBASSOCOFFSETSURFACEACTIONBODY,	"AcDbAssocOffsetSurfaceActionBody",	ODBX,	0
 ACDBASSOCPLANESURFACEACTIONBODY,	"AcDbAssocPlaneSurfaceActionBody",	ODBX,	0
 ACDBASSOCPATCHSURFACEACTIONBODY,	"AcDbAssocPatchSurfaceActionBody",	ODBX,	0
-ACDBASSOCRESTOREENTITYSTATEACTIONBODY,	"AcDbAssocRestoreEntityStateActionBody",	ODBX,	0
+ACDBASSOCRESTOREENTITYSTATEACTIONBODY,	"AcDbAssocRestoreEntityStateActionBody",ODBX,	0
 ACDBASSOCREVOLVEDSURFACEACTIONBODY,	"AcDbAssocRevolvedSurfaceActionBody",	ODBX,	0
 ACDBASSOCSWEPTSURFACEACTIONBODY,	"AcDbAssocSweptSurfaceActionBody",	ODBX,	0
-ACDBASSOCTRIMSURFACEACTIONBODY,		"AcDbAssocTrimSurfaceActionBody",		ODBX,	0
+ACDBASSOCTRIMSURFACEACTIONBODY,		"AcDbAssocTrimSurfaceActionBody",	ODBX,	0
 #
 ACDBASSOCACTIONPARAM,			"AcDbAssocActionParam",		ODBX,	0
 ACDBASSOCASMBODYACTIONPARAM,		"AcDbAssocAsmbodyActionParam",	ODBX,	0
@@ -174,6 +188,65 @@ ACDBASSOCFACEACTIONPARAM,		"AcDbAssocFaceActionParam",	ODBX,	0
 ACDBASSOCPATHACTIONPARAM,		"AcDbAssocPathActionParam",	ODBX,	0
 ACDBASSOCOBJECTACTIONPARAM,		"AcDbAssocObjectActionParam",	ODBX,	0
 ACDBASSOCPOINTREFACTIONPARAM,		"AcDbAssocPointRefActionParam",	ODBX,	0
+#
+ACDBASSOCARRAYMODIFYPARAMETERS,		"AcDbAssocArrayModifyParameters",	ODBX,	0
+ACDBASSOCARRAYPATHPARAMETERS,		"AcDbAssocArrayPathParameters",		ODBX,	0
+ACDBASSOCARRAYPOLARPARAMETERS,		"AcDbAssocArrayPolarParameters",	ODBX,	0
+ACDBASSOCARRAYRECTANGULARPARAMETERS,	"AcDbAssocArrayRectangularParameters",	ODBX,	0
+#
+ALIGNMENTPARAMETERENTITY,		"AcDbBlockAlignmentParameterEntity",	ODBX,	1
+BASEPOINTPARAMETERENTITY,		"AcDbBlockBasepointParameterEntity",	ODBX,	1
+FLIPPARAMETERENTITY,			"AcDbBlockFlipParameterEntity",		ODBX,	1
+LINEARPARAMETERENTITY,			"AcDbBlockLinearParameterEntity",      	ODBX,	1
+POINTPARAMETERENTITY,			"AcDbBlockPointParameterEntity",      	ODBX,	1
+ROTATIONPARAMETERENTITY,		"AcDbBlockRotationParameterEntity",     ODBX,	1
+POLARGRIPENTITY,			"AcDbBlockPolarGripEntity",		ODBX,	1
+XYPARAMETERENTITY,			"AcDbBlockXYParameterEntity",		ODBX,	1
+# more Dynblocks
+ACDB_BLOCKREPRESENTATION_DATA,		"AcDbBlockRepresentationData",     	ODBX,	0
+BLOCKARRAYACTION,			"AcDbBlockArrayAction",     		ODBX,	0
+BLOCKANGULARCONSTRAINTPARAMETER,	"AcDbBlockAngularConstraintParameter",  ODBX,	0
+BLOCKDIAMETRICCONSTRAINTPARAMETER,	"AcDbBlockDiametricConstraintParameter",ODBX,	0
+BLOCKRADIALCONSTRAINTPARAMETER,		"AcDbBlockRadialConstraintParameter",	ODBX,	0
+BLOCKALIGNEDCONSTRAINTPARAMETER,	"AcDbBlockAlignedConstraintParameter",  ODBX,	0
+BLOCKLINEARCONSTRAINTPARAMETER,		"AcDbBlockLinearConstraintParameter",	ODBX,	0
+BLOCKHORIZONTALCONSTRAINTPARAMETER,	"AcDbBlockHorizontalConstraintParameter",ODBX,	0
+BLOCKVERTICALCONSTRAINTPARAMETER,	"AcDbBlockVerticalConstraintParameter",	ODBX,	0
+BLOCKMOVEACTION,			"AcDbBlockMoveAction",			ODBX,	0
+BLOCKFLIPACTION,			"AcDbBlockFlipAction",			ODBX,	0
+BLOCKLOOKUPACTION,			"AcDbBlockLookupAction",		ODBX,	0
+BLOCKROTATEACTION,			"AcDbBlockRotateAction",		ODBX,	0
+BLOCKSCALEACTION,			"AcDbBlockScaleAction",			ODBX,	0
+BLOCKPOLARSTRETCHACTION,		"AcDbBlockPolarStretchAction",	       	ODBX,	0
+BLOCKSTRETCHACTION,			"AcDbBlockStretchAction",	       	ODBX,	0
+BLOCKLOOKUPPARAMETER,			"AcDbBlockLookupParameter",		ODBX,	0
+BLOCKPOINTPARAMETER,			"AcDbBlockPointParameter",		ODBX,	0
+BLOCKROTATIONPARAMETER,			"AcDbBlockRotationParameter",		ODBX,	0
+BLOCKPOLARGRIP,				"AcDbBlockPolarGrip",			ODBX,	0
+BLOCKROTATIONGRIP,			"AcDbBlockRotationGrip",		ODBX,	0
+BLOCKVISIBILITYGRIP,			"AcDbBlockVisibilityGrip",		ODBX,	0
+BLOCKXYGRIP,				"AcDbBlockXYGrip",			ODBX,	0
+BLOCKGRIPLOCATIONCOMPONENT,		"AcDbBlockGripExpr",			ODBX,	0
+BLOCKALIGNMENTGRIP,			"AcDbBlockAlignmentGrip",		ODBX,	0
+BLOCKALIGNMENTPARAMETER,		"AcDbBlockAlignmentParameter",		ODBX,	0
+BLOCKLINEARPARAMETER,			"AcDbBlockLinearParameter",		ODBX,	0
+BLOCKBASEPOINTPARAMETER,		"AcDbBlockBasepointParameter",		ODBX,	0
+BLOCKFLIPPARAMETER,			"AcDbBlockFlipParameter",		ODBX,	0
+BLOCKFLIPGRIP,				"AcDbBlockFlipGrip",			ODBX,	0
+BLOCKLINEARGRIP,			"AcDbBlockLinearGrip",			ODBX,	0
+BLOCKLOOKUPGRIP,			"AcDbBlockLookupGrip",			ODBX,	0
+BLOCKUSERPARAMETER,   			"AcDbBlockUserParameter",		ODBX,	0
+BLOCKXYPARAMETER,			"AcDbBlockXYParameter",			ODBX,	0
+BLOCKVISIBILITYPARAMETER,		"AcDbBlockVisibilityParameter",		ODBX,	0
+BLOCKPROPERTIESTABLE,			"AcDbBlockPropertiesTable",		ODBX,	0
+BLOCKPROPERTIESTABLEGRIP,   		"AcDbBlockPropertiesTableGrip",		ODBX,	0
+ACDB_DYNAMICBLOCKPROXYNODE,		"AcDbDynamicBlockProxyNode",	       	ODBX,	0
+ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION,"AcDbDynamicBlockPurgePreventer",      	ODBX,	0
+#
+ACDBCURVEPATH   			"AcDbCurvePath",			ODBX,	0
+MOTIONPATH   				"AcDbMotionPath",			ODBX,	0
+ACDBPOINTPATH   			"AcDbPointPath",			ODBX,	0
+#
 ACDB_ALDIMOBJECTCONTEXTDATA_CLASS,	"AcDbAlignedDimensionObjectContextData",ODBX,	0
 ACDB_ANGDIMOBJECTCONTEXTDATA_CLASS,	"AcDbAngularDimensionObjectContextData",ODBX,	0
 ACDB_ANNOTSCALEOBJECTCONTEXTDATA_CLASS,	"AcDbAnnotScaleObjectContextData",	ODBX,	0
@@ -186,6 +259,17 @@ ACDB_ORDDIMOBJECTCONTEXTDATA_CLASS,	"AcDbOrdinateDimensionObjectContextData",	OD
 ACDB_RADIMLGOBJECTCONTEXTDATA_CLASS,	"AcDbRadialDimensionLargeObjectContextData",	ODBX,	0
 ACDB_RADIMOBJECTCONTEXTDATA_CLASS,	"AcDbRadialDimensionObjectContextData",	ODBX,	0
 ACDB_TEXTOBJECTCONTEXTDATA_CLASS,	"AcDbTextObjectContextData",		ODBX,	0
+#
+ACDBPOINTCLOUD,				"AcDbPointCloud",			POINTCLOUD, 1
+ACDBPOINTCLOUDEX,			"AcDbPointCloudEx",			POINTCLOUD, 1
+ACDBPOINTCLOUDDEF,			"AcDbPointCloudDef",			POINTCLOUD, 0
+ACDBPOINTCLOUDDEFEX,			"AcDbPointCloudDefEx",			POINTCLOUD, 0
+ACDBPOINTCLOUDDEF_REACTOR,		"AcDbPointCloudDefReactor",		POINTCLOUD, 0
+ACDBPOINTCLOUDDEF_REACTOR_EX,		"AcDbPointCloudDefReactorEx",		POINTCLOUD, 0
+ACDBPOINTCLOUDCOLORMAP,			"AcDbPointCloudColorMap",		POINTCLOUD, 0
+#
+EXACXREFPANELOBJECT,			"ExAcXREFPanelObject",		SPECIAL, 0
+NPOCOLLECTION,	"AcDbImpNonPersistentObjectsCollection", ODBX, 0
 %%
 
 /* Create classes on demand.
@@ -222,6 +306,8 @@ dwg_require_class (Dwg_Data *restrict dwg, const char *const restrict dxfname, c
           return dwg_add_class (dwg, dxfname, result->cppname, "SCENEOE", result->isent);
         case ISMCLASS:
           return dwg_add_class (dwg, dxfname, result->cppname, "ISM", result->isent);
+        case POINTCLOUDCLASS:
+          return dwg_add_class (dwg, dxfname, result->cppname, "AcDbPointCloudObj", result->isent); //appname?
         case EXPRESSCLASS:
           {
             char appname[128];

@@ -24,6 +24,7 @@
 #include "dwg.h"
 #include "common.h"
 
+// FIXME: add enum Dwg_Class_STABILITY (STABLE, UNSTABLE, DEBUGGING, UNHANDLED)
 static const struct _dwg_dxfname * in_word_set (register const char *str, register size_t len);
 
 %}
@@ -92,6 +93,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "POINTCLOUD",                "ACDBPOINTCLOUD",             DWG_TYPE_POINTCLOUD,	1
 "POINTCLOUDEX",              "ACDBPOINTCLOUDEX",           DWG_TYPE_POINTCLOUDEX,	1
 "POINTPARAMETERENTITY",      "POINTPARAMETERENTITY",       DWG_TYPE_POINTPARAMETERENTITY,	1
+"POLARGRIPENTITY",           "POLARGRIPENTITY",            DWG_TYPE_POLARGRIPENTITY,	1
 "POLYLINE_2D",               "POLYLINE",                   DWG_TYPE_POLYLINE_2D,	1
 "POLYLINE_3D",               "POLYLINE",                   DWG_TYPE_POLYLINE_3D,	1
 "POLYLINE_MESH",             "POLYLINE",                   DWG_TYPE_POLYLINE_MESH,	1

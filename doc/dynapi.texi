@@ -3389,6 +3389,19 @@ struct _dwg_object_entity*
 @end vtable
 @end indentedblock
 
+@strong{POLARGRIPENTITY} @anchor{POLARGRIPENTITY}
+@cindex entity, POLARGRIPENTITY
+@vindex POLARGRIPENTITY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+
+@end vtable
+@end indentedblock
+
 @strong{POLYLINE_2D} @anchor{POLYLINE_2D}
 @cindex entity, POLYLINE_2D
 @vindex POLYLINE_2D

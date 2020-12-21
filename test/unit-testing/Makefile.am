@@ -304,6 +304,7 @@ testdebug = \
 	pointclouddef_reactor_ex \
 	pointcloudcolormap \
 	pointpath \
+	polargripentity \
 	radimobjectcontextdata \
 	radimlgobjectcontextdata \
 	renderenvironment \

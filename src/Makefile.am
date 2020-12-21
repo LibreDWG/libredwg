@@ -35,7 +35,6 @@ libredwg_la_SOURCES = \
 	dynapi.c \
 	classes.c \
 	dwg_api.c \
-	dxfclasses.c \
 	objects.c \
 	$(EXTRA_HEADERS)
 if !DISABLE_DXF
@@ -52,7 +51,8 @@ endif
 endif
 if USE_WRITE
 libredwg_la_SOURCES += \
-	encode.c
+	encode.c \
+	dxfclasses.c
 #       encode_r2007.c
 if !DISABLE_DXF
 libredwg_la_SOURCES += \

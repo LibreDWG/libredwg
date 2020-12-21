@@ -1270,6 +1270,7 @@ print $inc <<'EOF';
 #include "dwg.h"
 #include "common.h"
 
+// FIXME: add enum Dwg_Class_STABILITY (STABLE, UNSTABLE, DEBUGGING, UNHANDLED)
 static const struct _dwg_dxfname * in_word_set (register const char *str, register size_t len);
 
 %}
