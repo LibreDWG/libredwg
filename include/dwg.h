@@ -7769,8 +7769,8 @@ typedef struct _dwg_entity_eed_data
     struct { /* 1 (1001) handle, not in data */
       char invalid[1]; // set the eed[0].handle to the used APPID instead
     } eed_1;
-    struct { /* 2 (1002) { or } */
-      BITCODE_RC byte;
+    struct { /* 2 (1002) "{" => 0, or "}" => 1*/
+      BITCODE_RC close;
     } eed_2;
     struct { /* 3 (1003) layer */
       BITCODE_RL layer;

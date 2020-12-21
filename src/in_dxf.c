@@ -1734,8 +1734,8 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
             }
         }
       break;
-    case 2:
-      /* code [RC] + byte [RC] */
+    case 2: // 1002 . "{" => 0, or 1002 . "}" => 1
+      /* code [RC] + close [RC] */
       size = 1 + 1;
       eed[i].data = (Dwg_Eed_Data *)xcalloc (1, size);
       if (!eed[i].data)
@@ -1744,9 +1744,9 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
           dwg_free_eed (obj);
           return;
         }
-      eed[i].data->code = code; // 1002
-      eed[i].data->u.eed_2.byte = (BITCODE_RC)pair->value.i;
-      LOG_TRACE ("byte: %d\n", pair->value.i);
+      eed[i].data->code = code;
+      eed[i].data->u.eed_2.close = strEQc (pair->value.s, "{") ? 0 : 1;
+      LOG_TRACE ("close: %d\n", eed[i].data->u.eed_2.close);
       eed[i].size += size;
       break;
     case 4:

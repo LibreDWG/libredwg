@@ -1102,14 +1102,14 @@ add_DUMMY_eed (Dwg_Object *obj)
   //const int is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
   const BITCODE_BL num_eed = ent->num_eed; // same offset for object
   Dwg_Data *dwg = obj->parent;
+  char *name = obj->dxfname;
   BITCODE_H appid;
   Dwg_Eed_Data *data;
-  const bool is_tu = dwg->header.version >= R_2007;
   int i = 1;
-  char *name = obj->dxfname;
   int len;
   int size;
   int off = 0;
+  const bool is_tu = dwg->header.version >= R_2007;
 
 #ifdef HAVE_STDDEF_H /* just cygwin not */
   assert (offsetof (Dwg_Object_Object, num_eed) == offsetof (Dwg_Object_Entity, num_eed));
@@ -1136,11 +1136,13 @@ add_DUMMY_eed (Dwg_Object *obj)
   if (is_tu) // probably never used, write DUMMY placeholder to R_2007
     {
       BITCODE_TU wstr = bit_utf8_to_TU (name, 0);
+      data->u.eed_0_r2007.is_tu = 1;
       data->u.eed_0_r2007.length = len; // RS
       memcpy (data->u.eed_0_r2007.string, wstr, len * 2);
     }
   else
     {
+      data->u.eed_0.is_tu = 0;
       data->u.eed_0.length = len;  // RC
       data->u.eed_0.codepage = 30; // RS
       memcpy (data->u.eed_0.string, name, len);
@@ -3944,8 +3946,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
       }
       break;
     case 2:
-      bit_write_RC (dat, data->u.eed_2.byte);
-      LOG_TRACE ("byte: %d [RC]", (int)data->u.eed_2.byte);
+      bit_write_RC (dat, data->u.eed_2.close);
+      LOG_TRACE ("close: %d [RC]", (int)data->u.eed_2.close);
       break;
     case 3:
       bit_write_RL (dat, data->u.eed_3.layer);

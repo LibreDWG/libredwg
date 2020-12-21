@@ -1228,7 +1228,7 @@ dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
                 VALUE_TV (data->u.eed_0.string, 1000)
               break;
             case 2:
-              if (data->u.eed_2.byte)
+              if (data->u.eed_2.close)
                 VALUE_TFF ("}", 1002)
               else
                 VALUE_TFF ("{", 1002)
@@ -2821,7 +2821,7 @@ dxf_format (int code)
     return "%6i";
   if (code == 1071)
     return "%9li"; // int32_t
-  if (code == 1002) // RC
+  if (code == 1002) // string => RC
     return "%6i";
   if (code == 1003) // RL layer
     return "%9li";
