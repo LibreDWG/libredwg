@@ -491,7 +491,6 @@ EXPORT Dwg_Object_TVDEVICEPROPERTIES** dwg_getall_TVDEVICEPROPERTIES (Dwg_Data* 
 //EXPORT Dwg_Object_ACDSRECORD** dwg_getall_ACDSRECORD (Dwg_Data* dwg);
 //EXPORT Dwg_Object_ACDSSCHEMA** dwg_getall_ACDSSCHEMA (Dwg_Data* dwg);
 //EXPORT Dwg_Object_NPOCOLLECTION** dwg_getall_NPOCOLLECTION (Dwg_Data* dwg);
-//EXPORT Dwg_Object_PROXY_LWPOLYLINE** dwg_getall_PROXY_LWPOLYLINE (Dwg_Data* dwg);
 //EXPORT Dwg_Object_RAPIDRTRENDERENVIRONMENT** dwg_getall_RAPIDRTRENDERENVIRONMENT (Dwg_Data* dwg);
 //EXPORT Dwg_Object_XREFPANELOBJECT** dwg_getall_XREFPANELOBJECT (Dwg_Data* dwg);
 #endif
@@ -810,7 +809,6 @@ EXPORT Dwg_Object_TABLESTYLE* dwg_object_to_TABLESTYLE (Dwg_Object* obj);
   //EXPORT Dwg_Object_ACDSRECORD* dwg_object_to_ACDSRECORD (Dwg_Object* obj);
   //EXPORT Dwg_Object_ACDSSCHEMA* dwg_object_to_ACDSSCHEMA (Dwg_Object* obj);
   //EXPORT Dwg_Object_NPOCOLLECTION* dwg_object_to_NPOCOLLECTION (Dwg_Object* obj);
-  //EXPORT Dwg_Object_PROXY_LWPOLYLINE* dwg_object_to_PROXY_LWPOLYLINE (Dwg_Object* obj);
   //EXPORT Dwg_Object_RAPIDRTRENDERENVIRONMENT* dwg_object_to_RAPIDRTRENDERENVIRONMENT (Dwg_Object* obj);
   //EXPORT Dwg_Object_XREFPANELOBJECT* dwg_object_to_XREFPANELOBJECT (Dwg_Object* obj);
 #endif

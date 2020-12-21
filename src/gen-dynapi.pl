@@ -1023,7 +1023,7 @@ for (<DATA>) {
           } elsif ($k =~ /^VERTEX_(MESH|PFACE)$/) {
             $fields = "_dwg_VERTEX_3D_fields";
             $size = "sizeof (struct _dwg_entity_VERTEX_3D)";
-          } elsif ($k =~ /^PROXY_LWPOLYLINE$/) {
+          } elsif ($k =~ /^PROXY_LWPOLYLINE$/) { # TODO subent, not entity
             $size = "sizeof (struct _dwg_entity_PROXY_LWPOLYLINE)";
           }
           $DWG_TYPE{$k} = $vs;
@@ -1757,6 +1757,7 @@ while (<$in>) {
       $UNHANDLED{$1}++;
   }
 }
+delete $UNHANDLED{PROXY_LWPOLYLINE};
 close $in;
 for (sort keys %UNHANDLED) {
   push @unhandled_names, $_ if !exists $entity_names{$_} and !exists $object_names{$_};
@@ -2274,6 +2275,31 @@ if (1) {
         printf $out "    %-40s	/* %d */\n", "\"$dxfname\",", $e++;
       }
       print $out "  /* End auto-generated dxfnames */\n";
+      $gen = 1;
+    }
+    if (m{^/\* Start auto-generated stability}) {
+      print $out $_;
+      print $out <<EOF;
+static const Dwg_Object_Type _classes_unstable[] =
+  {
+EOF
+      print $out "   DWG_TYPE_$_,\n" for sort keys %UNSTABLE;
+      print $out <<EOF;
+  };
+static const Dwg_Object_Type _classes_debugging[] =
+  {
+EOF
+      print $out "   DWG_TYPE_$_,\n" for sort keys %DEBUGGING;
+      print $out <<EOF;
+  };
+static const Dwg_Object_Type _classes_unhandled[] =
+  {
+EOF
+      print $out "   DWG_TYPE_$_,\n" for sort keys %UNHANDLED;
+      print $out <<EOF;
+  };
+/* End auto-generated stability */
+EOF
       $gen = 1;
     }
     if (!$gen) {

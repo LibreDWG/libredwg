@@ -8200,7 +8200,6 @@ typedef struct _dwg_object_object
 //    Dwg_Object_ACDSRECORD *ACDSRECORD;
 //    Dwg_Object_ACDSSCHEMA *ACDSSCHEMA;
 //    Dwg_Object_NPOCOLLECTION *NPOCOLLECTION;
-//    Dwg_Object_PROXY_LWPOLYLINE *PROXY_LWPOLYLINE;
 //    Dwg_Object_RAPIDRTRENDERENVIRONMENT *RAPIDRTRENDERENVIRONMENT;
 //    Dwg_Object_XREFPANELOBJECT *XREFPANELOBJECT;
     /* End auto-generated object-union */
@@ -9509,7 +9508,6 @@ EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
   //EXPORT int dwg_setup_ACDSRECORD (Dwg_Object *obj);
   //EXPORT int dwg_setup_ACDSSCHEMA (Dwg_Object *obj);
   //EXPORT int dwg_setup_NPOCOLLECTION (Dwg_Object *obj);
-  //EXPORT int dwg_setup_PROXY_LWPOLYLINE (Dwg_Object *obj);
   //EXPORT int dwg_setup_RAPIDRTRENDERENVIRONMENT (Dwg_Object *obj);
   //EXPORT int dwg_setup_XREFPANELOBJECT (Dwg_Object *obj);
 #endif
