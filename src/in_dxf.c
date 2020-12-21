@@ -2667,6 +2667,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   int k = -1;
   int l = -1;
   int hdl_idx = -1;
+  bool next_330_boundary_handles = false;
 
   // valid entry codes
   if (pair->code == 91)
@@ -3130,6 +3131,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           CHK_segs;
           if (k < 0 || o->paths[j].segs[k].curve_type != 4)
             {
+              next_330_boundary_handles = true;
               o->paths[j].num_boundary_handles = pair->value.l;
               //o->num_boundary_handles += pair->value.l;
               LOG_TRACE ("HATCH.paths[%d].num_boundary_handles = %ld [BL 97]\n",
@@ -3138,6 +3140,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             }
           else
             {
+              next_330_boundary_handles = false;
               o->paths[j].segs[k].num_fitpts = pair->value.l;
               LOG_TRACE (
                   "HATCH.paths[%d].segs[%d].num_fitpts  = %ld [BL 97]\n", j, k,
@@ -3148,8 +3151,9 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           CHK_paths;
           o->paths[j].num_boundary_handles = pair->value.l;
+          next_330_boundary_handles = true;
           //o->num_boundary_handles += pair->value.l;
-          LOG_TRACE ("HATCH.paths[%d].num_boundary_handles = %ld [BL 97]\n", j,
+          LOG_TRACE ("HATCH.paths[%d].num_boundary_handles = %ld [BL 97] (1)\n", j,
                      pair->value.l);
           k = 0;
         }
@@ -3289,9 +3293,10 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                      pair->value.d);
         }
       else if (pair->code == 330
+               && next_330_boundary_handles
                && j >= 0 && j < (int)o->num_paths
                && o->paths[j].num_boundary_handles
-               && (unsigned)hdl_idx < o->paths[j].num_boundary_handles)
+               && hdl_idx < (int)o->paths[j].num_boundary_handles)
         {
           BITCODE_H ref
               = dwg_add_handleref (obj->parent, 4, pair->value.u, obj);
