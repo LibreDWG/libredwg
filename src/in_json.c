@@ -2816,7 +2816,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               obj->type = json_long (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
 
-              if (!dwg_object_name (name, &dxfname, &obj->fixedtype, &isent))
+              if (!dwg_object_name (name, &dxfname, &obj->fixedtype, &isent, NULL))
                 {
                   LOG_ERROR ("Unknown object %s failed dwg_object_name()", name);
                   // exhaust the rest

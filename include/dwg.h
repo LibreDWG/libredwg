@@ -284,6 +284,13 @@ typedef enum DWG_VERSION_TYPE
 } Dwg_Version_Type;
 #define DWG_VERSIONS (int)(R_AFTER+1)
 
+typedef enum DWG_CLASS_STABILITY {
+  DWG_CLASS_STABLE,
+  DWG_CLASS_UNSTABLE,
+  DWG_CLASS_DEBUGGING,
+  DWG_CLASS_UNHANDLED
+} Dwg_Class_Stability;
+
 /**
  Object supertypes that exist in dwg-files.
  */
@@ -9188,7 +9195,8 @@ EXPORT int dwg_add_object (Dwg_Data *restrict dwg);
 EXPORT int dwg_object_name (const char *const restrict name, // in
                             const char **restrict dxfnamep,  // out, maybe NULL
                             Dwg_Object_Type *restrict typep, // out, maybe NULL
-                            int *restrict is_entp);    // out, maybe NULL
+                            int *restrict is_entp,           // out, maybe NULL
+                            Dwg_Class_Stability *restrict stabilityp); // out, maybe NULL
 
 /** Initialize the empty entity or object with its three structs.
     All fields are zero'd, some are initialized with default values, as

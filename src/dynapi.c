@@ -13797,7 +13797,7 @@ EXPORT bool
 is_dwg_entity (const char *name)
 {
   int isent;
-  return dwg_object_name (name, NULL, NULL, &isent)
+  return dwg_object_name (name, NULL, NULL, &isent, NULL)
          && isent;
 }
 
@@ -13805,7 +13805,7 @@ EXPORT bool
 is_dwg_object (const char *name)
 {
   int isent;
-  return dwg_object_name (name, NULL, NULL, &isent)
+  return dwg_object_name (name, NULL, NULL, &isent, NULL)
          && !isent;
 }
 

@@ -55,12 +55,17 @@
 #include "config.h"
 #include "dwg.h"
 #include "common.h"
+#include "classes.h"
 
-// FIXME: add enum Dwg_Class_STABILITY (STABLE, UNSTABLE, DEBUGGING, UNHANDLED)
 static const struct _dwg_dxfname * in_word_set (register const char *str, register size_t len);
 
-#line 37 "src/objects.in"
-struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type type; const unsigned isent:1;};
+#define STABLE (unsigned)DWG_CLASS_STABLE
+#define UNSTABLE (unsigned)DWG_CLASS_UNSTABLE
+#define DEBUGGING (unsigned)DWG_CLASS_DEBUGGING
+#define UNHANDLED (unsigned)DWG_CLASS_UNHANDLED
+
+#line 42 "src/objects.in"
+struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type type; const unsigned isent:1; const unsigned stability:4; };
 
 #define TOTAL_KEYWORDS 305
 #define MIN_WORD_LENGTH 3
@@ -766,871 +771,871 @@ in_word_set (register const char *str, register size_t len)
   static const struct _dwg_dxfname wordlist[] =
     {
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 114 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str9,                      "TEXT",                       DWG_TYPE_TEXT,	1},
+#line 118 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str9,                      "TEXT",                       DWG_TYPE_TEXT,	1,	STABLE},
       {-1}, {-1}, {-1}, {-1}, {-1},
-#line 326 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str15,                            "STYLE",                             DWG_TYPE_STYLE,	0},
+#line 330 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str15,                            "STYLE",                             DWG_TYPE_STYLE,	0,	STABLE},
       {-1}, {-1}, {-1}, {-1},
-#line 113 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str20,                     "ACAD_TABLE",                 DWG_TYPE_TABLE,	1},
-#line 111 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str21,                    "SPLINE",                     DWG_TYPE_SPLINE,	1},
+#line 117 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str20,                     "ACAD_TABLE",                 DWG_TYPE_TABLE,	1,	DEBUGGING},
+#line 115 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str21,                    "SPLINE",                     DWG_TYPE_SPLINE,	1,	STABLE},
       {-1}, {-1}, {-1},
-#line 106 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str25,                     "RTEXT",                      DWG_TYPE_RTEXT,	1},
+#line 110 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str25,                     "RTEXT",                      DWG_TYPE_RTEXT,	1,	DEBUGGING},
       {-1}, {-1}, {-1}, {-1},
-#line 116 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str30,                     "TRACE",                      DWG_TYPE_TRACE,	1},
+#line 120 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str30,                     "TRACE",                      DWG_TYPE_TRACE,	1,	STABLE},
       {-1}, {-1},
-#line 102 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str33,                       "RAY",                        DWG_TYPE_RAY,	1},
+#line 106 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str33,                       "RAY",                        DWG_TYPE_RAY,	1,	STABLE},
       {-1},
-#line 332 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str35,                       "TABLESTYLE",                        DWG_TYPE_TABLESTYLE,	0},
+#line 336 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str35,                       "TABLESTYLE",                        DWG_TYPE_TABLESTYLE,	0,	UNSTABLE},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 285 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str45,                            "LTYPE",                             DWG_TYPE_LTYPE,	0},
+#line 289 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str45,                            "LTYPE",                             DWG_TYPE_LTYPE,	0,	STABLE},
       {-1}, {-1}, {-1}, {-1},
-#line 159 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str50,             "ACDBASSOCARRAYACTIONBODY",          DWG_TYPE_ASSOCARRAYACTIONBODY,	0},
-#line 280 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str51,                           "LAYOUT",                            DWG_TYPE_LAYOUT,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 160 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str56,       "ACDBASSOCARRAYMODIFYACTIONBODY",    DWG_TYPE_ASSOCARRAYMODIFYACTIONBODY,	0},
-#line 64 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str57,                   "ELLIPSE",                    DWG_TYPE_ELLIPSE,	1},
-      {-1},
-#line 162 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str59,         "ACDBASSOCARRAYPATHPARAMETERS",      DWG_TYPE_ASSOCARRAYPATHPARAMETERS,	0},
 #line 163 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str60,        "ACDBASSOCARRAYPOLARPARAMETERS",     DWG_TYPE_ASSOCARRAYPOLARPARAMETERS,	0},
-#line 161 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str61,       "ACDBASSOCARRAYMODIFYPARAMETERS",    DWG_TYPE_ASSOCARRAYMODIFYPARAMETERS,	0},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str50,             "ACDBASSOCARRAYACTIONBODY",          DWG_TYPE_ASSOCARRAYACTIONBODY,	0,	DEBUGGING},
+#line 284 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str51,                           "LAYOUT",                            DWG_TYPE_LAYOUT,	0,	STABLE},
       {-1}, {-1}, {-1}, {-1},
 #line 164 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str66,  "ACDBASSOCARRAYRECTANGULARPARAMETERS",  DWG_TYPE_ASSOCARRAYRECTANGULARPARAMETERS,	0},
-#line 188 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str67,           "ACDBASSOCPERSSUBENTMANAGER",        DWG_TYPE_ASSOCPERSSUBENTMANAGER,	0},
-      {-1}, {-1},
-#line 276 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str70,                            "LAYER",                             DWG_TYPE_LAYER,	0},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str56,       "ACDBASSOCARRAYMODIFYACTIONBODY",    DWG_TYPE_ASSOCARRAYMODIFYACTIONBODY,	0,	DEBUGGING},
+#line 68 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str57,                   "ELLIPSE",                    DWG_TYPE_ELLIPSE,	1,	STABLE},
       {-1},
-#line 91 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str72,              "PLANESURFACE",               DWG_TYPE_PLANESURFACE,	1},
-      {-1}, {-1}, {-1},
-#line 49 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str76,                    "ATTRIB",                     DWG_TYPE_ATTRIB,	1},
-#line 189 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str77,      "ACDBASSOCPLANESURFACEACTIONBODY",   DWG_TYPE_ASSOCPLANESURFACEACTIONBODY,	0},
-      {-1}, {-1},
-#line 317 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str80,                            "SCALE",                             DWG_TYPE_SCALE,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 92 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str85,                     "POINT",                      DWG_TYPE_POINT,	1},
-#line 74 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str86,                    "LEADER",                     DWG_TYPE_LEADER,	1},
-      {-1}, {-1}, {-1},
-#line 84 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str90,                     "MTEXT",                      DWG_TYPE_MTEXT,	1},
-      {-1}, {-1}, {-1},
-#line 225 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str94,         "BLOCKPROPERTIESTABLEGRIP",          DWG_TYPE_BLOCKPROPERTIESTABLEGRIP,	0},
-#line 224 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str95,             "BLOCKPROPERTIESTABLE",              DWG_TYPE_BLOCKPROPERTIESTABLE,	0},
-      {-1}, {-1},
-#line 45 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str98,                       "ARC",                        DWG_TYPE_ARC,	1},
-      {-1}, {-1},
-#line 53 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str101,                    "CAMERA",                     DWG_TYPE_CAMERA,	1},
-      {-1}, {-1}, {-1}, {-1},
-#line 147 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str106,                 "ACSH_TORUS_CLASS",                  DWG_TYPE_ACSH_TORUS_CLASS,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 52 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str114,                      "BODY",                       DWG_TYPE_BODY,	1},
-      {-1}, {-1}, {-1}, {-1}, {-1},
-#line 75 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str120,                     "LIGHT",                      DWG_TYPE_LIGHT,	1},
-      {-1}, {-1}, {-1},
-#line 76 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str124,                      "LINE",                       DWG_TYPE_LINE,	1},
-      {-1}, {-1}, {-1}, {-1}, {-1},
-#line 82 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str130,                     "MLINE",                      DWG_TYPE_MLINE,	1},
-      {-1}, {-1},
-#line 133 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str133,               "ACSH_BOOLEAN_CLASS",                DWG_TYPE_ACSH_BOOLEAN_CLASS,	0},
-      {-1}, {-1}, {-1},
-#line 265 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str137,                          "GEODATA",                           DWG_TYPE_GEODATA,	0},
-#line 205 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str138,          "BLOCKBASEPOINTPARAMETER",           DWG_TYPE_BLOCKBASEPOINTPARAMETER,	0},
-      {-1},
-#line 269 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str140,                            "GROUP",                             DWG_TYPE_GROUP,	0},
-      {-1},
-#line 290 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str142,                     "MLEADERSTYLE",                      DWG_TYPE_MLEADERSTYLE,	0},
-#line 331 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str143,                    "TABLEGEOMETRY",                     DWG_TYPE_TABLEGEOMETRY,	0},
-      {-1},
-#line 291 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str145,                       "MLINESTYLE",                        DWG_TYPE_MLINESTYLE,	0},
-      {-1}, {-1},
-#line 191 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str148, "ACDBASSOCRESTOREENTITYSTATEACTIONBODY",  DWG_TYPE_ASSOCRESTOREENTITYSTATEACTIONBODY,	0},
-      {-1},
-#line 226 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str150,   "BLOCKRADIALCONSTRAINTPARAMETER",    DWG_TYPE_BLOCKRADIALCONSTRAINTPARAMETER,	0},
-#line 320 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str151,                 "SECTION_SETTINGS",                  DWG_TYPE_SECTION_SETTINGS,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 313 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str156,                      "RENDERENTRY",                       DWG_TYPE_RENDERENTRY,	0},
-      {-1}, {-1},
-#line 283 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str159,                        "LIGHTLIST",                         DWG_TYPE_LIGHTLIST,	0},
-#line 152 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str160,                            "APPID",                             DWG_TYPE_APPID,	0},
-#line 54 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str161,                    "CIRCLE",                     DWG_TYPE_CIRCLE,	1},
-      {-1},
-#line 282 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str163,          "ACDB_LEADEROBJECTCONTEXTDATA_CLASS",  DWG_TYPE_LEADEROBJECTCONTEXTDATA,	0},
-#line 324 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str164,                   "SPATIAL_FILTER",                    DWG_TYPE_SPATIAL_FILTER,	0},
-#line 342 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str165,                            "VPORT",                             DWG_TYPE_VPORT,	0},
-#line 42 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str166,                    "3DFACE",                     DWG_TYPE__3DFACE,	1},
-      {-1}, {-1}, {-1},
-#line 319 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str170,                  "SECTION_MANAGER",                   DWG_TYPE_SECTION_MANAGER,	0},
-      {-1},
-#line 330 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str172,                     "TABLE",                             DWG_TYPE_TABLECONTENT,	0},
-      {-1}, {-1},
-#line 71 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str175,                     "IMAGE",                      DWG_TYPE_IMAGE,	1},
-      {-1}, {-1}, {-1},
-#line 219 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str179,         "BLOCKPARAMDEPENDENCYBODY",          DWG_TYPE_BLOCKPARAMDEPENDENCYBODY,	0},
-#line 312 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str180,                  "RASTERVARIABLES",                   DWG_TYPE_RASTERVARIABLES,	0},
-      {-1}, {-1}, {-1},
-#line 221 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str184,                   "BLOCKPOLARGRIP",                    DWG_TYPE_BLOCKPOLARGRIP,	0},
-      {-1}, {-1}, {-1},
-#line 143 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str188,               "ACSH_PYRAMID_CLASS",                DWG_TYPE_ACSH_PYRAMID_CLASS,	0},
-#line 134 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str189,                   "ACSH_BOX_CLASS",                    DWG_TYPE_ACSH_BOX_CLASS,	0},
-#line 95 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str190,      "POINTPARAMETERENTITY",       DWG_TYPE_POINTPARAMETERENTITY,	1},
-      {-1},
-#line 81 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str192,                   "MINSERT",                    DWG_TYPE_MINSERT,	1},
-      {-1}, {-1}, {-1},
-#line 77 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str196,     "LINEARPARAMETERENTITY",      DWG_TYPE_LINEARPARAMETERENTITY,	1},
-      {-1},
-#line 178 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str198,     "ACDBASSOCLOFTEDSURFACEACTIONBODY",  DWG_TYPE_ASSOCLOFTEDSURFACEACTIONBODY,	0},
-      {-1}, {-1}, {-1},
-#line 145 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str202,                "ACSH_SPHERE_CLASS",                 DWG_TYPE_ACSH_SPHERE_CLASS,	0},
-#line 288 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str203,          "MENTALRAYRENDERSETTINGS",           DWG_TYPE_MENTALRAYRENDERSETTINGS,	0},
-      {-1},
-#line 213 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str205,                  "BLOCKLINEARGRIP",                   DWG_TYPE_BLOCKLINEARGRIP,	0},
-      {-1},
-#line 315 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str207,                     "RENDERGLOBAL",                      DWG_TYPE_RENDERGLOBAL,	0},
-#line 197 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str208,                    "ACDBASSOCVARIABLE",                 DWG_TYPE_ASSOCVARIABLE,	0},
-#line 222 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str209,              "BLOCKPOLARPARAMETER",               DWG_TYPE_BLOCKPOLARPARAMETER,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1},
-#line 314 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str222,                "RENDERENVIRONMENT",                 DWG_TYPE_RENDERENVIRONMENT,	0},
-      {-1},
-#line 50 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str224,  "BASEPOINTPARAMETERENTITY",   DWG_TYPE_BASEPOINTPARAMETERENTITY,	1},
-      {-1}, {-1},
-#line 194 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str227,      "ACDBASSOCSWEPTSURFACEACTIONBODY",   DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY,	0},
-      {-1}, {-1},
-#line 214 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str230,             "BLOCKLINEARPARAMETER",              DWG_TYPE_BLOCKLINEARPARAMETER,	0},
-      {-1},
-#line 299 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str232,                     "ACDBPERSSUBENTMANAGER",             DWG_TYPE_PERSUBENTMGR,	0},
-      {-1},
-#line 44 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str234,  "ALIGNMENTPARAMETERENTITY",   DWG_TYPE_ALIGNMENTPARAMETERENTITY,	1},
-#line 110 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str235,                     "SOLID",                      DWG_TYPE_SOLID,	1},
-      {-1}, {-1}, {-1}, {-1},
-#line 212 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str240,   "BLOCKLINEARCONSTRAINTPARAMETER",    DWG_TYPE_BLOCKLINEARCONSTRAINTPARAMETER,	0},
-      {-1}, {-1},
-#line 183 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str243,     "ACDBASSOCOFFSETSURFACEACTIONBODY",  DWG_TYPE_ASSOCOFFSETSURFACEACTIONBODY,	0},
-#line 316 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str244,                   "RENDERSETTINGS",                    DWG_TYPE_RENDERSETTINGS,	0},
-      {-1},
-#line 333 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str246,            "ACDB_TEXTOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_TEXTOBJECTCONTEXTDATA,	0},
-      {-1}, {-1},
-#line 115 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str249,                 "TOLERANCE",                  DWG_TYPE_TOLERANCE,	1},
-      {-1}, {-1},
-#line 241 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str252,                     "CELLSTYLEMAP",                      DWG_TYPE_CELLSTYLEMAP,	0},
-      {-1},
-#line 131 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str254,                        "ACMESCOPE",                         DWG_TYPE_ACMESCOPE,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1},
-#line 296 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str260,                       "OBJECT_PTR",                        DWG_TYPE_OBJECT_PTR,	0},
-      {-1}, {-1}, {-1},
-#line 246 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str264,                        "DATATABLE",                         DWG_TYPE_DATATABLE,	0},
-#line 109 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str265,                     "SHAPE",                      DWG_TYPE_SHAPE,	1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 235 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str274,              "BLOCKVISIBILITYGRIP",               DWG_TYPE_BLOCKVISIBILITYGRIP,	0},
-      {-1}, {-1},
-#line 112 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str277,              "SWEPTSURFACE",               DWG_TYPE_SWEPTSURFACE,	1},
-      {-1},
-#line 67 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str279,       "FLIPPARAMETERENTITY",        DWG_TYPE_FLIPPARAMETERENTITY,	1},
-      {-1},
-#line 146 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str281,                 "ACSH_SWEEP_CLASS",                  DWG_TYPE_ACSH_SWEEP_CLASS,	0},
-#line 247 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str282,                          "DBCOLOR",                           DWG_TYPE_DBCOLOR,	0},
-      {-1}, {-1},
-#line 196 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str285,             "ACDBASSOCVALUEDEPENDENCY",          DWG_TYPE_ASSOCVALUEDEPENDENCY,	0},
-      {-1}, {-1},
-#line 297 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str288,          "ACDB_ORDDIMOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_ORDDIMOBJECTCONTEXTDATA,	0},
-#line 185 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str289,    "ACDBASSOCOSNAPPOINTREFACTIONPARAM",  DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM,	0},
-      {-1}, {-1},
-#line 198 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str292,           "ACDBASSOCVERTEXACTIONPARAM",        DWG_TYPE_ASSOCVERTEXACTIONPARAM,	0},
-#line 105 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str293,   "ROTATIONPARAMETERENTITY",    DWG_TYPE_ROTATIONPARAMETERENTITY,	1},
-#line 177 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str294,              "ACDBASSOCGEOMDEPENDENCY",           DWG_TYPE_ASSOCGEOMDEPENDENCY,	0},
-      {-1}, {-1}, {-1},
-#line 206 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str298, "BLOCKDIAMETRICCONSTRAINTPARAMETER",  DWG_TYPE_BLOCKDIAMETRICCONSTRAINTPARAMETER,	0},
-#line 236 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str299,         "BLOCKVISIBILITYPARAMETER",          DWG_TYPE_BLOCKVISIBILITYPARAMETER,	0},
-      {-1}, {-1}, {-1},
-#line 287 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str303,                         "MATERIAL",                          DWG_TYPE_MATERIAL,	0},
-#line 264 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str304,                        "FIELDLIST",                         DWG_TYPE_FIELDLIST,	0},
-      {-1},
-#line 108 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str306,                    "SEQEND",                     DWG_TYPE_SEQEND,	1},
-      {-1},
-#line 302 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str308,               "ACDBPOINTCLOUDCOLORMAP",            DWG_TYPE_POINTCLOUDCOLORMAP,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 176 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str313,     "ACDBASSOCFILLETSURFACEACTIONBODY",  DWG_TYPE_ASSOCFILLETSURFACEACTIONBODY,	0},
-      {-1},
-#line 127 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str315,                     "XLINE",                      DWG_TYPE_XLINE,	1},
-#line 90 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str316,               "PDFUNDERLAY",                DWG_TYPE_PDFUNDERLAY,	1},
-      {-1},
-#line 89 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str318,                  "OLEFRAME",                   DWG_TYPE_OLEFRAME,	1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1},
-#line 305 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str331,            "ACDBPOINTCLOUDDEF_REACTOR",         DWG_TYPE_POINTCLOUDDEF_REACTOR,	0},
-      {-1}, {-1},
-#line 270 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str334,                   "IBL_BACKGROUND",                    DWG_TYPE_IBL_BACKGROUND,	0},
-#line 192 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str335,   "ACDBASSOCREVOLVEDSURFACEACTIONBODY",  DWG_TYPE_ASSOCREVOLVEDSURFACEACTIONBODY,	0},
-#line 195 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str336,       "ACDBASSOCTRIMSURFACEACTIONBODY",    DWG_TYPE_ASSOCTRIMSURFACEACTIONBODY,	0},
-      {-1}, {-1},
-#line 243 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str339,              "CSACDOCUMENTOPTIONS",               DWG_TYPE_CSACDOCUMENTOPTIONS,	0},
-      {-1},
-#line 148 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str341,                 "ACSH_WEDGE_CLASS",                  DWG_TYPE_ACSH_WEDGE_CLASS,	0},
-      {-1}, {-1},
-#line 80 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str344,                      "MESH",                       DWG_TYPE_MESH,	1},
-#line 250 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str345,                       "DICTIONARY",                        DWG_TYPE_DICTIONARY,	0},
-#line 277 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str346,                      "LAYERFILTER",                       DWG_TYPE_LAYERFILTER,	0},
-      {-1},
-#line 199 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str348,          "ACDB_BLKREFOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_BLKREFOBJECTCONTEXTDATA,	0},
-#line 46 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str349,            "ARCALIGNEDTEXT",             DWG_TYPE_ARCALIGNEDTEXT,	1},
-#line 252 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str350,                  "ACDBDICTIONARYWDFLT",               DWG_TYPE_DICTIONARYWDFLT,	0},
-#line 318 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str351,                 "ACDBSECTIONVIEWSTYLE",              DWG_TYPE_SECTIONVIEWSTYLE,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 100 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str359,            "POLYLINE",                   DWG_TYPE_POLYLINE_PFACE,	1},
-      {-1},
-#line 171 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str361,       "ACDBASSOCEDGECHAMFERACTIONBODY",    DWG_TYPE_ASSOCEDGECHAMFERACTIONBODY,	0},
-#line 234 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str362, "BLOCKVERTICALCONSTRAINTPARAMETER",  DWG_TYPE_BLOCKVERTICALCONSTRAINTPARAMETER,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 140 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str367,                "ACSH_FILLET_CLASS",                 DWG_TYPE_ACSH_FILLET_CLASS,	0},
-#line 251 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str368,                    "DICTIONARYVAR",                     DWG_TYPE_DICTIONARYVAR,	0},
-      {-1},
-#line 193 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str370,        "ACDBASSOCROTATEDDIMACTIONBODY",     DWG_TYPE_ASSOCROTATEDDIMACTIONBODY,	0},
-      {-1}, {-1},
-#line 136 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str373,               "ACSH_CHAMFER_CLASS",                DWG_TYPE_ACSH_CHAMFER_CLASS,	0},
-#line 211 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str374, "BLOCKHORIZONTALCONSTRAINTPARAMETER",  DWG_TYPE_BLOCKHORIZONTALCONSTRAINTPARAMETER,	0},
-      {-1},
-#line 48 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str376,                    "ATTDEF",                     DWG_TYPE_ATTDEF,	1},
-      {-1}, {-1}, {-1}, {-1}, {-1},
-#line 43 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str382,                   "3DSOLID",                    DWG_TYPE__3DSOLID,	1},
-#line 335 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str383,                              "UCS",                               DWG_TYPE_UCS,	0},
-      {-1},
-#line 170 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str385,             "ACDBASSOCEDGEACTIONPARAM",          DWG_TYPE_ASSOCEDGEACTIONPARAM,	0},
-      {-1}, {-1},
-#line 144 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str388,               "ACSH_REVOLVE_CLASS",                DWG_TYPE_ACSH_REVOLVE_CLASS,	0},
-#line 309 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str389,         "ACDB_RADIMLGOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_RADIMLGOBJECTCONTEXTDATA,	0},
-      {-1},
-#line 155 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str391,  "ACDBASSOC3POINTANGULARDIMACTIONBODY",  DWG_TYPE_ASSOC3POINTANGULARDIMACTIONBODY,	0},
-      {-1},
-#line 107 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str393,             "SECTIONOBJECT",              DWG_TYPE_SECTIONOBJECT,	1},
-#line 220 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str394,              "BLOCKPOINTPARAMETER",               DWG_TYPE_BLOCKPOINTPARAMETER,	0},
-      {-1},
-#line 259 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str396,            "ACAD_DYNAMICBLOCKPROXYNODE",        DWG_TYPE_DYNAMICBLOCKPROXYNODE,	0},
 #line 166 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str397,      "ACDBASSOCBLENDSURFACEACTIONBODY",   DWG_TYPE_ASSOCBLENDSURFACEACTIONBODY,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 300 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str406,                      "ACDBPLACEHOLDER",                   DWG_TYPE_PLACEHOLDER,	0},
-      {-1}, {-1}, {-1},
-#line 263 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str410,                            "FIELD",                             DWG_TYPE_FIELD,	0},
-#line 203 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str411,  "BLOCKANGULARCONSTRAINTPARAMETER",   DWG_TYPE_BLOCKANGULARCONSTRAINTPARAMETER,	0},
-#line 229 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str412,                "BLOCKROTATIONGRIP",                 DWG_TYPE_BLOCKROTATIONGRIP,	0},
-      {-1},
-#line 190 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str414,         "ACDBASSOCPOINTREFACTIONPARAM",      DWG_TYPE_ASSOCPOINTREFACTIONPARAM,	0},
-      {-1},
-#line 260 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str416,       "ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",  DWG_TYPE_DYNAMICBLOCKPURGEPREVENTER,	0},
-      {-1},
-#line 254 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str418,                         "DIMSTYLE",                          DWG_TYPE_DIMSTYLE,	0},
-      {-1}, {-1},
-#line 311 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str421,            "RAPIDRTRENDERSETTINGS",             DWG_TYPE_RAPIDRTRENDERSETTINGS,	0},
-      {-1}, {-1}, {-1},
-#line 216 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str425,                  "BLOCKLOOKUPGRIP",                   DWG_TYPE_BLOCKLOOKUPGRIP,	0},
-#line 72 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str426,                    "INSERT",                     DWG_TYPE_INSERT,	1},
-#line 151 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str427,      "ACDB_ANNOTSCALEOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_ANNOTSCALEOBJECTCONTEXTDATA,	0},
-#line 141 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str428,               "ACSH_HISTORY_CLASS",                DWG_TYPE_ACSH_HISTORY_CLASS,	0},
-      {-1}, {-1},
-#line 55 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str431,               "DGNUNDERLAY",                DWG_TYPE_DGNUNDERLAY,	1},
-      {-1},
-#line 232 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str433,               "BLOCKSTRETCHACTION",                DWG_TYPE_BLOCKSTRETCHACTION,	0},
-      {-1}, {-1},
-#line 204 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str436,                 "BLOCKARRAYACTION",                  DWG_TYPE_BLOCKARRAYACTION,	0},
-#line 230 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str437,           "BLOCKROTATIONPARAMETER",            DWG_TYPE_BLOCKROTATIONPARAMETER,	0},
-#line 271 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str438,                         "IDBUFFER",                          DWG_TYPE_IDBUFFER,	0},
-      {-1},
-#line 187 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str440,             "ACDBASSOCPATHACTIONPARAM",          DWG_TYPE_ASSOCPATHACTIONPARAM,	0},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str59,         "ACDBASSOCARRAYPATHPARAMETERS",      DWG_TYPE_ASSOCARRAYPATHPARAMETERS,	0,	DEBUGGING},
+#line 167 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str60,        "ACDBASSOCARRAYPOLARPARAMETERS",     DWG_TYPE_ASSOCARRAYPOLARPARAMETERS,	0,	DEBUGGING},
+#line 165 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str61,       "ACDBASSOCARRAYMODIFYPARAMETERS",    DWG_TYPE_ASSOCARRAYMODIFYPARAMETERS,	0,	DEBUGGING},
       {-1}, {-1}, {-1}, {-1},
-#line 93 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str445,                "ACDBPOINTCLOUD",             DWG_TYPE_POINTCLOUD,	1},
-      {-1},
-#line 179 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str447,           "ACDBASSOCMLEADERACTIONBODY",        DWG_TYPE_ASSOCMLEADERACTIONBODY,	0},
-#line 253 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str448,                         "DIMASSOC",                          DWG_TYPE_DIMASSOC,	0},
-#line 289 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str449,         "ACDB_MLEADEROBJECTCONTEXTDATA_CLASS",  DWG_TYPE_MLEADEROBJECTCONTEXTDATA,	0},
-#line 217 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str450,             "BLOCKLOOKUPPARAMETER",              DWG_TYPE_BLOCKLOOKUPPARAMETER,	0},
-      {-1},
-#line 340 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str452,                     "VIEW_CONTROL",                      DWG_TYPE_VIEW_CONTROL,	0},
-#line 323 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str453,                    "SORTENTSTABLE",                     DWG_TYPE_SORTENTSTABLE,	0},
-      {-1},
-#line 175 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str455,             "ACDBASSOCFACEACTIONPARAM",          DWG_TYPE_ASSOCFACEACTIONPARAM,	0},
+#line 168 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str66,  "ACDBASSOCARRAYRECTANGULARPARAMETERS",  DWG_TYPE_ASSOCARRAYRECTANGULARPARAMETERS,	0,	DEBUGGING},
+#line 192 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str67,           "ACDBASSOCPERSSUBENTMANAGER",        DWG_TYPE_ASSOCPERSSUBENTMANAGER,	0,	DEBUGGING},
       {-1}, {-1},
-#line 242 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str458,               "CONTEXTDATAMANAGER",                DWG_TYPE_CONTEXTDATAMANAGER,	0},
+#line 280 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str70,                            "LAYER",                             DWG_TYPE_LAYER,	0,	STABLE},
       {-1},
-#line 257 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str460,                            "DUMMY",                             DWG_TYPE_DUMMY,	0},
-#line 231 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str461,                 "BLOCKSCALEACTION",                  DWG_TYPE_BLOCKSCALEACTION,	0},
-#line 347 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str462,                          "XRECORD",                           DWG_TYPE_XRECORD,	0},
-#line 334 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str463,               "TVDEVICEPROPERTIES",                DWG_TYPE_TVDEVICEPROPERTIES,	0},
-      {-1}, {-1},
-#line 184 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str466,       "ACDBASSOCORDINATEDIMACTIONBODY",    DWG_TYPE_ASSOCORDINATEDIMACTIONBODY,	0},
-      {-1},
-#line 327 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str468,                    "STYLE_CONTROL",                     DWG_TYPE_STYLE_CONTROL,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 153 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str473,                    "APPID_CONTROL",                     DWG_TYPE_APPID_CONTROL,	0},
-      {-1},
-#line 172 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str475,        "ACDBASSOCEDGEFILLETACTIONBODY",     DWG_TYPE_ASSOCEDGEFILLETACTIONBODY,	0},
+#line 95 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str72,              "PLANESURFACE",               DWG_TYPE_PLANESURFACE,	1,	DEBUGGING},
       {-1}, {-1}, {-1},
-#line 339 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str479,                             "VIEW",                              DWG_TYPE_VIEW,	0},
-      {-1},
-#line 273 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str481,                 "IMAGEDEF_REACTOR",                  DWG_TYPE_IMAGEDEF_REACTOR,	0},
-#line 128 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str482,         "XYPARAMETERENTITY",          DWG_TYPE_XYPARAMETERENTITY,	1},
-#line 303 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str483,                    "ACDBPOINTCLOUDDEF",                 DWG_TYPE_POINTCLOUDDEF,	0},
-      {-1},
-#line 51 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str485,                     "BLOCK",                      DWG_TYPE_BLOCK,	1},
+#line 53 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str76,                    "ATTRIB",                     DWG_TYPE_ATTRIB,	1,	STABLE},
+#line 193 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str77,      "ACDBASSOCPLANESURFACEACTIONBODY",   DWG_TYPE_ASSOCPLANESURFACEACTIONBODY,	0,	UNSTABLE},
+      {-1}, {-1},
+#line 321 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str80,                            "SCALE",                             DWG_TYPE_SCALE,	0,	STABLE},
+      {-1}, {-1}, {-1}, {-1},
+#line 96 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str85,                     "POINT",                      DWG_TYPE_POINT,	1,	STABLE},
+#line 78 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str86,                    "LEADER",                     DWG_TYPE_LEADER,	1,	STABLE},
       {-1}, {-1}, {-1},
 #line 88 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str489,                 "OLE2FRAME",                  DWG_TYPE_OLE2FRAME,	1},
-      {-1},
-#line 238 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str491,                 "BLOCKXYPARAMETER",                  DWG_TYPE_BLOCKXYPARAMETER,	0},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str90,                     "MTEXT",                      DWG_TYPE_MTEXT,	1,	STABLE},
+      {-1}, {-1}, {-1},
+#line 229 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str94,         "BLOCKPROPERTIESTABLEGRIP",          DWG_TYPE_BLOCKPROPERTIESTABLEGRIP,	0,	DEBUGGING},
+#line 228 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str95,             "BLOCKPROPERTIESTABLE",              DWG_TYPE_BLOCKPROPERTIESTABLE,	0,	DEBUGGING},
+      {-1}, {-1},
+#line 49 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str98,                       "ARC",                        DWG_TYPE_ARC,	1,	STABLE},
+      {-1}, {-1},
+#line 57 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str101,                    "CAMERA",                     DWG_TYPE_CAMERA,	1,	STABLE},
       {-1}, {-1}, {-1}, {-1},
-#line 85 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str496,               "MULTILEADER",                DWG_TYPE_MULTILEADER,	1},
+#line 151 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str106,                 "ACSH_TORUS_CLASS",                  DWG_TYPE_ACSH_TORUS_CLASS,	0,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 56 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str114,                      "BODY",                       DWG_TYPE_BODY,	1,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1},
+#line 79 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str120,                     "LIGHT",                      DWG_TYPE_LIGHT,	1,	STABLE},
+      {-1}, {-1}, {-1},
+#line 80 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str124,                      "LINE",                       DWG_TYPE_LINE,	1,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1},
+#line 86 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str130,                     "MLINE",                      DWG_TYPE_MLINE,	1,	STABLE},
+      {-1}, {-1},
+#line 137 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str133,               "ACSH_BOOLEAN_CLASS",                DWG_TYPE_ACSH_BOOLEAN_CLASS,	0,	STABLE},
+      {-1}, {-1}, {-1},
+#line 269 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str137,                          "GEODATA",                           DWG_TYPE_GEODATA,	0,	STABLE},
+#line 209 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str138,          "BLOCKBASEPOINTPARAMETER",           DWG_TYPE_BLOCKBASEPOINTPARAMETER,	0,	STABLE},
+      {-1},
+#line 273 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str140,                            "GROUP",                             DWG_TYPE_GROUP,	0,	STABLE},
+      {-1},
+#line 294 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str142,                     "MLEADERSTYLE",                      DWG_TYPE_MLEADERSTYLE,	0,	STABLE},
+#line 335 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str143,                    "TABLEGEOMETRY",                     DWG_TYPE_TABLEGEOMETRY,	0,	STABLE},
+      {-1},
+#line 295 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str145,                       "MLINESTYLE",                        DWG_TYPE_MLINESTYLE,	0,	STABLE},
+      {-1}, {-1},
+#line 195 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str148, "ACDBASSOCRESTOREENTITYSTATEACTIONBODY",  DWG_TYPE_ASSOCRESTOREENTITYSTATEACTIONBODY,	0,	DEBUGGING},
+      {-1},
+#line 230 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str150,   "BLOCKRADIALCONSTRAINTPARAMETER",    DWG_TYPE_BLOCKRADIALCONSTRAINTPARAMETER,	0,	DEBUGGING},
+#line 324 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str151,                 "SECTION_SETTINGS",                  DWG_TYPE_SECTION_SETTINGS,	0,	UNSTABLE},
+      {-1}, {-1}, {-1}, {-1},
+#line 317 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str156,                      "RENDERENTRY",                       DWG_TYPE_RENDERENTRY,	0,	DEBUGGING},
+      {-1}, {-1},
+#line 287 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str159,                        "LIGHTLIST",                         DWG_TYPE_LIGHTLIST,	0,	UNSTABLE},
+#line 156 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str160,                            "APPID",                             DWG_TYPE_APPID,	0,	STABLE},
+#line 58 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str161,                    "CIRCLE",                     DWG_TYPE_CIRCLE,	1,	STABLE},
       {-1},
 #line 286 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str498,                    "LTYPE_CONTROL",                     DWG_TYPE_LTYPE_CONTROL,	0},
-      {-1}, {-1},
-#line 98 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str501,               "POLYLINE",                   DWG_TYPE_POLYLINE_3D,	1},
-#line 132 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str502,                     "ACMESTATEMGR",                      DWG_TYPE_ACMESTATEMGR,	0},
-      {-1}, {-1},
-#line 96 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str505,           "POLARGRIPENTITY",            DWG_TYPE_POLARGRIPENTITY,	1},
-#line 284 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str506,                 "LONG_TRANSACTION",                  DWG_TYPE_LONG_TRANSACTION,	0},
-      {-1},
-#line 278 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str508,                    "LAYER_CONTROL",                     DWG_TYPE_LAYER_CONTROL,	0},
-      {-1}, {-1},
-#line 97 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str511,               "POLYLINE",                   DWG_TYPE_POLYLINE_2D,	1},
-      {-1}, {-1}, {-1},
-#line 69 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str515,                     "HATCH",                      DWG_TYPE_HATCH,	1},
-#line 157 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str516,                 "ACDBASSOCACTIONPARAM",              DWG_TYPE_ASSOCACTIONPARAM,	0},
-#line 308 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str517,                     "ACAD_PROXY_OBJECT",                 DWG_TYPE_PROXY_OBJECT,	0},
-      {-1}, {-1},
-#line 104 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str520,           "REVOLVEDSURFACE",            DWG_TYPE_REVOLVEDSURFACE,	1},
-#line 255 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str521,                 "DIMSTYLE_CONTROL",                  DWG_TYPE_DIMSTYLE_CONTROL,	0},
-#line 281 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str522,                "LAYOUTPRINTCONFIG",                 DWG_TYPE_LAYOUTPRINTCONFIG,	0},
-      {-1}, {-1}, {-1},
-#line 293 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str526,  "ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA,	0},
-#line 169 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str527,           "ACDBASSOCDIMDEPENDENCYBODY",        DWG_TYPE_ASSOCDIMDEPENDENCYBODY,	0},
-#line 239 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str528,                    "BLOCK_CONTROL",                     DWG_TYPE_BLOCK_CONTROL,	0},
-      {-1},
-#line 70 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str530,                     "HELIX",                      DWG_TYPE_HELIX,	1},
-#line 210 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str531,       "BLOCKGRIPLOCATIONCOMPONENT",        DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT,	0},
-      {-1},
-#line 223 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str533,          "BLOCKPOLARSTRETCHACTION",           DWG_TYPE_BLOCKPOLARSTRETCHACTION,	0},
-      {-1}, {-1}, {-1},
-#line 154 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str537,           "ACDBASSOC2DCONSTRAINTGROUP",        DWG_TYPE_ASSOC2DCONSTRAINTGROUP,	0},
-#line 150 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str538,          "ACDB_ANGDIMOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_ANGDIMOBJECTCONTEXTDATA,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1},
-#line 227 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str549,              "ACDB_BLOCKREPRESENTATION_DATA",     DWG_TYPE_BLOCKREPRESENTATION,	0},
-      {-1},
-#line 63 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str551,               "DWFUNDERLAY",                DWG_TYPE_DWFUNDERLAY,	1},
-#line 68 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str552,         "POSITIONMARKER",             DWG_TYPE_GEOPOSITIONMARKER,	1},
-#line 165 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str553,          "ACDBASSOCASMBODYACTIONPARAM",       DWG_TYPE_ASSOCASMBODYACTIONPARAM,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 268 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str558,          "GROUND_PLANE_BACKGROUND",           DWG_TYPE_GROUND_PLANE_BACKGROUND,	0},
-      {-1}, {-1}, {-1},
-#line 121 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str562,              "VERTEX",                     DWG_TYPE_VERTEX_PFACE,	1},
-      {-1}, {-1}, {-1}, {-1},
-#line 122 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str567,         "VERTEX",                     DWG_TYPE_VERTEX_PFACE_FACE,	1},
-      {-1}, {-1}, {-1}, {-1},
-#line 94 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str572,              "ACDBPOINTCLOUDEX",           DWG_TYPE_POINTCLOUDEX,	1},
-#line 209 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str573,               "BLOCKFLIPPARAMETER",                DWG_TYPE_BLOCKFLIPPARAMETER,	0},
-      {-1},
-#line 304 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str575,                  "ACDBPOINTCLOUDDEFEX",               DWG_TYPE_POINTCLOUDDEFEX,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 79 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str580,                "LWPOLYLINE",                 DWG_TYPE_LWPOLYLINE,	1},
-      {-1}, {-1}, {-1},
-#line 306 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str584,         "ACDBPOINTCLOUDDEF_REACTOR_EX",      DWG_TYPE_POINTCLOUDDEF_REACTOR_EX,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 138 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str589,              "ACSH_CYLINDER_CLASS",               DWG_TYPE_ACSH_CYLINDER_CLASS,	0},
-      {-1},
-#line 266 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str591,                      "GEOMAPIMAGE",                       DWG_TYPE_GEOMAPIMAGE,	0},
-      {-1},
-#line 233 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str593,               "BLOCKUSERPARAMETER",                DWG_TYPE_BLOCKUSERPARAMETER,	0},
-#line 118 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str594,                 "VERTEX",                     DWG_TYPE_VERTEX_2D,	1},
-      {-1}, {-1}, {-1}, {-1},
-#line 119 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str599,                 "VERTEX",                     DWG_TYPE_VERTEX_3D,	1},
-      {-1}, {-1},
-#line 186 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str602,      "ACDBASSOCPATCHSURFACEACTIONBODY",   DWG_TYPE_ASSOCPATCHSURFACEACTIONBODY,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 101 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str607,              "ACAD_ENTITY_OBJECT",         DWG_TYPE_PROXY_ENTITY,	1},
-      {-1},
-#line 167 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str609,         "ACDBASSOCCOMPOUNDACTIONPARAM",      DWG_TYPE_ASSOCCOMPOUNDACTIONPARAM,	0},
-      {-1}, {-1}, {-1},
-#line 272 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str613,                         "IMAGEDEF",                          DWG_TYPE_IMAGEDEF,	0},
-      {-1},
-#line 168 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str615,                  "ACDBASSOCDEPENDENCY",               DWG_TYPE_ASSOCDEPENDENCY,	0},
-      {-1}, {-1},
-#line 78 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str618,             "LOFTEDSURFACE",              DWG_TYPE_LOFTEDSURFACE,	1},
-      {-1}, {-1}, {-1},
-#line 310 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str622,           "ACDB_RADIMOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_RADIMOBJECTCONTEXTDATA,	0},
-#line 343 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str623,                    "VPORT_CONTROL",                     DWG_TYPE_VPORT_CONTROL,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 83 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str628,                  "MPOLYGON",                   DWG_TYPE_MPOLYGON,	1},
-      {-1},
-#line 124 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str630,      "VISIBILITYGRIPENTITY",       DWG_TYPE_VISIBILITYGRIPENTITY,	1},
-      {-1},
-#line 126 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str632,                   "WIPEOUT",                    DWG_TYPE_WIPEOUT,	1},
-#line 329 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str633,                         "SUNSTUDY",                          DWG_TYPE_SUNSTUDY,	0},
-      {-1},
-#line 125 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str635, "VISIBILITYPARAMETERENTITY",  DWG_TYPE_VISIBILITYPARAMETERENTITY,	1},
-#line 341 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str636,                      "VISUALSTYLE",                       DWG_TYPE_VISUALSTYLE,	0},
-#line 149 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str637,           "ACDB_ALDIMOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_ALDIMOBJECTCONTEXTDATA,	0},
-#line 123 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str638,                  "VIEWPORT",                   DWG_TYPE_VIEWPORT,	1},
-      {-1}, {-1}, {-1}, {-1}, {-1},
-#line 267 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str644,              "GRADIENT_BACKGROUND",               DWG_TYPE_GRADIENT_BACKGROUND,	0},
-#line 86 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str645,           "COORDINATION_MODEL",         DWG_TYPE_NAVISWORKSMODEL,	1},
-      {-1}, {-1},
-#line 47 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str648,             "ARC_DIMENSION",              DWG_TYPE_ARC_DIMENSION,	1},
-#line 307 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str649,                        "ACDBPOINTPATH",                     DWG_TYPE_POINTPATH,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1},
-#line 137 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str655,                  "ACSH_CONE_CLASS",                   DWG_TYPE_ACSH_CONE_CLASS,	0},
-      {-1}, {-1},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str163,          "ACDB_LEADEROBJECTCONTEXTDATA_CLASS",  DWG_TYPE_LEADEROBJECTCONTEXTDATA,	0,	DEBUGGING},
 #line 328 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str658,                              "SUN",                               DWG_TYPE_SUN,	0},
-      {-1},
-#line 142 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str660,                  "ACSH_LOFT_CLASS",                   DWG_TYPE_ACSH_LOFT_CLASS,	0},
-#line 58 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str661,          "DIMENSION",                  DWG_TYPE_DIMENSION_ANG3PT,	1},
-      {-1},
-#line 208 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str663,                    "BLOCKFLIPGRIP",                     DWG_TYPE_BLOCKFLIPGRIP,	0},
-      {-1}, {-1},
-#line 62 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str666,          "DIMENSION",                  DWG_TYPE_DIMENSION_RADIUS,	1},
-      {-1},
-#line 61 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str668,        "DIMENSION",                  DWG_TYPE_DIMENSION_ORDINATE,	1},
-      {-1},
-#line 174 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str670,   "ACDBASSOCEXTRUDEDSURFACEACTIONBODY",  DWG_TYPE_ASSOCEXTRUDEDSURFACEACTIONBODY,	0},
-      {-1}, {-1},
-#line 325 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str673,                    "SPATIAL_INDEX",                     DWG_TYPE_SPATIAL_INDEX,	0},
-      {-1}, {-1},
-#line 237 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str676,                      "BLOCKXYGRIP",                       DWG_TYPE_BLOCKXYGRIP,	0},
-#line 294 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str677,           "ACDB_MTEXTOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_MTEXTOBJECTCONTEXTDATA,	0},
-      {-1}, {-1},
-#line 158 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str680,        "ACDBASSOCALIGNEDDIMACTIONBODY",     DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY,	0},
-#line 60 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str681,          "DIMENSION",                  DWG_TYPE_DIMENSION_LINEAR,	1},
-#line 182 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str682,           "ACDBASSOCOBJECTACTIONPARAM",        DWG_TYPE_ASSOCOBJECTACTIONPARAM,	0},
-#line 59 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str683,        "DIMENSION",                  DWG_TYPE_DIMENSION_DIAMETER,	1},
-      {-1}, {-1}, {-1}, {-1},
-#line 99 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str688,             "POLYLINE",                   DWG_TYPE_POLYLINE_MESH,	1},
-      {-1}, {-1}, {-1}, {-1},
-#line 245 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str693,                         "DATALINK",                          DWG_TYPE_DATALINK,	0},
-      {-1},
-#line 275 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str695,                            "INDEX",                             DWG_TYPE_INDEX,	0},
-      {-1}, {-1},
-#line 173 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str698,     "ACDBASSOCEXTENDSURFACEACTIONBODY",  DWG_TYPE_ASSOCEXTENDSURFACEACTIONBODY,	0},
-      {-1}, {-1},
-#line 338 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str701,                      "VBA_PROJECT",                       DWG_TYPE_VBA_PROJECT,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1},
-#line 301 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str707,                     "PLOTSETTINGS",                      DWG_TYPE_PLOTSETTINGS,	0},
-      {-1}, {-1}, {-1},
-#line 103 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str711,                    "REGION",                     DWG_TYPE_REGION,	1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 135 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str720,                  "ACSH_BREP_CLASS",                   DWG_TYPE_ACSH_BREP_CLASS,	0},
-      {-1}, {-1},
-#line 201 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str723,               "BLOCKALIGNMENTGRIP",                DWG_TYPE_BLOCKALIGNMENTGRIP,	0},
-      {-1},
-#line 139 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str725,             "ACSH_EXTRUSION_CLASS",              DWG_TYPE_ACSH_EXTRUSION_CLASS,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 248 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str730,                  "ACDBDETAILVIEWSTYLE",               DWG_TYPE_DETAILVIEWSTYLE,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 202 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str748,          "BLOCKALIGNMENTPARAMETER",           DWG_TYPE_BLOCKALIGNMENTPARAMETER,	0},
-      {-1},
-#line 218 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str750,                  "BLOCKMOVEACTION",                   DWG_TYPE_BLOCKMOVEACTION,	0},
-      {-1},
-#line 228 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str752,                "BLOCKROTATEACTION",                 DWG_TYPE_BLOCKROTATEACTION,	0},
-      {-1}, {-1},
-#line 66 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str755,           "EXTRUDEDSURFACE",            DWG_TYPE_EXTRUDEDSURFACE,	1},
-#line 200 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str756,  "BLOCKALIGNEDCONSTRAINTPARAMETER",   DWG_TYPE_BLOCKALIGNEDCONSTRAINTPARAMETER,	0},
-      {-1},
-#line 298 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str758,                    "PDFDEFINITION",                     DWG_TYPE_PDFDEFINITION,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 156 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str766,                      "ACDBASSOCACTION",                   DWG_TYPE_ASSOCACTION,	0},
-#line 215 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str767,                "BLOCKLOOKUPACTION",                 DWG_TYPE_BLOCKLOOKUPACTION,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 181 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str774,    "ACDBASSOCNETWORKSURFACEACTIONBODY",  DWG_TYPE_ASSOCNETWORKSURFACEACTIONBODY,	0},
-#line 262 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str775,             "ACDB_FCFOBJECTCONTEXTDATA_CLASS",   DWG_TYPE_FCFOBJECTCONTEXTDATA,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 295 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str793,               "ACDBNAVISWORKSMODELDEF",            DWG_TYPE_NAVISWORKSMODELDEF,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1},
-#line 56 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str807,         "DIMENSION",                  DWG_TYPE_DIMENSION_ALIGNED,	1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1},
-#line 345 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str820,                  "VX_TABLE_RECORD",                   DWG_TYPE_VX_TABLE_RECORD,	0},
-      {-1},
-#line 256 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str822,           "ACDB_DMDIMOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_DMDIMOBJECTCONTEXTDATA,	0},
-      {-1}, {-1}, {-1},
-#line 279 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str826,                      "LAYER_INDEX",                       DWG_TYPE_LAYER_INDEX,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1},
-#line 240 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str837,                     "BLOCK_HEADER",                      DWG_TYPE_BLOCK_HEADER,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 130 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str853,               "ACMECOMMANDHISTORY",                DWG_TYPE_ACMECOMMANDHISTORY,	0},
-      {-1},
-#line 344 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str855,                       "VX_CONTROL",                        DWG_TYPE_VX_CONTROL,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 249 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str873,                    "DGNDEFINITION",                     DWG_TYPE_DGNDEFINITION,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 336 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str891,                      "UCS_CONTROL",                       DWG_TYPE_UCS_CONTROL,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 207 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str900,                  "BLOCKFLIPACTION",                   DWG_TYPE_BLOCKFLIPACTION,	0},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str164,                   "SPATIAL_FILTER",                    DWG_TYPE_SPATIAL_FILTER,	0,	STABLE},
 #line 346 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str901,                 "WIPEOUTVARIABLES",                  DWG_TYPE_WIPEOUTVARIABLES,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str165,                            "VPORT",                             DWG_TYPE_VPORT,	0,	STABLE},
+#line 46 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str166,                    "3DFACE",                     DWG_TYPE__3DFACE,	1,	STABLE},
       {-1}, {-1}, {-1},
-#line 73 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str932,    "LARGE_RADIAL_DIMENSION",     DWG_TYPE_LARGE_RADIAL_DIMENSION,	1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 323 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str170,                  "SECTION_MANAGER",                   DWG_TYPE_SECTION_MANAGER,	0,	STABLE},
+      {-1},
+#line 334 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str172,                     "TABLE",                             DWG_TYPE_TABLECONTENT,	0,	DEBUGGING},
       {-1}, {-1},
-#line 244 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str944,                        "ACDBCURVEPATH",                     DWG_TYPE_CURVEPATH,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 75 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str175,                     "IMAGE",                      DWG_TYPE_IMAGE,	1,	STABLE},
       {-1}, {-1}, {-1},
-#line 258 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str993,                    "DWFDEFINITION",                     DWG_TYPE_DWFDEFINITION,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 57 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1001,          "DIMENSION",                  DWG_TYPE_DIMENSION_ANG2LN,	1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1},
-#line 321 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1039,              "SKYLIGHT_BACKGROUND",               DWG_TYPE_SKYLIGHT_BACKGROUND,	0},
-      {-1},
-#line 120 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1041,               "VERTEX",                     DWG_TYPE_VERTEX_MESH,	1},
+#line 223 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str179,         "BLOCKPARAMDEPENDENCYBODY",          DWG_TYPE_BLOCKPARAMDEPENDENCYBODY,	0,	DEBUGGING},
+#line 316 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str180,                  "RASTERVARIABLES",                   DWG_TYPE_RASTERVARIABLES,	0,	STABLE},
       {-1}, {-1}, {-1},
+#line 225 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str184,                   "BLOCKPOLARGRIP",                    DWG_TYPE_BLOCKPOLARGRIP,	0,	DEBUGGING},
+      {-1}, {-1}, {-1},
+#line 147 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str188,               "ACSH_PYRAMID_CLASS",                DWG_TYPE_ACSH_PYRAMID_CLASS,	0,	UNSTABLE},
+#line 138 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str189,                   "ACSH_BOX_CLASS",                    DWG_TYPE_ACSH_BOX_CLASS,	0,	STABLE},
+#line 99 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str190,      "POINTPARAMETERENTITY",       DWG_TYPE_POINTPARAMETERENTITY,	1,	DEBUGGING},
+      {-1},
+#line 85 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str192,                   "MINSERT",                    DWG_TYPE_MINSERT,	1,	STABLE},
+      {-1}, {-1}, {-1},
+#line 81 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str196,     "LINEARPARAMETERENTITY",      DWG_TYPE_LINEARPARAMETERENTITY,	1,	DEBUGGING},
+      {-1},
+#line 182 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str198,     "ACDBASSOCLOFTEDSURFACEACTIONBODY",  DWG_TYPE_ASSOCLOFTEDSURFACEACTIONBODY,	0,	UNSTABLE},
+      {-1}, {-1}, {-1},
+#line 149 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str202,                "ACSH_SPHERE_CLASS",                 DWG_TYPE_ACSH_SPHERE_CLASS,	0,	STABLE},
 #line 292 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1045,                       "MOTIONPATH",                        DWG_TYPE_MOTIONPATH,	0},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str203,          "MENTALRAYRENDERSETTINGS",           DWG_TYPE_MENTALRAYRENDERSETTINGS,	0,	UNSTABLE},
+      {-1},
+#line 217 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str205,                  "BLOCKLINEARGRIP",                   DWG_TYPE_BLOCKLINEARGRIP,	0,	STABLE},
+      {-1},
+#line 319 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str207,                     "RENDERGLOBAL",                      DWG_TYPE_RENDERGLOBAL,	0,	DEBUGGING},
+#line 201 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str208,                    "ACDBASSOCVARIABLE",                 DWG_TYPE_ASSOCVARIABLE,	0,	DEBUGGING},
+#line 226 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str209,              "BLOCKPOLARPARAMETER",               DWG_TYPE_BLOCKPOLARPARAMETER,	0,	DEBUGGING},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 261 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1071,                 "ACAD_EVALUATION_GRAPH",             DWG_TYPE_EVALUATION_GRAPH,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 322 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1106,                 "SOLID_BACKGROUND",                  DWG_TYPE_SOLID_BACKGROUND,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1},
+#line 318 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str222,                "RENDERENVIRONMENT",                 DWG_TYPE_RENDERENVIRONMENT,	0,	DEBUGGING},
+      {-1},
+#line 54 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str224,  "BASEPOINTPARAMETERENTITY",   DWG_TYPE_BASEPOINTPARAMETERENTITY,	1,	DEBUGGING},
+      {-1}, {-1},
+#line 198 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str227,      "ACDBASSOCSWEPTSURFACEACTIONBODY",   DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY,	0,	DEBUGGING},
+      {-1}, {-1},
+#line 218 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str230,             "BLOCKLINEARPARAMETER",              DWG_TYPE_BLOCKLINEARPARAMETER,	0,	UNSTABLE},
+      {-1},
+#line 303 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str232,                     "ACDBPERSSUBENTMANAGER",             DWG_TYPE_PERSUBENTMGR,	0,	DEBUGGING},
+      {-1},
+#line 48 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str234,  "ALIGNMENTPARAMETERENTITY",   DWG_TYPE_ALIGNMENTPARAMETERENTITY,	1,	DEBUGGING},
+#line 114 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str235,                     "SOLID",                      DWG_TYPE_SOLID,	1,	STABLE},
       {-1}, {-1}, {-1}, {-1},
-#line 87 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1156,               "NURBSURFACE",                DWG_TYPE_NURBSURFACE,	1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 180 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1172,                     "ACDBASSOCNETWORK",                  DWG_TYPE_ASSOCNETWORK,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 65 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1181,                    "ENDBLK",                     DWG_TYPE_ENDBLK,	1},
-      {-1}, {-1}, {-1}, {-1},
-#line 274 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1186,                 "IMAGE_BACKGROUND",                  DWG_TYPE_IMAGE_BACKGROUND,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 216 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str240,   "BLOCKLINEARCONSTRAINTPARAMETER",    DWG_TYPE_BLOCKLINEARCONSTRAINTPARAMETER,	0,	DEBUGGING},
+      {-1}, {-1},
+#line 187 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str243,     "ACDBASSOCOFFSETSURFACEACTIONBODY",  DWG_TYPE_ASSOCOFFSETSURFACEACTIONBODY,	0,	UNSTABLE},
+#line 320 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str244,                   "RENDERSETTINGS",                    DWG_TYPE_RENDERSETTINGS,	0,	UNSTABLE},
       {-1},
 #line 337 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1251,                      "UNKNOWN_OBJ",                       DWG_TYPE_UNKNOWN_OBJ,	0},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str246,            "ACDB_TEXTOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_TEXTOBJECTCONTEXTDATA,	0,	DEBUGGING},
+      {-1}, {-1},
+#line 119 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str249,                 "TOLERANCE",                  DWG_TYPE_TOLERANCE,	1,	STABLE},
+      {-1}, {-1},
+#line 245 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str252,                     "CELLSTYLEMAP",                      DWG_TYPE_CELLSTYLEMAP,	0,	STABLE},
+      {-1},
+#line 135 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str254,                        "ACMESCOPE",                         DWG_TYPE_ACMESCOPE,	0,	DEBUGGING},
+      {-1}, {-1}, {-1}, {-1}, {-1},
+#line 300 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str260,                       "OBJECT_PTR",                        DWG_TYPE_OBJECT_PTR,	0,	UNSTABLE},
+      {-1}, {-1}, {-1},
+#line 250 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str264,                        "DATATABLE",                         DWG_TYPE_DATATABLE,	0,	DEBUGGING},
+#line 113 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str265,                     "SHAPE",                      DWG_TYPE_SHAPE,	1,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 239 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str274,              "BLOCKVISIBILITYGRIP",               DWG_TYPE_BLOCKVISIBILITYGRIP,	0,	STABLE},
+      {-1}, {-1},
+#line 116 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str277,              "SWEPTSURFACE",               DWG_TYPE_SWEPTSURFACE,	1,	DEBUGGING},
+      {-1},
+#line 71 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str279,       "FLIPPARAMETERENTITY",        DWG_TYPE_FLIPPARAMETERENTITY,	1,	DEBUGGING},
+      {-1},
+#line 150 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str281,                 "ACSH_SWEEP_CLASS",                  DWG_TYPE_ACSH_SWEEP_CLASS,	0,	DEBUGGING},
+#line 251 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str282,                          "DBCOLOR",                           DWG_TYPE_DBCOLOR,	0,	UNSTABLE},
+      {-1}, {-1},
+#line 200 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str285,             "ACDBASSOCVALUEDEPENDENCY",          DWG_TYPE_ASSOCVALUEDEPENDENCY,	0,	UNSTABLE},
+      {-1}, {-1},
+#line 301 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str288,          "ACDB_ORDDIMOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_ORDDIMOBJECTCONTEXTDATA,	0,	DEBUGGING},
+#line 189 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str289,    "ACDBASSOCOSNAPPOINTREFACTIONPARAM",  DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM,	0,	DEBUGGING},
+      {-1}, {-1},
+#line 202 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str292,           "ACDBASSOCVERTEXACTIONPARAM",        DWG_TYPE_ASSOCVERTEXACTIONPARAM,	0,	DEBUGGING},
+#line 109 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str293,   "ROTATIONPARAMETERENTITY",    DWG_TYPE_ROTATIONPARAMETERENTITY,	1,	DEBUGGING},
+#line 181 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str294,              "ACDBASSOCGEOMDEPENDENCY",           DWG_TYPE_ASSOCGEOMDEPENDENCY,	0,	UNSTABLE},
+      {-1}, {-1}, {-1},
+#line 210 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str298, "BLOCKDIAMETRICCONSTRAINTPARAMETER",  DWG_TYPE_BLOCKDIAMETRICCONSTRAINTPARAMETER,	0,	DEBUGGING},
+#line 240 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str299,         "BLOCKVISIBILITYPARAMETER",          DWG_TYPE_BLOCKVISIBILITYPARAMETER,	0,	UNSTABLE},
+      {-1}, {-1}, {-1},
+#line 291 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str303,                         "MATERIAL",                          DWG_TYPE_MATERIAL,	0,	UNSTABLE},
+#line 268 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str304,                        "FIELDLIST",                         DWG_TYPE_FIELDLIST,	0,	STABLE},
+      {-1},
+#line 112 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str306,                    "SEQEND",                     DWG_TYPE_SEQEND,	1,	STABLE},
+      {-1},
+#line 306 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str308,               "ACDBPOINTCLOUDCOLORMAP",            DWG_TYPE_POINTCLOUDCOLORMAP,	0,	DEBUGGING},
+      {-1}, {-1}, {-1}, {-1},
+#line 180 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str313,     "ACDBASSOCFILLETSURFACEACTIONBODY",  DWG_TYPE_ASSOCFILLETSURFACEACTIONBODY,	0,	UNSTABLE},
+      {-1},
+#line 131 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str315,                     "XLINE",                      DWG_TYPE_XLINE,	1,	STABLE},
+#line 94 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str316,               "PDFUNDERLAY",                DWG_TYPE_PDFUNDERLAY,	1,	STABLE},
+      {-1},
+#line 93 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str318,                  "OLEFRAME",                   DWG_TYPE_OLEFRAME,	1,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1},
+#line 309 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str331,            "ACDBPOINTCLOUDDEF_REACTOR",         DWG_TYPE_POINTCLOUDDEF_REACTOR,	0,	DEBUGGING},
+      {-1}, {-1},
+#line 274 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str334,                   "IBL_BACKGROUND",                    DWG_TYPE_IBL_BACKGROUND,	0,	UNSTABLE},
+#line 196 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str335,   "ACDBASSOCREVOLVEDSURFACEACTIONBODY",  DWG_TYPE_ASSOCREVOLVEDSURFACEACTIONBODY,	0,	UNSTABLE},
+#line 199 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str336,       "ACDBASSOCTRIMSURFACEACTIONBODY",    DWG_TYPE_ASSOCTRIMSURFACEACTIONBODY,	0,	UNSTABLE},
+      {-1}, {-1},
+#line 247 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str339,              "CSACDOCUMENTOPTIONS",               DWG_TYPE_CSACDOCUMENTOPTIONS,	0,	DEBUGGING},
+      {-1},
+#line 152 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str341,                 "ACSH_WEDGE_CLASS",                  DWG_TYPE_ACSH_WEDGE_CLASS,	0,	STABLE},
+      {-1}, {-1},
+#line 84 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str344,                      "MESH",                       DWG_TYPE_MESH,	1,	STABLE},
+#line 254 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str345,                       "DICTIONARY",                        DWG_TYPE_DICTIONARY,	0,	STABLE},
+#line 281 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str346,                      "LAYERFILTER",                       DWG_TYPE_LAYERFILTER,	0,	STABLE},
+      {-1},
+#line 203 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str348,          "ACDB_BLKREFOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_BLKREFOBJECTCONTEXTDATA,	0,	DEBUGGING},
+#line 50 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str349,            "ARCALIGNEDTEXT",             DWG_TYPE_ARCALIGNEDTEXT,	1,	DEBUGGING},
+#line 256 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str350,                  "ACDBDICTIONARYWDFLT",               DWG_TYPE_DICTIONARYWDFLT,	0,	STABLE},
+#line 322 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str351,                 "ACDBSECTIONVIEWSTYLE",              DWG_TYPE_SECTIONVIEWSTYLE,	0,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 104 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str359,            "POLYLINE",                   DWG_TYPE_POLYLINE_PFACE,	1,	STABLE},
+      {-1},
+#line 175 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str361,       "ACDBASSOCEDGECHAMFERACTIONBODY",    DWG_TYPE_ASSOCEDGECHAMFERACTIONBODY,	0,	DEBUGGING},
+#line 238 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str362, "BLOCKVERTICALCONSTRAINTPARAMETER",  DWG_TYPE_BLOCKVERTICALCONSTRAINTPARAMETER,	0,	DEBUGGING},
+      {-1}, {-1}, {-1}, {-1},
+#line 144 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str367,                "ACSH_FILLET_CLASS",                 DWG_TYPE_ACSH_FILLET_CLASS,	0,	STABLE},
+#line 255 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str368,                    "DICTIONARYVAR",                     DWG_TYPE_DICTIONARYVAR,	0,	STABLE},
+      {-1},
+#line 197 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str370,        "ACDBASSOCROTATEDDIMACTIONBODY",     DWG_TYPE_ASSOCROTATEDDIMACTIONBODY,	0,	DEBUGGING},
+      {-1}, {-1},
+#line 140 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str373,               "ACSH_CHAMFER_CLASS",                DWG_TYPE_ACSH_CHAMFER_CLASS,	0,	UNSTABLE},
+#line 215 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str374, "BLOCKHORIZONTALCONSTRAINTPARAMETER",  DWG_TYPE_BLOCKHORIZONTALCONSTRAINTPARAMETER,	0,	DEBUGGING},
+      {-1},
+#line 52 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str376,                    "ATTDEF",                     DWG_TYPE_ATTDEF,	1,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1},
+#line 47 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str382,                   "3DSOLID",                    DWG_TYPE__3DSOLID,	1,	STABLE},
+#line 339 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str383,                              "UCS",                               DWG_TYPE_UCS,	0,	STABLE},
+      {-1},
+#line 174 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str385,             "ACDBASSOCEDGEACTIONPARAM",          DWG_TYPE_ASSOCEDGEACTIONPARAM,	0,	DEBUGGING},
+      {-1}, {-1},
+#line 148 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str388,               "ACSH_REVOLVE_CLASS",                DWG_TYPE_ACSH_REVOLVE_CLASS,	0,	DEBUGGING},
+#line 313 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str389,         "ACDB_RADIMLGOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_RADIMLGOBJECTCONTEXTDATA,	0,	DEBUGGING},
+      {-1},
+#line 159 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str391,  "ACDBASSOC3POINTANGULARDIMACTIONBODY",  DWG_TYPE_ASSOC3POINTANGULARDIMACTIONBODY,	0,	DEBUGGING},
+      {-1},
+#line 111 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str393,             "SECTIONOBJECT",              DWG_TYPE_SECTIONOBJECT,	1,	STABLE},
+#line 224 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str394,              "BLOCKPOINTPARAMETER",               DWG_TYPE_BLOCKPOINTPARAMETER,	0,	DEBUGGING},
+      {-1},
+#line 263 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str396,            "ACAD_DYNAMICBLOCKPROXYNODE",        DWG_TYPE_DYNAMICBLOCKPROXYNODE,	0,	DEBUGGING},
+#line 170 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str397,      "ACDBASSOCBLENDSURFACEACTIONBODY",   DWG_TYPE_ASSOCBLENDSURFACEACTIONBODY,	0,	UNSTABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 304 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str406,                      "ACDBPLACEHOLDER",                   DWG_TYPE_PLACEHOLDER,	0,	STABLE},
+      {-1}, {-1}, {-1},
+#line 267 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str410,                            "FIELD",                             DWG_TYPE_FIELD,	0,	STABLE},
+#line 207 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str411,  "BLOCKANGULARCONSTRAINTPARAMETER",   DWG_TYPE_BLOCKANGULARCONSTRAINTPARAMETER,	0,	DEBUGGING},
+#line 233 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str412,                "BLOCKROTATIONGRIP",                 DWG_TYPE_BLOCKROTATIONGRIP,	0,	UNSTABLE},
+      {-1},
+#line 194 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str414,         "ACDBASSOCPOINTREFACTIONPARAM",      DWG_TYPE_ASSOCPOINTREFACTIONPARAM,	0,	DEBUGGING},
+      {-1},
+#line 264 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str416,       "ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",  DWG_TYPE_DYNAMICBLOCKPURGEPREVENTER,	0,	STABLE},
+      {-1},
+#line 258 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str418,                         "DIMSTYLE",                          DWG_TYPE_DIMSTYLE,	0,	STABLE},
+      {-1}, {-1},
+#line 315 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str421,            "RAPIDRTRENDERSETTINGS",             DWG_TYPE_RAPIDRTRENDERSETTINGS,	0,	UNSTABLE},
+      {-1}, {-1}, {-1},
+#line 220 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str425,                  "BLOCKLOOKUPGRIP",                   DWG_TYPE_BLOCKLOOKUPGRIP,	0,	UNSTABLE},
+#line 76 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str426,                    "INSERT",                     DWG_TYPE_INSERT,	1,	STABLE},
+#line 155 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str427,      "ACDB_ANNOTSCALEOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_ANNOTSCALEOBJECTCONTEXTDATA,	0,	DEBUGGING},
+#line 145 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str428,               "ACSH_HISTORY_CLASS",                DWG_TYPE_ACSH_HISTORY_CLASS,	0,	STABLE},
+      {-1}, {-1},
+#line 59 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str431,               "DGNUNDERLAY",                DWG_TYPE_DGNUNDERLAY,	1,	STABLE},
+      {-1},
+#line 236 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str433,               "BLOCKSTRETCHACTION",                DWG_TYPE_BLOCKSTRETCHACTION,	0,	DEBUGGING},
+      {-1}, {-1},
+#line 208 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str436,                 "BLOCKARRAYACTION",                  DWG_TYPE_BLOCKARRAYACTION,	0,	DEBUGGING},
+#line 234 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str437,           "BLOCKROTATIONPARAMETER",            DWG_TYPE_BLOCKROTATIONPARAMETER,	0,	UNSTABLE},
+#line 275 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str438,                         "IDBUFFER",                          DWG_TYPE_IDBUFFER,	0,	STABLE},
+      {-1},
+#line 191 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str440,             "ACDBASSOCPATHACTIONPARAM",          DWG_TYPE_ASSOCPATHACTIONPARAM,	0,	DEBUGGING},
+      {-1}, {-1}, {-1}, {-1},
+#line 97 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str445,                "ACDBPOINTCLOUD",             DWG_TYPE_POINTCLOUD,	1,	DEBUGGING},
+      {-1},
+#line 183 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str447,           "ACDBASSOCMLEADERACTIONBODY",        DWG_TYPE_ASSOCMLEADERACTIONBODY,	0,	DEBUGGING},
+#line 257 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str448,                         "DIMASSOC",                          DWG_TYPE_DIMASSOC,	0,	DEBUGGING},
+#line 293 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str449,         "ACDB_MLEADEROBJECTCONTEXTDATA_CLASS",  DWG_TYPE_MLEADEROBJECTCONTEXTDATA,	0,	DEBUGGING},
+#line 221 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str450,             "BLOCKLOOKUPPARAMETER",              DWG_TYPE_BLOCKLOOKUPPARAMETER,	0,	DEBUGGING},
+      {-1},
+#line 344 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str452,                     "VIEW_CONTROL",                      DWG_TYPE_VIEW_CONTROL,	0,	STABLE},
+#line 327 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str453,                    "SORTENTSTABLE",                     DWG_TYPE_SORTENTSTABLE,	0,	STABLE},
+      {-1},
+#line 179 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str455,             "ACDBASSOCFACEACTIONPARAM",          DWG_TYPE_ASSOCFACEACTIONPARAM,	0,	DEBUGGING},
+      {-1}, {-1},
+#line 246 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str458,               "CONTEXTDATAMANAGER",                DWG_TYPE_CONTEXTDATAMANAGER,	0,	DEBUGGING},
+      {-1},
+#line 261 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str460,                            "DUMMY",                             DWG_TYPE_DUMMY,	0,	STABLE},
+#line 235 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str461,                 "BLOCKSCALEACTION",                  DWG_TYPE_BLOCKSCALEACTION,	0,	STABLE},
+#line 351 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str462,                          "XRECORD",                           DWG_TYPE_XRECORD,	0,	STABLE},
+#line 338 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str463,               "TVDEVICEPROPERTIES",                DWG_TYPE_TVDEVICEPROPERTIES,	0,	DEBUGGING},
+      {-1}, {-1},
+#line 188 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str466,       "ACDBASSOCORDINATEDIMACTIONBODY",    DWG_TYPE_ASSOCORDINATEDIMACTIONBODY,	0,	DEBUGGING},
+      {-1},
+#line 331 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str468,                    "STYLE_CONTROL",                     DWG_TYPE_STYLE_CONTROL,	0,	STABLE},
+      {-1}, {-1}, {-1}, {-1},
+#line 157 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str473,                    "APPID_CONTROL",                     DWG_TYPE_APPID_CONTROL,	0,	STABLE},
+      {-1},
+#line 176 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str475,        "ACDBASSOCEDGEFILLETACTIONBODY",     DWG_TYPE_ASSOCEDGEFILLETACTIONBODY,	0,	DEBUGGING},
+      {-1}, {-1}, {-1},
+#line 343 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str479,                             "VIEW",                              DWG_TYPE_VIEW,	0,	STABLE},
+      {-1},
+#line 277 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str481,                 "IMAGEDEF_REACTOR",                  DWG_TYPE_IMAGEDEF_REACTOR,	0,	STABLE},
+#line 132 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str482,         "XYPARAMETERENTITY",          DWG_TYPE_XYPARAMETERENTITY,	1,	DEBUGGING},
+#line 307 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str483,                    "ACDBPOINTCLOUDDEF",                 DWG_TYPE_POINTCLOUDDEF,	0,	DEBUGGING},
+      {-1},
+#line 55 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str485,                     "BLOCK",                      DWG_TYPE_BLOCK,	1,	STABLE},
+      {-1}, {-1}, {-1},
+#line 92 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str489,                 "OLE2FRAME",                  DWG_TYPE_OLE2FRAME,	1,	STABLE},
+      {-1},
+#line 242 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str491,                 "BLOCKXYPARAMETER",                  DWG_TYPE_BLOCKXYPARAMETER,	0,	UNSTABLE},
+      {-1}, {-1}, {-1}, {-1},
+#line 89 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str496,               "MULTILEADER",                DWG_TYPE_MULTILEADER,	1,	STABLE},
+      {-1},
+#line 290 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str498,                    "LTYPE_CONTROL",                     DWG_TYPE_LTYPE_CONTROL,	0,	STABLE},
+      {-1}, {-1},
+#line 102 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str501,               "POLYLINE",                   DWG_TYPE_POLYLINE_3D,	1,	STABLE},
+#line 136 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str502,                     "ACMESTATEMGR",                      DWG_TYPE_ACMESTATEMGR,	0,	DEBUGGING},
+      {-1}, {-1},
+#line 100 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str505,           "POLARGRIPENTITY",            DWG_TYPE_POLARGRIPENTITY,	1,	DEBUGGING},
+#line 288 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str506,                 "LONG_TRANSACTION",                  DWG_TYPE_LONG_TRANSACTION,	0,	STABLE},
+      {-1},
+#line 282 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str508,                    "LAYER_CONTROL",                     DWG_TYPE_LAYER_CONTROL,	0,	STABLE},
+      {-1}, {-1},
+#line 101 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str511,               "POLYLINE",                   DWG_TYPE_POLYLINE_2D,	1,	STABLE},
+      {-1}, {-1}, {-1},
+#line 73 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str515,                     "HATCH",                      DWG_TYPE_HATCH,	1,	STABLE},
+#line 161 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str516,                 "ACDBASSOCACTIONPARAM",              DWG_TYPE_ASSOCACTIONPARAM,	0,	DEBUGGING},
+#line 312 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str517,                     "ACAD_PROXY_OBJECT",                 DWG_TYPE_PROXY_OBJECT,	0,	UNSTABLE},
+      {-1}, {-1},
+#line 108 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str520,           "REVOLVEDSURFACE",            DWG_TYPE_REVOLVEDSURFACE,	1,	DEBUGGING},
+#line 259 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str521,                 "DIMSTYLE_CONTROL",                  DWG_TYPE_DIMSTYLE_CONTROL,	0,	STABLE},
+#line 285 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str522,                "LAYOUTPRINTCONFIG",                 DWG_TYPE_LAYOUTPRINTCONFIG,	0,	DEBUGGING},
+      {-1}, {-1}, {-1},
+#line 297 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str526,  "ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA,	0,	DEBUGGING},
+#line 173 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str527,           "ACDBASSOCDIMDEPENDENCYBODY",        DWG_TYPE_ASSOCDIMDEPENDENCYBODY,	0,	DEBUGGING},
+#line 243 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str528,                    "BLOCK_CONTROL",                     DWG_TYPE_BLOCK_CONTROL,	0,	STABLE},
+      {-1},
+#line 74 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str530,                     "HELIX",                      DWG_TYPE_HELIX,	1,	UNSTABLE},
+#line 214 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str531,       "BLOCKGRIPLOCATIONCOMPONENT",        DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT,	0,	STABLE},
+      {-1},
+#line 227 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str533,          "BLOCKPOLARSTRETCHACTION",           DWG_TYPE_BLOCKPOLARSTRETCHACTION,	0,	DEBUGGING},
+      {-1}, {-1}, {-1},
+#line 158 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str537,           "ACDBASSOC2DCONSTRAINTGROUP",        DWG_TYPE_ASSOC2DCONSTRAINTGROUP,	0,	DEBUGGING},
+#line 154 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str538,          "ACDB_ANGDIMOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_ANGDIMOBJECTCONTEXTDATA,	0,	DEBUGGING},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1},
+#line 231 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str549,              "ACDB_BLOCKREPRESENTATION_DATA",     DWG_TYPE_BLOCKREPRESENTATION,	0,	UNSTABLE},
+      {-1},
+#line 67 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str551,               "DWFUNDERLAY",                DWG_TYPE_DWFUNDERLAY,	1,	STABLE},
+#line 72 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str552,         "POSITIONMARKER",             DWG_TYPE_GEOPOSITIONMARKER,	1,	DEBUGGING},
+#line 169 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str553,          "ACDBASSOCASMBODYACTIONPARAM",       DWG_TYPE_ASSOCASMBODYACTIONPARAM,	0,	DEBUGGING},
+      {-1}, {-1}, {-1}, {-1},
+#line 272 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str558,          "GROUND_PLANE_BACKGROUND",           DWG_TYPE_GROUND_PLANE_BACKGROUND,	0,	UNSTABLE},
+      {-1}, {-1}, {-1},
+#line 125 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str562,              "VERTEX",                     DWG_TYPE_VERTEX_PFACE,	1,	STABLE},
+      {-1}, {-1}, {-1}, {-1},
+#line 126 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str567,         "VERTEX",                     DWG_TYPE_VERTEX_PFACE_FACE,	1,	STABLE},
+      {-1}, {-1}, {-1}, {-1},
+#line 98 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str572,              "ACDBPOINTCLOUDEX",           DWG_TYPE_POINTCLOUDEX,	1,	DEBUGGING},
+#line 213 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str573,               "BLOCKFLIPPARAMETER",                DWG_TYPE_BLOCKFLIPPARAMETER,	0,	STABLE},
+      {-1},
+#line 308 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str575,                  "ACDBPOINTCLOUDDEFEX",               DWG_TYPE_POINTCLOUDDEFEX,	0,	DEBUGGING},
+      {-1}, {-1}, {-1}, {-1},
+#line 83 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str580,                "LWPOLYLINE",                 DWG_TYPE_LWPOLYLINE,	1,	STABLE},
+      {-1}, {-1}, {-1},
+#line 310 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str584,         "ACDBPOINTCLOUDDEF_REACTOR_EX",      DWG_TYPE_POINTCLOUDDEF_REACTOR_EX,	0,	DEBUGGING},
+      {-1}, {-1}, {-1}, {-1},
+#line 142 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str589,              "ACSH_CYLINDER_CLASS",               DWG_TYPE_ACSH_CYLINDER_CLASS,	0,	STABLE},
+      {-1},
+#line 270 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str591,                      "GEOMAPIMAGE",                       DWG_TYPE_GEOMAPIMAGE,	0,	DEBUGGING},
+      {-1},
+#line 237 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str593,               "BLOCKUSERPARAMETER",                DWG_TYPE_BLOCKUSERPARAMETER,	0,	DEBUGGING},
+#line 122 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str594,                 "VERTEX",                     DWG_TYPE_VERTEX_2D,	1,	STABLE},
+      {-1}, {-1}, {-1}, {-1},
+#line 123 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str599,                 "VERTEX",                     DWG_TYPE_VERTEX_3D,	1,	STABLE},
+      {-1}, {-1},
+#line 190 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str602,      "ACDBASSOCPATCHSURFACEACTIONBODY",   DWG_TYPE_ASSOCPATCHSURFACEACTIONBODY,	0,	UNSTABLE},
+      {-1}, {-1}, {-1}, {-1},
+#line 105 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str607,              "ACAD_ENTITY_OBJECT",         DWG_TYPE_PROXY_ENTITY,	1,	STABLE},
+      {-1},
+#line 171 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str609,         "ACDBASSOCCOMPOUNDACTIONPARAM",      DWG_TYPE_ASSOCCOMPOUNDACTIONPARAM,	0,	DEBUGGING},
+      {-1}, {-1}, {-1},
+#line 276 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str613,                         "IMAGEDEF",                          DWG_TYPE_IMAGEDEF,	0,	STABLE},
+      {-1},
+#line 172 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str615,                  "ACDBASSOCDEPENDENCY",               DWG_TYPE_ASSOCDEPENDENCY,	0,	UNSTABLE},
+      {-1}, {-1},
+#line 82 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str618,             "LOFTEDSURFACE",              DWG_TYPE_LOFTEDSURFACE,	1,	DEBUGGING},
+      {-1}, {-1}, {-1},
+#line 314 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str622,           "ACDB_RADIMOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_RADIMOBJECTCONTEXTDATA,	0,	DEBUGGING},
+#line 347 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str623,                    "VPORT_CONTROL",                     DWG_TYPE_VPORT_CONTROL,	0,	STABLE},
+      {-1}, {-1}, {-1}, {-1},
+#line 87 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str628,                  "MPOLYGON",                   DWG_TYPE_MPOLYGON,	1,	DEBUGGING},
+      {-1},
+#line 128 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str630,      "VISIBILITYGRIPENTITY",       DWG_TYPE_VISIBILITYGRIPENTITY,	1,	DEBUGGING},
+      {-1},
+#line 130 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str632,                   "WIPEOUT",                    DWG_TYPE_WIPEOUT,	1,	UNSTABLE},
+#line 333 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str633,                         "SUNSTUDY",                          DWG_TYPE_SUNSTUDY,	0,	DEBUGGING},
+      {-1},
+#line 129 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str635, "VISIBILITYPARAMETERENTITY",  DWG_TYPE_VISIBILITYPARAMETERENTITY,	1,	DEBUGGING},
+#line 345 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str636,                      "VISUALSTYLE",                       DWG_TYPE_VISUALSTYLE,	0,	STABLE},
+#line 153 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str637,           "ACDB_ALDIMOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_ALDIMOBJECTCONTEXTDATA,	0,	DEBUGGING},
+#line 127 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str638,                  "VIEWPORT",                   DWG_TYPE_VIEWPORT,	1,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1},
+#line 271 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str644,              "GRADIENT_BACKGROUND",               DWG_TYPE_GRADIENT_BACKGROUND,	0,	UNSTABLE},
+#line 90 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str645,           "COORDINATION_MODEL",         DWG_TYPE_NAVISWORKSMODEL,	1,	DEBUGGING},
+      {-1}, {-1},
+#line 51 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str648,             "ARC_DIMENSION",              DWG_TYPE_ARC_DIMENSION,	1,	UNSTABLE},
+#line 311 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str649,                        "ACDBPOINTPATH",                     DWG_TYPE_POINTPATH,	0,	DEBUGGING},
+      {-1}, {-1}, {-1}, {-1}, {-1},
+#line 141 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str655,                  "ACSH_CONE_CLASS",                   DWG_TYPE_ACSH_CONE_CLASS,	0,	STABLE},
+      {-1}, {-1},
+#line 332 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str658,                              "SUN",                               DWG_TYPE_SUN,	0,	UNSTABLE},
+      {-1},
+#line 146 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str660,                  "ACSH_LOFT_CLASS",                   DWG_TYPE_ACSH_LOFT_CLASS,	0,	DEBUGGING},
+#line 62 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str661,          "DIMENSION",                  DWG_TYPE_DIMENSION_ANG3PT,	1,	STABLE},
+      {-1},
+#line 212 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str663,                    "BLOCKFLIPGRIP",                     DWG_TYPE_BLOCKFLIPGRIP,	0,	STABLE},
+      {-1}, {-1},
+#line 66 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str666,          "DIMENSION",                  DWG_TYPE_DIMENSION_RADIUS,	1,	STABLE},
+      {-1},
+#line 65 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str668,        "DIMENSION",                  DWG_TYPE_DIMENSION_ORDINATE,	1,	STABLE},
+      {-1},
+#line 178 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str670,   "ACDBASSOCEXTRUDEDSURFACEACTIONBODY",  DWG_TYPE_ASSOCEXTRUDEDSURFACEACTIONBODY,	0,	UNSTABLE},
+      {-1}, {-1},
+#line 329 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str673,                    "SPATIAL_INDEX",                     DWG_TYPE_SPATIAL_INDEX,	0,	UNSTABLE},
+      {-1}, {-1},
+#line 241 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str676,                      "BLOCKXYGRIP",                       DWG_TYPE_BLOCKXYGRIP,	0,	DEBUGGING},
+#line 298 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str677,           "ACDB_MTEXTOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_MTEXTOBJECTCONTEXTDATA,	0,	DEBUGGING},
+      {-1}, {-1},
+#line 162 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str680,        "ACDBASSOCALIGNEDDIMACTIONBODY",     DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY,	0,	DEBUGGING},
+#line 64 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str681,          "DIMENSION",                  DWG_TYPE_DIMENSION_LINEAR,	1,	STABLE},
+#line 186 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str682,           "ACDBASSOCOBJECTACTIONPARAM",        DWG_TYPE_ASSOCOBJECTACTIONPARAM,	0,	DEBUGGING},
+#line 63 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str683,        "DIMENSION",                  DWG_TYPE_DIMENSION_DIAMETER,	1,	STABLE},
+      {-1}, {-1}, {-1}, {-1},
+#line 103 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str688,             "POLYLINE",                   DWG_TYPE_POLYLINE_MESH,	1,	STABLE},
+      {-1}, {-1}, {-1}, {-1},
+#line 249 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str693,                         "DATALINK",                          DWG_TYPE_DATALINK,	0,	DEBUGGING},
+      {-1},
+#line 279 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str695,                            "INDEX",                             DWG_TYPE_INDEX,	0,	STABLE},
+      {-1}, {-1},
+#line 177 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str698,     "ACDBASSOCEXTENDSURFACEACTIONBODY",  DWG_TYPE_ASSOCEXTENDSURFACEACTIONBODY,	0,	UNSTABLE},
+      {-1}, {-1},
+#line 342 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str701,                      "VBA_PROJECT",                       DWG_TYPE_VBA_PROJECT,	0,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1},
+#line 305 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str707,                     "PLOTSETTINGS",                      DWG_TYPE_PLOTSETTINGS,	0,	STABLE},
+      {-1}, {-1}, {-1},
+#line 107 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str711,                    "REGION",                     DWG_TYPE_REGION,	1,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 139 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str720,                  "ACSH_BREP_CLASS",                   DWG_TYPE_ACSH_BREP_CLASS,	0,	UNSTABLE},
+      {-1}, {-1},
+#line 205 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str723,               "BLOCKALIGNMENTGRIP",                DWG_TYPE_BLOCKALIGNMENTGRIP,	0,	UNSTABLE},
+      {-1},
+#line 143 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str725,             "ACSH_EXTRUSION_CLASS",              DWG_TYPE_ACSH_EXTRUSION_CLASS,	0,	DEBUGGING},
+      {-1}, {-1}, {-1}, {-1},
+#line 252 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str730,                  "ACDBDETAILVIEWSTYLE",               DWG_TYPE_DETAILVIEWSTYLE,	0,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 206 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str748,          "BLOCKALIGNMENTPARAMETER",           DWG_TYPE_BLOCKALIGNMENTPARAMETER,	0,	UNSTABLE},
+      {-1},
+#line 222 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str750,                  "BLOCKMOVEACTION",                   DWG_TYPE_BLOCKMOVEACTION,	0,	STABLE},
+      {-1},
+#line 232 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str752,                "BLOCKROTATEACTION",                 DWG_TYPE_BLOCKROTATEACTION,	0,	STABLE},
+      {-1}, {-1},
+#line 70 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str755,           "EXTRUDEDSURFACE",            DWG_TYPE_EXTRUDEDSURFACE,	1,	DEBUGGING},
+#line 204 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str756,  "BLOCKALIGNEDCONSTRAINTPARAMETER",   DWG_TYPE_BLOCKALIGNEDCONSTRAINTPARAMETER,	0,	DEBUGGING},
+      {-1},
+#line 302 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str758,                    "PDFDEFINITION",                     DWG_TYPE_PDFDEFINITION,	0,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 160 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str766,                      "ACDBASSOCACTION",                   DWG_TYPE_ASSOCACTION,	0,	UNSTABLE},
+#line 219 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str767,                "BLOCKLOOKUPACTION",                 DWG_TYPE_BLOCKLOOKUPACTION,	0,	DEBUGGING},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 185 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str774,    "ACDBASSOCNETWORKSURFACEACTIONBODY",  DWG_TYPE_ASSOCNETWORKSURFACEACTIONBODY,	0,	UNSTABLE},
+#line 266 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str775,             "ACDB_FCFOBJECTCONTEXTDATA_CLASS",   DWG_TYPE_FCFOBJECTCONTEXTDATA,	0,	DEBUGGING},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 299 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str793,               "ACDBNAVISWORKSMODELDEF",            DWG_TYPE_NAVISWORKSMODELDEF,	0,	DEBUGGING},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1},
+#line 60 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str807,         "DIMENSION",                  DWG_TYPE_DIMENSION_ALIGNED,	1,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1},
+#line 349 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str820,                  "VX_TABLE_RECORD",                   DWG_TYPE_VX_TABLE_RECORD,	0,	STABLE},
+      {-1},
+#line 260 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str822,           "ACDB_DMDIMOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_DMDIMOBJECTCONTEXTDATA,	0,	DEBUGGING},
+      {-1}, {-1}, {-1},
+#line 283 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str826,                      "LAYER_INDEX",                       DWG_TYPE_LAYER_INDEX,	0,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1},
+#line 244 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str837,                     "BLOCK_HEADER",                      DWG_TYPE_BLOCK_HEADER,	0,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 134 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str853,               "ACMECOMMANDHISTORY",                DWG_TYPE_ACMECOMMANDHISTORY,	0,	DEBUGGING},
+      {-1},
+#line 348 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str855,                       "VX_CONTROL",                        DWG_TYPE_VX_CONTROL,	0,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 253 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str873,                    "DGNDEFINITION",                     DWG_TYPE_DGNDEFINITION,	0,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 340 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str891,                      "UCS_CONTROL",                       DWG_TYPE_UCS_CONTROL,	0,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 211 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str900,                  "BLOCKFLIPACTION",                   DWG_TYPE_BLOCKFLIPACTION,	0,	STABLE},
+#line 350 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str901,                 "WIPEOUTVARIABLES",                  DWG_TYPE_WIPEOUTVARIABLES,	0,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1},
+#line 77 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str932,    "LARGE_RADIAL_DIMENSION",     DWG_TYPE_LARGE_RADIAL_DIMENSION,	1,	UNSTABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1},
+#line 248 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str944,                        "ACDBCURVEPATH",                     DWG_TYPE_CURVEPATH,	0,	DEBUGGING},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1},
+#line 262 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str993,                    "DWFDEFINITION",                     DWG_TYPE_DWFDEFINITION,	0,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 61 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1001,          "DIMENSION",                  DWG_TYPE_DIMENSION_ANG2LN,	1,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1},
-#line 117 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1271,               "UNKNOWN_ENT",                DWG_TYPE_UNKNOWN_ENT,	1}
+#line 325 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1039,              "SKYLIGHT_BACKGROUND",               DWG_TYPE_SKYLIGHT_BACKGROUND,	0,	UNSTABLE},
+      {-1},
+#line 124 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1041,               "VERTEX",                     DWG_TYPE_VERTEX_MESH,	1,	STABLE},
+      {-1}, {-1}, {-1},
+#line 296 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1045,                       "MOTIONPATH",                        DWG_TYPE_MOTIONPATH,	0,	DEBUGGING},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 265 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1071,                 "ACAD_EVALUATION_GRAPH",             DWG_TYPE_EVALUATION_GRAPH,	0,	UNSTABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 326 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1106,                 "SOLID_BACKGROUND",                  DWG_TYPE_SOLID_BACKGROUND,	0,	UNSTABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1},
+#line 91 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1156,               "NURBSURFACE",                DWG_TYPE_NURBSURFACE,	1,	DEBUGGING},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 184 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1172,                     "ACDBASSOCNETWORK",                  DWG_TYPE_ASSOCNETWORK,	0,	UNSTABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 69 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1181,                    "ENDBLK",                     DWG_TYPE_ENDBLK,	1,	STABLE},
+      {-1}, {-1}, {-1}, {-1},
+#line 278 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1186,                 "IMAGE_BACKGROUND",                  DWG_TYPE_IMAGE_BACKGROUND,	0,	UNSTABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1},
+#line 341 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1251,                      "UNKNOWN_OBJ",                       DWG_TYPE_UNKNOWN_OBJ,	0,	STABLE},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1},
+#line 121 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1271,               "UNKNOWN_ENT",                DWG_TYPE_UNKNOWN_ENT,	1,	STABLE}
     };
 
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
@@ -1651,13 +1656,14 @@ in_word_set (register const char *str, register size_t len)
     }
   return 0;
 }
-#line 348 "src/objects.in"
+#line 352 "src/objects.in"
 
 
 /* Find if an object name (our internal name, not anything used elsewhere)
    is defined, and return our fixed type, the public dxfname and if it's an entity. */
 EXPORT int dwg_object_name (const char *const restrict name, const char **restrict dxfname,
-                            Dwg_Object_Type *restrict typep, int *restrict is_entp)
+                            Dwg_Object_Type *restrict typep, int *restrict is_entp,
+                            Dwg_Class_Stability *restrict stabilityp)
 {
   const struct _dwg_dxfname* result = in_word_set (name, strlen (name));
   if (result)
@@ -1668,6 +1674,8 @@ EXPORT int dwg_object_name (const char *const restrict name, const char **restri
         *typep   = result->type;
       if (is_entp)
         *is_entp = result->isent;
+      if (stabilityp)
+        *stabilityp = result->stability;
       return 1;
     }
   return 0;
