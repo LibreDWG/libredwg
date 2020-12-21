@@ -2494,8 +2494,6 @@ static const Dwg_DYNAPI_field _dwg_MPOLYGON_fields[] = {
     1,0,0, 11 },
   { "num_boundary_handles",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_MPOLYGON, num_boundary_handles),
     0,0,0, 99 },
-  { "boundary_handles",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_entity_MPOLYGON, boundary_handles),
-    1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_MTEXT: (sorted by offset) */

@@ -2948,7 +2948,7 @@ typedef struct _dwg_entity_MPOLYGON
   BITCODE_CMC color;  /* DXF 62 */
   BITCODE_2RD x_dir;  /* DXF 11 (ocs) */
   BITCODE_BL num_boundary_handles; /* DXF 99 */
-  BITCODE_H* boundary_handles;
+  //BITCODE_H* boundary_handles;
 
 } Dwg_Entity_MPOLYGON;
 

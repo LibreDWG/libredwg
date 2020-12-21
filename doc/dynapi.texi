@@ -2765,8 +2765,6 @@ CMC,	DXF 62
 2RD,	DXF 11
 @item num_boundary_handles
 BL,	DXF 99
-@item boundary_handles
-H*
 
 @end vtable
 @end indentedblock

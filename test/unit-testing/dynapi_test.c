@@ -15416,16 +15416,6 @@ static int test_MPOLYGON (const Dwg_Object *obj)
     mpolygon->angle--;
   }
   {
-    BITCODE_H* boundary_handles;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "num_boundary_handles", &count, NULL)
-        && dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "boundary_handles", &boundary_handles, NULL)
-        && boundary_handles == mpolygon->boundary_handles)
-      pass ();
-    else
-      fail ("MPOLYGON.boundary_handles [H*] * %u num_boundary_handles", count);
-  }
-  {
     BITCODE_CMC color;
     if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "color", &color, NULL)
         && !memcmp (&color, &mpolygon->color, sizeof (BITCODE_CMC)))

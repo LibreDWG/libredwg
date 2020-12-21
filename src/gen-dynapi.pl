@@ -410,7 +410,7 @@ sub dxf_in {
     } elsif (/^\s+HANDLE_VECTOR(?:_N)?\s*\((\w+),.*?,\s*(\d+)\)/) {
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;
-    } elsif (/^\s+SUB_HANDLE_VECTOR\s*\([^,]+?, (\w+), .+?, (\d+)\)/) {
+    } elsif (/^\s+SUB_HANDLE_VECTOR\s*\([^,]+?, (\w+), .+, (\d+)\)/) {
       $f = $1;
       $DXF{$n}->{$f} = $2 if $2;
     } elsif (/^\s+HEADER_.+\s*\((\w+),\s*(\d+)\)/) { # HEADER_RC
@@ -479,7 +479,6 @@ $DXF{'INSERT'}->{'block_header'} = 2;
 $DXF{'MINSERT'}->{'block_header'} = 2;
 $DXF{'POLYLINE_3D'}->{'flag'} = 70;
 $DXF{'POLYLINE_MESH'}->{'flag'} = 70;
-$DXF{'HATCH'}->{'boundary_handles'} = 330; # special DXF logic
 $DXF{'VISUALSTYLE'}->{'edge_hide_precision_flag'} = 290;
 $DXF{'VISUALSTYLE'}->{'is_internal_use_only'} = 291;
 # $DXF{'VISUALSTYLE'}->{'face_lighting_model'} = 71;
