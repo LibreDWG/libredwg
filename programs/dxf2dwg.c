@@ -70,8 +70,7 @@ help (void)
   printf ("Default DWGFILE: DXFFILE with .dwg extension in the current "
           "directory.\n"
           "Existing files are not overwritten, unless -y is given.\n"
-          "Encoding currently only works for R13-R2000, dxf2dwg is "
-          "experimental.\n"
+          "Encoding currently only works for R13-R2000.\n"
           "\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
@@ -308,7 +307,7 @@ main (int argc, char *argv[])
 
       dwg.opts = opts;
       dwg.header.version = dwg_version;
-      printf ("Warning: dxf2dwg is still experimental.\n");
+      //printf ("Warning: dxf2dwg is still experimental.\n");
       printf ("Reading DXF file %s\n", filename_in);
       error = dxf_read_file (filename_in, &dwg);
       if (error >= DWG_ERR_CRITICAL)
