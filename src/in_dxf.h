@@ -24,8 +24,10 @@
 #include "dynapi.h"
 
 // from dwg_api
+#ifndef _DWG_API_H_
 BITCODE_T dwg_add_u8_input (Dwg_Data *restrict dwg,
                             const char *restrict u8str);
+#endif
 
 EXPORT int dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);

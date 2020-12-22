@@ -87,7 +87,7 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
       if (fd >= 0 && !fstat (fd, &attrib))
         dat->size = attrib.st_size;
     }
-  dat->chain = (unsigned char *)calloc (1, dat->size);
+  dat->chain = (unsigned char *)calloc (1, dat->size + 1);
   if (!dat->chain)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
@@ -108,6 +108,7 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
       dat->size = 0;
       return DWG_ERR_IOERROR;
     }
+  dat->chain[dat->size] = '\0';  // ensure zero-terminatation for strstr
   return 0;
 }
 
