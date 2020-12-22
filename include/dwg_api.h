@@ -520,6 +520,8 @@ dwg_get_OBJECT_DECL (ent_3dsolid, 3DSOLID);
 dwg_get_OBJECT_DECL (ent_xline, XLINE);
 
 /********************************************************************/
+typedef struct _dwg_abstractentity_UNDERLAY	      dwg_ent_underlay; /* same layout for all 3 */
+typedef struct _dwg_abstractobject_UNDERLAYDEFINITION dwg_obj_underlaydefinition;
 /* Start auto-generated content. Do not touch. */
 typedef struct _dwg_entity__3DFACE		dwg_ent__3dface;
 typedef struct _dwg_entity__3DSOLID		dwg_ent__3dsolid;
@@ -565,6 +567,8 @@ typedef struct _dwg_entity_VERTEX_PFACE_FACE		dwg_ent_vert_pface_face;
 typedef struct _dwg_entity_VIEWPORT		dwg_ent_viewport;
 /* untyped > 500 */
 typedef struct _dwg_entity_CAMERA		dwg_ent_camera;
+typedef struct _dwg_entity_DGNUNDERLAY		dwg_ent_dgnunderlay;
+typedef struct _dwg_entity_DWFUNDERLAY		dwg_ent_dwfunderlay;
 typedef struct _dwg_entity_HATCH		dwg_ent_hatch;
 typedef struct _dwg_entity_IMAGE		dwg_ent_image;
 typedef struct _dwg_entity_LIGHT		dwg_ent_light;
@@ -572,8 +576,8 @@ typedef struct _dwg_entity_LWPOLYLINE		dwg_ent_lwpline;
 typedef struct _dwg_entity_MESH		dwg_ent_mesh;
 typedef struct _dwg_entity_MULTILEADER		dwg_ent_mleader;
 typedef struct _dwg_entity_OLE2FRAME		dwg_ent_ole2frame;
+typedef struct _dwg_entity_PDFUNDERLAY		dwg_ent_pdfunderlay;
 typedef struct _dwg_entity_SECTIONOBJECT		dwg_ent_sectionobject;
-typedef struct _dwg_entity_UNDERLAY		dwg_ent_underlay;
 /* unstable */
 typedef struct _dwg_entity_ARC_DIMENSION		dwg_ent_arc_dimension;
 typedef struct _dwg_entity_HELIX		dwg_ent_helix;
@@ -595,6 +599,7 @@ typedef struct _dwg_entity_PLANESURFACE		dwg_ent_planesurface;
 typedef struct _dwg_entity_POINTCLOUD		dwg_ent_pointcloud;
 typedef struct _dwg_entity_POINTCLOUDEX		dwg_ent_pointcloudex;
 typedef struct _dwg_entity_POINTPARAMETERENTITY		dwg_ent_pointparameterentity;
+typedef struct _dwg_entity_POLARGRIPENTITY		dwg_ent_polargripentity;
 typedef struct _dwg_entity_REVOLVEDSURFACE		dwg_ent_revolvedsurface;
 typedef struct _dwg_entity_ROTATIONPARAMETERENTITY		dwg_ent_rotationparameterentity;
 typedef struct _dwg_entity_RTEXT		dwg_ent_rtext;
@@ -674,11 +679,13 @@ typedef struct _dwg_object_SECTION_MANAGER		dwg_obj_section_manager;
 typedef struct _dwg_object_SORTENTSTABLE		dwg_obj_sortentstable;
 typedef struct _dwg_object_SPATIAL_FILTER		dwg_obj_spatial_filter;
 typedef struct _dwg_object_TABLEGEOMETRY		dwg_obj_tablegeometry;
-typedef struct _dwg_object_UNDERLAYDEFINITION		dwg_obj_underlaydefinition;
 typedef struct _dwg_object_VBA_PROJECT		dwg_obj_vba_project;
 typedef struct _dwg_object_VISUALSTYLE		dwg_obj_visualstyle;
 typedef struct _dwg_object_WIPEOUTVARIABLES		dwg_obj_wipeoutvariables;
 typedef struct _dwg_object_XRECORD		dwg_obj_xrecord;
+typedef struct _dwg_object_PDFDEFINITION		dwg_obj_pdfdefinition;
+typedef struct _dwg_object_DGNDEFINITION		dwg_obj_dgndefinition;
+typedef struct _dwg_object_DWFDEFINITION		dwg_obj_dwfdefinition;
 /* unstable */
 typedef struct _dwg_object_ACSH_BREP_CLASS		dwg_obj_acsh_brep_class;
 typedef struct _dwg_object_ACSH_CHAMFER_CLASS		dwg_obj_acsh_chamfer_class;
@@ -699,17 +706,21 @@ typedef struct _dwg_object_ASSOCPLANESURFACEACTIONBODY		dwg_obj_assocplanesurfac
 typedef struct _dwg_object_ASSOCREVOLVEDSURFACEACTIONBODY		dwg_obj_assocrevolvedsurfaceactionbody;
 typedef struct _dwg_object_ASSOCTRIMSURFACEACTIONBODY		dwg_obj_assoctrimsurfaceactionbody;
 typedef struct _dwg_object_ASSOCVALUEDEPENDENCY		dwg_obj_assocvaluedependency;
-typedef struct _dwg_object_BACKGROUND		dwg_obj_background;
 typedef struct _dwg_object_BLOCKALIGNMENTGRIP		dwg_obj_blockalignmentgrip;
 typedef struct _dwg_object_BLOCKALIGNMENTPARAMETER		dwg_obj_blockalignmentparameter;
 typedef struct _dwg_object_BLOCKLINEARPARAMETER		dwg_obj_blocklinearparameter;
 typedef struct _dwg_object_BLOCKLOOKUPGRIP		dwg_obj_blocklookupgrip;
+typedef struct _dwg_object_BLOCKREPRESENTATION		dwg_obj_blockrepresentation;
 typedef struct _dwg_object_BLOCKROTATIONGRIP		dwg_obj_blockrotationgrip;
 typedef struct _dwg_object_BLOCKROTATIONPARAMETER		dwg_obj_blockrotationparameter;
 typedef struct _dwg_object_BLOCKVISIBILITYPARAMETER		dwg_obj_blockvisibilityparameter;
 typedef struct _dwg_object_BLOCKXYPARAMETER		dwg_obj_blockxyparameter;
 typedef struct _dwg_object_DBCOLOR		dwg_obj_dbcolor;
 typedef struct _dwg_object_EVALUATION_GRAPH		dwg_obj_evaluation_graph;
+typedef struct _dwg_object_GRADIENT_BACKGROUND		dwg_obj_gradient_background;
+typedef struct _dwg_object_GROUND_PLANE_BACKGROUND		dwg_obj_ground_plane_background;
+typedef struct _dwg_object_IBL_BACKGROUND		dwg_obj_ibl_background;
+typedef struct _dwg_object_IMAGE_BACKGROUND		dwg_obj_image_background;
 typedef struct _dwg_object_LIGHTLIST		dwg_obj_lightlist;
 typedef struct _dwg_object_MATERIAL		dwg_obj_material;
 typedef struct _dwg_object_MENTALRAYRENDERSETTINGS		dwg_obj_mentalrayrendersettings;
@@ -718,6 +729,8 @@ typedef struct _dwg_object_PROXY_OBJECT		dwg_obj_proxy_object;
 typedef struct _dwg_object_RAPIDRTRENDERSETTINGS		dwg_obj_rapidrtrendersettings;
 typedef struct _dwg_object_RENDERSETTINGS		dwg_obj_rendersettings;
 typedef struct _dwg_object_SECTION_SETTINGS		dwg_obj_section_settings;
+typedef struct _dwg_object_SKYLIGHT_BACKGROUND		dwg_obj_skylight_background;
+typedef struct _dwg_object_SOLID_BACKGROUND		dwg_obj_solid_background;
 typedef struct _dwg_object_SPATIAL_INDEX		dwg_obj_spatial_index;
 typedef struct _dwg_object_SUN		dwg_obj_sun;
 typedef struct _dwg_object_TABLESTYLE		dwg_obj_tablestyle;
@@ -778,7 +791,6 @@ typedef struct _dwg_object_BLOCKPOLARSTRETCHACTION		dwg_obj_blockpolarstretchact
 typedef struct _dwg_object_BLOCKPROPERTIESTABLE		dwg_obj_blockpropertiestable;
 typedef struct _dwg_object_BLOCKPROPERTIESTABLEGRIP		dwg_obj_blockpropertiestablegrip;
 typedef struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER		dwg_obj_blockradialconstraintparameter;
-typedef struct _dwg_object_BLOCKREPRESENTATION		dwg_obj_blockrepresentation;
 typedef struct _dwg_object_BLOCKSTRETCHACTION		dwg_obj_blockstretchaction;
 typedef struct _dwg_object_BLOCKUSERPARAMETER		dwg_obj_blockuserparameter;
 typedef struct _dwg_object_BLOCKVERTICALCONSTRAINTPARAMETER		dwg_obj_blockverticalconstraintparameter;
@@ -820,7 +832,6 @@ typedef struct _dwg_object_TVDEVICEPROPERTIES		dwg_obj_tvdeviceproperties;
 //typedef struct _dwg_object_ACDSRECORD		dwg_obj_acdsrecord;
 //typedef struct _dwg_object_ACDSSCHEMA		dwg_obj_acdsschema;
 //typedef struct _dwg_object_NPOCOLLECTION		dwg_obj_npocollection;
-//typedef struct _dwg_object_PROXY_LWPOLYLINE		dwg_obj_proxy_lwpline;
 //typedef struct _dwg_object_RAPIDRTRENDERENVIRONMENT		dwg_obj_rapidrtrenderenvironment;
 //typedef struct _dwg_object_XREFPANELOBJECT		dwg_obj_xrefpanelobject;
 
@@ -869,6 +880,8 @@ dwg_get_OBJECT_DECL (ent_vert_pface_face, VERTEX_PFACE_FACE);
 dwg_get_OBJECT_DECL (ent_viewport, VIEWPORT);
 /* untyped > 500 */
 dwg_get_OBJECT_DECL (ent_camera, CAMERA);
+dwg_get_OBJECT_DECL (ent_dgnunderlay, DGNUNDERLAY);
+dwg_get_OBJECT_DECL (ent_dwfunderlay, DWFUNDERLAY);
 dwg_get_OBJECT_DECL (ent_hatch, HATCH);
 dwg_get_OBJECT_DECL (ent_image, IMAGE);
 dwg_get_OBJECT_DECL (ent_light, LIGHT);
@@ -876,8 +889,8 @@ dwg_get_OBJECT_DECL (ent_lwpline, LWPOLYLINE);
 dwg_get_OBJECT_DECL (ent_mesh, MESH);
 dwg_get_OBJECT_DECL (ent_mleader, MULTILEADER);
 dwg_get_OBJECT_DECL (ent_ole2frame, OLE2FRAME);
+dwg_get_OBJECT_DECL (ent_pdfunderlay, PDFUNDERLAY);
 dwg_get_OBJECT_DECL (ent_sectionobject, SECTIONOBJECT);
-dwg_get_OBJECT_DECL (ent_underlay, UNDERLAY);
 /* unstable */
 dwg_get_OBJECT_DECL (ent_arc_dimension, ARC_DIMENSION);
 dwg_get_OBJECT_DECL (ent_helix, HELIX);
@@ -899,6 +912,7 @@ dwg_get_OBJECT_DECL (ent_wipeout, WIPEOUT);
   dwg_get_OBJECT_DECL (ent_pointcloud, POINTCLOUD);
   dwg_get_OBJECT_DECL (ent_pointcloudex, POINTCLOUDEX);
   dwg_get_OBJECT_DECL (ent_pointparameterentity, POINTPARAMETERENTITY);
+  dwg_get_OBJECT_DECL (ent_polargripentity, POLARGRIPENTITY);
   dwg_get_OBJECT_DECL (ent_revolvedsurface, REVOLVEDSURFACE);
   dwg_get_OBJECT_DECL (ent_rotationparameterentity, ROTATIONPARAMETERENTITY);
   dwg_get_OBJECT_DECL (ent_rtext, RTEXT);
@@ -980,11 +994,13 @@ dwg_get_OBJECT_DECL (obj_section_manager, SECTION_MANAGER);
 dwg_get_OBJECT_DECL (obj_sortentstable, SORTENTSTABLE);
 dwg_get_OBJECT_DECL (obj_spatial_filter, SPATIAL_FILTER);
 dwg_get_OBJECT_DECL (obj_tablegeometry, TABLEGEOMETRY);
-dwg_get_OBJECT_DECL (obj_underlaydefinition, UNDERLAYDEFINITION);
 dwg_get_OBJECT_DECL (obj_vba_project, VBA_PROJECT);
 dwg_get_OBJECT_DECL (obj_visualstyle, VISUALSTYLE);
 dwg_get_OBJECT_DECL (obj_wipeoutvariables, WIPEOUTVARIABLES);
 dwg_get_OBJECT_DECL (obj_xrecord, XRECORD);
+dwg_get_OBJECT_DECL (obj_pdfdefinition, PDFDEFINITION);
+dwg_get_OBJECT_DECL (obj_dgndefinition, DGNDEFINITION);
+dwg_get_OBJECT_DECL (obj_dwfdefinition, DWFDEFINITION);
 /* unstable */
 dwg_get_OBJECT_DECL (obj_acsh_brep_class, ACSH_BREP_CLASS);
 dwg_get_OBJECT_DECL (obj_acsh_chamfer_class, ACSH_CHAMFER_CLASS);
@@ -1005,17 +1021,21 @@ dwg_get_OBJECT_DECL (obj_assocplanesurfaceactionbody, ASSOCPLANESURFACEACTIONBOD
 dwg_get_OBJECT_DECL (obj_assocrevolvedsurfaceactionbody, ASSOCREVOLVEDSURFACEACTIONBODY);
 dwg_get_OBJECT_DECL (obj_assoctrimsurfaceactionbody, ASSOCTRIMSURFACEACTIONBODY);
 dwg_get_OBJECT_DECL (obj_assocvaluedependency, ASSOCVALUEDEPENDENCY);
-dwg_get_OBJECT_DECL (obj_background, BACKGROUND);
 dwg_get_OBJECT_DECL (obj_blockalignmentgrip, BLOCKALIGNMENTGRIP);
 dwg_get_OBJECT_DECL (obj_blockalignmentparameter, BLOCKALIGNMENTPARAMETER);
 dwg_get_OBJECT_DECL (obj_blocklinearparameter, BLOCKLINEARPARAMETER);
 dwg_get_OBJECT_DECL (obj_blocklookupgrip, BLOCKLOOKUPGRIP);
+dwg_get_OBJECT_DECL (obj_blockrepresentation, BLOCKREPRESENTATION);
 dwg_get_OBJECT_DECL (obj_blockrotationgrip, BLOCKROTATIONGRIP);
 dwg_get_OBJECT_DECL (obj_blockrotationparameter, BLOCKROTATIONPARAMETER);
 dwg_get_OBJECT_DECL (obj_blockvisibilityparameter, BLOCKVISIBILITYPARAMETER);
 dwg_get_OBJECT_DECL (obj_blockxyparameter, BLOCKXYPARAMETER);
 dwg_get_OBJECT_DECL (obj_dbcolor, DBCOLOR);
 dwg_get_OBJECT_DECL (obj_evaluation_graph, EVALUATION_GRAPH);
+dwg_get_OBJECT_DECL (obj_gradient_background, GRADIENT_BACKGROUND);
+dwg_get_OBJECT_DECL (obj_ground_plane_background, GROUND_PLANE_BACKGROUND);
+dwg_get_OBJECT_DECL (obj_ibl_background, IBL_BACKGROUND);
+dwg_get_OBJECT_DECL (obj_image_background, IMAGE_BACKGROUND);
 dwg_get_OBJECT_DECL (obj_lightlist, LIGHTLIST);
 dwg_get_OBJECT_DECL (obj_material, MATERIAL);
 dwg_get_OBJECT_DECL (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS);
@@ -1024,6 +1044,8 @@ dwg_get_OBJECT_DECL (obj_proxy_object, PROXY_OBJECT);
 dwg_get_OBJECT_DECL (obj_rapidrtrendersettings, RAPIDRTRENDERSETTINGS);
 dwg_get_OBJECT_DECL (obj_rendersettings, RENDERSETTINGS);
 dwg_get_OBJECT_DECL (obj_section_settings, SECTION_SETTINGS);
+dwg_get_OBJECT_DECL (obj_skylight_background, SKYLIGHT_BACKGROUND);
+dwg_get_OBJECT_DECL (obj_solid_background, SOLID_BACKGROUND);
 dwg_get_OBJECT_DECL (obj_spatial_index, SPATIAL_INDEX);
 dwg_get_OBJECT_DECL (obj_sun, SUN);
 dwg_get_OBJECT_DECL (obj_tablestyle, TABLESTYLE);
@@ -1084,7 +1106,6 @@ dwg_get_OBJECT_DECL (obj_tablestyle, TABLESTYLE);
   dwg_get_OBJECT_DECL (obj_blockpropertiestable, BLOCKPROPERTIESTABLE);
   dwg_get_OBJECT_DECL (obj_blockpropertiestablegrip, BLOCKPROPERTIESTABLEGRIP);
   dwg_get_OBJECT_DECL (obj_blockradialconstraintparameter, BLOCKRADIALCONSTRAINTPARAMETER);
-  dwg_get_OBJECT_DECL (obj_blockrepresentation, BLOCKREPRESENTATION);
   dwg_get_OBJECT_DECL (obj_blockstretchaction, BLOCKSTRETCHACTION);
   dwg_get_OBJECT_DECL (obj_blockuserparameter, BLOCKUSERPARAMETER);
   dwg_get_OBJECT_DECL (obj_blockverticalconstraintparameter, BLOCKVERTICALCONSTRAINTPARAMETER);
@@ -1126,7 +1147,6 @@ dwg_get_OBJECT_DECL (obj_tablestyle, TABLESTYLE);
   //dwg_get_OBJECT_DECL (obj_acdsrecord, ACDSRECORD);
   //dwg_get_OBJECT_DECL (obj_acdsschema, ACDSSCHEMA);
   //dwg_get_OBJECT_DECL (obj_npocollection, NPOCOLLECTION);
-  //dwg_get_OBJECT_DECL (obj_proxy_lwpline, PROXY_LWPOLYLINE);
   //dwg_get_OBJECT_DECL (obj_rapidrtrenderenvironment, RAPIDRTRENDERENVIRONMENT);
   //dwg_get_OBJECT_DECL (obj_xrefpanelobject, XREFPANELOBJECT);
 #endif
@@ -1185,6 +1205,8 @@ DWG_GETALL_ENTITY_DECL (VIEWPORT);
 DWG_GETALL_ENTITY_DECL (XLINE);
 /* untyped > 500 */
 DWG_GETALL_ENTITY_DECL (CAMERA);
+DWG_GETALL_ENTITY_DECL (DGNUNDERLAY);
+DWG_GETALL_ENTITY_DECL (DWFUNDERLAY);
 DWG_GETALL_ENTITY_DECL (HATCH);
 DWG_GETALL_ENTITY_DECL (IMAGE);
 DWG_GETALL_ENTITY_DECL (LIGHT);
@@ -1192,8 +1214,8 @@ DWG_GETALL_ENTITY_DECL (LWPOLYLINE);
 DWG_GETALL_ENTITY_DECL (MESH);
 DWG_GETALL_ENTITY_DECL (MULTILEADER);
 DWG_GETALL_ENTITY_DECL (OLE2FRAME);
+DWG_GETALL_ENTITY_DECL (PDFUNDERLAY);
 DWG_GETALL_ENTITY_DECL (SECTIONOBJECT);
-DWG_GETALL_ENTITY_DECL (UNDERLAY);
 /* unstable */
 DWG_GETALL_ENTITY_DECL (ARC_DIMENSION);
 DWG_GETALL_ENTITY_DECL (HELIX);
@@ -1215,6 +1237,7 @@ DWG_GETALL_ENTITY_DECL (PLANESURFACE);
 DWG_GETALL_ENTITY_DECL (POINTCLOUD);
 DWG_GETALL_ENTITY_DECL (POINTCLOUDEX);
 DWG_GETALL_ENTITY_DECL (POINTPARAMETERENTITY);
+DWG_GETALL_ENTITY_DECL (POLARGRIPENTITY);
 DWG_GETALL_ENTITY_DECL (REVOLVEDSURFACE);
 DWG_GETALL_ENTITY_DECL (ROTATIONPARAMETERENTITY);
 DWG_GETALL_ENTITY_DECL (RTEXT);
@@ -1305,11 +1328,13 @@ DWG_GETALL_OBJECT_DECL (SECTION_MANAGER);
 DWG_GETALL_OBJECT_DECL (SORTENTSTABLE);
 DWG_GETALL_OBJECT_DECL (SPATIAL_FILTER);
 DWG_GETALL_OBJECT_DECL (TABLEGEOMETRY);
-DWG_GETALL_OBJECT_DECL (UNDERLAYDEFINITION);
 DWG_GETALL_OBJECT_DECL (VBA_PROJECT);
 DWG_GETALL_OBJECT_DECL (VISUALSTYLE);
 DWG_GETALL_OBJECT_DECL (WIPEOUTVARIABLES);
 DWG_GETALL_OBJECT_DECL (XRECORD);
+DWG_GETALL_OBJECT_DECL (PDFDEFINITION);
+DWG_GETALL_OBJECT_DECL (DGNDEFINITION);
+DWG_GETALL_OBJECT_DECL (DWFDEFINITION);
 /* unstable */
 DWG_GETALL_OBJECT_DECL (ACSH_BREP_CLASS);
 DWG_GETALL_OBJECT_DECL (ACSH_CHAMFER_CLASS);
@@ -1330,17 +1355,21 @@ DWG_GETALL_OBJECT_DECL (ASSOCPLANESURFACEACTIONBODY);
 DWG_GETALL_OBJECT_DECL (ASSOCREVOLVEDSURFACEACTIONBODY);
 DWG_GETALL_OBJECT_DECL (ASSOCTRIMSURFACEACTIONBODY);
 DWG_GETALL_OBJECT_DECL (ASSOCVALUEDEPENDENCY);
-DWG_GETALL_OBJECT_DECL (BACKGROUND);
 DWG_GETALL_OBJECT_DECL (BLOCKALIGNMENTGRIP);
 DWG_GETALL_OBJECT_DECL (BLOCKALIGNMENTPARAMETER);
 DWG_GETALL_OBJECT_DECL (BLOCKLINEARPARAMETER);
 DWG_GETALL_OBJECT_DECL (BLOCKLOOKUPGRIP);
+DWG_GETALL_OBJECT_DECL (BLOCKREPRESENTATION);
 DWG_GETALL_OBJECT_DECL (BLOCKROTATIONGRIP);
 DWG_GETALL_OBJECT_DECL (BLOCKROTATIONPARAMETER);
 DWG_GETALL_OBJECT_DECL (BLOCKVISIBILITYPARAMETER);
 DWG_GETALL_OBJECT_DECL (BLOCKXYPARAMETER);
 DWG_GETALL_OBJECT_DECL (DBCOLOR);
 DWG_GETALL_OBJECT_DECL (EVALUATION_GRAPH);
+DWG_GETALL_OBJECT_DECL (GRADIENT_BACKGROUND);
+DWG_GETALL_OBJECT_DECL (GROUND_PLANE_BACKGROUND);
+DWG_GETALL_OBJECT_DECL (IBL_BACKGROUND);
+DWG_GETALL_OBJECT_DECL (IMAGE_BACKGROUND);
 DWG_GETALL_OBJECT_DECL (LIGHTLIST);
 DWG_GETALL_OBJECT_DECL (MATERIAL);
 DWG_GETALL_OBJECT_DECL (MENTALRAYRENDERSETTINGS);
@@ -1349,6 +1378,8 @@ DWG_GETALL_OBJECT_DECL (PROXY_OBJECT);
 DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERSETTINGS);
 DWG_GETALL_OBJECT_DECL (RENDERSETTINGS);
 DWG_GETALL_OBJECT_DECL (SECTION_SETTINGS);
+DWG_GETALL_OBJECT_DECL (SKYLIGHT_BACKGROUND);
+DWG_GETALL_OBJECT_DECL (SOLID_BACKGROUND);
 DWG_GETALL_OBJECT_DECL (SPATIAL_INDEX);
 DWG_GETALL_OBJECT_DECL (SUN);
 DWG_GETALL_OBJECT_DECL (TABLESTYLE);
@@ -1409,7 +1440,6 @@ DWG_GETALL_OBJECT_DECL (TABLESTYLE);
   DWG_GETALL_OBJECT_DECL (BLOCKPROPERTIESTABLE);
   DWG_GETALL_OBJECT_DECL (BLOCKPROPERTIESTABLEGRIP);
   DWG_GETALL_OBJECT_DECL (BLOCKRADIALCONSTRAINTPARAMETER);
-  DWG_GETALL_OBJECT_DECL (BLOCKREPRESENTATION);
   DWG_GETALL_OBJECT_DECL (BLOCKSTRETCHACTION);
   DWG_GETALL_OBJECT_DECL (BLOCKUSERPARAMETER);
   DWG_GETALL_OBJECT_DECL (BLOCKVERTICALCONSTRAINTPARAMETER);
@@ -1451,7 +1481,6 @@ DWG_GETALL_OBJECT_DECL (TABLESTYLE);
   //DWG_GETALL_OBJECT_DECL (ACDSRECORD);
   //DWG_GETALL_OBJECT_DECL (ACDSSCHEMA);
   //DWG_GETALL_OBJECT_DECL (NPOCOLLECTION);
-  //DWG_GETALL_OBJECT_DECL (PROXY_LWPOLYLINE);
   //DWG_GETALL_OBJECT_DECL (RAPIDRTRENDERENVIRONMENT);
   //DWG_GETALL_OBJECT_DECL (XREFPANELOBJECT);
 #endif
@@ -1516,6 +1545,8 @@ CAST_DWG_OBJECT_TO_ENTITY_DECL (VIEWPORT);
 CAST_DWG_OBJECT_TO_ENTITY_DECL (XLINE);
 /* untyped > 500 */
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (CAMERA);
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (DGNUNDERLAY);
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (DWFUNDERLAY);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (HATCH);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (IMAGE);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LIGHT);
@@ -1523,8 +1554,8 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (LWPOLYLINE);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (MESH);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (MULTILEADER);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (OLE2FRAME);
+CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (PDFUNDERLAY);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (SECTIONOBJECT);
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (UNDERLAY);
 /* unstable */
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ARC_DIMENSION);
 CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (HELIX);
@@ -1546,6 +1577,7 @@ CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (WIPEOUT);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (POINTCLOUD);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (POINTCLOUDEX);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (POINTPARAMETERENTITY);
+  CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (POLARGRIPENTITY);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (REVOLVEDSURFACE);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (ROTATIONPARAMETERENTITY);
   CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL (RTEXT);
@@ -1636,11 +1668,13 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTION_MANAGER);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SORTENTSTABLE);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SPATIAL_FILTER);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLEGEOMETRY);
-CAST_DWG_OBJECT_TO_OBJECT_DECL (UNDERLAYDEFINITION);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (VBA_PROJECT);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (VISUALSTYLE);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (WIPEOUTVARIABLES);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (XRECORD);
+CAST_DWG_OBJECT_TO_OBJECT_DECL (PDFDEFINITION);
+CAST_DWG_OBJECT_TO_OBJECT_DECL (DGNDEFINITION);
+CAST_DWG_OBJECT_TO_OBJECT_DECL (DWFDEFINITION);
 /* unstable */
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_BREP_CLASS);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ACSH_CHAMFER_CLASS);
@@ -1661,17 +1695,21 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCPLANESURFACEACTIONBODY);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCREVOLVEDSURFACEACTIONBODY);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCTRIMSURFACEACTIONBODY);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (ASSOCVALUEDEPENDENCY);
-CAST_DWG_OBJECT_TO_OBJECT_DECL (BACKGROUND);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKALIGNMENTGRIP);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKALIGNMENTPARAMETER);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKLINEARPARAMETER);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKLOOKUPGRIP);
+CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKREPRESENTATION);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKROTATIONGRIP);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKROTATIONPARAMETER);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKVISIBILITYPARAMETER);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKXYPARAMETER);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (DBCOLOR);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (EVALUATION_GRAPH);
+CAST_DWG_OBJECT_TO_OBJECT_DECL (GRADIENT_BACKGROUND);
+CAST_DWG_OBJECT_TO_OBJECT_DECL (GROUND_PLANE_BACKGROUND);
+CAST_DWG_OBJECT_TO_OBJECT_DECL (IBL_BACKGROUND);
+CAST_DWG_OBJECT_TO_OBJECT_DECL (IMAGE_BACKGROUND);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (LIGHTLIST);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MATERIAL);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (MENTALRAYRENDERSETTINGS);
@@ -1680,6 +1718,8 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (PROXY_OBJECT);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RAPIDRTRENDERSETTINGS);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (RENDERSETTINGS);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SECTION_SETTINGS);
+CAST_DWG_OBJECT_TO_OBJECT_DECL (SKYLIGHT_BACKGROUND);
+CAST_DWG_OBJECT_TO_OBJECT_DECL (SOLID_BACKGROUND);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SPATIAL_INDEX);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (SUN);
 CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLESTYLE);
@@ -1740,7 +1780,6 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLESTYLE);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKPROPERTIESTABLE);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKPROPERTIESTABLEGRIP);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKRADIALCONSTRAINTPARAMETER);
-  CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKREPRESENTATION);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKSTRETCHACTION);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKUSERPARAMETER);
   CAST_DWG_OBJECT_TO_OBJECT_DECL (BLOCKVERTICALCONSTRAINTPARAMETER);
@@ -1782,7 +1821,6 @@ CAST_DWG_OBJECT_TO_OBJECT_DECL (TABLESTYLE);
   //CAST_DWG_OBJECT_TO_OBJECT_DECL (ACDSRECORD);
   //CAST_DWG_OBJECT_TO_OBJECT_DECL (ACDSSCHEMA);
   //CAST_DWG_OBJECT_TO_OBJECT_DECL (NPOCOLLECTION);
-  //CAST_DWG_OBJECT_TO_OBJECT_DECL (PROXY_LWPOLYLINE);
   //CAST_DWG_OBJECT_TO_OBJECT_DECL (RAPIDRTRENDERENVIRONMENT);
   //CAST_DWG_OBJECT_TO_OBJECT_DECL (XREFPANELOBJECT);
 #endif
@@ -5888,7 +5926,6 @@ EXPORT dwg_object *dwg_ent_to_object (const dwg_obj_ent *restrict obj,
 EXPORT dwg_object *
 dwg_ent_generic_to_object (const void *restrict obj,
                            int *restrict error) __nonnull ((2));
-
 EXPORT dwg_obj_ent *
 dwg_ent_generic_parent (const void *restrict ent,
                         int *restrict error) __nonnull ((2));
@@ -6088,6 +6125,9 @@ dwg_obj_generic_to_object (const void *restrict obj,
                            int *restrict error) __nonnull ((2));
 EXPORT unsigned long
 dwg_obj_generic_handlevalue (void *_obj) __nonnull_all;
+Dwg_Data *
+dwg_obj_generic_dwg (const void *restrict obj,
+                     int *restrict error) __nonnull_all;
 EXPORT dwg_obj_obj *
 dwg_obj_generic_parent (const void *restrict obj,
                         int *restrict error) __nonnull ((2));
@@ -6692,6 +6732,9 @@ dwg_add_SPATIAL_FILTER (Dwg_Entity_INSERT *restrict insert /*, clip_verts... */)
 EXPORT Dwg_Object_SPATIAL_INDEX *
 dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 
+EXPORT Dwg_Object_WIPEOUTVARIABLES*
+dwg_add_WIPEOUTVARIABLES (Dwg_Data *dwg /* ... */) __nonnull_all;
+
 /* List of yet supported and unsupported add entity and object API from objects.inc,
    so we can auto-generate API's, i.e. for gambas.
 
@@ -6900,8 +6943,12 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 #define HAVE_NO_DWG_ADD_TEXTOBJECTCONTEXTDATA
 #define HAVE_NO_DWG_ADD_TVDEVICEPROPERTIES
 #define HAVE_NO_DWG_ADD_UCS_CONTROL
-#define HAVE_NO_DWG_ADD_UNDERLAY
-#define HAVE_NO_DWG_ADD_UNDERLAYDEFINITION
+#define HAVE_NO_DWG_ADD_PDFUNDERLAY
+#define HAVE_NO_DWG_ADD_DGNUNDERLAY
+#define HAVE_NO_DWG_ADD_DWFPDFUNDERLAY
+#define HAVE_NO_DWG_ADD_PDFDEFINITION
+#define HAVE_NO_DWG_ADD_DGNDEFINITION
+#define HAVE_NO_DWG_ADD_DWFDEFINITION
 #define HAVE_NO_DWG_ADD_UNKNOWN_ENT
 #define HAVE_NO_DWG_ADD_UNKNOWN_OBJ
 #define HAVE_NO_DWG_ADD_VERTEX_2D

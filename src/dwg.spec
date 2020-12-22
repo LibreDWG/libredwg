@@ -1215,16 +1215,14 @@ DWG_ENTITY_END
         VALUEOUTOFBOUNDS (class_version, 10) \
       } \
     DXF { \
-      /* already converted to utf8 */ \
-      FIELD_VALUE (blockname) = dwg_dim_blockname (dwg, obj); \
-      FIELD_TV0 (blockname, 2); \
-      FIELD_3BD (def_pt, 10); \
+      /* converted to utf8 */ \
+      char *blockname = dwg_dim_blockname (dwg, obj); \
+      VALUE_TV0 (blockname, 2); \
+      if (blockname)            \
+        free (blockname);       \
+      FIELD_3BD (def_pt, 10);   \
     } else { \
       FIELD_3BD (extrusion, 210); \
-    } \
-    FREE { \
-      SINCE (R_2007) \
-        FIELD_TV (blockname, 2); \
     } \
     FIELD_2RD (text_midpt, 11); \
     FIELD_BD (elevation, 31); \
@@ -1835,7 +1833,7 @@ DWG_ENTITY (ELLIPSE)
   FIELD_3BD (center, 10);
   FIELD_3BD (sm_axis, 11);
   FIELD_3BD (extrusion, 210);
-  FIELD_BD (axis_ratio, 40);
+  FIELD_BD (axis_ratio, 40); // i.e RadiusRatio
   FIELD_BD (start_angle, 41);
   FIELD_BD (end_angle, 42);
 
@@ -6789,9 +6787,23 @@ DWG_ENTITY (WIPEOUT)
 DWG_ENTITY_END
 
 // (varies)
-// in DXF as {PDF,DWF,DGN}DEFINITION
-// no DWF, DGN coverage yet
-DWG_OBJECT (UNDERLAYDEFINITION)
+DWG_OBJECT (PDFDEFINITION)
+  SUBCLASS (AcDbUnderlayDefinition)
+  FIELD_T (filename, 1);
+  FIELD_T (name, 2);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// no coverage
+DWG_OBJECT (DGNDEFINITION)
+  SUBCLASS (AcDbUnderlayDefinition)
+  FIELD_T (filename, 1);
+  FIELD_T (name, 2);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// no coverage
+DWG_OBJECT (DWFDEFINITION)
   SUBCLASS (AcDbUnderlayDefinition)
   FIELD_T (filename, 1);
   FIELD_T (name, 2);
@@ -6799,39 +6811,49 @@ DWG_OBJECT (UNDERLAYDEFINITION)
 DWG_OBJECT_END
 
 // (varies)
-// in DXF as 0 DGNUNDERLAY DWFUNDERLAY PDFUNDERLAY
 // In C++ as UNDERLAYREFERENCE. A bit better than WIPEOUT.
-// no DWF, DGN coverage yet
-DWG_ENTITY (UNDERLAY)
-  //DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbUnderlayReference)
-  FIELD_HANDLE (definition_id, 5, 340);
-  FIELD_3BD (extrusion, 0);
-  FIELD_3DPOINT (ins_pt, 10);
-  FIELD_BD0 (angle, 0);
-  DXF {
-    if (_obj->scale.x != 1.0 || _obj->scale.y != 1.0 || _obj->scale.z != 1.0)
-      FIELD_3BD_1 (scale, 41);
-  }
-  else {
-    FIELD_3BD_1 (scale, 41);
-  }
-  DXF {
-    FIELD_BD0 (angle, 50);
-    FIELD_BE (extrusion, 210);
-  }
-  FIELD_RC0 (flag, 280);
-  FIELD_RCd (contrast, 281); // 20-100. def: 100. DXF optional
-  FIELD_RCd (fade, 282);     // 0-80. DXF opt
-  FIELD_BL (num_clip_verts, 0);
-  //VALUEOUTOFBOUNDS (num_clip_verts, 5000)
-  FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 11);
-  if (FIELD_VALUE (flag) & 16)
-    {
-      FIELD_BS0 (num_clip_inverts, 170);
-      FIELD_2RD_VECTOR (clip_inverts, num_clip_inverts, 12);
-    }
+#define UNDERLAY_fields                                                 \
+  SUBCLASS (AcDbUnderlayReference)                                      \
+  FIELD_HANDLE (definition_id, 5, 340);                                 \
+  FIELD_3BD (extrusion, 0);                                             \
+  FIELD_3DPOINT (ins_pt, 10);                                           \
+  FIELD_BD0 (angle, 0);                                                 \
+  DXF {                                                                 \
+    if (_obj->scale.x != 1.0 || _obj->scale.y != 1.0 || _obj->scale.z != 1.0) \
+      FIELD_3BD_1 (scale, 41);                                          \
+  }                                                                     \
+  else {                                                                \
+    FIELD_3BD_1 (scale, 41);                                            \
+  }                                                                     \
+  DXF {                                                                 \
+    FIELD_BD0 (angle, 50);                                              \
+    FIELD_BE (extrusion, 210);                                          \
+  }                                                                     \
+  FIELD_RC0 (flag, 280);                                                \
+  FIELD_RCd (contrast, 281); /* 20-100. def: 100. DXF optional */       \
+  FIELD_RCd (fade, 282);     /* 0-80. DXF opt */                        \
+  FIELD_BL (num_clip_verts, 0);                                         \
+  VALUEOUTOFBOUNDS (num_clip_verts, 5000)                               \
+    FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 11);                  \
+  if (FIELD_VALUE (flag) & 16)                                          \
+    {                                                                   \
+      FIELD_BS0 (num_clip_inverts, 170);                                \
+      FIELD_2RD_VECTOR (clip_inverts, num_clip_inverts, 12);            \
+    }                                                                   \
   COMMON_ENTITY_HANDLE_DATA;
+
+DWG_ENTITY (PDFUNDERLAY)
+  UNDERLAY_fields
+DWG_ENTITY_END
+
+// no coverage yet
+DWG_ENTITY (DGNUNDERLAY)
+  UNDERLAY_fields
+DWG_ENTITY_END
+
+// no coverage yet
+DWG_ENTITY (DWFUNDERLAY)
+  UNDERLAY_fields
 DWG_ENTITY_END
 
 DWG_ENTITY (CAMERA) // i.e. a named view, not persistent in a DWG. CAMERADISPLAY=1
@@ -7538,12 +7560,24 @@ DWG_ENTITY_END
 
 // (varies)
 // ENHANCEDBLOCK => AcDbDynamicBlockRoundTripPurgePreventer
+// DXF: ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION
+// same struct as BLOCKREPRESENTATION
 DWG_OBJECT (DYNAMICBLOCKPURGEPREVENTER)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbDynamicBlockPurgePreventer)
   FIELD_BS (flag, 70); //1 class_version would be 90
   START_OBJECT_HANDLE_STREAM;
   FIELD_HANDLE (block, 5, 0)
+DWG_OBJECT_END
+
+// ACDB_BLOCKREPRESENTATION_DATA
+// same struct as above
+DWG_OBJECT (BLOCKREPRESENTATION)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockRepresentationData)
+  FIELD_BS (flag, 70);
+  START_OBJECT_HANDLE_STREAM;
+  FIELD_HANDLE (block, 3, 340);
 DWG_OBJECT_END
 
 // UNSTABLE
@@ -8663,7 +8697,7 @@ DWG_OBJECT (BLOCKSCALEACTION)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-// ACAD_ENHANCEDBLOCK
+// ACAD_ENHANCEDBLOCK?
 DWG_OBJECT (BLOCKVISIBILITYPARAMETER)
   AcDbBlock1PtParameter_fields;
   SUBCLASS (AcDbBlockVisibilityParameter)
@@ -8691,6 +8725,7 @@ DWG_OBJECT_END
 
 // unstable, but fields still wrong
 // arrays of nodes (of EvalExpr) and edges
+// ACAD_EVALUATION_GRAPH
 DWG_OBJECT (EVALUATION_GRAPH)
 
   DECODE_UNKNOWN_BITS
@@ -8709,10 +8744,14 @@ DWG_OBJECT (EVALUATION_GRAPH)
       }
       SUB_FIELD_BLd (nodes[rcount1], nextid, 95); // 1
       SUB_FIELD_HANDLE (nodes[rcount1], evalexpr, 5, 360);
+#ifndef IS_JSON
       SUB_FIELD_BLd (nodes[rcount1], node[0], 92);   // -1
       SUB_FIELD_BLd (nodes[rcount1], node[1], 92);   // -1
       SUB_FIELD_BLd (nodes[rcount1], node[2], 92);   // -1
       SUB_FIELD_BLd (nodes[rcount1], node[3], 92);   // -1
+#else
+      SUB_FIELD_VECTOR_N (nodes[rcount1], node, BLd, 4, 92)
+#endif
       if (FIELD_VALUE(has_graph))
         SUB_FIELD_B (nodes[rcount1], active_cycles, 0);
   END_REPEAT_BLOCK
@@ -8860,6 +8899,7 @@ DWG_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
   DECODE_UNKNOWN_BITS
   AcDbAssocAnnotationActionBody_fields;
   SUBCLASS (ACDBASSOCALIGNEDDIMACTIONBODY)
+  //SUBCLASS (AcDbAssocAlignedDimActionBody)
   FIELD_BL (class_version, 90);
   //or status, 90 //has d_node or r_node?
   START_OBJECT_HANDLE_STREAM;
@@ -9195,7 +9235,6 @@ DWG_ENTITY (NURBSURFACE)
   }
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
-
 
 DWG_ENTITY (PLANESURFACE)
 
@@ -10029,63 +10068,66 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-DWG_OBJECT (BACKGROUND)
-  DECODE_UNKNOWN_BITS
-  FIELD_BL (class_version, 90); // 1 or 2
-  DECODER { // subytped by dxfname
-    decode_BACKGROUND_type (obj);
-  }
-  switch (FIELD_VALUE (type))
-  {
-  case Dwg_BACKGROUND_type_Sky:
-    SUBCLASS (AcDbSkyBackground);
-    FIELD_HANDLE (u.sky.sunid, 5, 340);
-    break;
-  case Dwg_BACKGROUND_type_Image:
-    SUBCLASS (AcDbImageBackground)
-    FIELD_T (u.image.filename, 300);
-    FIELD_B (u.image.fit_to_screen, 290);
-    FIELD_B (u.image.maintain_aspect_ratio, 291);
-    FIELD_B (u.image.use_tiling, 292);
-    FIELD_2BD_1 (u.image.offset, 140);
-    FIELD_2BD_1 (u.image.scale, 142);
-    break;
-  case Dwg_BACKGROUND_type_Solid:
-    SUBCLASS (AcDbSolidBackground)
-    FIELD_BLx (u.solid.color, 90);
-    break;
-  case Dwg_BACKGROUND_type_IBL:
-    SUBCLASS (AcDbIBLBackground)
-    FIELD_B (u.ibl.enable, 290);
-    FIELD_T (u.ibl.name, 1);
-    FIELD_BD (u.ibl.rotation, 40);
-    FIELD_B (u.ibl.display_image, 290);
-    FIELD_HANDLE (u.ibl.secondary_background, 5, 340);
-    break;
-  case Dwg_BACKGROUND_type_GroundPlane:
-    SUBCLASS (AcDbGroundPlaneBackground)
-    // all rgb's with method c2
-    FIELD_BLx (u.ground_plane.color_sky_zenith, 90);
-    FIELD_BLx (u.ground_plane.color_sky_horizon, 91);
-    FIELD_BLx (u.ground_plane.color_underground_horizon, 92);
-    FIELD_BLx (u.ground_plane.color_underground_azimuth, 93);
-    FIELD_BLx (u.ground_plane.color_near, 94);
-    FIELD_BLx (u.ground_plane.color_far, 95);
-    break;
-  case Dwg_BACKGROUND_type_Gradient:
-    SUBCLASS (AcDbGradientBackground)
-    // all rgb's with method c2
-    FIELD_BLx (u.gradient.color_top, 90);
-    FIELD_BLx (u.gradient.color_middle, 91);
-    FIELD_BLx (u.gradient.color_bottom, 92);
-    FIELD_BD (u.gradient.horizon, 140);
-    FIELD_BD (u.gradient.height, 141);
-    FIELD_BD (u.gradient.rotation, 142);
-    break;
-  default:
-    LOG_ERROR ("Invalid BACKGROUND.type %d", _obj->type)
-    break;
-  }
+DWG_OBJECT (GRADIENT_BACKGROUND)
+  FIELD_BL (class_version, 90); /* 1 */
+  SUBCLASS (AcDbGradientBackground)
+  // all rgb's with method c2
+  FIELD_BLx (color_top, 90);
+  FIELD_BLx (color_middle, 91);
+  FIELD_BLx (color_bottom, 92);
+  FIELD_BD (horizon, 140);
+  FIELD_BD (height, 141);
+  FIELD_BD (rotation, 142);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (GROUND_PLANE_BACKGROUND)
+  FIELD_BL (class_version, 90); /* 1 */
+  SUBCLASS (AcDbGroundPlaneBackground)
+  // all rgb's with method c2
+  FIELD_BLx (color_sky_zenith, 90);
+  FIELD_BLx (color_sky_horizon, 91);
+  FIELD_BLx (color_underground_horizon, 92);
+  FIELD_BLx (color_underground_azimuth, 93);
+  FIELD_BLx (color_near, 94);
+  FIELD_BLx (color_far, 95);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (IBL_BACKGROUND)
+  FIELD_BL (class_version, 90); /* 2 */
+  SUBCLASS (AcDbIBLBackground)
+  FIELD_B (enable, 290);
+  FIELD_T (name, 1);
+  FIELD_BD (rotation, 40);
+  FIELD_B (display_image, 290);
+  FIELD_HANDLE (secondary_background, 5, 340);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (IMAGE_BACKGROUND)
+  FIELD_BL (class_version, 90); /* 1 */
+  SUBCLASS (AcDbImageBackground)
+  FIELD_T (filename, 300);
+  FIELD_B (fit_to_screen, 290);
+  FIELD_B (maintain_aspect_ratio, 291);
+  FIELD_B (use_tiling, 292);
+  FIELD_2BD_1 (offset, 140);
+  FIELD_2BD_1 (scale, 142);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (SKYLIGHT_BACKGROUND)
+  FIELD_BL (class_version, 90); /* 1 */
+  SUBCLASS (AcDbSkyBackground); 
+  FIELD_HANDLE (sunid, 5, 340);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (SOLID_BACKGROUND)
+  FIELD_BL (class_version, 90); /* 1 */
+  SUBCLASS (AcDbSolidBackground)
+  FIELD_BLx (color, 90);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -10721,14 +10763,6 @@ DWG_ENTITY_END
 
 // DYNBLOCKs:
 
-DWG_OBJECT (BLOCKREPRESENTATION)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbBlockRepresentationData)
-  FIELD_BS (flag, 70);
-  START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (block, 3, 340);
-DWG_OBJECT_END
-
 DWG_OBJECT (BLOCKARRAYACTION)
   DECODE_UNKNOWN_BITS
   AcDbBlockAction_fields;
@@ -10809,6 +10843,7 @@ DWG_OBJECT_END
 
 DWG_OBJECT (BLOCKLINEARCONSTRAINTPARAMETER)
   AcDbBlockLinearConstraintParameter_fields;
+  //SUBCLASS (AcDbBlockLinearConstraintParameter)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -10973,10 +11008,16 @@ DWG_ENTITY (VISIBILITYGRIPENTITY)
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
+DWG_ENTITY (POLARGRIPENTITY)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbBlockPolarGripEntity)
+  COMMON_ENTITY_HANDLE_DATA;
+DWG_ENTITY_END
+
 DWG_OBJECT (BLOCKXYGRIP)
   DECODE_UNKNOWN_BITS
   AcDbBlockGrip_fields;
-  SUBCLASS (AcDbBlockXYParameter)
+  SUBCLASS (AcDbBlockXYGrip)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -10986,10 +11027,11 @@ DWG_ENTITY (XYPARAMETERENTITY)
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
+// dxf: ACDB_DYNAMICBLOCKPROXYNODE
 DWG_OBJECT (DYNAMICBLOCKPROXYNODE)
   DECODE_UNKNOWN_BITS
   AcDbEvalExpr_fields;
-  //SUBCLASS (AcDbDynamicBlockProxyMode)
+  //SUBCLASS (AcDbDynamicBlockProxyNode)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -11240,11 +11282,14 @@ DWG_OBJECT_END
 // EXACXREFPANELOBJECT
 DWG_OBJECT (XREFPANELOBJECT)
   DECODE_UNKNOWN_BITS
+  SUBCLASS(ExAcXREFPanelObject)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+// FIXME Class only, not an object.
 DWG_OBJECT (NPOCOLLECTION)
   DECODE_UNKNOWN_BITS
+  SUBCLASS(AcDbImpNonPersistentObjectsCollection)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

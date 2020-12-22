@@ -530,14 +530,16 @@ int dwg_free_variable_type (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
 
   if (strNE (obj->dxfname, klass->dxfname))
     {
-      LOG_ERROR ("Wrong %s.type %d for obj [%d]: != %s",  obj->dxfname, obj->type,
-                 obj->index, klass->dxfname);
       // But we know how to handle the UNKNOWN_* types
       if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ
           || obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
         return DWG_ERR_UNHANDLEDCLASS;
       else
-        return dwg_free_variable_no_class (dwg, obj);
+        {
+          LOG_ERROR ("Wrong %s.type %d for obj [%d]: != %s",  obj->dxfname, obj->type,
+                     obj->index, klass->dxfname);
+          return dwg_free_variable_no_class (dwg, obj);
+        }
     }
 
   // global class dispatcher:

@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2014-2019 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2014-2020 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -11,9 +11,9 @@
 /*****************************************************************************/
 
 /*
- * testsuite.c: generate XML data per entity
- * similar to the out_xml backend, but this uses libxml2 to add bloat for
- * the "professional" company-type folks.
+ * testsuite.c: Generate XML data per entity.
+ *   Similar to the out_xml backend, but this uses libxml2 to add bloat for
+ *   the "professional" company-type folks.
  * written by Achyuta Piyush
  * modified by Reini Urban
  */
@@ -26,6 +26,8 @@
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 #include "common.c"
+
+#define MIN(a,b) ((a > b) ? b : a)
 
 // entities to check against:
 // perl -lne'/type="(IAcad.*?)" / and print $1' test/test-data/*/*.xml|sort -u
@@ -65,8 +67,11 @@ void add_text (xmlNodePtr rootnode, const Dwg_Object *obj);
 void add_xline (xmlNodePtr rootnode, const Dwg_Object *obj);
 
 #define newXMLProp(name, buf)                                                 \
-  xmlNewProp (node, (const xmlChar *)name, buf);                              \
-  free (buf)
+  {                                                                           \
+    xmlChar *tmp = buf;                                                       \
+    xmlNewProp (node, (const xmlChar *)name, tmp);                            \
+    free (tmp);                                                               \
+  }
 #define newXMLcProp(name, buf)                                                \
   xmlNewProp (node, (const xmlChar *)name, (xmlChar *)(buf))
 #define newXMLEntity(rootnode)                                                \
@@ -85,25 +90,33 @@ common_entity_attrs (xmlNodePtr node, const Dwg_Object *obj)
   int error;
   xmlChar *buf;
   char *name;
+  Dwg_Version_Type dwg_version = obj->parent->header.from_version;
   Dwg_Object_Entity *ent = obj->tio.entity;
+  dwg_point_3d extrusion;
+  double thickness;
 
-  // EntityTransparency, ObjectID, ObjectID32, Visible
+  // TODO: EntityTransparency, ObjectID, ObjectID32, Visible, TrueColor
 
   buf = doubletohex (obj->handle.value);
   newXMLProp ("Handle", buf);
 
-  buf = ent->xdicobjhandle ? (xmlChar *)"1" : (xmlChar *)"0";
-  newXMLcProp ("HasExtensionDictionary", buf);
+  newXMLcProp ("HasExtensionDictionary", ent->xdicobjhandle ? "1" : "0");
 
-  // Always return the default "0"
   name = dwg_ent_get_layer_name (ent, &error);
   if (!error)
-    newXMLcProp ("Layer", name); // leaks r2007+
+    {
+      newXMLcProp ("Layer", name);
+      if (dwg_version >= R_2007)
+        free (name);
+    }
 
-  // Always return the default: ByLayer
   name = dwg_ref_get_table_name (ent->ltype, &error);
   if (!error)
-    newXMLcProp ("Linetype", name); // leaks r2007+
+    {
+      newXMLcProp ("Linetype", name);
+      if (dwg_version >= R_2007)
+        free (name);
+    }
 
   buf = doubletochar (ent->ltype_scale);
   newXMLProp ("LinetypeScale", buf);
@@ -113,11 +126,39 @@ common_entity_attrs (xmlNodePtr node, const Dwg_Object *obj)
 
   name = dwg_ref_get_table_name (ent->material, &error);
   if (!error)
-    newXMLcProp ("Material", name); // leaks r2007+
+    {
+      newXMLcProp ("Material", name);
+      if (dwg_version >= R_2007)
+        free (name);
+    }
 
   name = dwg_ref_get_table_name (ent->plotstyle, &error);
   if (!error)
-    newXMLcProp ("PlotStyleName", name); // leaks r2007+
+    {
+      newXMLcProp ("PlotStyleName", name);
+      if (dwg_version >= R_2007)
+        free (name);
+    }
+
+  /* Arc, Attribute, AttributeReference, BlockRef, Circle,
+     Dim3PointAngular, DimAligned, DimAngular, DimArcLength,
+     DimDiametric, DimOrdinate, DimRadial, DimRadialLarge, DimRotated,
+     Ellipse, ExternalReference, Hatch, Leader, LightweightPolyline,
+     Line, MInsertBlock, MText, Point, Polyline, Region, Section,
+     Shape, Solid, Text, Tolerance, Trace */
+  if (dwg_dynapi_entity_value (ent->tio.LINE, obj->name, "extrusion", &extrusion, NULL))
+    {
+      buf = spointprepare (extrusion.x, extrusion.y, extrusion.z);
+      newXMLProp ("Normal", buf);
+    }
+
+  /* Arc, Attribute, AttributeReference, Circle, LightweightPolyline,
+     Line, Point, Polyline, Shape, Solid, Text, Trace */
+  if (dwg_dynapi_entity_value (ent->tio.LINE, obj->name, "thickness", &thickness, NULL))
+    {
+      buf = doubletochar (thickness);
+      newXMLProp ("Thickness", buf);
+    }
 }
 
 /*
@@ -166,8 +207,10 @@ add_circle (xmlNodePtr rootnode, const Dwg_Object *obj)
   dtostring = doubletochar (circle->radius);
   newXMLProp ("Radius", dtostring);
 
+  /* See common_entity_attrs
   dtostring = doubletochar (circle->thickness);
   newXMLProp ("Thickness", dtostring);
+  */
 
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
@@ -250,8 +293,7 @@ add_lwpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
   newXMLcProp ("desc",
                "IAcadLWPolyline: AutoCAD Lightweight Polyline Interface");
 
-  // flag?
-  newXMLcProp ("Closed", "0");
+  newXMLcProp ("Closed", lwpline->flag & 1 ? "1" : "0");
   // ConstantWidth="0.0"
 
   if (numpts >= 3)
@@ -267,14 +309,18 @@ add_lwpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
   buf = doubletochar (lwpline->elevation);
   newXMLProp ("Elevation", buf);
 
+  /* See common_entity_attrs
   buf = spointprepare (lwpline->extrusion.x, lwpline->extrusion.y,
                        lwpline->extrusion.z);
-  newXMLProp ("Extrusion", buf);
+  newXMLProp ("Normal", buf);
+  */
 
   newXMLcProp ("ObjectName", "AcDbPolyline");
 
+  /* See common_entity_attrs
   buf = doubletochar (lwpline->thickness);
   newXMLProp ("Thickness", buf);
+  */
 
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
@@ -288,8 +334,8 @@ add_lwpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
 void
 add_2dpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
 {
-  // Dwg_Entity_POLYLINE_2D *polyline2d = obj->tio.entity->tio.POLYLINE_2D;
   int error;
+  Dwg_Entity_POLYLINE_2D *pline = obj->tio.entity->tio.POLYLINE_2D;
   BITCODE_RL j, numpts = dwg_object_polyline_2d_get_numpoints (obj, &error);
   dwg_point_2d *pts = dwg_object_polyline_2d_get_points (obj, &error);
   xmlChar *buf = NULL;
@@ -300,8 +346,10 @@ add_2dpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
   newXMLcProp ("type", "IAcad2DPolyline");
   newXMLcProp ("desc", "IAcad2DPolyline: AutoCAD 2dPolyline Interface");
 
-  // flag?
-  newXMLcProp ("Closed", "0");
+  newXMLcProp ("Closed", pline->flag & 512 ? "1" : "0");
+
+  buf = doubletochar (pline->elevation);
+  newXMLProp ("Elevation", buf);
 
   if (numpts >= 3)
     {
@@ -326,8 +374,8 @@ add_2dpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
 void
 add_3dpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
 {
-  // Dwg_Entity_POLYLINE_3D *polyline3d = obj->tio.entity->tio.POLYLINE_3D;
   int error;
+  Dwg_Entity_POLYLINE_3D *pline = obj->tio.entity->tio.POLYLINE_3D;
   BITCODE_RL j, numpts = dwg_object_polyline_3d_get_numpoints (obj, &error);
   dwg_point_3d *pts = dwg_object_polyline_3d_get_points (obj, &error);
   xmlChar *buf = NULL;
@@ -336,8 +384,7 @@ add_3dpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
   newXMLcProp ("type", "IAcad3DPolyline");
   newXMLcProp ("desc", "IAcad3DPolyline: AutoCAD 3dPolyline Interface");
 
-  // flag?
-  newXMLcProp ("Closed", "0");
+  newXMLcProp ("Closed", pline->flag & 512 ? "1" : "0");
 
   if (numpts >= 2)
     {
@@ -382,8 +429,10 @@ add_arc (xmlNodePtr rootnode, const Dwg_Object *obj)
   dtostring = doubletochar (arc->start_angle);
   newXMLProp ("StartAngle", dtostring);
 
+  /* See common_entity_attrs
   dtostring = doubletochar (arc->thickness);
   newXMLProp ("Thickness", dtostring);
+  */
 
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
@@ -398,15 +447,20 @@ void
 add_block (xmlNodePtr rootnode, const Dwg_Object *obj)
 {
   Dwg_Entity_BLOCK *block = obj->tio.entity->tio.BLOCK;
-  xmlNodePtr node = newXMLEntity (rootnode);
+  xmlNodePtr node;
 
-  newXMLcProp ("type", "IAcadBlock");
-  newXMLcProp ("desc", "IAcadBlock: AutoCAD Block Interface");
+  if (block->name[0] != '*')
+    {
+      node = newXMLEntity (rootnode);
 
-  newXMLcProp ("EffectiveName", block->name);
+      newXMLcProp ("type", "IAcadBlock");
+      newXMLcProp ("desc", "IAcadBlock: AutoCAD Block Interface");
 
-  common_entity_attrs (node, obj);
-  xmlAddChild (rootnode, node);
+      newXMLcProp ("EffectiveName", block->name);
+
+      common_entity_attrs (node, obj);
+      xmlAddChild (rootnode, node);
+    }
 }
 
 /*
@@ -462,13 +516,19 @@ add_ellipse (xmlNodePtr rootnode, const Dwg_Object *obj)
                        ellipse->center.z);
   newXMLProp ("Center", buf);
 
-  dtostring = doubletochar (ellipse->end_angle);
-  newXMLProp ("EndAngle", dtostring);
-
   dtostring = doubletochar (ellipse->start_angle);
   newXMLProp ("StartAngle", dtostring);
 
-  // Axis Ratio and Sm Axis
+  dtostring = doubletochar (ellipse->end_angle);
+  newXMLProp ("EndAngle", dtostring);
+
+  // RadiusRatio and Axis
+  buf = spointprepare (ellipse->sm_axis.x, ellipse->sm_axis.y,
+                       ellipse->sm_axis.z);
+  newXMLProp ("MajorAxis", buf);
+
+  dtostring = doubletochar (ellipse->axis_ratio);
+  newXMLProp ("RadiusRatio", dtostring);
 
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
@@ -561,8 +621,10 @@ add_point (xmlNodePtr rootnode, const Dwg_Object *obj)
   buf = spointprepare (point->x, point->y, point->z);
   newXMLProp ("Coordinates", buf);
 
+  /* See common_entity_attrs
   dtostring = doubletochar (point->thickness);
   newXMLProp ("Thickness", dtostring);
+  */
 
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
@@ -594,7 +656,7 @@ add_ray (xmlNodePtr rootnode, const Dwg_Object *obj)
 }
 
 /*
- * This function emits all the spline related attributes
+ * This function emits most the spline related attributes
  * @param xmlNodePtr rootnode The rootnode of the XML Document
  * @param const Dwg_Object *obj The DWG Object
  */
@@ -604,28 +666,126 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
   Dwg_Entity_SPLINE *spline = obj->tio.entity->tio.SPLINE;
   xmlChar *buf, *dtostring;
   xmlNodePtr node = newXMLEntity (rootnode);
+  int len;
 
   newXMLcProp ("type", "IAcadSpline");
   newXMLcProp ("desc", "IAcadSpline: AutoCAD Spline Interface");
 
-  dtostring = doubletochar (spline->closed_b);
-  newXMLProp ("Closed", dtostring);
+  newXMLcProp ("Closed", spline->closed_b ? "1" : "0");
+  newXMLProp ("Degree", doubletochar (spline->degree));
+  // Closed2, Degree2
 
-  dtostring = doubletochar (spline->degree);
-  newXMLProp ("Degree", dtostring);
-
+  buf = spointprepare (spline->beg_tan_vec.x, spline->beg_tan_vec.y,
+                       spline->beg_tan_vec.z);
+  newXMLProp ("StartTangent", buf);
   buf = spointprepare (spline->end_tan_vec.x, spline->end_tan_vec.y,
                        spline->end_tan_vec.z);
   newXMLProp ("EndTangent", buf);
 
-  dtostring = doubletochar (spline->fit_tol);
-  newXMLProp ("FitTolerance", dtostring);
+  newXMLProp ("FitTolerance", doubletochar (spline->fit_tol));
+  newXMLcProp ("IsPeriodic", spline->periodic ? "1" : "0");
+  // IsPlanar="-1"
+  newXMLcProp ("IsRational", spline->rational ? "1" : "0");
+  if (spline->num_knots)
+    {
+      int bufsize = spline->num_knots * 16;
+      buf = malloc (bufsize + 1);
+      buf[0] = '(';
+      buf[1] = '\0';
+      len = 1;
+      for (unsigned i = 0; i < MIN(6,spline->num_knots); i++)
+        {
+          // Knots="(0.0 0.0 0.0 0.0 12.2776 26.0835 ... )"
+          char buf1[24];
+          if (i == 0)
+            len += snprintf (buf1, 24, "%f", spline->knots[i]);
+          else
+            len += snprintf (buf1, 24, " %f", spline->knots[i]);
+          if (len > bufsize)
+            {
+              bufsize = len + 24;
+              buf = realloc (buf, bufsize);
+            }
+          strncat ((char*)buf, buf1, bufsize - len);
+        }
+      if (spline->num_knots > 6)
+        strcat ((char*)buf, " ... ");
+      strcat ((char*)buf, ")");
+      newXMLProp ("Knots", buf);
+    }
+  newXMLProp ("KnotParameterization", inttochar (spline->knotparam));
+  newXMLProp ("NumberOfControlPoints", inttochar (spline->num_ctrl_pts));
+  newXMLProp ("NumberOfFitPoints", inttochar (spline->num_fit_pts));
+  newXMLcProp ("SplineFrame", spline->splineflags1 & 2 ? "1" : "0");
+  newXMLcProp ("SplineMethod", spline->splineflags1 & 1 ? "1" : "0");
 
-  // This is for fit points. DO this too
+  if (spline->num_ctrl_pts)
+    {
+      int bufsize = spline->num_ctrl_pts * (24 * 4);
+      buf = malloc (bufsize + 1);
+      buf[0] = '(';
+      buf[1] = '\0';
+      len = 1;
+      for (unsigned i = 0; i < MIN(2,spline->num_ctrl_pts); i++)
+        {
+          // ControlPoints="(0.0 0.0 0.0 0.0  12.2776 26.0835 ... )"
+          char buf1[24];
+          if (!i)
+            len += snprintf (buf1, 24, "%f", spline->ctrl_pts[i].x);
+          else
+            len += snprintf (buf1, 24, " %f", spline->ctrl_pts[i].x);
+          strncat ((char*)buf, buf1, bufsize - len);
+          len += snprintf (buf1, 24, " %f", spline->ctrl_pts[i].y);
+          strncat ((char*)buf, buf1, bufsize - len);
+          len += snprintf (buf1, 24, " %f", spline->ctrl_pts[i].z);
+          strncat ((char*)buf, buf1, bufsize - len);
+          len += snprintf (buf1, 24, " %f ", spline->ctrl_pts[i].w);
+          strncat ((char*)buf, buf1, bufsize - len);
 
-  // @TODO this is an array. Use it properly
-  // fprintf(file, (const xmlChar *)"ControlPoints='(%f %f %f %f)' ", );
+          if (len > bufsize)
+            {
+              bufsize = len + (24 * 4);
+              buf = realloc (buf, bufsize);
+            }
+        }
+      if (spline->num_ctrl_pts > 2)
+        strcat ((char*)buf, " ... ");
+      strcat ((char*)buf, ")");
+      newXMLProp ("ControlPoints", buf);
+    }
 
+  if (spline->num_fit_pts)
+    {
+      int bufsize = spline->num_fit_pts * (24 * 3);
+      buf = malloc (bufsize + 1);
+      buf[0] = '(';
+      buf[1] = '\0';
+      len = 1;
+      for (unsigned i = 0; i < MIN(2,spline->num_fit_pts); i++)
+        {
+          char buf1[24];
+          if (!i)
+            len += snprintf (buf1, 24, "%f", spline->fit_pts[i].x);
+          else
+            len += snprintf (buf1, 24, " %f", spline->fit_pts[i].x);
+          strncat ((char*)buf, buf1, bufsize - len);
+          len += snprintf (buf1, 24, " %f", spline->fit_pts[i].y);
+          strncat ((char*)buf, buf1, bufsize - len);
+          len += snprintf (buf1, 24, " %f", spline->fit_pts[i].z);
+          strncat ((char*)buf, buf1, bufsize - len);
+
+          if (len > bufsize)
+            {
+              bufsize = len + (24 * 3);
+              buf = realloc (buf, bufsize);
+            }
+        }
+      if (spline->num_fit_pts > 2)
+        strcat ((char*)buf, " ... ");
+      strcat ((char*)buf, ")");
+      newXMLProp ("FitPoints", buf);
+    }
+  
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
 }
@@ -734,7 +894,7 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
           break;
 
         case DWG_TYPE_BLOCK:
-          add_block (rootnode, obj);
+          //add_block (rootnode, obj);
           break;
 
         case DWG_TYPE_INSERT:

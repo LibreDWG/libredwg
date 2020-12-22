@@ -35,7 +35,7 @@ libredwg_la_SOURCES = \
 	dynapi.c \
 	classes.c \
 	dwg_api.c \
-	dxfclasses.c \
+	objects.c \
 	$(EXTRA_HEADERS)
 if !DISABLE_DXF
 libredwg_la_SOURCES += \
@@ -51,7 +51,8 @@ endif
 endif
 if USE_WRITE
 libredwg_la_SOURCES += \
-	encode.c
+	encode.c \
+	dxfclasses.c
 #       encode_r2007.c
 if !DISABLE_DXF
 libredwg_la_SOURCES += \
@@ -127,7 +128,8 @@ EXTRA_DIST = \
 	$(include_HEADERS) \
 	$(EXTRA_HEADERS) \
 	gen-dynapi.pl \
-	dxfclasses.in
+	dxfclasses.in \
+	objects.in
 
 # maintainer only:
 $(srcdir)/dynapi.c: $(srcdir)/gen-dynapi.pl $(top_srcdir)/include/dwg.h
@@ -135,8 +137,12 @@ $(srcdir)/dynapi.c: $(srcdir)/gen-dynapi.pl $(top_srcdir)/include/dwg.h
 if HAVE_GPERF
 $(srcdir)/dxfclasses.c: $(srcdir)/dxfclasses.in
 	-cd $(abs_top_srcdir) && \
-	  $(GPERF) --output-file src/dxfclasses.tmp src/dxfclasses.in && \
-	  mv -f src/dxfclasses.tmp src/dxfclasses.c
+	  $(GPERF) --output-file src/dxfclasses.tmp.c src/dxfclasses.in && \
+	  mv -f src/dxfclasses.tmp.c src/dxfclasses.c
+$(srcdir)/objects.c: $(srcdir)/objects.in
+	-cd $(abs_top_srcdir) && \
+	  $(GPERF) --output-file src/objects.tmp.c src/objects.in && \
+	  mv -f src/objects.tmp.c src/objects.c
 endif
 
 .c.i:

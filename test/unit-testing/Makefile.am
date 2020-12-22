@@ -19,7 +19,8 @@
 
 WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
-LDADD     = $(top_builddir)/src/libredwg.la \
+LDADD = $(top_builddir)/src/libredwg.la \
+	$(top_builddir)/src/objects.lo \
 	$(top_builddir)/src/classes.lo
 
 bits_test_LDADD = $(LDADD) \
@@ -77,7 +78,12 @@ testobjects = \
 	assoctrimsurfaceactionbody \
 	attdef \
 	attrib \
-	background \
+	skylight_background \
+	solid_background \
+	ibl_background \
+	image_background \
+	gradient_background \
+	ground_plane_background \
 	block \
 	block_control \
 	block_header \
@@ -114,6 +120,7 @@ testobjects = \
 	dimstyle_control \
 	dummy \
 	dynamicblockpurgepreventer \
+	blockrepresentation \
 	ellipse \
 	endblk \
 	evaluation_graph \
@@ -191,8 +198,12 @@ testobjects = \
 	trace \
 	ucs \
 	ucs_control \
-	underlay \
-	underlaydefinition \
+	pdfunderlay \
+	pdfdefinition \
+	dgnunderlay \
+	dgndefinition \
+	dwfunderlay \
+	dwfdefinition \
 	unknown_ent \
 	unknown_obj \
 	vba_project \
@@ -294,6 +305,7 @@ testdebug = \
 	pointclouddef_reactor_ex \
 	pointcloudcolormap \
 	pointpath \
+	polargripentity \
 	radimobjectcontextdata \
 	radimlgobjectcontextdata \
 	renderenvironment \
@@ -328,7 +340,6 @@ testdebug = \
 	blockpropertiestable \
 	blockpropertiestablegrip \
 	blockradialconstraintparameter \
-	blockrepresentation \
 	blockrotateaction \
 	blockrotationgrip \
 	blockstretchaction \
@@ -351,8 +362,10 @@ check_minimal = \
 	decode_test \
 	hash_test \
 	dynapi_test \
-	dxf_test \
-	add_test
+	dxf_test
+if USE_WRITE
+check_minimal += add_test
+endif
 
 check_PROGRAMS = \
 	$(check_minimal) \

@@ -347,7 +347,7 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
       if (!key)
         goto outofmemory;
       dat->chain[t->end] = '\0';
-      while (!bit_utf8_to_TV (key, &dat->chain[t->start], len))
+      while (!bit_utf8_to_TV (key, &dat->chain[t->start], len, 1))
         {
           LOG_INSANE ("Not enough room in quoted string len=%d\n", len-8)
           len += 8;
@@ -396,7 +396,7 @@ json_wstring (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
   tokens->index++;
   JSON_TOKENS_CHECK_OVERFLOW_NULL
   dat->chain[t->end] = '\0';
-  return bit_utf8_to_TU ((char *)&dat->chain[t->start]);
+  return bit_utf8_to_TU ((char *)&dat->chain[t->start], 0);
 }
 
 ATTRIBUTE_MALLOC
@@ -1140,7 +1140,7 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               klass->dxfname = json_string (dat, tokens);
               if (dwg->header.version >= R_2007)
-                klass->dxfname_u = bit_utf8_to_TU (klass->dxfname);
+                klass->dxfname_u = bit_utf8_to_TU (klass->dxfname, 0);
               LOG_TRACE ("dxfname: \"%s\"\n", klass->dxfname);
             }
           else if (strEQc (key, "cppname"))
@@ -1319,8 +1319,9 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                           {
                             char *s = json_string (dat, tokens);
                             int len = strlen (s);
-                            if (eed_need_size (dat, obj->eed, i, len + 1 + 1 + 2, &have))
+                            if (eed_need_size (dat, obj->eed, i, len + 1 + 5, &have))
                               data = obj->eed[i].data;
+                            data->u.eed_0.is_tu = 0;
                             data->u.eed_0.length = len;
                             data->u.eed_0.codepage = dwg->header.codepage;
                             if (len)
@@ -1331,8 +1332,8 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                             // with PRE (R_2007), the size gets smaller
                             if (does_cross_unicode_datversion (dat))
                               {
-                                int oldsize = (len * 2) + 2;
-                                size = len + 3;
+                                int oldsize = (len * 2) + 5;
+                                size = len + 5;
                                 obj->eed[isize].size -= (oldsize - size);
                               }
                           }
@@ -1358,13 +1359,13 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     case 2:
                       if (eed_need_size (dat, obj->eed, i, 1, &have))
                         data = obj->eed[i].data;
-                      data->u.eed_2.byte = (BITCODE_RC)json_long (dat, tokens);
-                      LOG_TRACE ("eed[%u].data.value %d\n", i, data->u.eed_2.byte);
+                      data->u.eed_2.close = (BITCODE_RC)json_long (dat, tokens);
+                      LOG_TRACE ("eed[%u].data.close %d\n", i, data->u.eed_2.close);
                       break;
                     case 3:
                       eed_need_size (dat, obj->eed, i, 4, &have);
                       data->u.eed_3.layer = json_long (dat, tokens);
-                      LOG_TRACE ("eed[%u].data.value %d\n", i, data->u.eed_3.layer);
+                      LOG_TRACE ("eed[%u].data.layer %d\n", i, data->u.eed_3.layer);
                       break;
                     case 4:
                       {
@@ -1474,6 +1475,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 // here the xdata_size gets re-calculated from size
                 PRE (R_2007) // from version
                 {
+                  rbuf->value.str.is_tu = 0;
                   rbuf->value.str.u.data = s;
                   rbuf->value.str.codepage = dwg->header.codepage;
                   LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]\n", i, s,
@@ -1482,7 +1484,8 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 }
                 LATER_VERSIONS
                 {
-                  rbuf->value.str.u.wdata = bit_utf8_to_TU (s);
+                  rbuf->value.str.is_tu = 1;
+                  rbuf->value.str.u.wdata = bit_utf8_to_TU (s, 0);
                   free (s);
                   LOG_TRACE_TU ("xdata", rbuf->value.str.u.wdata, rbuf->type);
                   size += (len * 2) + 2;
@@ -2454,7 +2457,25 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               JSON_TOKENS_CHECK_OVERFLOW_ERR;
             }
         }
-        return error | (f && f->name ? 1 : 0); // found or not
+      else if (t->type == JSMN_ARRAY
+               && strEQc (key, "node[4]")
+               && (f = dwg_dynapi_entity_field (name, "node[4]")))
+        {
+          BITCODE_BLd arr[4];
+          int index;
+          sscanf (key, "node[%d]", &index);
+          if (index >= 0 && index < 4)
+            {
+              dwg_dynapi_field_get_value (_obj, f, &arr);
+              arr[index] = (BITCODE_BLd)json_long (dat, tokens);
+              LOG_TRACE ("%s: %d [%s]\n", key, (int)arr[index], f->type);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
+            }
+          else
+            json_advance_unknown (dat, tokens, t->type, 0);
+          JSON_TOKENS_CHECK_OVERFLOW_ERR;
+        }
+      return error | (f && f->name ? 1 : 0); // found or not
      }
   return error;
 }
@@ -2625,6 +2646,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       tokens->index++;
       for (int j = 0; j < keys; j++)
         {
+          bool saw_dxfname = false;
           char key[80];
           memset (key, 0, sizeof (key));
           LOG_INSANE ("[%d] ", j);
@@ -2663,7 +2685,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               objsize = dwg_dynapi_fields_size (name);
               if (!fields || !objsize || !is_dwg_object (name))
                 {
-                  LOG_ERROR ("Unknown object %s", name);
+                  LOG_ERROR ("Unknown object %s (no fields)", name);
                 //skip_object:
                   obj->type = obj->fixedtype = DWG_TYPE_DUMMY;
                   // exhaust the rest
@@ -2733,7 +2755,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               objsize = dwg_dynapi_fields_size (name);
               if (!fields || !objsize || !is_dwg_entity (name))
                 {
-                  LOG_ERROR ("Unknown entity %s", name);
+                  LOG_ERROR ("Unknown entity %s (no fields)", name);
                   obj->type = obj->fixedtype = DWG_TYPE_DUMMY;
                   // exhaust the rest
                   for (; j < keys; j++)
@@ -2770,18 +2792,14 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else if (strEQc (key, "dxfname"))
             {
               free (obj->dxfname);
+              saw_dxfname = true;
               obj->dxfname = json_string (dat, tokens);
               LOG_TRACE ("dxfname: %s\n", obj->dxfname)
               if (!obj->dxfname)
                 obj->dxfname = strdup (name);
 
               // Some objects have various subtypes under one name.
-              // TODO UNDERLAY, UNDERLAYDEF, OBJECTCONTEXTDATA, ...
-              if (strEQc (name, "BACKGROUND"))
-                {
-                  decode_BACKGROUND_type (obj);
-                  obj->fixedtype = DWG_TYPE_BACKGROUND;
-                }
+              // TODO OBJECTCONTEXTDATA, ...
             }
           else if (strEQc (key, "index") && strNE (name, "TableCellContent_Attr"))
             {
@@ -2793,8 +2811,52 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
           else if (strEQc (key, "type") && !obj->type)
             {
+              int isent;
+              const char *dxfname;
               obj->type = json_long (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
+
+              if (!dwg_object_name (name, &dxfname, &obj->fixedtype, &isent, NULL))
+                {
+                  LOG_ERROR ("Unknown object %s failed dwg_object_name()", name);
+                  // exhaust the rest
+                  for (; j < keys; j++)
+                    {
+                      json_advance_unknown (dat, tokens, t->type, 0); // value
+                      tokens->index++; // next key
+                      JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
+                    }
+                  tokens->index--;
+                  break;
+                }
+              else
+                {
+                  if (obj->dxfname && strNE (obj->dxfname, dxfname))
+                    {
+                      if (memBEGINc (dxfname, "UNKNOWN_") || !saw_dxfname)
+                        LOG_TRACE ("Changed dxfname %s => %s", obj->dxfname, dxfname)
+                      else
+                        LOG_WARN ("Changed dxfname %s => %s", obj->dxfname, dxfname)
+                    }
+                  free (obj->dxfname);
+                  obj->dxfname = strdup (dxfname);
+                  if ((obj->supertype == DWG_SUPERTYPE_ENTITY && !isent)
+                      || (obj->supertype == DWG_SUPERTYPE_OBJECT && isent))
+                    {
+                      LOG_ERROR ("Illegal object supertype for %s", name);
+                      // exhaust the rest
+                      for (; j < keys; j++)
+                        {
+                          json_advance_unknown (dat, tokens, t->type, 0); // value
+                          tokens->index++; // next key
+                          JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
+                            }
+                      tokens->index--;
+                      break;
+                    }
+                }
+
+#if 0
               // clang-format off
               // ADD_ENTITY by name
               // check all objects
@@ -2835,6 +2897,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 #undef DWG_ENTITY
               // clang-format on
             found_ent:
+#endif
               LOG_TRACE ("type: %d,\tfixedtype: %d\n", obj->type,
                          obj->fixedtype)
             }

@@ -65,6 +65,9 @@
       FIELD_TV (unknown_text3, 0);
       FIELD_TV (unknown_text4, 0);
   }
+  FREE {
+    FIELD_TV (unknown_text1, 0);
+  }
   SINCE (R_13)
     {
       IF_ENCODE_FROM_EARLIER_OR_DXF {

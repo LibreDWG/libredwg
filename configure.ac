@@ -95,12 +95,20 @@ AC_SUBST([PCRE2_LIBS])
   
 dnl PKG_CHECK_MODULES([LIBXML2], [libxml-2.0], [],
 dnl    AC_MSG_ERROR([Install libxml-2.0 first]))
-if pkg-config --exists libxml-2.0; then
-  XML2_CFLAGS="`pkg-config libxml-2.0 --cflags`"
-  XML2_LIBS="`pkg-config libxml-2.0 --libs`"
-fi
-AC_SUBST([XML2_CFLAGS])
-AC_SUBST([XML2_LIBS])
+AC_CHECK_LIB([xml2],[newXMLEntity],
+  [have_libxml2=yes;
+   XML2_LIBS=-lxml2;
+   AC_SUBST([XML2_CFLAGS])
+   AC_SUBST([XML2_LIBS])
+   ],
+  [if pkg-config --exists libpcre2; then
+    have_libxml2=yes;
+    XML2_CFLAGS=`pkg-config libxml-2.0 --cflags`
+    XML2_LIBS=`pkg-config libxml-2.0 --libs`
+  else
+    AC_MSG_WARN([libxml-2.0 for test/xmlsuite not found])
+  fi])
+AM_CONDITIONAL([HAVE_LIBXML2], [test x$have_libxml2 = xyes])
 
 dnl Checks for header files
 AC_HEADER_STDC
@@ -301,9 +309,11 @@ AC_ARG_ENABLE([write],AS_HELP_STRING([--disable-write],[
     Disable write support (default: no).]),[],[enable_write=yes])
 AM_CONDITIONAL([USE_WRITE], [test x$enable_write != xno])
 AS_IF([test x$enable_write != xno],
-  AC_DEFINE([USE_WRITE],1,[Undefine to disable write support.])
-  AC_MSG_RESULT([no (default)]),
-  AC_MSG_RESULT([yes]))
+  [AC_DEFINE([USE_WRITE],1,[Undefine to disable write support.])
+   AC_SUBST(DISABLE_WRITE, 0)
+   AC_MSG_RESULT([no (default)])],
+  [AC_SUBST(DISABLE_WRITE, 1)
+   AC_MSG_RESULT([yes])])
 
 dnl Feature: --enable-trace
 AC_MSG_CHECKING([--enable-trace])
@@ -469,7 +479,7 @@ else
     fi
 fi
 
-if test x$enable_python != xno && test -n $XML2_LIBS; then
+if test x$enable_python != xno && test -n "$XML2_LIBS"; then
   AC_MSG_CHECKING([for the libxml2 Python package])
   ac_python_libxml2_result=`$PYTHON -c "import libxml2" 2>&1`
   if test $? -eq 0; then

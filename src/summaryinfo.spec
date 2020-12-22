@@ -28,7 +28,7 @@
         FIELD_VALUE (HYPERLINKBASE) = (BITCODE_TU)dwg->header_vars.HYPERLINKBASE;
       }
       else { /* 2004 -> 2007+ */
-        FIELD_VALUE (HYPERLINKBASE) = bit_utf8_to_TU (dwg->header_vars.HYPERLINKBASE);
+        FIELD_VALUE (HYPERLINKBASE) = bit_utf8_to_TU (dwg->header_vars.HYPERLINKBASE, 0);
       }
     }
   }

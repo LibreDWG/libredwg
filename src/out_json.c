@@ -606,6 +606,19 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
   else                                                                        \
     FIRSTPREFIX                                                               \
   ENDARRAY;
+#define SUB_FIELD_VECTOR_N(o, nam, type, size, dxf)                           \
+  KEY (nam);                                                                  \
+  ARRAY;                                                                      \
+  if (_obj->o.nam)                                                              \
+    {                                                                         \
+      for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
+        {                                                                     \
+          FIRSTPREFIX fprintf (dat->fh, FORMAT_##type, _obj->o.nam[vcount]);  \
+        }                                                                     \
+    }                                                                         \
+  else                                                                        \
+    FIRSTPREFIX                                                               \
+  ENDARRAY;
 #define FIELD_VECTOR_T(nam, type, size, dxf)                                  \
   KEY (nam);                                                                  \
   ARRAY;                                                                      \
@@ -977,13 +990,13 @@ json_eed (Bit_Chain *restrict dat,
           switch (data->code)
             {
             case 0:
-              if (!(IS_FROM_TU (dat)))
+              if (!data->u.eed_0.is_tu)
                 VALUE_TEXT (data->u.eed_0.string)
               else {
                 VALUE_TEXT_TU (data->u.eed_0_r2007.string);
               }
               break;
-            case 2: VALUE_RC (data->u.eed_2.byte, 0); break;
+            case 2: VALUE_RC (data->u.eed_2.close, 0); break;
             case 3: VALUE_RL (data->u.eed_3.layer, 0); break;
             case 4: VALUE_BINARY (data->u.eed_4.data, data->u.eed_4.length, 0); break;
             case 5: fprintf (dat->fh, FORMAT_H "", 5, data->u.eed_5.entity); break;
@@ -1026,13 +1039,17 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
       switch (type)
         {
         case DWG_VT_STRING:
-          if (!(IS_FROM_TU (dat)))
-            VALUE_TEXT (rbuf->value.str.u.data)
-          else {
-            VALUE_TEXT_TU (rbuf->value.str.u.data);
-          }
-          LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]\n", i, rbuf->value.str.u.data,
-                     rbuf->type);
+          if (!rbuf->value.str.is_tu)
+            {
+              VALUE_TEXT (rbuf->value.str.u.data);
+              LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]\n", i, rbuf->value.str.u.data,
+                         rbuf->type);
+            }
+          else
+            {
+              VALUE_TEXT_TU (rbuf->value.str.u.data);
+              LOG_TRACE_TU ("xdata", rbuf->value.str.u.data, rbuf->type);
+            }
           break;
         case DWG_VT_BINARY:
           VALUE_BINARY (rbuf->value.str.u.data, rbuf->value.str.size, 0);

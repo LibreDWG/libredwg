@@ -114,27 +114,36 @@ alldxf_unknowns = \
 	alldxf_ACDBASSOCVALUEDEPENDENCY.inc \
 	alldxf_ACDBASSOCVARIABLE.inc \
 	alldxf_ACDBASSOCVERTEXACTIONPARAM.inc \
-	alldxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS.inc \
 	alldxf_ACDBDETAILVIEWSTYLE.inc \
+	alldxf_ACDBPERSSUBENTMANAGER.inc \
+	alldxf_ACDBPOINTCLOUDCOLORMAP.inc \
+	alldxf_ACDBSECTIONVIEWSTYLE.inc \
+	alldxf_ACDB_BLKREFOBJECTCONTEXTDATA_CLASS.inc \
+	alldxf_ACDB_BLOCKREPRESENTATION_DATA.inc \
+	alldxf_ACDB_DYNAMICBLOCKPROXYNODE.inc \
 	alldxf_ACDB_LEADEROBJECTCONTEXTDATA_CLASS.inc \
 	alldxf_ACDB_MLEADEROBJECTCONTEXTDATA_CLASS.inc \
 	alldxf_ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS.inc \
 	alldxf_ACDB_MTEXTOBJECTCONTEXTDATA_CLASS.inc \
-	alldxf_ACDBPERSSUBENTMANAGER.inc \
-	alldxf_ACDBSECTIONVIEWSTYLE.inc \
 	alldxf_ACDB_TEXTOBJECTCONTEXTDATA_CLASS.inc \
 	alldxf_ACMECOMMANDHISTORY.inc \
 	alldxf_ACMESCOPE.inc \
 	alldxf_ACMESTATEMGR.inc \
 	alldxf_ACSH_BOX_CLASS.inc \
+	alldxf_ACSH_CHAMFER_CLASS.inc \
 	alldxf_ACSH_EXTRUSION_CLASS.inc \
 	alldxf_ACSH_HISTORY_CLASS.inc \
+	alldxf_ACSH_LOFT_CLASS.inc \
+	alldxf_ACSH_REVOLVE_CLASS.inc \
 	alldxf_ACSH_SWEEP_CLASS.inc \
 	alldxf_ARC_DIMENSION.inc \
 	alldxf_ASSOCDIMDEPENDENCYBODY.inc \
+	alldxf_BLOCKALIGNMENTGRIP.inc \
 	alldxf_BLOCKGRIPLOCATIONCOMPONENT.inc \
+	alldxf_BLOCKSTRETCHACTION.inc \
 	alldxf_BLOCKVISIBILITYGRIP.inc \
 	alldxf_BLOCKVISIBILITYPARAMETER.inc \
+	alldxf_BLOCKXYGRIP.inc \
 	alldxf_CELLSTYLEMAP.inc \
 	alldxf_CSACDOCUMENTOPTIONS.inc \
 	alldxf_DATALINK.inc \
@@ -153,15 +162,19 @@ alldxf_unknowns = \
 	alldxf_PLANESURFACE.inc \
 	alldxf_PLOTSETTINGS.inc \
 	alldxf_RAPIDRTRENDERSETTINGS.inc \
+	alldxf_RENDERENTRY.inc \
+	alldxf_RENDERGLOBAL.inc \
 	alldxf_REVOLVEDSURFACE.inc \
-	alldxf_SECTION_MANAGER.inc \
 	alldxf_SECTIONOBJECT.inc \
+	alldxf_SECTION_MANAGER.inc \
 	alldxf_SECTION_SETTINGS.inc \
+	alldxf_SKYLIGHT_BACKGROUND.inc \
 	alldxf_SUN.inc \
 	alldxf_SWEPTSURFACE.inc \
 	alldxf_TABLEGEOMETRY.inc \
 	alldxf_TABLESTYLE.inc \
-	alldxf_VISUALSTYLE.inc
+	alldxf_VISUALSTYLE.inc \
+	alldxf_WIPEOUT.inc
 
 EXTRA_DIST = unknown.h alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc $(alldxf_unknowns)
 EXTRA_DIST += log_unknown_dxf.pl log_unknown.pl bd-unknown.pl unstable.pm

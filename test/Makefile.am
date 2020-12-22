@@ -1,6 +1,8 @@
 SUBDIRS = unit-testing
 if HAVE_PYTHON_LIBXML2
+if HAVE_LIBXML2
 SUBDIRS += xmlsuite
+endif
 endif
 
 TESTDATA = \

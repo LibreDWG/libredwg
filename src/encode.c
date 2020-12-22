@@ -52,6 +52,12 @@
 bool is_dwg_object (const char *name);
 bool is_dwg_entity (const char *name);
 int dwg_dynapi_entity_size (const char *restrict name);
+// from dwg_api
+BITCODE_T dwg_add_u8_input (Dwg_Data *restrict dwg,
+                            const char *restrict u8str);
+Dwg_Object_APPID *dwg_add_APPID (Dwg_Data *restrict dwg,
+                                 const char *restrict name);
+unsigned long dwg_obj_generic_handlevalue (void *_obj);
 
 /* The logging level for the write (encode) path.  */
 static unsigned int loglevel;
@@ -1031,7 +1037,7 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
   Dwg_Object *obj;
   Dwg_Object_APPID *_obj;
   Dwg_Object_APPID_CONTROL *o;
-  unsigned long ref;
+  unsigned long absref;
   //int error = 0;
 
   if (appid)
@@ -1039,8 +1045,15 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
 
   // This breaks json.test roundtrips tests as it adds a new object.
   // But sooner or later we want to delete yet unsupported objects
-  // (DICTIONARIES, MATERIAL, VISUALSTYLE, ...)
+  // (Dictionaries, MATERIAL, VISUALSTYLE, dynblocks, surfaces, assoc*, ...)
+
+  // add APPID
 #if 1
+
+  _obj = dwg_add_APPID (dwg, "LibreDWG");
+  return dwg_obj_generic_handlevalue (_obj);
+
+#else
   if (!(appctl = dwg->header_vars.APPID_CONTROL_OBJECT))
     appctl = dwg_find_table_control (dwg, "APPID_CONTROL");
   if (!appctl)
@@ -1048,13 +1061,12 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
       LOG_ERROR ("APPID_CONTROL not found")
       return 0;
     }
-  ref = dwg->object[dwg->num_objects - 1].handle.value + 1;
-  // add APPID
+  absref = dwg->object[dwg->num_objects - 1].handle.value + 1;
   dwg_add_object (dwg);
   obj = &dwg->object[dwg->num_objects - 1];
   if (dwg_setup_APPID (obj) >= DWG_ERR_CRITICAL)
     return 0;
-  dwg_add_handle (&obj->handle, 0, ref, obj);
+  dwg_add_handle (&obj->handle, 0, absref, obj);
   //obj->type = obj->fixedtype = DWG_TYPE_APPID;
   _obj = obj->tio.object->tio.APPID;
   // precise size, bitsize done by encode
@@ -1062,10 +1074,8 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
   obj->bitsize = 164;
   obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, appctl->absolute_ref, NULL);
   obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
-  if (dwg->header.from_version >= R_2007)
-    _obj->name = (BITCODE_T)bit_utf8_to_TU ((char*)"LibreDWG");
-  else
-    _obj->name = strdup ("LibreDWG");
+
+  _obj->name = dwg_add_u8_input (dwg, "LibreDWG");
   _obj->is_xref_ref = 1;
   _obj->xref = dwg_add_handleref (dwg, 5, 0, NULL);
 
@@ -1077,8 +1087,9 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
       return 0;
     }
   o = obj->tio.object->tio.APPID_CONTROL;
-  PUSH_HV (o, num_entries, entries, dwg_add_handleref (dwg, 2, ref, NULL));
-  return ref;
+  PUSH_HV (o, num_entries, entries, dwg_add_handleref (dwg, 2, absref, NULL));
+  return absref;
+
 #endif
 
   return 0x12; // APPID.ACAD
@@ -1088,16 +1099,27 @@ static BITCODE_BL
 add_DUMMY_eed (Dwg_Object *obj)
 {
   Dwg_Object_Entity *ent = obj->tio.entity;
-  const BITCODE_BL num_eed = ent->num_eed;
+  //const int is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
+  const BITCODE_BL num_eed = ent->num_eed; // same offset for object
   Dwg_Data *dwg = obj->parent;
+  char *name = obj->dxfname;
   BITCODE_H appid;
   Dwg_Eed_Data *data;
+  int i = 1, off = 0;
+  int len, size;
   const bool is_tu = dwg->header.version >= R_2007;
-  int i = 1;
-  char *name = obj->dxfname;
-  int len;
-  int size;
-  int off = 0;
+
+  // FIXME
+#ifdef _WIN
+
+  return 0;
+
+#else
+
+#ifdef HAVE_STDDEF_H /* windows (mingw32,cygwin) not */
+  assert (offsetof (Dwg_Object_Object, num_eed) == offsetof (Dwg_Object_Entity, num_eed));
+  assert (offsetof (Dwg_Object_Object, eed) == offsetof (Dwg_Object_Entity, eed));
+#endif
 
   if (num_eed) // replace it
     dwg_free_eed (obj);
@@ -1111,22 +1133,25 @@ add_DUMMY_eed (Dwg_Object *obj)
   ent->num_eed = 1;
   ent->eed = calloc (2, sizeof (Dwg_Eed));
   len = strlen (name);
-  size = is_tu ? 3 + ((len + 1) * 2) : len + 5;
-  data = ent->eed[0].data = (Dwg_Eed_Data *)calloc (size, 1);
+  size = is_tu ? 1 + 2 + ((len + 1) * 2) // RC + RS_LE + wstr
+               : 1 + 3 + len + 1;        // RC + RC+RS_LE + str
+  data = ent->eed[0].data = (Dwg_Eed_Data *)calloc (size + 3, 1);
   ent->eed[0].size = size;
   dwg_add_handle (&ent->eed[0].handle, 5, appid->absolute_ref, NULL);
   data->code = 0; // RC
   if (is_tu) // probably never used, write DUMMY placeholder to R_2007
     {
-      BITCODE_TU wstr = bit_utf8_to_TU (name);
-      data->u.eed_0_r2007.length = len * 2; // RS
-      memcpy (data->u.eed_0_r2007.string, wstr, (len + 1) * 2);
+      BITCODE_TU wstr = bit_utf8_to_TU (name, 0);
+      data->u.eed_0_r2007.is_tu = 1;
+      data->u.eed_0_r2007.length = len; // RS
+      memcpy (data->u.eed_0_r2007.string, wstr, len * 2);
     }
   else
     {
+      data->u.eed_0.is_tu = 0;
       data->u.eed_0.length = len;  // RC
       data->u.eed_0.codepage = 30; // RS
-      memcpy (data->u.eed_0.string, name, len + 1);
+      memcpy (data->u.eed_0.string, name, len);
     }
   LOG_TRACE ("-EED[0]: code: 0, string: %s (len: %d)\n", name, len);
 
@@ -1164,6 +1189,7 @@ add_DUMMY_eed (Dwg_Object *obj)
     }
   while (1);
   return i;
+#endif
 }
 
 #ifdef ENCODE_UNKNOWN_AS_DUMMY
@@ -1198,7 +1224,7 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           obj->tio.entity->reactors = NULL;
         }
       */
-      add_DUMMY_eed (obj);
+      add_DUMMY_eed (obj); // broken on windows
       dwg_free_object_private (obj);
       free (obj->unknown_bits);
       obj->tio.entity->tio.POINT = _obj
@@ -1235,7 +1261,7 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       const char *name;
       const char *dxfname;
 
-      add_DUMMY_eed (obj);
+      add_DUMMY_eed (obj); // broken on windows
       dwg_free_object_private (obj);
       // if PLACEHOLDER is available, or even PROXY_OBJECT.
       // PLOTSETTINGS uses PLACEHOLDER though
@@ -3849,13 +3875,13 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
         PRE (R_2007)
         {
           // only if from r2007+ DWG, not JSON, DXF
-          if (IS_FROM_TU (dat))
+          if (data->u.eed_0.is_tu)
             {
               BITCODE_RS length = data->u.eed_0_r2007.length;
               BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
               BITCODE_RS codepage = 30; //FIXME
               char *dest;
-              if (length + 3 + dat->byte >= dat->size)
+              if (length + 5 + dat->byte >= dat->size)
                 bit_chain_alloc (dat);
               if (length > 255)
                 {
@@ -3874,7 +3900,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
             {
               if (!*data->u.eed_0.string)
                 data->u.eed_0.length = 0;
-              if (data->u.eed_0.length + 3 + dat->byte >= dat->size)
+              if (data->u.eed_0.length + 5 + dat->byte >= dat->size)
                 bit_chain_alloc (dat);
               bit_write_RC (dat, data->u.eed_0.length);
               bit_write_RS_LE (dat, data->u.eed_0.codepage);
@@ -3887,11 +3913,11 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
         LATER_VERSIONS
         {
           // from ASCII DWG or JSON, DXF
-          if (!(IS_FROM_TU (dat)))
+          if (!data->u.eed_0.is_tu)
             {
               BITCODE_RS length = data->u.eed_0.length;
-              BITCODE_TU dest = bit_utf8_to_TU (data->u.eed_0.string);
-              if ((length * 2) + 2 + dat->byte >= dat->size)
+              BITCODE_TU dest = bit_utf8_to_TU (data->u.eed_0.string, 0);
+              if ((length * 2) + 5 + dat->byte >= dat->size)
                 bit_chain_alloc (dat);
               bit_write_RS (dat, length);
               for (int j = 0; j < length; j++)
@@ -3904,7 +3930,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
             {
               BITCODE_RS length = data->u.eed_0_r2007.length;
               BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
-              if ((length * 2) + 2 + dat->byte >= dat->size)
+              if ((length * 2) + 5 + dat->byte >= dat->size)
                 bit_chain_alloc (dat);
               bit_write_RS (dat, length);
               for (int j = 0; j < length; j++)
@@ -3927,8 +3953,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
       }
       break;
     case 2:
-      bit_write_RC (dat, data->u.eed_2.byte);
-      LOG_TRACE ("byte: %d [RC]", (int)data->u.eed_2.byte);
+      bit_write_RC (dat, data->u.eed_2.close);
+      LOG_TRACE ("close: %d [RC]", (int)data->u.eed_2.close);
       break;
     case 3:
       bit_write_RL (dat, data->u.eed_3.layer);
@@ -4420,7 +4446,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
             if (dat->byte + 3 + rbuf->value.str.size > end)
               break;
             // from TU DWG only
-            if (rbuf->value.str.size && IS_FROM_TU (dat))
+            if (rbuf->value.str.size && rbuf->value.str.is_tu)
               {
                 BITCODE_TV new = bit_embed_TU_size (rbuf->value.str.u.wdata,
                                                     rbuf->value.str.size);
@@ -4450,13 +4476,12 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
           }
           LATER_VERSIONS
           {
-            if (dat->byte + 2 + (2 * rbuf->value.str.size) > end
-                || rbuf->value.str.size < 0)
+            if (dat->byte + 2 + (2 * rbuf->value.str.size) > end)
               break;
-            if (rbuf->value.str.size && !(IS_FROM_TU (dat)))
+            if (rbuf->value.str.size && !rbuf->value.str.is_tu)
               {
                 // TODO: same len when converted to TU? normally yes
-                BITCODE_TU new = bit_utf8_to_TU (rbuf->value.str.u.data);
+                BITCODE_TU new = bit_utf8_to_TU (rbuf->value.str.u.data, 0);
                 bit_write_RS (dat, rbuf->value.str.size);
                 for (i = 0; i < rbuf->value.str.size; i++)
                   bit_write_RS (dat, new[i]);

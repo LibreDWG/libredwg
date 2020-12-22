@@ -111,8 +111,10 @@ jobs:
     - name: checkout
       uses: actions/checkout@v2
     - shell: msys2 {0}
-      run: |
-        sh ./autogen.sh
-        ./configure
-        make
-        make check
+      run: sh ./autogen.sh
+    - shell: msys2 {0}
+      run: ./configure
+    - shell: msys2 {0}
+      run: make
+    - shell: msys2 {0}
+      run: make check

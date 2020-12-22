@@ -1026,7 +1026,11 @@ get_first_owned_entity (const Dwg_Object *hdr)
     {
       _hdr->__iterator = 0;
       if (_hdr->entities && _hdr->num_owned && _hdr->entities[0])
-        return _hdr->entities[0]->obj;
+        {
+          if (!_hdr->entities[0]->obj)
+            dwg_resolve_objectrefs_silent (hdr->parent);
+          return _hdr->entities[0]->obj;
+        }
       else
         return NULL;
     }
@@ -1272,7 +1276,11 @@ get_first_owned_block (const Dwg_Object *hdr)
   if (version >= R_13)
     {
       if (_hdr->block_entity)
-        return dwg_ref_object (dwg, _hdr->block_entity);
+        {
+          if (!_hdr->block_entity->obj)
+            dwg_resolve_objectrefs_silent (dwg);
+          return dwg_ref_object (dwg, _hdr->block_entity);
+        }
       else
         {
           Dwg_Object *obj = (Dwg_Object *)hdr;
@@ -2027,7 +2035,7 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
       u8 = nod->texts[j];
       if (!u8)
         continue;
-      if (dwg->header.version >= R_2007)
+      if (IS_FROM_TU_DWG (dwg))
         u8 = bit_convert_TU ((BITCODE_TU)u8);
       if (u8 && strEQ (u8, name))
         {
@@ -2036,11 +2044,11 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
             continue;
           // relative? (8.0.0, 6.0.0, ...)
           dwg_resolve_handleref (ref, obj);
-          if (dwg->header.version >= R_2007)
+          if (IS_FROM_TU_DWG (dwg))
             free (u8);
           return dwg_add_handleref (dwg, 5, ref->absolute_ref, NULL);
         }
-      if (dwg->header.version >= R_2007)
+      if (IS_FROM_TU_DWG (dwg))
         free (u8);
     }
   LOG_TRACE ("dwg_find_dictionary: DICTIONARY with %s not found\n", name)
@@ -2077,7 +2085,7 @@ dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict, const char *restric
 
       if (!hdlv || !texts || !texts[i])
         continue;
-      if (dwg->header.from_version >= R_2007)
+      if (IS_FROM_TU_DWG (dwg))
         {
           if (bit_eq_TU (name, (BITCODE_TU)texts[i]))
             return hdlv[i];
@@ -2411,6 +2419,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
 }
 
 // Search for handle in associated table, and return its name. (as UTF-8)
+// Always returns a copy.
 EXPORT char *
 dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
                  const BITCODE_H restrict handle)
@@ -2456,7 +2465,7 @@ dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
     return NULL;
   for (i = 0; i < num_entries; i++)
     {
-      char *hdlname;
+      char *hdlname, *name;
       Dwg_Object *hobj;
       Dwg_Object_APPID *_o;
       int isnew = 0;
@@ -2470,23 +2479,27 @@ dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
       if (hdlv[i]->absolute_ref != handle->absolute_ref)
         continue;
       _o = hobj->tio.object->tio.APPID;
+      name = hobj->name;
       /* For BLOCK search the BLOCK entities instead.
          The BLOCK_HEADER has only the abbrevated name, but we want "*D30", not "*D" */
-      if (strEQc (table, "BLOCK"))
+      if (strEQc (table, "BLOCK") && hobj->fixedtype == DWG_TYPE_BLOCK_HEADER)
         {
           Dwg_Object_BLOCK_HEADER *_bh = hobj->tio.object->tio.BLOCK_HEADER;
           Dwg_Object *bo = dwg_ref_object (dwg, _bh->block_entity);
-          if (bo)
+          if (bo != NULL && bo->fixedtype == DWG_TYPE_BLOCK)
             {
               _o = (Dwg_Object_APPID *)bo->tio.entity->tio.BLOCK;
-              hobj->name = bo->name;
+              name = bo->name;
             }
         }
-      ok = dwg_dynapi_entity_utf8text (_o, hobj->name, "name", &hdlname, &isnew, NULL);
+      ok = dwg_dynapi_entity_utf8text (_o, name, "name", &hdlname, &isnew, NULL);
       LOG_HANDLE (" %s.%s[%d] => %s.name: %s\n", obj->name, "entries", i,
                   hobj->name, hdlname ? hdlname : "NULL");
       if (ok)
-        return hdlname;
+        {
+          if (!isnew) return strdup (hdlname);
+          else return hdlname;
+        }
       else
         return NULL;
     }
@@ -2524,7 +2537,7 @@ xdata_string_match (Dwg_Data *restrict dwg, Dwg_Resbuf *restrict xdata,
 {
   if (xdata->type != type)
     return 0;
-  if (dwg->header.from_version < R_2007)
+  if (!IS_FROM_TU_DWG (dwg))
     {
       return strEQ (xdata->value.str.u.data, str);
     }
@@ -2615,7 +2628,7 @@ dwg_find_table_extname (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
       xdata = xdata->nextrb;
       if (xdata->type == 2) // new name
         {
-          if (dwg->header.from_version < R_2007)
+          if (!IS_FROM_TU_DWG (dwg))
             return xdata->value.str.u.data;
           else
             return (char *)xdata->value.str.u.wdata;

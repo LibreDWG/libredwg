@@ -52,7 +52,7 @@ while ( <$fm> ) {
     my $u = uc ($m);
     $m{ $u }++;
     warn "ok - $u in Makefile.am\n" if $v;
-    if ( !exists $o{$u} ) {
+    if ( !exists $o{$u} && $m !~ /^(bits|common|decode|hash|dynapi|dxf|add)_test$/) {
       warn "ok - TODO $u not in objects.inc\n" ; # harmless
     }
   }

@@ -3849,6 +3849,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       {
         if (eed_need_size (3, size))
           return DWG_ERR_INVALIDEED;
+        data->u.eed_0.is_tu = 0;
         data->u.eed_0.length = lenc = bit_read_RC (dat);
         data->u.eed_0.codepage = bit_read_RS_LE (dat);
         if ((long)lenc > size - 4)
@@ -3880,6 +3881,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       {
         if (eed_need_size (2, size))
           return DWG_ERR_INVALIDEED;
+        data->u.eed_0.is_tu = 1;
         data->u.eed_0_r2007.length = lens = bit_read_RS (dat);
         if (eed_need_size ((lens * 2) + 2, size))
           return DWG_ERR_INVALIDEED;
@@ -3904,8 +3906,8 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
     case 2:
       if (eed_need_size (1, size))
         return DWG_ERR_INVALIDEED;
-      data->u.eed_2.byte = bit_read_RC (dat);
-      LOG_TRACE ("byte: " FORMAT_RC " [RC]\n", data->u.eed_2.byte);
+      data->u.eed_2.close = bit_read_RC (dat);
+      LOG_TRACE ("close: " FORMAT_RC " [RC]\n", data->u.eed_2.close);
       break;
     case 3:
       if (eed_need_size (4, size))
@@ -4953,6 +4955,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
                         (int)rbuf->value.str.codepage)
             if (dat->byte + length > end_address || (short)length < 0)
               break;
+            rbuf->value.str.is_tu = 0;
             rbuf->value.str.size = length;
             rbuf->value.str.u.data = (char*)bit_read_TF (dat, length);
             LOG_INSANE ("STRING ")
@@ -4980,6 +4983,7 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
                       dwg_free_xdata_resbuf (rbuf);
                     return NULL;
                   }
+                rbuf->value.str.is_tu = 1;
                 rbuf->value.str.size = length;
                 for (i = 0; i < length; i++)
                   rbuf->value.str.u.wdata[i] = bit_read_RS (dat);
@@ -6327,30 +6331,5 @@ void dxf_3dsolid_revisionguid (Dwg_Entity_3DSOLID *_obj)
            _obj->revision_bytes[6], _obj->revision_bytes[7]);
   LOG_TRACE ("revision_guid: %s\n", (char*)_obj->revision_guid)
 }
-
-// set internal type from BACKGROUND.dxfname
-void decode_BACKGROUND_type (const Dwg_Object *obj)
-{
-  Dwg_Object_BACKGROUND *_obj = obj->tio.object->tio.BACKGROUND;
-  const char *dxfname = obj->dxfname;
-
-  loglevel = obj->parent->opts & DWG_OPTS_LOGLEVEL;
-  if (strEQc (dxfname, "SKYLIGHT_BACKGROUND"))
-    _obj->type = Dwg_BACKGROUND_type_Sky;
-  else if (strEQc (dxfname, "SOLID_BACKGROUND"))
-    _obj->type = Dwg_BACKGROUND_type_Solid;
-  else if (strEQc (dxfname, "IMAGE_BACKGROUND")) //?
-    _obj->type = Dwg_BACKGROUND_type_Image;
-  else if (strEQc (dxfname, "IBL_BACKGROUND")) //?
-    _obj->type = Dwg_BACKGROUND_type_IBL;
-  else if (strEQc (dxfname, "GROUND_PLANE_BACKGROUND"))
-    _obj->type = Dwg_BACKGROUND_type_GroundPlane;
-  else if (strEQc (dxfname, "GRADIENT_BACKGROUND")) //?
-    _obj->type = Dwg_BACKGROUND_type_Gradient;
-  else
-    LOG_ERROR ("Unknown BACKGROUND %s", dxfname);
-  LOG_TRACE("BACKGROUND.type => %d\n", _obj->type);
-}
-
 
 #undef IS_DECODER

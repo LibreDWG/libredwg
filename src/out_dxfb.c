@@ -995,7 +995,7 @@ dxfb_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
           switch (data->code)
             {
             case 0: VALUE_T (data->u.eed_0.string, dxf); break;
-            case 2: VALUE_RC (data->u.eed_2.byte, dxf); break;
+            case 2: VALUE_RC (data->u.eed_2.close, dxf); break;
             case 3: VALUE_RL (data->u.eed_3.layer, dxf); break;
             case 4: VALUE_BINARY (data->u.eed_4.data, data->u.eed_4.length, dxf); break;
             case 5: VALUE_H (data->u.eed_5.entity, dxf); break; // not in DXF

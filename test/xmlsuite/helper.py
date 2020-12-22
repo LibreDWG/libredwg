@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- indent-tabs-mode:1 tab-width:4 mode:python minor-mode:whitespace -*-
 import libxml2
 import re
 import os
@@ -6,16 +6,16 @@ import glob
 
 
 '''
-This class has all the colors to be used with coloured output
+This class has all the colors to be used with colored output
 terminal.
 '''
 class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
+	HEADER = '\033[95m'
+	OKBLUE = '\033[94m'
+	OKGREEN = '\033[92m'
+	WARNING = '\033[93m'
+	FAIL = '\033[91m'
+	ENDC = '\033[0m'
 
 
 '''
@@ -35,7 +35,7 @@ def generatexml(dwgdir):
 	for filename in glob.glob ("*/*.txt"):
 		# maybe add double-quotes for the script?
 		os.system (me + " " + srcdir + "/txttoxml.py " + filename + " "
-	                   + current_dir + "/test_output")
+					  + current_dir + "/test_output")
 	os.chdir(current_dir)
 
 '''
@@ -45,7 +45,7 @@ handles 2D and 3D point. It converts these string in certain format
 so that they can be equated
 
 @param string attr the attribute to be processed
-@return string The processed attribute 
+@return string The processed attribute
 '''
 def processattr(attr):
 	pattern = re.compile(r"(\d+\.\d{1,})\s{0,1}")
@@ -58,7 +58,8 @@ def processattr(attr):
 
 		#if its a 3d point
 		if len(result) == 3:
-			return "(%.2f %.2f %.2f)" % (round(result[0],2), round(result[1],2), round(result[2],2))
+			return "(%.2f %.2f %.2f)" % (round(result[0],2), round(result[1],2),
+										 round(result[2],2))
 		elif len(result) == 2:
 			return "(%.2f %.2f)" % round(round(result[0],2), round(result[1],2))
 	else:
@@ -74,12 +75,12 @@ result
 
 return array[2]
 [0] = The percentage of entity that matched
-[1] = The unmacthed attributes with following format
+[1] = The unmatched attributes with following format
 	{attrname, original, duplicate}
 	attrname =  Name of the attribute
 	original = Value came from AutoCAD
 	duplicate = Value that came from LibreDWG.
-''' 
+'''
 def xmlprocess(ideal, practical):
 	doc = libxml2.parseFile(ideal)
 
@@ -112,28 +113,37 @@ def xmlprocess(ideal, practical):
 	for original, duplicate in zip(original_entities, duplicate_entities):
 		original_attributes = {}
 		duplicate_attributes = {}
-		excluded_attributes = ["Delta", "id", "Document", "Visible", "text", "Application", "Hyperlinks"]
+		excluded_attributes = ["Delta", "id", "Document", "Visible", "text",
+							   "Application", "Hyperlinks"]
 
-		# collect original attributes. Removing the attributes here, so the total length is also set
-		for attr in original.properties:
-			if attr.name not in excluded_attributes:
-				original_attributes[attr.name] = processattr(attr.content)
-			
-		
-		for attr in duplicate.properties:
-			duplicate_attributes[attr.name] = processattr(attr.content)
+		# collect original attributes. Removing the attributes here, so the
+		# total length is also set
+		try:
+			#print (ideal + " original.properties")
+			for attr in original.properties:
+				if attr.name not in excluded_attributes:
+					original_attributes[attr.name] = processattr(attr.content)
+		except (TypeError):
+			print ("Need python3 compatible libxml2 with __next__ iterator")
 
-		
+		try:
+			for attr in duplicate.properties:
+				duplicate_attributes[attr.name] = processattr(attr.content)
+		except (TypeError):
+			pass
+
 		unmatched_attr = []
-		# collect duplicate attributes and check if it matches with original ones
+		# collect duplicate attributes and check if it matches with
+		# original ones
 		for key,value in original_attributes.items():
 			try:
 				if value == duplicate_attributes[key]:
-					match+=1
+					match += 1
 				else:
-					# The attributes didn't match. Report the unmatched attribute
+					# The attributes didn't match.
+					# Report the unmatched attribute
 					unmatched_attr.append({"attrname" : key, "original" : value,
-										 "duplicate" : duplicate_attributes[key]})
+									"duplicate" : duplicate_attributes[key]})
 
 			except Exception:
 				# This exception would occur when
@@ -142,7 +152,6 @@ def xmlprocess(ideal, practical):
 				unmatched_attr.append({"attrname" : key, "original" : value,
 									 "duplicate" : ""})
 				continue
-		
 
 	# What are the total number of attributes
 	try:

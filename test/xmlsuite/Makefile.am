@@ -6,12 +6,10 @@ WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD = $(top_builddir)/src/libredwg.la $(XML2_LIBS)
 
-if HAVE_PYTHON
 # Set env var ‘PYTHON’ so that check.py can invoke other .py programs.
 TESTS_ENVIRONMENT = PYTHON="$(PYTHON)" $(PYTHON)
 check_PROGRAMS = testsuite
 TESTS = check.py
-endif
 
 CLEANFILES = *.log *.sum site.bak result.htm
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i

@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <math.h>
 #include <sys/stat.h>
+#include <assert.h>
 
 static unsigned int loglevel;
 static int debug;
@@ -71,6 +72,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
   char dwgfile[1024];
   strcpy (dwgfile, file);
 
+  assert (name);
   failed = 0;
   cnt++;
   if (debug)
@@ -101,7 +103,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       dwg_add_LINE (hdr, &pt1, &pt2);
       break;
     case DWG_TYPE_TEXT:
-      dwg_add_TEXT (hdr, (const BITCODE_T) "testtekst", &pt1, 0.5);
+      dwg_add_TEXT (hdr, "testtekst", &pt1, 0.5);
       break;
     case DWG_TYPE_CIRCLE:
       dwg_add_CIRCLE (hdr, &pt1, 0.5);
@@ -166,21 +168,21 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
     case DWG_TYPE_INSERT:
       {
         Dwg_Object_BLOCK_HEADER *blk;
-        blk = dwg_add_BLOCK_HEADER (dwg, (const BITCODE_T) "bloko");
-        dwg_add_BLOCK (blk, (const BITCODE_T) "bloko");
+        blk = dwg_add_BLOCK_HEADER (dwg, "bloko");
+        dwg_add_BLOCK (blk, "bloko");
         dwg_add_LINE (blk, &pt1, &pt2);
         dwg_add_ENDBLK (blk);
-        dwg_add_INSERT (hdr, &pt1, (const BITCODE_T) "bloko", 1.0, 1.0, 1.0, 0.0);
+        dwg_add_INSERT (hdr, &pt1, "bloko", 1.0, 1.0, 1.0, 0.0);
       }
       break;
     case DWG_TYPE_MINSERT:
       {
         Dwg_Object_BLOCK_HEADER *blk;
-        blk = dwg_add_BLOCK_HEADER (dwg, (const BITCODE_T) "bloko");
-        dwg_add_BLOCK (blk, (const BITCODE_T) "bloko");
+        blk = dwg_add_BLOCK_HEADER (dwg, "bloko");
+        dwg_add_BLOCK (blk, "bloko");
         dwg_add_LINE (blk, &pt1, &pt2);
         dwg_add_ENDBLK (blk);
-        dwg_add_MINSERT (hdr, &pt1, (const BITCODE_T) "bloko", 1.0, 1.0, 1.0,
+        dwg_add_MINSERT (hdr, &pt1, "bloko", 1.0, 1.0, 1.0,
                          0.0, 2, 1, 1.0, 0.0);
       }
       break;
@@ -188,15 +190,15 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       {
         Dwg_Entity_INSERT *insert;
         Dwg_Object_BLOCK_HEADER *newhdr;
-        newhdr = dwg_add_BLOCK_HEADER (dwg, (const BITCODE_T) "bloko");
-        dwg_add_BLOCK (newhdr, (const BITCODE_T) "bloko");
+        newhdr = dwg_add_BLOCK_HEADER (dwg, "bloko");
+        dwg_add_BLOCK (newhdr, "bloko");
         dwg_add_LINE (newhdr, &pt1, &pt2);
         dwg_add_ENDBLK (newhdr);
-        insert = dwg_add_INSERT (hdr, &pt1, (const BITCODE_T) "bloko", 1.0, 1.0, 1.0, 0.0);
+        insert = dwg_add_INSERT (hdr, &pt1, "bloko", 1.0, 1.0, 1.0, 0.0);
         // adds ATTDEF to BLOCK, redefines it (??)
-        dwg_add_Attribute (insert, 1.0, 0, (const BITCODE_T) "blokoprompt", &pt1,
-                           (const BITCODE_T) "blokotag",
-                           (const BITCODE_T) "blokotekst");
+        dwg_add_Attribute (insert, 1.0, 0, "blokoprompt", &pt1,
+                           "blokotag",
+                           "blokotekst");
       }
       break;
     case DWG_TYPE_DIMENSION_ALIGNED:
@@ -260,10 +262,10 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       }
       break;
     case DWG_TYPE_SHAPE:
-      dwg_add_SHAPE (hdr, (const BITCODE_T) "romand.shx", &pt1, 1.0, 0.0); //??
+      dwg_add_SHAPE (hdr, "romand.shx", &pt1, 1.0, 0.0); //??
       break;
     case DWG_TYPE_VIEWPORT:
-      dwg_add_VIEWPORT (hdr, (const BITCODE_T) "viewport1"); // FIXME
+      dwg_add_VIEWPORT (hdr, "viewport1"); // FIXME
       break;
     case DWG_TYPE_ELLIPSE:
       {
@@ -310,12 +312,12 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       dwg_add_XLINE (hdr, &pt1, &pt2);
       break;
     case DWG_TYPE_DICTIONARY:
-      dwg_add_DICTIONARY (dwg, (const BITCODE_T) "TEST_DICT",
-                          (const BITCODE_T) "testkey", 0);
+      dwg_add_DICTIONARY (dwg, "TEST_DICT",
+                          "testkey", 0);
       break;
     case DWG_TYPE_DICTIONARYWDFLT:
-      dwg_add_DICTIONARYWDFLT (dwg, (const BITCODE_T) "TEST_DICT",
-                               (const BITCODE_T) "testkey", 0);
+      dwg_add_DICTIONARYWDFLT (dwg, "TEST_DICT",
+                               "testkey", 0);
       break;
     // case DWG_TYPE_DICTIONARYVAR:
     //  {
@@ -326,9 +328,9 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       {
         // but you can also add a DICT to any object/entity to its xdicobjhandle
         Dwg_Object_DICTIONARY *dict
-            = dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_MATERIAL",
-                                  (const BITCODE_T) "Global", 0);
-        Dwg_Object_XRECORD *xrecord = dwg_add_XRECORD (dict, (const BITCODE_T) "REFRACTIONTILE");
+            = dwg_add_DICTIONARY (dwg, "ACAD_MATERIAL",
+                                  "Global", 0);
+        Dwg_Object_XRECORD *xrecord = dwg_add_XRECORD (dict, "REFRACTIONTILE");
         dwg_add_XRECORD_int16 (xrecord, 270, 1);
         dwg_add_XRECORD_int32 (xrecord, 90, 1);
       }
@@ -337,21 +339,21 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       dwg_add_OLE2FRAME (hdr, &pt1, &pt2);
       break;
     case DWG_TYPE_MTEXT:
-      dwg_add_MTEXT (hdr, &pt1, 10.0, (const BITCODE_T) "test\ntext");
+      dwg_add_MTEXT (hdr, &pt1, 10.0, "test\ntext");
       break;
     case DWG_TYPE_LEADER:
       {
         const dwg_point_3d pts[] = { { 2.5, 0.0, 0.0 }, { 0.5, 0.0, 0.0 } };
-        Dwg_Entity_MTEXT *annot = dwg_add_MTEXT (hdr, &pt1, 10.0, (const BITCODE_T) "test\ntext");
+        Dwg_Entity_MTEXT *annot = dwg_add_MTEXT (hdr, &pt1, 10.0, "test\ntext");
         dwg_add_LEADER (hdr, 2, pts, annot, 15);
       }
       break;
     case DWG_TYPE_TOLERANCE:
-      dwg_add_TOLERANCE (hdr, (const BITCODE_T) "testtekst", &pt1, NULL);
+      dwg_add_TOLERANCE (hdr, "testtekst", &pt1, NULL);
       break;
     case DWG_TYPE_MLINESTYLE:
       {
-        Dwg_Object_MLINESTYLE *mlsty = dwg_add_MLINESTYLE (dwg, (const BITCODE_T) "Double");
+        Dwg_Object_MLINESTYLE *mlsty = dwg_add_MLINESTYLE (dwg, "Double");
         mlsty->start_angle = deg2rad (15.0);
       }
       break;
@@ -365,7 +367,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       break;
     case DWG_TYPE_DIMSTYLE:
       {
-        Dwg_Object_DIMSTYLE *dim = dwg_add_DIMSTYLE (dwg, (const BITCODE_T) "dim1");
+        Dwg_Object_DIMSTYLE *dim = dwg_add_DIMSTYLE (dwg, "dim1");
         dim->DIMSCALE = 2.0;
         dim->DIMUPT = 1;
       }
@@ -373,7 +375,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
     case DWG_TYPE_UCS:
       {
         const dwg_point_3d ydir = { 2.5, 0.0, 0.0 };
-        Dwg_Object_UCS *ucs = dwg_add_UCS (dwg, &pt1, &pt2, &ydir, (const BITCODE_T) "ucs1");
+        Dwg_Object_UCS *ucs = dwg_add_UCS (dwg, &pt1, &pt2, &ydir, "ucs1");
         ucs->ucs_elevation = 1.0;
       }
       break;
@@ -391,7 +393,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
         pline->flag |= 512; // closed
         obj = dwg_obj_generic_to_object ((const dwg_obj_generic *)pline, &error);
         objs[0] = obj;
-        hatch = dwg_add_HATCH (hdr, 1, (const BITCODE_T) "SOLID", true, 1, objs);
+        hatch = dwg_add_HATCH (hdr, 1, "SOLID", true, 1, objs);
         hatch->num_seeds = 1;
         seeds[0] = (BITCODE_2RD){ 1.5, 0.3 }; // a pick point
         hatch->seeds = seeds;
@@ -642,18 +644,17 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       break;
     case DWG_TYPE_LAYOUT:
       {
-        Dwg_Entity_VIEWPORT *viewport = dwg_add_VIEWPORT (hdr, (const BITCODE_T) "Model");
+        Dwg_Entity_VIEWPORT *viewport = dwg_add_VIEWPORT (hdr, "Model");
         Dwg_Object *vp = dwg_obj_generic_to_object (viewport, &error);
         if (vp && !error)
-          dwg_add_LAYOUT (vp, (const BITCODE_T) "Model",
-                          (const BITCODE_T) "ANSI_A_(8.50_x_11.00_Inches)");
+          dwg_add_LAYOUT (vp, "Model", "ANSI_A_(8.50_x_11.00_Inches)");
         else
           fail ("no VIEWPORT created");
       }
       break;
-    //case DWG_TYPE_UNDERLAYDEFINITION:
-    //case DWG_TYPE_UNDERLAY:
-    //  dwg_add_UNDERLAY (hdr, "test.pdf", &pt2d, NULL, 0.0, 0, NULL);
+    //case DWG_TYPE_PDFDEFINITION:
+    //case DWG_TYPE_PDFUNDERLAY:
+    //  dwg_add_PDFUNDERLAY (hdr, "test.pdf", &pt2d, NULL, 0.0, 0, NULL);
     //  break;
     case DWG_TYPE_ACSH_TORUS_CLASS:
       {
@@ -691,6 +692,37 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
         dwg_add_BOX (hdr, &pt, NULL, 4.416106, 2.044413, 2.543320);
       }
       break;
+    case DWG_TYPE_ACSH_PYRAMID_CLASS:
+      {
+        const dwg_point_3d pt = { 7.791946, 11.0222066, 1.271660 };
+        dwg_add_PYRAMID (hdr, &pt, NULL, 4.5, 4, 2.0, 2.5);
+      }
+      break;
+    case DWG_TYPE_ACSH_CHAMFER_CLASS:
+      {
+        const dwg_point_3d pt = { 7.791946, 11.0222066, 1.271660 };
+        const int32_t edges[] = { 151 };
+        //?? normally you chamfer an existing 3dsolid
+        //dwg_add_CHAMFER (hdr, &pt, NULL, 1, 10.0, 10.0, 1, edges, 152);
+      }
+      break;
+    case DWG_TYPE_WIPEOUTVARIABLES:
+      dwg_add_WIPEOUTVARIABLES (dwg);
+      break;
+    case DWG_TYPE_ACSH_FILLET_CLASS:
+    case TEMP_ELLIPTICAL_CONE:
+    case TEMP_ELLIPTICAL_CYLINDER:
+    case TEMP_EXTRUDED_SOLID:
+    case TEMP_EXTRUDED_PATH:
+    case TEMP_REVOLVED_SOLID:
+    case DWG_TYPE_TABLE:
+    case DWG_TYPE_TABLECONTENT:
+    case DWG_TYPE_TABLEGEOMETRY:
+    case DWG_TYPE_TABLESTYLE:
+    case DWG_TYPE_LAYERFILTER:
+    case DWG_TYPE_LAYER_INDEX:
+    case DWG_TYPE_SPATIAL_FILTER:
+    case DWG_TYPE_SPATIAL_INDEX:
 
     default:
       fail ("No add method yet type %s", name);
@@ -707,6 +739,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       Bit_Chain dat = { 0 };
       dat.version = dwg->header.version;
       dat.from_version = dwg->header.from_version;
+      dat.opts = dwg->opts;
       dat.fh = fopen (dwgfile, "wb");
       error = dwg_write_dxf (&dat, dwg);
       fclose (dat.fh);
@@ -728,19 +761,8 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
     error = dwg_read_file (dwgfile, dwg);
   if (error >= DWG_ERR_CRITICAL)
     {
-      if (as_dxf && (type == DWG_TYPE_POLYLINE_2D
-                     || type == DWG_TYPE_POLYLINE_MESH
-                     || type == DWG_TYPE_OLE2FRAME
-                     || type == DWG_TYPE_SHAPE))
-        {
-          todo ("read %s from %s", name, dwgfile);
-          return 0;
-        }
-      else
-        {
-          fail ("read %s from %s", name, dwgfile);
-          return 1;
-        }
+      fail ("read %s from %s", name, dwgfile);
+      return 1;
     }
   else
     ok ("read %s from %s", name, dwgfile);
@@ -755,12 +777,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
     if (objs && objs[0] && !objs[1])                                    \
       ok ("found 1 " #token);                                           \
     else if (!objs)                                                     \
-      {                                                                 \
-        if (as_dxf && type == DWG_TYPE__3DFACE)                         \
-          todo ("found no " #token " at all");                          \
-        else                                                            \
-          fail ("found no " #token " at all");                          \
-      }                                                                 \
+      fail ("found no " #token " at all");                              \
     else if (!objs[0])                                                  \
       fail ("found no " #token);                                        \
     free (objs);                                                        \
@@ -855,8 +872,8 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       TEST_OBJECT (XRECORD);
       TEST_OBJECT (VBA_PROJECT);
       TEST_OBJECT (LAYOUT);
-      TEST_ENTITY (UNDERLAY);
-      TEST_OBJECT (UNDERLAYDEFINITION);
+      TEST_ENTITY (PDFUNDERLAY);
+      TEST_OBJECT (PDFDEFINITION);
       //TEST_OBJECT (LAYERFILTER);
       //TEST_OBJECT (LAYER_INDEX);
       //TEST_OBJECT (SPATIAL_FILTER);
@@ -867,6 +884,20 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       TEST_OBJECT (ACSH_CONE_CLASS);
       TEST_OBJECT (ACSH_WEDGE_CLASS);
       TEST_OBJECT (ACSH_BOX_CLASS);
+      //TEST_OBJECT (ACSH_PYRAMID_CLASS);
+      //TEST_OBJECT (ACSH_CHAMFER_CLASS);
+      //TEST_OBJECT (ACSH_FILLET_CLASS);
+      TEST_OBJECT (WIPEOUTVARIABLES); // just for testing, not for real yet
+
+    case TEMP_ELLIPTICAL_CONE:
+    case TEMP_ELLIPTICAL_CYLINDER:
+    case TEMP_EXTRUDED_SOLID:
+    case TEMP_EXTRUDED_PATH:
+    case TEMP_REVOLVED_SOLID:
+    //TEST_OBJECT (TABLE);
+    //TEST_OBJECT (TABLECONTENT);
+    //TEST_OBJECT (TABLEGEOMETRY);
+    //TEST_OBJECT (TABLESTYLE);
     default:
       fail ("No test yet for type %s", name);
     }
@@ -896,8 +927,7 @@ main (int argc, char *argv[])
   else
     debug = 0;
 
-  // DXF entities are not yet written
-  for (int dxf = 0; dxf < (debug ? 2 : 1); dxf++)
+  for (int dxf = 0; dxf < 2; dxf++)
     {
       error += test_add (DWG_TYPE_LINE, "add_line_2000", dxf);
       error += test_add (DWG_TYPE_TEXT, "add_text_2000", dxf);
@@ -947,11 +977,11 @@ main (int argc, char *argv[])
       error += test_add (DWG_TYPE_XRECORD, "add_xrecord_2000", dxf);
       error += test_add (DWG_TYPE_VBA_PROJECT, "add_vba_2000", dxf);
       error += test_add (DWG_TYPE_LAYOUT, "add_layout_2000", dxf);
-#ifdef HAVE_DWG_ADD_UNDERLAY
-      error += test_add (DWG_TYPE_UNDERLAY, "add_underlay_2000", dxf);
+#ifdef HAVE_DWG_ADD_PDFUNDERLAY
+      error += test_add (DWG_TYPE_PDFUNDERLAY, "add_pdfunderlay_2000", dxf);
 #endif
-#ifdef HAVE_DWG_ADD_UNDERLAYDEFINITION
-      error += test_add (DWG_TYPE_UNDERLAYDEFINITION, "add_underlaydef_2000", dxf);
+#ifdef HAVE_DWG_ADD_PDFDEFINITION
+      error += test_add (DWG_TYPE_PDFDEFINITION, "add_pdfdef_2000", dxf);
 #endif
 #ifdef HAVE_DWG_ADD_LAYERFILTER
       error += test_add (DWG_TYPE_LAYERFILTER, "add_layfilt_2000", dxf);
@@ -1001,6 +1031,9 @@ main (int argc, char *argv[])
 #ifdef HAVE_DWG_ADD_TABLEGEOMETRY
       error += test_add (DWG_TYPE_TABLEGEOMETRY, "add_tablegeometry_2000", dxf);
 #endif
+
+      // just for testing yet
+      error += test_add (DWG_TYPE_WIPEOUTVARIABLES, "add_wipeoutvars_2000", dxf);
     }
 
   return error;
