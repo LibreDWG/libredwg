@@ -23,15 +23,13 @@
 #include <sys/stat.h>
 #include <assert.h>
 
-static unsigned int loglevel;
 static int debug;
 static int cnt = 0;
-#define DWG_LOGLEVEL loglevel
 #include "config.h"
 #include "logging.h"
 #include "dwg.h"
-#include "dwg_api.h"
 #include "tests_common.h"
+#include "dwg_api.h"
 #include "classes.h"
 #include "bits.h"
 #include "out_dxf.h"

@@ -37,6 +37,7 @@ common_memmem_tests (void)
 int
 main (int argc, char const *argv[])
 {
+  loglevel = is_make_silent() ? 0 : 1;
   common_memmem_tests ();
   return failed;
 }

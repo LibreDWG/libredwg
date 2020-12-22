@@ -22,14 +22,12 @@
 #include <math.h>
 #include <sys/stat.h>
 
-static unsigned int loglevel;
-#define DWG_LOGLEVEL loglevel
 #include "config.h"
 #include "common.h"
 #include "decode.h"
+#include "tests_common.h"
 #include "dwg.h"
 #include "dwg_api.h"
-#include "tests_common.h"
 
 int g_counter;
 #define MAX_COUNTER 10
@@ -790,12 +788,12 @@ test_dxf (const struct _unknown_dxf *dxf, const char *restrict name,
   BITCODE_BL i;
   char *trace;
 
-  loglevel = 0;
+  loglevel = is_make_silent() ? 0 : 1;
   trace = getenv ("LIBREDWG_TRACE");
   if (trace)
     loglevel = atoi (trace);
 
-  printf ("%s %X %s\n", dxf->name, dxf->handle, dwgfile);
+  LOG_TRACE ("%s %X %s\n", dxf->name, dxf->handle, dwgfile);
   num = passed = failed = 0;
   dwg.opts = loglevel;
 
@@ -822,7 +820,7 @@ test_dxf (const struct _unknown_dxf *dxf, const char *restrict name,
           if (dwg.object[i].fixedtype >= DWG_TYPE_UNKNOWN_ENT)
             break;
           if (strNE (dwg.object[i].dxfname, dxf->name))
-            fprintf (stderr, "Invalid handle 0x%X for %s\n", dxf->handle, dxf->name);
+            LOG_WARN ("Invalid handle 0x%X for %s", dxf->handle, dxf->name)
           else
             error += test_object (&dwg, &dwg.object[i], dxf, name);
           break;
@@ -911,7 +909,7 @@ main (int argc, char *argv[])
                 {
                   free (dwgfile);
                   if (!g_counter) // use --enable-debug
-                    fprintf (stderr, "Unhandled %s\n", dxf->name);
+                    LOG_WARN ("Unhandled %s", dxf->name)
                   continue;
                 }
             }
@@ -929,7 +927,7 @@ main (int argc, char *argv[])
       // GH #268. skip 2018/Helix.dwg. podman works fine.
       if (is_docker && strEQ (dxffile, "test/test-data/2018/Helix.dxf"))
         {
-          fprintf (stderr, "Skip %s in docker\n", dwgfile);
+          LOG_ERROR ("Skip %s in docker", dwgfile)
           free (dwgfile);
           continue;
         }
@@ -949,7 +947,7 @@ main (int argc, char *argv[])
             strcpy (path, "../../../");
           strcat (path, dwgfile);
           if (stat (path, &attrib))
-            fprintf (stderr, "%s not found\n", path);
+            LOG_WARN ("%s not found\n", path)
           else
             error += test_dxf (dxf, name, path);
         }

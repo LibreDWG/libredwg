@@ -22,13 +22,13 @@
 #include <math.h>
 #include <sys/stat.h>
 
-#define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
 #include "config.h"
+#include "logging.h"
 #include "common.h"
-#include "dwg.h"
-#include "dwg_api.h"
-#include "tests_common.h"
 #include "classes.h"
+#include "dwg.h"
+#include "tests_common.h"
+#include "dwg_api.h"
 
 /* for all objects/entities/header_vars:
    compare direct api vs dynapi values
@@ -109,6 +109,7 @@ int
 main (int argc, char *argv[])
 {
   char *input = getenv ("INPUT");
+  loglevel = is_make_silent() ? 0 : 2;
 
   if (input == NULL)
     {
@@ -136,7 +137,7 @@ main (int argc, char *argv[])
               strcpy (tmp, "../test-data/");
               strcat (tmp, *ptr);
               if (stat (tmp, &attrib))
-                fprintf (stderr, "Env var INPUT not defined, %s not found\n", tmp);
+                LOG_ERROR ("Env var INPUT not defined, %s not found\n", tmp)
               else
                 error += test_dynapi (tmp);
             }

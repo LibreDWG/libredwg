@@ -15,13 +15,11 @@
 #include <dirent.h>
 #include "../../src/common.h"
 #include "../../src/classes.h"
-static unsigned int loglevel;
-#define DWG_LOGLEVEL loglevel
-#include "../../src/logging.h"
+static int silent;
+#include "tests_common.h"
 
 #include "dwg.h"
 #include "dwg_api.h"
-#include "tests_common.h"
 
 dwg_data g_dwg;
 const char *stability;
@@ -91,8 +89,11 @@ main (int argc, char *argv[])
   int i = 1, cov = 1;
   //#ifdef USE_TRACING
   char *probe = getenv ("LIBREDWG_TRACE");
+  silent = is_make_silent();
   if (probe)
     loglevel = atoi (probe);
+  else
+    loglevel = silent ? 0 : 1;
   //#endif
 
 #ifdef DWG_TYPE
@@ -495,6 +496,7 @@ test_code (const char *dir, const char *filename, int cov)
 {
   int error;
   char path[256];
+
   path[255] = '\0';
   if (dir)
     {
@@ -512,10 +514,10 @@ test_code (const char *dir, const char *filename, int cov)
   if (strstr (path, "2018") || strstr (path, "2007")
       || (!numpassed () && !numfailed ()))
     {
-      if (cov)
+      if (cov && !silent)
         printf ("Testing with %s:\n", path);
     }
-  else if (cov)
+  else if (cov && !silent)
     {
       printf ("Skipping %s:\n", path);
       return 0;
@@ -682,7 +684,8 @@ output_object (dwg_object *obj)
 {
   if (!obj)
     {
-      printf ("object is NULL\n");
+      if (!silent)
+        printf ("object is NULL\n");
       return;
     }
   LOG_INFO ("  %s [%d]\n", obj->name, obj->index);
@@ -708,12 +711,15 @@ print_low_level (dwg_object *obj)
 void
 print_api (dwg_object *obj)
 {
+  if (!silent)
+    {
 #ifdef DWG_TYPE
-  printf ("Unit-testing type %d %s [%d] (%s):\n", DWG_TYPE, obj->name, g_counter,
-          stability);
+      printf ("Unit-testing type %d %s [%d] (%s):\n", DWG_TYPE, obj->name, g_counter,
+              stability);
 #else
-  printf ("Test dwg_api and dynapi [%d]:\n", g_counter);
+      printf ("Test dwg_api and dynapi [%d]:\n", g_counter);
 #endif
+    }
   api_process (obj);
 
   if (obj->supertype == DWG_SUPERTYPE_ENTITY &&
@@ -722,7 +728,7 @@ print_api (dwg_object *obj)
   else if (obj->supertype == DWG_SUPERTYPE_OBJECT &&
            obj->fixedtype != DWG_TYPE_UNKNOWN_OBJ)
     api_common_object (obj);
-  if (g_counter <= g_countmax)
+  if (!silent && g_counter <= g_countmax)
     printf ("\n");
 }
 
