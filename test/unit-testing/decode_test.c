@@ -56,7 +56,7 @@ read_two_byte_offset_tests (void)
 int
 main (int argc, char const *argv[])
 {
-  loglevel = is_make_silent() ? 0 : 1;
+  loglevel = is_make_silent() ? 0 : 2;
 
   read_literal_length_tests ();
   read_long_compression_offset_tests ();

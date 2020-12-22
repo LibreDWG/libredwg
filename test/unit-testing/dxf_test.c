@@ -787,15 +787,15 @@ test_dxf (const struct _unknown_dxf *dxf, const char *restrict name,
   static Dwg_Data dwg;
   BITCODE_BL i;
   char *trace;
+  int tracelevel = 0;
 
-  loglevel = is_make_silent() ? 0 : 1;
   trace = getenv ("LIBREDWG_TRACE");
   if (trace)
-    loglevel = atoi (trace);
+    tracelevel = atoi (trace);
 
+  loglevel = is_make_silent() ? 0 : MAX (tracelevel, 2);
   LOG_TRACE ("%s %X %s\n", dxf->name, dxf->handle, dwgfile);
   num = passed = failed = 0;
-  dwg.opts = loglevel;
 
   if (dwg.num_objects && strEQ (dwgfile, prev_dwgfile))
     ;
@@ -803,7 +803,7 @@ test_dxf (const struct _unknown_dxf *dxf, const char *restrict name,
     {
       if (dwg.num_objects && dwg.header.version > R_INVALID)
         dwg_free (&dwg);
-      dwg.opts = loglevel;
+      dwg.opts = tracelevel;
       if (dwg_read_file (dwgfile, &dwg) >= DWG_ERR_CRITICAL)
         {
           dwg_free (&dwg);

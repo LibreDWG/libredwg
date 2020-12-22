@@ -7,9 +7,12 @@
 #if defined(BITS_TEST_C) || defined(DECODE_TEST_C)
 #  include "../../src/bits.h"
 #endif
-static unsigned int loglevel;
-#define DWG_LOGLEVEL loglevel
-#include "../../src/logging.h"
+#ifndef DECODE_TEST_C
+  static unsigned int loglevel;
+#  define DWG_LOGLEVEL loglevel
+#  include "../../src/logging.h"
+#endif
+#include "../../src/config.h"
 
 #if defined(_WIN32) && defined(HAVE_FUNC_ATTRIBUTE_MS_FORMAT) && !defined(__USE_MINGW_ANSI_STDIO)
 #  define ATTRIBUTE_FORMAT(x, y) __attribute__ ((format (ms_printf, x, y)))
@@ -55,7 +58,8 @@ ok (const char *fmt, ...)
   va_start (ap, fmt);
   vsnprintf (buffer, sizeof (buffer), fmt, ap);
   va_end (ap);
-  LOG_TRACE ("ok %d\t# %s\n", ++num, buffer);
+  if (loglevel >= 2)
+    printf ("ok %d\t# %s\n", ++num, buffer);
 }
 
 static inline void
@@ -75,7 +79,8 @@ fail (const char *fmt, ...)
   va_start (ap, fmt);
   vsnprintf (buffer, sizeof (buffer), fmt, ap);
   va_end (ap);
-  LOG_TRACE ("not ok %d\t# %s\n", ++num, buffer);
+  if (loglevel >= 2)
+    printf ("not ok %d\t# %s\n", ++num, buffer);
 }
 
 #if defined(ADD_TEST_C)
@@ -88,7 +93,8 @@ todo (const char *fmt, ...)
   va_start (ap, fmt);
   vsnprintf (buffer, sizeof (buffer), fmt, ap);
   va_end (ap);
-  LOG_TRACE ("not ok %d\t# TODO %s\n", ++num, buffer);
+  if (loglevel >= 2)
+    printf ("not ok %d\t# TODO %s\n", ++num, buffer);
   passed++;
 }
 #endif
@@ -177,5 +183,5 @@ int is_make_silent()
   if (strstr (make, "-s"))
     return getenv("VERBOSE") ? 0 : 1;
   else
-    return 1;
+    return 0;
 }

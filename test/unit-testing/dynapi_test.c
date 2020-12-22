@@ -24,7 +24,6 @@
 #include <sys/stat.h>
 
 #include "config.h"
-#include "logging.h"
 #include "common.h"
 #include "classes.h"
 #include "dwg.h"
@@ -44,7 +43,7 @@ test_header (Dwg_Data *dwg)
   BITCODE_BD bd;
   BITCODE_TV tv;
 
-#line 47 "dynapi_test.c"
+#line 46 "dynapi_test.c"
   /* @@for test_HEADER@@ */
   {
     BITCODE_RL size;
@@ -5374,10 +5373,10 @@ test_header (Dwg_Data *dwg)
     dwg_dynapi_header_set_value (dwg, "unknown_57", &unknown_57, 0);
 
   }
-#line 48 "dynapi_test.c.in"
+#line 47 "dynapi_test.c.in"
   return error;
 }
-#line 5380 "dynapi_test.c"
+#line 5379 "dynapi_test.c"
 /* @@for test_OBJECT@@ */
 static int test__3DFACE (const Dwg_Object *obj)
 {
@@ -61672,12 +61671,12 @@ static int test_DWFDEFINITION (const Dwg_Object *obj)
   return failed;
 }
 
-#line 54 "dynapi_test.c.in"
+#line 53 "dynapi_test.c.in"
 static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 {
   int error = 0;
-#line 61669 "dynapi_test.c"
+#line 61679 "dynapi_test.c"
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
@@ -62891,7 +62890,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_DGNDEFINITION (obj);
   else  if (obj->fixedtype == DWG_TYPE_DWFDEFINITION)
     error += test_DWFDEFINITION (obj);
-#line 61 "dynapi_test.c.in"
+#line 60 "dynapi_test.c.in"
   return error + failed;
 }
 
@@ -62901,7 +62900,7 @@ test_sizes (void)
 {
   int error = 0;
   int size1, size2;
-#line 62889 "dynapi_test.c"
+#line 62903 "dynapi_test.c"
   /* @@for test_SIZES@@ */
   size1 = sizeof (Dwg_Entity__3DFACE);
   size2 = dwg_dynapi_fields_size ("3DFACE");
@@ -66327,7 +66326,7 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"MLEADER_Content\"): %d\n", size1, size2);
       error++;
     }
-#line 73 "dynapi_test.c.in"
+#line 72 "dynapi_test.c.in"
   return error;
 }
 

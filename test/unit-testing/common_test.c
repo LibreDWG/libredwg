@@ -1,7 +1,7 @@
 #define COMMON_TEST_C
 #include <stddef.h>
-#include "../../src/common.c"
 #include "tests_common.h"
+#include "../../src/common.c"
 
 static void
 common_memmem_tests (void)
@@ -37,7 +37,7 @@ common_memmem_tests (void)
 int
 main (int argc, char const *argv[])
 {
-  loglevel = is_make_silent() ? 0 : 1;
+  loglevel = is_make_silent() ? 0 : 2;
   common_memmem_tests ();
   return failed;
 }

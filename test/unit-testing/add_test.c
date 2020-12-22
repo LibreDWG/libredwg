@@ -23,10 +23,10 @@
 #include <sys/stat.h>
 #include <assert.h>
 
+static int tracelevel;
 static int debug;
 static int cnt = 0;
 #include "config.h"
-#include "logging.h"
 #include "dwg.h"
 #include "tests_common.h"
 #include "dwg_api.h"
@@ -85,7 +85,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
 
   dwg = dwg_add_Document (as_dxf ? R_2018 : R_2000,
                           0 /*metric/iso */,
-                          loglevel /* static global */);
+                          tracelevel);
   mspace =  dwg_model_space_object (dwg);
   mspace_ref =  dwg_model_space_ref (dwg);
   hdr = mspace->tio.object->tio.BLOCK_HEADER;
@@ -914,12 +914,13 @@ int
 main (int argc, char *argv[])
 {
   int error = 0;
-  char *trace = getenv ("LIBREDWG_TRACE");
-  char *debugenv = getenv ("LIBREDWG_DEBUG");
+  char *trace = getenv ("LIBREDWG_TRACE"); // read_dwg
+  char *debugenv = getenv ("LIBREDWG_DEBUG"); // keep files
+  loglevel = is_make_silent() ? 0 : 2; // print ok
   if (trace)
-    loglevel = atoi (trace);
+    tracelevel = atoi (trace);
   else
-    loglevel = 0;
+    tracelevel = 0;
   if (debugenv) // -1 for all, 0 for none, 12 for ATTRIB only
     debug = atoi (debugenv);
   else

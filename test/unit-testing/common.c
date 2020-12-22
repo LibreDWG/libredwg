@@ -88,12 +88,12 @@ main (int argc, char *argv[])
   int error = 0;
   int i = 1, cov = 1;
   //#ifdef USE_TRACING
-  char *probe = getenv ("LIBREDWG_TRACE");
+  char *trace = getenv ("LIBREDWG_TRACE");
   silent = is_make_silent();
-  if (probe)
-    loglevel = atoi (probe);
+  if (trace)
+    loglevel = atoi (trace);
   else
-    loglevel = silent ? 0 : 1;
+    loglevel = silent ? 0 : 2;
   //#endif
 
 #ifdef DWG_TYPE
@@ -514,12 +514,12 @@ test_code (const char *dir, const char *filename, int cov)
   if (strstr (path, "2018") || strstr (path, "2007")
       || (!numpassed () && !numfailed ()))
     {
-      if (cov && !silent)
-        printf ("Testing with %s:\n", path);
+      if (cov)
+        LOG_INFO ("Testing with %s:\n", path)
     }
-  else if (cov && !silent)
+  else if (cov)
     {
-      printf ("Skipping %s:\n", path);
+      LOG_INFO ("Skipping %s:\n", path)
       return 0;
     }
 #endif
@@ -536,12 +536,12 @@ test_code (const char *dir, const char *filename, int cov)
   if (is_type_unstable (DWG_TYPE) || is_type_debugging (DWG_TYPE))
     {
       if (cov && error)
-        printf ("%s failed (TODO: unstable)\n", path);
+        LOG_INFO ("%s failed (TODO: unstable)\n", path);
       return 0;
     }
 #endif
   if (cov && error)
-    printf ("%s failed\n", path);
+    LOG_WARN ("%s failed", path);
   return error;
 }
 
@@ -684,11 +684,10 @@ output_object (dwg_object *obj)
 {
   if (!obj)
     {
-      if (!silent)
-        printf ("object is NULL\n");
+      LOG_INFO ("object is NULL\n");
       return;
     }
-  LOG_INFO ("  %s [%d]\n", obj->name, obj->index);
+  LOG_TRACE ("  %s [%d]\n", obj->name, obj->index);
   if (obj->fixedtype == DWG_TYPE)
     {
       g_counter++;
@@ -711,15 +710,12 @@ print_low_level (dwg_object *obj)
 void
 print_api (dwg_object *obj)
 {
-  if (!silent)
-    {
 #ifdef DWG_TYPE
-      printf ("Unit-testing type %d %s [%d] (%s):\n", DWG_TYPE, obj->name, g_counter,
-              stability);
+  LOG_INFO ("Unit-testing type %d %s [%d] (%s):\n", DWG_TYPE, obj->name, g_counter,
+            stability);
 #else
-      printf ("Test dwg_api and dynapi [%d]:\n", g_counter);
+  LOG_INFO ("Test dwg_api and dynapi [%d]:\n", g_counter);
 #endif
-    }
   api_process (obj);
 
   if (obj->supertype == DWG_SUPERTYPE_ENTITY &&
@@ -728,8 +724,8 @@ print_api (dwg_object *obj)
   else if (obj->supertype == DWG_SUPERTYPE_OBJECT &&
            obj->fixedtype != DWG_TYPE_UNKNOWN_OBJ)
     api_common_object (obj);
-  if (!silent && g_counter <= g_countmax)
-    printf ("\n");
+  if (g_counter <= g_countmax)
+    LOG_INFO ("\n");
 }
 
 #define CHK_COMMON_TYPE(ent, field, type)                                     \
