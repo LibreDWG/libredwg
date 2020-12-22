@@ -1109,6 +1109,13 @@ add_DUMMY_eed (Dwg_Object *obj)
   int len, size;
   const bool is_tu = dwg->header.version >= R_2007;
 
+  // FIXME
+#ifdef _WIN
+
+  return 0;
+
+#else
+
 #ifdef HAVE_STDDEF_H /* windows (mingw32,cygwin) not */
   assert (offsetof (Dwg_Object_Object, num_eed) == offsetof (Dwg_Object_Entity, num_eed));
   assert (offsetof (Dwg_Object_Object, eed) == offsetof (Dwg_Object_Entity, eed));
@@ -1182,6 +1189,7 @@ add_DUMMY_eed (Dwg_Object *obj)
     }
   while (1);
   return i;
+#endif
 }
 
 #ifdef ENCODE_UNKNOWN_AS_DUMMY
@@ -1216,7 +1224,7 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           obj->tio.entity->reactors = NULL;
         }
       */
-      add_DUMMY_eed (obj);
+      add_DUMMY_eed (obj); // broken on windows
       dwg_free_object_private (obj);
       free (obj->unknown_bits);
       obj->tio.entity->tio.POINT = _obj
@@ -1253,7 +1261,7 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       const char *name;
       const char *dxfname;
 
-      add_DUMMY_eed (obj);
+      add_DUMMY_eed (obj); // broken on windows
       dwg_free_object_private (obj);
       // if PLACEHOLDER is available, or even PROXY_OBJECT.
       // PLOTSETTINGS uses PLACEHOLDER though
