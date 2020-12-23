@@ -5298,6 +5298,18 @@ typedef struct _dwg_CONSTRAINTGROUPNODE
   BITCODE_H geom_dep; /* 4, 330 */             \
   BITCODE_BL nodeid   /*  90 */
 
+#define ACCONSTRAINTPOINT_fields(node)         \
+  ACCONSTRAINTGEOMETRY_fields (node);          \
+  SUBCLASS (AcConstraintPoint);                \
+  BITCODE_3BD point /* 10 */
+
+#define ACCONSTRAINTIMPLICITPOINT_fields(node) \
+  ACCONSTRAINTPOINT_fields (node);             \
+  /*SUBCLASS (AcConstraintImplicitPoint);*/    \
+  BITCODE_RC point_type; /* 280 */             \
+  BITCODE_BLd point_idx; /* 90 default: -1 */  \
+  BITCODE_BLd curve_id   /* 90 default: 0 */
+
 #define ACEXPLICITCONSTRAINT_fields            \
   ACGEOMCONSTRAINT_fields;                     \
   BITCODE_H value_dep; /* 3, 340 */            \
@@ -5307,10 +5319,25 @@ typedef struct _dwg_CONSTRAINTGROUPNODE
   ACEXPLICITCONSTRAINT_fields;                  \
   BITCODE_RC sector_type  /* 280 */
 
+#define ACPARALLELCONSTRAINT_fields             \
+  ACGEOMCONSTRAINT_fields;                      \
+  BITCODE_BLd datum_line_idx  /* 90 */
+
 #define ACDISTANCECONSTRAINT_fields              \
   ACEXPLICITCONSTRAINT_fields;                   \
   BITCODE_RC dir_type; /* 280 if has_distance */ \
   BITCODE_3BD distance /* 10 */
+
+#define ACCONSTRAINEDELLIPSE_fields              \
+  ACGEOMCONSTRAINT_fields;                       \
+  BITCODE_3BD center;   /* 10 */                 \
+  BITCODE_3BD sm_axis;  /* 11 */                 \
+  BITCODE_BD axis_ratio /* 40 i.e RadiusRatio */
+
+#define ACCONSTRAINEDBOUNDEDELLIPSE_fields       \
+  ACCONSTRAINEDELLIPSE_fields;                   \
+  BITCODE_3BD start_pt;   /* 10 */               \
+  BITCODE_3BD end_pt      /* 11 */
 
 typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP
 {

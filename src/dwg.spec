@@ -10353,6 +10353,19 @@ DWG_ENTITY_END
   FIELD_HANDLE (geom_dep, 4, 330);             \
   FIELD_BL (nodeid, 90)
 
+#define AcConstraintPoint_fields(node)         \
+  AcGeomConstraint_fields (node);              \
+  SUBCLASS (AcConstraintPoint);                \
+  if (FIELD_VALUE (geom_dep))                  \
+    FIELD_3BD (point, 10)
+
+#define AcConstraintImplicitPoint_fields(node) \
+  AcConstraintPoint_fields (node);             \
+  /*SUBCLASS (AcConstraintImplicitPoint);*/    \
+  FIELD_RC (point_type, 280);                  \
+  FIELD_BLd (point_idx, 90); /* default: -1 */ \
+  FIELD_BLd (curve_id, 90) /* default: 0 */
+
 #define AcExplicitConstraint_fields(node)       \
   AcGeomConstraint_fields (node);               \
   SUBCLASS (AcExplicitConstraint)               \
@@ -10360,16 +10373,48 @@ DWG_ENTITY_END
   FIELD_HANDLE (dim_dep, 3, 340)
 
 #define AcAngleConstraint_fields(node)          \
-    AcExplicitConstraint_fields (node);         \
-    SUBCLASS (AcAngleConstraint);               \
-    FIELD_RC (sector_type, 280)
+  AcExplicitConstraint_fields (node);           \
+  SUBCLASS (AcAngleConstraint);                 \
+  FIELD_RC (sector_type, 280)
+
+#define AcParallelConstraint_fields(node)       \
+  AcGeomConstraint_fields (node);               \
+  SUBCLASS (AcParallelConstraint);              \
+  FIELD_BLd (datum_line_idx, 90)
 
 #define AcDistanceConstraint_fields(node)       \
-    AcExplicitConstraint_fields (node);         \
-    SUBCLASS (AcDistanceConstraint);            \
-    FIELD_RC (dir_type, 280)                    \
-    if (FIELD_VALUE (dir_type))                 \
-      FIELD_3BD (distance, 10)
+  AcExplicitConstraint_fields (node);           \
+  SUBCLASS (AcDistanceConstraint);              \
+  FIELD_RC (dir_type, 280)                      \
+  if (FIELD_VALUE (dir_type))                   \
+    FIELD_3BD (distance, 10)
+
+#define AcConstrainedEllipse_fields(node)       \
+  AcGeomConstraint_fields (node);               \
+  FIELD_3BD (center_pt, 10);                    \
+  FIELD_3BD (sm_axis, 11);                      \
+  FIELD_BD (axis_ratio, 40)
+
+#define AcConstrainedBoundedEllipse_fields(node)\
+  AcConstrainedEllipse_fields (node);           \
+  FIELD_3BD (start_pt, 10);                     \
+  FIELD_3BD (end_pt, 11)
+
+#define AcConstrainedSpline_fields(node)        \
+  AcConstraintGeometry_fields (node);           \
+  FIELD_B (b70_1, 70);                          \
+  FIELD_B (b70_2, 70);                          \
+  FIELD_BL (bl90, 90);                          \
+  FIELD_BD (bd40, 40); /* default 1e-10 */      \
+  FIELD_BL (num_logical_knots, 90);             \
+  FIELD_BL (num_physical_knots, 90);            \
+  FIELD_BL (knots_grow_length, 90);             \
+  FIELD_VECTOR (knots, BD, num_knots, 40);      \
+  FIELD_BL (num_logical_knots, 90);             \
+  FIELD_BL (num_physical_knots, 90);            \
+  FIELD_BL (knots_grow_length, 90);             \
+  FIELD_VECTOR (knots, BD, num_knots, 40);      \
+  /* ... */
 
 // Class AcDbAssoc2dConstraintGroup
 // see https://help.autodesk.com/view/OARX/2018/ENU/?guid=OREF-AcDbAssoc2dConstraintGroup
