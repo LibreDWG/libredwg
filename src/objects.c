@@ -1670,11 +1670,17 @@ in_word_set (register const char *str, register size_t len)
 
 /* Find if an object name (our internal name, not anything used elsewhere)
    is defined, and return our fixed type, the public dxfname and if it's an entity. */
-EXPORT int dwg_object_name (const char *const restrict name, const char **restrict dxfname,
+EXPORT int dwg_object_name (const char *const restrict name,
+                            const char **restrict dxfname,
                             Dwg_Object_Type *restrict typep, int *restrict is_entp,
                             Dwg_Class_Stability *restrict stabilityp)
 {
-  const struct _dwg_dxfname* result = in_word_set (name, strlen (name));
+  const struct _dwg_dxfname* result;
+  const size_t len = strlen (name);
+  // only allow UPPERCASE 7-bit names
+  if (strspn (name, "ABCDEFGHIJKLMNOPQRSTUVWXYZ_23") != len)
+    return 0;
+  result = in_word_set (name, len);
   if (result)
     {
       if (dxfname)

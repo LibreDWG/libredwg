@@ -1765,11 +1765,17 @@ print $inc <<'EOF';
 
 /* Find if an object name (our internal name, not anything used elsewhere)
    is defined, and return our fixed type, the public dxfname and if it's an entity. */
-EXPORT int dwg_object_name (const char *const restrict name, const char **restrict dxfname,
+EXPORT int dwg_object_name (const char *const restrict name,
+                            const char **restrict dxfname,
                             Dwg_Object_Type *restrict typep, int *restrict is_entp,
                             Dwg_Class_Stability *restrict stabilityp)
 {
-  const struct _dwg_dxfname* result = in_word_set (name, strlen (name));
+  const struct _dwg_dxfname* result;
+  const size_t len = strlen (name);
+  // only allow UPPERCASE 7-bit names
+  if (strspn (name, "ABCDEFGHIJKLMNOPQRSTUVWXYZ_23") != len)
+    return 0;
+  result = in_word_set (name, len);
   if (result)
     {
       if (dxfname)
@@ -2365,7 +2371,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2369 "gen-dynapi.pl"
+#line 2375 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2451,7 +2457,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 @@list name_subclasses@@
 };
 
-#line 2455 "gen-dynapi.pl"
+#line 2461 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;
