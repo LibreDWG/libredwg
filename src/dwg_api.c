@@ -24417,6 +24417,7 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
       LOG_TRACE (#control "_OBJECT = " FORMAT_REF "\n",                       \
                  ARGS_REF (dwg->header_vars.control##_OBJECT));               \
       dwg->header_vars.control##_OBJECT->obj = obj;                           \
+      ctrl = obj;                                                             \
       _ctrl = _obj;                                                           \
     }                                                                         \
   else                                                                        \

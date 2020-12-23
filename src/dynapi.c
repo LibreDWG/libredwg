@@ -14485,12 +14485,14 @@ dwg_dynapi_common_set_value (void *restrict _obj,
             ent->isbylayerlt = 1; // r13-r14 only
             ent->ltype_flags = 0;
           }
-        else if (ent->ltype->absolute_ref == dwg->header_vars.LTYPE_BYBLOCK->absolute_ref)
+        else if (dwg->header_vars.LTYPE_BYBLOCK
+                 && ent->ltype->absolute_ref == dwg->header_vars.LTYPE_BYBLOCK->absolute_ref)
           {
             ent->isbylayerlt = 0;
             ent->ltype_flags = 1;
           }
-        else if (ent->ltype->absolute_ref == dwg->header_vars.LTYPE_CONTINUOUS->absolute_ref)
+        else if (dwg->header_vars.LTYPE_CONTINUOUS
+                 && ent->ltype->absolute_ref == dwg->header_vars.LTYPE_CONTINUOUS->absolute_ref)
           {
             ent->isbylayerlt = 0;
             ent->ltype_flags = 2;
