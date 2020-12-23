@@ -3170,7 +3170,7 @@ dwg_dynapi_common_set_value (void *restrict _obj,
       { // set also isbylayerlt and ltype_flags
         BITCODE_H ltype = *(BITCODE_H*)value;
         Dwg_Object_Entity *ent = obj->tio.entity;
-        if (!dwg->header_vars.LTYPE_BYLAYER)
+        if (!dwg->header_vars.LTYPE_BYLAYER || !ent->ltype)
           ;
         else if (ent->ltype->absolute_ref == dwg->header_vars.LTYPE_BYLAYER->absolute_ref)
           {
