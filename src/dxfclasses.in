@@ -243,9 +243,9 @@ BLOCKPROPERTIESTABLEGRIP,   		"AcDbBlockPropertiesTableGrip",		ODBX,	0
 ACDB_DYNAMICBLOCKPROXYNODE,		"AcDbDynamicBlockProxyNode",	       	ODBX,	0
 ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION,"AcDbDynamicBlockPurgePreventer",      	ODBX,	0
 #
-ACDBCURVEPATH   			"AcDbCurvePath",			ODBX,	0
-MOTIONPATH   				"AcDbMotionPath",			ODBX,	0
-ACDBPOINTPATH   			"AcDbPointPath",			ODBX,	0
+ACDBCURVEPATH,   			"AcDbCurvePath",			ODBX,	0
+MOTIONPATH,   				"AcDbMotionPath",			ODBX,	0
+ACDBPOINTPATH,   			"AcDbPointPath",			ODBX,	0
 #
 ACDB_ALDIMOBJECTCONTEXTDATA_CLASS,	"AcDbAlignedDimensionObjectContextData",ODBX,	0
 ACDB_ANGDIMOBJECTCONTEXTDATA_CLASS,	"AcDbAngularDimensionObjectContextData",ODBX,	0
