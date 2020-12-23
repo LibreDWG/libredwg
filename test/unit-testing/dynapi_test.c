@@ -52713,6 +52713,67 @@ static int test_ORDDIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_PARTIAL_VIEWING_INDEX (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_PARTIAL_VIEWING_INDEX *restrict partial_viewing_index = obj->tio.object->tio.PARTIAL_VIEWING_INDEX;
+  failed = 0;
+  {
+    Dwg_PARTIAL_VIEWING_INDEX_Entry* entries;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (partial_viewing_index, "PARTIAL_VIEWING_INDEX", "num_entries", &count, NULL)
+        && dwg_dynapi_entity_value (partial_viewing_index, "PARTIAL_VIEWING_INDEX", "entries", &entries, NULL)
+        && entries == partial_viewing_index->entries)
+      pass ();
+    else
+      fail ("PARTIAL_VIEWING_INDEX.entries [Dwg_PARTIAL_VIEWING_INDEX_Entry*] * %u num_entries", count);
+  }
+  {
+    BITCODE_B has_entries;
+    if (dwg_dynapi_entity_value (partial_viewing_index, "PARTIAL_VIEWING_INDEX", "has_entries", &has_entries, NULL)
+        && has_entries == partial_viewing_index->has_entries)
+      pass ();
+    else
+      fail ("PARTIAL_VIEWING_INDEX.has_entries [B] " FORMAT_B " != " FORMAT_B "", partial_viewing_index->has_entries, has_entries);
+    has_entries++;
+    if (dwg_dynapi_entity_set_value (partial_viewing_index, "PARTIAL_VIEWING_INDEX", "has_entries", &has_entries, 0)
+        && has_entries == partial_viewing_index->has_entries)
+      pass ();
+    else
+      fail ("PARTIAL_VIEWING_INDEX.has_entries [B] set+1 " FORMAT_B " != " FORMAT_B "", partial_viewing_index->has_entries, has_entries);
+    partial_viewing_index->has_entries--;
+  }
+  {
+    BITCODE_BL num_entries;
+    if (dwg_dynapi_entity_value (partial_viewing_index, "PARTIAL_VIEWING_INDEX", "num_entries", &num_entries, NULL)
+        && num_entries == partial_viewing_index->num_entries)
+      pass ();
+    else
+      fail ("PARTIAL_VIEWING_INDEX.num_entries [BL] %u != %u", partial_viewing_index->num_entries, num_entries);
+    num_entries++;
+    if (dwg_dynapi_entity_set_value (partial_viewing_index, "PARTIAL_VIEWING_INDEX", "num_entries", &num_entries, 0)
+        && num_entries == partial_viewing_index->num_entries)
+      pass ();
+    else
+      fail ("PARTIAL_VIEWING_INDEX.num_entries [BL] set+1 %u != %u", partial_viewing_index->num_entries, num_entries);
+    partial_viewing_index->num_entries--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (partial_viewing_index, "PARTIAL_VIEWING_INDEX", "parent", &parent, NULL)
+        && !memcmp (&parent, &partial_viewing_index->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("PARTIAL_VIEWING_INDEX.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("PARTIAL_VIEWING_INDEX") || is_class_debugging ("PARTIAL_VIEWING_INDEX")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "PARTIAL_VIEWING_INDEX", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_PERSUBENTMGR (const Dwg_Object *obj)
 {
   int error = 0;
@@ -62182,6 +62243,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_OBJECT_PTR(obj);
   else  if (obj->fixedtype == DWG_TYPE_ORDDIMOBJECTCONTEXTDATA)
     error += test_ORDDIMOBJECTCONTEXTDATA(obj);
+  else  if (obj->fixedtype == DWG_TYPE_PARTIAL_VIEWING_INDEX)
+    error += test_PARTIAL_VIEWING_INDEX(obj);
   else  if (obj->fixedtype == DWG_TYPE_PERSUBENTMGR)
     error += test_PERSUBENTMGR(obj);
   else  if (obj->fixedtype == DWG_TYPE_PLACEHOLDER)
@@ -62788,6 +62851,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_OBJECT_PTR (obj);
   else  if (obj->fixedtype == DWG_TYPE_ORDDIMOBJECTCONTEXTDATA)
     error += test_ORDDIMOBJECTCONTEXTDATA (obj);
+  else  if (obj->fixedtype == DWG_TYPE_PARTIAL_VIEWING_INDEX)
+    error += test_PARTIAL_VIEWING_INDEX (obj);
   else  if (obj->fixedtype == DWG_TYPE_PERSUBENTMGR)
     error += test_PERSUBENTMGR (obj);
   else  if (obj->fixedtype == DWG_TYPE_PLACEHOLDER)
@@ -64926,6 +64991,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"ORDDIMOBJECTCONTEXTDATA\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (Dwg_Object_PARTIAL_VIEWING_INDEX);
+  size2 = dwg_dynapi_fields_size ("PARTIAL_VIEWING_INDEX");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Object_PARTIAL_VIEWING_INDEX): %d != "
+               "dwg_dynapi_fields_size (\"PARTIAL_VIEWING_INDEX\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (Dwg_Object_PERSUBENTMGR);
   size2 = dwg_dynapi_fields_size ("PERSUBENTMGR");
   if (size1 != size2)
@@ -66084,6 +66157,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(struct _dwg_OCD_Dimension): %d != "
                "dwg_dynapi_fields_size (\"OCD_Dimension\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (struct _dwg_PARTIAL_VIEWING_INDEX_Entry);
+  size2 = dwg_dynapi_fields_size ("PARTIAL_VIEWING_INDEX_Entry");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(struct _dwg_PARTIAL_VIEWING_INDEX_Entry): %d != "
+               "dwg_dynapi_fields_size (\"PARTIAL_VIEWING_INDEX_Entry\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (struct _dwg_POINTCLOUDCOLORMAP_Ramp);

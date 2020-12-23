@@ -295,6 +295,7 @@ testdebug = \
 	navisworksmodeldef \
 	nurbsurface \
 	orddimobjectcontextdata \
+	partial_viewing_index \
 	persubentmgr \
 	planesurface \
 	pointcloud \

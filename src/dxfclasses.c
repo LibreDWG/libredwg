@@ -88,7 +88,7 @@ enum apptypes {
 #line 63 "src/dxfclasses.in"
 struct Dwg_DXFClass {int name; const char *const cppname; unsigned apptype:4; unsigned isent:1;};
 
-#define TOTAL_KEYWORDS 197
+#define TOTAL_KEYWORDS 199
 #define MIN_WORD_LENGTH 3
 #define MAX_WORD_LENGTH 39
 #define MIN_HASH_VALUE 3
@@ -326,6 +326,7 @@ struct stringpool_t
     char stringpool_str277[sizeof("ACDBASSOCFILLETSURFACEACTIONBODY")];
     char stringpool_str278[sizeof("ACSH_REVOLVE_CLASS")];
     char stringpool_str280[sizeof("POLARGRIPENTITY")];
+    char stringpool_str287[sizeof("PARTIAL_VIEWING_FILTER")];
     char stringpool_str289[sizeof("ARCALIGNEDTEXT")];
     char stringpool_str290[sizeof("ACDBASSOCARRAYRECTANGULARPARAMETERS")];
     char stringpool_str291[sizeof("BLOCKANGULARCONSTRAINTPARAMETER")];
@@ -336,6 +337,7 @@ struct stringpool_t
     char stringpool_str304[sizeof("BLOCKPROPERTIESTABLEGRIP")];
     char stringpool_str307[sizeof("RENDERENVIRONMENT")];
     char stringpool_str308[sizeof("ACDB_DMDIMOBJECTCONTEXTDATA_CLASS")];
+    char stringpool_str311[sizeof("PARTIAL_VIEWING_INDEX")];
     char stringpool_str312[sizeof("RENDERGLOBAL")];
     char stringpool_str313[sizeof("IMAGEDEF")];
     char stringpool_str329[sizeof("ACSH_CYLINDER_CLASS")];
@@ -526,6 +528,7 @@ static const struct stringpool_t stringpool_contents =
     "ACDBASSOCFILLETSURFACEACTIONBODY",
     "ACSH_REVOLVE_CLASS",
     "POLARGRIPENTITY",
+    "PARTIAL_VIEWING_FILTER",
     "ARCALIGNEDTEXT",
     "ACDBASSOCARRAYRECTANGULARPARAMETERS",
     "BLOCKANGULARCONSTRAINTPARAMETER",
@@ -536,6 +539,7 @@ static const struct stringpool_t stringpool_contents =
     "BLOCKPROPERTIESTABLEGRIP",
     "RENDERENVIRONMENT",
     "ACDB_DMDIMOBJECTCONTEXTDATA_CLASS",
+    "PARTIAL_VIEWING_INDEX",
     "RENDERGLOBAL",
     "IMAGEDEF",
     "ACSH_CYLINDER_CLASS",
@@ -764,7 +768,7 @@ in_word_set (register const char *str, register size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str141,	"AcDbMLeader",		ODBX,	1},
       {-1},
 #line 284 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str143,	"AcDbImpNonPersistentObjectsCollection", ODBX, 0},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str143,				"AcDbImpNonPersistentObjectsCollection", ODBX, 0},
       {-1},
 #line 165 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str145,	"AcDbAssocEdgeChamferActionBody",	ODBX,	0},
@@ -948,7 +952,10 @@ in_word_set (register const char *str, register size_t len)
       {-1},
 #line 204 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str280,			"AcDbBlockPolarGripEntity",		ODBX,	1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 285 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str287,			"OdDbPartialViewingFilter",	SPECIAL, 0},
+      {-1},
 #line 111 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str289, "AcDbArcAlignedText",	EXPRESS, 1},
 #line 196 "src/dxfclasses.in"
@@ -973,7 +980,9 @@ in_word_set (register const char *str, register size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str307,   			"AcDbRenderEnvironment",		SCENEOE,	0},
 #line 266 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str308,	"AcDbDiametricDimensionObjectContextData",ODBX,	0},
-      {-1}, {-1}, {-1},
+      {-1}, {-1},
+#line 286 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str311,			"OdDbPartialViewingIndex",	SPECIAL, 0},
 #line 253 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str312,   			"AcDbRenderGlobal",			SCENEOE,	0},
 #line 98 "src/dxfclasses.in"
@@ -1145,7 +1154,7 @@ in_word_set (register const char *str, register size_t len)
     }
   return 0;
 }
-#line 285 "src/dxfclasses.in"
+#line 287 "src/dxfclasses.in"
 
 
 /* Create classes on demand.
@@ -1200,6 +1209,8 @@ dwg_require_class (Dwg_Data *restrict dwg, const char *const restrict dxfname, c
               strcpy (appname, "Wipeout|Product Desc:     WipeOut Dbx Application");
             else if (strEQc (dxfname, "DIMASSOC"))
               strcpy (appname, "AcDbDimAssoc|Product Desc:     AcDim ARX App For Dimension");
+            else if (memBEGINc (dxfname, "PARTIAL_VIEWING_"))
+              strcpy (appname, "OdDbPartialViewing|https://www.opendesign.com Teigha(R) Core Db");
             else
               {
                 strcpy (appname, result->cppname);

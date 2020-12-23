@@ -11269,6 +11269,26 @@ DWG_OBJECT (POINTCLOUDCOLORMAP)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+//DWG_OBJECT (PARTIAL_VIEWING_FILTER)
+//  SUBCLASS (AcDbFilter)
+//  START_OBJECT_HANDLE_STREAM;
+//DWG_OBJECT_END
+
+DWG_OBJECT (PARTIAL_VIEWING_INDEX)
+  FIELD_BL (num_entries, 0);
+  if (FIELD_VALUE (num_entries))
+    FIELD_B (has_entries, 0);
+  REPEAT (num_entries, entries, Dwg_PARTIAL_VIEWING_INDEX_Entry)
+  REPEAT_BLOCK
+    SUB_FIELD_3BD (entries[rcount1], extents_min, 0);
+    SUB_FIELD_3BD (entries[rcount1], extents_max, 0);
+    SUB_FIELD_HANDLE (entries[rcount1], object, 5, 0);
+  END_REPEAT_BLOCK
+  SET_PARENT_OBJ (entries);
+  END_REPEAT (entries)
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 #endif /* DEBUG_CLASSES || IS_FREE */
 /*=============================================================================*/
 

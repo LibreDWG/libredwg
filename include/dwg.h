@@ -569,6 +569,8 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_NURBSURFACE,
   DWG_TYPE_OBJECT_PTR,
   DWG_TYPE_ORDDIMOBJECTCONTEXTDATA,
+  DWG_TYPE_PARTIAL_VIEWING_INDEX,
+  //DWG_TYPE_PARTIAL_VIEWING_FILTER,
   DWG_TYPE_PDFDEFINITION,
   DWG_TYPE_PDFUNDERLAY,
   DWG_TYPE_PERSUBENTMGR,
@@ -7723,6 +7725,26 @@ typedef struct _dwg_COMPOUNDOBJECTID
   BITCODE_H object;
 } Dwg_COMPOUNDOBJECTID;
 
+// ODA Arx
+//typedef Dwg_Object_LAYERFILTER Dwg_Object_PARTIAL_VIEWING_FILTER;
+
+typedef struct _dwg_PARTIAL_VIEWING_INDEX_Entry
+{
+  struct _dwg_object_object *parent;
+  BITCODE_3BD extents_min;
+  BITCODE_3BD extents_max;
+  BITCODE_H object;
+} Dwg_PARTIAL_VIEWING_INDEX_Entry;
+
+typedef struct _dwg_object_PARTIAL_VIEWING_INDEX
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL num_entries;
+  BITCODE_B has_entries;
+  Dwg_PARTIAL_VIEWING_INDEX_Entry *entries;
+} Dwg_Object_PARTIAL_VIEWING_INDEX;
+
+
 /**
  -----------------------------------
  */
@@ -8187,6 +8209,7 @@ typedef struct _dwg_object_object
     Dwg_Object_MTEXTOBJECTCONTEXTDATA *MTEXTOBJECTCONTEXTDATA;
     Dwg_Object_NAVISWORKSMODELDEF *NAVISWORKSMODELDEF;
     Dwg_Object_ORDDIMOBJECTCONTEXTDATA *ORDDIMOBJECTCONTEXTDATA;
+    Dwg_Object_PARTIAL_VIEWING_INDEX *PARTIAL_VIEWING_INDEX;
     Dwg_Object_PERSUBENTMGR *PERSUBENTMGR;
     Dwg_Object_POINTCLOUDCOLORMAP *POINTCLOUDCOLORMAP;
     Dwg_Object_POINTCLOUDDEF *POINTCLOUDDEF;
@@ -9496,6 +9519,7 @@ EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
   EXPORT int dwg_setup_MTEXTOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_NAVISWORKSMODELDEF (Dwg_Object *obj);
   EXPORT int dwg_setup_ORDDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
+  EXPORT int dwg_setup_PARTIAL_VIEWING_INDEX (Dwg_Object *obj);
   EXPORT int dwg_setup_PERSUBENTMGR (Dwg_Object *obj);
   EXPORT int dwg_setup_POINTCLOUDCOLORMAP (Dwg_Object *obj);
   EXPORT int dwg_setup_POINTCLOUDDEF (Dwg_Object *obj);

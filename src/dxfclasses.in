@@ -281,7 +281,9 @@ ACDBPOINTCLOUDDEF_REACTOR_EX,		"AcDbPointCloudDefReactorEx",		POINTCLOUD, 0
 ACDBPOINTCLOUDCOLORMAP,			"AcDbPointCloudColorMap",		POINTCLOUD, 0
 #
 EXACXREFPANELOBJECT,			"ExAcXREFPanelObject",		SPECIAL, 0
-NPOCOLLECTION,	"AcDbImpNonPersistentObjectsCollection", ODBX, 0
+NPOCOLLECTION,				"AcDbImpNonPersistentObjectsCollection", ODBX, 0
+PARTIAL_VIEWING_FILTER,			"OdDbPartialViewingFilter",	SPECIAL, 0
+PARTIAL_VIEWING_INDEX,			"OdDbPartialViewingIndex",	SPECIAL, 0
 %%
 
 /* Create classes on demand.
@@ -336,6 +338,8 @@ dwg_require_class (Dwg_Data *restrict dwg, const char *const restrict dxfname, c
               strcpy (appname, "Wipeout|Product Desc:     WipeOut Dbx Application");
             else if (strEQc (dxfname, "DIMASSOC"))
               strcpy (appname, "AcDbDimAssoc|Product Desc:     AcDim ARX App For Dimension");
+            else if (memBEGINc (dxfname, "PARTIAL_VIEWING_"))
+              strcpy (appname, "OdDbPartialViewing|https://www.opendesign.com Teigha(R) Core Db");
             else
               {
                 strcpy (appname, result->cppname);

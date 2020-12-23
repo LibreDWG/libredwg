@@ -10787,6 +10787,25 @@ Dwg_OCD_Dimension
 @end vtable
 @end indentedblock
 
+@strong{PARTIAL_VIEWING_INDEX} @anchor{PARTIAL_VIEWING_INDEX}
+@cindex object, PARTIAL_VIEWING_INDEX
+@vindex PARTIAL_VIEWING_INDEX
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item num_entries
+BL
+@item has_entries
+B
+@item entries
+Dwg_PARTIAL_VIEWING_INDEX_Entry*
+
+@end vtable
+@end indentedblock
+
 @strong{PERSUBENTMGR} @anchor{PERSUBENTMGR}
 @cindex object, PERSUBENTMGR
 @vindex PERSUBENTMGR
@@ -14857,6 +14876,24 @@ B,	DXF 295
 B,	DXF 296
 @item flip_arrow1
 B,	DXF 297
+
+@end vtable
+@end indentedblock
+
+@strong{Dwg_PARTIAL_VIEWING_INDEX_Entry} @anchor{Dwg_PARTIAL_VIEWING_INDEX_Entry}
+@vindex Dwg_PARTIAL_VIEWING_INDEX_Entry
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item extents_min
+3BD
+@item extents_max
+3BD
+@item object
+H
 
 @end vtable
 @end indentedblock
