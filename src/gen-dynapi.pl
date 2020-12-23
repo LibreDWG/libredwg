@@ -680,7 +680,9 @@ my %DXFNAME =
     DICTIONARYWDFLT => "ACDBDICTIONARYWDFLT",
     PLACEHOLDER => "ACDBPLACEHOLDER",
     CURVEPATH => "ACDBCURVEPATH",
+    MOTIONPATH => "ACDBMOTIONPATH",
     POINTPATH => "ACDBPOINTPATH",
+    IBL_BACKGROUND => "RAPIDRTRENDERENVIRONMENT",
     NAVISWORKSMODEL => "COORDINATION_MODEL", #?
     PERSUBENTMGR => "ACDBPERSSUBENTMANAGER",
     DYNAMICBLOCKPURGEPREVENTER => "ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
@@ -704,13 +706,6 @@ sub dxfname {
   if (/OBJECTCONTEXTDATA$/) {
     return "ACDB_${_}_CLASS";
   }
-  # FIXME:
-  # BACKGROUND         => SOLID_BACKGROUND
-  #                       SKYLIGHT_BACKGROUND
-  #                       GROUND_PLANE_BACKGROUND
-  #                       GRADIENT_BACKGROUND
-  #                       IMAGE_BACKGROUND
-  #                       IBL_BACKGROUND
   return $dxfname;
 }
 
@@ -2370,7 +2365,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2354 "gen-dynapi.pl"
+#line 2369 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2456,7 +2451,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 @@list name_subclasses@@
 };
 
-#line 2440 "gen-dynapi.pl"
+#line 2455 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;

@@ -310,42 +310,41 @@ static const char *const _dwg_type_names_variable[] =
     "POLARGRIPENTITY",                      	/* 690 */
     "RADIMLGOBJECTCONTEXTDATA",             	/* 691 */
     "RADIMOBJECTCONTEXTDATA",               	/* 692 */
-    "RAPIDRTRENDERENVIRONMENT",             	/* 693 */
-    "RAPIDRTRENDERSETTINGS",                	/* 694 */
-    "RASTERVARIABLES",                      	/* 695 */
-    "RENDERENTRY",                          	/* 696 */
-    "RENDERENVIRONMENT",                    	/* 697 */
-    "RENDERGLOBAL",                         	/* 698 */
-    "RENDERSETTINGS",                       	/* 699 */
-    "REVOLVEDSURFACE",                      	/* 700 */
-    "ROTATIONPARAMETERENTITY",              	/* 701 */
-    "RTEXT",                                	/* 702 */
-    "SCALE",                                	/* 703 */
-    "SECTIONOBJECT",                        	/* 704 */
-    "SECTIONVIEWSTYLE",                     	/* 705 */
-    "SECTION_MANAGER",                      	/* 706 */
-    "SECTION_SETTINGS",                     	/* 707 */
-    "SKYLIGHT_BACKGROUND",                  	/* 708 */
-    "SOLID_BACKGROUND",                     	/* 709 */
-    "SORTENTSTABLE",                        	/* 710 */
-    "SPATIAL_FILTER",                       	/* 711 */
-    "SPATIAL_INDEX",                        	/* 712 */
-    "SUN",                                  	/* 713 */
-    "SUNSTUDY",                             	/* 714 */
-    "SWEPTSURFACE",                         	/* 715 */
-    "TABLE",                                	/* 716 */
-    "TABLECONTENT",                         	/* 717 */
-    "TABLEGEOMETRY",                        	/* 718 */
-    "TABLESTYLE",                           	/* 719 */
-    "TEXTOBJECTCONTEXTDATA",                	/* 720 */
-    "TVDEVICEPROPERTIES",                   	/* 721 */
-    "VISIBILITYGRIPENTITY",                 	/* 722 */
-    "VISIBILITYPARAMETERENTITY",            	/* 723 */
-    "VISUALSTYLE",                          	/* 724 */
-    "WIPEOUT",                              	/* 725 */
-    "WIPEOUTVARIABLES",                     	/* 726 */
-    "XREFPANELOBJECT",                      	/* 727 */
-    "XYPARAMETERENTITY",                    	/* 728 */
+    "RAPIDRTRENDERSETTINGS",                	/* 693 */
+    "RASTERVARIABLES",                      	/* 694 */
+    "RENDERENTRY",                          	/* 695 */
+    "RENDERENVIRONMENT",                    	/* 696 */
+    "RENDERGLOBAL",                         	/* 697 */
+    "RENDERSETTINGS",                       	/* 698 */
+    "REVOLVEDSURFACE",                      	/* 699 */
+    "ROTATIONPARAMETERENTITY",              	/* 700 */
+    "RTEXT",                                	/* 701 */
+    "SCALE",                                	/* 702 */
+    "SECTIONOBJECT",                        	/* 703 */
+    "SECTIONVIEWSTYLE",                     	/* 704 */
+    "SECTION_MANAGER",                      	/* 705 */
+    "SECTION_SETTINGS",                     	/* 706 */
+    "SKYLIGHT_BACKGROUND",                  	/* 707 */
+    "SOLID_BACKGROUND",                     	/* 708 */
+    "SORTENTSTABLE",                        	/* 709 */
+    "SPATIAL_FILTER",                       	/* 710 */
+    "SPATIAL_INDEX",                        	/* 711 */
+    "SUN",                                  	/* 712 */
+    "SUNSTUDY",                             	/* 713 */
+    "SWEPTSURFACE",                         	/* 714 */
+    "TABLE",                                	/* 715 */
+    "TABLECONTENT",                         	/* 716 */
+    "TABLEGEOMETRY",                        	/* 717 */
+    "TABLESTYLE",                           	/* 718 */
+    "TEXTOBJECTCONTEXTDATA",                	/* 719 */
+    "TVDEVICEPROPERTIES",                   	/* 720 */
+    "VISIBILITYGRIPENTITY",                 	/* 721 */
+    "VISIBILITYPARAMETERENTITY",            	/* 722 */
+    "VISUALSTYLE",                          	/* 723 */
+    "WIPEOUT",                              	/* 724 */
+    "WIPEOUTVARIABLES",                     	/* 725 */
+    "XREFPANELOBJECT",                      	/* 726 */
+    "XYPARAMETERENTITY",                    	/* 727 */
   /* End auto-generated variable */
 };
 
@@ -776,7 +775,7 @@ static const char *_dwg_dxfnames_variable[] =
     "GRADIENT_BACKGROUND",                  	/* 641 */
     "GROUND_PLANE_BACKGROUND",              	/* 642 */
     "HELIX",                                	/* 643 */
-    "IBL_BACKGROUND",                       	/* 644 */
+    "RAPIDRTRENDERENVIRONMENT",             	/* 644 */
     "IDBUFFER",                             	/* 645 */
     "IMAGE",                                	/* 646 */
     "IMAGEDEF",                             	/* 647 */
@@ -797,7 +796,7 @@ static const char *_dwg_dxfnames_variable[] =
     "MESH",                                 	/* 662 */
     "ACDB_MLEADEROBJECTCONTEXTDATA_CLASS",  	/* 663 */
     "MLEADERSTYLE",                         	/* 664 */
-    "MOTIONPATH",                           	/* 665 */
+    "ACDBMOTIONPATH",                       	/* 665 */
     "MPOLYGON",                             	/* 666 */
     "ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS",	/* 667 */
     "ACDB_MTEXTOBJECTCONTEXTDATA_CLASS",    	/* 668 */
@@ -825,42 +824,41 @@ static const char *_dwg_dxfnames_variable[] =
     "POLARGRIPENTITY",                      	/* 690 */
     "ACDB_RADIMLGOBJECTCONTEXTDATA_CLASS",  	/* 691 */
     "ACDB_RADIMOBJECTCONTEXTDATA_CLASS",    	/* 692 */
-    "RAPIDRTRENDERENVIRONMENT",             	/* 693 */
-    "RAPIDRTRENDERSETTINGS",                	/* 694 */
-    "RASTERVARIABLES",                      	/* 695 */
-    "RENDERENTRY",                          	/* 696 */
-    "RENDERENVIRONMENT",                    	/* 697 */
-    "RENDERGLOBAL",                         	/* 698 */
-    "RENDERSETTINGS",                       	/* 699 */
-    "REVOLVEDSURFACE",                      	/* 700 */
-    "ROTATIONPARAMETERENTITY",              	/* 701 */
-    "RTEXT",                                	/* 702 */
-    "SCALE",                                	/* 703 */
-    "SECTIONOBJECT",                        	/* 704 */
-    "ACDBSECTIONVIEWSTYLE",                 	/* 705 */
-    "SECTION_MANAGER",                      	/* 706 */
-    "SECTION_SETTINGS",                     	/* 707 */
-    "SKYLIGHT_BACKGROUND",                  	/* 708 */
-    "SOLID_BACKGROUND",                     	/* 709 */
-    "SORTENTSTABLE",                        	/* 710 */
-    "SPATIAL_FILTER",                       	/* 711 */
-    "SPATIAL_INDEX",                        	/* 712 */
-    "SUN",                                  	/* 713 */
-    "SUNSTUDY",                             	/* 714 */
-    "SWEPTSURFACE",                         	/* 715 */
-    "ACAD_TABLE",                           	/* 716 */
-    "TABLE",                                	/* 717 */
-    "TABLEGEOMETRY",                        	/* 718 */
-    "TABLESTYLE",                           	/* 719 */
-    "ACDB_TEXTOBJECTCONTEXTDATA_CLASS",     	/* 720 */
-    "TVDEVICEPROPERTIES",                   	/* 721 */
-    "VISIBILITYGRIPENTITY",                 	/* 722 */
-    "VISIBILITYPARAMETERENTITY",            	/* 723 */
-    "VISUALSTYLE",                          	/* 724 */
-    "WIPEOUT",                              	/* 725 */
-    "WIPEOUTVARIABLES",                     	/* 726 */
-    "EXACXREFPANELOBJECT",                  	/* 727 */
-    "XYPARAMETERENTITY",                    	/* 728 */
+    "RAPIDRTRENDERSETTINGS",                	/* 693 */
+    "RASTERVARIABLES",                      	/* 694 */
+    "RENDERENTRY",                          	/* 695 */
+    "RENDERENVIRONMENT",                    	/* 696 */
+    "RENDERGLOBAL",                         	/* 697 */
+    "RENDERSETTINGS",                       	/* 698 */
+    "REVOLVEDSURFACE",                      	/* 699 */
+    "ROTATIONPARAMETERENTITY",              	/* 700 */
+    "RTEXT",                                	/* 701 */
+    "SCALE",                                	/* 702 */
+    "SECTIONOBJECT",                        	/* 703 */
+    "ACDBSECTIONVIEWSTYLE",                 	/* 704 */
+    "SECTION_MANAGER",                      	/* 705 */
+    "SECTION_SETTINGS",                     	/* 706 */
+    "SKYLIGHT_BACKGROUND",                  	/* 707 */
+    "SOLID_BACKGROUND",                     	/* 708 */
+    "SORTENTSTABLE",                        	/* 709 */
+    "SPATIAL_FILTER",                       	/* 710 */
+    "SPATIAL_INDEX",                        	/* 711 */
+    "SUN",                                  	/* 712 */
+    "SUNSTUDY",                             	/* 713 */
+    "SWEPTSURFACE",                         	/* 714 */
+    "ACAD_TABLE",                           	/* 715 */
+    "TABLE",                                	/* 716 */
+    "TABLEGEOMETRY",                        	/* 717 */
+    "TABLESTYLE",                           	/* 718 */
+    "ACDB_TEXTOBJECTCONTEXTDATA_CLASS",     	/* 719 */
+    "TVDEVICEPROPERTIES",                   	/* 720 */
+    "VISIBILITYGRIPENTITY",                 	/* 721 */
+    "VISIBILITYPARAMETERENTITY",            	/* 722 */
+    "VISUALSTYLE",                          	/* 723 */
+    "WIPEOUT",                              	/* 724 */
+    "WIPEOUTVARIABLES",                     	/* 725 */
+    "EXACXREFPANELOBJECT",                  	/* 726 */
+    "XYPARAMETERENTITY",                    	/* 727 */
   /* End auto-generated dxfnames */
 };
 

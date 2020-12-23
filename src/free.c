@@ -493,7 +493,6 @@ dwg_free_variable_no_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
     case DWG_TYPE_ACDSRECORD:
     case DWG_TYPE_ACDSSCHEMA:
     case DWG_TYPE_NPOCOLLECTION:
-    case DWG_TYPE_RAPIDRTRENDERENVIRONMENT:
     case DWG_TYPE_XREFPANELOBJECT:
     default: LOG_ERROR ("Unhandled class %s, fixedtype %d in objects.inc",
                         dwg_type_name (obj->fixedtype), (int)obj->fixedtype);
@@ -578,7 +577,6 @@ int dwg_free_variable_type_private (Dwg_Object *restrict obj)
     case DWG_TYPE_ACDSRECORD:
     case DWG_TYPE_ACDSSCHEMA:
     case DWG_TYPE_NPOCOLLECTION:
-    case DWG_TYPE_RAPIDRTRENDERENVIRONMENT:
     case DWG_TYPE_XREFPANELOBJECT:
     default: LOG_ERROR ("Unhandled class %s, fixedtype %d in objects.inc",
                         dwg_type_name (obj->fixedtype), (int)obj->fixedtype);

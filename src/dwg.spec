@@ -9520,8 +9520,8 @@ DWG_OBJECT (NAVISWORKSMODELDEF)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-// officially documented, dbRender.h
-// ACAD_RENDER_ENVIRONMENT
+// officially documented, dbRender.h (ACAD_RENDER_ENVIRONMENT ??)
+// DXF: RENDERENVIRONMENT
 DWG_OBJECT (RENDERENVIRONMENT)
   DECODE_UNKNOWN_BITS
 
@@ -10069,8 +10069,8 @@ DWG_OBJECT (SECTIONVIEWSTYLE)
 DWG_OBJECT_END
 
 DWG_OBJECT (GRADIENT_BACKGROUND)
-  FIELD_BL (class_version, 90); /* 1 */
   SUBCLASS (AcDbGradientBackground)
+  FIELD_BL (class_version, 90); /* 1 */
   // all rgb's with method c2
   FIELD_BLx (color_top, 90);
   FIELD_BLx (color_middle, 91);
@@ -10081,9 +10081,10 @@ DWG_OBJECT (GRADIENT_BACKGROUND)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+// DXF: GRADIENT_BACKGROUND with ODA! (looks like an ODA bug)
 DWG_OBJECT (GROUND_PLANE_BACKGROUND)
-  FIELD_BL (class_version, 90); /* 1 */
   SUBCLASS (AcDbGroundPlaneBackground)
+  FIELD_BL (class_version, 90); /* 1 */
   // all rgb's with method c2
   FIELD_BLx (color_sky_zenith, 90);
   FIELD_BLx (color_sky_horizon, 91);
@@ -10094,9 +10095,10 @@ DWG_OBJECT (GROUND_PLANE_BACKGROUND)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+// DXF: RAPIDRTRENDERENVIRONMENT
 DWG_OBJECT (IBL_BACKGROUND)
-  FIELD_BL (class_version, 90); /* 2 */
   SUBCLASS (AcDbIBLBackground)
+  FIELD_BL (class_version, 90); /* 2 */
   FIELD_B (enable, 290);
   FIELD_T (name, 1);
   FIELD_BD (rotation, 40);
@@ -10106,8 +10108,8 @@ DWG_OBJECT (IBL_BACKGROUND)
 DWG_OBJECT_END
 
 DWG_OBJECT (IMAGE_BACKGROUND)
-  FIELD_BL (class_version, 90); /* 1 */
   SUBCLASS (AcDbImageBackground)
+  FIELD_BL (class_version, 90); /* 1 */
   FIELD_T (filename, 300);
   FIELD_B (fit_to_screen, 290);
   FIELD_B (maintain_aspect_ratio, 291);
@@ -10118,15 +10120,15 @@ DWG_OBJECT (IMAGE_BACKGROUND)
 DWG_OBJECT_END
 
 DWG_OBJECT (SKYLIGHT_BACKGROUND)
-  FIELD_BL (class_version, 90); /* 1 */
   SUBCLASS (AcDbSkyBackground); 
+  FIELD_BL (class_version, 90); /* 1 */
   FIELD_HANDLE (sunid, 5, 340);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
 DWG_OBJECT (SOLID_BACKGROUND)
-  FIELD_BL (class_version, 90); /* 1 */
   SUBCLASS (AcDbSolidBackground)
+  FIELD_BL (class_version, 90); /* 1 */
   FIELD_BLx (color, 90);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -11311,11 +11313,6 @@ DWG_OBJECT (ACDSRECORD)
 DWG_OBJECT_END
 
 DWG_OBJECT (ACDSSCHEMA)
-  DECODE_UNKNOWN_BITS
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (RAPIDRTRENDERENVIRONMENT)
   DECODE_UNKNOWN_BITS
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END

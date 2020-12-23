@@ -100,6 +100,7 @@ IMAGEDEF_REACTOR,"AcDbRasterImageDefReactor",	ISM,	0
 RASTERVARIABLES,"AcDbRasterVariables",	ISM,	0
 #
 LIGHT,		"AcDbLight",		SCENEOE, 1
+LIGHTLIST,	"AcDbLightList",	SCENEOE, 0
 SUN, 		"AcDbSun",		SCENEOE, 0
 SUNSTUDY,	"AcDbSunStudy",		SCENEOE, 0
 #
@@ -243,9 +244,20 @@ BLOCKPROPERTIESTABLEGRIP,   		"AcDbBlockPropertiesTableGrip",		ODBX,	0
 ACDB_DYNAMICBLOCKPROXYNODE,		"AcDbDynamicBlockProxyNode",	       	ODBX,	0
 ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION,"AcDbDynamicBlockPurgePreventer",      	ODBX,	0
 #
-ACDBCURVEPATH,   			"AcDbCurvePath",			ODBX,	0
-MOTIONPATH,   				"AcDbMotionPath",			ODBX,	0
-ACDBPOINTPATH,   			"AcDbPointPath",			ODBX,	0
+ACDBCURVEPATH,   			"AcDbCurvePath",			SCENEOE,	0
+ACDBMOTIONPATH,   			"AcDbMotionPath",			SCENEOE,	0
+ACDBPOINTPATH,   			"AcDbPointPath",			SCENEOE,	0
+MENTALRAYRENDERSETTINGS,   		"AcDbMentalRayRenderSettings",		SCENEOE,	0
+RAPIDRTRENDERSETTINGS,   		"AcDbRapidRTRenderSettings",		ODBX,		0
+RENDERENVIRONMENT,   			"AcDbRenderEnvironment",		SCENEOE,	0
+RENDERGLOBAL,   			"AcDbRenderGlobal",			SCENEOE,	0
+RENDERENTRY, 	  			"AcDbRenderEntry",			SCENEOE,	0
+RAPIDRTRENDERENVIRONMENT,   		"AcDbIBLBackground",			SCENEOE,	0
+SKYLIGHT_BACKGROUND,	   		"AcDbSkyBackground",			SCENEOE,	0
+IMAGE_BACKGROUND,	   		"AcDbImageBackground",			SCENEOE,	0
+SOLID_BACKGROUND,	   		"AcDbSolidBackground",			SCENEOE,	0
+GROUND_PLANE_BACKGROUND,	   	"AcDbGroundPlaneBackground",		SCENEOE,	0
+GRADIENT_BACKGROUND,	   		"AcDbGradientBackground",		SCENEOE,	0
 #
 ACDB_ALDIMOBJECTCONTEXTDATA_CLASS,	"AcDbAlignedDimensionObjectContextData",ODBX,	0
 ACDB_ANGDIMOBJECTCONTEXTDATA_CLASS,	"AcDbAngularDimensionObjectContextData",ODBX,	0

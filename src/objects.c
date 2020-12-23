@@ -1071,7 +1071,7 @@ in_word_set (register const char *str, register size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str331,            "ACDBPOINTCLOUDDEF_REACTOR",         DWG_TYPE_POINTCLOUDDEF_REACTOR,	0,	DEBUGGING},
       {-1}, {-1},
 #line 274 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str334,                   "IBL_BACKGROUND",                    DWG_TYPE_IBL_BACKGROUND,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str334,                   "RAPIDRTRENDERENVIRONMENT",          DWG_TYPE_IBL_BACKGROUND,	0,	UNSTABLE},
 #line 196 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str335,   "ACDBASSOCREVOLVEDSURFACEACTIONBODY",  DWG_TYPE_ASSOCREVOLVEDSURFACEACTIONBODY,	0,	UNSTABLE},
 #line 199 "src/objects.in"
@@ -1591,7 +1591,7 @@ in_word_set (register const char *str, register size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1041,               "VERTEX",                     DWG_TYPE_VERTEX_MESH,	1,	STABLE},
       {-1}, {-1}, {-1},
 #line 296 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1045,                       "MOTIONPATH",                        DWG_TYPE_MOTIONPATH,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1045,                       "ACDBMOTIONPATH",                    DWG_TYPE_MOTIONPATH,	0,	DEBUGGING},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},

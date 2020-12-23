@@ -1,6 +1,6 @@
 /* ANSI-C code produced by gperf version 3.1 */
 /* Command-line: gperf --output-file src/dxfclasses.tmp.c src/dxfclasses.in  */
-/* Computed positions: -k'1,6,10,12,$' */
+/* Computed positions: -k'4,6,10,12,21' */
 
 #if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
       && ('%' == 37) && ('&' == 38) && ('\'' == 39) && ('(' == 40) \
@@ -88,12 +88,12 @@ enum apptypes {
 #line 63 "src/dxfclasses.in"
 struct Dwg_DXFClass {int name; const char *const cppname; unsigned apptype:4; unsigned isent:1;};
 
-#define TOTAL_KEYWORDS 185
+#define TOTAL_KEYWORDS 197
 #define MIN_WORD_LENGTH 3
 #define MAX_WORD_LENGTH 39
-#define MIN_HASH_VALUE 10
-#define MAX_HASH_VALUE 528
-/* maximum key range = 519, duplicates = 0 */
+#define MIN_HASH_VALUE 3
+#define MAX_HASH_VALUE 649
+/* maximum key range = 647, duplicates = 0 */
 
 #ifdef __GNUC__
 __inline
@@ -107,25 +107,41 @@ hash (register const char *str, register size_t len)
 {
   static const unsigned short asso_values[] =
     {
-      529, 529, 529, 529, 529, 529, 529, 529, 529, 529,
-      529, 529, 529, 529, 529, 529, 529, 529, 529, 529,
-      529, 529, 529, 529, 529, 529, 529, 529, 529, 529,
-      529, 529, 529, 529, 529, 529, 529, 529, 529, 529,
-      529, 529, 529, 529, 529, 529, 529, 529, 529, 529,
-      529,   0, 529, 529, 529, 529, 529, 529, 529, 529,
-      529, 529, 529, 529, 529,   0,  20, 145,  80,   0,
-        5,  20, 130, 130, 255,  75, 135,  80,  25, 190,
-       15,  10,  30,   5, 105,  45,  90,  10, 150,   0,
-       15, 529, 529, 529, 529,   5,   5, 529, 529, 529,
-      529, 529, 529, 529, 529, 529, 529, 529, 529, 529,
-      529, 529, 529, 529, 529, 529, 529, 529, 529, 529,
-      529, 529, 529, 529, 529, 529, 529, 529, 529
+      650, 650, 650, 650, 650, 650, 650, 650, 650, 650,
+      650, 650, 650, 650, 650, 650, 650, 650, 650, 650,
+      650, 650, 650, 650, 650, 650, 650, 650, 650, 650,
+      650, 650, 650, 650, 650, 650, 650, 650, 650, 650,
+      650, 650, 650, 650, 650, 650, 650, 650, 650, 650,
+        0,  10, 650, 650, 650, 650, 650, 650, 650, 650,
+      650, 650, 650, 650, 650,   0,   0,   5,  60,  15,
+       40, 245,  95, 175, 120,  20,  80, 195, 170, 175,
+       10,  20,  45,   5,  35,   5,  30,  55,  40,  30,
+       10, 650, 650, 650, 650, 185,   0, 650, 650, 650,
+      650, 650, 650, 650, 650, 650, 650, 650, 650, 650,
+      650, 650, 650, 650, 650, 650, 650, 650, 650, 650,
+      650, 650, 650, 650, 650, 650, 650, 650, 650
     };
   register unsigned int hval = len;
 
   switch (hval)
     {
       default:
+        hval += asso_values[(unsigned char)str[20]];
+#if defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang_major__ && defined __clang_minor__ && __clang_major__ + (__clang_minor__ >= 9) > 3))
+      [[fallthrough]];
+#elif defined __GNUC__ && __GNUC__ >= 7
+      __attribute__ ((__fallthrough__));
+#endif
+      /*FALLTHROUGH*/
+      case 20:
+      case 19:
+      case 18:
+      case 17:
+      case 16:
+      case 15:
+      case 14:
+      case 13:
+      case 12:
         hval += asso_values[(unsigned char)str[11]+1];
 #if defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang_major__ && defined __clang_minor__ && __clang_major__ + (__clang_minor__ >= 9) > 3))
       [[fallthrough]];
@@ -155,390 +171,418 @@ hash (register const char *str, register size_t len)
       /*FALLTHROUGH*/
       case 5:
       case 4:
+        hval += asso_values[(unsigned char)str[3]];
+#if defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang_major__ && defined __clang_minor__ && __clang_major__ + (__clang_minor__ >= 9) > 3))
+      [[fallthrough]];
+#elif defined __GNUC__ && __GNUC__ >= 7
+      __attribute__ ((__fallthrough__));
+#endif
+      /*FALLTHROUGH*/
       case 3:
-      case 2:
-      case 1:
-        hval += asso_values[(unsigned char)str[0]];
         break;
     }
-  return hval + asso_values[(unsigned char)str[len - 1]];
+  return hval;
 }
 
 struct stringpool_t
   {
-    char stringpool_str10[sizeof("SCALE")];
-    char stringpool_str27[sizeof("SWEPTSURFACE")];
-    char stringpool_str29[sizeof("FLIPPARAMETERENTITY")];
-    char stringpool_str32[sizeof("ACSH_FILLET_CLASS")];
-    char stringpool_str33[sizeof("SUN")];
+    char stringpool_str3[sizeof("SUN")];
+    char stringpool_str9[sizeof("DATATABLE")];
+    char stringpool_str10[sizeof("HATCH")];
+    char stringpool_str13[sizeof("DIMASSOC")];
+    char stringpool_str18[sizeof("SUNSTUDY")];
+    char stringpool_str21[sizeof("NURBSURFACE")];
+    char stringpool_str25[sizeof("ACDBASSOCACTION")];
+    char stringpool_str27[sizeof("WIPEOUT")];
+    char stringpool_str30[sizeof("ACDBASSOCACTIONPARAM")];
+    char stringpool_str33[sizeof("ACDBCURVEPATH")];
     char stringpool_str34[sizeof("ACDBASSOCARRAYACTIONBODY")];
-    char stringpool_str37[sizeof("PLANESURFACE")];
+    char stringpool_str39[sizeof("ACDBASSOCARRAYPOLARPARAMETERS")];
     char stringpool_str40[sizeof("ACDBASSOCARRAYMODIFYACTIONBODY")];
-    char stringpool_str43[sizeof("ACDBASSOCARRAYPATHPARAMETERS")];
-    char stringpool_str44[sizeof("ACDBASSOCARRAYPOLARPARAMETERS")];
-    char stringpool_str45[sizeof("ACDBASSOCARRAYMODIFYPARAMETERS")];
-    char stringpool_str46[sizeof("ACDBASSOCSWEPTSURFACEACTIONBODY")];
-    char stringpool_str50[sizeof("ACDBASSOCARRAYRECTANGULARPARAMETERS")];
-    char stringpool_str55[sizeof("ACDBASSOC3POINTANGULARDIMACTIONBODY")];
-    char stringpool_str58[sizeof("SUNSTUDY")];
-    char stringpool_str61[sizeof("ACDBASSOCBLENDSURFACEACTIONBODY")];
-    char stringpool_str62[sizeof("ACSH_SPHERE_CLASS")];
-    char stringpool_str63[sizeof("ACDBASSOCGEOMDEPENDENCY")];
-    char stringpool_str66[sizeof("ACDB_FCFOBJECTCONTEXTDATA_CLASS")];
-    char stringpool_str71[sizeof("ACDBASSOCPLANESURFACEACTIONBODY")];
-    char stringpool_str74[sizeof("ACDB_BLKREFOBJECTCONTEXTDATA_CLASS")];
-    char stringpool_str75[sizeof("ACAD_PROXY_ENTITY_WRAPPER")];
-    char stringpool_str79[sizeof("ACDBASSOCREVOLVEDSURFACEACTIONBODY")];
-    char stringpool_str81[sizeof("ACDBASSOCPERSSUBENTMANAGER")];
-    char stringpool_str82[sizeof("ACDBASSOCEXTENDSURFACEACTIONBODY")];
-    char stringpool_str83[sizeof("BLOCKALIGNMENTGRIP")];
-    char stringpool_str84[sizeof("ACDBASSOCEXTRUDEDSURFACEACTIONBODY")];
-    char stringpool_str85[sizeof("ACAD_PROXY_OBJECT_WRAPPER")];
-    char stringpool_str89[sizeof("DATATABLE")];
-    char stringpool_str90[sizeof("ACDBASSOCACTION")];
-    char stringpool_str93[sizeof("BLOCKFLIPPARAMETER")];
-    char stringpool_str95[sizeof("POLARGRIPENTITY")];
-    char stringpool_str96[sizeof("ACDBASSOCPATCHSURFACEACTIONBODY")];
+    char stringpool_str43[sizeof("BLOCKUSERPARAMETER")];
+    char stringpool_str44[sizeof("ACDBASSOCPATHACTIONPARAM")];
+    char stringpool_str45[sizeof("RTEXT")];
+    char stringpool_str46[sizeof("ACDBASSOCPERSSUBENTMANAGER")];
+    char stringpool_str50[sizeof("ACDBASSOCARRAYMODIFYPARAMETERS")];
+    char stringpool_str52[sizeof("SURFACE")];
+    char stringpool_str53[sizeof("IDBUFFER")];
+    char stringpool_str54[sizeof("OLE2FRAME")];
+    char stringpool_str55[sizeof("BLOCKPROPERTIESTABLE")];
+    char stringpool_str57[sizeof("XRECORD")];
+    char stringpool_str60[sizeof("ACDBASSOC3POINTANGULARDIMACTIONBODY")];
+    char stringpool_str61[sizeof("ACDBASSOCPLANESURFACEACTIONBODY")];
+    char stringpool_str62[sizeof("ACDBASSOCEXTENDSURFACEACTIONBODY")];
+    char stringpool_str65[sizeof("BLOCKFLIPACTION")];
+    char stringpool_str66[sizeof("ACDBASSOCPATCHSURFACEACTIONBODY")];
+    char stringpool_str67[sizeof("SWEPTSURFACE")];
+    char stringpool_str69[sizeof("BLOCKPOINTPARAMETER")];
+    char stringpool_str72[sizeof("XYPARAMETERENTITY")];
+    char stringpool_str78[sizeof("BLOCKFLIPPARAMETER")];
+    char stringpool_str79[sizeof("BLOCKPOLARGRIP")];
+    char stringpool_str81[sizeof("WIPEOUTVARIABLES")];
+    char stringpool_str83[sizeof("ACDBASSOCARRAYPATHPARAMETERS")];
+    char stringpool_str84[sizeof("FLIPPARAMETERENTITY")];
+    char stringpool_str85[sizeof("SCALE")];
+    char stringpool_str89[sizeof("ACDBASSOCROTATEDDIMACTIONBODY")];
+    char stringpool_str91[sizeof("ACDBASSOCBLENDSURFACEACTIONBODY")];
+    char stringpool_str94[sizeof("ACDB_BLKREFOBJECTCONTEXTDATA_CLASS")];
+    char stringpool_str96[sizeof("ACDBASSOCSWEPTSURFACEACTIONBODY")];
     char stringpool_str97[sizeof("MLEADERSTYLE")];
-    char stringpool_str99[sizeof("BLOCKPOLARGRIP")];
-    char stringpool_str100[sizeof("BLOCKPROPERTIESTABLE")];
-    char stringpool_str101[sizeof("ACDBPERSSUBENTMANAGER")];
-    char stringpool_str103[sizeof("BLOCKALIGNMENTPARAMETER")];
-    char stringpool_str106[sizeof("BLOCKALIGNEDCONSTRAINTPARAMETER")];
-    char stringpool_str108[sizeof("ACDBASSOCNETWORKSURFACEACTIONBODY")];
-    char stringpool_str109[sizeof("ACDBASSOCROTATEDDIMACTIONBODY")];
-    char stringpool_str110[sizeof("BLOCKFLIPACTION")];
-    char stringpool_str111[sizeof("ACSH_WEDGE_CLASS")];
-    char stringpool_str114[sizeof("ACDBASSOCDEPENDENCY")];
-    char stringpool_str115[sizeof("ACAD_TABLE")];
-    char stringpool_str116[sizeof("ACDBASSOCMLEADERACTIONBODY")];
-    char stringpool_str118[sizeof("ACSH_PYRAMID_CLASS")];
-    char stringpool_str119[sizeof("BLOCKPROPERTIESTABLEGRIP")];
-    char stringpool_str120[sizeof("TABLESTYLE")];
-    char stringpool_str121[sizeof("ACSH_SWEEP_CLASS")];
-    char stringpool_str122[sizeof("ACDBASSOCFILLETSURFACEACTIONBODY")];
-    char stringpool_str123[sizeof("SORTENTSTABLE")];
-    char stringpool_str124[sizeof("ALIGNMENTPARAMETERENTITY")];
-    char stringpool_str125[sizeof("ACSH_BREP_CLASS")];
-    char stringpool_str126[sizeof("WIPEOUTVARIABLES")];
-    char stringpool_str129[sizeof("ACDB_BLOCKREPRESENTATION_DATA")];
-    char stringpool_str133[sizeof("BLOCKUSERPARAMETER")];
-    char stringpool_str135[sizeof("IMAGE")];
-    char stringpool_str136[sizeof("ACDBASSOCDIMDEPENDENCYBODY")];
-    char stringpool_str137[sizeof("ACDBASSOCASMBODYACTIONPARAM")];
-    char stringpool_str140[sizeof("RTEXT")];
-    char stringpool_str141[sizeof("BLOCKARRAYACTION")];
-    char stringpool_str143[sizeof("TABLEGEOMETRY")];
-    char stringpool_str145[sizeof("LWPOLYLINE")];
-    char stringpool_str146[sizeof("BLOCKSCALEACTION")];
-    char stringpool_str150[sizeof("ACDBASSOCACTIONPARAM")];
-    char stringpool_str157[sizeof("SURFACE")];
-    char stringpool_str158[sizeof("BLOCKPOLARSTRETCHACTION")];
-    char stringpool_str159[sizeof("EXACXREFPANELOBJECT")];
-    char stringpool_str160[sizeof("EXTRUDEDSURFACE")];
-    char stringpool_str162[sizeof("PLOTSETTINGS")];
-    char stringpool_str164[sizeof("ACDBASSOCEDGEFILLETACTIONBODY")];
-    char stringpool_str165[sizeof("ACDBASSOCEDGECHAMFERACTIONBODY")];
-    char stringpool_str166[sizeof("ACDBASSOCNETWORK")];
-    char stringpool_str167[sizeof("WIPEOUT")];
-    char stringpool_str168[sizeof("BLOCKDIAMETRICCONSTRAINTPARAMETER")];
-    char stringpool_str169[sizeof("ACDBASSOCPATHACTIONPARAM")];
-    char stringpool_str172[sizeof("XYPARAMETERENTITY")];
-    char stringpool_str173[sizeof("IDBUFFER")];
-    char stringpool_str175[sizeof("POINTPARAMETERENTITY")];
-    char stringpool_str177[sizeof("ACDBASSOCRESTOREENTITYSTATEACTIONBODY")];
-    char stringpool_str178[sizeof("ACSH_CHAMFER_CLASS")];
-    char stringpool_str183[sizeof("ACDBBLOCKPARAMDEPENDENCYBODY")];
-    char stringpool_str184[sizeof("ACDB_ANGDIMOBJECTCONTEXTDATA_CLASS")];
-    char stringpool_str185[sizeof("BLOCKMOVEACTION")];
-    char stringpool_str188[sizeof("ARC_DIMENSION")];
-    char stringpool_str189[sizeof("ACDB_LEADEROBJECTCONTEXTDATA_CLASS")];
-    char stringpool_str190[sizeof("BLOCKRADIALCONSTRAINTPARAMETER")];
-    char stringpool_str191[sizeof("LINEARPARAMETERENTITY")];
-    char stringpool_str192[sizeof("ACDBASSOCLOFTEDSURFACEACTIONBODY")];
-    char stringpool_str193[sizeof("ACSH_REVOLVE_CLASS")];
-    char stringpool_str194[sizeof("ACDBASSOCFACEACTIONPARAM")];
-    char stringpool_str198[sizeof("SPATIAL_INDEX")];
-    char stringpool_str199[sizeof("ACSH_CYLINDER_CLASS")];
-    char stringpool_str200[sizeof("REVOLVEDSURFACE")];
-    char stringpool_str202[sizeof("BLOCKROTATIONGRIP")];
-    char stringpool_str203[sizeof("ROTATIONPARAMETERENTITY")];
-    char stringpool_str204[sizeof("ACSH_BOX_CLASS")];
-    char stringpool_str205[sizeof("ACDB_MLEADEROBJECTCONTEXTDATA_CLASS")];
-    char stringpool_str206[sizeof("ACDBASSOCVERTEXACTIONPARAM")];
-    char stringpool_str209[sizeof("BLOCKPOINTPARAMETER")];
+    char stringpool_str99[sizeof("ACDBASSOCEXTRUDEDSURFACEACTIONBODY")];
+    char stringpool_str100[sizeof("LIGHT")];
+    char stringpool_str101[sizeof("BLOCKSCALEACTION")];
+    char stringpool_str102[sizeof("BLOCKROTATEACTION")];
+    char stringpool_str104[sizeof("ACDBASSOCDEPENDENCY")];
+    char stringpool_str107[sizeof("BLOCKLOOKUPACTION")];
+    char stringpool_str109[sizeof("EXACXREFPANELOBJECT")];
+    char stringpool_str110[sizeof("TABLESTYLE")];
+    char stringpool_str111[sizeof("BLOCKARRAYACTION")];
+    char stringpool_str112[sizeof("BLOCKROTATIONGRIP")];
+    char stringpool_str114[sizeof("ACSH_BOX_CLASS")];
+    char stringpool_str117[sizeof("TABLECONTENT")];
+    char stringpool_str118[sizeof("BLOCKDIAMETRICCONSTRAINTPARAMETER")];
+    char stringpool_str120[sizeof("ACAD_TABLE")];
+    char stringpool_str124[sizeof("ACDB_BLOCKREPRESENTATION_DATA")];
+    char stringpool_str125[sizeof("BLOCKLINEARPARAMETER")];
+    char stringpool_str126[sizeof("ACDBPERSSUBENTMANAGER")];
+    char stringpool_str129[sizeof("ACDBASSOCFACEACTIONPARAM")];
+    char stringpool_str130[sizeof("BLOCKLOOKUPPARAMETER")];
+    char stringpool_str132[sizeof("BLOCKROTATIONPARAMETER")];
+    char stringpool_str133[sizeof("GROUND_PLANE_BACKGROUND")];
+    char stringpool_str135[sizeof("ACAD_PROXY_OBJECT_WRAPPER")];
+    char stringpool_str138[sizeof("ACDBBLOCKPARAMDEPENDENCYBODY")];
+    char stringpool_str139[sizeof("ACDBASSOCEDGEACTIONPARAM")];
+    char stringpool_str141[sizeof("MULTILEADER")];
+    char stringpool_str143[sizeof("NPOCOLLECTION")];
+    char stringpool_str145[sizeof("ACDBASSOCEDGECHAMFERACTIONBODY")];
+    char stringpool_str146[sizeof("ACDB_FCFOBJECTCONTEXTDATA_CLASS")];
+    char stringpool_str149[sizeof("ACDBASSOCEDGEFILLETACTIONBODY")];
+    char stringpool_str151[sizeof("LINEARPARAMETERENTITY")];
+    char stringpool_str154[sizeof("GRADIENT_BACKGROUND")];
+    char stringpool_str157[sizeof("ACDBASSOCRESTOREENTITYSTATEACTIONBODY")];
+    char stringpool_str159[sizeof("ACDBASSOCALIGNEDDIMACTIONBODY")];
+    char stringpool_str161[sizeof("RENDERENTRY")];
+    char stringpool_str162[sizeof("ACSH_SPHERE_CLASS")];
+    char stringpool_str163[sizeof("ACSH_CHAMFER_CLASS")];
+    char stringpool_str165[sizeof("ACAD_PROXY_ENTITY_WRAPPER")];
+    char stringpool_str167[sizeof("ACSH_FILLET_CLASS")];
+    char stringpool_str168[sizeof("ACDB_ANNOTSCALEOBJECTCONTEXTDATA_CLASS")];
+    char stringpool_str174[sizeof("ACDB_LEADEROBJECTCONTEXTDATA_CLASS")];
+    char stringpool_str175[sizeof("BLOCKRADIALCONSTRAINTPARAMETER")];
+    char stringpool_str176[sizeof("VISUALSTYLE")];
+    char stringpool_str179[sizeof("ACDBASSOCREVOLVEDSURFACEACTIONBODY")];
+    char stringpool_str184[sizeof("LIGHTLIST")];
+    char stringpool_str186[sizeof("ACSH_SWEEP_CLASS")];
+    char stringpool_str188[sizeof("ACDBASSOCALIGNEDIMACTIONBODY")];
+    char stringpool_str190[sizeof("ACDBASSOCTRIMSURFACEACTIONBODY")];
+    char stringpool_str193[sizeof("BLOCKBASEPOINTPARAMETER")];
+    char stringpool_str195[sizeof("BLOCKLINEARGRIP")];
+    char stringpool_str196[sizeof("ACDBASSOCNETWORK")];
+    char stringpool_str198[sizeof("MATERIAL")];
+    char stringpool_str200[sizeof("BLOCKLOOKUPGRIP")];
+    char stringpool_str201[sizeof("ACAD_EVALUATION_GRAPH")];
+    char stringpool_str203[sizeof("ACDBPOINTPATH")];
+    char stringpool_str204[sizeof("ACDBPOINTCLOUD")];
+    char stringpool_str206[sizeof("ACDBPOINTCLOUDEX")];
+    char stringpool_str207[sizeof("ACDBPOINTCLOUDDEF")];
+    char stringpool_str208[sizeof("LOFTEDSURFACE")];
+    char stringpool_str209[sizeof("ACDBPOINTCLOUDDEFEX")];
+    char stringpool_str210[sizeof("BLOCKLINEARCONSTRAINTPARAMETER")];
     char stringpool_str211[sizeof("ACSH_TORUS_CLASS")];
-    char stringpool_str215[sizeof("BLOCKLINEARPARAMETER")];
-    char stringpool_str217[sizeof("BLOCKROTATEACTION")];
-    char stringpool_str220[sizeof("ACDBSECTIONVIEWSTYLE")];
-    char stringpool_str221[sizeof("BLOCKANGULARCONSTRAINTPARAMETER")];
-    char stringpool_str222[sizeof("BLOCKROTATIONPARAMETER")];
-    char stringpool_str223[sizeof("IMAGEDEF")];
-    char stringpool_str224[sizeof("SPATIAL_FILTER")];
+    char stringpool_str212[sizeof("ACDBPOINTCLOUDCOLORMAP")];
+    char stringpool_str213[sizeof("ACDBASSOCNETWORKSURFACEACTIONBODY")];
+    char stringpool_str215[sizeof("ACDBPOINTCLOUDDEF_REACTOR")];
+    char stringpool_str216[sizeof("LAYOUT")];
+    char stringpool_str218[sizeof("ACDBPOINTCLOUDDEF_REACTOR_EX")];
+    char stringpool_str220[sizeof("BLOCKMOVEACTION")];
     char stringpool_str225[sizeof("ACDBASSOCORDINATEDIMACTIONBODY")];
-    char stringpool_str226[sizeof("NURBSURFACE")];
-    char stringpool_str228[sizeof("ACDB_ANNOTSCALEOBJECTCONTEXTDATA_CLASS")];
-    char stringpool_str229[sizeof("OLE2FRAME")];
-    char stringpool_str233[sizeof("ACSH_BOOLEAN_CLASS")];
-    char stringpool_str238[sizeof("DIMASSOC")];
-    char stringpool_str239[sizeof("ACDBASSOCEDGEACTIONPARAM")];
-    char stringpool_str240[sizeof("ACSH_LOFT_CLASS")];
-    char stringpool_str241[sizeof("ACAD_EVALUATION_GRAPH")];
-    char stringpool_str244[sizeof("BLOCKVISIBILITYGRIP")];
-    char stringpool_str245[sizeof("LIGHT")];
-    char stringpool_str247[sizeof("ACDBASSOCOFFSETSURFACEACTIONBODY")];
-    char stringpool_str248[sizeof("ACDBCURVEPATH")];
-    char stringpool_str250[sizeof("ACSH_CONE_CLASS")];
-    char stringpool_str254[sizeof("BASEPOINTPARAMETERENTITY")];
-    char stringpool_str256[sizeof("MULTILEADER")];
-    char stringpool_str260[sizeof("BLOCKLOOKUPPARAMETER")];
-    char stringpool_str262[sizeof("BLOCKLOOKUPACTION")];
-    char stringpool_str263[sizeof("ACDB_ALDIMOBJECTCONTEXTDATA_CLASS")];
-    char stringpool_str264[sizeof("BLOCKVISIBILITYPARAMETER")];
-    char stringpool_str265[sizeof("HATCH")];
-    char stringpool_str266[sizeof("ACDB_DYNAMICBLOCKPROXYNODE")];
-    char stringpool_str267[sizeof("XRECORD")];
-    char stringpool_str271[sizeof("BLOCKXYPARAMETER")];
-    char stringpool_str280[sizeof("ACDB_RADIMLGOBJECTCONTEXTDATA_CLASS")];
-    char stringpool_str283[sizeof("ACDBASSOCCOMPOUNDACTIONPARAM")];
-    char stringpool_str288[sizeof("ACDBASSOCALIGNEDIMACTIONBODY")];
-    char stringpool_str289[sizeof("ACDBASSOCALIGNEDDIMACTIONBODY")];
+    char stringpool_str226[sizeof("LAYER_INDEX")];
+    char stringpool_str227[sizeof("PLANESURFACE")];
+    char stringpool_str229[sizeof("SPATIAL_FILTER")];
+    char stringpool_str230[sizeof("LWPOLYLINE")];
+    char stringpool_str231[sizeof("BLOCKXYGRIP")];
+    char stringpool_str233[sizeof("BLOCKALIGNMENTGRIP")];
+    char stringpool_str234[sizeof("ACDBDETAILVIEWSTYLE")];
+    char stringpool_str236[sizeof("ACDBASSOCVERTEXACTIONPARAM")];
+    char stringpool_str238[sizeof("BLOCKSTRETCHACTION")];
+    char stringpool_str241[sizeof("ACSH_WEDGE_CLASS")];
+    char stringpool_str246[sizeof("VBA_PROJECT")];
+    char stringpool_str248[sizeof("ACDB_ALDIMOBJECTCONTEXTDATA_CLASS")];
+    char stringpool_str249[sizeof("BLOCKVISIBILITYGRIP")];
+    char stringpool_str250[sizeof("IMAGE")];
+    char stringpool_str253[sizeof("DICTIONARYVAR")];
+    char stringpool_str254[sizeof("ACDB_ANGDIMOBJECTCONTEXTDATA_CLASS")];
+    char stringpool_str255[sizeof("ACSH_EXTRUSION_CLASS")];
+    char stringpool_str258[sizeof("SPATIAL_INDEX")];
+    char stringpool_str263[sizeof("BLOCKPOLARSTRETCHACTION")];
+    char stringpool_str264[sizeof("BASEPOINTPARAMETERENTITY")];
+    char stringpool_str265[sizeof("ACDBSECTIONVIEWSTYLE")];
+    char stringpool_str266[sizeof("ACDBASSOCDIMDEPENDENCYBODY")];
+    char stringpool_str267[sizeof("PLOTSETTINGS")];
+    char stringpool_str269[sizeof("BLOCKVISIBILITYPARAMETER")];
+    char stringpool_str273[sizeof("BLOCKALIGNMENTPARAMETER")];
+    char stringpool_str275[sizeof("RASTERVARIABLES")];
+    char stringpool_str276[sizeof("BLOCKXYPARAMETER")];
+    char stringpool_str277[sizeof("ACDBASSOCFILLETSURFACEACTIONBODY")];
+    char stringpool_str278[sizeof("ACSH_REVOLVE_CLASS")];
+    char stringpool_str280[sizeof("POLARGRIPENTITY")];
+    char stringpool_str289[sizeof("ARCALIGNEDTEXT")];
+    char stringpool_str290[sizeof("ACDBASSOCARRAYRECTANGULARPARAMETERS")];
+    char stringpool_str291[sizeof("BLOCKANGULARCONSTRAINTPARAMETER")];
     char stringpool_str293[sizeof("ACDB_RADIMOBJECTCONTEXTDATA_CLASS")];
-    char stringpool_str295[sizeof("BLOCKLINEARCONSTRAINTPARAMETER")];
-    char stringpool_str301[sizeof("LAYER_INDEX")];
-    char stringpool_str303[sizeof("BLOCKSTRETCHACTION")];
-    char stringpool_str304[sizeof("ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION")];
-    char stringpool_str306[sizeof("IMAGEDEF_REACTOR")];
-    char stringpool_str313[sizeof("LOFTEDSURFACE")];
-    char stringpool_str315[sizeof("BLOCKLINEARGRIP")];
-    char stringpool_str318[sizeof("NPOCOLLECTION")];
-    char stringpool_str322[sizeof("BLOCKVERTICALCONSTRAINTPARAMETER")];
-    char stringpool_str324[sizeof("POSITIONMARKER")];
-    char stringpool_str325[sizeof("ACSH_EXTRUSION_CLASS")];
-    char stringpool_str326[sizeof("BLOCKXYGRIP")];
-    char stringpool_str328[sizeof("BLOCKFLIPGRIP")];
-    char stringpool_str333[sizeof("DICTIONARYVAR")];
-    char stringpool_str334[sizeof("ARCALIGNEDTEXT")];
-    char stringpool_str343[sizeof("ACDB_DMDIMOBJECTCONTEXTDATA_CLASS")];
-    char stringpool_str351[sizeof("LAYOUT")];
-    char stringpool_str353[sizeof("MATERIAL")];
-    char stringpool_str355[sizeof("RASTERVARIABLES")];
-    char stringpool_str358[sizeof("ACSH_HISTORY_CLASS")];
-    char stringpool_str360[sizeof("BLOCKLOOKUPGRIP")];
-    char stringpool_str363[sizeof("BLOCKBASEPOINTPARAMETER")];
-    char stringpool_str367[sizeof("CELLSTYLEMAP")];
-    char stringpool_str371[sizeof("VISUALSTYLE")];
-    char stringpool_str372[sizeof("ACDBPOINTCLOUDDEF")];
-    char stringpool_str374[sizeof("ACDB_ORDDIMOBJECTCONTEXTDATA_CLASS")];
-    char stringpool_str375[sizeof("MOTIONPATH")];
-    char stringpool_str376[sizeof("ACDBASSOCOBJECTACTIONPARAM")];
-    char stringpool_str381[sizeof("VBA_PROJECT")];
-    char stringpool_str383[sizeof("ACDBASSOCPOINTREFACTIONPARAM")];
-    char stringpool_str386[sizeof("BLOCKGRIPLOCATIONCOMPONENT")];
-    char stringpool_str387[sizeof("ACDBPOINTCLOUDCOLORMAP")];
-    char stringpool_str390[sizeof("ACDBPLACEHOLDER")];
-    char stringpool_str393[sizeof("ACDBPOINTPATH")];
-    char stringpool_str395[sizeof("ACDBASSOCTRIMSURFACEACTIONBODY")];
-    char stringpool_str405[sizeof("ACDBPOINTCLOUDDEF_REACTOR")];
-    char stringpool_str407[sizeof("ACDB_TEXTOBJECTCONTEXTDATA_CLASS")];
-    char stringpool_str409[sizeof("ACDBDETAILVIEWSTYLE")];
-    char stringpool_str412[sizeof("TABLECONTENT")];
-    char stringpool_str419[sizeof("BLOCKHORIZONTALCONSTRAINTPARAMETER")];
-    char stringpool_str444[sizeof("ACDBPOINTCLOUD")];
-    char stringpool_str464[sizeof("ACDBDICTIONARYWDFLT")];
-    char stringpool_str473[sizeof("CONTEXTDATAMANAGER")];
-    char stringpool_str498[sizeof("ACDBASSOCOSNAPPOINTREFACTIONPARAM")];
-    char stringpool_str516[sizeof("ACDBPOINTCLOUDEX")];
-    char stringpool_str519[sizeof("ACDBPOINTCLOUDDEFEX")];
-    char stringpool_str528[sizeof("ACDBPOINTCLOUDDEF_REACTOR_EX")];
+    char stringpool_str298[sizeof("CONTEXTDATAMANAGER")];
+    char stringpool_str302[sizeof("ACDB_TEXTOBJECTCONTEXTDATA_CLASS")];
+    char stringpool_str303[sizeof("ACSH_BOOLEAN_CLASS")];
+    char stringpool_str304[sizeof("BLOCKPROPERTIESTABLEGRIP")];
+    char stringpool_str307[sizeof("RENDERENVIRONMENT")];
+    char stringpool_str308[sizeof("ACDB_DMDIMOBJECTCONTEXTDATA_CLASS")];
+    char stringpool_str312[sizeof("RENDERGLOBAL")];
+    char stringpool_str313[sizeof("IMAGEDEF")];
+    char stringpool_str329[sizeof("ACSH_CYLINDER_CLASS")];
+    char stringpool_str333[sizeof("ACSH_PYRAMID_CLASS")];
+    char stringpool_str338[sizeof("ACDBASSOCPOINTREFACTIONPARAM")];
+    char stringpool_str342[sizeof("CELLSTYLEMAP")];
+    char stringpool_str358[sizeof("TABLEGEOMETRY")];
+    char stringpool_str359[sizeof("ACDBMOTIONPATH")];
+    char stringpool_str364[sizeof("BLOCKHORIZONTALCONSTRAINTPARAMETER")];
+    char stringpool_str366[sizeof("IMAGEDEF_REACTOR")];
+    char stringpool_str367[sizeof("ACDBASSOCLOFTEDSURFACEACTIONBODY")];
+    char stringpool_str369[sizeof("ACDBDICTIONARYWDFLT")];
+    char stringpool_str370[sizeof("EXTRUDEDSURFACE")];
+    char stringpool_str373[sizeof("ROTATIONPARAMETERENTITY")];
+    char stringpool_str377[sizeof("ACDBASSOCASMBODYACTIONPARAM")];
+    char stringpool_str381[sizeof("ACDB_DYNAMICBLOCKPROXYNODE")];
+    char stringpool_str383[sizeof("ACDBASSOCCOMPOUNDACTIONPARAM")];
+    char stringpool_str385[sizeof("ACDBPLACEHOLDER")];
+    char stringpool_str388[sizeof("ARC_DIMENSION")];
+    char stringpool_str391[sizeof("BLOCKALIGNEDCONSTRAINTPARAMETER")];
+    char stringpool_str393[sizeof("ACSH_HISTORY_CLASS")];
+    char stringpool_str396[sizeof("ACDBASSOCOBJECTACTIONPARAM")];
+    char stringpool_str400[sizeof("POINTPARAMETERENTITY")];
+    char stringpool_str401[sizeof("SOLID_BACKGROUND")];
+    char stringpool_str403[sizeof("ACDBASSOCOSNAPPOINTREFACTIONPARAM")];
+    char stringpool_str404[sizeof("SKYLIGHT_BACKGROUND")];
+    char stringpool_str413[sizeof("SORTENTSTABLE")];
+    char stringpool_str417[sizeof("BLOCKVERTICALCONSTRAINTPARAMETER")];
+    char stringpool_str423[sizeof("BLOCKFLIPGRIP")];
+    char stringpool_str426[sizeof("BLOCKGRIPLOCATIONCOMPONENT")];
+    char stringpool_str429[sizeof("ACDB_ORDDIMOBJECTCONTEXTDATA_CLASS")];
+    char stringpool_str441[sizeof("ACDBASSOCMLEADERACTIONBODY")];
+    char stringpool_str444[sizeof("POSITIONMARKER")];
+    char stringpool_str453[sizeof("ACDBASSOCGEOMDEPENDENCY")];
+    char stringpool_str456[sizeof("RAPIDRTRENDERSETTINGS")];
+    char stringpool_str462[sizeof("ACDBASSOCOFFSETSURFACEACTIONBODY")];
+    char stringpool_str465[sizeof("ACDB_MLEADEROBJECTCONTEXTDATA_CLASS")];
+    char stringpool_str470[sizeof("REVOLVEDSURFACE")];
+    char stringpool_str471[sizeof("IMAGE_BACKGROUND")];
+    char stringpool_str490[sizeof("ACSH_BREP_CLASS")];
+    char stringpool_str495[sizeof("ACSH_CONE_CLASS")];
+    char stringpool_str514[sizeof("ALIGNMENTPARAMETERENTITY")];
+    char stringpool_str528[sizeof("MENTALRAYRENDERSETTINGS")];
+    char stringpool_str540[sizeof("ACDB_RADIMLGOBJECTCONTEXTDATA_CLASS")];
+    char stringpool_str570[sizeof("ACSH_LOFT_CLASS")];
+    char stringpool_str599[sizeof("ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION")];
+    char stringpool_str649[sizeof("RAPIDRTRENDERENVIRONMENT")];
   };
 static const struct stringpool_t stringpool_contents =
   {
-    "SCALE",
-    "SWEPTSURFACE",
-    "FLIPPARAMETERENTITY",
-    "ACSH_FILLET_CLASS",
     "SUN",
-    "ACDBASSOCARRAYACTIONBODY",
-    "PLANESURFACE",
-    "ACDBASSOCARRAYMODIFYACTIONBODY",
-    "ACDBASSOCARRAYPATHPARAMETERS",
-    "ACDBASSOCARRAYPOLARPARAMETERS",
-    "ACDBASSOCARRAYMODIFYPARAMETERS",
-    "ACDBASSOCSWEPTSURFACEACTIONBODY",
-    "ACDBASSOCARRAYRECTANGULARPARAMETERS",
-    "ACDBASSOC3POINTANGULARDIMACTIONBODY",
-    "SUNSTUDY",
-    "ACDBASSOCBLENDSURFACEACTIONBODY",
-    "ACSH_SPHERE_CLASS",
-    "ACDBASSOCGEOMDEPENDENCY",
-    "ACDB_FCFOBJECTCONTEXTDATA_CLASS",
-    "ACDBASSOCPLANESURFACEACTIONBODY",
-    "ACDB_BLKREFOBJECTCONTEXTDATA_CLASS",
-    "ACAD_PROXY_ENTITY_WRAPPER",
-    "ACDBASSOCREVOLVEDSURFACEACTIONBODY",
-    "ACDBASSOCPERSSUBENTMANAGER",
-    "ACDBASSOCEXTENDSURFACEACTIONBODY",
-    "BLOCKALIGNMENTGRIP",
-    "ACDBASSOCEXTRUDEDSURFACEACTIONBODY",
-    "ACAD_PROXY_OBJECT_WRAPPER",
     "DATATABLE",
+    "HATCH",
+    "DIMASSOC",
+    "SUNSTUDY",
+    "NURBSURFACE",
     "ACDBASSOCACTION",
-    "BLOCKFLIPPARAMETER",
-    "POLARGRIPENTITY",
-    "ACDBASSOCPATCHSURFACEACTIONBODY",
-    "MLEADERSTYLE",
-    "BLOCKPOLARGRIP",
-    "BLOCKPROPERTIESTABLE",
-    "ACDBPERSSUBENTMANAGER",
-    "BLOCKALIGNMENTPARAMETER",
-    "BLOCKALIGNEDCONSTRAINTPARAMETER",
-    "ACDBASSOCNETWORKSURFACEACTIONBODY",
-    "ACDBASSOCROTATEDDIMACTIONBODY",
-    "BLOCKFLIPACTION",
-    "ACSH_WEDGE_CLASS",
-    "ACDBASSOCDEPENDENCY",
-    "ACAD_TABLE",
-    "ACDBASSOCMLEADERACTIONBODY",
-    "ACSH_PYRAMID_CLASS",
-    "BLOCKPROPERTIESTABLEGRIP",
-    "TABLESTYLE",
-    "ACSH_SWEEP_CLASS",
-    "ACDBASSOCFILLETSURFACEACTIONBODY",
-    "SORTENTSTABLE",
-    "ALIGNMENTPARAMETERENTITY",
-    "ACSH_BREP_CLASS",
-    "WIPEOUTVARIABLES",
-    "ACDB_BLOCKREPRESENTATION_DATA",
-    "BLOCKUSERPARAMETER",
-    "IMAGE",
-    "ACDBASSOCDIMDEPENDENCYBODY",
-    "ACDBASSOCASMBODYACTIONPARAM",
-    "RTEXT",
-    "BLOCKARRAYACTION",
-    "TABLEGEOMETRY",
-    "LWPOLYLINE",
-    "BLOCKSCALEACTION",
-    "ACDBASSOCACTIONPARAM",
-    "SURFACE",
-    "BLOCKPOLARSTRETCHACTION",
-    "EXACXREFPANELOBJECT",
-    "EXTRUDEDSURFACE",
-    "PLOTSETTINGS",
-    "ACDBASSOCEDGEFILLETACTIONBODY",
-    "ACDBASSOCEDGECHAMFERACTIONBODY",
-    "ACDBASSOCNETWORK",
     "WIPEOUT",
-    "BLOCKDIAMETRICCONSTRAINTPARAMETER",
+    "ACDBASSOCACTIONPARAM",
+    "ACDBCURVEPATH",
+    "ACDBASSOCARRAYACTIONBODY",
+    "ACDBASSOCARRAYPOLARPARAMETERS",
+    "ACDBASSOCARRAYMODIFYACTIONBODY",
+    "BLOCKUSERPARAMETER",
     "ACDBASSOCPATHACTIONPARAM",
-    "XYPARAMETERENTITY",
+    "RTEXT",
+    "ACDBASSOCPERSSUBENTMANAGER",
+    "ACDBASSOCARRAYMODIFYPARAMETERS",
+    "SURFACE",
     "IDBUFFER",
-    "POINTPARAMETERENTITY",
-    "ACDBASSOCRESTOREENTITYSTATEACTIONBODY",
-    "ACSH_CHAMFER_CLASS",
+    "OLE2FRAME",
+    "BLOCKPROPERTIESTABLE",
+    "XRECORD",
+    "ACDBASSOC3POINTANGULARDIMACTIONBODY",
+    "ACDBASSOCPLANESURFACEACTIONBODY",
+    "ACDBASSOCEXTENDSURFACEACTIONBODY",
+    "BLOCKFLIPACTION",
+    "ACDBASSOCPATCHSURFACEACTIONBODY",
+    "SWEPTSURFACE",
+    "BLOCKPOINTPARAMETER",
+    "XYPARAMETERENTITY",
+    "BLOCKFLIPPARAMETER",
+    "BLOCKPOLARGRIP",
+    "WIPEOUTVARIABLES",
+    "ACDBASSOCARRAYPATHPARAMETERS",
+    "FLIPPARAMETERENTITY",
+    "SCALE",
+    "ACDBASSOCROTATEDDIMACTIONBODY",
+    "ACDBASSOCBLENDSURFACEACTIONBODY",
+    "ACDB_BLKREFOBJECTCONTEXTDATA_CLASS",
+    "ACDBASSOCSWEPTSURFACEACTIONBODY",
+    "MLEADERSTYLE",
+    "ACDBASSOCEXTRUDEDSURFACEACTIONBODY",
+    "LIGHT",
+    "BLOCKSCALEACTION",
+    "BLOCKROTATEACTION",
+    "ACDBASSOCDEPENDENCY",
+    "BLOCKLOOKUPACTION",
+    "EXACXREFPANELOBJECT",
+    "TABLESTYLE",
+    "BLOCKARRAYACTION",
+    "BLOCKROTATIONGRIP",
+    "ACSH_BOX_CLASS",
+    "TABLECONTENT",
+    "BLOCKDIAMETRICCONSTRAINTPARAMETER",
+    "ACAD_TABLE",
+    "ACDB_BLOCKREPRESENTATION_DATA",
+    "BLOCKLINEARPARAMETER",
+    "ACDBPERSSUBENTMANAGER",
+    "ACDBASSOCFACEACTIONPARAM",
+    "BLOCKLOOKUPPARAMETER",
+    "BLOCKROTATIONPARAMETER",
+    "GROUND_PLANE_BACKGROUND",
+    "ACAD_PROXY_OBJECT_WRAPPER",
     "ACDBBLOCKPARAMDEPENDENCYBODY",
-    "ACDB_ANGDIMOBJECTCONTEXTDATA_CLASS",
-    "BLOCKMOVEACTION",
-    "ARC_DIMENSION",
+    "ACDBASSOCEDGEACTIONPARAM",
+    "MULTILEADER",
+    "NPOCOLLECTION",
+    "ACDBASSOCEDGECHAMFERACTIONBODY",
+    "ACDB_FCFOBJECTCONTEXTDATA_CLASS",
+    "ACDBASSOCEDGEFILLETACTIONBODY",
+    "LINEARPARAMETERENTITY",
+    "GRADIENT_BACKGROUND",
+    "ACDBASSOCRESTOREENTITYSTATEACTIONBODY",
+    "ACDBASSOCALIGNEDDIMACTIONBODY",
+    "RENDERENTRY",
+    "ACSH_SPHERE_CLASS",
+    "ACSH_CHAMFER_CLASS",
+    "ACAD_PROXY_ENTITY_WRAPPER",
+    "ACSH_FILLET_CLASS",
+    "ACDB_ANNOTSCALEOBJECTCONTEXTDATA_CLASS",
     "ACDB_LEADEROBJECTCONTEXTDATA_CLASS",
     "BLOCKRADIALCONSTRAINTPARAMETER",
-    "LINEARPARAMETERENTITY",
-    "ACDBASSOCLOFTEDSURFACEACTIONBODY",
-    "ACSH_REVOLVE_CLASS",
-    "ACDBASSOCFACEACTIONPARAM",
-    "SPATIAL_INDEX",
-    "ACSH_CYLINDER_CLASS",
-    "REVOLVEDSURFACE",
-    "BLOCKROTATIONGRIP",
-    "ROTATIONPARAMETERENTITY",
-    "ACSH_BOX_CLASS",
-    "ACDB_MLEADEROBJECTCONTEXTDATA_CLASS",
-    "ACDBASSOCVERTEXACTIONPARAM",
-    "BLOCKPOINTPARAMETER",
-    "ACSH_TORUS_CLASS",
-    "BLOCKLINEARPARAMETER",
-    "BLOCKROTATEACTION",
-    "ACDBSECTIONVIEWSTYLE",
-    "BLOCKANGULARCONSTRAINTPARAMETER",
-    "BLOCKROTATIONPARAMETER",
-    "IMAGEDEF",
-    "SPATIAL_FILTER",
-    "ACDBASSOCORDINATEDIMACTIONBODY",
-    "NURBSURFACE",
-    "ACDB_ANNOTSCALEOBJECTCONTEXTDATA_CLASS",
-    "OLE2FRAME",
-    "ACSH_BOOLEAN_CLASS",
-    "DIMASSOC",
-    "ACDBASSOCEDGEACTIONPARAM",
-    "ACSH_LOFT_CLASS",
-    "ACAD_EVALUATION_GRAPH",
-    "BLOCKVISIBILITYGRIP",
-    "LIGHT",
-    "ACDBASSOCOFFSETSURFACEACTIONBODY",
-    "ACDBCURVEPATH",
-    "ACSH_CONE_CLASS",
-    "BASEPOINTPARAMETERENTITY",
-    "MULTILEADER",
-    "BLOCKLOOKUPPARAMETER",
-    "BLOCKLOOKUPACTION",
-    "ACDB_ALDIMOBJECTCONTEXTDATA_CLASS",
-    "BLOCKVISIBILITYPARAMETER",
-    "HATCH",
-    "ACDB_DYNAMICBLOCKPROXYNODE",
-    "XRECORD",
-    "BLOCKXYPARAMETER",
-    "ACDB_RADIMLGOBJECTCONTEXTDATA_CLASS",
-    "ACDBASSOCCOMPOUNDACTIONPARAM",
-    "ACDBASSOCALIGNEDIMACTIONBODY",
-    "ACDBASSOCALIGNEDDIMACTIONBODY",
-    "ACDB_RADIMOBJECTCONTEXTDATA_CLASS",
-    "BLOCKLINEARCONSTRAINTPARAMETER",
-    "LAYER_INDEX",
-    "BLOCKSTRETCHACTION",
-    "ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
-    "IMAGEDEF_REACTOR",
-    "LOFTEDSURFACE",
-    "BLOCKLINEARGRIP",
-    "NPOCOLLECTION",
-    "BLOCKVERTICALCONSTRAINTPARAMETER",
-    "POSITIONMARKER",
-    "ACSH_EXTRUSION_CLASS",
-    "BLOCKXYGRIP",
-    "BLOCKFLIPGRIP",
-    "DICTIONARYVAR",
-    "ARCALIGNEDTEXT",
-    "ACDB_DMDIMOBJECTCONTEXTDATA_CLASS",
-    "LAYOUT",
-    "MATERIAL",
-    "RASTERVARIABLES",
-    "ACSH_HISTORY_CLASS",
-    "BLOCKLOOKUPGRIP",
-    "BLOCKBASEPOINTPARAMETER",
-    "CELLSTYLEMAP",
     "VISUALSTYLE",
-    "ACDBPOINTCLOUDDEF",
-    "ACDB_ORDDIMOBJECTCONTEXTDATA_CLASS",
-    "MOTIONPATH",
-    "ACDBASSOCOBJECTACTIONPARAM",
-    "VBA_PROJECT",
-    "ACDBASSOCPOINTREFACTIONPARAM",
-    "BLOCKGRIPLOCATIONCOMPONENT",
-    "ACDBPOINTCLOUDCOLORMAP",
-    "ACDBPLACEHOLDER",
-    "ACDBPOINTPATH",
+    "ACDBASSOCREVOLVEDSURFACEACTIONBODY",
+    "LIGHTLIST",
+    "ACSH_SWEEP_CLASS",
+    "ACDBASSOCALIGNEDIMACTIONBODY",
     "ACDBASSOCTRIMSURFACEACTIONBODY",
-    "ACDBPOINTCLOUDDEF_REACTOR",
-    "ACDB_TEXTOBJECTCONTEXTDATA_CLASS",
-    "ACDBDETAILVIEWSTYLE",
-    "TABLECONTENT",
-    "BLOCKHORIZONTALCONSTRAINTPARAMETER",
+    "BLOCKBASEPOINTPARAMETER",
+    "BLOCKLINEARGRIP",
+    "ACDBASSOCNETWORK",
+    "MATERIAL",
+    "BLOCKLOOKUPGRIP",
+    "ACAD_EVALUATION_GRAPH",
+    "ACDBPOINTPATH",
     "ACDBPOINTCLOUD",
-    "ACDBDICTIONARYWDFLT",
-    "CONTEXTDATAMANAGER",
-    "ACDBASSOCOSNAPPOINTREFACTIONPARAM",
     "ACDBPOINTCLOUDEX",
+    "ACDBPOINTCLOUDDEF",
+    "LOFTEDSURFACE",
     "ACDBPOINTCLOUDDEFEX",
-    "ACDBPOINTCLOUDDEF_REACTOR_EX"
+    "BLOCKLINEARCONSTRAINTPARAMETER",
+    "ACSH_TORUS_CLASS",
+    "ACDBPOINTCLOUDCOLORMAP",
+    "ACDBASSOCNETWORKSURFACEACTIONBODY",
+    "ACDBPOINTCLOUDDEF_REACTOR",
+    "LAYOUT",
+    "ACDBPOINTCLOUDDEF_REACTOR_EX",
+    "BLOCKMOVEACTION",
+    "ACDBASSOCORDINATEDIMACTIONBODY",
+    "LAYER_INDEX",
+    "PLANESURFACE",
+    "SPATIAL_FILTER",
+    "LWPOLYLINE",
+    "BLOCKXYGRIP",
+    "BLOCKALIGNMENTGRIP",
+    "ACDBDETAILVIEWSTYLE",
+    "ACDBASSOCVERTEXACTIONPARAM",
+    "BLOCKSTRETCHACTION",
+    "ACSH_WEDGE_CLASS",
+    "VBA_PROJECT",
+    "ACDB_ALDIMOBJECTCONTEXTDATA_CLASS",
+    "BLOCKVISIBILITYGRIP",
+    "IMAGE",
+    "DICTIONARYVAR",
+    "ACDB_ANGDIMOBJECTCONTEXTDATA_CLASS",
+    "ACSH_EXTRUSION_CLASS",
+    "SPATIAL_INDEX",
+    "BLOCKPOLARSTRETCHACTION",
+    "BASEPOINTPARAMETERENTITY",
+    "ACDBSECTIONVIEWSTYLE",
+    "ACDBASSOCDIMDEPENDENCYBODY",
+    "PLOTSETTINGS",
+    "BLOCKVISIBILITYPARAMETER",
+    "BLOCKALIGNMENTPARAMETER",
+    "RASTERVARIABLES",
+    "BLOCKXYPARAMETER",
+    "ACDBASSOCFILLETSURFACEACTIONBODY",
+    "ACSH_REVOLVE_CLASS",
+    "POLARGRIPENTITY",
+    "ARCALIGNEDTEXT",
+    "ACDBASSOCARRAYRECTANGULARPARAMETERS",
+    "BLOCKANGULARCONSTRAINTPARAMETER",
+    "ACDB_RADIMOBJECTCONTEXTDATA_CLASS",
+    "CONTEXTDATAMANAGER",
+    "ACDB_TEXTOBJECTCONTEXTDATA_CLASS",
+    "ACSH_BOOLEAN_CLASS",
+    "BLOCKPROPERTIESTABLEGRIP",
+    "RENDERENVIRONMENT",
+    "ACDB_DMDIMOBJECTCONTEXTDATA_CLASS",
+    "RENDERGLOBAL",
+    "IMAGEDEF",
+    "ACSH_CYLINDER_CLASS",
+    "ACSH_PYRAMID_CLASS",
+    "ACDBASSOCPOINTREFACTIONPARAM",
+    "CELLSTYLEMAP",
+    "TABLEGEOMETRY",
+    "ACDBMOTIONPATH",
+    "BLOCKHORIZONTALCONSTRAINTPARAMETER",
+    "IMAGEDEF_REACTOR",
+    "ACDBASSOCLOFTEDSURFACEACTIONBODY",
+    "ACDBDICTIONARYWDFLT",
+    "EXTRUDEDSURFACE",
+    "ROTATIONPARAMETERENTITY",
+    "ACDBASSOCASMBODYACTIONPARAM",
+    "ACDB_DYNAMICBLOCKPROXYNODE",
+    "ACDBASSOCCOMPOUNDACTIONPARAM",
+    "ACDBPLACEHOLDER",
+    "ARC_DIMENSION",
+    "BLOCKALIGNEDCONSTRAINTPARAMETER",
+    "ACSH_HISTORY_CLASS",
+    "ACDBASSOCOBJECTACTIONPARAM",
+    "POINTPARAMETERENTITY",
+    "SOLID_BACKGROUND",
+    "ACDBASSOCOSNAPPOINTREFACTIONPARAM",
+    "SKYLIGHT_BACKGROUND",
+    "SORTENTSTABLE",
+    "BLOCKVERTICALCONSTRAINTPARAMETER",
+    "BLOCKFLIPGRIP",
+    "BLOCKGRIPLOCATIONCOMPONENT",
+    "ACDB_ORDDIMOBJECTCONTEXTDATA_CLASS",
+    "ACDBASSOCMLEADERACTIONBODY",
+    "POSITIONMARKER",
+    "ACDBASSOCGEOMDEPENDENCY",
+    "RAPIDRTRENDERSETTINGS",
+    "ACDBASSOCOFFSETSURFACEACTIONBODY",
+    "ACDB_MLEADEROBJECTCONTEXTDATA_CLASS",
+    "REVOLVEDSURFACE",
+    "IMAGE_BACKGROUND",
+    "ACSH_BREP_CLASS",
+    "ACSH_CONE_CLASS",
+    "ALIGNMENTPARAMETERENTITY",
+    "MENTALRAYRENDERSETTINGS",
+    "ACDB_RADIMLGOBJECTCONTEXTDATA_CLASS",
+    "ACSH_LOFT_CLASS",
+    "ACDB_DYNAMICBLOCKPURGEPREVENTER_VERSION",
+    "RAPIDRTRENDERENVIRONMENT"
   };
 #define stringpool ((const char *) &stringpool_contents)
 const struct Dwg_DXFClass *
@@ -546,486 +590,541 @@ in_word_set (register const char *str, register size_t len)
 {
   static const struct Dwg_DXFClass wordlist[] =
     {
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1},
-#line 95 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str10,		"AcDbScale",		ODBX,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 126 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str27,		"AcDbSweptSurface",	ODBX,	1},
-      {-1},
-#line 199 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str29,			"AcDbBlockFlipParameterEntity",		ODBX,	1},
+      {-1}, {-1}, {-1},
+#line 104 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str3, 		"AcDbSun",		SCENEOE, 0},
+      {-1}, {-1}, {-1}, {-1}, {-1},
+#line 94 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str9,	"AcDbDataTable",	ODBX,	0},
+#line 68 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str10,		"AcDbHatch",		ODBX,	1},
       {-1}, {-1},
-#line 135 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str32,	"AcDbShFillet",		ODBX,	0},
-#line 103 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str33, 		"AcDbSun",		SCENEOE, 0},
-#line 163 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str34,	"AcDbAssocArrayActionBody",		ODBX,	0},
+#line 107 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str13, 	"AcDbDimAssoc",		SPECIAL, 0},
+      {-1}, {-1}, {-1}, {-1},
+#line 105 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str18,	"AcDbSunStudy",		SCENEOE, 0},
       {-1}, {-1},
 #line 124 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str37,		"AcDbPlaneSurface",	ODBX,	1},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str21,		"AcDbNurbSurface",	ODBX,	1},
+      {-1}, {-1}, {-1},
+#line 149 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str25,		"AcDbAssocAction",		ODBX,	0},
+      {-1},
+#line 108 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str27,	"AcDbWipeout", 		SPECIAL, 1},
       {-1}, {-1},
-#line 162 "src/dxfclasses.in"
+#line 184 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str30,			"AcDbAssocActionParam",		ODBX,	0},
+      {-1}, {-1},
+#line 247 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str33,   			"AcDbCurvePath",			SCENEOE,	0},
+#line 164 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str34,	"AcDbAssocArrayActionBody",		ODBX,	0},
+      {-1}, {-1}, {-1}, {-1},
+#line 195 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str39,		"AcDbAssocArrayPolarParameters",	ODBX,	0},
+#line 163 "src/dxfclasses.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str40,	"AcDbAssocArrayModifyActionBody",	ODBX,	0},
       {-1}, {-1},
-#line 193 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str43,		"AcDbAssocArrayPathParameters",		ODBX,	0},
-#line 194 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str44,		"AcDbAssocArrayPolarParameters",	ODBX,	0},
-#line 192 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str45,		"AcDbAssocArrayModifyParameters",	ODBX,	0},
-#line 180 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str46,	"AcDbAssocSweptSurfaceActionBody",	ODBX,	0},
-      {-1}, {-1}, {-1},
-#line 195 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str50,	"AcDbAssocArrayRectangularParameters",	ODBX,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 157 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str55,"AcDbAssoc3PointAngularDimActionBody",	ODBX,	0},
-      {-1}, {-1},
-#line 104 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str58,	"AcDbSunStudy",		SCENEOE, 0},
-      {-1}, {-1},
-#line 169 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str61,	"AcDbAssocBlendSurfaceActionBody",	ODBX,	0},
-#line 140 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str62,	"AcDbShSphere",		ODBX,	0},
-#line 152 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str63,	"AcDbAssocGeomDependency",	ODBX,	0},
-      {-1}, {-1},
-#line 255 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str66,	"AcDbFcfObjectContextData",		ODBX,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 176 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str71,	"AcDbAssocPlaneSurfaceActionBody",	ODBX,	0},
-      {-1}, {-1},
-#line 253 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str74,	"AcDbBlkrefObjectContextData",		ODBX,	0},
-#line 76 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str75,	"AcDbProxyEntityWrapper",	ODBX_OR_A2000CLASS,	0},
-      {-1}, {-1}, {-1},
-#line 179 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str79,	"AcDbAssocRevolvedSurfaceActionBody",	ODBX,	0},
-      {-1},
-#line 145 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str81,	"AcDbAssocPersSubentManager",	ODBX,	0},
-#line 170 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str82,	"AcDbAssocExtendSurfaceActionBody",	ODBX,	0},
-#line 230 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str83,			"AcDbBlockAlignmentGrip",		ODBX,	0},
-#line 171 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str84,	"AcDbAssocExtrudedSurfaceActionBody",	ODBX,	0},
-#line 77 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str85,	"AcDbProxyObjectWrapper",	ODBX_OR_A2000CLASS,	0},
-      {-1}, {-1}, {-1},
-#line 94 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str89,	"AcDbDataTable",	ODBX,	0},
-#line 148 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str90,		"AcDbAssocAction",		ODBX,	0},
-      {-1}, {-1},
-#line 234 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str93,			"AcDbBlockFlipParameter",		ODBX,	0},
-      {-1},
-#line 203 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str95,			"AcDbBlockPolarGripEntity",		ODBX,	1},
-#line 177 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str96,	"AcDbAssocPatchSurfaceActionBody",	ODBX,	0},
-#line 111 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str97,	"AcDbMLeaderStyle",	SPECIAL, 0},
-      {-1},
-#line 225 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str99,				"AcDbBlockPolarGrip",			ODBX,	0},
-#line 241 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str100,			"AcDbBlockPropertiesTable",		ODBX,	0},
-#line 146 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str101, 		"AcDbPersSubentManager",	ODBX, 0},
-      {-1},
-#line 231 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str103,		"AcDbBlockAlignmentParameter",		ODBX,	0},
-      {-1}, {-1},
-#line 211 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str106,	"AcDbBlockAlignedConstraintParameter",  ODBX,	0},
-      {-1},
-#line 174 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str108,	"AcDbAssocNetworkSurfaceActionBody",	ODBX,	0},
-#line 160 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str109,	"AcDbAssocRotatedDimActionBody",	ODBX,	0},
-#line 216 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str110,			"AcDbBlockFlipAction",			ODBX,	0},
-#line 143 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str111,	"AcDbShWedge",		ODBX,	0},
-      {-1}, {-1},
-#line 153 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str114,		"AcDbAssocDependency",		ODBX,	0},
-#line 72 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str115,	"AcDbTable",		ODBX,	1},
-#line 166 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str116,	"AcDbAssocMLeaderActionBody",		ODBX,	0},
-      {-1},
-#line 138 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str118,	"AcDbShPyramid",	ODBX,	0},
-#line 242 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str119,   		"AcDbBlockPropertiesTableGrip",		ODBX,	0},
-#line 90 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str120,	"AcDbTableStyle",	ODBX,	0},
-#line 141 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str121,	"AcDbShSweep",		ODBX,	0},
-#line 172 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str122,	"AcDbAssocFilletSurfaceActionBody",	ODBX,	0},
-#line 81 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str123,	"AcDbSortentsTable",	A2000CLASS,	0},
-#line 197 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str124,		"AcDbBlockAlignmentParameterEntity",	ODBX,	1},
-#line 130 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str125,	"AcDbShBrep",		ODBX,	0},
-#line 108 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str126,"AcDbWipeoutVariables",	ODBX,	0},
-      {-1}, {-1},
-#line 206 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str129,		"AcDbBlockRepresentationData",     	ODBX,	0},
-      {-1}, {-1}, {-1},
-#line 238 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str133,   			"AcDbBlockUserParameter",		ODBX,	0},
-      {-1},
-#line 97 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str135,		"AcDbRasterImage",	ISM,	1},
-#line 154 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str136,	"AcDbAssocDimDependencyBody",	ODBX,	0},
-#line 184 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str137,		"AcDbAssocAsmbodyActionParam",	ODBX,	0},
-      {-1}, {-1},
-#line 109 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str140, 		"AcDbRText", 		EXPRESS, 1},
-#line 207 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str141,			"AcDbBlockArrayAction",     		ODBX,	0},
-      {-1},
-#line 92 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str143,	"AcDbTableGeometry",	ODBX,	0},
-      {-1},
-#line 67 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str145,	"AcDbPolyline",		ODBX,	1},
-#line 219 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str146,			"AcDbBlockScaleAction",			ODBX,	0},
-      {-1}, {-1}, {-1},
-#line 183 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str150,			"AcDbAssocActionParam",		ODBX,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 120 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str157,		"AcDbSurface",		ODBX,	1},
-#line 220 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str158,		"AcDbBlockPolarStretchAction",	       	ODBX,	0},
-#line 271 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str159,			"ExAcXREFPanelObject",		SPECIAL, 0},
-#line 121 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str160,	"AcDbExtrudedSurface",	ODBX,	1},
-      {-1},
-#line 114 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str162,		"AcDbPlotSettings",	ODBX,	0},
-      {-1},
-#line 165 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str164,	"AcDbAssocEdgeFilletActionBody",	ODBX,	0},
-#line 164 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str165,	"AcDbAssocEdgeChamferActionBody",	ODBX,	0},
-#line 147 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str166,		"AcDbAssocNetwork",		ODBX,	0},
-#line 107 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str167,	"AcDbWipeout", 		SPECIAL, 1},
-#line 209 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str168,	"AcDbBlockDiametricConstraintParameter",ODBX,	0},
-#line 188 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str169,		"AcDbAssocPathActionParam",	ODBX,	0},
-      {-1}, {-1},
-#line 204 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str172,			"AcDbBlockXYParameterEntity",		ODBX,	1},
-#line 88 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str173,	"AcDbIdBuffer",		ODBX,	0},
-      {-1},
-#line 201 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str175,			"AcDbBlockPointParameterEntity",      	ODBX,	1},
-      {-1},
-#line 178 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str177,	"AcDbAssocRestoreEntityStateActionBody",ODBX,	0},
-#line 131 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str178,	"AcDbShChamfer",	ODBX,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 155 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str183,	"AcDbBlockParameterDependencyBody",	ODBX,	0},
-#line 251 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str184,	"AcDbAngularDimensionObjectContextData",ODBX,	0},
-#line 215 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str185,			"AcDbBlockMoveAction",			ODBX,	0},
-      {-1}, {-1},
-#line 70 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str188,	"AcDbArcDimension",	ODBX,	1},
-#line 256 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str189,	"AcDbLeaderObjectContextData",		ODBX,	0},
-#line 210 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str190,		"AcDbBlockRadialConstraintParameter",	ODBX,	0},
-#line 200 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str191,			"AcDbBlockLinearParameterEntity",      	ODBX,	1},
-#line 173 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str192,	"AcDbAssocLoftedSurfaceActionBody",	ODBX,	0},
-#line 139 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str193,	"AcDbShRevolve",	ODBX,	0},
-#line 187 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str194,		"AcDbAssocFaceActionParam",	ODBX,	0},
-      {-1}, {-1}, {-1},
-#line 86 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str198,	"AcDbSpatialIndex",	ODBX,	0},
-#line 133 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str199,	"AcDbShCylinder",	ODBX,	0},
-#line 125 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str200,	"AcDbRevolvedSurface",	ODBX,	1},
-      {-1},
-#line 226 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str202,			"AcDbBlockRotationGrip",		ODBX,	0},
-#line 202 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str203,		"AcDbBlockRotationParameterEntity",     ODBX,	1},
-#line 129 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str204,		"AcDbShBox",		ODBX,	0},
-#line 257 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str205,	"AcDbMLeaderObjectContextData",		ODBX,	0},
-#line 151 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str206,	"AcDbAssocVertexActionParam",	ODBX,	0},
-      {-1}, {-1},
-#line 223 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str209,			"AcDbBlockPointParameter",		ODBX,	0},
-      {-1},
-#line 142 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str211,	"AcDbShTorus",		ODBX,	0},
-      {-1}, {-1}, {-1},
-#line 232 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str215,			"AcDbBlockLinearParameter",		ODBX,	0},
-      {-1},
-#line 218 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str217,			"AcDbBlockRotateAction",		ODBX,	0},
-      {-1}, {-1},
-#line 115 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str220,	"AcDbSectionViewStyle",	ODBX,	0},
-#line 208 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str221,	"AcDbBlockAngularConstraintParameter",  ODBX,	0},
-#line 224 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str222,			"AcDbBlockRotationParameter",		ODBX,	0},
-#line 98 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str223,	"AcDbRasterImageDef",	ISM,	0},
-#line 87 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str224,	"AcDbSpatialFilter",	ODBX,	0},
-#line 159 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str225,	"AcDbAssocOrdinatedDimActionBody",	ODBX,	0},
-#line 123 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str226,		"AcDbNurbSurface",	ODBX,	1},
-      {-1},
-#line 252 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str228,	"AcDbAnnotScaleObjectContextData",	ODBX,	0},
-#line 69 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str229,	"AcDbOle2Frame",	ODBX,	1},
-      {-1}, {-1}, {-1},
-#line 128 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str233,	"AcDbShBoolean",	ODBX,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 106 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str238, 	"AcDbDimAssoc",		SPECIAL, 0},
-#line 186 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str239,		"AcDbAssocEdgeActionParam",	ODBX,	0},
-#line 137 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str240,	"AcDbShLoft",		ODBX,	0},
-#line 118 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str241,	"AcDbEvalGraph",	ODBX,	0},
-      {-1}, {-1},
-#line 227 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str244,			"AcDbBlockVisibilityGrip",		ODBX,	0},
-#line 102 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str245,		"AcDbLight",		SCENEOE, 1},
-      {-1},
-#line 175 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str247,	"AcDbAssocOffsetSurfaceActionBody",	ODBX,	0},
-#line 246 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str248,   			"AcDbCurvePath",			ODBX,	0},
-      {-1},
-#line 132 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str250,	"AcDbShCone",		ODBX,	0},
-      {-1}, {-1}, {-1},
-#line 198 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str254,		"AcDbBlockBasepointParameterEntity",	ODBX,	1},
-      {-1},
-#line 71 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str256,	"AcDbMLeader",		ODBX,	1},
-      {-1}, {-1}, {-1},
-#line 222 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str260,			"AcDbBlockLookupParameter",		ODBX,	0},
-      {-1},
-#line 217 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str262,			"AcDbBlockLookupAction",		ODBX,	0},
-#line 250 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str263,	"AcDbAlignedDimensionObjectContextData",ODBX,	0},
-#line 240 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str264,		"AcDbBlockVisibilityParameter",		ODBX,	0},
-#line 68 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str265,		"AcDbHatch",		ODBX,	1},
-#line 243 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str266,		"AcDbDynamicBlockProxyNode",	       	ODBX,	0},
-#line 84 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str267,	"AcDbXrecord",		ODBX,	0},
-      {-1}, {-1}, {-1},
 #line 239 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str271,			"AcDbBlockXYParameter",			ODBX,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 259 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str280,	"AcDbRadialDimensionLargeObjectContextData",	ODBX,	0},
-      {-1}, {-1},
-#line 185 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str283,		"AcDbAssocCompoundActionParam",	ODBX,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 158 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str288,	"AcDbAssocAlignedDimActionBody",	ODBX,	0},
-#line 149 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str289,	"AcDbAssocAlignedDimActionBody",	ODBX,	0},
-      {-1}, {-1}, {-1},
-#line 260 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str293,	"AcDbRadialDimensionObjectContextData",	ODBX,	0},
-      {-1},
-#line 212 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str295,		"AcDbBlockLinearConstraintParameter",	ODBX,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1},
-#line 85 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str301,	"AcDbLayerIndex",	ODBX,	0},
-      {-1},
-#line 221 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str303,			"AcDbBlockStretchAction",	       	ODBX,	0},
-#line 244 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str304,"AcDbDynamicBlockPurgePreventer",      	ODBX,	0},
-      {-1},
-#line 99 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str306,"AcDbRasterImageDefReactor",	ISM,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 122 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str313,		"AcDbLoftedSurface",	ODBX,	1},
-      {-1},
-#line 236 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str315,			"AcDbBlockLinearGrip",			ODBX,	0},
-      {-1}, {-1},
-#line 272 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str318,	"AcDbImpNonPersistentObjectsCollection", ODBX, 0},
-      {-1}, {-1}, {-1},
-#line 214 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str322,	"AcDbBlockVerticalConstraintParameter",	ODBX,	0},
-      {-1},
-#line 117 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str324,		"AcDbGeoPositionMarker",ODBX,	0},
-#line 134 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str325,	"AcDbShExtrusion",	ODBX,	0},
-#line 228 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str326,				"AcDbBlockXYGrip",			ODBX,	0},
-      {-1},
-#line 235 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str328,				"AcDbBlockFlipGrip",			ODBX,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 79 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str333,	"AcDbDictionaryVar",	A2000CLASS,	0},
-#line 110 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str334, "AcDbArcAlignedText",	EXPRESS, 1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 254 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str343,	"AcDbDiametricDimensionObjectContextData",ODBX,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 80 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str351,		"AcDbLayout",		A2000CLASS,	0},
-      {-1},
-#line 113 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str353,		"AcDbMaterial",		ODBX,	0},
-      {-1},
-#line 100 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str355,"AcDbRasterVariables",	ISM,	0},
-      {-1}, {-1},
-#line 136 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str358,	"AcDbShHistory",	ODBX,	0},
-      {-1},
-#line 237 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str360,			"AcDbBlockLookupGrip",			ODBX,	0},
-      {-1}, {-1},
-#line 233 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str363,		"AcDbBlockBasepointParameter",		ODBX,	0},
-      {-1}, {-1}, {-1},
-#line 93 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str367,	"AcDbCellStyleMap",	ODBX,	0},
-      {-1}, {-1}, {-1},
-#line 89 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str371,	"AcDbVisualStyle",	ODBX,	0},
-#line 265 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str372,			"AcDbPointCloudDef",			POINTCLOUD, 0},
-      {-1},
-#line 258 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str374,	"AcDbOrdinateDimensionObjectContextData",	ODBX,	0},
-#line 247 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str375,   				"AcDbMotionPath",			ODBX,	0},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str43,   			"AcDbBlockUserParameter",		ODBX,	0},
 #line 189 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str376,		"AcDbAssocObjectActionParam",	ODBX,	0},
-      {-1}, {-1}, {-1}, {-1},
-#line 83 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str381,	"AcDbVbaProject",	ODBX,	0},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str44,		"AcDbAssocPathActionParam",	ODBX,	0},
+#line 110 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str45, 		"AcDbRText", 		EXPRESS, 1},
+#line 146 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str46,	"AcDbAssocPersSubentManager",	ODBX,	0},
+      {-1}, {-1}, {-1},
+#line 193 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str50,		"AcDbAssocArrayModifyParameters",	ODBX,	0},
       {-1},
-#line 190 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str383,		"AcDbAssocPointRefActionParam",	ODBX,	0},
+#line 121 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str52,		"AcDbSurface",		ODBX,	1},
+#line 88 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str53,	"AcDbIdBuffer",		ODBX,	0},
+#line 69 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str54,	"AcDbOle2Frame",	ODBX,	1},
+#line 242 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str55,			"AcDbBlockPropertiesTable",		ODBX,	0},
+      {-1},
+#line 84 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str57,	"AcDbXrecord",		ODBX,	0},
       {-1}, {-1},
-#line 229 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str386,		"AcDbBlockGripExpr",			ODBX,	0},
-#line 269 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str387,			"AcDbPointCloudColorMap",		POINTCLOUD, 0},
+#line 158 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str60,"AcDbAssoc3PointAngularDimActionBody",	ODBX,	0},
+#line 177 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str61,	"AcDbAssocPlaneSurfaceActionBody",	ODBX,	0},
+#line 171 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str62,	"AcDbAssocExtendSurfaceActionBody",	ODBX,	0},
       {-1}, {-1},
-#line 75 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str390,		"AcDbPlaceHolder",		ODBX_OR_A2000CLASS,	0},
+#line 217 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str65,			"AcDbBlockFlipAction",			ODBX,	0},
+#line 178 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str66,	"AcDbAssocPatchSurfaceActionBody",	ODBX,	0},
+#line 127 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str67,		"AcDbSweptSurface",	ODBX,	1},
+      {-1},
+#line 224 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str69,			"AcDbBlockPointParameter",		ODBX,	0},
       {-1}, {-1},
-#line 248 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str393,   			"AcDbPointPath",			ODBX,	0},
+#line 205 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str72,			"AcDbBlockXYParameterEntity",		ODBX,	1},
+      {-1}, {-1}, {-1}, {-1}, {-1},
+#line 235 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str78,			"AcDbBlockFlipParameter",		ODBX,	0},
+#line 226 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str79,				"AcDbBlockPolarGrip",			ODBX,	0},
+      {-1},
+#line 109 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str81,"AcDbWipeoutVariables",	ODBX,	0},
+      {-1},
+#line 194 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str83,		"AcDbAssocArrayPathParameters",		ODBX,	0},
+#line 200 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str84,			"AcDbBlockFlipParameterEntity",		ODBX,	1},
+#line 95 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str85,		"AcDbScale",		ODBX,	0},
+      {-1}, {-1}, {-1},
+#line 161 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str89,	"AcDbAssocRotatedDimActionBody",	ODBX,	0},
+      {-1},
+#line 170 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str91,	"AcDbAssocBlendSurfaceActionBody",	ODBX,	0},
+      {-1}, {-1},
+#line 265 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str94,	"AcDbBlkrefObjectContextData",		ODBX,	0},
       {-1},
 #line 181 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str395,		"AcDbAssocTrimSurfaceActionBody",	ODBX,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 267 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str405,		"AcDbPointCloudDefReactor",		POINTCLOUD, 0},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str96,	"AcDbAssocSweptSurfaceActionBody",	ODBX,	0},
+#line 112 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str97,	"AcDbMLeaderStyle",	SPECIAL, 0},
       {-1},
-#line 261 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str407,	"AcDbTextObjectContextData",		ODBX,	0},
+#line 172 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str99,	"AcDbAssocExtrudedSurfaceActionBody",	ODBX,	0},
+#line 102 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str100,		"AcDbLight",		SCENEOE, 1},
+#line 220 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str101,			"AcDbBlockScaleAction",			ODBX,	0},
+#line 219 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str102,			"AcDbBlockRotateAction",		ODBX,	0},
       {-1},
-#line 116 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str409,	"AcDbDetailViewStyle",	ODBX,	0},
+#line 154 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str104,		"AcDbAssocDependency",		ODBX,	0},
+      {-1}, {-1},
+#line 218 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str107,			"AcDbBlockLookupAction",		ODBX,	0},
+      {-1},
+#line 283 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str109,			"ExAcXREFPanelObject",		SPECIAL, 0},
+#line 90 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str110,	"AcDbTableStyle",	ODBX,	0},
+#line 208 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str111,			"AcDbBlockArrayAction",     		ODBX,	0},
+#line 227 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str112,			"AcDbBlockRotationGrip",		ODBX,	0},
+      {-1},
+#line 130 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str114,		"AcDbShBox",		ODBX,	0},
       {-1}, {-1},
 #line 91 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str412,	"AcDbTableContent",	ODBX,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str117,	"AcDbTableContent",	ODBX,	0},
+#line 210 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str118,	"AcDbBlockDiametricConstraintParameter",ODBX,	0},
+      {-1},
+#line 72 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str120,	"AcDbTable",		ODBX,	1},
+      {-1}, {-1}, {-1},
+#line 207 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str124,		"AcDbBlockRepresentationData",     	ODBX,	0},
+#line 233 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str125,			"AcDbBlockLinearParameter",		ODBX,	0},
+#line 147 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str126, 		"AcDbPersSubentManager",	ODBX, 0},
+      {-1}, {-1},
+#line 188 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str129,		"AcDbAssocFaceActionParam",	ODBX,	0},
+#line 223 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str130,			"AcDbBlockLookupParameter",		ODBX,	0},
+      {-1},
+#line 225 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str132,			"AcDbBlockRotationParameter",		ODBX,	0},
+#line 259 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str133,	   	"AcDbGroundPlaneBackground",		SCENEOE,	0},
+      {-1},
+#line 77 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str135,	"AcDbProxyObjectWrapper",	ODBX_OR_A2000CLASS,	0},
+      {-1}, {-1},
+#line 156 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str138,	"AcDbBlockParameterDependencyBody",	ODBX,	0},
+#line 187 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str139,		"AcDbAssocEdgeActionParam",	ODBX,	0},
+      {-1},
+#line 71 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str141,	"AcDbMLeader",		ODBX,	1},
+      {-1},
+#line 284 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str143,	"AcDbImpNonPersistentObjectsCollection", ODBX, 0},
+      {-1},
+#line 165 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str145,	"AcDbAssocEdgeChamferActionBody",	ODBX,	0},
+#line 267 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str146,	"AcDbFcfObjectContextData",		ODBX,	0},
+      {-1}, {-1},
+#line 166 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str149,	"AcDbAssocEdgeFilletActionBody",	ODBX,	0},
+      {-1},
+#line 201 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str151,			"AcDbBlockLinearParameterEntity",      	ODBX,	1},
+      {-1}, {-1},
+#line 260 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str154,	   		"AcDbGradientBackground",		SCENEOE,	0},
+      {-1}, {-1},
+#line 179 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str157,	"AcDbAssocRestoreEntityStateActionBody",ODBX,	0},
+      {-1},
+#line 150 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str159,	"AcDbAssocAlignedDimActionBody",	ODBX,	0},
+      {-1},
+#line 254 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str161, 	  			"AcDbRenderEntry",			SCENEOE,	0},
+#line 141 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str162,	"AcDbShSphere",		ODBX,	0},
+#line 132 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str163,	"AcDbShChamfer",	ODBX,	0},
+      {-1},
+#line 76 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str165,	"AcDbProxyEntityWrapper",	ODBX_OR_A2000CLASS,	0},
+      {-1},
+#line 136 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str167,	"AcDbShFillet",		ODBX,	0},
+#line 264 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str168,	"AcDbAnnotScaleObjectContextData",	ODBX,	0},
+      {-1}, {-1}, {-1}, {-1}, {-1},
+#line 268 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str174,	"AcDbLeaderObjectContextData",		ODBX,	0},
+#line 211 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str175,		"AcDbBlockRadialConstraintParameter",	ODBX,	0},
+#line 89 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str176,	"AcDbVisualStyle",	ODBX,	0},
+      {-1}, {-1},
+#line 180 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str179,	"AcDbAssocRevolvedSurfaceActionBody",	ODBX,	0},
+      {-1}, {-1}, {-1}, {-1},
+#line 103 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str184,	"AcDbLightList",	SCENEOE, 0},
+      {-1},
+#line 142 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str186,	"AcDbShSweep",		ODBX,	0},
+      {-1},
+#line 159 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str188,	"AcDbAssocAlignedDimActionBody",	ODBX,	0},
+      {-1},
+#line 182 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str190,		"AcDbAssocTrimSurfaceActionBody",	ODBX,	0},
+      {-1}, {-1},
+#line 234 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str193,		"AcDbBlockBasepointParameter",		ODBX,	0},
+      {-1},
+#line 237 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str195,			"AcDbBlockLinearGrip",			ODBX,	0},
+#line 148 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str196,		"AcDbAssocNetwork",		ODBX,	0},
+      {-1},
+#line 114 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str198,		"AcDbMaterial",		ODBX,	0},
+      {-1},
+#line 238 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str200,			"AcDbBlockLookupGrip",			ODBX,	0},
+#line 119 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str201,	"AcDbEvalGraph",	ODBX,	0},
+      {-1},
+#line 249 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str203,   			"AcDbPointPath",			SCENEOE,	0},
+#line 275 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str204,				"AcDbPointCloud",			POINTCLOUD, 1},
+      {-1},
+#line 276 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str206,			"AcDbPointCloudEx",			POINTCLOUD, 1},
+#line 277 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str207,			"AcDbPointCloudDef",			POINTCLOUD, 0},
+#line 123 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str208,		"AcDbLoftedSurface",	ODBX,	1},
+#line 278 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str209,			"AcDbPointCloudDefEx",			POINTCLOUD, 0},
 #line 213 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str419,	"AcDbBlockHorizontalConstraintParameter",ODBX,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str210,		"AcDbBlockLinearConstraintParameter",	ODBX,	0},
+#line 143 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str211,	"AcDbShTorus",		ODBX,	0},
+#line 281 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str212,			"AcDbPointCloudColorMap",		POINTCLOUD, 0},
+#line 175 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str213,	"AcDbAssocNetworkSurfaceActionBody",	ODBX,	0},
+      {-1},
+#line 279 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str215,		"AcDbPointCloudDefReactor",		POINTCLOUD, 0},
+#line 80 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str216,		"AcDbLayout",		A2000CLASS,	0},
+      {-1},
+#line 280 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str218,		"AcDbPointCloudDefReactorEx",		POINTCLOUD, 0},
+      {-1},
+#line 216 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str220,			"AcDbBlockMoveAction",			ODBX,	0},
+      {-1}, {-1}, {-1}, {-1},
+#line 160 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str225,	"AcDbAssocOrdinatedDimActionBody",	ODBX,	0},
+#line 85 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str226,	"AcDbLayerIndex",	ODBX,	0},
+#line 125 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str227,		"AcDbPlaneSurface",	ODBX,	1},
+      {-1},
+#line 87 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str229,	"AcDbSpatialFilter",	ODBX,	0},
+#line 67 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str230,	"AcDbPolyline",		ODBX,	1},
+#line 229 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str231,				"AcDbBlockXYGrip",			ODBX,	0},
+      {-1},
+#line 231 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str233,			"AcDbBlockAlignmentGrip",		ODBX,	0},
+#line 117 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str234,	"AcDbDetailViewStyle",	ODBX,	0},
+      {-1},
+#line 152 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str236,	"AcDbAssocVertexActionParam",	ODBX,	0},
+      {-1},
+#line 222 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str238,			"AcDbBlockStretchAction",	       	ODBX,	0},
+      {-1}, {-1},
+#line 144 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str241,	"AcDbShWedge",		ODBX,	0},
+      {-1}, {-1}, {-1}, {-1},
+#line 83 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str246,	"AcDbVbaProject",	ODBX,	0},
+      {-1},
+#line 262 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str248,	"AcDbAlignedDimensionObjectContextData",ODBX,	0},
+#line 228 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str249,			"AcDbBlockVisibilityGrip",		ODBX,	0},
+#line 97 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str250,		"AcDbRasterImage",	ISM,	1},
+      {-1}, {-1},
+#line 79 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str253,	"AcDbDictionaryVar",	A2000CLASS,	0},
+#line 263 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str254,	"AcDbAngularDimensionObjectContextData",ODBX,	0},
+#line 135 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str255,	"AcDbShExtrusion",	ODBX,	0},
+      {-1}, {-1},
+#line 86 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str258,	"AcDbSpatialIndex",	ODBX,	0},
+      {-1}, {-1}, {-1}, {-1},
+#line 221 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str263,		"AcDbBlockPolarStretchAction",	       	ODBX,	0},
+#line 199 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str264,		"AcDbBlockBasepointParameterEntity",	ODBX,	1},
+#line 116 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str265,	"AcDbSectionViewStyle",	ODBX,	0},
+#line 155 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str266,	"AcDbAssocDimDependencyBody",	ODBX,	0},
+#line 115 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str267,		"AcDbPlotSettings",	ODBX,	0},
+      {-1},
+#line 241 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str269,		"AcDbBlockVisibilityParameter",		ODBX,	0},
+      {-1}, {-1}, {-1},
+#line 232 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str273,		"AcDbBlockAlignmentParameter",		ODBX,	0},
+      {-1},
+#line 100 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str275,"AcDbRasterVariables",	ISM,	0},
+#line 240 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str276,			"AcDbBlockXYParameter",			ODBX,	0},
+#line 173 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str277,	"AcDbAssocFilletSurfaceActionBody",	ODBX,	0},
+#line 140 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str278,	"AcDbShRevolve",	ODBX,	0},
+      {-1},
+#line 204 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str280,			"AcDbBlockPolarGripEntity",		ODBX,	1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 111 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str289, "AcDbArcAlignedText",	EXPRESS, 1},
+#line 196 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str290,	"AcDbAssocArrayRectangularParameters",	ODBX,	0},
+#line 209 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str291,	"AcDbBlockAngularConstraintParameter",  ODBX,	0},
+      {-1},
+#line 272 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str293,	"AcDbRadialDimensionObjectContextData",	ODBX,	0},
+      {-1}, {-1}, {-1}, {-1},
+#line 168 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str298,		"AcDbContextDataManager",		ODBX,	0},
+      {-1}, {-1}, {-1},
+#line 273 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str302,	"AcDbTextObjectContextData",		ODBX,	0},
+#line 129 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str303,	"AcDbShBoolean",	ODBX,	0},
+#line 243 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str304,   		"AcDbBlockPropertiesTableGrip",		ODBX,	0},
+      {-1}, {-1},
+#line 252 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str307,   			"AcDbRenderEnvironment",		SCENEOE,	0},
+#line 266 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str308,	"AcDbDiametricDimensionObjectContextData",ODBX,	0},
+      {-1}, {-1}, {-1},
+#line 253 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str312,   			"AcDbRenderGlobal",			SCENEOE,	0},
+#line 98 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str313,	"AcDbRasterImageDef",	ISM,	0},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 263 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str444,				"AcDbPointCloud",			POINTCLOUD, 1},
+#line 134 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str329,	"AcDbShCylinder",	ODBX,	0},
+      {-1}, {-1}, {-1},
+#line 139 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str333,	"AcDbShPyramid",	ODBX,	0},
+      {-1}, {-1}, {-1}, {-1},
+#line 191 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str338,		"AcDbAssocPointRefActionParam",	ODBX,	0},
+      {-1}, {-1}, {-1},
+#line 93 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str342,	"AcDbCellStyleMap",	ODBX,	0},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 92 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str358,	"AcDbTableGeometry",	ODBX,	0},
+#line 248 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str359,   			"AcDbMotionPath",			SCENEOE,	0},
+      {-1}, {-1}, {-1}, {-1},
+#line 214 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str364,	"AcDbBlockHorizontalConstraintParameter",ODBX,	0},
+      {-1},
+#line 99 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str366,"AcDbRasterImageDefReactor",	ISM,	0},
+#line 174 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str367,	"AcDbAssocLoftedSurfaceActionBody",	ODBX,	0},
+      {-1},
+#line 74 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str369,		"AcDbDictionaryWithDefault",	ODBX_OR_A2000CLASS,	0},
+#line 122 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str370,	"AcDbExtrudedSurface",	ODBX,	1},
+      {-1}, {-1},
+#line 203 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str373,		"AcDbBlockRotationParameterEntity",     ODBX,	1},
+      {-1}, {-1}, {-1},
+#line 185 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str377,		"AcDbAssocAsmbodyActionParam",	ODBX,	0},
+      {-1}, {-1}, {-1},
+#line 244 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str381,		"AcDbDynamicBlockProxyNode",	       	ODBX,	0},
+      {-1},
+#line 186 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str383,		"AcDbAssocCompoundActionParam",	ODBX,	0},
+      {-1},
+#line 75 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str385,		"AcDbPlaceHolder",		ODBX_OR_A2000CLASS,	0},
+      {-1}, {-1},
+#line 70 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str388,	"AcDbArcDimension",	ODBX,	1},
+      {-1}, {-1},
+#line 212 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str391,	"AcDbBlockAlignedConstraintParameter",  ODBX,	0},
+      {-1},
+#line 137 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str393,	"AcDbShHistory",	ODBX,	0},
+      {-1}, {-1},
+#line 190 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str396,		"AcDbAssocObjectActionParam",	ODBX,	0},
+      {-1}, {-1}, {-1},
+#line 202 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str400,			"AcDbBlockPointParameterEntity",      	ODBX,	1},
+#line 258 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str401,	   		"AcDbSolidBackground",			SCENEOE,	0},
+      {-1},
+#line 151 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str403,"AcDbAssocOsnapPointRefActionParam",	ODBX,	0},
+#line 256 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str404,	   		"AcDbSkyBackground",			SCENEOE,	0},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 81 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str413,	"AcDbSortentsTable",	A2000CLASS,	0},
+      {-1}, {-1}, {-1},
+#line 215 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str417,	"AcDbBlockVerticalConstraintParameter",	ODBX,	0},
+      {-1}, {-1}, {-1}, {-1}, {-1},
+#line 236 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str423,				"AcDbBlockFlipGrip",			ODBX,	0},
+      {-1}, {-1},
+#line 230 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str426,		"AcDbBlockGripExpr",			ODBX,	0},
+      {-1}, {-1},
+#line 270 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str429,	"AcDbOrdinateDimensionObjectContextData",	ODBX,	0},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1},
+#line 167 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str441,	"AcDbAssocMLeaderActionBody",		ODBX,	0},
+      {-1}, {-1},
+#line 118 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str444,		"AcDbGeoPositionMarker",ODBX,	0},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 153 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str453,	"AcDbAssocGeomDependency",	ODBX,	0},
+      {-1}, {-1},
+#line 251 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str456,   		"AcDbRapidRTRenderSettings",		ODBX,		0},
+      {-1}, {-1}, {-1}, {-1}, {-1},
+#line 176 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str462,	"AcDbAssocOffsetSurfaceActionBody",	ODBX,	0},
+      {-1}, {-1},
+#line 269 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str465,	"AcDbMLeaderObjectContextData",		ODBX,	0},
+      {-1}, {-1}, {-1}, {-1},
+#line 126 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str470,	"AcDbRevolvedSurface",	ODBX,	1},
+#line 257 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str471,	   		"AcDbImageBackground",			SCENEOE,	0},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 131 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str490,	"AcDbShBrep",		ODBX,	0},
+      {-1}, {-1}, {-1}, {-1},
+#line 133 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str495,	"AcDbShCone",		ODBX,	0},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+#line 198 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str514,		"AcDbBlockAlignmentParameterEntity",	ODBX,	1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1},
+#line 250 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str528,   		"AcDbMentalRayRenderSettings",		SCENEOE,	0},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1},
+#line 271 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str540,	"AcDbRadialDimensionLargeObjectContextData",	ODBX,	0},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1},
+#line 138 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str570,	"AcDbShLoft",		ODBX,	0},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1},
-#line 74 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str464,		"AcDbDictionaryWithDefault",	ODBX_OR_A2000CLASS,	0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 167 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str473,		"AcDbContextDataManager",		ODBX,	0},
+#line 245 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str599,"AcDbDynamicBlockPurgePreventer",      	ODBX,	0},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 150 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str498,"AcDbAssocOsnapPointRefActionParam",	ODBX,	0},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 264 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str516,			"AcDbPointCloudEx",			POINTCLOUD, 1},
-      {-1}, {-1},
-#line 266 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str519,			"AcDbPointCloudDefEx",			POINTCLOUD, 0},
-      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 268 "src/dxfclasses.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str528,		"AcDbPointCloudDefReactorEx",		POINTCLOUD, 0}
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1},
+#line 255 "src/dxfclasses.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str649,   		"AcDbIBLBackground",			SCENEOE,	0}
     };
 
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
@@ -1046,7 +1145,7 @@ in_word_set (register const char *str, register size_t len)
     }
   return 0;
 }
-#line 273 "src/dxfclasses.in"
+#line 285 "src/dxfclasses.in"
 
 
 /* Create classes on demand.
