@@ -3301,7 +3301,6 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           BITCODE_H ref
               = dwg_add_handleref (obj->parent, 4, pair->value.u, obj);
           CHK_paths;
-          o->paths[j].num_boundary_handles = pair->value.l;
           hdl_idx++;
           if ((unsigned)hdl_idx > o->paths[j].num_boundary_handles)
             o->paths[j].num_boundary_handles = (unsigned)hdl_idx;
