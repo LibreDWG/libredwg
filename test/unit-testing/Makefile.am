@@ -394,9 +394,9 @@ TESTS_ENVIRONMENT = \
   ASAN_OPTIONS="detect_leaks=0"
 
 check-minimal: $(check_minimal)
-	$(MAKE) check TESTS="$(check_minimal)"
+	$(MAKE) check check_PROGRAMS="$(check_minimal)"
 check-debug: $(testdebug)
-	$(MAKE) check TESTS="$(testdebug)"
+	$(MAKE) check check_PROGRAMS="$(testdebug)"
 
 bits_test.cbmc: bits_test.c $(top_srcdir)/src/bits.c
 	cbmc -I. -I$(top_srcdir)/include -I/opt/local/include \

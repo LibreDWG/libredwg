@@ -13,6 +13,7 @@
 #  include "../../src/logging.h"
 #endif
 #include "../../src/config.h"
+#include "../../src/common.h"
 
 #if defined(_WIN32) && defined(HAVE_FUNC_ATTRIBUTE_MS_FORMAT) && !defined(__USE_MINGW_ANSI_STDIO)
 #  define ATTRIBUTE_FORMAT(x, y) __attribute__ ((format (ms_printf, x, y)))
@@ -179,9 +180,9 @@ int is_make_silent()
 {
   const char *make = getenv("MAKEFLAGS");
   if (!make)
-    return 0;
-  if (strstr (make, "-s"))
+    return 0; 			// not from make: verbose
+  if (strstr (make, "-s") || memBEGINc (make, "s "))  // make check with -s
     return getenv("VERBOSE") ? 0 : 1;
   else
-    return 0;
+    return 0; 			// make check without -s
 }
