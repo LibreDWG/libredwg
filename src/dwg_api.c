@@ -82,7 +82,7 @@ int dwg_dxfclass_require (Dwg_Data *restrict dwg, const char *restrict dxfname);
     {                                                                         \
       if (name && fieldname && value)                                         \
         return dwg_dynapi_entity_set_value ((void *)name, #OBJECT, fieldname, \
-                                            value, 0);                        \
+                                            value, 1);                        \
       else                                                                    \
         return false;                                                         \
     }
