@@ -34,6 +34,7 @@
 #include "bits.h"
 #include "suffix.inc"
 #include "decode.h"
+#include "encode.h"
 #ifndef DISABLE_JSON
 #  include "in_json.h"
 #endif
