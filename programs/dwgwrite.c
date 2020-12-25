@@ -378,7 +378,6 @@ main (int argc, char *argv[])
         {
           fprintf (stderr, "Reading DXF file %s\n",
                    infile ? infile : "from stdin");
-          fprintf (stderr, "Warning: still experimental.\n");
         }
       if (infile)
         error = dxf_read_file (infile, &dwg); // ascii or binary
