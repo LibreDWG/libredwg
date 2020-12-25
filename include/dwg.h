@@ -5608,6 +5608,7 @@ typedef struct _dwg_object_ASSOCVERTEXACTIONPARAM
 // inlined
 typedef struct _dwg_ASSOCARRAYITEM
 {
+  struct _dwg_abstractobject_ASSOCARRAYPARAMETERS *parent;
   BITCODE_BL class_version; // 0
   BITCODE_BL itemloc[3];
   BITCODE_BL flags; /* 2: has_relative_transform
@@ -5628,35 +5629,19 @@ typedef struct _dwg_ASSOCARRAYITEM
   BITCODE_T classname;                                        \
   Dwg_ASSOCARRAYITEM *items
 
-#define ASSOCARRAYCOMMONPARAMETERS_fields                     \
-  ASSOCARRAYPARAMETERS_fields;                                \
-  BITCODE_BL numitems;                                        \
-  BITCODE_BL numrows;                                         \
-  BITCODE_BL numlevels
-
-typedef struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS
+typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS
 {
   struct _dwg_object_object *parent;
-  ASSOCARRAYCOMMONPARAMETERS_fields;
-} Dwg_Object_ASSOCARRAYMODIFYPARAMETERS;
+  ASSOCARRAYPARAMETERS_fields;
+  BITCODE_BL numitems;
+  BITCODE_BL numrows;
+  BITCODE_BL numlevels;
+} Dwg_Object_ASSOCARRAYPARAMETERS;
 
-typedef struct _dwg_object_ASSOCARRAYPATHPARAMETERS
-{
-  struct _dwg_object_object *parent;
-  ASSOCARRAYCOMMONPARAMETERS_fields;
-} Dwg_Object_ASSOCARRAYPATHPARAMETERS;
-
-typedef struct _dwg_object_ASSOCARRAYPOLARPARAMETERS
-{
-  struct _dwg_object_object *parent;
-  ASSOCARRAYCOMMONPARAMETERS_fields;
-} Dwg_Object_ASSOCARRAYPOLARPARAMETERS;
-
-typedef struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS
-{
-  struct _dwg_object_object *parent;
-  ASSOCARRAYCOMMONPARAMETERS_fields;
-} Dwg_Object_ASSOCARRAYRECTANGULARPARAMETERS;
+typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS Dwg_Object_ASSOCARRAYMODIFYPARAMETERS;
+typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS Dwg_Object_ASSOCARRAYPATHPARAMETERS;
+typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS Dwg_Object_ASSOCARRAYPOLARPARAMETERS;
+typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS Dwg_Object_ASSOCARRAYRECTANGULARPARAMETERS;
 
 typedef struct _dwg_object_ASSOCRESTOREENTITYSTATEACTIONBODY
 {
@@ -8169,10 +8154,6 @@ typedef struct _dwg_object_object
     Dwg_Object_ASSOCALIGNEDDIMACTIONBODY *ASSOCALIGNEDDIMACTIONBODY;
     Dwg_Object_ASSOCARRAYACTIONBODY *ASSOCARRAYACTIONBODY;
     Dwg_Object_ASSOCARRAYMODIFYACTIONBODY *ASSOCARRAYMODIFYACTIONBODY;
-    Dwg_Object_ASSOCARRAYMODIFYPARAMETERS *ASSOCARRAYMODIFYPARAMETERS;
-    Dwg_Object_ASSOCARRAYPATHPARAMETERS *ASSOCARRAYPATHPARAMETERS;
-    Dwg_Object_ASSOCARRAYPOLARPARAMETERS *ASSOCARRAYPOLARPARAMETERS;
-    Dwg_Object_ASSOCARRAYRECTANGULARPARAMETERS *ASSOCARRAYRECTANGULARPARAMETERS;
     Dwg_Object_ASSOCASMBODYACTIONPARAM *ASSOCASMBODYACTIONPARAM;
     Dwg_Object_ASSOCCOMPOUNDACTIONPARAM *ASSOCCOMPOUNDACTIONPARAM;
     Dwg_Object_ASSOCDIMDEPENDENCYBODY *ASSOCDIMDEPENDENCYBODY;
@@ -8245,6 +8226,10 @@ typedef struct _dwg_object_object
     Dwg_Object_TABLECONTENT *TABLECONTENT;
     Dwg_Object_TEXTOBJECTCONTEXTDATA *TEXTOBJECTCONTEXTDATA;
     Dwg_Object_TVDEVICEPROPERTIES *TVDEVICEPROPERTIES;
+    Dwg_Object_ASSOCARRAYMODIFYPARAMETERS *ASSOCARRAYMODIFYPARAMETERS;
+    Dwg_Object_ASSOCARRAYPATHPARAMETERS *ASSOCARRAYPATHPARAMETERS;
+    Dwg_Object_ASSOCARRAYPOLARPARAMETERS *ASSOCARRAYPOLARPARAMETERS;
+    Dwg_Object_ASSOCARRAYRECTANGULARPARAMETERS *ASSOCARRAYRECTANGULARPARAMETERS;
 //    Dwg_Object_ACDSRECORD *ACDSRECORD;
 //    Dwg_Object_ACDSSCHEMA *ACDSSCHEMA;
 //    Dwg_Object_NPOCOLLECTION *NPOCOLLECTION;
@@ -9479,10 +9464,6 @@ EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
   EXPORT int dwg_setup_ASSOCALIGNEDDIMACTIONBODY (Dwg_Object *obj);
   EXPORT int dwg_setup_ASSOCARRAYACTIONBODY (Dwg_Object *obj);
   EXPORT int dwg_setup_ASSOCARRAYMODIFYACTIONBODY (Dwg_Object *obj);
-  EXPORT int dwg_setup_ASSOCARRAYMODIFYPARAMETERS (Dwg_Object *obj);
-  EXPORT int dwg_setup_ASSOCARRAYPATHPARAMETERS (Dwg_Object *obj);
-  EXPORT int dwg_setup_ASSOCARRAYPOLARPARAMETERS (Dwg_Object *obj);
-  EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   EXPORT int dwg_setup_ASSOCASMBODYACTIONPARAM (Dwg_Object *obj);
   EXPORT int dwg_setup_ASSOCCOMPOUNDACTIONPARAM (Dwg_Object *obj);
   EXPORT int dwg_setup_ASSOCDIMDEPENDENCYBODY (Dwg_Object *obj);
@@ -9555,6 +9536,10 @@ EXPORT int dwg_setup_TABLESTYLE (Dwg_Object *obj);
   EXPORT int dwg_setup_TABLECONTENT (Dwg_Object *obj);
   EXPORT int dwg_setup_TEXTOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_TVDEVICEPROPERTIES (Dwg_Object *obj);
+  EXPORT int dwg_setup_ASSOCARRAYMODIFYPARAMETERS (Dwg_Object *obj);
+  EXPORT int dwg_setup_ASSOCARRAYPATHPARAMETERS (Dwg_Object *obj);
+  EXPORT int dwg_setup_ASSOCARRAYPOLARPARAMETERS (Dwg_Object *obj);
+  EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   //EXPORT int dwg_setup_ACDSRECORD (Dwg_Object *obj);
   //EXPORT int dwg_setup_ACDSSCHEMA (Dwg_Object *obj);
   //EXPORT int dwg_setup_NPOCOLLECTION (Dwg_Object *obj);

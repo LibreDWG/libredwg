@@ -10672,7 +10672,7 @@ DWG_OBJECT_END
   REPEAT (num_items, items, Dwg_ASSOCARRAYITEM)                  \
   REPEAT_BLOCK                                                   \
       AcDbAssocArrayItem_fields (items[rcount1]);                \
-      SET_PARENT_OBJ (items[rcount1]);                           \
+      SET_PARENT (items[rcount1], (Dwg_Object_ASSOCARRAYPARAMETERS*)_obj); \
   END_REPEAT_BLOCK                                               \
   END_REPEAT (items)
 

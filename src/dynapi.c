@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2375 "gen-dynapi.pl"
+#line 2380 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -4877,86 +4877,6 @@ static const Dwg_DYNAPI_field _dwg_ASSOCARRAYMODIFYACTIONBODY_fields[] = {
     0,0,0, 90 },
   { "items",	"Dwg_ARRAYITEMLOCATOR*", sizeof (Dwg_ARRAYITEMLOCATOR*),  OFF (struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY, items),
     1,1,0, 0 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
-/* from typedef struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_ASSOCARRAYMODIFYPARAMETERS_fields[] = {
-  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS, parent),
-    1,1,0, 0 },
-  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS, aap_version),
-    0,0,0, 90 },
-  { "num_items",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS, num_items),
-    0,0,0, 90 },
-  { "classname",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS, classname),
-    1,1,1, 1 },
-  { "items",	"Dwg_ASSOCARRAYITEM*", sizeof (Dwg_ASSOCARRAYITEM*),  OFF (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS, items),
-    1,1,0, 0 },
-  { "numitems",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS, numitems),
-    0,0,0, 0 },
-  { "numrows",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS, numrows),
-    0,0,0, 0 },
-  { "numlevels",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS, numlevels),
-    0,0,0, 0 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
-/* from typedef struct _dwg_object_ASSOCARRAYPATHPARAMETERS: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_ASSOCARRAYPATHPARAMETERS_fields[] = {
-  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ASSOCARRAYPATHPARAMETERS, parent),
-    1,1,0, 0 },
-  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPATHPARAMETERS, aap_version),
-    0,0,0, 90 },
-  { "num_items",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPATHPARAMETERS, num_items),
-    0,0,0, 90 },
-  { "classname",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCARRAYPATHPARAMETERS, classname),
-    1,1,1, 1 },
-  { "items",	"Dwg_ASSOCARRAYITEM*", sizeof (Dwg_ASSOCARRAYITEM*),  OFF (struct _dwg_object_ASSOCARRAYPATHPARAMETERS, items),
-    1,1,0, 0 },
-  { "numitems",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPATHPARAMETERS, numitems),
-    0,0,0, 0 },
-  { "numrows",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPATHPARAMETERS, numrows),
-    0,0,0, 0 },
-  { "numlevels",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPATHPARAMETERS, numlevels),
-    0,0,0, 0 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
-/* from typedef struct _dwg_object_ASSOCARRAYPOLARPARAMETERS: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_ASSOCARRAYPOLARPARAMETERS_fields[] = {
-  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS, parent),
-    1,1,0, 0 },
-  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS, aap_version),
-    0,0,0, 90 },
-  { "num_items",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS, num_items),
-    0,0,0, 90 },
-  { "classname",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS, classname),
-    1,1,1, 1 },
-  { "items",	"Dwg_ASSOCARRAYITEM*", sizeof (Dwg_ASSOCARRAYITEM*),  OFF (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS, items),
-    1,1,0, 0 },
-  { "numitems",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS, numitems),
-    0,0,0, 0 },
-  { "numrows",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS, numrows),
-    0,0,0, 0 },
-  { "numlevels",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS, numlevels),
-    0,0,0, 0 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
-/* from typedef struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_ASSOCARRAYRECTANGULARPARAMETERS_fields[] = {
-  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS, parent),
-    1,1,0, 0 },
-  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS, aap_version),
-    0,0,0, 90 },
-  { "num_items",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS, num_items),
-    0,0,0, 90 },
-  { "classname",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS, classname),
-    1,1,1, 1 },
-  { "items",	"Dwg_ASSOCARRAYITEM*", sizeof (Dwg_ASSOCARRAYITEM*),  OFF (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS, items),
-    1,1,0, 0 },
-  { "numitems",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS, numitems),
-    0,0,0, 0 },
-  { "numrows",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS, numrows),
-    0,0,0, 0 },
-  { "numlevels",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS, numlevels),
-    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_ASSOCASMBODYACTIONPARAM: (sorted by offset) */
@@ -10527,6 +10447,86 @@ static const Dwg_DYNAPI_field _dwg_DWFDEFINITION_fields[] = {
     1,1,1, 2 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_ASSOCARRAYMODIFYPARAMETERS_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, parent),
+    1,1,0, 0 },
+  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, aap_version),
+    0,0,0, 90 },
+  { "num_items",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, num_items),
+    0,0,0, 90 },
+  { "classname",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, classname),
+    1,1,1, 1 },
+  { "items",	"Dwg_ASSOCARRAYITEM*", sizeof (Dwg_ASSOCARRAYITEM*),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, items),
+    1,1,0, 0 },
+  { "numitems",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, numitems),
+    0,0,0, 0 },
+  { "numrows",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, numrows),
+    0,0,0, 0 },
+  { "numlevels",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, numlevels),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_ASSOCARRAYPATHPARAMETERS_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, parent),
+    1,1,0, 0 },
+  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, aap_version),
+    0,0,0, 90 },
+  { "num_items",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, num_items),
+    0,0,0, 90 },
+  { "classname",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, classname),
+    1,1,1, 1 },
+  { "items",	"Dwg_ASSOCARRAYITEM*", sizeof (Dwg_ASSOCARRAYITEM*),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, items),
+    1,1,0, 0 },
+  { "numitems",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, numitems),
+    0,0,0, 0 },
+  { "numrows",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, numrows),
+    0,0,0, 0 },
+  { "numlevels",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, numlevels),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_ASSOCARRAYPOLARPARAMETERS_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, parent),
+    1,1,0, 0 },
+  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, aap_version),
+    0,0,0, 90 },
+  { "num_items",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, num_items),
+    0,0,0, 90 },
+  { "classname",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, classname),
+    1,1,1, 1 },
+  { "items",	"Dwg_ASSOCARRAYITEM*", sizeof (Dwg_ASSOCARRAYITEM*),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, items),
+    1,1,0, 0 },
+  { "numitems",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, numitems),
+    0,0,0, 0 },
+  { "numrows",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, numrows),
+    0,0,0, 0 },
+  { "numlevels",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, numlevels),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_ASSOCARRAYRECTANGULARPARAMETERS_fields[] = {
+  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, parent),
+    1,1,0, 0 },
+  { "aap_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, aap_version),
+    0,0,0, 90 },
+  { "num_items",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, num_items),
+    0,0,0, 90 },
+  { "classname",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, classname),
+    1,1,1, 1 },
+  { "items",	"Dwg_ASSOCARRAYITEM*", sizeof (Dwg_ASSOCARRAYITEM*),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, items),
+    1,1,0, 0 },
+  { "numitems",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, numitems),
+    0,0,0, 0 },
+  { "numrows",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, numrows),
+    0,0,0, 0 },
+  { "numlevels",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_abstractobject_ASSOCARRAYPARAMETERS, numlevels),
+    0,0,0, 0 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 
 /* from typedef struct _dwg_3DSOLID_material: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_3DSOLID_material_fields[] = {
@@ -10686,7 +10686,7 @@ static const Dwg_DYNAPI_field _dwg_ASSOCACTION_Deps_fields[] = {
 };
 /* from typedef struct _dwg_ASSOCARRAYITEM: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_ASSOCARRAYITEM_fields[] = {
-  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_ASSOCARRAYITEM, parent),
+  { "parent",	"struct _dwg_abstractobject_ASSOCARRAYPARAMETERS*", sizeof (void *),  OFF (struct _dwg_ASSOCARRAYITEM, parent),
     1,1,0, 0 },
   { "class_version",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_ASSOCARRAYITEM, class_version),
     0,0,0, 90 },
@@ -13048,10 +13048,10 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "ASSOCALIGNEDDIMACTIONBODY", DWG_TYPE_ASSOCALIGNEDDIMACTIONBODY /*(531)*/, _dwg_ASSOCALIGNEDDIMACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCALIGNEDDIMACTIONBODY) },	/* 36 */
   { "ASSOCARRAYACTIONBODY", DWG_TYPE_ASSOCARRAYACTIONBODY /*(532)*/, _dwg_ASSOCARRAYACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCARRAYACTIONBODY) },	/* 37 */
   { "ASSOCARRAYMODIFYACTIONBODY", DWG_TYPE_ASSOCARRAYMODIFYACTIONBODY /*(533)*/, _dwg_ASSOCARRAYMODIFYACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCARRAYMODIFYACTIONBODY) },	/* 38 */
-  { "ASSOCARRAYMODIFYPARAMETERS", DWG_TYPE_ASSOCARRAYMODIFYPARAMETERS /*(534)*/, _dwg_ASSOCARRAYMODIFYPARAMETERS_fields, sizeof (struct _dwg_object_ASSOCARRAYMODIFYPARAMETERS) },	/* 39 */
-  { "ASSOCARRAYPATHPARAMETERS", DWG_TYPE_ASSOCARRAYPATHPARAMETERS /*(535)*/, _dwg_ASSOCARRAYPATHPARAMETERS_fields, sizeof (struct _dwg_object_ASSOCARRAYPATHPARAMETERS) },	/* 40 */
-  { "ASSOCARRAYPOLARPARAMETERS", DWG_TYPE_ASSOCARRAYPOLARPARAMETERS /*(536)*/, _dwg_ASSOCARRAYPOLARPARAMETERS_fields, sizeof (struct _dwg_object_ASSOCARRAYPOLARPARAMETERS) },	/* 41 */
-  { "ASSOCARRAYRECTANGULARPARAMETERS", DWG_TYPE_ASSOCARRAYRECTANGULARPARAMETERS /*(537)*/, _dwg_ASSOCARRAYRECTANGULARPARAMETERS_fields, sizeof (struct _dwg_object_ASSOCARRAYRECTANGULARPARAMETERS) },	/* 42 */
+  { "ASSOCARRAYMODIFYPARAMETERS", DWG_TYPE_ASSOCARRAYMODIFYPARAMETERS /*(534)*/, NULL, 0 },	/* 39 */
+  { "ASSOCARRAYPATHPARAMETERS", DWG_TYPE_ASSOCARRAYPATHPARAMETERS /*(535)*/, NULL, 0 },	/* 40 */
+  { "ASSOCARRAYPOLARPARAMETERS", DWG_TYPE_ASSOCARRAYPOLARPARAMETERS /*(536)*/, NULL, 0 },	/* 41 */
+  { "ASSOCARRAYRECTANGULARPARAMETERS", DWG_TYPE_ASSOCARRAYRECTANGULARPARAMETERS /*(537)*/, NULL, 0 },	/* 42 */
   { "ASSOCASMBODYACTIONPARAM", DWG_TYPE_ASSOCASMBODYACTIONPARAM /*(538)*/, _dwg_ASSOCASMBODYACTIONPARAM_fields, sizeof (struct _dwg_object_ASSOCASMBODYACTIONPARAM) },	/* 43 */
   { "ASSOCBLENDSURFACEACTIONBODY", DWG_TYPE_ASSOCBLENDSURFACEACTIONBODY /*(539)*/, _dwg_ASSOCBLENDSURFACEACTIONBODY_fields, sizeof (struct _dwg_object_ASSOCBLENDSURFACEACTIONBODY) },	/* 44 */
   { "ASSOCCOMPOUNDACTIONPARAM", DWG_TYPE_ASSOCCOMPOUNDACTIONPARAM /*(540)*/, _dwg_ASSOCCOMPOUNDACTIONPARAM_fields, sizeof (struct _dwg_object_ASSOCCOMPOUNDACTIONPARAM) },	/* 45 */
@@ -13769,7 +13769,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 
 };
 
-#line 2461 "gen-dynapi.pl"
+#line 2466 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;

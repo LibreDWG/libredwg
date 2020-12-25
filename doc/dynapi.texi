@@ -5686,114 +5686,6 @@ Dwg_ARRAYITEMLOCATOR*
 @end vtable
 @end indentedblock
 
-@strong{ASSOCARRAYMODIFYPARAMETERS} @anchor{ASSOCARRAYMODIFYPARAMETERS}
-@cindex object, ASSOCARRAYMODIFYPARAMETERS
-@vindex ASSOCARRAYMODIFYPARAMETERS
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_object*
-@item aap_version
-BL,	DXF 90
-@item num_items
-BL,	DXF 90
-@item classname
-T,	DXF 1
-@item items
-Dwg_ASSOCARRAYITEM*
-@item numitems
-BL
-@item numrows
-BL
-@item numlevels
-BL
-
-@end vtable
-@end indentedblock
-
-@strong{ASSOCARRAYPATHPARAMETERS} @anchor{ASSOCARRAYPATHPARAMETERS}
-@cindex object, ASSOCARRAYPATHPARAMETERS
-@vindex ASSOCARRAYPATHPARAMETERS
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_object*
-@item aap_version
-BL,	DXF 90
-@item num_items
-BL,	DXF 90
-@item classname
-T,	DXF 1
-@item items
-Dwg_ASSOCARRAYITEM*
-@item numitems
-BL
-@item numrows
-BL
-@item numlevels
-BL
-
-@end vtable
-@end indentedblock
-
-@strong{ASSOCARRAYPOLARPARAMETERS} @anchor{ASSOCARRAYPOLARPARAMETERS}
-@cindex object, ASSOCARRAYPOLARPARAMETERS
-@vindex ASSOCARRAYPOLARPARAMETERS
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_object*
-@item aap_version
-BL,	DXF 90
-@item num_items
-BL,	DXF 90
-@item classname
-T,	DXF 1
-@item items
-Dwg_ASSOCARRAYITEM*
-@item numitems
-BL
-@item numrows
-BL
-@item numlevels
-BL
-
-@end vtable
-@end indentedblock
-
-@strong{ASSOCARRAYRECTANGULARPARAMETERS} @anchor{ASSOCARRAYRECTANGULARPARAMETERS}
-@cindex object, ASSOCARRAYRECTANGULARPARAMETERS
-@vindex ASSOCARRAYRECTANGULARPARAMETERS
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_object*
-@item aap_version
-BL,	DXF 90
-@item num_items
-BL,	DXF 90
-@item classname
-T,	DXF 1
-@item items
-Dwg_ASSOCARRAYITEM*
-@item numitems
-BL
-@item numrows
-BL
-@item numlevels
-BL
-
-@end vtable
-@end indentedblock
-
 @strong{ASSOCASMBODYACTIONPARAM} @anchor{ASSOCASMBODYACTIONPARAM}
 @cindex object, ASSOCASMBODYACTIONPARAM
 @vindex ASSOCASMBODYACTIONPARAM
@@ -12722,6 +12614,114 @@ T,	DXF 2
 @end vtable
 @end indentedblock
 
+@strong{ASSOCARRAYMODIFYPARAMETERS} @anchor{ASSOCARRAYMODIFYPARAMETERS}
+@cindex object, ASSOCARRAYMODIFYPARAMETERS
+@vindex ASSOCARRAYMODIFYPARAMETERS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aap_version
+BL,	DXF 90
+@item num_items
+BL,	DXF 90
+@item classname
+T,	DXF 1
+@item items
+Dwg_ASSOCARRAYITEM*
+@item numitems
+BL
+@item numrows
+BL
+@item numlevels
+BL
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCARRAYPATHPARAMETERS} @anchor{ASSOCARRAYPATHPARAMETERS}
+@cindex object, ASSOCARRAYPATHPARAMETERS
+@vindex ASSOCARRAYPATHPARAMETERS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aap_version
+BL,	DXF 90
+@item num_items
+BL,	DXF 90
+@item classname
+T,	DXF 1
+@item items
+Dwg_ASSOCARRAYITEM*
+@item numitems
+BL
+@item numrows
+BL
+@item numlevels
+BL
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCARRAYPOLARPARAMETERS} @anchor{ASSOCARRAYPOLARPARAMETERS}
+@cindex object, ASSOCARRAYPOLARPARAMETERS
+@vindex ASSOCARRAYPOLARPARAMETERS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aap_version
+BL,	DXF 90
+@item num_items
+BL,	DXF 90
+@item classname
+T,	DXF 1
+@item items
+Dwg_ASSOCARRAYITEM*
+@item numitems
+BL
+@item numrows
+BL
+@item numlevels
+BL
+
+@end vtable
+@end indentedblock
+
+@strong{ASSOCARRAYRECTANGULARPARAMETERS} @anchor{ASSOCARRAYRECTANGULARPARAMETERS}
+@cindex object, ASSOCARRAYRECTANGULARPARAMETERS
+@vindex ASSOCARRAYRECTANGULARPARAMETERS
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item aap_version
+BL,	DXF 90
+@item num_items
+BL,	DXF 90
+@item classname
+T,	DXF 1
+@item items
+Dwg_ASSOCARRAYITEM*
+@item numitems
+BL
+@item numrows
+BL
+@item numlevels
+BL
+
+@end vtable
+@end indentedblock
+
 @strong{Dwg_3DSOLID_material} @anchor{Dwg_3DSOLID_material}
 @vindex Dwg_3DSOLID_material
 
@@ -12945,7 +12945,7 @@ H
 @vtable @code
 
 @item parent
-struct _dwg_object_object*
+struct _dwg_abstractobject_ASSOCARRAYPARAMETERS*
 @item class_version
 BL,	DXF 90
 @item itemloc[3]
