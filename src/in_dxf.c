@@ -2357,7 +2357,7 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       return NULL;
     }
 
-  while (pair != NULL && pair->code == 1)
+  while (pair != NULL && (pair->code == 1 || pair->code == 3))
     {
       int len;
       if (!pair->value.s)
@@ -2391,9 +2391,12 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             }
           strcat ((char *)o->encr_sat_data[0], pair->value.s);
         }
-      strcat ((char *)o->encr_sat_data[0], "\n");
-      // For the replacement of "^ " with "^" see below
-      i++;
+      if (pair->code == 1)
+        {
+          strcat ((char *)o->encr_sat_data[0], "\n");
+          // For the replacement of "^ " with "^" see below
+          i++;
+        }
 
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
