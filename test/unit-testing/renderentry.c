@@ -1,4 +1,4 @@
-// DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_RENDERENTRY
 #include "common.c"
 
@@ -26,7 +26,6 @@ api_process (dwg_object *obj)
   BITCODE_BL display_index;	/*!< DXF 90 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_renderentry *_obj = dwg_object_to_RENDERENTRY (obj);
 
   CHK_ENTITY_TYPE (_obj, RENDERENTRY, class_version, BL);
@@ -47,5 +46,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, RENDERENTRY, light_count, BL);
   CHK_ENTITY_TYPE (_obj, RENDERENTRY, triangle_count, BL);
   CHK_ENTITY_TYPE (_obj, RENDERENTRY, display_index, BL);
-#endif
 }

@@ -17,7 +17,6 @@ api_process (dwg_object *obj)
   BITCODE_T environ_image_filename;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_renderenvironment *_obj = dwg_object_to_RENDERENVIRONMENT (obj);
 
   CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, class_version, BL);
@@ -30,5 +29,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, fog_distance_far, BD);
   CHK_ENTITY_TYPE (_obj, RENDERENVIRONMENT, environ_image_enabled, B);
   CHK_ENTITY_UTF8TEXT (_obj, RENDERENVIRONMENT, environ_image_filename);
-#endif
 }

@@ -174,6 +174,9 @@ testobjects = \
 	rastervariables \
 	ray \
 	region \
+	renderentry \
+	renderenvironment \
+	renderglobal \
 	rendersettings \
 	scale \
 	section_manager \
@@ -309,9 +312,6 @@ testdebug = \
 	polargripentity \
 	radimobjectcontextdata \
 	radimlgobjectcontextdata \
-	renderenvironment \
-	renderentry \
-	renderglobal \
 	revolvedsurface \
 	rtext \
 	sunstudy \

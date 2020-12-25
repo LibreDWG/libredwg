@@ -9520,46 +9520,6 @@ DWG_OBJECT (NAVISWORKSMODELDEF)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-// officially documented, dbRender.h (ACAD_RENDER_ENVIRONMENT ??)
-// DXF: RENDERENVIRONMENT
-DWG_OBJECT (RENDERENVIRONMENT)
-  DECODE_UNKNOWN_BITS
-
-  SUBCLASS (AcDbRenderEnvironment)
-  DEBUG_HERE_OBJ
-  FIELD_BL (class_version, 90);     /*!< default 1 */
-  FIELD_B (fog_enabled, 290);
-  FIELD_B (fog_background_enabled, 290);
-  FIELD_CMC (fog_color, 280);
-  FIELD_BD (fog_density_near, 40); /* default 100.0 (opaque fog) */
-  FIELD_BD (fog_density_far, 40);
-  FIELD_BD (fog_distance_near, 40); /* default 100.0 (at the far clipping plane) */
-  FIELD_BD (fog_distance_far, 40);
-  FIELD_B (environ_image_enabled, 290);
-  FIELD_T (environ_image_filename, 1);
-
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-// officially documented, dbRender.h
-DWG_OBJECT (RENDERGLOBAL)
-  DECODE_UNKNOWN_BITS
-
-  SUBCLASS (AcDbRenderGlobal)
-  DEBUG_HERE_OBJ
-  FIELD_BL (class_version, 90);     /*!< default 2 */
-  FIELD_BL (procedure, 90);         /*!< 0 view, 1 crop, 2 selection */
-  FIELD_BL (destination, 90);       /*!< 0 window, 1 viewport */
-  FIELD_B (save_enabled, 290);
-  FIELD_T (save_filename, 1);
-  FIELD_BL (image_width, 90);
-  FIELD_BL (image_height, 90);
-  FIELD_B (predef_presets_first, 290);
-  FIELD_B (highlevel_info, 290);
-
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
 // LiveMap raster image underlay r2015+
 DWG_OBJECT (GEOMAPIMAGE)
   DECODE_UNKNOWN_BITS
@@ -10133,6 +10093,62 @@ DWG_OBJECT (SOLID_BACKGROUND)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
+
+// part of ACAD_RENDER_ENTRIES
+DWG_OBJECT (RENDERENTRY)
+  SUBCLASS (AcDbRenderEntry);
+  FIELD_BL (class_version, 90);
+  FIELD_T (image_file_name, 1);
+  FIELD_T (preset_name, 1);
+  FIELD_T (view_name, 1);
+  FIELD_BL (dimension_x, 90);
+  FIELD_BL (dimension_y, 90);
+  FIELD_BS (start_year, 70);
+  FIELD_BS (start_month, 70);
+  FIELD_BS (start_day, 70);
+  FIELD_BS (start_minute, 70);
+  FIELD_BS (start_second, 70);
+  FIELD_BS (start_msec, 70);
+  FIELD_BD (render_time, 40);
+  FIELD_BL (memory_amount, 90);
+  FIELD_BL (material_count, 90);
+  FIELD_BL (light_count, 90);
+  FIELD_BL (triangle_count, 90);
+  FIELD_BL (display_index, 90);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// officially documented, dbRender.h (ACAD_RENDER_ENVIRONMENT ??)
+DWG_OBJECT (RENDERENVIRONMENT)
+  SUBCLASS (AcDbRenderEnvironment)
+  FIELD_BL (class_version, 90);     /*!< default 1 */
+  FIELD_B (fog_enabled, 290);
+  FIELD_B (fog_background_enabled, 290);
+  FIELD_CMC (fog_color, 280);
+  FIELD_BD (fog_density_near, 40); /* default 100.0 (opaque fog) */
+  FIELD_BD (fog_density_far, 40);
+  FIELD_BD (fog_distance_near, 40); /* default 100.0 (at the far clipping plane) */
+  FIELD_BD (fog_distance_far, 40);
+  FIELD_B (environ_image_enabled, 290);
+  FIELD_T (environ_image_filename, 1);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// officially documented, dbRender.h
+DWG_OBJECT (RENDERGLOBAL)
+  SUBCLASS (AcDbRenderGlobal)
+  FIELD_BL (class_version, 90);     /*!< default 2 */
+  FIELD_BL (procedure, 90);         /*!< 0 view, 1 crop, 2 selection */
+  FIELD_BL (destination, 90);       /*!< 0 window, 1 viewport */
+  FIELD_B (save_enabled, 290);
+  FIELD_T (save_filename, 1);
+  FIELD_BL (image_width, 90);
+  FIELD_BL (image_height, 90);
+  FIELD_B (predef_presets_first, 290);
+  FIELD_B (highlevel_info, 290);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
 #if defined (DEBUG_CLASSES) || defined (IS_FREE)
 
 DWG_OBJECT (LAYOUTPRINTCONFIG)
@@ -10211,31 +10227,6 @@ DWG_OBJECT (TVDEVICEPROPERTIES)
   //ver 2 or >4:
   FIELD_BD (antialiasing_level, 0)
   FIELD_BD (bd2, 0)
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-// part of ACAD_RENDER_ENTRIES
-DWG_OBJECT (RENDERENTRY)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbRenderEntry);
-  FIELD_BL (class_version, 90);
-  FIELD_T (image_file_name, 1);
-  FIELD_T (preset_name, 1);
-  FIELD_T (view_name, 1);
-  FIELD_BL (dimension_x, 90);
-  FIELD_BL (dimension_y, 90);
-  FIELD_BS (start_year, 70);
-  FIELD_BS (start_month, 70);
-  FIELD_BS (start_day, 70);
-  FIELD_BS (start_minute, 70);
-  FIELD_BS (start_second, 70);
-  FIELD_BS (start_msec, 70);
-  FIELD_BD (render_time, 40);
-  FIELD_BL (memory_amount, 90);
-  FIELD_BL (material_count, 90);
-  FIELD_BL (light_count, 90);
-  FIELD_BL (triangle_count, 90);
-  FIELD_BL (display_index, 90);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

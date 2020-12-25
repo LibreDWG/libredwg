@@ -895,7 +895,7 @@ in_word_set (register const char *str, register size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str150,   "BLOCKRADIALCONSTRAINTPARAMETER",    DWG_TYPE_BLOCKRADIALCONSTRAINTPARAMETER,	0,	DEBUGGING},
       {-1}, {-1}, {-1}, {-1}, {-1},
 #line 318 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str156,                      "RENDERENTRY",                       DWG_TYPE_RENDERENTRY,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str156,                      "RENDERENTRY",                       DWG_TYPE_RENDERENTRY,	0,	UNSTABLE},
       {-1}, {-1},
 #line 287 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str159,                        "LIGHTLIST",                         DWG_TYPE_LIGHTLIST,	0,	UNSTABLE},
@@ -959,7 +959,7 @@ in_word_set (register const char *str, register size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str205,                  "BLOCKLINEARGRIP",                   DWG_TYPE_BLOCKLINEARGRIP,	0,	STABLE},
       {-1},
 #line 320 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str207,                     "RENDERGLOBAL",                      DWG_TYPE_RENDERGLOBAL,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str207,                     "RENDERGLOBAL",                      DWG_TYPE_RENDERGLOBAL,	0,	UNSTABLE},
 #line 201 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str208,                    "ACDBASSOCVARIABLE",                 DWG_TYPE_ASSOCVARIABLE,	0,	DEBUGGING},
 #line 226 "src/objects.in"
@@ -967,7 +967,7 @@ in_word_set (register const char *str, register size_t len)
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1}, {-1}, {-1},
 #line 319 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str222,                "RENDERENVIRONMENT",                 DWG_TYPE_RENDERENVIRONMENT,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str222,                "RENDERENVIRONMENT",                 DWG_TYPE_RENDERENVIRONMENT,	0,	UNSTABLE},
       {-1},
 #line 54 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str224,  "BASEPOINTPARAMETERENTITY",   DWG_TYPE_BASEPOINTPARAMETERENTITY,	1,	DEBUGGING},
