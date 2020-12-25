@@ -43,6 +43,8 @@ enum apptypes {
   ISMCLASS,
   EXPRESSCLASS,
   POINTCLOUDCLASS,
+  DGNLSCLASS,
+  AEC60CLASS,
   SPECIALCLASS,
 };
 #define ODBX ODBXCLASS
@@ -50,6 +52,8 @@ enum apptypes {
 #define SCENEOE SCENEOECLASS
 #define EXPRESS EXPRESSCLASS
 #define POINTCLOUD POINTCLOUDCLASS
+#define DGNLS DGNLSCLASS
+#define AEC60 AEC60CLASS
 #define SPECIAL SPECIALCLASS
 //%null-strings
 
@@ -70,6 +74,9 @@ OLE2FRAME,	"AcDbOle2Frame",	ODBX,	1
 ARC_DIMENSION,	"AcDbArcDimension",	ODBX,	1
 MULTILEADER,	"AcDbMLeader",		ODBX,	1
 ACAD_TABLE,	"AcDbTable",		ODBX,	1
+PDFUNDERLAY, 	"AcDbPdfReference",   	ODBX,	1
+DGNUNDERLAY, 	"AcDbDgnReference",   	ODBX,	1
+DWFUNDERLAY, 	"AcDbDwfReference",   	ODBX,	1
 #
 ACDBDICTIONARYWDFLT,		"AcDbDictionaryWithDefault",	ODBX_OR_A2000CLASS,	0
 ACDBPLACEHOLDER,		"AcDbPlaceHolder",		ODBX_OR_A2000CLASS,	0
@@ -93,6 +100,9 @@ TABLEGEOMETRY,	"AcDbTableGeometry",	ODBX,	0
 CELLSTYLEMAP,	"AcDbCellStyleMap",	ODBX,	0
 DATATABLE,	"AcDbDataTable",	ODBX,	0
 SCALE,		"AcDbScale",		ODBX,	0
+DGNDEFINITION, 	"AcDbDgnDefinition",   	ODBX,	0
+DWFDEFINITION, 	"AcDbDwfDefinition",   	ODBX,	0
+PDFDEFINITION, 	"AcDbPdfDefinition",   	ODBX,	0
 #
 IMAGE,		"AcDbRasterImage",	ISM,	1
 IMAGEDEF,	"AcDbRasterImageDef",	ISM,	0
@@ -284,6 +294,13 @@ EXACXREFPANELOBJECT,			"ExAcXREFPanelObject",		SPECIAL, 0
 NPOCOLLECTION,				"AcDbImpNonPersistentObjectsCollection", ODBX, 0
 PARTIAL_VIEWING_FILTER,			"OdDbPartialViewingFilter",	SPECIAL, 0
 PARTIAL_VIEWING_INDEX,			"OdDbPartialViewingIndex",	SPECIAL, 0
+LSDEFINITION,				"AcDbLSDefinition",		DGNLS, 0
+LSSTROKEPATTERNCOMPONENT,	       	"AcDbLSStrokePatternComponent",	DGNLS, 0
+LSINTERNALCOMPONENT,			"AcDbLSInternalComponent",	DGNLS, 0
+LSCOMPOUNDCOMPONENT,			"AcDbLSCompoundComponent",	DGNLS, 0
+LSPOINTCOMPONENT,			"AcDbLSPointComponent",		DGNLS, 0
+LSSYMBOLCOMPONENT,			"AcDbLSSymbolComponent",	DGNLS, 0
+AEC_REFEDIT_STATUS_TRACKER,		"AecDbRefEditStatusTracker",    AEC60, 0
 %%
 
 /* Create classes on demand.
@@ -322,6 +339,11 @@ dwg_require_class (Dwg_Data *restrict dwg, const char *const restrict dxfname, c
           return dwg_add_class (dwg, dxfname, result->cppname, "ISM", result->isent);
         case POINTCLOUDCLASS:
           return dwg_add_class (dwg, dxfname, result->cppname, "AcDbPointCloudObj", result->isent); //appname?
+        case DGNLSCLASS:
+          return dwg_add_class (dwg, dxfname, result->cppname, "AcDgnLS", result->isent);
+        case AEC60CLASS:
+          return dwg_add_class (dwg, dxfname, result->cppname, "AecArchBase60|Product Desc: "
+                                "Autodesk Architectural Desktop 2007", result->isent);
         case EXPRESSCLASS:
           {
             char appname[128];
