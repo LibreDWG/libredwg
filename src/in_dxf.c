@@ -5863,6 +5863,92 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 }
 
 static Dxf_Pair *
+add_RENDERENVIRONMENT (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Object_RENDERENVIRONMENT *o = obj->tio.object->tio.RENDERENVIRONMENT;
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
+  BITCODE_RC r, g, b;
+
+  FIELD_BL (class_version, 90);
+  FIELD_B (fog_enabled, 290);
+  FIELD_B (fog_background_enabled, 290);
+
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, fog_color, 280);
+  r = pair->value.u & 0xff;
+  dxf_free_pair (pair);
+
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, fog_color, 280);
+  g = pair->value.u & 0xff;
+  dxf_free_pair (pair);
+
+  pair = dxf_read_pair (dat);
+  EXPECT_DXF (obj->name, fog_color, 280);
+  b = pair->value.u & 0xff;
+  dxf_free_pair (pair);
+
+  o->fog_color.method = 0xc3;
+  o->fog_color.rgb = 0xc3000000 | r << 16 | g << 8 | b;
+
+  FIELD_BD (fog_density_near, 40); /* default 100.0 (opaque fog) */
+  FIELD_BD (fog_density_far, 40);
+  FIELD_BD (fog_distance_near, 40); /* default 100.0 (at the far clipping plane) */
+  FIELD_BD (fog_distance_far, 40);
+  FIELD_B (environ_image_enabled, 290);
+  FIELD_T (environ_image_filename, 1);
+  return NULL;
+}
+
+static Dxf_Pair *
+add_RENDERGLOBAL (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Object_RENDERGLOBAL *o = obj->tio.object->tio.RENDERGLOBAL;
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
+
+  FIELD_BL (class_version, 90);
+  FIELD_BL (procedure, 90);         /*!< 0 view, 1 crop, 2 selection */
+  FIELD_BL (destination, 90);       /*!< 0 window, 1 viewport */
+  FIELD_B (save_enabled, 290);
+  FIELD_T (save_filename, 1);
+  FIELD_BL (image_width, 90);
+  FIELD_BL (image_height, 90);
+  FIELD_B (predef_presets_first, 290);
+  FIELD_B (highlevel_info, 290);
+  return NULL;
+}
+
+static Dxf_Pair *
+add_RENDERENTRY (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Object_RENDERENTRY *o = obj->tio.object->tio.RENDERENTRY;
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
+
+  FIELD_BL (class_version, 90);
+  FIELD_T (image_file_name, 1);
+  FIELD_T (preset_name, 1);
+  FIELD_T (view_name, 1);
+  FIELD_BL (dimension_x, 90);
+  FIELD_BL (dimension_y, 90);
+  FIELD_BS (start_year, 70);
+  FIELD_BS (start_month, 70);
+  FIELD_BS (start_day, 70);
+  FIELD_BS (start_minute, 70);
+  FIELD_BS (start_second, 70);
+  FIELD_BS (start_msec, 70);
+  FIELD_BD (render_time, 40);
+  FIELD_BL (memory_amount, 90);
+  FIELD_BL (material_count, 90);
+  FIELD_BL (light_count, 90);
+  FIELD_BL (triangle_count, 90);
+  FIELD_BL (display_index, 90);
+  return NULL;
+}
+
+static Dxf_Pair *
 add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   Dxf_Pair *restrict pair)
 {
@@ -5897,43 +5983,29 @@ add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 }
 
 static Dxf_Pair *
-add_ASSOCDEPENDENCY (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
-                     Dxf_Pair *restrict pair)
+add_ASSOCDEPENDENCY (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
 {
   Dwg_Object_ASSOCDEPENDENCY *o = obj->tio.object->tio.ASSOCDEPENDENCY;
   Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
 
-  EXPECT_INT_DXF ("class_version", 90, BL);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("status", 90, BL);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("is_read_dep", 290, B);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("is_write_dep", 290, B);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("is_attached_to_object", 290, B);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("is_delegating_to_owning_action", 290, B);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("order", 90, BL);
-  pair = dxf_read_pair (dat);
-  EXPECT_H_DXF ("dep_on", 3, 330, H);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("has_name", 290, B);
+  FIELD_BL (class_version, 90);
+  FIELD_BL (status, 90);
+  FIELD_B (is_read_dep, 290);
+  FIELD_B (is_write_dep, 290);
+  FIELD_B (is_attached_to_object, 290);
+  FIELD_B (is_delegating_to_owning_action, 290);
+  FIELD_BLd (order, 90); /* -1 or 0 */
+  FIELD_HANDLE (dep_on, 3, 330);
+  FIELD_B (has_name, 290);
   if (o->has_name)
     {
-      pair = dxf_read_pair (dat);
-      EXPECT_T_DXF ("name", 1);
+      FIELD_T (name, 1);
     }
-  pair = dxf_read_pair (dat);
-  EXPECT_H_DXF ("readdep", 4, 330, H);
-  pair = dxf_read_pair (dat);
-  EXPECT_H_DXF ("node", 3, 330, H);
-  pair = dxf_read_pair (dat);
-  EXPECT_H_DXF ("dep_body", 4, 360, H);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("depbodyid", 90, BL);
-
+  FIELD_HANDLE (readdep, 4, 330);
+  FIELD_HANDLE (node, 3, 330);
+  FIELD_HANDLE (dep_body, 4, 360);
+  FIELD_BLd (depbodyid, 90);
   return NULL;
 }
 
@@ -9095,11 +9167,38 @@ new_object (char *restrict name, char *restrict dxfname,
 
               // with PERSUBENTMGR
               if (obj->fixedtype == DWG_TYPE_PERSUBENTMGR
-                       && strEQc (subclass, "AcDbPersSubentManager"))
+                  && strEQc (subclass, "AcDbPersSubentManager"))
                 {
                   dxf_free_pair (pair);
                   pair = dxf_read_pair (dat);
                   pair = add_PERSUBENTMGR (obj, dat, pair); // NULL for success
+                  if (!pair)
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              else if (strEQc (subclass, "AcDbRenderEnvironment"))
+                {
+                  dxf_free_pair (pair);
+                  pair = add_RENDERENVIRONMENT (obj, dat); // NULL for success
+                  if (!pair)
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              else if (strEQc (subclass, "AcDbRenderGlobal"))
+                {
+                  dxf_free_pair (pair);
+                  pair = add_RENDERGLOBAL (obj, dat); // NULL for success
+                  if (!pair)
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              else if (strEQc (subclass, "AcDbRenderEntry"))
+                {
+                  dxf_free_pair (pair);
+                  pair = add_RENDERENTRY (obj, dat); // NULL for success
                   if (!pair)
                     goto next_pair;
                   else
@@ -9111,9 +9210,7 @@ new_object (char *restrict name, char *restrict dxfname,
                        && strEQc (subclass, "AcDbAssocDependency"))
                 {
                   dxf_free_pair (pair);
-                  pair = dxf_read_pair (dat);
-                  pair = add_ASSOCDEPENDENCY (obj, dat,
-                                              pair); // NULL for success
+                  pair = add_ASSOCDEPENDENCY (obj, dat); // NULL for success
                   if (!pair)
                     goto next_pair;
                   else
