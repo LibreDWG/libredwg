@@ -2720,7 +2720,10 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
 #define CHK_paths                                                             \
   if (!o->paths || j < 0 || j >= (int)o->num_paths)                           \
-    return NULL;                                                              \
+    {                                                                         \
+      LOG_ERROR ("HATCH no paths or wrong j %u\n", j);                        \
+      return NULL;                                                            \
+    }                                                                         \
   assert (o->paths);                                                          \
   assert (j >= 0);                                                            \
   assert (j < (int)o->num_paths)
@@ -2796,7 +2799,10 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
 #define CHK_segs                                                              \
   if (!o->paths[j].segs || k < 0 || k >= (int)o->paths[j].num_segs_or_paths)  \
-    return NULL;                                                              \
+    {                                                                         \
+      LOG_ERROR ("HATCH no paths[%d].segs or wrong k %d\n", j, k);            \
+      return NULL;                                                            \
+    }                                                                         \
   assert (o->paths[j].segs);                                                  \
   assert (k >= 0);                                                            \
   assert (k < (int)o->paths[j].num_segs_or_paths)
@@ -2806,7 +2812,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_TRACE ("HATCH.paths[%d].segs[%d].degree = %ld [BL 94]\n", j, k,
                      pair->value.l);
         }
-      else if (pair->code == 74 && !is_plpath && pair->value.i)
+      else if (pair->code == 74 && !is_plpath)
         {
           CHK_paths;
           CHK_segs;
@@ -2873,7 +2879,11 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 #define CHK_control_points                                                    \
   if (!o->paths[j].segs || l < 0                                              \
       || l >= (int)o->paths[j].segs[k].num_control_points)                    \
-    return NULL;                                                              \
+    {                                                                         \
+      LOG_ERROR ("HATCH no paths[%d].segs or "                                \
+                 "wrong l %d control_points index\n", j, l);                  \
+      return NULL;                                                            \
+    }                                                                         \
   assert (l >= 0);                                                            \
   assert (l < (int)o->paths[j].segs[k].num_control_points)
 
@@ -3021,12 +3031,27 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 }
               else
                 {
+#define CHK_knots                                                             \
+  if (!o->paths[j].segs ||                                                    \
+      !o->paths[j].segs[k].knots ||                                           \
+      l < 0 ||                                                                \
+      l >= (int)o->paths[j].segs[k].num_knots)                                \
+    {                                                                         \
+      LOG_ERROR ("HATCH no paths[%d].segs[%d].knots or "                      \
+                 "wrong l %d knots index\n", j, k, l);                        \
+      return NULL;                                                            \
+    }                                                                         \
+  assert (l >= 0);                                                            \
+  assert (l < (int)o->paths[j].segs[k].num_knots)
+                  
                   l++;
-                  CHK_control_points;
+                  CHK_knots;
                   o->paths[j].segs[k].knots[l] = pair->value.d;
                   LOG_TRACE (
                       "HATCH.paths[%d].segs[%d].knots[%d] = %f [BD 40]\n", j,
                       k, l, pair->value.d);
+                  if (l == (int)o->paths[j].segs[k].num_knots - 1) // last 40
+                    l = -1;
                 }
               break;
             default:
@@ -3083,7 +3108,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               LOG_TRACE ("HATCH.paths[%d].segs[%d].is_ccw = %d [B 73]\n", j, k,
                          pair->value.i);
               break;
-            default:
+            default: // SPLINE 4
               o->paths[j].segs[k].is_rational = pair->value.i;
               LOG_TRACE ("HATCH.paths[%d].segs[%d].is_rational = %d [B 73]\n",
                          j, k, pair->value.i);
@@ -3097,7 +3122,10 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 #define CHK_polyline_paths                                                    \
   if (!o->paths[j].polyline_paths || k < 0                                    \
       || k >= (int)o->paths[j].num_segs_or_paths)                             \
-    return NULL;                                                              \
+    {                                                                         \
+      LOG_ERROR ("HATCH no paths[%d].polyline_paths or wrong k %d\n", j, k);  \
+      return NULL;                                                            \
+    }                                                                         \
   assert (o->paths[j].polyline_paths);                                        \
   assert (k >= 0);                                                            \
   assert (k < (int)o->paths[j].num_segs_or_paths)
@@ -3176,7 +3204,10 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
 #define CHK_deflines                                                          \
   if (!o->deflines || j < 0 || j >= (int)o->num_deflines)                     \
-    return NULL;                                                              \
+    {                                                                         \
+      LOG_ERROR ("HATCH no deflines or wrong j %d", j);                       \
+      return NULL;                                                            \
+    }                                                                         \
   assert (j >= 0);                                                            \
   assert (j < (int)o->num_deflines)
 
@@ -3276,7 +3307,10 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
 #define CHK_seeds                                                             \
   if (!o->seeds || k < 0 || k >= (int)o->num_seeds)                           \
-    return NULL;                                                              \
+    {                                                                         \
+      LOG_ERROR ("HATCH no seeds or wrong k %d", k);                          \
+      return NULL;                                                            \
+    }                                                                         \
   assert (k >= 0);                                                            \
   assert (k < (int)o->num_seeds)
 
@@ -3495,12 +3529,18 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             case 20:
 #define CHK_points                                                            \
   if (j < 0 || j >= (int)lline->num_points)                                   \
-    return NULL;                                                              \
+    {                                                                         \
+      LOG_ERROR ("MULTILEADER wrong j %d points index", j);                   \
+      return NULL;                                                            \
+    }                                                                         \
   assert (j >= 0 && j < (int)lline->num_points)
 
 #define CHK_breaks                                                            \
   if (k < 0 || k >= (int)lline->num_breaks)                                   \
-    return NULL;                                                              \
+    {                                                                         \
+      LOG_ERROR ("MULTILEADER wrong k %d breaks index", j);                   \
+      return NULL;                                                            \
+    }                                                                         \
   assert (k >= 0 && k < (int)lline->num_breaks)
 
               CHK_points;
@@ -5891,6 +5931,7 @@ add_RENDERENVIRONMENT (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
 
   o->fog_color.method = 0xc3;
   o->fog_color.rgb = 0xc3000000 | r << 16 | g << 8 | b;
+  LOG_TRACE ("%s.fog_color.rgb = 0x%x [3x RC 280]\n", obj->name, o->fog_color.rgb)
 
   FIELD_BD (fog_density_near, 40); /* default 100.0 (opaque fog) */
   FIELD_BD (fog_density_far, 40);
