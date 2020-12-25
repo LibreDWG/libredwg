@@ -13626,6 +13626,8 @@ BL*
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_CONTEXTDATA_submgr*
 @item text
 T,	DXF 3
 @item itemhandle
@@ -13817,7 +13819,7 @@ Dwg_DATATABLE_row*
 @vtable @code
 
 @item parent
-struct _dwg_object_DATATABLE*
+struct _dwg_DATATABLE_column*
 @item value
 Dwg_TABLE_value
 
@@ -14076,14 +14078,14 @@ RL
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_object_TABLECONTENT*
 @item cellstyle
 Dwg_CellStyle
 @item num_merged_cells
 BL,	DXF 90
 @item merged_cells
 Dwg_FormattedTableMerged*
-@item parent
-struct _dwg_object_TABLECONTENT*
 
 @end vtable
 @end indentedblock
@@ -14094,6 +14096,8 @@ struct _dwg_object_TABLECONTENT*
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_FormattedTableData*
 @item top_row
 BL,	DXF 91
 @item left_col
@@ -14102,8 +14106,6 @@ BL,	DXF 92
 BL,	DXF 93
 @item right_col
 BL,	DXF 94
-@item parent
-struct _dwg_FormattedTableData*
 
 @end vtable
 @end indentedblock
@@ -14144,6 +14146,8 @@ BL
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_CellStyle*
 @item index_mask
 BL,	DXF 95
 @item border_overrides
@@ -14160,8 +14164,6 @@ H,	DXF 340
 B,	DXF 93
 @item double_line_spacing
 BD,	DXF 40
-@item parent
-struct _dwg_CellStyle*
 
 @end vtable
 @end indentedblock
@@ -15352,6 +15354,8 @@ TU,	DXF 1
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_TABLE_Cell*
 @item attdef
 H,	DXF 331
 @item index
@@ -15368,14 +15372,14 @@ T,	DXF 300
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_entity_TABLE*
 @item position
 3BD
 @item height
 BD
 @item flag
 BL
-@item parent
-struct _dwg_entity_TABLE*
 
 @end vtable
 @end indentedblock
@@ -15386,14 +15390,14 @@ struct _dwg_entity_TABLE*
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_entity_TABLE*
 @item position
 3BD
 @item start
 BL
 @item end
 BL
-@item parent
-struct _dwg_entity_TABLE*
 
 @end vtable
 @end indentedblock
@@ -15404,6 +15408,8 @@ struct _dwg_entity_TABLE*
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_entity_TABLE*
 @item type
 BS,	DXF 171
 @item flags
@@ -15474,8 +15480,6 @@ Dwg_TABLE_value
 BL
 @item attr_defs
 Dwg_TABLE_AttrDef*
-@item parent
-struct _dwg_entity_TABLE*
 
 @end vtable
 @end indentedblock
@@ -15487,7 +15491,7 @@ struct _dwg_entity_TABLE*
 @vtable @code
 
 @item name
-TV,	DXF 300
+T,	DXF 300
 @item value
 Dwg_TABLE_value
 @item cell_parent
@@ -15596,6 +15600,8 @@ struct _dwg_TableRow*
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_TableCell*
 @item type
 BL,	DXF 90
 @item value
@@ -15610,8 +15616,6 @@ Dwg_TableCellContent_Attr*
 BS
 @item content_format
 Dwg_ContentFormat
-@item parent
-struct _dwg_TableCell*
 
 @end vtable
 @end indentedblock
@@ -15622,14 +15626,14 @@ struct _dwg_TableCell*
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_TableCellContent*
 @item attdef
 H,	DXF 330
 @item value
 TV,	DXF 301
 @item index
 BL,	DXF 92
-@item parent
-struct _dwg_TableCellContent*
 
 @end vtable
 @end indentedblock
@@ -15640,6 +15644,8 @@ struct _dwg_TableCellContent*
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_LinkedTableData*
 @item name
 T,	DXF 300
 @item custom_data
@@ -15650,8 +15656,6 @@ Dwg_CellStyle
 BL
 @item width
 BL
-@item parent
-struct _dwg_LinkedTableData*
 
 @end vtable
 @end indentedblock
@@ -15662,6 +15666,8 @@ struct _dwg_LinkedTableData*
 @indentedblock
 @vtable @code
 
+@item parent
+struct _dwg_LinkedTableData*
 @item num_cells
 BL
 @item cells
@@ -15678,8 +15684,6 @@ Dwg_CellStyle
 BL
 @item height
 BL
-@item parent
-struct _dwg_LinkedTableData*
 
 @end vtable
 @end indentedblock

@@ -444,12 +444,11 @@
 #  undef SET_PARENT_OBJ
 #  undef SET_PARENT_FIELD
 #  define SET_PARENT(field, to)                                               \
-    if (_obj->field)                                                          \
-      _obj->field->parent = to;
-#  define SET_PARENT_OBJ(field) SET_PARENT (field, _obj);
+    _obj->field.parent = to
+#  define SET_PARENT_OBJ(field)                                               \
+    SET_PARENT (field, _obj)
 #  define SET_PARENT_FIELD(field, what_parent, to)                            \
-    if (_obj->field)                                                          \
-      _obj->field->what_parent = to;
+    _obj->field.what_parent = to
 #else
 #  define TRACE_DD
 #endif

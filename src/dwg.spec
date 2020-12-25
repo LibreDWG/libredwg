@@ -1906,8 +1906,8 @@ DWG_ENTITY (SPLINE)
           FIELD_VALUE (ctrl_pts[rcount1].w) = 0; // skipped when encoding
         else
           SUB_FIELD_BD (ctrl_pts[rcount1], w, 41);
+        SET_PARENT_OBJ (ctrl_pts[rcount1]);
     END_REPEAT_BLOCK
-    SET_PARENT_OBJ (ctrl_pts);
     END_REPEAT (ctrl_pts);
   }
   else { // bezier spline, scenario 2
@@ -2243,31 +2243,31 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
           REPEAT (num_wires, wires, Dwg_3DSOLID_wire)                         \
           REPEAT_BLOCK                                                        \
             WIRESTRUCT_fields (wires[rcount1])                                \
-            END_REPEAT_BLOCK                                                  \
-          SET_PARENT (wires, (Dwg_Entity__3DSOLID *)_obj)                     \
+            SET_PARENT (wires[rcount1], (Dwg_Entity__3DSOLID *)_obj);         \
+          END_REPEAT_BLOCK                                                    \
           END_REPEAT (wires);                                                 \
           FIELD_BL (num_silhouettes, 0);                                      \
           REPEAT (num_silhouettes, silhouettes, Dwg_3DSOLID_silhouette)       \
           REPEAT_BLOCK                                                        \
-          SUB_FIELD_BL (silhouettes[rcount1], vp_id, 0);                      \
-          SUB_FIELD_3BD (silhouettes[rcount1], vp_target, 0); /* ?? */        \
-          SUB_FIELD_3BD (silhouettes[rcount1], vp_dir_from_target, 0);        \
-          SUB_FIELD_3BD (silhouettes[rcount1], vp_up_dir, 0);                 \
-          SUB_FIELD_B (silhouettes[rcount1], vp_perspective, 0);              \
-          SUB_FIELD_B (silhouettes[rcount1], has_wires, 0);                   \
-          if (_obj->silhouettes[rcount1].has_wires)                           \
-            {                                                                 \
-              SUB_FIELD_BL (silhouettes[rcount1], num_wires, 0);              \
-              REPEAT2 (silhouettes[rcount1].num_wires,                        \
-                       silhouettes[rcount1].wires, Dwg_3DSOLID_wire)          \
-              REPEAT_BLOCK                                                    \
-                WIRESTRUCT_fields (silhouettes[rcount1].wires[rcount2])       \
-              END_REPEAT_BLOCK                                                \
-              SET_PARENT (silhouettes[rcount1].wires, (Dwg_Entity__3DSOLID *)_obj) \
-              END_REPEAT (silhouettes[rcount1].wires);                        \
-            }                                                                 \
+            SUB_FIELD_BL (silhouettes[rcount1], vp_id, 0);                    \
+            SUB_FIELD_3BD (silhouettes[rcount1], vp_target, 0); /* ?? */      \
+            SUB_FIELD_3BD (silhouettes[rcount1], vp_dir_from_target, 0);      \
+            SUB_FIELD_3BD (silhouettes[rcount1], vp_up_dir, 0);               \
+            SUB_FIELD_B (silhouettes[rcount1], vp_perspective, 0);            \
+            SUB_FIELD_B (silhouettes[rcount1], has_wires, 0);                 \
+            if (_obj->silhouettes[rcount1].has_wires)                         \
+              {                                                               \
+                SUB_FIELD_BL (silhouettes[rcount1], num_wires, 0);            \
+                REPEAT2 (silhouettes[rcount1].num_wires,                      \
+                         silhouettes[rcount1].wires, Dwg_3DSOLID_wire)        \
+                REPEAT_BLOCK                                                  \
+                  WIRESTRUCT_fields (silhouettes[rcount1].wires[rcount2])     \
+                  SET_PARENT (silhouettes[rcount1].wires[rcount2], (Dwg_Entity__3DSOLID *)_obj); \
+                END_REPEAT_BLOCK                                              \
+                END_REPEAT (silhouettes[rcount1].wires);                      \
+              }                                                               \
+            SET_PARENT (silhouettes[rcount1], (Dwg_Entity__3DSOLID *)_obj);    \
           END_REPEAT_BLOCK                                                    \
-          SET_PARENT (silhouettes, (Dwg_Entity__3DSOLID *)_obj)               \
           END_REPEAT (silhouettes);                                           \
         }                                                                     \
     }                                                                         \
@@ -2283,8 +2283,8 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
           SUB_FIELD_BL (materials[rcount1], array_index, 0);                  \
           SUB_FIELD_BL (materials[rcount1], mat_absref, 0); /* ?? */          \
           SUB_FIELD_HANDLE (materials[rcount1], material_handle, 5, 0);       \
+          SET_PARENT (materials[rcount1], (Dwg_Entity__3DSOLID *)_obj);        \
         END_REPEAT_BLOCK                                                      \
-        SET_PARENT (materials, (Dwg_Entity__3DSOLID *)_obj)                   \
         END_REPEAT (materials);                                               \
       }                                                                       \
     }                                                                         \
@@ -2764,11 +2764,11 @@ DWG_ENTITY (MLINE)
           SUB_FIELD_BS (verts[rcount1].lines[rcount2], num_areafillparms, 75);
           VALUEOUTOFBOUNDS (verts[rcount1].lines[rcount2].num_areafillparms, 5000)
           FIELD_VECTOR (verts[rcount1].lines[rcount2].areafillparms, BD, verts[rcount1].lines[rcount2].num_areafillparms, 42)
+          SET_PARENT (verts[rcount1].lines[rcount2], &_obj->verts[rcount1]);
       END_REPEAT_BLOCK
-      SET_PARENT (verts[rcount1].lines, &_obj->verts[rcount1])
       END_REPEAT (verts[rcount1].lines);
+      SET_PARENT_OBJ (verts[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (verts)
   END_REPEAT (verts);
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -3147,8 +3147,8 @@ DWG_OBJECT (LTYPE)
           FIELD_VALUE (pattern_len) += FIELD_VALUE (dashes[rcount1].length);
         }
       }
+      SET_PARENT_OBJ (dashes[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (dashes)
   END_REPEAT (dashes);
 
   UNTIL (R_2004) {
@@ -3363,8 +3363,8 @@ DWG_OBJECT (UCS)
     REPEAT_BLOCK
       SUB_FIELD_BS (orthopts[rcount1],type, 71);
       SUB_FIELD_3BD (orthopts[rcount1],pt, 13);
+      SET_PARENT_OBJ (orthopts[rcount1]);
     END_REPEAT_BLOCK
-    SET_PARENT_OBJ (orthopts)
     END_REPEAT (orthopts);
   }
   START_OBJECT_HANDLE_STREAM;
@@ -3983,8 +3983,8 @@ DWG_OBJECT (MLINESTYLE)
       LATER_VERSIONS {
         SUB_FIELD_HANDLE (lines[rcount1], lt_ltype, 5, 6);
       }
+      SET_PARENT_OBJ (lines[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (lines)
   END_REPEAT (lines);
 
   START_OBJECT_HANDLE_STREAM;
@@ -4035,8 +4035,8 @@ int DWG_FUNC_N (ACTION,_HATCH_gradientfill)(
   REPEAT_BLOCK
       SUB_FIELD_BD (colors[rcount1], shift_value, 463);
       SUB_FIELD_CMC (colors[rcount1], color, 63);
+      SET_PARENT_OBJ (colors[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (colors)
   END_REPEAT (colors);
   FIELD_T (gradient_name, 470);
   return error;
@@ -4159,9 +4159,8 @@ DWG_ENTITY (HATCH)
                           SUB_FIELD_2RD (control_points[rcount3], point, 10);
                           if (FIELD_VALUE (segs[rcount2].is_rational))
                             SUB_FIELD_BD (control_points[rcount3], weight, 40)
+                          SET_PARENT (control_points[rcount3], &_obj->segs[rcount2]);
                       END_REPEAT_BLOCK
-                      SET_PARENT (control_points,
-                                 &_obj->segs[rcount2])
                       END_REPEAT (control_points);
 #undef control_points
                       SINCE (R_2013) // r2014 really
@@ -4169,20 +4168,20 @@ DWG_ENTITY (HATCH)
 #define seg segs[rcount2]
                           SUB_FIELD_BL (seg, num_fitpts, 97);
                           FIELD_2RD_VECTOR (seg.fitpts, seg.num_fitpts, 11);
-#undef seg
                         }
                       break;
                     default:
                       LOG_ERROR ("Invalid HATCH.curve_type %d\n",
-                                FIELD_VALUE (segs[rcount2].curve_type));
+                                FIELD_VALUE (seg.curve_type));
                       DEBUG_HERE_OBJ
-                      _obj->segs[rcount2].curve_type = 0;
+                      FIELD_VALUE (seg.curve_type) = 0;
                       JSON_END_REPEAT (segs);
                       JSON_END_REPEAT (paths);
                       return DWG_ERR_VALUEOUTOFBOUNDS;
                 }
+              SET_PARENT (seg, &_obj->paths[rcount1]);
+#undef seg
           END_REPEAT_BLOCK
-          SET_PARENT (segs, &_obj->paths[rcount1])
           END_REPEAT (segs);
 #undef segs
         }
@@ -4199,8 +4198,8 @@ DWG_ENTITY (HATCH)
                 {
                   SUB_FIELD_BD (polyline_paths[rcount2],bulge, 42);
                 }
+              SET_PARENT (polyline_paths[rcount2], &_obj->paths[rcount1]);
           END_REPEAT_BLOCK
-          SET_PARENT (polyline_paths, &_obj->paths[rcount1])
           END_REPEAT (polyline_paths);
 #undef polyline_paths
         }
@@ -4211,8 +4210,8 @@ DWG_ENTITY (HATCH)
       }
       VALUEOUTOFBOUNDS (paths[rcount1].num_boundary_handles, 10000)
       SUB_HANDLE_VECTOR (paths[rcount1], boundary_handles, num_boundary_handles, 4, 330);
+      SET_PARENT_OBJ (paths[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (paths)
   END_REPEAT (paths);
 
   FIELD_BS (style, 75);        // 0=normal (odd parity); 1=outer; 2=whole
@@ -4231,8 +4230,8 @@ DWG_ENTITY (HATCH)
           SUB_FIELD_2BD_1 (deflines[rcount1], offset, 45);
           SUB_FIELD_BS (deflines[rcount1], num_dashes, 79);
           FIELD_VECTOR (deflines[rcount1].dashes, BD, deflines[rcount1].num_dashes, 49)
+          SET_PARENT_OBJ (deflines[rcount1]);
       END_REPEAT_BLOCK
-      SET_PARENT_OBJ (deflines)
       END_REPEAT (deflines);
     }
 
@@ -4369,9 +4368,8 @@ DWG_ENTITY (MPOLYGON)
                           SUB_FIELD_2RD (control_points[rcount3], point, 10);
                           if (FIELD_VALUE (segs[rcount2].is_rational))
                             SUB_FIELD_BD (control_points[rcount3], weight, 40)
+                          SET_PARENT (control_points[rcount3], &_obj->segs[rcount2]);
                       END_REPEAT_BLOCK
-                      SET_PARENT (control_points,
-                                 &_obj->segs[rcount2])
                       END_REPEAT (control_points);
 #undef control_points
                       SINCE (R_2013) // r2014 really
@@ -4379,20 +4377,20 @@ DWG_ENTITY (MPOLYGON)
 #define seg segs[rcount2]
                           SUB_FIELD_BL (seg, num_fitpts, 97);
                           FIELD_2RD_VECTOR (seg.fitpts, seg.num_fitpts, 11);
-#undef seg
                         }
                       break;
                     default:
                       LOG_ERROR ("Invalid HATCH.curve_type %d\n",
                                 FIELD_VALUE (segs[rcount2].curve_type));
                       DEBUG_HERE_OBJ
-                      _obj->segs[rcount2].curve_type = 0;
+                      FIELD_VALUE (seg.curve_type) = 0;
                       JSON_END_REPEAT (segs);
                       JSON_END_REPEAT (paths);
                       return DWG_ERR_VALUEOUTOFBOUNDS;
                 }
+              SET_PARENT (seg, &_obj->paths[rcount1]);
+#undef seg
           END_REPEAT_BLOCK
-          SET_PARENT (segs, &_obj->paths[rcount1])
           END_REPEAT (segs);
 #undef segs
         }
@@ -4409,8 +4407,8 @@ DWG_ENTITY (MPOLYGON)
                 {
                   SUB_FIELD_BD (polyline_paths[rcount2],bulge, 42);
                 }
+              SET_PARENT (polyline_paths[rcount2], &_obj->paths[rcount1]);
           END_REPEAT_BLOCK
-          SET_PARENT (polyline_paths, &_obj->paths[rcount1])
           END_REPEAT (polyline_paths);
 #undef polyline_paths
         }
@@ -4421,8 +4419,8 @@ DWG_ENTITY (MPOLYGON)
       //}
       VALUEOUTOFBOUNDS (paths[rcount1].num_boundary_handles, 10000)
       SUB_HANDLE_VECTOR (paths[rcount1], boundary_handles, num_boundary_handles, 4, 330);
+      SET_PARENT (paths[rcount1], (Dwg_Entity_HATCH *)_obj);
   END_REPEAT_BLOCK
-  SET_PARENT (paths, (Dwg_Entity_HATCH *)_obj)
   END_REPEAT (paths);
 
   FIELD_BS (style, 75);        // 0=normal (odd parity); 1=outer; 2=whole
@@ -4441,8 +4439,8 @@ DWG_ENTITY (MPOLYGON)
           SUB_FIELD_2BD_1 (deflines[rcount1], offset, 45);
           SUB_FIELD_BS (deflines[rcount1], num_dashes, 79);
           FIELD_VECTOR (deflines[rcount1].dashes, BD, deflines[rcount1].num_dashes, 49)
+          SET_PARENT (deflines[rcount1], (Dwg_Entity_HATCH *)_obj);
       END_REPEAT_BLOCK
-      SET_PARENT (deflines, (Dwg_Entity_HATCH *)_obj)
       END_REPEAT (deflines);
     }
 
@@ -4569,8 +4567,8 @@ DWG_OBJECT (LAYER_INDEX)
       SUB_FIELD_T (entries[rcount1], name, 8);
       SUB_FIELD_HANDLE (entries[rcount1], handle, 5, 360);
       DXF { SUB_FIELD_BL (entries[rcount1], numlayers, 90); }
+      SET_PARENT_OBJ (entries[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (entries)
   END_REPEAT (entries)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -5230,8 +5228,8 @@ DWG_OBJECT (FIELD)
           JSON_END_REPEAT (childval);
           return error;
         }
+      SET_PARENT_OBJ (childval[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (childval)
   END_REPEAT (childval)
 
   START_OBJECT_HANDLE_STREAM;
@@ -5547,8 +5545,8 @@ DWG_OBJECT_END
       CellStyle_fields (tdata.cols[rcount1].cellstyle);		\
       DXF { VALUE_TFF ("DATAMAP_END", 309) }                    \
       DXF { VALUE_TFF ("LINKEDTABLEDATACOLUMN_END", 309) }      \
+      SET_PARENT (tdata.cols[rcount1], &_obj->tdata);		\
   END_REPEAT_BLOCK						\
-  SET_PARENT (tdata.cols, &_obj->tdata)				\
   END_REPEAT (tdata.cols);					\
   FIELD_BL (tdata.num_rows, 90);				\
   REPEAT (tdata.num_rows, tdata.rows, Dwg_TableRow)		\
@@ -5571,8 +5569,8 @@ DWG_OBJECT_END
                   JSON_END_REPEAT (tdata.rows);			\
                   return error;					\
                 }						\
+              SET_PARENT_FIELD (cell.customdata_items[rcount3], cell_parent, &_obj->cell);\
           END_REPEAT_BLOCK					\
-          SET_PARENT_FIELD (cell.customdata_items, cell_parent, &_obj->cell)	\
           END_REPEAT (cell.customdata_items);			\
           SUB_FIELD_BL (cell,has_linked_data, 92);		\
           if (FIELD_VALUE (cell.has_linked_data))		\
@@ -5608,24 +5606,24 @@ DWG_OBJECT_END
                 SUB_FIELD_HANDLE (content,handle, 3, 340);	\
               }							\
               SUB_FIELD_BL (content,num_attrs, 91);		\
-              REPEAT4 (content.num_attrs, content.attrs, Dwg_TableCellContent_Attr)	\
+              REPEAT4 (content.num_attrs, content.attrs, Dwg_TableCellContent_Attr) \
               REPEAT_BLOCK					\
                   SUB_FIELD_HANDLE (attr,attdef, 5, 330);	\
                   SUB_FIELD_T (attr,value, 301);		\
                   SUB_FIELD_BL (attr,index, 92);		\
+                  SET_PARENT (attr, &_obj->content);	        \
               END_REPEAT_BLOCK					\
-              SET_PARENT (content.attrs, &_obj->content)	\
               END_REPEAT (content.attrs);			\
               DXF { VALUE_TFF ("CELLCONTENT_END", 309) }        \
               DXF { VALUE_TFF ("FORMATTEDCELLCONTENT_BEGIN", 1) }  \
               FIELD_BS (content.has_content_format_overrides, 170) \
-              if (FIELD_VALUE (content.has_content_format_overrides))	\
+              if (FIELD_VALUE (content.has_content_format_overrides)) \
                 {						\
                   ContentFormat_fields (content.content_format);\
                 }						\
               DXF { VALUE_TFF ("FORMATTEDCELLCONTENT_END", 309) } \
+              SET_PARENT (content, &_obj->cell);                \
           END_REPEAT_BLOCK					\
-          SET_PARENT (cell.cell_contents, &_obj->cell)		\
           END_REPEAT (cell.cell_contents);			\
           SUB_FIELD_BL (cell, style_id, 90);			\
           SUB_FIELD_BL (cell, has_geom_data, 91);		\
@@ -5645,35 +5643,35 @@ DWG_OBJECT_END
                   SUB_FIELD_BD (geom,width, 45);		\
                   SUB_FIELD_BD (geom,height, 46);		\
                   SUB_FIELD_BL (geom,unknown, 95);		\
+                  SET_PARENT_FIELD (geom, cell_parent, &_obj->cell); \
               END_REPEAT_BLOCK					\
-              SET_PARENT_FIELD (cell.geometry, cell_parent, &_obj->cell) \
               END_REPEAT (cell.geometry);			\
             }							\
+          SET_PARENT_FIELD (cell, row_parent, &_obj->row);	\
       END_REPEAT_BLOCK						\
-      SET_PARENT_FIELD (row.cells, row_parent, &_obj->row)	\
       END_REPEAT (row.cells);					\
       SUB_FIELD_BL (row,custom_data, 91);			\
       SUB_FIELD_BL (row,num_customdata_items, 90);		\
       REPEAT3 (row.num_customdata_items, row.customdata_items, Dwg_TABLE_CustomDataItem) \
       REPEAT_BLOCK						\
-          SUB_FIELD_T (row.customdata_items[rcount3],name, 300);	\
-          TABLE_value_fields (row.customdata_items[rcount3].value);	\
+          SUB_FIELD_T (row.customdata_items[rcount3],name, 300);\
+          TABLE_value_fields (row.customdata_items[rcount3].value);\
           if (error & DWG_ERR_INVALIDTYPE)			\
             {							\
               JSON_END_REPEAT (row.customdata_items);		\
               JSON_END_REPEAT (tdata.rows);			\
               return error;					\
             }							\
+          SET_PARENT_FIELD (row.customdata_items[rcount3], row_parent, &_obj->row); \
       END_REPEAT_BLOCK						\
-      SET_PARENT_FIELD (row.customdata_items, row_parent, &_obj->row)	\
       END_REPEAT (row.customdata_items);			\
       {								\
         CellStyle_fields (row.cellstyle);			\
         SUB_FIELD_BL (row,style_id, 90);			\
         SUB_FIELD_BL (row,height, 40);				\
       }								\
+      SET_PARENT (row, &_obj->tdata);				\
   END_REPEAT_BLOCK						\
-  SET_PARENT (tdata.rows, &_obj->tdata)				\
   END_REPEAT (tdata.rows);					\
   FIELD_BL (tdata.num_field_refs, 0);				\
   HANDLE_VECTOR (tdata.field_refs, tdata.num_field_refs, 3, 0);	\
@@ -5684,8 +5682,8 @@ DWG_OBJECT_END
       SUB_FIELD_BL (merged,left_col, 92);			\
       SUB_FIELD_BL (merged,bottom_row, 93);			\
       SUB_FIELD_BL (merged,right_col, 94);			\
+      SET_PARENT (merged, &_obj->fdata);			\
   END_REPEAT_BLOCK						\
-  SET_PARENT (fdata.merged_cells, &_obj->fdata)			\
   END_REPEAT (fdata.merged_cells)
 
 // clang-format on
@@ -5930,8 +5928,8 @@ DWG_ENTITY (TABLE)
                   }
               }
           }
+        SET_PARENT_OBJ (cell);
     END_REPEAT_BLOCK
-    SET_PARENT_OBJ (cells)
     END_REPEAT (cells);
     #undef cell
     /* End Cell Data (remaining data applies to entire table)*/
@@ -6152,8 +6150,8 @@ DWG_ENTITY (TABLE)
             SUB_FIELD_3BD (break_heights[rcount1],position, 0);
             SUB_FIELD_BD (break_heights[rcount1],height, 0);
             SUB_FIELD_BL (break_heights[rcount1],flag, 0); // default: 2
+            SET_PARENT_OBJ (break_heights[rcount1]);
         END_REPEAT_BLOCK
-        SET_PARENT_OBJ (break_heights)
         END_REPEAT (break_heights);
       }
     FIELD_BL (num_break_rows, 0);
@@ -6163,8 +6161,8 @@ DWG_ENTITY (TABLE)
         SUB_FIELD_3BD (break_rows[rcount1],position, 0);
         SUB_FIELD_BL (break_rows[rcount1],start, 0);
         SUB_FIELD_BL (break_rows[rcount1],end, 0);
+        SET_PARENT_OBJ (break_rows[rcount1]);
     END_REPEAT_BLOCK
-    SET_PARENT_OBJ (break_rows)
     END_REPEAT (break_rows);
 
     COMMON_ENTITY_HANDLE_DATA;
@@ -6280,8 +6278,8 @@ DWG_OBJECT (CELLSTYLEMAP)
       SUB_FIELD_BL (cells[rcount1],type, 91);
       SUB_FIELD_T (cells[rcount1],name, 300);
       DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
+      SET_PARENT (cells[rcount1], (Dwg_Object_TABLESTYLE*)_obj);
   END_REPEAT_BLOCK
-  SET_PARENT_FIELD (cells, parent, (Dwg_Object_TABLESTYLE*)_obj)
   END_REPEAT (cells);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -6316,13 +6314,13 @@ DWG_OBJECT (TABLEGEOMETRY)
           SUB_FIELD_BD (geom,width, 45);
           SUB_FIELD_BD (geom,height, 46);
           SUB_FIELD_BL (geom,unknown, 95);
+          SET_PARENT_FIELD (geom, geom_parent, &_obj->cell);
           #undef geom
       END_REPEAT_BLOCK
-      SET_PARENT_FIELD (cell.geometry, geom_parent, &_obj->cell)
       END_REPEAT (cell.geometry);
+      SET_PARENT_OBJ (cell);
       #undef cell
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (cells)
   END_REPEAT (cells);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -6527,8 +6525,8 @@ DWG_ENTITY (MULTILEADER)
       REPEAT_BLOCK
           SUB_FIELD_3BD (lnode.breaks[rcount2], start, 11);
           SUB_FIELD_3BD (lnode.breaks[rcount2], end, 12);
+          SET_PARENT (lnode.breaks[rcount2], (struct _dwg_LEADER_Line *)&_obj->lnode);
       END_REPEAT_BLOCK
-      SET_PARENT (lnode.breaks, (struct _dwg_LEADER_Line *)&_obj->lnode);
       END_REPEAT (lnode.breaks);
 
       SUB_FIELD_BL (lnode, branch_index, 90);
@@ -6547,8 +6545,8 @@ DWG_ENTITY (MULTILEADER)
           REPEAT_BLOCK
               SUB_FIELD_3BD (lline.breaks[rcount3], start, 11);
               SUB_FIELD_3BD (lline.breaks[rcount3], end, 12);
+              SET_PARENT (lline.breaks[rcount3], &_obj->lline);
           END_REPEAT_BLOCK
-          SET_PARENT (lline.breaks, &_obj->lline);
           END_REPEAT (lline.breaks);
           SUB_FIELD_BL (lline, line_index, 91);
 
@@ -6562,15 +6560,15 @@ DWG_ENTITY (MULTILEADER)
               SUB_FIELD_HANDLE (lline, arrow_handle, 5, 341);
               SUB_FIELD_BL (lline, flags, 93);
             }
+            SET_PARENT (lline, &_obj->lnode);
             #undef lline
       END_REPEAT_BLOCK
-      SET_PARENT (lnode.lines, &_obj->lnode);
       END_REPEAT (lnode.lines)
       SINCE (R_2010)
         SUB_FIELD_BS (lnode, attach_dir, 271);
       DXF_OR_PRINT { VALUE_TFF ("}", 305); }
+      SET_PARENT_OBJ (lnode);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (ctx.leaders)
   END_REPEAT (ctx.leaders)
 
 #ifndef IS_DXF
@@ -6626,8 +6624,8 @@ DWG_ENTITY (MULTILEADER)
       REPEAT_BLOCK
           SUB_FIELD_B (arrowheads[rcount1],is_default, 94);
           SUB_FIELD_HANDLE (arrowheads[rcount1],arrowhead, 5, 345);
+          SET_PARENT_OBJ (arrowheads[rcount1]);
       END_REPEAT_BLOCK
-      SET_PARENT_OBJ (arrowheads)
       END_REPEAT (arrowheads);
 
       FIELD_BL (num_blocklabels, 0);
@@ -6638,8 +6636,8 @@ DWG_ENTITY (MULTILEADER)
           SUB_FIELD_T (blocklabels[rcount1],label_text, 302);
           SUB_FIELD_BS (blocklabels[rcount1],ui_index, 177);
           SUB_FIELD_BD (blocklabels[rcount1],width, 44);
+          SET_PARENT_OBJ (blocklabels[rcount1]);
       END_REPEAT_BLOCK
-      SET_PARENT_OBJ (blocklabels)
       END_REPEAT (blocklabels)
       FIELD_B (is_neg_textdir, 294);
       FIELD_BS (ipe_alignment, 178);
@@ -6941,12 +6939,12 @@ DWG_OBJECT (SECTION_SETTINGS)
           SUB_FIELD_BD (types[rcount1].geom[rcount2], hatch_spacing, 42);
           SUB_FIELD_BD (types[rcount1].geom[rcount2], hatch_scale, 43);
           DXF { VALUE_TFF ("SectionGeometrySettingsEnd", 3); }
+          SET_PARENT (types[rcount1].geom[rcount2], &_obj->types[rcount1]);
       END_REPEAT_BLOCK
-      //SET_PARENT (types[rcount1].geom, &_obj->types[rcount1]);
       END_REPEAT (types[rcount1].geom)
       DXF { VALUE_TFF ("SectionTypeSettingsEnd", 3); }
+      SET_PARENT_OBJ (types[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (types);
   END_REPEAT (types)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -7648,8 +7646,8 @@ DWG_ENTITY (HELIX)
           FIELD_VALUE (ctrl_pts[rcount1].w) = 0; // skipped when encoding
         else
           SUB_FIELD_BD (ctrl_pts[rcount1], w, 41);
+        SET_PARENT (ctrl_pts[rcount1], (Dwg_Entity_SPLINE*)_obj);
     END_REPEAT_BLOCK
-    SET_PARENT (ctrl_pts, (Dwg_Entity_SPLINE*)_obj);
     END_REPEAT (ctrl_pts);
   }
   else { // bezier spline, scenario 2
@@ -7713,8 +7711,8 @@ DWG_ENTITY (MESH)
   REPEAT_BLOCK
       SUB_FIELD_BL (edges[rcount1], idxfrom, 90);
       SUB_FIELD_BL (edges[rcount1], idxto, 90);
+      SET_PARENT_OBJ (edges[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (edges);
   END_REPEAT (edges);
   //FIELD_VECTOR (edges, Dwg_MESH_edge, num_edges * 2, 90);
   FIELD_BL (num_crease, 95); // edge creases 19
@@ -7904,8 +7902,8 @@ DWG_SUBCLASS_DECL (MATERIAL, Texture_diffusemap);
             LOG_WARN ("recursive MATERIAL.gentextures")                       \
             CALL_SUBCLASS (_obj->gentextures[rcount1].material, MATERIAL,     \
                            Texture_diffusemap);                               \
+            SET_PARENT_OBJ (gentextures[rcount1]);                            \
           END_REPEAT_BLOCK                                                    \
-          SET_PARENT_OBJ (gentextures);                                       \
           END_REPEAT (gentextures)                                            \
           FIELD_B (genproctableend, 292);                                     \
         default:                                                              \
@@ -8715,8 +8713,8 @@ DWG_OBJECT (BLOCKVISIBILITYPARAMETER)
       SUB_HANDLE_VECTOR (states[rcount1], blocks, num_blocks, 4, 332);
       SUB_FIELD_BL (states[rcount1], num_params, 95);
       SUB_HANDLE_VECTOR (states[rcount1], params, num_params, 4, 333);
+      SET_PARENT_OBJ (states[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (states);
   END_REPEAT (states)
   //FIELD_T (cur_state_name, 0);
   //FIELD_BL (cur_state, 0);
@@ -8754,8 +8752,8 @@ DWG_OBJECT (EVALUATION_GRAPH)
 #endif
       if (FIELD_VALUE(has_graph))
         SUB_FIELD_B (nodes[rcount1], active_cycles, 0);
+      SET_PARENT_OBJ (nodes[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (nodes)
   END_REPEAT (nodes)
 
   FIELD_BL (num_edges, 0);
@@ -8771,8 +8769,8 @@ DWG_OBJECT (EVALUATION_GRAPH)
       SUB_FIELD_BLd (edges[rcount1], out_edge[2], 92); //
       SUB_FIELD_BLd (edges[rcount1], out_edge[3], 92); //
       SUB_FIELD_BLd (edges[rcount1], out_edge[4], 92); //
+      SET_PARENT_OBJ (edges[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (edges)
   END_REPEAT (edges)
 
   START_OBJECT_HANDLE_STREAM;
@@ -8837,8 +8835,8 @@ DWG_OBJECT (DIMASSOC)
         {
           SUB_FIELD_3BD (ref[rcount1], lastpt_ref, 0);
         }
+      SET_PARENT_OBJ (ref[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (ref)
   END_REPEAT (ref)
 
   START_OBJECT_HANDLE_STREAM;
@@ -8970,10 +8968,11 @@ DWG_OBJECT (CONTEXTDATAMANAGER)
       REPEAT_BLOCK
           SUB_FIELD_HANDLE (submgrs[rcount1].entries[rcount2],itemhandle, 5, 350);
           SUB_FIELD_T (submgrs[rcount1].entries[rcount2],text, 3);
+          SET_PARENT (submgrs[rcount1].entries[rcount2], &_obj->submgrs[rcount1]);
       END_REPEAT_BLOCK
       END_REPEAT (submgrs[rcount1].entries)
+      SET_PARENT_OBJ (submgrs[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (submgrs)
   END_REPEAT (submgrs)
 
   START_OBJECT_HANDLE_STREAM;
@@ -9808,11 +9807,11 @@ DWG_OBJECT (DATATABLE)
           SUB_FIELD_BD (cols[rcount1].rows[rcount2],value.data_double, 40);
           //switch case 3:
           SUB_FIELD_T (cols[rcount1].rows[rcount2],value.data_string, 3);
+          SET_PARENT (cols[rcount1].rows[rcount2], &_obj->cols[rcount1]);
       END_REPEAT_BLOCK
-      SET_PARENT_OBJ (cols[rcount1].rows);
       END_REPEAT (cols[rcount1].rows)
+      SET_PARENT_OBJ (cols[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (cols);
   END_REPEAT (cols)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -9846,8 +9845,8 @@ DWG_OBJECT (DATALINK)
       SUB_FIELD_HANDLE (customdata[rcount1],target, DWG_HDL_HARDOWN, 330);
       // ACEXCEL_UPDATEOPTIONS, ACEXCEL_CONNECTION_STRING, ACEXCEL_SOURCEDATA
       SUB_FIELD_T (customdata[rcount1],text, 304);
+      SET_PARENT_OBJ (customdata[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (customdata);
   END_REPEAT (customdata)
   DXF { VALUE_TFF ("DATAMAP_END", 309); }
   FIELD_HANDLE (hardowner, DWG_HDL_HARDOWN, 360);
@@ -10426,8 +10425,8 @@ DWG_OBJECT (ASSOC2DCONSTRAINTGROUP)
   REPEAT (num_nodes, nodes, Dwg_CONSTRAINTGROUPNODE)
   REPEAT_BLOCK
       AcConstraintGroupNode_fields (nodes[rcount1]);
+      SET_PARENT_OBJ (nodes[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (nodes);
   END_REPEAT (nodes)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -10673,8 +10672,8 @@ DWG_OBJECT_END
   REPEAT (num_items, items, Dwg_ASSOCARRAYITEM)                  \
   REPEAT_BLOCK                                                   \
       AcDbAssocArrayItem_fields (items[rcount1]);                \
+      SET_PARENT_OBJ (items[rcount1]);                           \
   END_REPEAT_BLOCK                                               \
-  /* SET_PARENT (items, what); */                                \
   END_REPEAT (items)
 
 #define AcDbAssocArrayCommonParameters_fields                    \
@@ -10733,8 +10732,8 @@ DWG_OBJECT (ASSOCARRAYMODIFYACTIONBODY)
       SUB_FIELD_BL (items[rcount1], itemloc2, 90);
       SUB_FIELD_BL (items[rcount1], itemloc3, 90);
       //SUB_FIELD_VECTOR_INN (items[rcount1], itemloc, BL, 3, 90);
+      SET_PARENT_OBJ (items[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (items);
   END_REPEAT (items)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -10916,8 +10915,8 @@ DWG_OBJECT (BLOCKLOOKUPACTION)
     BlockAction_ConnectionPts (lut[rcount1].conn_pts, 0, 3, 94, 303);
     SUB_FIELD_B (lut[rcount1], b282, 282);
     SUB_FIELD_B (lut[rcount1], b281, 281);
+    SET_PARENT_OBJ (lut[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (lut);
   END_REPEAT (lut)
   FIELD_B (b280, 280);
   DXF { FIELD_VECTOR_T (exprs, T, numelems, 302); }
@@ -11117,8 +11116,8 @@ DWG_ENTITY (POINTCLOUD)
               SUB_FIELD_BD (clippings[rcount1], z_min, 0);
               SUB_FIELD_BD (clippings[rcount1], z_max, 0);
             }
+          SET_PARENT_OBJ (clippings[rcount1]);
         END_REPEAT_BLOCK
-        SET_PARENT_OBJ (clippings);
         END_REPEAT (clippings)
       }
     }
@@ -11197,8 +11196,8 @@ DWG_ENTITY (POINTCLOUDEX)
       SUB_FIELD_3BD (croppings[rcount1], crop_y_dir, 213);
       SUB_FIELD_BL (croppings[rcount1], num_pts, 93)
       SUB_FIELD_3BD_VECTOR (croppings[rcount1], pts, num_pts, 13);
+      SET_PARENT_OBJ (croppings[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (croppings);
   END_REPEAT (croppings)
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
@@ -11273,12 +11272,12 @@ DWG_OBJECT (POINTCLOUDCOLORMAP)
         SUB_FIELD_BL (ramp.ramps[rcount2], unknown_bl, 91);
         SUB_FIELD_B (ramp.ramps[rcount2], unknown_b, 290);
       }
+      SET_PARENT (ramp.ramps[rcount2], _obj->colorramps);
     END_REPEAT_BLOCK
-    SET_PARENT (ramp.ramps, _obj->colorramps);
     END_REPEAT (ramp.ramps)
+    SET_PARENT_OBJ (ramp);
     #undef ramp
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (colorramps);
   END_REPEAT (colorramps)
 
   FIELD_BL (num_classification_colorramps, 90);
@@ -11287,7 +11286,7 @@ DWG_OBJECT (POINTCLOUDCOLORMAP)
     #define ramp classification_colorramps[rcount1]
     SUB_FIELD_BS (ramp, class_version, 70);
     SUB_FIELD_BL (ramp, num_ramps, 90);
-    REPEAT2 (ramp.num_ramps, colorramps[rcount1].ramps, Dwg_ColorRamp)
+    REPEAT2 (ramp.num_ramps, ramp.ramps, Dwg_ColorRamp)
     REPEAT_BLOCK
       if (1) {
         SUB_FIELD_T (ramp.ramps[rcount2], colorscheme, 1);
@@ -11295,12 +11294,12 @@ DWG_OBJECT (POINTCLOUDCOLORMAP)
         SUB_FIELD_BL (ramp.ramps[rcount2], unknown_bl, 91);
         SUB_FIELD_B (ramp.ramps[rcount2], unknown_b, 290);
       }
+      SET_PARENT (ramp.ramps[rcount2], _obj->classification_colorramps);
     END_REPEAT_BLOCK
-    SET_PARENT (ramp.ramps, _obj->classification_colorramps);
     END_REPEAT (ramp.ramps)
+    SET_PARENT_OBJ (ramp);
     #undef ramp
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (classification_colorramps);
   END_REPEAT (classification_colorramps)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
@@ -11319,8 +11318,8 @@ DWG_OBJECT (PARTIAL_VIEWING_INDEX)
     SUB_FIELD_3BD (entries[rcount1], extents_min, 0);
     SUB_FIELD_3BD (entries[rcount1], extents_max, 0);
     SUB_FIELD_HANDLE (entries[rcount1], object, 5, 0);
+    SET_PARENT_OBJ (entries[rcount1]);
   END_REPEAT_BLOCK
-  SET_PARENT_OBJ (entries);
   END_REPEAT (entries)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
