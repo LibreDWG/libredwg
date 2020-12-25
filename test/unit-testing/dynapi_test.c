@@ -7720,156 +7720,6 @@ static int test_DGNUNDERLAY (const Dwg_Object *obj)
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_DGNUNDERLAY *restrict dgnunderlay = obj->tio.entity->tio.DGNUNDERLAY;
   failed = 0;
-  {
-    BITCODE_BD angle;
-    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "angle", &angle, NULL)
-        && angle == dgnunderlay->angle)
-      pass ();
-    else
-      fail ("DGNUNDERLAY.angle [BD] %g != %g", dgnunderlay->angle, angle);
-    angle++;
-    if (dwg_dynapi_entity_set_value (dgnunderlay, "DGNUNDERLAY", "angle", &angle, 0)
-        && angle == dgnunderlay->angle)
-      pass ();
-    else
-      fail ("DGNUNDERLAY.angle [BD] set+1 %g != %g", dgnunderlay->angle, angle);
-    dgnunderlay->angle--;
-  }
-  {
-    BITCODE_2RD* clip_inverts;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "num_clip_inverts", &count, NULL)
-        && dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "clip_inverts", &clip_inverts, NULL)
-        && clip_inverts == dgnunderlay->clip_inverts)
-      pass ();
-    else
-      fail ("DGNUNDERLAY.clip_inverts [2RD*] * %u num_clip_inverts", count);
-  }
-  {
-    BITCODE_2RD* clip_verts;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "num_clip_verts", &count, NULL)
-        && dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "clip_verts", &clip_verts, NULL)
-        && clip_verts == dgnunderlay->clip_verts)
-      pass ();
-    else
-      fail ("DGNUNDERLAY.clip_verts [2RD*] * %u num_clip_verts", count);
-  }
-  {
-    BITCODE_RC contrast;
-    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "contrast", &contrast, NULL)
-        && contrast == dgnunderlay->contrast)
-      pass ();
-    else
-      fail ("DGNUNDERLAY.contrast [RC] %u != %u", dgnunderlay->contrast, contrast);
-    contrast++;
-    if (dwg_dynapi_entity_set_value (dgnunderlay, "DGNUNDERLAY", "contrast", &contrast, 0)
-        && contrast == dgnunderlay->contrast)
-      pass ();
-    else
-      fail ("DGNUNDERLAY.contrast [RC] set+1 %u != %u", dgnunderlay->contrast, contrast);
-    dgnunderlay->contrast--;
-  }
-  {
-    BITCODE_H definition_id;
-    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "definition_id", &definition_id, NULL)
-        && !memcmp (&definition_id, &dgnunderlay->definition_id, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("DGNUNDERLAY.definition_id [H]");
-  }
-  {
-    BITCODE_BE extrusion;
-    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &dgnunderlay->extrusion, sizeof (BITCODE_BE)))
-        pass ();
-    else
-        fail ("DGNUNDERLAY.extrusion [BE]");
-  }
-  {
-    BITCODE_RC fade;
-    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "fade", &fade, NULL)
-        && fade == dgnunderlay->fade)
-      pass ();
-    else
-      fail ("DGNUNDERLAY.fade [RC] %u != %u", dgnunderlay->fade, fade);
-    fade++;
-    if (dwg_dynapi_entity_set_value (dgnunderlay, "DGNUNDERLAY", "fade", &fade, 0)
-        && fade == dgnunderlay->fade)
-      pass ();
-    else
-      fail ("DGNUNDERLAY.fade [RC] set+1 %u != %u", dgnunderlay->fade, fade);
-    dgnunderlay->fade--;
-  }
-  {
-    BITCODE_RC flag;
-    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "flag", &flag, NULL)
-        && flag == dgnunderlay->flag)
-      pass ();
-    else
-      fail ("DGNUNDERLAY.flag [RC] %u != %u", dgnunderlay->flag, flag);
-    flag++;
-    if (dwg_dynapi_entity_set_value (dgnunderlay, "DGNUNDERLAY", "flag", &flag, 0)
-        && flag == dgnunderlay->flag)
-      pass ();
-    else
-      fail ("DGNUNDERLAY.flag [RC] set+1 %u != %u", dgnunderlay->flag, flag);
-    dgnunderlay->flag--;
-  }
-  {
-    BITCODE_3BD ins_pt;
-    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "ins_pt", &ins_pt, NULL)
-        && !memcmp (&ins_pt, &dgnunderlay->ins_pt, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("DGNUNDERLAY.ins_pt [3BD]");
-  }
-  {
-    BITCODE_BS num_clip_inverts;
-    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "num_clip_inverts", &num_clip_inverts, NULL)
-        && num_clip_inverts == dgnunderlay->num_clip_inverts)
-      pass ();
-    else
-      fail ("DGNUNDERLAY.num_clip_inverts [BS] %hu != %hu", dgnunderlay->num_clip_inverts, num_clip_inverts);
-    num_clip_inverts++;
-    if (dwg_dynapi_entity_set_value (dgnunderlay, "DGNUNDERLAY", "num_clip_inverts", &num_clip_inverts, 0)
-        && num_clip_inverts == dgnunderlay->num_clip_inverts)
-      pass ();
-    else
-      fail ("DGNUNDERLAY.num_clip_inverts [BS] set+1 %hu != %hu", dgnunderlay->num_clip_inverts, num_clip_inverts);
-    dgnunderlay->num_clip_inverts--;
-  }
-  {
-    BITCODE_BL num_clip_verts;
-    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "num_clip_verts", &num_clip_verts, NULL)
-        && num_clip_verts == dgnunderlay->num_clip_verts)
-      pass ();
-    else
-      fail ("DGNUNDERLAY.num_clip_verts [BL] %u != %u", dgnunderlay->num_clip_verts, num_clip_verts);
-    num_clip_verts++;
-    if (dwg_dynapi_entity_set_value (dgnunderlay, "DGNUNDERLAY", "num_clip_verts", &num_clip_verts, 0)
-        && num_clip_verts == dgnunderlay->num_clip_verts)
-      pass ();
-    else
-      fail ("DGNUNDERLAY.num_clip_verts [BL] set+1 %u != %u", dgnunderlay->num_clip_verts, num_clip_verts);
-    dgnunderlay->num_clip_verts--;
-  }
-  {
-    struct _dwg_object_entity* parent;
-    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "parent", &parent, NULL)
-        && !memcmp (&parent, &dgnunderlay->parent, sizeof (struct _dwg_object_entity*)))
-        pass ();
-    else
-        fail ("DGNUNDERLAY.parent [struct _dwg_object_entity*]");
-  }
-  {
-    BITCODE_3BD scale;
-    if (dwg_dynapi_entity_value (dgnunderlay, "DGNUNDERLAY", "scale", &scale, NULL)
-        && !memcmp (&scale, &dgnunderlay->scale, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("DGNUNDERLAY.scale [3BD]");
-  }
   if (failed && (is_class_unstable ("DGNUNDERLAY") || is_class_debugging ("DGNUNDERLAY")))
     {
       ok ("%s failed %d tests (TODO unstable)", "DGNUNDERLAY", failed);
@@ -10172,156 +10022,6 @@ static int test_DWFUNDERLAY (const Dwg_Object *obj)
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_DWFUNDERLAY *restrict dwfunderlay = obj->tio.entity->tio.DWFUNDERLAY;
   failed = 0;
-  {
-    BITCODE_BD angle;
-    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "angle", &angle, NULL)
-        && angle == dwfunderlay->angle)
-      pass ();
-    else
-      fail ("DWFUNDERLAY.angle [BD] %g != %g", dwfunderlay->angle, angle);
-    angle++;
-    if (dwg_dynapi_entity_set_value (dwfunderlay, "DWFUNDERLAY", "angle", &angle, 0)
-        && angle == dwfunderlay->angle)
-      pass ();
-    else
-      fail ("DWFUNDERLAY.angle [BD] set+1 %g != %g", dwfunderlay->angle, angle);
-    dwfunderlay->angle--;
-  }
-  {
-    BITCODE_2RD* clip_inverts;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "num_clip_inverts", &count, NULL)
-        && dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "clip_inverts", &clip_inverts, NULL)
-        && clip_inverts == dwfunderlay->clip_inverts)
-      pass ();
-    else
-      fail ("DWFUNDERLAY.clip_inverts [2RD*] * %u num_clip_inverts", count);
-  }
-  {
-    BITCODE_2RD* clip_verts;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "num_clip_verts", &count, NULL)
-        && dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "clip_verts", &clip_verts, NULL)
-        && clip_verts == dwfunderlay->clip_verts)
-      pass ();
-    else
-      fail ("DWFUNDERLAY.clip_verts [2RD*] * %u num_clip_verts", count);
-  }
-  {
-    BITCODE_RC contrast;
-    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "contrast", &contrast, NULL)
-        && contrast == dwfunderlay->contrast)
-      pass ();
-    else
-      fail ("DWFUNDERLAY.contrast [RC] %u != %u", dwfunderlay->contrast, contrast);
-    contrast++;
-    if (dwg_dynapi_entity_set_value (dwfunderlay, "DWFUNDERLAY", "contrast", &contrast, 0)
-        && contrast == dwfunderlay->contrast)
-      pass ();
-    else
-      fail ("DWFUNDERLAY.contrast [RC] set+1 %u != %u", dwfunderlay->contrast, contrast);
-    dwfunderlay->contrast--;
-  }
-  {
-    BITCODE_H definition_id;
-    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "definition_id", &definition_id, NULL)
-        && !memcmp (&definition_id, &dwfunderlay->definition_id, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("DWFUNDERLAY.definition_id [H]");
-  }
-  {
-    BITCODE_BE extrusion;
-    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &dwfunderlay->extrusion, sizeof (BITCODE_BE)))
-        pass ();
-    else
-        fail ("DWFUNDERLAY.extrusion [BE]");
-  }
-  {
-    BITCODE_RC fade;
-    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "fade", &fade, NULL)
-        && fade == dwfunderlay->fade)
-      pass ();
-    else
-      fail ("DWFUNDERLAY.fade [RC] %u != %u", dwfunderlay->fade, fade);
-    fade++;
-    if (dwg_dynapi_entity_set_value (dwfunderlay, "DWFUNDERLAY", "fade", &fade, 0)
-        && fade == dwfunderlay->fade)
-      pass ();
-    else
-      fail ("DWFUNDERLAY.fade [RC] set+1 %u != %u", dwfunderlay->fade, fade);
-    dwfunderlay->fade--;
-  }
-  {
-    BITCODE_RC flag;
-    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "flag", &flag, NULL)
-        && flag == dwfunderlay->flag)
-      pass ();
-    else
-      fail ("DWFUNDERLAY.flag [RC] %u != %u", dwfunderlay->flag, flag);
-    flag++;
-    if (dwg_dynapi_entity_set_value (dwfunderlay, "DWFUNDERLAY", "flag", &flag, 0)
-        && flag == dwfunderlay->flag)
-      pass ();
-    else
-      fail ("DWFUNDERLAY.flag [RC] set+1 %u != %u", dwfunderlay->flag, flag);
-    dwfunderlay->flag--;
-  }
-  {
-    BITCODE_3BD ins_pt;
-    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "ins_pt", &ins_pt, NULL)
-        && !memcmp (&ins_pt, &dwfunderlay->ins_pt, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("DWFUNDERLAY.ins_pt [3BD]");
-  }
-  {
-    BITCODE_BS num_clip_inverts;
-    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "num_clip_inverts", &num_clip_inverts, NULL)
-        && num_clip_inverts == dwfunderlay->num_clip_inverts)
-      pass ();
-    else
-      fail ("DWFUNDERLAY.num_clip_inverts [BS] %hu != %hu", dwfunderlay->num_clip_inverts, num_clip_inverts);
-    num_clip_inverts++;
-    if (dwg_dynapi_entity_set_value (dwfunderlay, "DWFUNDERLAY", "num_clip_inverts", &num_clip_inverts, 0)
-        && num_clip_inverts == dwfunderlay->num_clip_inverts)
-      pass ();
-    else
-      fail ("DWFUNDERLAY.num_clip_inverts [BS] set+1 %hu != %hu", dwfunderlay->num_clip_inverts, num_clip_inverts);
-    dwfunderlay->num_clip_inverts--;
-  }
-  {
-    BITCODE_BL num_clip_verts;
-    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "num_clip_verts", &num_clip_verts, NULL)
-        && num_clip_verts == dwfunderlay->num_clip_verts)
-      pass ();
-    else
-      fail ("DWFUNDERLAY.num_clip_verts [BL] %u != %u", dwfunderlay->num_clip_verts, num_clip_verts);
-    num_clip_verts++;
-    if (dwg_dynapi_entity_set_value (dwfunderlay, "DWFUNDERLAY", "num_clip_verts", &num_clip_verts, 0)
-        && num_clip_verts == dwfunderlay->num_clip_verts)
-      pass ();
-    else
-      fail ("DWFUNDERLAY.num_clip_verts [BL] set+1 %u != %u", dwfunderlay->num_clip_verts, num_clip_verts);
-    dwfunderlay->num_clip_verts--;
-  }
-  {
-    struct _dwg_object_entity* parent;
-    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "parent", &parent, NULL)
-        && !memcmp (&parent, &dwfunderlay->parent, sizeof (struct _dwg_object_entity*)))
-        pass ();
-    else
-        fail ("DWFUNDERLAY.parent [struct _dwg_object_entity*]");
-  }
-  {
-    BITCODE_3BD scale;
-    if (dwg_dynapi_entity_value (dwfunderlay, "DWFUNDERLAY", "scale", &scale, NULL)
-        && !memcmp (&scale, &dwfunderlay->scale, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("DWFUNDERLAY.scale [3BD]");
-  }
   if (failed && (is_class_unstable ("DWFUNDERLAY") || is_class_debugging ("DWFUNDERLAY")))
     {
       ok ("%s failed %d tests (TODO unstable)", "DWFUNDERLAY", failed);
@@ -17518,156 +17218,6 @@ static int test_PDFUNDERLAY (const Dwg_Object *obj)
   const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
   Dwg_Entity_PDFUNDERLAY *restrict pdfunderlay = obj->tio.entity->tio.PDFUNDERLAY;
   failed = 0;
-  {
-    BITCODE_BD angle;
-    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "angle", &angle, NULL)
-        && angle == pdfunderlay->angle)
-      pass ();
-    else
-      fail ("PDFUNDERLAY.angle [BD] %g != %g", pdfunderlay->angle, angle);
-    angle++;
-    if (dwg_dynapi_entity_set_value (pdfunderlay, "PDFUNDERLAY", "angle", &angle, 0)
-        && angle == pdfunderlay->angle)
-      pass ();
-    else
-      fail ("PDFUNDERLAY.angle [BD] set+1 %g != %g", pdfunderlay->angle, angle);
-    pdfunderlay->angle--;
-  }
-  {
-    BITCODE_2RD* clip_inverts;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "num_clip_inverts", &count, NULL)
-        && dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "clip_inverts", &clip_inverts, NULL)
-        && clip_inverts == pdfunderlay->clip_inverts)
-      pass ();
-    else
-      fail ("PDFUNDERLAY.clip_inverts [2RD*] * %u num_clip_inverts", count);
-  }
-  {
-    BITCODE_2RD* clip_verts;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "num_clip_verts", &count, NULL)
-        && dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "clip_verts", &clip_verts, NULL)
-        && clip_verts == pdfunderlay->clip_verts)
-      pass ();
-    else
-      fail ("PDFUNDERLAY.clip_verts [2RD*] * %u num_clip_verts", count);
-  }
-  {
-    BITCODE_RC contrast;
-    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "contrast", &contrast, NULL)
-        && contrast == pdfunderlay->contrast)
-      pass ();
-    else
-      fail ("PDFUNDERLAY.contrast [RC] %u != %u", pdfunderlay->contrast, contrast);
-    contrast++;
-    if (dwg_dynapi_entity_set_value (pdfunderlay, "PDFUNDERLAY", "contrast", &contrast, 0)
-        && contrast == pdfunderlay->contrast)
-      pass ();
-    else
-      fail ("PDFUNDERLAY.contrast [RC] set+1 %u != %u", pdfunderlay->contrast, contrast);
-    pdfunderlay->contrast--;
-  }
-  {
-    BITCODE_H definition_id;
-    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "definition_id", &definition_id, NULL)
-        && !memcmp (&definition_id, &pdfunderlay->definition_id, sizeof (BITCODE_H)))
-        pass ();
-    else
-        fail ("PDFUNDERLAY.definition_id [H]");
-  }
-  {
-    BITCODE_BE extrusion;
-    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &pdfunderlay->extrusion, sizeof (BITCODE_BE)))
-        pass ();
-    else
-        fail ("PDFUNDERLAY.extrusion [BE]");
-  }
-  {
-    BITCODE_RC fade;
-    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "fade", &fade, NULL)
-        && fade == pdfunderlay->fade)
-      pass ();
-    else
-      fail ("PDFUNDERLAY.fade [RC] %u != %u", pdfunderlay->fade, fade);
-    fade++;
-    if (dwg_dynapi_entity_set_value (pdfunderlay, "PDFUNDERLAY", "fade", &fade, 0)
-        && fade == pdfunderlay->fade)
-      pass ();
-    else
-      fail ("PDFUNDERLAY.fade [RC] set+1 %u != %u", pdfunderlay->fade, fade);
-    pdfunderlay->fade--;
-  }
-  {
-    BITCODE_RC flag;
-    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "flag", &flag, NULL)
-        && flag == pdfunderlay->flag)
-      pass ();
-    else
-      fail ("PDFUNDERLAY.flag [RC] %u != %u", pdfunderlay->flag, flag);
-    flag++;
-    if (dwg_dynapi_entity_set_value (pdfunderlay, "PDFUNDERLAY", "flag", &flag, 0)
-        && flag == pdfunderlay->flag)
-      pass ();
-    else
-      fail ("PDFUNDERLAY.flag [RC] set+1 %u != %u", pdfunderlay->flag, flag);
-    pdfunderlay->flag--;
-  }
-  {
-    BITCODE_3BD ins_pt;
-    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "ins_pt", &ins_pt, NULL)
-        && !memcmp (&ins_pt, &pdfunderlay->ins_pt, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("PDFUNDERLAY.ins_pt [3BD]");
-  }
-  {
-    BITCODE_BS num_clip_inverts;
-    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "num_clip_inverts", &num_clip_inverts, NULL)
-        && num_clip_inverts == pdfunderlay->num_clip_inverts)
-      pass ();
-    else
-      fail ("PDFUNDERLAY.num_clip_inverts [BS] %hu != %hu", pdfunderlay->num_clip_inverts, num_clip_inverts);
-    num_clip_inverts++;
-    if (dwg_dynapi_entity_set_value (pdfunderlay, "PDFUNDERLAY", "num_clip_inverts", &num_clip_inverts, 0)
-        && num_clip_inverts == pdfunderlay->num_clip_inverts)
-      pass ();
-    else
-      fail ("PDFUNDERLAY.num_clip_inverts [BS] set+1 %hu != %hu", pdfunderlay->num_clip_inverts, num_clip_inverts);
-    pdfunderlay->num_clip_inverts--;
-  }
-  {
-    BITCODE_BL num_clip_verts;
-    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "num_clip_verts", &num_clip_verts, NULL)
-        && num_clip_verts == pdfunderlay->num_clip_verts)
-      pass ();
-    else
-      fail ("PDFUNDERLAY.num_clip_verts [BL] %u != %u", pdfunderlay->num_clip_verts, num_clip_verts);
-    num_clip_verts++;
-    if (dwg_dynapi_entity_set_value (pdfunderlay, "PDFUNDERLAY", "num_clip_verts", &num_clip_verts, 0)
-        && num_clip_verts == pdfunderlay->num_clip_verts)
-      pass ();
-    else
-      fail ("PDFUNDERLAY.num_clip_verts [BL] set+1 %u != %u", pdfunderlay->num_clip_verts, num_clip_verts);
-    pdfunderlay->num_clip_verts--;
-  }
-  {
-    struct _dwg_object_entity* parent;
-    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "parent", &parent, NULL)
-        && !memcmp (&parent, &pdfunderlay->parent, sizeof (struct _dwg_object_entity*)))
-        pass ();
-    else
-        fail ("PDFUNDERLAY.parent [struct _dwg_object_entity*]");
-  }
-  {
-    BITCODE_3BD scale;
-    if (dwg_dynapi_entity_value (pdfunderlay, "PDFUNDERLAY", "scale", &scale, NULL)
-        && !memcmp (&scale, &pdfunderlay->scale, sizeof (BITCODE_3BD)))
-        pass ();
-    else
-        fail ("PDFUNDERLAY.scale [3BD]");
-  }
   if (failed && (is_class_unstable ("PDFUNDERLAY") || is_class_debugging ("PDFUNDERLAY")))
     {
       ok ("%s failed %d tests (TODO unstable)", "PDFUNDERLAY", failed);
@@ -61170,14 +60720,6 @@ static int test_PDFDEFINITION (const Dwg_Object *obj)
     else
       fail ("PDFDEFINITION.name [T] '%s' <> '%s'", name, pdfdefinition->name);
   }
-  {
-    struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (pdfdefinition, "PDFDEFINITION", "parent", &parent, NULL)
-        && !memcmp (&parent, &pdfdefinition->parent, sizeof (struct _dwg_object_object*)))
-        pass ();
-    else
-        fail ("PDFDEFINITION.parent [struct _dwg_object_object*]");
-  }
   if (failed && (is_class_unstable ("PDFDEFINITION") || is_class_debugging ("PDFDEFINITION")))
     {
       ok ("%s failed %d tests (TODO unstable)", "PDFDEFINITION", failed);
@@ -61210,14 +60752,6 @@ static int test_DGNDEFINITION (const Dwg_Object *obj)
       pass ();
     else
       fail ("DGNDEFINITION.name [T] '%s' <> '%s'", name, dgndefinition->name);
-  }
-  {
-    struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (dgndefinition, "DGNDEFINITION", "parent", &parent, NULL)
-        && !memcmp (&parent, &dgndefinition->parent, sizeof (struct _dwg_object_object*)))
-        pass ();
-    else
-        fail ("DGNDEFINITION.parent [struct _dwg_object_object*]");
   }
   if (failed && (is_class_unstable ("DGNDEFINITION") || is_class_debugging ("DGNDEFINITION")))
     {
@@ -61252,14 +60786,6 @@ static int test_DWFDEFINITION (const Dwg_Object *obj)
     else
       fail ("DWFDEFINITION.name [T] '%s' <> '%s'", name, dwfdefinition->name);
   }
-  {
-    struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (dwfdefinition, "DWFDEFINITION", "parent", &parent, NULL)
-        && !memcmp (&parent, &dwfdefinition->parent, sizeof (struct _dwg_object_object*)))
-        pass ();
-    else
-        fail ("DWFDEFINITION.parent [struct _dwg_object_object*]");
-  }
   if (failed && (is_class_unstable ("DWFDEFINITION") || is_class_debugging ("DWFDEFINITION")))
     {
       ok ("%s failed %d tests (TODO unstable)", "DWFDEFINITION", failed);
@@ -61274,21 +60800,6 @@ static int test_ASSOCARRAYMODIFYPARAMETERS (const Dwg_Object *obj)
   Dwg_Object_ASSOCARRAYMODIFYPARAMETERS *restrict assocarraymodifyparameters = obj->tio.object->tio.ASSOCARRAYMODIFYPARAMETERS;
   failed = 0;
   {
-    BITCODE_BL aap_version;
-    if (dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "aap_version", &aap_version, NULL)
-        && aap_version == assocarraymodifyparameters->aap_version)
-      pass ();
-    else
-      fail ("ASSOCARRAYMODIFYPARAMETERS.aap_version [BL] %u != %u", assocarraymodifyparameters->aap_version, aap_version);
-    aap_version++;
-    if (dwg_dynapi_entity_set_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "aap_version", &aap_version, 0)
-        && aap_version == assocarraymodifyparameters->aap_version)
-      pass ();
-    else
-      fail ("ASSOCARRAYMODIFYPARAMETERS.aap_version [BL] set+1 %u != %u", assocarraymodifyparameters->aap_version, aap_version);
-    assocarraymodifyparameters->aap_version--;
-  }
-  {
     BITCODE_T classname;
     if (dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "classname", &classname, NULL)
         && classname
@@ -61297,84 +60808,6 @@ static int test_ASSOCARRAYMODIFYPARAMETERS (const Dwg_Object *obj)
       pass ();
     else
       fail ("ASSOCARRAYMODIFYPARAMETERS.classname [T] '%s' <> '%s'", classname, assocarraymodifyparameters->classname);
-  }
-  {
-    Dwg_ASSOCARRAYITEM* items;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "num_items", &count, NULL)
-        && dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "items", &items, NULL)
-        && items == assocarraymodifyparameters->items)
-      pass ();
-    else
-      fail ("ASSOCARRAYMODIFYPARAMETERS.items [Dwg_ASSOCARRAYITEM*] * %u num_items", count);
-  }
-  {
-    BITCODE_BL num_items;
-    if (dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "num_items", &num_items, NULL)
-        && num_items == assocarraymodifyparameters->num_items)
-      pass ();
-    else
-      fail ("ASSOCARRAYMODIFYPARAMETERS.num_items [BL] %u != %u", assocarraymodifyparameters->num_items, num_items);
-    num_items++;
-    if (dwg_dynapi_entity_set_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "num_items", &num_items, 0)
-        && num_items == assocarraymodifyparameters->num_items)
-      pass ();
-    else
-      fail ("ASSOCARRAYMODIFYPARAMETERS.num_items [BL] set+1 %u != %u", assocarraymodifyparameters->num_items, num_items);
-    assocarraymodifyparameters->num_items--;
-  }
-  {
-    BITCODE_BL numitems;
-    if (dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "numitems", &numitems, NULL)
-        && numitems == assocarraymodifyparameters->numitems)
-      pass ();
-    else
-      fail ("ASSOCARRAYMODIFYPARAMETERS.numitems [BL] %u != %u", assocarraymodifyparameters->numitems, numitems);
-    numitems++;
-    if (dwg_dynapi_entity_set_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "numitems", &numitems, 0)
-        && numitems == assocarraymodifyparameters->numitems)
-      pass ();
-    else
-      fail ("ASSOCARRAYMODIFYPARAMETERS.numitems [BL] set+1 %u != %u", assocarraymodifyparameters->numitems, numitems);
-    assocarraymodifyparameters->numitems--;
-  }
-  {
-    BITCODE_BL numlevels;
-    if (dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "numlevels", &numlevels, NULL)
-        && numlevels == assocarraymodifyparameters->numlevels)
-      pass ();
-    else
-      fail ("ASSOCARRAYMODIFYPARAMETERS.numlevels [BL] %u != %u", assocarraymodifyparameters->numlevels, numlevels);
-    numlevels++;
-    if (dwg_dynapi_entity_set_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "numlevels", &numlevels, 0)
-        && numlevels == assocarraymodifyparameters->numlevels)
-      pass ();
-    else
-      fail ("ASSOCARRAYMODIFYPARAMETERS.numlevels [BL] set+1 %u != %u", assocarraymodifyparameters->numlevels, numlevels);
-    assocarraymodifyparameters->numlevels--;
-  }
-  {
-    BITCODE_BL numrows;
-    if (dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "numrows", &numrows, NULL)
-        && numrows == assocarraymodifyparameters->numrows)
-      pass ();
-    else
-      fail ("ASSOCARRAYMODIFYPARAMETERS.numrows [BL] %u != %u", assocarraymodifyparameters->numrows, numrows);
-    numrows++;
-    if (dwg_dynapi_entity_set_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "numrows", &numrows, 0)
-        && numrows == assocarraymodifyparameters->numrows)
-      pass ();
-    else
-      fail ("ASSOCARRAYMODIFYPARAMETERS.numrows [BL] set+1 %u != %u", assocarraymodifyparameters->numrows, numrows);
-    assocarraymodifyparameters->numrows--;
-  }
-  {
-    struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (assocarraymodifyparameters, "ASSOCARRAYMODIFYPARAMETERS", "parent", &parent, NULL)
-        && !memcmp (&parent, &assocarraymodifyparameters->parent, sizeof (struct _dwg_object_object*)))
-        pass ();
-    else
-        fail ("ASSOCARRAYMODIFYPARAMETERS.parent [struct _dwg_object_object*]");
   }
   if (failed && (is_class_unstable ("ASSOCARRAYMODIFYPARAMETERS") || is_class_debugging ("ASSOCARRAYMODIFYPARAMETERS")))
     {
@@ -61390,21 +60823,6 @@ static int test_ASSOCARRAYPATHPARAMETERS (const Dwg_Object *obj)
   Dwg_Object_ASSOCARRAYPATHPARAMETERS *restrict assocarraypathparameters = obj->tio.object->tio.ASSOCARRAYPATHPARAMETERS;
   failed = 0;
   {
-    BITCODE_BL aap_version;
-    if (dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "aap_version", &aap_version, NULL)
-        && aap_version == assocarraypathparameters->aap_version)
-      pass ();
-    else
-      fail ("ASSOCARRAYPATHPARAMETERS.aap_version [BL] %u != %u", assocarraypathparameters->aap_version, aap_version);
-    aap_version++;
-    if (dwg_dynapi_entity_set_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "aap_version", &aap_version, 0)
-        && aap_version == assocarraypathparameters->aap_version)
-      pass ();
-    else
-      fail ("ASSOCARRAYPATHPARAMETERS.aap_version [BL] set+1 %u != %u", assocarraypathparameters->aap_version, aap_version);
-    assocarraypathparameters->aap_version--;
-  }
-  {
     BITCODE_T classname;
     if (dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "classname", &classname, NULL)
         && classname
@@ -61413,84 +60831,6 @@ static int test_ASSOCARRAYPATHPARAMETERS (const Dwg_Object *obj)
       pass ();
     else
       fail ("ASSOCARRAYPATHPARAMETERS.classname [T] '%s' <> '%s'", classname, assocarraypathparameters->classname);
-  }
-  {
-    Dwg_ASSOCARRAYITEM* items;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "num_items", &count, NULL)
-        && dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "items", &items, NULL)
-        && items == assocarraypathparameters->items)
-      pass ();
-    else
-      fail ("ASSOCARRAYPATHPARAMETERS.items [Dwg_ASSOCARRAYITEM*] * %u num_items", count);
-  }
-  {
-    BITCODE_BL num_items;
-    if (dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "num_items", &num_items, NULL)
-        && num_items == assocarraypathparameters->num_items)
-      pass ();
-    else
-      fail ("ASSOCARRAYPATHPARAMETERS.num_items [BL] %u != %u", assocarraypathparameters->num_items, num_items);
-    num_items++;
-    if (dwg_dynapi_entity_set_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "num_items", &num_items, 0)
-        && num_items == assocarraypathparameters->num_items)
-      pass ();
-    else
-      fail ("ASSOCARRAYPATHPARAMETERS.num_items [BL] set+1 %u != %u", assocarraypathparameters->num_items, num_items);
-    assocarraypathparameters->num_items--;
-  }
-  {
-    BITCODE_BL numitems;
-    if (dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "numitems", &numitems, NULL)
-        && numitems == assocarraypathparameters->numitems)
-      pass ();
-    else
-      fail ("ASSOCARRAYPATHPARAMETERS.numitems [BL] %u != %u", assocarraypathparameters->numitems, numitems);
-    numitems++;
-    if (dwg_dynapi_entity_set_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "numitems", &numitems, 0)
-        && numitems == assocarraypathparameters->numitems)
-      pass ();
-    else
-      fail ("ASSOCARRAYPATHPARAMETERS.numitems [BL] set+1 %u != %u", assocarraypathparameters->numitems, numitems);
-    assocarraypathparameters->numitems--;
-  }
-  {
-    BITCODE_BL numlevels;
-    if (dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "numlevels", &numlevels, NULL)
-        && numlevels == assocarraypathparameters->numlevels)
-      pass ();
-    else
-      fail ("ASSOCARRAYPATHPARAMETERS.numlevels [BL] %u != %u", assocarraypathparameters->numlevels, numlevels);
-    numlevels++;
-    if (dwg_dynapi_entity_set_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "numlevels", &numlevels, 0)
-        && numlevels == assocarraypathparameters->numlevels)
-      pass ();
-    else
-      fail ("ASSOCARRAYPATHPARAMETERS.numlevels [BL] set+1 %u != %u", assocarraypathparameters->numlevels, numlevels);
-    assocarraypathparameters->numlevels--;
-  }
-  {
-    BITCODE_BL numrows;
-    if (dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "numrows", &numrows, NULL)
-        && numrows == assocarraypathparameters->numrows)
-      pass ();
-    else
-      fail ("ASSOCARRAYPATHPARAMETERS.numrows [BL] %u != %u", assocarraypathparameters->numrows, numrows);
-    numrows++;
-    if (dwg_dynapi_entity_set_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "numrows", &numrows, 0)
-        && numrows == assocarraypathparameters->numrows)
-      pass ();
-    else
-      fail ("ASSOCARRAYPATHPARAMETERS.numrows [BL] set+1 %u != %u", assocarraypathparameters->numrows, numrows);
-    assocarraypathparameters->numrows--;
-  }
-  {
-    struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (assocarraypathparameters, "ASSOCARRAYPATHPARAMETERS", "parent", &parent, NULL)
-        && !memcmp (&parent, &assocarraypathparameters->parent, sizeof (struct _dwg_object_object*)))
-        pass ();
-    else
-        fail ("ASSOCARRAYPATHPARAMETERS.parent [struct _dwg_object_object*]");
   }
   if (failed && (is_class_unstable ("ASSOCARRAYPATHPARAMETERS") || is_class_debugging ("ASSOCARRAYPATHPARAMETERS")))
     {
@@ -61506,21 +60846,6 @@ static int test_ASSOCARRAYPOLARPARAMETERS (const Dwg_Object *obj)
   Dwg_Object_ASSOCARRAYPOLARPARAMETERS *restrict assocarraypolarparameters = obj->tio.object->tio.ASSOCARRAYPOLARPARAMETERS;
   failed = 0;
   {
-    BITCODE_BL aap_version;
-    if (dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "aap_version", &aap_version, NULL)
-        && aap_version == assocarraypolarparameters->aap_version)
-      pass ();
-    else
-      fail ("ASSOCARRAYPOLARPARAMETERS.aap_version [BL] %u != %u", assocarraypolarparameters->aap_version, aap_version);
-    aap_version++;
-    if (dwg_dynapi_entity_set_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "aap_version", &aap_version, 0)
-        && aap_version == assocarraypolarparameters->aap_version)
-      pass ();
-    else
-      fail ("ASSOCARRAYPOLARPARAMETERS.aap_version [BL] set+1 %u != %u", assocarraypolarparameters->aap_version, aap_version);
-    assocarraypolarparameters->aap_version--;
-  }
-  {
     BITCODE_T classname;
     if (dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "classname", &classname, NULL)
         && classname
@@ -61529,84 +60854,6 @@ static int test_ASSOCARRAYPOLARPARAMETERS (const Dwg_Object *obj)
       pass ();
     else
       fail ("ASSOCARRAYPOLARPARAMETERS.classname [T] '%s' <> '%s'", classname, assocarraypolarparameters->classname);
-  }
-  {
-    Dwg_ASSOCARRAYITEM* items;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "num_items", &count, NULL)
-        && dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "items", &items, NULL)
-        && items == assocarraypolarparameters->items)
-      pass ();
-    else
-      fail ("ASSOCARRAYPOLARPARAMETERS.items [Dwg_ASSOCARRAYITEM*] * %u num_items", count);
-  }
-  {
-    BITCODE_BL num_items;
-    if (dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "num_items", &num_items, NULL)
-        && num_items == assocarraypolarparameters->num_items)
-      pass ();
-    else
-      fail ("ASSOCARRAYPOLARPARAMETERS.num_items [BL] %u != %u", assocarraypolarparameters->num_items, num_items);
-    num_items++;
-    if (dwg_dynapi_entity_set_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "num_items", &num_items, 0)
-        && num_items == assocarraypolarparameters->num_items)
-      pass ();
-    else
-      fail ("ASSOCARRAYPOLARPARAMETERS.num_items [BL] set+1 %u != %u", assocarraypolarparameters->num_items, num_items);
-    assocarraypolarparameters->num_items--;
-  }
-  {
-    BITCODE_BL numitems;
-    if (dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "numitems", &numitems, NULL)
-        && numitems == assocarraypolarparameters->numitems)
-      pass ();
-    else
-      fail ("ASSOCARRAYPOLARPARAMETERS.numitems [BL] %u != %u", assocarraypolarparameters->numitems, numitems);
-    numitems++;
-    if (dwg_dynapi_entity_set_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "numitems", &numitems, 0)
-        && numitems == assocarraypolarparameters->numitems)
-      pass ();
-    else
-      fail ("ASSOCARRAYPOLARPARAMETERS.numitems [BL] set+1 %u != %u", assocarraypolarparameters->numitems, numitems);
-    assocarraypolarparameters->numitems--;
-  }
-  {
-    BITCODE_BL numlevels;
-    if (dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "numlevels", &numlevels, NULL)
-        && numlevels == assocarraypolarparameters->numlevels)
-      pass ();
-    else
-      fail ("ASSOCARRAYPOLARPARAMETERS.numlevels [BL] %u != %u", assocarraypolarparameters->numlevels, numlevels);
-    numlevels++;
-    if (dwg_dynapi_entity_set_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "numlevels", &numlevels, 0)
-        && numlevels == assocarraypolarparameters->numlevels)
-      pass ();
-    else
-      fail ("ASSOCARRAYPOLARPARAMETERS.numlevels [BL] set+1 %u != %u", assocarraypolarparameters->numlevels, numlevels);
-    assocarraypolarparameters->numlevels--;
-  }
-  {
-    BITCODE_BL numrows;
-    if (dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "numrows", &numrows, NULL)
-        && numrows == assocarraypolarparameters->numrows)
-      pass ();
-    else
-      fail ("ASSOCARRAYPOLARPARAMETERS.numrows [BL] %u != %u", assocarraypolarparameters->numrows, numrows);
-    numrows++;
-    if (dwg_dynapi_entity_set_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "numrows", &numrows, 0)
-        && numrows == assocarraypolarparameters->numrows)
-      pass ();
-    else
-      fail ("ASSOCARRAYPOLARPARAMETERS.numrows [BL] set+1 %u != %u", assocarraypolarparameters->numrows, numrows);
-    assocarraypolarparameters->numrows--;
-  }
-  {
-    struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (assocarraypolarparameters, "ASSOCARRAYPOLARPARAMETERS", "parent", &parent, NULL)
-        && !memcmp (&parent, &assocarraypolarparameters->parent, sizeof (struct _dwg_object_object*)))
-        pass ();
-    else
-        fail ("ASSOCARRAYPOLARPARAMETERS.parent [struct _dwg_object_object*]");
   }
   if (failed && (is_class_unstable ("ASSOCARRAYPOLARPARAMETERS") || is_class_debugging ("ASSOCARRAYPOLARPARAMETERS")))
     {
@@ -61622,21 +60869,6 @@ static int test_ASSOCARRAYRECTANGULARPARAMETERS (const Dwg_Object *obj)
   Dwg_Object_ASSOCARRAYRECTANGULARPARAMETERS *restrict assocarrayrectangularparameters = obj->tio.object->tio.ASSOCARRAYRECTANGULARPARAMETERS;
   failed = 0;
   {
-    BITCODE_BL aap_version;
-    if (dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "aap_version", &aap_version, NULL)
-        && aap_version == assocarrayrectangularparameters->aap_version)
-      pass ();
-    else
-      fail ("ASSOCARRAYRECTANGULARPARAMETERS.aap_version [BL] %u != %u", assocarrayrectangularparameters->aap_version, aap_version);
-    aap_version++;
-    if (dwg_dynapi_entity_set_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "aap_version", &aap_version, 0)
-        && aap_version == assocarrayrectangularparameters->aap_version)
-      pass ();
-    else
-      fail ("ASSOCARRAYRECTANGULARPARAMETERS.aap_version [BL] set+1 %u != %u", assocarrayrectangularparameters->aap_version, aap_version);
-    assocarrayrectangularparameters->aap_version--;
-  }
-  {
     BITCODE_T classname;
     if (dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "classname", &classname, NULL)
         && classname
@@ -61645,84 +60877,6 @@ static int test_ASSOCARRAYRECTANGULARPARAMETERS (const Dwg_Object *obj)
       pass ();
     else
       fail ("ASSOCARRAYRECTANGULARPARAMETERS.classname [T] '%s' <> '%s'", classname, assocarrayrectangularparameters->classname);
-  }
-  {
-    Dwg_ASSOCARRAYITEM* items;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "num_items", &count, NULL)
-        && dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "items", &items, NULL)
-        && items == assocarrayrectangularparameters->items)
-      pass ();
-    else
-      fail ("ASSOCARRAYRECTANGULARPARAMETERS.items [Dwg_ASSOCARRAYITEM*] * %u num_items", count);
-  }
-  {
-    BITCODE_BL num_items;
-    if (dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "num_items", &num_items, NULL)
-        && num_items == assocarrayrectangularparameters->num_items)
-      pass ();
-    else
-      fail ("ASSOCARRAYRECTANGULARPARAMETERS.num_items [BL] %u != %u", assocarrayrectangularparameters->num_items, num_items);
-    num_items++;
-    if (dwg_dynapi_entity_set_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "num_items", &num_items, 0)
-        && num_items == assocarrayrectangularparameters->num_items)
-      pass ();
-    else
-      fail ("ASSOCARRAYRECTANGULARPARAMETERS.num_items [BL] set+1 %u != %u", assocarrayrectangularparameters->num_items, num_items);
-    assocarrayrectangularparameters->num_items--;
-  }
-  {
-    BITCODE_BL numitems;
-    if (dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "numitems", &numitems, NULL)
-        && numitems == assocarrayrectangularparameters->numitems)
-      pass ();
-    else
-      fail ("ASSOCARRAYRECTANGULARPARAMETERS.numitems [BL] %u != %u", assocarrayrectangularparameters->numitems, numitems);
-    numitems++;
-    if (dwg_dynapi_entity_set_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "numitems", &numitems, 0)
-        && numitems == assocarrayrectangularparameters->numitems)
-      pass ();
-    else
-      fail ("ASSOCARRAYRECTANGULARPARAMETERS.numitems [BL] set+1 %u != %u", assocarrayrectangularparameters->numitems, numitems);
-    assocarrayrectangularparameters->numitems--;
-  }
-  {
-    BITCODE_BL numlevels;
-    if (dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "numlevels", &numlevels, NULL)
-        && numlevels == assocarrayrectangularparameters->numlevels)
-      pass ();
-    else
-      fail ("ASSOCARRAYRECTANGULARPARAMETERS.numlevels [BL] %u != %u", assocarrayrectangularparameters->numlevels, numlevels);
-    numlevels++;
-    if (dwg_dynapi_entity_set_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "numlevels", &numlevels, 0)
-        && numlevels == assocarrayrectangularparameters->numlevels)
-      pass ();
-    else
-      fail ("ASSOCARRAYRECTANGULARPARAMETERS.numlevels [BL] set+1 %u != %u", assocarrayrectangularparameters->numlevels, numlevels);
-    assocarrayrectangularparameters->numlevels--;
-  }
-  {
-    BITCODE_BL numrows;
-    if (dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "numrows", &numrows, NULL)
-        && numrows == assocarrayrectangularparameters->numrows)
-      pass ();
-    else
-      fail ("ASSOCARRAYRECTANGULARPARAMETERS.numrows [BL] %u != %u", assocarrayrectangularparameters->numrows, numrows);
-    numrows++;
-    if (dwg_dynapi_entity_set_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "numrows", &numrows, 0)
-        && numrows == assocarrayrectangularparameters->numrows)
-      pass ();
-    else
-      fail ("ASSOCARRAYRECTANGULARPARAMETERS.numrows [BL] set+1 %u != %u", assocarrayrectangularparameters->numrows, numrows);
-    assocarrayrectangularparameters->numrows--;
-  }
-  {
-    struct _dwg_object_object* parent;
-    if (dwg_dynapi_entity_value (assocarrayrectangularparameters, "ASSOCARRAYRECTANGULARPARAMETERS", "parent", &parent, NULL)
-        && !memcmp (&parent, &assocarrayrectangularparameters->parent, sizeof (struct _dwg_object_object*)))
-        pass ();
-    else
-        fail ("ASSOCARRAYRECTANGULARPARAMETERS.parent [struct _dwg_object_object*]");
   }
   if (failed && (is_class_unstable ("ASSOCARRAYRECTANGULARPARAMETERS") || is_class_debugging ("ASSOCARRAYRECTANGULARPARAMETERS")))
     {

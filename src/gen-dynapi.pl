@@ -864,6 +864,23 @@ sub out_declarator {
   print $doc "\@item $name\n$type", $dxf ? ",\tDXF $dxf" : "", "\n";
 }
 
+# until the type is a struct or union
+sub expand_typedef {
+  my $s = shift;
+  if ($s =~ /^(struct|union)/) {
+    return $s;
+  }
+  my $typedef = $c->typedef($s);
+  return undef unless $typedef;
+  my $type;
+  $s = $typedef->{type};
+  while ($s and $s !~ /^(struct|union)/) {
+    $s = expand_typedef ($s);
+  }
+  return $s;
+}
+
+my %out_struct;
 sub out_struct {
   my ($tmpl, $n) = @_;
   #print $fh " /* ", Data::Dumper->Dump([$s], [$n]), "*/\n";
@@ -873,15 +890,19 @@ sub out_struct {
   unless ($s) {
     $s = $c->union($tmpl);
   }
-  unless ($s) { # resolve abstract typedef
-    my $typedef; # =~ s/dwg_/dwg_abstract/;
-    # abstractentity
-    $s = $c->struct($tmpl);
+  unless ($s) { # resolve abstract typedef to struct|union
+    $s = expand_typedef ($tmpl);
+    $s = $c->struct($s) if $s;
   }
   unless ($s->{declarations}) {
     delete $ENT{$n};   # don't show up in dynapi_test.c
     return;
   }
+  if (exists $out_struct{$tmpl}) {
+    warn "skip duplicate $tmpl\n";
+    return;
+  }
+  $out_struct{$tmpl}++;
   $n = "_dwg_$n" unless $n =~ /^_dwg_/;
   my @declarations = @{$s->{declarations}};
   if ($n =~ /^_dwg_(header_variables|object_object|object_entity)$/) {
@@ -997,13 +1018,29 @@ for (<DATA>) {
             $v = $s->{enumerators}->{'DWG_TYPE__'.$k};
             $vs = 'DWG_TYPE__'.$k;
           }
-          my $size = "sizeof (Dwg_$k)";
+          my $size = "0";
           if ($c->struct("_dwg_entity_$k")) {
             $size = "sizeof (struct _dwg_entity_$k)";
           } elsif ($c->struct("_dwg_object_$k")) {
             $size = "sizeof (struct _dwg_object_$k)";
-          } else {
-            $size = "0";
+          #} elsif ($c->typedef("Dwg_Object_$k")) {
+          #  my $type = expand_typedef ("Dwg_Object_$k");
+          #  if ($type) {
+          #    $size = "sizeof (Dwg_Object_$k)";
+          #    $k = $type;
+          #    $k =~ s/struct //;
+          #    $k =~ s/_dwg_(?:abstract)?object_//;
+          #    $k =~ s/ //g;
+          #  }
+          #} elsif ($c->typedef("Dwg_Entity_$k")) {
+          #  my $type = expand_typedef ("Dwg_Entity_$k");
+          #  if ($type) {
+          #    $size = "sizeof (Dwg_Entity_$k)";
+          #    $k = $type;
+          #    $k =~ s/struct //;
+          #    $k =~ s/_dwg_(?:abstract)?entity_//;
+          #    $k =~ s/ //g;
+          #  }
           }
           # see if the fields do exist:
           my $fields = exists $structs{$k} ? "_dwg_".$k."_fields" : "NULL";
@@ -1014,11 +1051,14 @@ for (<DATA>) {
             $fields = "_dwg_RAY_fields";
             $size = "sizeof (struct _dwg_entity_RAY)";
           } elsif ($k =~ /^(PDF|DWF|DGN)DEFINITION$/) {
-            $fields = "_dwg_${k}_fields";
+            $fields = "_dwg_UNDERLAYDEFINITION_fields";
             $size = "sizeof (Dwg_Object_$k)";
           } elsif ($k =~ /^(PDF|DWF|DGN)UNDERLAY$/) {
-            $fields = "_dwg_${k}_fields";
+            $fields = "_dwg_UNDERLAY_fields";
             $size = "sizeof (Dwg_Entity_$k)";
+          } elsif ($k =~ /^ASSOCARRAY(?:MODIFY|PATH|POLAR|RECTANGULAR)PARAMETERS$/) {
+            $fields = "_dwg_ASSOCARRAYPARAMETERS_fields";
+            $size = "sizeof (Dwg_Object_ASSOCARRAYPARAMETERS)";
           } elsif ($k =~ /^VERTEX_(MESH|PFACE)$/) {
             $fields = "_dwg_VERTEX_3D_fields";
             $size = "sizeof (struct _dwg_entity_VERTEX_3D)";
@@ -1109,8 +1149,18 @@ for (<DATA>) {
         print $doc "\@strong{$_} \@anchor{$_}\n\@cindex entity, $_\n",
           "\@vindex $_\n\n" unless $_ eq 'DIMENSION_';
         my $typedef = $c->typedef("Dwg_Entity_$_");
-        if ($typedef) {
-          out_struct($typedef->{type}, $_);
+        # multiple type aliases, only emit one _field[]
+        if ($typedef and $typedef->{type} ne "struct _dwg_entity_$_") {
+          my $type = expand_typedef ($typedef->{type});
+          if ($type) {
+            my $n = $type;
+            $n =~ s/struct //;
+            $n =~ s/_dwg_(?:abstract)?entity_//;
+            $n =~ s/ //g;
+            out_struct($type, $n);
+          } else {
+            out_struct("struct _dwg_entity_$_", $_);
+          }
         } else {
           out_struct("struct _dwg_entity_$_", $_);
         }
@@ -1121,8 +1171,17 @@ for (<DATA>) {
       for (@object_names) {
         print $doc "\@strong{$_} \@anchor{$_}\n\@cindex object, $_\n\@vindex $_\n\n";
         my $typedef = $c->typedef("Dwg_Object_$_");
-        if ($typedef) {
-          out_struct($typedef->{type}, $_);
+        if ($typedef and $typedef->{type} ne "struct _dwg_object_$_") {
+          my $type = expand_typedef ($typedef->{type}); # unify to one struct
+          if ($type) {
+            my $n = $type;
+            $n =~ s/struct //;
+            $n =~ s/_dwg_(?:abstract)?object_//;
+            $n =~ s/ //g;
+            out_struct($type, $n);
+          } else {
+            out_struct("struct _dwg_object_$_", $_);
+          }
         } else {
           out_struct("struct _dwg_object_$_", $_);
         }
@@ -2376,7 +2435,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2380 "gen-dynapi.pl"
+#line 2439 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2462,7 +2521,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 @@list name_subclasses@@
 };
 
-#line 2466 "gen-dynapi.pl"
+#line 2525 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;

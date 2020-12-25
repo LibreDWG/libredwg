@@ -1228,29 +1228,29 @@ BE,	DXF 210
 @item parent
 struct _dwg_object_entity*
 @item extrusion
-BE
+BE,	DXF 210
 @item ins_pt
-3BD
+3BD,	DXF 10
 @item scale
-3BD
+3BD_1,	DXF 41
 @item angle
-BD
+BD,	DXF 50
 @item flag
-RC
+RC,	DXF 280
 @item contrast
-RC
+RC,	DXF 281
 @item fade
-RC
+RC,	DXF 282
 @item num_clip_verts
 BL
 @item clip_verts
-2RD*
+2RD*,	DXF 11
 @item num_clip_inverts
-BS
+BS,	DXF 170
 @item clip_inverts
-2RD*
+2RD*,	DXF 12
 @item definition_id
-H
+H,	DXF 340
 
 @end vtable
 @end indentedblock
@@ -1699,39 +1699,6 @@ BD,	DXF 40
 @strong{DWFUNDERLAY} @anchor{DWFUNDERLAY}
 @cindex entity, DWFUNDERLAY
 @vindex DWFUNDERLAY
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_entity*
-@item extrusion
-BE
-@item ins_pt
-3BD
-@item scale
-3BD
-@item angle
-BD
-@item flag
-RC
-@item contrast
-RC
-@item fade
-RC
-@item num_clip_verts
-BL
-@item clip_verts
-2RD*
-@item num_clip_inverts
-BS
-@item clip_inverts
-2RD*
-@item definition_id
-H
-
-@end vtable
-@end indentedblock
 
 @strong{ELLIPSE} @anchor{ELLIPSE}
 @cindex entity, ELLIPSE
@@ -3104,39 +3071,6 @@ TF,	DXF 310
 @strong{PDFUNDERLAY} @anchor{PDFUNDERLAY}
 @cindex entity, PDFUNDERLAY
 @vindex PDFUNDERLAY
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_entity*
-@item extrusion
-BE
-@item ins_pt
-3BD
-@item scale
-3BD
-@item angle
-BD
-@item flag
-RC
-@item contrast
-RC
-@item fade
-RC
-@item num_clip_verts
-BL
-@item clip_verts
-2RD*
-@item num_clip_inverts
-BS
-@item clip_inverts
-2RD*
-@item definition_id
-H
-
-@end vtable
-@end indentedblock
 
 @strong{PLANESURFACE} @anchor{PLANESURFACE}
 @cindex entity, PLANESURFACE
@@ -12573,9 +12507,9 @@ H*,	DXF 340
 @item parent
 struct _dwg_object_object*
 @item filename
-T,	DXF 1
+T
 @item name
-T,	DXF 2
+T
 
 @end vtable
 @end indentedblock
@@ -12584,35 +12518,9 @@ T,	DXF 2
 @cindex object, DGNDEFINITION
 @vindex DGNDEFINITION
 
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_object*
-@item filename
-T,	DXF 1
-@item name
-T,	DXF 2
-
-@end vtable
-@end indentedblock
-
 @strong{DWFDEFINITION} @anchor{DWFDEFINITION}
 @cindex object, DWFDEFINITION
 @vindex DWFDEFINITION
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_object*
-@item filename
-T,	DXF 1
-@item name
-T,	DXF 2
-
-@end vtable
-@end indentedblock
 
 @strong{ASSOCARRAYMODIFYPARAMETERS} @anchor{ASSOCARRAYMODIFYPARAMETERS}
 @cindex object, ASSOCARRAYMODIFYPARAMETERS
@@ -12624,11 +12532,11 @@ T,	DXF 2
 @item parent
 struct _dwg_object_object*
 @item aap_version
-BL,	DXF 90
+BL
 @item num_items
-BL,	DXF 90
+BL
 @item classname
-T,	DXF 1
+TV
 @item items
 Dwg_ASSOCARRAYITEM*
 @item numitems
@@ -12645,82 +12553,13 @@ BL
 @cindex object, ASSOCARRAYPATHPARAMETERS
 @vindex ASSOCARRAYPATHPARAMETERS
 
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_object*
-@item aap_version
-BL,	DXF 90
-@item num_items
-BL,	DXF 90
-@item classname
-T,	DXF 1
-@item items
-Dwg_ASSOCARRAYITEM*
-@item numitems
-BL
-@item numrows
-BL
-@item numlevels
-BL
-
-@end vtable
-@end indentedblock
-
 @strong{ASSOCARRAYPOLARPARAMETERS} @anchor{ASSOCARRAYPOLARPARAMETERS}
 @cindex object, ASSOCARRAYPOLARPARAMETERS
 @vindex ASSOCARRAYPOLARPARAMETERS
 
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_object*
-@item aap_version
-BL,	DXF 90
-@item num_items
-BL,	DXF 90
-@item classname
-T,	DXF 1
-@item items
-Dwg_ASSOCARRAYITEM*
-@item numitems
-BL
-@item numrows
-BL
-@item numlevels
-BL
-
-@end vtable
-@end indentedblock
-
 @strong{ASSOCARRAYRECTANGULARPARAMETERS} @anchor{ASSOCARRAYRECTANGULARPARAMETERS}
 @cindex object, ASSOCARRAYRECTANGULARPARAMETERS
 @vindex ASSOCARRAYRECTANGULARPARAMETERS
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_object*
-@item aap_version
-BL,	DXF 90
-@item num_items
-BL,	DXF 90
-@item classname
-T,	DXF 1
-@item items
-Dwg_ASSOCARRAYITEM*
-@item numitems
-BL
-@item numrows
-BL
-@item numlevels
-BL
-
-@end vtable
-@end indentedblock
 
 @strong{Dwg_3DSOLID_material} @anchor{Dwg_3DSOLID_material}
 @vindex Dwg_3DSOLID_material
