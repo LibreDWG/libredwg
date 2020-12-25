@@ -1,4 +1,4 @@
-#define DWG_TYPE DWG_TYPE_BODY
+#define DWG_TYPE DWG_TYPE_SOLID
 #include "common.c"
 
 void
