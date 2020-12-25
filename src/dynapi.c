@@ -12130,7 +12130,7 @@ static const Dwg_DYNAPI_field _dwg_OCD_Dimension_fields[] = {
 };
 /* from typedef struct _dwg_PARTIAL_VIEWING_INDEX_Entry: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_PARTIAL_VIEWING_INDEX_Entry_fields[] = {
-  { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_PARTIAL_VIEWING_INDEX_Entry, parent),
+  { "parent",	"struct _dwg_object_PARTIAL_VIEWING_INDEX*", sizeof (void *),  OFF (struct _dwg_PARTIAL_VIEWING_INDEX_Entry, parent),
     1,1,0, 0 },
   { "extents_min",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_PARTIAL_VIEWING_INDEX_Entry, extents_min),
     1,0,0, 0 },

@@ -14887,7 +14887,7 @@ B,	DXF 297
 @vtable @code
 
 @item parent
-struct _dwg_object_object*
+struct _dwg_object_PARTIAL_VIEWING_INDEX*
 @item extents_min
 3BD
 @item extents_max

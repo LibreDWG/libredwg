@@ -7757,7 +7757,7 @@ typedef struct _dwg_COMPOUNDOBJECTID
 
 typedef struct _dwg_PARTIAL_VIEWING_INDEX_Entry
 {
-  struct _dwg_object_object *parent;
+  struct _dwg_object_PARTIAL_VIEWING_INDEX *parent;
   BITCODE_3BD extents_min;
   BITCODE_3BD extents_max;
   BITCODE_H object;

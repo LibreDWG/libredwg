@@ -6,7 +6,7 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  BITCODE_BL num_entries;
+  BITCODE_BL num_entries, i;
   BITCODE_B has_entries;
   Dwg_PARTIAL_VIEWING_INDEX_Entry *entries;
 
@@ -26,9 +26,9 @@ api_process (dwg_object *obj)
       else
         for (i = 0; i < num_entries; i++)
           {
-            CHK_SUBCLASS_2RD (_obj->entries, PARTIAL_VIEWING_INDEX_Entry, extents_min);
-            CHK_SUBCLASS_2RD (_obj->entries, PARTIAL_VIEWING_INDEX_Entry, extents_max);
-            CHK_SUBCLASS_H (_obj->entries, PARTIAL_VIEWING_INDEX_Entry, object);
+            CHK_SUBCLASS_2RD (entries[i], PARTIAL_VIEWING_INDEX_Entry, extents_min);
+            CHK_SUBCLASS_2RD (entries[i], PARTIAL_VIEWING_INDEX_Entry, extents_max);
+            CHK_SUBCLASS_H (entries[i], PARTIAL_VIEWING_INDEX_Entry, object);
           }
     }
 #endif
