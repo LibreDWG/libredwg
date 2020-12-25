@@ -186,7 +186,9 @@ main (int argc, char *argv[])
           char tmp[80];
           if (DWG_TYPE == DWG_TYPE_POLYLINE_2D ||
               DWG_TYPE == DWG_TYPE_SEQEND ||
-              DWG_TYPE == DWG_TYPE_VERTEX_2D)
+              DWG_TYPE == DWG_TYPE_VERTEX_2D ||
+              DWG_TYPE == DWG_TYPE_CSACDOCUMENTOPTIONS ||
+              DWG_TYPE == DWG_TYPE_LAYOUTPRINTCONFIG)
             {
               error += test_code (prefix, "2000/PolyLine2D.dwg", cov);
             }
@@ -208,6 +210,8 @@ main (int argc, char *argv[])
               error += test_code (prefix, "2000/TS1.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_IMAGE ||
+              DWG_TYPE == DWG_TYPE_IMAGEDEF ||
+              DWG_TYPE == DWG_TYPE_IMAGEDEF_REACTOR ||
               DWG_TYPE == DWG_TYPE_LEADER)
             {
               error += test_code (prefix, "2000/Leader.dwg", cov);
@@ -217,6 +221,28 @@ main (int argc, char *argv[])
           if (DWG_TYPE == DWG_TYPE_HATCH)
             {
               error += test_code (prefix, "2004/HatchG.dwg", cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_BODY)
+            {
+              // not in DIST!
+              error += test_code (prefix,
+                                  "../test-old/2000/from_cadforum.cz/"
+                                  "Transformer_Oil_Filling_Chamber.dwg",
+                                  cov);
+              error += test_code (
+                  prefix,
+                  "../test-old/r14/from_cadforum.cz/plaza_light_dual.dwg",
+                  cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_UCS)
+            {
+              error += test_code (prefix, "r14/plaza_light_dual.dwg", cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_SHAPE)
+            {
+              // not in DIST!
+              error += test_code (
+                  prefix, "../test-old/r13/from_lx_viewer/small.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_PDFUNDERLAY ||
               DWG_TYPE == DWG_TYPE_PDFDEFINITION)
@@ -249,13 +275,21 @@ main (int argc, char *argv[])
               error += test_code (prefix, "2000/work.dwg", cov);  // not in DIST
             }
           if (DWG_TYPE == DWG_TYPE_ASSOCPLANESURFACEACTIONBODY ||
-              DWG_TYPE == DWG_TYPE_ASSOCEXTRUDEDSURFACEACTIONBODY ||
-              DWG_TYPE == DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY ||
-              DWG_TYPE == DWG_TYPE_ASSOCREVOLVEDSURFACEACTIONBODY ||
+              DWG_TYPE == DWG_TYPE_ASSOCACTION ||
               DWG_TYPE == DWG_TYPE_ASSOCDEPENDENCY ||
+              DWG_TYPE == DWG_TYPE_ASSOCEDGEACTIONPARAM ||
+              DWG_TYPE == DWG_TYPE_ASSOCEXTRUDEDSURFACEACTIONBODY ||
+              DWG_TYPE == DWG_TYPE_ASSOCLOFTEDSURFACEACTIONBODY ||
+              DWG_TYPE == DWG_TYPE_ASSOCPATHACTIONPARAM ||
               DWG_TYPE == DWG_TYPE_ASSOCPERSSUBENTMANAGER ||
-              DWG_TYPE == DWG_TYPE_ASSOCACTION)
+              DWG_TYPE == DWG_TYPE_ASSOCREVOLVEDSURFACEACTIONBODY ||
+              DWG_TYPE == DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY ||
+              DWG_TYPE == DWG_TYPE_EXTRUDEDSURFACE ||
+              DWG_TYPE == DWG_TYPE_LOFTEDSURFACE ||
+              DWG_TYPE == DWG_TYPE_NURBSURFACE ||
+              DWG_TYPE == DWG_TYPE_REVOLVEDSURFACE)
             {
+              // not in DIST!
               error += test_code (prefix, "2004/Surface.dwg", cov);
               error += test_code (prefix, "2018/Surface.dwg", cov);
             }
@@ -280,14 +314,20 @@ main (int argc, char *argv[])
               error += test_code (prefix, "2004/Leader.dwg", cov);
               error += test_code (prefix, "2013/gh55-ltype.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_MLEADEROBJECTCONTEXTDATA
-              || DWG_TYPE == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
+          if (DWG_TYPE == DWG_TYPE_IDBUFFER)
+            {
+              // not in DIST!
+              error += test_code (prefix, "r14/missing_xref.dwg", cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_MLEADEROBJECTCONTEXTDATA ||
+              DWG_TYPE == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
             {
               // not in DIST!
               error += test_code (prefix, "2010/ACI_20160321_A_30_east.dwg",
                                   cov);
             }
-          if (DWG_TYPE == DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA)
+          if (DWG_TYPE == DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA ||
+              DWG_TYPE == DWG_TYPE_TEXTOBJECTCONTEXTDATA)
             {
               // not in DIST!
               error += test_code (prefix, "2013/gh55-ltype.dwg", cov);
@@ -365,14 +405,28 @@ main (int argc, char *argv[])
               DWG_TYPE == DWG_TYPE_ACSH_REVOLVE_CLASS ||
               DWG_TYPE == DWG_TYPE_ACSH_SWEEP_CLASS ||
               DWG_TYPE == DWG_TYPE_SKYLIGHT_BACKGROUND ||
+              DWG_TYPE == DWG_TYPE_MENTALRAYRENDERSETTINGS ||
               DWG_TYPE == DWG_TYPE_RENDERGLOBAL)
             {
               // not in DIST!
               error += test_code (prefix, "2010/visualization_-_condominium_with_skylight.dwg", cov);
             }
+          if (DWG_TYPE == DWG_TYPE_ACSH_PYRAMID_CLASS)
+            {
+              // not in DIST!
+              error += test_code (prefix, "2000/Pyramid.dwg", cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_ACSH_SPHERE_CLASS)
+            {
+              // not in DIST!
+              error += test_code (prefix, "2000/sphere.dwg", cov);
+              error += test_code (prefix, "2010/visualization_-_aerial.dwg", cov);
+            }
           if (DWG_TYPE == DWG_TYPE_ASSOCVARIABLE ||
               DWG_TYPE == DWG_TYPE_ASSOCVALUEDEPENDENCY ||
               DWG_TYPE == DWG_TYPE_ASSOCGEOMDEPENDENCY ||
+              DWG_TYPE == DWG_TYPE_ASSOC2DCONSTRAINTGROUP ||
+              DWG_TYPE == DWG_TYPE_DYNAMICBLOCKPROXYNODE ||
               DWG_TYPE == DWG_TYPE_BLOCKBASEPOINTPARAMETER ||
               DWG_TYPE == DWG_TYPE_BLOCKFLIPACTION ||
               DWG_TYPE == DWG_TYPE_BLOCKFLIPGRIP ||
@@ -383,9 +437,16 @@ main (int argc, char *argv[])
               DWG_TYPE == DWG_TYPE_BLOCKREPRESENTATION ||
               DWG_TYPE == DWG_TYPE_BLOCKROTATEACTION ||
               DWG_TYPE == DWG_TYPE_BLOCKROTATIONPARAMETER ||
-              DWG_TYPE == DWG_TYPE_BLOCKROTATIONGRIP)
+              DWG_TYPE == DWG_TYPE_BLOCKROTATIONGRIP ||
+              DWG_TYPE == DWG_TYPE_ASSOCDIMDEPENDENCYBODY)
             {
+              error += test_code (prefix, "2004/Dynblocks.dwg", cov);
               error += test_code (prefix, "2018/Dynblocks.dwg", cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_ASSOCARRAYACTIONBODY ||
+              DWG_TYPE == DWG_TYPE_ASSOCDIMDEPENDENCYBODY)
+            {
+              error += test_code (prefix, "2004/planetarygear.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_BLOCKSCALEACTION ||
               DWG_TYPE == DWG_TYPE_BLOCKMOVEACTION ||
@@ -394,6 +455,21 @@ main (int argc, char *argv[])
               error += test_code (prefix, "2018/Dynblocks.dwg", cov);
               error += test_code (prefix, "2010/sun_and_sky_demo.dwg", cov); // not in DIST
             }
+          if (DWG_TYPE == DWG_TYPE_BLOCKARRAYACTION ||
+              DWG_TYPE == DWG_TYPE_DGNDEFINITION ||
+              DWG_TYPE == DWG_TYPE_DGNUNDERLAY)
+            {
+              // not in DIST!
+              error += test_code (prefix, "../test-old/2004/from_uloz.to/Klánovice_RD_A.dwg", cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_BLOCKPOLARGRIP ||
+              DWG_TYPE == DWG_TYPE_BLOCKPOLARPARAMETER ||
+              DWG_TYPE == DWG_TYPE_BLOCKPOLARSTRETCHACTION)
+            {
+              // not in DIST!
+              error += test_code (prefix, "../test-old/2018/from_autocad_2021/Annotation - Metric.dwg", cov);
+              error += test_code (prefix, "../test-old/2018/from_autocad_2021/Annotation - Imperial.dwg", cov);
+            }
           if (DWG_TYPE == DWG_TYPE_BLOCKVISIBILITYPARAMETER ||
               DWG_TYPE == DWG_TYPE_BLOCKVISIBILITYGRIP ||
               DWG_TYPE == DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT)
@@ -401,11 +477,25 @@ main (int argc, char *argv[])
               error += test_code (prefix, "2018/Dynblocks.dwg", cov);
               error += test_code (prefix, "2013/gh44-error.dwg", cov);
             }
+          if (DWG_TYPE == DWG_TYPE_BLOCKHORIZONTALCONSTRAINTPARAMETER ||
+              DWG_TYPE == DWG_TYPE_BLOCKVERTICALCONSTRAINTPARAMETER ||
+              DWG_TYPE == DWG_TYPE_BLOCKPARAMDEPENDENCYBODY)
+            {
+              // not in DIST!
+              error += test_code (prefix, "../test-old/2000/1/Ashraf_Basic_File-1_Feet_input_2.dwg", cov);
+            }
           if (DWG_TYPE == DWG_TYPE_BLOCKALIGNMENTPARAMETER ||
               DWG_TYPE == DWG_TYPE_BLOCKALIGNMENTGRIP)
             {
               error += test_code (prefix, "2018/Dynblocks.dwg", cov);
               error += test_code (prefix, "2013/flipped.dwg", cov); // not in DIST
+            }
+          if (DWG_TYPE == DWG_TYPE_DYNAMICBLOCKPURGEPREVENTER)
+            {
+              // not in DIST!
+              error += test_code (prefix, "2013/gh55-ltype.dwg", cov);
+              error += test_code (prefix, "2007/anchor_dynamic_block.dwg", cov);
+              error += test_code (prefix, "2010/sun_and_sky_demo.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_BLOCKVISIBILITYGRIP ||
               DWG_TYPE == DWG_TYPE_EVALUATION_GRAPH ||
@@ -416,11 +506,7 @@ main (int argc, char *argv[])
             {
               error += test_code (prefix, "2013/gh44-error.dwg", cov);
               // not in DIST!
-              error += test_code (
-                  prefix,
-                  "../test-old/AC1021/from_knowledge.autodesk.com/"
-                  "blocks_and_tables_-_metric.dwg",
-                  cov);
+              error += test_code (prefix, "2007/blocks_and_tables_-_metric.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_BLOCKLOOKUPACTION ||
               DWG_TYPE == DWG_TYPE_BLOCKLOOKUPPARAMETER ||
@@ -430,10 +516,91 @@ main (int argc, char *argv[])
               // not in DIST!
               error += test_code (prefix, "2010/sun_and_sky_demo.dwg", cov);
             }
+          if (DWG_TYPE == DWG_TYPE_BLOCKXYGRIP)
+            {
+              // not in DIST!
+              error += test_code (prefix, "2010/sun_and_sky_demo.dwg", cov);
+              error += test_code (prefix, "2007/blocks_and_tables_-_metric.dwg", cov);
+              error += test_code (prefix, "2007/blocks_and_tables_-_imperial.dwg", cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_VBA_PROJECT)
+            {
+              // not in DIST!
+              error += test_code (prefix, "../test-old/2013/from_upcommons.upc.edu/DRAWINGS.dwg", cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_RAPIDRTRENDERSETTINGS)
+            {
+              // not in DIST!
+              error += test_code (prefix, "2013/JW.dwg", cov);
+              error += test_code (prefix, "2013/gh55-ltype.dwg", cov);
+              error += test_code (prefix, "2013/gh109_1.dwg", cov);
+              error += test_code (prefix, "2013/gh44-error.dwg", cov);
+              error += test_code (prefix, "2013/stelprdb1144445.dwg", cov);
+              error += test_code (prefix, "2013/nrcs141p2_034463.dwg", cov);
+              error += test_code (prefix, "2018/redwg1.dwg", cov);
+              if (g_countmax == 1000) // only with -a
+                error += test_code (prefix, "../test-big/2004/double_free_example.dwg", cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_RENDERENVIRONMENT)
+            {
+              // not in DIST!
+              error += test_code (prefix, "../test-old/2007/from_uloz.to/VBK_MODEL1.dwg", cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_RENDERENTRY)
+            {
+              // not in DIST!
+              error += test_code (prefix, "2007/ATMOS-DC22S.dwg", cov);
+              error += test_code (prefix, "2010/visualization_-_conference_room.dwg", cov);
+            }
           if (DWG_TYPE == DWG_TYPE_POINTCLOUDCOLORMAP)
             {
               // not in DIST!
-              error += test_code (prefix, "2004/double_free_example.dwg", cov);
+              if (g_countmax == 1000) // only with -a
+                error += test_code (prefix, "../test-big/2004/double_free_example.dwg", cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_RASTERVARIABLES)
+            {
+              // not in DIST!
+              error += test_code (prefix, "2000/passenger_drone.dwg", cov);
+              error += test_code (prefix, "2004/PLANO_MASSANASSA.dwg", cov);
+              error += test_code (prefix, "2007/SALLE_DES_MACHINES.dwg", cov);
+              error += test_code (prefix, "2013/nrcs141p2_034463.dwg", cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_SPATIAL_INDEX)
+            {
+              // not in DIST!
+              error += test_code (
+                  prefix,
+                  "../test-old/2004/from_uloz.to/00_005_POHLADY_Kl_A.dwg",
+                  cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_OBJECT_PTR)
+            {
+              // not in DIST!
+              error += test_code (
+                  prefix, "../test-old/r13c3/from_autocad_r14/asesmp.dwg",
+                  cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_ACMECOMMANDHISTORY ||
+              DWG_TYPE == DWG_TYPE_ACMESCOPE ||
+              DWG_TYPE == DWG_TYPE_ACMESTATEMGR)
+            {
+              // not in DIST!
+              error += test_code (prefix, "2013/JW.dwg", cov);
+              error += test_code (prefix, "../test-old/2010/AutoCAD_Mechanical_2019/Wheel_casing.dwg", cov);
+              error += test_code (prefix, "../test-old/2010/AutoCAD_Mechanical_2019/tray.dwg", cov);
+              error += test_code (prefix, "../test-old/2010/AutoCAD_Mechanical_2019/Trolley_Structure.dwg", cov);
+              error += test_code (prefix, "../test-old/2010/AutoCAD_Mechanical_2019/robot_handling_cell.dwg", cov);
+              error += test_code (prefix, "../test-old/2010/AutoCAD_Mechanical_2019/Pump_wheel.dwg", cov);
+              error += test_code (prefix, "../test-old/2010/AutoCAD_Mechanical_2019/Pump_cover.dwg", cov);
+              error += test_code (prefix, "../test-old/2010/AutoCAD_Mechanical_2019/LEVER_DETAIL.dwg", cov);
+              error += test_code (prefix, "../test-old/2010/AutoCAD_Mechanical_2019/GRIPPER.dwg", cov);
+              error += test_code (prefix, "../test-old/2010/AutoCAD_Mechanical_2019/GRIPPER_ASSEMBLY_NEW.dwg", cov);
+              error += test_code (prefix, "../test-old/2010/AutoCAD_Mechanical_2019/Gear_Pump_Subassy.dwg", cov);
+              error += test_code (prefix, "../test-old/2010/AutoCAD_Mechanical_2019/Drive_shaft.dwg", cov);
+              error += test_code (prefix, "../test-old/2010/AutoCAD_Mechanical_2019/Bottom_plate.dwg", cov);
+              error += test_code (prefix, "../test-old/2013/from_uloz.to/model-mechanical.dwg", cov);
+              error += test_code (prefix, "../test-old/2010/from_cadforum.cz/AMSTLSHAP2D.dwg", cov);
             }
         }
 #ifdef DWG_TYPE

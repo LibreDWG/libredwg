@@ -15,4 +15,6 @@ do
     echo "$t"
     # -a for all (no max 6), -n for no coverage checks
     @LTEXEC@ "test/unit-testing/$t" -an "$srcdir/test/test-data/"
+    @LTEXEC@ "test/unit-testing/$t" -an "$srcdir/test/test-big/"
+    @LTEXEC@ "test/unit-testing/$t" -an "$srcdir/test/test-old/"
 done

@@ -1,5 +1,5 @@
-//DEBUGGING
-#define DWG_TYPE DWG_TYPE_RENDERSETTINGS
+// DEBUGGING
+#define DWG_TYPE DWG_TYPE_RENDERENTRY
 #include "common.c"
 
 void
