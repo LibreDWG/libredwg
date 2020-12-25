@@ -6001,22 +6001,20 @@ add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
   EXPECT_INT_DXF ("class_version", 90, BL);
   FIELD_BL (unknown_0, 90);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("unknown_2", 90, BL);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("numassocsteps", 90, BL);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("numassocsubents", 90, BL);
-  pair = dxf_read_pair (dat);
-  EXPECT_INT_DXF ("num_steps", 90, BL);
+  FIELD_BL (unknown_2, 90);
+  FIELD_BL (numassocsteps, 90);
+  FIELD_BL (numassocsubents, 90);
+  FIELD_BL (num_steps, 90);
   if (o->num_steps)
     {
       o->steps = (BITCODE_BL*)xcalloc (o->num_steps, sizeof (BITCODE_BL));
       if (!o->steps)
-        return NULL;
+        return pair;
       for (unsigned i = 0; i < o->num_steps; i++)
         {
           pair = dxf_read_pair (dat);
+          if (pair->code != 90)
+            return pair;
           o->steps[i] = pair->value.u;
           LOG_TRACE ("%s.steps[%d] = %u [BL %d]\n", obj->name, i,
                      pair->value.u, pair->code);
