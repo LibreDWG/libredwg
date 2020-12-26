@@ -244,6 +244,13 @@ main (int argc, char *argv[])
               error += test_code_nodist (
                   prefix, "../test-old/r13/from_lx_viewer/small.dwg", cov);
             }
+          if (DWG_TYPE == DWG_TYPE_MINSERT)
+            {
+              error += test_code_nodist (
+                  prefix, "../test-old/r13/from_lx_viewer/small.dwg", cov);
+              error += test_code_nodist (prefix, "2000/passenger_drone.dwg", cov);
+              error += test_code_nodist (prefix, "2018/MInsert.dwg", cov);
+            }
           if (DWG_TYPE == DWG_TYPE_PDFUNDERLAY ||
               DWG_TYPE == DWG_TYPE_PDFDEFINITION)
             {
@@ -287,10 +294,20 @@ main (int argc, char *argv[])
               DWG_TYPE == DWG_TYPE_EXTRUDEDSURFACE ||
               DWG_TYPE == DWG_TYPE_LOFTEDSURFACE ||
               DWG_TYPE == DWG_TYPE_NURBSURFACE ||
-              DWG_TYPE == DWG_TYPE_REVOLVEDSURFACE)
+              DWG_TYPE == DWG_TYPE_REVOLVEDSURFACE ||
+              DWG_TYPE == DWG_TYPE_SWEPTSURFACE ||
+              DWG_TYPE == DWG_TYPE_MESH)
             {
               error += test_code (prefix, "2004/Surface.dwg", cov);
               error += test_code_nodist (prefix, "2018/Surface.dwg", cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_PLANESURFACE)
+            {
+              error += test_code (prefix, "2004/Surface.dwg", cov);
+              error += test_code_nodist (
+                  prefix, "2010/visualization_-_conference_room.dwg", cov);
+              error += test_code_nodist (
+                  prefix, "2010/visualization_-_aerial.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_ASSOCNETWORK)
             {
@@ -442,6 +459,11 @@ main (int argc, char *argv[])
             {
               error += test_code_nodist (prefix, "2004/planetarygear.dwg", cov);
             }
+          if (DWG_TYPE == DWG_TYPE_ASSOC3POINTANGULARDIMACTIONBODY)
+            {
+              error += test_code_nodist (prefix,
+                 "../test-old/2013/from_cadforum.cz/TwistRibbnConstThick_2.dwg", cov);
+            }
           if (DWG_TYPE == DWG_TYPE_BLOCKSCALEACTION ||
               DWG_TYPE == DWG_TYPE_BLOCKMOVEACTION ||
               DWG_TYPE == DWG_TYPE_BLOCKSTRETCHACTION)
@@ -557,7 +579,8 @@ main (int argc, char *argv[])
           if (DWG_TYPE == DWG_TYPE_POINTCLOUDCOLORMAP)
             {
               if (g_countmax == 1000) // only with -a
-                error += test_code_nodist (prefix, "../test-big/2004/double_free_example.dwg", cov);
+                error += test_code_nodist (prefix,
+                    "../test-big/2004/double_free_example.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_RASTERVARIABLES)
             {
