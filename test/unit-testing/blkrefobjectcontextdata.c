@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_BLKREFOBJECTCONTEXTDATA
 #include "common.c"
 
@@ -10,13 +10,11 @@ api_process (dwg_object *obj)
   BITCODE_B is_default;
   BITCODE_B has_xdic;
   BITCODE_H scale; /* DXF 340 */
-
   BITCODE_BD rotation;
   BITCODE_3BD ins_pt;
   BITCODE_3BD scale_factor;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_blkrefobjectcontextdata *_obj = dwg_object_to_BLKREFOBJECTCONTEXTDATA (obj);
 
   CHK_ENTITY_TYPE (_obj, BLKREFOBJECTCONTEXTDATA, class_version, BS);
@@ -26,5 +24,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLKREFOBJECTCONTEXTDATA, rotation, BD);
   CHK_ENTITY_3RD (_obj, BLKREFOBJECTCONTEXTDATA, ins_pt);
   CHK_ENTITY_3RD (_obj, BLKREFOBJECTCONTEXTDATA, scale_factor);
-#endif
 }

@@ -319,8 +319,8 @@ main (int argc, char *argv[])
             }
           if (DWG_TYPE == DWG_TYPE_BLKREFOBJECTCONTEXTDATA)
             {
-              error += test_code (prefix, "2004/Visualstyle.dwg", cov);
-              error += test_code (prefix, "2018/Visualstyle.dwg", cov);
+              error += test_code_nodist (prefix, "2004/Visualstyle.dwg", cov);
+              error += test_code_nodist (prefix, "2018/Visualstyle.dwg", cov);
               error += test_code_nodist (prefix, "2010/ACI_20160321_A_30_east.dwg",
                                          cov);
             }
@@ -335,17 +335,15 @@ main (int argc, char *argv[])
               error += test_code_nodist (prefix, "r14/missing_xref.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_MLEADEROBJECTCONTEXTDATA ||
-              DWG_TYPE == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
+              DWG_TYPE == DWG_TYPE_MTEXTOBJECTCONTEXTDATA ||
+              DWG_TYPE == DWG_TYPE_TEXTOBJECTCONTEXTDATA)
             {
               error += test_code_nodist (prefix, "2010/ACI_20160321_A_30_east.dwg",
                                   cov);
             }
-          if (DWG_TYPE == DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA ||
-              DWG_TYPE == DWG_TYPE_TEXTOBJECTCONTEXTDATA)
+          if (DWG_TYPE == DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA)
             {
               error += test_code_nodist (prefix, "2013/gh55-ltype.dwg", cov);
-              error += test_code_nodist (prefix, "2010/ACI_20160321_A_30_east.dwg",
-                                  cov);
             }
           if (DWG_TYPE == DWG_TYPE_FIELD || DWG_TYPE == DWG_TYPE_FIELDLIST)
             {

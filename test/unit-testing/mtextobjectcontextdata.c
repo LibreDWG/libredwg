@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_MTEXTOBJECTCONTEXTDATA
 #include "common.c"
 
@@ -26,8 +26,8 @@ api_process (dwg_object *obj)
   BITCODE_BD *column_heights;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_mtextobjectcontextdata *_obj = dwg_object_to_MTEXTOBJECTCONTEXTDATA (obj);
+
   // AcDbObjectContextData
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, is_default, B);
@@ -52,5 +52,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, flow_reversed, B);
   CHK_ENTITY_VECTOR_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, column_heights,
                           num_column_heights, BD);
-#endif
 }

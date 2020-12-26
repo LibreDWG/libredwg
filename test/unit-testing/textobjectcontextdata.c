@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_TEXTOBJECTCONTEXTDATA
 #include "common.c"
 
@@ -16,7 +16,6 @@ api_process (dwg_object *obj)
   BITCODE_2RD alignment_pt; 	/*!< DXF 11-21 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_textobjectcontextdata *_obj = dwg_object_to_TEXTOBJECTCONTEXTDATA (obj);
 
   CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, class_version, BS);
@@ -27,5 +26,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, rotation, BD);
   CHK_ENTITY_2RD (_obj, TEXTOBJECTCONTEXTDATA, ins_pt);
   CHK_ENTITY_2RD (_obj, TEXTOBJECTCONTEXTDATA, alignment_pt);
-#endif
 }

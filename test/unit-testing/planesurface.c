@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_PLANESURFACE
 #include "common.c"
 
@@ -8,13 +8,12 @@ api_process (dwg_object *obj)
   int error, isnew;
   _3DSOLID_FIELDS;
 
-  BITCODE_BS modeler_format_version; /*!< DXF 70 */
-  BITCODE_BS u_isolines;         /*!< DXF 71 */
-  BITCODE_BS v_isolines;         /*!< DXF 72 */
-  BITCODE_BL i, class_version; /*!< DXF 90 */
+  BITCODE_BS modeler_format_version;
+  BITCODE_BS u_isolines;
+  BITCODE_BS v_isolines;
+  BITCODE_BL i, class_version;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_ent_planesurface *_obj = dwg_object_to_PLANESURFACE (obj);
 
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, acis_empty, B);
@@ -50,5 +49,4 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, u_isolines, BS);
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, v_isolines, BS);
   CHK_ENTITY_TYPE (_obj, PLANESURFACE, class_version, BL);
-#endif
 }

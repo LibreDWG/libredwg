@@ -60,6 +60,11 @@ testobjects = \
 	appid_control \
 	arc \
 	arc_dimension \
+	aldimobjectcontextdata \
+	blkrefobjectcontextdata \
+	leaderobjectcontextdata \
+	mtextobjectcontextdata \
+	textobjectcontextdata \
 	assocaction \
 	assocnetwork \
 	assocdependency \
@@ -105,6 +110,7 @@ testobjects = \
 	camera \
 	cellstylemap \
 	circle \
+	datalink \
 	dbcolor \
 	dictionary \
 	dictionaryvar \
@@ -162,6 +168,7 @@ testobjects = \
 	ole2frame \
 	oleframe \
 	placeholder \
+	planesurface \
 	plotsettings \
 	point \
 	polyline_2d \
@@ -239,7 +246,6 @@ testdebug = \
 	acsh_loft_class \
 	acsh_revolve_class \
 	acsh_sweep_class \
-	aldimobjectcontextdata \
 	angdimobjectcontextdata \
 	annotscaleobjectcontextdata \
 	arcalignedtext \
@@ -271,13 +277,11 @@ testdebug = \
 	assocarraypathparameters \
 	assocarraypolarparameters \
 	assocarrayrectangularparameters \
-	blkrefobjectcontextdata \
 	assocdimdependencybody \
 	blockparamdependencybody \
 	contextdatamanager \
 	csacdocumentoptions \
 	curvepath \
-	datalink \
 	datatable \
 	dmdimobjectcontextdata \
 	dimassoc \
@@ -287,20 +291,17 @@ testdebug = \
 	geopositionmarker \
 	helix \
 	layoutprintconfig \
-	leaderobjectcontextdata \
 	loftedsurface \
 	mleaderobjectcontextdata \
 	motionpath \
 	mpolygon \
 	mtextattributeobjectcontextdata \
-	mtextobjectcontextdata \
 	navisworksmodel \
 	navisworksmodeldef \
 	nurbsurface \
 	orddimobjectcontextdata \
 	partial_viewing_index \
 	persubentmgr \
-	planesurface \
 	pointcloud \
 	pointcloudex \
 	pointclouddef \
@@ -318,7 +319,6 @@ testdebug = \
 	sweptsurface \
 	table \
 	tablecontent \
-	textobjectcontextdata \
 	tvdeviceproperties \
 	visibilityparameterentity \
 	visibilitygripentity \

@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_DATALINK
 #include "common.c"
 
@@ -29,7 +29,6 @@ api_process (dwg_object *obj)
   BITCODE_H hardowner;	/*<! DXF 360  */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_datalink *_obj = dwg_object_to_DATALINK (obj);
 
   CHK_ENTITY_TYPE (_obj, DATALINK, class_version, BS);
@@ -66,6 +65,4 @@ api_process (dwg_object *obj)
           }
     }
   CHK_ENTITY_H (_obj, DATALINK, hardowner);
-
-#endif
 }

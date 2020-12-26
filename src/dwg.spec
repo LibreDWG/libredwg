@@ -8777,6 +8777,56 @@ DWG_OBJECT (EVALUATION_GRAPH)
   //HANDLE_VECTOR (evalexpr, num_evalexpr, 5, 360);
 DWG_OBJECT_END
 
+DWG_ENTITY (PLANESURFACE)
+  DECODE_UNKNOWN_BITS
+  ACTION_3DSOLID;
+  FIELD_BS (modeler_format_version, 70); //def 1
+  //FIELD_BL (bindata_size, 90);
+  //FIELD_TF (bindata, FIELD_VALUE (bindata_size), 1); // in DXF as encrypted ASCII
+
+  SUBCLASS (AcDbSurface)
+  FIELD_BS (u_isolines, 71);
+  FIELD_BS (v_isolines, 72);
+  //SUBCLASS (AcDbPlaneSurface)
+  //FIELD_BL (class_version, 90);
+  //if (FIELD_VALUE (class_version) > 10)
+  //  return DWG_ERR_VALUEOUTOFBOUNDS;
+  COMMON_ENTITY_HANDLE_DATA;
+DWG_ENTITY_END
+
+#define AcDbObjectContextData_fields                                    \
+  SUBCLASS (AcDbObjectContextData);                                     \
+  FIELD_BS (class_version, 70);                                         \
+  FIELD_B (is_default, 290);                                            \
+  FIELD_B (has_xdic, 0) /* always 1 */
+
+#define AcDbAnnotScaleObjectContextData_fields                          \
+  AcDbObjectContextData_fields;                                         \
+  SUBCLASS (AcDbAnnotScaleObjectContextData);                           \
+  FIELD_HANDLE (scale, 2, 340)
+
+//  #ifdef IS_DXF
+//    FIELD_HANDLE_NAME (block, 2, BLOCK_HEADER);
+#define AcDbDimensionObjectContextData_fields           \
+  SUBCLASS (AcDbDimensionObjectContextData);            \
+  DXF { FIELD_HANDLE (dimension.block, 5, 2); }         \
+  DXF { FIELD_B (dimension.b293, 293); }                \
+  FIELD_2RD (dimension.def_pt, 10); /* text location */ \
+  DXF { VALUE_RD (0.0, 30); }                           \
+  FIELD_B (dimension.is_def_textloc, 294); /* 1 */      \
+  FIELD_BD (dimension.text_rotation, 140);              \
+  FIELD_HANDLE (dimension.block, 5, 0);                 \
+  FIELD_B (dimension.b293, 0);                          \
+  FIELD_B (dimension.dimtofl, 298);                     \
+  FIELD_B (dimension.dimosxd, 291);                     \
+  FIELD_B (dimension.dimatfit, 70);                     \
+  FIELD_B (dimension.dimtix, 292);                      \
+  FIELD_B (dimension.dimtmove, 71);                     \
+  FIELD_RC (dimension.override_code, 280);              \
+  FIELD_B (dimension.has_arrow2, 295);                  \
+  FIELD_B (dimension.flip_arrow2, 296);                 \
+  FIELD_B (dimension.flip_arrow1, 297)
+
 /*=============================================================================*/
 
 /* In work area:
@@ -9235,26 +9285,6 @@ DWG_ENTITY (NURBSURFACE)
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
-DWG_ENTITY (PLANESURFACE)
-
-  DECODE_UNKNOWN_BITS
-  ACTION_3DSOLID;
-  FIELD_BS (modeler_format_version, 70); //def 1
-  //FIELD_BL (bindata_size, 90);
-  //FIELD_TF (bindata, FIELD_VALUE (bindata_size), 1); // in DXF as encrypted ASCII
-
-  SUBCLASS (AcDbSurface)
-  FIELD_BS (u_isolines, 71);
-  FIELD_BS (v_isolines, 72);
-  //SUBCLASS (AcDbPlaneSurface)
-  //FIELD_BL (class_version, 90);
-  //if (FIELD_VALUE (class_version) > 10)
-  //  return DWG_ERR_VALUEOUTOFBOUNDS;
-
-  COMMON_ENTITY_HANDLE_DATA;
-
-DWG_ENTITY_END
-
 // (varies)
 // works ok on all example_20* but this coverage seems limited
 // The static variant
@@ -9561,52 +9591,9 @@ geoimage_height
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-#define AcDbObjectContextData_fields                                    \
-  SUBCLASS (AcDbObjectContextData);                                     \
-  FIELD_BS (class_version, 70);                                         \
-  FIELD_B (is_default, 290);                                            \
-  FIELD_B (has_xdic, 0) /* always 1 */
-
-#define AcDbAnnotScaleObjectContextData_fields                          \
-  AcDbObjectContextData_fields;                                         \
-  SUBCLASS (AcDbAnnotScaleObjectContextData);                           \
-  FIELD_HANDLE (scale, 2, 340)
-
-// DXF: 2 293 10 294 140 298 291 70 292 71 280 295 296 297
-//  #ifdef IS_DXF
-//    FIELD_HANDLE_NAME (block, 2, BLOCK_HEADER);
-#define AcDbDimensionObjectContextData_fields           \
-  SUBCLASS (AcDbDimensionObjectContextData);            \
-  DXF { FIELD_HANDLE (dimension.block, 5, 2); }         \
-  DXF { FIELD_B (dimension.b293, 293); }                \
-  FIELD_2RD (dimension.def_pt, 10); /* text location */ \
-  DXF { VALUE_RD (0.0, 30); }                           \
-  FIELD_B (dimension.is_def_textloc, 294); /* 1 */      \
-  FIELD_BD (dimension.text_rotation, 140);              \
-  FIELD_HANDLE (dimension.block, 5, 0);                 \
-  FIELD_B (dimension.b293, 0);                          \
-  FIELD_B (dimension.dimtofl, 298);                     \
-  FIELD_B (dimension.dimosxd, 291);                     \
-  FIELD_B (dimension.dimatfit, 70);                     \
-  FIELD_B (dimension.dimtix, 292);                      \
-  FIELD_B (dimension.dimtmove, 71);                     \
-  FIELD_RC (dimension.override_code, 280);              \
-  FIELD_B (dimension.has_arrow2, 295);                  \
-  FIELD_B (dimension.flip_arrow2, 296);                 \
-  FIELD_B (dimension.flip_arrow1, 297)
-
 DWG_OBJECT (ANNOTSCALEOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
   AcDbAnnotScaleObjectContextData_fields;
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (ALDIMOBJECTCONTEXTDATA)
-  DECODE_UNKNOWN_BITS
-  AcDbAnnotScaleObjectContextData_fields;
-  AcDbDimensionObjectContextData_fields;
-  SUBCLASS (AcDbAlignedDimensionObjectContextData)
-  FIELD_3BD (dimline_pt, 11);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -9658,17 +9645,6 @@ DWG_OBJECT (RADIMLGOBJECTCONTEXTDATA)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-DWG_OBJECT (BLKREFOBJECTCONTEXTDATA)
-  DECODE_UNKNOWN_BITS
-  AcDbAnnotScaleObjectContextData_fields;
-  SUBCLASS (AcDbBlkrefObjectContextData);
-  FIELD_BD (rotation, 50)
-  FIELD_3BD (ins_pt, 10);
-  FIELD_3BD_1 (scale_factor, 42);
-
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
 // TOLERANCE
 DWG_OBJECT (FCFOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
@@ -9679,36 +9655,11 @@ DWG_OBJECT (FCFOBJECTCONTEXTDATA)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-DWG_OBJECT (LEADEROBJECTCONTEXTDATA)
-  DECODE_UNKNOWN_BITS
-  AcDbAnnotScaleObjectContextData_fields;
-  SUBCLASS (AcDbLeaderObjectContextData)
-  FIELD_BL (num_points, 70); /* 3 */
-  FIELD_3DPOINT_VECTOR (points, num_points, 10);
-  FIELD_3DPOINT (x_direction, 11);
-  FIELD_B (b290, 290); /* 1 */
-  FIELD_3DPOINT (inspt_offset, 12);
-  FIELD_3DPOINT (endptproj, 13);
-
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
 DWG_OBJECT (MLEADEROBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
   AcDbAnnotScaleObjectContextData_fields;
   SUBCLASS (AcDbMLeaderObjectContextData)
   // ?? ...
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (TEXTOBJECTCONTEXTDATA)
-  DECODE_UNKNOWN_BITS
-  AcDbAnnotScaleObjectContextData_fields;
-  SUBCLASS (AcDbTextObjectContextData)
-  FIELD_BS (flag, 70); // 0
-  FIELD_BD (rotation, 50); // 0.0 or 90.0
-  FIELD_2RD (ins_pt, 10);
-  FIELD_2RD (alignment_pt, 11);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -9733,6 +9684,92 @@ DWG_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
       DXF { VALUE_TFF ( "Embedded Object", 101 ); }
       //CALL_ENTITY (SCALE, _obj->context);
     }
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+// (varies) TODO
+DWG_OBJECT (DATATABLE)
+  DECODE_UNKNOWN_BITS
+#ifdef IS_DXF
+  UNTIL (R_2000) {
+    SUBCLASS (ACDBDATATABLE)
+  } LATER_VERSIONS {
+    SUBCLASS (AcDbDataTable)
+  }
+#endif
+  DEBUG_HERE_OBJ
+  FIELD_BS (flags, 70);
+  FIELD_BL (num_cols, 90);
+  FIELD_BL (num_rows, 91);
+  FIELD_T (table_name, 1);
+  REPEAT (num_cols, cols, Dwg_DATATABLE_column)
+  REPEAT_BLOCK
+      SUB_FIELD_BL (cols[rcount1],type, 92);
+      SUB_FIELD_T (cols[rcount1],text, 2);
+
+      REPEAT2 (num_rows, cols[rcount1].rows, Dwg_DATATABLE_row) //CellType?
+      REPEAT_BLOCK
+          // almost like Dwg_TABLE_value
+          //switch case 1:
+          SUB_FIELD_BL (cols[rcount1].rows[rcount2],value.data_long, 93);
+          //switch case 2:
+          SUB_FIELD_BD (cols[rcount1].rows[rcount2],value.data_double, 40);
+          //switch case 3:
+          SUB_FIELD_T (cols[rcount1].rows[rcount2],value.data_string, 3);
+          SET_PARENT (cols[rcount1].rows[rcount2], &_obj->cols[rcount1]);
+      END_REPEAT_BLOCK
+      END_REPEAT (cols[rcount1].rows)
+      SET_PARENT_OBJ (cols[rcount1]);
+  END_REPEAT_BLOCK
+  END_REPEAT (cols)
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+#endif /* DEBUG_CLASS || IS_FREE */
+
+DWG_OBJECT (DATALINK)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbDataLink)
+  FIELD_T (data_adapter, 1);
+  FIELD_T (description, 300);
+  FIELD_T (tooltip, 301);
+  FIELD_T (connection_string, 302);
+  FIELD_BL (option, 90); // 2
+  FIELD_BL (update_option, 91); // 1179649
+  FIELD_BL (bl92, 92); // 1
+  FIELD_BS (year, 170);
+  FIELD_BS (month, 171);
+  FIELD_BS (day, 172);
+  FIELD_BS (hour, 173);
+  FIELD_BS (minute, 174);
+  FIELD_BS (seconds, 175);
+  FIELD_BS (msec, 176);
+  FIELD_BS (path_option, 177); // 1
+  FIELD_BL (bl93, 93); // 0
+  FIELD_T (update_status, 304);
+  FIELD_BL (num_customdata, 94); // 2
+  DXF { VALUE_TFF ("CUSTOMDATA", 305); }
+  DEBUG_HERE_OBJ
+  DXF { VALUE_TFF ("DATAMAP_BEGIN", 1); }
+  REPEAT (num_customdata, customdata, Dwg_DATALINK_customdata)
+  REPEAT_BLOCK
+      SUB_FIELD_HANDLE (customdata[rcount1],target, DWG_HDL_HARDOWN, 330);
+      // ACEXCEL_UPDATEOPTIONS, ACEXCEL_CONNECTION_STRING, ACEXCEL_SOURCEDATA
+      SUB_FIELD_T (customdata[rcount1],text, 304);
+      SET_PARENT_OBJ (customdata[rcount1]);
+  END_REPEAT_BLOCK
+  END_REPEAT (customdata)
+  DXF { VALUE_TFF ("DATAMAP_END", 309); }
+  FIELD_HANDLE (hardowner, DWG_HDL_HARDOWN, 360);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (ALDIMOBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
+  AcDbAnnotScaleObjectContextData_fields;
+  AcDbDimensionObjectContextData_fields;
+  SUBCLASS (AcDbAlignedDimensionObjectContextData)
+  FIELD_3BD (dimline_pt, 11);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -9778,82 +9815,41 @@ DWG_OBJECT (MTEXTOBJECTCONTEXTDATA)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-// (varies) TODO
-DWG_OBJECT (DATATABLE)
+DWG_OBJECT (TEXTOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
-#ifdef IS_DXF
-  UNTIL (R_2000) {
-    SUBCLASS (ACDBDATATABLE)
-  } LATER_VERSIONS {
-    SUBCLASS (AcDbDataTable)
-  }
-#endif
-  DEBUG_HERE_OBJ
-  FIELD_BS (flags, 70);
-  FIELD_BL (num_cols, 90);
-  FIELD_BL (num_rows, 91);
-  FIELD_T (table_name, 1);
-  REPEAT (num_cols, cols, Dwg_DATATABLE_column)
-  REPEAT_BLOCK
-      SUB_FIELD_BL (cols[rcount1],type, 92);
-      SUB_FIELD_T (cols[rcount1],text, 2);
-
-      REPEAT2 (num_rows, cols[rcount1].rows, Dwg_DATATABLE_row) //CellType?
-      REPEAT_BLOCK
-          // almost like Dwg_TABLE_value
-          //switch case 1:
-          SUB_FIELD_BL (cols[rcount1].rows[rcount2],value.data_long, 93);
-          //switch case 2:
-          SUB_FIELD_BD (cols[rcount1].rows[rcount2],value.data_double, 40);
-          //switch case 3:
-          SUB_FIELD_T (cols[rcount1].rows[rcount2],value.data_string, 3);
-          SET_PARENT (cols[rcount1].rows[rcount2], &_obj->cols[rcount1]);
-      END_REPEAT_BLOCK
-      END_REPEAT (cols[rcount1].rows)
-      SET_PARENT_OBJ (cols[rcount1]);
-  END_REPEAT_BLOCK
-  END_REPEAT (cols)
+  AcDbAnnotScaleObjectContextData_fields;
+  SUBCLASS (AcDbTextObjectContextData)
+  FIELD_BS (flag, 70); // 0
+  FIELD_BD (rotation, 50); // 0.0 or 90.0
+  FIELD_2RD (ins_pt, 10);
+  FIELD_2RD (alignment_pt, 11);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-DWG_OBJECT (DATALINK)
+DWG_OBJECT (BLKREFOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbDataLink)
-  FIELD_T (data_adapter, 1);
-  FIELD_T (description, 300);
-  FIELD_T (tooltip, 301);
-  FIELD_T (connection_string, 302);
-  FIELD_BL (option, 90); // 2
-  FIELD_BL (update_option, 91); // 1179649
-  FIELD_BL (bl92, 92); // 1
-  FIELD_BS (year, 170);
-  FIELD_BS (month, 171);
-  FIELD_BS (day, 172);
-  FIELD_BS (hour, 173);
-  FIELD_BS (minute, 174);
-  FIELD_BS (seconds, 175);
-  FIELD_BS (msec, 176);
-  FIELD_BS (path_option, 177); // 1
-  FIELD_BL (bl93, 93); // 0
-  FIELD_T (update_status, 304);
-  FIELD_BL (num_customdata, 94); // 2
-  DXF { VALUE_TFF ("CUSTOMDATA", 305); }
-  DEBUG_HERE_OBJ
-  DXF { VALUE_TFF ("DATAMAP_BEGIN", 1); }
-  REPEAT (num_customdata, customdata, Dwg_DATALINK_customdata)
-  REPEAT_BLOCK
-      SUB_FIELD_HANDLE (customdata[rcount1],target, DWG_HDL_HARDOWN, 330);
-      // ACEXCEL_UPDATEOPTIONS, ACEXCEL_CONNECTION_STRING, ACEXCEL_SOURCEDATA
-      SUB_FIELD_T (customdata[rcount1],text, 304);
-      SET_PARENT_OBJ (customdata[rcount1]);
-  END_REPEAT_BLOCK
-  END_REPEAT (customdata)
-  DXF { VALUE_TFF ("DATAMAP_END", 309); }
-  FIELD_HANDLE (hardowner, DWG_HDL_HARDOWN, 360);
+  AcDbAnnotScaleObjectContextData_fields;
+  SUBCLASS (AcDbBlkrefObjectContextData);
+  FIELD_BD (rotation, 50)
+  FIELD_3BD (ins_pt, 10);
+  FIELD_3BD_1 (scale_factor, 42);
+
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-#endif /* DEBUG_CLASS || IS_FREE */
+DWG_OBJECT (LEADEROBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
+  AcDbAnnotScaleObjectContextData_fields;
+  SUBCLASS (AcDbLeaderObjectContextData)
+  FIELD_BL (num_points, 70); /* 3 */
+  FIELD_3DPOINT_VECTOR (points, num_points, 10);
+  FIELD_3DPOINT (x_direction, 11);
+  FIELD_B (b290, 290); /* 1 */
+  FIELD_3DPOINT (inspt_offset, 12);
+  FIELD_3DPOINT (endptproj, 13);
+
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
 
 // stable and needed for the NOD
 DWG_OBJECT (DETAILVIEWSTYLE)

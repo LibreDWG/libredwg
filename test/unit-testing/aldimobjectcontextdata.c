@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_ALDIMOBJECTCONTEXTDATA
 #include "common.c"
 
@@ -11,7 +11,6 @@ api_process (dwg_object *obj)
   BITCODE_3BD dimline_pt;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_aldimobjectcontextdata *_obj = dwg_object_to_ALDIMOBJECTCONTEXTDATA (obj);
 
   CHK_ENTITY_TYPE (_obj, ALDIMOBJECTCONTEXTDATA, class_version, BS);
@@ -35,5 +34,4 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, flip_arrow1, B);
 
   CHK_ENTITY_3RD (_obj, ALDIMOBJECTCONTEXTDATA, dimline_pt);
-#endif
 }
