@@ -541,7 +541,9 @@ int dwg_fuzz_dat (Dwg_Data **restrict dwgp, Bit_Chain *restrict dat)
 
 //#define SET_ENT(var, name) if (0) exit(0)
 #define SET_ENT(var, name)                                       \
-      if (sscanf (p, #var".%s = %d", &s1[0], &i1))               \
+      if (!var)                                                  \
+        ;                                                        \
+      else if (sscanf (p, #var".%s = %d", &s1[0], &i1))          \
         dwg_dynapi_entity_set_value (var, #name, s1, &i1, 0);    \
       else if (sscanf (p, #var".%s = %lf", &s1[0], &f1))         \
         dwg_dynapi_entity_set_value (var, #name, s1, &f1, 0);    \
