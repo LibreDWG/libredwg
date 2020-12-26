@@ -6,7 +6,10 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  ASSOCARRAYCOMMONPARAMETERS_fields;
+  ASSOCARRAYPARAMETERS_fields;
+  BITCODE_BL numitems;
+  BITCODE_BL numrows;
+  BITCODE_BL numlevels;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
