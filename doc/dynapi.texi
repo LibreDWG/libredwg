@@ -1182,6 +1182,10 @@ T,	DXF 4
 @cindex entity, BODY
 @vindex BODY
 
+@indentedblock
+@xref{3DSOLID}
+@end indentedblock
+
 @strong{CAMERA} @anchor{CAMERA}
 @cindex entity, CAMERA
 @vindex CAMERA
@@ -1221,6 +1225,8 @@ BE,	DXF 210
 @strong{DGNUNDERLAY} @anchor{DGNUNDERLAY}
 @cindex entity, DGNUNDERLAY
 @vindex DGNUNDERLAY
+@anchor{UNDERLAY}
+@vindex UNDERLAY
 
 @indentedblock
 @vtable @code
@@ -1699,6 +1705,10 @@ BD,	DXF 40
 @strong{DWFUNDERLAY} @anchor{DWFUNDERLAY}
 @cindex entity, DWFUNDERLAY
 @vindex DWFUNDERLAY
+
+@indentedblock
+@xref{UNDERLAY}
+@end indentedblock
 
 @strong{ELLIPSE} @anchor{ELLIPSE}
 @cindex entity, ELLIPSE
@@ -3072,6 +3082,10 @@ TF,	DXF 310
 @cindex entity, PDFUNDERLAY
 @vindex PDFUNDERLAY
 
+@indentedblock
+@xref{UNDERLAY}
+@end indentedblock
+
 @strong{PLANESURFACE} @anchor{PLANESURFACE}
 @cindex entity, PLANESURFACE
 @vindex PLANESURFACE
@@ -3519,6 +3533,10 @@ struct _dwg_object_entity*
 @strong{REGION} @anchor{REGION}
 @cindex entity, REGION
 @vindex REGION
+
+@indentedblock
+@xref{3DSOLID}
+@end indentedblock
 
 @strong{REVOLVEDSURFACE} @anchor{REVOLVEDSURFACE}
 @cindex entity, REVOLVEDSURFACE
@@ -4394,9 +4412,17 @@ RC,	DXF 70
 @cindex entity, VERTEX_MESH
 @vindex VERTEX_MESH
 
+@indentedblock
+@xref{VERTEX_3D}
+@end indentedblock
+
 @strong{VERTEX_PFACE} @anchor{VERTEX_PFACE}
 @cindex entity, VERTEX_PFACE
 @vindex VERTEX_PFACE
+
+@indentedblock
+@xref{VERTEX_3D}
+@end indentedblock
 
 @strong{VERTEX_PFACE_FACE} @anchor{VERTEX_PFACE_FACE}
 @cindex entity, VERTEX_PFACE_FACE
@@ -4592,6 +4618,10 @@ H,	DXF 360
 @strong{XLINE} @anchor{XLINE}
 @cindex entity, XLINE
 @vindex XLINE
+
+@indentedblock
+@xref{RAY}
+@end indentedblock
 
 @strong{XYPARAMETERENTITY} @anchor{XYPARAMETERENTITY}
 @cindex entity, XYPARAMETERENTITY
@@ -12500,6 +12530,8 @@ H*,	DXF 340
 @strong{PDFDEFINITION} @anchor{PDFDEFINITION}
 @cindex object, PDFDEFINITION
 @vindex PDFDEFINITION
+@anchor{UNDERLAYDEFINITION}
+@vindex UNDERLAYDEFINITION
 
 @indentedblock
 @vtable @code
@@ -12518,13 +12550,23 @@ T
 @cindex object, DGNDEFINITION
 @vindex DGNDEFINITION
 
+@indentedblock
+@xref{UNDERLAYDEFINITION}
+@end indentedblock
+
 @strong{DWFDEFINITION} @anchor{DWFDEFINITION}
 @cindex object, DWFDEFINITION
 @vindex DWFDEFINITION
 
+@indentedblock
+@xref{UNDERLAYDEFINITION}
+@end indentedblock
+
 @strong{ASSOCARRAYMODIFYPARAMETERS} @anchor{ASSOCARRAYMODIFYPARAMETERS}
 @cindex object, ASSOCARRAYMODIFYPARAMETERS
 @vindex ASSOCARRAYMODIFYPARAMETERS
+@anchor{ASSOCARRAYPARAMETERS}
+@vindex ASSOCARRAYPARAMETERS
 
 @indentedblock
 @vtable @code
@@ -12553,13 +12595,25 @@ BL
 @cindex object, ASSOCARRAYPATHPARAMETERS
 @vindex ASSOCARRAYPATHPARAMETERS
 
+@indentedblock
+@xref{ASSOCARRAYPARAMETERS}
+@end indentedblock
+
 @strong{ASSOCARRAYPOLARPARAMETERS} @anchor{ASSOCARRAYPOLARPARAMETERS}
 @cindex object, ASSOCARRAYPOLARPARAMETERS
 @vindex ASSOCARRAYPOLARPARAMETERS
 
+@indentedblock
+@xref{ASSOCARRAYPARAMETERS}
+@end indentedblock
+
 @strong{ASSOCARRAYRECTANGULARPARAMETERS} @anchor{ASSOCARRAYRECTANGULARPARAMETERS}
 @cindex object, ASSOCARRAYRECTANGULARPARAMETERS
 @vindex ASSOCARRAYRECTANGULARPARAMETERS
+
+@indentedblock
+@xref{ASSOCARRAYPARAMETERS}
+@end indentedblock
 
 @strong{Dwg_3DSOLID_material} @anchor{Dwg_3DSOLID_material}
 @vindex Dwg_3DSOLID_material

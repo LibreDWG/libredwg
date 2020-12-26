@@ -900,9 +900,13 @@ sub out_struct {
   }
   if (exists $out_struct{$tmpl}) {
     warn "skip duplicate $tmpl\n";
+    my $see = $out_struct{$tmpl};
+    print $doc "\@indentedblock\n";
+    print $doc "\@xref{$see}\n";
+    print $doc "\@end indentedblock\n\n";
     return;
   }
-  $out_struct{$tmpl}++;
+  $out_struct{$tmpl} = $key;
   $n = "_dwg_$n" unless $n =~ /^_dwg_/;
   my @declarations = @{$s->{declarations}};
   if ($n =~ /^_dwg_(header_variables|object_object|object_entity)$/) {
@@ -1147,7 +1151,9 @@ for (<DATA>) {
       print $doc "All graphical objects with its fields. \@xref{Common Entity fields}\n\n";
       for (@entity_names) {
         print $doc "\@strong{$_} \@anchor{$_}\n\@cindex entity, $_\n",
-          "\@vindex $_\n\n" unless $_ eq 'DIMENSION_';
+          "\@vindex $_\n" unless $_ eq 'DIMENSION_';
+        print $doc "\@anchor{UNDERLAY}\n\@vindex UNDERLAY\n" if /^DGNUNDERLAY/;
+        print $doc "\n" unless $_ eq 'DIMENSION_';
         my $typedef = $c->typedef("Dwg_Entity_$_");
         # multiple type aliases, only emit one _field[]
         if ($typedef and $typedef->{type} ne "struct _dwg_entity_$_") {
@@ -1169,7 +1175,10 @@ for (<DATA>) {
       print $doc "\n\@node OBJECTS\n\@section OBJECTS\n\@cindex OBJECTS\n\n";
       print $doc "All non-graphical objects with its fields. \@xref{Common Object fields}\n\n";
       for (@object_names) {
-        print $doc "\@strong{$_} \@anchor{$_}\n\@cindex object, $_\n\@vindex $_\n\n";
+        print $doc "\@strong{$_} \@anchor{$_}\n\@cindex object, $_\n\@vindex $_\n";
+        print $doc "\@anchor{UNDERLAYDEFINITION}\n\@vindex UNDERLAYDEFINITION\n" if /^PDFDEFINITION/;
+        print $doc "\@anchor{ASSOCARRAYPARAMETERS}\n\@vindex ASSOCARRAYPARAMETERS\n" if /^ASSOCARRAYMODIFYPARAMETERS/;
+        print $doc "\n";
         my $typedef = $c->typedef("Dwg_Object_$_");
         if ($typedef and $typedef->{type} ne "struct _dwg_object_$_") {
           my $type = expand_typedef ($typedef->{type}); # unify to one struct
@@ -2065,7 +2074,17 @@ while (<$in>) {
     print $out "/* unstable */\n";
     out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
     print $out "/* debugging */\n";
-    out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
+    # without ASSOCARRAYPARAMETERS
+    my %DEBUGGING1 = %DEBUGGING;
+    delete %DEBUGGING1{qw(ASSOCARRAYMODIFYPARAMETERS ASSOCARRAYPATHPARAMETERS
+                         ASSOCARRAYPOLARPARAMETERS ASSOCARRAYRECTANGULARPARAMETERS)};
+    out_classes ($out, \@object_names, \%DEBUGGING1, $tmpl);
+    my %DEBUGGING2 = map {$_ => 1} qw(ASSOCARRAYMODIFYPARAMETERS ASSOCARRAYPATHPARAMETERS
+                                       ASSOCARRAYPOLARPARAMETERS ASSOCARRAYRECTANGULARPARAMETERS);
+    $tmpl = "typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS\t\tdwg_obj_\$lname;\n";
+    out_classes ($out, \@object_names, \%DEBUGGING2, $tmpl);
+
+    $tmpl = "typedef struct _dwg_object_\$name\t\tdwg_obj_\$lname;\n";
     out_classes ($out, \@object_names, \%UNHANDLED, "//".$tmpl);
     out_classes ($out, \@unhandled_names, \%UNHANDLED, "//".$tmpl);
     print $out "\n\n";
@@ -2435,7 +2454,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2439 "gen-dynapi.pl"
+#line 2458 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2521,7 +2540,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 @@list name_subclasses@@
 };
 
-#line 2525 "gen-dynapi.pl"
+#line 2544 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;
