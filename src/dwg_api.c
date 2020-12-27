@@ -21759,7 +21759,8 @@ dwg_object_to_object (dwg_object *restrict obj, int *restrict error)
   if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT)
     {
       *error = 0;
-      if (dwg_version == R_INVALID)
+      if ((dwg_version == R_INVALID)
+          && (obj->parent != NULL))
         dwg_version = (Dwg_Version_Type)obj->parent->header.version;
       return obj->tio.object;
     }
@@ -21790,6 +21791,11 @@ dwg_obj_obj_to_object (const dwg_obj_obj *restrict obj, int *restrict error)
       return NULL;
     }
   dwg = obj->dwg;
+  if (!dwg)
+    {
+      *error = 1;
+      return NULL;
+    }
   if (dwg_version == R_INVALID)
     dwg_version = (Dwg_Version_Type)dwg->header.version;
   if (obj->objid >= dwg->num_objects)
@@ -21824,7 +21830,7 @@ dwg_obj_generic_to_object (const void *restrict _vobj,
   if (_obj && _obj->parent)
     {
       dwg_data *dwg = _obj->parent->dwg;
-      dwg_object *retval = &dwg->object[_obj->parent->objid];
+      dwg_object *retval = dwg ? &dwg->object[_obj->parent->objid] : NULL;
       if (!dwg
           || _obj->parent->objid > dwg->num_objects
           || dwg->header.version > R_AFTER)
