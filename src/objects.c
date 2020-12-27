@@ -800,12 +800,12 @@ in_word_set (register const char *str, register size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str45,                            "LTYPE",                             DWG_TYPE_LTYPE,	0,	STABLE},
       {-1}, {-1}, {-1}, {-1},
 #line 163 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str50,             "ACDBASSOCARRAYACTIONBODY",          DWG_TYPE_ASSOCARRAYACTIONBODY,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str50,             "ACDBASSOCARRAYACTIONBODY",          DWG_TYPE_ASSOCARRAYACTIONBODY,	0,	UNSTABLE},
 #line 284 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str51,                           "LAYOUT",                            DWG_TYPE_LAYOUT,	0,	STABLE},
       {-1}, {-1}, {-1}, {-1},
 #line 164 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str56,       "ACDBASSOCARRAYMODIFYACTIONBODY",    DWG_TYPE_ASSOCARRAYMODIFYACTIONBODY,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str56,       "ACDBASSOCARRAYMODIFYACTIONBODY",    DWG_TYPE_ASSOCARRAYMODIFYACTIONBODY,	0,	DEBUGGING},
 #line 68 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str57,                   "ELLIPSE",                    DWG_TYPE_ELLIPSE,	1,	STABLE},
       {-1},

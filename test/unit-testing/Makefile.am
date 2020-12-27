@@ -250,6 +250,7 @@ testobjects = \
 	xrecord \
 	assoc2dconstraintgroup \
 	assocvariable \
+	assocarrayactionbody \
 	assocactionparam \
 	assocarraymodifyparameters \
 	assocarraypathparameters \
@@ -295,7 +296,6 @@ testdebug = \
 	angdimobjectcontextdata \
 	annotscaleobjectcontextdata \
 	arcalignedtext \
-	assocarrayactionbody \
 	assocarraymodifyactionbody \
 	assocmleaderactionbody \
 	assocedgechamferactionbody \

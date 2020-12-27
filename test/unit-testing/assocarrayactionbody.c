@@ -9,7 +9,7 @@ api_process (dwg_object *obj)
   BITCODE_H *deps;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_assocarrayactionbody *_obj = dwg_object_to_ASSOCARRAYACTIONBODY (obj);
 
   // ASSOCACTIONBODY
@@ -24,5 +24,5 @@ api_process (dwg_object *obj)
     {
       ok ("ASSOCARRAYACTIONBODY.transmatrix[%u]: %f", i, transmatrix[i]);
     }
- #endif
+  // #endif
 }
