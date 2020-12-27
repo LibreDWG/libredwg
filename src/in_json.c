@@ -2836,10 +2836,15 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                       if (memBEGINc (dxfname, "UNKNOWN_") || !saw_dxfname)
                         LOG_TRACE ("Changed dxfname %s => %s", obj->dxfname, dxfname)
                       else
-                        LOG_WARN ("Changed dxfname %s => %s", obj->dxfname, dxfname)
+                        LOG_WARN ("Changed wrong dxfname %s => %s", obj->dxfname, dxfname)
                     }
                   free (obj->dxfname);
                   obj->dxfname = strdup (dxfname);
+                  if (obj->type <= DWG_TYPE_LAYOUT && obj->fixedtype != obj->type)
+                    {
+                      LOG_WARN ("Changed wrong type %d => %d", obj->type, obj->fixedtype)
+                      obj->type = obj->fixedtype;
+                    }
                   if ((obj->supertype == DWG_SUPERTYPE_ENTITY && !isent)
                       || (obj->supertype == DWG_SUPERTYPE_OBJECT && isent))
                     {
@@ -2855,49 +2860,6 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                       break;
                     }
                 }
-
-#if 0
-              // clang-format off
-              // ADD_ENTITY by name
-              // check all objects
-
-              // if in CLASSES keep a high type
-#undef DWG_OBJECT
-#define DWG_OBJECT(token)                       \
-  if (strEQc (name, #token))                    \
-    {                                           \
-      obj->fixedtype = DWG_TYPE_##token;        \
-      if ((obj->fixedtype <= DWG_TYPE_OLE2FRAME \
-           || obj->type < 500)                  \
-          && obj->fixedtype != obj->type)       \
-        {                                       \
-          LOG_WARN ("Fixup wrong type %d for %s to %d", \
-                    obj->type, name, obj->fixedtype)    \
-          obj->type = obj->fixedtype;           \
-          break;                                \
-        }                                       \
-      goto found_ent;                           \
-    }                                           \
-  else
-#undef DWG_ENTITY
-#define DWG_ENTITY(token) DWG_OBJECT(token)
-
-              #include "objects.inc"
-              //final else
-              if (strEQc (name, "3DFACE"))
-                obj->fixedtype = DWG_TYPE__3DFACE;
-              else if (strEQc (name, "3DSOLID"))
-                obj->fixedtype = DWG_TYPE__3DSOLID;
-              else if (strEQc (name, "VERTEX_PFACE"))
-                obj->fixedtype = DWG_TYPE_VERTEX_PFACE;
-              else
-                LOG_WARN ("Unknown object %s", name);
-
-#undef DWG_OBJECT
-#undef DWG_ENTITY
-              // clang-format on
-            found_ent:
-#endif
               LOG_TRACE ("type: %d,\tfixedtype: %d\n", obj->type,
                          obj->fixedtype)
             }
