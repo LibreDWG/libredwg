@@ -687,9 +687,9 @@ typedef struct _dwg_object_VBA_PROJECT		dwg_obj_vba_project;
 typedef struct _dwg_object_VISUALSTYLE		dwg_obj_visualstyle;
 typedef struct _dwg_object_WIPEOUTVARIABLES		dwg_obj_wipeoutvariables;
 typedef struct _dwg_object_XRECORD		dwg_obj_xrecord;
-typedef struct _dwg_object_PDFDEFINITION		dwg_obj_pdfdefinition;
-typedef struct _dwg_object_DGNDEFINITION		dwg_obj_dgndefinition;
-typedef struct _dwg_object_DWFDEFINITION		dwg_obj_dwfdefinition;
+typedef struct _dwg_abstractobject_UNDERLAYDEFINITION		dwg_obj_pdfdefinition;
+typedef struct _dwg_abstractobject_UNDERLAYDEFINITION		dwg_obj_dgndefinition;
+typedef struct _dwg_abstractobject_UNDERLAYDEFINITION		dwg_obj_dwfdefinition;
 /* unstable */
 typedef struct _dwg_object_ACSH_BREP_CLASS		dwg_obj_acsh_brep_class;
 typedef struct _dwg_object_ACSH_CHAMFER_CLASS		dwg_obj_acsh_chamfer_class;

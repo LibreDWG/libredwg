@@ -2070,7 +2070,15 @@ while (<$in>) {
     $tmpl = "typedef struct _dwg_object_\$name\t\tdwg_obj_\$lname;\n";
     out_classes ($out, \@object_names, \%FIXED, $tmpl);
     print $out "/* untyped > 500 */\n";
-    out_classes ($out, \@object_names, \%STABLEVAR, $tmpl);
+    # without UNDERLAYDEFINITION
+    my %STABLEVAR1 = %STABLEVAR;
+    delete %STABLEVAR1{qw(PDFDEFINITION DGNDEFINITION DWFDEFINITION)};
+    out_classes ($out, \@object_names, \%STABLEVAR1, $tmpl);
+    my %STABLEVAR2 = map {$_ => 1} qw(PDFDEFINITION DGNDEFINITION DWFDEFINITION);
+    $tmpl = "typedef struct _dwg_abstractobject_UNDERLAYDEFINITION\t\tdwg_obj_\$lname;\n";
+    out_classes ($out, \@object_names, \%STABLEVAR2, $tmpl);
+    $tmpl = "typedef struct _dwg_object_\$name\t\tdwg_obj_\$lname;\n";
+
     print $out "/* unstable */\n";
     # without ASSOCARRAYPARAMETERS
     my %UNSTABLE1 = %UNSTABLE;

@@ -504,12 +504,16 @@ main (int argc, char *argv[])
               error += test_code (prefix, "2018/Dynblocks.dwg", cov);
               error += test_code_nodist (prefix, "2010/sun_and_sky_demo.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_BLOCKARRAYACTION ||
-              DWG_TYPE == DWG_TYPE_DGNDEFINITION ||
-              DWG_TYPE == DWG_TYPE_DGNUNDERLAY)
+          if (DWG_TYPE == DWG_TYPE_BLOCKARRAYACTION)
             {
               error += test_code_nodist (
                   prefix, "../test-old/2004/from_uloz.to/Klánovice_RD_A.dwg",
+                  cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_DGNDEFINITION)
+            {
+              error += test_code_nodist (
+                  prefix, "../test-old/2004/from_uloz.to/Klánovice_RD_A_situace.dwg",
                   cov);
             }
           if (DWG_TYPE == DWG_TYPE_BLOCKPOLARGRIP ||

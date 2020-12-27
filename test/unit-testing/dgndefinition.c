@@ -8,8 +8,8 @@ api_process (dwg_object *obj)
   BITCODE_T filename;
   BITCODE_T name;
 
-  dwg_obj_underlaydefinition *underlaydef = dwg_object_to_DGNDEFINITION (obj);
+  dwg_obj_dgndefinition *def = dwg_object_to_DGNDEFINITION (obj);
 
-  CHK_ENTITY_UTF8TEXT (underlaydef, DGNDEFINITION, filename);
-  CHK_ENTITY_UTF8TEXT (underlaydef, DGNDEFINITION, name);
+  CHK_ENTITY_UTF8TEXT (def, DGNDEFINITION, filename);
+  CHK_ENTITY_UTF8TEXT (def, DGNDEFINITION, name);
 }
