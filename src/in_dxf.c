@@ -172,6 +172,28 @@ static Dxf_Objs *dxf_objs;
                  pt.y, pt.z, pair->code - 20);                                \
       dxf_free_pair (pair);                                                   \
     }
+#define FIELD_3BD_1(field, dxf)                                               \
+  if (dxf)                                                                    \
+    {                                                                         \
+      BITCODE_3BD pt;                                                         \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_DXF (obj->name, #field, dxf);                                    \
+      pt.x = pair->value.d;                                                   \
+      dxf_free_pair (pair);                                                   \
+                                                                              \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_DXF (obj->name, #field, dxf + 1);                                \
+      pt.y = pair->value.d;                                                   \
+      dxf_free_pair (pair);                                                   \
+                                                                              \
+      pair = dxf_read_pair (dat);                                             \
+      EXPECT_DXF (obj->name, #field, dxf + 2);                                \
+      pt.z = pair->value.d;                                                   \
+      dwg_dynapi_entity_set_value (o, obj->name, #field, &pt, 1);             \
+      LOG_TRACE ("%s.%s = (%f, %f, %f) [3BD_1 %d]\n", obj->name, #field, pt.x,\
+                 pt.y, pt.z, pair->code - 2);                                 \
+      dxf_free_pair (pair);                                                   \
+    }
 #define FIELD_HANDLE(field, code, dxf)                                        \
   if (dxf)                                                                    \
     {                                                                         \
@@ -6012,6 +6034,65 @@ add_RENDERENTRY (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_BL (display_index, 90);
   return NULL;
 }
+// more Dynblocks:
+static Dxf_Pair *
+add_AcDbBlockParameter (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Object_BLOCKALIGNMENTGRIP *o = obj->tio.object->tio.BLOCKALIGNMENTGRIP;
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
+  // SUBCLASS (AcDbBlockParameter);
+  FIELD_B (show_properties, 280);
+  FIELD_B (chain_actions, 281);
+  return NULL;
+}
+#if 0
+static Dxf_Pair *
+add_AcDbBlockGrip (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Object_BLOCKALIGNMENTGRIP *o = obj->tio.object->tio.BLOCKALIGNMENTGRIP;
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
+  // SUBCLASS (AcDbBlockGrip)
+  FIELD_BL (bg_bl91, 91);
+  FIELD_BL (bg_bl92, 92);
+  FIELD_3BD (bg_location, 1010);
+  FIELD_B (bg_insert_cycling, 280);
+  FIELD_BLd (bg_insert_cycling_weight, 93);
+  return NULL;
+}
+#endif
+static Dxf_Pair *
+add_AcDbBlockGripExpr (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Object_BLOCKALIGNMENTGRIP *o = obj->tio.object->tio.BLOCKALIGNMENTGRIP;
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
+  // SUBCLASS (AcDbBlockGripExpr)
+  FIELD_BL (grip_type, 91); /* ?? */
+  FIELD_T (grip_expr, 300)
+  return NULL;
+}
+// also for BLOCKLINEARGRIP
+static Dxf_Pair *
+add_BLOCKALIGNMENTGRIP (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Object_BLOCKALIGNMENTGRIP *o = obj->tio.object->tio.BLOCKALIGNMENTGRIP;
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
+  FIELD_3BD_1 (orientation, 140);
+  return NULL;
+}
+static Dxf_Pair *
+add_BLOCKFLIPGRIP (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Object_BLOCKFLIPGRIP *o = obj->tio.object->tio.BLOCKFLIPGRIP;
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
+  FIELD_3BD_1 (orientation, 140);
+  FIELD_BL (combined_state, 93);
+  return NULL;
+}
 
 static Dxf_Pair *
 add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
@@ -9240,42 +9321,6 @@ new_object (char *restrict name, char *restrict dxfname,
                   else
                     goto start_loop; /* failure */
                 }
-              else if (strEQc (subclass, "AcDbRenderEnvironment"))
-                {
-                  dxf_free_pair (pair);
-                  pair = add_RENDERENVIRONMENT (obj, dat); // NULL for success
-                  if (!pair)
-                    goto next_pair;
-                  else
-                    goto start_loop; /* failure */
-                }
-              else if (strEQc (subclass, "AcDbRenderGlobal"))
-                {
-                  dxf_free_pair (pair);
-                  pair = add_RENDERGLOBAL (obj, dat); // NULL for success
-                  if (!pair)
-                    goto next_pair;
-                  else
-                    goto start_loop; /* failure */
-                }
-              else if (strEQc (subclass, "AcDbRenderEntry"))
-                {
-                  dxf_free_pair (pair);
-                  pair = add_RENDERENTRY (obj, dat); // NULL for success
-                  if (!pair)
-                    goto next_pair;
-                  else
-                    goto start_loop; /* failure */
-                }
-              else if (strEQc (subclass, "AcDbRenderSettings"))
-                {
-                  dxf_free_pair (pair);
-                  pair = add_RENDERSETTINGS (obj, dat); // NULL for success
-                  if (!pair)
-                    goto next_pair;
-                  else
-                    goto start_loop; /* failure */
-                }
               // with ASSOCDEPENDENCY or ACDBASSOCGEOMDEPENDENCY
               else if (strstr (obj->name, "ASSOC")
                        && strstr (obj->name, "DEPENDENCY")
@@ -9319,7 +9364,27 @@ new_object (char *restrict name, char *restrict dxfname,
                     goto start_loop; /* failure */
                 }
               // strict subclasses (functable?)
-              // DYNBLOCK
+#define CHK_SUBCLASS(cppname, addmethod)                                \
+  if (strEQc (subclass, #cppname))                                      \
+    {                                                                   \
+      dxf_free_pair (pair);                                             \
+      LOG_TRACE ("add_" #addmethod "\n")                                \
+      pair = add_##addmethod (obj, dat); /* NULL for success */         \
+      if (!pair)                                                        \
+        goto next_pair;                                                 \
+      else                                                              \
+        goto start_loop; /* failure */                                  \
+    }
+              else CHK_SUBCLASS (AcDbBlockParameter, AcDbBlockParameter)
+              else CHK_SUBCLASS (AcDbBlockGripExpr, AcDbBlockGripExpr)
+              else CHK_SUBCLASS (AcDbBlockAlignmentGrip, BLOCKALIGNMENTGRIP)
+              else CHK_SUBCLASS (AcDbBlockLinearGrip, BLOCKALIGNMENTGRIP)
+              else CHK_SUBCLASS (AcDbBlockFlipGrip, BLOCKFLIPGRIP)
+              else CHK_SUBCLASS (AcDbRenderEnvironment, RENDERENVIRONMENT)
+              else CHK_SUBCLASS (AcDbRenderGlobal, RENDERGLOBAL)
+              else CHK_SUBCLASS (AcDbRenderEntry, RENDERENTRY)
+              else CHK_SUBCLASS (AcDbRenderSettings, RENDERSETTINGS)
+              // more DYNBLOCKs
 #define else_do_strict_subclass(SUBCLASS)                                     \
   else if (strEQc (subclass, #SUBCLASS))                                      \
   {                                                                           \
