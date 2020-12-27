@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_ASSOC2DCONSTRAINTGROUP
 #include "common.c"
 
@@ -18,7 +17,7 @@ api_process (dwg_object *obj)
   Dwg_CONSTRAINTGROUPNODE *nodes;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_assoc2dconstraintgroup *_obj = dwg_object_to_ASSOC2DCONSTRAINTGROUP (obj);
   // ASSOCACTION
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, class_version, BS);
@@ -57,6 +56,5 @@ api_process (dwg_object *obj)
           ok ("CONSTRAINTGROUPNODE[%d].connections[%d]: %d", i, j, (int)_obj->nodes[i].connections[j]);
         }
     }
-  
-#endif
+  //#endif
 }

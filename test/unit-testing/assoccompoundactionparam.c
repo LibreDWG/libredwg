@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_ASSOCCOMPOUNDACTIONPARAM
 #include "common.c"
 
@@ -10,7 +10,7 @@ api_process (dwg_object *obj)
   ASSOCCOMPOUNDACTIONPARAM_fields;
   
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_assoccompoundactionparam *_obj = dwg_object_to_ASSOCCOMPOUNDACTIONPARAM (obj);
 
   CHK_ENTITY_TYPE (_obj, ASSOCCOMPOUNDACTIONPARAM, is_r2013, BS);
@@ -28,5 +28,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H    (_obj, ASSOCCOMPOUNDACTIONPARAM, h330_2);
   CHK_ENTITY_TYPE (_obj, ASSOCCOMPOUNDACTIONPARAM, bl2, BL);
   CHK_ENTITY_H    (_obj, ASSOCCOMPOUNDACTIONPARAM, h330_3);
-#endif
+  //#endif
 }

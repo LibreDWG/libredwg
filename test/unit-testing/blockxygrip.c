@@ -9,7 +9,7 @@ api_process (dwg_object *obj)
   BLOCKGRIP_fields;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_blockxygrip *_obj = dwg_object_to_BLOCKXYGRIP (obj);
 
   CHK_EVALEXPR (BLOCKXYGRIP);
@@ -24,5 +24,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD  (_obj, BLOCKXYGRIP, bg_location);
   CHK_ENTITY_TYPE (_obj, BLOCKXYGRIP, bg_insert_cycling, B);
   CHK_ENTITY_TYPE (_obj, BLOCKXYGRIP, bg_insert_cycling_weight, BLd);
-#endif
+  //#endif
 }

@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// TODO unstable
 #define DWG_TYPE DWG_TYPE_ASSOCOSNAPPOINTREFACTIONPARAM
 #include "common.c"
 
@@ -14,7 +14,7 @@ api_process (dwg_object *obj)
   BITCODE_BD param; // 40 -1.0
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_assocosnappointrefactionparam *_obj = dwg_object_to_ASSOCOSNAPPOINTREFACTIONPARAM (obj);
 
   CHK_ENTITY_TYPE (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, is_r2013, BS);
@@ -36,5 +36,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_MAX  (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, status, BS, 7);
   CHK_ENTITY_TYPE (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, osnap_mode, RS);
   CHK_ENTITY_TYPE (_obj, ASSOCOSNAPPOINTREFACTIONPARAM, param, BD);
-#endif
+  //#endif
 }

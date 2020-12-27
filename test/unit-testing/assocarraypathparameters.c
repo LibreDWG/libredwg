@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// unstable
 #define DWG_TYPE DWG_TYPE_ASSOCARRAYPATHPARAMETERS
 #include "common.c"
 
@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
   BITCODE_BL numlevels;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_assocarraypathparameters *_obj = dwg_object_to_ASSOCARRAYPATHPARAMETERS (obj);
   
   CHK_ENTITY_TYPE (_obj, ASSOCARRAYPATHPARAMETERS, aap_version, BL);
@@ -41,6 +41,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCARRAYPATHPARAMETERS, numitems, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCARRAYPATHPARAMETERS, numrows, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCARRAYPATHPARAMETERS, numlevels, BL);
-
-#endif
+  //#endif
 }

@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// TODO unstable
 #define DWG_TYPE DWG_TYPE_ASSOCVERTEXACTIONPARAM
 #include "common.c"
 
@@ -15,7 +15,7 @@ api_process (dwg_object *obj)
   BITCODE_3BD pt;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_assocvertexactionparam *_obj = dwg_object_to_ASSOCVERTEXACTIONPARAM (obj);
 
   CHK_ENTITY_TYPE (_obj, ASSOCVERTEXACTIONPARAM, is_r2013, BS);
@@ -26,5 +26,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H    (_obj, ASSOCVERTEXACTIONPARAM, dep);
   CHK_ENTITY_TYPE (_obj, ASSOCVERTEXACTIONPARAM, class_version, BL);
   CHK_ENTITY_3RD  (_obj, ASSOCVERTEXACTIONPARAM, pt);
-#endif
+  //#endif
 }

@@ -13,7 +13,7 @@ api_process (dwg_object *obj)
   BITCODE_3BD def_label_pt; /* DXF 1011 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_blockpointparameter *_obj = dwg_object_to_BLOCKPOINTPARAMETER (obj);
 
   CHK_EVALEXPR (BLOCKPOINTPARAMETER);
@@ -35,5 +35,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKPOINTPARAMETER, position_name);
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKPOINTPARAMETER, position_desc);
   CHK_ENTITY_3RD (_obj, BLOCKPOINTPARAMETER, def_label_pt);
-#endif
+  //#endif
 }

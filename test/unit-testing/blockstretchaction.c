@@ -18,7 +18,7 @@ api_process (dwg_object *obj)
   BLOCKACTION_doubles_fields;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_blockstretchaction *_obj = dwg_object_to_BLOCKSTRETCHACTION (obj);
 
   // AcDbBlockAction
@@ -44,5 +44,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, action_offset_x, BD);
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, action_offset_y, BD);
   CHK_ENTITY_TYPE (_obj, BLOCKSTRETCHACTION, angle_offset, BD);
-#endif
+  //#endif
 }

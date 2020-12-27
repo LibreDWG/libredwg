@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// TODO unstable
 #define DWG_TYPE DWG_TYPE_ASSOCPATHACTIONPARAM
 #include "common.c"
 
@@ -23,7 +23,7 @@ api_process (dwg_object *obj)
   BITCODE_BL version;	/*!< DXF 90 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_assocpathactionparam *_obj = dwg_object_to_ASSOCPATHACTIONPARAM (obj);
 
   CHK_ENTITY_TYPE (_obj, ASSOCPATHACTIONPARAM, is_r2013, BS);
@@ -43,5 +43,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H    (_obj, ASSOCPATHACTIONPARAM, h330_3);
 
   CHK_ENTITY_TYPE (_obj, ASSOCPATHACTIONPARAM, version, BL);
-#endif
+  //#endif
 }

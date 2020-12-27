@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// TODO unstable
 #define DWG_TYPE DWG_TYPE_ASSOCPOINTREFACTIONPARAM
 #include "common.c"
 
@@ -21,7 +21,7 @@ api_process (dwg_object *obj)
   BITCODE_H h330_3;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_assocpointrefactionparam *_obj = dwg_object_to_ASSOCPOINTREFACTIONPARAM (obj);
 
   CHK_ENTITY_TYPE (_obj, ASSOCPOINTREFACTIONPARAM, is_r2013, BS);
@@ -39,5 +39,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H    (_obj, ASSOCPOINTREFACTIONPARAM, h330_2);
   CHK_ENTITY_TYPE (_obj, ASSOCPOINTREFACTIONPARAM, bl2, BL);
   CHK_ENTITY_H    (_obj, ASSOCPOINTREFACTIONPARAM, h330_3);
-#endif
+  //#endif
 }

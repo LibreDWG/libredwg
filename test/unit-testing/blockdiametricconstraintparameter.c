@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_BLOCKDIAMETRICCONSTRAINTPARAMETER
 #include "common.c"
 
@@ -14,7 +13,7 @@ api_process (dwg_object *obj)
   BLOCKPARAMVALUESET_fields;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_blockdiametricconstraintparameter *_obj = dwg_object_to_BLOCKDIAMETRICCONSTRAINTPARAMETER (obj);
 
   CHK_EVALEXPR (BLOCKDIAMETRICCONSTRAINTPARAMETER);
@@ -54,5 +53,5 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE (_obj->value_set, BLOCKPARAMVALUESET, num_valuelist, BS);
   CHK_SUBCLASS_VECTOR_TYPE (_obj->value_set, BLOCKPARAMVALUESET, valuelist,
                             _obj->value_set.num_valuelist, BD);
-#endif
+  //#endif
 }

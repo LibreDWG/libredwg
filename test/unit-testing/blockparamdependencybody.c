@@ -11,7 +11,7 @@ api_process (dwg_object *obj)
   BITCODE_BS class_version;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_blockparamdependencybody *_obj = dwg_object_to_BLOCKPARAMDEPENDENCYBODY (obj);
 
   // AcDbAssocDependencyBody:
@@ -24,5 +24,5 @@ api_process (dwg_object *obj)
   // AcDbBlockParameterDependencyBody
   CHK_ENTITY_TYPE (_obj, BLOCKPARAMDEPENDENCYBODY, class_version, BL);
   CHK_ENTITY_MAX  (_obj, BLOCKPARAMDEPENDENCYBODY, class_version, BL, 0);
-#endif
+  //#endif
 }

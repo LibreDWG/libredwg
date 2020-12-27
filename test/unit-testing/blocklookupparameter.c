@@ -14,7 +14,7 @@ api_process (dwg_object *obj)
   BITCODE_T unknown_t;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_blocklookupparameter *_obj = dwg_object_to_BLOCKLOOKUPPARAMETER (obj);
 
   CHK_EVALEXPR (BLOCKLOOKUPPARAMETER);
@@ -37,5 +37,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKLOOKUPPARAMETER, lookup_desc);
   CHK_ENTITY_TYPE (_obj, BLOCKLOOKUPPARAMETER, index, BL);
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKLOOKUPPARAMETER, unknown_t);
-#endif
+  //#endif
 }

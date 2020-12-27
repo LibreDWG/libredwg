@@ -1,4 +1,4 @@
-// TODO DEBUGGING
+// TODO unstable
 #define DWG_TYPE DWG_TYPE_ASSOCVARIABLE
 #include "common.c"
 
@@ -19,7 +19,7 @@ api_process (dwg_object *obj)
   BITCODE_B b290;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_assocvariable *_obj = dwg_object_to_ASSOCVARIABLE (obj);
 
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, av_class_version, BS);
@@ -79,5 +79,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, has_t78, B);
   CHK_ENTITY_UTF8TEXT (_obj, ASSOCVARIABLE, t78);
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, b290, B);
-#endif
+  //#endif
 }

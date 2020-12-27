@@ -13,9 +13,9 @@ api_process (dwg_object *obj)
   dwg_obj_assocarrayactionbody *_obj = dwg_object_to_ASSOCARRAYACTIONBODY (obj);
 
   // ASSOCACTIONPARAM:
-  CHK_ENTITY_TYPE (_obj, ASSOCARRAYMODIFYACTIONBODY, is_r2013, BS);
-  CHK_ENTITY_TYPE (_obj, ASSOCARRAYMODIFYACTIONBODY, aap_version, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, ASSOCARRAYMODIFYACTIONBODY, name);
+  CHK_ENTITY_TYPE (_obj, ASSOCARRAYACTIONBODY, is_r2013, BS);
+  CHK_ENTITY_TYPE (_obj, ASSOCARRAYACTIONBODY, aap_version, BL);
+  CHK_ENTITY_UTF8TEXT (_obj, ASSOCARRAYACTIONBODY, name);
   CHK_ASSOCPARAMBASEDACTIONBODY (ASSOCARRAYACTIONBODY);
 
   CHK_ENTITY_TYPE (_obj, ASSOCARRAYACTIONBODY, aaab_version, BL);
@@ -26,5 +26,5 @@ api_process (dwg_object *obj)
     {
       ok ("ASSOCARRAYACTIONBODY.aaab_transmatrix[%u]: %f", i, aaab_transmatrix[i]);
     }
-#endif
+ #endif
 }

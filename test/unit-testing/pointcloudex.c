@@ -41,7 +41,7 @@ api_process (dwg_object *obj)
   BITCODE_3BD *vertices;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_ent_pointcloudex *_obj = dwg_object_to_POINTCLOUDEX (obj);
 
   CHK_ENTITY_TYPE (_obj, POINTCLOUDEX, class_version, BS);
@@ -89,5 +89,5 @@ api_process (dwg_object *obj)
         CHK_SUBCLASS_TYPE (croppings[i], POINTCLOUDEX_Croppings, num_pts, BL);
         CHK_SUBCLASS_3DPOINTS (croppings[i], POINTCLOUDEX_Croppings, pts, croppings[i].num_pts);
       }
-#endif
+  //#endif
 }

@@ -95,6 +95,8 @@ testobjects = \
 	block_control \
 	block_header \
 	blockgriplocationcomponent \
+	blockalignmentgrip \
+	blockalignmentparameter \
 	blockbasepointparameter \
 	blockflipaction \
 	blockflipparameter \
@@ -105,11 +107,12 @@ testobjects = \
 	blockmoveaction \
 	blockpolargrip \
 	blockpolarparameter \
+	blockrotationgrip \
 	blockscaleaction \
 	blockrotationparameter \
-	blockxyparameter \
 	blockvisibilitygrip \
 	blockvisibilityparameter \
+	blockxyparameter \
 	body \
 	camera \
 	cellstylemap \
@@ -179,6 +182,13 @@ testobjects = \
 	polyline_3d \
 	polyline_mesh \
 	polyline_pface \
+	pointcloud \
+	pointcloudex \
+	pointclouddef \
+	pointclouddefex \
+	pointclouddef_reactor \
+	pointclouddef_reactor_ex \
+	pointcloudcolormap \
 	proxy_entity \
 	proxy_object \
 	rapidrtrendersettings \
@@ -237,7 +247,39 @@ testobjects = \
 	wipeout \
 	wipeoutvariables \
 	xline \
-	xrecord
+	xrecord \
+	assoc2dconstraintgroup \
+	assocvariable \
+	assocactionparam \
+	assocarraymodifyparameters \
+	assocarraypathparameters \
+	assocarraypolarparameters \
+	assocarrayrectangularparameters \
+	assocasmbodyactionparam \
+	assoccompoundactionparam \
+	assocfaceactionparam \
+	assocobjectactionparam \
+	assocpathactionparam \
+	assocpointrefactionparam \
+	assocvertexactionparam \
+	assocosnappointrefactionparam \
+	blockparamdependencybody \
+	blockalignedconstraintparameter \
+	blockangularconstraintparameter \
+	blockarrayaction \
+	blockdiametricconstraintparameter \
+	blockhorizontalconstraintparameter \
+	blocklinearconstraintparameter \
+	blockradialconstraintparameter \
+	blockverticalconstraintparameter \
+	blocklookupaction \
+	blocklookupparameter \
+	blockpointparameter \
+	blockpolarstretchaction \
+	blockrotateaction \
+	blockstretchaction \
+	blockuserparameter \
+	blockxygrip
 
 # NB: After you modify this list, do "make update-ignorance"
 #     and include this directory's .gitignore in the commit.
@@ -253,10 +295,9 @@ testdebug = \
 	angdimobjectcontextdata \
 	annotscaleobjectcontextdata \
 	arcalignedtext \
-	assoc2dconstraintgroup \
-	assocmleaderactionbody \
 	assocarrayactionbody \
 	assocarraymodifyactionbody \
+	assocmleaderactionbody \
 	assocedgechamferactionbody \
 	assocedgefilletactionbody \
 	assocrestoreentitystateactionbody \
@@ -266,22 +307,7 @@ testdebug = \
 	assocrotateddimactionbody \
 	assocsweptsurfaceactionbody \
 	assocperssubentmanager \
-	assocvariable \
-	assocactionparam \
-	assocosnappointrefactionparam \
-	assocasmbodyactionparam \
 	assocedgeactionparam \
-	assoccompoundactionparam \
-	assocfaceactionparam \
-	assocobjectactionparam \
-	assocpathactionparam \
-	assocpointrefactionparam \
-	assocvertexactionparam \
-	assocarraymodifyparameters \
-	assocarraypathparameters \
-	assocarraypolarparameters \
-	assocarrayrectangularparameters \
-	blockparamdependencybody \
 	contextdatamanager \
 	csacdocumentoptions \
 	curvepath \
@@ -304,13 +330,6 @@ testdebug = \
 	orddimobjectcontextdata \
 	partial_viewing_index \
 	persubentmgr \
-	pointcloud \
-	pointcloudex \
-	pointclouddef \
-	pointclouddefex \
-	pointclouddef_reactor \
-	pointclouddef_reactor_ex \
-	pointcloudcolormap \
 	pointpath \
 	polargripentity \
 	radimobjectcontextdata \
@@ -326,27 +345,8 @@ testdebug = \
 	visibilitygripentity \
 	alignmentparameterentity \
 	basepointparameterentity \
-	blockalignedconstraintparameter \
-	blockalignmentgrip \
-	blockalignmentparameter \
-	blockangularconstraintparameter \
-	blockarrayaction \
-	blockdiametricconstraintparameter \
-	blockhorizontalconstraintparameter \
-	blocklinearconstraintparameter \
-	blocklookupaction \
-	blocklookupparameter \
-	blockpointparameter \
-	blockpolarstretchaction \
 	blockpropertiestable \
 	blockpropertiestablegrip \
-	blockradialconstraintparameter \
-	blockrotateaction \
-	blockrotationgrip \
-	blockstretchaction \
-	blockuserparameter \
-	blockverticalconstraintparameter \
-	blockxygrip \
 	dynamicblockproxynode \
 	flipparameterentity \
 	linearparameterentity \

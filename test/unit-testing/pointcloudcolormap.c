@@ -18,7 +18,7 @@ api_process (dwg_object *obj)
   Dwg_ColorRamp *ramps;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_pointcloudcolormap *_obj = dwg_object_to_POINTCLOUDCOLORMAP (obj);
 
   CHK_ENTITY_TYPE (_obj, POINTCLOUDCOLORMAP, class_version, BS);
@@ -73,5 +73,5 @@ api_process (dwg_object *obj)
               CHK_SUBCLASS_TYPE (ramps[j], ColorRamp, unknown_b, B);
             }
       }
-#endif
+  //#endif
 }

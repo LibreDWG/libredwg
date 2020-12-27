@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_BLOCKHORIZONTALCONSTRAINTPARAMETER
 #include "common.c"
 
@@ -11,7 +10,7 @@ api_process (dwg_object *obj)
   BLOCKLINEARCONSTRAINTPARAMETER_fields;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_blockhorizontalconstraintparameter *_obj = dwg_object_to_BLOCKHORIZONTALCONSTRAINTPARAMETER (obj);
 
   CHK_EVALEXPR (BLOCKHORIZONTALCONSTRAINTPARAMETER);
@@ -39,9 +38,9 @@ api_process (dwg_object *obj)
   // AcDbBlockConstraintParameter
   CHK_ENTITY_H (_obj, BLOCKHORIZONTALCONSTRAINTPARAMETER, dependency);
   // AcDbBlockLinearConstraintParameter
-  CHK_ENTITY_UTF8TEXT (_obj, BLOCKLINEARCONSTRAINTPARAMETER, expr_name);
-  CHK_ENTITY_UTF8TEXT (_obj, BLOCKLINEARCONSTRAINTPARAMETER, expr_description);
-  CHK_ENTITY_TYPE (_obj, BLOCKLINEARCONSTRAINTPARAMETER, value, BD);
+  CHK_ENTITY_UTF8TEXT (_obj, BLOCKHORIZONTALCONSTRAINTPARAMETER, expr_name);
+  CHK_ENTITY_UTF8TEXT (_obj, BLOCKHORIZONTALCONSTRAINTPARAMETER, expr_description);
+  CHK_ENTITY_TYPE (_obj, BLOCKHORIZONTALCONSTRAINTPARAMETER, value, BD);
   // AcDbBlockParamValueSet
   CHK_SUBCLASS_UTF8TEXT (_obj->value_set, BLOCKPARAMVALUESET, desc);
   CHK_SUBCLASS_TYPE (_obj->value_set, BLOCKPARAMVALUESET, flags, BL);
@@ -51,5 +50,5 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE (_obj->value_set, BLOCKPARAMVALUESET, num_valuelist, BS);
   CHK_SUBCLASS_VECTOR_TYPE (_obj->value_set, BLOCKPARAMVALUESET, valuelist,
                             _obj->value_set.num_valuelist, BD);
-#endif
+  //#endif
 }

@@ -32,7 +32,7 @@ api_process (dwg_object *obj)
   BITCODE_2RD *vertices;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_ent_pointcloud *_obj = dwg_object_to_POINTCLOUD (obj);
 
   CHK_ENTITY_TYPE (_obj, POINTCLOUD, class_version, BS);
@@ -89,5 +89,5 @@ api_process (dwg_object *obj)
           CHK_SUBCLASS_TYPE (clippings[i], POINTCLOUD_Clippings, z_max, BD);
         }
   }
-#endif
+  //#endif
 }

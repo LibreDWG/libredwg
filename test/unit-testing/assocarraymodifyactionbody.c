@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
   Dwg_ARRAYITEMLOCATOR *items;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_assocarraymodifyactionbody *_obj = dwg_object_to_ASSOCARRAYMODIFYACTIONBODY (obj);
   bool good = 1;
 
@@ -55,5 +55,5 @@ api_process (dwg_object *obj)
       //ok ("ASSOCARRAYACTIONBODY.items[%d].itemloc[1]: " FORMAT_BL, i, items[i].itemloc[1]);
       //ok ("ASSOCARRAYACTIONBODY.items[%d].itemloc[2]: " FORMAT_BL, i, items[i].itemloc[2]);
     }  
-#endif
+  //#endif
 }

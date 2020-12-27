@@ -2072,19 +2072,19 @@ while (<$in>) {
     print $out "/* untyped > 500 */\n";
     out_classes ($out, \@object_names, \%STABLEVAR, $tmpl);
     print $out "/* unstable */\n";
-    out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
-    print $out "/* debugging */\n";
     # without ASSOCARRAYPARAMETERS
-    my %DEBUGGING1 = %DEBUGGING;
-    delete %DEBUGGING1{qw(ASSOCARRAYMODIFYPARAMETERS ASSOCARRAYPATHPARAMETERS
+    my %UNSTABLE1 = %UNSTABLE;
+    delete %UNSTABLE1{qw(ASSOCARRAYMODIFYPARAMETERS ASSOCARRAYPATHPARAMETERS
                          ASSOCARRAYPOLARPARAMETERS ASSOCARRAYRECTANGULARPARAMETERS)};
-    out_classes ($out, \@object_names, \%DEBUGGING1, $tmpl);
-    my %DEBUGGING2 = map {$_ => 1} qw(ASSOCARRAYMODIFYPARAMETERS ASSOCARRAYPATHPARAMETERS
+    out_classes ($out, \@object_names, \%UNSTABLE1, $tmpl);
+    my %UNSTABLE2 = map {$_ => 1} qw(ASSOCARRAYMODIFYPARAMETERS ASSOCARRAYPATHPARAMETERS
                                        ASSOCARRAYPOLARPARAMETERS ASSOCARRAYRECTANGULARPARAMETERS);
     $tmpl = "typedef struct _dwg_abstractobject_ASSOCARRAYPARAMETERS\t\tdwg_obj_\$lname;\n";
-    out_classes ($out, \@object_names, \%DEBUGGING2, $tmpl);
-
+    out_classes ($out, \@object_names, \%UNSTABLE2, $tmpl);
+    #out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
+    print $out "/* debugging */\n";
     $tmpl = "typedef struct _dwg_object_\$name\t\tdwg_obj_\$lname;\n";
+    out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
     out_classes ($out, \@object_names, \%UNHANDLED, "//".$tmpl);
     out_classes ($out, \@unhandled_names, \%UNHANDLED, "//".$tmpl);
     print $out "\n\n";

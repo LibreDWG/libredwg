@@ -17,7 +17,7 @@ api_process (dwg_object *obj)
   BITCODE_BL *codes;    
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_blockpolarstretchaction *_obj = dwg_object_to_BLOCKPOLARSTRETCHACTION (obj);
 
   // AcDbBlockAction
@@ -40,5 +40,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKPOLARSTRETCHACTION, num_codes, BL);
   CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKPOLARSTRETCHACTION, codes, num_codes, BL);
   // ..
-#endif
+  //#endif
 }

@@ -15,7 +15,7 @@ api_process (dwg_object *obj)
   BITCODE_3BD extents_max;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
+  //#ifdef DEBUG_CLASSES
   dwg_obj_pointclouddefex *_obj = dwg_object_to_POINTCLOUDDEFEX (obj);
 
   CHK_ENTITY_TYPE (_obj, POINTCLOUDDEFEX, class_version, BL);
@@ -25,5 +25,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, POINTCLOUDDEFEX, numpoints, RLL);
   CHK_ENTITY_3RD (_obj, POINTCLOUDDEFEX, extents_min);
   CHK_ENTITY_3RD (_obj, POINTCLOUDDEFEX, extents_max);
-#endif
+  //#endif
 }
