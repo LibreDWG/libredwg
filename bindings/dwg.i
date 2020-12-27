@@ -379,6 +379,7 @@ EXPORT Dwg_Object_BLOCKXYPARAMETER** dwg_getall_BLOCKXYPARAMETER (Dwg_Data* dwg)
 EXPORT Dwg_Object_DATALINK** dwg_getall_DATALINK (Dwg_Data* dwg);
 EXPORT Dwg_Object_DBCOLOR** dwg_getall_DBCOLOR (Dwg_Data* dwg);
 EXPORT Dwg_Object_EVALUATION_GRAPH** dwg_getall_EVALUATION_GRAPH (Dwg_Data* dwg);
+EXPORT Dwg_Object_FCFOBJECTCONTEXTDATA** dwg_getall_FCFOBJECTCONTEXTDATA (Dwg_Data* dwg);
 EXPORT Dwg_Object_GRADIENT_BACKGROUND** dwg_getall_GRADIENT_BACKGROUND (Dwg_Data* dwg);
 EXPORT Dwg_Object_GROUND_PLANE_BACKGROUND** dwg_getall_GROUND_PLANE_BACKGROUND (Dwg_Data* dwg);
 EXPORT Dwg_Object_IBL_BACKGROUND** dwg_getall_IBL_BACKGROUND (Dwg_Data* dwg);
@@ -464,7 +465,6 @@ EXPORT Dwg_Object_DATATABLE** dwg_getall_DATATABLE (Dwg_Data* dwg);
 EXPORT Dwg_Object_DIMASSOC** dwg_getall_DIMASSOC (Dwg_Data* dwg);
 EXPORT Dwg_Object_DMDIMOBJECTCONTEXTDATA** dwg_getall_DMDIMOBJECTCONTEXTDATA (Dwg_Data* dwg);
 EXPORT Dwg_Object_DYNAMICBLOCKPROXYNODE** dwg_getall_DYNAMICBLOCKPROXYNODE (Dwg_Data* dwg);
-EXPORT Dwg_Object_FCFOBJECTCONTEXTDATA** dwg_getall_FCFOBJECTCONTEXTDATA (Dwg_Data* dwg);
 EXPORT Dwg_Object_GEOMAPIMAGE** dwg_getall_GEOMAPIMAGE (Dwg_Data* dwg);
 EXPORT Dwg_Object_LAYOUTPRINTCONFIG** dwg_getall_LAYOUTPRINTCONFIG (Dwg_Data* dwg);
 EXPORT Dwg_Object_MLEADEROBJECTCONTEXTDATA** dwg_getall_MLEADEROBJECTCONTEXTDATA (Dwg_Data* dwg);
@@ -698,6 +698,7 @@ EXPORT Dwg_Object_BLOCKXYPARAMETER* dwg_object_to_BLOCKXYPARAMETER (Dwg_Object* 
 EXPORT Dwg_Object_DATALINK* dwg_object_to_DATALINK (Dwg_Object* obj);
 EXPORT Dwg_Object_DBCOLOR* dwg_object_to_DBCOLOR (Dwg_Object* obj);
 EXPORT Dwg_Object_EVALUATION_GRAPH* dwg_object_to_EVALUATION_GRAPH (Dwg_Object* obj);
+EXPORT Dwg_Object_FCFOBJECTCONTEXTDATA* dwg_object_to_FCFOBJECTCONTEXTDATA (Dwg_Object* obj);
 EXPORT Dwg_Object_GRADIENT_BACKGROUND* dwg_object_to_GRADIENT_BACKGROUND (Dwg_Object* obj);
 EXPORT Dwg_Object_GROUND_PLANE_BACKGROUND* dwg_object_to_GROUND_PLANE_BACKGROUND (Dwg_Object* obj);
 EXPORT Dwg_Object_IBL_BACKGROUND* dwg_object_to_IBL_BACKGROUND (Dwg_Object* obj);
@@ -783,7 +784,6 @@ EXPORT Dwg_Object_TEXTOBJECTCONTEXTDATA* dwg_object_to_TEXTOBJECTCONTEXTDATA (Dw
   EXPORT Dwg_Object_DIMASSOC* dwg_object_to_DIMASSOC (Dwg_Object* obj);
   EXPORT Dwg_Object_DMDIMOBJECTCONTEXTDATA* dwg_object_to_DMDIMOBJECTCONTEXTDATA (Dwg_Object* obj);
   EXPORT Dwg_Object_DYNAMICBLOCKPROXYNODE* dwg_object_to_DYNAMICBLOCKPROXYNODE (Dwg_Object* obj);
-  EXPORT Dwg_Object_FCFOBJECTCONTEXTDATA* dwg_object_to_FCFOBJECTCONTEXTDATA (Dwg_Object* obj);
   EXPORT Dwg_Object_GEOMAPIMAGE* dwg_object_to_GEOMAPIMAGE (Dwg_Object* obj);
   EXPORT Dwg_Object_LAYOUTPRINTCONFIG* dwg_object_to_LAYOUTPRINTCONFIG (Dwg_Object* obj);
   EXPORT Dwg_Object_MLEADEROBJECTCONTEXTDATA* dwg_object_to_MLEADEROBJECTCONTEXTDATA (Dwg_Object* obj);

@@ -343,7 +343,42 @@ main (int argc, char *argv[])
             }
           if (DWG_TYPE == DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA)
             {
+              error += test_code (prefix, "2013/gh44-error.dwg", cov);
               error += test_code_nodist (prefix, "2013/gh55-ltype.dwg", cov);
+              error += test_code_nodist (prefix, "2010/ACI_20160321_A_30_east.dwg",
+                                  cov);
+              error += test_code_nodist (prefix, "2018/ACI_20160321_A_30_east.dwg",
+                                  cov);
+              error += test_code_nodist (prefix,
+                  "../test-old/2018/from_autocad_2021/Annotation - Metric.dwg",
+                  cov);
+              error += test_code_nodist (prefix,
+                  "../test-old/2018/from_autocad_2021/Annotation - Imperial.dwg",
+                  cov);
+              error += test_code_nodist (prefix,
+                  "../test-old/2018/from_autocad_2021/Civil - Metric.dwg",
+                  cov);
+              error += test_code_nodist (prefix,
+                  "../test-old/2018/from_autocad_2021/Civil - Imperial.dwg",
+                  cov);
+              error += test_code_nodist (prefix,
+                  "../test-old/2018/from_autocad_2021/Electrical - Metric.dwg",
+                  cov);
+              error += test_code_nodist (prefix,
+                  "../test-old/2018/from_autocad_2021/Electrical - Imperial.dwg",
+                  cov);
+              error += test_code_nodist (prefix,
+                  "../test-old/2018/from_autocad_2021/Mechanical - Metric.dwg",
+                  cov);
+              error += test_code_nodist (prefix,
+                  "../test-old/2018/from_autocad_2021/Mechanical - Imperial.dwg",
+                  cov);
+              error += test_code_nodist (prefix,
+                  "../test-old/2018/from_autocad_2021/Structural - Metric.dwg",
+                  cov);
+              error += test_code_nodist (prefix,
+                  "../test-old/2018/from_autocad_2021/Structural - Imperial.dwg",
+                  cov);
             }
           if (DWG_TYPE == DWG_TYPE_FIELD || DWG_TYPE == DWG_TYPE_FIELDLIST)
             {

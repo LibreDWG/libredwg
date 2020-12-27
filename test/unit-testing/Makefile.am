@@ -62,6 +62,7 @@ testobjects = \
 	arc_dimension \
 	aldimobjectcontextdata \
 	blkrefobjectcontextdata \
+	fcfobjectcontextdata \
 	leaderobjectcontextdata \
 	mtextobjectcontextdata \
 	textobjectcontextdata \
@@ -286,7 +287,6 @@ testdebug = \
 	dmdimobjectcontextdata \
 	dimassoc \
 	extrudedsurface \
-	fcfobjectcontextdata \
 	geomapimage \
 	geopositionmarker \
 	helix \

@@ -6564,8 +6564,7 @@ typedef struct _dwg_object_GROUND_PLANE_BACKGROUND
 #define OBJECTCONTEXTDATA_fields                                              \
   struct _dwg_object_object *parent;                                          \
   BITCODE_BS class_version; /*!< r2010+ =4, before 3 */                       \
-  BITCODE_B is_default;     /* 290 */                                         \
-  BITCODE_B has_xdic        /* no dxf, always 1 */
+  BITCODE_B is_default     /* 290 */
 
 #define ANNOTSCALEOBJECTCONTEXTDATA_fields                                    \
   OBJECTCONTEXTDATA_fields;                                                   \
@@ -6603,16 +6602,19 @@ typedef struct _dwg_object_CONTEXTDATAMANAGER
   Dwg_CONTEXTDATA_submgr *submgrs;
 } Dwg_Object_CONTEXTDATAMANAGER;
 
+#define TEXTOBJECTCONTEXTDATA_fields \
+  BITCODE_BS horizontal_mode;	/*<! DXF 70, default 0 */ \
+  BITCODE_BD rotation;		/*!< DXF 50, default 0.0 or 90.0 */ \
+  BITCODE_2RD ins_pt; 		/*!< DXF 10-20 */ \
+  BITCODE_2RD alignment_pt 	/*!< DXF 11-21 */
+
 /**
  * R2010+
  */
 typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA
 {
   ANNOTSCALEOBJECTCONTEXTDATA_fields;
-  BITCODE_BS flag;	/*<! DXF 70 */ // 0
-  BITCODE_BD rotation;	/*!< DXF 50 */ // 0.0 or 90.0
-  BITCODE_2RD ins_pt; 	/*!< DXF 10-20 */
-  BITCODE_2RD alignment_pt; 	/*!< DXF 11-21 */
+  TEXTOBJECTCONTEXTDATA_fields;
 } Dwg_Object_TEXTOBJECTCONTEXTDATA;
 
 /**
@@ -6621,7 +6623,7 @@ typedef struct _dwg_object_TEXTOBJECTCONTEXTDATA
 typedef struct _dwg_object_MTEXTOBJECTCONTEXTDATA
 {
   ANNOTSCALEOBJECTCONTEXTDATA_fields;
-  BITCODE_BL flag;      	/*<! DXF 70 */
+  BITCODE_BL attachment;      	/*<! DXF 70 */
   BITCODE_3BD ins_pt; 		/*!< DXF 10 */
   BITCODE_3BD x_axis_dir; 	/*!< DXF 11 */
   BITCODE_BD rect_height;	/*!< DXF 40 */
@@ -6734,11 +6736,7 @@ typedef struct _dwg_object_RADIMLGOBJECTCONTEXTDATA
 typedef struct _dwg_object_MTEXTATTRIBUTEOBJECTCONTEXTDATA
 {
   ANNOTSCALEOBJECTCONTEXTDATA_fields;
-  // TEXT
-  BITCODE_BS flag;	/*<! DXF 70 */ // 0
-  BITCODE_BD rotation;	/*!< DXF 50 */ // 0.0 or 90.0
-  BITCODE_2RD ins_pt; 	/*!< DXF 10-20 */
-  BITCODE_2RD alignment_pt; 	/*!< DXF 11-21 */
+  TEXTOBJECTCONTEXTDATA_fields;
   // MTEXTATTR
   BITCODE_B enable_context;
   struct _dwg_object *context;
@@ -8120,6 +8118,7 @@ typedef struct _dwg_object_object
     Dwg_Object_DATALINK *DATALINK;
     Dwg_Object_DBCOLOR *DBCOLOR;
     Dwg_Object_EVALUATION_GRAPH *EVALUATION_GRAPH;
+    Dwg_Object_FCFOBJECTCONTEXTDATA *FCFOBJECTCONTEXTDATA;
     Dwg_Object_GRADIENT_BACKGROUND *GRADIENT_BACKGROUND;
     Dwg_Object_GROUND_PLANE_BACKGROUND *GROUND_PLANE_BACKGROUND;
     Dwg_Object_IBL_BACKGROUND *IBL_BACKGROUND;
@@ -8205,7 +8204,6 @@ typedef struct _dwg_object_object
     Dwg_Object_DIMASSOC *DIMASSOC;
     Dwg_Object_DMDIMOBJECTCONTEXTDATA *DMDIMOBJECTCONTEXTDATA;
     Dwg_Object_DYNAMICBLOCKPROXYNODE *DYNAMICBLOCKPROXYNODE;
-    Dwg_Object_FCFOBJECTCONTEXTDATA *FCFOBJECTCONTEXTDATA;
     Dwg_Object_GEOMAPIMAGE *GEOMAPIMAGE;
     Dwg_Object_LAYOUTPRINTCONFIG *LAYOUTPRINTCONFIG;
     Dwg_Object_MLEADEROBJECTCONTEXTDATA *MLEADEROBJECTCONTEXTDATA;
@@ -9407,6 +9405,7 @@ EXPORT int dwg_setup_BLOCKXYPARAMETER (Dwg_Object *obj);
 EXPORT int dwg_setup_DATALINK (Dwg_Object *obj);
 EXPORT int dwg_setup_DBCOLOR (Dwg_Object *obj);
 EXPORT int dwg_setup_EVALUATION_GRAPH (Dwg_Object *obj);
+EXPORT int dwg_setup_FCFOBJECTCONTEXTDATA (Dwg_Object *obj);
 EXPORT int dwg_setup_GRADIENT_BACKGROUND (Dwg_Object *obj);
 EXPORT int dwg_setup_GROUND_PLANE_BACKGROUND (Dwg_Object *obj);
 EXPORT int dwg_setup_IBL_BACKGROUND (Dwg_Object *obj);
@@ -9515,7 +9514,6 @@ EXPORT int dwg_setup_TEXTOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_DIMASSOC (Dwg_Object *obj);
   EXPORT int dwg_setup_DMDIMOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_DYNAMICBLOCKPROXYNODE (Dwg_Object *obj);
-  EXPORT int dwg_setup_FCFOBJECTCONTEXTDATA (Dwg_Object *obj);
   EXPORT int dwg_setup_GEOMAPIMAGE (Dwg_Object *obj);
   EXPORT int dwg_setup_LAYOUTPRINTCONFIG (Dwg_Object *obj);
   EXPORT int dwg_setup_MLEADEROBJECTCONTEXTDATA (Dwg_Object *obj);

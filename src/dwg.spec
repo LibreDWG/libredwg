@@ -8797,13 +8797,19 @@ DWG_ENTITY_END
 #define AcDbObjectContextData_fields                                    \
   SUBCLASS (AcDbObjectContextData);                                     \
   FIELD_BS (class_version, 70);                                         \
-  FIELD_B (is_default, 290);                                            \
-  FIELD_B (has_xdic, 0) /* always 1 */
+  FIELD_B (is_default, 290)
 
 #define AcDbAnnotScaleObjectContextData_fields                          \
   AcDbObjectContextData_fields;                                         \
   SUBCLASS (AcDbAnnotScaleObjectContextData);                           \
   FIELD_HANDLE (scale, 2, 340)
+
+#define AcDbTextObjectContextData_fields                                \
+  SUBCLASS (AcDbTextObjectContextData)                                  \
+  FIELD_BS (horizontal_mode, 70);                                       \
+  FIELD_BD (rotation, 50);                                              \
+  FIELD_2RD (ins_pt, 10);                                               \
+  FIELD_2RD (alignment_pt, 11)
 
 //  #ifdef IS_DXF
 //    FIELD_HANDLE_NAME (block, 2, BLOCK_HEADER);
@@ -9645,16 +9651,6 @@ DWG_OBJECT (RADIMLGOBJECTCONTEXTDATA)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-// TOLERANCE
-DWG_OBJECT (FCFOBJECTCONTEXTDATA)
-  DECODE_UNKNOWN_BITS
-  AcDbAnnotScaleObjectContextData_fields;
-  SUBCLASS (AcDbFcfObjectContextData)
-  FIELD_3BD (location, 10);
-  FIELD_3BD (horiz_dir, 11);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
 DWG_OBJECT (MLEADEROBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
   AcDbAnnotScaleObjectContextData_fields;
@@ -9666,11 +9662,7 @@ DWG_OBJECT_END
 DWG_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
   AcDbAnnotScaleObjectContextData_fields;
-  SUBCLASS (AcDbTextObjectContextData)
-  FIELD_BS (flag, 70); // 0
-  FIELD_BD (rotation, 50); // 0.0 or 90.0
-  FIELD_2RD (ins_pt, 10);
-  FIELD_2RD (alignment_pt, 11);
+  AcDbTextObjectContextData_fields;
   SUBCLASS (AcDbMTextAttributeObjectContextData)
   FIELD_B (enable_context, 290);
   if (FIELD_VALUE (enable_context))
@@ -9777,26 +9769,14 @@ DWG_OBJECT (MTEXTOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
   AcDbAnnotScaleObjectContextData_fields;
   SUBCLASS (AcDbMTextObjectContextData)
-  FIELD_BL (flag, 70);
+  FIELD_BL (attachment, 70);
   // From MTEXT Embedded object
-  DXF {
-    FIELD_3BD (ins_pt, 10); // ODA bug
-    FIELD_3BD (x_axis_dir, 11);
-  } else {
-    FIELD_3BD (x_axis_dir, 11);
-    FIELD_3BD (ins_pt, 10);
-  }
-  DXF {
-    FIELD_BD (rect_height, 40);
-    FIELD_BD (rect_width, 41);
-    FIELD_BD (extents_width, 42);
-    FIELD_BD (extents_height, 43);
-  } else {
-    FIELD_BD (rect_width, 41);
-    FIELD_BD (rect_height, 40);
-    FIELD_BD (extents_height, 43);
-    FIELD_BD (extents_width, 42);
-  }
+  FIELD_3BD (x_axis_dir, 11);
+  FIELD_3BD (ins_pt, 10); // ODA bug
+  FIELD_BD (rect_width, 40);
+  FIELD_BD (rect_height, 41);
+  FIELD_BD (extents_width, 42);
+  FIELD_BD (extents_height, 43);
 
   FIELD_BL (column_type, 71);
   VALUEOUTOFBOUNDS (column_type, 2)
@@ -9818,11 +9798,7 @@ DWG_OBJECT_END
 DWG_OBJECT (TEXTOBJECTCONTEXTDATA)
   DECODE_UNKNOWN_BITS
   AcDbAnnotScaleObjectContextData_fields;
-  SUBCLASS (AcDbTextObjectContextData)
-  FIELD_BS (flag, 70); // 0
-  FIELD_BD (rotation, 50); // 0.0 or 90.0
-  FIELD_2RD (ins_pt, 10);
-  FIELD_2RD (alignment_pt, 11);
+  AcDbTextObjectContextData_fields;
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -9833,7 +9809,6 @@ DWG_OBJECT (BLKREFOBJECTCONTEXTDATA)
   FIELD_BD (rotation, 50)
   FIELD_3BD (ins_pt, 10);
   FIELD_3BD_1 (scale_factor, 42);
-
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -9847,7 +9822,16 @@ DWG_OBJECT (LEADEROBJECTCONTEXTDATA)
   FIELD_B (b290, 290); /* 1 */
   FIELD_3DPOINT (inspt_offset, 12);
   FIELD_3DPOINT (endptproj, 13);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
 
+// TOLERANCE
+DWG_OBJECT (FCFOBJECTCONTEXTDATA)
+  DECODE_UNKNOWN_BITS
+  AcDbAnnotScaleObjectContextData_fields;
+  SUBCLASS (AcDbFcfObjectContextData)
+  FIELD_3BD (location, 10);
+  FIELD_3BD (horiz_dir, 11);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 

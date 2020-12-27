@@ -1521,7 +1521,7 @@ in_word_set (register const char *str, register size_t len)
 #line 185 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str774,    "ACDBASSOCNETWORKSURFACEACTIONBODY",  DWG_TYPE_ASSOCNETWORKSURFACEACTIONBODY,	0,	UNSTABLE},
 #line 266 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str775,             "ACDB_FCFOBJECTCONTEXTDATA_CLASS",   DWG_TYPE_FCFOBJECTCONTEXTDATA,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str775,             "ACDB_FCFOBJECTCONTEXTDATA_CLASS",   DWG_TYPE_FCFOBJECTCONTEXTDATA,	0,	UNSTABLE},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
 #line 299 "src/objects.in"

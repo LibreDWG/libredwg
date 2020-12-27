@@ -27688,21 +27688,6 @@ static int test_ALDIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
         fail ("ALDIMOBJECTCONTEXTDATA.dimline_pt [3BD]");
   }
   {
-    BITCODE_B has_xdic;
-    if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "has_xdic", &has_xdic, NULL)
-        && has_xdic == aldimobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("ALDIMOBJECTCONTEXTDATA.has_xdic [B] " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->has_xdic, has_xdic);
-    has_xdic++;
-    if (dwg_dynapi_entity_set_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "has_xdic", &has_xdic, 0)
-        && has_xdic == aldimobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("ALDIMOBJECTCONTEXTDATA.has_xdic [B] set+1 " FORMAT_B " != " FORMAT_B "", aldimobjectcontextdata->has_xdic, has_xdic);
-    aldimobjectcontextdata->has_xdic--;
-  }
-  {
     BITCODE_B is_default;
     if (dwg_dynapi_entity_value (aldimobjectcontextdata, "ALDIMOBJECTCONTEXTDATA", "is_default", &is_default, NULL)
         && is_default == aldimobjectcontextdata->is_default)
@@ -27778,21 +27763,6 @@ static int test_ANGDIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
         fail ("ANGDIMOBJECTCONTEXTDATA.dimension [Dwg_OCD_Dimension]");
   }
   {
-    BITCODE_B has_xdic;
-    if (dwg_dynapi_entity_value (angdimobjectcontextdata, "ANGDIMOBJECTCONTEXTDATA", "has_xdic", &has_xdic, NULL)
-        && has_xdic == angdimobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("ANGDIMOBJECTCONTEXTDATA.has_xdic [B] " FORMAT_B " != " FORMAT_B "", angdimobjectcontextdata->has_xdic, has_xdic);
-    has_xdic++;
-    if (dwg_dynapi_entity_set_value (angdimobjectcontextdata, "ANGDIMOBJECTCONTEXTDATA", "has_xdic", &has_xdic, 0)
-        && has_xdic == angdimobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("ANGDIMOBJECTCONTEXTDATA.has_xdic [B] set+1 " FORMAT_B " != " FORMAT_B "", angdimobjectcontextdata->has_xdic, has_xdic);
-    angdimobjectcontextdata->has_xdic--;
-  }
-  {
     BITCODE_B is_default;
     if (dwg_dynapi_entity_value (angdimobjectcontextdata, "ANGDIMOBJECTCONTEXTDATA", "is_default", &is_default, NULL)
         && is_default == angdimobjectcontextdata->is_default)
@@ -27850,21 +27820,6 @@ static int test_ANNOTSCALEOBJECTCONTEXTDATA (const Dwg_Object *obj)
     else
       fail ("ANNOTSCALEOBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", annotscaleobjectcontextdata->class_version, class_version);
     annotscaleobjectcontextdata->class_version--;
-  }
-  {
-    BITCODE_B has_xdic;
-    if (dwg_dynapi_entity_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "has_xdic", &has_xdic, NULL)
-        && has_xdic == annotscaleobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("ANNOTSCALEOBJECTCONTEXTDATA.has_xdic [B] " FORMAT_B " != " FORMAT_B "", annotscaleobjectcontextdata->has_xdic, has_xdic);
-    has_xdic++;
-    if (dwg_dynapi_entity_set_value (annotscaleobjectcontextdata, "ANNOTSCALEOBJECTCONTEXTDATA", "has_xdic", &has_xdic, 0)
-        && has_xdic == annotscaleobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("ANNOTSCALEOBJECTCONTEXTDATA.has_xdic [B] set+1 " FORMAT_B " != " FORMAT_B "", annotscaleobjectcontextdata->has_xdic, has_xdic);
-    annotscaleobjectcontextdata->has_xdic--;
   }
   {
     BITCODE_B is_default;
@@ -34187,21 +34142,6 @@ static int test_BLKREFOBJECTCONTEXTDATA (const Dwg_Object *obj)
     else
       fail ("BLKREFOBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", blkrefobjectcontextdata->class_version, class_version);
     blkrefobjectcontextdata->class_version--;
-  }
-  {
-    BITCODE_B has_xdic;
-    if (dwg_dynapi_entity_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "has_xdic", &has_xdic, NULL)
-        && has_xdic == blkrefobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("BLKREFOBJECTCONTEXTDATA.has_xdic [B] " FORMAT_B " != " FORMAT_B "", blkrefobjectcontextdata->has_xdic, has_xdic);
-    has_xdic++;
-    if (dwg_dynapi_entity_set_value (blkrefobjectcontextdata, "BLKREFOBJECTCONTEXTDATA", "has_xdic", &has_xdic, 0)
-        && has_xdic == blkrefobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("BLKREFOBJECTCONTEXTDATA.has_xdic [B] set+1 " FORMAT_B " != " FORMAT_B "", blkrefobjectcontextdata->has_xdic, has_xdic);
-    blkrefobjectcontextdata->has_xdic--;
   }
   {
     BITCODE_3BD ins_pt;
@@ -45461,21 +45401,6 @@ static int test_DMDIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
         fail ("DMDIMOBJECTCONTEXTDATA.first_arc_pt [3BD]");
   }
   {
-    BITCODE_B has_xdic;
-    if (dwg_dynapi_entity_value (dmdimobjectcontextdata, "DMDIMOBJECTCONTEXTDATA", "has_xdic", &has_xdic, NULL)
-        && has_xdic == dmdimobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("DMDIMOBJECTCONTEXTDATA.has_xdic [B] " FORMAT_B " != " FORMAT_B "", dmdimobjectcontextdata->has_xdic, has_xdic);
-    has_xdic++;
-    if (dwg_dynapi_entity_set_value (dmdimobjectcontextdata, "DMDIMOBJECTCONTEXTDATA", "has_xdic", &has_xdic, 0)
-        && has_xdic == dmdimobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("DMDIMOBJECTCONTEXTDATA.has_xdic [B] set+1 " FORMAT_B " != " FORMAT_B "", dmdimobjectcontextdata->has_xdic, has_xdic);
-    dmdimobjectcontextdata->has_xdic--;
-  }
-  {
     BITCODE_B is_default;
     if (dwg_dynapi_entity_value (dmdimobjectcontextdata, "DMDIMOBJECTCONTEXTDATA", "is_default", &is_default, NULL)
         && is_default == dmdimobjectcontextdata->is_default)
@@ -45771,21 +45696,6 @@ static int test_FCFOBJECTCONTEXTDATA (const Dwg_Object *obj)
     else
       fail ("FCFOBJECTCONTEXTDATA.class_version [BS] set+1 %hu != %hu", fcfobjectcontextdata->class_version, class_version);
     fcfobjectcontextdata->class_version--;
-  }
-  {
-    BITCODE_B has_xdic;
-    if (dwg_dynapi_entity_value (fcfobjectcontextdata, "FCFOBJECTCONTEXTDATA", "has_xdic", &has_xdic, NULL)
-        && has_xdic == fcfobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("FCFOBJECTCONTEXTDATA.has_xdic [B] " FORMAT_B " != " FORMAT_B "", fcfobjectcontextdata->has_xdic, has_xdic);
-    has_xdic++;
-    if (dwg_dynapi_entity_set_value (fcfobjectcontextdata, "FCFOBJECTCONTEXTDATA", "has_xdic", &has_xdic, 0)
-        && has_xdic == fcfobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("FCFOBJECTCONTEXTDATA.has_xdic [B] set+1 " FORMAT_B " != " FORMAT_B "", fcfobjectcontextdata->has_xdic, has_xdic);
-    fcfobjectcontextdata->has_xdic--;
   }
   {
     BITCODE_3BD horiz_dir;
@@ -48510,21 +48420,6 @@ static int test_LEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
         fail ("LEADEROBJECTCONTEXTDATA.endptproj [3DPOINT]");
   }
   {
-    BITCODE_B has_xdic;
-    if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "has_xdic", &has_xdic, NULL)
-        && has_xdic == leaderobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("LEADEROBJECTCONTEXTDATA.has_xdic [B] " FORMAT_B " != " FORMAT_B "", leaderobjectcontextdata->has_xdic, has_xdic);
-    has_xdic++;
-    if (dwg_dynapi_entity_set_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "has_xdic", &has_xdic, 0)
-        && has_xdic == leaderobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("LEADEROBJECTCONTEXTDATA.has_xdic [B] set+1 " FORMAT_B " != " FORMAT_B "", leaderobjectcontextdata->has_xdic, has_xdic);
-    leaderobjectcontextdata->has_xdic--;
-  }
-  {
     BITCODE_3DPOINT inspt_offset;
     if (dwg_dynapi_entity_value (leaderobjectcontextdata, "LEADEROBJECTCONTEXTDATA", "inspt_offset", &inspt_offset, NULL)
         && !memcmp (&inspt_offset, &leaderobjectcontextdata->inspt_offset, sizeof (BITCODE_3DPOINT)))
@@ -50288,21 +50183,6 @@ static int test_MLEADEROBJECTCONTEXTDATA (const Dwg_Object *obj)
     mleaderobjectcontextdata->class_version--;
   }
   {
-    BITCODE_B has_xdic;
-    if (dwg_dynapi_entity_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "has_xdic", &has_xdic, NULL)
-        && has_xdic == mleaderobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("MLEADEROBJECTCONTEXTDATA.has_xdic [B] " FORMAT_B " != " FORMAT_B "", mleaderobjectcontextdata->has_xdic, has_xdic);
-    has_xdic++;
-    if (dwg_dynapi_entity_set_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "has_xdic", &has_xdic, 0)
-        && has_xdic == mleaderobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("MLEADEROBJECTCONTEXTDATA.has_xdic [B] set+1 " FORMAT_B " != " FORMAT_B "", mleaderobjectcontextdata->has_xdic, has_xdic);
-    mleaderobjectcontextdata->has_xdic--;
-  }
-  {
     BITCODE_B is_default;
     if (dwg_dynapi_entity_value (mleaderobjectcontextdata, "MLEADEROBJECTCONTEXTDATA", "is_default", &is_default, NULL)
         && is_default == mleaderobjectcontextdata->is_default)
@@ -51233,34 +51113,19 @@ static int test_MTEXTATTRIBUTEOBJECTCONTEXTDATA (const Dwg_Object *obj)
     mtextattributeobjectcontextdata->enable_context--;
   }
   {
-    BITCODE_BS flag;
-    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "flag", &flag, NULL)
-        && flag == mtextattributeobjectcontextdata->flag)
+    BITCODE_BS horizontal_mode;
+    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "horizontal_mode", &horizontal_mode, NULL)
+        && horizontal_mode == mtextattributeobjectcontextdata->horizontal_mode)
       pass ();
     else
-      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.flag [BS] %hu != %hu", mtextattributeobjectcontextdata->flag, flag);
-    flag++;
-    if (dwg_dynapi_entity_set_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "flag", &flag, 0)
-        && flag == mtextattributeobjectcontextdata->flag)
+      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.horizontal_mode [BS] %hu != %hu", mtextattributeobjectcontextdata->horizontal_mode, horizontal_mode);
+    horizontal_mode++;
+    if (dwg_dynapi_entity_set_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "horizontal_mode", &horizontal_mode, 0)
+        && horizontal_mode == mtextattributeobjectcontextdata->horizontal_mode)
       pass ();
     else
-      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.flag [BS] set+1 %hu != %hu", mtextattributeobjectcontextdata->flag, flag);
-    mtextattributeobjectcontextdata->flag--;
-  }
-  {
-    BITCODE_B has_xdic;
-    if (dwg_dynapi_entity_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "has_xdic", &has_xdic, NULL)
-        && has_xdic == mtextattributeobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.has_xdic [B] " FORMAT_B " != " FORMAT_B "", mtextattributeobjectcontextdata->has_xdic, has_xdic);
-    has_xdic++;
-    if (dwg_dynapi_entity_set_value (mtextattributeobjectcontextdata, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "has_xdic", &has_xdic, 0)
-        && has_xdic == mtextattributeobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.has_xdic [B] set+1 " FORMAT_B " != " FORMAT_B "", mtextattributeobjectcontextdata->has_xdic, has_xdic);
-    mtextattributeobjectcontextdata->has_xdic--;
+      fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.horizontal_mode [BS] set+1 %hu != %hu", mtextattributeobjectcontextdata->horizontal_mode, horizontal_mode);
+    mtextattributeobjectcontextdata->horizontal_mode--;
   }
   {
     BITCODE_2RD ins_pt;
@@ -51329,6 +51194,21 @@ static int test_MTEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
   const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
   Dwg_Object_MTEXTOBJECTCONTEXTDATA *restrict mtextobjectcontextdata = obj->tio.object->tio.MTEXTOBJECTCONTEXTDATA;
   failed = 0;
+  {
+    BITCODE_BL attachment;
+    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "attachment", &attachment, NULL)
+        && attachment == mtextobjectcontextdata->attachment)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.attachment [BL] %u != %u", mtextobjectcontextdata->attachment, attachment);
+    attachment++;
+    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "attachment", &attachment, 0)
+        && attachment == mtextobjectcontextdata->attachment)
+      pass ();
+    else
+      fail ("MTEXTOBJECTCONTEXTDATA.attachment [BL] set+1 %u != %u", mtextobjectcontextdata->attachment, attachment);
+    mtextobjectcontextdata->attachment--;
+  }
   {
     BITCODE_B auto_height;
     if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "auto_height", &auto_height, NULL)
@@ -51430,21 +51310,6 @@ static int test_MTEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
     mtextobjectcontextdata->extents_width--;
   }
   {
-    BITCODE_BL flag;
-    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "flag", &flag, NULL)
-        && flag == mtextobjectcontextdata->flag)
-      pass ();
-    else
-      fail ("MTEXTOBJECTCONTEXTDATA.flag [BL] %u != %u", mtextobjectcontextdata->flag, flag);
-    flag++;
-    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "flag", &flag, 0)
-        && flag == mtextobjectcontextdata->flag)
-      pass ();
-    else
-      fail ("MTEXTOBJECTCONTEXTDATA.flag [BL] set+1 %u != %u", mtextobjectcontextdata->flag, flag);
-    mtextobjectcontextdata->flag--;
-  }
-  {
     BITCODE_B flow_reversed;
     if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "flow_reversed", &flow_reversed, NULL)
         && flow_reversed == mtextobjectcontextdata->flow_reversed)
@@ -51473,21 +51338,6 @@ static int test_MTEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
     else
       fail ("MTEXTOBJECTCONTEXTDATA.gutter [BD] set+1 %g != %g", mtextobjectcontextdata->gutter, gutter);
     mtextobjectcontextdata->gutter--;
-  }
-  {
-    BITCODE_B has_xdic;
-    if (dwg_dynapi_entity_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "has_xdic", &has_xdic, NULL)
-        && has_xdic == mtextobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("MTEXTOBJECTCONTEXTDATA.has_xdic [B] " FORMAT_B " != " FORMAT_B "", mtextobjectcontextdata->has_xdic, has_xdic);
-    has_xdic++;
-    if (dwg_dynapi_entity_set_value (mtextobjectcontextdata, "MTEXTOBJECTCONTEXTDATA", "has_xdic", &has_xdic, 0)
-        && has_xdic == mtextobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("MTEXTOBJECTCONTEXTDATA.has_xdic [B] set+1 " FORMAT_B " != " FORMAT_B "", mtextobjectcontextdata->has_xdic, has_xdic);
-    mtextobjectcontextdata->has_xdic--;
   }
   {
     BITCODE_3BD ins_pt;
@@ -51737,21 +51587,6 @@ static int test_ORDDIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
         pass ();
     else
         fail ("ORDDIMOBJECTCONTEXTDATA.feature_location_pt [3BD]");
-  }
-  {
-    BITCODE_B has_xdic;
-    if (dwg_dynapi_entity_value (orddimobjectcontextdata, "ORDDIMOBJECTCONTEXTDATA", "has_xdic", &has_xdic, NULL)
-        && has_xdic == orddimobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("ORDDIMOBJECTCONTEXTDATA.has_xdic [B] " FORMAT_B " != " FORMAT_B "", orddimobjectcontextdata->has_xdic, has_xdic);
-    has_xdic++;
-    if (dwg_dynapi_entity_set_value (orddimobjectcontextdata, "ORDDIMOBJECTCONTEXTDATA", "has_xdic", &has_xdic, 0)
-        && has_xdic == orddimobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("ORDDIMOBJECTCONTEXTDATA.has_xdic [B] set+1 " FORMAT_B " != " FORMAT_B "", orddimobjectcontextdata->has_xdic, has_xdic);
-    orddimobjectcontextdata->has_xdic--;
   }
   {
     BITCODE_B is_default;
@@ -52991,21 +52826,6 @@ static int test_RADIMLGOBJECTCONTEXTDATA (const Dwg_Object *obj)
         fail ("RADIMLGOBJECTCONTEXTDATA.dimension [Dwg_OCD_Dimension]");
   }
   {
-    BITCODE_B has_xdic;
-    if (dwg_dynapi_entity_value (radimlgobjectcontextdata, "RADIMLGOBJECTCONTEXTDATA", "has_xdic", &has_xdic, NULL)
-        && has_xdic == radimlgobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("RADIMLGOBJECTCONTEXTDATA.has_xdic [B] " FORMAT_B " != " FORMAT_B "", radimlgobjectcontextdata->has_xdic, has_xdic);
-    has_xdic++;
-    if (dwg_dynapi_entity_set_value (radimlgobjectcontextdata, "RADIMLGOBJECTCONTEXTDATA", "has_xdic", &has_xdic, 0)
-        && has_xdic == radimlgobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("RADIMLGOBJECTCONTEXTDATA.has_xdic [B] set+1 " FORMAT_B " != " FORMAT_B "", radimlgobjectcontextdata->has_xdic, has_xdic);
-    radimlgobjectcontextdata->has_xdic--;
-  }
-  {
     BITCODE_B is_default;
     if (dwg_dynapi_entity_value (radimlgobjectcontextdata, "RADIMLGOBJECTCONTEXTDATA", "is_default", &is_default, NULL)
         && is_default == radimlgobjectcontextdata->is_default)
@@ -53095,21 +52915,6 @@ static int test_RADIMOBJECTCONTEXTDATA (const Dwg_Object *obj)
         pass ();
     else
         fail ("RADIMOBJECTCONTEXTDATA.first_arc_pt [3BD]");
-  }
-  {
-    BITCODE_B has_xdic;
-    if (dwg_dynapi_entity_value (radimobjectcontextdata, "RADIMOBJECTCONTEXTDATA", "has_xdic", &has_xdic, NULL)
-        && has_xdic == radimobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("RADIMOBJECTCONTEXTDATA.has_xdic [B] " FORMAT_B " != " FORMAT_B "", radimobjectcontextdata->has_xdic, has_xdic);
-    has_xdic++;
-    if (dwg_dynapi_entity_set_value (radimobjectcontextdata, "RADIMOBJECTCONTEXTDATA", "has_xdic", &has_xdic, 0)
-        && has_xdic == radimobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("RADIMOBJECTCONTEXTDATA.has_xdic [B] set+1 " FORMAT_B " != " FORMAT_B "", radimobjectcontextdata->has_xdic, has_xdic);
-    radimobjectcontextdata->has_xdic--;
   }
   {
     BITCODE_B is_default;
@@ -56687,34 +56492,19 @@ static int test_TEXTOBJECTCONTEXTDATA (const Dwg_Object *obj)
     textobjectcontextdata->class_version--;
   }
   {
-    BITCODE_BS flag;
-    if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "flag", &flag, NULL)
-        && flag == textobjectcontextdata->flag)
+    BITCODE_BS horizontal_mode;
+    if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "horizontal_mode", &horizontal_mode, NULL)
+        && horizontal_mode == textobjectcontextdata->horizontal_mode)
       pass ();
     else
-      fail ("TEXTOBJECTCONTEXTDATA.flag [BS] %hu != %hu", textobjectcontextdata->flag, flag);
-    flag++;
-    if (dwg_dynapi_entity_set_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "flag", &flag, 0)
-        && flag == textobjectcontextdata->flag)
+      fail ("TEXTOBJECTCONTEXTDATA.horizontal_mode [BS] %hu != %hu", textobjectcontextdata->horizontal_mode, horizontal_mode);
+    horizontal_mode++;
+    if (dwg_dynapi_entity_set_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "horizontal_mode", &horizontal_mode, 0)
+        && horizontal_mode == textobjectcontextdata->horizontal_mode)
       pass ();
     else
-      fail ("TEXTOBJECTCONTEXTDATA.flag [BS] set+1 %hu != %hu", textobjectcontextdata->flag, flag);
-    textobjectcontextdata->flag--;
-  }
-  {
-    BITCODE_B has_xdic;
-    if (dwg_dynapi_entity_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "has_xdic", &has_xdic, NULL)
-        && has_xdic == textobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("TEXTOBJECTCONTEXTDATA.has_xdic [B] " FORMAT_B " != " FORMAT_B "", textobjectcontextdata->has_xdic, has_xdic);
-    has_xdic++;
-    if (dwg_dynapi_entity_set_value (textobjectcontextdata, "TEXTOBJECTCONTEXTDATA", "has_xdic", &has_xdic, 0)
-        && has_xdic == textobjectcontextdata->has_xdic)
-      pass ();
-    else
-      fail ("TEXTOBJECTCONTEXTDATA.has_xdic [B] set+1 " FORMAT_B " != " FORMAT_B "", textobjectcontextdata->has_xdic, has_xdic);
-    textobjectcontextdata->has_xdic--;
+      fail ("TEXTOBJECTCONTEXTDATA.horizontal_mode [BS] set+1 %hu != %hu", textobjectcontextdata->horizontal_mode, horizontal_mode);
+    textobjectcontextdata->horizontal_mode--;
   }
   {
     BITCODE_2RD ins_pt;
