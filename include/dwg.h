@@ -5886,11 +5886,11 @@ typedef struct _dwg_ARRAYITEMLOCATOR
 } Dwg_ARRAYITEMLOCATOR;
 
 #define ASSOCARRAYACTIONBODY_fields            \
-  ASSOCACTIONPARAM_fields;                     \
+  ASSOCACTIONBODY_fields;                      \
   Dwg_ASSOCPARAMBASEDACTIONBODY pab;           \
   BITCODE_BL aaab_version;                     \
-  BITCODE_T aaab_paramblock;                   \
-  BITCODE_BD *aaab_transmatrix
+  BITCODE_T paramblock; /* classname, i.e. AcDbAssocArrayPolarParameters */ \
+  BITCODE_BD *transmatrix
 
 typedef struct _dwg_object_ASSOCARRAYACTIONBODY
 {

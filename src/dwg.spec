@@ -7680,17 +7680,17 @@ DWG_ENTITY (HELIX)
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
-#define AcDbAssocAnnotationActionBody_fields \
-  SINCE (R_2013) {                           \
-    FIELD_BS (aaab_version, 90);             \
-    FIELD_HANDLE (assoc_dep, 5, 330);        \
-  }                                          \
-  UNTIL (R_2010) {                           \
-  if (FIELD_VALUE (actionbody))              \
-    {                                        \
-      AcDbAssocActionBody_fields;            \
+#define AcDbAssocAnnotationActionBody_fields      \
+  UNTIL (R_2010) {                                \
+    if (FIELD_VALUE (actionbody))                 \
+    {                                             \
+      AcDbAssocActionBody_fields;                 \
       AcDbAssocParamBasedActionBody_fields (pab); \
-    }                                        \
+    }                                             \
+  }                                               \
+  LATER_VERSIONS {                                \
+    FIELD_BS (aaab_version, 90);                  \
+    FIELD_HANDLE (assoc_dep, 5, 330);             \
   }
 
 // undocumented fields, unstable, but looks stable.
@@ -10999,11 +10999,12 @@ DWG_OBJECT (ASSOCASMBODYACTIONPARAM)
 DWG_OBJECT_END
 
 #define AcDbAssocArrayActionBody_fields                     \
+  AcDbAssocActionBody_fields;                               \
   AcDbAssocParamBasedActionBody_fields (pab);               \
   SUBCLASS (AcDbAssocArrayActionBody);                      \
   FIELD_BL (aaab_version, 90);                              \
-  FIELD_T (aaab_paramblock, 1);                             \
-  FIELD_VECTOR_N (aaab_transmatrix, BD, 16, 40)
+  FIELD_T (paramblock, 1);                             \
+  FIELD_VECTOR_N (transmatrix, BD, 16, 40)
 
 #define AcDbAssocArrayItem_fields(item)                          \
   SUB_FIELD_BL (item, class_version, 90);                        \

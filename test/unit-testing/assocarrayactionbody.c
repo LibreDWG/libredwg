@@ -12,19 +12,17 @@ api_process (dwg_object *obj)
 #ifdef DEBUG_CLASSES
   dwg_obj_assocarrayactionbody *_obj = dwg_object_to_ASSOCARRAYACTIONBODY (obj);
 
-  // ASSOCACTIONPARAM:
-  CHK_ENTITY_TYPE (_obj, ASSOCARRAYACTIONBODY, is_r2013, BS);
-  CHK_ENTITY_TYPE (_obj, ASSOCARRAYACTIONBODY, aap_version, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, ASSOCARRAYACTIONBODY, name);
+  // ASSOCACTIONBODY
+  CHK_ENTITY_TYPE (_obj, ASSOCARRAYACTIONBODY, aab_version, BL);
   CHK_ASSOCPARAMBASEDACTIONBODY (ASSOCARRAYACTIONBODY);
 
   CHK_ENTITY_TYPE (_obj, ASSOCARRAYACTIONBODY, aaab_version, BL);
-  CHK_ENTITY_UTF8TEXT (_obj, ASSOCARRAYACTIONBODY, aaab_paramblock);
-  if (!dwg_dynapi_entity_value (_obj, "ASSOCARRAYACTIONBODY", "aaab_transmatrix[16]", &aaab_transmatrix, NULL))
-    fail ("ASSOCARRAYACTIONBODY.aaab_transmatrix[16]");
+  CHK_ENTITY_UTF8TEXT (_obj, ASSOCARRAYACTIONBODY, paramblock);
+  if (!dwg_dynapi_entity_value (_obj, "ASSOCARRAYACTIONBODY", "transmatrix", &transmatrix, NULL))
+    fail ("ASSOCARRAYACTIONBODY.transmatrix[16]");
   for (unsigned i = 0; i < 16; i++)
     {
-      ok ("ASSOCARRAYACTIONBODY.aaab_transmatrix[%u]: %f", i, aaab_transmatrix[i]);
+      ok ("ASSOCARRAYACTIONBODY.transmatrix[%u]: %f", i, transmatrix[i]);
     }
  #endif
 }

@@ -5593,19 +5593,15 @@ H,	DXF 330
 
 @item parent
 struct _dwg_object_object*
-@item is_r2013
-BS
-@item aap_version
-BL
-@item name
-TV
+@item aab_version
+BL,	DXF 90
 @item pab
 Dwg_ASSOCPARAMBASEDACTIONBODY
 @item aaab_version
 BL,	DXF 90
-@item aaab_paramblock
+@item paramblock
 T,	DXF 1
-@item aaab_transmatrix
+@item transmatrix
 BD*,	DXF 40
 
 @end vtable
@@ -5620,19 +5616,15 @@ BD*,	DXF 40
 
 @item parent
 struct _dwg_object_object*
-@item is_r2013
-BS
-@item aap_version
-BL
-@item name
-TV
+@item aab_version
+BL,	DXF 90
 @item pab
 Dwg_ASSOCPARAMBASEDACTIONBODY
 @item aaab_version
 BL,	DXF 90
-@item aaab_paramblock
+@item paramblock
 T,	DXF 1
-@item aaab_transmatrix
+@item transmatrix
 BD*,	DXF 40
 @item status
 BS,	DXF 70
