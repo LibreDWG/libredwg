@@ -71,7 +71,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, start_angle, BD);
   if (!dwg_dynapi_entity_value (_obj, "REVOLVEDSURFACE",
                                 "revolved_entity_transmatrix",
-                                &revolved_entity_transmatrix, NULL))
+                                &revolved_entity_transmatrix, NULL)
+      || !revolved_entity_transmatrix)
     fail ("REVOLVEDSURFACE.revolved_entity_transmatrix");
   else
     for (i = 0; i < 16; i++)

@@ -79,7 +79,8 @@ api_process (dwg_object *obj)
 
   if (!dwg_dynapi_entity_value (_obj, "SWEPTSURFACE",
                                 "sweep_entity_transmatrix",
-                                &sweep_entity_transmatrix, NULL))
+                                &sweep_entity_transmatrix, NULL)
+      || !sweep_entity_transmatrix)
     fail ("SWEPTSURFACE.sweep_entity_transmatrix");
   else
     for (i = 0; i < 16; i++)
@@ -89,7 +90,8 @@ api_process (dwg_object *obj)
       }
   if (!dwg_dynapi_entity_value (_obj, "SWEPTSURFACE",
                                 "path_entity_transmatrix",
-                                &path_entity_transmatrix, NULL))
+                                &path_entity_transmatrix, NULL)
+      || !path_entity_transmatrix)
     fail ("SWEPTSURFACE.path_entity_transmatrix");
   else
     for (i = 0; i < 16; i++)
@@ -99,7 +101,8 @@ api_process (dwg_object *obj)
       }
   if (!dwg_dynapi_entity_value (_obj, "SWEPTSURFACE",
                                 "sweep_entity_transmatrix1",
-                                &sweep_entity_transmatrix1, NULL))
+                                &sweep_entity_transmatrix1, NULL)
+      || !sweep_entity_transmatrix1)
     fail ("SWEPTSURFACE.sweep_entity_transmatrix1");
   else
     for (i = 0; i < 16; i++)
@@ -109,7 +112,8 @@ api_process (dwg_object *obj)
       }
   if (!dwg_dynapi_entity_value (_obj, "SWEPTSURFACE",
                                 "path_entity_transmatrix1",
-                                &path_entity_transmatrix1, NULL))
+                                &path_entity_transmatrix1, NULL)
+      || !path_entity_transmatrix1)
     fail ("SWEPTSURFACE.path_entity_transmatrix1");
   else
     for (i = 0; i < 16; i++)

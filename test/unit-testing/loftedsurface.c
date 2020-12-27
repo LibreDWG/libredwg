@@ -70,7 +70,8 @@ api_process (dwg_object *obj)
 
   if (!dwg_dynapi_entity_value (_obj, "LOFTEDSURFACE",
                                 "loft_entity_transmatrix",
-                                &loft_entity_transmatrix, NULL))
+                                &loft_entity_transmatrix, NULL)
+      || !loft_entity_transmatrix)
     fail ("LOFTEDSURFACE.loft_entity_transmatrix");
   else
     for (i = 0; i < 16; i++)
