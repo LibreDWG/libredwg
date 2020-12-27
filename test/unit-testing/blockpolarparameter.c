@@ -1,4 +1,3 @@
-// TODO DEBUGGING
 #define DWG_TYPE DWG_TYPE_BLOCKPOLARPARAMETER
 #include "common.c"
 
@@ -17,7 +16,6 @@ api_process (dwg_object *obj)
   Dwg_BLOCKPARAMVALUESET distance_value_set;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-#ifdef DEBUG_CLASSES
   dwg_obj_blockpolarparameter *_obj = dwg_object_to_BLOCKPOLARPARAMETER (obj);
 
   CHK_EVALEXPR (BLOCKPOLARPARAMETER);
@@ -66,5 +64,4 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE (_obj->distance_value_set, BLOCKPARAMVALUESET, num_valuelist, BS);
   CHK_SUBCLASS_VECTOR_TYPE (_obj->distance_value_set, BLOCKPARAMVALUESET, valuelist,
                             _obj->distance_value_set.num_valuelist, BD);
-#endif
 }

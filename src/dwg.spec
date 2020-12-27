@@ -10718,18 +10718,6 @@ DWG_OBJECT (ASSOCARRAYMODIFYACTIONBODY)
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
-DWG_OBJECT (ASSOCDIMDEPENDENCYBODY)
-  DECODE_UNKNOWN_BITS
-  SUBCLASS (AcDbAssocDependencyBody)
-  FIELD_BS (adb_version, 90); // always 1
-  SUBCLASS (AcDbImpAssocDimDependencyBodyBase)
-  FIELD_BS (dimbase_version, 90); // always 1
-  FIELD_T (name, 1);
-  SUBCLASS (AdDbAssocDimDependencyBody)
-  FIELD_BS (class_version, 90); // 1
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
 DWG_OBJECT (BLOCKPARAMDEPENDENCYBODY)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbAssocDependencyBody)
@@ -10920,27 +10908,6 @@ DWG_OBJECT (BLOCKPOINTPARAMETER)
   FIELD_T (position_name, 303);
   FIELD_T (position_desc, 304);
   FIELD_3BD (def_label_pt, 1011);
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-DWG_OBJECT (BLOCKPOLARGRIP)
-  AcDbBlockGrip_fields;
-  SUBCLASS (AcDbBlockPolarGrip)
-  START_OBJECT_HANDLE_STREAM;
-DWG_OBJECT_END
-
-// not enough coverage
-DWG_OBJECT (BLOCKPOLARPARAMETER)
-  AcDbBlock2PtParameter_fields;
-  SUBCLASS (AcDbBlockPolarParameter)
-  FIELD_T (angle_name, 305);
-  FIELD_T (angle_desc, 306);
-  FIELD_T (distance_name, 305);
-  FIELD_T (distance_desc, 306);
-  FIELD_BD (offset, 140);
-  AcDbBlockParamValueSet_fields (angle_value_set,96,142,175,410);
-  AcDbBlockParamValueSet_fields (distance_value_set,97,146,176,309);
-  //FIELD_3BD (base_angle_pt, 0);
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
@@ -11306,6 +11273,39 @@ DWG_OBJECT_END
 
 #endif /* DEBUG_CLASSES || IS_FREE */
 /*=============================================================================*/
+
+// not enough coverage
+DWG_OBJECT (BLOCKPOLARPARAMETER)
+  AcDbBlock2PtParameter_fields;
+  SUBCLASS (AcDbBlockPolarParameter)
+  FIELD_T (angle_name, 305);
+  FIELD_T (angle_desc, 306);
+  FIELD_T (distance_name, 305);
+  FIELD_T (distance_desc, 306);
+  FIELD_BD (offset, 140);
+  AcDbBlockParamValueSet_fields (angle_value_set,96,142,175,410);
+  AcDbBlockParamValueSet_fields (distance_value_set,97,146,176,309);
+  //FIELD_3BD (base_angle_pt, 0);
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (BLOCKPOLARGRIP)
+  AcDbBlockGrip_fields;
+  SUBCLASS (AcDbBlockPolarGrip)
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
+
+DWG_OBJECT (ASSOCDIMDEPENDENCYBODY)
+  DECODE_UNKNOWN_BITS
+  SUBCLASS (AcDbAssocDependencyBody)
+  FIELD_BS (adb_version, 90); // always 1
+  SUBCLASS (AcDbImpAssocDimDependencyBodyBase)
+  FIELD_BS (dimbase_version, 90); // always 1
+  FIELD_T (name, 1);
+  SUBCLASS (AdDbAssocDimDependencyBody)
+  FIELD_BS (class_version, 90); // 1
+  START_OBJECT_HANDLE_STREAM;
+DWG_OBJECT_END
 
 /* Those undocumented objects are also stored as raw UNKNOWN_OBJ */
 

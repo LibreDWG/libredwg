@@ -926,7 +926,7 @@ in_word_set (register const char *str, register size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str181,                 "SECTION_SETTINGS",                  DWG_TYPE_SECTION_SETTINGS,	0,	UNSTABLE},
       {-1}, {-1},
 #line 225 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str184,                   "BLOCKPOLARGRIP",                    DWG_TYPE_BLOCKPOLARGRIP,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str184,                   "BLOCKPOLARGRIP",                    DWG_TYPE_BLOCKPOLARGRIP,	0,	UNSTABLE},
       {-1}, {-1}, {-1},
 #line 147 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str188,               "ACSH_PYRAMID_CLASS",                DWG_TYPE_ACSH_PYRAMID_CLASS,	0,	UNSTABLE},
@@ -1161,7 +1161,7 @@ in_word_set (register const char *str, register size_t len)
 #line 207 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str411,  "BLOCKANGULARCONSTRAINTPARAMETER",   DWG_TYPE_BLOCKANGULARCONSTRAINTPARAMETER,	0,	DEBUGGING},
 #line 233 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str412,                "BLOCKROTATIONGRIP",                 DWG_TYPE_BLOCKROTATIONGRIP,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str412,                "BLOCKROTATIONGRIP",                 DWG_TYPE_BLOCKROTATIONGRIP,	0,	STABLE},
       {-1},
 #line 194 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str414,         "ACDBASSOCPOINTREFACTIONPARAM",      DWG_TYPE_ASSOCPOINTREFACTIONPARAM,	0,	DEBUGGING},
@@ -1176,7 +1176,7 @@ in_word_set (register const char *str, register size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str421,            "RAPIDRTRENDERSETTINGS",             DWG_TYPE_RAPIDRTRENDERSETTINGS,	0,	UNSTABLE},
       {-1}, {-1}, {-1},
 #line 220 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str425,                  "BLOCKLOOKUPGRIP",                   DWG_TYPE_BLOCKLOOKUPGRIP,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str425,                  "BLOCKLOOKUPGRIP",                   DWG_TYPE_BLOCKLOOKUPGRIP,	0,	STABLE},
 #line 76 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str426,                    "INSERT",                     DWG_TYPE_INSERT,	1,	STABLE},
 #line 155 "src/objects.in"
@@ -1304,7 +1304,7 @@ in_word_set (register const char *str, register size_t len)
 #line 297 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str526,  "ACDB_MTEXTATTRIBUTEOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA,	0,	DEBUGGING},
 #line 173 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str527,           "ACDBASSOCDIMDEPENDENCYBODY",        DWG_TYPE_ASSOCDIMDEPENDENCYBODY,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str527,           "ACDBASSOCDIMDEPENDENCYBODY",        DWG_TYPE_ASSOCDIMDEPENDENCYBODY,	0,	UNSTABLE},
 #line 243 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str528,                    "BLOCK_CONTROL",                     DWG_TYPE_BLOCK_CONTROL,	0,	STABLE},
       {-1},
@@ -1487,7 +1487,7 @@ in_word_set (register const char *str, register size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str720,                  "ACSH_BREP_CLASS",                   DWG_TYPE_ACSH_BREP_CLASS,	0,	UNSTABLE},
       {-1}, {-1},
 #line 205 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str723,               "BLOCKALIGNMENTGRIP",                DWG_TYPE_BLOCKALIGNMENTGRIP,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str723,               "BLOCKALIGNMENTGRIP",                DWG_TYPE_BLOCKALIGNMENTGRIP,	0,	STABLE},
       {-1},
 #line 143 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str725,             "ACSH_EXTRUSION_CLASS",              DWG_TYPE_ACSH_EXTRUSION_CLASS,	0,	DEBUGGING},
@@ -1497,7 +1497,7 @@ in_word_set (register const char *str, register size_t len)
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
 #line 206 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str748,          "BLOCKALIGNMENTPARAMETER",           DWG_TYPE_BLOCKALIGNMENTPARAMETER,	0,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str748,          "BLOCKALIGNMENTPARAMETER",           DWG_TYPE_BLOCKALIGNMENTPARAMETER,	0,	STABLE},
       {-1},
 #line 222 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str750,                  "BLOCKMOVEACTION",                   DWG_TYPE_BLOCKMOVEACTION,	0,	STABLE},

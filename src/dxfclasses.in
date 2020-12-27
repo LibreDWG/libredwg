@@ -233,6 +233,7 @@ BLOCKSTRETCHACTION,			"AcDbBlockStretchAction",	       	ODBX,	0
 BLOCKLOOKUPPARAMETER,			"AcDbBlockLookupParameter",		ODBX,	0
 BLOCKPOINTPARAMETER,			"AcDbBlockPointParameter",		ODBX,	0
 BLOCKROTATIONPARAMETER,			"AcDbBlockRotationParameter",		ODBX,	0
+BLOCKPOLARPARAMETER,			"AcDbBlockPolarParameter",		ODBX,	0
 BLOCKPOLARGRIP,				"AcDbBlockPolarGrip",			ODBX,	0
 BLOCKROTATIONGRIP,			"AcDbBlockRotationGrip",		ODBX,	0
 BLOCKVISIBILITYGRIP,			"AcDbBlockVisibilityGrip",		ODBX,	0

@@ -72,6 +72,7 @@ testobjects = \
 	assocgeomdependency \
 	assocvaluedependency \
 	assocblendsurfaceactionbody \
+	assocdimdependencybody \
 	assocextendsurfaceactionbody \
 	assocextrudedsurfaceactionbody \
 	assocfilletsurfaceactionbody \
@@ -102,6 +103,8 @@ testobjects = \
 	blocklineargrip \
 	blocklookupgrip \
 	blockmoveaction \
+	blockpolargrip \
+	blockpolarparameter \
 	blockscaleaction \
 	blockrotationparameter \
 	blockxyparameter \
@@ -278,7 +281,6 @@ testdebug = \
 	assocarraypathparameters \
 	assocarraypolarparameters \
 	assocarrayrectangularparameters \
-	assocdimdependencybody \
 	blockparamdependencybody \
 	contextdatamanager \
 	csacdocumentoptions \
@@ -335,8 +337,6 @@ testdebug = \
 	blocklookupaction \
 	blocklookupparameter \
 	blockpointparameter \
-	blockpolargrip \
-	blockpolarparameter \
 	blockpolarstretchaction \
 	blockpropertiestable \
 	blockpropertiestablegrip \
