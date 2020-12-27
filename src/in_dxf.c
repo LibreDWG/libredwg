@@ -5944,6 +5944,27 @@ add_RENDERENVIRONMENT (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_T (environ_image_filename, 1);
   return NULL;
 }
+static Dxf_Pair *
+add_RENDERSETTINGS (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
+{
+  Dwg_Object_RENDERSETTINGS *o = obj->tio.object->tio.RENDERSETTINGS;
+  Dwg_Data *dwg = obj->parent;
+  Dxf_Pair *pair;
+
+  FIELD_BL (class_version, 90);
+  FIELD_T (name, 1);
+  FIELD_B (fog_enabled, 290);
+  FIELD_B (fog_background_enabled, 290);
+  FIELD_B (backfaces_enabled, 290);
+  FIELD_B (environ_image_enabled, 290);
+  FIELD_T (environ_image_filename, 1);
+  FIELD_T (description, 1);
+  FIELD_BL (display_index, 90);
+  VERSION (R_2013) {
+    FIELD_B (has_predefined, 290);
+  }
+  return NULL;
+}
 
 static Dxf_Pair *
 add_RENDERGLOBAL (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
@@ -9241,6 +9262,15 @@ new_object (char *restrict name, char *restrict dxfname,
                 {
                   dxf_free_pair (pair);
                   pair = add_RENDERENTRY (obj, dat); // NULL for success
+                  if (!pair)
+                    goto next_pair;
+                  else
+                    goto start_loop; /* failure */
+                }
+              else if (strEQc (subclass, "AcDbRenderSettings"))
+                {
+                  dxf_free_pair (pair);
+                  pair = add_RENDERSETTINGS (obj, dat); // NULL for success
                   if (!pair)
                     goto next_pair;
                   else
