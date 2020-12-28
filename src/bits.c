@@ -2474,7 +2474,7 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
 int
 bit_eq_T (Bit_Chain *restrict dat, const BITCODE_T restrict wstr1, const char *restrict str2)
 {
-  if (dat->version >= R_2007)
+  if (IS_FROM_TU (dat))
     return bit_eq_TU (str2, (BITCODE_TU)wstr1);
   else
     return !strcmp (wstr1, str2);
