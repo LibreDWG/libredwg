@@ -512,6 +512,8 @@ $DXF{$_}->{'class_version'} = 280 for qw(ATTRIB ATTDEF); #r2010 only
 $DXF{$_}->{'elevation'} = 30 for qw(TEXT ATTRIB ATTDEF); # not 31
 $DXF{$_}->{'has_attribs'} = 66 for qw(INSERT MINSERT);
 #$DXF{$_}->{'has_vertex'} = 66 for qw(POLYLINE_2D POLYLINE_3D POLYLINE_PFACE);
+$DXF{UNDERLAYDEFINITION}->{'filename'} = 1;
+$DXF{UNDERLAYDEFINITION}->{'name'} = 2;
 $DXF{$_}->{'flag'} = 70 for qw(VERTEX_3D VERTEX_MESH VERTEX_PFACE_FACE POLYLINE_PFACE);
 my @solids = qw(3DSOLID REGION BODY
                 EXTRUDEDSURFACE LOFTEDSURFACE NURBSURFACE PLANESURFACE REVOLVEDSURFACE SWEPTSURFACE
@@ -964,6 +966,8 @@ for (sort @entity_names) {
 # FIXME: fixup duplicates in TEXT
   if ($_ eq 'TEXT') {
     $SUBCLASSES{$_} = [ 'AcDbText' ];
+  } elsif (/^...UNDERLAY$/) {
+    $SUBCLASSES{$_} = [ 'AcDbUnderlayReference' ];
   }
   my $aref = $SUBCLASSES{$_};
   unshift @$aref, 'AcDbEntity';

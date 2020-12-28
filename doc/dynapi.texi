@@ -12503,9 +12503,9 @@ H*,	DXF 340
 @item parent
 struct _dwg_object_object*
 @item filename
-T
+T,	DXF 1
 @item name
-T
+T,	DXF 2
 
 @end vtable
 @end indentedblock

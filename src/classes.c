@@ -897,9 +897,7 @@ object_alias (char *restrict name)
 {
   const int len = strlen (name);
   // check aliases (dxfname => name)
-  if (len == strlen ("PDFDEFINITION") && strEQc (&name[3], "DEFINITION"))
-    strcpy (name, "UNDERLAYDEFINITION");
-  else if (strEQc (name, "ACAD_PROXY_OBJECT"))
+  if (strEQc (name, "ACAD_PROXY_OBJECT"))
     strcpy (name, "PROXY_OBJECT");
   else if (strEQc (name, "ACDBPERSSUBENTMANAGER"))
     strcpy (name, "PERSUBENTMGR");
@@ -944,8 +942,6 @@ entity_alias (char *restrict name)
     strcpy (name, "POLYLINE_2D"); // other POLYLINE_* by flag or subclass?
   else if (strEQc (name, "VERTEX"))
     strcpy (name, "VERTEX_2D"); // other VERTEX_* by flag?
-  else if (len == strlen ("PDFUNDERLAY") && strEQc (&name[3], "UNDERLAY"))
-    strcpy (name, "UNDERLAY");
   else if (strEQc (name, "SURFACE"))
     strcpy (name, "PLANESURFACE");
   else if (strEQc (name, "COORDINATION_MODEL")) //??
