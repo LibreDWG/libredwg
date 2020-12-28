@@ -27084,17 +27084,19 @@ dwg_add_PDFUNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                      const dwg_point_3d *restrict ins_pt, const double scale_factor,
                      const double rotation_angle)
 {
-  Dwg_Object *und, *def, *dict;
+  Dwg_Object *und, *dict = NULL, *def = NULL;
   Dwg_Object_DICTIONARY *_dict;
   Dwg_Data *_dwg;
   char name[80], *base, *ext;
-  int i;
+  unsigned int i;
   {
     int err;
     Dwg_Object *hdr = dwg_obj_generic_to_object (blkhdr, &err);
     Dwg_Data *dwg = _dwg = hdr ? hdr->parent : NULL;
     char base_1[80];
-    BITCODE_H defs;
+    Dwg_Object *defs;
+    Dwg_Object_DICTIONARY *_defs;
+    BITCODE_H defsref;
 
     if (!dwg || err)
       return NULL;
@@ -27106,29 +27108,68 @@ dwg_add_PDFUNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     base = split_filepath (filename, &ext);
     snprintf (name, 80, "%d", i);
     snprintf (base_1, 80, "%s - %d", base, i);
-    defs = dwg_find_dictionary (dwg, "ACAD_PDFDEFINITIONS");
-    if (!defs)
+    defsref = dwg_find_dictionary (dwg, "ACAD_PDFDEFINITIONS");
+    if (!defsref) // no nod entry yet, create
       _dict = dwg_add_DICTIONARY (dwg, "ACAD_PDFDEFINITIONS", base_1, 0);
     else
       {
-        // FIXME: check if a PDFDEFINITION for this filename already exists.
+        // PDFDEFINITIONS dict exists
+        dict = dwg_ref_object (dwg, defsref);
+        _dict = dict->tio.object->tio.DICTIONARY;
+        // check if a PDFDEFINITION for this filename already exists.
         // if same path: re-use it. if same base: inc i and name.
-        _dict = dwg_add_DICTIONARY (dwg, "ACAD_PDFDEFINITIONS", base_1, 0);
+        for (unsigned j=0; j < _dict->numitems; j++)
+          {
+            BITCODE_T text = _dict->texts[j];
+            Dwg_Object_Ref *ref = _dict->itemhandles[j];
+            Dwg_Object *o = dwg_ref_object (dwg, ref);
+            if (o && o->fixedtype == DWG_TYPE_PDFDEFINITION)
+              {
+                Bit_Chain dat = {0};
+                Dwg_Object_PDFDEFINITION *_def = o->tio.object->tio.PDFDEFINITION;
+                char text1[80];
+                int i1;
+                // for IS_FROM_TU in bit_eq_T: don't convert with DXF
+                dat.from_version = dwg->header.from_version;
+                dat.opts = dwg->opts;
+                if (bit_eq_T (&dat, _def->filename, filename))
+                  {
+                    // same filename: re-use
+                    def = o;
+                    break;
+                  }
+                // same base: i++ and inc name
+                sscanf (text, "%s - %d", text1, &i1);
+                if (strEQ (text1, base))
+                  {
+                    i++;
+                    snprintf (name, 80, "%d", i);
+                    snprintf (base_1, 80, "%s - %d", base, i);
+                    break;
+                  }
+              }
+          }
+        if (!def) // matching def + dict not found, add entry
+          dwg_add_DICTIONARY_item (_dict, base_1, 0);
       }
-    dict = dwg_obj_generic_to_object (_dict, &err);
-  }
-  {
-    Dwg_Data *dwg = _dwg;
-    API_ADD_OBJECT (PDFDEFINITION);
-    if (!_obj)
-      return NULL;
-    def = obj;
-    _dict->itemhandles[0] = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);
-    _obj->filename = dwg_add_u8_input (dwg, filename);
-    _obj->name = strdup (name);
-    obj->tio.object->ownerhandle
-        = dwg_add_handleref (dwg, 4, dict->handle.value, obj);
-    add_obj_reactor (obj->tio.object, dict->handle.value);
+    if (!def)
+      {
+        API_ADD_OBJECT (PDFDEFINITION);
+        if (!_obj)
+          return NULL;
+        def = obj;
+        _dict->itemhandles[_dict->numitems-1] = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);
+        _obj->filename = dwg_add_u8_input (dwg, filename);
+        _obj->name = strdup (name);
+        if (!dict)
+          dict = dwg_obj_generic_to_object (_dict, &error);
+        if (dict)
+          {
+            obj->tio.object->ownerhandle
+              = dwg_add_handleref (dwg, 4, dict->handle.value, obj);
+            add_obj_reactor (obj->tio.object, dict->handle.value);
+          }
+      }
   }
   {
     API_ADD_ENTITY (PDFUNDERLAY);

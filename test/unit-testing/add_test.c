@@ -34,12 +34,15 @@ static int cnt = 0;
 #include "bits.h"
 #include "out_dxf.h"
 
-enum _temp_complex_types {
+enum _temp_complex_types { // and test-cases
   TEMP_ELLIPTICAL_CONE = 4000,
   TEMP_ELLIPTICAL_CYLINDER,
   TEMP_EXTRUDED_SOLID,
   TEMP_EXTRUDED_PATH,
   TEMP_REVOLVED_SOLID,
+  TEMP_PDFDEFINITION1,
+  TEMP_PDFDEFINITION2,
+  TEMP_PDFDEFINITION3,
 };
 
 static unsigned char* hex2bin (const char *hex)
@@ -52,6 +55,19 @@ static unsigned char* hex2bin (const char *hex)
       hex += 2;
     }
   return bin;
+}
+
+static unsigned num_objects (void *vents)
+{
+  unsigned i = 0;
+  Dwg_Object_DICTIONARY **ents = (Dwg_Object_DICTIONARY **)vents;
+  if (!ents)
+    return 0;
+  while (*ents) {
+    i++;
+    ents++;
+  };
+  return i;
 }
 
 static int
@@ -70,6 +86,33 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
   char dwgfile[1024];
   strcpy (dwgfile, file);
 
+  if (!name)
+    {
+      switch ((enum _temp_complex_types)type) {
+      case TEMP_ELLIPTICAL_CONE:
+        name = "ELLIPTICAL_CONE";
+        break;
+      case TEMP_ELLIPTICAL_CYLINDER:
+        name = "ELLIPTICAL_CYLINDER";
+        break;
+      case TEMP_EXTRUDED_SOLID:
+        name = "EXTRUDED_SOLID";
+        break;
+      case TEMP_EXTRUDED_PATH:
+        name = "EXTRUDED_PATH";
+        break;
+      case TEMP_REVOLVED_SOLID:
+        name = "REVOLVED_SOLID";
+        break;
+      case TEMP_PDFDEFINITION1:
+      case TEMP_PDFDEFINITION2:
+      case TEMP_PDFDEFINITION3:
+        name = "PDFDEFINITION";
+        break;
+      default:
+        assert (name);
+      }
+    }
   assert (name);
   failed = 0;
   cnt++;
@@ -650,6 +693,15 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
           fail ("no VIEWPORT created");
       }
       break;
+    case TEMP_PDFDEFINITION3: // same def
+      dwg_add_PDFUNDERLAY (hdr, "test.pdf", &pt2, 1.0, 0);
+      /* fallthrough */
+    case TEMP_PDFDEFINITION2: // new def
+      dwg_add_PDFUNDERLAY (hdr, "test1.pdf", &pt1, 1.0, 0);
+      /* fallthrough */
+    case TEMP_PDFDEFINITION1: // same base => "test - 2"
+      dwg_add_PDFUNDERLAY (hdr, "../test.pdf", &pt2, 1.0, 0);
+      /* fallthrough */
     case DWG_TYPE_PDFUNDERLAY:
       dwg_add_PDFUNDERLAY (hdr, "test.pdf", &pt1, 1.0, 0);
       break;
@@ -870,6 +922,39 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       TEST_OBJECT (VBA_PROJECT);
       TEST_OBJECT (LAYOUT);
       TEST_ENTITY (PDFUNDERLAY);
+    case TEMP_PDFDEFINITION3: // 2 defs, 4 ents
+    case TEMP_PDFDEFINITION2: // 2 defs (test1 - 1), 3 ents
+    case TEMP_PDFDEFINITION1: // 2 defs (test -2), 2 ents
+      {
+        Dwg_Entity_PDFUNDERLAY **ents = dwg_getall_PDFUNDERLAY (mspace_ref);
+        Dwg_Object_PDFDEFINITION **objs = dwg_getall_PDFDEFINITION (dwg);
+        Dwg_Object_DICTIONARY **dicts = dwg_getall_DICTIONARY (dwg);
+        unsigned numents = num_objects (ents);
+        unsigned numobjs = num_objects (objs);
+        unsigned numdicts = num_objects (dicts);
+        if (numents == 2 && (int)type == (int)TEMP_PDFDEFINITION1)
+          ok ("found 2 PDFUNDERLAY");
+        else if (numents == 3 && (int)type == (int)TEMP_PDFDEFINITION2)
+          ok ("found 3 PDFUNDERLAY");
+        else if (numents == 4 && (int)type == (int)TEMP_PDFDEFINITION3)
+          ok ("found 4 PDFUNDERLAY");
+        else
+          fail ("found %d PDFUNDERLAY", numents);
+        if (numobjs == 3 && (int)type != (int)TEMP_PDFDEFINITION1)
+          ok ("found 3 PDFDEFINITION");
+        else if (numobjs == 2 && (int)type == (int)TEMP_PDFDEFINITION1)
+          ok ("found 1 PDFDEFINITION");
+        else
+          fail ("found %d PDFDEFINITION", numobjs);
+        if (numdicts == 6)
+          ok ("found 6 DICTIONARY");
+        else
+          fail ("found %d DICTIONARY, not 6", numdicts);
+        free (ents);
+        free (objs);
+        free (dicts);
+      }
+      break;
       //TEST_OBJECT (LAYERFILTER);
       //TEST_OBJECT (LAYER_INDEX);
       //TEST_OBJECT (SPATIAL_FILTER);
@@ -976,6 +1061,9 @@ main (int argc, char *argv[])
       error += test_add (DWG_TYPE_LAYOUT, "add_layout_2000", dxf);
 #ifdef HAVE_DWG_ADD_PDFUNDERLAY
       error += test_add (DWG_TYPE_PDFUNDERLAY, "add_pdfunderlay_2000", dxf);
+      error += test_add ((const Dwg_Object_Type)TEMP_PDFDEFINITION1, "add_pdfdef1_2000", dxf);
+      error += test_add ((const Dwg_Object_Type)TEMP_PDFDEFINITION2, "add_pdfdef2_2000", dxf);
+      error += test_add ((const Dwg_Object_Type)TEMP_PDFDEFINITION3, "add_pdfdef3_2000", dxf);
 #endif
 #ifdef HAVE_DWG_ADD_LAYERFILTER
       error += test_add (DWG_TYPE_LAYERFILTER, "add_layfilt_2000", dxf);
