@@ -30,6 +30,7 @@
 #ifdef AX_STRCASECMP_HEADER
 #  include AX_STRCASECMP_HEADER
 #endif
+#include <libgen.h> // basename
 
 #include "bits.h"
 #include "common.h"
@@ -3025,4 +3026,30 @@ void dwg_set_next_objhandle (Dwg_Object *obj)
   hash_set (dwg->object_map, obj->handle.value, (uint32_t)obj->index);
   dwg->next_hdl = 0;
   return;
+}
+
+// <path-to>/dxf.ext => copy of "dxf", "ext"
+// returns a malloc'ed copy of basename without extension, and
+// sets ext to the char behind the last "." of basename
+char *split_filepath (const char *filepath, char **extp)
+{
+  char *copy, *base, *dot;
+  //int len;
+  if (!filepath)
+    return NULL;
+  copy = strdup (filepath);
+#ifdef HAVE_BASENAME
+  base = basename (copy);
+#else
+  base = strrchr (copy, '/');
+#endif
+  if (!base)
+    base = copy;
+  //len = strlen (base);
+  if ((dot = strrchr (base, '.')) && *dot)
+    {
+      *extp = dot + 1;
+      *dot = '\0';
+    }
+  return base;
 }

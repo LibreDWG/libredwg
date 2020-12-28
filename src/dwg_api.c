@@ -26879,6 +26879,7 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
     solid->wireframe_data_present = 1;
     solid->point_present = 1;
+    ADD_CHECK_3DPOINT (origin_pt);
     solid->point.x = origin_pt->x;
     solid->point.y = origin_pt->y;
     solid->point.z = origin_pt->z;
@@ -27037,9 +27038,11 @@ dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     if (!img)
       return NULL;
     _img = _obj;
+    ADD_CHECK_3DPOINT (ins_pt);
     _obj->pt0.x = ins_pt->x;
     _obj->pt0.y = ins_pt->y;
     _obj->pt0.z = ins_pt->z;
+    ADD_CHECK_DOUBLE (scale_factor);
     // TODO rotation cos()
     //ADD_CHECK_ANGLE (_obj->rotation);
     _obj->uvec.x = scale_factor;
@@ -27073,8 +27076,80 @@ dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _img;
 }
 
-// PDFUNDERLAY
-// PDFDEFINITION
+// Not in VBA
+// Searches all PDFDEFINITION's for filename, if not found create a new one.
+EXPORT Dwg_Entity_PDFUNDERLAY *
+dwg_add_PDFUNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                     const char *restrict filename,
+                     const dwg_point_3d *restrict ins_pt, const double scale_factor,
+                     const double rotation_angle)
+{
+  Dwg_Object *und, *def, *dict;
+  Dwg_Object_DICTIONARY *_dict;
+  Dwg_Data *_dwg;
+  char name[80], *base, *ext;
+  int i;
+  {
+    int err;
+    Dwg_Object *hdr = dwg_obj_generic_to_object (blkhdr, &err);
+    Dwg_Data *dwg = _dwg = hdr ? hdr->parent : NULL;
+    char base_1[80];
+    BITCODE_H defs;
+
+    if (!dwg || err)
+      return NULL;
+    i = 1;
+    REQUIRE_CLASS ("PDFDEFINITION");
+    REQUIRE_CLASS ("PDFUNDERLAY");
+    // name = "dxf - 1";
+    // search/register in NOD
+    base = split_filepath (filename, &ext);
+    snprintf (name, 80, "%d", i);
+    snprintf (base_1, 80, "%s - %d", base, i);
+    defs = dwg_find_dictionary (dwg, "ACAD_PDFDEFINITIONS");
+    if (!defs)
+      _dict = dwg_add_DICTIONARY (dwg, "ACAD_PDFDEFINITIONS", base_1, 0);
+    else
+      {
+        // FIXME: check if a PDFDEFINITION for this filename already exists.
+        // if same path: re-use it. if same base: inc i and name.
+        _dict = dwg_add_DICTIONARY (dwg, "ACAD_PDFDEFINITIONS", base_1, 0);
+      }
+    dict = dwg_obj_generic_to_object (_dict, &err);
+  }
+  {
+    Dwg_Data *dwg = _dwg;
+    API_ADD_OBJECT (PDFDEFINITION);
+    if (!_obj)
+      return NULL;
+    def = obj;
+    _dict->itemhandles[0] = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);
+    _obj->filename = dwg_add_u8_input (dwg, filename);
+    _obj->name = strdup (name);
+    obj->tio.object->ownerhandle
+        = dwg_add_handleref (dwg, 4, dict->handle.value, obj);
+    add_obj_reactor (obj->tio.object, dict->handle.value);
+  }
+  {
+    API_ADD_ENTITY (PDFUNDERLAY);
+    if (!_obj)
+      return NULL;
+    _obj->definition_id = dwg_add_handleref (dwg, 5, def->handle.value, obj);
+    ADD_CHECK_3DPOINT (ins_pt);
+    _obj->ins_pt.x = ins_pt->x;
+    _obj->ins_pt.y = ins_pt->y;
+    _obj->ins_pt.z = ins_pt->z;
+    _obj->angle = rotation_angle;
+    ADD_CHECK_ANGLE (_obj->angle);
+    ADD_CHECK_DOUBLE (scale_factor);
+    _obj->scale.x = scale_factor;
+    _obj->scale.y = scale_factor;
+    _obj->scale.z = 1.0;
+    _obj->contrast = 100;
+    return _obj;
+  }
+}
+
 // INDEX
 
 EXPORT Dwg_Entity_LARGE_RADIAL_DIMENSION *
@@ -27145,7 +27220,7 @@ dwg_add_SPATIAL_FILTER (Dwg_Entity_INSERT *restrict insert /*, clip_verts... */)
   {
     REQUIRE_CLASS ("SPATIAL_FILTER");
 
-    _filter = dwg_add_DICTIONARY (dwg, NULL, (BITCODE_T) "ACAD_FILTER", 0);
+    _filter = dwg_add_DICTIONARY (dwg, NULL, "ACAD_FILTER", 0);
     filter = dwg_obj_generic_to_object (_filter, &err);
     filter->tio.object->ownerhandle
         = dwg_add_handleref (dwg, 5, ins->handle.value, filter);
@@ -27154,7 +27229,7 @@ dwg_add_SPATIAL_FILTER (Dwg_Entity_INSERT *restrict insert /*, clip_verts... */)
     ins->tio.entity->xdicobjhandle
         = dwg_add_handleref (dwg, 3, filter->handle.value, ins);
 
-    _spatial = dwg_add_DICTIONARY (dwg, NULL, (BITCODE_T) "SPATIAL", 0);
+    _spatial = dwg_add_DICTIONARY (dwg, NULL, "SPATIAL", 0);
     _spatial->is_hardowner = 1;
     spatial = dwg_obj_generic_to_object (_spatial, &err);
     _filter->itemhandles[0]

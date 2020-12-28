@@ -6526,6 +6526,13 @@ dwg_add_LARGE_RADIAL_DIMENSION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                                 const dwg_point_3d *restrict jog_point,
                                 const double leader_len) __nonnull_all;
 
+/* Experimental. Does not work yet properly. */
+EXPORT Dwg_Entity_PDFUNDERLAY *
+dwg_add_PDFUNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                     const char *restrict filename,
+                     const dwg_point_3d *restrict ins_pt, const double scale_factor,
+                     const double rotation_angle) __nonnull_all;
+
 /* All the ACSH methods and 3d primitives are still experimental.
    They do not work yet properly */
 Dwg_Object_ACSH_BOX_CLASS*
@@ -6947,7 +6954,6 @@ dwg_add_WIPEOUTVARIABLES (Dwg_Data *dwg /* ... */) __nonnull_all;
 #define HAVE_NO_DWG_ADD_TEXTOBJECTCONTEXTDATA
 #define HAVE_NO_DWG_ADD_TVDEVICEPROPERTIES
 #define HAVE_NO_DWG_ADD_UCS_CONTROL
-#define HAVE_NO_DWG_ADD_PDFUNDERLAY
 #define HAVE_NO_DWG_ADD_DGNUNDERLAY
 #define HAVE_NO_DWG_ADD_DWFPDFUNDERLAY
 #define HAVE_NO_DWG_ADD_PDFDEFINITION
@@ -7038,6 +7044,7 @@ dwg_add_WIPEOUTVARIABLES (Dwg_Data *dwg /* ... */) __nonnull_all;
 #define HAVE_DWG_ADD_MLINESTYLE
 #define HAVE_DWG_ADD_MTEXT
 #define HAVE_DWG_ADD_OLE2FRAME
+#define HAVE_DWG_ADD_PDFUNDERLAY
 #define HAVE_DWG_ADD_PLACEHOLDER
 #define HAVE_DWG_ADD_POINT
 #define HAVE_DWG_ADD_POLYLINE_2D

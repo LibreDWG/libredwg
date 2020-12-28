@@ -331,4 +331,9 @@ BITCODE_H shift_hv (BITCODE_H *hv, BITCODE_BL *num_p);
 Dwg_Handle *dwg_find_first_type_handle (Dwg_Data *restrict dwg,
                                         enum DWG_OBJECT_TYPE type);
 
+// <path-to>/dxf.ext => copy of "dxf", "ext"
+// Returns a malloc'ed copy of basename, and
+// sets ext to the char behind the last "." of filepath
+char *split_filepath (const char *filepath, char **extp);
+
 #endif
