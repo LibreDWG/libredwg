@@ -1151,7 +1151,7 @@ static void
 dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str,
                   const int opts, const int dxf, const int dxfcont)
 {
-  if (str)
+  if (str && *str)
     {
       if (opts && (strchr (str, '\n') || strchr (str, '\r') || strstr (str, "\\M+1")))
         {
@@ -1222,7 +1222,9 @@ dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
           switch (data->code)
             {
             case 0:
-              if (IS_FROM_TU (dat))
+              if (!data->u.eed_0.length)
+                fprintf (dat->fh, "1000\r\n\r\n");
+              else if (data->u.eed_0.is_tu)
                 VALUE_TU (data->u.eed_0_r2007.string, 1000)
               else
                 VALUE_TV (data->u.eed_0.string, 1000)
