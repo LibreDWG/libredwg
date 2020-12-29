@@ -5409,8 +5409,6 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item entries
 H*
-@item objid
-BL
 
 @end vtable
 @end indentedblock
@@ -8559,8 +8557,6 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item entries
 H*
-@item objid
-BL
 @item model_space
 H
 @item paper_space
@@ -9208,8 +9204,6 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item entries
 H*
-@item objid
-BL
 @item num_morehandles
 RC,	DXF 71
 @item morehandles
@@ -9856,8 +9850,6 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item entries
 H*
-@item objid
-BL
 
 @end vtable
 @end indentedblock
@@ -10078,8 +10070,6 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item entries
 H*
-@item objid
-BL
 @item bylayer
 H
 @item byblock
@@ -11509,8 +11499,6 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item entries
 H*
-@item objid
-BL
 
 @end vtable
 @end indentedblock
@@ -11832,8 +11820,6 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item entries
 H*
-@item objid
-BL
 
 @end vtable
 @end indentedblock
@@ -11978,8 +11964,6 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item entries
 H*
-@item objid
-BL
 
 @end vtable
 @end indentedblock
@@ -12385,8 +12369,6 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item entries
 H*
-@item objid
-BL
 
 @end vtable
 @end indentedblock
@@ -12408,8 +12390,6 @@ struct _dwg_object_object*
 BS,	DXF 70
 @item entries
 H*
-@item objid
-BL
 
 @end vtable
 @end indentedblock

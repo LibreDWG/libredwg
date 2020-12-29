@@ -7,7 +7,6 @@ api_process (dwg_object *obj)
   int error, isnew;
   BITCODE_BS i, num_entries;
   BITCODE_H *entries, *hdls;
-  BITCODE_BL objid;
   BITCODE_H model_space;
   BITCODE_H paper_space;
 
@@ -24,7 +23,6 @@ api_process (dwg_object *obj)
       else
         fail ("BLOCK_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
     }
-  CHK_ENTITY_TYPE (block_control, BLOCK_CONTROL, objid, BL);
   CHK_ENTITY_H (block_control, BLOCK_CONTROL, model_space);
   CHK_ENTITY_H (block_control, BLOCK_CONTROL, model_space);
 }

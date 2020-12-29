@@ -28570,21 +28570,6 @@ static int test_APPID_CONTROL (const Dwg_Object *obj)
     appid_control->num_entries--;
   }
   {
-    BITCODE_BL objid;
-    if (dwg_dynapi_entity_value (appid_control, "APPID_CONTROL", "objid", &objid, NULL)
-        && objid == appid_control->objid)
-      pass ();
-    else
-      fail ("APPID_CONTROL.objid [BL] %u != %u", appid_control->objid, objid);
-    objid++;
-    if (dwg_dynapi_entity_set_value (appid_control, "APPID_CONTROL", "objid", &objid, 0)
-        && objid == appid_control->objid)
-      pass ();
-    else
-      fail ("APPID_CONTROL.objid [BL] set+1 %u != %u", appid_control->objid, objid);
-    appid_control->objid--;
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (appid_control, "APPID_CONTROL", "parent", &parent, NULL)
         && !memcmp (&parent, &appid_control->parent, sizeof (struct _dwg_object_object*)))
@@ -43057,21 +43042,6 @@ static int test_BLOCK_CONTROL (const Dwg_Object *obj)
     block_control->num_entries--;
   }
   {
-    BITCODE_BL objid;
-    if (dwg_dynapi_entity_value (block_control, "BLOCK_CONTROL", "objid", &objid, NULL)
-        && objid == block_control->objid)
-      pass ();
-    else
-      fail ("BLOCK_CONTROL.objid [BL] %u != %u", block_control->objid, objid);
-    objid++;
-    if (dwg_dynapi_entity_set_value (block_control, "BLOCK_CONTROL", "objid", &objid, 0)
-        && objid == block_control->objid)
-      pass ();
-    else
-      fail ("BLOCK_CONTROL.objid [BL] set+1 %u != %u", block_control->objid, objid);
-    block_control->objid--;
-  }
-  {
     BITCODE_H paper_space;
     if (dwg_dynapi_entity_value (block_control, "BLOCK_CONTROL", "paper_space", &paper_space, NULL)
         && !memcmp (&paper_space, &block_control->paper_space, sizeof (BITCODE_H)))
@@ -46315,21 +46285,6 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
     dimstyle_control->num_morehandles--;
   }
   {
-    BITCODE_BL objid;
-    if (dwg_dynapi_entity_value (dimstyle_control, "DIMSTYLE_CONTROL", "objid", &objid, NULL)
-        && objid == dimstyle_control->objid)
-      pass ();
-    else
-      fail ("DIMSTYLE_CONTROL.objid [BL] %u != %u", dimstyle_control->objid, objid);
-    objid++;
-    if (dwg_dynapi_entity_set_value (dimstyle_control, "DIMSTYLE_CONTROL", "objid", &objid, 0)
-        && objid == dimstyle_control->objid)
-      pass ();
-    else
-      fail ("DIMSTYLE_CONTROL.objid [BL] set+1 %u != %u", dimstyle_control->objid, objid);
-    dimstyle_control->objid--;
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (dimstyle_control, "DIMSTYLE_CONTROL", "parent", &parent, NULL)
         && !memcmp (&parent, &dimstyle_control->parent, sizeof (struct _dwg_object_object*)))
@@ -49120,21 +49075,6 @@ static int test_LAYER_CONTROL (const Dwg_Object *obj)
     layer_control->num_entries--;
   }
   {
-    BITCODE_BL objid;
-    if (dwg_dynapi_entity_value (layer_control, "LAYER_CONTROL", "objid", &objid, NULL)
-        && objid == layer_control->objid)
-      pass ();
-    else
-      fail ("LAYER_CONTROL.objid [BL] %u != %u", layer_control->objid, objid);
-    objid++;
-    if (dwg_dynapi_entity_set_value (layer_control, "LAYER_CONTROL", "objid", &objid, 0)
-        && objid == layer_control->objid)
-      pass ();
-    else
-      fail ("LAYER_CONTROL.objid [BL] set+1 %u != %u", layer_control->objid, objid);
-    layer_control->objid--;
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (layer_control, "LAYER_CONTROL", "parent", &parent, NULL)
         && !memcmp (&parent, &layer_control->parent, sizeof (struct _dwg_object_object*)))
@@ -49977,21 +49917,6 @@ static int test_LTYPE_CONTROL (const Dwg_Object *obj)
     else
       fail ("LTYPE_CONTROL.num_entries [BS] set+1 %hu != %hu", ltype_control->num_entries, num_entries);
     ltype_control->num_entries--;
-  }
-  {
-    BITCODE_BL objid;
-    if (dwg_dynapi_entity_value (ltype_control, "LTYPE_CONTROL", "objid", &objid, NULL)
-        && objid == ltype_control->objid)
-      pass ();
-    else
-      fail ("LTYPE_CONTROL.objid [BL] %u != %u", ltype_control->objid, objid);
-    objid++;
-    if (dwg_dynapi_entity_set_value (ltype_control, "LTYPE_CONTROL", "objid", &objid, 0)
-        && objid == ltype_control->objid)
-      pass ();
-    else
-      fail ("LTYPE_CONTROL.objid [BL] set+1 %u != %u", ltype_control->objid, objid);
-    ltype_control->objid--;
   }
   {
     struct _dwg_object_object* parent;
@@ -56841,21 +56766,6 @@ static int test_STYLE_CONTROL (const Dwg_Object *obj)
     style_control->num_entries--;
   }
   {
-    BITCODE_BL objid;
-    if (dwg_dynapi_entity_value (style_control, "STYLE_CONTROL", "objid", &objid, NULL)
-        && objid == style_control->objid)
-      pass ();
-    else
-      fail ("STYLE_CONTROL.objid [BL] %u != %u", style_control->objid, objid);
-    objid++;
-    if (dwg_dynapi_entity_set_value (style_control, "STYLE_CONTROL", "objid", &objid, 0)
-        && objid == style_control->objid)
-      pass ();
-    else
-      fail ("STYLE_CONTROL.objid [BL] set+1 %u != %u", style_control->objid, objid);
-    style_control->objid--;
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (style_control, "STYLE_CONTROL", "parent", &parent, NULL)
         && !memcmp (&parent, &style_control->parent, sizeof (struct _dwg_object_object*)))
@@ -58350,21 +58260,6 @@ static int test_UCS_CONTROL (const Dwg_Object *obj)
     ucs_control->num_entries--;
   }
   {
-    BITCODE_BL objid;
-    if (dwg_dynapi_entity_value (ucs_control, "UCS_CONTROL", "objid", &objid, NULL)
-        && objid == ucs_control->objid)
-      pass ();
-    else
-      fail ("UCS_CONTROL.objid [BL] %u != %u", ucs_control->objid, objid);
-    objid++;
-    if (dwg_dynapi_entity_set_value (ucs_control, "UCS_CONTROL", "objid", &objid, 0)
-        && objid == ucs_control->objid)
-      pass ();
-    else
-      fail ("UCS_CONTROL.objid [BL] set+1 %u != %u", ucs_control->objid, objid);
-    ucs_control->objid--;
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (ucs_control, "UCS_CONTROL", "parent", &parent, NULL)
         && !memcmp (&parent, &ucs_control->parent, sizeof (struct _dwg_object_object*)))
@@ -58955,21 +58850,6 @@ static int test_VIEW_CONTROL (const Dwg_Object *obj)
     else
       fail ("VIEW_CONTROL.num_entries [BS] set+1 %hu != %hu", view_control->num_entries, num_entries);
     view_control->num_entries--;
-  }
-  {
-    BITCODE_BL objid;
-    if (dwg_dynapi_entity_value (view_control, "VIEW_CONTROL", "objid", &objid, NULL)
-        && objid == view_control->objid)
-      pass ();
-    else
-      fail ("VIEW_CONTROL.objid [BL] %u != %u", view_control->objid, objid);
-    objid++;
-    if (dwg_dynapi_entity_set_value (view_control, "VIEW_CONTROL", "objid", &objid, 0)
-        && objid == view_control->objid)
-      pass ();
-    else
-      fail ("VIEW_CONTROL.objid [BL] set+1 %u != %u", view_control->objid, objid);
-    view_control->objid--;
   }
   {
     struct _dwg_object_object* parent;
@@ -61531,21 +61411,6 @@ static int test_VPORT_CONTROL (const Dwg_Object *obj)
     vport_control->num_entries--;
   }
   {
-    BITCODE_BL objid;
-    if (dwg_dynapi_entity_value (vport_control, "VPORT_CONTROL", "objid", &objid, NULL)
-        && objid == vport_control->objid)
-      pass ();
-    else
-      fail ("VPORT_CONTROL.objid [BL] %u != %u", vport_control->objid, objid);
-    objid++;
-    if (dwg_dynapi_entity_set_value (vport_control, "VPORT_CONTROL", "objid", &objid, 0)
-        && objid == vport_control->objid)
-      pass ();
-    else
-      fail ("VPORT_CONTROL.objid [BL] set+1 %u != %u", vport_control->objid, objid);
-    vport_control->objid--;
-  }
-  {
     struct _dwg_object_object* parent;
     if (dwg_dynapi_entity_value (vport_control, "VPORT_CONTROL", "parent", &parent, NULL)
         && !memcmp (&parent, &vport_control->parent, sizeof (struct _dwg_object_object*)))
@@ -61595,21 +61460,6 @@ static int test_VX_CONTROL (const Dwg_Object *obj)
     else
       fail ("VX_CONTROL.num_entries [BS] set+1 %hu != %hu", vx_control->num_entries, num_entries);
     vx_control->num_entries--;
-  }
-  {
-    BITCODE_BL objid;
-    if (dwg_dynapi_entity_value (vx_control, "VX_CONTROL", "objid", &objid, NULL)
-        && objid == vx_control->objid)
-      pass ();
-    else
-      fail ("VX_CONTROL.objid [BL] %u != %u", vx_control->objid, objid);
-    objid++;
-    if (dwg_dynapi_entity_set_value (vx_control, "VX_CONTROL", "objid", &objid, 0)
-        && objid == vx_control->objid)
-      pass ();
-    else
-      fail ("VX_CONTROL.objid [BL] set+1 %u != %u", vx_control->objid, objid);
-    vx_control->objid--;
   }
   {
     struct _dwg_object_object* parent;

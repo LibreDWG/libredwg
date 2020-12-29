@@ -7,7 +7,6 @@ api_process (dwg_object *obj)
   int error, isnew;
   BITCODE_BS i, num_entries;
   BITCODE_H *entries, *hdls;
-  BITCODE_BL objid;
   BITCODE_H bylayer;
   BITCODE_H byblock;
 
@@ -35,7 +34,6 @@ api_process (dwg_object *obj)
               fail ("LTYPE_CONTROL.entries[%d]: NULL", i);
           }
       }
-  CHK_ENTITY_TYPE (ctrl, LTYPE_CONTROL, objid, BL);  
   CHK_ENTITY_H (ctrl, LTYPE_CONTROL, bylayer);
   CHK_ENTITY_H (ctrl, LTYPE_CONTROL, byblock);
 }

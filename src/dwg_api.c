@@ -20870,9 +20870,7 @@ dwg_object_tablectrl_get_objid (const dwg_object *restrict obj,
   if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT
       && dwg_obj_is_control (obj))
     {
-      // HACK: we can guarantee a common layout of the common fields
-      Dwg_Object_STYLE_CONTROL *ctrl = obj->tio.object->tio.STYLE_CONTROL;
-      return ctrl->objid;
+      return obj->tio.object->objid;
     }
   else
     {

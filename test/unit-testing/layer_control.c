@@ -7,7 +7,6 @@ api_process (dwg_object *obj)
   int error, isnew;
   BITCODE_BS i, num_entries;
   BITCODE_H *entries, *hdls;
-  BITCODE_BL objid;
 
   dwg_obj_layer_control *ctrl = dwg_object_to_LAYER_CONTROL (obj);
 
@@ -22,5 +21,4 @@ api_process (dwg_object *obj)
       else
         fail ("LAYER_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
     }
-  CHK_ENTITY_TYPE (ctrl, LAYER_CONTROL, objid, BL);  
 }

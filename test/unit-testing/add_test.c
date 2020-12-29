@@ -841,13 +841,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
     if (objs && objs[0] && !objs[1])                                    \
       ok ("found 1 " #token);                                           \
     else if (!objs)                                                     \
-      {                                                                 \
-        if (as_dxf && (type == DWG_TYPE_DIMSTYLE                        \
-                       || type == DWG_TYPE_UCS))                        \
-          todo ("found no " #token " at all");                          \
-        else                                                            \
-          fail ("found no " #token " at all");                          \
-      }                                                                 \
+      fail ("found no " #token " at all");                              \
     else if (!objs[0])                                                  \
       fail ("found no " #token);                                        \
     free (objs);                                                        \

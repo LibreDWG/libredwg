@@ -84,7 +84,7 @@ fail (const char *fmt, ...)
     printf ("not ok %d\t# %s\n", ++num, buffer);
 }
 
-#if defined(ADD_TEST_C)
+#if 0
 static void
 ATTRIBUTE_FORMAT (1, 2)
 todo (const char *fmt, ...)

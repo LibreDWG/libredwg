@@ -7,7 +7,6 @@ api_process (dwg_object *obj)
   int error, isnew;
   BITCODE_BS i, num_entries;
   BITCODE_H *entries, *hdls;
-  BITCODE_BL objid;
 
   dwg_obj_ucs_control *ctrl = dwg_object_to_UCS_CONTROL (obj);
 

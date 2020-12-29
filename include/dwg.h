@@ -2162,8 +2162,7 @@ typedef struct _dwg_entity_MLINE
 #define COMMON_TABLE_CONTROL_FIELDS  \
   struct _dwg_object_object *parent; \
   BITCODE_BS num_entries;            \
-  BITCODE_H* entries;                \
-  BITCODE_BL objid
+  BITCODE_H* entries
 
 // table entries may be imported from xref's
 
