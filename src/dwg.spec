@@ -3056,7 +3056,7 @@ DWG_OBJECT (STYLE)
       // only print to DXF, if not in EED already
       if (FIELD_VALUE (font_file) && !dxf_has_STYLE_eed (dat, obj->tio.object))
         {
-          SINCE (R_2007) {
+          if (IS_FROM_TU (dat)) {
             s = bit_convert_TU ((BITCODE_TU)FIELD_VALUE (font_file));
             strncpy (_buf, s, 255);
             free (s);
