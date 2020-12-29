@@ -882,7 +882,7 @@ const char* dwg_type_dxfname (const Dwg_Object_Type type)
     return "ACAD_PROXY_ENTITY";
   else if (type == DWG_TYPE_PROXY_OBJECT)
     return "ACAD_PROXY_OBJECT";
-  else if (type == DWG_TYPE_FREED || DWG_TYPE_UNKNOWN_ENT || DWG_TYPE_UNKNOWN_OBJ)
+  else if (type == DWG_TYPE_FREED || type == DWG_TYPE_UNKNOWN_ENT || type == DWG_TYPE_UNKNOWN_OBJ)
     return NULL;
   else
     {
