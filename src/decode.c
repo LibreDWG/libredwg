@@ -4056,13 +4056,13 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
               ref.absolute_ref = 0L;
               if (dwg_resolve_handleref (&ref, _obj))
                 {
-                  Dwg_Object_APPID_CONTROL *appid = &dwg->appid_control;
+                  Dwg_Object *appid = dwg_get_first_object (dwg, DWG_TYPE_APPID_CONTROL);
+                  Dwg_Object_APPID_CONTROL *_appid = appid->tio.object->tio.APPID_CONTROL;
                   // search absref in APPID_CONTROL apps[]
-                  for (j = 0; j < appid->num_entries; j++)
+                  for (j = 0; j < _appid->num_entries; j++)
                     {
-                      if (appid->entries[j]
-                          && appid->entries[j]->absolute_ref
-                                 == ref.absolute_ref)
+                      if (_appid->entries[j] &&
+                          _appid->entries[j]->absolute_ref == ref.absolute_ref)
                         {
                           Dwg_Object_MLEADERSTYLE *mstyle
                               = obj->tio.MLEADERSTYLE;
@@ -5698,72 +5698,54 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
       break;
     case DWG_TYPE_LAYER_CONTROL:
       error = dwg_decode_LAYER_CONTROL (dat, obj);
-      if (!error && obj->tio.object->tio.LAYER_CONTROL)
-        dwg->layer_control = *obj->tio.object->tio.LAYER_CONTROL;
       break;
     case DWG_TYPE_LAYER:
       error = dwg_decode_LAYER (dat, obj);
       break;
     case DWG_TYPE_STYLE_CONTROL:
       error = dwg_decode_STYLE_CONTROL (dat, obj);
-      if (!error && obj->tio.object->tio.STYLE_CONTROL)
-        dwg->style_control = *obj->tio.object->tio.STYLE_CONTROL;
       break;
     case DWG_TYPE_STYLE:
       error = dwg_decode_STYLE (dat, obj);
       break;
     case DWG_TYPE_LTYPE_CONTROL:
       error = dwg_decode_LTYPE_CONTROL (dat, obj);
-      if (!error && obj->tio.object->tio.LTYPE_CONTROL)
-        dwg->ltype_control = *obj->tio.object->tio.LTYPE_CONTROL;
       break;
     case DWG_TYPE_LTYPE:
       error = dwg_decode_LTYPE (dat, obj);
       break;
     case DWG_TYPE_VIEW_CONTROL:
       error = dwg_decode_VIEW_CONTROL (dat, obj);
-      if (!error && obj->tio.object->tio.VIEW_CONTROL)
-        dwg->view_control = *obj->tio.object->tio.VIEW_CONTROL;
       break;
     case DWG_TYPE_VIEW:
       error = dwg_decode_VIEW (dat, obj);
       break;
     case DWG_TYPE_UCS_CONTROL:
       error = dwg_decode_UCS_CONTROL (dat, obj);
-      if (!error && obj->tio.object->tio.UCS_CONTROL)
-        dwg->ucs_control = *obj->tio.object->tio.UCS_CONTROL;
       break;
     case DWG_TYPE_UCS:
       error = dwg_decode_UCS (dat, obj);
       break;
     case DWG_TYPE_VPORT_CONTROL:
       error = dwg_decode_VPORT_CONTROL (dat, obj);
-      if (!error && obj->tio.object->tio.VPORT_CONTROL)
-        dwg->vport_control = *obj->tio.object->tio.VPORT_CONTROL;
       break;
     case DWG_TYPE_VPORT:
       error = dwg_decode_VPORT (dat, obj);
       break;
     case DWG_TYPE_APPID_CONTROL:
       error = dwg_decode_APPID_CONTROL (dat, obj);
-      if (!error && obj->tio.object->tio.APPID_CONTROL)
-        dwg->appid_control = *obj->tio.object->tio.APPID_CONTROL;
       break;
     case DWG_TYPE_APPID:
       error = dwg_decode_APPID (dat, obj);
       break;
     case DWG_TYPE_DIMSTYLE_CONTROL:
       error = dwg_decode_DIMSTYLE_CONTROL (dat, obj);
-      if (!error && obj->tio.object->tio.DIMSTYLE_CONTROL)
-        dwg->dimstyle_control = *obj->tio.object->tio.DIMSTYLE_CONTROL;
       break;
     case DWG_TYPE_DIMSTYLE:
       error = dwg_decode_DIMSTYLE (dat, obj);
       break;
     case DWG_TYPE_VX_CONTROL:
       error = dwg_decode_VX_CONTROL (dat, obj);
-      if (!error && obj->tio.object->tio.VX_CONTROL)
-        dwg->vx_control = *obj->tio.object->tio.VX_CONTROL;
       break;
     case DWG_TYPE_VX_TABLE_RECORD:
       error = dwg_decode_VX_TABLE_RECORD (dat, obj);

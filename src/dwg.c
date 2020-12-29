@@ -648,8 +648,13 @@ dwg_page_y_max (const Dwg_Data *dwg)
 EXPORT unsigned int
 dwg_get_layer_count (const Dwg_Data *dwg)
 {
+  Dwg_Object *ctrl;
   assert (dwg);
-  return dwg->layer_control.num_entries;
+  ctrl = dwg_get_first_object (dwg, DWG_TYPE_LAYER_CONTROL);
+  if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.LAYER_CONTROL)
+    return ctrl->tio.object->tio.LAYER_CONTROL->num_entries;
+  else
+    return 0;
 }
 
 EXPORT Dwg_Object_LAYER **
@@ -657,13 +662,23 @@ dwg_get_layers (const Dwg_Data *dwg)
 {
   unsigned int i;
   unsigned int num_layers = dwg_get_layer_count (dwg);
+  Dwg_Object_LAYER_CONTROL *_ctrl;
   Dwg_Object_LAYER **layers;
+  Dwg_Object *ctrl;
 
   assert (dwg);
-  layers
-      = (Dwg_Object_LAYER **)calloc (num_layers, sizeof (Dwg_Object_LAYER *));
+  ctrl = dwg_get_first_object (dwg, DWG_TYPE_LAYER_CONTROL);
+  if (!ctrl || !ctrl->tio.object || !ctrl->tio.object->tio.LAYER_CONTROL)
+    return NULL;
+  _ctrl = ctrl->tio.object->tio.LAYER_CONTROL;
+  assert (_ctrl);
+  layers = (Dwg_Object_LAYER **)calloc (num_layers, sizeof (Dwg_Object_LAYER *));
   for (i = 0; i < num_layers; i++)
-    layers[i] = dwg->layer_control.entries[i]->obj->tio.object->tio.LAYER;
+    {
+      Dwg_Object *obj = dwg_ref_object (dwg, _ctrl->entries[i]);
+      if (obj && obj->fixedtype == DWG_TYPE_LAYER)
+        layers[i] = obj->tio.object->tio.LAYER;
+    }
   return layers;
 }
 

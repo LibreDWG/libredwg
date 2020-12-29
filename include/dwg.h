@@ -8926,17 +8926,8 @@ typedef struct _dwg_struct
   /* Should only be initialized after the read/write is complete. */
   Dwg_Object *mspace_block;
   Dwg_Object *pspace_block;
-  /* Those TABLES might be empty with num_entries=0 */
+  /* This TABLE might be empty with num_entries=0 */
   Dwg_Object_BLOCK_CONTROL      block_control;
-  Dwg_Object_LAYER_CONTROL      layer_control;
-  Dwg_Object_STYLE_CONTROL      style_control;
-  Dwg_Object_LTYPE_CONTROL      ltype_control;
-  Dwg_Object_VIEW_CONTROL       view_control;
-  Dwg_Object_UCS_CONTROL        ucs_control;
-  Dwg_Object_VPORT_CONTROL      vport_control;
-  Dwg_Object_APPID_CONTROL      appid_control;
-  Dwg_Object_DIMSTYLE_CONTROL   dimstyle_control;
-  Dwg_Object_VX_CONTROL         vx_control;
 
   /* #define DWG_AUXHEADER_SIZE 123 */
   Dwg_AuxHeader auxheader;

@@ -22347,13 +22347,13 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   dwg_add_LTYPE (dwg, NULL);
   // VIEW_CONTROL_OBJECT: (3.1.6) abs:6 [H 0]
   dwg_add_VIEW (dwg, NULL);
-  dwg->view_control = *dwg->object[4].tio.object->tio.VIEW_CONTROL;
+  //dwg->view_control = *dwg->object[4].tio.object->tio.VIEW_CONTROL;
   // UCS_CONTROL_OBJECT: (3.1.7) abs:7 [H 0]
   dwg_add_UCS (dwg, &pt0, NULL, NULL, NULL);
-  dwg->ucs_control = *dwg->object[5].tio.object->tio.UCS_CONTROL;
+  //dwg->ucs_control = *dwg->object[5].tio.object->tio.UCS_CONTROL;
   // VPORT_CONTROL_OBJECT: (3.1.8) abs:8 [H 0]
   dwg_add_VPORT (dwg, NULL);
-  dwg->vport_control = *dwg->object[6].tio.object->tio.VPORT_CONTROL;
+  //dwg->vport_control = *dwg->object[6].tio.object->tio.VPORT_CONTROL;
   // APPID_CONTROL_OBJECT: (3.1.9) abs:9 [H 0]
   dwg_add_APPID (dwg, NULL);
   // DIMSTYLE_CONTROL_OBJECT: (3.1.A) abs:A [H 0]
@@ -22394,7 +22394,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   layer->plotstyle = dwg_add_handleref (dwg, 5, 0xF, NULL);
   // CLAYER: (5.1.F) abs:F [H 8]
   dwg->header_vars.CLAYER = dwg_add_handleref (dwg, 5, 0x10, NULL);
-  dwg->layer_control = *dwg->object[1].tio.object->tio.LAYER_CONTROL;
+  //dwg->layer_control = *dwg->object[1].tio.object->tio.LAYER_CONTROL;
   // STYLE: (0.1.11)
   style = dwg_add_STYLE (dwg, dwg_add_u8_input (dwg, "Standard"));
   style->font_file = dwg_add_u8_input (dwg, "txt");
@@ -22402,10 +22402,10 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   // TEXTSTYLE: (5.1.11) [H 7]
   dwg->header_vars.TEXTSTYLE = dwg_add_handleref (dwg, 5, 0x11, NULL);
   dwg->header_vars.DIMTXSTY = dwg->header_vars.TEXTSTYLE;
-  dwg->style_control = *dwg->object[2].tio.object->tio.STYLE_CONTROL;
+  //dwg->style_control = *dwg->object[2].tio.object->tio.STYLE_CONTROL;
   // APPID "ACAD": (0.1.12)
   dwg_add_APPID (dwg, "ACAD");
-  dwg->appid_control = *dwg->object[7].tio.object->tio.APPID_CONTROL;
+  //dwg->appid_control = *dwg->object[7].tio.object->tio.APPID_CONTROL;
   // hole at 13. already in r13
   dwg_set_next_hdl (dwg, 0x14);
   ltype_ctrl = dwg->object[3].tio.object->tio.LTYPE_CONTROL;
@@ -22425,7 +22425,6 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   ltype = dwg_add_LTYPE (dwg, "CONTINUOUS");
   ltype->description = dwg_add_u8_input (dwg, "Solid line");
   dwg->header_vars.LTYPE_CONTINUOUS = dwg_add_handleref (dwg, 5, 0x16, NULL);
-  dwg->ltype_control = *ltype_ctrl;
 
   // DICTIONARY ACAD_MLINESTYLE: (5.1.17) abs:E [H 0]
   dwg_add_DICTIONARY (dwg, "ACAD_MLINESTYLE", "Standard", 0x18);
@@ -24458,6 +24457,7 @@ EXPORT Dwg_Object_BLOCK_HEADER *
 dwg_add_BLOCK_HEADER (Dwg_Data *restrict dwg, const char *restrict name)
 {
   API_ADD_TABLE (BLOCK_HEADER, BLOCK_CONTROL);
+  dwg->block_control = *_ctrl;
 }
 
 EXPORT Dwg_Object_LAYER *

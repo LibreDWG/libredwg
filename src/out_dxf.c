@@ -3005,20 +3005,11 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   unsigned int i;
   BITCODE_BL vcount;
 
-#define SET_CONTROL(ctrl, name, lname)                            \
-    Dwg_Object_##name *_ctrl = &dwg->lname;                       \
-    Dwg_Object *ctrl = dwg_obj_generic_to_object (_ctrl, &error); \
-    if (!ctrl || ctrl->fixedtype != DWG_TYPE_##name)              \
-      {                                                           \
-        ctrl = dwg_get_first_object (dwg, DWG_TYPE_##name);       \
-        _ctrl = ctrl->tio.object->tio.name;                       \
-        dwg->lname = *_ctrl;                                      \
-      }
-
   SECTION (TABLES);
   SINCE (R_9c1)
   {
-    SET_CONTROL (ctrl, VPORT_CONTROL, vport_control);
+    Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_VPORT_CONTROL);
+    Dwg_Object_VPORT_CONTROL *_ctrl = ctrl->tio.object->tio.VPORT_CONTROL;
     if (ctrl && ctrl->fixedtype == DWG_TYPE_VPORT_CONTROL)
       {
         Dwg_Object *obj = ctrl;
@@ -3048,7 +3039,8 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       }
   }
   {
-    SET_CONTROL (ctrl, LTYPE_CONTROL, ltype_control);
+    Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_LTYPE_CONTROL);
+    Dwg_Object_LTYPE_CONTROL *_ctrl = ctrl->tio.object->tio.LTYPE_CONTROL;
     if (ctrl && ctrl->fixedtype == DWG_TYPE_LTYPE_CONTROL)
       {
         Dwg_Object *obj = ctrl;
@@ -3079,7 +3071,8 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       }
   }
   {
-    SET_CONTROL (ctrl, LAYER_CONTROL, layer_control);
+    Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_LAYER_CONTROL);
+    Dwg_Object_LAYER_CONTROL *_ctrl = ctrl->tio.object->tio.LAYER_CONTROL;
     if (ctrl && ctrl->fixedtype == DWG_TYPE_LAYER_CONTROL)
       {
         Dwg_Object *obj = ctrl;
@@ -3098,7 +3091,8 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       }
   }
   {
-    SET_CONTROL (ctrl, STYLE_CONTROL, style_control);
+    Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_STYLE_CONTROL);
+    Dwg_Object_STYLE_CONTROL *_ctrl = ctrl->tio.object->tio.STYLE_CONTROL;
     if (ctrl && ctrl->fixedtype == DWG_TYPE_STYLE_CONTROL)
       {
         Dwg_Object *obj = ctrl;
@@ -3117,7 +3111,8 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       }
   }
   {
-    SET_CONTROL (ctrl, VIEW_CONTROL, view_control);
+    Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_VIEW_CONTROL);
+    Dwg_Object_VIEW_CONTROL *_ctrl = ctrl->tio.object->tio.VIEW_CONTROL;
     if (ctrl && ctrl->fixedtype == DWG_TYPE_VIEW_CONTROL)
       {
         Dwg_Object *obj = ctrl;
@@ -3135,7 +3130,8 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
   SINCE (R_9c1)
   {
-    SET_CONTROL (ctrl, UCS_CONTROL, ucs_control);
+    Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_UCS_CONTROL);
+    Dwg_Object_UCS_CONTROL *_ctrl = ctrl->tio.object->tio.UCS_CONTROL;
     if (ctrl && ctrl->fixedtype == DWG_TYPE_UCS_CONTROL)
       {
         Dwg_Object *obj = ctrl;
@@ -3155,7 +3151,8 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
   SINCE (R_10c1)
   {
-    SET_CONTROL (ctrl, APPID_CONTROL, appid_control);
+    Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_APPID_CONTROL);
+    Dwg_Object_APPID_CONTROL *_ctrl = ctrl->tio.object->tio.APPID_CONTROL;
     if (ctrl && ctrl->fixedtype == DWG_TYPE_APPID_CONTROL)
       {
         Dwg_Object *obj = ctrl;
@@ -3175,7 +3172,8 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
   SINCE (R_10c1)
   {
-    SET_CONTROL (ctrl, DIMSTYLE_CONTROL, dimstyle_control);
+    Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_DIMSTYLE_CONTROL);
+    Dwg_Object_DIMSTYLE_CONTROL *_ctrl = ctrl->tio.object->tio.DIMSTYLE_CONTROL;
     if (ctrl && ctrl->fixedtype == DWG_TYPE_DIMSTYLE_CONTROL)
       {
         Dwg_Object *obj = ctrl;
@@ -3195,9 +3193,10 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       }
   }
   // fool the warnings. this table is nowhere to be found in the wild. maybe pre-R_11
-  if (0 && dwg->vx_control.num_entries)
+  if (0)
     {
-      SET_CONTROL (ctrl, VX_CONTROL, vx_control);
+      Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_VX_CONTROL);
+      Dwg_Object_VX_CONTROL *_ctrl = ctrl->tio.object->tio.VX_CONTROL;
       if (ctrl && ctrl->fixedtype == DWG_TYPE_VX_CONTROL)
         {
           Dwg_Object *obj = ctrl;

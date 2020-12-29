@@ -83,7 +83,9 @@ main (int argc, char *argv[])
   int flags = 0, on = 0, extnames = 0;
   char *filename_in;
   Dwg_Data dwg;
+  Dwg_Object *obj;
   Dwg_Object_LAYER *layer;
+  Dwg_Object_LAYER_CONTROL *_ctrl;
   int c;
 #ifdef HAVE_GETOPT_LONG
   int option_index = 0;
@@ -147,17 +149,18 @@ main (int argc, char *argv[])
   if (error >= DWG_ERR_CRITICAL)
     fprintf (stderr, "READ ERROR %s: 0x%x\n", filename_in, error);
 
-  for (i = 0; i < dwg.layer_control.num_entries; i++)
+  obj = dwg_get_first_object (&dwg, DWG_TYPE_LAYER_CONTROL);
+  _ctrl = obj->tio.object->tio.LAYER_CONTROL;
+  for (i = 0; i < _ctrl->num_entries; i++)
     {
-      Dwg_Object *obj;
       char *name;
-      assert (dwg.layer_control.entries);
-      assert (dwg.layer_control.entries[i]);
-      obj = dwg.layer_control.entries[i]->obj;
+      assert (_ctrl->entries);
+      assert (_ctrl->entries[i]);
+      obj = _ctrl->entries[i]->obj;
       if (!obj || obj->type != DWG_TYPE_LAYER) // can be DICTIONARY also
         continue;
-      assert (dwg.layer_control.entries[i]->obj->tio.object);
-      layer = dwg.layer_control.entries[i]->obj->tio.object->tio.LAYER;
+      assert (_ctrl->entries[i]->obj->tio.object);
+      layer = _ctrl->entries[i]->obj->tio.object->tio.LAYER;
       if (on && (!layer->on || layer->frozen))
         continue;
       if (flags)
