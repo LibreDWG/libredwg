@@ -24527,6 +24527,7 @@ dwg_add_VPORT (Dwg_Data *restrict dwg, const char *restrict name)
   });
 }
 
+// This is normally called automatically, not needed to set by the user.
 EXPORT Dwg_Object_APPID *
 dwg_add_APPID (Dwg_Data *restrict dwg, const char *restrict name)
 {

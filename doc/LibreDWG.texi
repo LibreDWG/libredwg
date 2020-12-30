@@ -916,6 +916,8 @@ If not, you need to free them by yourself.
 Exceptions are dxfname (there exists a seperate dxfname_u variant),
 the VX name, which does not exists anymore since r2000.
 
+A very simple example using the add API is the example program @xref{dwgadd}.
+
 @deftypefn {Function} Dwg_Data dwg_add_Document (const Dwg_Version_Type @var{version}, const int @var{imperial}, const int @var{loglevel}))
 
 Creates an initial template dwg structure in memory, suitable to be written to a DWG or DXF file,
@@ -1389,6 +1391,13 @@ with the following runtime options: @code{-indxf}, @code{-injson}, @code{-rw}, @
 The now default and fastest method INMEM does not need the 2nd file argument @code{@@@@}, the 2nd method STDIN neither.
 
 See also @url{https://github.com/LibreDWG/libredwg-fuzz} for our fuzzing setup to test new fuzzing campaigns automatically and find regressions.
+
+@item @file{dwgadd}
+@cindex dwgadd
+@anchor{dwgadd}
+is the easiest way to create DWG's (or DXF, JSON) from scratch or add entities to an existing DWG.
+It accepts a very simple file with commands to create entities or objects.
+See @code{man 1 dwgadd} and @code{man 5 dwgadd}.
 
 @end table
 

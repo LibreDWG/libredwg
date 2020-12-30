@@ -1,0 +1,228 @@
+=pod
+
+=head1 NAME
+
+dwgadd.5 - Format of the LibreDWG dwgadd example input-file
+
+=head1 DESCRIPTION
+
+The L<dwgadd> program accepts this input format to add entities and objects
+to a DWG file.
+
+=head1 COMMANDS
+
+commands start at each new line and must begin with a keyword and has optional agruments.
+
+comments start with # and are ignored.
+
+entities are created with the arguments as in the VBA object model AddEntity or AddObject methods.
+
+entities are added to the model space by default, objects to the DWG or to parents objects, as e.g.
+with C<xrecord dictionary>.
+
+=over
+
+=item B<readdwg> "file.dwg"
+
+This must be the very first command. Otherwise a new, empty DWG Document is created.
+
+=item B<readdxf> "file.dxf"
+
+This must be the very first command. Otherwise a new, empty DWG Document is created.
+
+
+=item B<readjson> "file.json"
+
+This must be the very first command. Otherwise a new, empty DWG Document is created.
+
+=item B<imperial>
+
+By default a new DWG is created as metric.
+There must be maximal one imperial line.
+
+=item B<version> number
+
+Writes the output file in this version. It accepts numbers only C<[0-9.]+>,
+prefixes it with an "r", and converts this string via C<dwg_version_as("r"version)>
+to a C<Dwg_Version_Type>. It accepts only valid DWG versions.
+There must be maximal one version line.
+
+=item B<pspace>
+
+Add further entities to the paper space.
+
+=item B<mspace>
+
+Add further entities to the model space again. This is only needed
+when a previous C<pspace> command was used. mspace is the default.
+
+=item B<HEADER>.I<field> = value
+
+Assign L</VALUES> to a HEADER field. See the full documentation of valid HEADER fields.
+
+=item B<point> (3dpoint)
+
+=item B<line> (3dpoint) (3dpoint)
+
+Create a line variable and entity. You may set all other fields via the
+C<line.field = value> syntax. E.g. C<line.layer = "0">
+
+=item B<ray> (3dpoint) (3dpoint)
+
+=item B<xline> (3dpoint) (3dpoint)
+
+=item B<xline> (3dpoint) (3dpoint)
+
+=item B<text> "text_value" (ins_pt) height
+
+=item B<mtext> (ins_pt) height "text_value"
+
+=item B<leader> num_points ((points)...) mtext type
+
+mtext must be the immediate previous command.
+
+=item B<attribute> 8 0 "prompt" (0.0 1.0 0.0) "tag" "text"
+
+=item B<attdef> 8 0 "prompt" (0.0 1.0 0.0) "tag" "default_text"
+
+=item B<block> "name"
+
+Starts a new block.
+
+=item B<endblk>
+
+Ends the current block.
+
+=item B<insert> (ins_pt) "name" xscale yscale zscale rotation
+
+=item B<minsert> (ins_pt) "name" xscale yscale zscale rotation numrows numcols rowspacing colspacing
+
+=item B<polyline>_2d numpts ((2dpoints) ...)
+
+=item B<lwpolyline> numpts ((2dpoints) ...)
+
+=item B<polyline>_3d numpts ((3dpoints) ...)
+
+=item B<arc> (center) radius startangle endangle
+
+=item B<circle> (center) radius
+
+=item B<polyline>_pface 5 3 ((3dpoints)...) ((faces_4ints)...)
+
+=item B<polyline>_mesh num_m_verts num_n_verts ((3dpoints)...)
+
+=item B<dimension>_aligned (xline1_pt) (xline2_pt) (text_midpt)
+
+=item B<dimension>_ang2ln (center_pt) (xline1end_pt) (xline2end_pt) (text_midpt)
+
+=item B<dimension>_ang3pt (center_pt) (xline1_pt) (xline2_pt) (text_midpt)
+
+=item B<dimension>_diameter (chord_pt) (far_chord_pt) leader_len
+
+=item B<dimension>_ordinate (feature_location_pt) (leader_endpt) number
+
+=item B<dimension>_radius (center_pt) (chord_pt) leader_len
+
+=item B<dimension>_linear (xline1_pt) (xline2_pt) (def_pt) angle
+
+=item B<3dface> (pt1) (pt2) (pt3) [(pt4)]
+
+=item B<solid> (pt1) (pt2-2d) (pt3-2d) (pt4-2d)
+
+=item B<trace> (pt1) (pt2-2d) (pt3-2d) (pt4-2d)
+
+=item B<shape> "name" (3dpoint) scale angle
+
+=item B<viewport> "name"
+
+=item B<ellipse> (center_pt) major_axis axis_ratio
+
+=item B<spline> num_fitpts ((fitpts)...) (begin_tan_vector) (end_tan_vector)
+
+=item B<dictionary> "name" "key" handle_ref
+
+=item B<xrecord> dictionary "name"
+
+=item B<tolerance> "testtekst" (0 0 0) (0 0 1)
+
+=item B<mlinestyle> "name"
+
+=item B<mline> num_points ((points)...)
+
+=item B<layout> viewport "name" "canonical_media_name"
+
+=item B<torus> (center_pt) (normal) major_radius minor_radius
+
+=item B<sphere> (center_pt) (normal) radius
+
+=item B<cylinder> (center_pt) (normal) height major_radius minor_radius x_radius
+
+=item B<cone> (center_pt) (normal) height major_radius minor_radius x_radius
+
+=item B<wedge> (center_pt) (normal) length width height
+
+=item B<box> (center_pt) (normal) length width height
+
+=item B<pyramid> (center_pt) (normal) height sides radius topradius
+
+=item B<layer> "name"
+
+=item B<style> "name"
+
+=item B<ltype> "name"
+
+=item B<vport> "name"
+
+=item B<view> "name"
+
+=item B<vport> "name"
+
+=item B<layout> "name"
+
+=item B<group> "name"
+
+=item I<entity>.I<field> = value
+
+Every field of the just created entity or object can be set. See L</VALUES>
+and the full documentation of the available entity fields.
+
+=back
+
+=head1 VALUES
+
+Acceptable values must be formatted as:
+
+=over
+
+=item B<integer>
+
+negative integers are allowed.
+C<0xXXX> hex numbers are not accepted.
+
+=item B<float>
+
+floats may omit the dot.
+
+=item B<angle> as float in degrees, not radians.
+
+=item B<string> in double-quotes
+
+E.g "string" or "" for the empty string.
+
+=item B<point> as (float, float, [float])
+
+esp. (float float) for 2dpoint
+
+(float float float) for 3dpoint. (0 0 0) is a valid 3dpoint.
+
+=item B<handle> as C<D.D.XXX>
+
+<C[0-12]> as type "." decimal digits as size "." hexadecimal absolute ref.
+For relative handle codes, like 6,8,10,12 do not take the 3rd handle part asis,
+but use the absolute ref.
+
+E.g. C<5.1.15> for HEADER.LTYPE_BYLAYER.
+
+=back
+
+=cut

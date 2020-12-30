@@ -1,0 +1,58 @@
+# example dwgadd file. strings are utf8 and must not exceed length 255
+#readdwg "example_2000.dwg"
+#readdxf "example_2000.dxf"
+#readjson "example_2000.json"
+version 2000
+text "test" (0.0 1.0 0.0) 8
+attribute 8 0 "prompt" (0.0 1.0 0.0) "tag" "text"
+attdef 8 0 "prompt" (0.0 1.0 0.0) "tag" "default_text"
+block "bloko"
+line (0 1 0) (1 1 0)
+endblk
+insert (0 1 0) "bloko" 1 1 1 0
+minsert (0 1 0) "bloko" 1 1 1 0 1 2 1 1
+polyline_2d 2 ((0 1) (1 1))
+polyline_3d 2 ((0 1 0) (1 1 0))
+lwpolyline 2 ((0 1) (1 1))
+arc (0.0 1.0 0.0) 0.5 0.0 3.0
+circle (0.0 1.0 0.0) 0.5
+polyline_pface 5 3 ((0 0 0) (2 0 0) (2 2 0) (1 2 0) (1 1 0)) ((0 1 2 3) (1 2 3 4) (2 3 4 5))
+polyline_mesh 3 2 ((0 0 0) (2 0 0) (2 2 0) (1 2 0) (1 1 0) (0 1 0))
+dimension_aligned (0 0 0) (2 0 0) (2 2 0)
+dimension_ang2ln (0 0 0) (2 0 0) (2 2 0) (2 2 0)
+dimension_ang3pt (0 0 0) (2 0 0) (2 1 0) (2 2 0)
+dimension_diameter (0 0 0) (2 0 0) 2
+dimension_ordinate (0 0 0) (2 0 0) 1
+dimension_radius (0 0 0) (2 0 0) 1
+dimension_linear (2 0 0) (2 1 0) (0 0 0) 90
+point (2 0 0)
+3dface (0 0 0) (2 0 0) (2 1 0) (0 2 0)
+solid (0 0 0) (2 0) (2 1) (0 2)
+trace (0 0 0) (2 0) (2 1) (0 2)
+shape "roman.shx" (0 0 0) 2 45
+viewport "Viewport1"
+ellipse (0 0 0) 2.0 0.75
+spline 3 ((0 0 0) (2 0 0) (2 1 0)) (0 2 0) (0 3 0)
+ray (0 0 0) (2 0 0)
+xline (0 0 0) (2 0 0)
+dictionary "ACAD_MATERIAL" "Global" 0
+xrecord dictionary "REFRACTIONTILE"
+mtext (0 1 0) 10 "test\ntext"
+leader 2 ((0 0 0) (0 1 0)) mtext 15
+tolerance "testtekst" (0 0 0) (0 0 1)
+mlinestyle "Double"
+mlinestyle.start_angle = 1.12
+mline 4 ((3.9 1.5 0) (3.2 1.8 0) (4.6 1.0 0) (3.8 1.7 0))
+dimstyle "Dim1"
+dimstyle.DIMSCALE = 2.0
+dimstyle.DIMUPT = 1
+ucs (0 0 0) (1 0 0) (2.5 0 0) "Ucs1"
+ucs.ucs_elevation = 1.0
+layout viewport "Model" "ANSI_A_(8.50_x_11.00_Inches)"
+torus (10 5 0) (0 0 1) 19 2.78
+sphere (10 5 0) (0 0 1) 15
+cylinder (10 5 0) (0 0 1) 15 5 5 5
+cone (10 5 0) (0 0 1) 15 5 5 0
+wedge (10 5 0) (0 0 1) 3.3 2.4 4.8
+box (10 5 0) (0 0 1) 3.3 2.0 2.5
+pyramid (10 5 0) (0 0 1) 4.5 4 2.0 2.5

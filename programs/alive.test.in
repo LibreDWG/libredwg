@@ -133,6 +133,8 @@ run ()
                     arg="-rw $arg"
                 fi
                 ;;
+    dwgadd)     arg="-o dwgadd.dwg $DATADIR/../../examples/dwgadd.example"
+                ;;
     esac
     if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
         TESTPROG="$LOG_COMPILER $LOG_FLAGS"
@@ -147,6 +149,10 @@ run ()
        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
     fi
     if test "$bprog" = "dwgfuzz" -a -n "@HAVE_ASAN@"
+    then
+       TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
+    fi
+    if test "$bprog" = "dwgadd" -a -n "@HAVE_ASAN@"
     then
        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
     fi
@@ -227,9 +233,15 @@ for d in $DATA; do
 done
 
 for prog in $PROGS ; do
-    for dwg in $DATA; do
-        run "$prog" "$dwg"
-    done
+    case $prog in
+    *dwgadd*)
+        run "$prog" "."
+        ;;
+    *)  for dwg in $DATA; do
+            run "$prog" "$dwg"
+        done
+        ;;
+    esac
 done
 
 # dwgread converts to json here, but has no --as yet

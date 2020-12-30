@@ -21,12 +21,14 @@ WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS   = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD       = $(top_builddir)/src/libredwg.la -lm
 
+bin_PROGRAMS     = dwgadd
 check_PROGRAMS   = load_dwg dwg2svg2 dwgfuzz
 EXTRA_PROGRAMS   = unknown bd bits
 
 load_dwg_SOURCES = load_dwg.c
 dwg2svg2_SOURCES = dwg2svg2.c
 dwgfuzz_SOURCES  = dwgfuzz.c
+dwgadd_SOURCES   = dwgadd.c
 unknown_SOURCES  = unknown.c
 # alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc bd-unknown.inc
 unknown_LDADD    = $(top_builddir)/src/libredwg.la \
@@ -177,9 +179,12 @@ alldxf_unknowns = \
 	alldxf_WIPEOUT.inc
 
 EXTRA_DIST = unknown.h alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc $(alldxf_unknowns)
-EXTRA_DIST += log_unknown_dxf.pl log_unknown.pl bd-unknown.pl unstable.pm
-EXTRA_DIST += load_dwg.py unknown.pi ACAD_EVALUATION_GRAPH.pi
+EXTRA_DIST += log_unknown_dxf.pl log_unknown.pl bd-unknown.pl unstable.pm dwgadd.pod
+EXTRA_DIST += unknown.pi ACAD_EVALUATION_GRAPH.pi
 EXTRA_man1_MANS = $(srcdir)/dwgfuzz.1
+dist_man1_MANS = $(srcdir)/dwgadd.1
+dist_man5_MANS = $(srcdir)/dwgadd.5
+dist_data_DATA = dwgadd.example load_dwg.py
 
 CLEANFILES = {example,sample}_2000.svg alldwg.inc~ \
 	     alldxf_0.inc~ alldxf_1.inc~ alldxf_2.inc~
@@ -192,14 +197,17 @@ MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 
 dsymutil:
 	for e in $(check_PROGRAMS) $(EXTRA_PROGRAMS); do dsymutil $$e; done
-man: $(EXTRA_man1_MANS)
+man: $(dist_man1_MANS) $(EXTRA_man1_MANS) $(dist_man5_MANS)
 
 if !HAVE_MINGW_CROSS
 # Note: These rules do not work cross-compiled
-regen-man: dwgfuzz
-	-for p in $(EXTRA_man1_MANS); do \
+regen-man: dwgfuzz dwgadd
+	-for p in $(dist_man1_MANS) $(EXTRA_man1_MANS); do \
 	  base=`basename $$p .1`; \
 	  help2man -p $(PACKAGE_NAME) -o $$p ./$$base$(EXEEXT); done
+	-for p in $(dist_man5_MANS); do \
+	  base=`basename $$p .5`; \
+	  pod2man --release="@VERSION@" --section=5 --center="User Commands" $(srcdir)/$$base.pod >$$p; done
 endif
 
 # emacs flymake-mode
