@@ -22569,7 +22569,10 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
   {                                                                           \
     BITCODE_BL idx = dwg->num_objects;                                        \
     if (dwg_add_object (dwg) < 0)                                             \
-      dwg_resolve_objectrefs_silent (dwg);                                    \
+      {                                                                       \
+        dwg_resolve_objectrefs_silent (dwg);                                  \
+        blkobj = dwg_obj_generic_to_object (blkhdr, &error);                  \
+      }                                                                       \
     obj = &dwg->object[idx];                                                  \
     obj->supertype = DWG_SUPERTYPE_ENTITY;                                    \
     obj->tio.entity                                                           \
