@@ -22396,7 +22396,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   dwg->header_vars.CLAYER = dwg_add_handleref (dwg, 5, 0x10, NULL);
   //dwg->layer_control = *dwg->object[1].tio.object->tio.LAYER_CONTROL;
   // STYLE: (0.1.11)
-  style = dwg_add_STYLE (dwg, dwg_add_u8_input (dwg, "Standard"));
+  style = dwg_add_STYLE (dwg, "Standard");
   style->font_file = dwg_add_u8_input (dwg, "txt");
   style->last_height = 0.2;
   // TEXTSTYLE: (5.1.11) [H 7]
