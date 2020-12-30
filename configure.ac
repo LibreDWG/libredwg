@@ -276,6 +276,13 @@ AC_CHECK_FUNCS([memchr memmove strcasecmp strchr strstr strrchr strtol strtoul s
 AC_CHECK_FUNCS([memmem],[],
   AC_MSG_WARN([memmem not found. Using a slower workaround.]))
 AC_CHECK_FUNCS([wcslen wcsnlen wcscpy wcscmp wcsstr])
+dnl try the secure extensions
+$as_echo '#define __STDC_WANT_LIB_EXT1__  1' >>confdefs.h
+AC_CHECK_FUNCS([sscanf_s],[],
+  AC_MSG_WARN([No secure sscanf_s found. dwgfuzz -add will produce false positives.]))
+dnl and undo it
+$GREP -v '__STDC_WANT_LIB_EXT1__' confdefs.h > confdefs.h.tmp
+mv confdefs.h.tmp confdefs.h
 
 dnl mingw-w64 7.0 bug with _FORTIFY_SOURCE, need -lssp
 case $host in

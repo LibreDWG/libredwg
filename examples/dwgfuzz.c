@@ -21,6 +21,9 @@
  */
 
 #include "../src/config.h"
+#ifdef HAVE_SSCANF_S
+#  define __STDC_WANT_LIB_EXT1__ 1
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -539,15 +542,31 @@ int dwg_fuzz_dat (Dwg_Data **restrict dwgp, Bit_Chain *restrict dat)
       Dwg_Object_UCS *ucs = NULL;
       Dwg_Object_LAYOUT *layout = NULL;
 
-//#define SET_ENT(var, name) if (0) exit(0)
-#define SET_ENT(var, name)                                       \
-      if (!var)                                                  \
-        ;                                                        \
-      else if (sscanf (p, #var".%s = %d", &s1[0], &i1))          \
-        dwg_dynapi_entity_set_value (var, #name, s1, &i1, 0);    \
-      else if (sscanf (p, #var".%s = %lf", &s1[0], &f1))         \
-        dwg_dynapi_entity_set_value (var, #name, s1, &f1, 0);    \
-      else if (sscanf (p, #var".%s = \"%s\"", &s1[0], &text[0])) \
+// accepts only ASCII strings, for fuzzing only
+#ifdef HAVE_SSCANF_S
+#  define SSCANF_S sscanf_s
+#  define SZ ,119
+#  define FMT_NAME "%[a-zA-Z0-9_]"
+#  define FMT_TBL "\"%[a-zA-Z0-9._ -]\""
+#  define FMT_PATH "\"%[a-zA-Z0-9_. \\-]\""
+#  define FMT_ANY  "\"%s\""
+#else
+#  define SSCANF_S sscanf
+#  define SZ
+#  define FMT_NAME "%119[a-zA-Z0-9_]"
+#  define FMT_TBL "\"%119[a-zA-Z0-9._ -]\""
+#  define FMT_PATH "\"%119[a-zA-Z0-9_. \\-]\""
+#  define FMT_ANY  "\"%119s\""
+#endif
+
+#define SET_ENT(var, name)                                              \
+      if (!var)                                                         \
+        ;                                                               \
+      else if (SSCANF_S (p, #var "." FMT_NAME " = %d", &s1[0] SZ, &i1))   \
+        dwg_dynapi_entity_set_value (var, #name, s1, &i1, 0);           \
+      else if (SSCANF_S (p, #var "." FMT_NAME " = %lf", &s1[0] SZ, &f1)) \
+        dwg_dynapi_entity_set_value (var, #name, s1, &f1, 0);           \
+      else if (SSCANF_S (p, #var "." FMT_NAME " = " FMT_ANY, &s1[0] SZ, &text[0] SZ)) \
         dwg_dynapi_entity_set_value (var, #name, s1, text, 1)
 
       if (sscanf (p, "line (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
@@ -559,25 +578,25 @@ int dwg_fuzz_dat (Dwg_Data **restrict dwgp, Bit_Chain *restrict dat)
       else if (sscanf (p, "xline (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
                   &pt1.z, &pt2.x, &pt2.y, &pt2.z))
         dwg_add_XLINE (hdr, &pt1, &pt2);
-      else if (sscanf (p, "text \"%s\" (%lf %lf %lf) %lf", &text[0], &pt1.x,
+      else if (SSCANF_S (p, "text " FMT_ANY " (%lf %lf %lf) %lf", &text[0] SZ, &pt1.x,
                        &pt1.y, &pt1.z, &height))
         dwg_add_TEXT (hdr, text, &pt1, height);
-      else if (sscanf (p, "mtext (%lf %lf %lf) %lf \"%s\"", &pt1.x, &pt1.y,
-                       &pt1.z, &height, &text[0]))
+      else if (SSCANF_S (p, "mtext (%lf %lf %lf) %lf " FMT_ANY, &pt1.x, &pt1.y,
+                       &pt1.z, &height, &text[0] SZ))
         mtext = dwg_add_MTEXT (hdr, &pt1, height, text);
       else SET_ENT (mtext, MTEXT);
-      else if (sscanf (p, "block \"%s\"", &text[0]))
+      else if (SSCANF_S (p, "block " FMT_TBL, &text[0] SZ))
         dwg_add_BLOCK (hdr, text);
       else if (memBEGINc (p, "endblk\n"))
         dwg_add_ENDBLK (hdr);
-      else if (sscanf (p, "insert (%lf %lf %lf) \"%s\" %lf %lf %lf %lf",
-                       &pt1.x, &pt1.y, &pt1.z, &text[0], &scale.x, &scale.y,
+      else if (sscanf (p, "insert (%lf %lf %lf) " FMT_TBL " %lf %lf %lf %lf",
+                       &pt1.x, &pt1.y, &pt1.z, &text[0] SZ, &scale.x, &scale.y,
                        &scale.z, &rot))
         dwg_add_INSERT (hdr, &pt1, text, scale.x, scale.y, scale.z, deg2rad (rot));
       else if (sscanf (p,
-                       "minsert (%lf %lf %lf) \"%s\" %lf %lf %lf %lf %d %d "
+                       "minsert (%lf %lf %lf) " FMT_TBL " %lf %lf %lf %lf %d %d "
                        "%lf %lf",
-                       &pt1.x, &pt1.y, &pt1.z, &text[0], &scale.x, &scale.y,
+                       &pt1.x, &pt1.y, &pt1.z, &text[0] SZ, &scale.x, &scale.y,
                        &scale.z, &rot, &i1, &i2, &f1, &f2))
         dwg_add_MINSERT (hdr, &pt1, text, scale.x, scale.y, scale.z, deg2rad (rot), i1,
                          i2, f1, f2);
@@ -663,14 +682,14 @@ int dwg_fuzz_dat (Dwg_Data **restrict dwgp, Bit_Chain *restrict dat)
               free (pts);
             }
         }
-      else if (sscanf (p, "dictionary \"%s\" \"%s\" %u", &text[0], &s1[0], &u))
+      else if (SSCANF_S (p, "dictionary " FMT_TBL " " FMT_TBL " %u", &text[0] SZ, &s1[0] SZ, &u))
         dictionary = dwg_add_DICTIONARY (dwg, text, s1, (unsigned long)u);
-      else if (dictionary && sscanf (p, "xrecord dictionary \"%s\"", &text[0]))
+      else if (dictionary && sscanf (p, "xrecord dictionary " FMT_TBL, &text[0] SZ))
         xrecord = dwg_add_XRECORD (dictionary, text);
-      else if (sscanf (p, "shape \"%s\" (%lf %lf %lf) %lf %lf",
-                       &text[0], &pt1.x, &pt1.y, &pt1.z, &scale.x, &rot))
+      else if (SSCANF_S (p, "shape " FMT_PATH " (%lf %lf %lf) %lf %lf",
+                       &text[0] SZ, &pt1.x, &pt1.y, &pt1.z, &scale.x, &rot))
         dwg_add_SHAPE (hdr, text, &pt1, scale.x, deg2rad (rot));
-      else if (sscanf (p, "viewport \"%s\"", &text[0]))
+      else if (sscanf (p, "viewport " FMT_TBL, &text[0] SZ))
         viewport = dwg_add_VIEWPORT (hdr, text);
       else SET_ENT (viewport, VIEWPORT);
       else if (sscanf (p, "ellipse (%lf %lf %lf) %lf %lf",
@@ -695,21 +714,22 @@ int dwg_fuzz_dat (Dwg_Data **restrict dwgp, Bit_Chain *restrict dat)
             }
           free (pts);
         }
-      else if (sscanf (p, "tolerance \"%s\" (%lf %lf %lf) (%lf %lf %lf)",
-                       &text[0], &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z))
+      else if (SSCANF_S (p, "tolerance " FMT_TBL " (%lf %lf %lf) (%lf %lf %lf)",
+                       &text[0] SZ, &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z))
         dwg_add_TOLERANCE (hdr, text, &pt1, &pt2);
-      else if (sscanf (p, "mlinestyle \"%s\"", &text[0]))
+      else if (SSCANF_S (p, "mlinestyle " FMT_TBL, &text[0] SZ))
         mlinestyle = dwg_add_MLINESTYLE (dwg, text);
-      else if (sscanf (p, "dimstyle \"%s\"", &text[0]))
+      else if (SSCANF_S (p, "dimstyle " FMT_TBL, &text[0] SZ))
         dimstyle = dwg_add_DIMSTYLE (dwg, text);
       else SET_ENT (mlinestyle, MLINESTYLE);
       else SET_ENT (dimstyle, DIMSTYLE);
-      else if (sscanf (p, "ucs (%lf %lf %lf) (%lf %lf %lf) (%lf %lf %lf) \"%s\"",
+      else if (SSCANF_S (p, "ucs (%lf %lf %lf) (%lf %lf %lf) (%lf %lf %lf) " FMT_TBL,
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
-                       &pt3.y, &pt3.z, &text[0]))
+                       &pt3.y, &pt3.z, &text[0] SZ))
         ucs = dwg_add_UCS (dwg, &pt1, &pt2, &pt3, text);
       else SET_ENT (ucs, UCS);
-      else if (viewport && sscanf (p, "layout viewport \"%s\" \"%s\"", &text[0], &s1[0]))
+      else if (viewport && SSCANF_S (p, "layout viewport " FMT_TBL " " FMT_ANY,
+                                     &text[0] SZ, &s1[0] SZ))
         {
           int error;
           Dwg_Object *obj = dwg_ent_generic_to_object (viewport, &error);
@@ -737,11 +757,11 @@ int dwg_fuzz_dat (Dwg_Data **restrict dwgp, Bit_Chain *restrict dat)
       else if (sscanf (p, "pyramid (%lf %lf %lf) (%lf %lf %lf) %lf %d %lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &height, &i1, &f1, &f2))
         dwg_add_PYRAMID (hdr, &pt1, &pt2, height, i1, f1, f2);
-      else if (sscanf (p, "HEADER.%s = %d", &s1[0], &i1))
+      else if (SSCANF_S (p, "HEADER." FMT_NAME " = %d", &s1[0] SZ, &i1))
         dwg_dynapi_header_set_value (dwg, s1, &i1, 0);
-      else if (sscanf (p, "HEADER.%s = %lf", &s1[0], &f1))
+      else if (SSCANF_S (p, "HEADER." FMT_NAME " = %lf", &s1[0] SZ, &f1))
         dwg_dynapi_header_set_value (dwg, s1, &f1, 0);
-      else if (sscanf (p, "HEADER.%s = \"%s\"", &s1[0], &text[0]))
+      else if (SSCANF_S (p, "HEADER." FMT_NAME " = " FMT_ANY, &s1[0] SZ, &text[0] SZ))
         dwg_dynapi_header_set_value (dwg, s1, text, 1);
 
       p = next_line (p, end);
