@@ -260,10 +260,11 @@ fi
 case $PROGS in
     *dwggrep*)
         echo "@LTEXEC@ dwggrep${EXEEXT} -i -c tekst ${DATADIR}/example_*.dwg"
-        n=$(@LTEXEC@ ./dwggrep${EXEEXT} -i -c tekst "${DATADIR}"/example_*.dwg)
+        n="$(@LTEXEC@ ./dwggrep${EXEEXT} -i -c tekst "${DATADIR}"/example_*.dwg | tr -d "\r")"
         if test "$n" != "24"; then
             i=$((i+1))
-            echo "dwggrep failure $?, result $n, expected 24"
+            echo "dwggrep failure $?"
+            echo "result $n, expected 24"
         fi
 esac
 
