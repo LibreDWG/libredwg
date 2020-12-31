@@ -5,15 +5,15 @@
 #include <stddef.h>
 #include <stdarg.h>
 #if defined(BITS_TEST_C) || defined(DECODE_TEST_C)
-#  include "../../src/bits.h"
+#  include "bits.h"
 #endif
 #ifndef DECODE_TEST_C
   static unsigned int loglevel;
 #  define DWG_LOGLEVEL loglevel
-#  include "../../src/logging.h"
+#  include "logging.h"
 #endif
-#include "../../src/config.h"
-#include "../../src/common.h"
+#include "config.h"
+#include "common.h"
 
 #if defined(_WIN32) && defined(HAVE_FUNC_ATTRIBUTE_MS_FORMAT) && !defined(__USE_MINGW_ANSI_STDIO)
 #  define ATTRIBUTE_FORMAT(x, y) __attribute__ ((format (ms_printf, x, y)))
