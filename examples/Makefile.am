@@ -21,7 +21,9 @@ WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS   = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD       = $(top_builddir)/src/libredwg.la -lm
 
+if USE_WRITE
 bin_PROGRAMS     = dwgadd
+endif
 check_PROGRAMS   = load_dwg dwg2svg2 dwgfuzz
 EXTRA_PROGRAMS   = unknown bd bits
 

@@ -226,8 +226,10 @@ main (int argc, char *argv[])
     { // llvm_mode persistent, non-forking mode
       i++;
 #ifndef __AFL_COMPILER
+#  ifdef USE_WRITE
       if (mode == ADD && i > 1)
         break;
+#  endif
       if (i > 3)
         break;
 #endif
@@ -380,6 +382,8 @@ main (int argc, char *argv[])
   dwg_free (&dwg);
   return 0;
 }
+
+#if defined(USE_WRITE)
 
 static dwg_point_2d *scan_pts2d (unsigned num_pts, char **pp)
 {
@@ -770,3 +774,5 @@ int dwg_fuzz_dat (Dwg_Data **restrict dwgp, Bit_Chain *restrict dat)
   // start fuzzing if at least 2 entities were added.
   return (dwg->num_objects - orig_num > 2 ? 0 : 1);
 }
+
+#endif // USE_WRITE
