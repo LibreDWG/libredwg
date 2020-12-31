@@ -2,20 +2,58 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2020 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.12 - 2020/12/?? - beta:
+LibreDWG version 0.12 - 2020/12/31 - beta:
 
 New features:
   * Add a new experimental dwg_add_ENTITY/OBJECT API for easier CAD write support,
     starting with GauchoCAD and SolveSpace. Most entities and some objects.
-    Similar to the VBA interface, just with our names.
+    Similar to the VBA interface and object model, just with our names.
   * cmake support enhanced to programs and LTO. Should be usable now by its own,
     but MSVC is untested.
+  * Add a new experimental dwgadd helper, to create fresh DWG's easily from scratch.
+  * Added support for many more object/entity types:
+    Now stable: ACSH_CONE_CLASS ACSH_TORUS_CLASS BLOCKALIGNMENTPARAMETER
+      BLOCKALIGNMENTGRIP BLOCKLOOKUPGRIP BLOCKROTATIONGRIP
+    Now unstable:
+      ALDIMOBJECTCONTEXTDATA ASSOC2DCONSTRAINTGROUP ASSOCACTIONPARAM
+      ASSOCARRAYACTIONBODY ASSOCARRAYMODIFYPARAMETERS
+      ASSOCARRAYPATHPARAMETERS ASSOCARRAYPOLARPARAMETERS
+      ASSOCARRAYRECTANGULARPARAMETERS ASSOCASMBODYACTIONPARAM
+      ASSOCCOMPOUNDACTIONPARAM ASSOCDIMDEPENDENCYBODY ASSOCFACEACTIONPARAM
+      ASSOCOBJECTACTIONPARAM ASSOCOSNAPPOINTREFACTIONPARAM
+      ASSOCPATHACTIONPARAM ASSOCPOINTREFACTIONPARAM ASSOCVARIABLE
+      ASSOCVERTEXACTIONPARAM BLKREFOBJECTCONTEXTDATA
+      BLOCKALIGNEDCONSTRAINTPARAMETER BLOCKANGULARCONSTRAINTPARAMETER
+      BLOCKARRAYACTION BLOCKDIAMETRICCONSTRAINTPARAMETER
+      BLOCKHORIZONTALCONSTRAINTPARAMETER BLOCKLINEARCONSTRAINTPARAMETER
+      BLOCKLOOKUPACTION BLOCKLOOKUPPARAMETER BLOCKPARAMDEPENDENCYBODY
+      BLOCKPOINTPARAMETER BLOCKPOLARGRIP BLOCKPOLARPARAMETER
+      BLOCKPOLARSTRETCHACTION BLOCKRADIALCONSTRAINTPARAMETER
+      BLOCKREPRESENTATION BLOCKSTRETCHACTION BLOCKUSERPARAMETER
+      BLOCKVERTICALCONSTRAINTPARAMETER BLOCKXYGRIP DATALINK EVALUATION_GRAPH
+      FCFOBJECTCONTEXTDATA GRADIENT_BACKGROUND GROUND_PLANE_BACKGROUND
+      IBL_BACKGROUND IMAGE_BACKGROUND LEADEROBJECTCONTEXTDATA
+      MTEXTOBJECTCONTEXTDATA PARTIAL_VIEWING_FILTER PARTIAL_VIEWING_INDEX
+      PLANESURFACE POINTCLOUD POINTCLOUDCOLORMAP POINTCLOUDDEF
+      POINTCLOUDDEFEX POINTCLOUDDEF_REACTOR POINTCLOUDDEF_REACTOR_EX
+      POINTCLOUDEX RENDERENTRY RENDERENVIRONMENT RENDERGLOBAL
+      SKYLIGHT_BACKGROUND SOLID_BACKGROUND TEXTOBJECTCONTEXTDATA
+    Debugging changes: Renamed ATEXT to ArCALIGNEDTEXT,
+      Added POLARGRIPENTITY.
+  * Added dwg_obj_generic_handlevalue(), dwg_obj_generic_dwg(),
 API breaking changes:
   * Disable old deprecated functional API, all object-specific field getters
     and setters. Re-enable with -DUSE_DEPRECATED_API
+  * Renamed UNDERLAY to {PDF,DGN,DWF}UNDERLAY and likewise PDFDEFINITION, ...
 Minor features:
   * fix more C++ compatiblity: restrict is __restrict, disable __nonnull.
     Now successfully used in SolveSpace.
+  * Add gperf hash tables for all objects and dxfclasses, for faster lookup
+    dxfnames to create classes, and object names with most properties.
+    Previously lookup was linear, now constant. Needs also less memory.
+  * Simplified API: dwg_obj_generic_parent(), dwg_ent_generic_parent() to take void*.
+  * Added public geometry helpers: dwg_geom_angle_normalize(), dwg_geom_normalize(),
+    dwg_geom_cross(), dwg_geom_transform_OCS()
 Major bugfixes:
   * Enable python shared lib, add -no-undefined and PYTHON_LIBS.
   * Disable static for Windows. This shrinks the released Windows zip file
