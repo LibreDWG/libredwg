@@ -417,15 +417,6 @@ dxf_read_binary (Bit_Chain *dat, unsigned char **p, int len)
   LOG_TRACE ("binary[%u]: ", size);
   if ((read = in_hex2bin (data, pos, size) != size))
     LOG_ERROR ("in_hex2bin read only %u of %u", read, size);
-  /*
-  for (int j = 0; j < len / 2; j++)
-    {
-      sscanf (pos, "%2hhX", &data[j]);
-      LOG_TRACE ("%02X", (unsigned char)*pos);
-      pos += 2;
-    }
-  LOG_TRACE (" [TF]\n");
-  */
   dat->byte += read;
   if (p)
     *p = data;
@@ -646,7 +637,7 @@ unsigned in_hex2bin (unsigned char *restrict dest, char *restrict src, unsigned 
   char *pos = (char *)src;
   for (unsigned i = 0; i < destlen; i++)
     {
-      if (sscanf (pos, "%2hhX", &dest[i]))
+      if (sscanf (pos, SCANF_2X, &dest[i]))
         pos += 2;
       else
         return i;
@@ -1792,15 +1783,6 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         LOG_TRACE ("binary[%d]: ", blen);
         if ((read = in_hex2bin (eed[i].data->u.eed_4.data, pair->value.s, blen) != blen))
           LOG_ERROR ("in_hex2bin read only %u of %u", read, blen);
-        /*
-        for (j = 0; j < len / 2; j++)
-          {
-            sscanf (pos, "%2hhX", &eed[i].data->u.eed_4.data[j]);
-            LOG_TRACE ("%02X", (unsigned char)*pos);
-            pos += 2;
-          }
-        LOG_TRACE (" [TF]\n");
-        */
         eed[i].size += size;
       }
       break;
@@ -6629,13 +6611,6 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         rbuf->value.str.size = blen;
         if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
           LOG_ERROR ("in_hex2bin read only %u of %u", read, blen);
-        /*
-        for (i = 0; i < blen; i++)
-          {
-            sscanf (pos, "%2hhX", &s[i]);
-            pos += 2;
-          }
-        */
         xdata_size += 1 + len;
         LOG_TRACE ("xdata[%d]: ", num_xdata);
         // LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
@@ -6751,13 +6726,6 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       s = &ent->preview[written];
       if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
         LOG_ERROR ("in_hex2bin read only %u of %u", read, blen);
-      /*
-      for (unsigned i = 0; i < blen; i++)
-        {
-          sscanf (pos, "%2hhX", &s[i]);
-          pos += 2;
-        }
-      */
       written += read;
       LOG_TRACE ("%s.preview += %u (%u/" FORMAT_BLL ")\n", obj->name, blen,
                  written, ent->preview_size);
@@ -6805,13 +6773,6 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           s = &_obj->preview[written];
           if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
             LOG_ERROR ("in_hex2bin read only %u of %u", read, blen);
-          /*
-          for (unsigned i = 0; i < blen; i++)
-            {
-              sscanf (pos, "%2hhX", &s[i]);
-              pos += 2;
-            }
-          */
           written += read;
           LOG_TRACE ("BLOCK_HEADER.preview += %u (%u)\n", blen, written);
         }
@@ -9711,13 +9672,13 @@ new_object (char *restrict name, char *restrict dxfname,
               revision_minor1 = (BITCODE_BS)u[0];
               revision_minor2 = (BITCODE_BS)u[1];
               p += 20;
-              sscanf (p, "%2hhX", &revision_bytes[0]);
+              sscanf (p, SCANF_2X, &revision_bytes[0]);
               p += 2;
-              sscanf (p, "%2hhX", &revision_bytes[1]);
+              sscanf (p, SCANF_2X, &revision_bytes[1]);
               p += 3;
               for (int _i = 2; _i < 8; _i++)
                 {
-                  sscanf (p, "%2hhX", &revision_bytes[_i]);
+                  sscanf (p, SCANF_2X, &revision_bytes[_i]);
                   p += 2;
                 }
               revision_bytes[8]
@@ -10118,13 +10079,6 @@ new_object (char *restrict name, char *restrict dxfname,
                 }
               if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
                 LOG_ERROR ("in_hex2bin read only %u of %u", read, blen);
-              /*
-              for (unsigned _i = 0; _i < blen; _i++)
-                {
-                  sscanf (pos, "%2hhX", &s[_i]);
-                  pos += 2;
-                }
-              */
               written += read;
               LOG_TRACE ("OLE2FRAME.data += %u (%u/%u) [TF 310]\n", blen,
                          written, o->data_size);
@@ -12405,13 +12359,6 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 }
               if ((read = in_hex2bin (s, pair->value.s, blen) != blen))
                 LOG_ERROR ("in_hex2bin read only %u of %u", read, blen);
-              /*
-              for (unsigned i = 0; i < blen; i++)
-                {
-                  sscanf (pos, "%2hhX", &s[i]);
-                  pos += 2;
-                }
-              */
               written += read;
               LOG_TRACE ("PREVIEW.chain += %u (%u/%lu)\n", blen, written,
                          dwg->thumbnail.size);

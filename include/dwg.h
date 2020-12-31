@@ -64,8 +64,8 @@
 
 #ifdef __cplusplus
 extern "C" {
-#undef restrict
-#define restrict __restrict
+# undef restrict
+# define restrict __restrict
 #endif
 
 #define BITCODE_DOUBLE double
@@ -74,8 +74,10 @@ extern "C" {
 typedef unsigned char BITCODE_RC;
 #ifdef _WIN32
 # define FORMAT_RC "0x%2x"
+# define SCANF_2X "%2X"
 #else
 # define FORMAT_RC "0x%hhx"
+# define SCANF_2X "%2hhX"
 #endif
 #define FORMAT_RCd "%d"
 #define FORMAT_RCu "%u"

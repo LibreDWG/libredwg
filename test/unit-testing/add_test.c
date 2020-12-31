@@ -45,16 +45,27 @@ enum _temp_complex_types { // and test-cases
   TEMP_PDFDEFINITION3,
 };
 
-static unsigned char* hex2bin (const char *hex)
+// copied from in-dxf.c
+static unsigned
+in_hex2bin (unsigned char *restrict dest, const char *restrict src, unsigned destlen)
 {
-  const unsigned size = strlen (hex) / 2;
-  unsigned char* bin = malloc (size);
-  for (unsigned i = 0; i < size; i++)
-    {
-      sscanf (hex, "%02hhx", &bin[i]);
-      hex += 2;
-    }
-  return bin;
+  char *pos = (char *)src;
+  // 124x faster, but no error checks.
+  // src must consist of valid uppercase hex chars only
+  static const unsigned char h2b_lookup[] = {
+    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, // 01234567
+    0x08, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // 89:;<=>?
+    0x00, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x00, // @ABCDEFG
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // ...
+  };
+  const char *_end = pos + (destlen << 1);
+  while (pos < _end) {
+    unsigned char v1 = h2b_lookup[(pos[0] & 0x1F) ^ 0x10];
+    unsigned char v2 = h2b_lookup[(pos[1] & 0x1F) ^ 0x10];
+    *dest++ = (v1 << 4 | v2);
+    pos += 2;
+  }
+  return destlen;
 }
 
 static unsigned num_objects (void *vents)
@@ -677,9 +688,10 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
               "0000000000FFFFFFFFFFFFFFFFFFFFFFFF00000000000000000000000000000"
               "000000000000000000000000000000000000000000000000000000000000000"
               "000000000000";
-        const int len = strlen (hex) / 2;
-        unsigned char *data = hex2bin (hex);
-        dwg_add_VBA_PROJECT (dwg, len, (const unsigned char *)data);
+        const int blen = strlen (hex) / 2;
+        BITCODE_TF data = malloc (blen + 1);
+        in_hex2bin (data, hex, blen);
+        dwg_add_VBA_PROJECT (dwg, blen, data);
         free (data);
       }
       break;

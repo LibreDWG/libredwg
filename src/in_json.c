@@ -433,19 +433,6 @@ json_binary (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
   if ((read = in_hex2bin (buf, pos, blen) != blen))
     LOG_ERROR ("json_binary in_hex2bin with key %s at pos %u of %u",
                key, read, blen);
-  /*
-  for (unsigned i = 0; i < blen; i++)
-    {
-      if (sscanf (pos, "%2hhX", &buf[i]) != EOF)
-        pos += 2;
-      else
-        {
-          LOG_ERROR ("json_binary sscanf error %s with key %s at pos %u of %lu",
-                     strerror(errno), key, i, blen);
-          break;
-        }
-    }
-  */
   if (buf)
     {
       buf[blen] = '\0';
@@ -1648,19 +1635,6 @@ json_acis_data (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   if ((read = in_hex2bin ((unsigned char*)&s[15], pos, blen) != blen))
                     LOG_ERROR ("in_hex2bin with key %s at pos %u of %u",
                                "acis_data", read, blen);
-                  /*
-                  for (unsigned j = 15; j < blen + 15; j++)
-                    {
-                      if (sscanf (pos, "%2hhX", &s[j]) != EOF)
-                        pos += 2;
-                      else
-                        {
-                          LOG_ERROR ("sscanf error %s with key %s at pos %u of %lu",
-                                     strerror(errno), "acis_data", j, blen);
-                          break;
-                        }
-                    }
-                  */
                   len = 15 + blen;
                 }
             }
@@ -1864,13 +1838,6 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   unsigned char *buf = len ? (unsigned char*)malloc (blen + 1) : NULL;
                   char *pos = str;
                   char *old;
-                  /*
-                  for (unsigned i = 0; i < blen; i++)
-                    {
-                      sscanf (pos, "%2hhX", &buf[i]);
-                      pos += 2;
-                    }
-                  */
                   if (buf)
                     {
                       if ((read = in_hex2bin (buf, pos, blen) != blen))
@@ -2920,25 +2887,16 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               const unsigned blen = len / 2;
               unsigned read;
               BITCODE_TF buf = (BITCODE_TF)malloc (blen + 1);
-              //char *pos = hex;
-              //char *old;
               if ((read = in_hex2bin (buf, hex, blen) != blen))
                 LOG_ERROR ("in_hex2bin with key %s at pos %u of %u",
                            key, read, blen);
-              /*
-              for (unsigned k = 0; k < blen; k++)
-                {
-                  sscanf (pos, "%2hhX", &buf[k]);
-                  pos += 2;
-                }
-              */
               buf[blen] = '\0';
               free (hex);
               if (!obj->num_unknown_bits)
                 obj->num_unknown_bits = blen * 8; // minus some padding bits
               obj->unknown_bits = buf;
               // LOG_TRACE ("%s: '%.*s' [%s] (binary)\n", key, blen, buf,
-              // f->type);
+              //            f->type);
               LOG_TRACE ("unknown_bits: %.*s\n", t->end - t->start,
                          &dat->chain[t->start])
             }
