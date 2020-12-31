@@ -13,6 +13,7 @@
 
 [ -z "$DATADIR" ] && DATADIR="@top_srcdir@/test/test-data"
 top_builddir="@top_builddir@"
+EXEEXT="@EXEEXT@"
 # artefact for "shellcheck"
 [ -z "$top_builddir" ] && echo $top_builddir
 
@@ -29,9 +30,9 @@ for dwg in $DATA; do
     svg="$(basename "$dwg" .dwg).svg"
     log="$svg.log"
     dwg="${DATADIR}/$dwg.dwg"
-    echo "dwg2SVG $dwg >$svg &&"
+    echo "dwg2SVG${EXEEXT} $dwg >$svg &&"
     echo "  @RUN_JING@ $svg"
-    if @TIMEOUT_10@ @LTEXEC@ ./dwg2SVG "$dwg" >"$svg" 2>"$log" && \
+    if @TIMEOUT_10@ @LTEXEC@ ./dwg2SVG${EXEEXT} "$dwg" >"$svg" 2>"$log" && \
        @RUN_JING@ "$svg"
     then
         rm "./$svg.log" "./$svg"
