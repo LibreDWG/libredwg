@@ -358,7 +358,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   pos = tbl->address + ((long)(i + 1) * tbl->size);                           \
   if ((long)(pos - dat->byte) != 2)                                           \
     {                                                                         \
-      LOG_WARN ("offset %ld", pos - dat->byte);                               \
+      LOG_ERROR ("offset %ld", pos - dat->byte);                              \
+      return DWG_ERR_SECTIONNOTFOUND;                                         \
     }                                                                         \
   dat->byte = pos
 
