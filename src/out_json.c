@@ -688,6 +688,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
   FIELD_VECTOR_N(nam, type, size, dxf)
 
 #define FIELD_2RD_VECTOR(nam, size, dxf)                                      \
+  if (_obj->nam)                                                              \
   {                                                                           \
     KEY (nam);                                                                \
     ARRAY;                                                                    \
@@ -699,6 +700,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
   }
 
 #define FIELD_2DD_VECTOR(nam, size, dxf)                                      \
+  if (_obj->nam)                                                              \
   {                                                                           \
     KEY (nam);                                                                \
     ARRAY;                                                                    \
@@ -710,6 +712,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
   }
 
 #define FIELD_3DPOINT_VECTOR(nam, size, dxf)                                  \
+  if (_obj->nam)                                                              \
   {                                                                           \
     KEY (nam);                                                                \
     ARRAY;                                                                    \
@@ -721,6 +724,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
   }
 
 #define HANDLE_VECTOR_N(nam, size, code, dxf)                                 \
+  if (_obj->nam)                                                              \
   {                                                                           \
     KEY (nam);                                                                \
     ARRAY;                                                                    \
