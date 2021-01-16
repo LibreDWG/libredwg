@@ -1064,10 +1064,14 @@ dwg_next_entity (const Dwg_Object *restrict obj)
 {
   Dwg_Object_Ref *restrict next;
 
-  if (obj->supertype != DWG_SUPERTYPE_ENTITY)
+  if (obj == NULL ||
+      obj->parent == NULL ||
+      obj->supertype != DWG_SUPERTYPE_ENTITY)
     return NULL;
   if (obj->parent->header.version < R_2004)
     {
+      if (!obj->tio.entity) // decoding error
+        goto next_obj;
       next = obj->tio.entity->next_entity;
       if (next && next->absolute_ref)
         return dwg_ref_object_silent (obj->parent, next);
