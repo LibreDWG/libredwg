@@ -2041,7 +2041,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
           // DXF 1 + 3 if >255
           LOG_TRACE ("acis_data:\n%s\n", FIELD_VALUE (acis_data));
         }
-      else //if (FIELD_VALUE (version)==2)
+      else if (FIELD_VALUE (version)==2)
         /* version 2, SAB: binary, unencrypted SAT format for ACIS 7.0/ShapeManager.
            ACIS versions:
            R14 release            106   (ACIS 1.6)
