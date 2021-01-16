@@ -1,6 +1,111 @@
 Full history from the git log
 -----------------------------
 
+2021-01-31  Reini Urban  <rurban@cpan.org>
+
+	Release 0.12.1
+	Fuzzer bugfixes and EED 3 for layer handle.
+	See NEWS
+
+2021-01-31  Reini Urban  <rurban@cpan.org>
+
+	dwgbmp: fix Preview offset
+	honor the sentinel, esp. >= 2004
+	and fix the size overflow check.
+
+	dwgbmp works now again.
+
+2021-01-31  Reini Urban  <rurban@cpan.org>
+
+	unit-testing: -Wuninitialized MTEXT.num_column_heights
+
+2021-01-31  Reini Urban  <rurban@cpan.org>
+
+	fix eed_3.layer from 4 to 8 byte
+	causing wrong offsets into the entities. many thanks to @shanzhugit
+	for the DWG example with a EED layer code 3, and wrong entity data.
+	Fixes GH #310.
+
+	This is analog to the xdata OBJECTID which also takes 8 byte.
+
+2021-01-31  Reini Urban  <rurban@cpan.org>
+
+	bit_TU_to_utf8_len, bit_read_TU_len
+	and swap the strict-align variants (ubsan) of wchar bytes
+
+2021-01-30  Reini Urban  <rurban@cpan.org>
+
+	dwgadd: -Wsometimes-uninitialized
+	on clang
+
+2021-01-17  Reini Urban  <rurban@cpan.org>
+
+	decode: fix LOG_TF for null strings
+	fuzzed DWG's only
+
+2021-01-17  Reini Urban  <rurban@cpan.org>
+
+	harden dwg_get_first_object
+	not only check the type, but also if _obj is valid.
+	Simplifies a lot of checks.
+
+	dwglayers got a new error warning and early exit
+
+2021-01-17  Reini Urban  <rurban@cpan.org>
+
+	eed: detect size overflow earlier
+	we read the size into a short, but multipled it with 2, with possible overflow.
+	eg. with a wstring len of 32810 => 65622 overflowing an ushort.
+	This may lead to a subsequent encode_eed overflow.
+	Fixes GH #307, with invalid fuzzed DWG only
+
+2021-01-17  Reini Urban  <rurban@cpan.org>
+
+	decode: check wrong APPID_CONTROL's with malcrafted DWG's
+	add more checks when we search for the matching APPID for
+	ACAD_MLEADERVER with a broken MLEADERSTYLE object.
+	Fixes 1/2 of GH #307
+
+	Modified-by: Reini Urban <rurban@cpan.org>
+
+2021-01-17  Reini Urban  <rurban@cpan.org>
+
+	dwg_find_class: null-deref of empty class.dxfname
+	which must not happen, but fuzzers create such invalid DWGs.
+	assert more null args for internal code.
+	Fixes GH #309
+
+	dwglayers: fail on empty layer name
+	and report its handle.
+	detected by fuzzing, only invalid DWG's have no layer name.
+	Fixes GH #308
+
+	decode_3dsolid: skip unknown versions
+	usually only needed for fuzzed DWGs
+	See GH #304
+
+	json: more null-deref protections
+	Fixes GH #306, fuzzed by Chew Kin Zhong
+
+	decode preR13: stricter table checks
+	error fatally on wrong end of table offset.
+	heap-buffer-overflow from GH #304, but this code is not
+	used in release versions.
+
+2021-01-17  Reini Urban  <rurban@cpan.org>
+
+	decode: wrong TFF VECTOR_CHKCOUNT, fix TFF overflows
+	protect from invalid free on static TFF fields on overload.
+
+	See GH #304, fuzzed by Chew Kin Zhong
+
+2021-01-17  Reini Urban  <rurban@cpan.org>
+
+	fix dwg_next_entity null-derefs
+	with broken/undecoded entities from fuzzed DWGs.
+	Fixes GH #305, out_svg. fuzzed by Chew Kin Zhong.
+
+
 2020-12-31  Reini Urban  <rurban@cpan.org>
 
 	Release 0.12

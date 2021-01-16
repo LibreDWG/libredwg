@@ -1,6 +1,6 @@
 # -*- sh -*-
 Name:           libredwg
-Version:        0.12
+Version:        0.12.1
 Release:        1%{?dist}
 Summary:        GNU C library and programs to read and write DWG files
 
@@ -137,6 +137,9 @@ fi
 #TODO add to {_libdir}/perl5/perllocal.pod
 
 %changelog
+* Sat 16 Jan 2021 Reini Urban <reini.urban@gmail.com> 0.12.1-1
+- upstream update. Security fixes
+
 * Thu 31 Dec 2020 Reini Urban <reini.urban@gmail.com> 0.12-1
 - upstream update. Add dxfadd
 

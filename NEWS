@@ -1,6 +1,29 @@
 GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
-Copyright (C) 2020 Free Software Foundation, Inc.
+Copyright (C) 2021 Free Software Foundation, Inc.
 See the end for copying conditions.
+
+LibreDWG version 0.12.1 - 2021/01/31 - beta:
+
+Major bugfixes:
+  * fixed dwg_bmp() and dwgbmp for >= r2004. Wrong dat offset.
+  * Fixed EED with code 3 for layer handles. (Fixes GH #310, shanzhugit)
+  * Fixed bit_convert_TU utf8 conversion with ubsan, wrong endian-ness.
+  Various fuzzing errors detected and fuzzed by Chew Kin Zhong (See GH #304):
+  * Fix possible null-deref with broken DWG's in dwg_get_first_object.
+  * Fix possible null-deref with broken DWG's in dwg_find_class with empty
+    CLASS.dxfname. (GH #309)
+  * Fix possible null-deref with broken DWG's in dwglayers with empty
+    LAYER.name. (GH #308)
+  * Fix short integer overflow in EED checks when decoding malcrafted DWG's,
+    which also led to encode buffer overflows. (GH #307)
+  * Fix possible null-derefs with broken DWG's in json export. (GH #306)
+  * Fix possible null-deref with broken DWG's in dwg_next_entity iterator. (GH #305)
+  * Fix wrong TFF overflow check for static strings, where we cannot set
+    the string nor the size. (GH #304)
+  * Fix heap-overflows and invalid free's when decoding broken 3DSOLID's
+    in malcrafted DWG's. Only accept version 1 and 2. (GH #304)
+Minor features:
+  * Added string converters with known TU sizes: bit_TU_to_utf8_len, bit_read_TU_len.
 
 LibreDWG version 0.12 - 2020/12/31 - beta:
 
