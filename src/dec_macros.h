@@ -435,7 +435,7 @@
   }
 #define FIELD_TFF(nam, len, dxf)                                              \
   {                                                                           \
-    SINCE (R_13) { VECTOR_CHKCOUNT (nam, TF, len, dat) }                      \
+    SINCE (R_13) { _VECTOR_CHKCOUNT_STATIC (nam, len, 1, dat) }               \
     bit_read_fixed (dat, _obj->nam, (int)len);                                \
     LOG_TRACE (#nam ": \"%.*s\" [TFF %d " #dxf "]", (int)len, _obj->nam, (int)len); \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
@@ -444,7 +444,7 @@
   }
 #define FIELD_TFFx(nam, len, dxf)                                             \
   {                                                                           \
-    SINCE (R_13) { VECTOR_CHKCOUNT (nam, TF, len, dat) }                      \
+    SINCE (R_13) { _VECTOR_CHKCOUNT_STATIC (nam, len, 1, dat) }               \
     bit_read_fixed (dat, (BITCODE_RC*)_obj->nam, (int)len);                   \
     LOG_TRACE (#nam ": [TFFx %d " #dxf "]", (int)len);                        \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
@@ -927,6 +927,7 @@
       size = 0;                                                               \
       /* return DWG_ERR_VALUEOUTOFBOUNDS; */                                  \
     }
+// for static TFF types with a size field
 #define _VECTOR_CHKCOUNT(nam, size, maxelemsize, dat)                         \
   if ((long long)(size) > AVAIL_BITS (dat) ||                                 \
       (long long)((size) * (maxelemsize)) > AVAIL_BITS (dat))                 \
@@ -937,6 +938,17 @@
                  (long)(size), (unsigned)(size) * (maxelemsize),              \
                  AVAIL_BITS (dat), SAFEDXFNAME);                              \
       size = 0;                                                               \
+      return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
+    }
+// for static TFF types with fixed size
+#define _VECTOR_CHKCOUNT_STATIC(nam, size, maxelemsize, dat)                  \
+  if ((long long)(size) > AVAIL_BITS (dat) ||                                 \
+      (long long)((size) * (maxelemsize)) > AVAIL_BITS (dat))                 \
+    {                                                                         \
+      LOG_ERROR ("Invalid " #nam                                              \
+                 " size %ld. Need min. %u bits, have %lld for %s.",           \
+                 (long)(size), (unsigned)(size) * (maxelemsize),              \
+                 AVAIL_BITS (dat), SAFEDXFNAME);                              \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
 #define HANDLE_VECTOR_CHKCOUNT(nam, size)                                     \

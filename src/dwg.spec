@@ -1982,6 +1982,8 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
   int error = 0;
 
   FIELD_B (acis_empty, 290);
+  if (dat->byte >= dat->size)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
   if (!FIELD_VALUE (acis_empty))
     {
       FIELD_B (unknown, 0);

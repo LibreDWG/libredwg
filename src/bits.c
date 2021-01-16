@@ -1442,14 +1442,15 @@ ATTRIBUTE_MALLOC
 BITCODE_TF
 bit_read_TF (Bit_Chain *restrict dat, unsigned int length)
 {
-  BITCODE_RC *chain = (BITCODE_RC *)calloc (length + 1, 1);
+  BITCODE_RC *chain;
+  CHK_OVERFLOW_PLUS (length,__FUNCTION__,NULL)
+  chain = (BITCODE_RC *)calloc (length + 1, 1);
   if (!chain)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("Out of memory");
       return NULL;
     }
-
   bit_read_fixed (dat, chain, length);
   chain[length] = '\0';
 
@@ -1466,7 +1467,9 @@ bit_read_bits (Bit_Chain *dat, unsigned long bits)
 {
   unsigned bytes = bits / 8;
   int rest = bits % 8;
-  BITCODE_RC *restrict chain = (BITCODE_RC *)calloc (bytes + (rest ? 2 : 1), 1);
+  BITCODE_RC *restrict chain;
+  CHK_OVERFLOW_PLUS (bytes,__FUNCTION__,NULL)
+  chain = (BITCODE_RC *)calloc (bytes + (rest ? 2 : 1), 1);
   if (!chain)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
