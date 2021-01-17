@@ -140,7 +140,7 @@
     }
 #define LOG_TF(level, var, len)                                               \
   {                                                                           \
-    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level || len <= 256)                   \
+    if (var && (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level || len <= 256))          \
       {                                                                       \
         for (int _i = 0; _i < (len); _i++)                                    \
           {                                                                   \
@@ -148,7 +148,7 @@
           }                                                                   \
         LOG (level, "\n");                                                    \
       }                                                                       \
-    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)                                  \
+    if (var && (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE))                         \
       {                                                                       \
         for (int _i = 0; _i < (len); _i++)                                    \
           {                                                                   \
