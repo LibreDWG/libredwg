@@ -127,7 +127,7 @@
 
 /* The __nonnull function attribute marks pointer arguments which
    must not be NULL.  */
-#if _GNUC_VERSION >= 303
+#if _GNUC_VERSION >= 303 && !defined(__cplusplus)
 #  undef __nonnull
 #  define __nonnull(params) __attribute__ ((__nonnull__ params))
 #  define __nonnull_all __attribute__ ((__nonnull__))

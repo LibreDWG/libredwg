@@ -18,6 +18,7 @@
 #include "config.h"
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "common.h"
 #include "classes.h"
 #include "dynapi.h"
@@ -527,11 +528,13 @@ bool is_class_unhandled (const char* name)
 
 bool dwg_find_class (const Dwg_Data *restrict dwg, const char* dxfname, BITCODE_BS *numberp)
 {
+  assert(dwg);
+  assert(dxfname);
   // linear search is good enough, with ~20 classes
   for (BITCODE_BS i = 0; i < dwg->num_classes; i++)
     {
       // ->dxfname is always ASCII/UTF-8, dxfname_u is the TU counterpart
-      if (strEQ (dwg->dwg_class[i].dxfname, dxfname))
+      if (dwg->dwg_class[i].dxfname && strEQ (dwg->dwg_class[i].dxfname, dxfname))
         {
           if (numberp)
             *numberp = dwg->dwg_class[i].number;
