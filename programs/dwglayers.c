@@ -173,15 +173,23 @@ main (int argc, char *argv[])
         }
       else
         name = layer->name;
-      // since r2007 unicode, converted to utf-8
-      if (dwg.header.from_version >= R_2007)
+      if (!name)
         {
-          char *utf8 = bit_convert_TU ((BITCODE_TU)name);
-          printf ("%s\n", utf8);
-          free (utf8);
+          LOG_ERROR ("Invalid layer %lX ignored, empty name",
+                     _ctrl->entries[i]->obj->handle.value)
         }
       else
-        printf ("%s\n", name);
+        {
+          // since r2007 unicode, converted to utf-8
+          if (dwg.header.from_version >= R_2007)
+            {
+              char *utf8 = bit_convert_TU ((BITCODE_TU)name);
+              printf ("%s\n", utf8);
+              free (utf8);
+            }
+          else
+            printf ("%s\n", name);
+        }
       fflush (stdout);
     }
 
