@@ -4058,19 +4058,27 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
               if (dwg_resolve_handleref (&ref, _obj))
                 {
                   Dwg_Object *appid = dwg_get_first_object (dwg, DWG_TYPE_APPID_CONTROL);
-                  Dwg_Object_APPID_CONTROL *_appid = appid->tio.object->tio.APPID_CONTROL;
-                  // search absref in APPID_CONTROL apps[]
-                  for (j = 0; j < _appid->num_entries; j++)
+                  Dwg_Object_APPID_CONTROL *_appid;
+                  if (appid &&
+                      appid->fixedtype == DWG_TYPE_APPID_CONTROL &&
+                      appid->tio.object &&
+                      appid->tio.object->tio.APPID_CONTROL)
                     {
-                      if (_appid->entries[j] &&
-                          _appid->entries[j]->absolute_ref == ref.absolute_ref)
+                      _appid = appid->tio.object->tio.APPID_CONTROL;
+                      // search absref in APPID_CONTROL apps[]
+                      for (j = 0; j < _appid->num_entries; j++)
                         {
-                          Dwg_Object_MLEADERSTYLE *mstyle
-                              = obj->tio.MLEADERSTYLE;
-                          mstyle->class_version = 2; // real value with code 70 follows
-                          LOG_TRACE (
-                              "EED found ACAD_MLEADERVER %lX\n",
-                              ref.absolute_ref);
+                          if (_appid->entries &&
+                              _appid->entries[j] &&
+                              _appid->entries[j]->absolute_ref == ref.absolute_ref)
+                            {
+                              Dwg_Object_MLEADERSTYLE *mstyle
+                                = obj->tio.MLEADERSTYLE;
+                              mstyle->class_version = 2; // real value with code 70 follows
+                              LOG_TRACE (
+                                         "EED found ACAD_MLEADERVER %lX\n",
+                                         ref.absolute_ref);
+                            }
                         }
                     }
                 }
