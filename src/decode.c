@@ -4059,13 +4059,9 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
               if (dwg_resolve_handleref (&ref, _obj))
                 {
                   Dwg_Object *appid = dwg_get_first_object (dwg, DWG_TYPE_APPID_CONTROL);
-                  Dwg_Object_APPID_CONTROL *_appid;
-                  if (appid &&
-                      appid->fixedtype == DWG_TYPE_APPID_CONTROL &&
-                      appid->tio.object &&
-                      appid->tio.object->tio.APPID_CONTROL)
+                  if (appid)
                     {
-                      _appid = appid->tio.object->tio.APPID_CONTROL;
+                      Dwg_Object_APPID_CONTROL *_appid = appid->tio.object->tio.APPID_CONTROL;
                       // search absref in APPID_CONTROL apps[]
                       for (j = 0; j < _appid->num_entries; j++)
                         {

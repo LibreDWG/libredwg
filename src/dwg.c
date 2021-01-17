@@ -1441,7 +1441,9 @@ dwg_get_first_object (const Dwg_Data *dwg, const Dwg_Object_Type type)
   for (unsigned i = 0; i < dwg->num_objects; i++)
     {
       Dwg_Object *const obj = &dwg->object[i];
-      if (obj->fixedtype == type)
+      if (obj->fixedtype == type &&
+          obj->tio.object &&
+          obj->tio.object->tio.APPID)
         return obj;
     }
   return NULL;
