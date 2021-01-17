@@ -3823,11 +3823,11 @@ decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
  */
 
 static int
-eed_need_size (BITCODE_BS need, BITCODE_BS have)
+eed_need_size (unsigned long need, BITCODE_BS have)
 {
-  if (need > have)
+  if (need > (unsigned long)have)
     {
-      LOG_ERROR ("Invalid EED size %d > %d", (int)need, (int)have);
+      LOG_ERROR ("Invalid EED size %lu > %u", need, (unsigned)have);
       return 1;
     }
   return 0;
@@ -3839,7 +3839,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
 {
   int lenc;
   BITCODE_BS j;
-  BITCODE_RS lens;
+  unsigned long lens;
 
   data->code = bit_read_RC (dat);
   LOG_TRACE ("code: %d [RC], ", (int)data->code);
@@ -3883,11 +3883,12 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
         if (eed_need_size (2, size))
           return DWG_ERR_INVALIDEED;
         data->u.eed_0.is_tu = 1;
-        data->u.eed_0_r2007.length = lens = bit_read_RS (dat);
-        if (eed_need_size ((lens * 2) + 2, size))
+        data->u.eed_0_r2007.length = bit_read_RS (dat);
+        lens = data->u.eed_0_r2007.length;
+        if (eed_need_size ((long)(lens * 2) + 2, size))
           return DWG_ERR_INVALIDEED;
         /* code:1 + len:2 NUL? */
-        for (j = 0; j < MIN (lens, (size - 3) / 2); j++)
+        for (j = 0; j < MIN (lens, (unsigned long)((size - 3) / 2)); j++)
           data->u.eed_0_r2007.string[j] = bit_read_RS (dat);
           // data->u.eed_0_r2007.string[j] = 0; //already calloc'ed
 #ifdef _WIN32
