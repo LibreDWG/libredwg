@@ -2684,14 +2684,14 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           LOG_TRACE ("Proxyflag:        %x [BS]\n", dwg->dwg_class[i].proxyflag)
           if (dwg->header.version >= R_2007)
             {
-              dwg->dwg_class[i].appname = (char *)bit_read_TU (&str_dat);
+              unsigned int applen, dxflen;
+              dwg->dwg_class[i].appname = (char *)bit_read_TU_len (&str_dat, &applen);
               dwg->dwg_class[i].cppname = (char *)bit_read_TU (&str_dat);
-              dwg->dwg_class[i].dxfname_u = bit_read_TU (&str_dat);
-              dwg->dwg_class[i].dxfname
-                  = bit_convert_TU (dwg->dwg_class[i].dxfname_u);
+              dwg->dwg_class[i].dxfname_u = bit_read_TU_len (&str_dat, &dxflen);
+              dwg->dwg_class[i].dxfname = bit_TU_to_utf8_len (dwg->dwg_class[i].dxfname_u, dxflen);
               if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
                 {
-                  char *appu8 = bit_convert_TU ((BITCODE_TU)dwg->dwg_class[i].appname);
+                  char *appu8 = bit_TU_to_utf8_len ((BITCODE_TU)dwg->dwg_class[i].appname, applen);
                   LOG_TRACE ("Application name: \"%s\" [TU 0 (as utf-8)]\n", appu8);
                   //LOG_TRACE_TU ("Application name", dwg->dwg_class[i].appname, 0)
                   LOG_TRACE_TU ("C++ class name  ", dwg->dwg_class[i].cppname, 0)
@@ -3897,7 +3897,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
 #else
         if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
           {
-            char *u8 = bit_convert_TU (data->u.eed_0_r2007.string);
+            char *u8 = bit_TU_to_utf8_len (data->u.eed_0_r2007.string, lens);
             LOG_TRACE ("wstring: len=%d [RS] \"%s\" [TU]\n",
                        (int)lens, u8);
             free (u8);

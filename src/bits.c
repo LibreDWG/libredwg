@@ -1910,6 +1910,32 @@ bit_read_TU (Bit_Chain *restrict dat)
   return chain;
 }
 
+BITCODE_TU
+bit_read_TU_len (Bit_Chain *restrict dat, unsigned int *lenp)
+{
+  unsigned int i;
+  unsigned int length;
+  BITCODE_TU chain;
+
+  CHK_OVERFLOW_PLUS (1,__FUNCTION__,NULL)
+  length = bit_read_BS (dat);
+  CHK_OVERFLOW_PLUS (length * 2,__FUNCTION__,NULL)
+  chain = (BITCODE_TU)malloc ((length + 1) * 2);
+  if (!chain)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("Out of memory")
+      return NULL;
+    }
+  for (i = 0; i < length; i++)
+    chain[i] = bit_read_RS (dat); // probably without byte swapping
+  // normally not needed, as the DWG itself contains the ending 0 as last char
+  // but we enforce writing it.
+  chain[length] = 0;
+  *lenp = length;
+  return chain;
+}
+
 /** String16: Read ASCII prefixed by a RS length
  */
 BITCODE_TV
@@ -2185,9 +2211,11 @@ bit_read_T (Bit_Chain *restrict dat)
     return (BITCODE_T)bit_read_TV (dat);
 }
 
-/* converts UCS-2 to UTF-8 */
+/* converts UCS-2LE to UTF-8.
+   first pass to get the dest len. single malloc.
+ */
 char *
-bit_convert_TU (BITCODE_TU restrict wstr)
+bit_convert_TU (const BITCODE_TU restrict wstr)
 {
   BITCODE_TU tmp = wstr;
   char *str;
@@ -2201,7 +2229,7 @@ bit_convert_TU (BITCODE_TU restrict wstr)
   if ((uintptr_t)wstr % SIZEOF_SIZE_T)
     {
       unsigned char *b = (unsigned char*)wstr;
-      c = (b[0] << 8) + b[1];
+      c = (b[1] << 8) + b[0];
       while (c)
         {
           len++;
@@ -2212,7 +2240,7 @@ bit_convert_TU (BITCODE_TU restrict wstr)
                 len++;
             }
           b += 2;
-          c = (b[0] << 8) + b[1];
+          c = (b[1] << 8) + b[0];
         }
     }
   else
@@ -2231,7 +2259,7 @@ bit_convert_TU (BITCODE_TU restrict wstr)
         LOG_INSANE ("U+%04X ", c);
 #endif
     }
-  str = (char*)malloc (len + 2);
+  str = (char*)malloc (len + 1);
   if (!str)
     {
       loglevel = 1;
@@ -2239,11 +2267,13 @@ bit_convert_TU (BITCODE_TU restrict wstr)
       return NULL;
     }
   i = 0;
+  tmp = wstr;
 #ifdef HAVE_ALIGNED_ACCESS_REQUIRED
   if ((uintptr_t)wstr % SIZEOF_SIZE_T)
     {
       unsigned char *b = (unsigned char*)wstr;
-      c = (b[0] << 8) + b[1];
+      // possible gcc bug
+      c = (b[1] << 8) + b[0];
       while (c && i < len)
         {
           if (c < 0x80)
@@ -2263,12 +2293,12 @@ bit_convert_TU (BITCODE_TU restrict wstr)
             }
 
           b += 2;
-          c = (b[0] << 8) + b[1];
+          c = (b[1] << 8) + b[0];
         }
     }
   else
 #endif
-  while ((c = *wstr++) && i < len)
+  while ((c = *tmp++) && i < len)
     {
       if (c < 0x80)
         {
@@ -2292,6 +2322,104 @@ bit_convert_TU (BITCODE_TU restrict wstr)
       /*
       else if (c < 0x110000)
         {
+          str[i++] = (c >> 18) | 0xF0;
+          str[i++] = ((c >> 12) & 0x3F) | 0x80;
+          str[i++] = ((c >> 6) & 0x3F) | 0x80;
+          str[i++] = (c & 0x3F) | 0x80;
+        }
+      else
+        HANDLER (OUTPUT, "ERROR: overlarge unicode codepoint U+%0X", c);
+     */
+    }
+  if (i <= len + 1)
+    str[i] = '\0';
+  return str;
+}
+
+#define EXTEND_SIZE(str, i, len)                \
+  if (i > len)                                  \
+    str = (char*) realloc (str, i+1)
+
+/* converts UCS-2LE to UTF-8. len is the wstr length, not the resulting utf8-size.
+   single pass with realloc. */
+char *
+bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
+{
+  BITCODE_TU tmp = wstr;
+  char *str;
+  int i = 0;
+  uint16_t c = 0;
+
+  if (!wstr || !len)
+    return NULL;
+  str = (char*)malloc (len + 1);
+  if (!str)
+    {
+      loglevel = 1;
+      LOG_ERROR ("Out of memory")
+      return NULL;
+    }
+  i = 0;
+  tmp = wstr;
+#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+  if ((uintptr_t)wstr % SIZEOF_SIZE_T)
+    {
+      unsigned char *b = (unsigned char*)wstr;
+      // possible gcc bug
+      c = (b[1] << 8) + b[0];
+      while (c && i < len)
+        {
+          if (c < 0x80)
+            {
+              str[i++] = c & 0xFF;
+            }
+          else if (c < 0x800)
+            {
+              EXTEND_SIZE(str, i + 1, len);
+              str[i++] = (c >> 6) | 0xC0;
+              str[i++] = (c & 0x3F) | 0x80;
+            }
+          else /* if (c < 0x10000) */
+            {
+              EXTEND_SIZE(str, i + 2, len);
+              str[i++] = (c >> 12) | 0xE0;
+              str[i++] = ((c >> 6) & 0x3F) | 0x80;
+              str[i++] = (c & 0x3F) | 0x80;
+            }
+
+          b += 2;
+          c = (b[1] << 8) + b[0];
+        }
+    }
+  else
+#endif
+  while ((c = *tmp++) && i < len)
+    {
+      if (c < 0x80)
+        {
+          str[i++] = c & 0xFF;
+        }
+      else if (c < 0x800)
+        {
+          EXTEND_SIZE(str, i + 1, len);
+          str[i++] = (c >> 6) | 0xC0;
+          str[i++] = (c & 0x3F) | 0x80;
+        }
+      else /* if (c < 0x10000) */
+        { /* windows ucs-2 has no D800-DC00 surrogate pairs. go straight up */
+          /*if (i+3 > len) {
+            str = realloc(str, i+3);
+            len = i+2;
+          }*/
+          EXTEND_SIZE(str, i + 2, len);
+          str[i++] = (c >> 12) | 0xE0;
+          str[i++] = ((c >> 6) & 0x3F) | 0x80;
+          str[i++] = (c & 0x3F) | 0x80;
+        }
+      /*
+      else if (c < 0x110000)
+        {
+          EXTEND_SIZE(str, i + 3, len);
           str[i++] = (c >> 18) | 0xF0;
           str[i++] = ((c >> 12) & 0x3F) | 0x80;
           str[i++] = ((c >> 6) & 0x3F) | 0x80;

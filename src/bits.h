@@ -231,6 +231,7 @@ void bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict value);
 
 /* read UCS-2 string, with length as BS */
 BITCODE_TU bit_read_TU (Bit_Chain *restrict dat);
+BITCODE_TU bit_read_TU_len (Bit_Chain *restrict dat, unsigned int *lenp);
 /* read ASCII string, with length as RS */
 BITCODE_TV bit_read_T16 (Bit_Chain *restrict dat);
 /* read UCS-2 string, with length as RS */
@@ -277,8 +278,11 @@ size_t bit_strnlen (const char *restrict str, const size_t maxlen);
 #define strnlen (str, maxlen) bit_strnlen(str, maxlen)
 #endif
 
-/* Converts UCS-2 to UTF-8, returning a copy. */
-EXPORT char *bit_convert_TU (BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
+/* Convert UCS-2LE to UTF-8, returning a copy. */
+EXPORT char *bit_convert_TU (const BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
+EXPORT char *bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
+  ATTRIBUTE_MALLOC;
+
 
 /** Converts UTF-8 (dxf,json) to ASCII TV.
     \uxxxx or other unicode => \U+XXXX
