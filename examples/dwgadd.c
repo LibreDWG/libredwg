@@ -425,11 +425,11 @@ static void fn_error (const char* msg)
 
 static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
 {
-  Dwg_Data *dwg;
+  Dwg_Data *dwg = NULL;
   Dwg_Object *mspace;
   Dwg_Object_BLOCK_HEADER *hdr;
   const char *end;
-  char *p;
+  char *p = NULL;
   Dwg_Version_Type version = R_2000;
   int error;
   int i = 0;
@@ -606,6 +606,8 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       dwg = dwg_add_Document (version, imperial, 0);
       *dwgp = dwg;
     }
+  else if (!dwg)
+    exit(1);
   mspace = dwg_model_space_object (dwg);
   hdr = mspace->tio.object->tio.BLOCK_HEADER;
   orig_num = dwg->num_objects;
