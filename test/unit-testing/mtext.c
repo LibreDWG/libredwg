@@ -69,6 +69,7 @@ api_process (dwg_object *obj)
         fprintf (stderr, "attachment " FORMAT_BS " != ignore_attachment " FORMAT_BL "\n",
                  attachment, ignore_attachment);
       CHK_ENTITY_TYPE (mtext, MTEXT, numfragments, BL); // only for column_type == 1
+      CHK_ENTITY_TYPE (mtext, MTEXT, num_column_heights, BL);
       if (column_type == 1)
         {
           if (num_column_heights)
@@ -79,7 +80,6 @@ api_process (dwg_object *obj)
           if (numfragments)
             fail ("numfragments with column_type != 1");
         }
-      CHK_ENTITY_TYPE (mtext, MTEXT, num_column_heights, BL); //else
       CHK_ENTITY_TYPE (mtext, MTEXT, column_width, BD);
       CHK_ENTITY_TYPE (mtext, MTEXT, gutter, BD);
       CHK_ENTITY_TYPE (mtext, MTEXT, auto_height, B);
