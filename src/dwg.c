@@ -489,7 +489,7 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
   BITCODE_RC i, num_pictures, type;
   int found;
   BITCODE_RL header_size, address, osize;
-  Bit_Chain dat = { NULL, 0, 0, 0 };
+  Bit_Chain dat = { 0 };
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   *size = 0;
@@ -501,8 +501,12 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
       LOG_INFO ("no THUMBNAIL Image Data\n")
       return NULL;
     }
-  dat.byte = 0;
+  //dat.byte = 0; sentinel at 16
   dat.bit = 0;
+  dat.opts = dwg->opts;
+  dat.from_version = dwg->header.from_version;
+  dat.version = dwg->header.version;
+  dat.fh = NULL;
 
 #ifdef USE_TRACING
   /* Before starting, set the logging level, but only do so once.  */
@@ -517,9 +521,9 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
 
   osize = bit_read_RL (&dat); /* overall size of all images */
   LOG_TRACE ("overall size: " FORMAT_RL " [RL]\n", osize);
-  if (osize > (dat.size - dat.byte))
+  if (osize > (dat.size - 4))
     {
-      LOG_ERROR ("Preview overflow > %ld", dat.size - dat.byte);
+      LOG_ERROR ("Preview overflow > %ld", dat.size - 4);
       return NULL;
     }
   num_pictures = bit_read_RC (&dat);

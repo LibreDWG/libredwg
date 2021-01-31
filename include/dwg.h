@@ -8335,9 +8335,9 @@ typedef struct _dwg_chain
   unsigned char bit;
   /* NOT:
   unsigned char opts;
-  FILE *fh;
   Dwg_Version_Type version;
   Dwg_Version_Type from_version;
+  FILE *fh;
   */
 } Dwg_Chain;
 
