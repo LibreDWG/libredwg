@@ -3942,7 +3942,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
 #else
               if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)
                 {
-                  char *u8 = bit_convert_TU (data->u.eed_0_r2007.string);
+                  char *u8 = bit_TU_to_utf8_len (data->u.eed_0_r2007.string,
+                                                 data->u.eed_0_r2007.length);
                   LOG_TRACE ("wstring: len=%d [RS] \"%s\" [TU]",
                              (int)data->u.eed_0_r2007.length, u8);
                   free (u8);
@@ -3957,8 +3958,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
       LOG_TRACE ("close: %d [RC]", (int)data->u.eed_2.close);
       break;
     case 3:
-      bit_write_RL (dat, data->u.eed_3.layer);
-      LOG_TRACE ("layer: %d [RL]", (int)data->u.eed_3.layer);
+      bit_write_RLL (dat, data->u.eed_3.layer);
+      LOG_TRACE ("layer: 0x%lX [RLL]", (unsigned long)data->u.eed_3.layer);
       break;
     case 4:
       bit_write_RC (dat, data->u.eed_4.length);

@@ -7796,8 +7796,8 @@ typedef struct _dwg_entity_eed_data
     struct { /* 2 (1002) "{" => 0 open, or "}" => 1 close */
       BITCODE_RC close;
     } eed_2;
-    struct { /* 3 (1003) layer */
-      BITCODE_RL layer;
+    struct { /* 3 (1003) layer (8-byte handle value) */
+      BITCODE_RLL layer;
     } eed_3;
     struct { /* 4 (1004) binary */
       BITCODE_RC length;

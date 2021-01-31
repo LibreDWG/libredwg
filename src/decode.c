@@ -3912,10 +3912,10 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       LOG_TRACE ("close: " FORMAT_RC " [RC]\n", data->u.eed_2.close);
       break;
     case 3:
-      if (eed_need_size (4, size))
+      if (eed_need_size (8, size))
         return DWG_ERR_INVALIDEED;
-      data->u.eed_3.layer = bit_read_RL (dat);
-      LOG_TRACE ("layer: " FORMAT_RL " [RL]\n", data->u.eed_3.layer);
+      data->u.eed_3.layer = bit_read_RLL (dat);
+      LOG_TRACE ("layer: " FORMAT_RLL " [RLL]\n", data->u.eed_3.layer);
       break;
     case 4:
       if (eed_need_size (1, size))

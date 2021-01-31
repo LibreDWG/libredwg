@@ -1237,8 +1237,8 @@ dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
               break;
             case 3:
               GROUP (dxf);
-              fprintf (dat->fh, "%9li\r\n", (long)data->u.eed_3.layer);
-              //VALUE_RL (data->u.eed_3.layer, dxf);
+              fprintf (dat->fh, "%9lu\r\n", (unsigned long)data->u.eed_3.layer);
+              //VALUE_RLL (data->u.eed_3.layer, dxf);
               break;
             case 4: VALUE_BINARY (data->u.eed_4.data, data->u.eed_4.length, dxf); break;
             case 5: VALUE_H (data->u.eed_5.entity, dxf); break; // not in DXF
