@@ -120,6 +120,17 @@ regen-swig-patch:
 	-difforig bindings/python/swig_python.c >xxxx
 	if test -s xxxx; then mv xxxx build-aux/swig_python.patch; fi
 
+WEB_DIR = $(srcdir)/../libredwg-web
+release-web: manual refman
+	if test -d $(WEB_DIR)/manual; then \
+	  rsync -avzC doc/manual/* $(WEB_DIR)/manual/; \
+	  rsync -avzC doc/refman/* $(WEB_DIR)/refman/; \
+	fi
+	cd $(WEB_DIR) && \
+	  cvs add -m"new with $(VERSION)" manual/html_node/*.html refman/*.{html,js} \
+	    refman/search/*.{html,js} && cd -
+	cd $(WEB_DIR) && cvs commit -m"update to $(VERSION)" && cd -
+
 TESTS =
 if HAVE_SHELLCHECK
 # fragile, serial-tests only. SPEC_LOG_COMPILER does not work there,
