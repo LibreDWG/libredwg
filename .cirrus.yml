@@ -1,13 +1,13 @@
 # Build configuration for https://cirrus-ci.com/github/LibreDWG/libredwg
 # See https://cirrus-ci.org/guide/FreeBSD/
 freebsd_instance:
-  image_family: freebsd-12-1
+  image_family: freebsd-12-2
 
 task:
   auto_cancellation: $CIRRUS_BRANCH != 'master' && $CIRRUS_BRANCH !=~ 'smoke/.*'
   only_if: $CIRRUS_BRANCH =~ 'smoke/.*' || $CIRRUS_BRANCH == 'master'
   install_script:
-    - pkg install -y autoconf automake libtool pkgconf python37 py37-libxml2 pcre2 libxml2
+    - pkg install -y m4 autoconf automake libtool pkgconf python37 py37-libxml2 pcre2 libxml2
                      texinfo p5-Convert-Binary-C
   build_script:
     - sh ./autogen.sh
