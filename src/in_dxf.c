@@ -10135,6 +10135,8 @@ new_object (char *restrict name, char *restrict dxfname,
               else
                 {
                   assert (o->text);
+                  if (strlen (o->text) < len)
+                    o->text = realloc (o->text, len + 1);
                   strcpy (o->text, pair->value.s);
                   written += len;
                   LOG_TRACE ("MTEXT.text += %u/%u [TV 3]\n", len, written);
