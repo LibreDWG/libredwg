@@ -1,6 +1,6 @@
 ## Makefile.am
 ##
-## Copyright (C) 2010-2019 Free Software Foundation, Inc.
+## Copyright (C) 2010-2021 Free Software Foundation, Inc.
 ##
 ## This file is part of LibreDWG.
 ##
@@ -25,7 +25,7 @@ if USE_WRITE
 bin_PROGRAMS     = dwgadd
 endif
 check_PROGRAMS   = load_dwg dwg2svg2 dwgfuzz
-EXTRA_PROGRAMS   = unknown bd bits
+EXTRA_PROGRAMS   = unknown bd bits llvmfuzz
 
 load_dwg_SOURCES = load_dwg.c
 dwg2svg2_SOURCES = dwg2svg2.c
@@ -39,6 +39,9 @@ bd_SOURCE        = bd.c
 bd_LDADD         = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo -lm
 bits_SOURCE      = bits.c
 bits_LDADD       = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo -lm
+llvmfuzz_SOURCE  = llvmfuzz.c
+llvmfuzz_CFLAGS  = $(CFLAGS) $(AM_CFLAGS) -fsanitize=address,fuzzer
+llvmfuzz_LDADD   = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo -lm
 
 all: $(check_PROGRAMS)
 
