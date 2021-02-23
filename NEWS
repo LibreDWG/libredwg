@@ -2,6 +2,12 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2021 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+LibreDWG version 0.12.2 - 2021/02/23 - beta:
+
+Minor bugfixes:
+  * Fixed extending the write buffer for the 2 CRC bytes. Occurs very
+    seldomly (GH #315)
+
 LibreDWG version 0.12.1 - 2021/01/31 - beta:
 
 Major bugfixes:

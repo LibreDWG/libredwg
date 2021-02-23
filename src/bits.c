@@ -1367,6 +1367,8 @@ bit_write_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
   while (dat->bit > 0)
     bit_write_B (dat, 0);
 
+  if (start_address > dat->byte || (dat->byte + 2) >= dat->size)
+      bit_chain_alloc (dat);
   if (start_address > dat->byte || dat->byte >= dat->size)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
@@ -1392,6 +1394,8 @@ bit_write_CRC_LE (Bit_Chain *dat, long unsigned int start_address, uint16_t seed
   while (dat->bit > 0)
     bit_write_B (dat, 0);
 
+  if (start_address > dat->byte || (dat->byte + 2) >= dat->size)
+      bit_chain_alloc (dat);
   if (start_address > dat->byte || dat->byte >= dat->size)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;

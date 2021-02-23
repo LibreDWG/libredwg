@@ -1,6 +1,19 @@
 Full history from the git log
 -----------------------------
 
+2021-02-22  Reini Urban  <rurban@cpan.org>
+
+	Release 0.12.2
+	Fixed extending the write buffer for the 2 CRC bytes. Occurs very
+	seldomly
+
+	update .cirrus.yml
+	autoconf update requires latest m4
+
+	fix bit_write_CRC overflow
+	need to extend the buffer on write.
+	Fixes GH #315
+
 2021-01-31  Reini Urban  <rurban@cpan.org>
 
 	Release 0.12.1
