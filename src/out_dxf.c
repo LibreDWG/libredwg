@@ -1046,25 +1046,29 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
       VALUE_RL (color->rgb, dxf + 420 - 62);
       if (color->flag & 2 && color->book_name)
         {
-          char name[80];
+          char name[256];
           if (IS_FROM_TU (dat))
             {
               char *u8 = bit_convert_TU ((BITCODE_TU)color->book_name);
-              strcpy (name, u8);
+              if (u8)
+                strncpy (name, u8, 255);
+              else
+                name[0] = '\0';
               free (u8);
               u8 = bit_convert_TU ((BITCODE_TU)color->name);
               if (u8)
                 {
-                  strcat (name, "$");
-                  strcpy (name, u8);
+                  if (*name)
+                    strncat (name, "$", 255);
+                  strncat (name, u8, 255);
                   free (u8);
                 }
             }
           else
             {
-              strcpy (name, color->book_name);
-              strcat (name, "$");
-              strcpy (name, color->name);
+              strncpy (name, color->book_name, 255);
+              strncat (name, "$", 255);
+              strncat (name, color->name, 255);
             }
           VALUE_TV (name, dxf + 430 - 62);
         }
