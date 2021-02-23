@@ -66,6 +66,9 @@
 /* Define to 1 if the system has the `ms_format' function attribute */
 #undef HAVE_FUNC_ATTRIBUTE_MS_FORMAT
 
+/* Define to 1 if the system has the `noreturn' function attribute */
+#undef HAVE_FUNC_ATTRIBUTE_NORETURN
+
 /* Define to 1 if the system has the `returns_nonnull' function attribute */
 #undef HAVE_FUNC_ATTRIBUTE_RETURNS_NONNULL
 

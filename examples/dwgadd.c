@@ -417,7 +417,8 @@ next_line (char *restrict p, const char *restrict end)
   return p;
 }
 
-static void fn_error (const char* msg)
+static ATTRIBUTE_NORETURN
+void fn_error (const char* msg)
 {
   fprintf (stderr, "%s", msg);
   exit (1);

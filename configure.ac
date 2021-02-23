@@ -230,6 +230,7 @@ AX_GCC_FUNC_ATTRIBUTE(ms_format)
 AX_GCC_FUNC_ATTRIBUTE(format)
 AX_GCC_FUNC_ATTRIBUTE(malloc)
 AX_GCC_FUNC_ATTRIBUTE(returns_nonnull)
+AX_GCC_FUNC_ATTRIBUTE(noreturn)
 
 dnl until we can make a release, favor no -O2 optims.
 dnl it's fast enough and better for debugging.

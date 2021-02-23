@@ -150,6 +150,12 @@
 #  define RETURNS_NONNULL
 #endif
 
+#ifdef HAVE_FUNC_ATTRIBUTE_NORETURN
+#  define ATTRIBUTE_NORETURN __attribute__ ((noreturn))
+#else
+#  define ATTRIBUTE_NORETURN
+#endif
+
 #ifndef EXPORT
 #  if defined(_WIN32) && defined(ENABLE_SHARED)
 #    ifdef DLL_EXPORT
