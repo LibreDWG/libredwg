@@ -2392,6 +2392,11 @@ read_2004_section_header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         free (sec_dat.chain);
       return error;
     }
+  if (dat->size - dat->byte <= 200)
+    {
+      LOG_ERROR ("Not enough space for HEADER %lu", dat->size - dat->byte);
+      return error | DWG_ERR_INVALIDDWG;
+    }
 
   if (bit_search_sentinel (&sec_dat,
                            dwg_sentinel (DWG_SENTINEL_VARIABLE_BEGIN)))
@@ -2641,7 +2646,7 @@ auxheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dat->chain || !dat->size)
     return 1;
 
-    // clang-format off
+  // clang-format off
   #include "auxheader.spec"
   // clang-format on
 
@@ -2690,7 +2695,7 @@ appinfo_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dat->chain || !dat->size)
     return 1;
 
-    // clang-format off
+  // clang-format off
   #include "appinfo.spec"
   // clang-format on
 
@@ -3032,7 +3037,7 @@ read_2004_section_objfreespace (Bit_Chain *restrict dat,
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-  // clang-format off
+// clang-format off
   #include "objfreespace.spec"
   // clang-format on
 
@@ -3052,7 +3057,7 @@ template_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Object *obj = NULL;
   int error = 0;
 
-  // clang-format off
+// clang-format off
   #include "template.spec"
   // clang-format on
 
@@ -3109,7 +3114,7 @@ acds_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_BL rcount3 = 0, rcount4, vcount;
   int error = 0;
 
-  // clang-format off
+// clang-format off
   #include "acds.spec"
   // clang-format on
 
@@ -3367,11 +3372,10 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     dat->byte = 0x06;
     if (dat->from_version >= R_2022)
       dat->byte = 0x07;
-      // clang-format off
+    // clang-format off
     #include "header.spec"
     // clang-format on
   }
-
   LOG_HANDLE ("\nempty R2004 slack (@%lu.0-%u.0, %ld):\n", dat->byte - 54,
               0x80, 0x80 - (dat->byte - 54));
   LOG_TF (HANDLE, &dat->chain[dat->byte], (int)(0x80 - dat->byte));
@@ -4196,7 +4200,7 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
     return error;
 
-    // clang-format off
+  // clang-format off
   #include "common_entity_data.spec"
   // clang-format on
 
@@ -4615,7 +4619,7 @@ dwg_decode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   if (dat->from_version >= R_2007 && _ent->color.flag & 0x40)
     FIELD_HANDLE (color.handle, 0, 430);
 
-    // clang-format off
+  // clang-format off
   #include "common_entity_handle_data.spec"
   // clang-format on
 

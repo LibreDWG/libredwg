@@ -505,6 +505,8 @@
     _obj->nam = bit_read_TF (dat, (int)len);                                  \
     LOG_TRACE (#nam ": \"%s\" [TF %lu " #dxf "]", _obj->nam,                  \
                (unsigned long)len);                                           \
+    if (!_obj->nam)                                                           \
+      return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")                                                          \
     LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
@@ -516,6 +518,8 @@
     _obj->nam = (BITCODE_TV)bit_read_TF (dat, (int)len);                      \
     LOG_TRACE (#nam ": \"%s\" [TFv %lu " #dxf "]", _obj->nam,                 \
                (unsigned long)len);                                           \
+    if (!_obj->nam)                                                           \
+      return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")                                                          \
     LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
