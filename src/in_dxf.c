@@ -2371,7 +2371,12 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           continue;
         }
       len = strlen (pair->value.s) + 1; // + the \n
-      if (!total)
+      if (len > 100000) // chunked into blocks of size 4096
+        {
+          LOG_ERROR ("Out of memory");
+          return NULL;
+        }
+      if (!total || !o->encr_sat_data[0])
         {
           total = len;
           o->encr_sat_data[0] = (char *)malloc (total + 1); // + the \0
