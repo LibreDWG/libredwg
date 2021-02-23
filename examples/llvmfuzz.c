@@ -118,6 +118,7 @@ int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
       default: break;
       }
     dwg_free (&dwg);
+    fclose (out_dat.fh);
     //unlink (tmp_file);
     return 0;
 }
