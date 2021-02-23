@@ -1575,7 +1575,7 @@ bit_embed_TU_size (BITCODE_TU restrict wstr, const int len)
       if ((uintptr_t)wstr % SIZEOF_SIZE_T)
         {
           unsigned char *b = (unsigned char *)wstr;
-          c = (b[1] << 8) + b[0];
+          c = TU_to_int(b);
           wstr++;
         }
       else
@@ -1627,14 +1627,14 @@ bit_wcs2nlen (const BITCODE_TU restrict wstr, const size_t maxlen)
   if ((uintptr_t)wstr % SIZEOF_SIZE_T)
     {
       unsigned char *b = (unsigned char *)wstr;
-      uint16_t c = (b[0] << 8) + b[1];
+      uint16_t c = TU_to_int(b);
       while (c)
         {
           len++;
           if (len >= maxlen)
             return 0;
           b += 2;
-          c = (b[0] << 8) + b[1];
+          c = TU_to_int(b);
         }
       return len;
     }
@@ -1670,12 +1670,12 @@ bit_wcs2len (const BITCODE_TU restrict wstr)
   if ((uintptr_t)wstr % SIZEOF_SIZE_T)
     {
       unsigned char *b = (unsigned char *)wstr;
-      uint16_t c = (b[0] << 8) + b[1];
+      uint16_t c = TU_to_int(b);
       while (c)
         {
           len++;
           b += 2;
-          c = (b[0] << 8) + b[1];
+          c = TU_to_int(b);
         }
       return len;
     }
@@ -1705,11 +1705,11 @@ bit_wcs2cpy (BITCODE_TU restrict dest, const BITCODE_TU restrict src)
   if ((uintptr_t)src % SIZEOF_SIZE_T)
     {
       unsigned char *b = (unsigned char *)src;
-      *d = (b[0] << 8) + b[1];
+      *d = TU_to_int(b);
       while (*d)
         {
           b += 2;
-          *d = (b[0] << 8) + b[1];
+          *d = TU_to_int(b);
         }
       return dest;
     }
@@ -1739,11 +1739,11 @@ bit_wcs2cmp (BITCODE_TU restrict dest, const BITCODE_TU restrict src)
   if ((uintptr_t)src % SIZEOF_SIZE_T)
     {
       unsigned char *s = (unsigned char *)src;
-      uint16_t s1 = (s[0] << 8) + s[1];
+      uint16_t s1 = TU_to_int(s);
       while (*d++ == s1)
         {
           s += 2;
-          s1 = (s[0] << 8) + s[1];
+          s1 = TU_to_int(s);
         }
       return (*d || *s1) ? 1 : 0;
     }
@@ -2233,7 +2233,7 @@ bit_convert_TU (const BITCODE_TU restrict wstr)
   if ((uintptr_t)wstr % SIZEOF_SIZE_T)
     {
       unsigned char *b = (unsigned char*)wstr;
-      c = (b[1] << 8) + b[0];
+      c = TU_to_int(b);
       while (c)
         {
           len++;
@@ -2244,7 +2244,7 @@ bit_convert_TU (const BITCODE_TU restrict wstr)
                 len++;
             }
           b += 2;
-          c = (b[1] << 8) + b[0];
+          c = TU_to_int(b);
         }
     }
   else
@@ -2277,7 +2277,7 @@ bit_convert_TU (const BITCODE_TU restrict wstr)
     {
       unsigned char *b = (unsigned char*)wstr;
       // possible gcc bug
-      c = (b[1] << 8) + b[0];
+      c = TU_to_int(b);
       while (c && i < len)
         {
           if (c < 0x80)
@@ -2297,7 +2297,7 @@ bit_convert_TU (const BITCODE_TU restrict wstr)
             }
 
           b += 2;
-          c = (b[1] << 8) + b[0];
+          c = TU_to_int(b);
         }
     }
   else
@@ -2370,7 +2370,7 @@ bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
     {
       unsigned char *b = (unsigned char*)wstr;
       // possible gcc bug
-      c = (b[1] << 8) + b[0];
+      c = TU_to_int(b);
       while (c && i < len)
         {
           if (c < 0x80)
@@ -2392,7 +2392,7 @@ bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
             }
 
           b += 2;
-          c = (b[1] << 8) + b[0];
+          c = TU_to_int(b);
         }
     }
   else
@@ -2619,8 +2619,12 @@ bit_eq_T (Bit_Chain *restrict dat, const BITCODE_T restrict wstr1, const char *r
 int
 bit_eq_TU (const char *restrict str, BITCODE_TU restrict wstr)
 {
-  char *utf8 = bit_convert_TU (wstr);
-  int result = strcmp (str, utf8) ? 0 : 1;
+  char *utf8;
+  int result;
+  if (!str)
+    return (wstr && *wstr) ? 0 : 1;
+  utf8 = bit_convert_TU (wstr);
+  result = strcmp (str, utf8) ? 0 : 1;
   free (utf8);
   return result;
 }
@@ -2640,7 +2644,7 @@ int bit_empty_T (Bit_Chain *restrict dat, BITCODE_T restrict str)
       if ((uintptr_t)str % SIZEOF_SIZE_T)
         {
           unsigned char *b = (unsigned char*)str;
-          c = (b[0] << 8) + b[1];
+          c = TU_to_int(b);
           return !c;
         }
 #endif

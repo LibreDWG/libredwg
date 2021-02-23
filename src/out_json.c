@@ -1171,8 +1171,21 @@ print_wcquote (Bit_Chain *restrict dat, dwg_wchar_t *restrict wstr)
       return;
     }
   fprintf (dat->fh, "\"");
-  while ((c = *ws++))
+  while (1)
     {
+#ifdef HAVE_ALIGNED_ACCESS_REQUIRED
+      // for strict alignment CPU's like sparc only. also for UBSAN.
+      if ((uintptr_t)wstr % SIZEOF_SIZE_T)
+        {
+          unsigned char *b = (unsigned char *)ws;
+          c = TU_to_int(b);
+          ws++;
+        }
+      else
+#endif
+        c = *ws++;
+      if (!c)
+        break;
       if (c == L'"')
         {
           fprintf (dat->fh, "\\\"");
