@@ -2433,8 +2433,8 @@ bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
         HANDLER (OUTPUT, "ERROR: overlarge unicode codepoint U+%0X", c);
      */
     }
-  if (i <= len + 1)
-    str[i] = '\0';
+  EXTEND_SIZE(str, i + 1, len);
+  str[i] = '\0';
   return str;
 }
 
