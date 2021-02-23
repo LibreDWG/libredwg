@@ -1293,7 +1293,7 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   BITCODE_RL data_size = 0;            // in byte
   BITCODE_RL old_size;                 // in byte
   BITCODE_RL old_byte;
-  assert (dat != str);
+  //assert (dat != str); // r2007 objects are the same, just entities not
   old_size = str->size;
   old_byte = str->byte;
 

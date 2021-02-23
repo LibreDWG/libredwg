@@ -2103,6 +2103,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   }
   assert (!dat->bit);
   LOG_INFO ("\n=======> Header Variables:   %4u\n", (unsigned)dat->byte);
+  if (!dwg->header.section)
+    {
+      LOG_ERROR ("Empty header.section");
+      return DWG_ERR_OUTOFMEM;
+    }
   dwg->header.section[0].number = 0;
   dwg->header.section[0].address = dat->byte;
   bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_VARIABLE_BEGIN));
@@ -2305,9 +2310,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
 #ifndef NDEBUG
       // check if this object overwrote at address 0. but with r2004 it starts
-      // fresh
+      // fresh.
       if (dwg->header.version >= R_1_2 && dwg->header.version < R_2004)
         {
+          if (dat->size < 6 || dat->chain[0] != 'A' || dat->chain[1] != 'C')
+            {
+              LOG_ERROR ("Encode overwrite pos 0, invalid DWG magic");
+              return DWG_ERR_INVALIDDWG;
+            }
+          assert (dat->size > 6);
           assert (dat->chain[0] == 'A');
           assert (dat->chain[1] == 'C');
         }
