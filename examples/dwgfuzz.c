@@ -11,12 +11,17 @@
 /*****************************************************************************/
 
 /*
- * dwgfuzz.c: afl++ fuzzing for all in- and exporters. Just not the seperate ones.
- *            Also useful for debugging the fuzzers.
- * AFL_DONT_OPTIMIZE=1 AFL_LLVM_INSTRIM=1 AFL_USE_ASAN=1 make -C examples dwgfuzz V=1
- * AFL_DEBUG=15 AFL_DEBUG_CHILD_OUTPUT=1 gdb --args afl-fuzz -m none -i ../.fuzz-in-dxf/
+ * dwgfuzz.c: afl++/honggfuzz fuzzing for all in- and exporters. Just not the seperate ones.
+ *
+ * Also usable like:
+    ../configure --disable-shared --disable-bindings CC=hfuzz-clang CFLAGS='-O2 -g -fsanitize=address,undefined -fno-omit-frame-pointer -I/usr/local/include' && make -C src && make -C examples dwgfuzz
+    honggfuzz -i ../.fuzz-in-dxf -- examples/dwgfuzz -indxf ___FILE___
+
+ * Also useful for debugging the fuzzers.
+    AFL_DONT_OPTIMIZE=1 AFL_LLVM_INSTRIM=1 AFL_USE_ASAN=1 make -C examples dwgfuzz V=1
+    AFL_DEBUG=15 AFL_DEBUG_CHILD_OUTPUT=1 gdb --args afl-fuzz -m none -i ../.fuzz-in-dxf/
       -o .fuzz-out/ examples/dwgfuzz
- * (gdb) set follow-fork-mode child
+    (gdb) set follow-fork-mode child
  * written by Reini Urban
  */
 
@@ -133,6 +138,8 @@ help (void)
   printf (" --help           display this help and exit\n");
   exit (0);
 }
+
+// for LLVMFuzzerTestOneInput see llvmfuzz.c
 
 int
 main (int argc, char *argv[])

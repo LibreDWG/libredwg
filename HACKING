@@ -227,7 +227,6 @@ someone should probably think about and resolve them!
 On darwin I need to set AFL_CC and CC.
 
   make clean
-  export AFL_CC=clang-mp-3.8
   CC="afl-clang" ./configure --enable-trace --enable-write --disable-shared
   make
   mkdir fuzz-in; cp test/test-data/example_2000.dwg fuzz-in/
@@ -235,6 +234,19 @@ On darwin I need to set AFL_CC and CC.
 
 Using the fast option and an internal loop would be faster. I get 220/sec uninstrumented
 and 800/sec instrumented without -O2, which is fast enough to finish within 30m for a 32k DWG.
+
+Update: With honggfuzz:
+
+    ../configure --disable-shared --disable-bindings CC=hfuzz-clang CFLAGS='-O2 -g -fsanitize=address,undefined -fno-omit-frame-pointer -I/usr/local/include'
+    make -C src && make -C examples dwgfuzz
+    honggfuzz -i ../.fuzz-in-dxf -- examples/dwgfuzz -indxf ___FILE___
+
+I added a better examples/dwgfuzz for faster persisent mode and more coverage. Up to 2000/sec.
+There's also a new examples/llvmfuzz which finds even more bugs.
+
+    make -C src
+    clang -I../src -Isrc -g -O3 -fsanitize=address,fuzzer ../examples/llvmfuzz.c -Lsrc/.libs -lredwg
+    LD_LIBRARY_PATH=src/.libs ./a.out  -timeout=4000 -detect_leaks=0 -rss_limit_mb=8000 ../test/test-data/
 
 * adding other code
 
