@@ -3342,7 +3342,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                && next_330_boundary_handles
                && j >= 0 && j < (int)o->num_paths
                && o->paths[j].num_boundary_handles
-               && hdl_idx < (int)o->paths[j].num_boundary_handles)
+               && (hdl_idx + 1) < (int)o->paths[j].num_boundary_handles)
         {
           BITCODE_H ref
               = dwg_add_handleref (obj->parent, 4, pair->value.u, obj);
