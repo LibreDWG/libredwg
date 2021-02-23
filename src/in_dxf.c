@@ -234,10 +234,13 @@ dxf_skip_ws (Bit_Chain *dat)
           dat->chain[dat->byte] == ' ' ||
           dat->chain[dat->byte] == '\t' ||
           dat->chain[dat->byte] == '\r');
-       dat->byte++)
-    if (dat->byte >= dat->size)
-      return;
-  // clang-format on
+       )
+    // clang-format on
+    {
+      dat->byte++;
+      if (dat->byte >= dat->size)
+        return;
+    }
 }
 
 static BITCODE_RC
@@ -252,9 +255,14 @@ dxf_read_rc (Bit_Chain *dat)
     {
       char *endptr;
       long num;
-      if (dat->byte + 1 >= dat->size)
-        return (BITCODE_RC)-1;
-      num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+      // avoid overflow over dat->size
+      if (dat->byte + 1 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
+        {
+          LOG_ERROR ("Premature DXF end");
+          return (BITCODE_RC)0;
+        }
+      else
+        num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
       if (endptr)
         dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
       if (errno == ERANGE)
@@ -284,9 +292,14 @@ dxf_read_rs (Bit_Chain *dat)
     {
       char *endptr;
       long num;
-      if (dat->byte + 2 >= dat->size)
-        return (BITCODE_RS)-1;
-      num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+      // avoid overflow over dat->size
+      if (dat->byte + 2 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
+        {
+          LOG_ERROR ("Premature DXF end");
+          return (BITCODE_RS)0;
+        }
+      else
+        num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
       if (endptr)
         dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
       if (errno == ERANGE)
@@ -316,9 +329,14 @@ dxf_read_rl (Bit_Chain *dat)
     {
       char *endptr;
       long num;
-      if (dat->byte + 2 >= dat->size)
-        return (BITCODE_RL)-1;
-      num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+      // avoid overflow over dat->size
+      if (dat->byte + 2 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
+        {
+          LOG_ERROR ("Premature DXF end");
+          return (BITCODE_RL)0;
+        }
+      else
+        num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
       if (endptr)
         dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
       if (errno == ERANGE)
@@ -348,9 +366,14 @@ dxf_read_rll (Bit_Chain *dat)
     {
       char *endptr;
       BITCODE_RLL num;
-      if (dat->byte + 2 >= dat->size)
-        return (BITCODE_RLL)-1;
-      num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
+      // avoid overflow over dat->size
+      if (dat->byte + 2 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
+        {
+          LOG_ERROR ("Premature DXF end");
+          return (BITCODE_RLL)0UL;
+        }
+      else
+        num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
       if (endptr)
         dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
       if (errno == ERANGE)
@@ -381,10 +404,15 @@ dxf_read_rd (Bit_Chain *dat)
       char *str, *endptr;
       BITCODE_RD num;
       dxf_skip_ws (dat);
-      if (dat->byte + 2 >= dat->size)
-        return (double)NAN;
       str = (char *)&dat->chain[dat->byte];
-      num = strtod (str, &endptr);
+      // avoid overflow over dat->size
+      if (dat->byte + 2 >= dat->size || !memchr (str, '\n', dat->size - dat->byte))
+        {
+          LOG_ERROR ("Premature DXF end");
+          return (double)NAN;
+        }
+      else
+        num = strtod (str, &endptr);
       if (endptr)
         dat->byte += endptr - str;
       if (errno == ERANGE)
@@ -468,6 +496,8 @@ dxf_read_string (Bit_Chain *dat, char **string)
     {
       int i;
       dxf_skip_ws (dat);
+      if (dat->byte >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
+        return;
       for (i = 0;
            dat->byte < dat->size && dat->chain[dat->byte] != '\n' && i < 4096;
            dat->byte++)
