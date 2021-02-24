@@ -3426,10 +3426,12 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Data *dwg = obj->parent;
 
   //oldpos = bit_position (dat);
-#ifndef NDEBUG
   PRE (R_2004)
-    assert (address);
-#endif
+    {
+      if (!address)
+        return DWG_ERR_INVALIDDWG;
+      assert (address);
+    }
   dat->byte = address;
   dat->bit = 0;
 
@@ -3793,10 +3795,12 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     {
       BITCODE_BL pos = bit_position (dat);
       BITCODE_RL old_size = obj->size;
-#ifndef NDEBUG
       if (dwg->header.version < R_2004 || obj->index)
-        assert (address);
-#endif
+        {
+          if (!address)
+            return DWG_ERR_INVALIDDWG;
+          assert (address);
+        }
       if (dat->byte > obj->address)
         {
           // The size and CRC fields are not included in the obj->size
