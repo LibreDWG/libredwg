@@ -3162,7 +3162,7 @@ DWG_OBJECT (LTYPE)
       FIELD_BINARY (strings_area, 256, 0);
       DECODER {
         unsigned int dash_i = 0;
-        for (rcount1 = 0; rcount1 < _obj->num_dashes; rcount1++)
+        for (rcount1 = 0; _obj->strings_area && rcount1 < _obj->num_dashes; rcount1++)
           {
             if (_obj->dashes[rcount1].shape_flag & 2)
               {
@@ -3184,7 +3184,7 @@ DWG_OBJECT (LTYPE)
       FIELD_BINARY (strings_area, 512, 0);
       DECODER {
         unsigned int dash_i = 0;
-        for (rcount1 = 0; rcount1 < _obj->num_dashes; rcount1++)
+        for (rcount1 = 0; _obj->strings_area && rcount1 < _obj->num_dashes; rcount1++)
           {
             if (_obj->dashes[rcount1].shape_flag & 2)
               {
