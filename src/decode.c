@@ -3146,6 +3146,7 @@ security_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Security *_obj = &dwg->security;
   Dwg_Object *obj = NULL;
   int error = 0;
+  memset (_obj, 0, sizeof(Dwg_Security));
 
   // clang-format off
   #include "security.spec"

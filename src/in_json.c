@@ -118,6 +118,7 @@ static Bit_Chain *g_dat;
   {                                                                           \
     unsigned long slen;                                                       \
     unsigned char *s = json_binary (dat, tokens, #nam, &slen);                \
+    slen = MIN (len, slen);                                                   \
     memcpy (&_obj->nam, s, slen);                                             \
     LOG_TRACE (#nam ": \"%.*s\"\n", (int)slen, _obj->nam);                    \
     free (s);                                                                 \
@@ -143,7 +144,10 @@ static Bit_Chain *g_dat;
           _obj->nam = json_string (dat, tokens);                              \
       }                                                                       \
     else                                                                      \
-      json_advance_unknown (dat, tokens, t->type, 0);                         \
+      {                                                                       \
+        _obj->nam = NULL;                                                     \
+        json_advance_unknown (dat, tokens, t->type, 0);                       \
+      }                                                                       \
     JSON_TOKENS_CHECK_OVERFLOW_ERR                                            \
   }
 #define FIELD_T32(nam, dxf)                                                   \
@@ -152,11 +156,12 @@ static Bit_Chain *g_dat;
     LOG_TRACE (#nam ": \"%.*s\"\n", t->end - t->start,                        \
                &dat->chain[t->start]);                                        \
     if (t->type == JSMN_STRING)                                               \
-      {                                                                       \
-        _obj->nam = (BITCODE_T32)json_string (dat, tokens);                   \
-      }                                                                       \
+      _obj->nam = (BITCODE_T32)json_string (dat, tokens);                     \
     else                                                                      \
-      json_advance_unknown (dat, tokens, t->type, 0);                         \
+      {                                                                       \
+        _obj->nam = NULL;                                                     \
+        json_advance_unknown (dat, tokens, t->type, 0);                       \
+      }                                                                       \
     JSON_TOKENS_CHECK_OVERFLOW_ERR                                            \
   }
 #define FIELD_TU16(nam, dxf)                                                  \
@@ -165,11 +170,12 @@ static Bit_Chain *g_dat;
     LOG_TRACE (#nam ": \"%.*s\"\n", t->end - t->start,                        \
                &dat->chain[t->start]);                                        \
     if (t->type == JSMN_STRING)                                               \
-      {                                                                       \
         _obj->nam = (BITCODE_TU)json_wstring (dat, tokens);                   \
-      }                                                                       \
     else                                                                      \
-      json_advance_unknown (dat, tokens, t->type, 0);                         \
+      {                                                                       \
+        _obj->nam = NULL;                                                     \
+        json_advance_unknown (dat, tokens, t->type, 0);                       \
+      }                                                                       \
     JSON_TOKENS_CHECK_OVERFLOW_ERR                                            \
   }
 #define FIELD_TIMERLL(nam, dxf)                                               \
@@ -327,7 +333,7 @@ static char *
 json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
 {
   const jsmntok_t *t = &tokens->tokens[tokens->index];
-  char *key;
+  char *key = NULL;
   int len;
   JSON_TOKENS_CHECK_OVERFLOW_NULL;
   len = t->end - t->start;
@@ -3373,6 +3379,17 @@ json_SummaryInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 }
 
 static int
+json_VBAProject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                  jsmntokens_t *restrict tokens)
+{
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  memset (&dwg->vbaproject, 0, sizeof (Dwg_VBAProject));
+  LOG_WARN ("Ignore VBAProject");
+  json_advance_unknown (dat, tokens, t->type, 0);
+  return DWG_ERR_INVALIDTYPE;
+}
+
+static int
 json_AppInfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               jsmntokens_t *restrict tokens)
 {
@@ -4243,6 +4260,8 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= json_R2004_Header (dat, dwg, &tokens);
       else if (strEQc (key, "SummaryInfo"))
         error |= json_SummaryInfo (dat, dwg, &tokens);
+      else if (strEQc (key, "VBAProject"))
+        error |= json_VBAProject (dat, dwg, &tokens);
       else if (strEQc (key, "AppInfo"))
         error |= json_AppInfo (dat, dwg, &tokens);
       else if (strEQc (key, "AppInfoHistory"))
