@@ -1294,6 +1294,7 @@ dwg_next_entity (const Dwg_Object *restrict obj)
       && obj->parent->header.version > R_12)
     {
       if (!obj->tio.entity) // decoding error
+        //return NULL; FIXME!
         goto next_obj;
       next = obj->tio.entity->next_entity;
       if (next && next->absolute_ref)
@@ -1305,7 +1306,8 @@ dwg_next_entity (const Dwg_Object *restrict obj)
                      : next_obj;
         }
       else
-        goto next_obj;
+        goto next_obj; // FIXME!
+        //return NULL;
     }
   else
     {
