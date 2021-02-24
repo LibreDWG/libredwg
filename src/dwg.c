@@ -1214,6 +1214,7 @@ dwg_next_entity (const Dwg_Object *restrict obj)
       && obj->parent->header.version > R_12)
     {
       if (!obj->tio.entity) // decoding error
+        //return NULL; FIXME!
         goto next_obj;
       next = obj->tio.entity->next_entity;
       if (next && next->absolute_ref)
@@ -1225,7 +1226,8 @@ dwg_next_entity (const Dwg_Object *restrict obj)
                      : next_obj;
         }
       else
-        goto next_obj;
+        goto next_obj; // FIXME!
+        //return NULL;
     }
   else
     {
@@ -1524,6 +1526,7 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
       if (!_hdr->last_entity
           || current->handle.value == _hdr->last_entity->absolute_ref)
         return NULL;
+      // TODO but dont traverse into BLOCK entity chains
       return dwg_next_entity (current);
     }
   if (version > R_2000 || version < R_13b1)
