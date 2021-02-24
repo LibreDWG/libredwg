@@ -2807,10 +2807,12 @@ decl_dxf_process_INSERT (MINSERT)
       return dwg_dxf_BLOCK (dat, obj);
     case DWG_TYPE_ENDBLK:
       LOG_WARN ("stale %s subentity", obj->dxfname);
-      return 0; // dwg_dxf_ENDBLK(dat, obj);
+      // endless next_entity loop
+      return DWG_ERR_INTERNALERROR; // dwg_dxf_ENDBLK(dat, obj);
     case DWG_TYPE_SEQEND:
       LOG_WARN ("stale %s subentity", obj->dxfname);
-      return 0; // dwg_dxf_SEQEND(dat, obj);
+      // endless next_entity loop
+      return DWG_ERR_INTERNALERROR; // dwg_dxf_SEQEND(dat, obj);
 
     case DWG_TYPE_INSERT:
       error = dwg_dxf_INSERT (dat, obj);
@@ -3675,6 +3677,8 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
                   && obj->tio.entity->ownerhandle->absolute_ref
                          != pspace_ref)))
         error |= dwg_dxf_object (dat, obj, i);
+      if (error & DWG_ERR_INVALIDTYPE)
+        break;
       obj = get_next_owned_block_entity (hdr, obj); // until last_entity
     }
   endblk = get_last_owned_block (hdr);
@@ -3757,6 +3761,8 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       int i = obj->index;
       error |= dwg_dxf_object (dat, obj, &i);
+      if (error == DWG_ERR_INTERNALERROR)
+        break;
       obj = get_next_owned_block_entity (ms, obj); // until last_entity
     }
   // Then all pspace entities. just filter out other BLOCKS entities
@@ -3767,6 +3773,8 @@ dxf_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           int i = obj->index;
           error |= dwg_dxf_object (dat, obj, &i);
+          if (error == DWG_ERR_INTERNALERROR)
+            break;
           obj = get_next_owned_block_entity (ps, obj);
         }
     }
