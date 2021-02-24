@@ -4284,6 +4284,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   free (tokens.tokens);
   free (created_by);
+  created_by = NULL;
   return error;
 }
 
