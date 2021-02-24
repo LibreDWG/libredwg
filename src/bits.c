@@ -2624,7 +2624,7 @@ bit_eq_TU (const char *restrict str, BITCODE_TU restrict wstr)
   if (!str)
     return (wstr && *wstr) ? 0 : 1;
   utf8 = bit_convert_TU (wstr);
-  result = strcmp (str, utf8) ? 0 : 1;
+  result = utf8 ? (strcmp (str, utf8) ? 0 : 1) : 0;
   free (utf8);
   return result;
 }
