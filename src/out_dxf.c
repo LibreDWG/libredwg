@@ -2907,16 +2907,13 @@ decl_dxf_process_INSERT (MINSERT)
     case DWG_TYPE_BLOCK:
       return dwg_dxf_BLOCK (dat, obj);
     case DWG_TYPE_ENDBLK:
-      if (dat->version >= R_13b1)
-        LOG_WARN ("stale %s subentity", obj->dxfname);
-      return 0;
     case DWG_TYPE_SEQEND:
       if (dat->version >= R_13b1)
         {
           LOG_WARN ("stale %s subentity", obj->dxfname);
-          return 0;
+          // endless next_entity loop
+          return DWG_ERR_INTERNALERROR; // dwg_dxf_ENDBLK(dat, obj);
         }
-      return dwg_dxf_SEQEND (dat, obj);
 
     case DWG_TYPE_INSERT:
       error = dwg_dxf_INSERT (dat, obj);
