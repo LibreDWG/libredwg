@@ -259,12 +259,21 @@ dxf_read_rc (Bit_Chain *dat)
       if (dat->byte + 1 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
         {
           LOG_ERROR ("Premature DXF end");
+          dat->byte = dat->size;
           return (BITCODE_RC)0;
         }
       else
         num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
       if (endptr)
-        dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+        {
+          if (endptr == (char *)&dat->chain[dat->byte])
+            {
+              LOG_ERROR ("Expected DXF short");
+              dat->byte = dat->size;
+              return (BITCODE_RS)0;
+            }
+          dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+        }
       if (errno == ERANGE)
         return (BITCODE_RC)num;
       if (dat->byte + 1 >= dat->size)
@@ -296,12 +305,21 @@ dxf_read_rs (Bit_Chain *dat)
       if (dat->byte + 2 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
         {
           LOG_ERROR ("Premature DXF end");
+          dat->byte = dat->size;
           return (BITCODE_RS)0;
         }
       else
         num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
       if (endptr)
-        dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+        {
+          if (endptr == (char *)&dat->chain[dat->byte])
+            {
+              LOG_ERROR ("Expected DXF short");
+              dat->byte = dat->size;
+              return (BITCODE_RS)0;
+            }
+          dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+        }
       if (errno == ERANGE)
         return (BITCODE_RS)num;
       if (dat->byte + 1 >= dat->size)
@@ -338,7 +356,14 @@ dxf_read_rl (Bit_Chain *dat)
       else
         num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
       if (endptr)
-        dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+        {
+          if (endptr == (char *)&dat->chain[dat->byte])
+            {
+              LOG_ERROR ("Expected DXF short");
+              return (BITCODE_RS)0;
+            }
+          dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+        }
       if (errno == ERANGE)
         return (BITCODE_RL)num;
       if (dat->byte + 1 >= dat->size)
@@ -370,12 +395,21 @@ dxf_read_rll (Bit_Chain *dat)
       if (dat->byte + 2 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
         {
           LOG_ERROR ("Premature DXF end");
+          dat->byte = dat->size;
           return (BITCODE_RLL)0UL;
         }
       else
         num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
       if (endptr)
-        dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+        {
+          if (endptr == (char *)&dat->chain[dat->byte])
+            {
+              LOG_ERROR ("Expected DXF short");
+              dat->byte = dat->size;
+              return (BITCODE_RS)0;
+            }
+          dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
+        }
       if (errno == ERANGE)
         return (BITCODE_RLL)num;
       if (dat->byte + 1 >= dat->size)
@@ -409,6 +443,7 @@ dxf_read_rd (Bit_Chain *dat)
       if (dat->byte + 2 >= dat->size || !memchr (str, '\n', dat->size - dat->byte))
         {
           LOG_ERROR ("Premature DXF end");
+          dat->byte = dat->size;
           return (double)NAN;
         }
       else
@@ -12748,11 +12783,13 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               LOG_ERROR ("Expected SECTION string code 2, got code %d",
                          pair->code);
               dxf_free_pair (pair);
+              pair = NULL;
               break;
             }
           else if (strEQc (pair->value.s, "HEADER"))
             {
               dxf_free_pair (pair);
+              pair = NULL;
               error = dxf_header_read (dat, dwg);
               if (error > DWG_ERR_CRITICAL)
                 goto error;
@@ -12769,6 +12806,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (strEQc (pair->value.s, "CLASSES"))
             {
               dxf_free_pair (pair);
+              pair = NULL;
               error = dxf_classes_read (dat, dwg);
               if (error > DWG_ERR_CRITICAL)
                 return error;
@@ -12777,6 +12815,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               BITCODE_H hdl;
               dxf_free_pair (pair);
+              pair = NULL;
               error = dxf_tables_read (dat, dwg);
               if (error > DWG_ERR_CRITICAL)
                 goto error;
@@ -12807,6 +12846,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               BITCODE_H hdl;
               dxf_free_pair (pair);
+              pair = NULL;
               error = dxf_blocks_read (dat, dwg);
               if (error > DWG_ERR_CRITICAL)
                 goto error;
@@ -12826,6 +12866,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (strEQc (pair->value.s, "ENTITIES"))
             {
               dxf_free_pair (pair);
+              pair = NULL;
               error = dxf_entities_read (dat, dwg);
               if (error > DWG_ERR_CRITICAL)
                 goto error;
@@ -12833,6 +12874,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (strEQc (pair->value.s, "OBJECTS"))
             {
               dxf_free_pair (pair);
+              pair = NULL;
               error = dxf_objects_read (dat, dwg);
               if (error > DWG_ERR_CRITICAL)
                 goto error;
@@ -12841,22 +12883,29 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           else if (strEQc (pair->value.s, "THUMBNAILIMAGE"))
             {
               dxf_free_pair (pair);
+              pair = NULL;
               error = dxf_thumbnail_read (dat, dwg);
             }
           else if (strEQc (pair->value.s, "ACDSDATA"))
             {
               dxf_free_pair (pair);
+              pair = NULL;
               error = dxf_acds_read (dat, dwg);
             }
           else // if (strEQc (pair->value.s, ""))
             {
               LOG_WARN ("SECTION %s ignored for now", pair->value.s);
               dxf_free_pair (pair);
+              pair = NULL;
               error = dxf_unknownsection_read (dat, dwg);
             }
         }
     }
-
+  if (pair != NULL && pair->code == 0 &&
+      pair->value.s != NULL && strEQc (pair->value.s, "EOF"))
+    ;
+  else if (dat->byte >= dat->size || (pair == NULL))
+    error |= DWG_ERR_IOERROR;
   resolve_postponed_header_refs (dwg);
   resolve_postponed_object_refs (dwg);
   LOG_HANDLE ("Resolving pointers from ObjectRef vector:\n");
