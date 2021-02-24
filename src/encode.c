@@ -2419,6 +2419,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 #ifndef NDEBUG
   if (dwg->header.version >= R_1_2 && dwg->header.version < R_2004)
     {
+      if (dat->size < 4 || dat->chain[0] != 'A' || dat->chain[1] != 'C')
+        {
+          LOG_ERROR ("Encode overwrite pos 0");
+          return DWG_ERR_INVALIDDWG;
+        }
       assert (dat->chain[0] == 'A');
       assert (dat->chain[1] == 'C');
     }
@@ -2990,8 +2995,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 #ifndef NDEBUG
       if (dwg->header.version >= R_1_2)
         {
+          if (dat->size < 4 || dat->chain[0] != 'A' || dat->chain[1] != 'C')
+            {
+              LOG_ERROR ("Encode overwrite pos 0");
+              return DWG_ERR_INVALIDDWG;
+            }
           assert (dat->chain[0] == 'A');
-          assert (dat->chain[0] == 'A');
+          assert (dat->chain[1] == 'C');
           assert (dat->byte <= 0x100);
         }
 #endif
