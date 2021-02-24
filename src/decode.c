@@ -1494,8 +1494,7 @@ classes_section:
         }
       }
 
-      if (bit_search_sentinel (dat,
-                               dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_END)))
+      if (bit_search_sentinel (dat, dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_END)))
         LOG_INFO ("         Second Header 3 (end)  : %8u\n",
                   (unsigned int)dat->byte)
     }
@@ -2764,8 +2763,7 @@ read_2004_section_header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       return error;
     }
 
-  if (bit_search_sentinel (&sec_dat,
-                           dwg_sentinel (DWG_SENTINEL_VARIABLE_BEGIN)))
+  if (bit_search_sentinel (&sec_dat, dwg_sentinel (DWG_SENTINEL_VARIABLE_BEGIN)))
     {
       LOG_TRACE ("\nHeader\n-------------------\n")
       dwg->header_vars.size = bit_read_RL (&sec_dat);
@@ -3591,6 +3589,11 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     decrypted_header_dat.size = size;
     decrypted_header_dat.chain = decrypted_data;
     decrypted_header_dat.byte = decrypted_header_dat.bit = 0;
+    if (file_dat->size < size + (file_dat->byte + 80))
+      {
+        LOG_ERROR ("Size underflow %lu for R2004_Header", file_dat->size);
+        return DWG_ERR_INVALIDDWG;
+      }
 
     LOG_HANDLE ("encrypted R2004_Header (@%u.0-%lu.0, %lu):\n", 0x80, size + 0x80, size);
     LOG_TF (HANDLE, &file_dat->chain[0x80], (int)size);
