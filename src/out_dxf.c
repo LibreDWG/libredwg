@@ -1134,9 +1134,17 @@ cquote (char *restrict dest, const char *restrict src, const int len)
             x -= (0x839f - 0x391);
           else
             x -= 0x525e; // our safe range of Hiragana + Katakana letters
-          sprintf (dest, "\\U+%04X", x);
-          s += 7;
-          dest += 7;
+          if (x < 0x10100)
+            {
+              snprintf (dest, endp - dest, "\\U+%04X", x);
+              dest += 7;
+              s += 7;
+            }
+          else
+            {
+              LOG_ERROR ("Invalid shift-jis sequence %s", s-1);
+              s += 3;
+            }
         }
       else
         *dest++ = c;
