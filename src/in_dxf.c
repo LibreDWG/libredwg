@@ -256,7 +256,7 @@ dxf_read_rc (Bit_Chain *dat)
       char *endptr;
       long num;
       // avoid overflow over dat->size
-      if (dat->byte + 1 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
+      if (dat->byte + 6 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
         {
           LOG_ERROR ("Premature DXF end");
           dat->byte = dat->size;
@@ -302,7 +302,7 @@ dxf_read_rs (Bit_Chain *dat)
       char *endptr;
       long num;
       // avoid overflow over dat->size
-      if (dat->byte + 2 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
+      if (dat->byte + 6 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
         {
           LOG_ERROR ("Premature DXF end");
           dat->byte = dat->size;
@@ -348,7 +348,7 @@ dxf_read_rl (Bit_Chain *dat)
       char *endptr;
       long num;
       // avoid overflow over dat->size
-      if (dat->byte + 2 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
+      if (dat->byte + 6 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
         {
           LOG_ERROR ("Premature DXF end");
           return (BITCODE_RL)0;
@@ -391,8 +391,8 @@ dxf_read_rll (Bit_Chain *dat)
     {
       char *endptr;
       BITCODE_RLL num;
-      // avoid overflow over dat->size
-      if (dat->byte + 2 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
+      // avoid overflow over dat->size (need final "  0\nEOF")
+      if (dat->byte + 6 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
         {
           LOG_ERROR ("Premature DXF end");
           dat->byte = dat->size;
@@ -440,7 +440,7 @@ dxf_read_rd (Bit_Chain *dat)
       dxf_skip_ws (dat);
       str = (char *)&dat->chain[dat->byte];
       // avoid overflow over dat->size
-      if (dat->byte + 2 >= dat->size || !memchr (str, '\n', dat->size - dat->byte))
+      if (dat->byte + 6 >= dat->size || !memchr (str, '\n', dat->size - dat->byte))
         {
           LOG_ERROR ("Premature DXF end");
           dat->byte = dat->size;
