@@ -1343,11 +1343,11 @@ fixup_NOD (Dwg_Data *restrict dwg, Dwg_Object *restrict obj) // named object dic
       if (is_tu)                                                              \
         {                                                                     \
           char *u8 = bit_convert_TU ((BITCODE_TU)_obj->texts[i]);             \
-          if (strEQc (u8, "ACAD_" #name))                                     \
+          if (u8 && strEQc (u8, "ACAD_" #name))                               \
             remove_NOD_item (_obj, i, "ACAD_" #name);                         \
           free (u8);                                                          \
         }                                                                     \
-      else if (strEQc (_obj->texts[i], "ACAD_" #name))                        \
+      else if (_obj->texts[i] && strEQc (_obj->texts[i], "ACAD_" #name))      \
         remove_NOD_item (_obj, i, "ACAD_" #name);                             \
     }
   
