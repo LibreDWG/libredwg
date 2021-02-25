@@ -5374,12 +5374,15 @@ dwg_decode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *dat,
       LOG_ERROR ("Invalid object type %d, only %u classes", obj->type,
                  dwg->num_classes);
       dwg->num_objects--;
-      return DWG_ERR_INVALIDTYPE;
+      return DWG_ERR_CLASSESNOTFOUND;
     }
 
   klass = &dwg->dwg_class[i];
   if (!dwg->dwg_class || !klass->dxfname)
-    return DWG_ERR_INTERNALERROR;
+    {
+      LOG_ERROR ("Invalid class %d", obj->type);
+      return DWG_ERR_CLASSESNOTFOUND;
+    }
   obj->dxfname = klass->dxfname;
   is_entity = dwg_class_is_entity (klass);
 

@@ -1333,7 +1333,7 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   data_size = (BITCODE_RL)bit_read_RS (str);
   LOG_HANDLE (" data_size: %u/0x%x [RS]", data_size, data_size);
 
-  if (data_size & 0x8000 && 0)
+  if (data_size & 0x8000)
     {
       BITCODE_RS hi_size;
       str->byte -= 4;
