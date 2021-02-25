@@ -2662,7 +2662,7 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       // assert (max_num < 5000);
 
       if (dat->from_version >= R_2007)
-        section_string_stream (&sec_dat, bitsize, &str_dat);
+        section_string_stream (dwg, &sec_dat, bitsize, &str_dat);
 
       dwg->dwg_class
           = (Dwg_Class *)calloc (dwg->num_classes, sizeof (Dwg_Class));
@@ -2790,7 +2790,7 @@ read_2004_section_header (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         LOG_TRACE ("bitsize: " FORMAT_RL " [RL]\n", dwg->header_vars.bitsize)
         endbits += dwg->header_vars.bitsize;
         bit_set_position (&hdl_dat, endbits);
-        section_string_stream (&sec_dat, dwg->header_vars.bitsize, &str_dat);
+        section_string_stream (dwg, &sec_dat, dwg->header_vars.bitsize, &str_dat);
         error |= dwg_decode_header_variables (&sec_dat, &hdl_dat, &str_dat,
                                               dwg);
       }

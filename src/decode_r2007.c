@@ -1378,13 +1378,14 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 }
 
 void
-section_string_stream (Bit_Chain *restrict dat, BITCODE_RL bitsize,
+section_string_stream (Dwg_Data *restrict dwg, Bit_Chain *restrict dat, BITCODE_RL bitsize,
                        Bit_Chain *restrict str)
 {
   BITCODE_RL start;     // in bits
   BITCODE_RL data_size; // in bits
   BITCODE_B endbit;
-  PRE (R_2010)
+  if (dwg->header.version < R_2010 ||
+      (dwg->header.version == R_2010 && dwg->header.maint_version < 3))
   {
     // r2007: + 24 bytes (sentinel+size+hsize) - 1 bit (endbit)
     start = bitsize + 159;
@@ -1487,7 +1488,7 @@ read_2007_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       assert (max_num >= 500);
       assert (max_num < 5000);
 
-      section_string_stream (&sec_dat, bitsize, &str);
+      section_string_stream (dwg, &sec_dat, bitsize, &str);
 
       dwg->dwg_class
           = (Dwg_Class *)calloc (dwg->num_classes, sizeof (Dwg_Class));
@@ -1592,7 +1593,7 @@ read_2007_section_header (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
                      dwg->header_vars.bitsize);
           endbits += dwg->header_vars.bitsize;
           bit_set_position (hdl_dat, endbits);
-          section_string_stream (&sec_dat, dwg->header_vars.bitsize, &str_dat);
+          section_string_stream (dwg, &sec_dat, dwg->header_vars.bitsize, &str_dat);
         }
 
       dwg_decode_header_variables (&sec_dat, hdl_dat, &str_dat, dwg);

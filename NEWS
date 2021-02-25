@@ -9,6 +9,7 @@ Minor bugfixes:
   * Harmonize UBSAN access for unaligned shorts (unicode strings).
     Wrong only with UBSAN or HAVE_ALIGNED_ACCESS_REQUIRED.
   * Fix dwg2dxf/dxf2dwg uppercase extension problem (Windows) (GH #311).
+  * Fix section_string_stream offset for r2010 beta 2 (many public samples) (GH #318)
 Minor features:
   * Added examples/llvmfuzz for libfuzzer and the google ossfuzz service.
 

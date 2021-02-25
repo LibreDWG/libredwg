@@ -89,7 +89,8 @@ unsigned long obj_stream_position (Bit_Chain *restrict dat,
 void read_r2007_init (Dwg_Data *restrict dwg);
 int read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
                           Dwg_Data *restrict dwg);
-void section_string_stream (Bit_Chain *restrict dat, BITCODE_RL bitsize,
+void section_string_stream (Dwg_Data *restrict dwg,
+                            Bit_Chain *restrict dat, BITCODE_RL bitsize,
                             Bit_Chain *restrict str);
 
 /* from dwg.c */
