@@ -1838,6 +1838,8 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   if (!memBEGINc ((char*)_obj->acis_data, "ACIS BinaryFile"))
     {
       LOG_ERROR ("acis_data is not a SAB 2 'ACIS BinaryFile'");
+      _obj->num_blocks = 0;
+      _obj->encr_sat_data[0] = NULL;
       return 1;
     }
   //dest = &_obj->encr_sat_data[0][0];
@@ -2039,6 +2041,16 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
         case 8:  // short len
           {
             int len = bit_read_RS (&src);
+            if (src.byte + len >= src.size)
+              {
+                LOG_ERROR ("Invalid SAB");
+                bit_chain_free (&dest);
+                _obj->num_blocks = 0;
+                _obj->encr_sat_data[0] = NULL;
+                return 1;
+              }
+            if (dest.byte + len + 1 >= dest.size)
+              bit_chain_alloc (&dest);
             LOG_TRACE ("%.*s%s", len, &src.chain[src.byte], " ")
             bit_write_TF (&dest, &src.chain[src.byte], len);
             src.byte += len;
@@ -2049,6 +2061,16 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
         case 9:  // long len
           {
             int len = bit_read_RL (&src);
+            if (src.byte + len >= src.size)
+              {
+                LOG_ERROR ("Invalid SAB");
+                bit_chain_free (&dest);
+                _obj->num_blocks = 0;
+                _obj->encr_sat_data[0] = NULL;
+                return 1;
+              }
+            if (dest.byte + len + 1 >= dest.size)
+              bit_chain_alloc (&dest);
             if (l + len > 255)
               {
                 bit_write_TF (&dest, (BITCODE_TF) "\n", 1);
