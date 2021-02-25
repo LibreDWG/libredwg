@@ -243,6 +243,31 @@ dxf_skip_ws (Bit_Chain *dat)
     }
 }
 
+#define SAFER_STRTOL(num, rettype, ret)                                       \
+  if (dat->byte + 3 >= dat->size                                              \
+      || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))       \
+    {                                                                         \
+      LOG_ERROR ("Premature DXF end");                                        \
+      dat->byte = dat->size;                                                  \
+      return (rettype)ret;                                                    \
+    }                                                                         \
+  else                                                                        \
+    num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);               \
+  if (endptr)                                                                 \
+    {                                                                         \
+      if (endptr == (char *)&dat->chain[dat->byte])                           \
+        {                                                                     \
+          LOG_ERROR ("Expected DXF integer value");                           \
+          dat->byte = dat->size;                                              \
+          return (rettype)ret;                                                \
+        }                                                                     \
+      dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];          \
+    }                                                                         \
+  if (errno == ERANGE)                                                        \
+    return (rettype)num;                                                      \
+  if (dat->byte + 1 >= dat->size)                                             \
+  return (rettype)num
+
 static BITCODE_RC
 dxf_read_rc (Bit_Chain *dat)
 {
@@ -256,28 +281,7 @@ dxf_read_rc (Bit_Chain *dat)
       char *endptr;
       long num;
       // avoid overflow over dat->size
-      if (dat->byte + 6 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
-        {
-          LOG_ERROR ("Premature DXF end");
-          dat->byte = dat->size;
-          return (BITCODE_RC)0;
-        }
-      else
-        num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
-      if (endptr)
-        {
-          if (endptr == (char *)&dat->chain[dat->byte])
-            {
-              LOG_ERROR ("Expected DXF short");
-              dat->byte = dat->size;
-              return (BITCODE_RS)0;
-            }
-          dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
-        }
-      if (errno == ERANGE)
-        return (BITCODE_RC)num;
-      if (dat->byte + 1 >= dat->size)
-        return (BITCODE_RC)num;
+      SAFER_STRTOL (num, BITCODE_RC, 0);
       if (dat->chain[dat->byte] == '\r')
         dat->byte++;
       if (dat->chain[dat->byte] == '\n')
@@ -301,29 +305,7 @@ dxf_read_rs (Bit_Chain *dat)
     {
       char *endptr;
       long num;
-      // avoid overflow over dat->size
-      if (dat->byte + 6 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
-        {
-          LOG_ERROR ("Premature DXF end");
-          dat->byte = dat->size;
-          return (BITCODE_RS)0;
-        }
-      else
-        num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
-      if (endptr)
-        {
-          if (endptr == (char *)&dat->chain[dat->byte])
-            {
-              LOG_ERROR ("Expected DXF short");
-              dat->byte = dat->size;
-              return (BITCODE_RS)0;
-            }
-          dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
-        }
-      if (errno == ERANGE)
-        return (BITCODE_RS)num;
-      if (dat->byte + 1 >= dat->size)
-        return (BITCODE_RS)num;
+      SAFER_STRTOL (num, BITCODE_RS, 0);
       if (dat->chain[dat->byte] == '\r')
         dat->byte++;
       if (dat->chain[dat->byte] == '\n')
@@ -348,26 +330,7 @@ dxf_read_rl (Bit_Chain *dat)
       char *endptr;
       long num;
       // avoid overflow over dat->size
-      if (dat->byte + 6 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
-        {
-          LOG_ERROR ("Premature DXF end");
-          return (BITCODE_RL)0;
-        }
-      else
-        num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
-      if (endptr)
-        {
-          if (endptr == (char *)&dat->chain[dat->byte])
-            {
-              LOG_ERROR ("Expected DXF short");
-              return (BITCODE_RS)0;
-            }
-          dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
-        }
-      if (errno == ERANGE)
-        return (BITCODE_RL)num;
-      if (dat->byte + 1 >= dat->size)
-        return 0;
+      SAFER_STRTOL (num, BITCODE_RL, 0);
       if (dat->chain[dat->byte] == '\r')
         dat->byte++;
       if (dat->chain[dat->byte] == '\n')
@@ -392,28 +355,7 @@ dxf_read_rll (Bit_Chain *dat)
       char *endptr;
       BITCODE_RLL num;
       // avoid overflow over dat->size (need final "  0\nEOF")
-      if (dat->byte + 6 >= dat->size || !memchr (&dat->chain[dat->byte], '\n', dat->size - dat->byte))
-        {
-          LOG_ERROR ("Premature DXF end");
-          dat->byte = dat->size;
-          return (BITCODE_RLL)0UL;
-        }
-      else
-        num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);
-      if (endptr)
-        {
-          if (endptr == (char *)&dat->chain[dat->byte])
-            {
-              LOG_ERROR ("Expected DXF short");
-              dat->byte = dat->size;
-              return (BITCODE_RS)0;
-            }
-          dat->byte += (unsigned char *)endptr - &dat->chain[dat->byte];
-        }
-      if (errno == ERANGE)
-        return (BITCODE_RLL)num;
-      if (dat->byte + 1 >= dat->size)
-        return 0L;
+      SAFER_STRTOL (num, BITCODE_RLL, 0UL);
       if (dat->chain[dat->byte] == '\r')
         dat->byte++;
       if (dat->chain[dat->byte] == '\n')
@@ -440,7 +382,7 @@ dxf_read_rd (Bit_Chain *dat)
       dxf_skip_ws (dat);
       str = (char *)&dat->chain[dat->byte];
       // avoid overflow over dat->size
-      if (dat->byte + 6 >= dat->size || !memchr (str, '\n', dat->size - dat->byte))
+      if (dat->byte + 6 >= dat->size || !memchr (str, '\n', dat->size - dat->byte - 6))
         {
           LOG_ERROR ("Premature DXF end");
           dat->byte = dat->size;
