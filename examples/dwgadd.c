@@ -654,17 +654,17 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         {
           hdr = mspace->tio.object->tio.BLOCK_HEADER;
         }
-      else if (sscanf (p, "line (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
+      else if (SSCANF_S (p, "line (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
                   &pt1.z, &pt2.x, &pt2.y, &pt2.z))
         ent = (lastent_t){.u.line = dwg_add_LINE (hdr, &pt1, &pt2),
                           .type = DWG_TYPE_LINE};
       else SET_ENT (line, LINE)
-      else if (sscanf (p, "ray (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
+      else if (SSCANF_S (p, "ray (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
                   &pt1.z, &pt2.x, &pt2.y, &pt2.z))
         ent = (lastent_t){.u.ray = dwg_add_RAY (hdr, &pt1, &pt2),
                            .type = DWG_TYPE_RAY};
       else SET_ENT (ray, RAY)
-      else if (sscanf (p, "xline (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
+      else if (SSCANF_S (p, "xline (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
                   &pt1.z, &pt2.x, &pt2.y, &pt2.z))
         ent = (lastent_t){.u.xline = dwg_add_XLINE (hdr, &pt1, &pt2),
                           .type = DWG_TYPE_XLINE};
@@ -685,13 +685,13 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else SET_ENT (block, BLOCK)
       else if (memBEGINc (p, "endblk\n"))
         dwg_add_ENDBLK (hdr);
-      else if (sscanf (p, "insert (%lf %lf %lf) " FMT_TBL " %lf %lf %lf %lf",
+      else if (SSCANF_S (p, "insert (%lf %lf %lf) " FMT_TBL " %lf %lf %lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &text[0] SZ, &scale.x, &scale.y,
                        &scale.z, &rot))
         ent = (lastent_t){.u.insert = dwg_add_INSERT (hdr, &pt1, text, scale.x, scale.y, scale.z, deg2rad (rot)),
                           .type = DWG_TYPE_INSERT};
       else SET_ENT (insert, INSERT)
-      else if (sscanf (p, "minsert (%lf %lf %lf) " FMT_TBL " %lf %lf %lf %lf %d %d "
+      else if (SSCANF_S (p, "minsert (%lf %lf %lf) " FMT_TBL " %lf %lf %lf %lf %d %d "
                        "%lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &text[0] SZ, &scale.x, &scale.y,
                        &scale.z, &rot, &i1, &i2, &f1, &f2))
@@ -699,89 +699,89 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                                    deg2rad (rot), i1, i2, f1, f2),
                           .type = DWG_TYPE_MINSERT};
       else SET_ENT (minsert, MINSERT)
-      else if (sscanf (p, "point (%lf %lf %lf)", &pt1.x, &pt1.y, &pt1.z))
+      else if (SSCANF_S (p, "point (%lf %lf %lf)", &pt1.x, &pt1.y, &pt1.z))
         ent = (lastent_t){.u.point = dwg_add_POINT (hdr, &pt1),
                           .type = DWG_TYPE_POINT};
       else SET_ENT (point, POINT)
-      else if (sscanf (p, "circle (%lf %lf %lf) %lf", &pt1.x, &pt1.y, &pt1.z,
+      else if (SSCANF_S (p, "circle (%lf %lf %lf) %lf", &pt1.x, &pt1.y, &pt1.z,
                        &f1))
         ent = (lastent_t){.u.circle = dwg_add_CIRCLE (hdr, &pt1, f1),
                           .type = DWG_TYPE_CIRCLE};
       else SET_ENT (circle, CIRCLE)
-      else if (sscanf (p, "arc (%lf %lf %lf) %lf %lf %lf", &pt1.x, &pt1.y,
+      else if (SSCANF_S (p, "arc (%lf %lf %lf) %lf %lf %lf", &pt1.x, &pt1.y,
                        &pt1.z, &f1, &f2, &height))
         ent = (lastent_t){.u.arc = dwg_add_ARC (hdr, &pt1, f1, f2, height),
                           .type = DWG_TYPE_ARC};
       else SET_ENT (arc, ARC)
-      else if (sscanf (p, "dimension_aligned (%lf %lf %lf) (%lf %lf %lf) (%lf "
+      else if (SSCANF_S (p, "dimension_aligned (%lf %lf %lf) (%lf %lf %lf) (%lf "
                        "%lf %lf)",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
                        &pt3.y, &pt3.z))
         ent = (lastent_t){.u.dimali = dwg_add_DIMENSION_ALIGNED (hdr, &pt1, &pt2, &pt3),
                           .type = DWG_TYPE_DIMENSION_ALIGNED};
       else SET_ENT (dimali, DIMENSION_ALIGNED)
-      else if (sscanf (p, "dimension_linear (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
+      else if (SSCANF_S (p, "dimension_linear (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
                        "%lf) %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
                        &pt3.y, &pt3.z, &rot))
         ent = (lastent_t){.u.dimlin = dwg_add_DIMENSION_LINEAR (hdr, &pt1, &pt2, &pt3, deg2rad (rot)),
                           .type = DWG_TYPE_DIMENSION_LINEAR};
       else SET_ENT (dimlin, DIMENSION_LINEAR)
-      else if (sscanf (p, "dimension_ang2ln (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
+      else if (SSCANF_S (p, "dimension_ang2ln (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
                        "%lf) (%lf %lf %lf)",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
                        &pt3.y, &pt3.z, &pt4.x, &pt4.y, &pt4.z))
         ent = (lastent_t){.u.dimang2ln = dwg_add_DIMENSION_ANG2LN (hdr, &pt1, &pt2, &pt3, &pt4),
                           .type = DWG_TYPE_DIMENSION_ANG2LN};
       else SET_ENT (dimang2ln, DIMENSION_ANG2LN)
-      else if (sscanf (p, "dimension_ang3pt (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
+      else if (SSCANF_S (p, "dimension_ang3pt (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
                        "%lf) (%lf %lf %lf)",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
                        &pt3.y, &pt3.z, &pt4.x, &pt4.y, &pt4.z))
         ent = (lastent_t){.u.dimang3pt = dwg_add_DIMENSION_ANG3PT (hdr, &pt1, &pt2, &pt3, &pt4),
                           .type = DWG_TYPE_DIMENSION_ANG3PT};
       else SET_ENT (dimang3pt, DIMENSION_ANG3PT)
-      else if (sscanf (p, "dimension_diameter (%lf %lf %lf) (%lf %lf %lf) %lf",
+      else if (SSCANF_S (p, "dimension_diameter (%lf %lf %lf) (%lf %lf %lf) %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len))
         ent = (lastent_t){.u.dimdia = dwg_add_DIMENSION_DIAMETER (hdr, &pt1, &pt2, len),
                           .type = DWG_TYPE_DIMENSION_DIAMETER};
       else SET_ENT (dimdia, DIMENSION_DIAMETER)
-      else if (sscanf (p, "dimension_ordinate (%lf %lf %lf) (%lf %lf %lf) %d",
+      else if (SSCANF_S (p, "dimension_ordinate (%lf %lf %lf) (%lf %lf %lf) %d",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &i1))
         ent = (lastent_t){.u.dimord = dwg_add_DIMENSION_ORDINATE (hdr, &pt1, &pt2, i1 ? true : false),
                           .type = DWG_TYPE_DIMENSION_ORDINATE};
       else SET_ENT (dimord, DIMENSION_ORDINATE)
-      else if (sscanf (p, "dimension_radius (%lf %lf %lf) (%lf %lf %lf) %lf",
+      else if (SSCANF_S (p, "dimension_radius (%lf %lf %lf) (%lf %lf %lf) %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len))
         ent = (lastent_t){.u.dimrad = dwg_add_DIMENSION_RADIUS (hdr, &pt1, &pt2, len),
                           .type = DWG_TYPE_DIMENSION_RADIUS};
       else SET_ENT (dimrad, DIMENSION_RADIUS)
-      else if (sscanf (p, "3dface (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
+      else if (SSCANF_S (p, "3dface (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
                        "%lf) (%lf %lf %lf)",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
                        &pt3.y, &pt3.z, &pt4.x, &pt4.y, &pt4.z))
         ent = (lastent_t){.u._3dface = dwg_add_3DFACE (hdr, &pt1, &pt2, &pt3, &pt4),
                           .type = DWG_TYPE__3DFACE};
-      else if (sscanf (p,"3dface (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
+      else if (SSCANF_S (p,"3dface (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
                        "%lf)",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
                        &pt3.y, &pt3.z))
         ent = (lastent_t){.u._3dface = dwg_add_3DFACE (hdr, &pt1, &pt2, &pt3, NULL),
                           .type = DWG_TYPE__3DFACE};
       else SET_ENT (_3dface, _3DFACE)
-      else if (sscanf (p, "solid (%lf %lf %lf) (%lf %lf) (%lf %lf)  (%lf %lf)",
+      else if (SSCANF_S (p, "solid (%lf %lf %lf) (%lf %lf) (%lf %lf)  (%lf %lf)",
                        &pt1.x, &pt1.y, &pt1.z, &p2.x, &p2.y, &p3.x,
                        &p3.y, &p4.x, &p4.y))
         ent = (lastent_t){.u.solid = dwg_add_SOLID (hdr, &pt1, &p2, &p3, &p4),
                           .type = DWG_TYPE_SOLID};
       else SET_ENT (solid, SOLID)
-      else if (sscanf (p, "trace (%lf %lf %lf) (%lf %lf) (%lf %lf)  (%lf %lf)",
+      else if (SSCANF_S (p, "trace (%lf %lf %lf) (%lf %lf) (%lf %lf)  (%lf %lf)",
                        &pt1.x, &pt1.y, &pt1.z, &p2.x, &p2.y, &p3.x,
                        &p3.y, &p4.x, &p4.y))
         ent = (lastent_t){.u.trace = dwg_add_TRACE (hdr, &pt1, &p2, &p3, &p4),
                           .type = DWG_TYPE_TRACE};
       else SET_ENT (trace, TRACE)
-      else if (sscanf (p, "polyline_2d %d ((%lf %lf)", &i1, &pt1.x, &pt1.y))
+      else if (SSCANF_S (p, "polyline_2d %d ((%lf %lf)", &i1, &pt1.x, &pt1.y))
         {
           dwg_point_2d *pts = scan_pts2d (i1, &p);
           if (i1 && pts)
@@ -792,7 +792,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             }
         }
       else SET_ENT (polyline_2d, POLYLINE_2D)
-      else if (sscanf (p, "polyline_3d %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y, &pt1.z))
+      else if (SSCANF_S (p, "polyline_3d %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y, &pt1.z))
         {
           dwg_point_3d *pts = scan_pts3d (i1, &p);
           if (i1 && pts)
@@ -803,7 +803,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             }
         }
       else SET_ENT (polyline_3d, POLYLINE_3D)
-      else if (sscanf (p, "polyline_mesh %d %d ((%lf %lf %lf)", &i1, &i2, &pt1.x, &pt1.y, &pt1.z))
+      else if (SSCANF_S (p, "polyline_mesh %d %d ((%lf %lf %lf)", &i1, &i2, &pt1.x, &pt1.y, &pt1.z))
         {
           dwg_point_3d *pts = scan_pts3d (i1 * i2, &p);
           if (i1 && i2 && pts)
@@ -819,7 +819,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                           .type = DWG_TYPE_DICTIONARY};
       else SET_ENT (dictionary, DICTIONARY)
       else if (ent.type == DWG_TYPE_DICTIONARY
-               && sscanf (p, "xrecord dictionary " FMT_TBL, &text[0] SZ))
+               && SSCANF_S (p, "xrecord dictionary " FMT_TBL, &text[0] SZ))
         ent = (lastent_t){.u.xrecord = dwg_add_XRECORD (ent.u.dictionary, text),
                           .type = DWG_TYPE_SOLID};
       else SET_ENT (xrecord, XRECORD)
@@ -828,16 +828,16 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         ent = (lastent_t){.u.shape = dwg_add_SHAPE (hdr, text, &pt1, scale.x, deg2rad (rot)),
                           .type = DWG_TYPE_SHAPE};
       else SET_ENT (shape, SHAPE)
-      else if (sscanf (p, "viewport " FMT_TBL, &text[0] SZ))
+      else if (SSCANF_S (p, "viewport " FMT_TBL, &text[0] SZ))
         ent = (lastent_t){.u.viewport = dwg_add_VIEWPORT (hdr, text),
                           .type = DWG_TYPE_SOLID};
       else SET_ENT (viewport, VIEWPORT)
-      else if (sscanf (p, "ellipse (%lf %lf %lf) %lf %lf",
+      else if (SSCANF_S (p, "ellipse (%lf %lf %lf) %lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &f1, &f2))
         ent = (lastent_t){.u.ellipse = dwg_add_ELLIPSE (hdr, &pt1, f1, f2),
                           .type = DWG_TYPE_ELLIPSE};
       else SET_ENT (ellipse, ELLIPSE)
-      else if (sscanf (p, "spline %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y, &pt1.z))
+      else if (SSCANF_S (p, "spline %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y, &pt1.z))
         {
           dwg_point_3d *fitpts = scan_pts3d (i1, &p);
           if (i1 && fitpts && sscanf (p, ") (%lf %lf %lf) (%lf %lf %lf)", &pt2.x,
@@ -913,31 +913,31 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             ent = (lastent_t){.u.layout = dwg_add_LAYOUT (obj, text, s1),
                           .type = DWG_TYPE_LAYOUT};
         }
-      else if (sscanf (p, "torus (%lf %lf %lf) (%lf %lf %lf) %lf %lf",
+      else if (SSCANF_S (p, "torus (%lf %lf %lf) (%lf %lf %lf) %lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &f1, &f2))
         ent = (lastent_t){.u._3dsolid = dwg_add_TORUS (hdr, &pt1, &pt2, f1, f2),
                           .type = DWG_TYPE__3DSOLID};
-      else if (sscanf (p, "sphere (%lf %lf %lf) (%lf %lf %lf) %lf",
+      else if (SSCANF_S (p, "sphere (%lf %lf %lf) (%lf %lf %lf) %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &f1))
         ent = (lastent_t){.u._3dsolid = dwg_add_SPHERE (hdr, &pt1, &pt2, f1),
                           .type = DWG_TYPE__3DSOLID};
-      else if (sscanf (p, "cylinder (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf %lf",
+      else if (SSCANF_S (p, "cylinder (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &height, &f1, &f2, &len))
         ent = (lastent_t){.u._3dsolid = dwg_add_CYLINDER (hdr, &pt1, &pt2, height, f1, f2, len),
                           .type = DWG_TYPE__3DSOLID};
-      else if (sscanf (p, "cone (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf %lf",
+      else if (SSCANF_S (p, "cone (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &height, &f1, &f2, &len))
         ent = (lastent_t){.u._3dsolid = dwg_add_CONE (hdr, &pt1, &pt2, height, f1, f2, len),
                           .type = DWG_TYPE__3DSOLID};
-      else if (sscanf (p, "wedge (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf",
+      else if (SSCANF_S (p, "wedge (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len, &f1, &height))
         ent = (lastent_t){.u._3dsolid = dwg_add_WEDGE (hdr, &pt1, &pt2, len, f1, height),
                           .type = DWG_TYPE__3DSOLID};
-      else if (sscanf (p, "box (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf",
+      else if (SSCANF_S (p, "box (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len, &f1, &height))
         ent = (lastent_t){.u._3dsolid = dwg_add_BOX (hdr, &pt1, &pt2, len, f1, height),
                           .type = DWG_TYPE__3DSOLID};
-      else if (sscanf (p, "pyramid (%lf %lf %lf) (%lf %lf %lf) %lf %d %lf %lf",
+      else if (SSCANF_S (p, "pyramid (%lf %lf %lf) (%lf %lf %lf) %lf %d %lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &height, &i1, &f1, &f2))
         ent = (lastent_t){.u._3dsolid = dwg_add_PYRAMID (hdr, &pt1, &pt2, height, i1, f1, f2),
                           .type = DWG_TYPE__3DSOLID};
