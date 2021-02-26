@@ -123,7 +123,7 @@ regen-swig-patch:
 WEB_DIR = $(srcdir)/../libredwg-web
 release-web: manual refman
 	if test -d $(WEB_DIR)/manual; then \
-	  rsync -avzC doc/manual/* $(WEB_DIR)/manual/; \
+	  rsync -avzC $(srcdir)/doc/manual/* $(WEB_DIR)/manual/; \
 	  rsync -avzC doc/refman/* $(WEB_DIR)/refman/; \
 	fi
 	cd $(WEB_DIR) && \

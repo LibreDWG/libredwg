@@ -1,6 +1,158 @@
 Full history from the git log
 -----------------------------
 
+2021-02-26  Reini Urban  <rurban@cpan.org>
+
+        Release 0.12.3
+
+        Fix manual and release-web targets.
+
+2021-02-25  Reini Urban  <rurban@cpan.org>
+
+	encode: fix null-deref in DISABLE_NODSTYLE
+	with empty NOD entries.
+	detected by llvmfuzz
+
+	fix outdxf overflow with Invalid shift-jis sequence \M+1xxxxxx
+	detected by llvmfuzz
+
+	indxf: abstract Premature DXF end to SAFER_STRTOL
+
+	indxf: harden Premature DXF end errors
+	we can assume there will always be a final "  0\nEOF" string.
+
+	other string stream offset with r2010 Beta 2 samples.
+	Fixes GH #318
+
+	WIP wrong string stream hisize offsets
+	with Gator Beta 2 samples. See GH #318
+	to/2010/from_knowledge.autodesk.com/
+
+	outdxf: handle invalid SAB abort
+	detected by llvmfuzz
+
+	outdxf logging: avoid wrong bitsize position overflow
+	detected by llvmfuzz
+
+	outdxf: fix crash with stale VERTEX
+	fail with empty last_vertex.
+	detected by llvmfuzz
+
+	outdxf: protect empty tio.entity
+	detected by llvmfuzz
+
+	indxf: hard error on invalid dxf pair
+	before we simply returned 0 (or NAN) on invalid dxf pairs.
+	now we set the stream to the end to force an early exit.
+
+2021-02-24  Reini Urban  <rurban@cpan.org>
+
+	indxf: protect dwg_read_dxf the same as dxf_read_file
+	check if input size is too small, and if it's not a DWG.
+	llvmfuzz used the latter, which was not repro with dxf2dwg.
+
+	encode: convert assert address to error
+
+	fix bit_eq_TU for NULL args
+	or conversion trouble.
+	detected by llvmfuzz
+
+	LTYPE: protect against empty strings_area
+	detected via llvmfuzz
+
+	injson: fix TFFx buffer-overflow
+	write max TFF size.
+	detected via llvmfuzz
+
+	encode: protect object dat pos 0 overwrites
+	don't assert, fail.
+	detected via llvmfuzz
+
+	decode: Size underflow for R2004_Header
+	detected by llvmfuzz
+
+	fix injson double-free
+	created_by is static
+	detected via llvmfuzz
+
+	outdxf: protect dxf_CMC string overflows
+	with fuzzing. llvmfuzz
+
+2021-02-23  Reini Urban  <rurban@cpan.org>
+
+	prelim. NEWS for next patch release
+
+	geojson: add PAIR_Sc for non-null values
+
+2021-02-23  Reini Urban  <rurban@cpan.org>
+
+	abstract TU_to_int for ubsan access
+	which was totally wrong in some cases. but only with ubsan or
+	HAVE_ALIGNED_ACCESS_REQUIRED.
+
+	fix out_json print_wcquote for unaligned/UBSAN strings.
+
+2021-02-23  Reini Urban  <rurban@cpan.org>
+
+	llvmfuzz: close the null file-handle
+	running out of it
+
+	Fix dwg2dxf uppercase extension problem
+	GH #311, esp on Windows
+
+	indxf: detect dxf_read_* premature DXF end
+	A DXF line must end with \n.
+	detected via llvmfuzz
+
+	indxf: fix add_HATCH overflow logic, wrong hdl_idx check
+	detected via llvmfuzz
+
+	bit_TU_to_utf8_len: fix heap overflow
+	force string being delimited.
+	deteced by llvmfuzz
+
+	indxf: fix 3DSOLID overallocation
+	detected via llvmfuzz
+
+	indxf: fix MTEXT text running lines, DXF 3
+	detected via llvmfuzz
+
+	dwgfuzz: add honggfuzz and llvmfuzz instructions
+	See GH #317
+
+	add suggested __attribute__ ((noreturn)) to examples/dwgadd
+	clang -Wmissing-noreturn
+
+	some libfuzzer assertions. see llvmfuzz
+
+2021-02-23  Reini Urban  <rurban@cpan.org>
+
+	protect invalid geojson input
+	via llvmfuzz.
+
+	cd .build-clang
+	m -C src && \
+	  clang -I../src -Isrc -g -O3 -fsanitize=address,fuzzer ../examples/llvmfuzz.c -Lsrc/.libs -lredwg;
+	LD_LIBRARY_PATH=src/.libs ./a.out -detect_leaks=0 -rss_limit_mb=8000 -timeout=4000 ../test/test-data/
+
+2021-02-23  Reini Urban  <rurban@cpan.org>
+
+	replace prelim fuzz_dwg_decode.c with llvmfuzz.c
+	with proper coverage
+
+2021-02-23  davkor  <david@adalogics.com>
+
+	Added initial fuzzer for OSS-Fuzz integration.
+
+2021-02-22  Reini Urban  <rurban@cpan.org>
+
+	add release-web maintainer target
+
+	docs: fix make refman out-of-tree
+
+	doxygen update to 1.8.20
+	which deprecated several external programs
+
 2021-02-22  Reini Urban  <rurban@cpan.org>
 
 	Release 0.12.2

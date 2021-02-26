@@ -24,8 +24,9 @@ info_TEXINFOS = LibreDWG.texi
 LibreDWG_TEXINFOS = fdl.texi dynapi.texi
 
 if HAVE_MAKEINFO
+.PHONY: manual
 manual:
-	../build-aux/gendocs.sh LibreDWG "GNU LibreDWG - Manual"
+	cd $(top_srcdir)/doc && ../build-aux/gendocs.sh LibreDWG "GNU LibreDWG - Manual"
 
 endif
 

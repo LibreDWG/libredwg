@@ -2,16 +2,18 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2021 Free Software Foundation, Inc.
 See the end for copying conditions.
 
-LibreDWG version 0.12.3 - 2021/xx/xx - beta:
+LibreDWG version 0.12.3 - 2021/02/26 - beta:
 
 Minor bugfixes:
-  * Fixed many more minor fuzzer errors, detected with llvmfuzz.
+  * Fixed many more minor fuzzer errors, detected with the new llvmfuzz.
   * Harmonize UBSAN access for unaligned shorts (unicode strings).
     Wrong only with UBSAN or HAVE_ALIGNED_ACCESS_REQUIRED.
   * Fix dwg2dxf/dxf2dwg uppercase extension problem (Windows) (GH #311).
   * Fix section_string_stream offset for r2010 beta 2 (many public samples) (GH #318)
 Minor features:
-  * Added examples/llvmfuzz for libfuzzer and the google ossfuzz service.
+  * Added google oss-fuzz integration, by David Korczynski (PR #316)
+    libredwg is now fuzzed twice daily.
+  * Added examples/llvmfuzz for libfuzzer and the google oss-fuzz service.
 
 LibreDWG version 0.12.2 - 2021/02/23 - beta:
 
