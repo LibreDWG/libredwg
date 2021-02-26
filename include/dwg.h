@@ -72,7 +72,7 @@ extern "C" {
 
 /* The FORMAT_* are for logging only */
 typedef unsigned char BITCODE_RC;
-#ifdef _WIN32
+#ifdef _MSC_VER
 # define FORMAT_RC "0x%2x"
 # define SCANF_2X "%2X"
 #else
