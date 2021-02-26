@@ -3060,7 +3060,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   SINCE (R_9c1)
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_VPORT_CONTROL);
-    if (ctrl)
+    if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.VPORT_CONTROL)
       {
         Dwg_Object_VPORT_CONTROL *_ctrl = ctrl->tio.object->tio.VPORT_CONTROL;
         Dwg_Object *obj = ctrl;
@@ -3091,7 +3091,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_LTYPE_CONTROL);
-    if (ctrl)
+    if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.LTYPE_CONTROL)
       {
         Dwg_Object_LTYPE_CONTROL *_ctrl = ctrl->tio.object->tio.LTYPE_CONTROL;
         Dwg_Object *obj = ctrl;
@@ -3123,7 +3123,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_LAYER_CONTROL);
-    if (ctrl)
+    if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.LAYER_CONTROL)
       {
         Dwg_Object_LAYER_CONTROL *_ctrl = ctrl->tio.object->tio.LAYER_CONTROL;
         Dwg_Object *obj = ctrl;
@@ -3143,7 +3143,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_STYLE_CONTROL);
-    if (ctrl)
+    if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.STYLE_CONTROL)
       {
         Dwg_Object_STYLE_CONTROL *_ctrl = ctrl->tio.object->tio.STYLE_CONTROL;
         Dwg_Object *obj = ctrl;
@@ -3163,7 +3163,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_VIEW_CONTROL);
-    if (ctrl)
+    if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.VIEW_CONTROL)
       {
         Dwg_Object_VIEW_CONTROL *_ctrl = ctrl->tio.object->tio.VIEW_CONTROL;
         Dwg_Object *obj = ctrl;
@@ -3182,7 +3182,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   SINCE (R_9c1)
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_UCS_CONTROL);
-    if (ctrl)
+    if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.UCS_CONTROL)
       {
         Dwg_Object_UCS_CONTROL *_ctrl = ctrl->tio.object->tio.UCS_CONTROL;
         Dwg_Object *obj = ctrl;
@@ -3203,7 +3203,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   SINCE (R_10c1)
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_APPID_CONTROL);
-    if (ctrl)
+    if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.APPID_CONTROL)
       {
         Dwg_Object_APPID_CONTROL *_ctrl = ctrl->tio.object->tio.APPID_CONTROL;
         Dwg_Object *obj = ctrl;
@@ -3224,7 +3224,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   SINCE (R_10c1)
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_DIMSTYLE_CONTROL);
-    if (ctrl)
+    if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.DIMSTYLE_CONTROL)
       {
         Dwg_Object_DIMSTYLE_CONTROL *_ctrl = ctrl->tio.object->tio.DIMSTYLE_CONTROL;
         Dwg_Object *obj = ctrl;
