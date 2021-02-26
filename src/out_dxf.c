@@ -1094,19 +1094,14 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
 "\U+3053\U+306E\U+56F3\U+67A0\U+306F\U+30B5\U+30F3\U+30D7\U+30EB\U+3067\U+3059\U+3002\U+793E\U+5185\U+306E\U+898F\U+683C\U+3084\U+30D7\U+30ED\U+30C3\U+30BF\U+306E\U+51FA\U+529B\U+7BC4\U+56F2\U+306B\U+5408\U+308F\U+305B\U+3066\U+9069\U+5F53\U+306B\U+5909\U+66F4\U+3057\U+3066\U+3054\U+5229\U+7528\U+304F\U+3060\U+3055\U+3044\U+3002"
 */
 static char *
-cquote (char *restrict dest, const char *restrict src, const int len)
+cquote (char *restrict dest, const int len, const char *restrict src)
 {
   char c;
   char *d = dest;
   const char* endp = dest + len;
   char *s = (char *)src;
-  while ((c = *s++))
+  while ((c = *s++) && dest < endp)
     {
-      if (dest >= endp)
-        {
-          *dest = 0;
-          return d;
-        }
       if (c == '\n' && dest+1 < endp)
         {
           *dest++ = '^';
@@ -1167,9 +1162,29 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str,
     {
       if (opts && (strchr (str, '\n') || strchr (str, '\r') || strstr (str, "\\M+1")))
         {
-          int len = 2 * strlen (str) + 1;
-          char *_buf = (char *)alloca (len);
-          _buf = cquote (_buf, str, len);
+          const int origlen = strlen (str);
+          int len = (2 * origlen) + 1;
+          char *_buf;
+          if (len > 1024)
+            {
+              fprintf (dat->fh, "\r\n");
+              LOG_ERROR ("Overlarge DXF string, len=%d", origlen);
+              return;
+            }
+          _buf = (char *)alloca (len);
+          if (!_buf)
+            {
+              fprintf (dat->fh, "\r\n");
+              LOG_ERROR ("Out of stack memory");
+              return;
+            }
+          _buf = cquote (_buf, len, str);
+          if (!_buf)
+            {
+              fprintf (dat->fh, "\r\n");
+              LOG_ERROR ("Out of stack");
+              return;
+            }
           len = strlen (_buf);
           if (len > 255 && dxf == 1)
             {
