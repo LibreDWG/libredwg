@@ -24415,7 +24415,7 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
   /* first check TABLE_CONTROL */                                             \
   Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_##control);          \
   Dwg_Object_##control *_ctrl;                                                \
-  if (!ctrl)                                                                  \
+  if (!ctrl || !ctrl->tio.object || !ctrl->tio.object->tio.control)           \
     {                                                                         \
       API_ADD_OBJECT (control);                                               \
       dwg->header_vars.control##_OBJECT                                       \
