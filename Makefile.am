@@ -126,10 +126,10 @@ release-web: manual refman
 	  rsync -avzC $(srcdir)/doc/manual/* $(WEB_DIR)/manual/; \
 	  rsync -avzC doc/refman/* $(WEB_DIR)/refman/; \
 	fi
-	cd $(WEB_DIR) && \
+	-cd $(WEB_DIR) && \
 	  cvs add -m"new with $(VERSION)" manual/html_node/*.html refman/*.{html,js} \
-	    refman/search/*.{html,js} && cd -
-	cd $(WEB_DIR) && cvs commit -m"update to $(VERSION)" && cd -
+	    refman/search/*.{html,js}; cd -
+	-cd $(WEB_DIR); cvs commit -m"update to $(VERSION)"; cd -
 
 TESTS =
 if HAVE_SHELLCHECK
