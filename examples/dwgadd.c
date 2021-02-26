@@ -647,7 +647,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
 
       if (sscanf (p, "pspace"))
         {
-          Dwg_Object *pspace = dwg_model_space_object (dwg);
+          Dwg_Object *pspace = dwg_paper_space_object (dwg);
           hdr = pspace->tio.object->tio.BLOCK_HEADER;
         }
       else if (sscanf (p, "mspace"))
