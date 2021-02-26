@@ -1051,7 +1051,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
             {
               char *u8 = bit_convert_TU ((BITCODE_TU)color->book_name);
               if (u8)
-                strncpy (name, u8, 255);
+                strncpy (name, u8, 127);
               else
                 name[0] = '\0';
               free (u8);
@@ -1059,16 +1059,19 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
               if (u8)
                 {
                   if (*name)
-                    strncat (name, "$", 255);
-                  strncat (name, u8, 255);
+                    strcat (name, "$");
+                  strncat (name, u8, 127);
                   free (u8);
                 }
             }
           else
             {
-              strncpy (name, color->book_name, 255);
-              strncat (name, "$", 255);
-              strncat (name, color->name, 255);
+              strncpy (name, color->book_name, 127);
+              if (color->name)
+                {
+                  strcat (name, "$");
+                  strncat (name, color->name, 127);
+                }
             }
           VALUE_TV (name, dxf + 430 - 62);
         }
