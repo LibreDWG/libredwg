@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2010-2020 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2010-2021 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -628,6 +628,12 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
   BITCODE_RC *pedata; // Pre RS encoded data
   BITCODE_RC *data;   // The data RS unencoded and uncompressed
 
+  if (repeat_count < 0 || repeat_count > DBG_MAX_COUNT)
+    {
+      LOG_ERROR ("Invalid r2007 system page repeat_count. size_comp: %" PRId64
+                 ", repeat_count: %" PRId64, size_comp, repeat_count);
+      return NULL;
+    }
   // Round to a multiple of 8
   pesize = ((size_comp + 7) & ~7) * repeat_count;
   // Divide pre encoded size by RS k-value (239)
