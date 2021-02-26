@@ -176,7 +176,7 @@ strtobt (const char *binarystring)
 #endif
 
 // make -s makes it silent, but can be overidden by VERBOSE=1
-int is_make_silent()
+int is_make_silent(void)
 {
   const char *make = getenv("MAKEFLAGS");
   if (!make)
