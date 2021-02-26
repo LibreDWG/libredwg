@@ -1106,6 +1106,15 @@ classes_section:
             (long)dwg->header.section[SECTION_CLASSES_R13].size)
   // check sentinel
   dat->byte = dwg->header.section[SECTION_CLASSES_R13].address;
+  if (dat->byte +16 > dat->size ||
+      dwg->header.section[SECTION_CLASSES_R13].address
+      + dwg->header.section[SECTION_CLASSES_R13].size
+             > dat->size)
+    {
+      LOG_ERROR ("Invalid Classes section, skipped")
+      error |= DWG_ERR_SECTIONNOTFOUND;
+      goto handles_section;
+    }
   if (memcmp (dwg_sentinel (DWG_SENTINEL_CLASS_BEGIN), &dat->chain[dat->byte], 16) == 0)
     dat->byte += 16;
   else
@@ -1227,7 +1236,7 @@ classes_section:
   /*-------------------------------------------------------------------------
    * Object-map, section 2
    */
-
+handles_section:
   dat->byte = dwg->header.section[SECTION_HANDLES_R13].address;
   dat->bit = 0;
 
