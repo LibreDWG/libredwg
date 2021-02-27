@@ -12712,12 +12712,14 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   while (dat->byte < dat->size)
     {
       pair = dxf_read_pair (dat);
+      DXF_BREAK_EOF;
       pair = dxf_expect_code (dat, pair, 0);
       DXF_BREAK_EOF;
       if (pair->type == DWG_VT_STRING && strEQc (pair->value.s, "SECTION"))
         {
           dxf_free_pair (pair);
           pair = dxf_read_pair (dat);
+          DXF_BREAK_EOF;
           pair = dxf_expect_code (dat, pair, 2);
           DXF_BREAK_EOF;
           if (!pair->value.s)
