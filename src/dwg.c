@@ -177,10 +177,10 @@ dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
   // clear the slack and realloc
   size = dat->size & 0xfff;
   if (size)
-    {
-      memset (&dat->chain[dat->size], 0, 0xfff - size);
-      dat->chain = (unsigned char *)realloc (dat->chain, dat->size);
-    }
+    memset (&dat->chain[dat->size], 0, 0xfff - size);
+  dat->chain = (unsigned char *)realloc (dat->chain, dat->size + 1);
+  // ensure NULL termination, for sscanf, strtol and friends.
+  dat->chain[dat->size] = '\0';
   return 0;
 }
 
