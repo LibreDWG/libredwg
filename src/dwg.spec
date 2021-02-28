@@ -2132,8 +2132,6 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
           // from decode and indxf we already have all fields.
           // from other importers we have acis_data, but maybe not
           // encr_sat_data.
-          if (!num_blocks)
-            num_blocks = 100; // max
           if (!FIELD_VALUE (block_size))
             {
               if (!FIELD_VALUE (acis_data))
@@ -2141,12 +2139,18 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                   VALUE_RL (0, 0);
                   return error;
                 }
-              // FIXME: Split into 4096 blocks
+              // Later split into 4096 byte sized blocks
               FIELD_VALUE (block_size) = (BITCODE_BL*)calloc (2, sizeof (BITCODE_BL));
               FIELD_VALUE (block_size[0]) = strlen ((char*)FIELD_VALUE (acis_data));
               FIELD_VALUE (block_size[1]) = 0;
               LOG_TRACE ("default block_size[0] = %d\n", (int)FIELD_VALUE (block_size[0]));
               num_blocks = 1;
+            }
+          else if (!num_blocks)
+            {
+              num_blocks = 0;
+              for (i = 0; FIELD_VALUE (block_size[i]); i++)
+                num_blocks++;
             }
           LOG_TRACE ("acis_data:\n%s\n", FIELD_VALUE (acis_data));
           for (i = 0; FIELD_VALUE (block_size[i]) && i < num_blocks; i++)
@@ -2167,6 +2171,13 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
               FIELD_BL (block_size[i], 0);
               FIELD_TF (encr_sat_data[i], FIELD_VALUE (block_size[i]), 1);
             }
+          /*
+          if (num_blocks > FIELD_VALUE (num_blocks))
+            {
+              FIELD_VALUE (block_size) = (BITCODE_BL*)realloc (FIELD_VALUE (block_size), (num_blocks + 1) * sizeof (BITCODE_BL));
+              FIELD_VALUE (num_blocks) = num_blocks;
+            }
+          */
           FIELD_BL (block_size[num_blocks], 0);
         }
       else //if (FIELD_VALUE (version)==2)
