@@ -67,7 +67,10 @@ int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
     if (dat.size > 2 && dat.chain[0] == 'A' && dat.chain[1] == 'C')
       {
         if (dwg_decode (&dat, &dwg) >= DWG_ERR_CRITICAL)
-          return 0;
+          {
+            dwg_free (&dwg);
+            return 0;
+          }
       }
 #ifndef DISABLE_JSON
     else if (dat.size > 1 && dat.chain[0] == '{')
@@ -75,7 +78,9 @@ int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
         copied = enforce_null_termination(&dat);
         if (dwg_read_json (&dat, &dwg) >= DWG_ERR_CRITICAL)
           {
-            if (copied) bit_chain_free (&dat);
+            if (copied)
+              bit_chain_free (&dat);
+            dwg_free (&dwg);
             return 0;
           }
       }
@@ -86,7 +91,9 @@ int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
         copied = enforce_null_termination(&dat);
         if (dwg_read_dxf (&dat, &dwg) >= DWG_ERR_CRITICAL)
           {
-            if (copied) bit_chain_free (&dat);
+            if (copied)
+              bit_chain_free (&dat);
+            dwg_free (&dwg);
             return 0;
           }
       }
