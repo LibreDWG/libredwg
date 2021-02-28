@@ -100,6 +100,8 @@ int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
             dwg_free (&dwg);
             return 0;
           }
+        dat.opts |= DWG_OPTS_INJSON;
+        dwg.opts |= DWG_OPTS_INJSON;
       }
 #endif
 #ifndef DISABLE_DXF
@@ -138,18 +140,18 @@ int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
           switch (rand() % 6)
             {
             case 0:
-              dwg.header.version = R_13;
+              out_dat.version = dwg.header.version = R_13;
               break;
             case 1:
-              dwg.header.version = R_13c3;
+              out_dat.version = dwg.header.version = R_13c3;
               break;
             case 2:
-              dwg.header.version = R_14;
+              out_dat.version = dwg.header.version = R_14;
               break;
             case 3: // favor this one
             case 4:
             case 5:
-              dwg.header.version = R_2000;
+              out_dat.version = dwg.header.version = R_2000;
               break;
             }
           dwg_encode (&dwg, &out_dat);

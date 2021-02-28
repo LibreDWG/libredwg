@@ -12680,6 +12680,8 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       return DWG_ERR_INVALIDDWG;
     }
 
+  dat->opts |= DWG_OPTS_INDXF;
+  dwg->opts |= DWG_OPTS_INDXF;
   num_dxf_objs = 0;
   size_dxf_objs = 1000;
   dxf_objs = (Dxf_Objs *)malloc (1000 * sizeof (Dxf_Objs));
