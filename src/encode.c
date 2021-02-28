@@ -837,7 +837,10 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
           bit_chain_free (hdl_dat);                                           \
         return error;                                                         \
       }                                                                       \
-    return dwg_encode_##token##_private (dat, hdl_dat, str_dat, obj);         \
+    error = dwg_encode_##token##_private (dat, hdl_dat, str_dat, obj);        \
+    if (error & DWG_ERR_VALUEOUTOFBOUNDS && hdl_dat != dat)                   \
+      bit_chain_free (hdl_dat);                                               \
+    return error;                                                             \
   }                                                                           \
   static int dwg_encode_##token##_private (                                   \
         Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,               \
@@ -884,7 +887,10 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
           bit_chain_free (hdl_dat);                                           \
         return error;                                                         \
       }                                                                       \
-    return dwg_encode_##token##_private (dat, hdl_dat, str_dat, obj);         \
+    error = dwg_encode_##token##_private (dat, hdl_dat, str_dat, obj);        \
+    if (error & DWG_ERR_VALUEOUTOFBOUNDS && hdl_dat != dat)                   \
+      bit_chain_free (hdl_dat);                                               \
+    return error;                                                             \
   }                                                                           \
   static int dwg_encode_##token##_private (                                   \
         Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,               \
