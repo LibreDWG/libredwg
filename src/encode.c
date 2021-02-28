@@ -2410,7 +2410,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       PRE (R_2004)
         assert (pvzadr);
 #endif
-      if (pvzadr >= dat->size)
+      if (pvzadr + 1 >= dat->size)
         bit_chain_alloc(dat);
       // i.e. encode_patch_RS_LE_size
       dat->chain[pvzadr] = sec_size >> 8;
