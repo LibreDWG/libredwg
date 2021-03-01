@@ -2009,7 +2009,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                 }
               else
                 {
-                  _obj->encr_sat_data[i] = NULL;
+                  _obj->encr_sat_data[i] = strdup("");
                   _obj->block_size[i] = 0;
                 }
             }
