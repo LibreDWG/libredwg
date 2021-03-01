@@ -896,7 +896,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_la
     case DWG_TYPE_LWPOLYLINE:
       return dwg_geojson_LWPOLYLINE (dat, obj, is_last);
     default:
-      if (obj->type != obj->parent->layout_type)
+      if (obj->parent && obj->type != obj->parent->layout_type)
         return dwg_geojson_variable_type (obj->parent, dat, obj, is_last);
     }
   return 0;
