@@ -941,13 +941,14 @@
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
 // for static TFF types with fixed size
-#define _VECTOR_CHKCOUNT_STATIC(nam, size, maxelemsize, dat)                  \
-  if ((long long)(size) > AVAIL_BITS (dat) ||                                 \
-      (long long)((size) * (maxelemsize)) > AVAIL_BITS (dat))                 \
+#define _VECTOR_CHKCOUNT_STATIC(nam, siz, maxelemsize, dat)                   \
+  if ((long long)(siz) > AVAIL_BITS (dat) ||                                  \
+      (long long)((siz) * (maxelemsize)) > AVAIL_BITS (dat) ||                \
+      dat->byte + (siz) > dat->size)                                          \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam                                              \
                  " size %ld. Need min. %u bits, have %lld for %s.",           \
-                 (long)(size), (unsigned)(size) * (maxelemsize),              \
+                 (long)(siz), (unsigned)(siz) * (maxelemsize),                \
                  AVAIL_BITS (dat), SAFEDXFNAME);                              \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }

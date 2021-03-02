@@ -1226,6 +1226,7 @@ dwg_free_acds (Dwg_Data *dwg)
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
   BITCODE_RL rcount3 = 0, rcount4, vcount;
+  int error = 0;
 
   // clang-format off
   #include "acds.spec"

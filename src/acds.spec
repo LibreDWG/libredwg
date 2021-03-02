@@ -2,7 +2,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2020 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2020-2021 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -98,10 +98,20 @@
           KEY (index); VALUE_RL (rcount1, 0);
 #endif
 #ifdef IS_DECODER
-          LOG_TRACE ("\nsegments[%d] offset: " FORMAT_RLL "\n", rcount1,
-                     _obj->segidx[rcount1].offset)
+          if (_obj->segidx[rcount1].offset >= dat->size)
+            {
+              LOG_ERROR ("Invalid AcDs.segments[%d] offset: " FORMAT_RLL "\n", rcount1,
+                         _obj->segidx[rcount1].offset);
+              _obj->segidx[rcount1].offset = 0;
+              continue;
+            }
+          else
+            {
+              LOG_TRACE ("\nsegments[%d] offset: " FORMAT_RLL "\n", rcount1,
+                         _obj->segidx[rcount1].offset);
+              dat->byte = _obj->segidx[rcount1].offset;
+            }
 #endif
-          dat->byte = _obj->segidx[rcount1].offset;
         }
       else
         {
@@ -110,15 +120,17 @@
 #endif
           continue;
         }
-#ifdef IS_JSON
-      if (!_obj->segments[rcount1].signature)
-        {
-          ENDHASH;
-          continue;
-        }
-#endif
 
       SUB_FIELD_RSx (segments[rcount1],signature, 0); /* always 0xD5AC (ACD5 in the TF) */
+      DECODER {
+        if (_obj->segments[rcount1].signature != 0xD5AC)
+          {
+            LOG_ERROR ("Invalid AcDs.segments[%d].signature %x != 0xd5ac", rcount1,
+                       _obj->segments[rcount1].signature);
+            error |= DWG_ERR_SECTIONNOTFOUND;
+            //continue;
+          }
+      }
       /* segidx, datidx, _data_, schidx, schdat, search, blob01, prvsav, freesp */
       FIELD_TFF (segments[rcount1].name, 6, 0);
       DECODER {
@@ -146,7 +158,8 @@
           {
             LOG_ERROR ("Invalid AcDs.segments[%d].name %s", rcount1,
                        (char *)_obj->segments[rcount1].name);
-            return DWG_ERR_SECTIONNOTFOUND;
+            error |= DWG_ERR_SECTIONNOTFOUND;
+            continue;
           }
       }
       JSON {
@@ -167,9 +180,9 @@
 #if 0
         REPEAT2 (num_segidx, segidx, Dwg_AcDs_SegmentIndex)
         REPEAT_BLOCK
-#ifdef IS_JSON
+# ifdef IS_JSON
             KEY (index); VALUE_RL (rcount2, 0);
-#endif
+# endif
             SUB_FIELD_RLL (segidx[rcount2],offset, 0);
             SUB_FIELD_RL (segidx[rcount2],size, 0);
         END_REPEAT_BLOCK
