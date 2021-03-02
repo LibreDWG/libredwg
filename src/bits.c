@@ -491,12 +491,10 @@ bit_read_RD (Bit_Chain *dat)
   unsigned char byte[8];
   double *result;
 
+  //CHK_OVERFLOW_PLUS (8, __FUNCTION__, bit_nan ())
   // TODO: big-endian
   for (i = 0; i < 8; i++)
-    {
-      byte[i] = bit_read_RC (dat);
-      CHK_OVERFLOW(__FUNCTION__, bit_nan ())
-    }
+    byte[i] = bit_read_RC (dat);
 
   result = (double *)byte;
   return (*result);

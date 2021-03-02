@@ -1511,7 +1511,7 @@
     _obj->parent = obj->tio.entity;                                           \
     SINCE (R_13) { error = dwg_decode_entity (dat, hdl_dat, str_dat, _ent); } \
     else { error = decode_entity_preR13 (dat, obj, _ent); }                   \
-    if (error >= DWG_ERR_CRITICAL)                                            \
+    if (error >= DWG_ERR_CRITICAL || dat->byte > dat->size)                   \
       return error;
 
 // Does size include the CRC?
@@ -1611,7 +1611,7 @@
       {                                                                       \
         _obj = obj->tio.object->tio.token;                                    \
         error = dwg_decode_object (dat, hdl_dat, str_dat, obj->tio.object);   \
-        if (error >= DWG_ERR_CRITICAL)                                        \
+        if (error >= DWG_ERR_CRITICAL || dat->byte > dat->size)               \
           return error;                                                       \
       }
 
