@@ -1838,10 +1838,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   SINCE (R_9c1)
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_VPORT_CONTROL);
-    Dwg_Object_VPORT_CONTROL *_ctrl = ctrl->tio.object->tio.VPORT_CONTROL;
-    if (ctrl && ctrl->fixedtype == DWG_TYPE_VPORT_CONTROL)
+    if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.VPORT_CONTROL)
       {
         Dwg_Object *obj = ctrl;
+        Dwg_Object_VPORT_CONTROL *_ctrl = ctrl->tio.object->tio.VPORT_CONTROL;
         TABLE (VPORT);
         // add handle 5 here at first
         COMMON_TABLE_CONTROL_FLAGS;
@@ -1869,10 +1869,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_LTYPE_CONTROL);
-    Dwg_Object_LTYPE_CONTROL *_ctrl = ctrl->tio.object->tio.LTYPE_CONTROL;
-    if (ctrl && ctrl->fixedtype == DWG_TYPE_LTYPE_CONTROL)
+    if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.LTYPE_CONTROL)
       {
         Dwg_Object *obj = ctrl;
+        Dwg_Object_LTYPE_CONTROL *_ctrl = ctrl->tio.object->tio.LTYPE_CONTROL;
         TABLE (LTYPE);
         COMMON_TABLE_CONTROL_FLAGS;
         error |= dwg_dxfb_LTYPE_CONTROL (dat, ctrl);
@@ -1899,10 +1899,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_LAYER_CONTROL);
-    Dwg_Object_LAYER_CONTROL *_ctrl = ctrl->tio.object->tio.LAYER_CONTROL;
-    if (ctrl && ctrl->fixedtype == DWG_TYPE_LAYER_CONTROL)
+    if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.LAYER_CONTROL)
       {
         Dwg_Object *obj = ctrl;
+        Dwg_Object_LAYER_CONTROL *_ctrl = ctrl->tio.object->tio.LAYER_CONTROL;
         TABLE (LAYER);
         COMMON_TABLE_CONTROL_FLAGS;
         error |= dwg_dxfb_LAYER_CONTROL (dat, ctrl);
@@ -1921,10 +1921,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_STYLE_CONTROL);
-    Dwg_Object_STYLE_CONTROL *_ctrl = ctrl->tio.object->tio.STYLE_CONTROL;
-    if (ctrl && ctrl->fixedtype == DWG_TYPE_STYLE_CONTROL)
+    if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.STYLE_CONTROL)
       {
         Dwg_Object *obj = ctrl;
+        Dwg_Object_STYLE_CONTROL *_ctrl = ctrl->tio.object->tio.STYLE_CONTROL;
         TABLE (STYLE);
         COMMON_TABLE_CONTROL_FLAGS;
         error |= dwg_dxfb_STYLE_CONTROL (dat, ctrl);
@@ -1941,10 +1941,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_VIEW_CONTROL);
-    Dwg_Object_VIEW_CONTROL *_ctrl = ctrl->tio.object->tio.VIEW_CONTROL;
-    if (ctrl && ctrl->fixedtype == DWG_TYPE_VIEW_CONTROL)
+    if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.VIEW_CONTROL)
       {
         Dwg_Object *obj = ctrl;
+        Dwg_Object_VIEW_CONTROL *_ctrl = ctrl->tio.object->tio.VIEW_CONTROL;
         TABLE (VIEW);
         COMMON_TABLE_CONTROL_FLAGS;
         error |= dwg_dxfb_VIEW_CONTROL (dat, ctrl);
@@ -1960,10 +1960,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   SINCE (R_9c1)
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_UCS_CONTROL);
-    Dwg_Object_UCS_CONTROL *_ctrl = ctrl->tio.object->tio.UCS_CONTROL;
-    if (ctrl && ctrl->fixedtype == DWG_TYPE_UCS_CONTROL)
+    if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.UCS_CONTROL)
       {
         Dwg_Object *obj = ctrl;
+        Dwg_Object_UCS_CONTROL *_ctrl = ctrl->tio.object->tio.UCS_CONTROL;
         TABLE (UCS);
         COMMON_TABLE_CONTROL_FLAGS;
         error |= dwg_dxfb_UCS_CONTROL (dat, ctrl);
@@ -1981,10 +1981,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   SINCE (R_10c1)
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_APPID_CONTROL);
-    Dwg_Object_APPID_CONTROL *_ctrl = ctrl->tio.object->tio.APPID_CONTROL;
-    if (ctrl && ctrl->fixedtype == DWG_TYPE_APPID_CONTROL)
+    if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.APPID_CONTROL)
       {
         Dwg_Object *obj = ctrl;
+        Dwg_Object_APPID_CONTROL *_ctrl = ctrl->tio.object->tio.APPID_CONTROL;
         TABLE (APPID);
         COMMON_TABLE_CONTROL_FLAGS;
         error |= dwg_dxfb_APPID_CONTROL (dat, ctrl);
@@ -2002,10 +2002,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   SINCE (R_10c1)
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_DIMSTYLE_CONTROL);
-    Dwg_Object_DIMSTYLE_CONTROL *_ctrl = ctrl->tio.object->tio.DIMSTYLE_CONTROL;
-    if (ctrl && ctrl->fixedtype == DWG_TYPE_DIMSTYLE_CONTROL)
+    if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.DIMSTYLE_CONTROL)
       {
         Dwg_Object *obj = ctrl;
+        Dwg_Object_DIMSTYLE_CONTROL *_ctrl = ctrl->tio.object->tio.DIMSTYLE_CONTROL;
         TABLE (DIMSTYLE);
         COMMON_TABLE_CONTROL_FLAGS;
         dwg_dxfb_DIMSTYLE_CONTROL (dat, ctrl);
