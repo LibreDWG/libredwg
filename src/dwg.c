@@ -552,6 +552,11 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
           *size = bit_read_RL (&dat);
           found = 1;
           LOG_INFO ("\t\tBMP size: %i [RL]\n", *size)
+          if (*size > (dat.size - 4))
+            {
+              LOG_ERROR ("BMP thumbnail overflow > %ld", dat.size - 4);
+              return NULL;
+            }
         }
       else if (type == 3)
         {
@@ -571,7 +576,13 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
     }
   dat.byte += header_size;
   if (*size)
-    LOG_TRACE ("BMP offset: %lu\n", dat.byte)
+    LOG_TRACE ("BMP offset: %lu\n", dat.byte);
+  if (dat.byte > dat.size)
+    {
+      *size = 0;
+      LOG_ERROR ("Preview overflow");
+      return NULL;
+    }
 
   if (*size > 0)
     return (dat.chain + dat.byte);
