@@ -394,31 +394,36 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
 // we need to check dwg_resbuf_value_type()
 #define FIELD_RC(nam, dxf) VALUE_INT (_obj->nam, dxf)
 #define VALUE_INT(value, dxf)                                                 \
-  switch (dwg_resbuf_value_type (dxf))                                        \
-    {                                                                         \
-    case DWG_VT_BOOL:                                                         \
-    case DWG_VT_INT8:                                                         \
-      VALUE_RC (value, dxf);                                                  \
-      break;                                                                  \
-    case DWG_VT_INT16:                                                        \
-      VALUE_RS (value, dxf);                                                  \
-      break;                                                                  \
-    case DWG_VT_INT32:                                                        \
-      VALUE_RL (value, dxf);                                                  \
-      break;                                                                  \
-    case DWG_VT_INT64:                                                        \
-      VALUE_RLL (value, dxf);                                                 \
-      break;                                                                  \
-    case DWG_VT_INVALID:                                                      \
-    case DWG_VT_STRING:                                                       \
-    case DWG_VT_POINT3D:                                                      \
-    case DWG_VT_REAL:                                                         \
-    case DWG_VT_BINARY:                                                       \
-    case DWG_VT_HANDLE:                                                       \
-    case DWG_VT_OBJECTID:                                                     \
-    default:                                                                  \
-      LOG_ERROR ("Unhandled VALUE_INT code %d", dxf);                         \
-    }
+  {                                                                           \
+    if (dxf == 0)                                                             \
+      VALUE_RS (value, dxf)                                                  \
+    else                                                                      \
+      switch (dwg_resbuf_value_type (dxf))                                    \
+        {                                                                     \
+        case DWG_VT_BOOL:                                                     \
+        case DWG_VT_INT8:                                                     \
+          VALUE_RC (value, dxf);                                              \
+          break;                                                              \
+        case DWG_VT_INT16:                                                    \
+          VALUE_RS (value, dxf);                                              \
+          break;                                                              \
+        case DWG_VT_INT32:                                                    \
+          VALUE_RL (value, dxf);                                              \
+          break;                                                              \
+        case DWG_VT_INT64:                                                    \
+          VALUE_RLL (value, dxf);                                             \
+          break;                                                              \
+        case DWG_VT_STRING:                                                   \
+        case DWG_VT_POINT3D:                                                  \
+        case DWG_VT_REAL:                                                     \
+        case DWG_VT_BINARY:                                                   \
+        case DWG_VT_HANDLE:                                                   \
+        case DWG_VT_OBJECTID:                                                 \
+        case DWG_VT_INVALID:                                                  \
+        default:                                                              \
+          LOG_ERROR ("Unhandled VALUE_INT code %d", dxf);                     \
+        }                                                                     \
+  }
 
 #define VALUE_3BD(value, dxf)                                                 \
   {                                                                           \
