@@ -529,7 +529,7 @@
     {                                                                         \
       if (strcmp (#acdbname, "Layer") == 0)                                   \
         {                                                                     \
-        FIELD_CAST (flag, RC, RS, 70);                                        \
+          FIELD_CAST (flag, RC, RS, 70);                                      \
         }                                                                     \
       else                                                                    \
         {                                                                     \

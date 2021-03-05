@@ -703,7 +703,7 @@ static bool env_var_checked_p;
   LOG_INSANE ("HANDLE_STREAM @%lu.%u\n", dat->byte - obj->address, dat->bit)  \
   if (!obj->bitsize ||                                                        \
        /* DD sizes can vary, but let unknown_bits asis */                     \
-       ((dwg->opts & DWG_OPTS_INJSON)                                         \
+       (dwg->header.version != dwg->header.from_version                       \
         && obj->fixedtype != DWG_TYPE_UNKNOWN_OBJ                             \
         && obj->fixedtype != DWG_TYPE_UNKNOWN_ENT))                           \
     {                                                                         \
@@ -3797,9 +3797,10 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
     }
 
-  /* DXF/JSON: patchup size and bitsize */
-  /* Imported json sizes are unreliable when changing versions */
-  if (!obj->size || dwg->opts & DWG_OPTS_INJSON)
+  /* DXF/JSON/RW across versions: patchup size and bitsize */
+  /* Across versions size+bitsize must be recalculated.
+     Sizes are unreliable when changing versions. */
+  if (!obj->size || dwg->header.from_version != dwg->header.version)
     {
       BITCODE_BL pos = bit_position (dat);
       BITCODE_RL old_size = obj->size;
@@ -3820,7 +3821,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         bit_chain_alloc (dat);
       // assert (obj->bitsize); // on errors
       if (!obj->bitsize ||
-          (dwg->opts & DWG_OPTS_INJSON
+          (dwg->header.from_version != dwg->header.version
            // and not calculated from HANDLE_STREAM or via unknown_bits already
            && !obj->was_bitsize_set))
         {
