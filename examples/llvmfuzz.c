@@ -37,7 +37,7 @@
 // libfuzzer limitation:
 // Enforce NULL-termination of the input buffer, to avoid bugus reports. copy it.
 // Problematic is mostly strtol(3) which also works with \n termination.
-static int enforce_null_termination(Bit_Chain *dat)
+static int enforce_null_termination(Bit_Chain *dat, bool enforce)
 {
     unsigned char *copy;
     unsigned char c;
@@ -45,7 +45,7 @@ static int enforce_null_termination(Bit_Chain *dat)
       return 0;
     c = dat->chain[dat->size - 1];
     // Allow \n termination
-    if (c == '\0' || c == '\n')
+    if (!enforce && (c == '\0' || c == '\n'))
       return 0;
     //fprintf (stderr, "llvmfuzz: Enforce libfuzzer buffer NULL termination\n");
     copy = malloc (dat->size + 1);
@@ -92,7 +92,7 @@ int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
 #ifndef DISABLE_JSON
     else if (dat.size > 1 && dat.chain[0] == '{')
       {
-        copied = enforce_null_termination(&dat);
+        copied = enforce_null_termination(&dat, true);
         if (dwg_read_json (&dat, &dwg) >= DWG_ERR_CRITICAL)
           {
             if (copied)
@@ -107,7 +107,7 @@ int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
 #ifndef DISABLE_DXF
     else
       {
-        copied = enforce_null_termination(&dat);
+        copied = enforce_null_termination(&dat, false);
         if (dwg_read_dxf (&dat, &dwg) >= DWG_ERR_CRITICAL)
           {
             if (copied)
