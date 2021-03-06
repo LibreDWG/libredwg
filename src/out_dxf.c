@@ -1181,6 +1181,7 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str,
               LOG_ERROR ("Out of stack memory");
               return;
             }
+          _buf[len - 1] = '\0';
           _buf = cquote (_buf, len, str);
           if (!_buf)
             {
