@@ -329,19 +329,20 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
     // TODO: move to a spec dwg_r11.spec, and dwg_decode_r11_NAME
 #define PREP_TABLE(token)                                                     \
-  Dwg_Object *obj = &dwg->object[num + i];                                    \
-  Dwg_Object_##token *_obj = (Dwg_Object_##token*)calloc (1, sizeof (Dwg_Object_##token)); \
-  if (dat->byte > dat->size)                                                  \
-    {                                                                         \
-      free (_obj);                                                            \
-      return DWG_ERR_INVALIDDWG;                                              \
-    }                                                                         \
-  obj->tio.object = (Dwg_Object_Object*)calloc (1, sizeof (Dwg_Object_Object)); \
+  Dwg_Object *obj;                                                            \
+  Dwg_Object_##token *_obj;                                                   \
+  if (dat->byte > dat->size || (num + i) >= dwg->num_objects)                 \
+    return DWG_ERR_INVALIDDWG;                                                \
+  obj = &dwg->object[num + i];                                                \
+  _obj = (Dwg_Object_##token *)calloc (1, sizeof (Dwg_Object_##token));       \
+  obj->tio.object                                                             \
+      = (Dwg_Object_Object *)calloc (1, sizeof (Dwg_Object_Object));          \
   if (!_obj || !obj->tio.object)                                              \
     {                                                                         \
-      if (_obj) free (_obj);                                                  \
+      if (_obj)                                                               \
+        free (_obj);                                                          \
       return DWG_ERR_OUTOFMEM;                                                \
-    } 	                                                                      \
+    }                                                                         \
   obj->index = num + i;                                                       \
   dwg->num_objects++;                                                         \
   obj->tio.object->tio.token = _obj;                                          \
