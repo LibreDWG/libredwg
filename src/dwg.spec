@@ -1052,7 +1052,7 @@ DWG_ENTITY (POLYLINE_3D)
     BITCODE_RC flag = FIELD_VALUE (flag);
     FIELD_B (has_vertex, 66);
     KEY (elevation); VALUE_3BD (pt, 10);
-    KEY (flag); VALUE_RC (flag | 8, 70);
+    KEY (flag); VALUE_RC ((BITCODE_RC)(flag | 8), 70);
   }
   else {
     FIELD_VALUE (has_vertex) = 1;
@@ -1519,7 +1519,7 @@ DWG_ENTITY (POLYLINE_PFACE)
     BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
     FIELD_B (has_vertex, 66);
     KEY (elevation); VALUE_3BD (pt, 10);
-    KEY (flag); VALUE_RC (64, 70);
+    KEY (flag); VALUE_RC ((BITCODE_RC)64, 70);
   }
   else {
     FIELD_VALUE (has_vertex) = 1;
@@ -2014,6 +2014,12 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                 }
             }
           while (FIELD_VALUE (block_size[i++]) > 0 && AVAIL_BITS (dat) >= 16); // crc RS
+          if (!FIELD_VALUE (encr_sat_data) || !FIELD_VALUE (block_size))
+            {
+              free (FIELD_VALUE (block_size));
+              free (FIELD_VALUE (encr_sat_data));
+              return DWG_ERR_VALUEOUTOFBOUNDS;
+            }
 
           // de-obfuscate SAT data
           FIELD_VALUE (acis_data) = (BITCODE_RC *)malloc (total_size + 1);
@@ -8547,7 +8553,7 @@ DWG_OBJECT_END
   FIELD_BD (action_offset_x, 140);                \
   FIELD_BD (action_offset_y, 141);                \
   FIELD_BD (angle_offset, 0);                     \
-  DXF { VALUE_RC (1, 280); } /* Action XY type. 1? */
+  DXF { VALUE_RC ((BITCODE_RC)1, 280); } /* Action XY type. 1? */
   
 #define AcDbBlockConstraintParameter_fields                \
   AcDbBlock2PtParameter_fields;                            \

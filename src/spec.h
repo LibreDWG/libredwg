@@ -533,7 +533,7 @@
         }                                                                     \
       else                                                                    \
         {                                                                     \
-          FIELD_RC (flag, 70);                                                \
+          FIELD_CAST (flag, RC, RC, 70);                                      \
         }                                                                     \
       FIELD_TFv (name, 32, 2);                                                \
       FIELD_RS (used, 0);                                                     \
@@ -555,8 +555,8 @@
           FIELD_VALUE (is_xref_dep) = 1;                                      \
       }                                                                       \
       FIELD_HANDLE (xref, 5, 0); /* NULLHDL without is_xref_dep */            \
-      FIELD_VALUE (flag) |= FIELD_VALUE (is_xref_dep) << 4                    \
-                          | FIELD_VALUE (is_xref_ref) << 6;                   \
+      FIELD_VALUE (flag)                                                      \
+          |= FIELD_VALUE (is_xref_dep) << 4 | FIELD_VALUE (is_xref_ref) << 6; \
     }                                                                         \
     RESET_VER
 #endif

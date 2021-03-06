@@ -42,13 +42,15 @@ static BITCODE_BL rcount1, rcount2;
 #define ACTION print
 #define IS_PRINT
 
-#define FIELD(name, type) FIELD_TRACE (name, type)
-#define FIELDG(name, type, dxf) FIELD_G_TRACE (name, type, dxf)
-#define FIELD_TRACE(name, type)                                               \
-  LOG_TRACE (#name ": " FORMAT_##type " [" #type "]\n", _obj->name)
-#define FIELD_G_TRACE(name, type, dxf)                                        \
-  LOG_TRACE (#name ": " FORMAT_##type " [" #type " " #dxf "]\n", _obj->name)
-#define FIELD_CAST(nam, type, cast, dxf) FIELD_G_TRACE (nam, cast, dxf)
+#define FIELD(nam, type) FIELD_TRACE (nam, type)
+#define FIELDG(nam, type, dxf) FIELD_G_TRACE (nam, type, dxf)
+#define FIELD_TRACE(nam, type)                                                \
+  LOG_TRACE (#nam ": " FORMAT_##type " [" #type "]\n", _obj->nam)
+#define FIELD_G_TRACE(nam, type, dxf)                                         \
+  LOG_TRACE (#nam ": " FORMAT_##type " [" #type " " #dxf "]\n", _obj->nam)
+#define FIELD_CAST(nam, type, cast, dxf)                                      \
+  LOG_TRACE (#nam ": " FORMAT_##type " [" #type " " #dxf "]\n",               \
+             (BITCODE_##type)_obj->nam)
 #define SUB_FIELD(o, nam, type, dxf) FIELDG (o.nam, type, dxf)
 #define SUB_FIELD_CAST(o, nam, type, cast, dxf) FIELD_G_TRACE (o.nam, cast, dxf)
 

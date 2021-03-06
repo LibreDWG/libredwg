@@ -102,8 +102,8 @@
             }                                                                 \
         }                                                                     \
       else                                                                    \
-        LOG_TRACE (#nam ": " FORMAT_##type " [" #type " %d]", _obj->nam,      \
-                   dxfgroup);                                                 \
+        LOG_TRACE (#nam ": " FORMAT_##type " [" #type " %d]",                 \
+                   (BITCODE_##type)_obj->nam, dxfgroup);                      \
       LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                            \
       LOG_TRACE ("\n")                                                        \
     }
@@ -373,7 +373,13 @@
     _obj->nam = bit_read_RL (dat);                                            \
     LOG_TRACE (#nam ": " FORMAT_RLd " [RLd %d]\n", _obj->nam, dxf);           \
   }
-#define FIELD_RC(nam, dxf) FIELDG (nam, RC, dxf)
+#define FIELD_RC(nam, dxf)                                                    \
+  {                                                                           \
+    _obj->nam = bit_read_RC (dat);                                            \
+    LOG_TRACE (#nam ": " FORMAT_RC " [RC %d]", ((BITCODE_RC)_obj->nam), dxf); \
+    LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
+    LOG_TRACE ("\n")                                                          \
+  }
 #define FIELD_RCu(nam, dxf)                                                   \
   {                                                                           \
     _obj->nam = bit_read_RC (dat);                                            \
