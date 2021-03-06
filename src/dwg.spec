@@ -1966,7 +1966,10 @@ DWG_ENTITY_END
 
 #if defined (IS_DECODER)
 
-#define DECODE_3DSOLID decode_3dsolid (dat, hdl_dat, obj, (Dwg_Entity_3DSOLID *)_obj);
+#  define DECODE_3DSOLID                                                      \
+    decode_3dsolid (dat, hdl_dat, obj, (Dwg_Entity_3DSOLID *)_obj);           \
+    if (FIELD_VALUE (encr_sat_data) && !FIELD_VALUE (encr_sat_data[0]))       \
+      FIELD_VALUE (block_size[0]) = 0;
 
 static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                            Dwg_Object *restrict obj,
@@ -2000,12 +2003,14 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                 realloc (FIELD_VALUE (encr_sat_data), (i+1) * sizeof (char*));
               FIELD_VALUE (block_size) = (BITCODE_BL*)
                 realloc (FIELD_VALUE (block_size), (i+1) * sizeof (BITCODE_BL));
+              if (!FIELD_VALUE (encr_sat_data) || !FIELD_VALUE (block_size))
+                return DWG_ERR_OUTOFMEM;
               FIELD_BL (block_size[i], 0);
               if (FIELD_VALUE (block_size[i]) > 0
                   && AVAIL_BITS (dat) > 8 * FIELD_VALUE (block_size[i]))
                 {
                   FIELD_TFv (encr_sat_data[i], FIELD_VALUE (block_size[i]), 1);
-                  if (!FIELD_VALUE (encr_sat_data[i]))
+                  if (!FIELD_VALUE (encr_sat_data) || !FIELD_VALUE (encr_sat_data[i]))
                     FIELD_VALUE (block_size[i]) = 0;
                   total_size += FIELD_VALUE (block_size[i]);
                 }
