@@ -964,3 +964,18 @@ entity_alias (char *restrict name)
   else if (memBEGINc (name, "ACDB") && is_dwg_entity (&name[4]))
     memmove (name, &name[4], len - 3);
 }
+
+bool has_entity_DD (const Dwg_Object* obj)
+{
+  const Dwg_Version_Type version = obj->parent->header.version;
+  const Dwg_Object_Type type = obj->fixedtype;
+  if (version < R_2000)
+    return false;
+  if (type == DWG_TYPE_LWPOLYLINE ||
+      type == DWG_TYPE_LINE ||
+      type == DWG_TYPE_INSERT ||
+      type == DWG_TYPE_MINSERT ||
+      type == DWG_TYPE_TABLE)
+    return true;
+  return false;
+}

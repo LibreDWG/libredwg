@@ -703,13 +703,14 @@ static bool env_var_checked_p;
   LOG_INSANE ("HANDLE_STREAM @%lu.%u\n", dat->byte - obj->address, dat->bit)  \
   if (!obj->bitsize ||                                                        \
        /* DD sizes can vary, but let unknown_bits asis */                     \
+      has_entity_DD (obj) ||                                                  \
        (dwg->header.version != dwg->header.from_version                       \
         && obj->fixedtype != DWG_TYPE_UNKNOWN_OBJ                             \
         && obj->fixedtype != DWG_TYPE_UNKNOWN_ENT))                           \
     {                                                                         \
-      LOG_TRACE ("-bitsize calc from HANDLE_STREAM @%lu.%u (%lu)\n",          \
-                 dat->byte - obj->address, dat->bit, obj->address);           \
       obj->bitsize = bit_position (dat) - (obj->address * 8);                 \
+      LOG_TRACE ("-bitsize calc from HANDLE_STREAM " FORMAT_RL " @%lu.%u (%lu)\n", \
+                 obj->bitsize, dat->byte - obj->address, dat->bit, obj->address); \
       obj->was_bitsize_set = 1;                                               \
     }                                                                         \
   if (!obj->hdlpos)                                                           \
@@ -3800,7 +3801,8 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   /* DXF/JSON/RW across versions: patchup size and bitsize */
   /* Across versions size+bitsize must be recalculated.
      Sizes are unreliable when changing versions. */
-  if (!obj->size || dwg->header.from_version != dwg->header.version)
+  if (!obj->size || dwg->header.from_version != dwg->header.version
+      || obj->was_bitsize_set)
     {
       BITCODE_BL pos = bit_position (dat);
       BITCODE_RL old_size = obj->size;
