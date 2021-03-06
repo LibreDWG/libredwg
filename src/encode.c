@@ -130,10 +130,12 @@ static bool env_var_checked_p;
 #define FIELD_CAST(nam, type, cast, dxf)                                      \
   {                                                                           \
     bit_write_##type (dat, (BITCODE_##type)_obj->nam);                        \
-    FIELD_G_TRACE (nam, cast, dxf);                                           \
+    LOG_TRACE (#nam ": " FORMAT_##type " [" #type " " #dxf "]",               \
+               (BITCODE_##type)_obj->nam);                                    \
+    LOG_POS                                                                   \
   }
 #define SUB_FIELD(o, nam, type, dxf) FIELD (o.nam, type)
-#define SUB_FIELD_CAST(o, nam, type, cast, dxf)                          \
+#define SUB_FIELD_CAST(o, nam, type, cast, dxf)                               \
   {                                                                           \
     bit_write_##type (dat, (BITCODE_##type)_obj->o.nam);                      \
     FIELD_G_TRACE (o.nam, cast, dxf);                                         \
