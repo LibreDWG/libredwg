@@ -1173,7 +1173,10 @@ classes_section:
       klass->appname = bit_read_TV (dat);
       LOG_HANDLE ("appname: %s [TV] ", klass->appname); LOG_POS;
       if (dat->byte >= endpos)
-        break;
+        {
+          free (klass->appname);
+          break;
+        }
       LOG_HANDLE ("\n  ");
       klass->cppname = bit_read_TV (dat);
       LOG_HANDLE ("cppname: %s [TV] ", klass->cppname); LOG_POS;
