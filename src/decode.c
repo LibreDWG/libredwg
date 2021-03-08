@@ -1954,7 +1954,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       free (decomp);
       return error;
     }
-  LOG_TRACE ("\n#### Read 2004 Section Page Map ####\n")
+  LOG_TRACE ("\n#### Read 2004 Section Page Map @%x ####\n", (unsigned)section_map_address)
 
   section_address = 0x100; // starting address
   i = 0;
@@ -3647,7 +3647,8 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     BITCODE_RC *map;
     LOG_INSANE ("@0x%lx\n", dat->byte)
 
-    LOG_TRACE ("\n=== Read System Section (Section Page Map) ===\n\n")
+    LOG_TRACE ("\n=== Read System Section (Section Page Map) @%x ===\n\n",
+               (unsigned)dwg->r2004_header.section_map_address)
     if (!dwg->r2004_header.section_map_address)
       return DWG_ERR_SECTIONNOTFOUND;
     assert (dwg->r2004_header.section_map_address);
