@@ -83,6 +83,7 @@ static bool env_var_checked_p;
 
 #define ANYCODE -1
 
+#undef LOG_POS
 #define LOG_POS                                                               \
   LOG_INSANE (" @%lu.%u", obj ? dat->byte - obj->address : dat->byte, dat->bit)\
   LOG_TRACE ("\n")
@@ -508,8 +509,9 @@ static bool env_var_checked_p;
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           bit_write_##type (dat, _obj->nam[vcount]);                          \
-          LOG_TRACE (#nam "[%ld]: " FORMAT_##type " [%s %d]\n", (long)vcount, \
+          LOG_TRACE (#nam "[%ld]: " FORMAT_##type " [%s %d]", (long)vcount,   \
                      _obj->nam[vcount], #type, dxf)                           \
+          LOG_POS                                                             \
         }                                                                     \
     }
 #define FIELD_VECTOR_T(nam, type, size, dxf)                                  \
@@ -519,18 +521,18 @@ static bool env_var_checked_p;
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
           if (dat->version != dat->from_version)                              \
-            FIELD_##type (nam[vcount], dxf)                                   \
-          else if (dat->version < R_2007)                                     \
-          {                                                                   \
-            bit_write_TV (dat, (BITCODE_TV)_obj->nam[vcount]);                \
-            LOG_TRACE (#nam "[%d]: \"%s\" [TV %d]\n", (int)vcount,            \
-                       _obj->nam[vcount], dxf)                                \
-          }                                                                   \
+            FIELD_##type (nam[vcount], dxf) else if (dat->version < R_2007)   \
+            {                                                                 \
+              bit_write_TV (dat, (BITCODE_TV)_obj->nam[vcount]);              \
+              LOG_TRACE (#nam "[%d]: \"%s\" [TV %d]", (int)vcount,            \
+                         _obj->nam[vcount], dxf)                              \
+              LOG_POS                                                         \
+            }                                                                 \
           else                                                                \
-          {                                                                   \
-            bit_write_##type (dat, _obj->nam[vcount]);                        \
-            LOG_TRACE_TU (#nam, _obj->nam[vcount], dxf)                       \
-          }                                                                   \
+            {                                                                 \
+              bit_write_##type (dat, _obj->nam[vcount]);                      \
+              LOG_TRACE_TU (#nam, _obj->nam[vcount], dxf)                     \
+            }                                                                 \
         }                                                                     \
       RESET_VER                                                               \
     }

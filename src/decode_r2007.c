@@ -1432,6 +1432,7 @@ read_2007_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   BITCODE_RL size, i;
   BITCODE_BS max_num;
   Bit_Chain sec_dat = { 0 }, str = { 0 };
+  Dwg_Object *obj = NULL;
   int error;
   char c;
 

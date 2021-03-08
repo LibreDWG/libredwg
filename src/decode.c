@@ -61,8 +61,8 @@ static bool env_var_checked_p;
 #include "logging.h"
 #include "dec_macros.h"
 
-#undef LOG_POS
-#define LOG_POS LOG_INSANE (" @%lu.%u\n", dat->byte, dat->bit)
+//#undef LOG_POS
+//#define LOG_POS LOG_INSANE (" @%lu.%u\n", dat->byte, dat->bit)
 
 /*------------------------------------------------------------------------------
  * Private functions
@@ -2620,6 +2620,7 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   char c;
   int error;
   Bit_Chain sec_dat = { 0 }, str_dat = { 0 };
+  Dwg_Object *obj = NULL;
 
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_CLASSES);
   if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
@@ -3840,6 +3841,9 @@ decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
  * Those subgroups have an empty raw, size, and the prev. handle.
  */
 
+#undef LOG_POS
+#define LOG_POS LOG_RPOS
+
 static int
 eed_need_size (unsigned long need, BITCODE_BS have)
 {
@@ -4028,7 +4032,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       long unsigned int end, offset;
 
       LOG_TRACE ("EED[%u] size: " FORMAT_BS " [BS]\n", idx, size);
-      LOG_POS
+      LOG_RPOS
       if (size > _obj->size || dat->byte == sav_byte)
         {
           LOG_ERROR ("Invalid EED size " FORMAT_BS " > %u", size, _obj->size);
@@ -4064,7 +4068,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
         {
           LOG_TRACE ("EED[%u] handle: " FORMAT_H "\n", idx,
                      ARGS_H (obj->eed[idx].handle));
-          LOG_POS;
+          LOG_RPOS;
           if (dat->byte >= dat->size)
             end = dat->byte;
           if (_obj->fixedtype == DWG_TYPE_MLEADERSTYLE)
@@ -4106,7 +4110,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       LOG_TRACE_TF (obj->eed[idx].raw, size);
       //LOG_TRACE ("\n");
       dat->byte = sav_byte;
-      LOG_POS
+      LOG_RPOS
 
       while (dat->byte < end)
         {
@@ -4120,7 +4124,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
             {
               free (obj->eed[idx].data);
               LOG_HANDLE ("        invalid eed[%d]: skip\n", idx);
-              LOG_POS
+              LOG_RPOS
               obj->eed[idx].data = NULL;
               //obj->num_eed--; // we still have .raw
               dat->byte = end;  // skip eed
@@ -4140,7 +4144,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
               obj->num_eed = idx + 1;
               size = (long)(end - dat->byte + 1);
               //LOG_INSANE ("        size remaining: %ld\n", (long)size);
-              //LOG_POS
+              //LOG_RPOS
               obj->eed = (Dwg_Eed *)realloc (obj->eed,
                                              obj->num_eed * sizeof (Dwg_Eed));
               obj->eed[idx].handle = obj->eed[idx - 1].handle;
@@ -4153,21 +4157,19 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
               break;
             }
         }
-      LOG_POS
+      LOG_RPOS
       if (obj->eed[idx].raw)
         {
           dat->byte = end;
-          LOG_POS
+          LOG_RPOS
         }
       idx++;
     }
   LOG_HANDLE ("EED[%u] size: " FORMAT_BS " [BS] (end)\n", idx, size);
   LOG_TRACE ("num_eed: " FORMAT_BL "\n", obj->num_eed);
-  //LOG_POS
+  //LOG_RPOS
   return error;
 }
-
-#undef LOG_POS
 
 /** OL2FRAME.data potentially contains as 128 byte of custom specific data:
   BITCODE_BS oleversion;   DXF 70, always 2

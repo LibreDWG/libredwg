@@ -38,6 +38,21 @@
 // redeclare versions to be from, not target
 #include "importer.h"
 
+#undef LOG_POS
+#define LOG_POS                                                               \
+  LOG_INSANE (" @%lu.%u", obj ? dat->byte - obj->address : dat->byte, dat->bit)\
+  LOG_TRACE ("\n")
+#define LOG_RPOS                                                              \
+  LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                                \
+  LOG_TRACE ("\n")
+#define LOG_HPOS                                                              \
+  LOG_INSANE (" @%lu.%u",                                                     \
+              obj && hdl_dat->byte > obj->address                             \
+                  ? hdl_dat->byte - obj->address                              \
+                  : hdl_dat->byte,                                            \
+              hdl_dat->bit)                                                   \
+  LOG_TRACE ("\n")
+
 #define VALUE(value, type, dxf)                                               \
   LOG_TRACE (FORMAT_##type " [" #type " %d]\n", (BITCODE_##type)value, dxf)
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)
@@ -193,8 +208,7 @@
           LOG_TRACE (#nam ": (" FORMAT_BD ", " FORMAT_BD ") [" #type " %d]",  \
                      _obj->nam.x, _obj->nam.y, dxf)                           \
         }                                                                     \
-      LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                            \
-      LOG_TRACE ("\n")                                                        \
+      LOG_POS;                                                                \
     }
 #define FIELD_3PT_TRACE(nam, type, dxf)                                       \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
@@ -230,8 +244,7 @@
                      ") [" #type " %d]",                                      \
                      _obj->nam.x, _obj->nam.y, _obj->nam.z, dxf)              \
         }                                                                     \
-      LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                            \
-      LOG_TRACE ("\n")                                                        \
+      LOG_POS;                                                                \
     }
 
 #define FIELD_VALUE(nam) _obj->nam
@@ -505,16 +518,15 @@
     if (dat->from_version < R_2007)                                           \
       {                                                                       \
         _obj->nam = bit_read_TV (dat);                                        \
-        LOG_TRACE (#nam ": \"%s\" [T %d]", _obj->nam, dxf);                   \
-        LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                          \
-        LOG_TRACE ("\n")                                                      \
+        LOG_TRACE (#nam ": \"%s\" [T %d]", _obj->nam, dxf)                    \
+        LOG_POS;                                                              \
       }                                                                       \
     else                                                                      \
       {                                                                       \
         if (!obj || obj->has_strings) /* header_vars */                       \
           {                                                                   \
             _obj->nam = (BITCODE_T)bit_read_TU (str_dat);                     \
-            LOG_TRACE_TU (#nam, (BITCODE_TU)FIELD_VALUE (nam), dxf);          \
+            LOG_TRACE_TU (#nam, (BITCODE_TU)FIELD_VALUE (nam), dxf)          \
           }                                                                   \
         else                                                                  \
           {                                                                   \
@@ -538,6 +550,7 @@
       {                                                                       \
         LOG_TRACE (#nam ": (%f, %f, %f) [BE %d]\n", _obj->nam.x, _obj->nam.y, \
                    _obj->nam.z, dxf);                                         \
+        LOG_POS;                                                              \
       }                                                                       \
   }
 #define TRACE_DD                                                              \
@@ -1030,7 +1043,7 @@
     {                                                                         \
       _VECTOR_CHKCOUNT (name, _obj->size,                                     \
                         dat->from_version >= R_2007 ? 18 : 2, dat)            \
-      _obj->name = (char**)calloc (_obj->size, sizeof (char *));              \
+      _obj->name = (char **)calloc (_obj->size, sizeof (char *));             \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
           PRE (R_2007)                                                        \
@@ -1038,8 +1051,7 @@
             _obj->name[vcount] = bit_read_TV (dat);                           \
             LOG_TRACE (#name "[%d]: \"%s\" [%s %d]", (int)vcount,             \
                        _obj->name[vcount], #type, dxf)                        \
-            LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                      \
-            LOG_TRACE ("\n")                                                  \
+            LOG_POS                                                           \
           }                                                                   \
           LATER_VERSIONS                                                      \
           {                                                                   \

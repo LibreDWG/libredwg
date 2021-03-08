@@ -96,25 +96,35 @@
 #define LOG_INSANE(args...) LOG (INSANE, args)
 #define LOG_ALL(args...) LOG (ALL, args)
 
+#ifndef LOG_POS
+#  define LOG_POS                                                             \
+    LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
+    LOG_TRACE ("\n")
+#endif
 #ifdef HAVE_NATIVE_WCHAR2
 #  define LOG_TRACE_TU(s, wstr, dxf)                                          \
-    LOG_TRACE ("%s: \"%ls\" [TU %d]", s, (wchar_t *)wstr, dxf)
+    LOG_TRACE ("%s: \"%ls\" [TU %d]", s, (wchar_t *)wstr, dxf)                \
+    LOG_POS
 #  define LOG_TRACE_TU_I(s, i, wstr, type, dxf)                               \
-    LOG_TRACE ("%s[%d]: \"%ls\" [%s %d]", s, (int)i, (wchar_t *)wstr, #type, dxf)
+    LOG_TRACE ("%s[%d]: \"%ls\" [%s %d]", s, (int)i, (wchar_t *)wstr, #type,  \
+               dxf)                                                           \
+    LOG_POS
 #  define LOG_TEXT_UNICODE(level, args) LOG (level, args)
 #else
 #  define LOG_TRACE_TU(s, wstr, dxf)                                          \
-  {                                                                           \
-    LOG_TRACE ("%s: \"", s)                                                   \
-    LOG_TEXT_UNICODE (TRACE, (BITCODE_TU)wstr)                                \
-    LOG_TRACE ("\" [TU %d]\n", dxf)                                           \
-  }
+    {                                                                         \
+      LOG_TRACE ("%s: \"", s)                                                 \
+      LOG_TEXT_UNICODE (TRACE, (BITCODE_TU)wstr)                              \
+      LOG_TRACE ("\" [TU %d]", dxf)                                           \
+      LOG_POS;                                                                \
+    }
 #  define LOG_TRACE_TU_I(s, i, wstr, type, dxf)                               \
-  {                                                                           \
-    LOG_TRACE ("%s[%d]: \"", s, (int)i)                                       \
-    LOG_TEXT_UNICODE (TRACE, (BITCODE_TU)wstr)                                \
-    LOG_TRACE ("\" [" #type" %d]\n", dxf)                                     \
-  }
+    {                                                                         \
+      LOG_TRACE ("%s[%d]: \"", s, (int)i)                                     \
+      LOG_TEXT_UNICODE (TRACE, (BITCODE_TU)wstr)                              \
+      LOG_TRACE ("\" [" #type " %d]", dxf)                                    \
+      LOG_POS;                                                                \
+    }
 #  define LOG_TEXT_UNICODE(level, wstr)                                       \
     {                                                                         \
       if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level && wstr)                       \
@@ -126,9 +136,10 @@
     }
 #endif
 #define LOG_TRACE_TW(s, wstr, dxf)                                            \
-    LOG_TRACE ("%s: \"", s)                                                   \
-    LOG_TEXT32 (TRACE, (BITCODE_TW)wstr)                                      \
-    LOG_TRACE ("\" [TW %d]\n", dxf)
+  LOG_TRACE ("%s: \"", s)                                                     \
+  LOG_TEXT32 (TRACE, (BITCODE_TW)wstr)                                        \
+  LOG_TRACE ("\" [TW %d]", dxf)                                               \
+  LOG_POS
 #define LOG_TEXT32(level, wstr)                                               \
     {                                                                         \
       if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level && wstr)                       \
