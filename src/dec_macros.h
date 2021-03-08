@@ -1049,8 +1049,8 @@
           PRE (R_2007)                                                        \
           {                                                                   \
             _obj->name[vcount] = bit_read_TV (dat);                           \
-            LOG_TRACE (#name "[%d]: \"%s\" [%s %d]", (int)vcount,             \
-                       _obj->name[vcount], #type, dxf)                        \
+            LOG_TRACE (#name "[%d]: \"%s\" [TV %d]", (int)vcount,             \
+                       _obj->name[vcount], dxf)                               \
             LOG_POS                                                           \
           }                                                                   \
           LATER_VERSIONS                                                      \

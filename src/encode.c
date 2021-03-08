@@ -536,6 +536,29 @@ static bool env_var_checked_p;
         }                                                                     \
       RESET_VER                                                               \
     }
+#define FIELD_VECTOR_T1(nam, type, size, dxf)                                 \
+  if (_obj->size > 0 && _obj->nam)                                            \
+    {                                                                         \
+      OVERFLOW_CHECK_LV (nam, _obj->size)                                     \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
+        {                                                                     \
+          if (dat->version < R_2007)                                          \
+            {                                                                 \
+              unsigned _len = strlen (_obj->nam[vcount]);                     \
+              bit_write_BS (dat, _len);                                       \
+              bit_write_TF (dat, (BITCODE_TF)_obj->nam[vcount], _len);        \
+              LOG_TRACE (#nam "[%d]: \"%s\" [TV1 %d]", (int)vcount,           \
+                         _obj->nam[vcount], dxf)                              \
+              LOG_POS                                                         \
+            }                                                                 \
+          else                                                                \
+            {                                                                 \
+              bit_write_##type (dat, _obj->nam[vcount]);                      \
+              LOG_TRACE_TU (#nam, _obj->nam[vcount], dxf)                     \
+            }                                                                 \
+        }                                                                     \
+      RESET_VER                                                               \
+    }
 
 #define FIELD_VECTOR(nam, type, size, dxf)                                    \
   FIELD_VECTOR_N (nam, type, _obj->size, dxf)
@@ -708,6 +731,8 @@ static bool env_var_checked_p;
   if (!obj->bitsize ||                                                        \
        /* DD sizes can vary, but let unknown_bits asis */                     \
       has_entity_DD (obj) ||                                                  \
+       /* strings may be zero-terminated or not */                            \
+      obj_has_strings (obj) ||                                                \
        (dwg->header.version != dwg->header.from_version                       \
         && obj->fixedtype != DWG_TYPE_UNKNOWN_OBJ                             \
         && obj->fixedtype != DWG_TYPE_UNKNOWN_ENT))                           \

@@ -41,6 +41,7 @@ bool dwg_find_class (const Dwg_Data *restrict dwg, const char* dxfname,
                      BITCODE_BS *numberp) __nonnull ((1,2));
 void object_alias (char *restrict name) __nonnull_all;
 void entity_alias (char *restrict name) __nonnull_all;
-bool has_entity_DD (const Dwg_Object* obj);
+bool has_entity_DD (const Dwg_Object* obj) __nonnull_all;
+bool obj_has_strings (const Dwg_Object* obj) __nonnull_all;
 
 #endif

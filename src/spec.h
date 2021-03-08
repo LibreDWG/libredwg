@@ -252,6 +252,9 @@
         }                                                                     \
     }
 #endif
+#ifndef FIELD_VECTOR_T1
+#  define FIELD_VECTOR_T1(nam, type, size, dxf) FIELD_VECTOR_T(nam, type, size, dxf)
+#endif
 #ifndef SUB_FIELD_VECTOR_TYPESIZE
 #  define SUB_FIELD_VECTOR_TYPESIZE(o, nam, size, typesize, dxf)              \
   if (_obj->o.size && _obj->o.nam)                                            \

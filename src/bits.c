@@ -1536,9 +1536,14 @@ bit_read_TV (Bit_Chain *restrict dat)
     }
   for (i = 0; i < length; i++)
     chain[i] = bit_read_RC (dat);
-  // normally not needed, as the DWG itself contains the ending \0 as last char
+  // check if the string is already zero-terminated or not.
+  // only observed >=r2004 as writer app
+  if (length > 0 && dat->from_version > R_2000 && chain[length - 1] != '\0')
+    LOG_HANDLE ("TV-not-ZERO %u\n ", length)
+  else if (length > 0 && dat->from_version <= R_2000 && chain[length - 1] == '\0')
+    LOG_HANDLE ("TV-ZERO %u\n", length)
+  // normally not needed, as the DWG since r2004 itself contains the ending \0 as last char
   chain[i] = '\0';
-
   return (char *)chain;
 }
 
@@ -1797,12 +1802,16 @@ bit_embed_TU (BITCODE_TU restrict wstr)
 }
 
 /** Write ASCIIZ text.
+    Starting with r2004 as writer (not target version) acad always
+    writes a terminating zero.
  */
 void
 bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
 {
   int i;
-  int length = (chain && *chain) ? strlen ((const char *)chain) + 1 : 0;
+  int length = (chain && *chain) ? strlen ((const char *)chain) : 0;
+  if (dat->version <= R_2000 && length)
+    length++;
   bit_write_BS (dat, length);
   for (i = 0; i < length; i++)
     bit_write_RC (dat, (unsigned char)chain[i]);

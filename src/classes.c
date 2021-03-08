@@ -979,3 +979,122 @@ bool has_entity_DD (const Dwg_Object* obj)
     return true;
   return false;
 }
+
+bool obj_has_strings (const Dwg_Object* obj)
+{
+  const Dwg_Version_Type version = obj->parent->header.from_version;
+  const Dwg_Object_Type type = obj->fixedtype;
+  if (version >= R_2007)
+    return obj->has_strings ? true : false;
+  if (dwg_obj_is_table (obj))
+      return true;
+  if (type == DWG_TYPE_TEXT ||
+      type == DWG_TYPE_ATTRIB ||
+      type == DWG_TYPE_ATTDEF ||
+      type == DWG_TYPE_BLOCK ||
+      type == DWG_TYPE_DIMENSION_ORDINATE ||
+      type == DWG_TYPE_DIMENSION_LINEAR ||
+      type == DWG_TYPE_DIMENSION_ALIGNED ||
+      type == DWG_TYPE_DIMENSION_ANG3PT ||
+      type == DWG_TYPE_DIMENSION_ANG2LN ||
+      type == DWG_TYPE_DIMENSION_RADIUS ||
+      type == DWG_TYPE_DIMENSION_DIAMETER ||
+      type == DWG_TYPE_LARGE_RADIAL_DIMENSION ||
+      type == DWG_TYPE_ARC_DIMENSION ||
+      type == DWG_TYPE_SHAPE ||
+      type == DWG_TYPE_VIEWPORT ||
+      type == DWG_TYPE__3DSOLID ||
+      type == DWG_TYPE_REGION ||
+      type == DWG_TYPE_BODY ||
+      type == DWG_TYPE_DICTIONARY ||
+      type == DWG_TYPE_DICTIONARYVAR ||
+      type == DWG_TYPE_DICTIONARYWDFLT ||
+      type == DWG_TYPE_MTEXT ||
+      type == DWG_TYPE_TOLERANCE ||
+      type == DWG_TYPE_BLOCK_HEADER ||
+      type == DWG_TYPE_GROUP ||
+      type == DWG_TYPE_MLINESTYLE ||
+      type == DWG_TYPE_HATCH ||
+      type == DWG_TYPE_MPOLYGON ||
+      type == DWG_TYPE_IMAGEDEF ||
+      type == DWG_TYPE_LAYER_INDEX ||
+      type == DWG_TYPE_PLOTSETTINGS ||
+      type == DWG_TYPE_LAYOUT ||
+      type == DWG_TYPE_OLE2FRAME ||
+      type == DWG_TYPE_FIELD ||
+      type == DWG_TYPE_GEODATA ||
+      type == DWG_TYPE_TABLECONTENT ||
+      type == DWG_TYPE_TABLE ||
+      type == DWG_TYPE_TABLESTYLE ||
+      type == DWG_TYPE_CELLSTYLEMAP ||
+      type == DWG_TYPE_SCALE ||
+      type == DWG_TYPE_MULTILEADER ||
+      type == DWG_TYPE_MLEADERSTYLE ||
+      type == DWG_TYPE_PDFDEFINITION ||
+      type == DWG_TYPE_DGNDEFINITION ||
+      type == DWG_TYPE_DWFDEFINITION ||
+      type == DWG_TYPE_SECTIONOBJECT ||
+      type == DWG_TYPE_SECTION_SETTINGS ||
+      type == DWG_TYPE_VISUALSTYLE ||
+      type == DWG_TYPE_LIGHT ||
+      type == DWG_TYPE_LIGHTLIST ||
+      type == DWG_TYPE_SUN ||
+      type == DWG_TYPE_RENDERSETTINGS ||
+      type == DWG_TYPE_MENTALRAYRENDERSETTINGS ||
+      type == DWG_TYPE_RAPIDRTRENDERSETTINGS ||
+      type == DWG_TYPE_DBCOLOR ||
+      type == DWG_TYPE_MATERIAL ||
+      type == DWG_TYPE_LAYERFILTER ||
+      type == DWG_TYPE_ASSOCDEPENDENCY ||
+      type == DWG_TYPE_ASSOCEDGEACTIONPARAM ||
+      type == DWG_TYPE_CONTEXTDATAMANAGER ||
+      (type >= DWG_TYPE_ACSH_BOOLEAN_CLASS && type <= DWG_TYPE_ACSH_WEDGE_CLASS) ||
+      (type >= DWG_TYPE_ASSOC2DCONSTRAINTGROUP && type <= DWG_TYPE_ASSOCVERTEXACTIONPARAM) ||
+      dwg_has_subclass (obj->name, "AcDbEvalVariant") ||
+      dwg_has_subclass (obj->name, "AcDbValueParam") ||
+      dwg_has_subclass (obj->name, "AcDbAssocActionParam") ||
+      dwg_has_subclass (obj->name, "AcDbAssocDependency") ||
+      dwg_has_subclass (obj->name, "AcDbEvalExpr") ||
+      dwg_has_subclass (obj->name, "AdDbAssocIndexPersSubentId") ||
+      dwg_has_subclass (obj->name, "AcDbAssocPersSubentId") ||
+      dwg_has_subclass (obj->name, "AcDbAssocEdgePersSubentId") ||
+      dwg_has_subclass (obj->name, "AcDbBlockElement") ||
+      dwg_has_subclass (obj->name, "AcDbBlockGripExpr") ||
+      type == DWG_TYPE_DIMASSOC ||
+      type == DWG_TYPE_SUNSTUDY ||
+      type == DWG_TYPE_GEOPOSITIONMARKER ||
+      type == DWG_TYPE_NAVISWORKSMODELDEF ||
+      type == DWG_TYPE_DATATABLE ||
+      type == DWG_TYPE_DATALINK ||
+      type == DWG_TYPE_DETAILVIEWSTYLE ||
+      type == DWG_TYPE_SECTIONVIEWSTYLE ||
+      type == DWG_TYPE_IBL_BACKGROUND ||
+      type == DWG_TYPE_IMAGE_BACKGROUND ||
+      type == DWG_TYPE_RENDERENTRY ||
+      type == DWG_TYPE_RENDERENVIRONMENT ||
+      type == DWG_TYPE_RENDERGLOBAL ||
+      type == DWG_TYPE_ARCALIGNEDTEXT ||
+      type == DWG_TYPE_RTEXT ||
+      type == DWG_TYPE_POINTCLOUD ||
+      type == DWG_TYPE_POINTCLOUDEX ||
+      type == DWG_TYPE_POINTCLOUDDEF ||
+      type == DWG_TYPE_POINTCLOUDDEFEX ||
+      type == DWG_TYPE_POINTCLOUDCOLORMAP ||
+      type == DWG_TYPE_ASSOCVARIABLE ||
+      dwg_has_subclass (obj->name, "AcDbCompoundObjectId") ||
+      type == DWG_TYPE_BLOCKPOLARPARAMETER ||
+      type == DWG_TYPE_ASSOCDIMDEPENDENCYBODY ||
+      type == DWG_TYPE_BLOCKANGULARCONSTRAINTPARAMETER ||
+      dwg_has_subclass (obj->name, "AcDbAssocArrayActionBody") ||
+      dwg_has_subclass (obj->name, "AcDbAssocArrayCommonParameters") ||
+      dwg_has_subclass (obj->name, "AcDbImpAssocDimDependencyBodyBase") ||
+      dwg_has_subclass (obj->name, "AcDbBlockConstraintParameter") ||
+      type == DWG_TYPE_BLOCKLOOKUPACTION ||
+      type == DWG_TYPE_BLOCKLOOKUPPARAMETER ||
+      type == DWG_TYPE_BLOCKPOINTPARAMETER ||
+      type == DWG_TYPE_BLOCKUSERPARAMETER ||
+      0
+      )
+    return true;
+  return false;
+}
