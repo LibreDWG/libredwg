@@ -1420,6 +1420,7 @@ bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at pos %lu, size %lu", __FUNCTION__,
                  dat->byte, dat->size)
+      memset (dest, 0, length);
       return;
     }
   if (dat->bit == 0)

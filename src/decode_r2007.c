@@ -1195,6 +1195,7 @@ read_file_header (Bit_Chain *restrict dat,
   dat->byte = 0x80;
   LOG_TRACE ("\n=== File header ===\n")
   memset (file_header, 0, sizeof (r2007_file_header));
+  memset (data, 0, 0x3d8);
   bit_read_fixed (dat, data, 0x3d8);
   pedata = decode_rs (data, 3, 239, 0x3d8);
   if (!pedata)
