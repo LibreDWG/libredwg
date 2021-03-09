@@ -2,6 +2,23 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2021 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+LibreDWG version 0.12.4 - 2021/03/?? - beta:
+
+Major bugfixes:
+  * Fixed encode from dwg and json for many objects: missing size and bitsize
+    recalculation for objects with strings and DD types. (GH #322, #326)
+  * dwgadd: Fixed the pspace command. (GH #319)
+  * Missed all binary DXF groups 0, but still not working.
+Minor bugfixes:
+  * Fixed many more minor fuzzer errors, mostly detected by the oss-fuzz
+    service and @zodf0055980:
+    More bounds-checks, null-derefs, a double-free, integer overflows.
+    GH #320, 321, 323-325
+    oss-fuzz issues 31873, 31789, 31724, 31660, 31657, 31656, 31654, 31647, 31591,
+    31574, 31564, 31542, 31533, 31516, 31470, 31462, 31456, 31454, 31450, 31436,
+    31432, 31426, 31425, 31422, 31419.
+  * dwgadd: Fixed sscanf usage on Windows
+
 LibreDWG version 0.12.3 - 2021/02/26 - beta:
 
 Minor bugfixes:
