@@ -3144,6 +3144,10 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= dwg_dxf_LAYER_CONTROL (dat, ctrl);
         for (i = 0; i < _ctrl->num_entries; i++)
           {
+            if (!_ctrl->entries)
+              break;
+            if (!_ctrl->entries[i])
+              continue;
             obj = dwg_ref_object (dwg, _ctrl->entries[i]);
             if (obj && obj->type == DWG_TYPE_LAYER)
               error |= dwg_dxf_LAYER (dat, obj);
