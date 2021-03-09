@@ -1116,6 +1116,12 @@ bit_read_DD (Bit_Chain *dat, double default_value)
     }
 }
 
+int
+bit_eq_DD (double value, double default_value)
+{
+  return fabs (value - default_value) < 1e-12;
+}
+
 /** Write bit-double with default.
  */
 BITCODE_BB

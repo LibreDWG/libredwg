@@ -585,21 +585,21 @@ DWG_ENTITY (INSERT)
         }
       ENCODER
         {
-          if (FIELD_VALUE (scale.x) == 1.0 &&
-              FIELD_VALUE (scale.y) == 1.0 &&
-              FIELD_VALUE (scale.z) == 1.0)
+          if (bit_eq_DD (FIELD_VALUE (scale.x), 1.0) &&
+              bit_eq_DD (FIELD_VALUE (scale.y), 1.0) &&
+              bit_eq_DD (FIELD_VALUE (scale.z), 1.0))
             {
               FIELD_VALUE (scale_flag) = 3;
               FIELD_BB (scale_flag, 0);
             }
-          else if (FIELD_VALUE (scale.x) == FIELD_VALUE (scale.y) &&
-                   FIELD_VALUE (scale.x) == FIELD_VALUE (scale.z))
+          else if (bit_eq_DD (FIELD_VALUE (scale.x), FIELD_VALUE (scale.y)) &&
+                   bit_eq_DD (FIELD_VALUE (scale.x), FIELD_VALUE (scale.z)))
             {
               FIELD_VALUE (scale_flag) = 2;
               FIELD_BB (scale_flag, 0);
               FIELD_RD (scale.x, 41);
             }
-          else if (FIELD_VALUE (scale.x) == 1.0)
+          else if (bit_eq_DD (FIELD_VALUE (scale.x), 1.0))
             {
               FIELD_VALUE (scale_flag) = 1;
               FIELD_BB (scale_flag, 0);
@@ -724,27 +724,27 @@ DWG_ENTITY (MINSERT)
 
       ENCODER
         {
-          if (FIELD_VALUE (scale.x) == 1.0 &&
-              FIELD_VALUE (scale.y) == 1.0 &&
-              FIELD_VALUE (scale.z) == 1.0)
+          if (bit_eq_DD (FIELD_VALUE (scale.x), 1.0) &&
+              bit_eq_DD (FIELD_VALUE (scale.y), 1.0) &&
+              bit_eq_DD (FIELD_VALUE (scale.z), 1.0))
             {
               FIELD_VALUE (scale_flag) = 3;
               FIELD_BB (scale_flag, 0);
             }
-          else if (FIELD_VALUE (scale.x) == 1.0)
+          else if (bit_eq_DD (FIELD_VALUE (scale.x), FIELD_VALUE (scale.y)) &&
+                   bit_eq_DD (FIELD_VALUE (scale.x), FIELD_VALUE (scale.z)))
+            {
+              FIELD_VALUE (scale_flag) = 2;
+              FIELD_BB (scale_flag, 0);
+              FIELD_RD (scale.x, 41);
+            }
+          else if (bit_eq_DD (FIELD_VALUE (scale.x), 1.0))
              {
               FIELD_VALUE (scale_flag) = 1;
               FIELD_BB (scale_flag, 0);
               FIELD_DD (scale.y, 1.0, 42);
               FIELD_DD (scale.z, 1.0, 43);
              }
-          else if (FIELD_VALUE (scale.x) == FIELD_VALUE (scale.y) &&
-                   FIELD_VALUE (scale.x) == FIELD_VALUE (scale.z))
-            {
-              FIELD_VALUE (scale_flag) = 2;
-              FIELD_BB (scale_flag, 0);
-              FIELD_RD (scale.x, 41);
-            }
           else
             {
               FIELD_VALUE (scale_flag) = 0;

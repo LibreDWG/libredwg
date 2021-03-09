@@ -195,6 +195,7 @@ void normalize_BE (BITCODE_3BD ext);
 
 BITCODE_DD bit_read_DD (Bit_Chain *dat, double default_value);
 BITCODE_BB bit_write_DD (Bit_Chain *dat, double value, double default_value);
+int bit_eq_DD (double value, double default_value);
 
 BITCODE_BT bit_read_BT (Bit_Chain *dat);
 void bit_write_BT (Bit_Chain *dat, double value);
