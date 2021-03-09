@@ -51,6 +51,13 @@ static int cur_ver = 0;
 static BITCODE_BL rcount1 = 0, rcount2 = 0;
 static bool is_teigha = false;
 
+#ifdef DWG_ABORT
+static unsigned int errors = 0;
+#  ifndef DWG_ABORT_LIMIT
+#    define DWG_ABORT_LIMIT 200
+#  endif
+#endif
+
 #ifdef USE_TRACING
 /* This flag means we have checked the environment variable
    LIBREDWG_TRACE and set `loglevel' appropriately.  */
@@ -5124,6 +5131,13 @@ static BITCODE_BB bit_read_BB_noadv (Bit_Chain *dat)
 {
   unsigned char result;
   unsigned char byte;
+
+  if (dat->byte >= dat->size)
+    {
+      LOG_ERROR ("%s buffer overflow at %lu >= %lu", __FUNCTION__, dat->byte,
+                 dat->size)
+      return 9;
+    }
   byte = dat->chain[dat->byte];
   if (dat->bit < 7)
     result = (byte & (0xc0 >> dat->bit)) >> (6 - dat->bit);
