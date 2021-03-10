@@ -8,7 +8,8 @@ Major bugfixes:
   * Fixed encode from dwg and json for many objects: missing size and bitsize
     recalculation for objects with strings and DD types. (GH #322, #326)
   * dwgadd: Fixed the pspace command. (GH #319)
-  * Missed all binary DXF groups 0, but still not working.
+  * Missed all binary DXF groups 0. Still not working, but added to oss-fuzz.
+  * Support older gperf, older than 3.1. eg. macOS
 Minor bugfixes:
   * Fixed many more minor fuzzer errors, mostly detected by the oss-fuzz
     service and @zodf0055980:

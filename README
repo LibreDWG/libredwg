@@ -47,6 +47,8 @@ You need the following dependencies:
 
 Optionally:
 
+- gperf to update static hashes for several API's
+  Only needed when you added objects or changed the dwg.spec significantly
 - TeXinfo for building the docs
 - pslib for dwg2ps: http://pslib.sourceforge.net/doc/pslib.html
 - pcre2 with 8bit and 16bit libraries for dwggrep regexp support
