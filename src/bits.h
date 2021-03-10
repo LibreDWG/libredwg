@@ -292,7 +292,7 @@ EXPORT char *bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
     Returns NULL if not enough room in dest. */
 EXPORT char *
 bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
-                const int len, const unsigned cquoted);
+                const int destlen, const int srclen, const unsigned cquoted);
 
 /** Converts UTF-8 to UCS-2. Returns a copy.
     Needed by dwg importers, writers (e.g. dxf2dwg)

@@ -353,7 +353,7 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
       if (!key)
         goto outofmemory;
       dat->chain[t->end] = '\0';
-      while (!bit_utf8_to_TV (key, &dat->chain[t->start], len, 1))
+      while (!bit_utf8_to_TV (key, &dat->chain[t->start], len, t->end - t->start, 1))
         {
           LOG_INSANE ("Not enough room in quoted string len=%d\n", len-8)
           len += 8;

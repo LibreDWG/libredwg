@@ -2459,19 +2459,18 @@ bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
 */
 char *
 bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
-                const int destlen, const unsigned cquoted)
+                const int destlen, const int srclen, const unsigned cquoted)
 {
   unsigned char c;
   unsigned char *s = (unsigned char *)src;
   const char* endp = dest + destlen;
+  const unsigned char* ends = src + srclen;
   char *d = dest;
 
   while ((c = *s++))
     {
       if (dest >= endp)
-        {
-          return NULL;
-        }
+        return NULL;
       else if (cquoted && c == '\\' && dest+1 < endp &&
           // skip \" to " and \\ to \.
           (*s == '"' || *s == '\\' || *s == 'r' || *s == 'n'))
@@ -2549,6 +2548,8 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
           s++;
           s++;
         }
+      if (s >= ends)
+        break;
       /* everything above 0xf0 exceeds ucs-2, 4-6 byte seqs */
     }
 

@@ -92,7 +92,7 @@ inline
 #endif
 #endif
 static unsigned int
-hash (register const char *str, register size_t len)
+hash (register const char *str, register SIZE_TYPE len)
 {
   static const unsigned short asso_values[] =
     {
