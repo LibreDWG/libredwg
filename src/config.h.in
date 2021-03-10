@@ -23,6 +23,9 @@
 /* Define to 1 if a shared library will be built */
 #undef ENABLE_SHARED
 
+/* versions earlier than 301 will have no size_t */
+#undef GPERF_VERSION
+
 /* Define if pointers to integers require aligned access */
 #undef HAVE_ALIGNED_ACCESS_REQUIRED
 

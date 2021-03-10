@@ -32,10 +32,22 @@ int dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
 // export
 EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
                               const char *const restrict dxfname, const int len);
-// internal
-static const struct Dwg_DXFClass * in_word_set (register const char *str, register size_t len);
 
-enum apptypes {
+// v3.1 changed len type from unsigned int to size_t (gperf d519d1a821511eaa22eae6d9019a548aea21e6)
+#ifdef GPERF_VERSION
+#  if GPERF_VERSION < 301
+#    define SIZE_TYPE unsigned int
+#  else
+#    define SIZE_TYPE size_t
+#  endif
+#else
+#  define SIZE_TYPE size_t
+#endif
+// internal
+static const struct Dwg_DXFClass *in_word_set (register const char *str, register SIZE_TYPE len);
+
+enum apptypes
+{
   ODBXCLASS,
   ODBX_OR_A2000CLASS,
   A2000CLASS,

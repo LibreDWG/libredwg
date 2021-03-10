@@ -404,7 +404,22 @@ fi
 AM_CONDITIONAL(ENABLE_GCOV, test "x$enable_gcov" = "xtrue")
 
 AC_CHECK_PROGS([GPERF], [gperf])
+if test -n "$GPERF"
+then
+    AC_MSG_CHECKING([GPERF version])
+    [GPERF_VERSION=`"$GPERF" --version | head -n1 2>&1 | sed 's,GNU gperf ,,'`]
+    case $GPERF_VERSION in
+      1.*) GPERF_VERSION=$((100+${GPERF_VERSION:2:1})) ;;
+      2.*) GPERF_VERSION=$((200+${GPERF_VERSION:2:1})) ;;
+      3.*) GPERF_VERSION=$((300+${GPERF_VERSION:2:1})) ;;
+      4.*) GPERF_VERSION=$((400+${GPERF_VERSION:2:1})) ;;
+    esac
+    AC_MSG_RESULT([$GPERF_VERSION])
+    AC_DEFINE_UNQUOTED([GPERF_VERSION],[$GPERF_VERSION],
+       [versions earlier than 301 will have no size_t])
+fi
 AC_SUBST(GPERF)
+AC_SUBST(GPERF_VERSION)
 AM_CONDITIONAL(HAVE_GPERF, test -n "$GPERF")
 
 AC_MSG_CHECKING([for latest clang-format])
