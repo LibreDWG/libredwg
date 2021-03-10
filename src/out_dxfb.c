@@ -1812,6 +1812,8 @@ dxfb_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   for (j = 0; j < dwg->num_classes; j++)
     {
       const char *dxfname = dwg->dwg_class[j].dxfname;
+      if (!dxfname)
+        continue;
       // some classes are now builtin
       if (dat->version >= R_2004
           && (strEQc (dxfname, "ACDBPLACEHOLDER")
@@ -1866,6 +1868,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           }
         for (i = 0; i < _ctrl->num_entries; i++)
           {
+            if (!_ctrl->entries)
+              break;
+            if (!_ctrl->entries[i])
+              continue;
             obj = dwg_ref_object (dwg, _ctrl->entries[i]);
             if (obj && obj->type == DWG_TYPE_VPORT)
               {
@@ -1898,6 +1904,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         // here LTYPE_CONTINUOUS is already included
         for (i = 0; i < _ctrl->num_entries; i++)
           {
+            if (!_ctrl->entries)
+              break;
+            if (!_ctrl->entries[i])
+              continue;
             obj = dwg_ref_object (dwg, _ctrl->entries[i]);
             if (obj && obj->type == DWG_TYPE_LTYPE)
               {
@@ -1918,6 +1928,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= dwg_dxfb_LAYER_CONTROL (dat, ctrl);
         for (i = 0; i < _ctrl->num_entries; i++)
           {
+            if (!_ctrl->entries)
+              break;
+            if (!_ctrl->entries[i])
+              continue;
             obj = dwg_ref_object (dwg, _ctrl->entries[i]);
             if (obj && obj->type == DWG_TYPE_LAYER)
               {
@@ -1940,6 +1954,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= dwg_dxfb_STYLE_CONTROL (dat, ctrl);
         for (i = 0; i < _ctrl->num_entries; i++)
           {
+            if (!_ctrl->entries)
+              break;
+            if (!_ctrl->entries[i])
+              continue;
             obj = dwg_ref_object (dwg, _ctrl->entries[i]);
             if (obj && obj->type == DWG_TYPE_STYLE)
               {
@@ -1960,6 +1978,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= dwg_dxfb_VIEW_CONTROL (dat, ctrl);
         for (i = 0; i < _ctrl->num_entries; i++)
           {
+            if (!_ctrl->entries)
+              break;
+            if (!_ctrl->entries[i])
+              continue;
             obj = dwg_ref_object (dwg, _ctrl->entries[i]);
             if (obj && obj->type == DWG_TYPE_VIEW)
               error |= dwg_dxfb_VIEW (dat, obj);
@@ -1979,6 +2001,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= dwg_dxfb_UCS_CONTROL (dat, ctrl);
         for (i = 0; i < _ctrl->num_entries; i++)
           {
+            if (!_ctrl->entries)
+              break;
+            if (!_ctrl->entries[i])
+              continue;
             obj = dwg_ref_object (dwg, _ctrl->entries[i]);
             if (obj && obj->type == DWG_TYPE_UCS)
               {
@@ -2000,6 +2026,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= dwg_dxfb_APPID_CONTROL (dat, ctrl);
         for (i = 0; i < _ctrl->num_entries; i++)
           {
+            if (!_ctrl->entries)
+              break;
+            if (!_ctrl->entries[i])
+              continue;
             obj = dwg_ref_object (dwg, _ctrl->entries[i]);
             if (obj && obj->type == DWG_TYPE_APPID)
               {
@@ -2022,6 +2052,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         // ignoring morehandles
         for (i = 0; i < _ctrl->num_entries; i++)
           {
+            if (!_ctrl->entries)
+              break;
+            if (!_ctrl->entries[i])
+              continue;
             obj = dwg_ref_object (dwg, _ctrl->entries[i]);
             if (obj && obj->type == DWG_TYPE_DIMSTYLE)
               {
@@ -2045,6 +2079,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           error |= dwg_dxfb_VX_CONTROL (dat, ctrl);
           for (i = 0; i < _ctrl->num_entries; i++)
             {
+              if (!_ctrl->entries)
+                break;
+              if (!_ctrl->entries[i])
+                continue;
               obj = dwg_ref_object (dwg, _ctrl->entries[i]);
               if (obj && obj->type == DWG_TYPE_VX_TABLE_RECORD)
                 {
