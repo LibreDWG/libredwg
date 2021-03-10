@@ -37,7 +37,7 @@ bool dxf_has_STYLE_eed(Bit_Chain *restrict dat, const Dwg_Object_Object *restric
 bool dxf_has_xrefdep_vertbar(Bit_Chain *restrict dat, const char *name);
 bool dxf_is_xrefdep_name (Bit_Chain *restrict dat, const char *name);
 
-EXPORT int dwg_write_dxf (Bit_Chain *dat, Dwg_Data *dwg);
-EXPORT int dwg_write_dxfb (Bit_Chain *dat, Dwg_Data *dwg);
+EXPORT int dwg_write_dxf (Bit_Chain *dat, Dwg_Data *dwg) __nonnull_all;
+EXPORT int dwg_write_dxfb (Bit_Chain *dat, Dwg_Data *dwg) __nonnull_all;
 
 #endif

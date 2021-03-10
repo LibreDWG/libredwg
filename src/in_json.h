@@ -25,7 +25,7 @@
 #error in_dxf.h must be included after in_json.h because of FORMAT_BD
 #endif
 
-EXPORT int dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
+EXPORT int dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg) __nonnull_all;
 //TODO needed? See [GH #136]
 //void dwg_injson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 

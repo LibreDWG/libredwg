@@ -515,7 +515,12 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
 #define VALUE_HANDLE_NAME(value, dxf, table)                                  \
   {                                                                           \
     Dwg_Object_Ref *ref = value;                                              \
-    if (ref && ref->obj && ref->obj->supertype == DWG_SUPERTYPE_OBJECT)       \
+    if (ref && obj && obj->parent                                             \
+        && (!ref->obj || ref->obj->supertype != DWG_SUPERTYPE_OBJECT          \
+            || ref->obj->fixedtype != DWG_TYPE_##table))                      \
+      ref->obj = dwg_resolve_handle (obj->parent, ref->absolute_ref);         \
+    if (ref && ref->obj && ref->obj->supertype == DWG_SUPERTYPE_OBJECT        \
+        && ref->obj->fixedtype == DWG_TYPE_##table)                           \
       {                                                                       \
         VALUE_TV (ref->obj->tio.object->tio.table->name, dxf)                 \
       }                                                                       \
@@ -2288,6 +2293,7 @@ dxfb_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 int
 dwg_write_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
+  int error = 0;
   const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
@@ -2295,6 +2301,7 @@ dwg_write_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     dat->from_version = dat->version;
   if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)
     dwg_fixup_BLOCKS_entities (dwg);
+  dwg_resolve_objectrefs_silent (dwg);
 
   fprintf (dat->fh, "AutoCAD Binary DXF\r\n%c%c", 0x1a, 0);
   //VALUE_TV (PACKAGE_STRING, 999); // not used in binary DXF

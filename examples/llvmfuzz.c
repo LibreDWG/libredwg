@@ -162,7 +162,7 @@ int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
           dwg_write_dxf (&out_dat, &dwg);
           free (out_dat.chain);
           break;
-      case 20: // disabled for now
+      case 2: // experimental
           dwg_write_dxfb (&out_dat, &dwg);
           free (out_dat.chain);
           break;
