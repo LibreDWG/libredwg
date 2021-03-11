@@ -12650,7 +12650,7 @@ EXPORT int
 dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   // const int minimal = dwg->opts & DWG_OPTS_MINIMAL;
-  Dxf_Pair *pair;
+  Dxf_Pair *pair = NULL;
   int error = 0;
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
