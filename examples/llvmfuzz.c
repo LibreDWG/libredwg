@@ -11,13 +11,13 @@
 /*****************************************************************************/
 
 /*
- * llvmfuzz.c: libfuzzer testing, esp. for oss-fuzz.
+ * llvmfuzz.c: libfuzzer testing, esp. for oss-fuzz. with libfuzzer or standalone
  * written by Reini Urban
  */
 
-// requires -fsanitize=fuzzer
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 //#include <unistd.h>
 
 #include <dwg.h>
@@ -34,6 +34,8 @@
 #  include "in_dxf.h"
 #endif
 
+extern int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size);
+
 // libfuzzer limitation:
 // Enforce NULL-termination of the input buffer, to avoid bugus reports. copy it.
 // Problematic is mostly strtol(3) which also works with \n termination.
@@ -47,7 +49,9 @@ static int enforce_null_termination(Bit_Chain *dat, bool enforce)
     // Allow \n termination
     if (!enforce && (c == '\0' || c == '\n'))
       return 0;
-    //fprintf (stderr, "llvmfuzz: Enforce libfuzzer buffer NULL termination\n");
+#ifdef STANDALONE
+    fprintf (stderr, "llvmfuzz_standalone: enforce libfuzzer buffer NULL termination\n");
+#endif
     copy = malloc (dat->size + 1);
     memcpy (copy, dat->chain, dat->size);
     copy[dat->size] = '\0';
@@ -61,15 +65,15 @@ int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
     Bit_Chain out_dat = { NULL, 0, 0, 0, 0 };
     int copied = 0;
     struct ly_ctx *ctx = NULL;
+    unsigned int possible_outputformats;
+    int out;
 
     static char tmp_file[256];
     dat.chain = (unsigned char *)data;
     dat.size = size;
-
-    memset (&out_dat, 0, sizeof (out_dat));
     memset (&dwg, 0, sizeof (dwg));
 
-    const unsigned int possible_outputformats =
+    possible_outputformats =
 #ifdef DISABLE_DXF
 # ifdef DISABLE_JSON
         1;
@@ -120,6 +124,8 @@ int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
     else
       return 0;
 #endif
+
+    memset (&out_dat, 0, sizeof (out_dat));
     bit_chain_set_version (&out_dat, &dat);
     if (copied)
       bit_chain_free (&dat);
@@ -127,17 +133,28 @@ int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
 #if 0
     snprintf (tmp_file, 255, "/tmp/llvmfuzzer%d.out", getpid());
     tmp_file[255] = '\0';
-#elif _WIN32
+#elif defined _WIN32
     strcpy (tmp_file, "NUL");
 #else
     strcpy (tmp_file, "/dev/null");
 #endif
     out_dat.fh = fopen(tmp_file, "w");
 
-    switch (rand () % possible_outputformats)
+    out = rand () % possible_outputformats;
+#ifdef STANDALONE
+    if (getenv("OUT"))
+      out = strtol (getenv("OUT"), NULL, 10);
+#endif
+    switch (out)
       {
       case 0:
-          switch (rand() % 6)
+        {
+          int ver = rand() % 6;
+#ifdef STANDALONE
+          if (getenv("VER"))
+            ver = strtol (getenv("VER"), NULL, 10);
+#endif
+          switch (ver)
             {
             case 0:
               out_dat.version = dwg.header.version = R_13;
@@ -151,12 +168,14 @@ int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
             case 3: // favor this one
             case 4:
             case 5:
+            default:
               out_dat.version = dwg.header.version = R_2000;
               break;
             }
           dwg_encode (&dwg, &out_dat);
           free (out_dat.chain);
           break;
+        }
 #ifndef DISABLE_DXF
       case 1:
           dwg_write_dxf (&out_dat, &dwg);
@@ -185,3 +204,48 @@ int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
     return 0;
 }
 
+#ifdef STANDALONE
+# ifdef __GNUC__
+__attribute__((weak))
+# endif
+extern int LLVMFuzzerInitialize(int *argc, char ***argv);
+
+static int
+usage (void)
+{
+  printf ("\nUsage: OUT=0 VER=3 llvmfuzz_standalone INPUT...");
+  return 1;
+}
+// llvmfuzz_standalone reproducer, see OUT and VER env vars
+int
+main (int argc, char *argv[])
+{
+  if (argc <= 1 || !*argv[1])
+    return usage ();
+  if (LLVMFuzzerInitialize)
+    LLVMFuzzerInitialize (&argc, &argv);
+  for (int i = 1; i < argc; i++)
+    {
+      unsigned char *buf;
+      FILE *f = fopen (argv[i], "rb");
+      size_t len, n_read;
+      if (!f)
+        continue;
+      // libFuzzer design bug, not zero-terminating its text buffer
+      fseek (f, 0, SEEK_END);
+      len = ftell (f);
+      fseek (f, 0, SEEK_SET);
+      buf = (unsigned char *)malloc (len);
+      n_read = fread (buf, 1, len, f);
+      fclose (f);
+      assert (n_read == len);
+      fprintf (stderr, "llvmfuzz_standalone %s [%zu]\n", argv[i], len);
+      LLVMFuzzerTestOneInput (buf, len);
+      free (buf);
+      // Bit_Chain dat = { 0 };
+      // dat_read_file (&dat, fp, argv[i]);
+      // LLVMFuzzerTestOneInput (dat.chain, dat.size);
+      // bit_free_chain (&dat);
+    }
+}
+#endif

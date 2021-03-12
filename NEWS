@@ -19,6 +19,8 @@ Minor bugfixes:
     31574, 31564, 31542, 31533, 31516, 31470, 31462, 31456, 31454, 31450, 31436,
     31432, 31426, 31425, 31422, 31419.
   * dwgadd: Fixed sscanf usage on Windows
+Minor features:
+  * Added examples/llvmfuzz_standalone
 
 LibreDWG version 0.12.3 - 2021/02/26 - beta:
 
