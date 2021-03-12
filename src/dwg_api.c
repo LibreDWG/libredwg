@@ -24410,51 +24410,54 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
   return _obj;
 }
 
-#define API_ADD_TABLE(record, control, ...)                                   \
-  Dwg_Object_##record *_record = NULL;                                        \
-  /* first check TABLE_CONTROL */                                             \
-  Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_##control);          \
-  Dwg_Object_##control *_ctrl;                                                \
-  if (!ctrl || !ctrl->tio.object || !ctrl->tio.object->tio.control)           \
-    {                                                                         \
-      API_ADD_OBJECT (control);                                               \
-      dwg->header_vars.control##_OBJECT                                       \
-          = dwg_add_handleref (dwg, 3, obj->handle.value, obj);               \
-      LOG_TRACE (#control "_OBJECT = " FORMAT_REF "\n",                       \
-                 ARGS_REF (dwg->header_vars.control##_OBJECT));               \
-      dwg->header_vars.control##_OBJECT->obj = obj;                           \
-      ctrl = obj;                                                             \
-      _ctrl = _obj;                                                           \
-    }                                                                         \
-  else                                                                        \
-    {                                                                         \
-      _ctrl = ctrl->tio.object->tio.control;                                  \
-    }                                                                         \
-  if (name || strEQc (#record, "BLOCK_HEADER"))                               \
-    {                                                                         \
-      API_ADD_OBJECT (record);                                                \
-      _record = _obj;                                                         \
-      _obj->name = dwg_add_u8_input (dwg, name);                              \
-      LOG_TRACE (#record ".name = %s\n", name);                               \
-      __VA_ARGS__                                                             \
-      if (_ctrl->entries)                                                     \
-        _ctrl->entries = realloc (_ctrl->entries, (_ctrl->num_entries + 1)    \
-                                                      * sizeof (BITCODE_H));  \
-      else                                                                    \
-        _ctrl->entries = calloc (_ctrl->num_entries + 1, sizeof (BITCODE_H)); \
-      _ctrl->entries[_ctrl->num_entries]                                      \
-          = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);              \
-      LOG_TRACE (#control ".entries[%d] = " FORMAT_REF "\n",                  \
-                 _ctrl->num_entries,                                          \
-                 ARGS_REF (_ctrl->entries[_ctrl->num_entries]));              \
-      _ctrl->num_entries++;                                                   \
-      obj->tio.object->ownerhandle                                            \
-          = dwg_add_handleref (dwg, 4, ctrl->handle.value, obj);              \
-      _obj->is_xref_ref = 1;                                                  \
-      return _obj;                                                            \
-    }                                                                         \
-  else                                                                        \
-    return NULL
+#  define API_ADD_TABLE(record, control, ...)                                 \
+    Dwg_Object_##record *_record = NULL;                                      \
+    /* first check TABLE_CONTROL */                                           \
+    Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_##control);        \
+    Dwg_Object_##control *_ctrl;                                              \
+    unsigned long ctrlhdl;                                                    \
+    if (!ctrl || !ctrl->tio.object || !ctrl->tio.object->tio.control)         \
+      {                                                                       \
+        API_ADD_OBJECT (control);                                             \
+        dwg->header_vars.control##_OBJECT                                     \
+            = dwg_add_handleref (dwg, 3, obj->handle.value, obj);             \
+        LOG_TRACE (#control "_OBJECT = " FORMAT_REF "\n",                     \
+                   ARGS_REF (dwg->header_vars.control##_OBJECT));             \
+        dwg->header_vars.control##_OBJECT->obj = obj;                         \
+        ctrl = obj;                                                           \
+        _ctrl = _obj;                                                         \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        _ctrl = ctrl->tio.object->tio.control;                                \
+      }                                                                       \
+    ctrlhdl = ctrl->handle.value;                                             \
+    if (name || strEQc (#record, "BLOCK_HEADER"))                             \
+      {                                                                       \
+        API_ADD_OBJECT (record);                                              \
+        _record = _obj;                                                       \
+        _obj->name = dwg_add_u8_input (dwg, name);                            \
+        LOG_TRACE (#record ".name = %s\n", name);                             \
+        __VA_ARGS__                                                           \
+        if (_ctrl->entries)                                                   \
+          _ctrl->entries = realloc (                                          \
+              _ctrl->entries, (_ctrl->num_entries + 1) * sizeof (BITCODE_H)); \
+        else                                                                  \
+          _ctrl->entries                                                      \
+              = calloc (_ctrl->num_entries + 1, sizeof (BITCODE_H));          \
+        _ctrl->entries[_ctrl->num_entries]                                    \
+            = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);            \
+        LOG_TRACE (#control ".entries[%d] = " FORMAT_REF "\n",                \
+                   _ctrl->num_entries,                                        \
+                   ARGS_REF (_ctrl->entries[_ctrl->num_entries]));            \
+        _ctrl->num_entries++;                                                 \
+        obj->tio.object->ownerhandle                                          \
+            = dwg_add_handleref (dwg, 4, ctrlhdl, obj);                       \
+        _obj->is_xref_ref = 1;                                                \
+        return _obj;                                                          \
+      }                                                                       \
+    else                                                                      \
+      return NULL
 
 EXPORT Dwg_Object_BLOCK_HEADER *
 dwg_add_BLOCK_HEADER (Dwg_Data *restrict dwg, const char *restrict name)
