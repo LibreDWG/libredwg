@@ -41,6 +41,7 @@ typedef struct _dxf_field
 } Dxf_Field;
 
 // to search obj ptr in array
+/*
 typedef struct _dxf_objs
 {
   Dwg_Object *obj;
@@ -48,6 +49,7 @@ typedef struct _dxf_objs
   int size_fields;
   Dxf_Field *fields;
 } Dxf_Objs;
+*/
 
 typedef struct _dxf_pair
 {

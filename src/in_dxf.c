@@ -70,9 +70,9 @@ static array_hdls *header_hdls = NULL;
 static array_hdls *eed_hdls = NULL;
 static array_hdls *obj_hdls = NULL;
 
-static long num_dxf_objs;  // how many elements are added
-static long size_dxf_objs; // how many elements are allocated
-static Dxf_Objs *dxf_objs;
+//static long num_dxf_objs;  // how many elements are added
+//static long size_dxf_objs; // how many elements are allocated
+//static Dxf_Objs *dxf_objs;
 
 #define EXPECT_DXF(nam, field, dxf)                                           \
   if (pair == NULL || pair->code != dxf)                                      \
@@ -12684,9 +12684,9 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   dat->opts |= DWG_OPTS_INDXF;
   dwg->opts |= DWG_OPTS_INDXF;
-  num_dxf_objs = 0;
-  size_dxf_objs = 1000;
-  dxf_objs = (Dxf_Objs *)malloc (1000 * sizeof (Dxf_Objs));
+  //num_dxf_objs = 0;
+  //size_dxf_objs = 1000;
+  //dxf_objs = (Dxf_Objs *)malloc (1000 * sizeof (Dxf_Objs));
   if (!dwg->object_map)
     dwg->object_map = hash_new (dat->size / 1000);
   // cannot rely on ref->obj during realloc's
