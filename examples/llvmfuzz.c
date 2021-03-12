@@ -205,10 +205,12 @@ int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
 }
 
 #ifdef STANDALONE
+/*
 # ifdef __GNUC__
 __attribute__((weak))
 # endif
 extern int LLVMFuzzerInitialize(int *argc, char ***argv);
+*/
 
 static int
 usage (void)
@@ -222,8 +224,10 @@ main (int argc, char *argv[])
 {
   if (argc <= 1 || !*argv[1])
     return usage ();
+  /* works only on linux
   if (LLVMFuzzerInitialize)
     LLVMFuzzerInitialize (&argc, &argv);
+  */
   for (int i = 1; i < argc; i++)
     {
       unsigned char *buf;

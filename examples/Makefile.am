@@ -45,7 +45,11 @@ llvmfuzz_SOURCES            = llvmfuzz.c
 llvmfuzz_CFLAGS             = $(CFLAGS) $(AM_CFLAGS) -fsanitize=fuzzer,address,undefined -fno-omit-frame-pointer
 llvmfuzz_LDADD              = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo -lm
 llvmfuzz_standalone_SOURCES = llvmfuzz.c
+if HAVE_MINGW
+llvmfuzz_standalone_CFLAGS  = $(CFLAGS) $(AM_CFLAGS) -DSTANDALONE
+else
 llvmfuzz_standalone_CFLAGS  = $(CFLAGS) $(AM_CFLAGS) -DSTANDALONE -fsanitize=address,undefined -fno-omit-frame-pointer
+endif
 llvmfuzz_standalone_LDADD   = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo -lm
 
 all: $(check_PROGRAMS)
