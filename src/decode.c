@@ -5525,7 +5525,11 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
 
   /* Until here dat is absolute. now restrict it */
   bit_reset_chain (dat);
-  if (obj->size > dat->size || dat->chain + dat->size > abs_dat.chain + abs_dat.size)
+  if (obj->size > dat->size ||
+      dat->size > abs_dat.size ||
+      dat->chain + dat->size < dat->chain ||
+      abs_dat.chain + abs_dat.size < abs_dat.chain ||
+      dat->chain + dat->size > abs_dat.chain + abs_dat.size)
     {
       LOG_TRACE ("\n");
       LOG_WARN ("Invalid object size %u > %ld. Would overflow", obj->size,
