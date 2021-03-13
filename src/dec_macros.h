@@ -822,6 +822,8 @@
                  dat->bit, bit_position (dat));                               \
     }
 #define _DEBUG_HERE(objsize)                                                  \
+  if (dat->size < dat->byte)                                                  \
+    return DWG_ERR_VALUEOUTOFBOUNDS;                                          \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
       Bit_Chain here = *dat;                                                  \
@@ -838,7 +840,7 @@
       tmp = bit_read_TF (dat, rs);                                            \
       if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)                                \
         {                                                                     \
-          bit_fprint_bits (OUTPUT, tmp, rs*8);                                \
+          bit_fprint_bits (OUTPUT, tmp, rs * 8);                              \
           HANDLER (OUTPUT, "\n");                                             \
         }                                                                     \
       LOG_TRACE_TF (tmp, rs);                                                 \
