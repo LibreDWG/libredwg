@@ -431,7 +431,7 @@ AM_CFLAGS += @GCOV_CFLAGS@
 LIBS      += @GCOV_LIBS@
 gcov: $(check_PROGRAMS) check
 	-test -f gcov.log && rm gcov.log
-	$(GCOV) *.gcno | tee -a $(builddir)/gcov.log
+	$(GCOV) -lp *.gcno | tee -a $(builddir)/gcov.log
 
 CLEANFILES  += *.gcov *.gcno *.gcda gcov.log
 endif

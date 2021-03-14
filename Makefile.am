@@ -225,8 +225,15 @@ gcov: check
 	$(MAKE) -C src gcov
 	$(MAKE) -C programs gcov
 	$(MAKE) -C examples gcov
+cover: gcov
 	gcov2perl test/*/*.gcov src/*.gcov programs/*.gcov examples/*.gcov
 	cover -no-gcov
+codecov: check
+	curl -s https://codecov.io/bash -o codecov_io.sh
+	chmod +x codecov_io.sh
+	bash codecov_io.sh -X test -X bindings
+coveralls: gcov
+	coveralls -e test -e bindings
 endif
 
 $(BUILT_SOURCES):
@@ -235,6 +242,9 @@ $(BUILT_SOURCES):
 CLEANFILES = check-dwg.log check-dwg-valgrind.log check-dxf.log \
              check-dwg.log~ check-dwg-valgrind.log~ check-dxf.log~ \
 	     *_20*.dxf *_r1*.dxf example_*.dxf.log
+if ENABLE_GCOV
+CLEANFILES += codecov_io.sh *.gcov
+endif
 DISTCLEANFILES  = logs-all.sh dynapi_test_all.sh unit_testing_all.sh log json dwg dxf svg rw libredwg.pc
 MAINTAINERCLEANFILES  = *~ *.log *.dxf *.json *.dwg cover_db .analysis
 
