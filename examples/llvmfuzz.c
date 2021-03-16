@@ -47,8 +47,8 @@ static int enforce_null_termination(Bit_Chain *dat, bool enforce)
     if (!dat->size)
       return 0;
     c = dat->chain[dat->size - 1];
-    // Allow \n termination
-    if (!enforce && (c == '\0' || c == '\n'))
+    // Allow \n termination without \0 in DXF? No, still crashes
+    if (!enforce && ((c == '\n' && c+1 == '\0') || c == '\0'))
       return 0;
 #ifdef STANDALONE
     fprintf (stderr, "llvmfuzz_standalone: enforce libfuzzer buffer NULL termination\n");

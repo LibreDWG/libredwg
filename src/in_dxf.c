@@ -253,8 +253,8 @@ dxf_skip_ws (Bit_Chain *dat)
       dat->byte = dat->size;                                                  \
       return (rettype)ret;                                                    \
     }                                                                         \
-  else                                                                        \
-    num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);               \
+  errno = 0;                                                                  \
+  num = strtol ((char *)&dat->chain[dat->byte], &endptr, 10);                 \
   if (endptr)                                                                 \
     {                                                                         \
       if (endptr == (char *)&dat->chain[dat->byte])                           \
@@ -12679,6 +12679,12 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       !memcmp (dat->chain, "MC0.0", 4))
     {
       LOG_ERROR ("This is a DWG, not a DXF\n");
+      return DWG_ERR_INVALIDDWG;
+    }
+  /* Fuzzers like to skip zero-termination. And fail loudly on strtol */
+  if (!memchr (&dat->chain[dat->size], '\0', 2))
+    {
+      LOG_ERROR ("This buffer is not zero-terminated\n");
       return DWG_ERR_INVALIDDWG;
     }
 
