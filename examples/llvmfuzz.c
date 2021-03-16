@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <assert.h>
 //#include <unistd.h>
+#include <sys/stat.h>
 
 #include <dwg.h>
 #include "common.h"
@@ -232,17 +233,37 @@ main (int argc, char *argv[])
     {
       unsigned char *buf;
       FILE *f = fopen (argv[i], "rb");
-      size_t len, n_read;
+      struct stat attrib;
+      long len;
+      size_t n_read;
+      int fd;
       if (!f)
-        continue;
+        {
+          fprintf(stderr, "Illegal file argument %s\n", argv[i]);
+          continue;
+        }
+      fd = fileno (f);
+      if (fd < 0
+          || fstat (fd, &attrib)
+          || !(S_ISREG (attrib.st_mode)
+#ifndef _WIN32
+            || S_ISLNK (attrib.st_mode)
+#endif
+            ))
+        {
+          fprintf(stderr, "Illegal input file \"%s\"\n", argv[i]);
+          continue;
+        }
       // libFuzzer design bug, not zero-terminating its text buffer
       fseek (f, 0, SEEK_END);
       len = ftell (f);
       fseek (f, 0, SEEK_SET);
+      if (len <= 0)
+        continue;
       buf = (unsigned char *)malloc (len);
       n_read = fread (buf, 1, len, f);
       fclose (f);
-      assert (n_read == len);
+      assert ((long)n_read == len);
       fprintf (stderr, "llvmfuzz_standalone %s [%zu]\n", argv[i], len);
       LLVMFuzzerTestOneInput (buf, len);
       free (buf);
