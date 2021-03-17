@@ -12278,12 +12278,11 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 return DWG_ERR_INVALIDDWG;
             }
           else
-            DXF_RETURN_ENDSEC (0)
-          else
-          {
-            LOG_WARN ("Unhandled 0 %s (%s)", name, "objects");
-            break;
-          }
+            {
+              DXF_RETURN_ENDSEC (0);
+              LOG_WARN ("Unhandled 0 %s (%s)", name, "objects");
+              dxf_free_pair (pair);
+            }
         }
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
@@ -12293,42 +12292,28 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+// redirected from ACDSDATA for now
 static int
 dxf_unknownsection_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  char name[80];
   Dxf_Pair *pair = dxf_read_pair (dat);
-
   // until 0 ENDSEC
   while (pair)
     {
       while (pair && pair->code == 0 && pair->value.s)
         {
-          char *dxfname = strdup (pair->value.s);
-          strncpy (name, dxfname, 79);
-          name[79] = '\0';
-          object_alias (name);
-          if (is_dwg_object (name))
-            {
-              dxf_free_pair (pair);
-              pair = new_object (name, dxfname, dat, dwg, 0, NULL);
-              if (!pair)
-                return DWG_ERR_INVALIDDWG;
-            }
-          else
-            DXF_RETURN_ENDSEC (0)
-          else
-          {
-            LOG_WARN ("Unhandled 0 %s (%s)", name, "unknownsection");
-            break;
-          }
+          DXF_RETURN_ENDSEC (0);
+          LOG_WARN ("Unhandled 0 %s (%s)", pair->value.s, "unknownsection");
+          dxf_free_pair (pair);
+          pair = dxf_read_pair (dat);
+          DXF_CHECK_EOF;
         }
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
       DXF_CHECK_EOF;
     }
   dxf_free_pair (pair);
-  return 0;
+  return DWG_ERR_INVALIDTYPE;
 }
 
 // read to THUMBNAIL dwg->thumbnail, size 90. not entity->preview
@@ -12395,6 +12380,7 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 // read to AcDs, TODO
+// SECTION ACDSDATA: 0 ACDSSCHEMA, 0 ACDSRECORD
 static int
 dxf_acds_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -12846,6 +12832,11 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               pair = NULL;
               error = dxf_unknownsection_read (dat, dwg);
             }
+        }
+      else
+        {
+          LOG_ERROR ("Expected string SECTION");
+          dxf_free_pair (pair);
         }
     }
   if (pair != NULL && pair->code == 0 &&
