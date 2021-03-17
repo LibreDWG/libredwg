@@ -1147,8 +1147,7 @@ cquote (char *restrict dest, const int len, const char *restrict src)
       else
         *dest++ = c;
     }
-  if (dest < endp)
-    *dest = 0; // add final delim, skipped above
+  d[len - 1] = '\0'; // add final delim, skipped above
   return d;
 }
 
