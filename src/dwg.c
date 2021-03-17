@@ -109,7 +109,7 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
       dat->size = 0;
       return DWG_ERR_IOERROR;
     }
-  dat->chain[dat->size] = '\0';  // ensure zero-terminatation for strstr
+  dat->chain[dat->size] = '\0';  // ensure zero-termination for strstr, strtol, ...
   return 0;
 }
 
@@ -135,6 +135,7 @@ dat_read_size (Bit_Chain *restrict dat)
       dat->chain = NULL;
       return DWG_ERR_IOERROR;
     }
+  dat->chain[dat->size] = '\0';  // ensure zero-termination
   return 0;
 }
 
@@ -343,15 +344,19 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
       dat.size = 0;
       return DWG_ERR_IOERROR;
     }
-  // properly end the buffer for strtol()/... readers
-  dat.chain[size] = '\n';
-  dat.chain[size + 1] = '\0';
   if (size < 256)
     {
       LOG_ERROR ("File %s too small, %lu byte.\n", filename,
                  (long unsigned int)size)
       return DWG_ERR_IOERROR;
     }
+  // properly end the buffer for strtol()/... readers
+  if (dat.chain[size-1] != '\n')
+    {
+      dat.chain[size] = '\n';
+      dat.size++;
+    }
+  dat.chain[size] = '\0';
 
   /* Fail on DWG */
   if (!memcmp (dat.chain, "AC10", 4) ||
