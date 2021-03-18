@@ -2,7 +2,7 @@
 # See https://cirrus-ci.org/guide/FreeBSD/
 freebsd_instance:
   image_family: freebsd-12-2
-
+  cpu: 4
 task:
   auto_cancellation: $CIRRUS_BRANCH != 'master' && $CIRRUS_BRANCH !=~ 'smoke/.*'
   only_if: $CIRRUS_BRANCH =~ 'smoke/.*' || $CIRRUS_BRANCH == 'master'
