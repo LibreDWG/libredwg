@@ -6448,12 +6448,16 @@ DWG_OBJECT (VBA_PROJECT)
 #ifndef IS_JSON
     FIELD_BL (data_size, 90);
 #endif
-    if (_obj->data_size < obj->size)
+#ifndef IS_FREE
+    if (!obj->size || _obj->data_size < obj->size)
       {
         FIELD_BINARY (data, FIELD_VALUE (data_size), 310);
       }
     else
       LOG_ERROR ("Invalid data_size ignored");
+#else
+    FIELD_BINARY (data, FIELD_VALUE (data_size), 310);
+#endif
 
     START_OBJECT_HANDLE_STREAM;
   }
