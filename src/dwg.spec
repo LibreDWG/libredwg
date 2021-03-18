@@ -2159,12 +2159,15 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
               LOG_TRACE ("default block_size[0] = %d\n", (int)FIELD_VALUE (block_size[0]));
               num_blocks = 1;
             }
+          /* insecure. e.g. oss-fuzz issue 32165
+             all inouts: dwg, injson and indxf have correct num_blocks values
           else if (!num_blocks)
             {
               num_blocks = 0;
               for (i = 0; FIELD_VALUE (block_size[i]); i++)
                 num_blocks++;
             }
+          */
           LOG_TRACE ("acis_data:\n%s\n", FIELD_VALUE (acis_data));
           for (i = 0; FIELD_VALUE (block_size[i]) && i < num_blocks; i++)
             {
