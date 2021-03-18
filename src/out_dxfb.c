@@ -2141,6 +2141,10 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
     for (i = 0; i < _ctrl->num_entries; i++)
       {
+        if (!_ctrl->entries)
+          break;
+        if (!_ctrl->entries[i])
+          continue;
         obj = dwg_ref_object (dwg, _ctrl->entries[i]);
         if (obj && obj->type == DWG_TYPE_BLOCK_HEADER
             && obj != mspace
@@ -2211,6 +2215,7 @@ dxfb_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
     {
       if (obj->supertype == DWG_SUPERTYPE_ENTITY
           && obj->fixedtype != DWG_TYPE_ENDBLK
+          && obj->tio.entity != NULL
           && (obj->tio.entity->entmode != 2 ||
               (obj->tio.entity->ownerhandle != NULL
                && obj->tio.entity->ownerhandle->absolute_ref != mspace_ref
