@@ -1101,22 +1101,23 @@ cquote (char *restrict dest, const int len, const char *restrict src)
 {
   char c;
   char *d = dest;
-  const char* endp = dest + len;
+  const char* dend = dest + len;
+  const char* send = src + strlen(src);
   char *s = (char *)src;
-  while ((c = *s++) && dest < endp)
+  while ((s < send) && (c = *s++) && dest < dend)
     {
-      if (c == '\n' && dest+1 < endp)
+      if (c == '\n' && dest+1 < dend)
         {
           *dest++ = '^';
           *dest++ = 'J';
         }
-      else if (c == '\r' && dest+1 < endp)
+      else if (c == '\r' && dest+1 < dend)
         {
           *dest++ = '^';
           *dest++ = 'M';
         }
       // convert shiftjis \M+1xxxx to \U+xxxx
-      else if (c == '\\' && dest+7 < endp && memBEGINc (s, "M+1"))
+      else if (c == '\\' && dest+7 < dend && memBEGINc (s, "M+1"))
         { // e.g. \M+1(8140) => \U+3000, 82a0 => 3042
           uint32_t x;
           sscanf (&s[3], "%4X", &x);
@@ -1134,7 +1135,7 @@ cquote (char *restrict dest, const int len, const char *restrict src)
             x -= 0x525e; // our safe range of Hiragana + Katakana letters
           if (x < 0x10100)
             {
-              snprintf (dest, endp - dest, "\\U+%04X", x);
+              snprintf (dest, dend - dest, "\\U+%04X", x);
               dest += 7;
               s += 7;
             }
