@@ -12282,6 +12282,8 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               DXF_RETURN_ENDSEC (0);
               LOG_WARN ("Unhandled 0 %s (%s)", name, "objects");
               dxf_free_pair (pair);
+              pair = dxf_read_pair (dat);
+              DXF_CHECK_EOF;
             }
         }
       dxf_free_pair (pair);
