@@ -1425,9 +1425,9 @@ dwg_dxfb_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                                                                               \
     VERSIONS (R_13, R_2000)                                                   \
     {                                                                         \
-      Dwg_Object *last_vertex = _obj->last_vertex->obj;                       \
+      Dwg_Object *last_vertex = _obj->last_vertex ? _obj->last_vertex->obj : NULL; \
       Dwg_Object *o = _obj->first_vertex ? _obj->first_vertex->obj : NULL;    \
-      if (!o)                                                                 \
+      if (!o || !last_vertex)                                                 \
         return DWG_ERR_INVALIDHANDLE;                                         \
       if (o->fixedtype == DWG_TYPE_VERTEX_##token)                            \
         error |= dwg_dxfb_VERTEX_##token (dat, o);                            \
