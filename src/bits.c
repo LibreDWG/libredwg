@@ -1509,6 +1509,17 @@ bit_read_bits (Bit_Chain *dat, unsigned long bits)
 void
 bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain, unsigned int length)
 {
+  if (!chain)
+    {
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+      LOG_ERROR ("Empty TF with length %u", length);
+      if (length <= 128) // either chain or length is wrong
+        {
+          for (unsigned int i = 0; i < length; i++)
+            bit_write_RC (dat, 0);
+        }
+      return;
+    }
   if (dat->bit == 0 && dat->byte + length < dat->size)
     {
       memcpy (&dat->chain[dat->byte], chain, length);

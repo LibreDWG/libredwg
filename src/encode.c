@@ -4623,8 +4623,16 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
         case DWG_VT_BINARY:
           if (dat->byte + rbuf->value.str.size > end)
             break;
-          bit_write_RC (dat, rbuf->value.str.size);
-          bit_write_TF (dat, (BITCODE_TF)rbuf->value.str.u.data, rbuf->value.str.size);
+          // 128 is a tradeoff, which of both data is wrong or right.
+          if (!rbuf->value.str.u.data && rbuf->value.str.size > 128)
+            {
+              LOG_ERROR("Empty xdata string. Write size %u as 0", (unsigned)rbuf->value.str.size);
+              bit_write_RC (dat, 0);
+            }
+          else
+            bit_write_RC (dat, rbuf->value.str.size);
+          if (rbuf->value.str.size)
+            bit_write_TF (dat, (BITCODE_TF)rbuf->value.str.u.data, rbuf->value.str.size);
           LOG_TRACE ("xdata[%u]: [TF %d %d] ", j, rbuf->value.str.size,
                      rbuf->type);
           LOG_TRACE_TF (rbuf->value.str.u.data, rbuf->value.str.size);
