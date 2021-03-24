@@ -2440,9 +2440,9 @@ DWG_OBJECT (DICTIONARY)
             const uint8_t wstr3[] = { 'S', 0, 'P', 0, 'A', 0, 'T', 0,
                                       'I', 0, 'A', 0, 'L', 0,  0,  0 };
 #endif
-            if (bit_eq_TU (text, (BITCODE_TU)wstr1) ||
-                bit_eq_TU (text, (BITCODE_TU)wstr2) ||
-                bit_eq_TU (text, (BITCODE_TU)wstr3))
+            if (text && (bit_eq_TU (text, (BITCODE_TU)wstr1) ||
+                         bit_eq_TU (text, (BITCODE_TU)wstr2) ||
+                         bit_eq_TU (text, (BITCODE_TU)wstr3)))
               dxf = 360;
           }
         else if (dxf == 350)
@@ -3003,8 +3003,9 @@ DWG_OBJECT (LAYER)
   FIELD_HANDLE (ltype, 5, 6);
   DXF {
     SINCE (R_2000) {
-      if (bit_eq_T (dat, _obj->name, "Defpoints") ||
-          bit_eq_T (dat, _obj->name, "DEFPOINTS"))
+      if (_obj->name &&
+          (bit_eq_T (dat, _obj->name, "Defpoints") ||
+           bit_eq_T (dat, _obj->name, "DEFPOINTS")))
       {
         _obj->plotflag = 0;
         FIELD_B (plotflag, 290);
