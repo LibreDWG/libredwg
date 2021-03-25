@@ -9664,6 +9664,12 @@ new_object (char *restrict name, char *restrict dxfname,
               char revision_guid[39];
               char *p = &revision_guid[0];
               unsigned u[3];
+              if (!pair->value.s)
+                {
+                  LOG_ERROR ("Invalid %s.revision_guid %s", obj->name,
+                             revision_guid);
+                  break;
+                }
               // "{00000100-0100-00CA-D300-80010A7B10C3}"
               strncpy (revision_guid, pair->value.s, 38);
               revision_guid[38] = '\0';
