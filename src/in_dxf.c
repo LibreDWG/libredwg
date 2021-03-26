@@ -512,6 +512,11 @@ dxf_free_pair (Dxf_Pair *pair)
       free (pair->value.s);
       pair->value.s = NULL;
     }
+  else if (pair->code == 0 || pair->code == 2)
+    {
+      free (pair->value.s);
+      pair->value.s = NULL;
+    }
   free (pair);
   pair = NULL;
 }
@@ -11928,13 +11933,13 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     {
                       _obj->strings_area = (BITCODE_TF)xcalloc (512, 1);
                       if (!_obj->strings_area)
-                        return DWG_ERR_OUTOFMEM;
+                        goto outofmem;
                     }
                   if (dwg->header.version <= R_2004)
                     {
                       _obj->strings_area = (BITCODE_TF)xcalloc (256, 1);
                       if (!_obj->strings_area)
-                        return DWG_ERR_OUTOFMEM;
+                        goto outofmem;
                     }
                 }
             }
@@ -11974,7 +11979,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     _ctrl->entries = (BITCODE_H *)realloc (
                         _ctrl->entries, num_entries * sizeof (BITCODE_H));
                     if (num_entries && !_ctrl->entries)
-                      return DWG_ERR_OUTOFMEM;
+                      goto outofmem;
                     _ctrl->num_entries = num_entries;
                     LOG_TRACE ("%s.num_entries => %d\n", ctrl->name,
                                _ctrl->num_entries);
@@ -11995,6 +12000,10 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   dxf_free_pair (pair);
   return 0;
+
+outofmem:
+  dxf_free_pair (pair);
+  return DWG_ERR_OUTOFMEM;
 }
 
 static int
