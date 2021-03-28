@@ -3004,7 +3004,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   dwg->num_objects = i;
   LOG_TRACE ("End of %s (hard error)\n", section)
   tokens->index--;
-  return DWG_ERR_INVALIDDWG;  
+  return DWG_ERR_INVALIDDWG;
  typeerr:
   dwg->num_objects = i;
   LOG_TRACE ("End of %s (type error)\n", section)
@@ -4102,6 +4102,14 @@ json_Template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   return 0;
 }
 
+static void
+json_free_globals(jsmntokens_t *tokens)
+{
+  if (tokens)
+    free (tokens->tokens);
+  free (created_by);
+}
+
 EXPORT int
 dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -4110,6 +4118,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   jsmntokens_t tokens;
   unsigned int i;
   int error = -1;
+  created_by = NULL;
 
   dwg->opts |= (loglevel | DWG_OPTS_INJSON);
   dat->opts |= (loglevel | DWG_OPTS_INJSON);
@@ -4158,6 +4167,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       if (!dwg->object_map)
         {
           LOG_ERROR ("Out of memory");
+          json_free_globals(&tokens);
           return DWG_ERR_OUTOFMEM;
         }
     }
@@ -4191,15 +4201,15 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                      error, parser.toknext, parser.pos, remaining,
                      &dat->chain[parser.pos]);
         }
-      free (tokens.tokens);
+      json_free_globals(&tokens);
       return DWG_ERR_INVALIDDWG;
     }
 
   if (tokens.tokens[0].type != JSMN_OBJECT)
     {
       fprintf (stderr, "First JSON element is not an object/hash\n");
-      free (tokens.tokens);
-      exit (1);
+      json_free_globals(&tokens);
+      return DWG_ERR_INVALIDDWG;
     }
 
   // valid first level tokens:
@@ -4222,14 +4232,14 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           LOG_ERROR ("Unexpected JSON key at %u of %ld tokens, got %s",
                      tokens.index, tokens.num_tokens, t_typename[t->type]);
-          free (tokens.tokens);
+          json_free_globals(&tokens);
           return DWG_ERR_INVALIDDWG;
         }
       if (len >= 80)
         {
           LOG_ERROR ("Unknown JSON key at %u of %ld tokens, len %d > 80",
                      tokens.index, tokens.num_tokens, len);
-          free (tokens.tokens);
+          json_free_globals(&tokens);
           return DWG_ERR_INVALIDDWG;
         }
       memcpy (key, &dat->chain[t->start], len);
@@ -4239,7 +4249,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         {
           LOG_ERROR ("Unexpected end of JSON at %u of %ld tokens %s:%d",
                      tokens.index, tokens.num_tokens, __FILE__, __LINE__);
-          free (tokens.tokens);
+          json_free_globals(&tokens);
           return DWG_ERR_INVALIDDWG;
         }
       if (strEQc (key, "created_by"))
@@ -4286,13 +4296,13 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           LOG_ERROR ("Unexpected JSON key %s at %u of %ld tokens. %s:%d", key,
                      tokens.index, tokens.num_tokens, __FUNCTION__, __LINE__);
           LOG_TRACE ("\n")
-          free (tokens.tokens);
+          json_free_globals(&tokens);
           return error | DWG_ERR_INVALIDTYPE;
         }
       if (error >= DWG_ERR_CRITICAL)
         {
           LOG_TRACE ("\n")
-          free (tokens.tokens);
+          json_free_globals(&tokens);
           return error;
         }
     }
@@ -4301,8 +4311,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)
     dwg_fixup_BLOCKS_entities (dwg);
 
-  free (tokens.tokens);
-  free (created_by);
+  json_free_globals(&tokens);
   created_by = NULL;
   return error;
 }
