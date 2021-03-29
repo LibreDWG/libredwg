@@ -5988,7 +5988,7 @@ dwg_dim_blockname (Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
   if (dwg_dynapi_entity_value (obj->tio.entity->tio.DIMENSION_LINEAR, obj->name, "block",
                                &block, NULL))
     {
-      return dwg_handle_name (dwg, "BLOCK", block);
+      return block ? dwg_handle_name (dwg, "BLOCK", block) : NULL;
     }
   return NULL;
 }
