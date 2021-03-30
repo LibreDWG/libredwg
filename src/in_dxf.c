@@ -10882,11 +10882,11 @@ new_object (char *restrict name, char *restrict dxfname,
                               int _i = is2d ? j * 2 : j * 3;
                               dwg_dynapi_entity_value (_obj, obj->name,
                                                        f->name, &pts, NULL);
-                              if (pair->code < 20)
+                              if (pair->code < 20 && pts)
                                 {
                                   pts[_i] = pair->value.d;
                                 }
-                              else if (pair->code < 30)
+                              else if (pair->code < 30 && pts)
                                 {
                                   if (is2d)
                                     LOG_TRACE (
@@ -10895,7 +10895,7 @@ new_object (char *restrict name, char *restrict dxfname,
                                         f->type, pair->code);
                                   pts[_i + 1] = pair->value.d;
                                 }
-                              else if (*f->type == '3')
+                              else if (*f->type == '3' && pts)
                                 {
                                   LOG_TRACE (
                                       "%s.%s[%d] = (%f, %f, %f) [%s %d]\n",
