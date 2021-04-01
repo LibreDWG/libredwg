@@ -90,12 +90,19 @@ This builds and installs various files in the "installation dirs":
 Use "./configure --help" to see a full list of options you can use to
 customize the installation dirs.  Other options recognized by configure are:
 
+  --enable-release
+
+    Recommended for packagers and fuzzers. Disables all features
+    which will not be enabled in official tarball releases. Like support
+    for pre-R13 DWGs, skipping unstable DWG features, unknown DWG versions
+    and objects.
+
   --enable-trace
 
     Enable runtime tracing (default: no).  When enabled, the environment
     variable LIBREDWG_TRACE is consulted on the first decode/encode attempt.
     Its value is an integer: 0 (no output) through 9 (full verbosity).
-    Most tools do support an --verbosity|-v flag instead.
+    Most tools do support a --verbosity|-v flag instead.
 
   --disable-write
 
@@ -113,9 +120,28 @@ customize the installation dirs.  Other options recognized by configure are:
 
     Disables all in and out modules: DXF, DXFB, JSON, GeoJSON.
 
+  --disable-json
+
+    Disables the json in and out modules: JSON, GeoJSON.
+
+  --disable-python
+
+    Disable python bindings and tests.
+    Related: --enable-python=python3.6
+    Enforce a specific version.
+
   --enable-debug
 
     Activates support for unstable classes. For testing only.
+
+  --enable-gcov
+
+    Activates support for GNU gcov, test coverage reporting.
+
+  --with-perl-install=vendor
+
+   Where to install the perl bindings: vendor,arch,yes,no,site.
+   Default is perl-install=site
 
 == Windows ==
 

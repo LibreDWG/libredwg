@@ -138,7 +138,8 @@ someone should probably think about and resolve them!
 
 * make release
 
-  This needs to be done with an in-tree ./configure, not in an extra build directory.
+  This might be needed to be done with an in-tree ./configure, not in an extra build directory.
+  It needs the default configure options, esp. the enabled bindings.
 
   Before a release:
   - update NEWS, .appveyor.yml, libredwg.spec manually
@@ -156,7 +157,7 @@ someone should probably think about and resolve them!
     e.g. git commit -S --amend -a -m 'Release 0.6.2
     see NEWS'
   - merge it into master (ff)
-  - update the tag: git tag -d  0.6.2; git tag -s -m 'release 0.6.2' 0.6.2
+  - update the tag: git tag -d 0.6.2; git tag -s -m 'release 0.6.2' 0.6.2
   - make dist to create the source tarballs
   - push master and tags to run the CI and create the windows binaries on appveyor
   - upload the dist tarballs
@@ -167,7 +168,9 @@ someone should probably think about and resolve them!
   - edit the github release, copy from the previous and fix up the text with the sha256sum's,
     upload the dists and sigs to this page.
   - regen the docs, the refman and manual
-  - update the libredwg-cvs checkout for the docs and GNU homepage with the updated docs
+    make manual refman
+  - update the libredwg-cvs checkout for the docs and GNU homepage with the updated docs via
+    make release-web
   - create the announcement via build-aux/announce-gen (needs lots of args)
     and fixup the header with the NEWS
   - create a savannah news item with the announcement, and post it to the announcement
