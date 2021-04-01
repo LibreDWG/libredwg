@@ -547,6 +547,8 @@ dxf_read_pair (Bit_Chain *dat)
     {
     case DWG_VT_STRING:
       dxf_read_string (dat, &pair->value.s);
+      if (!pair->value.s)
+        pair->value.s = calloc(1, 1);
       LOG_TRACE ("  dxf (%d, \"%s\")\n", (int)pair->code, pair->value.s);
       // dynapi_set_helper converts from utf-8 to unicode, not here.
       // we need to know the type of the target field, if TV or T
@@ -578,6 +580,8 @@ dxf_read_pair (Bit_Chain *dat)
     case DWG_VT_BINARY:
       // zero-terminated. TODO hex decode here already?
       dxf_read_string (dat, &pair->value.s);
+      if (!pair->value.s)
+        pair->value.s = calloc(1, 1);
       LOG_TRACE ("  dxf (%d, %s)\n", (int)pair->code, pair->value.s);
       break;
     case DWG_VT_HANDLE:
