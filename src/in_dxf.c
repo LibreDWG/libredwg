@@ -10856,8 +10856,8 @@ new_object (char *restrict name, char *restrict dxfname,
                                    || strEQc (&f->type[1], "DPOINT*"))
                                && (num_f = find_numfield (fields, f->name)))
                         {
-                          long size = get_numfield_value (
-                              _obj, num_f); // how many points
+                          // how many points
+                          long size = get_numfield_value (_obj, num_f);
                           double *pts;
                           int is2d = *f->type == '2';
                           if (!size)
@@ -10877,16 +10877,16 @@ new_object (char *restrict name, char *restrict dxfname,
                               dwg_dynapi_entity_set_value (_obj, obj->name,
                                                            f->name, &pts, 0);
                             }
-                          else if (j < size)
+                          else if (j > 0 && j < size)
                             {
                               int _i = is2d ? j * 2 : j * 3;
                               dwg_dynapi_entity_value (_obj, obj->name,
                                                        f->name, &pts, NULL);
-                              if (pair->code < 20 && pts)
+                              if (pair->code < 20 && pts != NULL)
                                 {
                                   pts[_i] = pair->value.d;
                                 }
-                              else if (pair->code < 30 && pts)
+                              else if (pair->code < 30 && pts != NULL)
                                 {
                                   if (is2d)
                                     LOG_TRACE (
@@ -11200,6 +11200,7 @@ new_object (char *restrict name, char *restrict dxfname,
                           LOG_TRACE ("%s.%s = %ld [%s %d]\n", name, f->name,
                                      pair->value.l, f->type, pair->code);
                         }
+                      j = 0; // not a point nor vector member, so reset
                       goto next_pair; // found, early exit
                     }
                   // wrong code, maybe a point .y or .z
