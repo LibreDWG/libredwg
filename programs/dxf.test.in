@@ -1,7 +1,7 @@
 #!/bin/sh
 # dxf.test
 #
-# Copyright (C) 2018-2020 Free Software Foundation, Inc.
+# Copyright (C) 2018-2021 Free Software Foundation, Inc.
 #
 # This program is free software, licensed under the terms of the GNU
 # General Public License as published by the Free Software Foundation,
@@ -21,6 +21,7 @@ EXEEXT="@EXEEXT@"
 i=0
 rm -f ./*dxf.log
 enable_debug="$(grep '^CFLAGS =' Makefile | grep 'DDEBUG_CLASSES')"
+is_release="$(grep -c 'IS_RELEASE 1' ../src/config.h)"
 
 check_subentity() {
     if [ -f "$dwg" ] && [ -f "$dxf" ]; then
@@ -169,7 +170,7 @@ check_roundtrip() {
         @LTEXEC@ ./dxf2dwg${EXEEXT} -y -v0 -o "$tgt" "$dxf" 2>/dev/null >/dev/null
         @LTEXEC@ ./dwgread${EXEEXT} -v2 "$tgt" 2>"$log2" >/dev/null
         # We dont write unstable entities yet. WIPEOUT is converted to POINT in encode, but skipped at out_dxf
-        if [ -n "$enable_debug" ]; then
+        if [ -n "$enable_debug" ] && [ -z "$is_release" ]; then
             expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (WIPEOUT|UNKNOWN_ENT)')"
         else
             expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (WIPEOUT|ARC_DIMENSION|HELIX|UNKNOWN_ENT)')"
