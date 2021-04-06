@@ -127,8 +127,8 @@ release-web: manual refman
 	  rsync -avzC doc/refman/* $(WEB_DIR)/refman/; \
 	fi
 	-cd $(WEB_DIR) && \
-	  cvs add -m"new with $(VERSION)" manual/html_node/*.html refman/*.{html,js} \
-	    refman/search/*.{html,js}; cd -
+	  cvs add -m"new with $(VERSION)" manual/index.html manual/LibreDWG.* manual/html_node/*.html \
+	    refman/*.{html,js,png} refman/search/*.{html,js}; cd -
 	-cd $(WEB_DIR); cvs commit -m"update to $(VERSION)"; cd -
 
 TESTS =
