@@ -547,7 +547,7 @@ dxf_read_pair (Bit_Chain *dat)
     {
     case DWG_VT_STRING:
       dxf_read_string (dat, &pair->value.s);
-      if (!pair->value.s)
+      if (!pair->value.s && pair->code != 0)
         pair->value.s = calloc(1, 1);
       LOG_TRACE ("  dxf (%d, \"%s\")\n", (int)pair->code, pair->value.s);
       // dynapi_set_helper converts from utf-8 to unicode, not here.
