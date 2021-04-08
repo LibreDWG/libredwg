@@ -164,6 +164,7 @@ case $CFLAGS in
      *-fsanitize=*,leak*)      HAVE_ASAN=yes ;;
 esac
 AC_SUBST(HAVE_ASAN)
+AM_CONDITIONAL([HAVE_ASAN], [test -n "$HAVE_ASAN"])
 
 AC_TYPE_SIZE_T
 AC_TYPE_INT16_T
@@ -457,6 +458,15 @@ if test "x$host_os" = "xmingw32" -a "x$build_os" != "xmingw32"; then
    fi
 fi
 AM_CONDITIONAL([HAVE_WINE], [test -n "$WINE"])
+AM_CONDITIONAL([HAVE_CYGWIN], [test "x$host_os" = "xcygwin32" -o test "x$host_os" = "xcygwin64"])
+if [ -n "$HAVE_ASAN" ]
+then
+        HAVE_ASAN_OR_LINUX=1
+elif [ "x$host_os" = "xlinux-gnu" ]
+then
+        HAVE_ASAN_OR_LINUX=1
+fi
+AM_CONDITIONAL([HAVE_ASAN_OR_LINUX],[test -n "HAVE_ASAN_OR_LINUX"])
 
 dnl Optional SWIG + python bindings
 dnl Feature: --disable-python or --enable-python=python3.6
