@@ -408,11 +408,12 @@ if test -n "$GPERF"
 then
     AC_MSG_CHECKING([GPERF version])
     [GPERF_VERSION=`"$GPERF" --version | head -n1 2>&1 | sed 's,GNU gperf ,,'`]
+    GPERF_MINOR="`echo $GPERF_VERSION | cut -f2 -d.`"
     case $GPERF_VERSION in
-      1.*) GPERF_VERSION=$((100+${GPERF_VERSION:2:1})) ;;
-      2.*) GPERF_VERSION=$((200+${GPERF_VERSION:2:1})) ;;
-      3.*) GPERF_VERSION=$((300+${GPERF_VERSION:2:1})) ;;
-      4.*) GPERF_VERSION=$((400+${GPERF_VERSION:2:1})) ;;
+      1.*) GPERF_VERSION=$((100+$GPERF_MINOR)) ;;
+      2.*) GPERF_VERSION=$((200+$GPERF_MINOR)) ;;
+      3.*) GPERF_VERSION=$((300+$GPERF_MINOR)) ;;
+      4.*) GPERF_VERSION=$((400+$GPERF_MINOR)) ;;
     esac
     AC_MSG_RESULT([$GPERF_VERSION])
     AC_DEFINE_UNQUOTED([GPERF_VERSION],[$GPERF_VERSION],
