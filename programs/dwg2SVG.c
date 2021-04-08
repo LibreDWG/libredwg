@@ -864,6 +864,7 @@ output_SVG (Dwg_Data *dwg)
     }
   printf ("\t</defs>\n");
   printf ("</svg>\n");
+  fflush (stdout);
 }
 
 int
