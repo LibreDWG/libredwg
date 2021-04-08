@@ -471,8 +471,8 @@ output_ELLIPSE (Dwg_Object *obj)
   /* The 2 points are already WCS */
   //transform_OCS (&center, ell->center, ell->extrusion);
   //transform_OCS (&sm_axis, ell->sm_axis, ell->extrusion);
-  radius.x = ell->sm_axis.x;
-  radius.y = ell->sm_axis.y * ell->axis_ratio;
+  radius.x = fabs (ell->sm_axis.x);
+  radius.y = fabs (ell->sm_axis.y * ell->axis_ratio);
 
   /*
   x_start = ell->center.x + radius.x * cos (ell->start_angle);
@@ -481,16 +481,16 @@ output_ELLIPSE (Dwg_Object *obj)
   y_end = ell->center.y + radius.y * sin (ell->end_angle);
   */
 
-  // TODO: rotate, start,end_angle
+  // TODO: rotate. start,end_angle => pathLength
   printf ("\t<!-- ellipse-%d -->\n", obj->index);
   printf (
       "\t<!-- sm_axis=(%f,%f,%f) axis_ratio=%f start_angle=%f end_angle=%f-->\n",
       ell->sm_axis.x, ell->sm_axis.y, ell->sm_axis.z, ell->axis_ratio,
       ell->start_angle, ell->end_angle);
   printf ("\t<ellipse id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" rx=\"%f\" "
-          "ry=\"%f\" transform=\"rotate=(%f)\"\n\t",
+          "ry=\"%f\" transform=\"rotate=(%f %f %f)\"\n\t",
           obj->index, ell->center.x, ell->center.y, radius.x, radius.y,
-          cos (ell->sm_axis.x));
+          ell->sm_axis.x, ell->sm_axis.y, ell->sm_axis.z);
   common_entity (obj->tio.entity);
 }
 
