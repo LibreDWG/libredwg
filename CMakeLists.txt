@@ -118,6 +118,7 @@ set(libredwg_SOURCES
 add_library(redwg
     ${libredwg_HEADERS}
     ${libredwg_SOURCES})
+#set_target_properties(${libredwg_HEADERS} PROPERTIES PUBLIC_HEADER)
 set_target_properties(redwg PROPERTIES PUBLIC_HEADER include/dwg_api.h)
 set_target_properties(redwg PROPERTIES PUBLIC_HEADER include/dwg.h)
 target_include_directories(redwg PRIVATE
@@ -218,15 +219,13 @@ add_custom_target(
 if(MSVC)
   #untested
   install(TARGETS redwg RUNTIME PUBLIC_HEADER
-         DESTINATION libredwg-${PACKAGE_VERSION})
+          DESTINATION libredwg-${PACKAGE_VERSION})
 else()
   include(GNUInstallDirs)
 endif()
-#install(TARGETS PUBLIC_HEADER include/dwg_api.h)
 install(TARGETS redwg
   LIBRARY
-    COMPONENT redwg
-    )
+  COMPONENT redwg)
 install(TARGETS RUNTIME)
 
 if(MSVC)
