@@ -16,8 +16,6 @@
  * written by Reini Urban
  */
 
-  #include "spec.h"
-
   if (dwg->header.version < R_2007 && _obj->class_version < 3)
     {
       DECODER {
@@ -65,7 +63,7 @@
           FIELD_T16 (product_info, 0);
         }
       }
-      FREE {
+      ON_FREE {
         FIELD_TFFx (comment_checksum, 16, 0);
         FIELD_T16 (comment, 0);
         FIELD_TFFx (product_checksum, 16, 0);

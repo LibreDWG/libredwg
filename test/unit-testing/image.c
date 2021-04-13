@@ -56,7 +56,7 @@ api_process (dwg_object *obj)
         }
     }
 #ifdef USE_DEPRECATED_API
-  free (cpts);
+  FREE (cpts);
 #endif
 
   CHK_ENTITY_H (image, IMAGE, imagedef);

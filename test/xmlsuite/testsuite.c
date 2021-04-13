@@ -71,7 +71,7 @@ void add_xline (xmlNodePtr rootnode, const Dwg_Object *obj);
   {                                                                           \
     xmlChar *tmp = buf;                                                       \
     xmlNewProp (node, (const xmlChar *)name, tmp);                            \
-    free (tmp);                                                               \
+    FREE (tmp);                                                               \
   }
 #define newXMLcProp(name, buf)                                                \
   xmlNewProp (node, (const xmlChar *)name, (xmlChar *)(buf))
@@ -109,7 +109,7 @@ common_entity_attrs (xmlNodePtr node, const Dwg_Object *obj)
     {
       newXMLcProp ("Layer", name);
       if (dwg_version >= R_2007)
-        free (name);
+        FREE (name);
     }
 
   name = dwg_ref_get_table_name (ent->ltype, &error);
@@ -117,7 +117,7 @@ common_entity_attrs (xmlNodePtr node, const Dwg_Object *obj)
     {
       newXMLcProp ("Linetype", name);
       if (dwg_version >= R_2007)
-        free (name);
+        FREE (name);
     }
 
   buf = doubletochar (ent->ltype_scale);
@@ -131,7 +131,7 @@ common_entity_attrs (xmlNodePtr node, const Dwg_Object *obj)
     {
       newXMLcProp ("Material", name);
       if (dwg_version >= R_2007)
-        free (name);
+        FREE (name);
     }
 
   name = dwg_ref_get_table_name (ent->plotstyle, &error);
@@ -139,7 +139,7 @@ common_entity_attrs (xmlNodePtr node, const Dwg_Object *obj)
     {
       newXMLcProp ("PlotStyleName", name);
       if (dwg_version >= R_2007)
-        free (name);
+        FREE (name);
     }
 
   /* Arc, Attribute, AttributeReference, BlockRef, Circle,
@@ -309,13 +309,13 @@ add_lwpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   if (numpts >= 3)
     {
-      buf = malloc (80);
+      buf = MALLOC (80);
       sprintf ((char *)buf, "(%.4f %.4f %.4f %.4f %.4f %.4f ... )", pts[0].x,
                pts[0].y, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
       newXMLProp ("Coordinates", buf);
-      // free (buf);
+      FREE (buf);
     }
-  free (pts);
+  FREE (pts);
 
   buf = doubletochar (lwpline->elevation);
   newXMLProp ("Elevation", buf);
@@ -363,12 +363,12 @@ add_2dpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   if (numpts >= 3)
     {
-      buf = malloc (80);
+      buf = MALLOC (80);
       sprintf ((char *)buf, "(%.4f %.4f %.4f %.4f %.4f %.4f ... )", pts[0].x,
                pts[0].y, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
       newXMLProp ("Coordinates", buf);
     }
-  free (pts);
+  FREE (pts);
 
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
@@ -399,12 +399,12 @@ add_3dpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   if (numpts >= 2)
     {
-      buf = malloc (80);
+      buf = MALLOC (80);
       sprintf ((char *)buf, "(%.4f %.4f %.4f %.4f %.4f %.4f ... )", pts[0].x,
                pts[0].y, pts[0].z, pts[1].x, pts[1].y, pts[1].z);
       newXMLProp ("Coordinates", buf);
     }
-  free (pts);
+  FREE (pts);
 
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
@@ -566,7 +566,7 @@ add_mline (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   if (mline->num_verts >= 3)
     {
-      buf = malloc (80);
+      buf = MALLOC (80);
       sprintf ((char *)buf,
                "(%.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f ... )",
                mline->verts[0].vertex.x, mline->verts[0].vertex.y,
@@ -707,7 +707,7 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
   if (spline->num_knots)
     {
       int bufsize = spline->num_knots * 16;
-      buf = malloc (bufsize + 1);
+      buf = MALLOC (bufsize + 1);
       buf[0] = '(';
       buf[1] = '\0';
       len = 1;
@@ -722,7 +722,7 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
           if (len > bufsize)
             {
               bufsize = len + 24;
-              buf = realloc (buf, bufsize);
+              buf = REALLOC (buf, bufsize);
             }
           strncat ((char *)buf, buf1, bufsize - len);
         }
@@ -740,7 +740,7 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
   if (spline->num_ctrl_pts)
     {
       int bufsize = spline->num_ctrl_pts * (24 * 4);
-      buf = malloc (bufsize + 1);
+      buf = MALLOC (bufsize + 1);
       buf[0] = '(';
       buf[1] = '\0';
       len = 1;
@@ -763,7 +763,7 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
           if (len > bufsize)
             {
               bufsize = len + (24 * 4);
-              buf = realloc (buf, bufsize);
+              buf = REALLOC (buf, bufsize);
             }
         }
       if (spline->num_ctrl_pts > 2)
@@ -775,7 +775,7 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
   if (spline->num_fit_pts)
     {
       int bufsize = spline->num_fit_pts * (24 * 3);
-      buf = malloc (bufsize + 1);
+      buf = MALLOC (bufsize + 1);
       buf[0] = '(';
       buf[1] = '\0';
       len = 1;
@@ -795,7 +795,7 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
           if (len > bufsize)
             {
               bufsize = len + (24 * 3);
-              buf = realloc (buf, bufsize);
+              buf = REALLOC (buf, bufsize);
             }
         }
       if (spline->num_fit_pts > 2)
@@ -838,7 +838,7 @@ add_text (xmlNodePtr rootnode, const Dwg_Object *obj)
     {
       newXMLcProp ("StyleName", name);
       if (dwg_version >= R_2007)
-        free (name);
+        FREE (name);
     }
 
   newXMLcProp ("TextString", (xmlChar *)text->text_value);
@@ -912,7 +912,7 @@ add_mtext (xmlNodePtr rootnode, const Dwg_Object *obj)
     {
       newXMLcProp ("StyleName", name);
       if (dwg_version >= R_2007)
-        free (name);
+        FREE (name);
     }
 
   dtostring = doubletochar (text->rect_width);
