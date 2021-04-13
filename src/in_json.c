@@ -3750,7 +3750,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     }
                   else
                     {
-                      char *tag = (char *)malloc (sz + 1);
+                      char *tag = (char *)MALLOC (sz + 1);
                       if (tag)
                         {
                           memcpy (tag, &dat->chain[t->start], sz);

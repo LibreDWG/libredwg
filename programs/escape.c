@@ -28,7 +28,7 @@
         {                                                                \
           const int _off = (d) - (dest);                                 \
           char *_new                                                     \
-              = (char *)realloc ((dest), (len) + (sizeof(s) - 1) + 10);  \
+              = (char *)REALLOC ((dest), (len) + (sizeof(s) - 1) + 10);  \
           if (!_new)                                                     \
             return NULL;                                                 \
           (dest) = _new;                                                 \

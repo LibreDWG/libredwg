@@ -36,6 +36,15 @@
 #include "hash.h"
 #include "free.h"
 
+/* When HAVE_LIBGC, these are macros in common.h and free.h —
+   undefine so the function definitions here can compile. */
+#ifdef HAVE_LIBGC
+#  undef dwg_free
+#  undef dwg_free_eed
+#  undef dwg_free_object
+#  undef dwg_free_object_private
+#endif
+
 #ifdef USE_TRACING
 static int env_var_checked_p;
 #endif
@@ -1690,7 +1699,7 @@ dwg_free (Dwg_Data *dwg)
             loglevel = atoi (probe);
           env_var_checked_p = 1;
         }
-#endif /* USE_TRACING */
+#  endif /* USE_TRACING */
       LOG_INFO ("\n============\ndwg_free\n");
       // copied table fields have duplicate pointers, but are freed only once
       for (i = 0; i < dwg->num_objects; ++i)
@@ -1761,7 +1770,7 @@ dwg_free (Dwg_Data *dwg)
       dwg->num_object_ordered_refs = 0;
       FREE_IF (dwg->object_ordered_ref);
     }
-#endif
+#endif /* HAVE_LIBGC */
 }
 
 #undef IS_FREE

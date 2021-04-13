@@ -3122,7 +3122,7 @@ bit_convert_TU_len (const BITCODE_TU restrict wstr, const size_t max_wchars)
             }
         }
     }
-  str = (char *)malloc (len + 1);
+  str = (char *)MALLOC (len + 1);
   if (!str)
     {
       loglevel |= 1;
@@ -3627,7 +3627,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
           // NOTE: src is expanded/shrinked internally.
           const size_t srclen = strlen (src);
           size_t destlen = 1 + trunc (srclen * 2);
-          char *dest = (char *)calloc (destlen + 1, 1);
+          char *dest = (char *)CALLOC (destlen + 1, 1);
           if (!dest)
             {
               loglevel |= 1;

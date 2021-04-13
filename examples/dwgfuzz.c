@@ -190,7 +190,6 @@ main (int argc, char *argv[])
   } mode
       = INVALID;
   __AFL_INIT ();
-
   GC_INIT ();
   if (argc <= 1 || !*argv[1])
     return 1;

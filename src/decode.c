@@ -2020,10 +2020,10 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       if (type == SECTION_TEMPLATE && is_teigha && info->size >= 4
           && info->unknown == 1)
         {
-          Dwg_Section *sec = calloc (1, sizeof (Dwg_Section));
+          Dwg_Section *sec = CALLOC (1, sizeof (Dwg_Section));
           // bug in Teigha with Template, with num_sections=0
           info->num_sections = 1;
-          info->sections = realloc (info->sections, sizeof (Dwg_Section *));
+          info->sections = REALLOC (info->sections, sizeof (Dwg_Section *));
           if (!info->sections || !sec)
             return DWG_ERR_OUTOFMEM;
           else
@@ -6202,7 +6202,7 @@ dwg_validate_entity_links (Dwg_Data *restrict dwg)
             continue;
 
           visited_size = ((size_t)max_steps + 7) / 8;
-          visited = calloc (visited_size, 1);
+          visited = CALLOC (visited_size, 1);
           if (!visited)
             continue;
 

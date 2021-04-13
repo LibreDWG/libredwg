@@ -842,7 +842,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             LOG_ERROR ("Invalid angles");
             return DWG_ERR_VALUEOUTOFBOUNDS;
           }
-        pts = (BITCODE_2BD *)malloc (num_pts * sizeof (BITCODE_2BD));
+        pts = (BITCODE_2BD *)MALLOC (num_pts * sizeof (BITCODE_2BD));
         if (!pts)
           {
             LOG_ERROR ("Out of memory");
@@ -873,7 +873,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         BITCODE_2BD ctr = { _obj->center.x, _obj->center.y };
         int num_pts = calc_curve_segments (dwg, _obj->radius, 2 * M_PI);
         BITCODE_2BD *pts
-            = (BITCODE_2BD *)malloc (num_pts * sizeof (BITCODE_2BD));
+            = (BITCODE_2BD *)MALLOC (num_pts * sizeof (BITCODE_2BD));
         if (!pts)
           {
             LOG_ERROR ("Out of memory");
@@ -971,7 +971,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           end_angle += 2 * M_PI;
         angle_span = end_angle - start_angle;
         num_pts = calc_curve_segments (dwg, major_r, angle_span);
-        pts = (BITCODE_2BD *)malloc (num_pts * sizeof (BITCODE_2BD));
+        pts = (BITCODE_2BD *)MALLOC (num_pts * sizeof (BITCODE_2BD));
         if (!pts)
           {
             LOG_ERROR ("Out of memory");
