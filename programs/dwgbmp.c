@@ -72,10 +72,13 @@ help (void)
   return 0;
 }
 
+#ifdef HAVE_LIBGC
+#  define bmp_free_dwg(x)
+#else
 static void
 bmp_free_dwg (Dwg_Data *dwg)
 {
-#if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
+#  if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
   {
     char *asanenv = getenv ("ASAN_OPTIONS");
     if (!asanenv)
@@ -84,15 +87,16 @@ bmp_free_dwg (Dwg_Data *dwg)
     else if (strstr (asanenv, "detect_leaks=0") == NULL) /* not found */
       force_free = 1;
   }
-#endif
+#  endif
   // really huge DWG's need endlessly here.
   if ((dwg->header.version && dwg->num_objects < 1000) || force_free
-#ifdef HAVE_VALGRIND_VALGRIND_H
+#  ifdef HAVE_VALGRIND_VALGRIND_H
       || (RUNNING_ON_VALGRIND)
-#endif
+#  endif
   )
     dwg_free (dwg);
 }
+#endif
 
 #pragma pack(1)
 
@@ -124,7 +128,7 @@ get_bmp (char *dwgfile, char *bmpfile, bool must_free)
     {
       fprintf (stderr, "Unable to read file %s. ERROR 0x%x\n", dwgfile, error);
       if (must_free)
-        free (bmpfile);
+        FREE (bmpfile);
       bmp_free_dwg (&dwg);
       return error;
     }
@@ -139,7 +143,7 @@ get_bmp (char *dwgfile, char *bmpfile, bool must_free)
     {
       fprintf (stderr, "No thumbnail image in %s\n", dwgfile);
       if (must_free)
-        free (bmpfile);
+        FREE (bmpfile);
       bmp_free_dwg (&dwg);
       return 0;
     }
@@ -153,7 +157,7 @@ get_bmp (char *dwgfile, char *bmpfile, bool must_free)
     {
       fprintf (stderr, "Empty thumbnail data in %s\n", dwgfile);
       if (must_free)
-        free (bmpfile);
+        FREE (bmpfile);
       bmp_free_dwg (&dwg);
       return -3;
     }
@@ -164,14 +168,14 @@ get_bmp (char *dwgfile, char *bmpfile, bool must_free)
                " size " FORMAT_RL " > %" PRIuSIZE "\n",
                dwgfile, size, dwg.thumbnail.size);
       if (must_free)
-        free (bmpfile);
+        FREE (bmpfile);
       bmp_free_dwg (&dwg);
       return -3;
     }
   if (type != 2 && *typename)
     {
       if (must_free)
-        free (bmpfile);
+        FREE (bmpfile);
       bmpfile = suffix (dwgfile, typename);
     }
 
@@ -180,7 +184,7 @@ get_bmp (char *dwgfile, char *bmpfile, bool must_free)
     {
       fprintf (stderr, "Unable to write thumbnail file '%s'\n", bmpfile);
       if (must_free)
-        free (bmpfile);
+        FREE (bmpfile);
       bmp_free_dwg (&dwg);
       return -4;
     }
@@ -206,7 +210,7 @@ get_bmp (char *dwgfile, char *bmpfile, bool must_free)
       if (!retval)
         {
           if (must_free)
-            free (bmpfile);
+            FREE (bmpfile);
           bmp_free_dwg (&dwg);
           perror ("writing BMP file_size");
           fclose (fh);
@@ -220,7 +224,7 @@ get_bmp (char *dwgfile, char *bmpfile, bool must_free)
   if (!retval)
     {
       if (must_free)
-        free (bmpfile);
+        FREE (bmpfile);
       bmp_free_dwg (&dwg);
       perror ("writing thumbnail data");
       return 1;
@@ -229,7 +233,7 @@ get_bmp (char *dwgfile, char *bmpfile, bool must_free)
   printf ("Success. Written thumbnail image to '%s'\n", bmpfile);
   bmp_free_dwg (&dwg);
   if (must_free)
-    free (bmpfile);
+    FREE (bmpfile);
   return 0;
 }
 
@@ -250,6 +254,7 @@ main (int argc, char *argv[])
           { NULL, 0, NULL, 0 } };
 #endif
 
+  GC_INIT ();
   if (argc < 2)
     return usage ();
 

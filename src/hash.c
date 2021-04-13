@@ -22,11 +22,12 @@
 #include <stdio.h>
 #include <string.h>
 #include "logging.h"
+#include "common.h"
 
 dwg_inthash *
 hash_new (uint64_t size)
 {
-  dwg_inthash *hash = (dwg_inthash *)malloc (sizeof (dwg_inthash));
+  dwg_inthash *hash = (dwg_inthash *)MALLOC (sizeof (dwg_inthash));
   uint64_t cap;
   if (!hash)
     return NULL;
@@ -38,7 +39,7 @@ hash_new (uint64_t size)
   // this is slow, but only done once. clz would be much faster
   while (size <= cap)
     size <<= 1U;
-  hash->array = (struct _hashbucket *)calloc (
+  hash->array = (struct _hashbucket *)CALLOC (
       size, sizeof (struct _hashbucket)); // key+value pairs
   hash->elems = 0;
   hash->size = size;
@@ -61,7 +62,7 @@ hash_resize (dwg_inthash *hash)
 
   // allocate key+value pairs afresh
   hash->array
-      = (struct _hashbucket *)calloc (size, sizeof (struct _hashbucket));
+      = (struct _hashbucket *)CALLOC (size, sizeof (struct _hashbucket));
   if (!hash->array)
     {
       *hash = oldhash;
@@ -76,7 +77,7 @@ hash_resize (dwg_inthash *hash)
       if (oldhash.array[i].key)
         hash_set (hash, oldhash.array[i].key, oldhash.array[i].value);
     }
-  free (oldhash.array);
+  FREE (oldhash.array);
   return;
 }
 
@@ -191,9 +192,9 @@ hash_set (dwg_inthash *hash, uint64_t key, uint64_t value)
 void
 hash_free (dwg_inthash *hash)
 {
-  free (hash->array);
+  FREE (hash->array);
   hash->array = NULL;
   hash->size = 0;
   hash->elems = 0;
-  free (hash);
+  FREE (hash);
 }
