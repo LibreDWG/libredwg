@@ -75,7 +75,7 @@ api_process (dwg_object *obj)
         (void)bulges[i];
       // printf ("bulge[%d] of lwpline : %f\n", (int)i, bulges[i]);
 #ifdef USE_DEPRECATED_API
-      free (bulges);
+      FREE (bulges);
 #endif
     }
   else
@@ -94,7 +94,7 @@ api_process (dwg_object *obj)
       // points[i].x,
       //        points[i].y);
 #ifdef USE_DEPRECATED_API
-      free (points);
+      FREE (points);
 #endif
     }
   else
@@ -112,7 +112,7 @@ api_process (dwg_object *obj)
       // printf ("widths[%d] of lwpline : x = %f\ty = %f\n", (int)i,
       //        width[i].start, width[i].end);
 #ifdef USE_DEPRECATED_API
-      free (width);
+      FREE (width);
 #endif
     }
   else
