@@ -83,8 +83,33 @@ AC_C_RESTRICT
 dnl Checks for libraries
 AM_ICONV
 
+dnl support optional --disable-gc to disable boehm-gc
+AC_MSG_CHECKING([for --disable-gc])
+AC_ARG_ENABLE([gc],AS_HELP_STRING([--disable-gc],[
+    Disable boehm-gc support (default: no).]),
+    [libredwg_have_libgc=no
+     AC_MSG_RESULT([yes])],
+    [AC_MSG_RESULT([no])
+     AC_CHECK_LIB([gc],[GC_get_version],
+       libredwg_have_libgc=yes,
+       libredwg_have_libgc=no)])
+if test yes = "$libredwg_have_libgc"
+then
+  AC_CHECK_HEADERS([gc/gc.h])
+fi
+if test "x$libredwg_have_libgc" = xyes &&
+   test "x$ac_cv_header_gc_gc_h" = xyes
+then
+  AC_DEFINE([HAVE_LIBGC],1,[Define to 1 if libgc is being used (Boehm Weiser GC)])
+  LIBGC=-lgc
+  LIBS="$LIBS $LIBGC"
+fi
+AC_SUBST([LIBGC])
+AM_CONDITIONAL([HAVE_LIBGC],[test "x$libredwg_have_libgc" = xyes &&
+                             test "x$ac_cv_header_gc_gc_h" = xyes])
+
 AC_CHECK_LIB([ps -lm],[PS_open_file],
-  libredwg_have_libps=yes,
+ libredwg_have_libps=yes,
   libredwg_have_libps=no)
 
 dnl `pcre2-config --libs8`

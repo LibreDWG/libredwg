@@ -158,10 +158,10 @@
     else                                                                      \
       {                                                                       \
         const size_t _len = 6 * len + 1;                                      \
-        char *_buf = (char *)malloc (_len);                                   \
+        char *_buf = (char *)MALLOC (_len);                                   \
         PREFIX fprintf (dat->fh, "\"" #name "\": \"%s\",\n",                  \
                         json_cquote (_buf, str, _len, dat->codepage));        \
-        free (_buf);                                                          \
+        FREE (_buf);                                                          \
       }                                                                       \
   }
 #define PAIR_S(name, str)                                                     \
@@ -397,7 +397,7 @@ normalize_polygon_orient (BITCODE_BL numpts, dwg_point_2d **const pts_p)
       // reverse and return a copy
       unsigned last = numpts - 1;
       dwg_point_2d *newpts
-          = (dwg_point_2d *)malloc (numpts * sizeof (BITCODE_2RD));
+          = (dwg_point_2d *)MALLOC (numpts * sizeof (BITCODE_2RD));
       // fprintf (stderr, "%u pts, sum %f: reverse orient\n", numpts, sum);
       for (unsigned i = 0; i < numpts; i++)
         {
@@ -442,7 +442,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
             {
               PAIR_S (Layer, name);
               if (IS_FROM_TU (dat))
-                free (name);
+                FREE (name);
             }
         }
 
@@ -472,7 +472,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         {
           PAIR_S (Linetype, name);
           if (IS_FROM_TU (dat))
-            free (name);
+            FREE (name);
         }
     }
 
@@ -485,7 +485,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         {
           char *utf8 = bit_convert_TU ((BITCODE_TU)_obj->notes);
           PAIR_S (Text, utf8)
-          free (utf8);
+          FREE (utf8);
         }
       else
         {
@@ -499,7 +499,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         {
           char *utf8 = bit_convert_TU ((BITCODE_TU)_obj->text_value);
           PAIR_S (Text, utf8)
-          free (utf8);
+          FREE (utf8);
         }
       else
         {
@@ -513,7 +513,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         {
           char *utf8 = bit_convert_TU ((BITCODE_TU)_obj->text);
           PAIR_S (Text, utf8)
-          free (utf8);
+          FREE (utf8);
         }
       else
         {
@@ -536,7 +536,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
             {
               PAIR_S (name, text);
               if (IS_FROM_TU (dat))
-                free (text);
+                FREE (text);
             }
         }
     }
@@ -556,7 +556,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
             {
               PAIR_S (name, text);
               if (IS_FROM_TU (dat))
-                free (text);
+                FREE (text);
             }
         }
     }
@@ -603,7 +603,7 @@ dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       LASTENDARRAY;
       LASTENDARRAY;
       if (changed)
-        free (pts);
+        FREE (pts);
     }
   else
     {
@@ -730,7 +730,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
             orig = pts; // pts is already a new copy
             changed = normalize_polygon_orient (numpts, &pts); // RFC7946
             if (changed)
-              free (orig);
+              FREE (orig);
             GEOMETRY (Polygon)
             KEY (coordinates);
             ARRAY;
@@ -741,7 +741,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
             LASTENDARRAY;
             LASTENDARRAY;
             if (changed)
-              free (pts);
+              FREE (pts);
           }
         else
           {
@@ -755,7 +755,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                 else
                   VALUE_2DPOINT (pts[j].x, pts[j].y);
               }
-            free (pts);
+            FREE (pts);
             LASTENDARRAY;
           }
         ENDGEOMETRY;
@@ -788,7 +788,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                 VALUE_3DPOINT (pts[j].x, pts[j].y, pts[j].z);
               }
           }
-        free (pts);
+        FREE (pts);
         LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
@@ -815,7 +815,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
               return DWG_ERR_VALUEOUTOFBOUNDS;
             }
           num_pts = MIN (num_pts, 120);
-          pts = (BITCODE_2BD *)malloc (num_pts * sizeof (BITCODE_2BD));
+          pts = (BITCODE_2BD *)MALLOC (num_pts * sizeof (BITCODE_2BD));
           if (!pts)
             {
               LOG_ERROR ("Out of memory");
@@ -838,7 +838,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           LASTENDARRAY;
           ENDGEOMETRY;
           ENDFEATURE;
-          free (pts);
+          FREE (pts);
         }
       else
         LOG_TRACE ("ARC not yet supported")
@@ -853,7 +853,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           // double res = viewres / 360.0;
           int num_pts = 120;
           BITCODE_2BD *pts
-              = (BITCODE_2BD *)malloc (num_pts * sizeof (BITCODE_2BD));
+              = (BITCODE_2BD *)MALLOC (num_pts * sizeof (BITCODE_2BD));
           arc_split (pts, num_pts, ctr, 0, M_PI * 2.0, _obj->radius);
           FEATURE (AcDbEntity : AcDbCircle, obj);
           GEOMETRY (Polygon)
@@ -869,7 +869,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           LASTENDARRAY;
           ENDGEOMETRY;
           ENDFEATURE;
-          free (pts);
+          FREE (pts);
         }
       else
         LOG_TRACE ("CIRCLE not yet supported")
