@@ -83,7 +83,7 @@ api_process (dwg_object *obj)
             }
         }
 #ifdef USE_DEPRECATED_API
-      free (cpts);
+      FREE (cpts);
 #endif
 
 #ifdef USE_DEPRECATED_API
@@ -104,7 +104,7 @@ api_process (dwg_object *obj)
             }
         }
 #ifdef USE_DEPRECATED_API
-      free (knots1);
+      FREE (knots1);
 #endif
     }
   else
@@ -134,7 +134,7 @@ api_process (dwg_object *obj)
             }
         }
 #ifdef USE_DEPRECATED_API
-      free (pts);
+      FREE (pts);
 #endif
     }
 }

@@ -43,6 +43,8 @@ static unsigned int cur_ver = 0;
 #include "logging.h"
 #include "dec_macros.h"
 #include "spec.h"
+/* free is included by spec.h, which happens inside functions */
+#include "free.h"
 
 // only for temp. debugging, to abort on obviously wrong sizes.
 // should be a bit larger then the filesize.
@@ -564,7 +566,7 @@ decode_rs (const BITCODE_RC *src, int block_count, int data_size,
                  (long)block_count * data_size, src_size);
       return NULL;
     }
-  dst_base = dst = (BITCODE_RC *)calloc (block_count, data_size);
+  dst_base = dst = (BITCODE_RC *)CALLOC (block_count, data_size);
   if (!dst)
     {
       LOG_ERROR ("Out of memory");
@@ -638,7 +640,6 @@ read_system_page (Bit_Chain *out, Bit_Chain *dat, int64_t size_comp,
   assert ((uint64_t)repeat_count < DBG_MAX_COUNT);
   assert ((uint64_t)page_size < DBG_MAX_COUNT);
   bit_chain_init_dat (out, size_uncomp + page_size, dat);
-  // data = (BITCODE_RC *)calloc (size_uncomp + page_size, 1);
   LOG_HANDLE ("Alloc system page of size %" PRId64 "\n",
               size_uncomp + page_size);
   assert (out->size == (size_t)(size_uncomp + page_size));
@@ -673,7 +674,7 @@ read_system_page (Bit_Chain *out, Bit_Chain *dat, int64_t size_comp,
         }
     }
 
-  free (pedata);
+  FREE (pedata);
   if (error >= DWG_ERR_CRITICAL)
     {
       bit_chain_free (out);
@@ -715,7 +716,7 @@ read_data_page (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   block_count = (pesize + 0xFB - 1) / 0xFB;
   pedata_size = block_count * 0xFB;
 
-  rsdata = (BITCODE_RC *)calloc (1, page_size);
+  rsdata = (BITCODE_RC *)CALLOC (1, page_size);
   if (rsdata == NULL)
     {
       LOG_ERROR ("Out of memory");
@@ -725,7 +726,7 @@ read_data_page (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   pedata = decode_rs (rsdata, block_count, 0xFB, page_size);
   if (!pedata)
     {
-      free (rsdata);
+      FREE (rsdata);
       return DWG_ERR_OUTOFMEM;
     }
 
@@ -739,13 +740,13 @@ read_data_page (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
       else
         {
           LOG_ERROR ("decomp overflow");
-          free (pedata);
+          FREE (pedata);
           return DWG_ERR_INTERNALERROR;
         }
     }
 
-  free (pedata);
-  free (rsdata);
+  FREE (pedata);
+  FREE (rsdata);
 
   return error;
 }
@@ -784,7 +785,7 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
       LOG_ERROR ("Invalid max decompression size %" PRIu64, max_decomp_size);
       return DWG_ERR_INVALIDDWG;
     }
-  decomp = (BITCODE_RC *)calloc (max_decomp_size, 1);
+  decomp = (BITCODE_RC *)CALLOC (max_decomp_size, 1);
   if (decomp == NULL)
     {
       LOG_ERROR ("Out of memory");
@@ -805,27 +806,27 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
       r2007_section_page *section_page = section->pages[i];
       if (!section_page)
         {
-          free (decomp);
+          FREE (decomp);
           LOG_ERROR ("Failed to find section page %d", (int)i);
           return DWG_ERR_PAGENOTFOUND;
         }
       page = get_page (pages_map, section_page->id);
       if (page == NULL)
         {
-          free (decomp);
+          FREE (decomp);
           LOG_ERROR ("Failed to find page %d", (int)section_page->id);
           return DWG_ERR_PAGENOTFOUND;
         }
       if (section_page->offset > max_decomp_size)
         {
-          free (decomp);
+          FREE (decomp);
           LOG_ERROR ("Invalid section_page->offset %ld > %ld",
                      (long)section_page->offset, (long)max_decomp_size);
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
       if (max_decomp_size < section_page->uncomp_size)
         {
-          free (decomp);
+          FREE (decomp);
           LOG_ERROR ("Invalid section size %ld < %ld", (long)max_decomp_size,
                      (long)section_page->uncomp_size);
           return DWG_ERR_VALUEOUTOFBOUNDS;
@@ -860,7 +861,7 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
                                   section_page->uncomp_size, decomp_end);
           if (error)
             {
-              free (decomp);
+              FREE (decomp);
               LOG_ERROR ("Failed to read page");
               return error;
             }
@@ -871,7 +872,7 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
                   > max_decomp_size - section_page->offset
               || section_page->uncomp_size > dat->size - dat->byte)
             {
-              free (decomp);
+              FREE (decomp);
               LOG_ERROR ("Invalid section size %ld",
                          (long)section_page->uncomp_size);
               return DWG_ERR_VALUEOUTOFBOUNDS;
@@ -905,7 +906,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
   LOG_TRACE ("\n=== System Section (Section Map) ===\n");
   while (page.byte < (size_t)size_uncomp)
     {
-      section = (r2007_section *)calloc (1, sizeof (r2007_section));
+      section = (r2007_section *)CALLOC (1, sizeof (r2007_section));
       if (!section)
         {
           LOG_ERROR ("Out of memory");
@@ -939,7 +940,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
           || section->name_length >= 48)
         {
           LOG_ERROR ("Invalid System Section");
-          free (section);
+          FREE (section);
           bit_chain_free (&page);
           sections_destroy (sections); // the root
           return NULL;
@@ -998,7 +999,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
             sz = page_sz;
           }
         section->name
-            = (DWGCHAR *)calloc (1, section->name_length > 0 ? sz + 2 : 2);
+            = (DWGCHAR *)CALLOC (1, section->name_length > 0 ? sz + 2 : 2);
         bit_read_fixed (&page, (BITCODE_RC *)section->name, sz);
       }
 #ifdef HAVE_NATIVE_WCHAR2
@@ -1019,7 +1020,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
           continue;
         }
 
-      section->pages = (r2007_section_page **)calloc (
+      section->pages = (r2007_section_page **)CALLOC (
           (size_t)section->num_pages, sizeof (r2007_section_page *));
       if (!section->pages)
         {
@@ -1035,7 +1036,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       for (i = 0; i < section->num_pages; i++)
         {
           section->pages[i]
-              = (r2007_section_page *)calloc (1, sizeof (r2007_section_page));
+              = (r2007_section_page *)CALLOC (1, sizeof (r2007_section_page));
           if (!section->pages[i])
             {
               LOG_ERROR ("Out of memory");
@@ -1052,7 +1053,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
               LOG_ERROR ("Section[%d]->pages[%d] overflow (%" PRIuSIZE
                          " > %" PRIuSIZE ")",
                          j, i, page.byte + 56, page.size);
-              free (section->pages[i]);
+              FREE (section->pages[i]);
               section->num_pages = i; // skip this last section
               break;
             }
@@ -1081,7 +1082,7 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
             {
               LOG_ERROR ("Invalid section->pages[%d] size", i);
               bit_chain_free (&page);
-              free (section->pages[i]);
+              FREE (section->pages[i]);
               section->num_pages = i; // skip this last section
               return sections;
             }
@@ -1112,7 +1113,7 @@ read_pages_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
   LOG_TRACE ("\n=== System Section (Pages Map) ===\n");
   while (sdat.byte < (size_t)size_uncomp)
     {
-      page = (r2007_page *)malloc (sizeof (r2007_page));
+      page = (r2007_page *)MALLOC (sizeof (r2007_page));
       if (page == NULL)
         {
           LOG_ERROR ("Out of memory");
@@ -1176,7 +1177,7 @@ pages_destroy (r2007_page *page)
   while (page != 0)
     {
       next = page->next;
-      free (page);
+      FREE (page);
       page = next;
     }
 }
@@ -1211,15 +1212,15 @@ sections_destroy (r2007_section *section)
         {
           while (section->num_pages-- > 0)
             {
-              free (section->pages[section->num_pages]);
+              FREE (section->pages[section->num_pages]);
             }
-          free (section->pages);
+          FREE (section->pages);
         }
 
       if (section->name)
-        free (section->name);
+        FREE (section->name);
 
-      free (section);
+      FREE (section);
       section = next;
     }
 }
@@ -1307,7 +1308,7 @@ read_file_header (Bit_Chain *restrict dat,
       VALID_COUNT (file_header->num_sections);
     }
 
-  free (pedata);
+  FREE (pedata);
   return error;
 }
 
@@ -1505,7 +1506,7 @@ read_2007_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       LOG_ERROR ("Failed to read class section");
       if (sec_dat.chain)
-        free (sec_dat.chain);
+        FREE (sec_dat.chain);
       return error;
     }
 
@@ -1543,7 +1544,7 @@ read_2007_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           LOG_ERROR ("Invalid max class number %d", max_num);
           dwg->num_classes = 0;
           if (sec_dat.chain)
-            free (sec_dat.chain);
+            FREE (sec_dat.chain);
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
       assert (max_num >= 500);
@@ -1552,12 +1553,12 @@ read_2007_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       section_string_stream (dwg, &sec_dat, bitsize, &str);
 
       dwg->dwg_class
-          = (Dwg_Class *)calloc (dwg->num_classes, sizeof (Dwg_Class));
+          = (Dwg_Class *)CALLOC (dwg->num_classes, sizeof (Dwg_Class));
       if (!dwg->dwg_class)
         {
           LOG_ERROR ("Out of memory");
           if (sec_dat.chain)
-            free (sec_dat.chain);
+            FREE (sec_dat.chain);
           return DWG_ERR_OUTOFMEM;
         }
 
@@ -1607,12 +1608,12 @@ read_2007_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   else
     {
       LOG_ERROR ("Failed to find class section sentinel");
-      free (sec_dat.chain);
+      FREE (sec_dat.chain);
       return DWG_ERR_CLASSESNOTFOUND;
     }
 
   if (sec_dat.chain)
-    free (sec_dat.chain);
+    FREE (sec_dat.chain);
 
   return 0;
 }
@@ -1632,7 +1633,7 @@ read_2007_section_header (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
     {
       LOG_ERROR ("Failed to read header section");
       if (sec_dat.chain)
-        free (sec_dat.chain);
+        FREE (sec_dat.chain);
       return error;
     }
   if (bit_search_sentinel (&sec_dat,
@@ -1676,7 +1677,7 @@ read_2007_section_header (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
     }
 
   if (sec_dat.chain)
-    free (sec_dat.chain);
+    FREE (sec_dat.chain);
 
   return error;
 }
@@ -1698,7 +1699,7 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
     {
       LOG_ERROR ("Failed to read objects section");
       if (obj_dat.chain)
-        free (obj_dat.chain);
+        FREE (obj_dat.chain);
       return error;
     }
 
@@ -1709,9 +1710,9 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
     {
       LOG_ERROR ("Failed to read handles section");
       if (obj_dat.chain)
-        free (obj_dat.chain);
+        FREE (obj_dat.chain);
       if (hdl_dat.chain)
-        free (hdl_dat.chain);
+        FREE (hdl_dat.chain);
       return error;
     }
 
@@ -1788,9 +1789,9 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
   while (section_size > 2);
 
   if (hdl_dat.chain)
-    free (hdl_dat.chain);
+    FREE (hdl_dat.chain);
   if (obj_dat.chain)
-    free (obj_dat.chain);
+    FREE (obj_dat.chain);
   return error;
 }
 
@@ -1815,7 +1816,7 @@ read_2007_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       LOG_INFO ("%s section not found\n", "VBAProject");
       if (sec_dat.chain)
-        free (sec_dat.chain);
+        FREE (sec_dat.chain);
       return error;
     }
 
@@ -1832,7 +1833,7 @@ read_2007_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
   LOG_TRACE ("\n");
   if (sec_dat.chain)
-    free (sec_dat.chain);
+    FREE (sec_dat.chain);
   *dat = old_dat; // unrestrict
   return error;
 }
@@ -1856,7 +1857,7 @@ read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       LOG_ERROR ("Failed to read SummaryInfo section");
       if (sec_dat.chain)
-        free (sec_dat.chain);
+        FREE (sec_dat.chain);
       return error;
     }
 
@@ -1873,7 +1874,7 @@ read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   // clang-format on
 
   if (sec_dat.chain)
-    free (sec_dat.chain);
+    FREE (sec_dat.chain);
   *dat = old_dat; // unrestrict
   return error;
 }
@@ -1899,7 +1900,7 @@ read_2007_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       LOG_INFO ("%s section not found\n", "AppInfo");
       if (sec_dat.chain)
-        free (sec_dat.chain);
+        FREE (sec_dat.chain);
       return error;
     }
 
@@ -1914,7 +1915,7 @@ read_2007_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
   LOG_TRACE ("\n");
   if (sec_dat.chain)
-    free (sec_dat.chain);
+    FREE (sec_dat.chain);
   *dat = old_dat; // unrestrict
   return error;
 }
@@ -1940,7 +1941,7 @@ read_2007_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       LOG_INFO ("%s section not found\n", "AuxHeader");
       if (sec_dat.chain)
-        free (sec_dat.chain);
+        FREE (sec_dat.chain);
       return error;
     }
 
@@ -1956,7 +1957,7 @@ read_2007_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
   LOG_TRACE ("\n");
   if (sec_dat.chain)
-    free (sec_dat.chain);
+    FREE (sec_dat.chain);
   *dat = old_dat; // unrestrict
   return error;
 }
@@ -1983,7 +1984,7 @@ read_2007_section_appinfohistory (Bit_Chain *restrict dat,
     {
       LOG_INFO ("%s section not found\n", "AppInfoHistory");
       if (sec_dat.chain)
-        free (sec_dat.chain);
+        FREE (sec_dat.chain);
       return error;
     }
 
@@ -2000,7 +2001,7 @@ read_2007_section_appinfohistory (Bit_Chain *restrict dat,
 
   LOG_TRACE ("\n");
   if (sec_dat.chain)
-    free (sec_dat.chain);
+    FREE (sec_dat.chain);
   *dat = old_dat; // unrestrict
   return error;
 }
@@ -2026,7 +2027,7 @@ read_2007_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       LOG_INFO ("%s section not found\n", "RevHistory");
       if (sec_dat.chain)
-        free (sec_dat.chain);
+        FREE (sec_dat.chain);
       return error;
     }
 
@@ -2042,7 +2043,7 @@ read_2007_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
   LOG_TRACE ("\n");
   if (sec_dat.chain)
-    free (sec_dat.chain);
+    FREE (sec_dat.chain);
   *dat = old_dat; // unrestrict
   return error;
 }
@@ -2069,7 +2070,7 @@ read_2007_section_objfreespace (Bit_Chain *restrict dat,
     {
       LOG_INFO ("%s section not found\n", "ObjFreeSpace");
       if (sec_dat.chain)
-        free (sec_dat.chain);
+        FREE (sec_dat.chain);
       return error;
     }
 
@@ -2085,7 +2086,7 @@ read_2007_section_objfreespace (Bit_Chain *restrict dat,
 
   LOG_TRACE ("\n");
   if (sec_dat.chain)
-    free (sec_dat.chain);
+    FREE (sec_dat.chain);
   *dat = old_dat; // unrestrict
   return error;
 }
@@ -2112,7 +2113,7 @@ read_2007_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       LOG_ERROR ("%s section not found\n", "Template");
       if (sec_dat.chain)
-        free (sec_dat.chain);
+        FREE (sec_dat.chain);
       return error | DWG_ERR_SECTIONNOTFOUND;
     }
 
@@ -2132,7 +2133,7 @@ read_2007_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
   LOG_TRACE ("\n");
   if (sec_dat.chain)
-    free (sec_dat.chain);
+    FREE (sec_dat.chain);
   *dat = old_dat; // unrestrict
   return error;
 }
@@ -2159,7 +2160,7 @@ read_2007_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       LOG_INFO ("%s section not found\n", "FileDepList");
       if (sec_dat.chain)
-        free (sec_dat.chain);
+        FREE (sec_dat.chain);
       return 0;
     }
 
@@ -2175,7 +2176,7 @@ read_2007_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
   LOG_TRACE ("\n");
   if (sec_dat.chain)
-    free (sec_dat.chain);
+    FREE (sec_dat.chain);
   *dat = old_dat; // unrestrict
   return error;
 }
@@ -2201,7 +2202,7 @@ read_2007_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       LOG_INFO ("%s section not found\n", "Security");
       if (sec_dat.chain)
-        free (sec_dat.chain);
+        FREE (sec_dat.chain);
       return 0;
     }
 
@@ -2216,7 +2217,7 @@ read_2007_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
   LOG_TRACE ("\n");
   if (sec_dat.chain)
-    free (sec_dat.chain);
+    FREE (sec_dat.chain);
   *dat = old_dat; // unrestrict
   return error;
 }
@@ -2243,7 +2244,7 @@ read_2007_section_signature (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       LOG_INFO ("%s section not found\n", "Signature");
       if (sec_dat.chain)
-        free (sec_dat.chain);
+        FREE (sec_dat.chain);
       return 0;
     }
 
@@ -2258,7 +2259,7 @@ read_2007_section_signature (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
   LOG_TRACE ("\n");
   if (sec_dat.chain)
-    free (sec_dat.chain);
+    FREE (sec_dat.chain);
   *dat = old_dat; // unrestrict
   return error;
 }
@@ -2299,7 +2300,7 @@ read_2007_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       LOG_INFO ("%s section not found\n", secname);
       if (sec_dat.chain)
-        free (sec_dat.chain);
+        FREE (sec_dat.chain);
       return 0;
     }
 
@@ -2314,7 +2315,7 @@ read_2007_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 
   LOG_TRACE ("\n");
   if (sec_dat.chain)
-    free (sec_dat.chain);
+    FREE (sec_dat.chain);
   *dat = old_dat; // unrestrict
   return error;
 }
@@ -2336,7 +2337,7 @@ read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       LOG_ERROR ("Failed to read uncompressed %s section", "Preview");
       if (sec_dat.chain)
-        free (sec_dat.chain);
+        FREE (sec_dat.chain);
       return error;
     }
 
@@ -2348,7 +2349,7 @@ read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     {
       LOG_WARN ("Empty thumbnail");
       if (sec_dat.chain)
-        free (sec_dat.chain);
+        FREE (sec_dat.chain);
       return error;
     }
 

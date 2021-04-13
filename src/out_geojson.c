@@ -158,10 +158,10 @@
     else                                                                      \
       {                                                                       \
         const size_t _len = 6 * len + 1;                                      \
-        char *_buf = (char *)malloc (_len);                                   \
+        char *_buf = (char *)MALLOC (_len);                                   \
         PREFIX fprintf (dat->fh, "\"" #name "\": \"%s\",\n",                  \
                         json_cquote (_buf, str, _len, dat->codepage));        \
-        free (_buf);                                                          \
+        FREE (_buf);                                                          \
       }                                                                       \
   }
 #define PAIR_S(name, str)                                                     \
@@ -397,7 +397,7 @@ normalize_polygon_orient (BITCODE_BL numpts, dwg_point_2d **const pts_p)
       // reverse and return a copy
       unsigned last = numpts - 1;
       dwg_point_2d *newpts
-          = (dwg_point_2d *)malloc (numpts * sizeof (BITCODE_2RD));
+          = (dwg_point_2d *)MALLOC (numpts * sizeof (BITCODE_2RD));
       // fprintf (stderr, "%u pts, sum %f: reverse orient\n", numpts, sum);
       for (unsigned i = 0; i < numpts; i++)
         {
@@ -609,7 +609,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
             {
               PAIR_S (Layer, name);
               if (IS_FROM_TU (dat))
-                free (name);
+                FREE (name);
             }
         }
 
@@ -639,7 +639,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         {
           PAIR_S (Linetype, name);
           if (IS_FROM_TU (dat))
-            free (name);
+            FREE (name);
         }
     }
 
@@ -652,7 +652,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         {
           char *utf8 = bit_convert_TU ((BITCODE_TU)_obj->notes);
           PAIR_S (Text, utf8)
-          free (utf8);
+          FREE (utf8);
         }
       else
         {
@@ -666,7 +666,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         {
           char *utf8 = bit_convert_TU ((BITCODE_TU)_obj->text_value);
           PAIR_S (Text, utf8)
-          free (utf8);
+          FREE (utf8);
         }
       else
         {
@@ -680,7 +680,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         {
           char *utf8 = bit_convert_TU ((BITCODE_TU)_obj->text);
           PAIR_S (Text, utf8)
-          free (utf8);
+          FREE (utf8);
         }
       else
         {
@@ -704,7 +704,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
             {
               PAIR_S (name, text);
               if (IS_FROM_TU (dat))
-                free (text);
+                FREE (text);
             }
         }
       geojson_insert_attribs (dat, obj);
@@ -725,7 +725,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
             {
               PAIR_S (name, text);
               if (IS_FROM_TU (dat))
-                free (text);
+                FREE (text);
             }
         }
       geojson_insert_attribs (dat, obj);
@@ -776,7 +776,7 @@ bulge_points (Dwg_Data *restrict dwg, const dwg_point_2d *restrict points,
       else
         total++;
     }
-  pts = (BITCODE_2BD *)malloc (total * sizeof (BITCODE_2BD));
+  pts = (BITCODE_2BD *)MALLOC (total * sizeof (BITCODE_2BD));
   if (!pts)
     return NULL;
   // pass 2: same segment counts as above
@@ -840,7 +840,7 @@ dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       LASTENDARRAY;
       LASTENDARRAY;
       if (changed)
-        free (pts);
+        FREE (pts);
     }
   else
     {
@@ -855,7 +855,7 @@ dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     }
   ENDGEOMETRY;
   ENDFEATURE;
-  free (bulge_pts);
+  FREE (bulge_pts);
   return 1;
 }
 
@@ -1211,7 +1211,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         pts = dwg_object_polyline_2d_get_points (obj, &error);
         if (error || !pts)
           {
-            free (pts);
+            FREE (pts);
             return 0;
           }
         bulges = dwg_object_polyline_2d_get_bulges (obj, &error);
@@ -1221,11 +1221,11 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 dwg, pts, bulges, numpts, _obj->flag & 1, &num_bulge_pts);
             if (bulge_pts)
               {
-                free (pts);
+                FREE (pts);
                 pts = bulge_pts;
                 numpts = num_bulge_pts;
               }
-            free (bulges);
+            FREE (bulges);
           }
 
         // if closed and num_points > 3 use a Polygon
@@ -1235,7 +1235,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             orig = pts; // pts is already a new copy
             changed = normalize_polygon_orient (numpts, &pts); // RFC7946
             if (changed)
-              free (orig);
+              FREE (orig);
             GEOMETRY (Polygon)
             KEY (coordinates);
             ARRAY;
@@ -1245,7 +1245,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             LASTVALUE_2DPOINT (pts[0].x, pts[0].y);
             LASTENDARRAY;
             LASTENDARRAY;
-            free (pts);
+            FREE (pts);
           }
         else
           {
@@ -1259,7 +1259,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 else
                   VALUE_2DPOINT (pts[j].x, pts[j].y);
               }
-            free (pts);
+            FREE (pts);
             LASTENDARRAY;
           }
         ENDGEOMETRY;
@@ -1292,7 +1292,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 VALUE_3DPOINT (pts[j].x, pts[j].y, pts[j].z);
               }
           }
-        free (pts);
+        FREE (pts);
         LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
@@ -1315,7 +1315,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             LOG_ERROR ("Invalid angles");
             return DWG_ERR_VALUEOUTOFBOUNDS;
           }
-        pts = (BITCODE_2BD *)malloc (num_pts * sizeof (BITCODE_2BD));
+        pts = (BITCODE_2BD *)MALLOC (num_pts * sizeof (BITCODE_2BD));
         if (!pts)
           {
             LOG_ERROR ("Out of memory");
@@ -1337,7 +1337,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
-        free (pts);
+        FREE (pts);
         return 1;
       }
     case DWG_TYPE_CIRCLE:
@@ -1346,7 +1346,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         BITCODE_2BD ctr = { _obj->center.x, _obj->center.y };
         int num_pts = calc_curve_segments (dwg, _obj->radius, 2 * M_PI);
         BITCODE_2BD *pts
-            = (BITCODE_2BD *)malloc (num_pts * sizeof (BITCODE_2BD));
+            = (BITCODE_2BD *)MALLOC (num_pts * sizeof (BITCODE_2BD));
         if (!pts)
           {
             LOG_ERROR ("Out of memory");
@@ -1367,7 +1367,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
-        free (pts);
+        FREE (pts);
         return 1;
       }
     case DWG_TYPE_LINE:
@@ -1444,7 +1444,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           end_angle += 2 * M_PI;
         angle_span = end_angle - start_angle;
         num_pts = calc_curve_segments (dwg, major_r, angle_span);
-        pts = (BITCODE_2BD *)malloc (num_pts * sizeof (BITCODE_2BD));
+        pts = (BITCODE_2BD *)MALLOC (num_pts * sizeof (BITCODE_2BD));
         if (!pts)
           {
             LOG_ERROR ("Out of memory");
@@ -1477,7 +1477,7 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         LASTENDARRAY;
         ENDGEOMETRY;
         ENDFEATURE;
-        free (pts);
+        FREE (pts);
         return 1;
       }
     case DWG_TYPE_SPLINE:
