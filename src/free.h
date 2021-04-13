@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2019 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2021 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -20,9 +20,12 @@
 #ifndef FREE_H
 #define FREE_H
 
+#include "config.h"
 #include "dwg.h"
+#include "common.h"
 #include "bits.h"
 
+#ifndef HAVE_LIBGC
 EXPORT void dwg_free_eed (Dwg_Object *obj);
 /* Needed when we cast types.
    By fixedtype, not dxfname. */
@@ -32,5 +35,11 @@ int dwg_free_variable_type_private (Dwg_Object *restrict obj);
 int dwg_free_variable_type (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
 int dwg_free_variable_no_class (Dwg_Data *restrict dwg,
                                 Dwg_Object *restrict obj);
+
+#else
+#  define dwg_free_eed(x)
+#  define dwg_free_object(x)
+#  define dwg_free_object_private(x)
+#endif
 
 #endif

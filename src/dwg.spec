@@ -622,7 +622,7 @@ DWG_ENTITY (BLOCK)
     if (R11OPTS (4)) {
       FIELD_TV (name, 2);
     }
-    FREE { // set via dwg_add_BLOCK
+    ON_FREE { // set via dwg_add_BLOCK
       FIELD_TV (name, 2);
     }
   }
@@ -1616,7 +1616,7 @@ DWG_ENTITY_END
         char *blockname = dwg_dim_blockname (dwg, obj);                       \
         VALUE_TV0 (blockname, 2);                                             \
         if (blockname)                                                        \
-          free (blockname);                                                   \
+          FREE (blockname);                                                   \
         FIELD_3BD (def_pt, 10);                                               \
       }                                                                       \
       else { FIELD_3BD (extrusion, 210); }                                    \
@@ -2661,9 +2661,7 @@ DWG_ENTITY (SPLINE)
     FIELD_BL (num_fit_pts, 0);
     FIELD_3DPOINT_VECTOR (fit_pts, num_fit_pts, 11);
   }
-
   COMMON_ENTITY_HANDLE_DATA;
-
 DWG_ENTITY_END
 
 /* (37) */
@@ -3517,7 +3515,7 @@ DWG_TABLE (STYLE)
           if (IS_FROM_TU (dat)) {
             s = bit_convert_TU ((BITCODE_TU)FIELD_VALUE (font_file));
             strncpy (_buf, s, 255);
-            free (s);
+            FREE (s);
           }
           else {
             strncpy (_buf, FIELD_VALUE (font_file), 255);
@@ -4303,7 +4301,7 @@ DWG_TABLE (DIMSTYLE)
       FIELD_CMC (DIMCLRE, 177);
       FIELD_CMC (DIMCLRT, 178);
     }
-  else FREE {
+  else ON_FREE {
       FIELD_TV (DIMBLK_T, 5);
       FIELD_TV (DIMBLK1_T, 6);
       FIELD_TV (DIMBLK2_T, 7);
@@ -5270,7 +5268,7 @@ DWG_OBJECT (PLOTSETTINGS)
         }
     }
   }
-  FREE { FIELD_TV (plotview_name, 6); FIELD_HANDLE (plotview, 5, 6); }
+  ON_FREE { FIELD_TV (plotview_name, 6); FIELD_HANDLE (plotview, 5, 6); }
   FIELD_BD (paper_units, 142);
   FIELD_BD (drawing_units, 143);
   DXF {
@@ -5361,7 +5359,7 @@ DWG_OBJECT (LAYOUT)
         }
     }
   }
-  FREE { FIELD_TV (plotsettings.plotview_name, 6); FIELD_HANDLE (plotsettings.plotview, 5, 6); }
+  ON_FREE { FIELD_TV (plotsettings.plotview_name, 6); FIELD_HANDLE (plotsettings.plotview, 5, 6); }
   FIELD_BD (plotsettings.paper_units, 142);
   FIELD_BD (plotsettings.drawing_units, 143);
   DXF {
@@ -5671,7 +5669,7 @@ DWG_ENTITY (PROXY_ENTITY)
     FIELD_BL (data_numbits, 93)
     FIELD_BINARY (data, bytes, 310);
   }
-  FREE {
+  ON_FREE {
     FIELD_BINARY (data, _obj->data_numbits / 8, 0);
   }
 
@@ -5794,7 +5792,7 @@ DWG_OBJECT (PROXY_OBJECT)
     FIELD_BL (data_numbits, 93)
     FIELD_BINARY (data, bytes, 310);
   }
-  FREE {
+  ON_FREE {
     FIELD_BINARY (data, _obj->data_numbits / 8, 0);
   }
 
