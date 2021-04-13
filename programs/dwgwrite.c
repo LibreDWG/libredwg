@@ -103,8 +103,8 @@ help (void)
 #  else
   printf ("  -I fmt      fmt: DXF, DXFB\n");
 #  endif
-  printf (
-      "              Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
+  printf ("              Planned input formats: "
+          "GeoJSON, YAML, XML/OGR, GPX\n");
   printf ("  -o dwgfile\n");
   printf ("  -y          overwrite existing files\n");
   printf ("  -h          display this help and exit\n");
@@ -129,6 +129,7 @@ main (int argc, char *argv[])
   Bit_Chain out_dat = { NULL, 0, 0, 0, 0 };
   FILE *fp;
 
+  GC_INIT ();
   __AFL_INIT ();
   dat.chain = NULL;
   dat.version = R_2000;
@@ -166,7 +167,7 @@ main (int argc, char *argv[])
           out_dat.codepage = dwg.header.codepage;
           if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
             exit (0);
-          free (out_dat.chain);
+          FREE (out_dat.chain);
         }
       else
         exit (0);
@@ -401,15 +402,15 @@ main (int argc, char *argv[])
         fprintf (stderr, "Missing input format\n");
       if (infile)
         fclose (dat.fh);
-      free (dat.chain);
+      FREE (dat.chain);
       exit (1);
     }
 
-  free (dat.chain);
+  FREE (dat.chain);
   if (infile && dat.fh)
     fclose (dat.fh);
   if (error >= DWG_ERR_CRITICAL)
-    goto free;
+    goto FREE;
 
   if (dwg_version == R_INVALID)
     {
@@ -482,7 +483,7 @@ main (int argc, char *argv[])
       }
   }
 
-free:
+FREE:
 #if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
   {
     char *asanenv = getenv ("ASAN_OPTIONS");
@@ -522,6 +523,8 @@ free:
     }
 
   if (free_outfile)
-    free (outfile);
+    {
+      FREE (outfile);
+    }
   return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }
