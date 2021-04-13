@@ -363,16 +363,16 @@ static array_hdls *obj_hdls = NULL;
     }
 
 static void *
-xcalloc (size_t n, size_t s)
+xCALLOC (size_t n, size_t s)
 {
   void *p;
   if ((n * s) > INT32_MAX)
     goto err;
-  p = calloc (n, s);
+  p = CALLOC (n, s);
   if (!p)
     {
     err:
-      LOG_ERROR ("Out of memory with calloc %ld * %ld\n", (long)n, (long)s);
+      LOG_ERROR ("Out of memory with CALLOC %ld * %ld\n", (long)n, (long)s);
       return NULL;
     }
   return p;
@@ -386,7 +386,7 @@ free_GEODATA_geomesh_pts (Dwg_Object_GEODATA *restrict geodata)
   if (!geodata)
     return;
 
-  free (geodata->geomesh_pts);
+  FREE (geodata->geomesh_pts);
   geodata->geomesh_pts = NULL;
   geodata->num_geomesh_pts = 0;
 }
@@ -397,7 +397,7 @@ free_GEODATA_geomesh_faces (Dwg_Object_GEODATA *restrict geodata)
   if (!geodata)
     return;
 
-  free (geodata->geomesh_faces);
+  FREE (geodata->geomesh_faces);
   geodata->geomesh_faces = NULL;
   geodata->num_geomesh_faces = 0;
 }
@@ -632,8 +632,8 @@ dxf_read_string (Bit_Chain *dat, char **string)
         }
       else
         {
-          *string = !*string ? (char *)malloc (size)
-                             : (char *)realloc (*string, size);
+          *string = !*string ? (char *)MALLOC (size)
+                             : (char *)REALLOC (*string, size);
           if (!*string)
             {
               LOG_ERROR ("Out of memory");
@@ -656,7 +656,7 @@ dxf_read_string (Bit_Chain *dat, char **string)
           return; // ignore, just advanced dat
         }
       *string
-          = !*string ? (char *)malloc (size) : (char *)realloc (*string, size);
+          = !*string ? (char *)MALLOC (size) : (char *)REALLOC (*string, size);
       if (!*string)
         {
           LOG_ERROR ("Out of memory");
@@ -731,9 +731,9 @@ dxf_read_string (Bit_Chain *dat, char **string)
       if (!string)
         return; // ignore, just advanced dat
       if (!*string)
-        *string = (char *)malloc (strlen (buf) + 1);
+        *string = (char *)MALLOC (strlen (buf) + 1);
       else
-        *string = (char *)realloc (*string, strlen (buf) + 1);
+        *string = (char *)REALLOC (*string, strlen (buf) + 1);
       if (!*string)
         {
           LOG_ERROR ("Out of memory");
@@ -771,8 +771,8 @@ dxf_read_binary (Bit_Chain *dat, char **string, BITCODE_BL *len)
           dat->byte = dat->size;
           return;
         }
-      dst = string && *string ? (unsigned char *)realloc (*string, size + 1)
-                              : (unsigned char *)malloc (size + 1);
+      dst = string && *string ? (unsigned char *)REALLOC (*string, size + 1)
+                              : (unsigned char *)MALLOC (size + 1);
       if (!dst)
         {
           LOG_ERROR ("Out of memory");
@@ -806,8 +806,8 @@ dxf_read_binary (Bit_Chain *dat, char **string, BITCODE_BL *len)
           dat->byte = dat->size;
           return;
         }
-      dst = string && *string ? (unsigned char *)realloc (*string, size + 1)
-                              : (unsigned char *)malloc (size + 1);
+      dst = string && *string ? (unsigned char *)REALLOC (*string, size + 1)
+                              : (unsigned char *)MALLOC (size + 1);
       if (!dst)
         {
           LOG_ERROR ("Out of memory");
@@ -833,22 +833,22 @@ dxf_free_pair (Dxf_Pair *pair)
     return;
   if (pair->type == DWG_VT_STRING || pair->type == DWG_VT_BINARY)
     {
-      free (pair->value.s.ptr);
+      FREE (pair->value.s.ptr);
       pair->value.s.ptr = NULL;
     }
   else if (pair->code == 0 || pair->code == 2)
     {
-      free (pair->value.s.ptr);
+      FREE (pair->value.s.ptr);
       pair->value.s.ptr = NULL;
     }
-  free (pair);
+  FREE (pair);
   pair = NULL;
 }
 
 static Dxf_Pair *ATTRIBUTE_MALLOC
 dxf_read_pair (Bit_Chain *dat)
 {
-  Dxf_Pair *pair = (Dxf_Pair *)xcalloc (1, sizeof (Dxf_Pair));
+  Dxf_Pair *pair = (Dxf_Pair *)xCALLOC (1, sizeof (Dxf_Pair));
   const int is_binary = dat->opts & DWG_OPTS_DXFB;
   if (!pair)
     return NULL;
@@ -856,7 +856,7 @@ dxf_read_pair (Bit_Chain *dat)
     {
     err:
       LOG_ERROR ("Unexpected DXF end-of-file");
-      free (pair);
+      FREE (pair);
       return NULL;
     }
   if (is_binary)
@@ -880,7 +880,7 @@ dxf_read_pair (Bit_Chain *dat)
     case DWG_VT_STRING:
       dxf_read_string (dat, &pair->value.s.ptr);
       if (!pair->value.s.ptr && pair->code != 0)
-        pair->value.s.ptr = (char *)calloc (1, 1);
+        pair->value.s.ptr = (char *)CALLOC (1, 1);
       if (!pair->value.s.ptr)
         {
           LOG_ERROR ("Out of memory");
@@ -926,7 +926,7 @@ dxf_read_pair (Bit_Chain *dat)
       dxf_read_binary (dat, &pair->value.s.ptr, &pair->value.s.len);
       if (!pair->value.s.ptr)
         {
-          pair->value.s.ptr = (char *)calloc (1, 1);
+          pair->value.s.ptr = (char *)CALLOC (1, 1);
           pair->value.s.len = 0;
         }
       if (!pair->value.s.ptr)
@@ -956,8 +956,8 @@ dxf_read_pair (Bit_Chain *dat)
 
 #  define DXF_CHECK_EOF                                                       \
     if (dat->byte >= dat->size || (pair == NULL)                              \
-        || (pair->code == 0 && !pair->value.s.ptr)                                \
-        || (pair->code == 0 && strEQc (pair->value.s.ptr, "EOF")))                \
+        || (pair->code == 0 && !pair->value.s.ptr)                            \
+        || (pair->code == 0 && strEQc (pair->value.s.ptr, "EOF")))            \
       {                                                                       \
         if (pair)                                                             \
           dxf_free_pair (pair);                                               \
@@ -966,8 +966,8 @@ dxf_read_pair (Bit_Chain *dat)
       }
 #  define DXF_RETURN_EOF(what)                                                \
     if (dat->byte >= dat->size || (pair == NULL)                              \
-        || (pair->code == 0 && !pair->value.s.ptr)                                \
-        || (pair->code == 0 && strEQc (pair->value.s.ptr, "EOF")))                \
+        || (pair->code == 0 && !pair->value.s.ptr)                            \
+        || (pair->code == 0 && strEQc (pair->value.s.ptr, "EOF")))            \
       {                                                                       \
         if (pair)                                                             \
           dxf_free_pair (pair);                                               \
@@ -976,8 +976,8 @@ dxf_read_pair (Bit_Chain *dat)
       }
 #  define DXF_BREAK_EOF                                                       \
     if (dat->byte >= dat->size || (pair == NULL)                              \
-        || (pair->code == 0 && !pair->value.s.ptr)                                \
-        || (pair->code == 0 && strEQc (pair->value.s.ptr, "EOF")))                \
+        || (pair->code == 0 && !pair->value.s.ptr)                            \
+        || (pair->code == 0 && strEQc (pair->value.s.ptr, "EOF")))            \
     break
 
 static Dxf_Pair *
@@ -1011,7 +1011,7 @@ array_push (array_hdls *restrict hdls, const char *restrict field,
   if (i >= hdls->size)
     {
       hdls->size += 16;
-      hdls = (array_hdls *)realloc (
+      hdls = (array_hdls *)REALLOC (
           hdls, 8 + (hdls->size * sizeof (struct array_hdl)));
       if (!hdls)
         {
@@ -1021,8 +1021,8 @@ array_push (array_hdls *restrict hdls, const char *restrict field,
       // memset (hdls, 0, 8 + (hdls->size * sizeof (struct array_hdl));
     }
   hdls->nitems = i + 1;
-  hdls->items[i].field = strdup (field);
-  hdls->items[i].name = strdup (name);
+  hdls->items[i].field = STRDUP (field);
+  hdls->items[i].name = STRDUP (name);
   hdls->items[i].code = code;
   return hdls;
 }
@@ -1031,7 +1031,7 @@ array_hdls *
 new_array_hdls (uint32_t size)
 {
   array_hdls *hdls
-      = (array_hdls *)xcalloc (1, 8 + size * sizeof (struct array_hdl));
+      = (array_hdls *)xCALLOC (1, 8 + size * sizeof (struct array_hdl));
   if (!hdls)
     return NULL;
   hdls->size = size;
@@ -1043,26 +1043,26 @@ free_array_hdls (array_hdls *hdls)
 {
   for (uint32_t i = 0; i < hdls->nitems; i++)
     {
-      free (hdls->items[i].field);
-      free (hdls->items[i].name);
+      FREE (hdls->items[i].field);
+      FREE (hdls->items[i].name);
     }
-  free (hdls);
+  FREE (hdls);
 }
 
 #  define DXF_CHECK_ENDSEC                                                    \
     if (pair != NULL                                                          \
-        && (dat->byte >= dat->size || (pair->code == 0 && !pair->value.s.ptr)     \
-            || (pair->code == 0 && strEQc (pair->value.s.ptr, "ENDSEC"))))        \
+        && (dat->byte >= dat->size || (pair->code == 0 && !pair->value.s.ptr) \
+            || (pair->code == 0 && strEQc (pair->value.s.ptr, "ENDSEC"))))    \
     return 0
 #  define DXF_BREAK_ENDSEC                                                    \
     if (pair != NULL                                                          \
-        && (dat->byte >= dat->size || (pair->code == 0 && !pair->value.s.ptr)     \
-            || (pair->code == 0 && strEQc (pair->value.s.ptr, "ENDSEC"))))        \
+        && (dat->byte >= dat->size || (pair->code == 0 && !pair->value.s.ptr) \
+            || (pair->code == 0 && strEQc (pair->value.s.ptr, "ENDSEC"))))    \
     break
 #  define DXF_RETURN_ENDSEC(what)                                             \
     if (pair != NULL                                                          \
-        && (dat->byte >= dat->size || (pair->code == 0 && !pair->value.s.ptr)     \
-            || (pair->code == 0 && strEQc (pair->value.s.ptr, "ENDSEC"))))        \
+        && (dat->byte >= dat->size || (pair->code == 0 && !pair->value.s.ptr) \
+            || (pair->code == 0 && strEQc (pair->value.s.ptr, "ENDSEC"))))    \
       {                                                                       \
         dxf_free_pair (pair);                                                 \
         return what;                                                          \
@@ -1437,7 +1437,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               Dwg_Object_BLOCK_HEADER *o
                   = dwg->object[0].tio.object->tio.BLOCK_HEADER;
-              free (o->name);
+              FREE (o->name);
               o->name = (char *)bit_utf8_to_TU ((char *)"*Model_Space", 0);
             }
           // currently we can only encode DWGs to r13-r2000, but DXF's to
@@ -1488,7 +1488,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   BITCODE_BL j = dwg->summaryinfo.num_props;
                   dwg->summaryinfo.num_props++;
                   dwg->summaryinfo.props
-                      = (Dwg_SummaryInfo_Property *)realloc (
+                      = (Dwg_SummaryInfo_Property *)REALLOC (
                           dwg->summaryinfo.props,
                           (j + 1) * sizeof (Dwg_SummaryInfo_Property));
                   memset (dwg->summaryinfo.props + j, 0,
@@ -1682,12 +1682,12 @@ dxf_set_default_DWGCODEPAGE (Bit_Chain *dat, Dwg_Data *dwg)
     return;
   if (hdr->version < R_2007)
     {
-      vars->DWGCODEPAGE = strdup ("ANSI_1252");
+      vars->DWGCODEPAGE = STRDUP ("ANSI_1252");
       hdr->codepage = CP_ANSI_1252;
     }
   else
     {
-      vars->DWGCODEPAGE = strdup ("UTF-16");
+      vars->DWGCODEPAGE = STRDUP ("UTF-16");
       hdr->codepage = CP_UTF16;
     }
   LOG_TRACE ("default HEADER.codepage = %d [%s]\n", hdr->codepage,
@@ -1734,7 +1734,7 @@ dxf_set_DWGCODEPAGE (Bit_Chain *dat, Dwg_Data *dwg)
           dat->codepage = hdr->codepage;
         }
     }
-  free (cp_tmp);
+  FREE (cp_tmp);
 }
 
 static void
@@ -1801,7 +1801,7 @@ dxf_fixup_header (Bit_Chain *dat, Dwg_Data *dwg)
           = dwg->header.from_version >= R_2007
                 ? (BITCODE_TV)bit_utf8_to_TU (
                       (char *)"{00000000-0000-0000-0000-000000000000}", 0)
-                : strdup ("{00000000-0000-0000-0000-000000000000}");
+                : STRDUP ("{00000000-0000-0000-0000-000000000000}");
     }
   if (!vars->VERSIONGUID)
     {
@@ -1809,7 +1809,7 @@ dxf_fixup_header (Bit_Chain *dat, Dwg_Data *dwg)
           = dwg->header.from_version >= R_2007
                 ? (BITCODE_TV)bit_utf8_to_TU (
                       (char *)"{A6BF05D3-02A0-4EB8-9AEE-9443625E66B6}", 0)
-                : (BITCODE_TV)strdup (
+                : (BITCODE_TV)STRDUP (
                       "{DE6A95C3-2D01-4A77-AC28-3C42FCFFF657}"); // R_2000
     }
 }
@@ -1828,9 +1828,9 @@ dxf_classes_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       // add class (see decode)
       i = dwg->num_classes;
       if (i == 0)
-        dwg->dwg_class = (Dwg_Class *)malloc (sizeof (Dwg_Class));
+        dwg->dwg_class = (Dwg_Class *)MALLOC (sizeof (Dwg_Class));
       else
-        dwg->dwg_class = (Dwg_Class *)realloc (dwg->dwg_class,
+        dwg->dwg_class = (Dwg_Class *)REALLOC (dwg->dwg_class,
                                                (i + 1) * sizeof (Dwg_Class));
       if (!dwg->dwg_class)
         {
@@ -1980,7 +1980,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
     {
       if (i || eed)
         {
-          eed = (Dwg_Eed *)realloc (eed, (i + 1) * sizeof (Dwg_Eed));
+          eed = (Dwg_Eed *)REALLOC (eed, (i + 1) * sizeof (Dwg_Eed));
           if (!eed)
             {
               LOG_ERROR ("Out of memory");
@@ -1992,7 +1992,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         }
       else
         {
-          eed = (Dwg_Eed *)xcalloc (1, sizeof (Dwg_Eed));
+          eed = (Dwg_Eed *)xCALLOC (1, sizeof (Dwg_Eed));
           if (!eed)
             {
               LOG_ERROR ("Out of memory");
@@ -2034,7 +2034,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
           {
             /* code [RC] + len [RS] + cp [RS] + str[len] */
             size = 1 + 2 + 2 + len;
-            eed[i].data = (Dwg_Eed_Data *)xcalloc (
+            eed[i].data = (Dwg_Eed_Data *)xCALLOC (
                 1, MAX (size + 1, sizeof (Dwg_Eed_Data)));
             if (!eed[i].data)
               {
@@ -2063,7 +2063,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
                 BITCODE_TU tu = bit_utf8_to_TU (pair->value.s.ptr, 0);
                 len = bit_wcs2len (tu) & 0x0FFFFFFF;
                 size = 1 + 2 + 2 + (len * 2); // now with padding
-                eed[i].data = (Dwg_Eed_Data *)xcalloc (
+                eed[i].data = (Dwg_Eed_Data *)xCALLOC (
                     1, MAX (size + 2, sizeof (Dwg_Eed_Data)));
                 if (!eed[i].data)
                   {
@@ -2079,7 +2079,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
                 if (len)
                   memcpy (eed[i].data->u.eed_0_r2007.string, tu,
                           2 * (len + 1));
-                free (tu);
+                FREE (tu);
               }
           }
         eed[i].size += size;
@@ -2128,7 +2128,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       /* code [RC] + close [RC] */
       size = 1 + 1;
       eed[i].data
-          = (Dwg_Eed_Data *)xcalloc (1, MAX (size, sizeof (Dwg_Eed_Data)));
+          = (Dwg_Eed_Data *)xCALLOC (1, MAX (size, sizeof (Dwg_Eed_Data)));
       if (!eed[i].data)
         {
           LOG_ERROR ("Out of memory");
@@ -2154,7 +2154,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         /* code [RC] + len+0 + length [RC] */
         size = 1 + (cblen & INT_MAX) + 1 + 1;
         eed[i].data
-            = (Dwg_Eed_Data *)xcalloc (1, MAX (size, sizeof (Dwg_Eed_Data)));
+            = (Dwg_Eed_Data *)xCALLOC (1, MAX (size, sizeof (Dwg_Eed_Data)));
         if (!eed[i].data)
           {
             LOG_ERROR ("Out of memory");
@@ -2187,7 +2187,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       /* code [RC] + 3*RD */
       size = 1 + (3 * 8);
       eed[i].data
-          = (Dwg_Eed_Data *)xcalloc (1, MAX (size, sizeof (Dwg_Eed_Data)));
+          = (Dwg_Eed_Data *)xCALLOC (1, MAX (size, sizeof (Dwg_Eed_Data)));
       if (!eed[i].data)
         {
           LOG_ERROR ("Out of memory");
@@ -2238,7 +2238,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       /* code [RC] + RD */
       size = 1 + 8;
       eed[i].data
-          = (Dwg_Eed_Data *)xcalloc (1, MAX (size, sizeof (Dwg_Eed_Data)));
+          = (Dwg_Eed_Data *)xCALLOC (1, MAX (size, sizeof (Dwg_Eed_Data)));
       if (!eed[i].data)
         {
           LOG_ERROR ("Out of memory");
@@ -2254,7 +2254,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       /* code [RC] + RS */
       size = 1 + 2;
       eed[i].data
-          = (Dwg_Eed_Data *)xcalloc (1, MAX (size, sizeof (Dwg_Eed_Data)));
+          = (Dwg_Eed_Data *)xCALLOC (1, MAX (size, sizeof (Dwg_Eed_Data)));
       if (!eed[i].data)
         {
           LOG_ERROR ("Out of memory");
@@ -2270,7 +2270,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
       /* code [RC] + RL */
       size = 1 + 4;
       eed[i].data
-          = (Dwg_Eed_Data *)xcalloc (1, MAX (size, sizeof (Dwg_Eed_Data)));
+          = (Dwg_Eed_Data *)xCALLOC (1, MAX (size, sizeof (Dwg_Eed_Data)));
       if (!eed[i].data)
         {
           LOG_ERROR ("Out of memory");
@@ -2290,7 +2290,7 @@ add_eed (Dwg_Object *restrict obj, const char *restrict name,
         /* code [RC] + RLL */
         size = 1 + 8;
         eed[i].data
-            = (Dwg_Eed_Data *)xcalloc (1, MAX (size, sizeof (Dwg_Eed_Data)));
+            = (Dwg_Eed_Data *)xCALLOC (1, MAX (size, sizeof (Dwg_Eed_Data)));
         if (!eed[i].data)
           {
             LOG_ERROR ("Out of memory");
@@ -2357,7 +2357,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   unsigned dash_i = 0;
 
   o->dashes
-      = (Dwg_LTYPE_dash *)xcalloc (o->numdashes, sizeof (Dwg_LTYPE_dash));
+      = (Dwg_LTYPE_dash *)xCALLOC (o->numdashes, sizeof (Dwg_LTYPE_dash));
   if (!o->dashes)
     {
       o->numdashes = 0;
@@ -2447,7 +2447,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           // write into strings_area
           strings_size = is_tu ? 512 : 256;
           if (!o->strings_area)
-            o->strings_area = (BITCODE_TF)xcalloc (strings_size, 1);
+            o->strings_area = (BITCODE_TF)xCALLOC (strings_size, 1);
           if (is_tu)
             {
               needed = ((strlen (pair->value.s.ptr) * 2) + 2);
@@ -2489,11 +2489,11 @@ add_MLINESTYLE_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   int num_lines = pair->value.i;
   Dwg_Object_MLINESTYLE *o = obj->tio.object->tio.MLINESTYLE;
   Dwg_Data *dwg = obj->parent;
-  free (o->lines);
+  FREE (o->lines);
   o->lines = NULL;
   o->num_lines = num_lines;
   LOG_TRACE ("MLINESTYLE.num_lines = %d [RC 71]\n", num_lines);
-  o->lines = (Dwg_MLINESTYLE_line *)xcalloc (num_lines,
+  o->lines = (Dwg_MLINESTYLE_line *)xCALLOC (num_lines,
                                              sizeof (Dwg_MLINESTYLE_line));
   if (!o->lines)
     {
@@ -2602,7 +2602,7 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
   o->num_points = num_points;
   LOG_TRACE ("LWPOLYLINE.num_points = %u [BS 90]\n", num_points);
-  o->points = (BITCODE_2RD *)xcalloc (num_points, sizeof (BITCODE_2RD));
+  o->points = (BITCODE_2RD *)xCALLOC (num_points, sizeof (BITCODE_2RD));
   if (!o->points)
     {
       o->num_points = 0;
@@ -2693,7 +2693,7 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (!o->num_bulges)
             {
               o->bulges
-                  = (BITCODE_BD *)xcalloc (num_points, sizeof (BITCODE_BD));
+                  = (BITCODE_BD *)xCALLOC (num_points, sizeof (BITCODE_BD));
               if (!o->bulges)
                 {
                   o->num_bulges = 0;
@@ -2711,7 +2711,7 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (!j)
             {
               o->vertexids
-                  = (BITCODE_BL *)xcalloc (num_points, sizeof (BITCODE_BL));
+                  = (BITCODE_BL *)xCALLOC (num_points, sizeof (BITCODE_BL));
               if (!o->vertexids)
                 {
                   o->num_vertexids = 0;
@@ -2728,7 +2728,7 @@ new_LWPOLYLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           if (!j)
             {
-              o->widths = (Dwg_LWPOLYLINE_width *)xcalloc (
+              o->widths = (Dwg_LWPOLYLINE_width *)xCALLOC (
                   num_points, sizeof (Dwg_LWPOLYLINE_width));
               if (!o->widths)
                 {
@@ -2773,14 +2773,14 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   size_t i = 0;
   size_t total = 0;
   o->num_blocks = 1;
-  o->encr_sat_data = (char **)xcalloc (2, sizeof (char *));
+  o->encr_sat_data = (char **)xCALLOC (2, sizeof (char *));
   if (!o->encr_sat_data)
     {
       o->num_blocks = 0;
       return NULL;
     }
   o->encr_sat_data[0] = NULL;
-  o->block_size = (BITCODE_BL *)xcalloc (2, sizeof (BITCODE_BL));
+  o->block_size = (BITCODE_BL *)xCALLOC (2, sizeof (BITCODE_BL));
   if (!o->block_size)
     {
       o->num_blocks = 0;
@@ -2806,7 +2806,7 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       if (!total || !o->encr_sat_data[0])
         {
           total = len;
-          o->encr_sat_data[0] = (char *)malloc (total + 1); // + the \0
+          o->encr_sat_data[0] = (char *)MALLOC (total + 1); // + the \0
           if (!o->encr_sat_data[0])
             {
               LOG_ERROR ("Out of memory");
@@ -2819,7 +2819,7 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           total += len;
           o->encr_sat_data[0]
-              = (char *)realloc (o->encr_sat_data[0], total + 1);
+              = (char *)REALLOC (o->encr_sat_data[0], total + 1);
           if (!o->encr_sat_data[0])
             {
               LOG_ERROR ("Out of memory");
@@ -2843,7 +2843,7 @@ add_3DSOLID_encr (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     {
       int idx = 0;
       o->unknown = 1; // ??
-      o->acis_data = (BITCODE_RC *)xcalloc (1, total + 1);
+      o->acis_data = (BITCODE_RC *)xCALLOC (1, total + 1);
       if (!o->acis_data)
         return NULL;
       for (i = 0; i < total; i++)
@@ -2883,13 +2883,13 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   if (pair->code == 91)
     {
       vector = pair->code;
-      free (o->subdiv_vertex);
+      FREE (o->subdiv_vertex);
       o->subdiv_vertex = NULL;
       o->num_subdiv_vertex = pair->value.u;
       LOG_TRACE ("MESH.num_subdiv_vertex = %u [BL 91]\n", pair->value.u);
       if (pair->value.u)
         {
-          o->subdiv_vertex = (BITCODE_3BD *)xcalloc (o->num_subdiv_vertex,
+          o->subdiv_vertex = (BITCODE_3BD *)xCALLOC (o->num_subdiv_vertex,
                                                      sizeof (BITCODE_3BD));
           if (!o->subdiv_vertex)
             {
@@ -2910,13 +2910,13 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           j = 0;
           vector = pair->code;
-          free (o->vertex);
+          FREE (o->vertex);
           o->vertex = NULL;
           o->num_vertex = pair->value.u;
           LOG_TRACE ("MESH.num_vertex = %u [BL 92]\n", pair->value.u);
           if (pair->value.u)
             {
-              o->vertex = (BITCODE_3BD *)xcalloc (o->num_vertex,
+              o->vertex = (BITCODE_3BD *)xCALLOC (o->num_vertex,
                                                   sizeof (BITCODE_3BD));
               if (!o->vertex)
                 {
@@ -2929,7 +2929,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           j = 0;
           vector = pair->code;
-          free (o->faces);
+          FREE (o->faces);
           o->faces = NULL;
           o->num_faces = pair->value.u;
           LOG_TRACE ("MESH.num_faces = %u [BL %d]\n", pair->value.u,
@@ -2937,7 +2937,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (pair->value.u)
             {
               o->faces
-                  = (BITCODE_BL *)xcalloc (o->num_faces, sizeof (BITCODE_BL));
+                  = (BITCODE_BL *)xCALLOC (o->num_faces, sizeof (BITCODE_BL));
               if (!o->faces)
                 {
                   o->num_faces = 0;
@@ -2949,14 +2949,14 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           j = 0;
           vector = pair->code;
-          free (o->edges);
+          FREE (o->edges);
           o->edges = NULL;
           o->num_edges = pair->value.u;
           LOG_TRACE ("MESH.num_edges = %u [BL %d]\n", pair->value.u,
                      pair->code);
           if (pair->value.u) // from face - to face
             {
-              o->edges = (Dwg_MESH_edge *)xcalloc (o->num_edges,
+              o->edges = (Dwg_MESH_edge *)xCALLOC (o->num_edges,
                                                    sizeof (Dwg_MESH_edge));
               if (!o->edges)
                 {
@@ -2969,7 +2969,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           j = 0;
           vector = pair->code;
-          free (o->crease);
+          FREE (o->crease);
           o->crease = NULL;
           o->num_crease = pair->value.u;
           LOG_TRACE ("MESH.num_crease = %u [BL %d]\n", pair->value.u,
@@ -2977,7 +2977,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (pair->value.u)
             {
               o->crease
-                  = (BITCODE_BD *)xcalloc (o->num_crease, sizeof (BITCODE_BD));
+                  = (BITCODE_BD *)xCALLOC (o->num_crease, sizeof (BITCODE_BD));
               if (!o->crease)
                 {
                   o->num_crease = 0;
@@ -3066,7 +3066,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             }
           else if (vector == 95)
             {
-              free (o->crease);
+              FREE (o->crease);
               o->crease = NULL;
               o->num_crease = pair->value.u;
               LOG_TRACE ("MESH.num_crease = %u [BL %d]\n", pair->value.u,
@@ -3074,7 +3074,7 @@ add_MESH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               if (pair->value.u) // from face - to face
                 {
                   o->crease
-                      = (double *)xcalloc (o->num_crease, sizeof (double));
+                      = (double *)xCALLOC (o->num_crease, sizeof (double));
                   if (!o->crease)
                     {
                       o->num_crease = 0;
@@ -3131,7 +3131,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       o->num_paths = pair->value.u;
       LOG_TRACE ("HATCH.num_paths = %u [BS 91]\n", o->num_paths);
       o->paths
-          = (Dwg_HATCH_Path *)xcalloc (o->num_paths, sizeof (Dwg_HATCH_Path));
+          = (Dwg_HATCH_Path *)xCALLOC (o->num_paths, sizeof (Dwg_HATCH_Path));
       if (!o->paths)
         {
           o->num_paths = 0;
@@ -3143,7 +3143,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     {
       o->num_deflines = pair->value.l;
       LOG_TRACE ("HATCH.num_deflines = %ld [BS 78]\n", pair->value.l);
-      o->deflines = (Dwg_HATCH_DefLine *)xcalloc (pair->value.l,
+      o->deflines = (Dwg_HATCH_DefLine *)xCALLOC (pair->value.l,
                                                   sizeof (Dwg_HATCH_DefLine));
       if (!o->deflines)
         {
@@ -3156,7 +3156,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     {
       o->num_colors = pair->value.l;
       LOG_TRACE ("HATCH.num_colors = %ld [BL 453]\n", pair->value.l);
-      o->colors = (Dwg_HATCH_Color *)xcalloc (pair->value.l,
+      o->colors = (Dwg_HATCH_Color *)xCALLOC (pair->value.l,
                                               sizeof (Dwg_HATCH_Color));
       if (!o->colors)
         {
@@ -3183,7 +3183,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         LOG_ERROR ("HATCH no paths or wrong j %u\n", j);                      \
         if (o->paths)                                                         \
           {                                                                   \
-            free (o->paths);                                                  \
+            FREE (o->paths);                                                  \
             o->paths = NULL;                                                  \
           }                                                                   \
         o->num_paths = 0;                                                     \
@@ -3214,7 +3214,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           k = -1;
           if (pair->value.u && !is_plpath)
             { /* segs */
-              o->paths[j].segs = (Dwg_HATCH_PathSeg *)xcalloc (
+              o->paths[j].segs = (Dwg_HATCH_PathSeg *)xCALLOC (
                   pair->value.u, sizeof (Dwg_HATCH_PathSeg));
               if (!o->paths[j].segs)
                 {
@@ -3225,7 +3225,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             }
           else if (pair->value.u)
             { /* polyline path */
-              o->paths[j].polyline_paths = (Dwg_HATCH_PolylinePath *)xcalloc (
+              o->paths[j].polyline_paths = (Dwg_HATCH_PolylinePath *)xCALLOC (
                   pair->value.u, sizeof (Dwg_HATCH_PolylinePath));
               if (!o->paths[j].polyline_paths)
                 {
@@ -3245,7 +3245,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         LOG_ERROR ("HATCH no paths[%d].segs or wrong k %d\n", j, k);          \
         if (o->paths && o->paths[j].segs)                                     \
           {                                                                   \
-            free (o->paths[j].segs);                                          \
+            FREE (o->paths[j].segs);                                          \
             o->paths[j].segs = NULL;                                          \
           }                                                                   \
         o->paths[j].num_segs_or_paths = 0;                                    \
@@ -3307,7 +3307,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_TRACE ("HATCH.paths[%d].segs[%d].num_knots = %ld [BL 95]\n", j,
                      k, pair->value.l);
           o->paths[j].segs[k].knots
-              = (double *)xcalloc (pair->value.l, sizeof (double));
+              = (double *)xCALLOC (pair->value.l, sizeof (double));
           if (!o->paths[j].segs[k].knots)
             {
               o->paths[j].segs[k].num_knots = 0;
@@ -3325,7 +3325,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               "HATCH.paths[%d].segs[%d].num_control_points = %ld [BL 96]\n", j,
               k, pair->value.l);
           o->paths[j].segs[k].control_points
-              = (Dwg_HATCH_ControlPoint *)xcalloc (
+              = (Dwg_HATCH_ControlPoint *)xCALLOC (
                   pair->value.l, sizeof (Dwg_HATCH_ControlPoint));
           if (!o->paths[j].segs[k].control_points)
             {
@@ -3368,7 +3368,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           o->paths[j].num_segs_or_paths = 0;                                  \
         else                                                                  \
           {                                                                   \
-            free (o->paths[j].segs[k].control_points);                        \
+            FREE (o->paths[j].segs[k].control_points);                        \
             o->paths[j].segs[k].control_points = NULL;                        \
             o->paths[j].segs[k].num_control_points = 0;                       \
           }                                                                   \
@@ -3751,7 +3751,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   pair->value.l);
               if (pair->value.l > 0)
                 {
-                  o->paths[j].segs[k].fitpts = (BITCODE_2RD *)xcalloc (
+                  o->paths[j].segs[k].fitpts = (BITCODE_2RD *)xCALLOC (
                       pair->value.l, sizeof (BITCODE_2RD));
                   if (!o->paths[j].segs[k].fitpts)
                     {
@@ -3778,7 +3778,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           o->num_deflines = pair->value.l;
           LOG_TRACE ("HATCH.num_deflines = %ld [BS 78]\n", pair->value.l);
-          o->deflines = (Dwg_HATCH_DefLine *)xcalloc (
+          o->deflines = (Dwg_HATCH_DefLine *)xCALLOC (
               pair->value.l, sizeof (Dwg_HATCH_DefLine));
           if (!o->deflines)
             {
@@ -3844,7 +3844,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (pair->value.u)
             {
               o->deflines[j].dashes
-                  = (BITCODE_BD *)xcalloc (pair->value.u, sizeof (BITCODE_BD));
+                  = (BITCODE_BD *)xCALLOC (pair->value.u, sizeof (BITCODE_BD));
               if (!o->deflines[j].dashes)
                 {
                   o->deflines[j].num_dashes = 0;
@@ -3887,7 +3887,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_TRACE ("HATCH.num_seeds = %u [BL 98]\n", pair->value.u);
           if (pair->value.u)
             {
-              o->seeds = (BITCODE_2RD *)xcalloc (pair->value.u,
+              o->seeds = (BITCODE_2RD *)xCALLOC (pair->value.u,
                                                  sizeof (BITCODE_2RD));
               if (!o->seeds)
                 {
@@ -3935,10 +3935,10 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if ((unsigned)hdl_idx > o->paths[j].num_boundary_handles)
             o->paths[j].num_boundary_handles = (unsigned)hdl_idx;
           if (!o->paths[j].boundary_handles)
-            o->paths[j].boundary_handles = (BITCODE_H *)xcalloc (
+            o->paths[j].boundary_handles = (BITCODE_H *)xCALLOC (
                 o->paths[j].num_boundary_handles, sizeof (BITCODE_H));
           else
-            o->paths[j].boundary_handles = (BITCODE_H *)realloc (
+            o->paths[j].boundary_handles = (BITCODE_H *)REALLOC (
                 o->paths[j].boundary_handles,
                 o->paths[j].num_boundary_handles * sizeof (BITCODE_H));
           LOG_TRACE ("HATCH.paths[%d].num_boundary_handles = %u\n", j,
@@ -3961,7 +3961,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           LOG_TRACE ("HATCH.num_colors = %u [BL 453]\n", pair->value.u);
           if (pair->value.u)
             {
-              o->colors = (Dwg_HATCH_Color *)xcalloc (
+              o->colors = (Dwg_HATCH_Color *)xCALLOC (
                   pair->value.u, sizeof (Dwg_HATCH_Color));
               if (!o->colors)
                 {
@@ -4028,7 +4028,7 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             o->colors[j].color.name
                 = (BITCODE_T)bit_utf8_to_TU (pair->value.s.ptr, 0);
           else
-            o->colors[j].color.name = strdup (pair->value.s.ptr);
+            o->colors[j].color.name = STRDUP (pair->value.s.ptr);
           LOG_TRACE ("HATCH.colors[%d].color.name = %s [CMC 431]\n", j,
                      pair->value.s.ptr);
         }
@@ -4102,7 +4102,7 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     {
       int i = -1, j = -1, k = -1;
       Dwg_MLEADER_AnnotContext *ctx = &o->ctx;
-      lnode->lines = (Dwg_LEADER_Line *)xcalloc (1, sizeof (Dwg_LEADER_Line));
+      lnode->lines = (Dwg_LEADER_Line *)xCALLOC (1, sizeof (Dwg_LEADER_Line));
       if (!lnode->lines)
         {
           lnode->num_lines = 0;
@@ -4127,7 +4127,7 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               LOG_TRACE ("%s.leaders[].num_lines = %d\n", obj->name, i + 1);
               if (i > 0)
                 {
-                  lnode->lines = (Dwg_LEADER_Line *)realloc (
+                  lnode->lines = (Dwg_LEADER_Line *)REALLOC (
                       lnode->lines,
                       lnode->num_lines * sizeof (Dwg_LEADER_Line));
                   if (!lnode->lines)
@@ -4143,7 +4143,7 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               lline->num_breaks = 0;
               j++;
               lline->num_points = j + 1;
-              lline->points = (BITCODE_3BD *)realloc (
+              lline->points = (BITCODE_3BD *)REALLOC (
                   lline->points, lline->num_points * sizeof (BITCODE_3BD));
               memset (&lline->points[j], 0, sizeof (BITCODE_3BD));
               lline->points[j].x = pair->value.d;
@@ -4184,7 +4184,7 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               CHK_points;
               k++;
               lline->num_breaks = k + 1;
-              lline->breaks = (Dwg_LEADER_Break *)realloc (
+              lline->breaks = (Dwg_LEADER_Break *)REALLOC (
                   lline->breaks, (k + 1) * sizeof (Dwg_LEADER_Break));
               memset (&ctx->leaders[k], 0, sizeof (Dwg_LEADER_Break));
               lline->breaks[k].start.x = pair->value.d;
@@ -4302,7 +4302,7 @@ add_MULTILEADER_lines (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     }
   if (!lnode->num_lines)
     {
-      free (lnode->lines);
+      FREE (lnode->lines);
       lnode->lines = NULL;
     }
   return pair;
@@ -4343,7 +4343,7 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               i++;
               ctx->num_leaders = i + 1;
               LOG_TRACE ("%s.ctx.num_leaders = %d\n", obj->name, i + 1);
-              ctx->leaders = (Dwg_LEADER_Node *)realloc (
+              ctx->leaders = (Dwg_LEADER_Node *)REALLOC (
                   ctx->leaders, (i + 1) * sizeof (Dwg_LEADER_Node));
               if (!ctx->leaders)
                 return NULL;
@@ -4405,7 +4405,7 @@ add_MULTILEADER_leaders (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   lnode->num_breaks = j + 1;
                   LOG_TRACE ("%s.leaders[%d].num_breaks = %d\n", obj->name, i,
                              j + 1);
-                  lnode->breaks = (Dwg_LEADER_Break *)realloc (
+                  lnode->breaks = (Dwg_LEADER_Break *)REALLOC (
                       lnode->breaks, (j + 1) * sizeof (Dwg_LEADER_Break));
                   lnode->breaks[j].start.x = pair->value.d;
                   LOG_TRACE (
@@ -4577,7 +4577,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                     ctx->content.txt.default_text
                         = (char *)bit_utf8_to_TU (pair->value.s.ptr, 0);
                   else
-                    ctx->content.txt.default_text = strdup (pair->value.s.ptr);
+                    ctx->content.txt.default_text = STRDUP (pair->value.s.ptr);
                   LOG_TRACE ("%s.ctx.content.txt.default_text = %s [%d T]\n",
                              obj->name, pair->value.s.ptr, pair->code);
                 }
@@ -4792,7 +4792,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                 goto unknown_mleader;
               i++;
               ctx->content.txt.num_col_sizes = i + 1;
-              ctx->content.txt.col_sizes = (double *)realloc (
+              ctx->content.txt.col_sizes = (double *)REALLOC (
                   ctx->content.txt.col_sizes, (i + 1) * sizeof (double));
               ctx->content.txt.col_sizes[i] = pair->value.d;
               LOG_TRACE ("%s.ctx.content.txt.col_sizes[%d] = %f [BD %d]\n",
@@ -4909,7 +4909,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               if (!j)
                 {
                   ctx->content.blk.transform
-                      = (double *)xcalloc (16, sizeof (double));
+                      = (double *)xCALLOC (16, sizeof (double));
                   if (!ctx->content.blk.transform)
                     {
                       return NULL;
@@ -4920,7 +4920,7 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                   LOG_ERROR ("Too many %s.ctx.content.blk.transform[%d] "
                              "groups 47, max 16",
                              obj->name, j);
-                  free (ctx->content.blk.transform);
+                  FREE (ctx->content.blk.transform);
                   ctx->content.blk.transform = NULL;
                   return NULL;
                 }
@@ -5011,7 +5011,7 @@ add_GEODATA (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           i = -1;
           free_GEODATA_geomesh_pts (o);
           o->num_geomesh_pts = pair->value.u;
-          o->geomesh_pts = (Dwg_GEODATA_meshpt *)xcalloc (
+          o->geomesh_pts = (Dwg_GEODATA_meshpt *)xCALLOC (
               pair->value.u, sizeof (Dwg_GEODATA_meshpt));
           if (!o->geomesh_pts && o->num_geomesh_pts)
             return NULL;
@@ -5022,7 +5022,7 @@ add_GEODATA (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           i = -1;
           free_GEODATA_geomesh_faces (o);
           o->num_geomesh_faces = pair->value.u;
-          o->geomesh_faces = (Dwg_GEODATA_meshface *)xcalloc (
+          o->geomesh_faces = (Dwg_GEODATA_meshface *)xCALLOC (
               pair->value.u, sizeof (Dwg_GEODATA_meshface));
           if (!o->geomesh_faces && o->num_geomesh_faces)
             return NULL;
@@ -5144,7 +5144,7 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
                     = (BITCODE_T)bit_utf8_to_TU (pair->value.s.ptr, 0);
               else
                 o->content_format.value_format_string
-                    = strdup (pair->value.s.ptr);
+                    = STRDUP (pair->value.s.ptr);
               LOG_TRACE (
                   "%s.%s.content_format.value_format_string = \"%s\" [T %d]\n",
                   obj->name, key, pair->value.s.ptr, pair->code);
@@ -5299,7 +5299,7 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
               j = 0;
               LOG_TRACE ("%s.%s.num_borders = " FORMAT_BL " [BL %d]\n",
                          obj->name, key, pair->value.u, pair->code);
-              o->borders = (Dwg_GridFormat *)xcalloc (o->num_borders,
+              o->borders = (Dwg_GridFormat *)xCALLOC (o->num_borders,
                                                       sizeof (Dwg_GridFormat));
               if (!o->borders)
                 {
@@ -5613,7 +5613,7 @@ add_TABLESTYLE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           assert (j >= 0 && j <= 6);
           if (!o->rowstyles[i].borders)
             {
-              o->rowstyles[i].borders = (Dwg_TABLESTYLE_border *)xcalloc (
+              o->rowstyles[i].borders = (Dwg_TABLESTYLE_border *)xCALLOC (
                   6, sizeof (Dwg_TABLESTYLE_border));
               if (!o->rowstyles[i].borders)
                 {
@@ -5718,7 +5718,7 @@ add_TABLEGEOMETRY_Cell (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       return NULL;
     }
 
-  o->cells = (Dwg_TABLEGEOMETRY_Cell *)xcalloc (
+  o->cells = (Dwg_TABLEGEOMETRY_Cell *)xCALLOC (
       num_cells, sizeof (Dwg_TABLEGEOMETRY_Cell));
   if (!o->cells)
     {
@@ -5779,7 +5779,7 @@ add_TABLEGEOMETRY_Cell (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           o->cells[i].num_geometry = pair->value.i;
           LOG_TRACE ("%s.cells[%d].num_geometry = " FORMAT_BL " [BL %d]\n",
                      obj->name, i, o->cells[i].num_geometry, pair->code);
-          o->cells[i].geometry = (Dwg_CellContentGeometry *)xcalloc (
+          o->cells[i].geometry = (Dwg_CellContentGeometry *)xCALLOC (
               pair->value.i, sizeof (Dwg_CellContentGeometry));
           if (!o->cells[i].geometry)
             {
@@ -5895,7 +5895,7 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Data *dwg = obj->parent;
   int i = -1, j = -1;
   int have_rotated_type = 0;
-  o->ref = (Dwg_DIMASSOC_Ref *)xcalloc (4, sizeof (Dwg_DIMASSOC_Ref));
+  o->ref = (Dwg_DIMASSOC_Ref *)xCALLOC (4, sizeof (Dwg_DIMASSOC_Ref));
   if (!o->ref)
     {
       return NULL;
@@ -5960,7 +5960,7 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             if (i < 0 || i > 3)
               break;
             n = o->ref[i].num_xrefs;
-            o->ref[i].xrefs = (BITCODE_H *)realloc (
+            o->ref[i].xrefs = (BITCODE_H *)REALLOC (
                 o->ref[i].xrefs, (n + 1) * sizeof (BITCODE_H));
             o->ref[i].xrefs[n]
                 = dwg_add_handleref (dwg, 5, pair->value.u, obj);
@@ -5975,7 +5975,7 @@ add_DIMASSOC (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
             break;
           o->ref[i].num_intsectobj = pair->value.i;
           o->ref[i].intsectobj
-              = (BITCODE_H *)xcalloc (pair->value.i, sizeof (BITCODE_H));
+              = (BITCODE_H *)xCALLOC (pair->value.i, sizeof (BITCODE_H));
           if (!o->ref[i].intsectobj)
             {
               o->ref[i].num_intsectobj = 0;
@@ -6058,7 +6058,7 @@ add_LAYER_entry (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Object_LAYER_INDEX *o = obj->tio.object->tio.LAYER_INDEX;
   Dwg_Data *dwg = obj->parent;
   int i = 0;
-  o->entries = (Dwg_LAYER_entry *)xcalloc (1, sizeof (Dwg_LAYER_entry));
+  o->entries = (Dwg_LAYER_entry *)xCALLOC (1, sizeof (Dwg_LAYER_entry));
   o->num_entries = 1;
   if (!o->entries)
     {
@@ -6096,7 +6096,7 @@ add_LAYER_entry (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                      pair->value.i, pair->code);
           o->num_entries++;
           i++;
-          o->entries = (Dwg_LAYER_entry *)realloc (
+          o->entries = (Dwg_LAYER_entry *)REALLOC (
               o->entries, o->num_entries * sizeof (Dwg_LAYER_entry));
           if (!o->entries)
             {
@@ -6233,7 +6233,7 @@ add_VALUEPARAMs (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   value->num_vars = pair->value.u;
   LOG_TRACE ("%s.%s = %d [BL %d]\n", "VALUEPARAM", "num_vars", pair->value.i,
              pair->code);
-  value->vars = (Dwg_VALUEPARAM_vars *)xcalloc (value->num_vars,
+  value->vars = (Dwg_VALUEPARAM_vars *)xCALLOC (value->num_vars,
                                                 sizeof (Dwg_VALUEPARAM_vars));
   if (!value->vars)
     {
@@ -6267,7 +6267,7 @@ add_EVAL_Edge (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Object_EVALUATION_GRAPH *o = obj->tio.object->tio.EVALUATION_GRAPH;
   Dwg_Data *dwg = obj->parent;
   int i = -1;
-  o->edges = (Dwg_EVAL_Edge *)xcalloc (1, sizeof (Dwg_EVAL_Edge));
+  o->edges = (Dwg_EVAL_Edge *)xCALLOC (1, sizeof (Dwg_EVAL_Edge));
   o->num_edges = 0;
   if (!o->edges)
     return NULL;
@@ -6275,7 +6275,7 @@ add_EVAL_Edge (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   while (pair != NULL && pair->code == 92)
     {
       i++;
-      o->edges = (Dwg_EVAL_Edge *)realloc (o->edges,
+      o->edges = (Dwg_EVAL_Edge *)REALLOC (o->edges,
                                            (i + 1) * sizeof (Dwg_EVAL_Edge));
       if (!o->edges)
         {
@@ -6360,7 +6360,7 @@ add_EVAL_Node (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Object_EVALUATION_GRAPH *o = obj->tio.object->tio.EVALUATION_GRAPH;
   Dwg_Data *dwg = obj->parent;
   int i = -1, j = 0;
-  o->nodes = (Dwg_EVAL_Node *)xcalloc (1, sizeof (Dwg_EVAL_Node));
+  o->nodes = (Dwg_EVAL_Node *)xCALLOC (1, sizeof (Dwg_EVAL_Node));
   o->num_nodes = 1;
   if (!o->nodes)
     {
@@ -6373,7 +6373,7 @@ add_EVAL_Node (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
         case 91:
           i++;
-          o->nodes = (Dwg_EVAL_Node *)realloc (
+          o->nodes = (Dwg_EVAL_Node *)REALLOC (
               o->nodes, (i + 1) * sizeof (Dwg_EVAL_Node));
           if (!o->nodes)
             break;
@@ -6442,7 +6442,7 @@ add_ASSOCNETWORK (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   FIELD_BL (num_actions, 90);
   num = o->num_actions;
 
-  deps = (Dwg_ASSOCACTION_Deps *)xcalloc (num, sizeof (Dwg_ASSOCACTION_Deps));
+  deps = (Dwg_ASSOCACTION_Deps *)xCALLOC (num, sizeof (Dwg_ASSOCACTION_Deps));
   if (!deps)
     {
       o->num_actions = 0;
@@ -6474,7 +6474,7 @@ add_ASSOCNETWORK (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   EXPECT_INT_DXF ("num_owned_actions", 90, BL);
   if (num)
     {
-      hv = (BITCODE_H *)xcalloc (num, sizeof (BITCODE_H));
+      hv = (BITCODE_H *)xCALLOC (num, sizeof (BITCODE_H));
       if (!hv)
         return NULL;
     }
@@ -6524,7 +6524,7 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
   FIELD_BL (num_deps, 90);
   num = o->num_deps;
-  deps = (Dwg_ASSOCACTION_Deps *)xcalloc (num, sizeof (Dwg_ASSOCACTION_Deps));
+  deps = (Dwg_ASSOCACTION_Deps *)xCALLOC (num, sizeof (Dwg_ASSOCACTION_Deps));
   if (!deps)
     {
       o->num_deps = 0;
@@ -6558,7 +6558,7 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       EXPECT_INT_DXF ("num_owned_params", 90, BL);
       if (num)
         {
-          hv = (BITCODE_H *)xcalloc (num, sizeof (BITCODE_H));
+          hv = (BITCODE_H *)xCALLOC (num, sizeof (BITCODE_H));
           if (!hv)
             return NULL;
         }
@@ -6592,7 +6592,7 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       EXPECT_INT_DXF ("num_values", 90, BL);
       if (num)
         {
-          values = (Dwg_VALUEPARAM *)xcalloc (num, sizeof (Dwg_VALUEPARAM));
+          values = (Dwg_VALUEPARAM *)xCALLOC (num, sizeof (Dwg_VALUEPARAM));
           if (!values)
             return NULL;
         }
@@ -6773,11 +6773,11 @@ add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   FIELD_BL (numassocsteps, 90);
   FIELD_BL (numassocsubents, 90);
   FIELD_BL (num_steps, 90);
-  free (o->steps);
+  FREE (o->steps);
   o->steps = NULL;
   if (o->num_steps > 0)
     {
-      o->steps = (BITCODE_BL *)xcalloc (o->num_steps, sizeof (BITCODE_BL));
+      o->steps = (BITCODE_BL *)xCALLOC (o->num_steps, sizeof (BITCODE_BL));
       if (!o->steps)
         {
           o->num_steps = 0;
@@ -6795,11 +6795,11 @@ add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
     }
   FIELD_BL (num_subents, 90);
-  free (o->subents);
+  FREE (o->subents);
   o->subents = NULL;
   if (o->num_subents > 0)
     {
-      o->subents = (BITCODE_BL *)xcalloc (o->num_subents, sizeof (BITCODE_BL));
+      o->subents = (BITCODE_BL *)xCALLOC (o->num_subents, sizeof (BITCODE_BL));
       if (!o->subents)
         {
           o->num_subents = 0;
@@ -6893,7 +6893,7 @@ add_FIELD (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   pair = dxf_read_pair (dat);
   if (pair->code == 4) // optional
     {
-      o->format = strdup (pair->value.s.ptr);
+      o->format = STRDUP (pair->value.s.ptr);
       LOG_TRACE ("%s.format = %s [T 4]\n", obj->name, o->format);
       dxf_free_pair (pair);
       FIELD_BL (num_childs, 90);
@@ -6905,7 +6905,7 @@ add_FIELD (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
     }
   if (o->num_childs)
     {
-      o->childs = (BITCODE_H *)xcalloc (o->num_childs, sizeof (BITCODE_H));
+      o->childs = (BITCODE_H *)xCALLOC (o->num_childs, sizeof (BITCODE_H));
       if (!o->childs)
         {
           o->num_childs = 0;
@@ -6924,7 +6924,7 @@ add_FIELD (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_BL (num_objects, 97);
   if (o->num_objects)
     {
-      o->objects = (BITCODE_H *)xcalloc (o->num_objects, sizeof (BITCODE_H));
+      o->objects = (BITCODE_H *)xCALLOC (o->num_objects, sizeof (BITCODE_H));
       if (!o->objects)
         {
           o->num_objects = 0;
@@ -7062,7 +7062,7 @@ add_FIELD (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   dxf_free_pair (pair);
   if (o->num_childval)
     {
-      o->childval = (Dwg_FIELD_ChildValue *)xcalloc (
+      o->childval = (Dwg_FIELD_ChildValue *)xCALLOC (
           o->num_childval, sizeof (Dwg_FIELD_ChildValue));
       if (!o->childval)
         {
@@ -7073,7 +7073,7 @@ add_FIELD (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
         {
           pair = dxf_read_pair (dat);
           EXPECT_DXF (obj->name, childval[i].key, 6);
-          o->childval[i].key = strdup (pair->value.s.ptr);
+          o->childval[i].key = STRDUP (pair->value.s.ptr);
           dxf_free_pair (pair);
         next_field:
           pair = dxf_read_pair (dat);
@@ -7271,7 +7271,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
       GCC80_DIAG_RESTORE
     }
   LOG_TRACE ("add %s\n", ctrlname);
-  dxfname = strdup (ctrlname);
+  dxfname = STRDUP (ctrlname);
 
   // clang-format off
   ADD_TABLE_IF1 (LTYPE, LTYPE_CONTROL)
@@ -7301,8 +7301,8 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
     // obj->name = "UNKNOWN_OBJ";
     obj->fixedtype = DWG_TYPE_UNKNOWN_OBJ;
     // undo NEW_OBJECT
-    free (dxfname);
-    free (obj->tio.object);
+    FREE (dxfname);
+    FREE (obj->tio.object);
     dwg->num_objects--;
     LOG_ERROR ("Unknown DXF TABLE %s nor %s_CONTROL", name, name);
     dxf_free_pair (pair);
@@ -7313,7 +7313,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
       // obj->name = "UNKNOWN_OBJ";
       obj->fixedtype = DWG_TYPE_UNKNOWN_OBJ;
       // undo NEW_OBJECT
-      free (obj->tio.object);
+      FREE (obj->tio.object);
       dwg->num_objects--;
       LOG_ERROR ("Empty _obj at DXF TABLE %s nor %s_CONTROL", name, name);
       dxf_free_pair (pair);
@@ -7426,9 +7426,11 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
                 }
               // Pre-allocate for capacity but start at 0: entries are added
               // via PUSH_HV so they land at index 0, 1, ... not after NULLs
-              hdls = num_entries ? (BITCODE_H *)xcalloc (num_entries,
+              hdls = num_entries ? (BITCODE_H *)xCALLOC (num_entries,
                                                          sizeof (BITCODE_H))
                                  : NULL;
+              if (!hdls)
+                num_entries = 0;
               dwg_dynapi_entity_set_value (_obj, obj->name, "num_entries",
                                            &zero_entries, 1);
               LOG_TRACE ("%s.num_entries = %u [BL 70]\n", ctrlname,
@@ -7444,7 +7446,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
               if (pair->value.u)
                 {
                   BITCODE_H *hdls;
-                  hdls = (BITCODE_H *)xcalloc (pair->value.u,
+                  hdls = (BITCODE_H *)xCALLOC (pair->value.u,
                                                sizeof (BITCODE_H));
                   if (!hdls)
                     pair->value.u = 0;
@@ -7500,7 +7502,7 @@ do_return:
 
 /* by name or by ref.
    Note that we don't get the ref->obj here, as it may still move
-   by realloc dwg->object[].
+   by REALLOC dwg->object[].
 */
 BITCODE_H
 find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair)
@@ -7584,7 +7586,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
   num_xdata = _obj->num_xdata;
   xdata_size = _obj->xdata_size;
-  rbuf = (Dwg_Resbuf *)calloc (1, sizeof (Dwg_Resbuf));
+  rbuf = (Dwg_Resbuf *)CALLOC (1, sizeof (Dwg_Resbuf));
   if (!rbuf)
     {
       LOG_ERROR ("Out of memory");
@@ -7620,7 +7622,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         rbuf->value.str.size = length & 0xFFFF;
         rbuf->value.str.codepage = dwg->header.codepage;
         rbuf->value.str.is_tu = 0;
-        rbuf->value.str.u.data = strdup (pair->value.s.ptr);
+        rbuf->value.str.u.data = STRDUP (pair->value.s.ptr);
         LOG_TRACE ("xdata[%d]: \"%s\" [%d]\n", num_xdata,
                    rbuf->value.str.u.data, rbuf->type);
         xdata_size += 3 + rbuf->value.str.size;
@@ -7704,7 +7706,7 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       {
         // dxf_read_binary already decoded hex to binary for text DXF
         size_t blen = pair->value.s.len;
-        unsigned char *s = (unsigned char *)malloc (blen);
+        unsigned char *s = (unsigned char *)MALLOC (blen);
         rbuf->value.str.u.data = (char *)s;
         rbuf->value.str.size = blen & 0xFFFF;
         memcpy (s, pair->value.s.ptr, blen);
@@ -7750,10 +7752,10 @@ add_dictionary_itemhandles (Dwg_Object *restrict obj, Dxf_Pair *restrict pair,
   hdl = dwg_add_handleref (dwg, 2, pair->value.u, obj);
   LOG_TRACE ("%s.itemhandles[%d] = " FORMAT_REF " [H* %d]\n", obj->name, num,
              ARGS_REF (hdl), pair->code);
-  _obj->itemhandles = (BITCODE_H *)realloc (_obj->itemhandles,
+  _obj->itemhandles = (BITCODE_H *)REALLOC (_obj->itemhandles,
                                             (num + 1) * sizeof (BITCODE_H));
   _obj->texts
-      = (BITCODE_TV *)realloc (_obj->texts, (num + 1) * sizeof (BITCODE_TV));
+      = (BITCODE_TV *)REALLOC (_obj->texts, (num + 1) * sizeof (BITCODE_TV));
   if (!_obj->itemhandles || !_obj->texts)
     {
       LOG_ERROR ("Out of memory");
@@ -7797,7 +7799,7 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       return NULL;
     }
   ent->preview
-      = (BITCODE_TF)calloc (ent->preview_size ? ent->preview_size : 127, 1);
+      = (BITCODE_TF)CALLOC (ent->preview_size ? ent->preview_size : 127, 1);
   if (!ent->preview)
     {
       LOG_ERROR ("Out of memory");
@@ -7818,7 +7820,7 @@ add_ent_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       BITCODE_TF s;
 
       if (!ent->preview_size)
-        ent->preview = (BITCODE_TF)realloc (ent->preview, written + blen);
+        ent->preview = (BITCODE_TF)REALLOC (ent->preview, written + blen);
       else if (blen + written > ent->preview_size)
         {
           LOG_ERROR ("%s.preview overflow: %" PRIuSIZE " + written %" PRIuSIZE
@@ -7871,7 +7873,7 @@ add_block_preview (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         if (blen)
           {
             _obj->preview
-                = (BITCODE_TF)realloc (_obj->preview, written + blen);
+                = (BITCODE_TF)REALLOC (_obj->preview, written + blen);
             memcpy (&_obj->preview[written], pos, blen);
             written += blen;
             LOG_TRACE ("BLOCK_HEADER.preview += %" PRIuSIZE " (%" PRIuSIZE
@@ -7941,7 +7943,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict o, Bit_Chain *restrict dat,
     {
       o->num_knots = pair->value.i;
       *jp = 0;
-      o->knots = (BITCODE_BD *)xcalloc (o->num_knots, sizeof (BITCODE_BD));
+      o->knots = (BITCODE_BD *)xCALLOC (o->num_knots, sizeof (BITCODE_BD));
       if (!o->knots)
         {
           o->num_knots = 0;
@@ -7954,7 +7956,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict o, Bit_Chain *restrict dat,
     {
       o->num_ctrl_pts = pair->value.i;
       *jp = 0;
-      o->ctrl_pts = (Dwg_SPLINE_control_point *)xcalloc (
+      o->ctrl_pts = (Dwg_SPLINE_control_point *)xCALLOC (
           o->num_ctrl_pts, sizeof (Dwg_SPLINE_control_point));
       if (!o->ctrl_pts)
         {
@@ -7969,7 +7971,7 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict o, Bit_Chain *restrict dat,
       o->num_fit_pts = pair->value.i;
       *jp = 0;
       o->fit_pts
-          = (BITCODE_3BD *)xcalloc (o->num_fit_pts, sizeof (BITCODE_3BD));
+          = (BITCODE_3BD *)xCALLOC (o->num_fit_pts, sizeof (BITCODE_3BD));
       if (!o->fit_pts)
         {
           o->num_fit_pts = 0;
@@ -8115,7 +8117,7 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       o->num_verts = pair->value.i;
       o->parent = obj->tio.entity;
-      o->verts = (Dwg_MLINE_vertex *)xcalloc (o->num_verts,
+      o->verts = (Dwg_MLINE_vertex *)xCALLOC (o->num_verts,
                                               sizeof (Dwg_MLINE_vertex));
       if (!o->verts)
         {
@@ -8126,7 +8128,7 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           for (int _j = 0; _j < o->num_verts; _j++)
             {
-              o->verts[_j].lines = (Dwg_MLINE_line *)xcalloc (
+              o->verts[_j].lines = (Dwg_MLINE_line *)xCALLOC (
                   o->num_lines, sizeof (Dwg_MLINE_line));
               if (!o->verts[_j].lines)
                 {
@@ -8150,7 +8152,7 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           for (int _j = 0; _j < o->num_verts; _j++)
             {
-              o->verts[_j].lines = (Dwg_MLINE_line *)xcalloc (
+              o->verts[_j].lines = (Dwg_MLINE_line *)xCALLOC (
                   o->num_lines, sizeof (Dwg_MLINE_line));
               if (!o->verts[_j].lines)
                 {
@@ -8249,7 +8251,7 @@ add_MLINE (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       o->verts[j].lines[k].parent = &o->verts[j];
       o->verts[j].lines[k].num_segparms = pair->value.i;
       o->verts[j].lines[k].segparms
-          = (BITCODE_BD *)xcalloc (pair->value.i, sizeof (BITCODE_BD));
+          = (BITCODE_BD *)xCALLOC (pair->value.i, sizeof (BITCODE_BD));
       if (!o->verts[j].lines[k].segparms)
         {
           o->verts[j].lines[k].num_segparms = 0;
@@ -8406,7 +8408,7 @@ add_AcDbEvalExpr (Dwg_Object *restrict obj, char *_obj,
         }
       else if (pair->code == 1)
         {
-          ee->value.text1 = strdup (pair->value.s.ptr);
+          ee->value.text1 = STRDUP (pair->value.s.ptr);
           LOG_TRACE ("%s.%s.%s = %s [T %d]\n", obj->name, evalexpr,
                      "value.text1", pair->value.s.ptr, pair->code);
         }
@@ -8462,7 +8464,7 @@ add_AcDbBlockAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   if (o->num_actions)
     {
       // FIELD_VECTOR (actions, BL, num_actions, 91);
-      o->actions = (BITCODE_BL *)xcalloc (o->num_actions, sizeof (BITCODE_BL));
+      o->actions = (BITCODE_BL *)xCALLOC (o->num_actions, sizeof (BITCODE_BL));
       if (!o->actions)
         {
           o->num_actions = 0;
@@ -8482,7 +8484,7 @@ add_AcDbBlockAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   // HANDLE_VECTOR (deps, num_deps, 5, 330);
   if (o->num_deps)
     {
-      o->deps = (BITCODE_H *)xcalloc (o->num_deps, sizeof (BITCODE_H));
+      o->deps = (BITCODE_H *)xCALLOC (o->num_deps, sizeof (BITCODE_H));
       if (!o->deps)
         {
           o->num_deps = 0;
@@ -8534,7 +8536,7 @@ add_BlockAction_ConnectionPts (Dwg_Object *restrict obj,
     {
       pair = dxf_read_pair (dat);
       EXPECT_DXF (obj->name, "conn_pts[].name", t_code + i - first);
-      conn_pts[i].name = strdup (pair->value.s.ptr);
+      conn_pts[i].name = STRDUP (pair->value.s.ptr);
       LOG_TRACE ("%s.conn_pts[%d].name = %s [BL %d]\n", obj->name, i,
                  pair->value.s.ptr, t_code + i - first);
       dxf_free_pair (pair);
@@ -8615,7 +8617,7 @@ add_AcDbBlockMoveAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   dxf_free_pair (pair);
   pair = dxf_read_pair (dat);
   EXPECT_DXF (obj->name, conn_pts[0].name, 301);
-  o->conn_pts[0].name = strdup (pair->value.s.ptr);
+  o->conn_pts[0].name = STRDUP (pair->value.s.ptr);
   LOG_TRACE ("%s.conn_pts[0] = (%u, %s)\n", obj->name, o->conn_pts[0].code,
              o->conn_pts[0].name);
   dxf_free_pair (pair);
@@ -8625,7 +8627,7 @@ add_AcDbBlockMoveAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   dxf_free_pair (pair);
   pair = dxf_read_pair (dat);
   EXPECT_DXF (obj->name, conn_pts[0].name, 302);
-  o->conn_pts[1].name = strdup (pair->value.s.ptr);
+  o->conn_pts[1].name = STRDUP (pair->value.s.ptr);
   LOG_TRACE ("%s.conn_pts[1] = (%u, %s)\n", obj->name, o->conn_pts[1].code,
              o->conn_pts[1].name);
   dxf_free_pair (pair);
@@ -8655,7 +8657,7 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   dxf_free_pair (pair);
   pair = dxf_read_pair (dat);
   EXPECT_DXF (obj->name, conn_pts[0].name, 301);
-  o->conn_pts[0].name = strdup (pair->value.s.ptr);
+  o->conn_pts[0].name = STRDUP (pair->value.s.ptr);
   LOG_TRACE ("%s.conn_pts[0] = (%u, %s)\n", obj->name, o->conn_pts[0].code,
              o->conn_pts[0].name);
   dxf_free_pair (pair);
@@ -8665,7 +8667,7 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   dxf_free_pair (pair);
   pair = dxf_read_pair (dat);
   EXPECT_DXF (obj->name, conn_pts[0].name, 302);
-  o->conn_pts[1].name = strdup (pair->value.s.ptr);
+  o->conn_pts[1].name = STRDUP (pair->value.s.ptr);
   LOG_TRACE ("%s.conn_pts[1] = (%u, %s)\n", obj->name, o->conn_pts[1].code,
              o->conn_pts[1].name);
   dxf_free_pair (pair);
@@ -8674,7 +8676,7 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   // FIELD_2RD_VECTOR (pts, num_pts, 10);
   if (o->num_pts)
     {
-      o->pts = (BITCODE_2RD *)xcalloc (o->num_pts, sizeof (BITCODE_2RD));
+      o->pts = (BITCODE_2RD *)xCALLOC (o->num_pts, sizeof (BITCODE_2RD));
       if (!o->pts)
         {
           o->num_pts = 0;
@@ -8698,7 +8700,7 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_BL (num_hdls, 73);
   if (o->num_hdls)
     {
-      o->hdls = (Dwg_BLOCKSTRETCHACTION_handles *)xcalloc (
+      o->hdls = (Dwg_BLOCKSTRETCHACTION_handles *)xCALLOC (
           o->num_hdls, sizeof (Dwg_BLOCKSTRETCHACTION_handles));
       if (!o->hdls)
         {
@@ -8713,7 +8715,6 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
           LOG_TRACE ("%s.hdls[%d] = " FORMAT_REF " [H 331]\n", obj->name, i,
                      ARGS_REF (o->hdls[i].hdl));
           dxf_free_pair (pair);
-
           pair = dxf_read_pair (dat);
           EXPECT_DXF (obj->name, o->hdls[i].num_indexes, 74);
           o->hdls[i].num_indexes = pair->value.i;
@@ -8722,7 +8723,7 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
           dxf_free_pair (pair);
           if (o->hdls[i].num_indexes)
             {
-              o->hdls[i].indexes = (BITCODE_BL *)xcalloc (
+              o->hdls[i].indexes = (BITCODE_BL *)xCALLOC (
                   o->hdls[i].num_indexes, sizeof (BITCODE_BL));
               if (!o->hdls[i].indexes)
                 return NULL;
@@ -8742,7 +8743,7 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_BL (num_codes, 75);
   if (o->num_codes)
     {
-      o->codes = (Dwg_BLOCKSTRETCHACTION_codes *)xcalloc (
+      o->codes = (Dwg_BLOCKSTRETCHACTION_codes *)xCALLOC (
           o->num_codes, sizeof (Dwg_BLOCKSTRETCHACTION_codes));
       if (!o->codes)
         {
@@ -8766,7 +8767,7 @@ add_AcDbBlockStretchAction (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
           dxf_free_pair (pair);
           if (o->codes[i].num_indexes)
             {
-              o->codes[i].indexes = (BITCODE_BL *)xcalloc (
+              o->codes[i].indexes = (BITCODE_BL *)xCALLOC (
                   o->codes[i].num_indexes, sizeof (BITCODE_BL));
               if (!o->codes[i].indexes)
                 return NULL;
@@ -8820,7 +8821,7 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
   EXPECT_INT_DXF ("num_blocks", 93, BL);
   if (o->num_blocks)
     {
-      o->blocks = (BITCODE_H *)xcalloc (o->num_blocks, sizeof (BITCODE_H));
+      o->blocks = (BITCODE_H *)xCALLOC (o->num_blocks, sizeof (BITCODE_H));
       if (!o->blocks)
         {
           o->num_blocks = 0;
@@ -8840,7 +8841,7 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
   FIELD_BL (num_states, 92);
   if (o->num_states)
     {
-      o->states = (Dwg_BLOCKVISIBILITYPARAMETER_state *)xcalloc (
+      o->states = (Dwg_BLOCKVISIBILITYPARAMETER_state *)xCALLOC (
           o->num_states, sizeof (Dwg_BLOCKVISIBILITYPARAMETER_state));
       if (!o->states)
         {
@@ -8851,7 +8852,7 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
         {
           pair = dxf_read_pair (dat);
           EXPECT_DXF (obj->name, o->states[i].name, 303);
-          o->states[i].name = strdup (pair->value.s.ptr);
+          o->states[i].name = STRDUP (pair->value.s.ptr);
           LOG_TRACE ("%s.states[%d].name = %s [T 303]\n", obj->name, i,
                      o->states[i].name);
           dxf_free_pair (pair);
@@ -8865,7 +8866,7 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
 
           if (o->states[i].num_blocks)
             {
-              o->states[i].blocks = (BITCODE_H *)xcalloc (
+              o->states[i].blocks = (BITCODE_H *)xCALLOC (
                   o->states[i].num_blocks, sizeof (BITCODE_H));
               if (!o->states[i].blocks)
                 {
@@ -8894,7 +8895,7 @@ add_AcDbBlockVisibilityParameter (Dwg_Object *restrict obj,
 
           if (o->states[i].num_params)
             {
-              o->states[i].params = (BITCODE_H *)xcalloc (
+              o->states[i].params = (BITCODE_H *)xCALLOC (
                   o->states[i].num_params, sizeof (BITCODE_H));
               if (!o->states[i].params)
                 {
@@ -8937,7 +8938,7 @@ add_BlockParam_PropInfo (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   dxf_free_pair (pair);
   if (prop->num_connections)
     {
-      prop->connections = (Dwg_BLOCKPARAMETER_connection *)xcalloc (
+      prop->connections = (Dwg_BLOCKPARAMETER_connection *)xCALLOC (
           prop->num_connections, sizeof (Dwg_BLOCKPARAMETER_connection));
       if (!prop->connections)
         {
@@ -8955,7 +8956,7 @@ add_BlockParam_PropInfo (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 
           pair = dxf_read_pair (dat);
           EXPECT_DXF (obj->name, prop->connections[j].name, t_code);
-          prop->connections[j].name = strdup (pair->value.s.ptr);
+          prop->connections[j].name = STRDUP (pair->value.s.ptr);
           LOG_TRACE ("%s.prop[%d].connections[%u].name = %s [T %d]\n",
                      obj->name, i, j, pair->value.s.ptr, t_code);
           dxf_free_pair (pair);
@@ -9049,7 +9050,7 @@ add_AcDbBlock2PtParameter (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   EXPECT_DXF (obj->name, "num_prop_states", 170);
   LOG_TRACE ("%s.num_prop_states = %d [BL 170]\n", obj->name, pair->value.u);
   dxf_free_pair (pair);
-  o->prop_states = (BITCODE_BL *)xcalloc (4, sizeof (BITCODE_BL));
+  o->prop_states = (BITCODE_BL *)xCALLOC (4, sizeof (BITCODE_BL));
   if (!o->prop_states)
     return dxf_read_pair (dat);
   for (unsigned i = 0; i < 4; i++)
@@ -9129,7 +9130,7 @@ add_AcDbBlockParamValueSet (Dwg_Object *restrict obj,
     }
   // subclass not object
   EXPECT_DXF ("BlockParamValueSet", "desc", (*code)[3]); // t_code
-  o->desc = strdup (pair->value.s.ptr);
+  o->desc = STRDUP (pair->value.s.ptr);
   LOG_TRACE ("%s.value_set.desc = \"%s\"\n", obj->name, pair->value.s.ptr);
   dxf_free_pair (pair);
 
@@ -9166,7 +9167,7 @@ add_AcDbBlockParamValueSet (Dwg_Object *restrict obj,
   // FIELD_VECTOR (valuelist, num_valuelist, BD, code[1]+3);
   if (!o->num_valuelist)
     return NULL;
-  o->valuelist = (double *)xcalloc (o->num_valuelist, sizeof (double));
+  o->valuelist = (double *)xCALLOC (o->num_valuelist, sizeof (double));
   if (!o->valuelist)
     {
       o->num_valuelist = 0;
@@ -9271,13 +9272,13 @@ add_AcDbSectionViewStyle (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_BLd (hatch_transparency, 90);
   FIELD_B (unknown_b1, 290);
   FIELD_B (unknown_b2, 290);
-  free (o->hatch_angles);
+  FREE (o->hatch_angles);
   o->hatch_angles = NULL;
   o->num_hatch_angles = 0;
   FIELD_BL (num_hatch_angles, 90);
   if (o->num_hatch_angles)
     {
-      o->hatch_angles = (BITCODE_BD *)xcalloc (o->num_hatch_angles, 8);
+      o->hatch_angles = (BITCODE_BD *)xCALLOC (o->num_hatch_angles, 8);
       if (!o->hatch_angles)
         {
           o->num_hatch_angles = 0;
@@ -9510,7 +9511,7 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
                                 || owner->fixedtype == DWG_TYPE_POLYLINE_3D)
                                    ? 3
                                    : 4;
-          owned = (BITCODE_H *)realloc (owned, num_owned * sizeof (BITCODE_H));
+          owned = (BITCODE_H *)REALLOC (owned, num_owned * sizeof (BITCODE_H));
           owned[j] = dwg_add_handleref (dwg, hdlcode, _o->handle.value, owner);
           LOG_TRACE ("%s.%s[%d] = " FORMAT_REF " [H* 0]\n", owner->name,
                      owhdls, j, ARGS_REF (owned[j]));
@@ -9612,11 +9613,11 @@ move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
           _ctrl->num_entries--;
           LOG_TRACE ("BLOCK_CONTROL.num_entries = " FORMAT_BL "\n",
                      _ctrl->num_entries);
-          if (j < _ctrl->num_entries) // if last, skip move, realloc is enough
+          if (j < _ctrl->num_entries) // if last, skip move, REALLOC is enough
             /* 1 < 4 (was 5, i.e 0-4): 1, 2, 4-1-1: 2 */
             memmove (&_ctrl->entries[j], &_ctrl->entries[j + 1],
                      (_ctrl->num_entries - j - 1) * sizeof (BITCODE_H));
-          _ctrl->entries = (BITCODE_H *)realloc (
+          _ctrl->entries = (BITCODE_H *)REALLOC (
               _ctrl->entries, _ctrl->num_entries * sizeof (BITCODE_H));
           return 1;
         }
@@ -9644,11 +9645,11 @@ move_out_LTYPE_CONTROL (Dwg_Object *restrict obj,
             memmove (&_ctrl->entries[j], &_ctrl->entries[j + 1],
                      (_ctrl->num_entries - j - 1) * sizeof (BITCODE_H));
           if (_ctrl->num_entries)
-            _ctrl->entries = (BITCODE_H *)realloc (
+            _ctrl->entries = (BITCODE_H *)REALLOC (
                 _ctrl->entries, _ctrl->num_entries * sizeof (BITCODE_H));
           else
             {
-              free (_ctrl->entries);
+              FREE (_ctrl->entries);
               _ctrl->entries = NULL;
             }
           return 1;
@@ -9795,7 +9796,7 @@ add_MATERIAL (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     {                                                                         \
       if (!o->mapfield.transmatrix)                                           \
         o->mapfield.transmatrix                                               \
-            = (BITCODE_BD *)xcalloc (16, sizeof (BITCODE_BD));                \
+            = (BITCODE_BD *)xCALLOC (16, sizeof (BITCODE_BD));                \
       if (o->mapfield.transmatrix && idxvar < 16)                            \
         {                                                                     \
           o->mapfield.transmatrix[idxvar] = pair->value.d;                    \
@@ -9824,9 +9825,9 @@ add_MATERIAL (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   // a map filename (source==1), kept as UTF-8 like all other imported strings
 #  define MAT_T(field, dxf)                                                   \
     case dxf:                                                                 \
-      free (o->field);                                                        \
+      FREE (o->field);                                                        \
       o->field = NULL;                                                        \
-      o->field = pair->value.s.ptr ? strdup (pair->value.s.ptr) : NULL;       \
+      o->field = pair->value.s.ptr ? STRDUP (pair->value.s.ptr) : NULL;       \
       LOG_TRACE ("MATERIAL." #field " = %s [T %d]\n",                         \
                  pair->value.s.ptr ? pair->value.s.ptr : "", pair->code);     \
       break;
@@ -10187,7 +10188,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
     {
       Dwg_Object_TABLESTYLE *o = obj->tio.object->tio.TABLESTYLE;
       o->num_rowstyles = 3;
-      o->rowstyles = (Dwg_TABLESTYLE_rowstyles *)xcalloc (
+      o->rowstyles = (Dwg_TABLESTYLE_rowstyles *)xCALLOC (
           3, sizeof (Dwg_TABLESTYLE_rowstyles));
       if (!o->rowstyles)
         {
@@ -10196,7 +10197,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
         }
       for (j = 0; j < 3; j++)
         {
-          o->rowstyles[j].borders = (Dwg_TABLESTYLE_border *)xcalloc (
+          o->rowstyles[j].borders = (Dwg_TABLESTYLE_border *)xCALLOC (
               6, sizeof (Dwg_TABLESTYLE_border));
           o->rowstyles[j].num_borders = 6;
           for (k = 0; k < 3; k++) // defaults: ByLayer
@@ -10287,7 +10288,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 && dwg->num_objects)
               {
                 dwg->num_objects--;
-                free (obj->tio.object->tio.BLOCK_HEADER);
+                FREE (obj->tio.object->tio.BLOCK_HEADER);
                 obj->tio.object->tio.BLOCK_HEADER = NULL;
                 obj = &dwg->object[0];
                 _obj = obj->tio.object->tio.APPID;
@@ -10372,10 +10373,10 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                     dwg_dynapi_entity_value (_ctrl, ctrlname, "entries", &hdls,
                                              NULL);
                     if (!hdls)
-                      hdls = (BITCODE_H *)xcalloc (num_entries,
+                      hdls = (BITCODE_H *)xCALLOC (num_entries,
                                                    sizeof (Dwg_Object_Ref *));
                     else
-                      hdls = (BITCODE_H *)realloc (
+                      hdls = (BITCODE_H *)REALLOC (
                           hdls, num_entries * sizeof (Dwg_Object_Ref *));
                     if (pair->value.u && !hdls)
                       goto invalid_dxf;
@@ -10434,7 +10435,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_LINEAR;
                       obj->name = (char *)"DIMENSION_LINEAR";
-                      obj->dxfname = strdup (obj->name);
+                      FREE (obj->dxfname);
+                      obj->dxfname = STRDUP (obj->name);
                       strcpy (name, obj->name);
                       LOG_TRACE ("change type to %s\n", name);
                     }
@@ -10444,7 +10446,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                       // new pairs
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_ALIGNED;
                       obj->name = (char *)"DIMENSION_ALIGNED";
-                      obj->dxfname = strdup (obj->name);
+                      FREE (obj->dxfname);
+                      obj->dxfname = STRDUP (obj->name);
                       strcpy (name, obj->name);
                       LOG_TRACE ("change type to %s\n", name);
                     }
@@ -10452,7 +10455,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_ORDINATE;
                       obj->name = (char *)"DIMENSION_ORDINATE";
-                      obj->dxfname = strdup (obj->name);
+                      FREE (obj->dxfname);
+                      obj->dxfname = STRDUP (obj->name);
                       strcpy (name, obj->name);
                       LOG_TRACE ("change type to %s\n", name);
                     }
@@ -10460,7 +10464,8 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_DIAMETER;
                       obj->name = (char *)"DIMENSION_DIAMETER";
-                      obj->dxfname = strdup (obj->name);
+                      FREE (obj->dxfname);
+                      obj->dxfname = STRDUP (obj->name);
                       strcpy (name, obj->name);
                       LOG_TRACE ("change type to %s\n", name);
                     }
@@ -10730,11 +10735,11 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                                &num_inserts, 0);
                 }
               if (inserts)
-                inserts = (BITCODE_H *)realloc (
+                inserts = (BITCODE_H *)REALLOC (
                     inserts, num_inserts * sizeof (BITCODE_H));
               else
                 inserts
-                    = (BITCODE_H *)xcalloc (num_inserts, sizeof (BITCODE_H));
+                    = (BITCODE_H *)xCALLOC (num_inserts, sizeof (BITCODE_H));
               if (num_inserts && !inserts)
                 goto invalid_dxf;
               dwg_dynapi_entity_set_value (_obj, obj->name, "inserts",
@@ -10756,7 +10761,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               LOG_TRACE ("VIEWPORT.frozen_layers[%d] = " FORMAT_REF
                          " [H* 341]\n",
                          o->num_frozen_layers, ARGS_REF (hdl));
-              o->frozen_layers = (BITCODE_H *)realloc (
+              o->frozen_layers = (BITCODE_H *)REALLOC (
                   o->frozen_layers,
                   (o->num_frozen_layers + 1) * sizeof (BITCODE_H));
               o->frozen_layers[o->num_frozen_layers] = hdl;
@@ -10783,9 +10788,9 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               if (o->num_ents > 0 && !o->sort_ents[o->num_ents - 1])
                 o->num_ents--;
               o->num_ents++;
-              o->ents = (BITCODE_H *)realloc (
+              o->ents = (BITCODE_H *)REALLOC (
                   o->ents, o->num_ents * sizeof (BITCODE_H));
-              o->sort_ents = (BITCODE_H *)realloc (
+              o->sort_ents = (BITCODE_H *)REALLOC (
                   o->sort_ents, o->num_ents * sizeof (BITCODE_H));
               o->ents[o->num_ents - 1] = hdl;
               o->sort_ents[o->num_ents - 1] = NULL;
@@ -10806,7 +10811,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               if (is_entity)
                 {
                   obj->tio.entity->reactors
-                      = (BITCODE_H *)realloc (obj->tio.entity->reactors,
+                      = (BITCODE_H *)REALLOC (obj->tio.entity->reactors,
                                               (num + 1) * sizeof (BITCODE_H));
                   obj->tio.entity->reactors[num] = reactor;
                   obj->tio.entity->num_reactors++;
@@ -10814,7 +10819,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               else
                 {
                   obj->tio.object->reactors
-                      = (BITCODE_H *)realloc (obj->tio.object->reactors,
+                      = (BITCODE_H *)REALLOC (obj->tio.object->reactors,
                                               (num + 1) * sizeof (BITCODE_H));
                   obj->tio.object->reactors[num] = reactor;
                   obj->tio.object->num_reactors++;
@@ -10910,7 +10915,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               BITCODE_H hdl = dwg_add_handleref (dwg, 5, pair->value.u, obj);
               LOG_TRACE ("GROUP.groups[%d] = " FORMAT_REF " [H* 340]\n",
                          o->num_groups, ARGS_REF (hdl));
-              o->groups = (BITCODE_H *)realloc (
+              o->groups = (BITCODE_H *)REALLOC (
                   o->groups, (o->num_groups + 1) * sizeof (BITCODE_H));
               o->groups[o->num_groups] = hdl;
               o->num_groups++;
@@ -10928,7 +10933,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               LOG_TRACE ("VIEWPORT.frozen_layers[%d] = " FORMAT_REF
                          " [H* 341]\n",
                          o->num_frozen_layers, ARGS_REF (hdl));
-              o->frozen_layers = (BITCODE_H *)realloc (
+              o->frozen_layers = (BITCODE_H *)REALLOC (
                   o->frozen_layers,
                   (o->num_frozen_layers + 1) * sizeof (BITCODE_H));
               o->frozen_layers[o->num_frozen_layers] = hdl;
@@ -11411,7 +11416,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
             {
               Dwg_Entity_OLE2FRAME *o = obj->tio.entity->tio.OLE2FRAME;
               o->data_size = pair->value.l;
-              o->data = (BITCODE_RC *)xcalloc (pair->value.l, 1);
+              o->data = (BITCODE_RC *)xCALLOC (pair->value.l, 1);
               if (!o->data)
                 {
                   o->data_size = 0;
@@ -11486,7 +11491,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               if (!o->data)
                 {
                   written = 0;
-                  o->data = (unsigned char *)xcalloc (blen, 1);
+                  o->data = (unsigned char *)xCALLOC (blen, 1);
                   s = o->data;
                 }
               assert (o->data);
@@ -11555,7 +11560,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               size_t len = strlen (pair->value.s.ptr);
               if (!o->text)
                 {
-                  o->text = strdup (pair->value.s.ptr);
+                  o->text = STRDUP (pair->value.s.ptr);
                   if (!o->text)
                     {
                       // No text yet: nothing to keep, fail the parse. Don't
@@ -11572,7 +11577,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               else
                 {
                   size_t oldlen = strlen (o->text);
-                  char *newtext = (char *)realloc (o->text, oldlen + len + 1);
+                  char *newtext = (char *)REALLOC (o->text, oldlen + len + 1);
                   if (newtext)
                     {
                       o->text = newtext;
@@ -11858,7 +11863,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 o->num_column_heights = 1;
               if (!j)
                 {
-                  o->column_heights = (BITCODE_BD *)xcalloc (
+                  o->column_heights = (BITCODE_BD *)xCALLOC (
                       o->num_column_heights, sizeof (BITCODE_BD));
                   if (!o->column_heights)
                     {
@@ -11907,7 +11912,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   if (cur_cell < 0 || cur_cell >= (int)o->num_cells)
                     goto invalid_dxf;
                   if (cur_cell == 0 && !o->cells)
-                    o->cells = (Dwg_TABLESTYLE_CellStyle *)xcalloc (
+                    o->cells = (Dwg_TABLESTYLE_CellStyle *)xCALLOC (
                         o->num_cells, sizeof (Dwg_TABLESTYLE_CellStyle));
                   if (!o->cells)
                     goto invalid_dxf;
@@ -12013,7 +12018,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                 }
               else if (hn && pair->code == 40) // VECTOR_N1
                 {
-                  hn->trans = (BITCODE_BD *)xcalloc (16, sizeof (BITCODE_BD));
+                  hn->trans = (BITCODE_BD *)xCALLOC (16, sizeof (BITCODE_BD));
                   if (!hn->trans)
                     {
                       dxf_free_pair (pair);
@@ -12070,7 +12075,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               Dwg_Entity_LEADER *o = obj->tio.entity->tio.LEADER;
               if (!j && pair->code == 10)
                 {
-                  o->points = (BITCODE_3BD *)xcalloc (o->num_points,
+                  o->points = (BITCODE_3BD *)xCALLOC (o->num_points,
                                                       sizeof (BITCODE_3BD));
                   if (!o->points)
                     {
@@ -12261,11 +12266,11 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
               Dwg_Object_LAYERFILTER *o = obj->tio.object->tio.LAYERFILTER;
               if (!o->names)
                 {
-                  o->names = (BITCODE_T *)xcalloc (1, sizeof (BITCODE_T));
+                  o->names = (BITCODE_T *)xCALLOC (1, sizeof (BITCODE_T));
                   j = 0;
                 }
               else
-                o->names = (BITCODE_T *)realloc (
+                o->names = (BITCODE_T *)REALLOC (
                     o->names, (o->num_names + 1) * sizeof (BITCODE_T));
               if (!o->names || j < 0 || j >= (int)o->num_names)
                 goto invalid_dxf;
@@ -12319,7 +12324,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                           dwg_dynapi_entity_value (_obj, obj->name,
                                                    "clip_verts", &clip_verts,
                                                    NULL);
-                          clip_verts = (BITCODE_2RD *)realloc (
+                          clip_verts = (BITCODE_2RD *)REALLOC (
                               clip_verts,
                               num_clip_verts * sizeof (BITCODE_2RD));
                           if (!clip_verts)
@@ -12366,7 +12371,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                               // no need to realloc
                               if (!j && pair->code == 14)
                                 {
-                                  clip_verts = (BITCODE_2RD *)xcalloc (
+                                  clip_verts = (BITCODE_2RD *)xCALLOC (
                                       num_clip_verts, sizeof (BITCODE_2RD));
                                   if (!clip_verts)
                                     goto invalid_dxf;
@@ -12376,7 +12381,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                 }
                               else if (pair->code == 11 || pair->code == 14)
                                 {
-                                  clip_verts = (BITCODE_2RD *)realloc (
+                                  clip_verts = (BITCODE_2RD *)REALLOC (
                                       clip_verts,
                                       num_clip_verts * sizeof (BITCODE_2RD));
                                   if (!clip_verts)
@@ -12397,7 +12402,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                 {
                                   if (num_clip_verts > 0)
                                     {
-                                      clip_verts = (BITCODE_2RD *)xcalloc (
+                                      clip_verts = (BITCODE_2RD *)xCALLOC (
                                           num_clip_verts,
                                           sizeof (BITCODE_2RD));
                                       if (!clip_verts)
@@ -12439,7 +12444,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                             }
                           else if (j == 0 && pair->code < 20)
                             {
-                              pts = (double *)xcalloc (size, is2d ? 16 : 24);
+                              pts = (double *)xCALLOC (size, is2d ? 16 : 24);
                               if (!pts)
                                 {
                                   dxf_free_pair (pair);
@@ -12588,14 +12593,14 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                           // TODO: for now we need to do double-conversion
                           // (str->dbl->str), because we don't have the initial
                           // dat->byte position.
-                          char *d2t = (char *)xcalloc (128, 1);
+                          char *d2t = (char *)xCALLOC (128, 1);
                           snprintf (d2t, 128, "%f", pair->value.d);
                           dwg_dynapi_entity_set_value (_obj, obj->name,
                                                        f->name, &d2t, 1);
                           LOG_TRACE ("%s.%s = %s (from %f°) [%s %d]\n", name,
                                      f->name, d2t, pair->value.d, f->type,
                                      pair->code);
-                          free (d2t);
+                          FREE (d2t);
                           goto next_pair; // found
                         }
                       // resolve handle, by name or ref
@@ -12924,7 +12929,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                                                &matrix, NULL);
                       if (!matrix)
                         {
-                          matrix = (BITCODE_BD *)xcalloc (16,
+                          matrix = (BITCODE_BD *)xCALLOC (16,
                                                           sizeof (BITCODE_BD));
                           if (!matrix)
                             goto invalid_dxf;
@@ -13220,7 +13225,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                             }
                           if (f->is_malloc)
                             {
-                              char *str = strdup (pair->value.s.ptr);
+                              char *str = STRDUP (pair->value.s.ptr);
                               dwg_dynapi_common_set_value (_obj, f->name, &str,
                                                            1);
                             }
@@ -13492,7 +13497,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                   else if (pair->code == 430)
                     {
                       char *x;
-                      o->color.book_name = strdup (pair->value.s.ptr);
+                      o->color.book_name = STRDUP (pair->value.s.ptr);
                       x = strchr (o->color.book_name, '$');
                       if (!x) // name only
                         {
@@ -13506,24 +13511,24 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                               char *tmp = o->color.name;
                               o->color.name = (BITCODE_T)bit_utf8_to_TU (
                                   o->color.name, 0);
-                              free (tmp);
+                              FREE (tmp);
                             }
                         }
                       else
                         { // book with name
                           o->color.flag = 3;
-                          o->color.name = strdup (x + 1);
+                          o->color.name = STRDUP (x + 1);
                           x[0] = '\0';
                           if (dwg->header.version >= R_2007)
                             {
                               char *tmp = o->color.book_name;
                               o->color.book_name = (BITCODE_T)bit_utf8_to_TU (
                                   o->color.book_name, 0);
-                              free (tmp);
+                              FREE (tmp);
                               tmp = o->color.name;
                               o->color.name = (BITCODE_T)bit_utf8_to_TU (
                                   o->color.name, 0);
-                              free (tmp);
+                              FREE (tmp);
                             }
                           LOG_TRACE ("%s.color.book+name = %s [%s %d]\n", name,
                                      pair->value.s.ptr, "CMC", pair->code);
@@ -13558,6 +13563,7 @@ static __nonnull ((1, 2, 3, 4)) Dxf_Pair *new_object (
                        && pair->code == 50)
                 {
                   BITCODE_BD ang = deg2rad (pair->value.d);
+                  FREE (obj->dxfname);
                   UPGRADE_ENTITY (DIMENSION_ALIGNED, DIMENSION_LINEAR)
                   UPGRADE_ENTITY (DIMENSION_ANG2LN, DIMENSION_LINEAR)
                   dwg_dynapi_entity_set_value (_obj, "DIMENSION_LINEAR",
@@ -13703,7 +13709,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                  && strEQ (pair->value.s.ptr, table))
             {
               Dwg_Object *ctrl;
-              char *dxfname = strdup (pair->value.s.ptr);
+              char *dxfname = STRDUP (pair->value.s.ptr);
               BITCODE_BL idx = dwg->num_objects;
               BITCODE_H ref;
               dxf_free_pair (pair);
@@ -13714,7 +13720,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               ctrl = &dwg->object[ctrl_id];
               if (!pair)
                 {
-                  free (dxfname);
+                  FREE (dxfname);
                   if (idx != dwg->num_objects)
                     obj->dxfname = NULL;
                   return DWG_ERR_INVALIDDWG;
@@ -13823,19 +13829,19 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                     if (dwg->header.from_version > R_2004 && _obj->name
                         && _obj->has_strings_area)
                       {
-                        _obj->strings_area = (BITCODE_TF)xcalloc (512, 1);
+                        _obj->strings_area = (BITCODE_TF)xCALLOC (512, 1);
                         if (!_obj->strings_area)
                           {
-                            free (dxfname);
+                            FREE (dxfname);
                             goto outofmem;
                           }
                       }
                     if (dwg->header.from_version <= R_2004)
                       {
-                        _obj->strings_area = (BITCODE_TF)xcalloc (256, 1);
+                        _obj->strings_area = (BITCODE_TF)xCALLOC (256, 1);
                         if (!_obj->strings_area)
                           {
-                            free (dxfname);
+                            FREE (dxfname);
                             goto outofmem;
                           }
                       }
@@ -13938,7 +13944,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 // remove many empty entries at the end at once (avoids DDOS)
                 if (num_entries != _ctrl->num_entries)
                   {
-                    _ctrl->entries = (BITCODE_H *)realloc (
+                    _ctrl->entries = (BITCODE_H *)REALLOC (
                         _ctrl->entries, num_entries * sizeof (BITCODE_H));
                     if (num_entries && !_ctrl->entries)
                       goto outofmem;
@@ -13987,7 +13993,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               Dwg_Object *blkhdr = NULL;
               BITCODE_BL idx = dwg->num_objects;
-              char *dxfname = strdup (pair->value.s.ptr);
+              char *dxfname = STRDUP (pair->value.s.ptr);
               strncpy (name, dxfname, 79);
               name[79] = '\0';
               entity_alias (name);
@@ -14034,7 +14040,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               obj = &dwg->object[idx];
               if (!pair)
                 {
-                  free (dxfname);
+                  FREE (dxfname);
                   if (idx != dwg->num_objects)
                     obj->dxfname = NULL;
                   return DWG_ERR_INVALIDDWG;
@@ -14355,9 +14361,9 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       while (pair != NULL && pair->code == 0 && pair->value.s.ptr
              && (is_dwg_entity (name) || strEQc (name, "DIMENSION")))
         {
-          char *dxfname = strdup (pair->value.s.ptr);
+          char *dxfname = STRDUP (pair->value.s.ptr);
           BITCODE_BL idx = dwg->num_objects;
-          // LOG_HANDLE ("dxfname = strdup (%s)\n", dxfname);
+          // LOG_HANDLE ("dxfname = STRDUP (%s)\n", dxfname);
           if (idx)
             {
               Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
@@ -14376,7 +14382,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           if (!pair)
             {
               Dwg_Object *obj = &dwg->object[idx];
-              free (dxfname);
+              FREE (dxfname);
               if (idx != dwg->num_objects)
                 obj->dxfname = NULL;
               return DWG_ERR_INVALIDDWG;
@@ -14464,15 +14470,15 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           object_alias (name);
           if (is_dwg_object (name))
             {
-              char *dxfname = strdup (pair->value.s.ptr);
-              // LOG_HANDLE ("dxfname = strdup (%s)\n", dxfname);
+              char *dxfname = STRDUP (pair->value.s.ptr);
+              // LOG_HANDLE ("dxfname = STRDUP (%s)\n", dxfname);
               dxf_free_pair (pair);
               pair = new_object (name, dxfname, dat, dwg, 0, NULL);
               dxfname = NULL; /* new_object may have freed dxfname via UPGRADE_ENTITY */
               if (!pair)
                 {
                   Dwg_Object *obj = &dwg->object[idx];
-                  free (dxfname);
+                  FREE (dxfname);
                   if (idx != dwg->num_objects)
                     obj->dxfname = NULL;
                   return DWG_ERR_INVALIDDWG;
@@ -14540,7 +14546,7 @@ dxf_thumbnail_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         case 90:
           dwg->thumbnail.size = pair->value.l; // INT32 => long
           dwg->thumbnail.chain
-              = (unsigned char *)calloc (dwg->thumbnail.size, 1);
+              = (unsigned char *)CALLOC (dwg->thumbnail.size, 1);
           if (!dwg->thumbnail.chain)
             {
               dxf_free_pair (pair);
@@ -14924,10 +14930,10 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg->opts |= DWG_OPTS_INDXF;
   // num_dxf_objs = 0;
   // size_dxf_objs = 1000;
-  // dxf_objs = (Dxf_Objs *)malloc (1000 * sizeof (Dxf_Objs));
+  // dxf_objs = (Dxf_Objs *)MALLOC (1000 * sizeof (Dxf_Objs));
   if (!dwg->object_map)
     dwg->object_map = hash_new (dat->size / 1000);
-  // cannot rely on ref->obj during realloc's
+  // cannot rely on ref->obj during REALLOC's
   dwg->dirty_refs = 1;
 
   header_hdls = new_array_hdls (16);
@@ -14939,7 +14945,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       Dwg_Object *obj;
       Dwg_Object_BLOCK_HEADER *_obj;
-      char *dxfname = strdup ((char *)"BLOCK_HEADER");
+      char *dxfname = STRDUP ((char *)"BLOCK_HEADER");
       NEW_OBJECT (dwg, obj);
       ADD_OBJECT1 (BLOCK_HEADER, BLOCK_HEADER);
       // dwg->header.version probably here still unknown. <r2000: 0x17
@@ -15017,7 +15023,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 {
                   Dwg_Object *obj;
                   Dwg_Object_LTYPE_CONTROL *_obj = NULL;
-                  char *dxfname = strdup ((char *)"BLOCK_CONTROL");
+                  char *dxfname = STRDUP ((char *)"BLOCK_CONTROL");
                   Dwg_Object_BLOCK_CONTROL *_bctrl;
                   Dwg_Object *mspace;
                   BITCODE_H ref;

@@ -93,7 +93,7 @@ set_info (PSDoc *restrict ps, Dwg_Data *restrict dwg, const char *restrict key,
           ret = 1;
         }
       if (u8)
-        free (u8);
+        FREE (u8);
     }
   return ret;
 }
@@ -207,7 +207,7 @@ create_postscript (Dwg_Data *dwg, char *output)
                   PS_lineto (ps, (float)pt0.x, (float)pt0.y);
                   PS_stroke (ps);
                 }
-              free (pts);
+              FREE (pts);
             }
         }
       else if (obj->fixedtype == DWG_TYPE_LWPOLYLINE)
@@ -239,7 +239,7 @@ create_postscript (Dwg_Data *dwg, char *output)
                   PS_stroke (ps);
                 }
 
-              free (pts);
+              FREE (pts);
             }
         }
       else if (obj->fixedtype == DWG_TYPE_ARC)
@@ -286,6 +286,7 @@ main (int argc, char *argv[])
           { NULL, 0, NULL, 0 } };
 #endif
 
+  GC_INIT ();
   if (argc < 2)
     return usage ();
 
@@ -381,7 +382,7 @@ main (int argc, char *argv[])
   create_postscript (&dwg, outfile);
 
   printf ("Success! See the file '%s'\n", outfile);
-  free (outfile);
+  FREE (outfile);
   dwg_free (&dwg);
   return 0;
 }

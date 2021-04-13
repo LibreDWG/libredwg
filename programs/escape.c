@@ -50,7 +50,7 @@ htmlescape (const char *restrict src, const Dwg_Codepage cp)
   if (!src)
     return NULL;
   len = strlen (src) + 10;
-  d = (char *)calloc (len, 1);
+  d = (char *)CALLOC (len, 1);
   if (!d)
     return NULL;
   s = (unsigned char *)src;
@@ -91,7 +91,7 @@ htmlescape (const char *restrict src, const Dwg_Codepage cp)
             if (end - d <= 16)
               {
                 const int _off = d - dest;
-                char *_new = (char *)realloc (dest, len + 16);
+                char *_new = (char *)REALLOC (dest, len + 16);
                 if (!_new)
                   return NULL;
                 dest = _new;
@@ -136,7 +136,7 @@ htmlwescape (BITCODE_TU wstr)
   while ((c = *tmp++))
     len++;
   len += 16;
-  d = dest = (char *)calloc (len, 1);
+  d = dest = (char *)CALLOC (len, 1);
   if (!d)
     return NULL;
   end = dest + len;
@@ -173,7 +173,7 @@ htmlwescape (BITCODE_TU wstr)
           if (end - d <= 16)
             {
               const int _off = d - dest;
-              char *_new = (char *)realloc (dest, len + 16);
+              char *_new = (char *)REALLOC (dest, len + 16);
               if (!_new)
                 return NULL;
               dest = _new;
