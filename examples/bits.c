@@ -126,8 +126,8 @@ decode (Bit_Chain *dat, int off, const int size)
                   size);
           pos = p;
         }
-      free (c.name);
-      free (c.book_name);
+      FREE (c.name);
+      FREE (c.book_name);
       bit_set_position (dat, off);
     }
   if (size - off >= 2)
@@ -157,7 +157,7 @@ decode (Bit_Chain *dat, int off, const int size)
               printf ("%s TV @%d (%d)\n", s, pos, size);
               pos = p;
             }
-          free (s);
+          FREE (s);
         }
     }
 
@@ -180,8 +180,10 @@ main (int argc, char *argv[])
   int print_bits = 0;
   int i;
   int pos;
-  Bit_Chain dat = EMPTY_CHAIN (0);
+  Bit_Chain dat;
 
+  GC_INIT ();
+  dat = EMPTY_CHAIN (0);
   if (argc < 2)
     {
       printf ("usage: examples/bits "
@@ -203,7 +205,7 @@ main (int argc, char *argv[])
       i++;
     }
 
-  // dat.chain = malloc (size + 1);
+  // dat.chain = MALLOC (size + 1);
   // dat.size = size;
   dat.version = R_2004;
   do
@@ -214,7 +216,7 @@ main (int argc, char *argv[])
         dat.size += bits;
       else
         dat.size += bits / 8;
-      dat.chain = realloc (dat.chain, dat.size + 1);
+      dat.chain = REALLOC (dat.chain, dat.size + 1);
       if (hex)
         {
           int size = bit_write_hexbits (&dat, input);
@@ -232,6 +234,6 @@ main (int argc, char *argv[])
   // accept all types, like CMC, BS, BL, HANDLE and print all possible variants
   pos = decode (&dat, 0, (int)pos);
 
-  free (dat.chain);
+  FREE (dat.chain);
   return 0;
 }
