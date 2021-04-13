@@ -299,7 +299,7 @@ output_TEXT (Dwg_Object *obj)
           text->height /* fontsize */, entity_color (obj->tio.entity, buf),
           escaped ? escaped : "");
   if (escaped)
-    free (escaped);
+    FREE (escaped);
 }
 
 static void
@@ -881,8 +881,8 @@ output_POLYLINE_2D (Dwg_Object *obj)
         }
       printf ("\"\n\t");
       common_entity (obj->tio.entity);
-      free (bulges);
-      free (pts);
+      FREE (bulges);
+      FREE (pts);
     }
 }
 
@@ -941,7 +941,7 @@ output_LWPOLYLINE (Dwg_Object *obj)
         }
       printf ("\"\n\t");
       common_entity (obj->tio.entity);
-      free (pts);
+      FREE (pts);
     }
 }
 
@@ -1350,7 +1350,7 @@ output_BLOCK_HEADER (Dwg_Object_Ref *ref)
       else
         printf ("\t<!-- %s -->\n", escaped);
       if (escaped)
-        free (escaped);
+        FREE (escaped);
     }
 
   obj = get_first_owned_entity (ref->obj);
@@ -1446,6 +1446,7 @@ main (int argc, char *argv[])
           { NULL, 0, NULL, 0 } };
 #endif
 
+  GC_INIT ();
   if (argc < 2)
     return usage ();
 

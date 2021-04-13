@@ -93,7 +93,7 @@ set_info (PSDoc *restrict ps, Dwg_Data *restrict dwg, const char *restrict key,
           ret = 1;
         }
       if (u8)
-        free (u8);
+        FREE (u8);
     }
   return ret;
 }
@@ -352,9 +352,9 @@ create_postscript (Dwg_Data *dwg, char *output)
               double *bulges = dwg_object_polyline_2d_get_bulges (obj, &error);
               ps_polyline (ps, pts, bulges, numpts, pline->elevation,
                            pline->extrusion, pline->flag & 1);
-              free (bulges);
+              FREE (bulges);
             }
-          free (pts);
+          FREE (pts);
         }
       else if (obj->fixedtype == DWG_TYPE_LWPOLYLINE)
         {
@@ -369,7 +369,7 @@ create_postscript (Dwg_Data *dwg, char *output)
                     ps, pts,
                     pline->num_bulges == numpts ? pline->bulges : NULL, numpts,
                     pline->elevation, pline->extrusion, pline->flag & 512);
-              free (pts);
+              FREE (pts);
             }
         }
       else if (obj->fixedtype == DWG_TYPE_ARC)
@@ -413,6 +413,7 @@ main (int argc, char *argv[])
           { NULL, 0, NULL, 0 } };
 #endif
 
+  GC_INIT ();
   if (argc < 2)
     return usage ();
 
@@ -508,7 +509,7 @@ main (int argc, char *argv[])
   create_postscript (&dwg, outfile);
 
   printf ("Success! See the file '%s'\n", outfile);
-  free (outfile);
+  FREE (outfile);
   dwg_free (&dwg);
   return 0;
 }

@@ -114,7 +114,7 @@ EXPORT void log_text32 (const unsigned int minlevel, const BITCODE_TU wstr);
       const char *_tv_str = nstr;                                             \
       stmt;                                                                   \
       if (nstr && nstr != str)                                                \
-        free (nstr);                                                          \
+        FREE (nstr);                                                          \
     }                                                                         \
   else                                                                        \
     {                                                                         \
@@ -175,7 +175,7 @@ EXPORT void log_text32 (const unsigned int minlevel, const BITCODE_TU wstr);
         {                                                                     \
           ATTRIBUTE_ALIGNED (2) char *_u8 = bit_convert_TU (wstr);            \
           HANDLER (OUTPUT, "%s", _u8);                                        \
-          free (_u8);                                                         \
+          FREE (_u8);                                                         \
         }                                                                     \
     }
 #endif
