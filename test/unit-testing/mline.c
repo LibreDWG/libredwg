@@ -62,7 +62,7 @@ api_process (dwg_object *obj)
                 }
             }
 #ifdef USE_DEPRECATED_API
-          free (lines);
+          FREE (lines);
 #endif
 
           ok ("MLINE.verts[%d]: (%f, %f, %f)", i, verts[i].vertex.x,
@@ -73,7 +73,7 @@ api_process (dwg_object *obj)
         }
     }
 #ifdef USE_DEPRECATED_API
-  free (verts);
+  FREE (verts);
 #endif
 
   CHK_ENTITY_H (mline, MLINE, mlinestyle);

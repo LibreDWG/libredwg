@@ -118,7 +118,7 @@ bits_TU (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
   BITCODE_TU wstr = bit_utf8_to_TU ((char *)g->value, 0);
   bit_write_TU (dat, wstr);
   g->type = BITS_TU;
-  free (wstr);
+  FREE (wstr);
 }
 
 static void
@@ -439,7 +439,7 @@ static void
 bits_try_handle (struct _unknown_field *g, int code, unsigned int objhandle)
 {
   Bit_Chain dat = EMPTY_CHAIN (CHAIN_SIZE);
-  dat.chain = calloc (1, CHAIN_SIZE);
+  dat.chain = CALLOC (1, CHAIN_SIZE);
 
   bits_handle (&dat, g, code, objhandle);
 
@@ -464,7 +464,7 @@ bits_format (struct _unknown_field *g, const int version,
   Bit_Chain dat = EMPTY_CHAIN (CHAIN_SIZE);
   const int is16 = version >= 2007 ? 1 : 0;
 
-  dat.chain = calloc (1, CHAIN_SIZE);
+  dat.chain = CALLOC (1, CHAIN_SIZE);
   if (version)
     {
       char s[16];
@@ -569,7 +569,7 @@ bits_format (struct _unknown_field *g, const int version,
     }
   else
     {
-      free (dat.chain);
+      FREE (dat.chain);
       dat.chain = NULL;
     }
 }
@@ -737,7 +737,7 @@ search_bits (int j, struct _unknown_field *g, struct _unknown_dxf *udxf,
       //  break;
       offset++;
     }
-  freea (s);
+  FREEa (s);
   return num_found;
 }
 
@@ -827,7 +827,7 @@ main (int argc, char *argv[])
   char *file = NULL;
 #define MAX_CLASSES 200
   char *classes[MAX_CLASSES]; // create files per classes
-  struct _dxf *dxf = calloc (sizeof (unknown_dxf) / sizeof (unknown_dxf[0]),
+  struct _dxf *dxf = CALLOC (sizeof (unknown_dxf) / sizeof (unknown_dxf[0]),
                              sizeof (struct _dxf));
   // clang-format off
   #include "alldxf_2.inc"
@@ -932,8 +932,8 @@ main (int argc, char *argv[])
               if (s)
                 sscanf (s + 2, "%d", &version);
             }
-          dxf[i].found = calloc (1, unknown_dxf[i].num_bits + 1);
-          dxf[i].possible = calloc (1, unknown_dxf[i].num_bits + 1);
+          dxf[i].found = CALLOC (1, unknown_dxf[i].num_bits + 1);
+          dxf[i].possible = CALLOC (1, unknown_dxf[i].num_bits + 1);
           dxf[i].num_bits = unknown_dxf[i].num_bits + 1;
           // TODO offline: find the shortest objects.
           printf ("\n%s: 0x%X (%d) %s\n", unknown_dxf[i].name,
@@ -1032,7 +1032,7 @@ main (int argc, char *argv[])
                   if (g[j].type == BITS_ENC)
                     {
                       Bit_Chain dat = EMPTY_CHAIN (CHAIN_SIZE);
-                      dat.chain = calloc (1, CHAIN_SIZE);
+                      dat.chain = CALLOC (1, CHAIN_SIZE);
 
                       bits_CMC (&dat, &g[j]);
                       g[j].bytes = dat.chain;
@@ -1045,7 +1045,7 @@ main (int argc, char *argv[])
                   if (g[j].type == BITS_BS && strlen (g[j].value) < 3)
                     {
                       Bit_Chain dat = EMPTY_CHAIN (CHAIN_SIZE);
-                      dat.chain = calloc (1, CHAIN_SIZE);
+                      dat.chain = CALLOC (1, CHAIN_SIZE);
 
                       bits_RC (&dat, &g[j]);
                       g[j].bytes = dat.chain;
@@ -1058,7 +1058,7 @@ main (int argc, char *argv[])
                   if (g[j].type == BITS_BS)
                     {
                       Bit_Chain dat = EMPTY_CHAIN (CHAIN_SIZE);
-                      dat.chain = calloc (1, CHAIN_SIZE);
+                      dat.chain = CALLOC (1, CHAIN_SIZE);
 
                       bits_BL (&dat, &g[j]);
                       g[j].bytes = dat.chain;
@@ -1081,7 +1081,7 @@ main (int argc, char *argv[])
                       && strlen (g[j].value) <= 5)
                     {
                       Bit_Chain dat = EMPTY_CHAIN (CHAIN_SIZE);
-                      dat.chain = calloc (1, CHAIN_SIZE);
+                      dat.chain = CALLOC (1, CHAIN_SIZE);
 
                       bits_BS (&dat, &g[j]);
                       g[j].bytes = dat.chain;
@@ -1103,7 +1103,7 @@ main (int argc, char *argv[])
                   if (g[j].type == BITS_RC)
                     {
                       Bit_Chain dat = EMPTY_CHAIN (CHAIN_SIZE);
-                      dat.chain = calloc (1, CHAIN_SIZE);
+                      dat.chain = CALLOC (1, CHAIN_SIZE);
 
                       bits_BS (&dat, &g[j]);
                       g[j].bytes = dat.chain;
@@ -1116,7 +1116,7 @@ main (int argc, char *argv[])
                   if (g[j].type == BITS_BD)
                     {
                       Bit_Chain dat = EMPTY_CHAIN (CHAIN_SIZE);
-                      dat.chain = calloc (1, CHAIN_SIZE);
+                      dat.chain = CALLOC (1, CHAIN_SIZE);
 
                       bits_RD (&dat, &g[j]);
                       g[j].bytes = dat.chain;
@@ -1133,7 +1133,7 @@ main (int argc, char *argv[])
                     {
                       double d;
                       Bit_Chain dat = EMPTY_CHAIN (CHAIN_SIZE);
-                      dat.chain = calloc (1, CHAIN_SIZE);
+                      dat.chain = CALLOC (1, CHAIN_SIZE);
 
                       bits_BD (&dat, &g[j]); // g.value -> dat
                       g[j].bytes = dat.chain;
@@ -1149,7 +1149,7 @@ main (int argc, char *argv[])
                                                &dxf[i], offset);
                       if (num_found)
                         {
-                          free (dat.chain);
+                          FREE (dat.chain);
                           dat.chain = (unsigned char *)unknown_dxf[i].bytes;
                           g[j].bytes = dat.chain;
                           dat.size = unknown_dxf[i].num_bits / 8;
@@ -1176,7 +1176,7 @@ main (int argc, char *argv[])
                                                    &dxf[i], offset);
                           if (num_found)
                             {
-                              free (dat.chain);
+                              FREE (dat.chain);
                               dat.chain
                                   = (unsigned char *)unknown_dxf[i].bytes;
                               g[j].bytes = dat.chain;
@@ -1203,7 +1203,7 @@ main (int argc, char *argv[])
                     {
                       double d;
                       Bit_Chain dat = EMPTY_CHAIN (CHAIN_SIZE);
-                      dat.chain = calloc (1, CHAIN_SIZE);
+                      dat.chain = CALLOC (1, CHAIN_SIZE);
 
                       bits_RD (&dat, &g[j]); // g.value -> dat
                       g[j].bytes = dat.chain;
@@ -1219,7 +1219,7 @@ main (int argc, char *argv[])
                                                &dxf[i], offset);
                       if (num_found)
                         {
-                          free (dat.chain);
+                          FREE (dat.chain);
                           dat.chain = (unsigned char *)unknown_dxf[i].bytes;
                           dat.size = unknown_dxf[i].num_bits / 8;
                           bit_set_position (&dat, g[j].pos[0]);
@@ -1246,7 +1246,7 @@ main (int argc, char *argv[])
                                                    &dxf[i], offset);
                           if (num_found)
                             {
-                              free (dat.chain);
+                              FREE (dat.chain);
                               dat.chain
                                   = (unsigned char *)unknown_dxf[i].bytes;
                               dat.size = unknown_dxf[i].num_bits / 8;
@@ -1275,7 +1275,7 @@ main (int argc, char *argv[])
                     {
                       Bit_Chain dat = EMPTY_CHAIN (CHAIN_SIZE);
                       int len = strlen (g[j].value);
-                      dat.chain = calloc (1, CHAIN_SIZE);
+                      dat.chain = CALLOC (1, CHAIN_SIZE);
 
 #if 0
                       /* TU/TF cannot be mixed */
@@ -1332,7 +1332,7 @@ main (int argc, char *argv[])
                           fprintf (pi, "\", \"%s\", [], \"%s\", %d])\n",
                                    cquote (buf, g[j].value), g[j].name,
                                    g[j].code);
-                          freea (buf);
+                          FREEa (buf);
                         }
                       else
                         {
@@ -1368,7 +1368,7 @@ main (int argc, char *argv[])
                   char *buf = alloca (2 * strlen (g[j].value));
                   fprintf (pi, "\", \"%s\", [], \"%s\", %d])\n",
                            cquote (buf, g[j].value), g[j].name, g[j].code);
-                  freea (buf);
+                  FREEa (buf);
                 }
               else
                 {
@@ -1521,7 +1521,7 @@ main (int argc, char *argv[])
                 */
               if (0)
                 {
-                  free (g[j].bytes);
+                  FREE (g[j].bytes);
                   g[j].bytes = NULL;
                 }
             }
@@ -1577,8 +1577,8 @@ main (int argc, char *argv[])
           // there are various heuristics, like the handle and string stream at
           // the end. points BD's being neighbors, ...
 
-          free (dxf[i].found);
-          free (dxf[i].possible);
+          FREE (dxf[i].found);
+          FREE (dxf[i].possible);
           k++;
           if (k >= 50)
             {

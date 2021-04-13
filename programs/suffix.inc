@@ -19,7 +19,7 @@
  */
 
 #include "config.h"
-#ifdef __STDC_ALLOC_LIB__ /* for strdup */
+#ifdef __STDC_ALLOC_LIB__
 # define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
 #else
 # define _USE_BSD 1
@@ -47,14 +47,14 @@ suffix (const char *filename, const char *ext);
 char *
 suffix (const char *filename, const char *ext)
 {
-  char *copy = strdup (filename ? filename : "");
+  char *copy = STRDUP (filename ? filename : "");
 #ifdef HAVE_BASENAME
   char *base = basename (copy);
 #else
   char *base = copy;
 #endif
   size_t len = (base ? strlen (base) : 0) + 1 + strlen (ext) + 1;
-  char *rv = (char *)malloc (len);
+  char *rv = (char *)MALLOC (len);
   char *dot;
 
   if (!base) // basename may fail
@@ -78,7 +78,7 @@ suffix (const char *filename, const char *ext)
     snprintf (rv, len, "%s%s", base, ext);
   else
     snprintf (rv, len, "%s.%s", base, ext);
-  free (copy);
+  FREE (copy);
   return rv;
 }
 
