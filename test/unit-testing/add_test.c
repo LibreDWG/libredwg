@@ -428,7 +428,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
           { 0.0, 0.0 }, { 2.5, 0.0 }, { 2.5, 2.0 }, { 0.0, 2.0 }, { 1.5, 1.0 }
         };
         BITCODE_2RD *seeds
-            = malloc (sizeof (BITCODE_2RD)); // this cannot be constant
+            = MALLOC (sizeof (BITCODE_2RD)); // this cannot be constant
         Dwg_Entity_HATCH *hatch;
         Dwg_Entity_LWPOLYLINE *pline = dwg_add_LWPOLYLINE (hdr, 5, pts);
         Dwg_Object *obj;
@@ -681,10 +681,10 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
               "000000000000000000000000000000000000000000000000000000000000000"
               "000000000000";
         const BITCODE_BL blen = ((sizeof (hex) - 1) / 2) & 0xFFFFFFFF;
-        BITCODE_TF data = malloc (blen + 1);
+        BITCODE_TF data = MALLOC (blen + 1);
         in_hex2bin (data, hex, blen);
         dwg_add_VBA_PROJECT (dwg, blen, data);
-        free (data);
+        FREE (data);
       }
       break;
     case DWG_TYPE_LAYOUT:
@@ -852,7 +852,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
         fail ("found no " #token);                                            \
       else if (objs && objs[0] && objs[1])                                    \
         ok ("found many " #token "'s");                                       \
-      free (objs);                                                            \
+      FREE (objs);                                                            \
     }                                                                         \
     break
 
@@ -869,7 +869,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
         fail ("found no " #token);                                            \
       else if (objs && objs[0] && objs[1])                                    \
         ok ("found many " #token "'s");                                       \
-      free (objs);                                                            \
+      FREE (objs);                                                            \
     }                                                                         \
     break
 
@@ -927,7 +927,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
         else if (!ents[0])
           fail ("found no "
                 "MLINE");
-        free (ents);
+        FREE (ents);
         if (objs && objs[0] && !objs[1])
           ok ("found 1 "
               "MLINESTYLE");
@@ -938,7 +938,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
         else if (!objs[0])
           fail ("found no "
                 "MLINESTYLE");
-        free (objs);
+        FREE (objs);
       }
       break;
       TEST_OBJECT (DIMSTYLE);
@@ -977,9 +977,9 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
           ok ("found 6 DICTIONARY");
         else
           fail ("found %d DICTIONARY, not 6", numdicts);
-        free (ents);
-        free (objs);
-        free (dicts);
+        FREE (ents);
+        FREE (objs);
+        FREE (dicts);
       }
       break;
       // TEST_OBJECT (LAYERFILTER);
@@ -1012,7 +1012,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
 
   ok ("read %s", name);
   dwg_free (dwg);
-  free (dwg);
+  FREE (dwg);
   if (debug >= 2)
     {
       char cmd[280];

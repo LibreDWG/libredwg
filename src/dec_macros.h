@@ -126,8 +126,8 @@
               LOG_TRACE (strcat (s2, ": " FORMAT_##type " [" #type " %d]"),   \
                          rcount1, rcount2, _obj->nam, dxfgroup);              \
               GCC46_DIAG_RESTORE                                              \
-              free (s2);                                                      \
-              free (s1);                                                      \
+              FREE (s2);                                                      \
+              FREE (s1);                                                      \
             }                                                                 \
           else                                                                \
             {                                                                 \
@@ -135,7 +135,7 @@
               LOG_TRACE (strcat (s1, ": " FORMAT_##type " [" #type " %d]"),   \
                          rcount1, _obj->nam, dxfgroup);                       \
               GCC46_DIAG_RESTORE                                              \
-              free (s1);                                                      \
+              FREE (s1);                                                      \
             }                                                                 \
         }                                                                     \
       else                                                                    \
@@ -159,8 +159,8 @@
                   rcount1, rcount2, _obj->nam, dxfgroup,                      \
                   rad2deg (_obj->nam));                                       \
               GCC46_DIAG_RESTORE                                              \
-              free (s2);                                                      \
-              free (s1);                                                      \
+              FREE (s2);                                                      \
+              FREE (s1);                                                      \
             }                                                                 \
           else                                                                \
             {                                                                 \
@@ -169,7 +169,7 @@
                   strcat (s1, ": " FORMAT_##type " [" #type " %d] %gº"),      \
                   rcount1, _obj->nam, dxfgroup, rad2deg (_obj->nam));         \
               GCC46_DIAG_RESTORE                                              \
-              free (s1);                                                      \
+              FREE (s1);                                                      \
             }                                                                 \
         }                                                                     \
       else                                                                    \
@@ -191,8 +191,8 @@
               LOG_TRACE (strcat (s2, ": " FORMAT_##type " " #type "\n"),      \
                          rcount1, rcount2, _obj->nam)                         \
               GCC46_DIAG_RESTORE                                              \
-              free (s2);                                                      \
-              free (s1);                                                      \
+              FREE (s2);                                                      \
+              FREE (s1);                                                      \
             }                                                                 \
           else                                                                \
             {                                                                 \
@@ -200,7 +200,7 @@
               LOG_TRACE (strcat (s1, ": " FORMAT_##type " " #type "\n"),      \
                          rcount1, _obj->nam)                                  \
               GCC46_DIAG_RESTORE                                              \
-              free (s1);                                                      \
+              FREE (s1);                                                      \
             }                                                                 \
         }                                                                     \
       else                                                                    \
@@ -249,8 +249,8 @@
                   strcat (s2, "[%ld]: " FORMAT_##type " [" #type " %d]"),     \
                   rcount1, rcount2, vcount, value, dxf)                       \
               GCC46_DIAG_RESTORE                                              \
-              free (s2);                                                      \
-              free (s1);                                                      \
+              FREE (s2);                                                      \
+              FREE (s1);                                                      \
             }                                                                 \
           else                                                                \
             {                                                                 \
@@ -259,7 +259,7 @@
                   strcat (s1, "[%ld]: " FORMAT_##type " [" #type " %d]"),     \
                   rcount1, vcount, value, dxf)                                \
               GCC46_DIAG_RESTORE                                              \
-              free (s1);                                                      \
+              FREE (s1);                                                      \
             }                                                                 \
         }                                                                     \
       else                                                                    \
@@ -283,8 +283,8 @@
                                      ") [" #type " %d]"),                     \
                          rcount1, rcount2, _obj->nam.x, _obj->nam.y, dxf)     \
               GCC46_DIAG_RESTORE                                              \
-              free (s2);                                                      \
-              free (s1);                                                      \
+              FREE (s2);                                                      \
+              FREE (s1);                                                      \
             }                                                                 \
           else                                                                \
             {                                                                 \
@@ -293,7 +293,7 @@
                                      ") [" #type " %d]"),                     \
                          rcount1, _obj->nam.x, _obj->nam.y, dxf)              \
               GCC46_DIAG_RESTORE                                              \
-              free (s1);                                                      \
+              FREE (s1);                                                      \
             }                                                                 \
         }                                                                     \
       else                                                                    \
@@ -318,8 +318,8 @@
                          rcount1, rcount2, _obj->nam.x, _obj->nam.y,          \
                          _obj->nam.z, dxf)                                    \
               GCC46_DIAG_RESTORE                                              \
-              free (s2);                                                      \
-              free (s1);                                                      \
+              FREE (s2);                                                      \
+              FREE (s1);                                                      \
             }                                                                 \
           else                                                                \
             {                                                                 \
@@ -328,7 +328,7 @@
                                      ", " FORMAT_BD ") [" #type " %d]"),      \
                          rcount1, _obj->nam.x, _obj->nam.y, _obj->nam.z, dxf) \
               GCC46_DIAG_RESTORE                                              \
-              free (s1);                                                      \
+              FREE (s1);                                                      \
             }                                                                 \
         }                                                                     \
       else                                                                    \
@@ -347,7 +347,7 @@
     {                                                                         \
       size_t _pos = bit_position (dat);                                       \
       if (ref && !ref->handleref.is_global)                                   \
-        free (ref);                                                           \
+        FREE (ref);                                                           \
       ref = dwg_decode_preR13_handleref (dat, code /*as size */, dwg);        \
       LOG_TRACE (#nam ": %hd [H(%s) %d]", (short)ref->r11_idx,                \
                  code == 1 ? "RC" : "RSd", dxf)                               \
@@ -376,7 +376,7 @@
                     HANDLER (OUTPUT, " => %s %s", dwg_ref_objname (dwg, ref), \
                              u8);                                             \
                   if (u8 && alloced)                                          \
-                    free ((void *)u8);                                        \
+                    FREE ((void *)u8);                                        \
                 }                                                             \
             }                                                                 \
           else                                                                \
@@ -436,7 +436,7 @@
                          _name ? _name : #nam, (int)vcount, ARGS_REF (ref),   \
                          dxf);                                                \
               if (_name)                                                      \
-                free (_name);                                                 \
+                FREE (_name);                                                 \
               if (dwg_ref_object_silent (dwg, ref)                            \
                   && DWG_LOGLEVEL > DWG_LOGLEVEL_TRACE)                       \
                 {                                                             \
@@ -445,7 +445,7 @@
                   HANDLER (OUTPUT, " => %s %s", dwg_ref_objname (dwg, ref),   \
                            u8);                                               \
                   if (alloced)                                                \
-                    free ((void *)u8);                                        \
+                    FREE ((void *)u8);                                        \
                 }                                                             \
             }                                                                 \
           else                                                                \
@@ -559,7 +559,7 @@
   }
 #define FIELD_TFv(nam, len, dxf)                                              \
   {                                                                           \
-    /* if (_obj->nam) free (_obj->nam); // preR13 add_Document defaults */    \
+    /* if (_obj->nam) FREE (_obj->nam); // preR13 add_Document defaults */    \
     SINCE (R_13b1) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }  \
     _obj->nam = (BITCODE_TV)bit_read_TF (dat, (size_t)len);                   \
     LOG_TRACE (#nam ": \"%s\" [TFv %" PRIuSIZE " " #dxf "]", _obj->nam,       \
@@ -1010,7 +1010,7 @@
               HANDLER (OUTPUT, "\n");                                         \
             }                                                                 \
           LOG_TRACE_TF (tmp, rs);                                             \
-          free (tmp);                                                         \
+          FREE (tmp);                                                         \
         }                                                                     \
       SINCE (R_13b1)                                                          \
       {                                                                       \
@@ -1090,7 +1090,7 @@
                  (int64_t)(size), (int64_t)(size) * TYPE_MAXELEMSIZE (type),  \
                  AVAIL_BITS (dat), SAFEDXFNAME);                              \
       if (_obj->nam)                                                          \
-        free (_obj->nam);                                                     \
+        FREE (_obj->nam);                                                     \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
 #define SUB_VECTOR_CHKCOUNT(o, nam, type, size, dat)                          \
@@ -1104,7 +1104,7 @@
           (int64_t)(size), (int64_t)(size) * TYPE_MAXELEMSIZE (type),         \
           AVAIL_BITS (dat), dat->byte, (unsigned)dat->bit, SAFEDXFNAME);      \
       if (_obj->o.nam)                                                        \
-        free (_obj->o.nam);                                                   \
+        FREE (_obj->o.nam);                                                   \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
 #define VECTOR_CHKCOUNT_LV(nam, type, size, dat)                              \
@@ -1118,7 +1118,7 @@
           (int64_t)(size), (int64_t)(size) * TYPE_MAXELEMSIZE (type),         \
           AVAIL_BITS (dat), dat->byte, (unsigned)dat->bit, SAFEDXFNAME);      \
       if (_obj->nam)                                                          \
-        free (_obj->nam);                                                     \
+        FREE (_obj->nam);                                                     \
       size = 0; /* return DWG_ERR_VALUEOUTOFBOUNDS; */                                  \
     }
 // for static TFF types with a size field
@@ -1156,7 +1156,7 @@
   if (size > 0)                                                               \
     {                                                                         \
       VECTOR_CHKCOUNT (name, type, size, dat)                                 \
-      _obj->name = (BITCODE_##type *)calloc (size, sizeof (BITCODE_##type));  \
+      _obj->name = (BITCODE_##type *)CALLOC (size, sizeof (BITCODE_##type));  \
       if (!_obj->name)                                                        \
         return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
@@ -1171,7 +1171,7 @@
     {                                                                         \
       SUB_VECTOR_CHKCOUNT (o, nam, type, csize, dat)                          \
       _obj->o.nam                                                             \
-          = (BITCODE_##type *)calloc (csize, sizeof (BITCODE_##type));        \
+          = (BITCODE_##type *)CALLOC (csize, sizeof (BITCODE_##type));        \
       if (!_obj->o.nam)                                                       \
         return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)csize; vcount++)                  \
@@ -1186,7 +1186,7 @@
   if (_obj->o.sizefield > 0)                                                  \
     {                                                                         \
       SUB_VECTOR_CHKCOUNT (o, name, type, _obj->o.sizefield, dat)             \
-      _obj->o.name = (BITCODE_##type *)calloc (_obj->o.sizefield,             \
+      _obj->o.name = (BITCODE_##type *)CALLOC (_obj->o.sizefield,             \
                                                sizeof (BITCODE_##type));      \
       if (!_obj->o.name)                                                      \
         return DWG_ERR_OUTOFMEM;                                              \
@@ -1202,7 +1202,7 @@
         LOG_TRACE ("} [*" #type "]")                                          \
       LOG_POS                                                                 \
     }
-// inlined, with const size and without malloc
+// inlined, with const size and without MALLOC
 #define FIELD_VECTOR_INL(name, type, size, dxf)                               \
   if (size > 0)                                                               \
     {                                                                         \
@@ -1239,7 +1239,7 @@
     {                                                                         \
       _VECTOR_CHKCOUNT (name, _obj->size,                                     \
                         dat->from_version >= R_2007 ? 18 : 2, dat)            \
-      _obj->name = (char **)calloc (_obj->size, sizeof (char *));             \
+      _obj->name = (char **)CALLOC (_obj->size, sizeof (char *));             \
       if (!_obj->name)                                                        \
         return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
@@ -1267,7 +1267,7 @@
     {                                                                         \
       int _dxf = dxf;                                                         \
       VECTOR_CHKCOUNT (name, type, size, dat)                                 \
-      _obj->name = (BITCODE_##type *)calloc (size, sizeof (BITCODE_##type));  \
+      _obj->name = (BITCODE_##type *)CALLOC (size, sizeof (BITCODE_##type));  \
       if (!_obj->name)                                                        \
         return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
@@ -1285,7 +1285,7 @@
 #define SUB_FIELD_VECTOR_TYPESIZE(o, name, size, typesize, dxf)               \
   if (_obj->o.size > 0)                                                       \
     {                                                                         \
-      _obj->o.name = (BITCODE_RC *)calloc (_obj->o.size, typesize);           \
+      _obj->o.name = (BITCODE_RC *)CALLOC (_obj->o.size, typesize);           \
       if (!_obj->o.name)                                                      \
         return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
@@ -1320,7 +1320,7 @@
   VECTOR_CHKCOUNT_LV (name, 2RD, _obj->size, dat)                             \
   if (_obj->size > 0)                                                         \
     {                                                                         \
-      _obj->name = (BITCODE_2RD *)calloc (_obj->size, sizeof (BITCODE_2RD));  \
+      _obj->name = (BITCODE_2RD *)CALLOC (_obj->size, sizeof (BITCODE_2RD));  \
       if (!_obj->name)                                                        \
         return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
@@ -1336,7 +1336,7 @@
   if (_obj->o.size > 0)                                                       \
     {                                                                         \
       _obj->o.name                                                            \
-          = (BITCODE_2RD *)calloc (_obj->o.size, sizeof (BITCODE_2RD));       \
+          = (BITCODE_2RD *)CALLOC (_obj->o.size, sizeof (BITCODE_2RD));       \
       if (!_obj->o.name)                                                      \
         return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
@@ -1351,7 +1351,7 @@
   VECTOR_CHKCOUNT_LV (name, 2DD, _obj->size, dat)                             \
   if (_obj->size > 0)                                                         \
     {                                                                         \
-      _obj->name = (BITCODE_2RD *)calloc (_obj->size, sizeof (BITCODE_2RD));  \
+      _obj->name = (BITCODE_2RD *)CALLOC (_obj->size, sizeof (BITCODE_2RD));  \
       if (!_obj->name)                                                        \
         return DWG_ERR_OUTOFMEM;                                              \
       FIELD_2RD (name[0], dxf);                                               \
@@ -1383,7 +1383,7 @@
   if (_obj->size > 0)                                                         \
     {                                                                         \
       _obj->name                                                              \
-          = (BITCODE_3DPOINT *)calloc (_obj->size, sizeof (BITCODE_3DPOINT)); \
+          = (BITCODE_3DPOINT *)CALLOC (_obj->size, sizeof (BITCODE_3DPOINT)); \
       if (!_obj->name)                                                        \
         return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
@@ -1396,7 +1396,7 @@
   if (_obj->o.size > 0)                                                       \
     {                                                                         \
       _obj->o.name                                                            \
-          = (BITCODE_3BD *)calloc (_obj->o.size, sizeof (BITCODE_3BD));       \
+          = (BITCODE_3BD *)CALLOC (_obj->o.size, sizeof (BITCODE_3BD));       \
       if (!_obj->o.name)                                                      \
         return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
@@ -1411,7 +1411,7 @@
 #define HANDLE_VECTOR_N(nam, size, code, dxf)                                 \
   if (size > 0)                                                               \
     {                                                                         \
-      FIELD_VALUE (nam) = (BITCODE_H *)calloc (size, sizeof (BITCODE_H));     \
+      FIELD_VALUE (nam) = (BITCODE_H *)CALLOC (size, sizeof (BITCODE_H));     \
       if (!_obj->nam)                                                         \
         return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
@@ -1429,7 +1429,7 @@
     {                                                                         \
       BITCODE_BL _size = _obj->o.sizefield;                                   \
       HANDLE_VECTOR_CHKCOUNT (nam, _size)                                     \
-      _obj->o.nam = (BITCODE_H *)calloc (_size, sizeof (BITCODE_H));          \
+      _obj->o.nam = (BITCODE_H *)CALLOC (_size, sizeof (BITCODE_H));          \
       if (!_obj->o.nam)                                                       \
         return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < _size; vcount++)                              \
@@ -1459,7 +1459,7 @@
   if (obj->tio.object->num_reactors > 0)                                      \
     {                                                                         \
       HANDLE_VECTOR_CHKCOUNT (reactors, obj->tio.object->num_reactors)        \
-      obj->tio.object->reactors = (BITCODE_H *)calloc (                       \
+      obj->tio.object->reactors = (BITCODE_H *)CALLOC (                       \
           obj->tio.object->num_reactors, sizeof (BITCODE_H));                 \
       if (!obj->tio.object->reactors)                                         \
         return DWG_ERR_OUTOFMEM;                                              \
@@ -1475,7 +1475,7 @@
     {                                                                         \
       HANDLE_VECTOR_CHKCOUNT (reactors, _ent->num_reactors)                   \
       _ent->reactors                                                          \
-          = (BITCODE_H *)calloc (_ent->num_reactors, sizeof (BITCODE_H));     \
+          = (BITCODE_H *)CALLOC (_ent->num_reactors, sizeof (BITCODE_H));     \
       if (!_ent->reactors)                                                    \
         return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < _ent->num_reactors; vcount++)                 \
@@ -1528,7 +1528,7 @@
       BITCODE_TF unknown = bit_read_TF (dat, (size_t)len);                    \
       LOG_TRACE ("unknown (%ld): ", len);                                     \
       LOG_TRACE_TF (unknown, len);                                            \
-      free (unknown);                                                         \
+      FREE (unknown);                                                         \
     }                                                                         \
   dat->byte = (size_t)(pos)
 
@@ -1575,7 +1575,7 @@
       LOG_ERROR ("Invalid " #name " in %s. No bytes left.\n", SAFEDXFNAME);   \
       if (_obj->name)                                                         \
         {                                                                     \
-          free (_obj->name);                                                  \
+          FREE (_obj->name);                                                  \
           _obj->name = NULL;                                                  \
         }                                                                     \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
@@ -1589,7 +1589,7 @@
                  (unsigned long)times);                                       \
       if (_obj->name)                                                         \
         {                                                                     \
-          free (_obj->name);                                                  \
+          FREE (_obj->name);                                                  \
           _obj->name = NULL;                                                  \
         }                                                                     \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
@@ -1601,7 +1601,7 @@
       times = 0;                                                              \
       if (_obj->name)                                                         \
         {                                                                     \
-          free (_obj->name);                                                  \
+          FREE (_obj->name);                                                  \
           _obj->name = NULL;                                                  \
         }                                                                     \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
@@ -1617,7 +1617,7 @@
       times = 0;                                                              \
       if (_obj->name)                                                         \
         {                                                                     \
-          free (_obj->name);                                                  \
+          FREE (_obj->name);                                                  \
           _obj->name = NULL;                                                  \
         }                                                                     \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
@@ -1627,14 +1627,14 @@
   _ adds idx
   C does no checks
   N does constant times (else _obj->times)
-  F does not calloc/free
+  F does not CALLOC/free
 */
 
 // unchecked with constant times
 #define REPEAT_CN(times, name, type)                                          \
   if (times > 0)                                                              \
     {                                                                         \
-      _obj->name = (type *)calloc (times, sizeof (type));                     \
+      _obj->name = (type *)CALLOC (times, sizeof (type));                     \
       if (!_obj->name)                                                        \
         return DWG_ERR_OUTOFMEM;                                              \
     }                                                                         \
@@ -1644,7 +1644,7 @@
   REPEAT_CHKCOUNT (name, times, type)                                         \
   if (times > 0)                                                              \
     {                                                                         \
-      _obj->name = (type *)calloc (times, sizeof (type));                     \
+      _obj->name = (type *)CALLOC (times, sizeof (type));                     \
       if (!_obj->name)                                                        \
         return DWG_ERR_OUTOFMEM;                                              \
     }                                                                         \
@@ -1655,7 +1655,7 @@
   REPEAT_CHKCOUNT_LVAL (nam, _obj->times, type)                               \
   if (_obj->times > 0)                                                        \
     {                                                                         \
-      _obj->nam = (type *)calloc (_obj->times, sizeof (type));                \
+      _obj->nam = (type *)CALLOC (_obj->times, sizeof (type));                \
       if (!_obj->nam)                                                         \
         return DWG_ERR_OUTOFMEM;                                              \
     }                                                                         \
@@ -1663,13 +1663,13 @@
 // unchecked with var. times
 #define _REPEAT_C(times, name, type, idx)                                     \
   if (_obj->times > 0)                                                        \
-    _obj->name = (type *)calloc (_obj->times, sizeof (type));                 \
+    _obj->name = (type *)CALLOC (_obj->times, sizeof (type));                 \
   for (rcount##idx = 0; rcount##idx < (BITCODE_BL)_obj->times; rcount##idx++)
 // unchecked with constant times
 #define _REPEAT_CN(times, name, type, idx)                                    \
   if (times > 0)                                                              \
     {                                                                         \
-      _obj->name = (type *)calloc (times, sizeof (type));                     \
+      _obj->name = (type *)CALLOC (times, sizeof (type));                     \
       if (!_obj->name)                                                        \
         return DWG_ERR_OUTOFMEM;                                              \
     }                                                                         \
@@ -1742,16 +1742,16 @@
       }                                                                       \
     if (obj->parent->opts & DWG_OPTS_IN)                                      \
       {                                                                       \
-        obj->dxfname = strdup (obj->dxfname);                                 \
+        obj->dxfname = STRDUP (obj->dxfname);                                 \
         if (obj->parent->opts & DWG_OPTS_INJSON)                              \
-          obj->name = strdup (obj->name);                                     \
+          obj->name = STRDUP (obj->name);                                     \
       }                                                                       \
     _ent = obj->tio.entity                                                    \
-        = (Dwg_Object_Entity *)calloc (1, sizeof (Dwg_Object_Entity));        \
+        = (Dwg_Object_Entity *)CALLOC (1, sizeof (Dwg_Object_Entity));        \
     if (!_ent)                                                                \
       return DWG_ERR_OUTOFMEM;                                                \
     _ent->tio.token                                                           \
-        = (Dwg_Entity_##token *)calloc (1, sizeof (Dwg_Entity_##token));      \
+        = (Dwg_Entity_##token *)CALLOC (1, sizeof (Dwg_Entity_##token));      \
     if (!_ent->tio.token)                                                     \
       return DWG_ERR_OUTOFMEM;                                                \
     _ent->dwg = obj->parent;                                                  \
@@ -1837,14 +1837,14 @@
     LOG_INFO ("Add object " #token " [%d] ", obj->index)                      \
     obj->supertype = DWG_SUPERTYPE_OBJECT;                                    \
     obj->tio.object                                                           \
-        = (Dwg_Object_Object *)calloc (1, sizeof (Dwg_Object_Object));        \
+        = (Dwg_Object_Object *)CALLOC (1, sizeof (Dwg_Object_Object));        \
     if (!obj->tio.object)                                                     \
       return DWG_ERR_OUTOFMEM;                                                \
     _obj = obj->tio.object->tio.token                                         \
-        = (Dwg_Object_##token *)calloc (1, sizeof (Dwg_Object_##token));      \
+        = (Dwg_Object_##token *)CALLOC (1, sizeof (Dwg_Object_##token));      \
     if (!_obj)                                                                \
       {                                                                       \
-        free (obj->tio.object);                                               \
+        FREE (obj->tio.object);                                               \
         obj->tio.object = NULL;                                               \
         obj->fixedtype = DWG_TYPE_FREED;                                      \
         return DWG_ERR_OUTOFMEM;                                              \
@@ -1869,9 +1869,9 @@
       }                                                                       \
     if (obj->parent->opts & DWG_OPTS_IN)                                      \
       {                                                                       \
-        obj->dxfname = strdup (obj->dxfname);                                 \
+        obj->dxfname = STRDUP (obj->dxfname);                                 \
         if (obj->parent->opts & DWG_OPTS_INJSON)                              \
-          obj->name = strdup (obj->name);                                     \
+          obj->name = STRDUP (obj->name);                                     \
       }                                                                       \
     _obj->parent = obj->tio.object;                                           \
     obj->tio.object->dwg = obj->parent;                                       \
@@ -1931,14 +1931,14 @@
     LOG_INFO ("Add table record " #token " [%d] ", obj->index)                \
     obj->supertype = DWG_SUPERTYPE_OBJECT;                                    \
     obj->tio.object                                                           \
-        = (Dwg_Object_Object *)calloc (1, sizeof (Dwg_Object_Object));        \
+        = (Dwg_Object_Object *)CALLOC (1, sizeof (Dwg_Object_Object));        \
     if (!obj->tio.object)                                                     \
       return DWG_ERR_OUTOFMEM;                                                \
     _obj = obj->tio.object->tio.token                                         \
-        = (Dwg_Object_##token *)calloc (1, sizeof (Dwg_Object_##token));      \
+        = (Dwg_Object_##token *)CALLOC (1, sizeof (Dwg_Object_##token));      \
     if (!_obj)                                                                \
       {                                                                       \
-        free (obj->tio.object);                                               \
+        FREE (obj->tio.object);                                               \
         obj->tio.object = NULL;                                               \
         obj->fixedtype = DWG_TYPE_FREED;                                      \
         return DWG_ERR_OUTOFMEM;                                              \
@@ -1955,9 +1955,9 @@
     obj->dxfname = (char *)#token;                                            \
     if (obj->parent->opts & DWG_OPTS_IN)                                      \
       {                                                                       \
-        obj->dxfname = strdup (obj->dxfname);                                 \
+        obj->dxfname = STRDUP (obj->dxfname);                                 \
         if (obj->parent->opts & DWG_OPTS_INJSON)                              \
-          obj->name = strdup (obj->name);                                     \
+          obj->name = STRDUP (obj->name);                                     \
       }                                                                       \
     _obj->parent = obj->tio.object;                                           \
     obj->tio.object->dwg = obj->parent;                                       \
