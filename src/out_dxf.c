@@ -39,6 +39,7 @@
 #include "decode.h"
 #include "encode.h"
 #include "out_dxf.h"
+#include "free.h"
 
 static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
@@ -115,7 +116,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
           }                                                                   \
         else                                                                  \
           fprintf (dat->fh, "\r\n");                                          \
-        free (u8);                                                            \
+        FREE (u8);                                                            \
       }                                                                       \
   }
 #define VALUE_TFF(str, dxf)                                                   \
@@ -398,7 +399,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
         if (name)                                                             \
           {                                                                   \
             fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);                    \
-            free (name);                                                      \
+            FREE (name);                                                      \
           }                                                                   \
         else                                                                  \
           fprintf (dat->fh, "%3i\r\n\r\n", dxf);                              \
@@ -421,7 +422,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
         if (name)                                                             \
           {                                                                   \
             fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);                    \
-            free (name);                                                      \
+            FREE (name);                                                      \
           }                                                                   \
         else                                                                  \
           fprintf (dat->fh, "%3i\r\n\r\n", dxf);                              \
@@ -682,7 +683,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
                 GROUP (dxf);                                                  \
                 fprintf (dat->fh, "%s\r\n", u8);                              \
               }                                                               \
-            free (u8);                                                        \
+            FREE (u8);                                                        \
           }                                                                   \
         else if (*_obj->nam)                                                  \
           {                                                                   \
@@ -1066,7 +1067,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
             LOG_TRACE ("handle: " FORMAT_H ", name: %s\n",                    \
                        ARGS_H (obj->handle), _name);                          \
             if (IS_FROM_TU (dat))                                             \
-              free (_name);                                                   \
+              FREE (_name);                                                   \
           }                                                                   \
         else                                                                  \
           LOG_TRACE ("handle: " FORMAT_H "\n", ARGS_H (obj->handle))          \
@@ -1136,14 +1137,14 @@ dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
                 strncpy (name, u8, 127);
               else
                 name[0] = '\0';
-              free (u8);
+              FREE (u8);
               u8 = bit_convert_TU ((BITCODE_TU)color->name);
               if (u8)
                 {
                   if (*name)
                     strcat (name, "$");
                   strncat (name, u8, 127);
-                  free (u8);
+                  FREE (u8);
                 }
             }
           else
@@ -1399,7 +1400,7 @@ dxf_is_xrefdep_name (Bit_Chain *restrict dat, const char *name)
       else
         result = false;
       if (u8)
-        free (u8);
+        FREE (u8);
       return result;
 #endif
     }
@@ -1436,7 +1437,7 @@ dxf_has_xrefdep_vertbar (Bit_Chain *restrict dat, const char *name)
       else
         result = false;
       if (u8)
-        free (u8);
+        FREE (u8);
       return result;
 #endif
     }
@@ -1605,7 +1606,7 @@ dxf_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
         }
       if (IS_FROM_TU (dat))
-        free (name);
+        FREE (name);
     }
   else
     {
@@ -1662,7 +1663,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     }
   if (IS_FROM_TU (dat))
     {
-      free (name);
+      FREE (name);
       name = NULL;
     }
 }
@@ -1763,13 +1764,13 @@ new_encr_sat_data_line (Dwg_Entity_3DSOLID *restrict _obj, Bit_Chain *dest,
   if (i + 1 >= _obj->num_blocks)
   {
     _obj->encr_sat_data
-        = realloc (_obj->encr_sat_data, (i + 2) * sizeof (char *));
+        = REALLOC (_obj->encr_sat_data, (i + 2) * sizeof (char *));
     _obj->block_size
-        = realloc (_obj->block_size, (i + 2) * sizeof (BITCODE_BL));
+        = REALLOC (_obj->block_size, (i + 2) * sizeof (BITCODE_BL));
     _obj->num_blocks = i + 1;
   }
   // fresh, the dest buf is too large
-  _obj->encr_sat_data[i] = calloc (dest->byte + 2, 1);
+  _obj->encr_sat_data[i] = CALLOC (dest->byte + 2, 1);
   // ensure proper eol, dxf out relies on that.
   bit_write_TF (dest, (BITCODE_TF) "\n\000", 2);
   memcpy (_obj->encr_sat_data[i], dest->chain, dest->byte);
@@ -1928,9 +1929,9 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   if (_obj->num_blocks)
     num_blocks = _obj->num_blocks;
   if (!_obj->block_size)
-    _obj->block_size = (BITCODE_BL *)calloc (num_blocks, sizeof (BITCODE_BL));
+    _obj->block_size = (BITCODE_BL *)CALLOC (num_blocks, sizeof (BITCODE_BL));
   if (!_obj->encr_sat_data)
-    _obj->encr_sat_data = (char **)calloc (num_blocks, sizeof (char *));
+    _obj->encr_sat_data = (char **)CALLOC (num_blocks, sizeof (char *));
 
   _obj->_dxf_sab_converted = 1;
   if (!_obj->sab_size)
@@ -2073,7 +2074,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
       LOG_HANDLE ("[%d] ", c)
       switch (c)
         {
-        // check size, realloc encr_sat_data[i], set dest
+        // check size, REALLOC encr_sat_data[i], set dest
         case 17: //  # end of record
           if (dest.byte + 2 >= dest.size)
             bit_chain_alloc (&dest);
@@ -2368,13 +2369,13 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
       { // chunks of 4096
         if (i >= num_blocks)
           {
-            _obj->block_size = (BITCODE_BL *)realloc (
+            _obj->block_size = (BITCODE_BL *)REALLOC (
                 _obj->block_size, (i + 2) * sizeof (BITCODE_BL));
-            _obj->encr_sat_data = (char **)realloc (
+            _obj->encr_sat_data = (char **)REALLOC (
                 _obj->encr_sat_data, (i + 1) * sizeof (char **));
             num_blocks = i + 1;
           }
-        _obj->encr_sat_data[i] = (char *)calloc (4096, 1);
+        _obj->encr_sat_data[i] = (char *)CALLOC (4096, 1);
         memcpy (_obj->encr_sat_data[i], &dest.chain[off], 4096);
         _obj->block_size[i] = 4096;
         LOG_TRACE ("block_size[%d] = 4096\n", i);
@@ -2385,13 +2386,13 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
     // and the smaller rest
     if (i >= num_blocks)
       {
-        _obj->block_size = (BITCODE_BL *)realloc (
+        _obj->block_size = (BITCODE_BL *)REALLOC (
             _obj->block_size, (i + 2) * sizeof (BITCODE_BL));
-        _obj->encr_sat_data = (char **)realloc (_obj->encr_sat_data,
+        _obj->encr_sat_data = (char **)REALLOC (_obj->encr_sat_data,
                                                 (i + 1) * sizeof (char **));
         num_blocks = i + 1;
       }
-    _obj->encr_sat_data[i] = (char *)calloc (size + 1, 1); // shrink it
+    _obj->encr_sat_data[i] = (char *)CALLOC (size + 1, 1); // shrink it
     memcpy (_obj->encr_sat_data[i], &dest.chain[off], size);
     _obj->block_size[i] = (BITCODE_BL)(size & 0xFFFFFFFF);
     LOG_TRACE ("block_size[%d] = %" PRId64 "\n", i, size);
@@ -2402,7 +2403,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   _obj->version = 1; // conversion complete
 
   if (i + 2 >= num_blocks)
-    _obj->block_size = (BITCODE_BL *)realloc (_obj->block_size,
+    _obj->block_size = (BITCODE_BL *)REALLOC (_obj->block_size,
                                               (i + 2) * sizeof (BITCODE_BL));
   _obj->num_blocks = i;
   _obj->block_size[i + 1] = 0;
@@ -2471,7 +2472,7 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               ptr = dwg_encrypt_SAT1 (
                   len, (BITCODE_RC *)_obj->encr_sat_data[i], &idx);
 
-              free (_obj->encr_sat_data[i]);
+              FREE (_obj->encr_sat_data[i]);
               _obj->encr_sat_data[i] = ptr;
             }
           _obj->version = 1; // conversion complete
@@ -3490,27 +3491,27 @@ static void
 dxf_ENDBLK_empty (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr)
 {
   // temp. only. not registered in dwg->object[]
-  Dwg_Object *obj = (Dwg_Object *)calloc (1, sizeof (Dwg_Object));
+  Dwg_Object *obj = (Dwg_Object *)CALLOC (1, sizeof (Dwg_Object));
   Dwg_Data *dwg = hdr->parent;
   // Dwg_Entity_ENDBLK *_obj;
   obj->parent = dwg;
   obj->index = dwg->num_objects;
   dwg_setup_ENDBLK (obj);
   obj->tio.entity->ownerhandle
-      = (BITCODE_H)calloc (1, sizeof (Dwg_Object_Ref));
+      = (BITCODE_H)CALLOC (1, sizeof (Dwg_Object_Ref));
   obj->tio.entity->ownerhandle->obj = (Dwg_Object *)hdr;
   obj->tio.entity->ownerhandle->handleref = hdr->handle;
   obj->tio.entity->ownerhandle->absolute_ref = hdr->handle.value;
   //_obj = obj->tio.entity->tio.ENDBLK;
   dwg_dxf_ENDBLK (dat, obj);
-  free (obj->tio.entity->tio.ENDBLK);
-  free (obj->tio.entity->ownerhandle);
-  free (obj->tio.entity);
+  FREE (obj->tio.entity->tio.ENDBLK);
+  FREE (obj->tio.entity->ownerhandle);
+  FREE (obj->tio.entity);
   if (dwg->opts & DWG_OPTS_IN)
-    free (obj->dxfname);
+    FREE (obj->dxfname);
   if (dwg->opts & DWG_OPTS_INJSON)
-    free (obj->name);
-  free (obj);
+    FREE (obj->name);
+  FREE (obj);
 }
 
 // a BLOCK_HEADER
@@ -3545,7 +3546,7 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
           {
             char *s = bit_convert_TU ((BITCODE_TU)_hdr->name);
             LOG_ERROR ("BLOCK_HEADER %s first_owned_entity missing", s);
-            free (s);
+            FREE (s);
           }
         else
           LOG_ERROR ("BLOCK_HEADER %s first_owned_entity missing", _hdr->name);
