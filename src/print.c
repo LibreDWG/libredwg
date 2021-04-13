@@ -27,6 +27,7 @@
 #include "dwg.h"
 #include "decode.h"
 #include "print.h"
+#include "free.h"
 
 #define DWG_LOGLEVEL DWG_LOGLEVEL_TRACE
 #include "logging.h"

@@ -121,7 +121,7 @@ EXPORT const char *trace_idx_name (char *restrict buf, const size_t size,
       const char *_tv_str = nstr;                                             \
       stmt;                                                                   \
       if (nstr && nstr != str)                                                \
-        free (nstr);                                                          \
+        FREE (nstr);                                                          \
     }                                                                         \
   else                                                                        \
     {                                                                         \
@@ -182,7 +182,7 @@ EXPORT const char *trace_idx_name (char *restrict buf, const size_t size,
         {                                                                     \
           ATTRIBUTE_ALIGNED (2) char *_u8 = bit_convert_TU (wstr);            \
           HANDLER (OUTPUT, "%s", _u8);                                        \
-          free (_u8);                                                         \
+          FREE (_u8);                                                         \
         }                                                                     \
     }
 #endif

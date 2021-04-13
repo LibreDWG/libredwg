@@ -181,7 +181,7 @@ print_match (const int is16, const char *restrict filename,
   printf ("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxfgroup,
           text);
   if (is16)
-    free (text);
+    FREE (text);
 }
 
 static int
@@ -339,7 +339,7 @@ do_match (const int is16, const char *restrict filename,
           text = bit_convert_TU ((BITCODE_TU)text);                           \
         found += do_match (0, filename, #ENTITY, dxfgroup, text);             \
         if (obj->parent->header.version >= R_2007)                            \
-          free (text);                                                        \
+          FREE (text);                                                        \
       }
 #endif
 
@@ -548,7 +548,7 @@ match_LTYPE (const char *restrict filename, const Dwg_Object *restrict obj)
                 if (text)
                   {
                     found += do_match (0, filename, "LTYPE", 9, text);
-                    free (text);
+                    FREE (text);
                   }
               }
             else
@@ -1893,7 +1893,7 @@ grep_file (const char *restrict filename)
     count += match_OBJECTS (filename, &dwg);
   if (dwg.header.version < R_13b1)
     { // FIXME hack
-      // mspace_ref = (Dwg_Object_Ref *)calloc (1, sizeof
+      // mspace_ref = (Dwg_Object_Ref *)CALLOC (1, sizeof
       // (Dwg_Object_Ref)); mspace_ref->obj = &dwg.object[0];
       count += match_preR13_entities (filename, &dwg, false);
     }
@@ -1918,7 +1918,7 @@ grep_file (const char *restrict filename)
 
   fflush (stdout);
   // if (dwg.header.version < R_13b1)
-  //   free (mspace_ref);
+  //   FREE (mspace_ref);
   dwg_free (&dwg);
   return count;
 }
@@ -1956,12 +1956,12 @@ list_dir (const char *restrict dir, char ***restrict namesp,
 #ifdef _MSC_VER
   struct _finddata_t fd;
   intptr_t h;
-  char *pat = (char *)malloc (strlen (dir) + 3);
+  char *pat = (char *)MALLOC (strlen (dir) + 3);
   if (!pat)
     return -1;
   sprintf (pat, "%s/*", dir);
   h = _findfirst (pat, &fd);
-  free (pat);
+  FREE (pat);
   if (h == -1)
     return -1;
   do
@@ -1982,12 +1982,12 @@ list_dir (const char *restrict dir, char ***restrict namesp,
         {
           char **tmp;
           cap = cap ? cap * 2 : 32;
-          tmp = (char **)realloc (names, cap * sizeof (char *));
+          tmp = (char **)REALLOC (names, cap * sizeof (char *));
           if (!tmp)
             break;
           names = tmp;
         }
-      names[n] = strdup (name);
+      names[n] = STRDUP (name);
       if (!names[n])
         break;
       n++;
@@ -2042,7 +2042,7 @@ grep_path_depth (const char *restrict path, const int recurse, const int depth)
       }
     for (size_t k = 0; k < n; k++)
       {
-        char *full = (char *)malloc (plen + 1 + strlen (names[k]) + 1);
+        char *full = (char *)MALLOC (plen + 1 + strlen (names[k]) + 1);
         if (full)
           {
             struct stat est;
@@ -2060,11 +2060,11 @@ grep_path_depth (const char *restrict path, const int recurse, const int depth)
                 else if (S_ISREG (est.st_mode) && is_dwg_name (names[k]))
                   count += grep_file (full);
               }
-            free (full);
+            FREE (full);
           }
-        free (names[k]);
+        FREE (names[k]);
       }
-    free (names);
+    FREE (names);
     return count;
   }
 }
@@ -2102,6 +2102,7 @@ main (int argc, char *argv[])
           { "version", 0, 0, 0 },     { NULL, 0, NULL, 0 } };
 #endif
 
+  GC_INIT ();
   // check args
   if (argc < 2)
     return usage ();
@@ -2226,7 +2227,7 @@ main (int argc, char *argv[])
                            NULL
 #    endif
   );
-  free (pattern16);
+  FREE (pattern16);
   if (errcode != 0 && errcode != 100)
     {
       pcre2_get_error_message_8 (errcode, (PCRE2_UCHAR8 *)buf, 4096);

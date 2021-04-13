@@ -800,14 +800,14 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
     if (SOLID_SURFACE && dat->version >= R_2007a)                             \
       FIELD_VALUE (acis_empty_bit) = 1;                                       \
   }                                                                           \
-  FIELD_B (acis_empty_bit, 0); \
+  FIELD_B (acis_empty_bit, 0);                                                \
   DECODE_3DSOLID_INLINE_R2013                                                 \
   if (SOLID_SURFACE_R2013 && !FIELD_VALUE (wireframe_data_present))           \
     {                                                                         \
       FIELD_B (acis_empty2, 0);                                               \
     }                                                                         \
-  else if (SOLID_VERSION2 || SOLID_SAT1_R2007                                \
-           || (SOLID_SURFACE && dat->version >= R_2007a))                    \
+  else if (SOLID_VERSION2 || SOLID_SAT1_R2007                                 \
+           || (SOLID_SURFACE && dat->version >= R_2007a))                     \
     {                                                                         \
       SINCE (R_2007a)                                                         \
       {                                                                       \
@@ -853,18 +853,18 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
   }                                                                           \
   DXF {                                                                       \
     SINCE (R_2007a) {                                                         \
-      if (!SOLID_SURFACE) {                                             \
+      if (!SOLID_SURFACE) {                                                   \
         SUBCLASS (AcDb3dSolid);                                               \
         FIELD_HANDLE (history_id, 3, 350);                                    \
       }                                                                       \
     }                                                                         \
-  } else if (!SOLID_SURFACE                                             \
-             && ((IF_IS_ENCODER ? dat->version >= R_2007a : SOLID_VERSION2)  \
+  } else if (!SOLID_SURFACE                                                   \
+             && ((IF_IS_ENCODER ? dat->version >= R_2007a : SOLID_VERSION2)   \
                  || SOLID_SAT1_R2007)                                         \
              && (!IF_IS_DECODER || AVAIL_BITS (hdl_dat) >= 8)) {              \
       FIELD_HANDLE (history_id, 3, 350);                                      \
   }                                                                           \
-  FREE { FIELD_HANDLE (history_id, 3, 350); }
+  ON_FREE { FIELD_HANDLE (history_id, 3, 350); }
 
 /* The ACIS of the ACSH_SWEEP_CLASS and ACSH_EXTRUSION_CLASS method 37 only
    exists in the decoder, encoder and DXF exporters. */
