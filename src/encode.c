@@ -225,7 +225,7 @@ static bool env_var_checked_p;
     IF_ENCODE_FROM_EARLIER                                                    \
     {                                                                         \
       if (!_obj->nam)                                                         \
-        _obj->nam = strdup ("");                                              \
+        _obj->nam = STRDUP ("");                                              \
     }                                                                         \
     bit_write_TV (dat, _obj->nam);                                            \
     LOG_TRACE (#nam ": \"%s\" [TV %d]", _obj->nam, dxf);                      \
@@ -982,7 +982,7 @@ obj_flush_hdlstream (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 /** See dec_macro.h instead.
    Returns -1 if not added, else returns the new objid.
    Does a complete handleref rescan to invalidate and resolve
-   all internal obj pointers after a object[] realloc.
+   all internal obj pointers after a object[] REALLOC.
 */
 EXPORT long dwg_add_##token (Dwg_Data * dwg)    \
 {                                               \
@@ -991,7 +991,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)    \
   int error = 0;                                \
   dat.size = sizeof(Dwg_Entity_##token) + 40;   \
   LOG_INFO ("Add entity " #token " ")           \
-  dat.chain = calloc (dat.size, 1);             \
+  dat.chain = CALLOC (dat.size, 1);             \
   dat.version = dwg->header.version;            \
   dat.from_version = dwg->header.from_version;  \
   bit_write_MS (&dat, dat.size);                \
@@ -1019,7 +1019,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
   BITCODE_BL num_objs  = dwg->num_objects;       \
   dat.size = sizeof(Dwg_Object_##token) + 40;    \
   LOG_INFO ("Add object " #token " ")            \
-  dat.chain = calloc (dat.size, 1);              \
+  dat.chain = CALLOC (dat.size, 1);              \
   dat.version = dwg->header.version;             \
   dat.from_version = dwg->header.from_version;   \
   bit_write_MS (&dat, dat.size);                 \
@@ -1096,7 +1096,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 
 /** Returns -1 if not added, else returns the new objid.
    Does a complete handleref rescan to invalidate and resolve
-   all internal obj pointers after a object[] realloc.
+   all internal obj pointers after a object[] REALLOC.
 */
 #define DWG_OBJECT(token)                                                     \
   static int dwg_encode_##token##_private (                                   \
@@ -1431,11 +1431,11 @@ add_DUMMY_eed (Dwg_Object *obj)
       return 0;
     }
   ent->num_eed = 1;
-  ent->eed = (Dwg_Eed *)calloc (2, sizeof (Dwg_Eed));
+  ent->eed = (Dwg_Eed *)CALLOC (2, sizeof (Dwg_Eed));
   len = (int)strlen (name);
   size = is_tu ? 1 + 2 + (((len + 1) & 0xFFFF) * 2) // RC + RS_BE + wstr
                : 1 + 3 + (len & 0xFF) + 1;          // RC + RC+RS + str
-  data = ent->eed[0].data = (Dwg_Eed_Data *)calloc (size + 3, 1);
+  data = ent->eed[0].data = (Dwg_Eed_Data *)CALLOC (size + 3, 1);
   ent->eed[0].size = size;
   dwg_add_handle (&ent->eed[0].handle, 5, appid->absolute_ref, NULL);
   data->code = 0; // RC
@@ -1464,7 +1464,7 @@ add_DUMMY_eed (Dwg_Object *obj)
   size = ((len / 256) + 1) & 0xFFFF;
   if (size > 1) // we already reserved for two eeds
     {
-      ent->eed = (Dwg_Eed *)realloc (ent->eed, (1 + size) * sizeof (Dwg_Eed));
+      ent->eed = (Dwg_Eed *)REALLOC (ent->eed, (1 + size) * sizeof (Dwg_Eed));
       memset (&ent->eed[1], 0, size * sizeof (Dwg_Eed));
     }
   do
@@ -1473,7 +1473,7 @@ add_DUMMY_eed (Dwg_Object *obj)
       ent->num_eed++;
       ent->eed[i].size = 0;
       ent->eed[0].size += l + 2;
-      data = ent->eed[i].data = (Dwg_Eed_Data *)calloc (l + 2, 1);
+      data = ent->eed[i].data = (Dwg_Eed_Data *)CALLOC (l + 2, 1);
       data->code = 4;           // RC
       data->u.eed_4.length = l; // also just an RC. max 256, how odd
       memcpy (data->u.eed_4.data, &obj->unknown_bits[off],
@@ -1522,7 +1522,7 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       /*
       if (obj->tio.entity->num_reactors)
         {
-          free (obj->tio.entity->reactors);
+          FREE (obj->tio.entity->reactors);
           obj->tio.entity->num_reactors = 0;
           obj->tio.entity->reactors = NULL;
         }
@@ -1530,9 +1530,9 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       if (dwg_supports_eed (dwg))
         add_DUMMY_eed (obj); // broken on windows
       dwg_free_object_private (obj);
-      free (obj->unknown_bits);
+      FREE (obj->unknown_bits);
       obj->tio.entity->tio.POINT = _obj
-          = (Dwg_Entity_POINT *)realloc (_obj, sizeof (Dwg_Entity_POINT));
+          = (Dwg_Entity_POINT *)REALLOC (_obj, sizeof (Dwg_Entity_POINT));
       // memset (_obj, 0, sizeof (Dwg_Entity_POINT)); // asan cries
       _obj->parent = obj->tio.entity;
       _obj->x = 0.0;
@@ -1547,15 +1547,15 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       obj->fixedtype = DWG_TYPE_POINT;
       if (dwg->opts & DWG_OPTS_INJSON)
         {
-          free (obj->name);
-          obj->name = strdup ("POINT");
+          FREE (obj->name);
+          obj->name = STRDUP ("POINT");
         }
       else
         obj->name = (char *)"POINT";
       if (dwg->opts & DWG_OPTS_IN)
         {
-          free (obj->dxfname);
-          obj->dxfname = strdup ("POINT");
+          FREE (obj->dxfname);
+          obj->dxfname = STRDUP ("POINT");
         }
       else
         obj->dxfname = (char *)"POINT";
@@ -1591,19 +1591,19 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       // keep owner, xdicobj, reactors
       if (dwg->opts & DWG_OPTS_INJSON)
         {
-          free (obj->name);
-          obj->name = strdup (name);
+          FREE (obj->name);
+          obj->name = STRDUP (name);
         }
       else
         obj->name = (char *)name;
       if (dwg->opts & DWG_OPTS_IN)
         {
-          free (obj->dxfname);
-          obj->dxfname = strdup (dxfname);
+          FREE (obj->dxfname);
+          obj->dxfname = STRDUP (dxfname);
         }
       else
         obj->dxfname = (char *)dxfname;
-      free (obj->unknown_bits);
+      FREE (obj->unknown_bits);
     }
   obj->hdlpos = 0;
 }
@@ -1626,9 +1626,9 @@ remove_NOD_item (Dwg_Object_DICTIONARY *_obj, const int i, const char *name)
     return;
   if (i < last && _obj->itemhandles != NULL && _obj->texts != NULL)
     {
-      free (_obj->texts[i]);
+      FREE (_obj->texts[i]);
       if (!_obj->itemhandles[i]->handleref.is_global)
-        free (_obj->itemhandles[i]);
+        FREE (_obj->itemhandles[i]);
       memmove (&_obj->texts[i], &_obj->texts[i + 1],
                (last - i) * sizeof (BITCODE_T));
       memmove (&_obj->itemhandles[i], &_obj->itemhandles[i + 1],
@@ -1663,7 +1663,7 @@ fixup_NOD (Dwg_Data *restrict dwg,
           char *u8 = bit_convert_TU ((BITCODE_TU)_obj->texts[i]);             \
           if (u8 && strEQc (u8, "ACAD_" #name))                               \
             remove_NOD_item (_obj, i, "ACAD_" #name);                         \
-          free (u8);                                                          \
+          FREE (u8);                                                          \
         }                                                                     \
       else if (_obj->texts[i] && strEQc (_obj->texts[i], "ACAD_" #name))      \
         remove_NOD_item (_obj, i, "ACAD_" #name);                             \
@@ -2424,7 +2424,7 @@ encode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   {
     if (!_obj->R11_HANDSEED)
       {
-        _obj->R11_HANDSEED = (BITCODE_H)calloc (1, sizeof (Dwg_Object_Ref));
+        _obj->R11_HANDSEED = (BITCODE_H)CALLOC (1, sizeof (Dwg_Object_Ref));
         _obj->R11_HANDSEED->handleref.code = 0;
         _obj->R11_HANDSEED->handleref.size = 8;
       }
@@ -2505,7 +2505,7 @@ encode_template (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   else sec_id = (Dwg_Section_Type)SECTION_TEMPLATE_R13;
 
   if ((int)dwg->header.num_sections <= (int)sec_id)
-    dwg->header.section = (Dwg_Section *)realloc (
+    dwg->header.section = (Dwg_Section *)REALLOC (
         dwg->header.section, (sec_id + 1) * sizeof (Dwg_Section));
   LOG_INFO ("\n=======> Template: @%4zu\n", dat->byte);
   dwg->header.section[sec_id].number = 4;
@@ -2823,7 +2823,7 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
    */
   LOG_TRACE ("num_objects: %i\n", dwg->num_objects);
   LOG_TRACE ("num_object_refs: %i\n", dwg->num_object_refs);
-  omap = (Object_Map *)calloc (dwg->num_objects, sizeof (Object_Map));
+  omap = (Object_Map *)CALLOC (dwg->num_objects, sizeof (Object_Map));
   if (!omap)
     {
       LOG_ERROR ("Out of memory");
@@ -3063,7 +3063,7 @@ encode_objects_handles (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
    */
   dwg->header.section[sec_id].size
       = (dat->byte - dwg->header.section[sec_id].address) & 0xFFFFFFFF;
-  free (omap);
+  FREE (omap);
   return error;
 }
 
@@ -3947,18 +3947,18 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     memset (&sec_dat, 0, (SECTION_SYSTEM_MAP + 1) * sizeof (Bit_Chain));
     if (dwg->header.section_infohdr.num_desc && !dwg->header.section_info)
-      dwg->header.section_info = (Dwg_Section_Info *)calloc (
+      dwg->header.section_info = (Dwg_Section_Info *)CALLOC (
           dwg->header.section_infohdr.num_desc, sizeof (Dwg_Section_Info));
     LOG_TRACE ("\n#### r2004 File Header ####\n");
     if (dat->byte + 0x80 >= dat->size - 1)
       {
         dwg->header.num_sections = 28; // room for some object pages
-        dwg->header.section = (Dwg_Section *)calloc (28, sizeof (Dwg_Section));
+        dwg->header.section = (Dwg_Section *)CALLOC (28, sizeof (Dwg_Section));
       }
     if (!dwg->header.section_info)
       {
         dwg->header.section_infohdr.num_desc = SECTION_SYSTEM_MAP + 1;
-        dwg->header.section_info = (Dwg_Section_Info *)calloc (
+        dwg->header.section_info = (Dwg_Section_Info *)CALLOC (
             SECTION_SYSTEM_MAP + 1, sizeof (Dwg_Section_Info));
       }
   }
@@ -4202,7 +4202,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               if (info_id >= (int)dwg->header.section_infohdr.num_desc)
                 {
                   dwg->header.section_infohdr.num_desc = info_id + 1;
-                  dwg->header.section_info = (Dwg_Section_Info *)realloc (
+                  dwg->header.section_info = (Dwg_Section_Info *)REALLOC (
                       dwg->header.section_info,
                       (info_id + 1) * sizeof (Dwg_Section_Info));
                 }
@@ -4233,14 +4233,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   if ((unsigned)ssize % max_decomp_size)
                     info->num_sections++;
                 }
-              info->sections = (Dwg_Section **)calloc (info->num_sections,
+              info->sections = (Dwg_Section **)CALLOC (info->num_sections,
                                                        sizeof (Dwg_Section *));
               // enough sections?
               if (si + info->num_sections > dwg->header.num_sections)
                 {
                   Dwg_Section *oldsecs = dwg->header.section;
                   dwg->header.num_sections = si + info->num_sections;
-                  dwg->header.section = (Dwg_Section *)realloc (
+                  dwg->header.section = (Dwg_Section *)REALLOC (
                       dwg->header.section,
                       dwg->header.num_sections * sizeof (Dwg_Section));
                   if (dwg->header.section != oldsecs)
@@ -4281,7 +4281,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         {
           Dwg_Section *oldsecs = dwg->header.section;
           dwg->header.num_sections = si;
-          dwg->header.section = (Dwg_Section *)realloc (
+          dwg->header.section = (Dwg_Section *)REALLOC (
               dwg->header.section, si * sizeof (Dwg_Section));
           if (dwg->header.section != oldsecs)
             section_info_rebuild (dwg, SECTION_SYSTEM_MAP);
@@ -4490,12 +4490,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
                   if (info->encrypted)
                     {
-                      BITCODE_RC *decr = (BITCODE_RC *)calloc (sec->size, 1);
+                      BITCODE_RC *decr = (BITCODE_RC *)CALLOC (sec->size, 1);
                       LOG_HANDLE ("Encrypt %s (%u/%d)\n", info->name, k,
                                   sec->size);
                       decrypt_R2004_header (decr, sec_dat[type].chain,
                                             sec->size);
-                      free (sec_dat[type].chain);
+                      FREE (sec_dat[type].chain);
                       sec_dat[type].chain = decr;
                     }
                   assert (sec->size <= MIN_COMPRESSED_SECTION
@@ -4535,7 +4535,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           = "\x68\x40\xF8\xF7\x92\x2A\xB5\xEF\x18\xDD\x0B\xF1";
       uint32_t checksum;
 
-      file_dat.chain = (unsigned char *)calloc (1, sizeof (Dwg_R2004_Header));
+      file_dat.chain = (unsigned char *)CALLOC (1, sizeof (Dwg_R2004_Header));
       dat = &file_dat;
       LOG_TRACE ("\nSection R2004_Header @0x100\n");
       memcpy (_obj->file_ID_string, "AcFssFcAJMB", 12);
@@ -4661,7 +4661,7 @@ fixup_invalid_tag (const Bit_Chain *restrict dat, char *restrict tag)
   if (changed && dat->version < R_2007)
     {
       newtag = bit_convert_TU (wstr);
-      free (wstr);
+      FREE (wstr);
       return newtag;
     }
   else
@@ -5219,10 +5219,10 @@ dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
               const char *alias = dxf_encode_alias (obj->dxfname);
               if (alias && klass->dxfname && strEQ (alias, klass->dxfname))
                 {
-                  // a static string, which cannot be free'd. important for
+                  // a static string, which cannot be FREE'd. important for
                   // indxf
                   if (dwg->opts & DWG_OPTS_IN)
-                    obj->dxfname = strdup ((char *)alias);
+                    obj->dxfname = STRDUP ((char *)alias);
                   else
                     obj->dxfname = (char *)alias;
                   obj->type = 500 + i;
@@ -5250,7 +5250,7 @@ dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
       if (!klass->dxfname)
         return NULL;
       if (dwg->opts & DWG_OPTS_IN)
-        obj->dxfname = strdup (klass->dxfname);
+        obj->dxfname = STRDUP (klass->dxfname);
       else
         obj->dxfname = klass->dxfname;
     }
@@ -5284,8 +5284,8 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
               klass->item_class_id = 0x1f2;
               if (!klass->dxfname || strNE (klass->dxfname, obj->dxfname))
                 {
-                  free (klass->dxfname);
-                  klass->dxfname = strdup (obj->dxfname);
+                  FREE (klass->dxfname);
+                  klass->dxfname = STRDUP (obj->dxfname);
                 }
               is_entity = 0;
             }
@@ -5304,8 +5304,8 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
               klass->item_class_id = 0x1f3;
               if (!klass->dxfname || strNE (klass->dxfname, obj->dxfname))
                 {
-                  free (klass->dxfname);
-                  klass->dxfname = strdup (obj->dxfname);
+                  FREE (klass->dxfname);
+                  klass->dxfname = STRDUP (obj->dxfname);
                 }
               is_entity = 1;
             }
@@ -5334,7 +5334,7 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         {
           LOG_WARN ("Skip broken %s", obj->name); // acad crashes still
           obj->type = is_entity ? DWG_TYPE_UNKNOWN_ENT : DWG_TYPE_PLACEHOLDER;
-          klass->dxfname = strdup (is_entity ? "UNKNOWN_ENT" : "UNKNOWN_OBJ");
+          klass->dxfname = STRDUP (is_entity ? "UNKNOWN_ENT" : "UNKNOWN_OBJ");
         }
       if (oldtype != obj->type)
         {
@@ -5966,7 +5966,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
           LOG_TRACE ("string: len=" FORMAT_RC " [RC] \"%s\" [TF]",
                      (BITCODE_RC)(length & 0xff), s);
           if (data->u.eed_0.is_tu)
-            free (s);
+            FREE (s);
         }
         VERSIONS (R_13b1, R_2007)
         {
@@ -5991,7 +5991,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
               LOG_TRACE ("string: len=" FORMAT_RS " [RC] cp=" FORMAT_RS
                          " [RS] \"%s\" [TF]",
                          length, dat->codepage, dest);
-              free (dest);
+              FREE (dest);
             }
           else
             {
@@ -6045,7 +6045,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
                                                  data->u.eed_0_r2007.length);
                   LOG_TRACE ("wstring: len=%d [RS] \"%s\" [TU]",
                              (int)data->u.eed_0_r2007.length, u8);
-                  free (u8);
+                  FREE (u8);
                 }
 #endif
             }
@@ -6605,7 +6605,7 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
       dat->from_version = (Dwg_Version_Type)((int)dat->version - 1);
       LOG_TRACE ("encode from minimal DXF\n");
 
-      _obj->HANDSEED = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
+      _obj->HANDSEED = (Dwg_Object_Ref *)CALLOC (1, sizeof (Dwg_Object_Ref));
       // check the object map for the next available handle
       last_hdl = dwg->num_object_refs
                      ? dwg->object_ref[dwg->num_object_refs - 1]
@@ -6682,7 +6682,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
                   bit_write_TF (dat, (BITCODE_TF) "", 0);
                 LOG_TRACE ("xdata[%u]: \"%s\" [TF %u %d]", j,
                            rbuf->value.str.u.data, len, rbuf->type);
-                free (news);
+                FREE (news);
               }
             else
               {
@@ -6735,7 +6735,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
                 for (i = 0; i < rbuf->value.str.size; i++)
                   bit_write_RS (dat, news[i]);
                 LOG_TRACE_TU ("xdata", news, rbuf->type);
-                free (news);
+                FREE (news);
               }
             else
               {
@@ -7110,7 +7110,7 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
     {
       BITCODE_H first, last, ref;
       unsigned i = 0;
-      owned = (BITCODE_H *)calloc (1, sizeof (BITCODE_H));
+      owned = (BITCODE_H *)CALLOC (1, sizeof (BITCODE_H));
       dwg_dynapi_entity_value (ow, owner->name, firstfield, &first, 0);
       dwg_dynapi_entity_value (ow, owner->name, lastfield, &last, 0);
       ref = first;
@@ -7141,7 +7141,7 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
             if (i > 1)
               {
                 num_owned = i;
-                owned = (BITCODE_H *)realloc (owned, i * sizeof (BITCODE_H));
+                owned = (BITCODE_H *)REALLOC (owned, i * sizeof (BITCODE_H));
               }
           }
       dwg_dynapi_entity_set_value (ow, owner->name, "num_owned", &num_owned,
@@ -7368,7 +7368,7 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
   if (!_obj->num_rowstyles)
     {
       _obj->num_rowstyles = 3;
-      _obj->rowstyles = (Dwg_TABLESTYLE_rowstyles *)calloc (
+      _obj->rowstyles = (Dwg_TABLESTYLE_rowstyles *)CALLOC (
           3, sizeof (Dwg_TABLESTYLE_rowstyles));
     }
   // 0: data, 1: title, 2: header
@@ -7395,18 +7395,18 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
                                .content_format.value_format_string);
     if (u8 && (destlen = strlen (u8)))
       {
-        char *dest = malloc (destlen + 1);
+        char *dest = MALLOC (destlen + 1);
         _obj->rowstyles[0].format_string = (BITCODE_TU)bit_utf8_to_TV (
             dest, (unsigned char *)u8, destlen, destlen - 1, 0,
             dwg->header.codepage);
       }
-    free (u8);
+    FREE (u8);
   }
 #endif
   if (!_obj->rowstyles[0].num_borders)
     {
       _obj->rowstyles[0].num_borders = 6;
-      _obj->rowstyles[0].borders = (Dwg_TABLESTYLE_border *)calloc (
+      _obj->rowstyles[0].borders = (Dwg_TABLESTYLE_border *)CALLOC (
           6, sizeof (Dwg_TABLESTYLE_border));
     }
   // borders/grid: top, horizontal inside, bottom, left, vertical inside, right
@@ -7423,7 +7423,7 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
           _obj->rowstyles[0].borders[i].color
               = _obj->sty.cellstyle.borders[i].color;
         }
-      free (_obj->sty.cellstyle.borders);
+      FREE (_obj->sty.cellstyle.borders);
       _obj->sty.cellstyle.borders = NULL;
       _obj->sty.cellstyle.num_borders = 0;
     }
@@ -7431,7 +7431,7 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
   if (!_obj->rowstyles[1].num_borders)
     {
       _obj->rowstyles[1].num_borders = 6;
-      _obj->rowstyles[1].borders = (Dwg_TABLESTYLE_border *)calloc (
+      _obj->rowstyles[1].borders = (Dwg_TABLESTYLE_border *)CALLOC (
           6, sizeof (Dwg_TABLESTYLE_border));
       _obj->rowstyles[1].text_color.method = 0xc1;
       _obj->rowstyles[1].fill_color.method = 0xc1;
@@ -7462,7 +7462,7 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
               _obj->rowstyles[0].borders[i].color
                   = _obj->ovr.cellstyle.borders[i].color;
             }
-          // free (_obj->ovr.cellstyle.borders);
+          // FREE (_obj->ovr.cellstyle.borders);
           //_obj->ovr.cellstyle.borders = NULL;
           //_obj->ovr.cellstyle.num_borders = 0;
         }
@@ -7471,7 +7471,7 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
   if (!_obj->rowstyles[2].num_borders)
     {
       _obj->rowstyles[2].num_borders = 6;
-      _obj->rowstyles[2].borders = (Dwg_TABLESTYLE_border *)calloc (
+      _obj->rowstyles[2].borders = (Dwg_TABLESTYLE_border *)CALLOC (
           6, sizeof (Dwg_TABLESTYLE_border));
       _obj->rowstyles[2].text_color.method = 0xc1;
       _obj->rowstyles[2].fill_color.method = 0xc1;
@@ -7540,10 +7540,10 @@ downconvert_MLEADERSTYLE (Dwg_Object *restrict obj)
     oo->eed
         = (Dwg_Eed *)realloc (oo->eed, (oo->num_eed + 1) * sizeof (Dwg_Eed));
   else
-    oo->eed = (Dwg_Eed *)calloc (2, sizeof (Dwg_Eed));
+    oo->eed = (Dwg_Eed *)CALLOC (2, sizeof (Dwg_Eed));
   dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl, NULL);
   oo->eed[idx].size = 3;
-  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+  oo->eed[idx].data = (Dwg_Eed_Data *)CALLOC (3, 1);
   oo->eed[idx].data->code = 70;
   _obj = oo->tio.MLEADERSTYLE;
   oo->eed[idx].data->u.eed_70.rs
@@ -7634,12 +7634,12 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         oo->eed = (Dwg_Eed *)realloc (oo->eed,
                                       (oo->num_eed + 1) * sizeof (Dwg_Eed));
       else
-        oo->eed = (Dwg_Eed *)calloc (6, sizeof (Dwg_Eed));
+        oo->eed = (Dwg_Eed *)CALLOC (6, sizeof (Dwg_Eed));
       // AnnotativeData
       dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl1, NULL);
       oo->eed[idx].size = 28;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (20, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)CALLOC (20, 1);
       oo->eed[idx].data->code = 0;
       oo->eed[idx].data->u.eed_0.length = 14; // sizeof ("AnnotativeData") - 1;
       oo->eed[idx].data->u.eed_0.codepage = 30;
@@ -7647,24 +7647,24 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       idx++;
       oo->eed[idx].size = 0;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (2, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)CALLOC (2, 1);
       oo->eed[idx].data->code = 2; // open
       idx++;
       oo->eed[idx].size = 0;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)CALLOC (3, 1);
       oo->eed[idx].data->code = 70;
       oo->eed[idx].data->u.eed_70.rs = 1;
       idx++;
       oo->eed[idx].size = 0;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)CALLOC (3, 1);
       oo->eed[idx].data->code = 70;
       oo->eed[idx].data->u.eed_70.rs = 1;
       idx++;
       oo->eed[idx].size = 0;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (2, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)CALLOC (2, 1);
       oo->eed[idx].data->code = 2;
       oo->eed[idx].data->u.eed_2.close = 1;
       idx++;
@@ -7682,19 +7682,19 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         oo->eed = (Dwg_Eed *)realloc (oo->eed,
                                       (oo->num_eed + 1) * sizeof (Dwg_Eed));
       else
-        oo->eed = (Dwg_Eed *)calloc (3, sizeof (Dwg_Eed));
+        oo->eed = (Dwg_Eed *)CALLOC (3, sizeof (Dwg_Eed));
       // DIMJAG
       dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl2, NULL);
       oo->eed[idx].size = 12;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)CALLOC (3, 1);
       oo->eed[idx].data->code = 70;
       //_obj = oo->tio.DIMSTYLE;
       oo->eed[idx].data->u.eed_70.rs = 388; // FIXME Which value?
       idx++;
       oo->eed[idx].size = 0;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (9, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)CALLOC (9, 1);
       oo->eed[idx].data->code = 40;
       oo->eed[idx].data->u.eed_40.real = 1.5; // FIXME Which value?
       idx++;
@@ -7711,19 +7711,19 @@ downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         oo->eed = (Dwg_Eed *)realloc (oo->eed,
                                       (oo->num_eed + 1) * sizeof (Dwg_Eed));
       else
-        oo->eed = (Dwg_Eed *)calloc (3, sizeof (Dwg_Eed));
+        oo->eed = (Dwg_Eed *)CALLOC (3, sizeof (Dwg_Eed));
       // DIMTALN
       dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl2, NULL);
       oo->eed[idx].size = 6;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)CALLOC (3, 1);
       oo->eed[idx].data->code = 70;
       //_obj = oo->tio.DIMSTYLE;
       oo->eed[idx].data->u.eed_70.rs = 392; // FIXME Which value?
       idx++;
       oo->eed[idx].size = 0;
       oo->eed[idx].raw = NULL;
-      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)CALLOC (3, 1);
       oo->eed[idx].data->code = 70;
       oo->eed[idx].data->u.eed_70.rs = 0; // FIXME Which value?
       idx++;
@@ -7756,11 +7756,11 @@ dwg_convert_LTYPE_strings_area (const Dwg_Data *restrict dwg,
           _obj->has_strings_area = 0;
           return;
         }
-      _obj->strings_area = calloc (1, 512);
+      _obj->strings_area = CALLOC (1, 512);
       if (!_obj->strings_area)
         {
           _obj->has_strings_area = 0;
-          free (old);
+          FREE (old);
           return;
         }
       _obj->has_strings_area = 1;
@@ -7768,7 +7768,7 @@ dwg_convert_LTYPE_strings_area (const Dwg_Data *restrict dwg,
         {
           _obj->strings_area[i * 2] = old[i];
         }
-      free (old);
+      FREE (old);
     }
   else if (dwg->header.from_version > R_2004 && dwg->header.version <= R_2004)
     {
@@ -7776,13 +7776,13 @@ dwg_convert_LTYPE_strings_area (const Dwg_Data *restrict dwg,
       BITCODE_TF old = _obj->strings_area;
       if (!old)
         _obj->has_strings_area = 0;
-      _obj->strings_area = calloc (1, 256);
+      _obj->strings_area = CALLOC (1, 256);
       if (!_obj->strings_area || !old)
         { // all empty
           if (old)
-            free (old);
+            FREE (old);
           if (_obj->strings_area)
-            free (_obj->strings_area);
+            FREE (_obj->strings_area);
           _obj->strings_area = NULL;
           return;
         }
@@ -7791,7 +7791,7 @@ dwg_convert_LTYPE_strings_area (const Dwg_Data *restrict dwg,
         {
           _obj->strings_area[i] = old[i * 2];
         }
-      free (old);
+      FREE (old);
     }
 }
 

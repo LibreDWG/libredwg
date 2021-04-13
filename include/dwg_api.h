@@ -316,7 +316,7 @@ extern "C"
       }                                                                       \
     if (!counts)                                                              \
       return NULL;                                                            \
-    ret_##token = (Dwg_Entity_##token **)malloc (                             \
+    ret_##token = (Dwg_Entity_##token **)MALLOC (                             \
         (counts + 1) * sizeof (Dwg_Entity_##token *));                        \
     obj = get_first_owned_entity (hdr->obj);                                  \
     while (obj)                                                               \
@@ -359,7 +359,7 @@ extern "C"
       }                                                                       \
     if (!counts)                                                              \
       return NULL;                                                            \
-    ret_##token = (Dwg_Object_##token **)malloc (                             \
+    ret_##token = (Dwg_Object_##token **)MALLOC (                             \
         (counts + 1) * sizeof (Dwg_Object_##token *));                        \
     for (c = 0, i = 0; i < dwg->num_objects; i++)                             \
       {                                                                       \
@@ -1421,11 +1421,11 @@ extern "C"
    *     Functions to return NULL-terminated array of all objects     *
    ********************************************************************/
 
-  /**
-   * \fn Dwg_Object_OBJECT dwg_getall_OBJECT(Dwg_Data *dwg)
-   * Extracts all objects of this type from a dwg, and returns a malloced
-   * NULL-terminated array.
-   */
+/**
+ * \fn Dwg_Object_OBJECT dwg_getall_OBJECT(Dwg_Data *dwg)
+ * Extracts all objects of this type from a dwg, and returns a malloced
+ * NULL-terminated array.
+ */
 
   DWG_GETALL_OBJECT_DECL (APPID);
   DWG_GETALL_OBJECT_DECL (APPID_CONTROL);
