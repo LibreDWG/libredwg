@@ -105,7 +105,7 @@ bitprepare (Bit_Chain *dat, size_t size)
   dat->opts = 1;
   dat->size = size + 1;
   dat->fh = NULL;
-  dat->chain = (unsigned char *)calloc (size + 1, 1);
+  dat->chain = (unsigned char *)CALLOC (size + 1, 1);
   dat->codepage = 30; // ANSI_1252
 }
 
@@ -120,7 +120,7 @@ bitfree (Bit_Chain *dat)
   dat->byte = 0;
   dat->size = 0;
   if (dat->chain)
-    free (dat->chain);
+    FREE (dat->chain);
 }
 
 /*
