@@ -363,7 +363,7 @@ strrplc (const char *s, const char *from, const char *to)
     {
       const size_t l1 = strlen (from);
       const size_t l2 = strlen (to);
-      char *dest = (char *)calloc (1, 80);
+      char *dest = (char *)CALLOC (1, 80);
       long i = p - s;
       assert (strlen (s) - ((long)l1 - l2) < 80);
       memcpy (dest, s, i);

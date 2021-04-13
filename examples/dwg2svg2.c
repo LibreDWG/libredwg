@@ -32,6 +32,7 @@
 
 #include <dwg.h>
 #include <dwg_api.h>
+#include "../src/common.h"
 #include "geom.h"
 
 static int opts = 0;
@@ -156,7 +157,7 @@ output_TEXT (dwg_object *obj)
           text_value);
 
   if (text_value && isnew)
-    free (text_value);
+    FREE (text_value);
 }
 
 static void
@@ -355,7 +356,7 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
               abs_ref ? abs_ref : 0, name ? name : "");
       if (name != NULL && name != _hdr->name
           && hdr->parent->header.version >= R_2007)
-        free (name);
+        FREE (name);
     }
   else
     printf ("\t<g id=\"symbol-%X\" >\n\t\t<!-- ? -->\n",
@@ -427,7 +428,7 @@ output_SVG (dwg_data *dwg)
     i = output_BLOCK_HEADER (ps);
   if (!ps || !i)
     output_BLOCK_HEADER (ms);
-  free (hdr_refs);
+  FREE (hdr_refs);
 
   printf ("</svg>\n");
 }
@@ -446,6 +447,7 @@ main (int argc, char *argv[])
           { NULL, 0, NULL, 0 } };
 #endif
 
+  GC_INIT ();
   if (argc < 2)
     return usage ();
 
