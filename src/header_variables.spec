@@ -59,15 +59,15 @@
     }
   VERSIONS (R_13b1, R_2004) { // undocumented as such in the ODA spec
       IF_ENCODE_FROM_EARLIER_OR_DXF {
-        free (FIELD_VALUE (unit1_name));
-        FIELD_VALUE (unit1_name) = strdup ("m");
+        FREE (FIELD_VALUE (unit1_name));
+        FIELD_VALUE (unit1_name) = STRDUP ("m");
       }
       FIELD_TV (unit1_name, 0);
       FIELD_TV (unit2_name, 0);
       FIELD_TV (unit3_name, 0);
       FIELD_TV (unit4_name, 0);
   }
-  FREE {
+  ON_FREE {
     FIELD_TV (unit1_name, 0);
   }
   SINCE (R_13b1)

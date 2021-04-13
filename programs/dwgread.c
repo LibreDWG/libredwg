@@ -131,6 +131,7 @@ main (int argc, char *argv[])
           { "force-free", 0, NULL, 0 }, { NULL, 0, NULL, 0 } };
 #endif
 
+  GC_INIT ();
   if (argc < 2)
     return usage ();
 
@@ -341,9 +342,9 @@ done:
   )
     {
       if (fmt)
-        free ((char *)fmt);
+        FREE ((char *)fmt);
       if (outfile)
-        free ((char *)outfile);
+        FREE ((char *)outfile);
       dwg_free (&dwg);
     }
 
