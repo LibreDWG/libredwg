@@ -214,7 +214,7 @@ escape_htmlescape_tests (void)
     pass ();
   else
     fail ("htmlescape => %s", s);
-  free (s);
+  FREE (s);
 
   // to multi-byte
   s = htmlescape ("'%test'&{}", CP_CP864);
@@ -222,7 +222,7 @@ escape_htmlescape_tests (void)
     pass ();
   else
     fail ("htmlescape CP864 => %s", s);
-  free (s);
+  FREE (s);
 
   // from multi-byte: echo -n "시험" | iconv -f utf-8 -t cp949 | od -t x1
   // to: echo -n "시험" | iconv -f utf-8 -t ucs-2 | od -t x2
@@ -231,7 +231,7 @@ escape_htmlescape_tests (void)
     pass ();
   else
     fail ("htmlescape CP949 => %s", s);
-  free (s);
+  FREE (s);
 }
 
 static void
@@ -243,7 +243,7 @@ escape_htmlwescape_tests (void)
     pass ();
   else
     fail ("htmlwescape => %s", s);
-  free (s);
+  FREE (s);
 }
 
 int

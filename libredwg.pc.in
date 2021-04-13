@@ -8,5 +8,5 @@ Name: @PACKAGE_TARNAME@
 Description: Free implementation of the DWG file format
 Version: @VERSION@
 URL: @PACKAGE_URL@
-Libs: -L${libdir} -lredwg @LIBS@
+Libs: -L${libdir} -lredwg @LIBS@ @LIBGC@
 Cflags: -I${includedir}

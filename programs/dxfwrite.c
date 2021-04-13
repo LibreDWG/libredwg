@@ -145,6 +145,7 @@ main (int argc, char *argv[])
           { "help", 0, 0, 0 },        { NULL, 0, NULL, 0 } };
 #endif
 
+  GC_INIT ();
   if (argc < 2)
     return usage ();
 
@@ -360,11 +361,11 @@ main (int argc, char *argv[])
             fprintf (stderr, "Missing input format\n");
           if (infile)
             fclose (dat.fh);
-          free (dat.chain);
+          FREE (dat.chain);
           exit (1);
         }
 
-      free (dat.chain);
+      FREE (dat.chain);
       dat.size = 0;
       if (infile && dat.fh)
         {
@@ -372,7 +373,7 @@ main (int argc, char *argv[])
           dat.fh = NULL;
         }
       if (error >= DWG_ERR_CRITICAL)
-        goto free;
+        goto FREE;
 
       if (!version)
         dat.version = dwg.header.version = dwg.header.from_version;
@@ -457,7 +458,7 @@ main (int argc, char *argv[])
       if (dat.fh)
         fclose (dat.fh);
 
-    free:
+    FREE:
 #if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
       {
         char *asanenv = getenv ("ASAN_OPTIONS");
@@ -501,6 +502,6 @@ main (int argc, char *argv[])
     }
 
   if (free_outfile)
-    free (outfile);
+    FREE (outfile);
   return error >= DWG_ERR_CRITICAL ? 1 : 0;
 }

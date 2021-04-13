@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009, 2023 Free Software Foundation, Inc.                  */
+/*  Copyright (C) 2009, 2021, 2023 Free Software Foundation, Inc.            */
 /*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
@@ -37,7 +37,8 @@
 #endif
 #include "dwg.h"
 #include "dwg_api.h"
-#include "../src/bits.h"
+#include "bits.h"
+#include "common.h"
 
 #include "../programs/suffix.inc"
 static int help (void);
@@ -123,13 +124,13 @@ change_fingerprint (Dwg_Data *dwg, Dwg_Entity_TEXT *_obj)
         strcpy (_obj->text_value, text);
       else
         {
-          free (_obj->text_value);
-          _obj->text_value = strdup (text);
+          FREE (_obj->text_value);
+          _obj->text_value = STRDUP (text);
         }
     }
   else
     {
-      free (_obj->text_value);
+      FREE (_obj->text_value);
       _obj->text_value = (BITCODE_TV)bit_utf8_to_TU (text, 0);
     }
   return 0;
@@ -144,8 +145,8 @@ load_dwg (char *filename, unsigned int opts)
   dwg_point_3d pt;
 
 #ifdef USE_WRITE
-  char *new_filename = (char *)malloc (strlen (filename) + 4);
-  char *fn = strdup (filename);
+  char *new_filename = (char *)MALLOC (strlen (filename) + 4);
+  char *fn = STRDUP (filename);
   char *base = basename (fn);
   char *p;
   struct stat st;
@@ -153,7 +154,7 @@ load_dwg (char *filename, unsigned int opts)
   if ((p = strrchr (base, '.')))
     *p = '\0';
   sprintf (new_filename, "%s_new.dwg", base);
-  free (fn);
+  FREE (fn);
 #endif
 
   memset (&dwg, 0, sizeof (Dwg_Data));
@@ -194,7 +195,7 @@ load_dwg (char *filename, unsigned int opts)
   if (dwg.header.version > R_2000)
     dwg.header.version = R_2000;
   success = dwg_write_file (new_filename, &dwg);
-  free (new_filename);
+  FREE (new_filename);
 #endif
 
   dwg_free (&dwg);
@@ -207,6 +208,7 @@ main (int argc, char *argv[])
   int i = 1;
   unsigned int opts = 0;
 
+  GC_INIT ();
   if (argc < 2)
     return usage ();
 #if defined(USE_TRACING) && defined(HAVE_SETENV)

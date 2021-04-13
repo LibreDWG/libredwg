@@ -371,7 +371,7 @@ strrplc (const char *s, const char *from, const char *to)
     {
       const size_t l1 = strlen (from);
       const size_t l2 = strlen (to);
-      char *dest = (char *)calloc (1, 80);
+      char *dest = (char *)CALLOC (1, 80);
       long i = p - s;
       assert (strlen (s) - ((long)l1 - l2) < 80);
       memcpy (dest, s, i);
@@ -499,7 +499,7 @@ delete_hv (BITCODE_H *entries, BITCODE_BS *num_p, BITCODE_BS i)
   *num_p = *num_p - 1;
   nume--;
   if (!ref->handleref.is_global)
-    free (ref);
+    FREE (ref);
   if (!nume || i != nume) // not the last?
     {
       memmove (&entries[i], &entries[i + 1], (nume - i) * sizeof (BITCODE_H));

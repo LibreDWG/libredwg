@@ -383,10 +383,10 @@
 /* #undef int64_t */
 
 /* Define to rpl_malloc if the replacement function should be used. */
-/* #undef malloc */
+/* #undef MALLOC */
 
 /* Define to rpl_realloc if the replacement function should be used. */
-/* #undef realloc */
+/* #undef REALLOC */
 
 /* If restrict is broken with this compiler */
 #ifdef __cplusplus

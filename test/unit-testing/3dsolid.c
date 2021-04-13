@@ -98,7 +98,7 @@ api_process (dwg_object *obj)
           CHK_SUBCLASS_3RD (wires[i], 3DSOLID_wire, scale);
         }
 #ifdef USE_DEPRECATED_API
-      free (wires);
+      FREE (wires);
 #endif
     }
   else
@@ -155,7 +155,7 @@ api_process (dwg_object *obj)
             }
         }
 #ifdef USE_DEPRECATED_API
-      free (silhouettes);
+      FREE (silhouettes);
 #endif
     }
   else

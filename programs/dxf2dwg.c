@@ -127,6 +127,7 @@ main (int argc, char *argv[])
   FILE *fp;
   struct stat attrib;
 
+  GC_INIT ();
   __AFL_INIT ();
   // dat.opts = 3;
 #  ifdef AFL_SHARED_MEM
@@ -164,7 +165,7 @@ main (int argc, char *argv[])
           dat.codepage = dwg.header.codepage;
           out_dat.version = R_2000;
           dwg_encode (&dwg, &out_dat);
-          free (out_dat.chain);
+          FREE (out_dat.chain);
           dwg_free (&dwg);
         }
     }
@@ -313,7 +314,7 @@ main (int argc, char *argv[])
       if (strEQ (filename_in, filename_out))
         {
           if (filename_out != argv[i - 1])
-            free (filename_out);
+            FREE (filename_out);
           return usage ();
         }
 
@@ -325,7 +326,7 @@ main (int argc, char *argv[])
         {
           fprintf (stderr, "READ ERROR 0x%x %s\n", error, filename_in);
           if (need_free)
-            free (filename_out);
+            FREE (filename_out);
           if (do_free
 #ifdef HAVE_VALGRIND_VALGRIND_H
               || (RUNNING_ON_VALGRIND)
@@ -431,7 +432,7 @@ main (int argc, char *argv[])
         {
           dwg_free (&dwg);
           if (need_free)
-            free (filename_out);
+            FREE (filename_out);
         }
       filename_out = NULL;
     }

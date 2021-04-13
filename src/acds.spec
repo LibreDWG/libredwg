@@ -55,7 +55,7 @@
       LOG_ERROR ("Invalid num_segidx");
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
-  _obj->segments = (Dwg_AcDs_Segment *)calloc (_obj->num_segidx,
+  _obj->segments = (Dwg_AcDs_Segment *)CALLOC (_obj->num_segidx,
                                                sizeof (Dwg_AcDs_Segment));
 #endif
 #ifndef IS_JSON
@@ -87,7 +87,7 @@
       DECODER { if (_obj->segidx[rcount1].offset) _obj->total_segments++; }
   END_REPEAT_BLOCK
 #ifdef IS_JSON
-  END_REPEAT (segidx) // still needed, free later
+  END_REPEAT (segidx) // still needed, FREE later
 #endif
 
   _REPEAT_NF (_obj->num_segidx, segments, Dwg_AcDs_Segment, 1)
@@ -131,7 +131,7 @@
             //continue;
           }
       }
-      /* segidx, datidx, _data_, schidx, schdat, search, blob01, prvsav, freesp */
+      /* segidx, datidx, _data_, schidx, schdat, search, blob01, prvsav, FREEsp */
       FIELD_TFF (segments[rcount1].name, 6, 0);
       DECODER {
         _obj->segments[rcount1].name[6] = '\0';
@@ -310,7 +310,7 @@
           LOG_WARN ("Possibly wrong prvsav_segidx %d for %d", _obj->prvsav_segidx, rcount1);
         // fallthru
         //break;
-      case 8: // freesp
+      case 8: // FREEsp
         //break;
       case 2: // _data_
         //break;
@@ -370,13 +370,13 @@
               {
                 LOG_ERROR ("Matching object %s " FORMAT_REF " not a 3DSOLID",
                            o ? o->name : "", ARGS_REF (hdl))
-                free (hdl);
+                FREE (hdl);
                 error |= DWG_ERR_INVALIDHANDLE;
                 continue;
               }
             sol = o->tio.entity->tio._3DSOLID;
             // not NULL terminated
-            acis_sab_data = (char*)malloc (size);
+            acis_sab_data = (char*)MALLOC (size);
             memcpy (acis_sab_data, s, size);
             num_acis_sab_data++;
             dwg_dynapi_entity_set_value (sol, o->name, "acis_data", &acis_sab_data, 0);
@@ -388,7 +388,7 @@
             // wires and silhuettes
             LOG_TRACE ("%s.acis_data = %" PRIuSIZE " " FORMAT_REF "\n", o->name, size,
                        ARGS_REF (hdl))
-            free (hdl); // it is a non-global, free'able handleref. Created in
+            FREE (hdl); // it is a non-global, free'able handleref. Created in
                         // common_entity_data.spec
             i = (j + size) & UINT_MAX; // next offset to try
           }
@@ -410,8 +410,13 @@
         LOG_WARN ("Not matching number of %u 3DSOLID entities and %u AcDs SAB "
                   "data\n",
                   wanted, num_acis_sab_data);
+#ifdef HAVE_LIBGC
         while (dwg->num_acis_sab_hdl > 0)
-          free (SHIFT_HV (dwg, num_acis_sab_hdl, acis_sab_hdl));
+          SHIFT_HV (dwg, num_acis_sab_hdl, acis_sab_hdl);
+#else
+        while (dwg->num_acis_sab_hdl > 0)
+          FREE (SHIFT_HV (dwg, num_acis_sab_hdl, acis_sab_hdl));
+#endif
       }
   }
 #endif

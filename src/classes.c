@@ -20,7 +20,6 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "common.h"
-#include "dwg.h"
 #include "classes.h"
 #include "dynapi.h"
 
@@ -1194,6 +1193,7 @@ dwg_type_name (const Dwg_Object_Type type)
     return "INVALID";
 #else
   const struct _obj_type_name *s = (struct _obj_type_name *)_dwg_type_name;
+  // linear, TODO better binary search. Or a switch jumptable, as in free.
   // just 12 unhandled are missing in objects.inc
   for (; s->type != DWG_TYPE_UNKNOWN_OBJ; s++)
     {

@@ -21,7 +21,7 @@ api_process (dwg_object *obj)
         {
           char *name = bit_convert_TU ((BITCODE_TU)names[i]);
           ok ("LAYERFILTER.names[%d]: %s", i, name);
-          free (name);
+          FREE (name);
         }
       else
         {

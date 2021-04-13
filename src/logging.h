@@ -115,7 +115,7 @@
       char *nstr = bit_TV_to_utf8 (str, dat->codepage);                       \
       LOG_TRACE (fmt, nstr, dxf)                                              \
       if (nstr && nstr != str)                                                \
-        free (nstr);                                                          \
+        FREE (nstr);                                                          \
     }                                                                         \
   else                                                                        \
     {                                                                         \
@@ -169,7 +169,7 @@
         {                                                                     \
           ATTRIBUTE_ALIGNED (2) char *_u8 = bit_convert_TU (wstr);            \
           HANDLER (OUTPUT, "%s", _u8);                                        \
-          free (_u8);                                                         \
+          FREE (_u8);                                                         \
         }                                                                     \
     }
 #endif
@@ -184,7 +184,7 @@
       {                                                                       \
         char *_u8 = bit_convert_TU (wstr);                                    \
         HANDLER (OUTPUT, "%s", _u8);                                          \
-        free (_u8);                                                           \
+        FREE (_u8);                                                           \
       }                                                                       \
   }
 
