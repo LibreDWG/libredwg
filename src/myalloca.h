@@ -11,7 +11,7 @@
 /*****************************************************************************/
 
 /*
- * myalloca.h: alloca checks and replacement, use with freea()
+ * myalloca.h: alloca checks and replacement, use with FREEa()
  * written by Reini Urban
  */
 
@@ -45,11 +45,11 @@ static inline char *alloca (size_t size);
 static inline char *
 alloca (size_t size)
 {
-  return malloc (size);
+  return MALLOC (size);
 }
-#  define freea(ptr) free (ptr)
+#  define FREEa(ptr) FREE (ptr)
 #else
-#  define freea(ptr)
+#  define FREEa(ptr)
 #endif
 
 #endif
