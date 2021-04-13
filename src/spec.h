@@ -19,6 +19,8 @@
 #  include "bits.h"
 #  include "codepages.h"
 #  include "decode.h"
+#  include "common.h"
+#  include "free.h"
 
 #  define DECODER if (0)
 #  define ENCODER if (0)
@@ -29,7 +31,7 @@
 #  define DXF_OR_FREE if (0)
 #  define DXF if (0)
 #  define JSON if (0)
-#  define FREE if (0)
+#  define ON_FREE if (0)
 #  define IF_FREE_OR_SINCE(x) SINCE (x)
 #  define IF_FREE_OR_VERSIONS(x, y) VERSIONS (x, y)
 #  ifndef IF_ENCODE_FROM_EARLIER
@@ -524,8 +526,8 @@
 #endif
 
 #if defined(IS_FREE)
-#  undef FREE
-#  define FREE if (1)
+#  undef ON_FREE
+#  define ON_FREE if (1)
 #  undef DXF_OR_FREE
 #  define DXF_OR_FREE if (1)
 #  undef IF_IS_FREE
@@ -789,7 +791,7 @@
   _ adds idx
   C does no checks
   N does constant times (else _obj->times)
-  F does not calloc/free
+  F does not CALLOC/free
 */
 
 // unchecked with constant times

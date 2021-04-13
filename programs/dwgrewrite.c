@@ -102,6 +102,7 @@ main (int argc, char *argv[])
   Bit_Chain out_dat = { NULL, 0, 0, 0, 0 };
   FILE *fp;
 
+  GC_INIT ();
   __AFL_INIT ();
   printf ("Fuzzing decode + encode + decode from shared memory\n");
 
@@ -137,7 +138,7 @@ main (int argc, char *argv[])
             exit (0);
           dwg_free (&dwg);
           dwg_decode (&out_dat, &dwg);
-          free (out_dat.chain);
+          FREE (out_dat.chain);
         }
       else
         exit (0);
@@ -291,7 +292,7 @@ main (int argc, char *argv[])
       if (!filename_out || !strcmp (filename_in, filename_out))
         {
           if (free_fnout)
-            free (filename_out);
+            FREE (filename_out);
           return usage ();
         }
 
@@ -309,7 +310,7 @@ main (int argc, char *argv[])
           if (error >= DWG_ERR_CRITICAL)
             {
               if (free_fnout)
-                free (filename_out);
+                FREE (filename_out);
               dwg_free (&dwg);
               return error;
             }
@@ -370,7 +371,7 @@ main (int argc, char *argv[])
 #endif
             {
               if (free_fnout)
-                free (filename_out);
+                FREE (filename_out);
               dwg_free (&dwg);
               return error;
             }
@@ -396,6 +397,6 @@ main (int argc, char *argv[])
 #endif
 
   if (free_fnout)
-    free (filename_out);
+    FREE (filename_out);
   return error >= DWG_ERR_CRITICAL ? error : 0;
 }
