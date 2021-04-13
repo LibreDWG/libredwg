@@ -2001,7 +2001,7 @@ while (<$in>) {
  * \return       malloced NULL-terminated array
  *
  * Extracts all entities of this type from a block header (mspace or pspace),
- * and returns a malloced NULL-terminated array.
+ * and returns a MALLOCed NULL-terminated array.
  */
 // clang-format: off
 //< \fn Dwg_Entity_TEXT* dwg_getall_TEXT (Dwg_Object_Ref *hdr)
@@ -2024,7 +2024,7 @@ EOF
 
 /**
  * \fn Dwg_Object_OBJECT dwg_getall_OBJECT(Dwg_Data *dwg)
- * Extracts all objects of this type from a dwg, and returns a malloced
+ * Extracts all objects of this type from a dwg, and returns a MALLOCed
  * NULL-terminated array.
  */
 
@@ -2210,7 +2210,7 @@ EOF
 
 /**
  * \fn Dwg_Object_OBJECT dwg_getall_OBJECT(Dwg_Data *dwg)
- * Extracts all objects of this type from a dwg, and returns a malloced
+ * Extracts all objects of this type from a dwg, and returns a MALLOCed
  * NULL-terminated array.
  */
 
@@ -3138,7 +3138,7 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
   // TODO: sanity checks. is_malloc (TF), copy zero's (TFv)
   // if text strcpy or wcscpy, or do utf8 conversion.
   //if ((char*)old && f->is_malloc)
-  //  free (old);
+  //  FREE (old);
   if (f->is_malloc)
     {
       // NULL ptr
@@ -3147,10 +3147,10 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
       // fixed length (but not yet TF)
       else if (strEQc (f->type, "TFv"))
         {
-          char *str = (char *)calloc (f->size + 1, 1);
+          char *str = (char *)CALLOC (f->size + 1, 1);
           strncpy (str, *(char**)value, f->size);
           // we copy just the pointer to heap-alloced str, not the string
-          free (*(char **)old);
+          FREE (*(char **)old);
           memcpy (old, &str, sizeof (char*)); // size of ptr
         }
       // ascii
@@ -3158,10 +3158,10 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
         {
           // FIXME: TF size calc is probably wrong
           size_t len = strlen (*(char**)value);
-          char *str = (char *)malloc (len + 1);
+          char *str = (char *)MALLOC (len + 1);
           memcpy (str, *(char**)value, len + 1);
           // we copy just the pointer, not the string
-          free (*(char **)old);
+          FREE (*(char **)old);
           memcpy (old, &str, sizeof (char*)); // size of ptr
         }
       // or wide
@@ -3173,18 +3173,18 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
           else // source is already TU
             {
 #ifdef HAVE_NATIVE_WCHAR2
-              wstr = (BITCODE_TU)malloc (2 * (wcslen (*(wchar_t **)value) + 1));
+              wstr = (BITCODE_TU)MALLOC (2 * (wcslen (*(wchar_t **)value) + 1));
               wcscpy ((wchar_t *)wstr, *(wchar_t **)value);
 #else
               int length = 0;
               for (; (*(BITCODE_TU*)value)[length]; length++)
                 ;
               length++;
-              wstr = (BITCODE_TU)malloc ((2 * length) + 1);
+              wstr = (BITCODE_TU)MALLOC ((2 * length) + 1);
               memcpy (wstr, value, length * 2);
 #endif
             }
-          free (*(char **)old);
+          FREE (*(char **)old);
           memcpy (old, &wstr, sizeof (char*)); // size of ptr
         }
       else
@@ -3279,7 +3279,7 @@ dwg_dynapi_header_set_value (Dwg_Data *restrict dwg,
     if (f)
       {
         void *old;
-        // there are no malloc'd fields in the HEADER, so no need to free().
+        // there are no MALLOC'd fields in the HEADER, so no need to FREE().
         const Dwg_Header_Variables *const _obj = &dwg->header_vars;
         // but there are several fixed-length malloced strings preR13
         static const Dwg_DYNAPI_field r11_fixed_strings[] = {
@@ -3625,41 +3625,41 @@ dwg_dynapi_subclass_name (const char *restrict type)
   if (memBEGINc (type, "Dwg_Object_"))
     {
       const size_t off = strlen ("Dwg_Object_"); // PLOTSETTINGS
-      name = strdup (&type[off]);
+      name = STRDUP (&type[off]);
       if (type[len - 1] == '*')
         name[len - off - 1] = '\0';
     }
   else if (memBEGINc (type, "Dwg_Entity_"))
     {
       const size_t off = strlen ("Dwg_Entity_");
-      name = strdup (&type[off]);
+      name = STRDUP (&type[off]);
       if (type[len - 1] == '*')
         name[len - off - 1] = '\0';
     }
   else if (memBEGINc (type, "Dwg_"))
     {
-      name = strdup (&type[4]);
+      name = STRDUP (&type[4]);
       if (type[len - 1] == '*')
         name[len - 5] = '\0';
     }
   else if (memBEGINc (type, "struct _dwg_entity_"))
     {
       const size_t off = strlen ("struct _dwg_entity_"); // TABLE
-      name = strdup (&type[off]);
+      name = STRDUP (&type[off]);
       if (type[len - 1] == '*')
         name[len - off - 1] = '\0';
     }
   else if (memBEGINc (type, "struct _dwg_object_"))
     {
       const size_t off = strlen ("struct _dwg_object_"); // CELLSTYLEMAP*, EVALUATION_GRAPH, ...
-      name = strdup (&type[off]);
+      name = STRDUP (&type[off]);
       if (type[len - 1] == '*')
         name[len - off - 1] = '\0';
     }
   else if (memBEGINc (type, "struct _dwg_")) // CellStyle*
     {
       const size_t off = strlen ("struct _dwg_");
-      name = strdup (&type[off]);
+      name = STRDUP (&type[off]);
       if (type[len - 1] == '*')
         name[len - off - 1] = '\0';
     }

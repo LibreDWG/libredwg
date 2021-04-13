@@ -33,6 +33,7 @@
 #include "dwg.h"
 #include "decode.h"
 #include "out_json.h"
+#include "free.h"
 
 #define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
 #include "logging.h"
@@ -267,10 +268,10 @@ static char *_path_field (const char *path);
         else                                                                  \
           {                                                                   \
             const size_t _len = 6 * len + 1;                                  \
-            char *_buf = (char *)malloc (_len);                               \
+            char *_buf = (char *)MALLOC (_len);                               \
             fprintf (dat->fh, "\"%s\"",                                       \
                      json_cquote (_buf, str, _len, dat->codepage));           \
-            free (_buf);                                                      \
+            FREE (_buf);                                                      \
           }                                                                   \
       }                                                                       \
     else                                                                      \
@@ -284,9 +285,9 @@ static char *_path_field (const char *path);
 #  define VALUE_TEXT_TU(wstr)                                                 \
     if (wstr)                                                                 \
       {                                                                       \
-        wchar_t *_buf = malloc (6 * wcslen ((wchar_t *)wstr) + 2);            \
+        wchar_t *_buf = MALLOC (6 * wcslen ((wchar_t *)wstr) + 2);            \
         fprintf (dat->fh, "\"%ls\"", wcquote (_buf, (wchar_t *)wstr));        \
-        free (_buf);                                                          \
+        FREE (_buf);                                                          \
       }                                                                       \
     else                                                                      \
       {                                                                       \
@@ -1548,7 +1549,7 @@ json_cquote (char *restrict dest, const char *restrict src, const size_t len,
         {
           *dest = 0;
           if (tmp && tmp != src)
-            free (tmp);
+            FREE (tmp);
           return d;
         }
       if (c == '"' && dest + 1 < endp)
@@ -1595,7 +1596,7 @@ json_cquote (char *restrict dest, const char *restrict src, const size_t len,
     }
   *dest = 0; // add final delim, skipped above
   if (tmp && tmp != src)
-    free (tmp);
+    FREE (tmp);
   return d;
 }
 
@@ -2344,7 +2345,7 @@ json_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                            _obj->size);
       FIELD_BINARY (chain, _obj->size, 310);
       if (dwg->header.from_version >= R_2004)
-        _obj->chain -= 16; /* undo for free */
+        _obj->chain -= 16; /* undo for FREE */
       ENDHASH;
     }
   return 0;
