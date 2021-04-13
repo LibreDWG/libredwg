@@ -31,8 +31,10 @@ main (int argc, char *argv[])
   int hex = 0;
   int size, bits;
   unsigned long pos;
-  Bit_Chain dat = EMPTY_CHAIN (0);
+  Bit_Chain dat;
 
+  GC_INIT ();
+  dat = EMPTY_CHAIN (0);
   if (argc < 2)
     {
       printf ("usage: examples/bd "
@@ -54,7 +56,7 @@ main (int argc, char *argv[])
       size = (bits / 8);
     }
 
-  dat.chain = malloc (size + 1);
+  dat.chain = MALLOC (size + 1);
   dat.size = size;
   dat.version = R_2004;
   if (hex)
@@ -147,6 +149,6 @@ main (int argc, char *argv[])
         printf ("%d 0x%06X 0x%x CMC? @%lu (%ld)\n", c.index, c.rgb, c.flag,
                 bit_position (&dat), pos);
     }
-  free (dat.chain);
+  FREE (dat.chain);
   return 0;
 }

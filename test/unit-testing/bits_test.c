@@ -983,33 +983,33 @@ bit_utf8_to_TU_tests (void)
     pass ();
   else
     fail ("bit_utf8_to_TU U+00CB => %2X%2X", p[0], p[1]);
-  free (p);
+  FREE (p);
 
   p = bit_utf8_to_TU ((char *)"█", 0); // \xe2\x96\x88
   if (*p == 0x2588 && !p[1])
     pass ();
   else
     fail ("bit_utf8_to_TU U+2588 => %2X%2X", p[0], p[1]);
-  free (p);
+  FREE (p);
 
   p = bit_utf8_to_TU ((char *)"δ", 0); // "\xce\xb4"
   if (*p == 0x03B4 && !p[1])
     pass ();
   else
     fail ("bit_utf8_to_TU U+03B4 => %2X%2X", p[0], p[1]);
-  free (p);
+  FREE (p);
 }
 
 static void
 bit_TV_to_utf8_tests (void)
 {
   char *p;
-  char *srcu = strdup ("Test\\U+0234"); // ȴ
+  char *srcu = STRDUP ("Test\\U+0234"); // ȴ
   const char *src1 = "Test\xc4";        // Ä
   const char *src2 = "Test\xc6";        // Ć \U+0106
   const char *src7 = "Test\xd3";        // Σ
   // echo -n "시험" | iconv -f utf8 -t cp949 | od -t x1
-  char *src_kor = strdup ("\xbd\xc3\xc7\xe8");
+  char *src_kor = STRDUP ("\xbd\xc3\xc7\xe8");
 
   ok ("bit_TV_to_utf8_tests init");
   p = bit_TV_to_utf8 ((char *)srcu, CP_ISO_8859_1);
@@ -1024,8 +1024,8 @@ bit_TV_to_utf8_tests (void)
       printf ("\n");
     }
   if (p != srcu)
-    free (p);
-  free (srcu);
+    FREE (p);
+  FREE (srcu);
 
   p = bit_TV_to_utf8 ((char *)src1, CP_ISO_8859_1);
   if (strEQc (p, "TestÄ")) // \xc3\x84 as utf-8
@@ -1033,7 +1033,7 @@ bit_TV_to_utf8_tests (void)
   else
     fail ("bit_TV_to_utf8 %s ISO_8859_1", p);
   if (p != src1)
-    free (p);
+    FREE (p);
 
   p = bit_TV_to_utf8 ((char *)src2, CP_ISO_8859_2);
   if (strEQc (p, "TestĆ"))
@@ -1041,7 +1041,7 @@ bit_TV_to_utf8_tests (void)
   else
     fail ("bit_TV_to_utf8 %s ISO_8859_2", p);
   if (p != src2)
-    free (p);
+    FREE (p);
 
   p = bit_TV_to_utf8 ((char *)src7, CP_ISO_8859_7);
   if (strEQc (p, "TestΣ"))
@@ -1049,7 +1049,7 @@ bit_TV_to_utf8_tests (void)
   else
     fail ("bit_TV_to_utf8 %s ISO_8859_7", p);
   if (p != src7)
-    free (p);
+    FREE (p);
 
   p = bit_TV_to_utf8 (src_kor, CP_CP949);
   // echo "시험" | od -t x1
@@ -1065,8 +1065,8 @@ bit_TV_to_utf8_tests (void)
       printf ("\n");
     }
   if (p != src_kor)
-    free (p);
-  free (src_kor);
+    FREE (p);
+  FREE (src_kor);
 
   p = bit_TV_to_utf8 ("\x83\x82\x83\x6d", CP_ANSI_932);
   // echo "モノ" | od -t x1
@@ -1079,7 +1079,7 @@ bit_TV_to_utf8_tests (void)
         printf ("\\x%02x", (unsigned char)p[i]);
       printf ("\n");
     }
-  free (p);
+  FREE (p);
 
   p = bit_TV_to_utf8 ("0\\M+18382", CP_ANSI_932); // MO
   if (strEQc (p, "0モ") || strEQc (p, "0\xe3\x83\xa2"))
@@ -1091,7 +1091,7 @@ bit_TV_to_utf8_tests (void)
         printf ("\\x%02x", (unsigned char)p[i]);
       printf ("\n");
     }
-  free (p);
+  FREE (p);
 
   /* --- Aliasing-return contract regression (PR #1250) ---
      bit_TV_to_utf8 documents (and the dxf_CMC / VALUE_TV call sites
@@ -1118,7 +1118,7 @@ bit_TV_to_utf8_tests (void)
               "to src %p, got %p",
               (const void *)ascii_src, (const void *)aliased);
         if (aliased && aliased != ascii_src)
-          free (aliased);
+          FREE (aliased);
       }
   }
 
@@ -1139,7 +1139,7 @@ bit_TV_to_utf8_tests (void)
               "to src %p, got %p",
               (const void *)empty_src, (const void *)aliased_empty);
         if (aliased_empty && aliased_empty != empty_src)
-          free (aliased_empty);
+          FREE (aliased_empty);
       }
   }
 
@@ -1161,7 +1161,7 @@ bit_TV_to_utf8_tests (void)
         ok ("bit_TV_to_utf8_tests CP_UNDEFINED returned a copy "
             "(also valid; aliasing is opportunistic on this build)");
         if (aliased_r11)
-          free (aliased_r11);
+          FREE (aliased_r11);
       }
   }
   /* --- iconv NUL-termination regression (commit dc8e3509) ---
@@ -1226,7 +1226,7 @@ bit_read_TV_tests (void)
     ok ("bit_read_TV (<R_13)");
   else
     fail ("bit_read_TV (<R_13): %s", result);
-  free (result);
+  FREE (result);
   bitfree (&bitchain);
 
   bitchain = strtobt ("01"         // BB (1)
@@ -1241,7 +1241,7 @@ bit_read_TV_tests (void)
     ok ("bit_read_TV (>R_13)");
   else
     fail ("bit_read_TV (>R_13): %s", result);
-  free (result);
+  FREE (result);
   bitfree (&bitchain);
 }
 
@@ -1280,7 +1280,7 @@ bit_read_TF_tests (void)
   else
     fail ("bit_read_TF");
 
-  free (result);
+  FREE (result);
   bitfree (&bitchain);
 }
 
@@ -1596,7 +1596,7 @@ in_hexbin_tests (void)
           0xFF, 0x30, 0x28, 0x21, 0xFF, 0x30, 0x28, 0x21, 0xFF, 0x30 };
   size_t written;
   dat.size = ((sizeof (hex) - 1) / 2);
-  dat.chain = calloc (dat.size + 1, 1);
+  dat.chain = CALLOC (dat.size + 1, 1);
   written = in_hex2bin (dat.chain, hex, dat.size);
   if (written == dat.size && memcmp (dat.chain, result, dat.size) == 0)
     {
@@ -1653,7 +1653,7 @@ in_hexbin_tests (void)
     fail ("in_hexbin error");
 #endif
 
-  free (dat.chain);
+  FREE (dat.chain);
 }
 
 int
@@ -1722,7 +1722,7 @@ main (int argc, char const *argv[])
   bitchain.opts = 1;
   bitchain.fh = NULL;
   bitchain.version = bitchain.from_version = R_2000;
-  bitchain.chain = (unsigned char *)calloc (bitchain.size, 1);
+  bitchain.chain = (unsigned char *)CALLOC (bitchain.size, 1);
 
   bit_write_RD (&bitchain, 1.2345);
   if (bitchain.byte == 8 && bitchain.bit == 0)
@@ -1940,7 +1940,7 @@ main (int argc, char const *argv[])
 #endif
       }
     bit_set_position (&bitchain, pos);
-    free (wstr);
+    FREE (wstr);
 
     bitchain.from_version = R_2007;
     bitchain.version = R_2000;
@@ -1970,8 +1970,8 @@ main (int argc, char const *argv[])
         bit_set_position (&bitchain, pos1);
       }
     bitchain.from_version = bitchain.version = R_2004;
-    free (str);
-    free (emb);
+    FREE (str);
+    FREE (emb);
   }
 
   pos = bit_position (&bitchain);
@@ -2002,8 +2002,8 @@ main (int argc, char const *argv[])
       pass ();
     else
       fail ("bit_read_CMC %d (r2000)", color_read.index);
-    free (color_read.name);
-    free (color_read.book_name);
+    FREE (color_read.name);
+    FREE (color_read.book_name);
   }
 
   bit_advance_position (&bitchain, -(long)size);
@@ -2034,8 +2034,8 @@ main (int argc, char const *argv[])
     else
       fail ("bit_read_CMC (%d,%x,%d) %s", color.index, color.rgb, color.flag,
             color.name);
-    free (color.name);
-    free (color.book_name);
+    FREE (color.name);
+    FREE (color.book_name);
   }
 
   bitchain.byte++;
@@ -2091,9 +2091,9 @@ main (int argc, char const *argv[])
       }
     if (!fails)
       pass ();
-    free (s);
+    FREE (s);
   }
 
-  free (bitchain.chain);
+  FREE (bitchain.chain);
   return failed;
 }

@@ -73,7 +73,7 @@ enforce_null_termination (Bit_Chain *dat, bool enforce)
   fprintf (stderr,
            "llvmfuzz_standalone: enforce libfuzzer buffer NULL termination\n");
 #endif
-  copy = malloc (dat->size + 1);
+  copy = MALLOC (dat->size + 1);
   memcpy (copy, dat->chain, dat->size);
   copy[dat->size] = '\0';
   dat->chain = copy;
@@ -92,6 +92,7 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
   static char tmp_file[256];
 
 #ifndef STANDALONE
+  GC_INIT ();
   /* The libfuzzer path otherwise leaves out/ver at 0, so only dwg_encode runs.
      Derive them from the input (without consuming it, so the existing corpus
      keeps decoding) to also drive the out_dxf/out_dxfb/out_json encoders. */
@@ -244,7 +245,7 @@ LLVMFuzzerTestOneInput (const unsigned char *data, size_t size)
       break;
     }
   dwg_free (&dwg);
-  free (out_dat.chain);
+  FREE (out_dat.chain);
   fclose (out_dat.fh);
   // unlink (tmp_file);
   return 0;
@@ -271,6 +272,7 @@ main (int argc, char *argv[])
   unsigned seed;
   const unsigned int possible_outputformats = LLVMFUZZ_NUM_OUTPUTS;
 
+  GC_INIT ();
   if (argc <= 1 || !*argv[1])
     return usage ();
   if (getenv ("SEED"))
@@ -320,7 +322,7 @@ main (int argc, char *argv[])
       fseek (f, 0, SEEK_SET);
       if (len <= 0)
         continue;
-      buf = (unsigned char *)malloc (len);
+      buf = (unsigned char *)MALLOC (len);
       n_read = fread (buf, 1, len, f);
       fclose (f);
       assert ((long)n_read == len);
@@ -346,7 +348,7 @@ main (int argc, char *argv[])
       fprintf (stderr, "examples/llvmfuzz_standalone %s [%" PRIuSIZE "]\n",
                argv[i], len);
       LLVMFuzzerTestOneInput (buf, len);
-      free (buf);
+      FREE (buf);
       // Bit_Chain dat = { 0 };
       // dat_read_file (&dat, fp, argv[i]);
       // LLVMFuzzerTestOneInput (dat.chain, dat.size);
