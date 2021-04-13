@@ -27,7 +27,7 @@ spointprepare (double x, double y, double z)
   int n;
 
   // Allocating memory for the string
-  result = malloc (100 * sizeof (xmlChar));
+  result = MALLOC (100 * sizeof (xmlChar));
   n = sprintf ((char *)result, "(%.4f %.4f %.4f)", x, y, z);
 
   // Check if it was transferred properly
@@ -53,7 +53,7 @@ doubletochar (double x)
   int n;
 
   /* Allocate memory for the string */
-  result = malloc (50 * sizeof (xmlChar));
+  result = MALLOC (50 * sizeof (xmlChar));
   n = sprintf ((char *)result, "%.4f", x);
 
   if (n < 0)
@@ -77,7 +77,7 @@ inttochar (int x)
   int n;
 
   /* Allocate memory for the string */
-  result = malloc (16 * sizeof (xmlChar));
+  result = MALLOC (16 * sizeof (xmlChar));
   n = sprintf ((char *)result, "%d", x);
   if (n < 0)
     {
@@ -106,7 +106,7 @@ spointprepare2 (double x, double y)
   int n;
 
   /* allocate memory for the string */
-  result = malloc (50 * sizeof (xmlChar));
+  result = MALLOC (50 * sizeof (xmlChar));
   n = sprintf ((char *)result, "(%.4f %.4f)", x, y);
 
   // Check if it was transferred properly
@@ -131,7 +131,7 @@ doubletohex (double handle)
   int n;
 
   /* allocate memory for the string */
-  result = malloc (20 * sizeof (xmlChar));
+  result = MALLOC (20 * sizeof (xmlChar));
   n = sprintf ((char *)result, "%03X", (unsigned int)handle);
 
   // Check if it was transferred properly

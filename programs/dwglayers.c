@@ -95,6 +95,7 @@ main (int argc, char *argv[])
           { "version", 0, 0, 0 }, { NULL, 0, NULL, 0 } };
 #endif
 
+  GC_INIT ();
   while
 #ifdef HAVE_GETOPT_LONG
       ((c = getopt_long (argc, argv, "xfoh", long_options, &option_index))
@@ -193,7 +194,7 @@ main (int argc, char *argv[])
             {
               char *utf8 = bit_convert_TU ((BITCODE_TU)name);
               printf ("%s\n", utf8);
-              free (utf8);
+              FREE (utf8);
             }
           else
             printf ("%s\n", name);
