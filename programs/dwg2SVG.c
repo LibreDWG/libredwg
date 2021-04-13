@@ -171,13 +171,13 @@ entity_color (Dwg_Object_Entity *ent)
     {
       const Dwg_RGB_Palette *palette = dwg_rgb_palette ();
       const Dwg_RGB_Palette *rgb = &palette[ent->color.index];
-      char *s = (char *)malloc (8);
+      char *s = (char *)MALLOC (8);
       sprintf (s, "#%02x%02x%02x", rgb->r, rgb->g, rgb->b);
       return s;
     }
   else if (ent->color.flag & 0x80 && !(ent->color.flag & 0x40))
     {
-      char *s = (char *)malloc (8);
+      char *s = (char *)MALLOC (8);
       sprintf (s, "#%06x", ent->color.rgb & 0x00ffffff);
       return s;
     }
@@ -215,7 +215,7 @@ common_entity (Dwg_Object_Entity *ent)
   printf ("      style=\"fill:none;stroke:%s;stroke-width:%.1fpx\" />\n",
           color, lweight);
   if (*color == '#')
-    free (color);
+    FREE (color);
 }
 
 // TODO: MTEXT
@@ -271,7 +271,7 @@ output_TEXT (Dwg_Object *obj)
           obj->index, transform_X (pt.x), transform_Y (pt.y), fontfamily,
           text->height /* fontsize */, entity_color (obj->tio.entity),
           escaped ? escaped : "");
-  free (escaped);
+  FREE (escaped);
 }
 
 static void
@@ -601,7 +601,7 @@ output_POLYLINE_2D (Dwg_Object *obj)
         printf (" Z");
       printf ("\"\n\t");
       common_entity (obj->tio.entity);
-      free (pts);
+      FREE (pts);
     }
 }
 
@@ -644,7 +644,7 @@ output_LWPOLYLINE (Dwg_Object *obj)
         printf (" Z");
       printf ("\"\n\t");
       common_entity (obj->tio.entity);
-      free (pts);
+      FREE (pts);
     }
 }
 
@@ -801,7 +801,7 @@ output_BLOCK_HEADER (Dwg_Object_Ref *ref)
       else
         printf ("\t<!-- %s -->\n", escaped);
       if (escaped)
-        free (escaped);
+        FREE (escaped);
     }
 
   obj = get_first_owned_entity (ref->obj);
@@ -891,6 +891,7 @@ main (int argc, char *argv[])
           { NULL, 0, NULL, 0 } };
 #endif
 
+  GC_INIT ();
   if (argc < 2)
     return usage ();
 
