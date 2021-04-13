@@ -183,6 +183,7 @@ main (int argc, char *argv[])
       = INVALID;
   __AFL_INIT ();
 
+  GC_INIT ();
   if (argc <= 1 || !*argv[1])
     return 1;
   if (strEQc (argv[1], "-dwg"))
@@ -296,7 +297,7 @@ main (int argc, char *argv[])
               out_dat.version = R_2000;
               if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
                 exit (0);
-              free (out_dat.chain);
+              FREE (out_dat.chain);
             }
           break;
 #endif
@@ -309,7 +310,7 @@ main (int argc, char *argv[])
                 exit (0);
               if (dwg_decode (&out_dat, &dwg) >= DWG_ERR_CRITICAL)
                 exit (0);
-              free (out_dat.chain);
+              FREE (out_dat.chain);
             }
           break;
         case ADD:
@@ -383,7 +384,7 @@ main (int argc, char *argv[])
         default:
           exit (1);
         }
-      free (out_dat.chain);
+      FREE (out_dat.chain);
       fclose (out_dat.fh);
     }
   dwg_free (&dwg);
@@ -404,7 +405,7 @@ scan_pts2d (unsigned num_pts, char **pp)
   p++;
   if (num_pts > 5000)
     exit (0);
-  pts = calloc (num_pts, 16);
+  pts = CALLOC (num_pts, 16);
   if (!pts)
     exit (0);
   for (unsigned i = 0; i < num_pts; i++)
@@ -431,7 +432,7 @@ scan_pts2d (unsigned num_pts, char **pp)
     }
   else
     {
-      free (pts);
+      FREE (pts);
       return NULL;
     }
 }
@@ -448,7 +449,7 @@ scan_pts3d (unsigned num_pts, char **pp)
   p++;
   if (num_pts > 5000)
     exit (0);
-  pts = calloc (num_pts, 24);
+  pts = CALLOC (num_pts, 24);
   if (!pts)
     exit (0);
   for (unsigned i = 0; i < num_pts; i++)
@@ -475,7 +476,7 @@ scan_pts3d (unsigned num_pts, char **pp)
     }
   else
     {
-      free (pts);
+      FREE (pts);
       return NULL;
     }
 }
@@ -688,7 +689,7 @@ dwg_fuzz_dat (Dwg_Data **restrict dwgp, Bit_Chain *restrict dat)
         if (i1 && pts)
           {
             dwg_add_POLYLINE_2D (hdr, i1, pts);
-            free (pts);
+            FREE (pts);
           }
       }
       else if (SSCANF_S (p, "polyline_3d %d ((%lf %lf %lf)", &i1, &pt1.x,
@@ -698,7 +699,7 @@ dwg_fuzz_dat (Dwg_Data **restrict dwgp, Bit_Chain *restrict dat)
         if (i1 && pts)
           {
             dwg_add_POLYLINE_3D (hdr, i1, pts);
-            free (pts);
+            FREE (pts);
           }
       }
       else if (SSCANF_S (p, "polyline_mesh %d %d ((%lf %lf %lf)", &i1, &i2,
@@ -708,7 +709,7 @@ dwg_fuzz_dat (Dwg_Data **restrict dwgp, Bit_Chain *restrict dat)
         if (i1 && i2 && pts)
           {
             dwg_add_POLYLINE_MESH (hdr, i1, i2, pts);
-            free (pts);
+            FREE (pts);
           }
       }
       else if (SSCANF_S (p, "dictionary " FMT_TBL " " FMT_TBL " %u",
@@ -737,7 +738,7 @@ dwg_fuzz_dat (Dwg_Data **restrict dwgp, Bit_Chain *restrict dat)
           {
             dwg_add_SPLINE (hdr, i1, fitpts, &pt2, &pt3);
           }
-        free (fitpts);
+        FREE (fitpts);
       }
       else if (mtext
                && sscanf (p, "leader %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y,
@@ -748,7 +749,7 @@ dwg_fuzz_dat (Dwg_Data **restrict dwgp, Bit_Chain *restrict dat)
           {
             dwg_add_LEADER (hdr, i1, pts, mtext, i2);
           }
-        free (pts);
+        FREE (pts);
       }
       else if (SSCANF_S (p,
                          "tolerance " FMT_TBL " (%lf %lf %lf) (%lf %lf %lf)",
