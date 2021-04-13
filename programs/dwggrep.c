@@ -167,7 +167,7 @@ print_match (const int is16, const char *restrict filename,
   printf ("%s %s %d: %s\n", opt_filename ? filename : "", entity, dxfgroup,
           text);
   if (is16)
-    free (text);
+    FREE (text);
 }
 
 static int
@@ -326,7 +326,7 @@ do_match (const int is16, const char *restrict filename,
         found += do_match (obj->parent->header.version >= R_2007, filename,   \
                            #ENTITY, dxfgroup, text);                          \
         if (obj->parent->header.version >= R_2007)                            \
-          free (text);                                                        \
+          FREE (text);                                                        \
       }
 #endif
 
@@ -1866,6 +1866,7 @@ main (int argc, char *argv[])
           { "version", 0, 0, 0 },     { NULL, 0, NULL, 0 } };
 #endif
 
+  GC_INIT ();
   // check args
   if (argc < 2)
     return usage ();
@@ -1991,7 +1992,7 @@ main (int argc, char *argv[])
                            NULL
 #    endif
   );
-  free (pattern16);
+  FREE (pattern16);
   if (errcode != 0 && errcode != 100)
     {
       pcre2_get_error_message_8 (errcode, (PCRE2_UCHAR8 *)buf, 4096);
@@ -2049,9 +2050,9 @@ main (int argc, char *argv[])
 
       fflush (stdout);
       // if (dwg.header.version < R_13b1)
-      //   free (mspace_ref);
+      //   FREE (mspace_ref);
       if (j < argc)
-        dwg_free (&dwg); // skip the last free
+        dwg_free (&dwg); // skip the last FREE
     }
   if (opt_count)
     printf ("%d\n", count);
