@@ -565,7 +565,7 @@ free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict _obj)
              && (!IF_IS_DECODER || AVAIL_BITS (hdl_dat) >= 8)) {              \
       FIELD_HANDLE (history_id, 4, 350);                                      \
   }                                                                           \
-  FREE { FIELD_HANDLE (history_id, 4, 350); }
+  ON_FREE { FIELD_HANDLE (history_id, 4, 350); }
 
 #define ACTION_3DSOLID \
   SUBCLASS (AcDbModelerGeometry); \
