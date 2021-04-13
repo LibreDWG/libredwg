@@ -29,6 +29,7 @@
 #include "decode.h"
 #include "decode_r11.h"
 #include "out_dxf.h"
+#include "free.h"
 
 static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
@@ -116,7 +117,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
           fprintf (dat->fh, "%s%c", _u8, 0);                                  \
         else                                                                  \
           fprintf (dat->fh, "%c", 0);                                         \
-        free (_u8);                                                           \
+        FREE (_u8);                                                           \
       }                                                                       \
   }
 #define VALUE_TFF(str, dxf) VALUE_TV (str, dxf)
@@ -1039,7 +1040,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
             LOG_TRACE ("Object handle: " FORMAT_H ", name: %s\n",             \
                        ARGS_H (obj->handle), _name);                          \
             if (IS_FROM_TU (dat))                                             \
-              free (_name);                                                   \
+              FREE (_name);                                                   \
           }                                                                   \
         else                                                                  \
           LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle))   \
@@ -1243,7 +1244,7 @@ dxfb_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             VALUE_TV (name, dxf)
         }
       if (IS_FROM_TU (dat))
-        free (name);
+        FREE (name);
     }
   else
     {
@@ -1305,7 +1306,7 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
         VALUE_TV (name, dxf)
     }
   if (IS_FROM_TU (dat))
-    free (name);
+    FREE (name);
 }
 
 #define START_OBJECT_HANDLE_STREAM
@@ -2291,20 +2292,20 @@ dxfb_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 static void
 dxfb_ENDBLK_empty (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr)
 {
-  Dwg_Object *obj = (Dwg_Object *)calloc (1, sizeof (Dwg_Object));
+  Dwg_Object *obj = (Dwg_Object *)CALLOC (1, sizeof (Dwg_Object));
   obj->parent = hdr->parent;
   obj->index = obj->parent->num_objects;
   dwg_setup_ENDBLK (obj);
   obj->tio.entity->ownerhandle
-      = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
+      = (Dwg_Object_Ref *)CALLOC (1, sizeof (Dwg_Object_Ref));
   obj->tio.entity->ownerhandle->obj = (Dwg_Object *)hdr;
   obj->tio.entity->ownerhandle->handleref = hdr->handle;
   obj->tio.entity->ownerhandle->absolute_ref = hdr->handle.value;
   dwg_dxfb_ENDBLK (dat, obj);
-  free (obj->tio.entity->tio.ENDBLK);
-  free (obj->tio.entity->ownerhandle);
-  free (obj->tio.entity);
-  free (obj);
+  FREE (obj->tio.entity->tio.ENDBLK);
+  FREE (obj->tio.entity->ownerhandle);
+  FREE (obj->tio.entity);
+  FREE (obj);
 }
 
 static int

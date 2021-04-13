@@ -685,7 +685,7 @@ DWG_ENTITY (BLOCK)
     if (R11OPTS (4)) {
       FIELD_TV (name, 2);
     }
-    FREE { // set via dwg_add_BLOCK
+    ON_FREE { // set via dwg_add_BLOCK
       FIELD_TV (name, 2);
     }
   }
@@ -1650,7 +1650,7 @@ DWG_ENTITY_END
         char *blockname = dwg_dim_blockname (dwg, obj);                       \
         VALUE_TV0 (blockname, 2);                                             \
         if (blockname)                                                        \
-          free (blockname);                                                   \
+          FREE (blockname);                                                   \
         FIELD_3BD (def_pt, 10);                                               \
       }                                                                       \
       else { FIELD_3BD (extrusion, 210); }                                    \
@@ -2750,9 +2750,9 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
           do
             {
               FIELD_VALUE (encr_sat_data) = (char**)
-                realloc (FIELD_VALUE (encr_sat_data), (i+1) * sizeof (char*));
+                REALLOC (FIELD_VALUE (encr_sat_data), (i+1) * sizeof (char*));
               FIELD_VALUE (block_size) = (BITCODE_BL*)
-                realloc (FIELD_VALUE (block_size), (i+1) * sizeof (BITCODE_BL));
+                REALLOC (FIELD_VALUE (block_size), (i+1) * sizeof (BITCODE_BL));
               if (!FIELD_VALUE (encr_sat_data) || !FIELD_VALUE (block_size))
                 return DWG_ERR_OUTOFMEM;
               FIELD_BL (block_size[i], 0);
@@ -2768,20 +2768,20 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                 }
               else
                 {
-                  FIELD_VALUE (encr_sat_data[i]) = (char*)calloc (1, 1);
+                  FIELD_VALUE (encr_sat_data[i]) = (char*)CALLOC (1, 1);
                   FIELD_VALUE (block_size[i]) = 0;
                 }
             }
           while (FIELD_VALUE (block_size[i++]) > 0 && AVAIL_BITS (dat) >= 16); // crc RS
           if (!FIELD_VALUE (encr_sat_data) || !FIELD_VALUE (block_size))
             {
-              free (FIELD_VALUE (block_size));
-              free (FIELD_VALUE (encr_sat_data));
+              FREE (FIELD_VALUE (block_size));
+              FREE (FIELD_VALUE (encr_sat_data));
               return DWG_ERR_VALUEOUTOFBOUNDS;
             }
 
           // de-obfuscate SAT data
-          FIELD_VALUE (acis_data) = (BITCODE_RC *)malloc (total_size + 1);
+          FIELD_VALUE (acis_data) = (BITCODE_RC *)MALLOC (total_size + 1);
           num_blocks = i - 1;
           FIELD_VALUE (num_blocks) = num_blocks;
           LOG_TRACE ("num_blocks: " FORMAT_BL "\n", FIELD_VALUE (num_blocks));
@@ -2818,7 +2818,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
            R?? (2018) release            223.0.1.1930
         */
         {
-          FIELD_VALUE (block_size) = (BITCODE_BL*)calloc (2, sizeof (BITCODE_BL));
+          FIELD_VALUE (block_size) = (BITCODE_BL*)CALLOC (2, sizeof (BITCODE_BL));
           FIELD_VALUE (encr_sat_data) = NULL;
           //TODO string in strhdl, even <r2007
           // either has_ds_data (r2013+) or the blob is here
@@ -2830,7 +2830,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
               const char end1[] = "\016\003End\016\002of\016\003ASM\r\004data";
               size_t pos = dat->byte;
               size_t size = dat->size - pos - 1;
-              FIELD_VALUE (acis_data) = (unsigned char*)calloc (size, 1);
+              FIELD_VALUE (acis_data) = (unsigned char*)CALLOC (size, 1);
               // Binary SAB. unencrypted, documented format until "End-of-ACIS-data"
               // TODO There exist also SAB streams with a given number of records, but I
               // haven't seen them here. See dwg_convert_SAB_to_SAT1
@@ -2912,7 +2912,7 @@ encode_3dsolid (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
                 }
               // Later split into 4096 byte sized blocks
               FIELD_VALUE (block_size)
-                  = (BITCODE_BL *)calloc (2, sizeof (BITCODE_BL));
+                  = (BITCODE_BL *)CALLOC (2, sizeof (BITCODE_BL));
               FIELD_VALUE (block_size[0])
                   = strlen ((char *)FIELD_VALUE (acis_data)) & 0xFFFFFFFF;
               FIELD_VALUE (block_size[1]) = 0;
@@ -2951,7 +2951,7 @@ encode_3dsolid (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
           /*
           if (num_blocks > FIELD_VALUE (num_blocks))
             {
-              FIELD_VALUE (block_size) = (BITCODE_BL*)realloc (FIELD_VALUE (block_size), (num_blocks + 1) * sizeof (BITCODE_BL));
+              FIELD_VALUE (block_size) = (BITCODE_BL*)REALLOC (FIELD_VALUE (block_size), (num_blocks + 1) * sizeof (BITCODE_BL));
               FIELD_VALUE (num_blocks) = num_blocks;
             }
           */
@@ -3111,7 +3111,7 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
   } else if (FIELD_VALUE (version) > 1) {                                     \
       FIELD_HANDLE (history_id, 4, 350);                                      \
   }                                                                           \
-  FREE { FIELD_HANDLE (history_id, 4, 350); }
+  ON_FREE { FIELD_HANDLE (history_id, 4, 350); }
 
 #define ACTION_3DSOLID \
   SUBCLASS (AcDbModelerGeometry); \
@@ -3971,7 +3971,7 @@ DWG_TABLE (STYLE)
           if (IS_FROM_TU (dat)) {
             s = bit_convert_TU ((BITCODE_TU)FIELD_VALUE (font_file));
             strncpy (_buf, s, 255);
-            free (s);
+            FREE (s);
           }
           else {
             strncpy (_buf, FIELD_VALUE (font_file), 255);
@@ -4759,7 +4759,7 @@ DWG_TABLE (DIMSTYLE)
       FIELD_CMC (DIMCLRE, 177);
       FIELD_CMC (DIMCLRT, 178);
     }
-  else FREE {
+  else ON_FREE {
       FIELD_TV (DIMBLK_T, 5);
       FIELD_TV (DIMBLK1_T, 6);
       FIELD_TV (DIMBLK2_T, 7);
@@ -5675,7 +5675,7 @@ DWG_OBJECT (PLOTSETTINGS)
         }
     }
   }
-  FREE { FIELD_TV (plotview_name, 6); FIELD_HANDLE (plotview, 5, 6); }
+  ON_FREE { FIELD_TV (plotview_name, 6); FIELD_HANDLE (plotview, 5, 6); }
   FIELD_BD (paper_units, 142);
   FIELD_BD (drawing_units, 143);
   DXF {
@@ -5766,7 +5766,7 @@ DWG_OBJECT (LAYOUT)
         }
     }
   }
-  FREE { FIELD_TV (plotsettings.plotview_name, 6); FIELD_HANDLE (plotsettings.plotview, 5, 6); }
+  ON_FREE { FIELD_TV (plotsettings.plotview_name, 6); FIELD_HANDLE (plotsettings.plotview, 5, 6); }
   FIELD_BD (plotsettings.paper_units, 142);
   FIELD_BD (plotsettings.drawing_units, 143);
   DXF {
@@ -7518,14 +7518,14 @@ DWG_OBJECT (XRECORD)
       for (vcount=0; bit_position (hdl_dat) < obj->handlestream_size; vcount++)
         {
           FIELD_VALUE (objid_handles) = vcount
-            ? (BITCODE_H*)realloc (FIELD_VALUE (objid_handles),
+            ? (BITCODE_H*)REALLOC (FIELD_VALUE (objid_handles),
                                    (vcount+1) * sizeof (Dwg_Object_Ref))
-            : (BITCODE_H*)malloc (sizeof (Dwg_Object_Ref));
+            : (BITCODE_H*)MALLOC (sizeof (Dwg_Object_Ref));
           FIELD_HANDLE_N (objid_handles[vcount], vcount, ANYCODE, 0);
           if (!FIELD_VALUE (objid_handles[vcount]))
             {
               if (!vcount) {
-                free (FIELD_VALUE (objid_handles));
+                FREE (FIELD_VALUE (objid_handles));
                 FIELD_VALUE (objid_handles) = NULL;
               }
               break;
@@ -8108,7 +8108,7 @@ DWG_OBJECT (SECTION_SETTINGS)
           DECODER {
             if (bit_empty_T (dat, _obj->types[rcount1].geom[rcount2].hatch_pattern))
               {
-                free (_obj->types[rcount1].geom[rcount2].hatch_pattern);
+                FREE (_obj->types[rcount1].geom[rcount2].hatch_pattern);
                 _obj->types[rcount1].geom[rcount2].hatch_pattern = bit_set_T (dat, "SOLID");
               }
           }
