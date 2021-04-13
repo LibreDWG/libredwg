@@ -108,6 +108,9 @@
 /* Define to 1 if the system has the `returns_nonnull' function attribute */
 #undef HAVE_FUNC_ATTRIBUTE_RETURNS_NONNULL
 
+/* Define to 1 if you have the <gc/gc.h> header file. */
+#undef HAVE_GC_GC_H
+
 /* Define to 1 if you have the <getopt.h> header file. */
 #undef HAVE_GETOPT_H
 
@@ -155,6 +158,9 @@
 
 /* Define to 1 if le64toh is available in <endian.h>. */
 #undef HAVE_LE64TOH
+
+/* Define to 1 if libgc is being used (Boehm Weiser GC) */
+#undef HAVE_LIBGC
 
 /* Define to 1 if you have the <libgen.h> header file. */
 #undef HAVE_LIBGEN_H
