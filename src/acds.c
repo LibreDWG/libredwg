@@ -85,7 +85,7 @@ acds_read_blob (const Dwg_AcDs *restrict acds, const Bit_Chain *restrict dat,
   uint32_t i;
   if (total > 0x7fffffff || !num_pages || len != 32 + (size_t)num_pages * 8)
     return NULL;
-  blob = (unsigned char *)calloc (1, (size_t)total + 1);
+  blob = (unsigned char *)CALLOC (1, (size_t)total + 1);
   if (!blob)
     return NULL;
   for (i = 0; i < num_pages; i++)
@@ -108,7 +108,7 @@ acds_read_blob (const Dwg_AcDs *restrict acds, const Bit_Chain *restrict dat,
   *psize = (size_t)total;
   return blob;
 fail:
-  free (blob);
+  FREE (blob);
   return NULL;
 }
 
@@ -147,7 +147,7 @@ acds_read_record (const Dwg_AcDs *restrict acds, const Bit_Chain *restrict dat,
     }
   if (dpos + 4 + len > dat->size)
     return NULL;
-  rec = (unsigned char *)malloc (len ? len : 1);
+  rec = (unsigned char *)MALLOC (len ? len : 1);
   if (!rec)
     return NULL;
   memcpy (rec, &dat->chain[dpos + 4], len);
@@ -186,7 +186,7 @@ acds_assign_sab (Dwg_Data *restrict dwg, const Bit_Chain *restrict dat,
         {
           // e.g. the thumbnail PNG, or an entity we cannot decode. Keep the
           // record, to write it back.
-          Dwg_AcDs_Record *rec = (Dwg_AcDs_Record *)realloc (
+          Dwg_AcDs_Record *rec = (Dwg_AcDs_Record *)REALLOC (
               acds->records,
               (acds->num_records + 1) * sizeof (Dwg_AcDs_Record));
           LOG_TRACE ("AcDs data record " FORMAT_RLL ": %" PRIuSIZE
@@ -194,7 +194,7 @@ acds_assign_sab (Dwg_Data *restrict dwg, const Bit_Chain *restrict dat,
                      handle, size);
           if (!rec)
             {
-              free (data);
+              FREE (data);
               continue;
             }
           acds->records = rec;
@@ -210,7 +210,7 @@ acds_assign_sab (Dwg_Data *restrict dwg, const Bit_Chain *restrict dat,
       // a later record of the same handle replaces an earlier
       if (dwg_obj_set_sab (o, data, sab_size))
         {
-          free (data);
+          FREE (data);
           continue;
         }
       LOG_TRACE ("%s.acis_data = %" PRIuSIZE " [" FORMAT_RLL "]\n", o->name,
@@ -243,7 +243,7 @@ acds_collect_records (const Dwg_Data *restrict dwg, unsigned *restrict pnum)
   *pnum = 0;
   if (!max)
     return NULL;
-  rec = (AcDs_Rec *)calloc (max, sizeof (AcDs_Rec));
+  rec = (AcDs_Rec *)CALLOC (max, sizeof (AcDs_Rec));
   if (!rec)
     return NULL;
   for (i = 0; i < dwg->num_objects; i++)
@@ -285,7 +285,7 @@ acds_collect_records (const Dwg_Data *restrict dwg, unsigned *restrict pnum)
     }
   if (!n)
     {
-      free (rec);
+      FREE (rec);
       return NULL;
     }
   qsort (rec, n, sizeof (AcDs_Rec), rec_cmp);

@@ -55,7 +55,7 @@
       LOG_ERROR ("Invalid num_segidx");
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
-  _obj->segments = (Dwg_AcDs_Segment *)calloc (_obj->num_segidx,
+  _obj->segments = (Dwg_AcDs_Segment *)CALLOC (_obj->num_segidx,
                                                sizeof (Dwg_AcDs_Segment));
 #endif
 #ifndef IS_JSON
@@ -87,7 +87,7 @@
       DECODER { if (_obj->segidx[rcount1].offset) _obj->total_segments++; }
   END_REPEAT_BLOCK
 #ifdef IS_JSON
-  END_REPEAT (segidx) // still needed, free later
+  END_REPEAT (segidx) // still needed, FREE later
 #endif
 
   _REPEAT_NF (_obj->num_segidx, segments, Dwg_AcDs_Segment, 1)
@@ -131,7 +131,7 @@
             //continue;
           }
       }
-      /* segidx, datidx, _data_, schidx, schdat, search, blob01, prvsav, freesp */
+      /* segidx, datidx, _data_, schidx, schdat, search, blob01, prvsav, FREEsp */
       FIELD_TFF (segments[rcount1].name, 6, 0);
       DECODER {
         _obj->segments[rcount1].name[6] = '\0';
@@ -319,7 +319,7 @@
           LOG_WARN ("Possibly wrong prvsav_segidx %d for %d", _obj->prvsav_segidx, rcount1);
         // fallthru
         //break;
-      case 8: // freesp
+      case 8: // FREEsp
         //break;
       case 2: // _data_
         //break;

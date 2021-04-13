@@ -28,6 +28,11 @@ libredwg_la_LIBADD = -lm @LTLIBICONV@
 if ENABLE_MIMALLOC
 libredwg_la_LDFLAGS += -lmimalloc
 endif
+else
+if HAVE_LIBGC
+libredwg_la_SOURCES += -lgc
+endif
+endif
 CPPCHECK = @CPPCHECK@
 
 libredwg_la_SOURCES = \
@@ -52,6 +57,10 @@ libredwg_la_SOURCES = \
 	objects.c \
 	geom.c \
 	$(EXTRA_HEADERS)
+if !HAVE_LIBGC
+libredwg_la_SOURCES += \
+	free.c
+endif
 if !DISABLE_DXF
 libredwg_la_SOURCES += \
 	out_dxf.c \
