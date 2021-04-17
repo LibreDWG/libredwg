@@ -229,9 +229,7 @@ cover: gcov
 	gcov2perl test/*/*.gcov src/*.gcov programs/*.gcov examples/*.gcov
 	cover -no-gcov
 codecov: check
-	curl -s https://codecov.io/bash -o codecov_io.sh
-	chmod +x codecov_io.sh
-	bash codecov_io.sh -X test -X bindings
+	build-aux/codecov_io.sh -X test -X bindings
 coveralls: gcov
 	coveralls -e test -e bindings
 endif
