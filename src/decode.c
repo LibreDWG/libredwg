@@ -713,7 +713,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x5e
   if (dat->size < 0x69f)
     {
-      LOG_ERROR ("DWG too small %zu", dat->size)
+      LOG_ERROR ("DWG too small %zu", (size_t)dat->size)
       return DWG_ERR_INVALIDDWG;
     }
   {
@@ -721,7 +721,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Bit_Chain *hdl_dat = dat;
     if (dat->size < 0x23a)
       {
-        LOG_ERROR ("HEADER too small %zu", dat->size)
+        LOG_ERROR ("HEADER too small %zu", (size_t)dat->size)
         return DWG_ERR_INVALIDDWG;
       }
     // clang-format off
