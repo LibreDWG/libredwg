@@ -433,7 +433,7 @@ do
         break
     fi
 done
-if test -z $CLANG_FORMAT; then
+if test -z "$CLANG_FORMAT"; then
     if which indent &>/dev/null; then
         CLANG_FORMAT="indent"
     else
