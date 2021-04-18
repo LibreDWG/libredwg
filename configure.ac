@@ -291,7 +291,7 @@ case $host in
  *-w64-mingw32)
    case $CFLAGS in
      *-fstack-protector*) ;;
-     *) CFLAGS="$CFLAGS -fstack-protector" ;;
+     *) CFLAGS="$CFLAGS -fstack-protector" LIBS="$LIBS -lssp" ;;
    esac
    ;;
 esac
@@ -397,7 +397,7 @@ if test "x$enable_gcov" = "xtrue" ; then
 	dnl libtool 1.5.22 and lower strip -fprofile-arcs from the flags
 	dnl passed to the linker, which is a bug; -fprofile-arcs implicitly
 	dnl links in -lgcov, so we do it explicitly here for the same effect
-	GCOV_LIBS=-lgcov
+	GCOV_LIBS="-lgcov"
 	AC_SUBST(GCOV_LIBS)
 else
 	AC_MSG_RESULT([no (default)])
