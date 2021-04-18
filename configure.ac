@@ -458,11 +458,11 @@ if test "x$host_os" = "xmingw32" -a "x$build_os" != "xmingw32"; then
    fi
 fi
 AM_CONDITIONAL([HAVE_WINE], [test -n "$WINE"])
-AM_CONDITIONAL([HAVE_CYGWIN], [test "x$host_os" = "xcygwin32" -o test "x$host_os" = "xcygwin64"])
-if [ -n "$HAVE_ASAN" ]
+AM_CONDITIONAL([HAVE_CYGWIN], [test x$host_os = xcygwin32 -o x$host_os" = "xcygwin64])
+if test -n "$HAVE_ASAN"
 then
         HAVE_ASAN_OR_LINUX=1
-elif [ "x$host_os" = "xlinux-gnu" ]
+elif test x$host_os = xlinux-gnu
 then
         HAVE_ASAN_OR_LINUX=1
 fi
