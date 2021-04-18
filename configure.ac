@@ -426,7 +426,7 @@ AM_CONDITIONAL(HAVE_GPERF, test -n "$GPERF")
 
 AC_MSG_CHECKING([for latest clang-format])
 CLANG_FORMAT=
-for clangfmt in clang-format{-mp,}{-devel,-{8,7,6,5,4,3}{,.9,.8,.7,.6,.5,.4,.3,.2,.1,.0},}
+for clangfmt in clang-format{,-mp}{,-devel,-{12,11,10,9,8,7,6,5,4,3}{,.9,.8,.7,.6,.5,.4,.3,.2,.1,.0}}
 do
     if which "$clangfmt" &>/dev/null; then
         CLANG_FORMAT="$clangfmt"
@@ -466,7 +466,7 @@ elif [ "x$host_os" = "xlinux-gnu" ]
 then
         HAVE_ASAN_OR_LINUX=1
 fi
-AM_CONDITIONAL([HAVE_ASAN_OR_LINUX],[test -n "HAVE_ASAN_OR_LINUX"])
+AM_CONDITIONAL([HAVE_ASAN_OR_LINUX],[test -n "$HAVE_ASAN_OR_LINUX"])
 
 dnl Optional SWIG + python bindings
 dnl Feature: --disable-python or --enable-python=python3.6
