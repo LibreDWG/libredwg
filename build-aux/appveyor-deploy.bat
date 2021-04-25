@@ -22,7 +22,10 @@ move /y bin\libredwg-0.dll libredwg-0.dll
 rmdir bin
 rem libssp-0.dll needed for -fstack-protector
 copy c:\%MSYS2_DIR%\%MSYSTEM%\bin\libssp-0.dll *.*
+copy c:\%MSYS2_DIR%\%MSYSTEM%\bin\libpcre2-16-0.dll *.*
+copy c:\%MSYS2_DIR%\%MSYSTEM%\bin\libpcre2-8-0.dll *.*
 copy ..\programs\.libs\*.exe *.*
+copy ..\programs\dwgfilter *.*
 mkdir examples
 copy ..\examples\.libs\*.exe examples
 copy ..\examples\*.c examples
