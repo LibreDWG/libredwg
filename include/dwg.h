@@ -8911,6 +8911,7 @@ typedef struct _dwg_struct
   BITCODE_BS num_classes;        /*!< number of classes */
   Dwg_Class * dwg_class;         /*!< array of classes */
   BITCODE_BL num_objects;        /*!< number of objects */
+  BITCODE_BL num_alloced_objects;/*!< room for objects */
   Dwg_Object * object;           /*!< list of all objects and entities */
   BITCODE_BL num_entities;       /*!< number of entities in object */
   BITCODE_BL num_object_refs;    /*!< number of object_ref's (resolved handles) */
