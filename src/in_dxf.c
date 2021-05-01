@@ -8523,7 +8523,7 @@ move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
   // move out this entry
   for (BITCODE_BL j = 0; j < _ctrl->num_entries; j++)
     {
-      if (_ctrl->entries[j]
+      if (_ctrl->entries && _ctrl->entries[j]
           && _ctrl->entries[j]->absolute_ref == obj->handle.value)
         {
           LOG_TRACE ("remove %s from entries[%d]: " FORMAT_H "\n", f, j,
@@ -8551,7 +8551,7 @@ move_out_LTYPE_CONTROL (Dwg_Object *restrict obj,
   // move out this entry (byblock, bylayer, continuous)
   for (BITCODE_BL j = 0; j < _ctrl->num_entries; j++)
     {
-      if (_ctrl->entries[j]
+      if (_ctrl->entries && _ctrl->entries[j]
           && _ctrl->entries[j]->absolute_ref == obj->handle.value)
         {
           LOG_TRACE ("remove %s from entries[%d]: " FORMAT_H "\n", f, j,
@@ -11965,7 +11965,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               {
                 for (int j = num_entries - 1; j >= 0; j--)
                   {
-                    BITCODE_H ref = _ctrl->entries[j];
+                    BITCODE_H ref = _ctrl->entries ? _ctrl->entries[j] : NULL;
                     if (!ref)
                       {
                         if (at_end)
