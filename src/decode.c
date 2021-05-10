@@ -2143,7 +2143,7 @@ section_max_decomp_size (const Dwg_Data *dwg, const Dwg_Section_Type id)
 {
   unsigned max_decomp_size = 0x7400;
   if (id == SECTION_APPINFOHISTORY)
-    max_decomp_size = 0x580;
+    max_decomp_size = 0x1000;
   else if (id == SECTION_APPINFO)
     max_decomp_size = 0x300;
   else if (id == SECTION_PREVIEW)
@@ -2155,7 +2155,7 @@ section_max_decomp_size (const Dwg_Data *dwg, const Dwg_Section_Type id)
         max_decomp_size = 0x4a000;
     }
   else if (id == SECTION_SUMMARYINFO)
-    max_decomp_size = 0x80;
+    max_decomp_size = 0x100;
 
   return max_decomp_size;
 }
