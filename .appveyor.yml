@@ -72,8 +72,8 @@ build_script:
   - if "%MINGW%"=="1" call build-aux\msys2.bat
   - bash -c "sh ./autogen.sh"
   - if "%CYGWIN%"=="1" bash -c "./configure --disable-static --disable-python || cat config.log"
-  - if not "%CYGWIN%"=="1" bash -c "./configure --disable-static || cat config.log"
-  - bash -c "make"
+  - if not "%CYGWIN%"=="1" bash -c "CFLAGS=-fstack-protector ./configure --disable-static || cat config.log"
+  - bash -c "make V=1"
 
 test_script:
   - if not "%CYGWIN%"=="1" bash -c "make check"

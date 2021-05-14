@@ -291,8 +291,8 @@ dnl mingw-w64 7.0 bug with _FORTIFY_SOURCE, need -lssp
 case $host in
  *-w64-mingw32)
    case $CFLAGS in
-     *-fstack-protector*) ;;
-     *) CFLAGS="$CFLAGS -fstack-protector" LIBS="$LIBS -lssp" ;;
+     *-fstack-protector*) LIBS="$LIBS -lssp" ;;
+     *) CFLAGS="$CFLAGS -fstack-protector"; LIBS="$LIBS -lssp" ;;
    esac
    ;;
 esac
