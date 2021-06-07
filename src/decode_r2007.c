@@ -829,6 +829,13 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
         }
       else
         {
+          if (section_page->uncomp_size > max_decomp_size - section_page->offset ||
+              section_page->uncomp_size > dat->size - dat->byte)
+            {
+              free (decomp);
+              LOG_ERROR ("Invalid section size %ld", (long)section_page->uncomp_size);
+              return DWG_ERR_VALUEOUTOFBOUNDS;
+            }
           memcpy (&decomp[section_page->offset], &dat->chain[dat->byte],
                   section_page->uncomp_size);
         }
