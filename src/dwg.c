@@ -1661,6 +1661,8 @@ dwg_section_wtype (const DWGCHAR *restrict wname)
   while ((c = *wp++))
     {
       name[i++] = (char)(c & 0xff);
+      if (i >= 24)
+        return SECTION_UNKNOWN;
     }
   name[i] = '\0';
   return dwg_section_type (name);

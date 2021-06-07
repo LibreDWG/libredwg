@@ -923,7 +923,8 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
 #if 1
       /* compressed */
       if (section->data_size > 10 * dat->size
-          || section->name_length >= (int64_t)dat->size)
+          || section->name_length >= (int64_t)dat->size
+          || section->name_length >= 48)
         {
           LOG_ERROR ("Invalid System Section");
           free (section);
