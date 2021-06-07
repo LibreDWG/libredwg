@@ -655,6 +655,8 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       LOG_ERROR ("Invalid r2007 system page: page_size: %" PRId64, page_size);
       return NULL;
     }
+  LOG_HANDLE ("read_system_page: size_comp: %" PRId64 ", size_uncomp: %" PRId64
+                 ", repeat_count: %" PRId64 "\n", size_comp, size_uncomp, repeat_count);
   assert ((uint64_t)size_comp < dat->size);
   assert ((uint64_t)size_uncomp < dat->size);
   assert ((uint64_t)repeat_count < DBG_MAX_COUNT);
@@ -800,6 +802,13 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
           free (decomp);
           LOG_ERROR ("Invalid section_page->offset %ld > %ld",
                      (long)section_page->offset, (long)max_decomp_size)
+          return DWG_ERR_VALUEOUTOFBOUNDS;
+        }
+      if (max_decomp_size < section_page->uncomp_size)
+        {
+          free (decomp);
+          LOG_ERROR ("Invalid section size %ld < %ld",
+                     (long)max_decomp_size, (long)section_page->uncomp_size)
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
 
