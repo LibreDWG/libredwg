@@ -36,6 +36,7 @@
 
 #include "dwg.h"
 #include "common.h"
+#include "bits.h"
 #ifndef DISABLE_DXF
 #  include "out_dxf.h"
 #  ifndef DISABLE_JSON
