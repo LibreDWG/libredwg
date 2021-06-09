@@ -1,0 +1,1 @@
+{"version":1,"ops":[{"type":1,"author":{"id":"4044e69633a068fb3769d4cf7ce5f6bebf15d0f1"},"timestamp":1580914682,"metadata":{"github-id":"MDU6SXNzdWU1NjA0Mjc0MjM=","github-url":"https://github.com/LibreDWG/libredwg/issues/199","origin":"github"},"title":"json: FIELD_BINARY (e.g. preview) is broken","message":"the output is \u003e2x as long, and is garbled","files":null}]}
