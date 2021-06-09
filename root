@@ -1,0 +1,1 @@
+{"version":1,"ops":[{"type":1,"author":{"id":"4044e69633a068fb3769d4cf7ce5f6bebf15d0f1"},"timestamp":1614022252,"metadata":{"github-id":"MDU6SXNzdWU4MTM3OTY4MzE=","github-url":"https://github.com/LibreDWG/libredwg/issues/317","origin":"github"},"title":"Add honggfuzz and LLVM libfuzzer integration to examples/dwgfuzz","message":"See PR #316","files":null}]}
