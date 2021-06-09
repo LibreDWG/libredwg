@@ -1,0 +1,1 @@
+{"version":1,"ops":[{"type":1,"author":{"id":"4044e69633a068fb3769d4cf7ce5f6bebf15d0f1"},"timestamp":1555693323,"metadata":{"github-id":"MDU6SXNzdWU0MzUyNDE3NjY=","github-url":"https://github.com/LibreDWG/libredwg/issues/103","origin":"github"},"title":"Missing msys2 DLL's in windows releases","message":"Check which and add them.","files":null}]}
