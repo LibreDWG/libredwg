@@ -1,0 +1,1 @@
+{"version":1,"ops":[{"type":1,"author":{"id":"00c7e76c35b172c73e64350c2c5fb2d517134549"},"timestamp":1602558778,"metadata":{"github-id":"MDU6SXNzdWU3MTk4MTk4NTQ=","github-url":"https://github.com/LibreDWG/libredwg/issues/271","origin":"github"},"title":"Use dwgread.exe to save as Geojson file, the Text is not converted to utf-8 ","message":"","files":null}]}
