@@ -1,1 +1,1 @@
-{"version":1,"ops":[{"type":1,"author":{"id":"4044e69633a068fb3769d4cf7ce5f6bebf15d0f1"},"timestamp":1594822884,"metadata":{"github-id":"MDU6SXNzdWU2NTczOTAwOTU=","github-url":"https://github.com/LibreDWG/libredwg/issues/246","origin":"github"},"title":"Binary DXF","message":"in work, HEADER and CLASSES already work","files":null}]}
+{"version":1,"ops":[{"type":5,"author":{"id":"4044e69633a068fb3769d4cf7ce5f6bebf15d0f1"},"timestamp":1594822898,"metadata":{"github-id":"MDEyOkxhYmVsZWRFdmVudDM1NDg4MTQ0MzQ="},"added":["enhancement"],"removed":[]}]}
