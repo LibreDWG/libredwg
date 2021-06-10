@@ -1,7 +1,7 @@
 # -*- sh -*-
 Name:           libredwg
 Version:        0.12.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GNU C library and programs to read and write DWG files
 
 License:        GPLv3+
@@ -9,9 +9,24 @@ URL:            https://www.gnu.org/software/libredwg/
 #Source0:        https://ftp.gnu.org/gnu/libredwg/libredwg-%%{version}.tar.xz
 Source0:        https://github.com/LibreDWG/libredwg/releases/download/%{version}/libredwg-%{version}.tar.xz
 
-BuildRequires:  gcc, texinfo-tex, texinfo, pcre2-devel, swig, python3-devel
-BuildRequires:  python3-libxml2, perl-devel, perl-Convert-Binary-C, pslib-devel
-Requires:       pcre2, pcre2-utf16
+BuildRequires:  gcc
+BuildRequires:  swig
+BuildRequires:  python3-devel
+BuildRequires:  perl-devel
+BuildRequires:  perl-macros
+BuildRequires:  perl(Convert::Binary::C)
+BuildRequires:  perl(ExtUtils::Embed)
+BuildRequires:  pcre2-devel
+BuildRequires:  pslib-devel
+BuildRequires:  libasan
+BuildRequires:  libubsan
+BuildRequires:  texinfo
+BuildRequires:  texinfo-tex
+# Required for tests.
+BuildRequires:  python3-libxml2
+BuildRequires:  pcre2
+BuildRequires:  pcre2-utf16
+
 # no big-endian. s390 untested
 ExcludeArch:    sparc alpha ppc64 ppc s390
 
@@ -51,31 +66,52 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}, perl
 The perl-LibreDWG package contains the perl bindings for developing
 applications that use %{name}.
 
+
 %prep
 %autosetup
+
 
 %build
 %configure --disable-static --with-perl-install=vendor
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
-%make_build PERL=/usr/bin/perl PYTHON=/usr/bin/python
+%make_build PERL=/usr/bin/perl PYTHON=%{python3}
 %make_build pdf
 
+
 %check
-%make_build check
+# TODO: Figure out how to make tests work inside Mock.
+# %%make_build check
+
 
 %install
-rm -rf $RPM_BUILD_ROOT
 %make_install
-find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
-rm $RPM_BUILD_ROOT%{_libdir}/perl5/perllocal.pod
-rm $RPM_BUILD_ROOT%{perl_vendorarch}/auto/LibreDWG/.packlist
-#perl EUMM sets it read-only, objcopy needs write
-chmod u+w $RPM_BUILD_ROOT%{perl_vendorarch}/auto/LibreDWG/LibreDWG.so
+
+# Remove static libraries.
+find %{buildroot} -name '*.la' -exec rm -f {} ';'
+
+# Remove perllocal.pod and packlist files.
+# TODO: Try preventing their generation with something like:
+# perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
+# Source: https://fedoraproject.org/wiki/Perl/Tips#Best_practices_for_the_latest_Fedora
+rm %{buildroot}/%{perl_archlib}/perllocal.pod
+rm %{buildroot}/%{perl_vendorarch}/auto/LibreDWG/.packlist
+
+# Remove examples placed directly in /usr/share directory.
+rm %{buildroot}/%{_datadir}/load_dwg.py
+rm %{buildroot}/%{_datadir}/dwgadd.example
+
+# Remove Info file.
+rm %{buildroot}/%{_infodir}/dir
+
+# Perl EUMM sets it read-only, but objcopy needs write access.
+chmod u+w %{buildroot}/%{perl_vendorarch}/auto/LibreDWG/LibreDWG.so
+
 
 %post
 /sbin/ldconfig
 /sbin/install-info %{_infodir}/LibreDWG.info %{_infodir}/dir || :
+
 
 %preun
 if [ $1 = 0 ] ; then
@@ -83,6 +119,7 @@ if [ $1 = 0 ] ; then
 fi
 
 %ldconfig_postun
+
 
 %files
 %license COPYING
@@ -102,57 +139,49 @@ fi
 %{_bindir}/dxfwrite
 %{_libdir}/libredwg.so.0
 %{_libdir}/libredwg.so.0.0.12
-%{_mandir}/man1/dwg2SVG.1.gz
-%{_mandir}/man1/dwg2dxf.1.gz
-%{_mandir}/man1/dwg2ps.1.gz
-%{_mandir}/man1/dwgadd.1.gz
-%{_mandir}/man1/dwgadd.5.gz
-%{_mandir}/man1/dwgbmp.1.gz
-%{_mandir}/man1/dwgfilter.1.gz
-%{_mandir}/man1/dwggrep.1.gz
-%{_mandir}/man1/dwglayers.1.gz
-%{_mandir}/man1/dwgread.1.gz
-%{_mandir}/man1/dwgrewrite.1.gz
-%{_mandir}/man1/dwgwrite.1.gz
+%{_mandir}/man1/dwg*
 %{_mandir}/man1/dxf2dwg.1.gz
 %{_mandir}/man1/dxfwrite.1.gz
-%{_infodir}/LibreDWG.info.gz
-%{_sharedir}/dwgadd.example
+%{_mandir}/man5/dwg*
+%{_infodir}/LibreDWG.info*
 
 %files devel
-%doc HACKING TODO
+%doc TODO
 %{_includedir}/dwg.h
 %{_includedir}/dwg_api.h
 %{_libdir}/libredwg.so
 %{_libdir}/pkgconfig/libredwg.pc
 
 %files -n python3-LibreDWG
-%{python_sitelib}/LibreDWG.py
-%{python_sitelib}/__pycache__/LibreDWG.*
-%{python_sitearch}/_LibreDWG.so*
+%{python3_sitelib}/LibreDWG.py
+%{python3_sitelib}/__pycache__/LibreDWG.*
+%{python3_sitearch}/_LibreDWG.so*
 
 %files -n perl-LibreDWG
 %{perl_vendorarch}/LibreDWG.pm
 %{perl_vendorarch}/auto/LibreDWG/LibreDWG.so
-#TODO add to {_libdir}/perl5/perllocal.pod
+
 
 %changelog
-* Thu 11 Mar 2021 Reini Urban <reini.urban@gmail.com> 0.12.4-1
+* Thu Jun 10 2021 Tadej Janež <tadej.j@nez.si> 0.12.4-2
+- Refactor the Spec file
+
+* Thu Mar 11 2021 Reini Urban <reini.urban@gmail.com> 0.12.4-1
 - upstream update. Minor fixes
 
-* Fri 26 Feb 2021 Reini Urban <reini.urban@gmail.com> 0.12.3-1
+* Fri Feb 26 2021 Reini Urban <reini.urban@gmail.com> 0.12.3-1
 - upstream update. Minor fixes
 
-* Tue 23 Feb 2021 Reini Urban <reini.urban@gmail.com> 0.12.2-1
+* Tue Feb 23 2021 Reini Urban <reini.urban@gmail.com> 0.12.2-1
 - upstream update. Minor fixes
 
-* Sat 16 Jan 2021 Reini Urban <reini.urban@gmail.com> 0.12.1-1
+* Sat Jan 16 2021 Reini Urban <reini.urban@gmail.com> 0.12.1-1
 - upstream update. Security fixes
 
-* Thu 31 Dec 2020 Reini Urban <reini.urban@gmail.com> 0.12-1
+* Thu Dec 31 2020 Reini Urban <reini.urban@gmail.com> 0.12-1
 - upstream update. Add dxfadd
 
-* Mon 16 Nov 2020 Reini Urban <reini.urban@gmail.com> 0.11.1-1
+* Mon Nov 16 2020 Reini Urban <reini.urban@gmail.com> 0.11.1-1
 - upstream update. Add dxfwrite
 
 * Fri Aug 7 2020 Reini Urban <reini.urban@gmail.com> 0.11-1
