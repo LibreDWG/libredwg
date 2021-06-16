@@ -139,11 +139,23 @@ fi
 %{_bindir}/dxfwrite
 %{_libdir}/libredwg.so.0
 %{_libdir}/libredwg.so.0.0.12
-%{_mandir}/man1/dwg*
+%{_mandir}/man1/dwg2SVG.1.gz
+%{_mandir}/man1/dwg2dxf.1.gz
+%{_mandir}/man1/dwg2ps.1.gz
+%{_mandir}/man1/dwgadd.1.gz
+%{_mandir}/man1/dwgadd.5.gz
+%{_mandir}/man1/dwgbmp.1.gz
+%{_mandir}/man1/dwgfilter.1.gz
+%{_mandir}/man1/dwggrep.1.gz
+%{_mandir}/man1/dwglayers.1.gz
+%{_mandir}/man1/dwgread.1.gz
+%{_mandir}/man1/dwgrewrite.1.gz
+%{_mandir}/man1/dwgwrite.1.gz
 %{_mandir}/man1/dxf2dwg.1.gz
 %{_mandir}/man1/dxfwrite.1.gz
 %{_mandir}/man5/dwg*
 %{_infodir}/LibreDWG.info*
+%{_sharedir}/dwgadd.example
 
 %files devel
 %doc TODO
