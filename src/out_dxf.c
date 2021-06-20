@@ -2219,15 +2219,23 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
           {
             int s;
             int64_t i64 = (int64_t)bit_read_RLL (&src);
-            if (dest.byte + 16 >= dest.size)
+            if (dest.byte + 21 >= dest.size)
               bit_chain_alloc (&dest);
-            if (l + 16 > 255)
+          again_23:
+            if (l + 20 > 255)
               {
                 bit_write_TF (&dest, (BITCODE_TF) "\n", 1);
                 LOG_TRACE ("Split overlong SAT line\n");
                 l = 0;
               }
-            s = sprintf ((char*)&dest.chain[dest.byte], "$%" PRId64 " ", i64);
+            s = snprintf ((char*)&dest.chain[dest.byte], dest.size - dest.byte,
+                          "$%" PRId64 " ", i64);
+            if (dest.size - dest.byte == (long unsigned)s)
+              {
+                LOG_WARN ("Buffer overflow in dwg_convert_SAB_to_SAT1");
+                bit_chain_alloc (&dest);
+                goto again_23;
+              }
             dest.byte += s; l += s;
             LOG_TRACE ("$%" PRId64 " ", i64)
           }
