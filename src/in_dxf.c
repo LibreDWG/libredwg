@@ -9283,12 +9283,13 @@ new_object (char *restrict name, char *restrict dxfname,
                 {
                   if (is_type_stable (obj->fixedtype))
                     {
-                      LOG_ERROR ("FIXME Unknown subclass %s in object %s", subclass, obj->name);
+                      LOG_ERROR ("Illegal subclass %s in object %s", subclass, obj->name);
                       return NULL;
                     }
                   else
                     {
-                      LOG_WARN ("TODO Unknown subclass %s in object %s", subclass, obj->name);
+                      LOG_WARN ("Illegal subclass %s in object %s", subclass, obj->name);
+                      *subclass = '\0';
                     }
                 }
               if (strEQc (subclass, "AcDbDetailViewStyle")
