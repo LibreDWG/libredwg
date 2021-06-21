@@ -10842,7 +10842,7 @@ static const Dwg_DYNAPI_field _dwg_AcDs_Search_IdIdxs_fields[] = {
 };
 /* from typedef struct _dwg_AcDs_Segment: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_AcDs_Segment_fields[] = {
-  { "signature",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_AcDs_Segment, signature),
+  { "signature",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_AcDs_Segment, signature),
     0,0,0, 0 },
   { "name[7]",	"RC", 7 * sizeof (BITCODE_RC),  OFF (struct _dwg_AcDs_Segment, name),
     0,0,0, 0 },

@@ -13272,7 +13272,7 @@ Dwg_AcDs_Search_IdIdx*
 @vtable @code
 
 @item signature
-RL
+RS
 @item name[7]
 RC
 @item type

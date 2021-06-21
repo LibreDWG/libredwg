@@ -8637,7 +8637,7 @@ typedef struct _dwg_AcDs_Search
 
 typedef struct _dwg_AcDs_Segment
 {
-  BITCODE_RL signature; /* always 0xd5ac */
+  BITCODE_RS signature; /* always 0xd5ac */
   BITCODE_RC name[7]; /* segidx, datidx, _data_, schidx, schdat, search, blob01 */
   BITCODE_RCd type; /* computed 0-6 or -1 */
   BITCODE_RL segment_idx;
