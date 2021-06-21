@@ -43,7 +43,7 @@
   FIELD_VECTOR_INL (aux_intro, RC, 3, 0) /* ff 77 01 */
   FIELD_RSx (dwg_version, 0);
   UNTIL (R_2013) { //r2016 really
-    FIELD_RS (maint_version, 0);
+    FIELD_CAST (maint_version, RL, RS, 0);
   } LATER_VERSIONS {
     FIELD_RL (maint_version, 0);
   }
@@ -54,15 +54,15 @@
   FIELD_RL (zero, 0);
   FIELD_RSx (dwg_version_1, 0);
   UNTIL (R_2013) { //r2016 really
-    FIELD_RS (maint_version, 0);
+    FIELD_CAST (maint_version_1, RL, RS, 0);
   } LATER_VERSIONS {
-    FIELD_RL (maint_version, 0);
+    FIELD_RL (maint_version_1, 0);
   }
   FIELD_RSx (dwg_version_2, 0);
   UNTIL (R_2013) { //r2016 really
-    FIELD_RS (maint_version, 0);
+    FIELD_CAST (maint_version_2, RL, RS, 0);
   } LATER_VERSIONS {
-    FIELD_RL (maint_version, 0);
+    FIELD_RL (maint_version_2, 0);
   }
   FIELD_VECTOR_INL (unknown_6rs, RS, 6, 0)
   FIELD_VECTOR_INL (unknown_5rl, RL, 5, 0)
