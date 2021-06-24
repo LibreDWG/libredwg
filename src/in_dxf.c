@@ -4303,6 +4303,13 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                       return NULL;
                     }
                 }
+              if (j >= 16)
+                {
+                  LOG_ERROR ("Too many %s.ctx.content.blk.transform[%d] groups 47, max 16", obj->name, j);
+                  free (ctx->content.blk.transform);
+                  ctx->content.blk.transform = NULL;
+                  return NULL;
+                }
               ctx->content.blk.transform[j] = pair->value.d;
               LOG_TRACE ("%s.ctx.content.blk.transform[%d] = %f [BD %d]\n",
                          obj->name, j, pair->value.d, pair->code);
