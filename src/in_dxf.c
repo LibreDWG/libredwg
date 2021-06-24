@@ -2796,12 +2796,21 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 72)
         {
           CHK_paths;
+#define CHK_segs                                                              \
+  if (!o->paths[j].segs || k < 0 || k >= (int)o->paths[j].num_segs_or_paths)  \
+    {                                                                         \
+      LOG_ERROR ("HATCH no paths[%d].segs or wrong k %d\n", j, k);            \
+      return NULL;                                                            \
+    }                                                                         \
+  assert (o->paths[j].segs);                                                  \
+  assert (k >= 0);                                                            \
+  assert (k < (int)o->paths[j].num_segs_or_paths)
+          
           if (!is_plpath)
             {
               k++;
-              assert (k >= 0);
-              if (j < (int)o->num_paths
-                  && k < (int)o->paths[j].num_segs_or_paths)
+              CHK_segs;
+              if (j < (int)o->num_paths)
                 {
                   o->paths[j].segs[k].curve_type = pair->value.i;
                   LOG_TRACE (
@@ -2826,17 +2835,6 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 94 && !is_plpath && pair->value.l)
         {
           CHK_paths;
-
-#define CHK_segs                                                              \
-  if (!o->paths[j].segs || k < 0 || k >= (int)o->paths[j].num_segs_or_paths)  \
-    {                                                                         \
-      LOG_ERROR ("HATCH no paths[%d].segs or wrong k %d\n", j, k);            \
-      return NULL;                                                            \
-    }                                                                         \
-  assert (o->paths[j].segs);                                                  \
-  assert (k >= 0);                                                            \
-  assert (k < (int)o->paths[j].num_segs_or_paths)
-
           CHK_segs;
           o->paths[j].segs[k].degree = pair->value.l;
           LOG_TRACE ("HATCH.paths[%d].segs[%d].degree = %ld [BL 94]\n", j, k,
