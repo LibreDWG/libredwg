@@ -6125,7 +6125,7 @@ add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       for (unsigned i = 0; i < o->num_steps; i++)
         {
           pair = dxf_read_pair (dat);
-          if (pair->code != 90)
+          if (!pair || pair->code != 90)
             return pair;
           o->steps[i] = pair->value.u;
           LOG_TRACE ("%s.steps[%d] = %u [BL %d]\n", obj->name, i,
