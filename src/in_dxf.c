@@ -12881,6 +12881,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     ;
   else if (dat->byte >= dat->size || (pair == NULL))
     error |= DWG_ERR_IOERROR;
+  dxf_free_pair (pair);
   resolve_postponed_header_refs (dwg);
   resolve_postponed_object_refs (dwg);
   LOG_HANDLE ("Resolving pointers from ObjectRef vector:\n");
