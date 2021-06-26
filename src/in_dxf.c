@@ -10416,6 +10416,8 @@ new_object (char *restrict name, char *restrict dxfname,
                   if (cur_cell == 0 && !o->cells)
                     o->cells = (Dwg_TABLESTYLE_CellStyle *)xcalloc (
                         o->num_cells, sizeof (Dwg_TABLESTYLE_CellStyle));
+                  if (!o->cells)
+                    goto invalid_dxf;
                   tbl_sty = &o->cells[cur_cell];
                   sprintf (key, "cells[%d]", cur_cell);
                   csty = &tbl_sty->cellstyle;
@@ -10818,6 +10820,8 @@ new_object (char *restrict name, char *restrict dxfname,
                                 {
                                   clip_verts = (BITCODE_2RD *)xcalloc (
                                       num_clip_verts, sizeof (BITCODE_2RD));
+                                  if (!clip_verts)
+                                    goto invalid_dxf;
                                   dwg_dynapi_entity_set_value (_obj, obj->name,
                                                                f->name,
                                                                &clip_verts, 0);
