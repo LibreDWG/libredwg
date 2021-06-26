@@ -3056,14 +3056,14 @@ typedef struct _dwg_LEADER_Node
 typedef struct _dwg_MLEADER_Content_MText
 {
   CMLContent_fields;
-  BITCODE_T default_text;
   BITCODE_H style;
   BITCODE_3BD direction;
+  BITCODE_CMC color;
   BITCODE_BD width;
   BITCODE_BD height;
   BITCODE_BD line_spacing_factor;
+  BITCODE_T default_text;
   BITCODE_BS line_spacing_style;
-  BITCODE_CMC color;
   BITCODE_BS alignment;
   BITCODE_BS flow;
   BITCODE_CMC bg_color;
