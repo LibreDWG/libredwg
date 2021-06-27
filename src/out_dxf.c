@@ -2020,6 +2020,14 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
         case 14: // subident
           {
             int len = bit_read_RC (&src);
+            if (src.byte + len >= src.size)
+              {
+                LOG_ERROR ("Invalid SAB");
+                bit_chain_free (&dest);
+                _obj->num_blocks = 0;
+                _obj->encr_sat_data[0] = NULL;
+                return 1;
+              }
             if (dest.byte + len + 4 >= dest.size)
               bit_chain_alloc (&dest);
             if (c == 7 && i < 3)
@@ -2040,7 +2048,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
               }
             else
 #endif
-              bit_write_TF (&dest, &src.chain[src.byte], len);
+            bit_write_TF (&dest, &src.chain[src.byte], len);
 #ifndef CAN_ACIS_HISTORY
             if (c == 14 && len == strlen ("acadSolidHistory") &&
                 !memcmp (&src.chain[src.byte], "acadSolidHistory", len))
