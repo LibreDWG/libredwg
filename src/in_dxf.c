@@ -972,7 +972,7 @@ dxf_read_CMC (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   int error = 1;
   unsigned long pos = bit_position (dat);
   Dxf_Pair *pair = dxf_read_pair (dat);
-  if (!color)
+  if (!color || pair == NULL)
     {
       LOG_ERROR ("empty CMC field %s", fieldname);
       return 1;
