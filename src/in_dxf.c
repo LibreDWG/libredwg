@@ -11216,6 +11216,7 @@ new_object (char *restrict name, char *restrict dxfname,
                   // wrong code, maybe a point .y or .z
                   else if ((*f->type == '3' || *f->type == '2'
                             || strEQc (f->type, "BE"))
+                           && f->dxf
                            && (strstr (f->type, "_1")
                                    ? f->dxf + 1 == pair->code // 2BD_1
                                    : f->dxf + 10 == pair->code))
@@ -11234,6 +11235,7 @@ new_object (char *restrict name, char *restrict dxfname,
                     }
                   else if ((*f->type == '3' || *f->type == '2'
                             || strEQc (f->type, "BE"))
+                           && f->dxf
                            && (strstr (f->type, "_1")
                                    ? f->dxf + 2 == pair->code // 2BD_1
                                    : f->dxf + 20 == pair->code))
