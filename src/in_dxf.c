@@ -5917,17 +5917,13 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       EXPECT_INT_DXF ("num_values", 90, BL);
       if (num)
         {
-          values = (Dwg_VALUEPARAM *)xcalloc (num, sizeof (Dwg_VALUEPARAM *));
+          values = (Dwg_VALUEPARAM *)xcalloc (num, sizeof (Dwg_VALUEPARAM));
           if (!values)
             return NULL;
         }
       for (unsigned i = 0; i < num; i++)
         {
-          Dwg_VALUEPARAM *value
-              = (Dwg_VALUEPARAM *)xcalloc (1, sizeof (Dwg_VALUEPARAM));
-          int success = add_VALUEPARAMs (dwg, dat, value);
-          values[i] = *value;
-          if (!success)
+          if (!add_VALUEPARAMs (dwg, dat, &values[i]))
             return NULL;
         }
       if (num)
