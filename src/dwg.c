@@ -2542,8 +2542,10 @@ dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
                   hobj->name, hdlname ? hdlname : "NULL");
       if (ok)
         {
-          if (!isnew) return strdup (hdlname);
-          else return hdlname;
+          if (!isnew && hdlname)
+            return strdup (hdlname);
+          else
+            return hdlname;
         }
       else
         return NULL;
