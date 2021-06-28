@@ -3855,7 +3855,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           if (dat->bit)
             obj->size++;
         }
-      if (dat->byte >= dat->size)
+      while (dat->byte >= dat->size)
         bit_chain_alloc (dat);
       // assert (obj->bitsize); // on errors
       if (!obj->bitsize ||
@@ -3871,9 +3871,10 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       if (obj->size > 0x7fff && old_size <= 0x7fff)
         {
           // with overlarge sizes >0x7fff memmove dat right by 2, one more RS added.
-          LOG_INFO ("overlarge size %u > 0x7fff @%lu\n", (unsigned)obj->size, dat->byte);
+          LOG_INFO ("overlarge size %u > 0x7fff (was %u) @%lu\n", (unsigned)obj->size, old_size,
+                    dat->byte);
           if (dat->byte + obj->size + 2 >= dat->size)
-            bit_chain_alloc (dat);
+            bit_chain_alloc_size (dat, (dat->byte + obj->size + 2) - dat->size);
           memmove (&dat->chain[dat->byte + 2], &dat->chain[dat->byte], obj->size);
           obj->size += 2;
           obj->bitsize += 16;
@@ -3954,7 +3955,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data, const
               BITCODE_RS codepage = 30; //FIXME
               char *dest;
               if (length + 5 + dat->byte >= dat->size)
-                bit_chain_alloc (dat);
+                bit_chain_alloc_size (dat, (length + 5 + dat->byte) - dat->size);
               if (length > 255)
                 {
                   LOG_ERROR ("eed: overlong string %d stripped", (int)length);

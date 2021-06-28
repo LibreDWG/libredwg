@@ -335,6 +335,7 @@ void bit_chain_init (Bit_Chain *dat, const int size);
 void bit_chain_init_dat (Bit_Chain *restrict dat, const int size,
                          const Bit_Chain *restrict from_dat);
 void bit_chain_alloc (Bit_Chain *dat);
+void bit_chain_alloc_size (Bit_Chain *dat, const size_t size);
 void bit_chain_free (Bit_Chain *dat);
 // after bit_chain_init
 #define bit_chain_set_version(to, from)                                       \

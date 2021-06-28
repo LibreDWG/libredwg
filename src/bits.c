@@ -3014,27 +3014,32 @@ bit_chain_init_dat (Bit_Chain *restrict dat, const int size,
  * Allocates or adds more memory space for bit_chain
  * adds a 1kB page.
  */
-#define CHAIN_BLOCK 1024
-void
-bit_chain_alloc (Bit_Chain *dat)
+void bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
 {
   if (dat->size == 0)
     {
-      bit_chain_init (dat, CHAIN_BLOCK);
+      bit_chain_init (dat, size);
     }
   else
     {
       dat->chain
-          = (unsigned char *)realloc (dat->chain, dat->size + CHAIN_BLOCK);
+          = (unsigned char *)realloc (dat->chain, dat->size + size);
       if (!dat->chain)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("Out of memory")
           abort();
         }
-      memset (&dat->chain[dat->size], 0, CHAIN_BLOCK);
-      dat->size += CHAIN_BLOCK;
+      memset (&dat->chain[dat->size], 0, size);
+      dat->size += size;
     }
+}
+
+#define CHAIN_BLOCK 1024
+void
+bit_chain_alloc (Bit_Chain *dat)
+{
+  bit_chain_alloc_size (dat, CHAIN_BLOCK);
 }
 
 void
