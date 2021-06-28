@@ -1,1 +1,1 @@
-{"version":1,"ops":[{"type":2,"author":{"id":"a694f4dbad72c4d56aabd21e56088e993998df8e"},"timestamp":1623726476,"metadata":{"github-id":"MDE3OlJlbmFtZWRUaXRsZUV2ZW50NDg4ODk0MDkzOA=="},"title":"Null pointer dereference in function add_PERSUBENTMGR in in_dxf.c","was":"Null pointer deference in function add_PERSUBENTMGR in in_dxf.c"}]}
+{"version":1,"ops":[{"type":4,"author":{"id":"b57a4f5420adf835b8b83469143e813bd4f12c78"},"timestamp":1624775792,"metadata":{"github-id":"MDExOkNsb3NlZEV2ZW50NDk0MzYwMjkxNQ=="},"status":2}]}
