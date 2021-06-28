@@ -3035,7 +3035,7 @@ void bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
     }
 }
 
-#define CHAIN_BLOCK 1024
+#define CHAIN_BLOCK 4096
 void
 bit_chain_alloc (Bit_Chain *dat)
 {
