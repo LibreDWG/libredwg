@@ -3646,6 +3646,13 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     // only really needed for r2004 encode later
     crc32 = _obj->crc32;
     _obj->crc32 = 0;
+
+    //while calc crc the 4 CRC bytes should initialized to 0 zero
+    decrypted_data[0x6c - 1] = 0;
+    decrypted_data[0x6c - 2] = 0;
+    decrypted_data[0x6c - 3] = 0;
+    decrypted_data[0x6c - 4] = 0;
+
     // without the padding, but the crc32 as 0
     calc_crc32 = bit_calc_CRC32 (0, &decrypted_data[0], 0x6c);
     _obj->crc32 = crc32;
