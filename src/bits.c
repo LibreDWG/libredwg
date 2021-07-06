@@ -3237,8 +3237,6 @@ bit_calc_CRC (const uint16_t seed, unsigned char *addr, long len)
 uint32_t
 bit_calc_CRC32 (const uint32_t seed, unsigned char *addr, long len)
 {
-  unsigned char al;
-  uint32_t dx = ~seed; /* inverted */
 
   static const uint32_t crctable[256] = {
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,
@@ -3286,13 +3284,12 @@ bit_calc_CRC32 (const uint32_t seed, unsigned char *addr, long len)
     0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d
   };
 
-  for (; len > 0; len--)
-    {
-      al = (unsigned char)((*addr) ^ ((unsigned char)(dx & 0xFF)));
-      dx = ((dx >> 8) & 0xFF) ^ crctable[al];
-      addr++;
-    }
-  return ~dx;
+  uint32_t invertedCrc = ~seed;
+  while (len--) {
+    uint8_t byte = *addr++;
+    invertedCrc = (invertedCrc >> 8) ^ crctable[(invertedCrc ^ byte) & 0xff];
+  }
+  return ~invertedCrc;
 }
 
 bool does_cross_unicode_datversion (Bit_Chain *restrict dat)
