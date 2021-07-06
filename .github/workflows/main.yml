@@ -80,10 +80,14 @@ jobs:
     steps:
     - name: init
       run: brew install automake
+    - name: setup-python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
     - name: checkout
       uses: actions/checkout@v2
     - run: sh autogen.sh
-    - run: ./configure
+    - run: ./configure --disable-bindings
     - run: make
     - run: make check
     #- run: make distcheck

@@ -972,7 +972,7 @@ dxf_read_CMC (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   int error = 1;
   unsigned long pos = bit_position (dat);
   Dxf_Pair *pair = dxf_read_pair (dat);
-  if (!color)
+  if (!color || pair == NULL)
     {
       LOG_ERROR ("empty CMC field %s", fieldname);
       return 1;
@@ -2796,12 +2796,21 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 72)
         {
           CHK_paths;
+#define CHK_segs                                                              \
+  if (!o->paths[j].segs || k < 0 || k >= (int)o->paths[j].num_segs_or_paths)  \
+    {                                                                         \
+      LOG_ERROR ("HATCH no paths[%d].segs or wrong k %d\n", j, k);            \
+      return NULL;                                                            \
+    }                                                                         \
+  assert (o->paths[j].segs);                                                  \
+  assert (k >= 0);                                                            \
+  assert (k < (int)o->paths[j].num_segs_or_paths)
+          
           if (!is_plpath)
             {
               k++;
-              assert (k >= 0);
-              if (j < (int)o->num_paths
-                  && k < (int)o->paths[j].num_segs_or_paths)
+              CHK_segs;
+              if (j < (int)o->num_paths)
                 {
                   o->paths[j].segs[k].curve_type = pair->value.i;
                   LOG_TRACE (
@@ -2826,17 +2835,6 @@ add_HATCH (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 94 && !is_plpath && pair->value.l)
         {
           CHK_paths;
-
-#define CHK_segs                                                              \
-  if (!o->paths[j].segs || k < 0 || k >= (int)o->paths[j].num_segs_or_paths)  \
-    {                                                                         \
-      LOG_ERROR ("HATCH no paths[%d].segs or wrong k %d\n", j, k);            \
-      return NULL;                                                            \
-    }                                                                         \
-  assert (o->paths[j].segs);                                                  \
-  assert (k >= 0);                                                            \
-  assert (k < (int)o->paths[j].num_segs_or_paths)
-
           CHK_segs;
           o->paths[j].segs[k].degree = pair->value.l;
           LOG_TRACE ("HATCH.paths[%d].segs[%d].degree = %ld [BL 94]\n", j, k,
@@ -4302,6 +4300,13 @@ add_MULTILEADER (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                     {
                       return NULL;
                     }
+                }
+              if (j >= 16)
+                {
+                  LOG_ERROR ("Too many %s.ctx.content.blk.transform[%d] groups 47, max 16", obj->name, j);
+                  free (ctx->content.blk.transform);
+                  ctx->content.blk.transform = NULL;
+                  return NULL;
                 }
               ctx->content.blk.transform[j] = pair->value.d;
               LOG_TRACE ("%s.ctx.content.blk.transform[%d] = %f [BD %d]\n",
@@ -5912,17 +5917,13 @@ add_ASSOCACTION (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       EXPECT_INT_DXF ("num_values", 90, BL);
       if (num)
         {
-          values = (Dwg_VALUEPARAM *)xcalloc (num, sizeof (Dwg_VALUEPARAM *));
+          values = (Dwg_VALUEPARAM *)xcalloc (num, sizeof (Dwg_VALUEPARAM));
           if (!values)
             return NULL;
         }
       for (unsigned i = 0; i < num; i++)
         {
-          Dwg_VALUEPARAM *value
-              = (Dwg_VALUEPARAM *)xcalloc (1, sizeof (Dwg_VALUEPARAM));
-          int success = add_VALUEPARAMs (dwg, dat, value);
-          values[i] = *value;
-          if (!success)
+          if (!add_VALUEPARAMs (dwg, dat, &values[i]))
             return NULL;
         }
       if (num)
@@ -6120,7 +6121,7 @@ add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       for (unsigned i = 0; i < o->num_steps; i++)
         {
           pair = dxf_read_pair (dat);
-          if (pair->code != 90)
+          if (!pair || pair->code != 90)
             return pair;
           o->steps[i] = pair->value.u;
           LOG_TRACE ("%s.steps[%d] = %u [BL %d]\n", obj->name, i,
@@ -9283,12 +9284,13 @@ new_object (char *restrict name, char *restrict dxfname,
                 {
                   if (is_type_stable (obj->fixedtype))
                     {
-                      LOG_ERROR ("FIXME Unknown subclass %s in object %s", subclass, obj->name);
+                      LOG_ERROR ("Illegal subclass %s in object %s", subclass, obj->name);
                       return NULL;
                     }
                   else
                     {
-                      LOG_WARN ("TODO Unknown subclass %s in object %s", subclass, obj->name);
+                      LOG_WARN ("Illegal subclass %s in object %s", subclass, obj->name);
+                      *subclass = '\0';
                     }
                 }
               if (strEQc (subclass, "AcDbDetailViewStyle")
@@ -10410,6 +10412,8 @@ new_object (char *restrict name, char *restrict dxfname,
                   if (cur_cell == 0 && !o->cells)
                     o->cells = (Dwg_TABLESTYLE_CellStyle *)xcalloc (
                         o->num_cells, sizeof (Dwg_TABLESTYLE_CellStyle));
+                  if (!o->cells)
+                    goto invalid_dxf;
                   tbl_sty = &o->cells[cur_cell];
                   sprintf (key, "cells[%d]", cur_cell);
                   csty = &tbl_sty->cellstyle;
@@ -10812,6 +10816,8 @@ new_object (char *restrict name, char *restrict dxfname,
                                 {
                                   clip_verts = (BITCODE_2RD *)xcalloc (
                                       num_clip_verts, sizeof (BITCODE_2RD));
+                                  if (!clip_verts)
+                                    goto invalid_dxf;
                                   dwg_dynapi_entity_set_value (_obj, obj->name,
                                                                f->name,
                                                                &clip_verts, 0);
@@ -12871,6 +12877,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     ;
   else if (dat->byte >= dat->size || (pair == NULL))
     error |= DWG_ERR_IOERROR;
+  dxf_free_pair (pair);
   resolve_postponed_header_refs (dwg);
   resolve_postponed_object_refs (dwg);
   LOG_HANDLE ("Resolving pointers from ObjectRef vector:\n");

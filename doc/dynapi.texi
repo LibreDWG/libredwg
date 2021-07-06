@@ -13272,7 +13272,7 @@ Dwg_AcDs_Search_IdIdx*
 @vtable @code
 
 @item signature
-RL
+RS
 @item name[7]
 RC
 @item type
@@ -14567,22 +14567,22 @@ RC
 3BD
 @item rotation
 BD
-@item default_text
-T
 @item style
 H
 @item direction
 3BD
+@item color
+CMC
 @item width
 BD
 @item height
 BD
 @item line_spacing_factor
 BD
+@item default_text
+T
 @item line_spacing_style
 BS
-@item color
-CMC
 @item alignment
 BS
 @item flow
