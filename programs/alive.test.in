@@ -30,7 +30,7 @@
 
 # Code:
 
-PROGS=${PROGS:-"dwgread dwgbmp dwg2dxf dwg2SVG dwglayers dwggrep dwgrewrite dxf2dwg dwgwrite"}
+PROGS=${PROGS:-"dwgread@EXEEXT@ dwgbmp@EXEEXT@ dwg2dxf@EXEEXT@ dwg2SVG@EXEEXT@ dwglayers@EXEEXT@ dwggrep@EXEEXT@ dwgrewrite@EXEEXT@ dxf2dwg@EXEEXT@ dwgwrite@EXEEXT@"}
 [ -z "$DATADIR" ] && DATADIR="@top_srcdir@/test/test-data"
 top_builddir="@top_builddir@"
 # artefact for "shellcheck"
