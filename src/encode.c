@@ -3922,10 +3922,12 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   if (end_address != dat->byte)
     {
       if (obj->size)
-        LOG_WARN ("Wrong object size: %lu + %u = %lu != %lu: %ld off",
-                  address, obj->size, end_address, dat->byte,
-                  (long)(end_address - dat->byte));
-      //dat->byte = end_address;
+        {
+          LOG_ERROR ("Wrong object size: %lu + %u = %lu != %lu: %ld off",
+                     address, obj->size, end_address, dat->byte,
+                     (long)(end_address - dat->byte));
+          //dat->byte = end_address;
+        }
     }
   assert (!dat->bit);
   bit_write_CRC (dat, address, 0xC0C1);

@@ -27,6 +27,7 @@
 #include <stdint.h>
 #include <inttypes.h>
 #include <math.h>
+#include <assert.h>
 #if defined(HAVE_WCHAR_H) && defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
 #  include <wchar.h>
 #endif
@@ -1269,7 +1270,10 @@ void
 bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
 {
   int i;
-  unsigned char *val;
+  union {
+    unsigned char p[8];
+    unsigned long v;
+  } val;
   unsigned char size;
 
   if (!handle)
@@ -1283,11 +1287,12 @@ bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
       return;
     }
 
+  assert(sizeof(val) <= 8);
   // TODO: little-endian only. support sizes <= 8, not just 4
   memset (&val, 0, sizeof(val));
-  val = (unsigned char *)&handle->value;
+  val.v = handle->value;
   for (i = sizeof(val) - 1; i >= 0; i--)
-    if (val[i])
+    if (val.p[i])
       break;
 
   size = handle->code << 4;
@@ -1295,7 +1300,7 @@ bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   bit_write_RC (dat, size);
 
   for (; i >= 0; i--)
-    bit_write_RC (dat, val[i]);
+    bit_write_RC (dat, val.p[i]);
 }
 
 /** Only read old 16bit CRC-numbers, without checking, only in order

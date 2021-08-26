@@ -1917,11 +1917,12 @@ set_handle_size (Dwg_Handle *restrict hdl)
       unsigned char *val;
       memset (&val, 0, sizeof(val));
       val = (unsigned char *)&hdl->value;
-      // FIXME: little endian only
-      for (i = sizeof(val) - 1; i >= 0; i--)
+      // FIXME: little endian only. was broken in 64bit windows
+      for (i = sizeof(hdl->value) - 1; i >= 0; i--)
         if (val[i])
           break;
       hdl->size = i + 1;
+      //printf("handle_size %lu => %u\n", hdl->value, hdl->size);
     }
   else
      hdl->size = 0;
