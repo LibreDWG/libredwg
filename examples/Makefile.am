@@ -19,7 +19,7 @@
 
 WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS   = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
-LDADD       = $(top_builddir)/src/libredwg.la -lm
+LDADD       = $(top_builddir)/src/libredwg.la
 
 if USE_WRITE
 bin_PROGRAMS     = dwgadd
@@ -35,9 +35,9 @@ unknown_SOURCES  = unknown.c
 unknown_LDADD    = $(top_builddir)/src/libredwg.la \
                    $(top_builddir)/src/bits.lo $(top_builddir)/src/common.lo
 bd_SOURCE        = bd.c
-bd_LDADD         = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo -lm
+bd_LDADD         = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo
 bits_SOURCE      = bits.c
-bits_LDADD       = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo -lm
+bits_LDADD       = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo
 dwgfuzz_SOURCES  = dwgfuzz.c
 #would need HAVE_ASAN am var set
 #dwgfuzz_CFLAGS             = $(CFLAGS) $(AM_CFLAGS) -fsanitize=address,undefined -fno-omit-frame-pointer
