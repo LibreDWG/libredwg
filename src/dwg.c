@@ -1704,7 +1704,7 @@ static const char * const dwg_section_r11_names[] =
 {
   "HEADER",                   // 0
   "BLOCK",                    // 1
-  "LAYER"                     // 2
+  "LAYER",                     // 2
   "STYLE",                    // 3
   "LTYPE",                    // 4
   "VIEW",                     // 5
