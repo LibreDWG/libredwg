@@ -32,7 +32,7 @@ for dwg in $DATA; do
     dwg="${DATADIR}/$dwg.dwg"
     echo "dwg2SVG${EXEEXT} $dwg >$svg &&"
     echo "  @RUN_JING@ $svg"
-    if @TIMEOUT_10@ @LTEXEC@ ./dwg2SVG${EXEEXT} "$dwg" >"$svg" 2>"$log" && \
+    if @TIMEOUT_10@ @LTEXEC@ "./dwg2SVG${EXEEXT}" "$dwg" >"$svg" 2>"$log" && \
        @RUN_JING@ "$svg"
     then
         rm "./$svg.log" "./$svg"

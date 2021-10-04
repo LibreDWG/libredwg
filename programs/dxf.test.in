@@ -25,7 +25,7 @@ is_release="$(grep -c 'IS_RELEASE 1' ../src/config.h)"
 
 check_subentity() {
     if [ -f "$dwg" ] && [ -f "$dxf" ]; then
-        @LTEXEC@ ./dwg2dxf${EXEEXT} -y -v4 -o "$tgt" "$dwg" 2>/dev/null
+        @LTEXEC@ "./dwg2dxf${EXEEXT}" -y -v4 -o "$tgt" "$dwg" 2>/dev/null
         grep -A8 ^VERTEX "$dxf" >tmp1
         grep -A8 ^VERTEX "$tgt" >tmp2
         d="$(diff -bu1 tmp1 tmp2)"
@@ -68,7 +68,7 @@ done
 
 check_acdb_dxfname() {
     if [ -f "$dwg" ] && [ -f "$dxf" ]; then
-        @LTEXEC@ ./dwg2dxf${EXEEXT} -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
+        @LTEXEC@ "./dwg2dxf${EXEEXT}" -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
         expect="$(grep -c "^$dxfname" "$dxf")"
         if [ -n "$1" ]; then expect="$1"; fi
         got=$(grep -c "^$dxfname" "$tgt")
@@ -113,6 +113,7 @@ for dwg in "$DATADIR"/example_*.dwg; do
         done
     fi
 done
+# shellcheck disable=SC2043
 for dwg in "$DATADIR"/2004/Underlay.dwg; do
     dxf="$(echo "$dwg" | sed 's,.dwg,.dxf,')"
     tgt="../$(basename "$dxf" .dxf)_2004.dxf"
@@ -127,7 +128,7 @@ done
 # check vertex - seqend order
 check_pline_order() {
     if [ -f "$dwg" ] && [ -f "$dxf" ]; then
-        @LTEXEC@ ./dwg2dxf${EXEEXT} -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
+        @LTEXEC@ "./dwg2dxf${EXEEXT}" -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
         got="$(grep -E '^(POLYLINE|VERTEX|SEQEND)' "$tgt")"
         expect="$(grep -E '^(POLYLINE|VERTEX|SEQEND)' "$dxf")"
         if [ "$got" = "$expect" ]
@@ -144,7 +145,7 @@ check_pline_order() {
 # check insert - attrib - seqend order
 check_insert_order() {
     if [ -f "$dwg" ] && [ -f "$dxf" ]; then
-        @LTEXEC@ ./dwg2dxf${EXEEXT} -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
+        @LTEXEC@ "./dwg2dxf${EXEEXT}" -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
         got="$(grep -E '^(INSERT|ATTRIB|SEQEND)' "$tgt")"
         expect="$(grep -E '^(INSERT|ATTRIB|SEQEND)' "$dxf")"
         if [ "$got" = "$expect" ]
@@ -166,9 +167,9 @@ check_roundtrip() {
         tgt="$(basename "$dwg")"
         log1="$(basename "$dwg" .dwg).log1"
         log2="$(basename "$dwg" .dwg).log2"
-        @LTEXEC@ ./dwg2dxf${EXEEXT} -y -v2 -o "$dxf" "$dwg" 2>"$log1" >/dev/null
-        @LTEXEC@ ./dxf2dwg${EXEEXT} -y -v0 -o "$tgt" "$dxf" 2>/dev/null >/dev/null
-        @LTEXEC@ ./dwgread${EXEEXT} -v2 "$tgt" 2>"$log2" >/dev/null
+        @LTEXEC@ "./dwg2dxf${EXEEXT}" -y -v2 -o "$dxf" "$dwg" 2>"$log1" >/dev/null
+        @LTEXEC@ "./dxf2dwg${EXEEXT}" -y -v0 -o "$tgt" "$dxf" 2>/dev/null >/dev/null
+        @LTEXEC@ "./dwgread${EXEEXT}" -v2 "$tgt" 2>"$log2" >/dev/null
         # We dont write unstable entities yet. WIPEOUT is converted to POINT in encode, but skipped at out_dxf
         if [ -n "$enable_debug" ] && [ -z "$is_release" ]; then
             expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (WIPEOUT|UNKNOWN_ENT)')"

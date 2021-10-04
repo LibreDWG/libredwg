@@ -25,7 +25,7 @@ do
         --help) help ;;
         --version) version ;;
         --debug) debug=1 ;;
-        $dwg) if [ ! -f "$dwg" ]; then echo DWG "$dwg" not found; exit 1; fi ;;
+        "$dwg") if [ ! -f "$dwg" ]; then echo DWG "$dwg" not found; exit 1; fi ;;
         -i)   writemode=1 ;;
         *)    opts="$opts $arg" ;;
     esac

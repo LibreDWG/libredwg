@@ -15,11 +15,10 @@ log=
 
 for d in "$@"; do
     # we do use bash
-    # shellcheck disable=SC2039
     case $d in
         -v*) v="$d"
              ;;
-        -l*) log="${d:2}"
+        -l*) log="$(cut "$d" -c2-)"
              ;;
         *)
         if [ ! -f "$d" ]; then

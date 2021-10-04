@@ -16,7 +16,7 @@ v=-v3
 # dummy to please shellcheck
 test -z "$v" && echo $top_builddir
 # check for dash
-# shellcheck disable=SC2039,SC2161
+# shellcheck disable=SC2039,SC2161,SC3010
 [[ 1 ]] 2>/dev/null || DASH=1
 args=-y
 out=
@@ -39,8 +39,7 @@ for d in "$@"; do
             -o*)    if [ -n "$DASH" ]; then
                         out="$(echo "$d" | awk '{ string=substr($0, 3); print string; }')"
                     else
-                        # shellcheck disable=SC2039
-                        out="${d:2}"
+                        out="$(cut "$d" -c2-)"
                     fi
                     ;;
             -y)     ;;
@@ -92,7 +91,7 @@ for d in "$@"; do
                 b=$(basename "$d" .$ext)
                 log="$b$dir.log"
                 [ -n "$out" ] || out="$b$dir.dxf"
-                if [ x$ext = xdwg ]; then
+                if [ "$ext" = "dwg" ]; then
                     echo "$timeout @LTEXEC@ programs/dwg2dxf $args $v -o $out $d 2>$log"
                     # shellcheck disable=SC2086
                     $timeout @LTEXEC@ programs/dwg2dxf $args "$v" -o "$out" "$d" 2>"$log"
