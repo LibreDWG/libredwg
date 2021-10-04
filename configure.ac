@@ -293,12 +293,11 @@ case $compiler in
    AC_MSG_CHECKING([-lssp hack for mingw])
    case $CFLAGS in
      *-fstack-protector*)
-        LIBS="$LIBS -lssp"
         AC_MSG_RESULT([yes])
         ;;
      *) CFLAGS="$CFLAGS -fstack-protector"
-        LIBS="$LIBS -lssp"
-        AC_MSG_RESULT([yes + -fstack-protector])
+        LDFLAGS="$LDFLAGS -fstack-protector"
+        AC_MSG_RESULT([-fstack-protector added])
         ;;
    esac
    ;;

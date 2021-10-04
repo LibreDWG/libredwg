@@ -129,6 +129,6 @@ jobs:
     - shell: msys2 {0}
       run: ./configure
     - shell: msys2 {0}
-      run: make
+      run: make V=1
     - shell: msys2 {0}
-      run: make check
+      run: make check V=1

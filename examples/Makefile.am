@@ -42,7 +42,7 @@ dwgfuzz_SOURCES  = dwgfuzz.c
 #would need HAVE_ASAN am var set
 #dwgfuzz_CFLAGS             = $(CFLAGS) $(AM_CFLAGS) -fsanitize=address,undefined -fno-omit-frame-pointer
 llvmfuzz_SOURCES            = llvmfuzz.c
-llvmfuzz_LDADD              = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo -lm
+llvmfuzz_LDADD              = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo
 llvmfuzz_standalone_SOURCES = llvmfuzz.c
 if HAVE_ASAN_OR_LINUX
 # needs CC=clang
@@ -58,7 +58,7 @@ endif
 else
 llvmfuzz_standalone_CFLAGS  = $(CFLAGS) $(AM_CFLAGS) -DSTANDALONE
 endif
-llvmfuzz_standalone_LDADD   = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo -lm
+llvmfuzz_standalone_LDADD   = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo
 
 all: $(check_PROGRAMS)
 
