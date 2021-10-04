@@ -288,8 +288,8 @@ $GREP -v '__STDC_WANT_LIB_EXT1__' confdefs.h > confdefs.h.tmp
 mv confdefs.h.tmp confdefs.h
 
 dnl mingw-w64 7.0 bug with _FORTIFY_SOURCE, need -lssp
-case $compiler in
- *-w64-mingw32-*)
+case $LD in
+  *-w64-mingw32*)
    AC_MSG_CHECKING([-lssp hack for mingw])
    case $CFLAGS in
      *-fstack-protector*)
