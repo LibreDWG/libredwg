@@ -155,7 +155,7 @@ fi
 %{_mandir}/man1/dxfwrite.1.gz
 %{_mandir}/man5/dwg*
 %{_infodir}/LibreDWG.info*
-%{_sharedir}/dwgadd.example
+%{_sharedir}/libredwg/dwgadd.example
 
 %files devel
 %doc TODO
