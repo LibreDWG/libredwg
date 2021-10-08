@@ -1178,18 +1178,11 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str,
           if (!_buf)
             {
               fprintf (dat->fh, "\r\n");
-              LOG_ERROR ("Out of stack memory");
-              return;
-            }
-          _buf[len - 1] = '\0';
-          _buf = cquote (_buf, len, str);
-          if (!_buf)
-            {
-              fprintf (dat->fh, "\r\n");
               LOG_ERROR ("Out of stack");
               return;
             }
-          len = strlen (_buf);
+          _buf[len - 1] = '\0';
+          len = strlen (cquote (_buf, len, str));
           if (len > 255 && dxf == 1)
             {
               // GROUP 1 already printed
