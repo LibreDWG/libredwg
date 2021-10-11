@@ -445,7 +445,7 @@ dxf_read_string (Bit_Chain *dat, char **string)
       int size = strlen ((char*)&dat->chain[dat->byte]) + 1;
       if (!string)
         {
-          strncpy (buf, (char*)&dat->chain[dat->byte], 4096);
+          strncpy (buf, (char*)&dat->chain[dat->byte], 4095);
           if (size > 4095)
             buf[4095] = '\0';
         }
@@ -6222,6 +6222,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
     strcpy (ctrlname, "VX_CONTROL");
   else
     {
+      // ignore -Wstringop-truncation
       strncpy (ctrlname, name, 70);
       ctrlname[69] = '\0';
       strcat (ctrlname, "_CONTROL");
@@ -6300,6 +6301,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
             LOG_TRACE ("%s.handle = " FORMAT_H " [H %d]\n", ctrlname,
                        ARGS_H (obj->handle), pair->code);
             // also set the matching HEADER.*_CONTROL_OBJECT
+	    // ignore -Wstringop-truncation
             strncpy (ctrlobj, ctrlname, 70);
             ctrlobj[69] = '\0';
             strcat (ctrlobj, "_OBJECT");
