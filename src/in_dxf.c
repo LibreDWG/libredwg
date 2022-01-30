@@ -10230,6 +10230,35 @@ new_object (char *restrict name, char *restrict dxfname,
               LOG_TRACE ("COMMON.ltype_scale = %f [BD 48]\n", pair->value.d);
               goto next_pair;
             }
+          else if (pair->code == 390 && obj->supertype == DWG_SUPERTYPE_ENTITY
+                   && strEQc (subclass, "AcDbEntity"))
+            {
+              BITCODE_BB flags = 3;
+              BITCODE_H hdl = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+              dwg_dynapi_common_set_value (_obj, "plotstyle", &hdl, 0);
+              dwg_dynapi_common_set_value (_obj, "plotstyle_flags", &flags, 0);
+              LOG_TRACE ("COMMON.plotstyle => " FORMAT_REF " [H 390]\n", ARGS_REF (hdl));
+              goto next_pair;
+            }
+          else if (pair->code == 347 && obj->supertype == DWG_SUPERTYPE_ENTITY
+                   && strEQc (subclass, "AcDbEntity"))
+            {
+              BITCODE_BB flags = 3;
+              BITCODE_H hdl = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+              dwg_dynapi_common_set_value (_obj, "material", &hdl, 0);
+              dwg_dynapi_common_set_value (_obj, "material_flags", &flags, 0);
+              LOG_TRACE ("COMMON.material => " FORMAT_REF " [H 390]\n", ARGS_REF (hdl));
+              goto next_pair;
+            }
+          else if (pair->code == 348 && obj->supertype == DWG_SUPERTYPE_ENTITY
+                   && strEQc (subclass, "AcDbEntity"))
+            {
+              BITCODE_H hdl = dwg_add_handleref (dwg, 5, pair->value.u, obj);
+              // FIXME: which of the 3 visualstyle types? full, face, or edge
+              dwg_dynapi_common_set_value (_obj, "full_visualstyle", &hdl, 0);
+              LOG_TRACE ("COMMON.full_visualstyle => " FORMAT_REF " [H 348]\n", ARGS_REF (hdl));
+              goto next_pair;
+            }
           else if (pair->code == 49 && obj->fixedtype == DWG_TYPE_LTYPE)
             {
               pair = add_LTYPE_dashes (obj, dat, pair);
@@ -10816,6 +10845,8 @@ new_object (char *restrict name, char *restrict dxfname,
                           // has.
                           if (pair->code == 14 || pair->code == 24)
                             {
+                              // FIXME: num_clip_verts must match clip_verts[]
+                              // But num_clip_verts can be set elsewhere, without reallocing the array.
                               dwg_dynapi_entity_value (_obj, obj->name,
                                                        "num_clip_verts",
                                                        &num_clip_verts, NULL);
@@ -11551,12 +11582,11 @@ new_object (char *restrict name, char *restrict dxfname,
                               && dwg->header.version >= R_2000)
                             {
                               BITCODE_BB flags = 3;
-                              /*
-                              if (!strcasecmp (pair->value.s, "BYLAYER"))
-                                flags = 0;
-                              if (!strcasecmp (pair->value.s, "BYBLOCK"))
-                                flags = 1;
-                              */
+                              // eg. plotstyle: (5.2.765) abs:765 [H 390]
+                              handle = dwg_add_handleref (dwg, 5,
+                                                          pair->value.u, obj);
+                              dwg_dynapi_common_set_value (_obj, "plotstyle",
+                                                           &handle, 0);
                               dwg_dynapi_common_set_value (
                                   _obj, "plotstyle_flags", &flags, 0);
                               LOG_TRACE ("COMMON.%s = %d [BB 0]\n",
@@ -11566,12 +11596,10 @@ new_object (char *restrict name, char *restrict dxfname,
                               && dwg->header.version >= R_2007)
                             {
                               BITCODE_BB flags = 3;
-                              /*
-                              if (!strcasecmp (pair->value.s, "BYLAYER"))
-                                flags = 0;
-                              if (!strcasecmp (pair->value.s, "BYBLOCK"))
-                                flags = 1;
-                              */
+                              handle = dwg_add_handleref (dwg, 5,
+                                                          pair->value.u, obj);
+                              dwg_dynapi_common_set_value (_obj, "material",
+                                                           &handle, 0);
                               dwg_dynapi_common_set_value (
                                   _obj, "material_flags", &flags, 0);
                               LOG_TRACE ("COMMON.%s = %d [BB 0]\n",
