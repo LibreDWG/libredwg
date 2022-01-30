@@ -36,10 +36,10 @@ libredwg_la_SOURCES = \
 	classes.c \
 	dwg_api.c \
 	objects.c \
+        out_dxf.c \
 	$(EXTRA_HEADERS)
 if !DISABLE_DXF
 libredwg_la_SOURCES += \
-        out_dxf.c \
         out_dxfb.c
 #       out_xml.c \
 #       out_yaml.c
@@ -52,17 +52,14 @@ endif
 if USE_WRITE
 libredwg_la_SOURCES += \
 	encode.c \
-	dxfclasses.c
-#       encode_r2007.c
-if !DISABLE_DXF
-libredwg_la_SOURCES += \
+	dxfclasses.c \
 	in_dxf.c
+#       encode_r2007.c
 #       in_xml.c
 #       in_yaml.c
 if !DISABLE_JSON
 libredwg_la_SOURCES += \
 	in_json.c
-endif
 endif
 endif
 

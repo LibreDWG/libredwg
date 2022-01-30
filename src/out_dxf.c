@@ -1646,7 +1646,11 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
     dxf_cvt_tablerecord (dat, obj, _obj->name, 2);                            \
   FIELD_RS (flag, 70)
 
+#ifndef DISABLE_DXF
+
 #include "dwg.spec"
+
+#endif
 
 /* This was previously in encode, but since out_dxf needs it for r2013+ 3DSOLIDs
    and --disable-write is still an option, we need to move it here.
@@ -1669,6 +1673,8 @@ dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
   *acis_data_idx = i;
   return (char*)encr_sat_data;
 }
+
+#ifndef DISABLE_DXF
 
 static int
 new_encr_sat_data_line (Dwg_Entity_3DSOLID *restrict _obj,Bit_Chain *dest,
@@ -3717,5 +3723,6 @@ fail:
 }
 AFL_GCC_POP
 
+#endif // DISABLE_DXF
 #undef IS_PRINT
 #undef IS_DXF

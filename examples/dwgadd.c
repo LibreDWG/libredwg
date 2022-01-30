@@ -189,12 +189,16 @@ main (int argc, char *argv[])
             return help ();
           else if (strEQc (long_options[option_index].name, "force-free"))
             opt.force_free = 1;
+#  ifndef DISABLE_DXF
           else if (strEQc (long_options[option_index].name, "dxf"))
             opt.dxf = 1;
           else if (strEQc (long_options[option_index].name, "binary"))
             opt.binary = 1;
+#  endif
+#  ifndef DISABLE_JSON
           else if (strEQc (long_options[option_index].name, "json"))
             opt.json = 1;
+#  endif
           else if (!strcmp (long_options[option_index].name, "verify"))
             opt.verify = 1;
           break;
@@ -265,15 +269,20 @@ main (int argc, char *argv[])
       out_dat.version = dwg.header.version;
       out_dat.opts = dwg.opts;
 
+#ifndef DISABLE_DXF
       if (opt.dxf && opt.binary)
         error = dwg_write_dxfb (&out_dat, &dwg);
       else if (opt.dxf)
         error = dwg_write_dxf (&out_dat, &dwg);
-      else if (opt.json)
+      else
+#endif
+#ifndef DISABLE_JSON
+      if (opt.json)
         error = dwg_write_json (&out_dat, &dwg);
       else if (opt.geojson)
         error = dwg_write_geojson (&out_dat, &dwg);
       else
+#endif
         {
           fclose (out_dat.fh);
           opt.dwg = 1;
@@ -296,16 +305,21 @@ main (int argc, char *argv[])
           memset (&dwg, 0, sizeof (Dwg_Data));
           dat_read_file (&dat, dat.fh, outfile);
 
+#ifndef DISABLE_DXF
           if (opt.dxf && opt.binary)
             error = dwg_read_dxfb (&dat, &dwg);
           else if (opt.dxf)
             error = dwg_read_dxf (&dat, &dwg);
-          else if (opt.json)
+          else
+#endif
+#ifndef DISABLE_JSON
+          if (opt.json)
             error = dwg_read_json (&dat, &dwg);
           else if (opt.geojson)
             LOG_ERROR ("--verify skipped with --geojson")
           else
-            error = dwg_decode (&dat, &dwg); // dat -> dwg
+#endif
+          error = dwg_decode (&dat, &dwg); // dat -> dwg
           if (error >= DWG_ERR_CRITICAL)
             {
               LOG_ERROR ("--verify failed with error 0x%x", error)
@@ -544,6 +558,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else
         LOG_ERROR ("%.*s ignored", 40, p)
     }
+#ifndef DISABLE_JSON
   if (memBEGINc ((char*)dat->chain, "readjson") || (p = strstr ((char*)dat->chain, "\nreadjson")))
     {
       if (*p == '\n')
@@ -565,6 +580,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else
         LOG_ERROR ("%.*s ignored", 40, p)
     }
+#endif
   if (memBEGINc ((char*)dat->chain, "imperial") || (p = strstr ((char*)dat->chain, "\nimperial\n")))
     {
       imperial = 1;

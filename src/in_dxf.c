@@ -223,6 +223,32 @@ xcalloc (size_t n, size_t s)
   return p;
 }
 
+static Dwg_Object *
+find_prev_entity (Dwg_Object *obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  if (obj->supertype != DWG_SUPERTYPE_ENTITY)
+    return NULL;
+  for (BITCODE_BL i = obj->index - 1; i > 0; i--)
+    {
+      Dwg_Object *prev = &dwg->object[i];
+      if (prev->supertype == DWG_SUPERTYPE_ENTITY
+          && prev->tio.entity->entmode == obj->tio.entity->entmode)
+        {
+          if (prev->fixedtype == DWG_TYPE_SEQEND
+              || prev->fixedtype == DWG_TYPE_ENDBLK)
+            return NULL;
+          else
+            return prev;
+        }
+    }
+  return NULL;
+}
+
+// we reuse some functions with encode:
+// dwg_encrypt_SAT1, in_postprocess_handles, in_postprocess_SEQEND
+#ifndef DISABLE_DXF
+
 static inline void
 dxf_skip_ws (Bit_Chain *dat)
 {
@@ -6159,28 +6185,6 @@ add_ASSOCDEPENDENCY (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   return NULL;
 }
 
-static Dwg_Object *
-find_prev_entity (Dwg_Object *obj)
-{
-  Dwg_Data *dwg = obj->parent;
-  if (obj->supertype != DWG_SUPERTYPE_ENTITY)
-    return NULL;
-  for (BITCODE_BL i = obj->index - 1; i > 0; i--)
-    {
-      Dwg_Object *prev = &dwg->object[i];
-      if (prev->supertype == DWG_SUPERTYPE_ENTITY
-          && prev->tio.entity->entmode == obj->tio.entity->entmode)
-        {
-          if (prev->fixedtype == DWG_TYPE_SEQEND
-              || prev->fixedtype == DWG_TYPE_ENDBLK)
-            return NULL;
-          else
-            return prev;
-        }
-    }
-  return NULL;
-}
-
 /* if it has an absolute ownerhandle */
 static int
 is_obj_absowner (Dwg_Object *obj)
@@ -8198,6 +8202,10 @@ add_VISUALSTYLE_props (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   return NULL;
 }
 
+#endif // DISABLE_DXF
+
+// needed for encode
+
 // return a relative softptr (4 handle) to the prev_ref handle, relative to obj.
 static Dwg_Object_Ref *
 dwg_link_prev (Dwg_Object_Ref *restrict prev_ref, Dwg_Object *restrict obj)
@@ -8403,6 +8411,8 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
       dwg_dynapi_entity_set_value (ow, owner->name, owhdls, &owned, 0);
     }
 }
+
+#ifndef DISABLE_DXF
 
 // see GH #138. add vertices / attribs
 static void
@@ -8639,6 +8649,9 @@ is_textlike (Dwg_Object *restrict obj)
          || obj->fixedtype == DWG_TYPE_ATTRIB;
 }
 
+#endif // DISABLE_DXF
+
+
 void
 in_postprocess_handles (Dwg_Object *restrict obj)
 {
@@ -8721,6 +8734,8 @@ in_postprocess_handles (Dwg_Object *restrict obj)
         ent->nolinks = 1;
     }
 }
+
+#ifndef DISABLE_DXF
 
 #define GET_NUMFIELD(type)                                                    \
   {                                                                           \
@@ -12918,5 +12933,7 @@ dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   return dwg_read_dxf (dat, dwg);
 }
+
+#endif // DISABLE_DXF
 
 #undef IS_INDXF
