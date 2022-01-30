@@ -561,13 +561,16 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       size = json_long (dat, tokens);
       value = json_long (dat, tokens);
       absref = json_long (dat, tokens);
-      ref = dwg_add_handleref (dwg, code, absref, (!code || code >= 6) ? obj : NULL);
-      if ((BITCODE_RC)size != ref->handleref.size || (unsigned long)value != ref->handleref.value)
+      ref = dwg_add_handleref (dwg, code, absref,
+                               (!code || code >= 6) ? obj : NULL);
+      if ((BITCODE_RC)size != ref->handleref.size
+          || (unsigned long)value != ref->handleref.value)
         {
-          // FIXME internal in_json problem only (GH #346 mingw64)
-          LOG_INFO ("dwg_add_handle(%.*s) inconsistency => " FORMAT_REF " code=%ld size=%ld value=%ld absref=%ld\n",
-                    t->end - t->start, &dat->chain[t->start], ARGS_REF (ref), code, size, value, absref);
-          assert(!"dwg_add_handle inconsistency");
+          // Wrong user-input: GH #346 mingw64, oss-fuzz #39755
+          LOG_ERROR ("Invalid handle %.*s => " FORMAT_REF
+                     " code=%ld size=%ld value=%ld absref=%ld\n",
+                     t->end - t->start, &dat->chain[t->start], ARGS_REF (ref),
+                     code, size, value, absref);
           ref->handleref.size = (BITCODE_RC)size;
           ref->handleref.value = (unsigned long)value;
           ref->absolute_ref = (unsigned long)absref;
