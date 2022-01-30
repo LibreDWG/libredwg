@@ -1539,6 +1539,7 @@ bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain, unsigned int l
 
 /** Read simple text. After usage, the allocated memory must be properly freed.
  */
+ATTRIBUTE_MALLOC
 BITCODE_TV
 bit_read_TV (Bit_Chain *restrict dat)
 {
@@ -1580,6 +1581,7 @@ static int heX (unsigned char c)
    Max len widechars.
    No codepage support yet, only cp 30.
  */
+ATTRIBUTE_MALLOC
 char *
 bit_embed_TU_size (BITCODE_TU restrict wstr, const int len)
 {
@@ -2581,6 +2583,7 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
 /** converts UTF-8 to UCS-2. Returns a copy.
     TODO: unquote json_cquote as above.
  */
+ATTRIBUTE_MALLOC
 BITCODE_TU
 bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
 {

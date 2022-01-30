@@ -40,6 +40,8 @@
 #  include <ctype.h>
 #endif
 
+#define DWG_MAX_OBJSIZE 0x100000
+
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
@@ -2369,6 +2371,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       end_address = omap[i].address + (unsigned long)obj->size; // from RL
       if (end_address > dat->size)
         {
+          assert(obj->size < DWG_MAX_OBJSIZE);
           dat->size = end_address;
           bit_chain_alloc (dat);
         }
@@ -3481,9 +3484,11 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   dat->bit = 0;
 
   LOG_INFO ("Object number: %lu", (unsigned long)obj->index);
-  if (obj->size > 0x100000)
+  if (obj->size > DWG_MAX_OBJSIZE)
     {
-      LOG_ERROR ("Object size %u overflow", obj->size);
+      LOG_ERROR ("Object size %u overflow, skipped", obj->size);
+      // limit the size (oss-fuzz #41021)
+      obj->size = 0;
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
   while (dat->byte + obj->size >= dat->size)
