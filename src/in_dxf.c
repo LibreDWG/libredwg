@@ -10835,8 +10835,32 @@ new_object (char *restrict name, char *restrict dxfname,
                       && strNE (f->name, "parent")) // parent set in NEW_OBJECT
                     {
                       const Dwg_DYNAPI_field *num_f;
+
                       // FIELD_2RD_VECTOR (clip_verts, num_clip_verts, 11|14);
-                      if (pair->code >= 10 && pair->code <= 24
+                      if ((pair->code == 91 || pair->code == 70) && strEQc (f->name, "num_clip_verts"))
+                        {
+                          BITCODE_2RD *clip_verts;
+                          BITCODE_BL num_clip_verts = pair->value.u;
+                          if (pair->code == 91)
+                            dwg_dynapi_entity_set_value (_obj, obj->name, f->name, &num_clip_verts, 0);
+                          else
+                            {
+                              BITCODE_BS num = pair->value.i; // 70
+                              dwg_dynapi_entity_set_value (_obj, obj->name, f->name, &num, 0);
+                            }
+                          dwg_dynapi_entity_value (_obj, obj->name,
+                                                   "clip_verts", &clip_verts,
+                                                   NULL);
+                          clip_verts = (BITCODE_2RD *)realloc (clip_verts,
+                              num_clip_verts * sizeof (BITCODE_2RD));
+                          if (!clip_verts)
+                            goto invalid_dxf;
+                          dwg_dynapi_entity_set_value (
+                              _obj, obj->name, f->name, &clip_verts, 0);
+                          LOG_TRACE ("%s.num_clip_verts = %d [%s %d]\n", name,
+                                     num_clip_verts, f->type, pair->code);
+                        }
+                      else if (pair->code >= 10 && pair->code <= 24
                           && strEQc (f->name, "clip_verts")) // 11 or 14
                         {
                           BITCODE_BL num_clip_verts = 0;
@@ -10908,10 +10932,11 @@ new_object (char *restrict name, char *restrict dxfname,
                             }
                           goto next_pair;
                         }
-                      // point vectors with known num_field
+                      // point vectors with known num_field (not 210)
                       else if ((*f->type == '2' || *f->type == '3')
                                && (f->type[2] == 'D'
                                    || strEQc (&f->type[1], "DPOINT*"))
+                               && pair->code >= 10 && pair->code <= 34
                                && (num_f = find_numfield (fields, f->name)))
                         {
                           // how many points
@@ -11874,12 +11899,12 @@ new_object (char *restrict name, char *restrict dxfname,
                              "dim_rotation", ang, pair->value.d, "BD", 50);
                 }
               // accept wrong colors
-              else if (is_class_stable (obj->name) && (pair->code < 60 || pair->code > 68))
+              else if (is_dxf_class_importable (obj->name) && (pair->code < 60 || pair->code > 68))
                 {
                   goto invalid_dxf;
                 }
               else
-                LOG_WARN ("Unknown DXF code %d for %s", pair->code, name);
+                LOG_WARN ("Unknown DXF code %d for %s", pair->code, name); // Debugging or Unhandled class
             }
         }
     next_pair:

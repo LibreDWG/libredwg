@@ -526,6 +526,27 @@ bool is_class_unhandled (const char* name)
 #endif
 }
 
+// if all DXF groups are known
+bool is_dxf_class_importable (const char* name)
+{
+  // hash lookup
+  Dwg_Class_Stability stability;
+  if (dwg_object_name (name, NULL, NULL, NULL, &stability)) {
+    if (stability == DWG_CLASS_UNSTABLE)
+      {
+        return !strEQc (name, "MATERIAL") &&      // 72 missing
+               !strEQc (name, "ARC_DIMENSION") && // 2 missing
+               !strEQc (name, "SUN") &&           // 421 missing
+               !strEQc (name, "PROXY_ENTITY") &&  // 90 missing
+               !strEQc (name, "PROXY_OBJECT");    // 90 missing
+      }
+    else
+      return stability == DWG_CLASS_STABLE;
+  }
+  else
+    return false;
+}
+
 bool dwg_find_class (const Dwg_Data *restrict dwg, const char* dxfname, BITCODE_BS *numberp)
 {
   assert(dwg);

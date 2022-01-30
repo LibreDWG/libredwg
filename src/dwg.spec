@@ -7775,6 +7775,7 @@ DWG_OBJECT_END
 
 // hard-owned child of AcDbViewportTableRecord or AcDbViewport 361
 // DXF docs put that as Entity, wrong!
+// Missing: 421
 DWG_OBJECT (SUN)
   SUBCLASS (AcDbSun)
   FIELD_BL (class_version, 90);
@@ -8060,7 +8061,7 @@ DWG_ENTITY (ARC_DIMENSION)
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (dimstyle, 5, 0);
-  FIELD_HANDLE (block, 5, 0);
+  FIELD_HANDLE (block, 5, 2);
 DWG_ENTITY_END
 
 // as ACAD_LAYERFILTERS in the NOD

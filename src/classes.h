@@ -37,6 +37,7 @@ bool is_class_stable (const char* name) __nonnull_all;
 bool is_class_unstable (const char* name) __nonnull_all;
 bool is_class_debugging (const char* name) __nonnull_all;
 bool is_class_unhandled (const char* name) __nonnull_all;
+bool is_dxf_class_importable (const char* name) __nonnull_all;
 bool dwg_find_class (const Dwg_Data *restrict dwg, const char* dxfname,
                      BITCODE_BS *numberp) __nonnull ((1,2));
 void object_alias (char *restrict name) __nonnull_all;
