@@ -79,7 +79,9 @@ jobs:
     runs-on: macOS-latest
     steps:
     - name: init
-      run: brew install automake
+      run: brew install automake texinfo
+    - name: link texinfo
+      run: brew link texinfo --force
     - name: setup-python
       uses: actions/setup-python@v2
       with:
@@ -88,8 +90,8 @@ jobs:
       uses: actions/checkout@v2
     - run: sh autogen.sh
     - run: ./configure --disable-bindings
-    - run: make
-    - run: make check
+    - run: PATH="/usr/local/opt/texinfo/bin:$PATH" make
+    - run: PATH="/usr/local/opt/texinfo/bin:$PATH" make check
     #- run: make distcheck
   mingw:
     name: mingw
@@ -117,6 +119,9 @@ jobs:
           mingw-w64-x86_64-libxml2
           mingw-w64-x86_64-swig
           mingw-w64-x86_64-python2
+          libtool
+          autoconf-wrapper
+          automake-wrapper
           texinfo
           gperf
           mingw-w64-x86_64-perl
@@ -126,6 +131,7 @@ jobs:
       uses: actions/checkout@v2
     - shell: msys2 {0}
       run: sh ./autogen.sh
+      continue-on-error: true
     - shell: msys2 {0}
       run: ./configure
     - shell: msys2 {0}
