@@ -991,7 +991,7 @@ B,	DXF 75
 @item dimstyle
 H,	DXF 3
 @item block
-H
+H,	DXF 2
 @item xline1_pt
 3BD,	DXF 13
 @item xline2_pt
@@ -2242,7 +2242,7 @@ BD
 @item box_height
 BD,	DXF 40
 @item box_width
-BD
+BD,	DXF 41
 @item hookline_dir
 B,	DXF 74
 @item arrowhead_on

@@ -2692,7 +2692,7 @@ DWG_ENTITY (LEADER)
   DXF {
     FIELD_B (hookline_dir, 74);
     FIELD_BD (box_height, 40);
-    FIELD_BD (box_width , 41);
+    FIELD_BD (box_width, 41);
   }
   FIELD_BL (num_points, 76);
   FIELD_3DPOINT_VECTOR (points, num_points, 10);
@@ -2709,7 +2709,7 @@ DWG_ENTITY (LEADER)
   }
 
   FIELD_BD (box_height, 0);
-  FIELD_BD (box_width , 0);
+  FIELD_BD (box_width, 0);
   FIELD_B (hookline_dir, 0);
   FIELD_B (arrowhead_on, 0);
   FIELD_BS (arrowhead_type, 0);
@@ -7343,7 +7343,7 @@ DWG_OBJECT (VISUALSTYLE)
   }
 
   FIELD_T (description, 2);
-  FIELD_BL (style_type, 70);
+  FIELD_BL (style_type, 70); // enum of internal styles, 0-27
   PRE (R_2010) {
     FIELD_BL (face_lighting_model, 71);
     FIELD_BL (face_lighting_quality, 72);

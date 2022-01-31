@@ -2091,8 +2091,8 @@ typedef struct _dwg_entity_LEADER
   BITCODE_3DPOINT inspt_offset;
   BITCODE_3DPOINT endptproj; /* R_14-R_2007 ? */
   BITCODE_BD dimgap;         /* R_13-R_14 only */
-  BITCODE_BD box_height;
-  BITCODE_BD box_width;
+  BITCODE_BD box_height;     /*< DXF(40) */
+  BITCODE_BD box_width;      /*< DXF(41) */
   BITCODE_B hookline_dir;
   BITCODE_B arrowhead_on;
   BITCODE_BS arrowhead_type;
