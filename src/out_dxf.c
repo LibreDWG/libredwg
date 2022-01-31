@@ -1861,7 +1861,9 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
     _obj->sab_size = _obj->block_size[0];
   //end = &p[_obj->sab_size];
 
-  if (!memBEGINc ((char*)_obj->acis_data, "ACIS BinaryFile"))
+  if (!_obj->acis_data
+      || strlen((char *)_obj->acis_data) < sizeof("ACIS BinaryFile") - 1
+      || !memBEGINc ((char *)_obj->acis_data, "ACIS BinaryFile"))
     {
       LOG_ERROR ("acis_data is not a SAB 2 'ACIS BinaryFile'");
       _obj->num_blocks = 0;
