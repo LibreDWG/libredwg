@@ -108,20 +108,29 @@ static Bit_Chain *g_dat;
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
     char *s = json_string (dat, tokens);                                      \
-    int slen = strlen (s);                                                    \
-    memcpy (&_obj->nam, s, MIN (len, slen));                                  \
-    LOG_TRACE (#nam ": \"%.*s\"\n", len, _obj->nam);                          \
-    free (s);                                                                 \
+    if (s)                                                                    \
+      {                                                                       \
+        int slen = strlen (s);                                                \
+        memcpy (&_obj->nam, s, MIN (len, slen));                              \
+        LOG_TRACE (#nam ": \"%.*s\"\n", len, _obj->nam);                      \
+        free (s);                                                             \
+      }                                                                       \
+    else {                                                                    \
+        LOG_TRACE (#nam ": NULL\n");                                          \
+    }                                                                         \
   }
 #define FIELD_TFFx(nam, len, dxf)                                             \
   else if (strEQc (key, #nam))                                                \
   {                                                                           \
     unsigned long slen;                                                       \
     unsigned char *s = json_binary (dat, tokens, #nam, &slen);                \
-    slen = MIN (len, slen);                                                   \
-    memcpy (&_obj->nam, s, slen);                                             \
-    LOG_TRACE (#nam ": \"%.*s\"\n", (int)slen, _obj->nam);                    \
-    free (s);                                                                 \
+    if (s)                                                                    \
+      {                                                                       \
+        slen = MIN (len, slen);                                               \
+        memcpy (&_obj->nam, s, slen);                                         \
+        LOG_TRACE (#nam ": \"%.*s\"\n", (int)slen, _obj->nam);                \
+        free (s);                                                             \
+      }                                                                       \
   }
 #define FIELD_BINARY(nam, lenf, dxf)                                          \
   else if (strEQc (key, #nam))                                                \
