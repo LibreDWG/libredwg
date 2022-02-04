@@ -519,18 +519,18 @@ decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
             {
               if ((dst + length) >= dst_end)
                 HANDLER(OUTPUT, "copy_compressed_bytes: dst %p + %u >= %p\n",
-                        dst, length, dst_end);
+                        dst, (unsigned)length, dst_end);
               else
                 HANDLER(OUTPUT, "copy_compressed_bytes: src %p + %u > %p\n",
-                        src, length, src_end);
+                        src, (unsigned)length, src_end);
             }
           LOG_ERROR ("Decompression error: length overflow");
           return DWG_ERR_INTERNALERROR;
         }
 
       LOG_INSANE (
-          "copy_compressed_bytes (%p, %p, %u). remaining src: %u, dst: %u\n",
-          dst, src, length, src_end - src, dst_end - dst);
+          "copy_compressed_bytes (%p, %p, %u). remaining src: %ld, dst: %ld\n",
+          dst, src, (unsigned)length, (long)(src_end - src), (long)(dst_end - dst));
       copy_compressed_bytes (dst, src, length);
 
       dst += length;
@@ -549,17 +549,17 @@ decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
         {
           if ((dst + length) > dst_end)
             {
-              LOG_HANDLE("copy_bytes: dst %p + %u > %p\n", dst, length, dst_end);
+              LOG_HANDLE("copy_bytes: dst %p + %u > %p\n", dst, (unsigned)length, dst_end);
               LOG_ERROR ("Decompression error: length overflow");
               return DWG_ERR_INTERNALERROR;
             }
           if (offset > (uint32_t) (dst - dst_start))
             {
-              LOG_HANDLE("copy_bytes: offset %u > %p - %p\n", offset, dst, dst_start);
+              LOG_HANDLE("copy_bytes: offset %u > %p - %p\n", (unsigned)offset, dst, dst_start);
               LOG_ERROR ("Decompression error: offset underflow");
               return DWG_ERR_INTERNALERROR;
             }
-          LOG_INSANE ("copy_bytes (%p, %u, [%u])\n", dst, length, offset);
+          LOG_INSANE ("copy_bytes (%p, %u, [%u])\n", dst, (unsigned)length, (unsigned)offset);
           copy_bytes (dst, length, offset);
 
           dst += length;
