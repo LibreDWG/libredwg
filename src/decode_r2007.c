@@ -513,13 +513,24 @@ decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
       if (length == 0)
         length = read_literal_length (&src, opcode);
 
-      if ((dst + length) > dst_end || (src + length) > src_end)
+      if ((dst + length) >= dst_end || (src + length) > src_end)
         {
+          if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
+            {
+              if ((dst + length) >= dst_end)
+                HANDLER(OUTPUT, "copy_compressed_bytes: dst %p + %u >= %p\n",
+                        dst, length, dst_end);
+              else
+                HANDLER(OUTPUT, "copy_compressed_bytes: src %p + %u > %p\n",
+                        src, length, src_end);
+            }
           LOG_ERROR ("Decompression error: length overflow");
           return DWG_ERR_INTERNALERROR;
         }
 
-      LOG_INSANE("copy_compressed_bytes (%p, %p, %u)\n", dst, src, length);
+      LOG_INSANE (
+          "copy_compressed_bytes (%p, %p, %u). remaining src: %u, dst: %u\n",
+          dst, src, length, src_end - src, dst_end - dst);
       copy_compressed_bytes (dst, src, length);
 
       dst += length;
@@ -538,15 +549,17 @@ decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
         {
           if ((dst + length) > dst_end)
             {
+              LOG_HANDLE("copy_bytes: dst %p + %u > %p\n", dst, length, dst_end);
               LOG_ERROR ("Decompression error: length overflow");
               return DWG_ERR_INTERNALERROR;
             }
           if (offset > (uint32_t) (dst - dst_start))
             {
+              LOG_HANDLE("copy_bytes: offset %u > %p - %p\n", offset, dst, dst_start);
               LOG_ERROR ("Decompression error: offset underflow");
               return DWG_ERR_INTERNALERROR;
             }
-          LOG_INSANE ("copy_bytes (%p, %u, %u)\n", dst, length, offset);
+          LOG_INSANE ("copy_bytes (%p, %u, [%u])\n", dst, length, offset);
           copy_bytes (dst, length, offset);
 
           dst += length;
@@ -680,7 +693,7 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
     }
 
   if (size_comp < size_uncomp)
-    error = decompress_r2007 (data, size_uncomp, pedata, MIN (pedata_size, size_comp));
+    error = decompress_r2007 (data, size_uncomp + 1, pedata, MIN (pedata_size, size_comp));
   else
     memcpy (data, pedata, size_uncomp);
 
@@ -727,7 +740,7 @@ read_data_page (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
     }
 
   if (size_comp < size_uncomp)
-    error = decompress_r2007 (decomp, size_uncomp, pedata,
+    error = decompress_r2007 (decomp, size_uncomp + 1, pedata,
                               MIN (pedata_size, size_comp));
   else
     memcpy (decomp, pedata, size_uncomp);
@@ -1231,8 +1244,8 @@ read_file_header (Bit_Chain *restrict dat,
   LOG_TRACE ("len2:          %d\n", (int)len2);      // 0 when compressed
 
   if (compr_len > 0)
-    error = decompress_r2007 ((BITCODE_RC *)file_header, 0x110, &pedata[32],
-                              MIN (compr_len, pedata_size - 32));
+    error = decompress_r2007 ((BITCODE_RC *)file_header, sizeof (r2007_file_header) + 1,
+                              &pedata[32], MIN (compr_len, pedata_size - 32));
   else
     memcpy (file_header, &pedata[32], sizeof (r2007_file_header));
 
