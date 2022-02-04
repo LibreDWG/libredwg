@@ -4074,7 +4074,7 @@ int DWG_FUNC_N (ACTION,_HATCH_gradientfill)(
 #endif
 
 #ifdef IS_JSON
-#  define JSON_END_REPEAT(f)  ENDHASH
+#  define JSON_END_REPEAT(f)  ENDHASH; ENDARRAY;
 #else
 #  define JSON_END_REPEAT(f)  END_REPEAT (f)
 #endif
