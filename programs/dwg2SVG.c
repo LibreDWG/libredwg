@@ -859,7 +859,7 @@ output_SVG (Dwg_Data *dwg)
   printf ("\t<defs>\n");
   for (i = 0; i < dwg->block_control.num_entries; i++)
     {
-      if ((ref = dwg->block_control.entries[i]))
+      if (dwg->block_control.entries && (ref = dwg->block_control.entries[i]))
         output_BLOCK_HEADER (ref);
     }
   printf ("\t</defs>\n");

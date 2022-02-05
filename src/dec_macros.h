@@ -925,7 +925,7 @@
       if (_obj->nam) free (_obj->nam);                                        \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
-#define SUB_VECTOR_CHKCOUNT(o, nam, type, size, dat)                           \
+#define SUB_VECTOR_CHKCOUNT(o, nam, type, size, dat)                          \
   if ((long long)(size) > AVAIL_BITS (dat) ||                                 \
       (long long)((size)*TYPE_MAXELEMSIZE (type)) > AVAIL_BITS (dat))         \
     {                                                                         \
