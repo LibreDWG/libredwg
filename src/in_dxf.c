@@ -11831,6 +11831,7 @@ new_object (char *restrict name, char *restrict dxfname,
                         {
                           o->color.name = o->color.book_name;
                           o->color.flag = 1;
+                          o->color.book_name = NULL;
                           LOG_TRACE ("%s.color.name = %s [%s %d]\n", name,
                                      pair->value.s, "CMC", pair->code);
                           if (dwg->header.version >= R_2007)
