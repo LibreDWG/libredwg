@@ -12040,7 +12040,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 = ctrl->tio.object->tio.BLOCK_CONTROL;
             int at_end = 1;
             unsigned num_entries = _ctrl->num_entries;
-            if (_ctrl)
+            if (_ctrl && ctrl->fixedtype == DWG_TYPE_BLOCK_CONTROL)
               {
                 for (int j = num_entries - 1; j >= 0; j--)
                   {
