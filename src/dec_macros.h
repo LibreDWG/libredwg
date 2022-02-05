@@ -1020,7 +1020,7 @@
 #define FIELD_VECTOR_INL(name, type, size, dxf)                               \
   if (size > 0)                                                               \
     {                                                                         \
-      VECTOR_CHKCOUNT (name, type, size, dat)                                 \
+      _VECTOR_CHKCOUNT_STATIC (name, size, TYPE_MAXELEMSIZE (type), dat)      \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           _obj->name[vcount] = bit_read_##type (dat);                         \
@@ -1032,7 +1032,7 @@
 #define SUB_FIELD_VECTOR_INL(o, name, type, size, dxf)                        \
   if (size > 0)                                                               \
     {                                                                         \
-      SUB_VECTOR_CHKCOUNT (o, name, type, size, dat)                          \
+      _VECTOR_CHKCOUNT_STATIC (name, size, TYPE_MAXELEMSIZE (type), dat)      \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           _obj->name[vcount] = bit_read_##type (dat);                         \
