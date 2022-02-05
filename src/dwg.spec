@@ -1670,11 +1670,15 @@ DWG_ENTITY (SHAPE)
           Dwg_Object *ctrl
             = ctrlref ? dwg_resolve_handle (dwg, ctrlref->absolute_ref) : NULL;
           Dwg_Object_STYLE_CONTROL *_ctrl
-            = ctrl ? ctrl->tio.object->tio.STYLE_CONTROL : NULL;
-          Dwg_Object_Ref *styleref = _ctrl && _ctrl->entries && _obj->style_id < _ctrl->num_entries
-                                     ? _ctrl->entries[_obj->style_id] // index
-                                     : NULL;
-          style = styleref ? dwg_resolve_handle (dwg, styleref->absolute_ref) : NULL;
+              = ctrl && ctrl->fixedtype == DWG_TYPE_STYLE_CONTROL
+                    ? ctrl->tio.object->tio.STYLE_CONTROL
+                    : NULL;
+          Dwg_Object_Ref *styleref
+              = _ctrl && _ctrl->entries && _obj->style_id < _ctrl->num_entries
+                    ? _ctrl->entries[_obj->style_id] // index
+                    : NULL;
+          style = styleref ? dwg_resolve_handle (dwg, styleref->absolute_ref)
+                           : NULL;
         }
       if (style && style->fixedtype == DWG_TYPE_STYLE)
         // dxf 2 for the name from SHAPE styles
