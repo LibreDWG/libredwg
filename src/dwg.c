@@ -582,10 +582,11 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
   dat.byte += header_size;
   if (*size)
     LOG_TRACE ("BMP offset: %lu\n", dat.byte);
-  if (dat.byte > dat.size)
+  if (dat.byte + *size > dat.size)
     {
       *size = 0;
-      LOG_ERROR ("Preview overflow");
+      LOG_ERROR ("Preview overflow %lu + " FORMAT_RL " > %lu",
+                 dat.byte, *size, dat.size);
       return NULL;
     }
 
