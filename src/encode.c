@@ -1835,6 +1835,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               fixup = 0;
               // if not found leaves placeholder_type at 0 to use DUMMY
               dwg_find_class (dwg, "ACDBPLACEHOLDER", &placeholder_type);
+              if (placeholder_type < 500)
+                {
+                  LOG_ERROR ("Invalid class_id %d for ACDBPLACEHOLDER",
+                             (int)placeholder_type);
+                  placeholder_type = 0;
+                }
               for (i = 0; i < dwg->num_objects; i++)
                 {
                   Dwg_Object *obj = &dwg->object[i];
