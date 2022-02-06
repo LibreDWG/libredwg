@@ -1095,7 +1095,10 @@ dwg_next_entity (const Dwg_Object *restrict obj)
         goto next_obj;
       next = obj->tio.entity->next_entity;
       if (next && next->absolute_ref)
-        return dwg_ref_object_silent (obj->parent, next);
+        {
+          Dwg_Object *next_obj = dwg_ref_object_silent (obj->parent, next);
+          return (obj == next_obj) ? NULL : next_obj;
+        }
       else
         goto next_obj;
     }
