@@ -138,7 +138,8 @@ someone should probably think about and resolve them!
 
 * make release
 
-  This might be needed to be done with an in-tree ./configure, not in an extra build directory.
+  This might be better in an in-tree ./configure, not in an extra build
+  directory. But out-of-tree is also supported now.
   It needs the default configure options, esp. the enabled bindings.
 
   Before a release:

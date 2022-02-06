@@ -1,6 +1,385 @@
 Full history from the git log
 -----------------------------
 
+2022-02-06  Reini Urban  <rurban@cpan.org>
+
+	Release 0.12.5
+	add a github release action helper
+	smoke also pull requests and tags (for the release)
+
+	avoid UNKNOWN.tar.gz on --depth 1 checkouts
+
+2022-02-06  Reini Urban  <rurban@cpan.org>
+
+	dwg_next_entity: fix immediate cycles
+	but we cannot yet detect non-immediate cycles, as from
+	illegal, fuzzed DWGs. See GH #345
+
+	bmp: better bounds-checks for wrong header_size
+	Fixes fuzzed GH #354 (Illegal DWG bmp preview)
+
+	encode: bounds-check remove_NOD_item
+	with illegal DWGs. Fixes GH #357
+
+	encode: protect from invalid ACDBPLACEHOLDER class_id
+	Fixes GH #359, a fuzzed DWG with ACDBPLACEHOLDER as 53 (STYLE)
+
+	encode: work on GH #364, #361 and #360
+	but no idea yet, how the hdl_dat stream overflows here.
+	all 3 cases the same problem in overlarge PLANESURFACE hdl_dat.
+
+2022-02-05  Reini Urban  <rurban@cpan.org>
+
+	indxf: more type protections
+	in dxf_tables_read for illegal/fuzzed input. Fixes GH #366
+
+	dxf: protect from wrong style type in SHAPE
+	from fuzzed DWGs. Fixes GH #373
+
+	indxf: fix double-free of LAYER.color.book_name
+	Fixes GH #383
+
+	fix free: -Wfree-nonheap-object of static arrays
+
+	dwg2SVG: null-deref GH #390
+
+2022-02-04  Reini Urban  <rurban@cpan.org>
+
+	decode_r2007: format nits
+
+	spec: face_modifier, BS cast for DXF
+	Fixes GH #396 warning
+
+	disarm cirrus FreeBSD smoker, no idea why it fails the tests.
+
+	fix decode_r2007 off-by-one dst buffer-overflow
+	We have one more byte to write to.
+	Detected only by fuzzing, Fixes GH #391 and #392 by @s1vona
+
+	outjson: fix JSON_END_REPEAT on early exit
+	several unstable objects need to exit a REPEAT BLOCK on errors.
+	fix that for json, e.g. with FIELD.ChildValue. Fixes GH #397
+
+	cleanup dwgwrite AFL left-overs
+	there is now a seperate main() for faster AFL fuzzing
+
+2022-02-01  Reini Urban  <rurban@cpan.org>
+
+	injson: protect from empty strings
+	No NULL deref. Fixes oss-fuzz #36901,
+	with json of '{}"AcDs"{"segments"[{"name"}]}('
+
+2022-01-31  Reini Urban  <rurban@cpan.org>
+
+	appveyor: update mingw deps as on github
+
+	dxf: improve convert_SAB_to_SAT1
+	for illegal DWGs. Fixes oss-fuzz #36728
+
+	spec: set LEADER.box_width DXF 41
+	needed for add_test LEADER dxf
+	fixes indxf for LEADER.
+
+2022-01-31  Reini Urban  <rurban@cpan.org>
+
+	indxf: stricter dxf import
+	2/3DPOINT* import only from matching DXF codes, not just
+	some irrelevant.
+
+	special-case clip_verts pairs (WIPEOUT, SPATIAL_FILTER, ...)
+	when the num_ value is set, do the vector alloc.
+	Fixes oss-fuzz #39025 with WIPEOUT.clip_verts
+
+	indxf now fails on unstable classes, where all DXF groups are known.
+
+2022-01-31  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix common entity handles
+	don't mixup LWPOLYLINE points 390 with Entity plotstyle handle.
+	also do material and visualstyle handles (the last one only partially)
+
+	Fixes oss-fuzz #39025 with WIPEOUT.clip_verts
+
+2022-01-30  Reini Urban  <rurban@cpan.org>
+
+	in_json: invalid HANDLEs
+	here we can have invalid user-input, dont assert.
+	Fixes oss-fuzz #39755
+
+	macos ci: enforce newer texinfo
+	see https://github.com/abo-abo/swiper/issues/457#issuecomment-203689787
+	also update mingw recipe (no autoreconf)
+
+	spec: fix 2 auxheader type warnings
+	RS -> RL
+
+	support --disable-json and --disable-dxf
+	in the various helpers. Actually needed for practical compilation times
+
+	encode: enforce limit of max obj->size
+	to avoid DDOS attacks. Fixes oss-fuzz #41021
+	We let the overlarge obj->size through, but we just need to skip it.
+
+2022-01-29  Reini Urban  <rurban@cpan.org>
+
+	dxf_fixup_string: optimize
+	remove dead code.
+	this fixes a valgrind error on dwg2dxf example_2004.dwg
+
+	Update cirrus freebsd to 13.0
+	with updated python 3.8
+
+2021-10-11  Reinhard Urban  <reinhard.urban@nubix.de>
+
+	-Wstringop-truncation with clang
+
+2021-10-06  Reini Urban  <rurban@cpan.org>
+
+	update for latest shellcheck
+	which came with new warnings
+
+2021-10-06  Reinhard Urban  <reinhard.urban@nubix.de>
+
+	mingw: fix github msys/mingw
+	This is msys, so check for ld, which is probed for.
+
+2021-10-05  Reinhard Urban  <reinhard.urban@nubix.de>
+
+	spec: fix dwgadd.example path
+
+	mingw: attempt to fix github msys/mingw action
+	on msys the compiler is just named gcc, without prefix.
+	but LD is searched for and thus has the mingw path prefix.
+	so msys, mingw cross and mingw works now again.
+
+2021-10-03  Reini Urban  <rurban@cpan.org>
+
+	fix dictionarywdflt unit-test
+	cloning_r14 is RL there
+
+	fix -Wstring-concatenation
+	detected by clang
+
+	Fix handle sizes calc. and encode under Windows GH #346
+	Handle corruption. Take the size of ulong, not a ptr.
+	Tested round-trips manually.
+	Fixes GH #346
+
+2021-09-30  Reini Urban  <rurban@cpan.org>
+
+	mingw64 cleanups
+	fix wrong mingw-w64 check with _FORTIFY_SOURCE to add -lssp
+	no double -lm in examples
+
+2021-08-22  Reini Urban  <rurban@cpan.org>
+
+	simplify alive.test on windows
+	make test sets .exe in PROGS correctly, but not standalone
+
+2021-07-07  huhexiang  <hhxnbw@163.com>
+
+	dwgread: fix r2004_file_header crc32 calculation error
+
+2021-07-06  Reini Urban  <rurban@cpan.org>
+
+	bit_chain_alloc: add blocks in page size
+
+2021-06-28  Reini Urban  <rurban@cpan.org>
+
+	add bit_chain_alloc_size
+	to allocate more than 1024 bytes in one swoop.
+	we could use while, but this is better.
+	needed eg for dwgrewrite, GH #364
+
+2021-06-27  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix setting 10 to y (dxf+10, when dxf = 0)
+	e.g. ASSOC2DCONSTRAINTGROUP.workplane[3] with code 10.
+	Fixes GH #365, fuzzing only
+
+	indxf: gracefully handle DXF EOF inside CMC
+	Fixes GH #367, fuzzing only
+
+	convert_SAB_to_SAT1: check more invalid SAB overflows
+	with tag 14 subident also.
+	Fixes GH #368, fuzzing only.
+
+	dwg_handle_name: protect from strdup(NULL)
+	Fixes GH #369
+
+	spec: fix wrong VALUEPARAM allocation
+	values[] are inlined, not per pointer.
+	Detected by GH #370
+
+	bit_eq_T: handle null args
+	fixes GH #371
+
+2021-06-26  Reini Urban  <rurban@cpan.org>
+
+	spec: protect from less LWPOLYLINE widths than points
+	on outdxf with illegal DWGs. Fuzzing only. Fixes GH #372
+
+	indxf: one less dxf pair leak
+	the last one
+
+	indxf: check !pair in add_PERSUBENTMGR
+	Fixes fuzzing GH #376
+
+	spec: re-arrange MLEADER union fields a bit
+	so that wrong types from illegal DXF don't corrupt handles. txt vs blk.
+	They are now much better aligned.
+	Fixes GH #378
+
+	indxf: protect from overlarge counts
+	fail with invalid dxf when xcalloc fails.
+	fixes fuzzing GH #379
+
+2021-06-24  Reini Urban  <rurban@cpan.org>
+
+	indxf: missed a CHK_segs in add_HATCH
+	fixes GH #380, fuzzing only
+
+	indxf: abort on too many MULTILEADER groups 47
+	Fixes GH #381, fuzzing only
+
+2021-06-21  Reini Urban  <rurban@cpan.org>
+
+	auxheader: wrong maint_version_* fields and types
+	cast the types to silence warnings. fill both alt. variants of maint_version
+
+	acds: wrong AcDs.segments.signature type
+
+	macOS: require python 3.8 for gh actions
+	but python 3.8 on macOS has a wrong linker cfg, -Wl,-stack_size is illegal for
+	shared libs.
+
+2021-06-20  Reini Urban  <rurban@cpan.org>
+
+	indxf: fix fuzzing overflow with illegal subclasses
+	disallow illegal subclasses, even with non-stable objects.
+	Fixes GH #385. Can only appear with fuzzed input
+
+	dxf: fix SAB_to_SAT1 overflow GH #384
+	with fuzzed input data. wrong size check for ltoa conversion
+
+2021-06-16  Reini Urban  <rurban@cpan.org>
+
+	decode_r2007: more fixes for invalid section size
+	Fixes GH #348. Check memcpy also with uncompressed pages.
+	Fuzzing (illegal DWG's) only.
+
+2021-06-16  Reinhard Urban  <reinhard.urban@nubix.de>
+
+	spec fixups
+	deleting /usr/share/man/man1/dwg* is not recommended.  we dont reserve that
+	namespace for us alone
+
+2021-06-16  Tadej Janež  <tadej.j@nez.si>
+
+	Refactor Spec file for building RPM packages
+
+2021-06-07  Reini Urban  <rurban@cpan.org>
+
+	decode_r2007: fix for invalid section size
+	See GH #350. With fuzzing section->data_size might not fit
+	section_page->uncomp_size.
+
+	dwgread: fix --disable-write --disable-dxf build
+
+	dwg_section_wtype: fix fuzzing overflow
+	with illegal and overlong section names. Fixes GH #349, #352
+	section names cannot be longer than 24
+
+2021-05-15  Reini Urban  <rurban@cpan.org>
+
+	appveyor: revise fef6deb79 add -lssp to mingw
+	add -lssp explicitly, but someone (libtool?) strips it nevertheless.
+	enforce -fstack-protector on appveyor.
+	need our git.
+
+2021-05-12  Reini Urban  <rurban@cpan.org>
+
+	decode: non fatal illegal/unknown class
+	esp. with the case of Warning: Recover invalid offset
+	the object is often illegal.
+	Fixes the GH #338 regression.
+
+	decode: r2013 has larger max_decomp_size
+	for AppInfoHistory and SummaryInfo.
+	See GH #338
+
+	decode: improve performance for big DWG's
+	double the size of allocated objects per cycle, not linear by 128.
+	dramatically improves dwg decode performance for big DWG's.
+
+2021-05-01  Reini Urban  <rurban@cpan.org>
+
+	indxf: more NULL _ctrl->entries derefs
+	e.g. oss-fuzz issue 33447
+
+2021-04-25  Reini Urban  <rurban@cpan.org>
+
+	Disable broken compiler optimizations
+	See https://lore.kernel.org/lkml/CAHk-=wi_KeD1M-_-_SU_H92vJ-yNkDnAGhAS=RR1yNNGWKW+aA@mail.gmail.com/
+
+	fix mingw release: add missing dwgfilter and the pcre dlls
+	See GH #337
+
+2021-04-18  Reini Urban  <rurban@cpan.org>
+
+	configure: test syntax error (AM HAVE_CYGWIN)
+
+	add -lssp to mingw
+	started failing again, with only -fstack-protector and only on appveyor.
+	mingw with gh actions not.
+
+	configure: fix HAVE_ASAN_OR_LINUX AM_CONDITIONAL
+	needed for examples/Makefile.am
+
+	configure: invalid test -z args
+
+	Fix mingw %zu warnings
+
+2021-04-17  Reini Urban  <rurban@cpan.org>
+
+	hardcode codecov_io.sh
+	due to its recent breakin upstream
+
+2021-04-09  Reini Urban  <rurban@cpan.org>
+
+	cmake warnings
+	target redwg has PUBLIC_HEADER files but no PUBLIC_HEADER DESTINATION
+	install TARGETS given no LIBRARY DESTINATION for shared library target
+
+	See GH #333
+
+2021-04-08  Reini Urban  <rurban@cpan.org>
+
+	dwg2SVG: flush stdout
+	interestingly the libc does not flush stdout to pipes on process exit???
+
+	dwg2SVG: improve ELLIPSE
+	absolute rx and ry radii,
+	rotation is the sm_axis (normal vector).
+	Fixes GH #328
+
+2021-04-08  Reini Urban  <rurban@cpan.org>
+
+	build asan fuzzers only on request
+	fixes failing cygwin smokes. we could install asan on the smokers,
+	but we dont need it. only build it when requested.
+	This needs no oss-fuzz build changes.
+
+	See GH #330
+
+2021-04-08  Reini Urban  <rurban@cpan.org>
+
+	Fix configure bashism
+	No string indexing in POSIX sh, for the new GPERF_VERSION check.
+	Broken with 0.12.4
+	Fixes GH #329
+	Thanks to Alexey Dokuchaev
+
 2021-04-06  Reini Urban  <rurban@cpan.org>
 
 	Release 0.12.4

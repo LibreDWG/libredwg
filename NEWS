@@ -2,6 +2,52 @@ GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
 Copyright (C) 2021 Free Software Foundation, Inc.
 See the end for copying conditions.
 
+LibreDWG version 0.12.5 - 2022/02/06 - beta:
+
+Major bugfixes:
+  * Fix handle size calculation on Windows GH #346.
+  * Restricted accepted DXF objects to all stable and unstable classes, minus
+    MATERIAL, ARC_DIMENSION, SUN, PROXY*. I.e. most unstable objects do not allow
+    unknown DXF codes anymore. This fixed most oss-fuzz errors.
+  * dwg2SVG: fixed ELLIPSE rx, ry radii. (#328)
+  * Fixed invalid free of static arrays
+  * Fix mingw release: add missing dwgfilter and pcre dll's (#337)
+  * Fix out_json for some invalid objects (FIELD, HATCH, TABLE) (#397)
+Minor bugfixes:
+  * dwgread: fix r2004_file_header crc32 calculation error (@huhexiang)
+  * Fixed LEADER.box_width DXF group
+  * Enforce limit of max obj->size in encode.
+  * Support --disable-json with --disable-dxf
+  * spec: fix wrong VALUEPARAM allocation. values[] are inlined, not per pointer.
+    GH #370
+  * Fixed many more minor fuzzer errors with illegal input, detected by the
+    oss-fuzz service and others. More bounds and type checks, null-derefs,
+    double-free, missing zero-termination in fuzzer inputs.
+    Fixed GH issues 338, 348, 349, 350, 352, 354, 357, 358, 359, 365, 366, 367,
+    368, 369, 371, 372, 373, 374, 375, 376, 378, 379, 380, 381, 383, 384, 385,
+    390, 391, 392.
+    Fixed oss-fuzz issues 33317, 33447, 36901, 36728, 39025, 39755, 41021.
+  * Special-case DXF import of clip_verts and associated num_clip_verts.
+  * Fix DXF import setting 10 to y (GH #365), fuzzing only
+  * Fix DXF import EOF within CMC (GH #367), fuzzing only
+  * Fix DXF import SAB_to_SAT1 overflows with tag 14 (GH #368), fuzzing only
+  * Fix dwg_handle_name NULL deref (GH #369), fuzzing only
+  * Fix out_dxf for not matching LWPOLYLINE widths and points (GH #372), fuzzing only
+  * auxheader: wrong maint_version_* fields and types.
+    fill both alt. variants of maint_version
+  * acds: wrong AcDs.segments.signature type
+  * decode: improve performance for big DWG's
+    double the size of allocated objects per cycle, not linear by 128.
+    dramatically improves dwg decode performance for big DWG's.
+  * Minor chain_alloc improvements: GH #364
+  * Optimize dxf_fixup_string, fixing a valgrind error
+  * Improved the rpm spec (Tadej Janež)
+  * Fix configure bashisms (Alexey Dokuchaev #329)
+  * minor cmake improvements (#333)
+  * Build asan fuzzers only on request (Fixes cygwin CI, GH #330)
+  * Update mingw and appveyor CI for upstream msys2 changes.
+  * Update macOS CI for texinfo
+
 LibreDWG version 0.12.4 - 2021/04/06 - beta:
 
 Major bugfixes:

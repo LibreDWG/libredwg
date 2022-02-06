@@ -5,6 +5,12 @@ on:
       - master
       - smoke/*
       - gh/*
+    tags:
+      - '0.*.*'
+      - '0.*'
+  pull_request:
+    branches:
+      - '*'
 
 #strategy:
 #  matrix:
@@ -46,12 +52,23 @@ jobs:
     - if: matrix.CONFIGURE_ARGS == '--enable-gcov --disable-bindings'
       name: Run make codecov if --enable-gcov
       run: make codecov
-    # FIXME deps
     - if: matrix.CONFIGURE_ARGS == '--enable-release'
       name: Run make distcheck if --enable-release
       run: |
         sudo apt-get -y install texlive help2man libconvert-binary-c-perl
         make distcheck
+    - if: matrix.CONFIGURE_ARGS == '--enable-release' && startsWith(github.ref, 'refs/tags/')
+      name: Prep-Release
+      run: sha256sum libredwg-*.tar.* > dist.sha256
+    - if: matrix.CONFIGURE_ARGS == '--enable-release' && startsWith(github.ref, 'refs/tags/')
+      name: Release
+      continue-on-error: true
+      uses: softprops/action-gh-release@v1
+      with:
+        body_path: dist.sha256
+        files: |
+          dist.sha256
+          libredwg-*.tar.*
   linux-cmake:
     runs-on: ubuntu-latest
     timeout-minutes: 20

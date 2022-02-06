@@ -1,7 +1,7 @@
 # -*- sh -*-
 Name:           libredwg
-Version:        0.12.4
-Release:        2%{?dist}
+Version:        0.12.5
+Release:        1%{?dist}
 Summary:        GNU C library and programs to read and write DWG files
 
 License:        GPLv3+
@@ -175,6 +175,9 @@ fi
 
 
 %changelog
+* Fri Feb 4 2022 Reini Urban <reini.urban@gmail.com> 0.12.5-1
+- upstream update.
+
 * Thu Jun 10 2021 Tadej Janež <tadej.j@nez.si> 0.12.4-2
 - Refactor the Spec file
 
