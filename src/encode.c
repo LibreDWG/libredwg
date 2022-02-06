@@ -1359,9 +1359,14 @@ static void
 remove_NOD_item (Dwg_Object_DICTIONARY *_obj, const int i, const char *name)
 {
   int last = _obj->numitems - 1;
-  LOG_TRACE ("Disable link to " FORMAT_REF " for NOD.%s\n",
-             ARGS_REF (_obj->itemhandles[i]), name);
-  if (i < last)
+  if (i < (int)_obj->numitems && _obj->itemhandles[i] != NULL)
+    {
+      LOG_TRACE ("Disable link to " FORMAT_REF " for NOD.%s\n",
+                 ARGS_REF (_obj->itemhandles[i]), name);
+    }
+  else
+    return;
+  if (i < last && _obj->itemhandles != NULL && _obj->texts != NULL)
     {
       free (_obj->texts[i]);
       if (!_obj->itemhandles[i]->handleref.is_global)
@@ -1369,7 +1374,8 @@ remove_NOD_item (Dwg_Object_DICTIONARY *_obj, const int i, const char *name)
       memmove (&_obj->texts[i], &_obj->texts[i+1], (last - i) * sizeof (BITCODE_T));
       memmove (&_obj->itemhandles[i], &_obj->itemhandles[i+1], (last - i) * sizeof (BITCODE_H));
     }
-  _obj->numitems--;
+  if (_obj->numitems)
+    _obj->numitems--;
   return;
 }
 
