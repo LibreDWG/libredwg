@@ -780,9 +780,13 @@ obj_flush_hdlstream (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   unsigned long datpos = bit_position (dat);
   unsigned long hdlpos = bit_position (hdl_dat);
   unsigned long objpos = obj->address * 8;
+#if 0
+  unsigned char* oldchain = dat->chain;
+#endif
   LOG_TRACE ("Flush handle stream of size %lu (@%lu.%u) to @%lu.%lu\n", hdlpos,
              hdl_dat->byte, hdl_dat->bit, (datpos - objpos) / 8,
              (datpos - objpos) % 8);
+  // This might change dat->chain
   bit_copy_chain (dat, hdl_dat);
 }
 
@@ -3502,7 +3506,8 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   PRE (R_2010)
   {
     bit_write_BS (dat, obj->type);
-    LOG_INFO (", Size: %d [MS], Type: %d [BS], Address: %lu\n", obj->size, obj->type, obj->address)
+    LOG_INFO (", Size: %d [MS], Type: %d [BS], Address: %lu\n", obj->size,
+              obj->type, obj->address)
   }
   LATER_VERSIONS
   {
