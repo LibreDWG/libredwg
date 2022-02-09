@@ -6226,10 +6226,12 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
     strcpy (ctrlname, "VX_CONTROL");
   else
     {
-      // ignore -Wstringop-truncation
-      strncpy (ctrlname, name, 70);
-      ctrlname[69] = '\0';
-      strcat (ctrlname, "_CONTROL");
+      const char _control[] = "_CONTROL";
+      // -Wstringop-truncation bug:
+      // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88780
+      strncpy (ctrlname, name, sizeof(ctrlname) - sizeof(_control) - 1);
+      ctrlname[sizeof(ctrlname) - sizeof(_control)] = '\0';
+      strcat (ctrlname, _control);
     }
   LOG_TRACE ("add %s\n", ctrlname);
   dxfname = strdup (ctrlname);
@@ -6300,15 +6302,17 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
           {
             Dwg_Object_Ref *ref;
             char ctrlobj[80];
+	    const char _object[] = "_OBJECT";
             dwg_add_handle (&obj->handle, 0, pair->value.u, obj);
             ref = dwg_add_handleref (dwg, 3, pair->value.u, obj);
             LOG_TRACE ("%s.handle = " FORMAT_H " [H %d]\n", ctrlname,
                        ARGS_H (obj->handle), pair->code);
             // also set the matching HEADER.*_CONTROL_OBJECT
-	    // ignore -Wstringop-truncation
-            strncpy (ctrlobj, ctrlname, 70);
-            ctrlobj[69] = '\0';
-            strcat (ctrlobj, "_OBJECT");
+	    // -Wstringop-truncation bug:
+	    // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88780
+	    strncpy (ctrlobj, ctrlname, sizeof(ctrlobj) - sizeof(_object) - 1);
+	    ctrlname[sizeof(ctrlobj) - sizeof(_object)] = '\0';
+            strcat (ctrlobj, _object);
             dwg_dynapi_header_set_value (dwg, ctrlobj, &ref, 0);
             LOG_TRACE ("HEADER.%s = " FORMAT_REF " [H 0]\n", ctrlobj,
                        ARGS_REF (ref));
