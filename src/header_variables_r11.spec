@@ -53,9 +53,8 @@
   dat->byte = 0x164;
   FIELD_RS (LUNITS, 70); //ok
   FIELD_RS (LUPREC, 70); //ok
-  DEBUG_HERE//@168
-  //RS 2xRD
-  dat->byte = 0x17a;
+  FIELD_RS (AXISMODE, 70);
+  FIELD_2RD (AXISUNIT, 10);
   FIELD_RD (SKETCHINC, 40); //ok
   FIELD_RD (FILLETRAD, 40); //ok
   FIELD_RS (AUNITS, 70);    //ok
