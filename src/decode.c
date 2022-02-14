@@ -701,7 +701,6 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   decode_preR13_section_ptr ("BLOCK", SECTION_BLOCK, dat, dwg);
   decode_preR13_section_ptr ("LAYER", SECTION_LAYER, dat, dwg);
   decode_preR13_section_ptr ("STYLE", SECTION_STYLE, dat, dwg);
-  // skip one
   decode_preR13_section_ptr ("LTYPE", SECTION_LTYPE, dat, dwg);
   decode_preR13_section_ptr ("VIEW", SECTION_VIEW, dat, dwg);
 
