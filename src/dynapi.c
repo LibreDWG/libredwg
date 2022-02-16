@@ -693,6 +693,8 @@ static const Dwg_DYNAPI_field _dwg_header_variables_fields[] = {
     0,0,0, 0 },
   { "bitsize_hi",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_header_variables, bitsize_hi),
     0,0,0, 0 },
+  { "num_entities",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_header_variables, num_entities),
+    0,0,0, 0 },
   { "size",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_header_variables, size),
     0,0,0, 0 },
   { "unknown_0",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_header_variables, unknown_0),

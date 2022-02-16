@@ -5400,6 +5400,24 @@ test_header (Dwg_Data *dwg)
     dwg_dynapi_header_set_value (dwg, "unknown_57", &unknown_57, 0);
 
   }
+  {
+    BITCODE_RS num_entities;
+    if (dwg_dynapi_header_value (dwg, "num_entities", &num_entities, NULL)
+        && num_entities == dwg->header_vars.num_entities)
+      pass ();
+    else
+      fail ("HEADER.num_entities [RS] %hu != %hu", dwg->header_vars.num_entities, num_entities);
+    num_entities++;
+    if (dwg_dynapi_header_set_value (dwg, "num_entities", &num_entities, 0)
+        && num_entities == dwg->header_vars.num_entities)
+      pass ();
+    else
+      fail ("HEADER.num_entities [RS] set+1 %hu != %hu",
+            dwg->header_vars.num_entities, num_entities);
+    num_entities--;
+    dwg_dynapi_header_set_value (dwg, "num_entities", &num_entities, 0);
+
+  }
 #line 47 "dynapi_test.c.in"
   return error;
 }
