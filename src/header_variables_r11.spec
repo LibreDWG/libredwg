@@ -19,7 +19,13 @@
 #include "spec.h"
 
   FIELD_3RD (INSBASE, 10); //ok 0x5e
-  FIELD_CAST (PLINEGEN, RS, B, 70); //ok
+  VERSIONS (R_10, R_11) {
+      FIELD_CAST (PLINEGEN, RS, B, 70); //ok
+  } else {
+      SINCE(R_2_0) { // since AC1.50
+	  FIELD_RS (num_entities, 0);
+      }
+  }
   FIELD_3RD (EXTMIN, 10);
   FIELD_3RD (EXTMAX, 10);
   FIELD_2RD (LIMMIN, 10);

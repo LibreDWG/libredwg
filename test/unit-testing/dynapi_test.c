@@ -2467,6 +2467,33 @@ test_header (Dwg_Data *dwg)
       fail ("HEADER.GRIDUNIT [2RD]");
   }
   {
+    BITCODE_BS axismode;
+    if (dwg_dynapi_header_value (dwg, "AXISMODE", &axismode, NULL)
+        && axismode == dwg->header_vars.AXISMODE)
+      pass ();
+    else
+      fail ("HEADER.AXISMODE [BS] %hu != %hu", dwg->header_vars.AXISMODE, axismode);
+    axismode++;
+    if (dwg_dynapi_header_set_value (dwg, "AXISMODE", &axismode, 0)
+        && axismode == dwg->header_vars.AXISMODE)
+      pass ();
+    else
+      fail ("HEADER.AXISMODE [BS] set+1 %hu != %hu",
+            dwg->header_vars.AXISMODE, axismode);
+    axismode--;
+    dwg_dynapi_header_set_value (dwg, "AXISMODE", &axismode, 0);
+
+  }
+  {
+    BITCODE_2RD axisunit;
+    if (dwg_dynapi_header_value (dwg, "AXISUNIT", &axisunit, NULL)
+        && !memcmp (&axisunit, &dwg->header_vars.AXISUNIT, sizeof (dwg->header_vars.AXISUNIT))
+       )
+      pass ();
+    else
+      fail ("HEADER.AXISUNIT [2RD]");
+  }
+  {
     BITCODE_3BD ucsorg;
     if (dwg_dynapi_header_value (dwg, "UCSORG", &ucsorg, NULL)
         && !memcmp (&ucsorg, &dwg->header_vars.UCSORG, sizeof (dwg->header_vars.UCSORG))
@@ -5371,6 +5398,24 @@ test_header (Dwg_Data *dwg)
             dwg->header_vars.unknown_57, unknown_57);
     unknown_57--;
     dwg_dynapi_header_set_value (dwg, "unknown_57", &unknown_57, 0);
+
+  }
+  {
+    BITCODE_RS num_entities;
+    if (dwg_dynapi_header_value (dwg, "num_entities", &num_entities, NULL)
+        && num_entities == dwg->header_vars.num_entities)
+      pass ();
+    else
+      fail ("HEADER.num_entities [RS] %hu != %hu", dwg->header_vars.num_entities, num_entities);
+    num_entities++;
+    if (dwg_dynapi_header_set_value (dwg, "num_entities", &num_entities, 0)
+        && num_entities == dwg->header_vars.num_entities)
+      pass ();
+    else
+      fail ("HEADER.num_entities [RS] set+1 %hu != %hu",
+            dwg->header_vars.num_entities, num_entities);
+    num_entities--;
+    dwg_dynapi_header_set_value (dwg, "num_entities", &num_entities, 0);
 
   }
 #line 47 "dynapi_test.c.in"
