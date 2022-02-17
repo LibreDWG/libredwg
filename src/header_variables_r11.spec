@@ -86,6 +86,8 @@
   FIELD_RC (DIMSE1, 70); //ok
   FIELD_RC (DIMSE2, 70); //ok
   FIELD_CAST (DIMTAD, RC, RS, 70); //ok
+  PRE(R_2_1)
+     return 0;
   FIELD_RC (LIMCHECK, 70); //ok 1fa
   DEBUG_HERE //1fb
 

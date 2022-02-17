@@ -964,21 +964,21 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_BS osmode;
-    if (dwg_dynapi_header_value (dwg, "OSMODE", &osmode, NULL)
-        && osmode == dwg->header_vars.OSMODE)
+    BITCODE_BS unknown_12;
+    if (dwg_dynapi_header_value (dwg, "unknown_12", &unknown_12, NULL)
+        && unknown_12 == dwg->header_vars.unknown_12)
       pass ();
     else
-      fail ("HEADER.OSMODE [BS] %hu != %hu", dwg->header_vars.OSMODE, osmode);
-    osmode++;
-    if (dwg_dynapi_header_set_value (dwg, "OSMODE", &osmode, 0)
-        && osmode == dwg->header_vars.OSMODE)
+      fail ("HEADER.unknown_12 [BS] %hu != %hu", dwg->header_vars.unknown_12, unknown_12);
+    unknown_12++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_12", &unknown_12, 0)
+        && unknown_12 == dwg->header_vars.unknown_12)
       pass ();
     else
-      fail ("HEADER.OSMODE [BS] set+1 %hu != %hu",
-            dwg->header_vars.OSMODE, osmode);
-    osmode--;
-    dwg_dynapi_header_set_value (dwg, "OSMODE", &osmode, 0);
+      fail ("HEADER.unknown_12 [BS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_12, unknown_12);
+    unknown_12--;
+    dwg_dynapi_header_set_value (dwg, "unknown_12", &unknown_12, 0);
 
   }
   {
@@ -1054,21 +1054,21 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_BL unknown_12;
-    if (dwg_dynapi_header_value (dwg, "unknown_12", &unknown_12, NULL)
-        && unknown_12 == dwg->header_vars.unknown_12)
+    BITCODE_BL osmode;
+    if (dwg_dynapi_header_value (dwg, "OSMODE", &osmode, NULL)
+        && osmode == dwg->header_vars.OSMODE)
       pass ();
     else
-      fail ("HEADER.unknown_12 [BL] %u != %u", dwg->header_vars.unknown_12, unknown_12);
-    unknown_12++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_12", &unknown_12, 0)
-        && unknown_12 == dwg->header_vars.unknown_12)
+      fail ("HEADER.OSMODE [BL] %u != %u", dwg->header_vars.OSMODE, osmode);
+    osmode++;
+    if (dwg_dynapi_header_set_value (dwg, "OSMODE", &osmode, 0)
+        && osmode == dwg->header_vars.OSMODE)
       pass ();
     else
-      fail ("HEADER.unknown_12 [BL] set+1 %u != %u",
-            dwg->header_vars.unknown_12, unknown_12);
-    unknown_12--;
-    dwg_dynapi_header_set_value (dwg, "unknown_12", &unknown_12, 0);
+      fail ("HEADER.OSMODE [BL] set+1 %u != %u",
+            dwg->header_vars.OSMODE, osmode);
+    osmode--;
+    dwg_dynapi_header_set_value (dwg, "OSMODE", &osmode, 0);
 
   }
   {

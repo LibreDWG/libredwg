@@ -422,7 +422,7 @@ B,	DXF 290
 @item ORTHOMODE
 B,	DXF 70
 @item OSMODE
-BS,	DXF 70
+BL,	DXF 70
 @item PDMODE
 BS,	DXF 70
 @item PDSIZE
@@ -680,7 +680,7 @@ BS
 @item unknown_11
 B
 @item unknown_12
-BL
+BS
 @item unknown_13
 BL
 @item unknown_14

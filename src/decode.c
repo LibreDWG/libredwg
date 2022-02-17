@@ -672,11 +672,9 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     // clang-format on
   }
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x14
-
-  // 10 tables + header + block
-  dwg->header.num_sections = 12;
-  dwg->header.section = (Dwg_Section *)calloc (
-      1, sizeof (Dwg_Section) * dwg->header.num_sections);
+  // 5 tables + header + block
+  dwg->header.section = (Dwg_Section *)calloc (sizeof (Dwg_Section),
+                                               dwg->header.num_sections + 7);
   if (!dwg->header.section)
     {
       LOG_ERROR ("Out of memory");
@@ -698,6 +696,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg->header.section[0].type = (Dwg_Section_Type)SECTION_HEADER_R11;
   strcpy (dwg->header.section[0].name, "HEADER");
 
+  // the 5 num_section's
   decode_preR13_section_ptr ("BLOCK", SECTION_BLOCK, dat, dwg);
   decode_preR13_section_ptr ("LAYER", SECTION_LAYER, dat, dwg);
   decode_preR13_section_ptr ("STYLE", SECTION_STYLE, dat, dwg);
@@ -758,6 +757,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error |= decode_preR13_section (SECTION_STYLE, dat, dwg);
   error |= decode_preR13_section (SECTION_LTYPE, dat, dwg);
   error |= decode_preR13_section (SECTION_VIEW, dat, dwg);
+
   error |= decode_preR13_section (SECTION_UCS, dat, dwg);
   error |= decode_preR13_section (SECTION_VPORT, dat, dwg);
   error |= decode_preR13_section (SECTION_APPID, dat, dwg);
