@@ -8689,7 +8689,8 @@ typedef struct _dwg_header
   BITCODE_RC zero_5[5];
   BITCODE_RC is_maint;
   BITCODE_RC zero_one_or_three;
-  BITCODE_RS unknown_s[3];      /* <R13 */
+  BITCODE_RS unknown_3;         /* < R13, always 3 */
+  BITCODE_RS num_header_vars;   /* < R13 */
   BITCODE_RL thumbnail_address; /* THUMBNAIL or AdDb:Preview */
   BITCODE_RC dwg_version;
   BITCODE_RC maint_version;

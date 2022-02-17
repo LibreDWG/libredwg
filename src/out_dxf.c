@@ -286,7 +286,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
     {                                                                         \
       const char *_fmt = dxf_format (dxf);                                    \
       assert (_fmt);                                                          \
-      if (strEQc (_fmt, DXF_FORMAT_FLT))                                          \
+      if (strEQc (_fmt, DXF_FORMAT_FLT))                                      \
         {                                                                     \
           dxf_print_rd (dat, (double)(value), dxf);                           \
         }                                                                     \

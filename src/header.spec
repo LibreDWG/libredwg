@@ -33,9 +33,19 @@
 
   PRE (R_13) {
     FIELD_RC (zero_one_or_three, 0); // 1,3,0,5,0,0x00cd,0
-    for (i = 0; i < 3; i++) { // 3, 5, 205
-      FIELD_RS (unknown_s[i], 0);
-    }
+    /*
+       AC1.50: 3, 5, 74; 3, 5, 83;
+       AC2.10: 3, 5, 83
+       AC1001: 3, 5, 101
+       AC1002: 3, 5, 104; 3, 5, 114
+       AC1003: 3, 5, 120; 3, 5, 122
+       AC1004: 3, 5, 129
+       AC1006: 3, 5, 158; 3, 5, 160
+       AC1009: 3, 5, 204; 3, 5, 205
+     */
+    FIELD_RS (unknown_3, 0);    // 3
+    FIELD_CAST (num_sections, RS, RL, 0); // 5
+    FIELD_RS (num_header_vars, 0); // 74,83,101,104,114,120,122,129,158,160,204,205
     FIELD_RC (dwg_version, 0); // 0
   } LATER_VERSIONS {
     FIELD_RC (zero_one_or_three, 0);
