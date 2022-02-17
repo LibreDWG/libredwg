@@ -14,8 +14,8 @@ someone should probably think about and resolve them!
 
   Aside from the the autotools (see "regen", above),
   you will also need GNU Texinfo to build the manual.
-  See e.g. .travis.yml for the Ubuntu recipe, or .appveyor.yml
-  for Mingw.
+  See e.g. the github action for recipes, or .appveyor.yml
+  for another Mingw recipe.
   The compiler needs to support C99, i.e. MSVC cannot be used.
 
 * coding standards
