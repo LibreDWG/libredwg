@@ -194,7 +194,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   /* Version */
   dat->byte = 0;
   dat->bit = 0;
-  if (!dat->chain || dat->size < 58)
+  if (!dat->chain || dat->size < 58) // saw the smallest r2.10 DWG with 1095 bytes
     {
       LOG_ERROR ("dwg too small: %lu bytes", dat->size);
       return DWG_ERR_INVALIDDWG;
@@ -710,7 +710,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       return DWG_ERR_INVALIDDWG;
     }
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x5e
-  if (dat->size < 0x69f)
+  if (dat->size < 0x1f0) // AC1.50 0x1f9 74 vars
     {
       LOG_ERROR ("DWG too small %zu", (size_t)dat->size)
       return DWG_ERR_INVALIDDWG;
