@@ -59,13 +59,8 @@
   FIELD_RD (FILLETRAD, 40); //ok
   FIELD_RS (AUNITS, 70);    //ok
   FIELD_RS (AUPREC, 70);    //ok
-  //DEBUG_HERE//@18e
-  FIELD_RS (OSMODE, 70);    //registry?
-  // 05000000 01004143 41440043 41440000
-  //RC 0
-  //RS 25
-  FIELD_CAST (unknown_12, RS, BL, 70); //??
-  //DEBUG_POS; dat->byte = 0x192; DEBUG_POS
+  FIELD_RS (unknown_12, 8);
+  FIELD_CAST (OSMODE, RS, BL, 70);
   FIELD_RS (ATTMODE, 70);
   FIELD_TFv (MENU, 15, 1);
   FIELD_RD (DIMSCALE, 40); //ok 0x1a3
