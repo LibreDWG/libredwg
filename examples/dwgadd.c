@@ -444,13 +444,13 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
   Dwg_Object *mspace;
   Dwg_Object_BLOCK_HEADER *hdr;
   const char *end;
-  char *p = NULL;
+  char *p;
   Dwg_Version_Type version = R_2000;
   int error;
   int i = 0;
   int initial = 1;
   int imperial = 0;
-  BITCODE_BL orig_num;
+  BITCODE_BL orig_num = 0;
   typedef struct {
     int type;
     union {
@@ -523,6 +523,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
   if (!dat->chain)
     abort();
   memset (&ent, 0, sizeof (lastent_t));
+  p = (char*)dat->chain;
   end = (char*)&dat->chain[dat->size - 1];
   if (memBEGINc ((char*)dat->chain, "readdwg") || (p = strstr ((char*)dat->chain, "\nreaddwg")))
     {
@@ -640,6 +641,146 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       double height, rot, len, f1, f2;
       int i1, i2;
       unsigned u;
+
+      while (p < end && (*p == ' ' || *p == '\t')) p++; // skip spaces
+      if (p == end) break;
+      if (*p == '\n' || *p == '#') { // skip empty lines and comments
+        p = next_line (p, end);
+        continue;
+      }
+
+      if (memBEGINc (p, "readdwg"))
+        {
+          if (dwg)
+            {
+              LOG_ERROR ("readdwg met, but DWG already exists");
+              exit (1);
+            }
+          if (SSCANF_S (p, "readdwg " FMT_PATH, &text[0] SZ))
+            {
+              if ((error = dwg_read_file (text, *dwgp)) > DWG_ERR_CRITICAL)
+                {
+                  LOG_ERROR ("Invalid readdwg \"%s\" => error 0x%x", text, error);
+                  exit (1);
+                }
+              dwg = *dwgp;
+              p = next_line (p, end);
+              continue;
+            }
+          else
+            {
+              LOG_ERROR ("readdwg syntax error");
+              exit (1);
+            }
+        }
+      else if (memBEGINc (p, "readdxf"))
+        {
+          if (dwg)
+            {
+              LOG_ERROR ("readdxf met, but DWG already exists");
+              exit (1);
+            }
+          if (SSCANF_S (p, "readdxf " FMT_PATH, &text[0] SZ))
+            {
+              if ((error = dxf_read_file (text, *dwgp)) > DWG_ERR_CRITICAL)
+                {
+                  LOG_ERROR ("Invalid readdxf \"%s\" => error 0x%x", text, error);
+                  exit (1);
+                }
+              dwg = *dwgp;
+              p = next_line (p, end);
+              continue;
+            }
+          else
+            {
+              LOG_ERROR ("readdxf syntax error");
+              exit (1);
+            }
+        }
+      else if (memBEGINc (p, "readjson"))
+        {
+          if (dwg)
+            {
+              LOG_ERROR ("readjson met, but DWG already exists");
+              exit (1);
+            }
+          if (SSCANF_S (p, "readjson " FMT_PATH, &text[0] SZ))
+            {
+              Bit_Chain in_dat = EMPTY_CHAIN(0);
+              in_dat.fh = fopen (text, "rb");
+              if (in_dat.fh) dat_read_file (&in_dat, in_dat.fh, text);
+              if (!in_dat.fh || (error = dwg_read_json (&in_dat, *dwgp)) > DWG_ERR_CRITICAL)
+                {
+                  LOG_ERROR ("Invalid readjson \"%s\" => error 0x%x", text, error);
+                  exit (1);
+                }
+              fclose (in_dat.fh);
+              dwg = *dwgp;
+              p = next_line (p, end);
+              continue;
+            }
+          else
+            {
+              LOG_ERROR ("readjson syntax error");
+              exit (1);
+            }
+        }
+      else if (memBEGINc (p, "imperial"))
+        {
+          if (!initial) {
+            LOG_ERROR ("`imperial' directive out of header section");
+            exit(1);
+          }
+          imperial = 1;
+          p = next_line (p, end);
+          continue;
+        }
+      else if (memBEGINc (p, "version"))
+        {
+          int i_ver;
+          double f_ver;
+          char s_ver[16];
+
+          if (!initial) {
+            LOG_ERROR ("`version' directive out of header section");
+            exit(1);
+          }
+
+          i = sscanf (p, "version %d", &i_ver);
+          if (i)
+            {
+              snprintf (s_ver, 16, "r%d", i_ver);
+              s_ver[15] = '\0';
+              version = dwg_version_as (s_ver);
+              p += strlen ("version ");
+            }
+          else if ((i = sscanf (p, "version %lf", &f_ver)))
+            {
+              snprintf (s_ver, 16, "r%f", f_ver);
+              s_ver[15] = '\0';
+              version = dwg_version_as (s_ver);
+            }
+          if (!i || version < R_13 || version >= R_AFTER)
+            {
+              fprintf (stderr, "Invalid version %.*s", 40, p);
+              exit (1);
+            }
+          p = next_line (p, end);
+          continue;
+        }
+
+      if (initial) {
+        if (!dwg)
+          {
+            dwg = dwg_new_Document (version, imperial, 0);
+            *dwgp = dwg;
+          }
+
+        mspace = dwg_model_space_object (dwg);
+        hdr = mspace->tio.object->tio.BLOCK_HEADER;
+        orig_num = dwg->num_objects;
+        initial = 0;
+      }
 
 // set entity/object field values.
 #define SET_ENT(var, name)                                              \
