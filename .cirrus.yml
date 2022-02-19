@@ -7,7 +7,7 @@ task:
   auto_cancellation: $CIRRUS_BRANCH != 'master' && $CIRRUS_BRANCH !=~ 'smoke/.*'
   only_if: $CIRRUS_BRANCH =~ 'smoke/.*' || $CIRRUS_BRANCH == 'master'
   install_script:
-    - pkg install -y m4 autoconf automake libtool pkgconf python38 py38-libxml2 pcre2 libxml2
+    - pkg install -y m4 git autoconf automake libtool pkgconf python38 py38-libxml2 pcre2 libxml2
                      texinfo p5-Convert-Binary-C
   build_script:
     - sh ./autogen.sh
