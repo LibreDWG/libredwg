@@ -1999,6 +1999,114 @@ test_header (Dwg_Data *dwg)
       fail ("HEADER.HANDSEED [H]");
   }
   {
+    BITCODE_RS clayer_r11;
+    if (dwg_dynapi_header_value (dwg, "CLAYER_R11", &clayer_r11, NULL)
+        && clayer_r11 == dwg->header_vars.CLAYER_R11)
+      pass ();
+    else
+      fail ("HEADER.CLAYER_R11 [RS] %hu != %hu", dwg->header_vars.CLAYER_R11, clayer_r11);
+    clayer_r11++;
+    if (dwg_dynapi_header_set_value (dwg, "CLAYER_R11", &clayer_r11, 0)
+        && clayer_r11 == dwg->header_vars.CLAYER_R11)
+      pass ();
+    else
+      fail ("HEADER.CLAYER_R11 [RS] set+1 %hu != %hu",
+            dwg->header_vars.CLAYER_R11, clayer_r11);
+    clayer_r11--;
+    dwg_dynapi_header_set_value (dwg, "CLAYER_R11", &clayer_r11, 0);
+
+  }
+  {
+    BITCODE_RS unknown_5;
+    if (dwg_dynapi_header_value (dwg, "unknown_5", &unknown_5, NULL)
+        && unknown_5 == dwg->header_vars.unknown_5)
+      pass ();
+    else
+      fail ("HEADER.unknown_5 [RS] %hu != %hu", dwg->header_vars.unknown_5, unknown_5);
+    unknown_5++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_5", &unknown_5, 0)
+        && unknown_5 == dwg->header_vars.unknown_5)
+      pass ();
+    else
+      fail ("HEADER.unknown_5 [RS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_5, unknown_5);
+    unknown_5--;
+    dwg_dynapi_header_set_value (dwg, "unknown_5", &unknown_5, 0);
+
+  }
+  {
+    BITCODE_RS unknown_6;
+    if (dwg_dynapi_header_value (dwg, "unknown_6", &unknown_6, NULL)
+        && unknown_6 == dwg->header_vars.unknown_6)
+      pass ();
+    else
+      fail ("HEADER.unknown_6 [RS] %hu != %hu", dwg->header_vars.unknown_6, unknown_6);
+    unknown_6++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_6", &unknown_6, 0)
+        && unknown_6 == dwg->header_vars.unknown_6)
+      pass ();
+    else
+      fail ("HEADER.unknown_6 [RS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_6, unknown_6);
+    unknown_6--;
+    dwg_dynapi_header_set_value (dwg, "unknown_6", &unknown_6, 0);
+
+  }
+  {
+    BITCODE_RS current_color_convert;
+    if (dwg_dynapi_header_value (dwg, "current_color_convert", &current_color_convert, NULL)
+        && current_color_convert == dwg->header_vars.current_color_convert)
+      pass ();
+    else
+      fail ("HEADER.current_color_convert [RS] %hu != %hu", dwg->header_vars.current_color_convert, current_color_convert);
+    current_color_convert++;
+    if (dwg_dynapi_header_set_value (dwg, "current_color_convert", &current_color_convert, 0)
+        && current_color_convert == dwg->header_vars.current_color_convert)
+      pass ();
+    else
+      fail ("HEADER.current_color_convert [RS] set+1 %hu != %hu",
+            dwg->header_vars.current_color_convert, current_color_convert);
+    current_color_convert--;
+    dwg_dynapi_header_set_value (dwg, "current_color_convert", &current_color_convert, 0);
+
+  }
+  {
+    BITCODE_RD unknown_4;
+    if (dwg_dynapi_header_value (dwg, "unknown_4", &unknown_4, NULL)
+        && unknown_4 == dwg->header_vars.unknown_4)
+      pass ();
+    else
+      fail ("HEADER.unknown_4 [RD] %g != %g", dwg->header_vars.unknown_4, unknown_4);
+    unknown_4++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_4", &unknown_4, 0)
+        && unknown_4 == dwg->header_vars.unknown_4)
+      pass ();
+    else
+      fail ("HEADER.unknown_4 [RD] set+1 %g != %g",
+            dwg->header_vars.unknown_4, unknown_4);
+    unknown_4--;
+    dwg_dynapi_header_set_value (dwg, "unknown_4", &unknown_4, 0);
+
+  }
+  {
+    BITCODE_RD unknown_7;
+    if (dwg_dynapi_header_value (dwg, "unknown_7", &unknown_7, NULL)
+        && unknown_7 == dwg->header_vars.unknown_7)
+      pass ();
+    else
+      fail ("HEADER.unknown_7 [RD] %g != %g", dwg->header_vars.unknown_7, unknown_7);
+    unknown_7++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_7", &unknown_7, 0)
+        && unknown_7 == dwg->header_vars.unknown_7)
+      pass ();
+    else
+      fail ("HEADER.unknown_7 [RD] set+1 %g != %g",
+            dwg->header_vars.unknown_7, unknown_7);
+    unknown_7--;
+    dwg_dynapi_header_set_value (dwg, "unknown_7", &unknown_7, 0);
+
+  }
+  {
     BITCODE_H clayer;
     if (dwg_dynapi_header_value (dwg, "CLAYER", &clayer, NULL)
         && !memcmp (&clayer, &dwg->header_vars.CLAYER, sizeof (dwg->header_vars.CLAYER))

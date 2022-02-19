@@ -65,6 +65,8 @@ BD,	DXF 40
 BD,	DXF 40
 @item CLAYER
 H,	DXF 8
+@item CLAYER_R11
+RS
 @item CMATERIAL
 H,	DXF 347
 @item CMLJUST
@@ -667,6 +669,8 @@ BD,	DXF 40
 RL
 @item bitsize_hi
 RL
+@item current_color_convert
+RS
 @item num_entities
 RS
 @item size
@@ -705,6 +709,10 @@ BL
 BD
 @item unknown_3
 BD
+@item unknown_4
+RD
+@item unknown_5
+RS
 @item unknown_54
 BS
 @item unknown_55
@@ -713,6 +721,10 @@ BS
 BS
 @item unknown_57
 BS
+@item unknown_6
+RS
+@item unknown_7
+RD
 @item unknown_8
 BL
 @item unknown_9
