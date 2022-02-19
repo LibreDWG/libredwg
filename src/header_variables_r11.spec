@@ -49,14 +49,13 @@
   FIELD_RD (LTSCALE, 40);  // 16.0 confirmed
   FIELD_RD (TEXTSIZE, 40); //unconfirmed, ineffective with r12
   FIELD_RD (TRACEWID, 40); //ok
-  DEBUG_HERE // 14a
-  //RS TEXTSTYLE STYLE index?
-  //RS 15
-
-  dat->byte = 0x156;
+  FIELD_RS (CLAYER_R11, 7);
+  FIELD_RS (current_color_convert, 0); // current color converted from older DWG file
+  FIELD_RD (unknown_4, 0);
+  FIELD_RS (unknown_5, 0);
   FIELD_CAST (PSLTSCALE, RS, B, 70);
-
-  dat->byte = 0x164;
+  FIELD_RS (unknown_6, 0);
+  FIELD_RD (unknown_7, 0); // converted from older DWG file (0x01d0)
   FIELD_RS (LUNITS, 70); //ok
   FIELD_RS (LUPREC, 70); //ok
   FIELD_RS (AXISMODE, 70);

@@ -915,6 +915,12 @@ typedef struct _dwg_header_variables {
   BITCODE_BS HANDLING; /* <r14: default 1 */
   //BITCODE_RS HANDSEED_R11;
   BITCODE_H HANDSEED;
+  BITCODE_RS CLAYER_R11; /*!< AC1.50-AC1009, DXF 7 */
+  BITCODE_RS unknown_5;
+  BITCODE_RS unknown_6;
+  BITCODE_RS current_color_convert;
+  BITCODE_RD unknown_4;
+  BITCODE_RD unknown_7;
   BITCODE_H CLAYER;	/*!< code 5, DXF 8 */
   BITCODE_H TEXTSTYLE;	/*!< code 5, DXF 7 */
   BITCODE_H CELTYPE;	/*!< code 5, DXF 6 */
