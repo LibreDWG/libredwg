@@ -814,6 +814,7 @@ typedef struct _dwg_header_variables {
   BITCODE_BL unknown_8; /* 24L */
   BITCODE_BL unknown_9; /* 0L */
   BITCODE_BS unknown_10; /* 0 r13-r14 */
+  BITCODE_BS unknown_18;
   BITCODE_H VX_TABLE_RECORD; /*!< r11-r2000 code 5, no DXF */
   BITCODE_B DIMASO;
   BITCODE_B DIMSHO;
@@ -950,6 +951,7 @@ typedef struct _dwg_header_variables {
   BITCODE_3BD INSBASE;
   BITCODE_3BD EXTMIN;
   BITCODE_3BD EXTMAX;
+  BITCODE_3BD VIEWDIR;
   BITCODE_2DPOINT LIMMIN;
   BITCODE_2DPOINT LIMMAX;
   BITCODE_2RD VIEWCTR;  /* -r11 */
