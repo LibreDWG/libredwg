@@ -98,9 +98,12 @@
   dat->byte = 0x229;
   FIELD_RD (ELEVATION, 40); //ok
   FIELD_RD (THICKNESS, 40); //ok
-  DEBUG_HERE //239
+  FIELD_3RD (VIEWDIR, 10);
+  DEBUG_HERE //252
 
-  dat->byte = 0x2e5;
+  dat->byte = 0x2e1;
+  FIELD_RS (unknown_18, 0);
+  FIELD_RC (BLIPMODE, 70);
   FIELD_CAST (DIMZIN, RC, B, 70); //ok
   FIELD_RD (DIMRND, 40);
   FIELD_RD (DIMDLE, 40);
