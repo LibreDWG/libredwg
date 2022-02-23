@@ -1174,7 +1174,7 @@ typedef struct _dwg_header_variables {
 typedef int Dwg_Entity_UNUSED;
 
 /** \ref Dwg_Entity_TEXT
- TEXT (1) entity
+ TEXT (1/7) entity
  */
 typedef struct _dwg_entity_TEXT
 {
@@ -1201,7 +1201,7 @@ typedef struct _dwg_entity_TEXT
 } Dwg_Entity_TEXT;
 
 /** \ref Dwg_Entity_ATTRIB
- ATTRIB (2) entity
+ ATTRIB (2/16) entity
  */
 typedef struct _dwg_entity_ATTRIB
 {
@@ -1241,7 +1241,7 @@ typedef struct _dwg_entity_ATTRIB
 } Dwg_Entity_ATTRIB;
 
 /** \ref Dwg_Entity_ATTDEF
- ATTDEF (3) entity
+ ATTDEF (3/15) entity
  */
 typedef struct _dwg_entity_ATTDEF
 {
@@ -1279,7 +1279,7 @@ typedef struct _dwg_entity_ATTDEF
 } Dwg_Entity_ATTDEF;
 
 /**
- BLOCK (4) entity
+ BLOCK (4/12) entity
  */
 typedef struct _dwg_entity_BLOCK
 {
@@ -1290,7 +1290,7 @@ typedef struct _dwg_entity_BLOCK
 } Dwg_Entity_BLOCK;
 
 /**
- ENDBLK (5) entity
+ ENDBLK (5/13) entity
  */
 typedef struct _dwg_entity_ENDBLK
 {
@@ -1298,7 +1298,7 @@ typedef struct _dwg_entity_ENDBLK
 } Dwg_Entity_ENDBLK;
 
 /**
- SEQEND (6) entity
+ SEQEND (6/17) entity
  */
 typedef struct _dwg_entity_SEQEND
 {
@@ -1306,7 +1306,7 @@ typedef struct _dwg_entity_SEQEND
 } Dwg_Entity_SEQEND;
 
 /**
- INSERT (7) entity
+ INSERT (7/14) entity
  */
 typedef struct _dwg_entity_INSERT
 {
@@ -1355,7 +1355,7 @@ typedef struct _dwg_entity_MINSERT
 } Dwg_Entity_MINSERT;
 
 /**
- VERTEX_2D (10) entity
+ VERTEX_2D (10/20) entity
  */
 typedef struct _dwg_entity_VERTEX_2D
 {
@@ -1412,7 +1412,7 @@ typedef struct _dwg_entity_VERTEX_PFACE_FACE
   BITCODE_H seqend
 
 /**
- 2D POLYLINE (15) entity
+ 2D POLYLINE (15/18) entity
  */
 typedef struct _dwg_entity_POLYLINE_2D
 {
@@ -1429,7 +1429,7 @@ typedef struct _dwg_entity_POLYLINE_2D
 } Dwg_Entity_POLYLINE_2D;
 
 /**
- 3D POLYLINE (16) entity
+ 3D POLYLINE (16/19) entity
  */
 typedef struct _dwg_entity_POLYLINE_3D
 {
@@ -1440,7 +1440,7 @@ typedef struct _dwg_entity_POLYLINE_3D
 } Dwg_Entity_POLYLINE_3D;
 
 /**
- ARC (17) entity
+ ARC (17/8) entity
  */
 typedef struct _dwg_entity_ARC
 {
@@ -1455,7 +1455,7 @@ typedef struct _dwg_entity_ARC
 } Dwg_Entity_ARC;
 
 /**
- CIRCLE (18) entity
+ CIRCLE (18/3) entity
  */
 typedef struct _dwg_entity_CIRCLE
 {
@@ -1468,7 +1468,7 @@ typedef struct _dwg_entity_CIRCLE
 } Dwg_Entity_CIRCLE;
 
 /**
- LINE (19) entity
+ LINE (19/1) entity
  */
 typedef struct _dwg_entity_LINE
 {
@@ -1533,7 +1533,7 @@ typedef struct _dwg_entity_DIMENSION_ORDINATE
 } Dwg_Entity_DIMENSION_ORDINATE;
 
 /**
- linear dimension - DIMENSION_LINEAR (21) entity
+ linear dimension - DIMENSION_LINEAR (21/23) entity
  */
 typedef struct _dwg_entity_DIMENSION_LINEAR
 {
@@ -1628,7 +1628,7 @@ typedef struct _dwg_entity_LARGE_RADIAL_DIMENSION
 } Dwg_Entity_LARGE_RADIAL_DIMENSION;
 
 /**
- Struct for:  POINT (27)
+ Struct for:  POINT (27/2)
  */
 typedef struct _dwg_entity_POINT
 {
@@ -1643,7 +1643,7 @@ typedef struct _dwg_entity_POINT
 } Dwg_Entity_POINT;
 
 /**
- Struct for:  3D FACE (28)
+ Struct for:  3D FACE (28/22)
  */
 typedef struct _dwg_entity_3DFACE
 {
@@ -1685,7 +1685,7 @@ typedef struct _dwg_entity_POLYLINE_MESH
 } Dwg_Entity_POLYLINE_MESH;
 
 /**
- Struct for:  SOLID (31)
+ Struct for:  SOLID (31/11)
  */
 
 typedef struct _dwg_entity_SOLID
@@ -1702,7 +1702,7 @@ typedef struct _dwg_entity_SOLID
 } Dwg_Entity_SOLID;
 
 /**
- Struct for:  TRACE (32)
+ Struct for:  TRACE (32/9)
  */
 
 typedef struct _dwg_entity_TRACE
@@ -1719,7 +1719,7 @@ typedef struct _dwg_entity_TRACE
 } Dwg_Entity_TRACE;
 
 /**
- Struct for:  SHAPE (33)
+ Struct for:  SHAPE (33/4)
  */
 
 typedef struct _dwg_entity_SHAPE
@@ -1738,7 +1738,7 @@ typedef struct _dwg_entity_SHAPE
 } Dwg_Entity_SHAPE;
 
 /**
- Struct for:  VIEWPORT ENTITY (34)
+ Struct for:  VIEWPORT ENTITY (34/24)
  */
 
 typedef struct _dwg_entity_VIEWPORT
@@ -2203,7 +2203,7 @@ typedef struct _dwg_object_BLOCK_CONTROL
 } Dwg_Object_BLOCK_CONTROL;
 
 /**
- BLOCK_HEADER (49) object, table entry
+ BLOCK_HEADER (49/T1) object, table entry
  */
 typedef struct _dwg_object_BLOCK_HEADER
 {
@@ -2244,7 +2244,7 @@ typedef struct _dwg_object_LAYER_CONTROL
 } Dwg_Object_LAYER_CONTROL;
 
 /**
- LAYER (51) object, table entry
+ LAYER (51/T2) object, table entry
  */
 typedef struct _dwg_object_LAYER
 {
@@ -2281,7 +2281,7 @@ typedef struct _dwg_object_STYLE_CONTROL
 } Dwg_Object_STYLE_CONTROL;
 
 /**
- STYLE (53) object, table entry.
+ STYLE (53/T3) object, table entry.
  TextStyleTableRecord. Some call it SHAPEFILE.
  */
 typedef struct _dwg_object_STYLE
@@ -2323,7 +2323,7 @@ typedef struct _dwg_object_LTYPE_CONTROL
 } Dwg_Object_LTYPE_CONTROL;
 
 /**
- LTYPE (57) object, table entry
+ LTYPE (57/T4) object, table entry
  */
 
 typedef struct _dwg_LTYPE_dash {
@@ -2365,7 +2365,7 @@ typedef struct _dwg_object_VIEW_CONTROL
 } Dwg_Object_VIEW_CONTROL;
 
 /**
- VIEW (61) object, table entry
+ VIEW (61/T5) object, table entry
  */
 typedef struct _dwg_object_VIEW
 {
@@ -2415,7 +2415,7 @@ typedef struct _dwg_object_UCS_CONTROL
 } Dwg_Object_UCS_CONTROL;
 
 /**
- UCS (63) object, table entry
+ UCS (63/T6) object, table entry
  */
 typedef struct _dwg_UCS_orthopts
 {
@@ -2447,7 +2447,7 @@ typedef struct _dwg_object_VPORT_CONTROL
 } Dwg_Object_VPORT_CONTROL;
 
 /**
- VPORT (65) object, table entry
+ VPORT (65/T7) object, table entry
  */
 typedef struct _dwg_object_VPORT
 {
@@ -2512,7 +2512,7 @@ typedef struct _dwg_object_APPID_CONTROL
 } Dwg_Object_APPID_CONTROL;
 
 /**
- APPID (67) object
+ APPID (67/T8) object
  The table entry of a registered application
  */
 typedef struct _dwg_object_APPID
@@ -2533,7 +2533,7 @@ typedef struct _dwg_object_DIMSTYLE_CONTROL
 } Dwg_Object_DIMSTYLE_CONTROL;
 
 /**
- DIMSTYLE (69) object, table entry
+ DIMSTYLE (69/T9) object, table entry
  */
 typedef struct _dwg_object_DIMSTYLE
 {
@@ -2644,7 +2644,7 @@ typedef struct _dwg_object_VX_CONTROL
 } Dwg_Object_VX_CONTROL;
 
 /**
- VX_TABLE_RECORD (71) table object (r11-r2000)
+ VX_TABLE_RECORD (71/T10) table object (r11-r2000)
  Called VXTableRecord / VX_TABLE_RECORD
  */
 typedef struct _dwg_object_VX_TABLE_RECORD
