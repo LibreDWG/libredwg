@@ -25236,8 +25236,8 @@ dwg_add_XRECORD_handle (Dwg_Object_XRECORD *restrict _obj,
     _obj->xdata = rbuf;
   _obj->num_xdata++;
   rbuf->type = dxf;
-  memcpy (rbuf->value.hdl, &hdl, sizeof (Dwg_Handle));
-  _obj->xdata_size += 10; // 2 + 8
+  memcpy (rbuf->value.h, &hdl, sizeof (Dwg_Handle));
+  _obj->xdata_size += 2+sizeof (Dwg_Handle); // 2 + 8
   return _obj;
 }
 
