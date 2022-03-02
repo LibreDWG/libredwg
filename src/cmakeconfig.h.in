@@ -39,7 +39,7 @@
 
 /* Define if you have <alloca.h> and it should be used (not on Ultrix).
    */
-#define HAVE_ALLOCA_H 1
+#cmakedefine HAVE_ALLOCA_H
 
 /* Define if __attribute__((visibility("default"))) is supported. */
 #define HAVE_ATTRIBUTE_VISIBILITY_DEFAULT 1
@@ -87,7 +87,7 @@
 #define HAVE_INTTYPES_H 1
 
 /* Define if you have the <libgen.h> header file. */
-#define HAVE_LIBGEN_H 1
+#cmakedefine HAVE_LIBGEN_H
 
 /* Define if you have the `m' library (-lm). */
 #define HAVE_LIBM 1
