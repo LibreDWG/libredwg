@@ -29,7 +29,7 @@
 #endif   
 
 /* Define if a shared library will be built */
-#define ENABLE_SHARED @BUILD_SHARED_LIBS@
+#cmakedefine ENABLE_SHARED
 
 /* Define if pointers to integers require aligned access */
 /* #undef HAVE_ALIGNED_ACCESS_REQUIRED */
