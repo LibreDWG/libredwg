@@ -20,6 +20,19 @@ else()
 endif()
 string(STRIP "${NL_PACKAGE_VERSION}" PACKAGE_VERSION)
 
+option(BUILD_SHARED_LIBS "shared libredwg library" ON)
+option(LIBREDWG_LIBONLY "only the libredwg library" OFF)
+option(LIBREDWG_DISABLE_WRITE "no libredwg write support" OFF)
+option(LIBREDWG_DISABLE_JSON "no libredwg json support" OFF)
+# Rather disable installing a crippled shared lib.
+# Only use these for static in-tree libs.
+if (LIBREDWG_DISABLE_JSON)
+  set(BUILD_SHARED_LIBS OFF)
+endif()
+if (LIBREDWG_DISABLE_WRITE)
+  set(BUILD_SHARED_LIBS OFF)
+endif()
+
 include(CheckIncludeFile)
 CHECK_INCLUDE_FILE("stddef.h" HAVE_STDDEF_H)
 CHECK_INCLUDE_FILE("stdlib.h" HAVE_STDLIB_H)
@@ -50,18 +63,6 @@ if(CMAKE_MAJOR_VERSION GREATER 2)
   endif()
 endif()
 
-option(BUILD_SHARED_LIBS "shared libredwg library" ON)
-option(LIBREDWG_LIBONLY "only the libredwg library" OFF)
-option(LIBREDWG_DISABLE_WRITE "no libredwg write support" OFF)
-option(LIBREDWG_DISABLE_JSON "no libredwg json support" OFF)
-# Rather disable installing a crippled shared lib.
-# Only use these for static in-tree libs.
-if (LIBREDWG_DISABLE_JSON)
-  set(BUILD_SHARED_LIBS OFF)
-endif()
-if (LIBREDWG_DISABLE_WRITE)
-  set(BUILD_SHARED_LIBS OFF)
-endif()
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release"
