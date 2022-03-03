@@ -109,7 +109,7 @@
 #define HAVE_MEMCHR 1
 
 /* Define if you have the `memmem' function. */
-#define HAVE_MEMMEM 1
+#cmakedefine HAVE_MEMMEM
 
 /* Define if you have the `memmove' function. */
 #define HAVE_MEMMOVE 1
@@ -134,7 +134,7 @@
 #define HAVE_SCANDIR 1
 
 /* Define if you have the `setenv' function. */
-#define HAVE_SETENV 1
+#cmakedefine HAVE_SETENV
 
 /* Define if you have the `sqrt' function. */
 /* #undef HAVE_SQRT */
@@ -156,7 +156,7 @@
 #define HAVE_STRCASECMP 1
 
 /* Define if you have the `strcasestr' function. */
-#define HAVE_STRCASESTR 1
+#cmakedefine HAVE_STRCASESTR
 
 /* Define if you have the `strchr' function. */
 #define HAVE_STRCHR 1
