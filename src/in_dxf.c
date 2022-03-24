@@ -86,13 +86,24 @@ static array_hdls *obj_hdls = NULL;
   dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
   LOG_TRACE ("%s.%s = %d [" #type " %d]\n", obj->name, field, pair->value.i,  \
              pair->code);                                                     \
-  dxf_free_pair (pair)
+  dxf_free_pair (pair); pair = NULL;
+#define EXPECT_UINT_DXF(field, dxf, type)                                     \
+  EXPECT_DXF (obj->name, #field, dxf);                                        \
+  if (pair->value.l < 0) {						      \
+      LOG_ERROR ("%s: Unexpected DXF value %ld for %s code %d", obj->name,    \
+                 pair ? pair->value.l : 0, #field, dxf);		      \
+      return pair;							      \
+  }									      \
+  dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
+  LOG_TRACE ("%s.%s = %d [" #type " %d]\n", obj->name, field, pair->value.i,  \
+             pair->code);                                                     \
+  dxf_free_pair (pair); pair = NULL
 #define EXPECT_DBL_DXF(field, dxf, type)                                      \
   EXPECT_DXF (obj->name, #field, dxf);                                        \
   dwg_dynapi_entity_set_value (o, obj->name, field, &pair->value, 1);         \
   LOG_TRACE ("%s.%s = %f [" #type " %d]\n", obj->name, field, pair->value.d,  \
              pair->code);                                                     \
-  dxf_free_pair (pair)
+  dxf_free_pair (pair); pair = NULL
 #define EXPECT_H_DXF(field, htype, dxf, type)                                 \
   EXPECT_DXF (obj->name, #field, dxf);                                        \
   if (pair->value.u)                                                          \
@@ -102,7 +113,7 @@ static array_hdls *obj_hdls = NULL;
       LOG_TRACE ("%s.%s = " FORMAT_REF " [H %d]\n", obj->name, field,         \
                  ARGS_REF (hdl), pair->code);                                 \
     }                                                                         \
-  dxf_free_pair (pair)
+  dxf_free_pair (pair); pair = NULL
 #define EXPECT_T_DXF(field, dxf)                                              \
   EXPECT_DXF (obj->name, #field, dxf);                                        \
   if (pair->value.s)                                                          \
@@ -111,7 +122,7 @@ static array_hdls *obj_hdls = NULL;
       LOG_TRACE ("%s.%s = \"%s\" [T %d]\n", obj->name, field, pair->value.s,  \
                  pair->code);                                                 \
     }                                                                         \
-  dxf_free_pair (pair)
+  dxf_free_pair (pair); pair = NULL
 
 // stricter ordering for special subclasses:
 #define FIELD_B(field, dxf)                                                   \
@@ -142,7 +153,7 @@ static array_hdls *obj_hdls = NULL;
   if (dxf)                                                                    \
     {                                                                         \
       pair = dxf_read_pair (dat);                                             \
-      EXPECT_INT_DXF (#field, dxf, BL);                                       \
+      EXPECT_UINT_DXF (#field, dxf, BL);                                      \
     }
 #define FIELD_BD(field, dxf)                                                  \
   if (dxf)                                                                    \
@@ -6133,13 +6144,13 @@ add_PERSUBENTMGR (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   Dwg_Object_PERSUBENTMGR *o = obj->tio.object->tio.PERSUBENTMGR;
   Dwg_Data *dwg = obj->parent;
 
-  EXPECT_INT_DXF ("class_version", 90, BL);
+  EXPECT_UINT_DXF ("class_version", 90, BL);
   FIELD_BL (unknown_0, 90);
   FIELD_BL (unknown_2, 90);
   FIELD_BL (numassocsteps, 90);
   FIELD_BL (numassocsubents, 90);
   FIELD_BL (num_steps, 90);
-  if (o->num_steps)
+  if (o->num_steps > 0)
     {
       o->steps = (BITCODE_BL*)xcalloc (o->num_steps, sizeof (BITCODE_BL));
       if (!o->steps)
