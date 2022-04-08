@@ -2280,7 +2280,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               LOG_INFO ("Fixup TEMPLATE.num_sections to 1 (Teigha bug)\n")
               info->num_sections = 1;
             }
-          if (info->size > info->num_sections * info->max_decomp_size)
+          if (info->size > info->num_sections * info->max_decomp_size * 2)
             {
               LOG_ERROR ("Skip section %s with size %" PRId64 " > " FORMAT_RL
                          " * " FORMAT_RL,
