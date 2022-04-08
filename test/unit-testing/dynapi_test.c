@@ -307,6 +307,24 @@ test_header (Dwg_Data *dwg)
 
   }
   {
+    BITCODE_BS unknown_18;
+    if (dwg_dynapi_header_value (dwg, "unknown_18", &unknown_18, NULL)
+        && unknown_18 == dwg->header_vars.unknown_18)
+      pass ();
+    else
+      fail ("HEADER.unknown_18 [BS] %hu != %hu", dwg->header_vars.unknown_18, unknown_18);
+    unknown_18++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_18", &unknown_18, 0)
+        && unknown_18 == dwg->header_vars.unknown_18)
+      pass ();
+    else
+      fail ("HEADER.unknown_18 [BS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_18, unknown_18);
+    unknown_18--;
+    dwg_dynapi_header_set_value (dwg, "unknown_18", &unknown_18, 0);
+
+  }
+  {
     BITCODE_H vx_table_record;
     if (dwg_dynapi_header_value (dwg, "VX_TABLE_RECORD", &vx_table_record, NULL)
         && !memcmp (&vx_table_record, &dwg->header_vars.VX_TABLE_RECORD, sizeof (dwg->header_vars.VX_TABLE_RECORD))
@@ -2393,6 +2411,15 @@ test_header (Dwg_Data *dwg)
       pass ();
     else
       fail ("HEADER.EXTMAX [3BD]");
+  }
+  {
+    BITCODE_3BD viewdir;
+    if (dwg_dynapi_header_value (dwg, "VIEWDIR", &viewdir, NULL)
+        && !memcmp (&viewdir, &dwg->header_vars.VIEWDIR, sizeof (dwg->header_vars.VIEWDIR))
+       )
+      pass ();
+    else
+      fail ("HEADER.VIEWDIR [3BD]");
   }
   {
     BITCODE_2DPOINT limmin;

@@ -66,8 +66,13 @@
     FIELD_RC (unknown_0, 0);
     FIELD_RC (app_dwg_version, 0);
     FIELD_RC (app_maint_version, 0);
-    FIELD_RL (security_type, 0);
-    FIELD_RL (rl_1c_address, 0); /* mostly 0 */
+    FIELD_RL (security_type, 0); /* 0x0001 = encrypt data (for all sections but
+				             AcDb:Preview and AcDb:SummaryInfo)
+				    0x0002 = encrypt properties (for AcDb:Preview
+				             and AcDb:SummaryInfo)
+				    0x0010 = sign data
+				    0x0020 = add timestamp */
+    FIELD_RL (rl_1c_address, 0); /* mostly 0, probably some unused section */
     FIELD_RL (summaryinfo_address, 0);
     FIELD_RL (vbaproj_address, 0);
     FIELD_RL (r2004_header_address, 0); /* mostly 128/0x80 */

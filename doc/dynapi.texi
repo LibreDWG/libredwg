@@ -643,6 +643,8 @@ B,	DXF 70
 TV,	DXF 2
 @item VIEWCTR
 2RD
+@item VIEWDIR
+3BD
 @item VIEWSIZE
 RD
 @item VIEW_CONTROL_OBJECT
@@ -697,6 +699,8 @@ BL
 BL
 @item unknown_17
 BL
+@item unknown_18
+BS
 @item unknown_2
 BD
 @item unknown_20
