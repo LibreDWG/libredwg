@@ -202,15 +202,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   strncpy (version, (const char *)dat->chain, 6);
   version[6] = '\0';
 
-  dwg->header.from_version = R_INVALID;
-  for (i = 0; i < R_AFTER; i++)
-    {
-      if (strEQ (version, version_codes[(Dwg_Version_Type)i]))
-        {
-          dwg->header.from_version = (Dwg_Version_Type)i;
-          break;
-        }
-    }
+  dwg->header.from_version = dwg_version_hdr_type(version);
   if (!dwg->header.from_version)
     {
       if (strncmp (version, "AC", 2)) // let's ignore MC0.0 for now

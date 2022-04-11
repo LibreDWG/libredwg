@@ -342,4 +342,7 @@ Dwg_Handle *dwg_find_first_type_handle (Dwg_Data *restrict dwg,
 // sets ext to the char behind the last "." of filepath
 char *split_filepath (const char *filepath, char **extp);
 
+EXPORT Dwg_Version_Type dwg_version_hdr_type (const char* hdr);
+const char* dwg_version_codes (const Dwg_Version_Type version);
+
 #endif

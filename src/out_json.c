@@ -1738,7 +1738,7 @@ json_fileheader_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   RECORD (FILEHEADER); // single hash
   KEY (version);
-  fprintf (dat->fh, "\"%s\"", version_codes[dwg->header.version]);
+  fprintf (dat->fh, "\"%s\"", dwg_version_codes (dwg->header.version));
   // clang-format off
   #include "header.spec"
   // clang-format on

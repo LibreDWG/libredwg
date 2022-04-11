@@ -1796,13 +1796,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   if (dwg->header.version != dwg->header.from_version)
     LOG_TRACE ("Encode version %s (%s) from version %s (%s)\n",
-               version_codes[dwg->header.version],
+               dwg_version_codes (dwg->header.version),
                dwg_version_type (dwg->header.version),
-               version_codes[dwg->header.from_version],
+               dwg_version_codes (dwg->header.from_version),
                dwg_version_type (dwg->header.from_version))
   else
-    LOG_TRACE ("Encode version %s (%s)\n", version_codes[dwg->header.version],
-               dwg_version_type (dwg->header.version))
+      LOG_TRACE ("Encode version %s (%s)\n",
+		 dwg_version_codes (dwg->header.version),
+		 dwg_version_type (dwg->header.version))
 
 #ifdef ENCODE_UNKNOWN_AS_DUMMY
   // We cannot write unknown_bits into another version, or when it's coming
@@ -1885,7 +1886,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    * Header
    */
   strcpy ((char *)dat->chain,
-          version_codes[dwg->header.version]); // Chain version
+          dwg_version_codes (dwg->header.version)); // Chain version
   dat->byte += 6;
 
   {
@@ -2531,9 +2532,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       LOG_TRACE ("pvzadr: %u\n", (unsigned)pvzadr);
       if (!_obj->size && !_obj->num_sections)
         {
+	  const char *code = dwg_version_codes (dwg->header.version);
           LOG_TRACE ("Use second_header defaults...\n");
-          strcpy ((char *)&_obj->version[0],
-                  &version_codes[dwg->header.version][0]);
+          strcpy ((char *)&_obj->version[0], &code[0]);
           memset (&_obj->version[7], 0, 4);
           _obj->version[11] = '\n';
           _obj->unknown_10 = 0x10;

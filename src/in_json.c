@@ -886,7 +886,7 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           // set version's (with C++ quirks)
           for (v = R_INVALID; v <= R_AFTER; vi = (int)v, vi++, v = (Dwg_Version_Type)vi)
             {
-              if (strEQ (version, version_codes[v]))
+	      if (strEQ (version, dwg_version_codes (v)))
                 {
                   dat->from_version = dwg->header.from_version = v;
                   // is_tu = dat->version >= R_2007;

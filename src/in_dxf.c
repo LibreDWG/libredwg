@@ -1115,13 +1115,13 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           for (Dwg_Version_Type v = R_INVALID; v <= R_AFTER;
                vi = (int)v, vi++, v = (Dwg_Version_Type)vi)
             {
-              if (strEQ (version, version_codes[v]))
+		if (strEQ (version, dwg_version_codes (v)))
                 {
                   dat->from_version = dwg->header.from_version = v;
                   is_tu = dat->version >= R_2007;
                   LOG_TRACE ("HEADER.from_version = %s,\tdat->from_version = %s\n",
-                             version_codes[dwg->header.from_version],
-                             version_codes[dat->from_version]);
+                             dwg_version_codes (dwg->header.from_version),
+                             dwg_version_codes (dat->from_version));
                   if (is_tu && dwg->num_objects
                       && dwg->object[0].fixedtype == DWG_TYPE_BLOCK_HEADER)
                     {
@@ -1140,8 +1140,8 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           if (dwg->header.from_version >= R_13 && dwg->header.from_version <= R_2000)
             dwg->header.version = dat->version = dwg->header.from_version;
           LOG_TRACE ("HEADER.version = %s,\tdat->version = %s\n",
-                     version_codes[dwg->header.version],
-                     version_codes[dat->version]);
+                     dwg_version_codes (dwg->header.version),
+                     dwg_version_codes (dat->version));
         }
       else if (field[0] == '$')
         {

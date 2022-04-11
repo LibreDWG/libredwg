@@ -20,7 +20,7 @@
 
   SECTION (HEADER);
 
-  HEADER_VALUE_TV (ACADVER, 1, version_codes[dwg->header.version]);
+  HEADER_VALUE_TV (ACADVER, 1, dwg_version_codes (dwg->header.version));
 
   if (minimal) {
     HEADER_VALUE (HANDSEED, RL, 5, _obj->HANDSEED->handleref.value);

@@ -277,14 +277,38 @@ typedef enum DWG_VERSION_TYPE
   R_13c3,	/* AC1013 AutoCAD Release 13C3 */
   R_14,		/* AC1014 AutoCAD Release 14 */
   R_2000,	/* AC1015 AutoCAD Release 2000 */
+  R_2000i,	/* AC1016 AutoCAD Release 2000i */
+  R_2002,	/* AC1016 AutoCAD Release 2002 */
   R_2004,	/* AC1018 AutoCAD Release 2004 (includes versions AC1019/0x19 and AC1020/0x1a) */
-  R_2007,	/* AC1021 AutoCAD Release 2007 - 2019*/
+  R_2005,	/* AC1019 AutoCAD Release 2005 */
+  R_2006,	/* AC1020 AutoCAD Release 2006 */
+  R_2007,	/* AC1021 AutoCAD Release 2007 - 2009 */
+  R_2008,	/* AC1022 AutoCAD Release 2008 */
+  R_2009,	/* AC1023 AutoCAD Release 2009 */
   R_2010,	/* AC1024 AutoCAD Release 2010 - 2012 */
+  R_2011,	/* AC1025 AutoCAD Release 2011 (same DWG format)  */
+  R_2012,	/* AC1025 AutoCAD Release 2012 (same DWG format) */
   R_2013,	/* AC1027 AutoCAD Release 2013 - 2017 */
+  R_2014,	/* AC1028 AutoCAD Release 2014 (same DWG format) */
+  R_2015,	/* AC1029 AutoCAD Release 2015 (same DWG format) */
+  R_2016,	/* AC1030 AutoCAD Release 2016 (same DWG format) */
+  R_2017,	/* AC1031 AutoCAD Release 2017 (same DWG format) */
   R_2018,	/* AC1032 AutoCAD Release 2018 - 2021 */
+  R_2019,	/* AC1032 AutoCAD Release 2019 (same DWG format) */
+  R_2020,	/* AC1032 AutoCAD Release 2020 (same DWG format)  */
+  R_2021,	/* AC1032 AutoCAD Release 2021 (same DWG format)  */
+  R_2022,	/* AC103-4 AutoCAD Release 2022 */
   R_AFTER
 } Dwg_Version_Type;
 #define DWG_VERSIONS (int)(R_AFTER+1)
+
+typedef struct dwg_versions {
+  Dwg_Version_Type r;
+  const char * type;
+  const char * hdr; // char[7] mostly
+  const char * desc;
+  uint8_t dwg_version;
+} Dwg_Versions;
 
 typedef enum DWG_CLASS_STABILITY {
   DWG_CLASS_STABLE,
