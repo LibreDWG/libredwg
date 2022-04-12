@@ -347,6 +347,12 @@ static const char *const _dwg_type_names_variable[] =
     "WIPEOUTVARIABLES",                     	/* 726 */
     "XREFPANELOBJECT",                      	/* 727 */
     "XYPARAMETERENTITY",                    	/* 728 */
+    "BREAKDATA",                            	/* 729 */
+    "BREAKPOINTREF",                        	/* 730 */
+    "FLIPGRIPENTITY",                       	/* 731 */
+    "LINEARGRIPENTITY",                     	/* 732 */
+    "ROTATIONGRIPENTITY",                   	/* 733 */
+    "XYGRIPENTITY",                         	/* 734 */
   /* End auto-generated variable */
 };
 
@@ -363,7 +369,7 @@ const char *dwg_type_name (const Dwg_Object_Type type)
 #if 1
   if (type <= DWG_TYPE_LAYOUT)
     return _dwg_type_names_fixed[type];
-  else if ((unsigned)type >= 500 && type <= DWG_TYPE_XYPARAMETERENTITY)
+  else if ((unsigned)type >= 500 && type <= DWG_TYPE_XYGRIPENTITY)
     return _dwg_type_names_variable[type - 500];
   else if (type == DWG_TYPE_UNKNOWN_ENT)
     return "UNKNOWN_ENT";
@@ -885,6 +891,12 @@ static const char *_dwg_dxfnames_variable[] =
     "WIPEOUTVARIABLES",                     	/* 726 */
     "EXACXREFPANELOBJECT",                  	/* 727 */
     "XYPARAMETERENTITY",                    	/* 728 */
+    "BREAKDATA",                            	/* 729 */
+    "BREAKPOINTREF",                        	/* 730 */
+    "FLIPGRIPENTITY",                       	/* 731 */
+    "LINEARGRIPENTITY",                     	/* 732 */
+    "ROTATIONGRIPENTITY",                   	/* 733 */
+    "XYGRIPENTITY",                         	/* 734 */
   /* End auto-generated dxfnames */
 };
 
@@ -898,7 +910,7 @@ const char* dwg_type_dxfname (const Dwg_Object_Type type)
 {
   if (type <= DWG_TYPE_LAYOUT)
     return _dwg_dxfnames_fixed[type];
-  else if ((unsigned)type >= 500 && type <= DWG_TYPE_XYPARAMETERENTITY)
+  else if ((unsigned)type >= 500 && type <= DWG_TYPE_XYGRIPENTITY)
     return _dwg_dxfnames_variable[type - 500];
   // DWG_TYPE_PROXY_ENTITY = 0x1f2, /* 498 */
   // DWG_TYPE_PROXY_OBJECT = 0x1f3, /* 499 */

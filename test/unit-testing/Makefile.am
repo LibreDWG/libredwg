@@ -331,7 +331,6 @@ testdebug = \
 	partial_viewing_index \
 	persubentmgr \
 	pointpath \
-	polargripentity \
 	radimobjectcontextdata \
 	radimlgobjectcontextdata \
 	revolvedsurface \
@@ -341,8 +340,15 @@ testdebug = \
 	table \
 	tablecontent \
 	tvdeviceproperties \
-	visibilityparameterentity \
+	breakdata \
+	breakpointref \
+	flipgripentity \
+	lineargripentity \
+	polargripentity \
+	rotationgripentity \
 	visibilitygripentity \
+	xygripentity \
+	visibilityparameterentity \
 	alignmentparameterentity \
 	basepointparameterentity \
 	blockpropertiestable \

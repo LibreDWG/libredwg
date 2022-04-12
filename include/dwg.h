@@ -304,9 +304,9 @@ typedef enum DWG_VERSION_TYPE
 
 typedef struct dwg_versions {
   Dwg_Version_Type r;
-  const char * type;
-  const char * hdr; // char[7] mostly
-  const char * desc;
+  const char *const type;
+  const char *const hdr; // char[6] mostly
+  const char *const desc;
   uint8_t dwg_version;
 } Dwg_Versions;
 
@@ -649,6 +649,12 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_WIPEOUTVARIABLES,
   DWG_TYPE_XREFPANELOBJECT,
   DWG_TYPE_XYPARAMETERENTITY,
+  DWG_TYPE_BREAKDATA,
+  DWG_TYPE_BREAKPOINTREF,
+  DWG_TYPE_FLIPGRIPENTITY,
+  DWG_TYPE_LINEARGRIPENTITY,
+  DWG_TYPE_ROTATIONGRIPENTITY,
+  DWG_TYPE_XYGRIPENTITY,
   // after 1.0 add new types here for binary compat
 
   DWG_TYPE_FREED        = 0xfffd,
@@ -7205,17 +7211,55 @@ typedef struct _dwg_object_BLOCKGRIPLOCATIONCOMPONENT
   BITCODE_T grip_expr;  // one of: X Y UpdatedX UpdatedY DisplacementX DisplacementY
 } Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT;
 
-typedef struct _dwg_entity_VISIBILITYGRIPENTITY
+typedef struct _dwg_object_BREAKDATA
+{
+  struct _dwg_object_object *parent;
+  BITCODE_BL num_pointrefs;
+  BITCODE_H *pointrefs;
+  BITCODE_H dimref;
+} Dwg_Object_BREAKDATA;
+
+typedef struct _dwg_object_BREAKPOINTREF
+{
+  struct _dwg_object_object *parent;
+  // XrefFullSubendPath ??
+} Dwg_Object_BREAKPOINTREF;
+
+typedef struct _dwg_entity_FLIPGRIPENTITY
 {
   struct _dwg_object_entity *parent;
   // ??
-} Dwg_Entity_VISIBILITYGRIPENTITY;
+} Dwg_Entity_FLIPGRIPENTITY;
+
+typedef struct _dwg_entity_LINEARGRIPENTITY
+{
+  struct _dwg_object_entity *parent;
+  // ??
+} Dwg_Entity_LINEARGRIPENTITY;
 
 typedef struct _dwg_entity_POLARGRIPENTITY
 {
   struct _dwg_object_entity *parent;
   // ??
 } Dwg_Entity_POLARGRIPENTITY;
+
+typedef struct _dwg_entity_ROTATIONGRIPENTITY
+{
+  struct _dwg_object_entity *parent;
+  // ??
+} Dwg_Entity_ROTATIONGRIPENTITY;
+
+typedef struct _dwg_entity_VISIBILITYGRIPENTITY
+{
+  struct _dwg_object_entity *parent;
+  // ??
+} Dwg_Entity_VISIBILITYGRIPENTITY;
+
+typedef struct _dwg_entity_XYGRIPENTITY
+{
+  struct _dwg_object_entity *parent;
+  // ??
+} Dwg_Entity_XYGRIPENTITY;
 
 typedef struct _dwg_entity_ALIGNMENTPARAMETERENTITY
 {
@@ -7952,8 +7996,10 @@ typedef struct _dwg_object_entity
     Dwg_Entity_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
     Dwg_Entity_BASEPOINTPARAMETERENTITY *BASEPOINTPARAMETERENTITY;
     Dwg_Entity_EXTRUDEDSURFACE *EXTRUDEDSURFACE;
+    Dwg_Entity_FLIPGRIPENTITY *FLIPGRIPENTITY;
     Dwg_Entity_FLIPPARAMETERENTITY *FLIPPARAMETERENTITY;
     Dwg_Entity_GEOPOSITIONMARKER *GEOPOSITIONMARKER;
+    Dwg_Entity_LINEARGRIPENTITY *LINEARGRIPENTITY;
     Dwg_Entity_LINEARPARAMETERENTITY *LINEARPARAMETERENTITY;
     Dwg_Entity_LOFTEDSURFACE *LOFTEDSURFACE;
     Dwg_Entity_MPOLYGON *MPOLYGON;
@@ -7962,12 +8008,14 @@ typedef struct _dwg_object_entity
     Dwg_Entity_POINTPARAMETERENTITY *POINTPARAMETERENTITY;
     Dwg_Entity_POLARGRIPENTITY *POLARGRIPENTITY;
     Dwg_Entity_REVOLVEDSURFACE *REVOLVEDSURFACE;
+    Dwg_Entity_ROTATIONGRIPENTITY *ROTATIONGRIPENTITY;
     Dwg_Entity_ROTATIONPARAMETERENTITY *ROTATIONPARAMETERENTITY;
     Dwg_Entity_RTEXT *RTEXT;
     Dwg_Entity_SWEPTSURFACE *SWEPTSURFACE;
     Dwg_Entity_TABLE *TABLE;
     Dwg_Entity_VISIBILITYGRIPENTITY *VISIBILITYGRIPENTITY;
     Dwg_Entity_VISIBILITYPARAMETERENTITY *VISIBILITYPARAMETERENTITY;
+    Dwg_Entity_XYGRIPENTITY *XYGRIPENTITY;
     Dwg_Entity_XYPARAMETERENTITY *XYPARAMETERENTITY;
     /* End auto-generated entity-union */
   } tio;
@@ -8243,6 +8291,8 @@ typedef struct _dwg_object_object
     Dwg_Object_ASSOCSWEPTSURFACEACTIONBODY *ASSOCSWEPTSURFACEACTIONBODY;
     Dwg_Object_BLOCKPROPERTIESTABLE *BLOCKPROPERTIESTABLE;
     Dwg_Object_BLOCKPROPERTIESTABLEGRIP *BLOCKPROPERTIESTABLEGRIP;
+    Dwg_Object_BREAKDATA *BREAKDATA;
+    Dwg_Object_BREAKPOINTREF *BREAKPOINTREF;
     Dwg_Object_CONTEXTDATAMANAGER *CONTEXTDATAMANAGER;
     Dwg_Object_CSACDOCUMENTOPTIONS *CSACDOCUMENTOPTIONS;
     Dwg_Object_CURVEPATH *CURVEPATH;
@@ -9506,8 +9556,10 @@ EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   EXPORT int dwg_setup_ARCALIGNEDTEXT (Dwg_Object *obj);
   EXPORT int dwg_setup_BASEPOINTPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_EXTRUDEDSURFACE (Dwg_Object *obj);
+  EXPORT int dwg_setup_FLIPGRIPENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_FLIPPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_GEOPOSITIONMARKER (Dwg_Object *obj);
+  EXPORT int dwg_setup_LINEARGRIPENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_LINEARPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_LOFTEDSURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_MPOLYGON (Dwg_Object *obj);
@@ -9516,12 +9568,14 @@ EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   EXPORT int dwg_setup_POINTPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_POLARGRIPENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_REVOLVEDSURFACE (Dwg_Object *obj);
+  EXPORT int dwg_setup_ROTATIONGRIPENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_ROTATIONPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_RTEXT (Dwg_Object *obj);
   EXPORT int dwg_setup_SWEPTSURFACE (Dwg_Object *obj);
   EXPORT int dwg_setup_TABLE (Dwg_Object *obj);
   EXPORT int dwg_setup_VISIBILITYGRIPENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_VISIBILITYPARAMETERENTITY (Dwg_Object *obj);
+  EXPORT int dwg_setup_XYGRIPENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_XYPARAMETERENTITY (Dwg_Object *obj);
   EXPORT int dwg_setup_ACMECOMMANDHISTORY (Dwg_Object *obj);
   EXPORT int dwg_setup_ACMESCOPE (Dwg_Object *obj);
@@ -9546,6 +9600,8 @@ EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   EXPORT int dwg_setup_ASSOCSWEPTSURFACEACTIONBODY (Dwg_Object *obj);
   EXPORT int dwg_setup_BLOCKPROPERTIESTABLE (Dwg_Object *obj);
   EXPORT int dwg_setup_BLOCKPROPERTIESTABLEGRIP (Dwg_Object *obj);
+  EXPORT int dwg_setup_BREAKDATA (Dwg_Object *obj);
+  EXPORT int dwg_setup_BREAKPOINTREF (Dwg_Object *obj);
   EXPORT int dwg_setup_CONTEXTDATAMANAGER (Dwg_Object *obj);
   EXPORT int dwg_setup_CSACDOCUMENTOPTIONS (Dwg_Object *obj);
   EXPORT int dwg_setup_CURVEPATH (Dwg_Object *obj);

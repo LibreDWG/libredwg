@@ -11211,6 +11211,32 @@ static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_FLIPGRIPENTITY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_FLIPGRIPENTITY *restrict flipgripentity = obj->tio.entity->tio.FLIPGRIPENTITY;
+  failed = 0;
+  if (!obj_obj || !flipgripentity)
+    {
+      fail ("NULL FLIPGRIPENTITY");
+      return 1;
+    }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (flipgripentity, "FLIPGRIPENTITY", "parent", &parent, NULL)
+        && !memcmp (&parent, &flipgripentity->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("FLIPGRIPENTITY.parent [struct _dwg_object_entity*]");
+  }
+  if (failed && (is_class_unstable ("FLIPGRIPENTITY") || is_class_debugging ("FLIPGRIPENTITY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "FLIPGRIPENTITY", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_FLIPPARAMETERENTITY (const Dwg_Object *obj)
 {
   int error = 0;
@@ -13998,6 +14024,32 @@ static int test_LINE (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("LINE") || is_class_debugging ("LINE")))
     {
       ok ("%s failed %d tests (TODO unstable)", "LINE", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_LINEARGRIPENTITY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_LINEARGRIPENTITY *restrict lineargripentity = obj->tio.entity->tio.LINEARGRIPENTITY;
+  failed = 0;
+  if (!obj_obj || !lineargripentity)
+    {
+      fail ("NULL LINEARGRIPENTITY");
+      return 1;
+    }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (lineargripentity, "LINEARGRIPENTITY", "parent", &parent, NULL)
+        && !memcmp (&parent, &lineargripentity->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("LINEARGRIPENTITY.parent [struct _dwg_object_entity*]");
+  }
+  if (failed && (is_class_unstable ("LINEARGRIPENTITY") || is_class_debugging ("LINEARGRIPENTITY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LINEARGRIPENTITY", failed);
       failed = 0;
     }
   return failed;
@@ -20395,6 +20447,32 @@ static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ROTATIONGRIPENTITY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_ROTATIONGRIPENTITY *restrict rotationgripentity = obj->tio.entity->tio.ROTATIONGRIPENTITY;
+  failed = 0;
+  if (!obj_obj || !rotationgripentity)
+    {
+      fail ("NULL ROTATIONGRIPENTITY");
+      return 1;
+    }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (rotationgripentity, "ROTATIONGRIPENTITY", "parent", &parent, NULL)
+        && !memcmp (&parent, &rotationgripentity->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("ROTATIONGRIPENTITY.parent [struct _dwg_object_entity*]");
+  }
+  if (failed && (is_class_unstable ("ROTATIONGRIPENTITY") || is_class_debugging ("ROTATIONGRIPENTITY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ROTATIONGRIPENTITY", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_ROTATIONPARAMETERENTITY (const Dwg_Object *obj)
 {
   int error = 0;
@@ -25227,6 +25305,32 @@ static int test_XLINE (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("XLINE") || is_class_debugging ("XLINE")))
     {
       ok ("%s failed %d tests (TODO unstable)", "XLINE", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_XYGRIPENTITY (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_XYGRIPENTITY *restrict xygripentity = obj->tio.entity->tio.XYGRIPENTITY;
+  failed = 0;
+  if (!obj_obj || !xygripentity)
+    {
+      fail ("NULL XYGRIPENTITY");
+      return 1;
+    }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (xygripentity, "XYGRIPENTITY", "parent", &parent, NULL)
+        && !memcmp (&parent, &xygripentity->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("XYGRIPENTITY.parent [struct _dwg_object_entity*]");
+  }
+  if (failed && (is_class_unstable ("XYGRIPENTITY") || is_class_debugging ("XYGRIPENTITY")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "XYGRIPENTITY", failed);
       failed = 0;
     }
   return failed;
@@ -43665,6 +43769,91 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("BLOCK_HEADER") || is_class_debugging ("BLOCK_HEADER")))
     {
       ok ("%s failed %d tests (TODO unstable)", "BLOCK_HEADER", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_BREAKDATA (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_BREAKDATA *restrict breakdata = obj->tio.object->tio.BREAKDATA;
+  failed = 0;
+  if (!obj_obj || !breakdata)
+    {
+      fail ("NULL BREAKDATA");
+      return 1;
+    }
+  {
+    BITCODE_H dimref;
+    if (dwg_dynapi_entity_value (breakdata, "BREAKDATA", "dimref", &dimref, NULL)
+        && !memcmp (&dimref, &breakdata->dimref, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("BREAKDATA.dimref [H]");
+  }
+  {
+    BITCODE_BL num_pointrefs;
+    if (dwg_dynapi_entity_value (breakdata, "BREAKDATA", "num_pointrefs", &num_pointrefs, NULL)
+        && num_pointrefs == breakdata->num_pointrefs)
+      pass ();
+    else
+      fail ("BREAKDATA.num_pointrefs [BL] %u != %u", breakdata->num_pointrefs, num_pointrefs);
+    num_pointrefs++;
+    if (dwg_dynapi_entity_set_value (breakdata, "BREAKDATA", "num_pointrefs", &num_pointrefs, 0)
+        && num_pointrefs == breakdata->num_pointrefs)
+      pass ();
+    else
+      fail ("BREAKDATA.num_pointrefs [BL] set+1 %u != %u", breakdata->num_pointrefs, num_pointrefs);
+    breakdata->num_pointrefs--;
+  }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (breakdata, "BREAKDATA", "parent", &parent, NULL)
+        && !memcmp (&parent, &breakdata->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("BREAKDATA.parent [struct _dwg_object_object*]");
+  }
+  {
+    BITCODE_H* pointrefs;
+    BITCODE_BL count = 0;
+    if (dwg_dynapi_entity_value (breakdata, "BREAKDATA", "num_pointrefs", &count, NULL)
+        && dwg_dynapi_entity_value (breakdata, "BREAKDATA", "pointrefs", &pointrefs, NULL)
+        && pointrefs == breakdata->pointrefs)
+      pass ();
+    else
+      fail ("BREAKDATA.pointrefs [H*] * %u num_pointrefs", count);
+  }
+  if (failed && (is_class_unstable ("BREAKDATA") || is_class_debugging ("BREAKDATA")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "BREAKDATA", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_BREAKPOINTREF (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Object *restrict obj_obj = obj->tio.object;
+  Dwg_Object_BREAKPOINTREF *restrict breakpointref = obj->tio.object->tio.BREAKPOINTREF;
+  failed = 0;
+  if (!obj_obj || !breakpointref)
+    {
+      fail ("NULL BREAKPOINTREF");
+      return 1;
+    }
+  {
+    struct _dwg_object_object* parent;
+    if (dwg_dynapi_entity_value (breakpointref, "BREAKPOINTREF", "parent", &parent, NULL)
+        && !memcmp (&parent, &breakpointref->parent, sizeof (struct _dwg_object_object*)))
+        pass ();
+    else
+        fail ("BREAKPOINTREF.parent [struct _dwg_object_object*]");
+  }
+  if (failed && (is_class_unstable ("BREAKPOINTREF") || is_class_debugging ("BREAKPOINTREF")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "BREAKPOINTREF", failed);
       failed = 0;
     }
   return failed;
@@ -62237,6 +62426,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ENDBLK(obj);
   else  if (obj->fixedtype == DWG_TYPE_EXTRUDEDSURFACE)
     error += test_EXTRUDEDSURFACE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_FLIPGRIPENTITY)
+    error += test_FLIPGRIPENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_FLIPPARAMETERENTITY)
     error += test_FLIPPARAMETERENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_GEOPOSITIONMARKER)
@@ -62257,6 +62448,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_LIGHT(obj);
   else  if (obj->fixedtype == DWG_TYPE_LINE)
     error += test_LINE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_LINEARGRIPENTITY)
+    error += test_LINEARGRIPENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_LINEARPARAMETERENTITY)
     error += test_LINEARPARAMETERENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_LOFTEDSURFACE)
@@ -62313,6 +62506,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_REGION(obj);
   else  if (obj->fixedtype == DWG_TYPE_REVOLVEDSURFACE)
     error += test_REVOLVEDSURFACE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ROTATIONGRIPENTITY)
+    error += test_ROTATIONGRIPENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ROTATIONPARAMETERENTITY)
     error += test_ROTATIONPARAMETERENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_RTEXT)
@@ -62357,6 +62552,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_WIPEOUT(obj);
   else  if (obj->fixedtype == DWG_TYPE_XLINE)
     error += test_XLINE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_XYGRIPENTITY)
+    error += test_XYGRIPENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_XYPARAMETERENTITY)
     error += test_XYPARAMETERENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACMECOMMANDHISTORY)
@@ -62573,6 +62770,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_BLOCK_CONTROL(obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
     error += test_BLOCK_HEADER(obj);
+  else  if (obj->fixedtype == DWG_TYPE_BREAKDATA)
+    error += test_BREAKDATA(obj);
+  else  if (obj->fixedtype == DWG_TYPE_BREAKPOINTREF)
+    error += test_BREAKPOINTREF(obj);
   else  if (obj->fixedtype == DWG_TYPE_CELLSTYLEMAP)
     error += test_CELLSTYLEMAP(obj);
   else  if (obj->fixedtype == DWG_TYPE_CONTEXTDATAMANAGER)
@@ -62845,6 +63046,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ENDBLK (obj);
   else  if (obj->fixedtype == DWG_TYPE_EXTRUDEDSURFACE)
     error += test_EXTRUDEDSURFACE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_FLIPGRIPENTITY)
+    error += test_FLIPGRIPENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_FLIPPARAMETERENTITY)
     error += test_FLIPPARAMETERENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_GEOPOSITIONMARKER)
@@ -62865,6 +63068,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_LIGHT (obj);
   else  if (obj->fixedtype == DWG_TYPE_LINE)
     error += test_LINE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_LINEARGRIPENTITY)
+    error += test_LINEARGRIPENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_LINEARPARAMETERENTITY)
     error += test_LINEARPARAMETERENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_LOFTEDSURFACE)
@@ -62921,6 +63126,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_REGION (obj);
   else  if (obj->fixedtype == DWG_TYPE_REVOLVEDSURFACE)
     error += test_REVOLVEDSURFACE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ROTATIONGRIPENTITY)
+    error += test_ROTATIONGRIPENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ROTATIONPARAMETERENTITY)
     error += test_ROTATIONPARAMETERENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_RTEXT)
@@ -62965,6 +63172,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_WIPEOUT (obj);
   else  if (obj->fixedtype == DWG_TYPE_XLINE)
     error += test_XLINE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_XYGRIPENTITY)
+    error += test_XYGRIPENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_XYPARAMETERENTITY)
     error += test_XYPARAMETERENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACMECOMMANDHISTORY)
@@ -63181,6 +63390,10 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_BLOCK_CONTROL (obj);
   else  if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
     error += test_BLOCK_HEADER (obj);
+  else  if (obj->fixedtype == DWG_TYPE_BREAKDATA)
+    error += test_BREAKDATA (obj);
+  else  if (obj->fixedtype == DWG_TYPE_BREAKPOINTREF)
+    error += test_BREAKPOINTREF (obj);
   else  if (obj->fixedtype == DWG_TYPE_CELLSTYLEMAP)
     error += test_CELLSTYLEMAP (obj);
   else  if (obj->fixedtype == DWG_TYPE_CONTEXTDATAMANAGER)
@@ -63615,6 +63828,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"EXTRUDEDSURFACE\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (Dwg_Entity_FLIPGRIPENTITY);
+  size2 = dwg_dynapi_fields_size ("FLIPGRIPENTITY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_FLIPGRIPENTITY): %d != "
+               "dwg_dynapi_fields_size (\"FLIPGRIPENTITY\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (Dwg_Entity_FLIPPARAMETERENTITY);
   size2 = dwg_dynapi_fields_size ("FLIPPARAMETERENTITY");
   if (size1 != size2)
@@ -63693,6 +63914,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_LINE): %d != "
                "dwg_dynapi_fields_size (\"LINE\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_LINEARGRIPENTITY);
+  size2 = dwg_dynapi_fields_size ("LINEARGRIPENTITY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_LINEARGRIPENTITY): %d != "
+               "dwg_dynapi_fields_size (\"LINEARGRIPENTITY\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_LINEARPARAMETERENTITY);
@@ -63919,6 +64148,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"REVOLVEDSURFACE\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (Dwg_Entity_ROTATIONGRIPENTITY);
+  size2 = dwg_dynapi_fields_size ("ROTATIONGRIPENTITY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_ROTATIONGRIPENTITY): %d != "
+               "dwg_dynapi_fields_size (\"ROTATIONGRIPENTITY\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (Dwg_Entity_ROTATIONPARAMETERENTITY);
   size2 = dwg_dynapi_fields_size ("ROTATIONPARAMETERENTITY");
   if (size1 != size2)
@@ -64101,6 +64338,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_XLINE): %d != "
                "dwg_dynapi_fields_size (\"XLINE\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_XYGRIPENTITY);
+  size2 = dwg_dynapi_fields_size ("XYGRIPENTITY");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_XYGRIPENTITY): %d != "
+               "dwg_dynapi_fields_size (\"XYGRIPENTITY\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_XYPARAMETERENTITY);
@@ -64965,6 +65210,22 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Object_BLOCK_HEADER): %d != "
                "dwg_dynapi_fields_size (\"BLOCK_HEADER\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Object_BREAKDATA);
+  size2 = dwg_dynapi_fields_size ("BREAKDATA");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Object_BREAKDATA): %d != "
+               "dwg_dynapi_fields_size (\"BREAKDATA\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Object_BREAKPOINTREF);
+  size2 = dwg_dynapi_fields_size ("BREAKPOINTREF");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Object_BREAKPOINTREF): %d != "
+               "dwg_dynapi_fields_size (\"BREAKPOINTREF\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Object_CELLSTYLEMAP);

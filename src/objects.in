@@ -78,6 +78,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "ELLIPSE",                   "ELLIPSE",                    DWG_TYPE_ELLIPSE,	1,	STABLE
 "ENDBLK",                    "ENDBLK",                     DWG_TYPE_ENDBLK,	1,	STABLE
 "EXTRUDEDSURFACE",           "EXTRUDEDSURFACE",            DWG_TYPE_EXTRUDEDSURFACE,	1,	DEBUGGING
+"FLIPGRIPENTITY",            "FLIPGRIPENTITY",             DWG_TYPE_FLIPGRIPENTITY,	1,	DEBUGGING
 "FLIPPARAMETERENTITY",       "FLIPPARAMETERENTITY",        DWG_TYPE_FLIPPARAMETERENTITY,	1,	DEBUGGING
 "GEOPOSITIONMARKER",         "POSITIONMARKER",             DWG_TYPE_GEOPOSITIONMARKER,	1,	DEBUGGING
 "HATCH",                     "HATCH",                      DWG_TYPE_HATCH,	1,	STABLE
@@ -88,6 +89,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "LEADER",                    "LEADER",                     DWG_TYPE_LEADER,	1,	STABLE
 "LIGHT",                     "LIGHT",                      DWG_TYPE_LIGHT,	1,	STABLE
 "LINE",                      "LINE",                       DWG_TYPE_LINE,	1,	STABLE
+"LINEARGRIPENTITY",          "LINEARGRIPENTITY",           DWG_TYPE_LINEARGRIPENTITY,	1,	DEBUGGING
 "LINEARPARAMETERENTITY",     "LINEARPARAMETERENTITY",      DWG_TYPE_LINEARPARAMETERENTITY,	1,	DEBUGGING
 "LOFTEDSURFACE",             "LOFTEDSURFACE",              DWG_TYPE_LOFTEDSURFACE,	1,	DEBUGGING
 "LWPOLYLINE",                "LWPOLYLINE",                 DWG_TYPE_LWPOLYLINE,	1,	STABLE
@@ -116,6 +118,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "RAY",                       "RAY",                        DWG_TYPE_RAY,	1,	STABLE
 "REGION",                    "REGION",                     DWG_TYPE_REGION,	1,	STABLE
 "REVOLVEDSURFACE",           "REVOLVEDSURFACE",            DWG_TYPE_REVOLVEDSURFACE,	1,	DEBUGGING
+"ROTATIONGRIPENTITY",        "ROTATIONGRIPENTITY",         DWG_TYPE_ROTATIONGRIPENTITY,	1,	DEBUGGING
 "ROTATIONPARAMETERENTITY",   "ROTATIONPARAMETERENTITY",    DWG_TYPE_ROTATIONPARAMETERENTITY,	1,	DEBUGGING
 "RTEXT",                     "RTEXT",                      DWG_TYPE_RTEXT,	1,	DEBUGGING
 "SECTIONOBJECT",             "SECTIONOBJECT",              DWG_TYPE_SECTIONOBJECT,	1,	STABLE
@@ -139,6 +142,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "VISIBILITYPARAMETERENTITY", "VISIBILITYPARAMETERENTITY",  DWG_TYPE_VISIBILITYPARAMETERENTITY,	1,	DEBUGGING
 "WIPEOUT",                   "WIPEOUT",                    DWG_TYPE_WIPEOUT,	1,	UNSTABLE
 "XLINE",                     "XLINE",                      DWG_TYPE_XLINE,	1,	STABLE
+"XYGRIPENTITY",              "XYGRIPENTITY",               DWG_TYPE_XYGRIPENTITY,	1,	DEBUGGING
 "XYPARAMETERENTITY",         "XYPARAMETERENTITY",          DWG_TYPE_XYPARAMETERENTITY,	1,	DEBUGGING
 # Objects
 "ACMECOMMANDHISTORY",               "ACMECOMMANDHISTORY",                DWG_TYPE_ACMECOMMANDHISTORY,	0,	DEBUGGING
@@ -252,6 +256,8 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "BLOCKXYPARAMETER",                 "BLOCKXYPARAMETER",                  DWG_TYPE_BLOCKXYPARAMETER,	0,	UNSTABLE
 "BLOCK_CONTROL",                    "BLOCK_CONTROL",                     DWG_TYPE_BLOCK_CONTROL,	0,	STABLE
 "BLOCK_HEADER",                     "BLOCK_HEADER",                      DWG_TYPE_BLOCK_HEADER,	0,	STABLE
+"BREAKDATA",                        "BREAKDATA",                         DWG_TYPE_BREAKDATA,	0,	DEBUGGING
+"BREAKPOINTREF",                    "BREAKPOINTREF",                     DWG_TYPE_BREAKPOINTREF,	0,	DEBUGGING
 "CELLSTYLEMAP",                     "CELLSTYLEMAP",                      DWG_TYPE_CELLSTYLEMAP,	0,	STABLE
 "CONTEXTDATAMANAGER",               "CONTEXTDATAMANAGER",                DWG_TYPE_CONTEXTDATAMANAGER,	0,	DEBUGGING
 "CSACDOCUMENTOPTIONS",              "CSACDOCUMENTOPTIONS",               DWG_TYPE_CSACDOCUMENTOPTIONS,	0,	DEBUGGING

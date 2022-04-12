@@ -1899,6 +1899,19 @@ BD*,	DXF 40
 @end vtable
 @end indentedblock
 
+@strong{FLIPGRIPENTITY} @anchor{FLIPGRIPENTITY}
+@cindex entity, FLIPGRIPENTITY
+@vindex FLIPGRIPENTITY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+
+@end vtable
+@end indentedblock
+
 @strong{FLIPPARAMETERENTITY} @anchor{FLIPPARAMETERENTITY}
 @cindex entity, FLIPPARAMETERENTITY
 @vindex FLIPPARAMETERENTITY
@@ -2415,6 +2428,19 @@ RC
 BT,	DXF 39
 @item extrusion
 BE,	DXF 210
+
+@end vtable
+@end indentedblock
+
+@strong{LINEARGRIPENTITY} @anchor{LINEARGRIPENTITY}
+@cindex entity, LINEARGRIPENTITY
+@vindex LINEARGRIPENTITY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
 
 @end vtable
 @end indentedblock
@@ -3667,6 +3693,19 @@ B,	DXF 291
 @end vtable
 @end indentedblock
 
+@strong{ROTATIONGRIPENTITY} @anchor{ROTATIONGRIPENTITY}
+@cindex entity, ROTATIONGRIPENTITY
+@vindex ROTATIONGRIPENTITY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+
+@end vtable
+@end indentedblock
+
 @strong{ROTATIONPARAMETERENTITY} @anchor{ROTATIONPARAMETERENTITY}
 @cindex entity, ROTATIONPARAMETERENTITY
 @vindex ROTATIONPARAMETERENTITY
@@ -4643,6 +4682,19 @@ H,	DXF 360
 
 @indentedblock
 @xref{RAY}
+@end indentedblock
+
+@strong{XYGRIPENTITY} @anchor{XYGRIPENTITY}
+@cindex entity, XYGRIPENTITY
+@vindex XYGRIPENTITY
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+
+@end vtable
 @end indentedblock
 
 @strong{XYPARAMETERENTITY} @anchor{XYPARAMETERENTITY}
@@ -8664,6 +8716,38 @@ H
 H*,	DXF 331
 @item layout
 H,	DXF 340
+
+@end vtable
+@end indentedblock
+
+@strong{BREAKDATA} @anchor{BREAKDATA}
+@cindex object, BREAKDATA
+@vindex BREAKDATA
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
+@item num_pointrefs
+BL,	DXF 90
+@item pointrefs
+H*,	DXF 330
+@item dimref
+H,	DXF 331
+
+@end vtable
+@end indentedblock
+
+@strong{BREAKPOINTREF} @anchor{BREAKPOINTREF}
+@cindex object, BREAKPOINTREF
+@vindex BREAKPOINTREF
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_object*
 
 @end vtable
 @end indentedblock
