@@ -627,6 +627,11 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_XYPARAMETERENTITY,
   // after 1.0 add new types here for binary compat
 
+  /* preR13 entities */
+  DWG_TYPE__3DLINE,
+  DWG_TYPE_REPEAT,
+  DWG_TYPE_ENDREP,
+
   DWG_TYPE_FREED        = 0xfffd,
   DWG_TYPE_UNKNOWN_ENT  = 0xfffe,
   DWG_TYPE_UNKNOWN_OBJ  = 0xffff,
@@ -7779,6 +7784,39 @@ typedef struct _dwg_object_UNKNOWN_OBJ
   struct _dwg_object_object *parent;
 } Dwg_Object_UNKNOWN_OBJ;
 
+/**
+ REPEAT (none/5) entity
+ */
+typedef struct _dwg_entity_REPEAT
+{
+  struct _dwg_object_entity *parent;
+} Dwg_Entity_REPEAT;
+
+/**
+ ENDREP (none/6) entity
+ */
+typedef struct _dwg_entity_ENDREP
+{
+  struct _dwg_object_entity *parent;
+
+  BITCODE_RS columns; // DXF 70
+  BITCODE_RS rows;    // DXF 71
+  BITCODE_2RD start;  // DXF 40|41
+} Dwg_Entity_ENDREP;
+
+/**
+ 3DLINE (none/21) entity
+ */
+typedef struct _dwg_entity__3DLINE
+{
+  struct _dwg_object_entity *parent;
+
+  BITCODE_3RD start;     // DXF 10|20|30
+  BITCODE_3RD end;       // DXF 11|21|31
+  BITCODE_3RD extrusion; // DXF 210
+  BITCODE_RD thickness;  // DXF 39
+} Dwg_Entity__3DLINE;
+
 /* OBJECTS - END ************************************************************/
 
 /**
@@ -7856,6 +7894,7 @@ typedef struct _dwg_object_entity
     Dwg_DIMENSION_common *DIMENSION_common;
     /* Start auto-generated entity-union. Do not touch. */
     Dwg_Entity__3DFACE *_3DFACE;
+    Dwg_Entity__3DLINE *_3DLINE;
     Dwg_Entity__3DSOLID *_3DSOLID;
     Dwg_Entity_ARC *ARC;
     Dwg_Entity_ATTDEF *ATTDEF;
@@ -7872,6 +7911,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_DIMENSION_RADIUS *DIMENSION_RADIUS;
     Dwg_Entity_ELLIPSE *ELLIPSE;
     Dwg_Entity_ENDBLK *ENDBLK;
+    Dwg_Entity_ENDREP *ENDREP;
     Dwg_Entity_INSERT *INSERT;
     Dwg_Entity_LEADER *LEADER;
     Dwg_Entity_LINE *LINE;
@@ -7887,6 +7927,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_PROXY_ENTITY *PROXY_ENTITY;
     Dwg_Entity_RAY *RAY;
     Dwg_Entity_REGION *REGION;
+    Dwg_Entity_REPEAT *REPEAT;
     Dwg_Entity_SEQEND *SEQEND;
     Dwg_Entity_SHAPE *SHAPE;
     Dwg_Entity_SOLID *SOLID;
@@ -9235,6 +9276,7 @@ EXPORT int dwg_object_name (const char *const restrict name, // in
 */
 /* Start auto-generated content. Do not touch. */
 EXPORT int dwg_setup__3DFACE (Dwg_Object *obj);
+EXPORT int dwg_setup__3DLINE (Dwg_Object *obj);
 EXPORT int dwg_setup__3DSOLID (Dwg_Object *obj);
 EXPORT int dwg_setup_ARC (Dwg_Object *obj);
 EXPORT int dwg_setup_ATTDEF (Dwg_Object *obj);
@@ -9251,6 +9293,7 @@ EXPORT int dwg_setup_DIMENSION_ORDINATE (Dwg_Object *obj);
 EXPORT int dwg_setup_DIMENSION_RADIUS (Dwg_Object *obj);
 EXPORT int dwg_setup_ELLIPSE (Dwg_Object *obj);
 EXPORT int dwg_setup_ENDBLK (Dwg_Object *obj);
+EXPORT int dwg_setup_ENDREP (Dwg_Object *obj);
 EXPORT int dwg_setup_INSERT (Dwg_Object *obj);
 EXPORT int dwg_setup_LEADER (Dwg_Object *obj);
 EXPORT int dwg_setup_LINE (Dwg_Object *obj);
@@ -9266,6 +9309,7 @@ EXPORT int dwg_setup_POLYLINE_PFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_PROXY_ENTITY (Dwg_Object *obj);
 EXPORT int dwg_setup_RAY (Dwg_Object *obj);
 EXPORT int dwg_setup_REGION (Dwg_Object *obj);
+EXPORT int dwg_setup_REPEAT (Dwg_Object *obj);
 EXPORT int dwg_setup_SEQEND (Dwg_Object *obj);
 EXPORT int dwg_setup_SHAPE (Dwg_Object *obj);
 EXPORT int dwg_setup_SOLID (Dwg_Object *obj);
