@@ -5331,6 +5331,12 @@ decode_preR13_entities (unsigned long start, unsigned long end,
         case 4:
           error |= dwg_decode_SHAPE (dat, obj);
           break;
+        case 5:
+          error |= dwg_decode_REPEAT (dat, obj);
+          break;
+        case 6:
+          error |= dwg_decode_ENDREP (dat, obj);
+          break;
         case 7:
           error |= dwg_decode_TEXT (dat, obj);
           break;
@@ -5340,6 +5346,7 @@ decode_preR13_entities (unsigned long start, unsigned long end,
         case 9:
           error |= dwg_decode_TRACE (dat, obj);
           break;
+        /* 10: load (convert from pre AC1.50) */
         case 11:
           error |= dwg_decode_SOLID (dat, obj);
           break;
@@ -5361,11 +5368,15 @@ decode_preR13_entities (unsigned long start, unsigned long end,
         case 17:
           error |= dwg_decode_SEQEND (dat, obj);
           break;
+        /* 18: another polyline */
         case 19:
           error |= dwg_decode_POLYLINE_2D (dat, obj);
           break;
         case 20:
           error |= dwg_decode_VERTEX_2D (dat, obj);
+          break;
+        case 21:
+          error |= dwg_decode__3DLINE (dat, obj);
           break;
         case 22:
           error |= dwg_decode__3DFACE (dat, obj);
