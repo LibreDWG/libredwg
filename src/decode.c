@@ -140,7 +140,7 @@ EXPORT int
 dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int i;
-  char version[7];
+  char version[8];
 
   dwg->num_object_refs = 0;
   // dwg->num_layers = 0; // see now dwg->layer_control->num_entries
@@ -200,7 +200,13 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       return DWG_ERR_INVALIDDWG;
     }
   strncpy (version, (const char *)dat->chain, 6);
-  version[6] = '\0';
+  if (memcmp (dat->chain, "AC103-4", 7) == 0)
+    {
+      version[6] = '4';
+      version[7] = '\0';
+    }
+  else
+    version[6] = '\0';
 
   dwg->header.from_version = dwg_version_hdr_type(version);
   if (!dwg->header.from_version)
@@ -221,11 +227,11 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       dat->version = dwg->header.version = dat->from_version;
     }
   LOG_INFO ("This file's version code is: %s (%s)\n", version,
-            dwg_version_type(dat->from_version))
+            dwg_version_type (dat->from_version))
 
 #define WE_CAN                                                                \
   "This version of LibreDWG is only capable of decoding "                     \
-  "version r13-r2018 (code: AC1012-AC1032) DWG files.\n"
+  "version r13-r2021 (code: AC1012-AC1035) DWG files.\n"
 
   PRE (R_13)
   {
@@ -240,12 +246,13 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   VERSION (R_2007) { return decode_R2007 (dat, dwg); }
   SINCE (R_2010)
   {
-    read_r2007_init (dwg);
+    read_r2007_init (dwg); // sets loglevel only for now
     return decode_R2004 (dat, dwg);
   }
 
   // This line should not be reached
-  LOG_ERROR ("LibreDWG does not support this version: %s.", version)
+  LOG_ERROR ("LibreDWG does not support this DWG version: %s (%s).",
+	     version, dwg_version_type (dat->from_version))
   return DWG_ERR_INVALIDDWG;
 }
 
@@ -3718,6 +3725,8 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     int i;
 
     dat->byte = 0x06;
+    if (dat->from_version > R_2021)
+      dat->byte = 0x07;
     // clang-format off
     #include "header.spec"
     // clang-format on
