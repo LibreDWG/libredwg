@@ -259,7 +259,7 @@ typedef enum DWG_VERSION_TYPE
   R_1_4,	/* AC1.40 AutoCAD Release 1.4 */
   R_1_402b,	/* AC402b AutoCAD Release 1.402b */
   R_2_0,	/* AC1.50 AutoCAD Release 2.0 */
-  R_2_1,	/* AC2.10 AutoCAD Release 2.10 */
+  R_2_10,	/* AC2.10 AutoCAD Release 2.10 */
   R_2_21,	/* AC2.21 AutoCAD Release 2.21 */
   R_2_22,	/* AC2.22 AutoCAD Release 2.22 */
   R_2_4,	/* AC1001 AutoCAD Release 2.4 */
@@ -8477,9 +8477,10 @@ typedef enum DWG_SECTION_TYPE_R11 /* tables */
 
 typedef struct _dwg_section
 {
-  int32_t    number; /* preR13: count of entries, r2007: id */
+  int32_t    number; /* preR13: num_entries, r2007: id */
   BITCODE_RL size;   /* now unsigned */
   uint64_t   address;
+  /* r2000+: */
   BITCODE_RL parent;
   BITCODE_RL left;
   BITCODE_RL right;
@@ -8493,6 +8494,7 @@ typedef struct _dwg_section
   BITCODE_RL comp_data_size;
   BITCODE_RL compression_type;
   BITCODE_RL checksum;
+  BITCODE_RS flags; /* preR13 */
 } Dwg_Section;
 
 /* Dwg_R2007_Section:

@@ -34,7 +34,7 @@ const struct dwg_versions dwg_versions[] = {
   { R_1_4,	"r1.40", "AC1.40", "AutoCAD Release 1.4", 2 },
   { R_1_402b,	"r402b", "AC402b", "AutoCAD Release 1.402b", 3 },
   { R_2_0,	"r1.50", "AC1.50", "AutoCAD Release 2.0", 4 },
-  { R_2_1,	"r2.10", "AC2.10", "AutoCAD Release 2.10", 5 },
+  { R_2_10,	"r2.10", "AC2.10", "AutoCAD Release 2.10", 5 },
   { R_2_21,	"r2.21", "AC2.21", "AutoCAD Release 2.21", 6 },
   { R_2_22,	"r2.22", "AC2.22", "AutoCAD Release 2.22", 7 },
   { R_2_4,	"r2.4",  "AC1001", "AutoCAD Release 2.4", 8 },

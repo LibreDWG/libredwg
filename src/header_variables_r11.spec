@@ -20,20 +20,20 @@
 
   FIELD_3RD (INSBASE, 10); //ok 0x5e
   VERSIONS (R_10, R_11) {
-      FIELD_CAST (PLINEGEN, RS, B, 70); //ok
+    FIELD_CAST (PLINEGEN, RS, B, 70); //ok
   } else {
-      SINCE(R_2_0) { // since AC1.50
-	  FIELD_RS (num_entities, 0);
-      }
+    SINCE(R_2_0) { // since AC1.50
+      FIELD_RS (num_entities, 0);
+    }
   }
   FIELD_3RD (EXTMIN, 10);
   FIELD_3RD (EXTMAX, 10);
   FIELD_2RD (LIMMIN, 10);
   FIELD_2RD (LIMMAX, 10);
   FIELD_2RD (VIEWCTR, 12);
-  FIELD_RD (unknown_0, 0); //0d8
+  FIELD_RD (unknown_0, 14); // VIEWCTR.z, always 0.0
   FIELD_RD (VIEWSIZE, 40);
-  FIELD_RS (SNAPMODE, 70);    //ineffective
+  FIELD_RS (SNAPMODE, 70);    //unhandled by ODA
   FIELD_2RD (SNAPUNIT, 14);   //??
   FIELD_2RD (SNAPBASE, 13);   //??
   FIELD_RD (SNAPANG, 50);     //??
@@ -78,6 +78,8 @@
   FIELD_RD (DIMTXT, 40); //ok
   FIELD_RD (DIMCEN, 40); //ok
   FIELD_RD (DIMTSZ, 40); //ok
+  PRE(R_2_0) // AC1.2 definitely
+     goto hdr_end;
   FIELD_RC (DIMTOL, 70); //ok 1f3
   FIELD_RC (DIMLIM, 70); //ok 1f4
   FIELD_RC (DIMTIH, 70); //ok 1f5
@@ -85,30 +87,39 @@
   FIELD_RC (DIMSE1, 70); //ok
   FIELD_RC (DIMSE2, 70); //ok
   FIELD_CAST (DIMTAD, RC, RS, 70); //ok
-  PRE(R_2_1)
-     return 0;
+  if (dwg->header.num_header_vars <= 74)
+     goto hdr_end;
   FIELD_RC (LIMCHECK, 70); //ok 1fa
-  DEBUG_HERE //1fb
-
-  // not in DWG, resp. not converted by ODA from r12 dxf to r12 dwg:
-  // SNAPMODE, DRAGMODE, BLIPMODE, CHAMFERA, CHAMFERB,
-  // COORDS, ATTDIA, ATTREQ, HANDLING, WORLDVIEW, SHADEDGE
-
-  //the names?
+  //DEBUG_HERE //1fb
+  // just guessing. not in DWG, resp. not converted by ODA from r12 dxf to r12 dwg:
+  //   SNAPMODE, DRAGMODE, BLIPMODE, CHAMFERA, CHAMFERB,
+  //   COORDS, ATTDIA, ATTREQ, HANDLING, WORLDVIEW, SHADEDGE
+  FIELD_RC (unknown_10, 70);
+  FIELD_RC (DRAGMODE, 70);
+  FIELD_RC (unknown_11, 70);
+  FIELD_RC (CHAMFERA, 70);
+  FIELD_RC (CHAMFERB, 70);
+  FIELD_RC (COORDS, 70);
+  FIELD_RC (ATTDIA, 70);
+  FIELD_RC (ATTREQ, 70);
+  FIELD_RC (HANDLING, 70);
+  FIELD_RC (WORLDVIEW, 70);
+  FIELD_RC (SHADEDGE, 70);
   dat->byte = 0x229;
   FIELD_RD (ELEVATION, 40); //ok
   FIELD_RD (THICKNESS, 40); //ok
   FIELD_3RD (VIEWDIR, 10);
-  DEBUG_HERE //252
-
+  //DEBUG_HERE //252
+  // skip lots of 3d points
   dat->byte = 0x2e1;
   FIELD_RS (unknown_18, 0);
   FIELD_RC (BLIPMODE, 70);
+  if (dwg->header.num_header_vars <= 83) // PRE(R_2_21)
+     goto hdr_end;
   FIELD_CAST (DIMZIN, RC, B, 70); //ok
   FIELD_RD (DIMRND, 40);
   FIELD_RD (DIMDLE, 40);
   DEBUG_HERE //2ee
-
   /*
   TODO...
   FIELD_HANDLE (UCSNAME, ANYCODE);

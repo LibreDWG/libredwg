@@ -1536,7 +1536,7 @@
 
 // Does size include the CRC?
 #define DWG_ENTITY_END                                                        \
-    {                                                                         \
+    SINCE (R_13) {                                                            \
       unsigned long pos = obj_stream_position (dat, hdl_dat, str_dat);        \
       int64_t padding = (obj->size * 8) - pos;                                \
       bit_set_position (dat, pos);                                            \

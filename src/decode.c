@@ -75,14 +75,13 @@ static bool env_var_checked_p;
  * Private functions
  */
 
-
-static void decode_preR13_section_ptr (const char *restrict name,
-                                       Dwg_Section_Type_r11 id,
-                                       Bit_Chain *restrict dat,
-                                       Dwg_Data *restrict dwg);
+static int decode_preR13_section_hdr (const char *restrict name,
+				      Dwg_Section_Type_r11 id,
+				      Bit_Chain *restrict dat,
+				      Dwg_Data *restrict dwg);
 static void decode_preR13_section_chk (Dwg_Section_Type_r11 id,
-                                       Bit_Chain *restrict dat,
-                                       Dwg_Data *restrict dwg);
+				       Bit_Chain *restrict dat,
+				       Dwg_Data *restrict dwg);
 static int decode_preR13_section (Dwg_Section_Type_r11 id,
                                   Bit_Chain *restrict dat,
                                   Dwg_Data *restrict dwg);
@@ -256,21 +255,29 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return DWG_ERR_INVALIDDWG;
 }
 
-// We put the 3x 10 table fields into sections.
-// number is the number of elements in the table. >=r13 it is the id.
-static void
-decode_preR13_section_ptr (const char *restrict name, Dwg_Section_Type_r11 id,
-                           Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+// We put the 5 tables into sections.
+// number is num_entries in the table. >=r13 it is the id.
+static int
+decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
+		           Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Section *tbl = &dwg->header.section[id];
   tbl->size = bit_read_RS (dat);
-  tbl->number = bit_read_RL (dat);
+  tbl->number = bit_read_RS (dat);
+  tbl->flags = bit_read_RS (dat);
   tbl->address = bit_read_RL (dat);
   strncpy (tbl->name, name, 63);
-  tbl->name [63] = '\0';
-  LOG_TRACE ("ptr table %-8s [%2d]: size:%-4u nr:%-2ld (0x%lx-0x%lx)\n",
+  tbl->name[63] = '\0';
+  LOG_TRACE ("ptr table %-8s [%2d]: size:%-4u num:%-2ld (0x%lx-0x%lx) flags:0x%x\n",
              tbl->name, id, tbl->size, (long)tbl->number, (unsigned long)tbl->address,
-             (unsigned long)(tbl->address + (unsigned long)(tbl->number * tbl->size)))
+             (unsigned long)(tbl->address + (tbl->number * tbl->size)),
+	     tbl->flags)
+  if (tbl->address + (tbl->number * tbl->size) > dat->size)
+    {
+      LOG_ERROR ("%s.size overflow", tbl->name)
+      return DWG_ERR_INVALIDDWG;
+    }
+  return 0;
 }
 
 static void
@@ -619,8 +626,7 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 {
   Dwg_Object_Entity *_obj = ent;
 
-  obj->type = bit_read_RC (dat);
-  _obj->flag_r11 = bit_read_RC (dat); // dxf 70
+  _obj->flag_r11 = bit_read_RC (dat); // dxf 70 (mode)
   obj->size = bit_read_RS (dat);
   LOG_INFO ("\n===========================\n"
             "Entity number: %d, Type: %d, Size: %d\n",
@@ -654,7 +660,8 @@ AFL_GCC_TOOBIG
 static int
 decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  BITCODE_RL entities_start, entities_end, blocks_start, blocks_end;
+  BITCODE_RL entities_start, entities_end;
+  BITCODE_RL blocks_start, blocks_size, blocks_end;
   BITCODE_RL rl1, rl2;
   BITCODE_RS rs2;
   Dwg_Object *obj = NULL;
@@ -673,7 +680,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x14
   // 5 tables + header + block
   dwg->header.section = (Dwg_Section *)calloc (sizeof (Dwg_Section),
-                                               dwg->header.num_sections + 7);
+                                               dwg->header.num_sections + 2);
   if (!dwg->header.section)
     {
       LOG_ERROR ("Out of memory");
@@ -684,10 +691,10 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   entities_end = bit_read_RL (dat);
   LOG_TRACE ("entities 0x%x - 0x%x\n", entities_start, entities_end);
   blocks_start = bit_read_RL (dat);
-  rl1 = bit_read_RL (dat); // 0x40
+  blocks_size = bit_read_RL (dat);
   blocks_end = bit_read_RL (dat);
   rl2 = bit_read_RL (dat); // 0x80
-  LOG_TRACE ("blocks   0x%x (0x%x) - 0x%x (0x%x)\n", blocks_start, rl1,
+  LOG_TRACE ("blocks   0x%x (0x%x) - 0x%x (0x%x)\n", blocks_start, blocks_size,
              blocks_end, rl2);
 
   tbl_id = 0;
@@ -695,18 +702,13 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg->header.section[0].type = (Dwg_Section_Type)SECTION_HEADER_R11;
   strcpy (dwg->header.section[0].name, "HEADER");
 
-  // the 5 num_section's
-  decode_preR13_section_ptr ("BLOCK", SECTION_BLOCK, dat, dwg);
-  decode_preR13_section_ptr ("LAYER", SECTION_LAYER, dat, dwg);
-  decode_preR13_section_ptr ("STYLE", SECTION_STYLE, dat, dwg);
-  decode_preR13_section_ptr ("LTYPE", SECTION_LTYPE, dat, dwg);
-  decode_preR13_section_ptr ("VIEW", SECTION_VIEW, dat, dwg);
-
-  if (dwg->header.section[SECTION_BLOCK].size > dat->size)
-    {
-      LOG_ERROR ("BLOCK.size overflow")
-      return DWG_ERR_INVALIDDWG;
-    }
+  // The 5 tables (num_sections always 5): 3 RS + 1 RL address
+  if (decode_preR13_section_hdr ("BLOCK", SECTION_BLOCK, dat, dwg)
+      || decode_preR13_section_hdr ("LAYER", SECTION_LAYER, dat, dwg)
+      || decode_preR13_section_hdr ("STYLE", SECTION_STYLE, dat, dwg)
+      || decode_preR13_section_hdr ("LTYPE", SECTION_LTYPE, dat, dwg)
+      || decode_preR13_section_hdr ("VIEW", SECTION_VIEW, dat, dwg))
+    return DWG_ERR_INVALIDDWG;
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x5e
   if (dat->size < 0x1f0) // AC1.50 0x1f9 74 vars
     {
@@ -716,37 +718,35 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   {
     Dwg_Header_Variables *_obj = &dwg->header_vars;
     Bit_Chain *hdl_dat = dat;
-    if (dat->size < 0x23a)
-      {
-        LOG_ERROR ("HEADER too small %zu", (size_t)dat->size)
-        return DWG_ERR_INVALIDDWG;
-      }
     // clang-format off
     #include "header_variables_r11.spec"
     // clang-format on
+  hdr_end:
   }
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x23a
 
-  dat->byte = 0x3ef;
-  LOG_TRACE ("@0x%lx\n", dat->byte);
-  decode_preR13_section_ptr ("UCS", SECTION_UCS, dat, dwg);
-  // skip: 0x500 - dat->bytes
-  dat->byte = 0x500;
-  LOG_TRACE ("@0x%lx\n", dat->byte); // 0x23a
-  decode_preR13_section_ptr ("VPORT", SECTION_VPORT, dat, dwg);
-  rl1 = bit_read_RL (dat);
-  rl2 = bit_read_RL (dat);
-  LOG_TRACE ("?2 long: 0x%x 0x%x\n", rl1, rl2);
-  decode_preR13_section_ptr ("APPID", SECTION_APPID, dat, dwg);
-  rl1 = bit_read_RL (dat);
-  rs2 = bit_read_RS (dat);
-  LOG_TRACE ("?long+short: 0x%x 0x%x\n", rl1, (unsigned)rs2);
-  decode_preR13_section_ptr ("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg);
-  // skip: 0x69f - dat->bytes
-  dat->byte = 0x69f;
-  decode_preR13_section_ptr ("VX", SECTION_VX, dat, dwg);
-  dat->byte += 38;
+  if (dwg->header.num_sections > 5)
+    {
+      decode_preR13_section_hdr ("UCS", SECTION_UCS, dat, dwg);
+      // skip: 0x500 - dat->bytes
+      dat->byte = 0x500;
+      LOG_TRACE ("@0x%lx\n", dat->byte); // 0x23a
+      decode_preR13_section_hdr ("VPORT", SECTION_VPORT, dat, dwg);
+      rl1 = bit_read_RL (dat);
+      rl2 = bit_read_RL (dat);
+      LOG_TRACE ("?2 long: 0x%x 0x%x\n", rl1, rl2);
+      decode_preR13_section_hdr ("APPID", SECTION_APPID, dat, dwg);
+      rl1 = bit_read_RL (dat);
+      rs2 = bit_read_RS (dat);
+      LOG_TRACE ("?long+short: 0x%x 0x%x\n", rl1, (unsigned)rs2);
+      decode_preR13_section_hdr ("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg);
+      // skip: 0x69f - dat->bytes
+      dat->byte = 0x69f;
+      decode_preR13_section_hdr ("VX", SECTION_VX, dat, dwg);
+    }
+
   // entities
+  dat->byte = entities_start;
   error |= decode_preR13_entities (entities_start, entities_end, 0, dat, dwg);
   if (error >= DWG_ERR_CRITICAL)
     return error;
@@ -5316,8 +5316,7 @@ decode_preR13_entities (unsigned long start, unsigned long end,
       obj->parent = dwg;
       obj->address = dat->byte;
 
-      DEBUG_HERE;
-
+      obj->type = bit_read_RC (dat);
       switch (obj->type)
         {
         case 1:
@@ -5384,13 +5383,17 @@ decode_preR13_entities (unsigned long start, unsigned long end,
           break;
         */
         default:
+	  DEBUG_HERE;
           LOG_ERROR ("Unknown object type %d", obj->type)
           break;
         }
 
+      assert (!dat->bit);
+#if 0
       bit_set_position (dat, obj->address + obj->size - 2);
       crc = bit_read_RS (dat);
       LOG_TRACE ("crc: %04X [RSx]\n", crc);
+#endif
       num++;
 
       if (obj->size < 2 || obj->size > 0x1000) // FIXME
