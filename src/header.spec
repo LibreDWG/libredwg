@@ -52,7 +52,7 @@
     FIELD_RL (thumbnail_address, 0); //@0x0d
     FIELD_RC (dwg_version, 0); // of app which stored it. eg. SaveAs
     FIELD_RC (maint_version, 0);
-    FIELD_RS (codepage, 0); //@0x13: 29/30 for ANSI_1252, since r2007 UTF-16
+    FIELD_RS (codepage, 0); //@0x13: 29/30 for ANSI_1252, since r2007 UCS-16
   }
 
   /* Until R_2004 here follows the sections */
