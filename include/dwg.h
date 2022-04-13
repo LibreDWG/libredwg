@@ -7978,7 +7978,6 @@ typedef struct _dwg_object_entity
     Dwg_Entity_DIMENSION_RADIUS *DIMENSION_RADIUS;
     Dwg_Entity_ELLIPSE *ELLIPSE;
     Dwg_Entity_ENDBLK *ENDBLK;
-    Dwg_Entity_ENDREP *ENDREP;
     Dwg_Entity_INSERT *INSERT;
     Dwg_Entity_LEADER *LEADER;
     Dwg_Entity_LINE *LINE;
@@ -7994,7 +7993,6 @@ typedef struct _dwg_object_entity
     Dwg_Entity_PROXY_ENTITY *PROXY_ENTITY;
     Dwg_Entity_RAY *RAY;
     Dwg_Entity_REGION *REGION;
-    Dwg_Entity_REPEAT *REPEAT;
     Dwg_Entity_SEQEND *SEQEND;
     Dwg_Entity_SHAPE *SHAPE;
     Dwg_Entity_SOLID *SOLID;
@@ -8010,7 +8008,6 @@ typedef struct _dwg_object_entity
     Dwg_Entity_VERTEX_PFACE_FACE *VERTEX_PFACE_FACE;
     Dwg_Entity_VIEWPORT *VIEWPORT;
     Dwg_Entity_XLINE *XLINE;
-    Dwg_Entity__3DLINE *_3DLINE;
     /* untyped > 500 */
     Dwg_Entity_CAMERA *CAMERA;
     Dwg_Entity_DGNUNDERLAY *DGNUNDERLAY;
@@ -8026,12 +8023,15 @@ typedef struct _dwg_object_entity
     Dwg_Entity_SECTIONOBJECT *SECTIONOBJECT;
     /* unstable */
     Dwg_Entity_ARC_DIMENSION *ARC_DIMENSION;
+    Dwg_Entity_ENDREP *ENDREP;
     Dwg_Entity_HELIX *HELIX;
     Dwg_Entity_LARGE_RADIAL_DIMENSION *LARGE_RADIAL_DIMENSION;
     Dwg_Entity_PLANESURFACE *PLANESURFACE;
     Dwg_Entity_POINTCLOUD *POINTCLOUD;
     Dwg_Entity_POINTCLOUDEX *POINTCLOUDEX;
+    Dwg_Entity_REPEAT *REPEAT;
     Dwg_Entity_WIPEOUT *WIPEOUT;
+    Dwg_Entity__3DLINE *_3DLINE;
     /* debugging */
     Dwg_Entity_ALIGNMENTPARAMETERENTITY *ALIGNMENTPARAMETERENTITY;
     Dwg_Entity_ARCALIGNEDTEXT *ARCALIGNEDTEXT;
@@ -9368,7 +9368,6 @@ EXPORT int dwg_setup_DIMENSION_ORDINATE (Dwg_Object *obj);
 EXPORT int dwg_setup_DIMENSION_RADIUS (Dwg_Object *obj);
 EXPORT int dwg_setup_ELLIPSE (Dwg_Object *obj);
 EXPORT int dwg_setup_ENDBLK (Dwg_Object *obj);
-EXPORT int dwg_setup_ENDREP (Dwg_Object *obj);
 EXPORT int dwg_setup_INSERT (Dwg_Object *obj);
 EXPORT int dwg_setup_LEADER (Dwg_Object *obj);
 EXPORT int dwg_setup_LINE (Dwg_Object *obj);
@@ -9384,7 +9383,6 @@ EXPORT int dwg_setup_POLYLINE_PFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_PROXY_ENTITY (Dwg_Object *obj);
 EXPORT int dwg_setup_RAY (Dwg_Object *obj);
 EXPORT int dwg_setup_REGION (Dwg_Object *obj);
-EXPORT int dwg_setup_REPEAT (Dwg_Object *obj);
 EXPORT int dwg_setup_SEQEND (Dwg_Object *obj);
 EXPORT int dwg_setup_SHAPE (Dwg_Object *obj);
 EXPORT int dwg_setup_SOLID (Dwg_Object *obj);
@@ -9400,7 +9398,6 @@ EXPORT int dwg_setup_VERTEX_PFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_VERTEX_PFACE_FACE (Dwg_Object *obj);
 EXPORT int dwg_setup_VIEWPORT (Dwg_Object *obj);
 EXPORT int dwg_setup_XLINE (Dwg_Object *obj);
-EXPORT int dwg_setup__3DLINE (Dwg_Object *obj);
 EXPORT int dwg_setup_APPID (Dwg_Object *obj);
 EXPORT int dwg_setup_APPID_CONTROL (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCK_CONTROL (Dwg_Object *obj);
@@ -9497,12 +9494,15 @@ EXPORT int dwg_setup_DGNDEFINITION (Dwg_Object *obj);
 EXPORT int dwg_setup_DWFDEFINITION (Dwg_Object *obj);
 /* unstable */
 EXPORT int dwg_setup_ARC_DIMENSION (Dwg_Object *obj);
+EXPORT int dwg_setup_ENDREP (Dwg_Object *obj);
 EXPORT int dwg_setup_HELIX (Dwg_Object *obj);
 EXPORT int dwg_setup_LARGE_RADIAL_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_PLANESURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTCLOUD (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTCLOUDEX (Dwg_Object *obj);
+EXPORT int dwg_setup_REPEAT (Dwg_Object *obj);
 EXPORT int dwg_setup_WIPEOUT (Dwg_Object *obj);
+EXPORT int dwg_setup__3DLINE (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_BREP_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_CHAMFER_CLASS (Dwg_Object *obj);
 EXPORT int dwg_setup_ACSH_PYRAMID_CLASS (Dwg_Object *obj);
