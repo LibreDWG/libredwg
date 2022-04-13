@@ -3799,6 +3799,16 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     case DWG_TYPE_PROXY_OBJECT:
       error = dwg_encode_PROXY_OBJECT (dat, obj);
       break;
+    case DWG_TYPE_REPEAT:
+      error = dwg_encode_REPEAT (dat, obj);
+      break;
+    case DWG_TYPE_ENDREP:
+      error = dwg_encode_ENDREP (dat, obj);
+      break;
+    case DWG_TYPE__3DLINE:
+      error = dwg_encode__3DLINE (dat, obj);
+      break;
+
     default:
       if (dwg && obj->type == dwg->layout_type
           && obj->fixedtype == DWG_TYPE_LAYOUT)

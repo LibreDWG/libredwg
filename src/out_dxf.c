@@ -2778,6 +2778,13 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
       return minimal ? 0 : dwg_dxf_VBA_PROJECT (dat, obj);
     case DWG_TYPE_LAYOUT:
       return minimal ? 0 : dwg_dxf_LAYOUT (dat, obj);
+    case DWG_TYPE_REPEAT:
+      return dwg_dxf_REPEAT (dat, obj);
+    case DWG_TYPE_ENDREP:
+      return dwg_dxf_ENDREP (dat, obj);
+    case DWG_TYPE__3DLINE:
+      return dwg_dxf__3DLINE (dat, obj);
+
     default:
       if (obj->type == obj->parent->layout_type)
         {

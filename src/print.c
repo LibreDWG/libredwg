@@ -587,6 +587,12 @@ dwg_print_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       return dwg_print_PROXY_ENTITY (dat, obj);
     case DWG_TYPE_PROXY_OBJECT: // DXF name: PROXY
       return dwg_print_PROXY_OBJECT (dat, obj);
+    case DWG_TYPE_REPEAT:
+      return dwg_print_REPEAT (dat, obj);
+    case DWG_TYPE_ENDREP:
+      return dwg_print_ENDREP (dat, obj);
+    case DWG_TYPE__3DLINE:
+      return dwg_print__3DLINE (dat, obj);
     default:
       if (obj->type == obj->parent->layout_type)
         {

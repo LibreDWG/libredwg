@@ -1664,6 +1664,12 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       LOG_ERROR ("Unhandled Object VBA_PROJECT. Has its own section\n");
       // dwg_json_VBA_PROJECT(dat, obj);
       break;
+    case DWG_TYPE_REPEAT:
+      return dwg_json_REPEAT (dat, obj);
+    case DWG_TYPE_ENDREP:
+      return dwg_json_ENDREP (dat, obj);
+    case DWG_TYPE__3DLINE:
+      return dwg_json__3DLINE (dat, obj);
     case DWG_TYPE_LAYOUT:
       return dwg_json_LAYOUT (dat, obj);
     default:
