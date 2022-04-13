@@ -79,7 +79,7 @@
   FIELD_RD (DIMCEN, 40); //ok
   FIELD_RD (DIMTSZ, 40); //ok
   PRE(R_2_0) // AC1.2 definitely
-     goto hdr_end;
+     return 0;
   FIELD_RC (DIMTOL, 70); //ok 1f3
   FIELD_RC (DIMLIM, 70); //ok 1f4
   FIELD_RC (DIMTIH, 70); //ok 1f5
@@ -88,7 +88,7 @@
   FIELD_RC (DIMSE2, 70); //ok
   FIELD_CAST (DIMTAD, RC, RS, 70); //ok
   if (dwg->header.num_header_vars <= 74)
-     goto hdr_end;
+     return 0;
   FIELD_RC (LIMCHECK, 70); //ok 1fa
   //DEBUG_HERE //1fb
   // just guessing. not in DWG, resp. not converted by ODA from r12 dxf to r12 dwg:
@@ -115,41 +115,17 @@
   FIELD_RS (unknown_18, 0);
   FIELD_RC (BLIPMODE, 70);
   if (dwg->header.num_header_vars <= 83) // PRE(R_2_21)
-     goto hdr_end;
+     return 0;
   FIELD_CAST (DIMZIN, RC, B, 70); //ok
   FIELD_RD (DIMRND, 40);
   FIELD_RD (DIMDLE, 40);
   DEBUG_HERE //2ee
-  /*
-  TODO...
-  FIELD_HANDLE (UCSNAME, ANYCODE);
-
-  FIELD_HANDLE (BLOCK_CONTROL_OBJECT, ANYCODE);
-  FIELD_HANDLE (LAYER_CONTROL_OBJECT, ANYCODE);
-  FIELD_HANDLE (STYLE_CONTROL_OBJECT, ANYCODE);
-  FIELD_HANDLE (LINETYPE_CONTROL_OBJECT, ANYCODE);
-  FIELD_HANDLE (VIEW_CONTROL_OBJECT, ANYCODE);
-  FIELD_HANDLE (UCS_CONTROL_OBJECT, ANYCODE);
-  FIELD_HANDLE (VPORT_CONTROL_OBJECT, ANYCODE);
-  FIELD_HANDLE (APPID_CONTROL_OBJECT, ANYCODE);
-  FIELD_HANDLE (DIMSTYLE_CONTROL_OBJECT, ANYCODE);
-
-  FIELD_HANDLE (DICTIONARY_ACAD_GROUP, ANYCODE);
-  FIELD_HANDLE (DICTIONARY_ACAD_MLINESTYLE, ANYCODE);
-  FIELD_HANDLE (DICTIONARY_NAMED_OBJECTS, ANYCODE);
-
-  FIELD_HANDLE (BLOCK_RECORD_PSPACE, ANYCODE);
-  FIELD_HANDLE (BLOCK_RECORD_MSPACE, ANYCODE);
-  FIELD_HANDLE (LTYPE_BYLAYER, ANYCODE);
-  FIELD_HANDLE (LTYPE_BYBLOCK, ANYCODE);
-  FIELD_HANDLE (LTYPE_CONTINUOUS, ANYCODE);
-
-  */
   dat->byte = 0x31b;
   FIELD_RS (CECOLOR.index, 62);
   DECODER {
     _obj->CELTYPE = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
-    _obj->CELTYPE->absolute_ref = (BITCODE_RL)bit_read_RS (dat); // 6, ff for BYLAYER, fe for BYBLOCK
+    // 6, ff for BYLAYER, fe for BYBLOCK
+    _obj->CELTYPE->absolute_ref = (BITCODE_RL)bit_read_RS (dat);
     LOG_TRACE ("CELTYPE: %lu [long 6]\n", _obj->CELTYPE->absolute_ref)
   }
   FIELD_TIMEBLL (TDCREATE, 40);
@@ -267,5 +243,4 @@
   FIELD_RD (DIMGAP, 40);   //ok
   FIELD_RD (PELEVATION, 40); //ok
   FIELD_CAST (VISRETAIN, RS, B, 70); //ok
-
 
