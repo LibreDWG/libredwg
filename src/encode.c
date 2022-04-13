@@ -2004,7 +2004,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   PRE (R_13)
   {
-    // TODO: tables, entities, block entities
+    // TODO: tables, entities, block entities. should be trivial.
     LOG_ERROR (WE_CAN "We don't encode preR13 tables, entities, blocks yet")
 #ifndef IS_RELEASE
     return encode_preR13 (dwg, dat);
@@ -3286,15 +3286,17 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   }
 
   return 0;
-  }
-  AFL_GCC_POP
+}
+// clang-format off
+AFL_GCC_POP
 
-  static int encode_preR13 (Dwg_Data * restrict dwg, Bit_Chain * restrict dat)
-  {
-    return DWG_ERR_NOTYETSUPPORTED;
-  }
+static int encode_preR13 (Dwg_Data * restrict dwg, Bit_Chain * restrict dat)
+{
+  return DWG_ERR_NOTYETSUPPORTED;
+}
 
 #include "dwg.spec"
+// clang-format on
 
 // expand aliases: name => CLASSES.dxfname
 static const char *
@@ -3530,24 +3532,40 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   // First write an aproximate size here.
   // Then calculate size from the fields. Either <0x7fff or more.
   // Patch it afterwards and check old<>new size if enough space allocated.
-  bit_write_MS (dat, obj->size);
-  obj->address = dat->byte;
-  PRE (R_2010)
+  PRE (R_13)
   {
-    bit_write_BS (dat, obj->type);
-    LOG_INFO (", Size: %d [MS], Type: %d [BS], Address: %lu\n", obj->size,
-              obj->type, obj->address)
+    bit_write_RS (dat, obj->size);
   }
   LATER_VERSIONS
   {
-    if (!obj->handlestream_size && obj->bitsize)
-      obj->handlestream_size = obj->size * 8 - obj->bitsize;
-    bit_write_UMC (dat, obj->handlestream_size);
-    obj->address = dat->byte;
-    bit_write_BOT (dat, obj->type);
-    LOG_INFO (", Size: %d [MS], Hdlsize: %lu [UMC], Type: %d [BOT], Address: %lu\n",
-              obj->size, (unsigned long)obj->handlestream_size, obj->type, obj->address)
+    bit_write_MS (dat, obj->size);
   }
+  obj->address = dat->byte;
+  PRE (R_13)
+  {
+    bit_write_RC (dat, obj->type);
+    LOG_INFO (", Size: %d [MS], Type: %d [BS], Address: %lu\n", obj->size,
+              obj->type, obj->address)
+  }
+  else
+    {
+      PRE (R_2010)
+      {
+	bit_write_BS (dat, obj->type);
+	LOG_INFO (", Size: %d [MS], Type: %d [BS], Address: %lu\n", obj->size,
+		  obj->type, obj->address)
+      }
+      LATER_VERSIONS
+      {
+	if (!obj->handlestream_size && obj->bitsize)
+	  obj->handlestream_size = obj->size * 8 - obj->bitsize;
+	bit_write_UMC (dat, obj->handlestream_size);
+	obj->address = dat->byte;
+	bit_write_BOT (dat, obj->type);
+	LOG_INFO (", Size: %d [MS], Hdlsize: %lu [UMC], Type: %d [BOT], Address: %lu\n",
+		  obj->size, (unsigned long)obj->handlestream_size, obj->type, obj->address)
+      }
+    }
 
   /* Write the specific type to dat */
   switch (obj->type)
@@ -3799,6 +3817,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     case DWG_TYPE_PROXY_OBJECT:
       error = dwg_encode_PROXY_OBJECT (dat, obj);
       break;
+    /*
     case DWG_TYPE_REPEAT:
       error = dwg_encode_REPEAT (dat, obj);
       break;
@@ -3808,7 +3827,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     case DWG_TYPE__3DLINE:
       error = dwg_encode__3DLINE (dat, obj);
       break;
-
+    */
     default:
       if (dwg && obj->type == dwg->layout_type
           && obj->fixedtype == DWG_TYPE_LAYOUT)

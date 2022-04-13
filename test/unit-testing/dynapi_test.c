@@ -5661,6 +5661,71 @@ static int test__3DFACE (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test__3DLINE (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity__3DLINE *restrict _3dline = obj->tio.entity->tio._3DLINE;
+  failed = 0;
+  if (!obj_obj || !_3dline)
+    {
+      fail ("NULL _3DLINE");
+      return 1;
+    }
+  {
+    BITCODE_3RD end;
+    if (dwg_dynapi_entity_value (_3dline, "3DLINE", "end", &end, NULL)
+        && !memcmp (&end, &_3dline->end, sizeof (BITCODE_3RD)))
+        pass ();
+    else
+        fail ("3DLINE.end [3RD]");
+  }
+  {
+    BITCODE_3RD extrusion;
+    if (dwg_dynapi_entity_value (_3dline, "3DLINE", "extrusion", &extrusion, NULL)
+        && !memcmp (&extrusion, &_3dline->extrusion, sizeof (BITCODE_3RD)))
+        pass ();
+    else
+        fail ("3DLINE.extrusion [3RD]");
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (_3dline, "3DLINE", "parent", &parent, NULL)
+        && !memcmp (&parent, &_3dline->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("3DLINE.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_3RD start;
+    if (dwg_dynapi_entity_value (_3dline, "3DLINE", "start", &start, NULL)
+        && !memcmp (&start, &_3dline->start, sizeof (BITCODE_3RD)))
+        pass ();
+    else
+        fail ("3DLINE.start [3RD]");
+  }
+  {
+    BITCODE_RD thickness;
+    if (dwg_dynapi_entity_value (_3dline, "3DLINE", "thickness", &thickness, NULL)
+        && thickness == _3dline->thickness)
+      pass ();
+    else
+      fail ("3DLINE.thickness [RD] %g != %g", _3dline->thickness, thickness);
+    thickness++;
+    if (dwg_dynapi_entity_set_value (_3dline, "3DLINE", "thickness", &thickness, 0)
+        && thickness == _3dline->thickness)
+      pass ();
+    else
+      fail ("3DLINE.thickness [RD] set+1 %g != %g", _3dline->thickness, thickness);
+    _3dline->thickness--;
+  }
+  if (failed && (is_class_unstable ("3DLINE") || is_class_debugging ("3DLINE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "3DLINE", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test__3DSOLID (const Dwg_Object *obj)
 {
   int error = 0;
@@ -25447,71 +25512,6 @@ static int test_XYPARAMETERENTITY (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("XYPARAMETERENTITY") || is_class_debugging ("XYPARAMETERENTITY")))
     {
       ok ("%s failed %d tests (TODO unstable)", "XYPARAMETERENTITY", failed);
-      failed = 0;
-    }
-  return failed;
-}
-static int test__3DLINE (const Dwg_Object *obj)
-{
-  int error = 0;
-  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
-  Dwg_Entity__3DLINE *restrict _3dline = obj->tio.entity->tio._3DLINE;
-  failed = 0;
-  if (!obj_obj || !_3dline)
-    {
-      fail ("NULL _3DLINE");
-      return 1;
-    }
-  {
-    BITCODE_3RD end;
-    if (dwg_dynapi_entity_value (_3dline, "_3DLINE", "end", &end, NULL)
-        && !memcmp (&end, &_3dline->end, sizeof (BITCODE_3RD)))
-        pass ();
-    else
-        fail ("_3DLINE.end [3RD]");
-  }
-  {
-    BITCODE_3RD extrusion;
-    if (dwg_dynapi_entity_value (_3dline, "_3DLINE", "extrusion", &extrusion, NULL)
-        && !memcmp (&extrusion, &_3dline->extrusion, sizeof (BITCODE_3RD)))
-        pass ();
-    else
-        fail ("_3DLINE.extrusion [3RD]");
-  }
-  {
-    struct _dwg_object_entity* parent;
-    if (dwg_dynapi_entity_value (_3dline, "_3DLINE", "parent", &parent, NULL)
-        && !memcmp (&parent, &_3dline->parent, sizeof (struct _dwg_object_entity*)))
-        pass ();
-    else
-        fail ("_3DLINE.parent [struct _dwg_object_entity*]");
-  }
-  {
-    BITCODE_3RD start;
-    if (dwg_dynapi_entity_value (_3dline, "_3DLINE", "start", &start, NULL)
-        && !memcmp (&start, &_3dline->start, sizeof (BITCODE_3RD)))
-        pass ();
-    else
-        fail ("_3DLINE.start [3RD]");
-  }
-  {
-    BITCODE_RD thickness;
-    if (dwg_dynapi_entity_value (_3dline, "_3DLINE", "thickness", &thickness, NULL)
-        && thickness == _3dline->thickness)
-      pass ();
-    else
-      fail ("_3DLINE.thickness [RD] %g != %g", _3dline->thickness, thickness);
-    thickness++;
-    if (dwg_dynapi_entity_set_value (_3dline, "_3DLINE", "thickness", &thickness, 0)
-        && thickness == _3dline->thickness)
-      pass ();
-    else
-      fail ("_3DLINE.thickness [RD] set+1 %g != %g", _3dline->thickness, thickness);
-    _3dline->thickness--;
-  }
-  if (failed && (is_class_unstable ("_3DLINE") || is_class_debugging ("_3DLINE")))
-    {
-      ok ("%s failed %d tests (TODO unstable)", "_3DLINE", failed);
       failed = 0;
     }
   return failed;
@@ -62533,6 +62533,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
   /* @@for if_test_OBJECT@@ */
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE(obj);
+  else  if (obj->fixedtype == DWG_TYPE__3DLINE)
+    error += test__3DLINE(obj);
   else  if (obj->fixedtype == DWG_TYPE__3DSOLID)
     error += test__3DSOLID(obj);
   else  if (obj->fixedtype == DWG_TYPE_ALIGNMENTPARAMETERENTITY)
@@ -62715,8 +62717,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_XYGRIPENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_XYPARAMETERENTITY)
     error += test_XYPARAMETERENTITY(obj);
-  else  if (obj->fixedtype == DWG_TYPE__3DLINE)
-    error += test__3DLINE(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACMECOMMANDHISTORY)
     error += test_ACMECOMMANDHISTORY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACMESCOPE)
@@ -63159,6 +63159,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ASSOCARRAYRECTANGULARPARAMETERS(obj);
   if (obj->fixedtype == DWG_TYPE__3DFACE)
     error += test__3DFACE (obj);
+  else  if (obj->fixedtype == DWG_TYPE__3DLINE)
+    error += test__3DLINE (obj);
   else  if (obj->fixedtype == DWG_TYPE__3DSOLID)
     error += test__3DSOLID (obj);
   else  if (obj->fixedtype == DWG_TYPE_ALIGNMENTPARAMETERENTITY)
@@ -63341,8 +63343,6 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_XYGRIPENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_XYPARAMETERENTITY)
     error += test_XYPARAMETERENTITY (obj);
-  else  if (obj->fixedtype == DWG_TYPE__3DLINE)
-    error += test__3DLINE (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACMECOMMANDHISTORY)
     error += test_ACMECOMMANDHISTORY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACMESCOPE)
@@ -63801,6 +63801,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity__3DFACE): %d != "
                "dwg_dynapi_fields_size (\"3DFACE\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity__3DLINE);
+  size2 = dwg_dynapi_fields_size ("3DLINE");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity__3DLINE): %d != "
+               "dwg_dynapi_fields_size (\"3DLINE\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity__3DSOLID);
@@ -64537,14 +64545,6 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_XYPARAMETERENTITY): %d != "
                "dwg_dynapi_fields_size (\"XYPARAMETERENTITY\"): %d\n", size1, size2);
-      error++;
-    }
-  size1 = sizeof (Dwg_Entity__3DLINE);
-  size2 = dwg_dynapi_fields_size ("_3DLINE");
-  if (size1 != size2)
-    {
-      fprintf (stderr, "sizeof(Dwg_Entity__3DLINE): %d != "
-               "dwg_dynapi_fields_size (\"_3DLINE\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Object_ACMECOMMANDHISTORY);

@@ -42,6 +42,9 @@ dxf_test_LDADD = $(LDADD) \
 common_test_LDADD =
 
 testobjects = \
+	3dline \
+	repeat \
+	endrep \
 	3dface \
 	3dsolid \
 	acsh_boolean_class \

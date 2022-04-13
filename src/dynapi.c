@@ -790,6 +790,20 @@ static const Dwg_DYNAPI_field _dwg_3DFACE_fields[] = {
     0,0,0, 70 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
+/* from typedef struct _dwg_entity_3DLINE: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_3DLINE_fields[] = {
+  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_3DLINE, parent),
+    1,1,0, 0 },
+  { "start",	"3RD", sizeof (BITCODE_3RD),  OFF (struct _dwg_entity_3DLINE, start),
+    1,0,0, 10 },
+  { "end",	"3RD", sizeof (BITCODE_3RD),  OFF (struct _dwg_entity_3DLINE, end),
+    1,0,0, 11 },
+  { "extrusion",	"3RD", sizeof (BITCODE_3RD),  OFF (struct _dwg_entity_3DLINE, extrusion),
+    1,0,0, 210 },
+  { "thickness",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_3DLINE, thickness),
+    0,0,0, 39 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
 /* from typedef struct _dwg_entity_3DSOLID: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_3DSOLID_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_3DSOLID, parent),
@@ -4098,20 +4112,6 @@ static const Dwg_DYNAPI_field _dwg_XYGRIPENTITY_fields[] = {
 static const Dwg_DYNAPI_field _dwg_XYPARAMETERENTITY_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_XYPARAMETERENTITY, parent),
     1,1,0, 0 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
-/* from typedef struct _dwg_entity__3DLINE: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg__3DLINE_fields[] = {
-  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity__3DLINE, parent),
-    1,1,0, 0 },
-  { "start",	"3RD", sizeof (BITCODE_3RD),  OFF (struct _dwg_entity__3DLINE, start),
-    1,0,0, 0 },
-  { "end",	"3RD", sizeof (BITCODE_3RD),  OFF (struct _dwg_entity__3DLINE, end),
-    1,0,0, 0 },
-  { "extrusion",	"3RD", sizeof (BITCODE_3RD),  OFF (struct _dwg_entity__3DLINE, extrusion),
-    1,0,0, 0 },
-  { "thickness",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity__3DLINE, thickness),
-    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 
@@ -12910,7 +12910,7 @@ struct _name_subclass_fields {
  */
 static const struct _name_type_fields dwg_name_types[] = {
   { "3DFACE", DWG_TYPE__3DFACE /*(28)*/, _dwg_3DFACE_fields, sizeof (struct _dwg_entity_3DFACE) },	/* 0 */
-  { "3DLINE", DWG_TYPE__3DLINE /*(735)*/, NULL, 0 },	/* 1 */
+  { "3DLINE", DWG_TYPE__3DLINE /*(735)*/, _dwg_3DLINE_fields, sizeof (struct _dwg_entity_3DLINE) },	/* 1 */
   { "3DSOLID", DWG_TYPE__3DSOLID /*(38)*/, _dwg_3DSOLID_fields, sizeof (struct _dwg_entity_3DSOLID) },	/* 2 */
   { "ACDSRECORD", DWG_TYPE_ACDSRECORD /*(500)*/, NULL, 0 },	/* 3 */
   { "ACDSSCHEMA", DWG_TYPE_ACDSSCHEMA /*(501)*/, NULL, 0 },	/* 4 */
@@ -13370,6 +13370,7 @@ struct _name_subclasses {
 /* List of all allowed subclasses per class. sorted for bsearch. */
 static const struct _name_subclasses dwg_name_subclasses[] = {
   { "3DFACE", {"AcDbEntity", "AcDbFace", NULL, NULL, NULL, NULL, NULL, NULL} },
+  { "3DLINE", {"AcDbEntity", NULL, NULL, NULL, NULL, NULL, NULL, NULL} },
   { "3DSOLID", {"AcDbEntity", "AcDbModelerGeometry", "AcDb3dSolid", NULL, NULL, NULL, NULL, NULL} },
   { "ACMECOMMANDHISTORY", {"AcDbObject", "AcMeCommandHistory", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "ACMESCOPE", {"AcDbObject", "AcMeScope", NULL, NULL, NULL, NULL, NULL, NULL} },
@@ -13683,7 +13684,6 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
   { "XRECORD", {"AcDbObject", "AcDbXrecord", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "XYGRIPENTITY", {"AcDbEntity", "AcDbBlockXYGripEntity", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "XYPARAMETERENTITY", {"AcDbEntity", "AcDbBlockXYParameterEntity", NULL, NULL, NULL, NULL, NULL, NULL} },
-  { "_3DLINE", {"AcDbEntity", NULL, NULL, NULL, NULL, NULL, NULL, NULL} },
 
 };
 

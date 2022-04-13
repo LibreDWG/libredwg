@@ -779,6 +779,27 @@ BS,	DXF 70
 @end vtable
 @end indentedblock
 
+@strong{3DLINE} @anchor{3DLINE}
+@cindex entity, 3DLINE
+@vindex 3DLINE
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item start
+3RD,	DXF 10
+@item end
+3RD,	DXF 11
+@item extrusion
+3RD,	DXF 210
+@item thickness
+RD,	DXF 39
+
+@end vtable
+@end indentedblock
+
 @strong{3DSOLID} @anchor{3DSOLID}
 @cindex entity, 3DSOLID
 @vindex 3DSOLID
@@ -4738,27 +4759,6 @@ struct _dwg_object_entity*
 
 @item parent
 struct _dwg_object_entity*
-
-@end vtable
-@end indentedblock
-
-@strong{_3DLINE} @anchor{_3DLINE}
-@cindex entity, _3DLINE
-@vindex _3DLINE
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_entity*
-@item start
-3RD
-@item end
-3RD
-@item extrusion
-3RD
-@item thickness
-RD
 
 @end vtable
 @end indentedblock
