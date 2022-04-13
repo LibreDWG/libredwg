@@ -666,7 +666,7 @@ DWG_ENTITY (INSERT)
 
 DWG_ENTITY_END
 
-/* (8) 20.4.10*/
+/* (8) 20.4.10 */
 DWG_ENTITY (MINSERT)
 
   SUBCLASS (AcDbMInsertBlock)

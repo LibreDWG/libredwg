@@ -353,6 +353,9 @@ static const char *const _dwg_type_names_variable[] =
     "LINEARGRIPENTITY",                     	/* 732 */
     "ROTATIONGRIPENTITY",                   	/* 733 */
     "XYGRIPENTITY",                         	/* 734 */
+    "_3DLINE",                              	/* 735 */
+    "REPEAT",                               	/* 736 */
+    "ENDREP",                               	/* 737 */
   /* End auto-generated variable */
 };
 
@@ -897,6 +900,9 @@ static const char *_dwg_dxfnames_variable[] =
     "LINEARGRIPENTITY",                     	/* 732 */
     "ROTATIONGRIPENTITY",                   	/* 733 */
     "XYGRIPENTITY",                         	/* 734 */
+    "_3DLINE",                              	/* 735 */
+    "REPEAT",                               	/* 736 */
+    "ENDREP",                               	/* 737 */
   /* End auto-generated dxfnames */
 };
 

@@ -1770,6 +1770,25 @@ struct _dwg_object_entity*
 @end vtable
 @end indentedblock
 
+@strong{ENDREP} @anchor{ENDREP}
+@cindex entity, ENDREP
+@vindex ENDREP
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item columns
+RS,	DXF 70
+@item rows
+RS,	DXF 71
+@item start
+2RD,	DXF 40
+
+@end vtable
+@end indentedblock
+
 @strong{EXTRUDEDSURFACE} @anchor{EXTRUDEDSURFACE}
 @cindex entity, EXTRUDEDSURFACE
 @vindex EXTRUDEDSURFACE
@@ -3586,6 +3605,19 @@ struct _dwg_object_entity*
 @xref{3DSOLID}
 @end indentedblock
 
+@strong{REPEAT} @anchor{REPEAT}
+@cindex entity, REPEAT
+@vindex REPEAT
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+
+@end vtable
+@end indentedblock
+
 @strong{REVOLVEDSURFACE} @anchor{REVOLVEDSURFACE}
 @cindex entity, REVOLVEDSURFACE
 @vindex REVOLVEDSURFACE
@@ -4706,6 +4738,27 @@ struct _dwg_object_entity*
 
 @item parent
 struct _dwg_object_entity*
+
+@end vtable
+@end indentedblock
+
+@strong{_3DLINE} @anchor{_3DLINE}
+@cindex entity, _3DLINE
+@vindex _3DLINE
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item start
+3RD
+@item end
+3RD
+@item extrusion
+3RD
+@item thickness
+RD
 
 @end vtable
 @end indentedblock

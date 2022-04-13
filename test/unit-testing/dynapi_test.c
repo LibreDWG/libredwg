@@ -10440,6 +10440,70 @@ static int test_ENDBLK (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_ENDREP (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_ENDREP *restrict endrep = obj->tio.entity->tio.ENDREP;
+  failed = 0;
+  if (!obj_obj || !endrep)
+    {
+      fail ("NULL ENDREP");
+      return 1;
+    }
+  {
+    BITCODE_RS columns;
+    if (dwg_dynapi_entity_value (endrep, "ENDREP", "columns", &columns, NULL)
+        && columns == endrep->columns)
+      pass ();
+    else
+      fail ("ENDREP.columns [RS] %hu != %hu", endrep->columns, columns);
+    columns++;
+    if (dwg_dynapi_entity_set_value (endrep, "ENDREP", "columns", &columns, 0)
+        && columns == endrep->columns)
+      pass ();
+    else
+      fail ("ENDREP.columns [RS] set+1 %hu != %hu", endrep->columns, columns);
+    endrep->columns--;
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (endrep, "ENDREP", "parent", &parent, NULL)
+        && !memcmp (&parent, &endrep->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("ENDREP.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_RS rows;
+    if (dwg_dynapi_entity_value (endrep, "ENDREP", "rows", &rows, NULL)
+        && rows == endrep->rows)
+      pass ();
+    else
+      fail ("ENDREP.rows [RS] %hu != %hu", endrep->rows, rows);
+    rows++;
+    if (dwg_dynapi_entity_set_value (endrep, "ENDREP", "rows", &rows, 0)
+        && rows == endrep->rows)
+      pass ();
+    else
+      fail ("ENDREP.rows [RS] set+1 %hu != %hu", endrep->rows, rows);
+    endrep->rows--;
+  }
+  {
+    BITCODE_2RD start;
+    if (dwg_dynapi_entity_value (endrep, "ENDREP", "start", &start, NULL)
+        && !memcmp (&start, &endrep->start, sizeof (BITCODE_2RD)))
+        pass ();
+    else
+        fail ("ENDREP.start [2RD]");
+  }
+  if (failed && (is_class_unstable ("ENDREP") || is_class_debugging ("ENDREP")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "ENDREP", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_EXTRUDEDSURFACE (const Dwg_Object *obj)
 {
   int error = 0;
@@ -19806,6 +19870,32 @@ static int test_REGION (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_REPEAT (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_REPEAT *restrict repeat = obj->tio.entity->tio.REPEAT;
+  failed = 0;
+  if (!obj_obj || !repeat)
+    {
+      fail ("NULL REPEAT");
+      return 1;
+    }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (repeat, "REPEAT", "parent", &parent, NULL)
+        && !memcmp (&parent, &repeat->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("REPEAT.parent [struct _dwg_object_entity*]");
+  }
+  if (failed && (is_class_unstable ("REPEAT") || is_class_debugging ("REPEAT")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "REPEAT", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_REVOLVEDSURFACE (const Dwg_Object *obj)
 {
   int error = 0;
@@ -25357,6 +25447,71 @@ static int test_XYPARAMETERENTITY (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("XYPARAMETERENTITY") || is_class_debugging ("XYPARAMETERENTITY")))
     {
       ok ("%s failed %d tests (TODO unstable)", "XYPARAMETERENTITY", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test__3DLINE (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity__3DLINE *restrict _3dline = obj->tio.entity->tio._3DLINE;
+  failed = 0;
+  if (!obj_obj || !_3dline)
+    {
+      fail ("NULL _3DLINE");
+      return 1;
+    }
+  {
+    BITCODE_3RD end;
+    if (dwg_dynapi_entity_value (_3dline, "_3DLINE", "end", &end, NULL)
+        && !memcmp (&end, &_3dline->end, sizeof (BITCODE_3RD)))
+        pass ();
+    else
+        fail ("_3DLINE.end [3RD]");
+  }
+  {
+    BITCODE_3RD extrusion;
+    if (dwg_dynapi_entity_value (_3dline, "_3DLINE", "extrusion", &extrusion, NULL)
+        && !memcmp (&extrusion, &_3dline->extrusion, sizeof (BITCODE_3RD)))
+        pass ();
+    else
+        fail ("_3DLINE.extrusion [3RD]");
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (_3dline, "_3DLINE", "parent", &parent, NULL)
+        && !memcmp (&parent, &_3dline->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("_3DLINE.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_3RD start;
+    if (dwg_dynapi_entity_value (_3dline, "_3DLINE", "start", &start, NULL)
+        && !memcmp (&start, &_3dline->start, sizeof (BITCODE_3RD)))
+        pass ();
+    else
+        fail ("_3DLINE.start [3RD]");
+  }
+  {
+    BITCODE_RD thickness;
+    if (dwg_dynapi_entity_value (_3dline, "_3DLINE", "thickness", &thickness, NULL)
+        && thickness == _3dline->thickness)
+      pass ();
+    else
+      fail ("_3DLINE.thickness [RD] %g != %g", _3dline->thickness, thickness);
+    thickness++;
+    if (dwg_dynapi_entity_set_value (_3dline, "_3DLINE", "thickness", &thickness, 0)
+        && thickness == _3dline->thickness)
+      pass ();
+    else
+      fail ("_3DLINE.thickness [RD] set+1 %g != %g", _3dline->thickness, thickness);
+    _3dline->thickness--;
+  }
+  if (failed && (is_class_unstable ("_3DLINE") || is_class_debugging ("_3DLINE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "_3DLINE", failed);
       failed = 0;
     }
   return failed;
@@ -62424,6 +62579,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ELLIPSE(obj);
   else  if (obj->fixedtype == DWG_TYPE_ENDBLK)
     error += test_ENDBLK(obj);
+  else  if (obj->fixedtype == DWG_TYPE_ENDREP)
+    error += test_ENDREP(obj);
   else  if (obj->fixedtype == DWG_TYPE_EXTRUDEDSURFACE)
     error += test_EXTRUDEDSURFACE(obj);
   else  if (obj->fixedtype == DWG_TYPE_FLIPGRIPENTITY)
@@ -62504,6 +62661,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_RAY(obj);
   else  if (obj->fixedtype == DWG_TYPE_REGION)
     error += test_REGION(obj);
+  else  if (obj->fixedtype == DWG_TYPE_REPEAT)
+    error += test_REPEAT(obj);
   else  if (obj->fixedtype == DWG_TYPE_REVOLVEDSURFACE)
     error += test_REVOLVEDSURFACE(obj);
   else  if (obj->fixedtype == DWG_TYPE_ROTATIONGRIPENTITY)
@@ -62556,6 +62715,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_XYGRIPENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_XYPARAMETERENTITY)
     error += test_XYPARAMETERENTITY(obj);
+  else  if (obj->fixedtype == DWG_TYPE__3DLINE)
+    error += test__3DLINE(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACMECOMMANDHISTORY)
     error += test_ACMECOMMANDHISTORY(obj);
   else  if (obj->fixedtype == DWG_TYPE_ACMESCOPE)
@@ -63044,6 +63205,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_ELLIPSE (obj);
   else  if (obj->fixedtype == DWG_TYPE_ENDBLK)
     error += test_ENDBLK (obj);
+  else  if (obj->fixedtype == DWG_TYPE_ENDREP)
+    error += test_ENDREP (obj);
   else  if (obj->fixedtype == DWG_TYPE_EXTRUDEDSURFACE)
     error += test_EXTRUDEDSURFACE (obj);
   else  if (obj->fixedtype == DWG_TYPE_FLIPGRIPENTITY)
@@ -63124,6 +63287,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_RAY (obj);
   else  if (obj->fixedtype == DWG_TYPE_REGION)
     error += test_REGION (obj);
+  else  if (obj->fixedtype == DWG_TYPE_REPEAT)
+    error += test_REPEAT (obj);
   else  if (obj->fixedtype == DWG_TYPE_REVOLVEDSURFACE)
     error += test_REVOLVEDSURFACE (obj);
   else  if (obj->fixedtype == DWG_TYPE_ROTATIONGRIPENTITY)
@@ -63176,6 +63341,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_XYGRIPENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_XYPARAMETERENTITY)
     error += test_XYPARAMETERENTITY (obj);
+  else  if (obj->fixedtype == DWG_TYPE__3DLINE)
+    error += test__3DLINE (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACMECOMMANDHISTORY)
     error += test_ACMECOMMANDHISTORY (obj);
   else  if (obj->fixedtype == DWG_TYPE_ACMESCOPE)
@@ -63820,6 +63987,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"ENDBLK\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (Dwg_Entity_ENDREP);
+  size2 = dwg_dynapi_fields_size ("ENDREP");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_ENDREP): %d != "
+               "dwg_dynapi_fields_size (\"ENDREP\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (Dwg_Entity_EXTRUDEDSURFACE);
   size2 = dwg_dynapi_fields_size ("EXTRUDEDSURFACE");
   if (size1 != size2)
@@ -64140,6 +64315,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"REGION\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (Dwg_Entity_REPEAT);
+  size2 = dwg_dynapi_fields_size ("REPEAT");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_REPEAT): %d != "
+               "dwg_dynapi_fields_size (\"REPEAT\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (Dwg_Entity_REVOLVEDSURFACE);
   size2 = dwg_dynapi_fields_size ("REVOLVEDSURFACE");
   if (size1 != size2)
@@ -64354,6 +64537,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_XYPARAMETERENTITY): %d != "
                "dwg_dynapi_fields_size (\"XYPARAMETERENTITY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity__3DLINE);
+  size2 = dwg_dynapi_fields_size ("_3DLINE");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity__3DLINE): %d != "
+               "dwg_dynapi_fields_size (\"_3DLINE\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Object_ACMECOMMANDHISTORY);

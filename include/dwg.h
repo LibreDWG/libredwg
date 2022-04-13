@@ -655,12 +655,12 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_LINEARGRIPENTITY,
   DWG_TYPE_ROTATIONGRIPENTITY,
   DWG_TYPE_XYGRIPENTITY,
-  // after 1.0 add new types here for binary compat
 
   /* preR13 entities */
   DWG_TYPE__3DLINE,
   DWG_TYPE_REPEAT,
   DWG_TYPE_ENDREP,
+  // after 1.0 add new types here for binary compat
 
   DWG_TYPE_FREED        = 0xfffd,
   DWG_TYPE_UNKNOWN_ENT  = 0xfffe,
@@ -7962,7 +7962,6 @@ typedef struct _dwg_object_entity
     Dwg_DIMENSION_common *DIMENSION_common;
     /* Start auto-generated entity-union. Do not touch. */
     Dwg_Entity__3DFACE *_3DFACE;
-    Dwg_Entity__3DLINE *_3DLINE;
     Dwg_Entity__3DSOLID *_3DSOLID;
     Dwg_Entity_ARC *ARC;
     Dwg_Entity_ATTDEF *ATTDEF;
@@ -8011,6 +8010,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_VERTEX_PFACE_FACE *VERTEX_PFACE_FACE;
     Dwg_Entity_VIEWPORT *VIEWPORT;
     Dwg_Entity_XLINE *XLINE;
+    Dwg_Entity__3DLINE *_3DLINE;
     /* untyped > 500 */
     Dwg_Entity_CAMERA *CAMERA;
     Dwg_Entity_DGNUNDERLAY *DGNUNDERLAY;
@@ -9352,7 +9352,6 @@ EXPORT int dwg_object_name (const char *const restrict name, // in
 */
 /* Start auto-generated content. Do not touch. */
 EXPORT int dwg_setup__3DFACE (Dwg_Object *obj);
-EXPORT int dwg_setup__3DLINE (Dwg_Object *obj);
 EXPORT int dwg_setup__3DSOLID (Dwg_Object *obj);
 EXPORT int dwg_setup_ARC (Dwg_Object *obj);
 EXPORT int dwg_setup_ATTDEF (Dwg_Object *obj);
@@ -9401,6 +9400,7 @@ EXPORT int dwg_setup_VERTEX_PFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_VERTEX_PFACE_FACE (Dwg_Object *obj);
 EXPORT int dwg_setup_VIEWPORT (Dwg_Object *obj);
 EXPORT int dwg_setup_XLINE (Dwg_Object *obj);
+EXPORT int dwg_setup__3DLINE (Dwg_Object *obj);
 EXPORT int dwg_setup_APPID (Dwg_Object *obj);
 EXPORT int dwg_setup_APPID_CONTROL (Dwg_Object *obj);
 EXPORT int dwg_setup_BLOCK_CONTROL (Dwg_Object *obj);

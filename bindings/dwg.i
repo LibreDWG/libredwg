@@ -197,6 +197,7 @@ EXPORT Dwg_Entity_DIMENSION_RADIUS** dwg_getall_DIMENSION_RADIUS (Dwg_Object_Ref
 EXPORT Dwg_Entity_DWFUNDERLAY** dwg_getall_DWFUNDERLAY (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_ELLIPSE** dwg_getall_ELLIPSE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_ENDBLK** dwg_getall_ENDBLK (Dwg_Object_Ref* hdr);
+EXPORT Dwg_Entity_ENDREP** dwg_getall_ENDREP (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_HATCH** dwg_getall_HATCH (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_IMAGE** dwg_getall_IMAGE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_INSERT** dwg_getall_INSERT (Dwg_Object_Ref* hdr);
@@ -220,6 +221,7 @@ EXPORT Dwg_Entity_POLYLINE_PFACE** dwg_getall_POLYLINE_PFACE (Dwg_Object_Ref* hd
 EXPORT Dwg_Entity_PROXY_ENTITY** dwg_getall_PROXY_ENTITY (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_RAY** dwg_getall_RAY (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_REGION** dwg_getall_REGION (Dwg_Object_Ref* hdr);
+EXPORT Dwg_Entity_REPEAT** dwg_getall_REPEAT (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_SECTIONOBJECT** dwg_getall_SECTIONOBJECT (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_SEQEND** dwg_getall_SEQEND (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_SHAPE** dwg_getall_SHAPE (Dwg_Object_Ref* hdr);
@@ -236,6 +238,7 @@ EXPORT Dwg_Entity_VERTEX_PFACE** dwg_getall_VERTEX_PFACE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_VERTEX_PFACE_FACE** dwg_getall_VERTEX_PFACE_FACE (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_VIEWPORT** dwg_getall_VIEWPORT (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_XLINE** dwg_getall_XLINE (Dwg_Object_Ref* hdr);
+EXPORT Dwg_Entity__3DLINE** dwg_getall__3DLINE (Dwg_Object_Ref* hdr);
 /* unstable */
 EXPORT Dwg_Entity_ARC_DIMENSION** dwg_getall_ARC_DIMENSION (Dwg_Object_Ref* hdr);
 EXPORT Dwg_Entity_HELIX** dwg_getall_HELIX (Dwg_Object_Ref* hdr);
@@ -523,6 +526,7 @@ EXPORT Dwg_Entity_DIMENSION_RADIUS* dwg_object_to_DIMENSION_RADIUS (Dwg_Object* 
 EXPORT Dwg_Entity_DWFUNDERLAY* dwg_object_to_DWFUNDERLAY (Dwg_Object* obj);
 EXPORT Dwg_Entity_ELLIPSE* dwg_object_to_ELLIPSE (Dwg_Object* obj);
 EXPORT Dwg_Entity_ENDBLK* dwg_object_to_ENDBLK (Dwg_Object* obj);
+EXPORT Dwg_Entity_ENDREP* dwg_object_to_ENDREP (Dwg_Object* obj);
 EXPORT Dwg_Entity_HATCH* dwg_object_to_HATCH (Dwg_Object* obj);
 EXPORT Dwg_Entity_IMAGE* dwg_object_to_IMAGE (Dwg_Object* obj);
 EXPORT Dwg_Entity_INSERT* dwg_object_to_INSERT (Dwg_Object* obj);
@@ -546,6 +550,7 @@ EXPORT Dwg_Entity_POLYLINE_PFACE* dwg_object_to_POLYLINE_PFACE (Dwg_Object* obj)
 EXPORT Dwg_Entity_PROXY_ENTITY* dwg_object_to_PROXY_ENTITY (Dwg_Object* obj);
 EXPORT Dwg_Entity_RAY* dwg_object_to_RAY (Dwg_Object* obj);
 EXPORT Dwg_Entity_REGION* dwg_object_to_REGION (Dwg_Object* obj);
+EXPORT Dwg_Entity_REPEAT* dwg_object_to_REPEAT (Dwg_Object* obj);
 EXPORT Dwg_Entity_SECTIONOBJECT* dwg_object_to_SECTIONOBJECT (Dwg_Object* obj);
 EXPORT Dwg_Entity_SEQEND* dwg_object_to_SEQEND (Dwg_Object* obj);
 EXPORT Dwg_Entity_SHAPE* dwg_object_to_SHAPE (Dwg_Object* obj);
@@ -562,6 +567,7 @@ EXPORT Dwg_Entity_VERTEX_PFACE* dwg_object_to_VERTEX_PFACE (Dwg_Object* obj);
 EXPORT Dwg_Entity_VERTEX_PFACE_FACE* dwg_object_to_VERTEX_PFACE_FACE (Dwg_Object* obj);
 EXPORT Dwg_Entity_VIEWPORT* dwg_object_to_VIEWPORT (Dwg_Object* obj);
 EXPORT Dwg_Entity_XLINE* dwg_object_to_XLINE (Dwg_Object* obj);
+EXPORT Dwg_Entity__3DLINE* dwg_object_to__3DLINE (Dwg_Object* obj);
 /* unstable */
 EXPORT Dwg_Entity_ARC_DIMENSION* dwg_object_to_ARC_DIMENSION (Dwg_Object* obj);
 EXPORT Dwg_Entity_HELIX* dwg_object_to_HELIX (Dwg_Object* obj);
