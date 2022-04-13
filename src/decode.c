@@ -255,6 +255,19 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return DWG_ERR_INVALIDDWG;
 }
 
+static int
+dwg_decode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
+{
+  Dwg_Header_Variables *_obj = &dwg->header_vars;
+  Dwg_Object *obj = NULL;
+  int error = 0;
+  // clang-format off
+  #include "header_variables_r11.spec"
+  // clang-format on
+  return error;
+}
+AFL_GCC_POP
+
 // We put the 5 tables into sections.
 // number is num_entries in the table. >=r13 it is the id.
 static int
@@ -326,7 +339,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       LOG_ERROR ("Invalid table number %ld for %-8s [%2d]", (long)tbl->number, tbl->name, id);
       return DWG_ERR_INVALIDDWG;
     }
-  LOG_TRACE ("\ncontents table %-8s [%2d]: size:%-4u nr:%-3ld (0x%lx-0x%lx)\n",
+  LOG_TRACE ("contents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n",
              tbl->name, id, tbl->size, (long)tbl->number, (unsigned long)tbl->address,
              (unsigned long)(tbl->address + ((unsigned long long)tbl->number * tbl->size)))
   dat->byte = tbl->address;
@@ -340,7 +353,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   if (dwg->num_objects % REFS_PER_REALLOC == 0)
     dwg->object = (Dwg_Object*)realloc (dwg->object, old_size + size + REFS_PER_REALLOC);
 
-    // TODO: move to a spec dwg_r11.spec, and dwg_decode_r11_NAME
+    // MAYBE: move to a spec dwg_r11.spec, and dwg_decode_r11_NAME
 #define PREP_TABLE(token)                                                     \
   Dwg_Object *obj;                                                            \
   Dwg_Object_##token *_obj;                                                   \
@@ -369,7 +382,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   LOG_TRACE ("\n-- table entry " #token " [%d]:\n", i)
 
 #define CHK_ENDPOS                                                            \
-  pos = tbl->address + ((long)(i + 1) * tbl->size);                           \
+  pos = tbl->address + (long)(i * tbl->size);                                 \
   if ((long)(pos - dat->byte) != 2)                                           \
     {                                                                         \
       LOG_ERROR ("offset %ld", pos - dat->byte);                              \
@@ -715,17 +728,13 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_ERROR ("DWG too small %zu", (size_t)dat->size)
       return DWG_ERR_INVALIDDWG;
     }
-  {
-    Dwg_Header_Variables *_obj = &dwg->header_vars;
-    Bit_Chain *hdl_dat = dat;
-    // clang-format off
-    #include "header_variables_r11.spec"
-    // clang-format on
-  hdr_end:
-  }
-  LOG_TRACE ("@0x%lx\n", dat->byte); // 0x23a
 
-  if (dwg->header.num_sections > 5)
+  error |= dwg_decode_preR13_header_variables (dat, dwg);
+  LOG_TRACE ("@0x%lx\n", dat->byte); // 0x23a
+  if (error >= DWG_ERR_CRITICAL)
+      return error;
+
+  if (dwg->header.num_sections > 5) // dead code?
     {
       decode_preR13_section_hdr ("UCS", SECTION_UCS, dat, dwg);
       // skip: 0x500 - dat->bytes
@@ -746,29 +755,49 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
 
   // entities
-  dat->byte = entities_start;
+  if (dat->byte != entities_start)
+    {
+      LOG_WARN ("@0x%lx => entities_start 0x%x", dat->byte, entities_start);
+      dat->byte = entities_start;
+    }
   error |= decode_preR13_entities (entities_start, entities_end, 0, dat, dwg);
   if (error >= DWG_ERR_CRITICAL)
     return error;
-  dat->byte += 19; /* crc + sentinel? */
+  if (dat->byte != entities_end)
+    {
+      LOG_WARN ("@0x%lx => entities_end 0x%x", dat->byte, entities_end);
+      dat->byte = entities_end;
+    }
+  //dat->byte += 20; /* crc + sentinel? 20 byte */
   error |= decode_preR13_section (SECTION_BLOCK, dat, dwg);
   error |= decode_preR13_section (SECTION_LAYER, dat, dwg);
   error |= decode_preR13_section (SECTION_STYLE, dat, dwg);
   error |= decode_preR13_section (SECTION_LTYPE, dat, dwg);
   error |= decode_preR13_section (SECTION_VIEW, dat, dwg);
 
-  error |= decode_preR13_section (SECTION_UCS, dat, dwg);
-  error |= decode_preR13_section (SECTION_VPORT, dat, dwg);
-  error |= decode_preR13_section (SECTION_APPID, dat, dwg);
-  error |= decode_preR13_section (SECTION_DIMSTYLE, dat, dwg);
-  error |= decode_preR13_section (SECTION_VX, dat, dwg);
+  if (dwg->header.num_sections > 5) // dead code?
+    {
+      error |= decode_preR13_section (SECTION_UCS, dat, dwg);
+      error |= decode_preR13_section (SECTION_VPORT, dat, dwg);
+      error |= decode_preR13_section (SECTION_APPID, dat, dwg);
+      error |= decode_preR13_section (SECTION_DIMSTYLE, dat, dwg);
+      error |= decode_preR13_section (SECTION_VX, dat, dwg);
+    }
   if (error >= DWG_ERR_CRITICAL)
     return error;
-  // blocks
-  error |= decode_preR13_entities (blocks_start, blocks_end, blocks_start - 0x40000000,
-                                   dat, dwg);
+
+  // block entities
+  if (dat->byte != blocks_start)
+    {
+      LOG_WARN ("@0x%lx => blocks_start 0x%x", dat->byte, blocks_start);
+      dat->byte = blocks_start;
+    }
+  error |= decode_preR13_entities (blocks_start, blocks_end,
+				   blocks_start - 0x40000000, dat, dwg);
   if (error >= DWG_ERR_CRITICAL)
     return error;
+
+  // some kind of auxheader?
   LOG_TRACE ("@0x%lx\n", dat->byte);
   // 36 byte: 9x long
   rl1 = bit_read_RL (dat);

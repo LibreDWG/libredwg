@@ -601,6 +601,7 @@ if test -n "$PARALLEL"; then
   esac
   AC_MSG_RESULT([$parallel_version])
 fi
+AC_SUBST([logs_all])
 AM_CONDITIONAL([HAVE_PARALLEL], [test -n "$PARALLEL"])
 
 dnl coreutils timeout
