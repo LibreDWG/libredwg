@@ -2776,7 +2776,6 @@ DWG_ENTITY (MLINE)
   FIELD_RCu (num_lines, 73); //aka linesinstyle
   FIELD_BS (num_verts, 72);
   VALUEOUTOFBOUNDS (num_verts, 5000)
-  VALUEOUTOFBOUNDS (num_lines, 1000)
 
   REPEAT (num_verts, verts, Dwg_MLINE_vertex)
   REPEAT_BLOCK
