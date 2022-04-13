@@ -90,37 +90,29 @@
   if (dwg->header.num_header_vars <= 74)
      return 0;
   FIELD_RC (LIMCHECK, 70); //ok 1fa
-  //DEBUG_HERE //1fb
-  // just guessing. not in DWG, resp. not converted by ODA from r12 dxf to r12 dwg:
-  //   SNAPMODE, DRAGMODE, BLIPMODE, CHAMFERA, CHAMFERB,
-  //   COORDS, ATTDIA, ATTREQ, HANDLING, WORLDVIEW, SHADEDGE
-  FIELD_RC (unknown_10, 70);
-  FIELD_RC (DRAGMODE, 70);
-  FIELD_RC (unknown_11, 70);
-  FIELD_RC (CHAMFERA, 70);
-  FIELD_RC (CHAMFERB, 70);
-  FIELD_RC (COORDS, 70);
-  FIELD_RC (ATTDIA, 70);
-  FIELD_RC (ATTREQ, 70);
-  FIELD_RC (HANDLING, 70);
-  FIELD_RC (WORLDVIEW, 70);
-  FIELD_RC (SHADEDGE, 70);
+
+  /* TODO Unknown structure (0x01fc-0x0228) */
+  DEBUG_HERE //1fb
+
   dat->byte = 0x229;
   FIELD_RD (ELEVATION, 40); //ok
   FIELD_RD (THICKNESS, 40); //ok
   FIELD_3RD (VIEWDIR, 10);
-  //DEBUG_HERE //252
-  // skip lots of 3d points
+
+  /* TODO Unknown repeating variable - 18 floats, probably 6x 3d point */
+  DEBUG_HERE //252
+
   dat->byte = 0x2e1;
   FIELD_RS (unknown_18, 0);
-  FIELD_RC (BLIPMODE, 70);
+  FIELD_CAST (BLIPMODE, RS, B, 70);
   if (dwg->header.num_header_vars <= 83) // PRE(R_2_21)
      return 0;
   FIELD_CAST (DIMZIN, RC, B, 70); //ok
   FIELD_RD (DIMRND, 40);
   FIELD_RD (DIMDLE, 40);
-  DEBUG_HERE //2ee
-  dat->byte = 0x31b;
+  FIELD_TFv (DIMBLK_T, 33, 1);
+  FIELD_RS (circle_zoom_percent, 0);
+  FIELD_RS (COORDS, 0);
   FIELD_RS (CECOLOR.index, 62);
   DECODER {
     _obj->CELTYPE = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
@@ -132,25 +124,32 @@
   FIELD_TIMEBLL (TDUPDATE, 40);
   FIELD_TIMEBLL (TDINDWG, 40);
   FIELD_TIMEBLL (TDUSRTIMER, 40);
-  DEBUG_HERE //
-
-  dat->byte = 0x33f;
   FIELD_CAST (USRTIMER, RS, B, 70);
-  FIELD_RS (unknown_10, 70);
+  FIELD_CAST (FASTZOOM, RS, B, 70);
+  FIELD_RS (unknown_10, 0);
   FIELD_CAST (SKPOLY, RS, B, 70);
+
+  /* TODO Unknown date structure (month, day, year, hour, minute, second, ms - all RS) */
   DEBUG_HERE //345
 
   dat->byte = 0x353;
   FIELD_RD (ANGBASE, 50);
   FIELD_CAST (ANGDIR, RS, B, 70);
+  if (dwg->header.num_header_vars <= 101)
+    return 0;
   FIELD_RS (PDMODE, 70);
   FIELD_RD (PDSIZE, 40);
   FIELD_RD (PLINEWID, 40);
+  if (dwg->header.num_header_vars <= 104)
+    return 0;
+
+  /* TODO Signed */
   FIELD_RS (USERI1, 70);
   FIELD_RS (USERI2, 70);
   FIELD_RS (USERI3, 70);
   FIELD_RS (USERI4, 70);
   FIELD_RS (USERI5, 70);
+
   FIELD_RD (USERR1, 40);
   FIELD_RD (USERR2, 40);
   FIELD_RD (USERR3, 40);
@@ -160,45 +159,55 @@
   FIELD_CAST (DIMALTD, RC, RS, 70); //ok
   FIELD_RC (DIMASO, 70); //ok
   FIELD_RC (DIMSHO, 70); //ok
-  FIELD_CAST (DIMTOFL, RS, B, 70);
-  DEBUG_HERE //3a7
-
-  dat->byte = 0x3c5;
+  FIELD_TFv (DIMPOST, 16, 1);
+  FIELD_TFv (DIMAPOST, 16, 1);
+  if (dwg->header.num_header_vars <= 120)
+    return 0;
   FIELD_RD (DIMALTF, 40);
   FIELD_RD (DIMLFAC, 40);
+  if (dwg->header.num_header_vars <= 122)
+    return 0;
   FIELD_RS (SPLINESEGS, 70);
   FIELD_CAST (SPLFRAME, RS, B, 70);
-  DEBUG_HERE //3d9
+  FIELD_RS (ATTREQ, 70);
+  FIELD_RS (ATTDIA, 70);
+  FIELD_RD (CHAMFERA, 40);
+  FIELD_RD (CHAMFERB, 40);
+  FIELD_CAST (MIRRTEXT, RS, B, 70);
+  if (dwg->header.num_header_vars <= 129)
+    return 0;
 
-  dat->byte = 0x3ed;
-  FIELD_CAST (MIRRTEXT, RS, B, 70); //confirmed
-  DEBUG_HERE //3ef
-  // UCS: 3ef
+  /* Skip table UCS (0x3ef-0x3f9) */
+  dat->byte = 0x3fa;
 
-  dat->byte = 0x3fb;
+  FIELD_RC (unknown_58, 0);
   FIELD_3RD (UCSORG, 10); //ok
   FIELD_3RD (UCSXDIR, 11); //ok
   FIELD_3RD (UCSYDIR, 12); //ok
-  DEBUG_HERE //443
-
-  dat->byte = 0x47d;
+  FIELD_3RD (TARGET, 0);
+  FIELD_RD (LENSLENGTH, 0);
+  FIELD_RD (VIEWTWIST, 0);
+  FIELD_RD (FRONTZ, 0);
+  FIELD_RD (BACKZ, 0);
+  FIELD_CAST (VIEWMODE, RS, B, 70);
   FIELD_RC (DIMTOFL, 70); //ok
-  DEBUG_HERE //47e
-
-  dat->byte = 0x4c0;
+  FIELD_TFv (DIMBLK1_T, 33, 1);
+  FIELD_TFv (DIMBLK2_T, 33, 1);
   FIELD_RC (DIMSAH, 70); //ok
   FIELD_RC (DIMTIX, 70); //ok
   FIELD_RC (DIMSOXD, 70); //ok
   FIELD_RD (DIMTVP, 40); //ok
-  DEBUG_HERE //4cb
+  FIELD_TFv (unknown_string, 33, 1);
+  FIELD_RS (HANDLING, 70);
 
+  /* TODO fix HANDSEED - 00 00 00 00 00 00 12 35 mean 0x1235 */
   dat->byte = 0x4ee;
   DECODER {
     _obj->HANDSEED = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
     _obj->HANDSEED->absolute_ref = (BITCODE_RL)bit_read_RS (dat);
     LOG_TRACE ("HANDSEED: %lX [RS 5]\n", _obj->HANDSEED->absolute_ref)
   }
-  DEBUG_HERE //4f0
+  DEBUG_HERE
 
   dat->byte = 0x4f6;
   FIELD_RS (SURFU, 70); //ok
@@ -206,12 +215,31 @@
   FIELD_RS (SURFTYPE, 70); //ok
   FIELD_RS (SURFTAB1, 70); //ok
   FIELD_RS (SURFTAB2, 70); //ok
-  DEBUG_HERE //500 VPORT
 
-  dat->byte = 0x50c;
+  /* Skip table VPORT (0x500-0x509 )*/
+  dat->byte = 0x50a;
+
+  FIELD_CAST (FLATLAND, RS, B, 70);
   FIELD_RS (SPLINETYPE, 70);
-  DEBUG_HERE //50e
-  // 3
+  FIELD_RS (UCSICON, 0);
+  FIELD_RS (unknown_59, 0); // ff ff
+  if (dwg->header.num_header_vars <= 158)
+    return 0;
+
+  /* Skip table APPID (0x512-0x51c) */
+  dat->byte = 0x51d;
+
+  FIELD_CAST (WORLDVIEW, RS, B, 70);
+  if (dwg->header.num_header_vars <= 160)
+    return 0;
+  FIELD_RS (unknown_51e, 0);
+  FIELD_RS (unknown_520, 0);
+
+  /* Skip table DIMSTYLE (0x522-0x52b) */
+  dat->byte = 0x52c;
+
+  /* TODO Unknown 5 bytes. (first two bytes sometimes ff ff) */
+  DEBUG_HERE
 
   dat->byte = 0x531;
   FIELD_RS (DIMCLRD_C, 70); //ok
@@ -220,9 +248,15 @@
   FIELD_RS (SHADEDGE, 70); //ok
   FIELD_RS (SHADEDIF, 70); //ok
   FIELD_RS (UNITMODE, 70); //ok
+
+  /* TODO Unknown 34 bytes */
   DEBUG_HERE //53d
 
-  dat->byte = 0x5df;
+  dat->byte = 0x55f;
+  FIELD_TFv (unknown_unit1, 32, 1);
+  FIELD_TFv (unknown_unit2, 32, 1);
+  FIELD_TFv (unknown_unit3, 32, 1);
+  FIELD_TFv (unknown_unit4, 32, 1);
   FIELD_RD (DIMTFAC, 40); //ok
   FIELD_3RD (PUCSORG, 10); //ok
   FIELD_3RD (PUCSXDIR, 11); //ok
@@ -236,11 +270,15 @@
   FIELD_3RD (PEXTMAX, 10); //
   FIELD_2RD (PLIMMIN, 10); //
   FIELD_2RD (PLIMMAX, 10); //
-  DEBUG_HERE //687
+  FIELD_3RD (PINSBASE, 10);
 
+  /* Skip table VX (0x69f-0x6a8) */
   dat->byte = 0x6a9;
+
   FIELD_RS (MAXACTVP, 70); //ok
   FIELD_RD (DIMGAP, 40);   //ok
   FIELD_RD (PELEVATION, 40); //ok
+  if (dwg->header.num_header_vars <= 204)
+    return 0;
   FIELD_CAST (VISRETAIN, RS, B, 70); //ok
 

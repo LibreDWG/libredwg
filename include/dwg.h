@@ -864,6 +864,9 @@ typedef struct _dwg_header_variables {
   BITCODE_B BLIPMODE;
   BITCODE_B unknown_11;
   BITCODE_B USRTIMER;
+  BITCODE_B FASTZOOM;  /* -r11 */
+  BITCODE_B FLATLAND;
+  BITCODE_B VIEWMODE;
   BITCODE_B SKPOLY;
   BITCODE_B ANGDIR;
   BITCODE_B SPLFRAME;
@@ -936,6 +939,7 @@ typedef struct _dwg_header_variables {
   BITCODE_BD FACETRES;
   BITCODE_BD CMLSCALE;
   BITCODE_BD CELTSCALE;
+  BITCODE_BD VIEWTWIST;
   BITCODE_TV MENU;
   BITCODE_TIMEBLL TDCREATE;
   BITCODE_TIMEBLL TDUPDATE;
@@ -987,6 +991,7 @@ typedef struct _dwg_header_variables {
   BITCODE_3BD EXTMIN;
   BITCODE_3BD EXTMAX;
   BITCODE_3BD VIEWDIR;
+  BITCODE_3BD TARGET;
   BITCODE_2DPOINT LIMMIN;
   BITCODE_2DPOINT LIMMAX;
   BITCODE_2RD VIEWCTR;  /* -r11 */
@@ -1075,6 +1080,7 @@ typedef struct _dwg_header_variables {
   BITCODE_T DIMBLK_T;
   BITCODE_T DIMBLK1_T;
   BITCODE_T DIMBLK2_T;
+  BITCODE_T unknown_string; /* r10-r11 */
   BITCODE_BD DIMALTRND;
   BITCODE_RS DIMCLRD_C; /* preR13 => CMC */
   BITCODE_RS DIMCLRE_C;
@@ -1200,6 +1206,19 @@ typedef struct _dwg_header_variables {
   BITCODE_BS unknown_56;
   BITCODE_BS unknown_57;
   BITCODE_RS num_entities; /* r2.0 - r10 */
+  BITCODE_RS circle_zoom_percent;
+  BITCODE_RC unknown_58;
+  BITCODE_RC unknown_59;
+  BITCODE_RC unknown_60;
+  BITCODE_BD FRONTZ;
+  BITCODE_BD BACKZ;
+  BITCODE_RC UCSICON;
+  BITCODE_RS unknown_51e;  /* r11 */
+  BITCODE_RS unknown_520;  /* r11 */
+  BITCODE_T unknown_unit1; /* r11 */
+  BITCODE_T unknown_unit2; /* r11 */
+  BITCODE_T unknown_unit3; /* r11 */
+  BITCODE_T unknown_unit4; /* r11 */
 } Dwg_Header_Variables;
 
 /* OBJECTS *******************************************************************/
