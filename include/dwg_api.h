@@ -522,6 +522,7 @@ dwg_get_OBJECT_DECL (ent_xline, XLINE);
 /********************************************************************/
 typedef struct _dwg_abstractentity_UNDERLAY	      dwg_ent_underlay; /* same layout for all 3 */
 typedef struct _dwg_abstractobject_UNDERLAYDEFINITION dwg_obj_underlaydefinition;
+//typedef struct _dwg_entity_3DLINE		dwg_ent_3dline;
 /* Start auto-generated content. Do not touch. */
 typedef struct _dwg_entity__3DFACE		dwg_ent__3dface;
 typedef struct _dwg_entity__3DSOLID		dwg_ent__3dsolid;
@@ -579,7 +580,7 @@ typedef struct _dwg_entity_OLE2FRAME		dwg_ent_ole2frame;
 typedef struct _dwg_entity_PDFUNDERLAY		dwg_ent_pdfunderlay;
 typedef struct _dwg_entity_SECTIONOBJECT		dwg_ent_sectionobject;
 /* unstable */
-typedef struct _dwg_entity__3DLINE		dwg_ent__3dline;
+typedef struct _dwg_entity_3DLINE		dwg_ent__3dline;
 typedef struct _dwg_entity_ARC_DIMENSION		dwg_ent_arc_dimension;
 typedef struct _dwg_entity_ENDREP		dwg_ent_endrep;
 typedef struct _dwg_entity_HELIX		dwg_ent_helix;

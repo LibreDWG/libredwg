@@ -663,6 +663,7 @@ my %DXFALIAS = # see also CLASS.dxfname
   );
 my %DXFNAME =
   (
+    _3DLINE        => "3DLINE",
     POLYLINE_2D    => "POLYLINE",
     POLYLINE_3D    => "POLYLINE",
     POLYLINE_MESH  => "POLYLINE",
@@ -1758,7 +1759,9 @@ for (@object_names) {
 }
 $STABLE{_3DSOLID}++;
 $STABLE{_3DFACE}++;
-$UNSTABLE{'3DLINE'}++;
+# $UNSTABLE{_3DLINE}++;
+delete $STABLE{'3DLINE'};
+delete $FIXED{'3DLINE'};
 $FIXED{_3DSOLID}++;
 $FIXED{_3DFACE}++;
 for (keys %STABLE) {
@@ -1899,12 +1902,15 @@ sub out_classes {
   my ($fh, $names, $STABILITY, $tmpl) = @_;
   my $lname;
   for my $name (@$names) {
+      if ($name =~ /^3/) {
+        $name =~ s/^3/_3/;
+      }
       if ($STABILITY->{$name}) {
         my $s = $tmpl;
-        if ($name =~ /^3/) {
-          $name =~ s/^3/_3/;
-        }
+        my $xname = $name;
+        $xname =~ s/^3/_3/;
         $s =~ s/\$name/$name/g;
+        $s =~ s/\$xname/$xname/g;
         if ($s =~ /\$lname/) {
           $lname = lc $name;
           # skip typedefs of
@@ -1917,6 +1923,7 @@ sub out_classes {
           $lname =~ s/vertex_pface_face/vert_pface_face/;
           $s =~ s/\$lname/$lname/;
         }
+        $s =~ s/_dwg_entity__3DLINE/_dwg_entity_3DLINE/;
         print $fh $s;
       }
     }
@@ -2267,7 +2274,7 @@ while (<$in>) {
       print $out $_; # because of the next shortcut
       next;
     }
-    $n =~ s/^_3/3/;
+    # $n =~ s/^_3/3/;
     push @VARTYPES, $n;
     $VARTYPES{$n} = $enum++;
   }
@@ -2284,6 +2291,7 @@ while (<$in>) {
     print $out "    /* untyped > 500 */\n";
     out_classes ($out, \@entity_names, \%STABLEVAR, $tmpl);
     print $out "    /* unstable */\n";
+    $tmpl = "    Dwg_Entity_\$name *\$xname;\n";
     out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
     print $out "    /* debugging */\n";
     #print $out "#ifdef DEBUG_CLASSES\n";

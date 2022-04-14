@@ -353,7 +353,7 @@ static const char *const _dwg_type_names_variable[] =
     "LINEARGRIPENTITY",                     	/* 732 */
     "ROTATIONGRIPENTITY",                   	/* 733 */
     "XYGRIPENTITY",                         	/* 734 */
-    "3DLINE",                               	/* 735 */
+    "_3DLINE",                              	/* 735 */
     "REPEAT",                               	/* 736 */
     "ENDREP",                               	/* 737 */
   /* End auto-generated variable */
@@ -372,7 +372,7 @@ const char *dwg_type_name (const Dwg_Object_Type type)
 #if 1
   if (type <= DWG_TYPE_LAYOUT)
     return _dwg_type_names_fixed[type];
-  else if ((unsigned)type >= 500 && type <= DWG_TYPE_XYGRIPENTITY)
+  else if ((unsigned)type >= 500 && type < ARRAY_SIZE(_dwg_type_names_variable) + 500)
     return _dwg_type_names_variable[type - 500];
   else if (type == DWG_TYPE_UNKNOWN_ENT)
     return "UNKNOWN_ENT";
