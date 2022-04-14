@@ -33,6 +33,8 @@ BS,	DXF 70
 BS,	DXF 70
 @item AXISUNIT
 2RD,	DXF 20
+@item BACKZ
+BD
 @item BLIPMODE
 B,	DXF 70
 @item BLOCK_CONTROL_OBJECT
@@ -319,6 +321,8 @@ B,	DXF 280
 B,	DXF 290
 @item FACETRES
 BD
+@item FASTZOOM
+B
 @item FILLETRAD
 BD,	DXF 40
 @item FILLMODE
@@ -327,6 +331,10 @@ B,	DXF 70
 TV,	DXF 2
 @item FLAGS
 BL
+@item FLATLAND
+B
+@item FRONTZ
+BD
 @item GRIDMODE
 RS
 @item GRIDUNIT
@@ -553,6 +561,8 @@ BS,	DXF 70
 BS,	DXF 70
 @item SURFV
 BS,	DXF 70
+@item TARGET
+3BD
 @item TDCREATE
 TIMEBLL,	DXF 40
 @item TDINDWG
@@ -589,6 +599,8 @@ BS
 BS
 @item UCSBASE
 H,	DXF 2
+@item UCSICON
+RC
 @item UCSNAME
 H,	DXF 2
 @item UCSORG
@@ -645,8 +657,12 @@ TV,	DXF 2
 2RD
 @item VIEWDIR
 3BD
+@item VIEWMODE
+B
 @item VIEWSIZE
 RD
+@item VIEWTWIST
+BD
 @item VIEW_CONTROL_OBJECT
 H
 @item VISRETAIN
@@ -671,6 +687,8 @@ BD,	DXF 40
 RL
 @item bitsize_hi
 RL
+@item circle_zoom_percent
+RS
 @item current_color_convert
 RS
 @item num_entities
@@ -717,6 +735,10 @@ BD
 RD
 @item unknown_5
 RS
+@item unknown_51e
+RS
+@item unknown_520
+RS
 @item unknown_54
 BS
 @item unknown_55
@@ -725,14 +747,22 @@ BS
 BS
 @item unknown_57
 BS
+@item unknown_58
+RC
+@item unknown_59
+RC
 @item unknown_6
 RS
+@item unknown_60
+RC
 @item unknown_7
 RD
 @item unknown_8
 BL
 @item unknown_9
 BL
+@item unknown_string
+T
 @item unknown_text1
 TV
 @item unknown_text2
@@ -741,6 +771,14 @@ TV
 TV
 @item unknown_text4
 TV
+@item unknown_unit1
+T
+@item unknown_unit2
+T
+@item unknown_unit3
+T
+@item unknown_unit4
+T
 
 @end vtable
 @end indentedblock
