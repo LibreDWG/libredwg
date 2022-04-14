@@ -49,7 +49,7 @@
   FIELD_RD (LTSCALE, 40);  // 16.0 confirmed
   FIELD_RD (TEXTSIZE, 40); //unconfirmed, ineffective with r12
   FIELD_RD (TRACEWID, 40); //ok
-  FIELD_RS (CLAYER_R11, 7);
+  FIELD_RS (CLAYER_r11, 8);
   FIELD_RS (current_color_convert, 0); // current color converted from older DWG file
   FIELD_RD (unknown_4, 0);
   FIELD_RS (unknown_5, 0);

@@ -93,7 +93,7 @@ static const Dwg_DYNAPI_field _dwg_header_variables_fields[] = {
     0,0,0, 40 },
   { "CLAYER",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_header_variables, CLAYER),
     1,0,0, 8 },
-  { "CLAYER_R11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_header_variables, CLAYER_R11),
+  { "CLAYER_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_header_variables, CLAYER_r11),
     0,0,0, 0 },
   { "CMATERIAL",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_header_variables, CMATERIAL),
     1,0,0, 347 },

@@ -67,7 +67,7 @@ BD,	DXF 40
 BD,	DXF 40
 @item CLAYER
 H,	DXF 8
-@item CLAYER_R11
+@item CLAYER_r11
 RS
 @item CMATERIAL
 H,	DXF 347

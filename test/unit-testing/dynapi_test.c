@@ -2108,20 +2108,20 @@ test_header (Dwg_Data *dwg)
   }
   {
     BITCODE_RS clayer_r11;
-    if (dwg_dynapi_header_value (dwg, "CLAYER_R11", &clayer_r11, NULL)
-        && clayer_r11 == dwg->header_vars.CLAYER_R11)
+    if (dwg_dynapi_header_value (dwg, "CLAYER_r11", &clayer_r11, NULL)
+        && clayer_r11 == dwg->header_vars.CLAYER_r11)
       pass ();
     else
-      fail ("HEADER.CLAYER_R11 [RS] %hu != %hu", dwg->header_vars.CLAYER_R11, clayer_r11);
+      fail ("HEADER.CLAYER_r11 [RS] %hu != %hu", dwg->header_vars.CLAYER_r11, clayer_r11);
     clayer_r11++;
-    if (dwg_dynapi_header_set_value (dwg, "CLAYER_R11", &clayer_r11, 0)
-        && clayer_r11 == dwg->header_vars.CLAYER_R11)
+    if (dwg_dynapi_header_set_value (dwg, "CLAYER_r11", &clayer_r11, 0)
+        && clayer_r11 == dwg->header_vars.CLAYER_r11)
       pass ();
     else
-      fail ("HEADER.CLAYER_R11 [RS] set+1 %hu != %hu",
-            dwg->header_vars.CLAYER_R11, clayer_r11);
+      fail ("HEADER.CLAYER_r11 [RS] set+1 %hu != %hu",
+            dwg->header_vars.CLAYER_r11, clayer_r11);
     clayer_r11--;
-    dwg_dynapi_header_set_value (dwg, "CLAYER_R11", &clayer_r11, 0);
+    dwg_dynapi_header_set_value (dwg, "CLAYER_r11", &clayer_r11, 0);
 
   }
   {
