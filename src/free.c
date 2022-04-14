@@ -139,6 +139,7 @@ static BITCODE_BL rcount1, rcount2;
 #define VALUE_TFF(value, dxf)
 #define FIELD_TU(name, dxf) FIELD_TV (name, dxf)
 #define FIELD_TF(name, len, dxf) FIELD_TV (name, dxf)
+#define FIELD_TFv(name, len, dxf) FIELD_TV (name, dxf)
 #define FIELD_TFF(name, len, dxf)                                             \
   {                                                                           \
   }

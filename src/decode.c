@@ -357,7 +357,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 #define PREP_TABLE(token)                                                     \
   Dwg_Object *obj;                                                            \
   Dwg_Object_##token *_obj;                                                   \
-  if (dat->byte > dat->size || (num + i) >= dwg->num_objects)                 \
+  if (dat->byte > dat->size || (num + i) > dwg->num_objects)                  \
     return DWG_ERR_INVALIDDWG;                                                \
   obj = &dwg->object[num + i];                                                \
   _obj = (Dwg_Object_##token *)calloc (1, sizeof (Dwg_Object_##token));       \
@@ -386,7 +386,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   if ((long)(pos - dat->byte) != 2)                                           \
     {                                                                         \
       LOG_ERROR ("offset %ld", pos - dat->byte);                              \
-      return DWG_ERR_SECTIONNOTFOUND;                                         \
+      /*return DWG_ERR_SECTIONNOTFOUND;*/                                     \
     }                                                                         \
   dat->byte = pos
 
@@ -675,7 +675,8 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_RL entities_start, entities_end;
   BITCODE_RL blocks_start, blocks_size, blocks_end;
-  BITCODE_RL rl1, rl2;
+  BITCODE_RL blocks_offset = 0x40000000;
+  BITCODE_RL rl1, rl2, blocks_max;
   BITCODE_RS rs2;
   Dwg_Object *obj = NULL;
   int tbl_id;
@@ -704,11 +705,12 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   entities_end = bit_read_RL (dat);
   LOG_TRACE ("entities 0x%x - 0x%x\n", entities_start, entities_end);
   blocks_start = bit_read_RL (dat);
-  blocks_size = bit_read_RL (dat);
+  blocks_offset = bit_read_RL (dat);
   blocks_end = bit_read_RL (dat);
-  rl2 = bit_read_RL (dat); // 0x80
-  LOG_TRACE ("blocks   0x%x (0x%x) - 0x%x (0x%x)\n", blocks_start, blocks_size,
-             blocks_end, rl2);
+  blocks_size = blocks_end - blocks_start;
+  blocks_max = bit_read_RL (dat); // 0x80000000
+  LOG_TRACE ("blocks   0x%x (0x%x) - 0x%x (0x%x, 0x%x)\n", blocks_start, blocks_size,
+             blocks_end, blocks_offset, blocks_max);
 
   tbl_id = 0;
   dwg->header.section[0].number = 0;
@@ -734,6 +736,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (error >= DWG_ERR_CRITICAL)
       return error;
 
+#if 0
   if (dwg->header.num_sections > 5) // dead code?
     {
       decode_preR13_section_hdr ("UCS", SECTION_UCS, dat, dwg);
@@ -753,6 +756,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       dat->byte = 0x69f;
       decode_preR13_section_hdr ("VX", SECTION_VX, dat, dwg);
     }
+#endif
 
   // entities
   if (dat->byte != entities_start)
@@ -775,6 +779,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error |= decode_preR13_section (SECTION_LTYPE, dat, dwg);
   error |= decode_preR13_section (SECTION_VIEW, dat, dwg);
 
+#if 0
   if (dwg->header.num_sections > 5) // dead code?
     {
       error |= decode_preR13_section (SECTION_UCS, dat, dwg);
@@ -783,6 +788,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       error |= decode_preR13_section (SECTION_DIMSTYLE, dat, dwg);
       error |= decode_preR13_section (SECTION_VX, dat, dwg);
     }
+#endif
   if (error >= DWG_ERR_CRITICAL)
     return error;
 
@@ -793,7 +799,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       dat->byte = blocks_start;
     }
   error |= decode_preR13_entities (blocks_start, blocks_end,
-				   blocks_start - 0x40000000, dat, dwg);
+				   blocks_start - blocks_offset, dat, dwg);
   if (error >= DWG_ERR_CRITICAL)
     return error;
 
@@ -5322,7 +5328,7 @@ decode_preR13_entities (unsigned long start, unsigned long end,
   int error = 0;
   BITCODE_BL num = dwg->num_objects;
   dat->bit = 0;
-  LOG_TRACE ("entities: (0x%lx-0x%lx, offset 0x%lx) TODO\n", start, end,
+  LOG_TRACE ("entities: (0x%lx-0x%lx, offset 0x%lx)\n", start, end,
              offset)
   while (dat->byte < end)
     {
