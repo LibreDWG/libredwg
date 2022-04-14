@@ -581,6 +581,8 @@ BS
 BD,	DXF 40
 @item TEXTSTYLE
 H,	DXF 7
+@item TEXTSTYLE_r11
+BS
 @item THICKNESS
 BD,	DXF 40
 @item TILEMODE
@@ -704,7 +706,7 @@ BS
 @item unknown_11
 B
 @item unknown_12
-BS
+BL
 @item unknown_13
 BL
 @item unknown_14

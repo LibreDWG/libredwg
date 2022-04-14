@@ -1036,21 +1036,21 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_BS unknown_12;
-    if (dwg_dynapi_header_value (dwg, "unknown_12", &unknown_12, NULL)
-        && unknown_12 == dwg->header_vars.unknown_12)
+    BITCODE_BS textstyle_r11;
+    if (dwg_dynapi_header_value (dwg, "TEXTSTYLE_r11", &textstyle_r11, NULL)
+        && textstyle_r11 == dwg->header_vars.TEXTSTYLE_r11)
       pass ();
     else
-      fail ("HEADER.unknown_12 [BS] %hu != %hu", dwg->header_vars.unknown_12, unknown_12);
-    unknown_12++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_12", &unknown_12, 0)
-        && unknown_12 == dwg->header_vars.unknown_12)
+      fail ("HEADER.TEXTSTYLE_r11 [BS] %hu != %hu", dwg->header_vars.TEXTSTYLE_r11, textstyle_r11);
+    textstyle_r11++;
+    if (dwg_dynapi_header_set_value (dwg, "TEXTSTYLE_r11", &textstyle_r11, 0)
+        && textstyle_r11 == dwg->header_vars.TEXTSTYLE_r11)
       pass ();
     else
-      fail ("HEADER.unknown_12 [BS] set+1 %hu != %hu",
-            dwg->header_vars.unknown_12, unknown_12);
-    unknown_12--;
-    dwg_dynapi_header_set_value (dwg, "unknown_12", &unknown_12, 0);
+      fail ("HEADER.TEXTSTYLE_r11 [BS] set+1 %hu != %hu",
+            dwg->header_vars.TEXTSTYLE_r11, textstyle_r11);
+    textstyle_r11--;
+    dwg_dynapi_header_set_value (dwg, "TEXTSTYLE_r11", &textstyle_r11, 0);
 
   }
   {
@@ -1141,6 +1141,24 @@ test_header (Dwg_Data *dwg)
             dwg->header_vars.OSMODE, osmode);
     osmode--;
     dwg_dynapi_header_set_value (dwg, "OSMODE", &osmode, 0);
+
+  }
+  {
+    BITCODE_BL unknown_12;
+    if (dwg_dynapi_header_value (dwg, "unknown_12", &unknown_12, NULL)
+        && unknown_12 == dwg->header_vars.unknown_12)
+      pass ();
+    else
+      fail ("HEADER.unknown_12 [BL] %u != %u", dwg->header_vars.unknown_12, unknown_12);
+    unknown_12++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_12", &unknown_12, 0)
+        && unknown_12 == dwg->header_vars.unknown_12)
+      pass ();
+    else
+      fail ("HEADER.unknown_12 [BL] set+1 %u != %u",
+            dwg->header_vars.unknown_12, unknown_12);
+    unknown_12--;
+    dwg_dynapi_header_set_value (dwg, "unknown_12", &unknown_12, 0);
 
   }
   {

@@ -64,7 +64,7 @@
   FIELD_RD (FILLETRAD, 40); //ok
   FIELD_RS (AUNITS, 70);    //ok
   FIELD_RS (AUPREC, 70);    //ok
-  FIELD_RS (unknown_12, 8);
+  FIELD_RS (TEXTSTYLE_r11, 7);
   FIELD_CAST (OSMODE, RS, BL, 70);
   FIELD_RS (ATTMODE, 70);
   FIELD_TFv (MENU, 15, 1);
