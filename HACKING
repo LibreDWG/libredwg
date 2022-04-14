@@ -65,6 +65,14 @@ someone should probably think about and resolve them!
   Version numbers are generated manually for a release by pushing a 2-3 number tag, 
   and automatically by bumping the version in .appveyor.yml.
 
+* make regen-dynapi
+
+  Whenever you change a class or any class field (add, remove, rename, change a type),
+  add a seperate make regen-dynapi commit, as result of this command. So the small change
+  is seperated from the automatically created changes by gen-dynapi.pl.
+
+  This command updates several generated lists of objects, classes, and its tests.
+
 * change log maintenance
 
   Presently, there is only one top-level ChangeLog file, and commits go
