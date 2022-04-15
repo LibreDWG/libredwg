@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <time.h>
+#include <math.h>
 #include "logging.h"
 
 const struct dwg_versions dwg_versions[] = {
@@ -345,4 +347,47 @@ shift_hv (BITCODE_H *hv, BITCODE_BL *num_p)
   *num_p = *num_p - 1;
   memmove (&hv[0], &hv[1], *num_p * sizeof (BITCODE_H));
   return ref;
+}
+
+/* from my dwg11.c, 1995 */
+struct tm *
+cvt_TIMEBLL (struct tm *tm, BITCODE_TIMEBLL date)
+{
+  double t, ss;
+  long ja, jalpha, jb, jc, jd, je;
+
+#define TRUNC(n) (long)floor (n)
+
+  t = date.ms / 1000.0 ; /* in seconds */
+  if (date.days > 2299161)
+    {
+      jalpha = TRUNC (((date.days - 1867216) - 0.25) / 36524.25);
+      ja = (long)(date.days + 1 + jalpha - TRUNC (0.25 * jalpha));
+    }
+  else
+    ja = (long)date.days;
+  jb = ja + 1524;
+  jc = TRUNC (6680.0 + ((jb - 2439870) - 122.1) / 365.25);
+  jd = 365 * jc + TRUNC (0.25 * jc);
+  je = TRUNC ((jb - jd) / 30.6001);
+
+  tm->tm_mday = (int)(jb - jd - TRUNC (30.6001 * je));
+  tm->tm_mon = (int)(je - 1);
+  if (tm->tm_mon > 12)
+    tm->tm_mon -= 12;
+  tm->tm_year = (int)(jc - 4715);
+  if (tm->tm_mon > 2)
+    tm->tm_year--;
+  if (tm->tm_year <= 0)
+    tm->tm_year--;
+  tm->tm_year -= 1900; // epoch start
+  tm->tm_mon--;        // zero-based
+
+  tm->tm_hour = (int)floor (t / 3600.0);
+  t -= tm->tm_hour * 3600.0;
+  tm->tm_min = (int)floor (t / 60.0);
+  ss = t - (tm->tm_min * 60.0);
+  tm->tm_sec = (int)ss;
+  //sprintf (s, "%02d.%02d.%4d  %02d:%02d:%05.2f", d, m, y, hh, mm, ss);
+  return tm;
 }

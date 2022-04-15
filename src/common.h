@@ -28,6 +28,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <inttypes.h>
+#include <time.h>
 #include "dwg.h"
 
 /* Used warning suppressions:
@@ -344,5 +345,8 @@ char *split_filepath (const char *filepath, char **extp);
 
 EXPORT Dwg_Version_Type dwg_version_hdr_type (const char* hdr);
 const char* dwg_version_codes (const Dwg_Version_Type version);
+
+// converts TIMEBLL to struct tm. useful for asctime(tm) or strftime
+struct tm * cvt_TIMEBLL (struct tm *tm, BITCODE_TIMEBLL date);
 
 #endif

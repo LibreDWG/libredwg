@@ -676,17 +676,25 @@
 #define FIELD_3DVECTOR(nam, dxf) FIELD_3BD_1 (nam, dxf)
 #define FIELD_TIMEBLL(nam, dxf)                                               \
   {                                                                           \
+    struct tm tm;                                                             \
+    char _buf[60] = "";                                                       \
     _obj->nam = bit_read_TIMEBLL (dat);                                       \
-    LOG_TRACE (#nam ": %.8f  (" FORMAT_BL ", " FORMAT_BL ") [TIMEBLL %d]",    \
-               _obj->nam.value, _obj->nam.days, _obj->nam.ms, dxf);           \
+    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                   \
+      strftime(_buf, 60, "%F %T", cvt_TIMEBLL(&tm, _obj->nam));               \
+    LOG_TRACE (#nam ": [" FORMAT_BL ", " FORMAT_BL "] %s [TIMEBLL %d]",       \
+               _obj->nam.days, _obj->nam.ms, _buf, dxf);                      \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")                                                          \
   }
 #define FIELD_TIMERLL(nam, dxf)                                               \
   {                                                                           \
+    struct tm tm;                                                             \
+    char _buf[60] = "";                                                       \
     _obj->nam = bit_read_TIMERLL (dat);                                       \
-    LOG_TRACE (#nam ": %.8f  (" FORMAT_RL ", " FORMAT_RL ") [TIMERLL %d]",    \
-               _obj->nam.value, _obj->nam.days, _obj->nam.ms, dxf);           \
+    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                   \
+      strftime(_buf, 60, "%F %T", cvt_TIMEBLL(&tm, _obj->nam));               \
+    LOG_TRACE (#nam ": [" FORMAT_RL ", " FORMAT_RL "] %s [TIMERLL %d]",       \
+               _obj->nam.days, _obj->nam.ms, _buf, dxf);                      \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")                                                          \
   }
