@@ -333,6 +333,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   long unsigned int old_size = num * sizeof (Dwg_Object);
   long unsigned int size = tbl->number * sizeof (Dwg_Object);
   long unsigned int pos;
+  tbl->address = (uint64_t)num;
 
   if ((unsigned)tbl->number > 100000 || size > dat->size)
     {
@@ -638,24 +639,31 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                       Dwg_Object_Entity *ent)
 {
   Dwg_Object_Entity *_obj = ent;
+  obj->bitsize_pos = bit_position (dat);
+  LOG_INFO ("===========================\n"
+            "Entity number: %d, Type: %d\n",
+            obj->index, obj->type);
 
-  _obj->flag_r11 = bit_read_RC (dat); // dxf 70 (mode)
+  obj->flag_r11 = bit_read_RC (dat); // mode, DXF 70
+  LOG_TRACE("flag_r11: %x [RC]\n", obj->flag_r11);
   obj->size = bit_read_RS (dat);
-  LOG_INFO ("\n===========================\n"
-            "Entity number: %d, Type: %d, Size: %d\n",
-            obj->index, obj->type, obj->size);
-  LOG_TRACE ("flag_r11: " FORMAT_RC "\n", _obj->flag_r11);
-  FIELD_RS (layer_r11, 8);
-  FIELD_RS (opts_r11, 0);
-  // LOG_TRACE("Layer: %d, Opts: 0x%x\n", ent->layer_r11, ent->opts_r11)
-  if (ent->flag_r11 & 1)
-    {
-      FIELD_RC (color_r11, 0);
-    }
-  if (ent->flag_r11 & 0x40)
-    {
-      FIELD_RC (extra_r11, 0);
-    }
+  LOG_TRACE("size: %d [RS]\n", obj->size);
+  FIELD_RCd (layer_r11, 8);
+  FIELD_RC (flag2_r11, 0); // ?
+  FIELD_RSx (opts_r11, 0);
+  if (obj->flag_r11 & FLAG_R11_COLOR)
+    FIELD_RCd (color_r11, 0);
+  if (obj->flag_r11 & FLAG_R11_LTYPE)
+    FIELD_RCd (ltype_r11, 0);
+
+  // TODO: maybe move that to the entity
+  if (obj->flag_r11 & FLAG_R11_ELEVATION)
+    FIELD_RD (elevation_r11, 31);
+  if (obj->flag_r11 & FLAG_R11_THICKNESS)
+    FIELD_RD (thickness_r11, 39);
+
+  if (obj->flag_r11 & FLAG_R11_XDATA)
+    FIELD_RC (extra_r11, 0);
   /* Common entity preR13 header: */
   if (ent->extra_r11 & 2)
     {
@@ -663,9 +671,19 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
         return error;
     }
-  if (FIELD_VALUE (flag_r11) & 2)
-    FIELD_RS (kind_r11, 0);
+  /*
+  if (obj->flag_r11 & 0x20) // XREF_DEP
+    {
+      Dwg_Object_Ref *hdl
+        = dwg_decode_handleref_with_code (dat, obj, dwg, 0);
+      if (hdl)
+        obj->handle = hdl->handleref;
+    }
+  */
+  if (ent->opts_r11 & OPTS_R11_PAPER)
+    FIELD_RS (paper_r11, 0);
 
+  obj->common_size = bit_position (dat) - obj->bitsize_pos;
   return 0;
 }
 
@@ -4447,6 +4465,8 @@ obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
    For EED check page 269, par 28 (Extended Object Data)
    For proxy graphics check page 270, par 29 (Proxy Entity Graphics)
+
+   PRE(R_13) goes into decode_entity_preR13 instead.
  */
 static int
 dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
@@ -4463,24 +4483,6 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
 
   // obj->dat_address = dat->byte; // the data stream offset
   obj->bitsize_pos = objectpos; // absolute. needed for encode
-  PRE (R_13)
-  {
-    if (FIELD_VALUE (flag_r11) & 4 && FIELD_VALUE (kind_r11) > 2
-        && FIELD_VALUE (kind_r11) != 22)
-      FIELD_RD (elevation_r11, 30);
-    if (FIELD_VALUE (flag_r11) & 8)
-      FIELD_RD (thickness_r11, 39);
-    if (FIELD_VALUE (flag_r11) & 0x20)
-      {
-        Dwg_Object_Ref *hdl
-            = dwg_decode_handleref_with_code (dat, obj, dwg, 0);
-        if (hdl)
-          obj->handle = hdl->handleref;
-      }
-    if (FIELD_VALUE (extra_r11) & 4)
-      FIELD_RS (paper_r11, 0);
-  }
-
   VERSIONS (R_2000, R_2007)
   {
     obj->bitsize = bit_read_RL (dat); // until the handles
@@ -4531,7 +4533,6 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   LOG_TRACE ("handle: " FORMAT_H " [H 5]", ARGS_H (obj->handle))
   LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)
   LOG_TRACE ("\n")
-  PRE (R_13) { return DWG_ERR_NOTYETSUPPORTED; }
 
   if (has_wrong_bitsize)
     LOG_WARN ("Skip eed")
@@ -5353,6 +5354,8 @@ decode_preR13_entities (unsigned long start, unsigned long end,
       obj->index = num;
       obj->parent = dwg;
       obj->address = dat->byte;
+      obj->supertype = DWG_SUPERTYPE_ENTITY;
+      obj->tio.entity->entmode = offset == 0 ? 2 : 3; // ent or block
 
       obj->type = bit_read_RC (dat);
       switch (obj->type)

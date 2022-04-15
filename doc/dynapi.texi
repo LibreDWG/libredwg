@@ -15818,7 +15818,7 @@ BB,	DXF 67
 RC
 @item face_visualstyle
 H,	DXF 348
-@item flag_r11
+@item flag2_r11
 RC
 @item full_visualstyle
 H,	DXF 348
@@ -15836,8 +15836,6 @@ BS,	DXF 60
 B
 @item isbylayerlt
 B
-@item kind_r11
-RS
 @item layer
 H,	DXF 8
 @item layer_r11

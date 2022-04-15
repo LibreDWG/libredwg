@@ -7969,6 +7969,18 @@ typedef struct _dwg_entity_eed
   BITCODE_TF raw; /* a binary copy of the data */
 } Dwg_Eed;
 
+enum {
+  FLAG_R11_COLOR = 1,
+  FLAG_R11_LTYPE = 2,
+  FLAG_R11_ELEVATION = 4,
+  FLAG_R11_THICKNESS = 8,
+  FLAG_R11_XREF_DEP = 16,
+  FLAG_R11_XREF_REF = 32,
+  FLAG_R11_XREF_RESOLVED = 64,
+  FLAG_R11_XDATA = 128,
+  OPTS_R11_PAPER = 256,
+};
+
 /**
  Common entity attributes
  */
@@ -8111,9 +8123,8 @@ typedef struct _dwg_object_entity
   BITCODE_BS invisible;
   BITCODE_RC linewt;              /*!< r2000+, see dxf_cvt_lweight() */
 
-  /* preR13 entity fields. TODO a union */
-  BITCODE_RC flag_r11;
-  BITCODE_RS kind_r11;
+  /* preR13 entity fields. TODO a union with above */
+  BITCODE_RC flag2_r11;
   BITCODE_RS opts_r11;
   BITCODE_RC extra_r11;
   BITCODE_RS layer_r11;
@@ -8454,6 +8465,7 @@ typedef struct _dwg_object
   Dwg_Handle handle;
   struct _dwg_struct *parent;
   Dwg_Class *klass;          /* the optional class of a variable object */
+  BITCODE_RC flag_r11;
 
   BITCODE_RL bitsize;        /* common + object fields, but no handles */
   unsigned long bitsize_pos; /* bitsize offset in bits: r13-2007 */

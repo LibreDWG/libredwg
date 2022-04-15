@@ -1145,11 +1145,12 @@ DWG_ENTITY (LINE)
     } else {
       FIELD_2RD (end, 11)
     }
-
+    /*
     if (R11OPTS (1))
       FIELD_3RD (extrusion, 210);
     if (R11OPTS (2))
       FIELD_RD (thickness, 39);
+    */
   }
   VERSIONS (R_13, R_14)
     {
@@ -1460,7 +1461,32 @@ DWG_ENTITY_END
 DWG_ENTITY (_3DFACE)
 
   SUBCLASS (AcDbFace)
-  // TODO PRE (R_R13)
+  PRE (R_13) {
+    if (R11OPTS (1)) {
+      FIELD_3RD (corner1, 10)
+    }
+    else {
+      FIELD_2RD (corner1, 10)
+    }
+    if (R11OPTS (2)) {
+      FIELD_3RD (corner2, 11)
+    }
+    else {
+      FIELD_2RD (corner2, 11)
+    }
+    if (R11OPTS (3)) {
+      FIELD_3RD (corner3, 12)
+    }
+    else {
+      FIELD_2RD (corner3, 12)
+    }
+    if (R11OPTS (4)) {
+      FIELD_3RD (corner4, 13)
+    }
+    else {
+      FIELD_2RD (corner4, 13)
+    }
+  }
   VERSIONS (R_13, R_14)
     {
       FIELD_3BD (corner1, 10);
@@ -1469,7 +1495,6 @@ DWG_ENTITY (_3DFACE)
       FIELD_3BD (corner4, 13);
       FIELD_BS0 (invis_flags, 70);
     }
-
   SINCE (R_2000)
     {
       FIELD_B (has_no_flags, 0);
