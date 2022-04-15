@@ -366,23 +366,27 @@ cvt_TIMEBLL (struct tm *tm, BITCODE_TIMEBLL date)
     }
   else
     ja = (long)date.days;
-  jb = ja + 1524;
-  jc = TRUNC (6680.0 + ((jb - 2439870) - 122.1) / 365.25);
-  jd = 365 * jc + TRUNC (0.25 * jc);
-  je = TRUNC ((jb - jd) / 30.6001);
+  if (ja < 1000) {
+    // TDINDWG: relative minutes
+    memset (tm, 0, sizeof(struct tm));
+  } else {
+    jb = ja + 1524;
+    jc = TRUNC (6680.0 + ((jb - 2439870) - 122.1) / 365.25);
+    jd = 365 * jc + TRUNC (0.25 * jc);
+    je = TRUNC ((jb - jd) / 30.6001);
 
-  tm->tm_mday = (int)(jb - jd - TRUNC (30.6001 * je));
-  tm->tm_mon = (int)(je - 1);
-  if (tm->tm_mon > 12)
-    tm->tm_mon -= 12;
-  tm->tm_year = (int)(jc - 4715);
-  if (tm->tm_mon > 2)
-    tm->tm_year--;
-  if (tm->tm_year <= 0)
-    tm->tm_year--;
-  tm->tm_year -= 1900; // epoch start
-  tm->tm_mon--;        // zero-based
-
+    tm->tm_mday = (int)(jb - jd - TRUNC (30.6001 * je));
+    tm->tm_mon = (int)(je - 1);
+    if (tm->tm_mon > 12)
+      tm->tm_mon -= 12;
+    tm->tm_year = (int)(jc - 4715);
+    if (tm->tm_mon > 2)
+      tm->tm_year--;
+    if (tm->tm_year <= 0)
+      tm->tm_year--;
+    tm->tm_year -= 1900; // epoch start
+    tm->tm_mon--;        // zero-based
+  }
   tm->tm_hour = (int)floor (t / 3600.0);
   t -= tm->tm_hour * 3600.0;
   tm->tm_min = (int)floor (t / 60.0);
