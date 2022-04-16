@@ -176,6 +176,15 @@
 #define TODO_ENCODER HANDLER (OUTPUT, "TODO: Encoder\n");
 #define TODO_DECODER HANDLER (OUTPUT, "TODO: Decoder\n");
 
+#ifndef _WIN32
+#define STRFTIME_DATE "%F %T"
+#define STRFTIME_TIME "%T"
+#else
+/* windows/mingw misses those C99 formats */
+#define STRFTIME_DATE "%Y-%m-%d %X"
+#define STRFTIME_TIME "%X"
+#endif
+
 // Exporters are more common in the spec format, in_json and in_dxf are not using it.
 // So default to the encode-to format. dec_macros needs to override them.
 // See importer.h for the other way: For decode, in_json, in_dxf.
