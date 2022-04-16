@@ -251,6 +251,8 @@
 
 #define ANYCODE -1
 #define VALUE_HANDLE(ref, nam, code, dxf)                                     \
+{                                                                             \
+  SINCE (R_13)                                                                \
   {                                                                           \
     unsigned long pos = bit_position (hdl_dat);                               \
     if (code >= 0)                                                            \
@@ -278,8 +280,10 @@
         LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                \
         LOG_TRACE ("\n");                                                     \
       }                                                                       \
-  }
-#define FIELD_HANDLE(nam, code, dxf) VALUE_HANDLE (_obj->nam, nam, code, dxf)
+  }                                                                           \
+}
+#define FIELD_HANDLE(nam, code, dxf)                                          \
+  VALUE_HANDLE (_obj->nam, nam, code, dxf)
 #define SUB_FIELD_HANDLE(o, nam, code, dxf)                                   \
   VALUE_HANDLE (_obj->o.nam, o.nam, code, dxf)
 

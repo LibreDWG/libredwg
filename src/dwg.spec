@@ -171,8 +171,21 @@ DWG_ENTITY (ATTRIB)
     {
       FIELD_2RD (ins_pt, 10);
       FIELD_RD (height, 40);
-      FIELD_RD (width_factor, 41);
       FIELD_TV (text_value, 1);
+      FIELD_TV (tag, 2);
+      FIELD_RC (generation, 71);
+      if (R11OPTS (2)) {
+        FIELD_RD (rotation, 50);
+      }
+      if (R11OPTS (4)) {
+        FIELD_RD (width_factor, 41);
+      }
+      if (R11OPTS (32)) {
+        FIELD_CAST (horiz_alignment, RC, BS, 72);
+      }
+      if (R11OPTS (64)) { // flag2_1
+        FIELD_2RD (alignment_pt, 11);
+      }
     }
   VERSIONS (R_13, R_14)
     {
@@ -296,9 +309,12 @@ DWG_ENTITY (ATTRIB)
         }
     }
 
-  FIELD_T (tag, 0);
-  FIELD_BS0 (field_length, 0);
-  FIELD_RC (flags, 0); // 1 invisible, 2 constant, 4 verify, 8 preset
+  SINCE (R_13)
+    {
+      FIELD_T (tag, 0);
+      FIELD_BS0 (field_length, 0);
+      FIELD_RC (flags, 0); // 1 invisible, 2 constant, 4 verify, 8 preset
+    }
 
   SINCE (R_2007) {
     FIELD_B (lock_position_flag, 0); // 70
@@ -690,8 +706,7 @@ DWG_ENTITY (INSERT)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-  SINCE (R_13)
-     FIELD_HANDLE (block_header, 5, 0);
+  FIELD_HANDLE (block_header, 5, 0);
   VERSIONS (R_13, R_2000)
     {
       if (FIELD_VALUE (has_attribs))
@@ -1024,7 +1039,7 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
-/* (15/18) */
+/* (15/19) */
 DWG_ENTITY (POLYLINE_2D)
 
   //SUBCLASS (AcDbCurve)
@@ -1091,7 +1106,7 @@ DWG_ENTITY (POLYLINE_2D)
 
 DWG_ENTITY_END
 
-/* (16/19) */
+/* (16) */
 DWG_ENTITY (POLYLINE_3D)
 
   SUBCLASS (AcDb3dPolyline)
@@ -3976,8 +3991,9 @@ DWG_OBJECT (DIMSTYLE)
     FIELD_VALUE (flag) |= FIELD_VALUE (flag0); //dimtofl?
 
     START_OBJECT_HANDLE_STREAM;
-    UNTIL (R_14)
+    UNTIL (R_14) {
       FIELD_HANDLE (DIMTXSTY, 5, 0); // 2000+ already before
+    }
   }
   IF_FREE_OR_SINCE (R_2000)
     {
