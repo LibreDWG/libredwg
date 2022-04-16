@@ -154,7 +154,7 @@ DWG_ENTITY (TEXT)
     {
       IF_ENCODE_FROM_PRE_R13 {
         //FIXME: should really just lookup the style table; style is the index.
-        FIELD_VALUE (style) = 0; //dwg_resolve_handle (dwg, obj->ltype_rs);
+        FIELD_VALUE (style) = 0; //dwg_resolve_handle (dwg, obj->ltype_r11);
       }
 #ifndef IS_DXF
       FIELD_HANDLE (style, 5, 7);
@@ -1035,7 +1035,7 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
   FIELD_BS (vertind[2], 73);
   FIELD_BS (vertind[3], 74);
 #endif
-  //TODO R13 has color_rs and ltype_rs for all vertices, not in DXF
+  //TODO R13 has color_r11 and ltype_r11 for all vertices, not in DXF
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
@@ -3041,11 +3041,11 @@ DWG_OBJECT (LAYER)
   COMMON_TABLE_FLAGS (Layer);
   PRE (R_13)
   {
-    FIELD_RS (color_rs, 62);  // color
-    FIELD_RS (ltype_rs, 7);   // style
+    FIELD_RS (color_r11, 62);  // color
+    FIELD_RS (ltype_r11, 7);   // style
 
     DECODER {
-      FIELD_VALUE (on)            = FIELD_VALUE (color_rs) >= 0;
+      FIELD_VALUE (on)            = FIELD_VALUE (color_r11) >= 0;
       FIELD_VALUE (frozen)        = FIELD_VALUE (flag) & 1;
       FIELD_VALUE (frozen_in_new) = FIELD_VALUE (flag) & 2;
       FIELD_VALUE (locked)        = FIELD_VALUE (flag) & 4;

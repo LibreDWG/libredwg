@@ -49633,19 +49633,19 @@ static int test_LAYER (const Dwg_Object *obj)
         fail ("LAYER.color [CMC]");
   }
   {
-    short color_rs;
-    if (dwg_dynapi_entity_value (layer, "LAYER", "color_rs", &color_rs, NULL)
-        && color_rs == layer->color_rs)
+    int16_t color_r11;
+    if (dwg_dynapi_entity_value (layer, "LAYER", "color_r11", &color_r11, NULL)
+        && color_r11 == layer->color_r11)
       pass ();
     else
-      fail ("LAYER.color_rs [short] %hd != %hd", layer->color_rs, color_rs);
-    color_rs++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "color_rs", &color_rs, 0)
-        && color_rs == layer->color_rs)
+      fail ("LAYER.color_r11 [int16_t] %hd != %hd", layer->color_r11, color_r11);
+    color_r11++;
+    if (dwg_dynapi_entity_set_value (layer, "LAYER", "color_r11", &color_r11, 0)
+        && color_r11 == layer->color_r11)
       pass ();
     else
-      fail ("LAYER.color_rs [short] set+1 %hd != %hd", layer->color_rs, color_rs);
-    layer->color_rs--;
+      fail ("LAYER.color_r11 [int16_t] set+1 %hd != %hd", layer->color_r11, color_r11);
+    layer->color_r11--;
   }
   {
     BITCODE_BS flag;
@@ -49776,19 +49776,19 @@ static int test_LAYER (const Dwg_Object *obj)
         fail ("LAYER.ltype [H]");
   }
   {
-    BITCODE_RS ltype_rs;
-    if (dwg_dynapi_entity_value (layer, "LAYER", "ltype_rs", &ltype_rs, NULL)
-        && ltype_rs == layer->ltype_rs)
+    BITCODE_RS ltype_r11;
+    if (dwg_dynapi_entity_value (layer, "LAYER", "ltype_r11", &ltype_r11, NULL)
+        && ltype_r11 == layer->ltype_r11)
       pass ();
     else
-      fail ("LAYER.ltype_rs [RS] %hu != %hu", layer->ltype_rs, ltype_rs);
-    ltype_rs++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "ltype_rs", &ltype_rs, 0)
-        && ltype_rs == layer->ltype_rs)
+      fail ("LAYER.ltype_r11 [RS] %hu != %hu", layer->ltype_r11, ltype_r11);
+    ltype_r11++;
+    if (dwg_dynapi_entity_set_value (layer, "LAYER", "ltype_r11", &ltype_r11, 0)
+        && ltype_r11 == layer->ltype_r11)
       pass ();
     else
-      fail ("LAYER.ltype_rs [RS] set+1 %hu != %hu", layer->ltype_rs, ltype_rs);
-    layer->ltype_rs--;
+      fail ("LAYER.ltype_r11 [RS] set+1 %hu != %hu", layer->ltype_r11, ltype_r11);
+    layer->ltype_r11--;
   }
   {
     BITCODE_H material;

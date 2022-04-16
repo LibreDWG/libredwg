@@ -1252,6 +1252,7 @@ my %FMT = (
     'unsigned long' => '%lu',
     'unsigned short int' => '%hu',
     'short' => '%hd',
+    'int16_t' => '%hd',
     'long' => '%l',
     'char**' => '%p',
     'TV' => '%s',

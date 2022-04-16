@@ -1835,9 +1835,8 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_TFv (name, 32, 2);
           FIELD_RS (used, 0);
 
-          FIELD_RS (color_rs, 62); // color, off if negative
-          FIELD_RS (ltype_rs, 6);  // style
-          // FIELD_RS (crc, 0);
+          FIELD_RS (color_r11, 62); // color, off if negative
+          FIELD_RS (ltype_r11, 6);  // style
           CHK_ENDPOS;
         }
       break;

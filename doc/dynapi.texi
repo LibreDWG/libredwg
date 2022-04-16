@@ -10009,9 +10009,9 @@ B,	DXF 290
 RC,	DXF 370
 @item color
 CMC,	DXF 62
-@item color_rs
-short,	DXF 62
-@item ltype_rs
+@item color_r11
+int16_t,	DXF 62
+@item ltype_r11
 RS,	DXF 7
 @item plotstyle
 H,	DXF 390

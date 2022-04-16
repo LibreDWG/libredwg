@@ -2325,8 +2325,8 @@ typedef struct _dwg_object_LAYER
   BITCODE_B plotflag;
   BITCODE_RC linewt;
   BITCODE_CMC color;
-  short      color_rs;    /* preR13, needs to be signed */
-  BITCODE_RS ltype_rs;    /* preR13 */
+  int16_t    color_r11;    /* preR13, needs to be signed */
+  BITCODE_RS ltype_r11;    /* preR13 */
   BITCODE_H plotstyle;    /* DXF 390 */
   BITCODE_H material;     /* DXF 347 */
   BITCODE_H ltype;        /* DXF 6 */
