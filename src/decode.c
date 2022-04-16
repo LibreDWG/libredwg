@@ -664,15 +664,17 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   if (obj->flag_r11 & FLAG_R11_THICKNESS)
     FIELD_RD (thickness_r11, 39);
 
-  if (obj->flag_r11 & FLAG_R11_XDATA)
-    FIELD_RC (extra_r11, 0);
-  /* Common entity preR13 header: */
-  if (ent->extra_r11 & 2)
-    {
-      int error = dwg_decode_eed (dat, (Dwg_Object_Object *)ent);
-      if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
-        return error;
-    }
+  SINCE (R_12) { // seems to be wrong
+    if (obj->flag_r11 & FLAG_R11_XDATA)
+      FIELD_RC (extra_r11, 0);
+    /* Common entity preR13 header: */
+    if (ent->extra_r11 & 2)
+      {
+        int error = dwg_decode_eed (dat, (Dwg_Object_Object *)ent);
+        if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
+          return error;
+      }
+  }
   /*
   if (obj->flag_r11 & 0x20) // XREF_DEP
     {
