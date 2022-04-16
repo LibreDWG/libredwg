@@ -1234,7 +1234,7 @@ typedef struct _dwg_entity_TEXT
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_RC dataflags;        /*!< r2000+ */
+  BITCODE_RC dataflags;        /*!< r2000+. should be renamed to opts for r11 compat */
   BITCODE_RD elevation;        /*!< DXF 30 (z coord of 10), when dataflags & 1 */
   BITCODE_2DPOINT ins_pt;      /*!< DXF 10 */
   BITCODE_2DPOINT alignment_pt; /*!< DXF 11. optional, when dataflags & 2, i.e 72/73 != 0 */
@@ -1379,6 +1379,13 @@ typedef struct _dwg_entity_INSERT
   BITCODE_H   last_attrib;
   BITCODE_H*  attribs;
   BITCODE_H   seqend;
+
+  // preR11 only
+  BITCODE_RS  block_r11; // block_header index for name, DXF 2
+  BITCODE_RS  num_cols;
+  BITCODE_RS  num_rows;
+  BITCODE_RD  col_spacing;
+  BITCODE_RD  row_spacing;
 } Dwg_Entity_INSERT;
 
 /**
@@ -1396,10 +1403,10 @@ typedef struct _dwg_entity_MINSERT
   BITCODE_B         has_attribs;
   BITCODE_BL        num_owned;
 
-  BITCODE_BS        num_cols;
-  BITCODE_BS        num_rows;
-  BITCODE_BD        col_spacing;
-  BITCODE_BD        row_spacing;
+  BITCODE_BS  num_cols;
+  BITCODE_BS  num_rows;
+  BITCODE_BD  col_spacing;
+  BITCODE_BD  row_spacing;
 
   BITCODE_H   block_header;
   BITCODE_H   first_attrib;

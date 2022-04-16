@@ -639,12 +639,14 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                       Dwg_Object_Entity *ent)
 {
   Dwg_Object_Entity *_obj = ent;
+  const bool is_block = obj->address >= 0x40000000;
   obj->bitsize_pos = bit_position (dat);
+  obj->address = dat->byte - 1; // already read the type. size includes the type
   LOG_INFO ("===========================\n"
             "Entity number: %d, Type: %d\n",
             obj->index, obj->type);
-
-  obj->flag_r11 = bit_read_RC (dat); // mode, DXF 70
+  obj->tio.entity->entmode = is_block ? 3 : 2; // ent or block
+  obj->flag_r11 = bit_read_RC (dat); // mode, DXF 70. some ents have more flags 70 extra
   LOG_TRACE("flag_r11: %x [RC]\n", obj->flag_r11);
   obj->size = bit_read_RS (dat);
   LOG_TRACE("size: %d [RS]\n", obj->size);
@@ -5353,9 +5355,8 @@ decode_preR13_entities (unsigned long start, unsigned long end,
       dwg->num_objects++;
       obj->index = num;
       obj->parent = dwg;
-      obj->address = dat->byte;
+      obj->address = offset;
       obj->supertype = DWG_SUPERTYPE_ENTITY;
-      obj->tio.entity->entmode = offset == 0 ? 2 : 3; // ent or block
 
       obj->type = bit_read_RC (dat);
       switch (obj->type)

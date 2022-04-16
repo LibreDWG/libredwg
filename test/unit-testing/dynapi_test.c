@@ -12911,6 +12911,36 @@ static int test_INSERT (const Dwg_Object *obj)
         fail ("INSERT.block_header [H]");
   }
   {
+    BITCODE_RS block_r11;
+    if (dwg_dynapi_entity_value (insert, "INSERT", "block_r11", &block_r11, NULL)
+        && block_r11 == insert->block_r11)
+      pass ();
+    else
+      fail ("INSERT.block_r11 [RS] %hu != %hu", insert->block_r11, block_r11);
+    block_r11++;
+    if (dwg_dynapi_entity_set_value (insert, "INSERT", "block_r11", &block_r11, 0)
+        && block_r11 == insert->block_r11)
+      pass ();
+    else
+      fail ("INSERT.block_r11 [RS] set+1 %hu != %hu", insert->block_r11, block_r11);
+    insert->block_r11--;
+  }
+  {
+    BITCODE_RD col_spacing;
+    if (dwg_dynapi_entity_value (insert, "INSERT", "col_spacing", &col_spacing, NULL)
+        && col_spacing == insert->col_spacing)
+      pass ();
+    else
+      fail ("INSERT.col_spacing [RD] %g != %g", insert->col_spacing, col_spacing);
+    col_spacing++;
+    if (dwg_dynapi_entity_set_value (insert, "INSERT", "col_spacing", &col_spacing, 0)
+        && col_spacing == insert->col_spacing)
+      pass ();
+    else
+      fail ("INSERT.col_spacing [RD] set+1 %g != %g", insert->col_spacing, col_spacing);
+    insert->col_spacing--;
+  }
+  {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (insert, "INSERT", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &insert->extrusion, sizeof (BITCODE_BE)))
@@ -12958,6 +12988,21 @@ static int test_INSERT (const Dwg_Object *obj)
         fail ("INSERT.last_attrib [H]");
   }
   {
+    BITCODE_RS num_cols;
+    if (dwg_dynapi_entity_value (insert, "INSERT", "num_cols", &num_cols, NULL)
+        && num_cols == insert->num_cols)
+      pass ();
+    else
+      fail ("INSERT.num_cols [RS] %hu != %hu", insert->num_cols, num_cols);
+    num_cols++;
+    if (dwg_dynapi_entity_set_value (insert, "INSERT", "num_cols", &num_cols, 0)
+        && num_cols == insert->num_cols)
+      pass ();
+    else
+      fail ("INSERT.num_cols [RS] set+1 %hu != %hu", insert->num_cols, num_cols);
+    insert->num_cols--;
+  }
+  {
     BITCODE_BL num_owned;
     if (dwg_dynapi_entity_value (insert, "INSERT", "num_owned", &num_owned, NULL)
         && num_owned == insert->num_owned)
@@ -12971,6 +13016,21 @@ static int test_INSERT (const Dwg_Object *obj)
     else
       fail ("INSERT.num_owned [BL] set+1 %u != %u", insert->num_owned, num_owned);
     insert->num_owned--;
+  }
+  {
+    BITCODE_RS num_rows;
+    if (dwg_dynapi_entity_value (insert, "INSERT", "num_rows", &num_rows, NULL)
+        && num_rows == insert->num_rows)
+      pass ();
+    else
+      fail ("INSERT.num_rows [RS] %hu != %hu", insert->num_rows, num_rows);
+    num_rows++;
+    if (dwg_dynapi_entity_set_value (insert, "INSERT", "num_rows", &num_rows, 0)
+        && num_rows == insert->num_rows)
+      pass ();
+    else
+      fail ("INSERT.num_rows [RS] set+1 %hu != %hu", insert->num_rows, num_rows);
+    insert->num_rows--;
   }
   {
     struct _dwg_object_entity* parent;
@@ -12994,6 +13054,21 @@ static int test_INSERT (const Dwg_Object *obj)
     else
       fail ("INSERT.rotation [BD] set+1 %g != %g", insert->rotation, rotation);
     insert->rotation--;
+  }
+  {
+    BITCODE_RD row_spacing;
+    if (dwg_dynapi_entity_value (insert, "INSERT", "row_spacing", &row_spacing, NULL)
+        && row_spacing == insert->row_spacing)
+      pass ();
+    else
+      fail ("INSERT.row_spacing [RD] %g != %g", insert->row_spacing, row_spacing);
+    row_spacing++;
+    if (dwg_dynapi_entity_set_value (insert, "INSERT", "row_spacing", &row_spacing, 0)
+        && row_spacing == insert->row_spacing)
+      pass ();
+    else
+      fail ("INSERT.row_spacing [RD] set+1 %g != %g", insert->row_spacing, row_spacing);
+    insert->row_spacing--;
   }
   {
     BITCODE_3BD scale;

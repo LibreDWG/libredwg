@@ -169,7 +169,10 @@ DWG_ENTITY (ATTRIB)
   SUBCLASS (AcDbText)
   PRE (R_13)
     {
-      LOG_ERROR ("TODO ATTRIB")
+      FIELD_2RD (ins_pt, 10);
+      FIELD_RD (height, 40);
+      FIELD_RD (width_factor, 41);
+      FIELD_TV (text_value, 1);
     }
   VERSIONS (R_13, R_14)
     {
@@ -312,7 +315,30 @@ DWG_ENTITY (ATTDEF)
   SUBCLASS (AcDbText)
   PRE (R_13)
     {
-      LOG_ERROR ("TODO ATTDEF")
+      FIELD_2RD (ins_pt, 10);
+      FIELD_RD (height, 40);
+      FIELD_TV (default_value, 1);
+      FIELD_TV (tag, 2);
+      FIELD_TV (prompt, 3);
+      FIELD_RS (flags, 70);
+      //if (R11OPTS (1)) { // since when
+      //  FIELD_RD (elevation, 30);
+      //}
+      if (R11OPTS (2)) {
+        FIELD_RD (rotation, 50);
+      }
+      if (R11OPTS (4)) {
+        FIELD_RD (width_factor, 41);
+      }
+      if (R11OPTS (8)) {
+        FIELD_CAST (generation, RC, BS, 71);
+      }
+      if (R11OPTS (32)) {
+        FIELD_CAST (horiz_alignment, RC, BS, 72);
+      }
+      if (R11OPTS (64)) {
+        FIELD_2RD (alignment_pt, 11);
+      }
     }
   VERSIONS (R_13, R_14)
     {
@@ -535,11 +561,35 @@ DWG_ENTITY (INSERT)
     FIELD_HANDLE_NAME (block_header, 2, BLOCK_HEADER);
 #endif
   PRE (R_13) {
+    FIELD_RS (block_r11, 2);
     FIELD_2RD (ins_pt, 10);
+    if (R11OPTS (1)) {
+      FIELD_RD (scale.x, 41);
+    }
+    if (R11OPTS (2)) {
+      FIELD_RD (scale.y, 42);
+    }
+    if (R11OPTS (4)) {
+      FIELD_RD (rotation, 50);
+    }
+    if (R11OPTS (8)) {
+      FIELD_RD (scale.z, 43);
+    }
+    if (R11OPTS (16)) {
+      FIELD_RS (num_cols, 70);
+    }
+    if (R11OPTS (32)) {
+      FIELD_RS (num_rows, 71);
+    }
+    if (R11OPTS (64)) {
+      FIELD_RD (col_spacing, 44);
+    }
+    if (R11OPTS (128)) {
+      FIELD_RD (row_spacing, 45);
+    }
   } else {
     FIELD_3DPOINT (ins_pt, 10);
   }
-
   VERSIONS (R_13, R_14)
     {
       FIELD_3BD_1 (scale, 41); // 42,43
@@ -640,7 +690,8 @@ DWG_ENTITY (INSERT)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (block_header, 5, 0);
+  SINCE (R_13)
+     FIELD_HANDLE (block_header, 5, 0);
   VERSIONS (R_13, R_2000)
     {
       if (FIELD_VALUE (has_attribs))

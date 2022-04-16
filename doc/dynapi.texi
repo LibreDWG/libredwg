@@ -1143,7 +1143,7 @@ T,	DXF 2
 @item field_length
 BS
 @item flags
-RC
+RC,	DXF 70
 @item lock_position_flag
 B
 @item style
@@ -2254,6 +2254,16 @@ H
 H*
 @item seqend
 H
+@item block_r11
+RS,	DXF 2
+@item num_cols
+RS,	DXF 70
+@item num_rows
+RS,	DXF 71
+@item col_spacing
+RD,	DXF 44
+@item row_spacing
+RD,	DXF 45
 
 @end vtable
 @end indentedblock
