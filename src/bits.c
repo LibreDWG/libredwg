@@ -1548,7 +1548,10 @@ bit_read_TV (Bit_Chain *restrict dat)
   unsigned char *chain;
 
   CHK_OVERFLOW_PLUS (1,__FUNCTION__,NULL)
-  length = bit_read_BS (dat);
+  if (dat->from_version < R_13)
+    length = bit_read_RS (dat);
+  else
+    length = bit_read_BS (dat);
   CHK_OVERFLOW_PLUS (length,__FUNCTION__,NULL)
   chain = (unsigned char *)malloc (length + 1);
   if (!chain)
@@ -1836,7 +1839,10 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
   int length = (chain && *chain) ? strlen ((const char *)chain) : 0;
   if (dat->version <= R_2000 && length)
     length++;
-  bit_write_BS (dat, length);
+  if (dat->from_version < R_13)
+    bit_write_RS (dat, length);
+  else
+    bit_write_BS (dat, length);
   for (i = 0; i < length; i++)
     bit_write_RC (dat, (unsigned char)chain[i]);
 }
