@@ -561,6 +561,7 @@ DWG_ENTITY (INSERT)
     FIELD_HANDLE_NAME (block_header, 2, BLOCK_HEADER);
 #endif
   PRE (R_13) {
+    DECODER { FIELD_VALUE (has_attribs) = R11FLAG (128); }
     FIELD_RS (block_r11, 2);
     FIELD_2RD (ins_pt, 10);
     if (R11OPTS (1)) {
@@ -670,7 +671,6 @@ DWG_ENTITY (INSERT)
     }
 
   PRE (R_13) {
-    FIELD_RD0 (rotation, 50);
     DXF { FIELD_BE (extrusion, 210); } // in DWG?
   }
   LATER_VERSIONS {

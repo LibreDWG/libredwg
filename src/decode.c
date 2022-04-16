@@ -5333,8 +5333,8 @@ decode_preR13_entities (unsigned long start, unsigned long end,
   int error = 0;
   BITCODE_BL num = dwg->num_objects;
   dat->bit = 0;
-  LOG_TRACE ("entities: (0x%lx-0x%lx, offset 0x%lx)\n", start, end,
-             offset)
+  LOG_TRACE ("\n%sentities: (0x%lx-0x%lx, offset 0x%lx)\n", offset ? "block " : "",
+             start, end, offset)
   while (dat->byte < end)
     {
       Dwg_Object *obj;
@@ -5357,7 +5357,7 @@ decode_preR13_entities (unsigned long start, unsigned long end,
       dwg->num_objects++;
       obj->index = num;
       obj->parent = dwg;
-      obj->address = offset;
+      obj->address = offset; // so that the entity know its owner
       obj->supertype = DWG_SUPERTYPE_ENTITY;
 
       obj->type = bit_read_RC (dat);
