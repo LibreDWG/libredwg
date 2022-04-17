@@ -491,23 +491,25 @@ DWG_ENTITY (ATTDEF)
             }
         }
     }
-
-  FIELD_T (tag, 0);
-  FIELD_BS (field_length, 0); //DXF 73, unused
-  FIELD_RC (flags, 0); // 1 invisible, 2 constant, 4 verify, 8 preset
-  SINCE (R_2007) {
-    FIELD_B (lock_position_flag, 0);
+  SINCE (R_13)
+  {
+    FIELD_T (tag, 0);
+    FIELD_BS (field_length, 0); //DXF 73, unused
+    FIELD_RC (flags, 0); // 1 invisible, 2 constant, 4 verify, 8 preset
+    SINCE (R_2007) {
+      FIELD_B (lock_position_flag, 0);
+    }
+    // specific to ATTDEF
+    SINCE (R_2010) {
+      FIELD_RC (attdef_class_version, 0);
+      VALUEOUTOFBOUNDS (attdef_class_version, 10)
+    }
+    FIELD_T (prompt, 0);
   }
-
-  // specific to ATTDEF
-  SINCE (R_2010) {
-    FIELD_RC (attdef_class_version, 0);
-    VALUEOUTOFBOUNDS (attdef_class_version, 10)
-  }
-  FIELD_T (prompt, 0);
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (style, 5, 0);
+  SINCE (R_13)
+    FIELD_HANDLE (style, 5, 0);
 
 DWG_ENTITY_END
 
