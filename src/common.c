@@ -19,6 +19,7 @@
  */
 
 #include "config.h"
+#define COMMON_C
 #include "common.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -177,7 +178,8 @@ const char *dwg_bits_name[] = {
 
 // minimal size of type in bits
 // keep in sync with above
-const unsigned char dwg_bits_size[] = {
+// used by unit-tests
+EXPORT const unsigned char dwg_bits_size[] = {
   0,   //"UNKNOWN",
   8,   //"RC",
   16,  //"RS",

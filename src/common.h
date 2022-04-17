@@ -273,9 +273,11 @@ typedef enum DWG_BITS
 } Dwg_Bits;
 
 /* Globals inside the lib */
+#ifndef COMMON_C
 extern const char version_codes[DWG_VERSIONS][7];
 extern const char *dwg_bits_name[];
 extern const unsigned char dwg_bits_size[];
+#endif
 
 /**
  * References of sentinels
@@ -294,7 +296,8 @@ typedef enum DWG_SENTINEL
 } Dwg_Sentinel;
 
 unsigned char *dwg_sentinel (Dwg_Sentinel sentinel);
-char *strrplc (const char *s, const char *from, const char *to);
+// used by unit-tests
+EXPORT char *strrplc (const char *s, const char *from, const char *to);
 
 #define strEQ(s1, s2) !strcmp ((s1), (s2))
 #define strNE(s1, s2) strcmp ((s1), (s2))

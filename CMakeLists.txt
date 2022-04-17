@@ -152,6 +152,7 @@ add_library(redwg
 #set_target_properties(${libredwg_HEADERS} PROPERTIES PUBLIC_HEADER)
 set_target_properties(redwg PROPERTIES PUBLIC_HEADER include/dwg_api.h)
 set_target_properties(redwg PROPERTIES PUBLIC_HEADER include/dwg.h)
+target_compile_definitions(redwg PUBLIC DLL_EXPORT)
 target_include_directories(redwg PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_BINARY_DIR}/src)
