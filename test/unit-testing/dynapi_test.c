@@ -8173,24 +8173,22 @@ static int test_BLOCK (const Dwg_Object *obj)
       return 1;
     }
   {
-    BITCODE_T filename;
-    if (dwg_dynapi_entity_value (block, "BLOCK", "filename", &filename, NULL)
-        && filename
-           ? strEQ ((char *)filename, (char *)block->filename)
-           : !block->filename)
-      pass ();
+    BITCODE_2RD base_pt;
+    if (dwg_dynapi_entity_value (block, "BLOCK", "base_pt", &base_pt, NULL)
+        && !memcmp (&base_pt, &block->base_pt, sizeof (BITCODE_2RD)))
+        pass ();
     else
-      fail ("BLOCK.filename [T] '%s' <> '%s'", filename, block->filename);
+        fail ("BLOCK.base_pt [2RD]");
   }
   {
-    BITCODE_T name;
+    BITCODE_TV name;
     if (dwg_dynapi_entity_value (block, "BLOCK", "name", &name, NULL)
         && name
            ? strEQ ((char *)name, (char *)block->name)
            : !block->name)
       pass ();
     else
-      fail ("BLOCK.name [T] '%s' <> '%s'", name, block->name);
+      fail ("BLOCK.name [TV] '%s' <> '%s'", name, block->name);
   }
   {
     struct _dwg_object_entity* parent;
@@ -8199,6 +8197,16 @@ static int test_BLOCK (const Dwg_Object *obj)
         pass ();
     else
         fail ("BLOCK.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_TV xref_pname;
+    if (dwg_dynapi_entity_value (block, "BLOCK", "xref_pname", &xref_pname, NULL)
+        && xref_pname
+           ? strEQ ((char *)xref_pname, (char *)block->xref_pname)
+           : !block->xref_pname)
+      pass ();
+    else
+      fail ("BLOCK.xref_pname [TV] '%s' <> '%s'", xref_pname, block->xref_pname);
   }
   if (failed && (is_class_unstable ("BLOCK") || is_class_debugging ("BLOCK")))
     {
@@ -12909,21 +12917,6 @@ static int test_INSERT (const Dwg_Object *obj)
         pass ();
     else
         fail ("INSERT.block_header [H]");
-  }
-  {
-    BITCODE_RS block_r11;
-    if (dwg_dynapi_entity_value (insert, "INSERT", "block_r11", &block_r11, NULL)
-        && block_r11 == insert->block_r11)
-      pass ();
-    else
-      fail ("INSERT.block_r11 [RS] %hu != %hu", insert->block_r11, block_r11);
-    block_r11++;
-    if (dwg_dynapi_entity_set_value (insert, "INSERT", "block_r11", &block_r11, 0)
-        && block_r11 == insert->block_r11)
-      pass ();
-    else
-      fail ("INSERT.block_r11 [RS] set+1 %hu != %hu", insert->block_r11, block_r11);
-    insert->block_r11--;
   }
   {
     BITCODE_RD col_spacing;
@@ -49774,21 +49767,6 @@ static int test_LAYER (const Dwg_Object *obj)
         pass ();
     else
         fail ("LAYER.ltype [H]");
-  }
-  {
-    BITCODE_RS ltype_r11;
-    if (dwg_dynapi_entity_value (layer, "LAYER", "ltype_r11", &ltype_r11, NULL)
-        && ltype_r11 == layer->ltype_r11)
-      pass ();
-    else
-      fail ("LAYER.ltype_r11 [RS] %hu != %hu", layer->ltype_r11, ltype_r11);
-    ltype_r11++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "ltype_r11", &ltype_r11, 0)
-        && ltype_r11 == layer->ltype_r11)
-      pass ();
-    else
-      fail ("LAYER.ltype_r11 [RS] set+1 %hu != %hu", layer->ltype_r11, ltype_r11);
-    layer->ltype_r11--;
   }
   {
     BITCODE_H material;

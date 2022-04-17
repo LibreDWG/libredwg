@@ -179,7 +179,7 @@ const char *dwg_bits_name[] = {
 // minimal size of type in bits
 // keep in sync with above
 // used by unit-tests
-EXPORT const unsigned char dwg_bits_size[] = {
+const unsigned char dwg_bits_size[] = {
   0,   //"UNKNOWN",
   8,   //"RC",
   16,  //"RS",

@@ -1254,9 +1254,11 @@ struct _dwg_object_entity*
 @item parent
 struct _dwg_object_entity*
 @item name
-T,	DXF 2
-@item filename
-T,	DXF 4
+TV,	DXF 2
+@item xref_pname
+TV,	DXF 3
+@item base_pt
+2RD,	DXF 10
 
 @end vtable
 @end indentedblock
@@ -1396,7 +1398,7 @@ B,	DXF 75
 @item dimstyle
 H,	DXF 3
 @item block
-H
+H,	DXF 2
 @item xline1_pt
 3BD,	DXF 13
 @item xline2_pt
@@ -1459,7 +1461,7 @@ B,	DXF 75
 @item dimstyle
 H,	DXF 3
 @item block
-H
+H,	DXF 2
 @item xline1start_pt
 3BD,	DXF 13
 @item xline1end_pt
@@ -1524,7 +1526,7 @@ B,	DXF 75
 @item dimstyle
 H,	DXF 3
 @item block
-H
+H,	DXF 2
 @item xline1_pt
 3BD,	DXF 13
 @item xline2_pt
@@ -1587,7 +1589,7 @@ B,	DXF 75
 @item dimstyle
 H,	DXF 3
 @item block
-H
+H,	DXF 2
 @item first_arc_pt
 3BD,	DXF 15
 @item leader_len
@@ -1648,7 +1650,7 @@ B,	DXF 75
 @item dimstyle
 H,	DXF 3
 @item block
-H
+H,	DXF 2
 @item xline1_pt
 3BD,	DXF 13
 @item xline2_pt
@@ -1713,7 +1715,7 @@ B,	DXF 75
 @item dimstyle
 H,	DXF 3
 @item block
-H
+H,	DXF 2
 @item feature_location_pt
 3BD,	DXF 13
 @item leader_endpt
@@ -1776,7 +1778,7 @@ B,	DXF 75
 @item dimstyle
 H,	DXF 3
 @item block
-H
+H,	DXF 2
 @item first_arc_pt
 3BD,	DXF 15
 @item leader_len
@@ -2254,8 +2256,6 @@ H
 H*
 @item seqend
 H
-@item block_r11
-RS,	DXF 2
 @item num_cols
 RS,	DXF 70
 @item num_rows
@@ -2320,7 +2320,7 @@ B,	DXF 75
 @item dimstyle
 H,	DXF 3
 @item block
-H
+H,	DXF 2
 @item first_arc_pt
 3BD,	DXF 15
 @item leader_len
@@ -10011,8 +10011,6 @@ RC,	DXF 370
 CMC,	DXF 62
 @item color_r11
 int16_t,	DXF 62
-@item ltype_r11
-RS,	DXF 7
 @item plotstyle
 H,	DXF 390
 @item material
@@ -13963,7 +13961,7 @@ B,	DXF 75
 @item dimstyle
 H,	DXF 3
 @item block
-H
+H,	DXF 2
 
 @end vtable
 @end indentedblock
@@ -15830,6 +15828,8 @@ RC
 H,	DXF 348
 @item flag2_r11
 RC
+@item flag_r11
+RC
 @item full_visualstyle
 H,	DXF 348
 @item has_ds_data
@@ -15848,16 +15848,12 @@ B
 B
 @item layer
 H,	DXF 8
-@item layer_r11
-RS
 @item linewt
 RC,	DXF 370
 @item ltype
 H,	DXF 6
 @item ltype_flags
 BB
-@item ltype_r11
-RS
 @item ltype_scale
 BD,	DXF 48
 @item material

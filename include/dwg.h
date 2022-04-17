@@ -742,6 +742,7 @@ typedef struct _dwg_object_ref
   struct _dwg_object* obj;
   Dwg_Handle handleref;
   unsigned long absolute_ref;
+  BITCODE_RS r11_idx; // preR13 only, the TABLE index (also used for DXF)
 } Dwg_Object_Ref;
 
 typedef Dwg_Object_Ref* BITCODE_H;
@@ -1339,8 +1340,9 @@ typedef struct _dwg_entity_BLOCK
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_T name;     // DXF 2
-  BITCODE_T filename; // unused, will be removed
+  BITCODE_T name;       // DXF 2
+  BITCODE_T xref_pname; // DXF 3
+  BITCODE_2RD base_pt;  // preR13 only
 } Dwg_Entity_BLOCK;
 
 /**
@@ -1374,14 +1376,12 @@ typedef struct _dwg_entity_INSERT
   BITCODE_B         has_attribs;
   BITCODE_BL        num_owned;
 
-  BITCODE_H   block_header;
+  BITCODE_H   block_header; /* DXF 2 */
   BITCODE_H   first_attrib;
   BITCODE_H   last_attrib;
   BITCODE_H*  attribs;
   BITCODE_H   seqend;
 
-  // preR11 only
-  BITCODE_RS  block_r11; // block_header index for name, DXF 2
   BITCODE_RS  num_cols;
   BITCODE_RS  num_rows;
   BITCODE_RD  col_spacing;
@@ -2325,8 +2325,7 @@ typedef struct _dwg_object_LAYER
   BITCODE_B plotflag;
   BITCODE_RC linewt;
   BITCODE_CMC color;
-  int16_t    color_r11;    /* preR13, needs to be signed */
-  BITCODE_RS ltype_r11;    /* preR13 */
+  int16_t   color_r11;    /* preR13, needs to be signed */
   BITCODE_H plotstyle;    /* DXF 390 */
   BITCODE_H material;     /* DXF 347 */
   BITCODE_H ltype;        /* DXF 6 */
@@ -8131,12 +8130,13 @@ typedef struct _dwg_object_entity
   BITCODE_RC linewt;              /*!< r2000+, see dxf_cvt_lweight() */
 
   /* preR13 entity fields. TODO a union with above */
+  BITCODE_RC flag_r11;
   BITCODE_RC flag2_r11;
   BITCODE_RS opts_r11;
   BITCODE_RC extra_r11;
-  BITCODE_RS layer_r11;
+  //BITCODE_RS layer_r11;
   BITCODE_RC color_r11;
-  BITCODE_RS ltype_r11;
+  //BITCODE_RS ltype_r11;
   BITCODE_RD elevation_r11;
   BITCODE_RD thickness_r11;
   BITCODE_RS paper_r11;
@@ -8472,7 +8472,7 @@ typedef struct _dwg_object
   Dwg_Handle handle;
   struct _dwg_struct *parent;
   Dwg_Class *klass;          /* the optional class of a variable object */
-  BITCODE_RC flag_r11;
+  //BITCODE_RC flag_r11;
 
   BITCODE_RL bitsize;        /* common + object fields, but no handles */
   unsigned long bitsize_pos; /* bitsize offset in bits: r13-2007 */

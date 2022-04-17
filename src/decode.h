@@ -44,7 +44,8 @@ void decode_BACKGROUND_type (const Dwg_Object *obj);
 Dwg_Object_Ref *dwg_decode_handleref (Bit_Chain *restrict hdl_dat,
                                       Dwg_Object *restrict obj,
                                       Dwg_Data *restrict dwg);
-
+Dwg_Object_Ref *dwg_decode_preR13_handleref (Bit_Chain *restrict dat,
+                                             int size);
 Dwg_Object_Ref *dwg_decode_handleref_with_code (Bit_Chain *restrict hdl_dat,
                                                 Dwg_Object *restrict obj,
                                                 Dwg_Data *restrict dwg,

@@ -37,9 +37,9 @@ DWG_ENTITY (TEXT)
     if (R11OPTS (4))
       FIELD_RD (oblique_angle, 51);
     if (R11OPTS (8)) {
-      DECODER { _ent->ltype_r11 = bit_read_RC (dat); }
-      ENCODER { bit_write_RC (dat, _ent->ltype_r11); }
-      PRINT   { LOG_TRACE ("ltype_r11: " FORMAT_RS "\n", _ent->ltype_r11); }
+      DECODER { _ent->ltype = dwg_decode_preR13_handleref (dat, 1); }
+      ENCODER { bit_write_RC (dat, _ent->ltype->r11_idx); }
+      PRINT   { LOG_TRACE ("ltype r11: " FORMAT_RC "\n", _ent->ltype->r11_idx); }
     }
     if (R11OPTS (16))
       FIELD_CAST (generation, RC, BS, 71);
@@ -154,7 +154,7 @@ DWG_ENTITY (TEXT)
     {
       IF_ENCODE_FROM_PRE_R13 {
         //FIXME: should really just lookup the style table; style is the index.
-        FIELD_VALUE (style) = 0; //dwg_resolve_handle (dwg, obj->ltype_r11);
+        FIELD_VALUE (style) = 0; //dwg_resolve_handle (dwg, obj->style->r11_idx);
       }
 #ifndef IS_DXF
       FIELD_HANDLE (style, 5, 7);
@@ -515,9 +515,16 @@ DWG_ENTITY_END
 DWG_ENTITY (BLOCK)
 
   SUBCLASS (AcDbBlockBegin)
-  BLOCK_NAME (name, 2) //special pre-R13 naming rules
-
-  COMMON_ENTITY_HANDLE_DATA;
+  PRE (R_13) {
+    FIELD_2RD (base_pt, 10);
+    FIELD_TV (name, 2);
+    if (R11OPTS(2))
+      FIELD_TV (xref_pname, 3);
+  }
+  LATER_VERSIONS {
+    BLOCK_NAME (name, 2) //special pre-R13 naming rules
+    COMMON_ENTITY_HANDLE_DATA;
+  }
 
 #ifdef IS_DXF
   {
@@ -578,7 +585,7 @@ DWG_ENTITY (INSERT)
 #endif
   PRE (R_13) {
     DECODER { FIELD_VALUE (has_attribs) = R11FLAG (128); }
-    FIELD_RS (block_r11, 2);
+    FIELD_HANDLE (block_header, 2, 2);
     FIELD_2RD (ins_pt, 10);
     if (R11OPTS (1)) {
       FIELD_RD (scale.x, 41);
@@ -706,7 +713,9 @@ DWG_ENTITY (INSERT)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (block_header, 5, 0);
+  SINCE (R_13) {
+    FIELD_HANDLE (block_header, 5, 0);
+  }
   VERSIONS (R_13, R_2000)
     {
       if (FIELD_VALUE (has_attribs))
@@ -726,8 +735,10 @@ DWG_ENTITY (INSERT)
         }
     }
 
-  if (FIELD_VALUE (has_attribs)) {
-    FIELD_HANDLE (seqend, 3, 0);
+  SINCE (R_13) {
+    if (FIELD_VALUE (has_attribs)) {
+      FIELD_HANDLE (seqend, 3, 0);
+    }
   }
 
 DWG_ENTITY_END
@@ -870,7 +881,6 @@ DWG_ENTITY_END
 
 /* (none/21) R10-R11 only */
 DWG_ENTITY (_3DLINE)
-
   VERSIONS (R_10, R_11) {
     FIELD_3RD (start, 10)
     FIELD_3RD (end, 11)
@@ -880,8 +890,7 @@ DWG_ENTITY (_3DLINE)
     if (R11OPTS (2))
       FIELD_RD (thickness, 39);
   }
-  COMMON_ENTITY_HANDLE_DATA;
-
+  //COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 /* (10/20) */
@@ -1271,83 +1280,112 @@ DWG_ENTITY_END
  * DIMENSION_common declaration
  */
 #ifndef COMMON_ENTITY_DIMENSION
-#define COMMON_ENTITY_DIMENSION \
-    SUBCLASS (AcDbDimension) \
-    SINCE (R_2010) \
-      { \
-        FIELD_RC (class_version, 280); /* 0=r2010 */ \
-        VALUEOUTOFBOUNDS (class_version, 10) \
-      } \
-    DXF { \
-      /* converted to utf8 */ \
-      char *blockname = dwg_dim_blockname (dwg, obj); \
-      VALUE_TV0 (blockname, 2); \
-      if (blockname)            \
-        free (blockname);       \
-      FIELD_3BD (def_pt, 10);   \
-    } else { \
-      FIELD_3BD (extrusion, 210); \
-    } \
-    FIELD_2RD (text_midpt, 11); \
-    FIELD_BD (elevation, 31); \
-    DXF { \
-      FIELD_RC0 (flag, 70); \
-    } else { \
-      FIELD_RC (flag1, 0); \
-    } \
-    DECODER { \
-      /* clear the upper flag bits, and fix them: */ \
-      BITCODE_RC flag = FIELD_VALUE (flag1) & 0xe0; \
-      /* bit 7 (non-default) is inverse of bit 0 */ \
-      flag = (FIELD_VALUE (flag1) & 1) ? flag & 0x7F : flag | 0x80; \
-      /* set bit 5 (use block) to bit 1. always set since r13 */ \
-      flag = (FIELD_VALUE (flag1) & 2) ? flag | 0x20 : flag & 0xDF; \
-      if      (obj->fixedtype == DWG_TYPE_DIMENSION_ALIGNED)  flag |= 1; \
-      else if (obj->fixedtype == DWG_TYPE_DIMENSION_ANG2LN)   flag |= 2; \
-      else if (obj->fixedtype == DWG_TYPE_DIMENSION_DIAMETER) flag |= 3; \
-      else if (obj->fixedtype == DWG_TYPE_DIMENSION_RADIUS)   flag |= 4; \
-      else if (obj->fixedtype == DWG_TYPE_DIMENSION_ANG3PT)   flag |= 5; \
-      else if (obj->fixedtype == DWG_TYPE_DIMENSION_ORDINATE) flag |= 6; \
-      FIELD_VALUE (flag) = flag;                                \
-      LOG_TRACE ("flag => 0x%x [RC 70]\n", flag);               \
-    }                                                           \
-    DXF {                                                       \
-      if (dat->from_version >= R_2007) {                        \
-        FIELD_T (user_text, 1);                                 \
-      } else if (_obj->user_text && strlen (_obj->user_text)) { \
-        FIELD_TV (user_text, 1);                                \
-      }                                                         \
-    } else {                                                    \
-      FIELD_T (user_text, 1);                                   \
-      FIELD_BD0 (text_rotation, 53);                            \
-      FIELD_BD0 (horiz_dir, 51);                                \
-      FIELD_3BD_1 (ins_scale, 0);                               \
-      FIELD_BD0 (ins_rotation, 54);                             \
-    }                                                           \
-    SINCE (R_2000)                                              \
-    {                                                           \
-      FIELD_BS (attachment, 71);                                \
-      FIELD_BS1 (lspace_style, 72);                             \
-      FIELD_BD1 (lspace_factor, 41);                            \
-      FIELD_BD (act_measurement, 42);                           \
-    }                                                           \
-    SINCE (R_2007)                                              \
-    {                                                           \
-      FIELD_B (unknown, 73); /* always 0 */                     \
-      FIELD_B (flip_arrow1, 74);                                \
-      FIELD_B (flip_arrow2, 75);                                \
-    }                                                           \
-    FIELD_2RD0 (clone_ins_pt, 12);                              \
-    DXF {                                                       \
-      FIELD_BD0 (ins_rotation, 54);                             \
-      FIELD_BD0 (horiz_dir, 51);                                \
-      FIELD_BE (extrusion, 210);                                \
-      FIELD_BD0 (text_rotation, 53);                            \
-      FIELD_HANDLE0 (dimstyle, 5, 3);                           \
+#define COMMON_ENTITY_DIMENSION                                               \
+    SUBCLASS (AcDbDimension)                                                  \
+    SINCE (R_2010)                                                            \
+    {                                                                         \
+      FIELD_RC (class_version, 280); /* 0=r2010 */                            \
+      VALUEOUTOFBOUNDS (class_version, 10)                                    \
+    }                                                                         \
+    PRE (R_13)                                                                \
+    {                                                                         \
+      FIELD_HANDLE (block, 2, 2);                                             \
+      FIELD_2RD (def_pt, 10);                                                 \
+      FIELD_2RD (text_midpt, 11);                                             \
+      if (R11OPTS (2))                                                        \
+        FIELD_RC (flag1, 0);                                                  \
+      if (R11OPTS (4))                                                        \
+        FIELD_TV (user_text, 1);                                              \
+    }                                                                         \
+    LATER_VERSIONS                                                            \
+    {                                                                         \
+      DXF                                                                     \
+      {                                                                       \
+        /* converted to utf8 */                                               \
+        char *blockname = dwg_dim_blockname (dwg, obj);                       \
+        VALUE_TV0 (blockname, 2);                                             \
+        if (blockname)                                                        \
+          free (blockname);                                                   \
+        FIELD_3BD (def_pt, 10);                                               \
+      }                                                                       \
+      else { FIELD_3BD (extrusion, 210); }                                    \
+      FIELD_2RD (text_midpt, 11);                                             \
+      FIELD_BD (elevation, 31);                                               \
+      DXF { FIELD_RC0 (flag, 70); }                                           \
+      else { FIELD_RC (flag1, 0); }                                           \
+    }                                                                         \
+    DECODER                                                                   \
+    {                                                                         \
+      /* clear the upper flag bits, and fix them: */                          \
+      BITCODE_RC flag = FIELD_VALUE (flag1) & 0xe0;                           \
+      /* bit 7 (non-default) is inverse of bit 0 */                           \
+      flag = (FIELD_VALUE (flag1) & 1) ? flag & 0x7F : flag | 0x80;           \
+      /* set bit 5 (use block) to bit 1. always set since r13 */              \
+      flag = (FIELD_VALUE (flag1) & 2) ? flag | 0x20 : flag & 0xDF;           \
+      if (obj->fixedtype == DWG_TYPE_DIMENSION_ALIGNED)                       \
+        flag |= 1;                                                            \
+      else if (obj->fixedtype == DWG_TYPE_DIMENSION_ANG2LN)                   \
+        flag |= 2;                                                            \
+      else if (obj->fixedtype == DWG_TYPE_DIMENSION_DIAMETER)                 \
+        flag |= 3;                                                            \
+      else if (obj->fixedtype == DWG_TYPE_DIMENSION_RADIUS)                   \
+        flag |= 4;                                                            \
+      else if (obj->fixedtype == DWG_TYPE_DIMENSION_ANG3PT)                   \
+        flag |= 5;                                                            \
+      else if (obj->fixedtype == DWG_TYPE_DIMENSION_ORDINATE)                 \
+        flag |= 6;                                                            \
+      FIELD_VALUE (flag) = flag;                                              \
+      LOG_TRACE ("flag => 0x%x [RC 70]\n", flag);                             \
+    }                                                                         \
+    DXF                                                                       \
+    {                                                                         \
+      if (dat->from_version >= R_2007)                                        \
+        {                                                                     \
+          FIELD_T (user_text, 1);                                             \
+        }                                                                     \
+      else if (_obj->user_text && strlen (_obj->user_text))                   \
+        {                                                                     \
+          FIELD_TV (user_text, 1);                                            \
+        }                                                                     \
+    }                                                                         \
+    else                                                                      \
+    {                                                                         \
+      SINCE (R_13)                                                            \
+      {                                                                       \
+        FIELD_T (user_text, 1);                                               \
+        FIELD_BD0 (text_rotation, 53);                                        \
+        FIELD_BD0 (horiz_dir, 51);                                            \
+        FIELD_3BD_1 (ins_scale, 0);                                           \
+        FIELD_BD0 (ins_rotation, 54);                                         \
+      }                                                                       \
+    }                                                                         \
+    SINCE (R_2000)                                                            \
+    {                                                                         \
+      FIELD_BS (attachment, 71);                                              \
+      FIELD_BS1 (lspace_style, 72);                                           \
+      FIELD_BD1 (lspace_factor, 41);                                          \
+      FIELD_BD (act_measurement, 42);                                         \
+    }                                                                         \
+    SINCE (R_2007)                                                            \
+    {                                                                         \
+      FIELD_B (unknown, 73); /* always 0 */                                   \
+      FIELD_B (flip_arrow1, 74);                                              \
+      FIELD_B (flip_arrow2, 75);                                              \
+    }                                                                         \
+    SINCE (R_13) {                                                            \
+      FIELD_2RD0 (clone_ins_pt, 12);                                          \
+    }                                                                         \
+    DXF                                                                       \
+    {                                                                         \
+      FIELD_BD0 (ins_rotation, 54);                                           \
+      FIELD_BD0 (horiz_dir, 51);                                              \
+      FIELD_BE (extrusion, 210);                                              \
+      FIELD_BD0 (text_rotation, 53);                                          \
+      FIELD_HANDLE0 (dimstyle, 5, 3);                                         \
     }
 #endif
 
-/* (20) */
+/* (20/23) */
 DWG_ENTITY (DIMENSION_ORDINATE)
 
   COMMON_ENTITY_DIMENSION
@@ -1373,7 +1411,6 @@ DWG_ENTITY_END
 /* (21/23) */
 DWG_ENTITY (DIMENSION_LINEAR)
 
-  // TODO PRE (R_R13)
   COMMON_ENTITY_DIMENSION
   JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbAlignedDimension)
@@ -1400,7 +1437,7 @@ DWG_ENTITY (DIMENSION_LINEAR)
 
 DWG_ENTITY_END
 
-/* (22) */
+/* (22/23) */
 DWG_ENTITY (DIMENSION_ALIGNED)
 
   COMMON_ENTITY_DIMENSION
@@ -1422,7 +1459,7 @@ DWG_ENTITY (DIMENSION_ALIGNED)
 
 DWG_ENTITY_END
 
-/* (23) */
+/* (23/23) */
 DWG_ENTITY (DIMENSION_ANG3PT)
 
   COMMON_ENTITY_DIMENSION
@@ -1439,7 +1476,7 @@ DWG_ENTITY (DIMENSION_ANG3PT)
 
 DWG_ENTITY_END
 
-/* (24) */
+/* (24/23) */
 DWG_ENTITY (DIMENSION_ANG2LN)
 
   COMMON_ENTITY_DIMENSION
@@ -1458,7 +1495,7 @@ DWG_ENTITY (DIMENSION_ANG2LN)
 
 DWG_ENTITY_END
 
-/* (25) */
+/* (25/23) */
 DWG_ENTITY (DIMENSION_RADIUS)
 
   COMMON_ENTITY_DIMENSION
@@ -1474,7 +1511,7 @@ DWG_ENTITY (DIMENSION_RADIUS)
 
 DWG_ENTITY_END
 
-/* (26) */
+/* (26/23) */
 DWG_ENTITY (DIMENSION_DIAMETER)
 
   COMMON_ENTITY_DIMENSION
@@ -1511,13 +1548,25 @@ DWG_ENTITY_END
 DWG_ENTITY (POINT)
 
   SUBCLASS (AcDbPoint)
-  //TODO PRE (R_13)
-  FIELD_BD (x, 10);
-  FIELD_BD (y, 20);
-  FIELD_BD (z, 30);
-  FIELD_BT0 (thickness, 39);
-  FIELD_BE (extrusion, 210);
-  FIELD_BD (x_ang, 50);
+  PRE (R_13)
+  {
+    FIELD_RD (x, 10);
+    FIELD_RD (y, 20);
+    if (R11FLAG (4))
+      FIELD_RD (z, 30);
+    if (R11OPTS (1))
+      FIELD_3RD (extrusion, 210);
+    if (R11OPTS (2))
+      FIELD_RD (thickness, 39);
+  }
+  LATER_VERSIONS {
+    FIELD_BD (x, 10);
+    FIELD_BD (y, 20);
+    FIELD_BD (z, 30);
+    FIELD_BT0 (thickness, 39);
+    FIELD_BE (extrusion, 210);
+    FIELD_BD (x_ang, 50);
+  }
 
   COMMON_ENTITY_HANDLE_DATA;
 
@@ -3042,7 +3091,7 @@ DWG_OBJECT (LAYER)
   PRE (R_13)
   {
     FIELD_RS (color_r11, 62);  // color
-    FIELD_RS (ltype_r11, 7);   // style
+    FIELD_HANDLE (ltype, 2, 6);
 
     DECODER {
       FIELD_VALUE (on)            = FIELD_VALUE (color_r11) >= 0;
@@ -3091,7 +3140,9 @@ DWG_OBJECT (LAYER)
   SINCE (R_2007) {
     FIELD_HANDLE (material, 5, 0);
   }
-  FIELD_HANDLE (ltype, 5, 6);
+  SINCE (R_13) {
+    FIELD_HANDLE (ltype, 5, 6);
+  }
   DXF {
     SINCE (R_2000) {
       if (_obj->name &&

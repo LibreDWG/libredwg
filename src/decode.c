@@ -416,6 +416,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     case SECTION_LAYER:
       for (i = 0; i < tbl->number; i++)
         {
+          Bit_Chain *hdl_dat = NULL;
           PREP_TABLE (LAYER);
 
           FIELD_CAST (flag, RC, RS, 70); // 860
@@ -423,8 +424,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_RS (used, 0);
 
           FIELD_RS (color_r11, 62); // color, off if negative
-          FIELD_RS (ltype_r11, 6);  // style
-          // FIELD_RS (crc, 0);
+          FIELD_HANDLE (ltype, 2, 6);
           CHK_ENDPOS;
         }
       break;
@@ -640,35 +640,39 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 {
   Dwg_Object_Entity *_obj = ent;
   const bool is_block = obj->address >= 0x40000000;
+  Bit_Chain *hdl_dat = NULL;
+  Dwg_Data *dwg = ent->dwg;
+
   obj->bitsize_pos = bit_position (dat);
   obj->address = dat->byte - 1; // already read the type. size includes the type
   LOG_INFO ("===========================\n"
             "Entity number: %d, Type: %d\n",
             obj->index, obj->type);
-  obj->tio.entity->entmode = is_block ? 3 : 2; // ent or block
-  obj->flag_r11 = bit_read_RC (dat); // mode, DXF 70. some ents have more flags 70 extra
-  LOG_TRACE("flag_r11: %x [RC]\n", obj->flag_r11);
+  _obj->entmode = is_block ? 3 : 2; // ent or block
+  FIELD_RC (flag_r11, 70); // mode
   obj->size = bit_read_RS (dat);
   LOG_TRACE("size: %d [RS]\n", obj->size);
-  FIELD_RCd (layer_r11, 8);
-  FIELD_RC (flag2_r11, 0); // ?
-  FIELD_RSx (opts_r11, 0);
-  if (obj->flag_r11 & FLAG_R11_COLOR)
+  //_obj->layer = dwg_decode_preR13_handleref (dat, 1);
+  //LOG_TRACE("layer.r11: %d [RS 8]\n", _obj->layer->r11_idx);
+  FIELD_HANDLE (layer, 1, 8);
+  FIELD_RC (flag2_r11, 0); // extra flags?
+  FIELD_RSx (opts_r11, 0); // i.e. dataflags
+  if (_obj->flag_r11 & FLAG_R11_COLOR)
     FIELD_RCd (color_r11, 0);
-  if (obj->flag_r11 & FLAG_R11_LTYPE)
-    FIELD_RCd (ltype_r11, 0);
+  if (_obj->flag_r11 & FLAG_R11_LTYPE)
+    FIELD_HANDLE (ltype, 1, 6);
 
   // TODO: maybe move that to the entity
-  if (obj->flag_r11 & FLAG_R11_ELEVATION)
-    FIELD_RD (elevation_r11, 31);
-  if (obj->flag_r11 & FLAG_R11_THICKNESS)
-    FIELD_RD (thickness_r11, 39);
+  //if (_obj->flag_r11 & FLAG_R11_ELEVATION)
+  //  FIELD_RD (elevation_r11, 31);
+  //if (_obj->flag_r11 & FLAG_R11_THICKNESS)
+  //  FIELD_RD (thickness_r11, 39);
 
   SINCE (R_12) { // seems to be wrong
-    if (obj->flag_r11 & FLAG_R11_XDATA)
+    if (_obj->flag_r11 & FLAG_R11_XDATA)
       FIELD_RC (extra_r11, 0);
     /* Common entity preR13 header: */
-    if (ent->extra_r11 & 2)
+    if (_obj->extra_r11 & 2)
       {
         int error = dwg_decode_eed (dat, (Dwg_Object_Object *)ent);
         if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
@@ -676,7 +680,7 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       }
   }
   /*
-  if (obj->flag_r11 & 0x20) // XREF_DEP
+  if (_obj->flag_r11 & 0x20) // XREF_DEP
     {
       Dwg_Object_Ref *hdl
         = dwg_decode_handleref_with_code (dat, obj, dwg, 0);
@@ -684,7 +688,7 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         obj->handle = hdl->handleref;
     }
   */
-  if (ent->opts_r11 & OPTS_R11_PAPER)
+  if (_obj->opts_r11 & OPTS_R11_PAPER)
     FIELD_RS (paper_r11, 0);
 
   obj->common_size = bit_position (dat) - obj->bitsize_pos;
@@ -4920,6 +4924,22 @@ dwg_decode_handleref_with_code (Bit_Chain *restrict dat,
   return ref;
 }
 
+Dwg_Object_Ref *
+dwg_decode_preR13_handleref (Bit_Chain *restrict dat, int size)
+{
+  Dwg_Object_Ref *ref = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
+  if (!ref)
+    {
+      LOG_ERROR ("Out of memory");
+      return NULL;
+    }
+  if (size == 2)
+    ref->r11_idx = bit_read_RS (dat);
+  else
+    ref->r11_idx = (BITCODE_RS)bit_read_RC (dat);
+  return ref;
+}
+
 AFL_GCC_TOOBIG
 int
 dwg_decode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
@@ -5325,6 +5345,40 @@ check_POLYLINE_handles (Dwg_Object *obj)
     }
 }
 
+static int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
+{
+  int error = 0;
+  BITCODE_RC flag_r11 = bit_read_RC (dat);
+  dat->byte--;
+  switch (flag_r11 & 63)
+    {
+    case 0:
+      error |= dwg_decode_DIMENSION_LINEAR (dat, obj);
+      break;
+    case 1:
+      error |= dwg_decode_DIMENSION_ALIGNED (dat, obj);
+      break;
+    case 2:
+      error |= dwg_decode_DIMENSION_ANG2LN (dat, obj);
+      break;
+    case 3:
+      error |= dwg_decode_DIMENSION_DIAMETER (dat, obj);
+      break;
+    case 4:
+      error |= dwg_decode_DIMENSION_RADIUS (dat, obj);
+      break;
+    case 5:
+      error |= dwg_decode_DIMENSION_ANG3PT (dat, obj);
+      break;
+    case 6:
+      error |= dwg_decode_DIMENSION_ORDINATE (dat, obj);
+      break;
+    default:
+      LOG_ERROR ("Unknown preR13 DIMENSION type %u", flag_r11 & 63);
+    }
+  return error;
+}
+
 static int
 decode_preR13_entities (unsigned long start, unsigned long end,
                         unsigned long offset, Bit_Chain *restrict dat,
@@ -5338,7 +5392,7 @@ decode_preR13_entities (unsigned long start, unsigned long end,
   while (dat->byte < end)
     {
       Dwg_Object *obj;
-      Dwg_Object_Entity *ent;
+      Dwg_Object_Entity *ent, *_ent;
       BITCODE_RS crc;
 
       if (!num)
@@ -5426,8 +5480,7 @@ decode_preR13_entities (unsigned long start, unsigned long end,
           error |= dwg_decode__3DFACE (dat, obj);
           break;
         case 23:
-          // TODO check opts for the type of dimension
-          error |= dwg_decode_DIMENSION_LINEAR (dat, obj);
+          error |= decode_preR13_DIMENSION (dat, obj);
           break;
         case 24:
           error |= dwg_decode_VPORT (dat, obj);

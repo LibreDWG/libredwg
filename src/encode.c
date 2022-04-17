@@ -1836,7 +1836,8 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_RS (used, 0);
 
           FIELD_RS (color_r11, 62); // color, off if negative
-          FIELD_RS (ltype_r11, 6);  // style
+          bit_write_RS (dat, _obj->ltype->r11_idx);
+          LOG_TRACE ("ltype->r11_idx: " FORMAT_RS " [RS 6]", _obj->ltype->r11_idx);
           CHK_ENDPOS;
         }
       break;
@@ -3653,10 +3654,10 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
         bit_chain_alloc (dat);
 
       bit_write_RC (dat, obj->type);
-      bit_write_RC (dat, obj->flag_r11);
+      bit_write_RC (dat, obj->tio.entity->flag_r11);
       bit_write_RS (dat, obj->size);
       LOG_INFO (", Type: %d [RC], Flag: 0x%x [RC], Size: %d [RS], Address: %lu\n",
-                obj->type, obj->flag_r11, obj->size, obj->address)
+                obj->type, obj->tio.entity->flag_r11, obj->size, obj->address)
 
       switch (obj->type)
         {
@@ -4737,20 +4738,27 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
 
   PRE (R_13)
   {
-    //FIELD_RC (flag_r11, 70); // mode
-    //bit_write_RS (dat, obj->size);
-    //LOG_TRACE("size: %d\n", obj->size);
-    FIELD_RCd (layer_r11, 8);
+    BITCODE_RC flag = ent->flag_r11;
+    FIELD_RC (flag_r11, 70); // mode
+    LOG_TRACE("size: %d\n", obj->size);
+    //FIELD_HANDLE (layer, 1, 8);
+    bit_write_RS (dat, _obj->layer->r11_idx);
+    LOG_TRACE("layer: %d\n", _obj->layer->r11_idx);
     FIELD_RSx (opts_r11, 0);
-    if (obj->flag_r11 & FLAG_R11_COLOR)
+    if (flag & FLAG_R11_COLOR)
       FIELD_RCd (color_r11, 0);
-    if (obj->flag_r11 & FLAG_R11_LTYPE)
-      FIELD_RCd (ltype_r11, 0);
-    if (obj->flag_r11 & FLAG_R11_ELEVATION)
+    if (flag & FLAG_R11_LTYPE) {
+      bit_write_RS (dat, _obj->ltype->r11_idx);
+      LOG_TRACE("ltype: %d\n", _obj->ltype->r11_idx);
+      //FIELD_HANDLE (ltype, 1, 0);
+    }
+    /* FIXME
+    if (flag & FLAG_R11_ELEVATION)
       FIELD_RD (elevation_r11, 31);
-    if (obj->flag_r11 & FLAG_R11_THICKNESS)
+    if (flag & FLAG_R11_THICKNESS)
       FIELD_RD (thickness_r11, 39);
-    if (obj->flag_r11 & FLAG_R11_XDATA)
+    */
+    if (flag & FLAG_R11_XDATA)
       FIELD_RC (extra_r11, 0);
     /*
     if (FIELD_VALUE (flag_r11) & 4 && FIELD_VALUE (kind_r11) > 2

@@ -252,9 +252,15 @@
 #define ANYCODE -1
 #define VALUE_HANDLE(ref, nam, code, dxf)                                     \
 {                                                                             \
-  SINCE (R_13)                                                                \
+  PRE (R_13)                                                                  \
   {                                                                           \
-    unsigned long pos = bit_position (hdl_dat);                               \
+    ref = dwg_decode_preR13_handleref (dat, code);                            \
+    LOG_TRACE (#nam ": " FORMAT_RS " [%s %d]\n", ref->r11_idx,                \
+               code == 2 ? "RS" : "RC", dxf)                                  \
+  }                                                                           \
+  LATER_VERSIONS                                                              \
+  {                                                                           \
+    unsigned long _pos = bit_position (hdl_dat);                              \
     if (code >= 0)                                                            \
       ref = dwg_decode_handleref_with_code (hdl_dat, obj, dwg, code);         \
     else                                                                      \
@@ -275,10 +281,10 @@
           }                                                                   \
         else                                                                  \
           {                                                                   \
-            LOG_TRACE (#nam ": NULL %d [H %d]", code, dxf);                   \
+            HANDLER (OUTPUT, #nam ": NULL %d [H %d]", code, dxf);             \
           }                                                                   \
-        LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                \
-        LOG_TRACE ("\n");                                                     \
+        LOG_INSANE (" @%lu.%u", _pos / 8, (unsigned)(_pos % 8));              \
+        HANDLER (OUTPUT, "\n");                                               \
       }                                                                       \
   }                                                                           \
 }
@@ -289,33 +295,42 @@
 
 #define VALUE_HANDLE_N(ref, nam, vcount, code, dxf)                           \
   {                                                                           \
-    unsigned long pos = bit_position (hdl_dat);                               \
-    if (code >= 0)                                                            \
-      ref = dwg_decode_handleref_with_code (hdl_dat, obj, dwg, code);         \
-    else                                                                      \
-      ref = dwg_decode_handleref (hdl_dat, obj, dwg);                         \
-    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                   \
-      {                                                                       \
-        if (ref)                                                              \
-          {                                                                   \
-            LOG_TRACE (#nam "[%d]: " FORMAT_REF " [H* %d]", (int)vcount,      \
-                       ARGS_REF (ref), dxf);                                  \
-            if (dwg_ref_object_silent (dwg, ref)                              \
-                && DWG_LOGLEVEL > DWG_LOGLEVEL_TRACE)                         \
-              {                                                               \
-                const char *u8 = dwg_ref_tblname (dwg, ref);                  \
-                HANDLER (OUTPUT, " => %s %s", dwg_ref_objname (dwg, ref), u8);\
-                if (dwg->header.version >= R_2007 && u8 && *u8)               \
-                  free ((void*)u8);                                           \
-              }                                                               \
-          }                                                                   \
-        else                                                                  \
-          {                                                                   \
-            LOG_TRACE (#nam "[%d]: NULL %d [H* %d]", (int)vcount, code, dxf); \
-          }                                                                   \
-        LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                \
-        LOG_TRACE ("\n");                                                     \
-      }                                                                       \
+    PRE (R_13)                                                                \
+    {                                                                         \
+      ref = dwg_decode_preR13_handleref (dat, code);                          \
+      LOG_TRACE (#nam "[%d]: " FORMAT_RS " [RS %d]\n", (int)vcount,           \
+                 ref->r11_idx, dxf);                                          \
+    }                                                                         \
+    LATER_VERSIONS                                                            \
+    {                                                                         \
+      unsigned long pos = bit_position (hdl_dat);                               \
+      if (code >= 0)                                                            \
+        ref = dwg_decode_handleref_with_code (hdl_dat, obj, dwg, code);         \
+      else                                                                      \
+        ref = dwg_decode_handleref (hdl_dat, obj, dwg);                         \
+      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                   \
+        {                                                                       \
+          if (ref)                                                              \
+            {                                                                   \
+              LOG_TRACE (#nam "[%d]: " FORMAT_REF " [H* %d]", (int)vcount,      \
+                         ARGS_REF (ref), dxf);                                  \
+              if (dwg_ref_object_silent (dwg, ref)                              \
+                  && DWG_LOGLEVEL > DWG_LOGLEVEL_TRACE)                         \
+                {                                                               \
+                  const char *u8 = dwg_ref_tblname (dwg, ref);                  \
+                  HANDLER (OUTPUT, " => %s %s", dwg_ref_objname (dwg, ref), u8);\
+                  if (dwg->header.version >= R_2007 && u8 && *u8)               \
+                    free ((void*)u8);                                           \
+                }                                                               \
+            }                                                                   \
+          else                                                                  \
+            {                                                                   \
+              LOG_TRACE (#nam "[%d]: NULL %d [H* %d]", (int)vcount, code, dxf); \
+            }                                                                   \
+          LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                \
+          LOG_TRACE ("\n");                                                     \
+        }                                                                       \
+      }                                                                         \
   }
 #define FIELD_HANDLE_N(nam, vcount, code, dxf)                                \
   VALUE_HANDLE_N (_obj->nam, nam, vcount, code, dxf)
