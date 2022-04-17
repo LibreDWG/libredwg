@@ -4693,7 +4693,7 @@ dwg_decode_add_object_ref (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
 }
 
 /* Returns a freshly allocated ref */
-Dwg_Object_Ref *
+EXPORT Dwg_Object_Ref *
 dwg_new_ref (Dwg_Data *restrict dwg)
 {
   Dwg_Object_Ref *ref = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));

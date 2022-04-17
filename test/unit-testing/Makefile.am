@@ -29,7 +29,6 @@ decode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo \
 	$(top_builddir)/src/hash.lo \
 	$(top_builddir)/src/decode_r2007.lo \
-	$(top_builddir)/src/common.lo \
 	$(top_builddir)/src/print.lo
 hash_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo \
@@ -37,7 +36,6 @@ hash_test_LDADD = $(LDADD) \
 dynapi_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo
 dxf_test_LDADD = $(LDADD) \
-	$(top_builddir)/src/common.lo \
 	$(top_builddir)/src/dynapi.lo
 common_test_LDADD =
 

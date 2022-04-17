@@ -295,7 +295,6 @@ case $LD in
         AC_MSG_RESULT([yes])
         ;;
      *) CFLAGS="$CFLAGS -fstack-protector"
-        LDFLAGS="$LDFLAGS -fstack-protector"
         AC_MSG_RESULT([-fstack-protector added])
         ;;
    esac

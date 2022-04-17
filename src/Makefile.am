@@ -20,6 +20,9 @@
 lib_LTLIBRARIES = libredwg.la
 WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS   = -I$(top_srcdir)/include -I. $(WARN_CFLAGS)
+if ENABLE_SHARED
+AM_CFLAGS += -DDLL_EXPORT
+endif
 libredwg_la_LDFLAGS = -version-info $(LIBREDWG_SO_VERSION) -no-undefined -lm
 
 libredwg_la_SOURCES = \

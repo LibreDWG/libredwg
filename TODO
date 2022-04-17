@@ -1,6 +1,10 @@
-* pre-R13: finish remaining entities and the blocks.
+* pre-R13: finish remaining entities and the blocks. Add tests.
 * add API for more complex entities, like 3dsolids, hatch, ACSH solids, dynblocks.
 * PROXY subentities, PROXY_ENTITY
+* rename all internal ent->tio.ENTITY to ent->tio._ENTITY, so that all 3D names can
+  stay asis. Which fixes the public API for all _3D names, to be more consistent.
+* extract seldomly used objects into extra sharedlib(s) as dynaloaded or linked plugin.
+  dynblocks, ACSH solids, ... to keep compile times managable.
 * TABLE_Cell
 * Enabled, but un(der)tested:
   ASSOCDEPENDENCY ASSOC*SURFACEACTIONBODY DBCOLOR HELIX
@@ -46,7 +50,7 @@
 * merge decode_r2007 with the 2004 decoder. It is almost the same, just
   the sections have multiple pages. Only for this version. 2010+ uses
   the 2004 format.
-* encode for 2004+: fix the reamining bugs, almost done.
+* encode for 2004+: fix the remaining bugs, almost done.
 * finish binary DXF (easy). cross-check via: filedia 0, dxfout => Binary
 * finish GeoJSON http://geojson.org/geojson-spec.html
   ELLIPSE, ARC, CIRCLE: needs segmentation into lines
@@ -58,6 +62,7 @@
 * add one of the easy OGR formats: gml, gpx. See the xmlsuite which does it also.
   See https://wiki.openstreetmap.org/wiki/Dxf2gpx
   https://grass.osgeo.org/grass74/manuals/v.in.dxf.html and dwg (teigha and opencad)
+  But only as external sharedlib plugin.
 * add more geom.c utils to tessellate curves (e.g. GeoJSON)
 * ACIS: We already convert the binary SAB to ASCII SAT version 2 (ASM ShapeManager,
   forked from ACIS 7.0), but the add API is still struggling to create them.
