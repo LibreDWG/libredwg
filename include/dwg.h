@@ -1357,6 +1357,7 @@ typedef struct _dwg_entity_ENDBLK
 typedef struct _dwg_entity_SEQEND
 {
   struct _dwg_object_entity *parent;
+  BITCODE_RL unknown_r11;
 } Dwg_Entity_SEQEND;
 
 /**

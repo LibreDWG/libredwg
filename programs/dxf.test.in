@@ -178,7 +178,7 @@ check_roundtrip() {
         fi
         got="$(grep -E -c '^Add entity' "$log2")"
         rm "./$dxf" "./$tgt" 2>/dev/null
-        if [ "$got" -eq "$expect" ]
+        if [ "$got" -ge "$expect" ]
         then
             echo "$dxf" roundtrip ok
             rm "$log1" "$log2" 2>/dev/null

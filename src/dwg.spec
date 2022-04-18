@@ -573,6 +573,9 @@ DWG_ENTITY_END
 DWG_ENTITY (SEQEND)
 
   //SUBCLASS (AcDbSequenceEnd) //unused
+  PRE (R_13) {
+    FIELD_RL (unknown_r11, 0);
+  }
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
@@ -908,9 +911,21 @@ DWG_ENTITY (VERTEX_2D)
     if (R11OPTS (2))
       FIELD_RD (end_width, 41);
     if (R11OPTS (4))
-      FIELD_RD (tangent_dir, 50);
+      FIELD_RD (bulge, 42);
     if (R11OPTS (8))
-      FIELD_RC (flag, 70);
+      FIELD_RC (flag, 0);
+    if (R11OPTS (16))
+      FIELD_RD (tangent_dir, 50);
+    // if (R11FLAG(32)) // VERTEX_3D
+    //   FIELD_RD (point.z, 30)
+    // if (R11FLAG(64)) // VERTEX_MESH
+    //   FIELD_RD (point.z, 30)
+    // if (R11FLAG(128) && !R11FLAG(64)) // PFACE_FACE index
+    //   FIELD_RS (vertind[0], 71);
+    //   FIELD_RS (vertind[1], 72);
+    //   FIELD_RS (vertind[2], 73);
+    //   if (FIELD_VALUE (vertind[3]))
+    //    FIELD_RS (vertind[3], 74);
   }
   SINCE (R_13)
   {
@@ -979,46 +994,67 @@ DWG_ENTITY (VERTEX_2D)
 
 DWG_ENTITY_END
 
-/* (11) */
+/* (11/20) */
 DWG_ENTITY (VERTEX_3D)
 
   SUBCLASS (AcDbVertex)
   SUBCLASS (AcDb3dPolylineVertex)
-  FIELD_RC (flag, 0);
-  FIELD_3BD (point, 10);
+  PRE (R_13)
+  {
+    FIELD_VALUE (flag) = R11FLAG (255);
+    FIELD_3RD (point, 10);
+  }
+  LATER_VERSIONS {
+    FIELD_RC (flag, 0);
+    FIELD_3BD (point, 10);
+  }
   DXF { FIELD_RC (flag, 70); }
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
-/* (12) */
+/* (12/20) */
 DWG_ENTITY (VERTEX_MESH)
 
   SUBCLASS (AcDbVertex)
   SUBCLASS (AcDbPolyFaceMeshVertex)
-  FIELD_RC (flag, 0);
-  FIELD_3BD (point, 10);
+  PRE (R_13)
+  {
+    FIELD_VALUE (flag) = R11FLAG (255);
+    FIELD_3RD (point, 10);
+  }
+  LATER_VERSIONS {
+    FIELD_RC (flag, 0);
+    FIELD_3BD (point, 10);
+  }
   DXF { FIELD_RC (flag, 70); }
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
-/* (13) */
+/* (13/20) */
 DWG_ENTITY (VERTEX_PFACE)
 
   SUBCLASS (AcDbVertex)
   SUBCLASS (AcDbPolyFaceMeshVertex)
-  FIELD_RC (flag, 0);
-  FIELD_3BD (point, 10);
+  PRE (R_13)
+  {
+    FIELD_VALUE (flag) = R11FLAG (255);
+    FIELD_3RD (point, 10);
+  }
+  LATER_VERSIONS {
+    FIELD_RC (flag, 0);
+    FIELD_3BD (point, 10);
+  }
   DXF { FIELD_RC (flag, 70); }
 
   COMMON_ENTITY_HANDLE_DATA;
 
 DWG_ENTITY_END
 
-/* (14) */
+/* (14/20) */
 DWG_ENTITY (VERTEX_PFACE_FACE)
 
   SUBCLASS (AcDbFaceRecord)
@@ -1040,32 +1076,45 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
   }
 #else
   //FIELD_VALUE (pt) = { 0.0, 0.0, 0.0 };
-  FIELD_VALUE (flag) = 128;
-  FIELD_BS (vertind[0], 71);
-  FIELD_BS (vertind[1], 72);
-  FIELD_BS (vertind[2], 73);
-  FIELD_BS (vertind[3], 74);
+  PRE (R_13)
+  {
+    FIELD_VALUE (flag) = R11FLAG (255);
+    FIELD_RS (vertind[0], 71);
+    FIELD_RS (vertind[1], 72);
+    FIELD_RS (vertind[2], 73);
+    FIELD_RS (vertind[3], 74);
+  }
+  LATER_VERSIONS {
+    FIELD_VALUE (flag) = 128;
+    FIELD_BS (vertind[0], 71);
+    FIELD_BS (vertind[1], 72);
+    FIELD_BS (vertind[2], 73);
+    FIELD_BS (vertind[3], 74);
+  }
 #endif
   //TODO R13 has color_r11 and ltype_r11 for all vertices, not in DXF
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
-/* (15/19) */
+/* (15/19)
+   r11 has all-in-one: n/m mesh (FLAG 16). curve-fit (FLAG 2),
+   spline-fit FLAGS 4), 3dpline (FLAG 8), pface_mesh: FLAG 64
+*/
 DWG_ENTITY (POLYLINE_2D)
 
   //SUBCLASS (AcDbCurve)
   SUBCLASS (AcDb2dPolyline)
   PRE (R_13)
   {
+    // is_closed = FLAG(1)
     if (R11OPTS (1))
-      FIELD_CAST (flag, RC, RS, 70);
+      FIELD_RC (curve_type, 75);
     if (R11OPTS (2))
       FIELD_RD (start_width, 40);
-    //??
-    if (R11OPTS (4))
-      FIELD_RS (curve_type, 75);
+    //if (R11OPTS (4)) ??
+    //  FIELD_RS (curve_type, 75);
     if (R11OPTS (8))
-      FIELD_RD (end_width, 40);
+      FIELD_RD (end_width, 41);
   }
   SINCE (R_13)
   {
@@ -1117,7 +1166,7 @@ DWG_ENTITY (POLYLINE_2D)
 
 DWG_ENTITY_END
 
-/* (16) */
+/* (16/19) */
 DWG_ENTITY (POLYLINE_3D)
 
   SUBCLASS (AcDb3dPolyline)
@@ -1131,9 +1180,22 @@ DWG_ENTITY (POLYLINE_3D)
   else {
     FIELD_VALUE (has_vertex) = 1;
   }
-  FIELD_RC0 (curve_type, 75);
-  FIELD_RC (flag, 0);
-
+  PRE (R_13)
+  {
+    FIELD_VALUE (flag) = R11FLAG (255);
+    if (R11OPTS (16)) // 3dmesh only
+      FIELD_RC (curve_type, 75);
+    //if (R11OPTS (2))
+    //  FIELD_RD (start_width, 40);
+    //if (R11OPTS (4))
+    //  FIELD_RS (curve_type, 75);
+    //if (R11OPTS (8))
+    //  FIELD_RD (end_width, 41);
+  }
+  LATER_VERSIONS {
+    FIELD_RC0 (curve_type, 75);
+    FIELD_RC (flag, 0);
+  }
   SINCE (R_2004) {
     FIELD_BL (num_owned, 0);
   }
@@ -1148,7 +1210,9 @@ DWG_ENTITY (POLYLINE_3D)
     {
       HANDLE_VECTOR (vertex, num_owned, 3, 0);
     }
-  FIELD_HANDLE (seqend, 3, 0);
+  SINCE (R_13) {
+    FIELD_HANDLE (seqend, 3, 0);
+  }
 
 DWG_ENTITY_END
 
@@ -1695,12 +1759,22 @@ DWG_ENTITY (POLYLINE_MESH)
     KEY (elevation); VALUE_3BD (pt, 10);
     KEY (flag); VALUE_BS (flag | 16, 70);
   }
-  FIELD_BS (flag, 0);
-  FIELD_BS (curve_type, 75);
-  FIELD_BS (num_m_verts, 71);
-  FIELD_BS (num_n_verts, 72);
-  FIELD_BS (m_density, 73);
-  FIELD_BS (n_density, 74);
+  PRE (R_13) {
+    if (R11OPTS (16)) // 3dmesh
+      FIELD_CAST (curve_type, RC, BS, 75);
+    FIELD_RS (num_m_verts, 71);
+    FIELD_RS (num_n_verts, 72);
+    FIELD_RS (m_density, 73);
+    FIELD_RS (n_density, 74);
+  }
+  LATER_VERSIONS {
+    FIELD_BS (flag, 0);
+    FIELD_BS (curve_type, 75);
+    FIELD_BS (num_m_verts, 71);
+    FIELD_BS (num_n_verts, 72);
+    FIELD_BS (m_density, 73);
+    FIELD_BS (n_density, 74);
+  }
 
   SINCE (R_2004) {
     FIELD_BL (num_owned, 0);
@@ -1717,7 +1791,9 @@ DWG_ENTITY (POLYLINE_MESH)
       VALUEOUTOFBOUNDS (num_owned, 100000)
       HANDLE_VECTOR (vertex, num_owned, 4, 0);
     }
-  FIELD_HANDLE (seqend, 3, 0);
+  SINCE (R_13) {
+    FIELD_HANDLE (seqend, 3, 0);
+  }
 
 DWG_ENTITY_END
 

@@ -21301,6 +21301,21 @@ static int test_SEQEND (const Dwg_Object *obj)
     else
         fail ("SEQEND.parent [struct _dwg_object_entity*]");
   }
+  {
+    BITCODE_RL unknown_r11;
+    if (dwg_dynapi_entity_value (seqend, "SEQEND", "unknown_r11", &unknown_r11, NULL)
+        && unknown_r11 == seqend->unknown_r11)
+      pass ();
+    else
+      fail ("SEQEND.unknown_r11 [RL] %u != %u", seqend->unknown_r11, unknown_r11);
+    unknown_r11++;
+    if (dwg_dynapi_entity_set_value (seqend, "SEQEND", "unknown_r11", &unknown_r11, 0)
+        && unknown_r11 == seqend->unknown_r11)
+      pass ();
+    else
+      fail ("SEQEND.unknown_r11 [RL] set+1 %u != %u", seqend->unknown_r11, unknown_r11);
+    seqend->unknown_r11--;
+  }
   if (failed && (is_class_unstable ("SEQEND") || is_class_debugging ("SEQEND")))
     {
       ok ("%s failed %d tests (TODO unstable)", "SEQEND", failed);

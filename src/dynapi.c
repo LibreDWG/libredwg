@@ -3396,6 +3396,8 @@ static const Dwg_DYNAPI_field _dwg_SECTIONOBJECT_fields[] = {
 static const Dwg_DYNAPI_field _dwg_SEQEND_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_SEQEND, parent),
     1,1,0, 0 },
+  { "unknown_r11",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_entity_SEQEND, unknown_r11),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_SHAPE: (sorted by offset) */

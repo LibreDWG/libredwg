@@ -3893,6 +3893,8 @@ H,	DXF 360
 
 @item parent
 struct _dwg_object_entity*
+@item unknown_r11
+RL
 
 @end vtable
 @end indentedblock

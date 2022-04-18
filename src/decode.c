@@ -5471,10 +5471,34 @@ decode_preR13_entities (unsigned long start, unsigned long end,
           break;
         /* 18: another polyline */
         case 19:
-          error |= dwg_decode_POLYLINE_2D (dat, obj);
+          { // which polyline
+            BITCODE_RC flag = bit_read_RC (dat);
+            dat->byte--;
+            if (flag & 8)
+              error |= dwg_decode_POLYLINE_3D (dat, obj);
+            else if (flag & 16)
+              error |= dwg_decode_POLYLINE_MESH (dat, obj);
+            else if (flag & 64)
+              error |= dwg_decode_POLYLINE_PFACE (dat, obj);
+            else
+              error |= dwg_decode_POLYLINE_2D (dat, obj);
+          }
           break;
         case 20:
-          error |= dwg_decode_VERTEX_2D (dat, obj);
+          { // which vertex?
+            BITCODE_RC flag = bit_read_RC (dat);
+            dat->byte--;
+            if (flag & 32)
+              error |= dwg_decode_VERTEX_3D (dat, obj);
+            else if (flag & 64 && !(flag & 128))
+              error |= dwg_decode_VERTEX_MESH (dat, obj);
+            else if (flag & (64 + 128))
+              error |= dwg_decode_VERTEX_PFACE (dat, obj);
+            else if (flag & 128 && !(flag & 64))
+              error |= dwg_decode_VERTEX_PFACE_FACE (dat, obj);
+            else
+              error |= dwg_decode_VERTEX_2D (dat, obj);
+          }
           break;
         case 21:
           error |= dwg_decode__3DLINE (dat, obj);
