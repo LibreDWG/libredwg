@@ -2143,24 +2143,6 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_RD unknown_4;
-    if (dwg_dynapi_header_value (dwg, "unknown_4", &unknown_4, NULL)
-        && unknown_4 == dwg->header_vars.unknown_4)
-      pass ();
-    else
-      fail ("HEADER.unknown_4 [RD] %g != %g", dwg->header_vars.unknown_4, unknown_4);
-    unknown_4++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_4", &unknown_4, 0)
-        && unknown_4 == dwg->header_vars.unknown_4)
-      pass ();
-    else
-      fail ("HEADER.unknown_4 [RD] set+1 %g != %g",
-            dwg->header_vars.unknown_4, unknown_4);
-    unknown_4--;
-    dwg_dynapi_header_set_value (dwg, "unknown_4", &unknown_4, 0);
-
-  }
-  {
     BITCODE_RD unknown_7;
     if (dwg_dynapi_header_value (dwg, "unknown_7", &unknown_7, NULL)
         && unknown_7 == dwg->header_vars.unknown_7)

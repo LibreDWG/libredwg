@@ -50,10 +50,10 @@
   FIELD_RD (TEXTSIZE, 40); //unconfirmed, ineffective with r12
   FIELD_RD (TRACEWID, 40); //ok
   FIELD_HANDLE (CLAYER, 2, 8);
-  FIELD_RS (current_color_convert, 0); // current color converted from older DWG file
-  FIELD_RD (unknown_4, 0);
+  FIELD_RD (current_color_convert, 0); // current color converted from older DWG file
   FIELD_RS (unknown_5, 0);
   FIELD_CAST (PSLTSCALE, RS, B, 70);
+  FIELD_RS (TREEDEPTH, 70);
   FIELD_RS (unknown_6, 0);
   FIELD_RD (unknown_7, 0); // converted from older DWG file (0x01d0)
   FIELD_RS (LUNITS, 70); //ok
