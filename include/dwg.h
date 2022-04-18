@@ -891,7 +891,6 @@ typedef struct _dwg_header_variables {
   BITCODE_BS LUPREC;
   BITCODE_BS AUNITS;
   BITCODE_BS AUPREC;
-  BITCODE_BS TEXTSTYLE_r11; // index
   BITCODE_BS ATTMODE;
   BITCODE_BS COORDS;
   BITCODE_BS PDMODE;
@@ -956,7 +955,6 @@ typedef struct _dwg_header_variables {
   BITCODE_BS HANDLING; /* <r14: default 1 */
   //BITCODE_RS HANDSEED_r11;
   BITCODE_H HANDSEED;
-  BITCODE_RS CLAYER_r11; /*!< AC1.50-AC1009 */
   BITCODE_RS unknown_5;
   BITCODE_RS unknown_6;
   BITCODE_RS current_color_convert;
@@ -8134,11 +8132,9 @@ typedef struct _dwg_object_entity
   BITCODE_RC flag2_r11;
   BITCODE_RS opts_r11;
   BITCODE_RC extra_r11;
-  //BITCODE_RS layer_r11;
   BITCODE_RC color_r11;
-  //BITCODE_RS ltype_r11;
-  BITCODE_RD elevation_r11;
-  BITCODE_RD thickness_r11;
+  BITCODE_RD elevation_r11; // TODO: move to the entities
+  BITCODE_RD thickness_r11; // TODO: move to the entities
   BITCODE_RS paper_r11;
   /* preR13 in the obj: eed, elevation/pt.z, thickness, paper */
 

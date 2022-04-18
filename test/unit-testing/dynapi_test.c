@@ -1036,24 +1036,6 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_BS textstyle_r11;
-    if (dwg_dynapi_header_value (dwg, "TEXTSTYLE_r11", &textstyle_r11, NULL)
-        && textstyle_r11 == dwg->header_vars.TEXTSTYLE_r11)
-      pass ();
-    else
-      fail ("HEADER.TEXTSTYLE_r11 [BS] %hu != %hu", dwg->header_vars.TEXTSTYLE_r11, textstyle_r11);
-    textstyle_r11++;
-    if (dwg_dynapi_header_set_value (dwg, "TEXTSTYLE_r11", &textstyle_r11, 0)
-        && textstyle_r11 == dwg->header_vars.TEXTSTYLE_r11)
-      pass ();
-    else
-      fail ("HEADER.TEXTSTYLE_r11 [BS] set+1 %hu != %hu",
-            dwg->header_vars.TEXTSTYLE_r11, textstyle_r11);
-    textstyle_r11--;
-    dwg_dynapi_header_set_value (dwg, "TEXTSTYLE_r11", &textstyle_r11, 0);
-
-  }
-  {
     BITCODE_BS attmode;
     if (dwg_dynapi_header_value (dwg, "ATTMODE", &attmode, NULL)
         && attmode == dwg->header_vars.ATTMODE)
@@ -2105,24 +2087,6 @@ test_header (Dwg_Data *dwg)
       pass ();
     else
       fail ("HEADER.HANDSEED [H]");
-  }
-  {
-    BITCODE_RS clayer_r11;
-    if (dwg_dynapi_header_value (dwg, "CLAYER_r11", &clayer_r11, NULL)
-        && clayer_r11 == dwg->header_vars.CLAYER_r11)
-      pass ();
-    else
-      fail ("HEADER.CLAYER_r11 [RS] %hu != %hu", dwg->header_vars.CLAYER_r11, clayer_r11);
-    clayer_r11++;
-    if (dwg_dynapi_header_set_value (dwg, "CLAYER_r11", &clayer_r11, 0)
-        && clayer_r11 == dwg->header_vars.CLAYER_r11)
-      pass ();
-    else
-      fail ("HEADER.CLAYER_r11 [RS] set+1 %hu != %hu",
-            dwg->header_vars.CLAYER_r11, clayer_r11);
-    clayer_r11--;
-    dwg_dynapi_header_set_value (dwg, "CLAYER_r11", &clayer_r11, 0);
-
   }
   {
     BITCODE_RS unknown_5;

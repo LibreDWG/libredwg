@@ -2,7 +2,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2019 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2022 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -49,7 +49,7 @@
   FIELD_RD (LTSCALE, 40);  // 16.0 confirmed
   FIELD_RD (TEXTSIZE, 40); //unconfirmed, ineffective with r12
   FIELD_RD (TRACEWID, 40); //ok
-  FIELD_RS (CLAYER_r11, 8);
+  FIELD_HANDLE (CLAYER, 2, 8);
   FIELD_RS (current_color_convert, 0); // current color converted from older DWG file
   FIELD_RD (unknown_4, 0);
   FIELD_RS (unknown_5, 0);
@@ -64,7 +64,7 @@
   FIELD_RD (FILLETRAD, 40); //ok
   FIELD_RS (AUNITS, 70);    //ok
   FIELD_RS (AUPREC, 70);    //ok
-  FIELD_RS (TEXTSTYLE_r11, 7);
+  FIELD_HANDLE (TEXTSTYLE, 2, 7);
   FIELD_CAST (OSMODE, RS, BL, 70);
   FIELD_RS (ATTMODE, 70);
   FIELD_TFv (MENU, 15, 1);

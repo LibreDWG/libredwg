@@ -260,10 +260,13 @@ dwg_decode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
+  Bit_Chain *hdl_dat = dat;
   int error = 0;
+
   // clang-format off
   #include "header_variables_r11.spec"
   // clang-format on
+
   return error;
 }
 AFL_GCC_POP
