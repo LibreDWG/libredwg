@@ -1619,16 +1619,16 @@ DWG_ENTITY_END
 DWG_ENTITY (POINT)
 
   SUBCLASS (AcDbPoint)
-  PRE (R_13)
-  {
+  PRE (R_13) {
     FIELD_RD (x, 10);
     FIELD_RD (y, 20);
-    if (R11OPTS (4))
-      FIELD_RD (z, 30);
-    if (R11OPTS (1))
-      FIELD_3RD (extrusion, 210);
-  }
-  LATER_VERSIONS {
+    SINCE (R_10) {
+      if (! (R11FLAG (4)))
+        FIELD_RD (z, 30);
+      if (R11OPTS (1))
+        FIELD_3RD (extrusion, 210);
+    }
+  } LATER_VERSIONS {
     FIELD_BD (x, 10);
     FIELD_BD (y, 20);
     FIELD_BD (z, 30);

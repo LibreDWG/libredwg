@@ -666,8 +666,15 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     FIELD_HANDLE (ltype, 1, 6);
 
   // TODO: maybe move that to the entity
-  //if (_obj->flag_r11 & FLAG_R11_ELEVATION)
-  //  FIELD_RD (elevation_r11, 31);
+  PRE (R_10) { // XXX Check precise version
+    if (_obj->flag_r11 & FLAG_R11_ELEVATION) // 4
+      FIELD_RD (elevation_r11, 38);
+  } LATER_VERSIONS {
+    if (_obj->flag_r11 & FLAG_R11_ELEVATION // 4
+      && obj->type != 1 && obj->type != 2) // 1 = LINE, 2 = POINT
+      FIELD_RD (elevation_r11, 38);
+  }
+
   if (_obj->flag_r11 & FLAG_R11_THICKNESS) // 8
     FIELD_RD (thickness_r11, 39);
 
