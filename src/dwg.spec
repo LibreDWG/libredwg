@@ -1355,7 +1355,7 @@ DWG_ENTITY_END
     PRE (R_13)                                                                \
     {                                                                         \
       FIELD_HANDLE (block, 2, 2);                                             \
-      FIELD_2RD (def_pt, 10);                                                 \
+      FIELD_3RD (def_pt, 10);                                                 \
       FIELD_2RD (text_midpt, 11);                                             \
       if (R11OPTS (2))                                                        \
         FIELD_RC (flag1, 0);                                                  \
@@ -1447,7 +1447,8 @@ DWG_ENTITY_END
       FIELD_BE (extrusion, 210);                                              \
       FIELD_BD0 (text_rotation, 53);                                          \
       FIELD_HANDLE0 (dimstyle, 5, 3);                                         \
-    }
+    }                                                                         \
+    JSON { FIELD_RC (flag, 0); }
 #endif
 
 /* (20/23) */
@@ -1455,10 +1456,17 @@ DWG_ENTITY (DIMENSION_ORDINATE)
 
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbOrdinateDimension)
-  FIELD_3BD (def_pt, 0);
-  FIELD_3BD (feature_location_pt, 13);
-  FIELD_3BD (leader_endpt, 14);
-  FIELD_RC (flag2, 0);
+  PRE (R_13) {
+    FIELD_2RD (def_pt, 0);
+    FIELD_2RD (feature_location_pt, 13);
+    FIELD_2RD (leader_endpt, 14);
+    FIELD_RC (flag2, 0);
+  } else {
+    FIELD_3BD (def_pt, 0);
+    FIELD_3BD (feature_location_pt, 13);
+    FIELD_3BD (leader_endpt, 14);
+    FIELD_RC (flag2, 0);
+  }
   DECODER {
     BITCODE_RC flag = FIELD_VALUE (flag);
     flag = (FIELD_VALUE (flag2) & 1)
@@ -1467,9 +1475,11 @@ DWG_ENTITY (DIMENSION_ORDINATE)
   }
   JSON { FIELD_RC (flag, 0); }
 
-  COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (dimstyle, 5, 0);
-  FIELD_HANDLE (block, 5, 0);
+  SINCE (R_13) {
+    COMMON_ENTITY_HANDLE_DATA;
+    FIELD_HANDLE (dimstyle, 5, 0);
+    FIELD_HANDLE (block, 5, 0);
+  }
 
 DWG_ENTITY_END
 
@@ -1477,28 +1487,27 @@ DWG_ENTITY_END
 DWG_ENTITY (DIMENSION_LINEAR)
 
   COMMON_ENTITY_DIMENSION
-  JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbAlignedDimension)
-  UNTIL (R_9) {
+  PRE (R_13) {
     FIELD_2RD (xline1_pt, 13);
     FIELD_2RD (xline2_pt, 14);
   } LATER_VERSIONS {
     FIELD_3BD (xline1_pt, 13);
     FIELD_3BD (xline2_pt, 14);
+    FIELD_3BD (def_pt, 0);
   }
-  FIELD_3BD (def_pt, 0);
   UNTIL (R_12) {
-    FIELD_BD0 (dim_rotation, 50);
-    FIELD_BD0 (oblique_angle, 52); // ext_line_rotation
+    FIELD_RD (dim_rotation, 50);
+    FIELD_RD (oblique_angle, 52); // ext_line_rotation
   } LATER_VERSIONS {
     FIELD_BD (oblique_angle, 0);
     FIELD_BD0 (dim_rotation, 50);
-  }
-  SUBCLASS (AcDbRotatedDimension)
+    SUBCLASS (AcDbRotatedDimension)
 
-  COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (dimstyle, 5, 0);
-  FIELD_HANDLE (block, 5, 0);
+    COMMON_ENTITY_HANDLE_DATA;
+    FIELD_HANDLE (dimstyle, 5, 0);
+    FIELD_HANDLE (block, 5, 0);
+  }
 
 DWG_ENTITY_END
 
@@ -1506,38 +1515,43 @@ DWG_ENTITY_END
 DWG_ENTITY (DIMENSION_ALIGNED)
 
   COMMON_ENTITY_DIMENSION
-  JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbAlignedDimension)
-  UNTIL (R_9) {
+  PRE (R_13) {
     FIELD_2RD (xline1_pt, 13);
     FIELD_2RD (xline2_pt, 14);
   } LATER_VERSIONS {
     FIELD_3BD (xline1_pt, 13);
     FIELD_3BD (xline2_pt, 14);
+    FIELD_3BD (def_pt, 0);
+    FIELD_BD (oblique_angle, 0);
+
+    COMMON_ENTITY_HANDLE_DATA;
+    FIELD_HANDLE (dimstyle, 5, 0);
+    FIELD_HANDLE (block, 5, 0);
   }
-  FIELD_3BD (def_pt, 0);
-  FIELD_BD (oblique_angle, 0);
-
-  COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (dimstyle, 5, 0);
-  FIELD_HANDLE (block, 5, 0);
-
 DWG_ENTITY_END
 
 /* (23/23) */
 DWG_ENTITY (DIMENSION_ANG3PT)
 
   COMMON_ENTITY_DIMENSION
-  JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDb3PointAngularDimension)
-  FIELD_3BD (def_pt, 0);
-  FIELD_3BD (xline1_pt, 13);
-  FIELD_3BD (xline2_pt, 14);
-  FIELD_3BD (center_pt, 15);
+  PRE (R_13) {
+    FIELD_2RD (def_pt, 0);
+    FIELD_2RD (xline1_pt, 13);
+    FIELD_2RD (xline2_pt, 14);
+    FIELD_2RD (center_pt, 15);
+  }
+  else {
+    FIELD_3BD (def_pt, 0);
+    FIELD_3BD (xline1_pt, 13);
+    FIELD_3BD (xline2_pt, 14);
+    FIELD_3BD (center_pt, 15);
 
-  COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (dimstyle, 5, 0);
-  FIELD_HANDLE (block, 5, 0);
+    COMMON_ENTITY_HANDLE_DATA;
+    FIELD_HANDLE (dimstyle, 5, 0);
+    FIELD_HANDLE (block, 5, 0);
+  }
 
 DWG_ENTITY_END
 
@@ -1545,7 +1559,6 @@ DWG_ENTITY_END
 DWG_ENTITY (DIMENSION_ANG2LN)
 
   COMMON_ENTITY_DIMENSION
-  JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDb2LineAngularDimension)
   JSON { FIELD_3RD (def_pt, 0) }
   else { FIELD_2RD (def_pt, 0) }
@@ -1564,7 +1577,6 @@ DWG_ENTITY_END
 DWG_ENTITY (DIMENSION_RADIUS)
 
   COMMON_ENTITY_DIMENSION
-  JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbRadialDimension)
   FIELD_3BD (def_pt, 0);
   FIELD_3BD (first_arc_pt, 15);
@@ -1580,7 +1592,6 @@ DWG_ENTITY_END
 DWG_ENTITY (DIMENSION_DIAMETER)
 
   COMMON_ENTITY_DIMENSION
-  JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbDiametricDimension)
   FIELD_3BD (first_arc_pt, 15);
   FIELD_3BD (def_pt, 0); // = far_chord_pt
@@ -1596,7 +1607,6 @@ DWG_ENTITY_END
 DWG_ENTITY (LARGE_RADIAL_DIMENSION)
 
   COMMON_ENTITY_DIMENSION
-  JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbRadialDimensionLarge)
   FIELD_3BD (def_pt, 0);
   FIELD_3BD (first_arc_pt, 15);
@@ -1617,7 +1627,7 @@ DWG_ENTITY (POINT)
   {
     FIELD_RD (x, 10);
     FIELD_RD (y, 20);
-    if (R11FLAG (4))
+    if (R11OPTS (4))
       FIELD_RD (z, 30);
     if (R11OPTS (1))
       FIELD_3RD (extrusion, 210);
@@ -8266,7 +8276,6 @@ DWG_ENTITY (ARC_DIMENSION)
 
   DECODE_UNKNOWN_BITS
   COMMON_ENTITY_DIMENSION
-  JSON { FIELD_RC (flag, 0); }
   SUBCLASS (AcDbArcDimension)
   FIELD_3BD (def_pt, 0);
   FIELD_3BD (xline1_pt, 13);

@@ -660,10 +660,10 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   FIELD_HANDLE (layer, 1, 8);
   FIELD_RC (flag2_r11, 0); // extra flags?
   FIELD_RSx (opts_r11, 0); // i.e. dataflags
-  if (_obj->flag_r11 & FLAG_R11_COLOR)
+  if (_obj->flag_r11 & FLAG_R11_COLOR) // 1
     FIELD_RCd (color_r11, 0);
-  if (_obj->flag_r11 & FLAG_R11_LTYPE)
-    FIELD_HANDLE (ltype, 1, 6);
+  if (_obj->flag_r11 & FLAG_R11_LTYPE) // 2
+    FIELD_HANDLE (ltype, 2, 6);
 
   // TODO: maybe move that to the entity
   //if (_obj->flag_r11 & FLAG_R11_ELEVATION)
@@ -673,9 +673,6 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
   SINCE (R_12) { // seems to be wrong
     if (_obj->flag_r11 & FLAG_R11_XDATA)
-      FIELD_RC (extra_r11, 0);
-    /* Common entity preR13 header: */
-    if (_obj->extra_r11 & 2)
       {
         int error = dwg_decode_eed (dat, (Dwg_Object_Object *)ent);
         if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
@@ -5524,15 +5521,31 @@ decode_preR13_entities (unsigned long start, unsigned long end,
         }
 
       assert (!dat->bit);
-#if 0
-      bit_set_position (dat, obj->address + obj->size - 2);
-      crc = bit_read_RS (dat);
-      LOG_TRACE ("crc: %04X [RSx]\n", crc);
-#endif
+      SINCE (R_11)
+      {
+        if (obj->address + obj->size != dat->byte + 2)
+          {
+            LOG_ERROR ("offset %ld", obj->address + obj->size - (dat->byte + 2));
+            dat->byte = obj->address + obj->size - 2;
+          }
+        crc = bit_read_RS (dat);
+        LOG_TRACE ("crc: %04X [RSx]\n", crc);
+      }
+      else
+      {
+        if (obj->address + obj->size != dat->byte)
+          {
+            LOG_ERROR ("offset %ld", obj->address + obj->size - dat->byte);
+            dat->byte = obj->address + obj->size;
+          }
+      }
+      LOG_TRACE ("\n");
       num++;
 
-      if (obj->size < 2 || obj->size > 0x1000) // FIXME
+      if (obj->size < 2 || obj->size > 0x1000) { // FIXME
+        error |= DWG_ERR_VALUEOUTOFBOUNDS;
         dat->byte = end;
+      }
     }
 
   dat->byte = end;

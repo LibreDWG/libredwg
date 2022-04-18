@@ -255,8 +255,8 @@
   PRE (R_13)                                                                  \
   {                                                                           \
     ref = dwg_decode_preR13_handleref (dat, code);                            \
-    LOG_TRACE (#nam ": " FORMAT_RS " [%s %d]\n", ref->r11_idx,                \
-               code == 2 ? "RS" : "RC", dxf)                                  \
+    LOG_TRACE (#nam ": %hd [%s %d]\n", (short)ref->r11_idx,                   \
+               code == 2 ? "RSd" : "RC", dxf)                                 \
   }                                                                           \
   LATER_VERSIONS                                                              \
   {                                                                           \
