@@ -25,15 +25,12 @@ LDADD = $(top_builddir)/src/libredwg.la \
 
 bits_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo
-decode_test_LDADD = \
+decode_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/dwg.lo \
 	$(top_builddir)/src/common.lo \
-	$(top_builddir)/src/objects.lo \
-	$(top_builddir)/src/classes.lo \
 	$(top_builddir)/src/bits.lo \
 	$(top_builddir)/src/hash.lo \
-	$(top_builddir)/src/decode_r2007.lo \
-	$(top_builddir)/src/libredwg.la
+	$(top_builddir)/src/decode_r2007.lo
 hash_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/bits.lo \
 	$(top_builddir)/src/hash.lo
@@ -372,12 +369,14 @@ endif
 check_minimal = \
 	bits_test \
 	common_test \
-	decode_test \
 	hash_test \
 	dynapi_test \
 	dxf_test
 if USE_WRITE
 check_minimal += add_test
+endif
+if !HAVE_MINGW
+check_minimal += decode_test
 endif
 
 check_PROGRAMS = \
