@@ -892,8 +892,6 @@ DWG_ENTITY (_3DLINE)
 
     if (R11OPTS (1))
       FIELD_3RD (extrusion, 210);
-    if (R11OPTS (2))
-      FIELD_RD (thickness, 39);
   }
   //COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
@@ -1288,8 +1286,6 @@ DWG_ENTITY (LINE)
     /*
     if (R11OPTS (1))
       FIELD_3RD (extrusion, 210);
-    if (R11OPTS (2))
-      FIELD_RD (thickness, 39);
     */
   }
   VERSIONS (R_13, R_14)
@@ -1631,8 +1627,6 @@ DWG_ENTITY (POINT)
       FIELD_RD (z, 30);
     if (R11OPTS (1))
       FIELD_3RD (extrusion, 210);
-    if (R11OPTS (2))
-      FIELD_RD (thickness, 39);
   }
   LATER_VERSIONS {
     FIELD_BD (x, 10);

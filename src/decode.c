@@ -668,8 +668,8 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   // TODO: maybe move that to the entity
   //if (_obj->flag_r11 & FLAG_R11_ELEVATION)
   //  FIELD_RD (elevation_r11, 31);
-  //if (_obj->flag_r11 & FLAG_R11_THICKNESS)
-  //  FIELD_RD (thickness_r11, 39);
+  if (_obj->flag_r11 & FLAG_R11_THICKNESS) // 8
+    FIELD_RD (thickness_r11, 39);
 
   SINCE (R_12) { // seems to be wrong
     if (_obj->flag_r11 & FLAG_R11_XDATA)
