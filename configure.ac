@@ -449,7 +449,7 @@ AC_MSG_RESULT($CLANG_FORMAT)
 AC_SUBST(CLANG_FORMAT)
 
 dnl Check for mingw, cross and wine
-AM_CONDITIONAL([HAVE_MINGW], [test "x$host_os" = "xmingw32"])
+AM_CONDITIONAL([HAVE_MINGW], [test "x$host_os" = "xmingw32" -o "x$host_os" = "xmingw64"])
 AM_CONDITIONAL([HAVE_MINGW_CROSS],
         [test "x$host_os" = "xmingw32" -a "x$build_os" != "xmingw32"])
 if test "x$host_os" = "xmingw32" -a "x$build_os" != "xmingw32"; then
