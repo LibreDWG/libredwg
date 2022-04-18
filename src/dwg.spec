@@ -1275,13 +1275,12 @@ DWG_ENTITY (LINE)
   //SUBCLASS (AcDbCurve)
   SUBCLASS (AcDbLine)
   PRE (R_13) {
-    if (R11FLAG (4)) {
+    if (R11OPTS (1)) {
       FIELD_3RD (start, 10)
     } else {
       FIELD_2RD (start, 10)
     }
-
-    if (R11FLAG (4)) {
+    if (R11OPTS (2)) {
       FIELD_3RD (end, 11)
     } else {
       FIELD_2RD (end, 11)
