@@ -953,11 +953,9 @@ typedef struct _dwg_header_variables {
   BITCODE_TIMEBLL TDUSRTIMER;
   BITCODE_CMC CECOLOR;
   BITCODE_BS HANDLING; /* <r14: default 1 */
-  //BITCODE_RS HANDSEED_r11;
   BITCODE_H HANDSEED;
   BITCODE_RS unknown_5;
   BITCODE_RS unknown_6;
-  BITCODE_RD current_color_convert;
   BITCODE_RD unknown_7;
   BITCODE_H CLAYER;	/*!< code 5, DXF 8 */
   BITCODE_H TEXTSTYLE;	/*!< code 5, DXF 7 */
@@ -1211,6 +1209,8 @@ typedef struct _dwg_header_variables {
   BITCODE_BD FRONTZ;
   BITCODE_BD BACKZ;
   BITCODE_RC UCSICON;
+  BITCODE_RL oldCECOLOR_hi; /* r11, or RD */
+  BITCODE_RL oldCECOLOR_lo; /* r11 */
   BITCODE_RS unknown_51e;  /* r11 */
   BITCODE_RS unknown_520;  /* r11 */
   BITCODE_T unknown_unit1; /* r11 */

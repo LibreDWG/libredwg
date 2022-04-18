@@ -2125,24 +2125,6 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_RS current_color_convert;
-    if (dwg_dynapi_header_value (dwg, "current_color_convert", &current_color_convert, NULL)
-        && current_color_convert == dwg->header_vars.current_color_convert)
-      pass ();
-    else
-      fail ("HEADER.current_color_convert [RS] %hu != %hu", dwg->header_vars.current_color_convert, current_color_convert);
-    current_color_convert++;
-    if (dwg_dynapi_header_set_value (dwg, "current_color_convert", &current_color_convert, 0)
-        && current_color_convert == dwg->header_vars.current_color_convert)
-      pass ();
-    else
-      fail ("HEADER.current_color_convert [RS] set+1 %hu != %hu",
-            dwg->header_vars.current_color_convert, current_color_convert);
-    current_color_convert--;
-    dwg_dynapi_header_set_value (dwg, "current_color_convert", &current_color_convert, 0);
-
-  }
-  {
     BITCODE_RD unknown_7;
     if (dwg_dynapi_header_value (dwg, "unknown_7", &unknown_7, NULL)
         && unknown_7 == dwg->header_vars.unknown_7)
@@ -5731,6 +5713,42 @@ test_header (Dwg_Data *dwg)
             dwg->header_vars.UCSICON, ucsicon);
     ucsicon--;
     dwg_dynapi_header_set_value (dwg, "UCSICON", &ucsicon, 0);
+
+  }
+  {
+    BITCODE_RL oldcecolor_hi;
+    if (dwg_dynapi_header_value (dwg, "oldCECOLOR_hi", &oldcecolor_hi, NULL)
+        && oldcecolor_hi == dwg->header_vars.oldCECOLOR_hi)
+      pass ();
+    else
+      fail ("HEADER.oldCECOLOR_hi [RL] %u != %u", dwg->header_vars.oldCECOLOR_hi, oldcecolor_hi);
+    oldcecolor_hi++;
+    if (dwg_dynapi_header_set_value (dwg, "oldCECOLOR_hi", &oldcecolor_hi, 0)
+        && oldcecolor_hi == dwg->header_vars.oldCECOLOR_hi)
+      pass ();
+    else
+      fail ("HEADER.oldCECOLOR_hi [RL] set+1 %u != %u",
+            dwg->header_vars.oldCECOLOR_hi, oldcecolor_hi);
+    oldcecolor_hi--;
+    dwg_dynapi_header_set_value (dwg, "oldCECOLOR_hi", &oldcecolor_hi, 0);
+
+  }
+  {
+    BITCODE_RL oldcecolor_lo;
+    if (dwg_dynapi_header_value (dwg, "oldCECOLOR_lo", &oldcecolor_lo, NULL)
+        && oldcecolor_lo == dwg->header_vars.oldCECOLOR_lo)
+      pass ();
+    else
+      fail ("HEADER.oldCECOLOR_lo [RL] %u != %u", dwg->header_vars.oldCECOLOR_lo, oldcecolor_lo);
+    oldcecolor_lo++;
+    if (dwg_dynapi_header_set_value (dwg, "oldCECOLOR_lo", &oldcecolor_lo, 0)
+        && oldcecolor_lo == dwg->header_vars.oldCECOLOR_lo)
+      pass ();
+    else
+      fail ("HEADER.oldCECOLOR_lo [RL] set+1 %u != %u",
+            dwg->header_vars.oldCECOLOR_lo, oldcecolor_lo);
+    oldcecolor_lo--;
+    dwg_dynapi_header_set_value (dwg, "oldCECOLOR_lo", &oldcecolor_lo, 0);
 
   }
   {

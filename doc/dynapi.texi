@@ -687,10 +687,12 @@ RL
 RL
 @item circle_zoom_percent
 RS
-@item current_color_convert
-RS
 @item num_entities
 RS
+@item oldCECOLOR_hi
+RL
+@item oldCECOLOR_lo
+RL
 @item size
 RL
 @item unknown_0
@@ -729,8 +731,6 @@ BL
 BD
 @item unknown_3
 BD
-@item unknown_4
-RD
 @item unknown_5
 RS
 @item unknown_51e

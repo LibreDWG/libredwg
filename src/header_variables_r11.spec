@@ -50,7 +50,8 @@
   FIELD_RD (TEXTSIZE, 40); //unconfirmed, ineffective with r12
   FIELD_RD (TRACEWID, 40); //ok
   FIELD_HANDLE (CLAYER, 2, 8);
-  FIELD_RD (current_color_convert, 0); // current color converted from older DWG file
+  FIELD_RL (oldCECOLOR_lo, 0); // current color converted from older DWG file
+  FIELD_RL (oldCECOLOR_hi, 0); //                   -"-
   FIELD_RS (unknown_5, 0);
   FIELD_CAST (PSLTSCALE, RS, B, 70);
   FIELD_RS (TREEDEPTH, 70);
@@ -92,6 +93,7 @@
   FIELD_RC (LIMCHECK, 70); //ok 1fa
 
   /* TODO Unknown structure (0x01fc-0x0228) */
+  // PLATFORM was until r11
   DEBUG_HERE //1fb
 
   dat->byte = 0x229;
@@ -100,6 +102,8 @@
   FIELD_3RD (VIEWDIR, 10);
 
   /* TODO Unknown repeating variable - 18 floats, probably 6x 3d point */
+  // probably RD sysvars: LASTANGLE, LASTPOINT, LASTPT3D. until r11
+  // also there is VPOINTX/VPOINTY/VPOINTZ (replaced by VIEWDIR with r11)
   DEBUG_HERE //252
 
   dat->byte = 0x2e1;
@@ -198,7 +202,7 @@
   FIELD_RC (DIMSOXD, 70); //ok
   FIELD_RD (DIMTVP, 40); //ok
   FIELD_TFv (unknown_string, 33, 1);
-  FIELD_RS (HANDLING, 70);
+  FIELD_RS (HANDLING, 70); // use new HEX handles (should be RC)
 
   /* TODO fix HANDSEED - 00 00 00 00 00 00 12 35 mean 0x1235 */
   dat->byte = 0x4ee;
@@ -223,17 +227,18 @@
   FIELD_RS (SPLINETYPE, 70);
   FIELD_RS (UCSICON, 0);
   FIELD_RS (unknown_59, 0); // ff ff
-  if (dwg->header.num_header_vars <= 158)
+  if (dwg->header.num_header_vars <= 158) // r10
     return 0;
 
   /* Skip table APPID (0x512-0x51c) */
   dat->byte = 0x51d;
 
   FIELD_CAST (WORLDVIEW, RS, B, 70);
-  if (dwg->header.num_header_vars <= 160)
+  if (dwg->header.num_header_vars <= 160) // r10
     return 0;
   FIELD_RS (unknown_51e, 0);
   FIELD_RS (unknown_520, 0);
+  // TILEMODE came with r11
 
   /* Skip table DIMSTYLE (0x522-0x52b) */
   dat->byte = 0x52c;
@@ -247,7 +252,7 @@
   FIELD_RS (DIMCLRT_C, 70); //ok
   FIELD_RS (SHADEDGE, 70); //ok
   FIELD_RS (SHADEDIF, 70); //ok
-  FIELD_RS (UNITMODE, 70); //ok
+  FIELD_RS (UNITMODE, 70); //ok, new with r11
 
   /* TODO Unknown 34 bytes */
   DEBUG_HERE //53d
