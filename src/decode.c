@@ -5375,6 +5375,7 @@ static int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restric
       break;
     default:
       LOG_ERROR ("Unknown preR13 DIMENSION type %u", flag_r11 & 63);
+      error |= DWG_ERR_VALUEOUTOFBOUNDS;
     }
   return error;
 }
@@ -5510,13 +5511,14 @@ decode_preR13_entities (unsigned long start, unsigned long end,
           error |= dwg_decode_VPORT (dat, obj);
           break;
         /*
-        case 25: // or DIMENSION_RADIUS?
+        case 25:
           error |= dwg_decode_3DLINE (dat, obj);
           break;
         */
         default:
 	  DEBUG_HERE;
-          LOG_ERROR ("Unknown object type %d", obj->type)
+          LOG_ERROR ("Unknown object type %d", obj->type);
+          error |= DWG_ERR_SECTIONNOTFOUND;
           break;
         }
 
@@ -5543,7 +5545,7 @@ decode_preR13_entities (unsigned long start, unsigned long end,
       num++;
 
       if (obj->size < 2 || obj->size > 0x1000) { // FIXME
-        error |= DWG_ERR_VALUEOUTOFBOUNDS;
+        error |= DWG_ERR_SECTIONNOTFOUND;
         dat->byte = end;
       }
     }
