@@ -336,8 +336,8 @@ DWG_ENTITY (ATTDEF)
       FIELD_TV (default_value, 1);
       FIELD_TV (tag, 2);
       FIELD_TV (prompt, 3);
-      FIELD_RS (flags, 70);
-      //if (R11OPTS (1)) { // since when
+      FIELD_RC (flags, 70); // 1 verify, 2 constant, 4 invisible
+      //if (R11OPTS (1)) { // since when?
       //  FIELD_RD (elevation, 30);
       //}
       if (R11OPTS (2)) {

@@ -649,8 +649,8 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   obj->bitsize_pos = bit_position (dat);
   obj->address = dat->byte - 1; // already read the type. size includes the type
   LOG_INFO ("===========================\n"
-            "Entity number: %d, Type: %d\n",
-            obj->index, obj->type);
+            "Entity number: %d, Type: %d, Addr: %lx\n",
+            obj->index, obj->type, obj->address);
   _obj->entmode = is_block ? 3 : 2; // ent or block
   FIELD_RC (flag_r11, 70); // mode
   obj->size = bit_read_RS (dat);
@@ -663,7 +663,7 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   if (_obj->flag_r11 & FLAG_R11_COLOR) // 1
     FIELD_RCd (color_r11, 0);
   if (_obj->flag_r11 & FLAG_R11_LTYPE) // 2
-    FIELD_HANDLE (ltype, 2, 6);
+    FIELD_HANDLE (ltype, 1, 6);
 
   // TODO: maybe move that to the entity
   //if (_obj->flag_r11 & FLAG_R11_ELEVATION)
