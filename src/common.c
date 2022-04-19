@@ -35,8 +35,8 @@ const struct dwg_versions dwg_versions[] = {
   { R_1_2,	"r1.2",  "AC1.2", "AutoCAD Release 1.2", 0 },
   { R_1_3,	"r1.3",  "AC1.3", "AutoCAD Release 1.3", 1 },
   { R_1_4,	"r1.40", "AC1.40", "AutoCAD Release 1.4", 2 },
-  { R_1_402b,	"r402b", "AC402b", "AutoCAD Release 1.402b", 3 },
-  { R_2_0,	"r1.50", "AC1.50", "AutoCAD Release 2.0", 4 },
+  { R_1_402b,	"r1.402b", "AC402b", "AutoCAD Release 1.402b", 3 },
+  { R_2_0,	"r2.0",  "AC1.50", "AutoCAD Release 2.0", 4 },
   { R_2_10,	"r2.10", "AC2.10", "AutoCAD Release 2.10", 5 },
   { R_2_21,	"r2.21", "AC2.21", "AutoCAD Release 2.21", 6 },
   { R_2_22,	"r2.22", "AC2.22", "AutoCAD Release 2.22", 7 },
@@ -82,7 +82,7 @@ const struct dwg_versions dwg_versions[] = {
   { R_2019,	"r2019", "AC1033", "AutoCAD Release 2019", 0x22 },
   { R_2020,	"r2020", "AC1034", "AutoCAD Release 2020", 0x23 },
   { R_2021,	"r2021", "AC1035", "AutoCAD Release 2021", 0x23 },
-  { R_2022,	"r2022", "AC103-4", "AutoCAD Release 2022", 0x24 },
+  { R_2022,	"r2022", "AC103-4", "AutoCAD Release 2022 (?)", 0x24 },
   { R_AFTER,    "r>2022", NULL,    "AutoCAD Release >2022", 0 },
 };
 

@@ -29,9 +29,9 @@
     FIELD_RC (zero_5[i], 0);
   }
 #endif
-  FIELD_RC (is_maint, 0);
-
-  PRE (R_13) {
+  SINCE (R_2_0)
+    FIELD_RC (is_maint, 0);
+  VERSIONS (R_2_0, R_12c1) {
     FIELD_RC (zero_one_or_three, 0); // 1,3,0,5,0,0x00cd,0
     /*
        AC1.50: 3, 5, 74; 3, 5, 83;
@@ -47,7 +47,8 @@
     FIELD_CAST (num_sections, RS, RL, 0); // 5
     FIELD_RS (num_header_vars, 0); // 74,83,101,104,114,120,122,129,158,160,204,205
     FIELD_RC (dwg_version, 0); // 0
-  } LATER_VERSIONS {
+  }
+  SINCE (R_13) {
     FIELD_RC (zero_one_or_three, 0);
     FIELD_RL (thumbnail_address, 0); //@0x0d
     FIELD_RC (dwg_version, 0); // of app which stored it. eg. SaveAs
@@ -56,7 +57,6 @@
   }
 
   /* Until R_2004 here follows the sections */
-
   SINCE (R_2004) {
     IF_ENCODE_FROM_EARLIER {
       FIELD_VALUE (app_dwg_version) = FIELD_VALUE (dwg_version);

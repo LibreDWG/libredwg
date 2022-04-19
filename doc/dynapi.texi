@@ -652,7 +652,7 @@ B,	DXF 70
 @item VERSIONGUID
 TV,	DXF 2
 @item VIEWCTR
-2RD
+3RD
 @item VIEWDIR
 3BD
 @item VIEWMODE
@@ -687,6 +687,10 @@ RL
 RL
 @item circle_zoom_percent
 RS
+@item layer_colors[128]
+RS
+@item num_bytes
+RL
 @item num_entities
 RS
 @item oldCECOLOR_hi

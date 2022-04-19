@@ -14,6 +14,7 @@
 /*
  * header_variables_r11.spec: DWG pre-R13 header variables specification
  * written by Reini Urban
+ * improved by Michal Josef Špaček
  */
 
 #include "spec.h"
@@ -22,47 +23,81 @@
   VERSIONS (R_10, R_11) {
     FIELD_CAST (PLINEGEN, RS, B, 70); //ok
   } else {
-    SINCE(R_2_0) { // since AC1.50
+    PRE (R_2_0)
+      FIELD_RL (num_bytes, 0);
+    PRE (R_9)
       FIELD_RS (num_entities, 0);
-    }
   }
   FIELD_3RD (EXTMIN, 10);
   FIELD_3RD (EXTMAX, 10);
   FIELD_2RD (LIMMIN, 10);
   FIELD_2RD (LIMMAX, 10);
-  FIELD_2RD (VIEWCTR, 12);
-  FIELD_RD (unknown_0, 14); // VIEWCTR.z, always 0.0
+  FIELD_3RD (VIEWCTR, 10);
   FIELD_RD (VIEWSIZE, 40);
   FIELD_RS (SNAPMODE, 70);    //unhandled by ODA
-  FIELD_2RD (SNAPUNIT, 14);   //??
-  FIELD_2RD (SNAPBASE, 13);   //??
-  FIELD_RD (SNAPANG, 50);     //??
-  FIELD_RS (SNAPSTYL, 70);    //77 ??
-  FIELD_RS (SNAPISOPAIR, 70); //78 ??
+  PRE (R_2_0) {
+    FIELD_RD (SNAPUNIT.x, 10);
+  }
+  LATER_VERSIONS {
+    FIELD_2RD (SNAPUNIT, 14);   //??
+    FIELD_2RD (SNAPBASE, 13);   //??
+    FIELD_RD (SNAPANG, 50);     //??
+    FIELD_RS (SNAPSTYL, 70);    //77 ??
+    FIELD_RS (SNAPISOPAIR, 70); //78 ??
+  }
   FIELD_RS (GRIDMODE, 70);    //76 ??
-  FIELD_2RD (GRIDUNIT, 15);
+  PRE (R_2_0) {
+    FIELD_RD (GRIDUNIT.x, 10);
+  }
+  LATER_VERSIONS {
+    FIELD_2RD (GRIDUNIT, 10);
+  }
   FIELD_CAST (ORTHOMODE, RS, B, 70); //ok
   FIELD_CAST (REGENMODE, RS, B, 70); //ok
   FIELD_CAST (FILLMODE, RS, B, 70);  //ok
-  FIELD_CAST (QTEXTMODE, RS, B, 70); //ok
-  FIELD_RS (DRAGMODE, 70); // 2 ineffective with r12
-  FIELD_RD (LTSCALE, 40);  // 16.0 confirmed
-  FIELD_RD (TEXTSIZE, 40); //unconfirmed, ineffective with r12
+  SINCE (R_2_0) {
+    FIELD_CAST (QTEXTMODE, RS, B, 70); //ok
+    FIELD_RS (DRAGMODE, 70); // 2 ineffective with r12
+    FIELD_RD (LTSCALE, 40);  // 16.0 confirmed
+  }
+  FIELD_RD (TEXTSIZE, 40); //ok ineffective with r12
   FIELD_RD (TRACEWID, 40); //ok
   FIELD_HANDLE (CLAYER, 2, 8);
-  FIELD_RL (oldCECOLOR_lo, 0); // current color converted from older DWG file
-  FIELD_RL (oldCECOLOR_hi, 0); //                   -"-
-  FIELD_RS (unknown_5, 0);
-  FIELD_CAST (PSLTSCALE, RS, B, 70);
-  FIELD_RS (TREEDEPTH, 70);
-  FIELD_RS (unknown_6, 0);
-  FIELD_RD (unknown_7, 0); // converted from older DWG file (0x01d0)
+  PRE (R_2_0) {
+    FIELD_RS (CECOLOR.index, 62);
+  } else {
+    FIELD_RL (oldCECOLOR_lo, 0); // CECOLOR converted from older DWG file
+    FIELD_RL (oldCECOLOR_hi, 0); //            -"-
+  }
+  VERSIONS (R_1_2, R_1_4) {
+    BITCODE_BL vcount;
+    FIELD_VECTOR_INL (layer_colors, RS, 128, 0); // color of each layer
+    FIELD_RD (DIMASZ, 40); //ok
+    FIELD_RD (unknown_7, 40); //?
+    VERSION (R_1_2) {
+      dwg->header.dwg_version = 1;
+      return error;
+    }
+  } else {
+      FIELD_CAST (PSLTSCALE, RS, B, 70);
+      FIELD_RS (TREEDEPTH, 70);
+      FIELD_RS (unknown_6, 0);
+      FIELD_RD (unknown_7, 0); // converted from older DWG file (0x01d0)
+  }
   FIELD_RS (LUNITS, 70); //ok
   FIELD_RS (LUPREC, 70); //ok
+  VERSION (R_1_4) {
+    FIELD_RS (DIMTOL, 70); // dim_text_within_dimension
+    FIELD_RS (DIMLIM, 70); // dim_text_outside_of_dimension
+  }
   FIELD_RS (AXISMODE, 70);
   FIELD_2RD (AXISUNIT, 10);
-  FIELD_RD (SKETCHINC, 40); //ok
+  FIELD_RD (SKETCHINC, 40); //ok default 0.1
   FIELD_RD (FILLETRAD, 40); //ok
+  VERSION (R_1_4) {
+      dwg->header.dwg_version = 2;
+      return error;
+  }
   FIELD_RS (AUNITS, 70);    //ok
   FIELD_RS (AUPREC, 70);    //ok
   FIELD_HANDLE (TEXTSTYLE, 2, 7);

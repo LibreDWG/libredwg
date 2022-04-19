@@ -1024,8 +1024,8 @@
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           _obj->name[vcount] = bit_read_##type (dat);                         \
-          LOG_TRACE (#name "[%ld]: " FORMAT_##type "\n", (long)vcount,        \
-                      _obj->name[vcount])                                     \
+          LOG_TRACE (#name "[%ld]: " FORMAT_##type " [" #type "]\n",          \
+                     (long)vcount, _obj->name[vcount])                        \
         }                                                                     \
     }
 #define SUB_FIELD_VECTOR_N(o, name, type, size, dxf)                          \
@@ -1036,8 +1036,8 @@
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           _obj->o.name[vcount] = bit_read_##type (dat);                       \
-          LOG_TRACE (#name "[%ld]: " FORMAT_##type "\n", (long)vcount,        \
-                      _obj->o.name[vcount])                                   \
+          LOG_TRACE (#name "[%ld]: " FORMAT_##type " [" #type "]\n",          \
+                     (long)vcount, _obj->o.name[vcount])                      \
         }                                                                     \
     }
 #define SUB_FIELD_VECTOR(o, name, sizefield, type, dxf)                       \
@@ -1049,8 +1049,8 @@
       for (vcount = 0; vcount < (BITCODE_BL)_obj->o.sizefield; vcount++)      \
         {                                                                     \
           _obj->o.name[vcount] = bit_read_##type (dat);                       \
-          LOG_TRACE (#name "[%ld]: " FORMAT_##type "\n", (long)vcount,        \
-                     _obj->o.name[vcount])                                    \
+          LOG_TRACE (#name "[%ld]: " FORMAT_##type " [" #type "]\n",          \
+                     (long)vcount, _obj->o.name[vcount])                      \
         }                                                                     \
     }
 // inlined, with const size and without malloc
@@ -1061,8 +1061,8 @@
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           _obj->name[vcount] = bit_read_##type (dat);                         \
-          LOG_TRACE (#name "[%ld]: " FORMAT_##type "\n", (long)vcount,        \
-                      _obj->name[vcount])                                     \
+          LOG_TRACE (#name "[%ld]: " FORMAT_##type " [" #type "]\n",          \
+                     (long)vcount, _obj->name[vcount])                        \
         }                                                                     \
     }
 // inlined, with const size and without malloc
@@ -1073,8 +1073,8 @@
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           _obj->name[vcount] = bit_read_##type (dat);                         \
-          LOG_TRACE (#name "[%ld]: " FORMAT_##type "\n", (long)vcount,        \
-                      _obj->o.name[vcount])                                   \
+          LOG_TRACE (#name "[%ld]: " FORMAT_##type " [" #type "]\n",          \
+                     (long)vcount, _obj->o.name[vcount])                      \
         }                                                                     \
     }
 #define FIELD_VECTOR_T(name, type, size, dxf)                                 \

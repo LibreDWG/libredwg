@@ -297,7 +297,7 @@ typedef enum DWG_VERSION_TYPE
   R_2019,	/* AC1032 AutoCAD Release 2019 (same DWG format) */
   R_2020,	/* AC1032 AutoCAD Release 2020 (same DWG format)  */
   R_2021,	/* AC1032 AutoCAD Release 2021 (same DWG format)  */
-  R_2022,	/* AC103-4 AutoCAD Release 2022 */
+  R_2022,	/* AC103-4 AutoCAD Release 2022? */
   R_AFTER
 } Dwg_Version_Type;
 #define DWG_VERSIONS (int)(R_AFTER+1)
@@ -990,7 +990,7 @@ typedef struct _dwg_header_variables {
   BITCODE_3BD TARGET;
   BITCODE_2DPOINT LIMMIN;
   BITCODE_2DPOINT LIMMAX;
-  BITCODE_2RD VIEWCTR;  /* -r11 */
+  BITCODE_3RD VIEWCTR;  /* -r11 */
   BITCODE_BD ELEVATION;
   BITCODE_RD VIEWSIZE;  /* -r11 */
   BITCODE_RS SNAPMODE;  /* -r11 */
@@ -1201,6 +1201,7 @@ typedef struct _dwg_header_variables {
   BITCODE_BS unknown_55;
   BITCODE_BS unknown_56;
   BITCODE_BS unknown_57;
+  BITCODE_RL num_bytes;    /* -r1.40 */
   BITCODE_RS num_entities; /* r2.0 - r10 */
   BITCODE_RS circle_zoom_percent;
   BITCODE_RC unknown_58;
@@ -1211,6 +1212,7 @@ typedef struct _dwg_header_variables {
   BITCODE_RC UCSICON;
   BITCODE_RL oldCECOLOR_hi; /* r11, or RD */
   BITCODE_RL oldCECOLOR_lo; /* r11 */
+  BITCODE_RS layer_colors[128]; /* r1.2 - r1.4 */
   BITCODE_RS unknown_51e;  /* r11 */
   BITCODE_RS unknown_520;  /* r11 */
   BITCODE_T unknown_unit1; /* r11 */

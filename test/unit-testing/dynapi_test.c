@@ -2467,13 +2467,13 @@ test_header (Dwg_Data *dwg)
       fail ("HEADER.LIMMAX [2DPOINT]");
   }
   {
-    BITCODE_2RD viewctr;
+    BITCODE_3RD viewctr;
     if (dwg_dynapi_header_value (dwg, "VIEWCTR", &viewctr, NULL)
         && !memcmp (&viewctr, &dwg->header_vars.VIEWCTR, sizeof (dwg->header_vars.VIEWCTR))
        )
       pass ();
     else
-      fail ("HEADER.VIEWCTR [2RD]");
+      fail ("HEADER.VIEWCTR [3RD]");
   }
   {
     BITCODE_BD elevation;
@@ -5572,6 +5572,24 @@ test_header (Dwg_Data *dwg)
 
   }
   {
+    BITCODE_RL num_bytes;
+    if (dwg_dynapi_header_value (dwg, "num_bytes", &num_bytes, NULL)
+        && num_bytes == dwg->header_vars.num_bytes)
+      pass ();
+    else
+      fail ("HEADER.num_bytes [RL] %u != %u", dwg->header_vars.num_bytes, num_bytes);
+    num_bytes++;
+    if (dwg_dynapi_header_set_value (dwg, "num_bytes", &num_bytes, 0)
+        && num_bytes == dwg->header_vars.num_bytes)
+      pass ();
+    else
+      fail ("HEADER.num_bytes [RL] set+1 %u != %u",
+            dwg->header_vars.num_bytes, num_bytes);
+    num_bytes--;
+    dwg_dynapi_header_set_value (dwg, "num_bytes", &num_bytes, 0);
+
+  }
+  {
     BITCODE_RS num_entities;
     if (dwg_dynapi_header_value (dwg, "num_entities", &num_entities, NULL)
         && num_entities == dwg->header_vars.num_entities)
@@ -5750,6 +5768,15 @@ test_header (Dwg_Data *dwg)
     oldcecolor_lo--;
     dwg_dynapi_header_set_value (dwg, "oldCECOLOR_lo", &oldcecolor_lo, 0);
 
+  }
+  {
+    BITCODE_RS layer_colors[128];
+    if (dwg_dynapi_header_value (dwg, "layer_colors[128]", &layer_colors, NULL)
+        && !memcmp (&layer_colors, &dwg->header_vars.layer_colors, sizeof (dwg->header_vars.layer_colors))
+       )
+      pass ();
+    else
+      fail ("HEADER.layer_colors[128] [RS]");
   }
   {
     BITCODE_RS unknown_51e;

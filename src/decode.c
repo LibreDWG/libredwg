@@ -741,30 +741,33 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_ERROR ("Out of memory");
       return DWG_ERR_OUTOFMEM;
     }
+  PRE (R_2_0)
+    bit_read_RC (dat); // the 6th zero
+  
+  SINCE (R_2_0) {
+    entities_start = bit_read_RL (dat);
+    entities_end = bit_read_RL (dat);
+    LOG_TRACE ("entities 0x%x - 0x%x\n", entities_start, entities_end);
+    blocks_start = bit_read_RL (dat);
+    blocks_offset = bit_read_RL (dat);
+    blocks_end = bit_read_RL (dat);
+    blocks_size = blocks_end - blocks_start;
+    blocks_max = bit_read_RL (dat); // 0x80000000
+    LOG_TRACE ("blocks   0x%x (0x%x) - 0x%x (0x%x, 0x%x)\n", blocks_start, blocks_size,
+               blocks_end, blocks_offset, blocks_max);
+    tbl_id = 0;
+    dwg->header.section[0].number = 0;
+    dwg->header.section[0].type = (Dwg_Section_Type)SECTION_HEADER_R11;
+    strcpy (dwg->header.section[0].name, "HEADER");
 
-  entities_start = bit_read_RL (dat);
-  entities_end = bit_read_RL (dat);
-  LOG_TRACE ("entities 0x%x - 0x%x\n", entities_start, entities_end);
-  blocks_start = bit_read_RL (dat);
-  blocks_offset = bit_read_RL (dat);
-  blocks_end = bit_read_RL (dat);
-  blocks_size = blocks_end - blocks_start;
-  blocks_max = bit_read_RL (dat); // 0x80000000
-  LOG_TRACE ("blocks   0x%x (0x%x) - 0x%x (0x%x, 0x%x)\n", blocks_start, blocks_size,
-             blocks_end, blocks_offset, blocks_max);
-
-  tbl_id = 0;
-  dwg->header.section[0].number = 0;
-  dwg->header.section[0].type = (Dwg_Section_Type)SECTION_HEADER_R11;
-  strcpy (dwg->header.section[0].name, "HEADER");
-
-  // The 5 tables (num_sections always 5): 3 RS + 1 RL address
-  if (decode_preR13_section_hdr ("BLOCK", SECTION_BLOCK, dat, dwg)
-      || decode_preR13_section_hdr ("LAYER", SECTION_LAYER, dat, dwg)
-      || decode_preR13_section_hdr ("STYLE", SECTION_STYLE, dat, dwg)
-      || decode_preR13_section_hdr ("LTYPE", SECTION_LTYPE, dat, dwg)
-      || decode_preR13_section_hdr ("VIEW", SECTION_VIEW, dat, dwg))
-    return DWG_ERR_INVALIDDWG;
+    // The 5 tables (num_sections always 5): 3 RS + 1 RL address
+    if (decode_preR13_section_hdr ("BLOCK", SECTION_BLOCK, dat, dwg)
+        || decode_preR13_section_hdr ("LAYER", SECTION_LAYER, dat, dwg)
+        || decode_preR13_section_hdr ("STYLE", SECTION_STYLE, dat, dwg)
+        || decode_preR13_section_hdr ("LTYPE", SECTION_LTYPE, dat, dwg)
+        || decode_preR13_section_hdr ("VIEW", SECTION_VIEW, dat, dwg))
+      return DWG_ERR_INVALIDDWG;
+  }
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x5e
   if (dat->size < 0x1f0) // AC1.50 0x1f9 74 vars
     {
@@ -777,6 +780,10 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (error >= DWG_ERR_CRITICAL)
       return error;
 
+  PRE (R_2_0) {
+    entities_start = dat->byte;
+    entities_end = dwg->header_vars.num_bytes;
+  }
 #if 0
   if (dwg->header.num_sections > 5) // dead code?
     {
@@ -813,6 +820,10 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_WARN ("@0x%lx => entities_end 0x%x", dat->byte, entities_end);
       dat->byte = entities_end;
     }
+  PRE (R_2_0) {
+    // this has usually some slack at the end.
+    return error;
+  }
   //dat->byte += 20; /* crc + sentinel? 20 byte */
   error |= decode_preR13_section (SECTION_BLOCK, dat, dwg);
   error |= decode_preR13_section (SECTION_LAYER, dat, dwg);
