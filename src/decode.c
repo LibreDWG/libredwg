@@ -678,8 +678,11 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   if (_obj->flag_r11 & FLAG_R11_THICKNESS) // 8
     FIELD_RD (thickness_r11, 39);
 
+  if (_obj->flag_r11 & FLAG_R11_PAPER) // 64
+    FIELD_RS (paper_r11, 0);
+
   SINCE (R_12) { // seems to be wrong
-    if (_obj->flag_r11 & FLAG_R11_XDATA)
+    if (_obj->opts_r11 & OPTS_R11_XDATA)
       {
         int error = dwg_decode_eed (dat, (Dwg_Object_Object *)ent);
         if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
@@ -687,7 +690,7 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       }
   }
   /*
-  if (_obj->flag_r11 & 0x20) // XREF_DEP
+  if (_obj->opts_r11 & 0x20) // XREF_DEP
     {
       Dwg_Object_Ref *hdl
         = dwg_decode_handleref_with_code (dat, obj, dwg, 0);
@@ -695,8 +698,6 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         obj->handle = hdl->handleref;
     }
   */
-  if (_obj->opts_r11 & OPTS_R11_PAPER)
-    FIELD_RS (paper_r11, 0);
 
   obj->common_size = bit_position (dat) - obj->bitsize_pos;
   return 0;

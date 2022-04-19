@@ -4758,7 +4758,7 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
     if (flag & FLAG_R11_THICKNESS)
       FIELD_RD (thickness_r11, 39);
     */
-    if (flag & FLAG_R11_XDATA)
+    if (flag & OPTS_R11_XDATA)
       FIELD_RC (extra_r11, 0);
     /*
     if (FIELD_VALUE (flag_r11) & 4 && FIELD_VALUE (kind_r11) > 2
@@ -4774,7 +4774,7 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
           obj->handle = hdl->handleref;
       }
     */
-    if (ent->opts_r11 & OPTS_R11_PAPER)
+    if (ent->opts_r11 & FLAG_R11_PAPER)
       FIELD_RS (paper_r11, 0);
     // TODO: EED/xdata?
     return error;
