@@ -31,7 +31,7 @@ if ($0 =~ m{(^\.\./.*src)/gen}) {
   $srcdir = $1;
   $topdir = "$srcdir/..";
   $topdir =~ s{^\.\./src/}{};
-} elsif ($0 =~ m{^src/gen}) {
+} elsif ($0 =~ m{^(\./)?src/gen}) {
   $srcdir = "src";
   $topdir = ".";
 } else {
