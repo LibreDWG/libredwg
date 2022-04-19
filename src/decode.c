@@ -645,6 +645,7 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   const bool is_block = obj->address >= 0x40000000;
   Bit_Chain *hdl_dat = NULL;
   Dwg_Data *dwg = ent->dwg;
+  BITCODE_RC handling_size;
 
   obj->bitsize_pos = bit_position (dat);
   obj->address = dat->byte - 1; // already read the type. size includes the type
@@ -677,6 +678,12 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
   if (_obj->flag_r11 & FLAG_R11_THICKNESS) // 8
     FIELD_RD (thickness_r11, 39);
+
+  if (_obj->flag_r11 & FLAG_R11_HANDLING) { // 32
+    handling_size = bit_read_RC (dat);
+    LOG_TRACE("handling size: %d\n", handling_size);
+    // TODO Read handling_r11 with length handling_size
+  }
 
   if (_obj->flag_r11 & FLAG_R11_PAPER) // 64
     FIELD_RS (paper_r11, 0);
