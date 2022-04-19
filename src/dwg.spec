@@ -1625,8 +1625,6 @@ DWG_ENTITY (POINT)
     SINCE (R_10) {
       if (! (R11FLAG (4)))
         FIELD_RD (z, 30);
-      if (R11OPTS (1))
-        FIELD_3RD (extrusion, 210);
     }
   } LATER_VERSIONS {
     FIELD_BD (x, 10);
