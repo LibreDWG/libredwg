@@ -641,8 +641,23 @@ free_preR13_object (Dwg_Object *obj)
     case DWG_TYPE_VERTEX_2D:
       dwg_free_VERTEX_2D_private (dat, dat, dat, obj);
       break;
+    case DWG_TYPE_VERTEX_3D:
+      dwg_free_VERTEX_3D (dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_MESH:
+      dwg_free_VERTEX_MESH (dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_PFACE:
+      dwg_free_VERTEX_PFACE (dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_PFACE_FACE:
+      dwg_free_VERTEX_PFACE_FACE (dat, obj);
+      break;
     case DWG_TYPE_POLYLINE_2D:
-      dwg_free_POLYLINE_2D_private (dat, dat, dat, obj);
+      dwg_free_POLYLINE_2D (dat, obj);
+      break;
+    case DWG_TYPE_POLYLINE_3D:
+      dwg_free_POLYLINE_3D (dat, obj);
       break;
     case DWG_TYPE_ARC:
       dwg_free_ARC_private (dat, dat, dat, obj);
