@@ -29,6 +29,8 @@ DWG_ENTITY (TEXT)
   PRE (R_13) {
     FIELD_2RD (ins_pt, 10);
     FIELD_RD (height, 40);
+    PRE (R_2_0)
+      FIELD_RD (oblique_angle, 51);
     FIELD_TV (text_value, 1);
     if (R11OPTS (1))
       FIELD_RD (rotation, 50);
