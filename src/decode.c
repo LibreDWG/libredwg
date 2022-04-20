@@ -644,12 +644,17 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
             obj->index, obj->type, obj->address);
   _obj->entmode = is_block ? 3 : 2; // ent or block
   FIELD_RC (flag_r11, 70); // mode
-  obj->size = bit_read_RS (dat);
-  LOG_TRACE("size: %d [RS]\n", obj->size);
+  SINCE (R_2_0) {
+    obj->size = bit_read_RS (dat);
+    LOG_TRACE("size: %d [RS]\n", obj->size);
+  }
+
   //_obj->layer = dwg_decode_preR13_handleref (dat, 1);
   //LOG_TRACE("layer.r11: %d [RS 8]\n", _obj->layer->r11_idx);
   FIELD_HANDLE (layer, 1, 8);
   FIELD_RC (flag2_r11, 0); // extra flags?
+  PRE (R_2_0)
+    goto entity_end;
   FIELD_RSx (opts_r11, 0); // i.e. dataflags
   if (_obj->flag_r11 & FLAG_R11_COLOR) // 1
     FIELD_RCd (color_r11, 0);
@@ -696,6 +701,7 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     }
   */
 
+entity_end:
   obj->common_size = bit_position (dat) - obj->bitsize_pos;
   return 0;
 }
@@ -5541,30 +5547,35 @@ decode_preR13_entities (unsigned long start, unsigned long end,
         }
 
       assert (!dat->bit);
-      SINCE (R_11)
+      SINCE (R_2_0) // Pre R_2_0 doesn't contain size of entity
       {
-        if (obj->address + obj->size != dat->byte + 2)
-          {
-            LOG_ERROR ("offset %ld", obj->address + obj->size - (dat->byte + 2));
-            dat->byte = obj->address + obj->size - 2;
-          }
-        crc = bit_read_RS (dat);
-        LOG_TRACE ("crc: %04X [RSx]\n", crc);
-      }
-      else
-      {
-        if (obj->address + obj->size != dat->byte)
-          {
-            LOG_ERROR ("offset %ld", obj->address + obj->size - dat->byte);
-            dat->byte = obj->address + obj->size;
-          }
+        SINCE (R_11)
+        {
+          if (obj->address + obj->size != dat->byte + 2)
+            {
+              LOG_ERROR ("offset %ld", obj->address + obj->size - (dat->byte + 2));
+              dat->byte = obj->address + obj->size - 2;
+            }
+          crc = bit_read_RS (dat);
+          LOG_TRACE ("crc: %04X [RSx]\n", crc);
+        }
+        else
+        {
+          if (obj->address + obj->size != dat->byte)
+            {
+              LOG_ERROR ("offset %ld", obj->address + obj->size - dat->byte);
+              dat->byte = obj->address + obj->size;
+            }
+        }
       }
       LOG_TRACE ("\n");
       num++;
 
-      if (obj->size < 2 || obj->size > 0x1000) { // FIXME
-        error |= DWG_ERR_SECTIONNOTFOUND;
-        dat->byte = end;
+      SINCE (R_2_0) {
+        if (obj->size < 2 || obj->size > 0x1000) { // FIXME
+          error |= DWG_ERR_SECTIONNOTFOUND;
+          dat->byte = end;
+        }
       }
     }
 
