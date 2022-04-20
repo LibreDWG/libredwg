@@ -256,7 +256,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 static int
-dwg_decode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
+decode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
@@ -775,7 +775,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       return DWG_ERR_INVALIDDWG;
     }
 
-  error |= dwg_decode_preR13_header_variables (dat, dwg);
+  error |= decode_preR13_header_variables (dat, dwg);
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x23a
   if (error >= DWG_ERR_CRITICAL)
       return error;
@@ -5493,7 +5493,7 @@ decode_preR13_entities (unsigned long start, unsigned long end,
         case 17:
           error |= dwg_decode_SEQEND (dat, obj);
           break;
-        /* 18: another polyline */
+        case 18: /* another polyline */
         case 19:
           { // which polyline
             BITCODE_RC flag = bit_read_RC (dat);

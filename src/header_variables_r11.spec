@@ -25,7 +25,7 @@
   } else {
     PRE (R_2_0)
       FIELD_RL (num_bytes, 0);
-    PRE (R_9)
+    PRE (R_10)
       FIELD_RS (num_entities, 0);
   }
   FIELD_3RD (EXTMIN, 10);
@@ -81,6 +81,7 @@
   } else {
     FIELD_CAST (PSLTSCALE, RS, B, 70);
     FIELD_RS (TREEDEPTH, 70);
+    FIELD_RS (unknown_5, 0);
     FIELD_RS (unknown_6, 0);
     FIELD_RD (unknown_7, 0); // converted from older DWG file (0x01d0)
   }
