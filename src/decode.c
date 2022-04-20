@@ -5467,7 +5467,9 @@ decode_preR13_entities (unsigned long start, unsigned long end,
         case 9:
           error |= dwg_decode_TRACE (dat, obj);
           break;
-        /* 10: load (convert from pre AC1.50) */
+        case 10:
+          error |= dwg_decode_LOAD (dat, obj);
+          break;
         case 11:
           error |= dwg_decode_SOLID (dat, obj);
           break;
