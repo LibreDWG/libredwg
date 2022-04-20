@@ -132,6 +132,9 @@
 #ifndef VALUE_BSd
 #  define VALUE_BSd(value, dxf)
 #endif
+#ifndef VALUE_RSd
+#  define VALUE_RSd(value, dxf)
+#endif
 #ifndef VALUE_BL
 #  define VALUE_BL(value, dxf)
 #endif
@@ -319,6 +322,9 @@
 #endif
 #ifndef FIELD_BSd
 #  define FIELD_BSd(name, dxf) FIELD_BS (name, dxf)
+#endif
+#ifndef FIELD_RSd
+#  define FIELD_RSd(name, dxf) FIELD_RS (name, dxf)
 #endif
 #ifndef FIELD_RCu
 #  define FIELD_RCu(name, dxf) FIELD_RC (name, dxf)

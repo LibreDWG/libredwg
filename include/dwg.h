@@ -103,6 +103,7 @@ typedef uint16_t BITCODE_BS;
 typedef int16_t BITCODE_BSd;
 typedef uint16_t BITCODE_BSx;
 typedef uint16_t BITCODE_RS;
+typedef int16_t BITCODE_RSd;
 typedef uint16_t BITCODE_RSx;
 typedef uint32_t BITCODE_BL;
 typedef uint32_t BITCODE_BLx;
@@ -134,6 +135,7 @@ typedef int32_t BITCODE_RLd;
 #define FORMAT_BSd "%" PRId16
 #define FORMAT_BSx "0x%" PRIx16
 #define FORMAT_RS "%" PRIu16
+#define FORMAT_RSd "%" PRId16
 #define FORMAT_RSx "0x%" PRIx16
 #define FORMAT_BL "%" PRIu32
 #define FORMAT_RL "%" PRIu32
@@ -2268,10 +2270,9 @@ typedef struct _dwg_object_BLOCK_CONTROL
  */
 typedef struct _dwg_object_BLOCK_HEADER
 {
-  COMMON_TABLE_FIELDS(RC);
+  COMMON_TABLE_FIELDS (RC);
   BITCODE_BL __iterator;
-  BITCODE_RC flag2; /* preR13 */
-  BITCODE_RS flag3; /* preR13 */
+  BITCODE_RC flag2;   /* preR13 */
   BITCODE_B anonymous;    /* flag 70 bit 1 */
   BITCODE_B hasattrs;     /* flag 70 bit 2 */
   BITCODE_B blkisxref;    /* flag 70 bit 3 */
@@ -2317,7 +2318,7 @@ typedef struct _dwg_object_LAYER
      bits 6-10: linewt
      32768: plotflag (bit 16)
  */
-  COMMON_TABLE_FIELDS(BS);
+  COMMON_TABLE_FIELDS (BS);
   BITCODE_B frozen;
   BITCODE_B on;
   BITCODE_B frozen_in_new;
@@ -2358,7 +2359,7 @@ typedef struct _dwg_object_STYLE
     256: shape_loaded (0x100)
     512: is_striked (0x200)
  */
-  COMMON_TABLE_FIELDS(RC);
+  COMMON_TABLE_FIELDS (RC);
   BITCODE_B is_shape;
   BITCODE_B is_vertical;
   BITCODE_BD text_size;
@@ -2403,7 +2404,7 @@ typedef struct _dwg_LTYPE_dash {
 
 typedef struct _dwg_object_LTYPE
 {
-  COMMON_TABLE_FIELDS(RC);
+  COMMON_TABLE_FIELDS (RC);
   BITCODE_TV description;
   BITCODE_BD pattern_len;
   BITCODE_RC alignment;
@@ -2429,7 +2430,7 @@ typedef struct _dwg_object_VIEW_CONTROL
  */
 typedef struct _dwg_object_VIEW
 {
-  COMMON_TABLE_FIELDS(RC);
+  COMMON_TABLE_FIELDS (RC);
   // AbstractViewTableRecord
   BITCODE_BD VIEWSIZE;
   BITCODE_BD view_width;
@@ -2486,7 +2487,7 @@ typedef struct _dwg_UCS_orthopts
 
 typedef struct _dwg_object_UCS
 {
-  COMMON_TABLE_FIELDS(RC);
+  COMMON_TABLE_FIELDS (RC);
   BITCODE_3BD ucsorg;
   BITCODE_3BD ucsxdir;
   BITCODE_3BD ucsydir;
@@ -2511,7 +2512,7 @@ typedef struct _dwg_object_VPORT_CONTROL
  */
 typedef struct _dwg_object_VPORT
 {
-  COMMON_TABLE_FIELDS(RC);
+  COMMON_TABLE_FIELDS (RC);
   // AbstractViewTableRecord
   BITCODE_BD VIEWSIZE;     // really the view height
   BITCODE_BD view_width;   // in DWG r13+, needed to calc. aspect_ratio
@@ -2577,7 +2578,7 @@ typedef struct _dwg_object_APPID_CONTROL
  */
 typedef struct _dwg_object_APPID
 {
-  COMMON_TABLE_FIELDS(RC);
+  COMMON_TABLE_FIELDS (RC);
   BITCODE_RC unknown;
 } Dwg_Object_APPID;
 
@@ -2597,7 +2598,7 @@ typedef struct _dwg_object_DIMSTYLE_CONTROL
  */
 typedef struct _dwg_object_DIMSTYLE
 {
-  COMMON_TABLE_FIELDS(RC);
+  COMMON_TABLE_FIELDS (RC);
   BITCODE_B DIMTOL;
   BITCODE_B DIMLIM;
   BITCODE_B DIMTIH;
@@ -2709,7 +2710,7 @@ typedef struct _dwg_object_VX_CONTROL
  */
 typedef struct _dwg_object_VX_TABLE_RECORD
 {
-  COMMON_TABLE_FIELDS(RC);
+  COMMON_TABLE_FIELDS (RC);
   BITCODE_B is_on;
   BITCODE_H viewport;
   BITCODE_H prev_entry;
