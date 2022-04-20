@@ -1809,6 +1809,7 @@ typedef struct _dwg_entity_SHAPE
   BITCODE_BS style_id;
   BITCODE_BE extrusion;
   BITCODE_H style;
+  BITCODE_RD height_pre2; // pre R_2_0
 } Dwg_Entity_SHAPE;
 
 /**
