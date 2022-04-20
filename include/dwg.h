@@ -671,6 +671,8 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE__3DLINE,
   DWG_TYPE_REPEAT,
   DWG_TYPE_ENDREP,
+  /* pre2.0 entities */
+  DWG_TYPE_LOAD,
   // after 1.0 add new types here for binary compat
 
   DWG_TYPE_FREED        = 0xfffd,
@@ -7908,6 +7910,16 @@ typedef struct _dwg_entity_ENDREP
 } Dwg_Entity_ENDREP;
 
 /**
+ LOAD (none/10) entity
+ */
+typedef struct _dwg_entity_LOAD
+{
+  struct _dwg_object_entity *parent;
+
+  BITCODE_T file_name;
+} Dwg_Entity_LOAD;
+
+/**
  3DLINE (none/21) entity
  */
 typedef struct _dwg_entity_3DLINE
@@ -8082,6 +8094,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity__3DLINE *_3DLINE;
     Dwg_Entity_ARC_DIMENSION *ARC_DIMENSION;
     Dwg_Entity_ENDREP *ENDREP;
+    Dwg_Entity_LOAD *LOAD;
     Dwg_Entity_HELIX *HELIX;
     Dwg_Entity_LARGE_RADIAL_DIMENSION *LARGE_RADIAL_DIMENSION;
     Dwg_Entity_PLANESURFACE *PLANESURFACE;
@@ -9554,6 +9567,7 @@ EXPORT int dwg_setup_DWFDEFINITION (Dwg_Object *obj);
 EXPORT int dwg_setup__3DLINE (Dwg_Object *obj);
 EXPORT int dwg_setup_ARC_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_ENDREP (Dwg_Object *obj);
+EXPORT int dwg_setup_LOAD (Dwg_Object *obj);
 EXPORT int dwg_setup_HELIX (Dwg_Object *obj);
 EXPORT int dwg_setup_LARGE_RADIAL_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_PLANESURFACE (Dwg_Object *obj);
