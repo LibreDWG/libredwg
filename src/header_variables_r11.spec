@@ -17,7 +17,7 @@
  * improved by Michal Josef Špaček
  */
 
-#include "spec.h"
+  #include "spec.h"
 
   FIELD_3RD (INSBASE, 10); //ok 0x5e
   VERSIONS (R_10, R_11) {
@@ -79,10 +79,10 @@
       return error;
     }
   } else {
-      FIELD_CAST (PSLTSCALE, RS, B, 70);
-      FIELD_RS (TREEDEPTH, 70);
-      FIELD_RS (unknown_6, 0);
-      FIELD_RD (unknown_7, 0); // converted from older DWG file (0x01d0)
+    FIELD_CAST (PSLTSCALE, RS, B, 70);
+    FIELD_RS (TREEDEPTH, 70);
+    FIELD_RS (unknown_6, 0);
+    FIELD_RD (unknown_7, 0); // converted from older DWG file (0x01d0)
   }
   FIELD_RS (LUNITS, 70); //ok
   FIELD_RS (LUPREC, 70); //ok
@@ -95,8 +95,8 @@
   FIELD_RD (SKETCHINC, 40); //ok default 0.1
   FIELD_RD (FILLETRAD, 40); //ok
   VERSION (R_1_4) {
-      dwg->header.dwg_version = 2;
-      return error;
+    dwg->header.dwg_version = 2;
+    return error;
   }
   FIELD_RS (AUNITS, 70);    //ok
   FIELD_RS (AUPREC, 70);    //ok
@@ -114,8 +114,8 @@
   FIELD_RD (DIMTXT, 40); //ok
   FIELD_RD (DIMCEN, 40); //ok
   FIELD_RD (DIMTSZ, 40); //ok
-  PRE(R_2_0) // AC1.2 definitely
-     return 0;
+  PRE (R_2_0) // AC1.2 definitely
+    return 0;
   FIELD_RC (DIMTOL, 70); //ok 1f3
   FIELD_RC (DIMLIM, 70); //ok 1f4
   FIELD_RC (DIMTIH, 70); //ok 1f5
@@ -124,7 +124,7 @@
   FIELD_RC (DIMSE2, 70); //ok
   FIELD_CAST (DIMTAD, RC, RS, 70); //ok
   if (dwg->header.num_header_vars <= 74)
-     return 0;
+    return 0;
   FIELD_RC (LIMCHECK, 70); //ok 1fa
 
   /* TODO Unknown structure (0x01fc-0x0228) */
