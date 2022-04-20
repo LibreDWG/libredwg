@@ -7357,8 +7357,6 @@ static const Dwg_DYNAPI_field _dwg_BLOCK_HEADER_fields[] = {
     0,0,0, 0 },
   { "flag2",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_BLOCK_HEADER, flag2),
     0,0,0, 0 },
-  { "flag3",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_BLOCK_HEADER, flag3),
-    0,0,0, 0 },
   { "anonymous",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCK_HEADER, anonymous),
     0,0,0, 0 },
   { "hasattrs",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_BLOCK_HEADER, hasattrs),

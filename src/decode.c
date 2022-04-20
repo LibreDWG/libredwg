@@ -284,8 +284,8 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
   tbl->address = bit_read_RL (dat);
   strncpy (tbl->name, name, 63);
   tbl->name[63] = '\0';
-  LOG_TRACE ("ptr table %-8s [%2d]: size:%-4u num:%-2ld (0x%lx-0x%lx) flags:0x%x\n",
-             tbl->name, id, tbl->size, (long)tbl->number, (unsigned long)tbl->address,
+  LOG_TRACE ("ptr table %-8s [%2d]: size:%-4u num:%-2d (0x%lx-0x%lx) flags:0x%x\n",
+             tbl->name, id, tbl->size, tbl->number, (unsigned long)tbl->address,
              (unsigned long)(tbl->address + (tbl->number * tbl->size)),
 	     tbl->flags)
   if (tbl->address + (tbl->number * tbl->size) > dat->size)
@@ -333,17 +333,16 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   BITCODE_BL vcount;
   int error = 0;
   long unsigned int num = dwg->num_objects;
-  long unsigned int old_size = num * sizeof (Dwg_Object);
-  long unsigned int size = tbl->number * sizeof (Dwg_Object);
+  long unsigned int old_size = dwg->num_objects * sizeof (Dwg_Object);
+  long unsigned int size = tbl->size * sizeof (Dwg_Object);
   long unsigned int pos;
-  tbl->address = (uint64_t)num;
 
   if ((unsigned)tbl->number > 100000 || size > dat->size)
     {
       LOG_ERROR ("Invalid table number %ld for %-8s [%2d]", (long)tbl->number, tbl->name, id);
       return DWG_ERR_INVALIDDWG;
     }
-  LOG_TRACE ("contents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n",
+  LOG_TRACE ("\ncontents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n",
              tbl->name, id, tbl->size, (long)tbl->number, (unsigned long)tbl->address,
              (unsigned long)(tbl->address + ((unsigned long long)tbl->number * tbl->size)))
   dat->byte = tbl->address;
@@ -386,7 +385,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   LOG_TRACE ("\n-- table entry " #token " [%d]:\n", i)
 
 #define CHK_ENDPOS                                                            \
-  pos = tbl->address + (long)(i * tbl->size);                                 \
+  pos = tbl->address + (long)((i + 1) * tbl->size);                           \
   if ((long)(pos - dat->byte) != 2)                                           \
     {                                                                         \
       LOG_ERROR ("offset %ld", pos - dat->byte);                              \
@@ -401,17 +400,14 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       for (i = 0; i < tbl->number; i++)
         {
           PREP_TABLE (BLOCK_HEADER);
-          // TODO DXF 8: layer name
           FIELD_RC (flag, 70);
           FIELD_TFv (name, 32, 2);
-          FIELD_RS (used, 0);
-
-          // TODO RD elevation 30, 2RD base_pt 10: 24
+          FIELD_RSd (used, 0); // -1
           FIELD_RC (block_scaling, 0);
           FIELD_CAST (num_owned, RS, BL, 0);
-          FIELD_RC (flag2, 0);
+          FIELD_RCd (flag2, 0);
           FIELD_CAST (num_inserts, RS, RL, 0);
-          FIELD_RS (flag3, 0);
+          FIELD_RSd (insert_units, 0);
           CHK_ENDPOS;
         }
       break;

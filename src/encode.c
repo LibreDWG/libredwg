@@ -167,8 +167,10 @@ const unsigned char unknown_section[53]
 #define FIELD_BB(nam, dxf) FIELDG (nam, BB, dxf)
 #define FIELD_3B(nam, dxf) FIELDG (nam, 3B, dxf)
 #define FIELD_BS(nam, dxf) FIELDG (nam, BS, dxf)
+#define FIELD_RCd(nam, dxf) FIELD_CAST (nam, RC, RCd, dxf)
 #define FIELD_BSd(nam, dxf) FIELD_CAST (nam, BS, BSd, dxf)
 #define FIELD_RSx(nam, dxf) FIELD_CAST (nam, RS, RSx, dxf)
+#define FIELD_RSd(nam, dxf) FIELD_CAST (nam, RS, RSd, dxf)
 #define FIELD_RLx(nam, dxf) FIELD_CAST (nam, RL, RLx, dxf)
 #define FIELD_BLx(nam, dxf) FIELD_CAST (nam, BL, BLx, dxf)
 #define FIELD_BLd(nam, dxf) FIELD_CAST (nam, BL, BLd, dxf)
@@ -1812,17 +1814,14 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       for (i = 0; i < tbl->number; i++)
         {
           PREP_TABLE (BLOCK_HEADER);
-          // TODO DXF 8: layer name
           FIELD_RC (flag, 70);
           FIELD_TFv (name, 32, 2);
-          FIELD_RS (used, 0);
-
-          // TODO RD elevation 30, 2RD base_pt 10: 24
+          FIELD_RSd (used, 0);
           FIELD_RC (block_scaling, 0);
           FIELD_CAST (num_owned, RS, BL, 0);
-          FIELD_RC (flag2, 0);
+          FIELD_RCd (flag2, 0);
           FIELD_CAST (num_inserts, RS, RL, 0);
-          FIELD_RS (flag3, 0);
+          FIELD_RSd (insert_units, 0);
           CHK_ENDPOS;
         }
       break;

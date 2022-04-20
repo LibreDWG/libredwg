@@ -385,6 +385,11 @@
     _obj->nam = bit_read_BS (dat);                                            \
     LOG_TRACE (#nam ": 0x%x [BSx %d]\n", _obj->nam, dxf);                     \
   }
+#define FIELD_RSd(nam, dxf)                                                   \
+  {                                                                           \
+    _obj->nam = bit_read_RS (dat);                                            \
+    LOG_TRACE (#nam ": " FORMAT_RSd " [RSd %d]\n", _obj->nam, dxf);           \
+  }
 #define FIELD_BSd(nam, dxf)                                                   \
   {                                                                           \
     _obj->nam = bit_read_BS (dat);                                            \

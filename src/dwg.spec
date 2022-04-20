@@ -3059,13 +3059,14 @@ DWG_OBJECT (BLOCK_HEADER)
 
   PRE (R_13)
   {
-    FIELD_RD (base_pt.z, 30);
-    FIELD_2RD (base_pt, 10);
+    FIELD_RC (flag, 70);
+    FIELD_TFv (name, 32, 2);
+    FIELD_RSd (used, 0); // -1
     FIELD_RC (block_scaling, 0);
     FIELD_CAST (num_owned, RS, BL, 0);
-    FIELD_RC (flag2, 0);
+    FIELD_RCd (flag2, 0);
     FIELD_CAST (num_inserts, RS, RL, 0);
-    FIELD_RS (flag3, 0);
+    FIELD_RSd (insert_units, 0);
 
     FIELD_VALUE (anonymous)    = FIELD_VALUE (flag) & 1;
     FIELD_VALUE (hasattrs)     = FIELD_VALUE (flag) & 2;

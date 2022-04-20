@@ -103,6 +103,7 @@ typedef uint16_t BITCODE_BS;
 typedef int16_t BITCODE_BSd;
 typedef uint16_t BITCODE_BSx;
 typedef uint16_t BITCODE_RS;
+typedef int16_t BITCODE_RSd;
 typedef uint16_t BITCODE_RSx;
 typedef uint32_t BITCODE_BL;
 typedef uint32_t BITCODE_BLx;
@@ -134,6 +135,7 @@ typedef int32_t BITCODE_RLd;
 #define FORMAT_BSd "%" PRId16
 #define FORMAT_BSx "0x%" PRIx16
 #define FORMAT_RS "%" PRIu16
+#define FORMAT_RSd "%" PRId16
 #define FORMAT_RSx "0x%" PRIx16
 #define FORMAT_BL "%" PRIu32
 #define FORMAT_RL "%" PRIu32
@@ -2270,8 +2272,7 @@ typedef struct _dwg_object_BLOCK_HEADER
 {
   COMMON_TABLE_FIELDS(RC);
   BITCODE_BL __iterator;
-  BITCODE_RC flag2; /* preR13 */
-  BITCODE_RS flag3; /* preR13 */
+  BITCODE_RC flag2;   /* preR13 */
   BITCODE_B anonymous;    /* flag 70 bit 1 */
   BITCODE_B hasattrs;     /* flag 70 bit 2 */
   BITCODE_B blkisxref;    /* flag 70 bit 3 */

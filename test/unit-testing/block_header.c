@@ -15,7 +15,6 @@ api_process (dwg_object *obj)
 
   BITCODE_BL __iterator;
   BITCODE_RC flag2; /* preR13 */
-  BITCODE_RS flag3; /* preR13 */
   BITCODE_B anonymous;    /* flag 70 bit 1 */
   BITCODE_B hasattrs;     /* flag 70 bit 2 */
   BITCODE_B blkisxref;    /* flag 70 bit 3 */
@@ -51,7 +50,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (block_header, BLOCK_HEADER, xref);
 
   CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, flag2, RC); /* preR13 */
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, flag3, RS); /* preR13 */
   CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, anonymous, B);    /* flag 70 bit 1 */
   CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, hasattrs, B);     /* flag 70 bit 2 */
   CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, blkisxref, B);    /* flag 70 bit 3 */

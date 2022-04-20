@@ -44052,21 +44052,6 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     block_header->flag2--;
   }
   {
-    BITCODE_RS flag3;
-    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "flag3", &flag3, NULL)
-        && flag3 == block_header->flag3)
-      pass ();
-    else
-      fail ("BLOCK_HEADER.flag3 [RS] %hu != %hu", block_header->flag3, flag3);
-    flag3++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "flag3", &flag3, 0)
-        && flag3 == block_header->flag3)
-      pass ();
-    else
-      fail ("BLOCK_HEADER.flag3 [RS] set+1 %hu != %hu", block_header->flag3, flag3);
-    block_header->flag3--;
-  }
-  {
     BITCODE_B hasattrs;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "hasattrs", &hasattrs, NULL)
         && hasattrs == block_header->hasattrs)

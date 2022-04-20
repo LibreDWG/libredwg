@@ -8775,8 +8775,6 @@ H
 BL
 @item flag2
 RC
-@item flag3
-RS
 @item anonymous
 B
 @item hasattrs
