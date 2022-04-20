@@ -144,13 +144,14 @@ const unsigned char unknown_section[53]
   LOG_TRACE (#nam ": " FORMAT_##type, _obj->nam)                              \
   LOG_POS
 #define FIELD_G_TRACE(nam, type, dxfgroup)                                    \
-  LOG_TRACE (#nam ": " FORMAT_##type " [" #type " " #dxfgroup "]", _obj->nam) \
+  LOG_TRACE (#nam ": " FORMAT_##type " [" #type " " #dxfgroup "]",            \
+             (BITCODE_##type)_obj->nam)                                       \
   LOG_POS
 #define FIELD_CAST(nam, type, cast, dxf)                                      \
   {                                                                           \
     bit_write_##type (dat, (BITCODE_##type)_obj->nam);                        \
-    LOG_TRACE (#nam ": " FORMAT_##type " [" #type " " #dxf "]",               \
-               (BITCODE_##type)_obj->nam);                                    \
+    LOG_TRACE (#nam ": " FORMAT_##cast " [" #cast " " #dxf "]",               \
+               (BITCODE_##cast)_obj->nam);                                    \
     LOG_POS                                                                   \
   }
 #define SUB_FIELD(o, nam, type, dxf) FIELD (o.nam, type)
