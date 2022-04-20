@@ -79,9 +79,9 @@
       return error;
     }
   } else {
+    FIELD_RS (unknown_5, 0);
     FIELD_CAST (PSLTSCALE, RS, B, 70);
     FIELD_RS (TREEDEPTH, 70);
-    FIELD_RS (unknown_5, 0);
     FIELD_RS (unknown_6, 0);
     FIELD_RD (unknown_7, 0); // converted from older DWG file (0x01d0)
   }
