@@ -470,7 +470,7 @@
   {                                                                           \
     SINCE (R_13) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }    \
     _obj->nam = (BITCODE_TV)bit_read_TF (dat, (int)len);                      \
-    LOG_TRACE (#nam ": \"%s\" [TF %lu " #dxf "]", _obj->nam,                  \
+    LOG_TRACE (#nam ": \"%s\" [TFv %lu " #dxf "]", _obj->nam,                  \
                (unsigned long)len);                                           \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")                                                          \

@@ -8758,7 +8758,7 @@ BLOCK_HEADER is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RC
+RC,	DXF 70
 @item name
 TV
 @item used

@@ -401,6 +401,7 @@ sub dxf_in {
     } elsif (/^\s+FIELD_(.+?)\s*\((\w+),.*,\s*(\d+)\)/) {
       my $type = $1;
       $f = $2;
+      $type =~ s/^TFv$/TV/; # fixed but alloc'd
       $DXF{$n}->{$f} = $3 if $3;
       $ENT{$n}->{$f} = 'TF' if $type eq 'BINARY';
       $ENT{$n}->{$f} = $type if $type =~ /^T/;
@@ -796,6 +797,8 @@ sub out_declarator {
     $type = 'BL';
   } elsif ($type eq 'uint32_t*') {
     $type = 'BL*';
+  #} elsif ($type eq 'TFv') {
+  #  $type = 'TV';
   } elsif ($type eq 'Dwg_Object_Ref*') {
     $type = 'H';
   } elsif ($type eq 'Dwg_Object_Ref**') {

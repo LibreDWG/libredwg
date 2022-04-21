@@ -337,11 +337,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   long unsigned int size = tbl->size * sizeof (Dwg_Object);
   long unsigned int pos;
 
-  if ((unsigned)tbl->number > 100000 || size > dat->size)
-    {
-      LOG_ERROR ("Invalid table number %ld for %-8s [%2d]", (long)tbl->number, tbl->name, id);
-      return DWG_ERR_INVALIDDWG;
-    }
   LOG_TRACE ("\ncontents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n",
              tbl->name, id, tbl->size, (long)tbl->number, (unsigned long)tbl->address,
              (unsigned long)(tbl->address + ((unsigned long long)tbl->number * tbl->size)))
@@ -349,14 +344,15 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   dat->bit = 0;
   if ((unsigned long)(tbl->number * tbl->size) > dat->size - dat->byte)
     {
-      LOG_ERROR ("Invalid table number %ld or size %ld for %-8s [%2d]", (long)tbl->number, (long)tbl->size,
-                 tbl->name, id);
+      LOG_ERROR ("Overlarge table num_entries %ld or size %ld for %-8s [%2d]",
+                 (long)tbl->number, (long)tbl->size, tbl->name, id);
       return DWG_ERR_INVALIDDWG;
     }
   if (dwg->num_objects % REFS_PER_REALLOC == 0)
     dwg->object = (Dwg_Object*)realloc (dwg->object, old_size + size + REFS_PER_REALLOC);
 
-    // MAYBE: move to a spec dwg_r11.spec, and dwg_decode_r11_NAME
+  // TODO: use the dwg.spec instead
+  // MAYBE: move to a spec dwg_r11.spec, and dwg_decode_r11_NAME
 #define PREP_TABLE(token)                                                     \
   Dwg_Object *obj;                                                            \
   Dwg_Object_##token *_obj;                                                   \
@@ -386,7 +382,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
 #define CHK_ENDPOS                                                            \
   pos = tbl->address + (long)((i + 1) * tbl->size);                           \
-  if ((long)(pos - dat->byte) != 2)                                           \
+  if ((long)(pos - dat->byte) != 2) /* crc16 since when? */                   \
     {                                                                         \
       LOG_ERROR ("offset %ld", pos - dat->byte);                              \
       /*return DWG_ERR_SECTIONNOTFOUND;*/                                     \
