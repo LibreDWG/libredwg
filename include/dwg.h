@@ -255,50 +255,59 @@ typedef Dwg_Bitcode_3BD  BITCODE_BE;
 typedef enum DWG_VERSION_TYPE
 {
   R_INVALID,
-  R_1_1,	/* MC0.0  MicroCAD Release 1.1 */
-  R_1_2,	/* AC1.2  AutoCAD Release 1.2 */
-  R_1_3,	/* AC1.3  AutoCAD Release 1.3 */
-  R_1_4,	/* AC1.40 AutoCAD Release 1.4 */
-  R_1_402b,	/* AC402b AutoCAD Release 1.402b */
-  R_2_0,	/* AC1.50 AutoCAD Release 2.0 */
-  R_2_10,	/* AC2.10 AutoCAD Release 2.10 */
-  R_2_21,	/* AC2.21 AutoCAD Release 2.21 */
-  R_2_22,	/* AC2.22 AutoCAD Release 2.22 */
-  R_2_4,	/* AC1001 AutoCAD Release 2.4 */
-  R_2_5,	/* AC1002 AutoCAD Release 2.5 */
-  R_2_6,	/* AC1003 AutoCAD Release 2.6 */
-  R_9,		/* AC1004 AutoCAD Release 9 */
-  R_9c1,	/* AC1005 AutoCAD Release 9c1 */
-  R_10,		/* AC1006 AutoCAD Release 10 */
-  R_10c1,	/* AC1007 AutoCAD Release 10c1 */
-  R_10c2,	/* AC1008 AutoCAD Release 10c2 */
-  R_11,		/* AC1009 AutoCAD Release 11/12 (LT R1/R2) */
-  R_12,		/* AC1010 AutoCAD Release 12 */
-  R_12c1,	/* AC1011 AutoCAD Release 12c1 */
-  R_13,		/* AC1012 AutoCAD Release 13 */
-  R_13c3,	/* AC1013 AutoCAD Release 13C3 */
-  R_14,		/* AC1014 AutoCAD Release 14 */
-  R_2000,	/* AC1015 AutoCAD Release 2000 */
-  R_2000i,	/* AC1016 AutoCAD Release 2000i */
-  R_2002,	/* AC1016 AutoCAD Release 2002 */
-  R_2004,	/* AC1018 AutoCAD Release 2004 (includes versions AC1019/0x19 and AC1020/0x1a) */
-  R_2005,	/* AC1019 AutoCAD Release 2005 */
-  R_2006,	/* AC1020 AutoCAD Release 2006 */
-  R_2007,	/* AC1021 AutoCAD Release 2007 - 2009 */
-  R_2008,	/* AC1022 AutoCAD Release 2008 */
-  R_2009,	/* AC1023 AutoCAD Release 2009 */
-  R_2010,	/* AC1024 AutoCAD Release 2010 - 2012 */
-  R_2011,	/* AC1025 AutoCAD Release 2011 (same DWG format)  */
-  R_2012,	/* AC1025 AutoCAD Release 2012 (same DWG format) */
-  R_2013,	/* AC1027 AutoCAD Release 2013 - 2017 */
-  R_2014,	/* AC1028 AutoCAD Release 2014 (same DWG format) */
-  R_2015,	/* AC1029 AutoCAD Release 2015 (same DWG format) */
-  R_2016,	/* AC1030 AutoCAD Release 2016 (same DWG format) */
-  R_2017,	/* AC1031 AutoCAD Release 2017 (same DWG format) */
-  R_2018,	/* AC1032 AutoCAD Release 2018 - 2021 */
-  R_2019,	/* AC1032 AutoCAD Release 2019 (same DWG format) */
-  R_2020,	/* AC1032 AutoCAD Release 2020 (same DWG format)  */
-  R_2021,	/* AC1032 AutoCAD Release 2021 (same DWG format)  */
+  R_1_1,	/* MC0.0/0  MicroCAD Release 1.1 */
+  R_1_2,	/* AC1.2/0  AutoCAD Release 1.2 */
+  R_1_3,	/* AC1.3/1  AutoCAD Release 1.3 */
+  R_1_4,	/* AC1.40/2 AutoCAD Release 1.4 */
+  R_2_0b,	/* AC1.50/3 AutoCAD 2.0 beta */
+  R_2_0,	/* AC1.50/4 AutoCAD Release 2.0 */
+  R_2_10,	/* AC2.10/5 AutoCAD Release 2.10 */
+  R_2_21,	/* AC2.21/6 AutoCAD Release 2.21 */
+  R_2_22,	/* AC2.22/7 AutoCAD Release 2.22 */
+  R_2_4,	/* AC1001/8 AutoCAD Release 2.4 */
+  R_2_5,	/* AC1002/9 AutoCAD Release 2.5 */
+  R_2_6,	/* AC1003/10 AutoCAD Release 2.6 */
+  R_9,		/* AC1004/0xb AutoCAD Release 9 */
+  R_9c1,	/* AC1005/0xc AutoCAD Release 9c1 */
+  R_10,		/* AC1006/0xd AutoCAD Release 10 */
+  R_11b1,	/* AC1007/0xe AutoCAD 11 beta 1 */
+  R_11b2,	/* AC1008/0xf AutoCAD 11 beta 2 */
+  R_11,		/* AC1009/0x10 AutoCAD Release 11/12 (LT R1/R2) */
+  R_12 = R_11,
+  R_13b1,	/* AC1010/0x11 AutoCAD 13 beta 1 */
+  R_13b2,	/* AC1011/0x12 AutoCAD 13 beta 2 */
+  R_13,		/* AC1012/0x13 AutoCAD Release 13 */
+  R_13c3,	/* AC1013/0x14 AutoCAD Release 13c3 */
+  R_14,		/* AC1014/0x15 AutoCAD Release 14 */
+  R_2000b,	/* AC1500/0x16 AutoCAD 2000 beta */
+  R_2000,	/* AC1015/0x16 AutoCAD Release 2000 */
+  R_2000i,	/* AC1016/0x17 AutoCAD Release 2000i */
+  R_2002,	/* AC1017/0x18 AutoCAD Release 2002 */
+  R_2004a,	/* AC402b/0x18 AutoCAD 2004 alpha a */
+  R_2004b,	/* AC402b/0x18 AutoCAD 2004 alpha b */
+  R_2004c,	/* AC1018/0x18 AutoCAD 2004 beta */
+  R_2004,	/* AC1018/0x19 AutoCAD Release 2004 - 2006 */
+  R_2005,	/* AC1019/0x19 AutoCAD 2005 */
+  R_2006,	/* AC1020/0x19 AutoCAD 2006 */
+  R_2007b,	/* AC1021/0x19 AutoCAD 2007 beta */
+  R_2007,	/* AC1021/0x1b AutoCAD Release 2007 - 2009 */
+  R_2008,	/* AC1022/0x1b AutoCAD 2008 */
+  R_2009,	/* AC1023/0x1b AutoCAD 2009 */
+  R_2010b,	/* AC1024/0x1b AutoCAD 2009 */
+  R_2010,	/* AC1024/0x1c AutoCAD Release 2010 - 2012 */
+  R_2011,	/* AC1025/0x1d AutoCAD 2011 */
+  R_2012,	/* AC1026/0x1e AutoCAD 2012 */
+  R_2013b,	/* AC1027/0x1e AutoCAD 2013 beta */
+  R_2013,	/* AC1027/0x1f AutoCAD Release 2013 - 2017 */
+  R_2014,	/* AC1028/0x1f AutoCAD 2014 */
+  R_2015,	/* AC1029/0x1f AutoCAD 2015 */
+  R_2016,	/* AC1030/0x1f AutoCAD 2016 */
+  R_2017,	/* AC1031/0x20 AutoCAD 2017 */
+  R_2018b,	/* AC1032/0x20 AutoCAD 2018 beta */
+  R_2018,	/* AC1032/0x21 AutoCAD Release 2018 - 2021 */
+  R_2019,	/* AC1033/0x22AutoCAD 2019 */
+  R_2020,	/* AC1034/0x23 AutoCAD 2020 */
+  R_2021,	/* AC1035/0x24 AutoCAD 2021 */
   R_2022,	/* AC103-4 AutoCAD Release 2022? */
   R_AFTER
 } Dwg_Version_Type;

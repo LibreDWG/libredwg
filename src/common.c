@@ -29,13 +29,15 @@
 #include <math.h>
 #include "logging.h"
 
+// See also http://devel.gvsig.org/sites/org.gvsig.dwg/2.0-SNAPSHOT/gvsig-base-library-pom/org.gvsig.dwg/xref/org/gvsig/dwg/lib/DwgFile.html
 const struct dwg_versions dwg_versions[] = {
+  /* r,          type,    hdr,    desc,         dwg_version */
   { R_INVALID,  "invalid", "INVALI",  "No DWG", 0 },
-  { R_1_1,	"mc0.0", "MC0.0", "MicroCAD Release 1.1", 0 },
+  { R_1_1,	"r1.1",  "MC0.0", "MicroCAD Release 1.1", 0 },
   { R_1_2,	"r1.2",  "AC1.2", "AutoCAD Release 1.2", 0 },
   { R_1_3,	"r1.3",  "AC1.3", "AutoCAD Release 1.3", 1 },
-  { R_1_4,	"r1.40", "AC1.40", "AutoCAD Release 1.4", 2 },
-  { R_1_402b,	"r1.402b", "AC402b", "AutoCAD Release 1.402b", 3 },
+  { R_1_4,	"r1.4",  "AC1.40", "AutoCAD Release 1.4", 2 },
+  { R_2_0b,	"r2.0b", "AC1.50", "AutoCAD 2.0 beta", 3 }, // not seen
   { R_2_0,	"r2.0",  "AC1.50", "AutoCAD Release 2.0", 4 },
   { R_2_10,	"r2.10", "AC2.10", "AutoCAD Release 2.10", 5 },
   { R_2_21,	"r2.21", "AC2.21", "AutoCAD Release 2.21", 6 },
@@ -46,43 +48,45 @@ const struct dwg_versions dwg_versions[] = {
   { R_9,	"r9",    "AC1004", "AutoCAD Release 9", 0xb },
   { R_9c1,	"r9c1",  "AC1005", "AutoCAD Release 9c1", 0xc },
   { R_10,	"r10",   "AC1006", "AutoCAD Release 10", 0xd },
-  { R_10c1,	"r10c1", "AC1007", "AutoCAD Release 10c1", 0xe },
-  { R_10c2,	"r10c2", "AC1008", "AutoCAD Release 10c2", 0xf },
+  { R_11b1,	"r11b1", "AC1007", "AutoCAD 11 beta 1", 0xe },
+  { R_11b2,	"r11b2", "AC1008", "AutoCAD 11 beta 2", 0xf },
   { R_11,	"r11",   "AC1009", "AutoCAD Release 11/12 (LT R1/R2)", 0x10 },
-  { R_12,	"r12",   "AC1010", "AutoCAD Release 12", 0x11 },
-  { R_12c1,	"r12c1", "AC1011", "AutoCAD Release 12c1", 0x12 },
+  { R_13b1,	"r13b1", "AC1010", "AutoCAD pre-R13 a", 0x11 },
+  { R_13b2,	"r13b2", "AC1011", "AutoCAD pre-R13 b", 0x12 },
   { R_13,	"r13",   "AC1012", "AutoCAD Release 13", 0x13 },
-  { R_13c3,	"r13c3", "AC1013", "AutoCAD Release 13C3", 0x14 },
+  { R_13c3,	"r13c3", "AC1013", "AutoCAD Release 13c3", 0x14 },
   { R_14,	"r14",   "AC1014", "AutoCAD Release 14", 0x15 },
-  //{ R_2000b,	"r2000b","AC1015", "AutoCAD Release 2000 (beta)", 0x16 },
+  { R_2000b,	"r2000b","AC1500", "AutoCAD 2000 beta", 0x16 },
   { R_2000,	"r2000", "AC1015", "AutoCAD Release 2000", 0x17 },
   { R_2000i,	"r2000i","AC1016", "AutoCAD Release 2000i", 0x17 },
   { R_2002,	"r2002", "AC1017", "AutoCAD Release 2002", 0x18 },
-  //{ R_2004b,	"r2004b","AC1018", "AutoCAD Release 2004 (beta)", 0x18 },
+  { R_2004a,	"r2004a","AC402a", "AutoCAD 2004 alpha a", 0x18 },
+  { R_2004b,	"r2004b","AC402b", "AutoCAD 2004 alpha b", 0x18 },
+  { R_2004c,	"r2004c","AC1018", "AutoCAD 2004 beta", 0x18 },
   // (includes versions AC1019/0x19 and AC1020/0x1a)
   { R_2004,	"r2004", "AC1018", "AutoCAD Release 2004", 0x19 },
-  { R_2005,	"r2005", "AC1019", "AutoCAD Release 2005", 0x19 },
-  { R_2006,	"r2006", "AC1020", "AutoCAD Release 2006", 0x1a },
-  //{ R_2007b,	"r2007b","AC1021", "AutoCAD Release 2007 (beta)", 0x1a },
+  { R_2005,	"r2005", "AC1019", "AutoCAD 2005", 0x19 }, // not seen
+  { R_2006,	"r2006", "AC1020", "AutoCAD 2006", 0x19 }, // not seen
+  { R_2007b,	"r2007b","AC1021", "AutoCAD 2007 beta", 0x1a },
   { R_2007,	"r2007", "AC1021", "AutoCAD Release 2007", 0x1b },
-  { R_2008,	"r2008", "AC1022", "AutoCAD Release 2008", 0x1b },
-  { R_2009,	"r2009", "AC1023", "AutoCAD Release 2009", 0x1c },
-  //{ R_2010b,	"r2010b","AC1024", "AutoCAD Release 2010 (beta)", 0x1c },
+  { R_2008,	"r2008", "AC1022", "AutoCAD 2008", 0x1b }, // not seen
+  { R_2009,	"r2009", "AC1023", "AutoCAD 2009", 0x1b }, // not seen
+  { R_2010b,	"r2010b","AC1024", "AutoCAD 2010 beta", 0x1c },
   { R_2010,	"r2010", "AC1024", "AutoCAD Release 2010", 0x1d },
-  { R_2011,	"r2011", "AC1025", "AutoCAD Release 2011", 0x1d },
-  { R_2012,	"r2012", "AC1026", "AutoCAD Release 2012", 0x1e },
-  //{ R_2013b,	"r2013b","AC1027", "AutoCAD Release 2013 (beta)", 0x1e },
+  { R_2011,	"r2011", "AC1025", "AutoCAD 2011", 0x1d }, // not seen
+  { R_2012,	"r2012", "AC1026", "AutoCAD 2012", 0x1e }, // not seen
+  { R_2013b,	"r2013b","AC1027", "AutoCAD 2013 beta", 0x1e },
   { R_2013,	"r2013", "AC1027", "AutoCAD Release 2013", 0x1f },
-  { R_2014,	"r2014", "AC1028", "AutoCAD Release 2014", 0x1f },
-  { R_2015,	"r2015", "AC1029", "AutoCAD Release 2015", 0x1f },
-  { R_2016,	"r2016", "AC1030", "AutoCAD Release 2016", 0x1f },
-  { R_2017,	"r2017", "AC1031", "AutoCAD Release 2017", 0x20 },
-  //{ R_2018b,	"r2018b","AC1032", "AutoCAD Release 2018 (beta)", 0x20 },
+  { R_2014,	"r2014", "AC1028", "AutoCAD 2014", 0x1f }, // not seen
+  { R_2015,	"r2015", "AC1029", "AutoCAD 2015", 0x1f }, // not seen
+  { R_2016,	"r2016", "AC1030", "AutoCAD 2016", 0x1f }, // not seen
+  { R_2017,	"r2017", "AC1031", "AutoCAD 2017", 0x20 }, // not seen
+  { R_2018b,	"r2018b","AC1032", "AutoCAD 2018 beta", 0x20 },
   { R_2018,	"r2018", "AC1032", "AutoCAD Release 2018", 0x21 },
-  { R_2019,	"r2019", "AC1033", "AutoCAD Release 2019", 0x22 },
-  { R_2020,	"r2020", "AC1034", "AutoCAD Release 2020", 0x23 },
-  { R_2021,	"r2021", "AC1035", "AutoCAD Release 2021", 0x23 },
-  { R_2022,	"r2022", "AC103-4", "AutoCAD Release 2022 (?)", 0x24 },
+  { R_2019,	"r2019", "AC1033", "AutoCAD Release 2019", 0x22 }, // not seen
+  { R_2020,	"r2020", "AC1034", "AutoCAD Release 2020", 0x23 }, // not seen
+  { R_2021,	"r2021", "AC1035", "AutoCAD Release 2021", 0x23 }, // not seen
+  { R_2022,	"r2022", "AC103-4", "AutoCAD 2022 beta?",  0x24 }, // saw just the magic
   { R_AFTER,    "r>2022", NULL,    "AutoCAD Release >2022", 0 },
 };
 
@@ -121,6 +125,16 @@ dwg_sentinel (Dwg_Sentinel s)
   return (sentinels[s]);
 }
 
+const struct dwg_versions*
+dwg_version_struct (const Dwg_Version_Type version)
+{
+  if (version < R_AFTER)
+    return &dwg_versions[version];
+  else
+    return NULL;
+}
+
+/* Returns the AC header magic string [6] */
 const char*
 dwg_version_codes (const Dwg_Version_Type version)
 {
@@ -131,13 +145,13 @@ dwg_version_codes (const Dwg_Version_Type version)
 }
 
 // map [rVER] to our enum number, not the dwg->header.dwgversion
-// Acad 2018 offers SaveAs DWG: 2018,2013,2010,2007,2004,2004,2000,r14
-//                         DXF: 2018,2013,2010,2007,2004,2004,2000,r12
+// Acad 2018 offers SaveAs DWG: 2018,2013,2010,2007,2004,2000,r14
+//                         DXF: 2018,2013,2010,2007,2004,2000,r12
 // libdxfrw dwg2dxf offers R12, v2000, v2004, v2007, v2010
 EXPORT Dwg_Version_Type
 dwg_version_as (const char *version)
 {
-  for (int i = 0; i < R_AFTER; i++)
+  for (int i = R_AFTER-1; i > 0; i--)
     {
       if (strEQ (dwg_versions[i].type, version))
         return dwg_versions[i].r;
@@ -145,7 +159,7 @@ dwg_version_as (const char *version)
   return R_INVALID;
 }
 
-/** The reverse of dwg_version_as(char*) */
+/** The reverse of dwg_version_as (char*) */
 EXPORT const char *
 dwg_version_type (const Dwg_Version_Type version)
 {
@@ -155,14 +169,28 @@ dwg_version_type (const Dwg_Version_Type version)
     return "invalid after";
 }
 
-/** The version from the magic char[6] header. */
+/** The version from the magic char[6] header.
+    The proper release must then be set when we read the dwg_version also. */
 EXPORT Dwg_Version_Type
 dwg_version_hdr_type (const char *hdr)
 {
-  for (int i = 1; i < R_AFTER; i++)
+  for (int i = R_AFTER-1; i > 0; i--)
     {
       if (strEQ (dwg_versions[i].hdr, hdr))
         return dwg_versions[i].r;
+    }
+  return R_INVALID;
+}
+
+/** The version from the magic char[6] header and the matching dwg_version number. */
+Dwg_Version_Type
+dwg_version_hdr_type2 (const char *hdr, unsigned dwg_version)
+{
+  for (int i = R_AFTER-1; i > 0; i--)
+    {
+      if (strEQ (dwg_versions[i].hdr, hdr))
+        if (!dwg_version || dwg_versions[i].dwg_version == dwg_version)
+          return dwg_versions[i].r;
     }
   return R_INVALID;
 }

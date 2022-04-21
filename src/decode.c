@@ -139,7 +139,7 @@ EXPORT int
 dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int i;
-  char version[8];
+  char magic[8];
 
   dwg->num_object_refs = 0;
   // dwg->num_layers = 0; // see now dwg->layer_control->num_entries
@@ -166,7 +166,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   dwg->dirty_refs = 1;
 
-  //memset (&dwg->header, 0, sizeof (dwg->header)); // no, needed for version
+  //memset (&dwg->header, 0, sizeof (dwg->header)); // no, needed for magic
   memset (&dwg->header_vars, 0, sizeof (dwg->header_vars));
   memset (&dwg->summaryinfo, 0, sizeof (dwg->summaryinfo));
   memset (&dwg->r2004_header, 0, sizeof (dwg->r2004_header));
@@ -198,25 +198,25 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_ERROR ("dwg too small: %lu bytes", dat->size);
       return DWG_ERR_INVALIDDWG;
     }
-  strncpy (version, (const char *)dat->chain, 6);
+  strncpy (magic, (const char *)dat->chain, 6);
   if (memcmp (dat->chain, "AC103-4", 7) == 0)
     {
-      version[6] = '4';
-      version[7] = '\0';
+      magic[6] = '4';
+      magic[7] = '\0';
     }
   else
-    version[6] = '\0';
+    magic[6] = '\0';
 
-  dwg->header.from_version = dwg_version_hdr_type(version);
+  dwg->header.from_version = dwg_version_hdr_type (magic);
   if (!dwg->header.from_version)
     {
-      if (strncmp (version, "AC", 2)) // let's ignore MC0.0 for now
+      if (strncmp (magic, "AC", 2)) // let's ignore MC0.0 for now
         {
-          LOG_ERROR ("Invalid DWG, magic: %s", version);
+          LOG_ERROR ("Invalid DWG, magic: %s", magic);
         }
       else
         {
-          LOG_ERROR ("Invalid or unimplemented DWG version code %s", version);
+          LOG_ERROR ("Invalid or unimplemented DWG version code %s", magic);
         }
       return DWG_ERR_INVALIDDWG;
     }
@@ -225,7 +225,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       dat->version = dwg->header.version = dat->from_version;
     }
-  LOG_INFO ("This file's version code is: %s (%s)\n", version,
+  LOG_INFO ("This file's version code is: %s (%s)\n", magic,
             dwg_version_type (dat->from_version))
 
 #define WE_CAN                                                                \
@@ -234,12 +234,10 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   PRE (R_13)
   {
-    LOG_ERROR (WE_CAN "We don't decode many entities and no blocks yet.")
 #ifndef IS_RELEASE
     return decode_preR13 (dat, dwg);
 #endif
   }
-
   VERSIONS (R_13, R_2000) { return decode_R13_R2000 (dat, dwg); }
   VERSION (R_2004) { return decode_R2004 (dat, dwg); }
   VERSION (R_2007) { return decode_R2007 (dat, dwg); }
@@ -251,7 +249,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   // This line should not be reached
   LOG_ERROR ("LibreDWG does not support this DWG version: %s (%s).",
-	     version, dwg_version_type (dat->from_version))
+	     magic, dwg_version_type (dat->from_version))
   return DWG_ERR_INVALIDDWG;
 }
 

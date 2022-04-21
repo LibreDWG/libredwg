@@ -1112,29 +1112,24 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           // Note: Here version is still R_INVALID, thus pair->value.s
           // is never TU.
           const char *version = pair->value.s;
-          for (Dwg_Version_Type v = R_INVALID; v <= R_AFTER;
-               vi = (int)v, vi++, v = (Dwg_Version_Type)vi)
+          dat->from_version = dwg->header.from_version = dwg_version_hdr_type (version);
+          is_tu = dat->from_version >= R_2007;
+          LOG_TRACE ("HEADER.from_version = %s,\tdat->from_version = %s\n",
+                     dwg_version_codes (dwg->header.from_version),
+                     dwg_version_codes (dat->from_version));
+          if (dat->from_version == R_INVALID)
             {
-		if (strEQ (version, dwg_version_codes (v)))
-                {
-                  dat->from_version = dwg->header.from_version = v;
-                  is_tu = dat->version >= R_2007;
-                  LOG_TRACE ("HEADER.from_version = %s,\tdat->from_version = %s\n",
-                             dwg_version_codes (dwg->header.from_version),
-                             dwg_version_codes (dat->from_version));
-                  if (is_tu && dwg->num_objects
-                      && dwg->object[0].fixedtype == DWG_TYPE_BLOCK_HEADER)
-                    {
-                      Dwg_Object_BLOCK_HEADER *o
-                          = dwg->object[0].tio.object->tio.BLOCK_HEADER;
-                      free (o->name);
-                      o->name
-                        = (char *)bit_utf8_to_TU ((char *)"*Model_Space", 0);
-                    }
-                  break;
-                }
-              if (v == R_AFTER)
-                LOG_ERROR ("Invalid HEADER: 9 %s, 1 %s", field, version)
+              LOG_ERROR ("Invalid HEADER: 9 %s, 1 %s", field, version)
+              exit (1);
+            }
+          if (is_tu && dwg->num_objects
+              && dwg->object[0].fixedtype == DWG_TYPE_BLOCK_HEADER)
+            {
+              Dwg_Object_BLOCK_HEADER *o
+                = dwg->object[0].tio.object->tio.BLOCK_HEADER;
+              free (o->name);
+              o->name
+                = (char *)bit_utf8_to_TU ((char *)"*Model_Space", 0);
             }
           // currently we can only encode DWGs to r13-r2000, but DXF's to almost everything.
           if (dwg->header.from_version >= R_13 && dwg->header.from_version <= R_2000)
@@ -1344,6 +1339,7 @@ dxf_fixup_header (Dwg_Data *dwg)
 {
   Dwg_Header_Variables *vars = &dwg->header_vars;
   Dwg_Header *hdr = &dwg->header;
+  const struct dwg_versions *_verp = dwg_version_struct (dwg->header.version);
   // Dwg_AuxHeader *aux = &dwg->auxheader;
   LOG_TRACE ("dxf_fixup_header\n");
 
@@ -1473,6 +1469,8 @@ dxf_fixup_header (Dwg_Data *dwg)
   // maint_version: 0x8 [RC 0]
   // codepage: 30 [RS 0]
 
+  if (_verp)
+    hdr->dwg_version = _verp->dwg_version;
   if (hdr->version <= R_14)
     hdr->is_maint = 0x0;
   else if (hdr->version <= R_2000)
@@ -1480,7 +1478,8 @@ dxf_fixup_header (Dwg_Data *dwg)
       hdr->is_maint = 0xf; // 0x6 - 0xf
       hdr->zero_one_or_three = 1;
       hdr->thumbnail_address = 220;
-      hdr->dwg_version = 0x21;
+      if (!hdr->dwg_version)
+        hdr->dwg_version = 0x21;
       hdr->maint_version = 0x8;
     }
   else if (hdr->version <= R_2004)
