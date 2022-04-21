@@ -14574,6 +14574,42 @@ static int test_LINEARPARAMETERENTITY (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_LOAD (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_LOAD *restrict load = obj->tio.entity->tio.LOAD;
+  failed = 0;
+  if (!obj_obj || !load)
+    {
+      fail ("NULL LOAD");
+      return 1;
+    }
+  {
+    BITCODE_TV file_name;
+    if (dwg_dynapi_entity_value (load, "LOAD", "file_name", &file_name, NULL)
+        && file_name
+           ? strEQ ((char *)file_name, (char *)load->file_name)
+           : !load->file_name)
+      pass ();
+    else
+      fail ("LOAD.file_name [TV] '%s' <> '%s'", file_name, load->file_name);
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (load, "LOAD", "parent", &parent, NULL)
+        && !memcmp (&parent, &load->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("LOAD.parent [struct _dwg_object_entity*]");
+  }
+  if (failed && (is_class_unstable ("LOAD") || is_class_debugging ("LOAD")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "LOAD", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_LOFTEDSURFACE (const Dwg_Object *obj)
 {
   int error = 0;
@@ -21368,6 +21404,21 @@ static int test_SHAPE (const Dwg_Object *obj)
         pass ();
     else
         fail ("SHAPE.extrusion [BE]");
+  }
+  {
+    BITCODE_RD height_pre2;
+    if (dwg_dynapi_entity_value (shape, "SHAPE", "height_pre2", &height_pre2, NULL)
+        && height_pre2 == shape->height_pre2)
+      pass ();
+    else
+      fail ("SHAPE.height_pre2 [RD] %g != %g", shape->height_pre2, height_pre2);
+    height_pre2++;
+    if (dwg_dynapi_entity_set_value (shape, "SHAPE", "height_pre2", &height_pre2, 0)
+        && height_pre2 == shape->height_pre2)
+      pass ();
+    else
+      fail ("SHAPE.height_pre2 [RD] set+1 %g != %g", shape->height_pre2, height_pre2);
+    shape->height_pre2--;
   }
   {
     BITCODE_3BD ins_pt;
@@ -62961,6 +63012,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_LINEARGRIPENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_LINEARPARAMETERENTITY)
     error += test_LINEARPARAMETERENTITY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_LOAD)
+    error += test_LOAD(obj);
   else  if (obj->fixedtype == DWG_TYPE_LOFTEDSURFACE)
     error += test_LOFTEDSURFACE(obj);
   else  if (obj->fixedtype == DWG_TYPE_LWPOLYLINE)
@@ -63587,6 +63640,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_LINEARGRIPENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_LINEARPARAMETERENTITY)
     error += test_LINEARPARAMETERENTITY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_LOAD)
+    error += test_LOAD (obj);
   else  if (obj->fixedtype == DWG_TYPE_LOFTEDSURFACE)
     error += test_LOFTEDSURFACE (obj);
   else  if (obj->fixedtype == DWG_TYPE_LWPOLYLINE)
@@ -64463,6 +64518,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_LINEARPARAMETERENTITY): %d != "
                "dwg_dynapi_fields_size (\"LINEARPARAMETERENTITY\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_LOAD);
+  size2 = dwg_dynapi_fields_size ("LOAD");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_LOAD): %d != "
+               "dwg_dynapi_fields_size (\"LOAD\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_LOFTEDSURFACE);

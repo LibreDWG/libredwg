@@ -42,6 +42,7 @@ dxf_test_LDADD = $(LDADD) \
 common_test_LDADD =
 
 testobjects = \
+	load \
 	3dline \
 	repeat \
 	endrep \

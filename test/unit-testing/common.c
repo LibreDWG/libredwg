@@ -141,6 +141,8 @@ main (int argc, char *argv[])
           = { "example_2000.dwg", "example_2004.dwg", "example_2007.dwg",
               "example_2010.dwg", "example_2013.dwg", "example_2018.dwg",
               "example_r14.dwg",
+              /* "example_r13.dwg", "example_r11.dwg" "example_r10.dwg",
+                 "example_r9.dwg", "example_r2.6.dwg" */
               //"2000/PolyLine2D.dwg",
               //"2007/PolyLine3D.dwg",
               NULL };
@@ -509,6 +511,10 @@ main (int argc, char *argv[])
               error += test_code_nodist (
                   prefix, "../test-old/2004/from_uloz.to/Klánovice_RD_A.dwg",
                   cov);
+            }
+          if (DWG_TYPE == DWG_TYPE_LOAD)
+            {
+              error += test_code (prefix, "r1.4/entities.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_DGNDEFINITION)
             {

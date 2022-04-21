@@ -2548,6 +2548,21 @@ struct _dwg_object_entity*
 @end vtable
 @end indentedblock
 
+@strong{LOAD} @anchor{LOAD}
+@cindex entity, LOAD
+@vindex LOAD
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item file_name
+TV,	DXF 1
+
+@end vtable
+@end indentedblock
+
 @strong{LOFTEDSURFACE} @anchor{LOFTEDSURFACE}
 @cindex entity, LOFTEDSURFACE
 @vindex LOFTEDSURFACE
@@ -3930,6 +3945,8 @@ BS
 BE,	DXF 210
 @item style
 H,	DXF 7
+@item height_pre2
+RD
 
 @end vtable
 @end indentedblock

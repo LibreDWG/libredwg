@@ -93,6 +93,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "LINE",                      "LINE",                       DWG_TYPE_LINE,	1,	STABLE
 "LINEARGRIPENTITY",          "LINEARGRIPENTITY",           DWG_TYPE_LINEARGRIPENTITY,	1,	DEBUGGING
 "LINEARPARAMETERENTITY",     "LINEARPARAMETERENTITY",      DWG_TYPE_LINEARPARAMETERENTITY,	1,	DEBUGGING
+"LOAD",                      "LOAD",                       DWG_TYPE_LOAD,	1,	STABLE
 "LOFTEDSURFACE",             "LOFTEDSURFACE",              DWG_TYPE_LOFTEDSURFACE,	1,	DEBUGGING
 "LWPOLYLINE",                "LWPOLYLINE",                 DWG_TYPE_LWPOLYLINE,	1,	STABLE
 "MESH",                      "MESH",                       DWG_TYPE_MESH,	1,	STABLE
