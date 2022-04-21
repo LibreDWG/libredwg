@@ -879,23 +879,13 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       t = &tokens->tokens[tokens->index];
       if (strEQc (key, "version"))
         {
-          Dwg_Version_Type v;
-          int vi; // C++ quirks
           version[0] = '\0';
           json_fixed_key (version, dat, tokens);
-          // set version's (with C++ quirks)
-          for (v = R_INVALID; v <= R_AFTER; vi = (int)v, vi++, v = (Dwg_Version_Type)vi)
-            {
-	      if (strEQ (version, dwg_version_codes (v)))
-                {
-                  dat->from_version = dwg->header.from_version = v;
-                  // is_tu = dat->version >= R_2007;
-                  LOG_TRACE ("FILEHEADER.from_version = %s (%s)\n",
-                             version, dwg_version_type (v));
-                  break;
-                }
-            }
-          if (v == R_AFTER)
+          dat->from_version = dwg->header.from_version = dwg_version_hdr_type (version);
+          // is_tu = dat->from_version >= R_2007;
+          LOG_TRACE ("FILEHEADER.from_version = %s (%s)\n",
+                     version, dwg_version_type (dat->from_version));
+          if (dat->from_version == R_INVALID)
             {
               LOG_ERROR ("Invalid FILEHEADER.version %s", version);
               exit (1);
@@ -942,6 +932,16 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       }
     }
   LOG_TRACE ("End of %s\n", section)
+  // revised beta version
+  {
+    Dwg_Version_Type v = dwg_version_hdr_type2 (version, _obj->dwg_version);
+    if (v != R_INVALID && v != dwg->header.from_version)
+      {
+        dat->from_version = dwg->header.from_version = v;
+        LOG_TRACE ("FILEHEADER.from_version = %s (%s) via dwg_version\n",
+                   version, dwg_version_type (v));
+      }
+  }
   tokens->index--;
   return 0;
 }
