@@ -2315,6 +2315,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     entities_end = dat->byte;
     LOG_TRACE ("entities %u 0x%x - 0x%x\n", num_entities, entities_start,
                entities_end);
+    pvzadr = dat->byte;
 
     SINCE (R_2_0) {
       encode_preR13_section (SECTION_BLOCK, dat, dwg);
@@ -2337,12 +2338,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       bit_write_RL (dat, blocks_max);
       LOG_TRACE ("blocks   0x%x (%d) - 0x%x (0x%x, 0x%x)\n", blocks_start,
                  blocks_end - blocks_start, blocks_end, blocks_offset, blocks_max);
+      dat->byte = pvzadr;
     }
     VERSIONS (R_2_0, R_9c1) {
       dat->byte = hdr_offset + (3 * 8);
       bit_write_RS (dat, num_entities);
+      dat->byte = pvzadr;
     }
-    dat->byte = pvzadr;
     return error;
   }
   VERSIONS (R_13, R_2004)
@@ -3694,7 +3696,10 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
         case 9:
           error |= dwg_encode_TRACE (dat, obj);
           break;
-        /* 10: load (convert from pre AC1.50) */
+        case 10:
+          /* convert from pre r2.0 */
+          error |= dwg_encode_LOAD (dat, obj);
+          break;
         case 11:
           error |= dwg_encode_SOLID (dat, obj);
           break;
