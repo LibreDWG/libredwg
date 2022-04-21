@@ -355,7 +355,12 @@ Dwg_Handle *dwg_find_first_type_handle (Dwg_Data *restrict dwg,
 // sets ext to the char behind the last "." of filepath
 char *split_filepath (const char *filepath, char **extp);
 
+const struct dwg_versions* dwg_version_struct (const Dwg_Version_Type version);
+/* Returns the AC header magic string [6] */
 const char* dwg_version_codes (const Dwg_Version_Type version);
+/* Finds version from the magic char[6] header and the matching
+   dwg_version number. */
+Dwg_Version_Type dwg_version_hdr_type2 (const char *hdr, unsigned dwg_version);
 
 // converts TIMEBLL to struct tm. useful for asctime(tm) or strftime
 struct tm * cvt_TIMEBLL (struct tm *tm, BITCODE_TIMEBLL date);

@@ -3252,7 +3252,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         ENDTAB ();
       }
   }
-  SINCE (R_10c1)
+  SINCE (R_11b1)
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_APPID_CONTROL);
     if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.APPID_CONTROL)
@@ -3277,7 +3277,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         ENDTAB ();
       }
   }
-  SINCE (R_10c1)
+  SINCE (R_11b1)
   {
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_DIMSTYLE_CONTROL);
     if (ctrl && ctrl->tio.object && ctrl->tio.object->tio.DIMSTYLE_CONTROL)

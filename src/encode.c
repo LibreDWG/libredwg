@@ -2187,17 +2187,20 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   dat->byte += 6;
 
   {
+    // set dwg_version from release
+    const struct dwg_versions *_verp = dwg_version_struct (dwg->header.version);
     Dwg_Header *_obj = &dwg->header;
     Dwg_Object *obj = NULL;
     if (!_obj->dwg_version) // ie from DXF
       {
         _obj->zero_one_or_three = 1;
-        _obj->dwg_version = 0x21;
-        _obj->is_maint = 0xf;
-        _obj->maint_version = 29;
-        if (dwg->header.version < R_13)
+        if (_verp)
+          _obj->dwg_version = _verp->dwg_version;
+        if (dwg->header.version > R_13)
           {
-            _obj->dwg_version = 0x14;
+            // can be improved with r2004 by another lookup table
+            _obj->is_maint = 0xf;
+            _obj->maint_version = 29;
           }
         /*
         switch (dwg->header.version)
@@ -2250,7 +2253,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           case R_1_2:
           case R_1_3:
           case R_1_4:
-          case R_1_402b:
           case R_2_0:
           case R_2_1:
           case R_2_21:
@@ -2259,10 +2261,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           case R_2_5:
           case R_2_6:
           case R_9c1:
-          case R_10c1:
-          case R_10c2:
+          case R_11b1:
+          case R_11b2:
           case R_12:
-          case R_12c1:
           default:
             break;
           }
@@ -2287,21 +2288,25 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   {
     BITCODE_RS num_entities;
     BITCODE_RL hdr_offset;
-    LOG_ERROR (WE_CAN "We cannot encode preR13 DWG's yet"); // but we are trying
+    // but we are trying. it really is trivial
+    LOG_ERROR (WE_CAN "We cannot encode preR13 DWG's yet");
     entities_start = entities_end = blocks_start = blocks_end = 0xFFFF;
-    bit_write_RL (dat, entities_start);
-    bit_write_RL (dat, entities_end);
-    bit_write_RL (dat, blocks_start);
-    bit_write_RL (dat, blocks_offset);
-    bit_write_RL (dat, blocks_end);
-    //blocks_size = blocks_end - blocks_start;
-    bit_write_RL (dat, blocks_max);
 
-    encode_preR13_section_hdr ("BLOCK", SECTION_BLOCK, dat, dwg);
-    encode_preR13_section_hdr ("LAYER", SECTION_LAYER, dat, dwg);
-    encode_preR13_section_hdr ("STYLE", SECTION_STYLE, dat, dwg);
-    encode_preR13_section_hdr ("LTYPE", SECTION_LTYPE, dat, dwg);
-    encode_preR13_section_hdr ("VIEW", SECTION_VIEW, dat, dwg);
+    SINCE (R_2_0) {
+      bit_write_RL (dat, entities_start);
+      bit_write_RL (dat, entities_end);
+      bit_write_RL (dat, blocks_start);
+      bit_write_RL (dat, blocks_offset);
+      bit_write_RL (dat, blocks_end);
+      //blocks_size = blocks_end - blocks_start;
+      bit_write_RL (dat, blocks_max);
+
+      encode_preR13_section_hdr ("BLOCK", SECTION_BLOCK, dat, dwg);
+      encode_preR13_section_hdr ("LAYER", SECTION_LAYER, dat, dwg);
+      encode_preR13_section_hdr ("STYLE", SECTION_STYLE, dat, dwg);
+      encode_preR13_section_hdr ("LTYPE", SECTION_LTYPE, dat, dwg);
+      encode_preR13_section_hdr ("VIEW", SECTION_VIEW, dat, dwg);
+    }
 
     hdr_offset = dat->byte;
     encode_preR13_header_variables (dat, dwg);
@@ -2311,27 +2316,28 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_TRACE ("entities %u 0x%x - 0x%x\n", num_entities, entities_start,
                entities_end);
 
-    encode_preR13_section (SECTION_BLOCK, dat, dwg);
-    encode_preR13_section (SECTION_LAYER, dat, dwg);
-    encode_preR13_section (SECTION_STYLE, dat, dwg);
-    encode_preR13_section (SECTION_LTYPE, dat, dwg);
-    encode_preR13_section (SECTION_VIEW, dat, dwg);
-    blocks_start = dat->byte;
-    encode_preR13_entities (blocks_start, dat, dwg);
-    blocks_end = dat->byte;
+    SINCE (R_2_0) {
+      encode_preR13_section (SECTION_BLOCK, dat, dwg);
+      encode_preR13_section (SECTION_LAYER, dat, dwg);
+      encode_preR13_section (SECTION_STYLE, dat, dwg);
+      encode_preR13_section (SECTION_LTYPE, dat, dwg);
+      encode_preR13_section (SECTION_VIEW, dat, dwg);
+      blocks_start = dat->byte;
+      encode_preR13_entities (blocks_start, dat, dwg);
+      blocks_end = dat->byte;
 
-    // patch these numbers into the header
-    pvzadr = dat->byte;
-    dat->byte = 0x14;
-    bit_write_RL (dat, entities_start);
-    bit_write_RL (dat, entities_end);
-    bit_write_RL (dat, blocks_start);
-    bit_write_RL (dat, blocks_offset);
-    bit_write_RL (dat, blocks_end);
-    bit_write_RL (dat, blocks_max);
-    LOG_TRACE ("blocks   0x%x (%d) - 0x%x (0x%x, 0x%x)\n", blocks_start,
-               blocks_end - blocks_start, blocks_end, blocks_offset, blocks_max);
-
+      // patch these numbers into the header
+      pvzadr = dat->byte;
+      dat->byte = 0x14;
+      bit_write_RL (dat, entities_start);
+      bit_write_RL (dat, entities_end);
+      bit_write_RL (dat, blocks_start);
+      bit_write_RL (dat, blocks_offset);
+      bit_write_RL (dat, blocks_end);
+      bit_write_RL (dat, blocks_max);
+      LOG_TRACE ("blocks   0x%x (%d) - 0x%x (0x%x, 0x%x)\n", blocks_start,
+                 blocks_end - blocks_start, blocks_end, blocks_offset, blocks_max);
+    }
     VERSIONS (R_2_0, R_9c1) {
       dat->byte = hdr_offset + (3 * 8);
       bit_write_RS (dat, num_entities);
