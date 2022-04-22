@@ -386,6 +386,10 @@
 #  define VALUE_TV0(name, dxf) VALUE_TV (name, dxf)
 #endif
 
+#ifndef FIELD_2RD_1
+#  define FIELD_2RD_1(nam, dxf) FIELD_2RD (nam, dxf)
+#endif
+
 // double to text
 #ifndef FIELD_D2T
 #  define FIELD_D2T(name, dxf) FIELD_TV (name, dxf)

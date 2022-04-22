@@ -1842,12 +1842,14 @@ struct _dwg_object_entity*
 
 @item parent
 struct _dwg_object_entity*
-@item columns
+@item num_cols
 RS,	DXF 70
-@item rows
+@item num_rows
 RS,	DXF 71
-@item start
-2RD,	DXF 40
+@item col_spacing
+RD,	DXF 40
+@item row_spacing
+RD,	DXF 41
 
 @end vtable
 @end indentedblock
@@ -2264,6 +2266,8 @@ RS,	DXF 71
 RD,	DXF 44
 @item row_spacing
 RD,	DXF 45
+@item block_name
+TV,	DXF 2
 
 @end vtable
 @end indentedblock

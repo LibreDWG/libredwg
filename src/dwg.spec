@@ -519,13 +519,17 @@ DWG_ENTITY_END
 DWG_ENTITY (BLOCK)
 
   SUBCLASS (AcDbBlockBegin)
-  PRE (R_13) {
+  PRE (R_2_0b) {
+    FIELD_TV (name, 2);
+    FIELD_2RD (base_pt, 10);
+  }
+  VERSIONS (R_2_0b, R_11) {
     FIELD_2RD (base_pt, 10);
     FIELD_TV (name, 2);
     if (R11OPTS(2))
       FIELD_TV (xref_pname, 3);
   }
-  LATER_VERSIONS {
+  SINCE (R_13b1) {
     BLOCK_NAME (name, 2) //special pre-R13 naming rules
     COMMON_ENTITY_HANDLE_DATA;
   }
@@ -590,7 +594,13 @@ DWG_ENTITY (INSERT)
     FIELD_RS0 (has_attribs, 66);
     FIELD_HANDLE_NAME (block_header, 2, BLOCK_HEADER);
 #endif
-  PRE (R_13) {
+  PRE (R_2_0b) {
+    FIELD_TV (block_name, 2);
+    FIELD_2RD (ins_pt, 10);
+    FIELD_2RD_1 (scale, 41);
+    FIELD_RD (rotation, 50);
+  }
+  VERSIONS (R_2_0b, R_11) {
     DECODER { FIELD_VALUE (has_attribs) = R11FLAG (128); }
     FIELD_HANDLE (block_header, 2, 2);
     FIELD_2RD (ins_pt, 10);
@@ -618,7 +628,8 @@ DWG_ENTITY (INSERT)
     if (R11OPTS (128)) {
       FIELD_RD (row_spacing, 45);
     }
-  } else {
+  }
+  SINCE (R_13) {
     FIELD_3DPOINT (ins_pt, 10);
   }
   VERSIONS (R_13, R_14)
@@ -10852,29 +10863,22 @@ DWG_ENTITY_END
 
 /* (none/5) pre r2.1 only */
 DWG_ENTITY (REPEAT)
-
-  COMMON_ENTITY_HANDLE_DATA;
-
+  //COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 /* (none/6) pre r2.1 only */
 DWG_ENTITY (ENDREP)
-
-  FIELD_RS (columns, 70);
-  FIELD_RS (rows, 71);
-  FIELD_2RD (start, 40);
-
-  COMMON_ENTITY_HANDLE_DATA;
-
+  FIELD_RS (num_cols, 70);
+  FIELD_RS (num_rows, 71);
+  FIELD_RD (col_spacing, 40);
+  FIELD_RD (row_spacing, 41);
+  //COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 /* (none/10) pre r2.0 only */
 DWG_ENTITY (LOAD)
-
   FIELD_TV (file_name, 1);
-
-  COMMON_ENTITY_HANDLE_DATA;
-
+  //COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 DWG_OBJECT (POINTCLOUDDEF)

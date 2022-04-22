@@ -643,18 +643,17 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
             "Entity number: %d, Type: %d, Addr: %lx\n",
             obj->index, obj->type, obj->address);
   _obj->entmode = is_block ? 3 : 2; // ent or block
-  FIELD_RC (flag_r11, 70); // mode
-  SINCE (R_2_0) {
+  PRE (R_2_0b) {
+    FIELD_HANDLE (layer, 2, 8);
+    goto entity_end;
+  }
+  SINCE (R_2_0b) {
+    FIELD_RC (flag_r11, 70); // mode
     obj->size = bit_read_RS (dat);
     LOG_TRACE("size: %d [RS]\n", obj->size);
+    FIELD_HANDLE (layer, 1, 8);
+    FIELD_RC (flag2_r11, 0); // extra flags?
   }
-
-  //_obj->layer = dwg_decode_preR13_handleref (dat, 1);
-  //LOG_TRACE("layer.r11: %d [RS 8]\n", _obj->layer->r11_idx);
-  FIELD_HANDLE (layer, 1, 8);
-  FIELD_RC (flag2_r11, 0); // extra flags?
-  PRE (R_2_0)
-    goto entity_end;
   FIELD_RSx (opts_r11, 0); // i.e. dataflags
   if (_obj->flag_r11 & FLAG_R11_COLOR) // 1
     FIELD_RCd (color_r11, 0);
@@ -5416,7 +5415,7 @@ decode_preR13_entities (unsigned long start, unsigned long end,
     {
       Dwg_Object *obj;
       Dwg_Object_Entity *ent, *_ent;
-      BITCODE_RS crc;
+      BITCODE_RS type, crc;
 
       if (!num)
         dwg->object
@@ -5437,8 +5436,17 @@ decode_preR13_entities (unsigned long start, unsigned long end,
       obj->address = offset; // so that the entity know its owner
       obj->supertype = DWG_SUPERTYPE_ENTITY;
 
-      obj->type = bit_read_RC (dat);
-      switch (obj->type)
+      PRE (R_2_0b) {
+        type = obj->type = (BITCODE_RC)bit_read_RS (dat);
+        if ((int8_t)obj->type < 0) // deleted
+          {
+            type = abs ((int8_t)obj->type);
+          }
+      }
+      else
+        type = obj->type = bit_read_RC (dat);
+
+      switch (type)
         {
         case 1:
           error |= dwg_decode_LINE (dat, obj);
@@ -5547,7 +5555,17 @@ decode_preR13_entities (unsigned long start, unsigned long end,
         }
 
       assert (!dat->bit);
-      SINCE (R_2_0) // Pre R_2_0 doesn't contain size of entity
+      PRE (R_2_0b)
+      {
+        if ((int8_t)obj->type < 0) // deleted
+          {
+            obj->fixedtype = DWG_TYPE_UNUSED;
+            dwg->num_entities--; // stats only
+          }
+        if (num + 1 >= dwg->header_vars.num_entities)
+          break;
+      }
+      SINCE (R_2_0b) // Pre R_2_0 doesn't contain size of entity
       {
         SINCE (R_11)
         {
@@ -5571,7 +5589,7 @@ decode_preR13_entities (unsigned long start, unsigned long end,
       LOG_TRACE ("\n");
       num++;
 
-      SINCE (R_2_0) {
+      SINCE (R_2_0b) {
         if (obj->size < 2 || obj->size > 0x1000) { // FIXME
           error |= DWG_ERR_SECTIONNOTFOUND;
           dat->byte = end;

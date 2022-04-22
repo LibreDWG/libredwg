@@ -1395,10 +1395,11 @@ typedef struct _dwg_entity_INSERT
   BITCODE_H*  attribs;
   BITCODE_H   seqend;
 
-  BITCODE_RS  num_cols;
+  BITCODE_RS  num_cols; /* pre-R13 */
   BITCODE_RS  num_rows;
   BITCODE_RD  col_spacing;
   BITCODE_RD  row_spacing;
+  BITCODE_TV  block_name; /* pre-R2.0 */
 } Dwg_Entity_INSERT;
 
 /**
@@ -7905,9 +7906,10 @@ typedef struct _dwg_entity_ENDREP
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_RS columns; // DXF 70
-  BITCODE_RS rows;    // DXF 71
-  BITCODE_2RD start;  // DXF 40|41
+  BITCODE_RS num_cols;     // DXF 70
+  BITCODE_RS num_rows;     // DXF 71
+  BITCODE_RD col_spacing;  // DXF 40
+  BITCODE_RD row_spacing;  // DXF 41
 } Dwg_Entity_ENDREP;
 
 /**
@@ -7917,7 +7919,7 @@ typedef struct _dwg_entity_LOAD
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_T file_name;
+  BITCODE_TV file_name;
 } Dwg_Entity_LOAD;
 
 /**

@@ -573,8 +573,8 @@ int dwg_free_variable_type_private (Dwg_Object *restrict obj)
     {
     #include "objects.inc"
 
-    case DWG_TYPE_FREED: break; // already freed
     case DWG_TYPE_UNUSED:
+    case DWG_TYPE_FREED: break; // already freed
     case DWG_TYPE_ACDSRECORD:
     case DWG_TYPE_ACDSSCHEMA:
     case DWG_TYPE_NPOCOLLECTION:
@@ -770,6 +770,11 @@ free_preR13_object (Dwg_Object *obj)
     case DWG_TYPE_VX_TABLE_RECORD:
       dwg_free_VX_TABLE_RECORD_private (dat, dat, dat, obj);
       break;
+    case DWG_TYPE_LOAD:
+      dwg_free_LOAD_private (dat, dat, dat, obj);
+      break;
+    case DWG_TYPE_UNUSED:
+      // TODO leak
     default:
       LOG_ERROR ("Unhandled preR13 class %s, fixedtype %d in free_preR13_object()",
                  dwg_type_name (obj->fixedtype), (int)obj->fixedtype);

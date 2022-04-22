@@ -1676,12 +1676,14 @@ static const Dwg_DYNAPI_field _dwg_ENDBLK_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ENDREP_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_ENDREP, parent),
     1,1,0, 0 },
-  { "columns",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_ENDREP, columns),
+  { "num_cols",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_ENDREP, num_cols),
     0,0,0, 70 },
-  { "rows",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_ENDREP, rows),
+  { "num_rows",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_ENDREP, num_rows),
     0,0,0, 71 },
-  { "start",	"2RD", sizeof (BITCODE_2RD),  OFF (struct _dwg_entity_ENDREP, start),
-    1,0,0, 40 },
+  { "col_spacing",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_ENDREP, col_spacing),
+    0,0,0, 40 },
+  { "row_spacing",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_ENDREP, row_spacing),
+    0,0,0, 41 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_EXTRUDEDSURFACE: (sorted by offset) */
@@ -2042,6 +2044,8 @@ static const Dwg_DYNAPI_field _dwg_INSERT_fields[] = {
     0,0,0, 44 },
   { "row_spacing",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_INSERT, row_spacing),
     0,0,0, 45 },
+  { "block_name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_INSERT, block_name),
+    1,1,1, 2 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_LARGE_RADIAL_DIMENSION: (sorted by offset) */
@@ -2286,7 +2290,7 @@ static const Dwg_DYNAPI_field _dwg_LINEARPARAMETERENTITY_fields[] = {
 static const Dwg_DYNAPI_field _dwg_LOAD_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_LOAD, parent),
     1,1,0, 0 },
-  { "file_name",	"TV", sizeof (BITCODE_T),  OFF (struct _dwg_entity_LOAD, file_name),
+  { "file_name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_LOAD, file_name),
     1,1,1, 1 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };

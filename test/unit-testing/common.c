@@ -514,8 +514,7 @@ main (int argc, char *argv[])
             }
           if (DWG_TYPE == DWG_TYPE_LOAD)
             {
-              // r1.4 not yet stable
-              //error += test_code (prefix, "r1.4/entities.dwg", cov);
+              error += test_code (prefix, "r1.4/entities.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_DGNDEFINITION)
             {

@@ -10822,19 +10822,49 @@ static int test_ENDREP (const Dwg_Object *obj)
       return 1;
     }
   {
-    BITCODE_RS columns;
-    if (dwg_dynapi_entity_value (endrep, "ENDREP", "columns", &columns, NULL)
-        && columns == endrep->columns)
+    BITCODE_RD col_spacing;
+    if (dwg_dynapi_entity_value (endrep, "ENDREP", "col_spacing", &col_spacing, NULL)
+        && col_spacing == endrep->col_spacing)
       pass ();
     else
-      fail ("ENDREP.columns [RS] %hu != %hu", endrep->columns, columns);
-    columns++;
-    if (dwg_dynapi_entity_set_value (endrep, "ENDREP", "columns", &columns, 0)
-        && columns == endrep->columns)
+      fail ("ENDREP.col_spacing [RD] %g != %g", endrep->col_spacing, col_spacing);
+    col_spacing++;
+    if (dwg_dynapi_entity_set_value (endrep, "ENDREP", "col_spacing", &col_spacing, 0)
+        && col_spacing == endrep->col_spacing)
       pass ();
     else
-      fail ("ENDREP.columns [RS] set+1 %hu != %hu", endrep->columns, columns);
-    endrep->columns--;
+      fail ("ENDREP.col_spacing [RD] set+1 %g != %g", endrep->col_spacing, col_spacing);
+    endrep->col_spacing--;
+  }
+  {
+    BITCODE_RS num_cols;
+    if (dwg_dynapi_entity_value (endrep, "ENDREP", "num_cols", &num_cols, NULL)
+        && num_cols == endrep->num_cols)
+      pass ();
+    else
+      fail ("ENDREP.num_cols [RS] %hu != %hu", endrep->num_cols, num_cols);
+    num_cols++;
+    if (dwg_dynapi_entity_set_value (endrep, "ENDREP", "num_cols", &num_cols, 0)
+        && num_cols == endrep->num_cols)
+      pass ();
+    else
+      fail ("ENDREP.num_cols [RS] set+1 %hu != %hu", endrep->num_cols, num_cols);
+    endrep->num_cols--;
+  }
+  {
+    BITCODE_RS num_rows;
+    if (dwg_dynapi_entity_value (endrep, "ENDREP", "num_rows", &num_rows, NULL)
+        && num_rows == endrep->num_rows)
+      pass ();
+    else
+      fail ("ENDREP.num_rows [RS] %hu != %hu", endrep->num_rows, num_rows);
+    num_rows++;
+    if (dwg_dynapi_entity_set_value (endrep, "ENDREP", "num_rows", &num_rows, 0)
+        && num_rows == endrep->num_rows)
+      pass ();
+    else
+      fail ("ENDREP.num_rows [RS] set+1 %hu != %hu", endrep->num_rows, num_rows);
+    endrep->num_rows--;
   }
   {
     struct _dwg_object_entity* parent;
@@ -10845,27 +10875,19 @@ static int test_ENDREP (const Dwg_Object *obj)
         fail ("ENDREP.parent [struct _dwg_object_entity*]");
   }
   {
-    BITCODE_RS rows;
-    if (dwg_dynapi_entity_value (endrep, "ENDREP", "rows", &rows, NULL)
-        && rows == endrep->rows)
+    BITCODE_RD row_spacing;
+    if (dwg_dynapi_entity_value (endrep, "ENDREP", "row_spacing", &row_spacing, NULL)
+        && row_spacing == endrep->row_spacing)
       pass ();
     else
-      fail ("ENDREP.rows [RS] %hu != %hu", endrep->rows, rows);
-    rows++;
-    if (dwg_dynapi_entity_set_value (endrep, "ENDREP", "rows", &rows, 0)
-        && rows == endrep->rows)
+      fail ("ENDREP.row_spacing [RD] %g != %g", endrep->row_spacing, row_spacing);
+    row_spacing++;
+    if (dwg_dynapi_entity_set_value (endrep, "ENDREP", "row_spacing", &row_spacing, 0)
+        && row_spacing == endrep->row_spacing)
       pass ();
     else
-      fail ("ENDREP.rows [RS] set+1 %hu != %hu", endrep->rows, rows);
-    endrep->rows--;
-  }
-  {
-    BITCODE_2RD start;
-    if (dwg_dynapi_entity_value (endrep, "ENDREP", "start", &start, NULL)
-        && !memcmp (&start, &endrep->start, sizeof (BITCODE_2RD)))
-        pass ();
-    else
-        fail ("ENDREP.start [2RD]");
+      fail ("ENDREP.row_spacing [RD] set+1 %g != %g", endrep->row_spacing, row_spacing);
+    endrep->row_spacing--;
   }
   if (failed && (is_class_unstable ("ENDREP") || is_class_debugging ("ENDREP")))
     {
@@ -12908,6 +12930,16 @@ static int test_INSERT (const Dwg_Object *obj)
         pass ();
     else
         fail ("INSERT.block_header [H]");
+  }
+  {
+    BITCODE_TV block_name;
+    if (dwg_dynapi_entity_value (insert, "INSERT", "block_name", &block_name, NULL)
+        && block_name
+           ? strEQ ((char *)block_name, (char *)insert->block_name)
+           : !insert->block_name)
+      pass ();
+    else
+      fail ("INSERT.block_name [TV] '%s' <> '%s'", block_name, insert->block_name);
   }
   {
     BITCODE_RD col_spacing;
