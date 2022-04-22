@@ -1865,7 +1865,7 @@ DWG_ENTITY (SHAPE)
     FIELD_RD (height_pre2, 0);
     FIELD_RD (oblique_angle, 0);
     FIELD_RS (style_id, 0);
-  } VERSIONS (R_2_0, R_13) {
+  } VERSIONS (R_2_0, R_11) {
     FIELD_HANDLE (style, 5, 0);
     FIELD_2RD (ins_pt, 10);
     FIELD_RS (style_id, 0); // dxf: 2
@@ -1874,7 +1874,7 @@ DWG_ENTITY (SHAPE)
     if (R11OPTS (2))
       FIELD_RD (ins_pt.z, 38);
   }
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_3BD (ins_pt, 10);
     FIELD_BD (scale, 40);  // documented as size
     FIELD_BD0 (rotation, 50);
