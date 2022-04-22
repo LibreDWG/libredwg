@@ -3636,6 +3636,75 @@ AFL_GCC_POP
 #include "dwg.spec"
 // clang-format on
 
+static int encode_preR13_POLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
+{
+  int error = 0;
+  BITCODE_RC flag_r11 = obj->tio.entity->flag_r11;
+  switch (obj->fixedtype)
+    {
+    case DWG_TYPE_VERTEX_2D:
+      error = dwg_encode_VERTEX_2D (dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_3D:
+      error = dwg_encode_VERTEX_3D (dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_MESH:
+      error = dwg_encode_VERTEX_MESH (dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_PFACE:
+      error = dwg_encode_VERTEX_PFACE (dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_PFACE_FACE:
+      error = dwg_encode_VERTEX_PFACE_FACE (dat, obj);
+      break;
+    case DWG_TYPE_POLYLINE_2D:
+      error = dwg_encode_POLYLINE_2D (dat, obj);
+      break;
+    case DWG_TYPE_POLYLINE_3D:
+      error = dwg_encode_POLYLINE_3D (dat, obj);
+      break;
+    default:
+      LOG_ERROR ("Wrong preR13 POLYLINE/VERTEX type %u (flag %u)",
+                 obj->fixedtype, flag_r11);
+      error |= DWG_ERR_VALUEOUTOFBOUNDS;
+    }
+  return error;
+}
+
+static int encode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
+{
+  int error = 0;
+  BITCODE_RC flag_r11 = obj->tio.entity->flag_r11;
+  switch (flag_r11 & 63)
+    {
+    case 0:
+      error |= dwg_encode_DIMENSION_LINEAR (dat, obj);
+      break;
+    case 1:
+      error |= dwg_encode_DIMENSION_ALIGNED (dat, obj);
+      break;
+    case 2:
+      error |= dwg_encode_DIMENSION_ANG2LN (dat, obj);
+      break;
+    case 3:
+      error |= dwg_encode_DIMENSION_DIAMETER (dat, obj);
+      break;
+    case 4:
+      error |= dwg_encode_DIMENSION_RADIUS (dat, obj);
+      break;
+    case 5:
+      error |= dwg_encode_DIMENSION_ANG3PT (dat, obj);
+      break;
+    case 6:
+      error |= dwg_encode_DIMENSION_ORDINATE (dat, obj);
+      break;
+    default:
+      LOG_ERROR ("Unknown preR13 DIMENSION type %u", flag_r11 & 63);
+      error |= DWG_ERR_VALUEOUTOFBOUNDS;
+    }
+  return error;
+}
+
 static BITCODE_RS
 encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict dwg)
 {
@@ -3710,7 +3779,10 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
           error |= dwg_encode_ENDBLK (dat, obj);
           break;
         case 14:
-          error |= dwg_encode_INSERT (dat, obj);
+          if (obj->fixedtype == DWG_TYPE_MINSERT)
+            error |= dwg_encode_MINSERT (dat, obj);
+          else
+            error |= dwg_encode_INSERT (dat, obj);
           break;
         case 15:
           error |= dwg_encode_ATTDEF (dat, obj);
@@ -3721,12 +3793,14 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
         case 17:
           error |= dwg_encode_SEQEND (dat, obj);
           break;
-        /* 18: another polyline */
+        case 18: /* another polyline */
         case 19:
-          error |= dwg_encode_POLYLINE_2D (dat, obj);
+          // checks fixedtype
+          error |= encode_preR13_POLYLINE (dat, obj);
           break;
-        case 20:
-          error |= dwg_encode_VERTEX_2D (dat, obj);
+        case 20: // VERTEX
+          // checks fixedtype
+          error |= encode_preR13_POLYLINE (dat, obj);
           break;
         case 21:
           error |= dwg_encode__3DLINE (dat, obj);
@@ -3735,15 +3809,14 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
           error |= dwg_encode__3DFACE (dat, obj);
           break;
         case 23:
-          // TODO check opts for the type of dimension
-          error |= dwg_encode_DIMENSION_LINEAR (dat, obj);
+          error |= encode_preR13_DIMENSION (dat, obj);
           break;
         case 24:
-          error |= dwg_encode_VPORT (dat, obj);
+          error |= dwg_encode_VIEWPORT (dat, obj);
           break;
         /*
         case 25: // or DIMENSION_RADIUS?
-          error |= dwg_encode_3DLINE (dat, obj);
+          error |= dwg_encode__3DLINE (dat, obj);
           break;
         */
         default:

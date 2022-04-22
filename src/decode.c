@@ -5532,7 +5532,7 @@ decode_preR13_entities (unsigned long start, unsigned long end,
           error |= decode_preR13_DIMENSION (dat, obj);
           break;
         case 24:
-          error |= dwg_decode_VPORT (dat, obj);
+          error |= dwg_decode_VIEWPORT (dat, obj);
           break;
         /*
         case 25:

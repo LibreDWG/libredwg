@@ -2607,12 +2607,14 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
 {
   int error = 0;
   int minimal;
+  unsigned int type;
 
   if (!obj || !obj->parent)
     return DWG_ERR_INTERNALERROR;
   minimal = obj->parent->opts & DWG_OPTS_MINIMAL;
+  type = dat->version < R_13 ? (unsigned int)obj->fixedtype : obj->type;
 
-  switch (obj->type)
+  switch (type)
     {
     case DWG_TYPE_TEXT:
       return dwg_dxf_TEXT (dat, obj);

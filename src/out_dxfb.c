@@ -1551,12 +1551,14 @@ static int dwg_dxfb_object (Bit_Chain *restrict dat,
 {
   int error = 0;
   int minimal;
+  unsigned int type;
 
   if (!obj || !obj->parent)
     return DWG_ERR_INTERNALERROR;
   minimal = obj->parent->opts & DWG_OPTS_MINIMAL;
+  type = dat->version < R_13 ? (unsigned int)obj->fixedtype : obj->type;
 
-  switch (obj->type)
+  switch (type)
     {
     case DWG_TYPE_TEXT:
       return dwg_dxfb_TEXT (dat, obj);
@@ -1694,7 +1696,14 @@ static int dwg_dxfb_object (Bit_Chain *restrict dat,
     case DWG_TYPE_DIMSTYLE:
     case DWG_TYPE_VX_CONTROL:
     case DWG_TYPE_VX_TABLE_RECORD:
+    /* preR13: no dxfb */
+    case DWG_TYPE_REPEAT:
+    case DWG_TYPE_ENDREP:
+    case DWG_TYPE__3DLINE:
+    case DWG_TYPE_LOAD:
+      LOG_INFO ("Skip unsupported object %s\n", obj->name);
       break;
+
     case DWG_TYPE_GROUP:
       return dwg_dxfb_GROUP (dat, obj);
     case DWG_TYPE_MLINESTYLE:

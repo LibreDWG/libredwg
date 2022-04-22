@@ -1504,7 +1504,12 @@ static int
 dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   int error = 0;
-  switch (obj->type)
+  unsigned int type;
+
+  if (!obj || !obj->parent)
+    return DWG_ERR_INTERNALERROR;
+  type = dat->version < R_13 ? (unsigned int)obj->fixedtype : obj->type;
+  switch (type)
     {
     case DWG_TYPE_TEXT:
       return dwg_json_TEXT (dat, obj);

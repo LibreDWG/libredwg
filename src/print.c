@@ -422,6 +422,11 @@ int
 dwg_print_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   int error = 0;
+  unsigned int type;
+
+  if (!obj || !obj->parent)
+    return DWG_ERR_INTERNALERROR;
+  type = dat->version < R_13 ? (unsigned int)obj->fixedtype : obj->type;
   // Bit_Chain * dat = (Bit_Chain *)obj->parent->bit_chain;
   // Bit_Chain *hdl_dat = dat;
   switch (obj->type)
@@ -593,6 +598,8 @@ dwg_print_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       return dwg_print_ENDREP (dat, obj);
     case DWG_TYPE__3DLINE:
       return dwg_print__3DLINE (dat, obj);
+    case DWG_TYPE_LOAD:
+      return dwg_print_LOAD (dat, obj);
     default:
       if (obj->type == obj->parent->layout_type)
         {
