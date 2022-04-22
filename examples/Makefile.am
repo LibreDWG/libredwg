@@ -206,7 +206,7 @@ EXTRA_DIST += unknown.pi ACAD_EVALUATION_GRAPH.pi
 EXTRA_man1_MANS = $(srcdir)/dwgfuzz.1
 dist_man1_MANS = $(srcdir)/dwgadd.1
 dist_man5_MANS = $(srcdir)/dwgadd.5
-dist_data_DATA = dwgadd.example load_dwg.py
+dist_pkgdata_DATA = dwgadd.example load_dwg.py
 
 CLEANFILES = {example,sample}_2000.svg alldwg.inc~ \
 	     alldxf_0.inc~ alldxf_1.inc~ alldxf_2.inc~
