@@ -2360,8 +2360,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       blocks_end = dat->byte;
 
       // patch these numbers into the header
-      pvzadr = dat->byte;
-      dat->byte = 0x14;
+      dat->byte = 0x14; // section_address
       bit_write_RL (dat, entities_start);
       bit_write_RL (dat, entities_end);
       bit_write_RL (dat, blocks_start);
@@ -2370,7 +2369,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       bit_write_RL (dat, blocks_max);
       LOG_TRACE ("blocks   0x%x (%d) - 0x%x (0x%x, 0x%x)\n", blocks_start,
                  blocks_end - blocks_start, blocks_end, blocks_offset, blocks_max);
-      dat->byte = pvzadr;
+      dat->byte = blocks_end;
     }
     VERSIONS (R_2_0b, R_9c1) {
       dat->byte = hdr_offset + (3 * 8);
