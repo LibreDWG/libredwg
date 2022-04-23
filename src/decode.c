@@ -638,6 +638,7 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
             "Entity number: %d, Type: %d, Addr: %lx\n",
             obj->index, obj->type, obj->address);
   _obj->entmode = is_block ? 3 : 2; // ent or block
+
   PRE (R_2_0b) {
     FIELD_HANDLE (layer, 2, 8);
     goto entity_end;
@@ -731,10 +732,11 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_ERROR ("Out of memory");
       return DWG_ERR_OUTOFMEM;
     }
-  PRE (R_2_0)
+  PRE (R_2_0b) {
     bit_read_RC (dat); // the 6th zero
-  
-  SINCE (R_2_0) {
+    LOG_TRACE ("zero[6]: 0 [RC 0]\n");
+  }
+  SINCE (R_2_0b) {
     entities_start = bit_read_RL (dat);
     entities_end = bit_read_RL (dat);
     LOG_TRACE ("entities 0x%x - 0x%x\n", entities_start, entities_end);
@@ -770,7 +772,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (error >= DWG_ERR_CRITICAL)
       return error;
 
-  PRE (R_2_0) {
+  PRE (R_2_0b) {
     entities_start = dat->byte;
     entities_end = dwg->header_vars.num_bytes;
   }
@@ -810,7 +812,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_WARN ("@0x%lx => entities_end 0x%x", dat->byte, entities_end);
       dat->byte = entities_end;
     }
-  PRE (R_2_0) {
+  PRE (R_2_0b) {
     // this has usually some slack at the end.
     return error;
   }

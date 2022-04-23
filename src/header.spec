@@ -29,9 +29,9 @@
     FIELD_RC (zero_5[i], 0);
   }
 #endif
-  SINCE (R_2_0)
+  SINCE (R_2_0b)
     FIELD_RC (is_maint, 0);
-  VERSIONS (R_2_0, R_13b1) {
+  VERSIONS (R_2_0b, R_13b1) {
     FIELD_RC (zero_one_or_three, 0); // 1,3,0,5,0,0x00cd,0
     /*
        AC1.50: 3, 5, 74; 3, 5, 83;
