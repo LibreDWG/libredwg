@@ -489,14 +489,16 @@ dwg_free_variable_no_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
     {
     #include "objects.inc"
 
-    case DWG_TYPE_FREED: break; // already freed
-    case DWG_TYPE_UNUSED:
+    case DWG_TYPE_FREED:
+      break; // already freed
+
     case DWG_TYPE_ACDSRECORD:
     case DWG_TYPE_ACDSSCHEMA:
     case DWG_TYPE_NPOCOLLECTION:
     case DWG_TYPE_XREFPANELOBJECT:
-    default: LOG_ERROR ("Unhandled class %s, fixedtype %d in objects.inc",
-                        dwg_type_name (obj->fixedtype), (int)obj->fixedtype);
+    default:
+      LOG_ERROR ("Unhandled class %s, fixedtype %d in objects.inc",
+                 dwg_type_name (obj->fixedtype), (int)obj->fixedtype);
     }
 
 #undef DWG_ENTITY
@@ -573,14 +575,16 @@ int dwg_free_variable_type_private (Dwg_Object *restrict obj)
     {
     #include "objects.inc"
 
-    case DWG_TYPE_UNUSED:
-    case DWG_TYPE_FREED: break; // already freed
+    case DWG_TYPE_FREED:
+      break; // already freed
+
     case DWG_TYPE_ACDSRECORD:
     case DWG_TYPE_ACDSSCHEMA:
     case DWG_TYPE_NPOCOLLECTION:
     case DWG_TYPE_XREFPANELOBJECT:
-    default: LOG_ERROR ("Unhandled class %s, fixedtype %d in objects.inc",
-                        dwg_type_name (obj->fixedtype), (int)obj->fixedtype);
+    default:
+      LOG_ERROR ("Unhandled class %s, fixedtype %d in objects.inc",
+                 dwg_type_name (obj->fixedtype), (int)obj->fixedtype);
     }
 
 #undef DWG_ENTITY
@@ -608,6 +612,8 @@ free_preR13_object (Dwg_Object *obj)
     return;
   if (obj->type == DWG_TYPE_FREED || obj->tio.object == NULL)
     return;
+
+  // TODO if DWG_TYPE_UNUSED and r1.4, set the old obj->fixedtype from the type
 
   switch (obj->fixedtype)
     {
@@ -774,7 +780,8 @@ free_preR13_object (Dwg_Object *obj)
       dwg_free_LOAD_private (dat, dat, dat, obj);
       break;
     case DWG_TYPE_UNUSED:
-      // TODO leak
+      // TODO leaks with r1.4
+      break;
     default:
       LOG_ERROR ("Unhandled preR13 class %s, fixedtype %d in free_preR13_object()",
                  dwg_type_name (obj->fixedtype), (int)obj->fixedtype);

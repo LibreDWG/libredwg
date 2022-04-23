@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2020 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2022 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -68,9 +68,9 @@ help (void)
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf ("  --as rNNNN                save as version\n");
   printf ("           Valid versions:\n");
-  printf ("             r12, r14, r2000 (default)\n");
+  printf ("             r13, r14, r2000 (default)\n");
   printf ("           Planned versions:\n");
-  printf ("             r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
+  printf ("             r1.4-r11, r2004-r2018\n");
 #  ifndef DISABLE_JSON
   printf ("  -I fmt,  --format fmt     DXF, DXFB, JSON\n");
 #else
@@ -87,9 +87,9 @@ help (void)
   printf ("  -v[0-9]     verbosity\n");
   printf ("  -a rNNNN    save as version\n");
   printf ("              Valid versions:\n");
-  printf ("                r12, r14, r2000 (default)\n");
+  printf ("                r13, r14, r2000 (default)\n");
   printf ("              Planned versions:\n");
-  printf ("                r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
+  printf ("                r1.2-r11, r2004-r2018\n");
 #  ifndef DISABLE_JSON
   printf ("  -I fmt      fmt: DXF, DXFB, JSON\n");
 #  else
@@ -398,8 +398,8 @@ main (int argc, char *argv[])
 
   if (dwg.header.from_version == R_INVALID)
     fprintf (stderr, "Unknown DWG header.from_version");
-  // FIXME: for now only R_13 - R_2000. later remove this line.
-  if (dwg.header.from_version < R_13 || dwg.header.from_version >= R_2004)
+  // FIXME: for now only r1.4 - R_2000. later remove this line.
+  if (dwg.header.from_version >= R_2004)
     dat.version = dwg.header.version = dwg_version;
   else
     dat.version = dwg.header.version = dwg.header.from_version;
