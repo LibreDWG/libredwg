@@ -1,0 +1,24 @@
+point 1,2
+line 2,3 3,4 
+arc c 5,5 5,4 a 90
+circle 3,1 1
+text a 1,4 3,4 FOO
+trace 0.2 1,5 2,6 
+repeat
+point 1,7
+endrep 3 2 1 1
+line 6,1 7,2 
+block BLOCK1 6,1 L 
+insert BLOCK1 6,1 0.5 0.5 30
+load es
+shape DIODE 6,6  30
+solid 7,1 8,2 7,3 8,4 
+attdef  ATTR1 PROMPT
+3
+9,5 0.2 60
+attdef  ATTR2 PROMPT
+3
+1,2 0.2 60
+block BLOCK2 1,2 L 
+insert BLOCK2 2,2 0.5 0.5 30 4
+pline 5,7 6,8 7,7 
