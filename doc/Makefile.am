@@ -1,6 +1,6 @@
 ## Makefile.am
 ##
-## Copyright (C) 2010-2021 Free Software Foundation, Inc.
+## Copyright (C) 2010-2022 Free Software Foundation, Inc.
 ##
 ## This file is part of LibreDWG.
 ##
@@ -18,7 +18,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 TEXINFO_TEX_DIR = $(abs_builddir)/latex
-TEXINPUTS="$(TEXINPUTS)$(PATH_SEPARATOR)$(TEXINFO_TEX_DIR)"
+TEXINPUTS="$(PATH_SEPARATOR)$(TEXINFO_TEX_DIR)"
 info_TEXINFOS = LibreDWG.texi
 # Note: automake has a distcheck bug in .texi.info: GH #211
 LibreDWG_TEXINFOS = fdl.texi dynapi.texi
