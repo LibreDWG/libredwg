@@ -232,12 +232,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   "This version of LibreDWG is only capable of decoding "                     \
   "version r13-r2021 (code: AC1012-AC1035) DWG files.\n"
 
-  PRE (R_13)
-  {
-#ifndef IS_RELEASE
-    return decode_preR13 (dat, dwg);
-#endif
-  }
+  PRE (R_13) { return decode_preR13 (dat, dwg); }
   VERSIONS (R_13, R_2000) { return decode_R13_R2000 (dat, dwg); }
   VERSION (R_2004) { return decode_R2004 (dat, dwg); }
   VERSION (R_2007) { return decode_R2007 (dat, dwg); }
