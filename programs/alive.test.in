@@ -39,6 +39,8 @@ CFLAGS="@CFLAGS@"
 DISABLE_JSON="@DISABLE_JSON@"
 DISABLE_WRITE="@DISABLE_WRITE@"
 EXEEXT="@EXEEXT@"
+#WRITE_REVS="r1.2 r1.4 r2.0 r2.6 r9 r10 r11 r13 r14 r2000"
+#READ_REVS="r1.2 r1.4 r2.0 r2.10 r2.21 r2.22 r2.4 r2.5 r2.6 r9 r10 r11 r13 r14 r2000 r2004 r2010 r2013 r2018"
 
 i=0
 rm -f ./*-dxf*.log ./*-read,.log ./*-write.log ./*-json.log ./*-rw.log
@@ -221,7 +223,7 @@ run ()
 
 DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
 DATA="$DATA example_2013 example_2018 example_r14"
-#TODO="r11/ACEL10"
+#TODO="r11/ACEL10 r1.4/entities"
 
 for d in $DATA; do
     b="$(basename "$d")"
@@ -229,6 +231,7 @@ for d in $DATA; do
     rm "./$b.svg" 2>/dev/null
     rm "./$b.ps" 2>/dev/null
     rm "./$b.bmp" 2>/dev/null
+    rm "./$b.json" 2>/dev/null
     rm "./$b-rewrite.dwg" 2>/dev/null
     rm "./$b-dwgwrite.dwg" 2>/dev/null
 done
@@ -250,7 +253,7 @@ done
 if false; then
 for prog in dwgwrite dwgrewrite dxf2dwg dwg2dxf dxfwrite ; do
     for dwg in $DATA; do
-        for as in --as=r13 --as=r2000 --as=r2004 --as=r2010 --as=r2013 --as=r2018; do
+        for as in --as=r1.4 --as=r13 --as=r2000 --as=r2004 --as=r2010 --as=r2013 --as=r2018; do
             run "$prog${EXEEXT}" "$dwg" "$as"
         done
     done

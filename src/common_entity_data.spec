@@ -83,7 +83,7 @@
     {
       FIELD_B (is_xdic_missing, 0);
     }
-  PRE (R_2004) //ODA bug
+  VERSIONS (R_13, R_2002) //ODA bug
     {
       FIELD_B (nolinks, 0)
     }
@@ -172,12 +172,15 @@
       if (ent->color.index != 256) // not bylayer
         FIELD_BS (color.index, 62);
     }
-    else
-      FIELD_CMC (color, 62);
+    else {
+      SINCE (R_13)
+        FIELD_CMC (color, 62);
+    }
   }
 
 #ifndef IS_DXF
-  FIELD_BD1 (ltype_scale, 48);
+  SINCE (R_13)
+    FIELD_BD1 (ltype_scale, 48);
 #endif
   SINCE (R_2000)
     {
@@ -207,7 +210,9 @@
       VALUE_BS (1, 60)
     }
   } else {
-    FIELD_BS (invisible, 60); //bit 0: 0 visible, 1 invisible
+    SINCE (R_13) {
+      FIELD_BS (invisible, 60); //bit 0: 0 visible, 1 invisible
+    }
   }
 
   SINCE (R_2000) {

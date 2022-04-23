@@ -781,8 +781,11 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
     }
 
 // violates duplicate keys
-#define SUBCLASS(name) \
-  FIRSTPREFIX fprintf (dat->fh, "\"_subclass\": \"" #name "\"");
+#define SUBCLASS(name)                                                  \
+  SINCE (R_13)                                                          \
+  {                                                                     \
+    FIRSTPREFIX fprintf (dat->fh, "\"_subclass\": \"" #name "\"");      \
+  }
 
 // FIXME: for KEY not the complete nam path, only the field.
 // e.g. verts[rcount1].lines[rcount2].segparms
@@ -887,12 +890,18 @@ _prefix (Bit_Chain *dat)
       FIELD_TEXT (dxfname, obj->dxfname);                                     \
     _FIELD (index, RL, 0);                                                    \
     _FIELD (type, RL, 0);                                                     \
-    KEY (handle);                                                             \
-    VALUE_H (obj->handle, 5);                                                 \
+    SINCE (R_13)                                                              \
+    {                                                                         \
+      KEY (handle);                                                           \
+      VALUE_H (obj->handle, 5);                                               \
+    }                                                                         \
     _FIELD (size, RL, 0);                                                     \
-    _FIELD (bitsize, BL, 0);                                                  \
-    if (_ent->preview_exists)                                                 \
-      ENT_FIELD (preview_exists, B, 0);                                       \
+    SINCE (R_13)                                                              \
+    {                                                                         \
+      _FIELD (bitsize, BL, 0);                                                \
+      if (_ent->preview_exists)                                               \
+        ENT_FIELD (preview_exists, B, 0);                                     \
+    }                                                                         \
     error |= json_common_entity_data (dat, obj);                              \
     return error | dwg_json_##token##_private (dat, hdl_dat, str_dat, obj);   \
   }                                                                           \
@@ -933,10 +942,16 @@ _prefix (Bit_Chain *dat)
       FIELD_TEXT (dxfname, obj->dxfname);                                     \
     _FIELD (index, RL, 0);                                                    \
     _FIELD (type, RL, 0);                                                     \
-    KEY (handle);                                                             \
-    VALUE_H (obj->handle, 5);                                                 \
+    SINCE (R_13)                                                              \
+    {                                                                         \
+      KEY (handle);                                                           \
+      VALUE_H (obj->handle, 5);                                               \
+    }                                                                         \
     _FIELD (size, RL, 0);                                                     \
-    _FIELD (bitsize, BL, 0);                                                  \
+    SINCE (R_13)                                                              \
+    {                                                                         \
+      _FIELD (bitsize, BL, 0);                                                \
+    }                                                                         \
     error |= json_eed (dat, obj->tio.object);                                 \
     error |= json_common_object_handle_data (dat, obj);                       \
     return error | dwg_json_##token##_private (dat, hdl_dat, str_dat, obj);   \
@@ -1760,24 +1775,38 @@ json_fileheader_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 static int
-json_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+json_header_write_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
   Dwg_Object *obj = NULL;
   // const int minimal = 0;
   char buf[4096];
   double ms;
+  int error = 0;
   const char *codepage
       = (dwg->header.codepage == 30 || dwg->header.codepage == 0)
             ? "ANSI_1252"
             : (dwg->header.version >= R_2007) ? "UTF-8" : "ANSI_1252";
-
-  RECORD (HEADER); // single hash
   // clang-format off
-  #include "header_variables.spec"
+  PRE (R_13) {
+    #include "header_variables_r11.spec"
+  }
+  LATER_VERSIONS {
+    #include "header_variables.spec"
+  }
   // clang-format on
+  return error;
+}
+
+static int
+json_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  int error = 0;
+  RECORD (HEADER); // single hash
+  // seperate func to catch the return
+  error = json_header_write_private (dat, dwg);
   ENDRECORD ();
-  return 0;
+  return error;
 }
 
 static int
