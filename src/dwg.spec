@@ -533,7 +533,6 @@ DWG_ENTITY (BLOCK)
   }
   VERSIONS (R_2_0b, R_11) {
     FIELD_2RD (base_pt, 10);
-    FIELD_TV (name, 2);
     if (R11OPTS(2))
       FIELD_TV (xref_pname, 3);
   }
