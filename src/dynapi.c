@@ -1169,7 +1169,7 @@ static const Dwg_DYNAPI_field _dwg_ATTRIB_fields[] = {
   { "field_length",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_ATTRIB, field_length),
     0,0,0, 0 },
   { "flags",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_ATTRIB, flags),
-    0,0,0, 0 },
+    0,0,0, 70 },
   { "lock_position_flag",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_entity_ATTRIB, lock_position_flag),
     0,0,0, 0 },
   { "style",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_ATTRIB, style),

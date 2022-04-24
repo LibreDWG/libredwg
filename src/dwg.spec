@@ -175,17 +175,23 @@ DWG_ENTITY (ATTRIB)
       FIELD_RD (height, 40);
       FIELD_TV (text_value, 1);
       FIELD_TV (tag, 2);
-      FIELD_RC (generation, 71);
+      FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify
       if (R11OPTS (2)) {
         FIELD_RD (rotation, 50);
       }
       if (R11OPTS (4)) {
         FIELD_RD (width_factor, 41);
       }
+      if (R11OPTS (8)) {
+        FIELD_RD (oblique_angle, 51);
+      }
       if (R11OPTS (32)) {
+        FIELD_CAST (generation, RC, BS, 71);
+      }
+      if (R11OPTS (64)) {
         FIELD_CAST (horiz_alignment, RC, BS, 72);
       }
-      if (R11OPTS (64)) { // flag2_1
+      if (R11OPTS (128)) { // flag2_1
         FIELD_2RD (alignment_pt, 11);
       }
     }
@@ -323,7 +329,9 @@ DWG_ENTITY (ATTRIB)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (style, 5, 0); // unexpected here in DXF
+  SINCE (R_13) {
+    FIELD_HANDLE (style, 5, 0); // unexpected here in DXF
+  }
 
 DWG_ENTITY_END
 

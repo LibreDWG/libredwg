@@ -1212,7 +1212,7 @@ T,	DXF 2
 @item field_length
 BS
 @item flags
-RC
+RC,	DXF 70
 @item lock_position_flag
 B
 @item style
