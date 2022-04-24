@@ -349,12 +349,15 @@ DWG_ENTITY (ATTDEF)
         FIELD_RD (width_factor, 41);
       }
       if (R11OPTS (8)) {
-        FIELD_CAST (generation, RC, BS, 71);
+        FIELD_RD (oblique_angle, 51);
       }
       if (R11OPTS (32)) {
-        FIELD_CAST (horiz_alignment, RC, BS, 72);
+        FIELD_CAST (generation, RC, BS, 71);
       }
       if (R11OPTS (64)) {
+        FIELD_CAST (horiz_alignment, RC, BS, 72);
+      }
+      if (R11OPTS (128)) {
         FIELD_2RD (alignment_pt, 11);
       }
     }
