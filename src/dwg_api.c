@@ -22039,6 +22039,7 @@ int dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg);
     if (dwg_add_object (dwg) < 0)                                             \
       dwg_resolve_objectrefs_silent (dwg);                                    \
     obj = &dwg->object[idx];                                                  \
+    dwg->cur_index++;                                                         \
     obj->supertype = DWG_SUPERTYPE_OBJECT;                                    \
     obj->tio.object                                                           \
         = (Dwg_Object_Object *)calloc (1, sizeof (Dwg_Object_Object));        \
@@ -22603,6 +22604,7 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
         blkobj = dwg_obj_generic_to_object (blkhdr, &error);                  \
       }                                                                       \
     obj = &dwg->object[idx];                                                  \
+    dwg->cur_index++;                                                         \
     obj->supertype = DWG_SUPERTYPE_ENTITY;                                    \
     obj->tio.entity                                                           \
         = (Dwg_Object_Entity *)calloc (1, sizeof (Dwg_Object_Entity));        \
@@ -22682,6 +22684,7 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
   obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;                    \
   obj->tio.object->tio.token->parent = obj->tio.object;                       \
   obj->tio.object->objid = obj->index
+
 
 /* globals: dwg */
 #define API_ADD_OBJECT(token)                                  \

@@ -1808,16 +1808,17 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
                        Dwg_Data *restrict dwg)
 {
   Dwg_Section *tbl = &dwg->header.section[id];
-  int i;
+  int i = 0;
   BITCODE_BL vcount;
   int error = 0;
-  long unsigned int num = (long unsigned int)tbl->address;
+  BITCODE_RL num = tbl->objid_r11;
 
 #define PREP_TABLE(name)                                \
   Dwg_Object *obj = &dwg->object[num + i];              \
   Dwg_Object_##name *_obj = obj->tio.object->tio.name;
 
-#define CHK_ENDPOS
+#define CHK_ENDPOS                                      \
+  dwg->cur_index += tbl->number
 
   switch (id)
     {
@@ -2089,6 +2090,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   BITCODE_RL blocks_offset = 0x40000000;
   BITCODE_RL blocks_max = 0x80000000;
 
+  dwg->cur_index = 0;
   if (dwg->opts)
     loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
 #ifdef USE_TRACING
@@ -2326,7 +2328,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     hdr_offset = dat->byte;
     encode_preR13_header_variables (dat, dwg);
     entities_start = dat->byte;
+    dwg->cur_index = 0;
     num_entities = encode_preR13_entities (0, dat, dwg);
+    dwg->cur_index += num_entities;
     entities_end = dat->byte;
     LOG_TRACE ("\nentities %u 0x%x - 0x%x\n", num_entities, entities_start,
                entities_end);
@@ -2350,13 +2354,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     }
     SINCE (R_2_0b)
     {
+      BITCODE_RL num_blocks;
       encode_preR13_section (SECTION_BLOCK, dat, dwg);
       encode_preR13_section (SECTION_LAYER, dat, dwg);
       encode_preR13_section (SECTION_STYLE, dat, dwg);
       encode_preR13_section (SECTION_LTYPE, dat, dwg);
       encode_preR13_section (SECTION_VIEW, dat, dwg);
       blocks_start = dat->byte;
-      encode_preR13_entities (blocks_start, dat, dwg);
+      num_blocks = encode_preR13_entities (blocks_start, dat, dwg);
       blocks_end = dat->byte;
 
       // patch these numbers into the header
@@ -3741,7 +3746,8 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
 {
   int error = 0;
   BITCODE_RS num_entities = 0;
-  for (unsigned index = 0; index < dwg->num_objects; index++)
+  // TODO index offset for blocks
+  for (unsigned index = dwg->cur_index; index < dwg->cur_index + dwg->num_entities; index++)
     {
       Dwg_Object *obj = &dwg->object[index];
       // check if block or entity member

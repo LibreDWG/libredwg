@@ -8594,6 +8594,7 @@ typedef struct _dwg_section
   int32_t    number; /* preR13: num_entries, r2007: id */
   BITCODE_RL size;   /* now unsigned */
   uint64_t   address;
+  BITCODE_RL objid_r11;
   /* r2000+: */
   BITCODE_RL parent;
   BITCODE_RL left;
@@ -9117,6 +9118,7 @@ typedef struct _dwg_struct
   Dwg_Object * object;           /*!< list of all objects and entities */
   BITCODE_BL num_entities;       /*!< number of entities in object */
   BITCODE_BL num_object_refs;    /*!< number of object_ref's (resolved handles) */
+  BITCODE_BL cur_index;          /*!< how many we have written currently */
   Dwg_Object_Ref **object_ref;   /*!< array of most handles */
   struct _inthash *object_map;   /*!< map of all handles */
   int dirty_refs;                /* 1 if we added an entity, and invalidated all

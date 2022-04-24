@@ -341,6 +341,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
                  (long)tbl->number, (long)tbl->size, tbl->name, id);
       return DWG_ERR_INVALIDDWG;
     }
+  tbl->objid_r11 = num;
   if (dwg->num_objects % REFS_PER_REALLOC == 0)
     dwg->object = (Dwg_Object*)realloc (dwg->object, old_size + size + REFS_PER_REALLOC);
 
