@@ -21438,21 +21438,6 @@ static int test_SHAPE (const Dwg_Object *obj)
         fail ("SHAPE.extrusion [BE]");
   }
   {
-    BITCODE_RD height_pre2;
-    if (dwg_dynapi_entity_value (shape, "SHAPE", "height_pre2", &height_pre2, NULL)
-        && height_pre2 == shape->height_pre2)
-      pass ();
-    else
-      fail ("SHAPE.height_pre2 [RD] %g != %g", shape->height_pre2, height_pre2);
-    height_pre2++;
-    if (dwg_dynapi_entity_set_value (shape, "SHAPE", "height_pre2", &height_pre2, 0)
-        && height_pre2 == shape->height_pre2)
-      pass ();
-    else
-      fail ("SHAPE.height_pre2 [RD] set+1 %g != %g", shape->height_pre2, height_pre2);
-    shape->height_pre2--;
-  }
-  {
     BITCODE_3BD ins_pt;
     if (dwg_dynapi_entity_value (shape, "SHAPE", "ins_pt", &ins_pt, NULL)
         && !memcmp (&ins_pt, &shape->ins_pt, sizeof (BITCODE_3BD)))

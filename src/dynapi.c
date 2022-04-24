@@ -3433,13 +3433,11 @@ static const Dwg_DYNAPI_field _dwg_SHAPE_fields[] = {
   { "thickness",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_SHAPE, thickness),
     0,0,0, 39 },
   { "style_id",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_SHAPE, style_id),
-    0,0,0, 0 },
+    0,0,0, 2 },
   { "extrusion",	"BE", sizeof (BITCODE_BE),  OFF (struct _dwg_entity_SHAPE, extrusion),
     0,0,0, 210 },
   { "style",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_SHAPE, style),
     1,0,0, 7 },
-  { "height_pre2",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_SHAPE, height_pre2),
-    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_SOLID: (sorted by offset) */

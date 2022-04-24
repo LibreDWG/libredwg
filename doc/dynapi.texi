@@ -3944,13 +3944,11 @@ BD,	DXF 51
 @item thickness
 BD,	DXF 39
 @item style_id
-BS
+BS,	DXF 2
 @item extrusion
 BE,	DXF 210
 @item style
 H,	DXF 7
-@item height_pre2
-RD
 
 @end vtable
 @end indentedblock

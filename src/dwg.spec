@@ -1119,7 +1119,8 @@ DWG_ENTITY_END
 
 /* (15/19)
    r11 has all-in-one: n/m mesh (FLAG 16). curve-fit (FLAG 2),
-   spline-fit FLAGS 4), 3dpline (FLAG 8), pface_mesh: FLAG 64
+   spline-fit (FLAGS 4), 3dpline (FLAG 8), pface_mesh: FLAG 64
+   is_closed FLAG(1)
 */
 DWG_ENTITY (POLYLINE_2D)
 
@@ -1127,14 +1128,13 @@ DWG_ENTITY (POLYLINE_2D)
   SUBCLASS (AcDb2dPolyline)
   PRE (R_13)
   {
-    // is_closed = FLAG(1)
     if (R11OPTS (1))
-      FIELD_RC (curve_type, 75);
+      FIELD_RC (has_vertex, 66);
     if (R11OPTS (2))
       FIELD_RD (start_width, 40);
     //if (R11OPTS (4)) ??
     //  FIELD_RS (curve_type, 75);
-    if (R11OPTS (8))
+    if (R11OPTS (8)) // or (4)?
       FIELD_RD (end_width, 41);
   }
   SINCE (R_13)
@@ -1883,17 +1883,16 @@ DWG_ENTITY (SHAPE)
   SUBCLASS (AcDbShape)
   PRE (R_2_0) {
     FIELD_2RD (ins_pt, 0);
-    FIELD_RD (height_pre2, 0);
-    FIELD_RD (oblique_angle, 0);
-    FIELD_RS (style_id, 0);
+    FIELD_RD (scale, 40);
+    FIELD_RD (rotation, 0);
+    FIELD_RSd (style_id, 0);
   } VERSIONS (R_2_0, R_11) {
-    FIELD_HANDLE (style, 5, 0);
     FIELD_2RD (ins_pt, 10);
-    FIELD_RS (style_id, 0); // dxf: 2
+    FIELD_RD (scale, 40);
+    FIELD_RCd (style_id, 2);
     if (R11OPTS (1))
-      FIELD_3RD (extrusion, 210);
-    if (R11OPTS (2))
-      FIELD_RD (ins_pt.z, 38);
+      FIELD_RD (rotation, 50);
+    FIELD_HANDLE (style, 1, 0);
   }
   SINCE (R_13b1) {
     FIELD_3BD (ins_pt, 10);

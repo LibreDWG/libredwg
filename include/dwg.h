@@ -1801,16 +1801,15 @@ typedef struct _dwg_entity_SHAPE
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_3BD ins_pt;
-  BITCODE_BD scale;
-  BITCODE_BD rotation;
-  BITCODE_BD width_factor;
-  BITCODE_BD oblique_angle;
-  BITCODE_BD thickness;
-  BITCODE_BS style_id;
-  BITCODE_BE extrusion;
+  BITCODE_3BD ins_pt;  // DXF 10-30
+  BITCODE_BD scale;    // DXF 40
+  BITCODE_BD rotation; // DXF 50
+  BITCODE_BD width_factor; // DXF 41
+  BITCODE_BD oblique_angle;// DXF 51
+  BITCODE_BD thickness; // DXF 39
+  BITCODE_BS style_id;  // DXF 2, STYLE index in dwg to SHAPEFILE
+  BITCODE_BE extrusion; // DXF 210
   BITCODE_H style;
-  BITCODE_RD height_pre2; // pre R_2_0
 } Dwg_Entity_SHAPE;
 
 /**
