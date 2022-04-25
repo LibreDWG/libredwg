@@ -1889,7 +1889,7 @@ DWG_ENTITY (SHAPE)
   } VERSIONS (R_2_0, R_11) {
     FIELD_2RD (ins_pt, 10);
     FIELD_RD (scale, 40);
-    FIELD_RCd (style_id, 2);
+    FIELD_RCu (style_id, 2);
     if (R11OPTS (1))
       FIELD_RD (rotation, 50);
     FIELD_HANDLE (style, 1, 0);
