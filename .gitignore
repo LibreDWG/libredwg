@@ -75,6 +75,9 @@ compile_commands.json
 /doc/Dwg*.rtf
 /doc/Dwg*.txt
 /doc/acad*.txt
+/doc/dxf_r12.txt
+/doc/ACAD_R11.html
+/doc/R13DXF.html
 /doc/inc-*
 /examples/*.log
 /examples/*.pi
