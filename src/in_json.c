@@ -2571,6 +2571,11 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Out of memory");
       return DWG_ERR_OUTOFMEM;
     }
+  if (dwg->header.version < R_13)
+    {
+      // 5 plus the header, plus a hole
+      dwg->header.section = calloc (7, sizeof (Dwg_Section));
+    }
   dwg->num_objects += size;
   for (i = 0; i < size; i++)
     {
@@ -2852,7 +2857,21 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     }
                 }
               LOG_TRACE ("type: %d,\tfixedtype: %d\n", obj->type,
-                         obj->fixedtype)
+                         obj->fixedtype);
+              if (dwg->header.version < R_13 && dwg_obj_is_table (obj))
+                {
+                  Dwg_Section_Type_r11 id;
+                  switch (obj->fixedtype)
+                    {
+                    case DWG_TYPE_BLOCK_HEADER: id = SECTION_BLOCK; break;
+                    case DWG_TYPE_LAYER: id = SECTION_LAYER; break;
+                    case DWG_TYPE_STYLE: id = SECTION_STYLE; break;
+                    case DWG_TYPE_LTYPE: id = SECTION_LTYPE; break;
+                    case DWG_TYPE_VIEW:  id = SECTION_VIEW; break;
+                    default: assert (!obj->fixedtype);
+                    }
+                  dwg->header.section[id].number++;
+                }
             }
           // Note: also _obj->size
           else if (strEQc (key, "size") && !obj->size
