@@ -204,9 +204,14 @@ EXTRA_DIST = unknown.h alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc $(alldx
 EXTRA_DIST += log_unknown_dxf.pl log_unknown.pl bd-unknown.pl unstable.pm dwgadd.pod
 EXTRA_DIST += unknown.pi ACAD_EVALUATION_GRAPH.pi
 EXTRA_man1_MANS = $(srcdir)/dwgfuzz.1
+if USE_WRITE
 dist_man1_MANS = $(srcdir)/dwgadd.1
 dist_man5_MANS = $(srcdir)/dwgadd.5
-dist_pkgdata_DATA = dwgadd.example load_dwg.py
+endif
+dist_pkgdata_DATA = load_dwg.py
+if USE_WRITE
+dist_pkgdata_DATA += dwgadd.example
+endif
 
 CLEANFILES = {example,sample}_2000.svg alldwg.inc~ \
 	     alldxf_0.inc~ alldxf_1.inc~ alldxf_2.inc~
