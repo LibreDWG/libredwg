@@ -101,7 +101,7 @@ run ()
                 ;;
     dwgwrite)   if [ -z "$DISABLE_JSON" ]; then
                     if [ -n "$addarg" ]; then
-                        arg="-y -v2 $addarg -o $bdwg-$out.dwg $dwg.json"
+                        arg="-y -v2 $addarg -o $bdwg-$out.dwg $bdwg.json"
                     else
                         arg="-y -v2 $bdwg.json"
                     fi
@@ -115,13 +115,13 @@ run ()
                 ;;
     dxfwrite)   if [ -z "$DISABLE_JSON" ]; then
                     if [ -n "$addarg" ]; then
-                        arg="-y -v2 $addarg -o $bdwg-$out.dxf $dwg.json"
+                        arg="-y -v2 $addarg -o $bdwg-$out.dxf $bdwg.json"
                     else
-                        arg="-y -v2 $dwg.json"
+                        arg="-y -v2 $bdwg.json"
                     fi
                 else
                     if [ -n "$addarg" ]; then
-                        arg="-y -v2 $addarg -o $bdwg-$out.dxf $dwg.dwg"
+                        arg="-y -v2 $addarg -o $bdwg-$out.dxf $bdwg.dwg"
                     else
                         arg="-y -v2 $dwg.dwg"
                     fi
