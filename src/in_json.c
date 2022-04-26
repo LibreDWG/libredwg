@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2020-2021 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2020-2022 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -903,6 +903,10 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       // clang-format off
       FIELD_RC (is_maint, 0)
       FIELD_RC (zero_one_or_three, 0)
+      // preR13 only
+      FIELD_RC (unknown_3, 0)
+      FIELD_RS (numheader_vars, 0)
+      FIELD_RS (numsections, 0)
       FIELD_RL (thumbnail_address, 0) //@0x0d
       FIELD_RC (dwg_version, 0)
       FIELD_RC (maint_version, 0)
@@ -1565,7 +1569,9 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             case DWG_VT_OBJECTID:
               {
                 BITCODE_H hdl;
-                hdl = json_HANDLE (dat, dwg, tokens, name, key, NULL, -1);
+                hdl = json_HANDLE (dat, dwg, tokens, name, "handle", NULL, -1);
+                LOG_TRACE ("xdata[%u]: " FORMAT_REF " [H %d]\n", i, ARGS_REF (hdl),
+                           (int)rbuf->type);
                 JSON_TOKENS_CHECK_OVERFLOW_ERR
                 memcpy (&rbuf->value.h, &hdl->handleref,
                         sizeof (hdl->handleref));
@@ -2581,7 +2587,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (i > 0)
         {
           Dwg_Object *oldobj = &dwg->object[i - 1];
-          if (!oldobj->handle.value)
+          if (dwg->header.version >= R_13 && !oldobj->handle.value)
             {
               LOG_ERROR ("Required %s.handle missing, skipped", oldobj->name)
               dwg_free_object (obj);
@@ -2627,7 +2633,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           JSON_TOKENS_CHECK_OVERFLOW(goto typeerr)
         }
       keys = t->size;
-      LOG_HANDLE ("\n-keys: %d\n", keys);
+      LOG_HANDLE ("\n-keys: %d, object %d of %d\n", keys, i, size);
 
       tokens->index++;
       for (int j = 0; j < keys; j++)
@@ -2694,8 +2700,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   goto skip_object;
                 }
               */
-              LOG_TRACE ("\nnew object %s [%d] (size: %d)\n", name, i,
-                         objsize);
+              LOG_TRACE ("\nnew object %s [%d] (size: %d)\n", name, i, objsize);
               obj->tio.object = (Dwg_Object_Object*)calloc (1, sizeof (Dwg_Object_Object));
               obj->tio.object->dwg = dwg;
               obj->tio.object->objid = i;
@@ -2855,7 +2860,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               obj->size = json_long (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
-              if (!obj->handle.value)
+              if (dwg->header.version >= R_13 && !obj->handle.value)
                 {
                   LOG_ERROR ("Required %s.handle missing", name);
                   goto harderr;
