@@ -229,10 +229,6 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_INFO ("This file's version code is: %s (%s)\n", magic,
             dwg_version_type (dat->from_version))
 
-#define WE_CAN                                                                \
-  "This version of LibreDWG is only capable of decoding "                     \
-  "version r13-r2021 (code: AC1012-AC1035) DWG files.\n"
-
   PRE (R_13) { return decode_preR13 (dat, dwg); }
   VERSIONS (R_13, R_2000) { return decode_R13_R2000 (dat, dwg); }
   VERSION (R_2004) { return decode_R2004 (dat, dwg); }
