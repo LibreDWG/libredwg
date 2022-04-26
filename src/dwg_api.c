@@ -1184,13 +1184,13 @@ dwg_object_to_DIMENSION (dwg_object *obj)
 {
   dwg_ent_dim *ret_obj = NULL;
   if (obj != NULL
-      && (obj->type == DWG_TYPE_DIMENSION_ORDINATE
-          || obj->type == DWG_TYPE_DIMENSION_LINEAR
-          || obj->type == DWG_TYPE_DIMENSION_ALIGNED
-          || obj->type == DWG_TYPE_DIMENSION_ANG3PT
-          || obj->type == DWG_TYPE_DIMENSION_ANG2LN
-          || obj->type == DWG_TYPE_DIMENSION_RADIUS
-          || obj->type == DWG_TYPE_DIMENSION_DIAMETER
+      && (obj->fixedtype == DWG_TYPE_DIMENSION_ORDINATE
+          || obj->fixedtype == DWG_TYPE_DIMENSION_LINEAR
+          || obj->fixedtype == DWG_TYPE_DIMENSION_ALIGNED
+          || obj->fixedtype == DWG_TYPE_DIMENSION_ANG3PT
+          || obj->fixedtype == DWG_TYPE_DIMENSION_ANG2LN
+          || obj->fixedtype == DWG_TYPE_DIMENSION_RADIUS
+          || obj->fixedtype == DWG_TYPE_DIMENSION_DIAMETER
           || obj->fixedtype == DWG_TYPE_ARC_DIMENSION))
     {
       ret_obj = obj->tio.entity->tio.DIMENSION_common;
@@ -14144,7 +14144,7 @@ dwg_point_3d *
 dwg_ent_polyline_pface_get_points (const dwg_object *restrict obj,
                                    int *restrict error)
 {
-  if (obj && obj->type == DWG_TYPE_POLYLINE_PFACE)
+  if (obj && obj->fixedtype == DWG_TYPE_POLYLINE_PFACE)
     {
       *error = 0;
       LOG_ERROR ("%s: nyi", __FUNCTION__);
@@ -19995,7 +19995,7 @@ BITCODE_BL
 dwg_object_polyline_2d_get_numpoints (const dwg_object *restrict obj,
                                       int *restrict error)
 {
-  if (obj && obj->type == DWG_TYPE_POLYLINE_2D)
+  if (obj && obj->fixedtype == DWG_TYPE_POLYLINE_2D)
     {
       BITCODE_BL num_points = 0;
       Dwg_Data *dwg = obj->parent;
@@ -20032,7 +20032,7 @@ dwg_object_polyline_2d_get_numpoints (const dwg_object *restrict obj,
         {
           Dwg_Object *vobj;
           while ((vobj = dwg_next_object (obj))
-                 && vobj->type != DWG_TYPE_SEQEND)
+                 && vobj->fixedtype != DWG_TYPE_SEQEND)
             {
               if ((vertex = dwg_object_to_VERTEX_2D (vobj)))
                 num_points++;
@@ -20057,7 +20057,7 @@ dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
                                    int *restrict error)
 {
   *error = 0;
-  if (obj && obj->type == DWG_TYPE_POLYLINE_2D)
+  if (obj && obj->fixedtype == DWG_TYPE_POLYLINE_2D)
     {
       BITCODE_BL i;
       Dwg_Data *dwg = obj->parent;
@@ -20126,7 +20126,7 @@ dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
           Dwg_Object *vobj;
           i = 0;
           while ((vobj = dwg_next_object (obj))
-                 && vobj->type != DWG_TYPE_SEQEND)
+                 && vobj->fixedtype != DWG_TYPE_SEQEND)
             {
               if ((vertex = dwg_object_to_VERTEX_2D (vobj)))
                 {
@@ -20162,7 +20162,7 @@ BITCODE_BL
 dwg_object_polyline_3d_get_numpoints (const dwg_object *restrict obj,
                                       int *restrict error)
 {
-  if (obj && obj->type == DWG_TYPE_POLYLINE_3D)
+  if (obj && obj->fixedtype == DWG_TYPE_POLYLINE_3D)
     {
       BITCODE_BL num_points = 0;
       Dwg_Data *dwg = obj->parent;
@@ -20199,7 +20199,7 @@ dwg_object_polyline_3d_get_numpoints (const dwg_object *restrict obj,
         {
           Dwg_Object *vobj;
           while ((vobj = dwg_next_object (obj))
-                 && vobj->type != DWG_TYPE_SEQEND)
+                 && vobj->fixedtype != DWG_TYPE_SEQEND)
             {
               if ((vertex = dwg_object_to_VERTEX_3D (vobj)))
                 num_points++;
@@ -20225,7 +20225,7 @@ dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
                                    int *restrict error)
 {
   *error = 0;
-  if (obj && obj->type == DWG_TYPE_POLYLINE_3D)
+  if (obj && obj->fixedtype == DWG_TYPE_POLYLINE_3D)
     {
       BITCODE_BL i;
       Dwg_Data *dwg = obj->parent;
@@ -20297,7 +20297,7 @@ dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
           Dwg_Object *vobj;
           i = 0;
           while ((vobj = dwg_next_object (obj))
-                 && vobj->type != DWG_TYPE_SEQEND)
+                 && vobj->fixedtype != DWG_TYPE_SEQEND)
             {
               if ((vertex = dwg_object_to_VERTEX_3D (vobj)))
                 {
@@ -20475,7 +20475,7 @@ dwg_block_header_get_block_control (const dwg_obj_block_header *block_header,
 {
   if (block_header && block_header->parent && block_header->parent->ownerhandle
       && block_header->parent->ownerhandle->obj
-      && block_header->parent->ownerhandle->obj->type == DWG_TYPE_BLOCK_CONTROL
+      && block_header->parent->ownerhandle->obj->fixedtype == DWG_TYPE_BLOCK_CONTROL
       && block_header->parent->ownerhandle->obj->tio.object)
     {
       *error = 0;
@@ -20643,7 +20643,7 @@ dwg_get_block_header (dwg_data *restrict dwg, int *restrict error)
     dwg_version = (Dwg_Version_Type)dwg->header.version;
 
   obj = &dwg->object[0];
-  while (obj && obj->type != DWG_TYPE_BLOCK_HEADER)
+  while (obj && obj->fixedtype != DWG_TYPE_BLOCK_HEADER)
     {
       if (obj->size > 0xffff)
         {
@@ -20652,7 +20652,7 @@ dwg_get_block_header (dwg_data *restrict dwg, int *restrict error)
         }
       obj = dwg_next_object (obj);
     }
-  if (obj && DWG_TYPE_BLOCK_HEADER == obj->type)
+  if (obj && DWG_TYPE_BLOCK_HEADER == obj->fixedtype)
     {
       if (obj->size > 0xffff)
         {
@@ -20945,7 +20945,7 @@ char *
 dwg_obj_table_get_name (const dwg_object *restrict obj, int *restrict error)
 {
   if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT
-      && (dwg_obj_is_table (obj) /* || obj->type == DWG_TYPE_DICTIONARY */))
+      && (dwg_obj_is_table (obj) /* || obj->fixedtype == DWG_TYPE_DICTIONARY */))
     {
       // HACK: we can guarantee that the table name is always the first field,
       // by using COMMON_TABLE_FLAGS.
