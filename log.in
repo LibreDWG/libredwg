@@ -4,8 +4,8 @@
 srcdir="@srcdir@"
 top_builddir="@top_builddir@"
 
-make -s -j4 -C src
-make -s -j4 -C programs dwgread
+make -s -j4 -C src || exit 1
+make -s -j4 -C programs dwgread || exit 1
 @DSYMUTIL@ programs/dwgread
 v=-v4
 # dummy to please shellcheck

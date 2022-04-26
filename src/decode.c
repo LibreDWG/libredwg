@@ -85,9 +85,10 @@ static void decode_preR13_section_chk (Dwg_Section_Type_r11 id,
 static int decode_preR13_section (Dwg_Section_Type_r11 id,
                                   Bit_Chain *restrict dat,
                                   Dwg_Data *restrict dwg);
-static int decode_preR13_entities (unsigned long start, unsigned long end,
-                                   unsigned long offset, Bit_Chain *dat,
-                                   Dwg_Data *restrict dwg);
+static int decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
+                                   unsigned num_entities,
+                                   BITCODE_RL size, BITCODE_RL blocks_max,
+                                   Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 
 static int decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 static int decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
@@ -281,7 +282,7 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
              tbl->name, id, tbl->size, tbl->number, (unsigned long)tbl->address,
              (unsigned long)(tbl->address + (tbl->number * tbl->size)),
 	     tbl->flags)
-  if (tbl->address + (tbl->number * tbl->size) > dat->size)
+  if (tbl->number && (tbl->address + (tbl->number * tbl->size) > dat->size))
     {
       LOG_ERROR ("%s.size overflow", tbl->name)
       return DWG_ERR_INVALIDDWG;
@@ -707,9 +708,8 @@ static int
 decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_RL entities_start, entities_end;
-  BITCODE_RL blocks_start, blocks_size, blocks_end;
-  BITCODE_RL blocks_offset = 0x40000000;
-  BITCODE_RL rl1, rl2, blocks_max;
+  BITCODE_RL blocks_start, blocks_size = 0, blocks_end = 0;
+  BITCODE_RL rl1, rl2, blocks_max = 0xFFFFFFFF, num_entities;
   BITCODE_RS rs2;
   Dwg_Object *obj = NULL;
   int tbl_id;
@@ -739,21 +739,29 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
   SINCE (R_2_0b) {
     entities_start = bit_read_RL (dat);
+    LOG_TRACE ("entities_start: " FORMAT_RL " (" FORMAT_RLx ") [RL]\n", entities_start, entities_start);
     entities_end = bit_read_RL (dat);
-    LOG_TRACE ("entities 0x%x - 0x%x\n", entities_start, entities_end);
+    LOG_TRACE ("entities_end: " FORMAT_RL " (" FORMAT_RLx ") [RL]\n", entities_end, entities_end);
     blocks_start = bit_read_RL (dat);
-    blocks_offset = bit_read_RL (dat);
+    LOG_TRACE ("blocks_start: " FORMAT_RL " (" FORMAT_RLx ") [RL]\n", blocks_start, blocks_start);
+    blocks_size = bit_read_RL (dat);
+    if (blocks_size >= 0x40000000) {
+      LOG_TRACE ("blocks_size: 0x40000000 | " FORMAT_RL " [RLx]\n", blocks_size & 0x3fffffff);
+    }
+    else {
+      LOG_TRACE ("blocks_size: " FORMAT_RL " [RL]\n", blocks_size);
+    }
     blocks_end = bit_read_RL (dat);
-    blocks_size = blocks_end - blocks_start;
+    LOG_TRACE ("blocks_end: " FORMAT_RL " (" FORMAT_RLx ") [RL]\n", blocks_end, blocks_end);
     blocks_max = bit_read_RL (dat); // 0x80000000
-    LOG_TRACE ("blocks   0x%x (0x%x) - 0x%x (0x%x, 0x%x)\n", blocks_start, blocks_size,
-               blocks_end, blocks_offset, blocks_max);
+    LOG_TRACE ("blocks_max: " FORMAT_RLx " [RLx]\n", blocks_max);
     tbl_id = 0;
     dwg->header.section[0].number = 0;
     dwg->header.section[0].type = (Dwg_Section_Type)SECTION_HEADER_R11;
     strcpy (dwg->header.section[0].name, "HEADER");
 
     // The 5 tables (num_sections always 5): 3 RS + 1 RL address
+    LOG_INFO ("==========================================\n")
     if (decode_preR13_section_hdr ("BLOCK", SECTION_BLOCK, dat, dwg)
         || decode_preR13_section_hdr ("LAYER", SECTION_LAYER, dat, dwg)
         || decode_preR13_section_hdr ("STYLE", SECTION_STYLE, dat, dwg)
@@ -768,11 +776,13 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       return DWG_ERR_INVALIDDWG;
     }
 
+  LOG_INFO ("==========================================\n")
   error |= decode_preR13_header_variables (dat, dwg);
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x23a
   if (error >= DWG_ERR_CRITICAL)
       return error;
 
+  num_entities = dwg->header_vars.num_entities;
   PRE (R_2_0b) {
     entities_start = dat->byte;
     entities_end = dwg->header_vars.num_bytes;
@@ -805,7 +815,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_WARN ("@0x%lx => entities_start 0x%x", dat->byte, entities_start);
       dat->byte = entities_start;
     }
-  error |= decode_preR13_entities (entities_start, entities_end, 0, dat, dwg);
+  error |= decode_preR13_entities (entities_start, entities_end, num_entities, 0, 0, dat, dwg);
   if (error >= DWG_ERR_CRITICAL)
     return error;
   if (dat->byte != entities_end)
@@ -817,6 +827,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     // this has usually some slack at the end.
     return error;
   }
+  LOG_INFO ("==========================================\n")
   //dat->byte += 20; /* crc + sentinel? 20 byte */
   error |= decode_preR13_section (SECTION_BLOCK, dat, dwg);
   error |= decode_preR13_section (SECTION_LAYER, dat, dwg);
@@ -843,8 +854,13 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_WARN ("@0x%lx => blocks_start 0x%x", dat->byte, blocks_start);
       dat->byte = blocks_start;
     }
+  // don't just decode the num_blocks (i.e. 1 the BLOCK ent),
+  // but the num_entities minus the already decoded entities.
+  //if (dwg->header.section[SECTION_BLOCK].number)
+  num_entities -= dwg->num_entities; // minus the already decoded modelspace ents
   error |= decode_preR13_entities (blocks_start, blocks_end,
-				   blocks_start - blocks_offset, dat, dwg);
+                                   num_entities, blocks_size & 0x3FFFFFFF,
+                                   blocks_max, dat, dwg);
   if (error >= DWG_ERR_CRITICAL)
     return error;
 
@@ -5400,16 +5416,28 @@ static int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restric
 }
 
 static int
-decode_preR13_entities (unsigned long start, unsigned long end,
-                        unsigned long offset, Bit_Chain *restrict dat,
+decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
+                        unsigned num_entities, BITCODE_RL size,
+                        BITCODE_RL blocks_max, Bit_Chain *restrict dat,
                         Dwg_Data *restrict dwg)
 {
   int error = 0;
   BITCODE_BL num = dwg->num_objects;
+  unsigned long oldpos = dat->byte;
+
   dat->bit = 0;
-  LOG_TRACE ("\n%sentities: (0x%lx-0x%lx, offset 0x%lx)\n", offset ? "block " : "",
-             start, end, offset)
-  while (dat->byte < end)
+  LOG_TRACE ("\n%sentities: (" FORMAT_RLx "-" FORMAT_RLx " (%u), size " FORMAT_RL ", 0x%x)\n",
+             blocks_max != (BITCODE_RL)0 ? "block " : "", start, end, num_entities,
+             size, blocks_max);
+  LOG_INFO ("==========================================\n");
+  if (end != 0 && start == end)
+    // with empty entities, ignore num_entities as they include block ents
+    return 0;
+  if (end == 0 && size == 0) // empty blocks
+    return 0;
+  if (end != 0 && size != 0 && num_entities == 0) // num_entities is wrong
+    num_entities = dwg->num_entities;
+  for (unsigned i = 0; i < num_entities; i++)
     {
       Dwg_Object *obj;
       Dwg_Object_Entity *ent, *_ent;
@@ -5431,7 +5459,7 @@ decode_preR13_entities (unsigned long start, unsigned long end,
       dwg->num_objects++;
       obj->index = num;
       obj->parent = dwg;
-      obj->address = offset; // so that the entity know its owner
+      obj->address = dat->byte;
       obj->supertype = DWG_SUPERTYPE_ENTITY;
 
       PRE (R_2_0b) {
@@ -5555,17 +5583,27 @@ decode_preR13_entities (unsigned long start, unsigned long end,
       assert (!dat->bit);
       PRE (R_2_0b)
       {
+        obj->size = dat->byte - oldpos;
+        oldpos = dat->byte;
         if ((int8_t)obj->type < 0) // deleted
           {
             obj->fixedtype = DWG_TYPE_UNUSED;
-            dwg->num_entities--; // stats only
+            dwg->num_entities--; // for stats only
           }
         if (num + 1 >= dwg->header_vars.num_entities)
           break;
       }
       SINCE (R_2_0b) // Pre R_2_0 doesn't contain size of entity
       {
-        SINCE (R_11)
+        PRE (R_11) // no crc16
+        {
+          if (obj->address + obj->size != dat->byte)
+            {
+              LOG_ERROR ("offset %ld", obj->address + obj->size - dat->byte);
+              dat->byte = obj->address + obj->size;
+            }
+        }
+        LATER_VERSIONS
         {
           if (obj->address + obj->size != dat->byte + 2)
             {
@@ -5575,27 +5613,34 @@ decode_preR13_entities (unsigned long start, unsigned long end,
           crc = bit_read_RS (dat);
           LOG_TRACE ("crc: %04X [RSx]\n", crc);
         }
-        else
-        {
-          if (obj->address + obj->size != dat->byte)
-            {
-              LOG_ERROR ("offset %ld", obj->address + obj->size - dat->byte);
-              dat->byte = obj->address + obj->size;
-            }
-        }
       }
       LOG_TRACE ("\n");
       num++;
 
-      SINCE (R_2_0b) {
-        if (obj->size < 2 || obj->size > 0x1000) { // FIXME
-          error |= DWG_ERR_SECTIONNOTFOUND;
+      if (end > 0 && dat->byte >= end)
+        {
+          if (size == 0 && blocks_max != 0) // else we just loop until end with wrong num
+            {
+              LOG_ERROR ("overflow with wrong blocks num_entities 0x%lx > 0x%x, %u",
+                         dat->byte, end, num_entities);
+              error |= DWG_ERR_SECTIONNOTFOUND;
+            }
           dat->byte = end;
+          return error;
         }
+      SINCE (R_2_0b) {
+        if (obj->size < 2 || obj->size > 0x1000)// FIXME
+          {
+            LOG_ERROR ("wrong obj->size %u", obj->size);
+            error |= DWG_ERR_SECTIONNOTFOUND;
+            if (end)
+              dat->byte = end;
+          }
       }
     }
 
-  dat->byte = end;
+  if (end)
+    dat->byte = end;
   return error;
 }
 

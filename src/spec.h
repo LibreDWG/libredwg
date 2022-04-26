@@ -303,7 +303,7 @@
 #  define FIELD_BLx(name, dxf) FIELD_BL (name, dxf)
 #endif
 #ifndef FIELD_TFv
-#  define FIELD_TFv(name, len, dxf) FIELD_TF (name, len, dxf)
+#  define FIELD_TFv(name, len, dxf) FIELD_TV (name, dxf)
 #endif
 #ifndef FIELD_TFFx
 #  define FIELD_TFFx(name, len, dxf) FIELD_TFF (name, len, dxf)
