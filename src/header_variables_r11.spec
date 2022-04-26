@@ -124,7 +124,7 @@
   FIELD_RC (DIMSE1, 70); //ok
   FIELD_RC (DIMSE2, 70); //ok
   FIELD_CAST (DIMTAD, RC, RS, 70); //ok
-  if (dwg->header.num_header_vars <= 74)
+  if (dwg->header.numheader_vars <= 74)
     return 0;
   FIELD_RC (LIMCHECK, 70); //ok 1fa
 
@@ -145,7 +145,7 @@
   dat->byte = 0x2e1;
   FIELD_RS (unknown_18, 0);
   FIELD_CAST (BLIPMODE, RS, B, 70);
-  if (dwg->header.num_header_vars <= 83) // PRE(R_2_21)
+  if (dwg->header.numheader_vars <= 83) // PRE(R_2_21)
      return 0;
   FIELD_CAST (DIMZIN, RC, B, 70); //ok
   FIELD_RD (DIMRND, 40);
@@ -175,12 +175,12 @@
   dat->byte = 0x353;
   FIELD_RD (ANGBASE, 50);
   FIELD_CAST (ANGDIR, RS, B, 70);
-  if (dwg->header.num_header_vars <= 101)
+  if (dwg->header.numheader_vars <= 101)
     return 0;
   FIELD_RS (PDMODE, 70);
   FIELD_RD (PDSIZE, 40);
   FIELD_RD (PLINEWID, 40);
-  if (dwg->header.num_header_vars <= 104)
+  if (dwg->header.numheader_vars <= 104)
     return 0;
 
   /* TODO Signed */
@@ -201,11 +201,11 @@
   FIELD_RC (DIMSHO, 70); //ok
   FIELD_TFv (DIMPOST, 16, 1);
   FIELD_TFv (DIMAPOST, 16, 1);
-  if (dwg->header.num_header_vars <= 120)
+  if (dwg->header.numheader_vars <= 120)
     return 0;
   FIELD_RD (DIMALTF, 40);
   FIELD_RD (DIMLFAC, 40);
-  if (dwg->header.num_header_vars <= 122)
+  if (dwg->header.numheader_vars <= 122)
     return 0;
   FIELD_RS (SPLINESEGS, 70);
   FIELD_CAST (SPLFRAME, RS, B, 70);
@@ -214,7 +214,7 @@
   FIELD_RD (CHAMFERA, 40);
   FIELD_RD (CHAMFERB, 40);
   FIELD_CAST (MIRRTEXT, RS, B, 70);
-  if (dwg->header.num_header_vars <= 129)
+  if (dwg->header.numheader_vars <= 129)
     return 0;
 
   /* Skip table UCS (0x3ef-0x3f9) */
@@ -263,14 +263,14 @@
   FIELD_RS (SPLINETYPE, 70);
   FIELD_RS (UCSICON, 0);
   FIELD_RS (unknown_59, 0); // ff ff
-  if (dwg->header.num_header_vars <= 158) // r10
+  if (dwg->header.numheader_vars <= 158) // r10
     return 0;
 
   /* Skip table APPID (0x512-0x51c) */
   dat->byte = 0x51d;
 
   FIELD_CAST (WORLDVIEW, RS, B, 70);
-  if (dwg->header.num_header_vars <= 160) // r10
+  if (dwg->header.numheader_vars <= 160) // r10
     return 0;
   FIELD_RS (unknown_51e, 0);
   FIELD_RS (unknown_520, 0);
@@ -319,7 +319,7 @@
   FIELD_RS (MAXACTVP, 70); //ok
   FIELD_RD (DIMGAP, 40);   //ok
   FIELD_RD (PELEVATION, 40); //ok
-  if (dwg->header.num_header_vars <= 204)
+  if (dwg->header.numheader_vars <= 204)
     return 0;
   FIELD_CAST (VISRETAIN, RS, B, 70); //ok
 

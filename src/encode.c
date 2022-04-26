@@ -1773,7 +1773,7 @@ section_info_rebuild (Dwg_Data *dwg, Dwg_Section_Type lasttype)
       if (info)
         {
           unsigned ssi = 0;
-          for (unsigned i = 0; i < dwg->header.num_sections; i++)
+          for (unsigned i = 0; i < dwg->header.numsections; i++)
             {
               Dwg_Section *sec = &dwg->header.section[i];
               if (sec->type == type) // first section
@@ -2394,14 +2394,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
      *         5: optional: AuxHeader
      */
     /* Usually 3-5, max 6 */
-    if (!dwg->header.num_sections
-        || (dat->from_version >= R_2004 && dwg->header.num_sections > 6))
+    if (!dwg->header.numsections
+        || (dat->from_version >= R_2004 && dwg->header.numsections > 6))
       {
-        dwg->header.num_sections = dwg->header.version < R_2000 ? 5 : 6;
+        dwg->header.numsections = dwg->header.version < R_2000 ? 5 : 6;
         // minimal DXF:
         if (!dwg->header_vars.HANDSEED || !dwg->header_vars.TDCREATE.days)
           {
-            dwg->header.num_sections = 5;
+            dwg->header.numsections = 5;
             // hack to trigger IF_ENCODE_FROM_EARLIER defaults. undone after
             // HEADER
             dat->from_version = R_11;
@@ -2409,10 +2409,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               dat->from_version = (Dwg_Version_Type)((int)dat->version - 1);
           }
       }
-    LOG_TRACE ("num_sections: " FORMAT_RL " [RL]\n", dwg->header.num_sections);
-    bit_write_RL (dat, dwg->header.num_sections);
+    LOG_TRACE ("numsections: " FORMAT_RL " [RL]\n", dwg->header.numsections);
+    bit_write_RL (dat, dwg->header.numsections);
     if (!dwg->header.section)
-      dwg->header.section = (Dwg_Section*)calloc (dwg->header.num_sections,
+      dwg->header.section = (Dwg_Section*)calloc (dwg->header.numsections,
                                                   sizeof (Dwg_Section));
     if (!dwg->header.section)
       {
@@ -2420,7 +2420,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         return DWG_ERR_OUTOFMEM;
       }
     section_address = dat->byte;                 // save section address
-    dat->byte += (dwg->header.num_sections * 9); /* RC + 2*RL */
+    dat->byte += (dwg->header.numsections * 9); /* RC + 2*RL */
     bit_write_CRC (dat, 0, 0xC0C1);
     bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_HEADER_END));
 
@@ -2428,7 +2428,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
      * AuxHeader section 5
      * R2000+, mostly redundant file header information
      */
-    if (dwg->header.num_sections > 5)
+    if (dwg->header.numsections > 5)
       {
         Dwg_AuxHeader *_obj = &dwg->auxheader;
         Dwg_Object *obj = NULL;
@@ -2492,7 +2492,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_TRACE ("\n#### r2004 File Header ####\n");
     if (dat->byte + 0x80 >= dat->size - 1)
       {
-        dwg->header.num_sections = 28; // room for some object pages
+        dwg->header.numsections = 28; // room for some object pages
         dwg->header.section = calloc (28, sizeof (Dwg_Section));
       }
     if (!dwg->header.section_info)
@@ -2940,7 +2940,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // always recomputed, even with dwgrewrite
       if (dwg->header.version <= R_2000)
         {
-          _obj->num_sections = dwg->header.num_sections;
+          _obj->num_sections = dwg->header.numsections;
           for (i = 0; i < _obj->num_sections; i++)
             {
               _obj->section[i].nr = dwg->header.section[i].number;
@@ -3007,7 +3007,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->header.section[SECTION_2NDHEADER_R13].size
           = dat->byte - _obj->address;
     }
-  else if (dwg->header.num_sections > SECTION_2NDHEADER_R13
+  else if (dwg->header.numsections > SECTION_2NDHEADER_R13
            && dwg->header.version < R_2004) // TODO
     {
       dwg->header.section[SECTION_2NDHEADER_R13].number = 3;
@@ -3027,7 +3027,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   }
   else sec_id = SECTION_MEASUREMENT_R13;
 
-  if (dwg->header.version >= R_2004 || (int)dwg->header.num_sections > sec_id)
+  if (dwg->header.version >= R_2004 || (int)dwg->header.numsections > sec_id)
     {
       LOG_INFO ("\n=======> MEASUREMENT: %4u\n", (unsigned)dat->byte);
       dwg->header.section[sec_id].number = 4;
@@ -3179,7 +3179,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     /*-------------------------------------------------------------------------
      * Section map and info
      */
-    // no gaps, so header->num_sections == r2004_header->numsections
+    // no gaps, so header->numsections == r2004_header->numsections
     // get together all the section sizes, and set the addresses
     {
       int ssize;
@@ -3270,7 +3270,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 #ifndef HAVE_COMPRESS_R2004_SECTION
               info->compressed = 1;
 #endif
-              // pre-calc num_sections for both
+              // pre-calc numsections for both
               if ((unsigned)ssize <= max_decomp_size)
                 info->num_sections = 1;
               else
@@ -3282,12 +3282,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               info->sections
                   = calloc (info->num_sections, sizeof (Dwg_Section*));
               // enough sections?
-              if (si + info->num_sections > dwg->header.num_sections)
+              if (si + info->num_sections > dwg->header.numsections)
                 {
                   Dwg_Section *oldsecs = dwg->header.section;
-                  dwg->header.num_sections = si + info->num_sections;
+                  dwg->header.numsections = si + info->num_sections;
                   dwg->header.section = realloc (dwg->header.section,
-                                                 dwg->header.num_sections
+                                                 dwg->header.numsections
                                                      * sizeof (Dwg_Section));
                   if (dwg->header.section != oldsecs)
                     // need to rebuild all info->sections
@@ -3323,10 +3323,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
       dwg->r2004_header.numsections = si;
       // section_info [27] and section_map [28] as two last already added.
-      if ((unsigned)si > dwg->header.num_sections) // needed?
+      if ((unsigned)si > dwg->header.numsections) // needed?
         {
           Dwg_Section *oldsecs = dwg->header.section;
-          dwg->header.num_sections = si;
+          dwg->header.numsections = si;
           dwg->header.section = realloc (dwg->header.section, si * sizeof (Dwg_Section));
           if (dwg->header.section != oldsecs)
             section_info_rebuild (dwg, SECTION_SYSTEM_MAP);
@@ -3427,7 +3427,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
 
       address = 0x100;
-      for (i = 0; i < dwg->header.num_sections; i++)
+      for (i = 0; i < dwg->header.numsections; i++)
         {
           Dwg_Section *_obj = &dwg->header.section[i];
 
@@ -3600,7 +3600,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     dat->byte = section_address;
     dat->bit = 0;
     LOG_INFO ("\n=======> section addresses: %4u\n", (unsigned)dat->byte);
-    for (j = 0; j < dwg->header.num_sections; j++)
+    for (j = 0; j < dwg->header.numsections; j++)
       {
         LOG_TRACE ("section[%u].number: %4d [RC] %s\n", j,
                    (int)dwg->header.section[j].number,
@@ -3639,7 +3639,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     ckr = bit_read_CRC (dat);
     dat->byte -= 2;
     // FIXME: r13-2000 only
-    switch (dwg->header.num_sections)
+    switch (dwg->header.numsections)
       {
       case 3:
         ckr ^= 0xA598;

@@ -8888,7 +8888,7 @@ typedef struct _dwg_header
   BITCODE_RC is_maint;
   BITCODE_RC zero_one_or_three;
   BITCODE_RS unknown_3;         /* < R13, always 3 */
-  BITCODE_RS num_header_vars;   /* < R13 */
+  BITCODE_RS numheader_vars;    /* < R13 */
   BITCODE_RL thumbnail_address; /* THUMBNAIL or AdDb:Preview */
   BITCODE_RC dwg_version;
   BITCODE_RC maint_version;
@@ -8901,7 +8901,7 @@ typedef struct _dwg_header
   BITCODE_RL summaryinfo_address; /* R2004+ */
   BITCODE_RL vbaproj_address;     /* R2004+ */
   BITCODE_RL r2004_header_address; /* R2004+ */
-  BITCODE_RL num_sections;
+  BITCODE_RL numsections;
   Dwg_Section *section;
   Dwg_Section_InfoHdr section_infohdr; /* R2004+ */
   Dwg_Section_Info *section_info;
