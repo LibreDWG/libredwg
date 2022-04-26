@@ -5462,15 +5462,20 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
       obj->address = dat->byte;
       obj->supertype = DWG_SUPERTYPE_ENTITY;
 
-      PRE (R_2_0b) {
-        type = obj->type = (BITCODE_RC)bit_read_RS (dat);
-        if ((int8_t)obj->type < 0) // deleted
-          {
+      PRE (R_2_0b)
+        {
+          type = bit_read_RS (dat);
+          obj->type = (BITCODE_RC)type;
+          LOG_TRACE ("type: " FORMAT_RS " [RS]\n", type);
+          if (type > 127) // deleted. moved into BLOCK
             type = abs ((int8_t)obj->type);
-          }
-      }
+        }
       else
-        type = obj->type = bit_read_RC (dat);
+        {
+          obj->type = bit_read_RC (dat);
+          LOG_TRACE ("type: " FORMAT_RCd " [RCd]\n", obj->type);
+          type = obj->type & 0x7F;
+        }
 
       switch (type)
         {
@@ -5574,8 +5579,9 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
           break;
         */
         default:
+          dat->byte--;
 	  DEBUG_HERE;
-          LOG_ERROR ("Unknown object type %d", obj->type);
+          LOG_ERROR ("Unknown object type %d", type);
           error |= DWG_ERR_SECTIONNOTFOUND;
           break;
         }
@@ -5585,7 +5591,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
       {
         obj->size = dat->byte - oldpos;
         oldpos = dat->byte;
-        if ((int8_t)obj->type < 0) // deleted
+        if (obj->type > 127) // deleted
           {
             obj->fixedtype = DWG_TYPE_UNUSED;
             dwg->num_entities--; // for stats only

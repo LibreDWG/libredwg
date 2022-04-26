@@ -536,11 +536,11 @@ DWG_ENTITY (BLOCK)
   }
   VERSIONS (R_2_0b, R_11) {
     FIELD_2RD (base_pt, 10);
-    if (R11OPTS(2))
+    if (R11OPTS (2))
       FIELD_TV (xref_pname, 3);
   }
   SINCE (R_13b1) {
-    BLOCK_NAME (name, 2) //special pre-R13 naming rules
+    BLOCK_NAME (name, 2) // special pre-R13 naming rules
     COMMON_ENTITY_HANDLE_DATA;
   }
 
@@ -937,11 +937,11 @@ DWG_ENTITY (VERTEX_2D)
       FIELD_RC (flag, 0);
     if (R11OPTS (16))
       FIELD_RD (tangent_dir, 50);
-    // if (R11FLAG(32)) // VERTEX_3D
+    // if (R11FLAG (32)) // => VERTEX_3D
     //   FIELD_RD (point.z, 30)
-    // if (R11FLAG(64)) // VERTEX_MESH
+    // if (R11FLAG (64)) // => VERTEX_MESH
     //   FIELD_RD (point.z, 30)
-    // if (R11FLAG(128) && !R11FLAG(64)) // PFACE_FACE index
+    // if (R11FLAG (128) && !R11FLAG (64)) // => PFACE_FACE index
     //   FIELD_RS (vertind[0], 71);
     //   FIELD_RS (vertind[1], 72);
     //   FIELD_RS (vertind[2], 73);
