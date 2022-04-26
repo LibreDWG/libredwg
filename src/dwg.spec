@@ -1132,10 +1132,10 @@ DWG_ENTITY (POLYLINE_2D)
       FIELD_RC (has_vertex, 66);
     if (R11OPTS (2))
       FIELD_RD (start_width, 40);
-    //if (R11OPTS (4)) ??
-    //  FIELD_RS (curve_type, 75);
-    if (R11OPTS (8)) // or (4)?
+    if (R11OPTS (4))
       FIELD_RD (end_width, 41);
+    //if (R11OPTS (8)) // but this is already in flags_r11 70
+    //  FIELD_RS (curve_type, 75);
   }
   SINCE (R_13)
   {
