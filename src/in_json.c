@@ -1884,7 +1884,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   char *old;
                   if (strEQc (key, "strings_area"))
                     {
-                      const int k = dwg->header.version > R_2004 ? 512 : 256;
+                      const int k = dwg->header.from_version > R_2004 ? 512 : 256;
                       if (len > (size_t)k)
                         {
                           LOG_ERROR ("Illegal %s.%s length %lu > %d, stripped", name,
@@ -2571,6 +2571,11 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Out of memory");
       return DWG_ERR_OUTOFMEM;
     }
+  if (dwg->header.from_version < R_13)
+    {
+      // 5 plus the header, plus a hole
+      dwg->header.section = calloc (7, sizeof (Dwg_Section));
+    }
   dwg->num_objects += size;
   for (i = 0; i < size; i++)
     {
@@ -2587,7 +2592,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (i > 0)
         {
           Dwg_Object *oldobj = &dwg->object[i - 1];
-          if (dwg->header.version >= R_13 && !oldobj->handle.value)
+          if (dwg->header.from_version >= R_13 && !oldobj->handle.value)
             {
               LOG_ERROR ("Required %s.handle missing, skipped", oldobj->name)
               dwg_free_object (obj);
@@ -2852,7 +2857,21 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     }
                 }
               LOG_TRACE ("type: %d,\tfixedtype: %d\n", obj->type,
-                         obj->fixedtype)
+                         obj->fixedtype);
+              if (dwg->header.from_version < R_13 && dwg_obj_is_table (obj))
+                {
+                  Dwg_Section_Type_r11 id;
+                  switch (obj->fixedtype)
+                    {
+                    case DWG_TYPE_BLOCK_HEADER: id = SECTION_BLOCK; break;
+                    case DWG_TYPE_LAYER: id = SECTION_LAYER; break;
+                    case DWG_TYPE_STYLE: id = SECTION_STYLE; break;
+                    case DWG_TYPE_LTYPE: id = SECTION_LTYPE; break;
+                    case DWG_TYPE_VIEW:  id = SECTION_VIEW; break;
+                    default: assert (!obj->fixedtype);
+                    }
+                  dwg->header.section[id].number++;
+                }
             }
           // Note: also _obj->size
           else if (strEQc (key, "size") && !obj->size
@@ -2860,7 +2879,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               obj->size = json_long (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
-              if (dwg->header.version >= R_13 && !obj->handle.value)
+              if (dwg->header.from_version >= R_13 && !obj->handle.value)
                 {
                   LOG_ERROR ("Required %s.handle missing", name);
                   goto harderr;
@@ -4326,7 +4345,7 @@ dwg_read_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
 
   LOG_TRACE ("\n")
-  if (dwg->header.version <= R_2000 && dwg->header.from_version > R_2000)
+  if (dat->version <= R_2000 && dwg->header.from_version > R_2000)
     dwg_fixup_BLOCKS_entities (dwg);
 
   json_free_globals(&tokens);
