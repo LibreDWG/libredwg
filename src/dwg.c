@@ -938,7 +938,7 @@ dwg_block_control (Dwg_Data *dwg)
     {
       Dwg_Object *obj;
       Dwg_Object_Ref *ctrl = dwg->header_vars.BLOCK_CONTROL_OBJECT;
-      if (!ctrl || !(obj = dwg_ref_object (dwg, ctrl)) || obj->type != DWG_TYPE_BLOCK_CONTROL)
+      if (!ctrl || !(obj = dwg_ref_object (dwg, ctrl)) || obj->fixedtype != DWG_TYPE_BLOCK_CONTROL)
         {
           LOG_ERROR ("dwg.block_control and HEADER.BLOCK_CONTROL_OBJECT missing");
           return NULL;
@@ -1009,7 +1009,7 @@ dwg_model_space_object (Dwg_Data *dwg)
   Dwg_Object_Ref *msref = dwg_model_space_ref (dwg);
   Dwg_Object_BLOCK_CONTROL *ctrl;
 
-  if (msref && msref->obj && msref->obj->type == DWG_TYPE_BLOCK_HEADER)
+  if (msref && msref->obj && msref->obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
     return msref->obj;
   ctrl = dwg_block_control (dwg);
   if (ctrl && ctrl->model_space && ctrl->model_space->obj)
@@ -1030,7 +1030,7 @@ dwg_paper_space_object (Dwg_Data *dwg)
   Dwg_Object_Ref *psref = dwg_paper_space_ref (dwg);
   Dwg_Object_BLOCK_CONTROL *ctrl;
 
-  if (psref && psref->obj && psref->obj->type == DWG_TYPE_BLOCK_HEADER)
+  if (psref && psref->obj && psref->obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
     return psref->obj;
   ctrl = dwg_block_control (dwg);
   if (ctrl && ctrl->paper_space && ctrl->paper_space->obj)
@@ -1049,9 +1049,9 @@ get_first_owned_entity (const Dwg_Object *hdr)
 {
   unsigned int version = hdr->parent->header.version;
   Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
-  if (hdr->type != DWG_TYPE_BLOCK_HEADER)
+  if (hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
     {
-      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->type);
+      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->fixedtype);
       return NULL;
     }
 
@@ -1124,9 +1124,9 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
   Dwg_Data *dwg = hdr->parent;
   Dwg_Version_Type version = dwg->header.version;
   Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
-  if (hdr->type != DWG_TYPE_BLOCK_HEADER)
+  if (hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
     {
-      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->type);
+      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->fixedtype);
       return NULL;
     }
 
@@ -1137,13 +1137,13 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
           || current->handle.value >= _hdr->last_entity->absolute_ref)
         return NULL;
       obj = dwg_next_entity (current);
-      while (obj && (obj->type == DWG_TYPE_ATTDEF
-                     || obj->type == DWG_TYPE_ATTRIB
-                     || obj->type == DWG_TYPE_VERTEX_2D
-                     || obj->type == DWG_TYPE_VERTEX_3D
-                     || obj->type == DWG_TYPE_VERTEX_MESH
-                     || obj->type == DWG_TYPE_VERTEX_PFACE
-                     || obj->type == DWG_TYPE_VERTEX_PFACE_FACE))
+      while (obj && (obj->fixedtype == DWG_TYPE_ATTDEF
+                     || obj->fixedtype == DWG_TYPE_ATTRIB
+                     || obj->fixedtype == DWG_TYPE_VERTEX_2D
+                     || obj->fixedtype == DWG_TYPE_VERTEX_3D
+                     || obj->fixedtype == DWG_TYPE_VERTEX_MESH
+                     || obj->fixedtype == DWG_TYPE_VERTEX_PFACE
+                     || obj->fixedtype == DWG_TYPE_VERTEX_PFACE_FACE))
         {
           obj = dwg_next_entity (obj);
           // this may happen with r2000 attribs
@@ -1179,7 +1179,7 @@ get_first_owned_subentity (const Dwg_Object *owner)
 {
   Dwg_Data *dwg = owner->parent;
   Dwg_Version_Type version = dwg->header.version;
-  const unsigned int type = owner->type;
+  const unsigned int type = owner->fixedtype;
   if (type == DWG_TYPE_INSERT)
     {
       Dwg_Entity_INSERT *_obj = owner->tio.entity->tio.INSERT;
@@ -1226,7 +1226,7 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
 {
   Dwg_Data *dwg = owner->parent;
   Dwg_Version_Type version = dwg->header.version;
-  const Dwg_Object_Type type = (const Dwg_Object_Type)owner->type;
+  const Dwg_Object_Type type = (const Dwg_Object_Type)owner->fixedtype;
   Dwg_Object_Entity *ent = owner->tio.entity;
   Dwg_Object *obj = dwg_next_object (current);
 
@@ -1235,7 +1235,7 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
       Dwg_Entity_INSERT *_obj = owner->tio.entity->tio.INSERT;
       if (version <= R_2000)
         return (_obj->last_attrib && current != _obj->last_attrib->obj
-                && obj->type == DWG_TYPE_ATTRIB)
+                && obj->fixedtype == DWG_TYPE_ATTRIB)
                    ? obj
                    : NULL;
       else
@@ -1257,7 +1257,7 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
       Dwg_Entity_MINSERT *_obj = owner->tio.entity->tio.MINSERT;
       if (version <= R_2000)
         return (_obj->last_attrib && current != _obj->last_attrib->obj
-                && obj->type == DWG_TYPE_ATTRIB)
+                && obj->fixedtype == DWG_TYPE_ATTRIB)
                    ? obj
                    : NULL;
       else
@@ -1312,9 +1312,9 @@ get_first_owned_block (const Dwg_Object *hdr)
   Dwg_Version_Type version = dwg->header.version;
   const Dwg_Object_BLOCK_HEADER *restrict _hdr
       = hdr->tio.object->tio.BLOCK_HEADER;
-  if (hdr->type != DWG_TYPE_BLOCK_HEADER)
+  if (hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
     {
-      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->type);
+      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->fixedtype);
       return NULL;
     }
 
@@ -1329,7 +1329,7 @@ get_first_owned_block (const Dwg_Object *hdr)
       else
         {
           Dwg_Object *obj = (Dwg_Object *)hdr;
-          while (obj && obj->type != DWG_TYPE_BLOCK)
+          while (obj && obj->fixedtype != DWG_TYPE_BLOCK)
             obj = dwg_next_object (obj);
           return obj;
         }
@@ -1351,9 +1351,9 @@ get_next_owned_block (const Dwg_Object *restrict hdr,
   Dwg_Version_Type version = dwg->header.version;
   const Dwg_Object_BLOCK_HEADER *restrict _hdr
       = hdr->tio.object->tio.BLOCK_HEADER;
-  if (hdr->type != DWG_TYPE_BLOCK_HEADER)
+  if (hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
     {
-      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->type);
+      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->fixedtype);
       return NULL;
     }
 
@@ -1379,9 +1379,9 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
   Dwg_Version_Type version;
   Dwg_Object_BLOCK_HEADER *restrict _hdr;
 
-  if (hdr->type != DWG_TYPE_BLOCK_HEADER)
+  if (hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
     {
-      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->type);
+      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->fixedtype);
       return NULL;
     }
 
@@ -1420,9 +1420,9 @@ get_last_owned_block (const Dwg_Object *restrict hdr)
   Dwg_Data *dwg = hdr->parent;
   Dwg_Object_BLOCK_HEADER *restrict _hdr = hdr->tio.object->tio.BLOCK_HEADER;
   unsigned int version = dwg->header.version;
-  if (hdr->type != DWG_TYPE_BLOCK_HEADER)
+  if (hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
     {
-      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->type);
+      LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->fixedtype);
       return NULL;
     }
 
@@ -1433,9 +1433,9 @@ get_last_owned_block (const Dwg_Object *restrict hdr)
       else
         {
           Dwg_Object *obj = (Dwg_Object *)hdr;
-          while (obj && obj->type != DWG_TYPE_ENDBLK)
+          while (obj && obj->fixedtype != DWG_TYPE_ENDBLK)
             obj = dwg_next_object (obj);
-          if (obj && obj->type == DWG_TYPE_ENDBLK)
+          if (obj && obj->fixedtype == DWG_TYPE_ENDBLK)
             {
               if (!_hdr->endblk_entity)
                 {
@@ -1482,7 +1482,7 @@ dwg_class_is_entity (const Dwg_Class *restrict klass)
 EXPORT int
 dwg_obj_is_control (const Dwg_Object *obj)
 {
-  const unsigned int type = obj->type;
+  const unsigned int type = obj->fixedtype;
   return (obj->supertype == DWG_SUPERTYPE_OBJECT)
          && (type == DWG_TYPE_BLOCK_CONTROL || type == DWG_TYPE_LAYER_CONTROL
              || type == DWG_TYPE_STYLE_CONTROL
@@ -1496,7 +1496,7 @@ dwg_obj_is_control (const Dwg_Object *obj)
 EXPORT int
 dwg_obj_is_table (const Dwg_Object *obj)
 {
-  const unsigned int type = obj->type;
+  const unsigned int type = obj->fixedtype;
   return (obj->supertype == DWG_SUPERTYPE_OBJECT)
          && (type == DWG_TYPE_BLOCK_HEADER || type == DWG_TYPE_LAYER
              || type == DWG_TYPE_STYLE || type == DWG_TYPE_LTYPE
@@ -1509,7 +1509,7 @@ dwg_obj_is_table (const Dwg_Object *obj)
 EXPORT int
 dwg_obj_is_subentity (const Dwg_Object *obj)
 {
-  const unsigned int type = obj->type;
+  const unsigned int type = obj->fixedtype;
   return (obj->supertype == DWG_SUPERTYPE_ENTITY)
          && (type == DWG_TYPE_ATTRIB || type == DWG_TYPE_VERTEX_2D
              || type == DWG_TYPE_VERTEX_3D || type == DWG_TYPE_VERTEX_MESH
@@ -1520,7 +1520,7 @@ dwg_obj_is_subentity (const Dwg_Object *obj)
 EXPORT int
 dwg_obj_has_subentity (const Dwg_Object *obj)
 {
-  const unsigned int type = obj->type;
+  const unsigned int type = obj->fixedtype;
   return (obj->supertype == DWG_SUPERTYPE_ENTITY)
          && (type == DWG_TYPE_INSERT || type == DWG_TYPE_MINSERT
              || type == DWG_TYPE_POLYLINE_2D || type == DWG_TYPE_POLYLINE_3D
@@ -2002,7 +2002,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
           && ((obj->fixedtype == DWG_TYPE_DICTIONARY
                || obj->fixedtype == DWG_TYPE_XRECORD
                || obj->supertype == DWG_SUPERTYPE_ENTITY
-               || (obj->type > DWG_TYPE_GROUP
+               || (obj->fixedtype > DWG_TYPE_GROUP
                    && obj->fixedtype != DWG_TYPE_DICTIONARYVAR)))))
     ;
   else
@@ -2119,7 +2119,7 @@ dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict, const char *restric
                  ARGS_REF(dict));
       return NULL;
     }
-  if (obj->type != DWG_TYPE_DICTIONARY)
+  if (obj->fixedtype != DWG_TYPE_DICTIONARY)
     {
       LOG_ERROR ("dwg_find_dicthandle: dict not a DICTIONARY\n");
       return NULL;
@@ -2163,7 +2163,7 @@ dwg_find_dicthandle_objname (Dwg_Data *restrict dwg, BITCODE_H dict, const char 
                  ARGS_REF(dict));
       return NULL;
     }
-  if (obj->type != DWG_TYPE_DICTIONARY)
+  if (obj->fixedtype != DWG_TYPE_DICTIONARY)
     {
       LOG_ERROR ("dwg_find_dicthandle: dict not a DICTIONARY\n");
       return NULL;
@@ -2422,7 +2422,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
       LOG_TRACE ("dwg_find_tablehandle: Could not resolve table %s\n", table);
       return NULL;
     }
-  if (obj->type == DWG_TYPE_DICTIONARY)
+  if (obj->fixedtype == DWG_TYPE_DICTIONARY)
     return dwg_find_dicthandle_objname (dwg, ctrl, name);
   if (!dwg_obj_is_control (obj))
     {
@@ -2497,7 +2497,7 @@ dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
       LOG_TRACE ("dwg_handle_name: Could not resolve table %s\n", table);
       return 0;
     }
-  //if (obj->type == DWG_TYPE_DICTIONARY)
+  //if (obj->fixedtype == DWG_TYPE_DICTIONARY)
   //  return dwg_find_dicthandle_objname (dwg, ctrl, name);
   if (!dwg_obj_is_control (obj))
     {
@@ -2642,7 +2642,7 @@ dwg_find_table_extname (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
   if (!xdicref)
     return NULL;
   xdic = dwg_ref_object (dwg, xdicref);
-  if (!xdic || xdic->type != DWG_TYPE_DICTIONARY)
+  if (!xdic || xdic->fixedtype != DWG_TYPE_DICTIONARY)
     return NULL;
   _xdic = xdic->tio.object->tio.DICTIONARY;
   if (_xdic->numitems < 1 || !_xdic->texts[0])
