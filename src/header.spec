@@ -44,8 +44,8 @@
        AC1009: 3, 5, 204; 3, 5, 205
      */
     FIELD_RS (unknown_3, 0);    // 3
-    FIELD_CAST (num_sections, RS, RL, 0); // 5
-    FIELD_RS (num_header_vars, 0); // 74,83,101,104,114,120,122,129,158,160,204,205
+    FIELD_CAST (numsections, RS, RL, 0); // 5
+    FIELD_RS (numheader_vars, 0); // 74,83,101,104,114,120,122,129,158,160,204,205
     FIELD_RC (dwg_version, 0); // 0
   }
   SINCE (R_13) {
