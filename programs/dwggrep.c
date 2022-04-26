@@ -1502,7 +1502,7 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       const Dwg_Object *obj = &dwg->object[i];
       if (obj->supertype != DWG_SUPERTYPE_OBJECT)
         continue;
-      if (obj->type == DWG_TYPE_BLOCK_HEADER) // processed later, --tables finds BLOCK
+      if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER) // processed later, --tables finds BLOCK
         continue;
       if (numtype) // search for allowed --type and skip if not
         {
@@ -1523,7 +1523,7 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
   else if (obj->fixedtype == DWG_TYPE_##OBJECT)                         \
     found += match_##OBJECT (filename, obj);
 
-      if (obj->type == DWG_TYPE_LAYER)
+      if (obj->fixedtype == DWG_TYPE_LAYER)
         found += match_LAYER (filename, obj);
       ELSEMATCH (LTYPE)
       ELSEMATCH (STYLE)
@@ -1603,6 +1603,61 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
 }
 
 static int
+match_preR13_entities (const char *restrict filename,
+                       const Dwg_Data *restrict dwg, const bool blocks)
+{
+  int found = 0;
+  char *text;
+
+  // TODO skip block entities for now
+  if (blocks)
+    return found;
+  for (unsigned j = 0; j < dwg->num_entities; j++)
+    {
+      const Dwg_Object *obj = &dwg->object[j];
+      if (obj->fixedtype == DWG_TYPE_UNUSED)
+        continue;
+      if (verbose)
+        fprintf(stderr, "%s [%d]\n", obj->name, obj->index);
+      if (numtype) // search for allowed --type and skip if not
+        {
+          int typeok = 0;
+          for (int i = 0; i < numtype; i++)
+            {
+              if (obj->dxfname && !strcmp (type[i], obj->dxfname))
+                {
+                  typeok = 1;
+                  break;
+                }
+            }
+          if (!typeok) // next obj
+            continue;
+        }
+
+      if (obj->fixedtype == DWG_TYPE_TEXT)
+        found += match_TEXT (filename, obj);
+#ifdef WITH_SUBENTS
+      ELSEMATCH (ATTRIB)
+#endif
+      ELSEMATCH (ATTDEF)
+      if (!opt_text)
+        {
+          if (obj->type == 23) /* DIMENSION */
+            found += match_DIMENSION (filename, obj);
+          ELSEMATCH (VIEWPORT)
+          ELSEMATCH (BLOCK)
+        }
+      if (!opt_text)
+        {
+          // common entity names
+          MATCH_TABLE (ENTITY, layer, LAYER, 8);
+          MATCH_TABLE (ENTITY, ltype, LTYPE, 8);
+        }
+    }
+  return found;
+}
+
+static int
 match_BLOCK_HEADER (const char *restrict filename,
                     Dwg_Object_Ref *restrict ref)
 {
@@ -1648,7 +1703,7 @@ match_BLOCK_HEADER (const char *restrict filename,
             continue;
         }
 
-      if (obj->type == DWG_TYPE_TEXT)
+      if (obj->fixedtype == DWG_TYPE_TEXT)
         found += match_TEXT (filename, obj);
 #ifdef WITH_SUBENTS
       ELSEMATCH (ATTRIB)
@@ -1656,7 +1711,7 @@ match_BLOCK_HEADER (const char *restrict filename,
       ELSEMATCH (ATTDEF)
       ELSEMATCH (MTEXT)
       ELSEMATCH (ARCALIGNEDTEXT)
-      else if (obj->type == DWG_TYPE_INSERT)
+      else if (obj->fixedtype == DWG_TYPE_INSERT)
         {
 #ifndef WITH_SUBENTS
           const Dwg_Data *dwg = obj->parent;
@@ -1691,7 +1746,7 @@ match_BLOCK_HEADER (const char *restrict filename,
             }
 #endif
         }
-      else if (obj->type == DWG_TYPE_MINSERT)
+      else if (obj->fixedtype == DWG_TYPE_MINSERT)
         {
 #ifndef WITH_SUBENTS
           const Dwg_Data *dwg = obj->parent;
@@ -1728,17 +1783,17 @@ match_BLOCK_HEADER (const char *restrict filename,
         }
       if (!opt_text)
         {
-          if (obj->type == DWG_TYPE_DIMENSION_ORDINATE
-              || obj->type == DWG_TYPE_DIMENSION_LINEAR
-              || obj->type == DWG_TYPE_DIMENSION_ALIGNED
-              || obj->type == DWG_TYPE_DIMENSION_ANG3PT
-              || obj->type == DWG_TYPE_DIMENSION_ANG2LN
-              || obj->type == DWG_TYPE_DIMENSION_RADIUS
-              || obj->type == DWG_TYPE_DIMENSION_DIAMETER)
+          if (obj->fixedtype == DWG_TYPE_DIMENSION_ORDINATE
+              || obj->fixedtype == DWG_TYPE_DIMENSION_LINEAR
+              || obj->fixedtype == DWG_TYPE_DIMENSION_ALIGNED
+              || obj->fixedtype == DWG_TYPE_DIMENSION_ANG3PT
+              || obj->fixedtype == DWG_TYPE_DIMENSION_ANG2LN
+              || obj->fixedtype == DWG_TYPE_DIMENSION_RADIUS
+              || obj->fixedtype == DWG_TYPE_DIMENSION_DIAMETER)
             found += match_DIMENSION (filename, obj);
           ELSEMATCH (VIEWPORT)
-          else if (obj->type == DWG_TYPE__3DSOLID || obj->type == DWG_TYPE_BODY
-                   || obj->type == DWG_TYPE_REGION)
+          else if (obj->fixedtype == DWG_TYPE__3DSOLID || obj->fixedtype == DWG_TYPE_BODY
+                   || obj->fixedtype == DWG_TYPE_REGION)
             found += match_3DSOLID (filename, obj);
 
           ELSEMATCH (BLOCK)
@@ -1944,6 +1999,7 @@ main (int argc, char *argv[])
   // for all filenames...
   for (j = i + 1; j < argc; j++)
     {
+      Dwg_Object_Ref *mspace_ref = NULL;
       filename = argv[j];
       memset (&dwg, 0, sizeof (Dwg_Data));
       dwg.opts = 0;
@@ -1957,19 +2013,33 @@ main (int argc, char *argv[])
 
       if (!opt_text)
         count += match_OBJECTS (filename, &dwg);
+      if (dwg.header.version < R_13b1)
+        { // FIXME hack
+          // mspace_ref = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
+          // mspace_ref->obj = &dwg.object[0];
+          count += match_preR13_entities (filename, &dwg, false);
+        }
+      else
+        mspace_ref = dwg_model_space_ref (&dwg);
+
       if (!opt_tables)
-        count += match_BLOCK_HEADER (filename, dwg_model_space_ref (&dwg));
+        count += match_BLOCK_HEADER (filename, mspace_ref);
       if (opt_blocks)
         {
-          for (long k = 0; k < dwg.block_control.num_entries; k++)
-            {
-              count += match_BLOCK_HEADER (filename, dwg.block_control.entries[k]);
-            }
+          if (dwg.header.version < R_13b1)
+            count += match_preR13_entities (filename, &dwg, true);
+          else
+            for (long k = 0; k < dwg.block_control.num_entries; k++)
+              {
+                count += match_BLOCK_HEADER (filename, dwg.block_control.entries[k]);
+              }
         }
       if (!opt_tables)
         count += match_BLOCK_HEADER (filename, dwg_paper_space_ref (&dwg));
 
       fflush (stdout);
+      //if (dwg.header.version < R_13b1)
+      //  free (mspace_ref);
       if (j < argc)
         dwg_free (&dwg); // skip the last free
     }

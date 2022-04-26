@@ -39,7 +39,7 @@ CFLAGS="@CFLAGS@"
 DISABLE_JSON="@DISABLE_JSON@"
 DISABLE_WRITE="@DISABLE_WRITE@"
 EXEEXT="@EXEEXT@"
-#WRITE_REVS="r1.2 r1.4 r2.0 r2.6 r9 r10 r11 r13 r14 r2000"
+WRITE_REVS="r1.4 r2.0 r2.10 r2.6 r9 r10 r11 r13 r14 r2000"
 #READ_REVS="r1.2 r1.4 r2.0 r2.10 r2.21 r2.22 r2.4 r2.5 r2.6 r9 r10 r11 r13 r14 r2000 r2004 r2010 r2013 r2018"
 
 i=0
@@ -61,6 +61,10 @@ run ()
 
     bprog="$(basename "$prog" .exe)"
     bdwg="$(basename "$dwg" .dwg)"
+    ddwg="$(dirname "$dwg")"
+    if [ $ddwg != . ]; then
+        bdwg="$bdwg"_"$ddwg"
+    fi
     bprog1=$(echo "$bprog" | sed -e's,^dwg2,,')
     bprog1=$(echo "$bprog1" | sed -e's,^dwg,,')
     if [ -n "$addarg" ]; then
@@ -73,7 +77,12 @@ run ()
     rm "./$log" 2>/dev/null
     case $bprog in
     dwglayers)  ;;
-    dwggrep)    arg="-i tekst $arg" ;;
+    dwggrep)    case $dwg in
+                    r11/*) arg="-i CONTINUOUS $arg" ;;
+                    r*/*)  arg="-i FOO $arg"        ;;
+                    *)     arg="-i tekst $arg"      ;;
+                esac
+                ;;
     dwg2dxf)    if [ -n "$addarg" ]; then
                     arg="-y $addarg -o $bdwg-$out.dxf $arg"
                 else
@@ -84,7 +93,7 @@ run ()
                     if [ -n "$addarg" ]; then
                         arg="-v2 $addarg -o $bdwg-$out.json $arg"
                     else
-                        arg="-v2 -o $dwg.json $arg"
+                        arg="-v2 -o $bdwg.json $arg"
                     fi
                 else
                     arg="-v2 $arg"
@@ -94,7 +103,7 @@ run ()
                     if [ -n "$addarg" ]; then
                         arg="-y -v2 $addarg -o $bdwg-$out.dwg $dwg.json"
                     else
-                        arg="-y -v2 $dwg.json"
+                        arg="-y -v2 $bdwg.json"
                     fi
                 else
                     if [ -n "$addarg" ]; then
@@ -123,6 +132,13 @@ run ()
                 else
                     arg="-y -v2 ${DATADIR}/$dwg.dxf"
                 fi
+                if [ ! -f "${DATADIR}/$dwg.dxf" ]; then
+                    return
+                fi
+                # no pre-r2 dxf yet
+                case $dwg in
+                    r1.4/* ) return ;;
+                esac
                 ;;
     dwgrewrite) if [ -n "$addarg" ]; then
                     arg="-v2 $addarg $arg"
@@ -223,7 +239,8 @@ run ()
 
 DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
 DATA="$DATA example_2013 example_2018 example_r14"
-#TODO="r11/ACEL10 r1.4/entities"
+TODO="r11/ACEL10 r2.10/entities r2.6/entities r1.4/entities"
+DATA="$DATA $TODO"
 
 for d in $DATA; do
     b="$(basename "$d")"
@@ -253,8 +270,8 @@ done
 if false; then
 for prog in dwgwrite dwgrewrite dxf2dwg dwg2dxf dxfwrite ; do
     for dwg in $DATA; do
-        for as in --as=r1.4 --as=r13 --as=r2000 --as=r2004 --as=r2010 --as=r2013 --as=r2018; do
-            run "$prog${EXEEXT}" "$dwg" "$as"
+        for r in $WRITE_REVS; do
+            run "$prog${EXEEXT}" "$dwg" "--as=$r"
         done
     done
 done
@@ -279,7 +296,12 @@ esac
 # only in programs, not examples:
 if [ -f cmp_dxf.pl ] && [ -e dwg2dxf ]; then
     for dwg in $DATA; do
-        run "dwg2dxf${EXEEXT}" "$dwg"
+        case $dwg in
+            r11/*)   ;; # cannot outdxf preR13 yet
+            r2*/*)   ;; # cannot outdxf preR13 yet
+            r1.4/*)  ;; # cannot outdxf preR13 yet
+            *)       run "dwg2dxf${EXEEXT}" "$dwg" ;;
+        esac
         #if [ -f ${DATADIR}/$dwg.dxf ]; then
         #    base="$(basename "$dwg" .dwg)"
         #    perl filt_dxf.pl ${DATADIR}/$dwg.dxf > $base.dxf.orig

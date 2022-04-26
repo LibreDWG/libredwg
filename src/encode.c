@@ -2299,13 +2299,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
 #define WE_CAN                                                                \
   "This version of LibreDWG is only capable of encoding "                     \
-  "version R13-R2000 (code: AC1012-AC1015) DWG files.\n"
+  "versions r1.4-r2000 (code: AC1.40-AC1015) DWG files.\n"
 
   PRE (R_13)
   {
     BITCODE_RS num_entities;
     BITCODE_RL hdr_offset;
-    LOG_WARN (WE_CAN "We cannot encode preR13 DWG's yet");
+    PRE (R_1_4)
+      LOG_WARN (WE_CAN "We cannot encode pre-r1.4 DWG's yet");
     entities_start = entities_end = blocks_start = blocks_end = 0xFFFF;
 
     SINCE (R_2_0b)
@@ -3750,9 +3751,13 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
   for (unsigned index = dwg->cur_index; index < dwg->cur_index + dwg->num_entities; index++)
     {
       Dwg_Object *obj = &dwg->object[index];
-      // check if block or entity member
+      // blocks are written in the 5 tables/sections
       if (obj->supertype != DWG_SUPERTYPE_ENTITY)
         continue;
+      // deleted, i.e. moved to a BLOCK
+      if (obj->fixedtype == DWG_TYPE_UNUSED)
+        continue;
+      // check if block or entity member
       if (offset) // is block
         {
           if (obj->tio.entity->entmode == 2) // is entity
