@@ -1214,8 +1214,8 @@ typedef struct _dwg_header_variables {
   BITCODE_BS unknown_55;
   BITCODE_BS unknown_56;
   BITCODE_BS unknown_57;
-  BITCODE_RL num_bytes;    /* -r1.40 */
-  BITCODE_RS num_entities; /* r2.0 - r10 */
+  BITCODE_RL dwg_size;     /* -r1.40 */
+  BITCODE_RS numentities;  /* r2.0 - r10 */
   BITCODE_RS circle_zoom_percent;
   BITCODE_RC unknown_58;
   BITCODE_RC unknown_59;

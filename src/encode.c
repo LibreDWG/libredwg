@@ -2342,10 +2342,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // patch these numbers into the header
       BITCODE_RL num_bytes = dat->byte;
       dat->byte = 0x0c + 24;
-      if (num_bytes != dwg->header_vars.num_bytes)
+      if (num_bytes != dwg->header_vars.dwg_size)
         LOG_TRACE ("0x%x: num_bytes: %u [RL]\n", (unsigned)dat->byte, num_bytes);
       bit_write_RL (dat, num_bytes);
-      if (num_entities != dwg->header_vars.num_entities)
+      if (num_entities != dwg->header_vars.numentities)
         LOG_TRACE ("0x%x: num_entities: %u [RS]\n", (unsigned)dat->byte, num_entities);
       bit_write_RS (dat, num_entities);
       dat->byte = num_bytes;
