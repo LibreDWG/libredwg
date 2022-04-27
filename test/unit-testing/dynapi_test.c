@@ -5572,39 +5572,39 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_RL num_bytes;
-    if (dwg_dynapi_header_value (dwg, "num_bytes", &num_bytes, NULL)
-        && num_bytes == dwg->header_vars.num_bytes)
+    BITCODE_RL dwg_size;
+    if (dwg_dynapi_header_value (dwg, "dwg_size", &dwg_size, NULL)
+        && dwg_size == dwg->header_vars.dwg_size)
       pass ();
     else
-      fail ("HEADER.num_bytes [RL] %u != %u", dwg->header_vars.num_bytes, num_bytes);
-    num_bytes++;
-    if (dwg_dynapi_header_set_value (dwg, "num_bytes", &num_bytes, 0)
-        && num_bytes == dwg->header_vars.num_bytes)
+      fail ("HEADER.dwg_size [RL] %u != %u", dwg->header_vars.dwg_size, dwg_size);
+    dwg_size++;
+    if (dwg_dynapi_header_set_value (dwg, "dwg_size", &dwg_size, 0)
+        && dwg_size == dwg->header_vars.dwg_size)
       pass ();
     else
-      fail ("HEADER.num_bytes [RL] set+1 %u != %u",
-            dwg->header_vars.num_bytes, num_bytes);
-    num_bytes--;
-    dwg_dynapi_header_set_value (dwg, "num_bytes", &num_bytes, 0);
+      fail ("HEADER.dwg_size [RL] set+1 %u != %u",
+            dwg->header_vars.dwg_size, dwg_size);
+    dwg_size--;
+    dwg_dynapi_header_set_value (dwg, "dwg_size", &dwg_size, 0);
 
   }
   {
-    BITCODE_RS num_entities;
-    if (dwg_dynapi_header_value (dwg, "num_entities", &num_entities, NULL)
-        && num_entities == dwg->header_vars.num_entities)
+    BITCODE_RS numentities;
+    if (dwg_dynapi_header_value (dwg, "numentities", &numentities, NULL)
+        && numentities == dwg->header_vars.numentities)
       pass ();
     else
-      fail ("HEADER.num_entities [RS] %hu != %hu", dwg->header_vars.num_entities, num_entities);
-    num_entities++;
-    if (dwg_dynapi_header_set_value (dwg, "num_entities", &num_entities, 0)
-        && num_entities == dwg->header_vars.num_entities)
+      fail ("HEADER.numentities [RS] %hu != %hu", dwg->header_vars.numentities, numentities);
+    numentities++;
+    if (dwg_dynapi_header_set_value (dwg, "numentities", &numentities, 0)
+        && numentities == dwg->header_vars.numentities)
       pass ();
     else
-      fail ("HEADER.num_entities [RS] set+1 %hu != %hu",
-            dwg->header_vars.num_entities, num_entities);
-    num_entities--;
-    dwg_dynapi_header_set_value (dwg, "num_entities", &num_entities, 0);
+      fail ("HEADER.numentities [RS] set+1 %hu != %hu",
+            dwg->header_vars.numentities, numentities);
+    numentities--;
+    dwg_dynapi_header_set_value (dwg, "numentities", &numentities, 0);
 
   }
   {
