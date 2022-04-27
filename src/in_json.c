@@ -2860,7 +2860,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                          obj->fixedtype);
               if (dwg->header.from_version < R_13 && dwg_obj_is_table (obj))
                 {
-                  Dwg_Section_Type_r11 id;
+                  Dwg_Section_Type_r11 id = SECTION_HEADER_R11;
                   switch (obj->fixedtype)
                     {
                     case DWG_TYPE_BLOCK_HEADER: id = SECTION_BLOCK; break;
@@ -2868,9 +2868,15 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     case DWG_TYPE_STYLE: id = SECTION_STYLE; break;
                     case DWG_TYPE_LTYPE: id = SECTION_LTYPE; break;
                     case DWG_TYPE_VIEW:  id = SECTION_VIEW; break;
-                    default: assert (!obj->fixedtype);
+                    default:
+                        LOG_ERROR ("Invalid table type %s %u", obj->name, obj->fixedtype);
+                        //assert (!obj->fixedtype);
                     }
-                  dwg->header.section[id].number++;
+                  if (id != SECTION_HEADER_R11)
+                    {
+                      // TODO: maybe add a missing CONTROL object here. GH #453
+                      dwg->header.section[id].number++;
+                    }
                 }
             }
           // Note: also _obj->size
