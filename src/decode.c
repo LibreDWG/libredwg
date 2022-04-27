@@ -721,7 +721,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     // clang-format on
   }
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x14
-  // 5 tables + header + block
+  // 5 tables + header + block. VIEW = 6
   dwg->header.section = (Dwg_Section *)calloc (sizeof (Dwg_Section),
                                                dwg->header.numsections + 2);
   if (!dwg->header.section)
@@ -778,10 +778,10 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (error >= DWG_ERR_CRITICAL)
       return error;
 
-  num_entities = dwg->header_vars.num_entities;
+  num_entities = dwg->header_vars.numentities;
   PRE (R_2_0b) {
     entities_start = dat->byte;
-    entities_end = dwg->header_vars.num_bytes;
+    entities_end = dwg->header_vars.dwg_size;
   }
 #if 0
   if (dwg->header.numsections > 5) // dead code?
@@ -809,6 +809,10 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (dat->byte != entities_start)
     {
       LOG_WARN ("@0x%lx => entities_start 0x%x", dat->byte, entities_start);
+      if (dat->byte < entities_start)
+        {
+          _DEBUG_HERE (dat->byte - entities_start)
+        }
       dat->byte = entities_start;
     }
   error |= decode_preR13_entities (entities_start, entities_end, num_entities, 0, 0, dat, dwg);
@@ -5592,7 +5596,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
             obj->fixedtype = DWG_TYPE_UNUSED;
             dwg->num_entities--; // for stats only
           }
-        if (num + 1 >= dwg->header_vars.num_entities)
+        if (num + 1 >= dwg->header_vars.numentities)
           break;
       }
       SINCE (R_2_0b) // Pre R_2_0 doesn't contain size of entity

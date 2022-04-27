@@ -24,9 +24,9 @@
     FIELD_CAST (PLINEGEN, RS, B, 70); //ok
   } else {
     PRE (R_2_0)
-      FIELD_RL (num_bytes, 0);
+      FIELD_RL (dwg_size, 0);
     PRE (R_10)
-      FIELD_RS (num_entities, 0);
+      FIELD_RS (numentities, 0);
   }
   FIELD_3RD (EXTMIN, 10);
   FIELD_3RD (EXTMAX, 10);

@@ -687,11 +687,11 @@ RL
 RL
 @item circle_zoom_percent
 RS
+@item dwg_size
+RL
 @item layer_colors[128]
 RS
-@item num_bytes
-RL
-@item num_entities
+@item numentities
 RS
 @item oldCECOLOR_hi
 RL
