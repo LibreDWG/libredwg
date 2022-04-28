@@ -776,7 +776,10 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       free (r11_sentinel);
     }
 
-  num_entities = dwg->header_vars.numentities;
+  PRE (R_10)
+    num_entities = dwg->header_vars.numentities;
+  else
+    num_entities = 0;
   PRE (R_2_0b) {
     entities_start = dat->byte;
     entities_end = dwg->header_vars.dwg_size;
@@ -862,10 +865,9 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       dat->byte = blocks_start;
     }
-  // don't just decode the num_blocks (i.e. 1 the BLOCK ent),
-  // but the num_entities minus the already decoded entities.
-  //if (dwg->header.section[SECTION_BLOCK].number)
-  num_entities -= dwg->num_entities; // minus the already decoded modelspace ents
+  num_entities = 0;
+  VERSION (R_11)
+    blocks_end -= 32; // ??
   error |= decode_preR13_entities (blocks_start, blocks_end,
                                    num_entities, blocks_size & 0x3FFFFFFF,
                                    blocks_max, dat, dwg);
