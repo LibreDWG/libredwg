@@ -2884,6 +2884,22 @@ dwg_color_method_name (unsigned m)
   }
 }
 
+const char *
+dwg_ref_objname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
+{
+  Dwg_Object *restrict obj = dwg_ref_object_silent (dwg, ref);
+  return obj ? obj->name : "";
+}
+
+// supports tables entries and everything with a name.
+// r2007 names are returned as malloc'ed utf-8
+const char *
+dwg_ref_tblname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
+{
+  const char *restrict name = dwg_dynapi_handle_name (dwg, ref);
+  return name ? name : "";
+}
+
 EXPORT unsigned long
 dwg_next_handle (const Dwg_Data *dwg)
 {
