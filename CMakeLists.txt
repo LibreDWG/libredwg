@@ -133,6 +133,7 @@ set(libredwg_SOURCES
     src/classes.c
     src/objects.c
     src/decode.c
+    src/decode_r11.c
     src/decode_r2007.c
     src/dwg.c
     src/hash.c
