@@ -5647,9 +5647,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
     return 0;
   if (end == 0 && size == 0) // empty blocks
     return 0;
-  if (end != 0 && size != 0 && num_entities == 0) // num_entities is wrong
-    num_entities = dwg->num_entities;
-  for (unsigned i = 0; i < num_entities; i++)
+  while (dat->byte < oldpos + end)
     {
       Dwg_Object *obj;
       Dwg_Object_Entity *ent, *_ent;
