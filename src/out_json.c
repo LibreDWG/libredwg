@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2021 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2022 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -1835,6 +1835,194 @@ json_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 }
 
 static int
+json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  CLEARFIRST;
+  SECTION (TABLES);
+  // TODO on r11 we might have up to VX tables
+  for (Dwg_Section_Type_r11 id = SECTION_BLOCK; id <= SECTION_VIEW; id++)
+    {
+      int error;
+      Dwg_Section *tbl = &dwg->header.section[id];
+      BITCODE_RL num = tbl->objid_r11;
+      
+      switch (id)
+        {
+        case SECTION_BLOCK:
+          SECTION (BLOCK);
+          {
+            Dwg_Section *_obj = tbl;
+            FIELD_RS (size, 0);
+            FIELD_RS (number, 0);
+            FIELD_RS (flags, 0);
+            FIELD_RLL (address, 0);
+          }
+          for (int32_t i = 0; i < tbl->number; i++)
+            {
+              Dwg_Object *obj = &dwg->object[num + i];
+              Dwg_Object_BLOCK_HEADER *_obj = obj->tio.object->tio.BLOCK_HEADER;
+              RECORD (BLOCK_HEADER);
+              FIELD_RC (flag, 70);
+              FIELD_TFv (name, 32, 2);
+              FIELD_RSd (used, 0); // -1
+              FIELD_RC (block_scaling, 0);
+              FIELD_CAST (num_owned, RS, BL, 0);
+              FIELD_RCd (flag2, 0);
+              FIELD_CAST (num_inserts, RS, RL, 0);
+              FIELD_RSd (insert_units, 0);
+              ENDRECORD ();
+            }
+          ENDSEC ();
+          break;
+        case SECTION_LAYER:
+          SECTION (LAYER);
+          {
+            Dwg_Section *_obj = tbl;
+            FIELD_RS (size, 0);
+            FIELD_RS (number, 0);
+            FIELD_RS (flags, 0);
+            FIELD_RLL (address, 0);
+          }
+          for (int32_t i = 0; i < tbl->number; i++)
+            {
+              Dwg_Object *obj = &dwg->object[num + i];
+              Dwg_Object_LAYER *_obj = obj->tio.object->tio.LAYER;
+              RECORD (LAYER);
+              FIELD_RC (flag, 70);
+              FIELD_TFv (name, 32, 2);
+              FIELD_RS (used, 0);
+
+              FIELD_RS (color_r11, 62); // color, off if negative
+              FIELD_HANDLE (ltype, 2, 6);
+              ENDRECORD ();
+            }
+          ENDSEC ();
+          break;
+        case SECTION_STYLE:
+          SECTION (STYLE);
+          {
+            Dwg_Section *_obj = tbl;
+            FIELD_RS (size, 0);
+            FIELD_RS (number, 0);
+            FIELD_RS (flags, 0);
+            FIELD_RLL (address, 0);
+          }
+          for (int32_t i = 0; i < tbl->number; i++)
+            {
+              Dwg_Object *obj = &dwg->object[num + i];
+              Dwg_Object_STYLE *_obj = obj->tio.object->tio.STYLE;
+              RECORD (STYLE);
+              FIELD_RC (flag, 70);
+              FIELD_TFv (name, 32, 2);
+              FIELD_RS (used, 0);
+
+              FIELD_RD (text_size, 40); // ok
+              FIELD_RD (width_factor, 41);
+              FIELD_RD (oblique_angle, 50);
+              FIELD_RC (generation, 71);
+              FIELD_RD (last_height, 42);
+              FIELD_TFv (font_file, 64, 3);    // 8ed
+              FIELD_TFv (bigfont_file, 64, 4); // 92d
+              ENDRECORD ();
+            }
+          ENDSEC ();
+          break;
+        case SECTION_LTYPE:
+          SECTION (LTYPE);
+          {
+            Dwg_Section *_obj = tbl;
+            FIELD_RS (size, 0);
+            FIELD_RS (number, 0);
+            FIELD_RS (flags, 0);
+            FIELD_RLL (address, 0);
+          }
+          for (int32_t i = 0; i < tbl->number; i++)
+            {
+              BITCODE_BL vcount;
+              Dwg_Object *obj = &dwg->object[num + i];
+              Dwg_Object_LTYPE *_obj = obj->tio.object->tio.LTYPE;
+              RECORD (LTYPE);
+              FIELD_RC (flag, 70);
+              FIELD_TFv (name, 32, 2);
+              FIELD_RS (used, 0);
+
+              FIELD_TFv (description, 48, 3);
+              FIELD_RC (alignment, 72);
+              FIELD_RC (num_dashes, 73);
+              FIELD_VECTOR (dashes_r11, RD, num_dashes, 340);
+              ENDRECORD ();
+            }
+          ENDSEC ();
+          break;
+        case SECTION_VIEW:
+          SECTION (VIEW);
+          {
+            Dwg_Section *_obj = tbl;
+            FIELD_RS (size, 0);
+            FIELD_RS (number, 0);
+            FIELD_RS (flags, 0);
+            FIELD_RLL (address, 0);
+          }
+          for (int32_t i = 0; i < tbl->number; i++)
+            {
+              BITCODE_BL vcount;
+              Dwg_Object *obj = &dwg->object[num + i];
+              Dwg_Object_VIEW *_obj = obj->tio.object->tio.VIEW;
+              RECORD (VIEW);
+              FIELD_RC (flag, 70);
+              FIELD_TFv (name, 32, 2);
+              FIELD_RS (used, 0);
+
+              FIELD_RD (VIEWSIZE, 40);
+              FIELD_2RD (VIEWCTR, 10);
+              FIELD_RD (view_width, 41);
+              FIELD_3RD (view_target, 12);
+              FIELD_3RD (VIEWDIR, 11);
+              FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
+              FIELD_RD (lens_length, 42);
+              FIELD_RD (front_clip_z, 43);
+              FIELD_RD (back_clip_z, 44);
+              FIELD_RD (twist_angle, 50);
+              ENDRECORD ();
+            }
+          ENDSEC ();
+          break;
+        case SECTION_UCS:
+          SECTION (UCS);
+          {
+            Dwg_Section *_obj = tbl;
+            FIELD_RS (size, 0);
+            FIELD_RS (number, 0);
+            FIELD_RS (flags, 0);
+            FIELD_RLL (address, 0);
+          }
+          for (int32_t i = 0; i < tbl->number; i++)
+            {
+              BITCODE_BL vcount;
+              Dwg_Object *obj = &dwg->object[num + i];
+              Dwg_Object_UCS *_obj = obj->tio.object->tio.UCS;
+              RECORD (UCS);
+              FIELD_RC (flag, 70);
+              FIELD_TFv (name, 32, 2);
+              FIELD_RS (used, 0);
+
+              FIELD_2RD (ucsorg, 10);
+              FIELD_2RD (ucsxdir, 11);
+              FIELD_2RD (ucsydir, 12);
+              ENDRECORD ();
+            }
+          ENDSEC ();
+          break;
+        default:
+          LOG_WARN ("Missing TABLE %u", id)
+        }
+      CLEARFIRST;
+    }
+  ENDSEC ();
+  return 0;
+}
+
+static int
 json_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_BL i;
@@ -2139,6 +2327,11 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!minimal && dat->version >= R_13)
     {
       if (json_classes_write (dat, dwg) >= DWG_ERR_CRITICAL)
+        goto fail;
+    }
+  if (!minimal && dat->version < R_13 && 0)
+    {
+      if (json_tables_write (dat, dwg) >= DWG_ERR_CRITICAL)
         goto fail;
     }
 

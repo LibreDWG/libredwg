@@ -1017,7 +1017,7 @@ dwg_model_space_object (Dwg_Data *dwg)
   if (dwg->header_vars.BLOCK_RECORD_MSPACE
       && dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
     return dwg->header_vars.BLOCK_RECORD_MSPACE->obj;
-  if (!dwg->object_map) // for dwg_add_document()
+  if (!dwg->object_map) // for dwg_add_Document()
     dwg->object_map = hash_new (100);
   return dwg_resolve_handle (dwg, dwg->header.version >= R_2000 ? 0x1F : 0x17);
 }
@@ -2882,6 +2882,22 @@ dwg_color_method_name (unsigned m)
   case 0xc8: return "none";
   default: return "";
   }
+}
+
+const char *
+dwg_ref_objname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
+{
+  Dwg_Object *restrict obj = dwg_ref_object_silent (dwg, ref);
+  return obj ? obj->name : "";
+}
+
+// supports tables entries and everything with a name.
+// r2007 names are returned as malloc'ed utf-8
+const char *
+dwg_ref_tblname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
+{
+  const char *restrict name = dwg_dynapi_handle_name (dwg, ref);
+  return name ? name : "";
 }
 
 EXPORT unsigned long
