@@ -30,6 +30,7 @@ libredwg_la_SOURCES = \
 	common.c \
 	bits.c \
 	decode.c \
+        decode_r11.c \
         decode_r2007.c \
 	reedsolomon.c \
         print.c \
@@ -98,6 +99,7 @@ EXTRA_HEADERS = \
 	bits.h \
 	myalloca.h \
 	decode.h \
+	decode_r11.h \
 	dec_macros.h \
 	free.h \
         print.h \
