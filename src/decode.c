@@ -664,7 +664,8 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       FIELD_RD (elevation_r11, 38);
   } LATER_VERSIONS {
     if (_obj->flag_r11 & FLAG_R11_ELEVATION // 4
-      && obj->type != 1 && obj->type != 2) // 1 = LINE, 2 = POINT
+        // 1 = LINE, 2 = POINT, 22 = 3DFACE
+        && obj->type != 1 && obj->type != 2 && obj->type != 22)
       FIELD_RD (elevation_r11, 38);
   }
 
