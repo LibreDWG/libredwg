@@ -365,4 +365,10 @@ Dwg_Version_Type dwg_version_hdr_type2 (const char *hdr, unsigned dwg_version);
 // converts TIMEBLL to struct tm. useful for asctime(tm) or strftime
 struct tm * cvt_TIMEBLL (struct tm *tm, BITCODE_TIMEBLL date);
 
+/* Exported functions not in the API */
+const char *
+dwg_ref_tblname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref);
+const char *
+dwg_ref_objname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref);
+
 #endif
