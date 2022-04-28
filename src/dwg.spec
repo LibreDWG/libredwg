@@ -1295,21 +1295,18 @@ DWG_ENTITY (LINE)
 
   //SUBCLASS (AcDbCurve)
   SUBCLASS (AcDbLine)
-  PRE (R_13) {
-    if (R11OPTS (1)) {
-      FIELD_3RD (start, 10)
-    } else {
+  PRE (R_10) {
       FIELD_2RD (start, 10)
-    }
-    if (R11OPTS (2)) {
-      FIELD_3RD (end, 11)
-    } else {
       FIELD_2RD (end, 11)
+  }
+  VERSIONS (R_10, R_12) {
+    if (R11FLAG (4)) {       // extension of pre R_10, not compatible
+      FIELD_2RD (start, 10)
+      FIELD_2RD (end, 11)
+    } else {
+      FIELD_3RD (start, 10)
+      FIELD_3RD (end, 11)
     }
-    /*
-    if (R11OPTS (1))
-      FIELD_3RD (extrusion, 210);
-    */
   }
   VERSIONS (R_13, R_14)
     {
