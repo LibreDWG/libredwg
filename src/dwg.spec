@@ -1666,7 +1666,7 @@ DWG_ENTITY_END
 DWG_ENTITY (_3DFACE)
 
   SUBCLASS (AcDbFace)
-  PRE (R_13) {
+  PRE (R_10) {
     if (R11OPTS (1)) {
       FIELD_3RD (corner1, 10)
     }
@@ -1692,6 +1692,21 @@ DWG_ENTITY (_3DFACE)
       FIELD_2RD (corner4, 13)
     }
   }
+  VERSIONS (R_10, R_13)
+    {
+      if (R11FLAG (4)) {
+        FIELD_2RD (corner1, 10)
+        FIELD_2RD (corner2, 11)
+        FIELD_2RD (corner3, 12)
+        FIELD_2RD (corner4, 13)
+      }
+      else {
+        FIELD_3RD (corner1, 10)
+        FIELD_3RD (corner2, 11)
+        FIELD_3RD (corner3, 12)
+        FIELD_3RD (corner4, 13)
+      }
+    }
   VERSIONS (R_13, R_14)
     {
       FIELD_3BD (corner1, 10);
