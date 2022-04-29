@@ -24,6 +24,12 @@ Invariant Sections, with no Front-Cover Texts, and with no Back-Cover
 Texts.  A copy of the license is included in the section entitled
 ``GNU Free Documentation License''.
 @end quotation
+
+All other trademarks, trade names or company names referenced herein are
+used for identification purposes only and are the property of their respective owners.
+
+DWG is the native and proprietary file format for AutoCAD® and a trademark of Autodesk, Inc.
+LibreDWG is neither associated with Autodesk, nor with the Open Design Alliance.
 @end copying
 
 @dircategory Libraries
@@ -120,36 +126,41 @@ reverse-engineered.  The specification is almost complete.
 The LibreDWG implementation of the specification is an ongoing process;
 as of version @value{VERSION}, coverage is approximately 99%.
 
-It can read the formats R13, R14, R2000, R2004, R2007, R2010, R2013 and R2018
-for 99%.
-R11 and earlier cannot be read yet, only partially.
-Reading R11 and earlier is only enabled with the development git checkout, not
-the released tarball.
+It can read all DWG formats from r1.2 to r2018 for 99%.
+The internally supported DWG revisions are identified as
+r1.1, r1.2, r1.3, r1.4, r2.0b, r2.0, r2.10, r2.21, r2.22, r2.4, r2.5, r2.6, r9
+r9c1, r10, r11b1, r11b2, r11, r13b1, r13b2, r13, r13c3, r14, r2000b, r2000, r2000i
+r2002, r2004a, r2004b, r2004c, r2004, r2005, r2006, r2007b, r2007, r2008, r2009
+r2010b, r2010, r2011, r2012, r2013b, r2013, r2014, r2015, r2016, r2017, r2018b
+r2018, r2019, r2020, r2021 and r2022.
 
-Here is a list of features that are still missing.
+Here is a list of features that are still missing:
 
 @cindex features, still missing
 
 @table @asis
 
-@item Reading pre-R13 DWG
-Reading DWG formats for pre-R13 and some R2010+ non-graphical objects is an ongoing
-effort, some minor parts are missing. Most DWG's can be read, some undocumented classes
-are skipped.
-
-@item Writing pre-R13 and R2004+ DWG
-Writing DWG formats for R2004 and later: R2007, R2010, R2013, R2018 is an
-ongoing effort. You need to patch the code to enable writing to the R2004+ format.
+@item Writing pre-R13 and r2004+ DWG
+Writing DWG formats for r2004 and later: r2007, r2010, r2013, r2018 is an
+ongoing effort. You need to patch the code to enable writing to the r2004+ format.
 See the @code{work/2004} branch.
-Wriing to the specific R2007 format is not implemented.
-We write as default in the R2000 format only.
+Writing to the specific r2007 format is not implemented.
+We write as default in the r2000 format only.
+
+Writing pre-R13 DWG's is possible, but some automatic conversions from
+new table objects to the old table sections are not complete. pre-R13
+had no objects nor handles, only tables and entities.
 
 @item Reading binary DXF
 DXF support is now mostly implemented.
 ASCII DXF's are generated fully, with much more elements and fields and other free libraries,
-but AutoCAD fails to import some of them. See the @file{TODO} file for a detailed coverage report.
+but AutoCAD @registeredsymbol{} fails to import some of them. See the @file{TODO} file for a detailed coverage report.
 
 Reading binary DXF is still under construction, done about 80%.
+
+@item Reading and writing pre-R13 DXF
+Reading and writing pre-R13 DXF's is work in progress.
+There is no support planned for the very old pre-R2.0 DXF format.
 
 @item Enabled entities and objects, but unstable, undertested. Field names may change:
 
@@ -275,14 +286,14 @@ But in the meantime it got a DXF reader.
 Read the DWG format for all versions r13+ but with much less elements, only those needed for DXF.
 Written in C++, under the GPLv2 license.
 @item libopencad
-Read the R2000 DWG format.
+Read the r2000 DWG format.
 Written in C++, under the GPLv2 license.
 @item OpenDWG
 The OpenDWG's license does not allow the usage in free software projects.
 @end table
 
 Compared to libdwg, libdxfrw and libopencad, LibreDWG can read and
-write much more details. Which is especially important for attached links
+write much more DWG versions and details. Which is especially important for attached links
 and data from third party applications: BIM, MAP, GIS, AEC, MECH, ...
 and for 3D solids and dynamic parametric constraints.
 
@@ -450,7 +461,7 @@ native fallback types int/long, which are different across platforms.
 * OBJECTS_::          All Entities and Objects
 * CLASSES::           The dynamically loaded class types
 * HANDLES::           The sorted handle map (relative handle and size) of all objects
-* R2004_Header::      R2004 Section meta-data to find the INFO and SYSTEM_MAP
+* R2004_Header::      r2004 Section meta-data to find the INFO and SYSTEM_MAP
 * UNKNOWN::           Unknown Section
 * SummaryInfo::       Some dwg meta-data
 * Preview::           The Thumbnail BMP or WMF data
@@ -501,6 +512,23 @@ The r2004 and r2007 format (used for r2004-r2018) knows the following sections:
     SIGNATURE
     INFO
     SYSTEM_MAP
+
+The old pre-R13 formats (from r1.1 to r11) have no objects and sections,
+but the 5 tables:
+
+    BLOCKS
+    LAYER
+    STYLE
+    LTYPE
+    VIEW
+
+With r11 came the additional tables:
+
+    UCS
+    VPORT
+    APPID
+    DIMSTYLE
+    VX
 
 @node HEADER_
 @section HEADER Section
@@ -851,8 +879,10 @@ Sets the fields for the object from the DWG bitstream.
 Encoding DWG files, i.e. DWG write support, can be disabled via
 @code{./configure --disable-write}. The default format and only useful
 one is currently r13-r2000. Experimentally work is ongoing for the r2004
-format, which is also used for r2010, r2013, and r2018. Only the pre-r13
-and r2007 versions are not covered yet.
+format, which is also used for r2010, r2013, and r2018.
+The r2007 format version is not covered yet.
+The pre-r13 formats are much simplier and can be written, but need some
+hand-holding and manual conversions when converting from newer formats still.
 
 See @file{src/in_dxf.c} for a high-level usage example.
 The default codepage is Latin-1, 30.
@@ -924,8 +954,8 @@ Creates an initial template dwg structure in memory, suitable to be written to a
 without any additional table records or entities. Creates ModelSpace, PaperSpace and most Tables
 and basic Dictionaries.
 
-When writing DWG, a @var{version} of R_2000 is recommended, only R_13 - R-2000
-are supported yet. For DXF you can try all versions >= R_13.
+When writing DWG, a @var{version} of R_2000 is recommended, only R_1_2 - R_2000
+are supported yet. For DXF you can try all versions R_13 - R_2018.
 @end deftypefn
 
 
@@ -1064,7 +1094,7 @@ it sets DWG_OPTS_IN.
 
 DWG to DXF/JSON: decode keeps the T and TU strings as TV or TU. out_dxf/json translate them to TV or UTF-8 and quote them via \U+XXXX
 
-add api to DWG/DXF: add reads strings as UTF-8, and encodes it from UTF-8 to TV or TU. (TU not yet, as we don't encode R2004+ yet). add sets DWG_OPTS_IN.
+add api to DWG/DXF: add reads strings as UTF-8, and encodes it from UTF-8 to TV or TU. (TU not yet, as we don't encode r2004+ yet). add sets DWG_OPTS_IN.
 
 
 @node Other Formats
@@ -1086,7 +1116,7 @@ add api to DWG/DXF: add reads strings as UTF-8, and encodes it from UTF-8 to TV 
 
 We can write ASCII DXF files in various versions, with much more data
 than other free DWG libraries, but not as stable as the unfree Teigha
-library yet.  AutoCAD fails to import some of our files still (~10%
+library yet.  AutoCAD @registeredsymbol{} fails to import some of our files still (~10%
 failure rate).
 
 Options: @code{--minimal} (see @code{dwg2dxf} or @code{dwgread}) creates
@@ -1227,10 +1257,15 @@ Options:
        -o outfile, --file outfile
               also defines the output fmt. Default: stdout
 
-       -a rNNNN, --as rNNNN
-              writes the output format as another version.
-              Valid versions are r13, r14, r2000, r2004, r2007, r2010,
-              r2013, r2018.
+       -a rNNNN, --as rNNNN writes the output format as another
+              version.  Valid versions are r1.2, r1.3, r1.4,
+              r2.0b, r2.0, r2.10, r2.21, r2.22, r2.4, r2.5, r2.6, r9,
+              r9c1, r10, r11b1, r11b2, r11, r13b1, r13b2, r13, r13c3,
+              r14, r2000b, r2000, r2000i r2002, r2004a, r2004b,
+              r2004c, r2004, r2005, r2006, r2007b, r2007, r2008, r2009,
+              r2010b, r2010, r2011, r2012, r2013b, r2013, r2014,
+              r2015, r2016, r2017, r2018b r2018, r2019, r2020, r2021,
+              r2022.
 
        --help display this help and exit
 
@@ -1243,7 +1278,7 @@ Options:
 
 Create a DWG from a given input file (@pxref{DXF}, @pxref{DXFB, Binary DXF}, @pxref{JSON}),
 optionally via @code{--as=rNNNN} as another version.
-For now can only create r13-r2018, but not r2007 DWG files.
+For now can only create r1.2-r2000 DWG files.
 
 @item @file{dxfwrite}
 @cindex dxfwrite
@@ -1277,10 +1312,9 @@ version, an earlier or later version.
 The DWG files are created in the current directory and not overwritten, unless
 the option @code{--overwrite} or @code{-y} is given.
 
-This program is experimental and AutoCAD may fail to import
+This program is experimental and AutoCAD @registeredsymbol{} may fail to import
 it.
-For now can only create r13-r2018, but not r2007 DWG files.
-Currently the default is writing as r2000.
+For now can only create r1.2-r2000 DWG. The default is writing as r2000.
 
 @item @file{dwgrewrite}
 @cindex dwgrewrite
@@ -1288,7 +1322,7 @@ Currently the default is writing as r2000.
 
 Read and write the DWG, optionally via @code{--as=rNNNN} as another
 version, an earlier or later version. The default is writing as r2000.
-Pre-r13 and r2007 DWG files cannot be written yet.
+For now can only create r1.2-r2000 DWG.
 
 @item @file{dwglayers}
 @cindex dwglayers
@@ -1425,7 +1459,7 @@ and about 80% finished.
 
 See the separate @uref{https://www.gnu.org/software/libredwg/refman/, refman} manual (in pdf or html format, the pdf has ~1800 pages) for a detailed API description, or see the relevant @file{dwg.h}, @file{dwg_api.h} or the @file{*.spec} files.
 
-For reference you might also want to check the public AutoCAD DXF reference manuals, the VBA object model
+For reference you might also want to check the public DXF reference manuals, the VBA object model
 and the ODA @file{OpenDesign_Specification_for_dwg_files.pdf}.
 
 @comment It is unfortunately not possible to include the doxygen generated tex
@@ -1470,6 +1504,7 @@ Patches are welcome; if possible, please make them with
 @samp{git format-patch} and
 include @file{ChangeLog} entries (@pxref{Change Log,,, emacs, The GNU
 Emacs Manual}).  Please follow the existing GNU coding conventions.
+For patches longer than 15 lines we need your copyright assignment to the FSF clerk.
 See @file{CONTRIBUTING} in the source distribution.
 
 @node GNU Free Documentation License
