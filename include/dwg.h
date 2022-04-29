@@ -8580,6 +8580,7 @@ typedef enum DWG_SECTION_TYPE_R11 /* tables */
   SECTION_STYLE = 3,
   SECTION_LTYPE = 5,
   SECTION_VIEW  = 6,
+  // since r11:
   SECTION_UCS   = 7,
   SECTION_VPORT = 8,
   SECTION_APPID = 9,
