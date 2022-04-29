@@ -2,7 +2,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2019 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2022 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -72,7 +72,18 @@
   }
   HEADER_2D (LIMMIN);
   HEADER_2D (LIMMAX);
-
+  PRE (R_9) { // tested r2.6
+    HEADER_2D (VIEWCTR);
+    HEADER_RD (VIEWSIZE, 40);
+    HEADER_RS (SNAPMODE, 70);
+    HEADER_2D (SNAPUNIT);
+    HEADER_2D (SNAPBASE);
+    HEADER_RD (SNAPANG, 50);
+    HEADER_RS (SNAPSTYLE, 70);
+    HEADER_RS (SNAPISOPAIR, 70);
+    HEADER_RS (GRIDMODE, 70);
+    HEADER_2D (GRIDUNIT);
+  }
   HEADER_RS (ORTHOMODE, 70);
   HEADER_RS (REGENMODE, 70);
   HEADER_RS (FILLMODE, 70);
@@ -101,8 +112,8 @@
       HEADER_RS (DELOBJ, 70);
     }
     HEADER_RS (DISPSILH, 70); // this is WIREFRAME
-    HEADER_RD (DIMSCALE, 40);
   }
+  HEADER_RD (DIMSCALE, 40);
   HEADER_RD (DIMASZ, 40);
   HEADER_RD (DIMEXO, 40);
   HEADER_RD (DIMDLI, 40);
@@ -136,19 +147,23 @@
   HEADER_RS (DIMALTD, 70);
   HEADER_RD (DIMALTF, 40);
   HEADER_RD (DIMLFAC, 40);
-  HEADER_RS (DIMTOFL, 70);
-  HEADER_RD (DIMTVP, 40);
-  HEADER_RS (DIMTIX, 70);
-  HEADER_RS (DIMSOXD, 70);
-  HEADER_RS (DIMSAH, 70);
-  HEADER_HANDLE_NAME (DIMBLK1, 1,  BLOCK_HEADER);
-  HEADER_HANDLE_NAME (DIMBLK2, 1,  BLOCK_HEADER);
-  HEADER_HANDLE_NAME (DIMSTYLE, 2, DIMSTYLE);
-  HEADER_CMC (DIMCLRD, 70);
-  HEADER_CMC (DIMCLRE, 70);
-  HEADER_CMC (DIMCLRT, 70);
-  HEADER_RD (DIMTFAC, 40);
-  HEADER_RD (DIMGAP, 40);
+  SINCE (R_9) {
+    HEADER_RS (DIMTOFL, 70);
+    HEADER_RD (DIMTVP, 40);
+    HEADER_RS (DIMTIX, 70);
+    HEADER_RS (DIMSOXD, 70);
+    HEADER_RS (DIMSAH, 70);
+    HEADER_HANDLE_NAME (DIMBLK1, 1,  BLOCK_HEADER);
+    HEADER_HANDLE_NAME (DIMBLK2, 1,  BLOCK_HEADER);
+  }
+  SINCE (R_11) {
+    HEADER_HANDLE_NAME (DIMSTYLE, 2, DIMSTYLE);
+    HEADER_CMC (DIMCLRD, 70);
+    HEADER_CMC (DIMCLRE, 70);
+    HEADER_CMC (DIMCLRT, 70);
+    HEADER_RD (DIMTFAC, 40);
+    HEADER_RD (DIMGAP, 40);
+  }
   SINCE (R_13) {
     HEADER_RS (DIMJUST, 70);
     HEADER_RS (DIMSD1, 70);
@@ -182,21 +197,19 @@
     HEADER_BSd (DIMLWE, 70);
     HEADER_RS (DIMTMOVE, 70);
   }
-  SINCE (R_2007)
-    {
-      HEADER_BD (DIMFXL, 40);
-      HEADER_B (DIMFXLON, 70);
-      HEADER_BD (DIMJOGANG, 40);
-      HEADER_BS (DIMTFILL, 70);
-      HEADER_CMC (DIMTFILLCLR, 70);
-      HEADER_BS (DIMARCSYM, 70);
-      HEADER_HANDLE_NAME (DIMLTYPE, 6, LTYPE);
-      HEADER_HANDLE_NAME (DIMLTEX1, 6, LTYPE);
-      HEADER_HANDLE_NAME (DIMLTEX2, 6, LTYPE);
-    }
-  SINCE (R_2010) {
-    HEADER_RS (DIMTXTDIRECTION, 70);
+  SINCE (R_2007) {
+    HEADER_BD (DIMFXL, 40);
+    HEADER_B (DIMFXLON, 70);
+    HEADER_BD (DIMJOGANG, 40);
+    HEADER_BS (DIMTFILL, 70);
+    HEADER_CMC (DIMTFILLCLR, 70);
+    HEADER_BS (DIMARCSYM, 70);
+    HEADER_HANDLE_NAME (DIMLTYPE, 6, LTYPE);
+    HEADER_HANDLE_NAME (DIMLTEX1, 6, LTYPE);
+    HEADER_HANDLE_NAME (DIMLTEX2, 6, LTYPE);
   }
+  SINCE (R_2010)
+    HEADER_RS (DIMTXTDIRECTION, 70);
   HEADER_RS (LUNITS, 70);
   HEADER_RS (LUPREC, 70);
   HEADER_RS (AXISMODE, 70);
@@ -207,10 +220,12 @@
   HEADER_RS (AUPREC, 70);
   HEADER_TV (MENU, 1);
   HEADER_RD (ELEVATION, 40);
-  SINCE (R_11b1) {
+  SINCE (R_11b1)
     HEADER_RD (PELEVATION, 40);
-  }
   HEADER_RD (THICKNESS, 40);
+  PRE (R_9) {
+    HEADER_3D (VIEWDIR);
+  }
   HEADER_RS (LIMCHECK, 70);
   UNTIL (R_14) {
     HEADER_RS0 (BLIPMODE, 70); //documented but nowhere found
@@ -221,6 +236,8 @@
     HEADER_RD (CHAMFERC, 40);
     HEADER_RD (CHAMFERD, 40);
   }
+  PRE (R_9)
+    HEADER_RS (FASTZOOM, 70);
   HEADER_RS (SKPOLY, 70);
 
   HEADER_TIMEBLL (TDCREATE, 40);
@@ -238,37 +255,36 @@
   HEADER_RS (PDMODE, 70);
   HEADER_RD (PDSIZE, 40);
   HEADER_RD (PLINEWID, 40);
-  UNTIL (R_14) {
+  UNTIL (R_14)
     HEADER_RS (COORDS, 70); // 2
-  }
-  SINCE (R_9)
+  SINCE (R_9) {
     HEADER_RS (SPLFRAME, 70);
-  SINCE (R_2_6)
     HEADER_RS (SPLINETYPE, 70);
-  SINCE (R_9)
     HEADER_RS (SPLINESEGS, 70);
-  UNTIL (R_14) {
-    HEADER_RS (ATTDIA, 70); //default 1
-    HEADER_RS (ATTREQ, 70); //default 1
-    HEADER_RS (HANDLING, 70); //default 1
   }
-
+  VERSIONS (R_9, R_14) {
+    HEADER_RS (ATTDIA, 70);   // default 1
+    HEADER_RS (ATTREQ, 70);
+    HEADER_RS (HANDLING, 70); // default 1
+  }
   //HEADER_H (HANDSEED, 5); //default: 20000, before r13: 0xB8BC
-  SINCE (R_9)
+  SINCE (R_9) {
     FIELD_DATAHANDLE (HANDSEED, 0, 5);
-
-  HEADER_RS (SURFTAB1, 70); // 6
-  HEADER_RS (SURFTAB2, 70); // 6
-  HEADER_RS (SURFTYPE, 70); // 6
-  HEADER_RS (SURFU, 70); // 6
-  HEADER_RS (SURFV, 70); // 6
+    HEADER_RS (SURFTAB1, 70); // 6
+    HEADER_RS (SURFTAB2, 70); // 6
+    HEADER_RS (SURFTYPE, 70); // 6
+    HEADER_RS (SURFU, 70); // 6
+    HEADER_RS (SURFV, 70); // 6
+  }
   SINCE (R_2000) {
     HEADER_HANDLE_NAME (UCSBASE, 2, UCS);
   }
-  HEADER_HANDLE_NAME (UCSNAME, 2, UCS);
-  HEADER_3D (UCSORG);
-  HEADER_3D (UCSXDIR);
-  HEADER_3D (UCSYDIR);
+  SINCE (R_9) {
+    HEADER_HANDLE_NAME (UCSNAME, 2, UCS);
+    HEADER_3D (UCSORG);
+    HEADER_3D (UCSXDIR);
+    HEADER_3D (UCSYDIR);
+  }
   SINCE (R_2000) {
     HEADER_HANDLE_NAME (UCSORTHOREF, 2, UCS);
     HEADER_RS (UCSORTHOVIEW, 70);
@@ -308,10 +324,12 @@
   HEADER_RD (USERR4, 40);
   HEADER_RD (USERR5, 40);
 
-  SINCE (R_2_6)
+  SINCE (R_9)
     HEADER_RS (WORLDVIEW, 70);
-  UNTIL (R_10)
+  UNTIL (R_10) {
+    ENDSEC ();
     return 0;
+  }
 
   //VERSION (R_13) {
   //  HEADER_RS (WIREFRAME, 70); //Undocumented
@@ -321,7 +339,7 @@
   HEADER_RS (TILEMODE, 70);
   HEADER_RS (MAXACTVP, 70);
 
-  SINCE (R_9)
+  SINCE (R_9) // ?
     HEADER_3D (PINSBASE);
   HEADER_RS (PLIMCHECK, 70);
   HEADER_3D (PEXTMIN);
@@ -364,8 +382,7 @@
     HEADER_T (STYLESHEET, 1);
     HEADER_B (XEDIT, 290);
     HEADER_RS (CEPSNTYPE, 380);
-    if (dwg->header_vars.CEPSNTYPE == 3)
-    {
+    if (dwg->header_vars.CEPSNTYPE == 3) {
       HEADER_HANDLE_NAME (CPSNID, 390, LTYPE);
     }
     HEADER_B (PSTYLEMODE, 290);

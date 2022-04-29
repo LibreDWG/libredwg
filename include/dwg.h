@@ -1010,7 +1010,7 @@ typedef struct _dwg_header_variables {
   BITCODE_2RD SNAPUNIT; /* -r11 */
   BITCODE_2RD SNAPBASE; /* -r11 */
   BITCODE_RD SNAPANG;   /* -r11 */
-  BITCODE_RS SNAPSTYL;  /* -r11 */
+  BITCODE_RS SNAPSTYLE;  /* -r11 */
   BITCODE_RS SNAPISOPAIR; /* -r11 */
   BITCODE_RS GRIDMODE;  /* -r11 */
   BITCODE_2RD GRIDUNIT; /* -r11 */

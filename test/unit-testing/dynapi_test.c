@@ -2566,21 +2566,21 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_RS snapstyl;
-    if (dwg_dynapi_header_value (dwg, "SNAPSTYL", &snapstyl, NULL)
-        && snapstyl == dwg->header_vars.SNAPSTYL)
+    BITCODE_RS snapstyle;
+    if (dwg_dynapi_header_value (dwg, "SNAPSTYLE", &snapstyle, NULL)
+        && snapstyle == dwg->header_vars.SNAPSTYLE)
       pass ();
     else
-      fail ("HEADER.SNAPSTYL [RS] %hu != %hu", dwg->header_vars.SNAPSTYL, snapstyl);
-    snapstyl++;
-    if (dwg_dynapi_header_set_value (dwg, "SNAPSTYL", &snapstyl, 0)
-        && snapstyl == dwg->header_vars.SNAPSTYL)
+      fail ("HEADER.SNAPSTYLE [RS] %hu != %hu", dwg->header_vars.SNAPSTYLE, snapstyle);
+    snapstyle++;
+    if (dwg_dynapi_header_set_value (dwg, "SNAPSTYLE", &snapstyle, 0)
+        && snapstyle == dwg->header_vars.SNAPSTYLE)
       pass ();
     else
-      fail ("HEADER.SNAPSTYL [RS] set+1 %hu != %hu",
-            dwg->header_vars.SNAPSTYL, snapstyl);
-    snapstyl--;
-    dwg_dynapi_header_set_value (dwg, "SNAPSTYL", &snapstyl, 0);
+      fail ("HEADER.SNAPSTYLE [RS] set+1 %hu != %hu",
+            dwg->header_vars.SNAPSTYLE, snapstyle);
+    snapstyle--;
+    dwg_dynapi_header_set_value (dwg, "SNAPSTYLE", &snapstyle, 0);
 
   }
   {

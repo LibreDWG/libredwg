@@ -1060,7 +1060,7 @@ get_first_owned_entity (const Dwg_Object *hdr)
       /* With r2000 we rather follow the next_entity chain */
       return _hdr->first_entity ? _hdr->first_entity->obj : NULL;
     }
-  else if (version >= R_2004)
+  else if (version >= R_2004 || version < R_13)
     {
       _hdr->__iterator = 0;
       if (_hdr->entities && _hdr->num_owned && _hdr->entities[0])
@@ -1074,7 +1074,7 @@ get_first_owned_entity (const Dwg_Object *hdr)
     }
 
   // TODO: preR13 block table
-  LOG_ERROR ("Unsupported version: %d\n", version);
+  LOG_ERROR ("Unsupported version %s\n", dwg_version_type (version));
   return NULL;
 }
 
@@ -1158,7 +1158,7 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
         }
       return obj;
     }
-  else if (version >= R_2004)
+  else if (version >= R_2004 || version < R_13)
     {
       Dwg_Object_Ref *ref;
       _hdr->__iterator++;
@@ -1168,7 +1168,7 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
       return ref ? dwg_ref_object (dwg, ref) : NULL;
     }
 
-  LOG_ERROR ("Unsupported version: %d\n", version);
+  LOG_ERROR ("Unsupported version %s\n", dwg_version_type (version));
   return NULL;
 }
 
@@ -1183,7 +1183,7 @@ get_first_owned_subentity (const Dwg_Object *owner)
   if (type == DWG_TYPE_INSERT)
     {
       Dwg_Entity_INSERT *_obj = owner->tio.entity->tio.INSERT;
-      if (version <= R_2000)
+      if (version >= R_13 && version <= R_2000)
         return _obj->first_attrib ? _obj->first_attrib->obj : NULL;
       else
         return _obj->attribs && _obj->attribs[0]
@@ -1193,7 +1193,7 @@ get_first_owned_subentity (const Dwg_Object *owner)
   else if (type == DWG_TYPE_MINSERT)
     {
       Dwg_Entity_MINSERT *_obj = owner->tio.entity->tio.MINSERT;
-      if (version <= R_2000)
+      if (version >= R_13 && version <= R_2000)
         return _obj->first_attrib ? dwg_ref_object (dwg, _obj->first_attrib) : NULL;
       else
         return _obj->attribs && _obj->attribs[0]
@@ -1206,7 +1206,7 @@ get_first_owned_subentity (const Dwg_Object *owner)
     {
       // guaranteed structure
       Dwg_Entity_POLYLINE_2D *_obj = owner->tio.entity->tio.POLYLINE_2D;
-      if (version <= R_2000)
+      if (version >= R_13 && version <= R_2000)
         return _obj->first_vertex ? dwg_ref_object (dwg, _obj->first_vertex) : NULL;
       else
         return _obj->vertex && _obj->vertex[0] ? dwg_ref_object (dwg, _obj->vertex[0]) : NULL;
@@ -1233,7 +1233,7 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
   if (type == DWG_TYPE_INSERT)
     {
       Dwg_Entity_INSERT *_obj = owner->tio.entity->tio.INSERT;
-      if (version <= R_2000)
+      if (version >= R_13 && version <= R_2000)
         return (_obj->last_attrib && current != _obj->last_attrib->obj
                 && obj->type == DWG_TYPE_ATTRIB)
                    ? obj
@@ -1255,7 +1255,7 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
   else if (type == DWG_TYPE_MINSERT)
     {
       Dwg_Entity_MINSERT *_obj = owner->tio.entity->tio.MINSERT;
-      if (version <= R_2000)
+      if (version >= R_13 && version <= R_2000)
         return (_obj->last_attrib && current != _obj->last_attrib->obj
                 && obj->type == DWG_TYPE_ATTRIB)
                    ? obj
@@ -1280,7 +1280,7 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
     {
       // guaranteed structure
       Dwg_Entity_POLYLINE_2D *_obj = owner->tio.entity->tio.POLYLINE_2D;
-      if (version <= R_2000)
+      if (version >= R_13 && version <= R_2000)
         return (_obj->last_vertex && current != _obj->last_vertex->obj) ? obj
                                                                         : NULL;
       else
@@ -1318,7 +1318,7 @@ get_first_owned_block (const Dwg_Object *hdr)
       return NULL;
     }
 
-  if (version >= R_13)
+  if (1 || version >= R_13)
     {
       if (_hdr->block_entity)
         {
@@ -1336,7 +1336,7 @@ get_first_owned_block (const Dwg_Object *hdr)
     }
 
   // TODO: preR13 block table
-  LOG_ERROR ("Unsupported version: %s\n", dwg_version_type (version));
+  LOG_ERROR ("Unsupported version %s\n", dwg_version_type (version));
   return NULL;
 }
 
@@ -1357,14 +1357,14 @@ get_next_owned_block (const Dwg_Object *restrict hdr,
       return NULL;
     }
 
-  if (version >= R_13)
+  if (1 || version >= R_13)
     {
       if (!_hdr->endblk_entity || current->handle.value >= _hdr->endblk_entity->absolute_ref)
         return NULL;
       return dwg_next_object (current);
     }
 
-  LOG_ERROR ("Unsupported version: %s\n", dwg_version_type (version));
+  LOG_ERROR ("Unsupported version %s\n", dwg_version_type (version));
   return NULL;
 }
 
@@ -1407,7 +1407,7 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
       return ref ? dwg_ref_object (dwg, ref) : NULL;
     }
 
-  LOG_ERROR ("Unsupported version: %s\n", dwg_version_type (version));
+  LOG_ERROR ("Unsupported version %s\n", dwg_version_type (version));
   return NULL;
 }
 
@@ -1426,7 +1426,7 @@ get_last_owned_block (const Dwg_Object *restrict hdr)
       return NULL;
     }
 
-  if (version >= R_13)
+  if (1 || version >= R_13)
     {
       if (_hdr->endblk_entity && _hdr->endblk_entity->obj)
         return _hdr->endblk_entity->obj;
@@ -1455,7 +1455,7 @@ get_last_owned_block (const Dwg_Object *restrict hdr)
         }
     }
 
-  LOG_ERROR ("Unsupported version: %d\n", version);
+  LOG_ERROR ("Unsupported version %s\n", dwg_version_type (version));
   return NULL;
 }
 

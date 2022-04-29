@@ -42,7 +42,7 @@
     FIELD_2RD (SNAPUNIT, 14);   //??
     FIELD_2RD (SNAPBASE, 13);   //??
     FIELD_RD (SNAPANG, 50);     //??
-    FIELD_RS (SNAPSTYL, 70);    //77 ??
+    FIELD_RS (SNAPSTYLE, 70);   //77 ??
     FIELD_RS (SNAPISOPAIR, 70); //78 ??
   }
   FIELD_RS (GRIDMODE, 70);    //76 ??
