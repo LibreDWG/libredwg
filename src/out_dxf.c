@@ -1652,28 +1652,6 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
 
 #endif
 
-/* This was previously in encode, but since out_dxf needs it for r2013+ 3DSOLIDs
-   and --disable-write is still an option, we need to move it here.
-   A global acis_data_idx is needed, since encr_acis_data is split into blocks, but
-   acis_data is a single stream, so we need to keep track of the current position.
- */
-EXPORT char *
-dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
-                  int *restrict acis_data_idx)
-{
-  BITCODE_RC* encr_sat_data = (BITCODE_RC*)calloc (blocksize + 1, 1);
-  int i;
-  for (i = 0; i < (int)blocksize; i++)
-    {
-      if (acis_data[i] <= 32)
-        encr_sat_data[i] = acis_data[i];
-      else
-        encr_sat_data[i] = 159 - acis_data[i];
-    }
-  *acis_data_idx = i;
-  return (char*)encr_sat_data;
-}
-
 #ifndef DISABLE_DXF
 
 static int

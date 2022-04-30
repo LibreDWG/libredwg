@@ -38,6 +38,8 @@
 #include "bits.h"
 #include "dwg_api.h"
 #include "classes.h"
+#include "decode.h"
+#include "encode.h"
 
 /** We don't pass in Dwg_Object*'s, so we don't know if the object
  *  is >= r2007 or <r13 or what. Default is r2000.
@@ -53,12 +55,10 @@ static unsigned nodeid = 0;
 /* I don't want to export these. */
 BITCODE_H dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
                                        const char *restrict table);
-void dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg);
-Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
 /* Initialization hack only */
 void dwg_set_next_hdl (Dwg_Data *dwg, unsigned long value);
 void dwg_set_next_objhandle (Dwg_Object *obj);
-// from dxfclasses */
+/* from dxfclasses */
 int dwg_dxfclass_require (Dwg_Data *restrict dwg, const char *restrict dxfname);
 
 /**
@@ -21983,6 +21983,28 @@ dwg_ref_get_absref (const dwg_object_ref *restrict ref, int *restrict error)
     }
 }
 
+/* This was previously in encode and out_dxf, but since out_dxf needs it for r2013+ 3DSOLIDs
+   and --disable-write is still an option, we need to move it here.
+   A global acis_data_idx is needed, since encr_acis_data is split into blocks, but
+   acis_data is a single stream, so we need to keep track of the current position.
+ */
+EXPORT char *
+dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
+                  int *restrict acis_data_idx)
+{
+  BITCODE_RC* encr_sat_data = (BITCODE_RC*)calloc (blocksize + 1, 1);
+  int i;
+  for (i = 0; i < (int)blocksize; i++)
+    {
+      if (acis_data[i] <= 32)
+        encr_sat_data[i] = acis_data[i];
+      else
+        encr_sat_data[i] = 159 - acis_data[i];
+    }
+  *acis_data_idx = i;
+  return (char*)encr_sat_data;
+}
+
 /********************************************************************
  *                    FUNCTIONS FOR ADDING OBJECTS                  *
  ********************************************************************/
@@ -22026,12 +22048,6 @@ dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
                            const dwg_face vertind) __nonnull_all;
 Dwg_Entity_SEQEND *
 dwg_add_SEQEND (dwg_ent_generic *restrict owner) __nonnull_all;
-
-// imported from in_dxf.c
-void in_postprocess_handles (Dwg_Object *restrict obj);
-void in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
-                            BITCODE_H *owned);
-int dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg);
 
 #define NEW_OBJECT(dwg, obj)                                                  \
   {                                                                           \

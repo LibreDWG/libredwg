@@ -20,6 +20,7 @@
 
 #include "dwg.h"
 #include "bits.h"
+#include "encode.h"
 
 #ifdef IN_DXF_H
 #error in_dxf.h must be included after in_json.h because of FORMAT_BD

@@ -42,4 +42,9 @@ EXPORT int dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
  */
 Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
 
+Dwg_Object *find_prev_entity (Dwg_Object *obj);
+void in_postprocess_handles (Dwg_Object *restrict obj);
+void in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
+                            BITCODE_H *owned);
+
 #endif
