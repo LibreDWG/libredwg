@@ -541,6 +541,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else
         LOG_ERROR ("%.*s ignored", 40, p)
     }
+#ifndef DISABLE_DXF
   if (memBEGINc ((char*)dat->chain, "readdxf") || (p = strstr ((char*)dat->chain, "\nreaddxf")))
     {
       if (*p == '\n')
@@ -558,6 +559,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else
         LOG_ERROR ("%.*s ignored", 40, p)
     }
+#endif
 #ifndef DISABLE_JSON
   if (memBEGINc ((char*)dat->chain, "readjson") || (p = strstr ((char*)dat->chain, "\nreadjson")))
     {

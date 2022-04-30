@@ -797,6 +797,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       unlink (dwgfile);
   if (as_dxf)
     {
+#ifndef DISABLE_DXF
       Bit_Chain dat = { 0 };
       dat.version = dwg->header.version;
       dat.from_version = dwg->header.from_version;
@@ -804,6 +805,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       dat.fh = fopen (dwgfile, "wb");
       error = dwg_write_dxf (&dat, dwg);
       fclose (dat.fh);
+#endif
     }
   else
     error = dwg_write_file (dwgfile, dwg);
@@ -816,9 +818,11 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
     ok ("write %s to %s", name, dwgfile);
   dwg_free (dwg);
 
+#ifndef DISABLE_DXF
   if (as_dxf)
     error = dxf_read_file (dwgfile, dwg);
   else
+#endif
     error = dwg_read_file (dwgfile, dwg);
   if (error >= DWG_ERR_CRITICAL)
     {
@@ -1005,6 +1009,7 @@ main (int argc, char *argv[])
   int error = 0;
   char *trace = getenv ("LIBREDWG_TRACE"); // read_dwg
   char *debugenv = getenv ("LIBREDWG_DEBUG"); // keep files
+  int dxf = 0;
   loglevel = is_make_silent() ? 0 : 2; // print ok
   if (trace)
     tracelevel = atoi (trace);
@@ -1015,7 +1020,9 @@ main (int argc, char *argv[])
   else
     debug = 0;
 
-  for (int dxf = 0; dxf < 2; dxf++)
+#ifndef DISABLE_DXF
+  for (; dxf < 2; dxf++)
+#endif
     {
       error += test_add (DWG_TYPE_LINE, "add_line_2000", dxf);
       error += test_add (DWG_TYPE_TEXT, "add_text_2000", dxf);
