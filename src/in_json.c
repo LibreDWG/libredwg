@@ -557,21 +557,23 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   long code, size, value, absref;
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   BITCODE_H ref;
-  if (t->type != JSMN_ARRAY || (t->size != 2 && t->size != 4))
+  if (t->type != JSMN_ARRAY || (t->size != 2 && t->size != 4 && t->size != 5))
     {
-      LOG_ERROR ("JSON HANDLE must be ARRAY of [ code, value ] or [ code, size, value, absref ]")
+      LOG_ERROR ("JSON HANDLE must be ARRAY of [ code, value ] or [ code, size, value, absref, [r11_idx] ]")
       return NULL;
     }
   JSON_TOKENS_CHECK_OVERFLOW_NULL
   tokens->index++;
   code = json_long (dat, tokens);
-  if (t->size == 4)
+  if (t->size >= 4)
     {
       size = json_long (dat, tokens);
       value = json_long (dat, tokens);
       absref = json_long (dat, tokens);
       ref = dwg_add_handleref (dwg, code, absref,
                                (!code || code >= 6) ? obj : NULL);
+      if (t->size > 4)
+        ref->r11_idx = json_long (dat, tokens);
       if ((BITCODE_RC)size != ref->handleref.size
           || (unsigned long)value != ref->handleref.value)
         {
