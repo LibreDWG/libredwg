@@ -620,11 +620,12 @@ const unsigned char unknown_section[53]
   {                                                                           \
   PRE (R_13)                                                                  \
   {                                                                           \
+    short idx = hdlptr ? (hdlptr)->r11_idx : 0;                               \
     if (handle_code == 1)                                                     \
-      bit_write_RC (dat, (hdlptr)->r11_idx);                                  \
+      bit_write_RC (dat, idx);                                                \
     else                                                                      \
-      bit_write_RS (dat, (hdlptr)->r11_idx);                                  \
-    LOG_TRACE (#nam ": %hd [%s %d]\n", (short)hdlptr->r11_idx,                \
+      bit_write_RS (dat, idx);                                                \
+    LOG_TRACE (#nam ": %hd [%s %d]\n", (short)idx,                            \
                handle_code == 2 ? "RSd" : "RC", dxf)                          \
   }                                                                           \
   IF_ENCODE_SINCE_R13                                                         \
@@ -4882,17 +4883,12 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
     BITCODE_RC flag = ent->flag_r11;
     FIELD_RC (flag_r11, 70); // mode
     LOG_TRACE ("size: %d\n", obj->size);
-    //FIELD_HANDLE (layer, 1, 8);
-    bit_write_RS (dat, _obj->layer->r11_idx);
-    LOG_TRACE ("layer: %d\n", _obj->layer->r11_idx);
+    FIELD_HANDLE (layer, 1, 8);
     FIELD_RSx (opts_r11, 0);
     if (flag & FLAG_R11_COLOR)
       FIELD_RCd (color_r11, 0);
-    if (flag & FLAG_R11_LTYPE) {
-      bit_write_RS (dat, _obj->ltype->r11_idx);
-      LOG_TRACE ("ltype: %d\n", _obj->ltype->r11_idx);
-      //FIELD_HANDLE (ltype, 1, 0);
-    }
+    if (flag & FLAG_R11_LTYPE)
+      FIELD_HANDLE (ltype, 1, 7);
     /* FIXME
     if (flag & FLAG_R11_ELEVATION)
       FIELD_RD (elevation_r11, 31);
