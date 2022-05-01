@@ -348,15 +348,20 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
                 _ctrl->entries[i]
                     = dwg_add_handleref (dwg, 2, obj->handle.value, obj);
               }
-            //FIELD_RSd (used, 0);
 
             // TODO move to => dwg.spec
             FIELD_RC (block_scaling, 0);
-            FIELD_CAST (num_owned, RS, BL, 0);
-            FIELD_RCd (flag2, 0);
-            FIELD_CAST (num_inserts, RS, RL, 0);
-            // since when?
-            FIELD_RSd (insert_units, 0);
+            PRE (R_11) {
+              FIELD_CAST (num_owned, RS, BL, 0);
+              FIELD_RC (flag2, 0);
+            }
+            SINCE (R_11) { // r10 not
+              FIELD_RS (unknown_r11, 0);
+              FIELD_HANDLE (block_entity, 2, 0); // index?
+              FIELD_RC (flag2, 0);
+              FIELD_RSd (used, 0);
+              FIELD_RSd (unknown1_r11, 0);
+            }
             CHK_ENDPOS;
           }
       break;
@@ -383,8 +388,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             FIELD_RC (generation, 71);
             FIELD_RD (last_height, 42);
             FIELD_TFv (font_file, 64, 3);    // 8ed
-            // since when?
-            FIELD_TFv (bigfont_file, 64, 4); // 92d
+            //SINCE (R_13)
+            //  FIELD_TFv (bigfont_file, 64, 4); // 92d
             CHK_ENDPOS;
           }
       break;
