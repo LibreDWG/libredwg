@@ -5365,6 +5365,7 @@ DWG_OBJECT (PROXY_OBJECT)
       }
     LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
     LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
+    FIELD_VALUE (num_objids) = 0;
     dat->opts &= 0xf0;
     FIELD_TF (data, _obj->data_size, 310);
     dat->opts = opts;
@@ -5410,10 +5411,11 @@ DWG_OBJECT (PROXY_OBJECT)
       {
         Dwg_Handle hdl;
         if (bit_read_H (hdl_dat, &hdl))
-          break;
+          break; // error
         else
           _obj->num_objids++;
       }
+    LOG_TRACE ("num_objids: " FORMAT_BL "\n", _obj->num_objids);
     dat->opts = opts;
     bit_set_position (hdl_dat, pos);
   }
