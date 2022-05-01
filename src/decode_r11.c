@@ -369,7 +369,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     case SECTION_LAYER:
         for (i = 0; i < tbl->number; i++)
           {
-            // Bit_Chain *hdl_dat = NULL;
             PREP_TABLE (LAYER);
             FIELD_RS (color_r11, 62); // color, off if negative
             FIELD_HANDLE (ltype, 2, 6);
@@ -419,13 +418,15 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             FIELD_RD (VIEWSIZE, 40);
             FIELD_2RD (VIEWCTR, 10);
             FIELD_RD (view_width, 41);
-            FIELD_3RD (view_target, 12);
-            FIELD_3RD (VIEWDIR, 11);
-            FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
-            FIELD_RD (lens_length, 42);
-            FIELD_RD (front_clip_z, 43);
-            FIELD_RD (back_clip_z, 44);
-            FIELD_RD (twist_angle, 50);
+            SINCE (R_10) {
+              FIELD_3RD (view_target, 12);
+              FIELD_3RD (VIEWDIR, 11);
+              FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
+              FIELD_RD (lens_length, 42);
+              FIELD_RD (front_clip_z, 43);
+              FIELD_RD (back_clip_z, 44);
+              FIELD_RD (twist_angle, 50);
+            }
             CHK_ENDPOS;
           }
       }
