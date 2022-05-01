@@ -133,12 +133,12 @@ static char *_path_field (const char *path);
 #undef ARGS_H
 #define ARGS_H(hdl) hdl.code, hdl.value
 #define FORMAT_H "[%u, %lu]"
-#define ARGS_HREF(ref) ref->handleref.code, ref->handleref.size, ref->handleref.value, ref->absolute_ref
+#define ARGS_HREF(ref) ref->handleref.code, ref->handleref.size, ref->handleref.value, ref->absolute_ref, ref->r11_idx
 #undef FORMAT_RD
 #undef FORMAT_BD
 #define FORMAT_RD "%.14f"
 #define FORMAT_BD FORMAT_RD
-#define FORMAT_HREF "[%u, %u, %lu, %lu]"
+#define FORMAT_HREF "[%u, %u, %lu, %lu, %u]"
 #define FORMAT_RLL "%" PRIu64
 #define FORMAT_BLL "%" PRIu64
 #define FORMAT_RC "%d"
