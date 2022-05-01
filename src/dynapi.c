@@ -7413,6 +7413,10 @@ static const Dwg_DYNAPI_field _dwg_BLOCK_HEADER_fields[] = {
     1,1,0, 331 },
   { "layout",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLOCK_HEADER, layout),
     1,0,0, 340 },
+  { "unknown_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_BLOCK_HEADER, unknown_r11),
+    0,0,0, 0 },
+  { "unknown1_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_BLOCK_HEADER, unknown1_r11),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_BREAKDATA: (sorted by offset) */
