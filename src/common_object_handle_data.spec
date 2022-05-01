@@ -28,9 +28,7 @@
   if (!dwg_obj_is_control (obj))
 #endif
     {
-      SINCE (R_13) {
-        FIELD_HANDLE (ownerhandle, 4, 330);
-      }
+      FIELD_HANDLE (ownerhandle, 4, 330);
 
 #ifndef IS_DXF
       SINCE (R_13) {
