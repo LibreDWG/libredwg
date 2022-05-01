@@ -620,7 +620,7 @@ const unsigned char unknown_section[53]
   {                                                                           \
   PRE (R_13)                                                                  \
   {                                                                           \
-    short idx = hdlptr ? (hdlptr)->r11_idx : 0;                               \
+    short idx = (hdlptr) ? (hdlptr)->r11_idx : 0;                             \
     if (handle_code == 1)                                                     \
       bit_write_RC (dat, idx);                                                \
     else                                                                      \
