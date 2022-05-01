@@ -43,7 +43,6 @@ static unsigned int loglevel;
 /* the current version per spec block */
 static int cur_ver = 0;
 static BITCODE_BL rcount1 = 0, rcount2 = 0;
-static bool is_teigha = false;
 
 #ifdef DWG_ABORT
 static unsigned int errors = 0;
@@ -67,7 +66,6 @@ static bool env_var_checked_p;
 
 //#undef LOG_POS
 //#define LOG_POS LOG_INSANE (" @%lu.%u\n", dat->byte, dat->bit)
-
 
 /*------------------------------------------------------------------------------
  * Private functions
@@ -93,7 +91,7 @@ static int decode_preR13_section (Dwg_Section_Type_r11 id,
  * Public function definitions
  */
 
-Dwg_Object_Ref *
+EXPORT Dwg_Object_Ref *
 dwg_decode_preR13_handleref (Bit_Chain *restrict dat, int size)
 {
   Dwg_Object_Ref *ref = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
@@ -567,7 +565,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   return error;
 }
  
-int
+EXPORT int
 decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                       Dwg_Object_Entity *ent)
 {
@@ -649,7 +647,7 @@ entity_end:
 
  
 AFL_GCC_TOOBIG
-int
+EXPORT int
 decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_RL entities_start = 0, entities_end = 0;

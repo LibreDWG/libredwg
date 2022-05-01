@@ -66,7 +66,6 @@ static bool env_var_checked_p;
 #define DWG_LOGLEVEL loglevel
 
 #include "logging.h"
-#include "decode_r11.h"
 #include "dec_macros.h"
 
 //#undef LOG_POS
