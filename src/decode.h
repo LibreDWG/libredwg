@@ -23,6 +23,7 @@
 
 #include "bits.h"
 #include "dwg.h"
+#include "decode_r11.h"
 
 #ifdef IN_DXF_H
 #error in_dxf.h must be included after decode.h because of FORMAT_BD
@@ -41,8 +42,6 @@ void decode_BACKGROUND_type (const Dwg_Object *obj);
 /*------------------------------------------------------------------------------
  * Functions reused with decode_r11
  */
-Dwg_Object_Ref *dwg_decode_preR13_handleref (Bit_Chain *restrict dat,
-                                             int size);
 int dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj);
 
 /*------------------------------------------------------------------------------
