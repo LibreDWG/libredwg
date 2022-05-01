@@ -556,6 +556,8 @@ $n = 'object_object';
 $DXF{$n}->{'ownerhandle'} = 330;
 $DXF{$n}->{'xdicobjhandle'} = 360;
 $DXF{$n}->{'reactors'} = 330;
+# $DXF{$n}->{'flag'} = 70;
+# $DXF{$n}->{'name'} = 2;
 
 $n = 'summaryinfo';
 dxfin_spec "$srcdir/summaryinfo.spec";
