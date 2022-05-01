@@ -62,7 +62,7 @@ run ()
     bprog="$(basename "$prog" .exe)"
     bdwg="$(basename "$dwg" .dwg)"
     ddwg="$(dirname "$dwg")"
-    if [ $ddwg != . ]; then
+    if [ "$ddwg" != "." ]; then
         bdwg="$bdwg"_"$ddwg"
     fi
     bprog1=$(echo "$bprog" | sed -e's,^dwg2,,')
@@ -213,7 +213,7 @@ run ()
                     CYGWIN*) todo=1 ;;
                     *) ;;
                 esac
-                if egrep -q '_(r11|r2.10|r2.6|r1.4).json' $arg; then
+                if grep -E -q '_(r11|r2\.10|r2\.6|r1\.4)\.json' $arg; then
                     todo=1
                 fi
                 ;;
@@ -246,7 +246,7 @@ run ()
 
 DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
 DATA="$DATA example_2013 example_2018 example_r14"
-TODO="r11/ACEB10 r2.10/entities r2.6/entities r1.4/entities"
+TODO="example_r13 r11/ACEB10 r2.10/entities r2.6/entities r1.4/entities"
 DATA="$DATA $TODO"
 
 for d in $DATA; do
@@ -259,6 +259,10 @@ for d in $DATA; do
     rm "./$b-rewrite.dwg" 2>/dev/null
     rm "./$b-dwgwrite.dwg" 2>/dev/null
 done
+rm "./entities_r*.dxf" 2>/dev/null
+rm "./entities_r*.json" 2>/dev/null
+rm "./ACEB10_r11.dxf" 2>/dev/null
+rm "./ACEB10_r11.json" 2>/dev/null
 
 for prog in $PROGS ; do
     case $prog in
