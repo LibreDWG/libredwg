@@ -27,6 +27,7 @@
 #include "bits.h"
 #include "dwg.h"
 #include "decode.h"
+#include "decode_r11.h"
 #include "out_dxf.h"
 
 static unsigned int loglevel;
@@ -1568,10 +1569,10 @@ static int dwg_dxfb_object (Bit_Chain *restrict dat,
       return dwg_dxfb_BLOCK (dat, obj);
     case DWG_TYPE_ENDBLK:
       LOG_WARN ("stale %s subentity", obj->dxfname);
-      return 0; // dwg_dxf_ENDBLK(dat, obj);
+      return 0; // dwg_dxfb_ENDBLK(dat, obj);
     case DWG_TYPE_SEQEND:
       LOG_WARN ("stale %s subentity", obj->dxfname);
-      return 0; // dwg_dxf_SEQEND(dat, obj);
+      return 0; // dwg_dxfb_SEQEND(dat, obj);
 
     case DWG_TYPE_INSERT:
       error = dwg_dxfb_INSERT (dat, obj);
@@ -1673,7 +1674,11 @@ static int dwg_dxfb_object (Bit_Chain *restrict dat,
       LOG_WARN ("Unhandled Entity MLINE in out_dxfb %u/%lX", obj->index,
                 obj->handle.value)
       if (0)
-        dwg_dxfb_MLINE (dat, obj);
+        {
+          // bypass -Wunused-function
+          dwg_dxfb_LOAD (dat, obj);
+          dwg_dxfb_MLINE (dat, obj);
+        }
       return DWG_ERR_UNHANDLEDCLASS;
 #endif
     case DWG_TYPE_BLOCK_CONTROL:
