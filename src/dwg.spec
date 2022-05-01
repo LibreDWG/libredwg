@@ -3111,11 +3111,17 @@ DWG_OBJECT (BLOCK_HEADER)
   PRE (R_13)
   {
     FIELD_RC (block_scaling, 0);
-    FIELD_CAST (num_owned, RS, BL, 0);
-    FIELD_RCd (flag2, 0);
-    FIELD_CAST (num_inserts, RS, RL, 0);
-    FIELD_RSd (insert_units, 0);
-
+    PRE (R_11) {
+      FIELD_CAST (num_owned, RS, BL, 0);
+      FIELD_RC (flag2, 0);
+    }
+    SINCE (R_11) { // r10 not
+      FIELD_RS (unknown_r11, 0);
+      FIELD_HANDLE (block_entity, 2, 0); // index?
+      FIELD_RC (flag2, 0);
+      FIELD_RSd (used, 0);
+      FIELD_RSd (unknown1_r11, 0);
+    }
     FIELD_VALUE (anonymous)    = FIELD_VALUE (flag) & 1;
     FIELD_VALUE (hasattrs)     = FIELD_VALUE (flag) & 2;
     FIELD_VALUE (blkisxref)    = FIELD_VALUE (flag) & 4;
@@ -3190,7 +3196,7 @@ DWG_OBJECT (BLOCK_HEADER)
         HANDLE_VECTOR (entities, num_owned, 4, 0);
       }
     }
-  SINCE (R_13) {
+  IF_FREE_OR_SINCE (R_13) {
     FIELD_HANDLE (endblk_entity, 3, 0);
   }
   IF_FREE_OR_SINCE (R_2000)
@@ -3334,7 +3340,7 @@ DWG_OBJECT (STYLE)
     FIELD_RC (generation, 71);
     FIELD_RD (last_height, 42);
     FIELD_TFv (font_file, 64, 3);
-    FIELD_TFv (bigfont_file, 64, 4);
+    //FIELD_TFv (bigfont_file, 64, 4);
     FIELD_VALUE (is_shape)    = FIELD_VALUE (flag) & 4;
     FIELD_VALUE (is_vertical) = FIELD_VALUE (flag) & 1;
   }

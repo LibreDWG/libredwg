@@ -29,10 +29,14 @@
 #  define FREE if (0)
 #  define IF_FREE_OR_SINCE(x) SINCE (x)
 #  define IF_FREE_OR_VERSIONS(x,y) VERSIONS(x, y)
-#  define IF_ENCODE_FROM_EARLIER if (0)
-#  define IF_ENCODE_FROM_EARLIER_OR_DXF if (0)
-#  define IF_ENCODE_FROM_PRE_R13 if (0)
-#  define IF_ENCODE_FROM_SINCE_R13 if (0)
+#  ifndef IF_ENCODE_FROM_EARLIER
+#    define IF_ENCODE_FROM_EARLIER if (0)
+#    define IF_ENCODE_FROM_EARLIER_OR_DXF if (0)
+#    define IF_ENCODE_FROM_PRE_R13 if (0)
+#  endif
+#  ifndef IF_ENCODE_SINCE_R13
+#    define IF_ENCODE_SINCE_R13 if (0)
+#  endif
 #  define IF_IS_ENCODER 0
 #  define IF_IS_DECODER 0
 #  define IF_IS_DXF 0
@@ -430,20 +434,6 @@
 #  define ENCODER if (1)
 #  undef DECODER_OR_ENCODER
 #  define DECODER_OR_ENCODER if (1)
-// when writing, check also rewriting from an earlier version and fill in
-// defaults then
-#  undef IF_ENCODE_FROM_EARLIER
-#  undef IF_ENCODE_FROM_EARLIER_OR_DXF
-#  undef IF_ENCODE_FROM_PRE_R13
-#  undef IF_ENCODE_FROM_SINCE_R13
-#  define IF_ENCODE_FROM_EARLIER                                              \
-    if (dat->from_version && dat->from_version < cur_ver)
-#  define IF_ENCODE_FROM_EARLIER_OR_DXF                                       \
-    if ((dat->from_version && dat->from_version < cur_ver) || dwg->opts & DWG_OPTS_INDXF)
-#  define IF_ENCODE_FROM_PRE_R13                                              \
-    if (dat->from_version && dat->from_version < R_13)
-#  define IF_ENCODE_SINCE_R13                                                 \
-    if (dat->from_version && dat->from_version >= R_13)
 #endif
 
 #ifdef IS_DECODER

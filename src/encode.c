@@ -98,6 +98,20 @@ const unsigned char unknown_section[53]
 
 #define ANYCODE -1
 
+// need to define before spec.h already
+#undef IF_ENCODE_FROM_EARLIER
+#undef IF_ENCODE_FROM_EARLIER_OR_DXF
+#undef IF_ENCODE_FROM_PRE_R13
+#undef IF_ENCODE_SINCE_R13
+#define IF_ENCODE_FROM_EARLIER                                              \
+  if (dat->from_version && dat->from_version < cur_ver)
+#define IF_ENCODE_FROM_EARLIER_OR_DXF                                       \
+  if ((dat->from_version && dat->from_version < cur_ver) || dwg->opts & DWG_OPTS_INDXF)
+#define IF_ENCODE_FROM_PRE_R13                                              \
+  if (dat->from_version && dat->from_version < R_13)
+#define IF_ENCODE_SINCE_R13                                                 \
+  if (dat->from_version && dat->from_version >= R_13)
+
 #undef LOG_POS
 #define LOG_POS                                                               \
   LOG_INSANE (" @%lu.%u", obj ? dat->byte - obj->address : dat->byte, dat->bit)\
@@ -1808,79 +1822,92 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   Dwg_Section *tbl = &dwg->header.section[id];
   int i = 0;
   BITCODE_BL vcount;
+  int tblnum = tbl->number;
   int error = 0;
   BITCODE_RL num = tbl->objid_r11;
+  Bit_Chain *hdl_dat = dat;
+  Dwg_Object *ctrl;
 
-#define PREP_TABLE(name)                                \
-  Dwg_Object *obj = &dwg->object[num + i];              \
-  Dwg_Object_##name *_obj = obj->tio.object->tio.name;
+#define PREP_CTRL(token)                                                      \
+  if (!num) /* don't trust tbl. from json or dxf */                           \
+    {                                                                         \
+      Dwg_Object_##token *_ctrl;                                              \
+      Dwg_Object *ref;                                                        \
+      ctrl = dwg_get_first_object (dwg, DWG_TYPE_##token);                    \
+      _ctrl = ctrl->tio.object->tio.token;                                    \
+      tblnum = _ctrl->num_entries;                                            \
+      ref = dwg_ref_object (dwg, _ctrl->entries[0]);                          \
+      num = ref->index;                                                       \
+    }
 
-#define CHK_ENDPOS                                      \
-  dwg->cur_index += tbl->number
+#define PREP_TABLE(token)                                \
+  Dwg_Object *obj = &dwg->object[num + i];               \
+  Dwg_Object_##token *_obj = obj->tio.object->tio.token; \
+  FIELD_RC (flag, 70);                                   \
+  FIELD_TFv (name, 32, 2)
+
+#define CHK_ENDPOS                                       \
+  dwg->cur_index += tblnum
 
   switch (id)
     {
     case SECTION_BLOCK:
-      for (i = 0; i < tbl->number; i++)
+      PREP_CTRL (BLOCK_CONTROL)
+      for (i = 0; i < tblnum; i++)
         {
           PREP_TABLE (BLOCK_HEADER);
-          FIELD_RC (flag, 70);
-          FIELD_TFv (name, 32, 2);
-          FIELD_RSd (used, 0);
           FIELD_RC (block_scaling, 0);
-          FIELD_CAST (num_owned, RS, BL, 0);
-          FIELD_RCd (flag2, 0);
-          FIELD_CAST (num_inserts, RS, RL, 0);
-          FIELD_RSd (insert_units, 0);
+          PRE (R_11) {
+            FIELD_CAST (num_owned, RS, BL, 0);
+            FIELD_RC (flag2, 0);
+          }
+          SINCE (R_11) { // r10 not
+            FIELD_RS (unknown_r11, 0);
+            FIELD_HANDLE (block_entity, 2, 0); // index?
+            FIELD_RC (flag2, 0);
+            FIELD_RSd (used, 0);
+            FIELD_RSd (unknown1_r11, 0);
+          }
           CHK_ENDPOS;
         }
       break;
 
     case SECTION_LAYER:
-      for (i = 0; i < tbl->number; i++)
+      PREP_CTRL (LAYER_CONTROL)
+      for (i = 0; i < tblnum; i++)
         {
           PREP_TABLE (LAYER);
 
           FIELD_CAST (flag, RC, RS, 70); // 860
-          FIELD_TFv (name, 32, 2);
-          FIELD_RS (used, 0);
-
           FIELD_RS (color_r11, 62); // color, off if negative
-          bit_write_RS (dat, _obj->ltype->r11_idx);
-          LOG_TRACE ("ltype->r11_idx: " FORMAT_RS " [RS 6]", _obj->ltype->r11_idx);
+          FIELD_HANDLE (ltype, 2, 6);
           CHK_ENDPOS;
         }
       break;
 
     // was a text STYLE table, became a STYLE object
     case SECTION_STYLE:
-      for (i = 0; i < tbl->number; i++)
+      PREP_CTRL (STYLE_CONTROL)
+      for (i = 0; i < tblnum; i++)
         {
           PREP_TABLE (STYLE);
-
-          FIELD_RC (flag, 70);
-          FIELD_TFv (name, 32, 2);
-          FIELD_RS (used, 0);
-
           FIELD_RD (text_size, 40); // ok
           FIELD_RD (width_factor, 41);
           FIELD_RD (oblique_angle, 50);
           FIELD_RC (generation, 71);
           FIELD_RD (last_height, 42);
           FIELD_TFv (font_file, 64, 3);    // 8ed
-          FIELD_TFv (bigfont_file, 64, 4); // 92d
+          //SINCE (R_13)
+          //  FIELD_TFv (bigfont_file, 64, 4); // 92d
           CHK_ENDPOS;
         }
       break;
 
     case SECTION_LTYPE:
-      for (i = 0; i < tbl->number; i++)
+      PREP_CTRL (LTYPE_CONTROL)
+      for (i = 0; i < tblnum; i++)
         {
           PREP_TABLE (LTYPE);
-
-          FIELD_RC (flag, 70);
-          FIELD_TFv (name, 32, 2);
-          FIELD_RS (used, 0);
           FIELD_TFv (description, 48, 3);
           FIELD_RC (alignment, 72);
           FIELD_RC (num_dashes, 73);
@@ -1893,14 +1920,10 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       break;
 
     case SECTION_VIEW:
-      for (i = 0; i < tbl->number; i++)
+      PREP_CTRL (VIEW_CONTROL)
+      for (i = 0; i < tblnum; i++)
         {
           PREP_TABLE (VIEW);
-
-          FIELD_RC (flag, 70);
-          FIELD_TFv (name, 32, 2);
-          FIELD_RS (used, 0);
-
           FIELD_RD (VIEWSIZE, 40);
           FIELD_2RD (VIEWCTR, 10);
           FIELD_RD (view_width, 41);
@@ -1916,30 +1939,22 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       break;
 
     case SECTION_UCS:
-      for (i = 0; i < tbl->number; i++)
+      PREP_CTRL (UCS_CONTROL)
+      for (i = 0; i < tblnum; i++)
         {
           PREP_TABLE (UCS);
-
-          FIELD_RC (flag, 70);
-          FIELD_TFv (name, 32, 2);
-          FIELD_RS (used, 0);
           FIELD_2RD (ucsorg, 10);
           FIELD_2RD (ucsxdir, 11);
           FIELD_2RD (ucsydir, 12);
-
           CHK_ENDPOS;
         }
       break;
 
     case SECTION_VPORT:
-      for (i = 0; i < tbl->number; i++)
+      PREP_CTRL (VPORT_CONTROL)
+      for (i = 0; i < tblnum; i++)
         {
           PREP_TABLE (VPORT);
-
-          FIELD_RC (flag, 70);
-          FIELD_TFv (name, 32, 2);
-          FIELD_RS (used, 0);
-
           FIELD_RD (VIEWSIZE, 40);
           FIELD_RD (aspect_ratio, 41);
           FIELD_2RD (VIEWCTR, 12);
@@ -1972,27 +1987,20 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       break;
 
     case SECTION_APPID:
-      for (i = 0; i < tbl->number; i++)
+      PREP_CTRL (APPID_CONTROL)
+      for (i = 0; i < tblnum; i++)
         {
           PREP_TABLE (APPID);
-
-          FIELD_RC (flag, 70);
-          FIELD_TFv (name, 32, 2);
-          FIELD_RS (used, 0);
           CHK_ENDPOS;
         }
       break;
 
     case SECTION_DIMSTYLE:
-      for (i = 0; i < tbl->number; i++)
+      PREP_CTRL (DIMSTYLE_CONTROL)
+      for (i = 0; i < tblnum; i++)
         {
           // unsigned long off;
           PREP_TABLE (DIMSTYLE); // d1f
-
-          FIELD_RC (flag, 70);
-          FIELD_TFv (name, 32, 2);
-          // off = dat->byte;
-          FIELD_RS (used, 0);      // d40
           FIELD_RD (DIMSCALE, 40); // d42
           FIELD_RD (DIMASZ, 41);
           FIELD_RD (DIMEXO, 42);
@@ -2040,10 +2048,10 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       break;
 
     case SECTION_VX:
-      if (tbl->number)
+      if (tblnum)
         {
           LOG_WARN ("VX table ignored");
-          tbl->number = 0;
+          tblnum = 0;
         }
       break;
 
