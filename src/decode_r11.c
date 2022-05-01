@@ -131,6 +131,7 @@ static int
 decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
 		           Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
+  int error = 0;
   Dwg_Section *tbl = &dwg->header.section[id];
   //Dwg_Object_BLOCK_CONTROL *block_control = dwg_block_control (dwg);
   //Dwg_Object_BLOCK_HEADER *mspace;
@@ -147,34 +148,73 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
     {
     case SECTION_BLOCK:
       {
-        // which mspace block_header index with r11?
-        //block_control = dwg_add_BLOCK_CONTROL (dwg, 0x1f, 0);
-        dwg->block_control.num_entries = tbl->number;
-        dwg->block_control.entries = calloc (tbl->number, sizeof (BITCODE_H));
-        //mspace = dwg_add_BLOCK_HEADER (dwg, "*MODEL_SPACE");
-        //mspaceobj = dwg_obj_generic_to_object (mspace, &error);
-        //block_control->num_entries--;
-        //dwg->header_vars.BLOCK_RECORD_MSPACE
-        //  = dwg_add_handleref (dwg, 5, mspaceobj->handle.value, NULL);
-        //dwg->header_vars.BLOCK_RECORD_MSPACE->obj = mspaceobj;
-        //block_control->model_space
-        //  = dwg_add_handleref (dwg, 3, mspaceobj->handle.value, NULL);
-        // TODO set address, flags, owner, maybe link to table, which is stable.
-        //_obj->parent
+        Dwg_Object *obj = dwg_get_first_object (dwg, DWG_TYPE_BLOCK_CONTROL);
+        if (obj)
+          {
+            Dwg_Object_BLOCK_CONTROL *_obj = obj->tio.object->tio.BLOCK_CONTROL;
+            obj->size = tbl->size;
+            _obj->num_entries = tbl->number;
+            if (tbl->number)
+              _obj->entries = calloc (tbl->number, sizeof (BITCODE_H));
+            dwg->block_control = *_obj;
+          }
       }
       break;
     case SECTION_LAYER:
-      //layer_control->num_entries = tbl->number;
-      //dwg_add_LAYER (dwg, NULL);
+      {
+        Dwg_Object *obj = dwg_get_first_object (dwg, DWG_TYPE_LAYER_CONTROL);
+        if (obj)
+          {
+            Dwg_Object_LAYER_CONTROL *_obj = obj->tio.object->tio.LAYER_CONTROL;
+            obj->size = tbl->size;
+            _obj->num_entries = tbl->number;
+            if (tbl->number)
+              _obj->entries = calloc (tbl->number, sizeof (BITCODE_H));
+          }
+        //dwg_add_LAYER (dwg, NULL);
+      }
       break;
     case SECTION_STYLE:
-      //dwg_add_STYLE (dwg, NULL);
+      {
+        Dwg_Object *obj = dwg_get_first_object (dwg, DWG_TYPE_STYLE_CONTROL);
+        if (obj)
+          {
+            Dwg_Object_STYLE_CONTROL *_obj = obj->tio.object->tio.STYLE_CONTROL;
+            obj->size = tbl->size;
+            _obj->num_entries = tbl->number;
+            if (tbl->number)
+              _obj->entries = calloc (tbl->number, sizeof (BITCODE_H));
+          }
+        //dwg_add_STYLE (dwg, NULL);
+      }
       break;
     case SECTION_LTYPE:
-      //dwg_add_LTYPE (dwg, NULL);
+      {
+        Dwg_Object *obj = dwg_get_first_object (dwg, DWG_TYPE_LTYPE_CONTROL);
+        if (obj)
+          {
+            Dwg_Object_LTYPE_CONTROL *_obj = obj->tio.object->tio.LTYPE_CONTROL;
+            obj->size = tbl->size;
+            _obj->num_entries = tbl->number;
+            if (tbl->number)
+              _obj->entries = calloc (tbl->number, sizeof (BITCODE_H));
+          }
+        //dwg_add_LTYPE (dwg, NULL);
+      }
       break;
     case SECTION_VIEW:
-      //dwg_add_VIEW (dwg, NULL);
+      {
+        Dwg_Object *obj = dwg_get_first_object (dwg, DWG_TYPE_VIEW_CONTROL);
+        if (obj)
+          {
+            Dwg_Object_VIEW_CONTROL *_obj = obj->tio.object->tio.VIEW_CONTROL;
+            obj->size = tbl->size;
+            _obj->num_entries = tbl->number;
+            if (tbl->number)
+              _obj->entries = calloc (tbl->number, sizeof (BITCODE_H));
+          }
+        //dwg_add_VIEW (dwg, NULL);
+      }
       break;
     // TODO: more only with r11
     default:
