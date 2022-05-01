@@ -22460,7 +22460,9 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
       layer->plotstyle = dwg_add_handleref (dwg, 5, 0xF, NULL);
       // CLAYER: (5.1.F) abs:F [H 8]
       dwg->header_vars.CLAYER = dwg_add_handleref (dwg, 5, 0x10, NULL);
-      // dwg->layer_control = *dwg->object[1].tio.object->tio.LAYER_CONTROL;
+      //ctrl = dwg_get_first_object (dwg, DWG_TYPE_LAYER_CONTROL);
+      //if (ctrl)
+      //  dwg->layer_control = ctrl->tio.object->tio.LAYER_CONTROL;
       //  STYLE: (0.1.11)
       style = dwg_add_STYLE (dwg, "Standard");
       style->font_file = dwg_add_u8_input (dwg, "txt");
@@ -22468,13 +22470,15 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
       // TEXTSTYLE: (5.1.11) [H 7]
       dwg->header_vars.TEXTSTYLE = dwg_add_handleref (dwg, 5, 0x11, NULL);
       dwg->header_vars.DIMTXSTY = dwg->header_vars.TEXTSTYLE;
-      // dwg->style_control = *dwg->object[2].tio.object->tio.STYLE_CONTROL;
+      //ctrl = dwg_get_first_object (dwg, DWG_TYPE_STYLE_CONTROL);
+      //if (ctrl)
+      //  dwg->style_control = ctrl->tio.object->tio.STYLE_CONTROL;
       //  APPID "ACAD": (0.1.12)
       dwg_add_APPID (dwg, "ACAD");
-      // dwg->appid_control = *dwg->object[7].tio.object->tio.APPID_CONTROL;
       //  hole at 13. already in r13
       dwg_set_next_hdl (dwg, 0x14);
-      ltype_ctrl = dwg->object[3].tio.object->tio.LTYPE_CONTROL;
+      ctrl = dwg_get_first_object (dwg, DWG_TYPE_LTYPE_CONTROL);
+      ltype_ctrl = ctrl->tio.object->tio.LTYPE_CONTROL;
       // LTYPE->byblock: (3.1.14)
       ltype = dwg_add_LTYPE (dwg, "BYBLOCK");
       ltype_ctrl->num_entries--;

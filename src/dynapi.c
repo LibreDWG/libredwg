@@ -7352,7 +7352,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCK_HEADER_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_BLOCK_HEADER, parent),
     1,1,0, 0 },
   { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_BLOCK_HEADER, flag),
-    0,0,0, 70 },
+    0,0,0, 0 },
   { "name",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_object_BLOCK_HEADER, name),
     1,1,1, 0 },
   { "used",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_BLOCK_HEADER, used),

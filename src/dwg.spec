@@ -3110,9 +3110,6 @@ DWG_OBJECT (BLOCK_HEADER)
 
   PRE (R_13)
   {
-    FIELD_RC (flag, 70);
-    FIELD_TFv (name, 32, 2);
-    FIELD_RSd (used, 0); // -1
     FIELD_RC (block_scaling, 0);
     FIELD_CAST (num_owned, RS, BL, 0);
     FIELD_RCd (flag2, 0);

@@ -942,11 +942,8 @@ _prefix (Bit_Chain *dat)
       FIELD_TEXT (dxfname, obj->dxfname);                                     \
     _FIELD (index, RL, 0);                                                    \
     _FIELD (type, RL, 0);                                                     \
-    SINCE (R_13)                                                              \
-    {                                                                         \
-      KEY (handle);                                                           \
-      VALUE_H (obj->handle, 5);                                               \
-    }                                                                         \
+    KEY (handle);                                                             \
+    VALUE_H (obj->handle, 5);                                                 \
     _FIELD (size, RL, 0);                                                     \
     SINCE (R_13)                                                              \
     {                                                                         \
