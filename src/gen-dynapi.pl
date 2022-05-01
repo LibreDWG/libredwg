@@ -534,6 +534,8 @@ $DXF{$_}->{'scale'} = 340 for @annotscale;
 
 dxfin_spec "$srcdir/header_variables_dxf.spec";
 $DXF{header_variables}->{'_3DDWFPREC'} = 40;
+# $DXF{header_variables}->{'TEXTSTYLE'} = 7;
+# $DXF{header_variables}->{'CLAYER'} = 8;
 
 $n = 'object_entity';
 dxfin_spec "$srcdir/common_entity_data.spec";
