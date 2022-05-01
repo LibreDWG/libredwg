@@ -34,9 +34,19 @@ api_process (dwg_object *obj)
     fail ("PROXY_OBJECT.objids");
   for (i = 0; i < num_objids; i++)
     {
-      if (_obj->objids[i] == objids[i])
-        ok ("PROXY_OBJECT.objids[%d]: " FORMAT_REF, i, ARGS_REF (objids[i]));
+      if (!objids[i]) // can be NULL
+        {
+          if (!_obj->objids[i])
+            ok ("PROXY_OBJECT.objids[%d]: NULL", i);
+          else
+            fail ("PROXY_OBJECT.objids[%d]: NULL", i);
+        }
       else
-        fail ("PROXY_OBJECT.objids[%d]: " FORMAT_REF, i, ARGS_REF (objids[i]));
+        {
+          if (_obj->objids[i] == objids[i])
+            ok ("PROXY_OBJECT.objids[%d]: " FORMAT_REF, i, ARGS_REF (objids[i]));
+          else
+            fail ("PROXY_OBJECT.objids[%d]: " FORMAT_REF, i, ARGS_REF (objids[i]));
+        }
     }
 }
