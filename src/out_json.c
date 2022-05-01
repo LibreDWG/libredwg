@@ -1861,12 +1861,18 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               RECORD (BLOCK_HEADER);
               FIELD_RC (flag, 70);
               FIELD_TFv (name, 32, 2);
-              FIELD_RSd (used, 0); // -1
               FIELD_RC (block_scaling, 0);
-              FIELD_CAST (num_owned, RS, BL, 0);
-              FIELD_RCd (flag2, 0);
-              FIELD_CAST (num_inserts, RS, RL, 0);
-              FIELD_RSd (insert_units, 0);
+              PRE (R_11) {
+                FIELD_CAST (num_owned, RS, BL, 0);
+                FIELD_RC (flag2, 0);
+              }
+              SINCE (R_11) { // r10 not
+                FIELD_RS (unknown_r11, 0);
+                FIELD_HANDLE (block_entity, 2, 0); // index?
+                FIELD_RC (flag2, 0);
+                FIELD_RSd (used, 0);
+                FIELD_RSd (unknown1_r11, 0);
+              }
               ENDRECORD ();
             }
           ENDSEC ();
@@ -1887,8 +1893,6 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               RECORD (LAYER);
               FIELD_RC (flag, 70);
               FIELD_TFv (name, 32, 2);
-              FIELD_RS (used, 0);
-
               FIELD_RS (color_r11, 62); // color, off if negative
               FIELD_HANDLE (ltype, 2, 6);
               ENDRECORD ();
@@ -1911,7 +1915,6 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               RECORD (STYLE);
               FIELD_RC (flag, 70);
               FIELD_TFv (name, 32, 2);
-              FIELD_RS (used, 0);
 
               FIELD_RD (text_size, 40); // ok
               FIELD_RD (width_factor, 41);
