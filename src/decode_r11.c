@@ -143,6 +143,10 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
   tbl->address = bit_read_RL (dat);
   strncpy (tbl->name, name, 63);
   tbl->name[63] = '\0';
+  LOG_TRACE ("ptr table %-8s [%2d]: size:%-4u num:%-2d (0x%lx-0x%lx) flags:0x%x\n",
+             tbl->name, id, tbl->size, tbl->number, (unsigned long)tbl->address,
+             (unsigned long)(tbl->address + (tbl->number * tbl->size)),
+	     tbl->flags)
 
   switch (id)
     {
@@ -153,9 +157,10 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
           {
             Dwg_Object_BLOCK_CONTROL *_obj = obj->tio.object->tio.BLOCK_CONTROL;
             obj->size = tbl->size;
-            _obj->num_entries = tbl->number;
-            if (tbl->number)
-              _obj->entries = calloc (tbl->number, sizeof (BITCODE_H));
+            // we cannot set _obj->num_entries, as we add BLOCK's via add_BLOCK_HEADER
+            //_obj->num_entries = tbl->number;
+            //if (tbl->number)
+            //  _obj->entries = realloc (_obj->entries, (tbl->number + 2) * sizeof (BITCODE_H));
             dwg->block_control = *_obj;
           }
       }
@@ -167,9 +172,9 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
           {
             Dwg_Object_LAYER_CONTROL *_obj = obj->tio.object->tio.LAYER_CONTROL;
             obj->size = tbl->size;
-            _obj->num_entries = tbl->number;
-            if (tbl->number)
-              _obj->entries = calloc (tbl->number, sizeof (BITCODE_H));
+            //_obj->num_entries = tbl->number;
+            //if (tbl->number)
+            //  _obj->entries = calloc (tbl->number, sizeof (BITCODE_H));
           }
         //dwg_add_LAYER (dwg, NULL);
       }
@@ -181,9 +186,9 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
           {
             Dwg_Object_STYLE_CONTROL *_obj = obj->tio.object->tio.STYLE_CONTROL;
             obj->size = tbl->size;
-            _obj->num_entries = tbl->number;
-            if (tbl->number)
-              _obj->entries = calloc (tbl->number, sizeof (BITCODE_H));
+            //_obj->num_entries = tbl->number;
+            //if (tbl->number)
+            //  _obj->entries = calloc (tbl->number, sizeof (BITCODE_H));
           }
         //dwg_add_STYLE (dwg, NULL);
       }
@@ -195,9 +200,9 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
           {
             Dwg_Object_LTYPE_CONTROL *_obj = obj->tio.object->tio.LTYPE_CONTROL;
             obj->size = tbl->size;
-            _obj->num_entries = tbl->number;
-            if (tbl->number)
-              _obj->entries = calloc (tbl->number, sizeof (BITCODE_H));
+            //_obj->num_entries = tbl->number;
+            //if (tbl->number)
+            //  _obj->entries = calloc (tbl->number, sizeof (BITCODE_H));
           }
         //dwg_add_LTYPE (dwg, NULL);
       }
@@ -209,9 +214,9 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
           {
             Dwg_Object_VIEW_CONTROL *_obj = obj->tio.object->tio.VIEW_CONTROL;
             obj->size = tbl->size;
-            _obj->num_entries = tbl->number;
-            if (tbl->number)
-              _obj->entries = calloc (tbl->number, sizeof (BITCODE_H));
+            //_obj->num_entries = tbl->number;
+            //if (tbl->number)
+            //  _obj->entries = calloc (tbl->number, sizeof (BITCODE_H));
           }
         //dwg_add_VIEW (dwg, NULL);
       }
@@ -220,10 +225,6 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
     default:
       LOG_ERROR ("Yet unhandled section id %d", id);
     }
-  LOG_TRACE ("ptr table %-8s [%2d]: size:%-4u num:%-2d (0x%lx-0x%lx) flags:0x%x\n",
-             tbl->name, id, tbl->size, tbl->number, (unsigned long)tbl->address,
-             (unsigned long)(tbl->address + (tbl->number * tbl->size)),
-	     tbl->flags)
   if (tbl->number && (tbl->address + (tbl->number * tbl->size) > dat->size))
     {
       LOG_ERROR ("%s.size overflow", tbl->name)
@@ -272,7 +273,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   long unsigned int num = dwg->num_objects;
   long unsigned int old_size = dwg->num_objects * sizeof (Dwg_Object);
   long unsigned int size = tbl->size * sizeof (Dwg_Object);
-  long unsigned int pos;
+  long unsigned int pos = tbl->address;
   BITCODE_RC flag;
   BITCODE_TF name;
 
@@ -296,36 +297,19 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 #define PREP_TABLE(token)                                                     \
   Dwg_Object *obj;                                                            \
   Dwg_Object_##token *_obj;                                                   \
+  Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_##token##_CONTROL);  \
+  Dwg_Object_##token##_CONTROL *_ctrl                                         \
+      = ctrl->tio.object->tio.token##_CONTROL;                                \
   if (dat->byte > dat->size || (num + i) > dwg->num_objects)                  \
     return DWG_ERR_INVALIDDWG;                                                \
   flag = bit_read_RC (dat);                                                   \
   name = bit_read_TF (dat, 32);                                               \
-  _obj = dwg_add_##token (dwg, (const char*)name);                            \
+  _obj = dwg_add_##token (dwg, (const char *)name);                           \
   obj = dwg_obj_generic_to_object (_obj, &error);                             \
-  /*                                                                          \
-  obj = &dwg->object[num + i];                                                \
-  _obj = (Dwg_Object_##token *)calloc (1, sizeof (Dwg_Object_##token));       \
-  obj->tio.object                                                             \
-      = (Dwg_Object_Object *)calloc (1, sizeof (Dwg_Object_Object));          \
-  if (!_obj || !obj->tio.object)                                              \
-    {                                                                         \
-      if (_obj)                                                               \
-        free (_obj);                                                          \
-      return DWG_ERR_OUTOFMEM;                                                \
-    }                                                                         \
-  obj->index = num + i;                                                       \
-  dwg->num_objects++;                                                         \
-  obj->tio.object->tio.token = _obj;                                          \
-  obj->tio.object->objid = obj->index;                                        \
-  obj->tio.object->dwg = obj->parent;                                         \
-  obj->supertype = DWG_SUPERTYPE_OBJECT;                                      \
-  obj->parent = dwg;                                                          \
-  obj->name = obj->dxfname = (char *)#token;                                  \
-  obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
-  _obj->parent = obj->tio.object;                                             \
-  */                                                                          \
+  _ctrl->entries[i] = dwg_add_handleref (dwg, 2, obj->handle.value, obj);     \
   obj->size = tbl->size;                                                      \
   obj->address = pos;                                                         \
+  _obj->flag = flag;                                                          \
   LOG_TRACE ("\n-- table entry " #token " [%d]: 0x%lx\n", i, pos)
 
 #define CHK_ENDPOS                                                            \
@@ -342,15 +326,38 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     case SECTION_BLOCK:
       for (i = 0; i < tbl->number; i++)
         {
-            PREP_TABLE (BLOCK_HEADER);
+            Dwg_Object *obj;
+            Dwg_Object_BLOCK_HEADER *_obj;
+            Dwg_Object *ctrl
+                = dwg_get_first_object (dwg, DWG_TYPE_BLOCK_CONTROL);
+            Dwg_Object_BLOCK_CONTROL *_ctrl;
+            if (dat->byte > dat->size || (num + i) > dwg->num_objects)
+              return DWG_ERR_INVALIDDWG;
+            flag = bit_read_RC (dat);
+            name = bit_read_TF (dat, 32);
+            _obj = dwg_add_BLOCK_HEADER (dwg, (const char *)name);
+            _obj->flag = flag;
+            LOG_TRACE ("\n-- table entry BLOCK_HEADER [%d]: 0x%lx\n", i, pos);
+            obj = dwg_obj_generic_to_object (_obj, &error);
+            if (obj)
+              {
+                obj->size = tbl->size;
+                obj->address = pos;
+              }
+            if (ctrl)
+              {
+                _ctrl = ctrl->tio.object->tio.BLOCK_CONTROL;
+                _ctrl->entries[i]
+                    = dwg_add_handleref (dwg, 2, obj->handle.value, obj);
+              }
+            //FIELD_RSd (used, 0);
+
             // TODO move to => dwg.spec
-            //FIELD_RC (flag, 70);
-            //FIELD_TFv (name, 32, 2);
-            FIELD_RSd (used, 0); // -1
             FIELD_RC (block_scaling, 0);
             FIELD_CAST (num_owned, RS, BL, 0);
             FIELD_RCd (flag2, 0);
             FIELD_CAST (num_inserts, RS, RL, 0);
+            // since when?
             FIELD_RSd (insert_units, 0);
             CHK_ENDPOS;
           }
@@ -361,11 +368,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           {
             // Bit_Chain *hdl_dat = NULL;
             PREP_TABLE (LAYER);
-
-            //FIELD_CAST (flag, RC, RS, 70); // 860
-            //FIELD_TFv (name, 32, 2);
-            // FIELD_RS (used, 0);
-
             FIELD_RS (color_r11, 62); // color, off if negative
             FIELD_HANDLE (ltype, 2, 6);
             CHK_ENDPOS;
@@ -377,17 +379,13 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         for (i = 0; i < tbl->number; i++)
           {
             PREP_TABLE (STYLE);
-
-            //FIELD_RC (flag, 70);
-            //FIELD_TFv (name, 32, 2);
-            // FIELD_RS (used, 0);
-
             FIELD_RD (text_size, 40); // ok
             FIELD_RD (width_factor, 41);
             FIELD_RD (oblique_angle, 50);
             FIELD_RC (generation, 71);
             FIELD_RD (last_height, 42);
             FIELD_TFv (font_file, 64, 3);    // 8ed
+            // since when?
             FIELD_TFv (bigfont_file, 64, 4); // 92d
             CHK_ENDPOS;
           }
@@ -398,10 +396,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         for (i = 0; i < tbl->number; i++)
           {
             PREP_TABLE (LTYPE);
-
-            //FIELD_RC (flag, 70);
-            //FIELD_TFv (name, 32, 2);
-            // FIELD_RS (used, 0);
             FIELD_TFv (description, 48, 3);
             FIELD_RC (alignment, 72);
             FIELD_RC (num_dashes, 73);
@@ -419,11 +413,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         for (i = 0; i < tbl->number; i++)
           {
             PREP_TABLE (VIEW);
-
-            //FIELD_RC (flag, 70);
-            //FIELD_TFv (name, 32, 2);
-            // FIELD_RS (used, 0);
-
             FIELD_RD (VIEWSIZE, 40);
             FIELD_2RD (VIEWCTR, 10);
             FIELD_RD (view_width, 41);
@@ -446,10 +435,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           {
             //FIXME
             //PREP_TABLE (UCS);
-
-            //FIELD_RC (flag, 70);
-            //FIELD_TFv (name, 32, 2);
-            // FIELD_RS (used, 0);
             //FIELD_2RD (ucsorg, 10);
             //FIELD_2RD (ucsxdir, 11);
             //FIELD_2RD (ucsydir, 12);
@@ -463,11 +448,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           for (i = 0; i < tbl->number; i++)
             {
               PREP_TABLE (VPORT);
-
-              //FIELD_RC (flag, 70);
-              //FIELD_TFv (name, 32, 2);
-              // FIELD_RS (used, 0);
-
               FIELD_RD (VIEWSIZE, 40);
               FIELD_RD (aspect_ratio, 41);
               FIELD_2RD (VIEWCTR, 12);
@@ -506,10 +486,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           for (i = 0; i < tbl->number; i++)
             {
               PREP_TABLE (APPID);
-
-              //FIELD_RC (flag, 70);
-              //FIELD_TFv (name, 32, 2);
-              FIELD_RS (used, 0);
               CHK_ENDPOS;
             }
         }
@@ -522,11 +498,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             {
               // unsigned long off;
               PREP_TABLE (DIMSTYLE); // d1f
-
-              //FIELD_RC (flag, 70);
-              //FIELD_TFv (name, 32, 2);
-              // off = dat->byte;
-              FIELD_RS (used, 0);      // d40
               FIELD_RD (DIMSCALE, 40); // d42
               FIELD_RD (DIMASZ, 41);
               FIELD_RD (DIMEXO, 42);
@@ -690,6 +661,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int tbl_id;
   int error = 0;
 
+  loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   {
     int i;
     Dwg_Header *_obj = (Dwg_Header *)&dwg->header;
@@ -769,7 +741,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     entities_end = dwg->header_vars.dwg_size;
   }
 #if 0
-  if (dwg->header.numsections > 5) // dead code?
+  if (dwg->header.numsections > 5) // dead code? r11 only?
     {
       decode_preR13_section_hdr ("UCS", SECTION_UCS, dat, dwg);
       // skip: 0x500 - dat->bytes
