@@ -182,6 +182,7 @@ $ENT{DIMSTYLE}->{name} = 'T';
 $SUBCLASSES{DIMENSION_common} = [ qw(AcDbDimension) ];
 $SUBCLASSES{ACTION_3DSOLID} = [ qw(AcDbModelerGeometry AcDb3dSolid) ];
 $SUBCLASSES{TABLECONTENTs} = [ qw( AcDbLinkedTableData AcDbFormattedTableData AcDbTableContent) ];
+$SUBCLASSES{PROXY_OBJECT} = [ qw( AcDbZombieObject) ];
 #$ENT{LTYPE}->{strings_area} = 'TF';
 close $in;
 my @old;

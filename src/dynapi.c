@@ -13674,7 +13674,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
   { "POLYLINE_MESH", {"AcDbEntity", "AcDbPolygonMesh", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "POLYLINE_PFACE", {"AcDbEntity", "AcDbPolyFaceMesh", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "PROXY_ENTITY", {"AcDbEntity", "AcDbProxyEntity", NULL, NULL, NULL, NULL, NULL, NULL} },
-  { "PROXY_OBJECT", {"AcDbObject", "AcDbProxyObject", NULL, NULL, NULL, NULL, NULL, NULL} },
+  { "PROXY_OBJECT", {"AcDbObject", "AcDbZombieObject", "AcDbProxyObject", NULL, NULL, NULL, NULL, NULL} },
   { "RADIMLGOBJECTCONTEXTDATA", {"AcDbObject", "AcDbObjectContextData", "AcDbAnnotScaleObjectContextData", "AcDbDimensionObjectContextData", "AcDbRadialDimensionLargeObjectContextData", NULL, NULL, NULL} },
   { "RADIMOBJECTCONTEXTDATA", {"AcDbObject", "AcDbObjectContextData", "AcDbAnnotScaleObjectContextData", "AcDbDimensionObjectContextData", "AcDbRadialDimensionObjectContextData", NULL, NULL, NULL} },
   { "RAPIDRTRENDERSETTINGS", {"AcDbObject", "AcDbRenderSettings", "AcDbRapidRTRenderSettings", NULL, NULL, NULL, NULL, NULL} },
