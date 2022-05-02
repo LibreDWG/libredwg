@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2020 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2022 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -618,34 +618,34 @@ free_preR13_object (Dwg_Object *obj)
   switch (obj->fixedtype)
     {
     case DWG_TYPE_TEXT:
-      dwg_free_TEXT_private (dat, dat, dat, obj);
+      dwg_free_TEXT (dat, obj);
       break;
     case DWG_TYPE_ATTRIB:
-      dwg_free_ATTRIB_private (dat, dat, dat, obj);
+      dwg_free_ATTRIB (dat, obj);
       break;
     case DWG_TYPE_ATTDEF:
-      dwg_free_ATTDEF_private (dat, dat, dat, obj);
+      dwg_free_ATTDEF (dat, obj);
       break;
     case DWG_TYPE_BLOCK:
-      dwg_free_BLOCK_private (dat, dat, dat, obj);
+      dwg_free_BLOCK (dat, obj);
       break;
     case DWG_TYPE_ENDBLK:
-      dwg_free_ENDBLK_private (dat, dat, dat, obj);
+      dwg_free_ENDBLK (dat, obj);
       break;
     case DWG_TYPE_SEQEND:
-      dwg_free_SEQEND_private (dat, dat, dat, obj);
+      dwg_free_SEQEND (dat, obj);
       break;
     case DWG_TYPE_REPEAT:
-      dwg_free_REPEAT_private (dat, dat, dat, obj);
+      dwg_free_REPEAT (dat, obj);
       break;
     case DWG_TYPE_ENDREP:
-      dwg_free_ENDREP_private (dat, dat, dat, obj);
+      dwg_free_ENDREP (dat, obj);
       break;
     case DWG_TYPE_INSERT:
-      dwg_free_INSERT_private (dat, dat, dat, obj);
+      dwg_free_INSERT (dat, obj);
       break;
     case DWG_TYPE_VERTEX_2D:
-      dwg_free_VERTEX_2D_private (dat, dat, dat, obj);
+      dwg_free_VERTEX_2D (dat, obj);
       break;
     case DWG_TYPE_VERTEX_3D:
       dwg_free_VERTEX_3D (dat, obj);
@@ -666,118 +666,121 @@ free_preR13_object (Dwg_Object *obj)
       dwg_free_POLYLINE_3D (dat, obj);
       break;
     case DWG_TYPE_ARC:
-      dwg_free_ARC_private (dat, dat, dat, obj);
+      dwg_free_ARC (dat, obj);
       break;
     case DWG_TYPE_CIRCLE:
-      dwg_free_CIRCLE_private (dat, dat, dat, obj);
+      dwg_free_CIRCLE (dat, obj);
       break;
     case DWG_TYPE_LINE:
-      dwg_free_LINE_private (dat, dat, dat, obj);
+      dwg_free_LINE (dat, obj);
       break;
     case DWG_TYPE_DIMENSION_ORDINATE:
-      dwg_free_DIMENSION_ORDINATE_private (dat, dat, dat, obj);
+      dwg_free_DIMENSION_ORDINATE (dat, obj);
       break;
     case DWG_TYPE_DIMENSION_LINEAR:
-      dwg_free_DIMENSION_LINEAR_private (dat, dat, dat, obj);
+      dwg_free_DIMENSION_LINEAR (dat, obj);
       break;
     case DWG_TYPE_DIMENSION_ALIGNED:
-      dwg_free_DIMENSION_ALIGNED_private (dat, dat, dat, obj);
+      dwg_free_DIMENSION_ALIGNED (dat, obj);
       break;
     case DWG_TYPE_DIMENSION_ANG3PT:
-      dwg_free_DIMENSION_ANG3PT_private (dat, dat, dat, obj);
+      dwg_free_DIMENSION_ANG3PT (dat, obj);
       break;
     case DWG_TYPE_DIMENSION_ANG2LN:
-      dwg_free_DIMENSION_ANG2LN_private (dat, dat, dat, obj);
+      dwg_free_DIMENSION_ANG2LN (dat, obj);
       break;
     case DWG_TYPE_DIMENSION_RADIUS:
-      dwg_free_DIMENSION_RADIUS_private (dat, dat, dat, obj);
+      dwg_free_DIMENSION_RADIUS (dat, obj);
       break;
     case DWG_TYPE_DIMENSION_DIAMETER:
-      dwg_free_DIMENSION_DIAMETER_private (dat, dat, dat, obj);
+      dwg_free_DIMENSION_DIAMETER (dat, obj);
       break;
     case DWG_TYPE_POINT:
-      dwg_free_POINT_private (dat, dat, dat, obj);
+      dwg_free_POINT (dat, obj);
       break;
     case DWG_TYPE__3DFACE:
-      dwg_free__3DFACE_private (dat, dat, dat, obj);
+      dwg_free__3DFACE (dat, obj);
       break;
     case DWG_TYPE__3DLINE:
-      dwg_free__3DLINE_private (dat, dat, dat, obj);
+      dwg_free__3DLINE (dat, obj);
       break;
     case DWG_TYPE_SOLID:
-      dwg_free_SOLID_private (dat, dat, dat, obj);
+      dwg_free_SOLID (dat, obj);
       break;
     case DWG_TYPE_TRACE:
-      dwg_free_TRACE_private (dat, dat, dat, obj);
+      dwg_free_TRACE (dat, obj);
       break;
     case DWG_TYPE_SHAPE:
-      dwg_free_SHAPE_private (dat, dat, dat, obj);
+      dwg_free_SHAPE (dat, obj);
       break;
     case DWG_TYPE_VIEWPORT:
-      dwg_free_VIEWPORT_private (dat, dat, dat, obj);
+      dwg_free_VIEWPORT (dat, obj);
       break;
     case DWG_TYPE_BLOCK_CONTROL:
-      dwg_free_BLOCK_CONTROL_private (dat, dat, dat, obj);
+      dwg_free_BLOCK_CONTROL (dat, obj);
       break;
     case DWG_TYPE_BLOCK_HEADER:
-      dwg_free_BLOCK_HEADER_private (dat, dat, dat, obj);
+      dwg_free_BLOCK_HEADER (dat, obj);
       break;
     case DWG_TYPE_LAYER_CONTROL:
-      dwg_free_LAYER_CONTROL_private (dat, dat, dat, obj);
+      dwg_free_LAYER_CONTROL (dat, obj);
       break;
     case DWG_TYPE_LAYER:
-      dwg_free_LAYER_private (dat, dat, dat, obj);
+      dwg_free_LAYER (dat, obj);
       break;
     case DWG_TYPE_STYLE_CONTROL:
-      dwg_free_STYLE_CONTROL_private (dat, dat, dat, obj);
+      dwg_free_STYLE_CONTROL (dat, obj);
       break;
     case DWG_TYPE_STYLE:
-      dwg_free_STYLE_private (dat, dat, dat, obj);
+      dwg_free_STYLE (dat, obj);
       break;
     case DWG_TYPE_LTYPE_CONTROL:
-      dwg_free_LTYPE_CONTROL_private (dat, dat, dat, obj);
+      dwg_free_LTYPE_CONTROL (dat, obj);
       break;
     case DWG_TYPE_LTYPE:
-      dwg_free_LTYPE_private (dat, dat, dat, obj);
+      dwg_free_LTYPE (dat, obj);
       break;
     case DWG_TYPE_VIEW_CONTROL:
-      dwg_free_VIEW_CONTROL_private (dat, dat, dat, obj);
+      dwg_free_VIEW_CONTROL (dat, obj);
       break;
     case DWG_TYPE_VIEW:
-      dwg_free_VIEW_private (dat, dat, dat, obj);
+      dwg_free_VIEW (dat, obj);
       break;
     case DWG_TYPE_UCS_CONTROL:
-      dwg_free_UCS_CONTROL_private (dat, dat, dat, obj);
+      dwg_free_UCS_CONTROL (dat, obj);
       break;
     case DWG_TYPE_UCS:
-      dwg_free_UCS_private (dat, dat, dat, obj);
+      dwg_free_UCS (dat, obj);
       break;
     case DWG_TYPE_VPORT_CONTROL:
-      dwg_free_VPORT_CONTROL_private (dat, dat, dat, obj);
+      dwg_free_VPORT_CONTROL (dat, obj);
       break;
     case DWG_TYPE_VPORT:
-      dwg_free_VPORT_private (dat, dat, dat, obj);
+      dwg_free_VPORT (dat, obj);
       break;
     case DWG_TYPE_APPID_CONTROL:
-      dwg_free_APPID_CONTROL_private (dat, dat, dat, obj);
+      dwg_free_APPID_CONTROL (dat, obj);
       break;
     case DWG_TYPE_APPID:
-      dwg_free_APPID_private (dat, dat, dat, obj);
+      dwg_free_APPID (dat, obj);
       break;
     case DWG_TYPE_DIMSTYLE_CONTROL:
-      dwg_free_DIMSTYLE_CONTROL_private (dat, dat, dat, obj);
+      dwg_free_DIMSTYLE_CONTROL (dat, obj);
       break;
     case DWG_TYPE_DIMSTYLE:
-      dwg_free_DIMSTYLE_private (dat, dat, dat, obj);
+      dwg_free_DIMSTYLE (dat, obj);
       break;
     case DWG_TYPE_VX_CONTROL:
-      dwg_free_VX_CONTROL_private (dat, dat, dat, obj);
+      dwg_free_VX_CONTROL (dat, obj);
       break;
     case DWG_TYPE_VX_TABLE_RECORD:
-      dwg_free_VX_TABLE_RECORD_private (dat, dat, dat, obj);
+      dwg_free_VX_TABLE_RECORD (dat, obj);
       break;
     case DWG_TYPE_LOAD:
-      dwg_free_LOAD_private (dat, dat, dat, obj);
+      dwg_free_LOAD (dat, obj);
+      break;
+    case DWG_TYPE_DICTIONARY:
+      dwg_free_DICTIONARY (dat, obj);
       break;
     case DWG_TYPE_UNUSED:
       // TODO leaks with r1.4
@@ -786,6 +789,13 @@ free_preR13_object (Dwg_Object *obj)
       LOG_ERROR ("Unhandled preR13 class %s, fixedtype %d in free_preR13_object()",
                  dwg_type_name (obj->fixedtype), (int)obj->fixedtype);
     }
+  /* With indxf the dxfname is dynamic, just the name is const */
+  if (dwg->opts & DWG_OPTS_IN)
+    FREE_IF (obj->dxfname);
+  /* With injson even the name is dynamic */
+  if (dwg->opts & DWG_OPTS_INJSON)
+    FREE_IF (obj->name);
+  obj->type = DWG_TYPE_FREED;
 }
 
 // using the global dat
