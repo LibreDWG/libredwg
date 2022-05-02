@@ -12803,8 +12803,6 @@ static const Dwg_DYNAPI_field _dwg_object_entity_fields[] = {
     0,0,0, 0 },
   { "face_visualstyle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_entity, face_visualstyle),
     1,0,0, 348 },
-  { "flag2_r11",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_entity, flag2_r11),
-    0,0,0, 0 },
   { "flag_r11",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_entity, flag_r11),
     0,0,0, 0 },
   { "full_visualstyle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_entity, full_visualstyle),

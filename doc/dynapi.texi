@@ -15845,8 +15845,6 @@ BB,	DXF 67
 RC
 @item face_visualstyle
 H,	DXF 348
-@item flag2_r11
-RC
 @item flag_r11
 RC
 @item full_visualstyle
