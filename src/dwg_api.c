@@ -22409,7 +22409,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   // VIEW_CONTROL_OBJECT: (3.1.6) abs:6 [H 0]
   dwg_add_VIEW (dwg, NULL);
   //dwg->view_control = *dwg->object[4].tio.object->tio.VIEW_CONTROL;
-  if (version >= R_11)
+  if (version > R_11)
     {
       // UCS_CONTROL_OBJECT: (3.1.7) abs:7 [H 0]
       dwg_add_UCS (dwg, &pt0, NULL, NULL, NULL);
@@ -22451,7 +22451,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
     {
       dwg_set_next_hdl (dwg, 0x10);
     }
-  if (version >= R_11)
+  if (version > R_11)
     {
       // LAYER: (0.1.10)
       layer = dwg_add_LAYER (dwg, (const BITCODE_T) "0");
