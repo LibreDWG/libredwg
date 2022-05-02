@@ -104,6 +104,10 @@
   FIELD_HANDLE (TEXTSTYLE, 2, 7);
   FIELD_CAST (OSMODE, RS, BL, 70);
   FIELD_RS (ATTMODE, 70);
+  DECODER {
+    if (FIELD_VALUE (MENU)) // already created by add_Document
+      free (FIELD_VALUE (MENU));
+  }
   FIELD_TFv (MENU, 15, 1);
   FIELD_RD (DIMSCALE, 40); //ok 0x1a3
   FIELD_RD (DIMASZ, 40); //ok
@@ -154,12 +158,7 @@
   FIELD_RS (circle_zoom_percent, 0);
   FIELD_RS (COORDS, 0);
   FIELD_RS (CECOLOR.index, 62);
-  DECODER {
-    _obj->CELTYPE = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
-    // 6, ff for BYLAYER, fe for BYBLOCK
-    _obj->CELTYPE->absolute_ref = (BITCODE_RL)bit_read_RS (dat);
-    LOG_TRACE ("CELTYPE: %lu [long 6]\n", _obj->CELTYPE->absolute_ref)
-  }
+  FIELD_HANDLE (CELTYPE, 2, 6); // ff for BYLAYER, fe for BYBLOCK
   FIELD_TIMERLL (TDCREATE, 40);
   FIELD_TIMERLL (TDUPDATE, 40);
   FIELD_TIMERLL (TDINDWG, 40);
@@ -248,6 +247,9 @@
     _obj->HANDSEED = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
     _obj->HANDSEED->absolute_ref = (BITCODE_RL)bit_read_RS (dat);
     LOG_TRACE ("HANDSEED: %lX [RS 5]\n", _obj->HANDSEED->absolute_ref)
+  }
+  FREE {
+    free (_obj->HANDSEED);
   }
   DEBUG_HERE
 

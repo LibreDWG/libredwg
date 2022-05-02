@@ -118,6 +118,7 @@ static BITCODE_BL rcount1, rcount2;
     } /* else freed globally */
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE (name, code, dxf)
 #define FIELD_HANDLE_N(name, vcount, code, dxf) FIELD_HANDLE (name, code, dxf)
+#define FIELD_VECTOR_INL(nam, type, size, dxf)
 
 #define FIELD_B(name, dxf) FIELD (name, B)
 #define FIELD_BB(name, dxf) FIELD (name, BB)
@@ -717,6 +718,7 @@ free_preR13_object (Dwg_Object *obj)
       dwg_free_VIEWPORT (dat, obj);
       break;
     case DWG_TYPE_BLOCK_CONTROL:
+      // _ctrl->entries
       dwg_free_BLOCK_CONTROL (dat, obj);
       break;
     case DWG_TYPE_BLOCK_HEADER:
@@ -1369,6 +1371,24 @@ dwg_free_object_private (Dwg_Object *obj)
 }
 
 static int
+dwg_free_preR13_header_vars (Dwg_Data *dwg)
+{
+  Dwg_Header_Variables *_obj = &dwg->header_vars;
+  Dwg_Object *obj = NULL;
+  Bit_Chain *dat = &pdat;
+  int error = 0;
+
+  // fields added by dwg_add_Document:
+  FIELD_TV (MENU, 0);
+
+  // clang-format off
+  #include "header_variables_r11.spec"
+  // clang-format on
+
+  return 0;
+}
+
+static int
 dwg_free_header_vars (Dwg_Data *dwg)
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
@@ -1478,7 +1498,10 @@ dwg_free (Dwg_Data *dwg)
           if (!dwg_obj_is_control (&dwg->object[i]))
             dwg_free_object (&dwg->object[i]);
         }
-      dwg_free_header_vars (dwg);
+      if (dwg->header.version < R_13)
+        dwg_free_preR13_header_vars (dwg);
+      else
+        dwg_free_header_vars (dwg);
       dwg_free_summaryinfo (dwg);
       FREE_IF (dwg->thumbnail.chain);
       if (dwg->header.section_infohdr.num_desc)
