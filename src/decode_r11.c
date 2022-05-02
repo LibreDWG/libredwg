@@ -31,9 +31,7 @@
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
-#include "hash.h"
 #include "decode.h"
-#include "print.h"
 #include "free.h"
 
 /* The logging level for the read (decode) path. 
@@ -640,13 +638,14 @@ entity_end:
  
 AFL_GCC_TOOBIG
 EXPORT int
-decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict *dwgp)
 {
   BITCODE_RL entities_start = 0, entities_end = 0;
   BITCODE_RL blocks_start = 0, blocks_size = 0, blocks_end = 0;
   BITCODE_RL rl1, rl2, blocks_max = 0xFFFFFFFF, num_entities;
   BITCODE_RS rs2;
   Dwg_Object *obj = NULL;
+  Dwg_Data *dwg = *dwgp;
   Dwg_Data *dwg1;
   int tbl_id;
   int error = 0;
@@ -666,7 +665,9 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // easily setup all the new control objects
   dwg1 = dwg_add_Document (dwg->header.version, 0, dat->opts & DWG_OPTS_LOGLEVEL);
   memcpy (&dwg1->header, &dwg->header, sizeof (Dwg_Header));
-  memcpy (dwg, dwg1, sizeof (Dwg_Data));
+  dwg_free (dwg);
+  dwg = dwg1;
+  *dwgp = dwg1;
 
   // 5 tables + header + block. VIEW = 6
   dwg->header.section = (Dwg_Section *)calloc (sizeof (Dwg_Section),

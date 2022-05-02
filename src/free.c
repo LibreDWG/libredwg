@@ -1535,7 +1535,10 @@ dwg_free (Dwg_Data *dwg)
       FREE_IF (dwg->acis_sab_hdl);
       FREE_IF (dwg->object);
       if (dwg->object_map)
-        hash_free (dwg->object_map);
+        {
+          hash_free (dwg->object_map);
+          dwg->object_map = NULL;
+        }
       dwg->num_objects = dwg->num_classes = dwg->num_object_refs = 0;
 #undef FREE_IF
     }

@@ -40,6 +40,7 @@
 #include "classes.h"
 #include "decode.h"
 #include "encode.h"
+#include "hash.h"
 
 /** We don't pass in Dwg_Object*'s, so we don't know if the object
  *  is >= r2007 or <r13 or what. Default is r2000.
@@ -22217,8 +22218,9 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
 /* Should be similar to the public VBA interface */
 
 /* Initialize a new dwg. Which template, imperial or metric */
-EXPORT Dwg_Data*
-dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int lglevel)
+EXPORT Dwg_Data *
+dwg_add_Document (const Dwg_Version_Type version, const int imperial,
+                  const int lglevel)
 {
   Dwg_Data *dwg = calloc (1, sizeof (Dwg_Data));
   int error;
@@ -22244,7 +22246,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial, const int 
   dwg->opts = loglevel | DWG_OPTS_IN;
   dwg->dirty_refs = 0;
 
-  //dwg->object_map = hash_new (200);
+  dwg->object_map = hash_new (200);
 
   dwg->header.version = version;
   dwg->header.from_version = version;
