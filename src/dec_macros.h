@@ -254,8 +254,10 @@
 {                                                                             \
   PRE (R_13)                                                                  \
   {                                                                           \
+    if (ref)                                                                  \
+      free (ref);                                                             \
     ref = dwg_decode_preR13_handleref (dat, code);                            \
-    LOG_TRACE (#nam ": %hd [H(%s) %d]\n", (short)ref->r11_idx,                   \
+    LOG_TRACE (#nam ": %hd [H(%s) %d]\n", (short)ref->r11_idx,                \
                code == 2 ? "RSd" : "RC", dxf)                                 \
   }                                                                           \
   LATER_VERSIONS                                                              \
@@ -464,10 +466,11 @@
                (unsigned long)len);                                           \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")                                                          \
-    LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                               \
+    LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
   }
 #define FIELD_TFv(nam, len, dxf)                                              \
   {                                                                           \
+    /* if (_obj->nam) free (_obj->nam); // preR13 add_Document defaults */    \
     SINCE (R_13) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }    \
     _obj->nam = (BITCODE_TV)bit_read_TF (dat, (int)len);                      \
     LOG_TRACE (#nam ": \"%s\" [TFv %lu " #dxf "]", _obj->nam,                 \
