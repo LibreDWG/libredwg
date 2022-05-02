@@ -125,7 +125,7 @@ int main (int argc, char *argv[])
     if (dwg_decode (&dat, &dwg) <= DWG_ERR_CRITICAL) {
       memset (&out_dat, 0, sizeof (out_dat));
       bit_chain_set_version (&out_dat, &dat);
-      out_dat.version = R_2000;      
+      out_dat.version = R_2000;
       if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
         exit (0);
       dwg_decode (&out_dat, &dwg);
@@ -346,6 +346,7 @@ int main (int argc, char *argv[])
       }
   }
 
+  printf ("\n==========================================\n");
   error = dwg_write_file (filename_out, &dwg);
   if (error >= DWG_ERR_CRITICAL)
     {
@@ -367,6 +368,7 @@ int main (int argc, char *argv[])
   //if (opts)
   //  printf ("\n");
   printf ("Re-reading created file %s\n", filename_out);
+  printf ("\n==========================================\n");
   error = dwg_read_file (filename_out, &dwg); /* 2nd read */
   if (error >= DWG_ERR_CRITICAL)
     printf ("re-READ ERROR 0x%x\n", error);

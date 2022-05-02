@@ -22217,12 +22217,9 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
 
 /* Should be similar to the public VBA interface */
 
-/* Initialize a new dwg. Which template, imperial or metric */
-EXPORT Dwg_Data *
-dwg_add_Document (const Dwg_Version_Type version, const int imperial,
-                  const int lglevel)
+/* The internal driver, which takes an existing dwg */
+EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
 {
-  Dwg_Data *dwg = calloc (1, sizeof (Dwg_Data));
   int error;
   Dwg_Object_BLOCK_CONTROL *block_control;
   Dwg_Object_BLOCK_HEADER *mspace, *pspace = NULL;
@@ -22240,16 +22237,22 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial,
   time_t now;
   const char *canonical_media_name;
   struct dwg_versions *dwg_ver_struct;
+  Dwg_Version_Type version = dwg->header.version;
 
-  loglevel = lglevel & DWG_OPTS_LOGLEVEL;
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   /* Set the import flag, so we don't encode to TU, just TV */
-  dwg->opts = loglevel | DWG_OPTS_IN;
+  dwg->opts |= DWG_OPTS_IN;
   dwg->dirty_refs = 0;
 
-  dwg->object_map = hash_new (200);
+  if (!dwg->object_map)
+    dwg->object_map = hash_new (200);
 
-  dwg->header.version = version;
-  dwg->header.from_version = version;
+  if (version)
+    dwg->header.from_version = version;
+  else
+    {
+      version = dwg->header.version = dwg->header.from_version;
+    }
   //dwg->header.is_maint = 0xf;
   //dwg->header.zero_one_or_three = 1;
   //dwg->header.dwg_version = 0x17; // prefer encode if dwg_version is 0
@@ -22399,7 +22402,7 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial,
   // BLOCK_CONTROL_OBJECT: (3.1.1) abs:1 [H 0]
   block_control = dwg_add_BLOCK_CONTROL (dwg,
       0x1F, // model space
-      dwg->header.version >= R_13 ? 0x20 : 0); // paper space
+      version >= R_13 ? 0x20 : 0); // paper space
   // LAYER_CONTROL_OBJECT: (3.1.2) abs:2 [H 0]
   dwg_add_LAYER (dwg, NULL);
   // STYLE_CONTROL_OBJECT: (3.1.3) abs:3 [H 0]
@@ -22604,6 +22607,18 @@ dwg_add_Document (const Dwg_Version_Type version, const int imperial,
         ref->obj = obj;
     }
   dwg->dirty_refs = 0;
+  return 0;
+}
+
+/* Initialize a new dwg. Which template, imperial or metric */
+EXPORT Dwg_Data *
+dwg_new_Document (const Dwg_Version_Type version, const int imperial,
+                  const int log_level)
+{
+  Dwg_Data *dwg = calloc (1, sizeof (Dwg_Data));
+  dwg->header.version = version;
+  dwg->opts = log_level;
+  (void)dwg_add_Document (dwg, imperial);
   return dwg;
 }
 
