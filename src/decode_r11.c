@@ -638,15 +638,13 @@ entity_end:
  
 AFL_GCC_TOOBIG
 EXPORT int
-decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict *dwgp)
+decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_RL entities_start = 0, entities_end = 0;
   BITCODE_RL blocks_start = 0, blocks_size = 0, blocks_end = 0;
   BITCODE_RL rl1, rl2, blocks_max = 0xFFFFFFFF, num_entities;
   BITCODE_RS rs2;
   Dwg_Object *obj = NULL;
-  Dwg_Data *dwg = *dwgp;
-  Dwg_Data *dwg1;
   int tbl_id;
   int error = 0;
 
@@ -662,12 +660,8 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict *dwgp)
   }
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x14
 
-  // easily setup all the new control objects
-  dwg1 = dwg_add_Document (dwg->header.version, 0, dat->opts & DWG_OPTS_LOGLEVEL);
-  memcpy (&dwg1->header, &dwg->header, sizeof (Dwg_Header));
-  dwg_free (dwg);
-  dwg = dwg1;
-  *dwgp = dwg1;
+  // setup all the new control objects
+  error |= dwg_add_Document (dwg, 0);
 
   // 5 tables + header + block. VIEW = 6
   dwg->header.section = (Dwg_Section *)calloc (sizeof (Dwg_Section),
