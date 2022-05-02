@@ -329,6 +329,11 @@ TESTDATA = \
     test-data/example_r13.dxf \
     test-data/example_r14.dwg \
     test-data/example_r14.dxf \
+    test-data/r1.4/entities.dwg \
+    test-data/r1.4/entities.dxf \
+    test-data/r10/entities.dwg \
+    test-data/r10/entities.dxf \
+    test-data/r10/entities.scr \
     test-data/r11/ACEB10.dwg \
     test-data/r11/ACEB10.stp \
     test-data/r11/Constraints_12.dxf \
@@ -339,6 +344,12 @@ TESTDATA = \
     test-data/r14/Leader.dwg \
     test-data/r14/Leader.dxf \
     test-data/r14/v.dwg \
+    test-data/r2.6/entities.dwg \
+    test-data/r2.6/entities.dxf \
+    test-data/r2.6/entities.scr \
+    test-data/r2.10/entities.dwg \
+    test-data/r2.10/entities.dxf \
+    test-data/r2.10/entities.scr \
     test-data/sample_2000.dwg \
     test-data/sample_2000.dxf \
     test-data/sample_2004.dxf \
