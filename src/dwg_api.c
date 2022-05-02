@@ -22268,8 +22268,8 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header_vars.unknown_1 = 1.0;
   dwg->header_vars.unknown_2 = 1.0;
   dwg->header_vars.unknown_3 = 1.0;
-  dwg->header_vars.unknown_text1
-      = dwg_add_u8_input (dwg, "m"); // also meter sometimes. unit1_text
+  if (version > R_11) // also meter sometimes. unit1_text
+    dwg->header_vars.unknown_text1 = dwg_add_u8_input (dwg, "m");
   dwg->header_vars.DIMASO = 1;
   dwg->header_vars.DIMSHO = 1; // Obsolete
   dwg->header_vars.REGENMODE = 1;
@@ -22313,7 +22313,8 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header_vars.CMLSCALE = imperial ? 1.0 : 20.0;
   dwg->header_vars.CELTSCALE = 1.0;
   dwg->header_vars.INSUNITS = imperial ? 1 : 4;
-  dwg->header_vars.MENU = dwg_add_u8_input (dwg, "acad");
+  if (!dwg->header_vars.MENU)
+    dwg->header_vars.MENU = dwg_add_u8_input (dwg, "acad");
 
   dwg->header_vars.FLAGS = 0x2a1d; // or 0x281d
   dwg->header_vars.CELWEIGHT = -1; // => FLAGS & 0x1f + lweight lookup

@@ -538,6 +538,9 @@ DWG_ENTITY (BLOCK)
     FIELD_2RD (base_pt, 10);
     if (R11OPTS (2))
       FIELD_TV (xref_pname, 3);
+    FREE { // set via dwg_add_BLOCK
+      FIELD_TV (name, 2);
+    }
   }
   SINCE (R_13b1) {
     BLOCK_NAME (name, 2) // special pre-R13 naming rules
