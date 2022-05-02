@@ -229,10 +229,7 @@ static BITCODE_BL rcount1, rcount2;
         {                                                                     \
           FIELD_HANDLE_N (name[vcount], vcount, code, dxf);                   \
         }                                                                     \
-      if (size)                                                               \
-        {                                                                     \
-          FIELD_TV (name, dxf)                                                \
-        }                                                                     \
+      FIELD_TV (name, dxf)                                                    \
     }
 #define HANDLE_VECTOR(name, sizefield, code, dxf)                             \
   HANDLE_VECTOR_N (name, FIELD_VALUE (sizefield), code, dxf)
