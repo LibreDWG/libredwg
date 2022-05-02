@@ -2316,7 +2316,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     entities_start = entities_end = blocks_start = blocks_end = 0xFFFF;
 
     SINCE (R_2_0b)
-    {
+    { // start with dummies, patched later
       bit_write_RL (dat, entities_start);
       bit_write_RL (dat, entities_end);
       bit_write_RL (dat, blocks_start);
