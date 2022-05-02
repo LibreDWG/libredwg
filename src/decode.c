@@ -649,8 +649,7 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     FIELD_RC (flag_r11, 70); // mode
     obj->size = bit_read_RS (dat);
     LOG_TRACE("size: %d [RS]\n", obj->size);
-    FIELD_HANDLE (layer, 1, 8);
-    FIELD_RC (flag2_r11, 0); // extra flags?
+    FIELD_HANDLE (layer, 2, 8);
   }
   FIELD_RSx (opts_r11, 0); // i.e. dataflags
   if (_obj->flag_r11 & FLAG_R11_COLOR) // 1

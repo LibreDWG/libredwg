@@ -8166,7 +8166,6 @@ typedef struct _dwg_object_entity
 
   /* preR13 entity fields. TODO a union with above */
   BITCODE_RC flag_r11;
-  BITCODE_RC flag2_r11;
   BITCODE_RS opts_r11;
   BITCODE_RC extra_r11;
   BITCODE_RC color_r11;
