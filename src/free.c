@@ -614,6 +614,13 @@ free_preR13_object (Dwg_Object *obj)
   if (obj->type == DWG_TYPE_FREED || obj->tio.object == NULL)
     return;
 
+  if (obj->supertype == DWG_SUPERTYPE_ENTITY) {
+    Dwg_Object_Entity *_obj = obj->tio.entity;
+    FIELD_HANDLE (layer, 2, 8);
+    if (_obj->flag_r11 & FLAG_R11_LTYPE) // 2
+      FIELD_HANDLE (ltype, 1, 6);
+  }
+
   // TODO if DWG_TYPE_UNUSED and r1.4, set the old obj->fixedtype from the type
 
   switch (obj->fixedtype)
