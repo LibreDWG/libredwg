@@ -323,3 +323,7 @@
     return 0;
   FIELD_CAST (VISRETAIN, RS, B, 70); //ok
 
+  /* TODO Unknown 18 bytes */
+  DEBUG_HERE //0x6bd-0x6ce
+  dat->byte = 0x6cf;
+
