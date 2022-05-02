@@ -232,12 +232,12 @@
     }
 #endif
 #ifndef FIELD_VECTOR_INL
-#  define FIELD_VECTOR_INL(o, nam, type, size, dxf)                           \
-  FIELD_VECTOR_N(o, nam, type, size, dxf)
+#  define FIELD_VECTOR_INL(nam, type, size, dxf)                              \
+  FIELD_VECTOR_N (nam, type, size, dxf)
 #endif
 #ifndef SUB_FIELD_VECTOR_INL
 #  define SUB_FIELD_VECTOR_INL(o, nam, type, size, dxf)                       \
-  SUB_FIELD_VECTOR_N(o, nam, type, size, dxf)
+  SUB_FIELD_VECTOR_N (o, nam, type, size, dxf)
 #endif
 #ifndef SUB_FIELD_2RD_VECTOR
 #  define SUB_FIELD_2RD_VECTOR(o,name, size, dxf)                             \
