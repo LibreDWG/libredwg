@@ -8,10 +8,10 @@ dnl either version 3 of the License, or (at your option) any later version.
 dnl You should have received a copy of the GNU General Public License
 dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-AC_PREREQ([2.61])
+AC_PREREQ([2.69])
 AC_INIT([LibreDWG],
-        m4_esyscmd([build-aux/git-version-gen .tarball-version]),
-        [libredwg@gnu.org],,
+        [m4_esyscmd(build-aux/git-version-gen .tarball-version)],
+        [libredwg@gnu.org],[],
         [https://savannah.gnu.org/projects/libredwg/])
 AC_CONFIG_AUX_DIR([build-aux])
 dnl for older systems use this:
@@ -19,6 +19,7 @@ dnl AM_INIT_AUTOMAKE([1.11.6 gnu no-define])
 dnl parallel-tests:
 dnl: error: using '$(srcdir)' in TESTS is currently broken: '$(srcdir)/libredwg.spec'
 AM_INIT_AUTOMAKE([1.14 gnu no-define serial-tests dist-xz info-in-builddir])
+AC_DISABLE_STATIC
 
 # Keep this in sync with what is passed in AC_INIT
 TARBALL_VERSION_FILE=".tarball-version"
@@ -36,7 +37,7 @@ AC_CONFIG_MACRO_DIR([m4])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
-AM_CONFIG_HEADER([src/config.h])
+AC_CONFIG_HEADERS([src/config.h])
 AC_MSG_CHECKING([git version])
 AC_MSG_RESULT($PACKAGE_VERSION)
 AC_MSG_CHECKING([so version-info])
@@ -53,8 +54,7 @@ AC_PROG_CC
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
-AC_PROG_LIBTOOL
-dnl AC_PROG_RANLIB: in LT_INIT
+AC_PROG_EGREP
 LT_INIT
 AC_CHECK_PROGS([BASH], [bash])
 
@@ -110,7 +110,9 @@ AC_CHECK_LIB([xml2],[newXMLEntity],
 AM_CONDITIONAL([HAVE_LIBXML2], [test x$have_libxml2 = xyes])
 
 dnl Checks for header files
+dnl 2.71 only: AC_CHECK_INCLUDES_DEFAULT
 AC_HEADER_STDC
+
 dnl Avoid rpl_malloc when cross-compiling. we don't need malloc.h
 dnl We just want to know if it's needed
 ac_cv_func_malloc_0_nonnull=yes
@@ -135,7 +137,7 @@ else
 fi
 
 dnl Checks for typedefs, structures, and compiler characteristics
-AC_PROG_CC_C99
+AC_PROG_CC
 case $CFLAGS in
      *-fsanitize=undefined*)   ax_cv_have_aligned_access_required=yes  ;;
      *-fsanitize=*,undefined*) ax_cv_have_aligned_access_required=yes  ;;
@@ -498,7 +500,7 @@ if test x$cross_compiling = xno -a x$enable_bindings = xyes; then
         AM_PATH_PYTHON
         PYTHON_NOVERSIONCHECK=1
       fi
-      SWIG_PYTHON
+      AX_SWIG_PYTHON
       AC_CHECK_PROGS([PATCH], [patch])
     fi
     dnl swig not required for perl, we ship swig_perl.c
