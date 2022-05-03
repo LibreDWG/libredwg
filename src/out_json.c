@@ -1771,6 +1771,24 @@ json_fileheader_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+AFL_GCC_TOOBIG
+static int
+json_preR13_header_write_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  Dwg_Header_Variables *_obj = &dwg->header_vars;
+  Dwg_Object *obj = NULL;
+  // const int minimal = 0;
+  char buf[4096];
+  double ms;
+  int error = 0;
+  const char *codepage = "ANSI_1252";
+
+  // clang-format off
+  #include "header_variables_r11.spec"
+  // clang-format on
+  return error;
+}
+
 static int
 json_header_write_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -1784,24 +1802,24 @@ json_header_write_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       = (dwg->header.codepage == 30 || dwg->header.codepage == 0)
             ? "ANSI_1252"
             : (dwg->header.version >= R_2007) ? "UTF-8" : "ANSI_1252";
+
   // clang-format off
-  PRE (R_13) {
-    #include "header_variables_r11.spec"
-  }
-  LATER_VERSIONS {
-    #include "header_variables.spec"
-  }
+  #include "header_variables.spec"
   // clang-format on
   return error;
 }
+AFL_GCC_POP
 
 static int
 json_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
   RECORD (HEADER); // single hash
-  // seperate func to catch the return
-  error = json_header_write_private (dat, dwg);
+  // seperate funcs to catch the return, and end with ENDRECORD
+  PRE (R_13)
+    error = json_preR13_header_write_private (dat, dwg);
+  LATER_VERSIONS
+    error = json_header_write_private (dat, dwg);
   ENDRECORD ();
   return error;
 }
