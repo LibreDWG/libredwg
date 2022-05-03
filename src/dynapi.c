@@ -680,7 +680,7 @@ static const Dwg_DYNAPI_field _dwg_header_variables_fields[] = {
   { "VIEWCTR",	"3RD", sizeof (BITCODE_3RD),  OFF (struct _dwg_header_variables, VIEWCTR),
     1,0,0, 20 },
   { "VIEWDIR",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_header_variables, VIEWDIR),
-    1,0,0, 0 },
+    1,0,0, 30 },
   { "VIEWMODE",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_header_variables, VIEWMODE),
     0,0,0, 0 },
   { "VIEWSIZE",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_header_variables, VIEWSIZE),
