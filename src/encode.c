@@ -3757,12 +3757,29 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
   for (unsigned index = dwg->cur_index; index < dwg->cur_index + dwg->num_entities; index++)
     {
       Dwg_Object *obj = &dwg->object[index];
-      // blocks are written in the 5 tables/sections
+      // skip table objects
       if (obj->supertype != DWG_SUPERTYPE_ENTITY)
-        continue;
+        {
+          LOG_TRACE ("Skip object %s, number: %d, Fixedtype: %d, Addr: %lx (0x%x)\n",
+                     obj->name, obj->index, obj->fixedtype, obj->address,
+                     (unsigned)dat->byte);
+          continue;
+        }
       // deleted, i.e. moved to a BLOCK
       if (obj->fixedtype == DWG_TYPE_UNUSED)
-        continue;
+        {
+          LOG_TRACE ("Skip unused entity %s, number: %d, Addr: %lx (0x%x)\n",
+                     obj->name, obj->index, obj->address, (unsigned)dat->byte);
+          continue;
+        }
+      // skip mspace block/endblk
+      if (obj->type == DWG_TYPE_UNUSED_R11)
+        {
+          LOG_TRACE ("Skip entity %s, number: %d, Fixedtype: %d, Addr: %lx (0x%x)\n",
+                     obj->name, obj->index, obj->fixedtype, obj->address,
+                     (unsigned)dat->byte);
+          continue;
+        }
       // check if block or entity member
       if (offset) // is block
         {
@@ -3798,87 +3815,86 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
                   obj->name, obj->type, obj->tio.entity->flag_r11, obj->size, obj->address)
       }
 
-      switch (obj->type)
+      switch ((Dwg_Object_Type_r11)obj->type)
         {
-        case 1:
+        case DWG_TYPE_LINE_R11:
           error |= dwg_encode_LINE (dat, obj);
           break;
-        case 2:
+        case DWG_TYPE_POINT_R11:
           error |= dwg_encode_POINT (dat, obj);
           break;
-        case 3:
+        case DWG_TYPE_CIRCLE_R11:
           error |= dwg_encode_CIRCLE (dat, obj);
           break;
-        case 4:
+        case DWG_TYPE_SHAPE_R11:
           error |= dwg_encode_SHAPE (dat, obj);
           break;
-        case 5:
+        case DWG_TYPE_REPEAT_R11:
           error |= dwg_encode_REPEAT (dat, obj);
           break;
-        case 6:
+        case DWG_TYPE_ENDREP_R11:
           error |= dwg_encode_ENDREP (dat, obj);
           break;
-        case 7:
+        case DWG_TYPE_TEXT_R11:
           error |= dwg_encode_TEXT (dat, obj);
           break;
-        case 8:
+        case DWG_TYPE_ARC_R11:
           error |= dwg_encode_ARC (dat, obj);
           break;
-        case 9:
+        case DWG_TYPE_TRACE_R11:
           error |= dwg_encode_TRACE (dat, obj);
           break;
-        case 10:
+        case DWG_TYPE_LOAD_R11:
           /* convert from pre r2.0 */
           error |= dwg_encode_LOAD (dat, obj);
           break;
-        case 11:
+        case DWG_TYPE_SOLID_R11:
           error |= dwg_encode_SOLID (dat, obj);
           break;
-        case 12:
+        case DWG_TYPE_BLOCK_R11:
           error |= dwg_encode_BLOCK (dat, obj);
           break;
-        case 13:
+        case DWG_TYPE_ENDBLK_R11:
           error |= dwg_encode_ENDBLK (dat, obj);
           break;
-        case 14:
+        case DWG_TYPE_INSERT_R11:
           if (obj->fixedtype == DWG_TYPE_MINSERT)
             error |= dwg_encode_MINSERT (dat, obj);
           else
             error |= dwg_encode_INSERT (dat, obj);
           break;
-        case 15:
+        case DWG_TYPE_ATTDEF_R11:
           error |= dwg_encode_ATTDEF (dat, obj);
           break;
-        case 16:
+        case DWG_TYPE_ATTRIB_R11:
           error |= dwg_encode_ATTRIB (dat, obj);
           break;
-        case 17:
+        case DWG_TYPE_SEQEND_R11:
           error |= dwg_encode_SEQEND (dat, obj);
           break;
-        case 18: /* another polyline */
-        case 19:
+        case DWG_TYPE_PLINE_R11: /* another polyline */
+        case DWG_TYPE_POLYLINE_R11:
           // checks fixedtype
           error |= encode_preR13_POLYLINE (dat, obj);
           break;
-        case 20: // VERTEX
+        case DWG_TYPE_VERTEX_R11:
           // checks fixedtype
           error |= encode_preR13_POLYLINE (dat, obj);
           break;
-        case 21:
+        case DWG_TYPE_3DLINE_R11:
           error |= dwg_encode__3DLINE (dat, obj);
           break;
-        case 22:
+        case DWG_TYPE_3DFACE_R11:
           error |= dwg_encode__3DFACE (dat, obj);
           break;
-        case 23:
+        case DWG_TYPE_DIMENSION_R11:
           error |= encode_preR13_DIMENSION (dat, obj);
           break;
-        case 24:
+        case DWG_TYPE_VIEWPORT_R11:
           error |= dwg_encode_VIEWPORT (dat, obj);
           break;
         /*
-        case 25: // or DIMENSION_RADIUS?
-          error |= dwg_encode__3DLINE (dat, obj);
+        case DWG_TYPE_UNKNOWN_R11:
           break;
         */
         default:
