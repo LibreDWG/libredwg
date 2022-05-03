@@ -22568,10 +22568,24 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   //layout = dwg_add_LAYOUT (layoutdict);
   //pspace->layout = dwg_add_handleref (dwg, 5, 0x23, NULL);
 
-  // BLOCK: (5.1.24)
-  dwg_add_BLOCK (mspace, "*MODEL_SPACE");
-  // ENDBLK: (5.1.25)
-  dwg_add_ENDBLK (mspace);
+  {
+    // BLOCK: (5.1.24)
+    Dwg_Entity_BLOCK *block = dwg_add_BLOCK (mspace, "*MODEL_SPACE");
+    if (dwg->header.version < R_13) // fixup the type
+      {
+        obj = dwg_obj_generic_to_object (block, &error);
+        obj->type = DWG_TYPE_UNUSED; // dont encode it
+      }
+  }
+  {
+    // ENDBLK: (5.1.25)
+    Dwg_Entity_ENDBLK *endblk = dwg_add_ENDBLK (mspace);
+    if (dwg->header.version < R_13) // fixup the type
+      {
+        obj = dwg_obj_generic_to_object (endblk, &error);
+        obj->type = DWG_TYPE_UNUSED; // dont encode it
+      }
+  }
   if (dwg->header.version >= R_2000)
     {
 #ifdef NEED_VPORT_FOR_MODEL_LAYOUT
@@ -24561,6 +24575,7 @@ dwg_add_BLOCK_HEADER (Dwg_Data *restrict dwg, const char *restrict name)
 {
   API_ADD_TABLE (BLOCK_HEADER, BLOCK_CONTROL);
   dwg->block_control = *_ctrl;
+  return _record;
 }
 
 EXPORT Dwg_Object_LAYER *

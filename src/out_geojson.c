@@ -670,7 +670,7 @@ dwg_geojson_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 static int
 dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_last)
 {
-  switch (obj->type)
+  switch (obj->fixedtype)
     {
     case DWG_TYPE_INSERT: // Just the insertion point yet
       {

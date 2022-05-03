@@ -680,6 +680,36 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_UNKNOWN_OBJ  = 0xffff,
 } Dwg_Object_Type;
 
+typedef enum DWG_OBJECT_TYPE_R11
+{
+  DWG_TYPE_UNUSED_R11 = 0, // i.e. all the added table or iterator objects (mspace block)
+  DWG_TYPE_LINE_R11 = 1,
+  DWG_TYPE_POINT_R11 = 2,
+  DWG_TYPE_CIRCLE_R11 = 3,
+  DWG_TYPE_SHAPE_R11 = 4,
+  DWG_TYPE_REPEAT_R11 = 5,
+  DWG_TYPE_ENDREP_R11 = 6,
+  DWG_TYPE_TEXT_R11 = 7,
+  DWG_TYPE_ARC_R11 = 8,
+  DWG_TYPE_TRACE_R11 = 9,
+  DWG_TYPE_LOAD_R11 = 10,
+  DWG_TYPE_SOLID_R11 = 11,
+  DWG_TYPE_BLOCK_R11 = 12,
+  DWG_TYPE_ENDBLK_R11 = 13,
+  DWG_TYPE_INSERT_R11 = 14, // includes also MINSERT
+  DWG_TYPE_ATTDEF_R11 = 15,
+  DWG_TYPE_ATTRIB_R11 = 16,
+  DWG_TYPE_SEQEND_R11 = 17,
+  DWG_TYPE_PLINE_R11 = 18,
+  DWG_TYPE_POLYLINE_R11 = 19, // also mesh/pfaces
+  DWG_TYPE_VERTEX_R11 = 20,   // also mesh/pface vertices
+  DWG_TYPE_3DLINE_R11 = 21,
+  DWG_TYPE_3DFACE_R11 = 22,
+  DWG_TYPE_DIMENSION_R11 = 23, // all types
+  DWG_TYPE_VIEWPORT_R11 = 24,
+  DWG_TYPE_UNKNOWN_R11 = 25,
+} Dwg_Object_Type_r11;
+
 /**
  Error codes returned.
  */
