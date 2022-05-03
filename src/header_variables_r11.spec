@@ -266,8 +266,8 @@
   if (dwg->header.num_header_vars <= 158) // r10
     return 0;
 
-  /* Skip table APPID (0x512-0x51c) */
-  dat->byte = 0x51d;
+  /* Skip table APPID (0x512-0x51b) */
+  dat->byte = 0x51c;
 
   FIELD_CAST (WORLDVIEW, RS, B, 70);
   if (dwg->header.num_header_vars <= 160) // r10
