@@ -254,6 +254,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   long unsigned int old_size = dwg->num_objects * sizeof (Dwg_Object);
   long unsigned int size = tbl->size * sizeof (Dwg_Object);
   long unsigned int pos = tbl->address;
+  int trailing_bytes = dwg->header.version == R_11 ? 2 : 0; /* 2 bytes crc16 since R_11 */
   BITCODE_RC flag;
   BITCODE_TF name;
 
@@ -295,7 +296,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
 #define CHK_ENDPOS                                                            \
   pos = tbl->address + (long)((i + 1) * tbl->size);                           \
-  if ((long)(pos - dat->byte) != 2) /* crc16 since when? */                   \
+  if ((long)(pos - dat->byte) != trailing_bytes)                              \
     {                                                                         \
       LOG_ERROR ("offset %ld", pos - dat->byte);                              \
       /*return DWG_ERR_SECTIONNOTFOUND;*/                                     \
