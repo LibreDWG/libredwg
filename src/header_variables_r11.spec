@@ -195,6 +195,8 @@
   FIELD_RD (USERR3, 40);
   FIELD_RD (USERR4, 40);
   FIELD_RD (USERR5, 40);
+  if (dwg->header.num_header_vars <= 114)
+    return 0;
   FIELD_RC (DIMALT, 70); //ok
   FIELD_CAST (DIMALTD, RC, RS, 70); //ok
   FIELD_RC (DIMASO, 70); //ok
