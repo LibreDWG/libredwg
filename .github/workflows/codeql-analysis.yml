@@ -20,6 +20,12 @@ on:
   schedule:
     - cron: '15 4 * * 3'
 
+paths:
+  - src
+  - programs
+  - examples
+  - bindings
+
 jobs:
   analyze:
     name: Analyze
