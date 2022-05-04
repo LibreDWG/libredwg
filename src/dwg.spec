@@ -1976,6 +1976,7 @@ DWG_ENTITY (SHAPE)
     FIELD_RCu (style_id, 2);
     if (R11OPTS (1))
       FIELD_RD (rotation, 50);
+    FIELD_HANDLE (style, 1, 0);
   }
   SINCE (R_13b1) {
     FIELD_3BD (ins_pt, 10);
