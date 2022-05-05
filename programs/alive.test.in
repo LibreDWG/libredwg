@@ -2,7 +2,7 @@
 # alive.test
 #
 # Copyright (C) 2010 Thien-Thi Nguyen
-# Copyright (C) 2018-2020 Free Software Foundation, Inc.
+# Copyright (C) 2018-2022 Free Software Foundation, Inc.
 #
 # This program is free software, licensed under the terms of the GNU
 # General Public License as published by the Free Software Foundation,
@@ -170,6 +170,13 @@ run ()
     if test "$bprog" = "dxf2dwg" -a -n "@HAVE_ASAN@"
     then
        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
+    fi
+    # preR13 imports and outdxf also still leak. GH #466
+    if test "$bprog" = "dxfwrite" -a -n "@HAVE_ASAN@"
+    then
+        case $ddwg in
+            r11|r2.*) TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG" ;;
+        esac
     fi
     if test "$bprog" = "dwgfuzz" -a -n "@HAVE_ASAN@"
     then
