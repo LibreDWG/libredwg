@@ -907,8 +907,20 @@ DWG_ENTITY (MINSERT)
 
 DWG_ENTITY_END
 
-/* (none/21) R10-R11 only */
+/* (none/21) R2.4-R11 only */
 DWG_ENTITY (_3DLINE)
+  VERSIONS (R_2_4, R_9c1) {
+    if (R11OPTS (1)) {
+      FIELD_3RD (start, 10);
+    } else {
+      FIELD_2RD (start, 10);
+    }
+    if (R11OPTS (2)) {
+      FIELD_3RD (end, 11);
+    } else {
+      FIELD_2RD (end, 11);
+    }
+  }
   VERSIONS (R_10, R_11) {
     FIELD_3RD (start, 10)
     FIELD_3RD (end, 11)
