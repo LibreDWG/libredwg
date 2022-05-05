@@ -618,8 +618,6 @@ free_preR13_object (Dwg_Object *obj)
       FIELD_HANDLE (ltype, 1, 6);
   }
 
-  // TODO if DWG_TYPE_UNUSED and r1.4, set the old obj->fixedtype from the type
-
   switch (obj->fixedtype)
     {
     case DWG_TYPE_TEXT:
@@ -795,7 +793,8 @@ free_preR13_object (Dwg_Object *obj)
       LOG_ERROR ("Unhandled preR13 class %s, fixedtype %d in free_preR13_object()",
                  dwg_type_name (obj->fixedtype), (int)obj->fixedtype);
     }
-  /* With indxf the dxfname is dynamic, just the name is const */
+
+  /* With indxf and injson the dxfname is dynamic, just the name is const */
   if (dwg->opts & DWG_OPTS_IN)
     FREE_IF (obj->dxfname);
   /* With injson even the name is dynamic */

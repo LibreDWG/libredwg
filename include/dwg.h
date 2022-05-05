@@ -2370,7 +2370,6 @@ typedef struct _dwg_object_LAYER
   BITCODE_B plotflag;
   BITCODE_RC linewt;
   BITCODE_CMC color;
-  int16_t   color_r11;    /* preR13, needs to be signed */
   BITCODE_H plotstyle;    /* DXF 390 */
   BITCODE_H material;     /* DXF 347 */
   BITCODE_H ltype;        /* DXF 6 */
@@ -8200,7 +8199,7 @@ typedef struct _dwg_object_entity
   BITCODE_RC flag_r11;
   BITCODE_RS opts_r11;
   BITCODE_RC extra_r11;
-  BITCODE_RC color_r11;
+  BITCODE_RCd color_r11;
   BITCODE_RD elevation_r11; // TODO: move to the entities
   BITCODE_RD thickness_r11; // TODO: move to the entities
   // TODO handling_r11; */

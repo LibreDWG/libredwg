@@ -357,8 +357,9 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     case SECTION_LAYER:
         for (i = 0; i < tbl->number; i++)
           {
+            Bit_Chain *str_dat = dat;
             PREP_TABLE (LAYER);
-            FIELD_RS (color_r11, 62); // color, off if negative
+            FIELD_CMC (color, 62); // off if negative
             FIELD_HANDLE (ltype, 2, 6);
             CHK_ENDPOS;
           }

@@ -10032,8 +10032,6 @@ B,	DXF 290
 RC,	DXF 370
 @item color
 CMC,	DXF 62
-@item color_r11
-int16_t,	DXF 62
 @item plotstyle
 H,	DXF 390
 @item material
@@ -15834,7 +15832,7 @@ BL
 @item color
 CMC,	DXF 62
 @item color_r11
-RC,	DXF 62
+RCd,	DXF 62
 @item dwg
 struct _dwg_struct*
 @item edge_visualstyle

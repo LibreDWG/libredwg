@@ -575,7 +575,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
     }
   else
     {
-      FIRSTPREFIX fprintf (dat->fh, "\"%s\": %d", _path_field (key),
+      FIRSTPREFIX fprintf (dat->fh, "\"%s\": " FORMAT_RSd, _path_field (key),
                            _obj->index);
     }
 }
@@ -1911,7 +1911,7 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               RECORD (LAYER);
               FIELD_RC (flag, 70);
               FIELD_TFv (name, 32, 2);
-              FIELD_RS (color_r11, 62); // color, off if negative
+              FIELD_CMC (color, 62); // off if negative
               FIELD_HANDLE (ltype, 2, 6);
               ENDRECORD ();
             }

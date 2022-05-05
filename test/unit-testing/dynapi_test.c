@@ -49715,21 +49715,6 @@ static int test_LAYER (const Dwg_Object *obj)
         fail ("LAYER.color [CMC]");
   }
   {
-    int16_t color_r11;
-    if (dwg_dynapi_entity_value (layer, "LAYER", "color_r11", &color_r11, NULL)
-        && color_r11 == layer->color_r11)
-      pass ();
-    else
-      fail ("LAYER.color_r11 [int16_t] %hd != %hd", layer->color_r11, color_r11);
-    color_r11++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "color_r11", &color_r11, 0)
-        && color_r11 == layer->color_r11)
-      pass ();
-    else
-      fail ("LAYER.color_r11 [int16_t] set+1 %hd != %hd", layer->color_r11, color_r11);
-    layer->color_r11--;
-  }
-  {
     BITCODE_BS flag;
     if (dwg_dynapi_entity_value (layer, "LAYER", "flag", &flag, NULL)
         && flag == layer->flag)

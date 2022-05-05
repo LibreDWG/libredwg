@@ -2814,6 +2814,11 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else if (strEQc (key, "index") && strNE (name, "TableCellContent_Attr"))
             {
               BITCODE_RL index = (BITCODE_RL)json_long (dat, tokens);
+              if (dat->from_version < R_13)
+                {
+                  if (index > 5)
+                    index = obj->index; // we added 2 mspace blocks (type 0) in-between
+                }
               if (obj->index != index)
                 LOG_WARN ("Ignore wrong %s.index %d, expected %d", name, index,
                           obj->index)

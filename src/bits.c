@@ -2787,7 +2787,10 @@ int
 bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
 {
   memset (color, 0, sizeof (Dwg_Color));
-  color->index = bit_read_BS (dat);
+  if (dat->from_version < R_13)
+    color->index = (BITCODE_RSd)bit_read_RS (dat);
+  else
+    color->index = bit_read_BS (dat);
   if (dat->from_version >= R_2004) // truecolor
     {
       CHK_OVERFLOW_PLUS (1,__FUNCTION__,DWG_ERR_VALUEOUTOFBOUNDS)
@@ -2901,7 +2904,10 @@ bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
   else
     {
       bit_downconvert_CMC (dat, color);
-      bit_write_BS (dat, color->index);
+      if (dat->version < R_13)
+        bit_write_RS (dat, color->index);
+      else
+        bit_write_BS (dat, color->index);
     }
 }
 

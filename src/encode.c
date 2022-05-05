@@ -1876,10 +1876,11 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       PREP_CTRL (LAYER_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
+          Bit_Chain *str_dat = dat;
           PREP_TABLE (LAYER);
 
           FIELD_CAST (flag, RC, RS, 70); // 860
-          FIELD_RS (color_r11, 62); // color, off if negative
+          FIELD_CMC (color, 62); // off if negative
           FIELD_HANDLE (ltype, 2, 6);
           CHK_ENDPOS;
         }

@@ -3241,11 +3241,11 @@ DWG_OBJECT (LAYER)
   COMMON_TABLE_FLAGS (Layer);
   PRE (R_13)
   {
-    FIELD_RS (color_r11, 62);  // color
+    FIELD_CMC (color, 62);
     FIELD_HANDLE (ltype, 2, 6);
 
     DECODER {
-      FIELD_VALUE (on)            = FIELD_VALUE (color_r11) >= 0;
+      FIELD_VALUE (on)            = FIELD_VALUE (color.index) >= 0;
       FIELD_VALUE (frozen)        = FIELD_VALUE (flag) & 1;
       FIELD_VALUE (frozen_in_new) = FIELD_VALUE (flag) & 2;
       FIELD_VALUE (locked)        = FIELD_VALUE (flag) & 4;
