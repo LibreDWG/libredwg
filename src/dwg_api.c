@@ -22211,7 +22211,17 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
         }
       return tgt;
 #endif
-      return strdup (u8str);
+      if (dwg->header.version < R_13 && strlen (u8str) < 32)
+        {
+          // those old names are usually 32byte, and bit_write_TF
+          // might heap-overflow then.
+          char *buf = malloc (32);
+          strncpy (buf, u8str, 32);
+          buf[31] = '\0';
+          return buf;
+        }
+      else
+        return strdup (u8str);
     }
 }
 
