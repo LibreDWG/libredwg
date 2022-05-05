@@ -500,15 +500,27 @@ json_3DPOINT (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   if (t->type != JSMN_ARRAY || t->size != 3)
     {
-      LOG_ERROR ("JSON 3DPOINT must be ARRAY of size 3")
-      return;
+      // older DWG's often are only 2D
+      if (t->type != JSMN_ARRAY || dat->from_version >= R_13)
+        {
+          LOG_ERROR ("JSON 3DPOINT must be ARRAY of size 3")
+          return;
+        }
     }
   tokens->index++;
   JSON_TOKENS_CHECK_OVERFLOW_VOID
   pt->x = json_float (dat, tokens);
   pt->y = json_float (dat, tokens);
-  pt->z = json_float (dat, tokens);
-  LOG_TRACE ("%s.%s: (%f, %f, %f) [%s]\n", name, key, pt->x, pt->y, pt->z, type);
+  if (t->size == 3)
+    {
+      pt->z = json_float (dat, tokens);
+      LOG_TRACE ("%s.%s: (%f, %f, %f) [%s]\n", name, key, pt->x, pt->y, pt->z, type);
+    }
+  else
+    {
+      pt->z = 0.0;
+      LOG_TRACE ("%s.%s: (%f, %f) [%s]\n", name, key, pt->x, pt->y, type);
+    }
 }
 
 static void
@@ -2839,7 +2851,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   free (obj->dxfname);
                   obj->dxfname = strdup (dxfname);
                   if (obj->type <= DWG_TYPE_LAYOUT
-                      && obj->fixedtype != obj->type && dat->version >= R_13)
+                      && obj->fixedtype != obj->type && dwg->header.from_version >= R_13)
                     {
                       LOG_WARN ("Changed wrong type %d => %d", obj->type, obj->fixedtype)
                       obj->type = obj->fixedtype;
