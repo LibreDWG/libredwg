@@ -617,6 +617,7 @@ DWG_ENTITY (INSERT)
     DECODER { FIELD_VALUE (has_attribs) = R11FLAG (128); }
     FIELD_HANDLE (block_header, 2, 2);
     FIELD_2RD (ins_pt, 10);
+#ifndef IS_JSON
     if (R11OPTS (1)) {
       FIELD_RD (scale.x, 41);
     }
@@ -629,6 +630,14 @@ DWG_ENTITY (INSERT)
     if (R11OPTS (8)) {
       FIELD_RD (scale.z, 43);
     }
+#else
+    if (R11OPTS (1|2|8)) {
+      FIELD_3RD (scale, 0);
+    }
+    if (R11OPTS (4)) {
+      FIELD_RD (rotation, 50);
+    }
+#endif
     if (R11OPTS (16)) {
       FIELD_RS (num_cols, 70);
     }
