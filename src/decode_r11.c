@@ -723,7 +723,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("@0x%lx\n", dat->byte);
   if (error >= DWG_ERR_CRITICAL)
     return error;
-  if (dat->byte == 0x6bd) // r11
+  SINCE (R_11)
     {
       // crc16 + DWG_SENTINEL_R11_HEADER_END
       BITCODE_RS crc, crcc;
