@@ -249,20 +249,26 @@ DATA="$DATA example_2013 example_2018 example_r14"
 TODO="example_r13 r11/ACEB10 r2.10/entities r2.6/entities r1.4/entities"
 DATA="$DATA $TODO"
 
-for d in $DATA; do
-    b="$(basename "$d")"
-    rm "./$b.dxf" 2>/dev/null
-    rm "./$b.svg" 2>/dev/null
-    rm "./$b.ps" 2>/dev/null
-    rm "./$b.bmp" 2>/dev/null
-    rm "./$b.json" 2>/dev/null
-    rm "./$b-rewrite.dwg" 2>/dev/null
-    rm "./$b-dwgwrite.dwg" 2>/dev/null
-done
-rm "./entities_r*.dxf" 2>/dev/null
-rm "./entities_r*.json" 2>/dev/null
-rm "./ACEB10_r11.dxf" 2>/dev/null
-rm "./ACEB10_r11.json" 2>/dev/null
+clean ()
+{
+  for d in $DATA; do
+      b="$(basename "$d")"
+      rm "./$b.dxf" 2>/dev/null
+      rm "./$b.svg" 2>/dev/null
+      rm "./$b.ps" 2>/dev/null
+      rm "./$b.bmp" 2>/dev/null
+      rm "./$b.json" 2>/dev/null
+      rm "./$b-rewrite.dwg" 2>/dev/null
+      rm "./$b-dwgwrite.dwg" 2>/dev/null
+  done
+  rm "./entities.dxf" 2>/dev/null
+  rm "./entities.dwg" 2>/dev/null
+  rm "./entities_*.dxf" 2>/dev/null
+  rm "./entities_*.json" 2>/dev/null
+  rm "./ACEB10.dxf" 2>/dev/null
+  rm "./ACEB10_*.dxf" 2>/dev/null
+  rm "./ACEB10_*.json" 2>/dev/null
+}
 
 for prog in $PROGS ; do
     case $prog in
@@ -324,6 +330,7 @@ if [ -f cmp_dxf.pl ] && [ -e dwg2dxf ]; then
 fi
 
 if test "0" = "$i" ; then
+    clean
     exit 0
 else
     echo "$(basename "$0"): $i failures"

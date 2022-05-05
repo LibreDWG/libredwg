@@ -2838,7 +2838,8 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     }
                   free (obj->dxfname);
                   obj->dxfname = strdup (dxfname);
-                  if (obj->type <= DWG_TYPE_LAYOUT && obj->fixedtype != obj->type)
+                  if (obj->type <= DWG_TYPE_LAYOUT
+                      && obj->fixedtype != obj->type && dat->version >= R_13)
                     {
                       LOG_WARN ("Changed wrong type %d => %d", obj->type, obj->fixedtype)
                       obj->type = obj->fixedtype;
@@ -2852,8 +2853,8 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         {
                           json_advance_unknown (dat, tokens, t->type, 0); // value
                           tokens->index++; // next key
-                          JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
-                            }
+                          JSON_TOKENS_CHECK_OVERFLOW(goto harderr);
+                        }
                       tokens->index--;
                       break;
                     }
