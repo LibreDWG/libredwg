@@ -33,7 +33,6 @@
 #define IS_DXF
 #include "common.h"
 #include "bits.h"
-#include "myalloca.h"
 #include "dwg.h"
 #include "decode.h"
 #include "encode.h"
@@ -1167,37 +1166,30 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str,
         {
           const int origlen = strlen (str);
           int len = (2 * origlen) + 1;
-          char *_buf;
+          char _buf[1024];
           if (len > 1024)
-            {
+              { // FIXME: maybe we need this for chunked strings
               fprintf (dat->fh, "\r\n");
               LOG_ERROR ("Overlarge DXF string, len=%d", origlen);
-              return;
-            }
-          _buf = (char *)alloca (len);
-          if (!_buf)
-            {
-              fprintf (dat->fh, "\r\n");
-              LOG_ERROR ("Out of stack");
               return;
             }
           _buf[len - 1] = '\0';
           len = strlen (cquote (_buf, len, str));
           if (len > 255 && dxf == 1)
             {
+              char* bufp = &_buf[0];
               // GROUP 1 already printed
               while (len > 0)
                 {
-                  fprintf (dat->fh, "%.*s\r\n", len > 255 ? 255 : len, _buf);
+                  fprintf (dat->fh, "%.*s\r\n", len > 255 ? 255 : len, bufp);
                   len -= 255;
-                  _buf += 255;
+                  bufp += 255;
                   if (len > 0)
                     fprintf (dat->fh, "%3d\r\n", dxfcont);
                 }
             }
           else
             fprintf (dat->fh, "%s\r\n", _buf);
-          freea (_buf);
         }
       else
         {

@@ -35,7 +35,6 @@
 #define IS_PRINT
 #include "common.h"
 #include "bits.h"
-#include "myalloca.h"
 #include "dwg.h"
 #include "decode.h"
 #include "out_json.h"
@@ -141,13 +140,12 @@ static unsigned int cur_ver = 0;
 #define PAIR_Sc(name, str)                                                    \
   {                                                                           \
     const int len = strlen (str);                                             \
-    if (len < 4096 / 6)                                                       \
+    if (len < 42)                                                             \
       {                                                                       \
         const int _len = 6 * len + 1;                                         \
-        char *_buf = (char *)alloca (_len);                                   \
+        char _buf[256];                                                       \
         PREFIX fprintf (dat->fh, "\"" #name "\": \"%s\",\n",                  \
                         json_cquote (_buf, str, _len));                       \
-        freea (_buf);                                                         \
       }                                                                       \
     else                                                                      \
       {                                                                       \
