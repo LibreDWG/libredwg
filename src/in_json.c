@@ -2728,8 +2728,10 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               _obj = (Dwg_Object_APPID*)calloc (1, objsize);
               obj->tio.object->tio.APPID = _obj;
               obj->tio.object->tio.APPID->parent = obj->tio.object;
+              free (obj->name);
               obj->name = strdup (name);
               // TODO alias
+              free (obj->dxfname);
               obj->dxfname = strdup (name);
               tokens->index++;
               JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
@@ -2787,8 +2789,10 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               _obj = (Dwg_Object_APPID *)calloc (1, objsize);
               obj->tio.entity->tio.POINT = (Dwg_Entity_POINT *)_obj;
               obj->tio.entity->tio.POINT->parent = obj->tio.entity;
+              free (obj->name);
               obj->name = strdup (name);
               // if different, the alias is done via extra dxfname key (below)
+              free (obj->dxfname);
               obj->dxfname = strdup (name);
               tokens->index++;
               JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
