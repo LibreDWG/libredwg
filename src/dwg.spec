@@ -3239,8 +3239,7 @@ DWG_OBJECT_END
 DWG_OBJECT (LAYER)
 
   COMMON_TABLE_FLAGS (Layer);
-  PRE (R_13)
-  {
+  PRE (R_13) {
     FIELD_CMC (color, 62);
     FIELD_HANDLE (ltype, 2, 6);
 
@@ -3251,8 +3250,7 @@ DWG_OBJECT (LAYER)
       FIELD_VALUE (locked)        = FIELD_VALUE (flag) & 4;
     }
   }
-  VERSIONS (R_13, R_14)
-  {
+  VERSIONS (R_13, R_14) {
     FIELD_B (frozen, 0); // bit 1
     FIELD_B (on, 0);     // really: negate the color
     FIELD_B (frozen_in_new, 0);
@@ -3275,8 +3273,7 @@ DWG_OBJECT (LAYER)
     }
   }
   FIELD_CMC (color, 62);
-  VERSIONS (R_13, R_14)
-  {
+  VERSIONS (R_13, R_14) {
     DECODER { FIELD_VALUE (on) = FIELD_VALUE (color.index) >= 0; }
     FIELD_VALUE (flag) |= FIELD_VALUE (frozen) |
       (FIELD_VALUE (frozen_in_new) << 1) |
@@ -3339,8 +3336,7 @@ DWG_OBJECT (STYLE)
 
   COMMON_TABLE_FLAGS (TextStyle)
 
-  SINCE (R_13)
-  {
+  SINCE (R_13) {
     FIELD_B (is_shape, 0);        //wrong oda doc
     FIELD_B (is_vertical, 0);     //
     DECODER_OR_ENCODER {
@@ -3349,20 +3345,23 @@ DWG_OBJECT (STYLE)
       LOG_TRACE ("flag => %d [RC 70]\n", FIELD_VALUE (flag));
     }
   }
-  PRE (R_13)
-  {
+  PRE (R_13) {
     FIELD_RD (text_size, 40);
     FIELD_RD (width_factor, 41);
     FIELD_RD (oblique_angle, 50);
     FIELD_RC (generation, 71);
     FIELD_RD (last_height, 42);
+    SINCE (R_11)
+      FIELD_RS (unknown, 0);
     FIELD_TFv (font_file, 64, 3);
-    //FIELD_TFv (bigfont_file, 64, 4);
-    FIELD_VALUE (is_shape)    = FIELD_VALUE (flag) & 4;
-    FIELD_VALUE (is_vertical) = FIELD_VALUE (flag) & 1;
+    SINCE (R_11)
+      FIELD_TFv (bigfont_file, 64, 4);
+    DECODER {
+      FIELD_VALUE (is_shape)    = FIELD_VALUE (flag) & 4;
+      FIELD_VALUE (is_vertical) = FIELD_VALUE (flag) & 1;
+    }
   }
-  LATER_VERSIONS
-  {
+  LATER_VERSIONS {
     FIELD_BD (text_size, 40);
     FIELD_BD (width_factor, 41); // xScale
     FIELD_BD (oblique_angle, 50);
@@ -3427,6 +3426,7 @@ DWG_OBJECT (LTYPE)
   COMMON_TABLE_FLAGS (Linetype)
 
   PRE (R_13) {
+    FIELD_RS (num_dashes, 0); // 255
     FIELD_TFv (description, 48, 3);
   }
   LATER_VERSIONS {
@@ -3436,8 +3436,15 @@ DWG_OBJECT (LTYPE)
   FIELD_RC (alignment, 72);
   FIELD_RCu (num_dashes, 73);
   DXF { FIELD_BD (pattern_len, 40); }
-  REPEAT (num_dashes, dashes, Dwg_LTYPE_dash)
-  REPEAT_BLOCK
+  PRE (R_13)
+  {
+    FIELD_RD (pattern_len, 40);
+    FIELD_VECTOR_N (dashes_r11, RD, 12, 340);
+  }
+  SINCE (R_13)
+  {
+    REPEAT (num_dashes, dashes, Dwg_LTYPE_dash)
+    REPEAT_BLOCK
       SUB_FIELD_BD (dashes[rcount1],length, 49);
       DXF {
         SUB_FIELD_BS (dashes[rcount1],shape_flag, 74);
@@ -3471,15 +3478,14 @@ DWG_OBJECT (LTYPE)
         }
       }
       SET_PARENT_OBJ (dashes[rcount1]);
-  END_REPEAT_BLOCK
-  END_REPEAT (dashes);
-
-  UNTIL (R_2004) {
-    JSON {
-      if (FIELD_VALUE (has_strings_area))
-        FIELD_BINARY (strings_area, 256, 0);
-    }
-    else {
+    END_REPEAT_BLOCK
+    END_REPEAT (dashes);
+    
+    UNTIL (R_2004) {
+      JSON {
+        if (FIELD_VALUE (has_strings_area))
+          FIELD_BINARY (strings_area, 256, 0);
+      }
       FIELD_BINARY (strings_area, 256, 0);
       DECODER {
         unsigned int dash_i = 0;
@@ -3490,40 +3496,47 @@ DWG_OBJECT (LTYPE)
                 if (dash_i >= 256)
                   {
                     LOG_ERROR ("dashes[%u] overflow @%u", rcount1, dash_i)
-                    break;
+                      break;
                   }
                 _obj->dashes[rcount1].text = (char*)&_obj->strings_area[dash_i];
                 LOG_TRACE ("dashes[%u] @%u\n", rcount1, dash_i)
-                dash_i += strnlen (_obj->dashes[rcount1].text, 256 - dash_i) + 1;
+                  dash_i += strnlen (_obj->dashes[rcount1].text, 256 - dash_i) + 1;
               }
           }
       }
     }
-  }
-  LATER_VERSIONS {
-    if (FIELD_VALUE (has_strings_area)) {
-      FIELD_BINARY (strings_area, 512, 0);
-      DECODER {
-        unsigned int dash_i = 0;
-        for (rcount1 = 0; _obj->strings_area && rcount1 < _obj->num_dashes; rcount1++)
-          {
-            if (_obj->dashes[rcount1].shape_flag & 2)
-              {
-                if (dash_i >= 512)
-                  {
-                    LOG_ERROR ("dashes[%u] overflow @%u", rcount1, dash_i)
-                    break;
-                  }
-                _obj->dashes[rcount1].text = (char*)&_obj->strings_area[dash_i];
-                LOG_TRACE ("dashes[%u] @%u\n", rcount1, dash_i)
-                dash_i += (2 * bit_wcs2nlen ((BITCODE_TU)_obj->dashes[rcount1].text, 256 - (dash_i / 2))) + 2;
-              }
-          }
+    LATER_VERSIONS { // r2007++
+      if (FIELD_VALUE (has_strings_area)) {
+        FIELD_BINARY (strings_area, 512, 0);
+        DECODER {
+          unsigned int dash_i = 0;
+          for (rcount1 = 0; _obj->strings_area && rcount1 < _obj->num_dashes;
+               rcount1++)
+            {
+              if (_obj->dashes[rcount1].shape_flag & 2)
+                {
+                  if (dash_i >= 512)
+                    {
+                      LOG_ERROR ("dashes[%u] overflow @%u", rcount1, dash_i)
+                        break;
+                    }
+                  _obj->dashes[rcount1].text
+                    = (char *)&_obj->strings_area[dash_i];
+                  LOG_TRACE ("dashes[%u] @%u\n", rcount1, dash_i)
+                    dash_i
+                    += (2
+                        * bit_wcs2nlen ((BITCODE_TU)_obj->dashes[rcount1].text,
+                                        256 - (dash_i / 2)))
+                    + 2;
+                }
+            }
+        }
       }
     }
-  }
+  } // r13
 
   START_OBJECT_HANDLE_STREAM;
+
 DWG_OBJECT_END
 
 // (58) : Unknown

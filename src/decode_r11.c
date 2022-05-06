@@ -285,18 +285,20 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   flag = bit_read_RC (dat);                                                   \
   name = bit_read_TF (dat, 32);                                               \
   _obj = dwg_add_##token (dwg, (const char *)name);                           \
-  free (name);                                                                \
   obj = dwg_obj_generic_to_object (_obj, &error);                             \
   _ctrl->entries[i] = dwg_add_handleref (dwg, 2, obj->handle.value, obj);     \
   obj->size = tbl->size;                                                      \
   obj->address = pos;                                                         \
   _obj->flag = flag;                                                          \
-  LOG_TRACE ("\n-- table entry " #token " [%d]: 0x%lx\n", i, pos)
+  LOG_TRACE ("\n-- table entry " #token " [%d]: 0x%lx\n", i, pos);            \
+  LOG_TRACE ("flag: %u [RC 70]\n", flag);                                     \
+  LOG_TRACE ("name: \"%s\" [TF 32 2]\n", name);                               \
+  free (name)
 
 #define CHK_ENDPOS                                                            \
   SINCE (R_11) {                                                              \
     BITCODE_RS crc16 = bit_read_RS (dat);                                     \
-    LOG_TRACE ("crc16: %X\n", crc16);                                         \
+    LOG_TRACE ("crc16: %04X\n", crc16);                                       \
   }                                                                           \
   pos = tbl->address + (long)((i + 1) * tbl->size);                           \
   if (pos != dat->byte)                                                       \
@@ -321,9 +323,11 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             flag = bit_read_RC (dat);
             name = bit_read_TF (dat, 32);
             _obj = dwg_add_BLOCK_HEADER (dwg, (const char *)name);
-            free (name);
             _obj->flag = flag;
             LOG_TRACE ("\n-- table entry BLOCK_HEADER [%d]: 0x%lx\n", i, pos);
+            LOG_TRACE ("flag: %u [RC 70]\n", flag);
+            LOG_TRACE ("name: \"%s\" [TF 32 2]\n", name);
+            free (name);
             obj = dwg_obj_generic_to_object (_obj, &error);
             if (obj)
               {
@@ -360,6 +364,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             Bit_Chain *str_dat = dat;
             PREP_TABLE (LAYER);
             FIELD_CMC (color, 62); // off if negative
+            FIELD_RS (linewt, 370);
             FIELD_HANDLE (ltype, 2, 6);
             CHK_ENDPOS;
           }
@@ -375,9 +380,11 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             FIELD_RD (oblique_angle, 50);
             FIELD_RC (generation, 71);
             FIELD_RD (last_height, 42);
-            FIELD_TFv (font_file, 64, 3);    // 8ed
-            //SINCE (R_13)
-            //  FIELD_TFv (bigfont_file, 64, 4); // 92d
+            SINCE (R_11)
+              FIELD_RS (unknown, 0);
+            FIELD_TFv (font_file, 64, 3)    // 8ed
+            SINCE (R_11)
+              FIELD_TFv (bigfont_file, 64, 4); // 92d
             CHK_ENDPOS;
           }
       break;
@@ -386,14 +393,18 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       {
         for (i = 0; i < tbl->number; i++)
           {
+            Bit_Chain abs_dat = *dat;
+            bit_reset_chain (dat);
             PREP_TABLE (LTYPE);
+            FIELD_RS (unknown_r11, 0); // 255
             FIELD_TFv (description, 48, 3);
             FIELD_RC (alignment, 72);
-            FIELD_RC (num_dashes, 73);
-            FIELD_VECTOR (dashes_r11, RD, num_dashes, 340);
-            // ... 106 byte
-            // 3, 40, 49, 74, 75, 340, 46, 50, 44, 45, 9
-
+            FIELD_RCu (num_dashes, 73); //
+            FIELD_RD (pattern_len, 40); // ??
+            FIELD_VECTOR_N (dashes_r11, RD, 12, 340);
+            pos = dat->byte;
+            *dat = abs_dat;
+            dat->byte += pos;
             CHK_ENDPOS;
           }
       }
@@ -837,8 +848,8 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   PRE (R_11) {
     return error;
   }
-  // auxheader? only since r11 (AC1009)
-  LOG_TRACE ("@0x%lx\n", dat->byte);
+  // only since r11 (AC1009)
+  LOG_TRACE ("AUXHEADER: @0x%lx\n", dat->byte);
   // 36 byte: 9x long
   rl1 = bit_read_RL (dat);
   rl2 = bit_read_RL (dat);

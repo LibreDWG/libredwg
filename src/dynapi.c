@@ -8512,11 +8512,13 @@ static const Dwg_DYNAPI_field _dwg_LTYPE_fields[] = {
   { "dashes",	"Dwg_LTYPE_dash*", sizeof (Dwg_LTYPE_dash*),  OFF (struct _dwg_object_LTYPE, dashes),
     1,1,0, 0 },
   { "dashes_r11",	"RD*", sizeof (BITCODE_RD*),  OFF (struct _dwg_object_LTYPE, dashes_r11),
-    1,1,0, 0 },
+    1,1,0, 340 },
   { "has_strings_area",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_LTYPE, has_strings_area),
     0,0,0, 0 },
   { "strings_area",	"TF", sizeof (BITCODE_TF),  OFF (struct _dwg_object_LTYPE, strings_area),
     1,1,0, 0 },
+  { "unknown_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_LTYPE, unknown_r11),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_LTYPE_CONTROL: (sorted by offset) */
@@ -9651,6 +9653,8 @@ static const Dwg_DYNAPI_field _dwg_STYLE_fields[] = {
     1,1,1, 3 },
   { "bigfont_file",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_STYLE, bigfont_file),
     1,1,1, 4 },
+  { "unknown",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_STYLE, unknown),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_STYLE_CONTROL: (sorted by offset) */

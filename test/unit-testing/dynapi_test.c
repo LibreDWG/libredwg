@@ -50794,6 +50794,21 @@ static int test_LTYPE (const Dwg_Object *obj)
         fail ("LTYPE.strings_area [TF]");
   }
   {
+    BITCODE_RS unknown_r11;
+    if (dwg_dynapi_entity_value (ltype, "LTYPE", "unknown_r11", &unknown_r11, NULL)
+        && unknown_r11 == ltype->unknown_r11)
+      pass ();
+    else
+      fail ("LTYPE.unknown_r11 [RS] %hu != %hu", ltype->unknown_r11, unknown_r11);
+    unknown_r11++;
+    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "unknown_r11", &unknown_r11, 0)
+        && unknown_r11 == ltype->unknown_r11)
+      pass ();
+    else
+      fail ("LTYPE.unknown_r11 [RS] set+1 %hu != %hu", ltype->unknown_r11, unknown_r11);
+    ltype->unknown_r11--;
+  }
+  {
     BITCODE_RS used;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "used", &used, NULL)
         && used == ltype->used)
@@ -57640,6 +57655,21 @@ static int test_STYLE (const Dwg_Object *obj)
     else
       fail ("STYLE.text_size [BD] set+1 %g != %g", style->text_size, text_size);
     style->text_size--;
+  }
+  {
+    BITCODE_RS unknown;
+    if (dwg_dynapi_entity_value (style, "STYLE", "unknown", &unknown, NULL)
+        && unknown == style->unknown)
+      pass ();
+    else
+      fail ("STYLE.unknown [RS] %hu != %hu", style->unknown, unknown);
+    unknown++;
+    if (dwg_dynapi_entity_set_value (style, "STYLE", "unknown", &unknown, 0)
+        && unknown == style->unknown)
+      pass ();
+    else
+      fail ("STYLE.unknown [RS] set+1 %hu != %hu", style->unknown, unknown);
+    style->unknown--;
   }
   {
     BITCODE_RS used;

@@ -2412,6 +2412,7 @@ typedef struct _dwg_object_STYLE
   BITCODE_BD last_height;
   BITCODE_T font_file;
   BITCODE_T bigfont_file;
+  BITCODE_RS unknown;
 } Dwg_Object_STYLE;
 
 /* 54 and 55 are UNKNOWN OBJECTS */
@@ -2453,9 +2454,10 @@ typedef struct _dwg_object_LTYPE
   BITCODE_RC alignment;
   BITCODE_RC num_dashes;
   Dwg_LTYPE_dash* dashes;
-  BITCODE_RD* dashes_r11;
+  BITCODE_RD* dashes_r11; // always 12
   BITCODE_B has_strings_area; /* if some shape_flag & 4 (ODA bug) */
   BITCODE_TF strings_area;
+  BITCODE_RS unknown_r11; // always 255
 } Dwg_Object_LTYPE;
 
 /* 58 and 59 are UNKNOWN OBJECTS */

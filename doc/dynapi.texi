@@ -10272,11 +10272,13 @@ RC,	DXF 73
 @item dashes
 Dwg_LTYPE_dash*
 @item dashes_r11
-RD*
+RD*,	DXF 340
 @item has_strings_area
 B
 @item strings_area
 TF
+@item unknown_r11
+RS
 
 @end vtable
 @end indentedblock
@@ -11706,6 +11708,8 @@ BD,	DXF 42
 T,	DXF 3
 @item bigfont_file
 T,	DXF 4
+@item unknown
+RS
 
 @end vtable
 @end indentedblock
