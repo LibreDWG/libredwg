@@ -6224,12 +6224,13 @@ EXPORT dwg_class *dwg_get_class (const dwg_data *dwg, unsigned int index);
    Exceptions are dxfname (there exists a seperate dxfname_u variant),
    the VX name, which does not exists anymore since r2000.
 
-   When writing DWG, a version of R_2000 is recommended, only R_13 - R-2000
+   When writing DWG, a version of R_2000 is recommended, only R_2 - R-2000
    are supported yet. For DXF you can try all versions >= R_13.
  */
 
-EXPORT Dwg_Data *dwg_add_Document (const Dwg_Version_Type version,
+EXPORT Dwg_Data *dwg_new_Document (const Dwg_Version_Type version,
                                    const int imperial, const int loglevel);
+EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial);
 
 /* Convert UTF-8 strings to BITCODE_T fields. Returns a copy of the string. */
 EXPORT BITCODE_T dwg_add_u8_input (Dwg_Data *restrict dwg,

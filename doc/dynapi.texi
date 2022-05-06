@@ -687,11 +687,11 @@ RL
 RL
 @item circle_zoom_percent
 RS
+@item dwg_size
+RL
 @item layer_colors[128]
 RS
-@item num_bytes
-RL
-@item num_entities
+@item numentities
 RS
 @item oldCECOLOR_hi
 RL
@@ -8777,7 +8777,7 @@ BLOCK_HEADER is a table object.
 @item parent
 struct _dwg_object_object*
 @item flag
-RC,	DXF 70
+RC
 @item name
 TV
 @item used
@@ -8838,6 +8838,10 @@ H
 H*,	DXF 331
 @item layout
 H,	DXF 340
+@item unknown_r11
+RS
+@item unknown1_r11
+RS
 
 @end vtable
 @end indentedblock
@@ -10028,8 +10032,6 @@ B,	DXF 290
 RC,	DXF 370
 @item color
 CMC,	DXF 62
-@item color_r11
-int16_t,	DXF 62
 @item plotstyle
 H,	DXF 390
 @item material
@@ -15830,7 +15832,7 @@ BL
 @item color
 CMC,	DXF 62
 @item color_r11
-RC,	DXF 62
+RCd,	DXF 62
 @item dwg
 struct _dwg_struct*
 @item edge_visualstyle

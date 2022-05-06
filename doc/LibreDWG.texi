@@ -14,7 +14,7 @@
 @copying
 This manual is for GNU LibreDWG (version @value{VERSION}, @value{UPDATED}).
 
-Copyright @copyright{} 2010-2020 Free Software Foundation, Inc.
+Copyright @copyright{} 2010-2022 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -478,6 +478,7 @@ native fallback types int/long, which are different across platforms.
 * Signature::         Signature Section
 * INFO::              The info of all used sections
 * SYSTEM_MAP::        The map of all used sections and its chunked pages
+* Tables::            How the old tables are mapped into the new objects
 @end menu
 
 The r2000 format (used for r13-r2000) knows the following 6 sections:
@@ -514,7 +515,7 @@ The r2004 and r2007 format (used for r2004-r2018) knows the following sections:
     SYSTEM_MAP
 
 The old pre-R13 formats (from r1.1 to r11) have no objects and sections,
-but the 5 tables:
+but the 5 @ref{Tables}:
 
     BLOCKS
     LAYER
@@ -529,6 +530,8 @@ With r11 came the additional tables:
     APPID
     DIMSTYLE
     VX
+
+@xref{Tables}.
 
 @node HEADER_
 @section HEADER Section
@@ -685,6 +688,40 @@ The info of all used sections.
 @section SYSTEM_MAP
 
 The map of all used sections and its chunked pages.
+
+@node Tables
+@section Tables
+@cindex Tables
+
+The old pre-R13 formats (from r1.1 to r11) have no objects and no sections,
+just tables, which we store in the sections indexed by the enum
+@b{Dwg_Section_Type_r11}.
+
+    BLOCKS
+    LAYER
+    STYLE
+    LTYPE
+    VIEW
+
+With r11 came the additional tables:
+
+    UCS
+    VPORT
+    APPID
+    DIMSTYLE
+    VX
+
+Since r13 all those tables are stored as table control objects and
+tablerecord objects.
+
+From pre-r13 DWG's these tables are imported as old r11 sections and
+as new CONTROL objects, so that all entities are accessable via the
+single BLOCK_CONTROL.model_space -> BLOCK_HEADER.entities iterator,
+all layers via the LAYER_CONTROL.entries -> LAYER objects, and so on.
+All blocks are accessed via all other model_space BLOCK_HEADER's,
+@code{get_first_owned_block (BLOCK_HEADER)}.  Each CONTROL object
+holds a list of all table records, i.e. entries.  Each table record
+entry has a name and other common table fields.
 
 @node Structures
 @chapter Structures
@@ -1148,6 +1185,12 @@ import it back in. @xref{Programs, dwgfilter, Programs: dwgfilter}. JSON is much
 
 The current first level objects are all the section names, like
 ``HEADER'', ``CLASSES'', ``OBJECTS''. For more see the specs.
+
+Note that for the versions before R13 we convert all tables to table
+control and record objects internally, which does not reflect the DWG and DXF
+structure fully.  But we can easier use our iterators needed for DXF
+support. @xref{Tables}.
+
 
 @node GeoJSON
 @subsection GeoJSON

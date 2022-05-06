@@ -680,6 +680,36 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_UNKNOWN_OBJ  = 0xffff,
 } Dwg_Object_Type;
 
+typedef enum DWG_OBJECT_TYPE_R11
+{
+  DWG_TYPE_UNUSED_R11 = 0, // i.e. all the added table or iterator objects (mspace block)
+  DWG_TYPE_LINE_R11 = 1,
+  DWG_TYPE_POINT_R11 = 2,
+  DWG_TYPE_CIRCLE_R11 = 3,
+  DWG_TYPE_SHAPE_R11 = 4,
+  DWG_TYPE_REPEAT_R11 = 5,
+  DWG_TYPE_ENDREP_R11 = 6,
+  DWG_TYPE_TEXT_R11 = 7,
+  DWG_TYPE_ARC_R11 = 8,
+  DWG_TYPE_TRACE_R11 = 9,
+  DWG_TYPE_LOAD_R11 = 10,
+  DWG_TYPE_SOLID_R11 = 11,
+  DWG_TYPE_BLOCK_R11 = 12,
+  DWG_TYPE_ENDBLK_R11 = 13,
+  DWG_TYPE_INSERT_R11 = 14, // includes also MINSERT
+  DWG_TYPE_ATTDEF_R11 = 15,
+  DWG_TYPE_ATTRIB_R11 = 16,
+  DWG_TYPE_SEQEND_R11 = 17,
+  DWG_TYPE_PLINE_R11 = 18,
+  DWG_TYPE_POLYLINE_R11 = 19, // also mesh/pfaces
+  DWG_TYPE_VERTEX_R11 = 20,   // also mesh/pface vertices
+  DWG_TYPE_3DLINE_R11 = 21,
+  DWG_TYPE_3DFACE_R11 = 22,
+  DWG_TYPE_DIMENSION_R11 = 23, // all types
+  DWG_TYPE_VIEWPORT_R11 = 24,
+  DWG_TYPE_UNKNOWN_R11 = 25,
+} Dwg_Object_Type_r11;
+
 /**
  Error codes returned.
  */
@@ -1214,8 +1244,8 @@ typedef struct _dwg_header_variables {
   BITCODE_BS unknown_55;
   BITCODE_BS unknown_56;
   BITCODE_BS unknown_57;
-  BITCODE_RL num_bytes;    /* -r1.40 */
-  BITCODE_RS num_entities; /* r2.0 - r10 */
+  BITCODE_RL dwg_size;     /* -r1.40 */
+  BITCODE_RS numentities;  /* r2.0 - r10 */
   BITCODE_RS circle_zoom_percent;
   BITCODE_RC unknown_58;
   BITCODE_RC unknown_59;
@@ -2307,6 +2337,8 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_H endblk_entity;
   BITCODE_H* inserts;
   BITCODE_H layout;
+  BITCODE_RS unknown_r11;
+  BITCODE_RS unknown1_r11;
 } Dwg_Object_BLOCK_HEADER;
 
 /**
@@ -2338,7 +2370,6 @@ typedef struct _dwg_object_LAYER
   BITCODE_B plotflag;
   BITCODE_RC linewt;
   BITCODE_CMC color;
-  int16_t   color_r11;    /* preR13, needs to be signed */
   BITCODE_H plotstyle;    /* DXF 390 */
   BITCODE_H material;     /* DXF 347 */
   BITCODE_H ltype;        /* DXF 6 */
@@ -8168,7 +8199,7 @@ typedef struct _dwg_object_entity
   BITCODE_RC flag_r11;
   BITCODE_RS opts_r11;
   BITCODE_RC extra_r11;
-  BITCODE_RC color_r11;
+  BITCODE_RCd color_r11;
   BITCODE_RD elevation_r11; // TODO: move to the entities
   BITCODE_RD thickness_r11; // TODO: move to the entities
   // TODO handling_r11; */
@@ -8580,6 +8611,7 @@ typedef enum DWG_SECTION_TYPE_R11 /* tables */
   SECTION_STYLE = 3,
   SECTION_LTYPE = 5,
   SECTION_VIEW  = 6,
+  // since r11:
   SECTION_UCS   = 7,
   SECTION_VPORT = 8,
   SECTION_APPID = 9,
@@ -8887,7 +8919,7 @@ typedef struct _dwg_header
   BITCODE_RC is_maint;
   BITCODE_RC zero_one_or_three;
   BITCODE_RS unknown_3;         /* < R13, always 3 */
-  BITCODE_RS num_header_vars;   /* < R13 */
+  BITCODE_RS numheader_vars;    /* < R13 */
   BITCODE_RL thumbnail_address; /* THUMBNAIL or AdDb:Preview */
   BITCODE_RC dwg_version;
   BITCODE_RC maint_version;
@@ -8900,7 +8932,7 @@ typedef struct _dwg_header
   BITCODE_RL summaryinfo_address; /* R2004+ */
   BITCODE_RL vbaproj_address;     /* R2004+ */
   BITCODE_RL r2004_header_address; /* R2004+ */
-  BITCODE_RL num_sections;
+  BITCODE_RL numsections;
   Dwg_Section *section;
   Dwg_Section_InfoHdr section_infohdr; /* R2004+ */
   Dwg_Section_Info *section_info;

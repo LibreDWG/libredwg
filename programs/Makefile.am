@@ -96,10 +96,10 @@ endif
 endif
 
 EXTRA_DIST  = suffix.inc escape.h geom.h common.inc $(TESTS) cmp_dxf.pl
-CLEANFILES  = {example_,sample_}*.{bmp,ps,svg,dxf,log}
+CLEANFILES  = {example_,sample_,entities_,ACEB10_r11}*.{bmp,ps,svg,dxf,log,json}
 if USE_WRITE
-CLEANFILES += {example_,sample_}*rewrite.{dwg,log}
-CLEANFILES += {example_,sample_}*.dwg
+CLEANFILES += {example_,sample_,entities_,ACEB10_r11}*rewrite.{dwg,log}
+CLEANFILES += {example_,sample_,entities_,ACEB10_r11}*.dwg
 CLEANFILES += example_*.{log1,log2}
 endif
 MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i *.ii *.log

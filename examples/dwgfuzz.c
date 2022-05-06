@@ -528,7 +528,7 @@ int dwg_fuzz_dat (Dwg_Data **restrict dwgp, Bit_Chain *restrict dat)
   if (!i || version < R_13 || version >= R_AFTER)
     version = R_2000;
 
-  dwg = dwg_add_Document (version, imperial, 0);
+  dwg = dwg_new_Document (version, imperial, 0);
   *dwgp = dwg;
   mspace = dwg_model_space_object (dwg);
   mspace_ref = dwg_model_space_ref (dwg);

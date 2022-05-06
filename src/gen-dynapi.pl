@@ -182,6 +182,7 @@ $ENT{DIMSTYLE}->{name} = 'T';
 $SUBCLASSES{DIMENSION_common} = [ qw(AcDbDimension) ];
 $SUBCLASSES{ACTION_3DSOLID} = [ qw(AcDbModelerGeometry AcDb3dSolid) ];
 $SUBCLASSES{TABLECONTENTs} = [ qw( AcDbLinkedTableData AcDbFormattedTableData AcDbTableContent) ];
+$SUBCLASSES{PROXY_OBJECT} = [ qw( AcDbZombieObject) ];
 #$ENT{LTYPE}->{strings_area} = 'TF';
 close $in;
 my @old;
@@ -556,6 +557,8 @@ $n = 'object_object';
 $DXF{$n}->{'ownerhandle'} = 330;
 $DXF{$n}->{'xdicobjhandle'} = 360;
 $DXF{$n}->{'reactors'} = 330;
+# $DXF{$n}->{'flag'} = 70;
+# $DXF{$n}->{'name'} = 2;
 
 $n = 'summaryinfo';
 dxfin_spec "$srcdir/summaryinfo.spec";

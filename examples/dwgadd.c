@@ -622,7 +622,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
 
   if (initial)
     {
-      dwg = dwg_add_Document (version, imperial, 0);
+      dwg = dwg_new_Document (version, imperial, 0);
       *dwgp = dwg;
     }
   else if (!dwg)

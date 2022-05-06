@@ -2,6 +2,7 @@
 #include "config.h"
 #include "bits.h"
 #include "common.h"
+#include "decode_r11.h"
 #include <string.h>
 #include <stdlib.h>
 #include "tests_common.h"

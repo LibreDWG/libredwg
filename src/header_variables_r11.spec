@@ -24,9 +24,9 @@
     FIELD_CAST (PLINEGEN, RS, B, 70); //ok
   } else {
     PRE (R_2_0)
-      FIELD_RL (num_bytes, 0);
+      FIELD_RL (dwg_size, 0);
     PRE (R_10)
-      FIELD_RS (num_entities, 0);
+      FIELD_RS (numentities, 0);
   }
   FIELD_3RD (EXTMIN, 10);
   FIELD_3RD (EXTMAX, 10);
@@ -104,6 +104,10 @@
   FIELD_HANDLE (TEXTSTYLE, 2, 7);
   FIELD_CAST (OSMODE, RS, BL, 70);
   FIELD_RS (ATTMODE, 70);
+  DECODER {
+    if (FIELD_VALUE (MENU)) // already created by add_Document
+      free (FIELD_VALUE (MENU));
+  }
   FIELD_TFv (MENU, 15, 1);
   FIELD_RD (DIMSCALE, 40); //ok 0x1a3
   FIELD_RD (DIMASZ, 40); //ok
@@ -124,7 +128,7 @@
   FIELD_RC (DIMSE1, 70); //ok
   FIELD_RC (DIMSE2, 70); //ok
   FIELD_CAST (DIMTAD, RC, RS, 70); //ok
-  if (dwg->header.num_header_vars <= 74)
+  if (dwg->header.numheader_vars <= 74)
     return 0;
   FIELD_RC (LIMCHECK, 70); //ok 1fa
 
@@ -145,7 +149,7 @@
   dat->byte = 0x2e1;
   FIELD_RS (unknown_18, 0);
   FIELD_CAST (BLIPMODE, RS, B, 70);
-  if (dwg->header.num_header_vars <= 83) // PRE(R_2_21)
+  if (dwg->header.numheader_vars <= 83) // PRE(R_2_21)
      return 0;
   FIELD_CAST (DIMZIN, RC, B, 70); //ok
   FIELD_RD (DIMRND, 40);
@@ -154,12 +158,7 @@
   FIELD_RS (circle_zoom_percent, 0);
   FIELD_RS (COORDS, 0);
   FIELD_RS (CECOLOR.index, 62);
-  DECODER {
-    _obj->CELTYPE = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
-    // 6, ff for BYLAYER, fe for BYBLOCK
-    _obj->CELTYPE->absolute_ref = (BITCODE_RL)bit_read_RS (dat);
-    LOG_TRACE ("CELTYPE: %lu [long 6]\n", _obj->CELTYPE->absolute_ref)
-  }
+  FIELD_HANDLE (CELTYPE, 2, 6); // ff for BYLAYER, fe for BYBLOCK
   FIELD_TIMERLL (TDCREATE, 40);
   FIELD_TIMERLL (TDUPDATE, 40);
   FIELD_TIMERLL (TDINDWG, 40);
@@ -175,12 +174,12 @@
   dat->byte = 0x353;
   FIELD_RD (ANGBASE, 50);
   FIELD_CAST (ANGDIR, RS, B, 70);
-  if (dwg->header.num_header_vars <= 101)
+  if (dwg->header.numheader_vars <= 101)
     return 0;
   FIELD_RS (PDMODE, 70);
   FIELD_RD (PDSIZE, 40);
   FIELD_RD (PLINEWID, 40);
-  if (dwg->header.num_header_vars <= 104)
+  if (dwg->header.numheader_vars <= 104)
     return 0;
 
   /* TODO Signed */
@@ -195,7 +194,7 @@
   FIELD_RD (USERR3, 40);
   FIELD_RD (USERR4, 40);
   FIELD_RD (USERR5, 40);
-  if (dwg->header.num_header_vars <= 114)
+  if (dwg->header.numheader_vars <= 114)
     return 0;
   FIELD_RC (DIMALT, 70); //ok
   FIELD_CAST (DIMALTD, RC, RS, 70); //ok
@@ -203,11 +202,11 @@
   FIELD_RC (DIMSHO, 70); //ok
   FIELD_TFv (DIMPOST, 16, 1);
   FIELD_TFv (DIMAPOST, 16, 1);
-  if (dwg->header.num_header_vars <= 120)
+  if (dwg->header.numheader_vars <= 120)
     return 0;
   FIELD_RD (DIMALTF, 40);
   FIELD_RD (DIMLFAC, 40);
-  if (dwg->header.num_header_vars <= 122)
+  if (dwg->header.numheader_vars <= 122)
     return 0;
   FIELD_RS (SPLINESEGS, 70);
   FIELD_CAST (SPLFRAME, RS, B, 70);
@@ -216,7 +215,7 @@
   FIELD_RD (CHAMFERA, 40);
   FIELD_RD (CHAMFERB, 40);
   FIELD_CAST (MIRRTEXT, RS, B, 70);
-  if (dwg->header.num_header_vars <= 129)
+  if (dwg->header.numheader_vars <= 129)
     return 0;
 
   /* Skip table UCS (0x3ef-0x3f9) */
@@ -249,6 +248,9 @@
     _obj->HANDSEED->absolute_ref = (BITCODE_RL)bit_read_RS (dat);
     LOG_TRACE ("HANDSEED: %lX [RS 5]\n", _obj->HANDSEED->absolute_ref)
   }
+  FREE {
+    free (_obj->HANDSEED);
+  }
   DEBUG_HERE
 
   dat->byte = 0x4f6;
@@ -265,14 +267,14 @@
   FIELD_RS (SPLINETYPE, 70);
   FIELD_RS (UCSICON, 0);
   FIELD_RS (unknown_59, 0); // ff ff
-  if (dwg->header.num_header_vars <= 158) // r10
+  if (dwg->header.numheader_vars <= 158) // r10
     return 0;
 
   /* Skip table APPID (0x512-0x51b) */
   dat->byte = 0x51c;
 
   FIELD_CAST (WORLDVIEW, RS, B, 70);
-  if (dwg->header.num_header_vars <= 160) // r10
+  if (dwg->header.numheader_vars <= 160) // r10
     return 0;
   FIELD_RS (unknown_51e, 0);
   FIELD_RS (unknown_520, 0);
@@ -321,7 +323,7 @@
   FIELD_RS (MAXACTVP, 70); //ok
   FIELD_RD (DIMGAP, 40);   //ok
   FIELD_RD (PELEVATION, 40); //ok
-  if (dwg->header.num_header_vars <= 204)
+  if (dwg->header.numheader_vars <= 204)
     return 0;
   FIELD_CAST (VISRETAIN, RS, B, 70); //ok
 

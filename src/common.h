@@ -292,10 +292,11 @@ typedef enum DWG_SENTINEL
   DWG_SENTINEL_CLASS_BEGIN,
   DWG_SENTINEL_CLASS_END,
   DWG_SENTINEL_SECOND_HEADER_BEGIN,
-  DWG_SENTINEL_SECOND_HEADER_END
+  DWG_SENTINEL_SECOND_HEADER_END,
+  DWG_SENTINEL_R11_HEADER_END
 } Dwg_Sentinel;
 
-unsigned char *dwg_sentinel (Dwg_Sentinel sentinel);
+unsigned char *dwg_sentinel (const Dwg_Sentinel sentinel);
 // used by unit-tests
 EXPORT char *strrplc (const char *s, const char *from, const char *to);
 
@@ -364,5 +365,11 @@ Dwg_Version_Type dwg_version_hdr_type2 (const char *hdr, unsigned dwg_version);
 
 // converts TIMEBLL to struct tm. useful for asctime(tm) or strftime
 struct tm * cvt_TIMEBLL (struct tm *tm, BITCODE_TIMEBLL date);
+
+/* Exported functions not in the API */
+const char *
+dwg_ref_tblname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref);
+const char *
+dwg_ref_objname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref);
 
 #endif

@@ -23,6 +23,7 @@
 
 #include "bits.h"
 #include "dwg.h"
+#include "decode_r11.h"
 
 #ifdef IN_DXF_H
 #error in_dxf.h must be included after decode.h because of FORMAT_BD
@@ -39,13 +40,16 @@ Dwg_Object_Ref *dwg_find_objectref (const Dwg_Data *restrict dwg,
 void decode_BACKGROUND_type (const Dwg_Object *obj);
 
 /*------------------------------------------------------------------------------
+ * Functions reused with decode_r11
+ */
+int dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj);
+
+/*------------------------------------------------------------------------------
  * Functions reused with decode_r2007
  */
 Dwg_Object_Ref *dwg_decode_handleref (Bit_Chain *restrict hdl_dat,
                                       Dwg_Object *restrict obj,
                                       Dwg_Data *restrict dwg);
-Dwg_Object_Ref *dwg_decode_preR13_handleref (Bit_Chain *restrict dat,
-                                             int size);
 Dwg_Object_Ref *dwg_decode_handleref_with_code (Bit_Chain *restrict hdl_dat,
                                                 Dwg_Object *restrict obj,
                                                 Dwg_Data *restrict dwg,
@@ -93,6 +97,13 @@ int read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
 void section_string_stream (Dwg_Data *restrict dwg,
                             Bit_Chain *restrict dat, BITCODE_RL bitsize,
                             Bit_Chain *restrict str);
+/* for decode_r11.c */
+int decode_preR13_DIMENSION (Bit_Chain *restrict dat,
+                             Dwg_Object *restrict obj);
+int decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
+                            unsigned num_entities, BITCODE_RL size,
+                            BITCODE_RL blocks_max, Bit_Chain *restrict dat,
+                            Dwg_Data *restrict dwg);
 
 /* from dwg.c */
 // from dat.fh

@@ -538,6 +538,9 @@ DWG_ENTITY (BLOCK)
     FIELD_2RD (base_pt, 10);
     if (R11OPTS (2))
       FIELD_TV (xref_pname, 3);
+    FREE { // set via dwg_add_BLOCK
+      FIELD_TV (name, 2);
+    }
   }
   SINCE (R_13b1) {
     BLOCK_NAME (name, 2) // special pre-R13 naming rules
@@ -613,6 +616,7 @@ DWG_ENTITY (INSERT)
   VERSIONS (R_2_0b, R_11) {
     DECODER { FIELD_VALUE (has_attribs) = R11FLAG (128); }
     FIELD_HANDLE (block_header, 2, 2);
+#ifndef IS_JSON
     FIELD_2RD (ins_pt, 10);
     if (R11OPTS (1)) {
       FIELD_RD (scale.x, 41);
@@ -626,6 +630,15 @@ DWG_ENTITY (INSERT)
     if (R11OPTS (8)) {
       FIELD_RD (scale.z, 43);
     }
+#else
+    FIELD_3RD (ins_pt, 10);
+    if (R11OPTS (1|2|8)) {
+      FIELD_3RD (scale, 0);
+    }
+    if (R11OPTS (4)) {
+      FIELD_RD (rotation, 50);
+    }
+#endif
     if (R11OPTS (16)) {
       FIELD_RS (num_cols, 70);
     }
@@ -938,7 +951,11 @@ DWG_ENTITY (VERTEX_2D)
   SUBCLASS (AcDb2dVertex)
   PRE (R_13)
   {
+#ifdef IN_JSON
+    FIELD_3RD (point, 10)
+#else
     FIELD_2RD (point, 10);
+#endif
     if (R11OPTS (1))
       FIELD_RD (start_width, 40);
     if (R11OPTS (2))
@@ -1909,14 +1926,14 @@ DWG_ENTITY (SHAPE)
     FIELD_2RD (ins_pt, 0);
     FIELD_RD (scale, 40);
     FIELD_RD (rotation, 0);
-    FIELD_RSd (style_id, 0);
-  } VERSIONS (R_2_0, R_11) {
+    FIELD_RS (style_id, 0);
+  }
+  VERSIONS (R_2_0, R_11) {
     FIELD_2RD (ins_pt, 10);
     FIELD_RD (scale, 40);
     FIELD_RCu (style_id, 2);
     if (R11OPTS (1))
       FIELD_RD (rotation, 50);
-    FIELD_HANDLE (style, 1, 0);
   }
   SINCE (R_13b1) {
     FIELD_3BD (ins_pt, 10);
@@ -3110,15 +3127,18 @@ DWG_OBJECT (BLOCK_HEADER)
 
   PRE (R_13)
   {
-    FIELD_RC (flag, 70);
-    FIELD_TFv (name, 32, 2);
-    FIELD_RSd (used, 0); // -1
     FIELD_RC (block_scaling, 0);
-    FIELD_CAST (num_owned, RS, BL, 0);
-    FIELD_RCd (flag2, 0);
-    FIELD_CAST (num_inserts, RS, RL, 0);
-    FIELD_RSd (insert_units, 0);
-
+    PRE (R_11) {
+      FIELD_CAST (num_owned, RS, BL, 0);
+      FIELD_RC (flag2, 0);
+    }
+    SINCE (R_11) { // r10 not
+      FIELD_RS (unknown_r11, 0);
+      FIELD_HANDLE (block_entity, 2, 0); // index?
+      FIELD_RC (flag2, 0);
+      FIELD_RSd (used, 0);
+      FIELD_RSd (unknown1_r11, 0);
+    }
     FIELD_VALUE (anonymous)    = FIELD_VALUE (flag) & 1;
     FIELD_VALUE (hasattrs)     = FIELD_VALUE (flag) & 2;
     FIELD_VALUE (blkisxref)    = FIELD_VALUE (flag) & 4;
@@ -3193,7 +3213,7 @@ DWG_OBJECT (BLOCK_HEADER)
         HANDLE_VECTOR (entities, num_owned, 4, 0);
       }
     }
-  SINCE (R_13) {
+  IF_FREE_OR_SINCE (R_13) {
     FIELD_HANDLE (endblk_entity, 3, 0);
   }
   IF_FREE_OR_SINCE (R_2000)
@@ -3221,11 +3241,11 @@ DWG_OBJECT (LAYER)
   COMMON_TABLE_FLAGS (Layer);
   PRE (R_13)
   {
-    FIELD_RS (color_r11, 62);  // color
+    FIELD_CMC (color, 62);
     FIELD_HANDLE (ltype, 2, 6);
 
     DECODER {
-      FIELD_VALUE (on)            = FIELD_VALUE (color_r11) >= 0;
+      FIELD_VALUE (on)            = FIELD_VALUE (color.index) >= 0;
       FIELD_VALUE (frozen)        = FIELD_VALUE (flag) & 1;
       FIELD_VALUE (frozen_in_new) = FIELD_VALUE (flag) & 2;
       FIELD_VALUE (locked)        = FIELD_VALUE (flag) & 4;
@@ -3337,7 +3357,7 @@ DWG_OBJECT (STYLE)
     FIELD_RC (generation, 71);
     FIELD_RD (last_height, 42);
     FIELD_TFv (font_file, 64, 3);
-    FIELD_TFv (bigfont_file, 64, 4);
+    //FIELD_TFv (bigfont_file, 64, 4);
     FIELD_VALUE (is_shape)    = FIELD_VALUE (flag) & 4;
     FIELD_VALUE (is_vertical) = FIELD_VALUE (flag) & 1;
   }
@@ -5374,6 +5394,7 @@ DWG_OBJECT (PROXY_OBJECT)
       }
     LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
     LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
+    FIELD_VALUE (num_objids) = 0;
     dat->opts &= 0xf0;
     FIELD_TF (data, _obj->data_size, 310);
     dat->opts = opts;
@@ -5419,10 +5440,11 @@ DWG_OBJECT (PROXY_OBJECT)
       {
         Dwg_Handle hdl;
         if (bit_read_H (hdl_dat, &hdl))
-          break;
+          break; // error
         else
           _obj->num_objids++;
       }
+    LOG_TRACE ("num_objids: " FORMAT_BL "\n", _obj->num_objids);
     dat->opts = opts;
     bit_set_position (hdl_dat, pos);
   }

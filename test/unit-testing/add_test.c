@@ -137,7 +137,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       ok ("LIBREDWG_DEBUG cnt %d %s", cnt, name);
     }
 
-  dwg = dwg_add_Document (as_dxf ? R_2018 : R_2000,
+  dwg = dwg_new_Document (as_dxf ? R_2018 : R_2000,
                           0 /*metric/iso */,
                           tracelevel);
   mspace =  dwg_model_space_object (dwg);
