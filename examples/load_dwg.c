@@ -107,7 +107,7 @@ load_dwg (char *filename, unsigned int opts)
       Dwg_Entity_CIRCLE *circle;
       Dwg_Entity_TEXT *text;
 
-      switch (dwg.object[i].type)
+      switch (dwg.object[i].fixedtype)
         {
         case DWG_TYPE_LINE:
           line = dwg.object[i].tio.entity->tio.LINE;
