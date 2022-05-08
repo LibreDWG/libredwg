@@ -23419,7 +23419,7 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (POLYLINE_PFACE);
   pl = obj;
   _pl = _obj;
-  _pl->vertex = malloc ((numverts + numfaces) * sizeof (BITCODE_H));
+  _pl->vertex = malloc (((unsigned long)numverts + numfaces) * sizeof (BITCODE_H));
   if (!_pl->vertex)
     return NULL;
   _pl->has_vertex = 1;

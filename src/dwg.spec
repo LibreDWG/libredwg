@@ -6159,7 +6159,7 @@ DWG_ENTITY (TABLE)
     VALUEOUTOFBOUNDS (num_rows, 5000)
     FIELD_VECTOR (col_widths, BD, num_cols, 142);
     FIELD_VECTOR (row_heights, BD, num_rows, 141);
-    FIELD_VALUE (num_cells) = FIELD_VALUE (num_rows) * FIELD_VALUE (num_cols);
+    FIELD_VALUE (num_cells) = (unsigned long)FIELD_VALUE (num_rows) * FIELD_VALUE (num_cols);
     #define cell cells[rcount1]
     REPEAT (num_cells, cells, Dwg_TABLE_Cell)
     REPEAT_BLOCK

@@ -1889,7 +1889,7 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
                  info->name, info->num_sections, info->max_decomp_size);
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
-  if (info->size > info->num_sections * info->max_decomp_size || info->size < 0)
+  if (info->size > (int64_t)info->num_sections * (int64_t)info->max_decomp_size || info->size < 0)
     {
       LOG_ERROR ("Invalid section %s size %" PRId64 " > %u * " FORMAT_RL,
                  info->name, info->size, info->num_sections, info->max_decomp_size);
