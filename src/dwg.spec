@@ -3134,7 +3134,9 @@ DWG_OBJECT (BLOCK_HEADER)
       FIELD_RS (unknown_r11, 0);
       FIELD_HANDLE (block_entity, 2, 0); // index?
       FIELD_RC (flag2, 0);
+#ifndef IS_JSON
       FIELD_RSd (used, 0);
+#endif
       FIELD_RSd (unknown1_r11, 0);
     }
     FIELD_VALUE (anonymous)    = FIELD_VALUE (flag) & 1;
@@ -3270,7 +3272,9 @@ DWG_OBJECT (LAYER)
       FIELD_RC (linewt, 370);
     }
   }
-  FIELD_CMC (color, 62);
+  SINCE (R_13) {
+    FIELD_CMC (color, 62);
+  }
   VERSIONS (R_13, R_14) {
     DECODER { FIELD_VALUE (on) = FIELD_VALUE (color.index) >= 0; }
     FIELD_VALUE (flag) |= FIELD_VALUE (frozen) |
@@ -3424,7 +3428,9 @@ DWG_OBJECT (LTYPE)
   COMMON_TABLE_FLAGS (Linetype)
 
   PRE (R_13) {
+#ifndef IS_JSON
     FIELD_RSd (used, 0); // -1
+#endif
     FIELD_TFv (description, 48, 3);
   }
   LATER_VERSIONS {

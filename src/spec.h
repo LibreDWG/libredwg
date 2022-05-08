@@ -539,7 +539,7 @@
           FIELD_CAST (flag, RC, RC, 70);                                      \
         }                                                                     \
       FIELD_TFv (name, 32, 2);                                                \
-      FIELD_RS (used, 0);                                                     \
+      FIELD_RSd (used, 0);                                                    \
     }                                                                         \
     LATER_VERSIONS                                                            \
     {                                                                         \

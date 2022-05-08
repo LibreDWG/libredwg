@@ -1853,12 +1853,12 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                        || strEQc (f->type, "BS") || strEQc (f->type, "RL")
                        || strEQc (f->type, "BL") || strEQc (f->type, "RLL")
                        || strEQc (f->type, "BLd") || strEQc (f->type, "BSd")
-                       || strEQc (f->type, "BLL")
+                       || strEQc (f->type, "BLL") || strEQc (f->type, "RSd")
                        || strEQc (f->type, "4BITS")))
             {
               long num = json_long (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW_ERR
-                LOG_TRACE ("%s.%s: %ld [%s]\n", name, key, num, f->type);
+              LOG_TRACE ("%s.%s: %ld [%s]\n", name, key, num, f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
             }
           // TFF not yet in dynapi.c

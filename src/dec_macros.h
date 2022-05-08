@@ -389,12 +389,12 @@
   }
 #define FIELD_RSd(nam, dxf)                                                   \
   {                                                                           \
-    _obj->nam = bit_read_RS (dat);                                            \
+    _obj->nam = (BITCODE_RSd)bit_read_RS (dat);                               \
     LOG_TRACE (#nam ": " FORMAT_RSd " [RSd %d]\n", _obj->nam, dxf);           \
   }
 #define FIELD_BSd(nam, dxf)                                                   \
   {                                                                           \
-    _obj->nam = bit_read_BS (dat);                                            \
+    _obj->nam = (BITCODE_BSd)bit_read_BS (dat);                               \
     LOG_TRACE (#nam ": " FORMAT_BSd " [BSd %d]\n", _obj->nam, dxf);           \
   }
 #define SUB_FIELD_BSd(o, nam, dxf)                                            \
@@ -409,7 +409,7 @@
   }
 #define FIELD_RLd(nam, dxf)                                                   \
   {                                                                           \
-    _obj->nam = bit_read_RL (dat);                                            \
+    _obj->nam = (BITCODE_RLd)bit_read_RL (dat);                               \
     LOG_TRACE (#nam ": " FORMAT_RLd " [RLd %d]\n", _obj->nam, dxf);           \
   }
 #define FIELD_RC(nam, dxf)                                                    \
@@ -434,7 +434,7 @@
   }
 #define FIELD_RCd(nam, dxf)                                                   \
   {                                                                           \
-    _obj->nam = bit_read_RC (dat);                                            \
+    _obj->nam = (BITCODE_RCd)bit_read_RC (dat);                               \
     LOG_TRACE (#nam ": %d [RC %d]\n", (int)((signed char)_obj->nam), dxf);    \
   }
 #define FIELD_RS(nam, dxf) FIELDG (nam, RS, dxf)
