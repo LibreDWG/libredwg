@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009-2019 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2009-2022 Free Software Foundation, Inc.                   */
 /*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
@@ -156,11 +156,11 @@ create_postscript (Dwg_Data *dwg, char *output)
   for (i = 0; i < dwg->num_objects; i++)
     {
       Dwg_Object *obj = &dwg->object[i];
-      if (obj->type == DWG_SUPERTYPE_OBJECT) // no entity
+      if (obj->supertype == DWG_SUPERTYPE_OBJECT) // no entity
         continue;
       // if (obj->tio.entity->entity_mode == 0) // belongs to block
       //  continue;
-      if (obj->type == DWG_TYPE_LINE)
+      if (obj->fixedtype == DWG_TYPE_LINE)
         {
           Dwg_Entity_LINE *line = obj->tio.entity->tio.LINE;
           BITCODE_3DPOINT start, end;
@@ -171,7 +171,7 @@ create_postscript (Dwg_Data *dwg, char *output)
           PS_lineto (ps, (float)end.x, (float)end.y);
           PS_stroke (ps);
         }
-      else if (obj->type == DWG_TYPE_POLYLINE_2D)
+      else if (obj->fixedtype == DWG_TYPE_POLYLINE_2D)
         {
           int error;
           BITCODE_RL j,
@@ -202,7 +202,7 @@ create_postscript (Dwg_Data *dwg, char *output)
               free (pts);
             }
         }
-      else if (obj->type == DWG_TYPE_LWPOLYLINE)
+      else if (obj->fixedtype == DWG_TYPE_LWPOLYLINE)
         {
           int error;
           Dwg_Entity_LWPOLYLINE *pline = obj->tio.entity->tio.LWPOLYLINE;
@@ -234,7 +234,7 @@ create_postscript (Dwg_Data *dwg, char *output)
               free (pts);
             }
         }
-      else if (obj->type == DWG_TYPE_ARC)
+      else if (obj->fixedtype == DWG_TYPE_ARC)
         {
           Dwg_Entity_ARC *arc = obj->tio.entity->tio.ARC;
           BITCODE_3DPOINT center;
@@ -243,7 +243,7 @@ create_postscript (Dwg_Data *dwg, char *output)
                   (float)arc->radius, (float)arc->start_angle,
                   (float)arc->end_angle);
         }
-      else if (obj->type == DWG_TYPE_CIRCLE)
+      else if (obj->fixedtype == DWG_TYPE_CIRCLE)
         {
           Dwg_Entity_CIRCLE *circle = obj->tio.entity->tio.CIRCLE;
           BITCODE_3DPOINT center;
