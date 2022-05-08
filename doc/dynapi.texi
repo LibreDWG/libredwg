@@ -5575,7 +5575,7 @@ RC
 @item name
 TV
 @item used
-RS
+RSd
 @item is_xref_ref
 B
 @item is_xref_resolved
@@ -8781,7 +8781,7 @@ RC
 @item name
 TV
 @item used
-RS
+RSd
 @item is_xref_ref
 B
 @item is_xref_resolved
@@ -9228,7 +9228,7 @@ RC,	DXF 70
 @item name
 T
 @item used
-RS
+RSd
 @item is_xref_ref
 B
 @item is_xref_resolved
@@ -10009,7 +10009,7 @@ BS
 @item name
 T
 @item used
-RS
+RSd
 @item is_xref_ref
 B
 @item is_xref_resolved
@@ -10252,7 +10252,7 @@ RC
 @item name
 TV
 @item used
-RS
+RSd
 @item is_xref_ref
 B
 @item is_xref_resolved
@@ -10271,14 +10271,12 @@ RC,	DXF 72
 RC,	DXF 73
 @item dashes
 Dwg_LTYPE_dash*
-@item dashes_r11
-RD*,	DXF 340
+@item dashes_r11[12]
+RD
 @item has_strings_area
 B
 @item strings_area
 TF
-@item unknown_r11
-RS
 
 @end vtable
 @end indentedblock
@@ -11681,7 +11679,7 @@ RC
 @item name
 TV
 @item used
-RS
+RSd
 @item is_xref_ref
 B
 @item is_xref_resolved
@@ -12004,7 +12002,7 @@ RC
 @item name
 TV
 @item used
-RS
+RSd
 @item is_xref_ref
 B
 @item is_xref_resolved
@@ -12104,7 +12102,7 @@ RC
 @item name
 TV
 @item used
-RS
+RSd
 @item is_xref_ref
 B
 @item is_xref_resolved
@@ -12481,7 +12479,7 @@ RC
 @item name
 TV
 @item used
-RS
+RSd
 @item is_xref_ref
 B
 @item is_xref_resolved
@@ -12644,7 +12642,7 @@ RC
 @item name
 TV
 @item used
-RS
+RSd
 @item is_xref_ref
 B
 @item is_xref_resolved

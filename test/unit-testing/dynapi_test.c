@@ -29391,18 +29391,18 @@ static int test_APPID (const Dwg_Object *obj)
     appid->unknown--;
   }
   {
-    BITCODE_RS used;
+    BITCODE_RSd used;
     if (dwg_dynapi_entity_value (appid, "APPID", "used", &used, NULL)
         && used == appid->used)
       pass ();
     else
-      fail ("APPID.used [RS] %hu != %hu", appid->used, used);
+      fail ("APPID.used [RSd] " FORMAT_RSd " != " FORMAT_RSd "", appid->used, used);
     used++;
     if (dwg_dynapi_entity_set_value (appid, "APPID", "used", &used, 0)
         && used == appid->used)
       pass ();
     else
-      fail ("APPID.used [RS] set+1 %hu != %hu", appid->used, used);
+      fail ("APPID.used [RSd] set+1 " FORMAT_RSd " != " FORMAT_RSd "", appid->used, used);
     appid->used--;
   }
   {
@@ -44337,18 +44337,18 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     block_header->unknown_r11--;
   }
   {
-    BITCODE_RS used;
+    BITCODE_RSd used;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "used", &used, NULL)
         && used == block_header->used)
       pass ();
     else
-      fail ("BLOCK_HEADER.used [RS] %hu != %hu", block_header->used, used);
+      fail ("BLOCK_HEADER.used [RSd] " FORMAT_RSd " != " FORMAT_RSd "", block_header->used, used);
     used++;
     if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "used", &used, 0)
         && used == block_header->used)
       pass ();
     else
-      fail ("BLOCK_HEADER.used [RS] set+1 %hu != %hu", block_header->used, used);
+      fail ("BLOCK_HEADER.used [RSd] set+1 " FORMAT_RSd " != " FORMAT_RSd "", block_header->used, used);
     block_header->used--;
   }
   {
@@ -47181,18 +47181,18 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
         fail ("DIMSTYLE.parent [struct _dwg_object_object*]");
   }
   {
-    BITCODE_RS used;
+    BITCODE_RSd used;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "used", &used, NULL)
         && used == dimstyle->used)
       pass ();
     else
-      fail ("DIMSTYLE.used [RS] %hu != %hu", dimstyle->used, used);
+      fail ("DIMSTYLE.used [RSd] " FORMAT_RSd " != " FORMAT_RSd "", dimstyle->used, used);
     used++;
     if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "used", &used, 0)
         && used == dimstyle->used)
       pass ();
     else
-      fail ("DIMSTYLE.used [RS] set+1 %hu != %hu", dimstyle->used, used);
+      fail ("DIMSTYLE.used [RSd] set+1 " FORMAT_RSd " != " FORMAT_RSd "", dimstyle->used, used);
     dimstyle->used--;
   }
   {
@@ -49907,18 +49907,18 @@ static int test_LAYER (const Dwg_Object *obj)
         fail ("LAYER.plotstyle [H]");
   }
   {
-    BITCODE_RS used;
+    BITCODE_RSd used;
     if (dwg_dynapi_entity_value (layer, "LAYER", "used", &used, NULL)
         && used == layer->used)
       pass ();
     else
-      fail ("LAYER.used [RS] %hu != %hu", layer->used, used);
+      fail ("LAYER.used [RSd] " FORMAT_RSd " != " FORMAT_RSd "", layer->used, used);
     used++;
     if (dwg_dynapi_entity_set_value (layer, "LAYER", "used", &used, 0)
         && used == layer->used)
       pass ();
     else
-      fail ("LAYER.used [RS] set+1 %hu != %hu", layer->used, used);
+      fail ("LAYER.used [RSd] set+1 " FORMAT_RSd " != " FORMAT_RSd "", layer->used, used);
     layer->used--;
   }
   {
@@ -50643,14 +50643,12 @@ static int test_LTYPE (const Dwg_Object *obj)
       fail ("LTYPE.dashes [Dwg_LTYPE_dash*] * %u num_dashes", count);
   }
   {
-    BITCODE_RD* dashes_r11;
-    BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (ltype, "LTYPE", "num_dashes", &count, NULL)
-        && dwg_dynapi_entity_value (ltype, "LTYPE", "dashes_r11", &dashes_r11, NULL)
-        && dashes_r11 == ltype->dashes_r11)
-      pass ();
+    BITCODE_RD dashes_r11[12];
+    if (dwg_dynapi_entity_value (ltype, "LTYPE", "dashes_r11[12]", &dashes_r11, NULL)
+        && !memcmp (&dashes_r11, &ltype->dashes_r11, sizeof (BITCODE_RD)))
+        pass ();
     else
-      fail ("LTYPE.dashes_r11 [RD*] * %u num_dashes", count);
+        fail ("LTYPE.dashes_r11[12] [RD]");
   }
   {
     BITCODE_T description;
@@ -50794,33 +50792,18 @@ static int test_LTYPE (const Dwg_Object *obj)
         fail ("LTYPE.strings_area [TF]");
   }
   {
-    BITCODE_RS unknown_r11;
-    if (dwg_dynapi_entity_value (ltype, "LTYPE", "unknown_r11", &unknown_r11, NULL)
-        && unknown_r11 == ltype->unknown_r11)
-      pass ();
-    else
-      fail ("LTYPE.unknown_r11 [RS] %hu != %hu", ltype->unknown_r11, unknown_r11);
-    unknown_r11++;
-    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "unknown_r11", &unknown_r11, 0)
-        && unknown_r11 == ltype->unknown_r11)
-      pass ();
-    else
-      fail ("LTYPE.unknown_r11 [RS] set+1 %hu != %hu", ltype->unknown_r11, unknown_r11);
-    ltype->unknown_r11--;
-  }
-  {
-    BITCODE_RS used;
+    BITCODE_RSd used;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "used", &used, NULL)
         && used == ltype->used)
       pass ();
     else
-      fail ("LTYPE.used [RS] %hu != %hu", ltype->used, used);
+      fail ("LTYPE.used [RSd] " FORMAT_RSd " != " FORMAT_RSd "", ltype->used, used);
     used++;
     if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "used", &used, 0)
         && used == ltype->used)
       pass ();
     else
-      fail ("LTYPE.used [RS] set+1 %hu != %hu", ltype->used, used);
+      fail ("LTYPE.used [RSd] set+1 " FORMAT_RSd " != " FORMAT_RSd "", ltype->used, used);
     ltype->used--;
   }
   {
@@ -57672,18 +57655,18 @@ static int test_STYLE (const Dwg_Object *obj)
     style->unknown--;
   }
   {
-    BITCODE_RS used;
+    BITCODE_RSd used;
     if (dwg_dynapi_entity_value (style, "STYLE", "used", &used, NULL)
         && used == style->used)
       pass ();
     else
-      fail ("STYLE.used [RS] %hu != %hu", style->used, used);
+      fail ("STYLE.used [RSd] " FORMAT_RSd " != " FORMAT_RSd "", style->used, used);
     used++;
     if (dwg_dynapi_entity_set_value (style, "STYLE", "used", &used, 0)
         && used == style->used)
       pass ();
     else
-      fail ("STYLE.used [RS] set+1 %hu != %hu", style->used, used);
+      fail ("STYLE.used [RSd] set+1 " FORMAT_RSd " != " FORMAT_RSd "", style->used, used);
     style->used--;
   }
   {
@@ -59181,18 +59164,18 @@ static int test_UCS (const Dwg_Object *obj)
         fail ("UCS.ucsydir [3BD]");
   }
   {
-    BITCODE_RS used;
+    BITCODE_RSd used;
     if (dwg_dynapi_entity_value (ucs, "UCS", "used", &used, NULL)
         && used == ucs->used)
       pass ();
     else
-      fail ("UCS.used [RS] %hu != %hu", ucs->used, used);
+      fail ("UCS.used [RSd] " FORMAT_RSd " != " FORMAT_RSd "", ucs->used, used);
     used++;
     if (dwg_dynapi_entity_set_value (ucs, "UCS", "used", &used, 0)
         && used == ucs->used)
       pass ();
     else
-      fail ("UCS.used [RS] set+1 %hu != %hu", ucs->used, used);
+      fail ("UCS.used [RSd] set+1 " FORMAT_RSd " != " FORMAT_RSd "", ucs->used, used);
     ucs->used--;
   }
   {
@@ -59742,18 +59725,18 @@ static int test_VIEW (const Dwg_Object *obj)
     view->use_default_lights--;
   }
   {
-    BITCODE_RS used;
+    BITCODE_RSd used;
     if (dwg_dynapi_entity_value (view, "VIEW", "used", &used, NULL)
         && used == view->used)
       pass ();
     else
-      fail ("VIEW.used [RS] %hu != %hu", view->used, used);
+      fail ("VIEW.used [RSd] " FORMAT_RSd " != " FORMAT_RSd "", view->used, used);
     used++;
     if (dwg_dynapi_entity_set_value (view, "VIEW", "used", &used, 0)
         && used == view->used)
       pass ();
     else
-      fail ("VIEW.used [RS] set+1 %hu != %hu", view->used, used);
+      fail ("VIEW.used [RSd] set+1 " FORMAT_RSd " != " FORMAT_RSd "", view->used, used);
     view->used--;
   }
   {
@@ -62286,18 +62269,18 @@ static int test_VPORT (const Dwg_Object *obj)
     vport->use_default_lights--;
   }
   {
-    BITCODE_RS used;
+    BITCODE_RSd used;
     if (dwg_dynapi_entity_value (vport, "VPORT", "used", &used, NULL)
         && used == vport->used)
       pass ();
     else
-      fail ("VPORT.used [RS] %hu != %hu", vport->used, used);
+      fail ("VPORT.used [RSd] " FORMAT_RSd " != " FORMAT_RSd "", vport->used, used);
     used++;
     if (dwg_dynapi_entity_set_value (vport, "VPORT", "used", &used, 0)
         && used == vport->used)
       pass ();
     else
-      fail ("VPORT.used [RS] set+1 %hu != %hu", vport->used, used);
+      fail ("VPORT.used [RSd] set+1 " FORMAT_RSd " != " FORMAT_RSd "", vport->used, used);
     vport->used--;
   }
   {
@@ -62576,18 +62559,18 @@ static int test_VX_TABLE_RECORD (const Dwg_Object *obj)
         fail ("VX_TABLE_RECORD.prev_entry [H]");
   }
   {
-    BITCODE_RS used;
+    BITCODE_RSd used;
     if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "used", &used, NULL)
         && used == vx_table_record->used)
       pass ();
     else
-      fail ("VX_TABLE_RECORD.used [RS] %hu != %hu", vx_table_record->used, used);
+      fail ("VX_TABLE_RECORD.used [RSd] " FORMAT_RSd " != " FORMAT_RSd "", vx_table_record->used, used);
     used++;
     if (dwg_dynapi_entity_set_value (vx_table_record, "VX_TABLE_RECORD", "used", &used, 0)
         && used == vx_table_record->used)
       pass ();
     else
-      fail ("VX_TABLE_RECORD.used [RS] set+1 %hu != %hu", vx_table_record->used, used);
+      fail ("VX_TABLE_RECORD.used [RSd] set+1 " FORMAT_RSd " != " FORMAT_RSd "", vx_table_record->used, used);
     vx_table_record->used--;
   }
   {

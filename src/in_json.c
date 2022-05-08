@@ -2422,46 +2422,40 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               JSON_TOKENS_CHECK_OVERFLOW_ERR;
             }
         }
-      else if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "edge["))
+      else if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "edge[")
+               && (f = dwg_dynapi_entity_field (name, "edge[4]")))
         {
-          f = dwg_dynapi_entity_field (name, "edge[4]");
-          if (f)
+          BITCODE_BL arr[4];
+          int index;
+          sscanf (key, "edge[%d]", &index);
+          if (index >= 0 && index < 4)
             {
-              BITCODE_BL arr[4];
-              int index;
-              sscanf (key, "edge[%d]", &index);
-              if (index >= 0 && index < 4)
-                {
-                  dwg_dynapi_field_get_value (_obj, f, &arr);
-                  arr[index] = json_long (dat, tokens);
-                  LOG_TRACE ("%s: %d [%s]\n", key, (int)arr[index], f->type);
-                  dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
-                }
-              else
-                {
-                  tokens->index++;
-                }
-              JSON_TOKENS_CHECK_OVERFLOW_ERR;
+              dwg_dynapi_field_get_value (_obj, f, &arr);
+              arr[index] = json_long (dat, tokens);
+              LOG_TRACE ("%s: %d [%s]\n", key, (int)arr[index], f->type);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
             }
+          else
+            {
+              tokens->index++;
+            }
+          JSON_TOKENS_CHECK_OVERFLOW_ERR;
         }
-      else if (t->type == JSMN_ARRAY && memBEGINc (key, "workplane["))
+      else if (t->type == JSMN_ARRAY && memBEGINc (key, "workplane[")
+               && (f = dwg_dynapi_entity_field (name, "workplane[3]")))
         {
-          f = dwg_dynapi_entity_field (name, "workplane[3]");
-          if (f)
+          BITCODE_3BD arr[3];
+          int index;
+          sscanf (key, "workplane[%d]", &index);
+          if (index >= 0 && index < 3)
             {
-              BITCODE_3BD arr[3];
-              int index;
-              sscanf (key, "workplane[%d]", &index);
-              if (index >= 0 && index < 3)
-                {
-                  dwg_dynapi_field_get_value (_obj, f, &arr);
-                  json_3DPOINT (dat, tokens, name, key, f->type, &arr[index]);
-                  dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
-                }
-              else
-                json_advance_unknown (dat, tokens, t->type, 0);
-              JSON_TOKENS_CHECK_OVERFLOW_ERR;
+              dwg_dynapi_field_get_value (_obj, f, &arr);
+              json_3DPOINT (dat, tokens, name, key, f->type, &arr[index]);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
             }
+          else
+            json_advance_unknown (dat, tokens, t->type, 0);
+          JSON_TOKENS_CHECK_OVERFLOW_ERR;
         }
       else if (t->type == JSMN_ARRAY
                && strEQc (key, "node[4]")
@@ -2479,6 +2473,23 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
             }
           else
             json_advance_unknown (dat, tokens, t->type, 0);
+          JSON_TOKENS_CHECK_OVERFLOW_ERR;
+        }
+      else if (t->type == JSMN_ARRAY
+               && strEQc (key, "dashes_r11")
+               && (f = dwg_dynapi_entity_field (name, "dashes_r11[12]")))
+        {
+          BITCODE_RD arr[12];
+          tokens->index++;
+          for (int index = 0; index < t->size; index++)
+            {
+              dwg_dynapi_field_get_value (_obj, f, &arr);
+              arr[index] = json_float (dat, tokens);
+              LOG_TRACE ("%s: %f [%s]\n", key, arr[index], f->type);
+              dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
+            }
+          f = dwg_dynapi_entity_field (name, "num_dashes");
+          dwg_dynapi_field_set_value (dwg, _obj, f, &t->size, 0);
           JSON_TOKENS_CHECK_OVERFLOW_ERR;
         }
       return error | (f && f->name ? 1 : 0); // found or not

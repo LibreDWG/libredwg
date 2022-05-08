@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
   int error, isnew;
   BITCODE_RC flag;
   BITCODE_T name;
-  BITCODE_RS used;
+  BITCODE_RSd used;
   BITCODE_B is_xref_ref;
   BITCODE_BS is_xref_resolved;
   BITCODE_B is_xref_dep;
@@ -18,7 +18,7 @@ api_process (dwg_object *obj)
   BITCODE_RC alignment;
   BITCODE_RC num_dashes;
   Dwg_LTYPE_dash* dashes;
-  BITCODE_RD* dashes_r11;
+  BITCODE_RD dashes_r11[12];
   BITCODE_B has_strings_area; /* if some shape_flag & 4 (ODA bug) */
   BITCODE_TF strings_area;
 
@@ -27,7 +27,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (ltype, LTYPE, flag, RC);
   CHK_ENTITY_UTF8TEXT (ltype, LTYPE, name);
-  CHK_ENTITY_TYPE (ltype, LTYPE, used, RS);
+  CHK_ENTITY_TYPE (ltype, LTYPE, used, RSd);
   CHK_ENTITY_TYPE (ltype, LTYPE, is_xref_ref, B);
   CHK_ENTITY_TYPE (ltype, LTYPE, is_xref_resolved, BS);
   CHK_ENTITY_TYPE (ltype, LTYPE, is_xref_dep, B);
@@ -41,20 +41,32 @@ api_process (dwg_object *obj)
     fail ("LTYPE.dashes");
   else
     {
+      if (dwg_version <= R_13)
+        {
+          if (!dwg_dynapi_entity_value (ltype, "LTYPE", "dashes_r11", &dashes_r11, NULL))
+            fail ("LTYPE.dashes_r11");
+        }
       for (BITCODE_BL i = 0; i < num_dashes; i++)
         {
-          CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, length, BD);
-          CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, complex_shapecode, BS);
-          CHK_SUBCLASS_H (dashes[i], LTYPE_dash, style);
-          CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, x_offset, RD);
-          CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, y_offset, RD);
-          CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, scale, BD);
-          CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, rotation, BD);
-          CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, shape_flag, BS);
-          //if (dwg_version <= R_11)
-          //  ok ("dashes_r11[%u]: %f", i, dashes_r11[i]);
+          if (dwg_version <= R_13)
+            {
+              ok ("dashes_r11[%u]: %f", i, dashes_r11[i]);
+            }
+          else
+            {
+              CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, length, BD);
+              CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, complex_shapecode, BS);
+              CHK_SUBCLASS_H (dashes[i], LTYPE_dash, style);
+              CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, x_offset, RD);
+              CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, y_offset, RD);
+              CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, scale, BD);
+              CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, rotation, BD);
+              CHK_SUBCLASS_TYPE (dashes[i], LTYPE_dash, shape_flag, BS);
+            }
         }
     }
-  CHK_ENTITY_TYPE (ltype, LTYPE, has_strings_area, B);
-  CHK_ENTITY_TYPE (ltype, LTYPE, strings_area, TF);
+  if (dwg_version >= R_13) {
+    CHK_ENTITY_TYPE (ltype, LTYPE, has_strings_area, B);
+    CHK_ENTITY_TYPE (ltype, LTYPE, strings_area, TF);
+  }
 }

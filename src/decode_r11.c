@@ -395,13 +395,30 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           {
             Bit_Chain abs_dat = *dat;
             bit_reset_chain (dat);
-            PREP_TABLE (LTYPE);
-            FIELD_RS (unknown_r11, 0); // 255
-            FIELD_TFv (description, 48, 3);
-            FIELD_RC (alignment, 72);
-            FIELD_RCu (num_dashes, 73); //
-            FIELD_RD (pattern_len, 40); // ??
-            FIELD_VECTOR_N (dashes_r11, RD, 12, 340);
+            {
+              PREP_TABLE (LTYPE);
+              FIELD_RSd (used, 0); // -1
+              FIELD_TFv (description, 48, 3);
+              FIELD_RC (alignment, 72);
+              FIELD_RCu (num_dashes, 73); //
+              FIELD_RD (pattern_len, 40);
+#ifndef IS_JSON
+              FIELD_RD (dashes_r11[0], 49);
+              FIELD_RD (dashes_r11[1], 49);
+              FIELD_RD (dashes_r11[2], 49);
+              FIELD_RD (dashes_r11[3], 49);
+              FIELD_RD (dashes_r11[4], 49);
+              FIELD_RD (dashes_r11[5], 49);
+              FIELD_RD (dashes_r11[6], 49);
+              FIELD_RD (dashes_r11[7], 49);
+              FIELD_RD (dashes_r11[8], 49);
+              FIELD_RD (dashes_r11[9], 49);
+              FIELD_RD (dashes_r11[10], 49);
+              FIELD_RD (dashes_r11[11], 49);
+#else
+              FIELD_VECTOR_N (dashes_r11, RD, 12, 49);
+#endif
+            }
             pos = dat->byte;
             *dat = abs_dat;
             dat->byte += pos;

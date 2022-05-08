@@ -2288,7 +2288,7 @@ typedef struct _dwg_entity_MLINE
   struct _dwg_object_object *parent;      \
   BITCODE_##laytype flag;                 \
   BITCODE_T  name;                        \
-  BITCODE_RS used;                        \
+  BITCODE_RSd used;                       \
   /* may be referenced by xref: */        \
   BITCODE_B  is_xref_ref;                 \
   /* is a xref reference: */              \
@@ -2453,11 +2453,11 @@ typedef struct _dwg_object_LTYPE
   BITCODE_BD pattern_len;
   BITCODE_RC alignment;
   BITCODE_RC num_dashes;
+  // could be made a union if we care
   Dwg_LTYPE_dash* dashes;
-  BITCODE_RD* dashes_r11; // always 12
+  BITCODE_RD dashes_r11[12];
   BITCODE_B has_strings_area; /* if some shape_flag & 4 (ODA bug) */
   BITCODE_TF strings_area;
-  BITCODE_RS unknown_r11; // always 255
 } Dwg_Object_LTYPE;
 
 /* 58 and 59 are UNKNOWN OBJECTS */

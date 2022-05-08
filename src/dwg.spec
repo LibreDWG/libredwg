@@ -3426,7 +3426,7 @@ DWG_OBJECT (LTYPE)
   COMMON_TABLE_FLAGS (Linetype)
 
   PRE (R_13) {
-    FIELD_RS (num_dashes, 0); // 255
+    FIELD_RSd (used, 0); // -1
     FIELD_TFv (description, 48, 3);
   }
   LATER_VERSIONS {
@@ -3439,7 +3439,11 @@ DWG_OBJECT (LTYPE)
   PRE (R_13)
   {
     FIELD_RD (pattern_len, 40);
-    FIELD_VECTOR_N (dashes_r11, RD, 12, 340);
+#ifndef IS_JSON
+    FIELD_VECTOR_INL (dashes_r11, RD, 12, 49);
+#else
+    FIELD_VECTOR (dashes_r11, RD, num_dashes, 49);
+#endif
   }
   SINCE (R_13)
   {
