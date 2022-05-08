@@ -39,9 +39,7 @@ DWG_ENTITY (TEXT)
     if (R11OPTS (4))
       FIELD_RD (oblique_angle, 51);
     if (R11OPTS (8)) {
-      DECODER { _ent->ltype = dwg_decode_preR13_handleref (dat, 1); }
-      ENCODER { bit_write_RC (dat, _ent->ltype->r11_idx); }
-      PRINT   { LOG_TRACE ("ltype r11: " FORMAT_RC "\n", _ent->ltype->r11_idx); }
+      VALUE_HANDLE (_ent->ltype, ltype, 1, 6);
     }
     if (R11OPTS (16))
       FIELD_CAST (generation, RC, BS, 71);
