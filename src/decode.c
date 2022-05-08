@@ -3322,7 +3322,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
         if (eed_need_size ((long)(lens * 2) + 2, size))
           return DWG_ERR_INVALIDEED;
         /* code:1 + len:2 NUL? */
-        for (j = 0; j < MIN (lens, (unsigned long)((size - 3) / 2)); j++)
+        for (j = 0; j < (BITCODE_BS)MIN (lens, (unsigned long)((size - 3) / 2)); j++)
           data->u.eed_0_r2007.string[j] = bit_read_RS (dat);
           // data->u.eed_0_r2007.string[j] = 0; //already calloc'ed
 #ifdef _WIN32
