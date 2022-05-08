@@ -1790,8 +1790,14 @@ DWG_ENTITY (POLYLINE_PFACE)
   else {
     FIELD_VALUE (has_vertex) = 1;
   }
-  FIELD_BS (numverts, 71);
-  FIELD_BS (numfaces, 72);
+  PRE (R_13) {
+    FIELD_RS (numverts, 71);
+    FIELD_RS (numfaces, 72);
+  }
+  LATER_VERSIONS {
+    FIELD_BS (numverts, 71);
+    FIELD_BS (numfaces, 72);
+  }
 
   SINCE (R_2004) {
     FIELD_BL (num_owned, 0);
@@ -1807,7 +1813,9 @@ DWG_ENTITY (POLYLINE_PFACE)
     {
       HANDLE_VECTOR (vertex, num_owned, 4, 0);
     }
-  FIELD_HANDLE (seqend, 3, 0);
+  SINCE (R_13) {
+    FIELD_HANDLE (seqend, 3, 0);
+  }
 
 DWG_ENTITY_END
 
