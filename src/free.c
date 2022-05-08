@@ -616,6 +616,9 @@ free_preR13_object (Dwg_Object *obj)
     FIELD_HANDLE (layer, 2, 8);
     if (_obj->flag_r11 & FLAG_R11_LTYPE) // 2
       FIELD_HANDLE (ltype, 1, 6);
+    if (_obj->flag_r11 & FLAG_R11_HANDLING) { // 32
+      FIELD_TFv (handling_r11, handling_size, 0);
+    }
   }
 
   switch (obj->fixedtype)
@@ -667,6 +670,12 @@ free_preR13_object (Dwg_Object *obj)
       break;
     case DWG_TYPE_POLYLINE_3D:
       dwg_free_POLYLINE_3D (dat, obj);
+      break;
+    case DWG_TYPE_POLYLINE_PFACE:
+      dwg_free_POLYLINE_PFACE (dat, obj);
+      break;
+    case DWG_TYPE_POLYLINE_MESH:
+      dwg_free_POLYLINE_MESH (dat, obj);
       break;
     case DWG_TYPE_ARC:
       dwg_free_ARC (dat, obj);

@@ -315,8 +315,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         {
             Dwg_Object *obj;
             Dwg_Object_BLOCK_HEADER *_obj;
-            Dwg_Object *ctrl
-                = dwg_get_first_object (dwg, DWG_TYPE_BLOCK_CONTROL);
+            Dwg_Object *ctrl;
             Dwg_Object_BLOCK_CONTROL *_ctrl;
             if (dat->byte > dat->size || (num + i) > dwg->num_objects)
               return DWG_ERR_INVALIDDWG;
@@ -334,6 +333,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
                 obj->size = tbl->size;
                 obj->address = pos;
               }
+            ctrl = dwg_get_first_object (dwg, DWG_TYPE_BLOCK_CONTROL);
             if (ctrl)
               {
                 _ctrl = ctrl->tio.object->tio.BLOCK_CONTROL;
@@ -596,7 +596,6 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   const bool is_block = obj->address >= 0x40000000;
   Bit_Chain *hdl_dat = NULL;
   Dwg_Data *dwg = ent->dwg;
-  BITCODE_RC handling_size;
 
   obj->bitsize_pos = bit_position (dat);
   obj->address = dat->byte - 1; // already read the type. size includes the type
@@ -636,15 +635,14 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     FIELD_RD (thickness_r11, 39);
 
   if (_obj->flag_r11 & FLAG_R11_HANDLING) { // 32
-    handling_size = bit_read_RC (dat);
-    LOG_TRACE("handling size: %d\n", handling_size);
-    // TODO Read handling_r11 with length handling_size
+    FIELD_RC (handling_size, 0);
+    FIELD_TFv (handling_r11, FIELD_VALUE (handling_size), 0);
   }
 
   if (_obj->flag_r11 & FLAG_R11_PAPER) // 64
     FIELD_RS (paper_r11, 0);
 
-  SINCE (R_12) { // seems to be wrong
+  SINCE (R_13b1) { // seems to be wrong
     if (_obj->opts_r11 & OPTS_R11_XDATA)
       {
         int error = dwg_decode_eed (dat, (Dwg_Object_Object *)ent);

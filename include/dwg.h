@@ -8204,7 +8204,8 @@ typedef struct _dwg_object_entity
   BITCODE_RCd color_r11;
   BITCODE_RD elevation_r11; // TODO: move to the entities
   BITCODE_RD thickness_r11; // TODO: move to the entities
-  // TODO handling_r11; */
+  BITCODE_RC handling_size;
+  BITCODE_T handling_r11;
   BITCODE_RS paper_r11;
   /* preR13 in the obj: eed, elevation/pt.z, thickness, paper */
 
