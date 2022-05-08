@@ -15853,6 +15853,10 @@ H,	DXF 348
 RC
 @item full_visualstyle
 H,	DXF 348
+@item handling_r11
+T
+@item handling_size
+RC
 @item has_ds_data
 B
 @item has_edge_visualstyle

@@ -3707,6 +3707,12 @@ static int encode_preR13_POLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict
     case DWG_TYPE_POLYLINE_3D:
       error = dwg_encode_POLYLINE_3D (dat, obj);
       break;
+    case DWG_TYPE_POLYLINE_PFACE:
+      error = dwg_encode_POLYLINE_PFACE (dat, obj);
+      break;
+    case DWG_TYPE_POLYLINE_MESH:
+      error = dwg_encode_POLYLINE_MESH (dat, obj);
+      break;
     default:
       LOG_ERROR ("Wrong preR13 POLYLINE/VERTEX type %u (flag %u)",
                  obj->fixedtype, flag_r11);
@@ -4161,7 +4167,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   }
 
   /* Write the specific type to dat */
-  switch (obj->type)
+  switch (obj->fixedtype)
     {
     case DWG_TYPE_TEXT:
       error = dwg_encode_TEXT (dat, obj);
@@ -4914,30 +4920,28 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
       FIELD_RCd (color_r11, 0);
     if (flag & FLAG_R11_LTYPE)
       FIELD_HANDLE (ltype, 1, 7);
-    /* FIXME
-    if (flag & FLAG_R11_ELEVATION)
-      FIELD_RD (elevation_r11, 31);
-    if (flag & FLAG_R11_THICKNESS)
+    PRE (R_10) { // XXX Check precise version
+      if (_obj->flag_r11 & FLAG_R11_ELEVATION) // 4
+        FIELD_RD (elevation_r11, 38);
+    } LATER_VERSIONS {
+      if (_obj->flag_r11 & FLAG_R11_ELEVATION // 4
+          // 1 = LINE, 2 = POINT, 22 = 3DFACE
+          && obj->type != 1 && obj->type != 2 && obj->type != 22)
+        FIELD_RD (elevation_r11, 38);
+    }
+    if (_obj->flag_r11 & FLAG_R11_THICKNESS) // 8
       FIELD_RD (thickness_r11, 39);
-    */
-    if (flag & OPTS_R11_XDATA)
-      FIELD_RC (extra_r11, 0);
-    /*
-    if (FIELD_VALUE (flag_r11) & 4 && FIELD_VALUE (kind_r11) > 2
-        && FIELD_VALUE (kind_r11) != 22)
-      FIELD_RD (elevation_r11, 30);
-    if (FIELD_VALUE (flag_r11) & 8)
-      FIELD_RD (thickness_r11, 39);
-    if (FIELD_VALUE (flag_r11) & 0x20)
-      {
-        Dwg_Object_Ref *hdl
-            = dwg_decode_handleref_with_code (dat, obj, dwg, 0);
-        if (hdl)
-          obj->handle = hdl->handleref;
-      }
-    */
-    if (ent->opts_r11 & FLAG_R11_PAPER)
+
+    if (_obj->flag_r11 & FLAG_R11_HANDLING) { // 32
+      FIELD_RC (handling_size, 0);
+      FIELD_TFv (handling_r11, FIELD_VALUE (handling_size), 0);
+    }
+
+    if (_obj->flag_r11 & FLAG_R11_PAPER) // 64
       FIELD_RS (paper_r11, 0);
+
+    if (_obj->flag_r11 & OPTS_R11_XDATA)
+      FIELD_RC (extra_r11, 0);
     // TODO: EED/xdata?
     return error;
   }
