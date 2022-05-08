@@ -4803,9 +4803,9 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
   bit_reset_chain (dat);
   if (obj->size > dat->size ||
       dat->size > abs_dat.size ||
-      dat->chain + dat->size < dat->chain ||
-      abs_dat.chain + abs_dat.size < abs_dat.chain ||
-      dat->chain + dat->size > abs_dat.chain + abs_dat.size)
+      (long)(dat->chain + dat->size) < (long)dat->chain ||
+      (long)(abs_dat.chain + abs_dat.size) < (long)abs_dat.chain ||
+      (long)(dat->chain + dat->size) > (long)(abs_dat.chain + abs_dat.size))
     {
       LOG_TRACE ("\n");
       LOG_WARN ("Invalid object size %u > %ld. Would overflow", obj->size,
