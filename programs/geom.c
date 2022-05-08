@@ -46,7 +46,8 @@ cross (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt1, BITCODE_3DPOINT pt2)
 void
 transform_OCS_2d (BITCODE_2DPOINT *out, BITCODE_2DPOINT pt, BITCODE_BE ext)
 {
-  if (ext.x == 0.0 && ext.y == 0.0 && ext.z == 1.0)
+  // [0,0,0] with preR13
+  if (ext.x == 0.0 && ext.y == 0.0 && (ext.z == 1.0 || ext.z == 0.0))
     {
       *out = pt;
     }

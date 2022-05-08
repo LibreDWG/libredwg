@@ -20017,25 +20017,21 @@ dwg_object_polyline_2d_get_numpoints (const dwg_object *restrict obj,
             {
               do
                 {
-                  if ((vertex = dwg_object_to_VERTEX_2D (vobj)))
-                    {
+                  if (vobj->fixedtype == DWG_TYPE_VERTEX_2D)
                       num_points++;
-                    }
                   else
-                    {
                       *error = 1; // return not all vertices, but some
-                    }
                 }
               while ((vobj = dwg_next_object (vobj)) && vobj != vlast);
             }
         }
       else // <r13: iterate over vertices until seqend
         {
-          Dwg_Object *vobj;
-          while ((vobj = dwg_next_object (obj))
+          Dwg_Object *vobj = (Dwg_Object *)obj;
+          while ((vobj = dwg_next_object (vobj))
                  && vobj->fixedtype != DWG_TYPE_SEQEND)
             {
-              if ((vertex = dwg_object_to_VERTEX_2D (vobj)))
+              if (vobj->fixedtype == DWG_TYPE_VERTEX_2D)
                 num_points++;
               else
                 *error = 1; // return not all vertices, but some
@@ -20081,7 +20077,8 @@ dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
         for (i = 0; i < num_points; i++)
           {
             Dwg_Object *vobj = dwg_ref_object (dwg, _obj->vertex[i]);
-            if (vobj && (vertex = dwg_object_to_VERTEX_2D (vobj)))
+            if (vobj && vobj->fixedtype == DWG_TYPE_VERTEX_2D
+                && (vertex = dwg_object_to_VERTEX_2D (vobj)))
               {
                 ptx[i].x = vertex->point.x;
                 ptx[i].y = vertex->point.y;
@@ -20103,7 +20100,8 @@ dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
               i = 0;
               do
                 {
-                  if ((vertex = dwg_object_to_VERTEX_2D (vobj)))
+                  if (vobj->fixedtype == DWG_TYPE_VERTEX_2D
+                      && (vertex = dwg_object_to_VERTEX_2D (vobj)))
                     {
                       ptx[i].x = vertex->point.x;
                       ptx[i].y = vertex->point.y;
@@ -20124,12 +20122,13 @@ dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
         }
       else // <r13: iterate over vertices until seqend
         {
-          Dwg_Object *vobj;
+          Dwg_Object *vobj = (Dwg_Object *)obj;
           i = 0;
-          while ((vobj = dwg_next_object (obj))
+          while ((vobj = dwg_next_object (vobj))
                  && vobj->fixedtype != DWG_TYPE_SEQEND)
             {
-              if ((vertex = dwg_object_to_VERTEX_2D (vobj)))
+              if (vobj->fixedtype == DWG_TYPE_VERTEX_2D
+                  && (vertex = dwg_object_to_VERTEX_2D (vobj)))
                 {
                   ptx[i].x = vertex->point.x;
                   ptx[i].y = vertex->point.y;
@@ -20184,7 +20183,7 @@ dwg_object_polyline_3d_get_numpoints (const dwg_object *restrict obj,
             {
               do
                 {
-                  if ((vertex = dwg_object_to_VERTEX_3D (vobj)))
+                  if (vobj->fixedtype == DWG_TYPE_VERTEX_3D && (vertex = dwg_object_to_VERTEX_3D (vobj)))
                     {
                       num_points++;
                     }
@@ -20198,11 +20197,11 @@ dwg_object_polyline_3d_get_numpoints (const dwg_object *restrict obj,
         }
       else // <r13: iterate over vertices until seqend
         {
-          Dwg_Object *vobj;
-          while ((vobj = dwg_next_object (obj))
+          Dwg_Object *vobj = (Dwg_Object *)obj;
+          while ((vobj = dwg_next_object (vobj))
                  && vobj->fixedtype != DWG_TYPE_SEQEND)
             {
-              if ((vertex = dwg_object_to_VERTEX_3D (vobj)))
+              if (vobj->fixedtype == DWG_TYPE_VERTEX_3D && (vertex = dwg_object_to_VERTEX_3D (vobj)))
                 num_points++;
               else
                 *error = 1; // return not all vertices, but some
@@ -20250,7 +20249,8 @@ dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
         for (i = 0; i < num_points; i++)
           {
             Dwg_Object *vobj = dwg_ref_object (dwg, _obj->vertex[i]);
-            if (vobj && (vertex = dwg_object_to_VERTEX_3D (vobj)))
+            if (vobj && vobj->fixedtype == DWG_TYPE_VERTEX_3D
+                && (vertex = dwg_object_to_VERTEX_3D (vobj)))
               {
                 ptx[i].x = vertex->point.x;
                 ptx[i].y = vertex->point.y;
@@ -20273,7 +20273,8 @@ dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
               i = 0;
               do
                 {
-                  if ((vertex = dwg_object_to_VERTEX_3D (vobj)))
+                  if (vobj->fixedtype == DWG_TYPE_VERTEX_3D
+                      && (vertex = dwg_object_to_VERTEX_3D (vobj)))
                     {
                       ptx[i].x = vertex->point.x;
                       ptx[i].y = vertex->point.y;
@@ -20295,12 +20296,13 @@ dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
         }
       else // <r13: iterate over vertices until seqend
         {
-          Dwg_Object *vobj;
+          Dwg_Object *vobj = (Dwg_Object *)obj;
           i = 0;
-          while ((vobj = dwg_next_object (obj))
+          while ((vobj = dwg_next_object (vobj))
                  && vobj->fixedtype != DWG_TYPE_SEQEND)
             {
-              if ((vertex = dwg_object_to_VERTEX_3D (vobj)))
+              if (vobj->fixedtype == DWG_TYPE_VERTEX_3D
+                  && (vertex = dwg_object_to_VERTEX_3D (vobj)))
                 {
                   ptx[i].x = vertex->point.x;
                   ptx[i].y = vertex->point.y;
