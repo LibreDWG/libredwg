@@ -813,7 +813,8 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       dat->byte = entities_start;
     }
-  error |= decode_preR13_entities (entities_start, entities_end, num_entities, 0, 0, dat, dwg);
+  error |= decode_preR13_entities (entities_start, entities_end, num_entities,
+                                   entities_end - entities_start, 0, dat, dwg);
   if (error >= DWG_ERR_CRITICAL)
     return error;
   if (dat->byte != entities_end)
@@ -849,7 +850,16 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // block entities
   if (dat->byte != blocks_start)
     {
-      LOG_WARN ("@0x%lx => blocks_start 0x%x", dat->byte, blocks_start);
+      BITCODE_TF unknown;
+      int len = blocks_start - dat->byte;
+      LOG_WARN ("\n@0x%lx => blocks_start 0x%x", dat->byte, blocks_start);
+      if (dat->byte < blocks_start)
+        {
+          unknown = bit_read_TF (dat, len);
+          LOG_TRACE ("unknown (%d):", len);
+          LOG_TRACE_TF (unknown, len);
+          free (unknown);
+        }
       dat->byte = blocks_start;
     }
   // don't just decode the num_blocks (i.e. 1 the BLOCK ent),
@@ -912,7 +922,16 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   rl1 = bit_read_RL (dat);
   LOG_TRACE ("?1long: 0x%x\n", rl1);
 
-  dat->byte = blocks_end + 36 + 4 * 4 + 12;
+  rl1 = blocks_end + 36 + 4 * 4 + 12;
+  if (dat->byte < rl1)
+    {
+      int len = rl1 - dat->byte;
+      BITCODE_TF unknown = bit_read_TF (dat, len);
+      LOG_TRACE ("unknown (%d):", len);
+      LOG_TRACE_TF (unknown, len);
+      free (unknown);
+    }
+  dat->byte = rl1;
   LOG_TRACE ("@0x%lx\n", dat->byte);
   decode_preR13_section_chk (SECTION_BLOCK, dat, dwg);
   decode_preR13_section_chk (SECTION_LAYER, dat, dwg);
@@ -929,7 +948,14 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   rl1 = bit_read_RL (dat);
   LOG_TRACE ("long 0x%x\n", rl1); // address
-
+  if (dat->byte < dat->size)
+    {
+      int len = dat->size - dat->byte;
+      BITCODE_TF unknown = bit_read_TF (dat, len);
+      LOG_TRACE ("unknown (%d):", len);
+      LOG_TRACE_TF (unknown, len);
+      free (unknown);
+    }
   return 0;
 }
 AFL_GCC_POP
