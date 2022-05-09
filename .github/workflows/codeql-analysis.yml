@@ -13,18 +13,12 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, work/codeql ]
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ master ]
   schedule:
     - cron: '15 4 * * 3'
-
-paths:
-  - src
-  - programs
-  - examples
-  - bindings
 
 jobs:
   analyze:
@@ -75,4 +69,4 @@ jobs:
     #   make release
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
+      uses: github/codeql-action/analyze@v2
