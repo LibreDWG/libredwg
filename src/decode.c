@@ -4725,7 +4725,7 @@ dwg_add_object (Dwg_Data *restrict dwg)
     {
       dwg->object = (Dwg_Object *)calloc (1024, sizeof (Dwg_Object));
       dwg->num_alloced_objects = 1024;
-      dwg->dirty_refs = 1;
+      dwg->dirty_refs = 0;
     }
   else if (num >= dwg->num_alloced_objects)
     {
@@ -5663,9 +5663,14 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
       if (!num)
         dwg->object
           = (Dwg_Object *)calloc (REFS_PER_REALLOC, sizeof (Dwg_Object));
-      else if (num % REFS_PER_REALLOC == 0)
-        dwg->object = (Dwg_Object *)realloc (
-            dwg->object, (num + REFS_PER_REALLOC) * sizeof (Dwg_Object));
+      else if (num >= dwg->num_alloced_objects)
+        {
+          while (num >= dwg->num_alloced_objects)
+            dwg->num_alloced_objects *= 2;
+          dwg->object = (Dwg_Object *)realloc (
+              dwg->object, dwg->num_alloced_objects * sizeof (Dwg_Object));
+          dwg->dirty_refs = 1;
+        }
       if (!dwg->object)
         {
           LOG_ERROR ("Out of memory");

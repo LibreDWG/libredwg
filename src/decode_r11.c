@@ -251,8 +251,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   BITCODE_BL vcount;
   int error = 0;
   long unsigned int num = dwg->num_objects;
-  long unsigned int old_size = dwg->num_objects * sizeof (Dwg_Object);
-  long unsigned int size = tbl->size * sizeof (Dwg_Object);
   long unsigned int pos = tbl->address;
   BITCODE_RC flag;
   BITCODE_TF name;
@@ -269,8 +267,13 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       return DWG_ERR_INVALIDDWG;
     }
   tbl->objid_r11 = num;
-  if (dwg->num_objects % REFS_PER_REALLOC == 0)
-    dwg->object = (Dwg_Object*)realloc (dwg->object, old_size + size + REFS_PER_REALLOC);
+  if (dwg->num_alloced_objects < dwg->num_objects + tbl->number)
+    {
+      dwg->num_alloced_objects = dwg->num_objects + tbl->number;
+      dwg->object = (Dwg_Object*)realloc (dwg->object,
+          dwg->num_alloced_objects * sizeof (Dwg_Object));
+      dwg->dirty_refs = 1;
+    }
 
   // TODO: use the dwg.spec instead
   // MAYBE: move to a spec dwg_r11.spec, and dwg_decode_r11_NAME
