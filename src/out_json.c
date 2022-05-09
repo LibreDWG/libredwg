@@ -768,13 +768,13 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
       ENDARRAY;                                                               \
     }
 #define ENT_REACTORS(code)                                                    \
-  if (dat->version >= R_13 && ent->num_reactors && ent->reactors)             \
+  if (dat->version >= R_13 && _ent->num_reactors && _ent->reactors)           \
     {                                                                         \
       KEY (reactors);                                                         \
       ARRAY;                                                                  \
-      for (vcount = 0; vcount < ent->num_reactors; vcount++)                  \
+      for (vcount = 0; vcount < _ent->num_reactors; vcount++)                 \
         {                                                                     \
-          FIRSTPREFIX VALUE_HANDLE (ent->reactors[vcount], reactors, code, 330);   \
+          FIRSTPREFIX VALUE_HANDLE (_ent->reactors[vcount], reactors, code, 330); \
         }                                                                     \
       ENDARRAY;                                                               \
     }
@@ -830,7 +830,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
   error |= json_xdata (dat, _obj)
 
 #define XDICOBJHANDLE(code)                                                   \
-  if ((dat->version < R_2004 || obj->tio.object->is_xdic_missing != 0)      \
+  if ((dat->version < R_2004 || obj->tio.object->is_xdic_missing != 0)        \
       && (obj->tio.object->xdicobjhandle != NULL)                             \
       && (obj->tio.object->xdicobjhandle->handleref.value != 0))              \
     {                                                                         \
@@ -838,12 +838,12 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
       VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code, -3); \
     }
 #define ENT_XDICOBJHANDLE(code)                                               \
-  if ((dat->version < R_2004 || (ent->is_xdic_missing != 0))                \
-      && (ent->xdicobjhandle != NULL)                                         \
-      && (ent->xdicobjhandle->handleref.value != 0))                          \
+  if ((dat->version < R_2004 || (_ent->is_xdic_missing != 0))                 \
+      && (_ent->xdicobjhandle != NULL)                                        \
+      && (_ent->xdicobjhandle->handleref.value != 0))                         \
     {                                                                         \
       KEY (xdicobjhandle);                                                    \
-      VALUE_HANDLE (ent->xdicobjhandle, xdicobjhandle, code, -3);             \
+      VALUE_HANDLE (_ent->xdicobjhandle, xdicobjhandle, code, -3);            \
     }
 
 #define COMMON_ENTITY_HANDLE_DATA
@@ -1122,14 +1122,14 @@ static int
 json_common_entity_data (Bit_Chain *restrict dat,
                          const Dwg_Object *restrict obj)
 {
-  Dwg_Object_Entity *ent, *_obj;
+  Dwg_Object_Entity *_ent, *_obj;
   // Dwg_Data *dwg = obj->parent;
   int error = 0;
   BITCODE_BL vcount = 0;
-  ent = obj->tio.entity;
-  _obj = ent;
+  _ent = obj->tio.entity;
+  _obj = _ent;
 
-  error |= json_eed (dat, (Dwg_Object_Object *)ent);
+  error |= json_eed (dat, (Dwg_Object_Object *)_ent);
 
   // clang-format off
   #include "common_entity_handle_data.spec"
