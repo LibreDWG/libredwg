@@ -262,16 +262,16 @@ static BITCODE_BL rcount1, rcount2;
       VALUE_TV (obj->tio.object->reactors, 0);                                \
     }
 #define ENT_REACTORS(code)                                                    \
-  if (ent->reactors)                                                          \
+  if (_ent->reactors)                                                         \
     {                                                                         \
-      for (vcount = 0; vcount < ent->num_reactors; vcount++)                  \
-        VALUE_HANDLE (ent->reactors[vcount], reactors, code, 330);            \
-      VALUE_TV (ent->reactors, 0);                                            \
+      for (vcount = 0; vcount < _ent->num_reactors; vcount++)                 \
+        VALUE_HANDLE (_ent->reactors[vcount], reactors, code, 330);           \
+      VALUE_TV (_ent->reactors, 0);                                           \
     }
 #define XDICOBJHANDLE(code)                                                   \
   SINCE (R_2004)                                                              \
   {                                                                           \
-    if (!obj->tio.object->is_xdic_missing)                                  \
+    if (!obj->tio.object->is_xdic_missing)                                    \
       {                                                                       \
         VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code,    \
                       0);                                                     \
@@ -284,12 +284,12 @@ static BITCODE_BL rcount1, rcount2;
 #define ENT_XDICOBJHANDLE(code)                                               \
   SINCE (R_2004)                                                              \
   {                                                                           \
-    if (!ent->is_xdic_missing)                                              \
+    if (!_ent->is_xdic_missing)                                               \
       {                                                                       \
-        VALUE_HANDLE (ent->xdicobjhandle, xdicobjhandle, code, 0);            \
+        VALUE_HANDLE (_ent->xdicobjhandle, xdicobjhandle, code, 0);           \
       }                                                                       \
   }                                                                           \
-  PRIOR_VERSIONS { VALUE_HANDLE (ent->xdicobjhandle, xdicobjhandle, code, 0); }
+  PRIOR_VERSIONS { VALUE_HANDLE (_ent->xdicobjhandle, xdicobjhandle, code, 0); }
 
 #define END_REPEAT(field) FIELD_TV (field, 0)
 
@@ -394,23 +394,23 @@ dwg_free_common_entity_data (Dwg_Object *obj)
   Bit_Chain *dat = &pdat;
   Bit_Chain *hdl_dat = &pdat;
   Dwg_Object_Entity *_obj;
-  Dwg_Object_Entity *ent;
+  Dwg_Object_Entity *_ent;
   BITCODE_BL vcount;
   int error = 0;
 
-  ent = obj->tio.entity;
-  if (!ent)
+  _ent = obj->tio.entity;
+  if (!_ent)
     return;
-  _obj = ent;
+  _obj = _ent;
 
-  FREE_IF (ent->preview);
+  FREE_IF (_ent->preview);
 
   // clang-format off
   #include "common_entity_data.spec"
-  if (dat->from_version >= R_2007 && ent->color.flag & 0x40)
+  if (dat->from_version >= R_2007 && _ent->color.flag & 0x40)
     FIELD_HANDLE (color.handle, 0, 430);
   SINCE (R_13) {
-  #include "common_entity_handle_data.spec"
+    #include "common_entity_handle_data.spec"
   }
   // clang-format on
 }

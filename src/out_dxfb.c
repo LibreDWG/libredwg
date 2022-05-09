@@ -898,8 +898,8 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
     {                                                                         \
       VALUE_HANDLE_NAME (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 330,   \
                          BLOCK_HEADER);                                       \
-      error |= dxfb_common_entity_handle_data (dat, obj);                     \
     }                                                                         \
+    error |= dxfb_common_entity_handle_data (dat, obj);                       \
     error |= dwg_dxfb_##token##_private (dat, hdl_dat, str_dat, obj);         \
     error |= dxfb_write_eed (dat, obj->tio.object);                           \
     return error;                                                             \
@@ -1773,13 +1773,16 @@ dxfb_common_entity_handle_data (Bit_Chain *restrict dat,
                                 const Dwg_Object *restrict obj)
 {
   const Dwg_Data *dwg = obj->parent;
-  const Dwg_Object_Entity *ent = obj->tio.entity;
-  const Dwg_Object_Entity *_obj = ent;
+  const Dwg_Object_Entity *_ent = obj->tio.entity;
+  const Dwg_Object_Entity *_obj = _ent;
   int error = 0;
   BITCODE_BL vcount = 0;
 
   // clang-format off
-  #include "common_entity_handle_data.spec"
+  if (dat->version >= R_13)
+    {
+      #include "common_entity_handle_data.spec"
+    }
   #include "common_entity_data.spec"
   // clang-format on
 

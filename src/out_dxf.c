@@ -913,7 +913,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
       LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H (obj->handle));      \
       fprintf (dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value);              \
     }                                                                         \
-    SINCE (R_13) { error |= dxf_common_entity_handle_data (dat, obj); }       \
+    error |= dxf_common_entity_handle_data (dat, obj);                        \
     error |= dwg_dxf_##token##_private (dat, hdl_dat, str_dat, obj);          \
     error |= dxf_write_eed (dat, obj->tio.object);                            \
     return error;                                                             \
@@ -2791,13 +2791,16 @@ dxf_common_entity_handle_data (Bit_Chain *restrict dat,
                                const Dwg_Object *restrict obj)
 {
   const Dwg_Data *dwg = obj->parent;
-  const Dwg_Object_Entity *ent = obj->tio.entity;
-  const Dwg_Object_Entity *_obj = ent;
+  const Dwg_Object_Entity *_ent = obj->tio.entity;
+  const Dwg_Object_Entity *_obj = _ent;
   int error = 0;
   BITCODE_BL vcount = 0;
 
   // clang-format off
-  #include "common_entity_handle_data.spec"
+  if (dat->version >= R_13)
+    {
+      #include "common_entity_handle_data.spec"
+    }
   #include "common_entity_data.spec"
   // clang-format on
 
