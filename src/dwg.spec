@@ -1398,7 +1398,9 @@ DWG_ENTITY_END
     PRE (R_13)                                                                \
     {                                                                         \
       FIELD_HANDLE (block, 2, 2);                                             \
-      FIELD_3RD (def_pt, 10);                                                 \
+      FIELD_2RD (def_pt, 10);                                                 \
+      if (R11FLAG (FLAG_R11_ELEVATION))                                       \
+        FIELD_RD (elevation, 38);                                             \
       FIELD_2RD (text_midpt, 11);                                             \
       if (R11OPTS (2))                                                        \
         FIELD_RC (flag1, 0);                                                  \
@@ -1500,12 +1502,24 @@ DWG_ENTITY (DIMENSION_ORDINATE)
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbOrdinateDimension)
   PRE (R_13) {
-    FIELD_2RD (def_pt, 0);
-    FIELD_2RD (feature_location_pt, 13);
-    FIELD_2RD (leader_endpt, 14);
+    //FIELD_2RD (def_pt, 0);
+    if (R11OPTS (8)) {
+      if (R11FLAG (FLAG_R11_ELEVATION)) {
+        FIELD_3RD (feature_location_pt, 13);
+      }
+      else {
+        FIELD_2RD (feature_location_pt, 13);
+      }
+    }
+    if (R11FLAG (FLAG_R11_ELEVATION)) {
+      FIELD_3RD (leader_endpt, 14);
+    }
+    else {
+      FIELD_2RD (leader_endpt, 14);
+    }
     FIELD_RC (flag2, 0);
   } else {
-    FIELD_3BD (def_pt, 0);
+    //FIELD_3BD (def_pt, 0);
     FIELD_3BD (feature_location_pt, 13);
     FIELD_3BD (leader_endpt, 14);
     FIELD_RC (flag2, 0);
@@ -1584,8 +1598,7 @@ DWG_ENTITY (DIMENSION_ANG3PT)
     FIELD_2RD (xline1_pt, 13);
     FIELD_2RD (xline2_pt, 14);
     FIELD_2RD (center_pt, 15);
-  }
-  else {
+  } LATER_VERSIONS {
     FIELD_3BD (def_pt, 0);
     FIELD_3BD (xline1_pt, 13);
     FIELD_3BD (xline2_pt, 14);
@@ -1604,15 +1617,25 @@ DWG_ENTITY (DIMENSION_ANG2LN)
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDb2LineAngularDimension)
   JSON { FIELD_3RD (def_pt, 0) }
-  else { FIELD_2RD (def_pt, 0) }
-  FIELD_3BD (xline1start_pt, 13);
-  FIELD_3BD (xline1end_pt, 14);
-  FIELD_3BD (xline2start_pt, 15);
-  FIELD_3BD (xline2end_pt, 16);
-
-  COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (dimstyle, 5, 0);
-  FIELD_HANDLE (block, 5, 0);
+  PRE (R_13) {
+    FIELD_2RD (xline1start_pt, 13);
+    FIELD_2RD (xline1end_pt, 14);
+    FIELD_2RD (xline2start_pt, 15);
+    FIELD_2RD (xline2end_pt, 16);
+  } LATER_VERSIONS {
+#ifndef IS_JSON
+    FIELD_2RD (def_pt, 0);
+#endif
+    FIELD_3BD (xline1start_pt, 13);
+    FIELD_3BD (xline1end_pt, 14);
+    FIELD_3BD (xline2start_pt, 15);
+    FIELD_3BD (xline2end_pt, 16);
+  }
+  SINCE (R_13) {
+    COMMON_ENTITY_HANDLE_DATA;
+    FIELD_HANDLE (dimstyle, 5, 0);
+    FIELD_HANDLE (block, 5, 0);
+  }
 
 DWG_ENTITY_END
 
@@ -1621,13 +1644,19 @@ DWG_ENTITY (DIMENSION_RADIUS)
 
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbRadialDimension)
-  FIELD_3BD (def_pt, 0);
-  FIELD_3BD (first_arc_pt, 15);
-  FIELD_BD (leader_len, 40);
+  PRE (R_13) {
+    //FIELD_2RD (def_pt, 0);
+    FIELD_2RD (first_arc_pt, 15);
+    FIELD_RD (leader_len, 40);
+  } LATER_VERSIONS {
+    FIELD_3BD (def_pt, 0);
+    FIELD_3BD (first_arc_pt, 15);
+    FIELD_BD (leader_len, 40);
 
-  COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (dimstyle, 5, 0);
-  FIELD_HANDLE (block, 5, 0);
+    COMMON_ENTITY_HANDLE_DATA;
+    FIELD_HANDLE (dimstyle, 5, 0);
+    FIELD_HANDLE (block, 5, 0);
+ }
 
 DWG_ENTITY_END
 
@@ -1636,13 +1665,18 @@ DWG_ENTITY (DIMENSION_DIAMETER)
 
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbDiametricDimension)
-  FIELD_3BD (first_arc_pt, 15);
-  FIELD_3BD (def_pt, 0); // = far_chord_pt
-  FIELD_BD (leader_len, 40);
+  PRE (R_13) {
+    FIELD_2RD (first_arc_pt, 15);
+    FIELD_RD (leader_len, 40);
+  } LATER_VERSIONS {
+    FIELD_3BD (first_arc_pt, 15);
+    FIELD_3BD (def_pt, 0); // = far_chord_pt
+    FIELD_BD (leader_len, 40);
 
-  COMMON_ENTITY_HANDLE_DATA;
-  FIELD_HANDLE (dimstyle, 5, 0);
-  FIELD_HANDLE (block, 5, 0);
+    COMMON_ENTITY_HANDLE_DATA;
+    FIELD_HANDLE (dimstyle, 5, 0);
+    FIELD_HANDLE (block, 5, 0);
+ }
 
 DWG_ENTITY_END
 

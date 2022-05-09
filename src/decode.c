@@ -5614,16 +5614,16 @@ int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     case 2:
       error |= dwg_decode_DIMENSION_ANG2LN (dat, obj);
       break;
-    case 3:
+    case 4:
       error |= dwg_decode_DIMENSION_DIAMETER (dat, obj);
       break;
-    case 4:
+    case 8:
       error |= dwg_decode_DIMENSION_RADIUS (dat, obj);
       break;
-    case 5:
+    case 16:
       error |= dwg_decode_DIMENSION_ANG3PT (dat, obj);
       break;
-    case 6:
+    case 32:
       error |= dwg_decode_DIMENSION_ORDINATE (dat, obj);
       break;
     default:
