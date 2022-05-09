@@ -590,12 +590,13 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
  
 EXPORT int
 decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
-                      Dwg_Object_Entity *ent)
+                      Dwg_Object_Entity *_ent)
 {
-  Dwg_Object_Entity *_obj = ent;
+  Dwg_Object_Entity *_obj = _ent;
   const bool is_block = obj->address >= 0x40000000;
-  Bit_Chain *hdl_dat = NULL;
-  Dwg_Data *dwg = ent->dwg;
+  Bit_Chain *hdl_dat = NULL, *str_dat = NULL;
+  Dwg_Data *dwg = _ent->dwg;
+  int error = 0;
 
   obj->bitsize_pos = bit_position (dat);
   obj->address = dat->byte - 1; // already read the type. size includes the type
@@ -604,6 +605,9 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
             obj->index, obj->type, obj->address);
   _obj->entmode = is_block ? 3 : 2; // ent or block
 
+  #include "common_entity_data.spec"
+
+#if 0  
   PRE (R_2_0b) {
     FIELD_HANDLE (layer, 2, 8);
     goto entity_end;
@@ -615,9 +619,9 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     FIELD_HANDLE (layer, 2, 8);
   }
   FIELD_RSx (opts_r11, 0); // i.e. dataflags
-  if (_obj->flag_r11 & FLAG_R11_COLOR) // 1
+  if (R11FLAG (FLAG_R11_COLOR)) // 1
     FIELD_RCd (color_r11, 0);
-  if (_obj->flag_r11 & FLAG_R11_LTYPE) // 2
+  if (R11FLAG (FLAG_R11_LTYPE)) // 2
     FIELD_HANDLE (ltype, 1, 6);
 
   // TODO: maybe move that to the entity
@@ -645,7 +649,7 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   SINCE (R_13b1) { // seems to be wrong
     if (_obj->opts_r11 & OPTS_R11_XDATA)
       {
-        int error = dwg_decode_eed (dat, (Dwg_Object_Object *)ent);
+        int error = dwg_decode_eed (dat, (Dwg_Object_Object *)_ent);
         if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
           return error;
       }
@@ -659,8 +663,9 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         obj->handle = hdl->handleref;
     }
   */
+#endif
 
-entity_end:
+//entity_end:
   obj->common_size = bit_position (dat) - obj->bitsize_pos;
   return 0;
 }

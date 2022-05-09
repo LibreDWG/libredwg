@@ -1,18 +1,62 @@
 /* -*- c -*- */
 
   #include "spec.h"
-  //Dwg_Object_Entity* _obj = ent;
+  //Dwg_Object_Entity* _obj = _ent;
+
+  PRE (R_2_0b) {
+    FIELD_HANDLE (layer, 2, 8);
+  }
+  LATER_VERSIONS {
+    PRE (R_13) {
+      SINCE (R_2_0b) {
+        FIELD_RC (flag_r11, 70); // mode
+#ifdef IS_DECODER
+        obj->size = bit_read_RS (dat);
+#elif defined IS_ENCODER
+        bit_write_RS (dat, obj->size);
+#elif defined IS_JSON
+        KEY (size); VALUE_RS (obj->size, 0);
+#endif
+        LOG_TRACE("size: %d [RS]\n", obj->size);
+        FIELD_HANDLE (layer, 2, 8);
+      }
+      FIELD_RSx (opts_r11, 0); // i.e. dataflags
+      if (R11FLAG (FLAG_R11_COLOR)) // 1
+        FIELD_RCd (color_r11, 0);
+      if (R11FLAG (FLAG_R11_LTYPE)) // 2
+        FIELD_HANDLE (ltype, 1, 6);
+
+      // TODO: maybe move that to the entity
+      PRE (R_10) { // XXX Check precise version
+        if (R11FLAG (FLAG_R11_ELEVATION)) // 4
+          FIELD_RD (elevation_r11, 38);
+      } LATER_VERSIONS {
+        if (R11FLAG (FLAG_R11_ELEVATION) // 4
+            // 1 = LINE, 2 = POINT, 22 = 3DFACE
+            && obj->type != 1 && obj->type != 2 && obj->type != 22)
+          FIELD_RD (elevation_r11, 38);
+      }
+      if (R11FLAG (FLAG_R11_THICKNESS)) // 8
+        FIELD_RD (thickness_r11, 39);
+      if (R11FLAG (FLAG_R11_HANDLING)) { // 32
+        FIELD_RC (handling_size, 0);
+        FIELD_TFv (handling_r11, FIELD_VALUE (handling_size), 0);
+      }
+      if (R11FLAG (FLAG_R11_PAPER)) // 64
+        FIELD_RS (paper_r11, 0);
+    }
+  }
 
   // p20.4.1
   SINCE (R_13) {
     FIELD_B (preview_exists, 0);
-    if (ent->preview_exists)
+    if (_ent->preview_exists)
       {
         // was DXF 160 (used for block previews?).
         // 92 also for all PROXY vector preview data with klass->is_zombie
 #ifdef IS_DECODER
         if (obj->klass && obj->klass->is_zombie)
-          ent->preview_is_proxy = 1;
+          _ent->preview_is_proxy = 1;
 #endif
 #if defined(IS_JSON)
         FIELD_B (preview_is_proxy, 0);
@@ -27,15 +71,15 @@
             FIELD_BLL (preview_size, 160);
           }
 #endif
-        if ((int)ent->preview_size >= 0 && ent->preview_size < 210210)
+        if ((int)_ent->preview_size >= 0 && _ent->preview_size < 210210)
           {
-            FIELD_BINARY (preview, ent->preview_size, 310);
+            FIELD_BINARY (preview, _ent->preview_size, 310);
           }
 #ifndef IS_FREE
         else
           {
             LOG_ERROR ("Invalid preview_size: %lu kB",
-                      (unsigned long)(ent->preview_size / 1000));
+                      (unsigned long)(_ent->preview_size / 1000));
             error |= DWG_ERR_VALUEOUTOFBOUNDS;
           }
 #endif
@@ -67,9 +111,11 @@
 #endif
     }
 
-  // TODO: r13-r14: 6B flags + 6B common params
-  FIELD_BB (entmode, 0);
-  FIELD_BL (num_reactors, 0); //ODA bug: BB as BS
+  SINCE (R_13) {
+    // TODO: r13-r14: 6B flags + 6B common params
+    FIELD_BB (entmode, 0);
+    FIELD_BL (num_reactors, 0); //ODA bug: BB as BS
+  }
 
   VERSIONS (R_13, R_14) //ODA bug
     {
@@ -106,25 +152,25 @@
     {
       BITCODE_BS flags;
 #ifdef IS_JSON
-      field_cmc (dat, "color", &ent->color);
+      field_cmc (dat, "color", &_ent->color);
 #else
       DXF {
         // 0: byblock
-        if (ent->color.index != 256) // not bylayer
+        if (_ent->color.index != 256) // not bylayer
           FIELD_BS (color.index, 62);
       } else {
         FIELD_BSx (color.raw, 0);
       }
 #ifdef IS_DECODER
-      ent->color.flag = ent->color.raw >> 8;
-      ent->color.index = ent->color.raw & 0x1ff; // 256 / -1 needed for ByLayer
-      ent->color.rgb = 0L;
-      if (ent->color.index != ent->color.raw)
-        LOG_TRACE (" color.index: %d [ENC 62]\n", ent->color.index);
-      if (ent->color.flag > 1)
-        LOG_TRACE (" color.flag: 0x%x\n", ent->color.flag);
+      _ent->color.flag = _ent->color.raw >> 8;
+      _ent->color.index = _ent->color.raw & 0x1ff; // 256 / -1 needed for ByLayer
+      _ent->color.rgb = 0L;
+      if (_ent->color.index != _ent->color.raw)
+        LOG_TRACE (" color.index: %d [ENC 62]\n", _ent->color.index);
+      if (_ent->color.flag > 1)
+        LOG_TRACE (" color.flag: 0x%x\n", _ent->color.flag);
 #endif
-      flags = ent->color.flag;
+      flags = _ent->color.flag;
       if (flags & 0x20)
         {
 #ifndef IS_DXF
@@ -132,9 +178,9 @@
 #endif
 #ifdef IS_DECODER
           /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
-          ent->color.alpha_type = ent->color.alpha >> 24;
-          ent->color.alpha = ent->color.alpha & 0xFF;
-          LOG_TRACE (" color.alpha_type: %d [ENC 440]\n", ent->color.alpha_type);
+          _ent->color.alpha_type = _ent->color.alpha >> 24;
+          _ent->color.alpha = _ent->color.alpha & 0xFF;
+          LOG_TRACE (" color.alpha_type: %d [ENC 440]\n", _ent->color.alpha_type);
 #endif
           JSON {
             FIELD_BB (color.alpha_type, 0);
@@ -147,7 +193,7 @@
       else if (flags & 0x80) // and not a reference
         {
           DXF {
-            VALUE_BL (ent->color.rgb & 0x00ffffff, 420);
+            VALUE_BL (_ent->color.rgb & 0x00ffffff, 420);
           } else {
             FIELD_BLx (color.rgb, 420); // ODA bug, documented as BS
           }
@@ -161,7 +207,7 @@
           FIELD_TV (color.book_name, 430);
         }
       DXF {
-        if (flags & 0x20 && ent->color.alpha_type == 3) {
+        if (flags & 0x20 && _ent->color.alpha_type == 3) {
           FIELD_BL (color.alpha, 440);
         }
       }
@@ -169,7 +215,7 @@
     }
   OTHER_VERSIONS {
     DXF {
-      if (ent->color.index != 256) // not bylayer
+      if (_ent->color.index != 256) // not bylayer
         FIELD_BS (color.index, 62);
     }
     else {

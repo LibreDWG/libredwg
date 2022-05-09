@@ -3815,6 +3815,7 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   Dwg_Data *dwg = ent->dwg;
   Dwg_Object *obj = &dwg->object[ent->objid];
   Dwg_Object_Entity *_obj = ent;
+  Dwg_Object_Entity *_ent = ent;
   Dwg_Class *klass = NULL;
   unsigned long objectpos = bit_position (dat);
   int has_wrong_bitsize = 0;

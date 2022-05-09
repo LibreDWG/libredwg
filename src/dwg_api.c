@@ -23504,7 +23504,7 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (POLYLINE_MESH);
   pl = obj;
   _pl = _obj;
-  _pl->vertex = malloc (num_m_verts * num_n_verts * sizeof (BITCODE_H));
+  _pl->vertex = malloc ((unsigned long)num_m_verts * num_n_verts * sizeof (BITCODE_H));
   if (!_pl->vertex)
     return NULL;
   _pl->flag = 16;

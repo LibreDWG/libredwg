@@ -14,13 +14,13 @@
     /* parent: {m,p}space block_record or polyline for vertex, block until blkend */
   if (FIELD_VALUE(entmode) != 0)
     {
-      if (ent->ownerhandle || ent->entmode == 3) {
-        //assert(ent->entmode == 3); /* does not exist */
-        VALUE_HANDLE (ent->ownerhandle, ownerhandle, 5, 330);
-      } else if (ent->entmode == 1) {
+      if (_ent->ownerhandle || _ent->entmode == 3) {
+        //assert(_ent->entmode == 3); /* does not exist */
+        VALUE_HANDLE (_ent->ownerhandle, ownerhandle, 5, 330);
+      } else if (_ent->entmode == 1) {
         VALUE_HANDLE (dwg->header_vars.BLOCK_RECORD_PSPACE, BLOCK_RECORD_PSPACE, 5, 330);
       } else {
-        //assert(ent->entmode == 2);
+        //assert(_ent->entmode == 2);
         VALUE_HANDLE (dwg->header_vars.BLOCK_RECORD_MSPACE, BLOCK_RECORD_MSPACE, 5, 330);
       }
     }
@@ -40,8 +40,8 @@
   SUBCLASS (AcDbEntity)
 #ifdef IS_DXF
   // PaperSpace0 BLOCK may have entmode 0
-  if (ent->entmode == 1 ||
-      (ent->entmode == 0 && ent->ownerhandle == obj->parent->header_vars.BLOCK_RECORD_PSPACE))
+  if (_ent->entmode == 1 ||
+      (_ent->entmode == 0 && _ent->ownerhandle == obj->parent->header_vars.BLOCK_RECORD_PSPACE))
     FIELD_BB (entmode, 67); // is paperspace
 #endif
 

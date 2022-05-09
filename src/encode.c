@@ -4894,57 +4894,16 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
                    Bit_Chain *restrict hdl_dat, Bit_Chain *str_dat)
 {
   int error = 0;
-  Dwg_Object_Entity *ent = obj->tio.entity;
-  Dwg_Object_Entity *_obj = ent;
-  Dwg_Data *dwg = ent->dwg;
+  Dwg_Object_Entity *_ent = obj->tio.entity;
+  Dwg_Object_Entity *_obj = _ent;
+  Dwg_Data *dwg = _ent->dwg;
 
-  if (!obj || !dat || !ent)
+  if (!obj || !dat || !_ent)
     return DWG_ERR_INVALIDDWG;
 
   hdl_dat->from_version = dat->from_version;
   hdl_dat->version = dat->version;
   hdl_dat->opts = dat->opts;
-
-  PRE (R_2_0b) {
-    FIELD_HANDLE (layer, 2, 8);
-    return error;
-  }
-  VERSIONS (R_2_0b, R_11)
-  {
-    BITCODE_RC flag = ent->flag_r11;
-    FIELD_RC (flag_r11, 70); // mode
-    LOG_TRACE ("size: %d\n", obj->size);
-    FIELD_HANDLE (layer, 1, 8);
-    FIELD_RSx (opts_r11, 0);
-    if (flag & FLAG_R11_COLOR)
-      FIELD_RCd (color_r11, 0);
-    if (flag & FLAG_R11_LTYPE)
-      FIELD_HANDLE (ltype, 1, 7);
-    PRE (R_10) { // XXX Check precise version
-      if (_obj->flag_r11 & FLAG_R11_ELEVATION) // 4
-        FIELD_RD (elevation_r11, 38);
-    } LATER_VERSIONS {
-      if (_obj->flag_r11 & FLAG_R11_ELEVATION // 4
-          // 1 = LINE, 2 = POINT, 22 = 3DFACE
-          && obj->type != 1 && obj->type != 2 && obj->type != 22)
-        FIELD_RD (elevation_r11, 38);
-    }
-    if (_obj->flag_r11 & FLAG_R11_THICKNESS) // 8
-      FIELD_RD (thickness_r11, 39);
-
-    if (_obj->flag_r11 & FLAG_R11_HANDLING) { // 32
-      FIELD_RC (handling_size, 0);
-      FIELD_TFv (handling_r11, FIELD_VALUE (handling_size), 0);
-    }
-
-    if (_obj->flag_r11 & FLAG_R11_PAPER) // 64
-      FIELD_RS (paper_r11, 0);
-
-    if (_obj->flag_r11 & OPTS_R11_XDATA)
-      FIELD_RC (extra_r11, 0);
-    // TODO: EED/xdata?
-    return error;
-  }
 
   SINCE (R_2007) { *str_dat = *dat; }
   VERSIONS (R_2000, R_2007)
@@ -4975,15 +4934,18 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
     // and set the string stream (restricted to size)
     error |= obj_string_stream (dat, obj, str_dat);
   }
+  
+  SINCE (R_13) {
+    bit_write_H (dat, &obj->handle);
+    LOG_TRACE ("handle: " FORMAT_H " [H 5]", ARGS_H (obj->handle))
+    LOG_INSANE (" @%lu.%u", dat->byte - obj->address, dat->bit)
+    LOG_TRACE ("\n")
 
-  bit_write_H (dat, &obj->handle);
-  LOG_TRACE ("handle: " FORMAT_H " [H 5]", ARGS_H (obj->handle))
-  LOG_INSANE (" @%lu.%u", dat->byte - obj->address, dat->bit)
-  LOG_TRACE ("\n")
+    error |= dwg_encode_eed (dat, obj);
+  }
 
-  error |= dwg_encode_eed (dat, obj);
   // if (error & (DWG_ERR_INVALIDTYPE|DWG_ERR_VALUEOUTOFBOUNDS))
-  //  return error;
+  //   return error;
 
   // clang-format off
   #include "common_entity_data.spec"
@@ -4996,13 +4958,13 @@ static int
 dwg_encode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
                                       Dwg_Object *restrict obj)
 {
-  Dwg_Object_Entity *ent;
+  Dwg_Object_Entity *_ent;
   // Dwg_Data *dwg = obj->parent;
   Dwg_Object_Entity *_obj;
   BITCODE_BL vcount;
   int error = 0;
-  ent = obj->tio.entity;
-  _obj = ent;
+  _ent = obj->tio.entity;
+  _obj = _ent;
 
   // clang-format off
   #include "common_entity_handle_data.spec"
