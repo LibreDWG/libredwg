@@ -294,6 +294,15 @@
   VALUE_HANDLE (_obj->nam, nam, code, dxf)
 #define SUB_FIELD_HANDLE(o, nam, code, dxf)                                   \
   VALUE_HANDLE (_obj->o.nam, o.nam, code, dxf)
+#define VALUE_H(hdl, dxf)                                                     \
+  {                                                                           \
+    PRE (R_13) {                                                              \
+      error |= bit_read_H (dat, &hdl);                                        \
+    } else {                                                                  \
+      error |= bit_read_H (hdl_dat, &hdl);                                    \
+    }                                                                         \
+    LOG_TRACE ("handle: " FORMAT_H " [H %d]\n", ARGS_H (hdl), dxf);           \
+  }
 
 #define VALUE_HANDLE_N(ref, nam, vcount, code, dxf)                           \
   {                                                                           \

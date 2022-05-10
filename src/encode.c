@@ -635,6 +635,7 @@ const unsigned char unknown_section[53]
   PRE (R_13)                                                                  \
   {                                                                           \
     short idx = (hdlptr) ? (hdlptr)->r11_idx : 0;                             \
+    /* = handle_size really, not code */                                      \
     if (handle_code == 1)                                                     \
       bit_write_RC (dat, idx);                                                \
     else                                                                      \
@@ -666,6 +667,16 @@ const unsigned char unknown_section[53]
         LOG_HPOS                                                              \
       }                                                                       \
     }                                                                         \
+  }
+// for obj->handle 0.x.x only, DXF 5
+#define VALUE_H(hdl, dxf)                                                     \
+  {                                                                           \
+    PRE (R_13) {                                                              \
+      bit_write_H (dat, &hdl);                                                \
+    } else {                                                                  \
+      bit_write_H (hdl_dat, &hdl);                                            \
+    }                                                                         \
+    LOG_TRACE ("handle: " FORMAT_H " [H %d]\n", ARGS_H (hdl), dxf);           \
   }
 
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \

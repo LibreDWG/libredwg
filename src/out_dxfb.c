@@ -892,7 +892,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
     SINCE (R_11)                                                              \
     {                                                                         \
       LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H (obj->handle))       \
-      VALUE_H (obj->handle.value, 330);                                       \
+      VALUE_H (obj->handle.value, 5);                                         \
     }                                                                         \
     SINCE (R_13)                                                              \
     {                                                                         \

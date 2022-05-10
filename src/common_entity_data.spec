@@ -15,7 +15,7 @@
 #elif defined IS_ENCODER
         bit_write_RS (dat, obj->size);
 #elif defined IS_JSON
-        KEY (size); VALUE_RS (obj->size, 0);
+        //KEY (size); VALUE_RS (obj->size, 0);
 #endif
         LOG_TRACE("size: %d [RS]\n", obj->size);
         FIELD_HANDLE (layer, 2, 8);
@@ -45,9 +45,13 @@
       if (R11FLAG (FLAG_R11_THICKNESS)) // 8
         FIELD_RD (thickness_r11, 39);
       if (R11FLAG (FLAG_R11_HANDLING)) { // 32
-        FIELD_RC (handling_size, 0);
-        // optional handle, in hex
-        FIELD_TFv (handling_r11, FIELD_VALUE (handling_size), 5);
+#ifdef IS_DXF
+        VALUE_H (obj->handle.value, 5);
+#elif defined IS_JSON
+        KEY (size); VALUE_H (obj->handle, 5);
+#else
+        VALUE_H (obj->handle, 5);
+#endif
       }
       if (R11FLAG (FLAG_R11_PAPER)) // 64
         FIELD_RS (paper_r11, 0);

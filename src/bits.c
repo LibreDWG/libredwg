@@ -1216,10 +1216,29 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   handle->code = bit_read_RC (dat);
   if (pos == dat->byte)
     return DWG_ERR_INVALIDHANDLE;
-  handle->size = handle->code & 0xf;
-  handle->code = (handle->code & 0xf0) >> 4;
   handle->is_global = 0;
   handle->value = 0;
+  if (dat->from_version < R_13)
+    {
+      BITCODE_RC *restrict val;
+      if (pos == dat->byte)
+        return DWG_ERR_INVALIDHANDLE;
+      handle->size = handle->code;
+      if (handle->size > sizeof(BITCODE_RC *))
+        {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
+          LOG_WARN ("Invalid handle-reference, longer than 8 bytes: " FORMAT_H,
+                    ARGS_H (*handle));
+          return DWG_ERR_INVALIDHANDLE;
+        }
+      handle->code = 0;
+      val = (BITCODE_RC *)&(handle->value);
+      for (int i = handle->size - 1; i >= 0; i--)
+        val[i] = bit_read_RC (dat);
+      return 0;
+    }
+  handle->size = handle->code & 0xf;
+  handle->code = (handle->code & 0xf0) >> 4;
 
   // size must not exceed 8
   if (handle->size > sizeof(BITCODE_RC *) || handle->code > 14)
