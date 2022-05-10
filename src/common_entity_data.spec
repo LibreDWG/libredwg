@@ -45,9 +45,11 @@
       if (R11FLAG (FLAG_R11_THICKNESS)) // 8
         FIELD_RD (thickness_r11, 39);
       if (R11FLAG (FLAG_R11_HANDLING)) { // 32
-        FIELD_RC (handling_size, 0);
-        // optional handle, in hex
-        FIELD_TFv (handling_r11, FIELD_VALUE (handling_size), 5);
+#ifdef IS_DXF
+        VALUE_H (obj->handle.value, 5);
+#else
+        VALUE_H (obj->handle, 5);
+#endif
       }
       if (R11FLAG (FLAG_R11_PAPER)) // 64
         FIELD_RS (paper_r11, 0);
