@@ -135,8 +135,7 @@
   /* TODO Unknown structure (0x01fc-0x0228) */
   // PLATFORM was until r11
   DEBUG_HERE //1fb
-
-  dat->byte = 0x229;
+  UNKNOWN_UNTIL (0x229);
   FIELD_RD (ELEVATION, 40); //ok
   FIELD_RD (THICKNESS, 40); //ok
   FIELD_3RD (VIEWDIR, 10);
@@ -145,8 +144,7 @@
   // probably RD sysvars: LASTANGLE, LASTPOINT, LASTPT3D. until r11
   // also there is VPOINTX/VPOINTY/VPOINTZ (replaced by VIEWDIR with r11)
   DEBUG_HERE //252
-
-  dat->byte = 0x2e1;
+  UNKNOWN_UNTIL (0x2e1);
   FIELD_RS (unknown_18, 0);
   FIELD_CAST (BLIPMODE, RS, B, 70);
   if (dwg->header.numheader_vars <= 83) // PRE(R_2_21)
@@ -170,8 +168,7 @@
 
   /* TODO Unknown date structure (month, day, year, hour, minute, second, ms - all RS) */
   DEBUG_HERE //345
-
-  dat->byte = 0x353;
+  UNKNOWN_UNTIL (0x353);
   FIELD_RD (ANGBASE, 50);
   FIELD_CAST (ANGDIR, RS, B, 70);
   if (dwg->header.numheader_vars <= 101)
@@ -217,10 +214,8 @@
   FIELD_CAST (MIRRTEXT, RS, B, 70);
   if (dwg->header.numheader_vars <= 129)
     return 0;
-
   /* Skip table UCS (0x3ef-0x3f9) */
-  dat->byte = 0x3fa;
-
+  UNKNOWN_UNTIL (0x3fa);
   FIELD_RC (unknown_58, 0);
   FIELD_3RD (UCSORG, 10); //ok
   FIELD_3RD (UCSXDIR, 11); //ok
@@ -240,9 +235,8 @@
   FIELD_RD (DIMTVP, 40); //ok
   FIELD_TFv (unknown_string, 33, 1);
   FIELD_RS (HANDLING, 70); // use new HEX handles (should be RC)
-
+  UNKNOWN_UNTIL (0x4ee);
   /* TODO fix HANDSEED - 00 00 00 00 00 00 12 35 mean 0x1235 */
-  dat->byte = 0x4ee;
   DECODER {
     _obj->HANDSEED = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
     _obj->HANDSEED->absolute_ref = (BITCODE_RL)bit_read_RS (dat);
@@ -252,17 +246,15 @@
     free (_obj->HANDSEED);
   }
   DEBUG_HERE
-
-  dat->byte = 0x4f6;
+  UNKNOWN_UNTIL (0x4f6);
   FIELD_RS (SURFU, 70); //ok
   FIELD_RS (SURFV, 70); //ok
   FIELD_RS (SURFTYPE, 70); //ok
   FIELD_RS (SURFTAB1, 70); //ok
   FIELD_RS (SURFTAB2, 70); //ok
-
   /* Skip table VPORT (0x500-0x509 )*/
-  dat->byte = 0x50a;
-
+  DEBUG_HERE
+  UNKNOWN_UNTIL (0x50a);
   FIELD_CAST (FLATLAND, RS, B, 70);
   FIELD_RS (SPLINETYPE, 70);
   FIELD_RS (UCSICON, 0);
@@ -271,8 +263,8 @@
     return 0;
 
   /* Skip table APPID (0x512-0x51b) */
-  dat->byte = 0x51c;
-
+  DEBUG_HERE
+  UNKNOWN_UNTIL (0x51c);
   FIELD_CAST (WORLDVIEW, RS, B, 70);
   if (dwg->header.numheader_vars <= 160) // r10
     return 0;
@@ -281,12 +273,11 @@
   // TILEMODE came with r11
 
   /* Skip table DIMSTYLE (0x522-0x52b) */
-  dat->byte = 0x52c;
-
+  DEBUG_HERE
+  UNKNOWN_UNTIL (0x52c);
   /* TODO Unknown 5 bytes. (first two bytes sometimes ff ff) */
   DEBUG_HERE
-
-  dat->byte = 0x531;
+  UNKNOWN_UNTIL (0x531);
   FIELD_RS (DIMCLRD_C, 70); //ok
   FIELD_RS (DIMCLRE_C, 70); //ok
   FIELD_RS (DIMCLRT_C, 70); //ok
@@ -296,8 +287,7 @@
 
   /* TODO Unknown 34 bytes */
   DEBUG_HERE //53d
-
-  dat->byte = 0x55f;
+  UNKNOWN_UNTIL (0x55f);
   FIELD_TFv (unknown_unit1, 32, 1);
   FIELD_TFv (unknown_unit2, 32, 1);
   FIELD_TFv (unknown_unit3, 32, 1);
@@ -318,12 +308,11 @@
   FIELD_3RD (PINSBASE, 10);
 
   /* Skip table VX (0x69f-0x6a8) */
-  dat->byte = 0x6a9;
-
+  DEBUG_HERE
+  UNKNOWN_UNTIL (0x6a9);
   FIELD_RS (MAXACTVP, 70); //ok
   FIELD_RD (DIMGAP, 40);   //ok
   FIELD_RD (PELEVATION, 40); //ok
   if (dwg->header.numheader_vars <= 204)
     return 0;
   FIELD_CAST (VISRETAIN, RS, B, 70); //ok
-
