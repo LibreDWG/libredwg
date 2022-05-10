@@ -367,8 +367,14 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             Bit_Chain *str_dat = dat;
             PREP_TABLE (LAYER);
             FIELD_CMC (color, 62); // off if negative
-            FIELD_RS (linewt, 370);
-            FIELD_HANDLE (ltype, 2, 6);
+            PRE (R_11) {
+              FIELD_RC (linewt, 370);
+              FIELD_HANDLE (ltype, 1, 6);
+            }
+            LATER_VERSIONS {
+              FIELD_RS (linewt, 370);
+              FIELD_HANDLE (ltype, 2, 6);
+            }
             CHK_ENDPOS;
           }
       break;
@@ -610,65 +616,6 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 
   #include "common_entity_data.spec"
 
-#if 0  
-  PRE (R_2_0b) {
-    FIELD_HANDLE (layer, 2, 8);
-    goto entity_end;
-  }
-  SINCE (R_2_0b) {
-    FIELD_RC (flag_r11, 70); // mode
-    obj->size = bit_read_RS (dat);
-    LOG_TRACE("size: %d [RS]\n", obj->size);
-    FIELD_HANDLE (layer, 2, 8);
-  }
-  FIELD_RSx (opts_r11, 0); // i.e. dataflags
-  if (R11FLAG (FLAG_R11_COLOR)) // 1
-    FIELD_RCd (color_r11, 0);
-  if (R11FLAG (FLAG_R11_LTYPE)) // 2
-    FIELD_HANDLE (ltype, 1, 6);
-
-  // TODO: maybe move that to the entity
-  PRE (R_10) { // XXX Check precise version
-    if (_obj->flag_r11 & FLAG_R11_ELEVATION) // 4
-      FIELD_RD (elevation_r11, 38);
-  } LATER_VERSIONS {
-    if (_obj->flag_r11 & FLAG_R11_ELEVATION // 4
-        // 1 = LINE, 2 = POINT, 22 = 3DFACE
-        && obj->type != 1 && obj->type != 2 && obj->type != 22)
-      FIELD_RD (elevation_r11, 38);
-  }
-
-  if (_obj->flag_r11 & FLAG_R11_THICKNESS) // 8
-    FIELD_RD (thickness_r11, 39);
-
-  if (_obj->flag_r11 & FLAG_R11_HANDLING) { // 32
-    FIELD_RC (handling_size, 0);
-    FIELD_TFv (handling_r11, FIELD_VALUE (handling_size), 0);
-  }
-
-  if (_obj->flag_r11 & FLAG_R11_PAPER) // 64
-    FIELD_RS (paper_r11, 0);
-
-  SINCE (R_13b1) { // seems to be wrong
-    if (_obj->opts_r11 & OPTS_R11_XDATA)
-      {
-        int error = dwg_decode_eed (dat, (Dwg_Object_Object *)_ent);
-        if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
-          return error;
-      }
-  }
-  /*
-  if (_obj->opts_r11 & 0x20) // XREF_DEP
-    {
-      Dwg_Object_Ref *hdl
-        = dwg_decode_handleref_with_code (dat, obj, dwg, 0);
-      if (hdl)
-        obj->handle = hdl->handleref;
-    }
-  */
-#endif
-
-//entity_end:
   obj->common_size = bit_position (dat) - obj->bitsize_pos;
   return 0;
 }
