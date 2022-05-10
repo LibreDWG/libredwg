@@ -878,15 +878,8 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("?1long: 0x%x\n", rl1);
 
   rl1 = blocks_end + 36 + 4 * 4 + 12;
-  if (dat->byte < rl1)
-    {
-      int len = rl1 - dat->byte;
-      BITCODE_TF unknown = bit_read_TF (dat, len);
-      LOG_TRACE ("unknown (%d):", len);
-      LOG_TRACE_TF (unknown, len);
-      free (unknown);
-    }
-  dat->byte = rl1;
+  DEBUG_HERE
+  UNKNOWN_UNTIL (rl1);
   LOG_TRACE ("@0x%lx\n", dat->byte);
   decode_preR13_section_chk (SECTION_BLOCK, dat, dwg);
   decode_preR13_section_chk (SECTION_LAYER, dat, dwg);
