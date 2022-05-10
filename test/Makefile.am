@@ -350,6 +350,9 @@ TESTDATA = \
     test-data/r14/Leader.dwg \
     test-data/r14/Leader.dxf \
     test-data/r14/v.dwg \
+    test-data/r2.6/dim.dwg \
+    test-data/r2.6/dim.dxf \
+    test-data/r2.6/dim.scr \
     test-data/r2.6/entities.dwg \
     test-data/r2.6/entities.dxf \
     test-data/r2.6/entities.scr \
