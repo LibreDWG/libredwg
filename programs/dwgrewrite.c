@@ -346,7 +346,8 @@ int main (int argc, char *argv[])
       }
   }
 
-  printf ("\n==========================================\n");
+  if (opts)
+    fprintf(stderr, "\n==========================================\n");
   error = dwg_write_file (filename_out, &dwg);
   if (error >= DWG_ERR_CRITICAL)
     {
@@ -368,7 +369,8 @@ int main (int argc, char *argv[])
   //if (opts)
   //  printf ("\n");
   printf ("Re-reading created file %s\n", filename_out);
-  printf ("\n==========================================\n");
+  if (opts)
+    fprintf(stderr, "\n==========================================\n");
   error = dwg_read_file (filename_out, &dwg); /* 2nd read */
   if (error >= DWG_ERR_CRITICAL)
     printf ("re-READ ERROR 0x%x\n", error);
