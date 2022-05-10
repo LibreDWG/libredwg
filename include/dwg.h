@@ -8038,8 +8038,8 @@ enum {
   FLAG_R11_ELEVATION = 4,
   FLAG_R11_THICKNESS = 8,
   // 16
-  FLAG_R11_HANDLING = 32,
-  FLAG_R11_PAPER = 64,
+  FLAG_R11_HANDLING = 32, // 0x20
+  FLAG_R11_PSPACE = 64,    // 0x40
   // 128
 };
 
@@ -8051,7 +8051,18 @@ enum {
   OPTS_R11_XREF_DEP = 16,
   OPTS_R11_XREF_REF = 32,
   OPTS_R11_XREF_RESOLVED = 64,
-  OPTS_R11_XDATA = 128,
+  OPTS_R11_XDATA = 128, //?
+};
+
+enum {
+  DIM_OPTS_R11_OPTS2 = 2,   // Optional flag
+  DIM_OPTS_R11_TEXT = 4,
+  DIM_OPTS_R11_DXF13 = 8,   // Ordinate: leader_start_pt
+  DIM_OPTS_R11_DXF14 = 16,  // Ordinate: leader_end_pt
+  DIM_OPTS_R11_DXF15 = 32,
+  DIM_OPTS_R11_DXF16 = 64,  // Angular: line arc
+  DIM_OPTS_R11_DXF17 = 128, // There is no DXF17
+  DIM_OPTS_R11_DXF50 = 0x100,
 };
 
 /**
@@ -8204,7 +8215,7 @@ typedef struct _dwg_object_entity
   BITCODE_RCd color_r11;
   BITCODE_RD elevation_r11; // TODO: move to the entities
   BITCODE_RD thickness_r11; // TODO: move to the entities
-  BITCODE_RS paper_r11;
+  BITCODE_H viewport; // if in paperspace
   /* preR13 in the obj: eed, elevation/pt.z, thickness, paper */
 
   /* Common Entity Handle Data */
