@@ -9,7 +9,7 @@
   LATER_VERSIONS {
     PRE (R_13) {
       SINCE (R_2_0b) {
-        FIELD_RC (flag_r11, 70); // mode
+        FIELD_RC (flag_r11, 70); // modes
 #ifdef IS_DECODER
         obj->size = bit_read_RS (dat);
 #elif defined IS_ENCODER
@@ -23,8 +23,14 @@
       FIELD_RSx (opts_r11, 0); // i.e. dataflags
       if (R11FLAG (FLAG_R11_COLOR)) // 1
         FIELD_RCd (color_r11, 0);
-      if (R11FLAG (FLAG_R11_LTYPE)) // 2
-        FIELD_HANDLE (ltype, 1, 6);
+      if (R11FLAG (FLAG_R11_LTYPE)) { // 2
+        PRE (R_11) {
+          FIELD_HANDLE (ltype, 1, 6);
+        }
+        LATER_VERSIONS {
+          FIELD_HANDLE (ltype, 2, 6);
+        }
+      }
 
       // TODO: maybe move that to the entity
       PRE (R_10) { // XXX Check precise version
@@ -40,7 +46,8 @@
         FIELD_RD (thickness_r11, 39);
       if (R11FLAG (FLAG_R11_HANDLING)) { // 32
         FIELD_RC (handling_size, 0);
-        FIELD_TFv (handling_r11, FIELD_VALUE (handling_size), 0);
+        // optional handle, in hex
+        FIELD_TFv (handling_r11, FIELD_VALUE (handling_size), 5);
       }
       if (R11FLAG (FLAG_R11_PAPER)) // 64
         FIELD_RS (paper_r11, 0);
