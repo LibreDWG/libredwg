@@ -1055,7 +1055,11 @@ DWG_ENTITY (VERTEX_3D)
   PRE (R_13)
   {
     FIELD_VALUE (flag) = R11FLAG (255);
-    FIELD_3RD (point, 10);
+    if (R11FLAG (FLAG_R11_ELEVATION)) {
+      FIELD_3RD (point, 10);
+    } else {
+      FIELD_2RD (point, 10);
+    }
   }
   LATER_VERSIONS {
     FIELD_RC (flag, 0);

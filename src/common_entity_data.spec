@@ -9,8 +9,24 @@
   LATER_VERSIONS {
     PRE (R_13) {
       SINCE (R_2_0b) {
-        FIELD_RC (flag_r11, 70); // modes
+        FIELD_RC (flag_r11, 0);
 #ifdef IS_DECODER
+        if (_obj->flag_r11)
+          {
+            LOG_TRACE ("          ");
+            // stringify the flag bits
+#define LOG_FLAG_R11(w)                                 \
+            if (R11FLAG (FLAG_R11_##w))                 \
+              LOG_TRACE (#w " (%02x) ", FLAG_R11_##w)
+            LOG_FLAG_R11 (COLOR);
+            LOG_FLAG_R11 (LTYPE);
+            LOG_FLAG_R11 (ELEVATION);
+            LOG_FLAG_R11 (THICKNESS);
+            LOG_FLAG_R11 (HANDLING);
+            LOG_FLAG_R11 (PSPACE);
+            LOG_TRACE ("\n");
+#undef LOG_FLAG_R11
+          }
         obj->size = bit_read_RS (dat);
 #elif defined IS_ENCODER
         bit_write_RS (dat, obj->size);
