@@ -15895,8 +15895,6 @@ BL
 RS
 @item ownerhandle
 H,	DXF 330
-@item paper_r11
-RS,	DXF 67
 @item plotstyle
 H,	DXF 390
 @item plotstyle_flags
@@ -15919,6 +15917,8 @@ H
 RC,	DXF 284
 @item thickness_r11
 RD,	DXF 39
+@item viewport
+H
 @item xdicobjhandle
 H,	DXF 360
 

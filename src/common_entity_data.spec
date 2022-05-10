@@ -44,6 +44,19 @@
       }
       if (R11FLAG (FLAG_R11_THICKNESS)) // 8
         FIELD_RD (thickness_r11, 39);
+      if (R11FLAG (FLAG_R11_PSPACE)) { // 64
+#ifdef IS_DECODER
+        _ent->entmode = 1;
+#endif
+        DXF { VALUE_RC (1, 67); }
+        if (obj->type != DWG_TYPE_VIEWPORT_R11) {
+          // which viewport?
+          FIELD_HANDLE (viewport, 1, 0);
+        } else {
+          FIELD_RSd (extra_r11, 0); // viewport index?
+          // ??
+        }
+      }
       if (R11FLAG (FLAG_R11_HANDLING)) { // 32
 #ifdef IS_DXF
         VALUE_H (obj->handle.value, 5);
@@ -51,8 +64,10 @@
         VALUE_H (obj->handle, 5);
 #endif
       }
-      if (R11FLAG (FLAG_R11_PAPER)) // 64
-        FIELD_RS (paper_r11, 0);
+      // some unknown pspace RS
+      if (R11FLAG (FLAG_R11_PSPACE) && obj->type != DWG_TYPE_VIEWPORT_R11) {
+        FIELD_RSd (extra_r11, 0); // unknown
+      }
     }
   }
 
