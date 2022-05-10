@@ -119,6 +119,7 @@ static BITCODE_BL rcount1, rcount2;
 #define FIELD_DATAHANDLE(name, code, dxf) FIELD_HANDLE (name, code, dxf)
 #define FIELD_HANDLE_N(name, vcount, code, dxf) FIELD_HANDLE (name, code, dxf)
 #define FIELD_VECTOR_INL(nam, type, size, dxf)
+#define VALUE_H(hdl, dxf)
 
 #define FIELD_B(name, dxf) FIELD (name, B)
 #define FIELD_BB(name, dxf) FIELD (name, BB)
@@ -617,7 +618,7 @@ free_preR13_object (Dwg_Object *obj)
     if (_obj->flag_r11 & FLAG_R11_LTYPE) // 2
       FIELD_HANDLE (ltype, 1, 6);
     if (_obj->flag_r11 & FLAG_R11_HANDLING) { // 32
-      FIELD_TFv (handling_r11, handling_size, 0);
+      ; // obj->handle is static
     }
   }
 

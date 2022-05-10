@@ -38,9 +38,14 @@ DWG_ENTITY (TEXT)
       FIELD_RD (width_factor, 41);
     if (R11OPTS (4))
       FIELD_RD (oblique_angle, 51);
-    if (R11OPTS (8)) {
+    /*
+    if (R11OPTS (8)) { // or R11FLAG LTYPE?
+#if defined IS_JSON
+      KEY (ltype);
+#endif      
       VALUE_HANDLE (_ent->ltype, ltype, 1, 6);
     }
+    */
     if (R11OPTS (16))
       FIELD_CAST (generation, RC, BS, 71);
     if (R11OPTS (32))
