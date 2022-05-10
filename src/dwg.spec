@@ -1398,9 +1398,11 @@ DWG_ENTITY_END
     PRE (R_13)                                                                \
     {                                                                         \
       FIELD_HANDLE (block, 2, 2);                                             \
-      FIELD_2RD (def_pt, 10);                                                 \
-      if (R11FLAG (FLAG_R11_ELEVATION))                                       \
-        FIELD_RD (elevation, 38);                                             \
+      if (!(R11FLAG (2))) {                                                   \
+        FIELD_3RD (def_pt, 10);                                               \
+      } else {  /* ANG2LN */                                                  \
+        FIELD_2RD (def_pt, 10);                                               \
+      }                                                                       \
       FIELD_2RD (text_midpt, 11);                                             \
       if (R11OPTS (2))                                                        \
         FIELD_RC (flag1, 0);                                                  \
@@ -1502,24 +1504,17 @@ DWG_ENTITY (DIMENSION_ORDINATE)
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbOrdinateDimension)
   PRE (R_13) {
-    //FIELD_2RD (def_pt, 0);
-    if (R11OPTS (8)) {
-      if (R11FLAG (FLAG_R11_ELEVATION)) {
-        FIELD_3RD (feature_location_pt, 13);
-      }
-      else {
-        FIELD_2RD (feature_location_pt, 13);
-      }
+    if (R11OPTS (8)) { // if dxf 13 (extension_defining_pt)
+      // TODO 2d if ANG2LN or opts 8
+      FIELD_3RD (feature_location_pt, 13);
     }
-    if (R11FLAG (FLAG_R11_ELEVATION)) {
+    if (R11OPTS (0x10)) { // extension_defining_point2
+      // TODO 2d if ANG2LN or opts 16
       FIELD_3RD (leader_endpt, 14);
-    }
-    else {
-      FIELD_2RD (leader_endpt, 14);
     }
     FIELD_RC (flag2, 0);
   } else {
-    //FIELD_3BD (def_pt, 0);
+    FIELD_3BD (def_pt, 0);
     FIELD_3BD (feature_location_pt, 13);
     FIELD_3BD (leader_endpt, 14);
     FIELD_RC (flag2, 0);
@@ -1576,11 +1571,13 @@ DWG_ENTITY (DIMENSION_ALIGNED)
   PRE (R_13) {
     FIELD_2RD (xline1_pt, 13);
     FIELD_2RD (xline2_pt, 14);
+    if (R11OPTS (0x100))
+      FIELD_RD (oblique_angle, 50);
   } LATER_VERSIONS {
     FIELD_3BD (xline1_pt, 13);
     FIELD_3BD (xline2_pt, 14);
     FIELD_3BD (def_pt, 0);
-    FIELD_BD (oblique_angle, 0);
+    FIELD_BD (oblique_angle, 50);
 
     COMMON_ENTITY_HANDLE_DATA;
     FIELD_HANDLE (dimstyle, 5, 0);
@@ -1597,6 +1594,7 @@ DWG_ENTITY (DIMENSION_ANG3PT)
     FIELD_2RD (def_pt, 0);
     FIELD_2RD (xline1_pt, 13);
     FIELD_2RD (xline2_pt, 14);
+    // if R11OPTS (32)
     FIELD_2RD (center_pt, 15);
   } LATER_VERSIONS {
     FIELD_3BD (def_pt, 0);
