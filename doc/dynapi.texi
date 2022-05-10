@@ -1404,7 +1404,7 @@ H,	DXF 2
 @item xline2_pt
 3BD,	DXF 14
 @item oblique_angle
-BD
+BD,	DXF 50
 
 @end vtable
 @end indentedblock
@@ -15842,7 +15842,7 @@ H,	DXF 348
 @item eed
 Dwg_Eed*
 @item elevation_r11
-RD
+RD,	DXF 38
 @item entmode
 BB,	DXF 67
 @item extra_r11
@@ -15850,11 +15850,11 @@ RC
 @item face_visualstyle
 H,	DXF 348
 @item flag_r11
-RC
+RC,	DXF 70
 @item full_visualstyle
 H,	DXF 348
 @item handling_r11
-T
+TV
 @item handling_size
 RC
 @item has_ds_data
@@ -15922,7 +15922,7 @@ H
 @item shadow_flags
 RC,	DXF 284
 @item thickness_r11
-RD
+RD,	DXF 39
 @item xdicobjhandle
 H,	DXF 360
 
