@@ -1970,18 +1970,29 @@ DWG_ENTITY (SHAPE)
 
   SUBCLASS (AcDbShape)
   PRE (R_2_0) {
-    FIELD_2RD (ins_pt, 0);
+    FIELD_2RD (ins_pt, 10);
     FIELD_RD (scale, 40);
-    FIELD_RD (rotation, 0);
-    FIELD_RS (style_id, 0);
+    FIELD_RD (rotation, 50);
+    FIELD_RS (style_id, 0); // => shapename
   }
   VERSIONS (R_2_0, R_11) {
     FIELD_2RD (ins_pt, 10);
     FIELD_RD (scale, 40);
     FIELD_RCu (style_id, 2);
     if (R11OPTS (1))
-      FIELD_RD (rotation, 50);
-    FIELD_HANDLE (style, 1, 0);
+      FIELD_RD0 (rotation, 50);
+    if (R11OPTS (2)) // untested
+      FIELD_RD0 (oblique_angle, 51);
+    if (R11OPTS (4)) // untested
+      FIELD_RD0 (width_factor, 41);
+    DECODER {
+      // thickness already in common
+      if (R11FLAG (FLAG_R11_THICKNESS))
+        _obj->thickness = _ent->thickness_r11;
+      if (R11FLAG (FLAG_R11_ELEVATION))
+        _obj->ins_pt.z = _ent->elevation_r11;
+    }
+    FIELD_HANDLE (style, 1, 0); // -> shapename 2
   }
   SINCE (R_13b1) {
     FIELD_3BD (ins_pt, 10);
@@ -1992,7 +2003,7 @@ DWG_ENTITY (SHAPE)
     DXF { FIELD_HANDLE (style, 5, 7); }
     FIELD_BD0 (thickness, 39);
 #ifdef IS_DXF
-    {
+    { // FIXME use the tblname API (needed for r11 also)
       Dwg_Object *style;
       if (_obj->style)
         style = dwg_resolve_handle (dwg, _obj->style->absolute_ref);
