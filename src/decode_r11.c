@@ -904,6 +904,8 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_TRACE_TF (unknown, len);
       free (unknown);
     }
+  if (dwg->dirty_refs)
+    dwg_resolve_objectrefs_silent (dwg);
   return 0;
 }
 AFL_GCC_POP
