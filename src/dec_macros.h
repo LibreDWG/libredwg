@@ -42,9 +42,16 @@
 #define LOG_POS                                                               \
   LOG_INSANE (" @%lu.%u", obj ? dat->byte - obj->address : dat->byte, dat->bit)\
   LOG_TRACE ("\n")
+#define LOG_POS_(level)                                                       \
+  LOG_INSANE (" @%lu.%u", obj ? dat->byte - obj->address : dat->byte, dat->bit) \
+  LOG (level, "\n")                                                         \
+
 #define LOG_RPOS                                                              \
   LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                                \
   LOG_TRACE ("\n")
+#define LOG_RPOS_(level)                                                      \
+  LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                                \
+  LOG (level, "\n")
 #define LOG_HPOS                                                              \
   LOG_INSANE (" @%lu.%u",                                                     \
               obj && hdl_dat->byte > obj->address                             \
@@ -52,6 +59,13 @@
                   : hdl_dat->byte,                                            \
               hdl_dat->bit)                                                   \
   LOG_TRACE ("\n")
+#define LOG_HPOS_(level)                                                      \
+  LOG_INSANE (" @%lu.%u",                                                     \
+              obj && hdl_dat->byte > obj->address                             \
+                  ? hdl_dat->byte - obj->address                              \
+                  : hdl_dat->byte,                                            \
+              hdl_dat->bit)                                                   \
+  LOG (level, "\n")
 
 #define VALUE(value, type, dxf)                                               \
   LOG_TRACE (FORMAT_##type " [" #type " %d]\n", (BITCODE_##type)value, dxf)
