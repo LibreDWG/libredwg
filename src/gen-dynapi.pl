@@ -3396,11 +3396,13 @@ dwg_dynapi_field_set_value (const Dwg_Data *restrict dwg, /* only needed if unic
 // check if the handle points to an object with a name.
 // see also dwg_obj_table_get_name, which only supports tables.
 EXPORT char*
-dwg_dynapi_handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict hdl)
+dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
+                        Dwg_Object_Ref *restrict hdl,
+                        int *alloced)
 {
   const bool is_tu = IS_FROM_TU_DWG (dwg);
   Dwg_Object *obj;
-
+  *alloced = 0;
 #ifndef HAVE_NONNULL
   if (!dwg || !hdl)
     return NULL;
@@ -3419,6 +3421,7 @@ dwg_dynapi_handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict h
     if (is_tu && strNE (f->type, "TF")) /* not TF */
       {
         BITCODE_TU wstr = *(BITCODE_TU *)((char *)_obj + f->offset);
+        *alloced = 1;
         return bit_convert_TU (wstr);
       }
     else

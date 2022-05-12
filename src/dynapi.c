@@ -8517,6 +8517,8 @@ static const Dwg_DYNAPI_field _dwg_LTYPE_fields[] = {
     0,0,0, 0 },
   { "strings_area",	"TF", sizeof (BITCODE_TF),  OFF (struct _dwg_object_LTYPE, strings_area),
     1,1,0, 0 },
+  { "unknown_r11",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_LTYPE, unknown_r11),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_LTYPE_CONTROL: (sorted by offset) */
@@ -12808,7 +12810,7 @@ static const Dwg_DYNAPI_field _dwg_object_entity_fields[] = {
   { "face_visualstyle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_entity, face_visualstyle),
     1,0,0, 348 },
   { "flag_r11",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_entity, flag_r11),
-    0,0,0, 70 },
+    0,0,0, 0 },
   { "full_visualstyle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_entity, full_visualstyle),
     1,0,0, 348 },
   { "has_ds_data",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_entity, has_ds_data),
@@ -14556,11 +14558,13 @@ dwg_dynapi_field_set_value (const Dwg_Data *restrict dwg, /* only needed if unic
 // check if the handle points to an object with a name.
 // see also dwg_obj_table_get_name, which only supports tables.
 EXPORT char*
-dwg_dynapi_handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict hdl)
+dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
+                        Dwg_Object_Ref *restrict hdl,
+                        int *alloced)
 {
   const bool is_tu = IS_FROM_TU_DWG (dwg);
   Dwg_Object *obj;
-
+  *alloced = 0;
 #ifndef HAVE_NONNULL
   if (!dwg || !hdl)
     return NULL;
@@ -14579,6 +14583,7 @@ dwg_dynapi_handle_name (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict h
     if (is_tu && strNE (f->type, "TF")) /* not TF */
       {
         BITCODE_TU wstr = *(BITCODE_TU *)((char *)_obj + f->offset);
+        *alloced = 1;
         return bit_convert_TU (wstr);
       }
     else

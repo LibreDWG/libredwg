@@ -50792,6 +50792,21 @@ static int test_LTYPE (const Dwg_Object *obj)
         fail ("LTYPE.strings_area [TF]");
   }
   {
+    BITCODE_RC unknown_r11;
+    if (dwg_dynapi_entity_value (ltype, "LTYPE", "unknown_r11", &unknown_r11, NULL)
+        && unknown_r11 == ltype->unknown_r11)
+      pass ();
+    else
+      fail ("LTYPE.unknown_r11 [RC] %u != %u", ltype->unknown_r11, unknown_r11);
+    unknown_r11++;
+    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "unknown_r11", &unknown_r11, 0)
+        && unknown_r11 == ltype->unknown_r11)
+      pass ();
+    else
+      fail ("LTYPE.unknown_r11 [RC] set+1 %u != %u", ltype->unknown_r11, unknown_r11);
+    ltype->unknown_r11--;
+  }
+  {
     BITCODE_RSd used;
     if (dwg_dynapi_entity_value (ltype, "LTYPE", "used", &used, NULL)
         && used == ltype->used)

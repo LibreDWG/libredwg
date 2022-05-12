@@ -289,9 +289,10 @@
             if (dwg_ref_object_silent (dwg, ref)                              \
                 && DWG_LOGLEVEL > DWG_LOGLEVEL_TRACE)                         \
               {                                                               \
-                const char *u8 = dwg_ref_tblname (dwg, ref);                  \
+                int alloced;                                                  \
+                const char *u8 = dwg_ref_tblname (dwg, ref, &alloced);        \
                 HANDLER (OUTPUT, " => %s %s", dwg_ref_objname (dwg, ref), u8);\
-                if (u8 && IS_FROM_TU_DWG (dwg))                               \
+                if (alloced)                                                  \
                   free ((void*)u8);                                           \
               }                                                               \
           }                                                                   \
@@ -342,9 +343,10 @@
               if (dwg_ref_object_silent (dwg, ref)                              \
                   && DWG_LOGLEVEL > DWG_LOGLEVEL_TRACE)                         \
                 {                                                               \
-                  const char *u8 = dwg_ref_tblname (dwg, ref);                  \
+                  int alloced;                                                  \
+                  const char *u8 = dwg_ref_tblname (dwg, ref, &alloced);        \
                   HANDLER (OUTPUT, " => %s %s", dwg_ref_objname (dwg, ref), u8);\
-                  if (dwg->header.version >= R_2007 && u8 && *u8)               \
+                  if (alloced)                                                  \
                     free ((void*)u8);                                           \
                 }                                                               \
             }                                                                   \

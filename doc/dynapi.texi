@@ -10277,6 +10277,8 @@ RD
 B
 @item strings_area
 TF
+@item unknown_r11
+RC
 
 @end vtable
 @end indentedblock
@@ -15850,7 +15852,7 @@ RC
 @item face_visualstyle
 H,	DXF 348
 @item flag_r11
-RC,	DXF 70
+RC
 @item full_visualstyle
 H,	DXF 348
 @item has_ds_data
