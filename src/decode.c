@@ -540,7 +540,8 @@ classes_section:
     }
   else
     endpos = dat->byte + size;
-  LOG_INSANE ("endpos: %lu", endpos); LOG_POS;
+  LOG_INSANE ("endpos: %lu", endpos);
+  LOG_POS_ (INSANE);
 
   /* Read the classes
    */
@@ -574,13 +575,13 @@ classes_section:
       klass = &dwg->dwg_class[i];
       memset (klass, 0, sizeof (Dwg_Class));
       klass->number = bit_read_BS (dat);
-      LOG_HANDLE ("number: " FORMAT_BS " [BS] ", klass->number); LOG_POS;
+      LOG_HANDLE ("number: " FORMAT_BS " [BS] ", klass->number); LOG_POS_ (HANDLE);
       klass->proxyflag = bit_read_BS (dat);
-      LOG_HANDLE ("proxyflag: " FORMAT_BS " [BS] ", klass->proxyflag); LOG_POS;
+      LOG_HANDLE ("proxyflag: " FORMAT_BS " [BS] ", klass->proxyflag); LOG_POS_ (HANDLE);
       if (dat->byte >= endpos)
         break;
       klass->appname = bit_read_TV (dat);
-      LOG_HANDLE ("appname: %s [TV] ", klass->appname); LOG_POS;
+      LOG_HANDLE ("appname: %s [TV] ", klass->appname); LOG_POS_ (HANDLE);
       if (dat->byte >= endpos)
         {
           free (klass->appname);
@@ -588,14 +589,14 @@ classes_section:
         }
       LOG_HANDLE ("\n  ");
       klass->cppname = bit_read_TV (dat);
-      LOG_HANDLE ("cppname: %s [TV] ", klass->cppname); LOG_POS;
+      LOG_HANDLE ("cppname: %s [TV] ", klass->cppname); LOG_POS_ (HANDLE);
       klass->dxfname = bit_read_TV (dat);
-      LOG_HANDLE ("dxfname: %s [TV] ", klass->dxfname); LOG_POS;
+      LOG_HANDLE ("dxfname: %s [TV] ", klass->dxfname); LOG_POS_ (HANDLE);
       klass->is_zombie = bit_read_B (dat); // was_a_proxy
-      LOG_HANDLE ("is_zombie: " FORMAT_B " [B] ", klass->is_zombie); LOG_POS;
+      LOG_HANDLE ("is_zombie: " FORMAT_B " [B] ", klass->is_zombie); LOG_POS_ (HANDLE);
       // 1f2 for entities, 1f3 for objects
       klass->item_class_id = bit_read_BS (dat);
-      LOG_HANDLE ("item_class_id: " FORMAT_BS " [BS]", klass->item_class_id); LOG_POS;
+      LOG_HANDLE ("item_class_id: " FORMAT_BS " [BS]", klass->item_class_id); LOG_POS_ (HANDLE);
       LOG_HANDLE ("\n");
       if (DWG_LOGLEVEL == DWG_LOGLEVEL_TRACE)
         {
@@ -610,7 +611,7 @@ classes_section:
       SINCE (R_2007) //? dead code it seems. see read_2004_section_classes()
       {
         klass->num_instances = bit_read_BL (dat);
-        LOG_HANDLE ("num_instances: " FORMAT_BL " [BL]", klass->num_instances); LOG_POS;
+        LOG_HANDLE ("num_instances: " FORMAT_BL " [BL]", klass->num_instances); LOG_POS_ (HANDLE);
         klass->dwg_version = bit_read_BL (dat); // nope: class_version
         klass->maint_version = bit_read_BL (dat);
         klass->unknown_1 = bit_read_BL (dat);
