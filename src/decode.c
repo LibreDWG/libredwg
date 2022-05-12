@@ -4013,9 +4013,13 @@ dwg_decode_add_object_ref (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
   if (!dwg->num_object_refs)
     dwg->object_ref = (Dwg_Object_Ref **)calloc (REFS_PER_REALLOC, sizeof (Dwg_Object_Ref *));
   else if (dwg->num_object_refs % REFS_PER_REALLOC == 0)
-    dwg->object_ref
+    {
+      dwg->object_ref
         = (Dwg_Object_Ref **)realloc (dwg->object_ref, (dwg->num_object_refs + REFS_PER_REALLOC)
-                                     * sizeof (Dwg_Object_Ref *));
+                                      * sizeof (Dwg_Object_Ref *));
+      LOG_TRACE ("REALLOC dwg->object_ref vector to %u\n",
+                 dwg->num_object_refs + REFS_PER_REALLOC)
+    }
   if (!dwg->object_ref)
     {
       LOG_ERROR ("Out of memory");
@@ -4738,7 +4742,11 @@ dwg_add_object (Dwg_Data *restrict dwg)
           dwg->object, dwg->num_alloced_objects * sizeof (Dwg_Object));
       realloced = old != dwg->object;
       if (realloced)
-        dwg->dirty_refs = 1;
+        {
+          dwg->dirty_refs = 1;
+          LOG_TRACE ("REALLOC dwg->object vector to %u\n",
+                     dwg->num_alloced_objects)
+        }
     }
   if (!dwg->object)
     return DWG_ERR_OUTOFMEM;
@@ -5669,6 +5677,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
             dwg->num_alloced_objects *= 2;
           dwg->object = (Dwg_Object *)realloc (
               dwg->object, dwg->num_alloced_objects * sizeof (Dwg_Object));
+          LOG_TRACE ("REALLOC dwg->object vector to %u\n", dwg->num_alloced_objects)
           dwg->dirty_refs = 1;
         }
       if (!dwg->object)
