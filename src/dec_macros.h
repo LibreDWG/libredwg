@@ -277,7 +277,7 @@
               {                                                               \
                 const char *u8 = dwg_ref_tblname (dwg, ref);                  \
                 HANDLER (OUTPUT, " => %s %s", dwg_ref_objname (dwg, ref), u8);\
-                if (dwg->header.version >= R_2007 && u8 && *u8)               \
+                if (u8 && IS_FROM_TU_DWG (dwg))                               \
                   free ((void*)u8);                                           \
               }                                                               \
           }                                                                   \
