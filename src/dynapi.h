@@ -126,8 +126,9 @@ dwg_dynapi_field_set_value (const Dwg_Data *restrict dwg, /* only needed if unic
   __nonnull ((2, 3, 4));
 
 EXPORT char *dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
-                                     Dwg_Object_Ref *restrict hdl)
-    __nonnull ((1, 2));
+                                     Dwg_Object_Ref *restrict hdl,
+                                     int *alloced)
+    __nonnull ((1, 2, 3));
 
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_header_field (const char *restrict fieldname) __nonnull ((1));

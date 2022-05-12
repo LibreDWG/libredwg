@@ -2019,6 +2019,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
   ref = dwg_new_ref (dwg);
   dwg_add_handle (&ref->handleref, code, absref, obj);
   ref->absolute_ref = absref;
+  ref->obj = NULL;
   // fill ->obj later
   return ref;
 }
@@ -2894,9 +2895,10 @@ dwg_ref_objname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
 // supports tables entries and everything with a name.
 // r2007 names are returned as malloc'ed utf-8
 const char *
-dwg_ref_tblname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
+dwg_ref_tblname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref,
+                 int *alloced)
 {
-  const char *restrict name = dwg_dynapi_handle_name (dwg, ref);
+  const char *restrict name = dwg_dynapi_handle_name (dwg, ref, alloced);
   return name ? name : "";
 }
 
