@@ -406,7 +406,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             bit_reset_chain (dat);
             {
               PREP_TABLE (LTYPE);
-              FIELD_RSd (used, 0); // -1
+              if (dwg->header.version == R_11)
+                FIELD_RSd (used, 0); // -1
               FIELD_TFv (description, 48, 3);
               FIELD_RC (alignment, 72);
               FIELD_RCu (num_dashes, 73); //
@@ -427,6 +428,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 #else
               FIELD_VECTOR_N (dashes_r11, RD, 12, 49);
 #endif
+              if (dwg->header.version < R_11 && tbl->size > 187)
+                FIELD_RC (unknown_r11, 0);
             }
             pos = dat->byte;
             *dat = abs_dat;
