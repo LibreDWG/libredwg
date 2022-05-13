@@ -1981,10 +1981,12 @@ DWG_ENTITY (SHAPE)
     FIELD_RCu (style_id, 2);
     if (R11OPTS (1))
       FIELD_RD0 (rotation, 50);
-    if (R11OPTS (2)) // untested
-      FIELD_RD0 (oblique_angle, 51);
-    if (R11OPTS (4)) // untested
+    if (R11OPTS (2))
+      FIELD_HANDLE (style, 1, 0); // -> shapename 2
+    if (R11OPTS (4))
       FIELD_RD0 (width_factor, 41);
+    if (R11OPTS (8))
+      FIELD_RD0 (oblique_angle, 51);
     DECODER {
       // thickness already in common
       if (R11FLAG (FLAG_R11_THICKNESS))
@@ -1992,7 +1994,6 @@ DWG_ENTITY (SHAPE)
       if (R11FLAG (FLAG_R11_ELEVATION))
         _obj->ins_pt.z = _ent->elevation_r11;
     }
-    FIELD_HANDLE (style, 1, 0); // -> shapename 2
   }
   SINCE (R_13b1) {
     FIELD_3BD (ins_pt, 10);
