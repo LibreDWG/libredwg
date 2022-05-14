@@ -1370,6 +1370,17 @@
     }                                                                         \
   }
 
+#define UNKNOWN_UNTIL(pos)                                                    \
+  if (dat->byte < pos)                                                        \
+    {                                                                         \
+      int len = pos - dat->byte;                                              \
+      BITCODE_TF unknown = bit_read_TF (dat, len);                            \
+      LOG_TRACE ("unknown (%d): ", len);                                      \
+      LOG_TRACE_TF (unknown, len);                                            \
+      free (unknown);                                                         \
+    }                                                                         \
+  dat->byte = pos
+
 #define SECTION_STRING_STREAM                                                 \
   {                                                                           \
     Bit_Chain sav_dat = *dat;                                                 \
