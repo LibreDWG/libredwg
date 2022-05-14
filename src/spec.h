@@ -681,15 +681,6 @@
 //error |= DWG_PRIVATE_N (ACTION, xobj->fixedtype) (dat, hdl_dat, str_dat, (Dwg_Object *)xobj)
 #define CALL_SUBCURVE(hdl, curvetype)
 
-// read unknown bytes until pos
-#define UNKNOWN_UNTIL(pos)                                                    \
-  if (dat->byte < pos)                                                        \
-    {                                                                         \
-      int len = pos - dat->byte;                                              \
-      BITCODE_TF unknown = bit_read_TF (dat, len);                            \
-      LOG_TRACE ("unknown (%d): ", len);                                       \
-      LOG_TRACE_TF (unknown, len);                                            \
-      free (unknown);                                                         \
-    }                                                                         \
-  dat->byte = pos
-
+#ifndef UNKNOWN_UNTIL
+#  define UNKNOWN_UNTIL(pos) dat->byte = pos
+#endif
