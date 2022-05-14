@@ -153,6 +153,8 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
           {
             Dwg_Object_BLOCK_CONTROL *_obj = obj->tio.object->tio.BLOCK_CONTROL;
             obj->size = tbl->size;
+            obj->address = tbl->address;
+            //obj->flag_r11 = tbl->flags;
             // we cannot set _obj->num_entries, as we add BLOCK's via add_BLOCK_HEADER
             dwg->block_control = *_obj;
           }
@@ -165,6 +167,7 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
           {
             Dwg_Object_LAYER_CONTROL *_obj = obj->tio.object->tio.LAYER_CONTROL;
             obj->size = tbl->size;
+            obj->address = tbl->address;
           }
         //dwg_add_LAYER (dwg, NULL);
       }
@@ -176,6 +179,7 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
           {
             Dwg_Object_STYLE_CONTROL *_obj = obj->tio.object->tio.STYLE_CONTROL;
             obj->size = tbl->size;
+            obj->address = tbl->address;
           }
         //dwg_add_STYLE (dwg, NULL);
       }
@@ -187,6 +191,7 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
           {
             Dwg_Object_LTYPE_CONTROL *_obj = obj->tio.object->tio.LTYPE_CONTROL;
             obj->size = tbl->size;
+            obj->address = tbl->address;
           }
         //dwg_add_LTYPE (dwg, NULL);
       }
@@ -198,6 +203,7 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
           {
             Dwg_Object_VIEW_CONTROL *_obj = obj->tio.object->tio.VIEW_CONTROL;
             obj->size = tbl->size;
+            obj->address = tbl->address;
           }
       }
       break;

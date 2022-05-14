@@ -1816,6 +1816,39 @@ encode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
 		           Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Dwg_Section *tbl = &dwg->header.section[id];
+  int i = id < 5 ? id : id - 1;
+  // SECTION_BLOCK = 1,
+  // SECTION_LAYER = 2,
+  // SECTION_STYLE = 3,
+  // SECTION_LTYPE = 5,
+  // SECTION_VIEW  = 6,
+  if (tbl && !tbl->size)
+    {
+      switch (id)
+        {
+#define ENCODE_CTRL_TO_TABLE(idtoken,ctrltoken)                               \
+  case SECTION_##idtoken:                                                     \
+    {                                                                         \
+      Dwg_Object *obj = dwg_get_first_object (dwg, DWG_TYPE_##ctrltoken);     \
+      if (obj)                                                                \
+        {                                                                     \
+          Dwg_Object_##ctrltoken *_obj = obj->tio.object->tio.ctrltoken;      \
+          tbl->size = obj->size;                                              \
+          tbl->number = _obj->num_entries;                                    \
+          tbl->flags = 0x8007 + i; /* 0x8008 - 0x800c */                      \
+          tbl->address = obj->address;                                        \
+        }                                                                     \
+      break;                                                                  \
+    }
+          ENCODE_CTRL_TO_TABLE (BLOCK, BLOCK_CONTROL)
+          ENCODE_CTRL_TO_TABLE (LAYER, LAYER_CONTROL)
+          ENCODE_CTRL_TO_TABLE (STYLE, STYLE_CONTROL)
+          ENCODE_CTRL_TO_TABLE (LTYPE, LTYPE_CONTROL)
+          ENCODE_CTRL_TO_TABLE (VIEW, VIEW_CONTROL)
+          default: break;
+#undef ENCODE_CTRL_TO_TABLE
+        }
+    }
   bit_write_RS (dat, tbl->size);
   bit_write_RS (dat, tbl->number);
   bit_write_RS (dat, tbl->flags);
@@ -2337,6 +2370,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       //blocks_size = blocks_end - blocks_start;
       bit_write_RL (dat, blocks_max);
 
+      // get the tables from the CONTROL objects
       encode_preR13_section_hdr ("BLOCK", SECTION_BLOCK, dat, dwg);
       encode_preR13_section_hdr ("LAYER", SECTION_LAYER, dat, dwg);
       encode_preR13_section_hdr ("STYLE", SECTION_STYLE, dat, dwg);
@@ -2345,6 +2379,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     }
 
     hdr_offset = dat->byte;
+
     encode_preR13_header_variables (dat, dwg);
     entities_start = dat->byte;
     dwg->cur_index = 0;
