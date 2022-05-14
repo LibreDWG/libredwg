@@ -279,6 +279,31 @@ static char *_path_field (const char *path);
     KEY (nam);                                                                \
     VALUE_TEXT_TU ((BITCODE_TU)wstr);                                         \
   }
+#define FIELD_TFv(nam, len, dxf)                                              \
+  {                                                                           \
+    FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field(#nam));             \
+    if (len < 42)                                                             \
+      {                                                                       \
+        const int _len = 6 * len + 1;                                         \
+        char _buf[256];                                                       \
+        char *p = json_cquote (_buf, (const char*)_obj->nam, _len);           \
+        size_t lp = strlen (p);                                               \
+        fprintf (dat->fh, "\"%s", p);                                         \
+        for (int _i = lp; _i < (int)len; _i++)                                \
+          fprintf (dat->fh, "\\0");                                           \
+        fprintf (dat->fh, "\"");                                              \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        const int _len = 6 * len + 1;                                         \
+        char *_buf = (char *)malloc (_len);                                   \
+        fprintf (dat->fh, "\"%s\"",                                           \
+                 json_cquote (_buf, (const char*)_obj->nam, _len));           \
+        free (_buf);                                                          \
+      }                                                                       \
+  }
+#define FIELD_TF(nam, len, dxf) FIELD_TFv (nam, len, dxf)
+#define FIELD_TFF(nam, len, dxf) FIELD_TFv (nam, len, dxf)
 
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1
@@ -437,8 +462,8 @@ static char *_path_field (const char *path);
 #define FIELD_RLL(nam, dxf) FIELD (nam, RLL, dxf)
 #define FIELD_MC(nam, dxf) FIELD (nam, MC, dxf)
 #define FIELD_MS(nam, dxf) FIELD (nam, MS, dxf)
-#define FIELD_TF(nam, len, dxf) FIELD_TEXT (nam, _obj->nam)
-#define FIELD_TFF(nam, len, dxf) FIELD_TEXT (nam, (const char*)_obj->nam)
+//#define FIELD_TF(nam, len, dxf) FIELD_TEXT (nam, _obj->nam)
+//#define FIELD_TFF(nam, len, dxf) FIELD_TEXT (nam, (const char*)_obj->nam)
 #define FIELD_TFFx(nam, len, dxf) FIELD_BINARY (nam, len, dxf)
 #define FIELD_TV(nam, dxf) FIELD_TEXT (nam, _obj->nam)
 #define FIELD_TU(nam, dxf) FIELD_TEXT_TU (nam, (BITCODE_TU)_obj->nam)
