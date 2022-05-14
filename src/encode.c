@@ -237,6 +237,15 @@ const unsigned char unknown_section[53]
             for (int _i = 0; _i < (int)(len); _i++)                           \
               bit_write_RC (dat, 0);                                          \
           }                                                                   \
+        /* The source might not be long enough. or it is, just with a zero */ \
+        /* Luckily TFF's are only preR13 */                                   \
+        else if (dat->version < R_13 && strlen ((char*)_obj->nam) < (unsigned)len) \
+          {                                                                   \
+            size_t rlen = strlen ((char*)_obj->nam);                          \
+            bit_write_TF (dat, (BITCODE_TF)_obj->nam, rlen);                  \
+            for (int _i = 0; _i < (int)(len - rlen); _i++)                    \
+              bit_write_RC (dat, 0);                                          \
+          }                                                                   \
         else                                                                  \
           {                                                                   \
             bit_write_TF (dat, (BITCODE_TF)_obj->nam, len);                   \
