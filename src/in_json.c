@@ -415,6 +415,61 @@ json_wstring (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
 }
 
 ATTRIBUTE_MALLOC
+static char *
+json_fixed_string (Bit_Chain *restrict dat, const int len, jsmntokens_t *restrict tokens)
+{
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  char *key = malloc (len + 1);
+  int l;
+  JSON_TOKENS_CHECK_OVERFLOW_NULL;
+  l = t->end - t->start;
+  if (!key)
+    goto outofmemory;
+  if (t->type != JSMN_STRING)
+    {
+      LOG_ERROR ("Expected JSON STRING");
+      json_advance_unknown (dat, tokens, t->type, 0);
+      JSON_TOKENS_CHECK_OVERFLOW_NULL
+      return NULL;
+    }
+  // Unquote \", convert Unicode to \\U+xxxx as in bit_embed_TU
+  // unquote \\ to \.
+  if (memchr (&dat->chain[t->start], '\\', l))
+    {
+      int dlen = len;
+      dat->chain[t->end] = '\0';
+      while (!bit_utf8_to_TV (key, &dat->chain[t->start], dlen, t->end - t->start, 1))
+        {
+          LOG_INSANE ("Not enough room in quoted string len=%d\n", len)
+          dlen += 8;
+          if (dlen > 6 * (t->end - t->start))
+            {
+              LOG_ERROR ("bit_utf8_to_TV loop len=%d vs %d \"%.*s\"", len,
+                         t->end - t->start, t->end - t->start,
+                         &dat->chain[t->start]);
+              //len = t->end - t->start;
+              free (key);
+              goto normal;
+            }
+          key = (char *)realloc (key, dlen);
+          if (!key)
+            goto outofmemory;
+        }
+    }
+  else
+    {
+    normal:
+      memcpy (key, &dat->chain[t->start], len);
+      key[len] = '\0';
+    }
+  tokens->index++;
+  return key;
+ outofmemory:
+  LOG_ERROR ("Out of memory");
+  return NULL;
+}
+
+ATTRIBUTE_MALLOC
 static unsigned char *
 json_binary (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
              const char *restrict key, unsigned long *lenp)

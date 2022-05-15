@@ -2529,6 +2529,12 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
                 s++;
               }
         }
+      // 0 bytes
+      else if (c == '\\' && dest+7 < endp && *s == 'u' && s + 5 <= ends && !memcmp (s, "u0000", 5))
+        {
+          *dest++ = 0;
+          s += 5;
+        }
       // \uxxxx => \U+XXXX as in bit_embed_TU
       else if (c == '\\' && dest+7 < endp && *s == 'u' && s + 5 <= ends)
         {
