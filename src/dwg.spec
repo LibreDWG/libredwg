@@ -612,7 +612,7 @@ DWG_ENTITY (INSERT)
     FIELD_RD (rotation, 50);
   }
   VERSIONS (R_2_0b, R_11) {
-    DECODER { FIELD_VALUE (has_attribs) = R11FLAG (128); }
+    DECODER { FIELD_VALUE (has_attribs) = R11FLAG (FLAG_R11_HAS_ATTRIBUTES); }
     FIELD_HANDLE (block_header, 2, 2);
 #ifndef IS_JSON
     FIELD_2RD (ins_pt, 10);

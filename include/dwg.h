@@ -8041,7 +8041,7 @@ enum {
   // 16
   FLAG_R11_HANDLING = 32, // 0x20
   FLAG_R11_PSPACE = 64,    // 0x40
-  // 128
+  FLAG_R11_HAS_ATTRIBUTES = 128,
 };
 
 enum {
