@@ -24,7 +24,7 @@
             LOG_FLAG_R11 (THICKNESS);
             LOG_FLAG_R11 (HANDLING);
             LOG_FLAG_R11 (PSPACE);
-            LOG_FLAG_R11 (HAS_ATTRIBUTES);
+            LOG_FLAG_R11 (HAS_ATTRIBS);
             LOG_TRACE ("\n");
 #undef LOG_FLAG_R11
           }
