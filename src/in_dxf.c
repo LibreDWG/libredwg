@@ -472,6 +472,7 @@ dxf_read_string (Bit_Chain *dat, char **string)
       int size = sscanf ((char*)&dat->chain[dat->byte], "%s", (char*)buf);
       buf[4095] = '\0';
       if (size != EOF)
+        // FIXME: TFv fixed size strings
         size = strlen (buf) + 1;
       dat->byte += size;
       if (!string)

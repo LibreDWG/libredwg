@@ -1,5 +1,5 @@
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2458 "gen-dynapi.pl"
+#line 2505 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -13749,7 +13749,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 
 };
 
-#line 2544 "gen-dynapi.pl"
+#line 2591 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;
@@ -14083,11 +14083,12 @@ dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
       {
         const Dwg_Header_Variables *const _obj = &dwg->header_vars;
         const bool is_tu = IS_FROM_TU_DWG (dwg);
+        const bool is_fixed = strEQc (f->type, "TF");
 
         if (fp)
           memcpy (fp, f, sizeof (Dwg_DYNAPI_field));
 
-        if (is_tu && strNE (f->type, "TF")) /* not TF */
+        if (is_tu && !is_fixed) /* not TF */
           {
             BITCODE_TU wstr = *(BITCODE_TU*)((char*)_obj + f->offset);
             char *utf8 = bit_convert_TU (wstr);
@@ -14257,7 +14258,7 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
                    const Dwg_Version_Type dwg_version,
                    const void *restrict value, const bool is_utf8)
 {
-  // TODO: sanity checks. is_malloc (TF)
+  // TODO: sanity checks. is_malloc (TF), copy zero's (TFv)
   // if text strcpy or wcscpy, or do utf8 conversion.
   //if ((char*)old && f->is_malloc)
   //  free (old);
@@ -14265,10 +14266,18 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
     {
       // NULL ptr
       if (!*(char**)value)
-        memcpy (old, value, f->size);
-      // ascii
-      else if (strEQc (f->type, "TF") || (f->is_string && dwg_version < R_2007))
+        memcpy (old, value, sizeof (char*));
+      // fixed length (but not yet TF)
+      else if (strEQc (f->type, "TFv"))
         {
+          char *str = (char *)calloc (f->size, 1);
+          strcpy (str, *(char**)value);
+          memcpy (old, &str, sizeof (char*)); // size of ptr
+        }
+      // ascii
+      else if (f->is_string && dwg_version < R_2007)
+        {
+          // FIXME: TF size calc is probably wrong
           char *str = (char *)malloc (strlen (*(char**)value)+1);
           strcpy (str, *(char**)value);
           memcpy (old, &str, sizeof (char*)); // size of ptr
@@ -14335,6 +14344,14 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
         = obj ? obj->parent
               : ((Dwg_Object_UNKNOWN_OBJ *)_obj)->parent->dwg;
       const Dwg_Version_Type dwg_version = dwg ? dwg->header.from_version : R_INVALID;
+      // but there are some fixed-length malloced strings preR13
+      static const Dwg_DYNAPI_field r11_fixed_strings[] = {
+          { "font_file", "TFv", 64, OFF (struct _dwg_object_STYLE, font_file), 1,1,1, 3 },
+          { "bigfont_file", "TFv", 64, OFF (struct _dwg_object_STYLE, bigfont_file), 1,1,1, 4 },
+          { "description", "TFv", 48, OFF (struct _dwg_object_LTYPE, description), 1,1,1, 3 },
+          // STYLE has no description, and LTYPE no font_file's
+          { NULL }
+        };
 
       if (!f)
         {
@@ -14342,7 +14359,19 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
           LOG_ERROR ("%s: Invalid %s field %s", __FUNCTION__, name, fieldname);
           return false;
         }
-
+      if (f->is_string && dwg->header.from_version < R_13 &&
+          (obj->fixedtype == DWG_TYPE_STYLE || obj->fixedtype == DWG_TYPE_LTYPE))
+        {
+          //find_name (fieldname, r11_fixed_strings))
+          for (Dwg_DYNAPI_field* f11 = (Dwg_DYNAPI_field*)&r11_fixed_strings[0]; f11->name; f11++)
+            {
+              if (strEQ (fieldname, f11->name))
+                {
+                  f = f11;
+                  break;
+                }
+            }
+        }
       old = &((char*)_obj)[f->offset];
       dynapi_set_helper (old, f, dwg_version, value, is_utf8);
       return true;
@@ -14369,7 +14398,33 @@ dwg_dynapi_header_set_value (Dwg_Data *restrict dwg,
         void *old;
         // there are no malloc'd fields in the HEADER, so no need to free().
         const Dwg_Header_Variables *const _obj = &dwg->header_vars;
-
+        // but there are several fixed-length malloced strings preR13
+        static const Dwg_DYNAPI_field r11_fixed_strings[] = {
+          { "MENU", "TFv", 15, OFF (struct _dwg_header_variables, MENU), 1,1,1, 1 },
+          { "DIMBLK_T", "TFv", 33, OFF (struct _dwg_header_variables, DIMBLK_T), 1,1,1, 1 },
+          { "DIMBLK1_T", "TFv", 33, OFF (struct _dwg_header_variables, DIMBLK1_T), 1,1,1, 1 },
+          { "DIMBLK2_T", "TFv", 33, OFF (struct _dwg_header_variables, DIMBLK2_T), 1,1,1, 1 },
+          { "DIMPOST", "TFv", 16, OFF (struct _dwg_header_variables, DIMPOST), 1,1,1, 1 },
+          { "DIMAPOST", "TFv", 16, OFF (struct _dwg_header_variables, DIMAPOST), 1,1,1, 1 },
+          { "unknown_string", "TFv", 33, OFF (struct _dwg_header_variables, unknown_string), 1,1,1, 1 },
+          { "unknown_unit1", "TFv", 32, OFF (struct _dwg_header_variables, unknown_unit1), 1,1,1, 1 },
+          { "unknown_unit2", "TFv", 32, OFF (struct _dwg_header_variables, unknown_unit2), 1,1,1, 1 },
+          { "unknown_unit3", "TFv", 32, OFF (struct _dwg_header_variables, unknown_unit3), 1,1,1, 1 },
+          { "unknown_unit4", "TFv", 32, OFF (struct _dwg_header_variables, unknown_unit4), 1,1,1, 1 },
+          { NULL }
+        };
+        if (f->is_string && dwg->header.from_version < R_13)
+          {
+            //find_name (fieldname, r11_fixed_strings))
+            for (Dwg_DYNAPI_field* f11 = (Dwg_DYNAPI_field*)&r11_fixed_strings[0]; f11->name; f11++)
+              {
+                if (strEQ (fieldname, f11->name))
+                  {
+                    f = f11;
+                    break;
+                  }
+              }
+          }
         old = &((char*)_obj)[f->offset];
         dynapi_set_helper (old, f, dwg->header.version, value, is_utf8);
 

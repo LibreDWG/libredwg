@@ -281,24 +281,26 @@ static char *_path_field (const char *path);
   }
 #define FIELD_TFv(nam, len, dxf)                                              \
   {                                                                           \
+    const int _l1 = 6 * len + 1;                                              \
     FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field(#nam));             \
     if (len < 42)                                                             \
       {                                                                       \
-        const int _len = 6 * len + 1;                                         \
         char _buf[256];                                                       \
-        char *p = json_cquote (_buf, (const char*)_obj->nam, _len);           \
+        char *p = json_cquote (_buf, (const char*)_obj->nam, _l1);            \
+        fprintf (dat->fh, "\"%s\"", p);                                       \
+        /*                                                                    \
         size_t lp = strlen (p);                                               \
         fprintf (dat->fh, "\"%s", p);                                         \
         for (int _i = lp; _i < (int)len; _i++)                                \
-          fprintf (dat->fh, "\\0");                                           \
+          fprintf (dat->fh, "\\u0000");                                       \
         fprintf (dat->fh, "\"");                                              \
+        */                                                                    \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        const int _len = 6 * len + 1;                                         \
-        char *_buf = (char *)malloc (_len);                                   \
-        fprintf (dat->fh, "\"%s\"",                                           \
-                 json_cquote (_buf, (const char*)_obj->nam, _len));           \
+        char *_buf = (char *)malloc (_l1);                                    \
+        char *p = json_cquote (_buf, (const char*)_obj->nam, _l1);            \
+        fprintf (dat->fh, "\"%s\"", p);                                       \
         free (_buf);                                                          \
       }                                                                       \
   }
