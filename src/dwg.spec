@@ -1336,7 +1336,7 @@ DWG_ENTITY (LINE)
       FIELD_2RD (end, 11)
   }
   VERSIONS (R_10, R_12) {
-    if (R11FLAG (4)) {       // extension of pre R_10, not compatible
+    if (R11FLAG (FLAG_R11_ELEVATION)) {       // extension of pre R_10, not compatible
       FIELD_2RD (start, 10)
       FIELD_2RD (end, 11)
     } else {
@@ -1711,7 +1711,7 @@ DWG_ENTITY (POINT)
     FIELD_RD (x, 10);
     FIELD_RD (y, 20);
     SINCE (R_10) {
-      if (! (R11FLAG (4)))
+      if (! (R11FLAG (FLAG_R11_ELEVATION)))
         FIELD_RD (z, 30);
     }
   } LATER_VERSIONS {
@@ -1759,7 +1759,7 @@ DWG_ENTITY (_3DFACE)
   }
   VERSIONS (R_10, R_13)
     {
-      if (R11FLAG (4)) {
+      if (R11FLAG (FLAG_R11_ELEVATION)) {
         FIELD_2RD (corner1, 10)
         FIELD_2RD (corner2, 11)
         FIELD_2RD (corner3, 12)
