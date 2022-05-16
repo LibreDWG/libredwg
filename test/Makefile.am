@@ -337,6 +337,12 @@ TESTDATA = \
     test-data/r11/ACEB10.dwg \
     test-data/r11/ACEB10.stp \
     test-data/r11/Constraints_12.dxf \
+    test-data/r11/entities-2d.dwg \
+    test-data/r11/entities-2d.dxf \
+    test-data/r11/entities-2d.scr \
+    test-data/r11/entities-3d.dwg \
+    test-data/r11/entities-3d.dxf \
+    test-data/r11/entities-3d.scr \
     test-data/r12/Constraints.dxf \
     test-data/r12/Leader.dxf \
     test-data/r13/v.dxf \
