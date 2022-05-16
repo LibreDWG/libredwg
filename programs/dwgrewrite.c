@@ -62,9 +62,9 @@ help (void)
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf ("  --as rNNNN                save as version\n");
   printf ("           Valid versions:\n");
-  printf ("             r13, r14, r2000 (default)\n");
+  printf ("             r1.4, r2.6, r2.10, r9, r10, r11, r13, r14, r2000 (default)\n");
   printf ("           Planned versions:\n");
-  printf ("             r1.4, r2.6, r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
+  printf ("             r2004, r2007, r2010, r2013, r2018\n");
   printf ("  -o dwgfile, --file        \n");
   printf ("           --help           display this help and exit\n");
   printf ("           --version        output version information and exit\n"
@@ -73,9 +73,9 @@ help (void)
   printf ("  -v[0-9]     verbosity\n");
   printf ("  -a rNNNN    save as version\n");
   printf ("              Valid versions:\n");
-  printf ("                r13, r14, r2000 (default)\n");
+  printf ("                r1.4-r11, r13, r14, r2000 (default)\n");
   printf ("              Planned versions:\n");
-  printf ("                r1.2-r11, r2004-r2018\n");
+  printf ("                r2004-r2018\n");
   printf ("  -o dwgfile\n");
   printf ("  -h          display this help and exit\n");
   printf ("  -i          output version information and exit\n"
@@ -128,6 +128,7 @@ int main (int argc, char *argv[])
       out_dat.version = R_2000;
       if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
         exit (0);
+      dwg_free (&dwg);
       dwg_decode (&out_dat, &dwg);
       free (out_dat.chain);
     }
