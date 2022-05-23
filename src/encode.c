@@ -2390,6 +2390,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     hdr_offset = dat->byte;
 
     encode_preR13_header_variables (dat, dwg);
+    SINCE (R_11)
+    {
+      // crc16 + DWG_SENTINEL_R11_HEADER_END
+      BITCODE_TF r11_sentinel = dwg_sentinel (DWG_SENTINEL_R11_HEADER_END);
+      bit_write_RS (dat, 0); // patch the crc later
+      bit_write_TF (dat, r11_sentinel, 16);
+      LOG_TRACE ("r11_sentinel: ");
+      LOG_TRACE_TF (r11_sentinel, 16)
+    }
     entities_start = dat->byte;
     dwg->cur_index = 0;
     num_entities = encode_preR13_entities (0, dat, dwg);
@@ -2412,7 +2421,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       bit_write_RS (dat, num_entities);
       dat->byte = num_bytes;
       LOG_TRACE ("Wrote %u bytes\n", num_bytes);
-
       return error;
     }
     SINCE (R_2_0b)
@@ -2437,13 +2445,22 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       bit_write_RL (dat, blocks_max);
       LOG_TRACE ("blocks   0x%x (%d) - 0x%x (0x%x, 0x%x)\n", blocks_start,
                  blocks_end - blocks_start, blocks_end, blocks_offset, blocks_max);
+      SINCE (R_11)
+      {
+        BITCODE_RS crc;
+        dat->byte = entities_start - 18;
+        crc = bit_calc_CRC (0xC0C1, &dat->chain[0], dat->byte);
+        LOG_TRACE ("crc: %04X [RSx] from 0-0x%lx\n", crc, dat->byte);
+        bit_write_RS (dat, crc);
+      }
       dat->byte = blocks_end;
     }
     VERSIONS (R_2_0b, R_9c1) {
       dat->byte = hdr_offset + (3 * 8);
       bit_write_RS (dat, num_entities);
-      dat->byte = pvzadr;
+      dat->byte = blocks_end;
     }
+    LOG_TRACE ("Wrote %lu bytes\n", dat->byte);
     return error;
   }
   VERSIONS (R_13, R_2004)
