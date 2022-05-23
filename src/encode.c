@@ -1891,11 +1891,13 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       tblnum = _ctrl->num_entries;                                            \
       ref = dwg_ref_object (dwg, _ctrl->entries[0]);                          \
       num = ref->index;                                                       \
-    }
+    }                                                                         \
+  LOG_TRACE ("\nctrl " #token " [%d]: num:%u\n", num, tblnum)
 
 #define PREP_TABLE(token)                                \
   Dwg_Object *obj = &dwg->object[num + i];               \
   Dwg_Object_##token *_obj = obj->tio.object->tio.token; \
+  LOG_TRACE ("contents table " #token " [%d]: size:%u (0x%lx)\n", i, obj->size, dat->byte); \
   FIELD_RC (flag, 70);                                   \
   FIELD_TFv (name, 32, 2)
 
@@ -2400,13 +2402,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       LOG_TRACE_TF (r11_sentinel, 16)
     }
     entities_start = dat->byte;
+    LOG_TRACE ("\nentities 0x%x:\n", entities_start);
     dwg->cur_index = 0;
     num_entities = encode_preR13_entities (0, dat, dwg);
     dwg->cur_index += num_entities;
     entities_end = dat->byte;
     LOG_TRACE ("\nentities %u 0x%x - 0x%x\n", num_entities, entities_start,
                entities_end);
-    pvzadr = dat->byte;
+    //pvzadr = dat->byte;
 
     PRE (R_2_0b)
     {
