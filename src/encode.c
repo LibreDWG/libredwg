@@ -2366,7 +2366,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   PRE (R_13)
   {
     BITCODE_RS num_entities;
-    BITCODE_RL hdr_offset;
+    BITCODE_RL hdr_offset, hdr_end;
     PRE (R_1_4)
       LOG_WARN (WE_CAN "We cannot encode pre-r1.4 DWG's yet");
     entities_start = entities_end = blocks_start = blocks_end = 0xFFFF;
@@ -2392,11 +2392,29 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     hdr_offset = dat->byte;
 
     encode_preR13_header_variables (dat, dwg);
+    hdr_end = dat->byte;
+
+    SINCE (R_10)
+    {
+      dat->byte = 0x3ef;
+      encode_preR13_section_hdr ("UCS", SECTION_UCS, dat, dwg);
+      dat->byte = 0x500;
+      encode_preR13_section_hdr ("VPORT", SECTION_VPORT, dat, dwg);
+      dat->byte = 0x512;
+      encode_preR13_section_hdr ("APPID", SECTION_APPID, dat, dwg);
+      dat->byte = hdr_end;
+    }
     SINCE (R_11)
     {
-      // crc16 + DWG_SENTINEL_R11_HEADER_END
-      BITCODE_TF r11_sentinel = dwg_sentinel (DWG_SENTINEL_R11_HEADER_END);
-      bit_write_RS (dat, 0); // patch the crc later
+      BITCODE_TF r11_sentinel;
+      dat->byte = 0x522;
+      encode_preR13_section_hdr ("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg);
+      dat->byte = 0x69f;
+      encode_preR13_section_hdr ("VX", SECTION_VX, dat, dwg);
+
+      dat->byte = hdr_end;
+      bit_write_RS (dat, 0); // patch the crc16 later
+      r11_sentinel = dwg_sentinel (DWG_SENTINEL_R11_HEADER_END);
       bit_write_TF (dat, r11_sentinel, 16);
       LOG_TRACE ("r11_sentinel: ");
       LOG_TRACE_TF (r11_sentinel, 16)

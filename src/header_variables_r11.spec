@@ -253,7 +253,6 @@
   FIELD_RS (SURFTAB1, 70); //ok
   FIELD_RS (SURFTAB2, 70); //ok
   /* Skip table VPORT (0x500-0x509 )*/
-  DEBUG_HERE
   UNKNOWN_UNTIL (0x50a);
   FIELD_CAST (FLATLAND, RS, B, 70);
   FIELD_RS (SPLINETYPE, 70);
@@ -263,7 +262,6 @@
     return 0;
 
   /* Skip table APPID (0x512-0x51b) */
-  DEBUG_HERE
   UNKNOWN_UNTIL (0x51c);
   FIELD_CAST (WORLDVIEW, RS, B, 70);
   if (dwg->header.numheader_vars <= 160) // r10
@@ -273,7 +271,6 @@
   // TILEMODE came with r11
 
   /* Skip table DIMSTYLE (0x522-0x52b) */
-  DEBUG_HERE
   UNKNOWN_UNTIL (0x52c);
   /* TODO Unknown 5 bytes. (first two bytes sometimes ff ff) */
   DEBUG_HERE
@@ -308,7 +305,6 @@
   FIELD_3RD (PINSBASE, 10);
 
   /* Skip table VX (0x69f-0x6a8) */
-  DEBUG_HERE
   UNKNOWN_UNTIL (0x6a9);
   FIELD_RS (MAXACTVP, 70); //ok
   FIELD_RD (DIMGAP, 40);   //ok
