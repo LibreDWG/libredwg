@@ -22427,7 +22427,7 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   // VIEW_CONTROL_OBJECT: (3.1.6) abs:6 [H 0]
   dwg_add_VIEW (dwg, NULL);
   //dwg->view_control = *dwg->object[4].tio.object->tio.VIEW_CONTROL;
-  if (version > R_11)
+  if (version >= R_10)
     {
       // UCS_CONTROL_OBJECT: (3.1.7) abs:7 [H 0]
       dwg_add_UCS (dwg, &pt0, NULL, NULL, NULL);
@@ -22437,11 +22437,17 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       //dwg->vport_control = *dwg->object[6].tio.object->tio.VPORT_CONTROL;
       // APPID_CONTROL_OBJECT: (3.1.9) abs:9 [H 0]
       dwg_add_APPID (dwg, NULL);
+    }
+  if (version >= R_11)
+    {
       // DIMSTYLE_CONTROL_OBJECT: (3.1.A) abs:A [H 0]
       // We don't create DIMSTYLE Standard upfront, only on demand.
       dwg_add_DIMSTYLE (dwg, NULL);
       // VX_CONTROL_OBJECT: (3.1.B) abs:B [H 0]
       dwg_add_VX (dwg, NULL); // TODO only <r2000
+    }
+  if (version > R_11)
+    {
       // DICTIONARY_NAMED_OBJECT: (3.1.C) abs:C [H 0]
       nod = dwg_add_DICTIONARY (dwg, NULL, (const BITCODE_T) "NAMED_OBJECT", 0UL);
       dwg->header_vars.DICTIONARY_NAMED_OBJECT

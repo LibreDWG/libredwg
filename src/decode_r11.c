@@ -160,54 +160,30 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
           }
       }
       break;
-    case SECTION_LAYER:
-      {
-        Dwg_Object *obj = dwg_get_first_object (dwg, DWG_TYPE_LAYER_CONTROL);
-        if (obj)
-          {
-            Dwg_Object_LAYER_CONTROL *_obj = obj->tio.object->tio.LAYER_CONTROL;
-            obj->size = tbl->size;
-            obj->address = tbl->address;
-          }
-        //dwg_add_LAYER (dwg, NULL);
-      }
-      break;
-    case SECTION_STYLE:
-      {
-        Dwg_Object *obj = dwg_get_first_object (dwg, DWG_TYPE_STYLE_CONTROL);
-        if (obj)
-          {
-            Dwg_Object_STYLE_CONTROL *_obj = obj->tio.object->tio.STYLE_CONTROL;
-            obj->size = tbl->size;
-            obj->address = tbl->address;
-          }
-        //dwg_add_STYLE (dwg, NULL);
-      }
-      break;
-    case SECTION_LTYPE:
-      {
-        Dwg_Object *obj = dwg_get_first_object (dwg, DWG_TYPE_LTYPE_CONTROL);
-        if (obj)
-          {
-            Dwg_Object_LTYPE_CONTROL *_obj = obj->tio.object->tio.LTYPE_CONTROL;
-            obj->size = tbl->size;
-            obj->address = tbl->address;
-          }
-        //dwg_add_LTYPE (dwg, NULL);
-      }
-      break;
-    case SECTION_VIEW:
-      {
-        Dwg_Object *obj = dwg_get_first_object (dwg, DWG_TYPE_VIEW_CONTROL);
-        if (obj)
-          {
-            Dwg_Object_VIEW_CONTROL *_obj = obj->tio.object->tio.VIEW_CONTROL;
-            obj->size = tbl->size;
-            obj->address = tbl->address;
-          }
-      }
-      break;
-    // TODO: more only with r11
+
+#define CASE_TBL(TBL)                                                         \
+  case SECTION_##TBL:                                                         \
+    {                                                                         \
+      Dwg_Object *obj = dwg_get_first_object (dwg, DWG_TYPE_##TBL##_CONTROL); \
+      if (obj)                                                                \
+        {                                                                     \
+          Dwg_Object_##TBL##_CONTROL *_obj                                    \
+              = obj->tio.object->tio.TBL##_CONTROL;                           \
+          obj->size = tbl->size;                                              \
+          obj->address = tbl->address;                                        \
+        }                                                                     \
+    }                                                                         \
+    break
+
+    CASE_TBL (LAYER);
+    CASE_TBL (STYLE);
+    CASE_TBL (LTYPE);
+    CASE_TBL (VIEW);
+    CASE_TBL (UCS);   // since r10
+    CASE_TBL (VPORT);
+    CASE_TBL (DIMSTYLE);
+    CASE_TBL (APPID); // since r11
+    CASE_TBL (VX);
     default:
       LOG_ERROR ("Yet unhandled section id %d", id);
     }
@@ -642,6 +618,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Object *obj = NULL;
   int tbl_id;
   int error = 0;
+  int num_sections = 5;
 
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   {
@@ -659,8 +636,12 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error |= dwg_add_Document (dwg, 0);
 
   // 5 tables + header + block. VIEW = 6
+  SINCE (R_10)
+    num_sections += 3;
+  SINCE (R_10)
+    num_sections += 2;
   dwg->header.section = (Dwg_Section *)calloc (sizeof (Dwg_Section),
-                                               dwg->header.numsections + 2);
+                                               num_sections + 2);
   if (!dwg->header.section)
     {
       LOG_ERROR ("Out of memory");
@@ -746,27 +727,31 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     entities_start = dat->byte;
     entities_end = dwg->header_vars.dwg_size;
   }
-#if 0
-  if (dwg->header.numsections > 5) // dead code? r11 only?
+
+  // additional tables mixed-in since r10
+  if (dwg->header.numheader_vars > 158) // r10
     {
+      dat->byte = 0x3ef;
+      LOG_TRACE ("@0x%lx\n", dat->byte);
       decode_preR13_section_hdr ("UCS", SECTION_UCS, dat, dwg);
-      // skip: 0x500 - dat->bytes
       dat->byte = 0x500;
-      LOG_TRACE ("@0x%lx\n", dat->byte); // 0x23a
+      LOG_TRACE ("@0x%lx\n", dat->byte);
       decode_preR13_section_hdr ("VPORT", SECTION_VPORT, dat, dwg);
-      rl1 = bit_read_RL (dat);
-      rl2 = bit_read_RL (dat);
-      LOG_TRACE ("?2 long: 0x%x 0x%x\n", rl1, rl2);
+      dat->byte = 0x512;
+      LOG_TRACE ("@0x%lx\n", dat->byte);
       decode_preR13_section_hdr ("APPID", SECTION_APPID, dat, dwg);
-      rl1 = bit_read_RL (dat);
-      rs2 = bit_read_RS (dat);
-      LOG_TRACE ("?long+short: 0x%x 0x%x\n", rl1, (unsigned)rs2);
-      decode_preR13_section_hdr ("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg);
-      // skip: 0x69f - dat->bytes
-      dat->byte = 0x69f;
-      decode_preR13_section_hdr ("VX", SECTION_VX, dat, dwg);
+      dat->byte = entities_start;
     }
-#endif
+  if (dwg->header.numheader_vars > 160) // r11
+    {
+      dat->byte = 0x522;
+      LOG_TRACE ("@0x%lx\n", dat->byte);
+      decode_preR13_section_hdr ("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg);
+      dat->byte = 0x69f;
+      LOG_TRACE ("@0x%lx\n", dat->byte);
+      decode_preR13_section_hdr ("VX", SECTION_VX, dat, dwg);
+      dat->byte = entities_start;
+    }
 
   // entities
   if (dat->byte != entities_start)
@@ -798,13 +783,15 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error |= decode_preR13_section (SECTION_STYLE, dat, dwg);
   error |= decode_preR13_section (SECTION_LTYPE, dat, dwg);
   error |= decode_preR13_section (SECTION_VIEW, dat, dwg);
-
-#if 0
-  if (dwg->header.numsections > 5) // dead code?
+#if 1
+  if (num_sections > 5) // r10
     {
       error |= decode_preR13_section (SECTION_UCS, dat, dwg);
       error |= decode_preR13_section (SECTION_VPORT, dat, dwg);
       error |= decode_preR13_section (SECTION_APPID, dat, dwg);
+    }
+  if (num_sections > 8) // r11
+    {
       error |= decode_preR13_section (SECTION_DIMSTYLE, dat, dwg);
       error |= decode_preR13_section (SECTION_VX, dat, dwg);
     }
@@ -886,7 +873,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   rl1 = bit_read_RL (dat);
   LOG_TRACE ("?1long: 0x%x\n", rl1);
 
-  rl1 = blocks_end + 36 + 4 * 4 + 12;
+  rl1 = blocks_end + 36 + 4 * 4 + 12; // ??
   DEBUG_HERE
   UNKNOWN_UNTIL (rl1);
   LOG_TRACE ("@0x%lx\n", dat->byte);
@@ -895,7 +882,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   decode_preR13_section_chk (SECTION_STYLE, dat, dwg);
   decode_preR13_section_chk (SECTION_LTYPE, dat, dwg);
   decode_preR13_section_chk (SECTION_VIEW, dat, dwg);
-  if (dwg->header.numsections > 5) // dead code?
+  if (num_sections > 5) // dead code?
     {
       decode_preR13_section_chk (SECTION_UCS, dat, dwg);
       decode_preR13_section_chk (SECTION_VPORT, dat, dwg);
