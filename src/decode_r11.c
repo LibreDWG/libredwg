@@ -81,11 +81,6 @@ static int decode_preR13_section (Dwg_Section_Type_r11 id,
                                   Dwg_Data *restrict dwg);
 
 /*----------------------------------------------------------------------------
- * Public variables
- */
-// long unsigned int ktl_lastaddress;
-
-/*----------------------------------------------------------------------------
  * Public function definitions
  */
 
