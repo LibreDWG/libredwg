@@ -22493,7 +22493,7 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       style->last_height = 0.2;
       // TEXTSTYLE: (5.1.11) [H 7]
       dwg->header_vars.TEXTSTYLE = dwg_add_handleref (dwg, 5, 0x11, NULL);
-      dwg->header_vars.DIMTXSTY = dwg->header_vars.TEXTSTYLE;
+      dwg->header_vars.DIMTXSTY = dwg_add_handleref (dwg, 5, 0x11, NULL);
       //ctrl = dwg_get_first_object (dwg, DWG_TYPE_STYLE_CONTROL);
       //if (ctrl)
       //  dwg->style_control = ctrl->tio.object->tio.STYLE_CONTROL;
@@ -24703,7 +24703,9 @@ dwg_add_DIMSTYLE (Dwg_Data *restrict dwg, const char *restrict name)
       _obj->DIMCLRD = (BITCODE_CMC){ 0 };
       _obj->DIMCLRE = (BITCODE_CMC){ 0 };
       _obj->DIMCLRT = (BITCODE_CMC){ 0 };
-      _obj->DIMTXSTY = dwg->header_vars.TEXTSTYLE;
+      if (dwg->header_vars.TEXTSTYLE)
+        _obj->DIMTXSTY = dwg_add_handleref (dwg, 5,
+            dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
     });
   }
 }
