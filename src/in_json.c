@@ -556,7 +556,7 @@ json_3DPOINT (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
   if (t->type != JSMN_ARRAY || t->size != 3)
     {
       // older DWG's often are only 2D
-      if (t->type != JSMN_ARRAY || dat->from_version >= R_13)
+      if (t->type != JSMN_ARRAY || dat->from_version >= R_13b1)
         {
           LOG_ERROR ("JSON 3DPOINT must be ARRAY of size 3")
           return;
@@ -2651,7 +2651,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       LOG_ERROR ("Out of memory");
       return DWG_ERR_OUTOFMEM;
     }
-  if (dwg->header.from_version < R_13)
+  if (dwg->header.from_version < R_13b1)
     {
       // 5 plus the header, plus a hole
       dwg->header.section = calloc (7, sizeof (Dwg_Section));
@@ -2672,7 +2672,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (i > 0)
         {
           Dwg_Object *oldobj = &dwg->object[i - 1];
-          if (dwg->header.from_version >= R_13 && !oldobj->handle.value)
+          if (dwg->header.from_version >= R_13b1 && !oldobj->handle.value)
             {
               LOG_ERROR ("Required %s.handle missing, skipped", oldobj->name)
               dwg_free_object (obj);
@@ -2948,7 +2948,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 }
               LOG_TRACE ("type: %d,\tfixedtype: %d\n", obj->type,
                          obj->fixedtype);
-              if (dwg->header.from_version < R_13 && dwg_obj_is_table (obj))
+              if (dwg->header.from_version < R_13b1 && dwg_obj_is_table (obj))
                 {
                   Dwg_Section_Type_r11 id = SECTION_HEADER_R11;
                   switch (obj->fixedtype)
@@ -2975,7 +2975,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               obj->size = json_long (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW(goto harderr)
-              if (dwg->header.from_version >= R_13 && !obj->handle.value)
+              if (dwg->header.from_version >= R_13b1 && !obj->handle.value)
                 {
                   LOG_ERROR ("Required %s.handle missing", name);
                   goto harderr;
