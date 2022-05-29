@@ -239,16 +239,20 @@ const unsigned char unknown_section[53]
           }                                                                   \
         /* The source might not be long enough. or it is, just with a zero */ \
         /* Luckily TFF's are only preR13 */                                   \
-        else if (dat->version < R_13 && strlen ((char*)_obj->nam) < (unsigned)len) \
-          {                                                                   \
-            size_t rlen = strlen ((char*)_obj->nam);                          \
-            bit_write_TF (dat, (BITCODE_TF)_obj->nam, rlen);                  \
-            for (int _i = 0; _i < (int)(len - rlen); _i++)                    \
-              bit_write_RC (dat, 0);                                          \
-          }                                                                   \
         else                                                                  \
           {                                                                   \
-            bit_write_TF (dat, (BITCODE_TF)_obj->nam, len);                   \
+            size_t rlen;                                                      \
+            if (dat->version < R_13                                           \
+                && (rlen = strlen ((char *)_obj->nam)) < (unsigned)len)       \
+              {                                                               \
+                bit_write_TF (dat, (BITCODE_TF)_obj->nam, rlen);              \
+                for (int _i = 0; _i < (int)(len - rlen); _i++)                \
+                  bit_write_RC (dat, 0);                                      \
+              }                                                               \
+            else                                                              \
+              {                                                               \
+                bit_write_TF (dat, (BITCODE_TF)_obj->nam, len);               \
+              }                                                               \
           }                                                                   \
       }                                                                       \
     LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
@@ -1877,7 +1881,7 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   BITCODE_BL vcount;
   int tblnum = tbl->number;
   int error = 0;
-  BITCODE_RL num = tbl->objid_r11;
+  BITCODE_RL num = tbl->objid_r11; // from decode_r11
   Bit_Chain *hdl_dat = dat;
   Dwg_Object *ctrl;
 
@@ -1887,6 +1891,11 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       Dwg_Object_##token *_ctrl;                                              \
       Dwg_Object *ref;                                                        \
       ctrl = dwg_get_first_object (dwg, DWG_TYPE_##token);                    \
+      if (!ctrl)                                                              \
+        {                                                                     \
+          LOG_ERROR ("No " #token " found");                                  \
+          return DWG_ERR_INVALIDTYPE;                                         \
+        }                                                                     \
       _ctrl = ctrl->tio.object->tio.token;                                    \
       tblnum = _ctrl->num_entries;                                            \
       ref = dwg_ref_object (dwg, _ctrl->entries[0]);                          \
@@ -1894,23 +1903,44 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     }                                                                         \
   LOG_TRACE ("\nctrl " #token " [%d]: num:%u\n", num, tblnum)
 
-#define PREP_TABLE(token)                                \
-  Dwg_Object *obj = &dwg->object[num + i];               \
-  Dwg_Object_##token *_obj = obj->tio.object->tio.token; \
-  LOG_TRACE ("contents table " #token " [%d]: size:%u (0x%lx)\n", i, obj->size, dat->byte); \
-  FIELD_RC (flag, 70);                                   \
+#define PREP_TABLE(token)                                                     \
+  Dwg_Object *obj = &dwg->object[num + i];                                    \
+  Dwg_Object_##token *_obj = obj->tio.object->tio.token;                      \
+  LOG_TRACE ("contents table " #token " [%d]: size:%u (0x%lx, 0x%lx)\n", i,   \
+             obj->size, obj->address, dat->byte);                             \
+  if (obj->fixedtype != DWG_TYPE_##token)                                     \
+    {                                                                         \
+      LOG_ERROR ("Wrong type %s, expected %s", dwg_type_name (obj->fixedtype),\
+                 "DWG_TYPE_" #token);                                         \
+      continue;                                                               \
+    }                                                                         \
+  FIELD_RC (flag, 70);                                                        \
   FIELD_TFv (name, 32, 2)
 
-#define CHK_ENDPOS                                       \
-  dwg->cur_index += tblnum
+#define CHK_ENDPOS dwg->cur_index += tblnum
 
-  switch (id)
+    switch (id)
     {
     case SECTION_BLOCK:
       PREP_CTRL (BLOCK_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
           PREP_TABLE (BLOCK_HEADER);
+          /*
+  Dwg_Object *obj = &dwg->object[num + i];
+  Dwg_Object_BLOCK_HEADER *_obj = obj->tio.object->tio.BLOCK_HEADER;
+  LOG_TRACE ("contents table BLOCK_HEADER [%d]: size:%u (0x%lx, 0x%lx)\n", i,
+             obj->size, obj->address, dat->byte);
+  if (obj->fixedtype != DWG_TYPE_BLOCK_HEADER)
+    {
+      LOG_ERROR ("Wrong type %s, expected %s", dwg_type_name (obj->fixedtype),
+                 "DWG_TYPE_BLOCK_HEADER");
+      continue;
+    }
+  FIELD_RC (flag, 70);
+  FIELD_TFv (name, 32, 2);
+          */
+
           FIELD_RC (block_scaling, 0);
           PRE (R_11) {
             FIELD_CAST (num_owned, RS, BL, 0);
