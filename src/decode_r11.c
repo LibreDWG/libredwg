@@ -65,6 +65,8 @@ static bool env_var_checked_p;
 //#undef LOG_POS
 //#define LOG_POS LOG_INSANE (" @%lu.%u\n", dat->byte, dat->bit)
 
+void dwg_set_next_hdl (Dwg_Data *dwg, unsigned long value);
+
 /*------------------------------------------------------------------------------
  * Private functions
  */
@@ -773,6 +775,8 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
   LOG_INFO ("==========================================\n")
   //dat->byte += 20; /* crc + sentinel? 20 byte */
+  if (!dwg->next_hdl)
+    dwg_set_next_hdl (dwg, 0x22);
   error |= decode_preR13_section (SECTION_BLOCK, dat, dwg);
   error |= decode_preR13_section (SECTION_LAYER, dat, dwg);
   error |= decode_preR13_section (SECTION_STYLE, dat, dwg);
