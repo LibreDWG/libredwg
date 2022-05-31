@@ -347,8 +347,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             PREP_TABLE (LAYER);
             FIELD_CMC (color, 62); // off if negative
             PRE (R_11) {
-              FIELD_RC (linewt, 370);
-              FIELD_HANDLE (ltype, 1, 6);
+              FIELD_HANDLE (ltype, 2, 6);
             }
             LATER_VERSIONS {
               FIELD_RS (linewt, 370);
