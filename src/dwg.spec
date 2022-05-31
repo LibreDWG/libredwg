@@ -188,6 +188,9 @@ DWG_ENTITY (ATTRIB)
       if (R11OPTS (8)) {
         FIELD_RD (oblique_angle, 51);
       }
+      if (R11OPTS (16)) {
+        FIELD_HANDLE0 (style, 1, 7);
+      }
       if (R11OPTS (32)) {
         FIELD_CAST (generation, RC, BS, 71);
       }
