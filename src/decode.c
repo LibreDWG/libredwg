@@ -5779,8 +5779,10 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
           break;
         case 20:
           { // which vertex?
-            BITCODE_RC flag = bit_read_RC (dat);
-            dat->byte--;
+            BITCODE_RC flag;
+            dat->byte += 5;
+            flag = bit_read_RC (dat);
+            dat->byte -= 6;
             if (flag & 32)
               error |= dwg_decode_VERTEX_3D (dat, obj);
             else if (flag & 64 && !(flag & 128))
