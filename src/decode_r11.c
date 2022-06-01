@@ -424,10 +424,14 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             PREP_TABLE (VIEW);
             FIELD_RD (VIEWSIZE, 40);
             FIELD_2RD (VIEWCTR, 10);
-            FIELD_RD (view_width, 41);
+            if (tbl->size > 58)
+              FIELD_RD (view_width, 41);
+            if (tbl->size > 66)
+              FIELD_3RD (VIEWDIR, 11);
+            if (tbl->size > 89)
+              FIELD_RS (flag_3d, 0);
             SINCE (R_10) {
               FIELD_3RD (view_target, 12);
-              FIELD_3RD (VIEWDIR, 11);
               FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
               FIELD_RD (lens_length, 42);
               FIELD_RD (front_clip_z, 43);
