@@ -2511,6 +2511,7 @@ typedef struct _dwg_object_VIEW
   BITCODE_H base_ucs;
   BITCODE_H named_ucs;
   BITCODE_H livesection;
+  BITCODE_RS flag_3d;
 } Dwg_Object_VIEW;
 
 /**
