@@ -328,6 +328,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             PRE (R_11) {
               FIELD_CAST (num_owned, RS, BL, 0);
               FIELD_RC (flag2, 0);
+              if (dwg->header.numheader_vars == 74)
+                FIELD_RC (r11_unknown, 0);
             }
             SINCE (R_11) { // r10 not
               FIELD_RS (unknown_r11, 0);
@@ -348,6 +350,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             FIELD_CMC (color, 62); // off if negative
             PRE (R_11) {
               FIELD_HANDLE (ltype, 2, 6);
+              if (dwg->header.numheader_vars == 74)
+                FIELD_RC (r11_unknown, 0);
             }
             LATER_VERSIONS {
               FIELD_RS (linewt, 370);
@@ -430,6 +434,10 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
               FIELD_3RD (VIEWDIR, 11);
             if (tbl->size > 89)
               FIELD_RS (flag_3d, 0);
+            PRE (R_10) {
+              if (dwg->header.numheader_vars == 74)
+                FIELD_RC (r11_unknown, 0);
+            }
             SINCE (R_10) {
               FIELD_3RD (view_target, 12);
               FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
