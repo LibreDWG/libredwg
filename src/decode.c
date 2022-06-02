@@ -5765,8 +5765,10 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
         case 18: /* another polyline */
         case 19:
           { // which polyline
-            BITCODE_RC flag = bit_read_RC (dat);
-            dat->byte--;
+            BITCODE_RC flag;
+            dat->byte += 5;
+            flag = bit_read_RC (dat);
+            dat->byte -= 6;
             if (flag & 8)
               error |= dwg_decode_POLYLINE_3D (dat, obj);
             else if (flag & 16)
