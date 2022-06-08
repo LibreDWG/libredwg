@@ -178,6 +178,13 @@ run ()
             r11|r2.*) TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG" ;;
         esac
     fi
+    # They even crash
+    if test "$bprog" = "dxfwrite"
+    then
+        case $ddwg in
+            r11|r2.*) TESTPROG="echo SKIP" ;;
+        esac
+    fi
     if test "$bprog" = "dwgfuzz" -a -n "@HAVE_ASAN@"
     then
        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
@@ -230,6 +237,11 @@ run ()
                             todo=1
                             ;;
                     *) ;;
+                esac
+                case $dwg in
+                    *r11/ACEB10)
+                        todo=1
+                        ;;
                 esac
                 ;;
             *)  ;;
