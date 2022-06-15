@@ -958,13 +958,13 @@ resolve_objectref_vector (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_BL i;
   Dwg_Object *obj;
 
+  LOG_INSANE ("==========\n")
   for (i = 0; i < dwg->num_object_refs; i++)
     {
       Dwg_Object_Ref *ref = dwg->object_ref[i];
-      LOG_INSANE ("==========\n")
       LOG_TRACE ("-objref[%3ld]: HANDLE" FORMAT_REF "\n", (long)i,
                  ARGS_REF (ref))
-
+      assert(ref->handleref.is_global == 1);
       // search the handle in all objects
       obj = dwg_resolve_handle (dwg, ref->absolute_ref);
       if (obj)
@@ -4018,6 +4018,7 @@ dwg_decode_add_object_ref (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
       dwg->object_ref
         = (Dwg_Object_Ref **)realloc (dwg->object_ref, (dwg->num_object_refs + REFS_PER_REALLOC)
                                       * sizeof (Dwg_Object_Ref *));
+      dwg->dirty_refs = 1;
       LOG_TRACE ("REALLOC dwg->object_ref vector to %u\n",
                  dwg->num_object_refs + REFS_PER_REALLOC)
     }

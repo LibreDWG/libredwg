@@ -867,14 +867,14 @@ dwg_ref_object_silent (const Dwg_Data *restrict dwg,
 {
   if (!ref)
     return NULL;
-  if (ref->obj && !dwg->dirty_refs)
+  if (dwg->dirty_refs == 0 && ref->obj != NULL)
     return ref->obj;
   if ((ref->handleref.code < 6
        && dwg_resolve_handleref ((Dwg_Object_Ref *)ref, NULL))
       || ref->absolute_ref)
     {
       Dwg_Object *obj = dwg_resolve_handle_silent (dwg, ref->absolute_ref);
-      if (!dwg->dirty_refs && obj)
+      if (obj)
         ref->obj = obj;
       return obj;
     }

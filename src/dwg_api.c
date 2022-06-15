@@ -22639,7 +22639,7 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       if ((obj = dwg_resolve_handle (dwg, ref->absolute_ref)))
         ref->obj = obj;
     }
-  dwg->dirty_refs = 0;
+  //dwg->dirty_refs = 0;
   return 0;
 }
 
@@ -24765,6 +24765,7 @@ dwg_add_GROUP (Dwg_Data *restrict dwg, const char *restrict name /* maybe NULL *
     {
       dictobj = dwg_obj_generic_to_object (dict, &error);
       obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, dictobj->handle.value, NULL);
+      obj->tio.object->ownerhandle->obj = NULL;
       add_obj_reactor (obj->tio.object, dictobj->handle.value);
     }
  

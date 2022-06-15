@@ -3459,7 +3459,7 @@ dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
   Dwg_Object *obj;
   *alloced = 0;
 #ifndef HAVE_NONNULL
-  if (!dwg || !hdl)
+  if (dwg == NULL || hdl == NULL)
     return NULL;
 #endif
 
