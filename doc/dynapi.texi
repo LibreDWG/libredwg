@@ -10040,6 +10040,8 @@ H,	DXF 347
 H,	DXF 6
 @item visualstyle
 H,	DXF 348
+@item unknown_r2
+RC
 
 @end vtable
 @end indentedblock
@@ -12175,6 +12177,10 @@ H,	DXF 346
 H,	DXF 345
 @item livesection
 H,	DXF 334
+@item flag_3d
+RS
+@item unknown_r2
+RC
 
 @end vtable
 @end indentedblock

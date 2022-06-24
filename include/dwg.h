@@ -2339,7 +2339,6 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_H layout;
   BITCODE_RS unknown_r11;
   BITCODE_RS unknown1_r11;
-  BITCODE_RC r11_unknown;
 } Dwg_Object_BLOCK_HEADER;
 
 /**
@@ -2375,7 +2374,7 @@ typedef struct _dwg_object_LAYER
   BITCODE_H material;     /* DXF 347 */
   BITCODE_H ltype;        /* DXF 6 */
   BITCODE_H visualstyle;  /* DXF 348 */
-  BITCODE_RC r11_unknown;
+  BITCODE_RC unknown_r2;
 } Dwg_Object_LAYER;
 
 /**
@@ -2514,7 +2513,7 @@ typedef struct _dwg_object_VIEW
   BITCODE_H named_ucs;
   BITCODE_H livesection;
   BITCODE_RS flag_3d;
-  BITCODE_RC r11_unknown;
+  BITCODE_RC unknown_r2;
 } Dwg_Object_VIEW;
 
 /**

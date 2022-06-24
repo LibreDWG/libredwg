@@ -8351,6 +8351,8 @@ static const Dwg_DYNAPI_field _dwg_LAYER_fields[] = {
     1,0,0, 6 },
   { "visualstyle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_LAYER, visualstyle),
     1,0,0, 348 },
+  { "unknown_r2",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_LAYER, unknown_r2),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_LAYERFILTER: (sorted by offset) */
@@ -10013,6 +10015,10 @@ static const Dwg_DYNAPI_field _dwg_VIEW_fields[] = {
     1,0,0, 345 },
   { "livesection",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_VIEW, livesection),
     1,0,0, 334 },
+  { "flag_3d",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_VIEW, flag_3d),
+    0,0,0, 0 },
+  { "unknown_r2",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_VIEW, unknown_r2),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_VIEW_CONTROL: (sorted by offset) */

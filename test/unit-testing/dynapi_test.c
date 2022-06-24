@@ -49907,6 +49907,21 @@ static int test_LAYER (const Dwg_Object *obj)
         fail ("LAYER.plotstyle [H]");
   }
   {
+    BITCODE_RC unknown_r2;
+    if (dwg_dynapi_entity_value (layer, "LAYER", "unknown_r2", &unknown_r2, NULL)
+        && unknown_r2 == layer->unknown_r2)
+      pass ();
+    else
+      fail ("LAYER.unknown_r2 [RC] %u != %u", layer->unknown_r2, unknown_r2);
+    unknown_r2++;
+    if (dwg_dynapi_entity_set_value (layer, "LAYER", "unknown_r2", &unknown_r2, 0)
+        && unknown_r2 == layer->unknown_r2)
+      pass ();
+    else
+      fail ("LAYER.unknown_r2 [RC] set+1 %u != %u", layer->unknown_r2, unknown_r2);
+    layer->unknown_r2--;
+  }
+  {
     BITCODE_RSd used;
     if (dwg_dynapi_entity_value (layer, "LAYER", "used", &used, NULL)
         && used == layer->used)
@@ -59509,6 +59524,21 @@ static int test_VIEW (const Dwg_Object *obj)
     view->flag--;
   }
   {
+    BITCODE_RS flag_3d;
+    if (dwg_dynapi_entity_value (view, "VIEW", "flag_3d", &flag_3d, NULL)
+        && flag_3d == view->flag_3d)
+      pass ();
+    else
+      fail ("VIEW.flag_3d [RS] %hu != %hu", view->flag_3d, flag_3d);
+    flag_3d++;
+    if (dwg_dynapi_entity_set_value (view, "VIEW", "flag_3d", &flag_3d, 0)
+        && flag_3d == view->flag_3d)
+      pass ();
+    else
+      fail ("VIEW.flag_3d [RS] set+1 %hu != %hu", view->flag_3d, flag_3d);
+    view->flag_3d--;
+  }
+  {
     BITCODE_BD front_clip_z;
     if (dwg_dynapi_entity_value (view, "VIEW", "front_clip_z", &front_clip_z, NULL)
         && front_clip_z == view->front_clip_z)
@@ -59723,6 +59753,21 @@ static int test_VIEW (const Dwg_Object *obj)
         pass ();
     else
         fail ("VIEW.ucsydir [3BD]");
+  }
+  {
+    BITCODE_RC unknown_r2;
+    if (dwg_dynapi_entity_value (view, "VIEW", "unknown_r2", &unknown_r2, NULL)
+        && unknown_r2 == view->unknown_r2)
+      pass ();
+    else
+      fail ("VIEW.unknown_r2 [RC] %u != %u", view->unknown_r2, unknown_r2);
+    unknown_r2++;
+    if (dwg_dynapi_entity_set_value (view, "VIEW", "unknown_r2", &unknown_r2, 0)
+        && unknown_r2 == view->unknown_r2)
+      pass ();
+    else
+      fail ("VIEW.unknown_r2 [RC] set+1 %u != %u", view->unknown_r2, unknown_r2);
+    view->unknown_r2--;
   }
   {
     BITCODE_B use_default_lights;
