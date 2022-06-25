@@ -28,6 +28,7 @@ jobs:
           - CC="clang"
           - --enable-release
           - --enable-gcov --disable-bindings
+          - --disable-write
     steps:
     - uses: actions/checkout@v2
       with:
