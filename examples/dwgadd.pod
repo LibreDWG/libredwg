@@ -11,7 +11,7 @@ to a DWG file.
 
 =head1 COMMANDS
 
-commands start at each new line and must begin with a keyword and has optional agruments.
+commands start at each new line and must begin with a keyword and has optional arguments.
 
 comments start with # and are ignored.
 

@@ -68,8 +68,8 @@ someone should probably think about and resolve them!
 * make regen-dynapi
 
   Whenever you change a class or any class field (add, remove, rename, change a type),
-  add a seperate make regen-dynapi commit, as result of this command. So the small change
-  is seperated from the automatically created changes by gen-dynapi.pl.
+  add a separate make regen-dynapi commit, as result of this command. So the small change
+  is separated from the automatically created changes by gen-dynapi.pl.
 
   This command updates several generated lists of objects, classes, and its tests.
 

@@ -40,7 +40,7 @@ spointprepare (double x, double y, double z)
 }
 
 /*
- * This functions coverts double format in char to be emitted in the XML
+ * This functions converts double format in char to be emitted in the XML
  * @param double x The double digis to be converted in string
  *
  * @return char* Return the converted double in string. Return empty string if
@@ -65,7 +65,7 @@ doubletochar (double x)
 }
 
 /*
- * This functions coverts int format in char to be emitted in the XML
+ * This functions converts int format in char to be emitted in the XML
  *
  * @return char* Return the converted double in string. Return empty string if
  * error

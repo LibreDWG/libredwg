@@ -285,7 +285,7 @@
             SUB_FIELD (o, nam[vcount], RLL, dxf);                             \
             break;                                                            \
           default:                                                            \
-            LOG_ERROR ("Unkown SUB_FIELD_VECTOR_TYPE " #nam " typesize %d",   \
+            LOG_ERROR ("Unknown SUB_FIELD_VECTOR_TYPE " #nam " typesize %d",   \
                        typesize);                                             \
             break;                                                            \
           }                                                                   \

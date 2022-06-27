@@ -622,7 +622,7 @@ const unsigned char unknown_section[53]
               bit_write_RLL (dat, _obj->o.name[vcount]);                      \
               break;                                                          \
             default:                                                          \
-              LOG_ERROR ("Unkown SUB_FIELD_VECTOR_TYPE " #nam " typesize %d", \
+              LOG_ERROR ("Unknown SUB_FIELD_VECTOR_TYPE " #nam " typesize %d", \
                          typesize);                                           \
               break;                                                          \
             }                                                                 \
@@ -4138,7 +4138,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   while (dat->byte + obj->size >= dat->size)
     bit_chain_alloc (dat);
 
-  // First write an aproximate size here.
+  // First write an approximate size here.
   // Then calculate size from the fields. Either <0x7fff or more.
   // Patch it afterwards and check old<>new size if enough space allocated.
   bit_write_MS (dat, obj->size);

@@ -671,7 +671,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
                                    (BITCODE_RLL)_obj->o.nam[vcount]);         \
               break;                                                          \
             default:                                                          \
-              LOG_ERROR ("Unkown SUB_FIELD_VECTOR_TYPESIZE " #nam             \
+              LOG_ERROR ("Unknown SUB_FIELD_VECTOR_TYPESIZE " #nam             \
                          " typesize %d", typesize);                           \
               break;                                                          \
             }                                                                 \
@@ -1814,7 +1814,7 @@ json_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
   RECORD (HEADER); // single hash
-  // seperate funcs to catch the return, and end with ENDRECORD
+  // separate funcs to catch the return, and end with ENDRECORD
   PRE (R_13)
     error = json_preR13_header_write_private (dat, dwg);
   LATER_VERSIONS

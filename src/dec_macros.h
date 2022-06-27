@@ -1147,7 +1147,7 @@
               _obj->o.name[vcount] = bit_read_RLL (dat);                      \
               break;                                                          \
             default:                                                          \
-              LOG_ERROR ("Unkown FIELD_VECTOR_TYPE " #name " typesize %d",    \
+              LOG_ERROR ("Unknown FIELD_VECTOR_TYPE " #name " typesize %d",    \
                          typesize);                                           \
               break;                                                          \
             }                                                                 \
