@@ -8311,7 +8311,7 @@ dxf_postprocess_PLOTSETTINGS (Dwg_Object *restrict obj)
     _obj->plotview_name = dwg_handle_name (dwg, "VIEW", _obj->plotview);
 }
 
-// seperate model_space and paper_space into its own fields, out of entries[]
+// separate model_space and paper_space into its own fields, out of entries[]
 static int
 move_out_BLOCK_CONTROL (Dwg_Object *restrict obj,
                         Dwg_Object_BLOCK_CONTROL *restrict _ctrl,
@@ -9318,7 +9318,7 @@ new_object (char *restrict name, char *restrict dxfname,
               *i_p = i + 1;
               if (strEQc (name, "BLOCK_RECORD"))
                 {
-                  // seperate mspace and pspace into its own fields
+                  // separate mspace and pspace into its own fields
                   Dwg_Object_BLOCK_CONTROL *_ctrl
                       = ctrl->tio.object->tio.BLOCK_CONTROL;
                   if (!strcasecmp (pair->value.s, "*Paper_Space"))
@@ -9350,7 +9350,7 @@ new_object (char *restrict name, char *restrict dxfname,
                 }
               else if (strEQc (name, "LTYPE"))
                 {
-                  // seperate bylayer and byblock into its own fields
+                  // separate bylayer and byblock into its own fields
                   Dwg_Object_LTYPE_CONTROL *_ctrl
                       = ctrl->tio.object->tio.LTYPE_CONTROL;
                   if (!strcasecmp (pair->value.s, "ByLayer"))

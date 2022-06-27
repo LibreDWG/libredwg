@@ -1299,7 +1299,7 @@ obj_stream_position (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
   /* all 3 now relative to obj */
   unsigned long p2 = bit_position (hdl_dat);
   SINCE (R_2007)
-    { // but only since 2007 there is a seperate string stream
+    { // but only since 2007 there is a separate string stream
       unsigned long p3 = bit_position (str_dat);
       if (p2 > p1)
         return p3 > p2 ? p3 : p2;

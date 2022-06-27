@@ -2973,7 +2973,7 @@ read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return error;
 }
 
-/* For decrypt and encrypt: symetric, as it's just a simple XOR with a one-time pad,
+/* For decrypt and encrypt: symmetric, as it's just a simple XOR with a one-time pad,
    generated here on the fly. */
 void
 decrypt_R2004_header (BITCODE_RC *restrict dest, const BITCODE_RC *restrict src,
@@ -3248,7 +3248,7 @@ decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
  * EED "Extended Entity Data":
  * There's an array of obj->num_eed obj->eed[] entries.
  * Each eed member has size, handle, the raw[size] buffer and the decoded data.
- * Each obj->eed[].data member is further seperated into DXF+1000 codes, for
+ * Each obj->eed[].data member is further separated into DXF+1000 codes, for
  * strings, numbers, points, ...
  * Those subgroups have an empty raw, size, and the prev. handle.
  */

@@ -930,7 +930,7 @@ const char* dwg_type_dxfname (const Dwg_Object_Type type)
     return NULL;
   else
     {
-      //LOG_ERROR ("Unkown object type %d", type)
+      //LOG_ERROR ("Unknown object type %d", type)
       return NULL;
     }
 }

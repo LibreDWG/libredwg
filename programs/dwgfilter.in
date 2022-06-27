@@ -7,7 +7,7 @@ version() {
 help() {
     echo "dwgfilter [OPTIONS...] dwgfile"
     echo ""
-    echo "Allow custom jq queries on a temporay JSON dump."
+    echo "Allow custom jq queries on a temporary JSON dump."
     echo ""
     echo "OPTIONS: --help,--version"
     echo "  --debug  keep the tmp json"

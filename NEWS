@@ -160,7 +160,7 @@ API breaking changes:
     and setters. Re-enable with -DUSE_DEPRECATED_API
   * Renamed UNDERLAY to {PDF,DGN,DWF}UNDERLAY and likewise PDFDEFINITION, ...
 Minor features:
-  * fix more C++ compatiblity: restrict is __restrict, disable __nonnull.
+  * fix more C++ compatibility: restrict is __restrict, disable __nonnull.
     Now successfully used in SolveSpace.
   * Add gperf hash tables for all objects and dxfclasses, for faster lookup
     dxfnames to create classes, and object names with most properties.
@@ -308,7 +308,7 @@ New features:
     r2013, r2018, but not r2007), but this does not work fully yet.
   * Added all remaining Dwg_Version types: R_1_3 for AC1.3, R_2_4 for AC1001, and
     AC1013 for R_13c3.
-  * The header can now be compiled wth C++ compilers, needed for some bindings.
+  * The header can now be compiled with C++ compilers, needed for some bindings.
     Re-arranged nested structs, names, malloc casts, reserved keywords like this,
     template.
     Started with the gambas bindings, a Visual Basic clone for unix.
@@ -388,7 +388,7 @@ API breaking changes:
     DIMSTYLE got a new flag0. flag is computed from that.
     VPORT_ENTITY_HEADER flag1 => is_on, vport_entity => viewport, xref_handle => xref,
       new prev_entity handle.
-    MLINESTYLE index/ltype union changed to seperate lt_index, lt_ltype fields.
+    MLINESTYLE index/ltype union changed to separate lt_index, lt_ltype fields.
       They were overwriting each other on version conversions.
     MLINESTYLE.desc => description, data_length => data_size.
     HATCH booleans got a is_ prefix.
@@ -409,11 +409,11 @@ API breaking changes:
 Major bugfixes:
   * Fixed converting ASCII from and to Unicode strings, when converting across
     versions. Embed Unicode as \U+XXXX into ASCII, and decode it back to Unicode.
-    Honor dat,dwg->from_version and use the new FIELD_T as seperate type. (GH #185)
+    Honor dat,dwg->from_version and use the new FIELD_T as separate type. (GH #185)
   * Invalid numbers (read failures) are converted to 0.0 in the released version.
   * Fixed wrong CMC color reads and writes, check the method, lookup the index,
     support a CMTC truecolor-only type.
-  * Fixed EED writes, by writing to seperate streams and merging them at the end,
+  * Fixed EED writes, by writing to separate streams and merging them at the end,
     with proper size calculation.
   * All remaining assertions are now protected. (GH #187)
 
@@ -422,9 +422,9 @@ Minor bugfixes:
     with the new sections.
   * Normalize extrusion vectors.
   * Fix bit_write_BT, the thickness vector pre-R2000.
-  * Added many overflow checks, due to extensive fuzzing campains.
+  * Added many overflow checks, due to extensive fuzzing campaigns.
   * Fixed wrong julian date conversions with TIMEBLL types.
-  * Fxed keyword conflicts with the bindings: No next, from, self fieldnames.
+  * Fixed keyword conflicts with the bindings: No next, from, self fieldnames.
   * Many more, see the ChangeLog.
 
 Other newsworthy changes:
@@ -438,7 +438,7 @@ Other newsworthy changes:
   * CMC color got 2 new fields: raw (EMC only), method (the first rgb byte).
   * Many DXF re-ordering fixes.
 
-Notes: The new constraint and dynblock objects just miss a major refactor into seperate
+Notes: The new constraint and dynblock objects just miss a major refactor into separate
 impl subclasses, and subent and curve support.
 
 LibreDWG version 0.10.1 - released 2020/01/13 - beta:
@@ -828,7 +828,7 @@ New features:
   * Added --disable-dxf, --enable--debug configure options. With debug there are many
     more unstable objects available.
   * Added libredwg.pc (GH #30)
-  * Added valgrind supressions for known darwin/glibc leaks.
+  * Added valgrind suppressions for known darwin/glibc leaks.
   * Changed and clarified the semver version numbering on development checkouts with
     major.minor[.patch[.build.nonmastercommits-gittag]]. See HACKING.
 

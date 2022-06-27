@@ -4873,7 +4873,7 @@ typedef struct _dwg_entity_HELIX
 } Dwg_Entity_HELIX;
 
 // TODO ACSH_SWEEP_CLASS has different names,
-// ACIS (sweep:options) even more so. ACIS key names are weird though, Acad didnt take them.
+// ACIS (sweep:options) even more so. ACIS key names are weird though, Acad didn't take them.
 #define SWEEPOPTIONS_fields  \
   BITCODE_BD draft_angle;   	   /*!< DXF 42 */ \
   BITCODE_BD draft_start_distance; /*!< DXF 43 */ \

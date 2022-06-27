@@ -1261,7 +1261,7 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
 
 /** Write handle-references.
  *  TODO
- *  seperate SoftPtr:   BB 0 + RLL
+ *  separate SoftPtr:   BB 0 + RLL
  *           HardPtr:   BB 1 + RLL
  *           SoftOwner: BB 2 + RLL
  *           HardOwner: BB 3 + RLL

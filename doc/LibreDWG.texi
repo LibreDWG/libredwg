@@ -541,7 +541,7 @@ With r11 came the additional tables:
 @node OBJECTS_
 @section OBJECTS Section
 
-The OBJECTS Section is usually split up into multiple pages (seperate sections of type AcDbObjects)
+The OBJECTS Section is usually split up into multiple pages (separate sections of type AcDbObjects)
 and contains all entities and objects. It is indexed by @ref{HANDLES}.
 
 @xref{Objects, OBJECTS}.
@@ -560,7 +560,7 @@ Objects in @strong{stable} classes are treated as the fixed-type objects with fu
 Objects in @strong{unstable} classes are sometimes written to DXF or JSON, but not to DWG. Changes are not treated as API breaking. Usually such objects are converted to UNKNOWN_OBJ or UNKNOWN_ENT objects, and when written to DWG converted to PLACEHOLDER, DUMMY or POINT objects with EED pointing to the original class and content.
 Only when rewriting from-to the very same version with the full known unknown_bits blob (e.g. dwgrewrite or json) such classes can persist as such.
 
-Objects in @strong{debugging} classes are only handled with the develper @code{configure --enable-debug} flag, otherwise ignored. See unstable above.
+Objects in @strong{debugging} classes are only handled with the developer @code{configure --enable-debug} flag, otherwise ignored. See unstable above.
 
 Objects in @strong{undhandled} classes are always ignored. There are no fields known, only it's type.
 
@@ -715,7 +715,7 @@ Since r13 all those tables are stored as table control objects and
 tablerecord objects.
 
 From pre-r13 DWG's these tables are imported as old r11 sections and
-as new CONTROL objects, so that all entities are accessable via the
+as new CONTROL objects, so that all entities are accessible via the
 single BLOCK_CONTROL.model_space -> BLOCK_HEADER.entities iterator,
 all layers via the LAYER_CONTROL.entries -> LAYER objects, and so on.
 All blocks are accessed via all other model_space BLOCK_HEADER's,
@@ -918,7 +918,7 @@ Encoding DWG files, i.e. DWG write support, can be disabled via
 one is currently r13-r2000. Experimentally work is ongoing for the r2004
 format, which is also used for r2010, r2013, and r2018.
 The r2007 format version is not covered yet.
-The pre-r13 formats are much simplier and can be written, but need some
+The pre-r13 formats are much simpler and can be written, but need some
 hand-holding and manual conversions when converting from newer formats still.
 
 See @file{src/in_dxf.c} for a high-level usage example.
@@ -975,12 +975,12 @@ With the add api you can easily create an empty DWG from scratch, add table entr
 or variables Dictionaries), and add entities. To set more entity fields use the @ref{dynapi}.
 
 For each almost each entity and table exists a function at to add it, with arguments to initialize some fields
-as in the VBA object model. The other objects are either created automatically, or handled seperately.
+as in the VBA object model. The other objects are either created automatically, or handled separately.
 
 All BITCODE_T strings are encoded as UTF-8, as with the dynapi. @xref{strings}.
 Most names are copied, since most names are considered to be constant.
 If not, you need to free them by yourself.
-Exceptions are dxfname (there exists a seperate dxfname_u variant),
+Exceptions are dxfname (there exists a separate dxfname_u variant),
 the VX name, which does not exists anymore since r2000.
 
 A very simple example using the add API is the example program @xref{dwgadd}.
@@ -1080,7 +1080,7 @@ This accesses the Header (or sometimes also called Database) fields.
 This accesses a subclass, a structure within the object.
 @end deftypefn
 
-The setters don't differentiate betwen common values and strings.
+The setters don't differentiate between common values and strings.
 
 @deftypefn {Function} bool dwg_dynapi_entity_set_value (dwg_ent_generic *@var{_obj}, const char *@var{fieldname}, const void *@var{value}, const bool @var{is_utf8})
 Sets the ENTITY.fieldname to a value.

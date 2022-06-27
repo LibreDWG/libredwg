@@ -6221,7 +6221,7 @@ EXPORT dwg_class *dwg_get_class (const dwg_data *dwg, unsigned int index);
    Most names are copied, since most names are considered to be constant.
    If not, you need to free them by yourself.
 
-   Exceptions are dxfname (there exists a seperate dxfname_u variant),
+   Exceptions are dxfname (there exists a separate dxfname_u variant),
    the VX name, which does not exists anymore since r2000.
 
    When writing DWG, a version of R_2000 is recommended, only R_2 - R-2000

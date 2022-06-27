@@ -2203,7 +2203,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   tokens->index++;
                   for (int ki = 0; ki < keys; ki++)
                     {
-                      // seperate subclass type loop
+                      // separate subclass type loop
                       const Dwg_DYNAPI_field *f1;
                       char key1[80];
                       char *rest;
@@ -2382,7 +2382,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           else
             {
               // failed_key.rest.nextfieldatteept
-              *(rest - 1) = '.'; // unsuccesfull search, set the dot back
+              *(rest - 1) = '.'; // unsuccessful search, set the dot back
               rest = strchr (rest, '.');
               if (rest)
                 {

@@ -25703,7 +25703,7 @@ dwg_geom_transform_OCS (dwg_point_3d *out,
 // and the scale vector as last row.
 typedef double dwg_matrix9[9];
 
-// Via the arbitray axis algorithm we can define the 3 rotations (dwg_matrix9)
+// Via the arbitrary axis algorithm we can define the 3 rotations (dwg_matrix9)
 // as a single normal. This helper function creates the rotation matrix from the
 // normal vector.
 static void

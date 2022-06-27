@@ -981,7 +981,7 @@ for (sort @entity_names) {
   }
   my $aref = $SUBCLASSES{$_};
   unshift @$aref, 'AcDbEntity';
-  $SUBCLASSES{$_} = $aref; # if it didnt exist
+  $SUBCLASSES{$_} = $aref; # if it didn't exist
   my $len = @$aref;
   $max_subclasses = $len if $len > $max_subclasses;
 }
@@ -1007,7 +1007,7 @@ for (sort @object_names) {
   } else {
     unshift @$aref, 'AcDbObject';
   }
-  $SUBCLASSES{$_} = $aref; # if it didnt exist
+  $SUBCLASSES{$_} = $aref; # if it didn't exist
   my $len = @$aref;
   $max_subclasses = $len if $len > $max_subclasses;
 }
@@ -1939,7 +1939,7 @@ sub out_classes {
     }
 }
 
-# generate API's lists per stabilty
+# generate API's lists per stability
 my $tmpl;
 my $api_c = "$srcdir/dwg_api.c";
 open $in, "<", $api_c or die "$api_c: $!";

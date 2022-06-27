@@ -11,7 +11,7 @@
 /*****************************************************************************/
 
 /*
- * dwgfuzz.c: afl++/honggfuzz fuzzing for all in- and exporters. Just not the seperate ones.
+ * dwgfuzz.c: afl++/honggfuzz fuzzing for all in- and exporters. Just not the separate ones.
  *
  * Also usable like:
     ../configure --disable-shared --disable-bindings CC=hfuzz-clang CFLAGS='-O2 -g -fsanitize=address,undefined -fno-omit-frame-pointer -I/usr/local/include' && make -C src && make -C examples dwgfuzz

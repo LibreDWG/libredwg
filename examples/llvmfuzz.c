@@ -38,7 +38,7 @@
 extern int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size);
 
 // libfuzzer limitation:
-// Enforce NULL-termination of the input buffer, to avoid bugus reports. copy it.
+// Enforce NULL-termination of the input buffer, to avoid bogus reports. copy it.
 // Problematic is mostly strtol(3) which also works with \n termination.
 static int enforce_null_termination(Bit_Chain *dat, bool enforce)
 {

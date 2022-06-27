@@ -55,7 +55,7 @@
 #pragma message("_GNUC_VERSION " STR(_GNUC_VERSION))
 */
 
-// clang-specifics (rarely needed, as they mimic GCC dignostics closely, even down to bugs)
+// clang-specifics (rarely needed, as they mimic GCC diagnostics closely, even down to bugs)
 #if defined(__clang__) || defined(__clang)
 #  define HAVE_CLANG
 #  define CLANG_DIAG_IGNORE(x)                                                \
