@@ -696,6 +696,12 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // setup all the new control objects
   error |= dwg_add_Document (dwg, 0);
 
+  if (dwg->header.numsections < 3)
+    {
+      LOG_ERROR ("Invalid number of sections %zu", dat->size)
+      return DWG_ERR_INVALIDDWG;
+    }
+
   // 5 tables + header + block. VIEW = 6
   dwg->header.section = (Dwg_Section *)calloc (sizeof (Dwg_Section),
                                                dwg->header.numsections + 2);
