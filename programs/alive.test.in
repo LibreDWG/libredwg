@@ -266,7 +266,7 @@ run ()
 DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
 DATA="$DATA example_2013 example_2018 example_r14"
 TODO="example_r13 r11/ACEB10 r2.10/entities r2.6/entities r1.4/entities"
-DATA="$DATA $TODO"
+[ -n "$DISABLE_WRITE" ] || DATA="$DATA $TODO"
 
 clean ()
 {

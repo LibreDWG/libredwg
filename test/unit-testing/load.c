@@ -5,10 +5,12 @@
 void
 api_process (dwg_object *obj)
 {
+#ifdef USE_WRITE
   int error;
   char *name;
   int isnew;
   dwg_ent_load *load = dwg_object_to_LOAD (obj);
 
   CHK_ENTITY_UTF8TEXT (load, LOAD, name);
+#endif
 }

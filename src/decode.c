@@ -209,8 +209,11 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   PRE (R_13) {
     Dwg_Object *ctrl;
     int error = decode_preR13 (dat, dwg);
-    ctrl = &dwg->object[0];
-    dwg->block_control = *ctrl->tio.object->tio.BLOCK_CONTROL;
+    if (error <= DWG_ERR_CRITICAL)
+      {
+        ctrl = &dwg->object[0];
+        dwg->block_control = *ctrl->tio.object->tio.BLOCK_CONTROL;
+      }
     return error;
   }
   VERSIONS (R_13, R_2000) { return decode_R13_R2000 (dat, dwg); }

@@ -519,7 +519,9 @@ main (int argc, char *argv[])
             }
           if (DWG_TYPE == DWG_TYPE_LOAD)
             {
+#ifdef USE_WRITE
               error += test_code (prefix, "r1.4/entities.dwg", cov);
+#endif
             }
           if (DWG_TYPE == DWG_TYPE_DGNDEFINITION)
             {
