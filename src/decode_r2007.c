@@ -1244,7 +1244,7 @@ read_file_header (Bit_Chain *restrict dat,
   LOG_TRACE ("len2:          %d\n", (int)len2);      // 0 when compressed
 
   if (compr_len > 0)
-    error = decompress_r2007 ((BITCODE_RC *)file_header, sizeof (r2007_file_header) + 1,
+    error = decompress_r2007 ((BITCODE_RC *)file_header, sizeof (r2007_file_header),
                               &pedata[32], MIN (compr_len, pedata_size - 32));
   else
     memcpy (file_header, &pedata[32], sizeof (r2007_file_header));
