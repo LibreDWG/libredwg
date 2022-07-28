@@ -94,7 +94,8 @@ EXPORT bool dwg_dynapi_common_set_value (void *restrict _obj,
                                          const void *restrict value,
                                          const bool is_utf8);
 EXPORT char *dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
-                                     Dwg_Object_Ref *restrict hdl);
+                                     Dwg_Object_Ref *restrict hdl,
+                                     int *alloced);
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_header_field (const char *restrict fieldname);
 EXPORT const Dwg_DYNAPI_field *

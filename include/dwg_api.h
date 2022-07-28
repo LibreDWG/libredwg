@@ -214,10 +214,13 @@ EXPORT bool dwg_dynapi_common_set_value (void *restrict _obj,
   __nonnull ((1, 2, 3));
 
 /** Checks if the handle hdl points an object or entity with a name field,
-    and returns it if so. Converted to UTF8 for r2007+ wide-strings. */
+    and returns it if so. Converted to UTF8 for r2007+ wide-strings. Sets alloced
+    if the returned string is freshly malloc'd.
+*/
 EXPORT char *dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
-                                     Dwg_Object_Ref *restrict hdl)
-    __nonnull ((1, 2));
+                                     Dwg_Object_Ref *restrict hdl,
+                                     int *alloced)
+  __nonnull ((1, 2, 3));
 
 /** Return the field for custom type checks. */
 EXPORT const Dwg_DYNAPI_field *

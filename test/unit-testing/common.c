@@ -1167,7 +1167,8 @@ print_api (dwg_object *obj)
       pass ();                                                                \
     else                                                                      \
       {                                                                       \
-        char *_hdlname = dwg_dynapi_handle_name (dwg, field);                 \
+        int alloced = 0;                                                      \
+        char *_hdlname = dwg_dynapi_handle_name (dwg, field, &alloced);       \
         if (field == (BITCODE_H)ent->parent->field)                           \
           {                                                                   \
             if (g_counter > g_countmax)                                       \
@@ -1179,7 +1180,7 @@ print_api (dwg_object *obj)
         else                                                                  \
           fail (#field ": %s " FORMAT_REF, _hdlname ? _hdlname : "",          \
                 ARGS_REF (field));                                            \
-        if (version >= R_2007)                                                \
+        if (alloced)                                                          \
           free (_hdlname);                                                    \
       }                                                                       \
   }
@@ -1194,7 +1195,8 @@ print_api (dwg_object *obj)
       for (int _i = 0; _i < (int)(num); _i++)                                 \
         {                                                                     \
           BITCODE_H _hdl = field[_i];                                         \
-          char *_hdlname = _hdl ? dwg_dynapi_handle_name (dwg, _hdl) : NULL;  \
+          int alloced = 0;                                                    \
+          char *_hdlname = _hdl ? dwg_dynapi_handle_name (dwg, _hdl, &alloced) : NULL;  \
           if (_hdl == ent->parent->field[_i])                                 \
             {                                                                 \
               if (g_counter > g_countmax)                                     \
@@ -1221,7 +1223,7 @@ print_api (dwg_object *obj)
                     ok (#field "[%d]: NULL", _i);                             \
                 }                                                             \
             }                                                                 \
-          if (_hdlname && version >= R_2007)                                  \
+          if (alloced)                                                        \
             free (_hdlname);                                                  \
         }                                                                     \
     }
@@ -1378,8 +1380,8 @@ api_common_entity (dwg_object *obj)
       pass ();                                                                \
     else                                                                      \
       {                                                                       \
-        Dwg_Version_Type _version = ent->parent->dwg->header.version;         \
-        char *_hdlname = dwg_dynapi_handle_name (obj->parent, field);         \
+        int alloced = 0;                                                      \
+        char *_hdlname = dwg_dynapi_handle_name (obj->parent, field, &alloced); \
         if (field == ent->field)                                              \
           {                                                                   \
             if (g_counter > g_countmax)                                       \
@@ -1393,7 +1395,7 @@ api_common_entity (dwg_object *obj)
             fail (#name "." #field ": %s " FORMAT_REF,                        \
                   _hdlname ? _hdlname : "", ARGS_REF (field));                \
           }                                                                   \
-        if (_version >= R_2007)                                               \
+        if (alloced)                                                          \
           free (_hdlname);                                                    \
       }                                                                       \
   }
@@ -1405,11 +1407,11 @@ api_common_entity (dwg_object *obj)
     pass ();                                                                  \
   else                                                                        \
     {                                                                         \
-      Dwg_Version_Type _version = ent->parent->dwg->header.version;           \
       for (int _i = 0; _i < (int)(num); _i++)                                 \
         {                                                                     \
           BITCODE_H _hdl = field[_i];                                         \
-          char *_hdlname = _hdl ? dwg_dynapi_handle_name (obj->parent, _hdl) : NULL; \
+          int alloced = 0;                                                    \
+          char *_hdlname = _hdl ? dwg_dynapi_handle_name (obj->parent, _hdl, &alloced) : NULL; \
           if (_hdl == ent->field[_i])                                         \
             {                                                                 \
               if (g_counter > g_countmax)                                     \
@@ -1434,7 +1436,7 @@ api_common_entity (dwg_object *obj)
                     ok (#field "[%d]: NULL", _i);                             \
                 }                                                             \
             }                                                                 \
-          if (_hdlname && _version >= R_2007)                                 \
+          if (alloced)                                                        \
             free (_hdlname);                                                  \
         }                                                                     \
     }
@@ -1804,8 +1806,9 @@ api_common_entity (dwg_object *obj)
       fail (#name "." #field);                                                \
     else                                                                      \
       {                                                                       \
+        int alloced = 0;                                                      \
         char *_hdlname                                                        \
-            = _value ? dwg_dynapi_handle_name (obj->parent, _value) : NULL;   \
+            = _value ? dwg_dynapi_handle_name (obj->parent, _value, &alloced) : NULL;   \
         if (!_value)                                                          \
           {                                                                   \
             if (!ptr.field)                                                   \
@@ -1829,7 +1832,7 @@ api_common_entity (dwg_object *obj)
         else                                                                  \
           fail (#name "." #field ":\t %s " FORMAT_REF, _hdlname ?: "",        \
                 ARGS_REF (_value));                                           \
-        if (_hdlname && dwg_version >= R_2007)                                \
+        if (alloced)                                                          \
           free (_hdlname);                                                    \
       }                                                                       \
   }
