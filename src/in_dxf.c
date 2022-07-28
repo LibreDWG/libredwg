@@ -1154,6 +1154,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   dwg->summaryinfo.props
                     = (Dwg_SummaryInfo_Property*)realloc (dwg->summaryinfo.props,
                                  (j + 1) * sizeof (Dwg_SummaryInfo_Property));
+                  memset (dwg->summaryinfo.props + j, 0, sizeof (Dwg_SummaryInfo_Property));
                   LOG_TRACE ("SUMMARY.props[%u].tag = %s [TU16 1]\n", j,
                              pair->value.s);
                   dwg->summaryinfo.props[j].tag = bit_utf8_to_TU (pair->value.s, 0);
