@@ -55,13 +55,14 @@ void
 bit_advance_position (Bit_Chain *dat, long advance)
 {
   const unsigned long pos  = bit_position (dat);
-  const unsigned long endpos = dat->size * 8;
+  const unsigned long endpos = dat->size * 8 - 1;
   long bits = (long)dat->bit + advance;
   if (pos + advance > endpos)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("%s buffer overflow at pos %lu.%u, size %lu, advance by %ld",
                  __FUNCTION__, dat->byte, dat->bit, dat->size, advance);
+      return;
     }
   else if ((long)pos + advance < 0)
     {
