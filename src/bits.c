@@ -74,6 +74,11 @@ bit_advance_position (Bit_Chain *dat, long advance)
     }
   dat->byte += (bits >> 3);
   dat->bit = bits & 7;
+  if (dat->byte >= dat->size)
+  {
+    dat->byte = dat->size == 0 ? 0 : dat->size - 1;
+    dat->bit = 0;
+  }
 }
 
 /* Absolute get in bits
