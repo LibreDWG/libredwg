@@ -513,11 +513,11 @@ decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
       if (length == 0)
         length = read_literal_length (&src, opcode);
 
-      if ((dst + length) >= dst_end || (src + length) > src_end)
+      if ((dst + length) > dst_end || (src + length) > src_end)
         {
           if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
             {
-              if ((dst + length) >= dst_end)
+              if ((dst + length) > dst_end)
                 HANDLER(OUTPUT, "copy_compressed_bytes: dst %p + %u >= %p\n",
                         dst, (unsigned)length, dst_end);
               else
@@ -693,7 +693,7 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
     }
 
   if (size_comp < size_uncomp)
-    error = decompress_r2007 (data, size_uncomp + 1, pedata, MIN (pedata_size, size_comp));
+    error = decompress_r2007 (data, size_uncomp, pedata, MIN (pedata_size, size_comp));
   else
     memcpy (data, pedata, size_uncomp);
 
@@ -740,7 +740,7 @@ read_data_page (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
     }
 
   if (size_comp < size_uncomp)
-    error = decompress_r2007 (decomp, size_uncomp + 1, pedata,
+    error = decompress_r2007 (decomp, size_uncomp, pedata,
                               MIN (pedata_size, size_comp));
   else
     memcpy (decomp, pedata, size_uncomp);
