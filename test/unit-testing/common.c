@@ -141,9 +141,10 @@ main (int argc, char *argv[])
           = { "example_2000.dwg", "example_2004.dwg", "example_2007.dwg",
               "example_2010.dwg", "example_2013.dwg", "example_2018.dwg",
               "example_r14.dwg",  "example_r13.dwg",
-              /* FIXME "r11/ACEB10.dwg", "r2.10/entities.dwg",
-                 "r2.6/entities.dwg", "r1.4/entities.dwg",
-              */
+#ifdef USE_WRITE
+              "r11/ACEB10.dwg",    "r2.10/entities.dwg",
+              "r2.6/entities.dwg", "r1.4/entities.dwg",
+#endif
               /* TODO
                 "example_r11.dwg"    "example_r10.dwg",  "example_r9.dwg",
                 "example_r2_10.dwg", "example_r2_6.dwg", "example_r1_4.dwg"
