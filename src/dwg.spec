@@ -3326,9 +3326,9 @@ DWG_OBJECT (LAYER)
     // locked (8 bit), plotting flag (16 bit), and linewt (mask with 0x03E0)
     FIELD_VALUE (frozen) = flag & 1;
     FIELD_VALUE (on) = !(flag & 2);
-    FIELD_VALUE (frozen_in_new) = flag & 4;
-    FIELD_VALUE (locked) = flag & 8;
-    FIELD_VALUE (plotflag) = flag & (1<<15) ? 1 : 0;
+    FIELD_VALUE (frozen_in_new) = (flag & 4) ? 1 : 0;
+    FIELD_VALUE (locked) = (flag & 8) ? 1 : 0;
+    FIELD_VALUE (plotflag) = (flag & 16) ? 1 : 0;
     FIELD_VALUE (linewt) = (flag & 0x03E0) >> 5;
     JSON {
       FIELD_RC (linewt, 370);
