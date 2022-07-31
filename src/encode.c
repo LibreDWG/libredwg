@@ -2276,7 +2276,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 #endif
 
   bit_chain_alloc (dat);
-  hdl_dat = dat; // splitted later in objects/entities
+  hdl_dat = dat; // split later in objects/entities
   if (!dat->version)
     {
       dat->version = dwg->header.version;

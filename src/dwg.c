@@ -815,7 +815,7 @@ dwg_ref_object_relative (const Dwg_Data *restrict dwg,
 }
 
 /**
- * Find a pointer to an object given it's absolute id (handle).
+ * Find a pointer to an object given its absolute id (handle).
  * TODO: Check and update each handleref obj cache.
  * Note that absref 0 is illegal here, I think.
  */

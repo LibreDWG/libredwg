@@ -2508,7 +2508,7 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
               num_blocks = 1;
             }
           /* insecure. e.g. oss-fuzz issue 32165
-             all inouts: dwg, injson and indxf have correct num_blocks values
+             all inputs: dwg, injson and indxf have correct num_blocks values
           else if (!num_blocks)
             {
               num_blocks = 0;
