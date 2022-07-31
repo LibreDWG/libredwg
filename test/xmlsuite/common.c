@@ -14,9 +14,9 @@ xmlChar *doubletohex (double handle);
  *
  *  To emit this in the XML file
  *
- *  @param double x The X Co-ordinate
- *  @param double y The Y Co-ordinate
- *  @param double z The Z Co-ordinate
+ *  @param double x The X coordinate
+ *  @param double y The Y coordinate
+ *  @param double z The Z coordinate
  *
  *  @return xmlChar* Converted string in the specified pattern
  */
@@ -93,8 +93,8 @@ inttochar (int x)
  *
  * Format: (x y)
  *
- * @param double x The x co-ordinate of the point
- * @param double y The y co-ordinate of the point
+ * @param double x The x coordinate of the point
+ * @param double y The y coordinate of the point
  *
  * @return xmlChar* Returns the string in the given format. Return empty string
  * on error

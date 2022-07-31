@@ -550,7 +550,7 @@ and contains all entities and objects. It is indexed by @ref{HANDLES}.
 @section CLASSES Section
 
 The @strong{Classes} Section contains the basic info for all dynamically loaded types for entities and objects.
-It's types start with 500, and are variable. An entity which has no class loaded is displayed as proxy.
+Its types start with 500, and are variable. An entity which has no class loaded is displayed as proxy.
 
 LibreDWG contains support for many classes, but not all. See @file{src/classes.inc} and @file{src/classes.c}.
 We define a stability for each class, one of stable, unstable, debugging and unhandled.
@@ -562,12 +562,12 @@ Only when rewriting from-to the very same version with the full known unknown_bi
 
 Objects in @strong{debugging} classes are only handled with the developer @code{configure --enable-debug} flag, otherwise ignored. See unstable above.
 
-Objects in @strong{undhandled} classes are always ignored. There are no fields known, only it's type.
+Objects in @strong{undhandled} classes are always ignored. There are no fields known, only its type.
 
 @node HANDLES
 @section HANDLES Section
 
-The Handles section contains a sorted list of all object handles and it's position in the Objects stream.
+The Handles section contains a sorted list of all object handles and its position in the Objects stream.
 All values are stored relatively, as offsets. Handles only increase and can contain holews when an object is deleted, offsets can jump back also.
 
 @node R2004_Header
@@ -628,7 +628,7 @@ RL
 @node Preview
 @section Preview
 
-The optional Preview section contains the thumbnail stream of BMP or WMF data of the drawing. Note that blocks or proxy objects can also contain it's own preview fields. The program @strong{dwgbmp} can extract the bitmap from this section.
+The optional Preview section contains the thumbnail stream of BMP or WMF data of the drawing. Note that blocks or proxy objects can also contain its own preview fields. The program @strong{dwgbmp} can extract the bitmap from this section.
 
 @node VBAProject
 @section VBAProject
