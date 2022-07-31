@@ -8315,7 +8315,7 @@ static const Dwg_DYNAPI_field _dwg_INDEX_fields[] = {
 static const Dwg_DYNAPI_field _dwg_LAYER_fields[] = {
   { "parent",	"struct _dwg_object_object*", sizeof (void *),  OFF (struct _dwg_object_LAYER, parent),
     1,1,0, 0 },
-  { "flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_LAYER, flag),
+  { "flag",	"BS", sizeof (BITCODE_RC),  OFF (struct _dwg_object_LAYER, flag),
     0,0,0, 0 },
   { "name",	"T", sizeof (BITCODE_TV),  OFF (struct _dwg_object_LAYER, name),
     1,1,1, 0 },
@@ -8329,6 +8329,8 @@ static const Dwg_DYNAPI_field _dwg_LAYER_fields[] = {
     0,0,0, 0 },
   { "xref",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_LAYER, xref),
     1,0,0, 0 },
+  { "flag0",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_object_LAYER, flag0),
+    0,0,0, 0 },
   { "frozen",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_LAYER, frozen),
     0,0,0, 0 },
   { "on",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_object_LAYER, on),
@@ -8351,8 +8353,6 @@ static const Dwg_DYNAPI_field _dwg_LAYER_fields[] = {
     1,0,0, 6 },
   { "visualstyle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_LAYER, visualstyle),
     1,0,0, 348 },
-  { "unknown_r2",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_LAYER, unknown_r2),
-    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_LAYERFILTER: (sorted by offset) */

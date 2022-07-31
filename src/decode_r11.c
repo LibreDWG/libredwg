@@ -353,7 +353,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             PRE (R_11) {
               FIELD_HANDLE (ltype, 2, 6);
               if (dwg->header.numheader_vars == 74)
-                FIELD_RC (unknown_r2, 0);
+                FIELD_RC (flag0, 0);
             }
             LATER_VERSIONS {
               FIELD_RS (linewt, 370);

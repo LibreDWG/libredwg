@@ -3319,17 +3319,26 @@ DWG_OBJECT (LAYER)
     FIELD_B (locked, 0);
   }
   SINCE (R_2000) {
-    int flag = FIELD_VALUE (flag);
-    FIELD_BSx (flag, 0); // 70,290,370
-    flag = FIELD_VALUE (flag);
-    // contains frozen (1 bit), on (2 bit), frozen by default in new viewports (4 bit),
-    // locked (8 bit), plotting flag (16 bit), and linewt (mask with 0x03E0)
-    FIELD_VALUE (frozen) = flag & 1;
-    FIELD_VALUE (on) = !(flag & 2);
-    FIELD_VALUE (frozen_in_new) = (flag & 4) ? 1 : 0;
-    FIELD_VALUE (locked) = (flag & 8) ? 1 : 0;
-    FIELD_VALUE (plotflag) = (flag & 16) ? 1 : 0;
-    FIELD_VALUE (linewt) = (flag & 0x03E0) >> 5;
+    // seperate DXF flag 70 from the internal DWG flag0 bitmask
+    int flag0 = FIELD_VALUE (flag0);
+    FIELD_BSx (flag0, 0); // -> 70,290,370
+    flag0 = FIELD_VALUE (flag0);
+    // DWG: frozen (1), on (2), frozen by default (4),
+    //      locked (8), plotting flag (16), and linewt (mask with 0x03E0)
+    FIELD_VALUE (frozen) = flag0 & 1;
+    FIELD_VALUE (on) = !(flag0 & 2);
+    FIELD_VALUE (frozen_in_new) = (flag0 & 4) ? 1 : 0;
+    FIELD_VALUE (locked) = (flag0 & 8) ? 1 : 0;
+    FIELD_VALUE (plotflag) = (flag0 & 16) ? 1 : 0;
+    FIELD_VALUE (linewt) = (flag0 & 0x03E0) >> 5;
+    // DXF: frozen (1), frozen by default in new viewports (2),
+    //      locked (4), is_xref_ref (16), is_xref_resolved (32), is_xref_dep (64).
+    FIELD_VALUE (flag) |= FIELD_VALUE (frozen) |
+      (FIELD_VALUE (frozen_in_new) << 1) |
+      (FIELD_VALUE (locked) << 2) |
+      (FIELD_VALUE (is_xref_ref) << 3) |
+      ((FIELD_VALUE (is_xref_resolved) ? 1 : 0) << 4) |
+      (FIELD_VALUE (is_xref_dep) << 5);
     JSON {
       FIELD_RC (linewt, 370);
     }
@@ -3339,6 +3348,12 @@ DWG_OBJECT (LAYER)
   }
   VERSIONS (R_13, R_14) {
     DECODER { FIELD_VALUE (on) = FIELD_VALUE (color.index) >= 0; }
+    // for DWG
+    FIELD_VALUE (flag0) |= FIELD_VALUE (frozen) |
+      (FIELD_VALUE (frozen_in_new) << 1) |
+      (FIELD_VALUE (locked) << 2) |
+      (FIELD_VALUE (color.index) < 0 ? 32 : 0);
+    // for DXF
     FIELD_VALUE (flag) |= FIELD_VALUE (frozen) |
       (FIELD_VALUE (frozen_in_new) << 1) |
       (FIELD_VALUE (locked) << 2) |

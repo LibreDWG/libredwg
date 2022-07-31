@@ -49730,6 +49730,21 @@ static int test_LAYER (const Dwg_Object *obj)
     layer->flag--;
   }
   {
+    BITCODE_BS flag0;
+    if (dwg_dynapi_entity_value (layer, "LAYER", "flag0", &flag0, NULL)
+        && flag0 == layer->flag0)
+      pass ();
+    else
+      fail ("LAYER.flag0 [BS] %hu != %hu", layer->flag0, flag0);
+    flag0++;
+    if (dwg_dynapi_entity_set_value (layer, "LAYER", "flag0", &flag0, 0)
+        && flag0 == layer->flag0)
+      pass ();
+    else
+      fail ("LAYER.flag0 [BS] set+1 %hu != %hu", layer->flag0, flag0);
+    layer->flag0--;
+  }
+  {
     BITCODE_B frozen;
     if (dwg_dynapi_entity_value (layer, "LAYER", "frozen", &frozen, NULL)
         && frozen == layer->frozen)
@@ -49905,21 +49920,6 @@ static int test_LAYER (const Dwg_Object *obj)
         pass ();
     else
         fail ("LAYER.plotstyle [H]");
-  }
-  {
-    BITCODE_RC unknown_r2;
-    if (dwg_dynapi_entity_value (layer, "LAYER", "unknown_r2", &unknown_r2, NULL)
-        && unknown_r2 == layer->unknown_r2)
-      pass ();
-    else
-      fail ("LAYER.unknown_r2 [RC] %u != %u", layer->unknown_r2, unknown_r2);
-    unknown_r2++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "unknown_r2", &unknown_r2, 0)
-        && unknown_r2 == layer->unknown_r2)
-      pass ();
-    else
-      fail ("LAYER.unknown_r2 [RC] set+1 %u != %u", layer->unknown_r2, unknown_r2);
-    layer->unknown_r2--;
   }
   {
     BITCODE_RSd used;

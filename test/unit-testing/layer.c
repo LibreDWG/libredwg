@@ -5,7 +5,8 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  BITCODE_BS flag;
+  BITCODE_RC flag;  // DXF
+  BITCODE_BS flag0; // DWG
   BITCODE_TV name;
   BITCODE_RS used;
   BITCODE_B is_xref_ref;
@@ -29,7 +30,8 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_layer *layer = dwg_object_to_LAYER (obj);
 
-  CHK_ENTITY_TYPE (layer, LAYER, flag, BSx);
+  CHK_ENTITY_TYPE (layer, LAYER, flag, RCx);
+  CHK_ENTITY_TYPE (layer, LAYER, flag0, BSx);
   CHK_ENTITY_UTF8TEXT_W_OBJ (layer, LAYER, name);
   CHK_ENTITY_TYPE (layer, LAYER, used, RS);
   CHK_ENTITY_TYPE (layer, LAYER, is_xref_ref, B);
