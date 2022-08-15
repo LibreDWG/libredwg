@@ -855,9 +855,11 @@ const unsigned char unknown_section[53]
         bit_chain_init_dat (&dat2, 12, dat);                                  \
         hdl_dat = &dat2;                                                      \
         ENCODE_COMMON_HANDLES                                                 \
+        bit_set_position (hdl_dat, 0);                                        \
         obj_flush_hdlstream (obj, dat, hdl_dat); /* common */                 \
         obj_flush_hdlstream (obj, dat, &dat1);   /* special accumulated */    \
-        bit_chain_free (&dat1);                                               \
+        if (dat1.chain != dat->chain)                                         \
+          bit_chain_free (&dat1);                                             \
         bit_chain_free (&dat2);                                               \
         *hdl_dat = *dat;                                                      \
         hdl_dat = dat;                                                        \
@@ -887,7 +889,12 @@ obj_flush_hdlstream (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
              hdlsize, hdl_dat->byte, hdl_dat->bit, (datpos - objpos) / 8,
              (datpos - objpos) % 8);
   if (hdlpos > 10000U)
-    LOG_ERROR("Possible hdl_data overflow")
+    LOG_WARN("Possible hdl_data overflow")
+  if (dat->chain == hdl_dat->chain)
+    {
+      LOG_WARN("Ignore identical hdl chains")
+      return;
+    }
   // This might change dat->chain
   bit_copy_chain (dat, hdl_dat);
 }
