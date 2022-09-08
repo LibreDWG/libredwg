@@ -12615,6 +12615,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               dxf_free_pair (pair);
               pair = NULL;
+              resolve_postponed_object_refs (dwg);
               error = dxf_entities_read (dat, dwg);
               if (error > DWG_ERR_CRITICAL)
                 goto error;
