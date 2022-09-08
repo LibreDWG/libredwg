@@ -6273,7 +6273,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
       LOG_ERROR ("Empty _obj at DXF TABLE %s nor %s_CONTROL", name, name);
       return pair;
     }
-  dwg_dynapi_entity_set_value (_obj, obj->name, "objid", &obj->index, 1);
+  obj->tio.object->objid = obj->index;
   is_xref_ref = 1;
   if (dwg_dynapi_entity_field (obj->name, "is_xref_ref"))
     dwg_dynapi_entity_set_value (_obj, obj->name, "is_xref_ref", &is_xref_ref,
