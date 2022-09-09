@@ -401,7 +401,7 @@ main (int argc, char *argv[])
   // FIXME: for now only r1.4 - R_2000. later remove this line.
   if (dwg.header.from_version >= R_2004)
     dat.version = dwg.header.version = dwg_version;
-  else
+  if (dwg.header.version == R_INVALID)
     dat.version = dwg.header.version = dwg.header.from_version;
 
   if (!outfile)
