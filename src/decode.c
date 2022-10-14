@@ -4795,7 +4795,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
    * pointers.
    */
   realloced = dwg_add_object (dwg);
-  if (realloced > 0)
+  if (realloced > 0) // i.e. not realloced, but error
     {
       *dat = abs_dat;
       return realloced; // i.e. DWG_ERR_OUTOFMEM
