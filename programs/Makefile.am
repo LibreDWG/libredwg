@@ -37,7 +37,7 @@ if !DISABLE_DXF
 if HAVE_LIBPS
 bin_PROGRAMS   += dwg2ps
 dist_man1_MANS += $(srcdir)/dwg2ps.1
-dwg2ps_SOURCES = dwg2ps.c geom.c
+dwg2ps_SOURCES = dwg2ps.c
 dwg2ps_LDADD   = $(LDADD) -lps
 endif
 endif
@@ -46,7 +46,7 @@ dwgread_SOURCES    = dwgread.c
 dwgbmp_SOURCES     = dwgbmp.c
 dwg2dxf_SOURCES    = dwg2dxf.c
 dwglayers_SOURCES  = dwglayers.c
-dwg2SVG_SOURCES    = dwg2SVG.c escape.c geom.c
+dwg2SVG_SOURCES    = dwg2SVG.c escape.c
 dwggrep_SOURCES    = dwggrep.c
 dwggrep_CFLAGS     = $(AM_CFLAGS) $(CFLAGS) $(PCRE2_CFLAGS)
 dwggrep_LDADD      = $(LDADD) $(PCRE2_LIBS)
@@ -104,7 +104,7 @@ if HAVE_CPPCHECK
 	$(CPPCHECK) -j4 --inline-suppr -I$(top_srcdir)/include -I../src $(srcdir)/*.c
 endif
 
-EXTRA_DIST  = suffix.inc escape.h geom.h my_getopt.h my_stat.h common.inc \
+EXTRA_DIST  = suffix.inc escape.h my_getopt.h my_stat.h common.inc \
 	      $(TESTS) cmp_dxf.pl
 CLEANFILES  = {example_,sample_,entities,ACEB10}*.{bmp,ps,svg,dxf,log,json}
 if USE_WRITE

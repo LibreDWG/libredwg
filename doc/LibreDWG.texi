@@ -1301,7 +1301,7 @@ or as TrueColor RGB hex string values for all r2004+ DWG's.
 
 Missing entities:
 No 3D entities, HATCH by definition.
-ELLIPSE, ARC, CIRCLE would need segmention into lines.
+ELLIPSE, polyline bulges would need segmention into line segments.
 MLINE, SPLINE, MINSERT, SOLID, TRACE, RAY(?), XLINE(?)
 
 Due to implementation quirks with ending commas in JSON, we mostly

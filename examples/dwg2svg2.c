@@ -32,7 +32,7 @@
 
 #include <dwg.h>
 #include <dwg_api.h>
-#include "../programs/geom.h"
+#include "geom.h"
 
 static int opts = 0;
 static dwg_data g_dwg;

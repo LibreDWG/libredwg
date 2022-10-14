@@ -1,0 +1,82 @@
+#!/bin/sh
+# create geojson's from DWG or DXF with dwgread -OGeoJSON
+srcdir="@srcdir@"
+top_builddir="@top_builddir@"
+CFLAGS="@CFLAGS@"
+timeout="@TIMEOUT_30@"
+TESTS_ENVIRONMENT="@AM_TESTS_ENVIRONMENT@"
+
+if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
+    TESTPROG="$LOG_COMPILER $LOG_FLAGS"
+elif [ -n "@WINE@" ]; then
+    TESTPROG="@WINE@"
+elif [ -n "$TESTS_ENVIRONMENT" ]; then
+    TESTPROG="$TESTS_ENVIRONMENT @LTEXEC@"
+else
+    TESTPROG="@LTEXEC@"
+fi
+
+case "$CFLAGS" in
+    *-DDEBUG_CLASSES*) timeout="" ;;
+    *) ;;
+esac
+make -s -C src
+make -s -C programs dwgread@EXEEXT@
+if [ -n "@DSYMUTIL@" ]; then
+    @DSYMUTIL@ programs/dwgread
+fi
+v=-v3
+# dummy to please shellcheck
+test -z "$v" && echo $top_builddir
+out=
+ob="$b"
+ext=
+gerr=0
+
+for d in "$@"; do
+    case $d in
+        -v*) v="$d"
+             ;;
+        *)
+        if [ ! -f "$d" ]; then
+            if [ -f "$srcdir/test/test-data/$d" ]; then
+                d="$srcdir/test/test-data/$d";
+            elif [ -f "$srcdir/test/test-data/$d.dwg" ]; then
+                d="$srcdir/test/test-data/$d.dwg"
+                ext=dwg
+            elif [ -f "$srcdir/test/test-data/$d.dxf" ]; then
+                d="$srcdir/test/test-data/$d.dxf"
+                ext=dxf
+            fi
+        fi
+        xd=$(dirname "$d")
+        dir=_$(basename "$xd")
+        [ "$dir" = "_test-data" ] && dir=""
+        [ "$dir" = "_td" ] && dir=""
+        [ "$dir" = "_." ] && dir=""
+        if [ -z "$ext" ]; then
+            case $(basename "$d") in
+                *.dwg)  ext=dwg ;;
+                *.DWG)  ext=dwg ;;
+                *.dxf)  ext=dxf ;;
+                *.DXF)  ext=dxf ;;
+                *.json) ext=json ;;
+                *.JSON) ext=json ;;
+                *)      ext=dwg; echo "Assume DWG file for $d";;
+            esac
+        fi
+        b=$(basename "$d" .$ext)
+        log="$b$dir.log"
+        out="$b$dir.geojson"
+        echo "$timeout $TESTPROG programs/dwgread $v -OGeoJSON -o $out $d 2>$log"
+        # shellcheck disable=SC2086
+        $timeout $TESTPROG programs/dwgread "$v" -OGeoJSON -o "$out" "$d" 2>"$log"
+        err=$?
+        [ $err -gt $gerr ] && gerr=$err
+        tail -n2 "$log"
+        ;;
+    esac
+done
+v=
+b=$ob
+if [ $gerr -gt 128 ]; then exit 1; fi

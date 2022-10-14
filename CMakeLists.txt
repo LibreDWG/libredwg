@@ -214,6 +214,7 @@ set(libredwg_SOURCES
     src/dynapi.c
     src/dxfclasses.c
     src/free.c
+    src/geom.c
     src/out_dxf.c
     ${outjson_SOURCES}
     src/out_dxfb.c
@@ -253,7 +254,7 @@ if(NOT LIBREDWG_LIBONLY)
   add_executable(dwglayers programs/dwglayers.c ${getopt_c})
   add_executable(dwgbmp programs/dwgbmp.c ${getopt_c})
   add_executable(dwg2SVG programs/dwg2SVG.c
-                         programs/escape.c programs/geom.c ${getopt_c})
+                         programs/escape.c ${getopt_c})
 
   if (HAVE_PCRE2_H)
     if(HAVE_PCRE2_16)

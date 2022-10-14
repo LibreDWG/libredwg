@@ -45,6 +45,7 @@ libredwg_la_SOURCES = \
 	classes.c \
 	dwg_api.c \
 	objects.c \
+	geom.c \
 	$(EXTRA_HEADERS)
 if !DISABLE_DXF
 libredwg_la_SOURCES += \
@@ -113,7 +114,8 @@ EXTRA_HEADERS = \
 	reedsolomon.h \
         hash.h \
 	dynapi.h \
-	out_json.h
+	out_json.h \
+	geom.h
 if !DISABLE_DXF
 EXTRA_HEADERS += \
 	out_dxf.h
