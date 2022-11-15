@@ -1458,6 +1458,8 @@ EOF
     # if 0 ignored in .spec
     # next if $type eq 'T' and $name eq 'LIGHT' and $var eq 'web_file';
     # next if $type eq 'TF' and $name eq 'SUN' and $var eq 'bytes';
+    # LAYER.flag is computed since r2000
+    next if $name eq 'LAYER' and $var eq 'flag';
     my $fmt = exists $FMT{$type} ? $FMT{$type} : undef;
     if (!$fmt) {
       if ($type =~ /[ \*]/ or $type eq 'H') {
@@ -2501,7 +2503,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2505 "gen-dynapi.pl"
+#line 2507 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2587,7 +2589,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 @@list name_subclasses@@
 };
 
-#line 2591 "gen-dynapi.pl"
+#line 2593 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;

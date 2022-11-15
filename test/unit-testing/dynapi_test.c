@@ -49715,21 +49715,6 @@ static int test_LAYER (const Dwg_Object *obj)
         fail ("LAYER.color [CMC]");
   }
   {
-    BITCODE_BS flag;
-    if (dwg_dynapi_entity_value (layer, "LAYER", "flag", &flag, NULL)
-        && flag == layer->flag)
-      pass ();
-    else
-      fail ("LAYER.flag [BS] %hu != %hu", layer->flag, flag);
-    flag++;
-    if (dwg_dynapi_entity_set_value (layer, "LAYER", "flag", &flag, 0)
-        && flag == layer->flag)
-      pass ();
-    else
-      fail ("LAYER.flag [BS] set+1 %hu != %hu", layer->flag, flag);
-    layer->flag--;
-  }
-  {
     BITCODE_BS flag0;
     if (dwg_dynapi_entity_value (layer, "LAYER", "flag0", &flag0, NULL)
         && flag0 == layer->flag0)
@@ -67881,6 +67866,9 @@ main (int argc, char *argv[])
          "example_r14.dwg",
          "2007/PolyLine3D.dwg",
          //"2018/Dynblocks.dwg",
+         //"example_r13.dwg",
+         //"r12/work.dwg",
+         //"r11/entities-3d.dwg",
          NULL
         };
       for (ptr = (char**)&files[0]; *ptr; ptr++)
