@@ -1221,8 +1221,6 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   if (dat->from_version < R_13)
     {
       BITCODE_RC *restrict val;
-      if (pos == dat->byte)
-        return DWG_ERR_INVALIDHANDLE;
       handle->size = handle->code;
       if (handle->size > sizeof(BITCODE_RC *))
         {
