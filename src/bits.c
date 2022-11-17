@@ -55,7 +55,7 @@ void
 bit_advance_position (Bit_Chain *dat, long advance)
 {
   const unsigned long pos  = bit_position (dat);
-  const unsigned long endpos = dat->size * 8 - 1;
+  const unsigned long endpos = dat->size * 8;
   long bits = (long)dat->bit + advance;
   if (pos + advance > endpos)
     {
