@@ -1249,7 +1249,7 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
 
   // TODO: little-endian only
   // x86_64 gcc-9.[0-2] miscompilation with val[i]: (%rbx) being dat+1
-  // we work aorund this one, but you never know what else is being miscompiled.
+  // we work around this one, but you never know what else is being miscompiled.
   // apparently fixed in gcc-9.3, but 9.3 is still broken for cperl.
 #if defined(__GNUC__) && (__GNUC__ == 9) && (__GNUC_MINOR__ <= 2) \
   && (SIZEOF_SIZE_T == 8)                                         \
