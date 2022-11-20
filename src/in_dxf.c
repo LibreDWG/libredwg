@@ -6220,7 +6220,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   char *fieldname;
   char ctrlname[80];
   char *dxfname;
-  BITCODE_B is_xref_ref; // referencable
+  BITCODE_B is_xref_ref; // referenceable
 
   NEW_OBJECT (dwg, obj);
 

@@ -3319,7 +3319,7 @@ DWG_OBJECT (LAYER)
     FIELD_B (locked, 0);
   }
   SINCE (R_2000) {
-    // seperate DXF flag 70 from the internal DWG flag0 bitmask
+    // separate DXF flag 70 from the internal DWG flag0 bitmask
     int flag0 = FIELD_VALUE (flag0);
     FIELD_BSx (flag0, 0); // -> 70,290,370
     flag0 = FIELD_VALUE (flag0);
