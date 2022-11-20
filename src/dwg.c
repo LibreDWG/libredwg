@@ -815,7 +815,7 @@ dwg_ref_object_relative (const Dwg_Data *restrict dwg,
 }
 
 /**
- * Find a pointer to an object given it's absolute id (handle).
+ * Find a pointer to an object given its absolute id (handle).
  * TODO: Check and update each handleref obj cache.
  * Note that absref 0 is illegal here, I think.
  */
@@ -2054,7 +2054,15 @@ dwg_find_table_control (Dwg_Data *restrict dwg, const char *restrict table)
       if (dwg->object[i].name && strEQ (dwg->object[i].name, table))
         {
           Dwg_Handle *hdl = &dwg->object[i].handle;
-          return dwg_add_handleref (dwg, 3, hdl->value, NULL);
+          if (hdl->value)
+            return dwg_add_handleref (dwg, 3, hdl->value, NULL);
+          else
+            {
+              // probably importing from a minimal DXF
+              LOG_TRACE ("dwg_find_table_control: table control object %s has no handle\n",
+                         table)
+              return NULL;
+            }
         }
     }
   // if we haven't read all objects yet, ignore this error

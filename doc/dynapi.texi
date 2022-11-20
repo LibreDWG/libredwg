@@ -10018,6 +10018,8 @@ BS
 B
 @item xref
 H
+@item flag0
+BS
 @item frozen
 B
 @item on
@@ -10040,8 +10042,6 @@ H,	DXF 347
 H,	DXF 6
 @item visualstyle
 H,	DXF 348
-@item unknown_r2
-RC
 
 @end vtable
 @end indentedblock

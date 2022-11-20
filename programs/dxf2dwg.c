@@ -336,6 +336,8 @@ main (int argc, char *argv[])
             dwg.header.version = dwg_version;
           if (dwg.header.from_version == R_INVALID)
             dwg.header.from_version = dwg.header.version;
+          if (dwg.header.version == R_INVALID)
+            dwg.header.version = dwg.header.from_version;
           printf ("\n");
         }
 

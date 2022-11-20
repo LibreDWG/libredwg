@@ -1525,6 +1525,9 @@ dwg_json_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   i = obj->type - 500;
   if (i < 0 || i >= (int)dwg->num_classes)
     return DWG_ERR_INVALIDTYPE;
+  if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
+      || obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
+    return DWG_ERR_UNHANDLEDCLASS;
 
   klass = &dwg->dwg_class[i];
   if (!klass || !klass->dxfname)
@@ -1546,7 +1549,17 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 
   if (!obj || !obj->parent)
     return DWG_ERR_INTERNALERROR;
-  type = dat->version < R_13 ? (unsigned int)obj->fixedtype : obj->type;
+  if (dat->version < R_13)
+    type = (unsigned int)obj->fixedtype;
+  else
+    {
+      type = obj->type;
+      if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
+        type = DWG_TYPE_UNKNOWN_ENT;
+      if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
+        type = DWG_TYPE_UNKNOWN_OBJ;
+    }
+
   switch (type)
     {
     case DWG_TYPE_TEXT:
@@ -1727,20 +1740,28 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
                & (error = dwg_json_variable_type (obj->parent, dat, obj)))
         {
           Dwg_Data *dwg = obj->parent;
-          int is_entity;
+          int is_entity = 0;
           int i = obj->type - 500;
           Dwg_Class *klass = NULL;
           int num_bytes = obj->num_unknown_bits / 8;
           if (obj->num_unknown_bits & 8)
             num_bytes++;
 
-          if (i >= 0 && i < (int)dwg->num_classes)
+          if (obj->fixedtype == DWG_TYPE_FREED)
+              goto invalid_type;
+          if (i >= 0 && i < (int)dwg->num_classes
+              && obj->fixedtype < DWG_TYPE_FREED)
             {
               klass = &dwg->dwg_class[i];
               is_entity = dwg_class_is_entity (klass);
             }
+          else
+            {
+              if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
+                is_entity = 1;
+            }
           // properly dwg_decode_object/_entity for eed, reactors, xdic
-          if (klass && !is_entity)
+          if (!is_entity)
             {
               error |= dwg_json_UNKNOWN_OBJ (dat, obj);
               KEY (num_unknown_bits);
@@ -1749,7 +1770,7 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
               VALUE_BINARY (obj->unknown_bits, num_bytes, 0);
               return error;
             }
-          else if (klass)
+          else
             {
               error |= dwg_json_UNKNOWN_ENT (dat, obj);
               KEY (num_unknown_bits);
@@ -1757,10 +1778,6 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
               KEY (unknown_bits);
               VALUE_BINARY (obj->unknown_bits, num_bytes, 0);
               return error;
-            }
-          else // not a class
-            {
-              goto invalid_type;
             }
         }
       else

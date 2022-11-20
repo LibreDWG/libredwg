@@ -2399,6 +2399,9 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   i = obj->type - 500;
   if (i < 0 || i >= dwg->num_classes)
     return DWG_ERR_INVALIDTYPE;
+  if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
+      || obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
+    return DWG_ERR_UNHANDLEDCLASS;
 
   klass = &dwg->dwg_class[i];
   if (!klass || !klass->dxfname)
@@ -2582,7 +2585,16 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
   if (!obj || !obj->parent)
     return DWG_ERR_INTERNALERROR;
   minimal = obj->parent->opts & DWG_OPTS_MINIMAL;
-  type = dat->version < R_13 ? (unsigned int)obj->fixedtype : obj->type;
+  if (dat->version < R_13)
+    type = (unsigned int)obj->fixedtype;
+  else
+    {
+      type = obj->type;
+      if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
+        type = DWG_TYPE_UNKNOWN_ENT;
+      if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
+        type = DWG_TYPE_UNKNOWN_OBJ;
+    }
 
   switch (type)
     {
@@ -2773,7 +2785,8 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
           int j = obj->type - 500;
           Dwg_Class *klass = NULL;
 
-          if (j >= 0 && j < (int)dwg->num_classes)
+          if (j >= 0 && j < (int)dwg->num_classes
+              && obj->fixedtype < DWG_TYPE_FREED)
             klass = &dwg->dwg_class[j];
           if (!klass)
             {

@@ -3861,14 +3861,16 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   }
 
   error |= bit_read_H (dat, &(obj->handle));
-  if (error & DWG_ERR_INVALIDHANDLE || !obj->handle.value || !obj->handle.size
-      || obj->handle.code)
+  if (error & DWG_ERR_INVALIDHANDLE || !obj->handle.value || !obj->handle.size)
     {
       LOG_ERROR ("Invalid object handle " FORMAT_H " at pos @%lu.%u",
                  ARGS_H (obj->handle), dat->byte, dat->bit);
       // TODO reconstruct the handle and search in the bitsoup?
       if (has_wrong_bitsize)
         obj->bitsize = 0;
+      //obj->handle.value = 0;
+      //obj->handle.size = 0;
+      //obj->handle.code = 0;
       ent->num_eed = 0;
       ent->preview_exists = 0;
       return error | DWG_ERR_INVALIDHANDLE;
@@ -4795,7 +4797,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
    * pointers.
    */
   realloced = dwg_add_object (dwg);
-  if (realloced > 0)
+  if (realloced > 0) // i.e. not realloced, but error
     {
       *dat = abs_dat;
       return realloced; // i.e. DWG_ERR_OUTOFMEM
@@ -5174,9 +5176,15 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
 
           // properly dwg_decode_object/_entity for eed, reactors, xdic
           if (is_entity)
+            {
+              //obj->type = DWG_TYPE_UNKNOWN_ENT;
               error |= dwg_decode_UNKNOWN_ENT (dat, obj);
+            }
           else
+            {
+              //obj->type = DWG_TYPE_UNKNOWN_OBJ;
               error |= dwg_decode_UNKNOWN_OBJ (dat, obj);
+            }
 
           if (!dat)
             return error;

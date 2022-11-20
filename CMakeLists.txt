@@ -258,7 +258,8 @@ else()
 endif()
 install(TARGETS redwg
   LIBRARY
-  COMPONENT redwg)
+  COMPONENT redwg
+  DESTINATION libredwg-${PACKAGE_VERSION})
 install(TARGETS RUNTIME)
 
 if(MSVC)

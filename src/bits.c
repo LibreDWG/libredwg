@@ -55,7 +55,7 @@ void
 bit_advance_position (Bit_Chain *dat, long advance)
 {
   const unsigned long pos  = bit_position (dat);
-  const unsigned long endpos = dat->size * 8 - 1;
+  const unsigned long endpos = dat->size * 8;
   long bits = (long)dat->bit + advance;
   if (pos + advance > endpos)
     {
@@ -1226,8 +1226,6 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   if (dat->from_version < R_13)
     {
       BITCODE_RC *restrict val;
-      if (pos == dat->byte)
-        return DWG_ERR_INVALIDHANDLE;
       handle->size = handle->code;
       if (handle->size > sizeof(BITCODE_RC *))
         {
@@ -1256,7 +1254,7 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
 
   // TODO: little-endian only
   // x86_64 gcc-9.[0-2] miscompilation with val[i]: (%rbx) being dat+1
-  // we work aorund this one, but you never know what else is being miscompiled.
+  // we work around this one, but you never know what else is being miscompiled.
   // apparently fixed in gcc-9.3, but 9.3 is still broken for cperl.
 #if defined(__GNUC__) && (__GNUC__ == 9) && (__GNUC_MINOR__ <= 2) \
   && (SIZEOF_SIZE_T == 8)                                         \

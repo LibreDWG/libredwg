@@ -125,6 +125,9 @@ main (int argc, char *argv[])
          "example_r14.dwg",
          "2007/PolyLine3D.dwg",
          //"2018/Dynblocks.dwg",
+         //"example_r13.dwg",
+         //"r12/work.dwg",
+         //"r11/entities-3d.dwg",
          NULL
         };
       for (ptr = (char**)&files[0]; *ptr; ptr++)

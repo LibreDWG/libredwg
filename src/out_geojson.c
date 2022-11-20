@@ -620,6 +620,9 @@ dwg_geojson_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   i = obj->type - 500;
   if (i < 0 || i >= (int)dwg->num_classes)
     return 0;
+  if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
+      || obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
+    return DWG_ERR_UNHANDLEDCLASS;
 
   klass = &dwg->dwg_class[i];
   if (!klass || !klass->dxfname)

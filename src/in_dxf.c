@@ -1317,10 +1317,16 @@ dxf_fixup_header (Dwg_Data *dwg)
 {
   Dwg_Header_Variables *vars = &dwg->header_vars;
   Dwg_Header *hdr = &dwg->header;
-  const struct dwg_versions *_verp = dwg_version_struct (dwg->header.version);
+  const struct dwg_versions *_verp = dwg->header.version == R_INVALID
+    ? dwg_version_struct (R_2000)
+    : dwg_version_struct (dwg->header.version);
   // Dwg_AuxHeader *aux = &dwg->auxheader;
   LOG_TRACE ("dxf_fixup_header\n");
-
+  if (dwg->header.version == R_INVALID)
+    {
+      dwg->header.version = R_2000;
+      dwg->header.from_version = R_12;
+    }
   if (vars->HANDSEED)
     vars->HANDSEED->handleref.code = 0;
   if (vars->DWGCODEPAGE)
@@ -1419,6 +1425,11 @@ dxf_fixup_header (Dwg_Data *dwg)
         hdr->codepage = 44;
       else
         hdr->codepage = 0;
+    }
+  else
+    {
+      vars->DWGCODEPAGE = strdup ("ANSI_1252");
+      hdr->codepage = 30;
     }
   LOG_TRACE ("HEADER.codepage = %d [%s]\n", hdr->codepage, vars->DWGCODEPAGE);
 
@@ -6209,7 +6220,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   char *fieldname;
   char ctrlname[80];
   char *dxfname;
-  BITCODE_B is_xref_ref; // referencable
+  BITCODE_B is_xref_ref; // referenceable
 
   NEW_OBJECT (dwg, obj);
 
@@ -6273,7 +6284,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
       LOG_ERROR ("Empty _obj at DXF TABLE %s nor %s_CONTROL", name, name);
       return pair;
     }
-  dwg_dynapi_entity_set_value (_obj, obj->name, "objid", &obj->index, 1);
+  obj->tio.object->objid = obj->index;
   is_xref_ref = 1;
   if (dwg_dynapi_entity_field (obj->name, "is_xref_ref"))
     dwg_dynapi_entity_set_value (_obj, obj->name, "is_xref_ref", &is_xref_ref,
@@ -6422,6 +6433,16 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
       pair = dxf_read_pair (dat);
     }
 do_return:
+  // A minimal DXF will have no handle values, assign them then
+  if (!obj->handle.value)
+    {
+      unsigned long next_handle = dwg_next_handle (dwg);
+      dwg_add_handle (&obj->handle, 0, next_handle, NULL);
+      // adds header_vars->CONTROL ref
+      (void)dwg_ctrl_table (dwg, name);
+      LOG_TRACE ("%s.handle = (0.%d.%lx)\n",
+                 obj->name, obj->handle.size, obj->handle.value);
+    }
   // default NULL handle
   if (!obj->tio.object->xdicobjhandle)
     {
@@ -11666,7 +11687,9 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               table[79] = '\0';
             }
           else if (strEQc (pair->value.s, "ENDTAB"))
-            table[0] = '\0'; // close table
+            {
+              table[0] = '\0'; // close table
+            }
           else if (strEQc (pair->value.s, "ENDSEC"))
             {
               dxf_free_pair (pair);
@@ -11682,7 +11705,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       else if (pair->code == 2 && pair->value.s && strlen (pair->value.s) < 80
                && is_table_name (pair->value.s)) // new table NAME
         {
-          BITCODE_BL i = 0;
+          long i = 0;
           BITCODE_BL ctrl_id;
           strncpy (table, pair->value.s, 79);
           table[79] = '\0';
@@ -11691,17 +11714,34 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           while (pair && pair->code == 0 && pair->value.s
                  && strEQ (pair->value.s, table))
             {
+              Dwg_Object *obj;
+              Dwg_Object *ctrl = &dwg->object[ctrl_id];
               char *dxfname = strdup (pair->value.s);
+              BITCODE_H ref;
               dxf_free_pair (pair);
               // until 0 table or 0 ENDTAB
-              pair = new_object (table, dxfname, dat, dwg, ctrl_id, &i);
+              pair = new_object (table, dxfname, dat, dwg, ctrl_id, (BITCODE_BL*)&i);
               if (!pair)
                 return DWG_ERR_INVALIDDWG;
+              obj = &dwg->object[dwg->num_objects - 1];
+              // A minimal DXF will have no handle values
+              if (!obj->handle.value)
+                {
+                  unsigned long next_handle = dwg_next_handle (dwg);
+                  dwg_add_handle (&obj->handle, 0, next_handle, NULL);
+                  //ref = dwg_add_handleref (dwg, 3, next_handle, ctrl);
+                  LOG_TRACE ("%s.handle = (0.%d.%lx)\n",
+                             obj->name, obj->handle.size, obj->handle.value);
+                }
+              {
+                Dwg_Object_BLOCK_CONTROL *_ctrl
+                  = ctrl->tio.object->tio.BLOCK_CONTROL;
+                ref = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);
+                PUSH_HV (_ctrl, num_entries, entries, ref);
+              }
               // undo BLOCK_CONTROL.entries and LTYPE_CONTROL.entries
               if (strEQc (table, "BLOCK_RECORD"))
                 {
-                  Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
-                  Dwg_Object *ctrl = &dwg->object[ctrl_id];
                   Dwg_Object_BLOCK_CONTROL *_ctrl
                       = ctrl->tio.object->tio.BLOCK_CONTROL;
                   if (_ctrl->model_space
@@ -11714,11 +11754,10 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 }
               else if (strEQc (table, "LTYPE"))
                 {
-                  Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
                   Dwg_Object_LTYPE *_obj = obj->tio.object->tio.LTYPE;
-                  Dwg_Object *ctrl = &dwg->object[ctrl_id];
                   Dwg_Object_LTYPE_CONTROL *_ctrl
                       = ctrl->tio.object->tio.LTYPE_CONTROL;
+                  int j = _ctrl->num_entries;
                   if (_ctrl->bylayer
                       && obj->handle.value == _ctrl->bylayer->absolute_ref)
                     i--;
@@ -11726,18 +11765,21 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                            && obj->handle.value
                                   == _ctrl->byblock->absolute_ref)
                     i--;
-                  else if (dwg->header.version > R_2004 && _obj->name
-                           && _obj->has_strings_area)
+                  else
                     {
-                      _obj->strings_area = (BITCODE_TF)xcalloc (512, 1);
-                      if (!_obj->strings_area)
-                        goto outofmem;
-                    }
-                  if (dwg->header.version <= R_2004)
-                    {
-                      _obj->strings_area = (BITCODE_TF)xcalloc (256, 1);
-                      if (!_obj->strings_area)
-                        goto outofmem;
+                      if (dwg->header.version > R_2004 && _obj->name
+                          && _obj->has_strings_area)
+                        {
+                          _obj->strings_area = (BITCODE_TF)xcalloc (512, 1);
+                          if (!_obj->strings_area)
+                            goto outofmem;
+                        }
+                      if (dwg->header.version <= R_2004)
+                        {
+                          _obj->strings_area = (BITCODE_TF)xcalloc (256, 1);
+                          if (!_obj->strings_area)
+                            goto outofmem;
+                        }
                     }
                 }
             }
@@ -11749,6 +11791,17 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 = ctrl->tio.object->tio.BLOCK_CONTROL;
             int at_end = 1;
             unsigned num_entries = _ctrl->num_entries;
+            // A minimal DXF will have no handle values, assign them then
+            if (!ctrl->handle.value)
+              {
+                unsigned long next_handle = dwg_next_handle (dwg);
+                dwg_add_handle (&ctrl->handle, 0, next_handle, NULL);
+                // adds header_vars->CONTROL ref
+                (void)dwg_ctrl_table (dwg, table);
+                //ref = dwg_add_handleref (dwg, 3, next_handle, ctrl);
+                LOG_TRACE ("%s.handle = (0.%d.%lx)\n",
+                           ctrl->name, ctrl->handle.size, ctrl->handle.value);
+              }
             if (_ctrl && ctrl->fixedtype == DWG_TYPE_BLOCK_CONTROL)
               {
                 for (int j = num_entries - 1; j >= 0; j--)
@@ -11809,6 +11862,7 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   char name[80];
   Dxf_Pair *pair = dxf_read_pair (dat);
+  Dwg_Object *obj;
 
   name[0] = '\0'; // init
   while (pair)    // read next 0 TABLE
@@ -11820,13 +11874,22 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           while (pair != NULL && pair->code == 0 && pair->value.s
                  && strNE (pair->value.s, "ENDSEC"))
             {
-              Dwg_Object *obj, *blkhdr = NULL;
+              Dwg_Object *blkhdr = NULL;
               BITCODE_BL idx = dwg->num_objects;
               char *dxfname = strdup (pair->value.s);
               strncpy (name, dxfname, 79);
               name[79] = '\0';
               entity_alias (name);
               dxf_free_pair (pair);
+              // complete old obj
+              obj = &dwg->object[idx - 1];
+              if (idx && !obj->handle.value)
+                {
+                  unsigned long next_handle = dwg_next_handle (dwg);
+                  dwg_add_handle (&obj->handle, 0, next_handle, NULL);
+                  LOG_TRACE ("%s.handle = (0.%d.%lx)\n",
+                             obj->name, obj->handle.size, obj->handle.value);
+                }
               pair = new_object (name, dxfname, dat, dwg, 0, &i);
               if (!pair)
                 return DWG_ERR_INVALIDDWG;
@@ -11962,6 +12025,14 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       pair = dxf_read_pair (dat);
       DXF_CHECK_EOF;
     }
+  obj = &dwg->object[dwg->num_objects - 1];
+  if (dwg->num_objects && !obj->handle.value)
+    {
+      unsigned long next_handle = dwg_next_handle (dwg);
+      dwg_add_handle (&obj->handle, 0, next_handle, NULL);
+      LOG_TRACE ("%s.handle = (0.%d.%lx)\n",
+                 obj->name, obj->handle.size, obj->handle.value);
+    }
   dxf_free_pair (pair);
   return 0;
 }
@@ -12031,6 +12102,17 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
              && (is_dwg_entity (name) || strEQc (name, "DIMENSION")))
         {
           char *dxfname = strdup (pair->value.s);
+          if (dwg->num_objects)
+            {
+              Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
+              if (!obj->handle.value)
+                {
+                  unsigned long next_handle = dwg_next_handle (dwg);
+                  dwg_add_handle (&obj->handle, 0, next_handle, NULL);
+                  LOG_TRACE ("%s.handle = (0.%d.%lx)\n",
+                             obj->name, obj->handle.size, obj->handle.value);
+                }
+            }
           dxf_free_pair (pair);
           pair = new_object (name, dxfname, dat, dwg, 0, NULL);
           if (!pair)
@@ -12057,6 +12139,17 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               strncpy (name, pair->value.s, 79);
               name[79] = '\0';
               entity_alias (name);
+            }
+        }
+      if (dwg->num_objects)
+        {
+          Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
+          if (!obj->handle.value)
+            {
+              unsigned long next_handle = dwg_next_handle (dwg);
+              dwg_add_handle (&obj->handle, 0, next_handle, NULL);
+              LOG_TRACE ("%s.handle = (0.%d.%lx)\n",
+                         obj->name, obj->handle.size, obj->handle.value);
             }
         }
       DXF_RETURN_ENDSEC (0)
@@ -12615,6 +12708,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               dxf_free_pair (pair);
               pair = NULL;
+              resolve_postponed_object_refs (dwg);
               error = dxf_entities_read (dat, dwg);
               if (error > DWG_ERR_CRITICAL)
                 goto error;

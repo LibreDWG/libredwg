@@ -6220,7 +6220,7 @@ EXPORT dwg_class *dwg_get_class (const dwg_data *dwg, unsigned int index);
  ********************************************************************/
 /* This is only useful for DXF exports or dwg USE_WRITE support */
 
-/* All BITCODE_T strings are encoded as UTF-8, as with the dynapi.
+/* All BITCODE_T/char* input strings are encoded as UTF-8, as with the dynapi.
    Most names are copied, since most names are considered to be constant.
    If not, you need to free them by yourself.
 
@@ -6472,7 +6472,7 @@ EXPORT Dwg_Entity_MTEXT*
 dwg_add_MTEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict ins_pt,
                const double rect_width,
-               const char* restrict text_value) __nonnull_all;
+               const char* restrict text_value /*UTF-8*/) __nonnull_all;
 /* Experimental. Does not work yet properly */
 EXPORT Dwg_Entity_LEADER*
 dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,

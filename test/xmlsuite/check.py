@@ -89,10 +89,10 @@ for report in final_output:
 	reporthtm.write("\n<div class='attributedetail'><h3>Attribute Details</h3>\n")
 	for unmatched in report[3]:
 		if unmatched['duplicate'] == "":
-			reporthtm.write("\n<p><b>%s</b> wasn't found at all. It's value should be <b>%s</b></p>\n"
+			reporthtm.write("\n<p><b>%s</b> wasn't found at all. Its value should be <b>%s</b></p>\n"
 							% (unmatched['attrname'], unmatched['original']))
 		else:
-			reporthtm.write("\n<p><b>%s</b> didn't match. It's value should be <b>%s</b>, and it is <b>%s</b></p>\n"
+			reporthtm.write("\n<p><b>%s</b> didn't match. Its value should be <b>%s</b>, and it is <b>%s</b></p>\n"
 							%(unmatched['attrname'],
 							  unmatched["original"], unmatched['duplicate']))
 	reporthtm.write("</div>")
