@@ -236,7 +236,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   BITCODE_RC flag;
   BITCODE_TF name;
 
-  LOG_TRACE ("\ncontents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n",
+  LOG_TRACE ("contents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n",
              tbl->name, id, tbl->size, (long)tbl->number, (unsigned long)tbl->address,
              (unsigned long)(tbl->address + ((unsigned long long)tbl->number * tbl->size)))
   dat->byte = tbl->address;
@@ -458,12 +458,37 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       {
         for (i = 0; i < tbl->number; i++)
           {
-            //FIXME
             //PREP_TABLE (UCS);
-            //FIELD_2RD (ucsorg, 10);
-            //FIELD_2RD (ucsxdir, 11);
-            //FIELD_2RD (ucsydir, 12);
-            //CHK_ENDPOS;
+            Dwg_Object *obj;
+            Dwg_Object_UCS *_obj;
+            dwg_point_3d ucsorg, ucsxdir, ucsydir;
+            Dwg_Object *ctrl
+                = dwg_get_first_object (dwg, DWG_TYPE_UCS_CONTROL);
+            Dwg_Object_UCS_CONTROL *_ctrl
+                = ctrl->tio.object->tio.UCS_CONTROL;
+            if (dat->byte > dat->size || (num + i) > dwg->num_objects)
+              return DWG_ERR_INVALIDDWG;
+            flag = bit_read_RC (dat);
+            name = bit_read_TF (dat, 32);
+            ucsorg.x = bit_read_RD (dat);
+            ucsorg.y = bit_read_RD (dat);
+            ucsxdir.x = bit_read_RD (dat);
+            ucsxdir.y = bit_read_RD (dat);
+            ucsydir.x = bit_read_RD (dat);
+            ucsydir.y = bit_read_RD (dat);
+            _obj = dwg_add_UCS (dwg, &ucsorg, &ucsxdir, &ucsydir, (const char *)name);
+            obj = dwg_obj_generic_to_object (_obj, &error);
+            _ctrl->entries[i]
+                = dwg_add_handleref (dwg, 2, obj->handle.value, obj);
+            obj->size = tbl->size;
+            obj->address = pos;
+            _obj->flag = flag;
+            LOG_TRACE ("\n-- table entry UCS [%d]: 0x%lx\n", i, pos);
+            LOG_TRACE ("flag: %u [RC 70]\n", flag);
+            LOG_TRACE ("name: \"%s\" [TF 32 2]\n", name);
+            free (name);
+
+            CHK_ENDPOS;
           }
         break;
 

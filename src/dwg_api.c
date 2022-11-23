@@ -24718,15 +24718,21 @@ dwg_add_UCS (Dwg_Data *restrict dwg,
              const char *restrict name)
 {
   API_ADD_TABLE (UCS, UCS_CONTROL, {
-    _obj->ucsorg.x = origin->x;
-    _obj->ucsorg.y = origin->y;
-    _obj->ucsorg.z = origin->z;
-    _obj->ucsxdir.x = x_axis->x;
-    _obj->ucsxdir.y = x_axis->y;
-    _obj->ucsxdir.z = x_axis->z;
-    _obj->ucsydir.x = y_axis->x;
-    _obj->ucsydir.y = y_axis->y;
-    _obj->ucsydir.z = y_axis->z;
+    if (origin) {
+      _obj->ucsorg.x = origin->x;
+      _obj->ucsorg.y = origin->y;
+      _obj->ucsorg.z = origin->z;
+    }
+    if (x_axis) {
+      _obj->ucsxdir.x = x_axis->x;
+      _obj->ucsxdir.y = x_axis->y;
+      _obj->ucsxdir.z = x_axis->z;
+    }
+    if (y_axis) {
+      _obj->ucsydir.x = y_axis->x;
+      _obj->ucsydir.y = y_axis->y;
+      _obj->ucsydir.z = y_axis->z;
+    }
   });
 }
 

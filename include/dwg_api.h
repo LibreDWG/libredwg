@@ -6739,7 +6739,7 @@ EXPORT Dwg_Object_UCS *dwg_add_UCS (Dwg_Data *restrict dwg,
                                     const dwg_point_3d *restrict origin,
                                     const dwg_point_3d *restrict x_axis,
                                     const dwg_point_3d *restrict y_axis,
-                                    const char *restrict name) __nonnull ((1,2));
+                                    const char *restrict name) __nonnull ((1));
 EXPORT Dwg_Object_LAYER*
 dwg_add_LAYER (Dwg_Data *restrict dwg,
                const char *restrict name /* maybe NULL */) __nonnull ((1));
