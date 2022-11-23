@@ -263,8 +263,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   Dwg_Object_##token *_obj;                                                   \
   Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_##token##_CONTROL);  \
   Dwg_Object_##token##_CONTROL *_ctrl                                         \
-      = ctrl->tio.object->tio.token##_CONTROL;                                \
-  if (dat->byte > dat->size || (num + i) > dwg->num_objects)                  \
+    = ctrl ? ctrl->tio.object->tio.token##_CONTROL : NULL;                    \
+  if (!ctrl || dat->byte > dat->size || (num + i) > dwg->num_objects)         \
     return DWG_ERR_INVALIDDWG;                                                \
   flag = bit_read_RC (dat);                                                   \
   name = bit_read_TF (dat, 32);                                               \
@@ -465,8 +465,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             Dwg_Object *ctrl
                 = dwg_get_first_object (dwg, DWG_TYPE_UCS_CONTROL);
             Dwg_Object_UCS_CONTROL *_ctrl
-                = ctrl->tio.object->tio.UCS_CONTROL;
-            if (dat->byte > dat->size || (num + i) > dwg->num_objects)
+                = ctrl ? ctrl->tio.object->tio.UCS_CONTROL : NULL;
+            if (!ctrl || dat->byte > dat->size || (num + i) > dwg->num_objects)
               return DWG_ERR_INVALIDDWG;
             flag = bit_read_RC (dat);
             name = bit_read_TF (dat, 32);
