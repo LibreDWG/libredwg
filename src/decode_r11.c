@@ -136,7 +136,7 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
   tbl->number = bit_read_RS (dat);
   tbl->flags = bit_read_RS (dat);
   tbl->address = bit_read_RL (dat);
-  strncpy (tbl->name, name, 63);
+  strncpy (tbl->name, name, sizeof(tbl->name) - 1);
   tbl->name[63] = '\0';
   LOG_TRACE ("ptr table %-8s [%2d]: size:%-4u num:%-2d (0x%lx-0x%lx) flags:0x%x\n",
              tbl->name, id, tbl->size, tbl->number, (unsigned long)tbl->address,
@@ -662,9 +662,9 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error |= dwg_add_Document (dwg, 0);
 
   // 5 tables + header + block. VIEW = 6
-  SINCE (R_10)
+  if (dwg->header.numheader_vars > 158) // r10
     num_sections += 3;
-  SINCE (R_10)
+  if (dwg->header.numheader_vars > 160) // r11
     num_sections += 2;
   dwg->header.section = (Dwg_Section *)calloc (sizeof (Dwg_Section),
                                                num_sections + 2);
@@ -673,6 +673,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_ERROR ("Out of memory");
       return DWG_ERR_OUTOFMEM;
     }
+  dwg->header.numsections = num_sections;
   PRE (R_2_0b) {
     bit_read_RC (dat); // the 6th zero
     LOG_TRACE ("zero[6]: 0 [RC 0]\n");
