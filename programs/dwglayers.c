@@ -163,7 +163,8 @@ main (int argc, char *argv[])
     {
       char *name;
       assert (_ctrl->entries);
-      assert (_ctrl->entries[i]);
+      if (!_ctrl->entries[i]) // NULL BITCODE_H
+        continue;
       obj = _ctrl->entries[i]->obj;
       if (!obj || obj->type != DWG_TYPE_LAYER) // can be DICTIONARY also
         continue;
