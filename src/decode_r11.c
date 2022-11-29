@@ -747,28 +747,33 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("@0x%lx\n", dat->byte);
   if (error >= DWG_ERR_CRITICAL)
     return error;
-  SINCE (R_11)
+  if (dat->byte + 2 >= dat->size)
     {
-      // crc16 + DWG_SENTINEL_R11_HEADER_END
-      BITCODE_RS crc, crcc;
-      BITCODE_TF r11_sentinel;
-      crcc = bit_calc_CRC (0xC0C1, &dat->chain[0], dat->byte); // from 0 to now
-      crc = bit_read_RS (dat);
-      LOG_TRACE ("crc: %04X [RSx] from 0-0x%lx\n", crc, dat->byte - 2);
-      if (crc != crcc)
-        {
-          LOG_ERROR ("Header CRC mismatch %04X <=> %04X", crc, crcc);
-          error |= DWG_ERR_WRONGCRC;
-        }
-      r11_sentinel = bit_read_TF (dat, 16);
-      LOG_TRACE ("r11_sentinel: ");
-      LOG_TRACE_TF (r11_sentinel, 16) // == C46E6854F86E3330633EC1852ADC9401
-      if (memcmp (r11_sentinel, dwg_sentinel (DWG_SENTINEL_R11_HEADER_END), 16))
-        {
-          LOG_ERROR ("DWG_SENTINEL_R11_HEADER_END mismatch");
-          error |= DWG_ERR_WRONGCRC;
-        }
-      free (r11_sentinel);
+      LOG_ERROR ("post HEADER overflow")
+      return error | DWG_ERR_CRITICAL;
+    }
+  SINCE (R_11)
+  {
+    // crc16 + DWG_SENTINEL_R11_HEADER_END
+    BITCODE_RS crc, crcc;
+    BITCODE_TF r11_sentinel;
+    crcc = bit_calc_CRC (0xC0C1, &dat->chain[0], dat->byte); // from 0 to now
+    crc = bit_read_RS (dat);
+    LOG_TRACE ("crc: %04X [RSx] from 0-0x%lx\n", crc, dat->byte - 2);
+    if (crc != crcc)
+      {
+        LOG_ERROR ("Header CRC mismatch %04X <=> %04X", crc, crcc);
+        error |= DWG_ERR_WRONGCRC;
+      }
+    r11_sentinel = bit_read_TF (dat, 16);
+    LOG_TRACE ("r11_sentinel: ");
+    LOG_TRACE_TF (r11_sentinel, 16) // == C46E6854F86E3330633EC1852ADC9401
+    if (memcmp (r11_sentinel, dwg_sentinel (DWG_SENTINEL_R11_HEADER_END), 16))
+      {
+        LOG_ERROR ("DWG_SENTINEL_R11_HEADER_END mismatch");
+        error |= DWG_ERR_WRONGCRC;
+      }
+    free (r11_sentinel);
     }
 
   PRE (R_10)
