@@ -608,7 +608,14 @@
 #define TRACE_DD                                                              \
   {                                                                           \
     BITCODE_BB result;                                                        \
-    BITCODE_RC byte = dat->chain[dat->byte];                                  \
+    BITCODE_RC byte;                                                          \
+    if (dat->byte + 8 >= dat->size) {                                         \
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                               \
+      LOG_ERROR ("%s FIELD_DD buffer overflow at pos %lu.%u, size %lu,"       \
+                 " advance by 8",                                             \
+                 __FUNCTION__, dat->byte, dat->bit, dat->size);               \
+    }                                                                         \
+    byte = dat->chain[dat->byte];                                             \
     if (dat->bit < 7)                                                         \
       result = (byte & (0xc0 >> dat->bit)) >> (6 - dat->bit);                 \
     else                                                                      \
