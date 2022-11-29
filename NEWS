@@ -1,6 +1,34 @@
 GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
-Copyright (C) 2021 Free Software Foundation, Inc.
+Copyright (C) 2022 Free Software Foundation, Inc.
 See the end for copying conditions.
+
+LibreDWG version 0.13.0 - 2022/?? - beta:
+
+Major features:
+  * Added experimental pre-R13 DWG decode support for most old formats (with
+    Michal Spacek).
+  * Fixed dwgadd: (Dmitry Sinyavin #388, #415)
+  * New authors: Michal Josef Špaček (preR13 formats),
+    Dmitry Sinyavin (dwgadd fixes).
+Minor features:
+  * Added a third *int alloced arg to dwg_dynapi_handle_name()
+  * Renamed HEADER.unknown_s[] fields. (Michal Spacek #412)
+Minor bugfixes:
+  * Fixed HEADER.PLINEGEN pre-r13 (Michal Spacek #408)
+  * Fixed HEADER.OSMODE pre-r13 (Michal Spacek #409)
+  * Fixed LAYER.plotflag (#509)
+  * Fixed many more minor fuzzer errors with illegal input, detected by the
+    oss-fuzz service and others. More bounds and type checks, null-derefs,
+    double-free, missing zero-termination in fuzzer inputs.
+    Fixed GH issues 425.
+    Fixed oss-fuzz issues 53492, 53492, 53468, 50259, 49681, 49589, 48793,
+    47729, 47632, 47570, 47526, 47497, 47487, 47304, 47303, 47151, 47144,
+    47330, 47166, 47002, 46769, 46751, 47020, 47015, 47014, 46998, 46994,
+    46985, 46881, 44533, 44481, 44981, 44460, 44439, 43178, 42212, 40721,
+    40434, 39241, 39510, 39885, 38263, 36544, 37227, 36979, 36698, 35897.
+  * Fixed make install via cmake.
+  * Fixed cmake compilation with missing memmem on mingw. (#422)
+  * Fixed cmake compilation with -DBUILD_SHARED_LIBS=Off. (#421)
 
 LibreDWG version 0.12.5 - 2022/02/06 - beta:
 
