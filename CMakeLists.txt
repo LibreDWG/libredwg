@@ -150,9 +150,8 @@ set(libredwg_SOURCES
 add_library(redwg
     ${libredwg_HEADERS}
     ${libredwg_SOURCES})
-#set_target_properties(${libredwg_HEADERS} PROPERTIES PUBLIC_HEADER)
-set_target_properties(redwg PROPERTIES PUBLIC_HEADER include/dwg_api.h)
-set_target_properties(redwg PROPERTIES PUBLIC_HEADER include/dwg.h)
+set_target_properties(redwg PROPERTIES
+  PUBLIC_HEADER "${libredwg_HEADERS}")
 target_compile_definitions(redwg PUBLIC DLL_EXPORT)
 target_include_directories(redwg PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -163,13 +162,14 @@ target_include_directories(redwg PUBLIC
 link_libraries(redwg -lm ${CMAKE_THREAD_LIBS_INIT})
 
 if(NOT LIBREDWG_LIBONLY)
-
+  set(executables_TARGETS dwgread dwg2dxf dwggrep dwglayers dwgbmp dwg2SVG)
   add_executable(dwgread programs/dwgread.c)
   add_executable(dwg2dxf programs/dwg2dxf.c)
   if(NOT LIBREDWG_DISABLE_WRITE)
     add_executable(dwgrewrite programs/dwgrewrite.c)
     add_executable(dwgwrite programs/dwgwrite.c)
     add_executable(dxf2dwg programs/dxf2dwg.c)
+    set(executables_TARGETS ${executables_TARGETS} dwgrewrite dwgwrite dxf2dwg)
   endif(NOT LIBREDWG_DISABLE_WRITE)
   add_executable(dwggrep programs/dwggrep.c)
   add_executable(dwglayers programs/dwglayers.c)
@@ -252,14 +252,21 @@ add_custom_target(
 if(MSVC)
   #untested
   install(TARGETS redwg RUNTIME PUBLIC_HEADER
+          ${executables_TARGETS}
+          DESTINATION libredwg-${PACKAGE_VERSION})
+  install(TARGETS redwg
+          LIBRARY
+          COMPONENT redwg
           DESTINATION libredwg-${PACKAGE_VERSION})
 else()
   include(GNUInstallDirs)
+  install(TARGETS redwg PUBLIC_HEADER
+          DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+  if(NOT LIBREDWG_LIBONLY)
+    install(TARGETS ${executables_TARGETS}
+            DESTINATION "${CMAKE_INSTALL_BINDIR}")
+  endif()
 endif()
-install(TARGETS redwg
-  LIBRARY
-  COMPONENT redwg
-  DESTINATION libredwg-${PACKAGE_VERSION})
 install(TARGETS RUNTIME)
 
 if(MSVC)
