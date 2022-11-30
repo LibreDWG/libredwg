@@ -265,9 +265,11 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   Dwg_Object_##token##_CONTROL *_ctrl                                         \
     = ctrl ? ctrl->tio.object->tio.token##_CONTROL : NULL;                    \
   if (!ctrl || dat->byte > dat->size || (num + i) > dwg->num_objects)         \
-    return DWG_ERR_INVALIDDWG;                                                \
+    return error | DWG_ERR_INVALIDDWG;                                        \
   flag = bit_read_RC (dat);                                                   \
   name = bit_read_TF (dat, 32);                                               \
+  if (!name)                                                                  \
+    return error | DWG_ERR_INVALIDDWG;                                        \
   _obj = dwg_add_##token (dwg, (const char *)name);                           \
   obj = dwg_obj_generic_to_object (_obj, &error);                             \
   _ctrl->entries[i] = dwg_add_handleref (dwg, 2, obj->handle.value, obj);     \
@@ -305,6 +307,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
               return DWG_ERR_INVALIDDWG;
             flag = bit_read_RC (dat);
             name = bit_read_TF (dat, 32);
+            if (!name)
+              return DWG_ERR_INVALIDDWG;
             _obj = dwg_add_BLOCK_HEADER (dwg, (const char *)name);
             _obj->flag = flag;
             LOG_TRACE ("\n-- table entry BLOCK_HEADER [%d]: 0x%lx\n", i, pos);
@@ -470,6 +474,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
               return DWG_ERR_INVALIDDWG;
             flag = bit_read_RC (dat);
             name = bit_read_TF (dat, 32);
+            if (!name)
+              return DWG_ERR_INVALIDDWG;
             ucsorg.x = bit_read_RD (dat);
             ucsorg.y = bit_read_RD (dat);
             ucsxdir.x = bit_read_RD (dat);
@@ -766,6 +772,8 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         error |= DWG_ERR_WRONGCRC;
       }
     r11_sentinel = bit_read_TF (dat, 16);
+    if (!r11_sentinel)
+      return error | DWG_ERR_INVALIDDWG;
     LOG_TRACE ("r11_sentinel: ");
     LOG_TRACE_TF (r11_sentinel, 16) // == C46E6854F86E3330633EC1852ADC9401
     if (memcmp (r11_sentinel, dwg_sentinel (DWG_SENTINEL_R11_HEADER_END), 16))
