@@ -922,10 +922,8 @@ test_code (const char *dir, const char *filename, int cov)
 #endif
   error = dwg_read_file (path, &g_dwg);
   if (error < DWG_ERR_CRITICAL)
-    {
-      output_test (&g_dwg);
-      dwg_free (&g_dwg);
-    }
+    output_test (&g_dwg);
+  dwg_free (&g_dwg);
   /* This value is the return value for `main',
      so clamp it to either 0 or 1.  */
   error = (error >= DWG_ERR_CRITICAL || numfailed () > 0) ? 1 : 0;
