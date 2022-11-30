@@ -739,7 +739,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         || decode_preR13_section_hdr ("STYLE", SECTION_STYLE, dat, dwg)
         || decode_preR13_section_hdr ("LTYPE", SECTION_LTYPE, dat, dwg)
         || decode_preR13_section_hdr ("VIEW", SECTION_VIEW, dat, dwg))
-      return DWG_ERR_INVALIDDWG;
+      return DWG_ERR_SECTIONNOTFOUND;
   }
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x5e
   if (dat->size < 0x1f0) // AC1.50 0x1f9 74 vars
@@ -798,23 +798,28 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       dat->byte = 0x3ef;
       LOG_TRACE ("@0x%lx\n", dat->byte);
-      decode_preR13_section_hdr ("UCS", SECTION_UCS, dat, dwg);
+      if (decode_preR13_section_hdr ("UCS", SECTION_UCS, dat, dwg))
+        return DWG_ERR_SECTIONNOTFOUND;
       dat->byte = 0x500;
       LOG_TRACE ("@0x%lx\n", dat->byte);
-      decode_preR13_section_hdr ("VPORT", SECTION_VPORT, dat, dwg);
+      if (decode_preR13_section_hdr ("VPORT", SECTION_VPORT, dat, dwg))
+        return DWG_ERR_SECTIONNOTFOUND;
       dat->byte = 0x512;
       LOG_TRACE ("@0x%lx\n", dat->byte);
-      decode_preR13_section_hdr ("APPID", SECTION_APPID, dat, dwg);
+      if (decode_preR13_section_hdr ("APPID", SECTION_APPID, dat, dwg))
+        return DWG_ERR_SECTIONNOTFOUND;
       dat->byte = entities_start;
     }
   if (dwg->header.numheader_vars > 160) // r11
     {
       dat->byte = 0x522;
       LOG_TRACE ("@0x%lx\n", dat->byte);
-      decode_preR13_section_hdr ("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg);
+      if (decode_preR13_section_hdr ("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg))
+        return DWG_ERR_SECTIONNOTFOUND;
       dat->byte = 0x69f;
       LOG_TRACE ("@0x%lx\n", dat->byte);
-      decode_preR13_section_hdr ("VX", SECTION_VX, dat, dwg);
+      if (decode_preR13_section_hdr ("VX", SECTION_VX, dat, dwg))
+        return DWG_ERR_SECTIONNOTFOUND;
       dat->byte = entities_start;
     }
 
@@ -845,22 +850,25 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   //dat->byte += 20; /* crc + sentinel? 20 byte */
   if (!dwg->next_hdl)
     dwg_set_next_hdl (dwg, 0x22);
-  error |= decode_preR13_section (SECTION_BLOCK, dat, dwg);
-  error |= decode_preR13_section (SECTION_LAYER, dat, dwg);
-  error |= decode_preR13_section (SECTION_STYLE, dat, dwg);
-  error |= decode_preR13_section (SECTION_LTYPE, dat, dwg);
-  error |= decode_preR13_section (SECTION_VIEW, dat, dwg);
+  if (decode_preR13_section (SECTION_BLOCK, dat, dwg)
+       || decode_preR13_section (SECTION_LAYER, dat, dwg)
+       || decode_preR13_section (SECTION_STYLE, dat, dwg)
+       || decode_preR13_section (SECTION_LTYPE, dat, dwg)
+       || decode_preR13_section (SECTION_VIEW, dat, dwg))
+    return DWG_ERR_SECTIONNOTFOUND;
 #if 1
   if (num_sections > 5) // r10
     {
-      error |= decode_preR13_section (SECTION_UCS, dat, dwg);
-      error |= decode_preR13_section (SECTION_VPORT, dat, dwg);
-      error |= decode_preR13_section (SECTION_APPID, dat, dwg);
+      if (decode_preR13_section (SECTION_UCS, dat, dwg)
+          || decode_preR13_section (SECTION_VPORT, dat, dwg)
+          || decode_preR13_section (SECTION_APPID, dat, dwg))
+        return DWG_ERR_SECTIONNOTFOUND;
     }
   if (num_sections > 8) // r11
     {
-      error |= decode_preR13_section (SECTION_DIMSTYLE, dat, dwg);
-      error |= decode_preR13_section (SECTION_VX, dat, dwg);
+      if (decode_preR13_section (SECTION_DIMSTYLE, dat, dwg)
+          || decode_preR13_section (SECTION_VX, dat, dwg))
+        return DWG_ERR_SECTIONNOTFOUND;
     }
 #endif
   if (error >= DWG_ERR_CRITICAL)
