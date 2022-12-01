@@ -31,6 +31,7 @@
 #include "decode.h"
 #include "encode.h"
 #include "bits.h"
+#define DWG_LOGLEVEL loglevel
 #include "logging.h"
 #include <dwg_api.h>
 #ifndef DISABLE_JSON
@@ -43,6 +44,7 @@
 #endif
 
 static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat);
+static unsigned int loglevel;
 
 static int
 usage (void)
@@ -247,11 +249,13 @@ main (int argc, char *argv[])
   i = optind;
 
   memset (&dwg, 0, sizeof (dwg));
+  loglevel = opts & DWG_OPTS_LOGLEVEL;
   dwg.header.version = dwg_version;
   dwg.header.from_version = dwg_version;
   dwg.opts = opts;
   dat.chain = NULL;
   dat.size = 0;
+  dat.opts = opts;
   fp = fopen (argv[i], "rb");
   if (!fp)
     {
@@ -550,6 +554,8 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
   memset (&ent, 0, sizeof (lastent_t));
   p = (char*)dat->chain;
   end = (char*)&dat->chain[dat->size - 1];
+
+#if 0
   if (memBEGINc ((char*)dat->chain, "readdwg") || (p = strstr ((char*)dat->chain, "\nreaddwg")))
     {
       if (*p == '\n')
@@ -656,6 +662,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
   mspace = dwg_model_space_object (dwg);
   hdr = mspace->tio.object->tio.BLOCK_HEADER;
   orig_num = dwg->num_objects;
+#endif
 
   // read dat line by line and call the matching add API
   while (p && p < end)
@@ -683,6 +690,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             }
           if (SSCANF_S (p, "readdwg " FMT_PATH, &text[0] SZ))
             {
+              LOG_INFO ("readdwg %s\n", text)
               if ((error = dwg_read_file (text, *dwgp)) > DWG_ERR_CRITICAL)
                 {
                   LOG_ERROR ("Invalid readdwg \"%s\" => error 0x%x", text, error);
@@ -707,6 +715,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             }
           if (SSCANF_S (p, "readdxf " FMT_PATH, &text[0] SZ))
             {
+              LOG_INFO ("readdxf %s\n", text)
               if ((error = dxf_read_file (text, *dwgp)) > DWG_ERR_CRITICAL)
                 {
                   LOG_ERROR ("Invalid readdxf \"%s\" => error 0x%x", text, error);
@@ -732,6 +741,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           if (SSCANF_S (p, "readjson " FMT_PATH, &text[0] SZ))
             {
               Bit_Chain in_dat = EMPTY_CHAIN(0);
+              LOG_INFO ("readjson %s\n", text)
               in_dat.fh = fopen (text, "rb");
               if (in_dat.fh) dat_read_file (&in_dat, in_dat.fh, text);
               if (!in_dat.fh || (error = dwg_read_json (&in_dat, *dwgp)) > DWG_ERR_CRITICAL)
@@ -796,10 +806,10 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
 
       if (initial) {
         if (!dwg)
-          {
-            dwg = dwg_new_Document (version, imperial, 0);
-            *dwgp = dwg;
-          }
+          dwg = dwg_new_Document (version, imperial, 0);
+        else
+          dwg_add_Document (dwg, imperial);
+        *dwgp = dwg;
 
         mspace = dwg_model_space_object (dwg);
         hdr = mspace->tio.object->tio.BLOCK_HEADER;
