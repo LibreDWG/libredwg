@@ -247,6 +247,8 @@ main (int argc, char *argv[])
   i = optind;
 
   memset (&dwg, 0, sizeof (dwg));
+  dwg.header.version = dwg_version;
+  dwg.header.from_version = dwg_version;
   dwg.opts = opts;
   dat.chain = NULL;
   dat.size = 0;
@@ -463,7 +465,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
   Dwg_Object_BLOCK_HEADER *hdr;
   const char *end;
   char *p;
-  Dwg_Version_Type version = R_2000;
+  Dwg_Version_Type version;
   int error;
   int i = 0;
   int initial = 1;
@@ -540,6 +542,11 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
 
   if (!dat->chain)
     abort();
+  dwg = *dwgp;
+  if (!dwg->header.version)
+    version = R_2000;
+  else
+    version = dwg->header.version;
   memset (&ent, 0, sizeof (lastent_t));
   p = (char*)dat->chain;
   end = (char*)&dat->chain[dat->size - 1];

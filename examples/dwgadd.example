@@ -2,7 +2,7 @@
 #readdwg "example_2000.dwg"
 #readdxf "example_2000.dxf"
 #readjson "example_2000.json"
-version 2000
+#version 2000
 text "test" (0.0 1.0 0.0) 8
 attribute 8 0 "prompt" (0.0 1.0 0.0) "tag" "text"
 attdef 8 0 "prompt" (0.0 1.0 0.0) "tag" "default_text"
