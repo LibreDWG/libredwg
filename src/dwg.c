@@ -446,8 +446,10 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
   if (!stat (filename, &attrib)
 #ifdef _WIN32
       && strNE (filename, "NUL")
+      && strNE (filename, "CON")
 #else
       && strNE (filename, "/dev/null")
+      && strNE (filename, "/dev/stdout")
 #endif
       )
     {

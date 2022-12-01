@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2020-2021 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2020-2022 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -78,7 +78,7 @@ help (void)
   printf ("             r12, r14, r2000 (default)\n");
   printf ("           Planned versions:\n");
   printf ("             r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
-  printf ("  -o outfile, --file outfile\n");
+  printf ("  -o outfile, --file outfile (default: stdout)\n");
 #else
   printf ("  -v[0-9]     verbosity\n");
   printf ("  -a rNNNN    save as version\n");
@@ -86,7 +86,7 @@ help (void)
   printf ("                r12, r14, r2000 (default)\n");
   printf ("              Planned versions:\n");
   printf ("                r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
-  printf ("  -o outfile\n");
+  printf ("  -o outfile (default: stdout)\n");
 #endif
   printf ("\n"
           " --version        display the version and exit\n");
@@ -104,7 +104,7 @@ main (int argc, char *argv[])
   Dwg_Data *dwgp;
   Bit_Chain dat = { NULL, 0, 0, 0, 0 };
   Bit_Chain out_dat = { NULL, 0, 0, 0, 0 };
-  char *outfile = NULL;
+  const char *outfile = NULL;
   Dwg_Version_Type dwg_version = R_2000;
   // boolean options
   struct opt_s {
@@ -221,7 +221,7 @@ main (int argc, char *argv[])
           i = (optind > 0 && optind < argc) ? optind - 1 : 1;
           if (!memcmp (argv[i], "-v", 2))
             {
-              opts = argv[i][2] ? argv[i][2] - '0' : 1;
+              opts = argv[i][2] ? argv[i][2] - '0' : 3;
             }
           if (opts < 0 || opts > 9)
             return usage ();
@@ -247,9 +247,15 @@ main (int argc, char *argv[])
   i = optind;
 
   memset (&dwg, 0, sizeof (dwg));
+  dwg.opts = opts;
   dat.chain = NULL;
   dat.size = 0;
   fp = fopen (argv[i], "rb");
+  if (!fp)
+    {
+      LOG_ERROR ("Could not read %s", argv[i])
+      exit (1);
+    }
   dat_read_file (&dat, fp, argv[i]);
   if (dat.size == 0)
     {
@@ -264,7 +270,18 @@ main (int argc, char *argv[])
       fclose (fp);
       dwg = *dwgp;
       out_dat.byte = 0; out_dat.bit = 0;
+      if (!outfile)
+#ifdef _WIN32
+        outfile = "CON";
+#else
+        outfile = "/dev/stdout";
+#endif
       out_dat.fh = fopen (outfile, "wb");
+      if (!out_dat.fh)
+        {
+          LOG_ERROR ("Could not write %s", outfile)
+          exit (1);
+        }
       out_dat.from_version = dwg.header.from_version;
       out_dat.version = dwg.header.version;
       out_dat.opts = dwg.opts;
@@ -284,7 +301,8 @@ main (int argc, char *argv[])
       else
 #endif
         {
-          fclose (out_dat.fh);
+          if (out_dat.fh)
+            fclose (out_dat.fh);
           opt.dwg = 1;
           unlink (outfile);
           error = dwg_write_file (outfile, &dwg);
