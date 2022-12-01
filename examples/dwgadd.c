@@ -77,7 +77,7 @@ help (void)
   printf ("           Valid versions:\n");
   printf ("             r12, r14, r2000 (default)\n");
   printf ("           Planned versions:\n");
-  printf ("             r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
+  printf ("             r1.4, r2.6, r2.10, r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
   printf ("  -o outfile, --file outfile (default: stdout)\n");
 #else
   printf ("  -v[0-9]     verbosity\n");
@@ -85,7 +85,7 @@ help (void)
   printf ("              Valid versions:\n");
   printf ("                r12, r14, r2000 (default)\n");
   printf ("              Planned versions:\n");
-  printf ("                r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
+  printf ("                r1.4, r2.6, r2.10, r9, r10, r11, r2004, r2007, r2010, r2013, r2018\n");
   printf ("  -o outfile (default: stdout)\n");
 #endif
   printf ("\n"
