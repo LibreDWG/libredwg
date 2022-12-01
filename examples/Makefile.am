@@ -114,6 +114,9 @@ TESTS_ENVIRONMENT = \
 endif
 
 TESTS = $(top_builddir)/programs/alive.test
+if USE_WRITE
+TESTS += dwgadd_test.sh
+endif
 
 alldxf_unknowns = \
 	alldxf_ACAD_EVALUATION_GRAPH.inc \
@@ -201,7 +204,7 @@ alldxf_unknowns = \
 	alldxf_WIPEOUT.inc
 
 EXTRA_DIST = unknown.h alldxf_0.inc alldxf_1.inc alldxf_2.inc alldwg.inc $(alldxf_unknowns)
-EXTRA_DIST += log_unknown_dxf.pl log_unknown.pl bd-unknown.pl unstable.pm dwgadd.pod
+EXTRA_DIST += log_unknown_dxf.pl log_unknown.pl bd-unknown.pl unstable.pm dwgadd.pod dwgadd_test.sh
 EXTRA_DIST += unknown.pi ACAD_EVALUATION_GRAPH.pi
 EXTRA_man1_MANS = $(srcdir)/dwgfuzz.1
 dist_man1_MANS = $(srcdir)/dwgadd.1
@@ -209,7 +212,7 @@ dist_man5_MANS = $(srcdir)/dwgadd.5
 dist_pkgdata_DATA = dwgadd.example load_dwg.py
 
 CLEANFILES = {example,sample}_2000.svg alldwg.inc~ \
-	     alldxf_0.inc~ alldxf_1.inc~ alldxf_2.inc~
+	     alldxf_0.inc~ alldxf_1.inc~ alldxf_2.inc~ dwgadd_test.dwg
 DISTCLEANFILES = alldxf_0.inc alldxf_1.inc alldxf_2.inc
 MAINTAINERCLEANFILES  = *_flymake.[ch] *~ *.i
 
