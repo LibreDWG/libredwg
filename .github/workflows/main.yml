@@ -30,12 +30,12 @@ jobs:
           - --enable-gcov --disable-bindings
           - --disable-write
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 1
         submodules: recursive
     - name: setup-python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.8
     - name: setup-python-libxml2
@@ -83,11 +83,11 @@ jobs:
     #      - "-DLIBREDWG_DISABLE_WRITE=On"
     steps:
     - name: setup-python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.8
     - name: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 1
         submodules: recursive
@@ -103,11 +103,11 @@ jobs:
     - name: link texinfo
       run: brew link texinfo --force
     - name: setup-python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.8
     - name: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 1
         submodules: recursive
@@ -151,7 +151,7 @@ jobs:
           mingw-w64-x86_64-pcre2
     - run: reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /f /v DontShowUI /d 1
     - name: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 1
         submodules: recursive
@@ -173,7 +173,7 @@ jobs:
       with:
         path-type: minimal
     - name: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 1
         submodules: recursive
