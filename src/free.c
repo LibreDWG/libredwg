@@ -622,6 +622,7 @@ free_preR13_object (Dwg_Object *obj)
     }
   }
 
+  // we could also use (Dwg_Object_Type_r11)obj->type
   switch (obj->fixedtype)
     {
     case DWG_TYPE_TEXT:

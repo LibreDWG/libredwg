@@ -4,5 +4,6 @@ BasedOnStyle:  GNU
 IndentPPDirectives: AfterHash
 SortIncludes:    false
 SortUsingDeclarations: false
+StatementMacros ['SET_ENT()']
 ...
 

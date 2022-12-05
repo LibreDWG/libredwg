@@ -855,13 +855,23 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else SET_ENT (line, LINE)
       else if (SSCANF_S (p, "ray (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
                   &pt1.z, &pt2.x, &pt2.y, &pt2.z))
-        ent = (lastent_t){.u.ray = dwg_add_RAY (hdr, &pt1, &pt2),
-                           .type = DWG_TYPE_RAY};
+        {
+          if (version <= R_11)
+            fn_error ("Invalid entity RAY\n");
+          else
+            ent = (lastent_t){.u.ray = dwg_add_RAY (hdr, &pt1, &pt2),
+                              .type = DWG_TYPE_RAY};
+        }
       else SET_ENT (ray, RAY)
       else if (SSCANF_S (p, "xline (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
                   &pt1.z, &pt2.x, &pt2.y, &pt2.z))
-        ent = (lastent_t){.u.xline = dwg_add_XLINE (hdr, &pt1, &pt2),
-                          .type = DWG_TYPE_XLINE};
+        {
+          if (version <= R_11)
+            fn_error ("Invalid entity XLINE\n");
+          else
+            ent = (lastent_t){.u.xline = dwg_add_XLINE (hdr, &pt1, &pt2),
+                              .type = DWG_TYPE_XLINE};
+        }
       else SET_ENT (xline, XLINE)
       else if (SSCANF_S (p, "text " FMT_ANY " (%lf %lf %lf) %lf", &text[0] SZ, &pt1.x,
                          &pt1.y, &pt1.z, &height))
@@ -869,9 +879,14 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                           .type = DWG_TYPE_TEXT};
       else SET_ENT (text, TEXT)
       else if (SSCANF_S (p, "mtext (%lf %lf %lf) %lf " FMT_ANY, &pt1.x, &pt1.y,
-                       &pt1.z, &height, &text[0] SZ))
-        ent = (lastent_t){.u.mtext = dwg_add_MTEXT (hdr, &pt1, height, text),
-                          .type = DWG_TYPE_MTEXT};
+                         &pt1.z, &height, &text[0] SZ))
+        {
+          if (version <= R_11)
+            fn_error ("Invalid entity MTEXT\n");
+          else
+            ent = (lastent_t){.u.mtext = dwg_add_MTEXT (hdr, &pt1, height, text),
+                              .type = DWG_TYPE_MTEXT};
+        }
       else SET_ENT (mtext, MTEXT)
       else if (SSCANF_S (p, "block " FMT_TBL, &text[0] SZ))
         ent = (lastent_t){.u.block = dwg_add_BLOCK (hdr, text),
@@ -889,9 +904,15 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                        "%lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &text[0] SZ, &scale.x, &scale.y,
                        &scale.z, &rot, &i1, &i2, &f1, &f2))
-        ent = (lastent_t){.u.minsert = dwg_add_MINSERT (hdr, &pt1, text, scale.x, scale.y, scale.z,
+        {
+          if (version <= R_11)
+            fn_error ("Invalid entity MINSERT\n");
+          else
+            ent = (lastent_t){ .u.minsert = dwg_add_MINSERT (
+                                   hdr, &pt1, text, scale.x, scale.y, scale.z,
                                    deg2rad (rot), i1, i2, f1, f2),
-                          .type = DWG_TYPE_MINSERT};
+                               .type = DWG_TYPE_MINSERT };
+        }
       else SET_ENT (minsert, MINSERT)
       else if (SSCANF_S (p, "point (%lf %lf %lf)", &pt1.x, &pt1.y, &pt1.z))
         ent = (lastent_t){.u.point = dwg_add_POINT (hdr, &pt1),
@@ -1028,79 +1049,116 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else SET_ENT (viewport, VIEWPORT)
       else if (SSCANF_S (p, "ellipse (%lf %lf %lf) %lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &f1, &f2))
-        ent = (lastent_t){.u.ellipse = dwg_add_ELLIPSE (hdr, &pt1, f1, f2),
-                          .type = DWG_TYPE_ELLIPSE};
+        {
+          if (version <= R_11)
+            fn_error ("Invalid entity ELLIPSE\n");
+          else
+            ent = (lastent_t){.u.ellipse = dwg_add_ELLIPSE (hdr, &pt1, f1, f2),
+                              .type = DWG_TYPE_ELLIPSE};
+        }
       else SET_ENT (ellipse, ELLIPSE)
       else if (SSCANF_S (p, "spline %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y, &pt1.z))
         {
-          dwg_point_3d *fitpts = scan_pts3d (i1, &p);
-          if (i1 && fitpts && sscanf (p, ") (%lf %lf %lf) (%lf %lf %lf)", &pt2.x,
-                                      &pt2.y, &pt2.z, &pt3.x, &pt3.y, &pt3.z))
+          if (version <= R_11)
+            fn_error ("Invalid entity SPLINE\n");
+          else
             {
-              ent = (lastent_t){.u.spline = dwg_add_SPLINE (hdr, i1, fitpts, &pt2, &pt3),
-                                .type = DWG_TYPE_SPLINE};
+              dwg_point_3d *fitpts = scan_pts3d (i1, &p);
+              if (i1 && fitpts
+                  && sscanf (p, ") (%lf %lf %lf) (%lf %lf %lf)", &pt2.x,
+                             &pt2.y, &pt2.z, &pt3.x, &pt3.y, &pt3.z))
+                {
+                  ent = (lastent_t){ .u.spline = dwg_add_SPLINE (
+                                         hdr, i1, fitpts, &pt2, &pt3),
+                                     .type = DWG_TYPE_SPLINE };
+                }
+              free (fitpts);
             }
-          free (fitpts);
         }
       else SET_ENT (spline, SPLINE)
       else if (ent.type == DWG_TYPE_MTEXT
                && sscanf (p, "leader %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y, &pt1.z))
         {
-          dwg_point_3d *pts = scan_pts3d (i1, &p);
-          if (i1 && pts && sscanf (p, ") mtext %d", &i2))
+          if (version <= R_11)
+            fn_error ("Invalid entity LEADER\n");
+          else
             {
-              ent = (lastent_t){.u.leader = dwg_add_LEADER (hdr, i1, pts, ent.u.mtext, i2),
-                                .type = DWG_TYPE_LEADER};
+              dwg_point_3d *pts = scan_pts3d (i1, &p);
+              if (i1 && pts && sscanf (p, ") mtext %d", &i2))
+                {
+                  ent = (lastent_t){ .u.leader = dwg_add_LEADER (
+                                         hdr, i1, pts, ent.u.mtext, i2),
+                                     .type = DWG_TYPE_LEADER };
+                }
+              free (pts);
             }
-          free (pts);
         }
       else SET_ENT (leader, LEADER)
-      else if (SSCANF_S (p, "tolerance " FMT_TBL " (%lf %lf %lf) (%lf %lf %lf)",
-                       &text[0] SZ, &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z))
-        ent = (lastent_t){.u.tolerance = dwg_add_TOLERANCE (hdr, text, &pt1, &pt2),
-                          .type = DWG_TYPE_TOLERANCE};
+      else if (SSCANF_S (p, "tolerance " FMT_TBL
+                         " (%lf %lf %lf) (%lf %lf %lf)",
+                         &text[0] SZ, &pt1.x, &pt1.y, &pt1.z, &pt2.x,
+                         &pt2.y, &pt2.z))
+        {
+          if (version <= R_11)
+            fn_error ("Invalid entity TOLERANCE\n");
+          else
+            ent = (lastent_t){ .u.tolerance
+                               = dwg_add_TOLERANCE (hdr, text, &pt1, &pt2),
+                               .type = DWG_TYPE_TOLERANCE };
+        }
       else SET_ENT (tolerance, TOLERANCE)
       else if (SSCANF_S (p, "mlinestyle " FMT_TBL, &text[0] SZ))
-        ent = (lastent_t){.u.mlinestyle = dwg_add_MLINESTYLE (dwg, text),
-                          .type = DWG_TYPE_MLINESTYLE};
+        {
+          if (version <= R_11)
+            fn_error ("Invalid entity MLINESTYLE\n");
+          else
+            ent = (lastent_t){ .u.mlinestyle = dwg_add_MLINESTYLE (dwg, text),
+                               .type = DWG_TYPE_MLINESTYLE };
+        }
       else SET_ENT (mlinestyle, MLINESTYLE)
       else if (SSCANF_S (p, "layer " FMT_TBL, &text[0] SZ))
-        ent = (lastent_t){.u.layer = dwg_add_LAYER (dwg, text),
-                          .type = DWG_TYPE_LAYER};
+        ent = (lastent_t){ .u.layer = dwg_add_LAYER (dwg, text),
+                             .type = DWG_TYPE_LAYER };
       else SET_ENT (layer, LAYER)
       else if (SSCANF_S (p, "style " FMT_TBL, &text[0] SZ))
-        ent = (lastent_t){.u.style = dwg_add_STYLE (dwg, text),
-                          .type = DWG_TYPE_STYLE};
+        ent = (lastent_t){ .u.style = dwg_add_STYLE (dwg, text),
+                           .type = DWG_TYPE_STYLE };
       else SET_ENT (style, STYLE)
       else if (SSCANF_S (p, "ltype " FMT_TBL, &text[0] SZ))
-        ent = (lastent_t){.u.ltype = dwg_add_LTYPE (dwg, text),
-                          .type = DWG_TYPE_LTYPE};
+        ent = (lastent_t){ .u.ltype = dwg_add_LTYPE (dwg, text),
+                           .type = DWG_TYPE_LTYPE };
       else SET_ENT (ltype, LTYPE)
       else if (SSCANF_S (p, "view " FMT_TBL, &text[0] SZ))
-        ent = (lastent_t){.u.view = dwg_add_VIEW (dwg, text),
-                          .type = DWG_TYPE_VIEW};
+        ent = (lastent_t){ .u.view = dwg_add_VIEW (dwg, text),
+                           .type = DWG_TYPE_VIEW };
       else SET_ENT (view, VIEW)
       else if (SSCANF_S (p, "vport " FMT_TBL, &text[0] SZ))
-        ent = (lastent_t){.u.vport = dwg_add_VPORT (dwg, text),
-                          .type = DWG_TYPE_VPORT};
+        ent = (lastent_t){ .u.vport = dwg_add_VPORT (dwg, text),
+                             .type = DWG_TYPE_VPORT };
       else SET_ENT (vport, VPORT)
       else if (SSCANF_S (p, "dimstyle " FMT_TBL, &text[0] SZ))
-        ent = (lastent_t){.u.dimstyle = dwg_add_DIMSTYLE (dwg, text),
-                          .type = DWG_TYPE_DIMSTYLE};
+        ent = (lastent_t){ .u.dimstyle = dwg_add_DIMSTYLE (dwg, text),
+                           .type = DWG_TYPE_DIMSTYLE };
       else SET_ENT (dimstyle, DIMSTYLE)
       else if (SSCANF_S (p, "group " FMT_TBL, &text[0] SZ))
-        ent = (lastent_t){.u.group = dwg_add_GROUP (dwg, text),
-                          .type = DWG_TYPE_GROUP};
+        {
+          if (version <= R_11)
+            fn_error ("Invalid entity GROUP\n");
+          else
+            ent = (lastent_t){ .u.group = dwg_add_GROUP (dwg, text),
+                               .type = DWG_TYPE_GROUP };
+        }
       else SET_ENT (group, GROUP)
-      else if (SSCANF_S (p, "ucs (%lf %lf %lf) (%lf %lf %lf) (%lf %lf %lf) " FMT_TBL,
-                       &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
-                       &pt3.y, &pt3.z, &text[0] SZ))
-        ent = (lastent_t){.u.ucs = dwg_add_UCS (dwg, &pt1, &pt2, &pt3, text),
-                          .type = DWG_TYPE_UCS};
+      else if (SSCANF_S (p,
+                         "ucs (%lf %lf %lf) (%lf %lf %lf) (%lf %lf %lf) " FMT_TBL,
+                         &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
+                         &pt3.y, &pt3.z, &text[0] SZ))
+        ent = (lastent_t){ .u.ucs = dwg_add_UCS (dwg, &pt1, &pt2, &pt3, text),
+                           .type = DWG_TYPE_UCS };
       else SET_ENT (ucs, UCS)
       else if (ent.type == DWG_TYPE_VIEWPORT
                && SSCANF_S (p, "layout viewport " FMT_TBL " " FMT_ANY,
-                            &text[0] SZ, &s1[0] SZ))
+                              &text[0] SZ, &s1[0] SZ))
         {
           Dwg_Object *obj = dwg_ent_generic_to_object (ent.u.viewport, &error);
           if (!error)
@@ -1109,32 +1167,67 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         }
       else if (SSCANF_S (p, "torus (%lf %lf %lf) (%lf %lf %lf) %lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &f1, &f2))
-        ent = (lastent_t){.u._3dsolid = dwg_add_TORUS (hdr, &pt1, &pt2, f1, f2),
-                          .type = DWG_TYPE__3DSOLID};
+        {
+          if (version <= R_11)
+            fn_error ("Invalid entity TORUS\n");
+          else
+            ent = (lastent_t){.u._3dsolid = dwg_add_TORUS (hdr, &pt1, &pt2, f1, f2),
+                              .type = DWG_TYPE__3DSOLID};
+        }
       else if (SSCANF_S (p, "sphere (%lf %lf %lf) (%lf %lf %lf) %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &f1))
-        ent = (lastent_t){.u._3dsolid = dwg_add_SPHERE (hdr, &pt1, &pt2, f1),
-                          .type = DWG_TYPE__3DSOLID};
+        {
+          if (version <= R_11)
+            fn_error ("Invalid entity SPHERE\n");
+          else
+            ent = (lastent_t){.u._3dsolid = dwg_add_SPHERE (hdr, &pt1, &pt2, f1),
+                              .type = DWG_TYPE__3DSOLID};
+        }
       else if (SSCANF_S (p, "cylinder (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &height, &f1, &f2, &len))
-        ent = (lastent_t){.u._3dsolid = dwg_add_CYLINDER (hdr, &pt1, &pt2, height, f1, f2, len),
-                          .type = DWG_TYPE__3DSOLID};
+        {
+          if (version <= R_11)
+            fn_error ("Invalid entity CYLINDER\n");
+          else
+            ent = (lastent_t){.u._3dsolid = dwg_add_CYLINDER (hdr, &pt1, &pt2, height, f1, f2, len),
+                              .type = DWG_TYPE__3DSOLID};
+        }
       else if (SSCANF_S (p, "cone (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &height, &f1, &f2, &len))
-        ent = (lastent_t){.u._3dsolid = dwg_add_CONE (hdr, &pt1, &pt2, height, f1, f2, len),
-                          .type = DWG_TYPE__3DSOLID};
+        {
+          if (version <= R_11)
+            fn_error ("Invalid entity CONE\n");
+          else
+            ent = (lastent_t){.u._3dsolid = dwg_add_CONE (hdr, &pt1, &pt2, height, f1, f2, len),
+                              .type = DWG_TYPE__3DSOLID};
+        }
       else if (SSCANF_S (p, "wedge (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len, &f1, &height))
-        ent = (lastent_t){.u._3dsolid = dwg_add_WEDGE (hdr, &pt1, &pt2, len, f1, height),
-                          .type = DWG_TYPE__3DSOLID};
+        {
+          if (version <= R_11)
+            fn_error ("Invalid entity wedge\n");
+          else
+            ent = (lastent_t){.u._3dsolid = dwg_add_WEDGE (hdr, &pt1, &pt2, len, f1, height),
+                              .type = DWG_TYPE__3DSOLID};
+        }
       else if (SSCANF_S (p, "box (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len, &f1, &height))
-        ent = (lastent_t){.u._3dsolid = dwg_add_BOX (hdr, &pt1, &pt2, len, f1, height),
-                          .type = DWG_TYPE__3DSOLID};
+        {
+          if (version <= R_11)
+            fn_error ("Invalid entity BOX\n");
+          else
+            ent = (lastent_t){.u._3dsolid = dwg_add_BOX (hdr, &pt1, &pt2, len, f1, height),
+                              .type = DWG_TYPE__3DSOLID};
+        }
       else if (SSCANF_S (p, "pyramid (%lf %lf %lf) (%lf %lf %lf) %lf %d %lf %lf",
                        &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &height, &i1, &f1, &f2))
-        ent = (lastent_t){.u._3dsolid = dwg_add_PYRAMID (hdr, &pt1, &pt2, height, i1, f1, f2),
-                          .type = DWG_TYPE__3DSOLID};
+        {
+          if (version <= R_11)
+            fn_error ("Invalid entity PYRAMID\n");
+          else
+            ent = (lastent_t){.u._3dsolid = dwg_add_PYRAMID (hdr, &pt1, &pt2, height, i1, f1, f2),
+                              .type = DWG_TYPE__3DSOLID};
+        }
       else SET_ENT (_3dsolid, _3DSOLID)
       else if (SSCANF_S (p, "HEADER." FMT_NAME " = %d", &s1[0] SZ, &i1))
         dwg_dynapi_header_set_value (dwg, s1, &i1, 0);
