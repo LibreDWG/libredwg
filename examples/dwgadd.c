@@ -46,6 +46,23 @@
 static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat);
 static unsigned int loglevel;
 
+// accepts only ASCII strings, for fuzzing only
+#ifdef HAVE_SSCANF_S
+#  define SSCANF_S sscanf_s
+#  define SZ ,119
+#  define FMT_NAME "%[a-zA-Z0-9_]"
+#  define FMT_TBL "\"%[a-zA-Z0-9._ -]\""
+#  define FMT_PATH "\"%[a-zA-Z0-9_. \\-]\""
+#  define FMT_ANY  "\"%s\""
+#else
+#  define SSCANF_S sscanf
+#  define SZ
+#  define FMT_NAME "%119[a-zA-Z0-9_]"
+#  define FMT_TBL "\"%119[a-zA-Z0-9._ -]\""
+#  define FMT_PATH "\"%119[a-zA-Z0-9_. \\-]\""
+#  define FMT_ANY  "\"%119s\""
+#endif
+
 static int
 usage (void)
 {
@@ -375,7 +392,7 @@ static dwg_point_2d *scan_pts2d (unsigned num_pts, char **pp)
     exit (0);
   for (unsigned i=0; i < num_pts; i++)
     {
-      if (sscanf (p, "(%lf %lf)", &pts[i].x, &pts[i].y))
+      if (SSCANF_S (p, "(%lf %lf)", &pts[i].x, &pts[i].y))
         {
           p = strchr (p, ')');
           if (!p)
@@ -418,7 +435,7 @@ static dwg_point_3d *scan_pts3d (unsigned num_pts, char **pp)
     exit (0);
   for (unsigned i=0; i < num_pts; i++)
     {
-      if (sscanf (p, "(%lf %lf %lf)", &pts[i].x, &pts[i].y, &pts[i].z))
+      if (SSCANF_S (p, "(%lf %lf %lf)", &pts[i].x, &pts[i].y, &pts[i].z))
         {
           p = strchr (p, ')');
           if (!p)
@@ -527,23 +544,6 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
   lastent_t ent;
   char text[120];
 
-// accepts only ASCII strings, for fuzzing only
-#ifdef HAVE_SSCANF_S
-#  define SSCANF_S sscanf_s
-#  define SZ ,119
-#  define FMT_NAME "%[a-zA-Z0-9_]"
-#  define FMT_TBL "\"%[a-zA-Z0-9._ -]\""
-#  define FMT_PATH "\"%[a-zA-Z0-9_. \\-]\""
-#  define FMT_ANY  "\"%s\""
-#else
-#  define SSCANF_S sscanf
-#  define SZ
-#  define FMT_NAME "%119[a-zA-Z0-9_]"
-#  define FMT_TBL "\"%119[a-zA-Z0-9._ -]\""
-#  define FMT_PATH "\"%119[a-zA-Z0-9_. \\-]\""
-#  define FMT_ANY  "\"%119s\""
-#endif
-
   if (!dat->chain)
     abort();
   dwg = *dwgp;
@@ -628,7 +628,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       char s_ver[16];
       if (*p == '\n')
         p++;
-      i = sscanf (p, "version %d", &i_ver);
+      i = SSCANF_S (p, "version %d", &i_ver);
       if (i)
         {
           snprintf (s_ver, 16, "r%d", i_ver);
@@ -636,7 +636,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           version = dwg_version_as (s_ver);
           p += strlen ("version ");
         }
-      else if ((i = sscanf (p, "version %lf", &f_ver)))
+      else if ((i = SSCANF_S (p, "version %lf", &f_ver)))
         {
           snprintf (s_ver, 16, "r%f", f_ver);
           s_ver[15] = '\0';
@@ -781,7 +781,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             exit(1);
           }
 
-          i = sscanf (p, "version %d", &i_ver);
+          i = SSCANF_S (p, "version %d", &i_ver);
           if (i)
             {
               snprintf (s_ver, 16, "r%d", i_ver);
@@ -789,7 +789,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
               version = dwg_version_as (s_ver);
               p += strlen ("version ");
             }
-          else if ((i = sscanf (p, "version %lf", &f_ver)))
+          else if ((i = SSCANF_S (p, "version %lf", &f_ver)))
             {
               snprintf (s_ver, 16, "r%f", f_ver);
               s_ver[15] = '\0';
@@ -839,12 +839,12 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         dwg_dynapi_entity_set_value (ent.u.var, #name, s1, text, 1);    \
       }
 
-      if (sscanf (p, "pspace"))
+      if (SSCANF_S (p, "pspace"))
         {
           Dwg_Object *pspace = dwg_paper_space_object (dwg);
           hdr = pspace->tio.object->tio.BLOCK_HEADER;
         }
-      else if (sscanf (p, "mspace"))
+      else if (SSCANF_S (p, "mspace"))
         {
           hdr = mspace->tio.object->tio.BLOCK_HEADER;
         }
@@ -1065,8 +1065,8 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             {
               dwg_point_3d *fitpts = scan_pts3d (i1, &p);
               if (i1 && fitpts
-                  && sscanf (p, ") (%lf %lf %lf) (%lf %lf %lf)", &pt2.x,
-                             &pt2.y, &pt2.z, &pt3.x, &pt3.y, &pt3.z))
+                  && SSCANF_S (p, ") (%lf %lf %lf) (%lf %lf %lf)", &pt2.x,
+                               &pt2.y, &pt2.z, &pt3.x, &pt3.y, &pt3.z))
                 {
                   ent = (lastent_t){ .u.spline = dwg_add_SPLINE (
                                          hdr, i1, fitpts, &pt2, &pt3),
@@ -1077,14 +1077,14 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         }
       else SET_ENT (spline, SPLINE)
       else if (ent.type == DWG_TYPE_MTEXT
-               && sscanf (p, "leader %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y, &pt1.z))
+               && SSCANF_S (p, "leader %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y, &pt1.z))
         {
           if (version <= R_11)
             fn_error ("Invalid entity LEADER\n");
           else
             {
               dwg_point_3d *pts = scan_pts3d (i1, &p);
-              if (i1 && pts && sscanf (p, ") mtext %d", &i2))
+              if (i1 && pts && SSCANF_S (p, ") mtext %d", &i2))
                 {
                   ent = (lastent_t){ .u.leader = dwg_add_LEADER (
                                          hdr, i1, pts, ent.u.mtext, i2),
