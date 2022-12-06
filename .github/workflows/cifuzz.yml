@@ -1,5 +1,16 @@
 name: CIFuzz
-on: [pull_request]
+on:
+  push:
+    branches:
+      - master
+      - smoke/*
+      - fuzz/*
+    tags:
+      - '0.*.*'
+      - '0.*'
+  pull_request:
+    branches:
+      - '*'
 jobs:
   Fuzzing:
     runs-on: ubuntu-latest
