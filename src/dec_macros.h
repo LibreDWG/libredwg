@@ -609,7 +609,7 @@
   {                                                                           \
     BITCODE_BB result;                                                        \
     BITCODE_RC byte;                                                          \
-    if (dat->byte + 8 >= dat->size) {                                         \
+    if ((dat->byte * 8) + 8 + dat->bit > dat->size * 8) {                     \
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                               \
       LOG_ERROR ("%s FIELD_DD buffer overflow at pos %lu.%u, size %lu,"       \
                  " advance by 8",                                             \
