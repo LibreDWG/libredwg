@@ -58,6 +58,7 @@
     }
   VERSIONS (R_13, R_2004) { // undocumented as such in the ODA spec
       IF_ENCODE_FROM_EARLIER_OR_DXF {
+        free (FIELD_VALUE (unknown_text1));
         FIELD_VALUE (unknown_text1) = strdup ("m");
       }
       FIELD_TV (unknown_text1, 0);

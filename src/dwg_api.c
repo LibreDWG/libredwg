@@ -22281,7 +22281,11 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header_vars.unknown_2 = 1.0;
   dwg->header_vars.unknown_3 = 1.0;
   if (version > R_11) // also meter sometimes. unit1_text
-    dwg->header_vars.unknown_text1 = dwg_add_u8_input (dwg, "m");
+    {
+      if (dwg->header_vars.unknown_text1)
+        free (dwg->header_vars.unknown_text1);
+      dwg->header_vars.unknown_text1 = dwg_add_u8_input (dwg, "m");
+    }
   dwg->header_vars.DIMASO = 1;
   dwg->header_vars.DIMSHO = 1; // Obsolete
   dwg->header_vars.REGENMODE = 1;
