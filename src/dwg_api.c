@@ -25857,6 +25857,7 @@ ACSH_init_evalgraph (Dwg_Data *restrict dwg, void *restrict _acsh,
 
   evalexpr[0] = dwg_add_handleref (dwg, 3, acsh->handle.value, NULL);
   eval = dwg_add_EVALUATION_GRAPH (dwg, 0, nodeid++, 1, evalexpr);
+  free (evalexpr);
   evalobj = dwg_obj_generic_to_object (eval, &error);
   acsh->tio.object->ownerhandle
       = dwg_add_handleref (dwg, 4, evalobj->handle.value, acsh);
