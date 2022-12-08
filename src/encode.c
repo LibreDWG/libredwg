@@ -2411,6 +2411,16 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       //blocks_size = blocks_end - blocks_start;
       bit_write_RL (dat, blocks_max);
 
+      if (!dwg->header.numsections)
+        {
+          dwg->header.numsections = 5;
+          if (dwg->header.version >= R_10)
+            dwg->header.numsections += 3;
+          if (dwg->header.version >= R_11)
+            dwg->header.numsections += 2;
+        }
+      if (!dwg->header.section)
+        dwg->header.section = calloc(sizeof (Dwg_Section), dwg->header.numsections + 2);
       // get the tables from the CONTROL objects
       encode_preR13_section_hdr ("BLOCK", SECTION_BLOCK, dat, dwg);
       encode_preR13_section_hdr ("LAYER", SECTION_LAYER, dat, dwg);
