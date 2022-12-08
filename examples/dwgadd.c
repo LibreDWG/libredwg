@@ -675,11 +675,17 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
   while (p && p < end)
     {
       char s1[120];
-      dwg_point_2d p2, p3, p4;
-      dwg_point_3d pt1, pt2, pt3, pt4, scale;
-      double height, rot, len, f1, f2;
-      int i1, i2;
-      unsigned u;
+      dwg_point_2d p2 = {0.0, 0.0};
+      dwg_point_2d p3 = {0.0, 0.0};
+      dwg_point_2d p4 = {0.0, 0.0};
+      dwg_point_3d pt1 = {0.0, 0.0, 0.0};
+      dwg_point_3d pt2 = {0.0, 0.0, 0.0};
+      dwg_point_3d pt3 = {0.0, 0.0, 0.0};
+      dwg_point_3d pt4 = {0.0, 0.0, 0.0};
+      dwg_point_3d scale = {0.0, 0.0, 0.0};
+      double height = 0.0, rot = 0.0, len = 0.0, f1 = 0.0, f2 = 0.0;
+      int i1 = 0, i2 = 0;
+      unsigned u = 0U;
 
       while (p < end && (*p == ' ' || *p == '\t')) p++; // skip spaces
       if (p == end) break;
