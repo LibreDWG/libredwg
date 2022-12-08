@@ -283,6 +283,7 @@ main (int argc, char *argv[])
   if (dat.size == 0)
     {
       LOG_ERROR ("empty %s", argv[i])
+      free (dat.chain);
       exit (1);
     }
 
@@ -337,6 +338,8 @@ main (int argc, char *argv[])
         }
       if (!opt.dwg)
         fclose (out_dat.fh);
+      free (out_dat.chain);
+      free (dat.chain);
       dwg_free (&dwg);
 
       if (opt.verify)
@@ -368,10 +371,14 @@ main (int argc, char *argv[])
             }
           fclose (dat.fh);
           dwg_free (&dwg);
+          free (dat.chain);
         }
     }
   else
-    fclose (fp);
+    {
+      fclose (fp);
+      free (dat.chain);
+    }
 
   return retval;
 }
