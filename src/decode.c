@@ -336,7 +336,9 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                  (unsigned)dwg->header.section[j].size);
       if (dwg->header.section[j].address + dwg->header.section[j].size > dat->size)
         {
-          LOG_ERROR ("section[%u] address or size overflow", j);
+          LOG_ERROR ("section[%u] address or size overflow: %lu + %u > %lu", j,
+                     dwg->header.section[j].address, dwg->header.section[j].size,
+                     dat->size);
           return DWG_ERR_INVALIDDWG;
         }
     }

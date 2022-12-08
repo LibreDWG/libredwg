@@ -11,11 +11,20 @@ dwgaddtest() {
     V="$2"
     EX="${3:-dwgadd.example}"
     if [ -z "$V" ]; then
-        echo ./dwgadd "$srcdir/$EX" -o dwgadd_test.dwg
-        ${top_builddir}/libtool --mode=execute "./dwgadd${EXEEXT}" "$srcdir/$EX" -o dwgadd_test.dwg
+        echo ./dwgadd --verify -o dwgadd_test.dwg "$srcdir/$EX"
+        ${top_builddir}/libtool --mode=execute "./dwgadd${EXEEXT}" --verify \
+                       -o dwgadd_test.dwg "$srcdir/$EX"
+        ret=$?
     else
-        echo ./dwgadd -a "$V" "$srcdir/$EX" -o dwgadd_test.dwg
-        ${top_builddir}/libtool --mode=execute "./dwgadd${EXEEXT}" -a "$V" "$srcdir/$EX" -o dwgadd_test.dwg
+        echo ./dwgadd --verify -a "$V" -o dwgadd_test.dwg "$srcdir/$EX"
+        ${top_builddir}/libtool --mode=execute "./dwgadd${EXEEXT}" --verify \
+                       -a "$V" -o dwgadd_test.dwg "$srcdir/$EX"
+        ret=$?
+    fi
+    if [ $ret -ne 0 ]
+    then
+        echo FAIL verify
+        exit 1
     fi
     ver=$(head -c6 dwgadd_test.dwg)
     if [ -z "$ver" ]
@@ -48,4 +57,14 @@ dwgaddtest AC1.40 r1.4 dwgadd.example_r11
 #dwgaddtest AC1027 r2013
 #dwgaddtest AC1032 r2018
 
-rm dwgadd_test.dwg
+# special cases
+
+tmp=dwgadd.tmp
+echo "point (0 0 0)" >$tmp
+dwgaddtest AC1015 r2000 $tmp
+echo "point (0 0 0)" >$tmp
+echo "point (1 1 0)" >>$tmp
+dwgaddtest AC1015 r2000 $tmp
+
+# cleanup
+rm -f dwgadd_test.dwg $tmp
