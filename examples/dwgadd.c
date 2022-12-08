@@ -341,7 +341,7 @@ main (int argc, char *argv[])
 
       if (opt.verify)
         {
-          dat.byte = 0; dat.bit = 0;
+          dat.byte = 0; dat.bit = 0; dat.size = 0;
           dat.fh = fopen (outfile, "rb");
           memset (&dwg, 0, sizeof (Dwg_Data));
           dat_read_file (&dat, dat.fh, outfile);
