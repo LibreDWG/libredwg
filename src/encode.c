@@ -1889,7 +1889,7 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   if (!num) /* don't trust tbl. from json or dxf */                           \
     {                                                                         \
       Dwg_Object_##token *_ctrl;                                              \
-      Dwg_Object *ref;                                                        \
+      Dwg_Object *ref = NULL;                                                 \
       ctrl = dwg_get_first_object (dwg, DWG_TYPE_##token);                    \
       if (!ctrl)                                                              \
         {                                                                     \
@@ -1898,8 +1898,8 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         }                                                                     \
       _ctrl = ctrl->tio.object->tio.token;                                    \
       tblnum = _ctrl->num_entries;                                            \
-      ref = dwg_ref_object (dwg, _ctrl->entries[0]);                          \
-      num = ref->index;                                                       \
+      if (tblnum) ref = dwg_ref_object (dwg, _ctrl->entries[0]);              \
+      num = ref ? ref->index : 0;                                             \
     }                                                                         \
   LOG_TRACE ("\nctrl " #token " [%d]: num:%u\n", num, tblnum)
 
