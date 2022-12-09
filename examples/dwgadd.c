@@ -345,8 +345,10 @@ main (int argc, char *argv[])
       if (opt.verify)
         {
           dat.byte = 0; dat.bit = 0; dat.size = 0;
+          dat.opts = opts;
           dat.fh = fopen (outfile, "rb");
           memset (&dwg, 0, sizeof (Dwg_Data));
+          dwg.opts = opts;
           dat_read_file (&dat, dat.fh, outfile);
 
 #ifndef DISABLE_DXF
