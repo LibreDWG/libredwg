@@ -79,8 +79,7 @@ dwgaddtest AC1015 r2000 $tmp
 
 echo "point (0 0 0)" >$tmp
 cat $tmp
-#FIXME leaks
-#dwgaddtest AC1015 r2000 $tmp
+dwgaddtest AC1015 r2000 $tmp
 
 # cleanup
 rm -f dwgadd_test.dwg $tmp

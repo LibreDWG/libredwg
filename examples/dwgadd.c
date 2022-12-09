@@ -377,6 +377,7 @@ main (int argc, char *argv[])
   else
     {
       fclose (fp);
+      dwg_free (&dwg);
       free (dat.chain);
     }
 
