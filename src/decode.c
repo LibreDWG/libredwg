@@ -5846,7 +5846,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
             obj->fixedtype = DWG_TYPE_UNUSED;
             dwg->num_entities--; // for stats only
           }
-        if (num + 1 >= dwg->header_vars.numentities)
+        if (num + 1 > dwg->num_objects)
           break;
       }
       SINCE (R_2_0b) // Pre R_2_0 doesn't contain size of entity
