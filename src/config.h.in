@@ -6,6 +6,9 @@
 /* Define to 1 if using 'alloca.c'. */
 #undef C_ALLOCA
 
+/* Define to enable unstable classes. */
+#undef DEBUG_CLASSES
+
 /* Define to disable bindings. */
 #undef DISABLE_BINDINGS
 

@@ -311,9 +311,11 @@ AC_ARG_ENABLE([debug],AS_HELP_STRING([--enable-debug],[
   [if test x$ac_compiler_gnu = xyes; then
     CFLAGS="`echo $CFLAGS|sed 's,-O2,,'` -fno-omit-frame-pointer"
   fi
-  CFLAGS="$CFLAGS -DDEBUG_CLASSES"]
-  AC_MSG_RESULT([yes]),
-  AC_MSG_RESULT([no (default)]))
+  AC_DEFINE([DEBUG_CLASSES],1,[Define to enable unstable classes.])
+  AC_SUBST(DEBUG_CLASSES, 1)
+  AC_MSG_RESULT([yes])],
+  [AC_MSG_RESULT([no (default)])
+  AC_SUBST(DEBUG_CLASSES, 0)])
 AM_CONDITIONAL([ENABLE_DEBUG], [test x$enable_debug = xyes])
 
 AX_ADD_FORTIFY_SOURCE

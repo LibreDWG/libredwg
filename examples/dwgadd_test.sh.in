@@ -50,10 +50,10 @@ dwgaddtest() {
 dwgaddtest AC1015
 dwgaddtest AC1015 r2000
 # skip. XRECORD.objid_handles double-free #530
-if [ -n "" ]; then
-    dwgaddtest AC1014 r14
-    dwgaddtest AC1012 r13
-fi
+#if [ @DEBUG_CLASSES@ -gt 0 ]; then
+#    dwgaddtest AC1014 r14
+#    dwgaddtest AC1012 r13
+#fi
 # --verify failed with error 0x100
 dwgaddtest AC1009 r11 dwgadd.example_r11
 dwgaddtest AC1006 r10 dwgadd.example_r11
