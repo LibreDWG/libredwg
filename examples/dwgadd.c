@@ -564,115 +564,6 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
   p = (char*)dat->chain;
   end = (char*)&dat->chain[dat->size - 1];
 
-#if 0
-  if (memBEGINc ((char*)dat->chain, "readdwg") || (p = strstr ((char*)dat->chain, "\nreaddwg")))
-    {
-      if (*p == '\n')
-        p++;
-      if (!initial && SSCANF_S (p, "readdwg " FMT_PATH, &text[0] SZ))
-        {
-          initial = 1;
-          if ((error = dwg_read_file (text, *dwgp)) > DWG_ERR_CRITICAL)
-            {
-              LOG_ERROR ("Invalid readdwg \"%s\" => error 0x%x", text, error);
-              exit (1);
-            }
-          p = next_line (p, end);
-        }
-      else
-        LOG_ERROR ("%.*s ignored", 40, p)
-    }
-#ifndef DISABLE_DXF
-  if (memBEGINc ((char*)dat->chain, "readdxf") || (p = strstr ((char*)dat->chain, "\nreaddxf")))
-    {
-      if (*p == '\n')
-        p++;
-      if (!initial && SSCANF_S (p, "readdxf " FMT_PATH, &text[0] SZ))
-        {
-          initial = 1;
-          if ((error = dxf_read_file (text, *dwgp)) > DWG_ERR_CRITICAL)
-            {
-              LOG_ERROR ("Invalid readdxf \"%s\" => error 0x%x", text, error);
-              exit (1);
-            }
-          p = next_line (p, end);
-        }
-      else
-        LOG_ERROR ("%.*s ignored", 40, p)
-    }
-#endif
-#ifndef DISABLE_JSON
-  if (memBEGINc ((char*)dat->chain, "readjson") || (p = strstr ((char*)dat->chain, "\nreadjson")))
-    {
-      if (*p == '\n')
-        p++;
-      if (!initial && SSCANF_S (p, "readjson " FMT_PATH, &text[0] SZ))
-        {
-          Bit_Chain in_dat = { NULL, 0, 0, 0, 0 };
-          initial = 1;
-          in_dat.fh = fopen (text, "rb");
-          dat_read_file (&in_dat, in_dat.fh, text);
-          if ((error = dwg_read_json (&in_dat, *dwgp)) > DWG_ERR_CRITICAL)
-            {
-              LOG_ERROR ("Invalid readjson \"%s\" => error 0x%x", text, error);
-              exit (1);
-            }
-          fclose (in_dat.fh);
-          p = next_line (p, end);
-        }
-      else
-        LOG_ERROR ("%.*s ignored", 40, p)
-    }
-#endif
-  if (memBEGINc ((char*)dat->chain, "imperial") || (p = strstr ((char*)dat->chain, "\nimperial\n")))
-    {
-      imperial = 1;
-      p += strlen ("imperial");
-      p = next_line (p, end);
-    }
-  if (memBEGINc ((char*)dat->chain, "version") || (p = strstr ((char*)dat->chain, "\nversion")))
-    {
-      int i_ver;
-      double f_ver;
-      char s_ver[16];
-      if (*p == '\n')
-        p++;
-      i = SSCANF_S (p, "version %d", &i_ver);
-      if (i)
-        {
-          snprintf (s_ver, 16, "r%d", i_ver);
-          s_ver[15] = '\0';
-          version = dwg_version_as (s_ver);
-          p += strlen ("version ");
-        }
-      else if ((i = SSCANF_S (p, "version %lf", &f_ver)))
-        {
-          snprintf (s_ver, 16, "r%f", f_ver);
-          s_ver[15] = '\0';
-          version = dwg_version_as (s_ver);
-          p += strlen ("version ");
-        }
-        p += strlen ("version ");
-      if (!i || version < R_13 || version >= R_AFTER)
-        {
-          fprintf (stderr, "Invalid version %.*s", 40, p);
-          exit (1);
-        }
-      p = next_line (p, end);
-    }
-
-  if (initial)
-    {
-      dwg = dwg_new_Document (version, imperial, 0);
-      *dwgp = dwg;
-    }
-  else if (!dwg)
-    exit(1);
-  mspace = dwg_model_space_object (dwg);
-  hdr = mspace->tio.object->tio.BLOCK_HEADER;
-  orig_num = dwg->num_objects;
-#endif
-
   // read dat line by line and call the matching add API
   while (p && p < end)
     {
@@ -700,7 +591,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         {
           if (dwg)
             {
-              LOG_ERROR ("readdwg met, but DWG already exists");
+              LOG_ERROR ("readdwg seen, but DWG already exists");
               exit (1);
             }
           if (SSCANF_S (p, "readdwg " FMT_PATH, &text[0] SZ))
@@ -725,7 +616,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         {
           if (dwg)
             {
-              LOG_ERROR ("readdxf met, but DWG already exists");
+              LOG_ERROR ("readdxf seen, but DWG already exists");
               exit (1);
             }
           if (SSCANF_S (p, "readdxf " FMT_PATH, &text[0] SZ))
@@ -750,7 +641,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         {
           if (dwg)
             {
-              LOG_ERROR ("readjson met, but DWG already exists");
+              LOG_ERROR ("readjson seen, but DWG already exists");
               exit (1);
             }
           if (SSCANF_S (p, "readjson " FMT_PATH, &text[0] SZ))
@@ -1254,5 +1145,5 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       p = next_line (p, end);
     }
   // if we added at least one object
-  return (dwg->num_objects - orig_num > 1 ? 0 : 1);
+  return (dwg->num_objects - orig_num > 0 ? 0 : 1);
 }
