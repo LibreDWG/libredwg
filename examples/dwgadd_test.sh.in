@@ -54,6 +54,9 @@ dwgaddtest AC1015 r2000
 #    dwgaddtest AC1014 r14
 #    dwgaddtest AC1012 r13
 #fi
+# wrong DICTIONARY.ownerhandle
+dwgaddtest AC1014 r14 dwgadd.example_r11
+dwgaddtest AC1012 r13 dwgadd.example_r11
 # --verify failed with error 0x100
 dwgaddtest AC1009 r11 dwgadd.example_r11
 dwgaddtest AC1006 r10 dwgadd.example_r11
