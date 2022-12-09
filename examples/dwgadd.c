@@ -288,7 +288,7 @@ main (int argc, char *argv[])
     }
 
   dwgp = &dwg;
-  if (dwg_add_dat (&dwgp, &dat) == 0)
+  if ((retval = dwg_add_dat (&dwgp, &dat)) == 0)
     {
       int error;
       fclose (fp);
@@ -379,6 +379,7 @@ main (int argc, char *argv[])
       fclose (fp);
       dwg_free (&dwg);
       free (dat.chain);
+      LOG_ERROR ("dwgadd failed to add objects")
     }
 
   return retval;
