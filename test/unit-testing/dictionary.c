@@ -30,5 +30,4 @@ api_process (dwg_object *obj)
       else
         fail ("DICTIONARY.itemhandles[%d]: " FORMAT_REF, i, ARGS_REF (itemhandles[i]));
     }
-  CHK_ENTITY_TYPE (dictionary, DICTIONARY, cloning_r14, RC);
 }

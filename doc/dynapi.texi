@@ -9137,8 +9137,6 @@ BS,	DXF 281
 T*,	DXF 3
 @item itemhandles
 H*,	DXF 350
-@item cloning_r14
-RC
 
 @end vtable
 @end indentedblock
@@ -9179,8 +9177,6 @@ BS,	DXF 281
 T*,	DXF 3
 @item itemhandles
 H*,	DXF 350
-@item cloning_r14
-RL
 @item defaultid
 H,	DXF 340
 

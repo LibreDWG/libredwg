@@ -2136,7 +2136,6 @@ typedef struct _dwg_object_DICTIONARY
   BITCODE_BS cloning;     /*!< DXF 281, ie merge_style */
   BITCODE_T* texts;       /*!< DXF 3 */
   BITCODE_H* itemhandles; /*!< DXF 350/360, pairwise with texts */
-  BITCODE_RC cloning_r14; /*!< r14 only */
 } Dwg_Object_DICTIONARY;
 
 /**
@@ -2151,7 +2150,6 @@ typedef struct _dwg_object_DICTIONARYWDFLT
   BITCODE_BS cloning;     /*!< DXF 281, ie merge_style */
   BITCODE_T* texts;       /*!< DXF 3 */
   BITCODE_H* itemhandles; /*!< DXF 350/360, pairwise with texts */
-  BITCODE_RL cloning_r14; /*!< r14 only */
 
   BITCODE_H defaultid;
 } Dwg_Object_DICTIONARYWDFLT;

@@ -10,7 +10,6 @@ api_process (dwg_object *obj)
   BITCODE_RC is_hardowner;
   BITCODE_TV* texts;
   BITCODE_H *itemhandles, *hdls;
-  BITCODE_RL cloning_r14;
   BITCODE_H defaultid;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
@@ -32,7 +31,6 @@ api_process (dwg_object *obj)
       else
         fail ("DICTIONARY.itemhandles[%d]: " FORMAT_REF, i, ARGS_REF (itemhandles[i]));
     }
-  CHK_ENTITY_TYPE (_obj, DICTIONARYWDFLT, cloning_r14, RL);
 
   CHK_ENTITY_H (_obj, DICTIONARYWDFLT, defaultid);
 }

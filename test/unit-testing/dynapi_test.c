@@ -45546,21 +45546,6 @@ static int test_DICTIONARY (const Dwg_Object *obj)
     dictionary->cloning--;
   }
   {
-    BITCODE_RC cloning_r14;
-    if (dwg_dynapi_entity_value (dictionary, "DICTIONARY", "cloning_r14", &cloning_r14, NULL)
-        && cloning_r14 == dictionary->cloning_r14)
-      pass ();
-    else
-      fail ("DICTIONARY.cloning_r14 [RC] %u != %u", dictionary->cloning_r14, cloning_r14);
-    cloning_r14++;
-    if (dwg_dynapi_entity_set_value (dictionary, "DICTIONARY", "cloning_r14", &cloning_r14, 0)
-        && cloning_r14 == dictionary->cloning_r14)
-      pass ();
-    else
-      fail ("DICTIONARY.cloning_r14 [RC] set+1 %u != %u", dictionary->cloning_r14, cloning_r14);
-    dictionary->cloning_r14--;
-  }
-  {
     BITCODE_RC is_hardowner;
     if (dwg_dynapi_entity_value (dictionary, "DICTIONARY", "is_hardowner", &is_hardowner, NULL)
         && is_hardowner == dictionary->is_hardowner)
@@ -45701,21 +45686,6 @@ static int test_DICTIONARYWDFLT (const Dwg_Object *obj)
     else
       fail ("DICTIONARYWDFLT.cloning [BS] set+1 %hu != %hu", dictionarywdflt->cloning, cloning);
     dictionarywdflt->cloning--;
-  }
-  {
-    BITCODE_RL cloning_r14;
-    if (dwg_dynapi_entity_value (dictionarywdflt, "DICTIONARYWDFLT", "cloning_r14", &cloning_r14, NULL)
-        && cloning_r14 == dictionarywdflt->cloning_r14)
-      pass ();
-    else
-      fail ("DICTIONARYWDFLT.cloning_r14 [RL] %u != %u", dictionarywdflt->cloning_r14, cloning_r14);
-    cloning_r14++;
-    if (dwg_dynapi_entity_set_value (dictionarywdflt, "DICTIONARYWDFLT", "cloning_r14", &cloning_r14, 0)
-        && cloning_r14 == dictionarywdflt->cloning_r14)
-      pass ();
-    else
-      fail ("DICTIONARYWDFLT.cloning_r14 [RL] set+1 %u != %u", dictionarywdflt->cloning_r14, cloning_r14);
-    dictionarywdflt->cloning_r14--;
   }
   {
     BITCODE_H defaultid;

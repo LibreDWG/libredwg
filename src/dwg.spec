@@ -2847,16 +2847,18 @@ DWG_OBJECT (DICTIONARYWDFLT)
   }
 #else
   FIELD_BL (numitems, 0);
-  VERSION (R_14)
-    FIELD_RL (cloning_r14, 0); // always 0
-  SINCE (R_2000)
-    {
-      IF_ENCODE_FROM_EARLIER {
-        FIELD_VALUE (cloning) = FIELD_VALUE (cloning_r14) & 0xffff;
+  // cloning from DICTIONARY
+  SINCE (R_13c3) {
+    SINCE (R_2000)
+      {
+        IF_ENCODE_FROM_EARLIER {
+          FIELD_VALUE (cloning) = FIELD_VALUE (is_hardowner) & 0xffff;
+        }
+        FIELD_BS (cloning, 281);
       }
-      FIELD_BS (cloning, 281);
-      FIELD_RC (is_hardowner, 0);
-    }
+    if (dat->version != R_13c3 || dwg->header.maint_version > 4)
+      FIELD_RC (is_hardowner, 280);
+  }
 #endif
   VALUEOUTOFBOUNDS (numitems, 10000)
 #ifdef IS_DXF
