@@ -22715,10 +22715,11 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
 
 /* globals: dwg, obj, _obj, dxfname */
 #define ADD_ENTITY(token)                                                     \
+  obj->fixedtype = DWG_TYPE_##token;                                          \
   if (dwg->header.version > R_11)                                             \
-    obj->type = obj->fixedtype = DWG_TYPE_##token;                            \
+    obj->type = DWG_TYPE_##token;                                             \
   else                                                                        \
-    obj->type = obj->fixedtype = (int)DWG_TYPE_##token##_R11;                 \
+    obj->type = DWG_TYPE_##token##_R11;                                       \
   obj->dxfname = (char*)dwg_type_dxfname (DWG_TYPE_##token);                  \
   if (memBEGINc (#token, "_3D"))                                              \
     obj->name = (char *)&#token[1];                                           \
