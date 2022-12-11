@@ -3894,7 +3894,7 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
   int error = 0;
   BITCODE_RS num_entities = 0;
   // TODO index offset for blocks
-  for (unsigned index = dwg->cur_index; index < dwg->cur_index + dwg->num_entities; index++)
+  for (unsigned index = dwg->cur_index; index < dwg->cur_index + dwg->num_objects; index++)
     {
       Dwg_Object *obj = &dwg->object[index];
       // skip table objects
