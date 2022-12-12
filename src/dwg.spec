@@ -6794,8 +6794,10 @@ DWG_OBJECT (XRECORD)
           FIELD_HANDLE_N (objid_handles[vcount], vcount, ANYCODE, 0);
           if (!FIELD_VALUE (objid_handles[vcount]))
             {
-              if (!vcount)
+              if (!vcount) {
                 free (FIELD_VALUE (objid_handles));
+                FIELD_VALUE (objid_handles) = NULL;
+              }
               break;
             }
         }
