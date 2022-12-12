@@ -132,9 +132,11 @@
   VERSIONS (R_13, R_14)
     {
 #ifdef IS_DECODER
+      obj->bitsize_pos = bit_position (dat);
       obj->bitsize = bit_read_RL (dat); // until the handles
 #endif
 #ifdef IS_ENCODER
+      obj->bitsize_pos = bit_position (dat);
       bit_write_RL (dat, obj->bitsize);
 #endif
 #ifndef IS_FREE

@@ -4634,10 +4634,11 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
     }
 
-  /* DXF/JSON/RW across versions: patchup size and bitsize */
+  /* ADD/DXF/JSON/RW across versions: patchup size and bitsize */
   /* Across versions size+bitsize must be recalculated.
      Sizes are unreliable when changing versions. */
-  if (!obj->size || dwg->header.from_version != dwg->header.version
+  if (!obj->size
+      || dwg->header.from_version != dwg->header.version
       || obj->was_bitsize_set)
     {
       BITCODE_BL pos = bit_position (dat);
@@ -4700,7 +4701,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         bit_write_UMC (dat, obj->handlestream_size);
         LOG_TRACE ("-handlestream_size: %lu [UMC]\n", obj->handlestream_size);
       }
-      SINCE (R_2000)
+      VERSIONS (R_13, R_2007)
       {
         if (obj->bitsize_pos && obj->bitsize)
           {
