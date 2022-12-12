@@ -326,14 +326,14 @@ const unsigned char unknown_section[53]
   {                                                                           \
     bit_write_RD (dat, _obj->nam.x);                                          \
     bit_write_RD (dat, _obj->nam.y);                                          \
-    LOG_TRACE (#nam ": (%f, %f) [3RD %d]", _obj->nam.x, _obj->nam.y, dxf)     \
+    LOG_TRACE (#nam ": (%f, %f) [2RD %d]", _obj->nam.x, _obj->nam.y, dxf)     \
     LOG_POS                                                                   \
   }
 #define FIELD_2BD(nam, dxf)                                                   \
   {                                                                           \
     bit_write_BD (dat, _obj->nam.x);                                          \
     bit_write_BD (dat, _obj->nam.y);                                          \
-    LOG_TRACE (#nam ": (%f, %f) [3BD %d]", _obj->nam.x, _obj->nam.y, dxf)     \
+    LOG_TRACE (#nam ": (%f, %f) [2BD %d]", _obj->nam.x, _obj->nam.y, dxf)     \
     LOG_POS                                                                   \
   }
 #define FIELD_2BD_1(nam, dxf) FIELD_2BD (nam, dxf)

@@ -746,6 +746,8 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           fn_error ("Invalid type " #var ". Empty or wrong type\n");    \
         dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &f1, 0);     \
       } else if (SSCANF_S (p, #var "." FMT_NAME " = " FMT_ANY, &s1[0] SZ, &text[0] SZ)) { \
+        if (strlen(text) && text[strlen(text) - 1] == '"')              \
+          text[strlen(text) - 1] = '\0';                                \
         if (!ent.u.var || ent.type != DWG_TYPE_##name)                  \
           fn_error ("Invalid type " #var ". Empty or wrong type\n");    \
         dwg_dynapi_entity_set_value (ent.u.var, #name, s1, text, 1);    \
@@ -787,12 +789,18 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else SET_ENT (xline, XLINE)
       else if (SSCANF_S (p, "text " FMT_ANY " (%lf %lf %lf) %lf", &text[0] SZ, &pt1.x,
                          &pt1.y, &pt1.z, &height))
-        ent = (lastent_t){.u.text = dwg_add_TEXT (hdr, text, &pt1, height),
-                          .type = DWG_TYPE_TEXT};
+        {
+          if (strlen(text) && text[strlen(text) - 1] == '"')
+            text[strlen(text) - 1] = '\0'; // strip the \"
+          ent = (lastent_t){.u.text = dwg_add_TEXT (hdr, text, &pt1, height),
+                            .type = DWG_TYPE_TEXT};
+        }
       else SET_ENT (text, TEXT)
       else if (SSCANF_S (p, "mtext (%lf %lf %lf) %lf " FMT_ANY, &pt1.x, &pt1.y,
                          &pt1.z, &height, &text[0] SZ))
         {
+          if (strlen(text) && text[strlen(text) - 1] == '"')
+            text[strlen(text) - 1] = '\0'; // strip the \"
           if (version <= R_11)
             fn_error ("Invalid entity MTEXT\n");
           else
@@ -801,8 +809,12 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         }
       else SET_ENT (mtext, MTEXT)
       else if (SSCANF_S (p, "block " FMT_TBL, &text[0] SZ))
-        ent = (lastent_t){.u.block = dwg_add_BLOCK (hdr, text),
-                          .type = DWG_TYPE_BLOCK};
+        {
+          if (strlen(text) && text[strlen(text) - 1] == '"')
+            text[strlen(text) - 1] = '\0'; // strip the \"
+          ent = (lastent_t){.u.block = dwg_add_BLOCK (hdr, text),
+                            .type = DWG_TYPE_BLOCK};
+        }
       else SET_ENT (block, BLOCK)
       else if (memBEGINc (p, "endblk\n"))
         dwg_add_ENDBLK (hdr);
@@ -1073,6 +1085,8 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                               &text[0] SZ, &s1[0] SZ))
         {
           Dwg_Object *obj = dwg_ent_generic_to_object (ent.u.viewport, &error);
+          if (strlen(s1) && text[strlen(s1) - 1] == '"')
+            text[strlen(s1) - 1] = '\0'; // strip the \"
           if (!error)
             ent = (lastent_t){.u.layout = dwg_add_LAYOUT (obj, text, s1),
                           .type = DWG_TYPE_LAYOUT};
@@ -1146,7 +1160,11 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else if (SSCANF_S (p, "HEADER." FMT_NAME " = %lf", &s1[0] SZ, &f1))
         dwg_dynapi_header_set_value (dwg, s1, &f1, 0);
       else if (SSCANF_S (p, "HEADER." FMT_NAME " = " FMT_ANY, &s1[0] SZ, &text[0] SZ))
-        dwg_dynapi_header_set_value (dwg, s1, text, 1);
+        {
+          if (strlen(text) && text[strlen(text) - 1] == '"')
+            text[strlen(text) - 1] = '\0'; // strip the \"
+          dwg_dynapi_header_set_value (dwg, s1, text, 1);
+        }
 
       p = next_line (p, end);
     }
