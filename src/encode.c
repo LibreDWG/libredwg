@@ -3972,6 +3972,101 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
       LOG_INFO ("===========================\n"
                 "Entity %s, number: %d, Type: %d, Addr: %lx (0x%x)\n",
                 obj->name, obj->index, obj->type, obj->address, (unsigned)dat->byte);
+      if (obj->type == 0 ||
+          (obj->type > DWG_TYPE_UNKNOWN_R11 && obj->fixedtype != 0))
+        {
+          // set the r11 type from the fixedtype. eg when downconverting
+          switch (obj->fixedtype)
+            {
+            case DWG_TYPE_LINE:
+              obj->type = DWG_TYPE_LINE_R11;
+              break;
+            case DWG_TYPE_POINT:
+              obj->type = DWG_TYPE_POINT_R11;
+              break;
+            case DWG_TYPE_CIRCLE:
+              obj->type = DWG_TYPE_CIRCLE_R11;
+              break;
+            case DWG_TYPE_SHAPE:
+              obj->type = DWG_TYPE_SHAPE_R11;
+              break;
+            case DWG_TYPE_REPEAT:
+              obj->type = DWG_TYPE_REPEAT_R11;
+              break;
+            case DWG_TYPE_ENDREP:
+              obj->type = DWG_TYPE_ENDREP_R11;
+              break;
+            case DWG_TYPE_TEXT:
+              obj->type = DWG_TYPE_TEXT_R11;
+              break;
+            case DWG_TYPE_ARC:
+              obj->type = DWG_TYPE_ARC_R11;
+              break;
+            case DWG_TYPE_TRACE:
+              obj->type = DWG_TYPE_TRACE_R11;
+              break;
+            case DWG_TYPE_LOAD:
+              /* convert from pre r2.0 */
+              obj->type = DWG_TYPE_LOAD_R11;
+              break;
+            case DWG_TYPE_SOLID:
+              obj->type = DWG_TYPE_SOLID_R11;
+              break;
+            case DWG_TYPE_BLOCK:
+              obj->type = DWG_TYPE_BLOCK_R11;
+              break;
+            case DWG_TYPE_ENDBLK:
+              obj->type = DWG_TYPE_ENDBLK_R11;
+              break;
+            case DWG_TYPE_INSERT:
+            case DWG_TYPE_MINSERT:
+                obj->type = DWG_TYPE_INSERT_R11;
+                break;
+            case DWG_TYPE_ATTDEF:
+              obj->type = DWG_TYPE_ATTDEF_R11;
+              break;
+            case DWG_TYPE_ATTRIB:
+              obj->type = DWG_TYPE_ATTRIB_R11;
+              break;
+            case DWG_TYPE_SEQEND:
+              obj->type = DWG_TYPE_SEQEND_R11;
+              break;
+            case DWG_TYPE_POLYLINE_2D:
+            case DWG_TYPE_POLYLINE_3D:
+            case DWG_TYPE_POLYLINE_PFACE:
+            case DWG_TYPE_POLYLINE_MESH:
+              obj->type = DWG_TYPE_POLYLINE_R11;
+              break;
+            case DWG_TYPE_VERTEX_2D:
+            case DWG_TYPE_VERTEX_3D:
+            case DWG_TYPE_VERTEX_MESH:
+            case DWG_TYPE_VERTEX_PFACE:
+            case DWG_TYPE_VERTEX_PFACE_FACE:
+              obj->type = DWG_TYPE_VERTEX_R11;
+              break;
+            case DWG_TYPE__3DLINE:
+              obj->type = DWG_TYPE_3DLINE_R11;
+              break;
+            case DWG_TYPE__3DFACE:
+              obj->type = DWG_TYPE_3DFACE_R11;
+              break;
+            case DWG_TYPE_DIMENSION_LINEAR:
+            case DWG_TYPE_DIMENSION_ALIGNED:
+            case DWG_TYPE_DIMENSION_ANG2LN:
+            case DWG_TYPE_DIMENSION_DIAMETER:
+            case DWG_TYPE_DIMENSION_RADIUS:
+            case DWG_TYPE_DIMENSION_ANG3PT:
+            case DWG_TYPE_DIMENSION_ORDINATE:
+              obj->type = DWG_TYPE_DIMENSION_R11;
+              break;
+            case DWG_TYPE_VIEWPORT:
+              obj->type = DWG_TYPE_VIEWPORT_R11;
+              break;
+            default:
+              LOG_INFO ("unknown fixup from fixedtype: %d\n", obj->fixedtype)
+            }
+        }
+
       PRE (R_2_0b) {
         bit_write_RS (dat, obj->type);
         LOG_INFO ("type: %d [RS]\n", obj->type)
