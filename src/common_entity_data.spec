@@ -34,7 +34,8 @@
 #elif defined IS_JSON
         //KEY (size); VALUE_RS (obj->size, 0);
 #endif
-        LOG_TRACE("size: %d [RS]\n", obj->size);
+        LOG_TRACE("size: %d [RS]", obj->size);
+        LOG_POS
         FIELD_HANDLE (layer, 2, 8);
       }
       FIELD_RSx (opts_r11, 0); // i.e. dataflags

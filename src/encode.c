@@ -4069,6 +4069,7 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
             }
         }
 
+      obj->address = dat->byte;
       PRE (R_2_0b) {
         bit_write_RS (dat, obj->type);
         LOG_INFO ("type: %d [RS]\n", obj->type)
@@ -4080,11 +4081,9 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
       }
       LATER_VERSIONS {
         bit_write_RC (dat, obj->type);
-        bit_write_RC (dat, obj->tio.entity->flag_r11);
-        size_pos = bit_position (dat);
-        bit_write_RS (dat, obj->size);
-        LOG_INFO ("Add %s, Type: %d [RC], Flag: 0x%x [RC], Size: %d [RS], Address: %lu\n",
-                  obj->name, obj->type, obj->tio.entity->flag_r11, obj->size, obj->address)
+        size_pos = dat->byte + 1; // past the flag
+        LOG_INFO ("Add %s, Type: %d [RC], Address: %lu\n",
+                  obj->name, obj->type, obj->address)
       }
 
       switch ((Dwg_Object_Type_r11)obj->type)
@@ -4178,12 +4177,13 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
         // patchup size
         if (!obj->size)
           {
-            unsigned long pos = bit_position (dat);
-            obj->size = (pos - size_pos) / 8;
-            bit_set_position (dat, size_pos);
+            unsigned long pos = dat->byte;
+            obj->size = dat->byte - size_pos;
+            dat->byte = size_pos;
+            bit_write_RS (dat, obj->size);
             LOG_TRACE ("-size: %u [RL] (@%lu.%u)\n", obj->size, dat->byte,
                        dat->bit)
-            bit_set_position (dat, pos);
+            dat->byte = pos;
           }
       }
     }
