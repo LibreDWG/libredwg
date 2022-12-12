@@ -3897,6 +3897,7 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
   for (unsigned index = dwg->cur_index; index < dwg->cur_index + dwg->num_objects; index++)
     {
       Dwg_Object *obj = &dwg->object[index];
+      unsigned long size_pos = 0UL;
       // skip table objects
       if (obj->supertype != DWG_SUPERTYPE_ENTITY)
         {
@@ -3950,6 +3951,7 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
       LATER_VERSIONS {
         bit_write_RC (dat, obj->type);
         bit_write_RC (dat, obj->tio.entity->flag_r11);
+        size_pos = bit_position (dat);
         bit_write_RS (dat, obj->size);
         LOG_INFO ("Add %s, Type: %d [RC], Flag: 0x%x [RC], Size: %d [RS], Address: %lu\n",
                   obj->name, obj->type, obj->tio.entity->flag_r11, obj->size, obj->address)
@@ -4042,6 +4044,18 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
           LOG_ERROR ("Unknown object type %d", obj->type)
           break;
         }
+      SINCE (R_2_0) {
+        // patchup size
+        if (!obj->size)
+          {
+            unsigned long pos = bit_position (dat);
+            obj->size = (pos - size_pos) / 8;
+            bit_set_position (dat, size_pos);
+            LOG_TRACE ("-size: %u [RL] (@%lu.%u)\n", obj->size, dat->byte,
+                       dat->bit)
+            bit_set_position (dat, pos);
+          }
+      }
     }
   return num_entities;
 }
