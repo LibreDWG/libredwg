@@ -1336,7 +1336,7 @@ DWG_ENTITY (LINE)
       FIELD_2RD (end, 11)
   }
   VERSIONS (R_10, R_12) {
-    if (R11FLAG (FLAG_R11_ELEVATION)) {       // extension of pre R_10, not compatible
+    if (R11FLAG (FLAG_R11_ELEVATION)) {  // extension of pre R_10, not compatible
       FIELD_2RD (start, 10)
       FIELD_2RD (end, 11)
     } else {
