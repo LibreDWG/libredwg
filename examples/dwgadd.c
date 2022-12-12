@@ -279,6 +279,7 @@ main (int argc, char *argv[])
       LOG_ERROR ("Could not read %s", argv[i])
       exit (1);
     }
+  LOG_INFO ("dwgadd read %s\n", argv[i])
   dat_read_file (&dat, fp, argv[i]);
   if (dat.size == 0)
     {
@@ -288,6 +289,7 @@ main (int argc, char *argv[])
     }
 
   dwgp = &dwg;
+  LOG_INFO ("dwgadd process %s\n", argv[i])
   if ((retval = dwg_add_dat (&dwgp, &dat)) == 0)
     {
       int error;
@@ -300,6 +302,7 @@ main (int argc, char *argv[])
 #else
         outfile = "/dev/stdout";
 #endif
+      LOG_INFO ("\ndwgadd write %s\n", outfile)
       out_dat.fh = fopen (outfile, "wb");
       if (!out_dat.fh)
         {
@@ -349,6 +352,7 @@ main (int argc, char *argv[])
           dat.fh = fopen (outfile, "rb");
           memset (&dwg, 0, sizeof (Dwg_Data));
           dwg.opts = opts;
+          LOG_INFO ("\ndwgadd verify %s\n", outfile)
           dat_read_file (&dat, dat.fh, outfile);
 
 #ifndef DISABLE_DXF
