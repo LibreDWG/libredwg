@@ -1,4 +1,5 @@
 # example dwgadd file. strings are utf8 and must not exceed length 255
+point (2 0 0)
 text "test" (0.0 1.0 0.0) 8
 attribute 8 0 "prompt" (0.0 1.0 0.0) "tag" "text"
 attdef 8 0 "prompt" (0.0 1.0 0.0) "tag" "default_text"
@@ -20,7 +21,6 @@ dimension_diameter (0 0 0) (2 0 0) 2
 dimension_ordinate (0 0 0) (2 0 0) 1
 dimension_radius (0 0 0) (2 0 0) 1
 dimension_linear (2 0 0) (2 1 0) (0 0 0) 90
-point (2 0 0)
 3dface (0 0 0) (2 0 0) (2 1 0) (0 2 0)
 solid (0 0 0) (2 0) (2 1) (0 2)
 trace (0 0 0) (2 0) (2 1) (0 2)

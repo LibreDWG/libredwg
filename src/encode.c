@@ -3971,9 +3971,10 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
       while (dat->byte + obj->size >= dat->size)
         bit_chain_alloc (dat);
 
+      obj->address = dat->byte;
       LOG_INFO ("===========================\n"
-                "Entity %s, number: %d, Type: %d, Addr: %lx (0x%x)\n",
-                obj->name, obj->index, obj->type, obj->address, (unsigned)dat->byte);
+                "Entity %s, number: %d, Addr: %lu (0x%x)\n",
+                obj->name, obj->index, obj->address, (unsigned)dat->byte);
       if (obj->type == 0 ||
           (obj->type > DWG_TYPE_UNKNOWN_R11 && obj->fixedtype != 0))
         {
@@ -4069,7 +4070,6 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
             }
         }
 
-      obj->address = dat->byte;
       PRE (R_2_0b) {
         bit_write_RS (dat, obj->type);
         LOG_INFO ("type: %d [RS]\n", obj->type)
@@ -4082,8 +4082,7 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
       LATER_VERSIONS {
         bit_write_RC (dat, obj->type);
         size_pos = dat->byte + 1; // past the flag
-        LOG_INFO ("Add %s, Type: %d [RC], Address: %lu\n",
-                  obj->name, obj->type, obj->address)
+        LOG_INFO ("type: %d [RC]\n", obj->type)
       }
 
       switch ((Dwg_Object_Type_r11)obj->type)
@@ -4178,13 +4177,22 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
         if (!obj->size)
           {
             unsigned long pos = dat->byte;
-            obj->size = dat->byte - size_pos;
+            obj->size = dat->byte - obj->address;
+            SINCE (R_11)
+              obj->size += 2; // crc16
             dat->byte = size_pos;
             bit_write_RS (dat, obj->size);
             LOG_TRACE ("-size: %u [RL] (@%lu.%u)\n", obj->size, dat->byte,
                        dat->bit)
             dat->byte = pos;
           }
+        SINCE (R_11) {
+          BITCODE_RS crc = bit_calc_CRC (0xC0C1, &dat->chain[obj->address],
+                                         obj->size - 2);
+          LOG_TRACE ("crc: %04X [RSx] from 0x%lx-0x%lx\n", crc, obj->address,
+                     dat->byte);
+          bit_write_RS (dat, crc);
+        }
       }
     }
   return num_entities;
