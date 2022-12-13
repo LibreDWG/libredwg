@@ -297,11 +297,16 @@ main (int argc, char *argv[])
       dwg = *dwgp;
       out_dat.byte = 0; out_dat.bit = 0;
       if (!outfile)
+        {
 #ifdef _WIN32
-        outfile = "CON";
+          outfile = "CON";
 #else
-        outfile = "/dev/stdout";
+          outfile = "/dev/stdout";
 #endif
+          if (opt.verify)
+            LOG_ERROR ("Cannot --verify with %s\n", outfile)
+          opt.verify = false;
+        }
       LOG_INFO ("\ndwgadd write %s\n", outfile)
       out_dat.fh = fopen (outfile, "wb");
       if (!out_dat.fh)
