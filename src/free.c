@@ -622,6 +622,50 @@ free_preR13_object (Dwg_Object *obj)
     }
   }
 
+  if (obj->fixedtype == DWG_TYPE_UNUSED // deleted
+      && dwg->header.version < R_2_0b && obj->type > 64)
+    {
+      obj->type = -(int8_t)obj->type;
+      // handle only entities with extra vectors specially
+      switch (obj->type)
+        {
+        case DWG_TYPE_TEXT_R11:
+          dwg_free_TEXT (dat, obj);
+          break;
+        case DWG_TYPE_ATTRIB_R11:
+          dwg_free_ATTRIB (dat, obj);
+          break;
+        case DWG_TYPE_ATTDEF_R11:
+          dwg_free_ATTDEF (dat, obj);
+          break;
+        case DWG_TYPE_BLOCK_R11:
+          dwg_free_BLOCK (dat, obj);
+          break;
+        case DWG_TYPE_INSERT_R11:
+          dwg_free_INSERT (dat, obj);
+          break;
+        case DWG_TYPE_DIMENSION_R11:
+          switch (obj->tio.entity->flag_r11)
+            {
+            case 64: dwg_free_DIMENSION_LINEAR (dat, obj); break;
+            case 65: dwg_free_DIMENSION_ALIGNED (dat, obj); break;
+            case 66: dwg_free_DIMENSION_ANG2LN (dat, obj); break;
+            case 68: dwg_free_DIMENSION_DIAMETER (dat, obj); break;
+            case 72: dwg_free_DIMENSION_RADIUS (dat, obj); break;
+            case 80: dwg_free_DIMENSION_ANG3PT (dat, obj); break;
+            case 96: dwg_free_DIMENSION_ORDINATE (dat, obj); break;
+            default:
+              LOG_ERROR ("Unknown preR11 %s.flag_r11 %d", obj->name,
+                         obj->tio.entity->flag_r11)
+            }
+          break;
+        // now the rest
+        default:
+          dwg_free_POINT (dat, obj);
+          break;
+        }
+    }
+
   // we could also use (Dwg_Object_Type_r11)obj->type
   switch (obj->fixedtype)
     {
@@ -798,7 +842,7 @@ free_preR13_object (Dwg_Object *obj)
       dwg_free_DICTIONARY (dat, obj);
       break;
     case DWG_TYPE_UNUSED:
-      // TODO leaks with r1.4
+      // deleted entity. leak? see above
       break;
     default:
       LOG_ERROR ("Unhandled preR13 class %s, fixedtype %d in free_preR13_object()",

@@ -22596,7 +22596,7 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     if (dwg->header.version <= R_11) // fixup the type
       {
         obj = dwg_obj_generic_to_object (block, &error);
-        obj->type = DWG_TYPE_UNUSED; // dont encode it
+        obj->type = DWG_TYPE_UNUSED_R11; // dont encode it
       }
   }
   {
@@ -22605,7 +22605,7 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     if (dwg->header.version <= R_11) // fixup the type
       {
         obj = dwg_obj_generic_to_object (endblk, &error);
-        obj->type = DWG_TYPE_UNUSED; // dont encode it
+        obj->type = DWG_TYPE_UNUSED_R11; // dont encode it
       }
   }
   if (dwg->header.version >= R_2000)
@@ -23701,9 +23701,9 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         }
       else
         {
+          obj->type = DWG_TYPE_LINE_R11;
           if (_obj->start.z == 0.0 && _obj->end.z == 0.0)
             obj->tio.entity->flag_r11 |= FLAG_R11_ELEVATION;
-          obj->type = DWG_TYPE_LINE_R11;
         }
     }
   if (dwg->header.version >= R_2_4 && dwg->header.version < R_10)

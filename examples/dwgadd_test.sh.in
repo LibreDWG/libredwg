@@ -22,14 +22,14 @@ dwgaddtest() {
                        -o dwgadd_test.dwg "$FEX"
         ret=$?
     else
-        PRE=
-        if test "$V" = "r1.4" -a -n "@HAVE_ASAN@"
-        then
-           PRE="env ASAN_OPTIONS=detect_leaks=0"
-        fi
+        #PRE=
+        #if test "$V" = "r1.4" -a -n "@HAVE_ASAN@"
+        #then
+        #   PRE="env ASAN_OPTIONS=detect_leaks=0"
+        #fi
         echo "$PRE" ./dwgadd --verify -a "$V" -o dwgadd_test.dwg "$FEX"
         # shellcheck disable=SC2086
-        $PRE ${top_builddir}/libtool --mode=execute "./dwgadd${EXEEXT}" --verify \
+        ${top_builddir}/libtool --mode=execute "./dwgadd${EXEEXT}" --verify \
                        -a "$V" -o dwgadd_test.dwg "$FEX"
         ret=$?
     fi

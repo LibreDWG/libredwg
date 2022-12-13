@@ -3944,8 +3944,8 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
       // deleted, i.e. moved to a BLOCK
       if (obj->fixedtype == DWG_TYPE_UNUSED)
         {
-          LOG_TRACE ("Skip unused entity %s, number: %d, Addr: %lx (0x%x)\n",
-                     obj->name, obj->index, obj->address, (unsigned)dat->byte);
+          LOG_TRACE ("Skip deleted entity %s, number: %d, type: %d, Addr: %lx (0x%x)\n",
+                     obj->name, obj->index, obj->type, obj->address, (unsigned)dat->byte);
           continue;
         }
       // skip mspace block/endblk
