@@ -22301,6 +22301,10 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     dwg->header.numheader_vars = 204;
   else if (version <= R_13b1)
     dwg->header.numheader_vars = 205;
+  if (dwg->header.numheader_vars > 158)
+    dwg->header.numsections += 3;
+  if (dwg->header.numheader_vars > 160)
+    dwg->header.numsections += 2;
 
   dwg->header_vars.unknown_0 = 412148564080.0; // unit1_ration
   dwg->header_vars.unknown_1 = 1.0;
