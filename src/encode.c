@@ -2395,7 +2395,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   PRE (R_13)
   {
-    BITCODE_RS num_entities;
+    BITCODE_RS numentities;
     BITCODE_RL hdr_offset, hdr_end;
     PRE (R_1_4)
       LOG_WARN (WE_CAN "We cannot encode pre-r1.4 DWG's yet");
@@ -2462,26 +2462,26 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     entities_start = dat->byte;
     LOG_TRACE ("\nentities 0x%x:\n", entities_start);
     dwg->cur_index = 0;
-    num_entities = encode_preR13_entities (0, dat, dwg);
-    dwg->cur_index += num_entities;
+    numentities = encode_preR13_entities (0, dat, dwg);
+    dwg->cur_index += numentities;
     entities_end = dat->byte;
-    LOG_TRACE ("\nentities %u 0x%x - 0x%x\n", num_entities, entities_start,
+    LOG_TRACE ("\nentities %u 0x%x - 0x%x\n", numentities, entities_start,
                entities_end);
     //pvzadr = dat->byte;
 
     PRE (R_2_0b)
     {
       // patch these numbers into the header
-      BITCODE_RL num_bytes = dat->byte;
+      BITCODE_RL dwg_size = dat->byte;
       dat->byte = 0x0c + 24;
-      if (num_bytes != dwg->header_vars.dwg_size)
-        LOG_TRACE ("0x%x: num_bytes: %u [RL]\n", (unsigned)dat->byte, num_bytes);
-      bit_write_RL (dat, num_bytes);
-      if (num_entities != dwg->header_vars.numentities)
-        LOG_TRACE ("0x%x: num_entities: %u [RS]\n", (unsigned)dat->byte, num_entities);
-      bit_write_RS (dat, num_entities);
-      dat->byte = num_bytes;
-      LOG_TRACE ("Wrote %u bytes\n", num_bytes);
+      if (dwg_size != dwg->header_vars.dwg_size)
+        LOG_TRACE ("-dwg_size: %u [RL] @%u.0\n", dwg_size, (unsigned)dat->byte);
+      bit_write_RL (dat, dwg_size);
+      if (numentities != dwg->header_vars.numentities)
+        LOG_TRACE ("-numentities: %u [RS] @%u.0\n", numentities, (unsigned)dat->byte);
+      bit_write_RS (dat, numentities);
+      dat->byte = dwg_size;
+      LOG_TRACE ("Wrote %u bytes\n", dwg_size);
       return error;
     }
     SINCE (R_2_0b)
@@ -2518,7 +2518,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     }
     VERSIONS (R_2_0b, R_9c1) {
       dat->byte = hdr_offset + (3 * 8);
-      bit_write_RS (dat, num_entities);
+      bit_write_RS (dat, numentities);
       dat->byte = blocks_end;
     }
     LOG_TRACE ("Wrote %lu bytes\n", dat->byte);
@@ -3927,7 +3927,7 @@ static BITCODE_RS
 encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
-  BITCODE_RS num_entities = 0;
+  BITCODE_RS numentities = 0;
   // TODO index offset for blocks
   for (unsigned index = dwg->cur_index; index < dwg->cur_index + dwg->num_objects; index++)
     {
@@ -3966,7 +3966,7 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
         {
           if (obj->tio.entity->entmode == 3) // is block
             continue;
-          num_entities++;
+          numentities++;
         }
       while (dat->byte + obj->size >= dat->size)
         bit_chain_alloc (dat);
@@ -4195,7 +4195,7 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
         }
       }
     }
-  return num_entities;
+  return numentities;
 }
 
 // expand aliases: name => CLASSES.dxfname
