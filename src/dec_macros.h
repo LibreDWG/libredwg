@@ -291,8 +291,9 @@
               {                                                               \
                 int alloced;                                                  \
                 const char *u8 = dwg_ref_tblname (dwg, ref, &alloced);        \
-                HANDLER (OUTPUT, " => %s %s", dwg_ref_objname (dwg, ref), u8);\
-                if (alloced)                                                  \
+                if (u8 && *u8)                                                \
+                  HANDLER (OUTPUT, " => %s %s", dwg_ref_objname (dwg, ref), u8);\
+                if (u8 && alloced)                                            \
                   free ((void*)u8);                                           \
               }                                                               \
           }                                                                   \
