@@ -235,6 +235,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   long unsigned int pos = tbl->address;
   BITCODE_RC flag;
   BITCODE_TF name;
+  unsigned long oldpos = dat->byte;
 
   LOG_TRACE ("contents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n",
              tbl->name, id, tbl->size, (long)tbl->number, (unsigned long)tbl->address,
@@ -245,6 +246,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     {
       LOG_ERROR ("Overlarge table num_entries %ld or size %ld for %-8s [%2d]",
                  (long)tbl->number, (long)tbl->size, tbl->name, id);
+      dat->byte = oldpos;
       return DWG_ERR_INVALIDDWG;
     }
   tbl->objid_r11 = num;
@@ -618,8 +620,11 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         tbl->number = 0;
         break;
       }
-      dat->byte = tbl->address + (tbl->number * tbl->size);
     }
+  if (tbl->address && tbl->number && tbl->size)
+    dat->byte = tbl->address + (tbl->number * tbl->size);
+  else
+    dat->byte = oldpos;
   return error;
 }
  
@@ -890,8 +895,8 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       dat->byte = blocks_start;
     }
   num_entities = 0;
-  VERSION (R_11)
-    blocks_end -= 32; // ??
+  if (dwg->header.version == R_11 && blocks_start + 32 < blocks_end)
+    blocks_end -= 32; // ?? some sentinel probably
   error |= decode_preR13_entities (blocks_start, blocks_end,
                                    num_entities, blocks_size & 0x3FFFFFFF,
                                    blocks_max, dat, dwg);
