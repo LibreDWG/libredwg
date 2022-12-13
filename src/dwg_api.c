@@ -22765,6 +22765,8 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
   dwg_set_next_objhandle (obj);                                               \
   LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H (obj->handle));                \
   in_postprocess_handles (obj);                                               \
+  if (dwg->header.version < R_10)                                             \
+       dwg->header_vars.numentities++;                                        \
   dwg_insert_entity ((Dwg_Object_BLOCK_HEADER *)blkhdr, obj)
 
 #define ADD_OBJECT(token)                                                     \
