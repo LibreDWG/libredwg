@@ -232,7 +232,7 @@ main (int argc, char *argv[])
           dwg_version = dwg_version_as (optarg);
           if (dwg_version == R_INVALID)
             {
-              fprintf (stderr, "Invalid version '%s'\n", argv[1]);
+              fprintf (stderr, "Invalid version '%s'\n", argv[i]);
               return usage ();
             }
           break;

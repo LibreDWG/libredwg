@@ -22272,9 +22272,35 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header.dwg_version = dwg_ver_struct->dwg_version;
   //dwg->header.maint_version = 29;
   dwg->header.codepage = 30; // FIXME: local codepage if <r2007
-  //dwg->header.num_sections = 5;
+  dwg->header.numsections = 5;
   //dwg->header.section = (Dwg_Section *)calloc (
   //    dwg->header.num_sections, sizeof (Dwg_Section));
+  if (version < R_2_0b)
+    ;
+  else if (version <= R_2_0b)
+    dwg->header.numheader_vars = 74;
+  else if (version <= R_2_22)
+    dwg->header.numheader_vars = 83;
+  else if (version <= R_2_4)
+    dwg->header.numheader_vars = 101;
+  else if (version <= R_2_5)
+    dwg->header.numheader_vars = 104;
+  else if (version <= R_2_5 && dwg->header.maint_version > 9)
+    dwg->header.numheader_vars = 114;
+  else if (version <= R_2_6)
+    dwg->header.numheader_vars = 120;
+  else if (version <= R_2_6 && dwg->header.maint_version > 10)
+    dwg->header.numheader_vars = 122;
+  else if (version <= R_9)
+    dwg->header.numheader_vars = 129;
+  else if (version <= R_9c1)
+    dwg->header.numheader_vars = 158;
+  else if (version <= R_10)
+    dwg->header.numheader_vars = 160;
+  else if (version <= R_11)
+    dwg->header.numheader_vars = 204;
+  else if (version <= R_13b1)
+    dwg->header.numheader_vars = 205;
 
   dwg->header_vars.unknown_0 = 412148564080.0; // unit1_ration
   dwg->header_vars.unknown_1 = 1.0;
