@@ -217,6 +217,16 @@ check-svg: all
 check-docker: dist
 	docker build --build-arg distdir="$(distdir)" --rm -t $(distdir) \
 	             -f $(srcdir)/Dockerfile-dist .
+log-dwg: all
+	for d in `find $(srcdir)/test/test-data \
+		$(srcdir)/test/test-old \
+		$(srcdir)/test/issues \
+		$(srcdir)/test/ossfuzz -iname \*.dwg -size -40M`; do \
+	  ./log "$$d"; \
+	done
+	for d in `find $(srcdir)/test/ossfuzz/indwg* -type f -size -40M`; do \
+	  ./log "$$d"; \
+	done
 
 # clang-analyzer.llvm.org, debian: clang-tools-{6.0,7}, redhat: clang-analyzer
 SCAN_BUILD = scan-build
