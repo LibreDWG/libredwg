@@ -3118,8 +3118,9 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
       else if (f->is_string && dwg_version < R_2007)
         {
           // FIXME: TF size calc is probably wrong
-          char *str = (char *)malloc (strlen (*(char**)value)+1);
-          strcpy (str, *(char**)value);
+          size_t len = strlen (*(char**)value);
+          char *str = (char *)malloc (len+1);
+          memcpy (str, *(char**)value, len+1);
           memcpy (old, &str, sizeof (char*)); // size of ptr
         }
       // or wide
