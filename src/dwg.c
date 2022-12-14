@@ -2079,7 +2079,7 @@ dwg_find_table_control (Dwg_Data *restrict dwg, const char *restrict table)
 EXPORT BITCODE_H
 dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
 {
-  // The NOD (Named Object Dict) is always the very first DICTIONARY
+  // The NOD (Named Object Dict) must be always the very first DICTIONARY
   Dwg_Object_DICTIONARY *nod;
   Dwg_Object *obj = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
   if (!obj || !obj->tio.object || obj->fixedtype != DWG_TYPE_DICTIONARY)

@@ -3610,12 +3610,20 @@ static int
 dxf_objects_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
-  int i;
+  int i = 0;
+  Dwg_Object *nod;
 
   SECTION (OBJECTS);
+  // The NOD (Named Object Dict) must be always the very first OBJECT,
+  // not just DICTIONARY.
+  nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
+  if (nod)
+    error |= dwg_dxf_object (dat, nod, &i);
   for (i = 0; (BITCODE_BL)i < dwg->num_objects; i++)
     {
       const Dwg_Object *restrict obj = &dwg->object[i];
+      if (obj == nod)
+        continue;
       if (obj->supertype == DWG_SUPERTYPE_OBJECT
           && obj->type != DWG_TYPE_BLOCK_HEADER && !dwg_obj_is_control (obj))
         error |= dwg_dxf_object (dat, obj, &i);
