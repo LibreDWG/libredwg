@@ -3111,7 +3111,7 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
       else if (strEQc (f->type, "TFv"))
         {
           char *str = (char *)calloc (f->size, 1);
-          strcpy (str, *(char**)value);
+          strncpy (str, *(char**)value, f->size);
           memcpy (old, &str, sizeof (char*)); // size of ptr
         }
       // ascii
