@@ -69,9 +69,15 @@
     FIELD_RL (oldCECOLOR_lo, 0); // CECOLOR converted from older DWG file
     FIELD_RL (oldCECOLOR_hi, 0); //            -"-
   }
-  VERSIONS (R_1_2, R_1_4) {
+  VERSIONS (R_1_1, R_1_4) {
     BITCODE_BL vcount;
     FIELD_VECTOR_INL (layer_colors, RS, 128, 0); // color of each layer
+    VERSION (R_1_1) {
+      dwg->header.dwg_version = 1;
+      return error;
+    }
+  }
+  VERSIONS (R_1_2, R_1_4) {
     FIELD_RD (DIMASZ, 40); //ok
     FIELD_RD (unknown_7, 40); //?
     VERSION (R_1_2) {
