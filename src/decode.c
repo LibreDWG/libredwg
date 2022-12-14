@@ -290,6 +290,11 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
 
   /* Section Locator Records 0x15 */
+  if (dat->byte != 0x15)
+    {
+      LOG_ERROR ("Wrong HEADER Section Locator Records at %lu", dat->byte)
+      return DWG_ERR_INVALIDDWG;
+    }
   assert (dat->byte == 0x15);
   dwg->header.numsections = bit_read_RL (dat);
   LOG_TRACE ("\nnum_sections: " FORMAT_RL " [RL]\n", dwg->header.numsections)
