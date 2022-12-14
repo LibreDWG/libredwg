@@ -256,11 +256,11 @@ typedef enum DWG_VERSION_TYPE
 {
   R_INVALID,
   // Releases based on https://autodesk.blogs.com/between_the_lines/autocad-release-history.html
-  R_1_1,	/* MC0.0/0  MicroCAD Release 1 */
-  R_1_2,	/* AC1.2/0  AutoCAD Release 2 */
-  R_1_3,	/* AC1.3/1  AutoCAD Release 3 */
-  R_1_4,	/* AC1.40/2 AutoCAD Release 4 */
-  R_2_0b,	/* AC1.50/3 AutoCAD 2.0 beta */
+  R_1_1,	/* MC0.0/1  MicroCAD Release 1 */
+  R_1_2,	/* AC1.2/2  AutoCAD Release 2 */
+  R_1_3,	/* AC1.3/?  AutoCAD Release 3 */
+  R_1_4,	/* AC1.40/3 AutoCAD Release 4 */
+  R_2_0b,	/* AC1.50/4 AutoCAD 2.0 beta */
   R_2_0,	/* AC1.50/4 AutoCAD Release 5 */
   R_2_10,	/* AC2.10/5 AutoCAD Release 6 */
   R_2_21,	/* AC2.21/6 AutoCAD Release ? */
