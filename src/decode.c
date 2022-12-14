@@ -206,7 +206,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_INFO ("This file's version code is: %s (%s)\n", magic,
             dwg_version_type (dat->from_version))
 
-  PRE (R_13) {
+  PRE (R_13b1) {
     Dwg_Object *ctrl;
     int error = decode_preR13 (dat, dwg);
     if (error <= DWG_ERR_CRITICAL)
@@ -216,7 +216,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       }
     return error;
   }
-  VERSIONS (R_13, R_2000) { return decode_R13_R2000 (dat, dwg); }
+  VERSIONS (R_13b1, R_2000) { return decode_R13_R2000 (dat, dwg); }
   VERSION (R_2004) { return decode_R2004 (dat, dwg); }
   VERSION (R_2007) { return decode_R2007 (dat, dwg); }
   SINCE (R_2010)
@@ -3810,7 +3810,7 @@ obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
    For EED check page 269, par 28 (Extended Object Data)
    For proxy graphics check page 270, par 29 (Proxy Entity Graphics)
 
-   PRE(R_13) goes into decode_entity_preR13 instead.
+   PRE(R_13b1) goes into decode_entity_preR13 instead.
  */
 static int
 dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
@@ -3986,7 +3986,7 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
     return error;
 
-  VERSIONS (R_13, R_14)
+  VERSIONS (R_13b1, R_14)
   {
     obj->bitsize = bit_read_RL (dat);
     LOG_TRACE ("bitsize: %u [RL]\n", obj->bitsize);
@@ -4871,7 +4871,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
       break;
     case DWG_TYPE_SEQEND:
       error = dwg_decode_SEQEND (dat, obj);
-      if (dat->from_version >= R_13 && obj->tio.entity->ownerhandle)
+      if (dat->from_version >= R_13b1 && obj->tio.entity->ownerhandle)
         {
           Dwg_Object *restrict owner = dwg_resolve_handle (
               dwg, obj->tio.entity->ownerhandle->absolute_ref);
