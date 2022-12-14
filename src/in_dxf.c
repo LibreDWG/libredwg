@@ -12648,6 +12648,8 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               dxf_free_pair (pair);
               pair = NULL;
+              if (dwg->header.from_version == R_INVALID)
+                dxf_fixup_header (dwg);
               error = dxf_classes_read (dat, dwg);
               if (error > DWG_ERR_CRITICAL)
                 return error;
@@ -12663,6 +12665,8 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
               resolve_postponed_header_refs (dwg);
               resolve_postponed_eed_refs (dwg);
+              if (dwg->header.from_version == R_INVALID)
+                dxf_fixup_header (dwg);
 
               // should not happen
               if (!dwg->header_vars.LTYPE_BYLAYER
@@ -12688,6 +12692,8 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               BITCODE_H hdl;
               dxf_free_pair (pair);
               pair = NULL;
+              if (dwg->header.from_version == R_INVALID)
+                dxf_fixup_header (dwg);
               error = dxf_blocks_read (dat, dwg);
               if (error > DWG_ERR_CRITICAL)
                 goto error;
