@@ -81,7 +81,7 @@
     FIELD_RD (DIMASZ, 40); //ok
     FIELD_RD (unknown_7, 40); //?
     VERSION (R_1_2) {
-      dwg->header.dwg_version = 1;
+      dwg->header.dwg_version = 2;
       return error;
     }
   } else {
@@ -102,7 +102,7 @@
   FIELD_RD (SKETCHINC, 40); //ok default 0.1
   FIELD_RD (FILLETRAD, 40); //ok
   VERSION (R_1_4) {
-    dwg->header.dwg_version = 2;
+    dwg->header.dwg_version = 3;
     return error;
   }
   FIELD_RS (AUNITS, 70);    //ok
