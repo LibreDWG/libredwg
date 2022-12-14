@@ -255,18 +255,19 @@ typedef Dwg_Bitcode_3BD  BITCODE_BE;
 typedef enum DWG_VERSION_TYPE
 {
   R_INVALID,
-  R_1_1,	/* MC0.0/0  MicroCAD Release 1.1 */
-  R_1_2,	/* AC1.2/0  AutoCAD Release 1.2 */
-  R_1_3,	/* AC1.3/1  AutoCAD Release 1.3 */
-  R_1_4,	/* AC1.40/2 AutoCAD Release 1.4 */
+  // Releases based on https://autodesk.blogs.com/between_the_lines/autocad-release-history.html
+  R_1_1,	/* MC0.0/0  MicroCAD Release 1 */
+  R_1_2,	/* AC1.2/0  AutoCAD Release 2 */
+  R_1_3,	/* AC1.3/1  AutoCAD Release 3 */
+  R_1_4,	/* AC1.40/2 AutoCAD Release 4 */
   R_2_0b,	/* AC1.50/3 AutoCAD 2.0 beta */
-  R_2_0,	/* AC1.50/4 AutoCAD Release 2.0 */
-  R_2_10,	/* AC2.10/5 AutoCAD Release 2.10 */
-  R_2_21,	/* AC2.21/6 AutoCAD Release 2.21 */
-  R_2_22,	/* AC2.22/7 AutoCAD Release 2.22 */
-  R_2_4,	/* AC1001/8 AutoCAD Release 2.4 */
-  R_2_5,	/* AC1002/9 AutoCAD Release 2.5 */
-  R_2_6,	/* AC1003/10 AutoCAD Release 2.6 */
+  R_2_0,	/* AC1.50/4 AutoCAD Release 5 */
+  R_2_10,	/* AC2.10/5 AutoCAD Release 6 */
+  R_2_21,	/* AC2.21/6 AutoCAD Release ? */
+  R_2_22,	/* AC2.22/7 AutoCAD Release ? */
+  R_2_4,	/* AC1001/8 AutoCAD Release ? */
+  R_2_5,	/* AC1002/9 AutoCAD Release 7 */
+  R_2_6,	/* AC1003/10 AutoCAD Release 8 */
   R_9,		/* AC1004/0xb AutoCAD Release 9 */
   R_9c1,	/* AC1005/0xc AutoCAD Release 9c1 */
   R_10,		/* AC1006/0xd AutoCAD Release 10 */
