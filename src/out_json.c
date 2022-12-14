@@ -626,7 +626,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
     {                                                                         \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
-          FIRSTPREFIX fprintf (dat->fh, FORMAT_##type, _obj->nam[vcount]); \
+          FIRSTPREFIX fprintf (dat->fh, FORMAT_##type, _obj->nam[vcount]);    \
         }                                                                     \
     }                                                                         \
   else                                                                        \

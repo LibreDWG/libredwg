@@ -3525,7 +3525,7 @@ DWG_OBJECT (LTYPE)
 #ifndef IS_JSON
     FIELD_VECTOR_INL (dashes_r11, RD, 12, 49);
 #else
-    FIELD_VECTOR (dashes_r11, RD, num_dashes, 49);
+    FIELD_VECTOR_N (dashes_r11, RD, 12, 49);
 #endif
   }
   SINCE (R_13)
