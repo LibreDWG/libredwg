@@ -1326,6 +1326,8 @@ json_cquote (char *restrict dest, const char *restrict src, const int len)
   unsigned char *s = (unsigned char *)src;
   const char* endp = dest + len;
   char *d = dest;
+  if (!src)
+    return (char *)"";
   while ((c = *s++))
     {
       if (dest >= endp)
