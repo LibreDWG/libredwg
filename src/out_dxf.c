@@ -121,17 +121,20 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
   }
 #define VALUE_BINARY(value, size, dxf)                                        \
   {                                                                           \
-    if (value && dxf)                                                         \
+    if (dxf)                                                                  \
       {                                                                       \
+        if (!size)                                                            \
+          GROUP (dxf);                                                        \
         for (unsigned long j = 0; j < (unsigned long)(size); j++)             \
           {                                                                   \
-            if (!(j % 127))                                                   \
+            if ((j % 127) == 0)                                               \
               {                                                               \
                 if (j)                                                        \
                   fprintf (dat->fh, "\r\n");                                  \
                 GROUP (dxf);                                                  \
               }                                                               \
-            fprintf (dat->fh, "%02X", (value)[j]);                            \
+            if (value)                                                        \
+              fprintf (dat->fh, "%02X", (value)[j]);                          \
           }                                                                   \
         fprintf (dat->fh, "\r\n");                                            \
       }                                                                       \
@@ -1256,8 +1259,12 @@ dxf_write_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
               fprintf (dat->fh, "%9lu\r\n", (unsigned long)data->u.eed_3.layer);
               //VALUE_RLL (data->u.eed_3.layer, dxf);
               break;
-            case 4: VALUE_BINARY (data->u.eed_4.data, data->u.eed_4.length, dxf); break;
-            case 5: VALUE_H (data->u.eed_5.entity, dxf); break; // not in DXF
+            case 4:
+              VALUE_BINARY (data->u.eed_4.data, data->u.eed_4.length, dxf);
+              break;
+            case 5:
+              VALUE_H (data->u.eed_5.entity, dxf);
+              break; // not in DXF
             case 10:
             case 11:
             case 12:
