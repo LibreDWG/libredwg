@@ -666,6 +666,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int tbl_id;
   int error = 0;
   int num_sections = 5;
+  Bit_Chain dat_save = *dat;
 
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
 #ifndef USE_WRITE
@@ -728,6 +729,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
     // The 5 tables (num_sections always 5): 3 RS + 1 RL address
     LOG_INFO ("==========================================\n")
+    dat_save = *dat;
     if (decode_preR13_section_hdr ("BLOCK", SECTION_BLOCK, dat, dwg)
         || decode_preR13_section_hdr ("LAYER", SECTION_LAYER, dat, dwg)
         || decode_preR13_section_hdr ("STYLE", SECTION_STYLE, dat, dwg)
@@ -844,25 +846,37 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   //dat->byte += 20; /* crc + sentinel? 20 byte */
   if (!dwg->next_hdl)
     dwg_set_next_hdl (dwg, 0x22);
+  dat_save = *dat;
   if (decode_preR13_section (SECTION_BLOCK, dat, dwg)
        || decode_preR13_section (SECTION_LAYER, dat, dwg)
        || decode_preR13_section (SECTION_STYLE, dat, dwg)
        || decode_preR13_section (SECTION_LTYPE, dat, dwg)
        || decode_preR13_section (SECTION_VIEW, dat, dwg))
-    return DWG_ERR_SECTIONNOTFOUND;
+    {
+      *dat = dat_save;
+      return DWG_ERR_SECTIONNOTFOUND;
+    }
 #if 1
   if (num_sections > 5) // r10
     {
+      dat_save = *dat;
       if (decode_preR13_section (SECTION_UCS, dat, dwg)
           || decode_preR13_section (SECTION_VPORT, dat, dwg)
           || decode_preR13_section (SECTION_APPID, dat, dwg))
-        return DWG_ERR_SECTIONNOTFOUND;
+        {
+          *dat = dat_save;
+          return DWG_ERR_SECTIONNOTFOUND;
+        }
     }
   if (num_sections > 8) // r11
     {
+      dat_save = *dat;
       if (decode_preR13_section (SECTION_DIMSTYLE, dat, dwg)
           || decode_preR13_section (SECTION_VX, dat, dwg))
-        return DWG_ERR_SECTIONNOTFOUND;
+        {
+          *dat = dat_save;
+          return DWG_ERR_SECTIONNOTFOUND;
+        }
     }
 #endif
   if (error >= DWG_ERR_CRITICAL)
