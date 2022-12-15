@@ -380,7 +380,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             FIELD_RC (generation, 71);
             FIELD_RD (last_height, 42);
             SINCE (R_11)
-              FIELD_RS (unknown, 0);
+              FIELD_RSd (used, 0);
             FIELD_TFv (font_file, 64, 3)    // 8ed
             SINCE (R_11)
               FIELD_TFv (bigfont_file, 64, 4); // 92d
