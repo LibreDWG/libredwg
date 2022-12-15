@@ -472,7 +472,9 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (dwg->header_vars.size > MAX_HEADER_SIZE)
     {
       LOG_WARN ("Fixup illegal Header Length");
-      dwg->header_vars.size = dwg->header.section[SECTION_HEADER_R13].size - 16 - 4;
+      dwg->header_vars.size = dwg->header.section[SECTION_HEADER_R13].size;
+      if (dwg->header_vars.size > 20)
+        dwg->header_vars.size -= 16 + 4;
     }
   dat->bit = 0;
 
@@ -798,7 +800,8 @@ handles_section:
   LOG_INFO ("\n"
             "=======> Last Object      : %8lu\n",
             (unsigned long)object_begin)
-  dat->byte = object_end;
+  if (object_end <= dat->size)
+    dat->byte = object_end;
   object_begin = bit_read_MS (dat);
   LOG_TRACE ("last object size: %lu [MS] (@%lu)\n", object_begin, object_end)
   LOG_INFO ("         Last Object (end): %8lu\n",
