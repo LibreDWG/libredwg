@@ -466,26 +466,41 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // after sentinel
   dat->byte = pvz = dwg->header.section[SECTION_HEADER_R13].address + 16;
   // LOG_HANDLE ("@ 0x%lx.%lu\n", bit_position (dat)/8, bit_position (dat)%8);
+#define MAX_HEADER_SIZE 2048
   dwg->header_vars.size = bit_read_RL (dat);
   LOG_TRACE ("         Length: " FORMAT_RL " [RL]\n", dwg->header_vars.size)
+  if (dwg->header_vars.size > MAX_HEADER_SIZE)
+    {
+      LOG_WARN ("Fixup illegal Header Length");
+      dwg->header_vars.size = dwg->header.section[SECTION_HEADER_R13].size - 16 - 4;
+    }
   dat->bit = 0;
 
   error |= dwg_decode_header_variables (dat, dat, dat, dwg);
 
   // LOG_HANDLE ("@ 0x%lx.%lu\n", bit_position (dat)/8, bit_position (dat)%8);
   // check slack
-  if (dat->bit || dat->byte != pvz + dwg->header_vars.size + 4)
-    {
-      unsigned char r = 8 - dat->bit;
-      LOG_HANDLE (" padding: %ld byte, %d bits\n",
-                  pvz + dwg->header_vars.size + 4 - dat->byte, r);
-    }
   // Check CRC, hardcoded to 2 before end sentinel
-  LOG_HANDLE (" crc pos: %lu\n", pvz + dwg->header_vars.size + 4);
-  bit_set_position (dat, (pvz + dwg->header_vars.size + 4) * 8);
-  crc = bit_read_RS (dat);
-  LOG_TRACE ("crc: %04X [RSx] from %lu-%lu=%ld\n", crc, pvz, dat->byte - 2,
-             dat->byte - 2 - pvz);
+  if (dwg->header_vars.size < MAX_HEADER_SIZE)
+    {
+      unsigned long crcpos = pvz + dwg->header_vars.size + 4;
+      if (dat->bit || dat->byte != crcpos)
+        {
+          unsigned char r = 8 - dat->bit;
+          LOG_HANDLE (" padding: %ld byte, %d bits\n", crcpos - dat->byte, r);
+        }
+      LOG_HANDLE (" crc pos: %lu\n", crcpos);
+      bit_set_position (dat, crcpos * 8);
+      crc = bit_read_RS (dat);
+      LOG_TRACE ("crc: %04X [RSx] from %lu-%lu=%ld\n", crc, pvz, dat->byte - 2,
+                 dat->byte - 2 - pvz);
+    }
+  else
+    {
+      LOG_WARN ("Skip crc with illegal Header Length");
+      error |= DWG_ERR_SECTIONNOTFOUND;
+      goto classes_section;
+    }
   crc2 = 0;
   // LOG_HANDLE ("@ 0x%lx\n", bit_position (dat)/8);
   // LOG_HANDLE ("HEADER_R13.address of size 0x%lx\n", pvz);
