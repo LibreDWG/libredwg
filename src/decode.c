@@ -595,6 +595,14 @@ classes_section:
       != dwg->header.section[SECTION_CLASSES_R13].size
              - ((sentinel_size * 2) + 6))
     {
+      if (dwg->header.section[SECTION_CLASSES_R13].size > dat->size - dat->byte
+          // minimal class size
+          || dwg->header.section[SECTION_CLASSES_R13].size < 8)
+        {
+          LOG_ERROR ("Invalid Classes section, skipped")
+          error |= DWG_ERR_SECTIONNOTFOUND;
+          goto handles_section;
+        }
       endpos = dwg->header.section[SECTION_CLASSES_R13].address
                + dwg->header.section[SECTION_CLASSES_R13].size - sentinel_size;
       LOG_ERROR ("Invalid size %" PRIuSIZE ", should be: " FORMAT_RL
@@ -821,7 +829,11 @@ handles_section:
           LOG_HANDLE (" Offset: " FORMAT_MC " [MC] @%" PRIuSIZE, offset,
                       last_offset)
           LOG_TRACE ("\n")
-
+          if (last_offset > section_size)
+            {
+              LOG_ERROR ("offset overflow")
+              break;
+            }
           if (dat->byte == oldpos)
             break;
 
@@ -857,6 +869,8 @@ handles_section:
       LOG_TRACE ("\nHandles page crc: %04X [RSx_BE] (%" PRIuSIZE "-%" PRIuSIZE
                  " = %u)\n",
                  crc, startpos, startpos + section_size, section_size);
+      if (last_offset > section_size)
+        break;
       crc2 = bit_calc_CRC (0xC0C1, dat->chain + startpos, section_size);
       if (crc != crc2)
         {
