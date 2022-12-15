@@ -403,18 +403,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
               FIELD_RCu (num_dashes, 73); //
               FIELD_RD (pattern_len, 40);
 #ifndef IS_JSON
-              FIELD_RD (dashes_r11[0], 49);
-              FIELD_RD (dashes_r11[1], 49);
-              FIELD_RD (dashes_r11[2], 49);
-              FIELD_RD (dashes_r11[3], 49);
-              FIELD_RD (dashes_r11[4], 49);
-              FIELD_RD (dashes_r11[5], 49);
-              FIELD_RD (dashes_r11[6], 49);
-              FIELD_RD (dashes_r11[7], 49);
-              FIELD_RD (dashes_r11[8], 49);
-              FIELD_RD (dashes_r11[9], 49);
-              FIELD_RD (dashes_r11[10], 49);
-              FIELD_RD (dashes_r11[11], 49);
+              FIELD_VECTOR_INL (dashes_r11, RD, 12, 49);
 #else
               FIELD_VECTOR_N (dashes_r11, RD, 12, 49);
 #endif

@@ -3508,6 +3508,7 @@ DWG_OBJECT (LTYPE)
 
   PRE (R_13) {
 #ifndef IS_JSON
+  if (dwg->header.version == R_11)
     FIELD_RSd (used, 0); // -1
 #endif
     FIELD_TFv (description, 48, 3);
@@ -3527,6 +3528,10 @@ DWG_OBJECT (LTYPE)
 #else
     FIELD_VECTOR_N (dashes_r11, RD, 12, 49);
 #endif
+    PRE (R_11) {
+      if (obj->size > 187) // !! encode,add
+        FIELD_RC (unknown_r11, 0);
+    }
   }
   SINCE (R_13)
   {
