@@ -113,7 +113,8 @@ bit_reset_chain (Bit_Chain *dat)
 
 #ifdef DWG_ABORT
 #  define CHK_OVERFLOW(func, retval)                                          \
-    if ((dat->byte * 8) + dat->bit > dat->size * 8)                           \
+    if (dat->byte > dat->size ||                                              \
+        ((dat->byte * 8) + dat->bit > dat->size * 8))                         \
       {                                                                       \
         loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                             \
         LOG_ERROR ("%s buffer overflow at %lu.%u > %lu", func, dat->byte,     \
@@ -124,7 +125,8 @@ bit_reset_chain (Bit_Chain *dat)
       }
 #else
 #  define CHK_OVERFLOW(func, retval)                                          \
-    if ((dat->byte * 8) + dat->bit > dat->size * 8)                           \
+    if (dat->byte > dat->size ||                                              \
+        ((dat->byte * 8) + dat->bit > dat->size * 8))                         \
       {                                                                       \
         loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                             \
         LOG_ERROR ("%s buffer overflow at %lu.%u > %lu", func, dat->byte,     \
@@ -134,7 +136,8 @@ bit_reset_chain (Bit_Chain *dat)
 #endif
 
 #define CHK_OVERFLOW_PLUS(plus, func, retval)                                 \
-    if (((dat->byte + plus) * 8) + dat->bit > dat->size * 8)                  \
+    if (dat->byte + plus > dat->size ||                                       \
+        (((dat->byte + plus) * 8) + dat->bit > dat->size * 8))                \
       {                                                                       \
         loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                             \
         LOG_ERROR ("%s buffer overflow at %lu.%u + %d > %lu", func, dat->byte,\
