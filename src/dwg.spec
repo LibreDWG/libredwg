@@ -26,7 +26,7 @@
 DWG_ENTITY (TEXT)
 
   SUBCLASS (AcDbText)
-  PRE (R_13) {
+  PRE (R_13b1) {
     FIELD_2RD (ins_pt, 10);
     FIELD_RD (height, 40);
     PRE (R_2_0)
@@ -49,7 +49,7 @@ DWG_ENTITY (TEXT)
     if (R11OPTS (256))
       FIELD_CAST (vert_alignment, RC, BS, 73);
   }
-  VERSIONS (R_13, R_14)
+  VERSIONS (R_13b1, R_14)
     {
       DXF {
         FIELD_BD0 (thickness, 39);
@@ -149,7 +149,7 @@ DWG_ENTITY (TEXT)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-  SINCE (R_13)
+  SINCE (R_13b1)
     {
       IF_ENCODE_FROM_PRE_R13 {
         //FIXME: should really just lookup the style table; style is the index.
@@ -166,7 +166,7 @@ DWG_ENTITY_END
 DWG_ENTITY (ATTRIB)
 
   SUBCLASS (AcDbText)
-  PRE (R_13)
+  PRE (R_13b1)
     {
       FIELD_2RD (ins_pt, 10);
       FIELD_RD (height, 40);
@@ -195,7 +195,7 @@ DWG_ENTITY (ATTRIB)
         FIELD_2RD (alignment_pt, 11);
       }
     }
-  VERSIONS (R_13, R_14)
+  VERSIONS (R_13b1, R_14)
     {
       DXF {
         FIELD_2RD (ins_pt, 10);
@@ -317,7 +317,7 @@ DWG_ENTITY (ATTRIB)
         }
     }
 
-  SINCE (R_13)
+  SINCE (R_13b1)
     {
       FIELD_T (tag, 0);
       FIELD_BS0 (field_length, 0);
@@ -329,7 +329,7 @@ DWG_ENTITY (ATTRIB)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_HANDLE (style, 5, 0); // unexpected here in DXF
   }
 
@@ -339,7 +339,7 @@ DWG_ENTITY_END
 DWG_ENTITY (ATTDEF)
 
   SUBCLASS (AcDbText)
-  PRE (R_13)
+  PRE (R_13b1)
     {
       FIELD_2RD (ins_pt, 10);
       FIELD_RD (height, 40);
@@ -372,7 +372,7 @@ DWG_ENTITY (ATTDEF)
         FIELD_2RD (alignment_pt, 11);
       }
     }
-  VERSIONS (R_13, R_14)
+  VERSIONS (R_13b1, R_14)
     {
       DXF {
         FIELD_2RD (ins_pt, 10);
@@ -473,7 +473,7 @@ DWG_ENTITY (ATTDEF)
     FIELD_T (prompt, 3);
     FIELD_T (tag, 2);
     FIELD_RC (type, 70);
-    SINCE (R_13) {
+    SINCE (R_13b1) {
       //FIELD_BS (field_length, 73);
       FIELD_BS0 (vert_alignment, 74);
     }
@@ -507,7 +507,7 @@ DWG_ENTITY (ATTDEF)
             }
         }
     }
-  SINCE (R_13)
+  SINCE (R_13b1)
   {
     FIELD_T (tag, 0);
     FIELD_BS (field_length, 0); //DXF 73, unused
@@ -524,7 +524,7 @@ DWG_ENTITY (ATTDEF)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
-  SINCE (R_13)
+  SINCE (R_13b1)
     FIELD_HANDLE (style, 5, 0);
 
 DWG_ENTITY_END
@@ -595,7 +595,7 @@ DWG_ENTITY_END
 DWG_ENTITY (SEQEND)
 
   //SUBCLASS (AcDbSequenceEnd) //unused
-  PRE (R_13) {
+  PRE (R_13b1) {
     FIELD_RL (unknown_r11, 0);
   }
   COMMON_ENTITY_HANDLE_DATA;
@@ -655,10 +655,10 @@ DWG_ENTITY (INSERT)
       FIELD_RD (row_spacing, 45);
     }
   }
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_3DPOINT (ins_pt, 10);
   }
-  VERSIONS (R_13, R_14)
+  VERSIONS (R_13b1, R_14)
     {
       FIELD_3BD_1 (scale, 41); // 42,43
     }
@@ -737,7 +737,7 @@ DWG_ENTITY (INSERT)
         }
     }
 
-  PRE (R_13) {
+  PRE (R_13b1) {
     DXF { FIELD_BE (extrusion, 210); } // in DWG?
   }
   LATER_VERSIONS {
@@ -757,10 +757,10 @@ DWG_ENTITY (INSERT)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_HANDLE (block_header, 5, 0);
   }
-  VERSIONS (R_13, R_2000)
+  VERSIONS (R_13b1, R_2000)
     {
       if (FIELD_VALUE (has_attribs))
         {
@@ -779,7 +779,7 @@ DWG_ENTITY (INSERT)
         }
     }
 
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     if (FIELD_VALUE (has_attribs)) {
       FIELD_HANDLE (seqend, 3, 0);
     }
@@ -798,7 +798,7 @@ DWG_ENTITY (MINSERT)
 #endif
   FIELD_3DPOINT (ins_pt, 10);
 
-  VERSIONS (R_13, R_14) {
+  VERSIONS (R_13b1, R_14) {
     FIELD_3BD_1 (scale, 41);
   }
 
@@ -899,7 +899,7 @@ DWG_ENTITY (MINSERT)
 
   COMMON_ENTITY_HANDLE_DATA;
   FIELD_HANDLE (block_header, 5, 0);
-  IF_FREE_OR_VERSIONS (R_13, R_2000)
+  IF_FREE_OR_VERSIONS (R_13b1, R_2000)
   {
     if (FIELD_VALUE (has_attribs))
       {
@@ -952,7 +952,7 @@ DWG_ENTITY (VERTEX_2D)
 
   SUBCLASS (AcDbVertex)
   SUBCLASS (AcDb2dVertex)
-  PRE (R_13)
+  PRE (R_13b1)
   {
 #ifdef IN_JSON
     FIELD_3RD (point, 10)
@@ -980,7 +980,7 @@ DWG_ENTITY (VERTEX_2D)
     //   if (FIELD_VALUE (vertind[3]))
     //    FIELD_RS (vertind[3], 74);
   }
-  SINCE (R_13)
+  SINCE (R_13b1)
   {
     FIELD_RC (flag, 0);
     FIELD_3BD (point, 10);
@@ -1052,7 +1052,7 @@ DWG_ENTITY (VERTEX_3D)
 
   SUBCLASS (AcDbVertex)
   SUBCLASS (AcDb3dPolylineVertex)
-  PRE (R_13)
+  PRE (R_13b1)
   {
     FIELD_VALUE (flag) = R11FLAG (255);
     if (R11FLAG (FLAG_R11_ELEVATION)) {
@@ -1076,7 +1076,7 @@ DWG_ENTITY (VERTEX_MESH)
 
   SUBCLASS (AcDbVertex)
   SUBCLASS (AcDbPolyFaceMeshVertex)
-  PRE (R_13)
+  PRE (R_13b1)
   {
     FIELD_VALUE (flag) = R11FLAG (255);
     FIELD_3RD (point, 10);
@@ -1096,7 +1096,7 @@ DWG_ENTITY (VERTEX_PFACE)
 
   SUBCLASS (AcDbVertex)
   SUBCLASS (AcDbPolyFaceMeshVertex)
-  PRE (R_13)
+  PRE (R_13b1)
   {
     FIELD_VALUE (flag) = R11FLAG (255);
     FIELD_3RD (point, 10);
@@ -1133,7 +1133,7 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
   }
 #else
   //FIELD_VALUE (pt) = { 0.0, 0.0, 0.0 };
-  PRE (R_13)
+  PRE (R_13b1)
   {
     FIELD_VALUE (flag) = R11FLAG (255);
     FIELD_RS (vertind[0], 71);
@@ -1162,7 +1162,7 @@ DWG_ENTITY (POLYLINE_2D)
 
   //SUBCLASS (AcDbCurve)
   SUBCLASS (AcDb2dPolyline)
-  PRE (R_13)
+  PRE (R_13b1)
   {
     if (R11OPTS (1))
       FIELD_RC (has_vertex, 66);
@@ -1173,7 +1173,7 @@ DWG_ENTITY (POLYLINE_2D)
     //if (R11OPTS (8)) // but this is already in flags_r11 70
     //  FIELD_RS (curve_type, 75);
   }
-  SINCE (R_13)
+  SINCE (R_13b1)
   {
     DXF {
       FIELD_B (has_vertex, 66);
@@ -1205,7 +1205,7 @@ DWG_ENTITY (POLYLINE_2D)
   }
   COMMON_ENTITY_HANDLE_DATA;
 
-  IF_FREE_OR_VERSIONS (R_13, R_2000)
+  IF_FREE_OR_VERSIONS (R_13b1, R_2000)
     {
       FIELD_HANDLE (first_vertex, 4, 0);
       FIELD_HANDLE (last_vertex, 4, 0);
@@ -1216,7 +1216,7 @@ DWG_ENTITY (POLYLINE_2D)
       HANDLE_VECTOR (vertex, num_owned, 3, 0);
     }
 
-  IF_FREE_OR_SINCE (R_13)
+  IF_FREE_OR_SINCE (R_13b1)
     {
       FIELD_HANDLE (seqend, 3, 0);
     }
@@ -1237,7 +1237,7 @@ DWG_ENTITY (POLYLINE_3D)
   else {
     FIELD_VALUE (has_vertex) = 1;
   }
-  PRE (R_13)
+  PRE (R_13b1)
   {
     FIELD_VALUE (flag) = R11FLAG (255);
     if (R11OPTS (16)) // 3dmesh only
@@ -1258,7 +1258,7 @@ DWG_ENTITY (POLYLINE_3D)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
-  IF_FREE_OR_VERSIONS (R_13, R_2000)
+  IF_FREE_OR_VERSIONS (R_13b1, R_2000)
     {
       FIELD_HANDLE (first_vertex, 4, 0);
       FIELD_HANDLE (last_vertex, 4, 0);
@@ -1267,7 +1267,7 @@ DWG_ENTITY (POLYLINE_3D)
     {
       HANDLE_VECTOR (vertex, num_owned, 3, 0);
     }
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_HANDLE (seqend, 3, 0);
   }
 
@@ -1278,7 +1278,7 @@ DWG_ENTITY (ARC)
 
   //SUBCLASS (AcDbCurve)
   SUBCLASS (AcDbCircle)
-  PRE (R_13) {
+  PRE (R_13b1) {
     FIELD_2RD (center, 10);
     FIELD_RD (radius, 40);
     FIELD_RD (start_angle, 50);
@@ -1307,7 +1307,7 @@ DWG_ENTITY (CIRCLE)
 
   //SUBCLASS (AcDbCurve)
   SUBCLASS (AcDbCircle)
-  PRE (R_13) {
+  PRE (R_13b1) {
     FIELD_2RD (center, 10);
     FIELD_RD (radius, 40);
     if (R11OPTS (1))
@@ -1344,7 +1344,7 @@ DWG_ENTITY (LINE)
       FIELD_3RD (end, 11)
     }
   }
-  VERSIONS (R_13, R_14)
+  VERSIONS (R_13b1, R_14)
     {
       FIELD_3BD (start, 10);
       FIELD_3BD (end, 11);
@@ -1384,7 +1384,7 @@ DWG_ENTITY (LINE)
         }
     }
 
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_BT0 (thickness, 39);
     FIELD_BE (extrusion, 210);
   }
@@ -1404,7 +1404,7 @@ DWG_ENTITY_END
       FIELD_RC (class_version, 280); /* 0=r2010 */                            \
       VALUEOUTOFBOUNDS (class_version, 10)                                    \
     }                                                                         \
-    PRE (R_13)                                                                \
+    PRE (R_13b1)                                                                \
     {                                                                         \
       FIELD_HANDLE (block, 2, 2);                                             \
       if (!(R11FLAG (2))) {                                                   \
@@ -1471,7 +1471,7 @@ DWG_ENTITY_END
     }                                                                         \
     else                                                                      \
     {                                                                         \
-      SINCE (R_13)                                                            \
+      SINCE (R_13b1)                                                            \
       {                                                                       \
         FIELD_T (user_text, 1);                                               \
         FIELD_BD0 (text_rotation, 53);                                        \
@@ -1493,7 +1493,7 @@ DWG_ENTITY_END
       FIELD_B (flip_arrow1, 74);                                              \
       FIELD_B (flip_arrow2, 75);                                              \
     }                                                                         \
-    SINCE (R_13) {                                                            \
+    SINCE (R_13b1) {                                                            \
       FIELD_2RD0 (clone_ins_pt, 12);                                          \
     }                                                                         \
     DXF                                                                       \
@@ -1512,7 +1512,7 @@ DWG_ENTITY (DIMENSION_ORDINATE)
 
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbOrdinateDimension)
-  PRE (R_13) {
+  PRE (R_13b1) {
     if (R11OPTS (8)) { // if dxf 13 (extension_defining_pt)
       // TODO 2d if ANG2LN or opts 8
       FIELD_3RD (feature_location_pt, 13);
@@ -1536,7 +1536,7 @@ DWG_ENTITY (DIMENSION_ORDINATE)
   }
   JSON { FIELD_RC (flag, 0); }
 
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     COMMON_ENTITY_HANDLE_DATA;
     FIELD_HANDLE (dimstyle, 5, 0);
     FIELD_HANDLE (block, 5, 0);
@@ -1549,7 +1549,7 @@ DWG_ENTITY (DIMENSION_LINEAR)
 
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbAlignedDimension)
-  PRE (R_13) {
+  PRE (R_13b1) {
     FIELD_2RD (xline1_pt, 13);
     FIELD_2RD (xline2_pt, 14);
   } LATER_VERSIONS {
@@ -1577,7 +1577,7 @@ DWG_ENTITY (DIMENSION_ALIGNED)
 
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbAlignedDimension)
-  PRE (R_13) {
+  PRE (R_13b1) {
     FIELD_2RD (xline1_pt, 13);
     FIELD_2RD (xline2_pt, 14);
     if (R11OPTS (0x100))
@@ -1599,7 +1599,7 @@ DWG_ENTITY (DIMENSION_ANG3PT)
 
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDb3PointAngularDimension)
-  PRE (R_13) {
+  PRE (R_13b1) {
     FIELD_2RD (def_pt, 0);
     FIELD_2RD (xline1_pt, 13);
     FIELD_2RD (xline2_pt, 14);
@@ -1624,7 +1624,7 @@ DWG_ENTITY (DIMENSION_ANG2LN)
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDb2LineAngularDimension)
   JSON { FIELD_3RD (def_pt, 0) }
-  PRE (R_13) {
+  PRE (R_13b1) {
     FIELD_2RD (xline1start_pt, 13);
     FIELD_2RD (xline1end_pt, 14);
     FIELD_2RD (xline2start_pt, 15);
@@ -1638,7 +1638,7 @@ DWG_ENTITY (DIMENSION_ANG2LN)
     FIELD_3BD (xline2start_pt, 15);
     FIELD_3BD (xline2end_pt, 16);
   }
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     COMMON_ENTITY_HANDLE_DATA;
     FIELD_HANDLE (dimstyle, 5, 0);
     FIELD_HANDLE (block, 5, 0);
@@ -1651,7 +1651,7 @@ DWG_ENTITY (DIMENSION_RADIUS)
 
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbRadialDimension)
-  PRE (R_13) {
+  PRE (R_13b1) {
     //FIELD_2RD (def_pt, 0);
     FIELD_2RD (first_arc_pt, 15);
     FIELD_RD (leader_len, 40);
@@ -1672,7 +1672,7 @@ DWG_ENTITY (DIMENSION_DIAMETER)
 
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbDiametricDimension)
-  PRE (R_13) {
+  PRE (R_13b1) {
     FIELD_2RD (first_arc_pt, 15);
     FIELD_RD (leader_len, 40);
   } LATER_VERSIONS {
@@ -1707,7 +1707,7 @@ DWG_ENTITY_END
 DWG_ENTITY (POINT)
 
   SUBCLASS (AcDbPoint)
-  PRE (R_13) {
+  PRE (R_13b1) {
     FIELD_RD (x, 10);
     FIELD_RD (y, 20);
     SINCE (R_10) {
@@ -1757,7 +1757,7 @@ DWG_ENTITY (_3DFACE)
       FIELD_2RD (corner4, 13)
     }
   }
-  VERSIONS (R_10, R_13)
+  VERSIONS (R_10, R_11)
     {
       if (R11FLAG (FLAG_R11_ELEVATION)) {
         FIELD_2RD (corner1, 10)
@@ -1772,7 +1772,7 @@ DWG_ENTITY (_3DFACE)
         FIELD_3RD (corner4, 13)
       }
     }
-  VERSIONS (R_13, R_14)
+  VERSIONS (R_13b1, R_14)
     {
       FIELD_3BD (corner1, 10);
       FIELD_3BD (corner2, 11);
@@ -1831,7 +1831,7 @@ DWG_ENTITY (POLYLINE_PFACE)
   else {
     FIELD_VALUE (has_vertex) = 1;
   }
-  PRE (R_13) {
+  PRE (R_13b1) {
     FIELD_RS (numverts, 71);
     FIELD_RS (numfaces, 72);
   }
@@ -1845,7 +1845,7 @@ DWG_ENTITY (POLYLINE_PFACE)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
-  IF_FREE_OR_VERSIONS (R_13, R_2000)
+  IF_FREE_OR_VERSIONS (R_13b1, R_2000)
     {
       FIELD_HANDLE (first_vertex, 4, 0);
       FIELD_HANDLE (last_vertex, 4, 0);
@@ -1854,7 +1854,7 @@ DWG_ENTITY (POLYLINE_PFACE)
     {
       HANDLE_VECTOR (vertex, num_owned, 4, 0);
     }
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_HANDLE (seqend, 3, 0);
   }
 
@@ -1871,7 +1871,7 @@ DWG_ENTITY (POLYLINE_MESH)
     KEY (elevation); VALUE_3BD (pt, 10);
     KEY (flag); VALUE_BS (flag | 16, 70);
   }
-  PRE (R_13) {
+  PRE (R_13b1) {
     if (R11OPTS (16)) // 3dmesh
       FIELD_CAST (curve_type, RC, BS, 75);
     FIELD_RS (num_m_verts, 71);
@@ -1893,7 +1893,7 @@ DWG_ENTITY (POLYLINE_MESH)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
-  VERSIONS (R_13, R_2000)
+  VERSIONS (R_13b1, R_2000)
     {
       FIELD_HANDLE (first_vertex, 4, 0);
       FIELD_HANDLE (last_vertex, 4, 0);
@@ -1903,7 +1903,7 @@ DWG_ENTITY (POLYLINE_MESH)
       VALUEOUTOFBOUNDS (num_owned, 100000)
       HANDLE_VECTOR (vertex, num_owned, 4, 0);
     }
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_HANDLE (seqend, 3, 0);
   }
 
@@ -1913,7 +1913,7 @@ DWG_ENTITY_END
 DWG_ENTITY (SOLID)
 
   SUBCLASS (AcDbTrace)
-  PRE (R_13) {
+  PRE (R_13b1) {
     FIELD_2RD (corner1, 10);
     FIELD_2RD (corner2, 11);
     FIELD_2RD (corner3, 12);
@@ -1941,7 +1941,7 @@ DWG_ENTITY_END
 DWG_ENTITY (TRACE)
 
   SUBCLASS (AcDbTrace)
-  PRE (R_13) {
+  PRE (R_13b1) {
     FIELD_2RD (corner1, 10);
     FIELD_2RD (corner2, 11);
     FIELD_2RD (corner3, 12);
@@ -2043,7 +2043,7 @@ DWG_ENTITY_END
 DWG_ENTITY (VIEWPORT)
 
   SUBCLASS (AcDbViewport)
-  PRE (R_13) {
+  PRE (R_13b1) {
     FIELD_3RD (center, 10);
     FIELD_RD (width, 40);
     FIELD_RD (height, 41);
@@ -2146,7 +2146,7 @@ DWG_ENTITY (VIEWPORT)
   }
 
   COMMON_ENTITY_HANDLE_DATA;
-  VERSIONS (R_13, R_14) {
+  VERSIONS (R_13b1, R_14) {
     FIELD_HANDLE (vport_entity_header, 5, 0);
   }
   VERSION (R_2000) {
@@ -3054,7 +3054,7 @@ DWG_ENTITY (LEADER)
   VERSIONS (R_14, R_2007) {
     FIELD_3DPOINT (endptproj, 0);
   }
-  VERSIONS (R_13, R_14) {
+  VERSIONS (R_13b1, R_14) {
     FIELD_BD (dimgap, 0);
   }
 
@@ -3064,7 +3064,7 @@ DWG_ENTITY (LEADER)
   FIELD_B (arrowhead_on, 0);
   FIELD_BS (arrowhead_type, 0);
 
-  VERSIONS (R_13, R_14)
+  VERSIONS (R_13b1, R_14)
     {
       FIELD_BD (dimasz, 0);
       FIELD_B (unknown_bit_2, 0);
@@ -3082,7 +3082,7 @@ DWG_ENTITY (LEADER)
     }
 
   COMMON_ENTITY_HANDLE_DATA;
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_HANDLE (associated_annotation, 2, 340);
   }
   FIELD_HANDLE (dimstyle, 5, 0); // ODA bug, DXF documented as 2
@@ -3094,7 +3094,7 @@ DWG_ENTITY (TOLERANCE)
 
   SUBCLASS (AcDbFcf)   // for Feature Control Frames
   DXF { FIELD_HANDLE (dimstyle, 5, 3); }
-  VERSIONS (R_13, R_14)
+  VERSIONS (R_13b1, R_14)
     {
       FIELD_BS (unknown_short, 0); //ODA typo: Spec says S instead of BS.
       FIELD_BD (height, 0);
@@ -3187,7 +3187,7 @@ DWG_OBJECT (BLOCK_HEADER)
     return 0;
   }
 
-  PRE (R_13)
+  PRE (R_13b1)
   {
     FIELD_RC (block_scaling, 0);
     PRE (R_11) {
@@ -3208,7 +3208,7 @@ DWG_OBJECT (BLOCK_HEADER)
     FIELD_VALUE (blkisxref)    = FIELD_VALUE (flag) & 4;
     FIELD_VALUE (xrefoverlaid) = FIELD_VALUE (flag) & 8;
   }
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_B (anonymous, 0); // bit 1
     FIELD_B (hasattrs, 0);  // bit 2
     FIELD_B (blkisxref, 0); // bit 4
@@ -3217,7 +3217,7 @@ DWG_OBJECT (BLOCK_HEADER)
   SINCE (R_2000) {
     FIELD_B (loaded_bit, 0); // bit 32
   }
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_VALUE (flag) |= FIELD_VALUE (anonymous) |
                           FIELD_VALUE (hasattrs) << 1 |
                           FIELD_VALUE (blkisxref) << 2 |
@@ -3231,7 +3231,7 @@ DWG_OBJECT (BLOCK_HEADER)
       }
   }
 
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_3DPOINT (base_pt, 10);
     FIELD_T (xref_pname, 1); // and 3
   }
@@ -3258,12 +3258,12 @@ DWG_OBJECT (BLOCK_HEADER)
       FIELD_RC (block_scaling, 281);
     }
 
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     START_OBJECT_HANDLE_STREAM;
     FIELD_HANDLE (block_entity, 3, 0);
   }
 
-  VERSIONS (R_13, R_2000)
+  VERSIONS (R_13b1, R_2000)
     {
       if (!FIELD_VALUE (blkisxref) && !FIELD_VALUE (xrefoverlaid))
         {
@@ -3277,7 +3277,7 @@ DWG_OBJECT (BLOCK_HEADER)
         HANDLE_VECTOR (entities, num_owned, 4, 0);
       }
     }
-  IF_FREE_OR_SINCE (R_13) {
+  IF_FREE_OR_SINCE (R_13b1) {
     FIELD_HANDLE (endblk_entity, 3, 0);
   }
   IF_FREE_OR_SINCE (R_2000)
@@ -3303,7 +3303,7 @@ DWG_OBJECT_END
 DWG_OBJECT (LAYER)
 
   COMMON_TABLE_FLAGS (Layer);
-  PRE (R_13) {
+  PRE (R_13b1) {
     FIELD_CMC (color, 62);
     FIELD_HANDLE (ltype, 2, 6);
 
@@ -3314,7 +3314,7 @@ DWG_OBJECT (LAYER)
       FIELD_VALUE (locked)        = FIELD_VALUE (flag) & 4;
     }
   }
-  VERSIONS (R_13, R_14) {
+  VERSIONS (R_13b1, R_14) {
     FIELD_B (frozen, 0); // bit 1
     FIELD_B (on, 0);     // really: negate the color
     FIELD_B (frozen_in_new, 0);
@@ -3345,10 +3345,10 @@ DWG_OBJECT (LAYER)
       FIELD_RC (linewt, 370);
     }
   }
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_CMC (color, 62);
   }
-  VERSIONS (R_13, R_14) {
+  VERSIONS (R_13b1, R_14) {
     DECODER { FIELD_VALUE (on) = FIELD_VALUE (color.index) >= 0; }
     // for DWG
     FIELD_VALUE (flag0) |= FIELD_VALUE (frozen) |
@@ -3369,7 +3369,7 @@ DWG_OBJECT (LAYER)
   SINCE (R_2007) {
     FIELD_HANDLE (material, 5, 0);
   }
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_HANDLE (ltype, 5, 6);
   }
   DXF {
@@ -3384,7 +3384,7 @@ DWG_OBJECT (LAYER)
         FIELD_B0 (plotflag, 290);
       }
     }
-    SINCE (R_13) {
+    SINCE (R_13b1) {
       int lw = dxf_cvt_lweight (FIELD_VALUE (linewt));
       KEY (linewt); VALUE_BSd (lw, 370);
     }
@@ -3417,7 +3417,7 @@ DWG_OBJECT (STYLE)
 
   COMMON_TABLE_FLAGS (TextStyle)
 
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_B (is_shape, 0);        //wrong oda doc
     FIELD_B (is_vertical, 0);     //
     DECODER_OR_ENCODER {
@@ -3426,7 +3426,7 @@ DWG_OBJECT (STYLE)
       LOG_TRACE ("flag => %d [RC 70]\n", FIELD_VALUE (flag));
     }
   }
-  PRE (R_13) {
+  PRE (R_13b1) {
     FIELD_RD (text_size, 40);
     FIELD_RD (width_factor, 41);
     FIELD_RD (oblique_angle, 50);
@@ -3506,7 +3506,7 @@ DWG_OBJECT (LTYPE)
 
   COMMON_TABLE_FLAGS (Linetype)
 
-  PRE (R_13) {
+  PRE (R_13b1) {
 #ifndef IS_JSON
   if (dwg->header.version == R_11)
     FIELD_RSd (used, 0); // -1
@@ -3520,7 +3520,7 @@ DWG_OBJECT (LTYPE)
   FIELD_RC (alignment, 72);
   FIELD_RCu (num_dashes, 73);
   DXF { FIELD_BD (pattern_len, 40); }
-  PRE (R_13)
+  PRE (R_13b1)
   {
     FIELD_RD (pattern_len, 40);
 #ifndef IS_JSON
@@ -3533,7 +3533,7 @@ DWG_OBJECT (LTYPE)
         FIELD_RC (unknown_r11, 0);
     }
   }
-  SINCE (R_13)
+  SINCE (R_13b1)
   {
     REPEAT (num_dashes, dashes, Dwg_LTYPE_dash)
     REPEAT_BLOCK
@@ -3565,7 +3565,7 @@ DWG_OBJECT (LTYPE)
       DECODER {
         if (FIELD_VALUE (dashes[rcount1].shape_flag) & 2)
           FIELD_VALUE (has_strings_area) = 1;
-        PRE (R_13) {
+        PRE (R_13b1) {
           FIELD_VALUE (pattern_len) += FIELD_VALUE (dashes[rcount1].length);
         }
       }
@@ -3649,7 +3649,7 @@ DWG_OBJECT (VIEW)
   COMMON_TABLE_FLAGS (View)
 
   // subclass AbstractViewTableRecord:
-  PRE (R_13)
+  PRE (R_13b1)
   {
     FIELD_RD (VIEWSIZE, 40);
     FIELD_2RD (VIEWCTR, 10);
@@ -3719,7 +3719,7 @@ DWG_OBJECT (VIEW)
   // end of ViInfo
 
   // subclass ViewTableRecord:
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_B (is_pspace, 0);
     FIELD_VALUE (flag) |= FIELD_VALUE (is_pspace);
   }
@@ -3759,7 +3759,7 @@ DWG_OBJECT_END
 DWG_OBJECT (UCS)
 
   COMMON_TABLE_FLAGS (UCS)
-  PRE (R_13)
+  PRE (R_13b1)
   {
     FIELD_3RD (ucsorg, 10);
     FIELD_3RD (ucsxdir, 11);
@@ -3873,7 +3873,7 @@ DWG_OBJECT (VPORT)
   /* end of DXF: now DWG */
   else {
 
-    PRE (R_13)
+    PRE (R_13b1)
     { // TODO verify
       FIELD_RD (VIEWSIZE, 40);
       FIELD_RD (aspect_ratio, 41);
@@ -3939,7 +3939,7 @@ DWG_OBJECT (VPORT)
           //TODO FIELD_VALUE (ambient_color.rgb) = ?;
           //TODO FIELD_VALUE (ambient_color.byte) = ?; //+ name, book_name
         }
-        VERSIONS (R_13, R_2004) {
+        VERSIONS (R_13b1, R_2004) {
           FIELD_HANDLE (sun, 3, 361);
         }
         SINCE (R_2007) {
@@ -4009,7 +4009,7 @@ DWG_OBJECT_END
 DWG_OBJECT (APPID)
 
   COMMON_TABLE_FLAGS (RegApp)
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     DXF {
       FIELD_RS0 (unknown, 71); // in DXF only with ADE_PROJECTION
     } else {
@@ -4044,7 +4044,7 @@ DWG_OBJECT (DIMSTYLE)
   }
   COMMON_TABLE_FLAGS (DimStyle)
 
-  PRE (R_13)
+  PRE (R_13b1)
     {
       FIELD_RC (DIMTOL, 71);
       FIELD_RC (DIMLIM, 72);
@@ -4101,7 +4101,7 @@ DWG_OBJECT (DIMSTYLE)
       FIELD_CAST (DIMCLRE_N, RC, RS, 177);
       FIELD_CAST (DIMCLRT_N, RC, RS, 178);
     }
-  VERSIONS (R_13, R_14)
+  VERSIONS (R_13b1, R_14)
     {
       DXF {
         FIELD_TV (DIMPOST, 3);
@@ -4292,7 +4292,7 @@ DWG_OBJECT (DIMSTYLE)
       FIELD_BSd (DIMLWE, 372);
     }
 
-  SINCE (R_13)
+  SINCE (R_13b1)
   {
     FIELD_B (flag0, 0); // Bit 0 of 70
     FIELD_VALUE (flag) |= FIELD_VALUE (flag0); //dimtofl?
@@ -5254,7 +5254,7 @@ DWG_ENTITY (LWPOLYLINE)
       return DWG_ERR_VALUEOUTOFBOUNDS;
     }
 #  endif
-    VERSIONS (R_13, R_14) {
+    VERSIONS (R_13b1, R_14) {
       FIELD_2RD_VECTOR (points, num_points, 10);
     }
     IF_FREE_OR_SINCE (R_2000) {
@@ -5341,7 +5341,7 @@ DWG_SUBENT (PROXY_LWPOLYLINE)
   if (FIELD_VALUE (flag) & 32)
     FIELD_BL (num_widths, 0);
 
-  VERSIONS (R_13, R_14) {
+  VERSIONS (R_13b1, R_14) {
     FIELD_2RD_VECTOR (points, num_points);
   }
   IF_FREE_OR_SINCE (R_2000) {
@@ -6158,7 +6158,7 @@ DWG_ENTITY (TABLE)
   else {
     SUBCLASS (AcDbBlockReference)
     FIELD_3BD (ins_pt, 10);
-    VERSIONS (R_13, R_14) {
+    VERSIONS (R_13b1, R_14) {
       FIELD_3BD_1 (scale, 41);
     }
     JSON {
@@ -6218,7 +6218,7 @@ DWG_ENTITY (TABLE)
       VALUEOUTOFBOUNDS (num_owned, 10000)
     }
     FIELD_HANDLE (block_header, 5, 2);
-    VERSIONS (R_13, R_2000)
+    VERSIONS (R_13b1, R_2000)
       {
         if (FIELD_VALUE (has_attribs))
           {

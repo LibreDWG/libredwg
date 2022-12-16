@@ -17,7 +17,7 @@
 
 #ifdef IS_DXF
   // unused. see out_dxf.c
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     XDICOBJHANDLE (3);
     REACTORS (4);
   }
@@ -31,7 +31,7 @@
       FIELD_HANDLE (ownerhandle, 4, 330);
 
 #ifndef IS_DXF
-      SINCE (R_13) {
+      SINCE (R_13b1) {
         REACTORS (4)
         XDICOBJHANDLE (3)
       }

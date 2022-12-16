@@ -48,7 +48,7 @@
     FIELD_RS (numheader_vars, 0); // 74,83,101,104,114,120,122,129,158,160,204,205
     FIELD_RC (dwg_version, 0); // 0
   }
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_RC (zero_one_or_three, 0);
     FIELD_RL (thumbnail_address, 0); //@0x0d
     FIELD_RC (dwg_version, 0); // of app which stored it. eg. SaveAs

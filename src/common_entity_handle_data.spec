@@ -45,7 +45,7 @@
     FIELD_BB (entmode, 67); // is paperspace
 #endif
 
-  VERSIONS (R_13, R_14)
+  VERSIONS (R_13b1, R_14)
     {
       FIELD_HANDLE (layer, 5, 8);
 #ifdef IS_ENCODER
@@ -64,7 +64,7 @@
         FIELD_HANDLE (ltype, 5, 6);
     }
 
-  VERSIONS (R_13, R_2000)
+  VERSIONS (R_13b1, R_2000)
     {
       if (!FIELD_VALUE (nolinks))
         {

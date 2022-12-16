@@ -28,7 +28,7 @@
     return 0;
   }
 
-  VERSIONS (R_13, R_2013) {
+  VERSIONS (R_13b1, R_2013) {
     HEADER_VALUE (ACADMAINTVER, RS, 70, dwg->header.maint_version);
   }
   SINCE (R_2018) {
@@ -113,7 +113,7 @@
     HEADER_HANDLE_NAME (CELTYPE, 6, LTYPE);
     HEADER_CMC (CECOLOR, 62);
   }
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     HEADER_RD (CELTSCALE, 40);
     UNTIL (R_14) {
       HEADER_RS (DELOBJ, 70);
@@ -177,7 +177,7 @@
     HEADER_RD (DIMTFAC, 40);
     HEADER_RD (DIMGAP, 40);
   }
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     HEADER_RS (DIMJUST, 70);
     HEADER_RS (DIMSD1, 70);
     HEADER_RS (DIMSD2, 70);
@@ -245,7 +245,7 @@
   }
   HEADER_RD (CHAMFERA, 40);
   HEADER_RD (CHAMFERB, 40);
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     HEADER_RD (CHAMFERC, 40);
     HEADER_RD (CHAMFERD, 40);
   }
@@ -348,7 +348,7 @@
     return 0;
   }
 
-  //VERSION (R_13) {
+  //VERSION (R_13b1) {
   //  HEADER_RS (WIREFRAME, 70); //Undocumented
   //}
   HEADER_RS (SHADEDGE, 70);
@@ -366,7 +366,7 @@
 
   HEADER_RS (UNITMODE, 70);
   HEADER_RS (VISRETAIN, 70);
-  VERSION (R_13) // undocumented and unhandled in ODA
+  VERSION (R_13b1) // undocumented and unhandled in ODA
     HEADER_RS (DELOBJ, 70);
   HEADER_RS (PLINEGEN, 70);
   HEADER_RS (PSLTSCALE, 70);
@@ -381,7 +381,7 @@
   HEADER_HANDLE_NAME (CMLSTYLE, 2, MLINESTYLE); //default: Standard
   HEADER_RS (CMLJUST, 70);
   HEADER_RD (CMLSCALE, 40); //default: 20
-  VERSION (R_13) {
+  VERSION (R_13b1) {
     HEADER_9 (SAVEIMAGES);
     VALUE (1, RS, 70);
   }

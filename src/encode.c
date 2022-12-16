@@ -495,7 +495,7 @@ const unsigned char unknown_section[53]
   if (obj->tio.object->reactors)                                              \
     {                                                                         \
       OVERFLOW_CHECK_LV (num_reactors, obj->tio.object->num_reactors)         \
-      SINCE (R_13)                                                            \
+      SINCE (R_13b1)                                                            \
       {                                                                       \
         for (vcount = 0; vcount < (BITCODE_BL)obj->tio.object->num_reactors;  \
              vcount++)                                                        \
@@ -518,7 +518,7 @@ const unsigned char unknown_section[53]
   }                                                                           \
   else                                                                        \
   {                                                                           \
-    SINCE (R_13)                                                              \
+    SINCE (R_13b1)                                                              \
     {                                                                         \
       VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code,      \
                     360);                                                     \
@@ -538,7 +538,7 @@ const unsigned char unknown_section[53]
   }                                                                           \
   else                                                                        \
   {                                                                           \
-    SINCE (R_13)                                                              \
+    SINCE (R_13b1)                                                              \
     {                                                                         \
       VALUE_HANDLE (obj->tio.entity->xdicobjhandle, xdicobjhandle, 3,         \
                     360);                                                     \
@@ -645,7 +645,7 @@ const unsigned char unknown_section[53]
 
 #define VALUE_HANDLE(hdlptr, nam, handle_code, dxf)                           \
   {                                                                           \
-  PRE (R_13)                                                                  \
+  PRE (R_13b1)                                                                  \
   {                                                                           \
     short idx = (hdlptr) ? (hdlptr)->r11_idx : 0;                             \
     /* = handle_size really, not code */                                      \
@@ -684,7 +684,7 @@ const unsigned char unknown_section[53]
 // for obj->handle 0.x.x only, DXF 5
 #define VALUE_H(hdl, dxf)                                                     \
   {                                                                           \
-    PRE (R_13) {                                                              \
+    PRE (R_13b1) {                                                              \
       bit_write_H (dat, &hdl);                                                \
     } else {                                                                  \
       bit_write_H (hdl_dat, &hdl);                                            \
@@ -757,7 +757,7 @@ const unsigned char unknown_section[53]
   error |= dwg_encode_xdata (dat, _obj, _obj->size)
 
 #define COMMON_ENTITY_HANDLE_DATA                                             \
-  SINCE (R_13)                                                                \
+  SINCE (R_13b1)                                                                \
   {                                                                           \
     START_HANDLE_STREAM;                                                      \
   }                                                                           \
@@ -1033,7 +1033,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
       LOG_ERROR ("Invalid num_reactors: %ld\n", (long)_obj->num_reactors);    \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }                                                                         \
-  SINCE (R_13)                                                                \
+  SINCE (R_13b1)                                                                \
   {                                                                           \
     if (_obj->num_reactors && !_obj->reactors)                                \
       {                                                                       \
@@ -1983,7 +1983,7 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_RC (generation, 71);
           FIELD_RD (last_height, 42);
           FIELD_TFv (font_file, 64, 3);    // 8ed
-          //SINCE (R_13)
+          //SINCE (R_13b1)
           //  FIELD_TFv (bigfont_file, 64, 4); // 92d
           CHK_ENDPOS;
         }
@@ -2393,7 +2393,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   "This version of LibreDWG is only capable of encoding "                     \
   "versions r1.4-r2000 (code: AC1.40-AC1015) DWG files.\n"
 
-  PRE (R_13)
+  PRE (R_13b1)
   {
     BITCODE_RS numentities;
     BITCODE_RL hdr_offset, hdr_end;
@@ -2524,7 +2524,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_TRACE ("Wrote %lu bytes\n", dat->byte);
     return error;
   }
-  VERSIONS (R_13, R_2004)
+  VERSIONS (R_13b1, R_2004)
   {
     /* section 0: header vars
      *         1: class section
@@ -4853,7 +4853,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         bit_write_UMC (dat, obj->handlestream_size);
         LOG_TRACE ("-handlestream_size: %lu [UMC]\n", obj->handlestream_size);
       }
-      VERSIONS (R_13, R_2007)
+      VERSIONS (R_13b1, R_2007)
       {
         if (obj->bitsize_pos && obj->bitsize)
           {
@@ -5221,7 +5221,7 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
     error |= obj_string_stream (dat, obj, str_dat);
   }
   
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     bit_write_H (dat, &obj->handle);
     LOG_TRACE ("handle: " FORMAT_H " [H 5]", ARGS_H (obj->handle))
     LOG_INSANE (" @%lu.%u", dat->byte - obj->address, dat->bit)
@@ -5378,14 +5378,14 @@ dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *dat,
     LOG_TRACE ("handle: " FORMAT_H " [H 5]\n", ARGS_H (obj->handle));
     error |= dwg_encode_eed (dat, obj);
 
-    VERSIONS (R_13, R_14)
+    VERSIONS (R_13b1, R_14)
     {
       obj->bitsize_pos = bit_position (dat);
       FIELD_RL (bitsize, 0);
     }
   }
 
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     Dwg_Object_Object *_obj = obj->tio.object;
     FIELD_BL (num_reactors, 0);
     SINCE (R_2004) { FIELD_B (is_xdic_missing, 0); }

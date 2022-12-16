@@ -2014,7 +2014,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           o->dashes[j].length = pair->value.d;
           LOG_TRACE ("LTYPE.dashes[%d].length = %f [BD 49]\n", j,
                      pair->value.d);
-          PRE (R_13)
+          PRE (R_13b1)
             o->pattern_len += pair->value.d;
         }
       else if (pair->code == 74)

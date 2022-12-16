@@ -410,7 +410,7 @@ dwg_free_common_entity_data (Dwg_Object *obj)
   #include "common_entity_data.spec"
   if (dat->from_version >= R_2007 && _ent->color.flag & 0x40)
     FIELD_HANDLE (color.handle, 0, 430);
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     #include "common_entity_handle_data.spec"
   }
   // clang-format on
@@ -878,7 +878,7 @@ dwg_free_object (Dwg_Object *obj)
   if (obj->type == DWG_TYPE_FREED || obj->tio.object == NULL)
     return;
 
-  PRE (R_13) {
+  PRE (R_13b1) {
     free_preR13_object (obj);
     return;
   }
@@ -1128,7 +1128,7 @@ dwg_free_object (Dwg_Object *obj)
       if (obj->type == obj->parent->layout_type
           && obj->fixedtype == DWG_TYPE_LAYOUT)
         {
-          SINCE (R_13)
+          SINCE (R_13b1)
           {
             dwg_free_LAYOUT (dat, obj); // XXX avoid double-free, esp. in eed
           }
@@ -1418,7 +1418,7 @@ dwg_free_object_private (Dwg_Object *obj)
       if (obj->type == obj->parent->layout_type
           && obj->fixedtype == DWG_TYPE_LAYOUT)
         {
-          SINCE (R_13)
+          SINCE (R_13b1)
           {
             dwg_free_LAYOUT_private (dat, dat, dat, obj); // XXX avoid double-free, esp. in eed
           }

@@ -43,7 +43,7 @@
       FIELD_BLL (REQUIREDVERSIONS, 160);
     }
 
-  SINCE (R_13)
+  SINCE (R_13b1)
     {
       IF_ENCODE_FROM_EARLIER_OR_DXF {
         FIELD_VALUE (unknown_0) = 412148564080.0;
@@ -56,7 +56,7 @@
       FIELD_BD (unknown_2, 0);
       FIELD_BD (unknown_3, 0);
     }
-  VERSIONS (R_13, R_2004) { // undocumented as such in the ODA spec
+  VERSIONS (R_13b1, R_2004) { // undocumented as such in the ODA spec
       IF_ENCODE_FROM_EARLIER_OR_DXF {
         free (FIELD_VALUE (unknown_text1));
         FIELD_VALUE (unknown_text1) = strdup ("m");
@@ -69,7 +69,7 @@
   FREE {
     FIELD_TV (unknown_text1, 0);
   }
-  SINCE (R_13)
+  SINCE (R_13b1)
     {
       IF_ENCODE_FROM_EARLIER_OR_DXF {
         FIELD_VALUE (unknown_8) = 24;
@@ -77,23 +77,23 @@
       FIELD_BL (unknown_8, 0);
       FIELD_BL (unknown_9, 0);
     }
-  VERSIONS (R_13, R_14) // or maybe UNTIL (R_14)
+  VERSIONS (R_13b1, R_14) // or maybe UNTIL (R_14)
     {
       FIELD_BS (unknown_10, 0);
     }
-  VERSIONS (R_13, R_2000)
+  VERSIONS (R_13b1, R_2000)
     {
       FIELD_HANDLE (VX_TABLE_RECORD, 5, 0); //current view
     }
-  SINCE (R_13)
+  SINCE (R_13b1)
     {
       FIELD_B (DIMASO, 70);
       FIELD_B (DIMSHO, 70);
     }
-  VERSIONS (R_13, R_14) {
+  VERSIONS (R_13b1, R_14) {
     FIELD_B (DIMSAV, 70);
   }
-  SINCE (R_13)
+  SINCE (R_13b1)
     {
       FIELD_B (PLINEGEN, 70);
       FIELD_B (ORTHOMODE, 70);
@@ -103,7 +103,7 @@
       FIELD_B (PSLTSCALE, 70);
       FIELD_B (LIMCHECK, 70);
     }
-  VERSIONS (R_13, R_14) {
+  VERSIONS (R_13b1, R_14) {
     FIELD_B (BLIPMODE, 70);
   }
   SINCE (R_2004) {
@@ -115,7 +115,7 @@
   FIELD_B (ANGDIR, 70);
   FIELD_B (SPLFRAME, 70);
 
-  VERSIONS (R_13, R_14)
+  VERSIONS (R_13b1, R_14)
     {
       IF_ENCODE_FROM_EARLIER {
          FIELD_VALUE (ATTREQ) = 1;
@@ -129,7 +129,7 @@
   FIELD_B (MIRRTEXT, 70);
   FIELD_B (WORLDVIEW, 70); // default: 1
 
-  VERSIONS (R_13, R_14)
+  VERSIONS (R_13b1, R_14)
     {
       FIELD_B (WIREFRAME, 0); //Undocumented, not in DXF
     }
@@ -138,7 +138,7 @@
   FIELD_B (PLIMCHECK, 70);
   FIELD_B (VISRETAIN, 70); // default: 1
 
-  VERSIONS (R_13, R_14)
+  VERSIONS (R_13b1, R_14)
     {
       FIELD_B (DELOBJ, 70);
     }
@@ -147,7 +147,7 @@
   FIELD_B (PELLIPSE, 70);
 
 #if 0
-  VERSION (R_13) {
+  VERSION (R_13b1) {
     FIELD_BS (SAVEIMAGES, 70); // not in R13. maybe R13C3 only? also not in ODA
   }
 #endif
@@ -158,7 +158,7 @@
     }
     FIELD_BS (DRAGMODE, 70);
   }
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     IF_ENCODE_FROM_EARLIER {
       FIELD_VALUE (TREEDEPTH) = 3020;
     }
@@ -235,7 +235,7 @@
   }
   FIELD_TIMEBLL (TDCREATE, 40);
   FIELD_TIMEBLL (TDUPDATE, 40);
-  SINCE (R_13) {
+  SINCE (R_13b1) {
   //FIELD_TIMEBLL (TDUCREATE, 40);
   //FIELD_TIMEBLL (TDUUPDATE, 40);
   }
@@ -267,7 +267,7 @@
       FIELD_BD (PSVPSCALE, 40);
     }
 
-  SINCE (R_13)
+  SINCE (R_13b1)
     {
       FIELD_3BD (PINSBASE, 10);
       FIELD_3BD (PEXTMIN, 10);
@@ -322,7 +322,7 @@
       }
     }
 
-  VERSIONS (R_13, R_14)
+  VERSIONS (R_13b1, R_14)
     {
       FIELD_B (DIMTOL, 70);
       FIELD_B (DIMLIM, 70);
@@ -401,7 +401,7 @@
   FIELD_BD (DIMTFAC, 40);
   FIELD_BD (DIMGAP, 40);
 
-  IF_FREE_OR_VERSIONS (R_13, R_14)
+  IF_FREE_OR_VERSIONS (R_13b1, R_14)
     {
       FIELD_TV (DIMPOST, 1);
       FIELD_TV (DIMAPOST, 1);
@@ -491,7 +491,7 @@
   FIELD_HANDLE (VPORT_CONTROL_OBJECT, 3, 0);
   FIELD_HANDLE (APPID_CONTROL_OBJECT, 5, 0);
   FIELD_HANDLE (DIMSTYLE_CONTROL_OBJECT, 3, 0);
-  VERSIONS (R_13, R_2000) {
+  VERSIONS (R_13b1, R_2000) {
     FIELD_HANDLE (VX_CONTROL_OBJECT, 3, 0);
   }
 
@@ -652,7 +652,7 @@
       FIELD_BD (SHADOWPLANELOCATION, 40); // z height
     }
 
-  SINCE (R_13)
+  SINCE (R_13b1)
     {
       FIELD_BS (unknown_54, 0); /* (type 5/6 only) these do not seem to be required */
       FIELD_BS (unknown_55, 0);

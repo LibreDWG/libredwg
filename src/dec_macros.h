@@ -266,7 +266,7 @@
 #define ANYCODE -1
 #define VALUE_HANDLE(ref, nam, code, dxf)                                     \
 {                                                                             \
-  PRE (R_13)                                                                  \
+  PRE (R_13b1)                                                                  \
   {                                                                           \
     if (ref)                                                                  \
       free (ref);                                                             \
@@ -312,7 +312,7 @@
   VALUE_HANDLE (_obj->o.nam, o.nam, code, dxf)
 #define VALUE_H(hdl, dxf)                                                     \
   {                                                                           \
-    PRE (R_13) {                                                              \
+    PRE (R_13b1) {                                                              \
       error |= bit_read_H (dat, &hdl);                                        \
     } else {                                                                  \
       error |= bit_read_H (hdl_dat, &hdl);                                    \
@@ -322,7 +322,7 @@
 
 #define VALUE_HANDLE_N(ref, nam, vcount, code, dxf)                           \
   {                                                                           \
-    PRE (R_13)                                                                \
+    PRE (R_13b1)                                                                \
     {                                                                         \
       ref = dwg_decode_preR13_handleref (dat, code);                          \
       LOG_TRACE (#nam "[%d]: " FORMAT_RS " [RS %d]\n", (int)vcount,           \
@@ -486,7 +486,7 @@
 // clang-format off
 #define FIELD_TF(nam, len, dxf)                                               \
   {                                                                           \
-    SINCE (R_13) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }    \
+    SINCE (R_13b1) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }    \
     _obj->nam = bit_read_TF (dat, (int)len);                                  \
     LOG_TRACE (#nam ": \"%s\" [TF %lu " #dxf "]", _obj->nam,                  \
                (unsigned long)len);                                           \
@@ -497,7 +497,7 @@
 #define FIELD_TFv(nam, len, dxf)                                              \
   {                                                                           \
     /* if (_obj->nam) free (_obj->nam); // preR13 add_Document defaults */    \
-    SINCE (R_13) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }    \
+    SINCE (R_13b1) { _obj->nam = NULL; VECTOR_CHKCOUNT (nam, TF, len, dat) }    \
     _obj->nam = (BITCODE_TV)bit_read_TF (dat, (int)len);                      \
     LOG_TRACE (#nam ": \"%s\" [TFv %lu " #dxf "]", _obj->nam,                 \
                (unsigned long)len);                                           \
@@ -507,7 +507,7 @@
   }
 #define FIELD_TFF(nam, len, dxf)                                              \
   {                                                                           \
-    SINCE (R_13) { _VECTOR_CHKCOUNT_STATIC (nam, len, 1, dat) }               \
+    SINCE (R_13b1) { _VECTOR_CHKCOUNT_STATIC (nam, len, 1, dat) }               \
     bit_read_fixed (dat, _obj->nam, (int)len);                                \
     LOG_TRACE (#nam ": \"%.*s\" [TFF %d " #dxf "]", (int)len, _obj->nam, (int)len); \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
@@ -516,7 +516,7 @@
   }
 #define FIELD_TFFx(nam, len, dxf)                                             \
   {                                                                           \
-    SINCE (R_13) { _VECTOR_CHKCOUNT_STATIC (nam, len, 1, dat) }               \
+    SINCE (R_13b1) { _VECTOR_CHKCOUNT_STATIC (nam, len, 1, dat) }               \
     bit_read_fixed (dat, (BITCODE_RC*)_obj->nam, (int)len);                   \
     LOG_TRACE (#nam ": [TFFx %d " #dxf "]", (int)len);                        \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
@@ -923,7 +923,7 @@
         }                                                                     \
       LOG_TRACE_TF (tmp, rs);                                                 \
       free (tmp);                                                             \
-      SINCE (R_13)                                                            \
+      SINCE (R_13b1)                                                            \
       {                                                                       \
         *dat = here;                                                          \
         LOG_TRACE ("  B  :" FORMAT_B "\t", bit_read_B (dat));                 \
@@ -934,7 +934,7 @@
       *dat = here;                                                            \
       rs = bit_read_RS (dat);                                                 \
       LOG_TRACE ("  RS :" FORMAT_RS " / 0x%04x (16)\n", rs, rs);              \
-      SINCE (R_13)                                                            \
+      SINCE (R_13b1)                                                            \
       {                                                                       \
         *dat = here;                                                          \
         rs = bit_read_BS (dat);                                               \
@@ -955,7 +955,7 @@
       *dat = here;                                                            \
       LOG_TRACE ("  RD :" FORMAT_RD " (64)\n", bit_read_RD (dat));            \
       *dat = here;                                                            \
-      SINCE (R_13)                                                            \
+      SINCE (R_13b1)                                                            \
       {                                                                       \
         if (bb != 3)                                                          \
           {                                                                   \
@@ -1357,7 +1357,7 @@
   }                                                                           \
   else                                                                        \
   {                                                                           \
-    SINCE (R_13)                                                              \
+    SINCE (R_13b1)                                                              \
     {                                                                         \
       VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code,      \
                     360);                                                     \
@@ -1374,7 +1374,7 @@
   }                                                                           \
   else                                                                        \
   {                                                                           \
-    SINCE (R_13)                                                              \
+    SINCE (R_13b1)                                                              \
     {                                                                         \
       VALUE_HANDLE (_ent->xdicobjhandle, xdicobjhandle, code, 360);           \
     }                                                                         \
@@ -1512,7 +1512,7 @@
 #define REPEAT4_C(times, name, type) _REPEAT_C (times, name, type, 4)
 
 #define COMMON_ENTITY_HANDLE_DATA                                             \
-  SINCE (R_13)                                                                \
+  SINCE (R_13b1)                                                                \
   {                                                                           \
     START_HANDLE_STREAM;                                                      \
   }
@@ -1618,14 +1618,14 @@
     _ent->dwg = dwg;                                                          \
     _ent->objid = obj->index; /* obj ptr itself might move */                 \
     _obj->parent = obj->tio.entity;                                           \
-    SINCE (R_13) { error = dwg_decode_entity (dat, hdl_dat, str_dat, _ent); } \
+    SINCE (R_13b1) { error = dwg_decode_entity (dat, hdl_dat, str_dat, _ent); } \
     else { error = decode_entity_preR13 (dat, obj, _ent); }                   \
     if (error >= DWG_ERR_CRITICAL || dat->byte > dat->size)                   \
       return error;
 
 // Does size include the CRC?
 #define DWG_ENTITY_END                                                        \
-    SINCE (R_13) {                                                            \
+    SINCE (R_13b1) {                                                            \
       unsigned long pos = obj_stream_position (dat, hdl_dat, str_dat);        \
       int64_t padding = (obj->size * 8) - pos;                                \
       bit_set_position (dat, pos);                                            \

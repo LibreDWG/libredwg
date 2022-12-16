@@ -7,7 +7,7 @@
     FIELD_HANDLE (layer, 2, 8);
   }
   LATER_VERSIONS {
-    PRE (R_13) {
+    PRE (R_13b1) {
       SINCE (R_2_0b) {
         FIELD_RC (flag_r11, 0);
 #ifdef IS_DECODER
@@ -92,7 +92,7 @@
   }
 
   // p20.4.1
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     FIELD_B (preview_exists, 0);
     if (_ent->preview_exists)
       {
@@ -106,7 +106,7 @@
         FIELD_B (preview_is_proxy, 0);
         FIELD_BLL (preview_size, 0);
 #else
-        VERSIONS (R_13, R_2007)
+        VERSIONS (R_13b1, R_2007)
           {
             FIELD_CAST (preview_size, RL, BLL, 92);
           }
@@ -130,7 +130,7 @@
       }
   }
 
-  VERSIONS (R_13, R_14)
+  VERSIONS (R_13b1, R_14)
     {
 #ifdef IS_DECODER
       obj->bitsize_pos = bit_position (dat);
@@ -157,13 +157,13 @@
 #endif
     }
 
-  SINCE (R_13) {
+  SINCE (R_13b1) {
     // TODO: r13-r14: 6B flags + 6B common params
     FIELD_BB (entmode, 0);
     FIELD_BL (num_reactors, 0); //ODA bug: BB as BS
   }
 
-  VERSIONS (R_13, R_14) //ODA bug
+  VERSIONS (R_13b1, R_14) //ODA bug
     {
       FIELD_B (isbylayerlt, 0);
 #ifdef IS_DECODER
@@ -175,7 +175,7 @@
     {
       FIELD_B (is_xdic_missing, 0);
     }
-  VERSIONS (R_13, R_2002) //ODA bug
+  VERSIONS (R_13b1, R_2002) //ODA bug
     {
       FIELD_B (nolinks, 0)
     }
@@ -265,13 +265,13 @@
         FIELD_BS (color.index, 62);
     }
     else {
-      SINCE (R_13)
+      SINCE (R_13b1)
         FIELD_CMC (color, 62);
     }
   }
 
 #ifndef IS_DXF
-  SINCE (R_13)
+  SINCE (R_13b1)
     FIELD_BD1 (ltype_scale, 48);
 #endif
   SINCE (R_2000)
@@ -302,7 +302,7 @@
       VALUE_BS (1, 60)
     }
   } else {
-    SINCE (R_13) {
+    SINCE (R_13b1) {
       FIELD_BS (invisible, 60); //bit 0: 0 visible, 1 invisible
     }
   }

@@ -967,7 +967,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
         else if (obj->type != DWG_TYPE_BLOCK_HEADER)                          \
           RECORD (token);                                                     \
                                                                               \
-        SINCE (R_13)                                                          \
+        SINCE (R_13b1)                                                          \
         {                                                                     \
           BITCODE_BL vcount;                                                  \
           const int dxf = obj->type == DWG_TYPE_DIMSTYLE ? 105 : 5;           \
@@ -1573,7 +1573,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
 #define COMMON_TABLE_CONTROL_FLAGS                                            \
   if (ctrl)                                                                   \
     {                                                                         \
-      SINCE (R_13)                                                            \
+      SINCE (R_13b1)                                                            \
       {                                                                       \
         VALUE_H (ctrl->handle.value, 5);                                      \
         _XDICOBJHANDLE (3);                                                   \
@@ -1584,10 +1584,10 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
         VALUE_HANDLE (ctrl->tio.object->ownerhandle, ownerhandle, 3, 330);    \
       }                                                                       \
     }                                                                         \
-  SINCE (R_13) { VALUE_TV ("AcDbSymbolTable", 100); }
+  SINCE (R_13b1) { VALUE_TV ("AcDbSymbolTable", 100); }
 
 #define COMMON_TABLE_FLAGS(acdbname)                                          \
-  SINCE (R_13)                                                                \
+  SINCE (R_13b1)                                                                \
   {                                                                           \
     VALUE_TV ("AcDbSymbolTableRecord", 100);                                  \
     VALUE_TV ("AcDb" #acdbname "TableRecord", 100);                           \
@@ -1636,7 +1636,7 @@ dxf_cvt_blockname (Bit_Chain *restrict dat, char *restrict name, const int dxf)
 
 // unused
 #define LAYER_TABLE_FLAGS(acdbname)                                           \
-  SINCE (R_13)                                                                \
+  SINCE (R_13b1)                                                                \
   {                                                                           \
     VALUE_TV ("AcDbSymbolTableRecord", 100);                                  \
     VALUE_TV ("AcDb" #acdbname "TableRecord", 100);                           \
@@ -2459,7 +2459,7 @@ dwg_dxf_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     Dwg_Entity_POLYLINE_##token *_obj                                         \
         = obj->tio.entity->tio.POLYLINE_##token;                              \
                                                                               \
-    VERSIONS (R_13, R_2000)                                                   \
+    VERSIONS (R_13b1, R_2000)                                                   \
     {                                                                         \
       Dwg_Object *last_vertex = _obj->last_vertex ? _obj->last_vertex->obj : NULL; \
       Dwg_Object *o = _obj->first_vertex ? _obj->first_vertex->obj : NULL;    \
@@ -2532,7 +2532,7 @@ decl_dxf_process_VERTEX (PFACE)
                                                                               \
     if (!_obj->has_attribs)                                                   \
         return 0;                                                             \
-    VERSIONS (R_13, R_2000)                                                   \
+    VERSIONS (R_13b1, R_2000)                                                   \
     {                                                                         \
       Dwg_Object *last_attrib                                                 \
           = _obj->last_attrib ? _obj->last_attrib->obj : NULL;                \
@@ -3719,7 +3719,7 @@ dwg_write_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   if (!minimal)
     {
-      SINCE (R_13)
+      SINCE (R_13b1)
       {
         if (dxf_objects_write (dat, dwg) >= DWG_ERR_CRITICAL)
           goto fail;

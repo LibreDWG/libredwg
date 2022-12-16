@@ -518,7 +518,7 @@
       hdl_dat->byte = dat->byte;                                              \
       hdl_dat->bit = dat->bit;                                                \
     }                                                                         \
-    SINCE (R_13) {                                                            \
+    SINCE (R_13b1) {                                                            \
       VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 4, 0);         \
       REACTORS (4)                                                            \
       XDICOBJHANDLE (3)                                                       \
@@ -528,7 +528,7 @@
 #ifndef COMMON_TABLE_FLAGS
 #  define COMMON_TABLE_FLAGS(acdbname)                                        \
     assert (obj->supertype == DWG_SUPERTYPE_OBJECT);                          \
-    PRE (R_13)                                                                \
+    PRE (R_13b1)                                                                \
     {                                                                         \
       if (strcmp (#acdbname, "Layer") == 0)                                   \
         {                                                                     \

@@ -808,7 +808,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
 
 // violates duplicate keys
 #define SUBCLASS(name)                                                  \
-  SINCE (R_13)                                                          \
+  SINCE (R_13b1)                                                          \
   {                                                                     \
     FIRSTPREFIX fprintf (dat->fh, "\"_subclass\": \"" #name "\"");      \
   }
@@ -916,13 +916,13 @@ _prefix (Bit_Chain *dat)
       FIELD_TEXT (dxfname, obj->dxfname);                                     \
     _FIELD (index, RL, 0);                                                    \
     _FIELD (type, RL, 0);                                                     \
-    SINCE (R_13)                                                              \
+    SINCE (R_13b1)                                                              \
     {                                                                         \
       KEY (handle);                                                           \
       VALUE_H (obj->handle, 5);                                               \
     }                                                                         \
     _FIELD (size, RL, 0);                                                     \
-    SINCE (R_13)                                                              \
+    SINCE (R_13b1)                                                              \
     {                                                                         \
       _FIELD (bitsize, BL, 0);                                                \
       if (_ent->preview_exists)                                               \
@@ -971,7 +971,7 @@ _prefix (Bit_Chain *dat)
     KEY (handle);                                                             \
     VALUE_H (obj->handle, 5);                                                 \
     _FIELD (size, RL, 0);                                                     \
-    SINCE (R_13)                                                              \
+    SINCE (R_13b1)                                                              \
     {                                                                         \
       _FIELD (bitsize, BL, 0);                                                \
     }                                                                         \
@@ -1861,7 +1861,7 @@ json_header_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
   RECORD (HEADER); // single hash
   // separate funcs to catch the return, and end with ENDRECORD
-  PRE (R_13)
+  PRE (R_13b1)
     error = json_preR13_header_write_private (dat, dwg);
   LATER_VERSIONS
     error = json_header_write_private (dat, dwg);
