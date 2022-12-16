@@ -3165,11 +3165,16 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     bit_chain_init_dat (&sec_dat[sec_id], 16, dat);
     str_dat = hdl_dat = dat = &sec_dat[sec_id];
   }
-  else sec_id = SECTION_MEASUREMENT_R13;
+  else
+    sec_id = SECTION_MEASUREMENT_R13;
 
-  if (dwg->header.version >= R_2004 || (int)dwg->header.numsections > sec_id)
+  if (dwg->header.version >= R_2004 ||
+      (int)dwg->header.numsections > sec_id)
     {
-      LOG_INFO ("\n=======> MEASUREMENT: %4u\n", (unsigned)dat->byte);
+      if (dwg->header.numsections <= sec_id)
+        dwg->header.section
+          = realloc (dwg->header.section, (sec_id + 1) * sizeof (Dwg_Section));
+      LOG_INFO ("\n=======> MEASUREMENT: @%4lu\n", dat->byte);
       dwg->header.section[sec_id].number = 4;
       dwg->header.section[sec_id].address = dat->byte;
       dwg->header.section[sec_id].size = 4;
