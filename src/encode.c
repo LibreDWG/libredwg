@@ -3171,7 +3171,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   if (dwg->header.version >= R_2004 ||
       (int)dwg->header.numsections > sec_id)
     {
-      if (dwg->header.numsections <= sec_id)
+      if ((int)dwg->header.numsections <= sec_id)
         dwg->header.section
           = realloc (dwg->header.section, (sec_id + 1) * sizeof (Dwg_Section));
       LOG_INFO ("\n=======> MEASUREMENT: @%4lu\n", dat->byte);
