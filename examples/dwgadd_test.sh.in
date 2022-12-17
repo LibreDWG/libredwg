@@ -1,9 +1,9 @@
 #!/bin/sh
 
-top_builddir="@top_builddir@"
+abs_top_builddir="@abs_top_builddir@"
+abs_builddir="@abs_builddir@"
 EXEEXT="@EXEEXT@"
-srcdir="@srcdir@"
-#srcdir=${srcdir:-$(dirname "$0")}
+srcdir="@abs_srcdir@"
 echo srcdir: "$srcdir"
 
 dwgaddtest() {
@@ -18,7 +18,7 @@ dwgaddtest() {
     fi
     if [ -z "$V" ]; then
         echo ./dwgadd --verify -o dwgadd_test.dwg "$FEX"
-        ${top_builddir}/libtool --mode=execute "./dwgadd${EXEEXT}" --verify \
+        ${abs_top_builddir}/libtool --mode=execute "${abs_builddir}/dwgadd${EXEEXT}" --verify \
                        -o dwgadd_test.dwg "$FEX"
         ret=$?
     else
@@ -29,7 +29,7 @@ dwgaddtest() {
         #fi
         echo "$PRE" ./dwgadd --verify -a "$V" -o dwgadd_test.dwg "$FEX"
         # shellcheck disable=SC2086
-        ${top_builddir}/libtool --mode=execute "./dwgadd${EXEEXT}" --verify \
+        ${abs_top_builddir}/libtool --mode=execute "${abs_builddir}/dwgadd${EXEEXT}" --verify \
                        -a "$V" -o dwgadd_test.dwg "$FEX"
         ret=$?
     fi
