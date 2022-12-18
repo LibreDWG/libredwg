@@ -22,6 +22,7 @@
             LOG_FLAG_R11 (LTYPE);
             LOG_FLAG_R11 (ELEVATION);
             LOG_FLAG_R11 (THICKNESS);
+            LOG_FLAG_R11 (UNKNOWN_16);
             LOG_FLAG_R11 (HANDLING);
             LOG_FLAG_R11 (PSPACE);
             LOG_FLAG_R11 (HAS_ATTRIBS);
