@@ -3006,3 +3006,59 @@ char *split_filepath (const char *filepath, char **extp)
     }
   return base;
 }
+
+int
+dwg_init_sections (Dwg_Data *dwg)
+{
+  unsigned num_sections = 5;
+  if (dwg->header.version < R_13b1)
+    {
+      if (!dwg->header.numsections)
+        dwg->header.numsections = 5;
+      // HEADER.numsections is always 5 even if it needs to be 8 or 10,
+      // probably because the additional sections are embedded in HEADER_VARS.
+      // 5 tables + header + block. VIEW = 6
+      if (dwg->header.version >= R_10) // numheader_vars > 158
+        num_sections += 3;
+      if (dwg->header.version >= R_11) // numheader_vars > 160
+        num_sections += 2;
+      // and there is one hole we need to skip over.
+      num_sections += 1;
+    }
+  else
+    {
+      /* section 0: header vars
+       *         1: class section
+       *         2: object map
+       *         3: (R13c3 and later): 2nd header (special table, no sentinels)
+       *         4: optional: MEASUREMENT
+       *         5: optional: AuxHeader (no sentinels, since r13c3
+       */
+      if (!dwg->header.numsections) // ODA writes zeros.
+        dwg->header.numsections = 6;
+      if (dwg->header.numsections < 3)
+        {
+          LOG_ERROR ("Not enough sections: " FORMAT_RL, dwg->header.numsections);
+          return DWG_ERR_INVALIDDWG;
+        }
+      if (dwg->header.numsections > 10)
+        {
+          LOG_ERROR ("Too many sections: " FORMAT_RL, dwg->header.numsections);
+          return DWG_ERR_INVALIDDWG;
+        }
+      num_sections = dwg->header.numsections;
+    }
+
+  if (dwg->header.section)
+    dwg->header.section = (Dwg_Section *)realloc (
+        dwg->header.section, sizeof (Dwg_Section) * (num_sections + 1));
+  else
+    dwg->header.section
+        = (Dwg_Section *)calloc (sizeof (Dwg_Section), num_sections + 1);
+  if (!dwg->header.section)
+    {
+      LOG_ERROR ("Out of memory");
+      return DWG_ERR_OUTOFMEM;
+    }
+  return 0;
+}

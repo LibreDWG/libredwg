@@ -298,19 +298,8 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   assert (dat->byte == 0x15);
   dwg->header.numsections = bit_read_RL (dat);
   LOG_TRACE ("\nnum_sections: " FORMAT_RL " [RL]\n", dwg->header.numsections)
-  if (!dwg->header.numsections) // ODA writes zeros.
-    dwg->header.numsections = 6;
-  if (dwg->header.numsections < 3)
-    {
-      LOG_ERROR ("Not enough sections: " FORMAT_RL, dwg->header.numsections);
-      return DWG_ERR_INVALIDDWG;
-    }
-  if (dwg->header.numsections > 10)
-    {
-      LOG_ERROR ("Too many sections: " FORMAT_RL, dwg->header.numsections);
-      return DWG_ERR_INVALIDDWG;
-    }
-
+  dwg_init_sections (dwg);
+#if 0
   // So far seen 3-6 sections. Most emit only 3-5 sections.
   dwg->header.section = (Dwg_Section *)calloc (
       1, sizeof (Dwg_Section) * dwg->header.numsections);
@@ -326,6 +315,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
    *         4: optional: MEASUREMENT
    *         5: optional: AuxHeader (no sentinels, since r13c3
    */
+#endif
   for (j = 0; j < dwg->header.numsections; j++)
     {
       dwg->header.section[j].number = bit_read_RC (dat);

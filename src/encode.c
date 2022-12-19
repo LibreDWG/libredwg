@@ -2411,16 +2411,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       //blocks_size = blocks_end - blocks_start;
       bit_write_RL (dat, blocks_max);
 
-      if (!dwg->header.numsections)
+      if (!dwg->header.section ||
+          dwg->header.version != dwg->header.from_version)
         {
-          dwg->header.numsections = 5;
-          if (dwg->header.version >= R_10)
-            dwg->header.numsections += 3;
-          if (dwg->header.version >= R_11)
-            dwg->header.numsections += 2;
+          dwg_init_sections (dwg);
         }
-      if (!dwg->header.section)
-        dwg->header.section = calloc(sizeof (Dwg_Section), dwg->header.numsections + 2);
       // get the tables from the CONTROL objects
       encode_preR13_section_hdr ("BLOCK", SECTION_BLOCK, dat, dwg);
       encode_preR13_section_hdr ("LAYER", SECTION_LAYER, dat, dwg);
@@ -2549,16 +2544,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               dat->from_version = (Dwg_Version_Type)((int)dat->version - 1);
           }
       }
+    dwg_init_sections (dwg);
     LOG_TRACE ("numsections: " FORMAT_RL " [RL]\n", dwg->header.numsections);
     bit_write_RL (dat, dwg->header.numsections);
-    if (!dwg->header.section)
-      dwg->header.section = (Dwg_Section*)calloc (dwg->header.numsections,
-                                                  sizeof (Dwg_Section));
-    if (!dwg->header.section)
-      {
-        LOG_ERROR ("Out of memory");
-        return DWG_ERR_OUTOFMEM;
-      }
     section_address = dat->byte;                 // save section address
     dat->byte += (dwg->header.numsections * 9); /* RC + 2*RL */
     bit_write_CRC (dat, 0, 0xC0C1);

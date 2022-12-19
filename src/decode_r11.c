@@ -665,7 +665,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Object *obj = NULL;
   int tbl_id;
   int error = 0;
-  int num_sections = 5;
+  unsigned num_sections = 5;
   Bit_Chain dat_save = *dat;
 
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
@@ -687,19 +687,6 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // setup all the new control objects
   error |= dwg_add_Document (dwg, 0);
 
-  // 5 tables + header + block. VIEW = 6
-  if (dwg->header.numheader_vars > 158) // r10
-    num_sections += 3;
-  if (dwg->header.numheader_vars > 160) // r11
-    num_sections += 2;
-  dwg->header.section = (Dwg_Section *)calloc (sizeof (Dwg_Section),
-                                               num_sections + 2);
-  if (!dwg->header.section)
-    {
-      LOG_ERROR ("Out of memory");
-      return DWG_ERR_OUTOFMEM;
-    }
-  dwg->header.numsections = num_sections;
   PRE (R_2_0b) {
     bit_read_RC (dat); // the 6th zero
     LOG_TRACE ("zero[6]: 0 [RC 0]\n");

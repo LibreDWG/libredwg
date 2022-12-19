@@ -22227,7 +22227,40 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
     }
 }
 
-/* Should be similar to the public VBA interface */
+static void
+default_numheader_vars (Dwg_Data *dwg, const Dwg_Version_Type version)
+{
+  if (version < R_2_0b)
+    ;
+  else if (version <= R_2_0b)
+    dwg->header.numheader_vars = 74;
+  else if (version <= R_2_22)
+    dwg->header.numheader_vars = 83;
+  else if (version <= R_2_4)
+    dwg->header.numheader_vars = 101;
+  else if (version <= R_2_5)
+    dwg->header.numheader_vars = 104;
+  // dead code
+  else if (version <= R_2_5 && dwg->header.maint_version > 9)
+    dwg->header.numheader_vars = 114;
+  else if (version <= R_2_6)
+    dwg->header.numheader_vars = 120;
+  // dead code
+  else if (version <= R_2_6 && dwg->header.maint_version > 10)
+    dwg->header.numheader_vars = 122;
+  else if (version <= R_9)
+    dwg->header.numheader_vars = 129;
+  else if (version <= R_9c1)
+    dwg->header.numheader_vars = 158;
+  else if (version <= R_10)
+    dwg->header.numheader_vars = 160;
+  else if (version <= R_11)
+    dwg->header.numheader_vars = 204;
+  else if (version <= R_13b1)
+    dwg->header.numheader_vars = 205;
+}
+
+/* The Document API should be similar to the public VBA interface */
 
 /* The internal driver, which takes an existing dwg */
 EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
@@ -22272,39 +22305,13 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header.dwg_version = dwg_ver_struct->dwg_version;
   //dwg->header.maint_version = 29;
   dwg->header.codepage = 30; // FIXME: local codepage if <r2007
-  dwg->header.numsections = 5;
-  //dwg->header.section = (Dwg_Section *)calloc (
-  //    dwg->header.num_sections, sizeof (Dwg_Section));
-  if (version < R_2_0b)
-    ;
-  else if (version <= R_2_0b)
-    dwg->header.numheader_vars = 74;
-  else if (version <= R_2_22)
-    dwg->header.numheader_vars = 83;
-  else if (version <= R_2_4)
-    dwg->header.numheader_vars = 101;
-  else if (version <= R_2_5)
-    dwg->header.numheader_vars = 104;
-  else if (version <= R_2_5 && dwg->header.maint_version > 9)
-    dwg->header.numheader_vars = 114;
-  else if (version <= R_2_6)
-    dwg->header.numheader_vars = 120;
-  else if (version <= R_2_6 && dwg->header.maint_version > 10)
-    dwg->header.numheader_vars = 122;
-  else if (version <= R_9)
-    dwg->header.numheader_vars = 129;
-  else if (version <= R_9c1)
-    dwg->header.numheader_vars = 158;
-  else if (version <= R_10)
-    dwg->header.numheader_vars = 160;
-  else if (version <= R_11)
-    dwg->header.numheader_vars = 204;
-  else if (version <= R_13b1)
-    dwg->header.numheader_vars = 205;
-  if (dwg->header.numheader_vars > 158)
-    dwg->header.numsections += 3;
-  if (dwg->header.numheader_vars > 160)
-    dwg->header.numsections += 2;
+  // with decode_r11 we already proper numheader_vars
+  if (!dwg->header.numheader_vars ||
+      dwg->header.version != dwg->header.from_version)
+    default_numheader_vars (dwg, version);
+  error = dwg_init_sections (dwg);
+  if (error) // DWG_ERR_OUTOFMEM or DWG_ERR_INVALIDDWG
+    return error;
 
   dwg->header_vars.unknown_0 = 412148564080.0; // unit1_ration
   dwg->header_vars.unknown_1 = 1.0;
@@ -22685,6 +22692,7 @@ dwg_new_Document (const Dwg_Version_Type version, const int imperial,
   Dwg_Data *dwg = calloc (1, sizeof (Dwg_Data));
   dwg->header.version = version;
   dwg->opts = log_level;
+
   (void)dwg_add_Document (dwg, imperial);
   return dwg;
 }
