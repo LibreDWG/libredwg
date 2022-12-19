@@ -1,7 +1,7 @@
 #!/bin/sh
 # dxf.test
 #
-# Copyright (C) 2018-2021 Free Software Foundation, Inc.
+# Copyright (C) 2018-2023 Free Software Foundation, Inc.
 #
 # This program is free software, licensed under the terms of the GNU
 # General Public License as published by the Free Software Foundation,
@@ -28,15 +28,15 @@ check_subentity() {
         @LTEXEC@ "./dwg2dxf${EXEEXT}" -y -v4 -o "$tgt" "$dwg" 2>/dev/null
         grep -A8 ^VERTEX "$dxf" >tmp1
         grep -A8 ^VERTEX "$tgt" >tmp2
-        d="$(diff -bu1 tmp1 tmp2)"
+        d="$(diff -b -U1 tmp1 tmp2)"
         test -z "$d" || echo "VERTEX $tgt $d"
         grep -A8 ^SEQEND "$dxf" >tmp1
         grep -A8 ^SEQEND "$tgt" >tmp2
-        d="$(diff -bu1 tmp1 tmp2)"
+        d="$(diff -b -U1 tmp1 tmp2)"
         test -z "$d" || echo "SEQEND $tgt $d"
         grep -A8 ^POLYLINE "$dxf" >tmp1
         grep -A8 ^POLYLINE "$tgt" >tmp2
-        d="$(diff -bu1 tmp1 tmp2)"
+        d="$(diff -b -U1 tmp1 tmp2)"
         test -z "$d" || echo "POLYLINE $tgt $d"
         rm tmp1 tmp2
 #   else
@@ -189,7 +189,7 @@ check_roundtrip() {
             echo "got=$got" >>"$log"
             @PERL@ -nle'/^Add entity (\w+) / && print $1' "$log1" >"$log1".tmp
             @PERL@ -nle'/^Add entity (\w+) / && print $1' "$log2" >"$log2".tmp
-            diff -bu0 "$log1".tmp "$log2".tmp | grep -v '^@@' | tee "$log"
+            diff -b -U0 "$log1".tmp "$log2".tmp | grep -v '^@@' | tee "$log"
             rm "$log1".tmp "$log2".tmp 2>/dev/null
         fi
     fi
