@@ -4268,19 +4268,15 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
       // deleted, i.e. moved to a BLOCK
       if (obj->fixedtype == DWG_TYPE_UNUSED)
         {
-          LOG_TRACE ("\nSkip deleted entity %s, number: %d, type: %d, Addr: %zx "
-                     "(0x%x)\n",
-                     obj->name, obj->index, obj->type, obj->address,
-                     (unsigned)dat->byte);
-          continue;
+          LOG_TRACE ("Deleted entity %s, number: %d, type: %d, Addr: %lx (0x%zx)\n",
+                     obj->name, obj->index, obj->type, obj->address, dat->byte);
         }
-      // skip mspace block/endblk
-      if (obj->type == DWG_TYPE_UNUSED_R11)
+      // skip first 2 mspace block/endblk entities
+      if (obj->type == DWG_TYPE_UNUSED_R11 && obj->index < 8)
         {
-          LOG_TRACE (
-              "Skip entity %s, number: %d, Fixedtype: %d, Addr: %zx (0x%x)\n",
-              obj->name, obj->index, obj->fixedtype, obj->address,
-              (unsigned)dat->byte);
+          LOG_TRACE ("Unused entity %s, number: %d, Fixedtype: %d, Addr: %lx (0x%zx)\n",
+                     obj->name, obj->index, obj->fixedtype, obj->address,
+                     dat->byte);
           continue;
         }
       // check if block/extras or entity member
@@ -4290,9 +4286,9 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
           if (dat->version >= R_2_0b && obj->tio.entity->entmode == 3)
             {
               LOG_TRACE ("Skip block %s in entities section, number: %d, "
-                         "type: %d, Addr: %zx (0x%x)\n",
+                         "type: %d, Addr: %zx (0x%zx)\n",
                          obj->name, obj->index, obj->type, obj->address,
-                         (unsigned)dat->byte);
+                         dat->byte);
               continue;
             }
         }
@@ -4303,115 +4299,12 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
       LOG_INFO ("===========================\n"
                 "Entity %s, number: %d, Addr: %zu (0x%x)\n",
                 obj->name, obj->index, obj->address, (unsigned)dat->byte);
-      if (obj->type == 0
-          || (obj->type > DWG_TYPE_UNKNOWN_R11 && obj->fixedtype != 0))
-        {
-          // set the r11 type from the fixedtype. eg when downconverting
-          switch (obj->fixedtype)
-            {
-#define DELETED(TYPE)                                   \
-   !deleted ? TYPE : (uint8_t)((int8_t)TYPE - 128);
-
-            case DWG_TYPE_LINE:
-              obj->type = DELETED (DWG_TYPE_LINE_R11);
-              break;
-            case DWG_TYPE_POINT:
-              obj->type = DELETED (DWG_TYPE_POINT_R11);
-              break;
-            case DWG_TYPE_CIRCLE:
-              obj->type = DELETED (DWG_TYPE_CIRCLE_R11);
-              break;
-            case DWG_TYPE_SHAPE:
-              obj->type = DELETED (DWG_TYPE_SHAPE_R11);
-              break;
-            case DWG_TYPE_REPEAT:
-              obj->type = DELETED (DWG_TYPE_REPEAT_R11);
-              break;
-            case DWG_TYPE_ENDREP:
-              obj->type = DELETED (DWG_TYPE_ENDREP_R11);
-              break;
-            case DWG_TYPE_TEXT:
-              obj->type = DELETED (DWG_TYPE_TEXT_R11);
-              break;
-            case DWG_TYPE_ARC:
-              obj->type = DELETED (DWG_TYPE_ARC_R11);
-              break;
-            case DWG_TYPE_TRACE:
-              obj->type = DELETED (DWG_TYPE_TRACE_R11);
-              break;
-            case DWG_TYPE_LOAD:
-              /* convert from pre r2.0 */
-              obj->type = DELETED (DWG_TYPE_LOAD_R11);
-              break;
-            case DWG_TYPE_SOLID:
-              obj->type = DELETED (DWG_TYPE_SOLID_R11);
-              break;
-            case DWG_TYPE_BLOCK:
-              obj->type = DELETED (DWG_TYPE_BLOCK_R11);
-              break;
-            case DWG_TYPE_ENDBLK:
-              obj->type = DELETED (DWG_TYPE_ENDBLK_R11);
-              break;
-            case DWG_TYPE_INSERT:
-            case DWG_TYPE_MINSERT:
-              obj->type = DELETED (DWG_TYPE_INSERT_R11);
-              break;
-            case DWG_TYPE_ATTDEF:
-              obj->type = DELETED (DWG_TYPE_ATTDEF_R11);
-              break;
-            case DWG_TYPE_ATTRIB:
-              obj->type = DELETED (DWG_TYPE_ATTRIB_R11);
-              break;
-            case DWG_TYPE_SEQEND:
-              obj->type = DELETED (DWG_TYPE_SEQEND_R11);
-              break;
-            case DWG_TYPE_POLYLINE_2D:
-            case DWG_TYPE_POLYLINE_3D:
-            case DWG_TYPE_POLYLINE_PFACE:
-            case DWG_TYPE_POLYLINE_MESH:
-              obj->type = DELETED (DWG_TYPE_POLYLINE_R11);
-              break;
-            case DWG_TYPE_VERTEX_2D:
-            case DWG_TYPE_VERTEX_3D:
-            case DWG_TYPE_VERTEX_MESH:
-            case DWG_TYPE_VERTEX_PFACE:
-            case DWG_TYPE_VERTEX_PFACE_FACE:
-              obj->type = DELETED (DWG_TYPE_VERTEX_R11);
-              break;
-            case DWG_TYPE__3DLINE:
-              obj->type = DELETED (DWG_TYPE_3DLINE_R11);
-              break;
-            case DWG_TYPE__3DFACE:
-              obj->type = DELETED (DWG_TYPE_3DFACE_R11);
-              break;
-            case DWG_TYPE_DIMENSION_LINEAR:
-            case DWG_TYPE_DIMENSION_ALIGNED:
-            case DWG_TYPE_DIMENSION_ANG2LN:
-            case DWG_TYPE_DIMENSION_DIAMETER:
-            case DWG_TYPE_DIMENSION_RADIUS:
-            case DWG_TYPE_DIMENSION_ANG3PT:
-            case DWG_TYPE_DIMENSION_ORDINATE:
-              obj->type = DELETED (DWG_TYPE_DIMENSION_R11);
-              break;
-            case DWG_TYPE_VIEWPORT:
-              obj->type = DELETED (DWG_TYPE_VIEWPORT_R11);
-#undef DELETED
-              break;
-            default:
-              LOG_INFO ("Invalid r11 type fixup from fixedtype: %d\n",
-                        obj->fixedtype)
-            }
-        }
-
       PRE (R_2_0b)
       {
         bit_write_RS (dat, obj->type);
         LOG_INFO ("type: %d [RS]\n", obj->type)
         if (obj->type > 64)
-          {
-            LOG_INFO ("deleted\n")
-            obj->type = -(int8_t)obj->type;
-          }
+          LOG_INFO ("deleted\n")
       }
       LATER_VERSIONS
       {
