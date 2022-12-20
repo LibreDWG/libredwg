@@ -707,3 +707,23 @@
          LOG_TRACE ("\n");                                                    \
        }
 #endif
+
+#ifndef LOG_FLAG_VERTEX
+#  define LOG_FLAG_VERTEX_ONE(value, w)                                       \
+     if (value & FLAG_VERTEX_##w)                                             \
+       LOG_TRACE (#w " (%d) ", FLAG_VERTEX_##w)
+#  define LOG_FLAG_VERTEX(value)                                              \
+     if (value)                                                               \
+       {                                                                      \
+         LOG_TRACE ("      ");                                                \
+         LOG_FLAG_VERTEX_ONE (value, EXTRA_VERTEX);                           \
+         LOG_FLAG_VERTEX_ONE (value, CURVE_FIT);                              \
+         LOG_FLAG_VERTEX_ONE (value, UNKNOWN_4);                              \
+         LOG_FLAG_VERTEX_ONE (value, UNKNOWN_8);                              \
+         LOG_FLAG_VERTEX_ONE (value, UNKNOWN_16);                             \
+         LOG_FLAG_VERTEX_ONE (value, 3D);                                     \
+         LOG_FLAG_VERTEX_ONE (value, POLYGON_MESH);                           \
+         LOG_FLAG_VERTEX_ONE (value, UNKNOWN_128);                            \
+         LOG_TRACE ("\n");                                                    \
+       }
+#endif

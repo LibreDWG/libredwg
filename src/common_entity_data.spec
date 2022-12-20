@@ -47,7 +47,7 @@
             // stringify the flag bits
 #define LOG_OPTS_R11(e, w)                                              \
             if (obj->type == DWG_TYPE_##e##_R11 && (R11OPTS (OPTS_R11_##e##_##w))) \
-              LOG_TRACE (#w " (0x%x) ", OPTS_R11_##e##_##w)
+              LOG_TRACE (#w " (%d) ", OPTS_R11_##e##_##w)
 
             LOG_OPTS_R11 (3DFACE, HAS_Z_FIRST);
             LOG_OPTS_R11 (3DFACE, HAS_Z_SECOND);
