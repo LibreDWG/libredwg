@@ -706,3 +706,23 @@
          LOG_TRACE ("\n");                                                    \
        }
 #endif
+
+#ifndef LOG_FLAG_VERTEX_2D
+#  define LOG_FLAG_VERTEX_2D_ONE(value, w)                                    \
+     if (value & (FLAG_VERTEX_2D_##w))                                        \
+       LOG_TRACE (#w " (0x%d) ", FLAG_VERTEX_2D_##w)
+#  define LOG_FLAG_VERTEX_2D(value)                                           \
+     if (value)                                                               \
+       {                                                                      \
+         LOG_TRACE ("      ");                                                \
+         LOG_FLAG_VERTEX_2D_ONE (value, EXTRA_VERTEX);                        \
+         LOG_FLAG_VERTEX_2D_ONE (value, CURVE_FIT);                           \
+         LOG_FLAG_VERTEX_2D_ONE (value, UNKNOWN_4);                           \
+         LOG_FLAG_VERTEX_2D_ONE (value, UNKNOWN_8);                           \
+         LOG_FLAG_VERTEX_2D_ONE (value, UNKNOWN_16);                          \
+         LOG_FLAG_VERTEX_2D_ONE (value, 3D_POLYLINE_VERTEX);                  \
+         LOG_FLAG_VERTEX_2D_ONE (value, 3D_POLYGON_MESH);                     \
+         LOG_FLAG_VERTEX_2D_ONE (value, UNKNOWN_128);                         \
+         LOG_TRACE ("\n");                                                    \
+       }
+#endif

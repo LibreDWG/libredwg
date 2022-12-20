@@ -969,8 +969,10 @@ DWG_ENTITY (VERTEX_2D)
       FIELD_RD (end_width, 41);
     if (R11OPTS (4))
       FIELD_RD (bulge, 42);
-    if (R11OPTS (8))
+    if (R11OPTS (8)) {
       FIELD_RC (flag, 0);
+      LOG_FLAG_VERTEX_2D(FIELD_VALUE(flag));
+    }
     if (R11OPTS (16))
       FIELD_RD (tangent_dir, 50);
     // if (R11FLAG (32)) // => VERTEX_3D
@@ -987,6 +989,7 @@ DWG_ENTITY (VERTEX_2D)
   SINCE (R_13b1)
   {
     FIELD_RC (flag, 0);
+    LOG_FLAG_VERTEX_2D(FIELD_VALUE(flag));
     FIELD_3BD (point, 10);
 
   /* Decoder and Encoder routines could be the same but then we
