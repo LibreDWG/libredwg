@@ -1728,8 +1728,8 @@
       Bit_Chain *obj_dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,             \
       Dwg_Object *restrict obj);                                              \
                                                                               \
-  static int dwg_decode_##token (Bit_Chain *restrict dat,                     \
-                                 Dwg_Object *restrict obj)                    \
+  int dwg_decode_##token (Bit_Chain *restrict dat,                            \
+                          Dwg_Object *restrict obj)                           \
   {                                                                           \
     int error = dwg_setup_##token (obj);                                      \
     Bit_Chain hdl_dat = *dat;                                                 \
@@ -1748,7 +1748,7 @@
     return error;                                                             \
   }                                                                           \
                                                                               \
-  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                   \
+  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                     \
   static int dwg_decode_##token##_private (                                   \
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \

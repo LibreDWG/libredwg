@@ -79,6 +79,16 @@ static unsigned int errors = 0;
 
 void dwg_set_next_hdl (Dwg_Data *dwg, unsigned long value);
 
+int dwg_decode_BLOCK_HEADER (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_LAYER (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_STYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_LTYPE (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_VIEW (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_UCS (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_VPORT (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_APPID (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+
 /*------------------------------------------------------------------------------
  * Private functions
  */
@@ -212,6 +222,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 {
   Dwg_Section *tbl = &dwg->header.section[id];
   Bit_Chain *hdl_dat = dat;
+  Dwg_Object *obj;
   int i;
   BITCODE_BL vcount;
   int error = 0;
@@ -223,7 +234,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   unsigned long oldpos;
   BITCODE_RL real_start = tbl->address;
 
-  LOG_TRACE ("\ncontents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n",
+  LOG_TRACE ("\ncontents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n\n",
              tbl->name, id, tbl->size, (long)tbl->number,
              (unsigned long)tbl->address,
              (unsigned long)(tbl->address
@@ -305,43 +316,13 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       dwg->dirty_refs = 1;
     }
 
-    // TODO: use the dwg.spec instead
-    // MAYBE: move to a spec dwg_r11.spec, and dwg_decode_r11_NAME
-#  define PREP_TABLE(token)                                                   \
-    Dwg_Object *obj;                                                          \
-    Dwg_Object_##token *_obj;                                                 \
-    Dwg_Object *ctrl                                                          \
-        = dwg_get_first_object (dwg, DWG_TYPE_##token##_CONTROL);             \
-    Dwg_Object_##token##_CONTROL *_ctrl                                       \
-        = ctrl ? ctrl->tio.object->tio.token##_CONTROL : NULL;                \
-    if (!ctrl || dat->byte > dat->size || (num + i) > dwg->num_objects)       \
-      return error | DWG_ERR_INVALIDDWG;                                      \
-    flag = bit_read_RC (dat);                                                 \
-    name = bit_read_TF (dat, 32);                                             \
-    if (!name)                                                                \
-      return error | DWG_ERR_INVALIDDWG;                                      \
-    _obj = dwg_add_##token (dwg, (const char *)name);                         \
-    obj = dwg_obj_generic_to_object (_obj, &error);                           \
-    _ctrl->entries[i] = dwg_add_handleref (dwg, 2, obj->handle.value, obj);   \
-    obj->size = tbl->size;                                                    \
-    obj->address = pos;                                                       \
-    _obj->flag = flag;                                                        \
-    LOG_TRACE ("\n-- table entry " #token " [%d]: 0x%lx\n", i, pos);          \
-    LOG_TRACE ("flag: %u [RC 70]\n", flag);                                   \
-    LOG_FLAG_##token;                                                         \
-    LOG_TRACE ("name: \"%s\" [TF 32 2]\n", name);                             \
-    free (name);                                                              \
-    if (dwg->header.version == R_11)                                          \
-      FIELD_RSd (used, 0);
-
-#  define LOG_FLAG_BLOCK LOG_FLAG_Block
-#  define LOG_FLAG_LAYER LOG_FLAG_Layer
-#  define LOG_FLAG_VIEW  LOG_FLAG_View
-#  define LOG_FLAG_STYLE LOG_FLAG_TextStyle
-#  define LOG_FLAG_APPID LOG_FLAG_RegApp
-#  define LOG_FLAG_DIMSTYLE LOG_FLAG_DimStyle
-#  define LOG_FLAG_LTYPE LOG_FLAG_Linetype
-#  define LOG_FLAG_VPORT LOG_FLAG_Viewport
+#  define NEW_OBJECT                                                          \
+    dwg_add_object (dwg);                                                     \
+    if (dat->byte > dat->size || (num + i) > dwg->num_objects)                \
+      return DWG_ERR_INVALIDDWG;                                              \
+    obj = &dwg->object[num++];                                                \
+    obj->address = dat->byte;                                                 \
+    obj->size = tbl->size
 
 #  define CHK_ENDPOS                                                          \
     SINCE (R_11)                                                              \
@@ -355,6 +336,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         LOG_ERROR ("offset %ld", pos - dat->byte);                            \
         /*return DWG_ERR_SECTIONNOTFOUND;*/                                   \
       }                                                                       \
+    LOG_TRACE ("\n")                                                          \
     dat->byte = pos
 
   switch (id)
@@ -362,51 +344,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     case SECTION_BLOCK:
       for (i = 0; i < tbl->number; i++)
         {
-          Dwg_Object *obj;
-          Dwg_Object_BLOCK_HEADER *_obj;
-          Dwg_Object *ctrl;
-          Dwg_Object_BLOCK_CONTROL *_ctrl;
-          if (dat->byte > dat->size || (num + i) > dwg->num_objects)
-            return DWG_ERR_INVALIDDWG;
-          flag = bit_read_RC (dat);
-          name = bit_read_TF (dat, 32);
-          if (!name)
-            return DWG_ERR_INVALIDDWG;
-          _obj = dwg_add_BLOCK_HEADER (dwg, (const char *)name);
-          _obj->flag = flag;
-          LOG_TRACE ("\n-- table entry BLOCK_HEADER [%d]: 0x%lx\n", i, pos);
-          LOG_TRACE ("flag: %u [RC 70]\n", flag);
-          LOG_FLAG_BLOCK
-          LOG_TRACE ("name: \"%s\" [TF 32 2]\n", name);
-          free (name);
-          obj = dwg_obj_generic_to_object (_obj, &error);
-          if (obj)
-            {
-              obj->size = tbl->size;
-              obj->address = pos;
-            }
-          ctrl = dwg_get_first_object (dwg, DWG_TYPE_BLOCK_CONTROL);
-          if (ctrl)
-            {
-              _ctrl = ctrl->tio.object->tio.BLOCK_CONTROL;
-              _ctrl->entries[i]
-                  = dwg_add_handleref (dwg, 2, obj->handle.value, obj);
-            }
-
-          // TODO move to => dwg.spec
-          SINCE (R_11)
-          {
-            FIELD_RSd (used, 0); // -1
-          }
-          FIELD_RLx (block_offset_r11, 0);
-          if (tbl->size == 38)
-            FIELD_RC (unknown_r11, 0);
-          SINCE (R_11)
-          {
-            FIELD_HANDLE (block_entity, 2, 0);
-            FIELD_RC (flag2, 0);
-            FIELD_RC (unknown_r11, 0);
-          }
+          NEW_OBJECT;
+          error |= dwg_decode_BLOCK_HEADER (dat, obj);
           CHK_ENDPOS;
         }
       break;
@@ -414,12 +353,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     case SECTION_LAYER:
       for (i = 0; i < tbl->number; i++)
         {
-          Bit_Chain *str_dat = dat;
-          PREP_TABLE (LAYER);
-          FIELD_CMC (color, 62); // off if negative
-          FIELD_HANDLE (ltype, 2, 6);
-          if (tbl->size == 38)
-            FIELD_RC (flag0, 0);
+          NEW_OBJECT;
+          error |= dwg_decode_LAYER (dat, obj);
           CHK_ENDPOS;
         }
       break;
@@ -428,240 +363,72 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     case SECTION_STYLE:
       for (i = 0; i < tbl->number; i++)
         {
-          PREP_TABLE (STYLE);
-          FIELD_RD (text_size, 40); // ok
-          FIELD_RD (width_factor, 41);
-          FIELD_RD (oblique_angle, 50);
-          FIELD_RC (generation, 71);
-          LOG_TEXT_GENERATION
-          FIELD_RD (last_height, 42);
-          FIELD_TFv (font_file, 64, 3)                       // 8ed
-          SINCE (R_2_4)
-            FIELD_TFv (bigfont_file, 64, 4); // 92d
+          NEW_OBJECT;
+          error |= dwg_decode_STYLE (dat, obj);
           CHK_ENDPOS;
         }
       break;
 
     case SECTION_LTYPE:
-      {
-        for (i = 0; i < tbl->number; i++)
-          {
-            Bit_Chain abs_dat = *dat;
-            bit_reset_chain (dat);
-            {
-              PREP_TABLE (LTYPE);
-              FIELD_TFv (description, 48, 3);
-              FIELD_RC (alignment, 72);
-              FIELD_RCu (num_dashes, 73); //
-              FIELD_RD (pattern_len, 40);
-#  ifndef IS_JSON
-              FIELD_VECTOR_INL (dashes_r11, RD, 12, 49);
-#  else
-              FIELD_VECTOR_N (dashes_r11, RD, 12, 49);
-#  endif
-              if (dwg->header.version < R_11 && tbl->size > 187)
-                FIELD_RC (unknown_r11, 0);
-            }
-            pos = dat->byte;
-            *dat = abs_dat;
-            dat->byte += pos;
-            CHK_ENDPOS;
-          }
-      }
+      for (i = 0; i < tbl->number; i++)
+        {
+          NEW_OBJECT;
+          error |= dwg_decode_LTYPE (dat, obj);
+          CHK_ENDPOS;
+        }
       break;
 
     case SECTION_VIEW:
-      {
-        for (i = 0; i < tbl->number; i++)
-          {
-            PREP_TABLE (VIEW);
-            FIELD_RD (VIEWSIZE, 40);
-            FIELD_2RD (VIEWCTR, 10);
-            if (obj->size == 58)
-              FIELD_RC (unknown_r11, 0);
-            if (tbl->size > 58)
-              FIELD_RD (view_width, 41);
-            if (tbl->size > 66)
-              FIELD_3RD (VIEWDIR, 11);
-            if (tbl->size > 89)
-              FIELD_RS (flag_3d, 0);
-            if (tbl->size == 66 || tbl->size == 92)
-              FIELD_RC (unknown_r2, 0);
-            SINCE (R_10)
-            {
-              FIELD_3RD (view_target, 12);
-              FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
-              FIELD_RD (lens_length, 42);
-              FIELD_RD (front_clip_z, 43);
-              FIELD_RD (back_clip_z, 44);
-              FIELD_RD (twist_angle, 50);
-            }
-            CHK_ENDPOS;
-          }
-      }
+      for (i = 0; i < tbl->number; i++)
+        {
+          NEW_OBJECT;
+          error |= dwg_decode_VIEW (dat, obj);
+          CHK_ENDPOS;
+        }
       break;
 
     // SINCE R_11
     case SECTION_UCS:
-      {
-        for (i = 0; i < tbl->number; i++)
-          {
-            Dwg_Object *obj;
-            Dwg_Object_UCS *_obj;
-            dwg_point_3d ucsorg, ucsxdir, ucsydir;
-            Dwg_Object *ctrl
-                = dwg_get_first_object (dwg, DWG_TYPE_UCS_CONTROL);
-            Dwg_Object_UCS_CONTROL *_ctrl
-                = ctrl ? ctrl->tio.object->tio.UCS_CONTROL : NULL;
-            if (!ctrl || dat->byte > dat->size || (num + i) > dwg->num_objects)
-              return DWG_ERR_INVALIDDWG;
-            LOG_TRACE ("\n-- table entry UCS [%d]: 0x%lx\n", i, pos);
-            flag = bit_read_RC (dat);
-            name = bit_read_TF (dat, 32);
-            if (!name)
-              return DWG_ERR_INVALIDDWG;
-            SINCE (R_11)
-              used = (BITCODE_RSd)bit_read_RS (dat);
-            ucsorg.x = bit_read_RD (dat);
-            ucsorg.y = bit_read_RD (dat);
-            ucsorg.z = bit_read_RD (dat);
-            ucsxdir.x = bit_read_RD (dat);
-            ucsxdir.y = bit_read_RD (dat);
-            ucsxdir.z = bit_read_RD (dat);
-            ucsydir.x = bit_read_RD (dat);
-            ucsydir.y = bit_read_RD (dat);
-            ucsydir.z = bit_read_RD (dat);
-            _obj = dwg_add_UCS (dwg, &ucsorg, &ucsxdir, &ucsydir,
-                                (const char *)name);
-            obj = dwg_obj_generic_to_object (_obj, &error);
-            _ctrl->entries[i]
-                = dwg_add_handleref (dwg, 2, obj->handle.value, obj);
-            obj->size = tbl->size;
-            obj->address = pos;
-            _obj->flag = flag;
-            _obj->used = used;
-            LOG_TRACE ("flag: %u [RC 70]\n", flag);
-            LOG_FLAG_UCS
-            LOG_TRACE ("name: \"%s\" [TF 32 2]\n", name);
-            LOG_TRACE ("used: " FORMAT_RSd " [RSd %d]\n", _obj->used, 0);
-            LOG_TRACE ("ucsorg: (%f %f %f) [3RD]\n", ucsorg.x, ucsorg.y, ucsorg.z);
-            LOG_TRACE ("ucsxdir: (%f %f %f) [3RD]\n", ucsxdir.x, ucsxdir.y, ucsxdir.z);
-            LOG_TRACE ("ucsydir: (%f %f %f) [3RD]\n", ucsydir.x, ucsydir.y, ucsydir.z);
-            free (name);
-
-            CHK_ENDPOS;
-          }
-        break;
-
-      // SINCE R_11
-      case SECTION_VPORT:
+      for (i = 0; i < tbl->number; i++)
         {
-          for (i = 0; i < tbl->number; i++)
-            {
-              PREP_TABLE (VPORT);
-              FIELD_2RD (lower_left, 10);
-              FIELD_2RD (upper_right, 11);
-              FIELD_3RD (view_target, 17);
-              FIELD_3RD (VIEWDIR, 16);
-              FIELD_RD (view_twist, 51);
-              FIELD_RD (VIEWSIZE, 40);
-              FIELD_2RD (VIEWCTR, 12);
-              FIELD_RD (aspect_ratio, 41);
-              DECODER {
-                FIELD_VALUE (view_width) = FIELD_VALUE (aspect_ratio) * FIELD_VALUE (VIEWSIZE);
-                LOG_TRACE ("view_width: %f (calc)\n", FIELD_VALUE (view_width))
-              }
-              FIELD_RD (lens_length, 42);
-              FIELD_RD (front_clip_z, 43);
-              FIELD_RD (back_clip_z, 44);
-              FIELD_RS (UCSFOLLOW, 71);
-              FIELD_RS (circle_zoom, 72); //circle sides
-              FIELD_RS (FASTZOOM, 73);
-              FIELD_RS (UCSICON, 74);
-              FIELD_RS (SNAPMODE, 75);
-              FIELD_RS (GRIDMODE, 76);
-              FIELD_RS (SNAPSTYLE, 77);
-              FIELD_RS (SNAPISOPAIR, 78);
-              FIELD_RD (SNAPANG, 50);
-              FIELD_2RD (SNAPBASE, 13);
-              FIELD_2RD (SNAPUNIT, 14);
-              FIELD_2RD (GRIDUNIT, 15);
-              CHK_ENDPOS;
-            }
+          NEW_OBJECT;
+          error |= dwg_decode_UCS (dat, obj);
+          CHK_ENDPOS;
         }
-        break;
+      break;
 
-      // SINCE R_11
-      case SECTION_APPID:
+    // SINCE R_11
+    case SECTION_VPORT:
+      for (i = 0; i < tbl->number; i++)
         {
-          for (i = 0; i < tbl->number; i++)
-            {
-              PREP_TABLE (APPID);
-              CHK_ENDPOS;
-            }
+          NEW_OBJECT;
+          error |= dwg_decode_VPORT (dat, obj);
+          CHK_ENDPOS;
         }
-        break;
+      break;
 
-      // SINCE R_11
-      case SECTION_DIMSTYLE:
+    // SINCE R_11
+    case SECTION_APPID:
+      for (i = 0; i < tbl->number; i++)
         {
-          for (i = 0; i < tbl->number; i++)
-            {
-              // unsigned long off;
-              PREP_TABLE (DIMSTYLE);   // d1f
-              FIELD_RD (DIMSCALE, 40); // d42
-              FIELD_RD (DIMASZ, 41);
-              FIELD_RD (DIMEXO, 42);
-              FIELD_RD (DIMDLI, 43);
-              FIELD_RD (DIMEXE, 44);
-              FIELD_RD (DIMRND, 45);
-              FIELD_RD (DIMDLE, 46);
-              FIELD_RD (DIMTP, 47);
-              FIELD_RD (DIMTM, 48); // ok
-              FIELD_RD (DIMTXT, 140);
-              FIELD_RD (DIMCEN, 141); // ok
-              FIELD_RD (DIMTSZ, 142);
-              FIELD_RD (DIMALTF, 143);
-              FIELD_RD (DIMLFAC, 144);
-              FIELD_RD (DIMTVP, 145); // db2
-              FIELD_RC (DIMTOL, 71);  // dba
-              FIELD_RC (DIMLIM, 72);  // dbb
-              FIELD_RC (DIMTIH, 73);
-              FIELD_RC (DIMTOH, 74);
-              FIELD_RC (DIMSE1, 75);
-              FIELD_RC (DIMSE2, 76);
-              FIELD_CAST (DIMTAD, RC, RS, 77); // ok
-              FIELD_CAST (DIMZIN, RC, BS, 78); // dc1
-              FIELD_RC (DIMALT, 170);
-              FIELD_CAST (DIMALTD, RC, BS, 171); // ok
-              FIELD_RC (DIMTOFL, 172);           // ok
-              FIELD_RC (DIMSAH, 173);            // ok
-              FIELD_RC (DIMTIX, 174);            // ok
-              FIELD_RC (DIMSOXD, 175);           // ok
-              FIELD_TFv (DIMPOST, 16, 3);        // ok dc8
-              FIELD_TFv (DIMAPOST, 16, 4);       // dd8
-              FIELD_TFv (DIMBLK_T, 16, 5);       //?? unsupported by ODA
-              FIELD_TFv (DIMBLK1_T, 16, 6);      //?? unsupported by ODA
-              FIELD_TFv (DIMBLK2_T, 66, 7);      //?? unsupported by ODA
-              // DEBUG_HERE; //e18
-              // dat->byte += 50; //unknown: DIMSHO, DIMASO (global)
-              FIELD_RS (DIMCLRD_N, 176); // e4a
-              FIELD_RS (DIMCLRE_N, 177);
-              FIELD_RS (DIMCLRT_N, 178); // e4e
-              FIELD_RC (DIMUPT, 0);      //??
-              FIELD_RD (DIMTFAC, 146);   // e51
-              FIELD_RD (DIMGAP, 147);    // e59
-              CHK_ENDPOS;                //-e63
-            }
+          NEW_OBJECT;
+          error |= dwg_decode_APPID (dat, obj);
+          CHK_ENDPOS;
         }
-        break;
+      break;
 
-#undef LOG_FLAG_W
-#undef LOG_FLAG_TABLE_W
-#undef LOG_FLAG_TABLE_MAX
+    // SINCE R_11
+    case SECTION_DIMSTYLE:
+      for (i = 0; i < tbl->number; i++)
+        {
+          NEW_OBJECT;
+          error |= dwg_decode_DIMSTYLE (dat, obj);
+          CHK_ENDPOS;
+        }
+      break;
 
-      // SINCE R_11
-      case SECTION_VX:
+    // SINCE R_11
+    case SECTION_VX:
         {
           for (i = 0; i < tbl->number; i++)
             {
