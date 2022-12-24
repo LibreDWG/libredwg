@@ -3852,32 +3852,32 @@ static int encode_preR13_POLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict
 static int encode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   int error = 0;
-  unsigned flag_r11 = (unsigned)obj->tio.entity->flag_r11 & 63;
+  unsigned flag_r11 = (unsigned)obj->tio.entity->flag_r11;
   obj->type = DWG_TYPE_DIMENSION_R11;
   if (!flag_r11)
     {
       switch (obj->fixedtype)
         {
         case DWG_TYPE_DIMENSION_LINEAR:
-          obj->tio.entity->flag_r11 = 64;
+          obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_LINEAR;
           break;
         case DWG_TYPE_DIMENSION_ALIGNED:
-          obj->tio.entity->flag_r11 = 64 | 1;
+          obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_ALIGNED;
           break;
         case DWG_TYPE_DIMENSION_ANG2LN:
-          obj->tio.entity->flag_r11 = 64 | 2;
+          obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_ANG2LN;
           break;
         case DWG_TYPE_DIMENSION_DIAMETER:
-          obj->tio.entity->flag_r11 = 64 | 4;
+          obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_DIAMETER;
           break;
         case DWG_TYPE_DIMENSION_RADIUS:
-          obj->tio.entity->flag_r11 = 64 | 8;
+          obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_RADIUS;
           break;
         case DWG_TYPE_DIMENSION_ANG3PT:
-          obj->tio.entity->flag_r11 = 64 | 16;
+          obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_ANG3PT;
           break;
         case DWG_TYPE_DIMENSION_ORDINATE:
-          obj->tio.entity->flag_r11 = 64 | 32;
+          obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_ORDINATE;
           break;
         default:
           LOG_ERROR ("Unknown preR13 DIMENSION fixedtype %u", obj->fixedtype);
@@ -3885,27 +3885,29 @@ static int encode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restric
         }
       LOG_TRACE ("-flag_r11: %u\n", obj->tio.entity->flag_r11)
     }
+  if (flag_r11 >= 64)
+    flag_r11 -= 64;
   switch (flag_r11)
     {
-    case 0:
+    case FLAG_R11_DIMENSION_LINEAR:
       error |= dwg_encode_DIMENSION_LINEAR (dat, obj);
       break;
-    case 1:
+    case FLAG_R11_DIMENSION_ALIGNED:
       error |= dwg_encode_DIMENSION_ALIGNED (dat, obj);
       break;
-    case 2:
+    case FLAG_R11_DIMENSION_ANG2LN:
       error |= dwg_encode_DIMENSION_ANG2LN (dat, obj);
       break;
-    case 4:
+    case FLAG_R11_DIMENSION_DIAMETER:
       error |= dwg_encode_DIMENSION_DIAMETER (dat, obj);
       break;
-    case 8:
+    case FLAG_R11_DIMENSION_RADIUS:
       error |= dwg_encode_DIMENSION_RADIUS (dat, obj);
       break;
-    case 16:
+    case FLAG_R11_DIMENSION_ANG3PT:
       error |= dwg_encode_DIMENSION_ANG3PT (dat, obj);
       break;
-    case 32:
+    case FLAG_R11_DIMENSION_ORDINATE:
       error |= dwg_encode_DIMENSION_ORDINATE (dat, obj);
       break;
     default:

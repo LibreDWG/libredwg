@@ -5639,32 +5639,35 @@ int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   int error = 0;
   BITCODE_RC flag_r11 = bit_read_RC (dat);
+  LOG_TRACE ("(flag_r11: " FORMAT_RC " [RC])\n", flag_r11)
   dat->byte--;
-  switch (flag_r11 & 63)
+  if (flag_r11 >= 64)
+    flag_r11 -= 64;
+  switch (flag_r11)
     {
-    case 0:
+    case FLAG_R11_DIMENSION_LINEAR:
       error |= dwg_decode_DIMENSION_LINEAR (dat, obj);
       break;
-    case 1:
+    case FLAG_R11_DIMENSION_ALIGNED:
       error |= dwg_decode_DIMENSION_ALIGNED (dat, obj);
       break;
-    case 2:
+    case FLAG_R11_DIMENSION_ANG2LN:
       error |= dwg_decode_DIMENSION_ANG2LN (dat, obj);
       break;
-    case 4:
+    case FLAG_R11_DIMENSION_DIAMETER:
       error |= dwg_decode_DIMENSION_DIAMETER (dat, obj);
       break;
-    case 8:
+    case FLAG_R11_DIMENSION_RADIUS:
       error |= dwg_decode_DIMENSION_RADIUS (dat, obj);
       break;
-    case 16:
+    case FLAG_R11_DIMENSION_ANG3PT:
       error |= dwg_decode_DIMENSION_ANG3PT (dat, obj);
       break;
-    case 32:
+    case FLAG_R11_DIMENSION_ORDINATE:
       error |= dwg_decode_DIMENSION_ORDINATE (dat, obj);
       break;
     default:
-      LOG_ERROR ("Unknown preR13 DIMENSION type %u", flag_r11 & 63);
+      LOG_ERROR ("Unknown preR13 DIMENSION type %u", flag_r11);
       error |= DWG_ERR_VALUEOUTOFBOUNDS;
     }
   return error;

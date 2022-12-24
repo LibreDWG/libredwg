@@ -23806,7 +23806,7 @@ dwg_add_DIMENSION_ALIGNED (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (dwg->header.version <= R_11)
     {
       obj->type = DWG_TYPE_DIMENSION_R11;
-      obj->tio.entity->flag_r11 = 64 + 1;
+      obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_ALIGNED;
     }
   return _obj;
 }
@@ -23840,7 +23840,7 @@ dwg_add_DIMENSION_ANG2LN (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (dwg->header.version <= R_11)
     {
       obj->type = DWG_TYPE_DIMENSION_R11;
-      obj->tio.entity->flag_r11 = 64 + 2;
+      obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_ANG2LN;
     }
   return _obj;
 }
@@ -23873,7 +23873,7 @@ dwg_add_DIMENSION_ANG3PT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (dwg->header.version <= R_11)
     {
       obj->type = DWG_TYPE_DIMENSION_R11;
-      obj->tio.entity->flag_r11 = 64 + 16;
+      obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_ANG3PT;
     }
   return _obj;
 }
@@ -23899,7 +23899,7 @@ dwg_add_DIMENSION_DIAMETER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (dwg->header.version <= R_11)
     {
       obj->type = DWG_TYPE_DIMENSION_R11;
-      obj->tio.entity->flag_r11 = 64 + 4;
+      obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_DIAMETER;
     }
   return _obj;
 }
@@ -23924,7 +23924,7 @@ dwg_add_DIMENSION_ORDINATE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (dwg->header.version <= R_11)
     {
       obj->type = DWG_TYPE_DIMENSION_R11;
-      obj->tio.entity->flag_r11 = 64 + 32;
+      obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_ORDINATE;
     }
   return _obj;
 }
@@ -23950,7 +23950,7 @@ dwg_add_DIMENSION_RADIUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (dwg->header.version <= R_11)
     {
       obj->type = DWG_TYPE_DIMENSION_R11;
-      obj->tio.entity->flag_r11 = 64 + 8;
+      obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_RADIUS;
     }
   return _obj;
 }
@@ -23982,7 +23982,7 @@ dwg_add_DIMENSION_LINEAR (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (dwg->header.version <= R_11)
     {
       obj->type = DWG_TYPE_DIMENSION_R11;
-      obj->tio.entity->flag_r11 = 64 + 0;
+      obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_LINEAR;
     }
   return _obj;
 }
