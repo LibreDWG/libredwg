@@ -138,7 +138,7 @@
     return 0;
   FIELD_RC (LIMCHECK, 70); //ok 1fa
 
-  /* TODO Unknown structure (0x01fc-0x0228) */
+  /* TODO Unknown structure (0x01fc-0x0228) 46 byte */
   // PLATFORM was until r11
   DEBUG_HERE //1fb
   UNKNOWN_UNTIL (0x229);
@@ -149,8 +149,14 @@
   /* TODO Unknown repeating variable - 18 floats, probably 6x 3d point */
   // probably RD sysvars: LASTANGLE, LASTPOINT, LASTPT3D. until r11
   // also there is VPOINTX/VPOINTY/VPOINTZ (replaced by VIEWDIR with r11)
-  DEBUG_HERE //252
-  UNKNOWN_UNTIL (0x2e1);
+  FIELD_3RD (VPOINTX, 0); //(1,0,0)
+  FIELD_3RD (VPOINTY, 0); //(0,1,0)
+  FIELD_3RD (VPOINTZ, 0); //(0,0,1)
+  FIELD_3RD (VPOINTXALT, 0); //(1,0,0)
+  FIELD_3RD (VPOINTYALT, 0); //(0,1,0)
+  FIELD_3RD (VPOINTZALT, 0); //(0,0,1)
+  //DEBUG_HERE //252
+  //UNKNOWN_UNTIL (0x2e1);
   FIELD_RS (unknown_18, 0);
   FIELD_CAST (BLIPMODE, RS, B, 70);
   if (dwg->header.numheader_vars <= 83) // PRE(R_2_21)

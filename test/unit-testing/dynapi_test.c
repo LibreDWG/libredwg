@@ -2656,6 +2656,60 @@ test_header (Dwg_Data *dwg)
       fail ("HEADER.AXISUNIT [2RD]");
   }
   {
+    BITCODE_3RD vpointx;
+    if (dwg_dynapi_header_value (dwg, "VPOINTX", &vpointx, NULL)
+        && !memcmp (&vpointx, &dwg->header_vars.VPOINTX, sizeof (dwg->header_vars.VPOINTX))
+       )
+      pass ();
+    else
+      fail ("HEADER.VPOINTX [3RD]");
+  }
+  {
+    BITCODE_3RD vpointy;
+    if (dwg_dynapi_header_value (dwg, "VPOINTY", &vpointy, NULL)
+        && !memcmp (&vpointy, &dwg->header_vars.VPOINTY, sizeof (dwg->header_vars.VPOINTY))
+       )
+      pass ();
+    else
+      fail ("HEADER.VPOINTY [3RD]");
+  }
+  {
+    BITCODE_3RD vpointz;
+    if (dwg_dynapi_header_value (dwg, "VPOINTZ", &vpointz, NULL)
+        && !memcmp (&vpointz, &dwg->header_vars.VPOINTZ, sizeof (dwg->header_vars.VPOINTZ))
+       )
+      pass ();
+    else
+      fail ("HEADER.VPOINTZ [3RD]");
+  }
+  {
+    BITCODE_3RD vpointxalt;
+    if (dwg_dynapi_header_value (dwg, "VPOINTXALT", &vpointxalt, NULL)
+        && !memcmp (&vpointxalt, &dwg->header_vars.VPOINTXALT, sizeof (dwg->header_vars.VPOINTXALT))
+       )
+      pass ();
+    else
+      fail ("HEADER.VPOINTXALT [3RD]");
+  }
+  {
+    BITCODE_3RD vpointyalt;
+    if (dwg_dynapi_header_value (dwg, "VPOINTYALT", &vpointyalt, NULL)
+        && !memcmp (&vpointyalt, &dwg->header_vars.VPOINTYALT, sizeof (dwg->header_vars.VPOINTYALT))
+       )
+      pass ();
+    else
+      fail ("HEADER.VPOINTYALT [3RD]");
+  }
+  {
+    BITCODE_3RD vpointzalt;
+    if (dwg_dynapi_header_value (dwg, "VPOINTZALT", &vpointzalt, NULL)
+        && !memcmp (&vpointzalt, &dwg->header_vars.VPOINTZALT, sizeof (dwg->header_vars.VPOINTZALT))
+       )
+      pass ();
+    else
+      fail ("HEADER.VPOINTZALT [3RD]");
+  }
+  {
     BITCODE_3BD ucsorg;
     if (dwg_dynapi_header_value (dwg, "UCSORG", &ucsorg, NULL)
         && !memcmp (&ucsorg, &dwg->header_vars.UCSORG, sizeof (dwg->header_vars.UCSORG))

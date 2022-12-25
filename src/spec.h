@@ -683,5 +683,6 @@
 #define CALL_SUBCURVE(hdl, curvetype)
 
 #ifndef UNKNOWN_UNTIL
-#  define UNKNOWN_UNTIL(pos) dat->byte = pos
+#  define UNKNOWN_UNTIL(pos)  LOG_TRACE ("unknown (%ld): ", pos - dat->byte); \
+  dat->byte = pos
 #endif
