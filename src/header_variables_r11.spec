@@ -248,14 +248,21 @@
   FIELD_TFv (unknown_string, 33, 1);
   FIELD_RS (HANDLING, 70); // use new HEX handles (should be RC)
   UNKNOWN_UNTIL (0x4ee);
-  /* TODO fix HANDSEED - 00 00 00 00 00 00 12 35 mean 0x1235 */
+  /* TODO fix HANDSEED - 00 00 00 00 00 00 12 35 mean 0x1235 [RLx] */
   DECODER {
     _obj->HANDSEED = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
     _obj->HANDSEED->absolute_ref = (BITCODE_RL)bit_read_RS (dat);
-    LOG_TRACE ("HANDSEED: %lX [RS 5]\n", _obj->HANDSEED->absolute_ref)
+    LOG_TRACE ("HANDSEED: %lX [RSx 5]\n", _obj->HANDSEED->absolute_ref)
+  }
+  ENCODER {
+    if (_obj->HANDSEED)
+      {
+        bit_write_RS (dat, _obj->HANDSEED->absolute_ref);
+        LOG_TRACE ("HANDSEED: %lX [RSx 5]\n", _obj->HANDSEED->absolute_ref)
+      }
   }
   FREE {
-    free (_obj->HANDSEED);
+    free (_obj->HANDSEED); _obj->HANDSEED = NULL;
   }
   DEBUG_HERE
   UNKNOWN_UNTIL (0x4f6);
