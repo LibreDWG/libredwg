@@ -2,7 +2,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2010, 2018 Free Software Foundation, Inc.                  */
+/*  Copyright (C) 2010, 2018, 2022 Free Software Foundation, Inc.            */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -190,11 +190,11 @@
     FIELD_VALUE (SHADEDIF) = 70;
     FIELD_VALUE (MAXACTVP) = 64;
   }
-  FIELD_BS (USERI1, 70);
-  FIELD_BS (USERI2, 70);
-  FIELD_BS (USERI3, 70);
-  FIELD_BS (USERI4, 70);
-  FIELD_BS (USERI5, 70);
+  FIELD_BSd (USERI1, 70);
+  FIELD_BSd (USERI2, 70);
+  FIELD_BSd (USERI3, 70);
+  FIELD_BSd (USERI4, 70);
+  FIELD_BSd (USERI5, 70);
   FIELD_BS (SPLINESEGS, 70);
   FIELD_BS (SURFU, 70);
   FIELD_BS (SURFV, 70);

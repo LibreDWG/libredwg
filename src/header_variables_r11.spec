@@ -195,12 +195,11 @@
   if (dwg->header.numheader_vars <= 104)
     return 0;
 
-  /* TODO Signed */
-  FIELD_RS (USERI1, 70);
-  FIELD_RS (USERI2, 70);
-  FIELD_RS (USERI3, 70);
-  FIELD_RS (USERI4, 70);
-  FIELD_RS (USERI5, 70);
+  FIELD_RSd (USERI1, 70);
+  FIELD_RSd (USERI2, 70);
+  FIELD_RSd (USERI3, 70);
+  FIELD_RSd (USERI4, 70);
+  FIELD_RSd (USERI5, 70);
 
   FIELD_RD (USERR1, 40);
   FIELD_RD (USERR2, 40);

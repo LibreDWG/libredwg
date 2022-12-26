@@ -379,6 +379,12 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
     GROUP (dxf);                                                              \
     fwrite (&_s, 2, 1, dat->fh);                                              \
   }
+#define VALUE_RSd(value, dxf)                                                 \
+  {                                                                           \
+    BITCODE_RSd _s = (BITCODE_RSd)(value);                                    \
+    GROUP (dxf);                                                              \
+    fwrite (&_s, 2, 1, dat->fh);                                              \
+  }
 #define VALUE_RL(value, dxf)                                                  \
   {                                                                           \
     BITCODE_RL _s = (BITCODE_RL)value;                                        \
@@ -455,6 +461,11 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
   {                                                                           \
     HEADER_9 (nam);                                                           \
     VALUE_RS (dwg->header_vars.nam, dxf);                                     \
+  }
+#define HEADER_RSd(nam, dxf)                                                   \
+  {                                                                           \
+    HEADER_9 (nam);                                                           \
+    VALUE_RSd (dwg->header_vars.nam, dxf);                                     \
   }
 #define VALUE_RD(value, dxf)                                                  \
   {                                                                           \
