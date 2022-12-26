@@ -229,9 +229,10 @@
   FIELD_CAST (MIRRTEXT, RS, B, 70);
   if (dwg->header.numheader_vars <= 129)
     return 0;
-  /* Skip table UCS (0x3ef-0x3f9) 11 byte */
-  UNKNOWN_UNTIL (0x3fa);
-  FIELD_RC (unknown_58, 0);
+  /* Skip table UCS (0x3ef-0x3f8) 10 byte */
+  UNKNOWN_UNTIL (0x3f9);
+  FIELD_RC (unknown_3f9, 0);
+  FIELD_RC (unknown_3fa, 0);
   FIELD_3RD (UCSORG, 10); //ok
   FIELD_3RD (UCSXDIR, 11); //ok
   FIELD_3RD (UCSYDIR, 12); //ok
