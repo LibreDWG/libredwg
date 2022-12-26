@@ -1263,12 +1263,10 @@ typedef struct _dwg_header_variables {
   BITCODE_RL dwg_size;     /* -r1.40 */
   BITCODE_RS numentities;  /* r2.0 - r10 */
   BITCODE_RS circle_zoom_percent;
-  BITCODE_RC unknown_58;
-  BITCODE_RC unknown_59;
-  BITCODE_RC unknown_60;
   BITCODE_BD FRONTZ;
   BITCODE_BD BACKZ;
   BITCODE_RC UCSICON;
+  BITCODE_RS unknown_58;  /* r11 */
   BITCODE_RL oldCECOLOR_hi; /* r11, or RD */
   BITCODE_RL oldCECOLOR_lo; /* r11 */
   BITCODE_RS layer_colors[128]; /* r1.2 - r1.4 */

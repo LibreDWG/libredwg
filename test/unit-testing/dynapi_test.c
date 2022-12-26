@@ -514,6 +514,15 @@ test_header (Dwg_Data *dwg)
 
   }
   {
+    BITCODE_RC unknown_46[46];
+    if (dwg_dynapi_header_value (dwg, "unknown_46[46]", &unknown_46, NULL)
+        && !memcmp (&unknown_46, &dwg->header_vars.unknown_46, sizeof (dwg->header_vars.unknown_46))
+       )
+      pass ();
+    else
+      fail ("HEADER.unknown_46[46] [RC]");
+  }
+  {
     BITCODE_B blipmode;
     if (dwg_dynapi_header_value (dwg, "BLIPMODE", &blipmode, NULL)
         && blipmode == dwg->header_vars.BLIPMODE)
@@ -637,6 +646,132 @@ test_header (Dwg_Data *dwg)
             dwg->header_vars.SKPOLY, skpoly);
     skpoly--;
     dwg_dynapi_header_set_value (dwg, "SKPOLY", &skpoly, 0);
+
+  }
+  {
+    BITCODE_RS unknown_mon;
+    if (dwg_dynapi_header_value (dwg, "unknown_mon", &unknown_mon, NULL)
+        && unknown_mon == dwg->header_vars.unknown_mon)
+      pass ();
+    else
+      fail ("HEADER.unknown_mon [RS] %hu != %hu", dwg->header_vars.unknown_mon, unknown_mon);
+    unknown_mon++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_mon", &unknown_mon, 0)
+        && unknown_mon == dwg->header_vars.unknown_mon)
+      pass ();
+    else
+      fail ("HEADER.unknown_mon [RS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_mon, unknown_mon);
+    unknown_mon--;
+    dwg_dynapi_header_set_value (dwg, "unknown_mon", &unknown_mon, 0);
+
+  }
+  {
+    BITCODE_RS unknown_day;
+    if (dwg_dynapi_header_value (dwg, "unknown_day", &unknown_day, NULL)
+        && unknown_day == dwg->header_vars.unknown_day)
+      pass ();
+    else
+      fail ("HEADER.unknown_day [RS] %hu != %hu", dwg->header_vars.unknown_day, unknown_day);
+    unknown_day++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_day", &unknown_day, 0)
+        && unknown_day == dwg->header_vars.unknown_day)
+      pass ();
+    else
+      fail ("HEADER.unknown_day [RS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_day, unknown_day);
+    unknown_day--;
+    dwg_dynapi_header_set_value (dwg, "unknown_day", &unknown_day, 0);
+
+  }
+  {
+    BITCODE_RS unknown_year;
+    if (dwg_dynapi_header_value (dwg, "unknown_year", &unknown_year, NULL)
+        && unknown_year == dwg->header_vars.unknown_year)
+      pass ();
+    else
+      fail ("HEADER.unknown_year [RS] %hu != %hu", dwg->header_vars.unknown_year, unknown_year);
+    unknown_year++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_year", &unknown_year, 0)
+        && unknown_year == dwg->header_vars.unknown_year)
+      pass ();
+    else
+      fail ("HEADER.unknown_year [RS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_year, unknown_year);
+    unknown_year--;
+    dwg_dynapi_header_set_value (dwg, "unknown_year", &unknown_year, 0);
+
+  }
+  {
+    BITCODE_RS unknown_hour;
+    if (dwg_dynapi_header_value (dwg, "unknown_hour", &unknown_hour, NULL)
+        && unknown_hour == dwg->header_vars.unknown_hour)
+      pass ();
+    else
+      fail ("HEADER.unknown_hour [RS] %hu != %hu", dwg->header_vars.unknown_hour, unknown_hour);
+    unknown_hour++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_hour", &unknown_hour, 0)
+        && unknown_hour == dwg->header_vars.unknown_hour)
+      pass ();
+    else
+      fail ("HEADER.unknown_hour [RS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_hour, unknown_hour);
+    unknown_hour--;
+    dwg_dynapi_header_set_value (dwg, "unknown_hour", &unknown_hour, 0);
+
+  }
+  {
+    BITCODE_RS unknown_min;
+    if (dwg_dynapi_header_value (dwg, "unknown_min", &unknown_min, NULL)
+        && unknown_min == dwg->header_vars.unknown_min)
+      pass ();
+    else
+      fail ("HEADER.unknown_min [RS] %hu != %hu", dwg->header_vars.unknown_min, unknown_min);
+    unknown_min++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_min", &unknown_min, 0)
+        && unknown_min == dwg->header_vars.unknown_min)
+      pass ();
+    else
+      fail ("HEADER.unknown_min [RS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_min, unknown_min);
+    unknown_min--;
+    dwg_dynapi_header_set_value (dwg, "unknown_min", &unknown_min, 0);
+
+  }
+  {
+    BITCODE_RS unknown_sec;
+    if (dwg_dynapi_header_value (dwg, "unknown_sec", &unknown_sec, NULL)
+        && unknown_sec == dwg->header_vars.unknown_sec)
+      pass ();
+    else
+      fail ("HEADER.unknown_sec [RS] %hu != %hu", dwg->header_vars.unknown_sec, unknown_sec);
+    unknown_sec++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_sec", &unknown_sec, 0)
+        && unknown_sec == dwg->header_vars.unknown_sec)
+      pass ();
+    else
+      fail ("HEADER.unknown_sec [RS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_sec, unknown_sec);
+    unknown_sec--;
+    dwg_dynapi_header_set_value (dwg, "unknown_sec", &unknown_sec, 0);
+
+  }
+  {
+    BITCODE_RS unknown_ms;
+    if (dwg_dynapi_header_value (dwg, "unknown_ms", &unknown_ms, NULL)
+        && unknown_ms == dwg->header_vars.unknown_ms)
+      pass ();
+    else
+      fail ("HEADER.unknown_ms [RS] %hu != %hu", dwg->header_vars.unknown_ms, unknown_ms);
+    unknown_ms++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_ms", &unknown_ms, 0)
+        && unknown_ms == dwg->header_vars.unknown_ms)
+      pass ();
+    else
+      fail ("HEADER.unknown_ms [RS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_ms, unknown_ms);
+    unknown_ms--;
+    dwg_dynapi_header_set_value (dwg, "unknown_ms", &unknown_ms, 0);
 
   }
   {
@@ -1180,90 +1315,90 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_BS useri1;
+    BITCODE_BSd useri1;
     if (dwg_dynapi_header_value (dwg, "USERI1", &useri1, NULL)
         && useri1 == dwg->header_vars.USERI1)
       pass ();
     else
-      fail ("HEADER.USERI1 [BS] %hu != %hu", dwg->header_vars.USERI1, useri1);
+      fail ("HEADER.USERI1 [BSd] " FORMAT_BSd " != " FORMAT_BSd "", dwg->header_vars.USERI1, useri1);
     useri1++;
     if (dwg_dynapi_header_set_value (dwg, "USERI1", &useri1, 0)
         && useri1 == dwg->header_vars.USERI1)
       pass ();
     else
-      fail ("HEADER.USERI1 [BS] set+1 %hu != %hu",
+      fail ("HEADER.USERI1 [BSd] set+1 " FORMAT_BSd " != " FORMAT_BSd "",
             dwg->header_vars.USERI1, useri1);
     useri1--;
     dwg_dynapi_header_set_value (dwg, "USERI1", &useri1, 0);
 
   }
   {
-    BITCODE_BS useri2;
+    BITCODE_BSd useri2;
     if (dwg_dynapi_header_value (dwg, "USERI2", &useri2, NULL)
         && useri2 == dwg->header_vars.USERI2)
       pass ();
     else
-      fail ("HEADER.USERI2 [BS] %hu != %hu", dwg->header_vars.USERI2, useri2);
+      fail ("HEADER.USERI2 [BSd] " FORMAT_BSd " != " FORMAT_BSd "", dwg->header_vars.USERI2, useri2);
     useri2++;
     if (dwg_dynapi_header_set_value (dwg, "USERI2", &useri2, 0)
         && useri2 == dwg->header_vars.USERI2)
       pass ();
     else
-      fail ("HEADER.USERI2 [BS] set+1 %hu != %hu",
+      fail ("HEADER.USERI2 [BSd] set+1 " FORMAT_BSd " != " FORMAT_BSd "",
             dwg->header_vars.USERI2, useri2);
     useri2--;
     dwg_dynapi_header_set_value (dwg, "USERI2", &useri2, 0);
 
   }
   {
-    BITCODE_BS useri3;
+    BITCODE_BSd useri3;
     if (dwg_dynapi_header_value (dwg, "USERI3", &useri3, NULL)
         && useri3 == dwg->header_vars.USERI3)
       pass ();
     else
-      fail ("HEADER.USERI3 [BS] %hu != %hu", dwg->header_vars.USERI3, useri3);
+      fail ("HEADER.USERI3 [BSd] " FORMAT_BSd " != " FORMAT_BSd "", dwg->header_vars.USERI3, useri3);
     useri3++;
     if (dwg_dynapi_header_set_value (dwg, "USERI3", &useri3, 0)
         && useri3 == dwg->header_vars.USERI3)
       pass ();
     else
-      fail ("HEADER.USERI3 [BS] set+1 %hu != %hu",
+      fail ("HEADER.USERI3 [BSd] set+1 " FORMAT_BSd " != " FORMAT_BSd "",
             dwg->header_vars.USERI3, useri3);
     useri3--;
     dwg_dynapi_header_set_value (dwg, "USERI3", &useri3, 0);
 
   }
   {
-    BITCODE_BS useri4;
+    BITCODE_BSd useri4;
     if (dwg_dynapi_header_value (dwg, "USERI4", &useri4, NULL)
         && useri4 == dwg->header_vars.USERI4)
       pass ();
     else
-      fail ("HEADER.USERI4 [BS] %hu != %hu", dwg->header_vars.USERI4, useri4);
+      fail ("HEADER.USERI4 [BSd] " FORMAT_BSd " != " FORMAT_BSd "", dwg->header_vars.USERI4, useri4);
     useri4++;
     if (dwg_dynapi_header_set_value (dwg, "USERI4", &useri4, 0)
         && useri4 == dwg->header_vars.USERI4)
       pass ();
     else
-      fail ("HEADER.USERI4 [BS] set+1 %hu != %hu",
+      fail ("HEADER.USERI4 [BSd] set+1 " FORMAT_BSd " != " FORMAT_BSd "",
             dwg->header_vars.USERI4, useri4);
     useri4--;
     dwg_dynapi_header_set_value (dwg, "USERI4", &useri4, 0);
 
   }
   {
-    BITCODE_BS useri5;
+    BITCODE_BSd useri5;
     if (dwg_dynapi_header_value (dwg, "USERI5", &useri5, NULL)
         && useri5 == dwg->header_vars.USERI5)
       pass ();
     else
-      fail ("HEADER.USERI5 [BS] %hu != %hu", dwg->header_vars.USERI5, useri5);
+      fail ("HEADER.USERI5 [BSd] " FORMAT_BSd " != " FORMAT_BSd "", dwg->header_vars.USERI5, useri5);
     useri5++;
     if (dwg_dynapi_header_set_value (dwg, "USERI5", &useri5, 0)
         && useri5 == dwg->header_vars.USERI5)
       pass ();
     else
-      fail ("HEADER.USERI5 [BS] set+1 %hu != %hu",
+      fail ("HEADER.USERI5 [BSd] set+1 " FORMAT_BSd " != " FORMAT_BSd "",
             dwg->header_vars.USERI5, useri5);
     useri5--;
     dwg_dynapi_header_set_value (dwg, "USERI5", &useri5, 0);
@@ -2087,6 +2222,24 @@ test_header (Dwg_Data *dwg)
       pass ();
     else
       fail ("HEADER.HANDSEED [H]");
+  }
+  {
+    BITCODE_RL unknown_4f2;
+    if (dwg_dynapi_header_value (dwg, "unknown_4f2", &unknown_4f2, NULL)
+        && unknown_4f2 == dwg->header_vars.unknown_4f2)
+      pass ();
+    else
+      fail ("HEADER.unknown_4f2 [RL] %u != %u", dwg->header_vars.unknown_4f2, unknown_4f2);
+    unknown_4f2++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_4f2", &unknown_4f2, 0)
+        && unknown_4f2 == dwg->header_vars.unknown_4f2)
+      pass ();
+    else
+      fail ("HEADER.unknown_4f2 [RL] set+1 %u != %u",
+            dwg->header_vars.unknown_4f2, unknown_4f2);
+    unknown_4f2--;
+    dwg_dynapi_header_set_value (dwg, "unknown_4f2", &unknown_4f2, 0);
+
   }
   {
     BITCODE_RS unknown_5;
@@ -5680,60 +5833,6 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_RC unknown_58;
-    if (dwg_dynapi_header_value (dwg, "unknown_58", &unknown_58, NULL)
-        && unknown_58 == dwg->header_vars.unknown_58)
-      pass ();
-    else
-      fail ("HEADER.unknown_58 [RC] %u != %u", dwg->header_vars.unknown_58, unknown_58);
-    unknown_58++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_58", &unknown_58, 0)
-        && unknown_58 == dwg->header_vars.unknown_58)
-      pass ();
-    else
-      fail ("HEADER.unknown_58 [RC] set+1 %u != %u",
-            dwg->header_vars.unknown_58, unknown_58);
-    unknown_58--;
-    dwg_dynapi_header_set_value (dwg, "unknown_58", &unknown_58, 0);
-
-  }
-  {
-    BITCODE_RC unknown_59;
-    if (dwg_dynapi_header_value (dwg, "unknown_59", &unknown_59, NULL)
-        && unknown_59 == dwg->header_vars.unknown_59)
-      pass ();
-    else
-      fail ("HEADER.unknown_59 [RC] %u != %u", dwg->header_vars.unknown_59, unknown_59);
-    unknown_59++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_59", &unknown_59, 0)
-        && unknown_59 == dwg->header_vars.unknown_59)
-      pass ();
-    else
-      fail ("HEADER.unknown_59 [RC] set+1 %u != %u",
-            dwg->header_vars.unknown_59, unknown_59);
-    unknown_59--;
-    dwg_dynapi_header_set_value (dwg, "unknown_59", &unknown_59, 0);
-
-  }
-  {
-    BITCODE_RC unknown_60;
-    if (dwg_dynapi_header_value (dwg, "unknown_60", &unknown_60, NULL)
-        && unknown_60 == dwg->header_vars.unknown_60)
-      pass ();
-    else
-      fail ("HEADER.unknown_60 [RC] %u != %u", dwg->header_vars.unknown_60, unknown_60);
-    unknown_60++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_60", &unknown_60, 0)
-        && unknown_60 == dwg->header_vars.unknown_60)
-      pass ();
-    else
-      fail ("HEADER.unknown_60 [RC] set+1 %u != %u",
-            dwg->header_vars.unknown_60, unknown_60);
-    unknown_60--;
-    dwg_dynapi_header_set_value (dwg, "unknown_60", &unknown_60, 0);
-
-  }
-  {
     BITCODE_BD frontz;
     if (dwg_dynapi_header_value (dwg, "FRONTZ", &frontz, NULL)
         && frontz == dwg->header_vars.FRONTZ)
@@ -5788,6 +5887,24 @@ test_header (Dwg_Data *dwg)
 
   }
   {
+    BITCODE_RS unknown_58;
+    if (dwg_dynapi_header_value (dwg, "unknown_58", &unknown_58, NULL)
+        && unknown_58 == dwg->header_vars.unknown_58)
+      pass ();
+    else
+      fail ("HEADER.unknown_58 [RS] %hu != %hu", dwg->header_vars.unknown_58, unknown_58);
+    unknown_58++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_58", &unknown_58, 0)
+        && unknown_58 == dwg->header_vars.unknown_58)
+      pass ();
+    else
+      fail ("HEADER.unknown_58 [RS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_58, unknown_58);
+    unknown_58--;
+    dwg_dynapi_header_set_value (dwg, "unknown_58", &unknown_58, 0);
+
+  }
+  {
     BITCODE_RL oldcecolor_hi;
     if (dwg_dynapi_header_value (dwg, "oldCECOLOR_hi", &oldcecolor_hi, NULL)
         && oldcecolor_hi == dwg->header_vars.oldCECOLOR_hi)
@@ -5833,6 +5950,42 @@ test_header (Dwg_Data *dwg)
       fail ("HEADER.layer_colors[128] [RS]");
   }
   {
+    BITCODE_RC unknown_3f9;
+    if (dwg_dynapi_header_value (dwg, "unknown_3f9", &unknown_3f9, NULL)
+        && unknown_3f9 == dwg->header_vars.unknown_3f9)
+      pass ();
+    else
+      fail ("HEADER.unknown_3f9 [RC] %u != %u", dwg->header_vars.unknown_3f9, unknown_3f9);
+    unknown_3f9++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_3f9", &unknown_3f9, 0)
+        && unknown_3f9 == dwg->header_vars.unknown_3f9)
+      pass ();
+    else
+      fail ("HEADER.unknown_3f9 [RC] set+1 %u != %u",
+            dwg->header_vars.unknown_3f9, unknown_3f9);
+    unknown_3f9--;
+    dwg_dynapi_header_set_value (dwg, "unknown_3f9", &unknown_3f9, 0);
+
+  }
+  {
+    BITCODE_RC unknown_3fa;
+    if (dwg_dynapi_header_value (dwg, "unknown_3fa", &unknown_3fa, NULL)
+        && unknown_3fa == dwg->header_vars.unknown_3fa)
+      pass ();
+    else
+      fail ("HEADER.unknown_3fa [RC] %u != %u", dwg->header_vars.unknown_3fa, unknown_3fa);
+    unknown_3fa++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_3fa", &unknown_3fa, 0)
+        && unknown_3fa == dwg->header_vars.unknown_3fa)
+      pass ();
+    else
+      fail ("HEADER.unknown_3fa [RC] set+1 %u != %u",
+            dwg->header_vars.unknown_3fa, unknown_3fa);
+    unknown_3fa--;
+    dwg_dynapi_header_set_value (dwg, "unknown_3fa", &unknown_3fa, 0);
+
+  }
+  {
     BITCODE_RS unknown_51e;
     if (dwg_dynapi_header_value (dwg, "unknown_51e", &unknown_51e, NULL)
         && unknown_51e == dwg->header_vars.unknown_51e)
@@ -5866,6 +6019,60 @@ test_header (Dwg_Data *dwg)
             dwg->header_vars.unknown_520, unknown_520);
     unknown_520--;
     dwg_dynapi_header_set_value (dwg, "unknown_520", &unknown_520, 0);
+
+  }
+  {
+    BITCODE_RS unknown_52c;
+    if (dwg_dynapi_header_value (dwg, "unknown_52c", &unknown_52c, NULL)
+        && unknown_52c == dwg->header_vars.unknown_52c)
+      pass ();
+    else
+      fail ("HEADER.unknown_52c [RS] %hu != %hu", dwg->header_vars.unknown_52c, unknown_52c);
+    unknown_52c++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_52c", &unknown_52c, 0)
+        && unknown_52c == dwg->header_vars.unknown_52c)
+      pass ();
+    else
+      fail ("HEADER.unknown_52c [RS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_52c, unknown_52c);
+    unknown_52c--;
+    dwg_dynapi_header_set_value (dwg, "unknown_52c", &unknown_52c, 0);
+
+  }
+  {
+    BITCODE_RS unknown_52e;
+    if (dwg_dynapi_header_value (dwg, "unknown_52e", &unknown_52e, NULL)
+        && unknown_52e == dwg->header_vars.unknown_52e)
+      pass ();
+    else
+      fail ("HEADER.unknown_52e [RS] %hu != %hu", dwg->header_vars.unknown_52e, unknown_52e);
+    unknown_52e++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_52e", &unknown_52e, 0)
+        && unknown_52e == dwg->header_vars.unknown_52e)
+      pass ();
+    else
+      fail ("HEADER.unknown_52e [RS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_52e, unknown_52e);
+    unknown_52e--;
+    dwg_dynapi_header_set_value (dwg, "unknown_52e", &unknown_52e, 0);
+
+  }
+  {
+    BITCODE_RC unknown_530;
+    if (dwg_dynapi_header_value (dwg, "unknown_530", &unknown_530, NULL)
+        && unknown_530 == dwg->header_vars.unknown_530)
+      pass ();
+    else
+      fail ("HEADER.unknown_530 [RC] %u != %u", dwg->header_vars.unknown_530, unknown_530);
+    unknown_530++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_530", &unknown_530, 0)
+        && unknown_530 == dwg->header_vars.unknown_530)
+      pass ();
+    else
+      fail ("HEADER.unknown_530 [RC] set+1 %u != %u",
+            dwg->header_vars.unknown_530, unknown_530);
+    unknown_530--;
+    dwg_dynapi_header_set_value (dwg, "unknown_530", &unknown_530, 0);
 
   }
   {

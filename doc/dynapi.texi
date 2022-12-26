@@ -628,15 +628,15 @@ H
 @item UNITMODE
 BS,	DXF 70
 @item USERI1
-BS,	DXF 70
+BSd,	DXF 70
 @item USERI2
-BS,	DXF 70
+BSd,	DXF 70
 @item USERI3
-BS,	DXF 70
+BSd,	DXF 70
 @item USERI4
-BS,	DXF 70
+BSd,	DXF 70
 @item USERI5
-BS,	DXF 70
+BSd,	DXF 70
 @item USERR1
 BD,	DXF 40
 @item USERR2
@@ -747,12 +747,26 @@ BL
 BD
 @item unknown_3
 BD
+@item unknown_3f9
+RC
+@item unknown_3fa
+RC
+@item unknown_46[46]
+RC
+@item unknown_4f2
+RL
 @item unknown_5
 RS
 @item unknown_51e
 RS
 @item unknown_520
 RS
+@item unknown_52c
+RS
+@item unknown_52e
+RS
+@item unknown_530
+RC
 @item unknown_54
 BS
 @item unknown_55
@@ -762,19 +776,27 @@ BS
 @item unknown_57
 BS
 @item unknown_58
-RC
-@item unknown_59
-RC
+RS
 @item unknown_6
 RS
-@item unknown_60
-RC
 @item unknown_7
 RD
 @item unknown_8
 BL
 @item unknown_9
 BL
+@item unknown_day
+RS
+@item unknown_hour
+RS
+@item unknown_min
+RS
+@item unknown_mon
+RS
+@item unknown_ms
+RS
+@item unknown_sec
+RS
 @item unknown_string
 T
 @item unknown_text1
@@ -793,6 +815,8 @@ T
 T
 @item unknown_unit4
 T
+@item unknown_year
+RS
 
 @end vtable
 @end indentedblock

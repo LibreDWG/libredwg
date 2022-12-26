@@ -281,7 +281,7 @@
   FIELD_CAST (FLATLAND, RS, B, 70);
   FIELD_RS (SPLINETYPE, 70);
   FIELD_RS (UCSICON, 0);
-  FIELD_RS (unknown_59, 0); // ff ff
+  FIELD_RS (unknown_58, 0); // ff ff
   if (dwg->header.numheader_vars <= 158) // r10
     return 0;
 
