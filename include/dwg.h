@@ -906,6 +906,7 @@ typedef struct _dwg_header_variables {
   BITCODE_B QTEXTMODE;
   BITCODE_B PSLTSCALE;
   BITCODE_B LIMCHECK;
+  BITCODE_RC unknown_46[46];
   BITCODE_B BLIPMODE;
   BITCODE_B unknown_11;
   BITCODE_B USRTIMER;
@@ -913,6 +914,13 @@ typedef struct _dwg_header_variables {
   BITCODE_B FLATLAND;
   BITCODE_B VIEWMODE;
   BITCODE_B SKPOLY;
+  BITCODE_RS unknown_mon;  /* -r11 */
+  BITCODE_RS unknown_day;  /* -r11 */
+  BITCODE_RS unknown_year; /* -r11 */
+  BITCODE_RS unknown_hour; /* -r11 */
+  BITCODE_RS unknown_min;  /* -r11 */
+  BITCODE_RS unknown_sec;  /* -r11 */
+  BITCODE_RS unknown_ms;  /* -r11 */
   BITCODE_B ANGDIR;
   BITCODE_B SPLFRAME;
   BITCODE_B ATTREQ;
@@ -998,6 +1006,7 @@ typedef struct _dwg_header_variables {
   BITCODE_CMC CECOLOR;
   BITCODE_BS HANDLING; /* <r14: default 1 */
   BITCODE_H HANDSEED;
+  BITCODE_RL unknown_4f2; /* -r11 */
   BITCODE_RS unknown_5;
   BITCODE_RS unknown_6;
   BITCODE_RD unknown_7;
@@ -1265,6 +1274,9 @@ typedef struct _dwg_header_variables {
   BITCODE_RS layer_colors[128]; /* r1.2 - r1.4 */
   BITCODE_RS unknown_51e;  /* r11 */
   BITCODE_RS unknown_520;  /* r11 */
+  BITCODE_RS unknown_52c;  /* r11 */
+  BITCODE_RS unknown_52e;  /* r11 */
+  BITCODE_RC unknown_530;  /* r11 */
   BITCODE_T unknown_unit1; /* r11 */
   BITCODE_T unknown_unit2; /* r11 */
   BITCODE_T unknown_unit3; /* r11 */

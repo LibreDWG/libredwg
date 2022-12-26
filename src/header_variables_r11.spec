@@ -140,8 +140,9 @@
 
   /* TODO Unknown structure (0x01fc-0x0228) 46 byte */
   // PLATFORM was until r11
-  DEBUG_HERE //1fb
-  UNKNOWN_UNTIL (0x229);
+  // DEBUG_HERE //1fb
+  //UNKNOWN_UNTIL (0x229);
+  FIELD_TFF (unknown_46, 46, 0);
   FIELD_RD (ELEVATION, 40); //ok
   FIELD_RD (THICKNESS, 40); //ok
   FIELD_3RD (VIEWDIR, 10);
@@ -176,11 +177,14 @@
   FIELD_CAST (USRTIMER, RS, B, 70);
   FIELD_CAST (FASTZOOM, RS, B, 70);
   FIELD_RS (unknown_10, 0);
-  FIELD_CAST (SKPOLY, RS, B, 70);
-
-  /* TODO Unknown date structure (month, day, year, hour, minute, second, ms - all RS) */
-  DEBUG_HERE //345
-  UNKNOWN_UNTIL (0x353);
+  //FIELD_CAST (SKPOLY, RS, B, 70);
+  FIELD_RS (unknown_mon, 0);
+  FIELD_RS (unknown_day, 0);
+  FIELD_RS (unknown_year, 0);
+  FIELD_RS (unknown_hour, 0);
+  FIELD_RS (unknown_min, 0);
+  FIELD_RS (unknown_sec, 0);
+  FIELD_RS (unknown_ms, 0);
   FIELD_RD (ANGBASE, 50);
   FIELD_CAST (ANGDIR, RS, B, 70);
   if (dwg->header.numheader_vars <= 101)
@@ -226,7 +230,7 @@
   FIELD_CAST (MIRRTEXT, RS, B, 70);
   if (dwg->header.numheader_vars <= 129)
     return 0;
-  /* Skip table UCS (0x3ef-0x3f9) */
+  /* Skip table UCS (0x3ef-0x3f9) 11 byte */
   UNKNOWN_UNTIL (0x3fa);
   FIELD_RC (unknown_58, 0);
   FIELD_3RD (UCSORG, 10); //ok
@@ -247,25 +251,26 @@
   FIELD_RD (DIMTVP, 40); //ok
   FIELD_TFv (unknown_string, 33, 1);
   FIELD_RS (HANDLING, 70); // use new HEX handles (should be RC)
-  UNKNOWN_UNTIL (0x4ee);
+  //UNKNOWN_UNTIL (0x4ee);
   /* TODO fix HANDSEED - 00 00 00 00 00 00 12 35 mean 0x1235 [RLx] */
   DECODER {
     _obj->HANDSEED = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
-    _obj->HANDSEED->absolute_ref = (BITCODE_RL)bit_read_RS (dat);
+    _obj->HANDSEED->absolute_ref = (BITCODE_RL)bit_read_RL (dat);
     LOG_TRACE ("HANDSEED: %lX [RSx 5]\n", _obj->HANDSEED->absolute_ref)
   }
   ENCODER {
     if (_obj->HANDSEED)
       {
-        bit_write_RS (dat, _obj->HANDSEED->absolute_ref);
-        LOG_TRACE ("HANDSEED: %lX [RSx 5]\n", _obj->HANDSEED->absolute_ref)
+        bit_write_RL (dat, _obj->HANDSEED->absolute_ref);
+        LOG_TRACE ("HANDSEED: %lX [RLx 5]\n", _obj->HANDSEED->absolute_ref)
       }
   }
   FREE {
     free (_obj->HANDSEED); _obj->HANDSEED = NULL;
   }
-  DEBUG_HERE
-  UNKNOWN_UNTIL (0x4f6);
+  FIELD_RL (unknown_4f2, 70); //ok
+  //DEBUG_HERE
+  //UNKNOWN_UNTIL (0x4f6);
   FIELD_RS (SURFU, 70); //ok
   FIELD_RS (SURFV, 70); //ok
   FIELD_RS (SURFTYPE, 70); //ok
@@ -292,8 +297,11 @@
   /* Skip table DIMSTYLE (0x522-0x52b) */
   UNKNOWN_UNTIL (0x52c);
   /* TODO Unknown 5 bytes. (first two bytes sometimes ff ff) */
-  DEBUG_HERE
-  UNKNOWN_UNTIL (0x531);
+  FIELD_RS (unknown_52c, 0);
+  FIELD_RS (unknown_52e, 0);
+  FIELD_RC (unknown_530, 0);
+  //DEBUG_HERE
+  //UNKNOWN_UNTIL (0x531);
   FIELD_RS (DIMCLRD_C, 70); //ok
   FIELD_RS (DIMCLRE_C, 70); //ok
   FIELD_RS (DIMCLRT_C, 70); //ok
