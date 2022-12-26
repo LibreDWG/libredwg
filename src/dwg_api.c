@@ -22393,7 +22393,21 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   else
     {
       dwg->header_vars.oldCECOLOR_lo = 15;
+      dwg->header_vars.VPOINTX
+        = (BITCODE_3RD){ 1.0, 0.0, 0.0 };
+      dwg->header_vars.VPOINTY
+        = (BITCODE_3RD){ 0.0, 1.0, 0.0 };
+      dwg->header_vars.VPOINTZ
+        = (BITCODE_3RD){ 0.0, 0.0, 1.0 };
+      dwg->header_vars.VPOINTXALT
+        = (BITCODE_3RD){ 1.0, 0.0, 0.0 };
+      dwg->header_vars.VPOINTYALT
+        = (BITCODE_3RD){ 0.0, 1.0, 0.0 };
+      dwg->header_vars.VPOINTZALT
+        = (BITCODE_3RD){ 0.0, 0.0, 1.0 };
     }
+  dwg->header_vars.VIEWDIR
+        = (BITCODE_3BD){ 0.0, 0.0, 1.0 };
   dwg->header_vars.EXTMIN
       = (BITCODE_3BD){ 100000000000000000000.0, 100000000000000000000.0,
                        100000000000000000000.0 };
@@ -22411,8 +22425,6 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       dwg->header_vars.LIMMAX = (BITCODE_2DPOINT){ 420.0, 297.0 };
     }
   // UCSORG: (0.0, 0.0, 0.0) [3BD 10]
-  // UCSXDIR: (1.0, 0.0, 0.0) [3BD 10]
-  // UCSYDIR: (0.0, 1.0, 0.0) [3BD 10]
   dwg->header_vars.UCSXDIR = (BITCODE_3BD){ 1.0, 0.0, 0.0 };
   dwg->header_vars.UCSYDIR = (BITCODE_3BD){ 0.0, 1.0, 0.0 };
   // UCSNAME: (5.0.0) abs:0 [H 2]
