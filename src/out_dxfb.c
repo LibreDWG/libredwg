@@ -328,7 +328,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
 #define ENDTAB() VALUE_TV ("ENDTAB", 0)
 #define RECORD(token) VALUE_TV (#token, 0)
 #define SUBCLASS(text)                                                        \
-  if (dat->version >= R_13)                                                   \
+  if (dat->version >= R_13b1)                                                 \
     {                                                                         \
       VALUE_TV (#text, 100)                                                   \
     }
@@ -403,7 +403,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
 #define VALUE_INT(value, dxf)                                                 \
   {                                                                           \
     if (dxf == 0)                                                             \
-      VALUE_RS (value, dxf)                                                  \
+      VALUE_RS (value, dxf)                                                   \
     else                                                                      \
       switch (dwg_resbuf_value_type (dxf))                                    \
         {                                                                     \
@@ -462,10 +462,10 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
     HEADER_9 (nam);                                                           \
     VALUE_RS (dwg->header_vars.nam, dxf);                                     \
   }
-#define HEADER_RSd(nam, dxf)                                                   \
+#define HEADER_RSd(nam, dxf)                                                  \
   {                                                                           \
     HEADER_9 (nam);                                                           \
-    VALUE_RSd (dwg->header_vars.nam, dxf);                                     \
+    VALUE_RSd (dwg->header_vars.nam, dxf);                                    \
   }
 #define VALUE_RD(value, dxf)                                                  \
   {                                                                           \
@@ -512,7 +512,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
   if (dxf)                                                                    \
     {                                                                         \
       HEADER_9 (nam);                                                         \
-      VALUE_HANDLE (dwg->header_vars.nam, nam, 0, dxf);                      \
+      VALUE_HANDLE (dwg->header_vars.nam, nam, 0, dxf);                       \
     }
 #define HEADER_H0(nam, dxf)                                                   \
   if (dxf && dwg->header_vars.nam && dwg->header_vars.nam->absolute_ref)      \
@@ -734,7 +734,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
 #define FIELD_VECTOR_T(nam, type, size, dxf)                                  \
   if (dxf && _obj->nam)                                                       \
     {                                                                         \
-      if (!IS_FROM_TU (dat))                                                   \
+      if (!IS_FROM_TU (dat))                                                  \
       {                                                                       \
         for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)           \
           VALUE_TV (_obj->nam[vcount], dxf)                                   \
@@ -796,7 +796,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
   dxfb_write_xdata (dat, obj, _obj->nam, _obj->size)
 
 #define _XDICOBJHANDLE(code)                                                  \
-  if (dat->version >= R_13 && obj->tio.object->xdicobjhandle                  \
+  if (dat->version >= R_13b1 && obj->tio.object->xdicobjhandle                \
       && obj->tio.object->xdicobjhandle->absolute_ref)                        \
     {                                                                         \
       VALUE_TV ("{ACAD_XDICTIONARY", 102);                                    \
@@ -805,7 +805,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
       VALUE_TV ("}", 102);                                                    \
     }
 #define _REACTORS(code)                                                       \
-  if (dat->version >= R_13 && obj->tio.object->num_reactors                   \
+  if (dat->version >= R_13b1 && obj->tio.object->num_reactors                 \
       && obj->tio.object->reactors)                                           \
     {                                                                         \
       VALUE_TV ("{ACAD_REACTORS", 102)                                        \
@@ -817,7 +817,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
       VALUE_TV ("}", 102)                                                     \
     }
 #define ENT_REACTORS(code)                                                    \
-  if (dat->version >= R_13 && _obj->num_reactors && _obj->reactors)           \
+  if (dat->version >= R_13b1 && _obj->num_reactors && _obj->reactors)         \
     {                                                                         \
       VALUE_TV ("{ACAD_REACTORS", 102)                                        \
       for (vcount = 0; vcount < _obj->num_reactors; vcount++)                 \
@@ -830,7 +830,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
 #define REACTORS(code)
 #define XDICOBJHANDLE(code)
 #define ENT_XDICOBJHANDLE(code)                                               \
-  if (dat->version >= R_13 && obj->tio.entity->xdicobjhandle                  \
+  if (dat->version >= R_13b1 && obj->tio.entity->xdicobjhandle                \
       && obj->tio.entity->xdicobjhandle->absolute_ref)                        \
     {                                                                         \
       VALUE_TV ("{ACAD_XDICTIONARY", 102);                                    \
@@ -877,7 +877,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
       }                                                                       \
     if (strEQc (#token, "GEOPOSITIONMARKER"))                                 \
       RECORD (POSITIONMARKER)                                                 \
-    else if (dat->version < R_13 && strlen (#token) == 10                     \
+    else if (dat->version < R_13b1 && strlen (#token) == 10                     \
              && strEQc (#token, "LWPOLYLINE"))                                \
       RECORD (POLYLINE)                                                       \
     else if (strlen (#token) > 10 && !memcmp (#token, "DIMENSION_", 10))      \
@@ -905,7 +905,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
       LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H (obj->handle))       \
       VALUE_H (obj->handle.value, 5);                                         \
     }                                                                         \
-    SINCE (R_13b1)                                                              \
+    SINCE (R_13b1)                                                            \
     {                                                                         \
       VALUE_HANDLE_NAME (obj->parent->header_vars.BLOCK_RECORD_MSPACE, 330,   \
                          BLOCK_HEADER);                                       \
@@ -962,7 +962,7 @@ static int dwg_dxfb_TABLECONTENT (Bit_Chain *restrict dat,
           RECORD (ACAD_PROXY_OBJECT)                                          \
         else if (obj->type != DWG_TYPE_BLOCK_HEADER)                          \
           RECORD (token)                                                      \
-        SINCE (R_13b1)                                                          \
+        SINCE (R_13b1)                                                        \
         {                                                                     \
           const int dxf = obj->type == DWG_TYPE_DIMSTYLE ? 105 : 5;           \
           VALUE_H (obj->handle.value, dxf);                                   \
@@ -1138,7 +1138,7 @@ dxfb_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         {
           name = bit_convert_TU ((BITCODE_TU)name);
         }
-      if (dat->from_version >= R_13 && dat->version < R_13)
+      if (dat->from_version >= R_13b1 && dat->version < R_13b1)
         { // convert the other way round, from newer to older
           if (strEQc (name, "Standard"))
             VALUE_TV ("STANDARD", dxf)
@@ -1153,13 +1153,13 @@ dxfb_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         }
       else
         { // convert some standard names
-          if (dat->version >= R_13 && strEQc (name, "STANDARD"))
+          if (dat->version >= R_13b1 && strEQc (name, "STANDARD"))
             VALUE_TV ("Standard", dxf)
-          else if (dat->version >= R_13 && strEQc (name, "BYLAYER"))
+          else if (dat->version >= R_13b1 && strEQc (name, "BYLAYER"))
             VALUE_TV ("ByLayer", dxf)
-          else if (dat->version >= R_13 && strEQc (name, "BYBLOCK"))
+          else if (dat->version >= R_13b1 && strEQc (name, "BYBLOCK"))
             VALUE_TV ("ByBlock", dxf)
-          else if (dat->version >= R_13 && strEQc (name, "*ACTIVE"))
+          else if (dat->version >= R_13b1 && strEQc (name, "*ACTIVE"))
             VALUE_TV ("*Active", dxf)
           else
             VALUE_TV (name, dxf)
@@ -1194,7 +1194,7 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
     {
       VALUE_TV (name, dxf)
     }
-  else if (dat->version < R_13 && dat->from_version >= R_13) // to older
+  else if (dat->version < R_13b1 && dat->from_version >= R_13b1) // to older
     {
       if (strlen (name) < 10)
         VALUE_TV (name, dxf)
@@ -1210,7 +1210,7 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
       else
         VALUE_TV (name, dxf)
     }
-  else if (dat->version >= R_13 && dat->from_version < R_13) // to newer
+  else if (dat->version >= R_13b1 && dat->from_version < R_13b1) // to newer
     {
       if (strlen (name) < 10)
         VALUE_TV (name, dxf)
@@ -1236,7 +1236,7 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
 #define COMMON_TABLE_CONTROL_FLAGS                                            \
   if (ctrl)                                                                   \
     {                                                                         \
-      SINCE (R_13b1)                                                            \
+      SINCE (R_13b1)                                                          \
       {                                                                       \
         BITCODE_BL vcount;                                                    \
         VALUE_H (ctrl->handle.value, 5);                                      \
@@ -1251,12 +1251,12 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
   SINCE (R_13b1) { VALUE_TV ("AcDbSymbolTable", 100); }
 
 #define COMMON_TABLE_FLAGS(acdbname)                                          \
-  SINCE (R_13b1)                                                                \
+  SINCE (R_13b1)                                                              \
   {                                                                           \
     VALUE_TV ("AcDbSymbolTableRecord", 100)                                   \
     VALUE_TV ("AcDb" #acdbname "TableRecord", 100)                            \
   }                                                                           \
-  if (strEQc (#acdbname, "Block") && dat->version >= R_13)                    \
+  if (strEQc (#acdbname, "Block") && dat->version >= R_13b1)                  \
     {                                                                         \
       Dwg_Object *blk = dwg_ref_object (                                      \
           dwg, ((Dwg_Object_BLOCK_HEADER *)_obj)->block_entity);              \
@@ -1303,7 +1303,7 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
   {                                                                           \
     VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 3, 330);         \
   }                                                                           \
-  SINCE (R_13b1)                                                                \
+  SINCE (R_13b1)                                                              \
   {                                                                           \
     VALUE_TV ("AcDbSymbolTableRecord", 100)                                   \
     VALUE_TV ("AcDb" #acdbname "TableRecord", 100)                            \
@@ -1438,7 +1438,7 @@ dwg_dxfb_variable_type (const Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     Dwg_Entity_POLYLINE_##token *_obj                                         \
         = obj->tio.entity->tio.POLYLINE_##token;                              \
                                                                               \
-    VERSIONS (R_13b1, R_2000)                                                   \
+    VERSIONS (R_13b1, R_2000)                                                 \
     {                                                                         \
       Dwg_Object *last_vertex = _obj->last_vertex ? _obj->last_vertex->obj : NULL; \
       Dwg_Object *o = _obj->first_vertex ? _obj->first_vertex->obj : NULL;    \
@@ -1511,7 +1511,7 @@ decl_dxfb_process_VERTEX (PFACE)
     if (!_obj->has_attribs)                                                   \
         return 0;                                                             \
                                                                               \
-    VERSIONS (R_13b1, R_2000)                                                   \
+    VERSIONS (R_13b1, R_2000)                                                 \
     {                                                                         \
       Dwg_Object *last_attrib                                                 \
           = _obj->last_attrib ? _obj->last_attrib->obj : NULL;                \
@@ -1541,8 +1541,8 @@ decl_dxfb_process_VERTEX (PFACE)
       Dwg_Object *o;                                                          \
       for (BITCODE_BL j = 0; j < _obj->num_owned; j++)                        \
         {                                                                     \
-          o = _obj->attribs && _obj->attribs[j]                 \
-                  ? _obj->attribs[j]->obj                              \
+          o = _obj->attribs && _obj->attribs[j]                               \
+                  ? _obj->attribs[j]->obj                                     \
                   : NULL;                                                     \
           if (o && o->fixedtype == DWG_TYPE_ATTRIB)                           \
             error |= dwg_dxfb_ATTRIB (dat, o);                                \
@@ -1571,7 +1571,7 @@ static int dwg_dxfb_object (Bit_Chain *restrict dat,
   if (!obj || !obj->parent)
     return DWG_ERR_INTERNALERROR;
   minimal = obj->parent->opts & DWG_OPTS_MINIMAL;
-  if (dat->version < R_13)
+  if (dat->version < R_13b1)
     type = (unsigned int)obj->fixedtype;
   else
     {
@@ -1803,7 +1803,7 @@ dxfb_common_entity_handle_data (Bit_Chain *restrict dat,
   BITCODE_BL vcount = 0;
 
   // clang-format off
-  if (dat->version >= R_13)
+  if (dat->version >= R_13b1)
     {
       #include "common_entity_handle_data.spec"
     }
@@ -2406,7 +2406,7 @@ dwg_write_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       // if downgraded to r13, but we still have classes, keep the
       // classes
-      if ((dat->from_version >= R_13 && dwg->num_classes)
+      if ((dat->from_version >= R_13b1 && dwg->num_classes)
           || dat->version >= R_2000)
         {
           if (dxfb_classes_write (dat, dwg) >= DWG_ERR_CRITICAL)

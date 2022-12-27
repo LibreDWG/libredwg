@@ -1556,7 +1556,7 @@ dwg_free (Dwg_Data *dwg)
           if (!dwg_obj_is_control (&dwg->object[i]))
             dwg_free_object (&dwg->object[i]);
         }
-      if (dwg->header.version < R_13)
+      if (dwg->header.version < R_13b1)
         dwg_free_preR13_header_vars (dwg);
       else
         dwg_free_header_vars (dwg);

@@ -712,7 +712,7 @@ static int dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
               s_ver[15] = '\0';
               version = dwg_version_as (s_ver);
             }
-          if (!i || version < R_13 || version >= R_AFTER)
+          if (!i || version >= R_AFTER)
             {
               fprintf (stderr, "Invalid version %.*s", 40, p);
               exit (1);

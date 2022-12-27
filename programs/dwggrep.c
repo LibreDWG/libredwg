@@ -1718,7 +1718,7 @@ match_BLOCK_HEADER (const char *restrict filename,
           Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
           if (_obj->has_attribs)
             {
-              if (dwg->header.version >= R_13 && dwg->header.version <= R_2000)
+              if (dwg->header.version >= R_13b1 && dwg->header.version <= R_2000)
                 {
                   Dwg_Object *last_attrib = _obj->last_attrib->obj;
                   Dwg_Object *o
@@ -1753,7 +1753,7 @@ match_BLOCK_HEADER (const char *restrict filename,
           Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
           if (_obj->has_attribs)
             {
-              if (dwg->header.version >= R_13 && dwg->header.version <= R_2000)
+              if (dwg->header.version >= R_13b1 && dwg->header.version <= R_2000)
                 {
                   Dwg_Object *last_attrib = _obj->last_attrib->obj;
                   Dwg_Object *o

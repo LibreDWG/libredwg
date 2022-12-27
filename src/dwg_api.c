@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2013,2018-2021 Free Software Foundation, Inc.              */
+/*  Copyright (C) 2013,2018-2022 Free Software Foundation, Inc.              */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -20007,7 +20007,7 @@ dwg_object_polyline_2d_get_numpoints (const dwg_object *restrict obj,
       if (dwg->header.version >= R_2004)
         return obj->tio.entity->tio.POLYLINE_2D->num_owned;
       // iterate over first_vertex - last_vertex
-      else if (dwg->header.version >= R_13)
+      else if (dwg->header.version >= R_13b1)
         {
           Dwg_Object *vobj = dwg_ref_object (dwg, _obj->first_vertex);
           Dwg_Object *vlast = dwg_ref_object (dwg, _obj->last_vertex);
@@ -20089,7 +20089,7 @@ dwg_object_polyline_2d_get_points (const dwg_object *restrict obj,
               }
           }
       // iterate over first_vertex - last_vertex
-      else if (dwg->header.version >= R_13)
+      else if (dwg->header.version >= R_13b1)
         {
           Dwg_Object *vobj = dwg_ref_object (dwg, _obj->first_vertex);
           Dwg_Object *vlast = dwg_ref_object (dwg, _obj->last_vertex);
@@ -20172,8 +20172,8 @@ dwg_object_polyline_3d_get_numpoints (const dwg_object *restrict obj,
 
       if (dwg->header.version >= R_2004)
         return obj->tio.entity->tio.POLYLINE_3D->num_owned;
-      else if (dwg->header.version
-               >= R_13) // iterate over first_vertex - last_vertex
+      // iterate over first_vertex - last_vertex
+      else if (dwg->header.version >= R_13b1)
         {
           Dwg_Object *vobj = dwg_ref_object (dwg, _obj->first_vertex);
           Dwg_Object *vlast = dwg_ref_object (dwg, _obj->last_vertex);
@@ -20261,8 +20261,8 @@ dwg_object_polyline_3d_get_points (const dwg_object *restrict obj,
                 *error = 1; // return not all vertices, but some
               }
           }
-      else if (dwg->header.version
-               >= R_13) // iterate over first_vertex - last_vertex
+      // iterate over first_vertex - last_vertex
+      else if (dwg->header.version >= R_13b1)
         {
           Dwg_Object *vobj = dwg_ref_object (dwg, _obj->first_vertex);
           Dwg_Object *vlast = dwg_ref_object (dwg, _obj->last_vertex);
@@ -22454,7 +22454,7 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   //dwg->header_vars.DIMBLK_T = dwg_add_u8_input (dwg, "");
   //dwg->header_vars.DIMBLK1_T = dwg_add_u8_input (dwg, "");
   //dwg->header_vars.DIMBLK2_T = dwg_add_u8_input (dwg, "");
-  if (version > R_2_21 && version < R_13)
+  if (version > R_2_21 && version < R_13b1)
     dwg->header_vars.circle_zoom_percent = 100;
 
   dwg->header_vars.DIMCLRD = (BITCODE_CMC){ 0 };
@@ -22468,7 +22468,7 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   // BLOCK_CONTROL_OBJECT: (3.1.1) abs:1 [H 0]
   block_control = dwg_add_BLOCK_CONTROL (dwg,
       0x1F, // model space
-      version >= R_13 ? 0x20 : 0); // paper space
+      version >= R_13b1 ? 0x20 : 0); // paper space
   // LAYER_CONTROL_OBJECT: (3.1.2) abs:2 [H 0]
   dwg_add_LAYER (dwg, NULL);
   // STYLE_CONTROL_OBJECT: (3.1.3) abs:3 [H 0]
@@ -22575,7 +22575,7 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
           = dwg_add_handleref (dwg, 5, 0x16, NULL);
     }
 
-  if (version >= R_13)
+  if (version >= R_13b1)
     {
       // DICTIONARY ACAD_MLINESTYLE: (5.1.17) abs:E [H 0]
       dwg_add_DICTIONARY (dwg, "ACAD_MLINESTYLE", "Standard", 0x18);
@@ -22613,7 +22613,7 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header_vars.BLOCK_RECORD_MSPACE->obj = mspaceobj;
   block_control->model_space
       = dwg_add_handleref (dwg, 3, mspaceobj->handle.value, NULL);
-  if (version >= R_13)
+  if (version >= R_13b1)
     {
       // BLOCK_RECORD_PSPACE: (5.1.20)
       pspace = dwg_add_BLOCK_HEADER (dwg, "*PAPER_SPACE");

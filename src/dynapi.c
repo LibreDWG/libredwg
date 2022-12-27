@@ -14398,7 +14398,7 @@ dwg_dynapi_entity_set_value (void *restrict _obj, const char *restrict name,
           LOG_ERROR ("%s: Invalid %s field %s", __FUNCTION__, name, fieldname);
           return false;
         }
-      if (f->is_string && dwg->header.from_version < R_13 &&
+      if (f->is_string && dwg->header.from_version < R_13b1 &&
           (obj->fixedtype == DWG_TYPE_STYLE || obj->fixedtype == DWG_TYPE_LTYPE))
         {
           //find_name (fieldname, r11_fixed_strings))
@@ -14452,7 +14452,7 @@ dwg_dynapi_header_set_value (Dwg_Data *restrict dwg,
           { "unknown_unit4", "TFv", 32, OFF (struct _dwg_header_variables, unknown_unit4), 1,1,1, 1 },
           { NULL }
         };
-        if (f->is_string && dwg->header.from_version < R_13)
+        if (f->is_string && dwg->header.from_version < R_13b1)
           {
             //find_name (fieldname, r11_fixed_strings))
             for (Dwg_DYNAPI_field* f11 = (Dwg_DYNAPI_field*)&r11_fixed_strings[0]; f11->name; f11++)

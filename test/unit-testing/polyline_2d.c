@@ -44,7 +44,7 @@ api_process (dwg_object *obj)
     {
       CHK_ENTITY_HV (polyline_2d, POLYLINE_2D, vertex, num_owned);
     }
-  if (version >= R_13 && version <= R_2000)
+  if (version >= R_13b1 && version <= R_2000)
     {
       CHK_ENTITY_H (polyline_2d, POLYLINE_2D, first_vertex);
       CHK_ENTITY_H (polyline_2d, POLYLINE_2D, last_vertex);

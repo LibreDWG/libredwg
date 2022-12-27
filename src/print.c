@@ -426,7 +426,7 @@ dwg_print_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 
   if (!obj || !obj->parent)
     return DWG_ERR_INTERNALERROR;
-  type = dat->version < R_13 ? (unsigned int)obj->fixedtype : obj->type;
+  type = dat->version < R_13b1 ? (unsigned int)obj->fixedtype : obj->type;
   // Bit_Chain * dat = (Bit_Chain *)obj->parent->bit_chain;
   // Bit_Chain *hdl_dat = dat;
   switch (obj->type)

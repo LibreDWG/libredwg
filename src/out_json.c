@@ -635,7 +635,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
 #define SUB_FIELD_VECTOR_N(o, nam, type, size, dxf)                           \
   KEY (nam);                                                                  \
   ARRAY;                                                                      \
-  if (_obj->o.nam)                                                              \
+  if (_obj->o.nam)                                                            \
     {                                                                         \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
@@ -698,7 +698,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
                                    (BITCODE_RLL)_obj->o.nam[vcount]);         \
               break;                                                          \
             default:                                                          \
-              LOG_ERROR ("Unknown SUB_FIELD_VECTOR_TYPESIZE " #nam             \
+              LOG_ERROR ("Unknown SUB_FIELD_VECTOR_TYPESIZE " #nam            \
                          " typesize %d", typesize);                           \
               break;                                                          \
             }                                                                 \
@@ -782,7 +782,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
     }
 
 #define REACTORS(code)                                                        \
-  if (dat->version >= R_13 && obj->tio.object->num_reactors                   \
+  if (dat->version >= R_13b1 && obj->tio.object->num_reactors                 \
       && obj->tio.object->reactors)                                           \
     {                                                                         \
       KEY (reactors);                                                         \
@@ -795,7 +795,7 @@ field_cmc (Bit_Chain *dat, const char *restrict key,
       ENDARRAY;                                                               \
     }
 #define ENT_REACTORS(code)                                                    \
-  if (dat->version >= R_13 && _ent->num_reactors && _ent->reactors)           \
+  if (dat->version >= R_13b1 && _ent->num_reactors && _ent->reactors)         \
     {                                                                         \
       KEY (reactors);                                                         \
       ARRAY;                                                                  \
@@ -916,13 +916,13 @@ _prefix (Bit_Chain *dat)
       FIELD_TEXT (dxfname, obj->dxfname);                                     \
     _FIELD (index, RL, 0);                                                    \
     _FIELD (type, RL, 0);                                                     \
-    SINCE (R_13b1)                                                              \
+    SINCE (R_13b1)                                                            \
     {                                                                         \
       KEY (handle);                                                           \
       VALUE_H (obj->handle, 5);                                               \
     }                                                                         \
     _FIELD (size, RL, 0);                                                     \
-    SINCE (R_13b1)                                                              \
+    SINCE (R_13b1)                                                            \
     {                                                                         \
       _FIELD (bitsize, BL, 0);                                                \
       if (_ent->preview_exists)                                               \
@@ -1551,7 +1551,7 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 
   if (!obj || !obj->parent)
     return DWG_ERR_INTERNALERROR;
-  if (dat->version < R_13)
+  if (dat->version < R_13b1)
     type = (unsigned int)obj->fixedtype;
   else
     {
@@ -2388,12 +2388,12 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // A minimal HEADER requires only $ACADVER, $HANDSEED, and then ENTITIES
   json_header_write (dat, dwg);
 
-  if (!minimal && dat->version >= R_13)
+  if (!minimal && dat->version >= R_13b1)
     {
       if (json_classes_write (dat, dwg) >= DWG_ERR_CRITICAL)
         goto fail;
     }
-  if (!minimal && dat->version < R_13 && 0)
+  if (!minimal && dat->version < R_13b1 && 0)
     {
       if (json_tables_write (dat, dwg) >= DWG_ERR_CRITICAL)
         goto fail;
@@ -2402,7 +2402,7 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (json_objects_write (dat, dwg) >= DWG_ERR_CRITICAL)
     goto fail;
 
-  if (!minimal && dat->version >= R_13)
+  if (!minimal && dat->version >= R_13b1)
     {
       if (json_thumbnail_write (dat, dwg) >= DWG_ERR_CRITICAL)
         goto fail;
@@ -2434,7 +2434,7 @@ dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
 #if 0
   /* object map */
-  if (!minimal && dat->version >= R_13)
+  if (!minimal && dat->version >= R_13b1)
     {
       if (json_handles_write (dat, dwg) >= DWG_ERR_CRITICAL)
         goto fail;

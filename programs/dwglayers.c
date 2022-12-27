@@ -175,7 +175,7 @@ main (int argc, char *argv[])
       if (flags)
         printf ("%s%s%s\t", layer->frozen ? "f" : " ", layer->on ? "+" : "-",
                 layer->locked ? "l" : " ");
-      if (extnames && dwg.header.from_version >= R_13 && dwg.header.from_version < R_2000)
+      if (extnames && dwg.header.from_version >= R_13b1 && dwg.header.from_version < R_2000)
         {
           if (!(name = dwg_find_table_extname (&dwg, obj)))
             name = layer->name;

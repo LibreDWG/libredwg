@@ -2884,7 +2884,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else if (strEQc (key, "index") && strNE (name, "TableCellContent_Attr"))
             {
               BITCODE_RL index = (BITCODE_RL)json_long (dat, tokens);
-              if (dat->from_version < R_13)
+              if (dat->from_version < R_13b1)
                 {
                   if (index > 5)
                     index = obj->index; // we added 2 mspace blocks (type 0) in-between
@@ -2926,7 +2926,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   free (obj->dxfname);
                   obj->dxfname = strdup (dxfname);
                   if (obj->type <= DWG_TYPE_LAYOUT
-                      && obj->fixedtype != obj->type && dwg->header.from_version >= R_13)
+                      && obj->fixedtype != obj->type && dwg->header.from_version >= R_13b1)
                     {
                       LOG_WARN ("Changed wrong type %d => %d", obj->type, obj->fixedtype)
                       obj->type = obj->fixedtype;

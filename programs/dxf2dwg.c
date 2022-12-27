@@ -331,8 +331,8 @@ main (int argc, char *argv[])
         }
       else
         {
-          // FIXME: for now only R_13 - R_2000. later remove this line.
-          if (dwg.header.from_version < R_13 || dwg.header.from_version >= R_2004)
+          // FIXME: for now only R_13b1 - R_2000. later remove this line.
+          if (dwg.header.from_version < R_13b1 || dwg.header.from_version >= R_2004)
             dwg.header.version = dwg_version;
           if (dwg.header.from_version == R_INVALID)
             dwg.header.from_version = dwg.header.version;

@@ -25,7 +25,7 @@ api_process (dwg_object *obj)
     ok ("TODO numverts %d + numfaces %d != num_owned %d", numverts,
         numfaces, num_owned);
 
-  if (version >= R_13 && version <= R_2000)
+  if (version >= R_13b1 && version <= R_2000)
     {
       CHK_ENTITY_H (polyline_pface, POLYLINE_PFACE, first_vertex);
       CHK_ENTITY_H (polyline_pface, POLYLINE_PFACE, last_vertex);

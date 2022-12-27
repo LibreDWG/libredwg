@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009-2010,2018-2021 Free Software Foundation, Inc.         */
+/*  Copyright (C) 2009-2010,2018-2022 Free Software Foundation, Inc.         */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -1057,12 +1057,12 @@ get_first_owned_entity (const Dwg_Object *hdr)
       return NULL;
     }
 
-  if (R_13 <= version && version <= R_2000)
+  if (R_13b1 <= version && version <= R_2000)
     {
       /* With r2000 we rather follow the next_entity chain */
       return _hdr->first_entity ? _hdr->first_entity->obj : NULL;
     }
-  else if (version >= R_2004 || version < R_13)
+  else if (version >= R_2004 || version < R_13b1)
     {
       _hdr->__iterator = 0;
       if (_hdr->entities && _hdr->num_owned && _hdr->entities[0])
@@ -1132,7 +1132,7 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
       return NULL;
     }
 
-  if (R_13 <= version && version <= R_2000)
+  if (R_13b1 <= version && version <= R_2000)
     {
       Dwg_Object *obj;
       if (_hdr->last_entity == NULL
@@ -1160,7 +1160,7 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
         }
       return obj;
     }
-  else if (version >= R_2004 || version < R_13)
+  else if (version >= R_2004 || version < R_13b1)
     {
       Dwg_Object_Ref *ref;
       _hdr->__iterator++;
@@ -1185,7 +1185,7 @@ get_first_owned_subentity (const Dwg_Object *owner)
   if (type == DWG_TYPE_INSERT)
     {
       Dwg_Entity_INSERT *_obj = owner->tio.entity->tio.INSERT;
-      if (version >= R_13 && version <= R_2000)
+      if (version >= R_13b1 && version <= R_2000)
         return _obj->first_attrib ? _obj->first_attrib->obj : NULL;
       else
         return _obj->attribs && _obj->attribs[0]
@@ -1195,7 +1195,7 @@ get_first_owned_subentity (const Dwg_Object *owner)
   else if (type == DWG_TYPE_MINSERT)
     {
       Dwg_Entity_MINSERT *_obj = owner->tio.entity->tio.MINSERT;
-      if (version >= R_13 && version <= R_2000)
+      if (version >= R_13b1 && version <= R_2000)
         return _obj->first_attrib ? dwg_ref_object (dwg, _obj->first_attrib) : NULL;
       else
         return _obj->attribs && _obj->attribs[0]
@@ -1208,7 +1208,7 @@ get_first_owned_subentity (const Dwg_Object *owner)
     {
       // guaranteed structure
       Dwg_Entity_POLYLINE_2D *_obj = owner->tio.entity->tio.POLYLINE_2D;
-      if (version >= R_13 && version <= R_2000)
+      if (version >= R_13b1 && version <= R_2000)
         return _obj->first_vertex ? dwg_ref_object (dwg, _obj->first_vertex) : NULL;
       else
         return _obj->vertex && _obj->vertex[0] ? dwg_ref_object (dwg, _obj->vertex[0]) : NULL;
@@ -1235,7 +1235,7 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
   if (type == DWG_TYPE_INSERT)
     {
       Dwg_Entity_INSERT *_obj = owner->tio.entity->tio.INSERT;
-      if (version >= R_13 && version <= R_2000)
+      if (version >= R_13b1 && version <= R_2000)
         return (_obj->last_attrib && current != _obj->last_attrib->obj
                 && obj->fixedtype == DWG_TYPE_ATTRIB)
                    ? obj
@@ -1257,7 +1257,7 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
   else if (type == DWG_TYPE_MINSERT)
     {
       Dwg_Entity_MINSERT *_obj = owner->tio.entity->tio.MINSERT;
-      if (version >= R_13 && version <= R_2000)
+      if (version >= R_13b1 && version <= R_2000)
         return (_obj->last_attrib && current != _obj->last_attrib->obj
                 && obj->fixedtype == DWG_TYPE_ATTRIB)
                    ? obj
@@ -1282,7 +1282,7 @@ get_next_owned_subentity (const Dwg_Object *restrict owner,
     {
       // guaranteed structure
       Dwg_Entity_POLYLINE_2D *_obj = owner->tio.entity->tio.POLYLINE_2D;
-      if (version >= R_13 && version <= R_2000)
+      if (version >= R_13b1 && version <= R_2000)
         return (_obj->last_vertex && current != _obj->last_vertex->obj) ? obj
                                                                         : NULL;
       else
@@ -1320,7 +1320,7 @@ get_first_owned_block (const Dwg_Object *hdr)
       return NULL;
     }
 
-  if (1 || version >= R_13)
+  if (1 || version >= R_13b1)
     {
       if (_hdr->block_entity)
         {
@@ -1359,7 +1359,7 @@ get_next_owned_block (const Dwg_Object *restrict hdr,
       return NULL;
     }
 
-  if (1 || version >= R_13)
+  if (1 || version >= R_13b1)
     {
       if (!_hdr->endblk_entity || current->handle.value >= _hdr->endblk_entity->absolute_ref)
         return NULL;
@@ -1391,7 +1391,7 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
   version = dwg->header.version;
   _hdr = hdr->tio.object->tio.BLOCK_HEADER;
 
-  if (R_13 <= version && version <= R_2000)
+  if (R_13b1 <= version && version <= R_2000)
     {
       /* With r2000 we rather follow the next_entity chain. It may jump around the linked list. */
       if (!_hdr->last_entity
@@ -1428,7 +1428,7 @@ get_last_owned_block (const Dwg_Object *restrict hdr)
       return NULL;
     }
 
-  if (1 || version >= R_13)
+  if (1 || version >= R_13b1)
     {
       if (_hdr->endblk_entity && _hdr->endblk_entity->obj)
         return _hdr->endblk_entity->obj;

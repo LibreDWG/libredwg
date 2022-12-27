@@ -1404,10 +1404,10 @@ DWG_ENTITY_END
       FIELD_RC (class_version, 280); /* 0=r2010 */                            \
       VALUEOUTOFBOUNDS (class_version, 10)                                    \
     }                                                                         \
-    PRE (R_13b1)                                                                \
+    PRE (R_13b1)                                                              \
     {                                                                         \
       FIELD_HANDLE (block, 2, 2);                                             \
-      if (!(R11FLAG (2))) {                                                   \
+      if (0 && !(R11FLAG (2))) {                                              \
         FIELD_3RD (def_pt, 10);                                               \
       } else {  /* ANG2LN */                                                  \
         FIELD_2RD (def_pt, 10);                                               \

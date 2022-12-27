@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2021 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2022 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -1109,7 +1109,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 = (char *)bit_utf8_to_TU ((char *)"*Model_Space", 0);
             }
           // currently we can only encode DWGs to r13-r2000, but DXF's to almost everything.
-          if (dwg->header.from_version >= R_13 && dwg->header.from_version <= R_2000)
+          if (dwg->header.from_version >= R_13b1 && dwg->header.from_version <= R_2000)
             dwg->header.version = dat->version = dwg->header.from_version;
           LOG_TRACE ("HEADER.version = %s,\tdat->version = %s\n",
                      dwg_version_codes (dwg->header.version),
@@ -6447,7 +6447,7 @@ do_return:
   if (!obj->tio.object->xdicobjhandle)
     {
       obj->tio.object->is_xdic_missing = 1;
-      if (dwg->header.version >= R_13 && dwg->header.version < R_2004)
+      if (dwg->header.version >= R_13b1 && dwg->header.version < R_2004)
         obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, obj);
     }
   return pair;
@@ -8241,7 +8241,7 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
 
   LOG_TRACE ("dxf_postprocess_SEQEND:\n");
   // r12 and earlier: search for owner backwards
-  if (dwg->header.from_version < R_13 && !owner && !obj->tio.entity->ownerhandle)
+  if (dwg->header.from_version < R_13b1 && !owner && !obj->tio.entity->ownerhandle)
     {
       for (i = obj->index - 1; i > 0; i--)
         {
@@ -8284,7 +8284,7 @@ dxf_postprocess_SEQEND (Dwg_Object *restrict obj)
     {
       Dwg_Object *_o = &dwg->object[i];
       num_owned = j + 1;
-      if (dwg->header.from_version >= R_13)
+      if (dwg->header.from_version >= R_13b1)
         {
           owned = (BITCODE_H *)realloc (owned, num_owned * sizeof (BITCODE_H));
           owned[j] = dwg_add_handleref (dwg, 3, _o->handle.value, owner);

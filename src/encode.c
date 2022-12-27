@@ -108,9 +108,9 @@ const unsigned char unknown_section[53]
 #define IF_ENCODE_FROM_EARLIER_OR_DXF                                       \
   if ((dat->from_version && dat->from_version < cur_ver) || dwg->opts & DWG_OPTS_INDXF)
 #define IF_ENCODE_FROM_PRE_R13                                              \
-  if (dat->from_version && dat->from_version < R_13)
+  if (dat->from_version && dat->from_version < R_13b1)
 #define IF_ENCODE_SINCE_R13                                                 \
-  if (dat->from_version && dat->from_version >= R_13)
+  if (dat->from_version && dat->from_version >= R_13b1)
 
 #undef LOG_POS
 #define LOG_POS                                                               \
@@ -242,7 +242,7 @@ const unsigned char unknown_section[53]
         else                                                                  \
           {                                                                   \
             size_t rlen;                                                      \
-            if (dat->version < R_13                                           \
+            if (dat->version < R_13b1                                         \
                 && (rlen = strlen ((char *)_obj->nam)) < (unsigned)len)       \
               {                                                               \
                 bit_write_TF (dat, (BITCODE_TF)_obj->nam, rlen);              \
@@ -495,7 +495,7 @@ const unsigned char unknown_section[53]
   if (obj->tio.object->reactors)                                              \
     {                                                                         \
       OVERFLOW_CHECK_LV (num_reactors, obj->tio.object->num_reactors)         \
-      SINCE (R_13b1)                                                            \
+      SINCE (R_13b1)                                                          \
       {                                                                       \
         for (vcount = 0; vcount < (BITCODE_BL)obj->tio.object->num_reactors;  \
              vcount++)                                                        \
@@ -510,7 +510,7 @@ const unsigned char unknown_section[53]
   RESET_VER                                                                   \
   SINCE (R_2004)                                                              \
   {                                                                           \
-    if (!obj->tio.object->is_xdic_missing)                                  \
+    if (!obj->tio.object->is_xdic_missing)                                    \
       {                                                                       \
         VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code,    \
                       360);                                                   \
@@ -518,7 +518,7 @@ const unsigned char unknown_section[53]
   }                                                                           \
   else                                                                        \
   {                                                                           \
-    SINCE (R_13b1)                                                              \
+    SINCE (R_13b1)                                                            \
     {                                                                         \
       VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code,      \
                     360);                                                     \
@@ -538,7 +538,7 @@ const unsigned char unknown_section[53]
   }                                                                           \
   else                                                                        \
   {                                                                           \
-    SINCE (R_13b1)                                                              \
+    SINCE (R_13b1)                                                            \
     {                                                                         \
       VALUE_HANDLE (obj->tio.entity->xdicobjhandle, xdicobjhandle, 3,         \
                     360);                                                     \
@@ -645,7 +645,7 @@ const unsigned char unknown_section[53]
 
 #define VALUE_HANDLE(hdlptr, nam, handle_code, dxf)                           \
   {                                                                           \
-  PRE (R_13b1)                                                                  \
+  PRE (R_13b1)                                                                \
   {                                                                           \
     short idx = (hdlptr) ? (hdlptr)->r11_idx : 0;                             \
     /* = handle_size really, not code */                                      \
@@ -684,7 +684,7 @@ const unsigned char unknown_section[53]
 // for obj->handle 0.x.x only, DXF 5
 #define VALUE_H(hdl, dxf)                                                     \
   {                                                                           \
-    PRE (R_13b1) {                                                              \
+    PRE (R_13b1) {                                                            \
       bit_write_H (dat, &hdl);                                                \
     } else {                                                                  \
       bit_write_H (hdl_dat, &hdl);                                            \
@@ -757,7 +757,7 @@ const unsigned char unknown_section[53]
   error |= dwg_encode_xdata (dat, _obj, _obj->size)
 
 #define COMMON_ENTITY_HANDLE_DATA                                             \
-  SINCE (R_13b1)                                                                \
+  SINCE (R_13b1)                                                              \
   {                                                                           \
     START_HANDLE_STREAM;                                                      \
   }                                                                           \
@@ -784,13 +784,13 @@ const unsigned char unknown_section[53]
   *dat = sav_dat;                                                             \
   }
 #define ENCODE_COMMON_HANDLES                                                 \
-  if (obj->supertype == DWG_SUPERTYPE_OBJECT && dat->version >= R_13)         \
+  if (obj->supertype == DWG_SUPERTYPE_OBJECT && dat->version >= R_13b1)       \
     {                                                                         \
       VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 4, 330);       \
       REACTORS (4);                                                           \
       XDICOBJHANDLE (3);                                                      \
     }                                                                         \
- else if (obj->supertype == DWG_SUPERTYPE_ENTITY && dat->version >= R_13)     \
+ else if (obj->supertype == DWG_SUPERTYPE_ENTITY && dat->version >= R_13b1)   \
    {                                                                          \
      error |= dwg_encode_common_entity_handle_data (dat, hdl_dat, obj);       \
    }
@@ -1028,12 +1028,12 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
   }
 
 #define ENT_REACTORS(code)                                                    \
-  if (dat->version >= R_13 && _obj->num_reactors > 0x1000)                    \
+  if (dat->version >= R_13b1 && _obj->num_reactors > 0x1000)                  \
     {                                                                         \
       LOG_ERROR ("Invalid num_reactors: %ld\n", (long)_obj->num_reactors);    \
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }                                                                         \
-  SINCE (R_13b1)                                                                \
+  SINCE (R_13b1)                                                              \
   {                                                                           \
     if (_obj->num_reactors && !_obj->reactors)                                \
       {                                                                       \
@@ -2301,7 +2301,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         _obj->zero_one_or_three = 1;
         if (_verp)
           _obj->dwg_version = _verp->dwg_version;
-        if (dwg->header.version > R_13)
+        if (dwg->header.version > R_13b1)
           {
             // can be improved with r2004 by another lookup table
             _obj->is_maint = 0xf;
@@ -3029,7 +3029,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    * Second header, section 3. R13-R2000 only.
    * But partially also since r2004. (TODO: under which name? AuxHeader?)
    */
-  if (dwg->header.version >= R_13 && dwg->header.version < R_2004 // TODO
+  if (dwg->header.version >= R_13b1 && dwg->header.version < R_2004 // TODO
       && dwg->second_header.num_sections > 3)
     {
       struct _dwg_second_header *_obj = &dwg->second_header;
@@ -5878,21 +5878,21 @@ in_postprocess_handles (Dwg_Object *restrict obj)
           else
             obj->tio.object->is_xdic_missing = 1;
         }
-      else if (dwg->header.version >= R_13 && !is_entity)
+      else if (dwg->header.version >= R_13b1 && !is_entity)
         obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, obj);
-      else if (dwg->header.version >= R_13 && is_entity)
+      else if (dwg->header.version >= R_13b1 && is_entity)
         obj->tio.entity->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, obj);
     }
 
   if (is_entity)
     {
       Dwg_Object_Entity *ent = obj->tio.entity;
-      if (dwg->header.version >= R_13 && dwg->header.version <= R_14)
+      if (dwg->header.version >= R_13b1 && dwg->header.version <= R_14)
         {
           if (ent->ltype_flags < 3)
             ent->isbylayerlt = 1;
         }
-      if (dwg->header.version >= R_13 && dwg->header.version <= R_2000
+      if (dwg->header.version >= R_13b1 && dwg->header.version <= R_2000
           && obj->type != DWG_TYPE_SEQEND && obj->type != DWG_TYPE_ENDBLK)
         {
           Dwg_Object *prev = find_prev_entity (obj);

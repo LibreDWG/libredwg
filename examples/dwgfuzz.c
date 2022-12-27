@@ -525,7 +525,7 @@ int dwg_fuzz_dat (Dwg_Data **restrict dwgp, Bit_Chain *restrict dat)
         p += strlen ("version ");
       p = next_line (p, end);
     }
-  if (!i || version < R_13 || version >= R_AFTER)
+  if (!i || version >= R_AFTER)
     version = R_2000;
 
   dwg = dwg_new_Document (version, imperial, 0);

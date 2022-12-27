@@ -1221,7 +1221,7 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
     return DWG_ERR_INVALIDHANDLE;
   handle->is_global = 0;
   handle->value = 0;
-  if (dat->from_version < R_13)
+  if (dat->from_version < R_13b1)
     {
       BITCODE_RC *restrict val;
       handle->size = handle->code;
@@ -1568,7 +1568,7 @@ bit_read_TV (Bit_Chain *restrict dat)
   unsigned char *chain;
 
   CHK_OVERFLOW_PLUS (1,__FUNCTION__,NULL)
-  if (dat->from_version < R_13)
+  if (dat->from_version < R_13b1)
     length = bit_read_RS (dat);
   else
     length = bit_read_BS (dat);
@@ -1859,7 +1859,7 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
   int length = (chain && *chain) ? strlen ((const char *)chain) : 0;
   if (dat->version <= R_2000 && length)
     length++;
-  if (dat->from_version < R_13)
+  if (dat->from_version < R_13b1)
     bit_write_RS (dat, length);
   else
     bit_write_BS (dat, length);
@@ -2755,7 +2755,7 @@ BITCODE_TIMEBLL
 bit_read_TIMEBLL (Bit_Chain *dat)
 {
   BITCODE_TIMEBLL date;
-  if (dat->from_version < R_13)
+  if (dat->from_version < R_13b1)
     {
       date.days = bit_read_RL (dat);
       date.ms = bit_read_RL (dat);
@@ -2775,7 +2775,7 @@ bit_read_TIMEBLL (Bit_Chain *dat)
 void
 bit_write_TIMEBLL (Bit_Chain *dat, BITCODE_TIMEBLL date)
 {
-  if (dat->version < R_13)
+  if (dat->version < R_13b1)
     {
       bit_write_RL (dat, date.days);
       bit_write_RL (dat, date.ms);
@@ -2813,7 +2813,7 @@ int
 bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
 {
   memset (color, 0, sizeof (Dwg_Color));
-  if (dat->from_version < R_13)
+  if (dat->from_version < R_13b1)
     color->index = (BITCODE_RSd)bit_read_RS (dat);
   else
     color->index = bit_read_BS (dat);
@@ -2930,7 +2930,7 @@ bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
   else
     {
       bit_downconvert_CMC (dat, color);
-      if (dat->version < R_13)
+      if (dat->version < R_13b1)
         bit_write_RS (dat, color->index);
       else
         bit_write_BS (dat, color->index);
