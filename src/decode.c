@@ -5637,39 +5637,120 @@ void dxf_3dsolid_revisionguid (Dwg_Entity_3DSOLID *_obj)
 
 int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
-  int error = 0;
-  BITCODE_RC flag_r11 = bit_read_RC (dat);
-  LOG_TRACE ("(flag_r11: " FORMAT_RC " [RC])\n", flag_r11)
-  dat->byte--;
-  if (flag_r11 >= 64)
-    flag_r11 -= 64;
-  switch (flag_r11)
+  int error = dwg_setup_DIMENSION_ANG2LN (obj);
+  Dwg_Object_Entity *_ent = obj->tio.entity;
+  BITCODE_RC dimtype = 0;
+  {
+    // decode a generic DIMENSION, and fixup the type after. DIMENSION_ANG2LN is the biggest.
+    Dwg_Entity_DIMENSION_ANG2LN *_obj;
+    Bit_Chain *hdl_dat = dat;
+    Bit_Chain *str_dat = dat;
+    Dwg_Data *dwg = obj->parent;
+    _obj = _ent->tio.DIMENSION_ANG2LN;
+    error |= decode_entity_preR13 (dat, obj, _ent);
+    COMMON_ENTITY_DIMENSION
+    dimtype = _obj->flag1;
+    _obj->flag = _obj->flag1;
+  }
+
+  switch (dimtype & 15)
     {
     case FLAG_R11_DIMENSION_LINEAR:
-      error |= dwg_decode_DIMENSION_LINEAR (dat, obj);
+      {
+        Dwg_Entity_DIMENSION_LINEAR *_obj = _ent->tio.DIMENSION_LINEAR;
+        obj->fixedtype = DWG_TYPE_DIMENSION_LINEAR;
+        LOG_TRACE ("=> Entity DIMENSION_LINEAR\n")
+        FIELD_2RD (xline1_pt, 13);
+        FIELD_2RD (xline2_pt, 14);
+        FIELD_RD (dim_rotation, 50);
+        FIELD_RD (oblique_angle, 52); // ext_line_rotation
+      }
       break;
     case FLAG_R11_DIMENSION_ALIGNED:
-      error |= dwg_decode_DIMENSION_ALIGNED (dat, obj);
+      {
+        Dwg_Entity_DIMENSION_ALIGNED *_obj = _ent->tio.DIMENSION_ALIGNED;
+        obj->fixedtype = DWG_TYPE_DIMENSION_ALIGNED;
+        LOG_TRACE ("=> Entity DIMENSION_ALIGNED\n")
+        FIELD_2RD (xline1_pt, 13);
+        FIELD_2RD (xline2_pt, 14);
+        if (R11OPTS (0x100))
+          FIELD_RD (oblique_angle, 50);
+      }
       break;
     case FLAG_R11_DIMENSION_ANG2LN:
-      error |= dwg_decode_DIMENSION_ANG2LN (dat, obj);
+      {
+        Dwg_Entity_DIMENSION_ANG2LN *_obj = _ent->tio.DIMENSION_ANG2LN;
+        obj->fixedtype = DWG_TYPE_DIMENSION_ANG2LN;
+        FIELD_2RD (xline1start_pt, 13);
+        FIELD_2RD (xline1end_pt, 14);
+        FIELD_2RD (xline2start_pt, 15);
+        FIELD_2RD (xline2end_pt, 16);
+      }
       break;
     case FLAG_R11_DIMENSION_DIAMETER:
-      error |= dwg_decode_DIMENSION_DIAMETER (dat, obj);
+      {
+        Dwg_Entity_DIMENSION_DIAMETER *_obj = _ent->tio.DIMENSION_DIAMETER;
+        obj->fixedtype = DWG_TYPE_DIMENSION_DIAMETER;
+        LOG_TRACE ("=> Entity DIMENSION_DIAMETER\n")
+        if (R11OPTS (32)) { //??
+          FIELD_3RD (first_arc_pt, 15);
+        } else {
+          FIELD_2RD (first_arc_pt, 15);
+        }
+        if (R11OPTS (256)) //??
+          FIELD_RD (leader_len, 40);
+      }
       break;
     case FLAG_R11_DIMENSION_RADIUS:
-      error |= dwg_decode_DIMENSION_RADIUS (dat, obj);
+      {
+        Dwg_Entity_DIMENSION_RADIUS *_obj = _ent->tio.DIMENSION_RADIUS;
+        obj->fixedtype = DWG_TYPE_DIMENSION_RADIUS;
+        LOG_TRACE ("=> Entity DIMENSION_RADIUS\n")
+        if (R11OPTS (32)) { //??
+          FIELD_3RD (first_arc_pt, 15);
+        } else {
+          FIELD_2RD (first_arc_pt, 15);
+        }
+        if (R11OPTS (256)) //??
+          FIELD_RD (leader_len, 40);
+      }
       break;
     case FLAG_R11_DIMENSION_ANG3PT:
-      error |= dwg_decode_DIMENSION_ANG3PT (dat, obj);
+      {
+        Dwg_Entity_DIMENSION_ANG3PT *_obj = _ent->tio.DIMENSION_ANG3PT;
+        obj->fixedtype = DWG_TYPE_DIMENSION_ANG3PT;
+        LOG_TRACE ("=> Entity DIMENSION_ANG3PT\n")
+        //FIELD_2RD (def_pt, 0);
+        FIELD_2RD (xline1_pt, 13);
+        FIELD_2RD (xline2_pt, 14);
+        if (R11OPTS (32)) {
+          FIELD_3RD (center_pt, 15);
+        } else {
+          FIELD_2RD (center_pt, 15);
+        }
+      }
       break;
     case FLAG_R11_DIMENSION_ORDINATE:
-      error |= dwg_decode_DIMENSION_ORDINATE (dat, obj);
+      {
+        Dwg_Entity_DIMENSION_ORDINATE *_obj = _ent->tio.DIMENSION_ORDINATE;
+        obj->fixedtype = DWG_TYPE_DIMENSION_ORDINATE;
+        LOG_TRACE ("=> Entity DIMENSION_ORDINATE\n")
+        if (R11OPTS (8)) { // if dxf 13 (extension_defining_pt)
+          // TODO 2d if ANG2LN or opts 8
+          FIELD_3RD (feature_location_pt, 13);
+        }
+        if (R11OPTS (0x10)) { // extension_defining_point2
+          // TODO 2d if ANG2LN or opts 16
+          FIELD_3RD (leader_endpt, 14);
+        }
+        FIELD_RC (flag2, 0);
+      }
       break;
     default:
-      LOG_ERROR ("Unknown preR13 DIMENSION type %u", flag_r11);
+      LOG_ERROR ("Unknown preR13 DIMENSION type %u", dimtype);
       error |= DWG_ERR_VALUEOUTOFBOUNDS;
     }
+
   return error;
 }
 

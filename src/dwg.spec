@@ -1407,7 +1407,7 @@ DWG_ENTITY_END
     PRE (R_13b1)                                                              \
     {                                                                         \
       FIELD_HANDLE (block, 2, 2);                                             \
-      if (0 && !(R11FLAG (2))) {                                              \
+      if (dat->version >= R_10 && !(R11FLAG (FLAG_R11_ELEVATION))) {          \
         FIELD_3RD (def_pt, 10);                                               \
       } else {  /* ANG2LN */                                                  \
         FIELD_2RD (def_pt, 10);                                               \
