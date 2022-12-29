@@ -1516,14 +1516,14 @@ DWG_ENTITY (DIMENSION_ORDINATE)
   SUBCLASS (AcDbOrdinateDimension)
   PRE (R_13b1) {
     if (R11OPTS (8)) { // if dxf 13 (extension_defining_pt)
-      if (!R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
         FIELD_3RD (feature_location_pt, 13);
       } else {
         FIELD_2RD (feature_location_pt, 13);
       }
     }
     if (R11OPTS (0x10)) { // extension_defining_point2
-      if (!R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
         FIELD_3RD (leader_endpt, 14);
       } else {
         FIELD_2RD (leader_endpt, 14);
@@ -1663,7 +1663,7 @@ DWG_ENTITY (DIMENSION_RADIUS)
   SUBCLASS (AcDbRadialDimension)
   PRE (R_13b1) {
     if (R11OPTS (32)) {
-      if (!R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
         FIELD_3RD (first_arc_pt, 15);
       } else {
         FIELD_2RD (first_arc_pt, 15);
@@ -1689,7 +1689,7 @@ DWG_ENTITY (DIMENSION_DIAMETER)
   SUBCLASS (AcDbDiametricDimension)
   PRE (R_13b1) {
     if (R11OPTS (32)) {
-      if (!R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
         FIELD_3RD (first_arc_pt, 15);
       } else {
         FIELD_2RD (first_arc_pt, 15);

@@ -5692,7 +5692,7 @@ int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         obj->fixedtype = DWG_TYPE_DIMENSION_DIAMETER;
         LOG_TRACE ("=> Entity DIMENSION_DIAMETER\n")
         if (R11OPTS (32)) {
-          if (!R11FLAG (FLAG_R11_ELEVATION)) {
+          if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
             FIELD_3RD (first_arc_pt, 15);
           } else {
             FIELD_2RD (first_arc_pt, 15);
@@ -5708,7 +5708,7 @@ int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         obj->fixedtype = DWG_TYPE_DIMENSION_RADIUS;
         LOG_TRACE ("=> Entity DIMENSION_RADIUS\n")
         if (R11OPTS (32)) {
-          if (!R11FLAG (FLAG_R11_ELEVATION)) {
+          if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
             FIELD_3RD (first_arc_pt, 15);
           } else {
             FIELD_2RD (first_arc_pt, 15);
@@ -5727,7 +5727,7 @@ int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         FIELD_2RD (xline1_pt, 13);
         FIELD_2RD (xline2_pt, 14);
         if (R11OPTS (32)) {
-          if (!R11FLAG (FLAG_R11_ELEVATION)) {
+          if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
             FIELD_3RD (center_pt, 15);
           } else {
             FIELD_2RD (center_pt, 15);
@@ -5741,14 +5741,14 @@ int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         obj->fixedtype = DWG_TYPE_DIMENSION_ORDINATE;
         LOG_TRACE ("=> Entity DIMENSION_ORDINATE\n")
         if (R11OPTS (8)) { // if dxf 13 (extension_defining_pt)
-          if (!R11FLAG (FLAG_R11_ELEVATION)) {
+          if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
             FIELD_3RD (feature_location_pt, 13);
           } else {
             FIELD_2RD (feature_location_pt, 13);
           }
         }
         if (R11OPTS (0x10)) { // extension_defining_point2
-          if (!R11FLAG (FLAG_R11_ELEVATION)) {
+          if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
             FIELD_3RD (leader_endpt, 14);
           } else {
             FIELD_2RD (leader_endpt, 14);
