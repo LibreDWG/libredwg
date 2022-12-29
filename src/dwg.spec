@@ -1516,12 +1516,18 @@ DWG_ENTITY (DIMENSION_ORDINATE)
   SUBCLASS (AcDbOrdinateDimension)
   PRE (R_13b1) {
     if (R11OPTS (8)) { // if dxf 13 (extension_defining_pt)
-      // TODO 2d if ANG2LN or opts 8
-      FIELD_3RD (feature_location_pt, 13);
+      if (!R11FLAG (FLAG_R11_ELEVATION)) {
+        FIELD_3RD (feature_location_pt, 13);
+      } else {
+        FIELD_2RD (feature_location_pt, 13);
+      }
     }
     if (R11OPTS (0x10)) { // extension_defining_point2
-      // TODO 2d if ANG2LN or opts 16
-      FIELD_3RD (leader_endpt, 14);
+      if (!R11FLAG (FLAG_R11_ELEVATION)) {
+        FIELD_3RD (leader_endpt, 14);
+      } else {
+        FIELD_2RD (leader_endpt, 14);
+      }
     }
     FIELD_RC (flag2, 0);
   } else {
@@ -1531,10 +1537,12 @@ DWG_ENTITY (DIMENSION_ORDINATE)
     FIELD_RC (flag2, 0);
   }
   DECODER {
-    BITCODE_RC flag = FIELD_VALUE (flag);
-    flag = (FIELD_VALUE (flag2) & 1)
-            ? flag | 0x80 : flag & 0xBF; /* set bit 6 */
-    FIELD_VALUE (flag) = flag;
+    SINCE (R_13b1) {
+      BITCODE_RC flag = FIELD_VALUE (flag);
+      flag = (FIELD_VALUE (flag2) & 1)
+        ? flag | 0x80 : flag & 0xBF; /* set bit 6 */
+      FIELD_VALUE (flag) = flag;
+    }
   }
   JSON { FIELD_RC (flag, 0); }
 
@@ -1563,7 +1571,7 @@ DWG_ENTITY (DIMENSION_LINEAR)
     FIELD_RD (dim_rotation, 50);
     FIELD_RD (oblique_angle, 52); // ext_line_rotation
   } LATER_VERSIONS {
-    FIELD_BD (oblique_angle, 0);
+    FIELD_BD (oblique_angle, 52);
     FIELD_BD0 (dim_rotation, 50);
     SUBCLASS (AcDbRotatedDimension)
 
@@ -1654,8 +1662,13 @@ DWG_ENTITY (DIMENSION_RADIUS)
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbRadialDimension)
   PRE (R_13b1) {
-    //FIELD_2RD (def_pt, 0);
-    FIELD_2RD (first_arc_pt, 15);
+    if (R11OPTS (32)) {
+      if (!R11FLAG (FLAG_R11_ELEVATION)) {
+        FIELD_3RD (first_arc_pt, 15);
+      } else {
+        FIELD_2RD (first_arc_pt, 15);
+      }
+    }
     FIELD_RD (leader_len, 40);
   } LATER_VERSIONS {
     FIELD_3BD (def_pt, 0);
@@ -1675,7 +1688,13 @@ DWG_ENTITY (DIMENSION_DIAMETER)
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbDiametricDimension)
   PRE (R_13b1) {
-    FIELD_2RD (first_arc_pt, 15);
+    if (R11OPTS (32)) {
+      if (!R11FLAG (FLAG_R11_ELEVATION)) {
+        FIELD_3RD (first_arc_pt, 15);
+      } else {
+        FIELD_2RD (first_arc_pt, 15);
+      }
+    }
     FIELD_RD (leader_len, 40);
   } LATER_VERSIONS {
     FIELD_3BD (first_arc_pt, 15);
