@@ -1495,7 +1495,7 @@ DWG_ENTITY_END
       FIELD_B (flip_arrow1, 74);                                              \
       FIELD_B (flip_arrow2, 75);                                              \
     }                                                                         \
-    SINCE (R_13b1) {                                                            \
+    SINCE (R_13b1) {                                                          \
       FIELD_2RD0 (clone_ins_pt, 12);                                          \
     }                                                                         \
     DXF                                                                       \
@@ -1522,7 +1522,7 @@ DWG_ENTITY (DIMENSION_ORDINATE)
         FIELD_2RD (feature_location_pt, 13);
       }
     }
-    if (R11OPTS (0x10)) { // extension_defining_point2
+    if (R11OPTS (16)) { // extension_defining_point2
       if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
         FIELD_3RD (leader_endpt, 14);
       } else {
@@ -1560,17 +1560,29 @@ DWG_ENTITY (DIMENSION_LINEAR)
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbAlignedDimension)
   PRE (R_13b1) {
-    FIELD_2RD (xline1_pt, 13);
-    FIELD_2RD (xline2_pt, 14);
-  } LATER_VERSIONS {
+    if (R11OPTS (8)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+        FIELD_3RD (xline1_pt, 13);
+      } else {
+        FIELD_2RD (xline1_pt, 13);
+      }
+    }
+    if (R11OPTS (16)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+        FIELD_3RD (xline2_pt, 14);
+      } else {
+        FIELD_2RD (xline2_pt, 14);
+      }
+    }
+    if (R11OPTS (0x100))
+      FIELD_RD (dim_rotation, 50);
+    if (R11OPTS (0x200))
+      FIELD_RD (oblique_angle, 52); // ext_line_rotation
+  }
+  LATER_VERSIONS {
     FIELD_3BD (xline1_pt, 13);
     FIELD_3BD (xline2_pt, 14);
     FIELD_3BD (def_pt, 0);
-  }
-  UNTIL (R_12) {
-    FIELD_RD (dim_rotation, 50);
-    FIELD_RD (oblique_angle, 52); // ext_line_rotation
-  } LATER_VERSIONS {
     FIELD_BD (oblique_angle, 52);
     FIELD_BD0 (dim_rotation, 50);
     SUBCLASS (AcDbRotatedDimension)
@@ -1588,11 +1600,24 @@ DWG_ENTITY (DIMENSION_ALIGNED)
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDbAlignedDimension)
   PRE (R_13b1) {
-    FIELD_2RD (xline1_pt, 13);
-    FIELD_2RD (xline2_pt, 14);
+    if (R11OPTS (8)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+        FIELD_3RD (xline1_pt, 13);
+      } else {
+        FIELD_2RD (xline1_pt, 13);
+      }
+    }
+    if (R11OPTS (16)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+        FIELD_3RD (xline2_pt, 14);
+      } else {
+        FIELD_2RD (xline2_pt, 14);
+      }
+    }
     if (R11OPTS (0x100))
       FIELD_RD (oblique_angle, 50);
-  } LATER_VERSIONS {
+  }
+  LATER_VERSIONS {
     FIELD_3BD (xline1_pt, 13);
     FIELD_3BD (xline2_pt, 14);
     FIELD_3BD (def_pt, 0);
@@ -1610,12 +1635,29 @@ DWG_ENTITY (DIMENSION_ANG3PT)
   COMMON_ENTITY_DIMENSION
   SUBCLASS (AcDb3PointAngularDimension)
   PRE (R_13b1) {
-    FIELD_2RD (def_pt, 0);
-    FIELD_2RD (xline1_pt, 13);
-    FIELD_2RD (xline2_pt, 14);
-    // if R11OPTS (32)
-    FIELD_2RD (center_pt, 15);
-  } LATER_VERSIONS {
+    if (R11OPTS (8)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+        FIELD_3RD (xline1_pt, 13);
+      } else {
+        FIELD_2RD (xline1_pt, 13);
+      }
+    }
+    if (R11OPTS (16)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+        FIELD_3RD (xline2_pt, 14);
+      } else {
+        FIELD_2RD (xline2_pt, 14);
+      }
+    }
+    if (R11OPTS (32)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+        FIELD_3RD (center_pt, 15);
+      } else {
+        FIELD_2RD (center_pt, 15);
+      }
+    }
+  }
+  LATER_VERSIONS {
     FIELD_3BD (def_pt, 0);
     FIELD_3BD (xline1_pt, 13);
     FIELD_3BD (xline2_pt, 14);
@@ -1635,11 +1677,36 @@ DWG_ENTITY (DIMENSION_ANG2LN)
   SUBCLASS (AcDb2LineAngularDimension)
   JSON { FIELD_3RD (def_pt, 0) }
   PRE (R_13b1) {
-    FIELD_2RD (xline1start_pt, 13);
-    FIELD_2RD (xline1end_pt, 14);
-    FIELD_2RD (xline2start_pt, 15);
-    FIELD_2RD (xline2end_pt, 16);
-  } LATER_VERSIONS {
+    if (R11OPTS (8)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+        FIELD_3RD (xline1start_pt, 13);
+      } else {
+        FIELD_2RD (xline1start_pt, 13);
+      }
+    }
+    if (R11OPTS (16)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+        FIELD_3RD (xline1end_pt, 14);
+      } else {
+        FIELD_2RD (xline1end_pt, 14);
+      }
+    }
+    if (R11OPTS (32)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+        FIELD_3RD (xline2start_pt, 15);
+      } else {
+        FIELD_2RD (xline2start_pt, 15);
+      }
+    }
+    if (R11OPTS (64)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+        FIELD_3RD (xline2end_pt, 16);
+      } else {
+        FIELD_2RD (xline2end_pt, 16);
+      }
+    }
+  }
+  LATER_VERSIONS {
 #ifndef IS_JSON
     FIELD_2RD (def_pt, 0);
 #endif
@@ -1647,8 +1714,7 @@ DWG_ENTITY (DIMENSION_ANG2LN)
     FIELD_3BD (xline1end_pt, 14);
     FIELD_3BD (xline2start_pt, 15);
     FIELD_3BD (xline2end_pt, 16);
-  }
-  SINCE (R_13b1) {
+
     COMMON_ENTITY_HANDLE_DATA;
     FIELD_HANDLE (dimstyle, 5, 0);
     FIELD_HANDLE (block, 5, 0);
@@ -1669,7 +1735,8 @@ DWG_ENTITY (DIMENSION_RADIUS)
         FIELD_2RD (first_arc_pt, 15);
       }
     }
-    FIELD_RD (leader_len, 40);
+    if (R11OPTS (128))
+      FIELD_RD (leader_len, 40);
   } LATER_VERSIONS {
     FIELD_3BD (def_pt, 0);
     FIELD_3BD (first_arc_pt, 15);
@@ -1695,7 +1762,8 @@ DWG_ENTITY (DIMENSION_DIAMETER)
         FIELD_2RD (first_arc_pt, 15);
       }
     }
-    FIELD_RD (leader_len, 40);
+    if (R11OPTS (128))
+      FIELD_RD (leader_len, 40);
   } LATER_VERSIONS {
     FIELD_3BD (first_arc_pt, 15);
     FIELD_3BD (def_pt, 0); // = far_chord_pt
@@ -1731,9 +1799,8 @@ DWG_ENTITY (POINT)
   PRE (R_13b1) {
     FIELD_RD (x, 10);
     FIELD_RD (y, 20);
-    SINCE (R_10) {
-      if (! (R11FLAG (FLAG_R11_ELEVATION)))
-        FIELD_RD (z, 30);
+    if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+      FIELD_RD (z, 30);
     }
   } LATER_VERSIONS {
     FIELD_BD (x, 10);

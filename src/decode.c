@@ -5659,10 +5659,24 @@ int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         Dwg_Entity_DIMENSION_LINEAR *_obj = _ent->tio.DIMENSION_LINEAR;
         obj->fixedtype = DWG_TYPE_DIMENSION_LINEAR;
         LOG_TRACE ("=> Entity DIMENSION_LINEAR\n")
-        FIELD_2RD (xline1_pt, 13);
-        FIELD_2RD (xline2_pt, 14);
-        FIELD_RD (dim_rotation, 50);
-        FIELD_RD (oblique_angle, 52); // ext_line_rotation
+        if (R11OPTS (8)) {
+          if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+            FIELD_3RD (xline1_pt, 13);
+          } else {
+            FIELD_2RD (xline1_pt, 13);
+          }
+        }
+        if (R11OPTS (16)) {
+          if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+            FIELD_3RD (xline2_pt, 14);
+          } else {
+            FIELD_2RD (xline2_pt, 14);
+          }
+        }
+        if (R11OPTS (0x100))
+          FIELD_RD (dim_rotation, 50);
+        if (R11OPTS (0x200))
+          FIELD_RD (oblique_angle, 52); // ext_line_rotation
       }
       break;
     case FLAG_R11_DIMENSION_ALIGNED:
@@ -5670,8 +5684,20 @@ int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         Dwg_Entity_DIMENSION_ALIGNED *_obj = _ent->tio.DIMENSION_ALIGNED;
         obj->fixedtype = DWG_TYPE_DIMENSION_ALIGNED;
         LOG_TRACE ("=> Entity DIMENSION_ALIGNED\n")
-        FIELD_2RD (xline1_pt, 13);
-        FIELD_2RD (xline2_pt, 14);
+        if (R11OPTS (8)) {
+          if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+            FIELD_3RD (xline1_pt, 13);
+          } else {
+            FIELD_2RD (xline1_pt, 13);
+          }
+        }
+        if (R11OPTS (16)) {
+          if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+            FIELD_3RD (xline2_pt, 14);
+          } else {
+            FIELD_2RD (xline2_pt, 14);
+          }
+        }
         if (R11OPTS (0x100))
           FIELD_RD (oblique_angle, 50);
       }
@@ -5680,10 +5706,34 @@ int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       {
         Dwg_Entity_DIMENSION_ANG2LN *_obj = _ent->tio.DIMENSION_ANG2LN;
         obj->fixedtype = DWG_TYPE_DIMENSION_ANG2LN;
-        FIELD_2RD (xline1start_pt, 13);
-        FIELD_2RD (xline1end_pt, 14);
-        FIELD_2RD (xline2start_pt, 15);
-        FIELD_2RD (xline2end_pt, 16);
+        if (R11OPTS (8)) {
+          if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+            FIELD_3RD (xline1start_pt, 13);
+          } else {
+            FIELD_2RD (xline1start_pt, 13);
+          }
+        }
+        if (R11OPTS (16)) {
+          if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+            FIELD_3RD (xline1end_pt, 14);
+          } else {
+            FIELD_2RD (xline1end_pt, 14);
+          }
+        }
+        if (R11OPTS (32)) {
+          if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+            FIELD_3RD (xline2start_pt, 15);
+          } else {
+            FIELD_2RD (xline2start_pt, 15);
+          }
+        }
+        if (R11OPTS (64)) {
+          if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+            FIELD_3RD (xline2end_pt, 16);
+          } else {
+            FIELD_2RD (xline2end_pt, 16);
+          }
+        }
       }
       break;
     case FLAG_R11_DIMENSION_DIAMETER:
@@ -5698,7 +5748,7 @@ int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
             FIELD_2RD (first_arc_pt, 15);
           }
         }
-        if (R11OPTS (256)) //??
+        if (R11OPTS (128))
           FIELD_RD (leader_len, 40);
       }
       break;
@@ -5714,7 +5764,7 @@ int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
             FIELD_2RD (first_arc_pt, 15);
           }
         }
-        if (R11OPTS (256)) //??
+        if (R11OPTS (128))
           FIELD_RD (leader_len, 40);
       }
       break;
@@ -5723,9 +5773,20 @@ int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         Dwg_Entity_DIMENSION_ANG3PT *_obj = _ent->tio.DIMENSION_ANG3PT;
         obj->fixedtype = DWG_TYPE_DIMENSION_ANG3PT;
         LOG_TRACE ("=> Entity DIMENSION_ANG3PT\n")
-        //FIELD_2RD (def_pt, 0);
-        FIELD_2RD (xline1_pt, 13);
-        FIELD_2RD (xline2_pt, 14);
+        if (R11OPTS (8)) {
+          if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+            FIELD_3RD (xline1_pt, 13);
+          } else {
+            FIELD_2RD (xline1_pt, 13);
+          }
+        }
+        if (R11OPTS (16)) {
+          if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+            FIELD_3RD (xline2_pt, 14);
+          } else {
+            FIELD_2RD (xline2_pt, 14);
+          }
+        }
         if (R11OPTS (32)) {
           if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
             FIELD_3RD (center_pt, 15);
@@ -5747,7 +5808,7 @@ int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
             FIELD_2RD (feature_location_pt, 13);
           }
         }
-        if (R11OPTS (0x10)) { // extension_defining_point2
+        if (R11OPTS (16)) { // extension_defining_point2
           if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
             FIELD_3RD (leader_endpt, 14);
           } else {
