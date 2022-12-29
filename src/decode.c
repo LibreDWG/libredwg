@@ -5649,8 +5649,7 @@ int decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     _obj = _ent->tio.DIMENSION_ANG2LN;
     error |= decode_entity_preR13 (dat, obj, _ent);
     COMMON_ENTITY_DIMENSION
-    dimtype = _obj->flag1;
-    _obj->flag = _obj->flag1;
+    dimtype = _obj->flag;
   }
 
   switch (dimtype & 15)

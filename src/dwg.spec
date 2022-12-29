@@ -1414,7 +1414,7 @@ DWG_ENTITY_END
       }                                                                       \
       FIELD_2RD (text_midpt, 11);                                             \
       if (R11OPTS (2))                                                        \
-        FIELD_RC (flag1, 0);                                                  \
+        FIELD_RC (flag, 70);                                                  \
       if (R11OPTS (4))                                                        \
         FIELD_TV (user_text, 1);                                              \
     }                                                                         \
@@ -1437,26 +1437,28 @@ DWG_ENTITY_END
     }                                                                         \
     DECODER                                                                   \
     {                                                                         \
-      /* clear the upper flag bits, and fix them: */                          \
-      BITCODE_RC flag = FIELD_VALUE (flag1) & 0xe0;                           \
-      /* bit 7 (non-default) is inverse of bit 0 */                           \
-      flag = (FIELD_VALUE (flag1) & 1) ? flag & 0x7F : flag | 0x80;           \
-      /* set bit 5 (use block) to bit 1. always set since r13 */              \
-      flag = (FIELD_VALUE (flag1) & 2) ? flag | 0x20 : flag & 0xDF;           \
-      if (obj->fixedtype == DWG_TYPE_DIMENSION_ALIGNED)                       \
-        flag |= 1;                                                            \
-      else if (obj->fixedtype == DWG_TYPE_DIMENSION_ANG2LN)                   \
-        flag |= 2;                                                            \
-      else if (obj->fixedtype == DWG_TYPE_DIMENSION_DIAMETER)                 \
-        flag |= 3;                                                            \
-      else if (obj->fixedtype == DWG_TYPE_DIMENSION_RADIUS)                   \
-        flag |= 4;                                                            \
-      else if (obj->fixedtype == DWG_TYPE_DIMENSION_ANG3PT)                   \
-        flag |= 5;                                                            \
-      else if (obj->fixedtype == DWG_TYPE_DIMENSION_ORDINATE)                 \
-        flag |= 6;                                                            \
-      FIELD_VALUE (flag) = flag;                                              \
-      LOG_TRACE ("flag => 0x%x [RC 70]\n", flag);                             \
+      SINCE (R_13b1) {                                                        \
+        /* clear the upper flag bits, and fix them: */                        \
+        BITCODE_RC flag = FIELD_VALUE (flag1) & 0xe0;                         \
+        /* bit 7 (non-default) is inverse of bit 0 */                         \
+        flag = (FIELD_VALUE (flag1) & 1) ? flag & 0x7F : flag | 0x80;         \
+        /* set bit 5 (use block) to bit 1. always set since r13 */            \
+        flag = (FIELD_VALUE (flag1) & 2) ? flag | 0x20 : flag & 0xDF;         \
+        if (obj->fixedtype == DWG_TYPE_DIMENSION_ALIGNED)                     \
+          flag |= 1;                                                          \
+        else if (obj->fixedtype == DWG_TYPE_DIMENSION_ANG2LN)                 \
+          flag |= 2;                                                          \
+        else if (obj->fixedtype == DWG_TYPE_DIMENSION_DIAMETER)               \
+          flag |= 3;                                                          \
+        else if (obj->fixedtype == DWG_TYPE_DIMENSION_RADIUS)                 \
+          flag |= 4;                                                          \
+        else if (obj->fixedtype == DWG_TYPE_DIMENSION_ANG3PT)                 \
+          flag |= 5;                                                          \
+        else if (obj->fixedtype == DWG_TYPE_DIMENSION_ORDINATE)               \
+          flag |= 6;                                                          \
+        FIELD_VALUE (flag) = flag;                                            \
+        LOG_TRACE ("flag => 0x%x [RC 70]\n", flag);                           \
+      }                                                                       \
     }                                                                         \
     DXF                                                                       \
     {                                                                         \
