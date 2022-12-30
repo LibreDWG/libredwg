@@ -128,10 +128,12 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
 {
   int error = 0;
   Dwg_Section *tbl = &dwg->header.section[id];
-  //Dwg_Object_BLOCK_CONTROL *block_control = dwg_block_control (dwg);
-  //Dwg_Object_BLOCK_HEADER *mspace;
-  //Dwg_Object *mspaceobj;
 
+  if (dat->byte + 10 > dat->size)
+    {
+      LOG_ERROR ("%s.size overflow @%lu", name, dat->byte)
+      return DWG_ERR_SECTIONNOTFOUND;
+    }
   tbl->size = bit_read_RS (dat);
   tbl->number = bit_read_RS (dat);
   tbl->flags = bit_read_RS (dat);
