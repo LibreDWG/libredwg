@@ -243,7 +243,7 @@ cover: gcov
 	gcov2perl test/*/*.gcov src/*.gcov programs/*.gcov examples/*.gcov
 	cover -no-gcov
 codecov: check
-	build-aux/codecov_io.sh -X test -X bindings
+	$(srcdir)/build-aux/codecov_io.sh -X test -X bindings
 coveralls: gcov
 	coveralls -e test -e bindings
 endif
