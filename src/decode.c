@@ -766,6 +766,11 @@ handles_section:
           dat->bit = 0;
         }
 
+      if (dat->byte >= dat->size)
+        {
+          LOG_ERROR ("Handles overflow @%lu", dat->byte)
+          return DWG_ERR_VALUEOUTOFBOUNDS;
+        }
       crc = bit_read_RS_LE (dat);
       LOG_TRACE ("\nHandles page crc: %04X [RS_LE] (%lu-%lu = %u)\n", crc,
                  startpos, startpos + section_size, section_size);
@@ -4822,6 +4827,11 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
             "Object number: %lu/%lX",
             (unsigned long)num, (unsigned long)num)
 
+  if (dat->byte >= dat->size)
+    {
+      LOG_ERROR ("MS size overflow @%lu", dat->byte)
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
   obj->size = bit_read_MS (dat);
   LOG_INFO (", Size: %d [MS]", obj->size)
   SINCE (R_2010)
