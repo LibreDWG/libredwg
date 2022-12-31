@@ -428,3 +428,22 @@ cvt_TIMEBLL (struct tm *tm, BITCODE_TIMEBLL date)
   //sprintf (s, "%02d.%02d.%4d  %02d:%02d:%05.2f", d, m, y, hh, mm, ss);
   return tm;
 }
+
+/* in seconds */
+long
+tm_offset (void)
+{
+  time_t gmt, rawtime = time(NULL);
+  struct tm *tm;
+
+#ifdef HAVE_GMTIME_R
+  struct tm gbuf;
+  tm = gmtime_r(&rawtime, &gbuf);
+#else
+  tm = gmtime(&rawtime);
+#endif
+  // Force mktime() lookup dst in timezone database
+  tm->tm_isdst = -1;
+  gmt = mktime(tm);
+  return (long)difftime(rawtime, gmt);
+}

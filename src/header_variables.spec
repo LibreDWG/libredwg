@@ -233,19 +233,33 @@
   PRE (R_2007) {
     FIELD_TV (MENU, 1);
   }
-  FIELD_TIMEBLL (TDCREATE, 40);
-  FIELD_TIMEBLL (TDUPDATE, 40);
-  SINCE (R_13b1) {
-  //FIELD_TIMEBLL (TDUCREATE, 40);
-  //FIELD_TIMEBLL (TDUUPDATE, 40);
-  }
-  SINCE (R_2004)
-    {
-      FIELD_BL (unknown_15, 0);
-      FIELD_BL (unknown_16, 0);
-      FIELD_BL (unknown_17, 0);
+  FIELD_TIMEBLL (TDUCREATE, 40);
+  FIELD_TIMEBLL (TDUUPDATE, 40);
+  DECODER {
+    if (!_obj->TDCREATE.days) {
+      struct tm tm;
+      long off = tm_offset() * 1000;
+      char _buf[60] = "";
+      _obj->TDCREATE.days  = _obj->TDUCREATE.days;
+      // adjust for timezone offset
+      _obj->TDCREATE.ms    = _obj->TDUCREATE.ms + off;
+      _obj->TDCREATE.value = _obj->TDCREATE.days + (_obj->TDCREATE.ms * 1e-8);
+      strftime (_buf, 60, STRFTIME_DATE, cvt_TIMEBLL (&tm, _obj->TDCREATE));
+      LOG_TRACE ("=> TDCREATE: [" FORMAT_BL ", " FORMAT_BL "] %s [TIMEBLL 40]\n",
+                   _obj->TDCREATE.days, _obj->TDCREATE.ms, _buf);
+      _obj->TDUPDATE.days  = _obj->TDUUPDATE.days;
+      _obj->TDUPDATE.ms    = _obj->TDUUPDATE.ms + off;
+      _obj->TDUPDATE.value = _obj->TDUPDATE.days + (_obj->TDUPDATE.ms * 1e-8);
+      strftime (_buf, 60, STRFTIME_DATE, cvt_TIMEBLL (&tm, _obj->TDUPDATE));
+      LOG_TRACE ("=> TDUPDATE: [" FORMAT_BL ", " FORMAT_BL "] %s [TIMEBLL 40]\n",
+                   _obj->TDUPDATE.days, _obj->TDUPDATE.ms, _buf);
     }
-
+  }
+  SINCE (R_2004) {
+    FIELD_BL (unknown_15, 0);
+    FIELD_BL (unknown_16, 0);
+    FIELD_BL (unknown_17, 0);
+  }
   FIELD_TIMEBLL (TDINDWG, 40);
   FIELD_TIMEBLL (TDUSRTIMER, 40);
   FIELD_CMC (CECOLOR, 62);

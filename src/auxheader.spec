@@ -80,9 +80,10 @@
   FIELD_RL (numsaves_4, 0);
   FIELD_RL (zero_5, 0);
   FIELD_RL (zero_6, 0);
-  FIELD_RL (zero_7, 0);
-  FIELD_RL (zero_8, 0);
-  //DEBUG_HERE;
+  SINCE (R_2004) {
+    FIELD_RL (zero_7, 0);
+    FIELD_RL (zero_8, 0);
+  }
   SINCE (R_2018) {
     FIELD_VECTOR_INL (zero_18, RS, 3, 0)
   }

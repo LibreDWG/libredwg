@@ -279,6 +279,7 @@ AC_CHECK_FUNCS([sincos])
 AC_CHECK_FUNCS([memchr memmove strcasecmp strchr strstr strrchr strtol strtoul strtoull strnlen])
 AC_CHECK_FUNCS([memmem],[],
   AC_MSG_WARN([memmem not found. Using a slower workaround.]))
+AC_CHECK_FUNCS([gmtime_r])
 AC_CHECK_FUNCS([wcslen wcsnlen wcscpy wcscmp wcsstr])
 dnl try the secure extensions
 $as_echo '#define __STDC_WANT_LIB_EXT1__  1' >>confdefs.h

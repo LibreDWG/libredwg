@@ -375,4 +375,7 @@ dwg_ref_objname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref);
 
 int dwg_init_sections (Dwg_Data *dwg);
 
+/* in seconds */
+long tm_offset (void);
+
 #endif

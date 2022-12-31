@@ -172,6 +172,22 @@
   FIELD_HANDLE (CELTYPE, 2, 6); // ff for BYLAYER, fe for BYBLOCK
   FIELD_TIMERLL (TDCREATE, 40);
   FIELD_TIMERLL (TDUPDATE, 40);
+  DECODER {
+    if (!_obj->TDUCREATE.days && dat->version >= R_13) {
+      long off = tm_offset() * 1000;
+      _obj->TDUCREATE.days  = _obj->TDCREATE.days;
+      // adjust for timezone offset
+      _obj->TDUCREATE.ms    = _obj->TDUCREATE.ms - off;
+      _obj->TDUCREATE.value = _obj->TDUCREATE.days + (_obj->TDUCREATE.ms * 1e-8);
+      LOG_TRACE ("=> TDUCREATE: [" FORMAT_BL ", " FORMAT_BL "] %f [TIMEBLL 40]\n",
+                   _obj->TDUCREATE.days, _obj->TDUCREATE.ms, _obj->TDUCREATE.value);
+      _obj->TDUUPDATE.days  = _obj->TDUPDATE.days;
+      _obj->TDUUPDATE.ms    = _obj->TDUPDATE.ms - off;
+      _obj->TDUUPDATE.value = _obj->TDUPDATE.days + (_obj->TDUPDATE.ms * 1e-8);
+      LOG_TRACE ("=> TDUUPDATE: [" FORMAT_BL ", " FORMAT_BL "] %f [TIMEBLL 40]\n",
+                   _obj->TDUUPDATE.days, _obj->TDUUPDATE.ms, _obj->TDUUPDATE.value);
+    }
+  }
   FIELD_TIMERLL (TDINDWG, 40);
   FIELD_TIMERLL (TDUSRTIMER, 40);
   FIELD_CAST (USRTIMER, RS, B, 70);
