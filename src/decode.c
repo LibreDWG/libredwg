@@ -412,6 +412,11 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               LOG_ERROR ("Illegal HEADER.thumbnail_size: %lu < %lu",
                          dat->byte - 16, start_address);
             }
+          else if ((dat->byte - 16) - start_address < 10)
+            {
+              LOG_TRACE ("No HEADER.thumbnail: %lu < 10",
+                         dat->byte - 16 - start_address);
+            }
           else
             {
               assert ((dat->byte - 16) >= start_address);
