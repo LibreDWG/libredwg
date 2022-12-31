@@ -3928,8 +3928,8 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat, Dwg_Data *restrict
     {
       Dwg_Object *obj = &dwg->object[index];
       unsigned long size_pos = 0UL;
-      // skip table objects
-      if (obj->supertype != DWG_SUPERTYPE_ENTITY)
+      // skip table objects or uninitialized entities
+      if (obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity)
         {
           LOG_TRACE ("Skip object %s, number: %d, Fixedtype: %d, Addr: %lx (0x%x)\n",
                      obj->name, obj->index, obj->fixedtype, obj->address,
