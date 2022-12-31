@@ -493,9 +493,10 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
 EXPORT unsigned char *
 dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
 {
-  BITCODE_RC i, num_pictures, type;
+  BITCODE_RC i, num_headers, type = 0;
   int found;
-  BITCODE_RL header_size, address, osize;
+  BITCODE_RL header_size, address = 0, osize;
+  unsigned long oldpos;
   Bit_Chain dat = { 0 };
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
@@ -509,6 +510,7 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
       return NULL;
     }
   //dat.byte = 0; sentinel at 16
+  oldpos = dat.byte;
   dat.bit = 0;
   dat.opts = dwg->opts;
   dat.from_version = dwg->header.from_version;
@@ -533,12 +535,12 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
       LOG_ERROR ("Preview overflow > %ld", dat.size - 4);
       return NULL;
     }
-  num_pictures = bit_read_RC (&dat);
-  LOG_INFO ("num_pictures: %d [RC]\n", (int)num_pictures)
+  num_headers = bit_read_RC (&dat);
+  LOG_INFO ("num_headers: %d [RC]\n", (int)num_headers)
 
   found = 0;
   header_size = 0;
-  for (i = 0; i < num_pictures; i++)
+  for (i = 0; i < num_headers; i++)
     {
       if (dat.byte > dat.size)
         {
@@ -548,16 +550,18 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
       type = bit_read_RC (&dat);
       LOG_TRACE ("\t[%i] Code: %i [RC]\n", i, type)
       address = bit_read_RL (&dat);
-      LOG_TRACE ("\t\tHeader data start: 0x%x [RL]\n", address)
       if (type == 1)
         {
-          header_size += bit_read_RL (&dat);
-          LOG_TRACE ("\t\tHeader data size: %i [RL]\n", header_size)
+          BITCODE_RL h_size = bit_read_RL (&dat);
+          LOG_TRACE ("\t\tHeader data start: " FORMAT_RL " [RL]\n", address)
+          header_size += h_size;
+          LOG_TRACE ("\t\tHeader data size: " FORMAT_RL " [RL] (" FORMAT_RL ")\n", h_size, header_size)
         }
       else if (type == 2 && found == 0)
         {
           *size = bit_read_RL (&dat);
           found = 1;
+          LOG_TRACE ("\t\tBMP data start: " FORMAT_RL " [RL]\n", address)
           LOG_INFO ("\t\tBMP size: %i [RL]\n", *size)
           if (*size > (dat.size - 4))
             {
@@ -568,16 +572,19 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
       else if (type == 3)
         {
           osize = bit_read_RL (&dat);
+          LOG_TRACE ("\t\tWMF data start: " FORMAT_RL " [RL]\n", address)
           LOG_INFO ("\t\tWMF size: %i [RL]\n", osize)
         }
       else if (type == 4) // type 4?
         {
           osize = bit_read_RL (&dat);
+          LOG_TRACE ("\t\tPNG data start: " FORMAT_RL " [RL]\n", address)
           LOG_INFO ("\t\tPNG size: %i [RL]\n", osize)
         }
       else
         {
           osize = bit_read_RL (&dat);
+          LOG_TRACE ("\t\tData start: " FORMAT_RL " [RL]\n", address)
           LOG_TRACE ("\t\tSize of unknown type %i: %i [RL]\n", type, osize)
         }
     }
@@ -586,9 +593,9 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
     LOG_TRACE ("BMP offset: %lu\n", dat.byte);
   if (dat.byte + *size > dat.size)
     {
-      *size = 0;
       LOG_ERROR ("Preview overflow %lu + " FORMAT_RL " > %lu",
                  dat.byte, *size, dat.size);
+      *size = 0;
       return NULL;
     }
 

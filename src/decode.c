@@ -1574,6 +1574,8 @@ section_max_decomp_size (const Dwg_Data *dwg, const Dwg_Section_Type id)
         max_decomp_size = 0x1800;
       else if (dwg->header.version >= R_2007 && dwg->header.version <= R_2010)
         max_decomp_size = 0x4a000;
+      else if (dwg->header.version == R_2004)
+        max_decomp_size = 0x144400;
     }
   else if (id == SECTION_SUMMARYINFO)
     max_decomp_size = 0x100;
@@ -2993,7 +2995,7 @@ read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   assert (sec_dat.size >= 32);
   assert (sec_dat.chain);
-  dwg->thumbnail.size = sec_dat.size - 32; // 2x sentinel
+  dwg->thumbnail.size = sec_dat.size - 16;
   dwg->thumbnail.chain = sec_dat.chain;
   dwg->thumbnail.byte = 16; // sentinel
 
