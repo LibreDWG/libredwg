@@ -5858,6 +5858,11 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
              blocks_max != (BITCODE_RL)0 ? "block " : "", start, end, num_entities,
              size, blocks_max);
   LOG_INFO ("==========================================\n");
+  if (size > dat->size || end > dat->size)
+    {
+      LOG_ERROR ("size overflow")
+      return DWG_ERR_INVALIDDWG;
+    }
   if (end != 0 && start == end)
     // with empty entities, ignore num_entities as they include block ents
     return 0;
