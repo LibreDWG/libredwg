@@ -23039,7 +23039,7 @@ dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     {
       obj->type = DWG_TYPE_TEXT_R11;
       if (_obj->elevation == 0.0)
-        obj->tio.entity->flag_r11 |= FLAG_R11_ELEVATION;
+        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
   return _obj;
 }
@@ -23150,7 +23150,7 @@ dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert,
     {
       obj->type = DWG_TYPE_ATTRIB_R11;
       if (_obj->elevation == 0.0)
-        obj->tio.entity->flag_r11 |= FLAG_R11_ELEVATION;
+        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
   return _obj;
 }
@@ -23183,7 +23183,7 @@ dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     {
       obj->type = DWG_TYPE_ATTDEF_R11;
       if (_obj->elevation == 0.0)
-        obj->tio.entity->flag_r11 |= FLAG_R11_ELEVATION;
+        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
   return _obj;
 }
@@ -23266,7 +23266,7 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     {
       obj->type = DWG_TYPE_INSERT_R11;
       if (_obj->ins_pt.z == 0.0)
-        obj->tio.entity->flag_r11 |= FLAG_R11_ELEVATION;
+        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
   return _obj;
 }
@@ -23326,7 +23326,7 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     {
       obj->type = DWG_TYPE_INSERT_R11;
       if (_obj->ins_pt.z == 0.0)
-        obj->tio.entity->flag_r11 |= FLAG_R11_ELEVATION;
+        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
   return _obj;
 }
@@ -23348,7 +23348,7 @@ dwg_add_VERTEX_2D (Dwg_Entity_POLYLINE_2D *restrict pline,
     {
       obj->type = DWG_TYPE_VERTEX_R11;
       if (_obj->point.z == 0.0)
-        obj->tio.entity->flag_r11 |= FLAG_R11_ELEVATION;
+        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
   return _obj;
 }
@@ -23370,7 +23370,7 @@ dwg_add_VERTEX_3D (Dwg_Entity_POLYLINE_3D *restrict pline,
     {
       obj->type = DWG_TYPE_VERTEX_R11;
       if (_obj->point.z == 0.0)
-        obj->tio.entity->flag_r11 |= FLAG_R11_ELEVATION;
+        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
   return _obj;
 }
@@ -23701,7 +23701,7 @@ dwg_add_ARC (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     {
       obj->type = DWG_TYPE_ARC_R11;
       if (_obj->center.z == 0.0)
-        obj->tio.entity->flag_r11 |= FLAG_R11_ELEVATION;
+        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
   return _obj;
 }
@@ -23722,7 +23722,7 @@ dwg_add_CIRCLE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       obj->type = DWG_TYPE_CIRCLE_R11;
       // UNTESTED
       if (_obj->center.z == 0.0)
-        obj->tio.entity->flag_r11 |= FLAG_R11_ELEVATION;
+        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
   return _obj;
 }
@@ -23753,7 +23753,7 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         {
           obj->type = DWG_TYPE_LINE_R11;
           if (_obj->start.z == 0.0 && _obj->end.z == 0.0)
-            obj->tio.entity->flag_r11 |= FLAG_R11_ELEVATION;
+            obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
         }
     }
   if (dwg->header.version >= R_2_4 && dwg->header.version < R_10)
@@ -24012,7 +24012,7 @@ dwg_add_POINT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     {
       obj->type = DWG_TYPE_POINT_R11;
       if (_obj->z == 0.0)
-        obj->tio.entity->flag_r11 |= FLAG_R11_ELEVATION;
+        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
   return _obj;
 }
@@ -24063,7 +24063,7 @@ dwg_add_3DFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (pt1->z == 0.0 && pt2->z == 0.0 && pt3->z == 0.0 && (!pt4 || pt4->z == 0.0))
     {
       _obj->z_is_zero = 1;
-      obj->tio.entity->flag_r11 |= FLAG_R11_ELEVATION;
+      obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
   if (dwg->header.version <= R_11)
     obj->type = DWG_TYPE_3DFACE_R11;
@@ -24127,7 +24127,7 @@ dwg_add_TRACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     {
       obj->type = DWG_TYPE_TRACE_R11;
       if (_obj->elevation == 0.0)
-        obj->tio.entity->flag_r11 |= FLAG_R11_ELEVATION;
+        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
   return _obj;
 }
@@ -24160,7 +24160,7 @@ dwg_add_SHAPE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     {
       obj->type = DWG_TYPE_SHAPE_R11;
       if (_obj->ins_pt.z == 0.0)
-        obj->tio.entity->flag_r11 |= FLAG_R11_ELEVATION;
+        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
   return _obj;
 }

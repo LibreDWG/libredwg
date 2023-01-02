@@ -1064,7 +1064,7 @@ DWG_ENTITY (VERTEX_3D)
   PRE (R_13b1)
   {
     FIELD_VALUE (flag) = R11FLAG (255);
-    if (R11FLAG (FLAG_R11_ELEVATION)) {
+    if (R11FLAG (FLAG_R11_HAS_ELEVATION)) {
       FIELD_3RD (point, 10);
     } else {
       FIELD_2RD (point, 10);
@@ -1360,7 +1360,7 @@ DWG_ENTITY (LINE)
       FIELD_2RD (end, 11)
   }
   VERSIONS (R_10, R_12) {
-    if (R11FLAG (FLAG_R11_ELEVATION)) {  // extension of pre R_10, not compatible
+    if (R11FLAG (FLAG_R11_HAS_ELEVATION)) {  // extension of pre R_10, not compatible
       FIELD_2RD (start, 10)
       FIELD_2RD (end, 11)
     } else {
@@ -1431,7 +1431,7 @@ DWG_ENTITY_END
     PRE (R_13b1)                                                              \
     {                                                                         \
       FIELD_HANDLE (block, 2, 2);                                             \
-      if (dat->version >= R_10 && !(R11FLAG (FLAG_R11_ELEVATION))) {          \
+      if (dat->version >= R_10 && !(R11FLAG (FLAG_R11_HAS_ELEVATION))) {      \
         FIELD_3RD (def_pt, 10);                                               \
       } else {  /* ANG2LN */                                                  \
         FIELD_2RD (def_pt, 10);                                               \
@@ -1540,14 +1540,14 @@ DWG_ENTITY (DIMENSION_ORDINATE)
   SUBCLASS (AcDbOrdinateDimension)
   PRE (R_13b1) {
     if (R11OPTS (8)) { // if dxf 13 (extension_defining_pt)
-      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION)) {
         FIELD_3RD (feature_location_pt, 13);
       } else {
         FIELD_2RD (feature_location_pt, 13);
       }
     }
     if (R11OPTS (16)) { // extension_defining_point2
-      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION)) {
         FIELD_3RD (leader_endpt, 14);
       } else {
         FIELD_2RD (leader_endpt, 14);
@@ -1585,14 +1585,14 @@ DWG_ENTITY (DIMENSION_LINEAR)
   SUBCLASS (AcDbAlignedDimension)
   PRE (R_13b1) {
     if (R11OPTS (8)) {
-      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION)) {
         FIELD_3RD (xline1_pt, 13);
       } else {
         FIELD_2RD (xline1_pt, 13);
       }
     }
     if (R11OPTS (16)) {
-      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION)) {
         FIELD_3RD (xline2_pt, 14);
       } else {
         FIELD_2RD (xline2_pt, 14);
@@ -1625,14 +1625,14 @@ DWG_ENTITY (DIMENSION_ALIGNED)
   SUBCLASS (AcDbAlignedDimension)
   PRE (R_13b1) {
     if (R11OPTS (8)) {
-      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION)) {
         FIELD_3RD (xline1_pt, 13);
       } else {
         FIELD_2RD (xline1_pt, 13);
       }
     }
     if (R11OPTS (16)) {
-      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION)) {
         FIELD_3RD (xline2_pt, 14);
       } else {
         FIELD_2RD (xline2_pt, 14);
@@ -1660,21 +1660,21 @@ DWG_ENTITY (DIMENSION_ANG3PT)
   SUBCLASS (AcDb3PointAngularDimension)
   PRE (R_13b1) {
     if (R11OPTS (8)) {
-      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION)) {
         FIELD_3RD (xline1_pt, 13);
       } else {
         FIELD_2RD (xline1_pt, 13);
       }
     }
     if (R11OPTS (16)) {
-      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION)) {
         FIELD_3RD (xline2_pt, 14);
       } else {
         FIELD_2RD (xline2_pt, 14);
       }
     }
     if (R11OPTS (32)) {
-      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION)) {
         FIELD_3RD (center_pt, 15);
       } else {
         FIELD_2RD (center_pt, 15);
@@ -1702,28 +1702,28 @@ DWG_ENTITY (DIMENSION_ANG2LN)
   JSON { FIELD_3RD (def_pt, 0) }
   PRE (R_13b1) {
     if (R11OPTS (8)) {
-      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION)) {
         FIELD_3RD (xline1start_pt, 13);
       } else {
         FIELD_2RD (xline1start_pt, 13);
       }
     }
     if (R11OPTS (16)) {
-      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION)) {
         FIELD_3RD (xline1end_pt, 14);
       } else {
         FIELD_2RD (xline1end_pt, 14);
       }
     }
     if (R11OPTS (32)) {
-      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION)) {
         FIELD_3RD (xline2start_pt, 15);
       } else {
         FIELD_2RD (xline2start_pt, 15);
       }
     }
     if (R11OPTS (64)) {
-      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION)) {
         FIELD_3RD (xline2end_pt, 16);
       } else {
         FIELD_2RD (xline2end_pt, 16);
@@ -1753,7 +1753,7 @@ DWG_ENTITY (DIMENSION_RADIUS)
   SUBCLASS (AcDbRadialDimension)
   PRE (R_13b1) {
     if (R11OPTS (32)) {
-      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION)) {
         FIELD_3RD (first_arc_pt, 15);
       } else {
         FIELD_2RD (first_arc_pt, 15);
@@ -1780,7 +1780,7 @@ DWG_ENTITY (DIMENSION_DIAMETER)
   SUBCLASS (AcDbDiametricDimension)
   PRE (R_13b1) {
     if (R11OPTS (32)) {
-      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+      if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION)) {
         FIELD_3RD (first_arc_pt, 15);
       } else {
         FIELD_2RD (first_arc_pt, 15);
@@ -1823,7 +1823,7 @@ DWG_ENTITY (POINT)
   PRE (R_13b1) {
     FIELD_RD (x, 10);
     FIELD_RD (y, 20);
-    if (dat->version >= R_10 && !R11FLAG (FLAG_R11_ELEVATION)) {
+    if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION)) {
       FIELD_RD (z, 30);
     }
   } LATER_VERSIONS {
@@ -1871,7 +1871,7 @@ DWG_ENTITY (_3DFACE)
   }
   VERSIONS (R_10, R_11)
     {
-      if (R11FLAG (FLAG_R11_ELEVATION)) {
+      if (R11FLAG (FLAG_R11_HAS_ELEVATION)) {
         FIELD_2RD (corner1, 10)
         FIELD_2RD (corner2, 11)
         FIELD_2RD (corner3, 12)
@@ -2108,9 +2108,9 @@ DWG_ENTITY (SHAPE)
       FIELD_RD0 (oblique_angle, 51);
     DECODER {
       // thickness already in common
-      if (R11FLAG (FLAG_R11_THICKNESS))
+      if (R11FLAG (FLAG_R11_HAS_THICKNESS))
         _obj->thickness = _ent->thickness_r11;
-      if (R11FLAG (FLAG_R11_ELEVATION))
+      if (R11FLAG (FLAG_R11_HAS_ELEVATION))
         _obj->ins_pt.z = _ent->elevation_r11;
     }
   }

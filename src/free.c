@@ -615,9 +615,9 @@ free_preR13_object (Dwg_Object *obj)
   if (obj->supertype == DWG_SUPERTYPE_ENTITY) {
     Dwg_Object_Entity *_obj = obj->tio.entity;
     FIELD_HANDLE (layer, 2, 8);
-    if (_obj->flag_r11 & FLAG_R11_LTYPE) // 2
+    if (_obj->flag_r11 & FLAG_R11_HAS_LTYPE) // 2
       FIELD_HANDLE (ltype, 1, 6);
-    if (_obj->flag_r11 & FLAG_R11_HANDLING) { // 32
+    if (_obj->flag_r11 & FLAG_R11_HAS_HANDLING) { // 32
       ; // obj->handle is static
     }
   }

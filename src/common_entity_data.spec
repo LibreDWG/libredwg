@@ -17,14 +17,14 @@
             // stringify the flag bits
 #define LOG_FLAG_R11(w)                                 \
             if (R11FLAG (FLAG_R11_##w))                 \
-              LOG_TRACE (#w " (%02x) ", FLAG_R11_##w)
-            LOG_FLAG_R11 (COLOR);
-            LOG_FLAG_R11 (LTYPE);
-            LOG_FLAG_R11 (ELEVATION);
-            LOG_FLAG_R11 (THICKNESS);
-            LOG_FLAG_R11 (UNKNOWN_16);
-            LOG_FLAG_R11 (HANDLING);
-            LOG_FLAG_R11 (PSPACE);
+              LOG_TRACE (#w " (0x%d) ", FLAG_R11_##w)
+            LOG_FLAG_R11 (HAS_COLOR);
+            LOG_FLAG_R11 (HAS_LTYPE);
+            LOG_FLAG_R11 (HAS_ELEVATION);
+            LOG_FLAG_R11 (HAS_THICKNESS);
+            LOG_FLAG_R11 (HAS_UNKNOWN_16);
+            LOG_FLAG_R11 (HAS_HANDLING);
+            LOG_FLAG_R11 (HAS_PSPACE);
             LOG_FLAG_R11 (HAS_ATTRIBS);
             LOG_TRACE ("\n");
 #undef LOG_FLAG_R11
@@ -308,9 +308,9 @@
 #undef LOG_OPTS_R11
           }
 #endif
-      if (R11FLAG (FLAG_R11_COLOR)) // 1
+      if (R11FLAG (FLAG_R11_HAS_COLOR)) // 1
         FIELD_RCd (color_r11, 0);
-      if (R11FLAG (FLAG_R11_LTYPE)) { // 2
+      if (R11FLAG (FLAG_R11_HAS_LTYPE)) { // 2
         PRE (R_11) {
           FIELD_HANDLE (ltype, 1, 6);
         }
@@ -321,17 +321,17 @@
 
       // TODO: maybe move that to the entity
       PRE (R_10) { // XXX Check precise version
-        if (R11FLAG (FLAG_R11_ELEVATION)) // 4
+        if (R11FLAG (FLAG_R11_HAS_ELEVATION)) // 4
           FIELD_RD (elevation_r11, 38);
       } LATER_VERSIONS {
-        if (R11FLAG (FLAG_R11_ELEVATION) // 4
+        if (R11FLAG (FLAG_R11_HAS_ELEVATION) // 4
             // 1 = LINE, 2 = POINT, 22 = 3DFACE
             && obj->type != 1 && obj->type != 2 && obj->type != 22)
           FIELD_RD (elevation_r11, 38);
       }
-      if (R11FLAG (FLAG_R11_THICKNESS)) // 8
+      if (R11FLAG (FLAG_R11_HAS_THICKNESS)) // 8
         FIELD_RD (thickness_r11, 39);
-      if (R11FLAG (FLAG_R11_PSPACE)) { // 64
+      if (R11FLAG (FLAG_R11_HAS_PSPACE)) { // 64
 #ifdef IS_DECODER
         _ent->entmode = 1;
 #endif
@@ -344,7 +344,7 @@
           // ??
         }
       }
-      if (R11FLAG (FLAG_R11_HANDLING)) { // 32
+      if (R11FLAG (FLAG_R11_HAS_HANDLING)) { // 32
 #ifdef IS_DXF
         VALUE_H (obj->handle.value, 5);
 #elif defined IS_JSON
@@ -354,7 +354,7 @@
 #endif
       }
       // some unknown pspace RS
-      if (R11FLAG (FLAG_R11_PSPACE) && obj->type != DWG_TYPE_VIEWPORT_R11) {
+      if (R11FLAG (FLAG_R11_HAS_PSPACE) && obj->type != DWG_TYPE_VIEWPORT_R11) {
         FIELD_RSd (extra_r11, 0); // unknown
       }
     }
