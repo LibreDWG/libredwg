@@ -8092,7 +8092,7 @@ enum {
   DIM_OPTS_R11_DXF14 = 16,  // Ordinate: leader_end_pt
   DIM_OPTS_R11_DXF15 = 32,
   DIM_OPTS_R11_DXF16 = 64,  // Angular: line arc
-  DIM_OPTS_R11_DXF17 = 128, // There is no DXF17
+  DIM_OPTS_R11_DXF40 = 128, // leader_len
   DIM_OPTS_R11_DXF50 = 0x100,
 };
 

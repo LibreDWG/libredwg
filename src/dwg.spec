@@ -1165,13 +1165,21 @@ DWG_ENTITY (POLYLINE_2D)
   PRE (R_13b1)
   {
     if (R11OPTS (1))
-      FIELD_RC (has_vertex, 66);
+      FIELD_CAST (flag, RC, BS, 70);
     if (R11OPTS (2))
       FIELD_RD (start_width, 40);
     if (R11OPTS (4))
       FIELD_RD (end_width, 41);
-    //if (R11OPTS (8)) // but this is already in flags_r11 70
+    //if (R11OPTS (8)) // 16? but this is already in flags_r11 70
     //  FIELD_RS (curve_type, 75);
+    DECODER {
+      //TODO FIELD_VALUE (curve_type) = 0-5;
+      FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
+      //LOG_TRACE ("=> has_vertex: %d\n", FIELD_VALUE (has_vertex))
+    }
+    DXF {
+      FIELD_RS0 (curve_type, 75);
+    }
   }
   SINCE (R_13b1)
   {
@@ -1239,7 +1247,8 @@ DWG_ENTITY (POLYLINE_3D)
   }
   PRE (R_13b1)
   {
-    FIELD_VALUE (flag) = R11FLAG (255);
+    if (R11OPTS (1))
+      FIELD_CAST (flag, RC, BS, 70);
     if (R11OPTS (16)) // 3dmesh only
       FIELD_RC (curve_type, 75);
     //if (R11OPTS (2))
@@ -1248,6 +1257,9 @@ DWG_ENTITY (POLYLINE_3D)
     //  FIELD_RS (curve_type, 75);
     //if (R11OPTS (8))
     //  FIELD_RD (end_width, 41);
+    DECODER {
+      FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
+    }
   }
   LATER_VERSIONS {
     FIELD_RC0 (curve_type, 75);
@@ -1960,12 +1972,17 @@ DWG_ENTITY (POLYLINE_MESH)
     KEY (flag); VALUE_BS (flag | 16, 70);
   }
   PRE (R_13b1) {
+    if (R11OPTS (1))
+      FIELD_CAST (flag, RC, BS, 70);
     if (R11OPTS (16)) // 3dmesh
       FIELD_CAST (curve_type, RC, BS, 75);
     FIELD_RS (num_m_verts, 71);
     FIELD_RS (num_n_verts, 72);
     FIELD_RS (m_density, 73);
     FIELD_RS (n_density, 74);
+    DECODER {
+      FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
+    }
   }
   LATER_VERSIONS {
     FIELD_BS (flag, 0);
