@@ -707,6 +707,26 @@
        }
 #endif
 
+#ifndef LOG_FLAG_POLYLINE
+#  define LOG_FLAG_POLYLINE_ONE(value, w)                                     \
+     if (value & (FLAG_POLYLINE_##w))                                         \
+       LOG_TRACE (#w " (0x%d) ", FLAG_POLYLINE_##w)
+#  define LOG_FLAG_POLYLINE(value)                                            \
+     if (value)                                                               \
+       {                                                                      \
+         LOG_TRACE ("      ");                                                \
+         LOG_FLAG_POLYLINE_ONE (value, CLOSED);                               \
+         LOG_FLAG_POLYLINE_ONE (value, CURVE_FIT);                            \
+         LOG_FLAG_POLYLINE_ONE (value, SPLINE_FIT);                           \
+         LOG_FLAG_POLYLINE_ONE (value, 3D_POLYLINE);                          \
+         LOG_FLAG_POLYLINE_ONE (value, 3D_POLYGON_MESH);                      \
+         LOG_FLAG_POLYLINE_ONE (value, POLYGON_MESH_CLOSED);                  \
+         LOG_FLAG_POLYLINE_ONE (value, POLYFACE_MESH);                        \
+         LOG_FLAG_POLYLINE_ONE (value, LT_PATTERN_CONTINUES);                 \
+         LOG_TRACE ("\n");                                                    \
+       }
+#endif
+
 #ifndef LOG_FLAG_VERTEX_2D
 #  define LOG_FLAG_VERTEX_2D_ONE(value, w)                                    \
      if (value & (FLAG_VERTEX_2D_##w))                                        \
