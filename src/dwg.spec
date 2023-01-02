@@ -1235,6 +1235,8 @@ DWG_ENTITY (POLYLINE_2D)
       FIELD_RD (end_width, 41);
     //if (R11OPTS (8)) // 16? but this is already in flags_r11 70
     //  FIELD_RS (curve_type, 75);
+    if (R11OPTS (8))
+      FIELD_3RD (extrusion, 210);
     DECODER {
       //TODO FIELD_VALUE (curve_type) = 0-5;
       FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
