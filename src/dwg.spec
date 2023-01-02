@@ -709,6 +709,9 @@ DWG_ENTITY (INSERT)
     if (R11OPTS (128)) {
       FIELD_RD (row_spacing, 45);
     }
+    if (R11OPTS (256)) {
+      FIELD_3RD	(extrusion, 210);
+    }
   }
   SINCE (R_13b1) {
     FIELD_3DPOINT (ins_pt, 10);
