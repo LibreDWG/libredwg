@@ -1356,6 +1356,10 @@ DWG_ENTITY (LINE)
       FIELD_3RD (end, 11)
     }
   }
+  PRE (R_13b1) {
+    if (R11OPTS (1))
+      FIELD_3RD (extrusion, 210);
+  }
   VERSIONS (R_13b1, R_14)
     {
       FIELD_3BD (start, 10);
