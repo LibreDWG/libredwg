@@ -687,3 +687,23 @@
 #  define UNKNOWN_UNTIL(pos)  LOG_TRACE ("unknown (%ld): ", pos - dat->byte); \
   dat->byte = pos
 #endif
+
+#ifndef LOG_GENERATION
+#  define LOG_TEXT_GEN_R11(value, w)                                          \
+     if (value & TEXT_GEN_R11_##w)                                            \
+       LOG_TRACE (#w " (%d) ", TEXT_GEN_R11_##w)
+#  define LOG_GENERATION(value)                                               \
+     if (value)                                                               \
+       {                                                                      \
+         LOG_TRACE ("            ");                                          \
+         LOG_TEXT_GEN_R11 (value, UNKNOWN_1);                                 \
+         LOG_TEXT_GEN_R11 (value, BACKWARDS);                                 \
+         LOG_TEXT_GEN_R11 (value, UPSIDE_DOWN);                               \
+         LOG_TEXT_GEN_R11 (value, UNKNOWN_8);                                 \
+         LOG_TEXT_GEN_R11 (value, UNKNOWN_16);                                \
+         LOG_TEXT_GEN_R11 (value, UNKNOWN_32);                                \
+         LOG_TEXT_GEN_R11 (value, UNKNOWN_64);                                \
+         LOG_TEXT_GEN_R11 (value, UNKNOWN_128);                               \
+         LOG_TRACE ("\n");                                                    \
+       }
+#endif

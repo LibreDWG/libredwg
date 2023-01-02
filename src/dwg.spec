@@ -40,8 +40,10 @@ DWG_ENTITY (TEXT)
       FIELD_RD (oblique_angle, 51);
     if (R11OPTS (8))
       FIELD_HANDLE0 (style, 1, 7);
-    if (R11OPTS (16))
+    if (R11OPTS (16)) {
       FIELD_CAST (generation, RC, BS, 71);
+      LOG_GENERATION (FIELD_VALUE (generation));
+    }
     if (R11OPTS (32))
       FIELD_CAST (horiz_alignment, RC, BS, 72);
     if (R11OPTS (64))
@@ -190,6 +192,7 @@ DWG_ENTITY (ATTRIB)
       }
       if (R11OPTS (32)) {
         FIELD_CAST (generation, RC, BS, 71);
+        LOG_GENERATION (FIELD_VALUE (generation));
       }
       if (R11OPTS (64)) {
         FIELD_CAST (horiz_alignment, RC, BS, 72);
@@ -370,6 +373,7 @@ DWG_ENTITY (ATTDEF)
       }
       if (R11OPTS (32)) {
         FIELD_CAST (generation, RC, BS, 71);
+        LOG_GENERATION (FIELD_VALUE (generation));
       }
       if (R11OPTS (64)) {
         FIELD_CAST (horiz_alignment, RC, BS, 72);
@@ -3545,6 +3549,7 @@ DWG_OBJECT (STYLE)
     FIELD_RD (width_factor, 41);
     FIELD_RD (oblique_angle, 50);
     FIELD_RC (generation, 71);
+    LOG_GENERATION (FIELD_VALUE (generation));
     FIELD_RD (last_height, 42);
     SINCE (R_11)
       FIELD_RS (unknown, 0);
@@ -9306,7 +9311,7 @@ DWG_OBJECT (EVALUATION_GRAPH)
 #else
       SUB_FIELD_VECTOR_N (nodes[rcount1], node, BLd, 4, 92)
 #endif
-      if (FIELD_VALUE(has_graph))
+      if (FIELD_VALUE (has_graph))
         SUB_FIELD_B (nodes[rcount1], active_cycles, 0);
       SET_PARENT_OBJ (nodes[rcount1]);
   END_REPEAT_BLOCK
@@ -11604,7 +11609,7 @@ DWG_OBJECT_END
   AcDbAssocParamBasedActionBody_fields (pab);               \
   SUBCLASS (AcDbAssocArrayActionBody);                      \
   FIELD_BL (aaab_version, 90);                              \
-  FIELD_T (paramblock, 1);                             \
+  FIELD_T (paramblock, 1);                                  \
   FIELD_VECTOR_N (transmatrix, BD, 16, 40)
 
 #define AcDbAssocArrayItem_fields(item)                          \
@@ -11614,7 +11619,7 @@ DWG_OBJECT_END
   SUB_FIELD_BL (item, itemloc[2], 90);                           \
   SUB_FIELD_BLx (item, flags, 90);                               \
   /* TODO compare against default transmatrix */                 \
-  if (FIELD_VALUE(item.is_default_transmatrix))                  \
+  if (FIELD_VALUE (item.is_default_transmatrix))                 \
     {                                                            \
       /* TODO x_dir computed from transmatrix */                 \
       SUB_FIELD_3BD (item, x_dir, 11);                           \
