@@ -1180,8 +1180,10 @@ DWG_ENTITY (POLYLINE_2D)
   SUBCLASS (AcDb2dPolyline)
   PRE (R_13b1)
   {
-    if (R11OPTS (1))
+    if (R11OPTS (1)) {
       FIELD_CAST (flag, RC, BS, 70);
+      LOG_FLAG_POLYLINE (FIELD_VALUE (flag));
+    }
     if (R11OPTS (2))
       FIELD_RD (start_width, 40);
     if (R11OPTS (4))
@@ -1206,6 +1208,7 @@ DWG_ENTITY (POLYLINE_2D)
       FIELD_VALUE (has_vertex) = 1;
     }
     FIELD_BS0 (flag, 70);
+    LOG_FLAG_POLYLINE (FIELD_VALUE (flag));
     FIELD_BS0 (curve_type, 75);
     DECODER_OR_ENCODER {
       FIELD_BD (start_width, 40);
@@ -1988,8 +1991,10 @@ DWG_ENTITY (POLYLINE_MESH)
     KEY (flag); VALUE_BS (flag | 16, 70);
   }
   PRE (R_13b1) {
-    if (R11OPTS (1))
+    if (R11OPTS (1)) {
       FIELD_CAST (flag, RC, BS, 70);
+      LOG_FLAG_POLYLINE (FIELD_VALUE (flag));
+    }
     if (R11OPTS (16)) // 3dmesh
       FIELD_CAST (curve_type, RC, BS, 75);
     FIELD_RS (num_m_verts, 71);
@@ -2002,6 +2007,7 @@ DWG_ENTITY (POLYLINE_MESH)
   }
   LATER_VERSIONS {
     FIELD_BS (flag, 0);
+    LOG_FLAG_POLYLINE (FIELD_VALUE (flag));
     FIELD_BS (curve_type, 75);
     FIELD_BS (num_m_verts, 71);
     FIELD_BS (num_n_verts, 72);
