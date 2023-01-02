@@ -48,8 +48,10 @@ DWG_ENTITY (TEXT)
       FIELD_CAST (horiz_alignment, RC, BS, 72);
     if (R11OPTS (64))
       FIELD_2RD (alignment_pt, 11);
-    if (R11OPTS (256))
+    if (R11OPTS (256)) {
       FIELD_CAST (vert_alignment, RC, BS, 73);
+      LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
+    }
   }
   VERSIONS (R_13b1, R_14)
     {
@@ -199,6 +201,10 @@ DWG_ENTITY (ATTRIB)
       }
       if (R11OPTS (128)) { // flag2_1
         FIELD_2RD (alignment_pt, 11);
+      }
+      if (R11OPTS (256)) {
+        FIELD_CAST (vert_alignment, RC, BS, 73);
+        LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
       }
     }
   VERSIONS (R_13b1, R_14)
@@ -380,6 +386,10 @@ DWG_ENTITY (ATTDEF)
       }
       if (R11OPTS (128)) {
         FIELD_2RD (alignment_pt, 11);
+      }
+      if (R11OPTS (256)) {
+        FIELD_CAST (vert_alignment, RC, BS, 73);
+        LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
       }
     }
   VERSIONS (R_13b1, R_14)

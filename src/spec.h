@@ -708,6 +708,22 @@
        }
 #endif
 
+#ifndef LOG_VERT_ALIGNMENT
+#  define LOG_VERT_ALIGNMENT_W(value, w)                                      \
+     if (value == (VERT_ALIGNMENT_##w))                                       \
+       LOG_TRACE (#w " (0x%d) ", VERT_ALIGNMENT_##w)
+#  define LOG_VERT_ALIGNMENT(value)                                           \
+     if (value)                                                               \
+       {                                                                      \
+         LOG_TRACE ("                ");                                      \
+         LOG_VERT_ALIGNMENT_W (value, BASELINE);                              \
+         LOG_VERT_ALIGNMENT_W (value, BOTTOM);                                \
+         LOG_VERT_ALIGNMENT_W (value, MIDDLE);                                \
+         LOG_VERT_ALIGNMENT_W (value, TOP);                                   \
+         LOG_TRACE ("\n");                                                    \
+       }
+#endif
+
 #ifndef LOG_FLAG_POLYLINE
 #  define LOG_FLAG_POLYLINE_ONE(value, w)                                     \
      if (value & FLAG_POLYLINE_##w)                                           \
