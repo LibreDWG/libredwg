@@ -3102,3 +3102,27 @@ dwg_log_proxyflag (const int _loglevel, const int maxlevel, const BITCODE_BS fla
     }
 }
 
+void
+dwg_log_dataflags (const int _loglevel, const int maxlevel, const BITCODE_RC flag)
+{
+  if (flag > 0 && _loglevel >= maxlevel)
+    {
+      if (flag & 1)
+        HANDLER (OUTPUT, "  elevation (1)\n");
+      if (flag & 2)
+        HANDLER (OUTPUT, "  alignment_pt (2)\n");
+      if (flag & 4)
+        HANDLER (OUTPUT, "  oblique_angle (4)\n");
+      if (flag & 8)
+        HANDLER (OUTPUT, "  rotation (8)\n");
+      if (flag & 16)
+        HANDLER (OUTPUT, "  width_factor (16)\n");
+      if (flag & 32)
+        HANDLER (OUTPUT, "  generation (32)\n");
+      if (flag & 64)
+        HANDLER (OUTPUT, "  horiz_alignment (64)\n");
+      if (flag & 128)
+        HANDLER (OUTPUT, "  vert_alignment (128)\n");
+    }
+}
+

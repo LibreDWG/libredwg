@@ -102,6 +102,7 @@ const unsigned char unknown_section[53]
 #undef IF_ENCODE_FROM_EARLIER
 #undef IF_ENCODE_FROM_EARLIER_OR_DXF
 #undef IF_ENCODE_FROM_PRE_R13
+#undef IF_ENCODE_FROM_PRE_2000
 #undef IF_ENCODE_SINCE_R13
 #define IF_ENCODE_FROM_EARLIER                                              \
   if (dat->from_version && dat->from_version < cur_ver)
@@ -109,6 +110,8 @@ const unsigned char unknown_section[53]
   if ((dat->from_version && dat->from_version < cur_ver) || dwg->opts & DWG_OPTS_INDXF)
 #define IF_ENCODE_FROM_PRE_R13                                              \
   if (dat->from_version && dat->from_version < R_13b1)
+#define IF_ENCODE_FROM_PRE_2000                                             \
+  if (dat->from_version && dat->from_version < R_2000)
 #define IF_ENCODE_SINCE_R13                                                 \
   if (dat->from_version && dat->from_version >= R_13b1)
 
@@ -5940,6 +5943,74 @@ in_postprocess_handles (Dwg_Object *restrict obj)
       else if (obj->type != DWG_TYPE_SEQEND && obj->type != DWG_TYPE_ENDBLK)
         ent->nolinks = 1;
     }
+}
+
+// when updating TEXT/ATTDEF/ATTRIB to R_2000
+void dwg_set_dataflags (Dwg_Object *obj)
+{
+  if (obj->fixedtype == DWG_TYPE_TEXT)
+    {
+      Dwg_Entity_TEXT *_obj = obj->tio.entity->tio.TEXT;
+      if (_obj->elevation != 0.0)
+        _obj->dataflags |= 1;
+      if (_obj->alignment_pt.x != _obj->ins_pt.x
+          || _obj->alignment_pt.y != _obj->ins_pt.y)
+        _obj->dataflags |= 2;
+      if (_obj->oblique_angle != 0.0)
+        _obj->dataflags |= 4;
+      if (_obj->rotation != 0.0)
+        _obj->dataflags |= 8;
+      if (_obj->width_factor != 0.0)
+        _obj->dataflags |= 0x10;
+      if (_obj->generation != 0)
+        _obj->dataflags |= 0x20;
+      if (_obj->horiz_alignment != 0)
+        _obj->dataflags |= 0x40;
+      if (_obj->vert_alignment != 0)
+        _obj->dataflags |= 0x80;
+    }
+ else if (obj->fixedtype == DWG_TYPE_ATTRIB)
+   {
+      Dwg_Entity_ATTRIB *_obj = obj->tio.entity->tio.ATTRIB;
+      if (_obj->elevation != 0.0)
+        _obj->dataflags |= 1;
+      if (_obj->alignment_pt.x != _obj->ins_pt.x
+          || _obj->alignment_pt.y != _obj->ins_pt.y)
+        _obj->dataflags |= 2;
+      if (_obj->oblique_angle != 0.0)
+        _obj->dataflags |= 4;
+      if (_obj->rotation != 0.0)
+        _obj->dataflags |= 8;
+      if (_obj->width_factor != 0.0)
+        _obj->dataflags |= 0x10;
+      if (_obj->generation != 0)
+        _obj->dataflags |= 0x20;
+      if (_obj->horiz_alignment != 0)
+        _obj->dataflags |= 0x40;
+      if (_obj->vert_alignment != 0)
+        _obj->dataflags |= 0x80;
+   }
+ else if (obj->fixedtype == DWG_TYPE_ATTDEF)
+   {
+      Dwg_Entity_ATTDEF *_obj = obj->tio.entity->tio.ATTDEF;
+      if (_obj->elevation != 0.0)
+        _obj->dataflags |= 1;
+      if (_obj->alignment_pt.x != _obj->ins_pt.x
+          || _obj->alignment_pt.y != _obj->ins_pt.y)
+        _obj->dataflags |= 2;
+      if (_obj->oblique_angle != 0.0)
+        _obj->dataflags |= 4;
+      if (_obj->rotation != 0.0)
+        _obj->dataflags |= 8;
+      if (_obj->width_factor != 0.0)
+        _obj->dataflags |= 0x10;
+      if (_obj->generation != 0)
+        _obj->dataflags |= 0x20;
+      if (_obj->horiz_alignment != 0)
+        _obj->dataflags |= 0x40;
+      if (_obj->vert_alignment != 0)
+        _obj->dataflags |= 0x80;
+   }
 }
 
 

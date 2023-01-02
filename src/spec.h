@@ -33,6 +33,7 @@
 #    define IF_ENCODE_FROM_EARLIER if (0)
 #    define IF_ENCODE_FROM_EARLIER_OR_DXF if (0)
 #    define IF_ENCODE_FROM_PRE_R13 if (0)
+#    define IF_ENCODE_FROM_PRE_R2000 if (0)
 #  endif
 #  ifndef IF_ENCODE_SINCE_R13
 #    define IF_ENCODE_SINCE_R13 if (0)

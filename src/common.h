@@ -379,5 +379,7 @@ int dwg_init_sections (Dwg_Data *dwg);
 long tm_offset (void);
 void dwg_log_proxyflag (const int _loglevel, const int maxlevel,
                         const BITCODE_BS flag);
+void dwg_log_dataflags (const int _loglevel, const int maxlevel,
+                        const BITCODE_RC flag);
 
 #endif

@@ -85,13 +85,16 @@ DWG_ENTITY (TEXT)
 
   IF_FREE_OR_SINCE (R_2000)
     {
-      /* We assume that the user (the client application)
-         is responsible for taking care of properly updating the dataflags field
-         which indicates which fields in the data structures are valid and which are
-         undefined */
       BITCODE_RC dataflags;
+#ifdef IS_ENCODER
+      if (dat->from_version < R_2000)
+        dwg_set_dataflags (obj);
+#endif
       FIELD_RC (dataflags, 0);
       dataflags = FIELD_VALUE (dataflags);
+      DECODER_OR_ENCODER {
+        dwg_log_dataflags (DWG_LOGLEVEL, DWG_LOGLEVEL_TRACE, dataflags);
+      }
 
       DXF {
         FIELD_BT0 (thickness, 39);
@@ -222,13 +225,16 @@ DWG_ENTITY (ATTRIB)
 
   IF_FREE_OR_SINCE (R_2000)
     {
-      /* We assume that the user (the client application)
-         is responsible for taking care of properly updating the dataflags field
-         which indicates which fields in the data structures are valid and which are
-         undefined */
       BITCODE_RC dataflags;
+#ifdef IS_ENCODER
+      if (dat->from_version < R_2000)
+        dwg_set_dataflags (obj);
+#endif
       FIELD_RC (dataflags, 0);
       dataflags = FIELD_VALUE (dataflags);
+      DECODER_OR_ENCODER {
+        dwg_log_dataflags (DWG_LOGLEVEL, DWG_LOGLEVEL_TRACE, dataflags);
+      }
 
       DXF {
         FIELD_BT0 (thickness, 39);
@@ -408,13 +414,16 @@ DWG_ENTITY (ATTDEF)
 
   IF_FREE_OR_SINCE (R_2000)
     {
-      /* We assume that the user (the client application)
-         is responsible for taking care of properly updating the dataflags field
-         which indicates which fields in the data structures are valid and which are
-         undefined */
       BITCODE_RC dataflags;
+#ifdef IS_ENCODER
+      if (dat->from_version < R_2000)
+        dwg_set_dataflags (obj);
+#endif
       FIELD_RC (dataflags, 0);
       dataflags = FIELD_VALUE (dataflags);
+      DECODER_OR_ENCODER {
+        dwg_log_dataflags (DWG_LOGLEVEL, DWG_LOGLEVEL_TRACE, dataflags);
+      }
 
       DXF {
         FIELD_BT0 (thickness, 39);
