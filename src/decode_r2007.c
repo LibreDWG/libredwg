@@ -1547,6 +1547,8 @@ read_2007_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           LOG_TRACE ("-------------------\n")
           LOG_TRACE ("Number:           %d\n", dwg->dwg_class[i].number)
           LOG_TRACE ("Proxyflag:        0x%x\n", dwg->dwg_class[i].proxyflag)
+          dwg_log_proxyflag (DWG_LOGLEVEL, DWG_LOGLEVEL_TRACE,
+                             dwg->dwg_class[i].proxyflag);
           LOG_TRACE_TU ("Application name", dwg->dwg_class[i].appname, 0)
           LOG_TRACE_TU ("C++ class name  ", dwg->dwg_class[i].cppname, 0)
           LOG_TRACE_TU ("DXF record name ", dwg->dwg_class[i].dxfname_u, 0)

@@ -600,6 +600,7 @@ classes_section:
       LOG_HANDLE ("number: " FORMAT_BS " [BS] ", klass->number); LOG_POS_ (HANDLE);
       klass->proxyflag = bit_read_BS (dat);
       LOG_HANDLE ("proxyflag: " FORMAT_BS " [BS] ", klass->proxyflag); LOG_POS_ (HANDLE);
+      dwg_log_proxyflag (DWG_LOGLEVEL, DWG_LOGLEVEL_HANDLE, klass->proxyflag);
       if (dat->byte >= endpos)
         break;
       klass->appname = bit_read_TV (dat);
@@ -2135,6 +2136,8 @@ read_2004_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           LOG_TRACE ("-------------------\n")
           LOG_TRACE ("Number:           %d [BS]\n", dwg->dwg_class[i].number)
           LOG_TRACE ("Proxyflag:        %x [BS]\n", dwg->dwg_class[i].proxyflag)
+          dwg_log_proxyflag (DWG_LOGLEVEL, DWG_LOGLEVEL_TRACE,
+                             dwg->dwg_class[i].proxyflag);
           if (dwg->header.version >= R_2007)
             {
               unsigned int applen, dxflen;

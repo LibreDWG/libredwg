@@ -3069,3 +3069,36 @@ dwg_init_sections (Dwg_Data *dwg)
     }
   return 0;
 }
+
+void
+dwg_log_proxyflag (const int _loglevel, const int maxlevel, const BITCODE_BS flag)
+{
+  if (flag > 0 && _loglevel >= maxlevel)
+    {
+      if (flag & 1)
+        HANDLER (OUTPUT, "  erase allowed (1)\n");
+      if (flag & 2)
+        HANDLER (OUTPUT, "  transform allowed (2)\n");
+      if (flag & 4)
+        HANDLER (OUTPUT, "  color change allowed (4)\n");
+      if (flag & 8)
+        HANDLER (OUTPUT, "  layer change allowed (8)\n");
+      if (flag & 16)
+        HANDLER (OUTPUT, "  LTYPE change allowed (16)\n");
+      if (flag & 32)
+        HANDLER (OUTPUT, "  LTYPE.scale change allowed (32)\n");
+      if (flag & 64)
+        HANDLER (OUTPUT, "  visibility change allowed (64)\n");
+      if (flag & 128)
+        HANDLER (OUTPUT, "  PLOTSTYLE.name change allowed (128)\n");
+      if (flag & 256)
+        HANDLER (OUTPUT, "  layer change allowed (256)\n");
+      if (flag & 512)
+        HANDLER (OUTPUT, "  layer change allowed (512)\n");
+      if (flag & 1024)
+        HANDLER (OUTPUT, "  Disables proxy warning dialog (1024)\n");
+      if (flag == 32768)
+        HANDLER (OUTPUT, "  is R13 format proxy (32768)\n");
+    }
+}
+
