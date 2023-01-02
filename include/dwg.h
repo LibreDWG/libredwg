@@ -8065,6 +8065,17 @@ enum {
 };
 
 enum {
+  GEN_R11_UNKNOWN_1 = 1,
+  GEN_R11_BACKWARDS = 2,
+  GEN_R11_UPSIDE_DOWN = 4,
+  GEN_R11_UNKNOWN_8 = 8,
+  GEN_R11_UNKNOWN_16 = 16,
+  GEN_R11_UNKNOWN_32 = 32,
+  GEN_R11_UNKNOWN_64 = 64,
+  GEN_R11_UNKNOWN_128 = 128,
+};
+
+enum {
   // 1
   // 2
   // 4

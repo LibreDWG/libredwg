@@ -40,8 +40,10 @@ DWG_ENTITY (TEXT)
       FIELD_RD (oblique_angle, 51);
     if (R11OPTS (8))
       FIELD_HANDLE0 (style, 1, 7);
-    if (R11OPTS (16))
+    if (R11OPTS (16)) {
       FIELD_CAST (generation, RC, BS, 71);
+      LOG_GENERATION(FIELD_VALUE(generation));
+    }
     if (R11OPTS (32))
       FIELD_CAST (horiz_alignment, RC, BS, 72);
     if (R11OPTS (64))
@@ -187,6 +189,7 @@ DWG_ENTITY (ATTRIB)
       }
       if (R11OPTS (32)) {
         FIELD_CAST (generation, RC, BS, 71);
+        LOG_GENERATION(FIELD_VALUE(generation));
       }
       if (R11OPTS (64)) {
         FIELD_CAST (horiz_alignment, RC, BS, 72);
@@ -364,6 +367,7 @@ DWG_ENTITY (ATTDEF)
       }
       if (R11OPTS (32)) {
         FIELD_CAST (generation, RC, BS, 71);
+        LOG_GENERATION(FIELD_VALUE(generation));
       }
       if (R11OPTS (64)) {
         FIELD_CAST (horiz_alignment, RC, BS, 72);
@@ -3536,6 +3540,7 @@ DWG_OBJECT (STYLE)
     FIELD_RD (width_factor, 41);
     FIELD_RD (oblique_angle, 50);
     FIELD_RC (generation, 71);
+    LOG_GENERATION(FIELD_VALUE(generation));
     FIELD_RD (last_height, 42);
     SINCE (R_11)
       FIELD_RS (unknown, 0);
