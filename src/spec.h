@@ -688,38 +688,32 @@
   dat->byte = pos
 #endif
 
-#ifndef LOG_GENERATION
-#  define LOG_TEXT_GEN_R11(value, w)                                          \
-     if (value & TEXT_GEN_R11_##w)                                            \
-       LOG_TRACE (#w " (%d) ", TEXT_GEN_R11_##w)
-#  define LOG_GENERATION(value)                                               \
+#ifndef LOG_TEXT_GENERATION
+#  define LOG_TEXT_GENERATION_ONE(value, w)                                   \
+     if (value & TEXT_GENERATION_##w)                                         \
+       LOG_TRACE (#w " (%d) ", TEXT_GENERATION_##w)
+#  define LOG_TEXT_GENERATION(value)                                          \
      if (value)                                                               \
        {                                                                      \
          LOG_TRACE ("            ");                                          \
-         LOG_TEXT_GEN_R11 (value, UNKNOWN_1);                                 \
-         LOG_TEXT_GEN_R11 (value, BACKWARDS);                                 \
-         LOG_TEXT_GEN_R11 (value, UPSIDE_DOWN);                               \
-         LOG_TEXT_GEN_R11 (value, UNKNOWN_8);                                 \
-         LOG_TEXT_GEN_R11 (value, UNKNOWN_16);                                \
-         LOG_TEXT_GEN_R11 (value, UNKNOWN_32);                                \
-         LOG_TEXT_GEN_R11 (value, UNKNOWN_64);                                \
-         LOG_TEXT_GEN_R11 (value, UNKNOWN_128);                               \
+         LOG_TEXT_GENERATION_ONE (value, BACKWARDS);                          \
+         LOG_TEXT_GENERATION_ONE (value, UPSIDE_DOWN);                        \
          LOG_TRACE ("\n");                                                    \
        }
 #endif
 
 #ifndef LOG_VERT_ALIGNMENT
-#  define LOG_VERT_ALIGNMENT_W(value, w)                                      \
+#  define LOG_VERT_ALIGNMENT_ONE(value, w)                                    \
      if (value == (VERT_ALIGNMENT_##w))                                       \
        LOG_TRACE (#w " (0x%d) ", VERT_ALIGNMENT_##w)
 #  define LOG_VERT_ALIGNMENT(value)                                           \
      if (value)                                                               \
        {                                                                      \
          LOG_TRACE ("                ");                                      \
-         LOG_VERT_ALIGNMENT_W (value, BASELINE);                              \
-         LOG_VERT_ALIGNMENT_W (value, BOTTOM);                                \
-         LOG_VERT_ALIGNMENT_W (value, MIDDLE);                                \
-         LOG_VERT_ALIGNMENT_W (value, TOP);                                   \
+         LOG_VERT_ALIGNMENT_ONE (value, BASELINE);                            \
+         LOG_VERT_ALIGNMENT_ONE (value, BOTTOM);                              \
+         LOG_VERT_ALIGNMENT_ONE (value, MIDDLE);                              \
+         LOG_VERT_ALIGNMENT_ONE (value, TOP);                                 \
          LOG_TRACE ("\n");                                                    \
        }
 #endif

@@ -42,7 +42,7 @@ DWG_ENTITY (TEXT)
       FIELD_HANDLE0 (style, 1, 7);
     if (R11OPTS (16)) {
       FIELD_CAST (generation, RC, BS, 71);
-      LOG_GENERATION (FIELD_VALUE (generation));
+      LOG_TEXT_GENERATION (FIELD_VALUE (generation));
     }
     if (R11OPTS (32))
       FIELD_CAST (horiz_alignment, RC, BS, 72);
@@ -82,8 +82,10 @@ DWG_ENTITY (TEXT)
         FIELD_BD (width_factor, 41);
         FIELD_TV (text_value, 1);
         FIELD_BS (generation, 71);
+        LOG_TEXT_GENERATION (FIELD_VALUE (generation));
         FIELD_BS (horiz_alignment, 72);
         FIELD_BS (vert_alignment, 73);
+        LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
       }
     }
 
@@ -139,12 +141,16 @@ DWG_ENTITY (TEXT)
         FIELD_T (text_value, 0);
       }
 
-      if (!(dataflags & 0x20))
+      if (!(dataflags & 0x20)) {
         FIELD_BS (generation, 71);
+        LOG_TEXT_GENERATION (FIELD_VALUE (generation));
+      }
       if (!(dataflags & 0x40))
         FIELD_BS (horiz_alignment, 72);
-      if (!(dataflags & 0x80))
+      if (!(dataflags & 0x80)) {
         FIELD_BS0 (vert_alignment, 0);
+        LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
+      }
 
       DXF {
         FIELD_2DD (alignment_pt, ins_pt, 11);
@@ -194,7 +200,7 @@ DWG_ENTITY (ATTRIB)
       }
       if (R11OPTS (32)) {
         FIELD_CAST (generation, RC, BS, 71);
-        LOG_GENERATION (FIELD_VALUE (generation));
+        LOG_TEXT_GENERATION (FIELD_VALUE (generation));
       }
       if (R11OPTS (64)) {
         FIELD_CAST (horiz_alignment, RC, BS, 72);
@@ -228,8 +234,10 @@ DWG_ENTITY (ATTRIB)
       FIELD_BD1 (width_factor, 41);
       FIELD_TV (text_value, 1);
       FIELD_BS0 (generation, 71);
+      LOG_TEXT_GENERATION (FIELD_VALUE (generation));
       FIELD_BS0 (horiz_alignment, 72);
       FIELD_BS0 (vert_alignment, 0);
+      LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
     }
 
   IF_FREE_OR_SINCE (R_2000)
@@ -284,12 +292,16 @@ DWG_ENTITY (ATTRIB)
         FIELD_T (text_value, 1);
       }
 
-      if (!(dataflags & 0x20))
+      if (!(dataflags & 0x20)) {
         FIELD_BS (generation, 71);
+        LOG_TEXT_GENERATION (FIELD_VALUE (generation));
+      }
       if (!(dataflags & 0x40))
         FIELD_BS (horiz_alignment, 72);
-      if (!(dataflags & 0x80))
+      if (!(dataflags & 0x80)) {
         FIELD_BS (vert_alignment, 0);
+        LOG_VERT_ALIGNMENT (FIELD_VALUE (generation));
+      }
       DXF {
         FIELD_2DD (alignment_pt, ins_pt, 11);
         FIELD_RD (elevation, 31);
@@ -303,6 +315,7 @@ DWG_ENTITY (ATTRIB)
     FIELD_RC (type, 70);
     //FIELD_BS (field_length, 73);
     FIELD_BS0 (vert_alignment, 74);
+    LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
     SINCE (R_2004) {
       FIELD_RC (class_version, 280);
     }
@@ -379,7 +392,7 @@ DWG_ENTITY (ATTDEF)
       }
       if (R11OPTS (32)) {
         FIELD_CAST (generation, RC, BS, 71);
-        LOG_GENERATION (FIELD_VALUE (generation));
+        LOG_TEXT_GENERATION (FIELD_VALUE (generation));
       }
       if (R11OPTS (64)) {
         FIELD_CAST (horiz_alignment, RC, BS, 72);
@@ -413,8 +426,10 @@ DWG_ENTITY (ATTDEF)
       FIELD_BD1 (width_factor, 41);
       FIELD_T (default_value, 1);
       FIELD_BS0 (generation, 71);
+      LOG_TEXT_GENERATION (FIELD_VALUE (generation));
       FIELD_BS0 (horiz_alignment, 72);
       FIELD_BS (vert_alignment, 0);
+      LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
       DXF {
         if (_obj->alignment_pt.x != 0.0 &&
             _obj->alignment_pt.y != 0.0)
@@ -478,12 +493,16 @@ DWG_ENTITY (ATTDEF)
         FIELD_T (default_value, 1);
       }
 
-      if (!(dataflags & 0x20))
+      if (!(dataflags & 0x20)) {
         FIELD_BS (generation, 71);
+        LOG_TEXT_GENERATION (FIELD_VALUE (generation));
+      }
       if (!(dataflags & 0x40))
         FIELD_BS (horiz_alignment, 72);
-      if (!(dataflags & 0x80))
+      if (!(dataflags & 0x80)) {
         FIELD_BS (vert_alignment, 0);
+        LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
+      }
       DXF {
         FIELD_2DD (alignment_pt, ins_pt, 11);
         FIELD_RD (elevation, 31);
@@ -3568,7 +3587,7 @@ DWG_OBJECT (STYLE)
     FIELD_RD (width_factor, 41);
     FIELD_RD (oblique_angle, 50);
     FIELD_RC (generation, 71);
-    LOG_GENERATION (FIELD_VALUE (generation));
+    LOG_TEXT_GENERATION (FIELD_VALUE (generation));
     FIELD_RD (last_height, 42);
     SINCE (R_11)
       FIELD_RS (unknown, 0);
@@ -3585,6 +3604,7 @@ DWG_OBJECT (STYLE)
     FIELD_BD (width_factor, 41); // xScale
     FIELD_BD (oblique_angle, 50);
     FIELD_RC (generation, 71);
+    LOG_TEXT_GENERATION (FIELD_VALUE (generation));
     FIELD_BD (last_height, 42);
     FIELD_T (font_file, 3);
     FIELD_T (bigfont_file, 4);
