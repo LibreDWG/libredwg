@@ -766,11 +766,11 @@
         LOG_FLAG_VERTEX_ONE (value, EXTRA_VERTEX);                            \
         LOG_FLAG_VERTEX_ONE (value, CURVE_FIT);                               \
         LOG_FLAG_VERTEX_ONE (value, UNKNOWN_4);                               \
-        LOG_FLAG_VERTEX_ONE (value, UNKNOWN_8);                               \
-        LOG_FLAG_VERTEX_ONE (value, UNKNOWN_16);                              \
+        LOG_FLAG_VERTEX_ONE (value, SPLINE_FIT);                              \
+        LOG_FLAG_VERTEX_ONE (value, SPLINE_FRAME_CONTROL_POINT);              \
         LOG_FLAG_VERTEX_ONE (value, 3D);                                      \
         LOG_FLAG_VERTEX_ONE (value, POLYGON_MESH);                            \
-        LOG_FLAG_VERTEX_ONE (value, UNKNOWN_128);                             \
+        LOG_FLAG_VERTEX_ONE (value, POLYFACE_MESH);                           \
         LOG_TRACE ("\n");                                                     \
       }
 #endif
