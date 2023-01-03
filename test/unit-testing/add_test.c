@@ -811,7 +811,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
     error = dwg_write_file (dwgfile, dwg);
   if (error >= DWG_ERR_CRITICAL)
     {
-      fail ("write %s to %s", name, dwgfile);
+      fail ("write %s to %s: %x", name, dwgfile, error);
       return 1;
     }
   else
@@ -826,7 +826,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
     error = dwg_read_file (dwgfile, dwg);
   if (error >= DWG_ERR_CRITICAL)
     {
-      fail ("read %s from %s", name, dwgfile);
+      fail ("read %s from %s: %x", name, dwgfile, error);
       return 1;
     }
   else
