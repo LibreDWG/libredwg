@@ -702,6 +702,24 @@
        }
 #endif
 
+#ifndef LOG_HORIZ_ALIGNMENT
+#  define LOG_HORIZ_ALIGNMENT_ONE(value, w)                                   \
+     if (value == HORIZ_ALIGNMENT_##w)                                        \
+       LOG_TRACE (#w " (0x%d) ", HORIZ_ALIGNMENT_##w)
+#  define LOG_HORIZ_ALIGNMENT(value)                                          \
+     if (value)                                                               \
+       {                                                                      \
+         LOG_TRACE ("                ");                                      \
+         LOG_HORIZ_ALIGNMENT_ONE (value, LEFT);                               \
+         LOG_HORIZ_ALIGNMENT_ONE (value, CENTER);                             \
+         LOG_HORIZ_ALIGNMENT_ONE (value, RIGHT);                              \
+         LOG_HORIZ_ALIGNMENT_ONE (value, ALIGNED);                            \
+         LOG_HORIZ_ALIGNMENT_ONE (value, MIDDLE);                             \
+         LOG_HORIZ_ALIGNMENT_ONE (value, FIT);                                \
+         LOG_TRACE ("\n");                                                    \
+       }
+#endif
+
 #ifndef LOG_VERT_ALIGNMENT
 #  define LOG_VERT_ALIGNMENT_ONE(value, w)                                    \
      if (value == (VERT_ALIGNMENT_##w))                                       \
