@@ -8177,28 +8177,16 @@ enum {
   OPTS_R11_CIRCLE_HAS_EXTRUSION = 1,
 };
 
-// old:
-enum {
-  DIM_OPTS_R11_OPTS2 = 2,   // Optional flag
-  DIM_OPTS_R11_TEXT = 4,
-  DIM_OPTS_R11_DXF13 = 8,   // Ordinate: leader_start_pt
-  DIM_OPTS_R11_DXF14 = 16,  // Ordinate: leader_end_pt
-  DIM_OPTS_R11_DXF15 = 32,
-  DIM_OPTS_R11_DXF16 = 64,  // Angular: line arc
-  DIM_OPTS_R11_DXF40 = 128, // leader_len
-  DIM_OPTS_R11_DXF50 = 0x100,
-};
-
 enum {
   OPTS_R11_DIMENSION_UNKNOWN_1 = 1,
-  OPTS_R11_DIMENSION_UNKNOWN_2 = 2,
-  OPTS_R11_DIMENSION_TEXT = 4,
-  OPTS_R11_DIMENSION_DXF13 = 8,   // Ordinate: leader_start_pt
-  OPTS_R11_DIMENSION_DXF14 = 16,  // Ordinate: leader_end_pt
-  OPTS_R11_DIMENSION_DXF15 = 32,
-  OPTS_R11_DIMENSION_DXF16 = 64,  // Angular: line arc
-  OPTS_R11_DIMENSION_DXF40 = 128, // leader_len
-  OPTS_R11_DIMENSION_DXF50 = 256,
+  OPTS_R11_DIMENSION_HAS_FLAG = 2,
+  OPTS_R11_DIMENSION_HAS_TEXT = 4,
+  OPTS_R11_DIMENSION_HAS_DXF13 = 8,   // Ordinate: leader_start_pt
+  OPTS_R11_DIMENSION_HAS_DXF14 = 16,  // Ordinate: leader_end_pt
+  OPTS_R11_DIMENSION_HAS_DXF15 = 32,
+  OPTS_R11_DIMENSION_HAS_DXF16 = 64,  // Angular: line arc
+  OPTS_R11_DIMENSION_HAS_DXF40 = 128, // leader_len
+  OPTS_R11_DIMENSION_HAS_ROTATION = 256,
 };
 
 enum {
