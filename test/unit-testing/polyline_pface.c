@@ -22,8 +22,8 @@ api_process (dwg_object *obj)
   if (numverts + numfaces == num_owned)
     ok ("numverts + numfaces == num_owned");
   else
-    ok ("TODO numverts %d + numfaces %d != num_owned %d", numverts,
-        numfaces, num_owned);
+    ok ("TODO numverts %d + numfaces %d != num_owned %d", numverts, numfaces,
+        num_owned);
 
   if (version >= R_13b1 && version <= R_2000)
     {

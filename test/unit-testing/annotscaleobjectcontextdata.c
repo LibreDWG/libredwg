@@ -11,7 +11,8 @@ api_process (dwg_object *obj)
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   //#ifdef DEBUG_CLASSES
-  dwg_obj_annotscaleobjectcontextdata *_obj = dwg_object_to_ANNOTSCALEOBJECTCONTEXTDATA (obj);
+  dwg_obj_annotscaleobjectcontextdata *_obj
+      = dwg_object_to_ANNOTSCALEOBJECTCONTEXTDATA (obj);
 
   CHK_ENTITY_TYPE (_obj, ANNOTSCALEOBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, ANNOTSCALEOBJECTCONTEXTDATA, is_default, B);

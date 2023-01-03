@@ -22,14 +22,16 @@ api_process (dwg_object *obj)
         if (hdls[i] == entries[i])
           {
             if (entries[i])
-              ok ("LTYPE_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
+              ok ("LTYPE_CONTROL.entries[%d]: " FORMAT_REF, i,
+                  ARGS_REF (entries[i]));
             else
               ok ("LTYPE_CONTROL.entries[%d]: NULL", i);
           }
         else
           {
             if (entries[i])
-              fail ("LTYPE_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
+              fail ("LTYPE_CONTROL.entries[%d]: " FORMAT_REF, i,
+                    ARGS_REF (entries[i]));
             else
               fail ("LTYPE_CONTROL.entries[%d]: NULL", i);
           }

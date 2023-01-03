@@ -19,7 +19,8 @@ api_process (dwg_object *obj)
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
-  dwg_ent_large_radial_dimension *dim_large = dwg_object_to_LARGE_RADIAL_DIMENSION (obj);
+  dwg_ent_large_radial_dimension *dim_large
+      = dwg_object_to_LARGE_RADIAL_DIMENSION (obj);
   dwg_ent_dim *dim = dwg_object_to_DIMENSION (obj);
 
   /* DIMENSION_COMMON */
@@ -48,9 +49,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (dim, LARGE_RADIAL_DIMENSION, dimstyle);
   CHK_ENTITY_H (dim, LARGE_RADIAL_DIMENSION, block);
   /* radius */
-  CHK_ENTITY_3RD  (dim_large, LARGE_RADIAL_DIMENSION, first_arc_pt);
+  CHK_ENTITY_3RD (dim_large, LARGE_RADIAL_DIMENSION, first_arc_pt);
   CHK_ENTITY_TYPE (dim_large, LARGE_RADIAL_DIMENSION, leader_len, BD);
-  
+
   CHK_ENTITY_3RD (dim_large, LARGE_RADIAL_DIMENSION, ovr_center);
   CHK_ENTITY_3RD (dim_large, LARGE_RADIAL_DIMENSION, jog_point);
 #endif

@@ -13,17 +13,18 @@ api_process (dwg_object *obj)
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
-  dwg_obj_radimlgobjectcontextdata *_obj = dwg_object_to_RADIMLGOBJECTCONTEXTDATA (obj);
+  dwg_obj_radimlgobjectcontextdata *_obj
+      = dwg_object_to_RADIMLGOBJECTCONTEXTDATA (obj);
 
   CHK_ENTITY_TYPE (_obj, RADIMLGOBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, RADIMLGOBJECTCONTEXTDATA, is_default, B);
   CHK_ENTITY_H (_obj, RADIMLGOBJECTCONTEXTDATA, scale);
 
-  CHK_SUBCLASS_2RD  (_obj->dimension, OCD_Dimension, def_pt);
+  CHK_SUBCLASS_2RD (_obj->dimension, OCD_Dimension, def_pt);
   CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, b293, B);
   CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, is_def_textloc, B);
   CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, text_rotation, BD);
-  CHK_SUBCLASS_H    (_obj->dimension, OCD_Dimension, block);
+  CHK_SUBCLASS_H (_obj->dimension, OCD_Dimension, block);
   CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, dimtofl, B);
   CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, dimosxd, B);
   CHK_SUBCLASS_TYPE (_obj->dimension, OCD_Dimension, dimatfit, B);

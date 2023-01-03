@@ -56,7 +56,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, class_version, BS);
   CHK_ENTITY_UTF8TEXT (_obj, SECTIONVIEWSTYLE, desc);
   CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, is_modified_for_recompute, B);
-  SINCE (R_2018) {
+  SINCE (R_2018)
+  {
     CHK_ENTITY_UTF8TEXT (_obj, SECTIONVIEWSTYLE, display_name);
     CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, viewstyle_flags, BLx);
   }
@@ -99,13 +100,14 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, unknown_b1, B);
   CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, unknown_b2, B);
   CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, num_hatch_angles, BL);
-  CHK_ENTITY_VECTOR_TYPE (_obj, SECTIONVIEWSTYLE, hatch_angles, num_hatch_angles, BD);
+  CHK_ENTITY_VECTOR_TYPE (_obj, SECTIONVIEWSTYLE, hatch_angles,
+                          num_hatch_angles, BD);
   // flag bits:
-  //CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, is_continuous_labeling, B);
-  //CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_arrowheads, B);
-  //CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_viewlabel, B);
-  //CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_all_plane_lines, B);
-  //CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_all_bend_indentifiers, B);
-  //CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_end_and_bend_lines, B);
-  //CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_hatching, B);
+  // CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, is_continuous_labeling, B);
+  // CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_arrowheads, B);
+  // CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_viewlabel, B);
+  // CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_all_plane_lines, B);
+  // CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_all_bend_indentifiers, B);
+  // CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_end_and_bend_lines, B);
+  // CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_hatching, B);
 }

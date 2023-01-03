@@ -15,7 +15,7 @@ api_process (dwg_object *obj)
   BITCODE_RC contrast;
   BITCODE_RC fade;
   BITCODE_BD rotation;
-  //BITCODE_3BD origin;
+  // BITCODE_3BD origin;
   BITCODE_BD image_width;
   BITCODE_BD image_height;
   BITCODE_T name;
@@ -46,7 +46,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, contrast, RC);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, fade, RC);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, rotation, BD);
-  //CHK_ENTITY_3RD (_obj, GEOMAPIMAGE, origin);
+  // CHK_ENTITY_3RD (_obj, GEOMAPIMAGE, origin);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, image_width, BD);
   CHK_ENTITY_TYPE (_obj, GEOMAPIMAGE, image_height, BD);
   CHK_ENTITY_UTF8TEXT (_obj, GEOMAPIMAGE, name);

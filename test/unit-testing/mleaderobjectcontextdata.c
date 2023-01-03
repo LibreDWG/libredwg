@@ -14,7 +14,8 @@ api_process (dwg_object *obj)
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
-  dwg_obj_mleaderobjectcontextdata *_obj = dwg_object_to_MLEADEROBJECTCONTEXTDATA (obj);
+  dwg_obj_mleaderobjectcontextdata *_obj
+      = dwg_object_to_MLEADEROBJECTCONTEXTDATA (obj);
 
   CHK_ENTITY_TYPE (_obj, MLEADEROBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, MLEADEROBJECTCONTEXTDATA, is_default, B);

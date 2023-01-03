@@ -51,10 +51,11 @@ api_process (dwg_object *obj)
   BITCODE_B unknown_b37;
 
 #ifdef DEBUG_CLASSES
-  dwg_obj_assocperssubentmanager *_obj = dwg_object_to_ASSOCPERSSUBENTMANAGER (obj);
+  dwg_obj_assocperssubentmanager *_obj
+      = dwg_object_to_ASSOCPERSSUBENTMANAGER (obj);
   if (obj->fixedtype == DWG_TYPE_UNKNOWN_OBJ)
     return;
- 
+
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, class_version, BL);
   CHK_ENTITY_MAX (_obj, ASSOCPERSSUBENTMANAGER, class_version, BL, 3);
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_3, BL);
@@ -64,7 +65,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, num_steps, BL);
   CHK_ENTITY_VECTOR_TYPE (_obj, ASSOCPERSSUBENTMANAGER, steps, num_steps, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, num_subents, BL);
-  CHK_ENTITY_VECTOR_TYPE (_obj, ASSOCPERSSUBENTMANAGER, subents, num_subents, BL);
+  CHK_ENTITY_VECTOR_TYPE (_obj, ASSOCPERSSUBENTMANAGER, subents, num_subents,
+                          BL);
   // FIXME
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_bl6, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCPERSSUBENTMANAGER, unknown_bl6a, BL);

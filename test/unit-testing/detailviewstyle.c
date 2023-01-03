@@ -45,7 +45,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, class_version, BS);
   CHK_ENTITY_UTF8TEXT (_obj, DETAILVIEWSTYLE, desc);
   CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, is_modified_for_recompute, B);
-  SINCE (R_2018) {
+  SINCE (R_2018)
+  {
     CHK_ENTITY_UTF8TEXT (_obj, DETAILVIEWSTYLE, display_name);
     CHK_ENTITY_TYPE (_obj, DETAILVIEWSTYLE, viewstyle_flags, BL);
   }

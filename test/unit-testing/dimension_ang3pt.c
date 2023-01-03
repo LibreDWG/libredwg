@@ -6,13 +6,14 @@ api_process (dwg_object *obj)
 {
   int error, isnew;
   double elevation, act_measurement, horiz_dir, lspace_factor, text_rotation,
-         ins_rotation;
+      ins_rotation;
   BITCODE_B flip_arrow1, flip_arrow2;
   BITCODE_RC class_version, flag, flag1;
   BITCODE_BS lspace_style, attachment;
   char *user_text;
   dwg_point_2d text_midpt, clone_ins_pt, pt2d;
-  dwg_point_3d def_pt, xline1_pt, xline2_pt, center_pt, extrusion, ins_scale, pt3d;
+  dwg_point_3d def_pt, xline1_pt, xline2_pt, center_pt, extrusion, ins_scale,
+      pt3d;
   BITCODE_H dimstyle, block;
 
   dwg_ent_dim_ang3pt *dim_ang3pt = dwg_object_to_DIMENSION_ANG3PT (obj);

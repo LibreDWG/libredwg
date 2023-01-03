@@ -24,7 +24,7 @@ api_process (dwg_object *obj)
   BITCODE_H base_ucs;
   BITCODE_H named_ucs;
   BITCODE_BL num_viewports;
-  BITCODE_H* viewports;
+  BITCODE_H *viewports;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_layout *layout = dwg_object_to_LAYOUT (obj);
@@ -32,7 +32,8 @@ api_process (dwg_object *obj)
 
   CHK_SUBCLASS_UTF8TEXT (layout->plotsettings, PLOTSETTINGS, printer_cfg_file);
   CHK_SUBCLASS_UTF8TEXT (layout->plotsettings, PLOTSETTINGS, paper_size);
-  CHK_SUBCLASS_UTF8TEXT (layout->plotsettings, PLOTSETTINGS, canonical_media_name);
+  CHK_SUBCLASS_UTF8TEXT (layout->plotsettings, PLOTSETTINGS,
+                         canonical_media_name);
   CHK_SUBCLASS_UTF8TEXT (layout->plotsettings, PLOTSETTINGS, stylesheet);
   CHK_SUBCLASS_UTF8TEXT (layout->plotsettings, PLOTSETTINGS, plotview_name);
   CHK_SUBCLASS_H (layout->plotsettings, PLOTSETTINGS, plotview);
@@ -45,9 +46,12 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE (layout->plotsettings, PLOTSETTINGS, paper_height, BD);
   CHK_SUBCLASS_2RD (layout->plotsettings, PLOTSETTINGS, plot_origin);
   CHK_SUBCLASS_TYPE (layout->plotsettings, PLOTSETTINGS, plot_paper_unit, BS);
-  CHK_SUBCLASS_MAX (layout->plotsettings, PLOTSETTINGS, plot_paper_unit, BS, 2);
-  CHK_SUBCLASS_TYPE (layout->plotsettings, PLOTSETTINGS, plot_rotation_mode, BS);
-  CHK_SUBCLASS_MAX (layout->plotsettings, PLOTSETTINGS, plot_rotation_mode, BS, 3);
+  CHK_SUBCLASS_MAX (layout->plotsettings, PLOTSETTINGS, plot_paper_unit, BS,
+                    2);
+  CHK_SUBCLASS_TYPE (layout->plotsettings, PLOTSETTINGS, plot_rotation_mode,
+                     BS);
+  CHK_SUBCLASS_MAX (layout->plotsettings, PLOTSETTINGS, plot_rotation_mode, BS,
+                    3);
   CHK_SUBCLASS_TYPE (layout->plotsettings, PLOTSETTINGS, plot_type, BS);
   CHK_SUBCLASS_MAX (layout->plotsettings, PLOTSETTINGS, plot_type, BS, 5);
   CHK_SUBCLASS_2RD (layout->plotsettings, PLOTSETTINGS, plot_window_ll);
@@ -55,14 +59,18 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE (layout->plotsettings, PLOTSETTINGS, paper_units, BD);
   CHK_SUBCLASS_TYPE (layout->plotsettings, PLOTSETTINGS, drawing_units, BD);
   CHK_SUBCLASS_TYPE (layout->plotsettings, PLOTSETTINGS, std_scale_type, BS);
-  CHK_SUBCLASS_MAX (layout->plotsettings, PLOTSETTINGS, std_scale_type, BS, 32);
+  CHK_SUBCLASS_MAX (layout->plotsettings, PLOTSETTINGS, std_scale_type, BS,
+                    32);
   CHK_SUBCLASS_TYPE (layout->plotsettings, PLOTSETTINGS, std_scale_factor, BD);
   CHK_SUBCLASS_2RD (layout->plotsettings, PLOTSETTINGS, paper_image_origin);
   CHK_SUBCLASS_TYPE (layout->plotsettings, PLOTSETTINGS, shadeplot_type, BS);
   CHK_SUBCLASS_MAX (layout->plotsettings, PLOTSETTINGS, shadeplot_type, BS, 5);
-  CHK_SUBCLASS_TYPE (layout->plotsettings, PLOTSETTINGS, shadeplot_reslevel, BS);
-  CHK_SUBCLASS_MAX (layout->plotsettings, PLOTSETTINGS, shadeplot_reslevel, BS, 5);
-  CHK_SUBCLASS_TYPE (layout->plotsettings, PLOTSETTINGS, shadeplot_customdpi, BS);
+  CHK_SUBCLASS_TYPE (layout->plotsettings, PLOTSETTINGS, shadeplot_reslevel,
+                     BS);
+  CHK_SUBCLASS_MAX (layout->plotsettings, PLOTSETTINGS, shadeplot_reslevel, BS,
+                    5);
+  CHK_SUBCLASS_TYPE (layout->plotsettings, PLOTSETTINGS, shadeplot_customdpi,
+                     BS);
   CHK_SUBCLASS_H (layout->plotsettings, PLOTSETTINGS, shadeplot);
 
   CHK_ENTITY_UTF8TEXT (layout, LAYOUT, layout_name);

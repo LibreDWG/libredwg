@@ -30,6 +30,7 @@ EXPORT void dwg_free_object_private (Dwg_Object *obj);
 
 int dwg_free_variable_type_private (Dwg_Object *restrict obj);
 int dwg_free_variable_type (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
-int dwg_free_variable_no_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
+int dwg_free_variable_no_class (Dwg_Data *restrict dwg,
+                                Dwg_Object *restrict obj);
 
 #endif

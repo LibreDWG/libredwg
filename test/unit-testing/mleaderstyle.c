@@ -32,7 +32,7 @@ api_process (dwg_object *obj)
   BITCODE_CMC text_color;
   BITCODE_BD text_height;
   BITCODE_B has_text_frame;
-  //BITCODE_B is_new_format; /* computed */
+  // BITCODE_B is_new_format; /* computed */
   BITCODE_B text_always_left;
   BITCODE_BD align_space;
   BITCODE_H block;

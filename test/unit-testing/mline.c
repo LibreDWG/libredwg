@@ -38,7 +38,8 @@ api_process (dwg_object *obj)
       for (i = 0; i < num_verts; i++)
         {
 #ifdef USE_DEPRECATED_API
-          dwg_mline_line *lines = dwg_mline_vertex_get_lines (&verts[i], &error);
+          dwg_mline_line *lines
+              = dwg_mline_vertex_get_lines (&verts[i], &error);
 #else
           dwg_mline_line *lines = (dwg_mline_line *)verts[i].lines;
 #endif
@@ -50,13 +51,13 @@ api_process (dwg_object *obj)
                 {
                   for (int k = 0; k < lines[j].num_segparms; k++)
                     {
-                      ok ("MLINE.verts[%d].lines[%d].segparms[%d]: %f", i, j, k,
-                          lines[j].segparms[k]);
+                      ok ("MLINE.verts[%d].lines[%d].segparms[%d]: %f", i, j,
+                          k, lines[j].segparms[k]);
                     }
                   for (int k = 0; k < lines[j].num_areafillparms; k++)
                     {
-                      ok ("MLINE.verts[%d].lines[%d].areafillparms[%d]: %f", i, j, k,
-                          lines[j].areafillparms[k]);
+                      ok ("MLINE.verts[%d].lines[%d].areafillparms[%d]: %f", i,
+                          j, k, lines[j].areafillparms[k]);
                     }
                 }
             }

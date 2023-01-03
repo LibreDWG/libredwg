@@ -122,8 +122,8 @@ main (int argc, char *argv[])
           { "file", 1, 0, 'o' },      { "as", 1, 0, 'a' },
           { "minimal", 0, 0, 'm' },   { "binary", 0, 0, 'b' },
           { "overwrite", 0, 0, 'y' }, { "help", 0, 0, 0 },
-          { "force-free", 0, 0, 0 },
-          { "version", 0, 0, 0 },     { NULL, 0, NULL, 0 } };
+          { "force-free", 0, 0, 0 },  { "version", 0, 0, 0 },
+          { NULL, 0, NULL, 0 } };
 #endif
 
   if (argc < 2)
@@ -306,11 +306,11 @@ main (int argc, char *argv[])
                   }
                 else if (
 #ifdef _WIN32
-      strEQc (filename_out, "NUL")
+                    strEQc (filename_out, "NUL")
 #else
-      strEQc (filename_out, "/dev/null")
+                    strEQc (filename_out, "/dev/null")
 #endif
-                         )
+                )
                   {
                     dat.fh = fopen (filename_out, "wb");
                   }
@@ -344,14 +344,14 @@ main (int argc, char *argv[])
 
     final:
 #if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
-  {
-    char *asanenv = getenv("ASAN_OPTIONS");
-    if (!asanenv)
-      do_free = 1;
-    // detect_leaks is enabled by default. see if it's turned off
-    else if (strstr (asanenv, "detect_leaks=0") == NULL) /* not found */
-      do_free = 1;
-  }
+      {
+        char *asanenv = getenv ("ASAN_OPTIONS");
+        if (!asanenv)
+          do_free = 1;
+        // detect_leaks is enabled by default. see if it's turned off
+        else if (strstr (asanenv, "detect_leaks=0") == NULL) /* not found */
+          do_free = 1;
+      }
 #endif
       // forget about leaks. really huge DWG's need endlessly here.
       if (do_free

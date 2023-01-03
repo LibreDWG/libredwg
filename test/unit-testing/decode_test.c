@@ -2,11 +2,11 @@
 //#include "../../src/common.h"
 #include <stddef.h>
 #ifdef CLANG_DIAG_IGNORE
-  CLANG_DIAG_IGNORE (-Wpragma-pack)
+CLANG_DIAG_IGNORE (-Wpragma-pack)
 #endif
 #include "decode.c"
 #ifdef CLANG_DIAG_IGNORE
-  CLANG_DIAG_RESTORE
+CLANG_DIAG_RESTORE
 #endif
 #include "tests_common.h"
 
@@ -56,7 +56,7 @@ read_two_byte_offset_tests (void)
 int
 main (int argc, char const *argv[])
 {
-  loglevel = is_make_silent() ? 0 : 2;
+  loglevel = is_make_silent () ? 0 : 2;
 
   read_literal_length_tests ();
   read_long_compression_offset_tests ();

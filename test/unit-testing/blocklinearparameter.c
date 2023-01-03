@@ -11,10 +11,11 @@ api_process (dwg_object *obj)
   BITCODE_T distance_name;
   BITCODE_T distance_desc;
   BITCODE_BD distance;
-  //Dwg_BLOCKPARAMVALUESET value_set;
+  // Dwg_BLOCKPARAMVALUESET value_set;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  dwg_obj_blocklinearparameter *_obj = dwg_object_to_BLOCKLINEARPARAMETER (obj);
+  dwg_obj_blocklinearparameter *_obj
+      = dwg_object_to_BLOCKLINEARPARAMETER (obj);
 
   CHK_EVALEXPR (BLOCKLINEARPARAMETER);
   // AcDbBlockElement
@@ -28,16 +29,14 @@ api_process (dwg_object *obj)
   // AcDbBlock2PtParameter
   CHK_ENTITY_3RD (_obj, BLOCKLINEARPARAMETER, def_basept);
   CHK_ENTITY_3RD (_obj, BLOCKLINEARPARAMETER, def_endpt);
-  BLOCKPARAMETER_PropInfo (prop1)
-  BLOCKPARAMETER_PropInfo (prop2)
-  BLOCKPARAMETER_PropInfo (prop3)
-  BLOCKPARAMETER_PropInfo (prop4)
-  CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKLINEARPARAMETER, prop_states, 4, BL);
+  BLOCKPARAMETER_PropInfo (prop1) BLOCKPARAMETER_PropInfo (
+      prop2) BLOCKPARAMETER_PropInfo (prop3) BLOCKPARAMETER_PropInfo (prop4)
+      CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKLINEARPARAMETER, prop_states, 4, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKLINEARPARAMETER, parameter_base_location, BS);
-  CHK_ENTITY_3RD  (_obj, BLOCKLINEARPARAMETER, upd_basept);
-  CHK_ENTITY_3RD  (_obj, BLOCKLINEARPARAMETER, basept);
-  CHK_ENTITY_3RD  (_obj, BLOCKLINEARPARAMETER, upd_endpt);
-  CHK_ENTITY_3RD  (_obj, BLOCKLINEARPARAMETER, endpt);
+  CHK_ENTITY_3RD (_obj, BLOCKLINEARPARAMETER, upd_basept);
+  CHK_ENTITY_3RD (_obj, BLOCKLINEARPARAMETER, basept);
+  CHK_ENTITY_3RD (_obj, BLOCKLINEARPARAMETER, upd_endpt);
+  CHK_ENTITY_3RD (_obj, BLOCKLINEARPARAMETER, endpt);
   // AcDbBlockLinearParameter
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKLINEARPARAMETER, distance_name);
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKLINEARPARAMETER, distance_desc);

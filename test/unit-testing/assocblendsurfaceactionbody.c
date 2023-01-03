@@ -18,7 +18,8 @@ api_process (dwg_object *obj)
   BITCODE_BS bs2;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  dwg_obj_assocblendsurfaceactionbody *_obj = dwg_object_to_ASSOCBLENDSURFACEACTIONBODY (obj);
+  dwg_obj_assocblendsurfaceactionbody *_obj
+      = dwg_object_to_ASSOCBLENDSURFACEACTIONBODY (obj);
 
   // ASSOCACTIONBODY:
   CHK_ENTITY_TYPE (_obj, ASSOCBLENDSURFACEACTIONBODY, aab_version, BL);
@@ -29,7 +30,7 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE (_obj->sab, ASSOCSURFACEACTIONBODY, l2, BL);
   CHK_SUBCLASS_TYPE (_obj->sab, ASSOCSURFACEACTIONBODY, is_semi_ovr, B);
   CHK_SUBCLASS_TYPE (_obj->sab, ASSOCSURFACEACTIONBODY, grip_status, BS);
-  CHK_SUBCLASS_H    (_obj->sab, ASSOCSURFACEACTIONBODY, assocdep);
+  CHK_SUBCLASS_H (_obj->sab, ASSOCSURFACEACTIONBODY, assocdep);
   // AcDbAssocPathBasedSurfaceActionBody
   CHK_ENTITY_TYPE (_obj, ASSOCBLENDSURFACEACTIONBODY, pbsab_status, BL);
 

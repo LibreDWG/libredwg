@@ -39,7 +39,7 @@
 // /usr/lib/gcc/arm-linux-gnueabi/9/include-fixed/limits.h defines it as 1
 #  if defined(MB_LEN_MAX) && MB_LEN_MAX != 16 && MB_LEN_MAX != 32
 #    undef MB_LEN_MAX
-#    define MB_LEN_MAX	16
+#    define MB_LEN_MAX 16
 #  endif
 #  include <wchar.h>
 #endif
@@ -71,11 +71,16 @@ typedef struct _bit_chain
   FILE *fh;
 } Bit_Chain;
 
-#define EMPTY_CHAIN(size) { NULL, size, 0L, 0, 0, 0, 0, NULL }
+#define EMPTY_CHAIN(size)                                                     \
+  {                                                                           \
+    NULL, size, 0L, 0, 0, 0, 0, NULL                                          \
+  }
 
 // only if from r2007+ DWG, not JSON, DXF, add API
-#define IS_FROM_TU(dat) (dat->from_version >= R_2007) && !(dat->opts & DWG_OPTS_IN)
-#define IS_FROM_TU_DWG(dwg) (dwg->header.from_version >= R_2007) && !(dwg->opts & DWG_OPTS_IN)
+#define IS_FROM_TU(dat)                                                       \
+  (dat->from_version >= R_2007) && !(dat->opts & DWG_OPTS_IN)
+#define IS_FROM_TU_DWG(dwg)                                                   \
+  (dwg->header.from_version >= R_2007) && !(dwg->opts & DWG_OPTS_IN)
 #define TU_to_int(b) ((b[1] << 8) + b[0])
 
 /* Functions for raw data manipulations.
@@ -253,7 +258,8 @@ void bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict chain);
 
 /* Converts UCS-2 to ASCII (with \U+XXXX), returning a copy. */
 EXPORT char *bit_embed_TU (BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
-EXPORT char *bit_embed_TU_size (BITCODE_TU restrict wstr, const int len) ATTRIBUTE_MALLOC;
+EXPORT char *bit_embed_TU_size (BITCODE_TU restrict wstr,
+                                const int len) ATTRIBUTE_MALLOC;
 
 #ifdef HAVE_NATIVE_WCHAR2
 #  define bit_wcs2len(wstr) wcslen (wstr)
@@ -277,36 +283,38 @@ int bit_wcs2cmp (BITCODE_TU restrict s1, const BITCODE_TU restrict s2);
 
 #ifndef HAVE_STRNLEN
 size_t bit_strnlen (const char *restrict str, const size_t maxlen);
-#define strnlen(str, maxlen) bit_strnlen(str, maxlen)
+#  define strnlen(str, maxlen) bit_strnlen (str, maxlen)
 #endif
 
 /* Convert UCS-2LE to UTF-8, returning a copy. */
 EXPORT char *bit_convert_TU (const BITCODE_TU restrict wstr) ATTRIBUTE_MALLOC;
-EXPORT char *bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
-  ATTRIBUTE_MALLOC;
-
+EXPORT char *bit_TU_to_utf8_len (const BITCODE_TU restrict wstr,
+                                 const int len) ATTRIBUTE_MALLOC;
 
 /** Converts UTF-8 (dxf,json) to ASCII TV.
     \uxxxx or other unicode => \U+XXXX
     If cquoted unquotes \" to ", undo json_cquote(),
     Returns NULL if not enough room in dest. */
-EXPORT char *
-bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
-                const int destlen, const int srclen, const unsigned cquoted);
+EXPORT char *bit_utf8_to_TV (char *restrict dest,
+                             const unsigned char *restrict src,
+                             const int destlen, const int srclen,
+                             const unsigned cquoted);
 
 /** Converts UTF-8 to UCS-2. Returns a copy.
     Needed by dwg importers, writers (e.g. dxf2dwg)
     cquoted is needed by in_json, to unquote \"
  */
-EXPORT BITCODE_TU bit_utf8_to_TU (char *restrict str, const unsigned cquoted) ATTRIBUTE_MALLOC;
+EXPORT BITCODE_TU bit_utf8_to_TU (char *restrict str,
+                                  const unsigned cquoted) ATTRIBUTE_MALLOC;
 
 /* compare an ASCII/TU string to ASCII name */
-int bit_eq_T (Bit_Chain *restrict dat, const BITCODE_T restrict str1, const char *restrict str2);
+int bit_eq_T (Bit_Chain *restrict dat, const BITCODE_T restrict str1,
+              const char *restrict str2);
 /* compare an ASCII/utf-8 string to a r2007+ name */
 int bit_eq_TU (const char *str, BITCODE_TU restrict wstr);
 /* check if the string (ascii or unicode) is empty */
 int bit_empty_T (Bit_Chain *restrict dat, BITCODE_T restrict str);
-BITCODE_T bit_set_T (Bit_Chain *restrict dat, const char* restrict src);
+BITCODE_T bit_set_T (Bit_Chain *restrict dat, const char *restrict src);
 
 BITCODE_RL bit_read_L (Bit_Chain *dat);
 void bit_write_L (Bit_Chain *dat, BITCODE_RL value);
@@ -317,8 +325,10 @@ void bit_write_TIMEBLL (Bit_Chain *dat, BITCODE_TIMEBLL date);
 BITCODE_TIMERLL bit_read_TIMERLL (Bit_Chain *dat);
 void bit_write_TIMERLL (Bit_Chain *dat, BITCODE_TIMERLL date);
 
-int bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color);
-void bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color);
+int bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat,
+                  Dwg_Color *restrict color);
+void bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat,
+                    Dwg_Color *restrict color);
 // Convert from truecolor (r2004+) to palette (-r2000)
 void bit_downconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color);
 void bit_upconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color);
@@ -349,7 +359,8 @@ void bit_print (Bit_Chain *dat, long unsigned int size);
 void bit_write_bits (Bit_Chain *restrict dat, const char *restrict bits);
 long bit_write_hexbits (Bit_Chain *restrict dat, const char *restrict bytes);
 void bit_print_bits (unsigned char *bits, long unsigned int bitsize);
-void bit_fprint_bits (FILE *fp, unsigned char *bits, long unsigned int bitsize);
+void bit_fprint_bits (FILE *fp, unsigned char *bits,
+                      long unsigned int bitsize);
 void bit_explore_chain (Bit_Chain *dat, long unsigned int datsize);
 
 BITCODE_BD bit_nan (void);
@@ -358,6 +369,7 @@ int bit_isnan (BITCODE_BD number);
 // which would require different text sizes and recalc.
 bool does_cross_unicode_datversion (Bit_Chain *restrict dat);
 /* Copy the whole content of tmp_data to dat, and reset tmp_dat */
-void bit_copy_chain (Bit_Chain *restrict orig_dat, Bit_Chain *restrict tmp_dat);
+void bit_copy_chain (Bit_Chain *restrict orig_dat,
+                     Bit_Chain *restrict tmp_dat);
 
 #endif

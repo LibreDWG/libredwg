@@ -20,7 +20,8 @@ api_process (dwg_object *obj)
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
-  dwg_obj_mtextattributeobjectcontextdata *_obj = dwg_object_to_MTEXTATTRIBUTEOBJECTCONTEXTDATA (obj);
+  dwg_obj_mtextattributeobjectcontextdata *_obj
+      = dwg_object_to_MTEXTATTRIBUTEOBJECTCONTEXTDATA (obj);
 
   CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, is_default, B);
@@ -32,12 +33,14 @@ api_process (dwg_object *obj)
   CHK_ENTITY_2RD (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, alignment_pt);
 
   CHK_ENTITY_TYPE (_obj, MTEXTATTRIBUTEOBJECTCONTEXTDATA, enable_context, B);
-  if (!dwg_dynapi_entity_value (_obj, "MTEXTATTRIBUTEOBJECTCONTEXTDATA", "mtext", &context, NULL))
+  if (!dwg_dynapi_entity_value (_obj, "MTEXTATTRIBUTEOBJECTCONTEXTDATA",
+                                "mtext", &context, NULL))
     fail ("MTEXTATTRIBUTEOBJECTCONTEXTDATA.context");
   else if (context)
     {
       if (context->fixedtype != DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
-        fail ("Wrong MTEXTATTRIBUTEOBJECTCONTEXTDATA.context.fixedtype %s %d != MTEXTOBJECTCONTEXTDATA",
+        fail ("Wrong MTEXTATTRIBUTEOBJECTCONTEXTDATA.context.fixedtype %s %d "
+              "!= MTEXTOBJECTCONTEXTDATA",
               dwg_type_name (context->fixedtype), context->fixedtype);
     }
 #endif

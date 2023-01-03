@@ -18,7 +18,8 @@ api_process (dwg_object *obj)
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   //#ifdef DEBUG_CLASSES
-  dwg_obj_blockangularconstraintparameter *_obj = dwg_object_to_BLOCKANGULARCONSTRAINTPARAMETER (obj);
+  dwg_obj_blockangularconstraintparameter *_obj
+      = dwg_object_to_BLOCKANGULARCONSTRAINTPARAMETER (obj);
 
   CHK_EVALEXPR (BLOCKANGULARCONSTRAINTPARAMETER);
   // AcDbBlockElement
@@ -32,12 +33,12 @@ api_process (dwg_object *obj)
   // AcDbBlock2PtParameter
   CHK_ENTITY_3RD (_obj, BLOCKANGULARCONSTRAINTPARAMETER, def_basept);
   CHK_ENTITY_3RD (_obj, BLOCKANGULARCONSTRAINTPARAMETER, def_endpt);
-  BLOCKPARAMETER_PropInfo (prop1)
-  BLOCKPARAMETER_PropInfo (prop2)
-  BLOCKPARAMETER_PropInfo (prop3)
-  BLOCKPARAMETER_PropInfo (prop4)
-  CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKANGULARCONSTRAINTPARAMETER, prop_states, 4, BL);
-  CHK_ENTITY_TYPE (_obj, BLOCKANGULARCONSTRAINTPARAMETER, parameter_base_location, BS);
+  BLOCKPARAMETER_PropInfo (prop1) BLOCKPARAMETER_PropInfo (prop2)
+      BLOCKPARAMETER_PropInfo (prop3) BLOCKPARAMETER_PropInfo (prop4)
+          CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKANGULARCONSTRAINTPARAMETER,
+                                  prop_states, 4, BL);
+  CHK_ENTITY_TYPE (_obj, BLOCKANGULARCONSTRAINTPARAMETER,
+                   parameter_base_location, BS);
   CHK_ENTITY_3RD (_obj, BLOCKANGULARCONSTRAINTPARAMETER, upd_basept);
   CHK_ENTITY_3RD (_obj, BLOCKANGULARCONSTRAINTPARAMETER, basept);
   CHK_ENTITY_3RD (_obj, BLOCKANGULARCONSTRAINTPARAMETER, upd_endpt);
@@ -48,9 +49,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (_obj, BLOCKANGULARCONSTRAINTPARAMETER, center_pt);
   CHK_ENTITY_3RD (_obj, BLOCKANGULARCONSTRAINTPARAMETER, end_pt);
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKANGULARCONSTRAINTPARAMETER, expr_name);
-  CHK_ENTITY_UTF8TEXT (_obj, BLOCKANGULARCONSTRAINTPARAMETER, expr_description);
+  CHK_ENTITY_UTF8TEXT (_obj, BLOCKANGULARCONSTRAINTPARAMETER,
+                       expr_description);
   CHK_ENTITY_TYPE (_obj, BLOCKANGULARCONSTRAINTPARAMETER, angle, BD);
-  CHK_ENTITY_TYPE (_obj, BLOCKANGULARCONSTRAINTPARAMETER, orientation_on_both_grips, B);
+  CHK_ENTITY_TYPE (_obj, BLOCKANGULARCONSTRAINTPARAMETER,
+                   orientation_on_both_grips, B);
   // AcDbBlockParamValueSet
   CHK_SUBCLASS_UTF8TEXT (_obj->value_set, BLOCKPARAMVALUESET, desc);
   CHK_SUBCLASS_TYPE (_obj->value_set, BLOCKPARAMVALUESET, flags, BL);

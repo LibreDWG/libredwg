@@ -11,7 +11,7 @@ api_process (dwg_object *obj)
   BITCODE_RC contrast;
   BITCODE_RC fade;
   BITCODE_BL num_clip_verts;
-  dwg_point_2d* clip_verts;
+  dwg_point_2d *clip_verts;
   BITCODE_BS num_clip_inverts;
   dwg_point_2d *clip_inverts;
   BITCODE_H definition_id;
@@ -25,23 +25,27 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (underlay, PDFUNDERLAY, contrast, RC);
   CHK_ENTITY_TYPE (underlay, PDFUNDERLAY, fade, RC);
   CHK_ENTITY_TYPE (underlay, PDFUNDERLAY, num_clip_verts, BL);
-  if (!dwg_dynapi_entity_value (underlay, "PDFUNDERLAY", "clip_verts", &clip_verts, NULL))
+  if (!dwg_dynapi_entity_value (underlay, "PDFUNDERLAY", "clip_verts",
+                                &clip_verts, NULL))
     fail ("PDFUNDERLAY.clip_verts");
   else
     {
       for (BITCODE_BL i = 0; i < num_clip_verts; i++)
         {
-          ok ("PDFUNDERLAY.clip_verts[%d]: (%f, %f)", i, clip_verts[i].x, clip_verts[i].y);
+          ok ("PDFUNDERLAY.clip_verts[%d]: (%f, %f)", i, clip_verts[i].x,
+              clip_verts[i].y);
         }
     }
   CHK_ENTITY_TYPE (underlay, PDFUNDERLAY, num_clip_inverts, BS);
-  if (!dwg_dynapi_entity_value (underlay, "PDFUNDERLAY", "clip_inverts", &clip_inverts, NULL))
+  if (!dwg_dynapi_entity_value (underlay, "PDFUNDERLAY", "clip_inverts",
+                                &clip_inverts, NULL))
     fail ("PDFUNDERLAY.clip_inverts");
   else
     {
       for (BITCODE_BL i = 0; i < num_clip_inverts; i++)
         {
-          ok ("PDFUNDERLAY.clip_inverts[%d]: (%f, %f)", i, clip_inverts[i].x, clip_inverts[i].y);
+          ok ("PDFUNDERLAY.clip_inverts[%d]: (%f, %f)", i, clip_inverts[i].x,
+              clip_inverts[i].y);
         }
     }
   CHK_ENTITY_H (underlay, PDFUNDERLAY, definition_id);

@@ -28,7 +28,7 @@ api_process (dwg_object *obj)
   if (data_size * 8 < data_numbits || data_size > obj->size)
     fail ("Invalid PROXY_ENTITY.data_size %u * 8 < %u data_numbits",
           (unsigned)data_size, (unsigned)data_numbits);
-  //BITCODE_RC *data;
+  // BITCODE_RC *data;
   CHK_ENTITY_TYPE (_obj, PROXY_OBJECT, num_objids, BL);
   if (!dwg_dynapi_entity_value (_obj, "PROXY_OBJECT", "objids", &objids, NULL))
     fail ("PROXY_OBJECT.objids");
@@ -44,9 +44,11 @@ api_process (dwg_object *obj)
       else
         {
           if (_obj->objids[i] == objids[i])
-            ok ("PROXY_OBJECT.objids[%d]: " FORMAT_REF, i, ARGS_REF (objids[i]));
+            ok ("PROXY_OBJECT.objids[%d]: " FORMAT_REF, i,
+                ARGS_REF (objids[i]));
           else
-            fail ("PROXY_OBJECT.objids[%d]: " FORMAT_REF, i, ARGS_REF (objids[i]));
+            fail ("PROXY_OBJECT.objids[%d]: " FORMAT_REF, i,
+                  ARGS_REF (objids[i]));
         }
     }
 }

@@ -8,11 +8,11 @@ api_process (dwg_object *obj)
   int error, isnew;
   BITCODE_BL i;
   BLOCK1PTPARAMETER_fields;
-  BITCODE_BS flag;		/*!< DXF 90 */
-  BITCODE_H assocvariable;	/*!< DXF 305 */
-  BITCODE_T expr;		/*!< DXF 301 */
+  BITCODE_BS flag;         /*!< DXF 90 */
+  BITCODE_H assocvariable; /*!< DXF 305 */
+  BITCODE_T expr;          /*!< DXF 301 */
   Dwg_EvalVariant value;
-  BITCODE_BS type;		/*!< DXF 170 */
+  BITCODE_BS type; /*!< DXF 170 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   //#ifdef DEBUG_CLASSES
@@ -31,10 +31,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (_obj, BLOCKUSERPARAMETER, def_pt);
   CHK_ENTITY_TYPE (_obj, BLOCKUSERPARAMETER, num_propinfos, BL);
   CHK_ENTITY_MAX (_obj, BLOCKUSERPARAMETER, num_propinfos, BL, 2);
-  BLOCKPARAMETER_PropInfo (prop1)
-  BLOCKPARAMETER_PropInfo (prop2)
-  // AcDbBlockUserParameter
-  CHK_ENTITY_TYPE (_obj, BLOCKUSERPARAMETER, flag, BS);
+  BLOCKPARAMETER_PropInfo (prop1) BLOCKPARAMETER_PropInfo (prop2)
+      // AcDbBlockUserParameter
+      CHK_ENTITY_TYPE (_obj, BLOCKUSERPARAMETER, flag, BS);
   CHK_ENTITY_H (_obj, BLOCKUSERPARAMETER, assocvariable);
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKUSERPARAMETER, expr);
 

@@ -30,7 +30,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCACTION, action_index, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCACTION, max_assoc_dep_index, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCACTION, num_deps, BL);
-  for (unsigned i=0; i < num_deps; i++)
+  for (unsigned i = 0; i < num_deps; i++)
     {
       CHK_SUBCLASS_TYPE (_obj->deps[i], ASSOCACTION_Deps, is_owned, B);
       CHK_SUBCLASS_H (_obj->deps[i], ASSOCACTION_Deps, dep);

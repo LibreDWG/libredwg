@@ -34,7 +34,8 @@ static int cnt = 0;
 #include "bits.h"
 #include "out_dxf.h"
 
-enum _temp_complex_types { // and test-cases
+enum _temp_complex_types
+{ // and test-cases
   TEMP_ELLIPTICAL_CONE = 4000,
   TEMP_ELLIPTICAL_CYLINDER,
   TEMP_EXTRUDED_SOLID,
@@ -47,7 +48,8 @@ enum _temp_complex_types { // and test-cases
 
 // copied from in-dxf.c
 static unsigned
-in_hex2bin (unsigned char *restrict dest, const char *restrict src, unsigned destlen)
+in_hex2bin (unsigned char *restrict dest, const char *restrict src,
+            unsigned destlen)
 {
   char *pos = (char *)src;
   // 124x faster, but no error checks.
@@ -59,30 +61,34 @@ in_hex2bin (unsigned char *restrict dest, const char *restrict src, unsigned des
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // ...
   };
   const char *_end = pos + (destlen << 1);
-  while (pos < _end) {
-    unsigned char v1 = h2b_lookup[(pos[0] & 0x1F) ^ 0x10];
-    unsigned char v2 = h2b_lookup[(pos[1] & 0x1F) ^ 0x10];
-    *dest++ = (v1 << 4 | v2);
-    pos += 2;
-  }
+  while (pos < _end)
+    {
+      unsigned char v1 = h2b_lookup[(pos[0] & 0x1F) ^ 0x10];
+      unsigned char v2 = h2b_lookup[(pos[1] & 0x1F) ^ 0x10];
+      *dest++ = (v1 << 4 | v2);
+      pos += 2;
+    }
   return destlen;
 }
 
-static unsigned num_objects (void *vents)
+static unsigned
+num_objects (void *vents)
 {
   unsigned i = 0;
   Dwg_Object_DICTIONARY **ents = (Dwg_Object_DICTIONARY **)vents;
   if (!ents)
     return 0;
-  while (*ents) {
-    i++;
-    ents++;
-  };
+  while (*ents)
+    {
+      i++;
+      ents++;
+    };
   return i;
 }
 
 static int
-test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dxf)
+test_add (const Dwg_Object_Type type, const char *restrict file,
+          const int as_dxf)
 {
   int error;
   struct stat attrib;
@@ -90,8 +96,8 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
   Dwg_Data *dwg;
   Dwg_Object *mspace;
   Dwg_Object_Ref *mspace_ref;
-  dwg_point_3d pt1 = {1.5, 2.5, 0.2};
-  dwg_point_3d pt2 = {2.5, 1.5, 0.0};
+  dwg_point_3d pt1 = { 1.5, 2.5, 0.2 };
+  dwg_point_3d pt2 = { 2.5, 1.5, 0.0 };
   Dwg_Object_BLOCK_HEADER *hdr;
   int n_failed;
   char dwgfile[1024];
@@ -99,30 +105,31 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
 
   if (!name)
     {
-      switch ((enum _temp_complex_types)type) {
-      case TEMP_ELLIPTICAL_CONE:
-        name = "ELLIPTICAL_CONE";
-        break;
-      case TEMP_ELLIPTICAL_CYLINDER:
-        name = "ELLIPTICAL_CYLINDER";
-        break;
-      case TEMP_EXTRUDED_SOLID:
-        name = "EXTRUDED_SOLID";
-        break;
-      case TEMP_EXTRUDED_PATH:
-        name = "EXTRUDED_PATH";
-        break;
-      case TEMP_REVOLVED_SOLID:
-        name = "REVOLVED_SOLID";
-        break;
-      case TEMP_PDFDEFINITION1:
-      case TEMP_PDFDEFINITION2:
-      case TEMP_PDFDEFINITION3:
-        name = "PDFDEFINITION";
-        break;
-      default:
-        assert (name);
-      }
+      switch ((enum _temp_complex_types)type)
+        {
+        case TEMP_ELLIPTICAL_CONE:
+          name = "ELLIPTICAL_CONE";
+          break;
+        case TEMP_ELLIPTICAL_CYLINDER:
+          name = "ELLIPTICAL_CYLINDER";
+          break;
+        case TEMP_EXTRUDED_SOLID:
+          name = "EXTRUDED_SOLID";
+          break;
+        case TEMP_EXTRUDED_PATH:
+          name = "EXTRUDED_PATH";
+          break;
+        case TEMP_REVOLVED_SOLID:
+          name = "REVOLVED_SOLID";
+          break;
+        case TEMP_PDFDEFINITION1:
+        case TEMP_PDFDEFINITION2:
+        case TEMP_PDFDEFINITION3:
+          name = "PDFDEFINITION";
+          break;
+        default:
+          assert (name);
+        }
     }
   assert (name);
   failed = 0;
@@ -137,11 +144,10 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       ok ("LIBREDWG_DEBUG cnt %d %s", cnt, name);
     }
 
-  dwg = dwg_new_Document (as_dxf ? R_2018 : R_2000,
-                          0 /*metric/iso */,
+  dwg = dwg_new_Document (as_dxf ? R_2018 : R_2000, 0 /*metric/iso */,
                           tracelevel);
-  mspace =  dwg_model_space_object (dwg);
-  mspace_ref =  dwg_model_space_ref (dwg);
+  mspace = dwg_model_space_object (dwg);
+  mspace_ref = dwg_model_space_ref (dwg);
   hdr = mspace->tio.object->tio.BLOCK_HEADER;
 
   if (!mspace)
@@ -234,8 +240,8 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
         dwg_add_BLOCK (blk, "bloko");
         dwg_add_LINE (blk, &pt1, &pt2);
         dwg_add_ENDBLK (blk);
-        dwg_add_MINSERT (hdr, &pt1, "bloko", 1.0, 1.0, 1.0,
-                         0.0, 2, 1, 1.0, 0.0);
+        dwg_add_MINSERT (hdr, &pt1, "bloko", 1.0, 1.0, 1.0, 0.0, 2, 1, 1.0,
+                         0.0);
       }
       break;
     case DWG_TYPE_ATTRIB:
@@ -248,8 +254,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
         dwg_add_ENDBLK (newhdr);
         insert = dwg_add_INSERT (hdr, &pt1, "bloko", 1.0, 1.0, 1.0, 0.0);
         // adds ATTDEF to BLOCK, redefines it (??)
-        dwg_add_Attribute (insert, 1.0, 0, "blokoprompt", &pt1,
-                           "blokotag",
+        dwg_add_Attribute (insert, 1.0, 0, "blokoprompt", &pt1, "blokotag",
                            "blokotekst");
       }
       break;
@@ -322,40 +327,47 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
     case DWG_TYPE_ELLIPSE:
       {
         const dwg_point_3d ctr = { 11.143259, 9.537395, 0.0 };
-        Dwg_Entity_ELLIPSE *ellipse = dwg_add_ELLIPSE (hdr, &ctr, -8.750802, 0.336109);
+        Dwg_Entity_ELLIPSE *ellipse
+            = dwg_add_ELLIPSE (hdr, &ctr, -8.750802, 0.336109);
       }
       break;
     case DWG_TYPE_REGION:
-      dwg_add_REGION (hdr,
-        "400 26 1 0\n"
-        "8 LibreDWG 20 ASM 223.0.1.1930 OSX 24 Wed Mar 18 07:23:29 2020 \n"
-        "1 9.999999999999999547e-07 1.000000000000000036e-10 \n"
-        "body $-1 $1 $-1 $-1 #\n"
-        "lump $-1 $-1 $2 $0 #\n"
-        "shell $-1 $-1 $-1 $3 $-1 $1 #\n"
-        "face $-1 $-1 $4 $2 $-1 $5 forward double out #\n"
-        "loop $-1 $-1 $6 $3 #\n"
-        "plane-surface $-1 -5234.186669031270867 1968.766094356862595 0 0 0 1 1 0 0 forward_v I I I I #\n"
-        "coedge $-1 $7 $8 $-1 $9 reversed $4 $-1 #\n"
-        "coedge $-1 $10 $6 $-1 $11 reversed $4 $-1 #\n"
-        "coedge $-1 $6 $10 $-1 $12 reversed $4 $-1 #\n"
-        "edge $-1 $13 $14 $6 $15 forward #\n"
-        "coedge $-1 $8 $7 $-1 $16 reversed $4 $-1 #\n"
-        "edge $-1 $17 $13 $7 $18 forward #\n"
-        "edge $-1 $14 $19 $8 $20 forward #\n"
-        "vertex $-1 $9 $21 #\n"
-        "vertex $-1 $9 $22 #\n"
-        "straight-curve $-1 -6836.331483613786986 3983.339979056661832 0 1 0 0 I I #\n"
-        "edge $-1 $19 $17 $10 $23 forward #\n"
-        "vertex $-1 $16 $24 #\n"
-        "straight-curve $-1 -6836.331483613786986 -45.80779034293664154 0 0 1 0 I I #\n"
-        "vertex $-1 $12 $25 #\n"
-        "straight-curve $-1 -3632.041854448754748 3983.339979056661832 0 0 -1 0 I I #\n"
-        "point $-1 -6836.331483613786986 3983.339979056661832 0 #\n"
-        "point $-1 -3632.041854448754748 3983.339979056661832 0 #\n"
-        "straight-curve $-1 -3632.041854448754748 -45.80779034293664154 0 -1 0 0 I I #\n"
-        "point $-1 -6836.331483613786986 -45.80779034293664154 0 #\n"
-        "point $-1 -3632.041854448754748 -45.80779034293664154 0 #\n");
+      dwg_add_REGION (
+          hdr,
+          "400 26 1 0\n"
+          "8 LibreDWG 20 ASM 223.0.1.1930 OSX 24 Wed Mar 18 07:23:29 2020 \n"
+          "1 9.999999999999999547e-07 1.000000000000000036e-10 \n"
+          "body $-1 $1 $-1 $-1 #\n"
+          "lump $-1 $-1 $2 $0 #\n"
+          "shell $-1 $-1 $-1 $3 $-1 $1 #\n"
+          "face $-1 $-1 $4 $2 $-1 $5 forward double out #\n"
+          "loop $-1 $-1 $6 $3 #\n"
+          "plane-surface $-1 -5234.186669031270867 1968.766094356862595 0 0 0 "
+          "1 1 0 0 forward_v I I I I #\n"
+          "coedge $-1 $7 $8 $-1 $9 reversed $4 $-1 #\n"
+          "coedge $-1 $10 $6 $-1 $11 reversed $4 $-1 #\n"
+          "coedge $-1 $6 $10 $-1 $12 reversed $4 $-1 #\n"
+          "edge $-1 $13 $14 $6 $15 forward #\n"
+          "coedge $-1 $8 $7 $-1 $16 reversed $4 $-1 #\n"
+          "edge $-1 $17 $13 $7 $18 forward #\n"
+          "edge $-1 $14 $19 $8 $20 forward #\n"
+          "vertex $-1 $9 $21 #\n"
+          "vertex $-1 $9 $22 #\n"
+          "straight-curve $-1 -6836.331483613786986 3983.339979056661832 0 1 "
+          "0 0 I I #\n"
+          "edge $-1 $19 $17 $10 $23 forward #\n"
+          "vertex $-1 $16 $24 #\n"
+          "straight-curve $-1 -6836.331483613786986 -45.80779034293664154 0 0 "
+          "1 0 I I #\n"
+          "vertex $-1 $12 $25 #\n"
+          "straight-curve $-1 -3632.041854448754748 3983.339979056661832 0 0 "
+          "-1 0 I I #\n"
+          "point $-1 -6836.331483613786986 3983.339979056661832 0 #\n"
+          "point $-1 -3632.041854448754748 3983.339979056661832 0 #\n"
+          "straight-curve $-1 -3632.041854448754748 -45.80779034293664154 0 "
+          "-1 0 0 I I #\n"
+          "point $-1 -6836.331483613786986 -45.80779034293664154 0 #\n"
+          "point $-1 -3632.041854448754748 -45.80779034293664154 0 #\n");
       break;
     case DWG_TYPE_RAY:
       dwg_add_RAY (hdr, &pt1, &pt2);
@@ -364,12 +376,10 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       dwg_add_XLINE (hdr, &pt1, &pt2);
       break;
     case DWG_TYPE_DICTIONARY:
-      dwg_add_DICTIONARY (dwg, "TEST_DICT",
-                          "testkey", 0);
+      dwg_add_DICTIONARY (dwg, "TEST_DICT", "testkey", 0);
       break;
     case DWG_TYPE_DICTIONARYWDFLT:
-      dwg_add_DICTIONARYWDFLT (dwg, "TEST_DICT",
-                               "testkey", 0);
+      dwg_add_DICTIONARYWDFLT (dwg, "TEST_DICT", "testkey", 0);
       break;
     // case DWG_TYPE_DICTIONARYVAR:
     //  {
@@ -378,10 +388,10 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
     //  break;
     case DWG_TYPE_XRECORD:
       {
-        // but you can also add a DICT to any object/entity to its xdicobjhandle
+        // but you can also add a DICT to any object/entity to its
+        // xdicobjhandle
         Dwg_Object_DICTIONARY *dict
-            = dwg_add_DICTIONARY (dwg, "ACAD_MATERIAL",
-                                  "Global", 0);
+            = dwg_add_DICTIONARY (dwg, "ACAD_MATERIAL", "Global", 0);
         Dwg_Object_XRECORD *xrecord = dwg_add_XRECORD (dict, "REFRACTIONTILE");
         dwg_add_XRECORD_int16 (xrecord, 270, 1);
         dwg_add_XRECORD_int32 (xrecord, 90, 1);
@@ -396,7 +406,8 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
     case DWG_TYPE_LEADER:
       {
         const dwg_point_3d pts[] = { { 2.5, 0.0, 0.0 }, { 0.5, 0.0, 0.0 } };
-        Dwg_Entity_MTEXT *annot = dwg_add_MTEXT (hdr, &pt1, 10.0, "test\ntext");
+        Dwg_Entity_MTEXT *annot
+            = dwg_add_MTEXT (hdr, &pt1, 10.0, "test\ntext");
         dwg_add_LEADER (hdr, 2, pts, annot, 15);
       }
       break;
@@ -411,9 +422,10 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
       break;
     case DWG_TYPE_MLINE:
       {
-        const dwg_point_3d pts[]
-            = { { 3467.902646, 1494.544557, 0.0 }, { 3975.226253, 1705.812678, 0.0 },
-                { 4186.611142, 1579.051827, 0.0 }, { 3763.841434, 1198.769165, 0.0 } };
+        const dwg_point_3d pts[] = { { 3467.902646, 1494.544557, 0.0 },
+                                     { 3975.226253, 1705.812678, 0.0 },
+                                     { 4186.611142, 1579.051827, 0.0 },
+                                     { 3763.841434, 1198.769165, 0.0 } };
         dwg_add_MLINE (hdr, 4, pts);
       }
       break;
@@ -437,13 +449,15 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
         const dwg_point_2d pts[] = {
           { 0.0, 0.0 }, { 2.5, 0.0 }, { 2.5, 2.0 }, { 0.0, 2.0 }, { 1.5, 1.0 }
         };
-        BITCODE_2RD* seeds = malloc (sizeof (BITCODE_2RD)); // this cannot be constant
+        BITCODE_2RD *seeds
+            = malloc (sizeof (BITCODE_2RD)); // this cannot be constant
         Dwg_Entity_HATCH *hatch;
         Dwg_Entity_LWPOLYLINE *pline = dwg_add_LWPOLYLINE (hdr, 5, pts);
         Dwg_Object *obj;
         const Dwg_Object *objs[1];
         pline->flag |= 512; // closed
-        obj = dwg_obj_generic_to_object ((const dwg_obj_generic *)pline, &error);
+        obj = dwg_obj_generic_to_object ((const dwg_obj_generic *)pline,
+                                         &error);
         objs[0] = obj;
         hatch = dwg_add_HATCH (hdr, 1, "SOLID", true, 1, objs);
         hatch->num_seeds = 1;
@@ -456,8 +470,8 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
         // VBAProject Section from some example dwg (in MS-CFB format, as hex)
         // https://github.com/microsoft/compoundfilereader/blob/master/src/include/compoundfilereader.h
         // cfb signature at offset 0x10
-        // Interesting are the VBA_Project/VBA/ThisDrawing and VBA_Project/VBA/_VBA_PROJECT streams
-        // eg: pip install compoundfiles
+        // Interesting are the VBA_Project/VBA/ThisDrawing and
+        // VBA_Project/VBA/_VBA_PROJECT streams eg: pip install compoundfiles
         const char *hex
             = "0000000000000000001C000019000000D0CF11E0A1B11AE1000000000000000"
               "000000000000000003E000300FEFF0900060000000000000000000000010000"
@@ -764,7 +778,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
         const dwg_point_3d pt = { 7.791946, 11.0222066, 1.271660 };
         const int32_t edges[] = { 151 };
         //?? normally you chamfer an existing 3dsolid
-        //dwg_add_CHAMFER (hdr, &pt, NULL, 1, 10.0, 10.0, 1, edges, 152);
+        // dwg_add_CHAMFER (hdr, &pt, NULL, 1, 10.0, 10.0, 1, edges, 152);
       }
       break;
     case DWG_TYPE_WIPEOUTVARIABLES:
@@ -794,7 +808,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
   else
     strcat (dwgfile, ".dwg");
   if (!stat (dwgfile, &attrib))
-      unlink (dwgfile);
+    unlink (dwgfile);
   if (as_dxf)
     {
 #ifndef DISABLE_DXF
@@ -832,37 +846,37 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
   else
     ok ("read %s from %s", name, dwgfile);
   // now we have a different ref!
-  mspace_ref =  dwg_model_space_ref (dwg);
+  mspace_ref = dwg_model_space_ref (dwg);
 
 // look for a single written entity
-#define TEST_ENTITY(token)                                              \
-  case DWG_TYPE_##token:                                                \
-  {                                                                     \
-    Dwg_Entity_##token **objs = dwg_getall_##token (mspace_ref);        \
-    if (objs && objs[0] && !objs[1])                                    \
-      ok ("found 1 " #token);                                           \
-    else if (!objs)                                                     \
-      fail ("found no " #token " at all");                              \
-    else if (!objs[0])                                                  \
-      fail ("found no " #token);                                        \
-    free (objs);                                                        \
-  }                                                                     \
-  break
+#define TEST_ENTITY(token)                                                    \
+  case DWG_TYPE_##token:                                                      \
+    {                                                                         \
+      Dwg_Entity_##token **objs = dwg_getall_##token (mspace_ref);            \
+      if (objs && objs[0] && !objs[1])                                        \
+        ok ("found 1 " #token);                                               \
+      else if (!objs)                                                         \
+        fail ("found no " #token " at all");                                  \
+      else if (!objs[0])                                                      \
+        fail ("found no " #token);                                            \
+      free (objs);                                                            \
+    }                                                                         \
+    break
 
 // look for a single written object
-#define TEST_OBJECT(token)                                              \
-  case DWG_TYPE_##token:                                                \
-  {                                                                     \
-    Dwg_Object_##token **objs = dwg_getall_##token (dwg);               \
-    if (objs && objs[0] && !objs[1])                                    \
-      ok ("found 1 " #token);                                           \
-    else if (!objs)                                                     \
-      fail ("found no " #token " at all");                              \
-    else if (!objs[0])                                                  \
-      fail ("found no " #token);                                        \
-    free (objs);                                                        \
-  }                                                                     \
-  break
+#define TEST_OBJECT(token)                                                    \
+  case DWG_TYPE_##token:                                                      \
+    {                                                                         \
+      Dwg_Object_##token **objs = dwg_getall_##token (dwg);                   \
+      if (objs && objs[0] && !objs[1])                                        \
+        ok ("found 1 " #token);                                               \
+      else if (!objs)                                                         \
+        fail ("found no " #token " at all");                                  \
+      else if (!objs[0])                                                      \
+        fail ("found no " #token);                                            \
+      free (objs);                                                            \
+    }                                                                         \
+    break
 
   switch ((int)type)
     {
@@ -909,24 +923,32 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
         Dwg_Entity_MLINE **ents = dwg_getall_MLINE (mspace_ref);
         Dwg_Object_MLINESTYLE **objs = dwg_getall_MLINESTYLE (dwg);
         if (ents && ents[0] && !ents[1])
-          ok ("found 1 " "MLINE");
+          ok ("found 1 "
+              "MLINE");
         else if (!ents)
-          fail ("found no " "MLINE" " at all");
+          fail ("found no "
+                "MLINE"
+                " at all");
         else if (!ents[0])
-          fail ("found no " "MLINE");
+          fail ("found no "
+                "MLINE");
         free (ents);
         if (objs && objs[0] && !objs[1])
-          ok ("found 1 " "MLINESTYLE");
+          ok ("found 1 "
+              "MLINESTYLE");
         else if (!objs)
-          fail ("found no " "MLINESTYLE" " at all");
+          fail ("found no "
+                "MLINESTYLE"
+                " at all");
         else if (!objs[0])
-          fail ("found no " "MLINESTYLE");
+          fail ("found no "
+                "MLINESTYLE");
         free (objs);
       }
       break;
       TEST_OBJECT (DIMSTYLE);
       TEST_OBJECT (UCS);
-      //TEST_OBJECT (VX_TABLE_RECORD);
+      // TEST_OBJECT (VX_TABLE_RECORD);
       TEST_ENTITY (HATCH);
       TEST_OBJECT (XRECORD);
       TEST_OBJECT (VBA_PROJECT);
@@ -965,19 +987,19 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
         free (dicts);
       }
       break;
-      //TEST_OBJECT (LAYERFILTER);
-      //TEST_OBJECT (LAYER_INDEX);
-      //TEST_OBJECT (SPATIAL_FILTER);
-      //TEST_OBJECT (SPATIAL_INDEX);
+      // TEST_OBJECT (LAYERFILTER);
+      // TEST_OBJECT (LAYER_INDEX);
+      // TEST_OBJECT (SPATIAL_FILTER);
+      // TEST_OBJECT (SPATIAL_INDEX);
       TEST_OBJECT (ACSH_TORUS_CLASS);
       TEST_OBJECT (ACSH_SPHERE_CLASS);
       TEST_OBJECT (ACSH_CYLINDER_CLASS);
       TEST_OBJECT (ACSH_CONE_CLASS);
       TEST_OBJECT (ACSH_WEDGE_CLASS);
       TEST_OBJECT (ACSH_BOX_CLASS);
-      //TEST_OBJECT (ACSH_PYRAMID_CLASS);
-      //TEST_OBJECT (ACSH_CHAMFER_CLASS);
-      //TEST_OBJECT (ACSH_FILLET_CLASS);
+      // TEST_OBJECT (ACSH_PYRAMID_CLASS);
+      // TEST_OBJECT (ACSH_CHAMFER_CLASS);
+      // TEST_OBJECT (ACSH_FILLET_CLASS);
       TEST_OBJECT (WIPEOUTVARIABLES); // just for testing, not for real yet
 
     case TEMP_ELLIPTICAL_CONE:
@@ -985,19 +1007,19 @@ test_add (const Dwg_Object_Type type, const char *restrict file, const int as_dx
     case TEMP_EXTRUDED_SOLID:
     case TEMP_EXTRUDED_PATH:
     case TEMP_REVOLVED_SOLID:
-    //TEST_OBJECT (TABLE);
-    //TEST_OBJECT (TABLECONTENT);
-    //TEST_OBJECT (TABLEGEOMETRY);
-    //TEST_OBJECT (TABLESTYLE);
+    // TEST_OBJECT (TABLE);
+    // TEST_OBJECT (TABLECONTENT);
+    // TEST_OBJECT (TABLEGEOMETRY);
+    // TEST_OBJECT (TABLESTYLE);
     default:
       fail ("No test yet for type %s", name);
     }
-  
+
   ok ("read %s", name);
   dwg_free (dwg);
   free (dwg);
 
-  n_failed = numfailed();
+  n_failed = numfailed ();
   if (!n_failed && (!debug || debug != -1))
     unlink (dwgfile);
   return n_failed;
@@ -1007,10 +1029,10 @@ int
 main (int argc, char *argv[])
 {
   int error = 0;
-  char *trace = getenv ("LIBREDWG_TRACE"); // read_dwg
+  char *trace = getenv ("LIBREDWG_TRACE");    // read_dwg
   char *debugenv = getenv ("LIBREDWG_DEBUG"); // keep files
   int dxf = 0;
-  loglevel = is_make_silent() ? 0 : 2; // print ok
+  loglevel = is_make_silent () ? 0 : 2; // print ok
   if (trace)
     tracelevel = atoi (trace);
   else
@@ -1067,16 +1089,19 @@ main (int argc, char *argv[])
       error += test_add (DWG_TYPE_MLINE, "add_mline_2000", dxf);
       error += test_add (DWG_TYPE_DIMSTYLE, "add_dimstyle_2000", dxf);
       error += test_add (DWG_TYPE_UCS, "add_ucs_2000", dxf);
-      //error += test_add (DWG_TYPE_VX_TABLE_RECORD, "add_vx_2000", dxf);
+      // error += test_add (DWG_TYPE_VX_TABLE_RECORD, "add_vx_2000", dxf);
       error += test_add (DWG_TYPE_HATCH, "add_hatch_2000", dxf);
       error += test_add (DWG_TYPE_XRECORD, "add_xrecord_2000", dxf);
       error += test_add (DWG_TYPE_VBA_PROJECT, "add_vba_2000", dxf);
       error += test_add (DWG_TYPE_LAYOUT, "add_layout_2000", dxf);
 #ifdef HAVE_DWG_ADD_PDFUNDERLAY
       error += test_add (DWG_TYPE_PDFUNDERLAY, "add_pdfunderlay_2000", dxf);
-      error += test_add ((const Dwg_Object_Type)TEMP_PDFDEFINITION1, "add_pdfdef1_2000", dxf);
-      error += test_add ((const Dwg_Object_Type)TEMP_PDFDEFINITION2, "add_pdfdef2_2000", dxf);
-      error += test_add ((const Dwg_Object_Type)TEMP_PDFDEFINITION3, "add_pdfdef3_2000", dxf);
+      error += test_add ((const Dwg_Object_Type)TEMP_PDFDEFINITION1,
+                         "add_pdfdef1_2000", dxf);
+      error += test_add ((const Dwg_Object_Type)TEMP_PDFDEFINITION2,
+                         "add_pdfdef2_2000", dxf);
+      error += test_add ((const Dwg_Object_Type)TEMP_PDFDEFINITION3,
+                         "add_pdfdef3_2000", dxf);
 #endif
 #ifdef HAVE_DWG_ADD_LAYERFILTER
       error += test_add (DWG_TYPE_LAYERFILTER, "add_layfilt_2000", dxf);
@@ -1092,7 +1117,8 @@ main (int argc, char *argv[])
 #endif
       error += test_add (DWG_TYPE_ACSH_TORUS_CLASS, "add_torus_2000", dxf);
       error += test_add (DWG_TYPE_ACSH_SPHERE_CLASS, "add_sphere_2000", dxf);
-      error += test_add (DWG_TYPE_ACSH_CYLINDER_CLASS, "add_cylinder_2000", dxf);
+      error
+          += test_add (DWG_TYPE_ACSH_CYLINDER_CLASS, "add_cylinder_2000", dxf);
       error += test_add (DWG_TYPE_ACSH_CONE_CLASS, "add_cone_2000", dxf);
       error += test_add (DWG_TYPE_ACSH_WEDGE_CLASS, "add_wedge_2000", dxf);
       error += test_add (DWG_TYPE_ACSH_BOX_CLASS, "add_box_2000", dxf);
@@ -1103,19 +1129,19 @@ main (int argc, char *argv[])
       error += test_add (DWG_TYPE_ACSH_PYRAMID_CLASS, "add_pyramid_2000", dxf);
 #endif
 #ifdef HAVE_DWG_ADD_ELLIPTICAL_CONE
-      //error += test_add (TEMP_ELLIPTICAL_CONE, "add_ellcone_2000", dxf);
+      // error += test_add (TEMP_ELLIPTICAL_CONE, "add_ellcone_2000", dxf);
 #endif
 #ifdef HAVE_DWG_ADD_ELLIPTICAL_CYLINDER
-      //error += test_add (TEMP_ELLIPTICAL_CYLINDER, "add_ellcyl_2000", dxf);
+      // error += test_add (TEMP_ELLIPTICAL_CYLINDER, "add_ellcyl_2000", dxf);
 #endif
 #ifdef HAVE_DWG_ADD_EXTRUDED_SOLID
-      //error += test_add (TEMP_EXTRUDED_SOLID, "add_extsolid_2000", dxf);
+      // error += test_add (TEMP_EXTRUDED_SOLID, "add_extsolid_2000", dxf);
 #endif
 #ifdef HAVE_DWG_ADD_EXTRUDED_PATH
-      //error += test_add (TEMP_EXTRUDED_PATH, "add_extpath_2000", dxf);
+      // error += test_add (TEMP_EXTRUDED_PATH, "add_extpath_2000", dxf);
 #endif
 #ifdef HAVE_DWG_ADD_REVOLVED_SOLID
-      //error += test_add (TEMP_REVOLVED_SOLID, "add_revsolid_2000", dxf);
+      // error += test_add (TEMP_REVOLVED_SOLID, "add_revsolid_2000", dxf);
 #endif
 #ifdef HAVE_DWG_ADD_TABLE
       error += test_add (DWG_TYPE_TABLE, "add_table_2000", dxf);
@@ -1124,11 +1150,13 @@ main (int argc, char *argv[])
       error += test_add (DWG_TYPE_TABLECONTENT, "add_tablecontent_2000", dxf);
 #endif
 #ifdef HAVE_DWG_ADD_TABLEGEOMETRY
-      error += test_add (DWG_TYPE_TABLEGEOMETRY, "add_tablegeometry_2000", dxf);
+      error
+          += test_add (DWG_TYPE_TABLEGEOMETRY, "add_tablegeometry_2000", dxf);
 #endif
 
       // just for testing yet
-      error += test_add (DWG_TYPE_WIPEOUTVARIABLES, "add_wipeoutvars_2000", dxf);
+      error
+          += test_add (DWG_TYPE_WIPEOUTVARIABLES, "add_wipeoutvars_2000", dxf);
     }
 
   return error;

@@ -86,7 +86,8 @@ help (void)
       exit (1);                                                               \
     }
 #define dynget_utf8(obj, name, field, var)                                    \
-  if (!dwg_dynapi_entity_utf8text (obj, "" name, "" field, var, &isnew, NULL)) \
+  if (!dwg_dynapi_entity_utf8text (obj, "" name, "" field, var, &isnew,       \
+                                   NULL))                                     \
     {                                                                         \
       fprintf (stderr, "ERROR: %s.%s", name, field);                          \
       exit (1);                                                               \
@@ -332,14 +333,15 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
     {
       dynget (_hdr, "BLOCK_HEADER", "name", &name);
       // name = dwg_obj_block_header_get_name (_hdr, &error);
-      printf ("\t<g id=\"symbol-%X\" >\n\t\t<!-- %s -->\n", abs_ref ? abs_ref : 0,
-              name ? name : "");
+      printf ("\t<g id=\"symbol-%X\" >\n\t\t<!-- %s -->\n",
+              abs_ref ? abs_ref : 0, name ? name : "");
       if (name != NULL && name != _hdr->name
           && hdr->parent->header.version >= R_2007)
         free (name);
     }
   else
-    printf ("\t<g id=\"symbol-%X\" >\n\t\t<!-- ? -->\n", abs_ref ? abs_ref : 0);
+    printf ("\t<g id=\"symbol-%X\" >\n\t\t<!-- ? -->\n",
+            abs_ref ? abs_ref : 0);
 
   obj = get_first_owned_entity (hdr);
   while (obj)

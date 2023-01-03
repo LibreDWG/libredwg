@@ -17,8 +17,10 @@ api_process (dwg_object *obj)
   for (i = 0; i < num_entries; i++)
     {
       if (hdls[i] == entries[i])
-        ok ("VPORT_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
+        ok ("VPORT_CONTROL.entries[%d]: " FORMAT_REF, i,
+            ARGS_REF (entries[i]));
       else
-        fail ("VPORT_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
+        fail ("VPORT_CONTROL.entries[%d]: " FORMAT_REF, i,
+              ARGS_REF (entries[i]));
     }
 }

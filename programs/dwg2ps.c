@@ -175,7 +175,7 @@ create_postscript (Dwg_Data *dwg, char *output)
         {
           int error;
           BITCODE_RL j,
-            numpts = dwg_object_polyline_2d_get_numpoints (obj, &error);
+              numpts = dwg_object_polyline_2d_get_numpoints (obj, &error);
           dwg_point_2d *pts = dwg_object_polyline_2d_get_points (obj, &error);
           Dwg_Entity_POLYLINE_2D *pline = obj->tio.entity->tio.POLYLINE_2D;
           if (numpts && !error)
@@ -230,7 +230,7 @@ create_postscript (Dwg_Data *dwg, char *output)
                   PS_lineto (ps, (float)pt0.x, (float)pt0.y);
                   PS_stroke (ps);
                 }
-                
+
               free (pts);
             }
         }
@@ -239,9 +239,8 @@ create_postscript (Dwg_Data *dwg, char *output)
           Dwg_Entity_ARC *arc = obj->tio.entity->tio.ARC;
           BITCODE_3DPOINT center;
           transform_OCS (&center, arc->center, arc->extrusion);
-          PS_arc (ps, (float)center.x, (float)center.y,
-                  (float)arc->radius, (float)arc->start_angle,
-                  (float)arc->end_angle);
+          PS_arc (ps, (float)center.x, (float)center.y, (float)arc->radius,
+                  (float)arc->start_angle, (float)arc->end_angle);
         }
       else if (obj->fixedtype == DWG_TYPE_CIRCLE)
         {

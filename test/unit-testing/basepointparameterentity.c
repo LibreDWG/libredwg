@@ -9,7 +9,8 @@ api_process (dwg_object *obj)
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
-  dwg_ent_basepointparameterentity *_obj = dwg_object_to_BASEPOINTPARAMETERENTITY (obj);
+  dwg_ent_basepointparameterentity *_obj
+      = dwg_object_to_BASEPOINTPARAMETERENTITY (obj);
 
 #endif
 }

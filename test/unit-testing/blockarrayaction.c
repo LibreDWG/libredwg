@@ -30,8 +30,10 @@ api_process (dwg_object *obj)
   // AcDbBlockArrayAction
   for (i = 0; i < 4; i++)
     {
-      CHK_SUBCLASS_TYPE     (_obj->conn_pts[i], BLOCKACTION_connectionpts, code, BL);
-      CHK_SUBCLASS_UTF8TEXT (_obj->conn_pts[i], BLOCKACTION_connectionpts, name);
+      CHK_SUBCLASS_TYPE (_obj->conn_pts[i], BLOCKACTION_connectionpts, code,
+                         BL);
+      CHK_SUBCLASS_UTF8TEXT (_obj->conn_pts[i], BLOCKACTION_connectionpts,
+                             name);
     }
   CHK_ENTITY_TYPE (_obj, BLOCKARRAYACTION, column_offset, BD);
   CHK_ENTITY_TYPE (_obj, BLOCKARRAYACTION, row_offset, BD);

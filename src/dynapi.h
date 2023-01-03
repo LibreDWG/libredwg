@@ -74,14 +74,14 @@ dwg_dynapi_common_value (void *restrict _obj, const char *restrict fieldname,
 // r_2007+ creates a fresh UTF-8 copy, <r2007 returns the field value
 EXPORT bool dwg_dynapi_header_utf8text (const Dwg_Data *restrict dwg,
                                         const char *restrict fieldname,
-                                        char **restrict out,  int *isnew,
+                                        char **restrict out, int *isnew,
                                         Dwg_DYNAPI_field *restrict fp)
     __nonnull ((1, 2, 3));
-EXPORT bool
-dwg_dynapi_entity_utf8text (void *restrict _obj, const char *restrict name,
-                            const char *restrict fieldname,
-                            char **restrict out, int *isnew,
-                            Dwg_DYNAPI_field *restrict fp)
+EXPORT bool dwg_dynapi_entity_utf8text (void *restrict _obj,
+                                        const char *restrict name,
+                                        const char *restrict fieldname,
+                                        char **restrict out, int *isnew,
+                                        Dwg_DYNAPI_field *restrict fp)
     __nonnull ((1, 2, 3, 4));
 EXPORT bool dwg_dynapi_common_utf8text (void *restrict _obj,
                                         const char *restrict fieldname,
@@ -106,29 +106,25 @@ EXPORT bool dwg_dynapi_common_set_value (void *restrict entity,
                                          const bool is_utf8)
     __nonnull ((1, 2, 3));
 
-EXPORT bool
-dwg_dynapi_subclass_value (const void *restrict ptr, const char *restrict subclass,
-                           const char *restrict fieldname, void *restrict out,
-                           Dwg_DYNAPI_field *restrict fp)
+EXPORT bool dwg_dynapi_subclass_value (const void *restrict ptr,
+                                       const char *restrict subclass,
+                                       const char *restrict fieldname,
+                                       void *restrict out,
+                                       Dwg_DYNAPI_field *restrict fp)
     __nonnull ((1, 2, 3, 4));
-EXPORT bool
-dwg_dynapi_field_get_value (const void *restrict ptr,
-                            const Dwg_DYNAPI_field *restrict field,
-                            void *restrict out)
-  __nonnull ((1, 2, 3));
+EXPORT bool dwg_dynapi_field_get_value (const void *restrict ptr,
+                                        const Dwg_DYNAPI_field *restrict field,
+                                        void *restrict out)
+    __nonnull ((1, 2, 3));
 
-EXPORT bool
-dwg_dynapi_field_set_value (const Dwg_Data *restrict dwg, /* only needed if unicode strings */
-                            void *restrict ptr,
-                            const Dwg_DYNAPI_field *restrict field,
-                            const void *restrict value,
-                            const bool is_utf8)
-  __nonnull ((2, 3, 4));
+EXPORT bool dwg_dynapi_field_set_value (
+    const Dwg_Data *restrict dwg, /* only needed if unicode strings */
+    void *restrict ptr, const Dwg_DYNAPI_field *restrict field,
+    const void *restrict value, const bool is_utf8) __nonnull ((2, 3, 4));
 
 EXPORT char *dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
                                      Dwg_Object_Ref *restrict hdl,
-                                     int *alloced)
-    __nonnull ((1, 2, 3));
+                                     int *alloced) __nonnull ((1, 2, 3));
 
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_header_field (const char *restrict fieldname) __nonnull ((1));
@@ -164,16 +160,15 @@ dwg_dynapi_subclass_fields (const char *restrict name) __nonnull ((1));
 /* Search fields by dxf. Returns the first found field,
    Sets unique to 1 if it's the only result */
 EXPORT const Dwg_DYNAPI_field *
-dwg_dynapi_field_dxf (const Dwg_DYNAPI_field *restrict fields,
-                      const int dxf, int *restrict unique);
+dwg_dynapi_field_dxf (const Dwg_DYNAPI_field *restrict fields, const int dxf,
+                      int *restrict unique);
 
 // The struct size of the object or entity
-EXPORT int
-dwg_dynapi_entity_size (const char *restrict name) __nonnull ((1));
+EXPORT int dwg_dynapi_entity_size (const char *restrict name) __nonnull ((1));
 
 // The struct size of the subclass
-EXPORT int
-dwg_dynapi_subclass_size (const char *restrict name) __nonnull ((1));
+EXPORT int dwg_dynapi_subclass_size (const char *restrict name)
+    __nonnull ((1));
 
 int _fields_size_sum (const Dwg_DYNAPI_field *restrict fields);
 
@@ -182,15 +177,15 @@ EXPORT int dwg_dynapi_fields_size (const char *restrict name) __nonnull ((1));
 
 // Converts from the fields type, like "Dwg_MLINESTYLE_line*" to the
 // subclass name, like "MLINESTYLE_line".
-ATTRIBUTE_MALLOC char*
-dwg_dynapi_subclass_name (const char *restrict type);
+ATTRIBUTE_MALLOC char *dwg_dynapi_subclass_name (const char *restrict type);
 
 #endif
 
 /* Searches in dwg_name_subclasses[].
    FIXME: Not yet ready. Need to expand all defines in the spec.
    Not yet public in 0.11.1 */
-EXPORT bool
-dwg_has_subclass (const char *restrict classname, const char *restrict subclass) __nonnull ((1, 2));
+EXPORT bool dwg_has_subclass (const char *restrict classname,
+                              const char *restrict subclass)
+    __nonnull ((1, 2));
 
 #endif

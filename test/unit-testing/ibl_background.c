@@ -19,7 +19,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, IBL_BACKGROUND, class_version, BL);
   CHK_ENTITY_TYPE (_obj, IBL_BACKGROUND, enable, B);
   CHK_ENTITY_UTF8TEXT (_obj, IBL_BACKGROUND, name);
-  CHK_ENTITY_TYPE (_obj, IBL_BACKGROUND, rotation, BD); // in degree, not radian
+  CHK_ENTITY_TYPE (_obj, IBL_BACKGROUND, rotation,
+                   BD); // in degree, not radian
   CHK_ENTITY_TYPE (_obj, IBL_BACKGROUND, display_image, B);
   CHK_ENTITY_H (_obj, IBL_BACKGROUND, secondary_background);
 }

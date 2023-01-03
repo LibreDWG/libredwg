@@ -14,7 +14,7 @@ api_process (dwg_object *obj)
   BITCODE_H xref;
 
   BITCODE_BL __iterator;
-  BITCODE_RC flag2; /* preR13 */
+  BITCODE_RC flag2;       /* preR13 */
   BITCODE_B anonymous;    /* flag 70 bit 1 */
   BITCODE_B hasattrs;     /* flag 70 bit 2 */
   BITCODE_B blkisxref;    /* flag 70 bit 3 */
@@ -33,12 +33,12 @@ api_process (dwg_object *obj)
   BITCODE_H block_entity;
   BITCODE_H first_entity;
   BITCODE_H last_entity;
-  BITCODE_H* entities;
+  BITCODE_H *entities;
   BITCODE_H endblk_entity;
-  BITCODE_H* inserts;
+  BITCODE_H *inserts;
   BITCODE_H layout;
 
-  //Dwg_Version_Type dwg_version = obj->parent->header.version;
+  // Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_block_header *block_header = dwg_object_to_BLOCK_HEADER (obj);
 
   CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, flag, RC);
@@ -50,11 +50,16 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (block_header, BLOCK_HEADER, xref);
 
   CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, flag2, RC); /* preR13 */
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, anonymous, B);    /* flag 70 bit 1 */
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, hasattrs, B);     /* flag 70 bit 2 */
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, blkisxref, B);    /* flag 70 bit 3 */
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, xrefoverlaid, B); /* flag 70 bit 4 */
-  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, loaded_bit, B);   /* flag 70 bit 6 */
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, anonymous,
+                   B); /* flag 70 bit 1 */
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, hasattrs,
+                   B); /* flag 70 bit 2 */
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, blkisxref,
+                   B); /* flag 70 bit 3 */
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, xrefoverlaid,
+                   B); /* flag 70 bit 4 */
+  CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, loaded_bit,
+                   B); /* flag 70 bit 6 */
   CHK_ENTITY_TYPE (block_header, BLOCK_HEADER, num_owned, BL);
   CHK_ENTITY_3RD (block_header, BLOCK_HEADER, base_pt);
   CHK_ENTITY_UTF8TEXT (block_header, BLOCK_HEADER, xref_pname);
@@ -69,14 +74,16 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (block_header, BLOCK_HEADER, block_entity);
   CHK_ENTITY_H (block_header, BLOCK_HEADER, first_entity);
   CHK_ENTITY_H (block_header, BLOCK_HEADER, last_entity);
-  if (!dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "entities", &entities, NULL))
+  if (!dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "entities",
+                                &entities, NULL))
     fail ("BLOCK_HEADER.entities");
   for (i = 0; i < num_owned; i++)
     {
       ok ("BLOCK_HEADER.entities[%d]: " FORMAT_REF, i, ARGS_REF (entities[i]));
     }
   CHK_ENTITY_H (block_header, BLOCK_HEADER, endblk_entity);
-  if (!dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "inserts", &inserts, NULL))
+  if (!dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "inserts",
+                                &inserts, NULL))
     fail ("BLOCK_HEADER.inserts");
   for (i = 0; i < num_inserts; i++)
     {

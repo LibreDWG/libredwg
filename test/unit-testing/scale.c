@@ -4,7 +4,7 @@
 void
 api_process (dwg_object *obj)
 {
-  int error, isnew; 
+  int error, isnew;
   BITCODE_BS flag;
   BITCODE_TV name;
   BITCODE_BD paper_units;

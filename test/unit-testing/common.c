@@ -27,7 +27,8 @@ int g_counter;
 #define MAX_COUNTER 6
 int g_countmax = MAX_COUNTER;
 
-// in radians. angles are not normalized. max observed: 10.307697 in ELLIPSE.end_angle
+// in radians. angles are not normalized. max observed: 10.307697 in
+// ELLIPSE.end_angle
 #define MAX_ANGLE 12.57
 
 // needs Dwg_Version_Type dwg_version = obj->parent->header.version;
@@ -37,8 +38,8 @@ int g_countmax = MAX_COUNTER;
 #undef UNTIL
 #undef SINCE
 #define VERSION(version) if (dwg_version == version)
-#define VERSIONS(v1, v2)   if (dwg_version >= v1 && dwg_version <= v2)
-#define PRE(version)   if (dwg_version < version)
+#define VERSIONS(v1, v2) if (dwg_version >= v1 && dwg_version <= v2)
+#define PRE(version) if (dwg_version < version)
 #define UNTIL(version) if (dwg_version <= version)
 #define SINCE(version) if (dwg_version >= version)
 #define LATER_VERSIONS else
@@ -90,12 +91,12 @@ main (int argc, char *argv[])
   int i = 1, cov = 1;
   //#ifdef USE_TRACING
   char *trace = getenv ("LIBREDWG_TRACE");
-  silent = is_make_silent();
+  silent = is_make_silent ();
   if (trace)
     loglevel = atoi (trace);
   else
     loglevel = silent ? 0 : 2;
-  //#endif
+    //#endif
 
 #ifdef DWG_TYPE
   if (is_type_stable (DWG_TYPE))
@@ -140,10 +141,10 @@ main (int argc, char *argv[])
       const char *const files[]
           = { "example_2000.dwg", "example_2004.dwg", "example_2007.dwg",
               "example_2010.dwg", "example_2013.dwg", "example_2018.dwg",
-              "example_r14.dwg",  "example_r13.dwg",
+              "example_r14.dwg", "example_r13.dwg",
 #ifdef USE_WRITE
-              "r11/ACEB10.dwg",    "r2.10/entities.dwg",
-              "r2.6/entities.dwg", "r1.4/entities.dwg",
+              "r11/ACEB10.dwg", "r2.10/entities.dwg", "r2.6/entities.dwg",
+              "r1.4/entities.dwg",
 #endif
               /* TODO
                 "example_r11.dwg"    "example_r10.dwg",  "example_r9.dwg",
@@ -156,8 +157,7 @@ main (int argc, char *argv[])
 
       if (dir)
         {
-          if (!stat (dir, &attrib) &&
-              S_ISDIR (attrib.st_mode))
+          if (!stat (dir, &attrib) && S_ISDIR (attrib.st_mode))
 #ifndef HAVE_SCANDIR
             fprintf (stderr, "dir argument not supported yet on this platform "
                              "(missing scandir)\n");
@@ -193,35 +193,32 @@ main (int argc, char *argv[])
       if (!numpassed () && !numfailed ())
         {
           char tmp[80];
-          if (DWG_TYPE == DWG_TYPE_POLYLINE_2D ||
-              DWG_TYPE == DWG_TYPE_SEQEND ||
-              DWG_TYPE == DWG_TYPE_VERTEX_2D ||
-              DWG_TYPE == DWG_TYPE_CSACDOCUMENTOPTIONS ||
-              DWG_TYPE == DWG_TYPE_LAYOUTPRINTCONFIG)
+          if (DWG_TYPE == DWG_TYPE_POLYLINE_2D || DWG_TYPE == DWG_TYPE_SEQEND
+              || DWG_TYPE == DWG_TYPE_VERTEX_2D
+              || DWG_TYPE == DWG_TYPE_CSACDOCUMENTOPTIONS
+              || DWG_TYPE == DWG_TYPE_LAYOUTPRINTCONFIG)
             {
               error += test_code (prefix, "2000/PolyLine2D.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_POLYLINE_3D ||
-              DWG_TYPE == DWG_TYPE_VERTEX_3D)
+          if (DWG_TYPE == DWG_TYPE_POLYLINE_3D
+              || DWG_TYPE == DWG_TYPE_VERTEX_3D)
             {
               error += test_code (prefix, "2000/PolyLine3D.dwg", cov);
               error += test_code (prefix, "2004/PolyLine3D.dwg", cov);
               error += test_code (prefix, "2018/PolyLine3D.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_POLYLINE_MESH ||
-              DWG_TYPE == DWG_TYPE_VERTEX_MESH ||
-              DWG_TYPE == DWG_TYPE_TRACE ||
-              DWG_TYPE == DWG_TYPE_DIMENSION_ANG3PT ||
-              DWG_TYPE == DWG_TYPE_DIMENSION_DIAMETER ||
-              DWG_TYPE == DWG_TYPE_DIMENSION_RADIUS ||
-              DWG_TYPE == DWG_TYPE_OLE2FRAME)
+          if (DWG_TYPE == DWG_TYPE_POLYLINE_MESH
+              || DWG_TYPE == DWG_TYPE_VERTEX_MESH || DWG_TYPE == DWG_TYPE_TRACE
+              || DWG_TYPE == DWG_TYPE_DIMENSION_ANG3PT
+              || DWG_TYPE == DWG_TYPE_DIMENSION_DIAMETER
+              || DWG_TYPE == DWG_TYPE_DIMENSION_RADIUS
+              || DWG_TYPE == DWG_TYPE_OLE2FRAME)
             {
               error += test_code (prefix, "2000/TS1.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_IMAGE ||
-              DWG_TYPE == DWG_TYPE_IMAGEDEF ||
-              DWG_TYPE == DWG_TYPE_IMAGEDEF_REACTOR ||
-              DWG_TYPE == DWG_TYPE_LEADER)
+          if (DWG_TYPE == DWG_TYPE_IMAGE || DWG_TYPE == DWG_TYPE_IMAGEDEF
+              || DWG_TYPE == DWG_TYPE_IMAGEDEF_REACTOR
+              || DWG_TYPE == DWG_TYPE_LEADER)
             {
               error += test_code (prefix, "2000/Leader.dwg", cov);
               error += test_code (prefix, "2004/Leader.dwg", cov);
@@ -234,9 +231,9 @@ main (int argc, char *argv[])
           if (DWG_TYPE == DWG_TYPE_BODY)
             {
               error += test_code_nodist (prefix,
-                                  "../test-old/2000/from_cadforum.cz/"
-                                  "Transformer_Oil_Filling_Chamber.dwg",
-                                  cov);
+                                         "../test-old/2000/from_cadforum.cz/"
+                                         "Transformer_Oil_Filling_Chamber.dwg",
+                                         cov);
               error += test_code_nodist (
                   prefix,
                   "../test-old/r14/from_cadforum.cz/plaza_light_dual.dwg",
@@ -256,16 +253,16 @@ main (int argc, char *argv[])
             {
               error += test_code_nodist (
                   prefix, "../test-old/r13/from_lx_viewer/small.dwg", cov);
-              error += test_code_nodist (prefix, "2000/passenger_drone.dwg", cov);
+              error += test_code_nodist (prefix, "2000/passenger_drone.dwg",
+                                         cov);
               error += test_code_nodist (prefix, "2018/MInsert.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_PDFUNDERLAY ||
-              DWG_TYPE == DWG_TYPE_PDFDEFINITION)
+          if (DWG_TYPE == DWG_TYPE_PDFUNDERLAY
+              || DWG_TYPE == DWG_TYPE_PDFDEFINITION)
             {
               error += test_code (prefix, "2004/Underlay.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_LIGHT ||
-              DWG_TYPE == DWG_TYPE_VISUALSTYLE)
+          if (DWG_TYPE == DWG_TYPE_LIGHT || DWG_TYPE == DWG_TYPE_VISUALSTYLE)
             {
               error += test_code_nodist (prefix, "2004/Visualstyle.dwg", cov);
               error += test_code_nodist (prefix, "2018/Visualstyle.dwg", cov);
@@ -289,22 +286,22 @@ main (int argc, char *argv[])
               error += test_code (prefix, "2018/Helix.dwg", cov);
               error += test_code_nodist (prefix, "2000/work.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_ASSOCPLANESURFACEACTIONBODY ||
-              DWG_TYPE == DWG_TYPE_ASSOCACTION ||
-              DWG_TYPE == DWG_TYPE_ASSOCDEPENDENCY ||
-              DWG_TYPE == DWG_TYPE_ASSOCEDGEACTIONPARAM ||
-              DWG_TYPE == DWG_TYPE_ASSOCEXTRUDEDSURFACEACTIONBODY ||
-              DWG_TYPE == DWG_TYPE_ASSOCLOFTEDSURFACEACTIONBODY ||
-              DWG_TYPE == DWG_TYPE_ASSOCPATHACTIONPARAM ||
-              DWG_TYPE == DWG_TYPE_ASSOCPERSSUBENTMANAGER ||
-              DWG_TYPE == DWG_TYPE_ASSOCREVOLVEDSURFACEACTIONBODY ||
-              DWG_TYPE == DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY ||
-              DWG_TYPE == DWG_TYPE_EXTRUDEDSURFACE ||
-              DWG_TYPE == DWG_TYPE_LOFTEDSURFACE ||
-              DWG_TYPE == DWG_TYPE_NURBSURFACE ||
-              DWG_TYPE == DWG_TYPE_REVOLVEDSURFACE ||
-              DWG_TYPE == DWG_TYPE_SWEPTSURFACE ||
-              DWG_TYPE == DWG_TYPE_MESH)
+          if (DWG_TYPE == DWG_TYPE_ASSOCPLANESURFACEACTIONBODY
+              || DWG_TYPE == DWG_TYPE_ASSOCACTION
+              || DWG_TYPE == DWG_TYPE_ASSOCDEPENDENCY
+              || DWG_TYPE == DWG_TYPE_ASSOCEDGEACTIONPARAM
+              || DWG_TYPE == DWG_TYPE_ASSOCEXTRUDEDSURFACEACTIONBODY
+              || DWG_TYPE == DWG_TYPE_ASSOCLOFTEDSURFACEACTIONBODY
+              || DWG_TYPE == DWG_TYPE_ASSOCPATHACTIONPARAM
+              || DWG_TYPE == DWG_TYPE_ASSOCPERSSUBENTMANAGER
+              || DWG_TYPE == DWG_TYPE_ASSOCREVOLVEDSURFACEACTIONBODY
+              || DWG_TYPE == DWG_TYPE_ASSOCSWEPTSURFACEACTIONBODY
+              || DWG_TYPE == DWG_TYPE_EXTRUDEDSURFACE
+              || DWG_TYPE == DWG_TYPE_LOFTEDSURFACE
+              || DWG_TYPE == DWG_TYPE_NURBSURFACE
+              || DWG_TYPE == DWG_TYPE_REVOLVEDSURFACE
+              || DWG_TYPE == DWG_TYPE_SWEPTSURFACE
+              || DWG_TYPE == DWG_TYPE_MESH)
             {
               error += test_code (prefix, "2004/Surface.dwg", cov);
               error += test_code_nodist (prefix, "2018/Surface.dwg", cov);
@@ -329,8 +326,8 @@ main (int argc, char *argv[])
             {
               error += test_code_nodist (prefix, "2004/Visualstyle.dwg", cov);
               error += test_code_nodist (prefix, "2018/Visualstyle.dwg", cov);
-              error += test_code_nodist (prefix, "2010/ACI_20160321_A_30_east.dwg",
-                                         cov);
+              error += test_code_nodist (
+                  prefix, "2010/ACI_20160321_A_30_east.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_LEADEROBJECTCONTEXTDATA)
             {
@@ -342,51 +339,61 @@ main (int argc, char *argv[])
             {
               error += test_code_nodist (prefix, "r14/missing_xref.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_MLEADEROBJECTCONTEXTDATA ||
-              DWG_TYPE == DWG_TYPE_MTEXTOBJECTCONTEXTDATA ||
-              DWG_TYPE == DWG_TYPE_TEXTOBJECTCONTEXTDATA)
+          if (DWG_TYPE == DWG_TYPE_MLEADEROBJECTCONTEXTDATA
+              || DWG_TYPE == DWG_TYPE_MTEXTOBJECTCONTEXTDATA
+              || DWG_TYPE == DWG_TYPE_TEXTOBJECTCONTEXTDATA)
             {
-              error += test_code_nodist (prefix, "2010/ACI_20160321_A_30_east.dwg",
-                                  cov);
+              error += test_code_nodist (
+                  prefix, "2010/ACI_20160321_A_30_east.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_MTEXTATTRIBUTEOBJECTCONTEXTDATA)
             {
               error += test_code (prefix, "2013/gh44-error.dwg", cov);
               error += test_code_nodist (prefix, "2013/gh55-ltype.dwg", cov);
-              error += test_code_nodist (prefix, "2010/ACI_20160321_A_30_east.dwg",
-                                  cov);
-              error += test_code_nodist (prefix, "2018/ACI_20160321_A_30_east.dwg",
-                                  cov);
-              error += test_code_nodist (prefix,
+              error += test_code_nodist (
+                  prefix, "2010/ACI_20160321_A_30_east.dwg", cov);
+              error += test_code_nodist (
+                  prefix, "2018/ACI_20160321_A_30_east.dwg", cov);
+              error += test_code_nodist (
+                  prefix,
                   "../test-old/2018/from_autocad_2021/Annotation - Metric.dwg",
                   cov);
               error += test_code_nodist (prefix,
-                  "../test-old/2018/from_autocad_2021/Annotation - Imperial.dwg",
-                  cov);
-              error += test_code_nodist (prefix,
+                                         "../test-old/2018/from_autocad_2021/"
+                                         "Annotation - Imperial.dwg",
+                                         cov);
+              error += test_code_nodist (
+                  prefix,
                   "../test-old/2018/from_autocad_2021/Civil - Metric.dwg",
                   cov);
-              error += test_code_nodist (prefix,
+              error += test_code_nodist (
+                  prefix,
                   "../test-old/2018/from_autocad_2021/Civil - Imperial.dwg",
                   cov);
-              error += test_code_nodist (prefix,
+              error += test_code_nodist (
+                  prefix,
                   "../test-old/2018/from_autocad_2021/Electrical - Metric.dwg",
                   cov);
               error += test_code_nodist (prefix,
-                  "../test-old/2018/from_autocad_2021/Electrical - Imperial.dwg",
-                  cov);
-              error += test_code_nodist (prefix,
+                                         "../test-old/2018/from_autocad_2021/"
+                                         "Electrical - Imperial.dwg",
+                                         cov);
+              error += test_code_nodist (
+                  prefix,
                   "../test-old/2018/from_autocad_2021/Mechanical - Metric.dwg",
                   cov);
               error += test_code_nodist (prefix,
-                  "../test-old/2018/from_autocad_2021/Mechanical - Imperial.dwg",
-                  cov);
-              error += test_code_nodist (prefix,
+                                         "../test-old/2018/from_autocad_2021/"
+                                         "Mechanical - Imperial.dwg",
+                                         cov);
+              error += test_code_nodist (
+                  prefix,
                   "../test-old/2018/from_autocad_2021/Structural - Metric.dwg",
                   cov);
               error += test_code_nodist (prefix,
-                  "../test-old/2018/from_autocad_2021/Structural - Imperial.dwg",
-                  cov);
+                                         "../test-old/2018/from_autocad_2021/"
+                                         "Structural - Imperial.dwg",
+                                         cov);
             }
           if (DWG_TYPE == DWG_TYPE_FIELD || DWG_TYPE == DWG_TYPE_FIELDLIST)
             {
@@ -404,7 +411,8 @@ main (int argc, char *argv[])
             {
               error += test_code (prefix, "2000/TS1.dwg", cov);
               error += test_code_nodist (prefix, "r13/TS1.dwg", cov);
-              error += test_code_nodist (prefix, "2004/fr05_b101_ref.dwg", cov);
+              error
+                  += test_code_nodist (prefix, "2004/fr05_b101_ref.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_SORTENTSTABLE)
             {
@@ -427,23 +435,23 @@ main (int argc, char *argv[])
                 error += test_code_nodist (prefix, "../test-big/2007/big.dwg",
                                            cov);
             }
-          if (DWG_TYPE == DWG_TYPE_SECTIONOBJECT ||
-              DWG_TYPE == DWG_TYPE_SECTION_MANAGER ||
-              DWG_TYPE == DWG_TYPE_SECTION_SETTINGS)
+          if (DWG_TYPE == DWG_TYPE_SECTIONOBJECT
+              || DWG_TYPE == DWG_TYPE_SECTION_MANAGER
+              || DWG_TYPE == DWG_TYPE_SECTION_SETTINGS)
             {
               error += test_code (prefix, "2018/LiveSection1.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_ACSH_BOOLEAN_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_BOX_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_BREP_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_CHAMFER_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_CYLINDER_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_EXTRUSION_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_FILLET_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_HISTORY_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_SWEEP_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_TORUS_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_WEDGE_CLASS)
+          if (DWG_TYPE == DWG_TYPE_ACSH_BOOLEAN_CLASS
+              || DWG_TYPE == DWG_TYPE_ACSH_BOX_CLASS
+              || DWG_TYPE == DWG_TYPE_ACSH_BREP_CLASS
+              || DWG_TYPE == DWG_TYPE_ACSH_CHAMFER_CLASS
+              || DWG_TYPE == DWG_TYPE_ACSH_CYLINDER_CLASS
+              || DWG_TYPE == DWG_TYPE_ACSH_EXTRUSION_CLASS
+              || DWG_TYPE == DWG_TYPE_ACSH_FILLET_CLASS
+              || DWG_TYPE == DWG_TYPE_ACSH_HISTORY_CLASS
+              || DWG_TYPE == DWG_TYPE_ACSH_SWEEP_CLASS
+              || DWG_TYPE == DWG_TYPE_ACSH_TORUS_CLASS
+              || DWG_TYPE == DWG_TYPE_ACSH_WEDGE_CLASS)
             {
               error += test_code (prefix, "2007/ATMOS-DC22S.dwg", cov);
               error += test_code_nodist (prefix, "2013/JW.dwg", cov);
@@ -452,13 +460,13 @@ main (int argc, char *argv[])
             {
               error += test_code (prefix, "2000/Cone.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_ACSH_LOFT_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_EXTRUSION_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_REVOLVE_CLASS ||
-              DWG_TYPE == DWG_TYPE_ACSH_SWEEP_CLASS ||
-              DWG_TYPE == DWG_TYPE_SKYLIGHT_BACKGROUND ||
-              DWG_TYPE == DWG_TYPE_MENTALRAYRENDERSETTINGS ||
-              DWG_TYPE == DWG_TYPE_RENDERGLOBAL)
+          if (DWG_TYPE == DWG_TYPE_ACSH_LOFT_CLASS
+              || DWG_TYPE == DWG_TYPE_ACSH_EXTRUSION_CLASS
+              || DWG_TYPE == DWG_TYPE_ACSH_REVOLVE_CLASS
+              || DWG_TYPE == DWG_TYPE_ACSH_SWEEP_CLASS
+              || DWG_TYPE == DWG_TYPE_SKYLIGHT_BACKGROUND
+              || DWG_TYPE == DWG_TYPE_MENTALRAYRENDERSETTINGS
+              || DWG_TYPE == DWG_TYPE_RENDERGLOBAL)
             {
               error += test_code_nodist (
                   prefix, "2010/visualization_-_condominium_with_skylight.dwg",
@@ -474,43 +482,47 @@ main (int argc, char *argv[])
               error += test_code_nodist (
                   prefix, "2010/visualization_-_aerial.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_ASSOCVARIABLE ||
-              DWG_TYPE == DWG_TYPE_ASSOCVALUEDEPENDENCY ||
-              DWG_TYPE == DWG_TYPE_ASSOCGEOMDEPENDENCY ||
-              DWG_TYPE == DWG_TYPE_ASSOC2DCONSTRAINTGROUP ||
-              DWG_TYPE == DWG_TYPE_DYNAMICBLOCKPROXYNODE ||
-              DWG_TYPE == DWG_TYPE_BLOCKBASEPOINTPARAMETER ||
-              DWG_TYPE == DWG_TYPE_BLOCKFLIPACTION ||
-              DWG_TYPE == DWG_TYPE_BLOCKFLIPGRIP ||
-              DWG_TYPE == DWG_TYPE_BLOCKFLIPPARAMETER ||
-              DWG_TYPE == DWG_TYPE_BLOCKLINEARPARAMETER ||
-              DWG_TYPE == DWG_TYPE_BLOCKLINEARGRIP ||
-              DWG_TYPE == DWG_TYPE_BLOCKLOOKUPGRIP ||
-              DWG_TYPE == DWG_TYPE_BLOCKREPRESENTATION ||
-              DWG_TYPE == DWG_TYPE_BLOCKROTATEACTION ||
-              DWG_TYPE == DWG_TYPE_BLOCKROTATIONPARAMETER ||
-              DWG_TYPE == DWG_TYPE_BLOCKROTATIONGRIP ||
-              DWG_TYPE == DWG_TYPE_ASSOCDIMDEPENDENCYBODY)
+          if (DWG_TYPE == DWG_TYPE_ASSOCVARIABLE
+              || DWG_TYPE == DWG_TYPE_ASSOCVALUEDEPENDENCY
+              || DWG_TYPE == DWG_TYPE_ASSOCGEOMDEPENDENCY
+              || DWG_TYPE == DWG_TYPE_ASSOC2DCONSTRAINTGROUP
+              || DWG_TYPE == DWG_TYPE_DYNAMICBLOCKPROXYNODE
+              || DWG_TYPE == DWG_TYPE_BLOCKBASEPOINTPARAMETER
+              || DWG_TYPE == DWG_TYPE_BLOCKFLIPACTION
+              || DWG_TYPE == DWG_TYPE_BLOCKFLIPGRIP
+              || DWG_TYPE == DWG_TYPE_BLOCKFLIPPARAMETER
+              || DWG_TYPE == DWG_TYPE_BLOCKLINEARPARAMETER
+              || DWG_TYPE == DWG_TYPE_BLOCKLINEARGRIP
+              || DWG_TYPE == DWG_TYPE_BLOCKLOOKUPGRIP
+              || DWG_TYPE == DWG_TYPE_BLOCKREPRESENTATION
+              || DWG_TYPE == DWG_TYPE_BLOCKROTATEACTION
+              || DWG_TYPE == DWG_TYPE_BLOCKROTATIONPARAMETER
+              || DWG_TYPE == DWG_TYPE_BLOCKROTATIONGRIP
+              || DWG_TYPE == DWG_TYPE_ASSOCDIMDEPENDENCYBODY)
             {
               error += test_code (prefix, "2018/Dynblocks.dwg", cov);
               error += test_code_nodist (prefix, "2004/Dynblocks.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_ASSOCARRAYACTIONBODY ||
-              DWG_TYPE == DWG_TYPE_ASSOCDIMDEPENDENCYBODY)
+          if (DWG_TYPE == DWG_TYPE_ASSOCARRAYACTIONBODY
+              || DWG_TYPE == DWG_TYPE_ASSOCDIMDEPENDENCYBODY)
             {
-              error += test_code_nodist (prefix, "2004/planetarygear.dwg", cov);
+              error
+                  += test_code_nodist (prefix, "2004/planetarygear.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_ASSOC3POINTANGULARDIMACTIONBODY)
             {
               error += test_code_nodist (prefix,
-                 "../test-old/2013/from_cadforum.cz/TwistRibbnConstThick_2.dwg", cov);
+                                         "../test-old/2013/from_cadforum.cz/"
+                                         "TwistRibbnConstThick_2.dwg",
+                                         cov);
             }
-          if (DWG_TYPE == DWG_TYPE_BLOCKSCALEACTION ||
-              DWG_TYPE == DWG_TYPE_BLOCKMOVEACTION ||
-              DWG_TYPE == DWG_TYPE_BLOCKSTRETCHACTION)
+          if (DWG_TYPE == DWG_TYPE_BLOCKSCALEACTION
+              || DWG_TYPE == DWG_TYPE_BLOCKMOVEACTION
+              || DWG_TYPE == DWG_TYPE_BLOCKSTRETCHACTION)
             {
               error += test_code (prefix, "2018/Dynblocks.dwg", cov);
-              error += test_code_nodist (prefix, "2010/sun_and_sky_demo.dwg", cov);
+              error += test_code_nodist (prefix, "2010/sun_and_sky_demo.dwg",
+                                         cov);
             }
           if (DWG_TYPE == DWG_TYPE_BLOCKARRAYACTION)
             {
@@ -527,12 +539,13 @@ main (int argc, char *argv[])
           if (DWG_TYPE == DWG_TYPE_DGNDEFINITION)
             {
               error += test_code_nodist (
-                  prefix, "../test-old/2004/from_uloz.to/Klánovice_RD_A_situace.dwg",
+                  prefix,
+                  "../test-old/2004/from_uloz.to/Klánovice_RD_A_situace.dwg",
                   cov);
             }
-          if (DWG_TYPE == DWG_TYPE_BLOCKPOLARGRIP ||
-              DWG_TYPE == DWG_TYPE_BLOCKPOLARPARAMETER ||
-              DWG_TYPE == DWG_TYPE_BLOCKPOLARSTRETCHACTION)
+          if (DWG_TYPE == DWG_TYPE_BLOCKPOLARGRIP
+              || DWG_TYPE == DWG_TYPE_BLOCKPOLARPARAMETER
+              || DWG_TYPE == DWG_TYPE_BLOCKPOLARSTRETCHACTION)
             {
               error += test_code_nodist (
                   prefix,
@@ -543,27 +556,28 @@ main (int argc, char *argv[])
                                          "Annotation - Imperial.dwg",
                                          cov);
             }
-          if (DWG_TYPE == DWG_TYPE_BLOCKVISIBILITYPARAMETER ||
-              DWG_TYPE == DWG_TYPE_BLOCKVISIBILITYGRIP ||
-              DWG_TYPE == DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT)
+          if (DWG_TYPE == DWG_TYPE_BLOCKVISIBILITYPARAMETER
+              || DWG_TYPE == DWG_TYPE_BLOCKVISIBILITYGRIP
+              || DWG_TYPE == DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT)
             {
               error += test_code (prefix, "2018/Dynblocks.dwg", cov);
               error += test_code (prefix, "2013/gh44-error.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_BLOCKHORIZONTALCONSTRAINTPARAMETER ||
-              DWG_TYPE == DWG_TYPE_BLOCKVERTICALCONSTRAINTPARAMETER ||
-              DWG_TYPE == DWG_TYPE_BLOCKPARAMDEPENDENCYBODY)
-            // missing BLOCKRADIALCONSTRAINTPARAMETER BLOCKALIGNEDCONSTRAINTPARAMETER
-            //   BLOCKDIAMETRICCONSTRAINTPARAMETER BLOCKLINEARCONSTRAINTPARAMETER
-            //   BLOCKANGULARCONSTRAINTPARAMETER
+          if (DWG_TYPE == DWG_TYPE_BLOCKHORIZONTALCONSTRAINTPARAMETER
+              || DWG_TYPE == DWG_TYPE_BLOCKVERTICALCONSTRAINTPARAMETER
+              || DWG_TYPE == DWG_TYPE_BLOCKPARAMDEPENDENCYBODY)
+            // missing BLOCKRADIALCONSTRAINTPARAMETER
+            // BLOCKALIGNEDCONSTRAINTPARAMETER
+            //   BLOCKDIAMETRICCONSTRAINTPARAMETER
+            //   BLOCKLINEARCONSTRAINTPARAMETER BLOCKANGULARCONSTRAINTPARAMETER
             {
               error += test_code_nodist (
                   prefix,
                   "../test-old/2000/1/Ashraf_Basic_File-1_Feet_input_2.dwg",
                   cov);
             }
-          if (DWG_TYPE == DWG_TYPE_BLOCKALIGNMENTPARAMETER ||
-              DWG_TYPE == DWG_TYPE_BLOCKALIGNMENTGRIP)
+          if (DWG_TYPE == DWG_TYPE_BLOCKALIGNMENTPARAMETER
+              || DWG_TYPE == DWG_TYPE_BLOCKALIGNMENTGRIP)
             {
               error += test_code (prefix, "2018/Dynblocks.dwg", cov);
               error += test_code_nodist (prefix, "2013/flipped.dwg", cov);
@@ -571,25 +585,28 @@ main (int argc, char *argv[])
           if (DWG_TYPE == DWG_TYPE_DYNAMICBLOCKPURGEPREVENTER)
             {
               error += test_code_nodist (prefix, "2013/gh55-ltype.dwg", cov);
-              error += test_code_nodist (prefix, "2007/anchor_dynamic_block.dwg", cov);
-              error += test_code_nodist (prefix, "2010/sun_and_sky_demo.dwg", cov);
+              error += test_code_nodist (prefix,
+                                         "2007/anchor_dynamic_block.dwg", cov);
+              error += test_code_nodist (prefix, "2010/sun_and_sky_demo.dwg",
+                                         cov);
             }
-          if (DWG_TYPE == DWG_TYPE_EVALUATION_GRAPH ||
-              DWG_TYPE == DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT ||
-              DWG_TYPE == DWG_TYPE_BLOCKPOINTPARAMETER ||
-              DWG_TYPE == DWG_TYPE_ALDIMOBJECTCONTEXTDATA ||
-              DWG_TYPE == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
+          if (DWG_TYPE == DWG_TYPE_EVALUATION_GRAPH
+              || DWG_TYPE == DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT
+              || DWG_TYPE == DWG_TYPE_BLOCKPOINTPARAMETER
+              || DWG_TYPE == DWG_TYPE_ALDIMOBJECTCONTEXTDATA
+              || DWG_TYPE == DWG_TYPE_MTEXTOBJECTCONTEXTDATA)
             {
               error += test_code (prefix, "2013/gh44-error.dwg", cov);
               error += test_code_nodist (
                   prefix, "2007/blocks_and_tables_-_metric.dwg", cov);
             }
-          if (DWG_TYPE == DWG_TYPE_BLOCKLOOKUPACTION ||
-              DWG_TYPE == DWG_TYPE_BLOCKLOOKUPPARAMETER ||
-              DWG_TYPE == DWG_TYPE_BLOCKLOOKUPGRIP ||
-              DWG_TYPE == DWG_TYPE_BLOCKXYPARAMETER)
+          if (DWG_TYPE == DWG_TYPE_BLOCKLOOKUPACTION
+              || DWG_TYPE == DWG_TYPE_BLOCKLOOKUPPARAMETER
+              || DWG_TYPE == DWG_TYPE_BLOCKLOOKUPGRIP
+              || DWG_TYPE == DWG_TYPE_BLOCKXYPARAMETER)
             {
-              error += test_code_nodist (prefix, "2010/sun_and_sky_demo.dwg", cov);
+              error += test_code_nodist (prefix, "2010/sun_and_sky_demo.dwg",
+                                         cov);
             }
           if (DWG_TYPE == DWG_TYPE_BLOCKXYGRIP)
             {
@@ -612,8 +629,10 @@ main (int argc, char *argv[])
               error += test_code (prefix, "2013/gh109_1.dwg", cov);
               error += test_code_nodist (prefix, "2013/JW.dwg", cov);
               error += test_code_nodist (prefix, "2013/gh55-ltype.dwg", cov);
-              error += test_code_nodist (prefix, "2013/stelprdb1144445.dwg", cov);
-              error += test_code_nodist (prefix, "2013/nrcs141p2_034463.dwg", cov);
+              error += test_code_nodist (prefix, "2013/stelprdb1144445.dwg",
+                                         cov);
+              error += test_code_nodist (prefix, "2013/nrcs141p2_034463.dwg",
+                                         cov);
               error += test_code_nodist (prefix, "2018/redwg1.dwg", cov);
               if (g_countmax == 1000) // only with -a
                 error += test_code_nodist (
@@ -633,15 +652,19 @@ main (int argc, char *argv[])
           if (DWG_TYPE == DWG_TYPE_POINTCLOUDCOLORMAP)
             {
               if (g_countmax == 1000) // only with -a
-                error += test_code_nodist (prefix,
-                    "../test-big/2004/double_free_example.dwg", cov);
+                error += test_code_nodist (
+                    prefix, "../test-big/2004/double_free_example.dwg", cov);
             }
           if (DWG_TYPE == DWG_TYPE_RASTERVARIABLES)
             {
-              error += test_code_nodist (prefix, "2000/passenger_drone.dwg", cov);
-              error += test_code_nodist (prefix, "2004/PLANO_MASSANASSA.dwg", cov);
-              error += test_code_nodist (prefix, "2007/SALLE_DES_MACHINES.dwg", cov);
-              error += test_code_nodist (prefix, "2013/nrcs141p2_034463.dwg", cov);
+              error += test_code_nodist (prefix, "2000/passenger_drone.dwg",
+                                         cov);
+              error += test_code_nodist (prefix, "2004/PLANO_MASSANASSA.dwg",
+                                         cov);
+              error += test_code_nodist (prefix, "2007/SALLE_DES_MACHINES.dwg",
+                                         cov);
+              error += test_code_nodist (prefix, "2013/nrcs141p2_034463.dwg",
+                                         cov);
             }
           if (DWG_TYPE == DWG_TYPE_SPATIAL_INDEX)
             {
@@ -656,9 +679,9 @@ main (int argc, char *argv[])
                   prefix, "../test-old/r13c3/from_autocad_r14/asesmp.dwg",
                   cov);
             }
-          if (DWG_TYPE == DWG_TYPE_ACMECOMMANDHISTORY ||
-              DWG_TYPE == DWG_TYPE_ACMESCOPE ||
-              DWG_TYPE == DWG_TYPE_ACMESTATEMGR)
+          if (DWG_TYPE == DWG_TYPE_ACMECOMMANDHISTORY
+              || DWG_TYPE == DWG_TYPE_ACMESCOPE
+              || DWG_TYPE == DWG_TYPE_ACMESTATEMGR)
             {
               error += test_code_nodist (prefix, "2013/JW.dwg", cov);
               error += test_code_nodist (
@@ -718,7 +741,7 @@ main (int argc, char *argv[])
                   prefix, "../test-old/2010/from_cadforum.cz/AMSTLSHAP2D.dwg",
                   cov);
             }
-          if (   DWG_TYPE == DWG_TYPE_ASSOCBLENDSURFACEACTIONBODY
+          if (DWG_TYPE == DWG_TYPE_ASSOCBLENDSURFACEACTIONBODY
               || DWG_TYPE == DWG_TYPE_ASSOCEXTENDSURFACEACTIONBODY
               || DWG_TYPE == DWG_TYPE_ASSOCFILLETSURFACEACTIONBODY
               || DWG_TYPE == DWG_TYPE_ASSOCNETWORKSURFACEACTIONBODY
@@ -730,8 +753,7 @@ main (int argc, char *argv[])
               || DWG_TYPE == DWG_TYPE_IMAGE_BACKGROUND
               || DWG_TYPE == DWG_TYPE_GRADIENT_BACKGROUND
               || DWG_TYPE == DWG_TYPE_GROUND_PLANE_BACKGROUND
-              || DWG_TYPE == DWG_TYPE_CAMERA
-              || DWG_TYPE == DWG_TYPE_DUMMY
+              || DWG_TYPE == DWG_TYPE_CAMERA || DWG_TYPE == DWG_TYPE_DUMMY
               || DWG_TYPE == DWG_TYPE_INDEX
               || DWG_TYPE == DWG_TYPE_LARGE_RADIAL_DIMENSION
               || DWG_TYPE == DWG_TYPE_LAYER_INDEX
@@ -787,8 +809,7 @@ main (int argc, char *argv[])
               || DWG_TYPE == DWG_TYPE_POLARGRIPENTITY
               || DWG_TYPE == DWG_TYPE_RADIMOBJECTCONTEXTDATA
               || DWG_TYPE == DWG_TYPE_RADIMLGOBJECTCONTEXTDATA
-              || DWG_TYPE == DWG_TYPE_RTEXT
-              || DWG_TYPE == DWG_TYPE_SUNSTUDY
+              || DWG_TYPE == DWG_TYPE_RTEXT || DWG_TYPE == DWG_TYPE_SUNSTUDY
               || DWG_TYPE == DWG_TYPE_TVDEVICEPROPERTIES
               || DWG_TYPE == DWG_TYPE_VISIBILITYPARAMETERENTITY
               || DWG_TYPE == DWG_TYPE_VISIBILITYGRIPENTITY
@@ -806,8 +827,7 @@ main (int argc, char *argv[])
               || DWG_TYPE == DWG_TYPE_LINEARPARAMETERENTITY
               || DWG_TYPE == DWG_TYPE_POINTPARAMETERENTITY
               || DWG_TYPE == DWG_TYPE_ROTATIONPARAMETERENTITY
-              || DWG_TYPE == DWG_TYPE_XYPARAMETERENTITY
-              )
+              || DWG_TYPE == DWG_TYPE_XYPARAMETERENTITY)
             {
               ; // missing
             }
@@ -853,8 +873,8 @@ test_subdirs (const char *dir, int cov)
 
           error += test_subdirs (path, cov);
         }
-      if (namelist[n]->d_type == DT_REG &&
-          (strstr (elem, ".dwg") || strstr (elem, ".DWG")))
+      if (namelist[n]->d_type == DT_REG
+          && (strstr (elem, ".dwg") || strstr (elem, ".DWG")))
         {
           error += test_code (dir, elem, cov);
         }
@@ -870,12 +890,14 @@ test_subdirs (const char *dir, int cov)
 /* Do not test not distributed DWG's.
    This would skip existing files, but still report FAIL.
 */
-int test_code_nodist (const char *dir, const char *filename, int cov)
+int
+test_code_nodist (const char *dir, const char *filename, int cov)
 {
   return 0;
 }
 #else
-int test_code_nodist (const char *dir, const char *filename, int cov)
+int
+test_code_nodist (const char *dir, const char *filename, int cov)
 {
   return test_code (dir, filename, cov);
 }
@@ -899,7 +921,7 @@ test_code (const char *dir, const char *filename, int cov)
   else
     strncpy (path, filename, 254);
   path[255] = '\0';
-  
+
 #ifdef DWG_TYPE
   // only process if no coverage yet, or when we are crossing the unicode
   // boundary.
@@ -936,11 +958,9 @@ test_code (const char *dir, const char *filename, int cov)
     }
   else // some exceptions, because we dont want to publish all our test-cases.
        // test-data is already too big.
-    if (DWG_TYPE == DWG_TYPE_IDBUFFER ||
-        DWG_TYPE == DWG_TYPE_ACSH_SPHERE_CLASS ||
-        DWG_TYPE == DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT ||
-        DWG_TYPE == DWG_TYPE_BLOCKBASEPOINTPARAMETER
-        )
+    if (DWG_TYPE == DWG_TYPE_IDBUFFER || DWG_TYPE == DWG_TYPE_ACSH_SPHERE_CLASS
+        || DWG_TYPE == DWG_TYPE_BLOCKGRIPLOCATIONCOMPONENT
+        || DWG_TYPE == DWG_TYPE_BLOCKBASEPOINTPARAMETER)
       {
         if (cov && error)
           LOG_INFO ("%s failed (TODO: skipped)\n", path);
@@ -1118,18 +1138,18 @@ void
 print_api (dwg_object *obj)
 {
 #ifdef DWG_TYPE
-  LOG_INFO ("Unit-testing type %d %s [%d] (%s):\n", DWG_TYPE, obj->name, g_counter,
-            stability);
+  LOG_INFO ("Unit-testing type %d %s [%d] (%s):\n", DWG_TYPE, obj->name,
+            g_counter, stability);
 #else
   LOG_INFO ("Test dwg_api and dynapi [%d]:\n", g_counter);
 #endif
   api_process (obj);
 
-  if (obj->supertype == DWG_SUPERTYPE_ENTITY &&
-      obj->fixedtype != DWG_TYPE_UNKNOWN_ENT)
+  if (obj->supertype == DWG_SUPERTYPE_ENTITY
+      && obj->fixedtype != DWG_TYPE_UNKNOWN_ENT)
     api_common_entity (obj);
-  else if (obj->supertype == DWG_SUPERTYPE_OBJECT &&
-           obj->fixedtype != DWG_TYPE_UNKNOWN_OBJ)
+  else if (obj->supertype == DWG_SUPERTYPE_OBJECT
+           && obj->fixedtype != DWG_TYPE_UNKNOWN_OBJ)
     api_common_object (obj);
   if (g_counter <= g_countmax)
     LOG_INFO ("\n");
@@ -1197,7 +1217,8 @@ print_api (dwg_object *obj)
         {                                                                     \
           BITCODE_H _hdl = field[_i];                                         \
           int alloced = 0;                                                    \
-          char *_hdlname = _hdl ? dwg_dynapi_handle_name (dwg, _hdl, &alloced) : NULL;  \
+          char *_hdlname                                                      \
+              = _hdl ? dwg_dynapi_handle_name (dwg, _hdl, &alloced) : NULL;   \
           if (_hdl == ent->parent->field[_i])                                 \
             {                                                                 \
               if (g_counter > g_countmax)                                     \
@@ -1339,7 +1360,7 @@ api_common_entity (dwg_object *obj)
 #define CHK_ENTITY_UTF8TEXT(ent, name, field)                                 \
   _CHK_ENTITY_UTF8TEXT (ent, name, field);                                    \
   if (isnew)                                                                  \
-    free (field)
+  free (field)
 
 #define CHK_ENTITY_TYPE(ent, name, field, typ)                                \
   if (!dwg_dynapi_entity_value (ent, #name, #field, &field, NULL))            \
@@ -1382,7 +1403,8 @@ api_common_entity (dwg_object *obj)
     else                                                                      \
       {                                                                       \
         int alloced = 0;                                                      \
-        char *_hdlname = dwg_dynapi_handle_name (obj->parent, field, &alloced); \
+        char *_hdlname                                                        \
+            = dwg_dynapi_handle_name (obj->parent, field, &alloced);          \
         if (field == ent->field)                                              \
           {                                                                   \
             if (g_counter > g_countmax)                                       \
@@ -1412,17 +1434,18 @@ api_common_entity (dwg_object *obj)
         {                                                                     \
           BITCODE_H _hdl = field[_i];                                         \
           int alloced = 0;                                                    \
-          char *_hdlname = _hdl ? dwg_dynapi_handle_name (obj->parent, _hdl, &alloced) : NULL; \
+          char *_hdlname                                                      \
+              = _hdl ? dwg_dynapi_handle_name (obj->parent, _hdl, &alloced)   \
+                     : NULL;                                                  \
           if (_hdl == ent->field[_i])                                         \
             {                                                                 \
               if (g_counter > g_countmax)                                     \
                 pass ();                                                      \
+              else if (_hdl)                                                  \
+                ok (#field "[%d]: %s " FORMAT_REF, _i, _hdlname ?: "",        \
+                    ARGS_REF (_hdl));                                         \
               else                                                            \
-                  if (_hdl)                                                   \
-                    ok (#field "[%d]: %s " FORMAT_REF, _i, _hdlname ?: "",    \
-                        ARGS_REF (_hdl));                                     \
-                  else                                                        \
-                    ok (#field "[%d]: NULL", _i);                             \
+                ok (#field "[%d]: NULL", _i);                                 \
             }                                                                 \
           else                                                                \
             {                                                                 \
@@ -1501,7 +1524,8 @@ api_common_entity (dwg_object *obj)
     {                                                                         \
       for (i = 0; i < (num); i++)                                             \
         {                                                                     \
-          ok ("%s.%s[%d]: (%f, %f)", #name, #field, i, field[i].x, field[i].y); \
+          ok ("%s.%s[%d]: (%f, %f)", #name, #field, i, field[i].x,            \
+              field[i].y);                                                    \
           if (memcmp (&ent->field[i], &field[i], sizeof (field[i])))          \
             fail ("%s.%s[%d]: memcmp", #name, #field, i);                     \
         }                                                                     \
@@ -1549,113 +1573,117 @@ api_common_entity (dwg_object *obj)
 
 #define CHK_ENTITY_MAX(ent, name, field, type, _max)                          \
   if (field > _max)                                                           \
-    fail ("Invalid " #name "." #field " " FORMAT_##type " > " #_max, field)
+  fail ("Invalid " #name "." #field " " FORMAT_##type " > " #_max, field)
 
 #define _DWGAPI_ENT_NAME(name, field) dwg_ent_##name##_get_##field
 #define DWGAPI_ENT_NAME(ent, field) _DWGAPI_ENT_NAME (ent, field)
 #define _DWGAPI_OBJ_NAME(name, field) dwg_obj_##name##_get_##field
 #define DWGAPI_OBJ_NAME(ent, field) _DWGAPI_OBJ_NAME (ent, field)
 #define DWGAPI_ENTOBJ_NAME(ent, field)                                        \
-  (ent->parent->dwg->object[ent->parent->objid].supertype == DWG_SUPERTYPE_OBJECT  \
-    ? _DWGAPI_OBJ_NAME (ent, field)                                           \
-    : _DWGAPI_ENT_NAME (ent, field))
+  (ent->parent->dwg->object[ent->parent->objid].supertype                     \
+           == DWG_SUPERTYPE_OBJECT                                            \
+       ? _DWGAPI_OBJ_NAME (ent, field)                                        \
+       : _DWGAPI_ENT_NAME (ent, field))
 
 #ifndef USE_DEPRECATED_API
-#  define CHK_ENTITY_UTF8TEXT_W_OLD(ent, name, field)     \
-  CHK_ENTITY_UTF8TEXT(ent, name, field)
-#  define CHK_ENTITY_UTF8TEXT_W_OBJ(ent, name, field)     \
-  CHK_ENTITY_UTF8TEXT(ent, name, field)
+#  define CHK_ENTITY_UTF8TEXT_W_OLD(ent, name, field)                         \
+    CHK_ENTITY_UTF8TEXT (ent, name, field)
+#  define CHK_ENTITY_UTF8TEXT_W_OBJ(ent, name, field)                         \
+    CHK_ENTITY_UTF8TEXT (ent, name, field)
 #else
-#define CHK_ENTITY_UTF8TEXT_W_OLD(ent, name, field)                           \
-  _CHK_ENTITY_UTF8TEXT (ent, name, field);                                    \
-  {                                                                           \
-    Dwg_Version_Type _dwg_version = ent->parent->dwg->header.version;         \
-    if (ent->field)                                                           \
-      {                                                                       \
-        char *old = DWGAPI_ENT_NAME (ent, field) (ent, &error);               \
-        if (error || (old && strcmp (old, field)))                            \
-          fail ("old API dwg_ent_" #ent "_get_" #field ": \"%s\"", old);      \
-        if (_dwg_version >= R_2007)                                           \
-          free (old);                                                         \
-      }                                                                       \
-    if (isnew)                                                                \
-      free (field);                                                           \
-  }
-#define CHK_ENTITY_UTF8TEXT_W_OBJ(ent, name, field)                           \
-  _CHK_ENTITY_UTF8TEXT (ent, name, field);                                    \
-  {                                                                           \
-    Dwg_Version_Type _dwg_version = ent->parent->dwg->header.version;         \
-    if (ent->field)                                                           \
-      {                                                                       \
-        char *old = DWGAPI_OBJ_NAME (ent, field) (ent, &error);               \
-        if (error || (old && strcmp (old, field)))                            \
-          fail ("old API dwg_obj_" #ent "_get_" #field ": \"%s\"", old);      \
-        else                                                                  \
-          pass ();                                                            \
-        if (_dwg_version >= R_2007)                                           \
-          free (old);                                                         \
-      }                                                                       \
-    if (isnew)                                                                \
-      free (field);                                                           \
-  }
+#  define CHK_ENTITY_UTF8TEXT_W_OLD(ent, name, field)                         \
+    _CHK_ENTITY_UTF8TEXT (ent, name, field);                                  \
+    {                                                                         \
+      Dwg_Version_Type _dwg_version = ent->parent->dwg->header.version;       \
+      if (ent->field)                                                         \
+        {                                                                     \
+          char *old = DWGAPI_ENT_NAME (ent, field) (ent, &error);             \
+          if (error || (old && strcmp (old, field)))                          \
+            fail ("old API dwg_ent_" #ent "_get_" #field ": \"%s\"", old);    \
+          if (_dwg_version >= R_2007)                                         \
+            free (old);                                                       \
+        }                                                                     \
+      if (isnew)                                                              \
+        free (field);                                                         \
+    }
+#  define CHK_ENTITY_UTF8TEXT_W_OBJ(ent, name, field)                         \
+    _CHK_ENTITY_UTF8TEXT (ent, name, field);                                  \
+    {                                                                         \
+      Dwg_Version_Type _dwg_version = ent->parent->dwg->header.version;       \
+      if (ent->field)                                                         \
+        {                                                                     \
+          char *old = DWGAPI_OBJ_NAME (ent, field) (ent, &error);             \
+          if (error || (old && strcmp (old, field)))                          \
+            fail ("old API dwg_obj_" #ent "_get_" #field ": \"%s\"", old);    \
+          else                                                                \
+            pass ();                                                          \
+          if (_dwg_version >= R_2007)                                         \
+            free (old);                                                       \
+        }                                                                     \
+      if (isnew)                                                              \
+        free (field);                                                         \
+    }
 #endif
 
 #ifndef USE_DEPRECATED_API
-#  define CHK_ENTITY_TYPE_W_OLD(ent, name, field, type)        \
-  CHK_ENTITY_TYPE(ent, name, field, type)
-#  define CHK_ENTITY_TYPE_W_OBJ(ent, name, field, type)        \
-  CHK_ENTITY_TYPE(ent, name, field, type)
+#  define CHK_ENTITY_TYPE_W_OLD(ent, name, field, type)                       \
+    CHK_ENTITY_TYPE (ent, name, field, type)
+#  define CHK_ENTITY_TYPE_W_OBJ(ent, name, field, type)                       \
+    CHK_ENTITY_TYPE (ent, name, field, type)
 #else
-#define CHK_ENTITY_TYPE_W_OLD(ent, name, field, type)                         \
-  {                                                                           \
-    BITCODE_##type old;                                                       \
-    CHK_ENTITY_TYPE (ent, name, field, type);                                 \
-    old = DWGAPI_ENT_NAME (ent, field) (ent, &error);                         \
-    if (error || old != field)                                                \
-      fail ("old API dwg_ent_" #ent "_get_" #field ": " FORMAT_##type         \
-            " != " FORMAT_##type,                                             \
-            old, field);                                                      \
-    else                                                                      \
-      pass ();                                                                \
-  }
+#  define CHK_ENTITY_TYPE_W_OLD(ent, name, field, type)                       \
+    {                                                                         \
+      BITCODE_##type old;                                                     \
+      CHK_ENTITY_TYPE (ent, name, field, type);                               \
+      old = DWGAPI_ENT_NAME (ent, field) (ent, &error);                       \
+      if (error || old != field)                                              \
+        fail ("old API dwg_ent_" #ent "_get_" #field ": " FORMAT_##type       \
+              " != " FORMAT_##type,                                           \
+              old, field);                                                    \
+      else                                                                    \
+        pass ();                                                              \
+    }
 
-#define CHK_ENTITY_TYPE_W_OBJ(ent, name, field, type)                         \
-  {                                                                           \
-    BITCODE_##type old;                                                       \
-    CHK_ENTITY_TYPE (ent, name, field, type);                                 \
-    old = DWGAPI_OBJ_NAME (ent, field) (ent, &error);                         \
-    if (error || old != field)                                                \
-      fail ("old API dwg_obj_" #ent "_get_" #field ": " FORMAT_##type " != "  \
-        FORMAT_##type, old, field);                                           \
-    else                                                                      \
-      pass ();                                                                \
-  }
+#  define CHK_ENTITY_TYPE_W_OBJ(ent, name, field, type)                       \
+    {                                                                         \
+      BITCODE_##type old;                                                     \
+      CHK_ENTITY_TYPE (ent, name, field, type);                               \
+      old = DWGAPI_OBJ_NAME (ent, field) (ent, &error);                       \
+      if (error || old != field)                                              \
+        fail ("old API dwg_obj_" #ent "_get_" #field ": " FORMAT_##type       \
+              " != " FORMAT_##type,                                           \
+              old, field);                                                    \
+      else                                                                    \
+        pass ();                                                              \
+    }
 #endif
 
 #ifndef USE_DEPRECATED_API
-#  define CHK_ENTITY_2RD_W_OLD(ent, name, field) CHK_ENTITY_2RD (ent, name, field)
-#  define CHK_ENTITY_3RD_W_OLD(ent, name, field) CHK_ENTITY_3RD (ent, name, field)
+#  define CHK_ENTITY_2RD_W_OLD(ent, name, field)                              \
+    CHK_ENTITY_2RD (ent, name, field)
+#  define CHK_ENTITY_3RD_W_OLD(ent, name, field)                              \
+    CHK_ENTITY_3RD (ent, name, field)
 #else
-#define CHK_ENTITY_2RD_W_OLD(ent, name, field)                                \
-  CHK_ENTITY_2RD (ent, name, field);                                          \
-  {                                                                           \
-    dwg_point_2d _pt2d;                                                       \
-    DWGAPI_ENT_NAME (ent, field) (ent, &_pt2d, &error);                       \
-    if (error || memcmp (&field, &_pt2d, sizeof (field)))                     \
-      fail ("old API dwg_ent_" #ent "_get_" #field);                          \
-    else                                                                      \
-      pass ();                                                                \
-  }
-#define CHK_ENTITY_3RD_W_OLD(ent, name, field)                         	      \
-  CHK_ENTITY_3RD (ent, name, field);                                          \
-  {                                                                           \
-    dwg_point_3d _pt3d;                                                       \
-    DWGAPI_ENT_NAME (ent, field) (ent, &_pt3d, &error);                       \
-    if (error || memcmp (&field, &_pt3d, sizeof (field)))                     \
-      fail ("old API dwg_ent_" #ent "_get_" #field);                          \
-    else                                                                      \
-      pass ();                                                                \
-  }
+#  define CHK_ENTITY_2RD_W_OLD(ent, name, field)                              \
+    CHK_ENTITY_2RD (ent, name, field);                                        \
+    {                                                                         \
+      dwg_point_2d _pt2d;                                                     \
+      DWGAPI_ENT_NAME (ent, field) (ent, &_pt2d, &error);                     \
+      if (error || memcmp (&field, &_pt2d, sizeof (field)))                   \
+        fail ("old API dwg_ent_" #ent "_get_" #field);                        \
+      else                                                                    \
+        pass ();                                                              \
+    }
+#  define CHK_ENTITY_3RD_W_OLD(ent, name, field)                              \
+    CHK_ENTITY_3RD (ent, name, field);                                        \
+    {                                                                         \
+      dwg_point_3d _pt3d;                                                     \
+      DWGAPI_ENT_NAME (ent, field) (ent, &_pt3d, &error);                     \
+      if (error || memcmp (&field, &_pt3d, sizeof (field)))                   \
+        fail ("old API dwg_ent_" #ent "_get_" #field);                        \
+      else                                                                    \
+        pass ();                                                              \
+    }
 #endif
 
 #define CHK_SUBCLASS_TYPE(ptr, name, field, typ)                              \
@@ -1809,7 +1837,8 @@ api_common_entity (dwg_object *obj)
       {                                                                       \
         int alloced = 0;                                                      \
         char *_hdlname                                                        \
-            = _value ? dwg_dynapi_handle_name (obj->parent, _value, &alloced) : NULL;   \
+            = _value ? dwg_dynapi_handle_name (obj->parent, _value, &alloced) \
+                     : NULL;                                                  \
         if (!_value)                                                          \
           {                                                                   \
             if (!ptr.field)                                                   \
@@ -1927,8 +1956,7 @@ api_common_entity (dwg_object *obj)
     }
 #define CHK_SUBCLASS_MAX(ptr, name, field, type, _max)                        \
   if (ptr.field > _max)                                                       \
-    fail ("Invalid " #name "." #field " " FORMAT_##type " > " #_max, ptr.field)
-
+  fail ("Invalid " #name "." #field " " FORMAT_##type " > " #_max, ptr.field)
 
 void
 api_common_object (dwg_object *obj)
@@ -2072,7 +2100,8 @@ api_common_object (dwg_object *obj)
 
 // FIXME TYPE unused
 #define CHK_ASSOCPARAMBASEDACTIONBODY(TYPE)                                   \
-  PRE (R_2013) {                                                              \
+  PRE (R_2013)                                                                \
+  {                                                                           \
     CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, version, BL);    \
     CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, minor, BL);      \
     CHK_SUBCLASS_TYPE (_obj->pab, ASSOCPARAMBASEDACTIONBODY, num_deps, BL);   \

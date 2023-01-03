@@ -9,7 +9,8 @@ api_process (dwg_object *obj)
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
-  dwg_ent_visibilityparameterentity *_obj = dwg_object_to_VISIBILITYPARAMETERENTITY (obj);
-  
+  dwg_ent_visibilityparameterentity *_obj
+      = dwg_object_to_VISIBILITYPARAMETERENTITY (obj);
+
 #endif
 }

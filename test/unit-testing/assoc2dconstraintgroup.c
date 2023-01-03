@@ -8,17 +8,18 @@ api_process (dwg_object *obj)
   ASSOCACTION_fields;
 
   BITCODE_BL version;
-  BITCODE_B  b1;
+  BITCODE_B b1;
   BITCODE_3BD workplane[3];
   BITCODE_H h1;
   BITCODE_BL num_actions;
-  BITCODE_H* actions;
+  BITCODE_H *actions;
   BITCODE_BL num_nodes;
   Dwg_CONSTRAINTGROUPNODE *nodes;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   //#ifdef DEBUG_CLASSES
-  dwg_obj_assoc2dconstraintgroup *_obj = dwg_object_to_ASSOC2DCONSTRAINTGROUP (obj);
+  dwg_obj_assoc2dconstraintgroup *_obj
+      = dwg_object_to_ASSOC2DCONSTRAINTGROUP (obj);
   // ASSOCACTION
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, class_version, BS);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, geometry_status, BL);
@@ -28,7 +29,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, action_index, BL);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, max_assoc_dep_index, BL);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_deps, BL);
-  for (unsigned i=0; i < num_deps; i++)
+  for (unsigned i = 0; i < num_deps; i++)
     {
       CHK_SUBCLASS_TYPE (_obj->deps[i], ASSOCACTION_Deps, is_owned, B);
       CHK_SUBCLASS_H (_obj->deps[i], ASSOCACTION_Deps, dep);
@@ -41,19 +42,22 @@ api_process (dwg_object *obj)
   // ASSOC2DCONSTRAINTGROUP
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, version, BL);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, b1, B);
-  //CHK_ENTITY_3RD (_obj, ASSOC2DCONSTRAINTGROUP, workplane[3], &workplane[3][0]); //3x10 workplane
+  // CHK_ENTITY_3RD (_obj, ASSOC2DCONSTRAINTGROUP, workplane[3],
+  // &workplane[3][0]); //3x10 workplane
   CHK_ENTITY_H (_obj, ASSOC2DCONSTRAINTGROUP, h1);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_actions, BL);
   CHK_ENTITY_HV (_obj, ASSOC2DCONSTRAINTGROUP, actions, num_actions);
   CHK_ENTITY_TYPE (_obj, ASSOC2DCONSTRAINTGROUP, num_nodes, BL);
-  for (unsigned i=0; i < num_nodes; i++)
+  for (unsigned i = 0; i < num_nodes; i++)
     {
       CHK_SUBCLASS_TYPE (_obj->nodes[i], CONSTRAINTGROUPNODE, nodeid, BL);
       CHK_SUBCLASS_TYPE (_obj->nodes[i], CONSTRAINTGROUPNODE, status, RC);
-      CHK_SUBCLASS_TYPE (_obj->nodes[i], CONSTRAINTGROUPNODE, num_connections, BL);
-      for (unsigned j=0; j < _obj->nodes[i].num_connections; j++)
+      CHK_SUBCLASS_TYPE (_obj->nodes[i], CONSTRAINTGROUPNODE, num_connections,
+                         BL);
+      for (unsigned j = 0; j < _obj->nodes[i].num_connections; j++)
         {
-          ok ("CONSTRAINTGROUPNODE[%d].connections[%d]: %d", i, j, (int)_obj->nodes[i].connections[j]);
+          ok ("CONSTRAINTGROUPNODE[%d].connections[%d]: %d", i, j,
+              (int)_obj->nodes[i].connections[j]);
         }
     }
   //#endif

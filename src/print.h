@@ -24,7 +24,7 @@
 #include "bits.h"
 
 #ifdef IN_DXF_H
-#error in_dxf.h must be included after print.h because of FORMAT_BD
+#  error in_dxf.h must be included after print.h because of FORMAT_BD
 #endif
 
 int dwg_print_object (Bit_Chain *dat, Dwg_Object *obj);

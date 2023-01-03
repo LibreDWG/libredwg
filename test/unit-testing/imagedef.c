@@ -11,7 +11,7 @@ api_process (dwg_object *obj)
   BITCODE_B is_loaded;
   BITCODE_RC resunits;
   BITCODE_2RD pixel_size;
-  //BITCODE_H xrefctrl;    /*!< r2010+ */
+  // BITCODE_H xrefctrl;    /*!< r2010+ */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_imagedef *_obj = dwg_object_to_IMAGEDEF (obj);

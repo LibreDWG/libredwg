@@ -15,8 +15,8 @@ api_process (dwg_object *obj)
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_acsh_history_class *_obj = dwg_object_to_ACSH_HISTORY_CLASS (obj);
 
-  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, major, BL); //33
-  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, minor, BL); //29
+  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, major, BL); // 33
+  CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, minor, BL); // 29
   CHK_ENTITY_H (_obj, ACSH_HISTORY_CLASS, owner);
   CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, h_nodeid, BL);
   CHK_ENTITY_TYPE (_obj, ACSH_HISTORY_CLASS, show_history, B);

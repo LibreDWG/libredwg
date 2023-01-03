@@ -29,7 +29,7 @@ api_process (dwg_object *obj)
   BITCODE_T coord_system_def;
   BITCODE_T geo_rss_tag;
   BITCODE_T coord_system_datum; /* obsolete */
-  BITCODE_T coord_system_wkt; /* obsolete */
+  BITCODE_T coord_system_wkt;   /* obsolete */
   BITCODE_T observation_from_tag;
   BITCODE_T observation_to_tag;
   BITCODE_T observation_coverage_tag;
@@ -45,7 +45,7 @@ api_process (dwg_object *obj)
   BITCODE_B unknown_b;
   BITCODE_BD north_dir_angle_deg;
   BITCODE_BD north_dir_angle_rad;
-  
+
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_geodata *geodata = dwg_object_to_GEODATA (obj);
 
@@ -80,7 +80,8 @@ api_process (dwg_object *obj)
   else
     {
       CHK_ENTITY_TYPE (geodata, GEODATA, units_value_horiz, BL);
-      CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_datum); /* obsolete */
+      CHK_ENTITY_UTF8TEXT (geodata, GEODATA,
+                           coord_system_datum);                 /* obsolete */
       CHK_ENTITY_UTF8TEXT (geodata, GEODATA, coord_system_wkt); /* obsolete */
       CHK_ENTITY_TYPE (geodata, GEODATA, has_civil_data, B);
       CHK_ENTITY_TYPE (geodata, GEODATA, obsolete_false, B);
@@ -94,7 +95,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (geodata, GEODATA, observation_to_tag);
   CHK_ENTITY_UTF8TEXT (geodata, GEODATA, observation_coverage_tag);
   CHK_ENTITY_TYPE (geodata, GEODATA, num_geomesh_pts, BL);
-  if (!dwg_dynapi_entity_value (geodata, "GEODATA", "geomesh_pts", &geomesh_pts, NULL))
+  if (!dwg_dynapi_entity_value (geodata, "GEODATA", "geomesh_pts",
+                                &geomesh_pts, NULL))
     fail ("GEODATA.geomesh_pts");
   if (num_geomesh_pts)
     {
@@ -108,7 +110,8 @@ api_process (dwg_object *obj)
           }
     }
   CHK_ENTITY_TYPE (geodata, GEODATA, num_geomesh_faces, BL);
-  if (!dwg_dynapi_entity_value (geodata, "GEODATA", "geomesh_faces", &geomesh_faces, NULL))
+  if (!dwg_dynapi_entity_value (geodata, "GEODATA", "geomesh_faces",
+                                &geomesh_faces, NULL))
     fail ("GEODATA.geomesh_faces");
   if (num_geomesh_faces)
     {
@@ -123,7 +126,8 @@ api_process (dwg_object *obj)
           }
     }
 
-  UNTIL (R_2007) {
+  UNTIL (R_2007)
+  {
     CHK_ENTITY_TYPE (geodata, GEODATA, has_civil_data, B);
     CHK_ENTITY_TYPE (geodata, GEODATA, obsolete_false, B);
     CHK_ENTITY_2RD (geodata, GEODATA, ref_pt2d);
@@ -140,5 +144,4 @@ api_process (dwg_object *obj)
     CHK_ENTITY_TYPE (geodata, GEODATA, sea_level_elev, BD);
     CHK_ENTITY_TYPE (geodata, GEODATA, coord_proj_radius, BD);
   }
-
 }

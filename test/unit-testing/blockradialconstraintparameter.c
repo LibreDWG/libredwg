@@ -15,7 +15,8 @@ api_process (dwg_object *obj)
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   //#ifdef DEBUG_CLASSES
-  dwg_obj_blockradialconstraintparameter *_obj = dwg_object_to_BLOCKRADIALCONSTRAINTPARAMETER (obj);
+  dwg_obj_blockradialconstraintparameter *_obj
+      = dwg_object_to_BLOCKRADIALCONSTRAINTPARAMETER (obj);
 
   CHK_EVALEXPR (BLOCKRADIALCONSTRAINTPARAMETER);
   // AcDbBlockElement
@@ -29,16 +30,16 @@ api_process (dwg_object *obj)
   // AcDbBlock2PtParameter
   CHK_ENTITY_3RD (_obj, BLOCKRADIALCONSTRAINTPARAMETER, def_basept);
   CHK_ENTITY_3RD (_obj, BLOCKRADIALCONSTRAINTPARAMETER, def_endpt);
-  BLOCKPARAMETER_PropInfo (prop1)
-  BLOCKPARAMETER_PropInfo (prop2)
-  BLOCKPARAMETER_PropInfo (prop3)
-  BLOCKPARAMETER_PropInfo (prop4)
-  CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKRADIALCONSTRAINTPARAMETER, prop_states, 4, BL);
-  CHK_ENTITY_TYPE (_obj, BLOCKRADIALCONSTRAINTPARAMETER, parameter_base_location, BS);
-  CHK_ENTITY_3RD  (_obj, BLOCKRADIALCONSTRAINTPARAMETER, upd_basept);
-  CHK_ENTITY_3RD  (_obj, BLOCKRADIALCONSTRAINTPARAMETER, basept);
-  CHK_ENTITY_3RD  (_obj, BLOCKRADIALCONSTRAINTPARAMETER, upd_endpt);
-  CHK_ENTITY_3RD  (_obj, BLOCKRADIALCONSTRAINTPARAMETER, endpt);
+  BLOCKPARAMETER_PropInfo (prop1) BLOCKPARAMETER_PropInfo (prop2)
+      BLOCKPARAMETER_PropInfo (prop3) BLOCKPARAMETER_PropInfo (prop4)
+          CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKRADIALCONSTRAINTPARAMETER,
+                                  prop_states, 4, BL);
+  CHK_ENTITY_TYPE (_obj, BLOCKRADIALCONSTRAINTPARAMETER,
+                   parameter_base_location, BS);
+  CHK_ENTITY_3RD (_obj, BLOCKRADIALCONSTRAINTPARAMETER, upd_basept);
+  CHK_ENTITY_3RD (_obj, BLOCKRADIALCONSTRAINTPARAMETER, basept);
+  CHK_ENTITY_3RD (_obj, BLOCKRADIALCONSTRAINTPARAMETER, upd_endpt);
+  CHK_ENTITY_3RD (_obj, BLOCKRADIALCONSTRAINTPARAMETER, endpt);
   // AcDbBlockConstraintParameter
   CHK_ENTITY_H (_obj, BLOCKRADIALCONSTRAINTPARAMETER, dependency);
   // AcDbBlockRadialConstraintParameter

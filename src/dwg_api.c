@@ -54,13 +54,15 @@ static unsigned nodeid = 0;
 
 /* Non-public imports */
 /* I don't want to export these. */
-BITCODE_H dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
+BITCODE_H dwg_find_tablehandle_silent (Dwg_Data *restrict dwg,
+                                       const char *restrict name,
                                        const char *restrict table);
 /* Initialization hack only */
 void dwg_set_next_hdl (Dwg_Data *dwg, unsigned long value);
 void dwg_set_next_objhandle (Dwg_Object *obj);
 /* from dxfclasses */
-int dwg_dxfclass_require (Dwg_Data *restrict dwg, const char *restrict dxfname);
+int dwg_dxfclass_require (Dwg_Data *restrict dwg,
+                          const char *restrict dxfname);
 
 /**
  * Return an object fieldvalue
@@ -108,1052 +110,846 @@ int dwg_dxfclass_require (Dwg_Data *restrict dwg, const char *restrict dxfname);
 #ifndef __AFL_COMPILER
 
 // clang-format: off
-dwg_get_OBJECT (ent_text, TEXT)
-dwg_get_OBJECT (ent_attrib, ATTRIB)
-dwg_get_OBJECT (ent_attdef, ATTDEF)
-dwg_get_OBJECT (ent_block, BLOCK)
-dwg_get_OBJECT (ent_endblk, ENDBLK)
-dwg_get_OBJECT (ent_seqend, SEQEND)
-dwg_get_OBJECT (ent_insert, INSERT)
-dwg_get_OBJECT (ent_minsert, MINSERT)
-dwg_get_OBJECT (ent_vertex_2d, VERTEX_2D)
-dwg_get_OBJECT (ent_vertex_3d, VERTEX_3D)
-dwg_get_OBJECT (ent_vertex_3d, VERTEX_MESH)
-dwg_get_OBJECT (ent_vertex_3d, VERTEX_PFACE)
-dwg_get_OBJECT (ent_vert_pface_face, VERTEX_PFACE_FACE)
-dwg_get_OBJECT (ent_polyline_2d, POLYLINE_2D)
-dwg_get_OBJECT (ent_polyline_3d, POLYLINE_3D)
-dwg_get_OBJECT (ent_arc, ARC)
+dwg_get_OBJECT (ent_text, TEXT) dwg_get_OBJECT (ent_attrib, ATTRIB)
+    dwg_get_OBJECT (ent_attdef, ATTDEF) dwg_get_OBJECT (ent_block, BLOCK)
+        dwg_get_OBJECT (ent_endblk, ENDBLK) dwg_get_OBJECT (ent_seqend, SEQEND)
+            dwg_get_OBJECT (ent_insert, INSERT)
+                dwg_get_OBJECT (ent_minsert, MINSERT)
+                    dwg_get_OBJECT (ent_vertex_2d, VERTEX_2D)
+                        dwg_get_OBJECT (ent_vertex_3d, VERTEX_3D)
+                            dwg_get_OBJECT (ent_vertex_3d, VERTEX_MESH)
+                                dwg_get_OBJECT (ent_vertex_3d, VERTEX_PFACE)
+                                    dwg_get_OBJECT (ent_vert_pface_face,
+                                                    VERTEX_PFACE_FACE)
+                                        dwg_get_OBJECT (ent_polyline_2d,
+                                                        POLYLINE_2D)
+                                            dwg_get_OBJECT (ent_polyline_3d,
+                                                            POLYLINE_3D)
+                                                dwg_get_OBJECT (ent_arc, ARC)
 
 #endif
 
-/* Most API functions are now auto-generated, but excluded
-   from afl-fuzz, because there would be too many.
-   These are the exceptions, needed in dwgwrite, ... */
+    /* Most API functions are now auto-generated, but excluded
+       from afl-fuzz, because there would be too many.
+       These are the exceptions, needed in dwgwrite, ... */
 
-dwg_get_OBJECT (ent_circle, CIRCLE)
-dwg_get_OBJECT (ent_line, LINE)
+    dwg_get_OBJECT (ent_circle, CIRCLE) dwg_get_OBJECT (ent_line, LINE)
 
 #ifdef __AFL_COMPILER
-CAST_DWG_OBJECT_TO_ENTITY (VERTEX_2D)
-CAST_DWG_OBJECT_TO_ENTITY (VERTEX_3D)
+        CAST_DWG_OBJECT_TO_ENTITY (VERTEX_2D) CAST_DWG_OBJECT_TO_ENTITY (
+            VERTEX_3D)
 #endif
 
 #ifndef __AFL_COMPILER
 
-dwg_get_OBJECT (ent_dim_ordinate, DIMENSION_ORDINATE)
-dwg_get_OBJECT (ent_dim_linear, DIMENSION_LINEAR)
-dwg_get_OBJECT (ent_dim_aligned, DIMENSION_ALIGNED)
-dwg_get_OBJECT (ent_dim_ang3pt, DIMENSION_ANG3PT)
-dwg_get_OBJECT (ent_dim_ang2ln, DIMENSION_ANG2LN)
-dwg_get_OBJECT (ent_dim_radius, DIMENSION_RADIUS)
-dwg_get_OBJECT (ent_dim_diameter, DIMENSION_DIAMETER)
-dwg_get_OBJECT (ent_point, POINT)
-dwg_get_OBJECT (ent_polyline_pface, POLYLINE_PFACE)
-dwg_get_OBJECT (ent_polyline_mesh, POLYLINE_MESH)
-dwg_get_OBJECT (ent_solid, SOLID)
-dwg_get_OBJECT (ent_trace, TRACE)
-dwg_get_OBJECT (ent_shape, SHAPE)
-dwg_get_OBJECT (ent_viewport, VIEWPORT)
-dwg_get_OBJECT (ent_ellipse, ELLIPSE)
-dwg_get_OBJECT (ent_spline, SPLINE)
-dwg_get_OBJECT (ent_3dsolid, 3DSOLID)
-dwg_get_OBJECT (ent_region, REGION)
-dwg_get_OBJECT (ent_body, BODY)
-dwg_get_OBJECT (ent_ray, RAY)
-dwg_get_OBJECT (ent_xline, XLINE)
-dwg_get_OBJECT (ent_oleframe, OLEFRAME)
-dwg_get_OBJECT (ent_mtext, MTEXT)
-dwg_get_OBJECT (ent_leader, LEADER)
-dwg_get_OBJECT (ent_tolerance, TOLERANCE)
-dwg_get_OBJECT (ent_mline, MLINE)
-dwg_get_OBJECT (ent_unknown, UNKNOWN_ENT)
-  
-/* Start auto-generated content. Do not touch. */
-/* untyped > 500 */
-dwg_get_OBJECT (ent_camera, CAMERA)
-dwg_get_OBJECT (ent_dgnunderlay, DGNUNDERLAY)
-dwg_get_OBJECT (ent_dwfunderlay, DWFUNDERLAY)
-dwg_get_OBJECT (ent_hatch, HATCH)
-dwg_get_OBJECT (ent_image, IMAGE)
-dwg_get_OBJECT (ent_light, LIGHT)
-dwg_get_OBJECT (ent_lwpline, LWPOLYLINE)
-dwg_get_OBJECT (ent_mesh, MESH)
-dwg_get_OBJECT (ent_mleader, MULTILEADER)
-dwg_get_OBJECT (ent_ole2frame, OLE2FRAME)
-dwg_get_OBJECT (ent_pdfunderlay, PDFUNDERLAY)
-dwg_get_OBJECT (ent_sectionobject, SECTIONOBJECT)
-/* unstable */
-dwg_get_OBJECT (ent__3dline, _3DLINE)
-dwg_get_OBJECT (ent_arc_dimension, ARC_DIMENSION)
-dwg_get_OBJECT (ent_endrep, ENDREP)
-dwg_get_OBJECT (ent_helix, HELIX)
-dwg_get_OBJECT (ent_large_radial_dimension, LARGE_RADIAL_DIMENSION)
-dwg_get_OBJECT (ent_planesurface, PLANESURFACE)
-dwg_get_OBJECT (ent_pointcloud, POINTCLOUD)
-dwg_get_OBJECT (ent_pointcloudex, POINTCLOUDEX)
-dwg_get_OBJECT (ent_repeat, REPEAT)
-dwg_get_OBJECT (ent_wipeout, WIPEOUT)
-#ifdef DEBUG_CLASSES
-  dwg_get_OBJECT (ent_alignmentparameterentity, ALIGNMENTPARAMETERENTITY)
-  dwg_get_OBJECT (ent_arcalignedtext, ARCALIGNEDTEXT)
-  dwg_get_OBJECT (ent_basepointparameterentity, BASEPOINTPARAMETERENTITY)
-  dwg_get_OBJECT (ent_extrudedsurface, EXTRUDEDSURFACE)
-  dwg_get_OBJECT (ent_flipgripentity, FLIPGRIPENTITY)
-  dwg_get_OBJECT (ent_flipparameterentity, FLIPPARAMETERENTITY)
-  dwg_get_OBJECT (ent_geopositionmarker, GEOPOSITIONMARKER)
-  dwg_get_OBJECT (ent_lineargripentity, LINEARGRIPENTITY)
-  dwg_get_OBJECT (ent_linearparameterentity, LINEARPARAMETERENTITY)
-  dwg_get_OBJECT (ent_loftedsurface, LOFTEDSURFACE)
-  dwg_get_OBJECT (ent_mpolygon, MPOLYGON)
-  dwg_get_OBJECT (ent_navisworksmodel, NAVISWORKSMODEL)
-  dwg_get_OBJECT (ent_nurbsurface, NURBSURFACE)
-  dwg_get_OBJECT (ent_pointparameterentity, POINTPARAMETERENTITY)
-  dwg_get_OBJECT (ent_polargripentity, POLARGRIPENTITY)
-  dwg_get_OBJECT (ent_revolvedsurface, REVOLVEDSURFACE)
-  dwg_get_OBJECT (ent_rotationgripentity, ROTATIONGRIPENTITY)
-  dwg_get_OBJECT (ent_rotationparameterentity, ROTATIONPARAMETERENTITY)
-  dwg_get_OBJECT (ent_rtext, RTEXT)
-  dwg_get_OBJECT (ent_sweptsurface, SWEPTSURFACE)
-  dwg_get_OBJECT (ent_table, TABLE)
-  dwg_get_OBJECT (ent_visibilitygripentity, VISIBILITYGRIPENTITY)
-  dwg_get_OBJECT (ent_visibilityparameterentity, VISIBILITYPARAMETERENTITY)
-  dwg_get_OBJECT (ent_xygripentity, XYGRIPENTITY)
-  dwg_get_OBJECT (ent_xyparameterentity, XYPARAMETERENTITY)
-#endif
+            dwg_get_OBJECT (ent_dim_ordinate, DIMENSION_ORDINATE) dwg_get_OBJECT (
+                ent_dim_linear,
+                DIMENSION_LINEAR) dwg_get_OBJECT (ent_dim_aligned,
+                                                  DIMENSION_ALIGNED)
+                dwg_get_OBJECT (
+                    ent_dim_ang3pt,
+                    DIMENSION_ANG3PT) dwg_get_OBJECT (ent_dim_ang2ln,
+                                                      DIMENSION_ANG2LN)
+                    dwg_get_OBJECT (
+                        ent_dim_radius,
+                        DIMENSION_RADIUS) dwg_get_OBJECT (ent_dim_diameter,
+                                                          DIMENSION_DIAMETER)
+                        dwg_get_OBJECT (ent_point, POINT) dwg_get_OBJECT (
+                            ent_polyline_pface,
+                            POLYLINE_PFACE) dwg_get_OBJECT (ent_polyline_mesh,
+                                                            POLYLINE_MESH)
+                            dwg_get_OBJECT (ent_solid, SOLID) dwg_get_OBJECT (
+                                ent_trace, TRACE) dwg_get_OBJECT (ent_shape,
+                                                                  SHAPE)
+                                dwg_get_OBJECT (
+                                    ent_viewport,
+                                    VIEWPORT) dwg_get_OBJECT (ent_ellipse,
+                                                              ELLIPSE)
+                                    dwg_get_OBJECT (
+                                        ent_spline,
+                                        SPLINE) dwg_get_OBJECT (ent_3dsolid,
+                                                                3DSOLID)
+                                        dwg_get_OBJECT (
+                                            ent_region,
+                                            REGION) dwg_get_OBJECT (ent_body,
+                                                                    BODY)
+                                            dwg_get_OBJECT (
+                                                ent_ray,
+                                                RAY) dwg_get_OBJECT (ent_xline,
+                                                                     XLINE)
+                                                dwg_get_OBJECT (ent_oleframe,
+                                                                OLEFRAME)
+                                                    dwg_get_OBJECT (ent_mtext,
+                                                                    MTEXT)
+                                                        dwg_get_OBJECT (
+                                                            ent_leader, LEADER)
+                                                            dwg_get_OBJECT (
+                                                                ent_tolerance,
+                                                                TOLERANCE)
+                                                                dwg_get_OBJECT (
+                                                                    ent_mline,
+                                                                    MLINE)
+                                                                    dwg_get_OBJECT (
+                                                                        ent_unknown,
+                                                                        UNKNOWN_ENT)
 
-dwg_get_OBJECT (obj_appid, APPID)
-dwg_get_OBJECT (obj_appid_control, APPID_CONTROL)
-dwg_get_OBJECT (obj_block_control, BLOCK_CONTROL)
-dwg_get_OBJECT (obj_block_header, BLOCK_HEADER)
-dwg_get_OBJECT (obj_dictionary, DICTIONARY)
-dwg_get_OBJECT (obj_dimstyle, DIMSTYLE)
-dwg_get_OBJECT (obj_dimstyle_control, DIMSTYLE_CONTROL)
-dwg_get_OBJECT (obj_dummy, DUMMY)
-dwg_get_OBJECT (obj_layer, LAYER)
-dwg_get_OBJECT (obj_layer_control, LAYER_CONTROL)
-dwg_get_OBJECT (obj_long_transaction, LONG_TRANSACTION)
-dwg_get_OBJECT (obj_ltype, LTYPE)
-dwg_get_OBJECT (obj_ltype_control, LTYPE_CONTROL)
-dwg_get_OBJECT (obj_mlinestyle, MLINESTYLE)
-dwg_get_OBJECT (obj_style, STYLE)
-dwg_get_OBJECT (obj_style_control, STYLE_CONTROL)
-dwg_get_OBJECT (obj_ucs, UCS)
-dwg_get_OBJECT (obj_ucs_control, UCS_CONTROL)
-dwg_get_OBJECT (obj_unknown_obj, UNKNOWN_OBJ)
-dwg_get_OBJECT (obj_view, VIEW)
-dwg_get_OBJECT (obj_view_control, VIEW_CONTROL)
-dwg_get_OBJECT (obj_vport, VPORT)
-dwg_get_OBJECT (obj_vport_control, VPORT_CONTROL)
-dwg_get_OBJECT (obj_vx_control, VX_CONTROL)
-dwg_get_OBJECT (obj_vx_table_record, VX_TABLE_RECORD)
-/* untyped > 500 */
-dwg_get_OBJECT (obj_acsh_boolean_class, ACSH_BOOLEAN_CLASS)
-dwg_get_OBJECT (obj_acsh_box_class, ACSH_BOX_CLASS)
-dwg_get_OBJECT (obj_acsh_cone_class, ACSH_CONE_CLASS)
-dwg_get_OBJECT (obj_acsh_cylinder_class, ACSH_CYLINDER_CLASS)
-dwg_get_OBJECT (obj_acsh_fillet_class, ACSH_FILLET_CLASS)
-dwg_get_OBJECT (obj_acsh_history_class, ACSH_HISTORY_CLASS)
-dwg_get_OBJECT (obj_acsh_sphere_class, ACSH_SPHERE_CLASS)
-dwg_get_OBJECT (obj_acsh_torus_class, ACSH_TORUS_CLASS)
-dwg_get_OBJECT (obj_acsh_wedge_class, ACSH_WEDGE_CLASS)
-dwg_get_OBJECT (obj_blockalignmentgrip, BLOCKALIGNMENTGRIP)
-dwg_get_OBJECT (obj_blockalignmentparameter, BLOCKALIGNMENTPARAMETER)
-dwg_get_OBJECT (obj_blockbasepointparameter, BLOCKBASEPOINTPARAMETER)
-dwg_get_OBJECT (obj_blockflipaction, BLOCKFLIPACTION)
-dwg_get_OBJECT (obj_blockflipgrip, BLOCKFLIPGRIP)
-dwg_get_OBJECT (obj_blockflipparameter, BLOCKFLIPPARAMETER)
-dwg_get_OBJECT (obj_blockgriplocationcomponent, BLOCKGRIPLOCATIONCOMPONENT)
-dwg_get_OBJECT (obj_blocklineargrip, BLOCKLINEARGRIP)
-dwg_get_OBJECT (obj_blocklookupgrip, BLOCKLOOKUPGRIP)
-dwg_get_OBJECT (obj_blockmoveaction, BLOCKMOVEACTION)
-dwg_get_OBJECT (obj_blockrotateaction, BLOCKROTATEACTION)
-dwg_get_OBJECT (obj_blockrotationgrip, BLOCKROTATIONGRIP)
-dwg_get_OBJECT (obj_blockscaleaction, BLOCKSCALEACTION)
-dwg_get_OBJECT (obj_blockvisibilitygrip, BLOCKVISIBILITYGRIP)
-dwg_get_OBJECT (obj_cellstylemap, CELLSTYLEMAP)
-dwg_get_OBJECT (obj_detailviewstyle, DETAILVIEWSTYLE)
-dwg_get_OBJECT (obj_dictionaryvar, DICTIONARYVAR)
-dwg_get_OBJECT (obj_dictionarywdflt, DICTIONARYWDFLT)
-dwg_get_OBJECT (obj_dynamicblockpurgepreventer, DYNAMICBLOCKPURGEPREVENTER)
-dwg_get_OBJECT (obj_field, FIELD)
-dwg_get_OBJECT (obj_fieldlist, FIELDLIST)
-dwg_get_OBJECT (obj_geodata, GEODATA)
-dwg_get_OBJECT (obj_group, GROUP)
-dwg_get_OBJECT (obj_idbuffer, IDBUFFER)
-dwg_get_OBJECT (obj_imagedef, IMAGEDEF)
-dwg_get_OBJECT (obj_imagedef_reactor, IMAGEDEF_REACTOR)
-dwg_get_OBJECT (obj_index, INDEX)
-dwg_get_OBJECT (obj_layerfilter, LAYERFILTER)
-dwg_get_OBJECT (obj_layer_index, LAYER_INDEX)
-dwg_get_OBJECT (obj_layout, LAYOUT)
-dwg_get_OBJECT (obj_mleaderstyle, MLEADERSTYLE)
-dwg_get_OBJECT (obj_placeholder, PLACEHOLDER)
-dwg_get_OBJECT (obj_plotsettings, PLOTSETTINGS)
-dwg_get_OBJECT (obj_rastervariables, RASTERVARIABLES)
-dwg_get_OBJECT (obj_scale, SCALE)
-dwg_get_OBJECT (obj_sectionviewstyle, SECTIONVIEWSTYLE)
-dwg_get_OBJECT (obj_section_manager, SECTION_MANAGER)
-dwg_get_OBJECT (obj_sortentstable, SORTENTSTABLE)
-dwg_get_OBJECT (obj_spatial_filter, SPATIAL_FILTER)
-dwg_get_OBJECT (obj_tablegeometry, TABLEGEOMETRY)
-dwg_get_OBJECT (obj_vba_project, VBA_PROJECT)
-dwg_get_OBJECT (obj_visualstyle, VISUALSTYLE)
-dwg_get_OBJECT (obj_wipeoutvariables, WIPEOUTVARIABLES)
-dwg_get_OBJECT (obj_xrecord, XRECORD)
-dwg_get_OBJECT (obj_pdfdefinition, PDFDEFINITION)
-dwg_get_OBJECT (obj_dgndefinition, DGNDEFINITION)
-dwg_get_OBJECT (obj_dwfdefinition, DWFDEFINITION)
-/* unstable */
-dwg_get_OBJECT (obj_acsh_brep_class, ACSH_BREP_CLASS)
-dwg_get_OBJECT (obj_acsh_chamfer_class, ACSH_CHAMFER_CLASS)
-dwg_get_OBJECT (obj_acsh_pyramid_class, ACSH_PYRAMID_CLASS)
-dwg_get_OBJECT (obj_aldimobjectcontextdata, ALDIMOBJECTCONTEXTDATA)
-dwg_get_OBJECT (obj_assoc2dconstraintgroup, ASSOC2DCONSTRAINTGROUP)
-dwg_get_OBJECT (obj_assocaction, ASSOCACTION)
-dwg_get_OBJECT (obj_assocactionparam, ASSOCACTIONPARAM)
-dwg_get_OBJECT (obj_assocarrayactionbody, ASSOCARRAYACTIONBODY)
-dwg_get_OBJECT (obj_assocasmbodyactionparam, ASSOCASMBODYACTIONPARAM)
-dwg_get_OBJECT (obj_assocblendsurfaceactionbody, ASSOCBLENDSURFACEACTIONBODY)
-dwg_get_OBJECT (obj_assoccompoundactionparam, ASSOCCOMPOUNDACTIONPARAM)
-dwg_get_OBJECT (obj_assocdependency, ASSOCDEPENDENCY)
-dwg_get_OBJECT (obj_assocdimdependencybody, ASSOCDIMDEPENDENCYBODY)
-dwg_get_OBJECT (obj_assocextendsurfaceactionbody, ASSOCEXTENDSURFACEACTIONBODY)
-dwg_get_OBJECT (obj_assocextrudedsurfaceactionbody, ASSOCEXTRUDEDSURFACEACTIONBODY)
-dwg_get_OBJECT (obj_assocfaceactionparam, ASSOCFACEACTIONPARAM)
-dwg_get_OBJECT (obj_assocfilletsurfaceactionbody, ASSOCFILLETSURFACEACTIONBODY)
-dwg_get_OBJECT (obj_assocgeomdependency, ASSOCGEOMDEPENDENCY)
-dwg_get_OBJECT (obj_assocloftedsurfaceactionbody, ASSOCLOFTEDSURFACEACTIONBODY)
-dwg_get_OBJECT (obj_assocnetwork, ASSOCNETWORK)
-dwg_get_OBJECT (obj_assocnetworksurfaceactionbody, ASSOCNETWORKSURFACEACTIONBODY)
-dwg_get_OBJECT (obj_assocobjectactionparam, ASSOCOBJECTACTIONPARAM)
-dwg_get_OBJECT (obj_assocoffsetsurfaceactionbody, ASSOCOFFSETSURFACEACTIONBODY)
-dwg_get_OBJECT (obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM)
-dwg_get_OBJECT (obj_assocpatchsurfaceactionbody, ASSOCPATCHSURFACEACTIONBODY)
-dwg_get_OBJECT (obj_assocpathactionparam, ASSOCPATHACTIONPARAM)
-dwg_get_OBJECT (obj_assocplanesurfaceactionbody, ASSOCPLANESURFACEACTIONBODY)
-dwg_get_OBJECT (obj_assocpointrefactionparam, ASSOCPOINTREFACTIONPARAM)
-dwg_get_OBJECT (obj_assocrevolvedsurfaceactionbody, ASSOCREVOLVEDSURFACEACTIONBODY)
-dwg_get_OBJECT (obj_assoctrimsurfaceactionbody, ASSOCTRIMSURFACEACTIONBODY)
-dwg_get_OBJECT (obj_assocvaluedependency, ASSOCVALUEDEPENDENCY)
-dwg_get_OBJECT (obj_assocvariable, ASSOCVARIABLE)
-dwg_get_OBJECT (obj_assocvertexactionparam, ASSOCVERTEXACTIONPARAM)
-dwg_get_OBJECT (obj_blkrefobjectcontextdata, BLKREFOBJECTCONTEXTDATA)
-dwg_get_OBJECT (obj_blockalignedconstraintparameter, BLOCKALIGNEDCONSTRAINTPARAMETER)
-dwg_get_OBJECT (obj_blockangularconstraintparameter, BLOCKANGULARCONSTRAINTPARAMETER)
-dwg_get_OBJECT (obj_blockarrayaction, BLOCKARRAYACTION)
-dwg_get_OBJECT (obj_blockdiametricconstraintparameter, BLOCKDIAMETRICCONSTRAINTPARAMETER)
-dwg_get_OBJECT (obj_blockhorizontalconstraintparameter, BLOCKHORIZONTALCONSTRAINTPARAMETER)
-dwg_get_OBJECT (obj_blocklinearconstraintparameter, BLOCKLINEARCONSTRAINTPARAMETER)
-dwg_get_OBJECT (obj_blocklinearparameter, BLOCKLINEARPARAMETER)
-dwg_get_OBJECT (obj_blocklookupaction, BLOCKLOOKUPACTION)
-dwg_get_OBJECT (obj_blocklookupparameter, BLOCKLOOKUPPARAMETER)
-dwg_get_OBJECT (obj_blockparamdependencybody, BLOCKPARAMDEPENDENCYBODY)
-dwg_get_OBJECT (obj_blockpointparameter, BLOCKPOINTPARAMETER)
-dwg_get_OBJECT (obj_blockpolargrip, BLOCKPOLARGRIP)
-dwg_get_OBJECT (obj_blockpolarparameter, BLOCKPOLARPARAMETER)
-dwg_get_OBJECT (obj_blockpolarstretchaction, BLOCKPOLARSTRETCHACTION)
-dwg_get_OBJECT (obj_blockradialconstraintparameter, BLOCKRADIALCONSTRAINTPARAMETER)
-dwg_get_OBJECT (obj_blockrepresentation, BLOCKREPRESENTATION)
-dwg_get_OBJECT (obj_blockrotationparameter, BLOCKROTATIONPARAMETER)
-dwg_get_OBJECT (obj_blockstretchaction, BLOCKSTRETCHACTION)
-dwg_get_OBJECT (obj_blockuserparameter, BLOCKUSERPARAMETER)
-dwg_get_OBJECT (obj_blockverticalconstraintparameter, BLOCKVERTICALCONSTRAINTPARAMETER)
-dwg_get_OBJECT (obj_blockvisibilityparameter, BLOCKVISIBILITYPARAMETER)
-dwg_get_OBJECT (obj_blockxygrip, BLOCKXYGRIP)
-dwg_get_OBJECT (obj_blockxyparameter, BLOCKXYPARAMETER)
-dwg_get_OBJECT (obj_datalink, DATALINK)
-dwg_get_OBJECT (obj_dbcolor, DBCOLOR)
-dwg_get_OBJECT (obj_evaluation_graph, EVALUATION_GRAPH)
-dwg_get_OBJECT (obj_fcfobjectcontextdata, FCFOBJECTCONTEXTDATA)
-dwg_get_OBJECT (obj_gradient_background, GRADIENT_BACKGROUND)
-dwg_get_OBJECT (obj_ground_plane_background, GROUND_PLANE_BACKGROUND)
-dwg_get_OBJECT (obj_ibl_background, IBL_BACKGROUND)
-dwg_get_OBJECT (obj_image_background, IMAGE_BACKGROUND)
-dwg_get_OBJECT (obj_leaderobjectcontextdata, LEADEROBJECTCONTEXTDATA)
-dwg_get_OBJECT (obj_lightlist, LIGHTLIST)
-dwg_get_OBJECT (obj_material, MATERIAL)
-dwg_get_OBJECT (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS)
-dwg_get_OBJECT (obj_mtextobjectcontextdata, MTEXTOBJECTCONTEXTDATA)
-dwg_get_OBJECT (obj_object_ptr, OBJECT_PTR)
-dwg_get_OBJECT (obj_partial_viewing_index, PARTIAL_VIEWING_INDEX)
-dwg_get_OBJECT (obj_pointcloudcolormap, POINTCLOUDCOLORMAP)
-dwg_get_OBJECT (obj_pointclouddef, POINTCLOUDDEF)
-dwg_get_OBJECT (obj_pointclouddefex, POINTCLOUDDEFEX)
-dwg_get_OBJECT (obj_pointclouddef_reactor, POINTCLOUDDEF_REACTOR)
-dwg_get_OBJECT (obj_pointclouddef_reactor_ex, POINTCLOUDDEF_REACTOR_EX)
-dwg_get_OBJECT (obj_proxy_object, PROXY_OBJECT)
-dwg_get_OBJECT (obj_rapidrtrendersettings, RAPIDRTRENDERSETTINGS)
-dwg_get_OBJECT (obj_renderentry, RENDERENTRY)
-dwg_get_OBJECT (obj_renderenvironment, RENDERENVIRONMENT)
-dwg_get_OBJECT (obj_renderglobal, RENDERGLOBAL)
-dwg_get_OBJECT (obj_rendersettings, RENDERSETTINGS)
-dwg_get_OBJECT (obj_section_settings, SECTION_SETTINGS)
-dwg_get_OBJECT (obj_skylight_background, SKYLIGHT_BACKGROUND)
-dwg_get_OBJECT (obj_solid_background, SOLID_BACKGROUND)
-dwg_get_OBJECT (obj_spatial_index, SPATIAL_INDEX)
-dwg_get_OBJECT (obj_sun, SUN)
-dwg_get_OBJECT (obj_tablestyle, TABLESTYLE)
-dwg_get_OBJECT (obj_textobjectcontextdata, TEXTOBJECTCONTEXTDATA)
-dwg_get_OBJECT (obj_assocarraymodifyparameters, ASSOCARRAYMODIFYPARAMETERS)
-dwg_get_OBJECT (obj_assocarraypathparameters, ASSOCARRAYPATHPARAMETERS)
-dwg_get_OBJECT (obj_assocarraypolarparameters, ASSOCARRAYPOLARPARAMETERS)
-dwg_get_OBJECT (obj_assocarrayrectangularparameters, ASSOCARRAYRECTANGULARPARAMETERS)
-#ifdef DEBUG_CLASSES
-  dwg_get_OBJECT (obj_acmecommandhistory, ACMECOMMANDHISTORY)
-  dwg_get_OBJECT (obj_acmescope, ACMESCOPE)
-  dwg_get_OBJECT (obj_acmestatemgr, ACMESTATEMGR)
-  dwg_get_OBJECT (obj_acsh_extrusion_class, ACSH_EXTRUSION_CLASS)
-  dwg_get_OBJECT (obj_acsh_loft_class, ACSH_LOFT_CLASS)
-  dwg_get_OBJECT (obj_acsh_revolve_class, ACSH_REVOLVE_CLASS)
-  dwg_get_OBJECT (obj_acsh_sweep_class, ACSH_SWEEP_CLASS)
-  dwg_get_OBJECT (obj_angdimobjectcontextdata, ANGDIMOBJECTCONTEXTDATA)
-  dwg_get_OBJECT (obj_annotscaleobjectcontextdata, ANNOTSCALEOBJECTCONTEXTDATA)
-  dwg_get_OBJECT (obj_assoc3pointangulardimactionbody, ASSOC3POINTANGULARDIMACTIONBODY)
-  dwg_get_OBJECT (obj_assocaligneddimactionbody, ASSOCALIGNEDDIMACTIONBODY)
-  dwg_get_OBJECT (obj_assocarraymodifyactionbody, ASSOCARRAYMODIFYACTIONBODY)
-  dwg_get_OBJECT (obj_assocedgeactionparam, ASSOCEDGEACTIONPARAM)
-  dwg_get_OBJECT (obj_assocedgechamferactionbody, ASSOCEDGECHAMFERACTIONBODY)
-  dwg_get_OBJECT (obj_assocedgefilletactionbody, ASSOCEDGEFILLETACTIONBODY)
-  dwg_get_OBJECT (obj_assocmleaderactionbody, ASSOCMLEADERACTIONBODY)
-  dwg_get_OBJECT (obj_assocordinatedimactionbody, ASSOCORDINATEDIMACTIONBODY)
-  dwg_get_OBJECT (obj_assocperssubentmanager, ASSOCPERSSUBENTMANAGER)
-  dwg_get_OBJECT (obj_assocrestoreentitystateactionbody, ASSOCRESTOREENTITYSTATEACTIONBODY)
-  dwg_get_OBJECT (obj_assocrotateddimactionbody, ASSOCROTATEDDIMACTIONBODY)
-  dwg_get_OBJECT (obj_assocsweptsurfaceactionbody, ASSOCSWEPTSURFACEACTIONBODY)
-  dwg_get_OBJECT (obj_blockpropertiestable, BLOCKPROPERTIESTABLE)
-  dwg_get_OBJECT (obj_blockpropertiestablegrip, BLOCKPROPERTIESTABLEGRIP)
-  dwg_get_OBJECT (obj_breakdata, BREAKDATA)
-  dwg_get_OBJECT (obj_breakpointref, BREAKPOINTREF)
-  dwg_get_OBJECT (obj_contextdatamanager, CONTEXTDATAMANAGER)
-  dwg_get_OBJECT (obj_csacdocumentoptions, CSACDOCUMENTOPTIONS)
-  dwg_get_OBJECT (obj_curvepath, CURVEPATH)
-  dwg_get_OBJECT (obj_datatable, DATATABLE)
-  dwg_get_OBJECT (obj_dimassoc, DIMASSOC)
-  dwg_get_OBJECT (obj_dmdimobjectcontextdata, DMDIMOBJECTCONTEXTDATA)
-  dwg_get_OBJECT (obj_dynamicblockproxynode, DYNAMICBLOCKPROXYNODE)
-  dwg_get_OBJECT (obj_geomapimage, GEOMAPIMAGE)
-  dwg_get_OBJECT (obj_layoutprintconfig, LAYOUTPRINTCONFIG)
-  dwg_get_OBJECT (obj_mleaderobjectcontextdata, MLEADEROBJECTCONTEXTDATA)
-  dwg_get_OBJECT (obj_motionpath, MOTIONPATH)
-  dwg_get_OBJECT (obj_mtextattributeobjectcontextdata, MTEXTATTRIBUTEOBJECTCONTEXTDATA)
-  dwg_get_OBJECT (obj_navisworksmodeldef, NAVISWORKSMODELDEF)
-  dwg_get_OBJECT (obj_orddimobjectcontextdata, ORDDIMOBJECTCONTEXTDATA)
-  dwg_get_OBJECT (obj_persubentmgr, PERSUBENTMGR)
-  dwg_get_OBJECT (obj_pointpath, POINTPATH)
-  dwg_get_OBJECT (obj_radimlgobjectcontextdata, RADIMLGOBJECTCONTEXTDATA)
-  dwg_get_OBJECT (obj_radimobjectcontextdata, RADIMOBJECTCONTEXTDATA)
-  dwg_get_OBJECT (obj_sunstudy, SUNSTUDY)
-  dwg_get_OBJECT (obj_tablecontent, TABLECONTENT)
-  dwg_get_OBJECT (obj_tvdeviceproperties, TVDEVICEPROPERTIES)
-  //dwg_get_OBJECT (obj_acdsrecord, ACDSRECORD)
-  //dwg_get_OBJECT (obj_acdsschema, ACDSSCHEMA)
-  //dwg_get_OBJECT (obj_npocollection, NPOCOLLECTION)
-  //dwg_get_OBJECT (obj_rapidrtrenderenvironment, RAPIDRTRENDERENVIRONMENT)
-  //dwg_get_OBJECT (obj_xrefpanelobject, XREFPANELOBJECT)
-#endif
+    /* Start auto-generated content. Do not touch. */
+    /* untyped > 500 */
+    dwg_get_OBJECT (ent_camera, CAMERA) dwg_get_OBJECT (ent_dgnunderlay,
+                                                        DGNUNDERLAY)
+        dwg_get_OBJECT (ent_dwfunderlay, DWFUNDERLAY)
+            dwg_get_OBJECT (ent_hatch, HATCH) dwg_get_OBJECT (ent_image, IMAGE)
+                dwg_get_OBJECT (ent_light, LIGHT) dwg_get_OBJECT (ent_lwpline,
+                                                                  LWPOLYLINE)
+                    dwg_get_OBJECT (ent_mesh, MESH)
+                        dwg_get_OBJECT (ent_mleader, MULTILEADER)
+                            dwg_get_OBJECT (ent_ole2frame, OLE2FRAME)
+                                dwg_get_OBJECT (ent_pdfunderlay, PDFUNDERLAY)
+                                    dwg_get_OBJECT (ent_sectionobject,
+                                                    SECTIONOBJECT)
+    /* unstable */
+    dwg_get_OBJECT (ent__3dline, _3DLINE) dwg_get_OBJECT (ent_arc_dimension, ARC_DIMENSION) dwg_get_OBJECT (
+        ent_endrep,
+        ENDREP) dwg_get_OBJECT (ent_helix,
+                                HELIX) dwg_get_OBJECT (ent_large_radial_dimension,
+                                                       LARGE_RADIAL_DIMENSION)
+        dwg_get_OBJECT (ent_planesurface, PLANESURFACE) dwg_get_OBJECT (ent_pointcloud, POINTCLOUD) dwg_get_OBJECT (
+            ent_pointcloudex,
+            POINTCLOUDEX) dwg_get_OBJECT (ent_repeat,
+                                          REPEAT) dwg_get_OBJECT (ent_wipeout,
+                                                                  WIPEOUT)
+#  ifdef DEBUG_CLASSES
+            dwg_get_OBJECT (ent_alignmentparameterentity, ALIGNMENTPARAMETERENTITY) dwg_get_OBJECT (
+                ent_arcalignedtext,
+                ARCALIGNEDTEXT) dwg_get_OBJECT (ent_basepointparameterentity, BASEPOINTPARAMETERENTITY)
+                dwg_get_OBJECT (ent_extrudedsurface, EXTRUDEDSURFACE) dwg_get_OBJECT (
+                    ent_flipgripentity,
+                    FLIPGRIPENTITY) dwg_get_OBJECT (ent_flipparameterentity, FLIPPARAMETERENTITY)
+                    dwg_get_OBJECT (ent_geopositionmarker, GEOPOSITIONMARKER) dwg_get_OBJECT (
+                        ent_lineargripentity,
+                        LINEARGRIPENTITY) dwg_get_OBJECT (ent_linearparameterentity,
+                                                          LINEARPARAMETERENTITY)
+                        dwg_get_OBJECT (ent_loftedsurface, LOFTEDSURFACE) dwg_get_OBJECT (
+                            ent_mpolygon,
+                            MPOLYGON) dwg_get_OBJECT (ent_navisworksmodel,
+                                                      NAVISWORKSMODEL)
+                            dwg_get_OBJECT (ent_nurbsurface, NURBSURFACE) dwg_get_OBJECT (
+                                ent_pointparameterentity,
+                                POINTPARAMETERENTITY) dwg_get_OBJECT (ent_polargripentity,
+                                                                      POLARGRIPENTITY)
+                                dwg_get_OBJECT (ent_revolvedsurface, REVOLVEDSURFACE) dwg_get_OBJECT (
+                                    ent_rotationgripentity,
+                                    ROTATIONGRIPENTITY) dwg_get_OBJECT (ent_rotationparameterentity, ROTATIONPARAMETERENTITY)
+                                    dwg_get_OBJECT (ent_rtext, RTEXT) dwg_get_OBJECT (
+                                        ent_sweptsurface,
+                                        SWEPTSURFACE) dwg_get_OBJECT (ent_table,
+                                                                      TABLE) dwg_get_OBJECT (ent_visibilitygripentity,
+                                                                                             VISIBILITYGRIPENTITY)
+                                        dwg_get_OBJECT (ent_visibilityparameterentity, VISIBILITYPARAMETERENTITY) dwg_get_OBJECT (
+                                            ent_xygripentity,
+                                            XYGRIPENTITY) dwg_get_OBJECT (ent_xyparameterentity,
+                                                                          XYPARAMETERENTITY)
+#  endif
 
-/********************************************************************
- * Functions to return NULL-terminated array of all owned entities  *
- ********************************************************************/
+                                            dwg_get_OBJECT (obj_appid, APPID) dwg_get_OBJECT (
+                                                obj_appid_control,
+                                                APPID_CONTROL) dwg_get_OBJECT (obj_block_control, BLOCK_CONTROL)
+                                                dwg_get_OBJECT (obj_block_header, BLOCK_HEADER) dwg_get_OBJECT (
+                                                    obj_dictionary,
+                                                    DICTIONARY) dwg_get_OBJECT (obj_dimstyle, DIMSTYLE)
+                                                    dwg_get_OBJECT (
+                                                        obj_dimstyle_control,
+                                                        DIMSTYLE_CONTROL) dwg_get_OBJECT (obj_dummy,
+                                                                                          DUMMY)
+                                                        dwg_get_OBJECT (obj_layer, LAYER) dwg_get_OBJECT (
+                                                            obj_layer_control,
+                                                            LAYER_CONTROL) dwg_get_OBJECT (obj_long_transaction,
+                                                                                           LONG_TRANSACTION)
+                                                            dwg_get_OBJECT (obj_ltype, LTYPE) dwg_get_OBJECT (
+                                                                obj_ltype_control,
+                                                                LTYPE_CONTROL) dwg_get_OBJECT (obj_mlinestyle,
+                                                                                               MLINESTYLE)
+                                                                dwg_get_OBJECT (obj_style, STYLE) dwg_get_OBJECT (
+                                                                    obj_style_control,
+                                                                    STYLE_CONTROL)
+                                                                    dwg_get_OBJECT (obj_ucs, UCS) dwg_get_OBJECT (
+                                                                        obj_ucs_control,
+                                                                        UCS_CONTROL)
+                                                                        dwg_get_OBJECT (
+                                                                            obj_unknown_obj,
+                                                                            UNKNOWN_OBJ)
+                                                                            dwg_get_OBJECT (
+                                                                                obj_view,
+                                                                                VIEW)
+                                                                                dwg_get_OBJECT (
+                                                                                    obj_view_control,
+                                                                                    VIEW_CONTROL)
+                                                                                    dwg_get_OBJECT (
+                                                                                        obj_vport,
+                                                                                        VPORT)
+                                                                                        dwg_get_OBJECT (
+                                                                                            obj_vport_control,
+                                                                                            VPORT_CONTROL)
+                                                                                            dwg_get_OBJECT (
+                                                                                                obj_vx_control,
+                                                                                                VX_CONTROL)
+                                                                                                dwg_get_OBJECT (
+                                                                                                    obj_vx_table_record,
+                                                                                                    VX_TABLE_RECORD)
+    /* untyped > 500 */
+    dwg_get_OBJECT (obj_acsh_boolean_class,
+                    ACSH_BOOLEAN_CLASS) dwg_get_OBJECT (obj_acsh_box_class,
+                                                        ACSH_BOX_CLASS)
+        dwg_get_OBJECT (obj_acsh_cone_class, ACSH_CONE_CLASS) dwg_get_OBJECT (
+            obj_acsh_cylinder_class,
+            ACSH_CYLINDER_CLASS) dwg_get_OBJECT (obj_acsh_fillet_class,
+                                                 ACSH_FILLET_CLASS)
+            dwg_get_OBJECT (obj_acsh_history_class, ACSH_HISTORY_CLASS)
+                dwg_get_OBJECT (obj_acsh_sphere_class, ACSH_SPHERE_CLASS)
+                    dwg_get_OBJECT (obj_acsh_torus_class, ACSH_TORUS_CLASS)
+                        dwg_get_OBJECT (
+                            obj_acsh_wedge_class,
+                            ACSH_WEDGE_CLASS) dwg_get_OBJECT (obj_blockalignmentgrip, BLOCKALIGNMENTGRIP) dwg_get_OBJECT (obj_blockalignmentparameter, BLOCKALIGNMENTPARAMETER) dwg_get_OBJECT (obj_blockbasepointparameter, BLOCKBASEPOINTPARAMETER) dwg_get_OBJECT (obj_blockflipaction,
+                                                                                                                                                                                                                                                                      BLOCKFLIPACTION) dwg_get_OBJECT (obj_blockflipgrip,
+                                                                                                                                                                                                                                                                                                       BLOCKFLIPGRIP) dwg_get_OBJECT (obj_blockflipparameter, BLOCKFLIPPARAMETER) dwg_get_OBJECT (obj_blockgriplocationcomponent, BLOCKGRIPLOCATIONCOMPONENT) dwg_get_OBJECT (obj_blocklineargrip, BLOCKLINEARGRIP) dwg_get_OBJECT (obj_blocklookupgrip, BLOCKLOOKUPGRIP) dwg_get_OBJECT (obj_blockmoveaction, BLOCKMOVEACTION) dwg_get_OBJECT (obj_blockrotateaction, BLOCKROTATEACTION) dwg_get_OBJECT (obj_blockrotationgrip,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          BLOCKROTATIONGRIP) dwg_get_OBJECT (obj_blockscaleaction,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             BLOCKSCALEACTION) dwg_get_OBJECT (obj_blockvisibilitygrip, BLOCKVISIBILITYGRIP) dwg_get_OBJECT (obj_cellstylemap,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             CELLSTYLEMAP) dwg_get_OBJECT (obj_detailviewstyle,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           DETAILVIEWSTYLE)
+                            dwg_get_OBJECT (obj_dictionaryvar, DICTIONARYVAR) dwg_get_OBJECT (
+                                obj_dictionarywdflt,
+                                DICTIONARYWDFLT) dwg_get_OBJECT (obj_dynamicblockpurgepreventer,
+                                                                 DYNAMICBLOCKPURGEPREVENTER)
+                                dwg_get_OBJECT (obj_field, FIELD) dwg_get_OBJECT (
+                                    obj_fieldlist,
+                                    FIELDLIST) dwg_get_OBJECT (obj_geodata,
+                                                               GEODATA)
+                                    dwg_get_OBJECT (obj_group, GROUP) dwg_get_OBJECT (
+                                        obj_idbuffer,
+                                        IDBUFFER) dwg_get_OBJECT (obj_imagedef, IMAGEDEF)
+                                        dwg_get_OBJECT (obj_imagedef_reactor, IMAGEDEF_REACTOR) dwg_get_OBJECT (
+                                            obj_index,
+                                            INDEX) dwg_get_OBJECT (obj_layerfilter,
+                                                                   LAYERFILTER)
+                                            dwg_get_OBJECT (obj_layer_index, LAYER_INDEX) dwg_get_OBJECT (
+                                                obj_layout,
+                                                LAYOUT) dwg_get_OBJECT (obj_mleaderstyle, MLEADERSTYLE)
+                                                dwg_get_OBJECT (obj_placeholder, PLACEHOLDER) dwg_get_OBJECT (
+                                                    obj_plotsettings,
+                                                    PLOTSETTINGS) dwg_get_OBJECT (obj_rastervariables,
+                                                                                  RASTERVARIABLES)
+                                                    dwg_get_OBJECT (obj_scale, SCALE) dwg_get_OBJECT (
+                                                        obj_sectionviewstyle,
+                                                        SECTIONVIEWSTYLE) dwg_get_OBJECT (obj_section_manager,
+                                                                                          SECTION_MANAGER)
+                                                        dwg_get_OBJECT (
+                                                            obj_sortentstable,
+                                                            SORTENTSTABLE) dwg_get_OBJECT (obj_spatial_filter,
+                                                                                           SPATIAL_FILTER)
+                                                            dwg_get_OBJECT (
+                                                                obj_tablegeometry,
+                                                                TABLEGEOMETRY) dwg_get_OBJECT (obj_vba_project,
+                                                                                               VBA_PROJECT)
+                                                                dwg_get_OBJECT (
+                                                                    obj_visualstyle,
+                                                                    VISUALSTYLE)
+                                                                    dwg_get_OBJECT (
+                                                                        obj_wipeoutvariables,
+                                                                        WIPEOUTVARIABLES)
+                                                                        dwg_get_OBJECT (
+                                                                            obj_xrecord,
+                                                                            XRECORD)
+                                                                            dwg_get_OBJECT (
+                                                                                obj_pdfdefinition,
+                                                                                PDFDEFINITION)
+                                                                                dwg_get_OBJECT (
+                                                                                    obj_dgndefinition,
+                                                                                    DGNDEFINITION)
+                                                                                    dwg_get_OBJECT (
+                                                                                        obj_dwfdefinition,
+                                                                                        DWFDEFINITION)
+    /* unstable */
+    dwg_get_OBJECT (obj_acsh_brep_class, ACSH_BREP_CLASS) dwg_get_OBJECT (
+        obj_acsh_chamfer_class,
+        ACSH_CHAMFER_CLASS) dwg_get_OBJECT (obj_acsh_pyramid_class,
+                                            ACSH_PYRAMID_CLASS)
+        dwg_get_OBJECT (obj_aldimobjectcontextdata, ALDIMOBJECTCONTEXTDATA) dwg_get_OBJECT (
+            obj_assoc2dconstraintgroup,
+            ASSOC2DCONSTRAINTGROUP) dwg_get_OBJECT (obj_assocaction,
+                                                    ASSOCACTION)
+            dwg_get_OBJECT (obj_assocactionparam, ASSOCACTIONPARAM) dwg_get_OBJECT (
+                obj_assocarrayactionbody,
+                ASSOCARRAYACTIONBODY) dwg_get_OBJECT (obj_assocasmbodyactionparam,
+                                                      ASSOCASMBODYACTIONPARAM)
+                dwg_get_OBJECT (
+                    obj_assocblendsurfaceactionbody,
+                    ASSOCBLENDSURFACEACTIONBODY)
+                    dwg_get_OBJECT (
+                        obj_assoccompoundactionparam, ASSOCCOMPOUNDACTIONPARAM)
+                        dwg_get_OBJECT (obj_assocdependency, ASSOCDEPENDENCY)
+                            dwg_get_OBJECT (
+                                obj_assocdimdependencybody,
+                                ASSOCDIMDEPENDENCYBODY)
+                                dwg_get_OBJECT (
+                                    obj_assocextendsurfaceactionbody,
+                                    ASSOCEXTENDSURFACEACTIONBODY)
+                                    dwg_get_OBJECT (
+                                        obj_assocextrudedsurfaceactionbody,
+                                        ASSOCEXTRUDEDSURFACEACTIONBODY)
+                                        dwg_get_OBJECT (
+                                            obj_assocfaceactionparam,
+                                            ASSOCFACEACTIONPARAM)
+                                            dwg_get_OBJECT (
+                                                obj_assocfilletsurfaceactionbody,
+                                                ASSOCFILLETSURFACEACTIONBODY)
+                                                dwg_get_OBJECT (
+                                                    obj_assocgeomdependency,
+                                                    ASSOCGEOMDEPENDENCY)
+                                                    dwg_get_OBJECT (
+                                                        obj_assocloftedsurfaceactionbody,
+                                                        ASSOCLOFTEDSURFACEACTIONBODY)
+                                                        dwg_get_OBJECT (
+                                                            obj_assocnetwork,
+                                                            ASSOCNETWORK)
+                                                            dwg_get_OBJECT (
+                                                                obj_assocnetworksurfaceactionbody,
+                                                                ASSOCNETWORKSURFACEACTIONBODY)
+                                                                dwg_get_OBJECT (obj_assocobjectactionparam, ASSOCOBJECTACTIONPARAM) dwg_get_OBJECT (obj_assocoffsetsurfaceactionbody, ASSOCOFFSETSURFACEACTIONBODY) dwg_get_OBJECT (obj_assocosnappointrefactionparam, ASSOCOSNAPPOINTREFACTIONPARAM) dwg_get_OBJECT (obj_assocpatchsurfaceactionbody, ASSOCPATCHSURFACEACTIONBODY) dwg_get_OBJECT (obj_assocpathactionparam, ASSOCPATHACTIONPARAM) dwg_get_OBJECT (obj_assocplanesurfaceactionbody,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ASSOCPLANESURFACEACTIONBODY) dwg_get_OBJECT (obj_assocpointrefactionparam,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ASSOCPOINTREFACTIONPARAM) dwg_get_OBJECT (obj_assocrevolvedsurfaceactionbody, ASSOCREVOLVEDSURFACEACTIONBODY) dwg_get_OBJECT (obj_assoctrimsurfaceactionbody, ASSOCTRIMSURFACEACTIONBODY) dwg_get_OBJECT (obj_assocvaluedependency, ASSOCVALUEDEPENDENCY) dwg_get_OBJECT (obj_assocvariable,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ASSOCVARIABLE) dwg_get_OBJECT (obj_assocvertexactionparam,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ASSOCVERTEXACTIONPARAM) dwg_get_OBJECT (obj_blkrefobjectcontextdata,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  BLKREFOBJECTCONTEXTDATA) dwg_get_OBJECT (obj_blockalignedconstraintparameter,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           BLOCKALIGNEDCONSTRAINTPARAMETER) dwg_get_OBJECT (obj_blockangularconstraintparameter,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            BLOCKANGULARCONSTRAINTPARAMETER) dwg_get_OBJECT (obj_blockarrayaction, BLOCKARRAYACTION) dwg_get_OBJECT (obj_blockdiametricconstraintparameter, BLOCKDIAMETRICCONSTRAINTPARAMETER) dwg_get_OBJECT (obj_blockhorizontalconstraintparameter,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               BLOCKHORIZONTALCONSTRAINTPARAMETER) dwg_get_OBJECT (obj_blocklinearconstraintparameter, BLOCKLINEARCONSTRAINTPARAMETER) dwg_get_OBJECT (obj_blocklinearparameter,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       BLOCKLINEARPARAMETER) dwg_get_OBJECT (obj_blocklookupaction, BLOCKLOOKUPACTION) dwg_get_OBJECT (obj_blocklookupparameter,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       BLOCKLOOKUPPARAMETER) dwg_get_OBJECT (obj_blockparamdependencybody, BLOCKPARAMDEPENDENCYBODY) dwg_get_OBJECT (obj_blockpointparameter,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     BLOCKPOINTPARAMETER) dwg_get_OBJECT (obj_blockpolargrip, BLOCKPOLARGRIP) dwg_get_OBJECT (obj_blockpolarparameter,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              BLOCKPOLARPARAMETER) dwg_get_OBJECT (obj_blockpolarstretchaction,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   BLOCKPOLARSTRETCHACTION) dwg_get_OBJECT (obj_blockradialconstraintparameter, BLOCKRADIALCONSTRAINTPARAMETER) dwg_get_OBJECT (obj_blockrepresentation, BLOCKREPRESENTATION) dwg_get_OBJECT (obj_blockrotationparameter,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              BLOCKROTATIONPARAMETER) dwg_get_OBJECT (obj_blockstretchaction, BLOCKSTRETCHACTION) dwg_get_OBJECT (obj_blockuserparameter, BLOCKUSERPARAMETER) dwg_get_OBJECT (obj_blockverticalconstraintparameter, BLOCKVERTICALCONSTRAINTPARAMETER) dwg_get_OBJECT (obj_blockvisibilityparameter, BLOCKVISIBILITYPARAMETER) dwg_get_OBJECT (obj_blockxygrip, BLOCKXYGRIP) dwg_get_OBJECT (obj_blockxyparameter,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            BLOCKXYPARAMETER) dwg_get_OBJECT (obj_datalink, DATALINK) dwg_get_OBJECT (obj_dbcolor, DBCOLOR) dwg_get_OBJECT (obj_evaluation_graph,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            EVALUATION_GRAPH) dwg_get_OBJECT (obj_fcfobjectcontextdata,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              FCFOBJECTCONTEXTDATA) dwg_get_OBJECT (obj_gradient_background, GRADIENT_BACKGROUND) dwg_get_OBJECT (obj_ground_plane_background, GROUND_PLANE_BACKGROUND) dwg_get_OBJECT (obj_ibl_background, IBL_BACKGROUND) dwg_get_OBJECT (obj_image_background,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            IMAGE_BACKGROUND) dwg_get_OBJECT (obj_leaderobjectcontextdata,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              LEADEROBJECTCONTEXTDATA) dwg_get_OBJECT (obj_lightlist, LIGHTLIST) dwg_get_OBJECT (obj_material,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 MATERIAL) dwg_get_OBJECT (obj_mentalrayrendersettings, MENTALRAYRENDERSETTINGS) dwg_get_OBJECT (obj_mtextobjectcontextdata, MTEXTOBJECTCONTEXTDATA) dwg_get_OBJECT (obj_object_ptr,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     OBJECT_PTR) dwg_get_OBJECT (obj_partial_viewing_index, PARTIAL_VIEWING_INDEX) dwg_get_OBJECT (obj_pointcloudcolormap, POINTCLOUDCOLORMAP) dwg_get_OBJECT (obj_pointclouddef,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               POINTCLOUDDEF) dwg_get_OBJECT (obj_pointclouddefex, POINTCLOUDDEFEX) dwg_get_OBJECT (obj_pointclouddef_reactor, POINTCLOUDDEF_REACTOR) dwg_get_OBJECT (obj_pointclouddef_reactor_ex, POINTCLOUDDEF_REACTOR_EX) dwg_get_OBJECT (obj_proxy_object, PROXY_OBJECT) dwg_get_OBJECT (obj_rapidrtrendersettings, RAPIDRTRENDERSETTINGS) dwg_get_OBJECT (obj_renderentry,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                RENDERENTRY) dwg_get_OBJECT (obj_renderenvironment, RENDERENVIRONMENT) dwg_get_OBJECT (obj_renderglobal, RENDERGLOBAL) dwg_get_OBJECT (obj_rendersettings,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       RENDERSETTINGS) dwg_get_OBJECT (obj_section_settings, SECTION_SETTINGS) dwg_get_OBJECT (obj_skylight_background, SKYLIGHT_BACKGROUND) dwg_get_OBJECT (obj_solid_background, SOLID_BACKGROUND) dwg_get_OBJECT (obj_spatial_index, SPATIAL_INDEX) dwg_get_OBJECT (obj_sun, SUN) dwg_get_OBJECT (obj_tablestyle, TABLESTYLE) dwg_get_OBJECT (obj_textobjectcontextdata,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 TEXTOBJECTCONTEXTDATA) dwg_get_OBJECT (obj_assocarraymodifyparameters, ASSOCARRAYMODIFYPARAMETERS) dwg_get_OBJECT (obj_assocarraypathparameters, ASSOCARRAYPATHPARAMETERS) dwg_get_OBJECT (obj_assocarraypolarparameters,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ASSOCARRAYPOLARPARAMETERS) dwg_get_OBJECT (obj_assocarrayrectangularparameters, ASSOCARRAYRECTANGULARPARAMETERS)
+#  ifdef DEBUG_CLASSES
+                                                                    dwg_get_OBJECT (obj_acmecommandhistory, ACMECOMMANDHISTORY) dwg_get_OBJECT (
+                                                                        obj_acmescope,
+                                                                        ACMESCOPE) dwg_get_OBJECT (obj_acmestatemgr, ACMESTATEMGR) dwg_get_OBJECT (obj_acsh_extrusion_class, ACSH_EXTRUSION_CLASS) dwg_get_OBJECT (obj_acsh_loft_class, ACSH_LOFT_CLASS) dwg_get_OBJECT (obj_acsh_revolve_class, ACSH_REVOLVE_CLASS) dwg_get_OBJECT (obj_acsh_sweep_class,
+                                                                                                                                                                                                                                                                                                                                     ACSH_SWEEP_CLASS) dwg_get_OBJECT (obj_angdimobjectcontextdata,
+                                                                                                                                                                                                                                                                                                                                                                       ANGDIMOBJECTCONTEXTDATA) dwg_get_OBJECT (obj_annotscaleobjectcontextdata,
+                                                                                                                                                                                                                                                                                                                                                                                                                ANNOTSCALEOBJECTCONTEXTDATA) dwg_get_OBJECT (obj_assoc3pointangulardimactionbody, ASSOC3POINTANGULARDIMACTIONBODY) dwg_get_OBJECT (obj_assocaligneddimactionbody, ASSOCALIGNEDDIMACTIONBODY) dwg_get_OBJECT (obj_assocarraymodifyactionbody, ASSOCARRAYMODIFYACTIONBODY) dwg_get_OBJECT (obj_assocedgeactionparam, ASSOCEDGEACTIONPARAM) dwg_get_OBJECT (obj_assocedgechamferactionbody,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ASSOCEDGECHAMFERACTIONBODY) dwg_get_OBJECT (obj_assocedgefilletactionbody, ASSOCEDGEFILLETACTIONBODY) dwg_get_OBJECT (obj_assocmleaderactionbody, ASSOCMLEADERACTIONBODY) dwg_get_OBJECT (obj_assocordinatedimactionbody, ASSOCORDINATEDIMACTIONBODY) dwg_get_OBJECT (obj_assocperssubentmanager, ASSOCPERSSUBENTMANAGER) dwg_get_OBJECT (obj_assocrestoreentitystateactionbody, ASSOCRESTOREENTITYSTATEACTIONBODY) dwg_get_OBJECT (obj_assocrotateddimactionbody,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ASSOCROTATEDDIMACTIONBODY) dwg_get_OBJECT (obj_assocsweptsurfaceactionbody, ASSOCSWEPTSURFACEACTIONBODY) dwg_get_OBJECT (obj_blockpropertiestable, BLOCKPROPERTIESTABLE) dwg_get_OBJECT (obj_blockpropertiestablegrip,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      BLOCKPROPERTIESTABLEGRIP) dwg_get_OBJECT (obj_breakdata,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                BREAKDATA) dwg_get_OBJECT (obj_breakpointref,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           BREAKPOINTREF) dwg_get_OBJECT (obj_contextdatamanager,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          CONTEXTDATAMANAGER) dwg_get_OBJECT (obj_csacdocumentoptions, CSACDOCUMENTOPTIONS) dwg_get_OBJECT (obj_curvepath, CURVEPATH) dwg_get_OBJECT (obj_datatable, DATATABLE) dwg_get_OBJECT (obj_dimassoc, DIMASSOC) dwg_get_OBJECT (obj_dmdimobjectcontextdata, DMDIMOBJECTCONTEXTDATA)
+                                                                        dwg_get_OBJECT (obj_dynamicblockproxynode, DYNAMICBLOCKPROXYNODE) dwg_get_OBJECT (obj_geomapimage, GEOMAPIMAGE) dwg_get_OBJECT (
+                                                                            obj_layoutprintconfig,
+                                                                            LAYOUTPRINTCONFIG) dwg_get_OBJECT (obj_mleaderobjectcontextdata,
+                                                                                                               MLEADEROBJECTCONTEXTDATA)
+                                                                            dwg_get_OBJECT (obj_motionpath, MOTIONPATH) dwg_get_OBJECT (
+                                                                                obj_mtextattributeobjectcontextdata,
+                                                                                MTEXTATTRIBUTEOBJECTCONTEXTDATA)
+                                                                                dwg_get_OBJECT (
+                                                                                    obj_navisworksmodeldef,
+                                                                                    NAVISWORKSMODELDEF) dwg_get_OBJECT (obj_orddimobjectcontextdata,
+                                                                                                                        ORDDIMOBJECTCONTEXTDATA)
+                                                                                    dwg_get_OBJECT (
+                                                                                        obj_persubentmgr,
+                                                                                        PERSUBENTMGR)
+                                                                                        dwg_get_OBJECT (
+                                                                                            obj_pointpath,
+                                                                                            POINTPATH)
+                                                                                            dwg_get_OBJECT (
+                                                                                                obj_radimlgobjectcontextdata,
+                                                                                                RADIMLGOBJECTCONTEXTDATA)
+                                                                                                dwg_get_OBJECT (
+                                                                                                    obj_radimobjectcontextdata,
+                                                                                                    RADIMOBJECTCONTEXTDATA)
+                                                                                                    dwg_get_OBJECT (
+                                                                                                        obj_sunstudy,
+                                                                                                        SUNSTUDY)
+                                                                                                        dwg_get_OBJECT (
+                                                                                                            obj_tablecontent,
+                                                                                                            TABLECONTENT)
+                                                                                                            dwg_get_OBJECT (
+                                                                                                                obj_tvdeviceproperties,
+                                                                                                                TVDEVICEPROPERTIES)
+// dwg_get_OBJECT (obj_acdsrecord, ACDSRECORD)
+// dwg_get_OBJECT (obj_acdsschema, ACDSSCHEMA)
+// dwg_get_OBJECT (obj_npocollection, NPOCOLLECTION)
+// dwg_get_OBJECT (obj_rapidrtrenderenvironment, RAPIDRTRENDERENVIRONMENT)
+// dwg_get_OBJECT (obj_xrefpanelobject, XREFPANELOBJECT)
+#  endif
 
-/**
- * \fn Dwg_Entity_ENTITY* dwg_getall_ENTITY(Dwg_Object_Ref *hdr)
- * \code Usage: Dwg_Entity_TEXT* texts = dwg_getall_TEXT(text,
- * dwg->header_vars.mspace_block); \endcode \param[in]    hdr Dwg_Object_Ref *
- * to a BLOCK_CONTROL obj \return       malloced NULL-terminated array
- *
- * Extracts all entities of this type from a block header (mspace or pspace),
- * and returns a malloced NULL-terminated array.
- */
-//< \fn Dwg_Entity_TEXT* dwg_getall_TEXT (Dwg_Object_Ref *hdr)
-DWG_GETALL_ENTITY (_3DFACE)
-DWG_GETALL_ENTITY (_3DSOLID)
-DWG_GETALL_ENTITY (ARC)
-DWG_GETALL_ENTITY (ATTDEF)
-DWG_GETALL_ENTITY (ATTRIB)
-DWG_GETALL_ENTITY (BLOCK)
-DWG_GETALL_ENTITY (BODY)
-DWG_GETALL_ENTITY (CAMERA)
-DWG_GETALL_ENTITY (CIRCLE)
-DWG_GETALL_ENTITY (DGNUNDERLAY)
-DWG_GETALL_ENTITY (DIMENSION_ALIGNED)
-DWG_GETALL_ENTITY (DIMENSION_ANG2LN)
-DWG_GETALL_ENTITY (DIMENSION_ANG3PT)
-DWG_GETALL_ENTITY (DIMENSION_DIAMETER)
-DWG_GETALL_ENTITY (DIMENSION_LINEAR)
-DWG_GETALL_ENTITY (DIMENSION_ORDINATE)
-DWG_GETALL_ENTITY (DIMENSION_RADIUS)
-DWG_GETALL_ENTITY (DWFUNDERLAY)
-DWG_GETALL_ENTITY (ELLIPSE)
-DWG_GETALL_ENTITY (ENDBLK)
-DWG_GETALL_ENTITY (HATCH)
-DWG_GETALL_ENTITY (IMAGE)
-DWG_GETALL_ENTITY (INSERT)
-DWG_GETALL_ENTITY (LEADER)
-DWG_GETALL_ENTITY (LIGHT)
-DWG_GETALL_ENTITY (LINE)
-DWG_GETALL_ENTITY (LOAD)
-DWG_GETALL_ENTITY (LWPOLYLINE)
-DWG_GETALL_ENTITY (MESH)
-DWG_GETALL_ENTITY (MINSERT)
-DWG_GETALL_ENTITY (MLINE)
-DWG_GETALL_ENTITY (MTEXT)
-DWG_GETALL_ENTITY (MULTILEADER)
-DWG_GETALL_ENTITY (OLE2FRAME)
-DWG_GETALL_ENTITY (OLEFRAME)
-DWG_GETALL_ENTITY (PDFUNDERLAY)
-DWG_GETALL_ENTITY (POINT)
-DWG_GETALL_ENTITY (POLYLINE_2D)
-DWG_GETALL_ENTITY (POLYLINE_3D)
-DWG_GETALL_ENTITY (POLYLINE_MESH)
-DWG_GETALL_ENTITY (POLYLINE_PFACE)
-DWG_GETALL_ENTITY (PROXY_ENTITY)
-DWG_GETALL_ENTITY (RAY)
-DWG_GETALL_ENTITY (REGION)
-DWG_GETALL_ENTITY (SECTIONOBJECT)
-DWG_GETALL_ENTITY (SEQEND)
-DWG_GETALL_ENTITY (SHAPE)
-DWG_GETALL_ENTITY (SOLID)
-DWG_GETALL_ENTITY (SPLINE)
-DWG_GETALL_ENTITY (TEXT)
-DWG_GETALL_ENTITY (TOLERANCE)
-DWG_GETALL_ENTITY (TRACE)
-DWG_GETALL_ENTITY (UNKNOWN_ENT)
-DWG_GETALL_ENTITY (VERTEX_2D)
-DWG_GETALL_ENTITY (VERTEX_3D)
-DWG_GETALL_ENTITY (VERTEX_MESH)
-DWG_GETALL_ENTITY (VERTEX_PFACE)
-DWG_GETALL_ENTITY (VERTEX_PFACE_FACE)
-DWG_GETALL_ENTITY (VIEWPORT)
-DWG_GETALL_ENTITY (XLINE)
-/* unstable */
-DWG_GETALL_ENTITY (_3DLINE)
-DWG_GETALL_ENTITY (ARC_DIMENSION)
-DWG_GETALL_ENTITY (ENDREP)
-DWG_GETALL_ENTITY (HELIX)
-DWG_GETALL_ENTITY (LARGE_RADIAL_DIMENSION)
-DWG_GETALL_ENTITY (PLANESURFACE)
-DWG_GETALL_ENTITY (POINTCLOUD)
-DWG_GETALL_ENTITY (POINTCLOUDEX)
-DWG_GETALL_ENTITY (REPEAT)
-DWG_GETALL_ENTITY (WIPEOUT)
-/* debugging */
-DWG_GETALL_ENTITY (ALIGNMENTPARAMETERENTITY)
-DWG_GETALL_ENTITY (ARCALIGNEDTEXT)
-DWG_GETALL_ENTITY (BASEPOINTPARAMETERENTITY)
-DWG_GETALL_ENTITY (EXTRUDEDSURFACE)
-DWG_GETALL_ENTITY (FLIPGRIPENTITY)
-DWG_GETALL_ENTITY (FLIPPARAMETERENTITY)
-DWG_GETALL_ENTITY (GEOPOSITIONMARKER)
-DWG_GETALL_ENTITY (LINEARGRIPENTITY)
-DWG_GETALL_ENTITY (LINEARPARAMETERENTITY)
-DWG_GETALL_ENTITY (LOFTEDSURFACE)
-DWG_GETALL_ENTITY (MPOLYGON)
-DWG_GETALL_ENTITY (NAVISWORKSMODEL)
-DWG_GETALL_ENTITY (NURBSURFACE)
-DWG_GETALL_ENTITY (POINTPARAMETERENTITY)
-DWG_GETALL_ENTITY (POLARGRIPENTITY)
-DWG_GETALL_ENTITY (REVOLVEDSURFACE)
-DWG_GETALL_ENTITY (ROTATIONGRIPENTITY)
-DWG_GETALL_ENTITY (ROTATIONPARAMETERENTITY)
-DWG_GETALL_ENTITY (RTEXT)
-DWG_GETALL_ENTITY (SWEPTSURFACE)
-DWG_GETALL_ENTITY (TABLE)
-DWG_GETALL_ENTITY (VISIBILITYGRIPENTITY)
-DWG_GETALL_ENTITY (VISIBILITYPARAMETERENTITY)
-DWG_GETALL_ENTITY (XYGRIPENTITY)
-DWG_GETALL_ENTITY (XYPARAMETERENTITY)
+    /********************************************************************
+     * Functions to return NULL-terminated array of all owned entities  *
+     ********************************************************************/
 
-/********************************************************************
- *     Functions to return NULL-terminated array of all objects     *
- ********************************************************************/
+    /**
+     * \fn Dwg_Entity_ENTITY* dwg_getall_ENTITY(Dwg_Object_Ref *hdr)
+     * \code Usage: Dwg_Entity_TEXT* texts = dwg_getall_TEXT(text,
+     * dwg->header_vars.mspace_block); \endcode \param[in]    hdr
+     * Dwg_Object_Ref * to a BLOCK_CONTROL obj \return       malloced
+     * NULL-terminated array
+     *
+     * Extracts all entities of this type from a block header (mspace or
+     * pspace), and returns a malloced NULL-terminated array.
+     */
+    //< \fn Dwg_Entity_TEXT* dwg_getall_TEXT (Dwg_Object_Ref *hdr)
+    DWG_GETALL_ENTITY (_3DFACE) DWG_GETALL_ENTITY (_3DSOLID) DWG_GETALL_ENTITY (
+        ARC) DWG_GETALL_ENTITY (ATTDEF) DWG_GETALL_ENTITY (ATTRIB)
+        DWG_GETALL_ENTITY (BLOCK) DWG_GETALL_ENTITY (BODY) DWG_GETALL_ENTITY (
+            CAMERA) DWG_GETALL_ENTITY (CIRCLE) DWG_GETALL_ENTITY (DGNUNDERLAY)
+            DWG_GETALL_ENTITY (DIMENSION_ALIGNED) DWG_GETALL_ENTITY (DIMENSION_ANG2LN) DWG_GETALL_ENTITY (DIMENSION_ANG3PT) DWG_GETALL_ENTITY (DIMENSION_DIAMETER) DWG_GETALL_ENTITY (DIMENSION_LINEAR) DWG_GETALL_ENTITY (DIMENSION_ORDINATE) DWG_GETALL_ENTITY (
+                DIMENSION_RADIUS) DWG_GETALL_ENTITY (DWFUNDERLAY) DWG_GETALL_ENTITY (ELLIPSE)
+                DWG_GETALL_ENTITY (ENDBLK) DWG_GETALL_ENTITY (HATCH) DWG_GETALL_ENTITY (
+                    IMAGE) DWG_GETALL_ENTITY (INSERT) DWG_GETALL_ENTITY (LEADER)
+                    DWG_GETALL_ENTITY (LIGHT) DWG_GETALL_ENTITY (
+                        LINE) DWG_GETALL_ENTITY (LOAD) DWG_GETALL_ENTITY (LWPOLYLINE)
+                        DWG_GETALL_ENTITY (MESH) DWG_GETALL_ENTITY (MINSERT) DWG_GETALL_ENTITY (
+                            MLINE) DWG_GETALL_ENTITY (MTEXT) DWG_GETALL_ENTITY (MULTILEADER)
+                            DWG_GETALL_ENTITY (OLE2FRAME) DWG_GETALL_ENTITY (
+                                OLEFRAME) DWG_GETALL_ENTITY (PDFUNDERLAY)
+                                DWG_GETALL_ENTITY (POINT) DWG_GETALL_ENTITY (POLYLINE_2D) DWG_GETALL_ENTITY (
+                                    POLYLINE_3D) DWG_GETALL_ENTITY (POLYLINE_MESH)
+                                    DWG_GETALL_ENTITY (POLYLINE_PFACE) DWG_GETALL_ENTITY (
+                                        PROXY_ENTITY) DWG_GETALL_ENTITY (RAY)
+                                        DWG_GETALL_ENTITY (REGION) DWG_GETALL_ENTITY (
+                                            SECTIONOBJECT) DWG_GETALL_ENTITY (SEQEND)
+                                            DWG_GETALL_ENTITY (SHAPE) DWG_GETALL_ENTITY (
+                                                SOLID) DWG_GETALL_ENTITY (SPLINE)
+                                                DWG_GETALL_ENTITY (TEXT) DWG_GETALL_ENTITY (
+                                                    TOLERANCE) DWG_GETALL_ENTITY (TRACE)
+                                                    DWG_GETALL_ENTITY (UNKNOWN_ENT) DWG_GETALL_ENTITY (
+                                                        VERTEX_2D) DWG_GETALL_ENTITY (VERTEX_3D)
+                                                        DWG_GETALL_ENTITY (
+                                                            VERTEX_MESH)
+                                                            DWG_GETALL_ENTITY (
+                                                                VERTEX_PFACE)
+                                                                DWG_GETALL_ENTITY (
+                                                                    VERTEX_PFACE_FACE)
+                                                                    DWG_GETALL_ENTITY (
+                                                                        VIEWPORT)
+                                                                        DWG_GETALL_ENTITY (
+                                                                            XLINE)
+    /* unstable */
+    DWG_GETALL_ENTITY (_3DLINE) DWG_GETALL_ENTITY (ARC_DIMENSION)
+        DWG_GETALL_ENTITY (ENDREP) DWG_GETALL_ENTITY (HELIX)
+            DWG_GETALL_ENTITY (LARGE_RADIAL_DIMENSION)
+                DWG_GETALL_ENTITY (PLANESURFACE) DWG_GETALL_ENTITY (POINTCLOUD)
+                    DWG_GETALL_ENTITY (POINTCLOUDEX) DWG_GETALL_ENTITY (REPEAT)
+                        DWG_GETALL_ENTITY (WIPEOUT)
+    /* debugging */
+    DWG_GETALL_ENTITY (ALIGNMENTPARAMETERENTITY) DWG_GETALL_ENTITY (
+        ARCALIGNEDTEXT) DWG_GETALL_ENTITY (BASEPOINTPARAMETERENTITY)
+        DWG_GETALL_ENTITY (EXTRUDEDSURFACE) DWG_GETALL_ENTITY (FLIPGRIPENTITY)
+            DWG_GETALL_ENTITY (FLIPPARAMETERENTITY) DWG_GETALL_ENTITY (
+                GEOPOSITIONMARKER) DWG_GETALL_ENTITY (LINEARGRIPENTITY)
+                DWG_GETALL_ENTITY (LINEARPARAMETERENTITY) DWG_GETALL_ENTITY (
+                    LOFTEDSURFACE) DWG_GETALL_ENTITY (MPOLYGON)
+                    DWG_GETALL_ENTITY (NAVISWORKSMODEL) DWG_GETALL_ENTITY (
+                        NURBSURFACE) DWG_GETALL_ENTITY (POINTPARAMETERENTITY)
+                        DWG_GETALL_ENTITY (POLARGRIPENTITY) DWG_GETALL_ENTITY (
+                            REVOLVEDSURFACE)
+                            DWG_GETALL_ENTITY (ROTATIONGRIPENTITY)
+                                DWG_GETALL_ENTITY (ROTATIONPARAMETERENTITY)
+                                    DWG_GETALL_ENTITY (
+                                        RTEXT) DWG_GETALL_ENTITY (SWEPTSURFACE)
+                                        DWG_GETALL_ENTITY (TABLE)
+                                            DWG_GETALL_ENTITY (
+                                                VISIBILITYGRIPENTITY)
+                                                DWG_GETALL_ENTITY (
+                                                    VISIBILITYPARAMETERENTITY)
+                                                    DWG_GETALL_ENTITY (
+                                                        XYGRIPENTITY)
+                                                        DWG_GETALL_ENTITY (
+                                                            XYPARAMETERENTITY)
 
-/**
- * \fn Dwg_Object_OBJECT dwg_getall_OBJECT(Dwg_Data *dwg)
- * Extracts all objects of this type from a dwg, and returns a malloced
- * NULL-terminated array.
- */
+    /********************************************************************
+     *     Functions to return NULL-terminated array of all objects     *
+     ********************************************************************/
 
-DWG_GETALL_OBJECT (ACSH_BOOLEAN_CLASS)
-DWG_GETALL_OBJECT (ACSH_BOX_CLASS)
-DWG_GETALL_OBJECT (ACSH_CONE_CLASS)
-DWG_GETALL_OBJECT (ACSH_CYLINDER_CLASS)
-DWG_GETALL_OBJECT (ACSH_FILLET_CLASS)
-DWG_GETALL_OBJECT (ACSH_HISTORY_CLASS)
-DWG_GETALL_OBJECT (ACSH_SPHERE_CLASS)
-DWG_GETALL_OBJECT (ACSH_TORUS_CLASS)
-DWG_GETALL_OBJECT (ACSH_WEDGE_CLASS)
-DWG_GETALL_OBJECT (APPID)
-DWG_GETALL_OBJECT (APPID_CONTROL)
-DWG_GETALL_OBJECT (BLOCKALIGNMENTGRIP)
-DWG_GETALL_OBJECT (BLOCKALIGNMENTPARAMETER)
-DWG_GETALL_OBJECT (BLOCKBASEPOINTPARAMETER)
-DWG_GETALL_OBJECT (BLOCKFLIPACTION)
-DWG_GETALL_OBJECT (BLOCKFLIPGRIP)
-DWG_GETALL_OBJECT (BLOCKFLIPPARAMETER)
-DWG_GETALL_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
-DWG_GETALL_OBJECT (BLOCKLINEARGRIP)
-DWG_GETALL_OBJECT (BLOCKLOOKUPGRIP)
-DWG_GETALL_OBJECT (BLOCKMOVEACTION)
-DWG_GETALL_OBJECT (BLOCKROTATEACTION)
-DWG_GETALL_OBJECT (BLOCKROTATIONGRIP)
-DWG_GETALL_OBJECT (BLOCKSCALEACTION)
-DWG_GETALL_OBJECT (BLOCKVISIBILITYGRIP)
-DWG_GETALL_OBJECT (BLOCK_CONTROL)
-DWG_GETALL_OBJECT (BLOCK_HEADER)
-DWG_GETALL_OBJECT (CELLSTYLEMAP)
-DWG_GETALL_OBJECT (DETAILVIEWSTYLE)
-DWG_GETALL_OBJECT (DICTIONARY)
-DWG_GETALL_OBJECT (DICTIONARYVAR)
-DWG_GETALL_OBJECT (DICTIONARYWDFLT)
-DWG_GETALL_OBJECT (DIMSTYLE)
-DWG_GETALL_OBJECT (DIMSTYLE_CONTROL)
-DWG_GETALL_OBJECT (DUMMY)
-DWG_GETALL_OBJECT (DYNAMICBLOCKPURGEPREVENTER)
-DWG_GETALL_OBJECT (FIELD)
-DWG_GETALL_OBJECT (FIELDLIST)
-DWG_GETALL_OBJECT (GEODATA)
-DWG_GETALL_OBJECT (GROUP)
-DWG_GETALL_OBJECT (IDBUFFER)
-DWG_GETALL_OBJECT (IMAGEDEF)
-DWG_GETALL_OBJECT (IMAGEDEF_REACTOR)
-DWG_GETALL_OBJECT (INDEX)
-DWG_GETALL_OBJECT (LAYER)
-DWG_GETALL_OBJECT (LAYERFILTER)
-DWG_GETALL_OBJECT (LAYER_CONTROL)
-DWG_GETALL_OBJECT (LAYER_INDEX)
-DWG_GETALL_OBJECT (LAYOUT)
-DWG_GETALL_OBJECT (LONG_TRANSACTION)
-DWG_GETALL_OBJECT (LTYPE)
-DWG_GETALL_OBJECT (LTYPE_CONTROL)
-DWG_GETALL_OBJECT (MLEADERSTYLE)
-DWG_GETALL_OBJECT (MLINESTYLE)
-DWG_GETALL_OBJECT (PLACEHOLDER)
-DWG_GETALL_OBJECT (PLOTSETTINGS)
-DWG_GETALL_OBJECT (RASTERVARIABLES)
-DWG_GETALL_OBJECT (SCALE)
-DWG_GETALL_OBJECT (SECTIONVIEWSTYLE)
-DWG_GETALL_OBJECT (SECTION_MANAGER)
-DWG_GETALL_OBJECT (SORTENTSTABLE)
-DWG_GETALL_OBJECT (SPATIAL_FILTER)
-DWG_GETALL_OBJECT (STYLE)
-DWG_GETALL_OBJECT (STYLE_CONTROL)
-DWG_GETALL_OBJECT (TABLEGEOMETRY)
-DWG_GETALL_OBJECT (UCS)
-DWG_GETALL_OBJECT (UCS_CONTROL)
-DWG_GETALL_OBJECT (UNKNOWN_OBJ)
-DWG_GETALL_OBJECT (VBA_PROJECT)
-DWG_GETALL_OBJECT (VIEW)
-DWG_GETALL_OBJECT (VIEW_CONTROL)
-DWG_GETALL_OBJECT (VISUALSTYLE)
-DWG_GETALL_OBJECT (VPORT)
-DWG_GETALL_OBJECT (VPORT_CONTROL)
-DWG_GETALL_OBJECT (VX_CONTROL)
-DWG_GETALL_OBJECT (VX_TABLE_RECORD)
-DWG_GETALL_OBJECT (WIPEOUTVARIABLES)
-DWG_GETALL_OBJECT (XRECORD)
-DWG_GETALL_OBJECT (PDFDEFINITION)
-DWG_GETALL_OBJECT (DGNDEFINITION)
-DWG_GETALL_OBJECT (DWFDEFINITION)
-/* unstable */
-DWG_GETALL_OBJECT (ACSH_BREP_CLASS)
-DWG_GETALL_OBJECT (ACSH_CHAMFER_CLASS)
-DWG_GETALL_OBJECT (ACSH_PYRAMID_CLASS)
-DWG_GETALL_OBJECT (ALDIMOBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (ASSOC2DCONSTRAINTGROUP)
-DWG_GETALL_OBJECT (ASSOCACTION)
-DWG_GETALL_OBJECT (ASSOCACTIONPARAM)
-DWG_GETALL_OBJECT (ASSOCARRAYACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCASMBODYACTIONPARAM)
-DWG_GETALL_OBJECT (ASSOCBLENDSURFACEACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCCOMPOUNDACTIONPARAM)
-DWG_GETALL_OBJECT (ASSOCDEPENDENCY)
-DWG_GETALL_OBJECT (ASSOCDIMDEPENDENCYBODY)
-DWG_GETALL_OBJECT (ASSOCEXTENDSURFACEACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCEXTRUDEDSURFACEACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCFACEACTIONPARAM)
-DWG_GETALL_OBJECT (ASSOCFILLETSURFACEACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCGEOMDEPENDENCY)
-DWG_GETALL_OBJECT (ASSOCLOFTEDSURFACEACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCNETWORK)
-DWG_GETALL_OBJECT (ASSOCNETWORKSURFACEACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCOBJECTACTIONPARAM)
-DWG_GETALL_OBJECT (ASSOCOFFSETSURFACEACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM)
-DWG_GETALL_OBJECT (ASSOCPATCHSURFACEACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCPATHACTIONPARAM)
-DWG_GETALL_OBJECT (ASSOCPLANESURFACEACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCPOINTREFACTIONPARAM)
-DWG_GETALL_OBJECT (ASSOCREVOLVEDSURFACEACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCTRIMSURFACEACTIONBODY)
-DWG_GETALL_OBJECT (ASSOCVALUEDEPENDENCY)
-DWG_GETALL_OBJECT (ASSOCVARIABLE)
-DWG_GETALL_OBJECT (ASSOCVERTEXACTIONPARAM)
-DWG_GETALL_OBJECT (BLKREFOBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (BLOCKALIGNEDCONSTRAINTPARAMETER)
-DWG_GETALL_OBJECT (BLOCKANGULARCONSTRAINTPARAMETER)
-DWG_GETALL_OBJECT (BLOCKARRAYACTION)
-DWG_GETALL_OBJECT (BLOCKDIAMETRICCONSTRAINTPARAMETER)
-DWG_GETALL_OBJECT (BLOCKHORIZONTALCONSTRAINTPARAMETER)
-DWG_GETALL_OBJECT (BLOCKLINEARCONSTRAINTPARAMETER)
-DWG_GETALL_OBJECT (BLOCKLINEARPARAMETER)
-DWG_GETALL_OBJECT (BLOCKLOOKUPACTION)
-DWG_GETALL_OBJECT (BLOCKLOOKUPPARAMETER)
-DWG_GETALL_OBJECT (BLOCKPARAMDEPENDENCYBODY)
-DWG_GETALL_OBJECT (BLOCKPOINTPARAMETER)
-DWG_GETALL_OBJECT (BLOCKPOLARGRIP)
-DWG_GETALL_OBJECT (BLOCKPOLARPARAMETER)
-DWG_GETALL_OBJECT (BLOCKPOLARSTRETCHACTION)
-DWG_GETALL_OBJECT (BLOCKRADIALCONSTRAINTPARAMETER)
-DWG_GETALL_OBJECT (BLOCKREPRESENTATION)
-DWG_GETALL_OBJECT (BLOCKROTATIONPARAMETER)
-DWG_GETALL_OBJECT (BLOCKSTRETCHACTION)
-DWG_GETALL_OBJECT (BLOCKUSERPARAMETER)
-DWG_GETALL_OBJECT (BLOCKVERTICALCONSTRAINTPARAMETER)
-DWG_GETALL_OBJECT (BLOCKVISIBILITYPARAMETER)
-DWG_GETALL_OBJECT (BLOCKXYGRIP)
-DWG_GETALL_OBJECT (BLOCKXYPARAMETER)
-DWG_GETALL_OBJECT (DATALINK)
-DWG_GETALL_OBJECT (DBCOLOR)
-DWG_GETALL_OBJECT (EVALUATION_GRAPH)
-DWG_GETALL_OBJECT (FCFOBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (GRADIENT_BACKGROUND)
-DWG_GETALL_OBJECT (GROUND_PLANE_BACKGROUND)
-DWG_GETALL_OBJECT (IBL_BACKGROUND)
-DWG_GETALL_OBJECT (IMAGE_BACKGROUND)
-DWG_GETALL_OBJECT (LEADEROBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (LIGHTLIST)
-DWG_GETALL_OBJECT (MATERIAL)
-DWG_GETALL_OBJECT (MENTALRAYRENDERSETTINGS)
-DWG_GETALL_OBJECT (MTEXTOBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (OBJECT_PTR)
-DWG_GETALL_OBJECT (PARTIAL_VIEWING_INDEX)
-DWG_GETALL_OBJECT (POINTCLOUDCOLORMAP)
-DWG_GETALL_OBJECT (POINTCLOUDDEF)
-DWG_GETALL_OBJECT (POINTCLOUDDEFEX)
-DWG_GETALL_OBJECT (POINTCLOUDDEF_REACTOR)
-DWG_GETALL_OBJECT (POINTCLOUDDEF_REACTOR_EX)
-DWG_GETALL_OBJECT (PROXY_OBJECT)
-DWG_GETALL_OBJECT (RAPIDRTRENDERSETTINGS)
-DWG_GETALL_OBJECT (RENDERENTRY)
-DWG_GETALL_OBJECT (RENDERENVIRONMENT)
-DWG_GETALL_OBJECT (RENDERGLOBAL)
-DWG_GETALL_OBJECT (RENDERSETTINGS)
-DWG_GETALL_OBJECT (SECTION_SETTINGS)
-DWG_GETALL_OBJECT (SKYLIGHT_BACKGROUND)
-DWG_GETALL_OBJECT (SOLID_BACKGROUND)
-DWG_GETALL_OBJECT (SPATIAL_INDEX)
-DWG_GETALL_OBJECT (SUN)
-DWG_GETALL_OBJECT (TABLESTYLE)
-DWG_GETALL_OBJECT (TEXTOBJECTCONTEXTDATA)
-DWG_GETALL_OBJECT (ASSOCARRAYMODIFYPARAMETERS)
-DWG_GETALL_OBJECT (ASSOCARRAYPATHPARAMETERS)
-DWG_GETALL_OBJECT (ASSOCARRAYPOLARPARAMETERS)
-DWG_GETALL_OBJECT (ASSOCARRAYRECTANGULARPARAMETERS)
-#ifdef DEBUG_CLASSES
-  DWG_GETALL_OBJECT (ACMECOMMANDHISTORY)
-  DWG_GETALL_OBJECT (ACMESCOPE)
-  DWG_GETALL_OBJECT (ACMESTATEMGR)
-  DWG_GETALL_OBJECT (ACSH_EXTRUSION_CLASS)
-  DWG_GETALL_OBJECT (ACSH_LOFT_CLASS)
-  DWG_GETALL_OBJECT (ACSH_REVOLVE_CLASS)
-  DWG_GETALL_OBJECT (ACSH_SWEEP_CLASS)
-  DWG_GETALL_OBJECT (ANGDIMOBJECTCONTEXTDATA)
-  DWG_GETALL_OBJECT (ANNOTSCALEOBJECTCONTEXTDATA)
-  DWG_GETALL_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY)
-  DWG_GETALL_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
-  DWG_GETALL_OBJECT (ASSOCARRAYMODIFYACTIONBODY)
-  DWG_GETALL_OBJECT (ASSOCEDGEACTIONPARAM)
-  DWG_GETALL_OBJECT (ASSOCEDGECHAMFERACTIONBODY)
-  DWG_GETALL_OBJECT (ASSOCEDGEFILLETACTIONBODY)
-  DWG_GETALL_OBJECT (ASSOCMLEADERACTIONBODY)
-  DWG_GETALL_OBJECT (ASSOCORDINATEDIMACTIONBODY)
-  DWG_GETALL_OBJECT (ASSOCPERSSUBENTMANAGER)
-  DWG_GETALL_OBJECT (ASSOCRESTOREENTITYSTATEACTIONBODY)
-  DWG_GETALL_OBJECT (ASSOCROTATEDDIMACTIONBODY)
-  DWG_GETALL_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
-  DWG_GETALL_OBJECT (BLOCKPROPERTIESTABLE)
-  DWG_GETALL_OBJECT (BLOCKPROPERTIESTABLEGRIP)
-  DWG_GETALL_OBJECT (BREAKDATA)
-  DWG_GETALL_OBJECT (BREAKPOINTREF)
-  DWG_GETALL_OBJECT (CONTEXTDATAMANAGER)
-  DWG_GETALL_OBJECT (CSACDOCUMENTOPTIONS)
-  DWG_GETALL_OBJECT (CURVEPATH)
-  DWG_GETALL_OBJECT (DATATABLE)
-  DWG_GETALL_OBJECT (DIMASSOC)
-  DWG_GETALL_OBJECT (DMDIMOBJECTCONTEXTDATA)
-  DWG_GETALL_OBJECT (DYNAMICBLOCKPROXYNODE)
-  DWG_GETALL_OBJECT (GEOMAPIMAGE)
-  DWG_GETALL_OBJECT (LAYOUTPRINTCONFIG)
-  DWG_GETALL_OBJECT (MLEADEROBJECTCONTEXTDATA)
-  DWG_GETALL_OBJECT (MOTIONPATH)
-  DWG_GETALL_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
-  DWG_GETALL_OBJECT (NAVISWORKSMODELDEF)
-  DWG_GETALL_OBJECT (ORDDIMOBJECTCONTEXTDATA)
-  DWG_GETALL_OBJECT (PERSUBENTMGR)
-  DWG_GETALL_OBJECT (POINTPATH)
-  DWG_GETALL_OBJECT (RADIMLGOBJECTCONTEXTDATA)
-  DWG_GETALL_OBJECT (RADIMOBJECTCONTEXTDATA)
-  DWG_GETALL_OBJECT (SUNSTUDY)
-  DWG_GETALL_OBJECT (TABLECONTENT)
-  DWG_GETALL_OBJECT (TVDEVICEPROPERTIES)
-  //DWG_GETALL_OBJECT (ACDSRECORD)
-  //DWG_GETALL_OBJECT (ACDSSCHEMA)
-  //DWG_GETALL_OBJECT (NPOCOLLECTION)
-  //DWG_GETALL_OBJECT (RAPIDRTRENDERENVIRONMENT)
-  //DWG_GETALL_OBJECT (XREFPANELOBJECT)
-#endif
+    /**
+     * \fn Dwg_Object_OBJECT dwg_getall_OBJECT(Dwg_Data *dwg)
+     * Extracts all objects of this type from a dwg, and returns a malloced
+     * NULL-terminated array.
+     */
 
-/*******************************************************************
- *     Functions created from macro to cast dwg_object to entity     *
- *                 Usage :- dwg_object_to_ENTITY(),                  *
- *                where ENTITY can be LINE or CIRCLE                 *
- ********************************************************************/
+    DWG_GETALL_OBJECT (ACSH_BOOLEAN_CLASS) DWG_GETALL_OBJECT (ACSH_BOX_CLASS)
+        DWG_GETALL_OBJECT (ACSH_CONE_CLASS) DWG_GETALL_OBJECT (
+            ACSH_CYLINDER_CLASS) DWG_GETALL_OBJECT (ACSH_FILLET_CLASS)
+            DWG_GETALL_OBJECT (ACSH_HISTORY_CLASS) DWG_GETALL_OBJECT (
+                ACSH_SPHERE_CLASS) DWG_GETALL_OBJECT (ACSH_TORUS_CLASS)
+                DWG_GETALL_OBJECT (ACSH_WEDGE_CLASS) DWG_GETALL_OBJECT (APPID) DWG_GETALL_OBJECT (APPID_CONTROL) DWG_GETALL_OBJECT (BLOCKALIGNMENTGRIP) DWG_GETALL_OBJECT (BLOCKALIGNMENTPARAMETER) DWG_GETALL_OBJECT (BLOCKBASEPOINTPARAMETER) DWG_GETALL_OBJECT (BLOCKFLIPACTION) DWG_GETALL_OBJECT (BLOCKFLIPGRIP) DWG_GETALL_OBJECT (BLOCKFLIPPARAMETER) DWG_GETALL_OBJECT (BLOCKGRIPLOCATIONCOMPONENT) DWG_GETALL_OBJECT (BLOCKLINEARGRIP) DWG_GETALL_OBJECT (BLOCKLOOKUPGRIP) DWG_GETALL_OBJECT (BLOCKMOVEACTION) DWG_GETALL_OBJECT (BLOCKROTATEACTION) DWG_GETALL_OBJECT (BLOCKROTATIONGRIP) DWG_GETALL_OBJECT (BLOCKSCALEACTION) DWG_GETALL_OBJECT (BLOCKVISIBILITYGRIP) DWG_GETALL_OBJECT (BLOCK_CONTROL) DWG_GETALL_OBJECT (BLOCK_HEADER) DWG_GETALL_OBJECT (
+                    CELLSTYLEMAP) DWG_GETALL_OBJECT (DETAILVIEWSTYLE) DWG_GETALL_OBJECT (DICTIONARY) DWG_GETALL_OBJECT (DICTIONARYVAR) DWG_GETALL_OBJECT (DICTIONARYWDFLT) DWG_GETALL_OBJECT (DIMSTYLE) DWG_GETALL_OBJECT (DIMSTYLE_CONTROL)
+                    DWG_GETALL_OBJECT (DUMMY) DWG_GETALL_OBJECT (DYNAMICBLOCKPURGEPREVENTER) DWG_GETALL_OBJECT (FIELD) DWG_GETALL_OBJECT (
+                        FIELDLIST) DWG_GETALL_OBJECT (GEODATA) DWG_GETALL_OBJECT (GROUP) DWG_GETALL_OBJECT (IDBUFFER)
+                        DWG_GETALL_OBJECT (IMAGEDEF) DWG_GETALL_OBJECT (IMAGEDEF_REACTOR) DWG_GETALL_OBJECT (
+                            INDEX) DWG_GETALL_OBJECT (LAYER) DWG_GETALL_OBJECT (LAYERFILTER)
+                            DWG_GETALL_OBJECT (LAYER_CONTROL) DWG_GETALL_OBJECT (LAYER_INDEX) DWG_GETALL_OBJECT (
+                                LAYOUT) DWG_GETALL_OBJECT (LONG_TRANSACTION) DWG_GETALL_OBJECT (LTYPE)
+                                DWG_GETALL_OBJECT (LTYPE_CONTROL) DWG_GETALL_OBJECT (MLEADERSTYLE) DWG_GETALL_OBJECT (
+                                    MLINESTYLE) DWG_GETALL_OBJECT (PLACEHOLDER)
+                                    DWG_GETALL_OBJECT (PLOTSETTINGS) DWG_GETALL_OBJECT (RASTERVARIABLES) DWG_GETALL_OBJECT (
+                                        SCALE) DWG_GETALL_OBJECT (SECTIONVIEWSTYLE) DWG_GETALL_OBJECT (SECTION_MANAGER)
+                                        DWG_GETALL_OBJECT (SORTENTSTABLE) DWG_GETALL_OBJECT (
+                                            SPATIAL_FILTER) DWG_GETALL_OBJECT (STYLE) DWG_GETALL_OBJECT (STYLE_CONTROL)
+                                            DWG_GETALL_OBJECT (TABLEGEOMETRY) DWG_GETALL_OBJECT (
+                                                UCS) DWG_GETALL_OBJECT (UCS_CONTROL)
+                                                DWG_GETALL_OBJECT (
+                                                    UNKNOWN_OBJ) DWG_GETALL_OBJECT (VBA_PROJECT)
+                                                    DWG_GETALL_OBJECT (VIEW) DWG_GETALL_OBJECT (
+                                                        VIEW_CONTROL) DWG_GETALL_OBJECT (VISUALSTYLE)
+                                                        DWG_GETALL_OBJECT (VPORT) DWG_GETALL_OBJECT (
+                                                            VPORT_CONTROL) DWG_GETALL_OBJECT (VX_CONTROL)
+                                                            DWG_GETALL_OBJECT (
+                                                                VX_TABLE_RECORD)
+                                                                DWG_GETALL_OBJECT (
+                                                                    WIPEOUTVARIABLES)
+                                                                    DWG_GETALL_OBJECT (
+                                                                        XRECORD)
+                                                                        DWG_GETALL_OBJECT (
+                                                                            PDFDEFINITION)
+                                                                            DWG_GETALL_OBJECT (
+                                                                                DGNDEFINITION)
+                                                                                DWG_GETALL_OBJECT (
+                                                                                    DWFDEFINITION)
+    /* unstable */
+    DWG_GETALL_OBJECT (ACSH_BREP_CLASS)
+        DWG_GETALL_OBJECT (ACSH_CHAMFER_CLASS)
+            DWG_GETALL_OBJECT (ACSH_PYRAMID_CLASS)
+                DWG_GETALL_OBJECT (ALDIMOBJECTCONTEXTDATA)
+                    DWG_GETALL_OBJECT (ASSOC2DCONSTRAINTGROUP)
+                        DWG_GETALL_OBJECT (ASSOCACTION)
+                            DWG_GETALL_OBJECT (ASSOCACTIONPARAM)
+                                DWG_GETALL_OBJECT (ASSOCARRAYACTIONBODY)
+                                    DWG_GETALL_OBJECT (ASSOCASMBODYACTIONPARAM)
+                                        DWG_GETALL_OBJECT (
+                                            ASSOCBLENDSURFACEACTIONBODY)
+                                            DWG_GETALL_OBJECT (
+                                                ASSOCCOMPOUNDACTIONPARAM)
+                                                DWG_GETALL_OBJECT (
+                                                    ASSOCDEPENDENCY) DWG_GETALL_OBJECT (ASSOCDIMDEPENDENCYBODY) DWG_GETALL_OBJECT (ASSOCEXTENDSURFACEACTIONBODY) DWG_GETALL_OBJECT (ASSOCEXTRUDEDSURFACEACTIONBODY) DWG_GETALL_OBJECT (ASSOCFACEACTIONPARAM) DWG_GETALL_OBJECT (ASSOCFILLETSURFACEACTIONBODY) DWG_GETALL_OBJECT (ASSOCGEOMDEPENDENCY) DWG_GETALL_OBJECT (ASSOCLOFTEDSURFACEACTIONBODY) DWG_GETALL_OBJECT (ASSOCNETWORK) DWG_GETALL_OBJECT (ASSOCNETWORKSURFACEACTIONBODY) DWG_GETALL_OBJECT (ASSOCOBJECTACTIONPARAM) DWG_GETALL_OBJECT (ASSOCOFFSETSURFACEACTIONBODY) DWG_GETALL_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM) DWG_GETALL_OBJECT (ASSOCPATCHSURFACEACTIONBODY) DWG_GETALL_OBJECT (ASSOCPATHACTIONPARAM) DWG_GETALL_OBJECT (ASSOCPLANESURFACEACTIONBODY) DWG_GETALL_OBJECT (ASSOCPOINTREFACTIONPARAM) DWG_GETALL_OBJECT (ASSOCREVOLVEDSURFACEACTIONBODY) DWG_GETALL_OBJECT (ASSOCTRIMSURFACEACTIONBODY) DWG_GETALL_OBJECT (ASSOCVALUEDEPENDENCY) DWG_GETALL_OBJECT (ASSOCVARIABLE) DWG_GETALL_OBJECT (ASSOCVERTEXACTIONPARAM)
+                                                    DWG_GETALL_OBJECT (BLKREFOBJECTCONTEXTDATA) DWG_GETALL_OBJECT (
+                                                        BLOCKALIGNEDCONSTRAINTPARAMETER)
+                                                        DWG_GETALL_OBJECT (BLOCKANGULARCONSTRAINTPARAMETER) DWG_GETALL_OBJECT (
+                                                            BLOCKARRAYACTION) DWG_GETALL_OBJECT (BLOCKDIAMETRICCONSTRAINTPARAMETER)
+                                                            DWG_GETALL_OBJECT (BLOCKHORIZONTALCONSTRAINTPARAMETER) DWG_GETALL_OBJECT (
+                                                                BLOCKLINEARCONSTRAINTPARAMETER)
+                                                                DWG_GETALL_OBJECT (BLOCKLINEARPARAMETER) DWG_GETALL_OBJECT (
+                                                                    BLOCKLOOKUPACTION) DWG_GETALL_OBJECT (BLOCKLOOKUPPARAMETER)
+                                                                    DWG_GETALL_OBJECT (
+                                                                        BLOCKPARAMDEPENDENCYBODY)
+                                                                        DWG_GETALL_OBJECT (BLOCKPOINTPARAMETER) DWG_GETALL_OBJECT (BLOCKPOLARGRIP) DWG_GETALL_OBJECT (BLOCKPOLARPARAMETER) DWG_GETALL_OBJECT (BLOCKPOLARSTRETCHACTION) DWG_GETALL_OBJECT (BLOCKRADIALCONSTRAINTPARAMETER) DWG_GETALL_OBJECT (BLOCKREPRESENTATION) DWG_GETALL_OBJECT (BLOCKROTATIONPARAMETER) DWG_GETALL_OBJECT (BLOCKSTRETCHACTION) DWG_GETALL_OBJECT (BLOCKUSERPARAMETER) DWG_GETALL_OBJECT (BLOCKVERTICALCONSTRAINTPARAMETER) DWG_GETALL_OBJECT (BLOCKVISIBILITYPARAMETER) DWG_GETALL_OBJECT (BLOCKXYGRIP) DWG_GETALL_OBJECT (BLOCKXYPARAMETER) DWG_GETALL_OBJECT (DATALINK) DWG_GETALL_OBJECT (DBCOLOR) DWG_GETALL_OBJECT (
+                                                                            EVALUATION_GRAPH) DWG_GETALL_OBJECT (FCFOBJECTCONTEXTDATA) DWG_GETALL_OBJECT (GRADIENT_BACKGROUND) DWG_GETALL_OBJECT (GROUND_PLANE_BACKGROUND) DWG_GETALL_OBJECT (IBL_BACKGROUND)
+                                                                            DWG_GETALL_OBJECT (IMAGE_BACKGROUND) DWG_GETALL_OBJECT (LEADEROBJECTCONTEXTDATA) DWG_GETALL_OBJECT (LIGHTLIST) DWG_GETALL_OBJECT (MATERIAL) DWG_GETALL_OBJECT (MENTALRAYRENDERSETTINGS) DWG_GETALL_OBJECT (MTEXTOBJECTCONTEXTDATA) DWG_GETALL_OBJECT (OBJECT_PTR) DWG_GETALL_OBJECT (PARTIAL_VIEWING_INDEX) DWG_GETALL_OBJECT (POINTCLOUDCOLORMAP) DWG_GETALL_OBJECT (
+                                                                                POINTCLOUDDEF) DWG_GETALL_OBJECT (POINTCLOUDDEFEX) DWG_GETALL_OBJECT (POINTCLOUDDEF_REACTOR) DWG_GETALL_OBJECT (POINTCLOUDDEF_REACTOR_EX) DWG_GETALL_OBJECT (PROXY_OBJECT) DWG_GETALL_OBJECT (RAPIDRTRENDERSETTINGS) DWG_GETALL_OBJECT (RENDERENTRY) DWG_GETALL_OBJECT (RENDERENVIRONMENT) DWG_GETALL_OBJECT (RENDERGLOBAL) DWG_GETALL_OBJECT (RENDERSETTINGS) DWG_GETALL_OBJECT (SECTION_SETTINGS)
+                                                                                DWG_GETALL_OBJECT (SKYLIGHT_BACKGROUND) DWG_GETALL_OBJECT (SOLID_BACKGROUND) DWG_GETALL_OBJECT (SPATIAL_INDEX) DWG_GETALL_OBJECT (SUN) DWG_GETALL_OBJECT (
+                                                                                    TABLESTYLE) DWG_GETALL_OBJECT (TEXTOBJECTCONTEXTDATA) DWG_GETALL_OBJECT (ASSOCARRAYMODIFYPARAMETERS) DWG_GETALL_OBJECT (ASSOCARRAYPATHPARAMETERS) DWG_GETALL_OBJECT (ASSOCARRAYPOLARPARAMETERS) DWG_GETALL_OBJECT (ASSOCARRAYRECTANGULARPARAMETERS)
+#  ifdef DEBUG_CLASSES
+                                                                                    DWG_GETALL_OBJECT (ACMECOMMANDHISTORY) DWG_GETALL_OBJECT (ACMESCOPE) DWG_GETALL_OBJECT (ACMESTATEMGR) DWG_GETALL_OBJECT (
+                                                                                        ACSH_EXTRUSION_CLASS) DWG_GETALL_OBJECT (ACSH_LOFT_CLASS) DWG_GETALL_OBJECT (ACSH_REVOLVE_CLASS) DWG_GETALL_OBJECT (ACSH_SWEEP_CLASS) DWG_GETALL_OBJECT (ANGDIMOBJECTCONTEXTDATA) DWG_GETALL_OBJECT (ANNOTSCALEOBJECTCONTEXTDATA) DWG_GETALL_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY)
+                                                                                        DWG_GETALL_OBJECT (ASSOCALIGNEDDIMACTIONBODY) DWG_GETALL_OBJECT (
+                                                                                            ASSOCARRAYMODIFYACTIONBODY) DWG_GETALL_OBJECT (ASSOCEDGEACTIONPARAM)
+                                                                                            DWG_GETALL_OBJECT (ASSOCEDGECHAMFERACTIONBODY) DWG_GETALL_OBJECT (
+                                                                                                ASSOCEDGEFILLETACTIONBODY)
+                                                                                                DWG_GETALL_OBJECT (
+                                                                                                    ASSOCMLEADERACTIONBODY)
+                                                                                                    DWG_GETALL_OBJECT (
+                                                                                                        ASSOCORDINATEDIMACTIONBODY)
+                                                                                                        DWG_GETALL_OBJECT (
+                                                                                                            ASSOCPERSSUBENTMANAGER) DWG_GETALL_OBJECT (ASSOCRESTOREENTITYSTATEACTIONBODY) DWG_GETALL_OBJECT (ASSOCROTATEDDIMACTIONBODY) DWG_GETALL_OBJECT (ASSOCSWEPTSURFACEACTIONBODY) DWG_GETALL_OBJECT (BLOCKPROPERTIESTABLE) DWG_GETALL_OBJECT (BLOCKPROPERTIESTABLEGRIP) DWG_GETALL_OBJECT (BREAKDATA) DWG_GETALL_OBJECT (BREAKPOINTREF) DWG_GETALL_OBJECT (CONTEXTDATAMANAGER)
+                                                                                                            DWG_GETALL_OBJECT (CSACDOCUMENTOPTIONS) DWG_GETALL_OBJECT (CURVEPATH) DWG_GETALL_OBJECT (DATATABLE) DWG_GETALL_OBJECT (DIMASSOC) DWG_GETALL_OBJECT (DMDIMOBJECTCONTEXTDATA) DWG_GETALL_OBJECT (DYNAMICBLOCKPROXYNODE) DWG_GETALL_OBJECT (GEOMAPIMAGE) DWG_GETALL_OBJECT (LAYOUTPRINTCONFIG) DWG_GETALL_OBJECT (MLEADEROBJECTCONTEXTDATA) DWG_GETALL_OBJECT (
+                                                                                                                MOTIONPATH) DWG_GETALL_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
+                                                                                                                DWG_GETALL_OBJECT (NAVISWORKSMODELDEF) DWG_GETALL_OBJECT (
+                                                                                                                    ORDDIMOBJECTCONTEXTDATA)
+                                                                                                                    DWG_GETALL_OBJECT (PERSUBENTMGR) DWG_GETALL_OBJECT (
+                                                                                                                        POINTPATH) DWG_GETALL_OBJECT (RADIMLGOBJECTCONTEXTDATA)
+                                                                                                                        DWG_GETALL_OBJECT (
+                                                                                                                            RADIMOBJECTCONTEXTDATA)
+                                                                                                                            DWG_GETALL_OBJECT (
+                                                                                                                                SUNSTUDY)
+                                                                                                                                DWG_GETALL_OBJECT (
+                                                                                                                                    TABLECONTENT)
+                                                                                                                                    DWG_GETALL_OBJECT (
+                                                                                                                                        TVDEVICEPROPERTIES)
+// DWG_GETALL_OBJECT (ACDSRECORD)
+// DWG_GETALL_OBJECT (ACDSSCHEMA)
+// DWG_GETALL_OBJECT (NPOCOLLECTION)
+// DWG_GETALL_OBJECT (RAPIDRTRENDERENVIRONMENT)
+// DWG_GETALL_OBJECT (XREFPANELOBJECT)
+#  endif
 
-/**
- * \fn Dwg_Entity_ENTITY *dwg_object_to_ENTITY(Dwg_Object *obj)
- * cast a Dwg_Object to Entity
- */
-/* fixed <500 */
-CAST_DWG_OBJECT_TO_ENTITY (_3DFACE)
-CAST_DWG_OBJECT_TO_ENTITY (_3DSOLID)
-CAST_DWG_OBJECT_TO_ENTITY (ARC)
-CAST_DWG_OBJECT_TO_ENTITY (ATTDEF)
-CAST_DWG_OBJECT_TO_ENTITY (ATTRIB)
-CAST_DWG_OBJECT_TO_ENTITY (BLOCK)
-CAST_DWG_OBJECT_TO_ENTITY (BODY)
-CAST_DWG_OBJECT_TO_ENTITY (CIRCLE)
-CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_ALIGNED)
-CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_ANG2LN)
-CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_ANG3PT)
-CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_DIAMETER)
-CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_LINEAR)
-CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_ORDINATE)
-CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_RADIUS)
-CAST_DWG_OBJECT_TO_ENTITY (ELLIPSE)
-CAST_DWG_OBJECT_TO_ENTITY (ENDBLK)
-CAST_DWG_OBJECT_TO_ENTITY (INSERT)
-CAST_DWG_OBJECT_TO_ENTITY (LEADER)
-CAST_DWG_OBJECT_TO_ENTITY (LINE)
-CAST_DWG_OBJECT_TO_ENTITY (LOAD)
-CAST_DWG_OBJECT_TO_ENTITY (MINSERT)
-CAST_DWG_OBJECT_TO_ENTITY (MLINE)
-CAST_DWG_OBJECT_TO_ENTITY (MTEXT)
-CAST_DWG_OBJECT_TO_ENTITY (OLEFRAME)
-CAST_DWG_OBJECT_TO_ENTITY (POINT)
-CAST_DWG_OBJECT_TO_ENTITY (POLYLINE_2D)
-CAST_DWG_OBJECT_TO_ENTITY (POLYLINE_3D)
-CAST_DWG_OBJECT_TO_ENTITY (POLYLINE_MESH)
-CAST_DWG_OBJECT_TO_ENTITY (POLYLINE_PFACE)
-CAST_DWG_OBJECT_TO_ENTITY (PROXY_ENTITY)
-CAST_DWG_OBJECT_TO_ENTITY (RAY)
-CAST_DWG_OBJECT_TO_ENTITY (REGION)
-CAST_DWG_OBJECT_TO_ENTITY (SEQEND)
-CAST_DWG_OBJECT_TO_ENTITY (SHAPE)
-CAST_DWG_OBJECT_TO_ENTITY (SOLID)
-CAST_DWG_OBJECT_TO_ENTITY (SPLINE)
-CAST_DWG_OBJECT_TO_ENTITY (TEXT)
-CAST_DWG_OBJECT_TO_ENTITY (TOLERANCE)
-CAST_DWG_OBJECT_TO_ENTITY (TRACE)
-CAST_DWG_OBJECT_TO_ENTITY (UNKNOWN_ENT)
-CAST_DWG_OBJECT_TO_ENTITY (VERTEX_2D)
-CAST_DWG_OBJECT_TO_ENTITY (VERTEX_3D)
-CAST_DWG_OBJECT_TO_ENTITY (VERTEX_MESH)
-CAST_DWG_OBJECT_TO_ENTITY (VERTEX_PFACE)
-CAST_DWG_OBJECT_TO_ENTITY (VERTEX_PFACE_FACE)
-CAST_DWG_OBJECT_TO_ENTITY (VIEWPORT)
-CAST_DWG_OBJECT_TO_ENTITY (XLINE)
-/* untyped > 500 */
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (CAMERA)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (DGNUNDERLAY)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (DWFUNDERLAY)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (HATCH)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (IMAGE)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (LIGHT)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (LWPOLYLINE)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (MESH)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (MULTILEADER)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (OLE2FRAME)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (PDFUNDERLAY)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (SECTIONOBJECT)
-/* unstable */
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (_3DLINE)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (ARC_DIMENSION)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (ENDREP)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (HELIX)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (LARGE_RADIAL_DIMENSION)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (PLANESURFACE)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (POINTCLOUD)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (POINTCLOUDEX)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (REPEAT)
-CAST_DWG_OBJECT_TO_ENTITY_BYNAME (WIPEOUT)
-#ifdef DEBUG_CLASSES
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (ALIGNMENTPARAMETERENTITY)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (ARCALIGNEDTEXT)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (BASEPOINTPARAMETERENTITY)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (EXTRUDEDSURFACE)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (FLIPGRIPENTITY)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (FLIPPARAMETERENTITY)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (GEOPOSITIONMARKER)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (LINEARGRIPENTITY)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (LINEARPARAMETERENTITY)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (LOFTEDSURFACE)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (MPOLYGON)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (NAVISWORKSMODEL)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (NURBSURFACE)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (POINTPARAMETERENTITY)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (POLARGRIPENTITY)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (REVOLVEDSURFACE)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (ROTATIONGRIPENTITY)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (ROTATIONPARAMETERENTITY)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (RTEXT)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (SWEPTSURFACE)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (TABLE)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (VISIBILITYGRIPENTITY)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (VISIBILITYPARAMETERENTITY)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (XYGRIPENTITY)
-  CAST_DWG_OBJECT_TO_ENTITY_BYNAME (XYPARAMETERENTITY)
-#endif
+    /*******************************************************************
+     *     Functions created from macro to cast dwg_object to entity     *
+     *                 Usage :- dwg_object_to_ENTITY(),                  *
+     *                where ENTITY can be LINE or CIRCLE                 *
+     ********************************************************************/
 
-/*******************************************************************
- *     Functions created from macro to cast dwg object to object     *
- *                 Usage :- dwg_object_to_OBJECT(),                  *
- *            where OBJECT can be LAYER or BLOCK_HEADER              *
- ********************************************************************/
-/**
- * \fn Dwg_Object_OBJECT *dwg_object_to_OBJECT(Dwg_Object *obj)
- * cast a Dwg_Object to Object
- */
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_BOOLEAN_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_BOX_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_CONE_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_CYLINDER_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_FILLET_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_HISTORY_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_SPHERE_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_TORUS_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_WEDGE_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (APPID)
-CAST_DWG_OBJECT_TO_OBJECT (APPID_CONTROL)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKALIGNMENTGRIP)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKALIGNMENTPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKBASEPOINTPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKFLIPACTION)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKFLIPGRIP)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKFLIPPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKGRIPLOCATIONCOMPONENT)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKLINEARGRIP)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKLOOKUPGRIP)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKMOVEACTION)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKROTATEACTION)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKROTATIONGRIP)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKSCALEACTION)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKVISIBILITYGRIP)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCK_CONTROL)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCK_HEADER)
-CAST_DWG_OBJECT_TO_OBJECT (CELLSTYLEMAP)
-CAST_DWG_OBJECT_TO_OBJECT (DETAILVIEWSTYLE)
-CAST_DWG_OBJECT_TO_OBJECT (DICTIONARY)
-CAST_DWG_OBJECT_TO_OBJECT (DICTIONARYVAR)
-CAST_DWG_OBJECT_TO_OBJECT (DICTIONARYWDFLT)
-CAST_DWG_OBJECT_TO_OBJECT (DIMSTYLE)
-CAST_DWG_OBJECT_TO_OBJECT (DIMSTYLE_CONTROL)
-CAST_DWG_OBJECT_TO_OBJECT (DUMMY)
-CAST_DWG_OBJECT_TO_OBJECT (DYNAMICBLOCKPURGEPREVENTER)
-CAST_DWG_OBJECT_TO_OBJECT (FIELD)
-CAST_DWG_OBJECT_TO_OBJECT (FIELDLIST)
-CAST_DWG_OBJECT_TO_OBJECT (GEODATA)
-CAST_DWG_OBJECT_TO_OBJECT (GROUP)
-CAST_DWG_OBJECT_TO_OBJECT (IDBUFFER)
-CAST_DWG_OBJECT_TO_OBJECT (IMAGEDEF)
-CAST_DWG_OBJECT_TO_OBJECT (IMAGEDEF_REACTOR)
-CAST_DWG_OBJECT_TO_OBJECT (INDEX)
-CAST_DWG_OBJECT_TO_OBJECT (LAYER)
-CAST_DWG_OBJECT_TO_OBJECT (LAYERFILTER)
-CAST_DWG_OBJECT_TO_OBJECT (LAYER_CONTROL)
-CAST_DWG_OBJECT_TO_OBJECT (LAYER_INDEX)
-CAST_DWG_OBJECT_TO_OBJECT (LAYOUT)
-CAST_DWG_OBJECT_TO_OBJECT (LONG_TRANSACTION)
-CAST_DWG_OBJECT_TO_OBJECT (LTYPE)
-CAST_DWG_OBJECT_TO_OBJECT (LTYPE_CONTROL)
-CAST_DWG_OBJECT_TO_OBJECT (MLEADERSTYLE)
-CAST_DWG_OBJECT_TO_OBJECT (MLINESTYLE)
-CAST_DWG_OBJECT_TO_OBJECT (PLACEHOLDER)
-CAST_DWG_OBJECT_TO_OBJECT (PLOTSETTINGS)
-CAST_DWG_OBJECT_TO_OBJECT (RASTERVARIABLES)
-CAST_DWG_OBJECT_TO_OBJECT (SCALE)
-CAST_DWG_OBJECT_TO_OBJECT (SECTIONVIEWSTYLE)
-CAST_DWG_OBJECT_TO_OBJECT (SECTION_MANAGER)
-CAST_DWG_OBJECT_TO_OBJECT (SORTENTSTABLE)
-CAST_DWG_OBJECT_TO_OBJECT (SPATIAL_FILTER)
-CAST_DWG_OBJECT_TO_OBJECT (STYLE)
-CAST_DWG_OBJECT_TO_OBJECT (STYLE_CONTROL)
-CAST_DWG_OBJECT_TO_OBJECT (TABLEGEOMETRY)
-CAST_DWG_OBJECT_TO_OBJECT (UCS)
-CAST_DWG_OBJECT_TO_OBJECT (UCS_CONTROL)
-CAST_DWG_OBJECT_TO_OBJECT (UNKNOWN_OBJ)
-CAST_DWG_OBJECT_TO_OBJECT (VBA_PROJECT)
-CAST_DWG_OBJECT_TO_OBJECT (VIEW)
-CAST_DWG_OBJECT_TO_OBJECT (VIEW_CONTROL)
-CAST_DWG_OBJECT_TO_OBJECT (VISUALSTYLE)
-CAST_DWG_OBJECT_TO_OBJECT (VPORT)
-CAST_DWG_OBJECT_TO_OBJECT (VPORT_CONTROL)
-CAST_DWG_OBJECT_TO_OBJECT (VX_CONTROL)
-CAST_DWG_OBJECT_TO_OBJECT (VX_TABLE_RECORD)
-CAST_DWG_OBJECT_TO_OBJECT (WIPEOUTVARIABLES)
-CAST_DWG_OBJECT_TO_OBJECT (XRECORD)
-CAST_DWG_OBJECT_TO_OBJECT (PDFDEFINITION)
-CAST_DWG_OBJECT_TO_OBJECT (DGNDEFINITION)
-CAST_DWG_OBJECT_TO_OBJECT (DWFDEFINITION)
-/* unstable */
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_BREP_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_CHAMFER_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (ACSH_PYRAMID_CLASS)
-CAST_DWG_OBJECT_TO_OBJECT (ALDIMOBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOC2DCONSTRAINTGROUP)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCACTION)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCARRAYACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCASMBODYACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCBLENDSURFACEACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCCOMPOUNDACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCDEPENDENCY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCDIMDEPENDENCYBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCEXTENDSURFACEACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCEXTRUDEDSURFACEACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCFACEACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCFILLETSURFACEACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCGEOMDEPENDENCY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCLOFTEDSURFACEACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCNETWORK)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCNETWORKSURFACEACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCOBJECTACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCOFFSETSURFACEACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCPATCHSURFACEACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCPATHACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCPLANESURFACEACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCPOINTREFACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCREVOLVEDSURFACEACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCTRIMSURFACEACTIONBODY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCVALUEDEPENDENCY)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCVARIABLE)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCVERTEXACTIONPARAM)
-CAST_DWG_OBJECT_TO_OBJECT (BLKREFOBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKALIGNEDCONSTRAINTPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKANGULARCONSTRAINTPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKARRAYACTION)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKDIAMETRICCONSTRAINTPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKHORIZONTALCONSTRAINTPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKLINEARCONSTRAINTPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKLINEARPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKLOOKUPACTION)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKLOOKUPPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKPARAMDEPENDENCYBODY)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKPOINTPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKPOLARGRIP)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKPOLARPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKPOLARSTRETCHACTION)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKRADIALCONSTRAINTPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKREPRESENTATION)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKROTATIONPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKSTRETCHACTION)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKUSERPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKVERTICALCONSTRAINTPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKVISIBILITYPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKXYGRIP)
-CAST_DWG_OBJECT_TO_OBJECT (BLOCKXYPARAMETER)
-CAST_DWG_OBJECT_TO_OBJECT (DATALINK)
-CAST_DWG_OBJECT_TO_OBJECT (DBCOLOR)
-CAST_DWG_OBJECT_TO_OBJECT (EVALUATION_GRAPH)
-CAST_DWG_OBJECT_TO_OBJECT (FCFOBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (GRADIENT_BACKGROUND)
-CAST_DWG_OBJECT_TO_OBJECT (GROUND_PLANE_BACKGROUND)
-CAST_DWG_OBJECT_TO_OBJECT (IBL_BACKGROUND)
-CAST_DWG_OBJECT_TO_OBJECT (IMAGE_BACKGROUND)
-CAST_DWG_OBJECT_TO_OBJECT (LEADEROBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (LIGHTLIST)
-CAST_DWG_OBJECT_TO_OBJECT (MATERIAL)
-CAST_DWG_OBJECT_TO_OBJECT (MENTALRAYRENDERSETTINGS)
-CAST_DWG_OBJECT_TO_OBJECT (MTEXTOBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (OBJECT_PTR)
-CAST_DWG_OBJECT_TO_OBJECT (PARTIAL_VIEWING_INDEX)
-CAST_DWG_OBJECT_TO_OBJECT (POINTCLOUDCOLORMAP)
-CAST_DWG_OBJECT_TO_OBJECT (POINTCLOUDDEF)
-CAST_DWG_OBJECT_TO_OBJECT (POINTCLOUDDEFEX)
-CAST_DWG_OBJECT_TO_OBJECT (POINTCLOUDDEF_REACTOR)
-CAST_DWG_OBJECT_TO_OBJECT (POINTCLOUDDEF_REACTOR_EX)
-CAST_DWG_OBJECT_TO_OBJECT (PROXY_OBJECT)
-CAST_DWG_OBJECT_TO_OBJECT (RAPIDRTRENDERSETTINGS)
-CAST_DWG_OBJECT_TO_OBJECT (RENDERENTRY)
-CAST_DWG_OBJECT_TO_OBJECT (RENDERENVIRONMENT)
-CAST_DWG_OBJECT_TO_OBJECT (RENDERGLOBAL)
-CAST_DWG_OBJECT_TO_OBJECT (RENDERSETTINGS)
-CAST_DWG_OBJECT_TO_OBJECT (SECTION_SETTINGS)
-CAST_DWG_OBJECT_TO_OBJECT (SKYLIGHT_BACKGROUND)
-CAST_DWG_OBJECT_TO_OBJECT (SOLID_BACKGROUND)
-CAST_DWG_OBJECT_TO_OBJECT (SPATIAL_INDEX)
-CAST_DWG_OBJECT_TO_OBJECT (SUN)
-CAST_DWG_OBJECT_TO_OBJECT (TABLESTYLE)
-CAST_DWG_OBJECT_TO_OBJECT (TEXTOBJECTCONTEXTDATA)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCARRAYMODIFYPARAMETERS)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCARRAYPATHPARAMETERS)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCARRAYPOLARPARAMETERS)
-CAST_DWG_OBJECT_TO_OBJECT (ASSOCARRAYRECTANGULARPARAMETERS)
-#ifdef DEBUG_CLASSES
-  CAST_DWG_OBJECT_TO_OBJECT (ACMECOMMANDHISTORY)
-  CAST_DWG_OBJECT_TO_OBJECT (ACMESCOPE)
-  CAST_DWG_OBJECT_TO_OBJECT (ACMESTATEMGR)
-  CAST_DWG_OBJECT_TO_OBJECT (ACSH_EXTRUSION_CLASS)
-  CAST_DWG_OBJECT_TO_OBJECT (ACSH_LOFT_CLASS)
-  CAST_DWG_OBJECT_TO_OBJECT (ACSH_REVOLVE_CLASS)
-  CAST_DWG_OBJECT_TO_OBJECT (ACSH_SWEEP_CLASS)
-  CAST_DWG_OBJECT_TO_OBJECT (ANGDIMOBJECTCONTEXTDATA)
-  CAST_DWG_OBJECT_TO_OBJECT (ANNOTSCALEOBJECTCONTEXTDATA)
-  CAST_DWG_OBJECT_TO_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY)
-  CAST_DWG_OBJECT_TO_OBJECT (ASSOCALIGNEDDIMACTIONBODY)
-  CAST_DWG_OBJECT_TO_OBJECT (ASSOCARRAYMODIFYACTIONBODY)
-  CAST_DWG_OBJECT_TO_OBJECT (ASSOCEDGEACTIONPARAM)
-  CAST_DWG_OBJECT_TO_OBJECT (ASSOCEDGECHAMFERACTIONBODY)
-  CAST_DWG_OBJECT_TO_OBJECT (ASSOCEDGEFILLETACTIONBODY)
-  CAST_DWG_OBJECT_TO_OBJECT (ASSOCMLEADERACTIONBODY)
-  CAST_DWG_OBJECT_TO_OBJECT (ASSOCORDINATEDIMACTIONBODY)
-  CAST_DWG_OBJECT_TO_OBJECT (ASSOCPERSSUBENTMANAGER)
-  CAST_DWG_OBJECT_TO_OBJECT (ASSOCRESTOREENTITYSTATEACTIONBODY)
-  CAST_DWG_OBJECT_TO_OBJECT (ASSOCROTATEDDIMACTIONBODY)
-  CAST_DWG_OBJECT_TO_OBJECT (ASSOCSWEPTSURFACEACTIONBODY)
-  CAST_DWG_OBJECT_TO_OBJECT (BLOCKPROPERTIESTABLE)
-  CAST_DWG_OBJECT_TO_OBJECT (BLOCKPROPERTIESTABLEGRIP)
-  CAST_DWG_OBJECT_TO_OBJECT (BREAKDATA)
-  CAST_DWG_OBJECT_TO_OBJECT (BREAKPOINTREF)
-  CAST_DWG_OBJECT_TO_OBJECT (CONTEXTDATAMANAGER)
-  CAST_DWG_OBJECT_TO_OBJECT (CSACDOCUMENTOPTIONS)
-  CAST_DWG_OBJECT_TO_OBJECT (CURVEPATH)
-  CAST_DWG_OBJECT_TO_OBJECT (DATATABLE)
-  CAST_DWG_OBJECT_TO_OBJECT (DIMASSOC)
-  CAST_DWG_OBJECT_TO_OBJECT (DMDIMOBJECTCONTEXTDATA)
-  CAST_DWG_OBJECT_TO_OBJECT (DYNAMICBLOCKPROXYNODE)
-  CAST_DWG_OBJECT_TO_OBJECT (GEOMAPIMAGE)
-  CAST_DWG_OBJECT_TO_OBJECT (LAYOUTPRINTCONFIG)
-  CAST_DWG_OBJECT_TO_OBJECT (MLEADEROBJECTCONTEXTDATA)
-  CAST_DWG_OBJECT_TO_OBJECT (MOTIONPATH)
-  CAST_DWG_OBJECT_TO_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
-  CAST_DWG_OBJECT_TO_OBJECT (NAVISWORKSMODELDEF)
-  CAST_DWG_OBJECT_TO_OBJECT (ORDDIMOBJECTCONTEXTDATA)
-  CAST_DWG_OBJECT_TO_OBJECT (PERSUBENTMGR)
-  CAST_DWG_OBJECT_TO_OBJECT (POINTPATH)
-  CAST_DWG_OBJECT_TO_OBJECT (RADIMLGOBJECTCONTEXTDATA)
-  CAST_DWG_OBJECT_TO_OBJECT (RADIMOBJECTCONTEXTDATA)
-  CAST_DWG_OBJECT_TO_OBJECT (SUNSTUDY)
-  CAST_DWG_OBJECT_TO_OBJECT (TABLECONTENT)
-  CAST_DWG_OBJECT_TO_OBJECT (TVDEVICEPROPERTIES)
-  //CAST_DWG_OBJECT_TO_OBJECT (ACDSRECORD)
-  //CAST_DWG_OBJECT_TO_OBJECT (ACDSSCHEMA)
-  //CAST_DWG_OBJECT_TO_OBJECT (NPOCOLLECTION)
-  //CAST_DWG_OBJECT_TO_OBJECT (RAPIDRTRENDERENVIRONMENT)
-  //CAST_DWG_OBJECT_TO_OBJECT (XREFPANELOBJECT)
-#endif
+    /**
+     * \fn Dwg_Entity_ENTITY *dwg_object_to_ENTITY(Dwg_Object *obj)
+     * cast a Dwg_Object to Entity
+     */
+    /* fixed <500 */
+    CAST_DWG_OBJECT_TO_ENTITY (_3DFACE) CAST_DWG_OBJECT_TO_ENTITY (_3DSOLID)
+        CAST_DWG_OBJECT_TO_ENTITY (ARC) CAST_DWG_OBJECT_TO_ENTITY (ATTDEF)
+            CAST_DWG_OBJECT_TO_ENTITY (ATTRIB)
+                CAST_DWG_OBJECT_TO_ENTITY (BLOCK)
+                    CAST_DWG_OBJECT_TO_ENTITY (BODY)
+                        CAST_DWG_OBJECT_TO_ENTITY (CIRCLE) CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_ALIGNED) CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_ANG2LN) CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_ANG3PT) CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_DIAMETER) CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_LINEAR) CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_ORDINATE) CAST_DWG_OBJECT_TO_ENTITY (DIMENSION_RADIUS) CAST_DWG_OBJECT_TO_ENTITY (ELLIPSE) CAST_DWG_OBJECT_TO_ENTITY (ENDBLK) CAST_DWG_OBJECT_TO_ENTITY (INSERT) CAST_DWG_OBJECT_TO_ENTITY (LEADER) CAST_DWG_OBJECT_TO_ENTITY (LINE) CAST_DWG_OBJECT_TO_ENTITY (LOAD) CAST_DWG_OBJECT_TO_ENTITY (MINSERT) CAST_DWG_OBJECT_TO_ENTITY (MLINE) CAST_DWG_OBJECT_TO_ENTITY (MTEXT) CAST_DWG_OBJECT_TO_ENTITY (
+                            OLEFRAME) CAST_DWG_OBJECT_TO_ENTITY (POINT) CAST_DWG_OBJECT_TO_ENTITY (POLYLINE_2D)
+                            CAST_DWG_OBJECT_TO_ENTITY (
+                                POLYLINE_3D) CAST_DWG_OBJECT_TO_ENTITY (POLYLINE_MESH)
+                                CAST_DWG_OBJECT_TO_ENTITY (POLYLINE_PFACE) CAST_DWG_OBJECT_TO_ENTITY (
+                                    PROXY_ENTITY) CAST_DWG_OBJECT_TO_ENTITY (RAY)
+                                    CAST_DWG_OBJECT_TO_ENTITY (REGION) CAST_DWG_OBJECT_TO_ENTITY (
+                                        SEQEND) CAST_DWG_OBJECT_TO_ENTITY (SHAPE)
+                                        CAST_DWG_OBJECT_TO_ENTITY (SOLID) CAST_DWG_OBJECT_TO_ENTITY (
+                                            SPLINE) CAST_DWG_OBJECT_TO_ENTITY (TEXT)
+                                            CAST_DWG_OBJECT_TO_ENTITY (TOLERANCE) CAST_DWG_OBJECT_TO_ENTITY (
+                                                TRACE) CAST_DWG_OBJECT_TO_ENTITY (UNKNOWN_ENT)
+                                                CAST_DWG_OBJECT_TO_ENTITY (
+                                                    VERTEX_2D)
+                                                    CAST_DWG_OBJECT_TO_ENTITY (
+                                                        VERTEX_3D)
+                                                        CAST_DWG_OBJECT_TO_ENTITY (
+                                                            VERTEX_MESH)
+                                                            CAST_DWG_OBJECT_TO_ENTITY (
+                                                                VERTEX_PFACE)
+                                                                CAST_DWG_OBJECT_TO_ENTITY (
+                                                                    VERTEX_PFACE_FACE)
+                                                                    CAST_DWG_OBJECT_TO_ENTITY (
+                                                                        VIEWPORT)
+                                                                        CAST_DWG_OBJECT_TO_ENTITY (
+                                                                            XLINE)
+    /* untyped > 500 */
+    CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+        CAMERA) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (DGNUNDERLAY)
+        CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+            DWFUNDERLAY) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (HATCH)
+            CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+                IMAGE) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (LIGHT)
+                CAST_DWG_OBJECT_TO_ENTITY_BYNAME (LWPOLYLINE)
+                    CAST_DWG_OBJECT_TO_ENTITY_BYNAME (MESH)
+                        CAST_DWG_OBJECT_TO_ENTITY_BYNAME (MULTILEADER)
+                            CAST_DWG_OBJECT_TO_ENTITY_BYNAME (OLE2FRAME)
+                                CAST_DWG_OBJECT_TO_ENTITY_BYNAME (PDFUNDERLAY)
+                                    CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+                                        SECTIONOBJECT)
+    /* unstable */
+    CAST_DWG_OBJECT_TO_ENTITY_BYNAME (_3DLINE) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+        ARC_DIMENSION) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (ENDREP) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (HELIX)
+        CAST_DWG_OBJECT_TO_ENTITY_BYNAME (LARGE_RADIAL_DIMENSION) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+            PLANESURFACE) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (POINTCLOUD)
+            CAST_DWG_OBJECT_TO_ENTITY_BYNAME (POINTCLOUDEX) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+                REPEAT) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (WIPEOUT)
+#  ifdef DEBUG_CLASSES
+                CAST_DWG_OBJECT_TO_ENTITY_BYNAME (ALIGNMENTPARAMETERENTITY) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+                    ARCALIGNEDTEXT) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (BASEPOINTPARAMETERENTITY)
+                    CAST_DWG_OBJECT_TO_ENTITY_BYNAME (EXTRUDEDSURFACE) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+                        FLIPGRIPENTITY) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (FLIPPARAMETERENTITY)
+                        CAST_DWG_OBJECT_TO_ENTITY_BYNAME (GEOPOSITIONMARKER) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+                            LINEARGRIPENTITY) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (LINEARPARAMETERENTITY)
+                            CAST_DWG_OBJECT_TO_ENTITY_BYNAME (LOFTEDSURFACE) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+                                MPOLYGON) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (NAVISWORKSMODEL)
+                                CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+                                    NURBSURFACE) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (POINTPARAMETERENTITY)
+                                    CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+                                        POLARGRIPENTITY) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (REVOLVEDSURFACE)
+                                        CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+                                            ROTATIONGRIPENTITY)
+                                            CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+                                                ROTATIONPARAMETERENTITY)
+                                                CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+                                                    RTEXT) CAST_DWG_OBJECT_TO_ENTITY_BYNAME (SWEPTSURFACE)
+                                                    CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+                                                        TABLE)
+                                                        CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+                                                            VISIBILITYGRIPENTITY)
+                                                            CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+                                                                VISIBILITYPARAMETERENTITY)
+                                                                CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+                                                                    XYGRIPENTITY)
+                                                                    CAST_DWG_OBJECT_TO_ENTITY_BYNAME (
+                                                                        XYPARAMETERENTITY)
+#  endif
+
+    /*******************************************************************
+     *     Functions created from macro to cast dwg object to object     *
+     *                 Usage :- dwg_object_to_OBJECT(),                  *
+     *            where OBJECT can be LAYER or BLOCK_HEADER              *
+     ********************************************************************/
+    /**
+     * \fn Dwg_Object_OBJECT *dwg_object_to_OBJECT(Dwg_Object *obj)
+     * cast a Dwg_Object to Object
+     */
+    CAST_DWG_OBJECT_TO_OBJECT (ACSH_BOOLEAN_CLASS) CAST_DWG_OBJECT_TO_OBJECT (
+        ACSH_BOX_CLASS) CAST_DWG_OBJECT_TO_OBJECT (ACSH_CONE_CLASS) CAST_DWG_OBJECT_TO_OBJECT (ACSH_CYLINDER_CLASS)
+        CAST_DWG_OBJECT_TO_OBJECT (ACSH_FILLET_CLASS) CAST_DWG_OBJECT_TO_OBJECT (ACSH_HISTORY_CLASS) CAST_DWG_OBJECT_TO_OBJECT (ACSH_SPHERE_CLASS) CAST_DWG_OBJECT_TO_OBJECT (ACSH_TORUS_CLASS) CAST_DWG_OBJECT_TO_OBJECT (ACSH_WEDGE_CLASS) CAST_DWG_OBJECT_TO_OBJECT (APPID) CAST_DWG_OBJECT_TO_OBJECT (APPID_CONTROL) CAST_DWG_OBJECT_TO_OBJECT (BLOCKALIGNMENTGRIP) CAST_DWG_OBJECT_TO_OBJECT (BLOCKALIGNMENTPARAMETER) CAST_DWG_OBJECT_TO_OBJECT (BLOCKBASEPOINTPARAMETER) CAST_DWG_OBJECT_TO_OBJECT (
+            BLOCKFLIPACTION) CAST_DWG_OBJECT_TO_OBJECT (BLOCKFLIPGRIP)
+            CAST_DWG_OBJECT_TO_OBJECT (BLOCKFLIPPARAMETER) CAST_DWG_OBJECT_TO_OBJECT (BLOCKGRIPLOCATIONCOMPONENT) CAST_DWG_OBJECT_TO_OBJECT (BLOCKLINEARGRIP) CAST_DWG_OBJECT_TO_OBJECT (
+                BLOCKLOOKUPGRIP) CAST_DWG_OBJECT_TO_OBJECT (BLOCKMOVEACTION)
+                CAST_DWG_OBJECT_TO_OBJECT (BLOCKROTATEACTION) CAST_DWG_OBJECT_TO_OBJECT (BLOCKROTATIONGRIP) CAST_DWG_OBJECT_TO_OBJECT (
+                    BLOCKSCALEACTION) CAST_DWG_OBJECT_TO_OBJECT (BLOCKVISIBILITYGRIP) CAST_DWG_OBJECT_TO_OBJECT (BLOCK_CONTROL) CAST_DWG_OBJECT_TO_OBJECT (BLOCK_HEADER) CAST_DWG_OBJECT_TO_OBJECT (CELLSTYLEMAP) CAST_DWG_OBJECT_TO_OBJECT (DETAILVIEWSTYLE) CAST_DWG_OBJECT_TO_OBJECT (DICTIONARY) CAST_DWG_OBJECT_TO_OBJECT (DICTIONARYVAR) CAST_DWG_OBJECT_TO_OBJECT (DICTIONARYWDFLT) CAST_DWG_OBJECT_TO_OBJECT (DIMSTYLE) CAST_DWG_OBJECT_TO_OBJECT (DIMSTYLE_CONTROL) CAST_DWG_OBJECT_TO_OBJECT (DUMMY) CAST_DWG_OBJECT_TO_OBJECT (DYNAMICBLOCKPURGEPREVENTER) CAST_DWG_OBJECT_TO_OBJECT (FIELD) CAST_DWG_OBJECT_TO_OBJECT (FIELDLIST) CAST_DWG_OBJECT_TO_OBJECT (GEODATA)
+                    CAST_DWG_OBJECT_TO_OBJECT (GROUP) CAST_DWG_OBJECT_TO_OBJECT (IDBUFFER) CAST_DWG_OBJECT_TO_OBJECT (
+                        IMAGEDEF) CAST_DWG_OBJECT_TO_OBJECT (IMAGEDEF_REACTOR) CAST_DWG_OBJECT_TO_OBJECT (INDEX)
+                        CAST_DWG_OBJECT_TO_OBJECT (LAYER) CAST_DWG_OBJECT_TO_OBJECT (LAYERFILTER) CAST_DWG_OBJECT_TO_OBJECT (
+                            LAYER_CONTROL) CAST_DWG_OBJECT_TO_OBJECT (LAYER_INDEX) CAST_DWG_OBJECT_TO_OBJECT (LAYOUT)
+                            CAST_DWG_OBJECT_TO_OBJECT (LONG_TRANSACTION) CAST_DWG_OBJECT_TO_OBJECT (
+                                LTYPE) CAST_DWG_OBJECT_TO_OBJECT (LTYPE_CONTROL)
+                                CAST_DWG_OBJECT_TO_OBJECT (MLEADERSTYLE) CAST_DWG_OBJECT_TO_OBJECT (
+                                    MLINESTYLE) CAST_DWG_OBJECT_TO_OBJECT (PLACEHOLDER)
+                                    CAST_DWG_OBJECT_TO_OBJECT (PLOTSETTINGS) CAST_DWG_OBJECT_TO_OBJECT (
+                                        RASTERVARIABLES) CAST_DWG_OBJECT_TO_OBJECT (SCALE)
+                                        CAST_DWG_OBJECT_TO_OBJECT (SECTIONVIEWSTYLE) CAST_DWG_OBJECT_TO_OBJECT (
+                                            SECTION_MANAGER) CAST_DWG_OBJECT_TO_OBJECT (SORTENTSTABLE)
+                                            CAST_DWG_OBJECT_TO_OBJECT (SPATIAL_FILTER) CAST_DWG_OBJECT_TO_OBJECT (
+                                                STYLE) CAST_DWG_OBJECT_TO_OBJECT (STYLE_CONTROL)
+                                                CAST_DWG_OBJECT_TO_OBJECT (TABLEGEOMETRY) CAST_DWG_OBJECT_TO_OBJECT (
+                                                    UCS) CAST_DWG_OBJECT_TO_OBJECT (UCS_CONTROL)
+                                                    CAST_DWG_OBJECT_TO_OBJECT (
+                                                        UNKNOWN_OBJ) CAST_DWG_OBJECT_TO_OBJECT (VBA_PROJECT)
+                                                        CAST_DWG_OBJECT_TO_OBJECT (VIEW) CAST_DWG_OBJECT_TO_OBJECT (
+                                                            VIEW_CONTROL) CAST_DWG_OBJECT_TO_OBJECT (VISUALSTYLE)
+                                                            CAST_DWG_OBJECT_TO_OBJECT (
+                                                                VPORT) CAST_DWG_OBJECT_TO_OBJECT (VPORT_CONTROL)
+                                                                CAST_DWG_OBJECT_TO_OBJECT (
+                                                                    VX_CONTROL)
+                                                                    CAST_DWG_OBJECT_TO_OBJECT (
+                                                                        VX_TABLE_RECORD)
+                                                                        CAST_DWG_OBJECT_TO_OBJECT (
+                                                                            WIPEOUTVARIABLES)
+                                                                            CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                XRECORD)
+                                                                                CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                    PDFDEFINITION)
+                                                                                    CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                        DGNDEFINITION)
+                                                                                        CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                            DWFDEFINITION)
+    /* unstable */
+    CAST_DWG_OBJECT_TO_OBJECT (ACSH_BREP_CLASS) CAST_DWG_OBJECT_TO_OBJECT (
+        ACSH_CHAMFER_CLASS) CAST_DWG_OBJECT_TO_OBJECT (ACSH_PYRAMID_CLASS)
+        CAST_DWG_OBJECT_TO_OBJECT (ALDIMOBJECTCONTEXTDATA) CAST_DWG_OBJECT_TO_OBJECT (
+            ASSOC2DCONSTRAINTGROUP) CAST_DWG_OBJECT_TO_OBJECT (ASSOCACTION)
+            CAST_DWG_OBJECT_TO_OBJECT (ASSOCACTIONPARAM) CAST_DWG_OBJECT_TO_OBJECT (
+                ASSOCARRAYACTIONBODY) CAST_DWG_OBJECT_TO_OBJECT (ASSOCASMBODYACTIONPARAM)
+                CAST_DWG_OBJECT_TO_OBJECT (ASSOCBLENDSURFACEACTIONBODY)
+                    CAST_DWG_OBJECT_TO_OBJECT (
+                        ASSOCCOMPOUNDACTIONPARAM) CAST_DWG_OBJECT_TO_OBJECT (ASSOCDEPENDENCY)
+                        CAST_DWG_OBJECT_TO_OBJECT (ASSOCDIMDEPENDENCYBODY)
+                            CAST_DWG_OBJECT_TO_OBJECT (
+                                ASSOCEXTENDSURFACEACTIONBODY)
+                                CAST_DWG_OBJECT_TO_OBJECT (ASSOCEXTRUDEDSURFACEACTIONBODY) CAST_DWG_OBJECT_TO_OBJECT (ASSOCFACEACTIONPARAM) CAST_DWG_OBJECT_TO_OBJECT (ASSOCFILLETSURFACEACTIONBODY) CAST_DWG_OBJECT_TO_OBJECT (ASSOCGEOMDEPENDENCY) CAST_DWG_OBJECT_TO_OBJECT (ASSOCLOFTEDSURFACEACTIONBODY) CAST_DWG_OBJECT_TO_OBJECT (ASSOCNETWORK) CAST_DWG_OBJECT_TO_OBJECT (ASSOCNETWORKSURFACEACTIONBODY) CAST_DWG_OBJECT_TO_OBJECT (ASSOCOBJECTACTIONPARAM) CAST_DWG_OBJECT_TO_OBJECT (ASSOCOFFSETSURFACEACTIONBODY) CAST_DWG_OBJECT_TO_OBJECT (ASSOCOSNAPPOINTREFACTIONPARAM) CAST_DWG_OBJECT_TO_OBJECT (
+                                    ASSOCPATCHSURFACEACTIONBODY)
+                                    CAST_DWG_OBJECT_TO_OBJECT (ASSOCPATHACTIONPARAM) CAST_DWG_OBJECT_TO_OBJECT (
+                                        ASSOCPLANESURFACEACTIONBODY)
+                                        CAST_DWG_OBJECT_TO_OBJECT (
+                                            ASSOCPOINTREFACTIONPARAM)
+                                            CAST_DWG_OBJECT_TO_OBJECT (
+                                                ASSOCREVOLVEDSURFACEACTIONBODY)
+                                                CAST_DWG_OBJECT_TO_OBJECT (
+                                                    ASSOCTRIMSURFACEACTIONBODY)
+                                                    CAST_DWG_OBJECT_TO_OBJECT (
+                                                        ASSOCVALUEDEPENDENCY)
+                                                        CAST_DWG_OBJECT_TO_OBJECT (
+                                                            ASSOCVARIABLE)
+                                                            CAST_DWG_OBJECT_TO_OBJECT (
+                                                                ASSOCVERTEXACTIONPARAM)
+                                                                CAST_DWG_OBJECT_TO_OBJECT (
+                                                                    BLKREFOBJECTCONTEXTDATA)
+                                                                    CAST_DWG_OBJECT_TO_OBJECT (
+                                                                        BLOCKALIGNEDCONSTRAINTPARAMETER)
+                                                                        CAST_DWG_OBJECT_TO_OBJECT (
+                                                                            BLOCKANGULARCONSTRAINTPARAMETER)
+                                                                            CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                BLOCKARRAYACTION)
+                                                                                CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                    BLOCKDIAMETRICCONSTRAINTPARAMETER)
+                                                                                    CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                        BLOCKHORIZONTALCONSTRAINTPARAMETER)
+                                                                                        CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                            BLOCKLINEARCONSTRAINTPARAMETER)
+                                                                                            CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                BLOCKLINEARPARAMETER)
+                                                                                                CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                    BLOCKLOOKUPACTION)
+                                                                                                    CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                        BLOCKLOOKUPPARAMETER)
+                                                                                                        CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                            BLOCKPARAMDEPENDENCYBODY)
+                                                                                                            CAST_DWG_OBJECT_TO_OBJECT (BLOCKPOINTPARAMETER) CAST_DWG_OBJECT_TO_OBJECT (BLOCKPOLARGRIP) CAST_DWG_OBJECT_TO_OBJECT (BLOCKPOLARPARAMETER) CAST_DWG_OBJECT_TO_OBJECT (BLOCKPOLARSTRETCHACTION) CAST_DWG_OBJECT_TO_OBJECT (BLOCKRADIALCONSTRAINTPARAMETER) CAST_DWG_OBJECT_TO_OBJECT (BLOCKREPRESENTATION) CAST_DWG_OBJECT_TO_OBJECT (BLOCKROTATIONPARAMETER) CAST_DWG_OBJECT_TO_OBJECT (BLOCKSTRETCHACTION) CAST_DWG_OBJECT_TO_OBJECT (BLOCKUSERPARAMETER) CAST_DWG_OBJECT_TO_OBJECT (BLOCKVERTICALCONSTRAINTPARAMETER)
+                                                                                                                CAST_DWG_OBJECT_TO_OBJECT (BLOCKVISIBILITYPARAMETER) CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                    BLOCKXYGRIP) CAST_DWG_OBJECT_TO_OBJECT (BLOCKXYPARAMETER)
+                                                                                                                    CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                        DATALINK)
+                                                                                                                        CAST_DWG_OBJECT_TO_OBJECT (DBCOLOR) CAST_DWG_OBJECT_TO_OBJECT (EVALUATION_GRAPH) CAST_DWG_OBJECT_TO_OBJECT (FCFOBJECTCONTEXTDATA) CAST_DWG_OBJECT_TO_OBJECT (GRADIENT_BACKGROUND) CAST_DWG_OBJECT_TO_OBJECT (GROUND_PLANE_BACKGROUND) CAST_DWG_OBJECT_TO_OBJECT (IBL_BACKGROUND) CAST_DWG_OBJECT_TO_OBJECT (IMAGE_BACKGROUND) CAST_DWG_OBJECT_TO_OBJECT (LEADEROBJECTCONTEXTDATA) CAST_DWG_OBJECT_TO_OBJECT (LIGHTLIST) CAST_DWG_OBJECT_TO_OBJECT (MATERIAL)
+                                                                                                                            CAST_DWG_OBJECT_TO_OBJECT (MENTALRAYRENDERSETTINGS) CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                MTEXTOBJECTCONTEXTDATA)
+                                                                                                                                CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                    OBJECT_PTR)
+                                                                                                                                    CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                        PARTIAL_VIEWING_INDEX)
+                                                                                                                                        CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                            POINTCLOUDCOLORMAP)
+                                                                                                                                            CAST_DWG_OBJECT_TO_OBJECT (POINTCLOUDDEF) CAST_DWG_OBJECT_TO_OBJECT (POINTCLOUDDEFEX) CAST_DWG_OBJECT_TO_OBJECT (POINTCLOUDDEF_REACTOR) CAST_DWG_OBJECT_TO_OBJECT (POINTCLOUDDEF_REACTOR_EX)
+                                                                                                                                                CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                    PROXY_OBJECT)
+                                                                                                                                                    CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                        RAPIDRTRENDERSETTINGS)
+                                                                                                                                                        CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                            RENDERENTRY)
+                                                                                                                                                            CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                                RENDERENVIRONMENT)
+                                                                                                                                                                CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                                    RENDERGLOBAL) CAST_DWG_OBJECT_TO_OBJECT (RENDERSETTINGS) CAST_DWG_OBJECT_TO_OBJECT (SECTION_SETTINGS) CAST_DWG_OBJECT_TO_OBJECT (SKYLIGHT_BACKGROUND)
+                                                                                                                                                                    CAST_DWG_OBJECT_TO_OBJECT (SOLID_BACKGROUND) CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                                        SPATIAL_INDEX) CAST_DWG_OBJECT_TO_OBJECT (SUN) CAST_DWG_OBJECT_TO_OBJECT (TABLESTYLE) CAST_DWG_OBJECT_TO_OBJECT (TEXTOBJECTCONTEXTDATA) CAST_DWG_OBJECT_TO_OBJECT (ASSOCARRAYMODIFYPARAMETERS) CAST_DWG_OBJECT_TO_OBJECT (ASSOCARRAYPATHPARAMETERS) CAST_DWG_OBJECT_TO_OBJECT (ASSOCARRAYPOLARPARAMETERS) CAST_DWG_OBJECT_TO_OBJECT (ASSOCARRAYRECTANGULARPARAMETERS)
+#  ifdef DEBUG_CLASSES
+                                                                                                                                                                        CAST_DWG_OBJECT_TO_OBJECT (ACMECOMMANDHISTORY) CAST_DWG_OBJECT_TO_OBJECT (ACMESCOPE) CAST_DWG_OBJECT_TO_OBJECT (ACMESTATEMGR) CAST_DWG_OBJECT_TO_OBJECT (ACSH_EXTRUSION_CLASS) CAST_DWG_OBJECT_TO_OBJECT (ACSH_LOFT_CLASS)
+                                                                                                                                                                            CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                                                ACSH_REVOLVE_CLASS)
+                                                                                                                                                                                CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                                                    ACSH_SWEEP_CLASS)
+                                                                                                                                                                                    CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                                                        ANGDIMOBJECTCONTEXTDATA)
+                                                                                                                                                                                        CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                                                            ANNOTSCALEOBJECTCONTEXTDATA)
+                                                                                                                                                                                            CAST_DWG_OBJECT_TO_OBJECT (ASSOC3POINTANGULARDIMACTIONBODY) CAST_DWG_OBJECT_TO_OBJECT (ASSOCALIGNEDDIMACTIONBODY) CAST_DWG_OBJECT_TO_OBJECT (ASSOCARRAYMODIFYACTIONBODY)
+                                                                                                                                                                                                CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                                                                    ASSOCEDGEACTIONPARAM)
+                                                                                                                                                                                                    CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                                                                        ASSOCEDGECHAMFERACTIONBODY)
+                                                                                                                                                                                                        CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                                                                            ASSOCEDGEFILLETACTIONBODY) CAST_DWG_OBJECT_TO_OBJECT (ASSOCMLEADERACTIONBODY) CAST_DWG_OBJECT_TO_OBJECT (ASSOCORDINATEDIMACTIONBODY) CAST_DWG_OBJECT_TO_OBJECT (ASSOCPERSSUBENTMANAGER)
+                                                                                                                                                                                                            CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                                                                                ASSOCRESTOREENTITYSTATEACTIONBODY) CAST_DWG_OBJECT_TO_OBJECT (ASSOCROTATEDDIMACTIONBODY) CAST_DWG_OBJECT_TO_OBJECT (ASSOCSWEPTSURFACEACTIONBODY) CAST_DWG_OBJECT_TO_OBJECT (BLOCKPROPERTIESTABLE)
+                                                                                                                                                                                                                CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                                                                                    BLOCKPROPERTIESTABLEGRIP)
+                                                                                                                                                                                                                    CAST_DWG_OBJECT_TO_OBJECT (BREAKDATA) CAST_DWG_OBJECT_TO_OBJECT (BREAKPOINTREF) CAST_DWG_OBJECT_TO_OBJECT (CONTEXTDATAMANAGER) CAST_DWG_OBJECT_TO_OBJECT (CSACDOCUMENTOPTIONS) CAST_DWG_OBJECT_TO_OBJECT (CURVEPATH) CAST_DWG_OBJECT_TO_OBJECT (DATATABLE) CAST_DWG_OBJECT_TO_OBJECT (DIMASSOC) CAST_DWG_OBJECT_TO_OBJECT (DMDIMOBJECTCONTEXTDATA) CAST_DWG_OBJECT_TO_OBJECT (DYNAMICBLOCKPROXYNODE) CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                                                                                        GEOMAPIMAGE) CAST_DWG_OBJECT_TO_OBJECT (LAYOUTPRINTCONFIG) CAST_DWG_OBJECT_TO_OBJECT (MLEADEROBJECTCONTEXTDATA) CAST_DWG_OBJECT_TO_OBJECT (MOTIONPATH) CAST_DWG_OBJECT_TO_OBJECT (MTEXTATTRIBUTEOBJECTCONTEXTDATA)
+                                                                                                                                                                                                                        CAST_DWG_OBJECT_TO_OBJECT (NAVISWORKSMODELDEF) CAST_DWG_OBJECT_TO_OBJECT (ORDDIMOBJECTCONTEXTDATA) CAST_DWG_OBJECT_TO_OBJECT (PERSUBENTMGR) CAST_DWG_OBJECT_TO_OBJECT (POINTPATH) CAST_DWG_OBJECT_TO_OBJECT (RADIMLGOBJECTCONTEXTDATA) CAST_DWG_OBJECT_TO_OBJECT (RADIMOBJECTCONTEXTDATA) CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                                                                                            SUNSTUDY) CAST_DWG_OBJECT_TO_OBJECT (TABLECONTENT)
+                                                                                                                                                                                                                            CAST_DWG_OBJECT_TO_OBJECT (
+                                                                                                                                                                                                                                TVDEVICEPROPERTIES)
+// CAST_DWG_OBJECT_TO_OBJECT (ACDSRECORD)
+// CAST_DWG_OBJECT_TO_OBJECT (ACDSSCHEMA)
+// CAST_DWG_OBJECT_TO_OBJECT (NPOCOLLECTION)
+// CAST_DWG_OBJECT_TO_OBJECT (RAPIDRTRENDERENVIRONMENT)
+// CAST_DWG_OBJECT_TO_OBJECT (XREFPANELOBJECT)
+#  endif
 // clang-format: on
 /* End auto-generated content */
 
@@ -1161,20 +957,19 @@ CAST_DWG_OBJECT_TO_OBJECT (ASSOCARRAYRECTANGULARPARAMETERS)
  *                FUNCTIONS START HERE ENTITY SPECIFIC               *
  ********************************************************************/
 
-#ifdef USE_DEPRECATED_API
+#  ifdef USE_DEPRECATED_API
 
-/** not thread safe. Deprecated.
- *  TODO: replace with walking parents up to the dwg.
- * \deprecated
- */
-void
-dwg_api_init_version (Dwg_Data *dwg)
+    /** not thread safe. Deprecated.
+     *  TODO: replace with walking parents up to the dwg.
+     * \deprecated
+     */
+    void dwg_api_init_version (Dwg_Data *dwg)
 {
   dwg_version = (Dwg_Version_Type)dwg->header.version;
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
 }
 
-#endif
+#  endif
 
 /** To access the common DIMENSION fields (only).
  *  There is no generic call dwg_get_DIMENSION, for this you have to
@@ -1212,42 +1007,43 @@ EXPORT bool
 dwg_get_HEADER (const Dwg_Data *restrict dwg, const char *restrict fieldname,
                 void *restrict out)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (dwg && fieldname && out)
-#endif
+#  endif
     return dwg_dynapi_header_value (dwg, fieldname, out, NULL);
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   else
     return false;
-#endif
+#  endif
 }
 
 EXPORT bool
 dwg_get_HEADER_utf8text (const Dwg_Data *restrict dwg,
-                         const char *restrict fieldname, char **restrict textp, int *isnewp)
+                         const char *restrict fieldname, char **restrict textp,
+                         int *isnewp)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (dwg && fieldname && out)
-#endif
+#  endif
     return dwg_dynapi_header_utf8text (dwg, fieldname, textp, isnewp, NULL);
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   else
     return false;
-#endif
+#  endif
 }
 
 EXPORT bool
 dwg_set_HEADER (Dwg_Data *restrict dwg, const char *restrict fieldname,
                 const void *restrict value)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (dwg && fieldname && value)
-#endif
+#  endif
     return dwg_dynapi_header_set_value (dwg, fieldname, value, 0);
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   else
     return false;
-#endif
+#  endif
 }
 
 EXPORT bool
@@ -1255,28 +1051,28 @@ dwg_set_HEADER_utf8text (Dwg_Data *restrict dwg,
                          const char *restrict fieldname,
                          const char *restrict utf8)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (dwg && fieldname && utf8)
-#endif
+#  endif
     return dwg_dynapi_header_set_value (dwg, fieldname, utf8, 0);
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   else
     return false;
-#endif
+#  endif
 }
 
 EXPORT bool
 dwg_get_ENTITY_common (Dwg_Object_Entity *restrict obj,
                        const char *restrict fieldname, void *restrict out)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (obj && fieldname && out)
-#endif
+#  endif
     return dwg_dynapi_common_value (obj, fieldname, out, NULL);
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   else
     return false;
-#endif
+#  endif
 }
 
 EXPORT bool
@@ -1284,28 +1080,28 @@ dwg_set_ENTITY_common (Dwg_Object_Entity *restrict obj,
                        const char *restrict fieldname,
                        const void *restrict value)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (obj && fieldname && value)
-#endif
+#  endif
     return dwg_dynapi_common_set_value (obj, fieldname, value, 0);
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   else
     return false;
-#endif
+#  endif
 }
 
 EXPORT bool
 dwg_get_OBJECT_common (Dwg_Object_Object *restrict obj,
                        const char *restrict fieldname, void *restrict out)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (obj && fieldname && out)
-#endif
+#  endif
     return dwg_dynapi_common_value (obj, fieldname, out, NULL);
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   else
     return false;
-#endif
+#  endif
 }
 
 EXPORT bool
@@ -1313,14 +1109,14 @@ dwg_set_OBJECT_common (Dwg_Object_Object *restrict obj,
                        const char *restrict fieldname,
                        const void *restrict value)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (obj && fieldname && value)
-#endif
+#  endif
     return dwg_dynapi_common_set_value (obj, fieldname, value, 0);
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   else
     return false;
-#endif
+#  endif
 }
 
 EXPORT bool
@@ -1328,14 +1124,14 @@ dwg_get_ENTITY_common_utf8text (Dwg_Object_Entity *restrict obj,
                                 const char *restrict fieldname,
                                 char **restrict textp, int *isnewp)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (obj && fieldname && textp)
-#endif
+#  endif
     return dwg_dynapi_common_utf8text (obj, fieldname, textp, isnewp, NULL);
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   else
     return false;
-#endif
+#  endif
 }
 
 EXPORT bool
@@ -1343,14 +1139,14 @@ dwg_set_ENTITY_common_utf8text (Dwg_Object_Entity *restrict obj,
                                 const char *restrict fieldname,
                                 const char *restrict utf8)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (obj && fieldname && utf8)
-#endif
+#  endif
     return dwg_dynapi_common_set_value (obj, fieldname, utf8, 0);
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   else
     return false;
-#endif
+#  endif
 }
 
 EXPORT bool
@@ -1358,14 +1154,14 @@ dwg_get_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj,
                                 const char *restrict fieldname,
                                 char **restrict textp, int *isnewp)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (obj && fieldname && textp)
-#endif
+#  endif
     return dwg_dynapi_common_utf8text (obj, fieldname, textp, isnewp, NULL);
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   else
     return false;
-#endif
+#  endif
 }
 
 EXPORT bool
@@ -1373,14 +1169,14 @@ dwg_set_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj,
                                 const char *restrict fieldname,
                                 const char *restrict utf8)
 {
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   if (obj && fieldname && utf8)
-#endif
+#  endif
     return dwg_dynapi_common_set_value (obj, fieldname, utf8, 1);
-#ifndef HAVE_NONNULL
+#  ifndef HAVE_NONNULL
   else
     return false;
-#endif
+#  endif
 }
 
 /********************************************************************
@@ -1388,8 +1184,8 @@ dwg_set_OBJECT_common_utf8text (Dwg_Object_Object *restrict obj,
  *********************************************************************/
 
 /* Should we accept dwg and entities? or add dwg_header_get_TYPE */
-EXPORT dwg_point_2d *dwg_ent_get_POINT2D (const void *restrict _obj,
-                                          const char *restrict fieldname)
+EXPORT dwg_point_2d *
+dwg_ent_get_POINT2D (const void *restrict _obj, const char *restrict fieldname)
 {
 #  ifndef HAVE_NONNULL
   if (!_obj || !fieldname)
@@ -1397,9 +1193,10 @@ EXPORT dwg_point_2d *dwg_ent_get_POINT2D (const void *restrict _obj,
 #  endif
   {
     dwg_point_2d *point;
-    Dwg_DYNAPI_field field = {0};
+    Dwg_DYNAPI_field field = { 0 };
     int error;
-    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (_obj, &error);
+    const Dwg_Object *obj
+        = (const Dwg_Object *)dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return NULL;
 
@@ -1436,10 +1233,10 @@ dwg_ent_set_POINT2D (void *restrict _obj, const char *restrict fieldname,
 #  endif
   {
     dwg_point_2d dummy;
-    Dwg_DYNAPI_field field = {0};
+    Dwg_DYNAPI_field field = { 0 };
     int error;
-    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        _obj, &error);
+    const Dwg_Object *obj
+        = (const Dwg_Object *)dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return false;
 
@@ -1473,10 +1270,10 @@ dwg_ent_get_POINT3D (const void *restrict _obj, const char *restrict fieldname)
 #  endif
   {
     dwg_point_3d *point;
-    Dwg_DYNAPI_field field = {0};
+    Dwg_DYNAPI_field field = { 0 };
     int error;
-    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        _obj, &error);
+    const Dwg_Object *obj
+        = (const Dwg_Object *)dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return NULL;
 
@@ -1513,10 +1310,10 @@ dwg_ent_set_POINT3D (void *restrict _obj, const char *restrict fieldname,
 #  endif
   {
     dwg_point_3d dummy;
-    Dwg_DYNAPI_field field = {0};
+    Dwg_DYNAPI_field field = { 0 };
     int error;
-    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        _obj, &error);
+    const Dwg_Object *obj
+        = (const Dwg_Object *)dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return false;
 
@@ -1548,10 +1345,10 @@ dwg_ent_get_STRING (const void *restrict _obj, const char *restrict fieldname)
 #  endif
   {
     char *str;
-    Dwg_DYNAPI_field field = {0};
+    Dwg_DYNAPI_field field = { 0 };
     int error;
-    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        _obj, &error);
+    const Dwg_Object *obj
+        = (const Dwg_Object *)dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return NULL;
 
@@ -1573,7 +1370,8 @@ dwg_ent_get_STRING (const void *restrict _obj, const char *restrict fieldname)
 
 // convert string to UTF-8
 EXPORT char *
-dwg_ent_get_UTF8 (const void *restrict _obj, const char *restrict fieldname, int *isnewp)
+dwg_ent_get_UTF8 (const void *restrict _obj, const char *restrict fieldname,
+                  int *isnewp)
 {
   if (isnewp)
     *isnewp = 0;
@@ -1583,10 +1381,10 @@ dwg_ent_get_UTF8 (const void *restrict _obj, const char *restrict fieldname, int
 #  endif
   {
     char *str;
-    Dwg_DYNAPI_field field = {0};
+    Dwg_DYNAPI_field field = { 0 };
     int error;
-    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        _obj, &error);
+    const Dwg_Object *obj
+        = (const Dwg_Object *)dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return NULL;
 
@@ -1616,10 +1414,10 @@ dwg_ent_set_STRING (void *restrict _obj, const char *restrict fieldname,
 #  endif
   {
     char *dummy;
-    Dwg_DYNAPI_field field = {0};
+    Dwg_DYNAPI_field field = { 0 };
     int error;
-    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        _obj, &error);
+    const Dwg_Object *obj
+        = (const Dwg_Object *)dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return false;
 
@@ -1650,10 +1448,10 @@ dwg_ent_set_UTF8 (void *restrict _obj, const char *restrict fieldname,
 #  endif
   {
     char *dummy;
-    Dwg_DYNAPI_field field = {0};
+    Dwg_DYNAPI_field field = { 0 };
     int error;
-    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        _obj, &error);
+    const Dwg_Object *obj
+        = (const Dwg_Object *)dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return false;
 
@@ -1683,10 +1481,10 @@ dwg_ent_get_REAL (const void *restrict _obj, const char *restrict fieldname)
 #  endif
   {
     BITCODE_BD num;
-    Dwg_DYNAPI_field field = {0};
+    Dwg_DYNAPI_field field = { 0 };
     int error;
-    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        _obj, &error);
+    const Dwg_Object *obj
+        = (const Dwg_Object *)dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return 0.0;
 
@@ -1716,10 +1514,10 @@ dwg_ent_set_REAL (void *restrict _obj, const char *restrict fieldname,
 #  endif
   {
     BITCODE_BD dummy;
-    Dwg_DYNAPI_field field = {0};
+    Dwg_DYNAPI_field field = { 0 };
     int error;
-    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        _obj, &error);
+    const Dwg_Object *obj
+        = (const Dwg_Object *)dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return false;
     if (!dwg_dynapi_entity_value ((void *)_obj, obj->name, fieldname, &dummy,
@@ -1748,10 +1546,10 @@ dwg_ent_get_INT16 (const void *restrict _obj, const char *restrict fieldname)
 #  endif
   {
     BITCODE_BS num;
-    Dwg_DYNAPI_field field = {0};
+    Dwg_DYNAPI_field field = { 0 };
     int error;
-    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        _obj, &error);
+    const Dwg_Object *obj
+        = (const Dwg_Object *)dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return 0;
 
@@ -1781,10 +1579,10 @@ dwg_ent_set_INT16 (void *restrict _obj, const char *restrict fieldname,
 #  endif
   {
     BITCODE_BS dummy;
-    Dwg_DYNAPI_field field = {0};
+    Dwg_DYNAPI_field field = { 0 };
     int error;
-    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        _obj, &error);
+    const Dwg_Object *obj
+        = (const Dwg_Object *)dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return false;
 
@@ -1814,10 +1612,10 @@ dwg_ent_get_INT32 (const void *restrict _obj, const char *restrict fieldname)
 #  endif
   {
     BITCODE_BL num;
-    Dwg_DYNAPI_field field = {0};
+    Dwg_DYNAPI_field field = { 0 };
     int error;
-    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        _obj, &error);
+    const Dwg_Object *obj
+        = (const Dwg_Object *)dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return 0;
 
@@ -1848,10 +1646,10 @@ dwg_ent_set_INT32 (void *restrict _obj, const char *restrict fieldname,
 #  endif
   {
     BITCODE_BL dummy;
-    Dwg_DYNAPI_field field = {0};
+    Dwg_DYNAPI_field field = { 0 };
     int error;
-    const Dwg_Object *obj = (const Dwg_Object *)dwg_obj_generic_to_object (
-        _obj, &error);
+    const Dwg_Object *obj
+        = (const Dwg_Object *)dwg_obj_generic_to_object (_obj, &error);
     if (!obj || !obj->name)
       return false;
 
@@ -1873,7 +1671,7 @@ dwg_ent_set_INT32 (void *restrict _obj, const char *restrict fieldname,
   }
 }
 
-#ifdef USE_DEPRECATED_API
+#  ifdef USE_DEPRECATED_API
 
 /*******************************************************************
  *                    FUNCTIONS FOR CIRCLE ENTITY                    *
@@ -1892,9 +1690,9 @@ dwg_ent_circle_get_center (const dwg_ent_circle *restrict circle,
                            dwg_point_3d *restrict point, int *restrict error)
 {
   if (circle
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -1923,9 +1721,9 @@ dwg_ent_circle_set_center (dwg_ent_circle *restrict circle,
                            int *restrict error)
 {
   if (circle
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
       && dwg_dynapi_entity_set_value (circle, "CIRCLE", "center", point, 0))
     *error = 0;
   else
@@ -2046,9 +1844,9 @@ dwg_ent_circle_set_extrusion (dwg_ent_circle *restrict circle,
                               int *restrict error)
 {
   if (circle
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
       && dwg_dynapi_entity_set_value ((void *)circle, "CIRCLE", "extrusion",
                                       vector, 0))
     {
@@ -2074,9 +1872,9 @@ dwg_ent_circle_get_extrusion (const dwg_ent_circle *restrict circle,
                               int *restrict error)
 {
   if (circle
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
       && dwg_dynapi_entity_value ((void *)circle, "CIRCLE", "extrusion",
                                   vector, NULL))
     {
@@ -2107,9 +1905,9 @@ dwg_ent_line_get_start_point (const dwg_ent_line *restrict line,
                               int *restrict error)
 {
   if (line
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
       && dwg_dynapi_entity_value ((void *)line, "LINE", "start", point, NULL))
     {
       *error = 0;
@@ -2135,9 +1933,9 @@ dwg_ent_line_set_start_point (dwg_ent_line *restrict line,
                               int *restrict error)
 {
   if (line
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
       && dwg_dynapi_entity_set_value ((void *)line, "LINE", "start", point, 0))
     {
       *error = 0;
@@ -2162,9 +1960,9 @@ dwg_ent_line_get_end_point (const dwg_ent_line *restrict line,
                             dwg_point_3d *restrict point, int *restrict error)
 {
   if (line
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -2193,9 +1991,9 @@ dwg_ent_line_set_end_point (dwg_ent_line *restrict line,
                             int *restrict error)
 {
   if (line
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -2270,9 +2068,9 @@ dwg_ent_line_get_extrusion (const dwg_ent_line *restrict line,
                             dwg_point_3d *restrict vector, int *restrict error)
 {
   if (line
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -2301,9 +2099,9 @@ dwg_ent_line_set_extrusion (dwg_ent_line *restrict line,
                             int *restrict error)
 {
   if (line
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -2335,9 +2133,9 @@ dwg_ent_arc_get_center (const dwg_ent_arc *restrict arc,
                         dwg_point_3d *restrict point, int *restrict error)
 {
   if (arc
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -2366,9 +2164,9 @@ dwg_ent_arc_set_center (dwg_ent_arc *restrict arc,
                         int *restrict error)
 {
   if (arc
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -2491,9 +2289,9 @@ dwg_ent_arc_get_extrusion (const dwg_ent_arc *restrict arc,
                            dwg_point_3d *restrict vector, int *restrict error)
 {
   if (arc
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -2522,9 +2320,9 @@ dwg_ent_arc_set_extrusion (dwg_ent_arc *restrict arc,
                            int *restrict error)
 {
   if (arc
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -2654,9 +2452,9 @@ dwg_ent_ellipse_get_center (const dwg_ent_ellipse *restrict ellipse,
                             dwg_point_3d *restrict point, int *restrict error)
 {
   if (ellipse
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -2685,9 +2483,9 @@ dwg_ent_ellipse_set_center (dwg_ent_ellipse *restrict ellipse,
                             int *restrict error)
 {
   if (ellipse
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -2715,9 +2513,9 @@ dwg_ent_ellipse_get_sm_axis (const dwg_ent_ellipse *restrict ellipse,
                              dwg_point_3d *restrict point, int *restrict error)
 {
   if (ellipse
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -2746,9 +2544,9 @@ dwg_ent_ellipse_set_sm_axis (dwg_ent_ellipse *restrict ellipse,
                              int *restrict error)
 {
   if (ellipse
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -2777,9 +2575,9 @@ dwg_ent_ellipse_get_extrusion (const dwg_ent_ellipse *restrict ellipse,
                                int *restrict error)
 {
   if (ellipse
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -2808,9 +2606,9 @@ dwg_ent_ellipse_set_extrusion (dwg_ent_ellipse *restrict ellipse,
                                int *restrict error)
 {
   if (ellipse
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -3029,13 +2827,13 @@ dwg_ent_text_get_text (const dwg_ent_text *restrict ent, int *restrict error)
 */
 void
 dwg_ent_text_get_insertion_pt (const dwg_ent_text *restrict text,
-                                  dwg_point_2d *restrict point,
-                                  int *restrict error)
+                               dwg_point_2d *restrict point,
+                               int *restrict error)
 {
   if (text
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -3059,13 +2857,13 @@ dwg_ent_text_get_insertion_pt (const dwg_ent_text *restrict text,
 */
 void
 dwg_ent_text_set_insertion_pt (dwg_ent_text *restrict text,
-                                  const dwg_point_2d *restrict point,
-                                  int *restrict error)
+                               const dwg_point_2d *restrict point,
+                               int *restrict error)
 {
   if (text
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -3140,9 +2938,9 @@ dwg_ent_text_get_extrusion (const dwg_ent_text *restrict text,
                             dwg_point_3d *restrict vector, int *restrict error)
 {
   if (text
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -3171,9 +2969,9 @@ dwg_ent_text_set_extrusion (dwg_ent_text *restrict text,
                             int *restrict error)
 {
   if (text
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -3449,13 +3247,13 @@ dwg_ent_attrib_get_text (const dwg_ent_attrib *restrict ent,
 */
 void
 dwg_ent_attrib_get_insertion_pt (const dwg_ent_attrib *restrict attrib,
-                                    dwg_point_2d *restrict point,
-                                    int *restrict error)
+                                 dwg_point_2d *restrict point,
+                                 int *restrict error)
 {
   if (attrib
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -3479,13 +3277,13 @@ dwg_ent_attrib_get_insertion_pt (const dwg_ent_attrib *restrict attrib,
 */
 void
 dwg_ent_attrib_set_insertion_pt (dwg_ent_attrib *restrict attrib,
-                                    const dwg_point_2d *restrict point,
-                                    int *restrict error)
+                                 const dwg_point_2d *restrict point,
+                                 int *restrict error)
 {
   if (attrib
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -3561,9 +3359,9 @@ dwg_ent_attrib_get_extrusion (const dwg_ent_attrib *restrict attrib,
                               int *restrict error)
 {
   if (attrib
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -3592,9 +3390,9 @@ dwg_ent_attrib_set_extrusion (dwg_ent_attrib *restrict attrib,
                               int *restrict error)
 {
   if (attrib
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -3864,13 +3662,13 @@ dwg_ent_attdef_get_default_value (const dwg_ent_attdef *restrict ent,
 */
 void
 dwg_ent_attdef_get_insertion_pt (const dwg_ent_attdef *restrict attdef,
-                                    dwg_point_2d *restrict point,
-                                    int *restrict error)
+                                 dwg_point_2d *restrict point,
+                                 int *restrict error)
 {
   if (attdef
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -3894,13 +3692,13 @@ dwg_ent_attdef_get_insertion_pt (const dwg_ent_attdef *restrict attdef,
 */
 void
 dwg_ent_attdef_set_insertion_pt (dwg_ent_attdef *restrict attdef,
-                                    const dwg_point_2d *restrict point,
-                                    int *restrict error)
+                                 const dwg_point_2d *restrict point,
+                                 int *restrict error)
 {
   if (attdef
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -3976,9 +3774,9 @@ dwg_ent_attdef_get_extrusion (const dwg_ent_attdef *restrict attdef,
                               int *restrict error)
 {
   if (attdef
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4007,9 +3805,9 @@ dwg_ent_attdef_set_extrusion (dwg_ent_attdef *restrict attdef,
                               int *restrict error)
 {
   if (attdef
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4232,9 +4030,9 @@ dwg_ent_point_set_point (dwg_ent_point *restrict point,
                          int *restrict error)
 {
   if (point
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && retpoint
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4262,9 +4060,9 @@ dwg_ent_point_get_point (const dwg_ent_point *restrict point,
                          dwg_point_3d *restrict retpoint, int *restrict error)
 {
   if (point
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && retpoint
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4341,9 +4139,9 @@ dwg_ent_point_set_extrusion (dwg_ent_point *restrict point,
                              int *restrict error)
 {
   if (point
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4372,9 +4170,9 @@ dwg_ent_point_get_extrusion (const dwg_ent_point *restrict point,
                              int *restrict error)
 {
   if (point
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4502,9 +4300,9 @@ dwg_ent_solid_get_corner1 (const dwg_ent_solid *restrict solid,
                            dwg_point_2d *restrict point, int *restrict error)
 {
   if (solid
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4532,9 +4330,9 @@ dwg_ent_solid_set_corner1 (dwg_ent_solid *restrict solid,
                            int *restrict error)
 {
   if (solid
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4561,9 +4359,9 @@ dwg_ent_solid_get_corner2 (const dwg_ent_solid *restrict solid,
                            dwg_point_2d *restrict point, int *restrict error)
 {
   if (solid
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4591,9 +4389,9 @@ dwg_ent_solid_set_corner2 (dwg_ent_solid *restrict solid,
                            int *restrict error)
 {
   if (solid
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4620,9 +4418,9 @@ dwg_ent_solid_get_corner3 (const dwg_ent_solid *restrict solid,
                            dwg_point_2d *restrict point, int *restrict error)
 {
   if (solid
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4650,9 +4448,9 @@ dwg_ent_solid_set_corner3 (dwg_ent_solid *restrict solid,
                            int *restrict error)
 {
   if (solid
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4679,9 +4477,9 @@ dwg_ent_solid_get_corner4 (const dwg_ent_solid *restrict solid,
                            dwg_point_2d *restrict point, int *restrict error)
 {
   if (solid
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4709,9 +4507,9 @@ dwg_ent_solid_set_corner4 (dwg_ent_solid *restrict solid,
                            int *restrict error)
 {
   if (solid
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4739,9 +4537,9 @@ dwg_ent_solid_get_extrusion (const dwg_ent_solid *restrict solid,
                              int *restrict error)
 {
   if (solid
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4770,9 +4568,9 @@ dwg_ent_solid_set_extrusion (dwg_ent_solid *restrict solid,
                              int *restrict error)
 {
   if (solid
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4860,9 +4658,9 @@ dwg_ent_ray_get_point (const dwg_ent_ray *restrict ray,
                        dwg_point_3d *restrict point, int *restrict error)
 {
   if (ray
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4890,9 +4688,9 @@ dwg_ent_ray_set_point (dwg_ent_ray *restrict ray,
                        const dwg_point_3d *restrict point, int *restrict error)
 {
   if (ray
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4920,9 +4718,9 @@ dwg_ent_ray_get_vector (const dwg_ent_ray *restrict ray,
                         dwg_point_3d *restrict vector, int *restrict error)
 {
   if (ray
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4951,9 +4749,9 @@ dwg_ent_ray_set_vector (dwg_ent_ray *restrict ray,
                         int *restrict error)
 {
   if (ray
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -4985,9 +4783,9 @@ dwg_ent_xline_get_point (const dwg_ent_xline *restrict xline,
                          dwg_point_3d *restrict point, int *restrict error)
 {
   if (xline
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5016,9 +4814,9 @@ dwg_ent_xline_set_point (dwg_ent_xline *restrict xline,
                          int *restrict error)
 {
   if (xline
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5046,9 +4844,9 @@ dwg_ent_xline_get_vector (const dwg_ent_xline *restrict xline,
                           dwg_point_3d *restrict vector, int *restrict error)
 {
   if (xline
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5076,9 +4874,9 @@ dwg_ent_xline_set_vector (dwg_ent_xline *restrict xline,
                           int *restrict error)
 {
   if (xline
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5206,9 +5004,9 @@ dwg_ent_trace_get_corner1 (const dwg_ent_trace *restrict trace,
                            dwg_point_2d *restrict point, int *restrict error)
 {
   if (trace
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5236,9 +5034,9 @@ dwg_ent_trace_set_corner1 (dwg_ent_trace *restrict trace,
                            int *restrict error)
 {
   if (trace
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5265,9 +5063,9 @@ dwg_ent_trace_get_corner2 (const dwg_ent_trace *restrict trace,
                            dwg_point_2d *restrict point, int *restrict error)
 {
   if (trace
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5295,9 +5093,9 @@ dwg_ent_trace_set_corner2 (dwg_ent_trace *restrict trace,
                            int *restrict error)
 {
   if (trace
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5324,9 +5122,9 @@ dwg_ent_trace_get_corner3 (const dwg_ent_trace *restrict trace,
                            dwg_point_2d *restrict point, int *restrict error)
 {
   if (trace
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5354,9 +5152,9 @@ dwg_ent_trace_set_corner3 (dwg_ent_trace *restrict trace,
                            int *restrict error)
 {
   if (trace
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5383,9 +5181,9 @@ dwg_ent_trace_get_corner4 (const dwg_ent_trace *restrict trace,
                            dwg_point_2d *restrict point, int *restrict error)
 {
   if (trace
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5413,9 +5211,9 @@ dwg_ent_trace_set_corner4 (dwg_ent_trace *restrict trace,
                            int *restrict error)
 {
   if (trace
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5443,9 +5241,9 @@ dwg_ent_trace_get_extrusion (const dwg_ent_trace *restrict trace,
                              int *restrict error)
 {
   if (trace
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5474,9 +5272,9 @@ dwg_ent_trace_set_extrusion (dwg_ent_trace *restrict trace,
                              int *restrict error)
 {
   if (trace
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5556,9 +5354,9 @@ dwg_ent_vertex_3d_get_point (const dwg_ent_vertex_3d *restrict vert,
                              dwg_point_3d *restrict point, int *restrict error)
 {
   if (vert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5587,9 +5385,9 @@ dwg_ent_vertex_3d_set_point (dwg_ent_vertex_3d *restrict vert,
                              int *restrict error)
 {
   if (vert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5670,9 +5468,9 @@ dwg_ent_vertex_mesh_get_point (const dwg_ent_vertex_mesh *restrict vert,
                                int *restrict error)
 {
   if (vert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5701,9 +5499,9 @@ dwg_ent_vertex_mesh_set_point (dwg_ent_vertex_mesh *restrict vert,
                                int *restrict error)
 {
   if (vert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5784,9 +5582,9 @@ dwg_ent_vertex_pface_get_point (const dwg_ent_vertex_pface *restrict vert,
                                 int *restrict error)
 {
   if (vert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5815,9 +5613,9 @@ dwg_ent_vertex_pface_set_point (dwg_ent_vertex_pface *restrict vert,
                                 int *restrict error)
 {
   if (vert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5897,9 +5695,9 @@ dwg_ent_vertex_2d_get_point (const dwg_ent_vertex_2d *restrict vert,
                              dwg_point_3d *restrict point, int *restrict error)
 {
   if (vert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -5928,9 +5726,9 @@ dwg_ent_vertex_2d_set_point (dwg_ent_vertex_2d *restrict vert,
                              int *restrict error)
 {
   if (vert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -6154,9 +5952,9 @@ dwg_ent_insert_get_ins_pt (const dwg_ent_insert *restrict insert,
                            dwg_point_3d *restrict point, int *restrict error)
 {
   if (insert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -6184,9 +5982,9 @@ dwg_ent_insert_set_ins_pt (dwg_ent_insert *restrict insert,
                            int *restrict error)
 {
   if (insert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -6213,9 +6011,9 @@ dwg_ent_insert_get_scale (const dwg_ent_insert *restrict insert,
                           dwg_point_3d *restrict scale3d, int *restrict error)
 {
   if (insert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && scale3d
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -6243,9 +6041,9 @@ dwg_ent_insert_set_scale (dwg_ent_insert *restrict insert,
                           int *restrict error)
 {
   if (insert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && scale3d
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -6322,9 +6120,9 @@ dwg_ent_insert_get_extrusion (const dwg_ent_insert *restrict insert,
                               int *restrict error)
 {
   if (insert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -6353,9 +6151,9 @@ dwg_ent_insert_set_extrusion (dwg_ent_insert *restrict insert,
                               int *restrict error)
 {
   if (insert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -6461,9 +6259,9 @@ dwg_ent_minsert_get_ins_pt (const dwg_ent_minsert *restrict minsert,
                             dwg_point_3d *restrict point, int *restrict error)
 {
   if (minsert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -6492,9 +6290,9 @@ dwg_ent_minsert_set_ins_pt (dwg_ent_minsert *restrict minsert,
                             int *restrict error)
 {
   if (minsert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -6521,9 +6319,9 @@ dwg_ent_minsert_get_scale (const dwg_ent_minsert *restrict minsert,
                            dwg_point_3d *restrict scale3d, int *restrict error)
 {
   if (minsert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && scale3d
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -6551,9 +6349,9 @@ dwg_ent_minsert_set_scale (dwg_ent_minsert *restrict minsert,
                            int *restrict error)
 {
   if (minsert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && scale3d
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -6631,9 +6429,9 @@ dwg_ent_minsert_get_extrusion (const dwg_ent_minsert *restrict minsert,
                                int *restrict error)
 {
   if (minsert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -6662,9 +6460,9 @@ dwg_ent_minsert_set_extrusion (dwg_ent_minsert *restrict minsert,
                                int *restrict error)
 {
   if (minsert
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -7310,7 +7108,8 @@ dwg_obj_appid_get_flag (const dwg_obj_appid *restrict appid,
   if (appid)
     {
       *error = 0;
-      return appid->flag & 1 || appid->is_xref_ref >> 4 || appid->is_xref_dep >> 6;
+      return appid->flag & 1 || appid->is_xref_ref >> 4
+             || appid->is_xref_dep >> 6;
     }
   else
     {
@@ -7748,9 +7547,9 @@ dwg_ent_dim_set_extrusion (dwg_ent_dim *restrict dim,
                            int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -7778,9 +7577,9 @@ dwg_ent_dim_get_extrusion (const dwg_ent_dim *restrict dim,
                            dwg_point_3d *restrict vector, int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8052,9 +7851,9 @@ dwg_ent_dim_set_text_midpt (dwg_ent_dim *restrict dim,
                             int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8081,9 +7880,9 @@ dwg_ent_dim_get_text_midpt (const dwg_ent_dim *restrict dim,
                             dwg_point_2d *restrict point, int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8110,9 +7909,9 @@ dwg_ent_dim_set_ins_scale (dwg_ent_dim *restrict dim,
                            int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && scale3d
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8139,9 +7938,9 @@ dwg_ent_dim_get_ins_scale (const dwg_ent_dim *restrict dim,
                            dwg_point_3d *restrict scale3d, int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && scale3d
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8170,9 +7969,9 @@ dwg_ent_dim_set_clone_ins_pt (dwg_ent_dim *restrict dim,
                               int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8200,9 +7999,9 @@ dwg_ent_dim_get_clone_ins_pt (const dwg_ent_dim *restrict dim,
                               int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8282,9 +8081,9 @@ dwg_ent_dim_ordinate_set_def_pt (dwg_ent_dim_ordinate *restrict dim,
                                  int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8313,9 +8112,9 @@ dwg_ent_dim_ordinate_get_def_pt (const dwg_ent_dim_ordinate *restrict dim,
                                  int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8344,9 +8143,9 @@ dwg_ent_dim_ordinate_set_feature_location_pt (
     int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8375,9 +8174,9 @@ dwg_ent_dim_ordinate_get_feature_location_pt (
     int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8406,9 +8205,9 @@ dwg_ent_dim_ordinate_set_leader_endpt (dwg_ent_dim_ordinate *restrict dim,
                                        int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8437,9 +8236,9 @@ dwg_ent_dim_ordinate_get_leader_endpt (
     int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8472,9 +8271,9 @@ dwg_ent_dim_linear_set_def_pt (dwg_ent_dim_linear *restrict dim,
                                int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8503,9 +8302,9 @@ dwg_ent_dim_linear_get_def_pt (const dwg_ent_dim_linear *restrict dim,
                                int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8534,9 +8333,9 @@ dwg_ent_dim_linear_set_13_pt (dwg_ent_dim_linear *restrict dim,
                               int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8565,9 +8364,9 @@ dwg_ent_dim_linear_get_13_pt (const dwg_ent_dim_linear *restrict dim,
                               int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8596,9 +8395,9 @@ dwg_ent_dim_linear_set_14_pt (dwg_ent_dim_linear *restrict dim,
                               int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8627,9 +8426,9 @@ dwg_ent_dim_linear_get_14_pt (const dwg_ent_dim_linear *restrict dim,
                               int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8758,9 +8557,9 @@ dwg_ent_dim_aligned_set_def_pt (dwg_ent_dim_aligned *restrict dim,
                                 int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8789,9 +8588,9 @@ dwg_ent_dim_aligned_get_def_pt (const dwg_ent_dim_aligned *restrict dim,
                                 int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8820,9 +8619,9 @@ dwg_ent_dim_aligned_set_13_pt (dwg_ent_dim_aligned *restrict dim,
                                int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8851,9 +8650,9 @@ dwg_ent_dim_aligned_get_13_pt (const dwg_ent_dim_aligned *restrict dim,
                                int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8882,9 +8681,9 @@ dwg_ent_dim_aligned_set_14_pt (dwg_ent_dim_aligned *restrict dim,
                                int *restrict error)
 {
   if (dim
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -8991,9 +8790,9 @@ dwg_ent_dim_ang3pt_set_def_pt (dwg_ent_dim_ang3pt *restrict ang,
                                int *restrict error)
 {
   if (ang
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9049,9 +8848,9 @@ dwg_ent_dim_ang3pt_set_13_pt (dwg_ent_dim_ang3pt *restrict ang,
                               int *restrict error)
 {
   if (ang
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9080,9 +8879,9 @@ dwg_ent_dim_ang3pt_get_13_pt (const dwg_ent_dim_ang3pt *restrict ang,
                               int *restrict error)
 {
   if (ang
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9111,9 +8910,9 @@ dwg_ent_dim_ang3pt_set_14_pt (dwg_ent_dim_ang3pt *restrict ang,
                               int *restrict error)
 {
   if (ang
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9142,9 +8941,9 @@ dwg_ent_dim_ang3pt_get_14_pt (const dwg_ent_dim_ang3pt *restrict ang,
                               int *restrict error)
 {
   if (ang
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9173,9 +8972,9 @@ dwg_ent_dim_ang3pt_set_first_arc_pt (dwg_ent_dim_ang3pt *restrict ang,
                                      int *restrict error)
 {
   if (ang
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9204,9 +9003,9 @@ dwg_ent_dim_ang3pt_get_first_arc_pt (const dwg_ent_dim_ang3pt *restrict ang,
                                      int *restrict error)
 {
   if (ang
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9233,9 +9032,9 @@ dwg_ent_dim_ang2ln_set_def_pt (dwg_ent_dim_ang2ln *restrict ang,
                                int *restrict error)
 {
   if (ang
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9257,9 +9056,9 @@ dwg_ent_dim_ang2ln_get_def_pt (const dwg_ent_dim_ang2ln *restrict ang,
                                int *restrict error)
 {
   if (ang
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9282,9 +9081,9 @@ dwg_ent_dim_ang2ln_set_13_pt (dwg_ent_dim_ang2ln *restrict ang,
                               int *restrict error)
 {
   if (ang
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9307,9 +9106,9 @@ dwg_ent_dim_ang2ln_get_13_pt (const dwg_ent_dim_ang2ln *restrict ang,
                               int *restrict error)
 {
   if (ang
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9332,9 +9131,9 @@ dwg_ent_dim_ang2ln_set_14_pt (dwg_ent_dim_ang2ln *restrict ang,
                               int *restrict error)
 {
   if (ang
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9357,9 +9156,9 @@ dwg_ent_dim_ang2ln_get_14_pt (const dwg_ent_dim_ang2ln *restrict ang,
                               int *restrict error)
 {
   if (ang
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9382,9 +9181,9 @@ dwg_ent_dim_ang2ln_set_first_arc_pt (dwg_ent_dim_ang2ln *restrict ang,
                                      int *restrict error)
 {
   if (ang
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9407,9 +9206,9 @@ dwg_ent_dim_ang2ln_get_first_arc_pt (const dwg_ent_dim_ang2ln *restrict ang,
                                      int *restrict error)
 {
   if (ang
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9432,9 +9231,9 @@ dwg_ent_dim_ang2ln_set_16_pt (dwg_ent_dim_ang2ln *restrict ang,
                               int *restrict error)
 {
   if (ang
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9457,9 +9256,9 @@ dwg_ent_dim_ang2ln_get_16_pt (const dwg_ent_dim_ang2ln *restrict ang,
                               int *restrict error)
 {
   if (ang
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9486,9 +9285,9 @@ dwg_ent_dim_radius_set_def_pt (dwg_ent_dim_radius *restrict radius,
                                int *restrict error)
 {
   if (radius
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9511,9 +9310,9 @@ dwg_ent_dim_radius_get_def_pt (const dwg_ent_dim_radius *restrict radius,
                                int *restrict error)
 {
   if (radius
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9536,9 +9335,9 @@ dwg_ent_dim_radius_set_first_arc_pt (dwg_ent_dim_radius *restrict radius,
                                      int *restrict error)
 {
   if (radius
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9561,9 +9360,9 @@ dwg_ent_dim_radius_get_first_arc_pt (const dwg_ent_dim_radius *restrict radius,
                                      int *restrict error)
 {
   if (radius
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9627,9 +9426,9 @@ dwg_ent_dim_diameter_set_def_pt (dwg_ent_dim_diameter *restrict dia,
                                  int *restrict error)
 {
   if (dia
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9652,9 +9451,9 @@ dwg_ent_dim_diameter_get_def_pt (const dwg_ent_dim_diameter *restrict dia,
                                  int *restrict error)
 {
   if (dia
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9677,9 +9476,9 @@ dwg_ent_dim_diameter_set_first_arc_pt (dwg_ent_dim_diameter *restrict dia,
                                        int *restrict error)
 {
   if (dia
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9702,9 +9501,9 @@ dwg_ent_dim_diameter_get_first_arc_pt (
     int *restrict error)
 {
   if (dia
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9768,9 +9567,9 @@ dwg_ent_shape_get_ins_pt (const dwg_ent_shape *restrict shape,
                           dwg_point_3d *restrict point, int *restrict error)
 {
   if (shape
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -9793,9 +9592,9 @@ dwg_ent_shape_set_ins_pt (dwg_ent_shape *restrict shape,
                           int *restrict error)
 {
   if (shape
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -10078,9 +9877,9 @@ dwg_ent_shape_get_extrusion (const dwg_ent_shape *restrict shape,
                              dwg_point_3d *restrict point, int *restrict error)
 {
   if (shape
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -10103,9 +9902,9 @@ dwg_ent_shape_set_extrusion (dwg_ent_shape *restrict shape,
                              int *restrict error)
 {
   if (shape
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -10132,9 +9931,9 @@ dwg_ent_mtext_set_insertion_pt (dwg_ent_mtext *restrict mtext,
                                 int *restrict error)
 {
   if (mtext
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -10157,9 +9956,9 @@ dwg_ent_mtext_get_insertion_pt (const dwg_ent_mtext *restrict mtext,
                                 int *restrict error)
 {
   if (mtext
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -10182,9 +9981,9 @@ dwg_ent_mtext_set_extrusion (dwg_ent_mtext *restrict mtext,
                              int *restrict error)
 {
   if (mtext
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -10206,9 +10005,9 @@ dwg_ent_mtext_get_extrusion (const dwg_ent_mtext *restrict mtext,
                              dwg_point_3d *restrict point, int *restrict error)
 {
   if (mtext
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -10231,9 +10030,9 @@ dwg_ent_mtext_set_x_axis_dir (dwg_ent_mtext *restrict mtext,
                               int *restrict error)
 {
   if (mtext
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -10256,9 +10055,9 @@ dwg_ent_mtext_get_x_axis_dir (const dwg_ent_mtext *restrict mtext,
                               int *restrict error)
 {
   if (mtext
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -10752,9 +10551,9 @@ dwg_ent_leader_set_origin (dwg_ent_leader *restrict leader,
                            int *restrict error)
 {
   if (leader
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -10776,9 +10575,9 @@ dwg_ent_leader_get_origin (const dwg_ent_leader *restrict leader,
                            dwg_point_3d *restrict point, int *restrict error)
 {
   if (leader
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -10801,9 +10600,9 @@ dwg_ent_leader_set_extrusion (dwg_ent_leader *restrict leader,
                               int *restrict error)
 {
   if (leader
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -10826,9 +10625,9 @@ dwg_ent_leader_get_extrusion (const dwg_ent_leader *restrict leader,
                               int *restrict error)
 {
   if (leader
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -10851,9 +10650,9 @@ dwg_ent_leader_set_x_direction (dwg_ent_leader *restrict leader,
                                 int *restrict error)
 {
   if (leader
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -10876,9 +10675,9 @@ dwg_ent_leader_get_x_direction (const dwg_ent_leader *restrict leader,
                                 int *restrict error)
 {
   if (leader
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -10897,13 +10696,13 @@ dwg_ent_leader_get_x_direction (const dwg_ent_leader *restrict leader,
  */
 void
 dwg_ent_leader_set_inspt_offset (dwg_ent_leader *restrict leader,
-                                           const dwg_point_3d *restrict point,
-                                           int *restrict error)
+                                 const dwg_point_3d *restrict point,
+                                 int *restrict error)
 {
   if (leader
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -10921,14 +10720,14 @@ dwg_ent_leader_set_inspt_offset (dwg_ent_leader *restrict leader,
 /** Returns leader offset to block ins point
  */
 void
-dwg_ent_leader_get_inspt_offset (
-    const dwg_ent_leader *restrict leader, dwg_point_3d *restrict point,
-    int *restrict error)
+dwg_ent_leader_get_inspt_offset (const dwg_ent_leader *restrict leader,
+                                 dwg_point_3d *restrict point,
+                                 int *restrict error)
 {
   if (leader
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -11325,9 +11124,9 @@ dwg_ent_tolerance_set_ins_pt (dwg_ent_tolerance *restrict tol,
                               int *restrict error)
 {
   if (tol
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -11350,9 +11149,9 @@ dwg_ent_tolerance_get_ins_pt (const dwg_ent_tolerance *restrict tol,
                               int *restrict error)
 {
   if (tol
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -11375,9 +11174,9 @@ dwg_ent_tolerance_set_x_direction (dwg_ent_tolerance *restrict tol,
                                    int *restrict error)
 {
   if (tol
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -11400,9 +11199,9 @@ dwg_ent_tolerance_get_x_direction (const dwg_ent_tolerance *restrict tol,
                                    int *restrict error)
 {
   if (tol
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -11425,9 +11224,9 @@ dwg_ent_tolerance_set_extrusion (dwg_ent_tolerance *restrict tol,
                                  int *restrict error)
 {
   if (tol
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -11450,9 +11249,9 @@ dwg_ent_tolerance_get_extrusion (const dwg_ent_tolerance *restrict tol,
                                  int *restrict error)
 {
   if (tol
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -11703,9 +11502,9 @@ dwg_ent_lwpline_get_extrusion (const dwg_ent_lwpline *restrict lwpline,
                                int *restrict error)
 {
   if (lwpline
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -11728,9 +11527,9 @@ dwg_ent_lwpline_set_extrusion (dwg_ent_lwpline *restrict lwpline,
                                int *restrict error)
 {
   if (lwpline
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -12008,7 +11807,7 @@ dwg_obj_proxy_set_data (dwg_obj_proxy *restrict proxy,
   if (proxy)
     {
       *error = 0;
-      proxy->data = (BITCODE_RC*)data;
+      proxy->data = (BITCODE_RC *)data;
     }
   else
     {
@@ -12296,9 +12095,9 @@ dwg_ent_spline_get_begin_tan_vector (const dwg_ent_spline *restrict spline,
                                      int *restrict error)
 {
   if (spline
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -12321,9 +12120,9 @@ dwg_ent_spline_set_begin_tan_vector (dwg_ent_spline *restrict spline,
                                      int *restrict error)
 {
   if (spline
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -12346,9 +12145,9 @@ dwg_ent_spline_get_end_tan_vector (const dwg_ent_spline *restrict spline,
                                    int *restrict error)
 {
   if (spline
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -12371,9 +12170,9 @@ dwg_ent_spline_set_end_tan_vector (dwg_ent_spline *restrict spline,
                                    int *restrict error)
 {
   if (spline
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -12672,7 +12471,7 @@ dwg_ent_spline_get_num_ctrl_pts (const dwg_ent_spline *restrict spline,
 }
 
 /// Return all spline fit points
-dwg_point_3d*
+dwg_point_3d *
 dwg_ent_spline_get_fit_pts (const dwg_ent_spline *restrict spline,
                             int *restrict error)
 {
@@ -12684,7 +12483,7 @@ dwg_ent_spline_get_fit_pts (const dwg_ent_spline *restrict spline,
       *error = 0;
       for (i = 0; i < spline->num_fit_pts; i++)
         {
-          memcpy (&ptx[i], &spline->fit_pts[i], sizeof(dwg_point_3d));
+          memcpy (&ptx[i], &spline->fit_pts[i], sizeof (dwg_point_3d));
         }
       return ptx;
     }
@@ -12758,9 +12557,9 @@ dwg_ent_viewport_get_center (const dwg_ent_viewport *restrict vp,
                              dwg_point_3d *restrict point, int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -12783,9 +12582,9 @@ dwg_ent_viewport_set_center (dwg_ent_viewport *restrict vp,
                              int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13140,9 +12939,8 @@ dwg_ent_viewport_get_ucs_at_origin (const dwg_ent_viewport *restrict vp,
 /** Sets VIEWPORT.UCSVP
  */
 void
-dwg_ent_viewport_set_UCSVP (dwg_ent_viewport *restrict vp,
-                                       unsigned char ucsvp,
-                                       int *restrict error)
+dwg_ent_viewport_set_UCSVP (dwg_ent_viewport *restrict vp, unsigned char ucsvp,
+                            int *restrict error)
 {
   if (vp)
     {
@@ -13183,9 +12981,9 @@ dwg_ent_viewport_set_view_target (dwg_ent_viewport *restrict vp,
                                   int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13208,9 +13006,9 @@ dwg_ent_viewport_get_view_target (const dwg_ent_viewport *restrict vp,
                                   int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13233,9 +13031,9 @@ dwg_ent_viewport_set_VIEWDIR (dwg_ent_viewport *restrict vp,
                               int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13258,9 +13056,9 @@ dwg_ent_viewport_get_VIEWDIR (const dwg_ent_viewport *restrict vp,
                               int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13279,7 +13077,7 @@ dwg_ent_viewport_get_VIEWDIR (const dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_set_twist_angle (dwg_ent_viewport *restrict vp,
-                                 const double angle, int *restrict error)
+                                  const double angle, int *restrict error)
 {
   if (vp)
     {
@@ -13297,7 +13095,7 @@ dwg_ent_viewport_set_twist_angle (dwg_ent_viewport *restrict vp,
  */
 double
 dwg_ent_viewport_get_twist_angle (const dwg_ent_viewport *restrict vp,
-                                 int *restrict error)
+                                  int *restrict error)
 {
   if (vp)
     {
@@ -13316,7 +13114,7 @@ dwg_ent_viewport_get_twist_angle (const dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_set_VIEWSIZE (dwg_ent_viewport *restrict vp,
-                                  const double height, int *restrict error)
+                               const double height, int *restrict error)
 {
   if (vp)
     {
@@ -13464,7 +13262,7 @@ dwg_ent_viewport_get_back_clip_z (const dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_set_SNAPANG (dwg_ent_viewport *restrict vp,
-                                 const double angle, int *restrict error)
+                              const double angle, int *restrict error)
 {
   if (vp)
     {
@@ -13482,7 +13280,7 @@ dwg_ent_viewport_set_SNAPANG (dwg_ent_viewport *restrict vp,
  */
 double
 dwg_ent_viewport_get_SNAPANG (const dwg_ent_viewport *restrict vp,
-                                 int *restrict error)
+                              int *restrict error)
 {
   if (vp)
     {
@@ -13501,13 +13299,13 @@ dwg_ent_viewport_get_SNAPANG (const dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_get_VIEWCTR (const dwg_ent_viewport *restrict vp,
-                                  dwg_point_2d *restrict point,
-                                  int *restrict error)
+                              dwg_point_2d *restrict point,
+                              int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13525,8 +13323,8 @@ dwg_ent_viewport_get_VIEWCTR (const dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_set_VIEWCTR (dwg_ent_viewport *restrict vp,
-                                  const dwg_point_2d *restrict point,
-                                  int *restrict error)
+                              const dwg_point_2d *restrict point,
+                              int *restrict error)
 {
   if (vp)
     {
@@ -13545,13 +13343,13 @@ dwg_ent_viewport_set_VIEWCTR (dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_get_GRIDUNIT (const dwg_ent_viewport *restrict vp,
-                                   dwg_point_2d *restrict point,
-                                   int *restrict error)
+                               dwg_point_2d *restrict point,
+                               int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13569,13 +13367,13 @@ dwg_ent_viewport_get_GRIDUNIT (const dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_set_GRIDUNIT (dwg_ent_viewport *restrict vp,
-                                   const dwg_point_2d *restrict point,
-                                   int *restrict error)
+                               const dwg_point_2d *restrict point,
+                               int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13593,13 +13391,13 @@ dwg_ent_viewport_set_GRIDUNIT (dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_get_SNAPBASE (const dwg_ent_viewport *restrict vp,
-                                dwg_point_2d *restrict point,
-                                int *restrict error)
+                               dwg_point_2d *restrict point,
+                               int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13617,13 +13415,13 @@ dwg_ent_viewport_get_SNAPBASE (const dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_set_SNAPBASE (dwg_ent_viewport *restrict vp,
-                                const dwg_point_2d *restrict point,
-                                int *restrict error)
+                               const dwg_point_2d *restrict point,
+                               int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13641,13 +13439,13 @@ dwg_ent_viewport_set_SNAPBASE (dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_get_SNAPUNIT (const dwg_ent_viewport *restrict vp,
-                                   dwg_point_2d *restrict point,
-                                   int *restrict error)
+                               dwg_point_2d *restrict point,
+                               int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13665,13 +13463,13 @@ dwg_ent_viewport_get_SNAPUNIT (const dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_set_SNAPUNIT (dwg_ent_viewport *restrict vp,
-                                   const dwg_point_2d *restrict point,
-                                   int *restrict error)
+                               const dwg_point_2d *restrict point,
+                               int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13689,13 +13487,13 @@ dwg_ent_viewport_set_SNAPUNIT (dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_set_ucsorg (dwg_ent_viewport *restrict vp,
-                                 const dwg_point_3d *restrict point,
-                                 int *restrict error)
+                             const dwg_point_3d *restrict point,
+                             int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13714,13 +13512,12 @@ dwg_ent_viewport_set_ucsorg (dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_get_ucsorg (const dwg_ent_viewport *restrict vp,
-                                 dwg_point_3d *restrict point,
-                                 int *restrict error)
+                             dwg_point_3d *restrict point, int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13739,13 +13536,13 @@ dwg_ent_viewport_get_ucsorg (const dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_set_ucsxdir (dwg_ent_viewport *restrict vp,
-                                 const dwg_point_3d *restrict point,
-                                 int *restrict error)
+                              const dwg_point_3d *restrict point,
+                              int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13764,13 +13561,13 @@ dwg_ent_viewport_set_ucsxdir (dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_get_ucsxdir (const dwg_ent_viewport *restrict vp,
-                                 dwg_point_3d *restrict point,
-                                 int *restrict error)
+                              dwg_point_3d *restrict point,
+                              int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13789,13 +13586,13 @@ dwg_ent_viewport_get_ucsxdir (const dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_set_ucsydir (dwg_ent_viewport *restrict vp,
-                                 const dwg_point_3d *restrict point,
-                                 int *restrict error)
+                              const dwg_point_3d *restrict point,
+                              int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13814,13 +13611,13 @@ dwg_ent_viewport_set_ucsydir (dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_get_ucsydir (const dwg_ent_viewport *restrict vp,
-                                 dwg_point_3d *restrict point,
-                                 int *restrict error)
+                              dwg_point_3d *restrict point,
+                              int *restrict error)
 {
   if (vp
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -13877,8 +13674,7 @@ dwg_ent_viewport_get_ucs_elevation (const dwg_ent_viewport *restrict vp,
  */
 void
 dwg_ent_viewport_set_UCSORTHOVIEW (dwg_ent_viewport *restrict vp,
-                                          const BITCODE_BS type,
-                                          int *restrict error)
+                                   const BITCODE_BS type, int *restrict error)
 {
   if (vp)
     {
@@ -13896,7 +13692,7 @@ dwg_ent_viewport_set_UCSORTHOVIEW (dwg_ent_viewport *restrict vp,
  */
 BITCODE_BS
 dwg_ent_viewport_get_UCSORTHOVIEW (const dwg_ent_viewport *restrict vp,
-                                          int *restrict error)
+                                   int *restrict error)
 {
   if (vp)
     {
@@ -14390,9 +14186,9 @@ dwg_ent_polyline_2d_get_extrusion (const dwg_ent_polyline_2d *restrict pline2d,
                                    int *restrict error)
 {
   if (pline2d
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -14419,9 +14215,9 @@ dwg_ent_polyline_2d_set_extrusion (dwg_ent_polyline_2d *restrict pline2d,
                                    int *restrict error)
 {
   if (pline2d
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -14826,9 +14622,9 @@ dwg_ent_3dface_get_corner1 (const dwg_ent_3dface *restrict _3dface,
                             dwg_point_3d *restrict point, int *restrict error)
 {
   if (_3dface
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -14857,9 +14653,9 @@ dwg_ent_3dface_set_corner1 (dwg_ent_3dface *restrict _3dface,
                             int *restrict error)
 {
   if (_3dface
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -14887,9 +14683,9 @@ dwg_ent_3dface_get_corner2 (const dwg_ent_3dface *restrict _3dface,
                             dwg_point_3d *restrict point, int *restrict error)
 {
   if (_3dface
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -14918,9 +14714,9 @@ dwg_ent_3dface_set_corner2 (dwg_ent_3dface *restrict _3dface,
                             int *restrict error)
 {
   if (_3dface
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -14948,9 +14744,9 @@ dwg_ent_3dface_get_corner3 (const dwg_ent_3dface *restrict _3dface,
                             dwg_point_3d *restrict point, int *restrict error)
 {
   if (_3dface
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -14979,16 +14775,16 @@ dwg_ent_3dface_set_corner3 (dwg_ent_3dface *restrict _3dface,
                             int *restrict error)
 {
   if (_3dface
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
       _3dface->corner3.x = point->x;
       _3dface->corner3.y = point->y;
       _3dface->corner3.z = point->z;
-  }
+    }
   else
     {
       *error = 1;
@@ -15009,9 +14805,9 @@ dwg_ent_3dface_get_corner4 (const dwg_ent_3dface *restrict _3dface,
                             dwg_point_3d *restrict point, int *restrict error)
 {
   if (_3dface
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -15040,9 +14836,9 @@ dwg_ent_3dface_set_corner4 (dwg_ent_3dface *restrict _3dface,
                             int *restrict error)
 {
   if (_3dface
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -15106,9 +14902,9 @@ dwg_ent_image_get_pt0 (const dwg_ent_image *restrict image,
                        dwg_point_3d *restrict point, int *restrict error)
 {
   if (image
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -15130,9 +14926,9 @@ dwg_ent_image_set_pt0 (dwg_ent_image *restrict image,
                        const dwg_point_3d *restrict point, int *restrict error)
 {
   if (image
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -15154,9 +14950,9 @@ dwg_ent_image_get_u_vector (const dwg_ent_image *restrict image,
                             dwg_point_3d *restrict point, int *restrict error)
 {
   if (image
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -15179,9 +14975,9 @@ dwg_ent_image_set_u_vector (dwg_ent_image *restrict image,
                             int *restrict error)
 {
   if (image
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -15203,9 +14999,9 @@ dwg_ent_image_get_v_vector (const dwg_ent_image *restrict image,
                             dwg_point_3d *restrict point, int *restrict error)
 {
   if (image
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -15228,9 +15024,9 @@ dwg_ent_image_set_v_vector (dwg_ent_image *restrict image,
                             int *restrict error)
 {
   if (image
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -15550,9 +15346,9 @@ dwg_ent_image_get_boundary_pt0 (const dwg_ent_image *restrict image,
                                 int *restrict error)
 {
   if (image
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -15574,9 +15370,9 @@ dwg_ent_image_set_boundary_pt0 (dwg_ent_image *restrict image,
                                 int *restrict error)
 {
   if (image
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -15598,9 +15394,9 @@ dwg_ent_image_get_boundary_pt1 (const dwg_ent_image *restrict image,
                                 int *restrict error)
 {
   if (image
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -15622,9 +15418,9 @@ dwg_ent_image_set_boundary_pt1 (dwg_ent_image *restrict image,
                                 int *restrict error)
 {
   if (image
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -15662,7 +15458,8 @@ BITCODE_2RD *
 dwg_ent_image_get_clip_verts (const dwg_ent_image *restrict image,
                               int *restrict error)
 {
-  BITCODE_2RD *ptx = (BITCODE_2RD *)calloc (image->num_clip_verts, sizeof (BITCODE_2RD));
+  BITCODE_2RD *ptx
+      = (BITCODE_2RD *)calloc (image->num_clip_verts, sizeof (BITCODE_2RD));
   if (ptx)
     {
       BITCODE_BL i;
@@ -15768,9 +15565,9 @@ dwg_ent_mline_set_base_point (dwg_ent_mline *restrict mline,
                               int *restrict error)
 {
   if (mline
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -15793,9 +15590,9 @@ dwg_ent_mline_get_base_point (const dwg_ent_mline *restrict mline,
                               int *restrict error)
 {
   if (mline
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -15818,9 +15615,9 @@ dwg_ent_mline_set_extrusion (dwg_ent_mline *restrict mline,
                              int *restrict error)
 {
   if (mline
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -15842,9 +15639,9 @@ dwg_ent_mline_get_extrusion (const dwg_ent_mline *restrict mline,
                              dwg_point_3d *restrict point, int *restrict error)
 {
   if (mline
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -16013,9 +15810,9 @@ dwg_ent_vertex_pface_face_set_vertind (dwg_ent_vert_pface_face *restrict face,
                                        const BITCODE_BS vertind[4])
 {
   if (face
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vertind
-#  endif
+#    endif
   )
     {
       face->vertind[0] = vertind[0];
@@ -16211,9 +16008,9 @@ dwg_ent_3dsolid_get_point (const dwg_ent_3dsolid *restrict _3dsolid,
                            dwg_point_3d *restrict point, int *restrict error)
 {
   if (_3dsolid
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -16236,9 +16033,9 @@ dwg_ent_3dsolid_set_point (dwg_ent_3dsolid *restrict _3dsolid,
                            int *restrict error)
 {
   if (_3dsolid
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -16579,15 +16376,14 @@ BITCODE_BL
 dwg_ent_region_get_isolines (const dwg_ent_region *restrict region,
                              int *restrict error)
 {
-  return dwg_ent_3dsolid_get_isolines ((const dwg_ent_3dsolid *)region,
-                                       error);
+  return dwg_ent_3dsolid_get_isolines ((const dwg_ent_3dsolid *)region, error);
 }
 
 /** Sets the Dwg_Entity_REGION::isolines (??)
  */
 void
 dwg_ent_region_set_isolines (dwg_ent_region *restrict region,
-                                 const BITCODE_BL num, int *restrict error)
+                             const BITCODE_BL num, int *restrict error)
 {
   dwg_ent_3dsolid_set_isolines ((dwg_ent_3dsolid *)region, num, error);
 }
@@ -16793,17 +16589,16 @@ dwg_ent_body_set_point (dwg_ent_body *restrict body,
  */
 BITCODE_BL
 dwg_ent_body_get_isolines (const dwg_ent_body *restrict body,
-                               int *restrict error)
+                           int *restrict error)
 {
-  return dwg_ent_3dsolid_get_isolines ((const dwg_ent_3dsolid *)body,
-                                           error);
+  return dwg_ent_3dsolid_get_isolines ((const dwg_ent_3dsolid *)body, error);
 }
 
 /** Sets the Dwg_Entity_BODY::isolines (??)
  */
 void
-dwg_ent_body_set_isolines (dwg_ent_body *restrict body,
-                               const BITCODE_BL num, int *restrict error)
+dwg_ent_body_set_isolines (dwg_ent_body *restrict body, const BITCODE_BL num,
+                           int *restrict error)
 {
   dwg_ent_3dsolid_set_isolines ((dwg_ent_3dsolid *)body, num, error);
 }
@@ -16903,13 +16698,13 @@ dwg_ent_body_set_acis_empty2 (dwg_ent_body *restrict body,
 */
 void
 dwg_ent_table_set_insertion_pt (dwg_ent_table *restrict table,
-                                   const dwg_point_3d *restrict point,
-                                   int *restrict error)
+                                const dwg_point_3d *restrict point,
+                                int *restrict error)
 {
   if (table
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -16936,9 +16731,9 @@ dwg_ent_table_get_insertion_pt (const dwg_ent_table *restrict table,
                                 int *restrict error)
 {
   if (table
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && point
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -16965,9 +16760,9 @@ dwg_ent_table_set_scale (dwg_ent_table *restrict table,
                          int *restrict error)
 {
   if (table
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && scale3d
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -17006,9 +16801,9 @@ dwg_ent_table_get_scale (const dwg_ent_table *restrict table,
                          dwg_point_3d *restrict scale3d, int *restrict error)
 {
   if (table
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && scale3d
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -17079,9 +16874,9 @@ dwg_ent_table_set_extrusion (dwg_ent_table *restrict table,
                              int *restrict error)
 {
   if (table
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -17108,9 +16903,9 @@ dwg_ent_table_get_extrusion (const dwg_ent_table *restrict table,
                              int *restrict error)
 {
   if (table
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -17188,9 +16983,9 @@ dwg_ent_table_set_flag_for_table_value (dwg_ent_table *restrict table,
                                         int *restrict error)
 {
   if (table
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && value < 0x30
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -17238,9 +17033,9 @@ dwg_ent_table_set_horiz_direction (dwg_ent_table *restrict table,
                                    int *restrict error)
 {
   if (table
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -17267,9 +17062,9 @@ dwg_ent_table_get_horiz_direction (const dwg_ent_table *restrict table,
                                    int *restrict error)
 {
   if (table
-#  ifndef HAVE_NONNULL
+#    ifndef HAVE_NONNULL
       && vector
-#  endif
+#    endif
   )
     {
       *error = 0;
@@ -19986,7 +19781,7 @@ dwg_ent_table_get_data_vert_right_visibility (
     }
 }
 
-#endif /* USE_DEPRECATED_API */
+#  endif /* USE_DEPRECATED_API */
 
 #endif /* __AFL_COMPILER ************************************************ */
 
@@ -20018,9 +19813,9 @@ dwg_object_polyline_2d_get_numpoints (const dwg_object *restrict obj,
               do
                 {
                   if (vobj->fixedtype == DWG_TYPE_VERTEX_2D)
-                      num_points++;
+                    num_points++;
                   else
-                      *error = 1; // return not all vertices, but some
+                    *error = 1; // return not all vertices, but some
                 }
               while ((vobj = dwg_next_object (vobj)) && vobj != vlast);
             }
@@ -20183,7 +19978,8 @@ dwg_object_polyline_3d_get_numpoints (const dwg_object *restrict obj,
             {
               do
                 {
-                  if (vobj->fixedtype == DWG_TYPE_VERTEX_3D && (vertex = dwg_object_to_VERTEX_3D (vobj)))
+                  if (vobj->fixedtype == DWG_TYPE_VERTEX_3D
+                      && (vertex = dwg_object_to_VERTEX_3D (vobj)))
                     {
                       num_points++;
                     }
@@ -20201,7 +19997,8 @@ dwg_object_polyline_3d_get_numpoints (const dwg_object *restrict obj,
           while ((vobj = dwg_next_object (vobj))
                  && vobj->fixedtype != DWG_TYPE_SEQEND)
             {
-              if (vobj->fixedtype == DWG_TYPE_VERTEX_3D && (vertex = dwg_object_to_VERTEX_3D (vobj)))
+              if (vobj->fixedtype == DWG_TYPE_VERTEX_3D
+                  && (vertex = dwg_object_to_VERTEX_3D (vobj)))
                 num_points++;
               else
                 *error = 1; // return not all vertices, but some
@@ -20414,7 +20211,7 @@ dwg_ent_lwpline_set_points (dwg_ent_lwpline *restrict lwpline,
       for (BITCODE_BL i = 0; i < num_pts2d; i++)
         {
           const dwg_point_2d pt = pts2d[i];
-          if (bit_isnan(pt.x) || bit_isnan(pt.y))
+          if (bit_isnan (pt.x) || bit_isnan (pt.y))
             goto isnan;
           lwpline->points[i].x = pt.x;
           lwpline->points[i].y = pt.y;
@@ -20426,7 +20223,7 @@ dwg_ent_lwpline_set_points (dwg_ent_lwpline *restrict lwpline,
       LOG_ERROR ("%s: Out of memory", __FUNCTION__)
       return 1;
     }
- isnan:
+isnan:
   LOG_ERROR ("%s: Invalid vertex nan", __FUNCTION__);
   return 2;
 }
@@ -20478,7 +20275,8 @@ dwg_block_header_get_block_control (const dwg_obj_block_header *block_header,
 {
   if (block_header && block_header->parent && block_header->parent->ownerhandle
       && block_header->parent->ownerhandle->obj
-      && block_header->parent->ownerhandle->obj->fixedtype == DWG_TYPE_BLOCK_CONTROL
+      && block_header->parent->ownerhandle->obj->fixedtype
+             == DWG_TYPE_BLOCK_CONTROL
       && block_header->parent->ownerhandle->obj->tio.object)
     {
       *error = 0;
@@ -20948,7 +20746,8 @@ char *
 dwg_obj_table_get_name (const dwg_object *restrict obj, int *restrict error)
 {
   if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT
-      && (dwg_obj_is_table (obj) /* || obj->fixedtype == DWG_TYPE_DICTIONARY */))
+      && (dwg_obj_is_table (
+          obj) /* || obj->fixedtype == DWG_TYPE_DICTIONARY */))
     {
       // HACK: we can guarantee that the table name is always the first field,
       // by using COMMON_TABLE_FLAGS.
@@ -21174,7 +20973,7 @@ dwg_ent_get_num_reactors (const dwg_obj_ent *restrict ent, int *restrict error)
 
 EXPORT BITCODE_B
 dwg_ent_get_is_xdic_missing (const dwg_obj_ent *restrict ent,
-                               int *restrict error) // r2004+
+                             int *restrict error) // r2004+
 {
   _BODY_FIELD (ent, is_xdic_missing);
 }
@@ -21389,19 +21188,16 @@ dwg_ent_to_object (const dwg_obj_ent *restrict obj, int *restrict error)
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_object *
-dwg_ent_generic_to_object (const void *restrict _obj,
-                           int *restrict error)
+dwg_ent_generic_to_object (const void *restrict _obj, int *restrict error)
 {
   return dwg_obj_generic_to_object (_obj, error);
 }
 
 Dwg_Data *
-dwg_obj_generic_dwg (const void *restrict _obj,
-                        int *restrict error)
+dwg_obj_generic_dwg (const void *restrict _obj, int *restrict error)
 {
   dwg_obj_generic *o = (dwg_obj_generic *)_obj;
-  return (o && o->parent && o->parent->dwg)
-    ? o->parent->dwg : NULL;
+  return (o && o->parent && o->parent->dwg) ? o->parent->dwg : NULL;
 }
 
 /** Returns dwg_obj_ent* from any dwg_ent_* entity
@@ -21411,8 +21207,7 @@ dwg_obj_generic_dwg (const void *restrict _obj,
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_obj_ent *
-dwg_ent_generic_parent (const void *restrict ent,
-                        int *restrict error)
+dwg_ent_generic_parent (const void *restrict ent, int *restrict error)
 {
   const dwg_ent_generic *xent = (const dwg_ent_generic *)ent;
   if (xent && xent->parent)
@@ -21760,7 +21555,7 @@ dwg_obj_get_xdicobjhandle (const dwg_obj_obj *restrict obj,
 /* r2004+ */
 EXPORT BITCODE_B
 dwg_obj_get_is_xdic_missing (const dwg_obj_obj *restrict obj,
-                               int *restrict error)
+                             int *restrict error)
 {
   _BODY_FIELD (obj, is_xdic_missing);
 }
@@ -21789,8 +21584,7 @@ dwg_object_to_object (dwg_object *restrict obj, int *restrict error)
   if (obj && obj->supertype == DWG_SUPERTYPE_OBJECT)
     {
       *error = 0;
-      if ((dwg_version == R_INVALID)
-          && (obj->parent != NULL))
+      if ((dwg_version == R_INVALID) && (obj->parent != NULL))
         dwg_version = (Dwg_Version_Type)obj->parent->header.version;
       return obj->tio.object;
     }
@@ -21853,16 +21647,14 @@ dwg_obj_obj_to_object (const dwg_obj_obj *restrict obj, int *restrict error)
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_object *
-dwg_obj_generic_to_object (const void *restrict _vobj,
-                           int *restrict error)
+dwg_obj_generic_to_object (const void *restrict _vobj, int *restrict error)
 {
   const dwg_obj_generic *_obj = (const dwg_obj_generic *)_vobj;
   if (_obj && _obj->parent)
     {
       dwg_data *dwg = _obj->parent->dwg;
       dwg_object *retval = dwg ? &dwg->object[_obj->parent->objid] : NULL;
-      if (!dwg
-          || _obj->parent->objid > dwg->num_objects
+      if (!dwg || _obj->parent->objid > dwg->num_objects
           || dwg->header.version > R_AFTER)
         {
           *error = 1;
@@ -21887,7 +21679,8 @@ dwg_obj_generic_to_object (const void *restrict _vobj,
 \code Usage: handle = dwg_obj_generic_handlevalue(_obj);
 \endcode
 \return The handle value or 0;
-\param[in]  obj   dwg_obj_generic* (layer, block_header, xrecord, ...) as void * to avoid casts.
+\param[in]  obj   dwg_obj_generic* (layer, block_header, xrecord, ...) as void
+* to avoid casts.
 */
 unsigned long
 dwg_obj_generic_handlevalue (void *_obj)
@@ -21907,8 +21700,7 @@ dwg_obj_generic_handlevalue (void *_obj)
 \param[out] error   int*, is set to 0 for ok, 1 on error
 */
 dwg_obj_obj *
-dwg_obj_generic_parent (const void *restrict _vobj,
-                        int *restrict error)
+dwg_obj_generic_parent (const void *restrict _vobj, int *restrict error)
 {
   const dwg_obj_generic *_obj = (const dwg_obj_generic *)_vobj;
   if (_obj && _obj->parent)
@@ -21986,16 +21778,17 @@ dwg_ref_get_absref (const dwg_object_ref *restrict ref, int *restrict error)
     }
 }
 
-/* This was previously in encode and out_dxf, but since out_dxf needs it for r2013+ 3DSOLIDs
-   and --disable-write is still an option, we need to move it here.
-   A global acis_data_idx is needed, since encr_acis_data is split into blocks, but
-   acis_data is a single stream, so we need to keep track of the current position.
+/* This was previously in encode and out_dxf, but since out_dxf needs it for
+   r2013+ 3DSOLIDs and --disable-write is still an option, we need to move it
+   here. A global acis_data_idx is needed, since encr_acis_data is split into
+   blocks, but acis_data is a single stream, so we need to keep track of the
+   current position.
  */
 EXPORT char *
 dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
                   int *restrict acis_data_idx)
 {
-  BITCODE_RC* encr_sat_data = (BITCODE_RC*)calloc (blocksize + 1, 1);
+  BITCODE_RC *encr_sat_data = (BITCODE_RC *)calloc (blocksize + 1, 1);
   int i;
   for (i = 0; i < (int)blocksize; i++)
     {
@@ -22005,7 +21798,7 @@ dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
         encr_sat_data[i] = 159 - acis_data[i];
     }
   *acis_data_idx = i;
-  return (char*)encr_sat_data;
+  return (char *)encr_sat_data;
 }
 
 /********************************************************************
@@ -22015,60 +21808,55 @@ dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
 #ifdef USE_WRITE
 
 /* internally used only by dwg_add_Attribute only */
-Dwg_Entity_ATTRIB*
-dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert,
-                const double height,
-                const int flags,
-                const dwg_point_3d *restrict ins_pt,
+Dwg_Entity_ATTRIB *
+dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert, const double height,
+                const int flags, const dwg_point_3d *restrict ins_pt,
                 const char *restrict tag,
                 const char *restrict text_value) __nonnull_all;
 /* internally used only by dwg_add_ATTRIB only */
-Dwg_Entity_ATTDEF*
-dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                const double height,
-                const int mode,
-                const char *restrict prompt,
-                const dwg_point_3d *restrict ins_pt,
-                const char *restrict tag,
+Dwg_Entity_ATTDEF *
+dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr, const double height,
+                const int mode, const char *restrict prompt,
+                const dwg_point_3d *restrict ins_pt, const char *restrict tag,
                 const char *restrict default_value) __nonnull_all;
 
 /* internally used only by dwg_add_POLYLINE* only */
 // fixme: Dwg_Entity_POLYLINE_2D* as 1st owner arg
-Dwg_Entity_VERTEX_2D*
+Dwg_Entity_VERTEX_2D *
 dwg_add_VERTEX_2D (Dwg_Entity_POLYLINE_2D *restrict pline,
                    const dwg_point_2d *restrict point) __nonnull_all;
-Dwg_Entity_VERTEX_3D*
+Dwg_Entity_VERTEX_3D *
 dwg_add_VERTEX_3D (Dwg_Entity_POLYLINE_3D *restrict pline,
                    const dwg_point_3d *restrict point) __nonnull_all;
-Dwg_Entity_VERTEX_MESH*
+Dwg_Entity_VERTEX_MESH *
 dwg_add_VERTEX_MESH (Dwg_Entity_POLYLINE_MESH *restrict pline,
-                      const dwg_point_3d *restrict point) __nonnull_all;
-Dwg_Entity_VERTEX_PFACE*
+                     const dwg_point_3d *restrict point) __nonnull_all;
+Dwg_Entity_VERTEX_PFACE *
 dwg_add_VERTEX_PFACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
                       const dwg_point_3d *restrict point) __nonnull_all;
-Dwg_Entity_VERTEX_PFACE_FACE*
+Dwg_Entity_VERTEX_PFACE_FACE *
 dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
                            const dwg_face vertind) __nonnull_all;
 Dwg_Entity_SEQEND *
 dwg_add_SEQEND (dwg_ent_generic *restrict owner) __nonnull_all;
 
-#define NEW_OBJECT(dwg, obj)                                                  \
-  {                                                                           \
-    BITCODE_BL idx = dwg->num_objects;                                        \
-    if (dwg_add_object (dwg) < 0)                                             \
-      dwg_resolve_objectrefs_silent (dwg);                                    \
-    obj = &dwg->object[idx];                                                  \
-    dwg->cur_index++;                                                         \
-    obj->supertype = DWG_SUPERTYPE_OBJECT;                                    \
-    obj->tio.object                                                           \
-        = (Dwg_Object_Object *)calloc (1, sizeof (Dwg_Object_Object));        \
-    obj->tio.object->objid = obj->index;                                      \
-    obj->tio.object->dwg = dwg;                                               \
-  }
+#  define NEW_OBJECT(dwg, obj)                                                \
+    {                                                                         \
+      BITCODE_BL idx = dwg->num_objects;                                      \
+      if (dwg_add_object (dwg) < 0)                                           \
+        dwg_resolve_objectrefs_silent (dwg);                                  \
+      obj = &dwg->object[idx];                                                \
+      dwg->cur_index++;                                                       \
+      obj->supertype = DWG_SUPERTYPE_OBJECT;                                  \
+      obj->tio.object                                                         \
+          = (Dwg_Object_Object *)calloc (1, sizeof (Dwg_Object_Object));      \
+      obj->tio.object->objid = obj->index;                                    \
+      obj->tio.object->dwg = dwg;                                             \
+    }
 
 // returns BLOCK_HEADER owner for generic entity from ent->ownerhandle.
-EXPORT Dwg_Object_BLOCK_HEADER*
-dwg_entity_owner (const void* _ent)
+EXPORT Dwg_Object_BLOCK_HEADER *
+dwg_entity_owner (const void *_ent)
 {
   int error;
   Dwg_Object *ent = dwg_ent_generic_to_object (_ent, &error);
@@ -22082,7 +21870,7 @@ dwg_entity_owner (const void* _ent)
   dwg = ent->parent;
   owner = ent->tio.entity->ownerhandle;
   hdr = dwg_ref_object (dwg, owner);
- hdr_again:
+hdr_again:
   if (!hdr || hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
     {
       if (iter)
@@ -22105,80 +21893,87 @@ dwg_entity_owner (const void* _ent)
     return hdr->tio.object->tio.BLOCK_HEADER;
 }
 
-static void add_ent_reactor (Dwg_Object_Entity *obj, unsigned long absolute_ref)
+static void
+add_ent_reactor (Dwg_Object_Entity *obj, unsigned long absolute_ref)
 {
   if (obj->num_reactors)
     {
       obj->num_reactors++;
-      obj->reactors = realloc (obj->reactors, obj->num_reactors * sizeof (BITCODE_H));
+      obj->reactors
+          = realloc (obj->reactors, obj->num_reactors * sizeof (BITCODE_H));
     }
   else
     {
       obj->num_reactors = 1;
       obj->reactors = calloc (1, sizeof (BITCODE_H));
     }
-  obj->reactors[obj->num_reactors - 1] = dwg_add_handleref (obj->dwg, 4, absolute_ref, NULL);
+  obj->reactors[obj->num_reactors - 1]
+      = dwg_add_handleref (obj->dwg, 4, absolute_ref, NULL);
 }
 
-static void add_obj_reactor (Dwg_Object_Object *obj, unsigned long absolute_ref)
+static void
+add_obj_reactor (Dwg_Object_Object *obj, unsigned long absolute_ref)
 {
   if (obj->num_reactors)
     {
       obj->num_reactors++;
-      obj->reactors = realloc (obj->reactors, obj->num_reactors * sizeof (BITCODE_H));
+      obj->reactors
+          = realloc (obj->reactors, obj->num_reactors * sizeof (BITCODE_H));
     }
   else
     {
       obj->num_reactors = 1;
       obj->reactors = calloc (1, sizeof (BITCODE_H));
     }
-  obj->reactors[obj->num_reactors - 1] = dwg_add_handleref (obj->dwg, 4, absolute_ref, NULL);
+  obj->reactors[obj->num_reactors - 1]
+      = dwg_add_handleref (obj->dwg, 4, absolute_ref, NULL);
 }
 
 // check if radian or degree, need to normalize.
 // max observed angle: 10.307697 in some ELLIPSE.end_angle
-#define ADD_CHECK_ANGLE(angle)              \
-  if (isnan (angle))                        \
-    {                                       \
-      LOG_ERROR ("Invalid %s: NaN", #angle) \
-      return NULL;                          \
-    }                                       \
-  if (fabs (angle) > 12.0)                  \
-    {                                       \
-      LOG_ERROR ("Invalid %s: %f needs to " \
-                 "be radian (%f)", #angle,  \
-                 angle, deg2rad (angle))    \
-      return NULL;                          \
-    }                                       \
-  if (fabs (angle) > M_PI)                  \
-    {                                       \
-      const double old = angle;             \
-      while (angle > M_PI)                  \
-        angle -= (M_PI * 2.0);              \
-      while (angle < -M_PI)                 \
-        angle += (M_PI * 2.0);              \
-      LOG_WARN ("Bad angle %s: %f normalized "\
-                "to %f", #angle, old, angle) \
-    }
+#  define ADD_CHECK_ANGLE(angle)                                              \
+    if (isnan (angle))                                                        \
+      {                                                                       \
+        LOG_ERROR ("Invalid %s: NaN", #angle)                                 \
+        return NULL;                                                          \
+      }                                                                       \
+    if (fabs (angle) > 12.0)                                                  \
+      {                                                                       \
+        LOG_ERROR ("Invalid %s: %f needs to "                                 \
+                   "be radian (%f)",                                          \
+                   #angle, angle, deg2rad (angle))                            \
+        return NULL;                                                          \
+      }                                                                       \
+    if (fabs (angle) > M_PI)                                                  \
+      {                                                                       \
+        const double old = angle;                                             \
+        while (angle > M_PI)                                                  \
+          angle -= (M_PI * 2.0);                                              \
+        while (angle < -M_PI)                                                 \
+          angle += (M_PI * 2.0);                                              \
+        LOG_WARN ("Bad angle %s: %f normalized "                              \
+                  "to %f",                                                    \
+                  #angle, old, angle)                                         \
+      }
 
-#define ADD_CHECK_3DPOINT(pt)                \
-  if (isnan (pt->x) || isnan (pt->y) || isnan (pt->z)) \
-    {                                       \
-      LOG_ERROR ("Invalid %s: NaN", #pt)    \
-      return NULL;                          \
-    }
-#define ADD_CHECK_2DPOINT(pt)               \
-  if (isnan (pt->x) || isnan (pt->y))       \
-    {                                       \
-      LOG_ERROR ("Invalid %s: NaN", #pt)    \
-      return NULL;                          \
-    }
-#define ADD_CHECK_DOUBLE(dbl)               \
- if (isnan (dbl))                           \
-    {                                       \
-      LOG_ERROR ("Invalid %s: NaN", #dbl)   \
-      return NULL;                          \
-    }                                       \
+#  define ADD_CHECK_3DPOINT(pt)                                               \
+    if (isnan (pt->x) || isnan (pt->y) || isnan (pt->z))                      \
+      {                                                                       \
+        LOG_ERROR ("Invalid %s: NaN", #pt)                                    \
+        return NULL;                                                          \
+      }
+#  define ADD_CHECK_2DPOINT(pt)                                               \
+    if (isnan (pt->x) || isnan (pt->y))                                       \
+      {                                                                       \
+        LOG_ERROR ("Invalid %s: NaN", #pt)                                    \
+        return NULL;                                                          \
+      }
+#  define ADD_CHECK_DOUBLE(dbl)                                               \
+    if (isnan (dbl))                                                          \
+      {                                                                       \
+        LOG_ERROR ("Invalid %s: NaN", #dbl)                                   \
+        return NULL;                                                          \
+      }
 
 /* Convert UTF-8 strings to BITCODE_T fields */
 EXPORT BITCODE_T
@@ -22191,7 +21986,7 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
   else
     {
       // TODO Encode unicode to \U+... bit_utf8_to_TV
-#if 0
+#  if 0
       int size = 1024;
       char *dest = malloc (size);
       char *tgt = bit_utf8_to_TV (dest, u8str, size, strlen(u8str), 0);
@@ -22212,7 +22007,7 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
           tgt = bit_utf8_to_TV (dest, u8str, size, strlen(u8str), 0);
         }
       return tgt;
-#endif
+#  endif
       if (dwg->header.version <= R_11 && strlen (u8str) < 32)
         {
           // those old names are usually 32byte, and bit_write_TF
@@ -22263,7 +22058,8 @@ default_numheader_vars (Dwg_Data *dwg, const Dwg_Version_Type version)
 /* The Document API should be similar to the public VBA interface */
 
 /* The internal driver, which takes an existing dwg */
-EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
+EXPORT int
+dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
 {
   int error;
   Dwg_Object_BLOCK_CONTROL *block_control;
@@ -22298,16 +22094,16 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     {
       version = dwg->header.version = dwg->header.from_version;
     }
-  //dwg->header.is_maint = 0xf;
-  //dwg->header.zero_one_or_three = 1;
-  //dwg->header.dwg_version = 0x17; // prefer encode if dwg_version is 0
+  // dwg->header.is_maint = 0xf;
+  // dwg->header.zero_one_or_three = 1;
+  // dwg->header.dwg_version = 0x17; // prefer encode if dwg_version is 0
   dwg_ver_struct = (struct dwg_versions *)dwg_version_struct (version);
   dwg->header.dwg_version = dwg_ver_struct->dwg_version;
-  //dwg->header.maint_version = 29;
+  // dwg->header.maint_version = 29;
   dwg->header.codepage = 30; // FIXME: local codepage if <r2007
   // with decode_r11 we already proper numheader_vars
-  if (!dwg->header.numheader_vars ||
-      dwg->header.version != dwg->header.from_version)
+  if (!dwg->header.numheader_vars
+      || dwg->header.version != dwg->header.from_version)
     default_numheader_vars (dwg, version);
   error = dwg_init_sections (dwg);
   if (error) // DWG_ERR_OUTOFMEM or DWG_ERR_INVALIDDWG
@@ -22330,7 +22126,7 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header_vars.PSLTSCALE = 1;
   dwg->header_vars.BLIPMODE = 1;
   dwg->header_vars.USRTIMER = 1;
-  //dwg->header_vars.SKPOLY = 0;
+  // dwg->header_vars.SKPOLY = 0;
   dwg->header_vars.TILEMODE = 1;
   dwg->header_vars.VISRETAIN = 1;
   dwg->header_vars.ATTREQ = 1;
@@ -22371,7 +22167,7 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
 
   dwg->header_vars.FLAGS = 0x2a1d; // or 0x281d
   dwg->header_vars.CELWEIGHT = -1; // => FLAGS & 0x1f + lweight lookup
-  now = time(NULL);
+  now = time (NULL);
   dwg->header_vars.TDCREATE = (BITCODE_TIMEBLL){ now / 3600, now / 86400 };
   // CECOLOR.index: 256 [CMC.BS 62]
   dwg->header_vars.CECOLOR = (BITCODE_CMC){ 256, 0 }; // ByLayer
@@ -22380,11 +22176,11 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       // HANDSEED: 0.1.49 [H 0] // FIXME needs to be updated on encode
       dwg->header_vars.HANDSEED = dwg_add_handleref (dwg, 0, 0x25, NULL);
       dwg->header_vars.PEXTMIN
-        = (BITCODE_3BD){ 100000000000000000000.0, 100000000000000000000.0,
-                         100000000000000000000.0 };
+          = (BITCODE_3BD){ 100000000000000000000.0, 100000000000000000000.0,
+                           100000000000000000000.0 };
       dwg->header_vars.PEXTMAX
-        = (BITCODE_3BD){ -100000000000000000000.0, -100000000000000000000.0,
-                         -100000000000000000000.0 };
+          = (BITCODE_3BD){ -100000000000000000000.0, -100000000000000000000.0,
+                           -100000000000000000000.0 };
       // dwg->header_vars.PUCSORG = { 0.0, 0.0, 0.0 };
       dwg->header_vars.PUCSXDIR = (BITCODE_3BD){ 1.0, 0.0, 0.0 };
       dwg->header_vars.PUCSYDIR = (BITCODE_3BD){ 0.0, 1.0, 0.0 };
@@ -22393,21 +22189,14 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   else
     {
       dwg->header_vars.oldCECOLOR_lo = 15;
-      dwg->header_vars.VPOINTX
-        = (BITCODE_3RD){ 1.0, 0.0, 0.0 };
-      dwg->header_vars.VPOINTY
-        = (BITCODE_3RD){ 0.0, 1.0, 0.0 };
-      dwg->header_vars.VPOINTZ
-        = (BITCODE_3RD){ 0.0, 0.0, 1.0 };
-      dwg->header_vars.VPOINTXALT
-        = (BITCODE_3RD){ 1.0, 0.0, 0.0 };
-      dwg->header_vars.VPOINTYALT
-        = (BITCODE_3RD){ 0.0, 1.0, 0.0 };
-      dwg->header_vars.VPOINTZALT
-        = (BITCODE_3RD){ 0.0, 0.0, 1.0 };
+      dwg->header_vars.VPOINTX = (BITCODE_3RD){ 1.0, 0.0, 0.0 };
+      dwg->header_vars.VPOINTY = (BITCODE_3RD){ 0.0, 1.0, 0.0 };
+      dwg->header_vars.VPOINTZ = (BITCODE_3RD){ 0.0, 0.0, 1.0 };
+      dwg->header_vars.VPOINTXALT = (BITCODE_3RD){ 1.0, 0.0, 0.0 };
+      dwg->header_vars.VPOINTYALT = (BITCODE_3RD){ 0.0, 1.0, 0.0 };
+      dwg->header_vars.VPOINTZALT = (BITCODE_3RD){ 0.0, 0.0, 1.0 };
     }
-  dwg->header_vars.VIEWDIR
-        = (BITCODE_3BD){ 0.0, 0.0, 1.0 };
+  dwg->header_vars.VIEWDIR = (BITCODE_3BD){ 0.0, 0.0, 1.0 };
   dwg->header_vars.EXTMIN
       = (BITCODE_3BD){ 100000000000000000000.0, 100000000000000000000.0,
                        100000000000000000000.0 };
@@ -22449,11 +22238,11 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header_vars.DIMLFAC = 1.0;
   dwg->header_vars.DIMTFAC = 1.0;
   dwg->header_vars.DIMGAP = 0.09;
-  //dwg->header_vars.DIMPOST = dwg_add_u8_input (dwg, "");
-  //dwg->header_vars.DIMAPOST = dwg_add_u8_input (dwg, "");
-  //dwg->header_vars.DIMBLK_T = dwg_add_u8_input (dwg, "");
-  //dwg->header_vars.DIMBLK1_T = dwg_add_u8_input (dwg, "");
-  //dwg->header_vars.DIMBLK2_T = dwg_add_u8_input (dwg, "");
+  // dwg->header_vars.DIMPOST = dwg_add_u8_input (dwg, "");
+  // dwg->header_vars.DIMAPOST = dwg_add_u8_input (dwg, "");
+  // dwg->header_vars.DIMBLK_T = dwg_add_u8_input (dwg, "");
+  // dwg->header_vars.DIMBLK1_T = dwg_add_u8_input (dwg, "");
+  // dwg->header_vars.DIMBLK2_T = dwg_add_u8_input (dwg, "");
   if (version > R_2_21 && version < R_13b1)
     dwg->header_vars.circle_zoom_percent = 100;
 
@@ -22466,9 +22255,10 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
                                   : "ISO_A1_(841.00_x_594.00_MM)";
 
   // BLOCK_CONTROL_OBJECT: (3.1.1) abs:1 [H 0]
-  block_control = dwg_add_BLOCK_CONTROL (dwg,
-      0x1F, // model space
-      version >= R_13b1 ? 0x20 : 0); // paper space
+  block_control
+      = dwg_add_BLOCK_CONTROL (dwg,
+                               0x1F,                          // model space
+                               version >= R_13b1 ? 0x20 : 0); // paper space
   // LAYER_CONTROL_OBJECT: (3.1.2) abs:2 [H 0]
   dwg_add_LAYER (dwg, NULL);
   // STYLE_CONTROL_OBJECT: (3.1.3) abs:3 [H 0]
@@ -22479,16 +22269,16 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg_add_LTYPE (dwg, NULL);
   // VIEW_CONTROL_OBJECT: (3.1.6) abs:6 [H 0]
   dwg_add_VIEW (dwg, NULL);
-  //dwg->view_control = *dwg->object[4].tio.object->tio.VIEW_CONTROL;
+  // dwg->view_control = *dwg->object[4].tio.object->tio.VIEW_CONTROL;
   if (version >= R_10)
     {
       // UCS_CONTROL_OBJECT: (3.1.7) abs:7 [H 0]
       dwg_add_UCS (dwg, &pt0, NULL, NULL, NULL);
-      //dwg->ucs_control = *dwg->object[5].tio.object->tio.UCS_CONTROL;
-      // VPORT_CONTROL_OBJECT: (3.1.8) abs:8 [H 0]
+      // dwg->ucs_control = *dwg->object[5].tio.object->tio.UCS_CONTROL;
+      //  VPORT_CONTROL_OBJECT: (3.1.8) abs:8 [H 0]
       dwg_add_VPORT (dwg, NULL);
-      //dwg->vport_control = *dwg->object[6].tio.object->tio.VPORT_CONTROL;
-      // APPID_CONTROL_OBJECT: (3.1.9) abs:9 [H 0]
+      // dwg->vport_control = *dwg->object[6].tio.object->tio.VPORT_CONTROL;
+      //  APPID_CONTROL_OBJECT: (3.1.9) abs:9 [H 0]
       dwg_add_APPID (dwg, NULL);
     }
   if (version >= R_11)
@@ -22502,12 +22292,14 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   if (version > R_11)
     {
       // DICTIONARY_NAMED_OBJECT: (3.1.C) abs:C [H 0]
-      nod = dwg_add_DICTIONARY (dwg, NULL, (const BITCODE_T) "NAMED_OBJECT", 0UL);
+      nod = dwg_add_DICTIONARY (dwg, NULL, (const BITCODE_T) "NAMED_OBJECT",
+                                0UL);
       dwg->header_vars.DICTIONARY_NAMED_OBJECT
-        = dwg_add_handleref (dwg, 3, 0xC, NULL);
+          = dwg_add_handleref (dwg, 3, 0xC, NULL);
       // DICTIONARY_ACAD_GROUP: (5.1.D) abs:D [H 0]
       dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_GROUP", NULL, 0UL);
-      dwg->header_vars.DICTIONARY_ACAD_GROUP = dwg_add_handleref (dwg, 5, 0xD, NULL);
+      dwg->header_vars.DICTIONARY_ACAD_GROUP
+          = dwg_add_handleref (dwg, 5, 0xD, NULL);
       dwg_add_DICTIONARY_item (nod, (const BITCODE_T) "ACAD_GROUP", 0xD);
     }
   if (version >= R_2000)
@@ -22537,20 +22329,20 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       layer->plotstyle = dwg_add_handleref (dwg, 5, 0xF, NULL);
       // CLAYER: (5.1.F) abs:F [H 8]
       dwg->header_vars.CLAYER = dwg_add_handleref (dwg, 5, 0x10, NULL);
-      //ctrl = dwg_get_first_object (dwg, DWG_TYPE_LAYER_CONTROL);
-      //if (ctrl)
-      //  dwg->layer_control = ctrl->tio.object->tio.LAYER_CONTROL;
-      //  STYLE: (0.1.11)
+      // ctrl = dwg_get_first_object (dwg, DWG_TYPE_LAYER_CONTROL);
+      // if (ctrl)
+      //   dwg->layer_control = ctrl->tio.object->tio.LAYER_CONTROL;
+      //   STYLE: (0.1.11)
       style = dwg_add_STYLE (dwg, "Standard");
       style->font_file = dwg_add_u8_input (dwg, "txt");
       style->last_height = 0.2;
       // TEXTSTYLE: (5.1.11) [H 7]
       dwg->header_vars.TEXTSTYLE = dwg_add_handleref (dwg, 5, 0x11, NULL);
       dwg->header_vars.DIMTXSTY = dwg_add_handleref (dwg, 5, 0x11, NULL);
-      //ctrl = dwg_get_first_object (dwg, DWG_TYPE_STYLE_CONTROL);
-      //if (ctrl)
-      //  dwg->style_control = ctrl->tio.object->tio.STYLE_CONTROL;
-      //  APPID "ACAD": (0.1.12)
+      // ctrl = dwg_get_first_object (dwg, DWG_TYPE_STYLE_CONTROL);
+      // if (ctrl)
+      //   dwg->style_control = ctrl->tio.object->tio.STYLE_CONTROL;
+      //   APPID "ACAD": (0.1.12)
       dwg_add_APPID (dwg, "ACAD");
       //  hole at 13. already in r13
       dwg_set_next_hdl (dwg, 0x14);
@@ -22580,17 +22372,17 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       // DICTIONARY ACAD_MLINESTYLE: (5.1.17) abs:E [H 0]
       dwg_add_DICTIONARY (dwg, "ACAD_MLINESTYLE", "Standard", 0x18);
       dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE
-        = dwg_add_handleref (dwg, 5, 0x17, NULL);
+          = dwg_add_handleref (dwg, 5, 0x17, NULL);
       // MLINESTYLE: (0.1.18)
       mlstyle = dwg_add_MLINESTYLE (dwg, "Standard");
       obj = dwg_obj_generic_to_object (mlstyle, &error);
       dwg->header_vars.CMLSTYLE
-        = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
+          = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
 
       // DICTIONARY ACAD_PLOTSETTINGS: (5.1.19)
       dwg_add_DICTIONARY (dwg, "ACAD_PLOTSETTINGS", NULL, 0);
       dwg->header_vars.DICTIONARY_PLOTSETTINGS
-        = dwg_add_handleref (dwg, 5, 0x19, NULL);
+          = dwg_add_handleref (dwg, 5, 0x19, NULL);
     }
   if (version >= R_2000)
     {
@@ -22625,10 +22417,10 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
           block_control->entries = NULL;
         }
       dwg->header_vars.BLOCK_RECORD_PSPACE
-        = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
+          = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
       dwg->header_vars.BLOCK_RECORD_PSPACE->obj = obj;
       block_control->paper_space
-        = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
+          = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
       dwg->block_control = *block_control;
       // BLOCK: (5.1.21)
       dwg_add_BLOCK (pspace, "*PAPER_SPACE");
@@ -22636,8 +22428,8 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       dwg_add_ENDBLK (pspace);
     }
   // LAYOUT (0.1.23)
-  //layout = dwg_add_LAYOUT (layoutdict);
-  //pspace->layout = dwg_add_handleref (dwg, 5, 0x23, NULL);
+  // layout = dwg_add_LAYOUT (layoutdict);
+  // pspace->layout = dwg_add_handleref (dwg, 5, 0x23, NULL);
 
   {
     // BLOCK: (5.1.24)
@@ -22659,26 +22451,26 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   }
   if (dwg->header.version >= R_2000)
     {
-#ifdef NEED_VPORT_FOR_MODEL_LAYOUT
+#  ifdef NEED_VPORT_FOR_MODEL_LAYOUT
       // VPORT (0.1.26)
       vport_active = dwg_add_VPORT (dwg, "*Active");
       // LAYOUT (0.1.27)
       obj = dwg_obj_generic_to_object (vport_active, &error);
       layout = dwg_add_LAYOUT (obj, "Model", canonical_media_name);
-#else
+#  else
       layout = dwg_add_LAYOUT (mspaceobj, "Model", canonical_media_name);
-#endif
+#  endif
       obj = dwg_obj_generic_to_object (layout, &error);
       mspace->layout = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
 
-#ifdef NEED_VPORT_FOR_MODEL_LAYOUT
+#  ifdef NEED_VPORT_FOR_MODEL_LAYOUT
       // VIEWPORT (0.1.28)
       pviewport = dwg_add_VIEWPORT (pspace, "");
       // LAYOUT (0.1.29)
       obj = dwg_obj_generic_to_object (pviewport, &error);
-#else
+#  else
       obj = dwg_obj_generic_to_object (pspace, &error);
-#endif
+#  endif
       layout = dwg_add_LAYOUT (obj, "Layout1", canonical_media_name);
       obj = dwg_obj_generic_to_object (layout, &error);
       pspace->layout = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
@@ -22692,7 +22484,7 @@ EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       if ((obj = dwg_resolve_handle (dwg, ref->absolute_ref)))
         ref->obj = obj;
     }
-  //dwg->dirty_refs = 0;
+  // dwg->dirty_refs = 0;
   return 0;
 }
 
@@ -22723,8 +22515,8 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
   if (i == 0)
     dwg->dwg_class = (Dwg_Class *)malloc (sizeof (Dwg_Class));
   else
-    dwg->dwg_class = (Dwg_Class *)realloc (dwg->dwg_class,
-                                           (i + 1) * sizeof (Dwg_Class));
+    dwg->dwg_class
+        = (Dwg_Class *)realloc (dwg->dwg_class, (i + 1) * sizeof (Dwg_Class));
   if (!dwg->dwg_class)
     {
       LOG_ERROR ("Out of memory");
@@ -22738,119 +22530,118 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
     klass->dxfname_u = bit_utf8_to_TU ((char *restrict)dxfname, 0);
   klass->appname = dwg_add_u8_input (dwg, appname);
   klass->cppname = dwg_add_u8_input (dwg, cppname);
-  klass->item_class_id = is_entity ? 0x1f2: 0x1f3;
+  klass->item_class_id = is_entity ? 0x1f2 : 0x1f3;
   dwg->num_classes++;
   return klass->number;
 }
 
 /* Now implemented in dxfclasses.c as gperf lookup */
-#define REQUIRE_CLASS(name) dwg_require_class (dwg, name, sizeof(name)-1)
+#  define REQUIRE_CLASS(name) dwg_require_class (dwg, name, sizeof (name) - 1)
 
-#define NEW_ENTITY(dwg, obj)                                                  \
-  {                                                                           \
-    BITCODE_BL idx = dwg->num_objects;                                        \
-    if (dwg_add_object (dwg) < 0)                                             \
-      {                                                                       \
-        dwg_resolve_objectrefs_silent (dwg);                                  \
-        blkobj = dwg_obj_generic_to_object (blkhdr, &error);                  \
-      }                                                                       \
-    obj = &dwg->object[idx];                                                  \
-    dwg->cur_index++;                                                         \
-    obj->supertype = DWG_SUPERTYPE_ENTITY;                                    \
-    obj->tio.entity                                                           \
-        = (Dwg_Object_Entity *)calloc (1, sizeof (Dwg_Object_Entity));        \
-    obj->tio.entity->objid = obj->index;                                      \
-    obj->tio.entity->dwg = dwg;                                               \
-  }
+#  define NEW_ENTITY(dwg, obj)                                                \
+    {                                                                         \
+      BITCODE_BL idx = dwg->num_objects;                                      \
+      if (dwg_add_object (dwg) < 0)                                           \
+        {                                                                     \
+          dwg_resolve_objectrefs_silent (dwg);                                \
+          blkobj = dwg_obj_generic_to_object (blkhdr, &error);                \
+        }                                                                     \
+      obj = &dwg->object[idx];                                                \
+      dwg->cur_index++;                                                       \
+      obj->supertype = DWG_SUPERTYPE_ENTITY;                                  \
+      obj->tio.entity                                                         \
+          = (Dwg_Object_Entity *)calloc (1, sizeof (Dwg_Object_Entity));      \
+      obj->tio.entity->objid = obj->index;                                    \
+      obj->tio.entity->dwg = dwg;                                             \
+    }
 
 /* globals: dwg, obj, _obj, dxfname */
-#define ADD_ENTITY(token)                                                     \
-  obj->fixedtype = DWG_TYPE_##token;                                          \
-  if (dwg->header.version > R_11)                                             \
-    obj->type = DWG_TYPE_##token;                                             \
-  obj->dxfname = (char*)dwg_type_dxfname (DWG_TYPE_##token);                  \
-  if (memBEGINc (#token, "_3D"))                                              \
-    obj->name = (char *)&#token[1];                                           \
-  else                                                                        \
-    obj->name = (char *)#token;                                               \
-  if (!obj->dxfname)                                                          \
-    {                                                                         \
-      LOG_TRACE ("Unknown dxfname for %s\n", obj->name)                       \
-      obj->dxfname = obj->name;                                               \
-    }                                                                         \
-  if (dwg->opts & DWG_OPTS_IN)                                                \
-    obj->dxfname = strdup (obj->dxfname);                                     \
-  if (dwg->opts & DWG_OPTS_INJSON)                                            \
-    obj->name = strdup (obj->name);                                           \
-  if (obj->type >= DWG_TYPE_GROUP)                                            \
-    (void)dwg_encode_get_class (obj->parent, obj);                            \
-  LOG_TRACE ("  ADD_ENTITY %s [%d]\n", obj->name, obj->index)                 \
-  _obj = calloc (1, sizeof (Dwg_Entity_##token));                             \
-  obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;                    \
-  obj->tio.entity->tio.token->parent = obj->tio.entity;                       \
-  obj->tio.entity->objid = obj->index;                                        \
-  dwg_add_entity_defaults (dwg, obj->tio.entity);                             \
-  if (strEQc (#token, "SEQEND") || memBEGINc (#token, "VERTEX"))              \
+#  define ADD_ENTITY(token)                                                   \
+    obj->fixedtype = DWG_TYPE_##token;                                        \
+    if (dwg->header.version > R_11)                                           \
+      obj->type = DWG_TYPE_##token;                                           \
+    obj->dxfname = (char *)dwg_type_dxfname (DWG_TYPE_##token);               \
+    if (memBEGINc (#token, "_3D"))                                            \
+      obj->name = (char *)&#token[1];                                         \
+    else                                                                      \
+      obj->name = (char *)#token;                                             \
+    if (!obj->dxfname)                                                        \
+      {                                                                       \
+        LOG_TRACE ("Unknown dxfname for %s\n", obj->name)                     \
+        obj->dxfname = obj->name;                                             \
+      }                                                                       \
+    if (dwg->opts & DWG_OPTS_IN)                                              \
+      obj->dxfname = strdup (obj->dxfname);                                   \
+    if (dwg->opts & DWG_OPTS_INJSON)                                          \
+      obj->name = strdup (obj->name);                                         \
+    if (obj->type >= DWG_TYPE_GROUP)                                          \
+      (void)dwg_encode_get_class (obj->parent, obj);                          \
+    LOG_TRACE ("  ADD_ENTITY %s [%d]\n", obj->name, obj->index)               \
+    _obj = calloc (1, sizeof (Dwg_Entity_##token));                           \
+    obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;                  \
+    obj->tio.entity->tio.token->parent = obj->tio.entity;                     \
+    obj->tio.entity->objid = obj->index;                                      \
+    dwg_add_entity_defaults (dwg, obj->tio.entity);                           \
+    if (strEQc (#token, "SEQEND") || memBEGINc (#token, "VERTEX"))            \
     obj->tio.entity->linewt = 0x1c
 
 /* globals: dxfname, blkhdr=owner */
-#define API_ADD_ENTITY(token)                                                 \
-  int error;                                                                  \
-  Dwg_Object *obj;                                                            \
-  Dwg_Entity_##token *_obj;                                                   \
-  Dwg_Object *blkobj = dwg_obj_generic_to_object (blkhdr, &error);            \
-  Dwg_Data *dwg = blkobj && !error ? blkobj->parent : NULL;                   \
-  if (!dwg || !blkobj ||                                                      \
-      !(blkobj->fixedtype == DWG_TYPE_BLOCK_HEADER ||                         \
-        dwg_obj_has_subentity (blkobj)))                                      \
-    {                                                                         \
-      LOG_ERROR ("Entity %s can not be added to %s",                          \
-                 #token, blkobj ? dwg_type_name (blkobj->fixedtype) : "NULL");\
-      return NULL;                                                            \
-    }                                                                         \
-  NEW_ENTITY (dwg, obj);                                                      \
-  ADD_ENTITY (token);                                                         \
-  obj->tio.entity->ownerhandle = dwg_add_handleref (dwg,                      \
-                                   5, blkobj->handle.value, obj);             \
-  dwg_set_next_objhandle (obj);                                               \
-  LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H (obj->handle));                \
-  in_postprocess_handles (obj);                                               \
-  if (dwg->header.version < R_10)                                             \
-       dwg->header_vars.numentities++;                                        \
-  dwg_insert_entity ((Dwg_Object_BLOCK_HEADER *)blkhdr, obj)
+#  define API_ADD_ENTITY(token)                                               \
+    int error;                                                                \
+    Dwg_Object *obj;                                                          \
+    Dwg_Entity_##token *_obj;                                                 \
+    Dwg_Object *blkobj = dwg_obj_generic_to_object (blkhdr, &error);          \
+    Dwg_Data *dwg = blkobj && !error ? blkobj->parent : NULL;                 \
+    if (!dwg || !blkobj                                                       \
+        || !(blkobj->fixedtype == DWG_TYPE_BLOCK_HEADER                       \
+             || dwg_obj_has_subentity (blkobj)))                              \
+      {                                                                       \
+        LOG_ERROR ("Entity %s can not be added to %s", #token,                \
+                   blkobj ? dwg_type_name (blkobj->fixedtype) : "NULL");      \
+        return NULL;                                                          \
+      }                                                                       \
+    NEW_ENTITY (dwg, obj);                                                    \
+    ADD_ENTITY (token);                                                       \
+    obj->tio.entity->ownerhandle                                              \
+        = dwg_add_handleref (dwg, 5, blkobj->handle.value, obj);              \
+    dwg_set_next_objhandle (obj);                                             \
+    LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H (obj->handle));              \
+    in_postprocess_handles (obj);                                             \
+    if (dwg->header.version < R_10)                                           \
+      dwg->header_vars.numentities++;                                         \
+    dwg_insert_entity ((Dwg_Object_BLOCK_HEADER *)blkhdr, obj)
 
-#define ADD_OBJECT(token)                                                     \
-  obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
-  obj->name = (char *)#token;                                                 \
-  obj->dxfname = (char*)dwg_type_dxfname (DWG_TYPE_##token);                  \
-  if (!obj->dxfname)                                                          \
-    {                                                                         \
-      LOG_TRACE ("Unknown dxfname for %s\n", obj->name)                       \
-      obj->dxfname = obj->name;                                               \
-    }                                                                         \
-  if (dwg->opts & DWG_OPTS_IN)                                                \
-    obj->dxfname = strdup (obj->dxfname);                                     \
-  if (dwg->opts & DWG_OPTS_INJSON)                                            \
-    obj->name = strdup (obj->name);                                           \
-  if (obj->type >= DWG_TYPE_GROUP)                                            \
-    (void)dwg_encode_get_class (obj->parent, obj);                            \
-  LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index)                 \
-  _obj = calloc (1, sizeof (Dwg_Object_##token));                             \
-  obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;                    \
-  obj->tio.object->tio.token->parent = obj->tio.object;                       \
-  obj->tio.object->objid = obj->index
-
+#  define ADD_OBJECT(token)                                                   \
+    obj->type = obj->fixedtype = DWG_TYPE_##token;                            \
+    obj->name = (char *)#token;                                               \
+    obj->dxfname = (char *)dwg_type_dxfname (DWG_TYPE_##token);               \
+    if (!obj->dxfname)                                                        \
+      {                                                                       \
+        LOG_TRACE ("Unknown dxfname for %s\n", obj->name)                     \
+        obj->dxfname = obj->name;                                             \
+      }                                                                       \
+    if (dwg->opts & DWG_OPTS_IN)                                              \
+      obj->dxfname = strdup (obj->dxfname);                                   \
+    if (dwg->opts & DWG_OPTS_INJSON)                                          \
+      obj->name = strdup (obj->name);                                         \
+    if (obj->type >= DWG_TYPE_GROUP)                                          \
+      (void)dwg_encode_get_class (obj->parent, obj);                          \
+    LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index)               \
+    _obj = calloc (1, sizeof (Dwg_Object_##token));                           \
+    obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;                  \
+    obj->tio.object->tio.token->parent = obj->tio.object;                     \
+    obj->tio.object->objid = obj->index
 
 /* globals: dwg */
-#define API_ADD_OBJECT(token)                                  \
-  int error;                                                   \
-  Dwg_Object *obj;                                             \
-  Dwg_Object_##token *_obj;                                    \
-  NEW_OBJECT (dwg, obj);                                       \
-  ADD_OBJECT (token);                                          \
-  dwg_set_next_objhandle (obj);                                \
-  LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H(obj->handle));  \
-  in_postprocess_handles (obj)
+#  define API_ADD_OBJECT(token)                                               \
+    int error;                                                                \
+    Dwg_Object *obj;                                                          \
+    Dwg_Object_##token *_obj;                                                 \
+    NEW_OBJECT (dwg, obj);                                                    \
+    ADD_OBJECT (token);                                                       \
+    dwg_set_next_objhandle (obj);                                             \
+    LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H (obj->handle));              \
+    in_postprocess_handles (obj)
 
 EXPORT int
 dwg_add_entity_defaults (Dwg_Data *restrict dwg,
@@ -22858,7 +22649,7 @@ dwg_add_entity_defaults (Dwg_Data *restrict dwg,
 {
   int error;
   Dwg_Object *obj = dwg_ent_to_object (ent, &error);
-  //const Dwg_Version_Type version = dwg->header.version;
+  // const Dwg_Version_Type version = dwg->header.version;
   ent->is_xdic_missing = 1;
   ent->color.index = 256; /* ByLayer */
   // ltype either Bylayer or Continuous. if it has an ltype field, assume Cont
@@ -22867,7 +22658,8 @@ dwg_add_entity_defaults (Dwg_Data *restrict dwg,
   ent->ltype_scale = 1.0;
   // ltype_flags = 0; ByLayer
   // plotstyle_flags  = 0; ByLayer
-  if (!error & (strEQc (obj->name, "SEQEND") || memBEGINc (obj->name, "VERTEX")))
+  if (!error
+      & (strEQc (obj->name, "SEQEND") || memBEGINc (obj->name, "VERTEX")))
     ent->linewt = 0x1c;
   else
     ent->linewt = 0x1d;
@@ -22876,24 +22668,25 @@ dwg_add_entity_defaults (Dwg_Data *restrict dwg,
         dwg, 5, dwg->header_vars.CLAYER->absolute_ref, NULL);
   // we cannot yet write >r2000, so no material, visualstyle, yet ...
 
-  if (dwg->header_vars.THICKNESS != 0.0
-      && !error && dwg_dynapi_entity_field (obj->name, "thickness"))
+  if (dwg->header_vars.THICKNESS != 0.0 && !error
+      && dwg_dynapi_entity_field (obj->name, "thickness"))
     {
       BITCODE_BD thickness = dwg->header_vars.THICKNESS;
       dwg_dynapi_entity_set_value (obj, obj->name, "thickness", &thickness, 0);
     }
   if (!error && dwg_dynapi_entity_field (obj->name, "extrusion"))
     {
-      BITCODE_BE extrusion = (BITCODE_BE){0.0, 0.0, 1.0};
-      dwg_dynapi_entity_set_value (ent->tio.POINT, obj->name, "extrusion", &extrusion, 0);
+      BITCODE_BE extrusion = (BITCODE_BE){ 0.0, 0.0, 1.0 };
+      dwg_dynapi_entity_set_value (ent->tio.POINT, obj->name, "extrusion",
+                                   &extrusion, 0);
     }
   return 0;
 }
 
 /* Insert new entity into the block.
-   We have two entity chains, one in the BLOCK_HEADER (not relative, obj always NULL)
-   and the 2nd in the entities itself, these are always relative, so different ref.
-   _owner may be BLOCK_HEADER or POLYLINE_*
+   We have two entity chains, one in the BLOCK_HEADER (not relative, obj always
+   NULL) and the 2nd in the entities itself, these are always relative, so
+   different ref. _owner may be BLOCK_HEADER or POLYLINE_*
  */
 EXPORT int
 dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
@@ -22903,39 +22696,40 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
   Dwg_Data *dwg = obj->parent;
   const Dwg_Version_Type version = dwg->header.version;
   Dwg_Object *owner = dwg_obj_generic_to_object (_owner, &error);
-  const Dwg_Object_Ref *mspace =  dwg_model_space_ref (dwg);
-  const Dwg_Object_Ref *pspace =  dwg_paper_space_ref (dwg);
+  const Dwg_Object_Ref *mspace = dwg_model_space_ref (dwg);
+  const Dwg_Object_Ref *pspace = dwg_paper_space_ref (dwg);
   Dwg_Object_Entity *ent = obj->tio.entity;
 
   assert (mspace);
   // set entmode and ownerhandle
-  if (owner->fixedtype == DWG_TYPE_BLOCK_HEADER &&
-      owner->handle.value == mspace->absolute_ref)
+  if (owner->fixedtype == DWG_TYPE_BLOCK_HEADER
+      && owner->handle.value == mspace->absolute_ref)
     ent->entmode = 2;
-  else
-  if (owner->fixedtype == DWG_TYPE_BLOCK_HEADER &&
-      pspace && owner->handle.value == pspace->absolute_ref)
+  else if (owner->fixedtype == DWG_TYPE_BLOCK_HEADER && pspace
+           && owner->handle.value == pspace->absolute_ref)
     ent->entmode = 1;
   else
-    obj->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, owner->handle.value, obj);
-  if (!obj->tio.entity->ownerhandle &&
-      (obj->fixedtype == DWG_TYPE_BLOCK ||
-       obj->fixedtype == DWG_TYPE_ENDBLK ||
-       obj->fixedtype == DWG_TYPE_SEQEND))
+    obj->tio.entity->ownerhandle
+        = dwg_add_handleref (dwg, 4, owner->handle.value, obj);
+  if (!obj->tio.entity->ownerhandle
+      && (obj->fixedtype == DWG_TYPE_BLOCK || obj->fixedtype == DWG_TYPE_ENDBLK
+          || obj->fixedtype == DWG_TYPE_SEQEND))
     // BLOCK,ENDBLK,SEQEND always have the ownerhandle set.
     ent->ownerhandle = dwg_add_handleref (dwg, 4, owner->handle.value, obj);
 
   // TODO 2004+
   if (1)
     {
-      if (owner->fixedtype == DWG_TYPE_BLOCK_HEADER && obj->fixedtype == DWG_TYPE_BLOCK)
+      if (owner->fixedtype == DWG_TYPE_BLOCK_HEADER
+          && obj->fixedtype == DWG_TYPE_BLOCK)
         {
           _owner->block_entity
               = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
           LOG_TRACE ("%s.block_entity = " FORMAT_REF "\n", owner->name,
                      ARGS_REF (_owner->block_entity));
         }
-      else if (owner->fixedtype == DWG_TYPE_BLOCK_HEADER && obj->fixedtype == DWG_TYPE_ENDBLK)
+      else if (owner->fixedtype == DWG_TYPE_BLOCK_HEADER
+               && obj->fixedtype == DWG_TYPE_ENDBLK)
         {
           _owner->endblk_entity
               = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
@@ -22945,23 +22739,22 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
       else if (obj->fixedtype == DWG_TYPE_SEQEND)
         {
           ent->prev_entity = ent->next_entity
-            = dwg_add_handleref (dwg, 4, 0, NULL);
+              = dwg_add_handleref (dwg, 4, 0, NULL);
         }
-      else if (owner->fixedtype == DWG_TYPE_BLOCK_HEADER &&
-               !_owner->first_entity &&
-               !_owner->num_owned &&
-               !dwg_obj_is_subentity (obj))
+      else if (owner->fixedtype == DWG_TYPE_BLOCK_HEADER
+               && !_owner->first_entity && !_owner->num_owned
+               && !dwg_obj_is_subentity (obj))
         {
           BITCODE_H ref;
           _owner->first_entity = _owner->last_entity
-            = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
+              = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
           LOG_TRACE ("%s.{first,last}_entity = " FORMAT_REF "\n", owner->name,
                      ARGS_REF (_owner->first_entity));
           ref = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
-          LOG_TRACE ("%s.entities[%d] = " FORMAT_REF "\n",
-                     owner->name, _owner->num_owned, ARGS_REF (ref));
+          LOG_TRACE ("%s.entities[%d] = " FORMAT_REF "\n", owner->name,
+                     _owner->num_owned, ARGS_REF (ref));
           PUSH_HV (_owner, num_owned, entities, ref)
-          //ent->nolinks = 1;
+          // ent->nolinks = 1;
           LOG_TRACE ("%s.num_owned = %u\n", owner->name, _owner->num_owned);
         }
       else
@@ -22977,14 +22770,16 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
             {
               BITCODE_H ref = _owner->last_entity;
               prev = ref ? dwg_ref_object (dwg, ref) : NULL; // may fail!
-              _owner->last_entity = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
-              LOG_TRACE ("%s.last_entity = " FORMAT_REF "\n",
-                         owner->name, ARGS_REF (_owner->last_entity));
+              _owner->last_entity
+                  = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
+              LOG_TRACE ("%s.last_entity = " FORMAT_REF "\n", owner->name,
+                         ARGS_REF (_owner->last_entity));
               ref = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
-              LOG_TRACE ("%s.entities[%d] = " FORMAT_REF "\n",
-                         owner->name, _owner->num_owned, ARGS_REF (ref));
+              LOG_TRACE ("%s.entities[%d] = " FORMAT_REF "\n", owner->name,
+                         _owner->num_owned, ARGS_REF (ref));
               PUSH_HV (_owner, num_owned, entities, ref)
-              LOG_TRACE ("%s.num_owned = %u\n", owner->name, _owner->num_owned);
+              LOG_TRACE ("%s.num_owned = %u\n", owner->name,
+                         _owner->num_owned);
             }
           // link prev. last to curr last
           if (prev && prev->supertype == DWG_SUPERTYPE_ENTITY)
@@ -22999,10 +22794,11 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
               else
                 {
                   prev->tio.entity->next_entity
-                    = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
+                      = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
                   LOG_TRACE ("prev.next_entity = " FORMAT_REF "\n",
                              ARGS_REF (prev->tio.entity->next_entity));
-                  ent->prev_entity = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
+                  ent->prev_entity
+                      = dwg_add_handleref (dwg, 4, prev->handle.value, obj);
                   LOG_TRACE ("%s.prev_entity = " FORMAT_REF "\n", obj->name,
                              ARGS_REF (ent->prev_entity));
                   prev->tio.entity->nolinks = 0;
@@ -23018,20 +22814,19 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
 
 /* -- For now only the entities needed for SolveSpace -- */
 
-EXPORT Dwg_Entity_TEXT*
+EXPORT Dwg_Entity_TEXT *
 dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const char *restrict text_value,
-              const dwg_point_3d *restrict ins_pt,
-              const double height)
+              const dwg_point_3d *restrict ins_pt, const double height)
 {
   API_ADD_ENTITY (TEXT);
   ADD_CHECK_3DPOINT (ins_pt);
   ADD_CHECK_DOUBLE (height);
   _obj->text_value = dwg_add_u8_input (dwg, text_value);
-  _obj->ins_pt.x   = ins_pt->x;
-  _obj->ins_pt.y   = ins_pt->y;
-  _obj->elevation  = ins_pt->z;
-  _obj->height     = height;
+  _obj->ins_pt.x = ins_pt->x;
+  _obj->ins_pt.y = ins_pt->y;
+  _obj->elevation = ins_pt->z;
+  _obj->height = height;
   if (dwg->header_vars.TEXTSTYLE)
     _obj->style = dwg_add_handleref (
         dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
@@ -23046,14 +22841,11 @@ dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
 /* This adds the ATTRIB and ENDBLK to the insert,
    and the ATTDEF and ENDBLK to the block. */
-EXPORT Dwg_Entity_ATTRIB*
-dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert,
-                   const double height,
-                   const int flags,
-                   const char *restrict prompt,
+EXPORT Dwg_Entity_ATTRIB *
+dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert, const double height,
+                   const int flags, const char *restrict prompt,
                    const dwg_point_3d *restrict ins_pt,
-                   const char *restrict tag,
-                   const char *restrict text_value)
+                   const char *restrict tag, const char *restrict text_value)
 {
   Dwg_Object *hdr, *attobj, *insobj;
   Dwg_Object_BLOCK_HEADER *restrict blkhdr;
@@ -23079,8 +22871,8 @@ dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert,
   blkhdr = hdr->tio.object->tio.BLOCK_HEADER;
 
   // TODO check if this ATTDEF already exists.
-  attdef = dwg_add_ATTDEF (blkhdr, height, flags, prompt,
-                           ins_pt, tag, text_value);
+  attdef = dwg_add_ATTDEF (blkhdr, height, flags, prompt, ins_pt, tag,
+                           text_value);
   if (!attdef)
     LOG_WARN ("No ATTDEF %s added", tag)
   // ENDBLK must exist already though
@@ -23091,13 +22883,14 @@ dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert,
       LOG_ERROR ("No ATTRIB %s added", tag);
       return NULL;
     }
-  //dwg->header_vars.AFLAGS = flags; FIXME
+  // dwg->header_vars.AFLAGS = flags; FIXME
   if (!insert->has_attribs) // no ATTRIB and SEQEND yet
     {
       API_ADD_ENTITY (SEQEND);
       insert->has_attribs = 1;
       insert->num_owned = 1;
-      insert->first_attrib = dwg_add_handleref (dwg, 4, attobj->handle.value, insobj);
+      insert->first_attrib
+          = dwg_add_handleref (dwg, 4, attobj->handle.value, insobj);
       insert->last_attrib = insert->first_attrib;
       insert->seqend = dwg_add_handleref (dwg, 3, obj->handle.value, insobj);
       insert->attribs = malloc (sizeof (BITCODE_H));
@@ -23108,12 +22901,16 @@ dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert,
     {
       Dwg_Data *dwg = insobj->parent;
       Dwg_Object *seqend;
-      Dwg_Object *lastobj = dwg_ref_object (dwg, insert->last_attrib); // prev attrib
-      insert->last_attrib = dwg_add_handleref (attobj->parent, 4, attobj->handle.value, insobj);
+      Dwg_Object *lastobj
+          = dwg_ref_object (dwg, insert->last_attrib); // prev attrib
+      insert->last_attrib = dwg_add_handleref (attobj->parent, 4,
+                                               attobj->handle.value, insobj);
       attobj->tio.entity->prev_entity = insert->last_attrib;
       insert->num_owned++;
-      insert->attribs = realloc (insert->attribs, insert->num_owned * sizeof (BITCODE_H));
-      lastobj->tio.entity->next_entity = dwg_add_handleref (dwg, 3, attobj->handle.value, insobj);
+      insert->attribs
+          = realloc (insert->attribs, insert->num_owned * sizeof (BITCODE_H));
+      lastobj->tio.entity->next_entity
+          = dwg_add_handleref (dwg, 3, attobj->handle.value, insobj);
       insert->attribs[insert->num_owned - 1] = insert->last_attrib
           = dwg_add_handleref (dwg, 4, attobj->handle.value, insobj);
       seqend = dwg_ref_object (dwg, insert->seqend);
@@ -23123,29 +22920,27 @@ dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert,
 }
 
 /* internally used only by dwg_add_Attribute only */
-Dwg_Entity_ATTRIB*
-dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert,
-                const double height,
-                const int flags,
-                const dwg_point_3d *restrict ins_pt,
-                const char *restrict tag,
-                const char *restrict text_value)
+Dwg_Entity_ATTRIB *
+dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert, const double height,
+                const int flags, const dwg_point_3d *restrict ins_pt,
+                const char *restrict tag, const char *restrict text_value)
 {
-  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)insert);
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr
+      = dwg_entity_owner ((dwg_ent_generic *)insert);
   API_ADD_ENTITY (ATTRIB);
   ADD_CHECK_3DPOINT (ins_pt);
   ADD_CHECK_DOUBLE (height);
-  _obj->tag        = dwg_add_u8_input (dwg, tag);
+  _obj->tag = dwg_add_u8_input (dwg, tag);
   _obj->text_value = dwg_add_u8_input (dwg, text_value);
-  _obj->ins_pt.x   = ins_pt->x;
-  _obj->ins_pt.y   = ins_pt->y;
-  _obj->elevation  = ins_pt->z;
-  _obj->height     = height;
+  _obj->ins_pt.x = ins_pt->x;
+  _obj->ins_pt.y = ins_pt->y;
+  _obj->elevation = ins_pt->z;
+  _obj->height = height;
   // block handles
   if (dwg->header_vars.TEXTSTYLE)
     _obj->style = dwg_add_handleref (
         dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
-  //blkhdr->hasattrs = 1;
+  // blkhdr->hasattrs = 1;
   if (dwg->header.version <= R_11)
     {
       obj->type = DWG_TYPE_ATTRIB_R11;
@@ -23156,25 +22951,22 @@ dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert,
 }
 
 /* internally used only by dwg_add_Attribute only */
-Dwg_Entity_ATTDEF*
-dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                const double height,
-                const int flags,
-                const char *restrict prompt,
-                const dwg_point_3d *restrict ins_pt,
-                const char *restrict tag,
+Dwg_Entity_ATTDEF *
+dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr, const double height,
+                const int flags, const char *restrict prompt,
+                const dwg_point_3d *restrict ins_pt, const char *restrict tag,
                 const char *restrict default_value)
 {
   API_ADD_ENTITY (ATTDEF);
   ADD_CHECK_3DPOINT (ins_pt);
   ADD_CHECK_DOUBLE (height);
-  _obj->prompt     = dwg_add_u8_input (dwg, prompt);
-  _obj->tag        = dwg_add_u8_input (dwg, tag);
+  _obj->prompt = dwg_add_u8_input (dwg, prompt);
+  _obj->tag = dwg_add_u8_input (dwg, tag);
   _obj->default_value = dwg_add_u8_input (dwg, default_value);
-  _obj->ins_pt.x   = ins_pt->x;
-  _obj->ins_pt.y   = ins_pt->y;
-  _obj->elevation  = ins_pt->z;
-  _obj->height     = height;
+  _obj->ins_pt.x = ins_pt->x;
+  _obj->ins_pt.y = ins_pt->y;
+  _obj->elevation = ins_pt->z;
+  _obj->height = height;
   // block handles
   if (dwg->header_vars.TEXTSTYLE)
     _obj->style = dwg_add_handleref (
@@ -23188,7 +22980,7 @@ dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_BLOCK*
+EXPORT Dwg_Entity_BLOCK *
 dwg_add_BLOCK (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const char *restrict name)
 {
@@ -23199,7 +22991,7 @@ dwg_add_BLOCK (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_ENDBLK*
+EXPORT Dwg_Entity_ENDBLK *
 dwg_add_ENDBLK (Dwg_Object_BLOCK_HEADER *restrict blkhdr)
 {
   API_ADD_ENTITY (ENDBLK);
@@ -23210,7 +23002,7 @@ dwg_add_ENDBLK (Dwg_Object_BLOCK_HEADER *restrict blkhdr)
 }
 
 // owned by POLYLINE or INSERT
-Dwg_Entity_SEQEND*
+Dwg_Entity_SEQEND *
 dwg_add_SEQEND (dwg_ent_generic *restrict blkhdr)
 {
   API_ADD_ENTITY (SEQEND);
@@ -23219,13 +23011,10 @@ dwg_add_SEQEND (dwg_ent_generic *restrict blkhdr)
   return _obj;
 }
 
-EXPORT Dwg_Entity_INSERT*
+EXPORT Dwg_Entity_INSERT *
 dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                const dwg_point_3d *restrict ins_pt,
-                const char *restrict name,
-                const double xscale,
-                const double yscale,
-                const double zscale,
+                const dwg_point_3d *restrict ins_pt, const char *restrict name,
+                const double xscale, const double yscale, const double zscale,
                 const double rotation)
 {
   BITCODE_H hdrref;
@@ -23234,14 +23023,14 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   ADD_CHECK_DOUBLE (xscale);
   ADD_CHECK_DOUBLE (yscale);
   ADD_CHECK_DOUBLE (zscale);
-  _obj->ins_pt.x     = ins_pt->x;
-  _obj->ins_pt.y     = ins_pt->y;
-  _obj->ins_pt.z     = ins_pt->z;
-  _obj->scale.x      = xscale;
-  _obj->scale.y      = yscale;
-  _obj->scale.z      = zscale;
-  //TODO scale_flag
-  _obj->rotation     = rotation;
+  _obj->ins_pt.x = ins_pt->x;
+  _obj->ins_pt.y = ins_pt->y;
+  _obj->ins_pt.z = ins_pt->z;
+  _obj->scale.x = xscale;
+  _obj->scale.y = yscale;
+  _obj->scale.z = zscale;
+  // TODO scale_flag
+  _obj->rotation = rotation;
   ADD_CHECK_ANGLE (_obj->rotation);
   hdrref = dwg_find_tablehandle (dwg, name, "BLOCK");
   if (hdrref)
@@ -23271,18 +23060,13 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_MINSERT*
+EXPORT Dwg_Entity_MINSERT *
 dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                  const dwg_point_3d *restrict ins_pt,
-                 const char *restrict name,
-                 const double xscale,
-                 const double yscale,
-                 const double zscale,
-                 const double rotation,
-                 const int num_rows,
-                 const int num_cols,
-                 const double row_spacing,
-                 const double col_spacing)
+                 const char *restrict name, const double xscale,
+                 const double yscale, const double zscale,
+                 const double rotation, const int num_rows, const int num_cols,
+                 const double row_spacing, const double col_spacing)
 {
   BITCODE_H hdrref;
   API_ADD_ENTITY (MINSERT);
@@ -23290,19 +23074,19 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   ADD_CHECK_DOUBLE (xscale);
   ADD_CHECK_DOUBLE (yscale);
   ADD_CHECK_DOUBLE (zscale);
-  _obj->ins_pt.x     = ins_pt->x;
-  _obj->ins_pt.y     = ins_pt->y;
-  _obj->ins_pt.z     = ins_pt->z;
-  _obj->scale.x      = xscale;
-  _obj->scale.y      = yscale;
-  _obj->scale.z      = zscale;
-  //TODO scale_flag
-  _obj->rotation     = rotation;
+  _obj->ins_pt.x = ins_pt->x;
+  _obj->ins_pt.y = ins_pt->y;
+  _obj->ins_pt.z = ins_pt->z;
+  _obj->scale.x = xscale;
+  _obj->scale.y = yscale;
+  _obj->scale.z = zscale;
+  // TODO scale_flag
+  _obj->rotation = rotation;
   ADD_CHECK_ANGLE (_obj->rotation);
-  _obj->num_rows     = (BITCODE_BS)num_rows;
-  _obj->num_cols     = (BITCODE_BS)num_cols;
-  _obj->row_spacing  = row_spacing;
-  _obj->col_spacing  = col_spacing;
+  _obj->num_rows = (BITCODE_BS)num_rows;
+  _obj->num_cols = (BITCODE_BS)num_cols;
+  _obj->row_spacing = row_spacing;
+  _obj->col_spacing = col_spacing;
   hdrref = dwg_find_tablehandle (dwg, name, "BLOCK");
   if (hdrref)
     {
@@ -23332,14 +23116,16 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 }
 
 // TODO blkhdr => pline owner
-Dwg_Entity_VERTEX_2D*
+Dwg_Entity_VERTEX_2D *
 dwg_add_VERTEX_2D (Dwg_Entity_POLYLINE_2D *restrict pline,
                    const dwg_point_2d *restrict point)
 {
-  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)pline);
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr
+      = dwg_entity_owner ((dwg_ent_generic *)pline);
   API_ADD_ENTITY (VERTEX_2D);
   obj->tio.entity->entmode = 0;
-  obj->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (pline), obj);
+  obj->tio.entity->ownerhandle
+      = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (pline), obj);
   ADD_CHECK_2DPOINT (point);
   _obj->point.x = point->x;
   _obj->point.y = point->y;
@@ -23353,14 +23139,16 @@ dwg_add_VERTEX_2D (Dwg_Entity_POLYLINE_2D *restrict pline,
   return _obj;
 }
 
-Dwg_Entity_VERTEX_3D*
+Dwg_Entity_VERTEX_3D *
 dwg_add_VERTEX_3D (Dwg_Entity_POLYLINE_3D *restrict pline,
                    const dwg_point_3d *restrict point)
 {
-  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)pline);
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr
+      = dwg_entity_owner ((dwg_ent_generic *)pline);
   API_ADD_ENTITY (VERTEX_3D);
   obj->tio.entity->entmode = 0;
-  obj->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (pline), obj);
+  obj->tio.entity->ownerhandle
+      = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (pline), obj);
   ADD_CHECK_3DPOINT (point);
   _obj->point.x = point->x;
   _obj->point.y = point->y;
@@ -23375,10 +23163,9 @@ dwg_add_VERTEX_3D (Dwg_Entity_POLYLINE_3D *restrict pline,
   return _obj;
 }
 
-EXPORT Dwg_Entity_POLYLINE_2D*
+EXPORT Dwg_Entity_POLYLINE_2D *
 dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                    const int num_pts,
-                    const dwg_point_2d *restrict pts)
+                     const int num_pts, const dwg_point_2d *restrict pts)
 {
   Dwg_Object *pl, *vtx = NULL;
   Dwg_Entity_POLYLINE_2D *_pl;
@@ -23407,11 +23194,14 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         goto vtx_2d_err;
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, vtx->handle.value, pl);
       if (i == 0)
-        _pl->first_vertex  = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
+        _pl->first_vertex
+            = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
       if (i == num_pts - 1)
         {
-          vtx->tio.entity->prev_entity = dwg_add_handleref (dwg, 4, vtx->handle.value - 1, vtx);
-          _pl->last_vertex  = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
+          vtx->tio.entity->prev_entity
+              = dwg_add_handleref (dwg, 4, vtx->handle.value - 1, vtx);
+          _pl->last_vertex
+              = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
         }
     }
   _seq = dwg_add_SEQEND ((dwg_ent_generic *)_pl);
@@ -23420,8 +23210,8 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       LOG_ERROR ("No SEQEND added");
       return NULL;
     }
-  _pl->seqend = dwg_add_handleref (
-      dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
+  _pl->seqend
+      = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
   pl->tio.entity->next_entity = NULL;
   if (dwg->header.version <= R_11)
     obj->type = DWG_TYPE_POLYLINE_R11;
@@ -23431,10 +23221,9 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _pl;
 }
 
-EXPORT Dwg_Entity_POLYLINE_3D*
+EXPORT Dwg_Entity_POLYLINE_3D *
 dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                    const int num_pts,
-                    const dwg_point_3d *restrict pts)
+                     const int num_pts, const dwg_point_3d *restrict pts)
 {
   Dwg_Object *pl, *vtx = NULL;
   Dwg_Entity_POLYLINE_3D *_pl;
@@ -23463,11 +23252,14 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         goto vtx_3d_err;
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, vtx->handle.value, pl);
       if (i == 0)
-        _pl->first_vertex = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
+        _pl->first_vertex
+            = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
       if (i == num_pts - 1)
         {
-          vtx->tio.entity->prev_entity = dwg_add_handleref (dwg, 4, vtx->handle.value - 1, vtx);
-          _pl->last_vertex = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
+          vtx->tio.entity->prev_entity
+              = dwg_add_handleref (dwg, 4, vtx->handle.value - 1, vtx);
+          _pl->last_vertex
+              = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
         }
     }
   _seq = dwg_add_SEQEND ((dwg_ent_generic *)_pl);
@@ -23476,7 +23268,8 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       LOG_ERROR ("No SEQEND added");
       return NULL;
     }
-  _pl->seqend  = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
+  _pl->seqend
+      = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
   pl->tio.entity->next_entity = NULL;
   if (dwg->header.version <= R_11)
     obj->type = DWG_TYPE_POLYLINE_R11;
@@ -23486,14 +23279,16 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _pl;
 }
 
-Dwg_Entity_VERTEX_PFACE*
+Dwg_Entity_VERTEX_PFACE *
 dwg_add_VERTEX_PFACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
                       const dwg_point_3d *restrict point)
 {
-  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)pline);
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr
+      = dwg_entity_owner ((dwg_ent_generic *)pline);
   API_ADD_ENTITY (VERTEX_PFACE);
   obj->tio.entity->entmode = 0;
-  obj->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (pline), obj);
+  obj->tio.entity->ownerhandle
+      = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (pline), obj);
   ADD_CHECK_3DPOINT (point);
   _obj->point.x = point->x;
   _obj->point.y = point->y;
@@ -23504,14 +23299,16 @@ dwg_add_VERTEX_PFACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
   return _obj;
 }
 
-Dwg_Entity_VERTEX_PFACE_FACE*
+Dwg_Entity_VERTEX_PFACE_FACE *
 dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
                            const dwg_face vertind)
 {
-  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)pline);
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr
+      = dwg_entity_owner ((dwg_ent_generic *)pline);
   API_ADD_ENTITY (VERTEX_PFACE_FACE);
   obj->tio.entity->entmode = 0;
-  obj->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (pline), obj);
+  obj->tio.entity->ownerhandle
+      = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (pline), obj);
   _obj->flag = 70;
   _obj->vertind[0] = vertind[0];
   _obj->vertind[1] = vertind[1];
@@ -23526,10 +23323,9 @@ dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
 }
 
 // Polyface Mesh
-EXPORT Dwg_Entity_POLYLINE_PFACE*
+EXPORT Dwg_Entity_POLYLINE_PFACE *
 dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                        const unsigned numverts,
-                        const unsigned numfaces,
+                        const unsigned numverts, const unsigned numfaces,
                         const dwg_point_3d *restrict verts,
                         const dwg_face *restrict faces)
 {
@@ -23542,7 +23338,8 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (POLYLINE_PFACE);
   pl = obj;
   _pl = _obj;
-  _pl->vertex = malloc (((unsigned long)numverts + numfaces) * sizeof (BITCODE_H));
+  _pl->vertex
+      = malloc (((unsigned long)numverts + numfaces) * sizeof (BITCODE_H));
   if (!_pl->vertex)
     return NULL;
   _pl->has_vertex = 1;
@@ -23563,7 +23360,8 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         goto vtx_pface_err;
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, vtx->handle.value, pl);
       if (i == 0)
-        _pl->first_vertex = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
+        _pl->first_vertex
+            = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
     }
   for (unsigned j = 0; j < numfaces; j++)
     {
@@ -23576,13 +23374,16 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         }
       vtx = dwg_obj_generic_to_object (_vtxf, &error);
       if (!vtx)
-        goto vtx_pface_face_err;       
-      _pl->vertex[numverts + j] = dwg_add_handleref (dwg, 3, vtx->handle.value, pl);
+        goto vtx_pface_face_err;
+      _pl->vertex[numverts + j]
+          = dwg_add_handleref (dwg, 3, vtx->handle.value, pl);
       if (j == numfaces - 1)
         {
           // FIXME
-          vtx->tio.entity->prev_entity = dwg_add_handleref (dwg, 4, vtx->handle.value - 1, vtx);
-          _pl->last_vertex  = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
+          vtx->tio.entity->prev_entity
+              = dwg_add_handleref (dwg, 4, vtx->handle.value - 1, vtx);
+          _pl->last_vertex
+              = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
         }
     }
   _seq = dwg_add_SEQEND ((dwg_ent_generic *)_pl);
@@ -23591,7 +23392,8 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       LOG_ERROR ("No SEQEND added");
       return NULL;
     }
-  _pl->seqend  = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
+  _pl->seqend
+      = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
   in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
   pl->tio.entity->next_entity = NULL; // fixup
   if (dwg->header.version <= R_11)
@@ -23599,14 +23401,16 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _pl;
 }
 
-Dwg_Entity_VERTEX_MESH*
+Dwg_Entity_VERTEX_MESH *
 dwg_add_VERTEX_MESH (Dwg_Entity_POLYLINE_MESH *restrict pline,
                      const dwg_point_3d *restrict point)
 {
-  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner ((dwg_ent_generic*)pline);
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr
+      = dwg_entity_owner ((dwg_ent_generic *)pline);
   API_ADD_ENTITY (VERTEX_MESH);
   obj->tio.entity->entmode = 0;
-  obj->tio.entity->ownerhandle = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (pline), obj);
+  obj->tio.entity->ownerhandle
+      = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (pline), obj);
   ADD_CHECK_3DPOINT (point);
   _obj->point.x = point->x;
   _obj->point.y = point->y;
@@ -23622,10 +23426,9 @@ dwg_add_VERTEX_MESH (Dwg_Entity_POLYLINE_MESH *restrict pline,
   return _obj;
 }
 
-EXPORT Dwg_Entity_POLYLINE_MESH*
+EXPORT Dwg_Entity_POLYLINE_MESH *
 dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                       const unsigned num_m_verts,
-                       const unsigned num_n_verts,
+                       const unsigned num_m_verts, const unsigned num_n_verts,
                        const dwg_point_3d *restrict verts)
 {
   Dwg_Object *pl, *vtx;
@@ -23636,7 +23439,8 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (POLYLINE_MESH);
   pl = obj;
   _pl = _obj;
-  _pl->vertex = malloc ((unsigned long)num_m_verts * num_n_verts * sizeof (BITCODE_H));
+  _pl->vertex
+      = malloc ((unsigned long)num_m_verts * num_n_verts * sizeof (BITCODE_H));
   if (!_pl->vertex)
     return NULL;
   _pl->flag = 16;
@@ -23659,11 +23463,14 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         goto vtx_mesh_err;
       _pl->vertex[i] = dwg_add_handleref (dwg, 3, vtx->handle.value, pl);
       if (i == 0)
-        _pl->first_vertex  = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
+        _pl->first_vertex
+            = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
       if (i == _pl->num_owned - 1)
         {
-          vtx->tio.entity->prev_entity = dwg_add_handleref (dwg, 4, vtx->handle.value - 1, vtx);
-          _pl->last_vertex  = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
+          vtx->tio.entity->prev_entity
+              = dwg_add_handleref (dwg, 4, vtx->handle.value - 1, vtx);
+          _pl->last_vertex
+              = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
         }
     }
   _seq = dwg_add_SEQEND ((dwg_ent_generic *)_pl);
@@ -23672,7 +23479,8 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       LOG_ERROR ("No SEQEND added");
       return NULL;
     }
-  _pl->seqend  = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
+  _pl->seqend
+      = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
   pl->tio.entity->next_entity = NULL;
   if (dwg->header.version <= R_11)
     obj->type = DWG_TYPE_POLYLINE_R11;
@@ -23680,21 +23488,19 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _pl;
 }
 
-EXPORT Dwg_Entity_ARC*
+EXPORT Dwg_Entity_ARC *
 dwg_add_ARC (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-             const dwg_point_3d *restrict center,
-             const double radius,
-             const double start_angle,
-             const double end_angle)
+             const dwg_point_3d *restrict center, const double radius,
+             const double start_angle, const double end_angle)
 {
   API_ADD_ENTITY (ARC);
   ADD_CHECK_3DPOINT (center);
-  _obj->center.x    = center->x;
-  _obj->center.y    = center->y;
-  _obj->center.z    = center->z;
-  _obj->radius      = radius;
+  _obj->center.x = center->x;
+  _obj->center.y = center->y;
+  _obj->center.z = center->z;
+  _obj->radius = radius;
   _obj->start_angle = start_angle;
-  _obj->end_angle   = end_angle;
+  _obj->end_angle = end_angle;
   ADD_CHECK_ANGLE (_obj->start_angle);
   ADD_CHECK_ANGLE (_obj->end_angle);
   if (dwg->header.version <= R_11)
@@ -23706,17 +23512,16 @@ dwg_add_ARC (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_CIRCLE*
+EXPORT Dwg_Entity_CIRCLE *
 dwg_add_CIRCLE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                const dwg_point_3d *restrict center,
-                const double radius)
+                const dwg_point_3d *restrict center, const double radius)
 {
   API_ADD_ENTITY (CIRCLE);
   ADD_CHECK_3DPOINT (center);
-  _obj->center.x    = center->x;
-  _obj->center.y    = center->y;
-  _obj->center.z    = center->z;
-  _obj->radius      = radius;
+  _obj->center.x = center->x;
+  _obj->center.y = center->y;
+  _obj->center.z = center->z;
+  _obj->radius = radius;
   if (dwg->header.version <= R_11)
     {
       obj->type = DWG_TYPE_CIRCLE_R11;
@@ -23727,7 +23532,7 @@ dwg_add_CIRCLE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_LINE*
+EXPORT Dwg_Entity_LINE *
 dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const dwg_point_3d *restrict start_pt,
               const dwg_point_3d *restrict end_pt)
@@ -23738,9 +23543,9 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->start.x = start_pt->x;
   _obj->start.y = start_pt->y;
   _obj->start.z = start_pt->z;
-  _obj->end.x   = end_pt->x;
-  _obj->end.y   = end_pt->y;
-  _obj->end.z   = end_pt->z;
+  _obj->end.x = end_pt->x;
+  _obj->end.y = end_pt->y;
+  _obj->end.z = end_pt->z;
 
   if (dwg->header.version >= R_10 && dwg->header.version <= R_11)
     {
@@ -23787,14 +23592,14 @@ dwg_require_DIMSTYLE_Standard (Dwg_Data *restrict dwg)
     }
 }
 
-#define DIMENSION_DEFAULTS                                                    \
+#  define DIMENSION_DEFAULTS                                                  \
     _obj->extrusion.z = 1.0;                                                  \
     dwg_require_DIMSTYLE_Standard (dwg);                                      \
     if (dwg->header_vars.DIMSTYLE)                                            \
     _obj->dimstyle = dwg_add_handleref (                                      \
         dwg, 5, dwg->header_vars.DIMSTYLE->absolute_ref, NULL)
 
-EXPORT Dwg_Entity_DIMENSION_ALIGNED*
+EXPORT Dwg_Entity_DIMENSION_ALIGNED *
 dwg_add_DIMENSION_ALIGNED (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                            const dwg_point_3d *restrict xline1_pt,
                            const dwg_point_3d *restrict xline2_pt,
@@ -23805,8 +23610,8 @@ dwg_add_DIMENSION_ALIGNED (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   ADD_CHECK_3DPOINT (xline1_pt);
   ADD_CHECK_3DPOINT (xline2_pt);
   ADD_CHECK_3DPOINT (text_midpt);
-  _obj->text_midpt.x= text_midpt->x;
-  _obj->text_midpt.y= text_midpt->y;
+  _obj->text_midpt.x = text_midpt->x;
+  _obj->text_midpt.y = text_midpt->y;
   //_obj->text_midpt.z= text_midpt->z;
   _obj->xline1_pt.x = xline1_pt->x;
   _obj->xline1_pt.y = xline1_pt->y;
@@ -23823,7 +23628,7 @@ dwg_add_DIMENSION_ALIGNED (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_DIMENSION_ANG2LN* /* DimAngular */
+EXPORT Dwg_Entity_DIMENSION_ANG2LN * /* DimAngular */
 dwg_add_DIMENSION_ANG2LN (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict center_pt,
                           const dwg_point_3d *restrict xline1end_pt,
@@ -23836,9 +23641,9 @@ dwg_add_DIMENSION_ANG2LN (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   ADD_CHECK_3DPOINT (xline1end_pt);
   ADD_CHECK_3DPOINT (xline2end_pt);
   ADD_CHECK_3DPOINT (text_midpt);
-  _obj->def_pt.x     = center_pt->x;
-  _obj->def_pt.y     = center_pt->y;
-  _obj->def_pt.z     = center_pt->z;
+  _obj->def_pt.x = center_pt->x;
+  _obj->def_pt.y = center_pt->y;
+  _obj->def_pt.z = center_pt->z;
   _obj->text_midpt.x = text_midpt->x;
   _obj->text_midpt.y = text_midpt->y;
   //_obj->text_midpt.z= text_midpt->z;
@@ -23857,7 +23662,7 @@ dwg_add_DIMENSION_ANG2LN (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_DIMENSION_ANG3PT*
+EXPORT Dwg_Entity_DIMENSION_ANG3PT *
 dwg_add_DIMENSION_ANG3PT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict center_pt,
                           const dwg_point_3d *restrict xline1_pt,
@@ -23870,18 +23675,18 @@ dwg_add_DIMENSION_ANG3PT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   ADD_CHECK_3DPOINT (xline1_pt);
   ADD_CHECK_3DPOINT (xline2_pt);
   ADD_CHECK_3DPOINT (text_midpt);
-  _obj->center_pt.x  = center_pt->x;
-  _obj->center_pt.y  = center_pt->y;
-  _obj->center_pt.z  = center_pt->z;
+  _obj->center_pt.x = center_pt->x;
+  _obj->center_pt.y = center_pt->y;
+  _obj->center_pt.z = center_pt->z;
   _obj->text_midpt.x = text_midpt->x;
   _obj->text_midpt.y = text_midpt->y;
   //_obj->text_midpt.z = text_midpt->z;
-  _obj->xline1_pt.x  = xline1_pt->x;
-  _obj->xline1_pt.y  = xline1_pt->y;
-  _obj->xline1_pt.z  = xline1_pt->z;
-  _obj->xline2_pt.x  = xline2_pt->x;
-  _obj->xline2_pt.y  = xline2_pt->y;
-  _obj->xline2_pt.z  = xline2_pt->z;
+  _obj->xline1_pt.x = xline1_pt->x;
+  _obj->xline1_pt.y = xline1_pt->y;
+  _obj->xline1_pt.z = xline1_pt->z;
+  _obj->xline2_pt.x = xline2_pt->x;
+  _obj->xline2_pt.y = xline2_pt->y;
+  _obj->xline2_pt.z = xline2_pt->z;
   if (dwg->header.version <= R_11)
     {
       obj->type = DWG_TYPE_DIMENSION_R11;
@@ -23890,7 +23695,7 @@ dwg_add_DIMENSION_ANG3PT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_DIMENSION_DIAMETER*
+EXPORT Dwg_Entity_DIMENSION_DIAMETER *
 dwg_add_DIMENSION_DIAMETER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                             const dwg_point_3d *restrict chord_pt,
                             const dwg_point_3d *restrict far_chord_pt,
@@ -23901,13 +23706,13 @@ dwg_add_DIMENSION_DIAMETER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   ADD_CHECK_3DPOINT (chord_pt);
   ADD_CHECK_3DPOINT (far_chord_pt);
   ADD_CHECK_DOUBLE (leader_len);
-  _obj->def_pt.x       = far_chord_pt->x;
-  _obj->def_pt.y       = far_chord_pt->y;
-  _obj->def_pt.z       = far_chord_pt->z;
+  _obj->def_pt.x = far_chord_pt->x;
+  _obj->def_pt.y = far_chord_pt->y;
+  _obj->def_pt.z = far_chord_pt->z;
   _obj->first_arc_pt.x = chord_pt->x;
   _obj->first_arc_pt.y = chord_pt->y;
   _obj->first_arc_pt.z = chord_pt->z;
-  _obj->leader_len     = leader_len;
+  _obj->leader_len = leader_len;
   if (dwg->header.version <= R_11)
     {
       obj->type = DWG_TYPE_DIMENSION_R11;
@@ -23916,7 +23721,7 @@ dwg_add_DIMENSION_DIAMETER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_DIMENSION_ORDINATE*
+EXPORT Dwg_Entity_DIMENSION_ORDINATE *
 dwg_add_DIMENSION_ORDINATE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                             const dwg_point_3d *restrict feature_location_pt,
                             const dwg_point_3d *restrict leader_endpt,
@@ -23932,7 +23737,7 @@ dwg_add_DIMENSION_ORDINATE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->leader_endpt.x = leader_endpt->x;
   _obj->leader_endpt.y = leader_endpt->y;
   _obj->leader_endpt.z = leader_endpt->z;
-  _obj->flag2          = (BITCODE_RC)use_x_axis;
+  _obj->flag2 = (BITCODE_RC)use_x_axis;
   if (dwg->header.version <= R_11)
     {
       obj->type = DWG_TYPE_DIMENSION_R11;
@@ -23941,7 +23746,7 @@ dwg_add_DIMENSION_ORDINATE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_DIMENSION_RADIUS*
+EXPORT Dwg_Entity_DIMENSION_RADIUS *
 dwg_add_DIMENSION_RADIUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict center_pt,
                           const dwg_point_3d *restrict chord_pt,
@@ -23952,13 +23757,13 @@ dwg_add_DIMENSION_RADIUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   ADD_CHECK_3DPOINT (center_pt);
   ADD_CHECK_3DPOINT (chord_pt);
   ADD_CHECK_DOUBLE (leader_len);
-  _obj->def_pt.x       = center_pt->x;
-  _obj->def_pt.y       = center_pt->y;
-  _obj->def_pt.z       = center_pt->z;
+  _obj->def_pt.x = center_pt->x;
+  _obj->def_pt.y = center_pt->y;
+  _obj->def_pt.z = center_pt->z;
   _obj->first_arc_pt.x = chord_pt->x;
   _obj->first_arc_pt.y = chord_pt->y;
   _obj->first_arc_pt.z = chord_pt->z;
-  _obj->leader_len     = leader_len;
+  _obj->leader_len = leader_len;
   if (dwg->header.version <= R_11)
     {
       obj->type = DWG_TYPE_DIMENSION_R11;
@@ -23967,7 +23772,7 @@ dwg_add_DIMENSION_RADIUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_DIMENSION_LINEAR* /* Rotated */
+EXPORT Dwg_Entity_DIMENSION_LINEAR * /* Rotated */
 dwg_add_DIMENSION_LINEAR (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict xline1_pt,
                           const dwg_point_3d *restrict xline2_pt,
@@ -23979,16 +23784,16 @@ dwg_add_DIMENSION_LINEAR (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   ADD_CHECK_3DPOINT (xline1_pt);
   ADD_CHECK_3DPOINT (xline2_pt);
   ADD_CHECK_3DPOINT (def_pt);
-  _obj->def_pt.x    = def_pt->x; // dimline_pt
-  _obj->def_pt.y    = def_pt->y;
-  _obj->def_pt.z    = def_pt->z;
+  _obj->def_pt.x = def_pt->x; // dimline_pt
+  _obj->def_pt.y = def_pt->y;
+  _obj->def_pt.z = def_pt->z;
   _obj->xline1_pt.x = xline1_pt->x;
   _obj->xline1_pt.y = xline1_pt->y;
   _obj->xline1_pt.z = xline1_pt->z;
   _obj->xline2_pt.x = xline2_pt->x;
   _obj->xline2_pt.y = xline2_pt->y;
   _obj->xline2_pt.z = xline2_pt->z;
-  _obj->dim_rotation= rotation_angle;
+  _obj->dim_rotation = rotation_angle;
   ADD_CHECK_ANGLE (_obj->dim_rotation);
   // TODO calc oblique_angle
   if (dwg->header.version <= R_11)
@@ -23999,7 +23804,7 @@ dwg_add_DIMENSION_LINEAR (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_POINT*
+EXPORT Dwg_Entity_POINT *
 dwg_add_POINT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict pt)
 {
@@ -24017,7 +23822,7 @@ dwg_add_POINT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity__3DFACE*
+EXPORT Dwg_Entity__3DFACE *
 dwg_add_3DFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const dwg_point_3d *restrict pt1,
                 const dwg_point_3d *restrict pt2,
@@ -24032,17 +23837,17 @@ dwg_add_3DFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->corner1.y = pt1->y;
   _obj->corner1.z = pt1->z;
   if (dwg->header.version < R_10 && pt1->z != 0.0)
-      obj->tio.entity->opts_r11 |= 1;
+    obj->tio.entity->opts_r11 |= 1;
   _obj->corner2.x = pt2->x;
   _obj->corner2.y = pt2->y;
   _obj->corner2.z = pt2->z;
   if (dwg->header.version < R_10 && pt2->z != 0.0)
-      obj->tio.entity->opts_r11 |= 2;
+    obj->tio.entity->opts_r11 |= 2;
   _obj->corner3.x = pt3->x;
   _obj->corner3.y = pt3->y;
   _obj->corner3.z = pt3->z;
   if (dwg->header.version < R_10 && pt3->z != 0.0)
-      obj->tio.entity->opts_r11 |= 3;
+    obj->tio.entity->opts_r11 |= 3;
   if (pt4)
     {
       ADD_CHECK_3DPOINT (pt4);
@@ -24060,7 +23865,8 @@ dwg_add_3DFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       if (dwg->header.version < R_10 && pt3->z != 0.0)
         obj->tio.entity->opts_r11 |= 4;
     }
-  if (pt1->z == 0.0 && pt2->z == 0.0 && pt3->z == 0.0 && (!pt4 || pt4->z == 0.0))
+  if (pt1->z == 0.0 && pt2->z == 0.0 && pt3->z == 0.0
+      && (!pt4 || pt4->z == 0.0))
     {
       _obj->z_is_zero = 1;
       obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
@@ -24072,7 +23878,7 @@ dwg_add_3DFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_SOLID*
+EXPORT Dwg_Entity_SOLID *
 dwg_add_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict pt1,
                const dwg_point_2d *restrict pt2,
@@ -24102,7 +23908,7 @@ dwg_add_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_TRACE*
+EXPORT Dwg_Entity_TRACE *
 dwg_add_TRACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict pt1,
                const dwg_point_2d *restrict pt2,
@@ -24132,26 +23938,25 @@ dwg_add_TRACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_SHAPE*
+EXPORT Dwg_Entity_SHAPE *
 dwg_add_SHAPE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-               const char *restrict name,
-               const dwg_point_3d *restrict ins_pt,
-               const double scale,
-               const double oblique_angle)
+               const char *restrict name, const dwg_point_3d *restrict ins_pt,
+               const double scale, const double oblique_angle)
 {
   API_ADD_ENTITY (SHAPE);
   ADD_CHECK_3DPOINT (ins_pt);
   ADD_CHECK_DOUBLE (scale);
-  _obj->ins_pt.x      = ins_pt->x;
-  _obj->ins_pt.y      = ins_pt->y;
-  _obj->ins_pt.z      = ins_pt->z;
-  _obj->scale         = scale;
+  _obj->ins_pt.x = ins_pt->x;
+  _obj->ins_pt.y = ins_pt->y;
+  _obj->ins_pt.z = ins_pt->z;
+  _obj->scale = scale;
   _obj->oblique_angle = oblique_angle;
   ADD_CHECK_ANGLE (_obj->oblique_angle);
-  _obj->width_factor  = 1.0;
+  _obj->width_factor = 1.0;
   if (dwg->header_vars.TEXTSTYLE && dwg->header_vars.TEXTSTYLE->absolute_ref)
     {
-      _obj->style = dwg_add_handleref (dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
+      _obj->style = dwg_add_handleref (
+          dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
       _obj->style_id = 1; // TODO STYLE_CONTROL index + 1
     }
   else
@@ -24165,7 +23970,7 @@ dwg_add_SHAPE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_VIEWPORT*
+EXPORT Dwg_Entity_VIEWPORT *
 dwg_add_VIEWPORT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                   const char *restrict name)
 {
@@ -24191,11 +23996,10 @@ dwg_add_VIEWPORT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_ELLIPSE*
+EXPORT Dwg_Entity_ELLIPSE *
 dwg_add_ELLIPSE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-               const dwg_point_3d *restrict center,
-               const double major_axis,
-               const double axis_ratio)
+                 const dwg_point_3d *restrict center, const double major_axis,
+                 const double axis_ratio)
 {
   API_ADD_ENTITY (ELLIPSE);
   if (dwg->header.version <= R_11)
@@ -24206,13 +24010,14 @@ dwg_add_ELLIPSE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   ADD_CHECK_3DPOINT (center);
   ADD_CHECK_DOUBLE (major_axis);
   ADD_CHECK_DOUBLE (axis_ratio); // Only (0 - 1], ie. RadiusRatio
-  _obj->center.x     = center->x;
-  _obj->center.y     = center->y;
-  _obj->center.z     = center->z;
-  _obj->sm_axis.x    = major_axis;
-  _obj->sm_axis.y    = major_axis;
-  _obj->sm_axis.z    = center->z; // Error 150 (eGeneralModelingFailure) when not co-planar
-  _obj->axis_ratio   = axis_ratio;
+  _obj->center.x = center->x;
+  _obj->center.y = center->y;
+  _obj->center.z = center->z;
+  _obj->sm_axis.x = major_axis;
+  _obj->sm_axis.y = major_axis;
+  _obj->sm_axis.z
+      = center->z; // Error 150 (eGeneralModelingFailure) when not co-planar
+  _obj->axis_ratio = axis_ratio;
   if (axis_ratio > 1.0 || axis_ratio <= 0.0)
     {
       LOG_ERROR ("Illegal ELLIPSE.axis_ratio %f. Set to 1.0", axis_ratio);
@@ -24223,14 +24028,13 @@ dwg_add_ELLIPSE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       LOG_ERROR ("Illegal ELLIPSE.major_axis 0.0, needs to be != 0");
       return NULL;
     }
-  _obj->end_angle    = M_PI * 2.0;
+  _obj->end_angle = M_PI * 2.0;
   return _obj;
 }
 
-EXPORT Dwg_Entity_SPLINE*
+EXPORT Dwg_Entity_SPLINE *
 dwg_add_SPLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                const int num_fit_pts,
-                const dwg_point_3d *restrict fit_pts,
+                const int num_fit_pts, const dwg_point_3d *restrict fit_pts,
                 const dwg_point_3d *restrict beg_tan_vec,
                 const dwg_point_3d *restrict end_tan_vec)
 {
@@ -24250,12 +24054,12 @@ dwg_add_SPLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->end_tan_vec.z = end_tan_vec->z;
   _obj->num_fit_pts = (BITCODE_BL)num_fit_pts;
   assert (sizeof (BITCODE_3BD) == sizeof (dwg_point_3d));
-  _obj->fit_pts = malloc (num_fit_pts * sizeof(BITCODE_3BD));
-  memcpy (_obj->fit_pts, fit_pts, num_fit_pts * sizeof(BITCODE_3BD));
+  _obj->fit_pts = malloc (num_fit_pts * sizeof (BITCODE_3BD));
+  memcpy (_obj->fit_pts, fit_pts, num_fit_pts * sizeof (BITCODE_3BD));
   return _obj;
 }
 
-EXPORT Dwg_Entity_REGION*
+EXPORT Dwg_Entity_REGION *
 dwg_add_REGION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const char *acis_data)
 {
@@ -24272,9 +24076,9 @@ dwg_add_REGION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (len % 4096)
     _obj->num_blocks++;
   j = _obj->num_blocks;
-  _obj->acis_data = (BITCODE_RC*)strdup (acis_data);
+  _obj->acis_data = (BITCODE_RC *)strdup (acis_data);
   _obj->block_size = calloc (j + 1, sizeof (BITCODE_BL));
-  _obj->encr_sat_data = calloc (j + 1, sizeof (char*));
+  _obj->encr_sat_data = calloc (j + 1, sizeof (char *));
   _obj->version = 1;
   _obj->unknown = 1;
   for (unsigned i = 0; i < _obj->num_blocks; i++)
@@ -24283,15 +24087,16 @@ dwg_add_REGION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         _obj->block_size[i] = len % 4096;
       else
         _obj->block_size[i] = 4096;
-      _obj->encr_sat_data[i] = dwg_encrypt_SAT1 (
-          _obj->block_size[i], &_obj->acis_data[acis_data_idx], &acis_data_idx);
+      _obj->encr_sat_data[i]
+          = dwg_encrypt_SAT1 (_obj->block_size[i],
+                              &_obj->acis_data[acis_data_idx], &acis_data_idx);
     }
   return _obj;
 }
 
-EXPORT Dwg_Entity__3DSOLID*
+EXPORT Dwg_Entity__3DSOLID *
 dwg_add_3DSOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                const char *acis_data)
+                 const char *acis_data)
 {
   const int len = strlen (acis_data);
   unsigned j;
@@ -24306,9 +24111,9 @@ dwg_add_3DSOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (len % 4096)
     _obj->num_blocks++;
   j = _obj->num_blocks;
-  _obj->acis_data = (BITCODE_RC*)strdup (acis_data);
+  _obj->acis_data = (BITCODE_RC *)strdup (acis_data);
   _obj->block_size = calloc (j + 1, sizeof (BITCODE_BL));
-  _obj->encr_sat_data = calloc (j + 1, sizeof (char*));
+  _obj->encr_sat_data = calloc (j + 1, sizeof (char *));
   _obj->version = 1;
   _obj->unknown = 1;
   for (unsigned i = 0; i < j; i++)
@@ -24317,17 +24122,17 @@ dwg_add_3DSOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         _obj->block_size[i] = len % 4096;
       else
         _obj->block_size[i] = 4096;
-      _obj->encr_sat_data[i] = dwg_encrypt_SAT1 (
-          _obj->block_size[i], &_obj->acis_data[acis_data_idx], &acis_data_idx);
+      _obj->encr_sat_data[i]
+          = dwg_encrypt_SAT1 (_obj->block_size[i],
+                              &_obj->acis_data[acis_data_idx], &acis_data_idx);
     }
   //_obj->encr_sat_data[j] = NULL;
   //_obj->block_size[j] = 0;
   return _obj;
 }
 
-EXPORT Dwg_Entity_BODY*
-dwg_add_BODY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-              const char *acis_data)
+EXPORT Dwg_Entity_BODY *
+dwg_add_BODY (Dwg_Object_BLOCK_HEADER *restrict blkhdr, const char *acis_data)
 {
   const int len = strlen (acis_data);
   unsigned j;
@@ -24342,9 +24147,9 @@ dwg_add_BODY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (len % 4096)
     _obj->num_blocks++;
   j = _obj->num_blocks;
-  _obj->acis_data = (BITCODE_RC*)strdup (acis_data);
+  _obj->acis_data = (BITCODE_RC *)strdup (acis_data);
   _obj->block_size = calloc (j + 1, sizeof (BITCODE_BL));
-  _obj->encr_sat_data = calloc (j + 1, sizeof (char*));
+  _obj->encr_sat_data = calloc (j + 1, sizeof (char *));
   _obj->version = 1;
   _obj->unknown = 1;
   for (unsigned i = 0; i < _obj->num_blocks; i++)
@@ -24353,13 +24158,14 @@ dwg_add_BODY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         _obj->block_size[i] = len % 4096;
       else
         _obj->block_size[i] = 4096;
-      _obj->encr_sat_data[i] = dwg_encrypt_SAT1 (
-          _obj->block_size[i], &_obj->acis_data[acis_data_idx], &acis_data_idx);
+      _obj->encr_sat_data[i]
+          = dwg_encrypt_SAT1 (_obj->block_size[i],
+                              &_obj->acis_data[acis_data_idx], &acis_data_idx);
     }
   return _obj;
 }
 
-EXPORT Dwg_Entity_RAY*
+EXPORT Dwg_Entity_RAY *
 dwg_add_RAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
              const dwg_point_3d *restrict point,
              const dwg_point_3d *restrict vector) /* different to VBA */
@@ -24372,17 +24178,17 @@ dwg_add_RAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     }
   ADD_CHECK_3DPOINT (point);
   ADD_CHECK_3DPOINT (vector);
-  _obj->point.x  = point->x;
-  _obj->point.y  = point->y;
-  _obj->point.z  = point->z;
-  dwg_geom_normalize ((dwg_point_3d*)&_obj->vector, *vector);
+  _obj->point.x = point->x;
+  _obj->point.y = point->y;
+  _obj->point.z = point->z;
+  dwg_geom_normalize ((dwg_point_3d *)&_obj->vector, *vector);
   return _obj;
 }
 
-EXPORT Dwg_Entity_XLINE*
+EXPORT Dwg_Entity_XLINE *
 dwg_add_XLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-             const dwg_point_3d *restrict point,
-             const dwg_point_3d *restrict vector) /* different to VBA */
+               const dwg_point_3d *restrict point,
+               const dwg_point_3d *restrict vector) /* different to VBA */
 {
   API_ADD_ENTITY (XLINE);
   if (dwg->header.version <= R_11)
@@ -24392,27 +24198,28 @@ dwg_add_XLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     }
   ADD_CHECK_3DPOINT (point);
   ADD_CHECK_3DPOINT (vector);
-  _obj->point.x  = point->x;
-  _obj->point.y  = point->y;
-  _obj->point.z  = point->z;
-  dwg_geom_normalize ((dwg_point_3d*)&_obj->vector, *vector);
+  _obj->point.x = point->x;
+  _obj->point.y = point->y;
+  _obj->point.z = point->z;
+  dwg_geom_normalize ((dwg_point_3d *)&_obj->vector, *vector);
   return _obj;
 }
 
-/* The name is the NOD entry. On NULL this is the NOD 0.1.C ("Named Object Dictionary") */
-EXPORT Dwg_Object_DICTIONARY*
+/* The name is the NOD entry. On NULL this is the NOD 0.1.C ("Named Object
+ * Dictionary") */
+EXPORT Dwg_Object_DICTIONARY *
 dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
                     const char *restrict name, /* the NOD entry */
                     const char *restrict key,  /* maybe NULL */
                     const unsigned long absolute_ref)
 {
-  Dwg_Object* nod;
+  Dwg_Object *nod;
   API_ADD_OBJECT (DICTIONARY);
   if (key && strNEc (key, "NAMED_OBJECT")) // the initial NOD is empty
     {
       _obj->numitems = 1;
-      _obj->texts = (BITCODE_T*)calloc (1, sizeof (BITCODE_T));
-      _obj->itemhandles = (BITCODE_H*)calloc (1, sizeof (BITCODE_H));
+      _obj->texts = (BITCODE_T *)calloc (1, sizeof (BITCODE_T));
+      _obj->itemhandles = (BITCODE_H *)calloc (1, sizeof (BITCODE_H));
       _obj->texts[0] = dwg_add_u8_input (dwg, key);
       _obj->itemhandles[0] = dwg_add_handleref (dwg, 2, absolute_ref, NULL);
     }
@@ -24438,9 +24245,8 @@ dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
   return _obj;
 }
 
-EXPORT Dwg_Object_DICTIONARY*
-dwg_add_DICTIONARY_item (Dwg_Object_DICTIONARY* _obj,
-                         const char *restrict key,
+EXPORT Dwg_Object_DICTIONARY *
+dwg_add_DICTIONARY_item (Dwg_Object_DICTIONARY *_obj, const char *restrict key,
                          const unsigned long absolute_ref)
 {
   int error;
@@ -24469,7 +24275,8 @@ dwg_add_DICTIONARY_item (Dwg_Object_DICTIONARY* _obj,
             {
               if (bit_eq_TU (key, (BITCODE_TU)texts[i]))
                 {
-                  _obj->itemhandles[i] = dwg_add_handleref (dwg, 2, absolute_ref, NULL);
+                  _obj->itemhandles[i]
+                      = dwg_add_handleref (dwg, 2, absolute_ref, NULL);
                   LOG_TRACE ("replace DICTIONARY_item %s=> " FORMAT_REF "\n",
                              key, ARGS_REF (_obj->itemhandles[i]));
                   return _obj;
@@ -24479,7 +24286,8 @@ dwg_add_DICTIONARY_item (Dwg_Object_DICTIONARY* _obj,
             {
               if (strEQ (key, texts[i]))
                 {
-                  _obj->itemhandles[i] = dwg_add_handleref (dwg, 2, absolute_ref, NULL);
+                  _obj->itemhandles[i]
+                      = dwg_add_handleref (dwg, 2, absolute_ref, NULL);
                   LOG_TRACE ("replace DICTIONARY_item %s => " FORMAT_REF "\n",
                              key, ARGS_REF (_obj->itemhandles[i]));
                   return _obj;
@@ -24487,28 +24295,29 @@ dwg_add_DICTIONARY_item (Dwg_Object_DICTIONARY* _obj,
             }
         }
       // not found:
-      _obj->texts = (char **)realloc (
-          _obj->texts, (_obj->numitems + 1) * sizeof (BITCODE_T));
+      _obj->texts = (char **)realloc (_obj->texts, (_obj->numitems + 1)
+                                                       * sizeof (BITCODE_T));
       _obj->itemhandles = (BITCODE_H *)realloc (
           _obj->itemhandles, (_obj->numitems + 1) * sizeof (BITCODE_H));
     }
 
   _obj->texts[_obj->numitems] = dwg_add_u8_input (dwg, key);
-  _obj->itemhandles[_obj->numitems] = dwg_add_handleref (dwg, 2, absolute_ref, NULL);
+  _obj->itemhandles[_obj->numitems]
+      = dwg_add_handleref (dwg, 2, absolute_ref, NULL);
   LOG_TRACE ("add DICTIONARY_item %s => " FORMAT_REF "\n", key,
              ARGS_REF (_obj->itemhandles[_obj->numitems]));
   _obj->numitems++;
   return _obj;
 }
 
-//dwg_add_DICTIONARYWDFLT (dwg, "Normal", handle (0xF));
-EXPORT Dwg_Object_DICTIONARYWDFLT*
+// dwg_add_DICTIONARYWDFLT (dwg, "Normal", handle (0xF));
+EXPORT Dwg_Object_DICTIONARYWDFLT *
 dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
                          const char *restrict name, /* the NOD entry */
-                         const char *restrict key, /* maybe NULL */
+                         const char *restrict key,  /* maybe NULL */
                          const unsigned long absolute_ref)
 {
-  Dwg_Object* nod;
+  Dwg_Object *nod;
   {
     REQUIRE_CLASS ("ACDBDICTIONARYWDFLT");
   }
@@ -24517,8 +24326,8 @@ dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
     if (key)
       {
         _obj->numitems = 1;
-        _obj->texts = (BITCODE_T*)calloc (1, sizeof (BITCODE_T));
-        _obj->itemhandles = (BITCODE_H*)calloc (1, sizeof (BITCODE_H));
+        _obj->texts = (BITCODE_T *)calloc (1, sizeof (BITCODE_T));
+        _obj->itemhandles = (BITCODE_H *)calloc (1, sizeof (BITCODE_H));
         _obj->texts[0] = dwg_add_u8_input (dwg, key);
         _obj->itemhandles[0] = dwg_add_handleref (dwg, 2, absolute_ref, NULL);
       }
@@ -24533,9 +24342,11 @@ dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
         nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
         if (nod)
           {
-            dwg_add_DICTIONARY_item (nod->tio.object->tio.DICTIONARY, name, obj->handle.value);
+            dwg_add_DICTIONARY_item (nod->tio.object->tio.DICTIONARY, name,
+                                     obj->handle.value);
             /* owner is relative, reactor absolute */
-            obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, nod->handle.value, obj);
+            obj->tio.object->ownerhandle
+                = dwg_add_handleref (dwg, 4, nod->handle.value, obj);
             if (!obj->tio.object->num_reactors)
               add_obj_reactor (obj->tio.object, nod->handle.value);
           }
@@ -24550,45 +24361,44 @@ dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
   }
 }
 
-EXPORT Dwg_Entity_OLE2FRAME*
+EXPORT Dwg_Entity_OLE2FRAME *
 dwg_add_OLE2FRAME (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                    const dwg_point_3d *restrict pt1,
                    const dwg_point_3d *restrict pt2)
 {
-  //const Dwg_Object_Ref *pspace =  dwg_paper_space_ref (dwg);
+  // const Dwg_Object_Ref *pspace =  dwg_paper_space_ref (dwg);
   API_ADD_ENTITY (OLE2FRAME);
   if (dwg->header.version <= R_11)
     {
       LOG_ERROR ("Invalid entity %s <R13", "OLE2FRAME")
       return NULL;
     }
-  _obj->pt1.x   = pt1->x;
-  _obj->pt1.y   = pt1->y;
-  _obj->pt1.z   = pt1->z;
-  _obj->pt2.x   = pt2->x;
-  _obj->pt2.y   = pt2->y;
-  _obj->pt2.z   = pt2->z;
+  _obj->pt1.x = pt1->x;
+  _obj->pt1.y = pt1->y;
+  _obj->pt1.z = pt1->z;
+  _obj->pt2.x = pt2->x;
+  _obj->pt2.y = pt2->y;
+  _obj->pt2.z = pt2->z;
   _obj->oleversion = 2;
   if (strEQ (blkhdr->name, "*PAPER_SPACE"))
     _obj->mode = 1;
   return _obj;
 }
 
-EXPORT Dwg_Entity_MTEXT*
+EXPORT Dwg_Entity_MTEXT *
 dwg_add_MTEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-               const dwg_point_3d *restrict ins_pt,
-               const double rect_width,
+               const dwg_point_3d *restrict ins_pt, const double rect_width,
                const char *restrict text)
 {
   API_ADD_ENTITY (MTEXT);
-  _obj->text       = dwg_add_u8_input (dwg, text);
+  _obj->text = dwg_add_u8_input (dwg, text);
   ADD_CHECK_3DPOINT (ins_pt);
   ADD_CHECK_DOUBLE (rect_width);
-  _obj->ins_pt.x   = ins_pt->x;
-  _obj->ins_pt.y   = ins_pt->y;
-  _obj->ins_pt.z   = ins_pt->z;
+  _obj->ins_pt.x = ins_pt->x;
+  _obj->ins_pt.y = ins_pt->y;
+  _obj->ins_pt.z = ins_pt->z;
   _obj->rect_width = rect_width;
-  // defaults:  
+  // defaults:
   _obj->x_axis_dir.x = 1.0;
   _obj->linespace_style = 1;
   _obj->linespace_factor = 1.0;
@@ -24603,12 +24413,12 @@ dwg_add_MTEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_LEADER*
-dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                const unsigned num_points,
-                const dwg_point_3d *restrict points,
-                const Dwg_Entity_MTEXT *restrict associated_annotation, /* maybe NULL */
-                const unsigned type)
+EXPORT Dwg_Entity_LEADER *
+dwg_add_LEADER (
+    Dwg_Object_BLOCK_HEADER *restrict blkhdr, const unsigned num_points,
+    const dwg_point_3d *restrict points,
+    const Dwg_Entity_MTEXT *restrict associated_annotation, /* maybe NULL */
+    const unsigned type)
 {
   API_ADD_ENTITY (LEADER);
   if (!num_points)
@@ -24637,15 +24447,17 @@ dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (associated_annotation)
     {
       BITCODE_H annotative;
-      Dwg_Object *o = dwg_obj_generic_to_object (associated_annotation, &error);
+      Dwg_Object *o
+          = dwg_obj_generic_to_object (associated_annotation, &error);
       if (error || !o || o->fixedtype != DWG_TYPE_MTEXT)
         {
           LOG_ERROR ("Invalid associated_annotation object");
           return NULL;
         }
       _obj->annot_type = 1;
-      _obj->associated_annotation =
-        dwg_add_handleref (dwg, 5, dwg_obj_generic_handlevalue ((void*)associated_annotation), obj);
+      _obj->associated_annotation = dwg_add_handleref (
+          dwg, 5, dwg_obj_generic_handlevalue ((void *)associated_annotation),
+          obj);
       add_obj_reactor (o->tio.object, obj->handle.value);
       // use DIMSTYLE "Annotative"
       annotative = dwg_find_tablehandle (dwg, "Annotative", "DIMSTYLE");
@@ -24675,7 +24487,7 @@ dwg_add_LEADER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_TOLERANCE*
+EXPORT Dwg_Entity_TOLERANCE *
 dwg_add_TOLERANCE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                    const char *restrict text_value,
                    const dwg_point_3d *restrict ins_pt,
@@ -24689,13 +24501,13 @@ dwg_add_TOLERANCE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       return NULL;
     }
   ADD_CHECK_3DPOINT (ins_pt);
-  _obj->ins_pt.x   = ins_pt->x;
-  _obj->ins_pt.y   = ins_pt->y;
-  _obj->ins_pt.z   = ins_pt->z;
+  _obj->ins_pt.x = ins_pt->x;
+  _obj->ins_pt.y = ins_pt->y;
+  _obj->ins_pt.z = ins_pt->z;
   if (x_direction)
     {
       ADD_CHECK_3DPOINT (x_direction);
-      dwg_geom_normalize ((dwg_point_3d*)&_obj->x_direction, *x_direction);
+      dwg_geom_normalize ((dwg_point_3d *)&_obj->x_direction, *x_direction);
     }
   else
     _obj->x_direction.x = 1.0;
@@ -24707,10 +24519,9 @@ dwg_add_TOLERANCE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
-EXPORT Dwg_Entity_MLINE*
+EXPORT Dwg_Entity_MLINE *
 dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-               const unsigned num_verts,
-               const dwg_point_3d *restrict verts)
+               const unsigned num_verts, const dwg_point_3d *restrict verts)
 {
   BITCODE_H mlstyref;
   Dwg_Object_MLINESTYLE *mlstyle = NULL;
@@ -24742,7 +24553,7 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     }
   for (unsigned i = 0; i < num_verts; i++)
     {
-      //dwg_point_3d pt, ext;
+      // dwg_point_3d pt, ext;
       BITCODE_3BD dir;
       unsigned next = i + 1;
       unsigned prev = i ? i - 1 : num_verts - 1;
@@ -24754,26 +24565,28 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _obj->verts[i].vertex.z = verts[i].z;
       // calc vertex_direction
       dwg_geom_normalize ((dwg_point_3d *)&dir,
-                              (dwg_point_3d){ verts[next].x - verts[i].x,
-                                              verts[next].y - verts[i].y,
-                                              verts[next].z - verts[i].z });
+                          (dwg_point_3d){ verts[next].x - verts[i].x,
+                                          verts[next].y - verts[i].y,
+                                          verts[next].z - verts[i].z });
       _obj->verts[i].vertex_direction = dir;
-      // FIXME miter_direction = seems to be the extrusion (=normal) of the vertex_direction
-      // to calculate the rotation matrix, starting with the start_angle.
+      // FIXME miter_direction = seems to be the extrusion (=normal) of the
+      // vertex_direction to calculate the rotation matrix, starting with the
+      // start_angle.
       if (i == 0)
         {
-#if defined(HAVE_SINCOS) && !defined(__clang__)
+#  if defined(HAVE_SINCOS) && !defined(__clang__)
           double cosa, sina;
           sincos (mlstyle->start_angle, &sina, &cosa);
-#else
+#  else
           const double cosa = cos (mlstyle->start_angle);
           const double sina = sin (mlstyle->start_angle);
-#endif
+#  endif
           dir = _obj->verts[i].vertex_direction;
           // rotate by the mlstyle->start_angle
           dir.x = (dir.x * cosa) - (dir.y * sina);
           dir.y = (dir.x * sina) + (dir.y * cosa);
-          //dwg_geom_normalize ((dwg_point_3d *)&_obj->verts[i].miter_direction, dir);
+          // dwg_geom_normalize ((dwg_point_3d
+          // *)&_obj->verts[i].miter_direction, dir);
           _obj->verts[i].miter_direction = dir; // already normalized
         }
       else
@@ -24803,7 +24616,8 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         {
           _obj->verts[i].lines[j].parent = _obj->verts;
           _obj->verts[i].lines[j].num_segparms = 2;
-          _obj->verts[i].lines[j].segparms = calloc (_obj->verts[i].lines[j].num_segparms, 8);
+          _obj->verts[i].lines[j].segparms
+              = calloc (_obj->verts[i].lines[j].num_segparms, 8);
           for (unsigned k = 0; k < _obj->verts[i].lines[j].num_segparms; k++)
             { // TODO
               _obj->verts[i].lines[j].segparms[k] = 0.0;
@@ -24815,31 +24629,32 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
 // Tables:
 
-/* This is a singleton and must be at 1. Must only be called from dwg_add_document() */
-Dwg_Object_BLOCK_CONTROL*
+/* This is a singleton and must be at 1. Must only be called from
+ * dwg_add_document() */
+Dwg_Object_BLOCK_CONTROL *
 dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
 {
   API_ADD_OBJECT (BLOCK_CONTROL);
-  //obj->handle.value = 1;
-  //obj->handle.size = 1;
-  //dwg->block_control = _obj; // but will be realloc'ed soon
+  // obj->handle.value = 1;
+  // obj->handle.size = 1;
+  // dwg->block_control = _obj; // but will be realloc'ed soon
   dwg->header_vars.BLOCK_CONTROL_OBJECT = dwg_add_handleref (dwg, 3, 1, obj);
   dwg->header_vars.BLOCK_CONTROL_OBJECT->obj = obj;
   if (ms)
     {
       // Usually this does not exist yet.
       _obj->model_space = dwg_add_handleref (dwg, 3, ms, obj);
-       dwg->header_vars.BLOCK_RECORD_MSPACE = _obj->model_space;
-       LOG_TRACE ("blkctrl.model_space = " FORMAT_REF "\n",
-                  ARGS_REF (_obj->model_space));
+      dwg->header_vars.BLOCK_RECORD_MSPACE = _obj->model_space;
+      LOG_TRACE ("blkctrl.model_space = " FORMAT_REF "\n",
+                 ARGS_REF (_obj->model_space));
     }
   if (ps)
     {
       // This neither
       _obj->paper_space = dwg_add_handleref (dwg, 3, ps, obj);
-       dwg->header_vars.BLOCK_RECORD_PSPACE = _obj->paper_space;
-       LOG_TRACE ("blkctrl.paper_space = " FORMAT_REF "\n",
-                  ARGS_REF (_obj->paper_space));
+      dwg->header_vars.BLOCK_RECORD_PSPACE = _obj->paper_space;
+      LOG_TRACE ("blkctrl.paper_space = " FORMAT_REF "\n",
+                 ARGS_REF (_obj->paper_space));
     }
   dwg->block_control = *_obj;
   return _obj;
@@ -24905,12 +24720,11 @@ dwg_add_BLOCK_HEADER (Dwg_Data *restrict dwg, const char *restrict name)
 EXPORT Dwg_Object_LAYER *
 dwg_add_LAYER (Dwg_Data *restrict dwg, const char *restrict name)
 {
-  //Dwg_Object_Ref *plotstyle = dwg_ctrl_table (dwg, "PLOTSTYLE"); // PLOTSTYLE dict
-  // TODO: since when do we add a plotstyle?
+  // Dwg_Object_Ref *plotstyle = dwg_ctrl_table (dwg, "PLOTSTYLE"); //
+  // PLOTSTYLE dict
+  //  TODO: since when do we add a plotstyle?
   API_ADD_TABLE (LAYER, LAYER_CONTROL,
-                 {
-                   _obj->plotstyle = dwg_add_handleref (dwg, 5, 0xF, NULL);
-                 });
+                 { _obj->plotstyle = dwg_add_handleref (dwg, 5, 0xF, NULL); });
 }
 
 EXPORT Dwg_Object_STYLE *
@@ -25010,35 +24824,36 @@ dwg_add_DIMSTYLE (Dwg_Data *restrict dwg, const char *restrict name)
       _obj->DIMCLRE = (BITCODE_CMC){ 0 };
       _obj->DIMCLRT = (BITCODE_CMC){ 0 };
       if (dwg->header_vars.TEXTSTYLE)
-        _obj->DIMTXSTY = dwg_add_handleref (dwg, 5,
-            dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
+        _obj->DIMTXSTY = dwg_add_handleref (
+            dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
     });
   }
 }
 
 EXPORT Dwg_Object_UCS *
-dwg_add_UCS (Dwg_Data *restrict dwg,
-             const dwg_point_3d *restrict origin,
+dwg_add_UCS (Dwg_Data *restrict dwg, const dwg_point_3d *restrict origin,
              const dwg_point_3d *restrict x_axis,
-             const dwg_point_3d *restrict y_axis,
-             const char *restrict name)
+             const dwg_point_3d *restrict y_axis, const char *restrict name)
 {
   API_ADD_TABLE (UCS, UCS_CONTROL, {
-    if (origin) {
-      _obj->ucsorg.x = origin->x;
-      _obj->ucsorg.y = origin->y;
-      _obj->ucsorg.z = origin->z;
-    }
-    if (x_axis) {
-      _obj->ucsxdir.x = x_axis->x;
-      _obj->ucsxdir.y = x_axis->y;
-      _obj->ucsxdir.z = x_axis->z;
-    }
-    if (y_axis) {
-      _obj->ucsydir.x = y_axis->x;
-      _obj->ucsydir.y = y_axis->y;
-      _obj->ucsydir.z = y_axis->z;
-    }
+    if (origin)
+      {
+        _obj->ucsorg.x = origin->x;
+        _obj->ucsorg.y = origin->y;
+        _obj->ucsorg.z = origin->z;
+      }
+    if (x_axis)
+      {
+        _obj->ucsxdir.x = x_axis->x;
+        _obj->ucsxdir.y = x_axis->y;
+        _obj->ucsxdir.z = x_axis->z;
+      }
+    if (y_axis)
+      {
+        _obj->ucsydir.x = y_axis->x;
+        _obj->ucsydir.y = y_axis->y;
+        _obj->ucsydir.z = y_axis->z;
+      }
   });
 }
 
@@ -25046,13 +24861,14 @@ dwg_add_UCS (Dwg_Data *restrict dwg,
 // VX_TABLE_RECORD
 // only until r14
 EXPORT Dwg_Object_VX_TABLE_RECORD *
-dwg_add_VX (Dwg_Data *restrict dwg, const char* restrict name)
+dwg_add_VX (Dwg_Data *restrict dwg, const char *restrict name)
 {
   API_ADD_TABLE (VX_TABLE_RECORD, VX_CONTROL);
 }
 
 EXPORT Dwg_Object_GROUP *
-dwg_add_GROUP (Dwg_Data *restrict dwg, const char *restrict name /* maybe NULL */)
+dwg_add_GROUP (Dwg_Data *restrict dwg,
+               const char *restrict name /* maybe NULL */)
 {
   Dwg_Object_DICTIONARY *dict = NULL;
   Dwg_Object *dictobj;
@@ -25068,29 +24884,31 @@ dwg_add_GROUP (Dwg_Data *restrict dwg, const char *restrict name /* maybe NULL *
   groupdict = dwg_ctrl_table (dwg, "GROUP");
   if (!groupdict)
     {
-      dict = dwg_add_DICTIONARY (
-          dwg, (const BITCODE_T) "ACAD_GROUP", name, obj->handle.value);
+      dict = dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_GROUP", name,
+                                 obj->handle.value);
     }
   else
     {
       Dwg_Object *group = dwg_ref_object (dwg, groupdict);
       if (group)
-        dict = dwg_add_DICTIONARY_item (obj->tio.object->tio.DICTIONARY, (const BITCODE_T) "ACAD_GROUP",
+        dict = dwg_add_DICTIONARY_item (obj->tio.object->tio.DICTIONARY,
+                                        (const BITCODE_T) "ACAD_GROUP",
                                         group->handle.value);
     }
   if (dict)
     {
       dictobj = dwg_obj_generic_to_object (dict, &error);
-      obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, dictobj->handle.value, NULL);
+      obj->tio.object->ownerhandle
+          = dwg_add_handleref (dwg, 4, dictobj->handle.value, NULL);
       obj->tio.object->ownerhandle->obj = NULL;
       add_obj_reactor (obj->tio.object, dictobj->handle.value);
     }
- 
-   _obj->selectable = 1;
+
+  _obj->selectable = 1;
   if (name)
     _obj->name = dwg_add_u8_input (dwg, name);
   else
-    _obj->unnamed = 1; 
+    _obj->unnamed = 1;
   return _obj;
 }
 
@@ -25104,14 +24922,15 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const char *restrict name)
   dictref = dwg_find_dictionary (dwg, "ACAD_MLINESTYLE");
   if (!dictref)
     {
-      dict = dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_MLINESTYLE", name,
-                                 obj->handle.value);
+      dict = dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_MLINESTYLE",
+                                 name, obj->handle.value);
       if (dict)
         {
           obj->tio.object->ownerhandle = dwg_add_handleref (
               dwg, 4, dwg_obj_generic_handlevalue (dict), obj);
           if (!obj->tio.object->num_reactors)
-            add_obj_reactor (obj->tio.object, dwg_obj_generic_handlevalue (dict));
+            add_obj_reactor (obj->tio.object,
+                             dwg_obj_generic_handlevalue (dict));
         }
     }
   else
@@ -25121,8 +24940,8 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const char *restrict name)
         {
           dwg_add_DICTIONARY_item (dictobj->tio.object->tio.DICTIONARY, name,
                                    obj->handle.value);
-          obj->tio.object->ownerhandle = dwg_add_handleref (
-              dwg, 4, dictobj->handle.value, obj);
+          obj->tio.object->ownerhandle
+              = dwg_add_handleref (dwg, 4, dictobj->handle.value, obj);
           if (!obj->tio.object->num_reactors)
             add_obj_reactor (obj->tio.object, dictobj->handle.value);
         }
@@ -25148,9 +24967,9 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const char *restrict name)
   return _obj;
 }
 
-  // OLE2FRAME
-  // DUMMY
-  // LONG_TRANSACTION
+// OLE2FRAME
+// DUMMY
+// LONG_TRANSACTION
 
 EXPORT Dwg_Entity_LWPOLYLINE *
 dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
@@ -25175,7 +24994,7 @@ dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   }
 }
 
-//GCC33_DIAG_IGNORE (-Wswitch-enum)
+// GCC33_DIAG_IGNORE (-Wswitch-enum)
 EXPORT Dwg_Entity_HATCH *
 dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const int pattern_type, const char *restrict name,
@@ -25222,18 +25041,15 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     for (unsigned i = 0; i < num_paths; i++)
       {
         Dwg_Object_Type type = pathobjs[i]->fixedtype;
-        if (type != DWG_TYPE_LINE &&
-            type != DWG_TYPE_ARC &&
-            type != DWG_TYPE_CIRCLE &&
-            type != DWG_TYPE_ELLIPSE &&
-            type != DWG_TYPE_POLYLINE_2D &&
-            type != DWG_TYPE_LWPOLYLINE &&
-            type != DWG_TYPE_SPLINE &&
-            type != DWG_TYPE_REGION)
+        if (type != DWG_TYPE_LINE && type != DWG_TYPE_ARC
+            && type != DWG_TYPE_CIRCLE && type != DWG_TYPE_ELLIPSE
+            && type != DWG_TYPE_POLYLINE_2D && type != DWG_TYPE_LWPOLYLINE
+            && type != DWG_TYPE_SPLINE && type != DWG_TYPE_REGION)
           {
-            LOG_ERROR ("Invalid HATCH.path[%d] object type %s. Only accept "
-                       "Line, Polyline, Circle, Arc, Ellipse, Spline or Region",
-                       i, dwg_type_name (type));
+            LOG_ERROR (
+                "Invalid HATCH.path[%d] object type %s. Only accept "
+                "Line, Polyline, Circle, Arc, Ellipse, Spline or Region",
+                i, dwg_type_name (type));
             return NULL;
           }
         _obj->paths[i].parent = _obj;
@@ -25264,7 +25080,8 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           case DWG_TYPE_ARC:
             {
               Dwg_Entity_ARC *arc = pathobjs[i]->tio.entity->tio.ARC;
-              _obj->paths[i].flag = 0x21 + (is_associative ? 0x200 : 0); // is_open
+              _obj->paths[i].flag
+                  = 0x21 + (is_associative ? 0x200 : 0); // is_open
               _obj->paths[i].num_segs_or_paths = 1;
               _obj->paths[i].segs = calloc (1, sizeof (Dwg_HATCH_PathSeg));
               _obj->paths[i].segs[0].parent = &_obj->paths[i];
@@ -25313,18 +25130,21 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
             }
           case DWG_TYPE_SPLINE:
           case DWG_TYPE_REGION:
-            LOG_WARN ("Path segment extraction for HATCH from %s not yet implemented",
+            LOG_WARN ("Path segment extraction for HATCH from %s not yet "
+                      "implemented",
                       dwg_type_name (type));
             break;
           case DWG_TYPE_LWPOLYLINE:
             {
               bool has_bulges = false;
-              Dwg_Entity_LWPOLYLINE *pline = pathobjs[i]->tio.entity->tio.LWPOLYLINE;
-              // If no bulges just use flag 1 as with LINE?? (but flag 2 would be much more compact)
-              // I have seen LWPOLYLINE's without bulges being HATCHed to segments.
+              Dwg_Entity_LWPOLYLINE *pline
+                  = pathobjs[i]->tio.entity->tio.LWPOLYLINE;
+              // If no bulges just use flag 1 as with LINE?? (but flag 2 would
+              // be much more compact) I have seen LWPOLYLINE's without bulges
+              // being HATCHed to segments.
               if (pline->num_bulges && pline->flag & 16)
                 {
-                  for (unsigned j=0; j < pline->num_bulges; j++)
+                  for (unsigned j = 0; j < pline->num_bulges; j++)
                     {
                       if (pline->bulges[j] != 0.0)
                         {
@@ -25345,18 +25165,23 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                       num = pline->num_points - 1;
                     }
                   _obj->paths[i].num_segs_or_paths = num;
-                  _obj->paths[i].segs = calloc (num, sizeof (Dwg_HATCH_PathSeg));
-                  for (unsigned j=0; j < num; j++)
+                  _obj->paths[i].segs
+                      = calloc (num, sizeof (Dwg_HATCH_PathSeg));
+                  for (unsigned j = 0; j < num; j++)
                     {
                       unsigned k = j + 1;
                       if (k == pline->num_points)
                         k = 0;
                       _obj->paths[i].segs[j].parent = &_obj->paths[i];
                       _obj->paths[i].segs[j].curve_type = 1;
-                      _obj->paths[i].segs[j].first_endpoint.x = pline->points[j].x;
-                      _obj->paths[i].segs[j].first_endpoint.y = pline->points[j].y;
-                      _obj->paths[i].segs[j].second_endpoint.x = pline->points[k].x;
-                      _obj->paths[i].segs[j].second_endpoint.y = pline->points[k].y;
+                      _obj->paths[i].segs[j].first_endpoint.x
+                          = pline->points[j].x;
+                      _obj->paths[i].segs[j].first_endpoint.y
+                          = pline->points[j].y;
+                      _obj->paths[i].segs[j].second_endpoint.x
+                          = pline->points[k].x;
+                      _obj->paths[i].segs[j].second_endpoint.y
+                          = pline->points[k].y;
                     }
                 }
               else
@@ -25369,18 +25194,23 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                       pline->num_points, sizeof (Dwg_HATCH_PolylinePath));
                   for (unsigned j = 0; j < pline->num_points; j++)
                     {
-                      _obj->paths[i].polyline_paths[j].parent = &_obj->paths[i];
-                      _obj->paths[i].polyline_paths[j].point.x = pline->points[j].x;
-                      _obj->paths[i].polyline_paths[j].point.y = pline->points[j].y;
+                      _obj->paths[i].polyline_paths[j].parent
+                          = &_obj->paths[i];
+                      _obj->paths[i].polyline_paths[j].point.x
+                          = pline->points[j].x;
+                      _obj->paths[i].polyline_paths[j].point.y
+                          = pline->points[j].y;
                       if (_obj->paths[i].bulges_present)
-                        _obj->paths[i].polyline_paths[j].bulge = pline->bulges[j];
+                        _obj->paths[i].polyline_paths[j].bulge
+                            = pline->bulges[j];
                     }
                 }
             }
             break;
           case DWG_TYPE_POLYLINE_2D:
             {
-              Dwg_Entity_POLYLINE_2D *pline = pathobjs[i]->tio.entity->tio.POLYLINE_2D;
+              Dwg_Entity_POLYLINE_2D *pline
+                  = pathobjs[i]->tio.entity->tio.POLYLINE_2D;
               dwg_point_2d *pts;
               _obj->paths[i].flag = 2 + (is_associative ? 0x200 : 0);
               _obj->paths[i].closed = pline->flag & 1 ? 1 : 0;
@@ -25390,7 +25220,7 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               pts = dwg_object_polyline_2d_get_points (pathobjs[i], &error);
               if (error)
                 return NULL;
-              for (unsigned j=0; j < pline->num_owned; j++)
+              for (unsigned j = 0; j < pline->num_owned; j++)
                 {
                   _obj->paths[i].polyline_paths[j].parent = &_obj->paths[i];
                   _obj->paths[i].polyline_paths[j].point.x = pts[j].x;
@@ -25401,9 +25231,10 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
             }
             break;
           default:
-            LOG_ERROR ("Invalid HATCH.path[%d] object type %s. Only accept "
-                       "Line, Polyline, Circle, Arc, Ellipse, Spline or Region",
-                       i, dwg_type_name (type));
+            LOG_ERROR (
+                "Invalid HATCH.path[%d] object type %s. Only accept "
+                "Line, Polyline, Circle, Arc, Ellipse, Spline or Region",
+                i, dwg_type_name (type));
             return NULL;
           }
       }
@@ -25418,7 +25249,8 @@ dwg_add_XRECORD (Dwg_Object_DICTIONARY *restrict dict,
   int err;
   Dwg_Object *dictobj = dwg_obj_generic_to_object (dict, &err);
   Dwg_Data *dwg = dictobj->parent;
-  if (dictobj->fixedtype != DWG_TYPE_DICTIONARY) // allow WDFLT? not seen in the wild
+  if (dictobj->fixedtype
+      != DWG_TYPE_DICTIONARY) // allow WDFLT? not seen in the wild
     {
       LOG_ERROR ("Object XRECORD must be added to a DICTIONARY, not %s",
                  dwg_type_name (dictobj->fixedtype));
@@ -25437,7 +25269,8 @@ dwg_add_XRECORD (Dwg_Object_DICTIONARY *restrict dict,
   }
 }
 
-static Dwg_Resbuf *rbuf_last (Dwg_Resbuf *rbuf)
+static Dwg_Resbuf *
+rbuf_last (Dwg_Resbuf *rbuf)
 {
   Dwg_Resbuf *prev = rbuf;
   while (rbuf)
@@ -25448,7 +25281,8 @@ static Dwg_Resbuf *rbuf_last (Dwg_Resbuf *rbuf)
   return prev;
 }
 
-static Dwg_Resbuf *rbuf_add (Dwg_Resbuf *rbuf)
+static Dwg_Resbuf *
+rbuf_add (Dwg_Resbuf *rbuf)
 {
   rbuf = rbuf_last (rbuf);
   if (!rbuf)
@@ -25462,21 +25296,22 @@ static Dwg_Resbuf *rbuf_add (Dwg_Resbuf *rbuf)
     }
 }
 
-#define CHECK_XRECORD                                                   \
-  int error;                                                            \
-  Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);           \
-  if (!obj || obj->fixedtype != DWG_TYPE_XRECORD)                       \
-    {                                                                   \
-      LOG_ERROR ("Not a XRECORD, but %s", obj ? dwg_type_name (obj->fixedtype) : "NULL"); \
-      return NULL;                                                      \
-    }
+#  define CHECK_XRECORD                                                       \
+    int error;                                                                \
+    Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);               \
+    if (!obj || obj->fixedtype != DWG_TYPE_XRECORD)                           \
+      {                                                                       \
+        LOG_ERROR ("Not a XRECORD, but %s",                                   \
+                   obj ? dwg_type_name (obj->fixedtype) : "NULL");            \
+        return NULL;                                                          \
+      }
 
 EXPORT Dwg_Object_XRECORD *
-dwg_add_XRECORD_bool (Dwg_Object_XRECORD *restrict _obj,
-                      const short dxf, const BITCODE_B value)
+dwg_add_XRECORD_bool (Dwg_Object_XRECORD *restrict _obj, const short dxf,
+                      const BITCODE_B value)
 {
   Dwg_Resbuf *rbuf;
-  CHECK_XRECORD;    
+  CHECK_XRECORD;
   rbuf = rbuf_add (_obj->xdata);
   if (!_obj->xdata)
     _obj->xdata = rbuf;
@@ -25488,8 +25323,8 @@ dwg_add_XRECORD_bool (Dwg_Object_XRECORD *restrict _obj,
 }
 
 EXPORT Dwg_Object_XRECORD *
-dwg_add_XRECORD_int8 (Dwg_Object_XRECORD *restrict _obj,
-                       const short dxf, const BITCODE_RC value)
+dwg_add_XRECORD_int8 (Dwg_Object_XRECORD *restrict _obj, const short dxf,
+                      const BITCODE_RC value)
 {
   int error;
   Dwg_Resbuf *rbuf;
@@ -25510,8 +25345,8 @@ dwg_add_XRECORD_int8 (Dwg_Object_XRECORD *restrict _obj,
 }
 
 EXPORT Dwg_Object_XRECORD *
-dwg_add_XRECORD_int16 (Dwg_Object_XRECORD *restrict _obj,
-                       const short dxf, const BITCODE_BS value)
+dwg_add_XRECORD_int16 (Dwg_Object_XRECORD *restrict _obj, const short dxf,
+                       const BITCODE_BS value)
 {
   int error;
   Dwg_Resbuf *rbuf;
@@ -25532,15 +25367,16 @@ dwg_add_XRECORD_int16 (Dwg_Object_XRECORD *restrict _obj,
 }
 
 EXPORT Dwg_Object_XRECORD *
-dwg_add_XRECORD_int32 (Dwg_Object_XRECORD *restrict _obj,
-                       const short dxf, const BITCODE_BL value)
+dwg_add_XRECORD_int32 (Dwg_Object_XRECORD *restrict _obj, const short dxf,
+                       const BITCODE_BL value)
 {
   int error;
   Dwg_Resbuf *rbuf;
   Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);
   if (!obj || obj->fixedtype != DWG_TYPE_XRECORD)
     {
-      LOG_ERROR ("Not a XRECORD, but %s", obj ? dwg_type_name (obj->fixedtype) : "NULL");
+      LOG_ERROR ("Not a XRECORD, but %s",
+                 obj ? dwg_type_name (obj->fixedtype) : "NULL");
       return NULL;
     }
   rbuf = rbuf_add (_obj->xdata);
@@ -25553,10 +25389,9 @@ dwg_add_XRECORD_int32 (Dwg_Object_XRECORD *restrict _obj,
   return _obj;
 }
 
-
 EXPORT Dwg_Object_XRECORD *
-dwg_add_XRECORD_int64 (Dwg_Object_XRECORD *restrict _obj,
-                       const short dxf, const BITCODE_BLL value)
+dwg_add_XRECORD_int64 (Dwg_Object_XRECORD *restrict _obj, const short dxf,
+                       const BITCODE_BLL value)
 {
   int err;
   Dwg_Resbuf *rbuf;
@@ -25577,8 +25412,8 @@ dwg_add_XRECORD_int64 (Dwg_Object_XRECORD *restrict _obj,
 }
 
 EXPORT Dwg_Object_XRECORD *
-dwg_add_XRECORD_real (Dwg_Object_XRECORD *restrict _obj,
-                      const short dxf, const BITCODE_BD value)
+dwg_add_XRECORD_real (Dwg_Object_XRECORD *restrict _obj, const short dxf,
+                      const BITCODE_BD value)
 {
   int err;
   Dwg_Resbuf *rbuf;
@@ -25599,8 +25434,8 @@ dwg_add_XRECORD_real (Dwg_Object_XRECORD *restrict _obj,
 }
 
 EXPORT Dwg_Object_XRECORD *
-dwg_add_XRECORD_pointd3d (Dwg_Object_XRECORD *restrict _obj,
-                          const short dxf, const BITCODE_3DPOINT *pt)
+dwg_add_XRECORD_pointd3d (Dwg_Object_XRECORD *restrict _obj, const short dxf,
+                          const BITCODE_3DPOINT *pt)
 {
   int err;
   Dwg_Resbuf *rbuf;
@@ -25623,9 +25458,8 @@ dwg_add_XRECORD_pointd3d (Dwg_Object_XRECORD *restrict _obj,
 }
 
 EXPORT Dwg_Object_XRECORD *
-dwg_add_XRECORD_binary (Dwg_Object_XRECORD *restrict _obj,
-                        const short dxf,
-                        const int size, const BITCODE_RC* data)
+dwg_add_XRECORD_binary (Dwg_Object_XRECORD *restrict _obj, const short dxf,
+                        const int size, const BITCODE_RC *data)
 {
   int error;
   Dwg_Resbuf *rbuf;
@@ -25650,8 +25484,7 @@ dwg_add_XRECORD_binary (Dwg_Object_XRECORD *restrict _obj,
 }
 
 EXPORT Dwg_Object_XRECORD *
-dwg_add_XRECORD_string (Dwg_Object_XRECORD *restrict _obj,
-                        const short dxf,
+dwg_add_XRECORD_string (Dwg_Object_XRECORD *restrict _obj, const short dxf,
                         const BITCODE_BS len,
                         const char *str) // utf8
 {
@@ -25680,8 +25513,8 @@ dwg_add_XRECORD_string (Dwg_Object_XRECORD *restrict _obj,
 }
 
 EXPORT Dwg_Object_XRECORD *
-dwg_add_XRECORD_handle (Dwg_Object_XRECORD *restrict _obj,
-                        const short dxf, const Dwg_Handle hdl)
+dwg_add_XRECORD_handle (Dwg_Object_XRECORD *restrict _obj, const short dxf,
+                        const Dwg_Handle hdl)
 {
   int error;
   Dwg_Resbuf *rbuf;
@@ -25729,7 +25562,7 @@ dwg_add_VBA_PROJECT (Dwg_Data *restrict dwg, const BITCODE_BL size,
     // add the data to dwg->vbaproject, the SECTION_VBAPROJECT
     dwg->vbaproject.size = size;
     dwg->vbaproject.unknown_bits = malloc (size);
-    //memcpy (_obj->data, data, size);
+    // memcpy (_obj->data, data, size);
     memcpy (dwg->vbaproject.unknown_bits, data, size);
     // header.vbaproj_address is set in encode
     return _obj;
@@ -25738,19 +25571,19 @@ dwg_add_VBA_PROJECT (Dwg_Data *restrict dwg, const BITCODE_BL size,
 
 /* either added to the VIEWPORT entity in pspace, or VPORT object in mspace. */
 EXPORT Dwg_Object_LAYOUT *
-dwg_add_LAYOUT (Dwg_Object *restrict vp,
-                const char *restrict name,
+dwg_add_LAYOUT (Dwg_Object *restrict vp, const char *restrict name,
                 const char *restrict canonical_media_name)
 {
   int err;
   Dwg_Data *dwg = vp->parent;
-#ifdef NEED_VPORT_FOR_MODEL_LAYOUT
+#  ifdef NEED_VPORT_FOR_MODEL_LAYOUT
   if (vp->fixedtype != DWG_TYPE_VPORT && vp->fixedtype != DWG_TYPE_VIEWPORT)
     {
-      LOG_ERROR ("LAYOUT can only be added to VPORT (in mspace) or VIEWPORT (in pspace)");
+      LOG_ERROR ("LAYOUT can only be added to VPORT (in mspace) or VIEWPORT "
+                 "(in pspace)");
       return NULL;
     }
-#endif
+#  endif
   {
     // TODL skip if <r2000
     REQUIRE_CLASS ("LAYOUT");
@@ -25766,36 +25599,45 @@ dwg_add_LAYOUT (Dwg_Object *restrict vp,
 
     _obj->layout_name = dwg_add_u8_input (dwg, name);
     _obj->layout_flags = 1;
-    _obj->plotsettings.canonical_media_name = dwg_add_u8_input (dwg, canonical_media_name);
+    _obj->plotsettings.canonical_media_name
+        = dwg_add_u8_input (dwg, canonical_media_name);
     _obj->UCSXDIR.x = 1.0;
     _obj->UCSYDIR.y = 1.0;
-    if (vp->fixedtype == DWG_TYPE_VIEWPORT) {
-      _obj->LIMMAX = dwg->header_vars.PLIMMAX;
-      _obj->EXTMIN = dwg->header_vars.PEXTMIN;
-      _obj->EXTMAX = dwg->header_vars.PEXTMAX;
-      _obj->UCSXDIR = dwg->header_vars.PUCSXDIR;
-      _obj->UCSYDIR = dwg->header_vars.PUCSYDIR;
-    } else {
-      _obj->LIMMAX = dwg->header_vars.LIMMAX;
-      _obj->EXTMIN = dwg->header_vars.EXTMIN;
-      _obj->EXTMAX = dwg->header_vars.EXTMAX;
-      _obj->UCSXDIR = dwg->header_vars.UCSXDIR;
-      _obj->UCSYDIR = dwg->header_vars.UCSYDIR;
-    }
+    if (vp->fixedtype == DWG_TYPE_VIEWPORT)
+      {
+        _obj->LIMMAX = dwg->header_vars.PLIMMAX;
+        _obj->EXTMIN = dwg->header_vars.PEXTMIN;
+        _obj->EXTMAX = dwg->header_vars.PEXTMAX;
+        _obj->UCSXDIR = dwg->header_vars.PUCSXDIR;
+        _obj->UCSYDIR = dwg->header_vars.PUCSYDIR;
+      }
+    else
+      {
+        _obj->LIMMAX = dwg->header_vars.LIMMAX;
+        _obj->EXTMIN = dwg->header_vars.EXTMIN;
+        _obj->EXTMAX = dwg->header_vars.EXTMAX;
+        _obj->UCSXDIR = dwg->header_vars.UCSXDIR;
+        _obj->UCSYDIR = dwg->header_vars.UCSYDIR;
+      }
 
     // either VIEWPORT or VPORT
-    if (vp->fixedtype == DWG_TYPE_BLOCK_HEADER) {
-      ownerhandle = vp->handle.value;
-      _obj->active_viewport = dwg_add_handleref (dwg, 4, 0, NULL);
-    }
-    else if (vp->fixedtype == DWG_TYPE_VPORT) {
-      ownerhandle = vp->tio.object->ownerhandle->absolute_ref;
-      _obj->active_viewport = dwg_add_handleref (dwg, 4, vp->handle.value, NULL);
-    }
-    else {
-      ownerhandle = vp->tio.entity->ownerhandle->absolute_ref;
-      _obj->active_viewport = dwg_add_handleref (dwg, 4, vp->handle.value, NULL);
-    }
+    if (vp->fixedtype == DWG_TYPE_BLOCK_HEADER)
+      {
+        ownerhandle = vp->handle.value;
+        _obj->active_viewport = dwg_add_handleref (dwg, 4, 0, NULL);
+      }
+    else if (vp->fixedtype == DWG_TYPE_VPORT)
+      {
+        ownerhandle = vp->tio.object->ownerhandle->absolute_ref;
+        _obj->active_viewport
+            = dwg_add_handleref (dwg, 4, vp->handle.value, NULL);
+      }
+    else
+      {
+        ownerhandle = vp->tio.entity->ownerhandle->absolute_ref;
+        _obj->active_viewport
+            = dwg_add_handleref (dwg, 4, vp->handle.value, NULL);
+      }
 
     _obj->block_header = dwg_add_handleref (dwg, 4, ownerhandle, NULL);
     // TODO copy the plotsettings and viewport settings as default
@@ -25814,12 +25656,14 @@ dwg_add_LAYOUT (Dwg_Object *restrict vp,
         obj->tio.object->ownerhandle
             = dwg_add_handleref (dwg, 4, dictobj->handle.value, obj);
         add_obj_reactor (obj->tio.object, dictobj->handle.value);
-        if (!dwg->header_vars.DICTIONARY_LAYOUT || !dwg->header_vars.DICTIONARY_LAYOUT->absolute_ref)
+        if (!dwg->header_vars.DICTIONARY_LAYOUT
+            || !dwg->header_vars.DICTIONARY_LAYOUT->absolute_ref)
           dwg->header_vars.DICTIONARY_LAYOUT
               = dwg_add_handleref (dwg, 5, dictobj->handle.value, NULL);
       }
     {
-      // Attach to block_header also if empty. Only to *Paper_Space or *Model_Space.
+      // Attach to block_header also if empty. Only to *Paper_Space or
+      // *Model_Space.
       Dwg_Object_Ref *blkref = _obj->block_header;
       Dwg_Object *blk = dwg_ref_object (dwg, blkref);
       if (!blk)
@@ -25849,7 +25693,8 @@ dwg_add_PROXY_ENTITY (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */)
   }
 }
 
-// owned by a DICT: name: nod key, e.g. HOST_DOC_SETTINGS, key: e.g. NCDOCPARAMETERS
+// owned by a DICT: name: nod key, e.g. HOST_DOC_SETTINGS, key: e.g.
+// NCDOCPARAMETERS
 EXPORT Dwg_Object_PROXY_OBJECT *
 dwg_add_PROXY_OBJECT (Dwg_Data *restrict dwg, char *name, char *key
                       /*, size, data */)
@@ -25868,8 +25713,10 @@ dwg_add_PROXY_OBJECT (Dwg_Data *restrict dwg, char *name, char *key
 
   {
     API_ADD_OBJECT (PROXY_OBJECT);
-    dwg_add_DICTIONARY_item (nod->tio.object->tio.DICTIONARY, key, obj->handle.value);
-    obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, dictobj->handle.value, NULL);
+    dwg_add_DICTIONARY_item (nod->tio.object->tio.DICTIONARY, key,
+                             obj->handle.value);
+    obj->tio.object->ownerhandle
+        = dwg_add_handleref (dwg, 4, dictobj->handle.value, NULL);
     add_obj_reactor (obj->tio.object, dictobj->handle.value);
     _obj->class_id = 499;
     return _obj;
@@ -25883,8 +25730,8 @@ dwg_add_PROXY_OBJECT (Dwg_Data *restrict dwg, char *name, char *key
 // ACMESTATEMGR
 
 // ACSH_BOOLEAN_CLASS
-// Performs a Boolean operation (0 union, 1 intersect, or 2 subtract) between the
-// object and another 3DSolid or Region object
+// Performs a Boolean operation (0 union, 1 intersect, or 2 subtract) between
+// the object and another 3DSolid or Region object
 
 Dwg_Object_EVALUATION_GRAPH *
 dwg_add_EVALUATION_GRAPH (Dwg_Data *restrict dwg, const int has_graph,
@@ -25931,7 +25778,7 @@ dwg_add_EVALUATION_GRAPH (Dwg_Data *restrict dwg, const int has_graph,
   return _obj;
 }
 
-Dwg_Object_ACSH_HISTORY_CLASS*
+Dwg_Object_ACSH_HISTORY_CLASS *
 dwg_add_ACSH_HISTORY_CLASS (Dwg_Entity_3DSOLID *restrict region,
                             const int h_nodeid)
 {
@@ -25982,7 +25829,8 @@ dwg_geom_normalize (dwg_point_3d *out, const dwg_point_3d pt)
 }
 
 dwg_point_3d *
-dwg_geom_cross (dwg_point_3d *out, const dwg_point_3d pt1, const dwg_point_3d pt2)
+dwg_geom_cross (dwg_point_3d *out, const dwg_point_3d pt1,
+                const dwg_point_3d pt2)
 {
   out->x = pt1.y * pt2.z - pt1.z * pt2.y;
   out->y = pt1.z * pt2.x - pt1.x * pt2.z;
@@ -25992,8 +25840,7 @@ dwg_geom_cross (dwg_point_3d *out, const dwg_point_3d pt1, const dwg_point_3d pt
 
 // Transform a 3D point via its OCS (extrusion or normal)
 EXPORT dwg_point_3d *
-dwg_geom_transform_OCS (dwg_point_3d *out,
-                        const dwg_point_3d pt,
+dwg_geom_transform_OCS (dwg_point_3d *out, const dwg_point_3d pt,
                         const dwg_point_3d ext)
 {
   if (ext.x == 0.0 && ext.y == 0.0 && ext.z == 1.0)
@@ -26003,7 +25850,7 @@ dwg_geom_transform_OCS (dwg_point_3d *out,
   else if (ext.x == 0.0 && ext.y == 0.0 && ext.z == -1.0)
     {
       *out = pt;
-      out->x = - out->x;
+      out->x = -out->x;
     }
   else
     {
@@ -26040,13 +25887,14 @@ dwg_geom_transform_OCS (dwg_point_3d *out,
 typedef double dwg_matrix9[9];
 
 // Via the arbitrary axis algorithm we can define the 3 rotations (dwg_matrix9)
-// as a single normal. This helper function creates the rotation matrix from the
-// normal vector.
+// as a single normal. This helper function creates the rotation matrix from
+// the normal vector.
 static void
-dwg_geom_normal_to_matrix9 (const dwg_point_3d *restrict normal, dwg_matrix9 *matrix)
+dwg_geom_normal_to_matrix9 (const dwg_point_3d *restrict normal,
+                            dwg_matrix9 *matrix)
 {
   // TODO for now we keep the unrotated defaults
-#if 0
+#  if 0
   if (normal.x == 0.0 && normal.y == 0.0 && normal.z == 1.0)
     {
       dwg_matrix9 def_matrix = {
@@ -26077,20 +25925,19 @@ dwg_geom_normal_to_matrix9 (const dwg_point_3d *restrict normal, dwg_matrix9 *ma
       //??
       memcpy (&matrix, &ay, sizeof (dwg_point_3d));
     }
-#endif
+#  endif
   ;
 }
 
 static void
 dwg_init_ACSH_CLASS (Dwg_Data *restrict dwg, Dwg_Object *restrict obj,
-                     void *restrict acsh, Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                     const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal)
+                     void *restrict acsh,
+                     Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
+                     const dwg_point_3d *restrict origin_pt,
+                     const dwg_point_3d *restrict normal)
 {
-  Dwg_Object_ACSH_BOX_CLASS* _obj = (Dwg_Object_ACSH_BOX_CLASS*)acsh;
-  dwg_matrix9 matrix = {
-    1.0, 0.0, 0.0,
-    0.0, 1.0, 0.0,
-    0.0, 0.0, 1.0 };
+  Dwg_Object_ACSH_BOX_CLASS *_obj = (Dwg_Object_ACSH_BOX_CLASS *)acsh;
+  dwg_matrix9 matrix = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
 
   obj->tio.object->ownerhandle = dwg_add_handleref (
       dwg, 5, dwg_obj_generic_handlevalue (evalgraph), obj);
@@ -26105,7 +25952,7 @@ dwg_init_ACSH_CLASS (Dwg_Data *restrict dwg, Dwg_Object *restrict obj,
   _obj->history_node.color.rgb = 0xc3000001;
   _obj->history_node.color.method = 0xc3;
   _obj->history_node.color.flag = 0x0;
-  _obj->history_node.step_id = 97; //?
+  _obj->history_node.step_id = 97;    //?
   _obj->history_node.material = NULL; // => MATERIAL of LAYER "0"
   dwg_geom_normal_to_matrix9 (normal, &matrix);
   _obj->history_node.trans = calloc (16, 8);
@@ -26127,7 +25974,8 @@ dwg_init_ACSH_CLASS (Dwg_Data *restrict dwg, Dwg_Object *restrict obj,
   _obj->minor = 52;
 }
 
-static size_t dwg_acis_date (char *date, size_t size)
+static size_t
+dwg_acis_date (char *date, size_t size)
 {
   time_t rawtime;
   struct tm *tm;
@@ -26138,9 +25986,10 @@ static size_t dwg_acis_date (char *date, size_t size)
   return strftime (date, size, "%a %b %d %H:%M:%S %Y", tm);
 }
 
-Dwg_Object_ACSH_BOX_CLASS*
+Dwg_Object_ACSH_BOX_CLASS *
 dwg_add_ACSH_BOX_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                        const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
+                        const dwg_point_3d *restrict origin_pt,
+                        const dwg_point_3d *restrict normal,
                         const double length, const double width,
                         const double height)
 {
@@ -26188,11 +26037,11 @@ ACSH_init_evalgraph (Dwg_Data *restrict dwg, void *restrict _acsh,
       = dwg_add_handleref (dwg, 4, histobj->handle.value, evalobj);
 }
 
-EXPORT Dwg_Entity_3DSOLID*
+EXPORT Dwg_Entity_3DSOLID *
 dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-             const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
-             const double length, const double width,
-             const double height)
+             const dwg_point_3d *restrict origin_pt,
+             const dwg_point_3d *restrict normal, const double length,
+             const double width, const double height)
 {
   int err;
   Dwg_Data *dwg;
@@ -26212,11 +26061,8 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Entity_3DSOLID *solid;
     Dwg_Object_ACSH_BOX_CLASS *_obj;
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
-    dwg_matrix9 matrix = {
-      1.0, 0.0, 0.0,
-      0.0, 1.0, 0.0,
-      0.0, 0.0, 1.0 };
-    #define ACIS_BOX_SIZE 7500
+    dwg_matrix9 matrix = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
+#  define ACIS_BOX_SIZE 7500
     char acis_data[ACIS_BOX_SIZE];
     char date[48];
     unsigned date_size = dwg_acis_date (date, 48);
@@ -26233,33 +26079,39 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         // product acis_version date
         "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
         // num_mm_units resabs resnor
-        "25.39999999999999858 9.999999999999999547e-07 1.000000000000000036e-10\n"
+        "25.39999999999999858 9.999999999999999547e-07 "
+        "1.000000000000000036e-10\n"
         "body $-1 -1 $-1 $1 $-1 $2 #\n"
         "lump $-1 -1 $-1 $-1 $3 $0 #\n"
-        "transform $-1 -1 ""%g %g %g ""%g %g %g ""%g %g %g ""%g %g %g ""1 no_rotate no_reflect no_shear #\n"
+        "transform $-1 -1 "
+        "%g %g %g "
+        "%g %g %g "
+        "%g %g %g "
+        "%g %g %g "
+        "1 no_rotate no_reflect no_shear #\n"
         "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
         "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
         "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
         "face $9 -1 $-1 $10 $11 $3 $-1 $12 reversed single #\n"
         "loop $-1 -1 $-1 $-1 $13 $4 #\n"
-      // h2
+        // h2
         "plane-surface $-1 -1 $-1 0 0 %f 0 0 1 -1 0 0 reverse_v I I I I #\n"
         "color-adesk-attrib $-1 -1 $-1 $-1 $6 256 #\n"
         "face $14 -1 $-1 $15 $16 $3 $-1 $17 reversed single #\n"
         "loop $-1 -1 $-1 $-1 $18 $6 #\n"
-      // -h2
+        // -h2
         "plane-surface $-1 -1 $-1 0 0 %f 0 0 1 -1 0 0 reverse_v I I I I #\n"
         "coedge $-1 -1 $-1 $19 $20 $21 $22 reversed $7 $-1 #\n"
         "color-adesk-attrib $-1 -1 $-1 $-1 $10 256 #\n"
         "face $23 -1 $-1 $24 $25 $3 $-1 $26 reversed single #\n"
         "loop $-1 -1 $-1 $-1 $27 $10 #\n"
-      // -w2
+        // -w2
         "plane-surface $-1 -1 $-1 0 %f 0 0 1 0 0 0 1 reverse_v I I I I #\n"
         "coedge $-1 -1 $-1 $28 $29 $30 $31 reversed $11 $-1 #\n"
         "coedge $-1 -1 $-1 $32 $13 $33 $34 reversed $7 $-1 #\n"
         "coedge $-1 -1 $-1 $13 $32 $35 $36 reversed $7 $-1 #\n"
         "coedge $-1 -1 $-1 $37 $38 $13 $22 forward $39 $-1 #\n"
-      // -w2, w2
+        // -w2, w2
         "edge $40 -1 $-1 $41 %f $42 %f $21 $43 forward @7 unknown #\n"
         "color-adesk-attrib $-1 -1 $-1 $-1 $15 256 #\n"
         "face $44 -1 $-1 $45 $46 $3 $-1 $47 reversed single #\n"
@@ -26270,7 +26122,7 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         "coedge $-1 -1 $-1 $52 $18 $53 $54 reversed $11 $-1 #\n"
         "coedge $-1 -1 $-1 $18 $52 $49 $55 reversed $11 $-1 #\n"
         "coedge $-1 -1 $-1 $38 $37 $18 $31 forward $39 $-1 #\n"
-      // -w2, w2
+        // -w2, w2
         "edge $56 -1 $-1 $57 %f $58 %f $30 $59 forward @7 unknown #\n"
         "coedge $-1 -1 $-1 $20 $19 $60 $61 reversed $7 $-1 #\n"
         "coedge $-1 -1 $-1 $62 $27 $19 $34 forward $16 $-1 #\n"
@@ -26290,12 +26142,12 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         "color-adesk-attrib $-1 -1 $-1 $-1 $24 256 #\n"
         "face $75 -1 $-1 $-1 $39 $3 $-1 $76 reversed single #\n"
         "loop $-1 -1 $-1 $-1 $67 $24 #\n"
-      // w2
+        // w2
         "plane-surface $-1 -1 $-1 0 %f 0 0 -1 0 0 0 -1 reverse_v I I I I #\n"
         "coedge $-1 -1 $-1 $60 $77 $66 $78 reversed $25 $-1 #\n"
         "coedge $-1 -1 $-1 $27 $62 $29 $55 forward $16 $-1 #\n"
         "coedge $-1 -1 $-1 $77 $60 $27 $51 forward $25 $-1 #\n"
-      // -h2, h2
+        // -h2, h2
         "edge $79 -1 $-1 $64 %f $80 %f $50 $81 forward @7 unknown #\n"
         "coedge $-1 -1 $-1 $29 $28 $77 $82 reversed $11 $-1 #\n"
         "coedge $-1 -1 $-1 $67 $66 $28 $54 forward $46 $-1 #\n"
@@ -26309,72 +26161,72 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         // -l2, -h2
         "straight-curve $-1 -1 $-1 %f 0 %f 0 -1 0 I I #\n"
         "coedge $-1 -1 $-1 $50 $48 $32 $61 forward $25 $-1 #\n"
-      // -w2, w2
+        // -w2, w2
         "edge $90 -1 $-1 $69 %f $64 %f $60 $91 forward @7 unknown #\n"
         "coedge $-1 -1 $-1 $49 $33 $38 $72 forward $16 $-1 #\n"
         "color-adesk-attrib $-1 -1 $-1 $-1 $34 256 #\n"
         "vertex $-1 -1 $-1 $61 $92 #\n"
-      // -w2, h2
+        // -w2, h2
         "straight-curve $-1 -1 $-1 0 %f %f -1 0 0 I I #\n"
         "coedge $-1 -1 $-1 $53 $35 $48 $78 forward $46 $-1 #\n"
         "coedge $-1 -1 $-1 $35 $53 $37 $71 reversed $46 $-1 #\n"
         "color-adesk-attrib $-1 -1 $-1 $-1 $36 256 #\n"
         "vertex $-1 -1 $-1 $36 $93 #\n"
-      // w2, h2
+        // w2, h2
         "straight-curve $-1 -1 $-1 0 %f %f 1 0 0 I I #\n"
-      // -h2, h2
+        // -h2, h2
         "edge $94 -1 $-1 $42 %f $57 %f $37 $95 forward @7 unknown #\n"
-      // -h2, h2
+        // -h2, h2
         "edge $96 -1 $-1 $41 %f $58 %f $38 $97 forward @7 unknown #\n"
-      // -l2 -w2 h2
+        // -l2 -w2 h2
         "point $-1 -1 $-1 %f %f %f #\n"
-      // -l2 w2 h2
+        // -l2 w2 h2
         "point $-1 -1 $-1 %f %f %f #\n"
         "color-adesk-attrib $-1 -1 $-1 $-1 $45 256 #\n"
-      // -l2
+        // -l2
         "plane-surface $-1 -1 $-1 %f 0 0 1 0 0 0 0 1 reverse_v I I I I #\n"
         "coedge $-1 -1 $-1 $48 $50 $52 $82 forward $25 $-1 #\n"
-      // -h2, h2
+        // -h2, h2
         "edge $98 -1 $-1 $69 %f $84 %f $66 $99 forward @7 unknown #\n"
         "color-adesk-attrib $-1 -1 $-1 $-1 $51 256 #\n"
         "vertex $-1 -1 $-1 $82 $100 #\n"
-      // l2 -w2
+        // l2 -w2
         "straight-curve $-1 -1 $-1 %f %f 0 0 0 -1 I I #\n"
-      // -w2 w2
+        // -w2 w2
         "edge $101 -1 $-1 $80 %f $84 %f $77 $102 forward @7 unknown #\n"
         "color-adesk-attrib $-1 -1 $-1 $-1 $54 256 #\n"
         "vertex $-1 -1 $-1 $54 $103 #\n"
-      // w2 -h2
+        // w2 -h2
         "straight-curve $-1 -1 $-1 0 %f %f -1 0 0 I I #\n"
         "color-adesk-attrib $-1 -1 $-1 $-1 $55 256 #\n"
-      // -w2 -h2
+        // -w2 -h2
         "straight-curve $-1 -1 $-1 0 %f %f 1 0 0 I I #\n"
-      // -l2 w2 -h2
+        // -l2 w2 -h2
         "point $-1 -1 $-1 %f %f %f #\n"
-      // -l2 -w2 -h2
+        // -l2 -w2 -h2
         "point $-1 -1 $-1 %f %f %f #\n"
         "color-adesk-attrib $-1 -1 $-1 $-1 $61 256 #\n"
-      // l2, h2
+        // l2, h2
         "straight-curve $-1 -1 $-1 %f 0 %f 0 -1 0 I I #\n"
-      // l2 -w2 h2
+        // l2 -w2 h2
         "point $-1 -1 $-1 %f %f %f #\n"
-      // l2 w2 h2
+        // l2 w2 h2
         "point $-1 -1 $-1 %f %f %f #\n"
         "color-adesk-attrib $-1 -1 $-1 $-1 $71 256 #\n"
-      // -l2 w2
+        // -l2 w2
         "straight-curve $-1 -1 $-1 %f %f 0 0 0 -1 I I #\n"
         "color-adesk-attrib $-1 -1 $-1 $-1 $72 256 #\n"
-      // -l2 -w2
+        // -l2 -w2
         "straight-curve $-1 -1 $-1 %f %f 0 0 0 -1 I I #\n"
         "color-adesk-attrib $-1 -1 $-1 $-1 $78 256 #\n"
-      // l2, w2
+        // l2, w2
         "straight-curve $-1 -1 $-1 %f %f 0 0 0 -1 I I #\n"
-      // l2 -w2 -h2
+        // l2 -w2 -h2
         "point $-1 -1 $-1 %f %f %f #\n"
         "color-adesk-attrib $-1 -1 $-1 $-1 $82 256 #\n"
-      // l2, -h2
+        // l2, -h2
         "straight-curve $-1 -1 $-1 %f 0 %f 0 1 0 I I #\n"
-      // l2 w2 -h2
+        // l2 w2 -h2
         "point $-1 -1 $-1 %f %f %f #\n"
         "End-of-ACIS-data\n";
     dwg_geom_normal_to_matrix9 (normal, &matrix);
@@ -26431,8 +26283,9 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.z = origin_pt->z;
     solid->acis_empty_bit = 1;
 
-    _obj = dwg_add_ACSH_BOX_CLASS ((void*)solid, origin_pt, normal ? normal : &defnormal,
-                                   length, width, height);
+    _obj = dwg_add_ACSH_BOX_CLASS ((void *)solid, origin_pt,
+                                   normal ? normal : &defnormal, length, width,
+                                   height);
     ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
@@ -26440,12 +26293,13 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
 // ACSH_BREP_CLASS
 
-Dwg_Object_ACSH_CHAMFER_CLASS*
+Dwg_Object_ACSH_CHAMFER_CLASS *
 dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                            const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
+                            const dwg_point_3d *restrict origin_pt,
+                            const dwg_point_3d *restrict normal,
                             const int bl92, const double base_dist,
                             const double other_dist, const int num_edges,
-                            const int32_t* edges, const int bl95)
+                            const int32_t *edges, const int bl95)
 {
   int err;
   Dwg_Object *hdr = dwg_obj_generic_to_object (evalgraph, &err);
@@ -26469,7 +26323,7 @@ dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   }
 }
 
-#if 0
+#  if 0
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                  const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
@@ -26544,11 +26398,12 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     return solid;
   }
 }
-#endif
+#  endif
 
-Dwg_Object_ACSH_CONE_CLASS*
+Dwg_Object_ACSH_CONE_CLASS *
 dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                         const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
+                         const dwg_point_3d *restrict origin_pt,
+                         const dwg_point_3d *restrict normal,
                          const double height, const double major_radius,
                          const double minor_radius, const double x_radius)
 {
@@ -26569,11 +26424,12 @@ dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
 }
 
 // same as CYLINDER
-EXPORT Dwg_Entity_3DSOLID*
+EXPORT Dwg_Entity_3DSOLID *
 dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-              const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
-              const double height, const double major_radius,
-              const double minor_radius, const double x_radius)
+              const dwg_point_3d *restrict origin_pt,
+              const dwg_point_3d *restrict normal, const double height,
+              const double major_radius, const double minor_radius,
+              const double x_radius)
 {
   int err;
   Dwg_Data *dwg;
@@ -26593,10 +26449,7 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Entity_3DSOLID *solid;
     Dwg_Object_ACSH_CONE_CLASS *_obj;
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
-    dwg_matrix9 matrix = {
-      1.0, 0.0, 0.0,
-      0.0, 1.0, 0.0,
-      0.0, 0.0, 1.0 };
+    dwg_matrix9 matrix = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
     double h2 = height / 2.0;
     double majr2 = major_radius / 2.0;
     double minr2 = minor_radius / 2.0;
@@ -26606,54 +26459,56 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     char date[48];
     unsigned date_size = dwg_acis_date (date, 48);
     const char cone_acis_format[] = /* len = 1200? => 1338 */
-      // version num_records num_entities has_history
-      "400 27 1 0 \n"
-      // product acis_version date
-      "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
-      // num_mm_units resabs resnor
-      "25.39999999999999858 9.999999999999999547e-07 1.000000000000000036e-10\n"
-      "body $-1 -1 $-1 $1 $-1 $2 #\n"
-      "lump $-1 -1 $-1 $-1 $3 $0 #\n"
-      "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
-      "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
-      "face $5 -1 $-1 $6 $7 $3 $-1 $8 forward single #\n"
-      "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
-      "face $9 -1 $-1 $-1 $10 $3 $-1 $11 forward single #\n"
-      "loop $-1 -1 $-1 $12 $13 $4 #\n"
-      "cone-surface $-1 -1 $-1 0 0 0 0 0 1 %f 0 0 1 I I %f %f %f forward I I I I #\n" // 2.5, -0.3162277660168379412 0.948683298050513768 2.5
-      "color-adesk-attrib $-1 -1 $-1 $-1 $6 256 #\n"
-      "loop $-1 -1 $-1 $-1 $14 $6 #\n"
-      "plane-surface $-1 -1 $-1 0 0 %f 0 0 -1 -1 0 0 forward_v I I I I #\n" // -7.5
-      "loop $-1 -1 $-1 $-1 $15 $4 #\n"
-      "coedge $-1 -1 $-1 $13 $13 $14 $16 reversed $7 $-1 #\n"
-      "coedge $-1 -1 $-1 $14 $14 $13 $16 forward $10 $-1 #\n"
-      "coedge $-1 -1 $-1 $15 $15 $-1 $17 reversed $12 $-1 #\n"
-      "edge $18 -1 $-1 $19 0 $19 %f $14 $20 forward @7 unknown #\n" // 2*pi
-      "edge $21 -1 $-1 $22 1 $22 0 $15 $-1 forward @7 unknown #\n"
-      "color-adesk-attrib $-1 -1 $-1 $-1 $16 256 #\n"
-      "vertex $-1 -1 $-1 $16 $23 #\n"
-      "ellipse-curve $-1 -1 $-1 0 0 %f 0 0 -1 %f 0 0 1 I I #\n" // -7.5, 5
-      "color-adesk-attrib $-1 -1 $-1 $-1 $17 256 #\n"
-      "vertex $-1 -1 $-1 $17 $24 #\n"
-      "point $-1 -1 $-1 %f 0 %f #\n"   // 5, -7.5
-      "point $-1 -1 $-1 %f 0 %f #\n"  // 0, 7.5
-      "End-of-ACIS-data\n";
+        // version num_records num_entities has_history
+        "400 27 1 0 \n"
+        // product acis_version date
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+        // num_mm_units resabs resnor
+        "25.39999999999999858 9.999999999999999547e-07 "
+        "1.000000000000000036e-10\n"
+        "body $-1 -1 $-1 $1 $-1 $2 #\n"
+        "lump $-1 -1 $-1 $-1 $3 $0 #\n"
+        "transform $-1 -1 "
+        "%g %g %g "
+        "%g %g %g "
+        "%g %g %g "
+        "%g %g %g "
+        "1 no_rotate no_reflect no_shear #\n"
+        "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
+        "face $5 -1 $-1 $6 $7 $3 $-1 $8 forward single #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
+        "face $9 -1 $-1 $-1 $10 $3 $-1 $11 forward single #\n"
+        "loop $-1 -1 $-1 $12 $13 $4 #\n"
+        "cone-surface $-1 -1 $-1 0 0 0 0 0 1 %f 0 0 1 I I %f %f %f forward I "
+        "I I I #\n" // 2.5, -0.3162277660168379412 0.948683298050513768 2.5
+        "color-adesk-attrib $-1 -1 $-1 $-1 $6 256 #\n"
+        "loop $-1 -1 $-1 $-1 $14 $6 #\n"
+        "plane-surface $-1 -1 $-1 0 0 %f 0 0 -1 -1 0 0 forward_v I I I I #\n" // -7.5
+        "loop $-1 -1 $-1 $-1 $15 $4 #\n"
+        "coedge $-1 -1 $-1 $13 $13 $14 $16 reversed $7 $-1 #\n"
+        "coedge $-1 -1 $-1 $14 $14 $13 $16 forward $10 $-1 #\n"
+        "coedge $-1 -1 $-1 $15 $15 $-1 $17 reversed $12 $-1 #\n"
+        "edge $18 -1 $-1 $19 0 $19 %f $14 $20 forward @7 unknown #\n" // 2*pi
+        "edge $21 -1 $-1 $22 1 $22 0 $15 $-1 forward @7 unknown #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $16 256 #\n"
+        "vertex $-1 -1 $-1 $16 $23 #\n"
+        "ellipse-curve $-1 -1 $-1 0 0 %f 0 0 -1 %f 0 0 1 I I #\n" // -7.5, 5
+        "color-adesk-attrib $-1 -1 $-1 $-1 $17 256 #\n"
+        "vertex $-1 -1 $-1 $17 $24 #\n"
+        "point $-1 -1 $-1 %f 0 %f #\n" // 5, -7.5
+        "point $-1 -1 $-1 %f 0 %f #\n" // 0, 7.5
+        "End-of-ACIS-data\n";
     // pt: 10, 10, 7.5
-    //height: 15.000000 [BD 40]
-    //major_radius: 5.000000 [BD 41]
-    //minor_radius: 5.000000 [BD 42]
-    //x_radius: 0.000000 [BD 43]
+    // height: 15.000000 [BD 40]
+    // major_radius: 5.000000 [BD 41]
+    // minor_radius: 5.000000 [BD 42]
+    // x_radius: 0.000000 [BD 43]
     dwg_geom_normal_to_matrix9 (normal, &matrix);
-    snprintf (acis_data, 1600, cone_acis_format,
-              date_size, date,
-              matrix[0], matrix[1], matrix[2],
-              matrix[3], matrix[4], matrix[5],
-              matrix[6], matrix[7], matrix[8],
-              origin_pt->x, origin_pt->y, origin_pt->z,
+    snprintf (acis_data, 1600, cone_acis_format, date_size, date, matrix[0],
+              matrix[1], matrix[2], matrix[3], matrix[4], matrix[5], matrix[6],
+              matrix[7], matrix[8], origin_pt->x, origin_pt->y, origin_pt->z,
               majr2, -0.3162277660168379412, 0.948683298050513768, minr2, //?
-              -majr2, dbl_pi,
-              -majr2, major_radius,
-              minor_radius, -h2,
+              -majr2, dbl_pi, -majr2, major_radius, minor_radius, -h2,
               x_radius, h2);
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
     solid->wireframe_data_present = 1;
@@ -26663,17 +26518,18 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.z = origin_pt->z;
     solid->acis_empty_bit = 1;
 
-    _obj = dwg_add_ACSH_CONE_CLASS (
-        (void *)solid, origin_pt, normal ? normal : &defnormal, height,
-        major_radius, minor_radius, x_radius);
+    _obj = dwg_add_ACSH_CONE_CLASS ((void *)solid, origin_pt,
+                                    normal ? normal : &defnormal, height,
+                                    major_radius, minor_radius, x_radius);
     ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
 }
 
-Dwg_Object_ACSH_CYLINDER_CLASS*
+Dwg_Object_ACSH_CYLINDER_CLASS *
 dwg_add_ACSH_CYLINDER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                             const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
+                             const dwg_point_3d *restrict origin_pt,
+                             const dwg_point_3d *restrict normal,
                              const double height, const double major_radius,
                              const double minor_radius, const double x_radius)
 {
@@ -26694,11 +26550,12 @@ dwg_add_ACSH_CYLINDER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
 }
 
 // TODO compare to a cone, it's the same
-EXPORT Dwg_Entity_3DSOLID*
+EXPORT Dwg_Entity_3DSOLID *
 dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                  const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
-                  const double height, const double major_radius,
-                  const double minor_radius, const double x_radius)
+                  const dwg_point_3d *restrict origin_pt,
+                  const dwg_point_3d *restrict normal, const double height,
+                  const double major_radius, const double minor_radius,
+                  const double x_radius)
 {
   int err;
   Dwg_Data *dwg;
@@ -26718,10 +26575,7 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Entity_3DSOLID *solid;
     Dwg_Object_ACSH_CYLINDER_CLASS *_obj;
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
-    dwg_matrix9 matrix = {
-      1.0, 0.0, 0.0,
-      0.0, 1.0, 0.0,
-      0.0, 0.0, 1.0 };
+    dwg_matrix9 matrix = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
     double h2 = height / 2.0;
     double dbl_pi = 2.0 * M_PI; // i.e. 360
     char acis_data[2000];
@@ -26729,55 +26583,60 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     unsigned date_size = dwg_acis_date (date, 48);
     // acis version 106 (r14) would be nicer
     const char cylinder_acis_format[] = /* len = 890 => 1609 */
-      // version num_records num_entities has_history
-      "400 30 1 0 \n"
-      // product acis_version date
-      "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
-      // num_mm_units resabs resnor
-      "25.39999999999999858 9.999999999999999547e-07 1.000000000000000036e-10\n"
-      "body $-1 -1 $-1 $1 $-1 $2 #\n"
-      "lump $-1 -1 $-1 $-1 $3 $0 #\n"
-      "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
-      "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
-      "face $5 -1 $-1 $6 $7 $3 $-1 $8 forward single #\n"
-      "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
-      "face $9 -1 $-1 $10 $11 $3 $-1 $12 forward single #\n"
-      "loop $-1 -1 $-1 $13 $14 $4 #\n"
-      "cone-surface $-1 -1 $-1 0 0 0 0 0 1 %g 0 0 1 I I 0 1 %g forward I I I I #\n"
-      "color-adesk-attrib $-1 -1 $-1 $-1 $6 256 #\n"
-      "face $15 -1 $-1 $-1 $16 $3 $-1 $17 forward single #\n"
-      "loop $-1 -1 $-1 $-1 $18 $6 #\n"
-      "plane-surface $-1 -1 $-1 0 0 %g 0 0 -1 -1 0 0 forward_v I I I I #\n" // -height/2
-      "loop $-1 -1 $-1 $-1 $19 $4 #\n"
-      "coedge $-1 -1 $-1 $14 $14 $18 $20 reversed $7 $-1 #\n"
-      "color-adesk-attrib $-1 -1 $-1 $-1 $10 256 #\n"
-      "loop $-1 -1 $-1 $-1 $21 $10 #\n"
-      "plane-surface $-1 -1 $-1 0 0 %g 0 0 1 1 0 0 forward_v I I I I #\n" // height/2
-      "coedge $-1 -1 $-1 $18 $18 $14 $20 forward $11 $-1 #\n"
-      "coedge $-1 -1 $-1 $19 $19 $21 $22 reversed $13 $-1 #\n"
-      "edge $23 -1 $-1 $24 0 $24 %g $18 $25 forward @7 unknown #\n" // 2*pi
-      "coedge $-1 -1 $-1 $21 $21 $19 $22 forward $16 $-1 #\n"
-      "edge $26 -1 $-1 $27 0 $27 %g $21 $28 forward @7 unknown #\n" // 2*pi
-      "color-adesk-attrib $-1 -1 $-1 $-1 $20 256 #\n"
-      "vertex $-1 -1 $-1 $20 $29 #\n"
-      "ellipse-curve $-1 -1 $-1 0 0 %g 0 0 -1 %g 0 0 1 I I #\n" // -height/2, major_radius
-      "color-adesk-attrib $-1 -1 $-1 $-1 $22 256 #\n"
-      "vertex $-1 -1 $-1 $22 $30 #\n"
-      "ellipse-curve $-1 -1 $-1 0 0 %g 0 0 1 %g 0 0 1 I I #\n"   // -height/2, minor_radius
-      "point $-1 -1 $-1 %g 0 %g #\n"  // major_radius, -height/2,
-      "point $-1 -1 $-1 %g 0 %g #\n" // major_radius, height/2,
-      "End-of-ACIS-data\n";
+        // version num_records num_entities has_history
+        "400 30 1 0 \n"
+        // product acis_version date
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+        // num_mm_units resabs resnor
+        "25.39999999999999858 9.999999999999999547e-07 "
+        "1.000000000000000036e-10\n"
+        "body $-1 -1 $-1 $1 $-1 $2 #\n"
+        "lump $-1 -1 $-1 $-1 $3 $0 #\n"
+        "transform $-1 -1 "
+        "%g %g %g "
+        "%g %g %g "
+        "%g %g %g "
+        "%g %g %g "
+        "1 no_rotate no_reflect no_shear #\n"
+        "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
+        "face $5 -1 $-1 $6 $7 $3 $-1 $8 forward single #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
+        "face $9 -1 $-1 $10 $11 $3 $-1 $12 forward single #\n"
+        "loop $-1 -1 $-1 $13 $14 $4 #\n"
+        "cone-surface $-1 -1 $-1 0 0 0 0 0 1 %g 0 0 1 I I 0 1 %g forward I I "
+        "I I #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $6 256 #\n"
+        "face $15 -1 $-1 $-1 $16 $3 $-1 $17 forward single #\n"
+        "loop $-1 -1 $-1 $-1 $18 $6 #\n"
+        "plane-surface $-1 -1 $-1 0 0 %g 0 0 -1 -1 0 0 forward_v I I I I #\n" // -height/2
+        "loop $-1 -1 $-1 $-1 $19 $4 #\n"
+        "coedge $-1 -1 $-1 $14 $14 $18 $20 reversed $7 $-1 #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $10 256 #\n"
+        "loop $-1 -1 $-1 $-1 $21 $10 #\n"
+        "plane-surface $-1 -1 $-1 0 0 %g 0 0 1 1 0 0 forward_v I I I I #\n" // height/2
+        "coedge $-1 -1 $-1 $18 $18 $14 $20 forward $11 $-1 #\n"
+        "coedge $-1 -1 $-1 $19 $19 $21 $22 reversed $13 $-1 #\n"
+        "edge $23 -1 $-1 $24 0 $24 %g $18 $25 forward @7 unknown #\n" // 2*pi
+        "coedge $-1 -1 $-1 $21 $21 $19 $22 forward $16 $-1 #\n"
+        "edge $26 -1 $-1 $27 0 $27 %g $21 $28 forward @7 unknown #\n" // 2*pi
+        "color-adesk-attrib $-1 -1 $-1 $-1 $20 256 #\n"
+        "vertex $-1 -1 $-1 $20 $29 #\n"
+        "ellipse-curve $-1 -1 $-1 0 0 %g 0 0 -1 %g 0 0 1 I I #\n" // -height/2,
+                                                                  // major_radius
+        "color-adesk-attrib $-1 -1 $-1 $-1 $22 256 #\n"
+        "vertex $-1 -1 $-1 $22 $30 #\n"
+        "ellipse-curve $-1 -1 $-1 0 0 %g 0 0 1 %g 0 0 1 I I #\n" // -height/2,
+                                                                 // minor_radius
+        "point $-1 -1 $-1 %g 0 %g #\n" // major_radius, -height/2,
+        "point $-1 -1 $-1 %g 0 %g #\n" // major_radius, height/2,
+        "End-of-ACIS-data\n";
     dwg_geom_normal_to_matrix9 (normal, &matrix);
-    snprintf (acis_data, 2000, cylinder_acis_format,
-              date_size, date,
-              matrix[0], matrix[1], matrix[2],
-              matrix[3], matrix[4], matrix[5],
-              matrix[6], matrix[7], matrix[8],
-              origin_pt->x, origin_pt->y, origin_pt->z,
-              major_radius, minor_radius,
-              -h2, h2, dbl_pi, dbl_pi,
-              -h2, major_radius, -h2, major_radius,
-              major_radius, -h2, major_radius, h2);
+    snprintf (acis_data, 2000, cylinder_acis_format, date_size, date,
+              matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5],
+              matrix[6], matrix[7], matrix[8], origin_pt->x, origin_pt->y,
+              origin_pt->z, major_radius, minor_radius, -h2, h2, dbl_pi,
+              dbl_pi, -h2, major_radius, -h2, major_radius, major_radius, -h2,
+              major_radius, h2);
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
     solid->wireframe_data_present = 1;
     solid->point_present = 1;
@@ -26786,16 +26645,18 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.z = origin_pt->z;
     solid->acis_empty_bit = 1;
 
-    _obj = dwg_add_ACSH_CYLINDER_CLASS ((void*)solid, origin_pt, normal ? normal : &defnormal,
-                                        height, major_radius, minor_radius, x_radius);
+    _obj = dwg_add_ACSH_CYLINDER_CLASS ((void *)solid, origin_pt,
+                                        normal ? normal : &defnormal, height,
+                                        major_radius, minor_radius, x_radius);
     ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
 }
 
-Dwg_Object_ACSH_PYRAMID_CLASS*
+Dwg_Object_ACSH_PYRAMID_CLASS *
 dwg_add_ACSH_PYRAMID_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                            const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
+                            const dwg_point_3d *restrict origin_pt,
+                            const dwg_point_3d *restrict normal,
                             const double height, const int sides,
                             const double radius, const double topradius)
 {
@@ -26816,11 +26677,11 @@ dwg_add_ACSH_PYRAMID_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
 }
 
 // not yet implemented
-EXPORT Dwg_Entity_3DSOLID*
+EXPORT Dwg_Entity_3DSOLID *
 dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                 const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
-                 const double height, const int sides,
-                 const double radius, const double topradius)
+                 const dwg_point_3d *restrict origin_pt,
+                 const dwg_point_3d *restrict normal, const double height,
+                 const int sides, const double radius, const double topradius)
 {
   int err;
   Dwg_Data *dwg;
@@ -26840,36 +26701,36 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Entity_3DSOLID *solid;
     Dwg_Object_ACSH_PYRAMID_CLASS *_obj;
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
-    dwg_matrix9 matrix = {
-      1.0, 0.0, 0.0,
-      0.0, 1.0, 0.0,
-      0.0, 0.0, 1.0 };
+    dwg_matrix9 matrix = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
     char acis_data[1048];
     char date[48];
     unsigned date_size = dwg_acis_date (date, 48);
     // acis version 106 (r14) would be nicer
     const char base_acis_format[] = /* len = 890 => 957 */
-      // version num_records num_entities has_history
-      "400 6 1 0 \n"
-      // product acis_version date
-      "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
-      // num_mm_units resabs resnor
-      "25.39999999999999858 9.999999999999999547e-07 1.000000000000000036e-10\n"
-      "body $-1 -1 $-1 $1 $-1 $2 #\n"
-      "lump $-1 -1 $-1 $-1 $3 $0 #\n"
-      "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
-      "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
-      "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
-      "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
-      "End-of-ACIS-data\n";
+        // version num_records num_entities has_history
+        "400 6 1 0 \n"
+        // product acis_version date
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+        // num_mm_units resabs resnor
+        "25.39999999999999858 9.999999999999999547e-07 "
+        "1.000000000000000036e-10\n"
+        "body $-1 -1 $-1 $1 $-1 $2 #\n"
+        "lump $-1 -1 $-1 $-1 $3 $0 #\n"
+        "transform $-1 -1 "
+        "%g %g %g "
+        "%g %g %g "
+        "%g %g %g "
+        "%g %g %g "
+        "1 no_rotate no_reflect no_shear #\n"
+        "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
+        "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
+        "End-of-ACIS-data\n";
     // TODO
     dwg_geom_normal_to_matrix9 (normal, &matrix);
-    snprintf (acis_data, 1048, base_acis_format,
-              date_size, date,
-              matrix[0], matrix[1], matrix[2],
-              matrix[3], matrix[4], matrix[5],
-              matrix[6], matrix[7], matrix[8],
-              origin_pt->x, origin_pt->y, origin_pt->z);
+    snprintf (acis_data, 1048, base_acis_format, date_size, date, matrix[0],
+              matrix[1], matrix[2], matrix[3], matrix[4], matrix[5], matrix[6],
+              matrix[7], matrix[8], origin_pt->x, origin_pt->y, origin_pt->z);
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
     solid->wireframe_data_present = 1;
     solid->point_present = 1;
@@ -26878,57 +26739,54 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.z = origin_pt->z;
     solid->acis_empty_bit = 1;
 
-    _obj = dwg_add_ACSH_PYRAMID_CLASS ((void*)solid, origin_pt, normal ? normal : &defnormal,
-                                       height, sides, radius, topradius);
+    _obj = dwg_add_ACSH_PYRAMID_CLASS ((void *)solid, origin_pt,
+                                       normal ? normal : &defnormal, height,
+                                       sides, radius, topradius);
     ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
 }
 
-//EXPORT Dwg_Entity_3DSOLID*
-//dwg_add_ELLIPTICAL_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-//                         const dwg_point_3d *restrict origin_pt,
-//                         const dwg_point_3d *restrict normal, /* maybe NULL */
-//                         const double major_radius,
-//                         const double minor_radius,
-//                         const double height)
+// EXPORT Dwg_Entity_3DSOLID*
+// dwg_add_ELLIPTICAL_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+//                          const dwg_point_3d *restrict origin_pt,
+//                          const dwg_point_3d *restrict normal, /* maybe NULL
+//                          */ const double major_radius, const double
+//                          minor_radius, const double height)
 //{
-//  LOG_ERROR ("%s not yet implemented", __FUNCTION__)
-//  return NULL;
-//}
+//   LOG_ERROR ("%s not yet implemented", __FUNCTION__)
+//   return NULL;
+// }
 //
-//EXPORT Dwg_Entity_3DSOLID*
-//dwg_add_ELLIPTICAL_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-//                             const dwg_point_3d *restrict origin_pt,
-//                             const dwg_point_3d *restrict normal, /* maybe NULL */
-//                             const double major_radius,
-//                             const double minor_radius,
-//                             const double height)
+// EXPORT Dwg_Entity_3DSOLID*
+// dwg_add_ELLIPTICAL_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+//                              const dwg_point_3d *restrict origin_pt,
+//                              const dwg_point_3d *restrict normal, /* maybe
+//                              NULL */ const double major_radius, const double
+//                              minor_radius, const double height)
 //{
-//  LOG_ERROR ("%s not yet implemented", __FUNCTION__)
-//  return NULL;
-//}
+//   LOG_ERROR ("%s not yet implemented", __FUNCTION__)
+//   return NULL;
+// }
 
-EXPORT Dwg_Entity_3DSOLID*
+EXPORT Dwg_Entity_3DSOLID *
 dwg_add_EXTRUDED_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                         const Dwg_Object *restrict profile,
-                        const double height,
-                        const double taper_angle)
+                        const double height, const double taper_angle)
 {
   LOG_ERROR ("%s not yet implemented", __FUNCTION__)
   return NULL;
 }
-EXPORT Dwg_Entity_3DSOLID*
+EXPORT Dwg_Entity_3DSOLID *
 dwg_add_EXTRUDED_PATH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                       const Dwg_Object *restrict profile,
-                       const double height,
+                       const Dwg_Object *restrict profile, const double height,
                        const double taper_angle)
 {
   LOG_ERROR ("%s not yet implemented", __FUNCTION__)
   return NULL;
 }
 
-EXPORT Dwg_Entity_3DSOLID*
+EXPORT Dwg_Entity_3DSOLID *
 dwg_add_REVOLVED_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                         const Dwg_Object *restrict profile,
                         const dwg_point_3d *restrict axis_pt,
@@ -26944,9 +26802,10 @@ dwg_add_REVOLVED_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 // ACSH_LOFT_CLASS
 // ACSH_REVOLVE_CLASS (needed)
 
-Dwg_Object_ACSH_SPHERE_CLASS*
+Dwg_Object_ACSH_SPHERE_CLASS *
 dwg_add_ACSH_SPHERE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                           const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
+                           const dwg_point_3d *restrict origin_pt,
+                           const dwg_point_3d *restrict normal,
                            const double radius)
 {
   int err;
@@ -26962,10 +26821,10 @@ dwg_add_ACSH_SPHERE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   }
 }
 
-EXPORT Dwg_Entity_3DSOLID*
+EXPORT Dwg_Entity_3DSOLID *
 dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-                const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
-                const double radius)
+                const dwg_point_3d *restrict origin_pt,
+                const dwg_point_3d *restrict normal, const double radius)
 {
   int err;
   Dwg_Data *dwg;
@@ -26985,35 +26844,35 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Entity_3DSOLID *solid;
     Dwg_Object_ACSH_SPHERE_CLASS *_obj;
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
-    dwg_matrix9 matrix = {
-      1.0, 0.0, 0.0,
-      0.0, 1.0, 0.0,
-      0.0, 0.0, 1.0 };
+    dwg_matrix9 matrix = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
     char acis_data[650];
     char date[48];
     unsigned date_size = dwg_acis_date (date, 48);
     const char sphere_acis_format[] = /* len = 524 => 552 */
-      // version num_records num_entities has_history
-      "400 7 1 0 \n"
-      // product acis_version date
-      "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
-      // num_mm_units resabs resnor
-      "25.39999999999999858 9.999999999999999547e-07 1.000000000000000036e-10\n"
-      "body $-1 -1 $-1 $1 $-1 $2 #\n"
-      "lump $-1 -1 $-1 $-1 $3 $0 #\n"
-      "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
-      "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
-      "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
-      "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
-      "sphere-surface $-1 -1 $-1 0 0 0 %g 1 0 0 0 0 1 forward_v I I I I #\n"
-      "End-of-ACIS-data\n";
+        // version num_records num_entities has_history
+        "400 7 1 0 \n"
+        // product acis_version date
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+        // num_mm_units resabs resnor
+        "25.39999999999999858 9.999999999999999547e-07 "
+        "1.000000000000000036e-10\n"
+        "body $-1 -1 $-1 $1 $-1 $2 #\n"
+        "lump $-1 -1 $-1 $-1 $3 $0 #\n"
+        "transform $-1 -1 "
+        "%g %g %g "
+        "%g %g %g "
+        "%g %g %g "
+        "%g %g %g "
+        "1 no_rotate no_reflect no_shear #\n"
+        "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
+        "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
+        "sphere-surface $-1 -1 $-1 0 0 0 %g 1 0 0 0 0 1 forward_v I I I I #\n"
+        "End-of-ACIS-data\n";
     dwg_geom_normal_to_matrix9 (normal, &matrix);
-    snprintf (acis_data, 650, sphere_acis_format,
-              date_size, date,
-              matrix[0], matrix[1], matrix[2],
-              matrix[3], matrix[4], matrix[5],
-              matrix[6], matrix[7], matrix[8],
-              origin_pt->x, origin_pt->y, origin_pt->z,
+    snprintf (acis_data, 650, sphere_acis_format, date_size, date, matrix[0],
+              matrix[1], matrix[2], matrix[3], matrix[4], matrix[5], matrix[6],
+              matrix[7], matrix[8], origin_pt->x, origin_pt->y, origin_pt->z,
               radius);
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
     solid->wireframe_data_present = 1;
@@ -27032,9 +26891,10 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
 // ACSH_SWEEP_CLASS
 
-Dwg_Object_ACSH_TORUS_CLASS*
+Dwg_Object_ACSH_TORUS_CLASS *
 dwg_add_ACSH_TORUS_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                          const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
+                          const dwg_point_3d *restrict origin_pt,
+                          const dwg_point_3d *restrict normal,
                           const double major_radius, const double minor_radius)
 {
   int err;
@@ -27051,10 +26911,11 @@ dwg_add_ACSH_TORUS_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   }
 }
 
-EXPORT Dwg_Entity_3DSOLID*
+EXPORT Dwg_Entity_3DSOLID *
 dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-               const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
-               const double major_radius, const double minor_radius)
+               const dwg_point_3d *restrict origin_pt,
+               const dwg_point_3d *restrict normal, const double major_radius,
+               const double minor_radius)
 {
   int err;
   Dwg_Data *dwg;
@@ -27074,50 +26935,50 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Entity_3DSOLID *solid;
     Dwg_Object_ACSH_TORUS_CLASS *_obj;
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
-    dwg_matrix9 matrix = {
-      1.0, 0.0, 0.0,
-      0.0, 1.0, 0.0,
-      0.0, 0.0, 1.0 };
+    dwg_matrix9 matrix = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
     char acis_data[1048];
     char date[48];
     unsigned date_size = dwg_acis_date (date, 48);
     // acis version 106 (r14) would be nicer
     const char torus_acis_format[] = /* len = 890 => 957 */
-      // version num_records num_entities has_history
-      "400 19 1 0 \n"
-      // product acis_version date
-      "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
-      // num_mm_units resabs resnor
-      "25.39999999999999858 9.999999999999999547e-07 1.000000000000000036e-10\n"
-      "body $-1 -1 $-1 $1 $-1 $2 #\n"
-      "lump $-1 -1 $-1 $-1 $3 $0 #\n"
-      "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
-      "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
-      "face $5 -1 $-1 $-1 $6 $3 $-1 $7 forward single #\n"
-      "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
-      "loop $-1 -1 $-1 $8 $9 $4 #\n"
-      "torus-surface $-1 -1 $-1 0 0 0 0 0 1 %g %g 1 0 0 forward_v I I I I #\n"
-      "loop $-1 -1 $-1 $-1 $10 $4 #\n"
-      "coedge $-1 -1 $-1 $9 $9 $-1 $11 reversed $6 $-1 #\n"
-      "coedge $-1 -1 $-1 $10 $10 $-1 $12 reversed $8 $-1 #\n"
-      "edge $13 -1 $-1 $14 1 $14 0 $9 $-1 forward @7 unknown #\n"
-      "edge $15 -1 $-1 $16 1 $16 0 $10 $-1 forward @7 unknown #\n"
-      "color-adesk-attrib $-1 -1 $-1 $-1 $11 256 #\n"
-      "vertex $-1 -1 $-1 $11 $17 #\n"
-      "color-adesk-attrib $-1 -1 $-1 $-1 $12 256 #\n"
-      "vertex $-1 -1 $-1 $12 $18 #\n"
-      "point $-1 -1 $-1 0 0 %g #\n"
-      "point $-1 -1 $-1 0 0 %g #\n"
-      "End-of-ACIS-data\n";
+        // version num_records num_entities has_history
+        "400 19 1 0 \n"
+        // product acis_version date
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+        // num_mm_units resabs resnor
+        "25.39999999999999858 9.999999999999999547e-07 "
+        "1.000000000000000036e-10\n"
+        "body $-1 -1 $-1 $1 $-1 $2 #\n"
+        "lump $-1 -1 $-1 $-1 $3 $0 #\n"
+        "transform $-1 -1 "
+        "%g %g %g "
+        "%g %g %g "
+        "%g %g %g "
+        "%g %g %g "
+        "1 no_rotate no_reflect no_shear #\n"
+        "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
+        "face $5 -1 $-1 $-1 $6 $3 $-1 $7 forward single #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $4 256 #\n"
+        "loop $-1 -1 $-1 $8 $9 $4 #\n"
+        "torus-surface $-1 -1 $-1 0 0 0 0 0 1 %g %g 1 0 0 forward_v I I I I "
+        "#\n"
+        "loop $-1 -1 $-1 $-1 $10 $4 #\n"
+        "coedge $-1 -1 $-1 $9 $9 $-1 $11 reversed $6 $-1 #\n"
+        "coedge $-1 -1 $-1 $10 $10 $-1 $12 reversed $8 $-1 #\n"
+        "edge $13 -1 $-1 $14 1 $14 0 $9 $-1 forward @7 unknown #\n"
+        "edge $15 -1 $-1 $16 1 $16 0 $10 $-1 forward @7 unknown #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $11 256 #\n"
+        "vertex $-1 -1 $-1 $11 $17 #\n"
+        "color-adesk-attrib $-1 -1 $-1 $-1 $12 256 #\n"
+        "vertex $-1 -1 $-1 $12 $18 #\n"
+        "point $-1 -1 $-1 0 0 %g #\n"
+        "point $-1 -1 $-1 0 0 %g #\n"
+        "End-of-ACIS-data\n";
     dwg_geom_normal_to_matrix9 (normal, &matrix);
-    snprintf (acis_data, 1048, torus_acis_format,
-              date_size, date,
-              matrix[0], matrix[1], matrix[2],
-              matrix[3], matrix[4], matrix[5],
-              matrix[6], matrix[7], matrix[8],
-              origin_pt->x, origin_pt->y, origin_pt->z,
-              major_radius, minor_radius,
-              major_radius, -major_radius);
+    snprintf (acis_data, 1048, torus_acis_format, date_size, date, matrix[0],
+              matrix[1], matrix[2], matrix[3], matrix[4], matrix[5], matrix[6],
+              matrix[7], matrix[8], origin_pt->x, origin_pt->y, origin_pt->z,
+              major_radius, minor_radius, major_radius, -major_radius);
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
     solid->wireframe_data_present = 1;
     solid->point_present = 1;
@@ -27126,7 +26987,7 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.z = origin_pt->z;
     solid->acis_empty_bit = 1;
 
-    _obj = dwg_add_ACSH_TORUS_CLASS ((void*)solid, origin_pt,
+    _obj = dwg_add_ACSH_TORUS_CLASS ((void *)solid, origin_pt,
                                      normal ? normal : &defnormal,
                                      major_radius, minor_radius);
     ACSH_init_evalgraph (dwg, _obj, solid);
@@ -27134,9 +26995,10 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   }
 }
 
-Dwg_Object_ACSH_WEDGE_CLASS*
+Dwg_Object_ACSH_WEDGE_CLASS *
 dwg_add_ACSH_WEDGE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                          const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
+                          const dwg_point_3d *restrict origin_pt,
+                          const dwg_point_3d *restrict normal,
                           const double length, const double width,
                           const double height)
 {
@@ -27155,10 +27017,11 @@ dwg_add_ACSH_WEDGE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   }
 }
 
-EXPORT Dwg_Entity_3DSOLID*
+EXPORT Dwg_Entity_3DSOLID *
 dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
-               const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
-               const double length, const double width, const double height)
+               const dwg_point_3d *restrict origin_pt,
+               const dwg_point_3d *restrict normal, const double length,
+               const double width, const double height)
 {
   int err;
   Dwg_Data *dwg;
@@ -27178,148 +27041,181 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Entity_3DSOLID *solid;
     Dwg_Object_ACSH_WEDGE_CLASS *_obj;
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
-    dwg_matrix9 matrix = {
-      1.0, 0.0, 0.0,
-      0.0, 1.0, 0.0,
-      0.0, 0.0, 1.0 };
-    #define WEDGE_ACIS_SIZE 6500
+    dwg_matrix9 matrix = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
+#  define WEDGE_ACIS_SIZE 6500
     char acis_data[WEDGE_ACIS_SIZE];
     char date[48];
     unsigned date_size = dwg_acis_date (date, 48);
     // the center is in the middle
-    const double l2 = length / 2; // 1.674079
-    const double w2 = width / 2;  // 1.244932
-    const double h2 = height / 2; // 2.4430318
+    const double l2 = length / 2;            // 1.674079
+    const double w2 = width / 2;             // 1.244932
+    const double h2 = height / 2;            // 2.4430318
     const double c1 = 0.8249088118009861859; // ??
     const double c2 = 0.5652658243809589589; // ??
     // acis version 106 (r14) would be nicer
     const char wedge_acis_format[] = /* len => 4332 - 5300 */
-      // version num_records num_entities has_history
-      "400 87 1 0 \n"
-      // product acis_version date
-      "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
-      // num_mm_units resabs resnor
-      "25.39999999999999858 9.999999999999999547e-07 1.000000000000000036e-10\n"
-      "body $-1 -1 $-1 $1 $-1 $2 #\n"
-      "lump $-1 -1 $-1 $-1 $3 $0 #\n"
-      "transform $-1 -1 " "%g %g %g " "%g %g %g " "%g %g %g " "%g %g %g " "1 no_rotate no_reflect no_shear #\n"
-      "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
-      "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $4 1 1 1 0 #\n"
-      "face $9 $10 $11 $3 $-1 $12 forward single #\n"
-      "loop $-1 $-1 $13 $4 #\n"
-      // -l2 w2 -h2, -c1 0 c2, -c2 -0 -c1
-      "plane-surface $-1 " "%f %f %f " "%f %d %f " "%f %d %f " "forward_v I I I I #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $6 1 1 5 0 #\n"
-      "face $14 $15 $16 $3 $-1 $17 forward single #\n"
-      "loop $-1 $-1 $18 $6 #\n"
-      // l2 w2 h2
-      "plane-surface $-1 " "%f %f %f " "1 0 0 " "0 0 1 " "forward_v I I I I #\n"
-      "coedge $-1 $19 $20 $21 $22 forward $7 $-1 #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $10 1 1 9 0 #\n"
-      "face $23 $24 $25 $3 $-1 $26 reversed single #\n"
-      "loop $-1 $-1 $27 $10 #\n"
-      // l2 w2 -h2
-      "plane-surface $-1 " "%f %f %f " "0 0 -1 " "1 0 0 " "forward_v I I I I #\n"
-      "coedge $-1 $28 $29 $30 $31 forward $11 $-1 #\n"
-      "coedge $-1 $32 $13 $29 $33 reversed $7 $-1 #\n"
-      "coedge $-1 $13 $32 $34 $35 forward $7 $-1 #\n"
-      "coedge $-1 $36 $30 $13 $22 reversed $25 $-1 #\n"
-      "edge $37 $38 $39 $13 $40 forward #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $15 1 1 13 0 #\n"
-      "face $41 $-1 $42 $3 $-1 $43 forward single #\n"
-      "loop $-1 $-1 $21 $15 #\n"
-      // 0 -w2 0
-      "plane-surface $-1 " "%d %f %d " "0 1 0 " "0 0 -1 " "forward_v I I I I #\n"
-      "coedge $-1 $34 $44 $36 $45 forward $16 $-1 #\n"
-      "coedge $-1 $46 $18 $44 $47 reversed $11 $-1 #\n"
-      "coedge $-1 $18 $46 $19 $33 forward $11 $-1 #\n"
-      "coedge $-1 $21 $36 $18 $31 reversed $25 $-1 #\n"
-      "edge $48 $39 $49 $18 $50 forward #\n"
-      "coedge $-1 $20 $19 $51 $52 reversed $7 $-1 #\n"
-      "edge $53 $54 $39 $29 $55 forward #\n"
-      "coedge $-1 $56 $27 $20 $35 reversed $16 $-1 #\n"
-      "edge $57 $58 $38 $20 $59 forward #\n"
-      "coedge $-1 $30 $21 $27 $45 reversed $25 $-1 #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $22 1 1 2 0 #\n"
-      "vertex $60 $35 $61 #\n"
-      "vertex $62 $33 $63 #\n"
-      // -l2 -w2 -h2 c2 0 c1
-      "straight-curve $-1 " "%f %f %f " "%f %d %f " " I I #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $24 1 1 14 0 #\n"
-      "loop $-1 $-1 $64 $24 #\n"
-      // 0 w2 0
-      "plane-surface $-1 " "%d %f %d " "0 1 0 " "0 0 -1 " "forward_v I I I I #\n"
-      "coedge $-1 $27 $56 $28 $47 forward $16 $-1 #\n"
-      "edge $65 $49 $38 $27 $66 forward #\n"
-      "coedge $-1 $29 $28 $67 $68 reversed $11 $-1 #\n"
-      "edge $69 $70 $49 $44 $71 forward #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $31 1 1 6 0 #\n"
-      "vertex $72 $47 $73 #\n"
-      // l2 -w2 h2
-      "straight-curve $-1 " "%f %f %f " "0 0 -1 ""I I #\n"
-      "coedge $-1 $67 $64 $32 $52 forward $42 $-1 #\n"
-      "edge $74 $58 $54 $51 $75 forward #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $33 1 1 7 0 #\n"
-      "vertex $76 $52 $77 #\n"
-      // l2 w2 h2
-      "straight-curve $-1 " "%f %f %f " "0 -1 0 ""I I #\n"
-      "coedge $-1 $44 $34 $64 $78 reversed $16 $-1 #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $35 1 1 3 0 #\n"
-      "vertex $79 $78 $80 #\n"
-      // -l2 w2 -h2
-      "straight-curve $-1 " "%f %f %f " "0 -1 0 ""I I #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $38 1 1 4 0 #\n"
-      // -l2 -w2 -h2
-      "point $-1 %f %f %f #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $39 1 1 8 0 #\n"
-      // l2 -w2 h2
-      "point $-1 %f %f %f #\n"
-      "coedge $-1 $51 $67 $56 $78 forward $42 $-1 #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $45 1 1 10 0 #\n"
-      // l2 -w2 -h2
-      "straight-curve $-1 %f %f %f -1 0 0 I I #\n"
-      "coedge $-1 $64 $51 $46 $68 forward $42 $-1 #\n"
-      "edge $81 $54 $70 $67 $82 forward #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $47 1 1 11 0 #\n"
-      "vertex $83 $78 $84 #\n"
-      // l2 w2 -h2
-      "straight-curve $-1 %f %f %f 0 -1 0 I I #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $49 1 1 12 0 #\n"
-      // l2 -w2 -h2
-      "point $-1 %f %f %f #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $52 1 1 18 0 #\n"
-      // -l2 w2 -h2 c2 0 c1
-      "straight-curve $-1 %f %f %f %f %d %f I I #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $54 1 1 19 0 #\n"
-      // l2 w2 h2
-      "point $-1 %f %f %f #\n"
-      "edge $85 $70 $58 $64 $86 forward #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $58 1 1 17 0 #\n"
-      // -l2 w2 -h2
-      "point $-1 %f %f %f #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $68 1 1 20 0 #\n"
-      // l2 w2 h2
-      "straight-curve $-1 %f %f %f 0 0 -1 I I #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $70 1 1 16 0 #\n"
-      // l2 w2 -h2
-      "point $-1 %f %f %f #\n"
-      "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $78 1 1 15 0 #\n"
-      // l2 w2 -h2
-      "straight-curve $-1 %f %f %f -1 0 0 I I #\n"
-      "End-of-ACIS-data\n";
+        // version num_records num_entities has_history
+        "400 87 1 0 \n"
+        // product acis_version date
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+        // num_mm_units resabs resnor
+        "25.39999999999999858 9.999999999999999547e-07 "
+        "1.000000000000000036e-10\n"
+        "body $-1 -1 $-1 $1 $-1 $2 #\n"
+        "lump $-1 -1 $-1 $-1 $3 $0 #\n"
+        "transform $-1 -1 "
+        "%g %g %g "
+        "%g %g %g "
+        "%g %g %g "
+        "%g %g %g "
+        "1 no_rotate no_reflect no_shear #\n"
+        "shell $-1 -1 $-1 $-1 $-1 $4 $-1 $1 #\n"
+        "face $5 -1 $-1 $-1 $-1 $3 $-1 $6 forward single #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $4 1 1 1 0 #\n"
+        "face $9 $10 $11 $3 $-1 $12 forward single #\n"
+        "loop $-1 $-1 $13 $4 #\n"
+        // -l2 w2 -h2, -c1 0 c2, -c2 -0 -c1
+        "plane-surface $-1 "
+        "%f %f %f "
+        "%f %d %f "
+        "%f %d %f "
+        "forward_v I I I I #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $6 1 1 5 0 #\n"
+        "face $14 $15 $16 $3 $-1 $17 forward single #\n"
+        "loop $-1 $-1 $18 $6 #\n"
+        // l2 w2 h2
+        "plane-surface $-1 "
+        "%f %f %f "
+        "1 0 0 "
+        "0 0 1 "
+        "forward_v I I I I #\n"
+        "coedge $-1 $19 $20 $21 $22 forward $7 $-1 #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $10 1 1 9 0 #\n"
+        "face $23 $24 $25 $3 $-1 $26 reversed single #\n"
+        "loop $-1 $-1 $27 $10 #\n"
+        // l2 w2 -h2
+        "plane-surface $-1 "
+        "%f %f %f "
+        "0 0 -1 "
+        "1 0 0 "
+        "forward_v I I I I #\n"
+        "coedge $-1 $28 $29 $30 $31 forward $11 $-1 #\n"
+        "coedge $-1 $32 $13 $29 $33 reversed $7 $-1 #\n"
+        "coedge $-1 $13 $32 $34 $35 forward $7 $-1 #\n"
+        "coedge $-1 $36 $30 $13 $22 reversed $25 $-1 #\n"
+        "edge $37 $38 $39 $13 $40 forward #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $15 1 1 13 0 #\n"
+        "face $41 $-1 $42 $3 $-1 $43 forward single #\n"
+        "loop $-1 $-1 $21 $15 #\n"
+        // 0 -w2 0
+        "plane-surface $-1 "
+        "%d %f %d "
+        "0 1 0 "
+        "0 0 -1 "
+        "forward_v I I I I #\n"
+        "coedge $-1 $34 $44 $36 $45 forward $16 $-1 #\n"
+        "coedge $-1 $46 $18 $44 $47 reversed $11 $-1 #\n"
+        "coedge $-1 $18 $46 $19 $33 forward $11 $-1 #\n"
+        "coedge $-1 $21 $36 $18 $31 reversed $25 $-1 #\n"
+        "edge $48 $39 $49 $18 $50 forward #\n"
+        "coedge $-1 $20 $19 $51 $52 reversed $7 $-1 #\n"
+        "edge $53 $54 $39 $29 $55 forward #\n"
+        "coedge $-1 $56 $27 $20 $35 reversed $16 $-1 #\n"
+        "edge $57 $58 $38 $20 $59 forward #\n"
+        "coedge $-1 $30 $21 $27 $45 reversed $25 $-1 #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $22 1 1 2 0 #\n"
+        "vertex $60 $35 $61 #\n"
+        "vertex $62 $33 $63 #\n"
+        // -l2 -w2 -h2 c2 0 c1
+        "straight-curve $-1 "
+        "%f %f %f "
+        "%f %d %f "
+        " I I #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $24 1 1 14 0 #\n"
+        "loop $-1 $-1 $64 $24 #\n"
+        // 0 w2 0
+        "plane-surface $-1 "
+        "%d %f %d "
+        "0 1 0 "
+        "0 0 -1 "
+        "forward_v I I I I #\n"
+        "coedge $-1 $27 $56 $28 $47 forward $16 $-1 #\n"
+        "edge $65 $49 $38 $27 $66 forward #\n"
+        "coedge $-1 $29 $28 $67 $68 reversed $11 $-1 #\n"
+        "edge $69 $70 $49 $44 $71 forward #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $31 1 1 6 0 #\n"
+        "vertex $72 $47 $73 #\n"
+        // l2 -w2 h2
+        "straight-curve $-1 "
+        "%f %f %f "
+        "0 0 -1 "
+        "I I #\n"
+        "coedge $-1 $67 $64 $32 $52 forward $42 $-1 #\n"
+        "edge $74 $58 $54 $51 $75 forward #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $33 1 1 7 0 #\n"
+        "vertex $76 $52 $77 #\n"
+        // l2 w2 h2
+        "straight-curve $-1 "
+        "%f %f %f "
+        "0 -1 0 "
+        "I I #\n"
+        "coedge $-1 $44 $34 $64 $78 reversed $16 $-1 #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $35 1 1 3 0 #\n"
+        "vertex $79 $78 $80 #\n"
+        // -l2 w2 -h2
+        "straight-curve $-1 "
+        "%f %f %f "
+        "0 -1 0 "
+        "I I #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $38 1 1 4 0 #\n"
+        // -l2 -w2 -h2
+        "point $-1 %f %f %f #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $39 1 1 8 0 #\n"
+        // l2 -w2 h2
+        "point $-1 %f %f %f #\n"
+        "coedge $-1 $51 $67 $56 $78 forward $42 $-1 #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $45 1 1 10 0 #\n"
+        // l2 -w2 -h2
+        "straight-curve $-1 %f %f %f -1 0 0 I I #\n"
+        "coedge $-1 $64 $51 $46 $68 forward $42 $-1 #\n"
+        "edge $81 $54 $70 $67 $82 forward #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $47 1 1 11 0 #\n"
+        "vertex $83 $78 $84 #\n"
+        // l2 w2 -h2
+        "straight-curve $-1 %f %f %f 0 -1 0 I I #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $49 1 1 12 0 #\n"
+        // l2 -w2 -h2
+        "point $-1 %f %f %f #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $52 1 1 18 0 #\n"
+        // -l2 w2 -h2 c2 0 c1
+        "straight-curve $-1 %f %f %f %f %d %f I I #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $54 1 1 19 0 #\n"
+        // l2 w2 h2
+        "point $-1 %f %f %f #\n"
+        "edge $85 $70 $58 $64 $86 forward #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $58 1 1 17 0 #\n"
+        // -l2 w2 -h2
+        "point $-1 %f %f %f #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $68 1 1 20 0 #\n"
+        // l2 w2 h2
+        "straight-curve $-1 %f %f %f 0 0 -1 I I #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $70 1 1 16 0 #\n"
+        // l2 w2 -h2
+        "point $-1 %f %f %f #\n"
+        "persubent-acadSolidHistory-attrib $-1 $-1 $-1 $78 1 1 15 0 #\n"
+        // l2 w2 -h2
+        "straight-curve $-1 %f %f %f -1 0 0 I I #\n"
+        "End-of-ACIS-data\n";
     // origin: 8.325921, 8.755068, 2.443032
     // matrix -1 0 0, 0 -1 0, 0 0 1
     // length: 3.348158
     // width: 2.489864
     // height: 4.886064
     dwg_geom_normal_to_matrix9 (normal, &matrix);
-    snprintf (acis_data, WEDGE_ACIS_SIZE, wedge_acis_format,
-              date_size, date,
-              matrix[0], matrix[1], matrix[2],
-              matrix[3], matrix[4], matrix[5],
-              matrix[6], matrix[7], matrix[8],
-              origin_pt->x, origin_pt->y, origin_pt->z,
+    snprintf (acis_data, WEDGE_ACIS_SIZE, wedge_acis_format, date_size, date,
+              matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5],
+              matrix[6], matrix[7], matrix[8], origin_pt->x, origin_pt->y,
+              origin_pt->z,
               // clang-format off
               -l2, w2, -h2, -c1, 0, c2, -c2, -0, -c1,
               l2, w2, h2,
@@ -27342,7 +27238,7 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               l2, w2, -h2,
               l2, w2, -h2
               // clang-format on
-              );
+    );
     solid = dwg_add_3DSOLID (blkhdr, acis_data);
     solid->wireframe_data_present = 1;
     solid->point_present = 1;
@@ -27511,7 +27407,7 @@ dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     _obj->pt0.z = ins_pt->z;
     ADD_CHECK_DOUBLE (scale_factor);
     // TODO rotation cos()
-    //ADD_CHECK_ANGLE (_obj->rotation);
+    // ADD_CHECK_ANGLE (_obj->rotation);
     _obj->uvec.x = scale_factor;
     _obj->uvec.y = scale_factor;
     _obj->uvec.z = 1.0;
@@ -27548,8 +27444,8 @@ dwg_add_IMAGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 EXPORT Dwg_Entity_PDFUNDERLAY *
 dwg_add_PDFUNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                      const char *restrict filename,
-                     const dwg_point_3d *restrict ins_pt, const double scale_factor,
-                     const double rotation_angle)
+                     const dwg_point_3d *restrict ins_pt,
+                     const double scale_factor, const double rotation_angle)
 {
   Dwg_Object *und, *dict = NULL, *def = NULL;
   Dwg_Object_DICTIONARY *_dict;
@@ -27585,15 +27481,16 @@ dwg_add_PDFUNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         _dict = dict->tio.object->tio.DICTIONARY;
         // check if a PDFDEFINITION for this filename already exists.
         // if same path: re-use it. if same base: inc i and name.
-        for (unsigned j=0; j < _dict->numitems; j++)
+        for (unsigned j = 0; j < _dict->numitems; j++)
           {
             BITCODE_T text = _dict->texts[j];
             Dwg_Object_Ref *ref = _dict->itemhandles[j];
             Dwg_Object *o = dwg_ref_object (dwg, ref);
             if (o && o->fixedtype == DWG_TYPE_PDFDEFINITION)
               {
-                Bit_Chain dat = {0};
-                Dwg_Object_PDFDEFINITION *_def = o->tio.object->tio.PDFDEFINITION;
+                Bit_Chain dat = { 0 };
+                Dwg_Object_PDFDEFINITION *_def
+                    = o->tio.object->tio.PDFDEFINITION;
                 char text1[80];
                 int i1;
                 // for IS_FROM_TU in bit_eq_T: don't convert with DXF
@@ -27625,7 +27522,8 @@ dwg_add_PDFUNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         if (!_obj)
           return NULL;
         def = obj;
-        _dict->itemhandles[_dict->numitems-1] = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);
+        _dict->itemhandles[_dict->numitems - 1]
+            = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);
         _obj->filename = dwg_add_u8_input (dwg, filename);
         _obj->name = strdup (name);
         if (!dict)
@@ -27633,7 +27531,7 @@ dwg_add_PDFUNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         if (dict)
           {
             obj->tio.object->ownerhandle
-              = dwg_add_handleref (dwg, 4, dict->handle.value, obj);
+                = dwg_add_handleref (dwg, 4, dict->handle.value, obj);
             add_obj_reactor (obj->tio.object, dict->handle.value);
           }
       }
@@ -27713,7 +27611,8 @@ dwg_add_LAYER_INDEX (Dwg_Data *restrict dwg /* ... */)
 //   DICT_item "ACAD_FILTER" ->
 //   DICT_item "SPATIAL" -> obj
 EXPORT Dwg_Object_SPATIAL_FILTER *
-dwg_add_SPATIAL_FILTER (Dwg_Entity_INSERT *restrict insert /*, clip_verts... */)
+dwg_add_SPATIAL_FILTER (
+    Dwg_Entity_INSERT *restrict insert /*, clip_verts... */)
 {
   int err;
   Dwg_Object *ins;
@@ -27840,7 +27739,7 @@ dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */)
 // WIPEOUT
 
 // just for testing dwg_type_dxfname()
-EXPORT Dwg_Object_WIPEOUTVARIABLES*
+EXPORT Dwg_Object_WIPEOUTVARIABLES *
 dwg_add_WIPEOUTVARIABLES (Dwg_Data *dwg /* ... */)
 {
   {

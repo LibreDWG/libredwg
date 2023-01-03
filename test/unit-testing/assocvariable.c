@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
   BITCODE_T t58;
   BITCODE_T evaluator;
   BITCODE_T desc;
-  //BITCODE_BSd value_type;
+  // BITCODE_BSd value_type;
   Dwg_EvalVariant value;
   BITCODE_B has_t78;
   BITCODE_T t78;
@@ -33,7 +33,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, action_index, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, max_assoc_dep_index, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCVARIABLE, num_deps, BL);
-  for (unsigned i=0; i < num_deps; i++)
+  for (unsigned i = 0; i < num_deps; i++)
     {
       CHK_SUBCLASS_TYPE (_obj->deps[i], ASSOCACTION_Deps, is_owned, B);
       CHK_SUBCLASS_H (_obj->deps[i], ASSOCACTION_Deps, dep);

@@ -12,12 +12,14 @@ api_process (dwg_object *obj)
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
-  dwg_obj_partial_viewing_index *_obj = dwg_object_to_PARTIAL_VIEWING_INDEX (obj);
+  dwg_obj_partial_viewing_index *_obj
+      = dwg_object_to_PARTIAL_VIEWING_INDEX (obj);
 
   CHK_ENTITY_TYPE (_obj, PARTIAL_VIEWING_INDEX, num_entries, BL);
   CHK_ENTITY_TYPE (_obj, PARTIAL_VIEWING_INDEX, has_entries, B);
 
-  if (!dwg_dynapi_entity_value (_obj, "PARTIAL_VIEWING_INDEX", "entries", &entries, NULL))
+  if (!dwg_dynapi_entity_value (_obj, "PARTIAL_VIEWING_INDEX", "entries",
+                                &entries, NULL))
     fail ("dynapi PARTIAL_VIEWING_INDEX.entries");
   if (num_entries)
     {
@@ -26,8 +28,10 @@ api_process (dwg_object *obj)
       else
         for (i = 0; i < num_entries; i++)
           {
-            CHK_SUBCLASS_2RD (entries[i], PARTIAL_VIEWING_INDEX_Entry, extents_min);
-            CHK_SUBCLASS_2RD (entries[i], PARTIAL_VIEWING_INDEX_Entry, extents_max);
+            CHK_SUBCLASS_2RD (entries[i], PARTIAL_VIEWING_INDEX_Entry,
+                              extents_min);
+            CHK_SUBCLASS_2RD (entries[i], PARTIAL_VIEWING_INDEX_Entry,
+                              extents_max);
             CHK_SUBCLASS_H (entries[i], PARTIAL_VIEWING_INDEX_Entry, object);
           }
     }

@@ -31,14 +31,17 @@ api_process (dwg_object *obj)
   else
     {
       for (i = 0; i < num_wires; i++)
-        printf ("PLANESURFACE.wires[%u]: " FORMAT_BLd "\n", i, wires[i].selection_marker);
+        printf ("PLANESURFACE.wires[%u]: " FORMAT_BLd "\n", i,
+                wires[i].selection_marker);
     }
-  if (!dwg_dynapi_entity_value (_obj, "PLANESURFACE", "silhouettes", &silhouettes, NULL))
+  if (!dwg_dynapi_entity_value (_obj, "PLANESURFACE", "silhouettes",
+                                &silhouettes, NULL))
     fail ("PLANESURFACE.silhouettes");
   else
     {
       for (i = 0; i < num_silhouettes; i++)
-        printf ("PLANESURFACE.silhouettes[%u]: " FORMAT_BL "\n", i, silhouettes[i].vp_id);
+        printf ("PLANESURFACE.silhouettes[%u]: " FORMAT_BL "\n", i,
+                silhouettes[i].vp_id);
     }
   if (dwg_version >= R_2007 && _obj->history_id) // if it did not fail before
     {

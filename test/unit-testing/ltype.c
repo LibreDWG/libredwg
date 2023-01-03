@@ -17,7 +17,7 @@ api_process (dwg_object *obj)
   BITCODE_BD pattern_len;
   BITCODE_RC alignment;
   BITCODE_RC num_dashes;
-  Dwg_LTYPE_dash* dashes;
+  Dwg_LTYPE_dash *dashes;
   BITCODE_RD dashes_r11[12];
   BITCODE_B has_strings_area; /* if some shape_flag & 4 (ODA bug) */
   BITCODE_TF strings_area;
@@ -43,7 +43,8 @@ api_process (dwg_object *obj)
     {
       if (dwg_version <= R_13b1)
         {
-          if (!dwg_dynapi_entity_value (ltype, "LTYPE", "dashes_r11", &dashes_r11, NULL))
+          if (!dwg_dynapi_entity_value (ltype, "LTYPE", "dashes_r11",
+                                        &dashes_r11, NULL))
             fail ("LTYPE.dashes_r11");
         }
       for (BITCODE_BL i = 0; i < num_dashes; i++)
@@ -65,8 +66,9 @@ api_process (dwg_object *obj)
             }
         }
     }
-  if (dwg_version >= R_13b1) {
-    CHK_ENTITY_TYPE (ltype, LTYPE, has_strings_area, B);
-    CHK_ENTITY_TYPE (ltype, LTYPE, strings_area, TF);
-  }
+  if (dwg_version >= R_13b1)
+    {
+      CHK_ENTITY_TYPE (ltype, LTYPE, has_strings_area, B);
+      CHK_ENTITY_TYPE (ltype, LTYPE, strings_area, TF);
+    }
 }

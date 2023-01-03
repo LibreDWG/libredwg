@@ -16,7 +16,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, SORTENTSTABLE, num_ents, BL);
   if (!dwg_dynapi_entity_value (_obj, "SORTENTSTABLE", "ents", &ents, NULL))
     fail ("SORTENTSTABLE.ents");
-  if (!dwg_dynapi_entity_value (_obj, "SORTENTSTABLE", "sort_ents", &sort_ents, NULL))
+  if (!dwg_dynapi_entity_value (_obj, "SORTENTSTABLE", "sort_ents", &sort_ents,
+                                NULL))
     fail ("SORTENTSTABLE.sort_ents");
   hdls = _obj->ents;
   for (i = 0; i < num_ents; i++)
@@ -31,7 +32,8 @@ api_process (dwg_object *obj)
       else
         fail ("SORTENTSTABLE.ents[%d]: " FORMAT_REF, i, ARGS_REF (ents[i]));
       if (sort_ents[i])
-        ok ("SORTENTSTABLE.sort_ents[%d]: " FORMAT_REF, i, ARGS_REF (sort_ents[i]));
+        ok ("SORTENTSTABLE.sort_ents[%d]: " FORMAT_REF, i,
+            ARGS_REF (sort_ents[i]));
       else
         ok ("SORTENTSTABLE.sort_ents[%d]: NULL", i);
     }

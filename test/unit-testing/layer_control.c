@@ -17,8 +17,10 @@ api_process (dwg_object *obj)
   for (i = 0; i < num_entries; i++)
     {
       if (hdls[i] == entries[i])
-        ok ("LAYER_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
+        ok ("LAYER_CONTROL.entries[%d]: " FORMAT_REF, i,
+            ARGS_REF (entries[i]));
       else
-        fail ("LAYER_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
+        fail ("LAYER_CONTROL.entries[%d]: " FORMAT_REF, i,
+              ARGS_REF (entries[i]));
     }
 }

@@ -8,12 +8,13 @@ api_process (dwg_object *obj)
   int error, isnew;
   ANNOTSCALEOBJECTCONTEXTDATA_fields;
   Dwg_OCD_Dimension dimension;
-  BITCODE_3BD feature_location_pt;	/*!< DXF 11-31 = origin */
-  BITCODE_3BD leader_endpt;		/*!< DXF 12-32 */
+  BITCODE_3BD feature_location_pt; /*!< DXF 11-31 = origin */
+  BITCODE_3BD leader_endpt;        /*!< DXF 12-32 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
-  dwg_obj_orddimobjectcontextdata *_obj = dwg_object_to_ORDDIMOBJECTCONTEXTDATA (obj);
+  dwg_obj_orddimobjectcontextdata *_obj
+      = dwg_object_to_ORDDIMOBJECTCONTEXTDATA (obj);
 
   CHK_ENTITY_TYPE (_obj, ORDDIMOBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, ORDDIMOBJECTCONTEXTDATA, is_default, B);

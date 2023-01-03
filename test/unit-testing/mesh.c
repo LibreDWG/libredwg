@@ -8,23 +8,24 @@ api_process (dwg_object *obj)
   BITCODE_BS dlevel;
   BITCODE_B is_watertight;
   BITCODE_BL i, num_subdiv_vertex;
-  BITCODE_3BD* subdiv_vertex;
+  BITCODE_3BD *subdiv_vertex;
   BITCODE_BL num_vertex;
-  BITCODE_3BD* vertex;
+  BITCODE_3BD *vertex;
   BITCODE_BL num_faces;
-  BITCODE_BL* faces;
+  BITCODE_BL *faces;
   BITCODE_BL num_edges;
-  Dwg_MESH_edge* edges;
+  Dwg_MESH_edge *edges;
   BITCODE_BL num_crease;
-  BITCODE_BD* crease;
+  BITCODE_BD *crease;
 
-  //Dwg_Version_Type dwg_version = obj->parent->header.version;
+  // Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_ent_mesh *_obj = dwg_object_to_MESH (obj);
 
   CHK_ENTITY_TYPE (_obj, MESH, dlevel, BS);
   CHK_ENTITY_TYPE (_obj, MESH, is_watertight, B);
   CHK_ENTITY_TYPE (_obj, MESH, num_subdiv_vertex, BL);
-  if (!dwg_dynapi_entity_value (_obj, "MESH", "subdiv_vertex", &subdiv_vertex, NULL))
+  if (!dwg_dynapi_entity_value (_obj, "MESH", "subdiv_vertex", &subdiv_vertex,
+                                NULL))
     fail ("MESH.subdiv_vertex");
   for (i = 0; i < num_subdiv_vertex; i++)
     {
@@ -36,8 +37,8 @@ api_process (dwg_object *obj)
     fail ("MESH.vertex");
   for (i = 0; i < num_vertex; i++)
     {
-      ok ("MESH.vertex[%u]: (%f, %f, %f)", i, vertex[i].x,
-          vertex[i].y, vertex[i].z);
+      ok ("MESH.vertex[%u]: (%f, %f, %f)", i, vertex[i].x, vertex[i].y,
+          vertex[i].z);
     }
   CHK_ENTITY_TYPE (_obj, MESH, num_faces, BL);
   if (!dwg_dynapi_entity_value (_obj, "MESH", "faces", &faces, NULL))

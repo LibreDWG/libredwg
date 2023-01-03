@@ -5,8 +5,8 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  //Dwg_EvalExpr evalexpr;
-  //Dwg_ACSH_HistoryNode history_node;
+  // Dwg_EvalExpr evalexpr;
+  // Dwg_ACSH_HistoryNode history_node;
   BITCODE_BD *trans;
   BITCODE_BL major;
   BITCODE_BL minor;
@@ -18,8 +18,8 @@ api_process (dwg_object *obj)
   dwg_obj_acsh_wedge_class *_obj = dwg_object_to_ACSH_WEDGE_CLASS (obj);
 
   CHK_EVALEXPR (ACSH_WEDGE_CLASS);
-  CHK_ACSH_HISTORYNODE();
-  
+  CHK_ACSH_HISTORYNODE ();
+
   CHK_ENTITY_TYPE (_obj, ACSH_WEDGE_CLASS, major, BL);
   CHK_ENTITY_TYPE (_obj, ACSH_WEDGE_CLASS, minor, BL);
   CHK_ENTITY_TYPE (_obj, ACSH_WEDGE_CLASS, length, BD);

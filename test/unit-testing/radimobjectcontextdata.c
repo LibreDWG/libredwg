@@ -8,11 +8,12 @@ api_process (dwg_object *obj)
   int error, isnew;
   ANNOTSCALEOBJECTCONTEXTDATA_fields;
   Dwg_OCD_Dimension dimension;
-  BITCODE_3BD first_arc_pt;	/*!< DXF 11-31 = origin */
+  BITCODE_3BD first_arc_pt; /*!< DXF 11-31 = origin */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
-  dwg_obj_radimobjectcontextdata *_obj = dwg_object_to_RADIMOBJECTCONTEXTDATA (obj);
+  dwg_obj_radimobjectcontextdata *_obj
+      = dwg_object_to_RADIMOBJECTCONTEXTDATA (obj);
 
   CHK_ENTITY_TYPE (_obj, RADIMOBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, RADIMOBJECTCONTEXTDATA, is_default, B);

@@ -22,19 +22,20 @@
 #include "bits.h"
 
 #ifdef IN_DXF_H
-#error in_dxf.h must be included after out_dxf.h because of FORMAT_BD
+#  error in_dxf.h must be included after out_dxf.h because of FORMAT_BD
 #endif
 
 #define DXF_FORMAT_FLT "%-16.16f"
 #define DXF_FLT_MAXLEN 18
 
 const char *dxf_format (int code) RETURNS_NONNULL;
-const char *dxf_codepage (int code, Dwg_Data *dwg)  RETURNS_NONNULL;
+const char *dxf_codepage (int code, Dwg_Data *dwg) RETURNS_NONNULL;
 int dxf_is_sorted_INSERT (const Dwg_Object *restrict obj);
 int dxf_is_sorted_POLYLINE (const Dwg_Object *restrict obj);
 int dxf_validate_DICTIONARY (Dwg_Object *obj);
-bool dxf_has_STYLE_eed(Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj);
-bool dxf_has_xrefdep_vertbar(Bit_Chain *restrict dat, const char *name);
+bool dxf_has_STYLE_eed (Bit_Chain *restrict dat,
+                        const Dwg_Object_Object *restrict obj);
+bool dxf_has_xrefdep_vertbar (Bit_Chain *restrict dat, const char *name);
 bool dxf_is_xrefdep_name (Bit_Chain *restrict dat, const char *name);
 
 EXPORT int dwg_write_dxf (Bit_Chain *dat, Dwg_Data *dwg) __nonnull_all;

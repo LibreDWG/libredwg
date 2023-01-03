@@ -19,9 +19,9 @@
  *       NOCOMMA:
  *         We really have to add the comma before, not after, and special case
  *         the first field, not the last to omit the comma.
- *       GeoJSON 2008 or newer RFC7946 https://tools.ietf.org/html/rfc7946#appendix-B
- *       For the new format we need to follow the right-hand rule for orientation
- *       (counterclockwise polygons).
+ *       GeoJSON 2008 or newer RFC7946
+ * https://tools.ietf.org/html/rfc7946#appendix-B For the new format we need to
+ * follow the right-hand rule for orientation (counterclockwise polygons).
  */
 
 #include "config.h"
@@ -135,7 +135,7 @@ static unsigned int cur_ver = 0;
   }
 #define ENDSEC() ENDARRAY
 #define OLD_NOCOMMA fseek (dat->fh, -2, SEEK_CUR)
-#define NOCOMMA assert(0 = "NOCOMMA")
+#define NOCOMMA assert (0 = "NOCOMMA")
 // guaranteed non-null str
 #define PAIR_Sc(name, str)                                                    \
   {                                                                           \
@@ -158,7 +158,7 @@ static unsigned int cur_ver = 0;
   }
 #define PAIR_S(name, str)                                                     \
   if (str)                                                                    \
-    PAIR_Sc (name, str)
+  PAIR_Sc (name, str)
 #define PAIR_D(name, value)                                                   \
   {                                                                           \
     PREFIX fprintf (dat->fh, "\"" #name "\": %d,\n", value);                  \
@@ -169,9 +169,10 @@ static unsigned int cur_ver = 0;
     PREFIX fprintf (dat->fh, "\"" #name "\": \"%s\"\n", value);               \
   }
 #define LASTPAIR_S(name, value)                                               \
-  if (value) {                                                                \
-    PREFIX fprintf (dat->fh, "\"" #name "\": \"%s\"\n", value);               \
-  }
+  if (value)                                                                  \
+    {                                                                         \
+      PREFIX fprintf (dat->fh, "\"" #name "\": \"%s\"\n", value);             \
+    }
 #define PAIR_NULL(name)                                                       \
   {                                                                           \
     PREFIX fprintf (dat->fh, "\"" #name "\": null,\n");                       \
@@ -247,12 +248,12 @@ static unsigned int cur_ver = 0;
 #define _VALUE_RD(value) fprintf (dat->fh, FORMAT_RD, value)
 #ifdef IS_RELEASE
 #  define VALUE_RD(value)                                                     \
-  {                                                                           \
-    if (bit_isnan (value))                                                    \
-      _VALUE_RD (0.0);                                                        \
-    else                                                                      \
-      _VALUE_RD (value);                                                      \
-   }
+    {                                                                         \
+      if (bit_isnan (value))                                                  \
+        _VALUE_RD (0.0);                                                      \
+      else                                                                    \
+        _VALUE_RD (value);                                                    \
+    }
 #else
 #  define VALUE_RD(value) _VALUE_RD (value)
 #endif
@@ -274,7 +275,7 @@ static unsigned int cur_ver = 0;
   }
 #define FIELD_2DPOINT(name) VALUE_2DPOINT (_obj->name.x, _obj->name.y)
 #define LASTFIELD_2DPOINT(name) LASTVALUE_2DPOINT (_obj->name.x, _obj->name.y)
-#define VALUE_3DPOINT(px, py, pz)                                          \
+#define VALUE_3DPOINT(px, py, pz)                                             \
   {                                                                           \
     PREFIX fprintf (dat->fh, "[ ");                                           \
     VALUE_RD (px);                                                            \
@@ -305,7 +306,7 @@ static unsigned int cur_ver = 0;
     if (_obj->name.z != 0.0)                                                  \
       VALUE_3DPOINT (_obj->name.x, _obj->name.y, _obj->name.z)                \
     else                                                                      \
-      FIELD_2DPOINT(name)                                                     \
+      FIELD_2DPOINT (name)                                                    \
   }
 #define LASTFIELD_3DPOINT(name)                                               \
   {                                                                           \
@@ -334,19 +335,19 @@ static unsigned int cur_ver = 0;
 #define FIELD_VECTOR_T(name, type, size, dxf)                                 \
   ARRAY;                                                                      \
   if (!(IS_FROM_TU (dat)))                                                    \
-  {                                                                           \
-    for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)               \
-      {                                                                       \
-        PREFIX fprintf (dat->fh, "\"" #name "\": \"%s\"%s\n",                 \
-                        _obj->name[vcount],                                   \
-                        vcount == (BITCODE_BL)_obj->size - 1 ? "" : ",");     \
-      }                                                                       \
-  }                                                                           \
+    {                                                                         \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
+        {                                                                     \
+          PREFIX fprintf (dat->fh, "\"" #name "\": \"%s\"%s\n",               \
+                          _obj->name[vcount],                                 \
+                          vcount == (BITCODE_BL)_obj->size - 1 ? "" : ",");   \
+        }                                                                     \
+    }                                                                         \
   else                                                                        \
-  {                                                                           \
-    for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)               \
-      FIELD_TEXT_TU (name, _obj->name[vcount]);                               \
-  }                                                                           \
+    {                                                                         \
+      for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
+        FIELD_TEXT_TU (name, _obj->name[vcount]);                             \
+    }                                                                         \
   ENDARRAY;
 
 #define FIELD_VECTOR(name, type, size, dxf)                                   \
@@ -369,7 +370,7 @@ static unsigned int cur_ver = 0;
 #define WARN_UNSTABLE_CLASS                                                   \
   LOG_WARN ("Unstable Class %s %d %s (0x%x%s) -@%ld",                         \
             is_entity ? "entity" : "object", klass->number, dxfname,          \
-            klass->proxyflag, klass->is_zombie ? "is_zombie" : "",          \
+            klass->proxyflag, klass->is_zombie ? "is_zombie" : "",            \
             obj->address + obj->size)
 
 // ensure counter-clockwise orientation of a closed polygon. 2d only.
@@ -381,25 +382,25 @@ normalize_polygon_orient (BITCODE_BL numpts, dwg_point_2d **const pts_p)
   // check orientation
   for (unsigned i = 0; i < numpts - 1; i++)
     {
-      sum += (pts[i+1].x - pts[i].x) * (pts[i+1].y + pts[i].y);
+      sum += (pts[i + 1].x - pts[i].x) * (pts[i + 1].y + pts[i].y);
     }
   if (sum > 0.0) // if clockwise
     {
       // reverse and return a copy
       unsigned last = numpts - 1;
       dwg_point_2d *new = malloc (numpts * sizeof (BITCODE_2RD));
-      //fprintf (stderr, "%u pts, sum %f: reverse orient\n", numpts, sum);
+      // fprintf (stderr, "%u pts, sum %f: reverse orient\n", numpts, sum);
       for (unsigned i = 0; i < numpts; i++)
         {
-          new[i].x = pts[last-i].x;
-          new[i].y = pts[last-i].y;
+          new[i].x = pts[last - i].x;
+          new[i].y = pts[last - i].y;
         }
       *pts_p = new;
       return 1;
     }
   else
     {
-      //fprintf (stderr, "%u pts, sum %f: keep orient\n", numpts, sum);
+      // fprintf (stderr, "%u pts, sum %f: keep orient\n", numpts, sum);
       return 0;
     }
 }
@@ -489,9 +490,9 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           char *utf8 = bit_convert_TU ((BITCODE_TU)_obj->text_value);
           PAIR_S (Text, utf8)
           free (utf8);
-        } 
+        }
       else
-        {      
+        {
           PAIR_S (Text, _obj->text_value)
         }
     }
@@ -503,9 +504,9 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           char *utf8 = bit_convert_TU ((BITCODE_TU)_obj->text);
           PAIR_S (Text, utf8)
           free (utf8);
-        } 
+        }
       else
-        {      
+        {
           PAIR_S (Text, _obj->text)
         }
     }
@@ -565,11 +566,12 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     ENDHASH
 
 static int
-dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_last)
+dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                        int is_last)
 {
   BITCODE_BL j, last_j;
   Dwg_Entity_LWPOLYLINE *_obj = obj->tio.entity->tio.LWPOLYLINE;
-  dwg_point_2d *pts = (dwg_point_2d*)_obj->points;
+  dwg_point_2d *pts = (dwg_point_2d *)_obj->points;
   if (!_obj->points)
     return 1;
 
@@ -577,7 +579,8 @@ dwg_geojson_LWPOLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int i
   // if closed and num_points > 3 use a Polygon
   if (_obj->flag & 512 && _obj->num_points > 3)
     {
-      int changed = normalize_polygon_orient (_obj->num_points, &pts); // RFC7946
+      int changed
+          = normalize_polygon_orient (_obj->num_points, &pts); // RFC7946
       GEOMETRY (Polygon)
       KEY (coordinates);
       ARRAY;
@@ -669,7 +672,8 @@ dwg_geojson_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 }
 
 static int
-dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj, int is_last)
+dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+                    int is_last)
 {
   switch (obj->fixedtype)
     {
@@ -914,10 +918,10 @@ geojson_entities_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       int is_last = i == dwg->num_objects - 1;
       Dwg_Object *obj = &dwg->object[i];
       success = dwg_geojson_object (dat, obj, is_last);
-      if (is_last && !success) // needed for the LASTFEATURE comma. end with an empty dummy
+      if (is_last && !success) // needed for the LASTFEATURE comma. end with an
+                               // empty dummy
         {
-          HASH
-          PAIR_Sc (type, "Feature");
+          HASH PAIR_Sc (type, "Feature");
           PAIR_NULL (properties);
           LASTPAIR_NULL (geometry);
           LASTENDHASH;

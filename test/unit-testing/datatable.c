@@ -28,6 +28,6 @@ api_process (dwg_object *obj)
         CHK_SUBCLASS_TYPE (cols[i], DATATABLE_column, type, BL);
         CHK_SUBCLASS_UTF8TEXT (cols[i], DATATABLE_column, text);
         // ..
-      }  
+      }
 #endif
 }

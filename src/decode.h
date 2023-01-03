@@ -26,7 +26,7 @@
 #include "decode_r11.h"
 
 #ifdef IN_DXF_H
-#error in_dxf.h must be included after decode.h because of FORMAT_BD
+#  error in_dxf.h must be included after decode.h because of FORMAT_BD
 #endif
 
 #define REFS_PER_REALLOC 128
@@ -70,9 +70,10 @@ void dwg_free_xdata_resbuf (Dwg_Resbuf *restrict rbuf);
 
 /* reused with encode */
 void dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg);
-uint32_t dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat,
-                                    int32_t size);
-unsigned int section_max_decomp_size (const Dwg_Data *dwg, const Dwg_Section_Type id);
+uint32_t dwg_section_page_checksum (const uint32_t seed,
+                                    Bit_Chain *restrict dat, int32_t size);
+unsigned int section_max_decomp_size (const Dwg_Data *dwg,
+                                      const Dwg_Section_Type id);
 
 /* reused with out_dxf */
 char *dwg_dim_blockname (Dwg_Data *restrict dwg,
@@ -94,9 +95,8 @@ unsigned long obj_stream_position (Bit_Chain *restrict dat,
 void read_r2007_init (Dwg_Data *restrict dwg);
 int read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
                           Dwg_Data *restrict dwg);
-void section_string_stream (Dwg_Data *restrict dwg,
-                            Bit_Chain *restrict dat, BITCODE_RL bitsize,
-                            Bit_Chain *restrict str);
+void section_string_stream (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
+                            BITCODE_RL bitsize, Bit_Chain *restrict str);
 /* for decode_r11.c */
 int decode_preR13_DIMENSION (Bit_Chain *restrict dat,
                              Dwg_Object *restrict obj);

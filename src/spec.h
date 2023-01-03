@@ -28,7 +28,7 @@
 #  define JSON if (0)
 #  define FREE if (0)
 #  define IF_FREE_OR_SINCE(x) SINCE (x)
-#  define IF_FREE_OR_VERSIONS(x,y) VERSIONS(x, y)
+#  define IF_FREE_OR_VERSIONS(x, y) VERSIONS (x, y)
 #  ifndef IF_ENCODE_FROM_EARLIER
 #    define IF_ENCODE_FROM_EARLIER if (0)
 #    define IF_ENCODE_FROM_EARLIER_OR_DXF if (0)
@@ -62,25 +62,24 @@
 #  endif
 
 // for compile-time range checks with n=3,10,1000,5000,10000,20000,100000
-//#  define LOG2_APPROX(n) (size_t)((-0.344845 * (n) * (n)) + (2.024658 * (n)) - 1.674873)
-//#  define _IN_RANGE     (sizeof (_obj->field) >= LOG2_APPROX (maxvalue) / 8)
+//#  define LOG2_APPROX(n) (size_t)((-0.344845 * (n) * (n)) + (2.024658 * (n))
+//- 1.674873) #  define _IN_RANGE     (sizeof (_obj->field) >= LOG2_APPROX
+//(maxvalue) / 8)
 #  define _IN_RANGE(var, n)                                                   \
     ((sizeof (var) == 1 && n <= 0xff) || (sizeof (var) == 2 && n <= 0xffff)   \
      || (sizeof (var) >= 4))
 
 #  ifndef IS_FREE
 #    define VALUEOUTOFBOUNDS(field, maxvalue)                                 \
-      if (_IN_RANGE (_obj->field, maxvalue)                                   \
-          && _obj->field > maxvalue)                                          \
+      if (_IN_RANGE (_obj->field, maxvalue) && _obj->field > maxvalue)        \
         {                                                                     \
           LOG_ERROR ("Invalid %s." #field " %lu", obj->name,                  \
                      (unsigned long)_obj->field);                             \
           _obj->field = 0;                                                    \
           return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
         }
-#    define SUB_VALUEOUTOFBOUNDS(o,field, maxvalue)                           \
-      if (_IN_RANGE (_obj->o.field, maxvalue)                                 \
-          && _obj->o.field > maxvalue)                                        \
+#    define SUB_VALUEOUTOFBOUNDS(o, field, maxvalue)                          \
+      if (_IN_RANGE (_obj->o.field, maxvalue) && _obj->o.field > maxvalue)    \
         {                                                                     \
           LOG_ERROR ("Invalid %s." #field " %lu", obj->name,                  \
                      (unsigned long)_obj->o.field);                           \
@@ -89,14 +88,12 @@
         }
 #  else
 #    define VALUEOUTOFBOUNDS(field, maxvalue)                                 \
-      if (_IN_RANGE (_obj->field, maxvalue)                                   \
-          && _obj->field > maxvalue)                                          \
+      if (_IN_RANGE (_obj->field, maxvalue) && _obj->field > maxvalue)        \
         {                                                                     \
           return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
         }
-#    define SUB_VALUEOUTOFBOUNDS(o,field, maxvalue)                           \
-      if (_IN_RANGE (_obj->o.field, maxvalue)                                 \
-          && _obj->o.field > maxvalue)                                        \
+#    define SUB_VALUEOUTOFBOUNDS(o, field, maxvalue)                          \
+      if (_IN_RANGE (_obj->o.field, maxvalue) && _obj->o.field > maxvalue)    \
         {                                                                     \
           return DWG_ERR_VALUEOUTOFBOUNDS;                                    \
         }
@@ -126,7 +123,7 @@
 #  define VALUE_2RD(value, dxf)
 #endif
 #ifndef VALUE_2BD
-#  define VALUE_2BD(value, dxf) VALUE_2RD(value, dxf)
+#  define VALUE_2BD(value, dxf) VALUE_2RD (value, dxf)
 #endif
 #ifndef VALUE_3RD
 #  define VALUE_3RD(value, dxf) VALUE_3BD (value, dxf)
@@ -200,98 +197,100 @@
 #endif
 #ifndef SUB_HANDLE_VECTOR
 #  define SUB_HANDLE_VECTOR(o, nam, sizefield, code, dxf)                     \
-  if (_obj->o.sizefield && _obj->o.nam)                                       \
-    {                                                                         \
-      BITCODE_BL _size = _obj->o.sizefield;                                   \
-      for (vcount = 0; vcount < _size; vcount++)                              \
-        {                                                                     \
-          SUB_FIELD_HANDLE (o, nam[vcount], code, dxf);                       \
-        }                                                                     \
-    }
+    if (_obj->o.sizefield && _obj->o.nam)                                     \
+      {                                                                       \
+        BITCODE_BL _size = _obj->o.sizefield;                                 \
+        for (vcount = 0; vcount < _size; vcount++)                            \
+          {                                                                   \
+            SUB_FIELD_HANDLE (o, nam[vcount], code, dxf);                     \
+          }                                                                   \
+      }
 #endif
 
 #ifndef SUB_FIELD_VECTOR
 #  define SUB_FIELD_VECTOR(o, nam, sizefield, type, dxf)                      \
-  if (_obj->o.sizefield && _obj->o.nam)                                       \
-    {                                                                         \
-      BITCODE_BL _size = _obj->o.sizefield;                                   \
-      for (vcount = 0; vcount < _size; vcount++)                              \
-        {                                                                     \
-          SUB_FIELD (o, nam[vcount], type, dxf);                              \
-        }                                                                     \
-    }
+    if (_obj->o.sizefield && _obj->o.nam)                                     \
+      {                                                                       \
+        BITCODE_BL _size = _obj->o.sizefield;                                 \
+        for (vcount = 0; vcount < _size; vcount++)                            \
+          {                                                                   \
+            SUB_FIELD (o, nam[vcount], type, dxf);                            \
+          }                                                                   \
+      }
 #endif
 #ifndef SUB_FIELD_VECTOR_N
 #  define SUB_FIELD_VECTOR_N(o, nam, type, size, dxf)                         \
-  if (size > 0 && _obj->o.nam != NULL)                                        \
-    {                                                                         \
-      BITCODE_BL _size = (BITCODE_BL)size;                                    \
-      for (vcount = 0; vcount < _size; vcount++)                              \
-        {                                                                     \
-          SUB_FIELD (o, nam[vcount], type, dxf);                              \
-        }                                                                     \
-    }
+    if (size > 0 && _obj->o.nam != NULL)                                      \
+      {                                                                       \
+        BITCODE_BL _size = (BITCODE_BL)size;                                  \
+        for (vcount = 0; vcount < _size; vcount++)                            \
+          {                                                                   \
+            SUB_FIELD (o, nam[vcount], type, dxf);                            \
+          }                                                                   \
+      }
 #endif
 #ifndef FIELD_VECTOR_INL
 #  define FIELD_VECTOR_INL(nam, type, size, dxf)                              \
-  FIELD_VECTOR_N (nam, type, size, dxf)
+    FIELD_VECTOR_N (nam, type, size, dxf)
 #endif
 #ifndef SUB_FIELD_VECTOR_INL
 #  define SUB_FIELD_VECTOR_INL(o, nam, type, size, dxf)                       \
-  SUB_FIELD_VECTOR_N (o, nam, type, size, dxf)
+    SUB_FIELD_VECTOR_N (o, nam, type, size, dxf)
 #endif
 #ifndef SUB_FIELD_2RD_VECTOR
-#  define SUB_FIELD_2RD_VECTOR(o,name, size, dxf)                             \
-  if (_obj->o.size > 0)                                                       \
-    {                                                                         \
-      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
-        {                                                                     \
-          SUB_FIELD_2RD (o,name[vcount], dxf);                                \
-        }                                                                     \
-    }
+#  define SUB_FIELD_2RD_VECTOR(o, name, size, dxf)                            \
+    if (_obj->o.size > 0)                                                     \
+      {                                                                       \
+        for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)         \
+          {                                                                   \
+            SUB_FIELD_2RD (o, name[vcount], dxf);                             \
+          }                                                                   \
+      }
 #endif
 #ifndef SUB_FIELD_3BD_VECTOR
-#  define SUB_FIELD_3BD_VECTOR(o,name, size, dxf)                             \
-  if (_obj->o.size > 0)                                                       \
-    {                                                                         \
-      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
-        {                                                                     \
-          SUB_FIELD_3BD (o,name[vcount], dxf);                                \
-        }                                                                     \
-    }
+#  define SUB_FIELD_3BD_VECTOR(o, name, size, dxf)                            \
+    if (_obj->o.size > 0)                                                     \
+      {                                                                       \
+        for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)         \
+          {                                                                   \
+            SUB_FIELD_3BD (o, name[vcount], dxf);                             \
+          }                                                                   \
+      }
 #endif
 #ifndef FIELD_VECTOR_T1
-#  define FIELD_VECTOR_T1(nam, type, size, dxf) FIELD_VECTOR_T(nam, type, size, dxf)
+#  define FIELD_VECTOR_T1(nam, type, size, dxf)                               \
+    FIELD_VECTOR_T (nam, type, size, dxf)
 #endif
 #ifndef SUB_FIELD_VECTOR_TYPESIZE
 #  define SUB_FIELD_VECTOR_TYPESIZE(o, nam, size, typesize, dxf)              \
-  if (_obj->o.size && _obj->o.nam)                                            \
-    {                                                                         \
-      for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
+    if (_obj->o.size && _obj->o.nam)                                          \
       {                                                                       \
-        switch (typesize)                                                     \
+        for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)         \
           {                                                                   \
-          case 0:                                                             \
-            break;                                                            \
-          case 1:                                                             \
-            SUB_FIELD (o, nam[vcount], RC, dxf);                              \
-            break;                                                            \
-          case 2:                                                             \
-            SUB_FIELD (o, nam[vcount], RS, dxf);                              \
-            break;                                                            \
-          case 4:                                                             \
-            SUB_FIELD (o, nam[vcount], RL, dxf);                              \
-            break;                                                            \
-          case 8:                                                             \
-            SUB_FIELD (o, nam[vcount], RLL, dxf);                             \
-            break;                                                            \
-          default:                                                            \
-            LOG_ERROR ("Unknown SUB_FIELD_VECTOR_TYPE " #nam " typesize %d",   \
-                       typesize);                                             \
-            break;                                                            \
+            switch (typesize)                                                 \
+              {                                                               \
+              case 0:                                                         \
+                break;                                                        \
+              case 1:                                                         \
+                SUB_FIELD (o, nam[vcount], RC, dxf);                          \
+                break;                                                        \
+              case 2:                                                         \
+                SUB_FIELD (o, nam[vcount], RS, dxf);                          \
+                break;                                                        \
+              case 4:                                                         \
+                SUB_FIELD (o, nam[vcount], RL, dxf);                          \
+                break;                                                        \
+              case 8:                                                         \
+                SUB_FIELD (o, nam[vcount], RLL, dxf);                         \
+                break;                                                        \
+              default:                                                        \
+                LOG_ERROR ("Unknown SUB_FIELD_VECTOR_TYPE " #nam              \
+                           " typesize %d",                                    \
+                           typesize);                                         \
+                break;                                                        \
+              }                                                               \
           }                                                                   \
-      }                                                                       \
-    }
+      }
 #endif
 
 // logging format overrides
@@ -385,7 +384,8 @@
 #  define FIELD_T0(name, dxf) FIELD_T (name, dxf)
 #  define FIELD_CMC0(color, dxf) FIELD_CMC (color, dxf)
 #  define FIELD_HANDLE0(name, code, dxf) FIELD_HANDLE (name, code, dxf)
-#  define SUB_FIELD_HANDLE0(o, name, code, dxf) SUB_FIELD_HANDLE (o, name, code, dxf)
+#  define SUB_FIELD_HANDLE0(o, name, code, dxf)                               \
+    SUB_FIELD_HANDLE (o, name, code, dxf)
 #endif
 #ifndef VALUE_TV0
 #  define VALUE_TV0(name, dxf) VALUE_TV (name, dxf)
@@ -447,12 +447,9 @@
 #  undef SET_PARENT
 #  undef SET_PARENT_OBJ
 #  undef SET_PARENT_FIELD
-#  define SET_PARENT(field, to)                                               \
-    _obj->field.parent = to
-#  define SET_PARENT_OBJ(field)                                               \
-    SET_PARENT (field, _obj)
-#  define SET_PARENT_FIELD(field, what_parent, to)                            \
-    _obj->field.what_parent = to
+#  define SET_PARENT(field, to) _obj->field.parent = to
+#  define SET_PARENT_OBJ(field) SET_PARENT (field, _obj)
+#  define SET_PARENT_FIELD(field, what_parent, to) _obj->field.what_parent = to
 #else
 #  define TRACE_DD
 #endif
@@ -490,7 +487,7 @@
 #  undef IF_FREE_OR_SINCE
 #  define IF_FREE_OR_SINCE(x) if (1)
 #  undef IF_FREE_OR_VERSIONS
-#  define IF_FREE_OR_VERSIONS(x,y) if (1)
+#  define IF_FREE_OR_VERSIONS(x, y) if (1)
 #else
 #  ifndef END_REPEAT
 #    define END_REPEAT(field)
@@ -503,7 +500,7 @@
 #endif
 
 #define DECODE_UNKNOWN_BITS                                                   \
-  DECODER { dwg_decode_unknown (dat, (Dwg_Object * restrict) obj); }          \
+  DECODER { dwg_decode_unknown (dat, (Dwg_Object *restrict)obj); }            \
   FREE { VALUE_TF (obj->unknown_bits, 0); }
 
 #ifndef START_OBJECT_HANDLE_STREAM
@@ -515,11 +512,13 @@
 #ifndef CONTROL_HANDLE_STREAM
 #  define CONTROL_HANDLE_STREAM                                               \
     assert (obj->supertype == DWG_SUPERTYPE_OBJECT);                          \
-    PRE (R_2007) {                                                            \
+    PRE (R_2007)                                                              \
+    {                                                                         \
       hdl_dat->byte = dat->byte;                                              \
       hdl_dat->bit = dat->bit;                                                \
     }                                                                         \
-    SINCE (R_13b1) {                                                          \
+    SINCE (R_13b1)                                                            \
+    {                                                                         \
       VALUE_HANDLE (obj->tio.object->ownerhandle, ownerhandle, 4, 0);         \
       REACTORS (4)                                                            \
       XDICOBJHANDLE (3)                                                       \
@@ -541,7 +540,7 @@
         }                                                                     \
       FIELD_TFv (name, 32, 2);                                                \
       VERSION (R_11)                                                          \
-        FIELD_RSd (used, 0);                                                  \
+      FIELD_RSd (used, 0);                                                    \
     }                                                                         \
     LATER_VERSIONS                                                            \
     {                                                                         \
@@ -653,16 +652,14 @@
 #endif
 
 #define DWG_SUBCLASS_DECL(parenttype, subtype)                                \
-  static int DWG_PRIVATE_N (ACTION, parenttype##_##subtype)                   \
-    (Dwg_Object_##parenttype *restrict _obj, Bit_Chain *dat,                  \
-     Bit_Chain *hdl_dat,                                                      \
-     Bit_Chain *str_dat, Dwg_Object *restrict obj)                            \
+  static int DWG_PRIVATE_N (ACTION, parenttype##_##subtype) (                 \
+      Dwg_Object_##parenttype *restrict _obj, Bit_Chain * dat,                \
+      Bit_Chain * hdl_dat, Bit_Chain * str_dat, Dwg_Object *restrict obj)
 
 #define DWG_SUBCLASS(parenttype, subtype)                                     \
-  static int DWG_PRIVATE_N (ACTION, parenttype##_##subtype)                   \
-    (Dwg_Object_##parenttype *restrict _obj, Bit_Chain *dat,                  \
-     Bit_Chain *hdl_dat,                                                      \
-     Bit_Chain *str_dat, Dwg_Object *restrict obj)                            \
+  static int DWG_PRIVATE_N (ACTION, parenttype##_##subtype) (                 \
+      Dwg_Object_##parenttype *restrict _obj, Bit_Chain * dat,                \
+      Bit_Chain * hdl_dat, Bit_Chain * str_dat, Dwg_Object *restrict obj)     \
   {                                                                           \
     BITCODE_BL vcount, rcount3, rcount4;                                      \
     Dwg_Data *dwg = obj->parent;                                              \
@@ -672,106 +669,108 @@
   }
 
 #define CALL_SUBCLASS(_xobj, parenttype, subtype)                             \
-  error |= DWG_PRIVATE_N (ACTION, parenttype##_##subtype) (_xobj, dat,        \
-               hdl_dat, str_dat, (Dwg_Object *)obj)
+  error |= DWG_PRIVATE_N (ACTION, parenttype##_##subtype) (                   \
+      _xobj, dat, hdl_dat, str_dat, (Dwg_Object *)obj)
 // if the name is compile-time known
 #define CALL_ENTITY(name, xobj)                                               \
   error |= DWG_PRIVATE_N (ACTION, name) (dat, hdl_dat, str_dat,               \
-                                             (Dwg_Object *)xobj)
+                                         (Dwg_Object *)xobj)
 // TODO: dispatch on the type
 #define CALL_SUBENT(hdl, dxf)
-//error |= DWG_PRIVATE_N (ACTION, xobj->fixedtype) (dat, hdl_dat, str_dat, (Dwg_Object *)xobj)
+// error |= DWG_PRIVATE_N (ACTION, xobj->fixedtype) (dat, hdl_dat, str_dat,
+// (Dwg_Object *)xobj)
 #define CALL_SUBCURVE(hdl, curvetype)
 
 #ifndef UNKNOWN_UNTIL
-#  define UNKNOWN_UNTIL(pos)  LOG_TRACE ("unknown (%ld): ", pos - dat->byte); \
-  dat->byte = pos
+#  define UNKNOWN_UNTIL(pos)                                                  \
+    LOG_TRACE ("unknown (%ld): ", pos - dat->byte);                           \
+    dat->byte = pos
 #endif
 
 #ifndef LOG_TEXT_GENERATION
 #  define LOG_TEXT_GENERATION_ONE(value, w)                                   \
-     if (value & TEXT_GENERATION_##w)                                         \
-       LOG_TRACE (#w " (%d) ", TEXT_GENERATION_##w)
+    if (value & TEXT_GENERATION_##w)                                          \
+    LOG_TRACE (#w " (%d) ", TEXT_GENERATION_##w)
 #  define LOG_TEXT_GENERATION(value)                                          \
-     if (value)                                                               \
-       {                                                                      \
-         LOG_TRACE ("            ");                                          \
-         LOG_TEXT_GENERATION_ONE (value, BACKWARDS);                          \
-         LOG_TEXT_GENERATION_ONE (value, UPSIDE_DOWN);                        \
-         LOG_TRACE ("\n");                                                    \
-       }
+    if (value)                                                                \
+      {                                                                       \
+        LOG_TRACE ("            ");                                           \
+        LOG_TEXT_GENERATION_ONE (value, BACKWARDS);                           \
+        LOG_TEXT_GENERATION_ONE (value, UPSIDE_DOWN);                         \
+        LOG_TRACE ("\n");                                                     \
+      }
 #endif
 
 #ifndef LOG_HORIZ_ALIGNMENT
 #  define LOG_HORIZ_ALIGNMENT_ONE(value, w)                                   \
-     if (value == HORIZ_ALIGNMENT_##w)                                        \
-       LOG_TRACE (#w " (0x%d) ", HORIZ_ALIGNMENT_##w)
+    if (value == HORIZ_ALIGNMENT_##w)                                         \
+    LOG_TRACE (#w " (0x%d) ", HORIZ_ALIGNMENT_##w)
 #  define LOG_HORIZ_ALIGNMENT(value)                                          \
-     if (value)                                                               \
-       {                                                                      \
-         LOG_TRACE ("                ");                                      \
-         LOG_HORIZ_ALIGNMENT_ONE (value, LEFT);                               \
-         LOG_HORIZ_ALIGNMENT_ONE (value, CENTER);                             \
-         LOG_HORIZ_ALIGNMENT_ONE (value, RIGHT);                              \
-         LOG_HORIZ_ALIGNMENT_ONE (value, ALIGNED);                            \
-         LOG_HORIZ_ALIGNMENT_ONE (value, MIDDLE);                             \
-         LOG_HORIZ_ALIGNMENT_ONE (value, FIT);                                \
-         LOG_TRACE ("\n");                                                    \
-       }
+    if (value)                                                                \
+      {                                                                       \
+        LOG_TRACE ("                ");                                       \
+        LOG_HORIZ_ALIGNMENT_ONE (value, LEFT);                                \
+        LOG_HORIZ_ALIGNMENT_ONE (value, CENTER);                              \
+        LOG_HORIZ_ALIGNMENT_ONE (value, RIGHT);                               \
+        LOG_HORIZ_ALIGNMENT_ONE (value, ALIGNED);                             \
+        LOG_HORIZ_ALIGNMENT_ONE (value, MIDDLE);                              \
+        LOG_HORIZ_ALIGNMENT_ONE (value, FIT);                                 \
+        LOG_TRACE ("\n");                                                     \
+      }
 #endif
 
 #ifndef LOG_VERT_ALIGNMENT
 #  define LOG_VERT_ALIGNMENT_ONE(value, w)                                    \
-     if (value == (VERT_ALIGNMENT_##w))                                       \
-       LOG_TRACE (#w " (0x%d) ", VERT_ALIGNMENT_##w)
+    if (value == (VERT_ALIGNMENT_##w))                                        \
+    LOG_TRACE (#w " (0x%d) ", VERT_ALIGNMENT_##w)
 #  define LOG_VERT_ALIGNMENT(value)                                           \
-     if (value)                                                               \
-       {                                                                      \
-         LOG_TRACE ("                ");                                      \
-         LOG_VERT_ALIGNMENT_ONE (value, BASELINE);                            \
-         LOG_VERT_ALIGNMENT_ONE (value, BOTTOM);                              \
-         LOG_VERT_ALIGNMENT_ONE (value, MIDDLE);                              \
-         LOG_VERT_ALIGNMENT_ONE (value, TOP);                                 \
-         LOG_TRACE ("\n");                                                    \
-       }
+    if (value)                                                                \
+      {                                                                       \
+        LOG_TRACE ("                ");                                       \
+        LOG_VERT_ALIGNMENT_ONE (value, BASELINE);                             \
+        LOG_VERT_ALIGNMENT_ONE (value, BOTTOM);                               \
+        LOG_VERT_ALIGNMENT_ONE (value, MIDDLE);                               \
+        LOG_VERT_ALIGNMENT_ONE (value, TOP);                                  \
+        LOG_TRACE ("\n");                                                     \
+      }
 #endif
 
 #ifndef LOG_FLAG_POLYLINE
 #  define LOG_FLAG_POLYLINE_ONE(value, w)                                     \
-     if (value & FLAG_POLYLINE_##w)                                           \
-       LOG_TRACE (#w " (%d) ", FLAG_POLYLINE_##w)
+    if (value & FLAG_POLYLINE_##w)                                            \
+    LOG_TRACE (#w " (%d) ", FLAG_POLYLINE_##w)
 #  define LOG_FLAG_POLYLINE(value)                                            \
-     if (value)                                                               \
-       {                                                                      \
-         LOG_TRACE ("      ");                                                \
-         LOG_FLAG_POLYLINE_ONE (value, CLOSED);                               \
-         LOG_FLAG_POLYLINE_ONE (value, CURVE_FIT);                            \
-         LOG_FLAG_POLYLINE_ONE (value, SPLINE_FIT);                           \
-         LOG_FLAG_POLYLINE_ONE (value, 3D);                                   \
-         LOG_FLAG_POLYLINE_ONE (value, MESH);                                 \
-         LOG_FLAG_POLYLINE_ONE (value, MESH_CLOSED);                          \
-         LOG_FLAG_POLYLINE_ONE (value, PFACE_MESH);                           \
-         LOG_FLAG_POLYLINE_ONE (value, LT_PATTERN_CONTINUES);                 \
-         LOG_TRACE ("\n");                                                    \
-       }
+    if (value)                                                                \
+      {                                                                       \
+        LOG_TRACE ("      ");                                                 \
+        LOG_FLAG_POLYLINE_ONE (value, CLOSED);                                \
+        LOG_FLAG_POLYLINE_ONE (value, CURVE_FIT);                             \
+        LOG_FLAG_POLYLINE_ONE (value, SPLINE_FIT);                            \
+        LOG_FLAG_POLYLINE_ONE (value, 3D);                                    \
+        LOG_FLAG_POLYLINE_ONE (value, MESH);                                  \
+        LOG_FLAG_POLYLINE_ONE (value, MESH_CLOSED);                           \
+        LOG_FLAG_POLYLINE_ONE (value, PFACE_MESH);                            \
+        LOG_FLAG_POLYLINE_ONE (value, LT_PATTERN_CONTINUES);                  \
+        LOG_TRACE ("\n");                                                     \
+      }
 #endif
 
 #ifndef LOG_FLAG_VERTEX
 #  define LOG_FLAG_VERTEX_ONE(value, w)                                       \
-     if (value & FLAG_VERTEX_##w)                                             \
-       LOG_TRACE (#w " (%d) ", FLAG_VERTEX_##w)
+    if (value & FLAG_VERTEX_##w)                                              \
+    LOG_TRACE (#w " (%d) ", FLAG_VERTEX_##w)
 #  define LOG_FLAG_VERTEX(value)                                              \
-     if (value)                                                               \
-       {                                                                      \
-         LOG_TRACE ("      ");                                                \
-         LOG_FLAG_VERTEX_ONE (value, EXTRA_VERTEX);                           \
-         LOG_FLAG_VERTEX_ONE (value, CURVE_FIT);                              \
-         LOG_FLAG_VERTEX_ONE (value, UNKNOWN_4);                              \
-         LOG_FLAG_VERTEX_ONE (value, UNKNOWN_8);                              \
-         LOG_FLAG_VERTEX_ONE (value, UNKNOWN_16);                             \
-         LOG_FLAG_VERTEX_ONE (value, 3D);                                     \
-         LOG_FLAG_VERTEX_ONE (value, POLYGON_MESH);                           \
-         LOG_FLAG_VERTEX_ONE (value, UNKNOWN_128);                            \
-         LOG_TRACE ("\n");                                                    \
-       }
+    if (value)                                                                \
+      {                                                                       \
+        LOG_TRACE ("      ");                                                 \
+        LOG_FLAG_VERTEX_ONE (value, EXTRA_VERTEX);                            \
+        LOG_FLAG_VERTEX_ONE (value, CURVE_FIT);                               \
+        LOG_FLAG_VERTEX_ONE (value, UNKNOWN_4);                               \
+        LOG_FLAG_VERTEX_ONE (value, UNKNOWN_8);                               \
+        LOG_FLAG_VERTEX_ONE (value, UNKNOWN_16);                              \
+        LOG_FLAG_VERTEX_ONE (value, 3D);                                      \
+        LOG_FLAG_VERTEX_ONE (value, POLYGON_MESH);                            \
+        LOG_FLAG_VERTEX_ONE (value, UNKNOWN_128);                             \
+        LOG_TRACE ("\n");                                                     \
+      }
 #endif

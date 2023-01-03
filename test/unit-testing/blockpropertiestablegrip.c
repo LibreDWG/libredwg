@@ -10,7 +10,8 @@ api_process (dwg_object *obj)
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
-  dwg_obj_blockpropertiestablegrip *_obj = dwg_object_to_BLOCKPROPERTIESTABLEGRIP (obj);
+  dwg_obj_blockpropertiestablegrip *_obj
+      = dwg_object_to_BLOCKPROPERTIESTABLEGRIP (obj);
 
   CHK_EVALEXPR (BLOCKPROPERTIESTABLEGRIP);
   // AcDbBlockElement
@@ -21,8 +22,9 @@ api_process (dwg_object *obj)
   // AcDbBlockGrip
   CHK_ENTITY_TYPE (_obj, BLOCKPROPERTIESTABLEGRIP, bg_bl91, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKPROPERTIESTABLEGRIP, bg_bl92, BL);
-  CHK_ENTITY_3RD  (_obj, BLOCKPROPERTIESTABLEGRIP, bg_location);
+  CHK_ENTITY_3RD (_obj, BLOCKPROPERTIESTABLEGRIP, bg_location);
   CHK_ENTITY_TYPE (_obj, BLOCKPROPERTIESTABLEGRIP, bg_insert_cycling, B);
-  CHK_ENTITY_TYPE (_obj, BLOCKPROPERTIESTABLEGRIP, bg_insert_cycling_weight, BLd);
+  CHK_ENTITY_TYPE (_obj, BLOCKPROPERTIESTABLEGRIP, bg_insert_cycling_weight,
+                   BLd);
 #endif
 }

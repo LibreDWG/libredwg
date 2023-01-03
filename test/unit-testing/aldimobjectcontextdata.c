@@ -11,7 +11,8 @@ api_process (dwg_object *obj)
   BITCODE_3BD dimline_pt;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  dwg_obj_aldimobjectcontextdata *_obj = dwg_object_to_ALDIMOBJECTCONTEXTDATA (obj);
+  dwg_obj_aldimobjectcontextdata *_obj
+      = dwg_object_to_ALDIMOBJECTCONTEXTDATA (obj);
 
   CHK_ENTITY_TYPE (_obj, ALDIMOBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, ALDIMOBJECTCONTEXTDATA, is_default, B);

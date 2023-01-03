@@ -19,15 +19,15 @@ api_process (dwg_object *obj)
   BITCODE_BL path_entity_id;
   BITCODE_BL pathdata_size;
   BITCODE_TF pathdata;
-  BITCODE_BD* sweep_entity_transmatrix;
-  BITCODE_BD* path_entity_transmatrix;
+  BITCODE_BD *sweep_entity_transmatrix;
+  BITCODE_BD *path_entity_transmatrix;
 
   BITCODE_BD draft_angle;
   BITCODE_BD draft_start_distance;
   BITCODE_BD draft_end_distance;
   BITCODE_BD twist_angle;
-  BITCODE_BD* sweep_entity_transmatrix1;
-  BITCODE_BD* path_entity_transmatrix1;
+  BITCODE_BD *sweep_entity_transmatrix1;
+  BITCODE_BD *path_entity_transmatrix1;
   BITCODE_BD scale_factor;
   BITCODE_BD align_angle;
   BITCODE_B is_solid;
@@ -58,14 +58,17 @@ api_process (dwg_object *obj)
   else
     {
       for (i = 0; i < num_wires; i++)
-        printf ("SWEPTSURFACE.wires[%u]: " FORMAT_BLd "\n", i, wires[i].selection_marker);
+        printf ("SWEPTSURFACE.wires[%u]: " FORMAT_BLd "\n", i,
+                wires[i].selection_marker);
     }
-  if (!dwg_dynapi_entity_value (_obj, "SWEPTSURFACE", "silhouettes", &silhouettes, NULL))
+  if (!dwg_dynapi_entity_value (_obj, "SWEPTSURFACE", "silhouettes",
+                                &silhouettes, NULL))
     fail ("SWEPTSURFACE.silhouettes");
   else
     {
       for (i = 0; i < num_silhouettes; i++)
-        printf ("SWEPTSURFACE.silhouettes[%u]: " FORMAT_BL "\n", i, silhouettes[i].vp_id);
+        printf ("SWEPTSURFACE.silhouettes[%u]: " FORMAT_BL "\n", i,
+                silhouettes[i].vp_id);
     }
   if (dwg_version >= R_2007 && _obj->history_id) // if it did not fail before
     {
@@ -123,10 +126,10 @@ api_process (dwg_object *obj)
       }
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, sweep_entity_id, BL);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, sweepdata_size, BL);
-  //CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, sweepdata, TF);
+  // CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, sweepdata, TF);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, path_entity_id, BL);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, pathdata_size, BL);
-  //CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, pathdata, TF);
+  // CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, pathdata, TF);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, draft_angle, BD);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, draft_start_distance, BD);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, draft_end_distance, BD);

@@ -27,7 +27,7 @@
 #include <libxml/parser.h>
 #include "common.c"
 
-#define MIN(a,b) ((a > b) ? b : a)
+#define MIN(a, b) ((a > b) ? b : a)
 
 // entities to check against:
 // perl -lne'/type="(IAcad.*?)" / and print $1' test/test-data/*/*.xml|sort -u
@@ -146,7 +146,8 @@ common_entity_attrs (xmlNodePtr node, const Dwg_Object *obj)
      Ellipse, ExternalReference, Hatch, Leader, LightweightPolyline,
      Line, MInsertBlock, MText, Point, Polyline, Region, Section,
      Shape, Solid, Text, Tolerance, Trace */
-  if (dwg_dynapi_entity_value (ent->tio.LINE, obj->name, "extrusion", &extrusion, NULL))
+  if (dwg_dynapi_entity_value (ent->tio.LINE, obj->name, "extrusion",
+                               &extrusion, NULL))
     {
       buf = spointprepare (extrusion.x, extrusion.y, extrusion.z);
       newXMLProp ("Normal", buf);
@@ -154,7 +155,8 @@ common_entity_attrs (xmlNodePtr node, const Dwg_Object *obj)
 
   /* Arc, Attribute, AttributeReference, Circle, LightweightPolyline,
      Line, Point, Polyline, Shape, Solid, Text, Trace */
-  if (dwg_dynapi_entity_value (ent->tio.LINE, obj->name, "thickness", &thickness, NULL))
+  if (dwg_dynapi_entity_value (ent->tio.LINE, obj->name, "thickness",
+                               &thickness, NULL))
     {
       buf = doubletochar (thickness);
       newXMLProp ("Thickness", buf);
@@ -234,13 +236,16 @@ add_helix (xmlNodePtr rootnode, const Dwg_Object *obj)
   newXMLcProp ("type", "IAcadHelix");
   newXMLcProp ("desc", "IAcadHelix: IAcadSpring Interface");
 
-  buf = spointprepare (helix->start_pt.x, helix->start_pt.y, helix->start_pt.z);
+  buf = spointprepare (helix->start_pt.x, helix->start_pt.y,
+                       helix->start_pt.z);
   newXMLProp ("Position", buf);
 
-  buf = spointprepare (helix->axis_base_pt.x, helix->axis_base_pt.y, helix->axis_base_pt.z);
+  buf = spointprepare (helix->axis_base_pt.x, helix->axis_base_pt.y,
+                       helix->axis_base_pt.z);
   newXMLProp ("AxisPoint", buf);
 
-  buf = spointprepare (helix->axis_vector.x, helix->axis_vector.y, helix->axis_vector.z);
+  buf = spointprepare (helix->axis_vector.x, helix->axis_vector.y,
+                       helix->axis_vector.z);
   newXMLProp ("AxisVector", buf);
 
   dtostring = doubletochar (helix->turn_height);
@@ -693,7 +698,7 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
       buf[0] = '(';
       buf[1] = '\0';
       len = 1;
-      for (unsigned i = 0; i < MIN(6,spline->num_knots); i++)
+      for (unsigned i = 0; i < MIN (6, spline->num_knots); i++)
         {
           // Knots="(0.0 0.0 0.0 0.0 12.2776 26.0835 ... )"
           char buf1[24];
@@ -706,11 +711,11 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
               bufsize = len + 24;
               buf = realloc (buf, bufsize);
             }
-          strncat ((char*)buf, buf1, bufsize - len);
+          strncat ((char *)buf, buf1, bufsize - len);
         }
       if (spline->num_knots > 6)
-        strcat ((char*)buf, " ... ");
-      strcat ((char*)buf, ")");
+        strcat ((char *)buf, " ... ");
+      strcat ((char *)buf, ")");
       newXMLProp ("Knots", buf);
     }
   newXMLProp ("KnotParameterization", inttochar (spline->knotparam));
@@ -726,7 +731,7 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
       buf[0] = '(';
       buf[1] = '\0';
       len = 1;
-      for (unsigned i = 0; i < MIN(2,spline->num_ctrl_pts); i++)
+      for (unsigned i = 0; i < MIN (2, spline->num_ctrl_pts); i++)
         {
           // ControlPoints="(0.0 0.0 0.0 0.0  12.2776 26.0835 ... )"
           char buf1[24];
@@ -734,13 +739,13 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
             len += snprintf (buf1, 24, "%f", spline->ctrl_pts[i].x);
           else
             len += snprintf (buf1, 24, " %f", spline->ctrl_pts[i].x);
-          strncat ((char*)buf, buf1, bufsize - len);
+          strncat ((char *)buf, buf1, bufsize - len);
           len += snprintf (buf1, 24, " %f", spline->ctrl_pts[i].y);
-          strncat ((char*)buf, buf1, bufsize - len);
+          strncat ((char *)buf, buf1, bufsize - len);
           len += snprintf (buf1, 24, " %f", spline->ctrl_pts[i].z);
-          strncat ((char*)buf, buf1, bufsize - len);
+          strncat ((char *)buf, buf1, bufsize - len);
           len += snprintf (buf1, 24, " %f ", spline->ctrl_pts[i].w);
-          strncat ((char*)buf, buf1, bufsize - len);
+          strncat ((char *)buf, buf1, bufsize - len);
 
           if (len > bufsize)
             {
@@ -749,8 +754,8 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
             }
         }
       if (spline->num_ctrl_pts > 2)
-        strcat ((char*)buf, " ... ");
-      strcat ((char*)buf, ")");
+        strcat ((char *)buf, " ... ");
+      strcat ((char *)buf, ")");
       newXMLProp ("ControlPoints", buf);
     }
 
@@ -761,18 +766,18 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
       buf[0] = '(';
       buf[1] = '\0';
       len = 1;
-      for (unsigned i = 0; i < MIN(2,spline->num_fit_pts); i++)
+      for (unsigned i = 0; i < MIN (2, spline->num_fit_pts); i++)
         {
           char buf1[24];
           if (!i)
             len += snprintf (buf1, 24, "%f", spline->fit_pts[i].x);
           else
             len += snprintf (buf1, 24, " %f", spline->fit_pts[i].x);
-          strncat ((char*)buf, buf1, bufsize - len);
+          strncat ((char *)buf, buf1, bufsize - len);
           len += snprintf (buf1, 24, " %f", spline->fit_pts[i].y);
-          strncat ((char*)buf, buf1, bufsize - len);
+          strncat ((char *)buf, buf1, bufsize - len);
           len += snprintf (buf1, 24, " %f", spline->fit_pts[i].z);
-          strncat ((char*)buf, buf1, bufsize - len);
+          strncat ((char *)buf, buf1, bufsize - len);
 
           if (len > bufsize)
             {
@@ -781,11 +786,11 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
             }
         }
       if (spline->num_fit_pts > 2)
-        strcat ((char*)buf, " ... ");
-      strcat ((char*)buf, ")");
+        strcat ((char *)buf, " ... ");
+      strcat ((char *)buf, ")");
       newXMLProp ("FitPoints", buf);
     }
-  
+
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
 }
@@ -837,8 +842,7 @@ add_table (xmlNodePtr rootnode, const Dwg_Object *obj)
   newXMLcProp ("type", "IAcadTable");
   newXMLcProp ("desc", "IAcadTable: IAcadTable Interface");
 
-  buf = spointprepare (table->ins_pt.x, table->ins_pt.y,
-                       table->ins_pt.z);
+  buf = spointprepare (table->ins_pt.x, table->ins_pt.y, table->ins_pt.z);
   newXMLProp ("InsertionPoint", buf);
 
   dtostring = doubletochar (table->num_rows);
@@ -894,7 +898,7 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
           break;
 
         case DWG_TYPE_BLOCK:
-          //add_block (rootnode, obj);
+          // add_block (rootnode, obj);
           break;
 
         case DWG_TYPE_INSERT:
@@ -933,9 +937,9 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
           add_xline (rootnode, obj);
           break;
 
-        /*case DWG_TYPE_TABLE:
-          add_table(rootnode, obj);
-          break;*/
+          /*case DWG_TYPE_TABLE:
+            add_table(rootnode, obj);
+            break;*/
 
         default:
           if (obj->type < 500 || (obj->type - 500) >= dwg.num_classes)

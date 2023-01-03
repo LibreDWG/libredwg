@@ -15,19 +15,20 @@ api_process (dwg_object *obj)
   BITCODE_T environ_image_filename;
   BITCODE_T description;
   BITCODE_BL display_index;
-  BITCODE_B has_predefined; 	/*!< DXF 290, r2013 only */
+  BITCODE_B has_predefined; /*!< DXF 290, r2013 only */
   // AcDbRapidRTRenderSettings
-  BITCODE_BL rapidrt_version; 	/*!< DXF 90 */
-  BITCODE_BL render_target;	/*!< DXF 70 */
-  BITCODE_BL render_level;	/*!< DXF 90 */
-  BITCODE_BL render_time;	/*!< DXF 90 */
-  BITCODE_BL lighting_model;	/*!< DXF 70 */
-  BITCODE_BL filter_type;	/*!< DXF 70 */
-  BITCODE_BD filter_width;	/*!< DXF 40 */
-  BITCODE_BD filter_height;	/*!< DXF 40 */
+  BITCODE_BL rapidrt_version; /*!< DXF 90 */
+  BITCODE_BL render_target;   /*!< DXF 70 */
+  BITCODE_BL render_level;    /*!< DXF 90 */
+  BITCODE_BL render_time;     /*!< DXF 90 */
+  BITCODE_BL lighting_model;  /*!< DXF 70 */
+  BITCODE_BL filter_type;     /*!< DXF 70 */
+  BITCODE_BD filter_width;    /*!< DXF 40 */
+  BITCODE_BD filter_height;   /*!< DXF 40 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  dwg_obj_rapidrtrendersettings *_obj = dwg_object_to_RAPIDRTRENDERSETTINGS (obj);
+  dwg_obj_rapidrtrendersettings *_obj
+      = dwg_object_to_RAPIDRTRENDERSETTINGS (obj);
 
   CHK_ENTITY_TYPE (_obj, RAPIDRTRENDERSETTINGS, class_version, BL);
   CHK_ENTITY_UTF8TEXT (_obj, RAPIDRTRENDERSETTINGS, name);

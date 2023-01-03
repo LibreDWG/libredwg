@@ -15,10 +15,11 @@ api_process (dwg_object *obj)
 
   dwg_obj_xrecord *xrecord = dwg_object_to_XRECORD (obj);
 
-  CHK_ENTITY_TYPE (xrecord, XRECORD, xdata_size, BL); // called num_databytes in old API
+  CHK_ENTITY_TYPE (xrecord, XRECORD, xdata_size,
+                   BL); // called num_databytes in old API
   CHK_ENTITY_TYPE (xrecord, XRECORD, cloning, BS);
   CHK_ENTITY_TYPE_W_OBJ (xrecord, XRECORD, num_xdata, BL);
-  //CHK_ENTITY_TYPE_W_OBJ (xrecord, XRECORD, xdata, TV);
+  // CHK_ENTITY_TYPE_W_OBJ (xrecord, XRECORD, xdata, TV);
   if (!dwg_dynapi_entity_value (xrecord, "XRECORD", "xdata", &xdata, NULL))
     fail ("dwg_dynapi_entity_value");
 #if 0

@@ -20,9 +20,9 @@
  *
  * TODO: all entities: 3DSOLID, SHAPE, ARC_DIMENSION, ATTRIB, DIMENSION*,
  *         *SURFACE, GEOPOSITIONMARKER/CAMERA/LIGHT, HATCH, HELIX,
- *         IMAGE/WIPEOUT/UNDERLAY, LEADER, MESH, MINSERT, MLINE, MTEXT, MULTILEADER,
- *         OLE2FRAME, OLEFRAME, POLYLINE_3D, POLYLINE_MESH, POLYLINE_PFACE, RAY, XLINE,
- *         SPLINE, TABLE, TOLERANCE, VIEWPORT?
+ *         IMAGE/WIPEOUT/UNDERLAY, LEADER, MESH, MINSERT, MLINE, MTEXT,
+ * MULTILEADER, OLE2FRAME, OLEFRAME, POLYLINE_3D, POLYLINE_MESH,
+ * POLYLINE_PFACE, RAY, XLINE, SPLINE, TABLE, TOLERANCE, VIEWPORT?
  *       common_entity_data: ltype, ltype_scale.
  *       PLINE: widths, bulges.
  */
@@ -181,23 +181,23 @@ entity_color (Dwg_Object_Entity *ent)
     switch (ent->color.index)
       {
       case 1:
-        return (char*)"red";
+        return (char *)"red";
       case 2:
-        return (char*)"yellow";
+        return (char *)"yellow";
       case 3:
-        return (char*)"green";
+        return (char *)"green";
       case 4:
-        return (char*)"cyan";
+        return (char *)"cyan";
       case 5:
-        return (char*)"blue";
+        return (char *)"blue";
       case 6:
-        return (char*)"magenta";
+        return (char *)"magenta";
       case 7:
-        return (char*)"white";
+        return (char *)"white";
       case 0:   // ByBlock
       case 256: // ByLayer
       default:
-        return (char*)"black";
+        return (char *)"black";
       }
 }
 
@@ -205,7 +205,7 @@ static void
 common_entity (Dwg_Object_Entity *ent)
 {
   double lweight;
-  char* color;
+  char *color;
   lweight = entity_lweight (ent);
   color = entity_color (ent);
   printf ("      style=\"fill:none;stroke:%s;stroke-width:%.1fpx\" />\n",
@@ -282,9 +282,9 @@ output_LINE (Dwg_Object *obj)
   transform_OCS (&start, line->start, line->extrusion);
   transform_OCS (&end, line->end, line->extrusion);
   printf ("\t<!-- line-%d -->\n", obj->index);
-  printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f L %f,%f\"\n\t",
-          obj->index, transform_X (start.x), transform_Y (start.y),
-          transform_X (end.x), transform_Y (end.y));
+  printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f L %f,%f\"\n\t", obj->index,
+          transform_X (start.x), transform_Y (start.y), transform_X (end.x),
+          transform_Y (end.y));
   common_entity (obj->tio.entity);
 }
 
@@ -316,9 +316,9 @@ output_XLINE (Dwg_Object *obj)
   // untested!
   /* intersect xline with model_xmin, model_ymin, model_xmax, model_ymax */
   txmin = (box[sign[0]].x - xline->point.x) * invvec.x;
-  txmax = (box[1-sign[0]].x - xline->point.x) * invvec.x;
+  txmax = (box[1 - sign[0]].x - xline->point.x) * invvec.x;
   tymin = (box[sign[1]].x - xline->point.y) * invvec.y;
-  tymax = (box[1-sign[1]].x - xline->point.y) * invvec.y;
+  tymax = (box[1 - sign[1]].x - xline->point.y) * invvec.y;
   if ((txmin > tymax) || (tymin > txmax))
     return;
   if (tymin > txmin)
@@ -326,12 +326,12 @@ output_XLINE (Dwg_Object *obj)
   if (tymax > txmax)
     txmax = tymax;
   tzmin = (box[sign[0]].z - xline->point.z) * invvec.z;
-  tzmax = (box[1-sign[0]].z - xline->point.z) * invvec.z;
+  tzmax = (box[1 - sign[0]].z - xline->point.z) * invvec.z;
   if ((txmin > tzmax) || (tzmin > txmax))
     return;
 
-  printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f L %f,%f\"\n\t",
-          obj->index, txmin, tymin, txmax, tymax);
+  printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f L %f,%f\"\n\t", obj->index,
+          txmin, tymin, txmax, tymax);
   common_entity (obj->tio.entity);
 }
 
@@ -361,11 +361,12 @@ output_RAY (Dwg_Object *obj)
   printf ("\t<!-- ray-%d -->\n", obj->index);
 
   // untested!
-  /* intersect ray from point with box (model_xmin, model_ymin, model_xmax, model_ymax) */
+  /* intersect ray from point with box (model_xmin, model_ymin, model_xmax,
+   * model_ymax) */
   txmin = (box[sign[0]].x - xline->point.x) * invvec.x;
-  txmax = (box[1-sign[0]].x - xline->point.x) * invvec.x;
+  txmax = (box[1 - sign[0]].x - xline->point.x) * invvec.x;
   tymin = (box[sign[1]].x - xline->point.y) * invvec.y;
-  tymax = (box[1-sign[1]].x - xline->point.y) * invvec.y;
+  tymax = (box[1 - sign[1]].x - xline->point.y) * invvec.y;
   if ((txmin > tymax) || (tymin > txmax))
     return;
   if (tymin > txmin)
@@ -374,18 +375,18 @@ output_RAY (Dwg_Object *obj)
     txmax = tymax;
   point.x = (xline->point.x > txmax) ? txmax : xline->point.x;
   if (point.x < txmin)
-   point.x = txmin;
+    point.x = txmin;
   point.y = (xline->point.y > tymax) ? tymax : xline->point.y;
   if (point.y < tymin)
     point.y = tymin;
 
   tzmin = (box[sign[0]].z - xline->point.z) * invvec.z;
-  tzmax = (box[1-sign[0]].z - xline->point.z) * invvec.z;
+  tzmax = (box[1 - sign[0]].z - xline->point.z) * invvec.z;
   if ((txmin > tzmax) || (tzmin > txmax))
     return;
 
-  printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f L %f,%f\"\n\t",
-          obj->index, point.x, point.y, txmax, tymax);
+  printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f L %f,%f\"\n\t", obj->index,
+          point.x, point.y, txmax, tymax);
   common_entity (obj->tio.entity);
 }
 
@@ -447,10 +448,10 @@ output_ARC (Dwg_Object *obj)
   large_arc = (arc->end_angle - arc->start_angle < M_PI) ? 0 : 1;
 
   printf ("\t<!-- arc-%d -->\n", obj->index);
-  printf ("\t<path id=\"dwg-object-%d\" d=\"M %f,%f A %f,%f 0 %d,0 %f,%f\"\n\t",
-          obj->index, transform_X (x_start), transform_Y (y_start),
-          arc->radius, arc->radius, large_arc, transform_X (x_end),
-          transform_Y (y_end));
+  printf (
+      "\t<path id=\"dwg-object-%d\" d=\"M %f,%f A %f,%f 0 %d,0 %f,%f\"\n\t",
+      obj->index, transform_X (x_start), transform_Y (y_start), arc->radius,
+      arc->radius, large_arc, transform_X (x_end), transform_Y (y_end));
   common_entity (obj->tio.entity);
 }
 
@@ -460,17 +461,17 @@ output_ELLIPSE (Dwg_Object *obj)
 {
   Dwg_Entity_ELLIPSE *ell = obj->tio.entity->tio.ELLIPSE;
   BITCODE_2DPOINT radius;
-  //BITCODE_3DPOINT center, sm_axis;
-  //double x_start, y_start, x_end, y_end;
+  // BITCODE_3DPOINT center, sm_axis;
+  // double x_start, y_start, x_end, y_end;
 
   if (isnan_3BD (ell->center) || isnan_3BD (ell->extrusion)
-      || isnan_3BD (ell->sm_axis)
-      || isnan (ell->axis_ratio) || isnan (ell->start_angle)
-      || isnan (ell->end_angle) || entity_invisible (obj))
+      || isnan_3BD (ell->sm_axis) || isnan (ell->axis_ratio)
+      || isnan (ell->start_angle) || isnan (ell->end_angle)
+      || entity_invisible (obj))
     return;
   /* The 2 points are already WCS */
-  //transform_OCS (&center, ell->center, ell->extrusion);
-  //transform_OCS (&sm_axis, ell->sm_axis, ell->extrusion);
+  // transform_OCS (&center, ell->center, ell->extrusion);
+  // transform_OCS (&sm_axis, ell->sm_axis, ell->extrusion);
   radius.x = fabs (ell->sm_axis.x);
   radius.y = fabs (ell->sm_axis.y * ell->axis_ratio);
 
@@ -483,10 +484,10 @@ output_ELLIPSE (Dwg_Object *obj)
 
   // TODO: rotate. start,end_angle => pathLength
   printf ("\t<!-- ellipse-%d -->\n", obj->index);
-  printf (
-      "\t<!-- sm_axis=(%f,%f,%f) axis_ratio=%f start_angle=%f end_angle=%f-->\n",
-      ell->sm_axis.x, ell->sm_axis.y, ell->sm_axis.z, ell->axis_ratio,
-      ell->start_angle, ell->end_angle);
+  printf ("\t<!-- sm_axis=(%f,%f,%f) axis_ratio=%f start_angle=%f "
+          "end_angle=%f-->\n",
+          ell->sm_axis.x, ell->sm_axis.y, ell->sm_axis.z, ell->axis_ratio,
+          ell->start_angle, ell->end_angle);
   printf ("\t<ellipse id=\"dwg-object-%d\" cx=\"%f\" cy=\"%f\" rx=\"%f\" "
           "ry=\"%f\" transform=\"rotate=(%f %f %f)\"\n\t",
           obj->index, ell->center.x, ell->center.y, radius.x, radius.y,
@@ -545,8 +546,8 @@ output_3DFACE (Dwg_Object *obj)
               ent->corner3.y);
       printf (" %s %f,%f", ent->invis_flags & 4 ? "M" : "L", ent->corner4.x,
               ent->corner4.y);
-      printf (" %s %f,%f\"\n\t", ent->invis_flags & 8 ? "M" : "L", ent->corner1.x,
-              ent->corner1.y);
+      printf (" %s %f,%f\"\n\t", ent->invis_flags & 8 ? "M" : "L",
+              ent->corner1.x, ent->corner1.y);
     }
   else
     printf ("\t<polygon id=\"dwg-object-%d\" "
@@ -789,8 +790,8 @@ output_BLOCK_HEADER (Dwg_Object_Ref *ref)
       if (!escaped || strcmp (escaped, "*Model_Space") != 0)
         {
           is_g = 1;
-          printf ("\t<g id=\"symbol-%lX\" >\n\t\t<!-- %s -->\n", ref->absolute_ref,
-                  escaped ? escaped : "");
+          printf ("\t<g id=\"symbol-%lX\" >\n\t\t<!-- %s -->\n",
+                  ref->absolute_ref, escaped ? escaped : "");
         }
       else
         printf ("\t<!-- %s -->\n", escaped);
@@ -841,19 +842,21 @@ output_SVG (Dwg_Data *dwg)
   // optional, for xmllint
   // <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   //   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-  // But we use jing with relaxng, which is better. Just LaTeXML shipped a broken rng
+  // But we use jing with relaxng, which is better. Just LaTeXML shipped a
+  // broken rng
   printf ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
           "<svg\n"
           "   xmlns:svg=\"http://www.w3.org/2000/svg\"\n"
           "   xmlns=\"http://www.w3.org/2000/svg\"\n"
           "   xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n"
           "   version=\"1.1\" baseProfile=\"basic\"\n"
-		      "   width=\"100%%\" height=\"100%%\"\n"
+          "   width=\"100%%\" height=\"100%%\"\n"
           "   viewBox=\"%f %f %f %f\">\n",
           model_xmin, model_ymin, page_width, page_height);
 
   if (!mspace && (ref = dwg_paper_space_ref (dwg)))
-    num = output_BLOCK_HEADER (ref); // how many paper-space entities we did print
+    num = output_BLOCK_HEADER (
+        ref); // how many paper-space entities we did print
   if (!num && (ref = dwg_model_space_ref (dwg)))
     output_BLOCK_HEADER (ref);
   printf ("\t<defs>\n");
@@ -878,10 +881,8 @@ main (int argc, char *argv[])
   int option_index = 0;
   static struct option long_options[]
       = { { "verbose", 1, &opts, 1 }, // optional
-          { "mspace", 0, 0, 0 },
-          { "force-free", 0, 0, 0 },
-          { "help", 0, 0, 0 },
-          { "version", 0, 0, 0 },
+          { "mspace", 0, 0, 0 },      { "force-free", 0, 0, 0 },
+          { "help", 0, 0, 0 },        { "version", 0, 0, 0 },
           { NULL, 0, NULL, 0 } };
 #endif
 
@@ -981,7 +982,7 @@ main (int argc, char *argv[])
 
 #if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
   {
-    char *asanenv = getenv("ASAN_OPTIONS");
+    char *asanenv = getenv ("ASAN_OPTIONS");
     if (!asanenv)
       force_free = 1;
     // detect_leaks is enabled by default. see if it's turned off
@@ -991,12 +992,11 @@ main (int argc, char *argv[])
 #endif
 
   // forget about leaks. really huge DWG's need endlessly here.
-  if ((g_dwg.header.version && g_dwg.num_objects < 1000)
-      || force_free
+  if ((g_dwg.header.version && g_dwg.num_objects < 1000) || force_free
 #ifdef HAVE_VALGRIND_VALGRIND_H
       || (RUNNING_ON_VALGRIND)
 #endif
-      )
+  )
     {
       dwg_free (&g_dwg);
     }

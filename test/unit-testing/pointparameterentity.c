@@ -9,7 +9,8 @@ api_process (dwg_object *obj)
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
-  dwg_ent_pointparameterentity *_obj = dwg_object_to_POINTPARAMETERENTITY (obj);
+  dwg_ent_pointparameterentity *_obj
+      = dwg_object_to_POINTPARAMETERENTITY (obj);
 
 #endif
 }

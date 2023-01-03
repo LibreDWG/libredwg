@@ -14,14 +14,17 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE_W_OBJ (block_control, BLOCK_CONTROL, num_entries, BS);
   entries = dwg_object_tablectrl_get_entries (obj, &error);
-  if (!dwg_dynapi_entity_value (block_control, "BLOCK_CONTROL", "entries", &hdls, NULL))
+  if (!dwg_dynapi_entity_value (block_control, "BLOCK_CONTROL", "entries",
+                                &hdls, NULL))
     fail ("BLOCK_CONTROL.entries");
   for (i = 0; i < num_entries; i++)
     {
       if (hdls[i] == entries[i])
-        ok ("BLOCK_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
+        ok ("BLOCK_CONTROL.entries[%d]: " FORMAT_REF, i,
+            ARGS_REF (entries[i]));
       else
-        fail ("BLOCK_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
+        fail ("BLOCK_CONTROL.entries[%d]: " FORMAT_REF, i,
+              ARGS_REF (entries[i]));
     }
   CHK_ENTITY_H (block_control, BLOCK_CONTROL, model_space);
   CHK_ENTITY_H (block_control, BLOCK_CONTROL, model_space);

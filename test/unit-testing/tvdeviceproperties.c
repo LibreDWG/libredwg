@@ -1,4 +1,4 @@
-//debugging
+// debugging
 #define DWG_TYPE DWG_TYPE_TVDEVICEPROPERTIES
 #include "common.c"
 

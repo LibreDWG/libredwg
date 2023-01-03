@@ -10,7 +10,8 @@ api_process (dwg_object *obj)
   BITCODE_B align_perpendicular;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  dwg_obj_blockalignmentparameter *_obj = dwg_object_to_BLOCKALIGNMENTPARAMETER (obj);
+  dwg_obj_blockalignmentparameter *_obj
+      = dwg_object_to_BLOCKALIGNMENTPARAMETER (obj);
 
   CHK_EVALEXPR (BLOCKALIGNMENTPARAMETER);
   // AcDbBlockElement
@@ -24,11 +25,10 @@ api_process (dwg_object *obj)
   // AcDbBlock2PtParameter
   CHK_ENTITY_3RD (_obj, BLOCKALIGNMENTPARAMETER, def_basept);
   CHK_ENTITY_3RD (_obj, BLOCKALIGNMENTPARAMETER, def_endpt);
-  BLOCKPARAMETER_PropInfo (prop1)
-  BLOCKPARAMETER_PropInfo (prop2)
-  BLOCKPARAMETER_PropInfo (prop3)
-  BLOCKPARAMETER_PropInfo (prop4)
-  CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKALIGNMENTPARAMETER, prop_states, 4, BL);
+  BLOCKPARAMETER_PropInfo (prop1) BLOCKPARAMETER_PropInfo (prop2)
+      BLOCKPARAMETER_PropInfo (prop3) BLOCKPARAMETER_PropInfo (prop4)
+          CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKALIGNMENTPARAMETER, prop_states,
+                                  4, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKALIGNMENTPARAMETER, parameter_base_location, BS);
   // AcDbBlockAlignmentParameter
   CHK_ENTITY_TYPE (_obj, BLOCKALIGNMENTPARAMETER, align_perpendicular, B);

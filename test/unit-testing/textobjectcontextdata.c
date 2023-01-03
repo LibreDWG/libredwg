@@ -17,7 +17,8 @@ api_process (dwg_object *obj)
   BITCODE_2BD alignment_pt;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  dwg_obj_textobjectcontextdata *_obj = dwg_object_to_TEXTOBJECTCONTEXTDATA (obj);
+  dwg_obj_textobjectcontextdata *_obj
+      = dwg_object_to_TEXTOBJECTCONTEXTDATA (obj);
 
   CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, TEXTOBJECTCONTEXTDATA, is_default, B);

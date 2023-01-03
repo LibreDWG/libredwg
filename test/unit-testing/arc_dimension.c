@@ -15,7 +15,7 @@ api_process (dwg_object *obj)
   dwg_point_2d text_midpt, clone_ins_pt;
   dwg_point_3d def_pt, extrusion, ins_scale;
   BITCODE_H dimstyle, block;
-  
+
   BITCODE_3BD xline1_pt;
   BITCODE_3BD xline2_pt;
   BITCODE_3BD center_pt;
@@ -29,8 +29,8 @@ api_process (dwg_object *obj)
   dwg_ent_arc_dimension *arc_dimension = dwg_object_to_ARC_DIMENSION (obj);
   dwg_ent_dim *dim = dwg_object_to_DIMENSION (obj);
 
-  //if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
-  //  return;
+  // if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT)
+  //   return;
 
   /* DIMENSION_COMMON */
   CHK_ENTITY_TYPE (dim, ARC_DIMENSION, class_version, RC);

@@ -137,8 +137,9 @@ help (void)
       "  -y, --type NAME           Search only NAME entities or objects.\n");
   printf ("  -d, --dxf NUM             Search only DXF group NUM fields.\n");
   printf ("  -t, --text                Search only in TEXT-like entities.\n");
-  printf ("  -b, --blocks              Search also in all block definitions.\n");
-  printf("       --tables              Search only in table names.\n");
+  printf (
+      "  -b, --blocks              Search also in all block definitions.\n");
+  printf ("       --tables              Search only in table names.\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("      --help                Display this help and exit\n");
   printf ("      --version             Output version information and exit\n"
@@ -347,7 +348,8 @@ match_TEXT (const char *restrict filename, const Dwg_Object *restrict obj)
 }
 
 static int
-match_ARCALIGNEDTEXT (const char *restrict filename, const Dwg_Object *restrict obj)
+match_ARCALIGNEDTEXT (const char *restrict filename,
+                      const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -430,11 +432,12 @@ match_LEADER (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  //MATCH_ENTITY (LEADER, text, 1);
+  // MATCH_ENTITY (LEADER, text, 1);
   return found;
 }
 static int
-match_MULTILEADER (const char *restrict filename, const Dwg_Object *restrict obj)
+match_MULTILEADER (const char *restrict filename,
+                   const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -555,7 +558,8 @@ match_UCS (const char *restrict filename, const Dwg_Object *restrict obj)
   return found;
 }
 static int
-match_VX_TABLE_RECORD (const char *restrict filename, const Dwg_Object *restrict obj)
+match_VX_TABLE_RECORD (const char *restrict filename,
+                       const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -644,7 +648,7 @@ match_SCALE (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0, i;
-  //const Dwg_Object_SCALE *_obj = obj->tio.object->tio.SCALE;
+  // const Dwg_Object_SCALE *_obj = obj->tio.object->tio.SCALE;
   MATCH_OBJECT (SCALE, name, 1);
   return found;
 }
@@ -792,7 +796,7 @@ match_GEODATA (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  //const Dwg_Object_GEODATA *_obj = obj->tio.object->tio.GEODATA;
+  // const Dwg_Object_GEODATA *_obj = obj->tio.object->tio.GEODATA;
 
   MATCH_OBJECT (GEODATA, coord_system_def, 0);
   MATCH_OBJECT (GEODATA, geo_rss_tag, 302);
@@ -811,11 +815,12 @@ match_GEOPOSITIONMARKER (const char *restrict filename,
 {
   char *text;
   int found = 0;
-  //const Dwg_Entity_GEOPOSITIONMARKER *_obj = obj->tio.entity->tio.GEOPOSITIONMARKER;
+  // const Dwg_Entity_GEOPOSITIONMARKER *_obj =
+  // obj->tio.entity->tio.GEOPOSITIONMARKER;
 
   MATCH_ENTITY (GEOPOSITIONMARKER, notes, 1);
-  //if enabled
-  //MATCH_ENTITY (GEOPOSITIONMARKER, mtext->tio.entity->tio.MTEXT->text, 3);
+  // if enabled
+  // MATCH_ENTITY (GEOPOSITIONMARKER, mtext->tio.entity->tio.MTEXT->text, 3);
   return found;
 }
 
@@ -825,7 +830,7 @@ match_UNDERLAYDEFINITION (const char *restrict filename,
 {
   char *text;
   int found = 0;
-  //const Dwg_Object_PDFDEFINITION *_obj = obj->tio.object->tio.PDFDEFINITION;
+  // const Dwg_Object_PDFDEFINITION *_obj = obj->tio.object->tio.PDFDEFINITION;
 
   MATCH_OBJECT (PDFDEFINITION, filename, 1);
   MATCH_OBJECT (PDFDEFINITION, name, 2);
@@ -838,18 +843,18 @@ match_VISUALSTYLE (const char *restrict filename,
 {
   char *text;
   int found = 0, i;
-  //const Dwg_Object_VISUALSTYLE *_obj = obj->tio.object->tio.VISUALSTYLE;
+  // const Dwg_Object_VISUALSTYLE *_obj = obj->tio.object->tio.VISUALSTYLE;
   MATCH_OBJECT (VISUALSTYLE, description, 1);
   return found;
 }
 
 static int
 match_TABLESTYLE (const char *restrict filename,
-                   const Dwg_Object *restrict obj)
+                  const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0, i;
-  //const Dwg_Object_TABLESTYLE *_obj = obj->tio.object->tio.TABLESTYLE;
+  // const Dwg_Object_TABLESTYLE *_obj = obj->tio.object->tio.TABLESTYLE;
   MATCH_OBJECT (TABLESTYLE, name, 2);
   return found;
 }
@@ -858,7 +863,7 @@ match_LIGHT (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  //const Dwg_Entity_LIGHT *_obj = obj->tio.entity->tio.LIGHT;
+  // const Dwg_Entity_LIGHT *_obj = obj->tio.entity->tio.LIGHT;
   MATCH_ENTITY (LIGHT, name, 1);
   // MATCH_ENTITY (LIGHT, web_file, 1);
   return found;
@@ -869,7 +874,7 @@ match_SUNSTUDY (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  //const Dwg_Object_SUNSTUDY *_obj = obj->tio.object->tio.SUNSTUDY;
+  // const Dwg_Object_SUNSTUDY *_obj = obj->tio.object->tio.SUNSTUDY;
   MATCH_OBJECT (SUNSTUDY, setup_name, 1);
   MATCH_OBJECT (SUNSTUDY, description, 2);
   MATCH_OBJECT (SUNSTUDY, sheet_set_name, 3);
@@ -895,7 +900,7 @@ match_DBCOLOR (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  //const Dwg_Object_DBCOLOR *_obj = obj->tio.object->tio.DBCOLOR;
+  // const Dwg_Object_DBCOLOR *_obj = obj->tio.object->tio.DBCOLOR;
   MATCH_OBJECT (DBCOLOR, color.name, 430);
   MATCH_OBJECT (DBCOLOR, color.book_name, 430);
   return found;
@@ -906,7 +911,7 @@ match_MATERIAL (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  //const Dwg_Object_MATERIAL *_obj = obj->tio.object->tio.MATERIAL;
+  // const Dwg_Object_MATERIAL *_obj = obj->tio.object->tio.MATERIAL;
   MATCH_OBJECT (MATERIAL, name, 1);
   MATCH_OBJECT (MATERIAL, description, 2);
   MATCH_OBJECT (MATERIAL, diffusemap.filename, 3);
@@ -915,10 +920,10 @@ match_MATERIAL (const char *restrict filename, const Dwg_Object *restrict obj)
   MATCH_OBJECT (MATERIAL, opacitymap.filename, 7);
   MATCH_OBJECT (MATERIAL, bumpmap.filename, 8);
   MATCH_OBJECT (MATERIAL, refractionmap.filename, 9);
-  //MATCH_OBJECT (MATERIAL, normalmap.filename, 3);
-  //MATCH_OBJECT (MATERIAL, genprocname, 300);
-  //MATCH_OBJECT (MATERIAL, genprocvaltext, 301);
-  //MATCH_OBJECT (MATERIAL, genprocvalcolorname, 430);
+  // MATCH_OBJECT (MATERIAL, normalmap.filename, 3);
+  // MATCH_OBJECT (MATERIAL, genprocname, 300);
+  // MATCH_OBJECT (MATERIAL, genprocvaltext, 301);
+  // MATCH_OBJECT (MATERIAL, genprocvalcolorname, 430);
   return found;
 }
 
@@ -928,7 +933,7 @@ match_PLOTSETTINGS (const char *restrict filename,
 {
   char *text;
   int found = 0;
-  //const Dwg_Object_PLOTSETTINGS *_obj = obj->tio.object->tio.PLOTSETTINGS;
+  // const Dwg_Object_PLOTSETTINGS *_obj = obj->tio.object->tio.PLOTSETTINGS;
   MATCH_OBJECT (PLOTSETTINGS, printer_cfg_file, 1);
   MATCH_OBJECT (PLOTSETTINGS, paper_size, 2);
   MATCH_OBJECT (PLOTSETTINGS, canonical_media_name, 4);
@@ -939,8 +944,7 @@ match_PLOTSETTINGS (const char *restrict filename,
   return found;
 }
 static int
-match_DIMASSOC (const char *restrict filename,
-                   const Dwg_Object *restrict obj)
+match_DIMASSOC (const char *restrict filename, const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -975,7 +979,7 @@ match_ASSOCACTIONPARAM (const char *restrict filename,
 }
 static int
 match_ASSOCEDGEACTIONPARAM (const char *restrict filename,
-                        const Dwg_Object *restrict obj)
+                            const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -984,7 +988,7 @@ match_ASSOCEDGEACTIONPARAM (const char *restrict filename,
 }
 static int
 match_ASSOCFACEACTIONPARAM (const char *restrict filename,
-                        const Dwg_Object *restrict obj)
+                            const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -993,7 +997,7 @@ match_ASSOCFACEACTIONPARAM (const char *restrict filename,
 }
 static int
 match_ASSOCOBJECTACTIONPARAM (const char *restrict filename,
-                        const Dwg_Object *restrict obj)
+                              const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -1002,7 +1006,7 @@ match_ASSOCOBJECTACTIONPARAM (const char *restrict filename,
 }
 static int
 match_ASSOCPATHACTIONPARAM (const char *restrict filename,
-                        const Dwg_Object *restrict obj)
+                            const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -1011,7 +1015,7 @@ match_ASSOCPATHACTIONPARAM (const char *restrict filename,
 }
 static int
 match_ASSOCVERTEXACTIONPARAM (const char *restrict filename,
-                        const Dwg_Object *restrict obj)
+                              const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -1024,28 +1028,27 @@ match_ASSOCVERTEXACTIONPARAM (const char *restrict filename,
 
 #define MATCH_AcDbAssocParamBasedActionBody(_type)                            \
   for (unsigned i = 0; i < _obj->pab.num_values; i++)                         \
-  {                                                                           \
-    MATCH_OBJECT (_type, pab.values[i].name, 1);                              \
-    for (unsigned j = 0; j < _obj->pab.values[i].num_vars; j++)               \
-      {                                                                       \
-        int _dxf = _obj->pab.values[i].vars[j].value.code;                    \
-        if (dwg_resbuf_value_type (_dxf) == DWG_VT_STRING)                    \
-          {                                                                   \
-            MATCH_OBJECT (_type, pab.values[i].vars[j].value.u.text, _dxf);   \
-          }                                                                   \
-      }                                                                       \
-  }
+    {                                                                         \
+      MATCH_OBJECT (_type, pab.values[i].name, 1);                            \
+      for (unsigned j = 0; j < _obj->pab.values[i].num_vars; j++)             \
+        {                                                                     \
+          int _dxf = _obj->pab.values[i].vars[j].value.code;                  \
+          if (dwg_resbuf_value_type (_dxf) == DWG_VT_STRING)                  \
+            {                                                                 \
+              MATCH_OBJECT (_type, pab.values[i].vars[j].value.u.text, _dxf); \
+            }                                                                 \
+        }                                                                     \
+    }
 
 static int
 match_ASSOCMLEADERACTIONBODY (const char *restrict filename,
-                                       const Dwg_Object *restrict obj)
+                              const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
   const Dwg_Object_ASSOCMLEADERACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCMLEADERACTIONBODY;
-  MATCH_AcDbAssocParamBasedActionBody (ASSOCMLEADERACTIONBODY)
-  return found;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCMLEADERACTIONBODY) return found;
 }
 static int
 match_ASSOC3POINTANGULARDIMACTIONBODY (const char *restrict filename,
@@ -1055,8 +1058,8 @@ match_ASSOC3POINTANGULARDIMACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOC3POINTANGULARDIMACTIONBODY *_obj
       = obj->tio.object->tio.ASSOC3POINTANGULARDIMACTIONBODY;
-  MATCH_AcDbAssocParamBasedActionBody (ASSOC3POINTANGULARDIMACTIONBODY)
-  return found;
+  MATCH_AcDbAssocParamBasedActionBody (
+      ASSOC3POINTANGULARDIMACTIONBODY) return found;
 }
 static int
 match_ASSOCALIGNEDDIMACTIONBODY (const char *restrict filename,
@@ -1066,20 +1069,19 @@ match_ASSOCALIGNEDDIMACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCALIGNEDDIMACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCALIGNEDDIMACTIONBODY;
-  MATCH_AcDbAssocParamBasedActionBody (ASSOCALIGNEDDIMACTIONBODY)
-  return found;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCALIGNEDDIMACTIONBODY) return found;
 }
 
 static int
 match_ASSOCORDINATEDIMACTIONBODY (const char *restrict filename,
-                                 const Dwg_Object *restrict obj)
+                                  const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
   const Dwg_Object_ASSOCORDINATEDIMACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCORDINATEDIMACTIONBODY;
-  MATCH_AcDbAssocParamBasedActionBody (ASSOCORDINATEDIMACTIONBODY)
-  return found;
+  MATCH_AcDbAssocParamBasedActionBody (
+      ASSOCORDINATEDIMACTIONBODY) return found;
 }
 
 static int
@@ -1090,8 +1092,7 @@ match_ASSOCROTATEDDIMACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCROTATEDDIMACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCROTATEDDIMACTIONBODY;
-  MATCH_AcDbAssocParamBasedActionBody (ASSOCROTATEDDIMACTIONBODY)
-  return found;
+  MATCH_AcDbAssocParamBasedActionBody (ASSOCROTATEDDIMACTIONBODY) return found;
 }
 
 static int
@@ -1102,8 +1103,8 @@ match_ASSOCPATCHSURFACEACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCPATCHSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCPATCHSURFACEACTIONBODY;
-  MATCH_AcDbAssocParamBasedActionBody (ASSOCPATCHSURFACEACTIONBODY)
-  return found;
+  MATCH_AcDbAssocParamBasedActionBody (
+      ASSOCPATCHSURFACEACTIONBODY) return found;
 }
 static int
 match_ASSOCPLANESURFACEACTIONBODY (const char *restrict filename,
@@ -1113,19 +1114,19 @@ match_ASSOCPLANESURFACEACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCPLANESURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCPLANESURFACEACTIONBODY;
-  MATCH_AcDbAssocParamBasedActionBody (ASSOCPLANESURFACEACTIONBODY)
-  return found;
+  MATCH_AcDbAssocParamBasedActionBody (
+      ASSOCPLANESURFACEACTIONBODY) return found;
 }
 static int
 match_ASSOCEXTENDSURFACEACTIONBODY (const char *restrict filename,
-                                      const Dwg_Object *restrict obj)
+                                    const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
   const Dwg_Object_ASSOCEXTENDSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCEXTENDSURFACEACTIONBODY;
-  MATCH_AcDbAssocParamBasedActionBody (ASSOCEXTENDSURFACEACTIONBODY)
-  return found;
+  MATCH_AcDbAssocParamBasedActionBody (
+      ASSOCEXTENDSURFACEACTIONBODY) return found;
 }
 static int
 match_ASSOCEXTRUDEDSURFACEACTIONBODY (const char *restrict filename,
@@ -1135,19 +1136,19 @@ match_ASSOCEXTRUDEDSURFACEACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCEXTRUDEDSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCEXTRUDEDSURFACEACTIONBODY;
-  MATCH_AcDbAssocParamBasedActionBody (ASSOCEXTRUDEDSURFACEACTIONBODY)
-  return found;
+  MATCH_AcDbAssocParamBasedActionBody (
+      ASSOCEXTRUDEDSURFACEACTIONBODY) return found;
 }
 static int
 match_ASSOCFILLETSURFACEACTIONBODY (const char *restrict filename,
-                                   const Dwg_Object *restrict obj)
+                                    const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
   const Dwg_Object_ASSOCFILLETSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCFILLETSURFACEACTIONBODY;
-  MATCH_AcDbAssocParamBasedActionBody (ASSOCFILLETSURFACEACTIONBODY)
-  return found;
+  MATCH_AcDbAssocParamBasedActionBody (
+      ASSOCFILLETSURFACEACTIONBODY) return found;
 }
 static int
 match_ASSOCLOFTEDSURFACEACTIONBODY (const char *restrict filename,
@@ -1157,19 +1158,19 @@ match_ASSOCLOFTEDSURFACEACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCLOFTEDSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCLOFTEDSURFACEACTIONBODY;
-  MATCH_AcDbAssocParamBasedActionBody (ASSOCLOFTEDSURFACEACTIONBODY)
-  return found;
+  MATCH_AcDbAssocParamBasedActionBody (
+      ASSOCLOFTEDSURFACEACTIONBODY) return found;
 }
 static int
 match_ASSOCNETWORKSURFACEACTIONBODY (const char *restrict filename,
-                                    const Dwg_Object *restrict obj)
+                                     const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
   const Dwg_Object_ASSOCNETWORKSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCNETWORKSURFACEACTIONBODY;
-  MATCH_AcDbAssocParamBasedActionBody (ASSOCNETWORKSURFACEACTIONBODY)
-  return found;
+  MATCH_AcDbAssocParamBasedActionBody (
+      ASSOCNETWORKSURFACEACTIONBODY) return found;
 }
 static int
 match_ASSOCOFFSETSURFACEACTIONBODY (const char *restrict filename,
@@ -1179,8 +1180,8 @@ match_ASSOCOFFSETSURFACEACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCOFFSETSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCOFFSETSURFACEACTIONBODY;
-  MATCH_AcDbAssocParamBasedActionBody (ASSOCOFFSETSURFACEACTIONBODY)
-  return found;
+  MATCH_AcDbAssocParamBasedActionBody (
+      ASSOCOFFSETSURFACEACTIONBODY) return found;
 }
 static int
 match_ASSOCREVOLVEDSURFACEACTIONBODY (const char *restrict filename,
@@ -1190,8 +1191,8 @@ match_ASSOCREVOLVEDSURFACEACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCREVOLVEDSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCREVOLVEDSURFACEACTIONBODY;
-  MATCH_AcDbAssocParamBasedActionBody (ASSOCREVOLVEDSURFACEACTIONBODY)
-  return found;
+  MATCH_AcDbAssocParamBasedActionBody (
+      ASSOCREVOLVEDSURFACEACTIONBODY) return found;
 }
 static int
 match_ASSOCSWEPTSURFACEACTIONBODY (const char *restrict filename,
@@ -1201,24 +1202,24 @@ match_ASSOCSWEPTSURFACEACTIONBODY (const char *restrict filename,
   int found = 0;
   const Dwg_Object_ASSOCSWEPTSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCSWEPTSURFACEACTIONBODY;
-  MATCH_AcDbAssocParamBasedActionBody (ASSOCSWEPTSURFACEACTIONBODY)
-  return found;
+  MATCH_AcDbAssocParamBasedActionBody (
+      ASSOCSWEPTSURFACEACTIONBODY) return found;
 }
 static int
 match_ASSOCTRIMSURFACEACTIONBODY (const char *restrict filename,
-                                   const Dwg_Object *restrict obj)
+                                  const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
   const Dwg_Object_ASSOCTRIMSURFACEACTIONBODY *_obj
       = obj->tio.object->tio.ASSOCTRIMSURFACEACTIONBODY;
-  MATCH_AcDbAssocParamBasedActionBody (ASSOCTRIMSURFACEACTIONBODY)
-  return found;
+  MATCH_AcDbAssocParamBasedActionBody (
+      ASSOCTRIMSURFACEACTIONBODY) return found;
 }
 
 static int
 match_BLOCKPARAMDEPENDENCYBODY (const char *restrict filename,
-                          const Dwg_Object *restrict obj)
+                                const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -1227,7 +1228,7 @@ match_BLOCKPARAMDEPENDENCYBODY (const char *restrict filename,
 }
 static int
 match_BLOCKMOVEACTION (const char *restrict filename,
-                          const Dwg_Object *restrict obj)
+                       const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -1247,7 +1248,7 @@ match_BLOCKSTRETCHACTION (const char *restrict filename,
 }
 static int
 match_BLOCKROTATEACTION (const char *restrict filename,
-                          const Dwg_Object *restrict obj)
+                         const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -1258,11 +1259,12 @@ match_BLOCKROTATEACTION (const char *restrict filename,
 }
 static int
 match_BLOCKVISIBILITYGRIP (const char *restrict filename,
-                               const Dwg_Object *restrict obj)
+                           const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  Dwg_Object_BLOCKVISIBILITYGRIP *_obj = obj->tio.object->tio.BLOCKVISIBILITYGRIP;
+  Dwg_Object_BLOCKVISIBILITYGRIP *_obj
+      = obj->tio.object->tio.BLOCKVISIBILITYGRIP;
 
   if (_obj->evalexpr.value_code == 1)
     {
@@ -1273,11 +1275,12 @@ match_BLOCKVISIBILITYGRIP (const char *restrict filename,
 }
 static int
 match_BLOCKGRIPLOCATIONCOMPONENT (const char *restrict filename,
-                               const Dwg_Object *restrict obj)
+                                  const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT *_obj = obj->tio.object->tio.BLOCKGRIPLOCATIONCOMPONENT;
+  Dwg_Object_BLOCKGRIPLOCATIONCOMPONENT *_obj
+      = obj->tio.object->tio.BLOCKGRIPLOCATIONCOMPONENT;
 
   if (_obj->evalexpr.value_code == 1)
     {
@@ -1292,7 +1295,8 @@ match_BLOCKBASEPOINTPARAMETER (const char *restrict filename,
 {
   char *text;
   int found = 0;
-  Dwg_Object_BLOCKBASEPOINTPARAMETER *_obj = obj->tio.object->tio.BLOCKBASEPOINTPARAMETER;
+  Dwg_Object_BLOCKBASEPOINTPARAMETER *_obj
+      = obj->tio.object->tio.BLOCKBASEPOINTPARAMETER;
 
   if (_obj->evalexpr.value_code == 1)
     {
@@ -1311,11 +1315,12 @@ match_BLOCKBASEPOINTPARAMETER (const char *restrict filename,
 }
 static int
 match_BLOCKLINEARPARAMETER (const char *restrict filename,
-                          const Dwg_Object *restrict obj)
+                            const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  Dwg_Object_BLOCKLINEARPARAMETER *_obj = obj->tio.object->tio.BLOCKLINEARPARAMETER;
+  Dwg_Object_BLOCKLINEARPARAMETER *_obj
+      = obj->tio.object->tio.BLOCKLINEARPARAMETER;
 
   if (_obj->evalexpr.value_code == 1)
     {
@@ -1349,7 +1354,8 @@ match_BLOCKFLIPPARAMETER (const char *restrict filename,
 {
   char *text;
   int found = 0;
-  Dwg_Object_BLOCKFLIPPARAMETER *_obj = obj->tio.object->tio.BLOCKFLIPPARAMETER;
+  Dwg_Object_BLOCKFLIPPARAMETER *_obj
+      = obj->tio.object->tio.BLOCKFLIPPARAMETER;
 
   if (_obj->evalexpr.value_code == 1)
     {
@@ -1381,11 +1387,12 @@ match_BLOCKFLIPPARAMETER (const char *restrict filename,
 }
 static int
 match_BLOCKROTATIONPARAMETER (const char *restrict filename,
-                          const Dwg_Object *restrict obj)
+                              const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  Dwg_Object_BLOCKROTATIONPARAMETER *_obj = obj->tio.object->tio.BLOCKROTATIONPARAMETER;
+  Dwg_Object_BLOCKROTATIONPARAMETER *_obj
+      = obj->tio.object->tio.BLOCKROTATIONPARAMETER;
 
   if (_obj->evalexpr.value_code == 1)
     {
@@ -1415,7 +1422,7 @@ match_BLOCKROTATIONPARAMETER (const char *restrict filename,
 }
 static int
 match_BLOCKXYPARAMETER (const char *restrict filename,
-                          const Dwg_Object *restrict obj)
+                        const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
@@ -1452,11 +1459,12 @@ match_BLOCKXYPARAMETER (const char *restrict filename,
 }
 static int
 match_BLOCKVISIBILITYPARAMETER (const char *restrict filename,
-                          const Dwg_Object *restrict obj)
+                                const Dwg_Object *restrict obj)
 {
   char *text;
   int found = 0;
-  Dwg_Object_BLOCKVISIBILITYPARAMETER *_obj = obj->tio.object->tio.BLOCKVISIBILITYPARAMETER;
+  Dwg_Object_BLOCKVISIBILITYPARAMETER *_obj
+      = obj->tio.object->tio.BLOCKVISIBILITYPARAMETER;
 
   if (_obj->evalexpr.value_code == 1)
     {
@@ -1502,7 +1510,8 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       const Dwg_Object *obj = &dwg->object[i];
       if (obj->supertype != DWG_SUPERTYPE_OBJECT)
         continue;
-      if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER) // processed later, --tables finds BLOCK
+      if (obj->fixedtype
+          == DWG_TYPE_BLOCK_HEADER) // processed later, --tables finds BLOCK
         continue;
       if (numtype) // search for allowed --type and skip if not
         {
@@ -1519,9 +1528,9 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
             continue;
         }
 
-#define ELSEMATCH(OBJECT)                                               \
-  else if (obj->fixedtype == DWG_TYPE_##OBJECT)                         \
-    found += match_##OBJECT (filename, obj);
+#define ELSEMATCH(OBJECT)                                                     \
+  else if (obj->fixedtype == DWG_TYPE_##OBJECT) found                         \
+      += match_##OBJECT (filename, obj);
 
       if (obj->fixedtype == DWG_TYPE_LAYER)
         found += match_LAYER (filename, obj);
@@ -1549,12 +1558,12 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       ELSEMATCH (FIELD)
       ELSEMATCH (TABLECONTENT)
       ELSEMATCH (GEODATA)
-      else if (obj->fixedtype == DWG_TYPE_PDFDEFINITION)
-        found += match_UNDERLAYDEFINITION (filename, obj);
-      else if (obj->fixedtype == DWG_TYPE_DGNDEFINITION)
-        found += match_UNDERLAYDEFINITION (filename, obj);
-      else if (obj->fixedtype == DWG_TYPE_DWFDEFINITION)
-        found += match_UNDERLAYDEFINITION (filename, obj);
+      else if (obj->fixedtype == DWG_TYPE_PDFDEFINITION) found
+          += match_UNDERLAYDEFINITION (filename, obj);
+      else if (obj->fixedtype == DWG_TYPE_DGNDEFINITION) found
+          += match_UNDERLAYDEFINITION (filename, obj);
+      else if (obj->fixedtype == DWG_TYPE_DWFDEFINITION) found
+          += match_UNDERLAYDEFINITION (filename, obj);
       ELSEMATCH (VISUALSTYLE)
       ELSEMATCH (TABLESTYLE)
       ELSEMATCH (SUNSTUDY)
@@ -1618,7 +1627,7 @@ match_preR13_entities (const char *restrict filename,
       if (obj->fixedtype == DWG_TYPE_UNUSED)
         continue;
       if (verbose)
-        fprintf(stderr, "%s [%d]\n", obj->name, obj->index);
+        fprintf (stderr, "%s [%d]\n", obj->name, obj->index);
       if (numtype) // search for allowed --type and skip if not
         {
           int typeok = 0;
@@ -1680,14 +1689,15 @@ match_BLOCK_HEADER (const char *restrict filename,
   MATCH_OBJECT (BLOCK_HEADER, description, 4);
 
   if (verbose)
-    fprintf(stderr, "HDR: %d, HANDLE: %lX\n", hdr->index, hdr->handle.value);
+    fprintf (stderr, "HDR: %d, HANDLE: %lX\n", hdr->index, hdr->handle.value);
   for (obj = get_first_owned_entity (hdr); obj;
        obj = get_next_owned_entity (hdr, obj)) // without subentities
     {
       if (!obj)
         break;
       if (verbose)
-        fprintf(stderr, "%s [%d], HANDLE: %lX\n", obj->name, obj->index, obj->handle.value);
+        fprintf (stderr, "%s [%d], HANDLE: %lX\n", obj->name, obj->index,
+                 obj->handle.value);
       if (numtype) // search for allowed --type and skip if not
         {
           int typeok = 0;
@@ -1712,75 +1722,71 @@ match_BLOCK_HEADER (const char *restrict filename,
       ELSEMATCH (MTEXT)
       ELSEMATCH (ARCALIGNEDTEXT)
       else if (obj->fixedtype == DWG_TYPE_INSERT)
-        {
+      {
 #ifndef WITH_SUBENTS
-          const Dwg_Data *dwg = obj->parent;
-          Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
-          if (_obj->has_attribs)
-            {
-              if (dwg->header.version >= R_13b1 && dwg->header.version <= R_2000)
-                {
-                  Dwg_Object *last_attrib = _obj->last_attrib->obj;
-                  Dwg_Object *o
-                      = _obj->first_attrib ? _obj->first_attrib->obj : NULL;
-                  while (o && o->type == DWG_TYPE_ATTRIB)
-                    {
+        const Dwg_Data *dwg = obj->parent;
+        Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
+        if (_obj->has_attribs)
+          {
+            if (dwg->header.version >= R_13b1 && dwg->header.version <= R_2000)
+              {
+                Dwg_Object *last_attrib = _obj->last_attrib->obj;
+                Dwg_Object *o
+                    = _obj->first_attrib ? _obj->first_attrib->obj : NULL;
+                while (o && o->type == DWG_TYPE_ATTRIB)
+                  {
+                    found += match_ATTRIB (filename, o);
+                    o = dwg_next_entity (o);
+                    if (o == last_attrib)
+                      break;
+                  }
+              }
+            else if (dwg->header.version >= R_2004)
+              {
+                Dwg_Object *o;
+                for (BITCODE_BL j = 0; j < _obj->num_owned; j++)
+                  {
+                    o = _obj->attribs[j] ? _obj->attribs[j]->obj : NULL;
+                    if (o && o->type == DWG_TYPE_ATTRIB)
                       found += match_ATTRIB (filename, o);
-                      o = dwg_next_entity (o);
-                      if (o == last_attrib)
-                        break;
-                    }
-                }
-              else if (dwg->header.version >= R_2004)
-                {
-                  Dwg_Object *o;
-                  for (BITCODE_BL j = 0; j < _obj->num_owned; j++)
-                    {
-                      o = _obj->attribs[j]
-                              ? _obj->attribs[j]->obj
-                              : NULL;
-                      if (o && o->type == DWG_TYPE_ATTRIB)
-                        found += match_ATTRIB (filename, o);
-                    }
-                }
-            }
+                  }
+              }
+          }
 #endif
-        }
+      }
       else if (obj->fixedtype == DWG_TYPE_MINSERT)
-        {
+      {
 #ifndef WITH_SUBENTS
-          const Dwg_Data *dwg = obj->parent;
-          Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
-          if (_obj->has_attribs)
-            {
-              if (dwg->header.version >= R_13b1 && dwg->header.version <= R_2000)
-                {
-                  Dwg_Object *last_attrib = _obj->last_attrib->obj;
-                  Dwg_Object *o
-                      = _obj->first_attrib ? _obj->first_attrib->obj : NULL;
-                  while (o && o->type == DWG_TYPE_ATTRIB)
-                    {
+        const Dwg_Data *dwg = obj->parent;
+        Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
+        if (_obj->has_attribs)
+          {
+            if (dwg->header.version >= R_13b1 && dwg->header.version <= R_2000)
+              {
+                Dwg_Object *last_attrib = _obj->last_attrib->obj;
+                Dwg_Object *o
+                    = _obj->first_attrib ? _obj->first_attrib->obj : NULL;
+                while (o && o->type == DWG_TYPE_ATTRIB)
+                  {
+                    found += match_ATTRIB (filename, o);
+                    o = dwg_next_entity (o);
+                    if (o == last_attrib)
+                      break;
+                  }
+              }
+            else if (dwg->header.version >= R_2004)
+              {
+                Dwg_Object *o;
+                for (BITCODE_BL j = 0; j < _obj->num_owned; j++)
+                  {
+                    o = _obj->attribs[j] ? _obj->attribs[j]->obj : NULL;
+                    if (o && o->type == DWG_TYPE_ATTRIB)
                       found += match_ATTRIB (filename, o);
-                      o = dwg_next_entity (o);
-                      if (o == last_attrib)
-                        break;
-                    }
-                }
-              else if (dwg->header.version >= R_2004)
-                {
-                  Dwg_Object *o;
-                  for (BITCODE_BL j = 0; j < _obj->num_owned; j++)
-                    {
-                      o = _obj->attribs[j]
-                              ? _obj->attribs[j]->obj
-                              : NULL;
-                      if (o && o->type == DWG_TYPE_ATTRIB)
-                        found += match_ATTRIB (filename, o);
-                    }
-                }
-            }
+                  }
+              }
+          }
 #endif
-        }
+      }
       if (!opt_text)
         {
           if (obj->fixedtype == DWG_TYPE_DIMENSION_ORDINATE
@@ -1792,9 +1798,10 @@ match_BLOCK_HEADER (const char *restrict filename,
               || obj->fixedtype == DWG_TYPE_DIMENSION_DIAMETER)
             found += match_DIMENSION (filename, obj);
           ELSEMATCH (VIEWPORT)
-          else if (obj->fixedtype == DWG_TYPE__3DSOLID || obj->fixedtype == DWG_TYPE_BODY
-                   || obj->fixedtype == DWG_TYPE_REGION)
-            found += match_3DSOLID (filename, obj);
+          else if (obj->fixedtype == DWG_TYPE__3DSOLID
+                   || obj->fixedtype == DWG_TYPE_BODY
+                   || obj->fixedtype == DWG_TYPE_REGION) found
+              += match_3DSOLID (filename, obj);
 
           ELSEMATCH (BLOCK)
           ELSEMATCH (HATCH)
@@ -1858,9 +1865,8 @@ main (int argc, char *argv[])
           { "recursive", 0, 0, 'r' }, { "recursive", 0, 0, 'R' },
           { "type", 1, 0, 'y' },      { "dxf", 1, 0, 'd' },
           { "text", 0, 0, 't' },      { "blocks", 0, 0, 'b' },
-          { "tables", 0, 0, 0 },
-          { "help", 0, 0, 0 },        { "version", 0, 0, 0 },
-          { NULL, 0, NULL, 0 } };
+          { "tables", 0, 0, 0 },      { "help", 0, 0, 0 },
+          { "version", 0, 0, 0 },     { NULL, 0, NULL, 0 } };
 #endif
 
   // check args
@@ -2015,8 +2021,8 @@ main (int argc, char *argv[])
         count += match_OBJECTS (filename, &dwg);
       if (dwg.header.version < R_13b1)
         { // FIXME hack
-          // mspace_ref = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
-          // mspace_ref->obj = &dwg.object[0];
+          // mspace_ref = (Dwg_Object_Ref *)calloc (1, sizeof
+          // (Dwg_Object_Ref)); mspace_ref->obj = &dwg.object[0];
           count += match_preR13_entities (filename, &dwg, false);
         }
       else
@@ -2031,15 +2037,16 @@ main (int argc, char *argv[])
           else
             for (long k = 0; k < dwg.block_control.num_entries; k++)
               {
-                count += match_BLOCK_HEADER (filename, dwg.block_control.entries[k]);
+                count += match_BLOCK_HEADER (filename,
+                                             dwg.block_control.entries[k]);
               }
         }
       if (!opt_tables)
         count += match_BLOCK_HEADER (filename, dwg_paper_space_ref (&dwg));
 
       fflush (stdout);
-      //if (dwg.header.version < R_13b1)
-      //  free (mspace_ref);
+      // if (dwg.header.version < R_13b1)
+      //   free (mspace_ref);
       if (j < argc)
         dwg_free (&dwg); // skip the last free
     }

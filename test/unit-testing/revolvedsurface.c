@@ -18,7 +18,7 @@ api_process (dwg_object *obj)
   BITCODE_3BD axis_vector;
   BITCODE_BD revolve_angle;
   BITCODE_BD start_angle;
-  BITCODE_BD* revolved_entity_transmatrix;
+  BITCODE_BD *revolved_entity_transmatrix;
   BITCODE_BD draft_angle;
   BITCODE_BD draft_start_distance;
   BITCODE_BD draft_end_distance;
@@ -40,19 +40,23 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, isolines, BL);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, num_wires, BL);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, num_silhouettes, BL);
-  if (!dwg_dynapi_entity_value (_obj, "REVOLVEDSURFACE", "wires", &wires, NULL))
+  if (!dwg_dynapi_entity_value (_obj, "REVOLVEDSURFACE", "wires", &wires,
+                                NULL))
     fail ("REVOLVEDSURFACE.wires");
   else
     {
       for (i = 0; i < num_wires; i++)
-        printf ("REVOLVEDSURFACE.wires[%u]: " FORMAT_BLd "\n", i, wires[i].selection_marker);
+        printf ("REVOLVEDSURFACE.wires[%u]: " FORMAT_BLd "\n", i,
+                wires[i].selection_marker);
     }
-  if (!dwg_dynapi_entity_value (_obj, "REVOLVEDSURFACE", "silhouettes", &silhouettes, NULL))
+  if (!dwg_dynapi_entity_value (_obj, "REVOLVEDSURFACE", "silhouettes",
+                                &silhouettes, NULL))
     fail ("REVOLVEDSURFACE.silhouettes");
   else
     {
       for (i = 0; i < num_silhouettes; i++)
-        printf ("REVOLVEDSURFACE.silhouettes[%u]: " FORMAT_BL "\n", i, silhouettes[i].vp_id);
+        printf ("REVOLVEDSURFACE.silhouettes[%u]: " FORMAT_BL "\n", i,
+                silhouettes[i].vp_id);
     }
   if (dwg_version >= R_2007 && _obj->history_id) // if it did not fail before
     {
@@ -63,7 +67,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, u_isolines, BS);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, v_isolines, BS);
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, class_version, BL);
-  
+
   CHK_ENTITY_TYPE (_obj, REVOLVEDSURFACE, id, BL);
   CHK_ENTITY_3RD (_obj, REVOLVEDSURFACE, axis_point);
   CHK_ENTITY_3RD (_obj, REVOLVEDSURFACE, axis_vector);

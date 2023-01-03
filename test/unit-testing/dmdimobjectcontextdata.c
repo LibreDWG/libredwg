@@ -13,7 +13,8 @@ api_process (dwg_object *obj)
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
-  dwg_obj_dmdimobjectcontextdata *_obj = dwg_object_to_DMDIMOBJECTCONTEXTDATA (obj);
+  dwg_obj_dmdimobjectcontextdata *_obj
+      = dwg_object_to_DMDIMOBJECTCONTEXTDATA (obj);
 
   CHK_ENTITY_TYPE (_obj, DMDIMOBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, DMDIMOBJECTCONTEXTDATA, is_default, B);

@@ -34,11 +34,12 @@ hash_new (uint32_t size)
   // and round size to next power of 2 (fast) or prime (secure),
   if (size < 15)
     size = 15;
-  cap = (uint32_t) (size * 100.0 / HASH_LOAD);
+  cap = (uint32_t)(size * 100.0 / HASH_LOAD);
   // this is slow, but only done once. clz would be much faster
   while (size <= cap)
     size <<= 1U;
-  hash->array = (struct _hashbucket *)calloc (size, sizeof (struct _hashbucket)); // key+value pairs
+  hash->array = (struct _hashbucket *)calloc (
+      size, sizeof (struct _hashbucket)); // key+value pairs
   hash->elems = 0;
   hash->size = size;
   return hash;
@@ -48,7 +49,7 @@ hash_new (uint32_t size)
 static inline int
 hash_need_resize (dwg_inthash *hash)
 {
-  return (uint32_t) (hash->elems * 100.0 / HASH_LOAD) > hash->size;
+  return (uint32_t)(hash->elems * 100.0 / HASH_LOAD) > hash->size;
 }
 
 static void
@@ -59,7 +60,8 @@ hash_resize (dwg_inthash *hash)
   uint32_t i;
 
   // allocate key+value pairs afresh
-  hash->array = (struct _hashbucket *)calloc (size, sizeof (struct _hashbucket));
+  hash->array
+      = (struct _hashbucket *)calloc (size, sizeof (struct _hashbucket));
   if (!hash->array)
     {
       *hash = oldhash;
@@ -100,7 +102,7 @@ hash_get (dwg_inthash *hash, uint32_t key)
   uint32_t j = i;
   while (hash->array[i].key && hash->array[i].key != key)
     {
-      //HANDLER (OUTPUT, "get collision at %d\n", i);
+      // HANDLER (OUTPUT, "get collision at %d\n", i);
       i++; // linear probing with wrap around
       if (i == hash->size)
         i = 0;

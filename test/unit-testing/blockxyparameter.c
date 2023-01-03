@@ -32,23 +32,21 @@ api_process (dwg_object *obj)
   // AcDbBlock2PtParameter
   CHK_ENTITY_3RD (_obj, BLOCKXYPARAMETER, def_basept);
   CHK_ENTITY_3RD (_obj, BLOCKXYPARAMETER, def_endpt);
-  BLOCKPARAMETER_PropInfo (prop1)
-  BLOCKPARAMETER_PropInfo (prop2)
-  BLOCKPARAMETER_PropInfo (prop3)
-  BLOCKPARAMETER_PropInfo (prop4)
-  CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKXYPARAMETER, prop_states, 4, BL);
+  BLOCKPARAMETER_PropInfo (prop1) BLOCKPARAMETER_PropInfo (prop2)
+      BLOCKPARAMETER_PropInfo (prop3) BLOCKPARAMETER_PropInfo (prop4)
+          CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKXYPARAMETER, prop_states, 4, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKXYPARAMETER, parameter_base_location, BS);
-  CHK_ENTITY_3RD  (_obj, BLOCKXYPARAMETER, upd_basept);
-  CHK_ENTITY_3RD  (_obj, BLOCKXYPARAMETER, basept);
-  CHK_ENTITY_3RD  (_obj, BLOCKXYPARAMETER, upd_endpt);
-  CHK_ENTITY_3RD  (_obj, BLOCKXYPARAMETER, endpt);
+  CHK_ENTITY_3RD (_obj, BLOCKXYPARAMETER, upd_basept);
+  CHK_ENTITY_3RD (_obj, BLOCKXYPARAMETER, basept);
+  CHK_ENTITY_3RD (_obj, BLOCKXYPARAMETER, upd_endpt);
+  CHK_ENTITY_3RD (_obj, BLOCKXYPARAMETER, endpt);
   // AcDbBlockXYParameter
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKXYPARAMETER, x_label);
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKXYPARAMETER, x_label_desc);
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKXYPARAMETER, y_label);
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKXYPARAMETER, y_label_desc);
-  CHK_ENTITY_TYPE     (_obj, BLOCKXYPARAMETER, x_value, BD);
-  CHK_ENTITY_TYPE     (_obj, BLOCKXYPARAMETER, y_value, BD);
+  CHK_ENTITY_TYPE (_obj, BLOCKXYPARAMETER, x_value, BD);
+  CHK_ENTITY_TYPE (_obj, BLOCKXYPARAMETER, y_value, BD);
   // AcDbBlockParamValueSet
   CHK_SUBCLASS_UTF8TEXT (_obj->x_value_set, BLOCKPARAMVALUESET, desc);
   CHK_SUBCLASS_TYPE (_obj->x_value_set, BLOCKPARAMVALUESET, flags, BL);

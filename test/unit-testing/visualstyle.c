@@ -36,22 +36,22 @@ api_process (dwg_object *obj)
   BITCODE_B edge_do_hide_precision;
   BITCODE_BL edge_style_apply;
   BITCODE_BL display_settings;
-  BITCODE_BLd display_brightness_bl;    /*!< DXF 44 <=r2007 */
-  BITCODE_BD display_brightness;        /*!< DXF 44  r2010+ */
+  BITCODE_BLd display_brightness_bl; /*!< DXF 44 <=r2007 */
+  BITCODE_BD display_brightness;     /*!< DXF 44  r2010+ */
   BITCODE_BL display_shadow_type;
   BITCODE_BD bd2007_45;
 
-  BITCODE_BS num_props; 		/*!< r2013+ version3 58x */
-  BITCODE_B  b_prop1c;
-  BITCODE_B  b_prop1d;
-  BITCODE_B  b_prop1e;
-  BITCODE_B  b_prop1f;
-  BITCODE_B  b_prop20;
-  BITCODE_B  b_prop21;
-  BITCODE_B  b_prop22;
-  BITCODE_B  b_prop23;
-  BITCODE_B  b_prop24;
-  BITCODE_BL  bl_prop25;
+  BITCODE_BS num_props; /*!< r2013+ version3 58x */
+  BITCODE_B b_prop1c;
+  BITCODE_B b_prop1d;
+  BITCODE_B b_prop1e;
+  BITCODE_B b_prop1f;
+  BITCODE_B b_prop20;
+  BITCODE_B b_prop21;
+  BITCODE_B b_prop22;
+  BITCODE_B b_prop23;
+  BITCODE_B b_prop24;
+  BITCODE_BL bl_prop25;
   BITCODE_BD bd_prop26;
   BITCODE_BD bd_prop27;
   BITCODE_BL bl_prop28;
@@ -59,7 +59,7 @@ api_process (dwg_object *obj)
   BITCODE_BL bl_prop2a;
   BITCODE_BL bl_prop2b;
   BITCODE_CMC c_prop2c;
-  BITCODE_B  b_prop2d;
+  BITCODE_B b_prop2d;
   BITCODE_BL bl_prop2e;
   BITCODE_BL bl_prop2f;
   BITCODE_BL bl_prop30;
@@ -75,7 +75,7 @@ api_process (dwg_object *obj)
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_visualstyle *vsty = dwg_object_to_VISUALSTYLE (obj);
- 
+
   CHK_ENTITY_UTF8TEXT (vsty, VISUALSTYLE, description);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, style_type, BL);
   CHK_ENTITY_MAX (vsty, VISUALSTYLE, style_type, BL, 32);
@@ -90,7 +90,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, face_specular, BD);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, face_modifier, BL);
   CHK_ENTITY_MAX (vsty, VISUALSTYLE, face_modifier, BL, 2);
-  //CHK_ENTITY_CMC (vsty, VISUALSTYLE, color);
+  // CHK_ENTITY_CMC (vsty, VISUALSTYLE, color);
   CHK_ENTITY_CMC (vsty, VISUALSTYLE, face_mono_color);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_model, BL);
   CHK_ENTITY_MAX (vsty, VISUALSTYLE, edge_model, BL, 2);
@@ -103,15 +103,18 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_modifier, BL);
   CHK_ENTITY_CMC (vsty, VISUALSTYLE, edge_color);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_opacity, BD);
-  PRE (R_2010) {
+  PRE (R_2010)
+  {
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_width, BS);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_overhang, BS);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_silhouette_width, BS);
-    //CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_halo_gap, RC); // need to cast
+    // CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_halo_gap, RC); // need to cast
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_isolines, BS);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_style_apply, BS);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_intersection_ltype, BS);
-  } LATER_VERSIONS {
+  }
+  LATER_VERSIONS
+  {
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_width, BL);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_overhang, BL);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, edge_silhouette_width, BL);
@@ -128,10 +131,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, display_brightness, BD);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, display_shadow_type, BL);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, internal_only, B);
-  VERSION (R_2007) {
-    CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bd2007_45, BD);
-  }
-  SINCE (R_2013) {
+  VERSION (R_2007) { CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bd2007_45, BD); }
+  SINCE (R_2013)
+  {
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, num_props, BS);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, b_prop1c, B);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, b_prop1d, B);
@@ -163,5 +165,5 @@ api_process (dwg_object *obj)
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, b_prop37, B);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bd_prop38, BD);
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bd_prop39, BD);
-  }  
+  }
 }

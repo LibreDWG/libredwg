@@ -92,5 +92,8 @@ for dir in "$@"; do
            -e's, (-Wpragma - pack), (-Wpragma-pack),;' \
            -e's, (-Wswitch - enum), (-Wswitch-enum),;' \
         `grep -l 'DIAG_IGNORE' */*.{c,h} *.{c,h}`
+    if [ X$dir = Xexamples ]; then
+        sed -i -e's/define SZ , 119/define SZ ,119/' dwgadd.c
+    fi
     popd &>/dev/null
 done

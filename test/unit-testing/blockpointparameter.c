@@ -29,10 +29,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (_obj, BLOCKPOINTPARAMETER, def_pt);
   CHK_ENTITY_TYPE (_obj, BLOCKPOINTPARAMETER, num_propinfos, BL);
   CHK_ENTITY_MAX (_obj, BLOCKPOINTPARAMETER, num_propinfos, BL, 2);
-  BLOCKPARAMETER_PropInfo (prop1)
-  BLOCKPARAMETER_PropInfo (prop2)
-  // AcDbBlockPointParameter
-  CHK_ENTITY_UTF8TEXT (_obj, BLOCKPOINTPARAMETER, position_name);
+  BLOCKPARAMETER_PropInfo (prop1) BLOCKPARAMETER_PropInfo (prop2)
+      // AcDbBlockPointParameter
+      CHK_ENTITY_UTF8TEXT (_obj, BLOCKPOINTPARAMETER, position_name);
   CHK_ENTITY_UTF8TEXT (_obj, BLOCKPOINTPARAMETER, position_desc);
   CHK_ENTITY_3RD (_obj, BLOCKPOINTPARAMETER, def_label_pt);
   //#endif

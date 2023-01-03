@@ -14,11 +14,12 @@ api_process (dwg_object *obj)
   BITCODE_BD distance;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  dwg_obj_assoctrimsurfaceactionbody *_obj = dwg_object_to_ASSOCTRIMSURFACEACTIONBODY (obj);
+  dwg_obj_assoctrimsurfaceactionbody *_obj
+      = dwg_object_to_ASSOCTRIMSURFACEACTIONBODY (obj);
 
   // ASSOCACTIONBODY
   CHK_ENTITY_TYPE (_obj, ASSOCTRIMSURFACEACTIONBODY, aab_version, BL);
-  CHK_ENTITY_MAX  (_obj, ASSOCTRIMSURFACEACTIONBODY, aab_version, BL, 2);
+  CHK_ENTITY_MAX (_obj, ASSOCTRIMSURFACEACTIONBODY, aab_version, BL, 2);
   CHK_ASSOCPARAMBASEDACTIONBODY (ASSOCTRIMSURFACEACTIONBODY);
   // AcDbAssocSurfaceActionBody
   CHK_SUBCLASS_TYPE (_obj->sab, ASSOCSURFACEACTIONBODY, version, BL);
@@ -26,12 +27,12 @@ api_process (dwg_object *obj)
   CHK_SUBCLASS_TYPE (_obj->sab, ASSOCSURFACEACTIONBODY, l2, BL);
   CHK_SUBCLASS_TYPE (_obj->sab, ASSOCSURFACEACTIONBODY, is_semi_ovr, B);
   CHK_SUBCLASS_TYPE (_obj->sab, ASSOCSURFACEACTIONBODY, grip_status, BS);
-  CHK_SUBCLASS_H    (_obj->sab, ASSOCSURFACEACTIONBODY, assocdep);
+  CHK_SUBCLASS_H (_obj->sab, ASSOCSURFACEACTIONBODY, assocdep);
   // AcDbAssocPathBasedSurfaceActionBody
   CHK_ENTITY_TYPE (_obj, ASSOCTRIMSURFACEACTIONBODY, pbsab_status, BL);
 
-  CHK_ENTITY_TYPE (_obj, ASSOCTRIMSURFACEACTIONBODY, class_version, BL); 
-  CHK_ENTITY_TYPE (_obj, ASSOCTRIMSURFACEACTIONBODY, b1, B); 
-  CHK_ENTITY_TYPE (_obj, ASSOCTRIMSURFACEACTIONBODY, b2, B); 
-  CHK_ENTITY_TYPE (_obj, ASSOCTRIMSURFACEACTIONBODY, distance, BD); 
+  CHK_ENTITY_TYPE (_obj, ASSOCTRIMSURFACEACTIONBODY, class_version, BL);
+  CHK_ENTITY_TYPE (_obj, ASSOCTRIMSURFACEACTIONBODY, b1, B);
+  CHK_ENTITY_TYPE (_obj, ASSOCTRIMSURFACEACTIONBODY, b2, B);
+  CHK_ENTITY_TYPE (_obj, ASSOCTRIMSURFACEACTIONBODY, distance, BD);
 }

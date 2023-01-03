@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
 {
   int error, isnew;
   BITCODE_BL i, num_names;
-  BITCODE_T* names;
+  BITCODE_T *names;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_layerfilter *_obj = dwg_object_to_LAYERFILTER (obj);

@@ -62,7 +62,8 @@ help (void)
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf ("  --as rNNNN                save as version\n");
   printf ("           Valid versions:\n");
-  printf ("             r1.4, r2.6, r2.10, r9, r10, r11, r13, r14, r2000 (default)\n");
+  printf ("             r1.4, r2.6, r2.10, r9, r10, r11, r13, r14, r2000 "
+          "(default)\n");
   printf ("           Planned versions:\n");
   printf ("             r2004, r2007, r2010, r2013, r2018\n");
   printf ("  -o dwgfile, --file        \n");
@@ -87,61 +88,66 @@ help (void)
 }
 
 #ifdef __AFL_COMPILER
-#include "bits.h"
-#include "decode.h"
-#include "encode.h"
-__AFL_FUZZ_INIT();
-int main (int argc, char *argv[])
+#  include "bits.h"
+#  include "decode.h"
+#  include "encode.h"
+__AFL_FUZZ_INIT ();
+int
+main (int argc, char *argv[])
 {
   Dwg_Data dwg;
   Bit_Chain dat = { NULL, 0, 0, 0, 0 };
   Bit_Chain out_dat = { NULL, 0, 0, 0, 0 };
   FILE *fp;
 
-  __AFL_INIT();
+  __AFL_INIT ();
   printf ("Fuzzing decode + encode + decode from shared memory\n");
 
-  while (__AFL_LOOP(10000)) { // llvm_mode persistent, non-forking mode
-#if 1 // fastest mode via shared mem (crashes still)
-    dat.chain = __AFL_FUZZ_TESTCASE_BUF;
-    dat.size = __AFL_FUZZ_TESTCASE_LEN;
-    //printf ("size: %lu\n", dat.size);
-#elif 1 // still 1000x faster than the old file-forking fuzzer.
-    /* from stdin: */
-    dat.size = 0;
-    //dat.chain = NULL;
-    dat_read_stream (&dat, stdin);
-#else
-    /* else from file */
-    fp = fopen (argv[1], "rb");
-    if (!fp)
-      return 0;
-    dat.size = 0;
-    dat_read_file (&dat, fp, argv[1]);
-    fclose (fp);
-#endif
-    if (dat.size < 100) continue;  // useful minimum input length
-    // dwg in only
-    if (dwg_decode (&dat, &dwg) <= DWG_ERR_CRITICAL) {
-      memset (&out_dat, 0, sizeof (out_dat));
-      bit_chain_set_version (&out_dat, &dat);
-      out_dat.version = R_2000;
-      if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
+  while (__AFL_LOOP (10000))
+    {   // llvm_mode persistent, non-forking mode
+#  if 1 // fastest mode via shared mem (crashes still)
+      dat.chain = __AFL_FUZZ_TESTCASE_BUF;
+      dat.size = __AFL_FUZZ_TESTCASE_LEN;
+      // printf ("size: %lu\n", dat.size);
+#  elif 1 // still 1000x faster than the old file-forking fuzzer.
+      /* from stdin: */
+      dat.size = 0;
+      // dat.chain = NULL;
+      dat_read_stream (&dat, stdin);
+#  else
+      /* else from file */
+      fp = fopen (argv[1], "rb");
+      if (!fp)
+        return 0;
+      dat.size = 0;
+      dat_read_file (&dat, fp, argv[1]);
+      fclose (fp);
+#  endif
+      if (dat.size < 100)
+        continue; // useful minimum input length
+      // dwg in only
+      if (dwg_decode (&dat, &dwg) <= DWG_ERR_CRITICAL)
+        {
+          memset (&out_dat, 0, sizeof (out_dat));
+          bit_chain_set_version (&out_dat, &dat);
+          out_dat.version = R_2000;
+          if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
+            exit (0);
+          dwg_free (&dwg);
+          dwg_decode (&out_dat, &dwg);
+          free (out_dat.chain);
+        }
+      else
         exit (0);
-      dwg_free (&dwg);
-      dwg_decode (&out_dat, &dwg);
-      free (out_dat.chain);
     }
-    else
-      exit (0);
-  }
   dwg_free (&dwg);
 }
-#define main orig_main
+#  define main orig_main
 int orig_main (int argc, char *argv[]);
 #endif
 
-int main (int argc, char *argv[])
+int
+main (int argc, char *argv[])
 {
   int error;
   int i = 1;
@@ -257,131 +263,132 @@ int main (int argc, char *argv[])
   dwg.opts = opts & 0xf;
 
 #ifdef __AFL_HAVE_MANUAL_CONTROL
-  __AFL_INIT();
-  while (__AFL_LOOP(1000)) {
+  __AFL_INIT ();
+  while (__AFL_LOOP (1000))
+    {
 #endif
 
-  filename_in = argv[i];
-  if (!filename_in)
-    {
-      puts ("No input file specified");
-      return 1;
-    }
-  if (!filename_out)
-    {
-      if (argc > i + 1)
-        filename_out = argv[i + 1];
-      else
+      filename_in = argv[i];
+      if (!filename_in)
         {
-          free_fnout = 1;
-          filename_out = suffix (filename_in, "-rewrite.dwg");
+          puts ("No input file specified");
+          return 1;
         }
-    }
-  if (!filename_out || !strcmp (filename_in, filename_out))
-    {
-      if (free_fnout)
-        free (filename_out);
-      return usage ();
-    }
-
-  /*
-   * some very simple testing
-   */
-  printf ("Reading DWG file %s\n", filename_in);
-  error = dwg_read_file (filename_in, &dwg); /* 1st read */
-  if (error >= DWG_ERR_CRITICAL)
-    fprintf (stderr, "READ ERROR 0x%x\n", error);
-  num_objects = dwg.num_objects;
-  if (!num_objects)
-    {
-      printf ("Read 0 objects\n");
-      if (error >= DWG_ERR_CRITICAL)
+      if (!filename_out)
+        {
+          if (argc > i + 1)
+            filename_out = argv[i + 1];
+          else
+            {
+              free_fnout = 1;
+              filename_out = suffix (filename_in, "-rewrite.dwg");
+            }
+        }
+      if (!filename_out || !strcmp (filename_in, filename_out))
         {
           if (free_fnout)
             free (filename_out);
-          dwg_free (&dwg);
-          return error;
+          return usage ();
         }
-    }
 
-  //if (opts)
-  //  printf ("\n");
-  printf ("Writing DWG file %s", filename_out);
-  if (version)
-    { // forced -as-rXXX
-      printf (" as %s\n", version);
-      if (dwg.header.from_version != dwg.header.version)
-        dwg.header.from_version = dwg.header.version;
-      // else keep from_version
-      dwg.header.version = dwg_version;
-    }
-  else if (dwg.header.version > R_2000)
-    {
-      // we cannot yet write 2004+
-      printf (" as r2000\n");
-      dwg.header.version = R_2000;
-    }
-  else
-    {
-      printf ("\n");
-    }
+      /*
+       * some very simple testing
+       */
+      printf ("Reading DWG file %s\n", filename_in);
+      error = dwg_read_file (filename_in, &dwg); /* 1st read */
+      if (error >= DWG_ERR_CRITICAL)
+        fprintf (stderr, "READ ERROR 0x%x\n", error);
+      num_objects = dwg.num_objects;
+      if (!num_objects)
+        {
+          printf ("Read 0 objects\n");
+          if (error >= DWG_ERR_CRITICAL)
+            {
+              if (free_fnout)
+                free (filename_out);
+              dwg_free (&dwg);
+              return error;
+            }
+        }
 
-  {
-    struct stat attrib;
-    if (!stat (filename_out, &attrib)) // exists
+      // if (opts)
+      //   printf ("\n");
+      printf ("Writing DWG file %s", filename_out);
+      if (version)
+        { // forced -as-rXXX
+          printf (" as %s\n", version);
+          if (dwg.header.from_version != dwg.header.version)
+            dwg.header.from_version = dwg.header.version;
+          // else keep from_version
+          dwg.header.version = dwg_version;
+        }
+      else if (dwg.header.version > R_2000)
+        {
+          // we cannot yet write 2004+
+          printf (" as r2000\n");
+          dwg.header.version = R_2000;
+        }
+      else
+        {
+          printf ("\n");
+        }
+
       {
-        if (S_ISREG (attrib.st_mode) &&        // refuse to remove a directory
-            (access (filename_out, W_OK) == 0) // is writable
+        struct stat attrib;
+        if (!stat (filename_out, &attrib)) // exists
+          {
+            if (S_ISREG (attrib.st_mode) && // refuse to remove a directory
+                (access (filename_out, W_OK) == 0) // is writable
 #ifndef _WIN32
-            // refuse to remove a symlink. even with overwrite. security
-            && !S_ISLNK (attrib.st_mode)
+                // refuse to remove a symlink. even with overwrite. security
+                && !S_ISLNK (attrib.st_mode)
 #endif
             )
-          unlink (filename_out);
-        else
-          {
-            fprintf (stderr, "ERROR: Not writable file or symlink: %s\n",
-                     filename_out);
-            error |= DWG_ERR_IOERROR;
+              unlink (filename_out);
+            else
+              {
+                fprintf (stderr, "ERROR: Not writable file or symlink: %s\n",
+                         filename_out);
+                error |= DWG_ERR_IOERROR;
+              }
           }
       }
-  }
 
-  if (opts)
-    fprintf(stderr, "\n==========================================\n");
-  error = dwg_write_file (filename_out, &dwg);
-  if (error >= DWG_ERR_CRITICAL)
-    {
-      printf ("WRITE ERROR 0x%x\n", error);
+      if (opts)
+        fprintf (stderr, "\n==========================================\n");
+      error = dwg_write_file (filename_out, &dwg);
+      if (error >= DWG_ERR_CRITICAL)
+        {
+          printf ("WRITE ERROR 0x%x\n", error);
 #ifndef IS_RELEASE
-      // try to read the halfway written r2004 file.
-      if (!(version && error == DWG_ERR_SECTIONNOTFOUND))
+          // try to read the halfway written r2004 file.
+          if (!(version && error == DWG_ERR_SECTIONNOTFOUND))
 #endif
-      {
-        if (free_fnout)
-          free (filename_out);
-        dwg_free (&dwg);
-        return error;
-      }
-    }
-  dwg_free (&dwg);
+            {
+              if (free_fnout)
+                free (filename_out);
+              dwg_free (&dwg);
+              return error;
+            }
+        }
+      dwg_free (&dwg);
 
-  // try to read again
-  //if (opts)
-  //  printf ("\n");
-  printf ("Re-reading created file %s\n", filename_out);
-  if (opts)
-    fprintf(stderr, "\n==========================================\n");
-  error = dwg_read_file (filename_out, &dwg); /* 2nd read */
-  if (error >= DWG_ERR_CRITICAL)
-    printf ("re-READ ERROR 0x%x\n", error);
-  if (num_objects && (num_objects != dwg.num_objects))
-    printf ("re-READ num_objects: %lu, should be %lu\n",
-            (unsigned long)dwg.num_objects, (unsigned long)num_objects);
-  dwg_free (&dwg);
+      // try to read again
+      // if (opts)
+      //  printf ("\n");
+      printf ("Re-reading created file %s\n", filename_out);
+      if (opts)
+        fprintf (stderr, "\n==========================================\n");
+      error = dwg_read_file (filename_out, &dwg); /* 2nd read */
+      if (error >= DWG_ERR_CRITICAL)
+        printf ("re-READ ERROR 0x%x\n", error);
+      if (num_objects && (num_objects != dwg.num_objects))
+        printf ("re-READ num_objects: %lu, should be %lu\n",
+                (unsigned long)dwg.num_objects, (unsigned long)num_objects);
+      dwg_free (&dwg);
 
 #ifdef __AFL_HAVE_MANUAL_CONTROL
-  }
+    }
 #endif
 
   if (free_fnout)

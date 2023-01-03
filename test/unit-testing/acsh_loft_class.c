@@ -6,11 +6,11 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  //Dwg_EvalExpr evalexpr;
-  //Dwg_ACSH_HistoryNode history_node;
-  BITCODE_BD* trans;
-  BITCODE_BL major;       /*!< DXF 90 */
-  BITCODE_BL minor;       /*!< DXF 91 */
+  // Dwg_EvalExpr evalexpr;
+  // Dwg_ACSH_HistoryNode history_node;
+  BITCODE_BD *trans;
+  BITCODE_BL major; /*!< DXF 90 */
+  BITCODE_BL minor; /*!< DXF 91 */
   BITCODE_BL num_crosssects;
   BITCODE_H *crosssects;
   BITCODE_BL num_guides;
@@ -21,7 +21,7 @@ api_process (dwg_object *obj)
   dwg_obj_acsh_loft_class *_obj = dwg_object_to_ACSH_LOFT_CLASS (obj);
 
   CHK_EVALEXPR (ACSH_LOFT_CLASS);
-  CHK_ACSH_HISTORYNODE();
+  CHK_ACSH_HISTORYNODE ();
 
   CHK_ENTITY_TYPE (_obj, ACSH_LOFT_CLASS, major, BL);
   CHK_ENTITY_TYPE (_obj, ACSH_LOFT_CLASS, minor, BL);

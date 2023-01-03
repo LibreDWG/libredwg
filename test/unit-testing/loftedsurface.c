@@ -11,7 +11,7 @@ api_process (dwg_object *obj)
   BITCODE_BS modeler_format_version;
   BITCODE_BS u_isolines;
   BITCODE_BS v_isolines;
-  BITCODE_BD* loft_entity_transmatrix;
+  BITCODE_BD *loft_entity_transmatrix;
   BITCODE_BL i, plane_normal_lofting_type;
   BITCODE_BD start_draft_angle;
   BITCODE_BD end_draft_angle;
@@ -50,14 +50,17 @@ api_process (dwg_object *obj)
   else
     {
       for (i = 0; i < num_wires; i++)
-        printf ("LOFTEDSURFACE.wires[%u]: " FORMAT_BLd "\n", i, wires[i].selection_marker);
+        printf ("LOFTEDSURFACE.wires[%u]: " FORMAT_BLd "\n", i,
+                wires[i].selection_marker);
     }
-  if (!dwg_dynapi_entity_value (_obj, "LOFTEDSURFACE", "silhouettes", &silhouettes, NULL))
+  if (!dwg_dynapi_entity_value (_obj, "LOFTEDSURFACE", "silhouettes",
+                                &silhouettes, NULL))
     fail ("LOFTEDSURFACE.silhouettes");
   else
     {
       for (i = 0; i < num_silhouettes; i++)
-        printf ("LOFTEDSURFACE.silhouettes[%u]: " FORMAT_BL "\n", i, silhouettes[i].vp_id);
+        printf ("LOFTEDSURFACE.silhouettes[%u]: " FORMAT_BL "\n", i,
+                silhouettes[i].vp_id);
     }
   if (dwg_version >= R_2007 && _obj->history_id) // if it did not fail before
     {
@@ -95,17 +98,21 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, num_cross_sections, BS);
   CHK_ENTITY_TYPE (_obj, LOFTEDSURFACE, num_guide_curves, BS);
   CHK_ENTITY_H (_obj, LOFTEDSURFACE, path_curve);
-  if (!dwg_dynapi_entity_value (_obj, "LOFTEDSURFACE", "cross_sections", &cross_sections, NULL))
+  if (!dwg_dynapi_entity_value (_obj, "LOFTEDSURFACE", "cross_sections",
+                                &cross_sections, NULL))
     fail ("LOFTEDSURFACE.cross_sections");
   for (i = 0; i < num_cross_sections; i++)
     {
-      ok ("LOFTEDSURFACE.cross_sections[%d]: " FORMAT_REF, i, ARGS_REF (cross_sections[i]));
+      ok ("LOFTEDSURFACE.cross_sections[%d]: " FORMAT_REF, i,
+          ARGS_REF (cross_sections[i]));
     }
-  if (!dwg_dynapi_entity_value (_obj, "LOFTEDSURFACE", "guide_curves", &guide_curves, NULL))
+  if (!dwg_dynapi_entity_value (_obj, "LOFTEDSURFACE", "guide_curves",
+                                &guide_curves, NULL))
     fail ("LOFTEDSURFACE.guide_curves");
   for (i = 0; i < num_guide_curves; i++)
     {
-      ok ("LOFTEDSURFACE.guide_curves[%d]: " FORMAT_REF, i, ARGS_REF (guide_curves[i]));
+      ok ("LOFTEDSURFACE.guide_curves[%d]: " FORMAT_REF, i,
+          ARGS_REF (guide_curves[i]));
     }
 #endif
 }

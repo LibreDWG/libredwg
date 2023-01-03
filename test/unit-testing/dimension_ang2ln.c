@@ -19,7 +19,7 @@ api_process (dwg_object *obj)
   BITCODE_3BD xline1end_pt;
   BITCODE_3BD xline2start_pt;
   BITCODE_3BD xline2end_pt;
-  
+
   dwg_ent_dim_ang2ln *dim_ang2ln = dwg_object_to_DIMENSION_ANG2LN (obj);
   dwg_ent_dim *dim = dwg_object_to_DIMENSION (obj);
 

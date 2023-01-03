@@ -28,7 +28,7 @@
 #define ENCODE_UNKNOWN_AS_DUMMY
 
 #ifdef IN_DXF_H
-#error in_dxf.h must be included after __FILE__ because of FORMAT_BD
+#  error in_dxf.h must be included after __FILE__ because of FORMAT_BD
 #endif
 
 EXPORT int dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
@@ -36,11 +36,12 @@ EXPORT int dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat);
 /** Returns the class for the object.
     First searching class by name, not offset
     because indxf has a different class order. Fixes up the obj->type then.
-    Also searches via dxfname aliases, like DICTIONARYWDFLT => ACDBDICTIONARYWDFLT
-    and fixes up obj->type also then.
-    If obj->dxfname is NULL, the search is done by index, without any fixups.
+    Also searches via dxfname aliases, like DICTIONARYWDFLT =>
+   ACDBDICTIONARYWDFLT and fixes up obj->type also then. If obj->dxfname is
+   NULL, the search is done by index, without any fixups.
  */
-Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
+Dwg_Class *dwg_encode_get_class (Dwg_Data *restrict dwg,
+                                 Dwg_Object *restrict obj);
 
 Dwg_Object *find_prev_entity (Dwg_Object *obj);
 void in_postprocess_handles (Dwg_Object *restrict obj);

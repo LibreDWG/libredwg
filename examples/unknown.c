@@ -41,9 +41,8 @@
 #include "../src/myalloca.h"
 
 // not needed anymore
-//void *memmem (const void *big, size_t big_len, const void *little,
+// void *memmem (const void *big, size_t big_len, const void *little,
 //              size_t little_len);
-
 
 #define CHAIN_SIZE 128
 int cur_hdl; // to avoid dupl. search
@@ -51,8 +50,8 @@ int cur_hdl; // to avoid dupl. search
 #include "unknown.h"
 
 static struct _unknown_dxf unknown_dxf[] = {
-  // see log_unknown_dxf.pl
-  #include "alldxf_0.inc"
+// see log_unknown_dxf.pl
+#include "alldxf_0.inc"
   { NULL, NULL, 0, "", 0, 0, 0, 0, 0, 0, 0, NULL }
 };
 
@@ -100,8 +99,8 @@ static struct _bd
   const char *value;
   const char *bin;
 } bd[] = {
-  // see bd-unknown.pl
-  #include "bd-unknown.inc"
+// see bd-unknown.pl
+#include "bd-unknown.inc"
   { NULL, NULL }
 };
 
@@ -116,7 +115,7 @@ static void
 bits_TU (Bit_Chain *restrict dat, struct _unknown_field *restrict g)
 {
   // the source is always utf8
-  BITCODE_TU wstr = bit_utf8_to_TU ((char*)g->value, 0);
+  BITCODE_TU wstr = bit_utf8_to_TU ((char *)g->value, 0);
   bit_write_TU (dat, wstr);
   g->type = BITS_TU;
   free (wstr);
@@ -889,13 +888,13 @@ main (int argc, char *argv[])
           strcpy (pi_fn, "examples/");
         }
       else
-          strcpy (pi_fn, "");
+        strcpy (pi_fn, "");
       strcat (pi_fn, class);
       strcpy (base_pi_fn, pi_fn);
       pi_filename (pi_fn, i_pi);
       pi = fopen (pi_fn, "w");
       if (open_pi (pi, class, pi_fn))
-          continue;
+        continue;
       for (i = 0; unknown_dxf[i].name; i++)
         {
           int num_fields;
@@ -1172,7 +1171,8 @@ main (int argc, char *argv[])
                           if (num_found)
                             {
                               free (dat.chain);
-                              dat.chain = (unsigned char *)unknown_dxf[i].bytes;
+                              dat.chain
+                                  = (unsigned char *)unknown_dxf[i].bytes;
                               g[j].bytes = dat.chain;
                               dat.size = unknown_dxf[i].num_bits / 8;
                               bit_set_position (&dat, g[j].pos[0]);
@@ -1241,7 +1241,8 @@ main (int argc, char *argv[])
                           if (num_found)
                             {
                               free (dat.chain);
-                              dat.chain = (unsigned char *)unknown_dxf[i].bytes;
+                              dat.chain
+                                  = (unsigned char *)unknown_dxf[i].bytes;
                               dat.size = unknown_dxf[i].num_bits / 8;
                               bit_set_position (&dat, g[j].pos[0]);
                               d = bit_read_BD (&dat);
@@ -1512,10 +1513,11 @@ main (int argc, char *argv[])
                 &g[j])) { offset = g[j].pos[0]+1; goto SEARCH;
                 }
                 */
-              if (0) {
-                free (g[j].bytes);
-                g[j].bytes = NULL;
-              }
+              if (0)
+                {
+                  free (g[j].bytes);
+                  g[j].bytes = NULL;
+                }
             }
           fprintf (pi, "  ],\n"
                        "  Data = [S,Fields,Class,Dxf,Version,Offsets],\n"
@@ -1566,8 +1568,8 @@ main (int argc, char *argv[])
 
           // TODO: try likely field combinations and print the top 3.
           // See unknown.pi
-          // there are various heuristics, like the handle and string stream at the end.
-          // points BD's being neighbors, ...
+          // there are various heuristics, like the handle and string stream at
+          // the end. points BD's being neighbors, ...
 
           free (dxf[i].found);
           free (dxf[i].possible);

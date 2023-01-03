@@ -9,8 +9,8 @@ api_process (dwg_object *obj)
   BITCODE_BL i;
   BLOCKACTION_fields;
   BITCODE_BL numelems; /* computed */
-  BITCODE_BL numrows; /* DXF 92 */
-  BITCODE_BL numcols; /* DXF 93 */
+  BITCODE_BL numrows;  /* DXF 92 */
+  BITCODE_BL numcols;  /* DXF 93 */
   Dwg_BLOCKLOOKUPACTION_lut *lut;
   BITCODE_T *exprs;
   BITCODE_B b280;
@@ -33,15 +33,18 @@ api_process (dwg_object *obj)
       fail ("BLOCKLOOKUPACTION.lut[]: NULL");
       return;
     }
-  for (i = 0; i < numrows * numcols; i++) {
-    for (int j = 0; j < 3; j++)
-      {
-        CHK_SUBCLASS_TYPE     (_obj->lut[i].conn_pts[j], BLOCKACTION_connectionpts, code, BL);
-        CHK_SUBCLASS_UTF8TEXT (_obj->lut[i].conn_pts[j], BLOCKACTION_connectionpts, name);
-      }
-    CHK_SUBCLASS_TYPE     (_obj->lut[i], "BLOCKLOOKUPACTION_lut", b282, BL);
-    CHK_SUBCLASS_TYPE     (_obj->lut[i], "BLOCKLOOKUPACTION_lut", b281, BL);
-  }
+  for (i = 0; i < numrows * numcols; i++)
+    {
+      for (int j = 0; j < 3; j++)
+        {
+          CHK_SUBCLASS_TYPE (_obj->lut[i].conn_pts[j],
+                             BLOCKACTION_connectionpts, code, BL);
+          CHK_SUBCLASS_UTF8TEXT (_obj->lut[i].conn_pts[j],
+                                 BLOCKACTION_connectionpts, name);
+        }
+      CHK_SUBCLASS_TYPE (_obj->lut[i], "BLOCKLOOKUPACTION_lut", b282, BL);
+      CHK_SUBCLASS_TYPE (_obj->lut[i], "BLOCKLOOKUPACTION_lut", b281, BL);
+    }
   CHK_ENTITY_TYPE (_obj, BLOCKLOOKUPACTION, b280, B);
   // ..
   //#endif

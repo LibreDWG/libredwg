@@ -5,11 +5,13 @@ void
 api_process (dwg_object *obj)
 {
   int error;
-  BITCODE_RS flag; /* computed */
+  BITCODE_RS flag;     /* computed */
   BITCODE_BS scenario; /* 1 spline, 2 bezier */
   BITCODE_BS degree;
-  BITCODE_BL splineflags1; /* 2013+: method fit points = 1, CV frame show = 2, closed = 4 */
-  BITCODE_BL knotparam;    /* 2013+: Chord = 0, Square root = 1, Uniform = 2, Custom = 15 */
+  BITCODE_BL splineflags1; /* 2013+: method fit points = 1, CV frame show = 2,
+                              closed = 4 */
+  BITCODE_BL knotparam;    /* 2013+: Chord = 0, Square root = 1, Uniform = 2,
+                              Custom = 15 */
   BITCODE_BD fit_tol;
   BITCODE_3BD beg_tan_vec;
   BITCODE_3BD end_tan_vec;
@@ -20,11 +22,11 @@ api_process (dwg_object *obj)
   BITCODE_BD knot_tol;
   BITCODE_BD ctrl_tol;
   BITCODE_BS num_fit_pts;
-  BITCODE_3DPOINT* fit_pts;
+  BITCODE_3DPOINT *fit_pts;
   BITCODE_BL num_knots;
-  BITCODE_BD* knots;
+  BITCODE_BD *knots;
   BITCODE_BL num_ctrl_pts;
-  Dwg_SPLINE_control_point* ctrl_pts;
+  Dwg_SPLINE_control_point *ctrl_pts;
 
   dwg_ent_spline *spline = dwg_object_to_SPLINE (obj);
 
@@ -36,8 +38,8 @@ api_process (dwg_object *obj)
     fail ("Illegal SPLINE.scenario %d", (int)scenario);
   CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, degree, BS);
   CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, fit_tol, BD);
-  CHK_ENTITY_3RD  (spline, SPLINE, beg_tan_vec);
-  CHK_ENTITY_3RD  (spline, SPLINE, end_tan_vec);
+  CHK_ENTITY_3RD (spline, SPLINE, beg_tan_vec);
+  CHK_ENTITY_3RD (spline, SPLINE, end_tan_vec);
   CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, closed_b, B);
   CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, periodic, B);
   CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, rational, B);
@@ -125,8 +127,8 @@ api_process (dwg_object *obj)
         {
           for (BITCODE_BL i = 0; i < num_fit_pts; i++)
             {
-              ok ("SPLINE.fit_pts[%d]: (%f, %f, %f)", i, pts[i].x,
-                  pts[i].y, pts[i].z);
+              ok ("SPLINE.fit_pts[%d]: (%f, %f, %f)", i, pts[i].x, pts[i].y,
+                  pts[i].z);
               if (memcmp (&fit_pts[i], &pts[i], sizeof (fit_pts[i])))
                 fail ("SPLINE.fit_pts[%d]", i);
             }

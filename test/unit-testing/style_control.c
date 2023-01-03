@@ -17,8 +17,10 @@ api_process (dwg_object *obj)
   for (i = 0; i < num_entries; i++)
     {
       if (hdls[i] == entries[i])
-        ok ("STYLE_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
+        ok ("STYLE_CONTROL.entries[%d]: " FORMAT_REF, i,
+            ARGS_REF (entries[i]));
       else
-        fail ("STYLE_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
+        fail ("STYLE_CONTROL.entries[%d]: " FORMAT_REF, i,
+              ARGS_REF (entries[i]));
     }
 }

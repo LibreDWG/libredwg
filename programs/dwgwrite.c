@@ -48,8 +48,9 @@ static int help (void);
 static int
 usage (void)
 {
-  printf ("\nUsage: dwgwrite [-v[0-9]] [-y] [--as rNNNN] [-I FMT] [-o DWGFILE] "
-          "INFILE\n");
+  printf (
+      "\nUsage: dwgwrite [-v[0-9]] [-y] [--as rNNNN] [-I FMT] [-o DWGFILE] "
+      "INFILE\n");
   return 1;
 }
 static int
@@ -73,11 +74,10 @@ help (void)
   printf ("             r1.4-r11, r2004-r2018\n");
 #  ifndef DISABLE_JSON
   printf ("  -I fmt,  --format fmt     DXF, DXFB, JSON\n");
-#else
+#  else
   printf ("  -I fmt,  --format fmt     DXF, DXFB\n");
 #  endif
-  printf (
-      "           Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
+  printf ("           Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
   printf ("  -o dwgfile, --file        \n");
   printf ("  -y, --overwrite           overwrite existing files\n");
   printf ("           --help           display this help and exit\n");
@@ -94,8 +94,9 @@ help (void)
   printf ("  -I fmt      fmt: DXF, DXFB, JSON\n");
 #  else
   printf ("  -I fmt      fmt: DXF, DXFB\n");
-#endif
-  printf ("              Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
+#  endif
+  printf (
+      "              Planned input formats: GeoJSON, YAML, XML/OGR, GPX\n");
   printf ("  -o dwgfile\n");
   printf ("  -y          overwrite existing files\n");
   printf ("  -h          display this help and exit\n");
@@ -108,53 +109,57 @@ help (void)
 }
 
 #ifdef __AFL_COMPILER
-__AFL_FUZZ_INIT();
-int main (int argc, char *argv[])
+__AFL_FUZZ_INIT ();
+int
+main (int argc, char *argv[])
 {
   Dwg_Data dwg;
   Bit_Chain dat = { NULL, 0, 0, 0, 0 };
   Bit_Chain out_dat = { NULL, 0, 0, 0, 0 };
   FILE *fp;
 
-  __AFL_INIT();
+  __AFL_INIT ();
   dat.chain = NULL;
   dat.version = R_2000;
   printf ("Fuzzing in_json + encode from shared memory\n");
 
-  while (__AFL_LOOP(10000)) { // llvm_mode persistent, non-forking mode
-#if 1 // fastest mode via shared mem (crashes still)
-    dat.chain = __AFL_FUZZ_TESTCASE_BUF;
-    dat.size = __AFL_FUZZ_TESTCASE_LEN;
-#elif 1 // still 1000x faster than the old file-forking fuzzer.
-    /* from stdin: */
-    dat.size = 0;
-    dat_read_stream (&dat, stdin);
-#else
-    /* else from file */
-    stat (argv[1], &attrib);
-    fp = fopen (argv[1], "rb");
-    if (!fp)
-      return 0;
-    dat.size = attrib.st_size;
-    dat_read_file (&dat, fp, argv[1]);
-    fclose (fp);
-#endif
-    if (dat.size < 100) continue;  // useful minimum input length
+  while (__AFL_LOOP (10000))
+    {   // llvm_mode persistent, non-forking mode
+#  if 1 // fastest mode via shared mem (crashes still)
+      dat.chain = __AFL_FUZZ_TESTCASE_BUF;
+      dat.size = __AFL_FUZZ_TESTCASE_LEN;
+#  elif 1 // still 1000x faster than the old file-forking fuzzer.
+      /* from stdin: */
+      dat.size = 0;
+      dat_read_stream (&dat, stdin);
+#  else
+      /* else from file */
+      stat (argv[1], &attrib);
+      fp = fopen (argv[1], "rb");
+      if (!fp)
+        return 0;
+      dat.size = attrib.st_size;
+      dat_read_file (&dat, fp, argv[1]);
+      fclose (fp);
+#  endif
+      if (dat.size < 100)
+        continue; // useful minimum input length
 
-    if (dwg_read_json (&dat, &dwg) <= DWG_ERR_CRITICAL) {
-      memset (&out_dat, 0, sizeof (out_dat));
-      bit_chain_set_version (&out_dat, &dat);
-      out_dat.version = R_2000;      
-      if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
+      if (dwg_read_json (&dat, &dwg) <= DWG_ERR_CRITICAL)
+        {
+          memset (&out_dat, 0, sizeof (out_dat));
+          bit_chain_set_version (&out_dat, &dat);
+          out_dat.version = R_2000;
+          if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
+            exit (0);
+          free (out_dat.chain);
+        }
+      else
         exit (0);
-      free (out_dat.chain);
     }
-    else
-      exit (0);
-  }
   dwg_free (&dwg);
 }
-#define main orig_main
+#  define main orig_main
 int orig_main (int argc, char *argv[]);
 #endif
 
@@ -180,8 +185,7 @@ main (int argc, char *argv[])
           { "format", 1, 0, 'I' },    { "file", 1, 0, 'o' },
           { "as", 1, 0, 'a' },        { "help", 0, 0, 0 },
           { "overwrite", 0, 0, 'y' }, { "version", 0, 0, 0 },
-          { "force-free", 0, 0, 0 },
-          { NULL, 0, NULL, 0 } };
+          { "force-free", 0, 0, 0 },  { NULL, 0, NULL, 0 } };
 #endif
 
   if (argc < 2)
@@ -298,7 +302,7 @@ main (int argc, char *argv[])
             fmt = (char *)"json";
           else
 #  endif
-          if (strstr (infile, ".dxfb") || strstr (infile, ".DXFB"))
+              if (strstr (infile, ".dxfb") || strstr (infile, ".DXFB"))
             fmt = (char *)"dxfb";
           else if (strstr (infile, ".dxf") || strstr (infile, ".DXF"))
             fmt = (char *)"dxf";
@@ -307,7 +311,7 @@ main (int argc, char *argv[])
             fprintf (stderr, "Unknown input format for '%s'\n", infile);
         }
     }
-  
+
   // allow stdin, but require -I|--format then
   memset (&dwg, 0, sizeof (Dwg_Data));
   dat.opts = dwg.opts = opts;
@@ -348,14 +352,15 @@ main (int argc, char *argv[])
     }
   else
 #  endif
-  if ((fmt && !strcasecmp (fmt, "dxfb"))
-           || (infile && !strcasecmp (infile, ".dxfb")))
+      if ((fmt && !strcasecmp (fmt, "dxfb"))
+          || (infile && !strcasecmp (infile, ".dxfb")))
     {
       if (opts > 1)
         {
           fprintf (stderr, "Reading Binary DXF file %s\n",
-                 infile ? infile : "from stdin");
-          fprintf (stderr, "Warning: still highly experimental and untested.\n");
+                   infile ? infile : "from stdin");
+          fprintf (stderr,
+                   "Warning: still highly experimental and untested.\n");
         }
       if (infile)
         error = dxf_read_file (infile, &dwg); // ascii or binary
@@ -438,11 +443,11 @@ main (int argc, char *argv[])
               }
             else if ( // for fuzzing mainly
 #ifdef _WIN32
-                     strEQc (outfile, "NUL")
+                strEQc (outfile, "NUL")
 #else
-                     strEQc (outfile, "/dev/null")
+                strEQc (outfile, "/dev/null")
 #endif
-                     )
+            )
               {
                 dwg.opts |= opts;
                 error = dwg_write_file (outfile, &dwg);
@@ -462,10 +467,10 @@ main (int argc, char *argv[])
       }
   }
 
-  free:
+free:
 #if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
   {
-    char *asanenv = getenv("ASAN_OPTIONS");
+    char *asanenv = getenv ("ASAN_OPTIONS");
     if (!asanenv)
       force_free = 1;
     // detect_leaks is enabled by default. see if it's turned off
@@ -474,12 +479,11 @@ main (int argc, char *argv[])
   }
 #endif
   // forget about leaks. really huge DWG's need endlessly here.
-  if ((dwg.header.version && dwg.num_objects < 1000)
-      || force_free
+  if ((dwg.header.version && dwg.num_objects < 1000) || force_free
 #ifdef HAVE_VALGRIND_VALGRIND_H
       || (RUNNING_ON_VALGRIND)
 #endif
-      )
+  )
     {
       dwg_free (&dwg);
     }

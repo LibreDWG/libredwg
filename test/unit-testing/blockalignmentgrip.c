@@ -20,9 +20,9 @@ api_process (dwg_object *obj)
   // AcDbBlockGrip
   CHK_ENTITY_TYPE (_obj, BLOCKALIGNMENTGRIP, bg_bl91, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKALIGNMENTGRIP, bg_bl92, BL);
-  CHK_ENTITY_3RD  (_obj, BLOCKALIGNMENTGRIP, bg_location);
+  CHK_ENTITY_3RD (_obj, BLOCKALIGNMENTGRIP, bg_location);
   CHK_ENTITY_TYPE (_obj, BLOCKALIGNMENTGRIP, bg_insert_cycling, B);
   CHK_ENTITY_TYPE (_obj, BLOCKALIGNMENTGRIP, bg_insert_cycling_weight, BLd);
   // AcDbBlockAlignmentGrip
-  CHK_ENTITY_3RD  (_obj, BLOCKALIGNMENTGRIP, orientation);
+  CHK_ENTITY_3RD (_obj, BLOCKALIGNMENTGRIP, orientation);
 }

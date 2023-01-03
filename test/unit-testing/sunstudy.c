@@ -14,24 +14,24 @@ api_process (dwg_object *obj)
   BITCODE_T sheet_subset_name;
   BITCODE_B select_dates_from_calendar;
   BITCODE_BL num_dates;
-  Dwg_SUNSTUDY_Dates* dates;
+  Dwg_SUNSTUDY_Dates *dates;
   BITCODE_B select_range_of_dates;
   BITCODE_BL start_time;
   BITCODE_BL end_time;
   BITCODE_BL interval;
   BITCODE_BL num_hours;
-  BITCODE_B* hours;
+  BITCODE_B *hours;
   BITCODE_BL shade_plot_type;
   BITCODE_BL numvports;
   BITCODE_BL numrows;
   BITCODE_BL numcols;
   BITCODE_BD spacing;
-  BITCODE_B  lock_viewports;
-  BITCODE_B  label_viewports;
-  BITCODE_H  page_setup_wizard;
-  BITCODE_H  view;
-  BITCODE_H  visualstyle;
-  BITCODE_H  text_style;
+  BITCODE_B lock_viewports;
+  BITCODE_B label_viewports;
+  BITCODE_H page_setup_wizard;
+  BITCODE_H view;
+  BITCODE_H visualstyle;
+  BITCODE_H text_style;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
@@ -46,13 +46,13 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (_obj, SUNSTUDY, sheet_subset_name);
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, select_dates_from_calendar, B);
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, num_dates, BL);
-  //Dwg_SUNSTUDY_Dates* dates;
+  // Dwg_SUNSTUDY_Dates* dates;
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, select_range_of_dates, B);
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, start_time, BL);
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, end_time, BL);
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, interval, BL);
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, num_hours, BL);
-  //BITCODE_B* hours;
+  // BITCODE_B* hours;
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, shade_plot_type, BL);
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, numvports, BL);
   CHK_ENTITY_TYPE (_obj, SUNSTUDY, numrows, BL);

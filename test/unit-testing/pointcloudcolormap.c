@@ -25,7 +25,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_MAX (_obj, POINTCLOUDCOLORMAP, class_version, BS, 3);
   CHK_ENTITY_UTF8TEXT (_obj, POINTCLOUDCOLORMAP, def_intensity_colorscheme);
   CHK_ENTITY_UTF8TEXT (_obj, POINTCLOUDCOLORMAP, def_elevation_colorscheme);
-  CHK_ENTITY_UTF8TEXT (_obj, POINTCLOUDCOLORMAP, def_classification_colorscheme);
+  CHK_ENTITY_UTF8TEXT (_obj, POINTCLOUDCOLORMAP,
+                       def_classification_colorscheme);
   CHK_ENTITY_TYPE (_obj, POINTCLOUDCOLORMAP, num_colorramps, BL);
   if (!dwg_dynapi_entity_value (_obj, "POINTCLOUDCOLORMAP", "colorramps",
                                 &colorramps, NULL))
@@ -50,8 +51,10 @@ api_process (dwg_object *obj)
             }
       }
 
-  CHK_ENTITY_TYPE (_obj, POINTCLOUDCOLORMAP, num_classification_colorramps, BL);
-  if (!dwg_dynapi_entity_value (_obj, "POINTCLOUDCOLORMAP", "classification_colorramps",
+  CHK_ENTITY_TYPE (_obj, POINTCLOUDCOLORMAP, num_classification_colorramps,
+                   BL);
+  if (!dwg_dynapi_entity_value (_obj, "POINTCLOUDCOLORMAP",
+                                "classification_colorramps",
                                 &classification_colorramps, NULL))
     fail ("POINTCLOUDCOLORMAP.classification_colorramps");
   else

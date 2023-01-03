@@ -11,11 +11,11 @@ api_process (dwg_object *obj)
   BITCODE_B trans_space_flag;
   BITCODE_RC rotated_type;
   Dwg_DIMASSOC_Ref *ref;
-  //BITCODE_BS j;
+  // BITCODE_BS j;
   BITCODE_BL num_intsectobj, num_xrefs;
   BITCODE_H *intsectobj, *xrefs;
-  //BITCODE_BL intsect_gsmarker;
-  //BITCODE_H intsectxrefobj;
+  // BITCODE_BL intsect_gsmarker;
+  // BITCODE_H intsectxrefobj;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_dimassoc *dimassoc = dwg_object_to_DIMASSOC (obj);
@@ -33,9 +33,10 @@ api_process (dwg_object *obj)
   for (int i = 0; i < 4; i++)
     {
       // 0 1 2 3 => 1 2 4 8. skip unset bits
-      if (!(associativity & (1<<i)))
+      if (!(associativity & (1 << i)))
         continue;
-      CHK_SUBCLASS_UTF8TEXT (ref[i], DIMASSOC_Ref, classname); // "AcDbOsnapPointRef"
+      CHK_SUBCLASS_UTF8TEXT (ref[i], DIMASSOC_Ref,
+                             classname); // "AcDbOsnapPointRef"
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, osnap_type, RC);
       CHK_SUBCLASS_MAX (ref[i], DIMASSOC_Ref, osnap_type, RC, 13);
       CHK_SUBCLASS_TYPE (ref[i], DIMASSOC_Ref, osnap_dist, BD);

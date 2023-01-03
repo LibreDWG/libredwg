@@ -25,7 +25,9 @@ api_process (dwg_object *obj)
   // AcDbBlockFlipAction
   for (i = 0; i < 3; i++)
     {
-      CHK_SUBCLASS_TYPE     (_obj->conn_pts[i], BLOCKACTION_connectionpts, code, BL);
-      CHK_SUBCLASS_UTF8TEXT (_obj->conn_pts[i], BLOCKACTION_connectionpts, name);
+      CHK_SUBCLASS_TYPE (_obj->conn_pts[i], BLOCKACTION_connectionpts, code,
+                         BL);
+      CHK_SUBCLASS_UTF8TEXT (_obj->conn_pts[i], BLOCKACTION_connectionpts,
+                             name);
     }
 }

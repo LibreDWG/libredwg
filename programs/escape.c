@@ -23,7 +23,7 @@
 #include "common.h"
 #include "escape.h"
 
-char * ATTRIBUTE_MALLOC
+char *ATTRIBUTE_MALLOC
 htmlescape (const char *restrict src, const int cp)
 {
   int len;
@@ -100,7 +100,7 @@ htmlescape (const char *restrict src, const int cp)
   return dest;
 }
 
-char * ATTRIBUTE_MALLOC
+char *ATTRIBUTE_MALLOC
 htmlwescape (BITCODE_TU wstr)
 {
   int len = 0;
@@ -127,14 +127,38 @@ htmlwescape (BITCODE_TU wstr)
         }
       switch (*wstr)
         {
-        case 34: strcat (d, "&quot;"); d += 6; break;
-        case 39: strcat (d, "&#39;"); d += 5; break;
-        case 38: strcat (d, "&amp;"); d += 5; break;
-        case 60: strcat (d, "&lt;"); d += 4; break;
-        case 62: strcat (d, "&gt;"); d += 4; break;
-        case 96: strcat (d, "&#96;"); d += 5; break;
-        case 123: strcat (d, "&#123;"); d += 6; break;
-        case 125: strcat (d, "&#125;"); d += 6; break;
+        case 34:
+          strcat (d, "&quot;");
+          d += 6;
+          break;
+        case 39:
+          strcat (d, "&#39;");
+          d += 5;
+          break;
+        case 38:
+          strcat (d, "&amp;");
+          d += 5;
+          break;
+        case 60:
+          strcat (d, "&lt;");
+          d += 4;
+          break;
+        case 62:
+          strcat (d, "&gt;");
+          d += 4;
+          break;
+        case 96:
+          strcat (d, "&#96;");
+          d += 5;
+          break;
+        case 123:
+          strcat (d, "&#123;");
+          d += 6;
+          break;
+        case 125:
+          strcat (d, "&#125;");
+          d += 6;
+          break;
         default:
           if (*wstr >= 127) // utf8 encodings
             {

@@ -21,7 +21,7 @@ api_process (dwg_object *obj)
   BITCODE_B plotflag;
   BITCODE_RC linewt;
   BITCODE_CMC color;
-  //int16_t  color_r11;     /* preR13, needs to be signed */
+  // int16_t  color_r11;     /* preR13, needs to be signed */
   BITCODE_H plotstyle;
   BITCODE_H material;
   BITCODE_H ltype;

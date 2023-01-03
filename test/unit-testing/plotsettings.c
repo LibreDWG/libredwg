@@ -66,12 +66,12 @@ api_process (dwg_object *obj)
   CHK_ENTITY_MAX (plt, PLOTSETTINGS, std_scale_type, BS, 32);
   CHK_ENTITY_TYPE (plt, PLOTSETTINGS, std_scale_factor, BD);
   CHK_ENTITY_2RD (plt, PLOTSETTINGS, paper_image_origin);
-  //2004+:
+  // 2004+:
   CHK_ENTITY_TYPE (plt, PLOTSETTINGS, shadeplot_type, BS);
   CHK_ENTITY_MAX (plt, PLOTSETTINGS, shadeplot_type, BS, 5);
   CHK_ENTITY_TYPE (plt, PLOTSETTINGS, shadeplot_reslevel, BS);
   CHK_ENTITY_MAX (plt, PLOTSETTINGS, shadeplot_reslevel, BS, 5);
   CHK_ENTITY_TYPE (plt, PLOTSETTINGS, shadeplot_customdpi, BS);
-  //2007+:
+  // 2007+:
   CHK_ENTITY_H (plt, PLOTSETTINGS, shadeplot);
 }

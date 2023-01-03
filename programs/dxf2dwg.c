@@ -35,9 +35,9 @@
 #include "suffix.inc"
 
 #ifdef __AFL_COMPILER
-#include "decode.h"
-#include "encode.h"
-#include "in_dxf.h"
+#  include "decode.h"
+#  include "encode.h"
+#  include "in_dxf.h"
 #endif
 
 static int help (void);
@@ -112,8 +112,9 @@ __asan_default_options (void)
 #endif
 
 #ifdef __AFL_COMPILER
-__AFL_FUZZ_INIT();
-int main (int argc, char *argv[])
+__AFL_FUZZ_INIT ();
+int
+main (int argc, char *argv[])
 {
   Dwg_Data dwg;
   Bit_Chain dat = { NULL, 0, 0, 0, 0 };
@@ -121,44 +122,47 @@ int main (int argc, char *argv[])
   FILE *fp;
   struct stat attrib;
 
-  __AFL_INIT();
-  //dat.opts = 3;
+  __AFL_INIT ();
+  // dat.opts = 3;
 
-  while (__AFL_LOOP(10000)) { // llvm_mode persistent, non-forking mode
-#if 1 // fastest mode via shared mem (10x faster)
-    dat.chain = __AFL_FUZZ_TESTCASE_BUF;
-    dat.size = __AFL_FUZZ_TESTCASE_LEN;
-    printf ("Fuzzing in_dxf + encode from shmem (%lu)\n", dat.size);
-#elif 0 // still 10x faster than the old file-forking fuzzer.
-    /* from stdin: */
-    dat.size = 0;
-    //dat.chain = NULL;
-    dat_read_stream (&dat, stdin);
-    printf ("Fuzzing in_dxf + encode from stdin (%lu)\n", dat.size);
-#else
-    /* else from file */
-    fp = fopen (argv[1], "rb");
-    if (!fp)
-      return 0;
-    dat.size = 0;
-    dat_read_file (&dat, fp, argv[1]);
-    fclose (fp);
-    printf ("Fuzzing in_dxf + encode from file (%lu)\n", dat.size);
-#endif
+  while (__AFL_LOOP (10000))
+    {   // llvm_mode persistent, non-forking mode
+#  if 1 // fastest mode via shared mem (10x faster)
+      dat.chain = __AFL_FUZZ_TESTCASE_BUF;
+      dat.size = __AFL_FUZZ_TESTCASE_LEN;
+      printf ("Fuzzing in_dxf + encode from shmem (%lu)\n", dat.size);
+#  elif 0 // still 10x faster than the old file-forking fuzzer.
+      /* from stdin: */
+      dat.size = 0;
+      // dat.chain = NULL;
+      dat_read_stream (&dat, stdin);
+      printf ("Fuzzing in_dxf + encode from stdin (%lu)\n", dat.size);
+#  else
+      /* else from file */
+      fp = fopen (argv[1], "rb");
+      if (!fp)
+        return 0;
+      dat.size = 0;
+      dat_read_file (&dat, fp, argv[1]);
+      fclose (fp);
+      printf ("Fuzzing in_dxf + encode from file (%lu)\n", dat.size);
+#  endif
 
-    if (dat.size < 100) continue;  // useful minimum input length
-    if (dwg_read_dxf (&dat, &dwg) <= DWG_ERR_CRITICAL) {
-      memset (&out_dat, 0, sizeof (out_dat));
-      bit_chain_set_version (&out_dat, &dat);
-      out_dat.version = R_2000;      
-      dwg_encode (&dwg, &out_dat);
-      free (out_dat.chain);
-      dwg_free (&dwg);
+      if (dat.size < 100)
+        continue; // useful minimum input length
+      if (dwg_read_dxf (&dat, &dwg) <= DWG_ERR_CRITICAL)
+        {
+          memset (&out_dat, 0, sizeof (out_dat));
+          bit_chain_set_version (&out_dat, &dat);
+          out_dat.version = R_2000;
+          dwg_encode (&dwg, &out_dat);
+          free (out_dat.chain);
+          dwg_free (&dwg);
+        }
     }
-  }
   dwg_free (&dwg);
 }
-#define main orig_main
+#  define main orig_main
 int orig_main (int argc, char *argv[]);
 #endif
 
@@ -181,8 +185,8 @@ main (int argc, char *argv[])
       = { { "verbose", 1, &opts, 1 }, // optional
           { "file", 1, 0, 'o' },      { "as", 1, 0, 'a' },
           { "overwrite", 0, 0, 'y' }, { "help", 0, 0, 0 },
-          { "force-free", 0, 0, 0 },
-          { "version", 0, 0, 0 },     { NULL, 0, NULL, 0 } };
+          { "force-free", 0, 0, 0 },  { "version", 0, 0, 0 },
+          { NULL, 0, NULL, 0 } };
 #endif
 
   if (argc < 2)
@@ -307,7 +311,7 @@ main (int argc, char *argv[])
 
       dwg.opts = opts;
       dwg.header.version = dwg_version;
-      //printf ("Warning: dxf2dwg is still experimental.\n");
+      // printf ("Warning: dxf2dwg is still experimental.\n");
       printf ("Reading DXF file %s\n", filename_in);
       error = dxf_read_file (filename_in, &dwg);
       if (error >= DWG_ERR_CRITICAL)
@@ -332,7 +336,8 @@ main (int argc, char *argv[])
       else
         {
           // FIXME: for now only R_13b1 - R_2000. later remove this line.
-          if (dwg.header.from_version < R_13b1 || dwg.header.from_version >= R_2004)
+          if (dwg.header.from_version < R_13b1
+              || dwg.header.from_version >= R_2004)
             dwg.header.version = dwg_version;
           if (dwg.header.from_version == R_INVALID)
             dwg.header.from_version = dwg.header.version;
@@ -367,12 +372,12 @@ main (int argc, char *argv[])
                     error = dwg_write_file (filename_out, &dwg);
                   }
                 else if (
-#ifdef _WIN32
-      strEQc (filename_out, "NUL")
-#else
-      strEQc (filename_out, "/dev/null")
-#endif
-                         )
+#  ifdef _WIN32
+                    strEQc (filename_out, "NUL")
+#  else
+                    strEQc (filename_out, "/dev/null")
+#  endif
+                )
                   {
                     error = dwg_write_file (filename_out, &dwg);
                   }
@@ -395,14 +400,14 @@ main (int argc, char *argv[])
         fprintf (stderr, "WRITE ERROR 0x%x %s\n", error, filename_out);
 
 #if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
-  {
-    char *asanenv = getenv("ASAN_OPTIONS");
-    if (!asanenv)
-      do_free = 1;
-    // detect_leaks is enabled by default. see if it's turned off
-    else if (strstr (asanenv, "detect_leaks=0") == NULL) /* not found */
-      do_free = 1;
-  }
+      {
+        char *asanenv = getenv ("ASAN_OPTIONS");
+        if (!asanenv)
+          do_free = 1;
+        // detect_leaks is enabled by default. see if it's turned off
+        else if (strstr (asanenv, "detect_leaks=0") == NULL) /* not found */
+          do_free = 1;
+      }
 #endif
       // forget about leaks. really huge DWG's need endlessly here.
       if (do_free

@@ -43,7 +43,8 @@ api_process (dwg_object *obj)
           CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, color, BL);
           CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, acis_index, BLd);
           CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, num_points, BL);
-          CHK_SUBCLASS_3DPOINTS (wires[i], 3DSOLID_wire, points, wires[i].num_points);
+          CHK_SUBCLASS_3DPOINTS (wires[i], 3DSOLID_wire, points,
+                                 wires[i].num_points);
           CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, transform_present, B);
           if (wires[i].transform_present)
             {
@@ -75,23 +76,29 @@ api_process (dwg_object *obj)
         {
           CHK_SUBCLASS_TYPE (silhouettes[i], 3DSOLID_silhouette, vp_id, BL);
           CHK_SUBCLASS_3RD (silhouettes[i], 3DSOLID_silhouette, vp_target);
-          CHK_SUBCLASS_3RD (silhouettes[i], 3DSOLID_silhouette, vp_dir_from_target);
+          CHK_SUBCLASS_3RD (silhouettes[i], 3DSOLID_silhouette,
+                            vp_dir_from_target);
           CHK_SUBCLASS_3RD (silhouettes[i], 3DSOLID_silhouette, vp_up_dir);
-          CHK_SUBCLASS_TYPE (silhouettes[i], 3DSOLID_silhouette, vp_perspective, B);
+          CHK_SUBCLASS_TYPE (silhouettes[i], 3DSOLID_silhouette,
+                             vp_perspective, B);
           CHK_SUBCLASS_TYPE (silhouettes[i], 3DSOLID_silhouette, has_wires, B);
           if (silhouettes[i].has_wires)
             {
               wires = silhouettes[i].wires;
-              CHK_SUBCLASS_TYPE (silhouettes[i], 3DSOLID_silhouette, num_wires, BL);
+              CHK_SUBCLASS_TYPE (silhouettes[i], 3DSOLID_silhouette, num_wires,
+                                 BL);
               for (unsigned j = 0; j < silhouettes[i].num_wires; j++)
                 {
                   CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, type, RC);
-                  CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, selection_marker, BLd);
+                  CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, selection_marker,
+                                     BLd);
                   CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, color, BL);
                   CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, acis_index, BLd);
                   CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, num_points, BL);
-                  CHK_SUBCLASS_3DPOINTS (wires[j], 3DSOLID_wire, points, wires[i].num_points);
-                  CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, transform_present, B);
+                  CHK_SUBCLASS_3DPOINTS (wires[j], 3DSOLID_wire, points,
+                                         wires[i].num_points);
+                  CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, transform_present,
+                                     B);
                   if (wires[j].transform_present)
                     {
                       CHK_SUBCLASS_3RD (wires[j], 3DSOLID_wire, axis_x);
@@ -99,8 +106,10 @@ api_process (dwg_object *obj)
                       CHK_SUBCLASS_3RD (wires[j], 3DSOLID_wire, axis_z);
                       CHK_SUBCLASS_3RD (wires[j], 3DSOLID_wire, translation);
                       CHK_SUBCLASS_3RD (wires[j], 3DSOLID_wire, scale);
-                      CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, has_rotation, B);
-                      CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, has_reflection, B);
+                      CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, has_rotation,
+                                         B);
+                      CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire,
+                                         has_reflection, B);
                       CHK_SUBCLASS_TYPE (wires[j], 3DSOLID_wire, has_shear, B);
                     }
                 }
@@ -116,16 +125,21 @@ api_process (dwg_object *obj)
   if (version > 1)
     {
       CHK_ENTITY_TYPE (body, BODY, num_materials, BL);
-      SINCE (R_2007) {
-        if (!dwg_dynapi_entity_value (body, "BODY", "materials", &materials, NULL))
+      SINCE (R_2007)
+      {
+        if (!dwg_dynapi_entity_value (body, "BODY", "materials", &materials,
+                                      NULL))
           fail ("BODY.materials");
         else
           {
             for (i = 0; i < num_materials; i++)
               {
-                CHK_SUBCLASS_TYPE (materials[i], 3DSOLID_material, array_index, BL);
-                CHK_SUBCLASS_TYPE (materials[i], 3DSOLID_material, mat_absref, BL);
-                CHK_SUBCLASS_H (materials[i], 3DSOLID_material, material_handle);
+                CHK_SUBCLASS_TYPE (materials[i], 3DSOLID_material, array_index,
+                                   BL);
+                CHK_SUBCLASS_TYPE (materials[i], 3DSOLID_material, mat_absref,
+                                   BL);
+                CHK_SUBCLASS_H (materials[i], 3DSOLID_material,
+                                material_handle);
               }
           }
       }
@@ -140,7 +154,5 @@ api_process (dwg_object *obj)
       CHK_ENTITY_TYPE (body, BODY, end_marker, BL);
     }
 
-  SINCE (R_2007) {
-    CHK_ENTITY_H (body, BODY, history_id);
-  }
+  SINCE (R_2007) { CHK_ENTITY_H (body, BODY, history_id); }
 }

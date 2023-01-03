@@ -22,12 +22,13 @@
 #include "bits.h"
 
 #ifdef IN_DXF_H
-#error in_dxf.h must be included after out_json.h because of FORMAT_BD
+#  error in_dxf.h must be included after out_json.h because of FORMAT_BD
 #endif
 
 EXPORT int dwg_write_json (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 EXPORT int dwg_write_geojson (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 
-char *json_cquote (char *restrict dest, const char *restrict src, const int len);
+char *json_cquote (char *restrict dest, const char *restrict src,
+                   const int len);
 
 #endif

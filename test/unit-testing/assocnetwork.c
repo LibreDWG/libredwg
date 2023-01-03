@@ -37,7 +37,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, action_index, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, max_assoc_dep_index, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, num_deps, BL);
-  for (unsigned i=0; i < num_deps; i++)
+  for (unsigned i = 0; i < num_deps; i++)
     {
       CHK_SUBCLASS_TYPE (_obj->deps[i], ASSOCACTION_Deps, is_owned, B);
       CHK_SUBCLASS_H (_obj->deps[i], ASSOCACTION_Deps, dep);
@@ -46,12 +46,12 @@ api_process (dwg_object *obj)
   CHK_ENTITY_HV (_obj, ASSOCNETWORK, owned_params, num_owned_params);
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, num_values, BL);
   CHK_VALUEPARAM (num_values, values);
-  
+
   // ASSOCNETWORK
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, network_version, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, network_action_index, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCNETWORK, num_actions, BL);
-  for (unsigned i=0; i < num_actions; i++)
+  for (unsigned i = 0; i < num_actions; i++)
     {
       CHK_SUBCLASS_TYPE (_obj->actions[i], ASSOCACTION_Deps, is_owned, B);
       CHK_SUBCLASS_H (_obj->actions[i], ASSOCACTION_Deps, dep);

@@ -15,7 +15,7 @@ api_process (dwg_object *obj)
   BITCODE_3BD extents_min;
   BITCODE_3BD extents_max;
   BITCODE_RLL numpoints;
-  BITCODE_T  ucs_name;
+  BITCODE_T ucs_name;
   BITCODE_3BD ucs_origin;
   BITCODE_3BD ucs_x_dir;
   BITCODE_3BD ucs_y_dir;
@@ -40,7 +40,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (_obj, POINTCLOUD, origin);
   CHK_ENTITY_UTF8TEXT (_obj, POINTCLOUD, saved_filename);
   CHK_ENTITY_TYPE (_obj, POINTCLOUD, num_source_files, BL);
-  if (!dwg_dynapi_entity_value (_obj, "POINTCLOUD", "source_files", &source_files, NULL))
+  if (!dwg_dynapi_entity_value (_obj, "POINTCLOUD", "source_files",
+                                &source_files, NULL))
     fail ("POINTCLOUD.source_files");
   else
     for (i = 0; i < num_source_files; i++)

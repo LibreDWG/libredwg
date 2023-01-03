@@ -31,10 +31,10 @@ api_process (dwg_object *obj)
   BITCODE_BL num_seeds;
   BITCODE_2RD *seeds;
   BITCODE_BL num_boundary_handles;
-  BITCODE_H* boundary_handles;
-  Dwg_HATCH_Color* colors;
-  Dwg_HATCH_Path* paths;
-  Dwg_HATCH_DefLine * deflines;
+  BITCODE_H *boundary_handles;
+  Dwg_HATCH_Color *colors;
+  Dwg_HATCH_Path *paths;
+  Dwg_HATCH_DefLine *deflines;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_ent_hatch *hatch = dwg_object_to_HATCH (obj);
@@ -70,9 +70,10 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (hatch, HATCH, has_derived, B);
   CHK_ENTITY_TYPE (hatch, HATCH, pixel_size, BD);
   if (hatch->pixel_size != 0.0 && !hatch->has_derived)
-    fail ("Invalid HATCH.pixel_size %f without HATCH.has_derived", hatch->pixel_size);
+    fail ("Invalid HATCH.pixel_size %f without HATCH.has_derived",
+          hatch->pixel_size);
   CHK_ENTITY_TYPE (hatch, HATCH, num_seeds, BL);
-  //CHK_ENTITY_TYPE (hatch, HATCH, num_boundary_handles, BL);
+  // CHK_ENTITY_TYPE (hatch, HATCH, num_boundary_handles, BL);
 
   if (!dwg_dynapi_entity_value (hatch, "HATCH", "colors", &colors, NULL))
     fail ("HATCH.colors");
@@ -106,43 +107,67 @@ api_process (dwg_object *obj)
               {
                 for (BITCODE_BL j = 0; j < paths[i].num_segs_or_paths; j++)
                   {
-                    CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, curve_type, RC);
+                    CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg,
+                                       curve_type, RC);
                     if (paths[i].segs[j].curve_type > 4)
-                      fail ("Invalid HATCH.paths[%d].segs[%d].curve_type %d > 4",
-                            i, j, paths[i].segs[j].curve_type);
+                      fail (
+                          "Invalid HATCH.paths[%d].segs[%d].curve_type %d > 4",
+                          i, j, paths[i].segs[j].curve_type);
                     if (paths[i].segs[j].curve_type == 1)
                       {
-                        CHK_SUBCLASS_2RD (paths[i].segs[j], HATCH_PathSeg, first_endpoint);
-                        CHK_SUBCLASS_2RD (paths[i].segs[j], HATCH_PathSeg, second_endpoint);
+                        CHK_SUBCLASS_2RD (paths[i].segs[j], HATCH_PathSeg,
+                                          first_endpoint);
+                        CHK_SUBCLASS_2RD (paths[i].segs[j], HATCH_PathSeg,
+                                          second_endpoint);
                       }
                     else if (paths[i].segs[j].curve_type == 2)
                       { /* CIRCULAR ARC */
-                        CHK_SUBCLASS_2RD (paths[i].segs[j], HATCH_PathSeg, center);
-                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, radius, BD);
-                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, start_angle, BD);
-                        //CHK_ENTITY_MAX (hatch, HATCH_PathSeg, start_angle, BD, MAX_ANGLE);
-                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, end_angle, BD);
-                        //CHK_ENTITY_MAX (hatch, HATCH_PathSeg, end_angle, BD, MAX_ANGLE);
-                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, is_ccw, B);
+                        CHK_SUBCLASS_2RD (paths[i].segs[j], HATCH_PathSeg,
+                                          center);
+                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg,
+                                           radius, BD);
+                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg,
+                                           start_angle, BD);
+                        // CHK_ENTITY_MAX (hatch, HATCH_PathSeg, start_angle,
+                        // BD, MAX_ANGLE);
+                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg,
+                                           end_angle, BD);
+                        // CHK_ENTITY_MAX (hatch, HATCH_PathSeg, end_angle, BD,
+                        // MAX_ANGLE);
+                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg,
+                                           is_ccw, B);
                       }
                     else if (paths[i].segs[j].curve_type == 3)
                       { /* ELLIPTICAL ARC */
-                        CHK_SUBCLASS_2RD (paths[i].segs[j], HATCH_PathSeg, center);
-                        CHK_SUBCLASS_2RD (paths[i].segs[j], HATCH_PathSeg, endpoint);
-                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, minor_major_ratio, BD);
-                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, start_angle, BD);
-                        //CHK_ENTITY_MAX (hatch, HATCH_PathSeg, start_angle, BD, MAX_ANGLE);
-                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, end_angle, BD);
-                        //CHK_ENTITY_MAX (hatch, HATCH_PathSeg, end_angle, BD, MAX_ANGLE);
-                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, is_ccw, B);
+                        CHK_SUBCLASS_2RD (paths[i].segs[j], HATCH_PathSeg,
+                                          center);
+                        CHK_SUBCLASS_2RD (paths[i].segs[j], HATCH_PathSeg,
+                                          endpoint);
+                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg,
+                                           minor_major_ratio, BD);
+                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg,
+                                           start_angle, BD);
+                        // CHK_ENTITY_MAX (hatch, HATCH_PathSeg, start_angle,
+                        // BD, MAX_ANGLE);
+                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg,
+                                           end_angle, BD);
+                        // CHK_ENTITY_MAX (hatch, HATCH_PathSeg, end_angle, BD,
+                        // MAX_ANGLE);
+                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg,
+                                           is_ccw, B);
                       }
                     else if (paths[i].segs[j].curve_type == 4)
                       { /* SPLINE */
-                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, degree, BL);
-                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, is_rational, B);
-                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, is_periodic, B);
-                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, num_knots, BL);
-                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg, num_control_points, BL);
+                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg,
+                                           degree, BL);
+                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg,
+                                           is_rational, B);
+                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg,
+                                           is_periodic, B);
+                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg,
+                                           num_knots, BL);
+                        CHK_SUBCLASS_TYPE (paths[i].segs[j], HATCH_PathSeg,
+                                           num_control_points, BL);
                         // knots: BD vector
                         // control_points: HATCH_ControlPoint
                       }
@@ -152,13 +177,18 @@ api_process (dwg_object *obj)
               {
                 CHK_SUBCLASS_TYPE (paths[i], HATCH_Path, bulges_present, B);
                 CHK_SUBCLASS_TYPE (paths[i], HATCH_Path, closed, B);
-                CHK_SUBCLASS_TYPE (paths[i], HATCH_Path, num_segs_or_paths, BL);
+                CHK_SUBCLASS_TYPE (paths[i], HATCH_Path, num_segs_or_paths,
+                                   BL);
                 for (BITCODE_BL j = 0; j < paths[i].num_segs_or_paths; j++)
                   {
-                    CHK_SUBCLASS_2RD (paths[i].polyline_paths[j], HATCH_PolylinePath, point);
-                    CHK_SUBCLASS_TYPE (paths[i].polyline_paths[j], HATCH_PolylinePath, bulge, BD);
-                    if (paths[i].polyline_paths[j].bulge != 0.0 && paths[i].bulges_present)
-                      fail ("Illegal HATCH_PolylinePath.bulge %f without paths[i].bulges_present",
+                    CHK_SUBCLASS_2RD (paths[i].polyline_paths[j],
+                                      HATCH_PolylinePath, point);
+                    CHK_SUBCLASS_TYPE (paths[i].polyline_paths[j],
+                                       HATCH_PolylinePath, bulge, BD);
+                    if (paths[i].polyline_paths[j].bulge != 0.0
+                        && paths[i].bulges_present)
+                      fail ("Illegal HATCH_PolylinePath.bulge %f without "
+                            "paths[i].bulges_present",
                             paths[i].polyline_paths[j].bulge);
                   }
               }
@@ -186,7 +216,8 @@ api_process (dwg_object *obj)
               CHK_SUBCLASS_TYPE (deflines[i], HATCH_DefLine, num_dashes, BS);
               for (BITCODE_BS j = 0; j < deflines[i].num_dashes; j++)
                 {
-                  ok ("HATCH.deflines[%d].dashes[%d]: %f", i, j, deflines[i].dashes[j]);
+                  ok ("HATCH.deflines[%d].dashes[%d]: %f", i, j,
+                      deflines[i].dashes[j]);
                 }
             }
         }
@@ -208,16 +239,17 @@ api_process (dwg_object *obj)
     fail ("HATCH.seeds with !num_seeds");
 
   /*
-  if (!dwg_dynapi_entity_value (hatch, "HATCH", "boundary_handles", &boundary_handles, NULL))
-    fail ("HATCH.boundary_handles");
-  if (num_boundary_handles)
+  if (!dwg_dynapi_entity_value (hatch, "HATCH", "boundary_handles",
+  &boundary_handles, NULL)) fail ("HATCH.boundary_handles"); if
+  (num_boundary_handles)
     {
       if (!boundary_handles)
         fail ("HATCH.boundary_handles");
       else
         for (i = 0; i < num_boundary_handles; i++)
           {
-            ok ("HATCH.boundary_handles[%d]: " FORMAT_REF, i, ARGS_REF (boundary_handles[i]));
+            ok ("HATCH.boundary_handles[%d]: " FORMAT_REF, i, ARGS_REF
+  (boundary_handles[i]));
           }
     }
   else if (boundary_handles)

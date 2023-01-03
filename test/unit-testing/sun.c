@@ -1,4 +1,4 @@
-//unstable
+// unstable
 #define DWG_TYPE DWG_TYPE_SUN
 #include "common.c"
 
@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
   BITCODE_BD intensity;
   BITCODE_BL julian_day;
   BITCODE_BL msecs;
-  BITCODE_B  is_dst;
+  BITCODE_B is_dst;
   BITCODE_B has_shadow;
   BITCODE_BL shadow_type;
   BITCODE_BS shadow_mapsize;

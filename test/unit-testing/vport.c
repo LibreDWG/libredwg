@@ -71,9 +71,11 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, VPORT, is_xref_dep, B);
   CHK_ENTITY_H (_obj, VPORT, xref);
 
-  CHK_ENTITY_TYPE (_obj, VPORT, VIEWSIZE, BD);  // really the view height
-  CHK_ENTITY_TYPE (_obj, VPORT, view_width, BD); // in DWG r13+, needed to calc. aspect_ratio
-  CHK_ENTITY_TYPE (_obj, VPORT, aspect_ratio, BD); // DXF 41 = view_width / VIEWSIZE
+  CHK_ENTITY_TYPE (_obj, VPORT, VIEWSIZE, BD); // really the view height
+  CHK_ENTITY_TYPE (_obj, VPORT, view_width,
+                   BD); // in DWG r13+, needed to calc. aspect_ratio
+  CHK_ENTITY_TYPE (_obj, VPORT, aspect_ratio,
+                   BD); // DXF 41 = view_width / VIEWSIZE
   CHK_ENTITY_2RD (_obj, VPORT, VIEWCTR);
   CHK_ENTITY_3RD (_obj, VPORT, view_target);
   CHK_ENTITY_3RD (_obj, VPORT, VIEWDIR);
@@ -95,7 +97,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_2RD (_obj, VPORT, lower_left);
   CHK_ENTITY_2RD (_obj, VPORT, upper_right);
   CHK_ENTITY_TYPE (_obj, VPORT, UCSFOLLOW, B);
-  CHK_ENTITY_TYPE (_obj, VPORT, circle_zoom, BS); /* circle sides: nr of tesselations */
+  CHK_ENTITY_TYPE (_obj, VPORT, circle_zoom,
+                   BS); /* circle sides: nr of tesselations */
   CHK_ENTITY_TYPE (_obj, VPORT, FASTZOOM, B);
   CHK_ENTITY_TYPE (_obj, VPORT, UCSICON, RC);
   CHK_ENTITY_TYPE (_obj, VPORT, GRIDMODE, B);

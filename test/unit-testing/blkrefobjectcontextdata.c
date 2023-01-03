@@ -18,7 +18,8 @@ api_process (dwg_object *obj)
   BITCODE_3BD scale_factor;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  dwg_obj_blkrefobjectcontextdata *_obj = dwg_object_to_BLKREFOBJECTCONTEXTDATA (obj);
+  dwg_obj_blkrefobjectcontextdata *_obj
+      = dwg_object_to_BLKREFOBJECTCONTEXTDATA (obj);
 
   CHK_ENTITY_TYPE (_obj, BLKREFOBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, BLKREFOBJECTCONTEXTDATA, is_default, B);

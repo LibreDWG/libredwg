@@ -36,14 +36,14 @@ int g_all;
 
 void object_alias (char *restrict name);
 void entity_alias (char *restrict name);
-ATTRIBUTE_MALLOC char* dwg_dynapi_subclass_name (const char *restrict type);
+ATTRIBUTE_MALLOC char *dwg_dynapi_subclass_name (const char *restrict type);
 int dwg_dynapi_subclass_size (const char *restrict name);
 
 #include "../../examples/unknown.h"
 
 static struct _unknown_dxf unknown_dxf[] = {
-  // see log_unknown_dxf.pl
-  #include "../../examples/alldxf_0.inc"
+// see log_unknown_dxf.pl
+#include "../../examples/alldxf_0.inc"
   { NULL, NULL, 0, "", 0, 0, 0, 0, 0, 0, 0, NULL }
 };
 
@@ -79,15 +79,15 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
                 ok ("%s[%d].%s: %s", fieldname, index, key, f->value);
             }
           else if (field.type)
-            fail ("%s[%d].%s: %d <=> \"%s\" [%s]", fieldname, index, key, (int)color.index,
-                  f->value, field.type);
+            fail ("%s[%d].%s: %d <=> \"%s\" [%s]", fieldname, index, key,
+                  (int)color.index, f->value, field.type);
           else
             {
               if (g_counter > g_max_count)
                 pass ();
               else
-                ok ("%s[%d].%s: %d <=> \"%s\" [CMC] (TODO)", fieldname, index, key,
-                    (int)color.index, f->value);
+                ok ("%s[%d].%s: %d <=> \"%s\" [CMC] (TODO)", fieldname, index,
+                    key, (int)color.index, f->value);
             }
         }
       return;
@@ -97,7 +97,8 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
     goto DWG_VT_POINT3D;
   if (vtype == DWG_VT_INT8 && fp->size == 1 && strEQc (fp->type, "B"))
     goto DWG_VT_BOOL;
-  if ((vtype == DWG_VT_BOOL || vtype == DWG_VT_INT16) && fp->size == 1 && strEQc (fp->type, "RC"))
+  if ((vtype == DWG_VT_BOOL || vtype == DWG_VT_INT16) && fp->size == 1
+      && strEQc (fp->type, "RC"))
     goto DWG_VT_INT8;
   if (vtype == DWG_VT_INT8 && fp->size == 2)
     goto DWG_VT_INT16;
@@ -114,12 +115,14 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
         if (dwg_dynapi_subclass_value (ptr, subclass, key, &value, &field))
           {
             // convert to UTF8
-            if (value && dwg_version >= R_2007 && strNE (field.type, "TF")) /* not TF */
+            if (value && dwg_version >= R_2007
+                && strNE (field.type, "TF")) /* not TF */
               {
                 value = bit_convert_TU ((BITCODE_TU)value);
                 if (!value) // some conversion error, invalid wchar (nyi)
                   {
-                    fail ("%s[%d].%s: %s [STRING %s]", fieldname, index, key, value, field.type);
+                    fail ("%s[%d].%s: %s [STRING %s]", fieldname, index, key,
+                          value, field.type);
                   }
                 else
                   {
@@ -134,7 +137,8 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
                   ok ("%s[%d].%s: %s", fieldname, index, key, value);
               }
             else
-              fail ("%s[%d].%s: %s [STRING %s]", fieldname, index, key, value, field.type);
+              fail ("%s[%d].%s: %s [STRING %s]", fieldname, index, key, value,
+                    field.type);
           }
         if (isnew)
           free (value);
@@ -175,12 +179,12 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
                 if (g_counter > g_max_count)
                   pass ();
                 else
-                  ok ("%s[%d].%s: %f [%s %d]", fieldname, index, key, ptv, field.type,
-                      f->code);
+                  ok ("%s[%d].%s: %f [%s %d]", fieldname, index, key, ptv,
+                      field.type, f->code);
               }
             else
-              fail ("%s[%d].%s: %f <=> \"%s\" [%s %d]", fieldname, index, key, ptv, f->value,
-                    field.type, f->code);
+              fail ("%s[%d].%s: %f <=> \"%s\" [%s %d]", fieldname, index, key,
+                    ptv, f->value, field.type, f->code);
           }
       }
       break;
@@ -200,8 +204,8 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
                   ok ("%s[%d].%s: %f", fieldname, index, key, value);
               }
             else
-              fail ("%s[%d].%s: %f <=> \"%s\" [REAL %s]", fieldname, index, key, value,
-                    f->value, field.type);
+              fail ("%s[%d].%s: %f <=> \"%s\" [REAL %s]", fieldname, index,
+                    key, value, f->value, field.type);
           }
       }
       break;
@@ -220,8 +224,8 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
                   ok ("%s[%d].%s: %d", fieldname, index, key, value);
               }
             else
-              fail ("%s[%d].%s: %d <=> \"%s\" [BOOL %s]", fieldname, index, key, value,
-                    f->value, field.type);
+              fail ("%s[%d].%s: %d <=> \"%s\" [BOOL %s]", fieldname, index,
+                    key, value, f->value, field.type);
           }
       }
       break;
@@ -240,15 +244,15 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
                   ok ("%s[%d].%s: %d", fieldname, index, key, value);
               }
             else if (field.type)
-              fail ("%s[%d].%s: %d <=> \"%s\" [INT8 %s]", fieldname, index, key, value,
-                    f->value, field.type);
+              fail ("%s[%d].%s: %d <=> \"%s\" [INT8 %s]", fieldname, index,
+                    key, value, f->value, field.type);
             else
               {
                 if (g_counter > g_max_count)
                   pass ();
                 else
-                  ok ("%s[%d].%s: %d <=> \"%s\" [INT8] (TODO)", fieldname, index, key, value,
-                      f->value);
+                  ok ("%s[%d].%s: %d <=> \"%s\" [INT8] (TODO)", fieldname,
+                      index, key, value, f->value);
               }
           }
       }
@@ -268,15 +272,15 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
                   ok ("%s[%d].%s: %d", fieldname, index, key, (int)value);
               }
             else if (field.type)
-              fail ("%s[%d].%s: %d <=> \"%s\" [INT16 %s]", fieldname, index, key, (int)value,
-                    f->value, field.type);
+              fail ("%s[%d].%s: %d <=> \"%s\" [INT16 %s]", fieldname, index,
+                    key, (int)value, f->value, field.type);
             else
               {
                 if (g_counter > g_max_count)
                   pass ();
                 else
-                  ok ("%s[%d].%s: %d <=> \"%s\" [INT16] (TODO)", fieldname, index, key,
-                      (int)value, f->value);
+                  ok ("%s[%d].%s: %d <=> \"%s\" [INT16] (TODO)", fieldname,
+                      index, key, (int)value, f->value);
               }
           }
       }
@@ -294,7 +298,8 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
                 if (g_counter > g_max_count)
                   pass ();
                 else
-                  ok ("%s[%d].%s: 0x%x", fieldname, index, key, (unsigned)value);
+                  ok ("%s[%d].%s: 0x%x", fieldname, index, key,
+                      (unsigned)value);
               }
             else if (i == value)
               {
@@ -304,15 +309,15 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
                   ok ("%s[%d].%s: %u", fieldname, index, key, (unsigned)value);
               }
             else if (field.type)
-              fail ("%s[%d].%s: %u <=> \"%s\" [INT32 %s]", fieldname, index, key,
-                    (unsigned)value, f->value, field.type);
+              fail ("%s[%d].%s: %u <=> \"%s\" [INT32 %s]", fieldname, index,
+                    key, (unsigned)value, f->value, field.type);
             else
               {
                 if (g_counter > g_max_count)
                   pass ();
                 else
-                  ok ("%s[%d].%s: %u <=> \"%s\" [INT32] (TODO)", fieldname, index,
-                      key, (unsigned)value, f->value);
+                  ok ("%s[%d].%s: %u <=> \"%s\" [INT32] (TODO)", fieldname,
+                      index, key, (unsigned)value, f->value);
               }
           }
       }
@@ -332,15 +337,15 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
                   ok ("%s[%d].%s: %ld", fieldname, index, key, (long)value);
               }
             else if (field.type)
-              fail ("%s[%d].%s: %ld <=> \"%s\" [INT64]", fieldname, index, key, (long)value,
-                    f->value);
+              fail ("%s[%d].%s: %ld <=> \"%s\" [INT64]", fieldname, index, key,
+                    (long)value, f->value);
             else
               {
                 if (g_counter > g_max_count)
                   pass ();
                 else
-                  ok ("%s[%d].%s: %ld <=> \"%s\" [INT64] (TODO)", fieldname, index, key,
-                      (long)value, f->value);
+                  ok ("%s[%d].%s: %ld <=> \"%s\" [INT64] (TODO)", fieldname,
+                      index, key, (long)value, f->value);
               }
           }
       }
@@ -362,8 +367,8 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
                   ok ("%s[%d].%s: %s", fieldname, index, key, f->value);
               }
             else
-              fail ("%s[%d].%s: %lX <=> \"%s\" [H]", fieldname, index, key,
-                    l, f->value);
+              fail ("%s[%d].%s: %lX <=> \"%s\" [H]", fieldname, index, key, l,
+                    f->value);
           }
       }
       break;
@@ -374,7 +379,8 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
     }
 }
 
-static int DIMASSOC_index (const Dwg_Object *restrict obj, int sub_i)
+static int
+DIMASSOC_index (const Dwg_Object *restrict obj, int sub_i)
 {
   // check associativity bitmask for the index
   Dwg_Object_DIMASSOC *_obj = obj->tio.object->tio.DIMASSOC;
@@ -385,12 +391,13 @@ static int DIMASSOC_index (const Dwg_Object *restrict obj, int sub_i)
 
 static int
 test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
-             const struct _unknown_dxf *restrict dxf, const char *restrict name)
+             const struct _unknown_dxf *restrict dxf,
+             const char *restrict name)
 {
   int isnew;
   const struct _unknown_field *f = dxf->fields;
   int sub_i = 0;
-  char firstkey [80];
+  char firstkey[80];
 
   *firstkey = '\0';
   g_counter++;
@@ -424,7 +431,7 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
             {
               if (strEQc (name, "DIMASSOC"))
                 {
-                  sub_i = DIMASSOC_index (obj, sub_i+1);
+                  sub_i = DIMASSOC_index (obj, sub_i + 1);
                   if (sub_i > 3)
                     break;
                 }
@@ -458,12 +465,13 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
             {
               // ptr = ref[i].key
               int subsize = sub_i ? dwg_dynapi_subclass_size (subclass) : 0;
-              ptr = *(char**)((char*)obj->tio.object->tio.APPID + fp1->offset); // deref
-              ptr += (sub_i * subsize); // index offset
+              ptr = *(char **)((char *)obj->tio.object->tio.APPID
+                               + fp1->offset); // deref
+              ptr += (sub_i * subsize);        // index offset
             }
           else
             { // embedded. no deref, and also no index offset. ptr = &ref.key
-              ptr = &((char*)obj->tio.object->tio.APPID)[fp1->offset];
+              ptr = &((char *)obj->tio.object->tio.APPID)[fp1->offset];
             }
           if (ptr)
             test_subclass (dwg, ptr, f, fp, subclass, subf, key, sub_i);
@@ -471,9 +479,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           free (subf);
           continue;
         }
-      else
-        if (!(fp = dwg_dynapi_entity_field (name, f->name)))
-          continue;
+      else if (!(fp = dwg_dynapi_entity_field (name, f->name)))
+        continue;
       if (strEQc (fp->type, "CMC"))
         {
           BITCODE_CMC color;
@@ -541,7 +548,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           }
           break;
         case DWG_VT_POINT3D:
-        DWG_VT_POINT3D: {
+        DWG_VT_POINT3D:
+          {
             BITCODE_3BD pt;
             if (dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
                                          f->name, &pt, &field))
@@ -607,7 +615,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           }
           break;
         case DWG_VT_BOOL:
-        DWG_VT_BOOL: {
+        DWG_VT_BOOL:
+          {
             BITCODE_B value;
             if (dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
                                          f->name, &value, &field))
@@ -627,7 +636,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           }
           break;
         case DWG_VT_INT8:
-        DWG_VT_INT8: {
+        DWG_VT_INT8:
+          {
             BITCODE_RC value;
             if (dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
                                          f->name, &value, &field))
@@ -655,7 +665,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           }
           break;
         case DWG_VT_INT16:
-        DWG_VT_INT16: {
+        DWG_VT_INT16:
+          {
             BITCODE_BS value;
             if (dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
                                          f->name, &value, &field))
@@ -683,7 +694,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           }
           break;
         case DWG_VT_INT32:
-        DWG_VT_INT32: {
+        DWG_VT_INT32:
+          {
             BITCODE_BL value;
             if (dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
                                          f->name, &value, &field))
@@ -719,7 +731,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
           }
           break;
         case DWG_VT_INT64:
-        DWG_VT_INT64: {
+        DWG_VT_INT64:
+          {
             BITCODE_RLL value;
             if (dwg_dynapi_entity_value (obj->tio.object->tio.APPID, name,
                                          f->name, &value, &field))
@@ -764,8 +777,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj,
                       ok ("%s.%s: %s", name, f->name, f->value);
                   }
                 else
-                  fail ("%s.%s: %lX <=> \"%s\" [H %d]", name, f->name,
-                        l, f->value, field.dxf);
+                  fail ("%s.%s: %lX <=> \"%s\" [H %d]", name, f->name, l,
+                        f->value, field.dxf);
               }
           }
           break;
@@ -793,7 +806,7 @@ test_dxf (const struct _unknown_dxf *dxf, const char *restrict name,
   if (trace)
     tracelevel = atoi (trace);
 
-  loglevel = is_make_silent() ? 0 : MAX (tracelevel, 2);
+  loglevel = is_make_silent () ? 0 : MAX (tracelevel, 2);
   LOG_TRACE ("%s %X %s\n", dxf->name, dxf->handle, dwgfile);
   num = passed = failed = 0;
 
@@ -847,7 +860,7 @@ main (int argc, char *argv[])
   #include "../../examples/alldxf_2.inc"
   // clang-format on
 
-  docker = getenv("DOCKER");
+  docker = getenv ("DOCKER");
   if (docker && strNE (docker, "0"))
     is_docker = 1;
   g_max_count = MAX_COUNTER;
@@ -884,8 +897,8 @@ main (int argc, char *argv[])
       int len = strlen (dxffile);
       char *dwgfile = strdup (dxffile);
       char *s = strrchr (dwgfile, '.');
-      *(s+2) = 'w';
-      *(s+3) = 'g';
+      *(s + 2) = 'w';
+      *(s + 3) = 'g';
 
       // display ok values only for the first 6 object types per file
       if (strNE (name, dxf->name) && strNE (olddxf, dxf->dxf))
@@ -936,7 +949,8 @@ main (int argc, char *argv[])
           char path[80];
           char *top_srcdir = getenv ("top_srcdir");
           // fixup wrong alldxf_0.inc paths
-          if (len > 3 && dwgfile[0] == '.' && dwgfile[1] == '.' && dwgfile[2] == '/')
+          if (len > 3 && dwgfile[0] == '.' && dwgfile[1] == '.'
+              && dwgfile[2] == '/')
             memmove (dwgfile, &dwgfile[3], len - 2); // include the final \0
           if (top_srcdir)
             {

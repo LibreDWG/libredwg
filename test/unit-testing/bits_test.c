@@ -151,7 +151,8 @@ bit_read_4BITS_tests (void)
   if (result == 0xF)
     pass ();
   else
-    fail ("bit_read_4BITS 0x%X != 0xF dat:%x", (unsigned)result, bitchain.chain[0]);
+    fail ("bit_read_4BITS 0x%X != 0xF dat:%x", (unsigned)result,
+          bitchain.chain[0]);
   bitfree (&bitchain);
 
 #define test_4bits(s, x)                                                      \
@@ -329,7 +330,7 @@ main (int argc, char const *argv[])
   unsigned char sentinel[]
       = { 0xCF, 0x7B, 0x1F, 0x23, 0xFD, 0xDE, 0x38, 0xA9,
           0x5F, 0x7C, 0x68, 0xB8, 0x4E, 0x6D, 0x33, 0x5F };
-  loglevel = is_make_silent() ? 0 : 3;
+  loglevel = is_make_silent () ? 0 : 3;
 
   bit_read_B_tests ();
   bit_write_B_tests ();
@@ -531,39 +532,40 @@ main (int argc, char const *argv[])
   else
     fail ("bit_read_BT %f", dbl);
 
-  // mingw-w64 gcc-9.2.0 miscompilation in bit_read_H with val[i]: (%rbx) being dat+1
+    // mingw-w64 gcc-9.2.0 miscompilation in bit_read_H with val[i]: (%rbx)
+    // being dat+1
 #if defined(__MINGW64_VERSION_MAJOR) && defined(__GNUC__) && __GNUC__ >= 9
   if (0)
 #endif
-  {
-    int i;
-    Dwg_Handle handles[]
-        = { { 4, 1, 5 },  { 12, 1, 11 }, { 4, 1, 12 }, { 3, 0, 0 },
-            { 5, 0, 0 },  { 2, 1, 24 },  { 0, 1, 1 },  { 2, 2, 522 },
-            { 5, 1, 94 }, { 2, 1, 100 } };
-    Dwg_Handle handle;
-    pos = bit_position (&bitchain);
-    for (i = 0; i < 10; i++)
-      {
-        unsigned long byte = 63 + handles[i].size;
-        bit_write_H (&bitchain, &handles[i]);
-        if (bitchain.byte == byte && bitchain.bit == 4)
-          pass ();
-        else
-          fail ("bit_write_H (" FORMAT_H ") @%lu.%d", ARGS_H (handles[i]),
-                bitchain.byte, bitchain.bit);
+    {
+      int i;
+      Dwg_Handle handles[]
+          = { { 4, 1, 5 },  { 12, 1, 11 }, { 4, 1, 12 }, { 3, 0, 0 },
+              { 5, 0, 0 },  { 2, 1, 24 },  { 0, 1, 1 },  { 2, 2, 522 },
+              { 5, 1, 94 }, { 2, 1, 100 } };
+      Dwg_Handle handle;
+      pos = bit_position (&bitchain);
+      for (i = 0; i < 10; i++)
+        {
+          unsigned long byte = 63 + handles[i].size;
+          bit_write_H (&bitchain, &handles[i]);
+          if (bitchain.byte == byte && bitchain.bit == 4)
+            pass ();
+          else
+            fail ("bit_write_H (" FORMAT_H ") @%lu.%d", ARGS_H (handles[i]),
+                  bitchain.byte, bitchain.bit);
 
-        bit_set_position (&bitchain, pos);
-        bit_read_H (&bitchain, &handle);
-        if (handle.code == handles[i].code && handle.size == handles[i].size
-            && handle.value == handles[i].value)
-          pass ();
-        else
-          fail ("bit_read_H (" FORMAT_H ")", ARGS_H (handle));
+          bit_set_position (&bitchain, pos);
+          bit_read_H (&bitchain, &handle);
+          if (handle.code == handles[i].code && handle.size == handles[i].size
+              && handle.value == handles[i].value)
+            pass ();
+          else
+            fail ("bit_read_H (" FORMAT_H ")", ARGS_H (handle));
 
-        bit_set_position (&bitchain, pos);
-      }
-  }
+          bit_set_position (&bitchain, pos);
+        }
+    }
 #define _CRC 0x6024
   bit_advance_position (&bitchain, -2L);
   {
@@ -609,17 +611,17 @@ main (int argc, char const *argv[])
   bit_set_position (&bitchain, pos);
   free (str);
   for (int i = 0; i < 6; i++)
-    bit_write_B (&bitchain, 0); // padding for the T BS, to have aligned strings at 67
+    bit_write_B (&bitchain,
+                 0); // padding for the T BS, to have aligned strings at 67
   pos = bit_position (&bitchain); // 526
 
   {
     BITCODE_T wstr;
-    const uint16_t exp[] = {'T', 'e', 'i', 'g', 'h', 'a', 0x2122, 0};
-    bitchain.version = R_2007; // @65.6
+    const uint16_t exp[] = { 'T', 'e', 'i', 'g', 'h', 'a', 0x2122, 0 };
+    bitchain.version = R_2007;                         // @65.6
     bit_write_T (&bitchain, (char *)"Teigha\\U+2122"); // convert to unicode
-    if (bitchain.byte == 83 && bitchain.bit == 0 &&    // containing the ending 0L
-        bitchain.chain[79] == 0x22 &&
-        bitchain.chain[80] == 0x21)
+    if (bitchain.byte == 83 && bitchain.bit == 0 && // containing the ending 0L
+        bitchain.chain[79] == 0x22 && bitchain.chain[80] == 0x21)
       pass ();
     else
       fail ("bit_write_T => TU @%ld.%d", bitchain.byte, bitchain.bit);
@@ -635,7 +637,7 @@ main (int argc, char const *argv[])
     bit_set_position (&bitchain, pos);
     free (wstr);
 
-    bit_write_T (&bitchain, (char*)exp); // convert to ASCII via embed
+    bit_write_T (&bitchain, (char *)exp); // convert to ASCII via embed
     if (bitchain.byte == 81 && bitchain.bit == 0)
       pass ();
     else
@@ -649,7 +651,8 @@ main (int argc, char const *argv[])
     if (str && !strcmp (str, "Teigha\\U+2122"))
       pass ();
     else
-      fail ("bit_read_T => TV \"%s\" @%ld.%d", str, bitchain.byte, bitchain.bit);
+      fail ("bit_read_T => TV \"%s\" @%ld.%d", str, bitchain.byte,
+            bitchain.bit);
     bitchain.from_version = bitchain.version = R_2004;
     free (str);
   }
@@ -718,8 +721,8 @@ main (int argc, char const *argv[])
     bit_read_CMC (&bitchain, &bitchain, &color);
 
     // index is fixed up for dxf
-    if (color.rgb == 0xc2ff00ff && color.method == 0xc2
-        && color.flag == 3 && !strcmp (color.name, "Some color"))
+    if (color.rgb == 0xc2ff00ff && color.method == 0xc2 && color.flag == 3
+        && !strcmp (color.name, "Some color"))
       pass ();
     else
       fail ("bit_read_CMC (%d,%x,%d) %s", color.index, color.rgb, color.flag,

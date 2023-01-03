@@ -52,7 +52,8 @@ static BITCODE_BL rcount1, rcount2;
   LOG_TRACE (#nam ": " FORMAT_##type " [" #type " " #dxf "]\n",               \
              (BITCODE_##type)_obj->nam)
 #define SUB_FIELD(o, nam, type, dxf) FIELDG (o.nam, type, dxf)
-#define SUB_FIELD_CAST(o, nam, type, cast, dxf) FIELD_G_TRACE (o.nam, cast, dxf)
+#define SUB_FIELD_CAST(o, nam, type, cast, dxf)                               \
+  FIELD_G_TRACE (o.nam, cast, dxf)
 
 #define LOG_INSANE_TF(var, len)
 #define FIELD_VALUE(name) _obj->name
@@ -84,7 +85,7 @@ static BITCODE_BL rcount1, rcount2;
   if (handleptr)                                                              \
     {                                                                         \
       LOG_TRACE (#name "[%d]: HANDLE" FORMAT_REF " [%d]\n", (int)vcount,      \
-                 ARGS_REF (handleptr),  dxf);                                 \
+                 ARGS_REF (handleptr), dxf);                                  \
     }
 #define FIELD_HANDLE_N(name, vcount, handle_code, dxf)                        \
   VALUE_HANDLE_N (_obj->name, name, vcount, handle_code, dxf)
@@ -237,7 +238,10 @@ static BITCODE_BL rcount1, rcount2;
           {                                                                   \
             LOG_TRACE (#name "[%ld]: %s\n", (long)vcount, _obj->name[vcount]) \
           }                                                                   \
-          else { LOG_TRACE_TU (#name, _obj->name[vcount], dxf) }              \
+          else                                                                \
+          {                                                                   \
+            LOG_TRACE_TU (#name, _obj->name[vcount], dxf)                     \
+          }                                                                   \
         }                                                                     \
     }
 
@@ -308,7 +312,7 @@ static BITCODE_BL rcount1, rcount2;
 #define XDICOBJHANDLE(code)                                                   \
   SINCE (R_2004)                                                              \
   {                                                                           \
-    if (!obj->tio.object->is_xdic_missing)                                  \
+    if (!obj->tio.object->is_xdic_missing)                                    \
       VALUE_HANDLE (obj->tio.object->xdicobjhandle, xdicobjhandle, code, 0);  \
   }                                                                           \
   PRIOR_VERSIONS                                                              \
@@ -336,9 +340,10 @@ static BITCODE_BL rcount1, rcount2;
   bit_set_position (hdl_dat, obj->hdlpos)
 
 #define DWG_ENTITY(token)                                                     \
-  static int dwg_print_##token##_private (                                    \
-      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
-      const Dwg_Object *restrict obj) {                                       \
+  static int dwg_print_##token##_private (Bit_Chain *dat, Bit_Chain *hdl_dat, \
+                                          Bit_Chain *str_dat,                 \
+                                          const Dwg_Object *restrict obj)     \
+  {                                                                           \
     return 0;                                                                 \
   }                                                                           \
   static int dwg_print_##token (Bit_Chain *restrict dat,                      \
@@ -362,9 +367,10 @@ static BITCODE_BL rcount1, rcount2;
   }
 
 #define DWG_OBJECT(token)                                                     \
-  static int dwg_print_##token##_private (                                    \
-      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
-      const Dwg_Object *restrict obj) {                                       \
+  static int dwg_print_##token##_private (Bit_Chain *dat, Bit_Chain *hdl_dat, \
+                                          Bit_Chain *str_dat,                 \
+                                          const Dwg_Object *restrict obj)     \
+  {                                                                           \
     return 0;                                                                 \
   }                                                                           \
   static int dwg_print_##token (Bit_Chain *restrict dat,                      \

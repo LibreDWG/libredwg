@@ -16,7 +16,7 @@ api_process (dwg_object *obj)
   BITCODE_B clip_mode;
   BITCODE_BS clip_boundary_type;
   BITCODE_BL num_clip_verts;
-  dwg_point_2d* clip_verts;
+  dwg_point_2d *clip_verts;
   BITCODE_2RD *cpts;
   BITCODE_H imagedef;
   BITCODE_H imagedefreactor;
@@ -35,7 +35,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE_W_OLD (image, IMAGE, clip_boundary_type, BS);
   CHK_ENTITY_TYPE_W_OLD (image, IMAGE, num_clip_verts, BL);
 
-  if (!dwg_dynapi_entity_value (image, "IMAGE", "clip_verts", &clip_verts, NULL))
+  if (!dwg_dynapi_entity_value (image, "IMAGE", "clip_verts", &clip_verts,
+                                NULL))
     fail ("IMAGE.clip_verts");
 #ifdef USE_DEPRECATED_API
   cpts = dwg_ent_image_get_clip_verts (image, &error);
@@ -48,8 +49,7 @@ api_process (dwg_object *obj)
     {
       for (BITCODE_BL i = 0; i < num_clip_verts; i++)
         {
-          ok ("IMAGE.clip_verts[%d]: (%f, %f)", i, cpts[i].x,
-              cpts[i].y);
+          ok ("IMAGE.clip_verts[%d]: (%f, %f)", i, cpts[i].x, cpts[i].y);
           if (memcmp (&clip_verts[i], &cpts[i], sizeof (clip_verts[i])))
             fail ("IMAGE.clip_verts[%d]", i);
         }

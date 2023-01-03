@@ -19,6 +19,7 @@ api_process (dwg_object *obj)
       if (hdls[i] == entries[i])
         ok ("UCS_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
       else
-        fail ("UCS_CONTROL.entries[%d]: " FORMAT_REF, i, ARGS_REF (entries[i]));
+        fail ("UCS_CONTROL.entries[%d]: " FORMAT_REF, i,
+              ARGS_REF (entries[i]));
     }
 }

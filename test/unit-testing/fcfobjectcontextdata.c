@@ -11,11 +11,12 @@ api_process (dwg_object *obj)
   BITCODE_B is_default;
   BITCODE_H scale; */
 
-  BITCODE_3BD location;   /*!< DXF 10-30 */
-  BITCODE_3BD horiz_dir;  /*!< DXF 11-31 */
+  BITCODE_3BD location;  /*!< DXF 10-30 */
+  BITCODE_3BD horiz_dir; /*!< DXF 11-31 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  dwg_obj_fcfobjectcontextdata *_obj = dwg_object_to_FCFOBJECTCONTEXTDATA (obj);
+  dwg_obj_fcfobjectcontextdata *_obj
+      = dwg_object_to_FCFOBJECTCONTEXTDATA (obj);
 
   CHK_ENTITY_TYPE (_obj, FCFOBJECTCONTEXTDATA, class_version, BS);
   CHK_ENTITY_TYPE (_obj, FCFOBJECTCONTEXTDATA, is_default, B);

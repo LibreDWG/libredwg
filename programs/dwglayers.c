@@ -89,12 +89,10 @@ main (int argc, char *argv[])
   int c;
 #ifdef HAVE_GETOPT_LONG
   int option_index = 0;
-  static struct option long_options[] = { { "flags", 0, 0, 'f' },
-                                          { "extnames", 0, 0, 'x' },
-                                          { "on", 0, 0, 'o' },
-                                          { "help", 0, 0, 0 },
-                                          { "version", 0, 0, 0 },
-                                          { NULL, 0, NULL, 0 } };
+  static struct option long_options[]
+      = { { "flags", 0, 0, 'f' }, { "extnames", 0, 0, 'x' },
+          { "on", 0, 0, 'o' },    { "help", 0, 0, 0 },
+          { "version", 0, 0, 0 }, { NULL, 0, NULL, 0 } };
 #endif
 
   while
@@ -175,7 +173,8 @@ main (int argc, char *argv[])
       if (flags)
         printf ("%s%s%s\t", layer->frozen ? "f" : " ", layer->on ? "+" : "-",
                 layer->locked ? "l" : " ");
-      if (extnames && dwg.header.from_version >= R_13b1 && dwg.header.from_version < R_2000)
+      if (extnames && dwg.header.from_version >= R_13b1
+          && dwg.header.from_version < R_2000)
         {
           if (!(name = dwg_find_table_extname (&dwg, obj)))
             name = layer->name;
@@ -202,7 +201,7 @@ main (int argc, char *argv[])
       fflush (stdout);
     }
 
- done:
+done:
   // forget about valgrind. really huge DWG's need endlessly here.
   if ((dwg.header.version && dwg.num_objects < 1000)
 #if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)

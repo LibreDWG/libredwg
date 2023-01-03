@@ -77,7 +77,7 @@ bmp_free_dwg (Dwg_Data *dwg)
 {
 #if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
   {
-    char *asanenv = getenv("ASAN_OPTIONS");
+    char *asanenv = getenv ("ASAN_OPTIONS");
     if (!asanenv)
       force_free = 1;
     // detect_leaks is enabled by default. see if it's turned off
@@ -86,8 +86,7 @@ bmp_free_dwg (Dwg_Data *dwg)
   }
 #endif
   // really huge DWG's need endlessly here.
-  if ((dwg->header.version && dwg->num_objects < 1000)
-      || force_free
+  if ((dwg->header.version && dwg->num_objects < 1000) || force_free
 #ifdef HAVE_VALGRIND_VALGRIND_H
       || (RUNNING_ON_VALGRIND)
 #endif

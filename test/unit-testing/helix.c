@@ -11,8 +11,10 @@ api_process (dwg_object *obj)
   BITCODE_BS flag;
   BITCODE_BS scenario; /* 1 spline, 2 bezier */
   BITCODE_BS degree;
-  BITCODE_BL splineflags1; /* 2013+: method fit points = 1, CV frame show = 2, closed = 4 */
-  BITCODE_BL knotparam;    /* 2013+: Chord = 0, Square root = 1, Uniform = 2, Custom = 15 */
+  BITCODE_BL splineflags1; /* 2013+: method fit points = 1, CV frame show = 2,
+                              closed = 4 */
+  BITCODE_BL knotparam;    /* 2013+: Chord = 0, Square root = 1, Uniform = 2,
+                              Custom = 15 */
   BITCODE_BD fit_tol;
   BITCODE_3BD beg_tan_vec;
   BITCODE_3BD end_tan_vec;
@@ -23,11 +25,11 @@ api_process (dwg_object *obj)
   BITCODE_BD knot_tol;
   BITCODE_BD ctrl_tol;
   BITCODE_BS num_fit_pts;
-  BITCODE_3DPOINT* fit_pts;
+  BITCODE_3DPOINT *fit_pts;
   BITCODE_BL num_knots;
-  BITCODE_BD* knots;
+  BITCODE_BD *knots;
   BITCODE_BL num_ctrl_pts;
-  Dwg_SPLINE_control_point* ctrl_pts;
+  Dwg_SPLINE_control_point *ctrl_pts;
   // AcDbHelix
   BITCODE_BL major_version;
   BITCODE_BL maint_version;
@@ -110,8 +112,8 @@ api_process (dwg_object *obj)
         fail ("HELIX.num_ctrl_pts with scenario 2");
       for (i = 0; i < num_fit_pts; i++)
         {
-          ok ("HELIX.fit_pts[%d]: (%f, %f, %f)", i, fit_pts[i].x,
-              fit_pts[i].y, fit_pts[i].z);
+          ok ("HELIX.fit_pts[%d]: (%f, %f, %f)", i, fit_pts[i].x, fit_pts[i].y,
+              fit_pts[i].z);
         }
     }
 

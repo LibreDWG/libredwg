@@ -72,30 +72,31 @@ help (void)
           "\n");
 #ifdef HAVE_GETOPT_LONG
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
-#ifndef DISABLE_DXF
-#  ifndef DISABLE_JSON
+#  ifndef DISABLE_DXF
+#    ifndef DISABLE_JSON
   printf ("  -O fmt,  --format fmt     fmt: DXF, DXFB, JSON, GeoJSON\n");
-#  else
+#    else
   printf ("  -O fmt,  --format fmt     fmt: DXF, DXFB\n");
-#  endif
+#    endif
   printf ("           Planned output formats:  YAML, XML/OGR, GPX, SVG, PS\n");
   printf ("  -o outfile                also defines the output fmt. Default: "
           "stdout\n");
-#endif
+#  endif
   printf ("           --help           display this help and exit\n");
   printf ("           --version        output version information and exit\n"
           "\n");
 #else
   printf ("  -v[0-9]     verbosity\n");
-#ifndef DISABLE_DXF
-#  ifndef DISABLE_JSON
+#  ifndef DISABLE_DXF
+#    ifndef DISABLE_JSON
   printf ("  -O fmt      fmt: DXF, DXFB, JSON, GeoJSON\n");
-#  else
+#    else
   printf ("  -O fmt      fmt: DXF, DXFB\n");
-#  endif
-  printf ("              Planned output formats:  YAML, XML/OGR, GPX, SVG, PS\n");
+#    endif
+  printf (
+      "              Planned output formats:  YAML, XML/OGR, GPX, SVG, PS\n");
   printf ("  -o outfile  also defines the output fmt. Default: stdout\n");
-#endif
+#  endif
   printf ("  -h          display this help and exit\n");
   printf ("  -i          output version information and exit\n"
           "\n");
@@ -122,8 +123,7 @@ main (int argc, char *argv[])
       = { { "verbose", 1, &opts, 1 }, // optional
           { "format", 1, 0, 'O' },    { "file", 1, 0, 'o' },
           { "help", 0, 0, 0 },        { "version", 0, 0, 0 },
-          { "force-free", 0, 0, 0 },
-          { NULL, 0, NULL, 0 } };
+          { "force-free", 0, 0, 0 },  { NULL, 0, NULL, 0 } };
 #endif
 
   if (argc < 2)
@@ -188,20 +188,20 @@ main (int argc, char *argv[])
           if (!fmt && outfile != NULL)
             {
 #ifndef DISABLE_DXF
-#ifndef DISABLE_JSON
+#  ifndef DISABLE_JSON
               if (strstr (outfile, ".json") || strstr (outfile, ".JSON"))
                 fmt = (char *)"json";
               else
-#endif
-              if (strstr (outfile, ".dxf") || strstr (outfile, ".DXF"))
+#  endif
+                  if (strstr (outfile, ".dxf") || strstr (outfile, ".DXF"))
                 fmt = (char *)"dxf";
               else if (strstr (outfile, ".dxfb") || strstr (outfile, ".DXFB"))
                 fmt = (char *)"dxfb";
-#ifndef DISABLE_JSON
+#  ifndef DISABLE_JSON
               else if (strstr (outfile, ".geojson")
                        || strstr (outfile, ".GeoJSON"))
                 fmt = (char *)"geojson";
-#endif
+#  endif
               else
 #endif
                 fprintf (stderr, "Unknown output format for %s\n", outfile);
@@ -273,7 +273,7 @@ main (int argc, char *argv[])
       // TODO --as-rNNNN version? for now not.
       // we want the native dump, converters are separate.
 #ifndef DISABLE_DXF
-#ifndef DISABLE_JSON
+#  ifndef DISABLE_JSON
       if (!strcasecmp (fmt, "json"))
         {
           if (opts > 1 && outfile)
@@ -281,8 +281,8 @@ main (int argc, char *argv[])
           error = dwg_write_json (&dat, &dwg);
         }
       else
-#endif
-      if (!strcasecmp (fmt, "dxfb"))
+#  endif
+          if (!strcasecmp (fmt, "dxfb"))
         {
           if (opts > 1 && outfile)
             fprintf (stderr, "Writing Binary DXF file %s\n", outfile);
@@ -294,7 +294,7 @@ main (int argc, char *argv[])
             fprintf (stderr, "Writing Binary DXF file %s\n", outfile);
           error = dwg_write_dxf (&dat, &dwg);
         }
-#ifndef DISABLE_JSON
+#  ifndef DISABLE_JSON
       else if (!strcasecmp (fmt, "geojson"))
         {
           if (opts > 1 && outfile)
@@ -302,7 +302,7 @@ main (int argc, char *argv[])
           error = dwg_write_geojson (&dat, &dwg);
         }
       else
-#endif
+#  endif
 #endif
         fprintf (stderr, "Invalid output format '%s'\n", fmt);
 
@@ -310,10 +310,10 @@ main (int argc, char *argv[])
         fclose (dat.fh);
     }
 
- done:
+done:
 #if defined __SANITIZE_ADDRESS__ || __has_feature(address_sanitizer)
   {
-    char *asanenv = getenv("ASAN_OPTIONS");
+    char *asanenv = getenv ("ASAN_OPTIONS");
     if (!asanenv)
       force_free = 1;
     // detect_leaks is enabled by default. see if it's turned off
@@ -323,8 +323,7 @@ main (int argc, char *argv[])
 #endif
 
   // forget about valgrind. really huge DWG's need endlessly here.
-  if ((dwg.header.version && dwg.num_objects < 1000)
-      || force_free
+  if ((dwg.header.version && dwg.num_objects < 1000) || force_free
 #ifdef HAVE_VALGRIND_VALGRIND_H
       || (RUNNING_ON_VALGRIND)
 #endif

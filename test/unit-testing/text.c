@@ -5,7 +5,8 @@ void
 api_process (dwg_object *obj)
 {
   int error = 0, isnew;
-  BITCODE_RD elevation, thickness, rotation, height, oblique_angle, width_factor;
+  BITCODE_RD elevation, thickness, rotation, height, oblique_angle,
+      width_factor;
   BITCODE_BS generation, vert_alignment, horiz_alignment;
   BITCODE_RC dataflags;
   char *text_value;

@@ -26,7 +26,7 @@
 #include <string.h>
 
 #ifdef IN_DXF_H
-#error in_dxf.h must be included after logging.h because of FORMAT_BD
+#  error in_dxf.h must be included after logging.h because of FORMAT_BD
 #endif
 
 /*
@@ -85,9 +85,15 @@
 #  undef LOG
 #  undef LOG_WARN
 #  undef LOG_ERROR
-#  define LOG(args...) {}
-#  define LOG_WARN(args...) {}
-#  define LOG_ERROR(args...) {}
+#  define LOG(args...)                                                        \
+    {                                                                         \
+    }
+#  define LOG_WARN(args...)                                                   \
+    {                                                                         \
+    }
+#  define LOG_ERROR(args...)                                                  \
+    {                                                                         \
+    }
 #endif
 
 #define LOG_INFO(args...) LOG (INFO, args)
@@ -141,13 +147,13 @@
   LOG_TRACE ("\" [TW %d]", dxf)                                               \
   LOG_POS
 #define LOG_TEXT32(level, wstr)                                               \
-    {                                                                         \
-      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level && wstr)                       \
-        {                                                                     \
-          char *_u8 = bit_convert_TU (wstr);                                  \
-          HANDLER (OUTPUT, "%s", _u8);                                        \
-          free (_u8);                                                         \
-        }                                                                     \
-    }
+  {                                                                           \
+    if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level && wstr)                         \
+      {                                                                       \
+        char *_u8 = bit_convert_TU (wstr);                                    \
+        HANDLER (OUTPUT, "%s", _u8);                                          \
+        free (_u8);                                                           \
+      }                                                                       \
+  }
 
 #endif

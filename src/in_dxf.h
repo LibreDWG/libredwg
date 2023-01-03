@@ -29,8 +29,10 @@ BITCODE_T dwg_add_u8_input (Dwg_Data *restrict dwg,
                             const char *restrict u8str) __nonnull_all;
 #endif
 
-EXPORT int dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg) __nonnull_all;
-EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat, Dwg_Data *restrict dwg) __nonnull_all;
+EXPORT int dwg_read_dxf (Bit_Chain *restrict dat,
+                         Dwg_Data *restrict dwg) __nonnull_all;
+EXPORT int dwg_read_dxfb (Bit_Chain *restrict dat,
+                          Dwg_Data *restrict dwg) __nonnull_all;
 
 // global array of [obj -> [fields], ...]
 typedef struct _dxf_field
@@ -173,7 +175,7 @@ BITCODE_RC dxf_find_lweight (const int lw);
 #define STRADD_TV(field, string)                                              \
   if (string)                                                                 \
     {                                                                         \
-      field = (char*)malloc (strlen (string) + 1);                            \
+      field = (char *)malloc (strlen (string) + 1);                           \
       strcpy (field, string);                                                 \
     }
 #define STRADD_T(field, string)                                               \

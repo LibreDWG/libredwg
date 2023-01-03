@@ -13,7 +13,7 @@
 /*
  * geom.h: geometric projections from OCS
  * written by Reini Urban
-*/
+ */
 
 #ifndef _GEOM_H_
 #define _GEOM_H_
@@ -28,9 +28,10 @@
 void normalize (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt);
 void cross (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt1, BITCODE_3DPOINT pt2);
 // transform a 2D point via its OCS (extrusion) to 2D
-void transform_OCS_2d (BITCODE_2DPOINT *out, BITCODE_2DPOINT pt, BITCODE_BE ext);
+void transform_OCS_2d (BITCODE_2DPOINT *out, BITCODE_2DPOINT pt,
+                       BITCODE_BE ext);
 // transform a 3D point via its OCS (extrusion) to 2D
 void transform_OCS (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt, BITCODE_BE ext);
 // TODO: bulge -> arc for svg and ps
 
-#endif  /* _GEOM_H_ */
+#endif /* _GEOM_H_ */

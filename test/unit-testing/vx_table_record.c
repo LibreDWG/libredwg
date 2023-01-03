@@ -18,7 +18,7 @@ api_process (dwg_object *obj)
   BITCODE_H viewport;
   BITCODE_H prev_entry;
 
-  //Dwg_Version_Type dwg_version = obj->parent->header.version;
+  // Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_vx_table_record *_obj = dwg_object_to_VX_TABLE_RECORD (obj);
 
   CHK_ENTITY_TYPE (_obj, VX_TABLE_RECORD, flag, RC);

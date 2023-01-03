@@ -4,7 +4,7 @@
 void
 api_process (dwg_object *obj)
 {
-  int error, isnew; 
+  int error, isnew;
   BITCODE_BL class_version;
   BITCODE_BL procedure;
   BITCODE_BL destination;

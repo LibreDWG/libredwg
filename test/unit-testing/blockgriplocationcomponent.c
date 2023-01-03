@@ -8,10 +8,12 @@ api_process (dwg_object *obj)
   Dwg_EvalExpr evalexpr;
   // AcDbBlockGripExpr
   BITCODE_BL grip_type;
-  BITCODE_T grip_expr; // one of: X Y UpdatedX UpdatedY DisplacementX DisplacementY
+  BITCODE_T
+  grip_expr; // one of: X Y UpdatedX UpdatedY DisplacementX DisplacementY
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  dwg_obj_blockgriplocationcomponent *_obj = dwg_object_to_BLOCKGRIPLOCATIONCOMPONENT (obj);
+  dwg_obj_blockgriplocationcomponent *_obj
+      = dwg_object_to_BLOCKGRIPLOCATIONCOMPONENT (obj);
 
   // AcDbEvalExpr
   CHK_EVALEXPR (BLOCKGRIPLOCATIONCOMPONENT);

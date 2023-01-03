@@ -29,7 +29,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, GEOPOSITIONMARKER, enable_frame_text, B);
   CHK_ENTITY_UTF8TEXT (_obj, GEOPOSITIONMARKER, notes);
 
-  if (!dwg_dynapi_entity_value (_obj, "GEOPOSITIONMARKER", "mtext", &mtext, NULL))
+  if (!dwg_dynapi_entity_value (_obj, "GEOPOSITIONMARKER", "mtext", &mtext,
+                                NULL))
     fail ("GEOPOSITIONMARKER.mtext");
   else if (mtext)
     {

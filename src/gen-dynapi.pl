@@ -2413,7 +2413,7 @@ if (1) {
       print $out $_;
       my $e = 500;
       for (@VARTYPES) {
-        printf $out "    %-40s	/* %d */\n", "\"$_\",", $e++;
+        printf $out "  %-37s /* %d */\n", "\"$_\",", $e++;
       }
       print $out "  /* End auto-generated variable */\n";
       $gen = 1;
@@ -2423,7 +2423,7 @@ if (1) {
       my $e = 500;
       for (@VARTYPES) {
         my $dxfname = dxfname $_;
-        printf $out "    %-40s	/* %d */\n", "\"$dxfname\",", $e++;
+        printf $out "  %-45s /* %d */\n", "\"$dxfname\",", $e++;
       }
       print $out "  /* End auto-generated dxfnames */\n";
       $gen = 1;

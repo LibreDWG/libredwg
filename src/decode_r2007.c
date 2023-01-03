@@ -174,14 +174,15 @@ static void copy_bytes (BITCODE_RC *dst, uint32_t length, uint32_t offset);
 static uint32_t read_literal_length (BITCODE_RC *restrict *restrict src,
                                      unsigned char opcode);
 static void copy_compressed_bytes (BITCODE_RC *restrict dst,
-                                   BITCODE_RC *restrict src,
-                                   int length);
+                                   BITCODE_RC *restrict src, int length);
 static DWGCHAR *bfr_read_string (BITCODE_RC *restrict *restrict src,
                                  int64_t size) ATTRIBUTE_MALLOC;
 static BITCODE_RC *decode_rs (const BITCODE_RC *src, int block_count,
-                              int data_size, const unsigned src_size) ATTRIBUTE_MALLOC;
+                              int data_size,
+                              const unsigned src_size) ATTRIBUTE_MALLOC;
 static int decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
-                             BITCODE_RC *restrict src, const unsigned src_size);
+                             BITCODE_RC *restrict src,
+                             const unsigned src_size);
 
 #define copy_1(offset) *dst++ = *(src + offset);
 
@@ -489,7 +490,8 @@ decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
   BITCODE_RC *src_end = src + src_size;
   unsigned char opcode;
 
-  LOG_INSANE ("decompress_r2007 (%p, %d, %p, %d)\n", dst, dst_size, src, src_size);
+  LOG_INSANE ("decompress_r2007 (%p, %d, %p, %d)\n", dst, dst_size, src,
+              src_size);
   if (!dst || !src || !dst_size || src_size < 2)
     {
       LOG_ERROR ("Invalid argument to %s\n", __FUNCTION__);
@@ -518,11 +520,11 @@ decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
           if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
             {
               if ((dst + length) > dst_end)
-                HANDLER(OUTPUT, "copy_compressed_bytes: dst %p + %u >= %p\n",
-                        dst, (unsigned)length, dst_end);
+                HANDLER (OUTPUT, "copy_compressed_bytes: dst %p + %u >= %p\n",
+                         dst, (unsigned)length, dst_end);
               else
-                HANDLER(OUTPUT, "copy_compressed_bytes: src %p + %u > %p\n",
-                        src, (unsigned)length, src_end);
+                HANDLER (OUTPUT, "copy_compressed_bytes: src %p + %u > %p\n",
+                         src, (unsigned)length, src_end);
             }
           LOG_ERROR ("Decompression error: length overflow");
           return DWG_ERR_INTERNALERROR;
@@ -530,7 +532,8 @@ decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
 
       LOG_INSANE (
           "copy_compressed_bytes (%p, %p, %u). remaining src: %ld, dst: %ld\n",
-          dst, src, (unsigned)length, (long)(src_end - src), (long)(dst_end - dst));
+          dst, src, (unsigned)length, (long)(src_end - src),
+          (long)(dst_end - dst));
       copy_compressed_bytes (dst, src, length);
 
       dst += length;
@@ -549,17 +552,20 @@ decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
         {
           if ((dst + length) > dst_end)
             {
-              LOG_HANDLE("copy_bytes: dst %p + %u > %p\n", dst, (unsigned)length, dst_end);
+              LOG_HANDLE ("copy_bytes: dst %p + %u > %p\n", dst,
+                          (unsigned)length, dst_end);
               LOG_ERROR ("Decompression error: length overflow");
               return DWG_ERR_INTERNALERROR;
             }
-          if (offset > (uint32_t) (dst - dst_start))
+          if (offset > (uint32_t)(dst - dst_start))
             {
-              LOG_HANDLE("copy_bytes: offset %u > %p - %p\n", (unsigned)offset, dst, dst_start);
+              LOG_HANDLE ("copy_bytes: offset %u > %p - %p\n",
+                          (unsigned)offset, dst, dst_start);
               LOG_ERROR ("Decompression error: offset underflow");
               return DWG_ERR_INTERNALERROR;
             }
-          LOG_INSANE ("copy_bytes (%p, %u, [%u])\n", dst, (unsigned)length, (unsigned)offset);
+          LOG_INSANE ("copy_bytes (%p, %u, [%u])\n", dst, (unsigned)length,
+                      (unsigned)offset);
           copy_bytes (dst, length, offset);
 
           dst += length;
@@ -641,14 +647,14 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
   BITCODE_RC *pedata; // Pre RS encoded data
   BITCODE_RC *data;   // The data RS unencoded and uncompressed
 
-  if (repeat_count < 0 ||
-      repeat_count > DBG_MAX_COUNT ||
-      (uint64_t)size_comp >= dat->size ||
-      (uint64_t)size_uncomp >= dat->size)
+  if (repeat_count < 0 || repeat_count > DBG_MAX_COUNT
+      || (uint64_t)size_comp >= dat->size
+      || (uint64_t)size_uncomp >= dat->size)
     {
       LOG_ERROR ("Invalid r2007 system page: "
                  "size_comp: %" PRId64 ", size_uncomp: %" PRId64
-                 ", repeat_count: %" PRId64, size_comp, size_uncomp, repeat_count);
+                 ", repeat_count: %" PRId64,
+                 size_comp, size_uncomp, repeat_count);
       return NULL;
     }
   // Round to a multiple of 8
@@ -658,24 +664,28 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
   if (block_count <= 0 || block_count > DBG_MAX_COUNT)
     {
       LOG_ERROR ("Invalid r2007 system page: size_comp: %" PRId64
-                 ", size_uncomp: %" PRId64, size_comp, size_uncomp);
+                 ", size_uncomp: %" PRId64,
+                 size_comp, size_uncomp);
       return NULL;
     }
   // Multiply with codeword size (255) and round to a multiple of 8
   page_size = (block_count * 255 + 7) & ~7;
-  if ((uint64_t)page_size >= DBG_MAX_COUNT || (unsigned long)page_size > dat->size - dat->byte)
+  if ((uint64_t)page_size >= DBG_MAX_COUNT
+      || (unsigned long)page_size > dat->size - dat->byte)
     {
       LOG_ERROR ("Invalid r2007 system page: page_size: %" PRId64, page_size);
       return NULL;
     }
   LOG_HANDLE ("read_system_page: size_comp: %" PRId64 ", size_uncomp: %" PRId64
-                 ", repeat_count: %" PRId64 "\n", size_comp, size_uncomp, repeat_count);
+              ", repeat_count: %" PRId64 "\n",
+              size_comp, size_uncomp, repeat_count);
   assert ((uint64_t)size_comp < dat->size);
   assert ((uint64_t)size_uncomp < dat->size);
   assert ((uint64_t)repeat_count < DBG_MAX_COUNT);
   assert ((uint64_t)page_size < DBG_MAX_COUNT);
   data = (BITCODE_RC *)calloc (size_uncomp + page_size, 1);
-  LOG_HANDLE ("Alloc system page of size %" PRId64 "\n", size_uncomp + page_size)
+  LOG_HANDLE ("Alloc system page of size %" PRId64 "\n",
+              size_uncomp + page_size)
   if (!data)
     {
       LOG_ERROR ("Out of memory")
@@ -693,7 +703,8 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
     }
 
   if (size_comp < size_uncomp)
-    error = decompress_r2007 (data, size_uncomp, pedata, MIN (pedata_size, size_comp));
+    error = decompress_r2007 (data, size_uncomp, pedata,
+                              MIN (pedata_size, size_comp));
   else
     memcpy (data, pedata, size_uncomp);
 
@@ -766,8 +777,7 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
   sec_dat->chain = NULL;
   if (section == NULL)
     {
-      if (sec_type < SECTION_REVHISTORY
-          && sec_type != SECTION_TEMPLATE
+      if (sec_type < SECTION_REVHISTORY && sec_type != SECTION_TEMPLATE
           && sec_type != SECTION_OBJFREESPACE)
         {
           LOG_WARN ("Failed to find section_info[%u]", (int)sec_type)
@@ -820,8 +830,8 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
       if (max_decomp_size < section_page->uncomp_size)
         {
           free (decomp);
-          LOG_ERROR ("Invalid section size %ld < %ld",
-                     (long)max_decomp_size, (long)section_page->uncomp_size)
+          LOG_ERROR ("Invalid section size %ld < %ld", (long)max_decomp_size,
+                     (long)section_page->uncomp_size)
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
 
@@ -842,11 +852,13 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
         }
       else
         {
-          if (section_page->uncomp_size > max_decomp_size - section_page->offset ||
-              section_page->uncomp_size > dat->size - dat->byte)
+          if (section_page->uncomp_size
+                  > max_decomp_size - section_page->offset
+              || section_page->uncomp_size > dat->size - dat->byte)
             {
               free (decomp);
-              LOG_ERROR ("Invalid section size %ld", (long)section_page->uncomp_size);
+              LOG_ERROR ("Invalid section size %ld",
+                         (long)section_page->uncomp_size);
               return DWG_ERR_VALUEOUTOFBOUNDS;
             }
           memcpy (&decomp[section_page->offset], &dat->chain[dat->byte],
@@ -895,7 +907,7 @@ bfr_read_string (BITCODE_RC *restrict *restrict src, int64_t size)
   ptr = (uint16_t *)*src;
   for (i = 0; i < length; i++)
     {
-      *str++ = (DWGCHAR) (*ptr++);
+      *str++ = (DWGCHAR)(*ptr++);
     }
 
   *src += size;
@@ -999,7 +1011,8 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
         continue;
       if (section->num_pages > 0xf0000)
         {
-          LOG_ERROR ("Invalid num_pages %lu, skip", (unsigned long)section->num_pages);
+          LOG_ERROR ("Invalid num_pages %lu, skip",
+                     (unsigned long)section->num_pages);
           continue;
         }
 
@@ -1244,8 +1257,9 @@ read_file_header (Bit_Chain *restrict dat,
   LOG_TRACE ("len2:          %d\n", (int)len2);      // 0 when compressed
 
   if (compr_len > 0)
-    error = decompress_r2007 ((BITCODE_RC *)file_header, sizeof (r2007_file_header),
-                              &pedata[32], MIN (compr_len, pedata_size - 32));
+    error = decompress_r2007 ((BITCODE_RC *)file_header,
+                              sizeof (r2007_file_header), &pedata[32],
+                              MIN (compr_len, pedata_size - 32));
   else
     memcpy (file_header, &pedata[32], sizeof (r2007_file_header));
 
@@ -1299,17 +1313,17 @@ obj_stream_position (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
   /* all 3 now relative to obj */
   unsigned long p2 = bit_position (hdl_dat);
   SINCE (R_2007)
-    { // but only since 2007 there is a separate string stream
-      unsigned long p3 = bit_position (str_dat);
-      if (p2 > p1)
-        return p3 > p2 ? p3 : p2;
-      else
-        return p3 > p1 ? p3 : p1;
-    }
+  { // but only since 2007 there is a separate string stream
+    unsigned long p3 = bit_position (str_dat);
+    if (p2 > p1)
+      return p3 > p2 ? p3 : p2;
+    else
+      return p3 > p1 ? p3 : p1;
+  }
   else
-    {
-      return (p2 > p1) ? p2 : p1;
-    }
+  {
+    return (p2 > p1) ? p2 : p1;
+  }
 }
 
 int
@@ -1320,19 +1334,20 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   BITCODE_RL data_size = 0;            // in byte
   BITCODE_RL old_size;                 // in byte
   BITCODE_RL old_byte;
-  //assert (dat != str); // r2007 objects are the same, just entities not
+  // assert (dat != str); // r2007 objects are the same, just entities not
   old_size = str->size;
   old_byte = str->byte;
 
-  //str->chain += str->byte;
-  //obj->strpos = str->byte * 8 + str->bit;
+  // str->chain += str->byte;
+  // obj->strpos = str->byte * 8 + str->bit;
 
   str->size = (obj->bitsize / 8) + ((obj->bitsize % 8) ? 1 : 0);
   bit_set_position (str, start);
 
   if (str->byte >= old_size - old_byte)
     {
-      LOG_ERROR ("obj_string_stream overflow, bitsize " FORMAT_RL " => " FORMAT_RL,
+      LOG_ERROR ("obj_string_stream overflow, bitsize " FORMAT_RL
+                 " => " FORMAT_RL,
                  obj->bitsize, obj->size * 8);
       str->byte = old_byte;
       str->size = old_size;
@@ -1367,7 +1382,8 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       data_size &= 0x7FFF;
       LOG_HANDLE (" @%lu.%u", str->byte, str->bit & 7);
       hi_size = bit_read_RS (str);
-      LOG_HANDLE (" hi_size " FORMAT_RS "/" FORMAT_RSx " [RS]", hi_size, hi_size);
+      LOG_HANDLE (" hi_size " FORMAT_RS "/" FORMAT_RSx " [RS]", hi_size,
+                  hi_size);
       data_size |= (hi_size << 15);
       LOG_HANDLE (" => data_size: %u/0x%x\n", data_size, data_size);
       // LOG_TRACE("  -33: @%lu\n", str->byte);
@@ -1378,7 +1394,8 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   if (data_size > obj->bitsize)
     {
       LOG_WARN ("Invalid string stream data_size %u > bitsize %u at @%lu.%u\n",
-                (unsigned)data_size, (unsigned)obj->bitsize, str->byte, str->bit & 7);
+                (unsigned)data_size, (unsigned)obj->bitsize, str->byte,
+                str->bit & 7);
       if (dat->from_version == R_2007)
         {
           return 0;
@@ -1405,23 +1422,23 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 }
 
 void
-section_string_stream (Dwg_Data *restrict dwg, Bit_Chain *restrict dat, BITCODE_RL bitsize,
-                       Bit_Chain *restrict str)
+section_string_stream (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
+                       BITCODE_RL bitsize, Bit_Chain *restrict str)
 {
   BITCODE_RL start;     // in bits
   BITCODE_RL data_size; // in bits
   BITCODE_B endbit;
-  if (dwg->header.version < R_2010 ||
-      (dwg->header.version == R_2010 && dwg->header.maint_version < 3))
-  {
-    // r2007: + 24 bytes (sentinel+size+hsize) - 1 bit (endbit)
-    start = bitsize + 159;
-  }
+  if (dwg->header.version < R_2010
+      || (dwg->header.version == R_2010 && dwg->header.maint_version < 3))
+    {
+      // r2007: + 24 bytes (sentinel+size+hsize) - 1 bit (endbit)
+      start = bitsize + 159;
+    }
   else
-  {
-    // r2010: + 24 bytes (sentinel+size+hSize) - 1 bit (endbit)
-    start = bitsize + 191; /* 8*24 = 192 */
-  }
+    {
+      // r2010: + 24 bytes (sentinel+size+hSize) - 1 bit (endbit)
+      start = bitsize + 191; /* 8*24 = 192 */
+    }
   *str = *dat;
   bit_set_position (str, start);
   LOG_TRACE ("section string stream\n  pos: " FORMAT_RL ", %lu/%u\n", start,
@@ -1536,7 +1553,8 @@ read_2007_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           dwg->dwg_class[i].cppname = (char *)bit_read_TU (&str);
           dwg->dwg_class[i].dxfname_u = bit_read_TU (&str);
           dwg->dwg_class[i].is_zombie = bit_read_B (&sec_dat); // DXF 280
-          dwg->dwg_class[i].item_class_id = bit_read_BS (&sec_dat); // DXF 281, is_entity is 0x1f3
+          dwg->dwg_class[i].item_class_id
+              = bit_read_BS (&sec_dat); // DXF 281, is_entity is 0x1f3
 
           dwg->dwg_class[i].num_instances = bit_read_BL (&sec_dat); // DXF 91
           dwg->dwg_class[i].dwg_version = bit_read_BS (&sec_dat);
@@ -1623,7 +1641,8 @@ read_2007_section_header (Bit_Chain *restrict dat, Bit_Chain *restrict hdl_dat,
                      dwg->header_vars.bitsize);
           endbits += dwg->header_vars.bitsize;
           bit_set_position (hdl_dat, endbits);
-          section_string_stream (dwg, &sec_dat, dwg->header_vars.bitsize, &str_dat);
+          section_string_stream (dwg, &sec_dat, dwg->header_vars.bitsize,
+                                 &str_dat);
         }
 
       dwg_decode_header_variables (&sec_dat, hdl_dat, &str_dat, dwg);
@@ -1664,7 +1683,7 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
   LOG_TRACE ("\nHandles\n-------------------\n")
   error = read_data_section (&hdl_dat, dat, sections_map, pages_map,
                              SECTION_HANDLES);
-  if (error >= DWG_ERR_CRITICAL|| !hdl_dat.chain)
+  if (error >= DWG_ERR_CRITICAL || !hdl_dat.chain)
     {
       LOG_ERROR ("Failed to read handles section");
       if (obj_dat.chain)
@@ -1761,11 +1780,11 @@ read_2007_section_vbaproject (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                               r2007_page *restrict pages_map)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
-  //Bit_Chain *str_dat;
+  // Bit_Chain *str_dat;
   Dwg_VBAProject *_obj = &dwg->vbaproject;
   Dwg_Object *obj = NULL;
   int error = 0;
-  //BITCODE_RL rcount1 = 0, rcount2 = 0;
+  // BITCODE_RL rcount1 = 0, rcount2 = 0;
 
   // not compressed, page size: 0x80
   error = read_data_section (&sec_dat, dat, sections_map, pages_map,
@@ -1884,7 +1903,7 @@ read_2007_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                              r2007_page *restrict pages_map)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
-  //Bit_Chain *str_dat;
+  // Bit_Chain *str_dat;
   Dwg_AuxHeader *_obj = &dwg->auxheader;
   Dwg_Object *obj = NULL;
   int error = 0;
@@ -1909,7 +1928,7 @@ read_2007_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   // clang-format off
   #include "auxheader.spec"
   // clang-format on
-  
+
   LOG_TRACE ("\n")
   if (sec_dat.chain)
     free (sec_dat.chain);
@@ -1920,16 +1939,17 @@ read_2007_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 /* Unknown AppInfoHistory Section
  */
 static int
-read_2007_section_appinfohistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+read_2007_section_appinfohistory (Bit_Chain *restrict dat,
+                                  Dwg_Data *restrict dwg,
                                   r2007_section *restrict sections_map,
                                   r2007_page *restrict pages_map)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
-  //Bit_Chain *str_dat;
+  // Bit_Chain *str_dat;
   Dwg_AppInfoHistory *_obj = &dwg->appinfohistory;
   Dwg_Object *obj = NULL;
   int error = 0;
-  //BITCODE_RL rcount1 = 0, rcount2 = 0;
+  // BITCODE_RL rcount1 = 0, rcount2 = 0;
 
   // compressed, page size: 0x580
   error = read_data_section (&sec_dat, dat, sections_map, pages_map,
@@ -1967,7 +1987,7 @@ read_2007_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                               r2007_page *restrict pages_map)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
-  //Bit_Chain *str_dat;
+  // Bit_Chain *str_dat;
   Dwg_RevHistory *_obj = &dwg->revhistory;
   Dwg_Object *obj = NULL;
   int error = 0;
@@ -2003,12 +2023,13 @@ read_2007_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 /* ObjFreeSpace Section
  */
 static int
-read_2007_section_objfreespace (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+read_2007_section_objfreespace (Bit_Chain *restrict dat,
+                                Dwg_Data *restrict dwg,
                                 r2007_section *restrict sections_map,
                                 r2007_page *restrict pages_map)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
-  //Bit_Chain *str_dat;
+  // Bit_Chain *str_dat;
   Dwg_ObjFreeSpace *_obj = &dwg->objfreespace;
   Dwg_Object *obj = NULL;
   int error = 0;
@@ -2050,7 +2071,7 @@ read_2007_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                             r2007_page *restrict pages_map)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
-  //Bit_Chain *str_dat;
+  // Bit_Chain *str_dat;
   Dwg_Template *_obj = &dwg->Template;
   Dwg_Object *obj = NULL;
   int error = 0;
@@ -2133,8 +2154,8 @@ read_2007_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
  */
 static int
 read_2007_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
-                           r2007_section *restrict sections_map,
-                           r2007_page *restrict pages_map)
+                            r2007_section *restrict sections_map,
+                            r2007_page *restrict pages_map)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
@@ -2246,7 +2267,8 @@ read_2007_section_acds (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   BITCODE_RL rcount1 = 0, rcount2 = 0;
 
   // compressed, pagesize 0x7400, type 13
-  error = read_data_section (&sec_dat, dat, sections_map, pages_map, SECTION_ACDS);
+  error = read_data_section (&sec_dat, dat, sections_map, pages_map,
+                             SECTION_ACDS);
   if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
       LOG_INFO ("%s section not found\n", secname);
@@ -2360,12 +2382,10 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   // Pages Map
   dat->byte += 0x28; // overread check data
   dat->byte += file_header.pages_map_offset;
-  if ((unsigned long)file_header.pages_map_size_comp
-      > dat->size - dat->byte)
+  if ((unsigned long)file_header.pages_map_size_comp > dat->size - dat->byte)
     {
       LOG_ERROR ("%s Invalid pages_map_size_comp %lu > %lu bytes left",
-                 __FUNCTION__,
-                 (unsigned long)file_header.pages_map_size_comp,
+                 __FUNCTION__, (unsigned long)file_header.pages_map_size_comp,
                  dat->size - dat->byte)
       error |= DWG_ERR_VALUEOUTOFBOUNDS;
       goto error;
@@ -2402,8 +2422,8 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   if (!sections_map)
     goto error;
 
-  error = read_2007_section_header (dat, hdl_dat, dwg, sections_map,
-                                    pages_map);
+  error
+      = read_2007_section_header (dat, hdl_dat, dwg, sections_map, pages_map);
   if (dwg->header.summaryinfo_address)
     error |= read_2007_section_summary (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_classes (dat, dwg, sections_map, pages_map);
@@ -2413,7 +2433,8 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   if (dwg->header.thumbnail_address)
     error |= read_2007_section_preview (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_appinfo (dat, dwg, sections_map, pages_map);
-  error |= read_2007_section_appinfohistory (dat, dwg, sections_map, pages_map);
+  error
+      |= read_2007_section_appinfohistory (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_filedeplist (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_security (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_revhistory (dat, dwg, sections_map, pages_map);
@@ -2421,7 +2442,7 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   error |= read_2007_section_template (dat, dwg, sections_map, pages_map);
   if (dwg->header.vbaproj_address)
     error |= read_2007_section_vbaproject (dat, dwg, sections_map, pages_map);
-  //error |= read_2007_section_signature (dat, dwg, sections_map, pages_map);
+  // error |= read_2007_section_signature (dat, dwg, sections_map, pages_map);
   error |= read_2007_section_acds (dat, dwg, sections_map, pages_map);
   // read_2007_blocks (dat, hdl_dat, dwg, sections_map, pages_map);
 

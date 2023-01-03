@@ -6,8 +6,8 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  //Dwg_EvalExpr evalexpr;
-  //Dwg_ACSH_HistoryNode history_node;
+  // Dwg_EvalExpr evalexpr;
+  // Dwg_ACSH_HistoryNode history_node;
   BITCODE_BD *trans;
   BITCODE_BL major;
   BITCODE_BL minor;
@@ -21,14 +21,14 @@ api_process (dwg_object *obj)
   BITCODE_BD twist_angle;
   BITCODE_B b290;
   BITCODE_B is_close_to_axis;
-  struct _dwg_object_entity  *sweep_entity;
+  struct _dwg_object_entity *sweep_entity;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
 #ifdef DEBUG_CLASSES
   dwg_obj_acsh_revolve_class *_obj = dwg_object_to_ACSH_REVOLVE_CLASS (obj);
 
   CHK_EVALEXPR (ACSH_REVOLVE_CLASS);
-  CHK_ACSH_HISTORYNODE();
+  CHK_ACSH_HISTORYNODE ();
 
   CHK_ENTITY_TYPE (_obj, ACSH_REVOLVE_CLASS, major, BL);
   CHK_ENTITY_TYPE (_obj, ACSH_REVOLVE_CLASS, minor, BL);

@@ -29,11 +29,11 @@ api_process (dwg_object *obj)
   BITCODE_BL num_cols;
   BITCODE_BL num_rows;
   unsigned long num_cells;
-  BITCODE_BD* col_widths;
-  BITCODE_BD* row_heights;
-  Dwg_TABLE_Cell* cells;
+  BITCODE_BD *col_widths;
+  BITCODE_BD *row_heights;
+  Dwg_TABLE_Cell *cells;
   BITCODE_BL num_attr_defs;
-  Dwg_TABLE_AttrDef* attr_defs;
+  Dwg_TABLE_AttrDef *attr_defs;
   BITCODE_B has_table_overrides;
   BITCODE_BL table_flag_override;
   BITCODE_B title_suppressed;
@@ -123,7 +123,7 @@ api_process (dwg_object *obj)
   BITCODE_H block_header;
   BITCODE_H first_attrib;
   BITCODE_H last_attrib;
-  BITCODE_H* attribs;
+  BITCODE_H *attribs;
   BITCODE_H seqend;
   BITCODE_H title_row_style_override;
   BITCODE_H header_row_style_override;
@@ -147,7 +147,7 @@ api_process (dwg_object *obj)
   if (dwg_version >= R_2010)
     {
       printf ("TABLECONTENT r2010+ nyi\n"); // TODO
-      //return;
+      // return;
     }
 
   CHK_ENTITY_TYPE (table, TABLE, unknown_rc, RC);
@@ -170,8 +170,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (table, TABLE, num_cols, BL);
   CHK_ENTITY_TYPE (table, TABLE, num_rows, BL);
   CHK_ENTITY_TYPE (table, TABLE, num_cells, BLL);
-  //BITCODE_BD* col_widths;
-  //BITCODE_BD* row_heights;
+  // BITCODE_BD* col_widths;
+  // BITCODE_BD* row_heights;
   if (!dwg_dynapi_entity_value (table, "TABLE", "cells", &cells, NULL))
     fail ("TABLE.cells");
   else
@@ -195,7 +195,8 @@ api_process (dwg_object *obj)
             CHK_SUBCLASS_H (cells[i], TABLE_Cell, block_handle);
             CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, block_scale, BD);
             CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, num_attr_defs, BL);
-            if (!dwg_dynapi_subclass_value (&cells[i], "TABLE_Cell", "attr_defs", &attr_defs, NULL))
+            if (!dwg_dynapi_subclass_value (&cells[i], "TABLE_Cell",
+                                            "attr_defs", &attr_defs, NULL))
               fail ("TABLE.attr_defs");
             for (j = 0; j < cells[i].num_attr_defs; j++)
               {
@@ -224,7 +225,7 @@ api_process (dwg_object *obj)
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, left_grid_linewt, BS);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, left_visibility, BS);
         CHK_SUBCLASS_TYPE (cells[i], TABLE_Cell, unknown, BL);
-        //Dwg_TABLE_value value;
+        // Dwg_TABLE_value value;
       }
   CHK_ENTITY_TYPE (table, TABLE, has_table_overrides, B);
   CHK_ENTITY_TYPE (table, TABLE, table_flag_override, BL);
@@ -315,7 +316,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (table, TABLE, block_header);
   CHK_ENTITY_H (table, TABLE, first_attrib);
   CHK_ENTITY_H (table, TABLE, last_attrib);
-  //CHK_ENTITY_TYPE (table, TABLE, attribs, H*, attribs);
+  // CHK_ENTITY_TYPE (table, TABLE, attribs, H*, attribs);
   CHK_ENTITY_H (table, TABLE, seqend);
   CHK_ENTITY_H (table, TABLE, title_row_style_override);
   CHK_ENTITY_H (table, TABLE, header_row_style_override);
@@ -329,9 +330,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (table, TABLE, break_unknown1, BL);
   CHK_ENTITY_TYPE (table, TABLE, break_unknown2, BL);
   CHK_ENTITY_TYPE (table, TABLE, num_break_heights, BL);
-  //Dwg_TABLE_BreakHeight *break_heights;
+  // Dwg_TABLE_BreakHeight *break_heights;
   CHK_ENTITY_TYPE (table, TABLE, num_break_rows, BL);
-  //Dwg_TABLE_BreakRow *break_rows;
+  // Dwg_TABLE_BreakRow *break_rows;
 
 #if 0
   if (!dwg_dynapi_entity_value (table, "TABLE", "rowstyles", &rowstyles, NULL))

@@ -14,7 +14,7 @@
  * geom.c: geometric projections from OCS
  * Note: There are certainly bugs lurking here. Not thoroughly tested yet.
  * written by Reini Urban
-*/
+ */
 
 #include "../src/config.h"
 #include <math.h>
@@ -54,7 +54,7 @@ transform_OCS_2d (BITCODE_2DPOINT *out, BITCODE_2DPOINT pt, BITCODE_BE ext)
   else if (ext.x == 0.0 && ext.y == 0.0 && ext.z == -1.0)
     {
       *out = pt;
-      out->x = - out->x;
+      out->x = -out->x;
     }
   else
     {
@@ -79,7 +79,7 @@ transform_OCS_2d (BITCODE_2DPOINT *out, BITCODE_2DPOINT pt, BITCODE_BE ext)
       normalize (&ay, ay);
       out->x = pt.x * ax.x + pt.y * ax.y;
       out->y = pt.x * ay.x + pt.y * ay.y;
-   }
+    }
   return;
 }
 
@@ -94,7 +94,7 @@ transform_OCS (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt, BITCODE_BE ext)
   else if (ext.x == 0.0 && ext.y == 0.0 && ext.z == -1.0)
     {
       *out = pt;
-      out->x = - out->x;
+      out->x = -out->x;
     }
   else
     {

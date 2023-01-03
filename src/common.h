@@ -43,7 +43,7 @@
 */
 #if defined(__GNUC__)
 #  define _GNUC_VERSION ((__GNUC__ * 100) + __GNUC_MINOR__)
-#  define CC_DIAG_PRAGMA(x) _Pragma (#x)
+#  define CC_DIAG_PRAGMA(x) _Pragma (#  x)
 #else
 #  define _GNUC_VERSION 0
 #  define CC_DIAG_PRAGMA(x)
@@ -55,12 +55,13 @@
 #pragma message("_GNUC_VERSION " STR(_GNUC_VERSION))
 */
 
-// clang-specifics (rarely needed, as they mimic GCC diagnostics closely, even down to bugs)
+// clang-specifics (rarely needed, as they mimic GCC diagnostics closely, even
+// down to bugs)
 #if defined(__clang__) || defined(__clang)
 #  define HAVE_CLANG
 #  define CLANG_DIAG_IGNORE(x)                                                \
     _Pragma ("clang diagnostic push")                                         \
-    CC_DIAG_PRAGMA (clang diagnostic ignored #x)
+        CC_DIAG_PRAGMA (clang diagnostic ignored #x)
 #  define CLANG_DIAG_RESTORE _Pragma ("clang diagnostic pop")
 #elif defined(__GNUC__)
 #  define CLANG_DIAG_IGNORE(w)
@@ -77,8 +78,7 @@
 #if _GNUC_VERSION >= 460 || (defined(HAVE_CLANG) && _GNUC_VERSION >= 400)
 #  define HAVE_CC_DIAG_STACK
 #  define GCC46_DIAG_IGNORE(x)                                                \
-     _Pragma ("GCC diagnostic push")                                          \
-     CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
+    _Pragma ("GCC diagnostic push") CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
 #  define GCC46_DIAG_RESTORE _Pragma ("GCC diagnostic pop")
 #else
 #  undef HAVE_CC_DIAG_STACK
@@ -88,13 +88,13 @@
 
 /* For GCC30_DIAG_IGNORE (-Wformat-nonliteral) outside functions */
 #if _GNUC_VERSION >= 300 && !defined HAVE_CC_DIAG_STACK
-#  define GCC30_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
+#  define GCC30_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #  x)
 #else
 #  define GCC30_DIAG_IGNORE(w)
 #endif
 /* for GCC31_DIAG_IGNORE (-Wdeprecated-declarations) outside functions */
 #if _GNUC_VERSION >= 310 && !defined HAVE_CC_DIAG_STACK
-#  define GCC31_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
+#  define GCC31_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #  x)
 #else
 #  define GCC31_DIAG_IGNORE(w)
 #endif
@@ -102,7 +102,7 @@
    -Wswitch-enum appeared first with gcc 3.3.6
  */
 #if _GNUC_VERSION >= 330 && !defined HAVE_CC_DIAG_STACK
-#  define GCC33_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
+#  define GCC33_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #  x)
 #else
 #  define GCC33_DIAG_IGNORE(w)
 #endif
@@ -113,14 +113,13 @@
 
 /* */
 #if defined(__AFL_COMPILER) && defined(__clang__)
-#  define AFL_GCC_TOOBIG __attribute__((optnone))
+#  define AFL_GCC_TOOBIG __attribute__ ((optnone))
 #  define AFL_GCC_POP
 #elif defined(__AFL_COMPILER) && defined(__GNUC__)
-#  define AFL_GCC_TOOBIG \
-    _Pragma ("GCC push_options") \
-    _Pragma ("GCC optimize (\"-fno-var-tracking-assignments\")")
-#  define AFL_GCC_POP \
-    _Pragma ("GCC pop_options")
+#  define AFL_GCC_TOOBIG                                                      \
+    _Pragma ("GCC push_options")                                              \
+        _Pragma ("GCC optimize (\"-fno-var-tracking-assignments\")")
+#  define AFL_GCC_POP _Pragma ("GCC pop_options")
 #else
 #  define AFL_GCC_TOOBIG
 #  define AFL_GCC_POP
@@ -177,17 +176,17 @@
 #define TODO_DECODER HANDLER (OUTPUT, "TODO: Decoder\n");
 
 #ifndef _WIN32
-#define STRFTIME_DATE "%F %T"
-#define STRFTIME_TIME "%T"
+#  define STRFTIME_DATE "%F %T"
+#  define STRFTIME_TIME "%T"
 #else
 /* windows/mingw misses those C99 formats */
-#define STRFTIME_DATE "%Y-%m-%d %X"
-#define STRFTIME_TIME "%X"
+#  define STRFTIME_DATE "%Y-%m-%d %X"
+#  define STRFTIME_TIME "%X"
 #endif
 
-// Exporters are more common in the spec format, in_json and in_dxf are not using it.
-// So default to the encode-to format. dec_macros needs to override them.
-// See importer.h for the other way: For decode, in_json, in_dxf.
+// Exporters are more common in the spec format, in_json and in_dxf are not
+// using it. So default to the encode-to format. dec_macros needs to override
+// them. See importer.h for the other way: For decode, in_json, in_dxf.
 #define VERSION(v)                                                            \
   cur_ver = v;                                                                \
   if (dat->version == v)
@@ -320,13 +319,15 @@ EXPORT char *strrplc (const char *s, const char *from, const char *to);
 
 #if !defined(HAVE_MEMMEM) || defined(COMMON_TEST_C)
 // only if _GNU_SOURCE
-void *my_memmem (const void *h0, size_t k, const void *n0, size_t l) __nonnull((1, 3));
-#define memmem my_memmem
+void *my_memmem (const void *h0, size_t k, const void *n0, size_t l)
+    __nonnull ((1, 3));
+#  define memmem my_memmem
 #elif !defined(_GNU_SOURCE) && defined(IS_DECODER)
 /* HAVE_MEMMEM and _GNU_SOURCE are unreliable on non-Linux systems.
    This fails on FreeBSD and macos.
    Rather declare it by ourselves, and don't use _GNU_SOURCE. */
-void *memmem (const void *h0, size_t k, const void *n0, size_t l) __nonnull((1, 3));
+void *memmem (const void *h0, size_t k, const void *n0, size_t l)
+    __nonnull ((1, 3));
 #endif
 
 // push to handle vector at the end. It really is unshift.
@@ -344,7 +345,8 @@ void *memmem (const void *h0, size_t k, const void *n0, size_t l) __nonnull((1, 
 // returns the last
 #define POP_HV(_obj, numfield, hvfield) _obj->hvfield[--_obj->numfield]
 // returns the first
-#define SHIFT_HV(_obj, numfield, hvfield) shift_hv (_obj->hvfield, &_obj->numfield)
+#define SHIFT_HV(_obj, numfield, hvfield)                                     \
+  shift_hv (_obj->hvfield, &_obj->numfield)
 BITCODE_H shift_hv (BITCODE_H *hv, BITCODE_BL *num_p);
 
 // used in dwg.spec
@@ -356,22 +358,21 @@ Dwg_Handle *dwg_find_first_type_handle (Dwg_Data *restrict dwg,
 // sets ext to the char behind the last "." of filepath
 char *split_filepath (const char *filepath, char **extp);
 
-const struct dwg_versions* dwg_version_struct (const Dwg_Version_Type version);
+const struct dwg_versions *dwg_version_struct (const Dwg_Version_Type version);
 /* Returns the AC header magic string [6] */
-const char* dwg_version_codes (const Dwg_Version_Type version);
+const char *dwg_version_codes (const Dwg_Version_Type version);
 /* Finds version from the magic char[6] header and the matching
    dwg_version number. */
 Dwg_Version_Type dwg_version_hdr_type2 (const char *hdr, unsigned dwg_version);
 
 // converts TIMEBLL to struct tm. useful for asctime(tm) or strftime
-struct tm * cvt_TIMEBLL (struct tm *tm, BITCODE_TIMEBLL date);
+struct tm *cvt_TIMEBLL (struct tm *tm, BITCODE_TIMEBLL date);
 
 /* Exported functions not in the API */
-const char *
-dwg_ref_tblname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref,
-                 int *alloced);
-const char *
-dwg_ref_objname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref);
+const char *dwg_ref_tblname (const Dwg_Data *restrict dwg,
+                             Dwg_Object_Ref *restrict ref, int *alloced);
+const char *dwg_ref_objname (const Dwg_Data *restrict dwg,
+                             Dwg_Object_Ref *restrict ref);
 
 int dwg_init_sections (Dwg_Data *dwg);
 

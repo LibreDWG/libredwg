@@ -5,6 +5,6 @@
 void
 api_process (dwg_object *obj)
 {
-  //int error;
+  // int error;
   dwg_ent_repeat *_obj = dwg_object_to_REPEAT (obj);
 }

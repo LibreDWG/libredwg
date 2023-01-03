@@ -36,7 +36,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_MAX (_obj, SECTION_SETTINGS, curr_type, BS, 8);
   CHK_ENTITY_TYPE (_obj, SECTION_SETTINGS, num_types, BL);
   CHK_ENTITY_MAX (_obj, SECTION_SETTINGS, num_types, BL, 8);
-  if (!dwg_dynapi_entity_value (_obj, "SECTION_SETTINGS", "types", &types, NULL))
+  if (!dwg_dynapi_entity_value (_obj, "SECTION_SETTINGS", "types", &types,
+                                NULL))
     fail ("SECTION_SETTINGS.types");
   else
     for (i = 0; i < num_types; i++)
@@ -47,40 +48,61 @@ api_process (dwg_object *obj)
         CHK_SUBCLASS_TYPE (types[i], SECTION_typesettings, generation, BS);
         CHK_SUBCLASS_MAX (types[i], SECTION_typesettings, generation, BS, 128);
         CHK_SUBCLASS_TYPE (types[i], SECTION_typesettings, num_sources, BL);
-        CHK_SUBCLASS_MAX (types[i], SECTION_typesettings, num_sources, BL, 5000);
-        CHK_SUBCLASS_HV (types[i], SECTION_typesettings, sources, types[i].num_sources);
+        CHK_SUBCLASS_MAX (types[i], SECTION_typesettings, num_sources, BL,
+                          5000);
+        CHK_SUBCLASS_HV (types[i], SECTION_typesettings, sources,
+                         types[i].num_sources);
         CHK_SUBCLASS_H (types[i], SECTION_typesettings, destblock);
         CHK_SUBCLASS_UTF8TEXT (types[i], SECTION_typesettings, destfile);
         CHK_SUBCLASS_TYPE (types[i], SECTION_typesettings, num_geom, BL);
-        if (!dwg_dynapi_subclass_value (&types[i], "SECTION_typesettings", "geom", &geom, NULL))
+        if (!dwg_dynapi_subclass_value (&types[i], "SECTION_typesettings",
+                                        "geom", &geom, NULL))
           fail ("SECTION_SETTINGS.types[%d].geom", i);
         else
           for (j = 0; j < types[i].num_geom; j++)
             {
               ok ("SECTION_SETTINGS.types[%d].geom[%d]", i, j);
-              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings, num_geoms, BL);
-              CHK_SUBCLASS_MAX (geom[j], SECTION_geometrysettings, num_geoms, BL, 8);
-              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings, hexindex, BLx);
-              CHK_SUBCLASS_MAX (geom[j], SECTION_geometrysettings, hexindex, BL, 32);
+              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings, num_geoms,
+                                 BL);
+              CHK_SUBCLASS_MAX (geom[j], SECTION_geometrysettings, num_geoms,
+                                BL, 8);
+              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings, hexindex,
+                                 BLx);
+              CHK_SUBCLASS_MAX (geom[j], SECTION_geometrysettings, hexindex,
+                                BL, 32);
               CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings, flags, BL);
               CHK_SUBCLASS_CMC (geom[j], SECTION_geometrysettings, color);
               CHK_SUBCLASS_UTF8TEXT (geom[j], SECTION_geometrysettings, layer);
               CHK_SUBCLASS_UTF8TEXT (geom[j], SECTION_geometrysettings, ltype);
-              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings, ltype_scale, BD);
-              CHK_SUBCLASS_UTF8TEXT (geom[j], SECTION_geometrysettings, plotstyle);
+              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings,
+                                 ltype_scale, BD);
+              CHK_SUBCLASS_UTF8TEXT (geom[j], SECTION_geometrysettings,
+                                     plotstyle);
               SINCE (R_2000)
-                CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings, linewt, BLd);
-              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings, face_transparency, BS);
-              CHK_SUBCLASS_MAX (geom[j], SECTION_geometrysettings, face_transparency, BS, 100);
-              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings, edge_transparency, BS);
-              CHK_SUBCLASS_MAX (geom[j], SECTION_geometrysettings, edge_transparency, BS, 100);
-              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings, hatch_type, BS);
-              CHK_SUBCLASS_MAX (geom[j], SECTION_geometrysettings, hatch_type, BS, 8);
-              CHK_SUBCLASS_UTF8TEXT (geom[j], SECTION_geometrysettings, hatch_pattern);
-              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings, hatch_angle, BD);
-              CHK_SUBCLASS_MAX (geom[j], SECTION_geometrysettings, hatch_angle, BD, MAX_ANGLE);
-              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings, hatch_spacing, BD);
-              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings, hatch_scale, BD);
+              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings, linewt,
+                                 BLd);
+              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings,
+                                 face_transparency, BS);
+              CHK_SUBCLASS_MAX (geom[j], SECTION_geometrysettings,
+                                face_transparency, BS, 100);
+              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings,
+                                 edge_transparency, BS);
+              CHK_SUBCLASS_MAX (geom[j], SECTION_geometrysettings,
+                                edge_transparency, BS, 100);
+              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings, hatch_type,
+                                 BS);
+              CHK_SUBCLASS_MAX (geom[j], SECTION_geometrysettings, hatch_type,
+                                BS, 8);
+              CHK_SUBCLASS_UTF8TEXT (geom[j], SECTION_geometrysettings,
+                                     hatch_pattern);
+              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings,
+                                 hatch_angle, BD);
+              CHK_SUBCLASS_MAX (geom[j], SECTION_geometrysettings, hatch_angle,
+                                BD, MAX_ANGLE);
+              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings,
+                                 hatch_spacing, BD);
+              CHK_SUBCLASS_TYPE (geom[j], SECTION_geometrysettings,
+                                 hatch_scale, BD);
             }
       }
 }

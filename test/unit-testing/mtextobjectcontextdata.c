@@ -26,7 +26,8 @@ api_process (dwg_object *obj)
   BITCODE_BD *column_heights;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  dwg_obj_mtextobjectcontextdata *_obj = dwg_object_to_MTEXTOBJECTCONTEXTDATA (obj);
+  dwg_obj_mtextobjectcontextdata *_obj
+      = dwg_object_to_MTEXTOBJECTCONTEXTDATA (obj);
 
   // AcDbObjectContextData
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, class_version, BS);
@@ -35,15 +36,15 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (_obj, MTEXTOBJECTCONTEXTDATA, scale);
   // AcDbMTextObjectContextData
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, attachment, BL);
-  CHK_ENTITY_3RD  (_obj, MTEXTOBJECTCONTEXTDATA, ins_pt);
-  CHK_ENTITY_3RD  (_obj, MTEXTOBJECTCONTEXTDATA, x_axis_dir);
+  CHK_ENTITY_3RD (_obj, MTEXTOBJECTCONTEXTDATA, ins_pt);
+  CHK_ENTITY_3RD (_obj, MTEXTOBJECTCONTEXTDATA, x_axis_dir);
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, rect_height, BD);
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, rect_width, BD);
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, extents_height, BD);
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, extents_width, BD);
 
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, column_type, BL);
-  CHK_ENTITY_MAX  (_obj, MTEXTOBJECTCONTEXTDATA, column_type, BL, 2);
+  CHK_ENTITY_MAX (_obj, MTEXTOBJECTCONTEXTDATA, column_type, BL, 2);
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, num_column_heights, BL);
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, column_width, BD);
   CHK_ENTITY_TYPE (_obj, MTEXTOBJECTCONTEXTDATA, gutter, BD);

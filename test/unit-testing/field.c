@@ -5,23 +5,23 @@ void
 api_process (dwg_object *obj)
 {
   int error, isnew;
-  BITCODE_TV id;           /* 1 */
-  BITCODE_TV code;         /* 2,3 */
-  BITCODE_BL num_childs;   /* 90 */
+  BITCODE_TV id;         /* 1 */
+  BITCODE_TV code;       /* 2,3 */
+  BITCODE_BL num_childs; /* 90 */
   BITCODE_H *childs, *hdls;
-  BITCODE_BL num_objects;  /* 97 */
-  BITCODE_H *objects;      /* code:5, 331 */
-  BITCODE_TV format;       /* 4, until r2004 only */
-  BITCODE_BL evaluation_option; /* 91 */
-  BITCODE_BL filing_option;     /* 92 */
-  BITCODE_BL field_state;       /* 94 */
-  BITCODE_BL evaluation_status; /* 95 */
+  BITCODE_BL num_objects;           /* 97 */
+  BITCODE_H *objects;               /* code:5, 331 */
+  BITCODE_TV format;                /* 4, until r2004 only */
+  BITCODE_BL evaluation_option;     /* 91 */
+  BITCODE_BL filing_option;         /* 92 */
+  BITCODE_BL field_state;           /* 94 */
+  BITCODE_BL evaluation_status;     /* 95 */
   BITCODE_BL evaluation_error_code; /* 96 */
   BITCODE_TV evaluation_error_msg;  /* 300 */
-  //Dwg_TABLE_value value;
+  // Dwg_TABLE_value value;
   BITCODE_TV value_string;        /* 301,9 */
   BITCODE_BL value_string_length; /* 98 ODA bug: TV */
-  BITCODE_BL i, num_childval;      /* 93 */
+  BITCODE_BL i, num_childval;     /* 93 */
   Dwg_FIELD_ChildValue *childval;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
@@ -58,7 +58,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, FIELD, evaluation_status, BL);
   CHK_ENTITY_TYPE (_obj, FIELD, evaluation_error_code, BL);
   CHK_ENTITY_UTF8TEXT (_obj, FIELD, evaluation_error_msg);
-  //Dwg_TABLE_value value;
+  // Dwg_TABLE_value value;
   CHK_ENTITY_UTF8TEXT (_obj, FIELD, value_string);
   CHK_ENTITY_TYPE (_obj, FIELD, value_string_length, BL);
   CHK_ENTITY_TYPE (_obj, FIELD, num_childval, BL);

@@ -18,7 +18,7 @@ api_process (dwg_object *obj)
 
 #ifdef DEBUG_CLASSES
   dwg_obj_persubentmgr *_obj = dwg_object_to_PERSUBENTMGR (obj);
- 
+
   CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, class_version, BL);
   CHK_ENTITY_MAX (_obj, PERSUBENTMGR, class_version, BL, 2);
   CHK_ENTITY_TYPE (_obj, PERSUBENTMGR, unknown_0, BL);

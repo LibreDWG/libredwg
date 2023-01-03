@@ -8,8 +8,8 @@ api_process (dwg_object *obj)
   BLOCKGRIP_fields;
   BITCODE_BL combined_state;
   BITCODE_3BD orientation;
-  //BITCODE_BS upd_state;
-  //BITCODE_BS state;
+  // BITCODE_BS upd_state;
+  // BITCODE_BS state;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_blockflipgrip *_obj = dwg_object_to_BLOCKFLIPGRIP (obj);
@@ -23,12 +23,12 @@ api_process (dwg_object *obj)
   // AcDbBlockGrip
   CHK_ENTITY_TYPE (_obj, BLOCKFLIPGRIP, bg_bl91, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKFLIPGRIP, bg_bl92, BL);
-  CHK_ENTITY_3RD  (_obj, BLOCKFLIPGRIP, bg_location);
+  CHK_ENTITY_3RD (_obj, BLOCKFLIPGRIP, bg_location);
   CHK_ENTITY_TYPE (_obj, BLOCKFLIPGRIP, bg_insert_cycling, B);
   CHK_ENTITY_TYPE (_obj, BLOCKFLIPGRIP, bg_insert_cycling_weight, BLd);
   // AcDbBlockFlipGrip
-  CHK_ENTITY_TYPE  (_obj, BLOCKFLIPGRIP, combined_state, BL);
-  CHK_ENTITY_3RD  (_obj, BLOCKFLIPGRIP, orientation);
-  //CHK_ENTITY_TYPE  (_obj, BLOCKFLIPGRIP, upd_state, BS);
-  //CHK_ENTITY_TYPE  (_obj, BLOCKFLIPGRIP, state, BS);
+  CHK_ENTITY_TYPE (_obj, BLOCKFLIPGRIP, combined_state, BL);
+  CHK_ENTITY_3RD (_obj, BLOCKFLIPGRIP, orientation);
+  // CHK_ENTITY_TYPE  (_obj, BLOCKFLIPGRIP, upd_state, BS);
+  // CHK_ENTITY_TYPE  (_obj, BLOCKFLIPGRIP, state, BS);
 }

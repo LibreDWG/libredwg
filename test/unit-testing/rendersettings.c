@@ -14,7 +14,7 @@ api_process (dwg_object *obj)
   BITCODE_T environ_image_filename;
   BITCODE_T description;
   BITCODE_BL display_index;
-  BITCODE_B has_predefined; 	/*!< DXF 290, r2013 only */
+  BITCODE_B has_predefined; /*!< DXF 290, r2013 only */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   dwg_obj_rendersettings *_obj = dwg_object_to_RENDERSETTINGS (obj);

@@ -119,8 +119,7 @@ load_dwg (char *filename, unsigned int opts)
           break;
         case DWG_TYPE_TEXT:
           text = dwg.object[i].tio.entity->tio.TEXT;
-          add_text (text->ins_pt.x, text->ins_pt.y,
-                    text->text_value);
+          add_text (text->ins_pt.x, text->ins_pt.y, text->text_value);
           break;
         default:
           break;

@@ -8,14 +8,15 @@
 #  include "bits.h"
 #endif
 #ifndef DECODE_TEST_C
-  static unsigned int loglevel;
+static unsigned int loglevel;
 #  define DWG_LOGLEVEL loglevel
 #  include "logging.h"
 #endif
 #include "config.h"
 #include "common.h"
 
-#if defined(_WIN32) && defined(HAVE_FUNC_ATTRIBUTE_MS_FORMAT) && !defined(__USE_MINGW_ANSI_STDIO)
+#if defined(_WIN32) && defined(HAVE_FUNC_ATTRIBUTE_MS_FORMAT)                 \
+    && !defined(__USE_MINGW_ANSI_STDIO)
 #  define ATTRIBUTE_FORMAT(x, y) __attribute__ ((format (ms_printf, x, y)))
 #elif defined HAVE_FUNC_ATTRIBUTE_GNU_FORMAT
 #  define ATTRIBUTE_FORMAT(x, y) __attribute__ ((format (gnu_printf, x, y)))
@@ -49,9 +50,7 @@ numfailed (void)
   return failed;
 }
 
-static void
-ATTRIBUTE_FORMAT (1, 2)
-ok (const char *fmt, ...)
+static void ATTRIBUTE_FORMAT (1, 2) ok (const char *fmt, ...)
 {
   va_list ap;
 
@@ -70,9 +69,7 @@ pass (void)
   num++;
 }
 
-static void
-ATTRIBUTE_FORMAT (1, 2)
-fail (const char *fmt, ...)
+static void ATTRIBUTE_FORMAT (1, 2) fail (const char *fmt, ...)
 {
   va_list ap;
 
@@ -176,13 +173,14 @@ strtobt (const char *binarystring)
 #endif
 
 // make -s makes it silent, but can be overridden by VERBOSE=1
-int is_make_silent(void)
+int
+is_make_silent (void)
 {
-  const char *make = getenv("MAKEFLAGS");
+  const char *make = getenv ("MAKEFLAGS");
   if (!make)
-    return 0; 			// not from make: verbose
-  if (strstr (make, "-s") || memBEGINc (make, "s "))  // make check with -s
-    return getenv("VERBOSE") ? 0 : 1;
+    return 0;                                        // not from make: verbose
+  if (strstr (make, "-s") || memBEGINc (make, "s ")) // make check with -s
+    return getenv ("VERBOSE") ? 0 : 1;
   else
-    return 0; 			// make check without -s
+    return 0; // make check without -s
 }

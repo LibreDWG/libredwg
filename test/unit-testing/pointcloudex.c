@@ -75,19 +75,22 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, POINTCLOUDEX, unknown_bl0, BL);
   CHK_ENTITY_TYPE (_obj, POINTCLOUDEX, unknown_bl1, BL);
   CHK_ENTITY_TYPE (_obj, POINTCLOUDEX, num_croppings, BL);
-  if (!dwg_dynapi_entity_value (_obj, "POINTCLOUDEX", "croppings", &croppings, NULL))
+  if (!dwg_dynapi_entity_value (_obj, "POINTCLOUDEX", "croppings", &croppings,
+                                NULL))
     fail ("POINTCLOUDEX.croppings");
   else
     for (i = 0; i < num_croppings; i++)
       {
         CHK_SUBCLASS_TYPE (croppings[i], POINTCLOUDEX_Croppings, type, BS);
         CHK_SUBCLASS_TYPE (croppings[i], POINTCLOUDEX_Croppings, is_inside, B);
-        CHK_SUBCLASS_TYPE (croppings[i], POINTCLOUDEX_Croppings, is_inverted, B);
+        CHK_SUBCLASS_TYPE (croppings[i], POINTCLOUDEX_Croppings, is_inverted,
+                           B);
         CHK_SUBCLASS_3RD (croppings[i], POINTCLOUDEX_Croppings, crop_plane);
         CHK_SUBCLASS_3RD (croppings[i], POINTCLOUDEX_Croppings, crop_x_dir);
         CHK_SUBCLASS_3RD (croppings[i], POINTCLOUDEX_Croppings, crop_y_dir);
         CHK_SUBCLASS_TYPE (croppings[i], POINTCLOUDEX_Croppings, num_pts, BL);
-        CHK_SUBCLASS_3DPOINTS (croppings[i], POINTCLOUDEX_Croppings, pts, croppings[i].num_pts);
+        CHK_SUBCLASS_3DPOINTS (croppings[i], POINTCLOUDEX_Croppings, pts,
+                               croppings[i].num_pts);
       }
   //#endif
 }

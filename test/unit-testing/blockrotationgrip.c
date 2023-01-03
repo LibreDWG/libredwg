@@ -19,7 +19,7 @@ api_process (dwg_object *obj)
   // AcDbBlockGrip
   CHK_ENTITY_TYPE (_obj, BLOCKROTATIONGRIP, bg_bl91, BL);
   CHK_ENTITY_TYPE (_obj, BLOCKROTATIONGRIP, bg_bl92, BL);
-  CHK_ENTITY_3RD  (_obj, BLOCKROTATIONGRIP, bg_location);
+  CHK_ENTITY_3RD (_obj, BLOCKROTATIONGRIP, bg_location);
   CHK_ENTITY_TYPE (_obj, BLOCKROTATIONGRIP, bg_insert_cycling, B);
   CHK_ENTITY_TYPE (_obj, BLOCKROTATIONGRIP, bg_insert_cycling_weight, BLd);
 }
