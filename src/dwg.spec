@@ -1974,10 +1974,12 @@ DWG_ENTITY (POLYLINE_MESH)
   PRE (R_13b1) {
     if (R11OPTS (1))
       FIELD_CAST (flag, RC, BS, 70);
-    if (R11OPTS (16)) // 3dmesh
-      FIELD_CAST (curve_type, RC, BS, 75);
-    FIELD_RS (num_m_verts, 71);
-    FIELD_RS (num_n_verts, 72);
+    if (R11OPTS (16))
+      FIELD_RS (num_m_verts, 71);
+    if (R11OPTS (32))
+      FIELD_RS (num_n_verts, 72);
+//  if (R11OPTS (16)) // 3dmesh
+//    FIELD_CAST (curve_type, RC, BS, 75);
     FIELD_RS (m_density, 73);
     FIELD_RS (n_density, 74);
     DECODER {
