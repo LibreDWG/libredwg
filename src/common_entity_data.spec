@@ -15,12 +15,12 @@
           {
             LOG_TRACE ("          ");
             // stringify the flag bits
-#define LOG_FLAG_R11(w)                                 \
-            if (R11FLAG (FLAG_R11_##w))                 \
-              LOG_TRACE (#w " (0x%d) ", FLAG_R11_##w)
-#define LOG_FLAG_R11_MAX(w)                             \
-            if (_obj->flag_r11 > FLAG_R11_##w)          \
-              LOG_WARN ("Unknown flag_r11 (0x%d)", _obj->flag_r11)
+#  define LOG_FLAG_R11(w)                                                     \
+    if (R11FLAG (FLAG_R11_##w))                                               \
+      LOG_TRACE (#w " (%d) ", FLAG_R11_##w)
+#  define LOG_FLAG_R11_MAX(v)                                                 \
+    if (_obj->flag_r11 > v)                                                   \
+      LOG_WARN ("Unknown flag_r11 (%d)", _obj->flag_r11)
             LOG_FLAG_R11 (HAS_COLOR);
             LOG_FLAG_R11 (HAS_LTYPE);
             LOG_FLAG_R11 (HAS_ELEVATION);
@@ -29,9 +29,10 @@
             LOG_FLAG_R11 (HAS_HANDLING);
             LOG_FLAG_R11 (HAS_PSPACE);
             LOG_FLAG_R11 (HAS_ATTRIBS);
-            LOG_FLAG_R11_MAX (HAS_ATTRIBS);
+            LOG_FLAG_R11_MAX (255);
             LOG_TRACE ("\n");
-#undef LOG_FLAG_R11
+#  undef LOG_FLAG_R11
+#  undef LOG_FLAG_R11_MAX
           }
         obj->size = bit_read_RS (dat);
 #elif defined IS_ENCODER
@@ -49,25 +50,25 @@
           {
             LOG_TRACE ("          ");
             // stringify the flag bits
-#define LOG_OPTS_R11(e, w)                                              \
-            if (obj->type == DWG_TYPE_##e##_R11 && (R11OPTS (OPTS_R11_##e##_##w))) \
-              LOG_TRACE (#w " (%d) ", OPTS_R11_##e##_##w)
-#define LOG_OPTS_R11_MAX(e, w)                                           \
-            if (obj->type == DWG_TYPE_##e##_R11 && _obj->opts_r11 > OPTS_R11_##e##_##w) \
-              LOG_WARN ("Unknown opts_r11 (0x%d)", _obj->opts_r11)
+#  define LOG_OPTS_R11(e, w)                                                  \
+    if (obj->type == DWG_TYPE_##e##_R11 && (R11OPTS (OPTS_R11_##e##_##w)))    \
+      LOG_TRACE (#w " (%d) ", OPTS_R11_##e##_##w)
+#  define LOG_OPTS_R11_MAX(e, v)                                              \
+    if (obj->type == DWG_TYPE_##e##_R11 && _obj->opts_r11 > v)                \
+      LOG_WARN ("Unknown opts_r11 (%d)", _obj->opts_r11)
 
             LOG_OPTS_R11 (3DFACE, HAS_Z_FIRST);
             LOG_OPTS_R11 (3DFACE, HAS_Z_SECOND);
             LOG_OPTS_R11 (3DFACE, HAS_Z_THIRD);
             LOG_OPTS_R11 (3DFACE, HAS_Z_FOURTH);
-            LOG_OPTS_R11_MAX (3DFACE, HAS_Z_FOURTH);
+            LOG_OPTS_R11_MAX (3DFACE, 15);
 
             LOG_OPTS_R11 (3DLINE, HAS_Z_FIRST);
             LOG_OPTS_R11 (3DLINE, HAS_Z_SECOND);
-            LOG_OPTS_R11_MAX (3DLINE, HAS_Z_SECOND);
+            LOG_OPTS_R11_MAX (3DLINE, 3);
 
             LOG_OPTS_R11 (ARC, HAS_EXTRUSION);
-            LOG_OPTS_R11_MAX (ARC, HAS_EXTRUSION);
+            LOG_OPTS_R11_MAX (ARC, 1);
 
             LOG_OPTS_R11 (ATTDEF, UNKNOWN_1);
             LOG_OPTS_R11 (ATTDEF, HAS_ROTATION);
@@ -77,7 +78,7 @@
             LOG_OPTS_R11 (ATTDEF, HAS_GENERATION);
             LOG_OPTS_R11 (ATTDEF, HAS_HORIZ_ALIGNMENT);
             LOG_OPTS_R11 (ATTDEF, HAS_ALIGNMENT_POINT);
-            LOG_OPTS_R11_MAX (ATTDEF, HAS_ALIGNMENT_POINT);
+            LOG_OPTS_R11_MAX (ATTDEF, 255);
 
             LOG_OPTS_R11 (ATTRIB, UNKNOWN_1);
             LOG_OPTS_R11 (ATTRIB, HAS_ROTATION);
@@ -87,13 +88,13 @@
             LOG_OPTS_R11 (ATTRIB, HAS_GENERATION);
             LOG_OPTS_R11 (ATTRIB, HAS_HORIZ_ALIGNMENT);
             LOG_OPTS_R11 (ATTRIB, HAS_ALIGNMENT_POINT);
-            LOG_OPTS_R11_MAX (ATTRIB, HAS_ALIGNMENT_POINT);
+            LOG_OPTS_R11_MAX (ATTRIB, 255);
 
             LOG_OPTS_R11 (BLOCK, UNKNOWN_1);
-            LOG_OPTS_R11_MAX (BLOCK, UNKNOWN_1);
+            LOG_OPTS_R11_MAX (BLOCK, 1);
 
             LOG_OPTS_R11 (CIRCLE, HAS_EXTRUSION);
-            LOG_OPTS_R11_MAX (CIRCLE, HAS_EXTRUSION);
+            LOG_OPTS_R11_MAX (CIRCLE, 1);
 
             LOG_OPTS_R11 (DIMENSION, UNKNOWN_1);
             LOG_OPTS_R11 (DIMENSION, HAS_FLAG);
@@ -104,7 +105,7 @@
             LOG_OPTS_R11 (DIMENSION, HAS_DXF16);
             LOG_OPTS_R11 (DIMENSION, HAS_DXF40);
             LOG_OPTS_R11 (DIMENSION, HAS_ROTATION);
-            LOG_OPTS_R11_MAX (DIMENSION, HAS_ROTATION);
+            LOG_OPTS_R11_MAX (DIMENSION, 511);
 
             LOG_OPTS_R11 (INSERT, HAS_SCALE_X);
             LOG_OPTS_R11 (INSERT, HAS_SCALE_Y);
@@ -115,10 +116,10 @@
             LOG_OPTS_R11 (INSERT, HAS_COL_SPACING);
             LOG_OPTS_R11 (INSERT, HAS_ROW_SPACING);
             LOG_OPTS_R11 (INSERT, HAS_EXTRUSION);
-            LOG_OPTS_R11_MAX (INSERT, HAS_EXTRUSION);
+            LOG_OPTS_R11_MAX (INSERT, 511);
 
             LOG_OPTS_R11 (LINE, HAS_EXTRUSION);
-            LOG_OPTS_R11_MAX (LINE, HAS_EXTRUSION);
+            LOG_OPTS_R11_MAX (LINE, 1);
 
             LOG_OPTS_R11 (POLYLINE, HAS_FLAG);
             LOG_OPTS_R11 (POLYLINE, HAS_START_WIDTH);
@@ -129,11 +130,11 @@
             LOG_OPTS_R11 (POLYLINE, HAS_M_DENSITY);
             LOG_OPTS_R11 (POLYLINE, HAS_N_DENSITY);
             LOG_OPTS_R11 (POLYLINE, HAS_CURVETYPE);
-            LOG_OPTS_R11_MAX (POLYLINE, HAS_CURVETYPE);
+            LOG_OPTS_R11_MAX (POLYLINE, 511);
 
             LOG_OPTS_R11 (SHAPE, HAS_ROTATION);
             LOG_OPTS_R11 (SHAPE, HAS_LOAD_NUM);
-            LOG_OPTS_R11_MAX (SHAPE, HAS_LOAD_NUM);
+            LOG_OPTS_R11_MAX (SHAPE, 3);
 
             LOG_OPTS_R11 (TEXT, HAS_ROTATION);
             LOG_OPTS_R11 (TEXT, HAS_WIDTH_FACTOR);
@@ -144,17 +145,18 @@
             LOG_OPTS_R11 (TEXT, HAS_ALIGNMENT_POINT);
             LOG_OPTS_R11 (TEXT, UNKNOWN_128);
             LOG_OPTS_R11 (TEXT, ALIGNED_VERT_TO);
-            LOG_OPTS_R11_MAX (TEXT, ALIGNED_VERT_TO);
+            LOG_OPTS_R11_MAX (TEXT, 511);
 
             LOG_OPTS_R11 (VERTEX, HAS_START_WIDTH);
             LOG_OPTS_R11 (VERTEX, HAS_END_WIDTH);
             LOG_OPTS_R11 (VERTEX, HAS_BULGE);
             LOG_OPTS_R11 (VERTEX, HAS_VERTEX_FLAG);
             LOG_OPTS_R11 (VERTEX, HAS_TANGENT_DIR);
-            LOG_OPTS_R11_MAX (VERTEX, HAS_TANGENT_DIR);
+            LOG_OPTS_R11_MAX (VERTEX, 31);
 
             LOG_TRACE ("\n");
-#undef LOG_OPTS_R11
+#  undef LOG_OPTS_R11
+#  undef LOG_OPTS_R11_MAX
           }
 #endif
       if (R11FLAG (FLAG_R11_HAS_COLOR)) // 1
