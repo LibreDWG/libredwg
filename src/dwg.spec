@@ -1924,13 +1924,13 @@ DWG_ENTITY (_3DFACE)
     else {
       FIELD_2RD (corner2, 11)
     }
-    if (R11OPTS (3)) {
+    if (R11OPTS (4)) {
       FIELD_3RD (corner3, 12)
     }
     else {
       FIELD_2RD (corner3, 12)
     }
-    if (R11OPTS (4)) {
+    if (R11OPTS (8)) {
       FIELD_3RD (corner4, 13)
     }
     else {
