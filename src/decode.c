@@ -549,7 +549,8 @@ classes_section:
     {
       endpos = dwg->header.section[SECTION_CLASSES_R13].address
              + dwg->header.section[SECTION_CLASSES_R13].size - 16;
-      LOG_WARN ("Invalid size %lu, endpos: %lu\n", size, endpos)
+      LOG_WARN ("Invalid size %lu, should be: " FORMAT_RL ", endpos: %lu\n", size,
+                dwg->header.section[SECTION_CLASSES_R13].size - 38, endpos)
     }
   else
     endpos = dat->byte + size;
