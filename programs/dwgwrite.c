@@ -69,9 +69,10 @@ help (void)
   printf ("  -v[0-9], --verbose [0-9]  verbosity\n");
   printf ("  --as rNNNN                save as version\n");
   printf ("           Valid versions:\n");
-  printf ("             r13, r14, r2000 (default)\n");
+  printf ("             r1.1, r1.2, r1.3, r2.0, r2.10, r2.21, r2.22, r2.4,"
+          "             r2.5, r2.6, r9, r10, r11, r13, r14, r2000 (default)\n");
   printf ("           Planned versions:\n");
-  printf ("             r1.4-r11, r2004-r2018\n");
+  printf ("             r2004-r2021\n");
 #  ifndef DISABLE_JSON
   printf ("  -I fmt,  --format fmt     DXF, DXFB, JSON\n");
 #  else
@@ -87,9 +88,10 @@ help (void)
   printf ("  -v[0-9]     verbosity\n");
   printf ("  -a rNNNN    save as version\n");
   printf ("              Valid versions:\n");
-  printf ("                r13, r14, r2000 (default)\n");
+  printf ("                r1.1, r1.2, r1.3, r2.0, r2.10, r2.21, r2.22, r2.4,"
+          "                r2.5, r2.6, r9, r10, r11, r13, r14, r2000 (default)\n");
   printf ("              Planned versions:\n");
-  printf ("                r1.2-r11, r2004-r2018\n");
+  printf ("                r2004-r2021\n");
 #  ifndef DISABLE_JSON
   printf ("  -I fmt      fmt: DXF, DXFB, JSON\n");
 #  else
