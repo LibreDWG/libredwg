@@ -2042,21 +2042,30 @@ DWG_ENTITY (POLYLINE_MESH)
     KEY (flag); VALUE_BS (flag | 16, 70);
   }
   PRE (R_13b1) {
-    if (R11OPTS (1)) {
-      FIELD_CAST (flag, RC, BS, 70);
-      LOG_FLAG_POLYLINE (FIELD_VALUE (flag));
-    }
-//  if (R11OPTS (8)) // shared with extrusion?
-//    FIELD_CAST (curve_type, RC, BS, 75);
-    if (R11OPTS (16))
+    DXF {
       FIELD_RS (num_m_verts, 71);
-    if (R11OPTS (32))
       FIELD_RS (num_n_verts, 72);
-    FIELD_RS (m_density, 73);
-    FIELD_RS (n_density, 74);
-    // TODO 4 missing
-    DECODER {
-      FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
+      FIELD_RS0 (m_density, 73);
+      FIELD_RS0 (n_density, 74);
+      FIELD_BS0 (curve_type, 75);
+    } else {
+      if (R11OPTS (1)) {
+        FIELD_CAST (flag, RC, BS, 70);
+        LOG_FLAG_POLYLINE (FIELD_VALUE (flag));
+      }
+      DECODER {
+        FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
+      }
+      if (R11OPTS (16))
+        FIELD_RS (num_m_verts, 71);
+      if (R11OPTS (32))
+        FIELD_RS (num_n_verts, 72);
+      if (R11OPTS (64))
+        FIELD_RS (m_density, 73);
+      if (R11OPTS (128))
+        FIELD_RS (n_density, 74);
+      if (R11OPTS (256))
+        FIELD_CAST (curve_type, RC, BS, 75);
     }
   }
   LATER_VERSIONS {
