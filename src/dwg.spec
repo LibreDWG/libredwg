@@ -2046,12 +2046,15 @@ DWG_ENTITY (POLYLINE_MESH)
       FIELD_CAST (flag, RC, BS, 70);
       LOG_FLAG_POLYLINE (FIELD_VALUE (flag));
     }
-    if (R11OPTS (16)) // 3dmesh
-      FIELD_CAST (curve_type, RC, BS, 75);
-    FIELD_RS (num_m_verts, 71);
-    FIELD_RS (num_n_verts, 72);
+//  if (R11OPTS (8)) // shared with extrusion?
+//    FIELD_CAST (curve_type, RC, BS, 75);
+    if (R11OPTS (16))
+      FIELD_RS (num_m_verts, 71);
+    if (R11OPTS (32))
+      FIELD_RS (num_n_verts, 72);
     FIELD_RS (m_density, 73);
     FIELD_RS (n_density, 74);
+    // TODO 4 missing
     DECODER {
       FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
     }
