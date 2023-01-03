@@ -773,12 +773,12 @@
         LOG_TRACE ("      ");                                                 \
         LOG_FLAG_VERTEX_W (EXTRA_VERTEX);                                     \
         LOG_FLAG_VERTEX_W (CURVE_FIT);                                        \
-        LOG_FLAG_VERTEX_W (UNKNOWN_4);                                        \
-        LOG_FLAG_VERTEX_W (UNKNOWN_8);                                        \
-        LOG_FLAG_VERTEX_W (UNKNOWN_16);                                       \
+        LOG_FLAG_VERTEX_W (UNUSED_4);                                         \
+        LOG_FLAG_VERTEX_W (SPLINE_FIT);                                       \
+        LOG_FLAG_VERTEX_W (SPLINE_FRAME_CONTROL_POINT);                       \
         LOG_FLAG_VERTEX_W (3D);                                               \
-        LOG_FLAG_VERTEX_W (POLYGON_MESH);                                     \
-        LOG_FLAG_VERTEX_W (UNKNOWN_128);                                      \
+        LOG_FLAG_VERTEX_W (MESH);                                             \
+        LOG_FLAG_VERTEX_W (PFACE_MESH);                                       \
         LOG_FLAG_MAX (_obj->flag, 255);                                       \
         LOG_TRACE ("\n");                                                     \
       }
