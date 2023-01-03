@@ -713,7 +713,7 @@
 #  define LOG_HORIZ_ALIGNMENT                                                 \
     if (_obj->horiz_alignment)                                                \
       {                                                                       \
-        LOG_TRACE ("                ");                                       \
+        LOG_TRACE ("                 ");                                      \
         LOG_HORIZ_ALIGNMENT_W (LEFT);                                         \
         LOG_HORIZ_ALIGNMENT_W (CENTER);                                       \
         LOG_HORIZ_ALIGNMENT_W (RIGHT);                                        \
