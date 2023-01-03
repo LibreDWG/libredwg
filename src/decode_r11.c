@@ -688,6 +688,8 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   // setup all the new control objects
   error |= dwg_add_Document (dwg, 0);
+  if (error >= DWG_ERR_CRITICAL)
+    return error;
 
   PRE (R_2_0b) {
     bit_read_RC (dat); // the 6th zero

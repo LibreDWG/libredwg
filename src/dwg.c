@@ -3043,17 +3043,16 @@ dwg_init_sections (Dwg_Data *dwg)
        */
       if (!dwg->header.numsections) // ODA writes zeros.
         dwg->header.numsections = 6;
-      if (dwg->header.numsections < 3)
-        {
-          LOG_ERROR ("Not enough sections: " FORMAT_RL, dwg->header.numsections);
-          return DWG_ERR_INVALIDDWG;
-        }
-      if (dwg->header.numsections > 10)
-        {
-          LOG_ERROR ("Too many sections: " FORMAT_RL, dwg->header.numsections);
-          return DWG_ERR_INVALIDDWG;
-        }
-      num_sections = dwg->header.numsections;
+    }
+  if (dwg->header.numsections < 3)
+    {
+      LOG_ERROR ("Not enough sections: " FORMAT_RL, dwg->header.numsections);
+      return DWG_ERR_INVALIDDWG;
+    }
+  if (dwg->header.numsections > 10)
+    {
+      LOG_ERROR ("Too many sections: " FORMAT_RL, dwg->header.numsections);
+      return DWG_ERR_INVALIDDWG;
     }
 
   if (dwg->header.section)
