@@ -8122,6 +8122,11 @@ enum {
 };
 
 enum {
+  OPTS_R11_3DLINE_HAS_Z_FIRST = 1,
+  OPTS_R11_3DLINE_HAS_Z_SECOND = 2,
+};
+
+enum {
   OPTS_R11_ARC_HAS_EXTRUSION = 1,
 };
 
