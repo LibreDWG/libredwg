@@ -42,17 +42,17 @@ DWG_ENTITY (TEXT)
       FIELD_HANDLE0 (style, 1, 7);
     if (R11OPTS (16)) {
       FIELD_CAST (generation, RC, BS, 71);
-      LOG_TEXT_GENERATION (FIELD_VALUE (generation));
+      LOG_TEXT_GENERATION
     }
     if (R11OPTS (32)) {
       FIELD_CAST (horiz_alignment, RC, BS, 72);
-      LOG_HORIZ_ALIGNMENT (FIELD_VALUE (horiz_alignment));
+      LOG_HORIZ_ALIGNMENT
     }
     if (R11OPTS (64))
       FIELD_2RD (alignment_pt, 11);
     if (R11OPTS (256)) {
       FIELD_CAST (vert_alignment, RC, BS, 73);
-      LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
+      LOG_VERT_ALIGNMENT
     }
   }
   VERSIONS (R_13b1, R_14)
@@ -84,11 +84,11 @@ DWG_ENTITY (TEXT)
         FIELD_BD (width_factor, 41);
         FIELD_TV (text_value, 1);
         FIELD_BS (generation, 71);
-        LOG_TEXT_GENERATION (FIELD_VALUE (generation));
+        LOG_TEXT_GENERATION
         FIELD_BS (horiz_alignment, 72);
-        LOG_HORIZ_ALIGNMENT (FIELD_VALUE (horiz_alignment));
+        LOG_HORIZ_ALIGNMENT
         FIELD_BS (vert_alignment, 73);
-        LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
+        LOG_VERT_ALIGNMENT
       }
     }
 
@@ -146,15 +146,15 @@ DWG_ENTITY (TEXT)
 
       if (!(dataflags & 0x20)) {
         FIELD_BS (generation, 71);
-        LOG_TEXT_GENERATION (FIELD_VALUE (generation));
+        LOG_TEXT_GENERATION
       }
       if (!(dataflags & 0x40)) {
         FIELD_BS (horiz_alignment, 72);
-        LOG_HORIZ_ALIGNMENT (FIELD_VALUE (horiz_alignment));
+        LOG_HORIZ_ALIGNMENT
       }
       if (!(dataflags & 0x80)) {
         FIELD_BS0 (vert_alignment, 0);
-        LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
+        LOG_VERT_ALIGNMENT
       }
 
       DXF {
@@ -205,18 +205,18 @@ DWG_ENTITY (ATTRIB)
       }
       if (R11OPTS (32)) {
         FIELD_CAST (generation, RC, BS, 71);
-        LOG_TEXT_GENERATION (FIELD_VALUE (generation));
+        LOG_TEXT_GENERATION
       }
       if (R11OPTS (64)) {
         FIELD_CAST (horiz_alignment, RC, BS, 72);
-        LOG_HORIZ_ALIGNMENT (FIELD_VALUE (horiz_alignment));
+        LOG_HORIZ_ALIGNMENT
       }
       if (R11OPTS (128)) { // flag2_1
         FIELD_2RD (alignment_pt, 11);
       }
       if (R11OPTS (256)) {
         FIELD_CAST (vert_alignment, RC, BS, 73);
-        LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
+        LOG_VERT_ALIGNMENT
       }
     }
   VERSIONS (R_13b1, R_14)
@@ -240,11 +240,11 @@ DWG_ENTITY (ATTRIB)
       FIELD_BD1 (width_factor, 41);
       FIELD_TV (text_value, 1);
       FIELD_BS0 (generation, 71);
-      LOG_TEXT_GENERATION (FIELD_VALUE (generation));
+      LOG_TEXT_GENERATION
       FIELD_BS0 (horiz_alignment, 72);
-      LOG_HORIZ_ALIGNMENT (FIELD_VALUE (horiz_alignment));
+      LOG_HORIZ_ALIGNMENT
       FIELD_BS0 (vert_alignment, 0);
-      LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
+      LOG_VERT_ALIGNMENT
     }
 
   IF_FREE_OR_SINCE (R_2000)
@@ -301,15 +301,15 @@ DWG_ENTITY (ATTRIB)
 
       if (!(dataflags & 0x20)) {
         FIELD_BS (generation, 71);
-        LOG_TEXT_GENERATION (FIELD_VALUE (generation));
+        LOG_TEXT_GENERATION
       }
       if (!(dataflags & 0x40)) {
         FIELD_BS (horiz_alignment, 72);
-        LOG_HORIZ_ALIGNMENT (FIELD_VALUE (horiz_alignment));
+        LOG_HORIZ_ALIGNMENT
       }
       if (!(dataflags & 0x80)) {
         FIELD_BS (vert_alignment, 0);
-        LOG_VERT_ALIGNMENT (FIELD_VALUE (generation));
+        LOG_VERT_ALIGNMENT
       }
       DXF {
         FIELD_2DD (alignment_pt, ins_pt, 11);
@@ -324,7 +324,7 @@ DWG_ENTITY (ATTRIB)
     FIELD_RC (type, 70);
     //FIELD_BS (field_length, 73);
     FIELD_BS0 (vert_alignment, 74);
-    LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
+    LOG_VERT_ALIGNMENT
     SINCE (R_2004) {
       FIELD_RC (class_version, 280);
     }
@@ -401,18 +401,18 @@ DWG_ENTITY (ATTDEF)
       }
       if (R11OPTS (32)) {
         FIELD_CAST (generation, RC, BS, 71);
-        LOG_TEXT_GENERATION (FIELD_VALUE (generation));
+        LOG_TEXT_GENERATION
       }
       if (R11OPTS (64)) {
         FIELD_CAST (horiz_alignment, RC, BS, 72);
-        LOG_HORIZ_ALIGNMENT (FIELD_VALUE (horiz_alignment));
+        LOG_HORIZ_ALIGNMENT
       }
       if (R11OPTS (128)) {
         FIELD_2RD (alignment_pt, 11);
       }
       if (R11OPTS (256)) {
         FIELD_CAST (vert_alignment, RC, BS, 73);
-        LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
+        LOG_VERT_ALIGNMENT
       }
     }
   VERSIONS (R_13b1, R_14)
@@ -436,11 +436,11 @@ DWG_ENTITY (ATTDEF)
       FIELD_BD1 (width_factor, 41);
       FIELD_T (default_value, 1);
       FIELD_BS0 (generation, 71);
-      LOG_TEXT_GENERATION (FIELD_VALUE (generation));
+      LOG_TEXT_GENERATION
       FIELD_BS0 (horiz_alignment, 72);
-      LOG_HORIZ_ALIGNMENT (FIELD_VALUE (horiz_alignment));
+      LOG_HORIZ_ALIGNMENT
       FIELD_BS (vert_alignment, 0);
-      LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
+      LOG_VERT_ALIGNMENT
       DXF {
         if (_obj->alignment_pt.x != 0.0 &&
             _obj->alignment_pt.y != 0.0)
@@ -506,15 +506,15 @@ DWG_ENTITY (ATTDEF)
 
       if (!(dataflags & 0x20)) {
         FIELD_BS (generation, 71);
-        LOG_TEXT_GENERATION (FIELD_VALUE (generation));
+        LOG_TEXT_GENERATION
       }
       if (!(dataflags & 0x40)) {
         FIELD_BS (horiz_alignment, 72);
-        LOG_HORIZ_ALIGNMENT (FIELD_VALUE (horiz_alignment));
+        LOG_HORIZ_ALIGNMENT
       }
       if (!(dataflags & 0x80)) {
         FIELD_BS (vert_alignment, 0);
-        LOG_VERT_ALIGNMENT (FIELD_VALUE (vert_alignment));
+        LOG_VERT_ALIGNMENT
       }
       DXF {
         FIELD_2DD (alignment_pt, ins_pt, 11);
@@ -1025,7 +1025,7 @@ DWG_ENTITY (VERTEX_2D)
       FIELD_RD (bulge, 42);
     if (R11OPTS (8)) {
       FIELD_RC (flag, 0);
-      LOG_FLAG_VERTEX (FIELD_VALUE (flag));
+      LOG_FLAG_VERTEX
     }
     if (R11OPTS (16))
       FIELD_RD (tangent_dir, 50);
@@ -1043,7 +1043,7 @@ DWG_ENTITY (VERTEX_2D)
   SINCE (R_13b1)
   {
     FIELD_RC (flag, 0);
-    LOG_FLAG_VERTEX (FIELD_VALUE (flag));
+    LOG_FLAG_VERTEX
     FIELD_3BD (point, 10);
 
   /* Decoder and Encoder routines could be the same but then we
@@ -1124,6 +1124,7 @@ DWG_ENTITY (VERTEX_3D)
   }
   LATER_VERSIONS {
     FIELD_RC (flag, 0);
+    LOG_FLAG_VERTEX
     FIELD_3BD (point, 10);
   }
   DXF { FIELD_RC (flag, 70); }
@@ -1144,6 +1145,7 @@ DWG_ENTITY (VERTEX_MESH)
   }
   LATER_VERSIONS {
     FIELD_RC (flag, 0);
+    LOG_FLAG_VERTEX
     FIELD_3BD (point, 10);
   }
   DXF { FIELD_RC (flag, 70); }
@@ -1227,7 +1229,7 @@ DWG_ENTITY (POLYLINE_2D)
   {
     if (R11OPTS (1)) {
       FIELD_CAST (flag, RC, BS, 70);
-      LOG_FLAG_POLYLINE (FIELD_VALUE (flag));
+      LOG_FLAG_POLYLINE
     }
     if (R11OPTS (2))
       FIELD_RD (start_width, 40);
@@ -1237,6 +1239,7 @@ DWG_ENTITY (POLYLINE_2D)
       FIELD_3RD (extrusion, 210);
     //if (R11OPTS (256)) // 16? but this is already in flags_r11 70
     //  FIELD_RS (curve_type, 75);
+    //  LOG_POLYLINE_CURVETYPE
     DECODER {
       //TODO FIELD_VALUE (curve_type) = 0-8;
       FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
@@ -1255,8 +1258,9 @@ DWG_ENTITY (POLYLINE_2D)
       FIELD_VALUE (has_vertex) = 1;
     }
     FIELD_BS0 (flag, 70);
-    LOG_FLAG_POLYLINE (FIELD_VALUE (flag));
+    LOG_FLAG_POLYLINE
     FIELD_BS0 (curve_type, 75);
+    LOG_POLYLINE_CURVETYPE
     DECODER_OR_ENCODER {
       FIELD_BD (start_width, 40);
       FIELD_BD (end_width, 41);
@@ -1313,23 +1317,29 @@ DWG_ENTITY (POLYLINE_3D)
   }
   PRE (R_13b1)
   {
-    if (R11OPTS (1))
+    if (R11OPTS (1)) {
       FIELD_CAST (flag, RC, BS, 70);
-    if (R11OPTS (16)) // 3dmesh only
-      FIELD_RC (curve_type, 75);
+      LOG_FLAG_POLYLINE
+    }
     //if (R11OPTS (2))
     //  FIELD_RD (start_width, 40);
     //if (R11OPTS (4))
     //  FIELD_RS (curve_type, 75);
     //if (R11OPTS (8))
     //  FIELD_RD (end_width, 41);
+    if (R11OPTS (16)) { // 3dmesh only
+      FIELD_RC (curve_type, 75);
+      LOG_POLYLINE_CURVETYPE
+    }
     DECODER {
       FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
     }
   }
   LATER_VERSIONS {
     FIELD_RC0 (curve_type, 75);
+    LOG_POLYLINE_CURVETYPE
     FIELD_RC (flag, 0);
+    LOG_FLAG_POLYLINE
   }
   SINCE (R_2004) {
     FIELD_BL (num_owned, 0);
@@ -2051,7 +2061,7 @@ DWG_ENTITY (POLYLINE_MESH)
     } else {
       if (R11OPTS (1)) {
         FIELD_CAST (flag, RC, BS, 70);
-        LOG_FLAG_POLYLINE (FIELD_VALUE (flag));
+        LOG_FLAG_POLYLINE
       }
       DECODER {
         FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
@@ -2064,14 +2074,17 @@ DWG_ENTITY (POLYLINE_MESH)
         FIELD_RS (m_density, 73);
       if (R11OPTS (128))
         FIELD_RS (n_density, 74);
-      if (R11OPTS (256))
+      if (R11OPTS (256)) {
         FIELD_CAST (curve_type, RC, BS, 75);
+        LOG_POLYLINE_CURVETYPE
+      }
     }
   }
   LATER_VERSIONS {
     FIELD_BS (flag, 0);
-    LOG_FLAG_POLYLINE (FIELD_VALUE (flag));
+    LOG_FLAG_POLYLINE
     FIELD_BS (curve_type, 75);
+    LOG_POLYLINE_CURVETYPE
     FIELD_BS (num_m_verts, 71);
     FIELD_BS (num_n_verts, 72);
     FIELD_BS (m_density, 73);
@@ -3227,10 +3240,12 @@ DWG_ENTITY (LEADER)
   DXF { FIELD_HANDLE (dimstyle, 5, 3); }
   FIELD_B (unknown_bit_1, 0);
   DXF { FIELD_B (arrowhead_on, 71); }
-  FIELD_BS (path_type, 72);
-  FIELD_BS (annot_type, 73); //0: text, 1: tol, 2: insert, 3 (def): none
+  FIELD_BS (path_type, 72); // 0: straight, 1: spline
+  LOG_LEADER_PATHTYPE
+  FIELD_BS (annot_type, 73); // 0: text, 1: tol, 2: insert, 3 (def): none
+  LOG_LEADER_ANNOTTYPE
   DXF {
-    FIELD_B (hookline_dir, 74);
+    FIELD_B (hookline_dir, 74); // same as hor_vector?
     FIELD_BD (box_height, 40);
     FIELD_BD (box_width, 41);
   }
@@ -3250,7 +3265,7 @@ DWG_ENTITY (LEADER)
 
   FIELD_BD (box_height, 0);
   FIELD_BD (box_width, 0);
-  FIELD_B (hookline_dir, 0);
+  FIELD_B (hookline_dir, 0); // same as hor_vector?
   FIELD_B (arrowhead_on, 0);
   FIELD_BS (arrowhead_type, 0);
 
@@ -3309,9 +3324,11 @@ DWG_ENTITY (MLINE)
   DXF { FIELD_HANDLE (mlinestyle, 5, 340); }
   FIELD_BD (scale, 40);
   FIELD_RC (justification, 70); /* spec typo. spec says EC instead of RC */
+  LOG_MLINE_JUSTIFICATION
   FIELD_3DPOINT (base_point, 10);
   FIELD_3DPOINT (extrusion, 210);
   FIELD_BS (flags, 71);
+  LOG_MLINE_FLAGS
   FIELD_RCu (num_lines, 73); //aka linesinstyle
   FIELD_BS (num_verts, 72);
   VALUEOUTOFBOUNDS (num_verts, 5000)
@@ -3621,7 +3638,7 @@ DWG_OBJECT (STYLE)
     FIELD_RD (width_factor, 41);
     FIELD_RD (oblique_angle, 50);
     FIELD_RC (generation, 71);
-    LOG_TEXT_GENERATION (FIELD_VALUE (generation));
+    LOG_TEXT_GENERATION
     FIELD_RD (last_height, 42);
     SINCE (R_11)
       FIELD_RS (unknown, 0);
@@ -3638,7 +3655,7 @@ DWG_OBJECT (STYLE)
     FIELD_BD (width_factor, 41); // xScale
     FIELD_BD (oblique_angle, 50);
     FIELD_RC (generation, 71);
-    LOG_TEXT_GENERATION (FIELD_VALUE (generation));
+    LOG_TEXT_GENERATION
     FIELD_BD (last_height, 42);
     FIELD_T (font_file, 3);
     FIELD_T (bigfont_file, 4);
