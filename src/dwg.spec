@@ -384,6 +384,7 @@ DWG_ENTITY (ATTDEF)
       FIELD_TV (tag, 2);
       FIELD_TV (prompt, 3);
       FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify
+      LOG_FLAG_ATTDEF
       //if (R11OPTS (1)) { // since when?
       //  FIELD_RD (elevation, 30);
       //}
