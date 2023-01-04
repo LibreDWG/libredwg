@@ -191,6 +191,7 @@ DWG_ENTITY (ATTRIB)
       FIELD_TV (text_value, 1);
       FIELD_TV (tag, 2);
       FIELD_RC (flags, 70);
+      LOG_FLAG_ATTRIB
       if (R11OPTS (2)) {
         FIELD_RD (rotation, 50);
       }

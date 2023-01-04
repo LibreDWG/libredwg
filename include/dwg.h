@@ -8208,6 +8208,13 @@ enum {
 };
 
 enum {
+  FLAG_ATTRIB_INVISIBLE = 1,
+  FLAG_ATTRIB_CONSTANT = 2,
+  FLAG_ATTRIB_VERIFY = 4,
+  FLAG_ATTRIB_PRESET = 8,
+};
+
+enum {
   FLAG_POLYLINE_CLOSED = 1, // or polygon mesh closed in the M direction
   FLAG_POLYLINE_CURVE_FIT = 2,
   FLAG_POLYLINE_SPLINE_FIT = 4,

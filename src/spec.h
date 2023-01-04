@@ -759,6 +759,23 @@
       }
 #endif
 
+#ifndef LOG_FLAG_ATTRIB
+#  define LOG_FLAG_ATTRIB_W(w)                                                \
+    if (_obj->flags & FLAG_ATTRIB_##w)                                        \
+    LOG_TRACE (#w " (0x%d) ", FLAG_ATTRIB_##w)
+#  define LOG_FLAG_ATTRIB                                                     \
+    if (_obj->flags)                                                          \
+      {                                                                       \
+        LOG_TRACE ("       ");                                                \
+        LOG_FLAG_ATTRIB_W (INVISIBLE);                                        \
+        LOG_FLAG_ATTRIB_W (CONSTANT);                                         \
+        LOG_FLAG_ATTRIB_W (VERIFY);                                           \
+        LOG_FLAG_ATTRIB_W (PRESET);                                           \
+        LOG_FLAG_MAX (_obj->flags, 15);                                       \
+        LOG_TRACE ("\n");                                                     \
+      }
+#endif
+
 #ifndef LOG_FLAG_POLYLINE
 #  define LOG_FLAG_POLYLINE_W(w)                                              \
     if (_obj->flag & FLAG_POLYLINE_##w)                                       \
