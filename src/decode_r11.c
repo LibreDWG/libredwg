@@ -345,7 +345,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           {
             FIELD_CAST (num_owned, RS, BL, 0);
             FIELD_RC (flag2, 0);
-            if (dwg->header.numheader_vars == 74)
+            SINCE (R_2_21)
               FIELD_CAST (unknown_r11, RC, RS, 0);
           }
           SINCE (R_11)
@@ -369,7 +369,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           PRE (R_11)
           {
             FIELD_HANDLE (ltype, 2, 6);
-            if (dwg->header.numheader_vars == 74)
+            if (tbl->size == 38)
               FIELD_RC (flag0, 0);
           }
           LATER_VERSIONS
@@ -442,11 +442,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
               FIELD_3RD (VIEWDIR, 11);
             if (tbl->size > 89)
               FIELD_RS (flag_3d, 0);
-            PRE (R_10)
-            {
-              if (dwg->header.numheader_vars == 74)
-                FIELD_RC (unknown_r2, 0);
-            }
+            if (tbl->size == 66 || tbl->size == 92)
+              FIELD_RC (unknown_r2, 0);
             SINCE (R_10)
             {
               FIELD_3RD (view_target, 12);
