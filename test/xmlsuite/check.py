@@ -17,7 +17,7 @@ outdir = "test_output"
 # Get all the directories
 dirs = [d for d in os.listdir(path_to_dwg)
 	if os.path.isdir(os.path.join(path_to_dwg, d)) and
-		(d[0] == 'r' or int(d) <= 2018)]
+		(d[0] == 'r' or (d.isdigit and int(d) >= 2000 and int(d) <= 2021))]
 
 for dir in dirs:
 	for file in os.listdir(os.path.join(path_to_dwg, dir)):
