@@ -190,7 +190,8 @@ DWG_ENTITY (ATTRIB)
       FIELD_RD (height, 40);
       FIELD_TV (text_value, 1);
       FIELD_TV (tag, 2);
-      FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify
+      FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
+      LOG_FLAG_ATTRIB
       if (R11OPTS (2)) {
         FIELD_RD (rotation, 50);
       }
@@ -383,7 +384,7 @@ DWG_ENTITY (ATTDEF)
       FIELD_TV (default_value, 1);
       FIELD_TV (tag, 2);
       FIELD_TV (prompt, 3);
-      FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify
+      FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
       LOG_FLAG_ATTDEF
       //if (R11OPTS (1)) { // since when?
       //  FIELD_RD (elevation, 30);
