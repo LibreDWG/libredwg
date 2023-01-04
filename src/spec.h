@@ -753,7 +753,8 @@
         LOG_FLAG_ATTDEF_W (INVISIBLE);                                        \
         LOG_FLAG_ATTDEF_W (CONSTANT);                                         \
         LOG_FLAG_ATTDEF_W (VERIFY);                                           \
-        LOG_FLAG_MAX (_obj->flags, 7);                                        \
+        LOG_FLAG_ATTDEF_W (PRESET);                                           \
+        LOG_FLAG_MAX (_obj->flags, 15);                                       \
         LOG_TRACE ("\n");                                                     \
       }
 #endif
