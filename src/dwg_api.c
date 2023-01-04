@@ -22082,7 +22082,8 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   /* Set the import flag, so we don't encode to TU, just TV */
-  dwg->opts |= DWG_OPTS_IN;
+  if (version >= R_13b1)
+    dwg->opts |= DWG_OPTS_IN;
   dwg->dirty_refs = 0;
 
   if (!dwg->object_map)
