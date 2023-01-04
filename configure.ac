@@ -100,7 +100,7 @@ AC_CHECK_LIB([xml2],[newXMLEntity],
    AC_SUBST([XML2_CFLAGS])
    AC_SUBST([XML2_LIBS])
    ],
-  [if pkg-config --exists libpcre2; then
+  [if pkg-config --exists libxml-2.0; then
     have_libxml2=yes;
     XML2_CFLAGS=`pkg-config libxml-2.0 --cflags`
     XML2_LIBS=`pkg-config libxml-2.0 --libs`
