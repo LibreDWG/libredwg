@@ -91,7 +91,9 @@
             LOG_OPTS_R11_MAX (ATTRIB, 255);
 
             LOG_OPTS_R11 (BLOCK, UNKNOWN_1);
-            LOG_OPTS_R11_MAX (BLOCK, 1);
+            LOG_OPTS_R11 (BLOCK, HAS_XREF_PNAME);
+            LOG_OPTS_R11 (BLOCK, HAS_BLOCK_NAME);
+            LOG_OPTS_R11_MAX (BLOCK, 7);
 
             LOG_OPTS_R11 (CIRCLE, HAS_EXTRUSION);
             LOG_OPTS_R11_MAX (CIRCLE, 1);
