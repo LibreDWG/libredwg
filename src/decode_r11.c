@@ -304,6 +304,27 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       }                                                                       \
     dat->byte = pos
 
+#  define LOG_FLAG_BLOCK_W(w)                                                 \
+    if (_obj->flag & FLAG_BLOCK_##w)                                          \
+    LOG_TRACE (#w " (0x%d) ", FLAG_BLOCK_##w)
+#  define LOG_FLAG_BLOCK_MAX(v)                                               \
+    if (_obj->flag > v)                                                       \
+      LOG_WARN ("Unknown flag (%d)", _obj->flag)
+#  define LOG_FLAG_BLOCK                                                      \
+    if (_obj->flag)                                                           \
+      {                                                                       \
+        LOG_TRACE ("      ");                                                 \
+        LOG_FLAG_BLOCK_W (ANONYMOUS);                                         \
+        LOG_FLAG_BLOCK_W (HAS_NON_CONSTANT_ATTRIBS);                          \
+        LOG_FLAG_BLOCK_W (IS_EXTERNAL_REF);                                   \
+        LOG_FLAG_BLOCK_W (XREF_OVERLAY);                                      \
+        LOG_FLAG_BLOCK_W (EXT_DEPENDENT);                                     \
+        LOG_FLAG_BLOCK_W (RESOLVED_OR_DEPENDENT_EXT_REF);                     \
+        LOG_FLAG_BLOCK_W (REFERENCED_EXT_REF);                                \
+        LOG_FLAG_BLOCK_MAX (127);                                             \
+        LOG_TRACE ("\n");                                                     \
+      }
+
   switch (id)
     {
     case SECTION_BLOCK:
@@ -323,6 +344,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           _obj->flag = flag;
           LOG_TRACE ("\n-- table entry BLOCK_HEADER [%d]: 0x%lx\n", i, pos);
           LOG_TRACE ("flag: %u [RC 70]\n", flag);
+          LOG_FLAG_BLOCK
           LOG_TRACE ("name: \"%s\" [TF 32 2]\n", name);
           free (name);
           obj = dwg_obj_generic_to_object (_obj, &error);
