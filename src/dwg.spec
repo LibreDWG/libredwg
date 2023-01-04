@@ -596,7 +596,9 @@ DWG_ENTITY (BLOCK)
   VERSIONS (R_2_0b, R_11) {
     FIELD_2RD (base_pt, 10);
     if (R11OPTS (2))
-      FIELD_TV (xref_pname, 3);
+      FIELD_TV (xref_pname, 1);
+    if (R11OPTS (4))
+      FIELD_TV (name, 3);
     FREE { // set via dwg_add_BLOCK
       FIELD_TV (name, 2);
     }
