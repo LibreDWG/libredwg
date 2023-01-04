@@ -728,6 +728,10 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         LOG_TRACE ("blocks_size: " FORMAT_RL " [RL]\n", blocks_size);
       }
     blocks_end = bit_read_RL (dat);
+    if (blocks_end == 0 && blocks_size != 0)
+      {
+        blocks_end = blocks_start + blocks_size;
+      }
     LOG_TRACE ("blocks_end: " FORMAT_RL " (" FORMAT_RLx ") [RL]\n", blocks_end,
                blocks_end);
     blocks_max = bit_read_RL (dat); // 0x80000000
