@@ -23,6 +23,7 @@ compile_commands.json
 /.analysis/
 /.build-*/
 /.build/
+/.ccls-cache/
 /.fuzz-*/
 .vscode/
 /autom4te.cache/
