@@ -3069,10 +3069,14 @@ dwg_init_sections (Dwg_Data *dwg)
        *         2: object map
        *         3: (R13c3 and later): 2nd header (special table, no sentinels)
        *         4: optional: MEASUREMENT
-       *         5: optional: AuxHeader (no sentinels, since r13c3
+       *         5: optional: AuxHeader (no sentinels, since r13c3)
        */
+      if (dwg->header.version >= R_13c3)
+        num_sections = 6;
       if (!dwg->header.numsections) // ODA writes zeros.
-        dwg->header.numsections = 6;
+        dwg->header.numsections = num_sections;
+      if (num_sections != dwg->header.numsections)
+        num_sections = dwg->header.numsections;
     }
   if (dwg->header.numsections < 3)
     {
