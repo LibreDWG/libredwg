@@ -525,6 +525,88 @@
     }
 #endif
 
+#ifndef LOG_FLAG_W
+#  define LOG_FLAG_W(token, w)                                                \
+    if (_obj->flag & FLAG_##token##_##w)                                      \
+      LOG_TRACE (#w " (%d) ", FLAG_##token##_##w)
+#  define LOG_FLAG_TABLE_W(w)                                                 \
+    if (_obj->flag & FLAG_TABLE_##w)                                          \
+      LOG_TRACE (#w " (%d) ", FLAG_TABLE_##w)
+#  define LOG_FLAG_TABLE_MAX(v)                                               \
+    if (_obj->flag > v)                                                       \
+      LOG_WARN ("Unknown flag (%d)", _obj->flag)
+#  define LOG_FLAG_TABLE_COMMON                                               \
+    if (_obj->flag)                                                           \
+      {                                                                       \
+        LOG_TRACE ("      ");                                                 \
+        LOG_FLAG_TABLE_W (IS_XREF_REF);                                       \
+        LOG_FLAG_TABLE_W (IS_XREF_RESOLVED);                                  \
+        LOG_FLAG_TABLE_W (IS_XREF_DEP);                                       \
+        LOG_FLAG_TABLE_MAX (127);                                             \
+        LOG_TRACE ("\n");                                                     \
+      }
+#  define LOG_FLAG_BLOCK_W(w)                                                 \
+    if (_obj->flag & FLAG_BLOCK_##w)                                          \
+    LOG_TRACE (#w " (%d) ", FLAG_BLOCK_##w)
+#  define LOG_FLAG_Block                                                      \
+    if (_obj->flag)                                                           \
+      {                                                                       \
+        LOG_TRACE ("      ");                                                 \
+        LOG_FLAG_W (BLOCK, ANONYMOUS);                                        \
+        LOG_FLAG_W (BLOCK, HAS_ATTRIBS);                                      \
+        LOG_FLAG_W (BLOCK, IS_EXT_REF);                                       \
+        LOG_FLAG_W (BLOCK, IS_XREF_OVERLAY);                                  \
+        LOG_FLAG_TABLE_W (IS_XREF_REF);                                       \
+        LOG_FLAG_TABLE_W (IS_XREF_RESOLVED);                                  \
+        LOG_FLAG_TABLE_W (IS_XREF_DEP);                                       \
+        LOG_FLAG_TABLE_MAX (127);                                             \
+        LOG_TRACE ("\n");                                                     \
+      }
+#  define LOG_FLAG_Layer                                                      \
+    if (_obj->flag)                                                           \
+      {                                                                       \
+        LOG_TRACE ("      ");                                                 \
+        LOG_FLAG_W (LAYER, FROZEN);                                           \
+        LOG_FLAG_W (LAYER, FROZEN_IN_NEW);                                    \
+        LOG_FLAG_W (LAYER, LOCKED);                                           \
+        LOG_FLAG_W (LAYER, PLOTFLAG);                                         \
+        LOG_FLAG_TABLE_W (IS_XREF_REF);                                       \
+        LOG_FLAG_TABLE_W (IS_XREF_RESOLVED);                                  \
+        LOG_FLAG_TABLE_W (IS_XREF_DEP);                                       \
+        LOG_FLAG_TABLE_MAX (127);                                             \
+        LOG_TRACE ("\n");                                                     \
+      }
+#  define LOG_FLAG_TextStyle                                                  \
+    if (_obj->flag)                                                           \
+      {                                                                       \
+        LOG_TRACE ("      ");                                                 \
+        LOG_FLAG_W (STYLE, SHAPE);                                            \
+        LOG_FLAG_W (STYLE, VERTICAL_TEXT);                                    \
+        LOG_FLAG_TABLE_W (IS_XREF_REF);                                       \
+        LOG_FLAG_TABLE_W (IS_XREF_RESOLVED);                                  \
+        LOG_FLAG_TABLE_W (IS_XREF_DEP);                                       \
+        LOG_FLAG_TABLE_MAX (127);                                             \
+        LOG_TRACE ("\n");                                                     \
+      }
+#  define LOG_FLAG_View                                                       \
+    if (_obj->flag)                                                           \
+      {                                                                       \
+        LOG_TRACE ("      ");                                                 \
+        LOG_FLAG_W (VIEW, PSPACE);                                            \
+        LOG_FLAG_TABLE_W (IS_XREF_REF);                                       \
+        LOG_FLAG_TABLE_W (IS_XREF_RESOLVED);                                  \
+        LOG_FLAG_TABLE_W (IS_XREF_DEP);                                       \
+        LOG_FLAG_TABLE_MAX (127);                                             \
+        LOG_TRACE ("\n");                                                     \
+      }
+#  define LOG_FLAG_RegApp LOG_FLAG_TABLE_COMMON
+#  define LOG_FLAG_DimStyle LOG_FLAG_TABLE_COMMON
+#  define LOG_FLAG_Linetype LOG_FLAG_TABLE_COMMON
+#  define LOG_FLAG_UCS LOG_FLAG_TABLE_COMMON
+#  define LOG_FLAG_Viewport LOG_FLAG_TABLE_COMMON
+#  define LOG_FLAG_VX LOG_FLAG_TABLE_COMMON
+#endif
+
 #ifndef COMMON_TABLE_FLAGS
 #  define COMMON_TABLE_FLAGS(acdbname)                                        \
     assert (obj->supertype == DWG_SUPERTYPE_OBJECT);                          \
@@ -538,6 +620,7 @@
         {                                                                     \
           FIELD_CAST (flag, RC, RC, 70);                                      \
         }                                                                     \
+      LOG_FLAG_##acdbname                                                     \
       FIELD_TFv (name, 32, 2);                                                \
       VERSION (R_11)                                                          \
       FIELD_RSd (used, 0);                                                    \
