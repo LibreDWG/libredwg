@@ -177,9 +177,11 @@
         if (R11FLAG (FLAG_R11_HAS_ELEVATION)) // 4
           FIELD_RD (elevation_r11, 38);
       } LATER_VERSIONS {
+        // skip flag 4 for LINE, POINT, 3DFACE (also the deleted variants)
         if (R11FLAG (FLAG_R11_HAS_ELEVATION) // 4
-            // 1 = LINE, 2 = POINT, 22 = 3DFACE
-            && obj->type != 1 && obj->type != 2 && obj->type != 22)
+            && obj->fixedtype != DWG_TYPE_LINE
+            && obj->fixedtype != DWG_TYPE_POINT
+            && obj->fixedtype != DWG_TYPE__3DFACE)
           FIELD_RD (elevation_r11, 38);
       }
       if (R11FLAG (FLAG_R11_HAS_THICKNESS)) // 8
