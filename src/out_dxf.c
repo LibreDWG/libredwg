@@ -2648,13 +2648,13 @@ decl_dxf_process_VERTEX (PFACE)
       return error;                                                           \
     }
 
-    // clang-format off
+// clang-format off
 decl_dxf_process_INSERT (INSERT)
 decl_dxf_process_INSERT (MINSERT)
-    // clang-format on
+// clang-format on
 
-    static int dwg_dxf_object (Bit_Chain *restrict dat,
-                               const Dwg_Object *restrict obj, int *restrict i)
+static int dwg_dxf_object (Bit_Chain *restrict dat,
+                           const Dwg_Object *restrict obj, int *restrict i)
 {
   int error = 0;
   int minimal;
@@ -2664,7 +2664,12 @@ decl_dxf_process_INSERT (MINSERT)
     return DWG_ERR_INTERNALERROR;
   minimal = obj->parent->opts & DWG_OPTS_MINIMAL;
   if (dat->version < R_13b1)
-    type = (unsigned int)obj->fixedtype;
+    {
+      type = (unsigned int)obj->fixedtype;
+      if (obj->type > 127)
+        // don't convert deleted entities to DXF
+        type = DWG_TYPE_UNUSED;
+    }
   else
     {
       type = obj->type;
