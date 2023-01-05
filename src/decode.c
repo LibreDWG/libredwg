@@ -6060,14 +6060,19 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
         type = bit_read_RS (dat);
         obj->type = (BITCODE_RC)type;
         LOG_TRACE ("type: " FORMAT_RS " [RS]\n", type);
-        if (type > 127) // deleted. moved into BLOCK
+        if (type > 127) { // deleted. moved into BLOCK
           type = abs ((int8_t)obj->type);
+          LOG_TRACE ("deleted, type => " FORMAT_RCd "\n", type);
+        }
       }
       else
       {
         obj->type = bit_read_RC (dat);
         LOG_TRACE ("type: " FORMAT_RCd " [RCd]\n", obj->type);
         type = obj->type & 0x7F;
+        if (obj->type > 127) { // deleted. moved into BLOCK
+          LOG_TRACE ("deleted, type => " FORMAT_RCd "\n", type);
+        }
       }
 
       switch (type)

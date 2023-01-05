@@ -907,6 +907,9 @@ field to the object. This is done in the @file{src/decode.c} or @file{src/decode
 Sets the fields for the object from the DWG bitstream.
 @end deftypefn
 
+Note: Pre-R13 DWG's do contain all deleted entities, which e.g. where moved into a BLOCK.
+Those entities do have a type > 127. You need to filter them out by yourself, when processing the DWG.
+
 @node Encoding
 @section Encoding
 
