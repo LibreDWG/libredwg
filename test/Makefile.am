@@ -334,6 +334,9 @@ TESTDATA = \
     test-data/r10/entities.dwg \
     test-data/r10/entities.dxf \
     test-data/r10/entities.scr \
+    test-data/r10/tmp_line.scr \
+    test-data/r10/tmp_line.dwg \
+    test-data/r10/tmp_line.dxf \
     test-data/r11/ACEB10.dwg \
     test-data/r11/ACEB10.stp \
     test-data/r11/Constraints_12.dxf \
