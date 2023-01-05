@@ -8204,6 +8204,7 @@ enum {
   FLAG_TABLE_IS_XREF_REF = 16, // is externally dependent
   FLAG_TABLE_IS_XREF_RESOLVED = 32,
   FLAG_TABLE_IS_XREF_DEP = 64, // is referenced (used)
+  FLAG_TABLE_IS_REMOVED = 128,
 };
 
 enum {

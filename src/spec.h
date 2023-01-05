@@ -559,7 +559,8 @@
         LOG_FLAG_TABLE_W (IS_XREF_REF);                                       \
         LOG_FLAG_TABLE_W (IS_XREF_RESOLVED);                                  \
         LOG_FLAG_TABLE_W (IS_XREF_DEP);                                       \
-        LOG_FLAG_TABLE_MAX (127);                                             \
+        LOG_FLAG_TABLE_W (IS_REMOVED);                                        \
+        LOG_FLAG_TABLE_MAX (255);                                             \
         LOG_TRACE ("\n");                                                     \
       }
 #  define LOG_FLAG_Layer                                                      \
