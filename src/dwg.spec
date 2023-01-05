@@ -5437,6 +5437,7 @@ DWG_ENTITY (LWPOLYLINE)
 #else
   FIELD_BS (flag, 70); // 512 closed, 128 plinegen, 4 constwidth, 8 elevation, 2 thickness
                        // 1 extrusion, 16 num_bulges, 1024 vertexidcount, 32 numwidths
+  LOG_FLAG_LWPOLYLINE
 #endif
 
   if (FIELD_VALUE (flag) & 4)
