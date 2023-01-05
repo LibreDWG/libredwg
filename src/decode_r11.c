@@ -297,26 +297,20 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 #  define LOG_FLAG_TABLE_MAX(v)                                               \
     if (_obj->flag > v)                                                       \
       LOG_WARN ("Unknown flag (%d)", _obj->flag)
-#  define LOG_FLAG_APPID                                                      \
+#  define LOG_FLAG_TABLE_COMMON_FLAGS                                         \
+    LOG_FLAG_W (TABLE_COMMON, XREF_DEPENDENT);                                \
+    LOG_FLAG_W (TABLE_COMMON, XREF_RESOLVED);                                 \
+    LOG_FLAG_W (TABLE_COMMON, IS_REFERENCED);
+#  define LOG_FLAG_TABLE_COMMON                                               \
     if (_obj->flag)                                                           \
       {                                                                       \
         LOG_TRACE ("      ");                                                 \
-        LOG_FLAG_W (APPID, XREF_DEPENDENT);                                   \
-        LOG_FLAG_W (APPID, XREF_RESOLVED);                                    \
-        LOG_FLAG_W (APPID, IS_REFERENCED);                                    \
+        LOG_FLAG_TABLE_COMMON_FLAGS                                           \
         LOG_FLAG_TABLE_MAX (127);                                             \
         LOG_TRACE ("\n");                                                     \
       }
-#  define LOG_FLAG_DIMSTYLE                                                   \
-    if (_obj->flag)                                                           \
-      {                                                                       \
-        LOG_TRACE ("      ");                                                 \
-        LOG_FLAG_W (DIMSTYLE, XREF_DEPENDENT);                                \
-        LOG_FLAG_W (DIMSTYLE, XREF_RESOLVED);                                 \
-        LOG_FLAG_W (DIMSTYLE, IS_REFERENCED);                                 \
-        LOG_FLAG_TABLE_MAX (127);                                             \
-        LOG_TRACE ("\n");                                                     \
-      }
+#  define LOG_FLAG_APPID LOG_FLAG_TABLE_COMMON
+#  define LOG_FLAG_DIMSTYLE LOG_FLAG_TABLE_COMMON
 #  define LOG_FLAG_LAYER                                                      \
     if (_obj->flag)                                                           \
       {                                                                       \
@@ -325,65 +319,32 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         LOG_FLAG_W (LAYER, FROZEN_IN_NEW_VPORTS);                             \
         LOG_FLAG_W (LAYER, LOCKED);                                           \
         LOG_FLAG_W (LAYER, UNKNOWN_8);                                        \
-        LOG_FLAG_W (LAYER, XREF_DEPENDENT);                                   \
-        LOG_FLAG_W (LAYER, XREF_RESOLVED);                                    \
-        LOG_FLAG_W (LAYER, IS_REFERENCED);                                    \
+        LOG_FLAG_TABLE_COMMON_FLAGS                                           \
         LOG_FLAG_TABLE_MAX (127);                                             \
         LOG_TRACE ("\n");                                                     \
       }
-#  define LOG_FLAG_LTYPE                                                      \
-    if (_obj->flag)                                                           \
-      {                                                                       \
-        LOG_TRACE ("      ");                                                 \
-        LOG_FLAG_W (LTYPE, XREF_DEPENDENT);                                   \
-        LOG_FLAG_W (LTYPE, XREF_RESOLVED);                                    \
-        LOG_FLAG_W (LTYPE, IS_REFERENCED);                                    \
-        LOG_FLAG_TABLE_MAX (127);                                             \
-        LOG_TRACE ("\n");                                                     \
-      }
+#  define LOG_FLAG_LTYPE LOG_FLAG_TABLE_COMMON
 #  define LOG_FLAG_STYLE                                                      \
     if (_obj->flag)                                                           \
       {                                                                       \
         LOG_TRACE ("      ");                                                 \
         LOG_FLAG_W (STYLE, SHAPE);                                            \
         LOG_FLAG_W (STYLE, VERTICAL_TEXT);                                    \
-        LOG_FLAG_W (STYLE, XREF_DEPENDENT);                                   \
-        LOG_FLAG_W (STYLE, XREF_RESOLVED);                                    \
-        LOG_FLAG_W (STYLE, IS_REFERENCED);                                    \
+        LOG_FLAG_TABLE_COMMON_FLAGS                                           \
         LOG_FLAG_TABLE_MAX (127);                                             \
         LOG_TRACE ("\n");                                                     \
       }
-#  define LOG_FLAG_UCS                                                        \
-    if (_obj->flag)                                                           \
-      {                                                                       \
-        LOG_TRACE ("      ");                                                 \
-        LOG_FLAG_W (UCS, XREF_DEPENDENT);                                     \
-        LOG_FLAG_W (UCS, XREF_RESOLVED);                                      \
-        LOG_FLAG_W (UCS, IS_REFERENCED);                                      \
-        LOG_FLAG_TABLE_MAX (127);                                             \
-        LOG_TRACE ("\n");                                                     \
-      }
+#  define LOG_FLAG_UCS LOG_FLAG_TABLE_COMMON
 #  define LOG_FLAG_VIEW                                                       \
     if (_obj->flag)                                                           \
       {                                                                       \
         LOG_TRACE ("      ");                                                 \
         LOG_FLAG_W (VIEW, PSPACE);                                            \
-        LOG_FLAG_W (VIEW, XREF_DEPENDENT);                                    \
-        LOG_FLAG_W (VIEW, XREF_RESOLVED);                                     \
-        LOG_FLAG_W (VIEW, IS_REFERENCED);                                     \
+        LOG_FLAG_TABLE_COMMON_FLAGS                                           \
         LOG_FLAG_TABLE_MAX (127);                                             \
         LOG_TRACE ("\n");                                                     \
       }
-#  define LOG_FLAG_VPORT                                                      \
-    if (_obj->flag)                                                           \
-      {                                                                       \
-        LOG_TRACE ("      ");                                                 \
-        LOG_FLAG_W (VPORT, XREF_DEPENDENT);                                   \
-        LOG_FLAG_W (VPORT, XREF_RESOLVED);                                    \
-        LOG_FLAG_W (VPORT, IS_REFERENCED);                                    \
-        LOG_FLAG_TABLE_MAX (127);                                             \
-        LOG_TRACE ("\n");                                                     \
-      }
+#  define LOG_FLAG_VPORT LOG_FLAG_TABLE_COMMON
 
 #  define CHK_ENDPOS                                                          \
     SINCE (R_11)                                                              \
