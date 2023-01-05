@@ -745,7 +745,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     blocks_size = bit_read_RL (dat);
     if (blocks_size >= 0x40000000)
       {
-        LOG_TRACE ("blocks_size: 0x40000000 | " FORMAT_RL " [RLx]\n",
+        LOG_TRACE ("blocks_size: 0x40000000 | " FORMAT_RLx " [RLx]\n",
                    blocks_size & 0x3fffffff);
       }
     else
@@ -753,12 +753,13 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         LOG_TRACE ("blocks_size: " FORMAT_RL " [RL]\n", blocks_size);
       }
     blocks_end = bit_read_RL (dat);
-    if (blocks_end == 0 && blocks_size != 0)
-      {
-        blocks_end = blocks_start + blocks_size;
-      }
     LOG_TRACE ("blocks_end: " FORMAT_RL " (" FORMAT_RLx ") [RL]\n", blocks_end,
                blocks_end);
+    if (blocks_end == 0 && blocks_size != 0 && blocks_size != 0x40000000)
+      {
+        blocks_end = blocks_start + blocks_size;
+        LOG_TRACE ("blocks_end => " FORMAT_RLx "\n", blocks_end);
+      }
     blocks_max = bit_read_RL (dat); // 0x80000000
     LOG_TRACE ("blocks_max: " FORMAT_RLx " [RLx]\n", blocks_max);
     tbl_id = 0;
@@ -820,8 +821,9 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
 
   PRE (R_10)
-  num_entities = dwg->header_vars.numentities;
-  else num_entities = 0;
+    num_entities = dwg->header_vars.numentities;
+  else
+    num_entities = 0;
   PRE (R_2_0b)
   {
     entities_start = dat->byte;
@@ -937,14 +939,16 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       dat->byte = blocks_start;
     }
-  num_entities = 0;
-  if (dwg->header.version == R_11 && blocks_start + 32 < blocks_end)
-    blocks_end -= 32; // ?? some sentinel probably
-  error |= decode_preR13_entities (blocks_start, blocks_end, num_entities,
-                                   blocks_size & 0x3FFFFFFF, blocks_max, dat,
-                                   dwg);
-  if (error >= DWG_ERR_CRITICAL)
-    return error;
+  if (blocks_size != 0 && blocks_size != 0x40000000)
+    {
+      if (dwg->header.version == R_11 && blocks_start + 32 < blocks_end)
+        blocks_end -= 32; // ?? some sentinel probably
+      error |= decode_preR13_entities (blocks_start, blocks_end, 0,
+                                       blocks_size & 0x3FFFFFFF, blocks_max, dat,
+                                       dwg);
+      if (error >= DWG_ERR_CRITICAL)
+        return error;
+    }
 
   PRE (R_11) { return error; }
   // only since r11 (AC1009)
