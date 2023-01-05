@@ -304,10 +304,13 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       }                                                                       \
     dat->byte = pos
 
+#  define LOG_FLAG_TABLE_W(w)                                                 \
+    if (_obj->flag & FLAG_TABLE_##w)                                          \
+    LOG_TRACE (#w " (%d) ", FLAG_TABLE_##w)
 #  define LOG_FLAG_BLOCK_W(w)                                                 \
     if (_obj->flag & FLAG_BLOCK_##w)                                          \
-    LOG_TRACE (#w " (0x%d) ", FLAG_BLOCK_##w)
-#  define LOG_FLAG_BLOCK_MAX(v)                                               \
+    LOG_TRACE (#w " (%d) ", FLAG_BLOCK_##w)
+#  define LOG_FLAG_TABLE_MAX(v)                                               \
     if (_obj->flag > v)                                                       \
       LOG_WARN ("Unknown flag (%d)", _obj->flag)
 #  define LOG_FLAG_BLOCK                                                      \
@@ -315,13 +318,13 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       {                                                                       \
         LOG_TRACE ("      ");                                                 \
         LOG_FLAG_BLOCK_W (ANONYMOUS);                                         \
-        LOG_FLAG_BLOCK_W (HAS_NON_CONSTANT_ATTRIBS);                          \
-        LOG_FLAG_BLOCK_W (IS_EXTERNAL_REF);                                   \
-        LOG_FLAG_BLOCK_W (XREF_OVERLAY);                                      \
-        LOG_FLAG_BLOCK_W (EXT_DEPENDENT);                                     \
-        LOG_FLAG_BLOCK_W (RESOLVED_OR_DEPENDENT_EXT_REF);                     \
-        LOG_FLAG_BLOCK_W (REFERENCED_EXT_REF);                                \
-        LOG_FLAG_BLOCK_MAX (127);                                             \
+        LOG_FLAG_BLOCK_W (HAS_ATTRIBS);                                       \
+        LOG_FLAG_BLOCK_W (IS_EXT_REF);                                        \
+        LOG_FLAG_BLOCK_W (IS_XREF_OVERLAY);                                   \
+        LOG_FLAG_TABLE_W (IS_XREF_REF);                                       \
+        LOG_FLAG_TABLE_W (IS_XREF_RESOLVED);                                  \
+        LOG_FLAG_TABLE_W (IS_XREF_DEP);                                       \
+        LOG_FLAG_TABLE_MAX (127);                                             \
         LOG_TRACE ("\n");                                                     \
       }
 
