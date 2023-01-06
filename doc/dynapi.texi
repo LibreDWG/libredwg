@@ -1292,7 +1292,7 @@ struct _dwg_object_entity*
 @item name
 TV,	DXF 2
 @item xref_pname
-TV,	DXF 3
+TV,	DXF 1
 @item base_pt
 2RD,	DXF 10
 
@@ -15885,8 +15885,6 @@ Dwg_Eed*
 RD,	DXF 38
 @item entmode
 BB,	DXF 67
-@item extra_r11
-RC
 @item face_visualstyle
 H,	DXF 348
 @item flag_r11

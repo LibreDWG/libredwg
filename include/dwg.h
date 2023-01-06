@@ -8479,7 +8479,6 @@ typedef struct _dwg_object_entity
   /* preR13 entity fields. TODO a union with above */
   BITCODE_RC flag_r11;
   BITCODE_RS opts_r11;
-  BITCODE_RC extra_r11;
   BITCODE_RCd color_r11;
   BITCODE_RD elevation_r11; // TODO: move to the entities
   BITCODE_RD thickness_r11; // TODO: move to the entities
