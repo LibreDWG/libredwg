@@ -19,7 +19,8 @@
 #   The POLICY parameter specifies how ax_is_release is determined. It can
 #   take the following values:
 #
-#    * git-directory:  ax_is_release will be 'no' if a '.git' directory exists
+#    * git-directory:  ax_is_release will be 'no' if a '.git'
+#                      directory or git worktree exists
 #    * minor-version:  ax_is_release will be 'no' if the minor version number
 #                      in $PACKAGE_VERSION is odd; this assumes
 #                      $PACKAGE_VERSION follows the 'major.minor.micro' scheme
@@ -44,7 +45,7 @@
 #   permitted in any medium without royalty provided the copyright notice
 #   and this notice are preserved.
 
-#serial 7
+#serial 8
 
 AC_DEFUN([AX_IS_RELEASE],[
     AC_BEFORE([AC_INIT],[$0])
@@ -52,7 +53,7 @@ AC_DEFUN([AX_IS_RELEASE],[
     m4_case([$1],
       [git-directory],[
         # $is_release = (.git directory does not exist)
-        AS_IF([test -d ${srcdir}/.git],[ax_is_release=no],[ax_is_release=yes])
+        AS_IF([test -d ${srcdir}/.git || (test -f ${srcdir}/.git && grep \.git/worktrees ${srcdir}/.git)],[ax_is_release=no],[ax_is_release=yes])
       ],
       [minor-version],[
         # $is_release = ($minor_version is even)

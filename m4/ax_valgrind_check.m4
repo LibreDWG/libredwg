@@ -39,7 +39,7 @@
 #   in each Makefile.am with tests:
 #
 #     @VALGRIND_CHECK_RULES@
-#     VALGRIND_SUPPRESSIONS_FILE = my-project.supp
+#     VALGRIND_SUPPRESSIONS_FILES = my-project.supp
 #     EXTRA_DIST = my-project.supp
 #
 #   This results in a "check-valgrind" rule being added. Running `make
@@ -54,19 +54,18 @@
 #   memcheck, helgrind, drd and sgcheck. These are useful because often only
 #   some of those tools can be ran cleanly on a codebase.
 #
-#   The macro supports running with libtool only (changed by rurban to support BSD make)
+#   The macro supports running with and without libtool.
 #
 # LICENSE
 #
 #   Copyright (c) 2014, 2015, 2016 Philip Withnall <philip.withnall@collabora.co.uk>
-#   Copyright (c) 2017 Reini Urban <rurban@cpan.org>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice
 #   and this notice are preserved.  This file is offered as-is, without any
 #   warranty.
 
-#serial 18
+#serial 23
 
 dnl Configured tools
 m4_define([valgrind_tool_list], [[memcheck], [helgrind], [drd], [sgcheck]])
@@ -78,11 +77,11 @@ AC_DEFUN([AX_VALGRIND_DFLT],[
 	m4_define([en_dflt_valgrind_$1], [$2])
 ])dnl
 
-AM_EXTRA_RECURSIVE_TARGETS([check-valgrind])
-m4_foreach([vgtool], [valgrind_tool_list],
-	[AM_EXTRA_RECURSIVE_TARGETS([check-valgrind-]vgtool)])
-
 AC_DEFUN([AX_VALGRIND_CHECK],[
+	AM_EXTRA_RECURSIVE_TARGETS([check-valgrind])
+	m4_foreach([vgtool], [valgrind_tool_list],
+		[AM_EXTRA_RECURSIVE_TARGETS([check-valgrind-]vgtool)])
+
 	dnl Check for --enable-valgrind
 	AC_ARG_ENABLE([valgrind],
 	              [AS_HELP_STRING([--enable-valgrind], [Whether to enable Valgrind on the unit tests])],
@@ -140,7 +139,6 @@ m4_if(m4_defn([en_dflt_valgrind_]vgtool), [off], [= "yes"], [!= "no"]),[
 		])
 		AS_IF([test "$enable_valgrind_]vgtool[" = "yes"],[
 			valgrind_enabled_tools="$valgrind_enabled_tools ]m4_bpatsubst(vgtool,[^exp-])["
-			check_valgrind_enabled_tools="$check_valgrind_enabled_tools check-valgrind-]m4_bpatsubst(vgtool,[^exp-])["
 		])
 		AC_SUBST([ENABLE_VALGRIND_]vgtool,[$enable_valgrind_]vgtool)
 	])
@@ -151,43 +149,51 @@ m4_if(m4_defn([en_dflt_valgrind_]vgtool), [off], [= "yes"], [!= "no"]),[
 # Valgrind check
 #
 # Optional:
-#  - VALGRIND_SUPPRESSIONS_FILE: Valgrind suppressions file to load. (Default: empty)
+#  - VALGRIND_SUPPRESSIONS_FILES: Space-separated list of Valgrind suppressions
+#    files to load. (Default: empty)
 #  - VALGRIND_FLAGS: General flags to pass to all Valgrind tools.
 #    (Default: --num-callers=30)
 #  - VALGRIND_$toolname_FLAGS: Flags to pass to Valgrind $toolname (one of:
 #    memcheck, helgrind, drd, sgcheck). (Default: various)
 
 # Optional variables
-#VALGRIND_SUPPRESSIONS   ?= --suppressions=$(VALGRIND_SUPPRESSIONS_FILE)
-VALGRIND_FLAGS          ?= --num-callers=30
+VALGRIND_SUPPRESSIONS ?= $(addprefix --suppressions=,$(VALGRIND_SUPPRESSIONS_FILES))
+VALGRIND_FLAGS ?= --num-callers=30
 VALGRIND_memcheck_FLAGS ?= --leak-check=full --show-reachable=no
 VALGRIND_helgrind_FLAGS ?= --history-level=approx
-VALGRIND_drd_FLAGS      ?=
-VALGRIND_sgcheck_FLAGS  ?=
+VALGRIND_drd_FLAGS ?=
+VALGRIND_sgcheck_FLAGS ?=
 
 # Internal use
-valgrind_log_files = test-suite-memcheck.log test-suite-helgrind.log test-suite-drd.log test-suite-sgcheck.log
+valgrind_log_files = $(addprefix test-suite-,$(addsuffix .log,$(valgrind_tools)))
 
 valgrind_memcheck_flags = --tool=memcheck $(VALGRIND_memcheck_FLAGS)
 valgrind_helgrind_flags = --tool=helgrind $(VALGRIND_helgrind_FLAGS)
-valgrind_drd_flags      = --tool=drd $(VALGRIND_drd_FLAGS)
-valgrind_sgcheck_flags  = --tool=exp-sgcheck $(VALGRIND_sgcheck_FLAGS)
+valgrind_drd_flags = --tool=drd $(VALGRIND_drd_FLAGS)
+valgrind_sgcheck_flags = --tool=exp-sgcheck $(VALGRIND_sgcheck_FLAGS)
 
-valgrind_quiet   = $(valgrind_quiet_$(V))
-valgrind_quiet_  = $(valgrind_quiet_$(AM_DEFAULT_VERBOSITY))
+valgrind_quiet = $(valgrind_quiet_$(V))
+valgrind_quiet_ = $(valgrind_quiet_$(AM_DEFAULT_VERBOSITY))
 valgrind_quiet_0 = --quiet
 valgrind_v_use   = $(valgrind_v_use_$(V))
 valgrind_v_use_  = $(valgrind_v_use_$(AM_DEFAULT_VERBOSITY))
-valgrind_v_use_0 = @echo "  USE   " $(patsubst check-valgrind-%-am,%,$''@):;
+valgrind_v_use_0 = @echo "  USE   " $(patsubst check-valgrind-%-local,%,$''@):;
 
+# Support running with and without libtool.
+ifneq ($(LIBTOOL),)
 valgrind_lt = $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=execute
-
-check-vg-am: check-valgrind-am
+else
+valgrind_lt =
+endif
 
 # Use recursive makes in order to ignore errors during check
-check-valgrind-am:
+check-valgrind-local:
+ifeq ($(VALGRIND_ENABLED),yes)
 	$(A''M_V_at)$(MAKE) $(AM_MAKEFLAGS) -k \
-            ']$check_valgrind_enabled_tools['
+		$(foreach tool, $(valgrind_enabled_tools), check-valgrind-$(tool))
+else
+	@echo "Need to reconfigure with --enable-valgrind"
+endif
 
 # Valgrind running
 VALGRIND_TESTS_ENVIRONMENT = \
@@ -200,30 +206,24 @@ VALGRIND_LOG_COMPILER = \
 	$(valgrind_lt) \
 	$(VALGRIND) $(VALGRIND_SUPPRESSIONS) --error-exitcode=1 $(VALGRIND_FLAGS)
 
-check-valgrind-memcheck-am:
-	$(valgrind_v_use)$(MAKE) check-TESTS \
-		TESTS_ENVIRONMENT="$(VALGRIND_TESTS_ENVIRONMENT)" \
-		LOG_COMPILER="$(VALGRIND_LOG_COMPILER)" \
-		LOG_FLAGS="$(valgrind_memcheck_flags)" \
-		TEST_SUITE_LOG=test-suite-memcheck.log
-check-valgrind-helgrind-am:
-	$(valgrind_v_use)$(MAKE) check-TESTS \
-		TESTS_ENVIRONMENT="$(VALGRIND_TESTS_ENVIRONMENT)" \
-		LOG_COMPILER="$(VALGRIND_LOG_COMPILER)" \
-		LOG_FLAGS="$(valgrind_helgrind_flags)" \
-		TEST_SUITE_LOG=test-suite-helgrind.log
-check-valgrind-drd-am:
-	$(valgrind_v_use)$(MAKE) check-TESTS \
-		TESTS_ENVIRONMENT="$(VALGRIND_TESTS_ENVIRONMENT)" \
-		LOG_COMPILER="$(VALGRIND_LOG_COMPILER)" \
-		LOG_FLAGS="$(valgrind_drd_flags)" \
-		TEST_SUITE_LOG=test-suite-drd.log
-check-valgrind-sgcheck-am:
-	$(valgrind_v_use)$(MAKE) check-TESTS \
-		TESTS_ENVIRONMENT="$(VALGRIND_TESTS_ENVIRONMENT)" \
-		LOG_COMPILER="$(VALGRIND_LOG_COMPILER)" \
-		LOG_FLAGS="$(valgrind_sgcheck_flags)" \
-		TEST_SUITE_LOG=test-suite-sgcheck.log
+define valgrind_tool_rule
+check-valgrind-$(1)-local:
+ifeq ($$(VALGRIND_ENABLED)-$$(ENABLE_VALGRIND_$(1)),yes-yes)
+ifneq ($$(TESTS),)
+	$$(valgrind_v_use)$$(MAKE) check-TESTS \
+		TESTS_ENVIRONMENT="$$(VALGRIND_TESTS_ENVIRONMENT)" \
+		LOG_COMPILER="$$(VALGRIND_LOG_COMPILER)" \
+		LOG_FLAGS="$$(valgrind_$(1)_flags)" \
+		TEST_SUITE_LOG=test-suite-$(1).log
+endif
+else ifeq ($$(VALGRIND_ENABLED),yes)
+	@echo "Need to reconfigure with --enable-valgrind-$(1)"
+else
+	@echo "Need to reconfigure with --enable-valgrind"
+endif
+endef
+
+$(foreach tool,$(valgrind_tools),$(eval $(call valgrind_tool_rule,$(tool))))
 
 A''M_DISTCHECK_CONFIGURE_FLAGS ?=
 A''M_DISTCHECK_CONFIGURE_FLAGS += --disable-valgrind
@@ -231,7 +231,7 @@ A''M_DISTCHECK_CONFIGURE_FLAGS += --disable-valgrind
 MOSTLYCLEANFILES ?=
 MOSTLYCLEANFILES += $(valgrind_log_files)
 
-.PHONY: check-vg check-valgrind ']$check_valgrind_enabled_tools['
+.PHONY: check-valgrind $(addprefix check-valgrind-,$(valgrind_tools))
 ']
 
 	AC_SUBST([VALGRIND_CHECK_RULES])

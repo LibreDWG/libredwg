@@ -24,8 +24,8 @@
 #
 #     switch (0) case 0: case 0:;
 #
-#   Thus, the AC_TRY_COMPILE will fail if the currently tried size does not
-#   match.
+#   Thus, the AC_COMPILE_IFELSE will fail if the currently tried size does
+#   not match.
 #
 #   Here is an example skeleton configure.in script, demonstrating the
 #   macro's usage:
@@ -85,7 +85,7 @@
 #   modified version of the Autoconf Macro, you may extend this special
 #   exception to the GPL to apply to your modified version as well.
 
-#serial 7
+#serial 8
 
 AU_ALIAS([AC_COMPILE_CHECK_SIZEOF], [AX_COMPILE_CHECK_SIZEOF])
 AC_DEFUN([AX_COMPILE_CHECK_SIZEOF],
