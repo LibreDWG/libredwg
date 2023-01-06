@@ -327,7 +327,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           > dat->size)
         {
           LOG_ERROR ("section[%u] address or size overflow: %lu + %u > %lu", j,
-                     dwg->header.section[j].address,
+                     (unsigned long)dwg->header.section[j].address,
                      dwg->header.section[j].size, dat->size);
           return DWG_ERR_INVALIDDWG;
         }
@@ -4939,9 +4939,9 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
   /* Until here dat is absolute. now restrict it */
   bit_reset_chain (dat);
   if (obj->size > dat->size || dat->size > abs_dat.size
-      || (long)(dat->chain + dat->size) < (long)dat->chain
-      || (long)(abs_dat.chain + abs_dat.size) < (long)abs_dat.chain
-      || (long)(dat->chain + dat->size) > (long)(abs_dat.chain + abs_dat.size))
+      || &dat->chain[dat->size] < &dat->chain[0]
+      || &abs_dat.chain[abs_dat.size] < &abs_dat.chain[0]
+      || &dat->chain[dat->size] > &abs_dat.chain[abs_dat.size])
     {
       LOG_TRACE ("\n");
       LOG_WARN ("Invalid object size %u > %ld. Would overflow", obj->size,
