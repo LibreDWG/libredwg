@@ -765,7 +765,7 @@ if test x$cross_compiling = xno; then
   esac
   dnl passes only on some systems. --enable-valgrind-sgcheck
   AX_VALGRIND_DFLT([sgcheck], [off])
-  AX_VALGRIND_CHECK()
+  AX_VALGRIND_CHECK
   if test -n "$VALGRIND"; then
      if test -n "$VALGRIND"; then
        AC_MSG_CHECKING([VALGRIND version])
@@ -787,7 +787,8 @@ if test x$cross_compiling = xno; then
 else
   AC_MSG_WARN([disabled valgrind: cross-compiled])
   enable_valgrind=no
-  AX_VALGRIND_CHECK()
+  AC_SUBST([VALGRIND_ENABLED],[$enable_valgrind])
+  AM_CONDITIONAL([VALGRIND_ENABLED],[test "$enable_valgrind" = "yes"])
 fi
 AC_SUBST(VALGRIND_SUPPRESSIONS)
 AC_SUBST(VALGRIND_SUPPRESSIONS_FILE)
