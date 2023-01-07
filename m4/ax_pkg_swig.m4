@@ -36,6 +36,7 @@
 #   Copyright (c) 2008 Rafael Laboissiere <rafael@laboissiere.net>
 #   Copyright (c) 2008 Andrew Collier
 #   Copyright (c) 2011 Murray Cumming <murrayc@openismus.com>
+#   Copyright (c) 2018 Reini Urban <rurban@cpan.org>
 #   Copyright (c) 2021 Vincent Danjean <Vincent.Danjean@ens-lyon.org>
 #
 #   This program is free software; you can redistribute it and/or modify it
@@ -64,7 +65,7 @@
 #   modified version of the Autoconf Macro, you may extend this special
 #   exception to the GPL to apply to your modified version as well.
 
-#serial 14
+#serial 15
 
 AC_DEFUN([AX_PKG_SWIG],[
         # Find path to the "swig" executable.
@@ -124,7 +125,7 @@ AC_DEFUN([AX_PKG_SWIG],[
                                 m4_ifval([$3],[$3],[])
                         else
                                 AC_MSG_CHECKING([for SWIG library])
-                                SWIG_LIB=`$SWIG -swiglib`
+                                SWIG_LIB=`$SWIG -swiglib | tr '\r\n' '  '`
                                 AC_MSG_RESULT([$SWIG_LIB])
                                 m4_ifval([$2],[$2],[])
                         fi
