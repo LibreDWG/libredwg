@@ -320,7 +320,7 @@ AC_ARG_ENABLE([debug],AS_HELP_STRING([--enable-debug],[
 AM_CONDITIONAL([ENABLE_DEBUG], [test x$enable_debug = xyes])
 
 AX_ADD_FORTIFY_SOURCE
-AX_RESTRICT
+AX_C_RESTRICT
 
 dnl Feature: --disable-write
 AC_MSG_CHECKING([--disable-write])

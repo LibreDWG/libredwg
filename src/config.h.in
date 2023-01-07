@@ -316,7 +316,7 @@
 /* Define to rpl_realloc if the replacement function should be used. */
 #undef realloc
 
-/* If restrict is broken with this compiler */
+/* If restrict is broken with this C compiler */
 #undef restrict
 
 /* Define to `unsigned int' if <sys/types.h> does not define. */

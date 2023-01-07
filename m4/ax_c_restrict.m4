@@ -1,10 +1,10 @@
 # ===========================================================================
-#       https://www.gnu.org/software/autoconf-archive/ax_restrict.html
+#       https://www.gnu.org/software/autoconf-archive/ax_c_restrict.html
 # ===========================================================================
 #
 # SYNOPSIS
 #
-#   AX_RESTRICT
+#   AX_C_RESTRICT
 #
 # DESCRIPTION
 #
@@ -26,9 +26,9 @@
 
 #serial 1
 
-AC_DEFUN([AX_RESTRICT],
+AC_DEFUN([AX_C_RESTRICT],
 [AC_CACHE_CHECK([for restrict usability],
-  [ax_cv_restrict_usable],
+  [ax_cv_c_restrict_usable],
   [AC_RUN_IFELSE([AC_LANG_PROGRAM([],
   [[
     void copy (int * restrict to, int * restrict from) {
@@ -48,15 +48,15 @@ AC_DEFUN([AX_RESTRICT],
     	return ary[0] == 2 ? 0 : 1;
     }
   ]])],
-  [ax_cv_restrict_usable=restrict],
-  [ax_cv_restrict_usable=],
-  [ax_cv_restrict_usable=])])
+  [ax_cv_c_restrict_usable=restrict],
+  [ax_cv_c_restrict_usable=],
+  [ax_cv_c_restrict_usable=])])
 
-if test -z $ax_cv_restrict_usable; then
+if test -z $ax_cv_c_restrict_usable; then
   AC_MSG_RESULT([no])
-  AC_DEFINE_UNQUOTED(restrict, $ax_cv_restrict_usable,
-    [If restrict is broken with this compiler])
+  AC_DEFINE_UNQUOTED(restrict, $ax_cv_c_restrict_usable,
+    [If restrict is broken with this C compiler])
 else
   AC_MSG_RESULT([yes])
 fi
-]) dnl AX_RESTRICT
+]) dnl AX_C_RESTRICT
