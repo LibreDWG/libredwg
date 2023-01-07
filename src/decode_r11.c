@@ -405,11 +405,13 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_RD (width_factor, 41);
           FIELD_RD (oblique_angle, 50);
           FIELD_RC (generation, 71);
+          LOG_TEXT_GENERATION
           FIELD_RD (last_height, 42);
           SINCE (R_11)
-          FIELD_RSd (used, 0);
+            FIELD_RSd (used, 0);
           FIELD_TFv (font_file, 64, 3)                       // 8ed
-              SINCE (R_2_4) FIELD_TFv (bigfont_file, 64, 4); // 92d
+          SINCE (R_2_4)
+            FIELD_TFv (bigfont_file, 64, 4); // 92d
           CHK_ENDPOS;
         }
       break;
