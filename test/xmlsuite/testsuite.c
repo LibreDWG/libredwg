@@ -96,7 +96,8 @@ common_entity_attrs (xmlNodePtr node, const Dwg_Object *obj)
   dwg_point_3d extrusion;
   double thickness;
 
-  // TODO: EntityTransparency, ObjectID, ObjectID32, Visible, TrueColor
+  // TODO: EntityTransparency (ByLayer), ObjectID=int, ObjectID32=int, Visible, TrueColor
+  // OwnerID=int OwnerID32=int TrueColor Document=dwg ptr
 
   buf = doubletohex (obj->handle.value);
   newXMLProp ("Handle", buf);
@@ -178,6 +179,7 @@ add_line (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   newXMLcProp ("type", "IAcadLine");
   newXMLcProp ("desc", "IAcadLine: AutoCAD Line Interface");
+  newXMLcProp ("ObjectName", "AcDbLine");
 
   buf = spointprepare (line->end.x, line->end.y, line->end.z);
   newXMLProp ("EndPoint", buf);
@@ -203,6 +205,7 @@ add_circle (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   newXMLcProp ("type", "IAcadCircle");
   newXMLcProp ("desc", "IAcadCircle: AutoCAD Circle Interface");
+  newXMLcProp ("ObjectName", "AcDbCircle");
 
   buf = spointprepare (circle->center.x, circle->center.y, circle->center.z);
   newXMLProp ("Center", buf);
@@ -236,6 +239,7 @@ add_helix (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   newXMLcProp ("type", "IAcadHelix");
   newXMLcProp ("desc", "IAcadHelix: IAcadSpring Interface");
+  newXMLcProp ("ObjectName", "AcDbHelix");
 
   buf = spointprepare (helix->start_pt.x, helix->start_pt.y,
                        helix->start_pt.z);
@@ -298,6 +302,7 @@ add_lwpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
   newXMLcProp ("type", "IAcadLWPolyline");
   newXMLcProp ("desc",
                "IAcadLWPolyline: AutoCAD Lightweight Polyline Interface");
+  newXMLcProp ("ObjectName", "AcDbPolyline");
 
   newXMLcProp ("Closed", lwpline->flag & 1 ? "1" : "0");
   // ConstantWidth="0.0"
@@ -320,8 +325,6 @@ add_lwpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
                        lwpline->extrusion.z);
   newXMLProp ("Normal", buf);
   */
-
-  newXMLcProp ("ObjectName", "AcDbPolyline");
 
   /* See common_entity_attrs
   buf = doubletochar (lwpline->thickness);
@@ -351,6 +354,7 @@ add_2dpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   newXMLcProp ("type", "IAcad2DPolyline");
   newXMLcProp ("desc", "IAcad2DPolyline: AutoCAD 2dPolyline Interface");
+  newXMLcProp ("ObjectName", "AcDb2dPolyline");
 
   newXMLcProp ("Closed", pline->flag & 512 ? "1" : "0");
 
@@ -389,6 +393,7 @@ add_3dpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   newXMLcProp ("type", "IAcad3DPolyline");
   newXMLcProp ("desc", "IAcad3DPolyline: AutoCAD 3dPolyline Interface");
+  newXMLcProp ("ObjectName", "AcDb3dPolyline");
 
   newXMLcProp ("Closed", pline->flag & 512 ? "1" : "0");
 
@@ -402,7 +407,6 @@ add_3dpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
   free (pts);
 
   common_entity_attrs (node, obj);
-  newXMLcProp ("ObjectName", "Acad3DPolyline");
   xmlAddChild (rootnode, node);
 }
 
@@ -422,6 +426,7 @@ add_arc (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   newXMLcProp ("type", "IAcadArc");
   newXMLcProp ("desc", "IAcadArc: AutoCAD Arc Interface");
+  newXMLcProp ("ObjectName", "AcDbArc");
 
   buf = spointprepare (arc->center.x, arc->center.y, arc->center.z);
   newXMLProp ("Center", buf);
@@ -461,6 +466,7 @@ add_block (xmlNodePtr rootnode, const Dwg_Object *obj)
 
       newXMLcProp ("type", "IAcadBlock");
       newXMLcProp ("desc", "IAcadBlock: AutoCAD Block Interface");
+      newXMLcProp ("ObjectName", "AcDbBlock");
 
       newXMLcProp ("EffectiveName", block->name);
 
@@ -517,6 +523,7 @@ add_ellipse (xmlNodePtr rootnode, const Dwg_Object *obj)
   // Now the attributes
   newXMLcProp ("type", "IAcadEllipse");
   newXMLcProp ("desc", "IAcadEllipse: AutoCAD Ellipse Interface");
+  newXMLcProp ("ObjectName", "AcDbEllipse");
 
   buf = spointprepare (ellipse->center.x, ellipse->center.y,
                        ellipse->center.z);
@@ -555,6 +562,7 @@ add_mline (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   newXMLcProp ("type", "IAcadMLine");
   newXMLcProp ("desc", "IAcadMLine: IAcadMLine Interface");
+  newXMLcProp ("ObjectName", "AcDbMline");
 
   if (mline->num_verts >= 3)
     {
@@ -593,6 +601,7 @@ add_xline (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   newXMLcProp ("type", "IAcadXline");
   newXMLcProp ("desc", "IAcadXline: AutoCAD Xline Interface");
+  newXMLcProp ("ObjectName", "AcDbXline");
 
   buf = spointprepare (line->point.x, line->point.y, line->point.z);
   newXMLProp ("BasePoint", buf);
@@ -623,6 +632,7 @@ add_point (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   newXMLcProp ("type", "IAcadPoint");
   newXMLcProp ("desc", "IAcadPoint: AutoCAD Point Interface");
+  newXMLcProp ("ObjectName", "AcDbPoint");
 
   buf = spointprepare (point->x, point->y, point->z);
   newXMLProp ("Coordinates", buf);
@@ -650,6 +660,7 @@ add_ray (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   newXMLcProp ("type", "IAcadRay");
   newXMLcProp ("desc", "IAcadRay: AutoCAD Ray Interface");
+  newXMLcProp ("ObjectName", "AcDbRay");
 
   buf = spointprepare (ray->point.x, ray->point.y, ray->point.z);
   newXMLProp ("BasePoint", buf);
@@ -676,6 +687,7 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   newXMLcProp ("type", "IAcadSpline");
   newXMLcProp ("desc", "IAcadSpline: AutoCAD Spline Interface");
+  newXMLcProp ("ObjectName", "AcDbSpline");
 
   newXMLcProp ("Closed", spline->closed_b ? "1" : "0");
   newXMLProp ("Degree", doubletochar (spline->degree));
@@ -834,7 +846,7 @@ add_text (xmlNodePtr rootnode, const Dwg_Object *obj)
   dtostring = doubletochar (text->width_factor);
   newXMLProp ("Width", dtostring);
 
-  //@TODO: Lots of attributes were also left. Check this.
+  //@TODO: Lots of attributes were also left. Check MText also
 
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
@@ -866,7 +878,7 @@ add_mtext (xmlNodePtr rootnode, const Dwg_Object *obj)
   buf = spointprepare2 (text->ins_pt.x, text->ins_pt.y);
   newXMLProp ("InsertionPoint", buf);
 
-  //rotation = (text->x_axis_dir);
+  //rotation = geom_some(text->x_axis_dir);
   //dtostring = doubletochar (rotation);
   //newXMLProp ("Rotation", dtostring);
 
@@ -881,8 +893,8 @@ add_mtext (xmlNodePtr rootnode, const Dwg_Object *obj)
     }
   //if (text->bg_fill_flag == 1)
   //  {
-  //    dtostring = doubletochar (text->bg_fill_color);
-  //    newXMLProp ("BackgroundColor", dtostring);
+  //    buf = colortochar (text->bg_fill_color);
+  //    newXMLProp ("BackgroundColor", buf);
   //  }
   buf = inttochar (text->flow_dir);
   newXMLProp ("DrawingDirection", buf);
@@ -906,8 +918,6 @@ add_mtext (xmlNodePtr rootnode, const Dwg_Object *obj)
   dtostring = doubletochar (text->rect_width);
   newXMLProp ("Width", dtostring);
 
-  //@TODO: Some more attributes
-
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
 }
@@ -926,6 +936,7 @@ add_table (xmlNodePtr rootnode, const Dwg_Object *obj)
 
   newXMLcProp ("type", "IAcadTable");
   newXMLcProp ("desc", "IAcadTable: IAcadTable Interface");
+  newXMLcProp ("ObjectName", "AcDbTable");
 
   buf = spointprepare (table->ins_pt.x, table->ins_pt.y, table->ins_pt.z);
   newXMLProp ("InsertionPoint", buf);
@@ -1074,7 +1085,7 @@ main (int argc, char *argv[])
 
   if (root == NULL)
     {
-      printf ("Cannot get handle to root node. Please Check\n");
+      printf ("Cannot get handle to root node. Please check\n");
       return 1;
     }
 
@@ -1087,7 +1098,7 @@ main (int argc, char *argv[])
       return error;
     }
 
-  // Save the XML and Cleanup
+  // Save the XML and cleanup
   xmlSaveFormatFileEnc (argv[2], doc, "UTF-8", 1);
   xmlFreeDoc (doc);
   xmlCleanupParser ();

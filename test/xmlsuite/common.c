@@ -132,7 +132,7 @@ doubletohex (double handle)
 
   /* allocate memory for the string */
   result = malloc (20 * sizeof (xmlChar));
-  n = sprintf ((char *)result, "%03x", (unsigned int)handle);
+  n = sprintf ((char *)result, "%03X", (unsigned int)handle);
 
   // Check if it was transferred properly
 
