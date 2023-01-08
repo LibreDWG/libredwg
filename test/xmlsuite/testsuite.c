@@ -46,7 +46,7 @@
     IAcadSpline
     IAcadXline
  */
-int load_dwg (char *dwgfilename, xmlNodePtr rootnode);
+int xml_dwg (char *dwgfilename, xmlNodePtr rootnode);
 void common_entity_attrs (xmlNodePtr node, const Dwg_Object *obj);
 void add_2dpolyline (xmlNodePtr rootnode, const Dwg_Object *obj);
 void add_3dpolyline (xmlNodePtr rootnode, const Dwg_Object *obj);
@@ -307,7 +307,7 @@ add_lwpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
       sprintf ((char *)buf, "(%.4f %.4f %.4f %.4f %.4f %.4f ... )", pts[0].x,
                pts[0].y, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
       newXMLProp ("Coordinates", buf);
-      free (buf);
+      //free (buf);
     }
   free (pts);
 
@@ -856,7 +856,7 @@ add_table (xmlNodePtr rootnode, const Dwg_Object *obj)
 
 // Main function
 int
-load_dwg (char *dwgfilename, xmlNodePtr rootnode)
+xml_dwg (char *dwgfilename, xmlNodePtr rootnode)
 {
   BITCODE_BL i;
   int error;
@@ -867,8 +867,11 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
   // Read the DWG file
   dwg.opts = 0; // silently
   error = dwg_read_file (dwgfilename, &dwg);
-  if (error)
-    return error;
+  if (error >= DWG_ERR_CRITICAL)
+    {
+      dwg_free (&dwg);
+      return error;
+    }
 
   // Emit some entities/objects to the XML file
   for (i = 0; i < dwg.num_objects; i++)
@@ -937,9 +940,9 @@ load_dwg (char *dwgfilename, xmlNodePtr rootnode)
           add_xline (rootnode, obj);
           break;
 
-          /*case DWG_TYPE_TABLE:
-            add_table(rootnode, obj);
-            break;*/
+        /*case DWG_TYPE_TABLE:
+          add_table(rootnode, obj);
+          break;*/
 
         default:
           if (obj->type < 500 || (obj->type - 500) >= dwg.num_classes)
@@ -986,9 +989,9 @@ main (int argc, char *argv[])
       return 1;
     }
 
-  // Load the DWG file
-  error = load_dwg (argv[1], root);
-  if (error)
+  // Process the DWG file
+  error = xml_dwg (argv[1], root);
+  if (error >= DWG_ERR_CRITICAL)
     {
       xmlFreeDoc (doc);
       xmlCleanupParser ();
