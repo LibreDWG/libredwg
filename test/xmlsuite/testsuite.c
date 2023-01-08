@@ -64,6 +64,7 @@ void add_ray (xmlNodePtr rootnode, const Dwg_Object *obj);
 void add_spline (xmlNodePtr rootnode, const Dwg_Object *obj);
 void add_table (xmlNodePtr rootnode, const Dwg_Object *obj);
 void add_text (xmlNodePtr rootnode, const Dwg_Object *obj);
+void add_mtext (xmlNodePtr rootnode, const Dwg_Object *obj);
 void add_xline (xmlNodePtr rootnode, const Dwg_Object *obj);
 
 #define newXMLProp(name, buf)                                                 \
@@ -803,12 +804,16 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
 void
 add_text (xmlNodePtr rootnode, const Dwg_Object *obj)
 {
+  const Dwg_Version_Type dwg_version = obj->parent->header.from_version;
   Dwg_Entity_TEXT *text = obj->tio.entity->tio.TEXT;
   xmlChar *buf, *dtostring;
   xmlNodePtr node = newXMLEntity (rootnode);
+  char *name;
+  int error;
 
   newXMLcProp ("type", "IAcadText");
   newXMLcProp ("desc", "IAcadText: AutoCAD Text Interface");
+  newXMLcProp ("ObjectName", "AcDbText");
 
   dtostring = doubletochar (text->height);
   newXMLProp ("Height", dtostring);
@@ -816,12 +821,92 @@ add_text (xmlNodePtr rootnode, const Dwg_Object *obj)
   buf = spointprepare2 (text->ins_pt.x, text->ins_pt.y);
   newXMLProp ("InsertionPoint", buf);
 
+  name = dwg_ref_get_table_name (text->style, &error);
+  if (!error)
+    {
+      newXMLcProp ("StyleName", name);
+      if (dwg_version >= R_2007)
+        free (name);
+    }
+
   newXMLcProp ("TextString", (xmlChar *)text->text_value);
 
   dtostring = doubletochar (text->width_factor);
   newXMLProp ("Width", dtostring);
 
   //@TODO: Lots of attributes were also left. Check this.
+
+  common_entity_attrs (node, obj);
+  xmlAddChild (rootnode, node);
+}
+
+/*
+ * This function emits all the multi-line text related attributes
+ * @param xmlNodePtr rootnode The rootnode of the XML Document
+ * @param Dwg_Object The DWG Object
+ */
+void
+add_mtext (xmlNodePtr rootnode, const Dwg_Object *obj)
+{
+  const Dwg_Version_Type dwg_version = obj->parent->header.from_version;
+  Dwg_Entity_MTEXT *text = obj->tio.entity->tio.MTEXT;
+  xmlChar *buf, *dtostring;
+  xmlNodePtr node = newXMLEntity (rootnode);
+  //double rotation;
+  char *name;
+  int error;
+
+  newXMLcProp ("type", "IAcadMText");
+  newXMLcProp ("desc", "IAcadMText: AutoCAD MText Interface");
+  newXMLcProp ("ObjectName", "AcDbMText");
+
+  dtostring = doubletochar (text->rect_height);
+  newXMLProp ("Height", dtostring);
+
+  buf = spointprepare2 (text->ins_pt.x, text->ins_pt.y);
+  newXMLProp ("InsertionPoint", buf);
+
+  //rotation = (text->x_axis_dir);
+  //dtostring = doubletochar (rotation);
+  //newXMLProp ("Rotation", dtostring);
+
+  buf = inttochar (text->attachment);
+  newXMLProp ("AttachmentPoint", buf);
+  buf = inttochar (text->bg_fill_flag);
+  newXMLProp ("BackgroundFill", buf);
+  if (text->bg_fill_flag)
+    {
+      dtostring = doubletochar (text->bg_fill_scale);
+      newXMLProp ("BackgroundFill", dtostring);
+    }
+  //if (text->bg_fill_flag == 1)
+  //  {
+  //    dtostring = doubletochar (text->bg_fill_color);
+  //    newXMLProp ("BackgroundColor", dtostring);
+  //  }
+  buf = inttochar (text->flow_dir);
+  newXMLProp ("DrawingDirection", buf);
+  dtostring = doubletochar (text->text_height);
+  newXMLProp ("LineSpacingDistance", dtostring);
+  dtostring = doubletochar (text->linespace_factor);
+  newXMLProp ("LineSpacingFactor", dtostring);
+  buf = inttochar (text->linespace_style);
+  newXMLProp ("LineSpacingStyle", buf);
+
+  newXMLcProp ("TextString", (xmlChar *)text->text);
+
+  name = dwg_ref_get_table_name (text->style, &error);
+  if (!error)
+    {
+      newXMLcProp ("StyleName", name);
+      if (dwg_version >= R_2007)
+        free (name);
+    }
+
+  dtostring = doubletochar (text->rect_width);
+  newXMLProp ("Width", dtostring);
+
+  //@TODO: Some more attributes
 
   common_entity_attrs (node, obj);
   xmlAddChild (rootnode, node);
@@ -929,6 +1014,10 @@ xml_dwg (char *dwgfilename, xmlNodePtr rootnode)
           break;
 
         case DWG_TYPE_TEXT:
+          add_text (rootnode, obj);
+          break;
+
+        case DWG_TYPE_MTEXT:
           add_text (rootnode, obj);
           break;
 
