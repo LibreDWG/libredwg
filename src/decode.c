@@ -3388,7 +3388,27 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
   switch (data->code)
     {
     case 0:
-      PRE (R_2007)
+      PRE (R_13b1)
+      {
+        if (eed_need_size (1, size))
+          return DWG_ERR_INVALIDEED;
+        data->u.eed_0.is_tu = 0;
+        data->u.eed_0.length = lenc = bit_read_RC (dat);
+        if ((long)lenc > size - 3)
+          {
+            LOG_ERROR ("Invalid EED string len %d, max %d", lenc,
+                       (int)size - 3)
+            dat->byte = end;
+            break;
+          }
+        /* code:1 + len:1 */
+        if (eed_need_size (lenc + 2, size))
+          return DWG_ERR_INVALIDEED;
+        bit_read_fixed (dat, (BITCODE_RC *)data->u.eed_0.string, lenc);
+        data->u.eed_0.string[lenc] = '\0';
+        LOG_TRACE ("string: len=%d [RC] \"%s\" [TF]", (int)lenc, data->u.eed_0.string);
+      }
+      VERSIONS (R_13b1, R_2007b)
       {
         if (eed_need_size (3, size))
           return DWG_ERR_INVALIDEED;
@@ -3420,7 +3440,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
         LOG_TRACE ("string: len=%d [RC] cp=%d [RS_LE] \"%s\" [TF]", (int)lenc,
                    (int)data->u.eed_0.codepage, data->u.eed_0.string);
       }
-      LATER_VERSIONS
+      SINCE (R_2007)
       {
         if (eed_need_size (2, size))
           return DWG_ERR_INVALIDEED;
@@ -3447,6 +3467,12 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
 #endif
       }
       break;
+    case 1:
+      if (eed_need_size (3, size))
+        return DWG_ERR_INVALIDEED;
+      data->u.eed_1.unknown_r11 = bit_read_RS (dat);
+      LOG_TRACE ("application name: " FORMAT_RS " [RC]", data->u.eed_1.unknown_r11);
+      break;
     case 2:
       if (eed_need_size (1, size))
         return DWG_ERR_INVALIDEED;
@@ -3456,8 +3482,14 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
     case 3:
       if (eed_need_size (8, size))
         return DWG_ERR_INVALIDEED;
-      data->u.eed_3.layer = bit_read_RLL (dat);
-      LOG_TRACE ("layer: " FORMAT_RLL " [RLL]", data->u.eed_3.layer);
+      PRE (R_13b1) {
+        data->u.eed_3.layer = (BITCODE_RLL)bit_read_RC (dat);
+        LOG_TRACE ("layer: " FORMAT_RLL " [RC]", data->u.eed_3.layer);
+      }
+      LATER_VERSIONS {
+        data->u.eed_3.layer = bit_read_RLL (dat);
+        LOG_TRACE ("layer: " FORMAT_RLL " [RLL]", data->u.eed_3.layer);
+      }
       break;
     case 4:
       if (eed_need_size (1, size))
@@ -3545,13 +3577,27 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
     return DWG_ERR_INVALIDEED;
   _obj = &dwg->object[obj->objid]; /* Note that obj->objid may be 0 */
   obj->num_eed = 0;
-  while ((size = bit_read_BS (dat)))
+  while (1)
     {
       int i;
       BITCODE_BS j;
       long unsigned int end, offset;
 
-      LOG_TRACE ("EED[%u] size: " FORMAT_BS " [BS]", idx, size);
+      if (dat->from_version >= R_13b1)
+        {
+          size = bit_read_BS (dat);
+          if (! size)
+            break;
+          LOG_TRACE ("EED[%u] size: " FORMAT_BS " [BS]", idx, size);
+        }
+      else
+        {
+          if (idx)
+            break;
+          size = (BITCODE_BS)bit_read_RS (dat);
+          LOG_TRACE ("EED[%u] size: " FORMAT_BS " [RS]", idx, size);
+        }
+
       LOG_RPOS
       if (size > _obj->size || dat->byte == sav_byte)
         {
@@ -3572,58 +3618,65 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
           obj->eed = (Dwg_Eed *)calloc (1, sizeof (Dwg_Eed));
         }
       obj->eed[idx].size = size;
-      error |= bit_read_H (dat, &obj->eed[idx].handle);
-      end = dat->byte + size;
-      if (error)
+      if (dat->from_version >= R_13b1)
         {
-          LOG_ERROR ("No EED[%d].handle", idx);
-          obj->eed[idx].size = 0;
-          obj->num_eed--;
-          if (!obj->num_eed)
-            dwg_free_eed (_obj);
-          dat->byte = end; // skip eed
-          continue;        // continue for size = bit_read_BS(dat)
-        }
-      else
-        {
-          LOG_TRACE ("EED[%u] handle: " FORMAT_H, idx,
-                     ARGS_H (obj->eed[idx].handle));
-          LOG_RPOS;
-          if (dat->byte >= dat->size)
-            end = dat->byte;
-          if (_obj->fixedtype == DWG_TYPE_MLEADERSTYLE)
-            { // check for is_new_format: has extended data for APPID
-              // “ACAD_MLEADERVER”
-              Dwg_Object_Ref ref;
-              ref.obj = NULL;
-              ref.handleref = obj->eed[idx].handle;
-              ref.absolute_ref = 0L;
-              if (dwg_resolve_handleref (&ref, _obj))
-                {
-                  Dwg_Object *appid
-                      = dwg_get_first_object (dwg, DWG_TYPE_APPID_CONTROL);
-                  if (appid)
+          error |= bit_read_H (dat, &obj->eed[idx].handle);
+          end = dat->byte + size;
+          if (error)
+            {
+              LOG_ERROR ("No EED[%d].handle", idx);
+              obj->eed[idx].size = 0;
+              obj->num_eed--;
+              if (!obj->num_eed)
+                dwg_free_eed (_obj);
+              dat->byte = end; // skip eed
+              continue;        // continue for size = bit_read_BS(dat)
+            }
+          else
+            {
+              LOG_TRACE ("EED[%u] handle: " FORMAT_H, idx,
+                         ARGS_H (obj->eed[idx].handle));
+              LOG_RPOS;
+              if (dat->byte >= dat->size)
+                end = dat->byte;
+              if (_obj->fixedtype == DWG_TYPE_MLEADERSTYLE)
+                { // check for is_new_format: has extended data for APPID
+                  // “ACAD_MLEADERVER”
+                  Dwg_Object_Ref ref;
+                  ref.obj = NULL;
+                  ref.handleref = obj->eed[idx].handle;
+                  ref.absolute_ref = 0L;
+                  if (dwg_resolve_handleref (&ref, _obj))
                     {
-                      Dwg_Object_APPID_CONTROL *_appid
-                          = appid->tio.object->tio.APPID_CONTROL;
-                      // search absref in APPID_CONTROL apps[]
-                      for (j = 0; j < _appid->num_entries; j++)
+                      Dwg_Object *appid
+                          = dwg_get_first_object (dwg, DWG_TYPE_APPID_CONTROL);
+                      if (appid)
                         {
-                          if (_appid->entries && _appid->entries[j]
-                              && _appid->entries[j]->absolute_ref
-                                     == ref.absolute_ref)
+                          Dwg_Object_APPID_CONTROL *_appid
+                              = appid->tio.object->tio.APPID_CONTROL;
+                          // search absref in APPID_CONTROL apps[]
+                          for (j = 0; j < _appid->num_entries; j++)
                             {
-                              Dwg_Object_MLEADERSTYLE *mstyle
-                                  = obj->tio.MLEADERSTYLE;
-                              mstyle->class_version
-                                  = 2; // real value with code 70 follows
-                              LOG_TRACE ("EED found ACAD_MLEADERVER %lX\n",
-                                         ref.absolute_ref);
+                              if (_appid->entries && _appid->entries[j]
+                                  && _appid->entries[j]->absolute_ref
+                                         == ref.absolute_ref)
+                                {
+                                  Dwg_Object_MLEADERSTYLE *mstyle
+                                      = obj->tio.MLEADERSTYLE;
+                                  mstyle->class_version
+                                      = 2; // real value with code 70 follows
+                                  LOG_TRACE ("EED found ACAD_MLEADERVER %lX\n",
+                                             ref.absolute_ref);
+                                }
                             }
                         }
                     }
                 }
             }
+        }
+      else
+        {
+          end = dat->byte + size;
         }
 
       sav_byte = dat->byte;
