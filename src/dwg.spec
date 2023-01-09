@@ -2285,7 +2285,7 @@ DWG_ENTITY (VIEWPORT)
     FIELD_3RD (center, 10);
     FIELD_RD (width, 40);
     FIELD_RD (height, 41);
-    FIELD_RS (on_off, 68);
+    FIELD_RS (id, 69);
   }
   LATER_VERSIONS {
     FIELD_3BD (center, 10);
