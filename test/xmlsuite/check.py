@@ -79,7 +79,7 @@ for report in final_output:
 	if report[2] < 100 and report[2] != 0:
 		print (bcolors.OKGREEN + "%s: [%d]"
 			   % (report[1], report[2]) + bcolors.ENDC)
-		reporthtm.write("\n<div class='result_middle'><b>%s</b> was <b>%d</b> percentage matched</div>\n"
+		reporthtm.write("\n<div class='result_middle'><b>%s</b> matched <b>%d</b>%%</div>\n"
 						% (report[1], report[2]))
 	elif report[2] == 0:
 		print (bcolors.WARNING + "%s: [%d]"
