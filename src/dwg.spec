@@ -680,8 +680,8 @@ DWG_ENTITY (INSERT)
   VERSIONS (R_2_0b, R_11) {
     DECODER { FIELD_VALUE (has_attribs) = R11FLAG (FLAG_R11_HAS_ATTRIBS); }
     FIELD_HANDLE (block_header, 2, 2);
+    FIELD_2RD (ins_pt, 10)
 #ifndef IS_JSON
-    FIELD_2RD (ins_pt, 10);
     if (R11OPTS (1)) {
       FIELD_RD (scale.x, 41);
     }
@@ -695,7 +695,6 @@ DWG_ENTITY (INSERT)
       FIELD_RD (scale.z, 43);
     }
 #else
-    FIELD_3RD (ins_pt, 10);
     if (R11OPTS (1|2|8)) {
       FIELD_3RD (scale, 0);
     }
