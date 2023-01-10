@@ -8056,6 +8056,17 @@ typedef struct _dwg_entity_eed
 } Dwg_Eed;
 
 enum {
+  EXTRA_R11_UNKNOWN_1 = 1,
+  EXTRA_R11_HAS_EED = 2,
+  EXTRA_R11_HAS_VIEWPORT = 4,
+  EXTRA_R11_UNKNOWN_8 = 8,
+  EXTRA_R11_UNKNOWN_16 = 16,
+  EXTRA_R11_UNKNOWN_32 = 32,
+  EXTRA_R11_UNKNOWN_64 = 64,
+  EXTRA_R11_UNKNOWN_128 = 128,
+};
+
+enum {
   FLAG_R11_HAS_COLOR = 1,
   FLAG_R11_HAS_LTYPE = 2,
   FLAG_R11_HAS_ELEVATION = 4,
@@ -8482,6 +8493,7 @@ typedef struct _dwg_object_entity
   /* preR13 entity fields. TODO a union with above */
   BITCODE_RC flag_r11;
   BITCODE_RS opts_r11;
+  BITCODE_RS extra_r11;
   BITCODE_RCd color_r11;
   BITCODE_RD elevation_r11; // TODO: move to the entities
   BITCODE_RD thickness_r11; // TODO: move to the entities

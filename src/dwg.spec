@@ -2278,10 +2278,6 @@ DWG_ENTITY (VIEWPORT)
 
   SUBCLASS (AcDbViewport)
   PRE (R_13b1) {
-    // some unknown pspace RS
-    if (R11FLAG (FLAG_R11_HAS_PSPACE)) {
-      FIELD_HANDLE (vport_entity_header, 2, 0);
-    }
     FIELD_3RD (center, 10);
     FIELD_RD (width, 40);
     FIELD_RD (height, 41);
