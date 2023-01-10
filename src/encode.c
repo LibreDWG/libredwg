@@ -1066,8 +1066,10 @@ static int dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
                               Bit_Chain *restrict hdl_dat, Bit_Chain *str_dat);
 static int dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *dat,
                               Bit_Chain *restrict hdl_dat, Bit_Chain *str_dat);
-static BITCODE_RS encode_preR13_entities (unsigned long offset, Bit_Chain *dat,
-                                          Dwg_Data *restrict dwg);
+static BITCODE_RS encode_preR13_entities (unsigned long offset,
+                                          Bit_Chain *restrict dat,
+                                          Dwg_Data *restrict dwg,
+                                          int *restrict error);
 static int encode_preR13_header_variables (Bit_Chain *dat,
                                            Dwg_Data *restrict dwg);
 static int dwg_encode_common_entity_handle_data (Bit_Chain *dat,
@@ -2471,7 +2473,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     entities_start = dat->byte;
     LOG_TRACE ("\nentities 0x%x:\n", entities_start);
     dwg->cur_index = 0;
-    numentities = encode_preR13_entities (0, dat, dwg);
+    numentities = encode_preR13_entities (0, dat, dwg, &error);
     dwg->cur_index += numentities;
     entities_end = dat->byte;
     LOG_TRACE ("\nentities %u 0x%x - 0x%x\n", numentities, entities_start,
@@ -2504,7 +2506,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       encode_preR13_section (SECTION_LTYPE, dat, dwg);
       encode_preR13_section (SECTION_VIEW, dat, dwg);
       blocks_start = dat->byte;
-      num_blocks = encode_preR13_entities (blocks_start, dat, dwg);
+      num_blocks = encode_preR13_entities (blocks_start, dat, dwg, &error);
       blocks_end = dat->byte;
 
       // patch these numbers into the header
@@ -3954,15 +3956,15 @@ encode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 }
 
 static BITCODE_RS
-encode_preR13_entities (unsigned long offset, Bit_Chain *dat,
-                        Dwg_Data *restrict dwg)
+encode_preR13_entities (unsigned long offset, Bit_Chain *restrict dat,
+                        Dwg_Data *restrict dwg, int *restrict error)
 {
-  int error = 0;
   BITCODE_RS numentities = 0;
   if (dwg->cur_index > dwg->num_objects)
     {
       LOG_ERROR ("Invalid dwg->cur_index " FORMAT_BL " > " FORMAT_BL,
                  dwg->cur_index, dwg->num_objects);
+      *error |= DWG_ERR_SECTIONNOTFOUND;
       return 0;
     }
   // TODO index offset for blocks
@@ -4132,80 +4134,80 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat,
       switch ((Dwg_Object_Type_r11)obj->type)
         {
         case DWG_TYPE_LINE_R11:
-          error |= dwg_encode_LINE (dat, obj);
+          *error |= dwg_encode_LINE (dat, obj);
           break;
         case DWG_TYPE_POINT_R11:
-          error |= dwg_encode_POINT (dat, obj);
+          *error |= dwg_encode_POINT (dat, obj);
           break;
         case DWG_TYPE_CIRCLE_R11:
-          error |= dwg_encode_CIRCLE (dat, obj);
+          *error |= dwg_encode_CIRCLE (dat, obj);
           break;
         case DWG_TYPE_SHAPE_R11:
-          error |= dwg_encode_SHAPE (dat, obj);
+          *error |= dwg_encode_SHAPE (dat, obj);
           break;
         case DWG_TYPE_REPEAT_R11:
-          error |= dwg_encode_REPEAT (dat, obj);
+          *error |= dwg_encode_REPEAT (dat, obj);
           break;
         case DWG_TYPE_ENDREP_R11:
-          error |= dwg_encode_ENDREP (dat, obj);
+          *error |= dwg_encode_ENDREP (dat, obj);
           break;
         case DWG_TYPE_TEXT_R11:
-          error |= dwg_encode_TEXT (dat, obj);
+          *error |= dwg_encode_TEXT (dat, obj);
           break;
         case DWG_TYPE_ARC_R11:
-          error |= dwg_encode_ARC (dat, obj);
+          *error |= dwg_encode_ARC (dat, obj);
           break;
         case DWG_TYPE_TRACE_R11:
-          error |= dwg_encode_TRACE (dat, obj);
+          *error |= dwg_encode_TRACE (dat, obj);
           break;
         case DWG_TYPE_LOAD_R11:
           /* convert from pre r2.0 */
-          error |= dwg_encode_LOAD (dat, obj);
+          *error |= dwg_encode_LOAD (dat, obj);
           break;
         case DWG_TYPE_SOLID_R11:
-          error |= dwg_encode_SOLID (dat, obj);
+          *error |= dwg_encode_SOLID (dat, obj);
           break;
         case DWG_TYPE_BLOCK_R11:
-          error |= dwg_encode_BLOCK (dat, obj);
+          *error |= dwg_encode_BLOCK (dat, obj);
           break;
         case DWG_TYPE_ENDBLK_R11:
-          error |= dwg_encode_ENDBLK (dat, obj);
+          *error |= dwg_encode_ENDBLK (dat, obj);
           break;
         case DWG_TYPE_INSERT_R11:
           if (obj->fixedtype == DWG_TYPE_MINSERT)
-            error |= dwg_encode_MINSERT (dat, obj);
+            *error |= dwg_encode_MINSERT (dat, obj);
           else
-            error |= dwg_encode_INSERT (dat, obj);
+            *error |= dwg_encode_INSERT (dat, obj);
           break;
         case DWG_TYPE_ATTDEF_R11:
-          error |= dwg_encode_ATTDEF (dat, obj);
+          *error |= dwg_encode_ATTDEF (dat, obj);
           break;
         case DWG_TYPE_ATTRIB_R11:
-          error |= dwg_encode_ATTRIB (dat, obj);
+          *error |= dwg_encode_ATTRIB (dat, obj);
           break;
         case DWG_TYPE_SEQEND_R11:
-          error |= dwg_encode_SEQEND (dat, obj);
+          *error |= dwg_encode_SEQEND (dat, obj);
           break;
         case DWG_TYPE_PLINE_R11: /* another polyline */
         case DWG_TYPE_POLYLINE_R11:
           // checks fixedtype
-          error |= encode_preR13_POLYLINE (dat, obj);
+          *error |= encode_preR13_POLYLINE (dat, obj);
           break;
         case DWG_TYPE_VERTEX_R11:
           // checks fixedtype
-          error |= encode_preR13_POLYLINE (dat, obj);
+          *error |= encode_preR13_POLYLINE (dat, obj);
           break;
         case DWG_TYPE_3DLINE_R11:
-          error |= dwg_encode__3DLINE (dat, obj);
+          *error |= dwg_encode__3DLINE (dat, obj);
           break;
         case DWG_TYPE_3DFACE_R11:
-          error |= dwg_encode__3DFACE (dat, obj);
+          *error |= dwg_encode__3DFACE (dat, obj);
           break;
         case DWG_TYPE_DIMENSION_R11:
-          error |= encode_preR13_DIMENSION (dat, obj);
+          *error |= encode_preR13_DIMENSION (dat, obj);
           break;
         case DWG_TYPE_VIEWPORT_R11:
-          error |= dwg_encode_VIEWPORT (dat, obj);
+          *error |= dwg_encode_VIEWPORT (dat, obj);
           break;
         /*
         case DWG_TYPE_UNKNOWN_R11:
@@ -4351,7 +4353,6 @@ static int
 dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                           Dwg_Object *restrict obj)
 {
-  // int error = 0;
   int is_entity;
   Dwg_Class *klass = dwg_encode_get_class (dwg, obj);
 
