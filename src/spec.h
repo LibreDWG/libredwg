@@ -497,6 +497,7 @@
 #ifndef R11OPTS
 #  define R11OPTS(b) (_ent->opts_r11 & (b))
 #  define R11FLAG(b) (_ent->flag_r11 & (b))
+#  define R11EXTRA(b) (_ent->extra_r11 & (b))
 #endif
 
 #define DECODE_UNKNOWN_BITS                                                   \

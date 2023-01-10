@@ -186,6 +186,35 @@
       }
       if (R11FLAG (FLAG_R11_HAS_THICKNESS)) // 8
         FIELD_RD (thickness_r11, 39);
+      if (R11FLAG (FLAG_R11_HAS_PSPACE)) { // 16
+#ifdef IS_DECODER
+        _ent->entmode = 1;
+#endif
+        DXF { VALUE_RC (1, 67); }
+        FIELD_RC (extra_r11, 0);
+#ifdef IS_DECODER
+        if (_obj->extra_r11)
+          {
+            LOG_TRACE ("           ");
+#define LOG_EXTRA_R11(w)                                                      \
+            if ((R11EXTRA (EXTRA_R11_##w)))  \
+              LOG_TRACE (#w " (0x%d) ", EXTRA_R11_##w)
+
+            LOG_EXTRA_R11 (UNKNOWN_1);
+            LOG_EXTRA_R11 (HAS_EED);
+            LOG_EXTRA_R11 (HAS_VIEWPORT);
+            LOG_EXTRA_R11 (UNKNOWN_8);
+            LOG_EXTRA_R11 (UNKNOWN_16);
+            LOG_EXTRA_R11 (UNKNOWN_32);
+            LOG_EXTRA_R11 (UNKNOWN_64);
+            LOG_EXTRA_R11 (UNKNOWN_128);
+            LOG_TRACE ("\n");
+#undef LOG_EXTRA_R11
+          }
+#endif
+      }
+      if (R11EXTRA (EXTRA_R11_HAS_EED))
+        error |= dwg_decode_eed (dat, (Dwg_Object_Object *)_ent);
       if (R11FLAG (FLAG_R11_HAS_HANDLING)) { // 32
 #ifdef IS_DXF
         VALUE_H (obj->handle.value, 5);
@@ -195,11 +224,7 @@
         VALUE_H (obj->handle, 5);
 #endif
       }
-      if (R11FLAG (FLAG_R11_HAS_PSPACE)) { // 64
-#ifdef IS_DECODER
-        _ent->entmode = 1;
-#endif
-        DXF { VALUE_RC (1, 67); }
+      if (R11EXTRA (EXTRA_R11_HAS_VIEWPORT)) {
         FIELD_HANDLE (viewport, 2, 0);
       }
     }
