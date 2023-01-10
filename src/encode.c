@@ -3959,6 +3959,12 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *dat,
 {
   int error = 0;
   BITCODE_RS numentities = 0;
+  if (dwg->cur_index > dwg->num_objects)
+    {
+      LOG_ERROR ("Invalid dwg->cur_index " FORMAT_BL " > " FORMAT_BL,
+                 dwg->cur_index, dwg->num_objects);
+      return 0;
+    }
   // TODO index offset for blocks
   for (unsigned index = dwg->cur_index;
        index < dwg->cur_index + dwg->num_objects; index++)
