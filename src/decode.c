@@ -3477,7 +3477,14 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       if (eed_need_size (1, size))
         return DWG_ERR_INVALIDEED;
       data->u.eed_2.close = bit_read_RC (dat);
-      LOG_TRACE ("close: " FORMAT_RC " [RC]", data->u.eed_2.close);
+      if (data->u.eed_2.close)
+        {
+          LOG_TRACE ("close: " FORMAT_RC " [RC]", data->u.eed_2.close);
+        }
+      else
+        {
+          LOG_TRACE ("open: " FORMAT_RC " [RC]", data->u.eed_2.close);
+        }
       break;
     case 3:
       if (eed_need_size (8, size))
