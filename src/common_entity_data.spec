@@ -161,7 +161,7 @@
 #  undef LOG_OPTS_R11_MAX
           }
 #endif
-      if (R11FLAG (FLAG_R11_HAS_COLOR)) // 1
+      if (R11FLAG (FLAG_R11_HAS_COLOR) && ! R11FLAG (FLAG_R11_HAS_PSPACE)) // 1
         FIELD_RCd (color_r11, 0);
       if (R11FLAG (FLAG_R11_HAS_LTYPE)) { // 2
         PRE (R_11) {
@@ -212,6 +212,9 @@
 #undef LOG_EXTRA_R11
           }
 #endif
+        if (R11FLAG (FLAG_R11_HAS_COLOR)) {
+          FIELD_RCd (color_r11, 0);
+        }
       }
       if (R11EXTRA (EXTRA_R11_HAS_EED))
         error |= dwg_decode_eed (dat, (Dwg_Object_Object *)_ent);
