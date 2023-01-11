@@ -3548,16 +3548,12 @@ DWG_OBJECT (LAYER)
 
   COMMON_TABLE_FLAGS (Layer);
   PRE (R_13b1) {
+    SINCE (R_11)
+      FIELD_RSd (used, 0);
     FIELD_CMC (color, 62);
-    PRE (R_11) {
-      FIELD_HANDLE (ltype, 2, 6);
-      if (obj->size == 38)
-        FIELD_RC (flag0, 0);
-    }
-    LATER_VERSIONS {
-      FIELD_RS (linewt, 370);
-      FIELD_HANDLE (ltype, 2, 6);
-    }
+    FIELD_HANDLE (ltype, 2, 6);
+    if (obj->size == 38)
+      FIELD_RC (flag0, 0);
 
     DECODER {
       FIELD_VALUE (on)            = FIELD_VALUE (color.index) >= 0;
