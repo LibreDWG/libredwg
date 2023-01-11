@@ -355,21 +355,28 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             }
 
           // TODO move to => dwg.spec
-          FIELD_RC (block_scaling, 0);
-          PRE (R_11)
-          {
-            FIELD_CAST (num_owned, RS, BL, 0);
-            FIELD_RC (flag2, 0);
-            SINCE (R_2_21)
-              FIELD_CAST (unknown_r11, RC, RS, 0);
-          }
           SINCE (R_11)
-          { // r10 not
-            FIELD_RS (unknown_r11, 0);
-            FIELD_HANDLE (block_entity, 2, 0); // index?
+          {
+            FIELD_RSd (used, 0); // -1
+          }
+          _obj->block_addr = bit_read_RL (dat);
+          if (_obj->block_addr >= 0x40000000)
+            {
+              LOG_TRACE ("block_addr: 0x40000000 | " FORMAT_RLx " [RLx]\n",
+                         _obj->block_addr & 0x3fffffff);
+            }
+          else
+            {
+              LOG_TRACE ("block_addr: " FORMAT_RL " [RL]\n", _obj->block_addr);
+            }
+          // TODO Same as first field in >R_11?
+          if (tbl->size == 38)
+            FIELD_RC (unknown1_r11, 0);
+          SINCE (R_11)
+          {
+            FIELD_HANDLE (block_entity, 2, 0); // index? increasing value with another block
             FIELD_RC (flag2, 0);
-            FIELD_RSd (used, 0);
-            FIELD_RSd (unknown1_r11, 0);
+            FIELD_RC (unknown_r11, 0);
           }
           CHK_ENDPOS;
         }
