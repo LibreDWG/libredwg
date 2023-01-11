@@ -2356,6 +2356,7 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_H layout;
   BITCODE_RS unknown_r11;
   BITCODE_RS unknown1_r11;
+  BITCODE_RL block_addr;
 } Dwg_Object_BLOCK_HEADER;
 
 /**
