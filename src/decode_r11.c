@@ -387,18 +387,12 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         {
           Bit_Chain *str_dat = dat;
           PREP_TABLE (LAYER);
+          SINCE (R_11)
+            FIELD_RSd (used, 0);
           FIELD_CMC (color, 62); // off if negative
-          PRE (R_11)
-          {
-            FIELD_HANDLE (ltype, 2, 6);
-            if (tbl->size == 38)
-              FIELD_RC (flag0, 0);
-          }
-          LATER_VERSIONS
-          {
-            FIELD_RS (linewt, 370);
-            FIELD_HANDLE (ltype, 2, 6);
-          }
+          FIELD_HANDLE (ltype, 2, 6);
+          if (tbl->size == 38)
+            FIELD_RC (flag0, 0);
           CHK_ENDPOS;
         }
       break;
