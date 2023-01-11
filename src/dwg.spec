@@ -3910,6 +3910,8 @@ DWG_OBJECT (VIEW)
   // subclass AbstractViewTableRecord:
   PRE (R_13b1)
   {
+    SINCE (R_11)
+      FIELD_RSd (used, 0);
     FIELD_RD (VIEWSIZE, 40);
     FIELD_2RD (VIEWCTR, 10);
     if (obj->size > 58)
