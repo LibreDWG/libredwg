@@ -3679,14 +3679,14 @@ DWG_OBJECT (STYLE)
     }
   }
   PRE (R_13b1) {
+    SINCE (R_11)
+      FIELD_RSd (used, 0);
     FIELD_RD (text_size, 40);
     FIELD_RD (width_factor, 41);
     FIELD_RD (oblique_angle, 50);
     FIELD_RC (generation, 71);
     LOG_TEXT_GENERATION
     FIELD_RD (last_height, 42);
-    SINCE (R_11)
-      FIELD_RS (used, 0);
     FIELD_TFv (font_file, 64, 3);
     SINCE (R_11)
       FIELD_TFv (bigfont_file, 64, 4);
