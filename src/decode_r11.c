@@ -451,6 +451,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         for (i = 0; i < tbl->number; i++)
           {
             PREP_TABLE (VIEW);
+            SINCE (R_11)
+              FIELD_RSd (used, 0);
             FIELD_RD (VIEWSIZE, 40);
             FIELD_2RD (VIEWCTR, 10);
             if (tbl->size > 58)
