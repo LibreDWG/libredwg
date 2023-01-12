@@ -3437,16 +3437,18 @@ DWG_OBJECT (BLOCK_HEADER)
       FIELD_RSd (used, 0); // -1
 #endif
     }
-    _obj->block_addr = bit_read_RL (dat);
-    if (_obj->block_addr >= 0x40000000)
-      {
-        LOG_TRACE ("block_addr: 0x40000000 | " FORMAT_RLx " [RLx]\n",
-                   _obj->block_addr & 0x3fffffff);
-      }
-    else
-      {
-        LOG_TRACE ("block_addr: " FORMAT_RL " [RL]\n", _obj->block_addr);
-      }
+    FIELD_RL (block_addr, 0);
+    DECODER_OR_ENCODER {
+      if (_obj->block_addr >= 0x40000000)
+        {
+          LOG_TRACE ("block_addr: 0x40000000 | " FORMAT_RLx " [RLx]\n",
+                     _obj->block_addr & 0x3fffffff);
+        }
+      else
+        {
+          LOG_TRACE ("block_addr: " FORMAT_RL " [RL]\n", _obj->block_addr);
+        }
+    }
     // TODO Same as first field in >R_11?
     if (obj->size == 38)
       FIELD_RC (unknown1_r11, 0);
