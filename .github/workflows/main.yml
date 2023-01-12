@@ -12,6 +12,10 @@ on:
     branches:
       - '*'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 #strategy:
 #  matrix:
 #    os: [ubuntu-14.04, ubuntu-18.04, ubuntu-latest]
