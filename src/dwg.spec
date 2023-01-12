@@ -3693,7 +3693,7 @@ DWG_OBJECT (STYLE)
     LOG_TEXT_GENERATION
     FIELD_RD (last_height, 42);
     FIELD_TFv (font_file, 64, 3);
-    SINCE (R_11)
+    SINCE (R_2_4)
       FIELD_TFv (bigfont_file, 64, 4);
     DECODER {
       FIELD_VALUE (is_shape)    = FIELD_VALUE (flag) & 4;
