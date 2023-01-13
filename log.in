@@ -50,6 +50,7 @@ for d in "$@"; do
         if [ "$dir" = "_td" ]; then dir=""; fi
         if [ "$dir" = "_." ]; then dir=""; fi
         b=$(basename "$d" .dwg)
+        b=$(basename "$b" .DWG)
         [ -z "$log" ] && log="$b$dir.log"
         echo "@TIMEOUT_10@ @LTEXEC@ programs/dwgread $v $d 2>$log"
         # (sleep 12s; killall dwgread 2>/dev/null) &
