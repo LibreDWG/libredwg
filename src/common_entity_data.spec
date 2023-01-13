@@ -216,8 +216,14 @@
           FIELD_RCd (color_r11, 0);
         }
       }
-      if (R11EXTRA (EXTRA_R11_HAS_EED))
-        error |= dwg_decode_eed (dat, (Dwg_Object_Object *)_ent);
+      if (R11EXTRA (EXTRA_R11_HAS_EED)) {
+#ifdef IS_DECODER
+        error |= dwg_decode_eed (dat, obj->tio.object);
+#elif defined IS_ENCODER
+        error |= dwg_encode_eed (dat, obj);
+        // DXF, JSON and FREE handled elsewhere
+#endif
+      }
       if (R11FLAG (FLAG_R11_HAS_HANDLING)) { // 32
 #ifdef IS_DXF
         VALUE_H (obj->handle.value, 5);
