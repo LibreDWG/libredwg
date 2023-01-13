@@ -8878,6 +8878,8 @@ H,	DXF 340
 RS
 @item unknown1_r11
 RS
+@item block_addr
+RL
 
 @end vtable
 @end indentedblock
@@ -15885,6 +15887,8 @@ Dwg_Eed*
 RD,	DXF 38
 @item entmode
 BB,	DXF 67
+@item extra_r11
+RS
 @item face_visualstyle
 H,	DXF 348
 @item flag_r11

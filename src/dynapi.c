@@ -7453,6 +7453,8 @@ static const Dwg_DYNAPI_field _dwg_BLOCK_HEADER_fields[] = {
     0,0,0, 0 },
   { "unknown1_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_BLOCK_HEADER, unknown1_r11),
     0,0,0, 0 },
+  { "block_addr",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_object_BLOCK_HEADER, block_addr),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_BREAKDATA: (sorted by offset) */
@@ -12843,6 +12845,8 @@ static const Dwg_DYNAPI_field _dwg_object_entity_fields[] = {
     0,0,0, 38 },
   { "entmode",	"BB", sizeof (BITCODE_BB),  OFF (struct _dwg_object_entity, entmode),
     0,0,0, 67 },
+  { "extra_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_entity, extra_r11),
+    0,0,0, 0 },
   { "face_visualstyle",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_entity, face_visualstyle),
     1,0,0, 348 },
   { "flag_r11",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_entity, flag_r11),

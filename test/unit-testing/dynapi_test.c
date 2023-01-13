@@ -44277,6 +44277,21 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     block_header->blkisxref--;
   }
   {
+    BITCODE_RL block_addr;
+    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "block_addr", &block_addr, NULL)
+        && block_addr == block_header->block_addr)
+      pass ();
+    else
+      fail ("BLOCK_HEADER.block_addr [RL] %u != %u", block_header->block_addr, block_addr);
+    block_addr++;
+    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "block_addr", &block_addr, 0)
+        && block_addr == block_header->block_addr)
+      pass ();
+    else
+      fail ("BLOCK_HEADER.block_addr [RL] set+1 %u != %u", block_header->block_addr, block_addr);
+    block_header->block_addr--;
+  }
+  {
     BITCODE_H block_entity;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "block_entity", &block_entity, NULL)
         && !memcmp (&block_entity, &block_header->block_entity, sizeof (BITCODE_H)))
