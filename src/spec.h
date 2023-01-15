@@ -952,6 +952,7 @@
     if (_obj->path_type == LEADER_PATHTYPE_##w)                             \
       LOG_TRACE (#w " (%d) ", LEADER_PATHTYPE_##w)
 #  define LOG_LEADER_PATHTYPE                                               \
+    if (_obj->path_type)                                                    \
       {                                                                     \
         LOG_TRACE ("      ");                                               \
         LOG_LEADER_PATHTYPE_W (STRAIGHT);                                   \
