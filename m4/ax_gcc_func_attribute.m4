@@ -48,6 +48,7 @@
 #    ifunc
 #    leaf
 #    malloc
+#    ms_format
 #    noclone
 #    noinline
 #    nonnull
@@ -143,6 +144,9 @@ AC_DEFUN([AX_GCC_FUNC_ATTRIBUTE], [
                 ],
                 [gnu_format], [
                     int foo(const char *p, ...) __attribute__((format(gnu_printf, 1, 2)));
+                ],
+                [ms_format], [
+                    int foo(const char *p, ...) __attribute__((format(ms_printf, 1, 2)));
                 ],
                 [format_arg], [
                     char *foo(const char *p) __attribute__(($1(1)));
