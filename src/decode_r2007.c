@@ -182,7 +182,8 @@ static BITCODE_RC *decode_rs (const BITCODE_RC *src, int block_count,
                               const unsigned src_size) ATTRIBUTE_MALLOC;
 static int decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
                              BITCODE_RC *restrict src,
-                             const unsigned src_size);
+                             const unsigned src_size,
+                             const BITCODE_RC *restrict dst_end);
 
 #define copy_1(offset) *dst++ = *(src + offset);
 
@@ -477,18 +478,21 @@ read_instructions (BITCODE_RC *restrict *src, unsigned char *restrict opcode,
 
 /* par 4.7 Compression, page 32 (same as format 2004)
    TODO: replace by decompress_R2004_section(dat, decomp, comp_data_size)
+   Note that dst + dst_size might deviate from dst_end.
 */
 static int
 decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
-                  BITCODE_RC *restrict src, const unsigned src_size)
+                  BITCODE_RC *restrict src, const unsigned src_size,
+                  const BITCODE_RC *restrict dst_end)
 {
   uint32_t length = 0;
   uint32_t offset = 0;
 
   BITCODE_RC *dst_start = dst;
-  BITCODE_RC *dst_end = dst + dst_size;
   BITCODE_RC *src_end = src + src_size;
   unsigned char opcode;
+  if (!dst_end)
+    dst_end = dst + dst_size;
 
   LOG_INSANE ("decompress_r2007 (%p, %d, %p, %d)\n", dst, dst_size, src,
               src_size);
@@ -645,7 +649,7 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
 
   BITCODE_RC *rsdata; // RS encoded data
   BITCODE_RC *pedata; // Pre RS encoded data
-  BITCODE_RC *data;   // The data RS unencoded and uncompressed
+  BITCODE_RC *data, *data_end;  // The data RS unencoded and uncompressed
 
   if (repeat_count < 0 || repeat_count > DBG_MAX_COUNT
       || (uint64_t)size_comp >= dat->size
@@ -691,6 +695,7 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       LOG_ERROR ("Out of memory")
       return NULL;
     }
+  data_end = &data[size_uncomp + page_size];
 
   rsdata = &data[size_uncomp];
   bit_read_fixed (dat, rsdata, page_size);
@@ -704,9 +709,17 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
 
   if (size_comp < size_uncomp)
     error = decompress_r2007 (data, size_uncomp, pedata,
-                              MIN (pedata_size, size_comp));
+                              MIN (pedata_size, size_comp), data_end);
   else
-    memcpy (data, pedata, size_uncomp);
+    {
+      if (data + size_uncomp <= data_end)
+        memcpy (data, pedata, size_uncomp);
+      else
+        {
+          LOG_ERROR ("data overflow")
+          error = DWG_ERR_CRITICAL;
+        }
+    }
 
   free (pedata);
   if (error >= DWG_ERR_CRITICAL)
@@ -719,7 +732,8 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
 
 static int
 read_data_page (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
-                int64_t page_size, int64_t size_comp, int64_t size_uncomp)
+                int64_t page_size, int64_t size_comp, int64_t size_uncomp,
+                BITCODE_RC *restrict decomp_end)
 {
   int i;
   int error = 0;
@@ -752,9 +766,17 @@ read_data_page (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
 
   if (size_comp < size_uncomp)
     error = decompress_r2007 (decomp, size_uncomp, pedata,
-                              MIN (pedata_size, size_comp));
+                              MIN (pedata_size, size_comp), decomp_end);
   else
-    memcpy (decomp, pedata, size_uncomp);
+    {
+      if (decomp + size_uncomp <= decomp_end)
+        memcpy (decomp, pedata, size_uncomp);
+      else
+        {
+          LOG_ERROR ("decomp overflow")
+          return DWG_ERR_INTERNALERROR;
+        }
+    }
 
   free (pedata);
   free (rsdata);
@@ -770,7 +792,7 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
   r2007_section *section;
   r2007_page *page;
   uint64_t max_decomp_size;
-  BITCODE_RC *decomp;
+  BITCODE_RC *decomp, *decomp_end;
   int error = 0, i;
 
   section = get_section (sections_map, sec_type);
@@ -802,8 +824,10 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
       LOG_ERROR ("Out of memory")
       return DWG_ERR_OUTOFMEM;
     }
+  decomp_end = &decomp[max_decomp_size];
   LOG_HANDLE ("Alloc data section of size %" PRIu64 "\n", max_decomp_size)
 
+  //sec_dat->chain = decomp;
   sec_dat->bit = 0;
   sec_dat->byte = 0;
   sec_dat->size = max_decomp_size;
@@ -842,7 +866,8 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
         {
           error = read_data_page (dat, &decomp[section_page->offset],
                                   page->size, section_page->comp_size,
-                                  section_page->uncomp_size);
+                                  section_page->uncomp_size,
+                                  decomp_end);
           if (error)
             {
               free (decomp);
@@ -1259,7 +1284,7 @@ read_file_header (Bit_Chain *restrict dat,
   if (compr_len > 0)
     error = decompress_r2007 ((BITCODE_RC *)file_header,
                               sizeof (r2007_file_header), &pedata[32],
-                              MIN (compr_len, pedata_size - 32));
+                              MIN (compr_len, pedata_size - 32), NULL);
   else
     memcpy (file_header, &pedata[32], sizeof (r2007_file_header));
 
