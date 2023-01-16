@@ -5832,7 +5832,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         LOG_TRACE ("=> Entity DIMENSION_LINEAR\n")
         if (R11OPTS (8))
           {
-            if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION))
+            if (dat->version >= R_10)
               {
                 FIELD_3RD (xline1_pt, 13);
               }
@@ -5843,7 +5843,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           }
         if (R11OPTS (16))
           {
-            if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION))
+            if (dat->version >= R_10)
               {
                 FIELD_3RD (xline2_pt, 14);
               }
@@ -5865,7 +5865,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         LOG_TRACE ("=> Entity DIMENSION_ALIGNED\n")
         if (R11OPTS (8))
           {
-            if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION))
+            if (dat->version >= R_10)
               {
                 FIELD_3RD (xline1_pt, 13);
               }
@@ -5876,7 +5876,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           }
         if (R11OPTS (16))
           {
-            if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION))
+            if (dat->version >= R_10)
               {
                 FIELD_3RD (xline2_pt, 14);
               }
@@ -5895,7 +5895,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         obj->fixedtype = DWG_TYPE_DIMENSION_ANG2LN;
         if (R11OPTS (8))
           {
-            if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION))
+            if (dat->version >= R_10)
               {
                 FIELD_3RD (xline1start_pt, 13);
               }
@@ -5906,7 +5906,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           }
         if (R11OPTS (16))
           {
-            if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION))
+            if (dat->version >= R_10)
               {
                 FIELD_3RD (xline1end_pt, 14);
               }
@@ -5917,7 +5917,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           }
         if (R11OPTS (32))
           {
-            if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION))
+            if (dat->version >= R_10)
               {
                 FIELD_3RD (xline2start_pt, 15);
               }
@@ -5928,7 +5928,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           }
         if (R11OPTS (64))
           {
-            if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION))
+            if (dat->version >= R_10)
               {
                 FIELD_3RD (xline2end_pt, 16);
               }
@@ -5966,7 +5966,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         LOG_TRACE ("=> Entity DIMENSION_RADIUS\n")
         if (R11OPTS (32))
           {
-            if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION))
+            if (dat->version >= R_10)
               {
                 FIELD_3RD (first_arc_pt, 15);
               }
@@ -5986,7 +5986,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         LOG_TRACE ("=> Entity DIMENSION_ANG3PT\n")
         if (R11OPTS (8))
           {
-            if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION))
+            if (dat->version >= R_10)
               {
                 FIELD_3RD (xline1_pt, 13);
               }
@@ -5997,7 +5997,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           }
         if (R11OPTS (16))
           {
-            if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION))
+            if (dat->version >= R_10)
               {
                 FIELD_3RD (xline2_pt, 14);
               }
@@ -6008,7 +6008,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           }
         if (R11OPTS (32))
           {
-            if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION))
+            if (dat->version >= R_10)
               {
                 FIELD_3RD (center_pt, 15);
               }
@@ -6026,7 +6026,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         LOG_TRACE ("=> Entity DIMENSION_ORDINATE\n")
         if (R11OPTS (8))
           { // if dxf 13 (extension_defining_pt)
-            if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION))
+            if (dat->version >= R_10)
               {
                 FIELD_3RD (feature_location_pt, 13);
               }
@@ -6037,7 +6037,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           }
         if (R11OPTS (16))
           { // extension_defining_point2
-            if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION))
+            if (dat->version >= R_10)
               {
                 FIELD_3RD (leader_endpt, 14);
               }
