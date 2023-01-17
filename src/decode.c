@@ -6046,7 +6046,6 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
                 FIELD_2RD (leader_endpt, 14);
               }
           }
-        FIELD_RC (flag2, 0);
       }
       break;
     default:

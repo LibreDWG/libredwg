@@ -1653,7 +1653,6 @@ DWG_ENTITY (DIMENSION_ORDINATE)
         FIELD_2RD (leader_endpt, 14);
       }
     }
-    FIELD_RC (flag2, 0);
   } else {
     FIELD_3BD (def_pt, 0);
     FIELD_3BD (feature_location_pt, 13);
