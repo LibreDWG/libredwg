@@ -8149,7 +8149,7 @@ enum {
 };
 
 enum {
-  OPTS_R11_DIMENSION_UNKNOWN_1 = 1,
+  OPTS_R11_DIMENSION_HAS_DXF12 = 1,   // Baseline, continue: clone ins_pt
   OPTS_R11_DIMENSION_HAS_FLAG = 2,
   OPTS_R11_DIMENSION_HAS_TEXT = 4,
   OPTS_R11_DIMENSION_HAS_DXF13 = 8,   // Ordinate: leader_start_pt
