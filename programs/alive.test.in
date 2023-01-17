@@ -172,6 +172,14 @@ run ()
             r11|r2.*) TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG" ;;
         esac
     fi
+    # load_dwg r2000|r13|r14 leaks
+    if test "$bprog" = "load_dwg" -a -n "@HAVE_ASAN@"
+    then
+        case $bdwg in
+            *_2000 | example_r14 | example_r13 )
+                TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG" ;;
+        esac
+    fi
     # They even crash
     if test "$bprog" = "dxfwrite"
     then
@@ -273,6 +281,7 @@ clean ()
       rm "./$b.json" 2>/dev/null
       rm "./$b-rewrite.dwg" 2>/dev/null
       rm "./$b-dwgwrite.dwg" 2>/dev/null
+      rm "./${b}_new.dwg" 2>/dev/null
   done
   rm "./entities.dxf" 2>/dev/null
   rm "./entities.dwg" 2>/dev/null

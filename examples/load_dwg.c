@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009 Free Software Foundation, Inc.                        */
+/*  Copyright (C) 2009, 2023 Free Software Foundation, Inc.                  */
 /*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
@@ -28,8 +28,16 @@
 #ifndef _XOPEN_SOURCE /* for strdup, snprintf */
 #  define _XOPEN_SOURCE 700
 #endif
+
 #include <stdio.h>
+#include <time.h>
+#ifndef DISABLE_WRITE
+#  include <sys/stat.h>
+#  include <unistd.h>
+#endif
 #include "dwg.h"
+#include "dwg_api.h"
+#include "bits.h"
 
 #include "../programs/suffix.inc"
 static int help (void);
@@ -63,68 +71,116 @@ help (void)
   return 0;
 }
 
-static void
-add_line (double x1, double y1, double x2, double y2)
+static int
+add_fingerprint (Dwg_Data *dwg, dwg_point_3d *pt)
 {
-  // Make something with that
-  (void)x1;
-  (void)y1;
-  (void)x2;
-  (void)y2;
+  int error = 0;
+  char text[128];
+  double height = dwg->header_vars.TEXTSIZE;
+  time_t t = time (NULL);
+  Dwg_Object_BLOCK_HEADER *hdr = dwg_get_block_header (dwg, &error);
+  Dwg_Entity_TEXT *ent;
+  if (error)
+    return 1;
+  strftime (text, sizeof (text), "Last updated: %c", localtime (&t));
+#ifdef USE_WRITE
+  if ((ent = dwg_add_TEXT (hdr, text, pt, height)))
+    {
+      ent->horiz_alignment = HORIZ_ALIGNMENT_RIGHT;
+      return 0;
+    }
+  else
+#endif
+    return 1;
 }
 
-static void
-add_circle (double x, double y, double R)
+static int
+change_fingerprint (Dwg_Data *dwg, Dwg_Entity_TEXT *_obj)
 {
-  // Make something with that
-  (void)x;
-  (void)y;
-  (void)R;
-}
+  char text[128];
+  double height = dwg->header_vars.TEXTSIZE;
+  time_t t = time (NULL);
+  strftime (text, sizeof (text), "Last updated: %c", localtime (&t));
 
-static void
-add_text (double x, double y, char *txt)
-{
-  // Make something with that
-  (void)x;
-  (void)y;
-  (void)txt;
+  if (dwg->header.version < R_2007)
+    {
+      if (strlen (text) < strlen (_obj->text_value))
+        strcpy (_obj->text_value, text);
+      else
+        {
+          free (_obj->text_value);
+          _obj->text_value = strdup (text);
+        }
+    }
+  else
+    {
+      free (_obj->text_value);
+      _obj->text_value = (BITCODE_TV)bit_utf8_to_TU (text, 0);
+    }
+  return 0;
 }
 
 static int
 load_dwg (char *filename, unsigned int opts)
 {
   BITCODE_BL i;
-  int success;
+  int success, found = 0;
   Dwg_Data dwg;
+  dwg_point_3d pt;
+
+#ifdef USE_WRITE
+  char *new_filename = malloc (strlen (filename) + 4);
+  char *fn = strdup (filename);
+  char *base = basename (fn);
+  char *p;
+  struct stat st;
+
+  if ((p = strrchr (base, '.')))
+    *p = '\0';
+  sprintf (new_filename, "%s_new.dwg", base);
+  free (fn);
+#endif
 
   memset (&dwg, 0, sizeof (Dwg_Data));
   dwg.opts = opts;
   success = dwg_read_file (filename, &dwg);
+  // get the insertion point for our fingerprint
+  pt.x = dwg.header_vars.LIMMAX.x;
+  pt.y = dwg.header_vars.LIMMAX.y;
+  pt.z = 0.0;
+
+  // check if a fingerprint already exists there.
+  // if so update it. if not add it
   for (i = 0; i < dwg.num_objects; i++)
     {
-      Dwg_Entity_LINE *line;
-      Dwg_Entity_CIRCLE *circle;
-      Dwg_Entity_TEXT *text;
-
-      switch (dwg.object[i].fixedtype)
+      if (dwg.object[i].fixedtype == DWG_TYPE_TEXT)
         {
-        case DWG_TYPE_LINE:
-          line = dwg.object[i].tio.entity->tio.LINE;
-          add_line (line->start.x, line->end.x, line->start.y, line->end.y);
-          break;
-        case DWG_TYPE_CIRCLE:
-          circle = dwg.object[i].tio.entity->tio.CIRCLE;
-          add_circle (circle->center.x, circle->center.y, circle->radius);
-          break;
-        case DWG_TYPE_TEXT:
-          text = dwg.object[i].tio.entity->tio.TEXT;
-          add_text (text->ins_pt.x, text->ins_pt.y, text->text_value);
-          break;
-        default:
-          break;
+          Dwg_Entity_TEXT *_obj = dwg.object[i].tio.entity->tio.TEXT;
+          if (pt.x == _obj->ins_pt.x && pt.y == _obj->ins_pt.y
+              && _obj->horiz_alignment == HORIZ_ALIGNMENT_RIGHT)
+            {
+              found++;
+              change_fingerprint (&dwg, _obj);
+              fprintf (stderr, "fingerprint updated at (%f, %f)\n", pt.x, pt.y);
+            }
         }
     }
+
+  if (!found)
+    {
+      add_fingerprint (&dwg, &pt);
+      fprintf (stderr, "fingerprint added at (%f, %f)\n", pt.x, pt.y);
+    }
+
+#ifdef USE_WRITE
+  if (0 == stat (new_filename, &st))
+    unlink (new_filename);
+  if (dwg.header.version > R_2000)
+    dwg.header.version = R_2000;
+  success = dwg_write_file (new_filename, &dwg);
+  free (new_filename);
+#endif
+
   dwg_free (&dwg);
   return success;
 }
@@ -133,7 +189,7 @@ int
 main (int argc, char *argv[])
 {
   int i = 1;
-  unsigned int opts = 1;
+  unsigned int opts = 0;
 
   if (argc < 2)
     return usage ();
