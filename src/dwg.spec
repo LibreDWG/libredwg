@@ -1535,6 +1535,8 @@ DWG_ENTITY_END
         FIELD_2RD (def_pt, 10);                                               \
       }                                                                       \
       FIELD_2RD (text_midpt, 11);                                             \
+      if (R11OPTS (1))                                                        \
+        FIELD_2RD (clone_ins_pt, 12);                                         \
       if (R11OPTS (2))                                                        \
         FIELD_RC (flag, 70);                                                  \
       if (R11OPTS (4))                                                        \
