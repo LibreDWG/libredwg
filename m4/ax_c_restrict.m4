@@ -27,7 +27,7 @@
 #serial 1
 
 AC_DEFUN([AX_C_RESTRICT],
-[AC_CACHE_CHECK([for restrict usability],
+[AC_CACHE_CHECK([for C restrict usability],
   [ax_cv_c_restrict_usable],
   [AC_RUN_IFELSE([AC_LANG_PROGRAM([],
   [[

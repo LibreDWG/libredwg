@@ -219,6 +219,9 @@
 /* Define to 1 if you have the `wcsstr' function. */
 #undef HAVE_WCSSTR
 
+/* Define if -Wformat-y2k is supported. */
+#undef HAVE_WFORMAT_Y2K
+
 /* Define to 1 if the system has the type `_Bool'. */
 #undef HAVE__BOOL
 

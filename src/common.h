@@ -88,13 +88,13 @@
 
 /* For GCC30_DIAG_IGNORE (-Wformat-nonliteral) outside functions */
 #if _GNUC_VERSION >= 300 && !defined HAVE_CC_DIAG_STACK
-#  define GCC30_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #  x)
+#  define GCC30_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
 #else
 #  define GCC30_DIAG_IGNORE(w)
 #endif
 /* for GCC31_DIAG_IGNORE (-Wdeprecated-declarations) outside functions */
 #if _GNUC_VERSION >= 310 && !defined HAVE_CC_DIAG_STACK
-#  define GCC31_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #  x)
+#  define GCC31_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
 #else
 #  define GCC31_DIAG_IGNORE(w)
 #endif
@@ -102,7 +102,7 @@
    -Wswitch-enum appeared first with gcc 3.3.6
  */
 #if _GNUC_VERSION >= 330 && !defined HAVE_CC_DIAG_STACK
-#  define GCC33_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #  x)
+#  define GCC33_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
 #else
 #  define GCC33_DIAG_IGNORE(w)
 #endif

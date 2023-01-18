@@ -82,7 +82,15 @@ add_fingerprint (Dwg_Data *dwg, dwg_point_3d *pt)
   Dwg_Entity_TEXT *ent;
   if (error)
     return 1;
+
+#ifdef HAVE_WFORMAT_Y2K
+  GCC46_DIAG_IGNORE (-Wformat-y2k)
+#endif
   strftime (text, sizeof (text), "Last updated: %c", localtime (&t));
+#ifdef HAVE_WFORMAT_Y2K
+  GCC46_DIAG_RESTORE
+#endif
+
 #ifdef USE_WRITE
   if ((ent = dwg_add_TEXT (hdr, text, pt, height)))
     {
@@ -100,7 +108,14 @@ change_fingerprint (Dwg_Data *dwg, Dwg_Entity_TEXT *_obj)
   char text[128];
   double height = dwg->header_vars.TEXTSIZE;
   time_t t = time (NULL);
+
+#ifdef HAVE_WFORMAT_Y2K
+  GCC46_DIAG_IGNORE (-Wformat-y2k)
+#endif
   strftime (text, sizeof (text), "Last updated: %c", localtime (&t));
+#ifdef HAVE_WFORMAT_Y2K
+  GCC46_DIAG_RESTORE
+#endif
 
   if (dwg->header.version < R_2007)
     {
