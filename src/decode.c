@@ -5809,14 +5809,14 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   int error = dwg_setup_DIMENSION_ANG2LN (obj);
   Dwg_Object_Entity *_ent = obj->tio.entity;
+  Bit_Chain *hdl_dat = dat;
+  Dwg_Data *dwg = obj->parent;
   BITCODE_RC dimtype = 0;
   {
     // decode a generic DIMENSION, and fixup the type after. DIMENSION_ANG2LN
     // is the biggest.
     Dwg_Entity_DIMENSION_ANG2LN *_obj;
-    Bit_Chain *hdl_dat = dat;
     Bit_Chain *str_dat = dat;
-    Dwg_Data *dwg = obj->parent;
     _obj = _ent->tio.DIMENSION_ANG2LN;
     error |= decode_entity_preR13 (dat, obj, _ent);
     COMMON_ENTITY_DIMENSION
@@ -5887,6 +5887,8 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           }
         if (R11OPTS (0x100))
           FIELD_RD (oblique_angle, 50);
+        if (R11OPTS (32768))
+          FIELD_HANDLE (dimstyle, 2, 0);
       }
       break;
     case FLAG_R11_DIMENSION_ANG2LN:
@@ -5937,6 +5939,8 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
                 FIELD_2RD (xline2end_pt, 16);
               }
           }
+        if (R11OPTS (32768))
+          FIELD_HANDLE (dimstyle, 2, 0);
       }
       break;
     case FLAG_R11_DIMENSION_DIAMETER:
@@ -5957,6 +5961,8 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           }
         if (R11OPTS (128))
           FIELD_RD (leader_len, 40);
+        if (R11OPTS (32768))
+          FIELD_HANDLE (dimstyle, 2, 0);
       }
       break;
     case FLAG_R11_DIMENSION_RADIUS:
@@ -6046,6 +6052,8 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
                 FIELD_2RD (leader_endpt, 14);
               }
           }
+        if (R11OPTS (32768))
+          FIELD_HANDLE (dimstyle, 5, 0);
       }
       break;
     default:

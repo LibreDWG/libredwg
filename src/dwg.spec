@@ -1653,6 +1653,8 @@ DWG_ENTITY (DIMENSION_ORDINATE)
         FIELD_2RD (leader_endpt, 14);
       }
     }
+    if (R11OPTS (32768))
+      FIELD_HANDLE (dimstyle, 5, 0);
   } else {
     FIELD_3BD (def_pt, 0);
     FIELD_3BD (feature_location_pt, 13);
@@ -1739,6 +1741,8 @@ DWG_ENTITY (DIMENSION_ALIGNED)
     }
     if (R11OPTS (0x100))
       FIELD_RD (oblique_angle, 50);
+    if (R11OPTS (32768))
+      FIELD_HANDLE (dimstyle, 2, 0);
   }
   LATER_VERSIONS {
     FIELD_3BD (xline1_pt, 13);
@@ -1828,6 +1832,8 @@ DWG_ENTITY (DIMENSION_ANG2LN)
         FIELD_2RD (xline2end_pt, 16);
       }
     }
+    if (R11OPTS (32768))
+      FIELD_HANDLE (dimstyle, 2, 0);
   }
   LATER_VERSIONS {
 #ifndef IS_JSON
@@ -1887,6 +1893,8 @@ DWG_ENTITY (DIMENSION_DIAMETER)
     }
     if (R11OPTS (128))
       FIELD_RD (leader_len, 40);
+    if (R11OPTS (32768))
+      FIELD_HANDLE (dimstyle, 2, 0);
   } LATER_VERSIONS {
     FIELD_3BD (first_arc_pt, 15);
     FIELD_3BD (def_pt, 0); // = far_chord_pt
