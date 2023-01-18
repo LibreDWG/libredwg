@@ -1826,11 +1826,7 @@ DWG_ENTITY (DIMENSION_ANG2LN)
       }
     }
     if (R11OPTS (64)) {
-      if (dat->version >= R_10) {
-        FIELD_3RD (xline2end_pt, 16);
-      } else {
-        FIELD_2RD (xline2end_pt, 16);
-      }
+      FIELD_2RD (xline2end_pt, 16);
     }
     if (R11OPTS (32768))
       FIELD_HANDLE (dimstyle, 2, 0);
