@@ -3045,7 +3045,7 @@ split_filepath (const char *filepath, char **extp)
 }
 
 int
-dwg_init_sections (Dwg_Data *dwg)
+dwg_sections_init (Dwg_Data *dwg)
 {
   unsigned num_sections = 5;
   if (dwg->header.version < R_13b1)
@@ -3055,9 +3055,9 @@ dwg_init_sections (Dwg_Data *dwg)
       // HEADER.numsections is always 5 even if it needs to be 8 or 10,
       // probably because the additional sections are embedded in HEADER_VARS.
       // 5 tables + header + block. VIEW = 6
-      if (dwg->header.version >= R_10) // numheader_vars > 158
+      if (dwg->header.numheader_vars > 158) // r10
         num_sections += 3;
-      if (dwg->header.version >= R_11) // numheader_vars > 160
+      if (dwg->header.numheader_vars > 160) // r11
         num_sections += 2;
       // and there is one hole we need to skip over.
       num_sections += 1;

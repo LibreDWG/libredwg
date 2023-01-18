@@ -300,7 +300,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   assert (dat->byte == 0x15);
   dwg->header.numsections = bit_read_RL (dat);
   LOG_TRACE ("\nnum_sections: " FORMAT_RL " [RL]\n", dwg->header.numsections)
-  if ((error = dwg_init_sections (dwg)))
+  if ((error = dwg_sections_init (dwg)))
     return error;
   /* section 0: header vars
    *         1: class section

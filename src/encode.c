@@ -2430,7 +2430,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       if (!dwg->header.section
           || dwg->header.version != dwg->header.from_version)
         {
-          dwg_init_sections (dwg);
+          dwg_sections_init (dwg);
         }
       // get the tables from the CONTROL objects
       encode_preR13_section_hdr ("BLOCK", SECTION_BLOCK, dat, dwg);
@@ -2564,7 +2564,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               dat->from_version = (Dwg_Version_Type)((int)dat->version - 1);
           }
       }
-    dwg_init_sections (dwg);
+    dwg_sections_init (dwg);
     LOG_TRACE ("numsections: " FORMAT_RL " [RL]\n", dwg->header.numsections);
     bit_write_RL (dat, dwg->header.numsections);
     section_address = dat->byte;                // save section address

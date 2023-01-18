@@ -22106,7 +22106,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   if (!dwg->header.numheader_vars
       || dwg->header.version != dwg->header.from_version)
     default_numheader_vars (dwg, version);
-  error = dwg_init_sections (dwg);
+  error = dwg_sections_init (dwg);
   if (error) // DWG_ERR_OUTOFMEM or DWG_ERR_INVALIDDWG
     return error;
 
