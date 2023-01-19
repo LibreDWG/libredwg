@@ -1460,7 +1460,7 @@ DWG_ENTITY (LINE)
     } else {
       FIELD_2RD (start, 10)
       FIELD_2RD (end, 11)
-      if (obj->size >= 56) // GH #586
+      if (obj->size >= 56 && _ent->flag_r11 == FLAG_R11_HAS_ELEVATION) // GH #586
         FIELD_2RD (unknown_r11, 0)
     }
   }
@@ -8185,6 +8185,7 @@ DWG_ENTITY (LIGHT)
   VALUEOUTOFBOUNDS (class_version, 10)
   FIELD_T (name, 1);
   FIELD_BL (type, 70);
+  LOG_LIGHT_TYPE
   FIELD_B (status, 290);
 #ifdef IS_DXF
   UNTIL (R_2000) {
@@ -8200,6 +8201,7 @@ DWG_ENTITY (LIGHT)
   FIELD_3BD (position, 10);
   FIELD_3BD (target, 11);
   FIELD_BL (attenuation_type, 72);
+  LOG_LIGHT_ATTENUATION_TYPE
   FIELD_B (use_attenuation_limits, 292);
   FIELD_BD (attenuation_start_limit, 41);
   FIELD_BD (attenuation_end_limit, 42);
@@ -8238,6 +8240,7 @@ DWG_ENTITY (LIGHT)
         FIELD_3BD_1 (web_rotation, 43);
         // ExtendedLigthShape
         FIELD_BS (extlight_shape, 73);
+        LOG_LIGHT_EXTLIGHT_SHAPE
         FIELD_BD (extlight_length, 46);
         FIELD_BD (extlight_width, 47);
         FIELD_BD (extlight_radius, 48);

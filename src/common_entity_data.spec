@@ -17,10 +17,10 @@
             // stringify the flag bits
 #  define LOG_FLAG_R11(w)                                                     \
     if (R11FLAG (FLAG_R11_##w))                                               \
-      LOG_TRACE (#w " (%d) ", FLAG_R11_##w)
+      LOG_TRACE (#w " (0x%x) ", FLAG_R11_##w)
 #  define LOG_FLAG_R11_MAX(v)                                                 \
     if (_obj->flag_r11 > v)                                                   \
-      LOG_WARN ("Unknown flag_r11 (%d)", _obj->flag_r11)
+      LOG_WARN ("Unknown flag_r11 (0x%x)", _obj->flag_r11 & ~255)
             LOG_FLAG_R11 (HAS_COLOR);
             LOG_FLAG_R11 (HAS_LTYPE);
             LOG_FLAG_R11 (HAS_ELEVATION);
@@ -54,10 +54,10 @@
             // stringify the flag bits
 #  define LOG_OPTS_R11(e, w)                                                  \
     if (obj->type == DWG_TYPE_##e##_R11 && (R11OPTS (OPTS_R11_##e##_##w)))    \
-      LOG_TRACE (#w " (%d) ", OPTS_R11_##e##_##w)
+      LOG_TRACE (#w " (0x%x) ", OPTS_R11_##e##_##w)
 #  define LOG_OPTS_R11_MAX(e, v)                                              \
     if (obj->type == DWG_TYPE_##e##_R11 && _obj->opts_r11 > v)                \
-      LOG_WARN ("Unknown opts_r11 (%d)", _obj->opts_r11)
+        LOG_WARN ("Unknown opts_r11 (0x%x)", _obj->opts_r11 & ~(v))
 
             LOG_OPTS_R11 (3DFACE, HAS_Z_FIRST);
             LOG_OPTS_R11 (3DFACE, HAS_Z_SECOND);
@@ -207,7 +207,7 @@
             LOG_TRACE ("           ");
 #define LOG_EXTRA_R11(w)                                                      \
             if ((R11EXTRA (EXTRA_R11_##w)))  \
-              LOG_TRACE (#w " (0x%d) ", EXTRA_R11_##w)
+              LOG_TRACE (#w " (0x%x) ", EXTRA_R11_##w)
 
             LOG_EXTRA_R11 (UNKNOWN_1);
             LOG_EXTRA_R11 (HAS_EED);

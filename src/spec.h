@@ -777,12 +777,12 @@
 
 #define LOG_FLAG_MAX(value, w)                                                \
     if (value > w)                                                            \
-        LOG_WARN ("Unknown flag (0x%d)", value)
+        LOG_WARN ("Unknown flag (0x%x)", value & ~(w))
 
 #ifndef LOG_TEXT_GENERATION
 #  define LOG_TEXT_GENERATION_W(w)                                            \
     if (_obj->generation & TEXT_GENERATION_##w)                               \
-      LOG_TRACE (#w " (%d) ", TEXT_GENERATION_##w)
+      LOG_TRACE (#w " (0x%x) ", TEXT_GENERATION_##w)
 #  define LOG_TEXT_GENERATION                                                 \
     DECODER_OR_ENCODER                                                        \
       {                                                                       \
@@ -800,7 +800,7 @@
 #ifndef LOG_HORIZ_ALIGNMENT
 #  define LOG_HORIZ_ALIGNMENT_W(w)                                            \
     if (_obj->horiz_alignment == HORIZ_ALIGNMENT_##w)                         \
-      LOG_TRACE (#w " (0x%d) ", HORIZ_ALIGNMENT_##w)
+      LOG_TRACE (#w " (0x%x) ", HORIZ_ALIGNMENT_##w)
 #  define LOG_HORIZ_ALIGNMENT                                                 \
     DECODER_OR_ENCODER                                                        \
       {                                                                       \
@@ -822,7 +822,7 @@
 #ifndef LOG_VERT_ALIGNMENT
 #  define LOG_VERT_ALIGNMENT_W(w)                                             \
     if (_obj->vert_alignment == VERT_ALIGNMENT_##w)                           \
-    LOG_TRACE (#w " (0x%d) ", VERT_ALIGNMENT_##w)
+    LOG_TRACE (#w " (0x%x) ", VERT_ALIGNMENT_##w)
 #  define LOG_VERT_ALIGNMENT                                                  \
     DECODER_OR_ENCODER                                                        \
       {                                                                       \
@@ -842,7 +842,7 @@
 #ifndef LOG_FLAG_ATTDEF
 #  define LOG_FLAG_ATTDEF_W(w)                                                \
     if (_obj->flags & FLAG_ATTDEF_##w)                                        \
-    LOG_TRACE (#w " (0x%d) ", FLAG_ATTDEF_##w)
+    LOG_TRACE (#w " (0x%x) ", FLAG_ATTDEF_##w)
 #  define LOG_FLAG_ATTDEF                                                     \
     DECODER_OR_ENCODER                                                        \
       {                                                                       \
@@ -862,7 +862,7 @@
 #ifndef LOG_FLAG_ATTRIB
 #  define LOG_FLAG_ATTRIB_W(w)                                                \
     if (_obj->flags & FLAG_ATTRIB_##w)                                        \
-    LOG_TRACE (#w " (0x%d) ", FLAG_ATTRIB_##w)
+    LOG_TRACE (#w " (0x%x) ", FLAG_ATTRIB_##w)
 #  define LOG_FLAG_ATTRIB                                                     \
     DECODER_OR_ENCODER                                                        \
       {                                                                       \
@@ -882,7 +882,7 @@
 #ifndef LOG_FLAG_LWPOLYLINE
 #  define LOG_FLAG_LWPOLYLINE_W(w)                                            \
     if (_obj->flag & FLAG_LWPOLYLINE_##w)                                     \
-      LOG_TRACE (#w " (%d) ", FLAG_LWPOLYLINE_##w)
+      LOG_TRACE (#w " (0x%x) ", FLAG_LWPOLYLINE_##w)
 #  define LOG_FLAG_LWPOLYLINE                                                 \
     DECODER_OR_ENCODER                                                        \
       {                                                                       \
@@ -909,7 +909,7 @@
 #ifndef LOG_FLAG_POLYLINE
 #  define LOG_FLAG_POLYLINE_W(w)                                              \
     if (_obj->flag & FLAG_POLYLINE_##w)                                       \
-      LOG_TRACE (#w " (%d) ", FLAG_POLYLINE_##w)
+      LOG_TRACE (#w " (0x%x) ", FLAG_POLYLINE_##w)
 #  define LOG_FLAG_POLYLINE                                                   \
     DECODER_OR_ENCODER                                                        \
       {                                                                       \
@@ -933,7 +933,7 @@
 #ifndef LOG_FLAG_VERTEX
 #  define LOG_FLAG_VERTEX_W(w)                                                \
     if (_obj->flag & FLAG_VERTEX_##w)                                         \
-    LOG_TRACE (#w " (%d) ", FLAG_VERTEX_##w)
+    LOG_TRACE (#w " (0x%x) ", FLAG_VERTEX_##w)
 #  define LOG_FLAG_VERTEX                                                     \
     DECODER_OR_ENCODER                                                        \
       {                                                                       \
@@ -957,7 +957,7 @@
 #ifndef LOG_POLYLINE_CURVETYPE
 #  define LOG_POLYLINE_CURVETYPE_W(w)                                       \
     if (_obj->curve_type == POLYLINE_CURVETYPE_##w)                         \
-      LOG_TRACE (#w " (%d) ", POLYLINE_CURVETYPE_##w)
+      LOG_TRACE (#w " (0x%x) ", POLYLINE_CURVETYPE_##w)
 #  define LOG_POLYLINE_CURVETYPE                                            \
     DECODER_OR_ENCODER                                                      \
       {                                                                     \
@@ -977,7 +977,7 @@
 #ifndef LOG_LEADER_PATHTYPE
 #  define LOG_LEADER_PATHTYPE_W(w)                                          \
     if (_obj->path_type == LEADER_PATHTYPE_##w)                             \
-      LOG_TRACE (#w " (%d) ", LEADER_PATHTYPE_##w)
+      LOG_TRACE (#w " (0x%x) ", LEADER_PATHTYPE_##w)
 #  define LOG_LEADER_PATHTYPE                                               \
     DECODER_OR_ENCODER                                                      \
       {                                                                     \
@@ -986,7 +986,8 @@
           LOG_TRACE ("      ");                                             \
           LOG_LEADER_PATHTYPE_W (STRAIGHT);                                 \
           LOG_LEADER_PATHTYPE_W (SPLINE);                                   \
-          LOG_FLAG_MAX (_obj->path_type, 1);                                \
+          LOG_LEADER_PATHTYPE_W (UNKNOWN);                                  \
+          LOG_FLAG_MAX (_obj->path_type, 2);                                \
           LOG_TRACE ("\n");                                                 \
         }                                                                   \
       }
@@ -995,14 +996,14 @@
 #ifndef LOG_LEADER_ANNOTTYPE
 #  define LOG_LEADER_ANNOTTYPE_W(w)                                         \
     if (_obj->annot_type == LEADER_ANNOTTYPE_##w)                           \
-      LOG_TRACE (#w " (%d) ", LEADER_ANNOTTYPE_##w)
+      LOG_TRACE (#w " (0x%x) ", LEADER_ANNOTTYPE_##w)
 #  define LOG_LEADER_ANNOTTYPE                                              \
     DECODER_OR_ENCODER                                                      \
       {                                                                     \
       if (_obj->annot_type)                                                 \
         {                                                                   \
           LOG_TRACE ("      ");                                             \
-          LOG_LEADER_ANNOTTYPE_W (TEXT);                                    \
+          LOG_LEADER_ANNOTTYPE_W (MTEXT);                                   \
           LOG_LEADER_ANNOTTYPE_W (TOLERANCE);                               \
           LOG_LEADER_ANNOTTYPE_W (INSERT);                                  \
           LOG_LEADER_ANNOTTYPE_W (NO_ANNOT);                                \
@@ -1015,7 +1016,7 @@
 #ifndef LOG_MLINE_FLAGS
 #  define LOG_MLINE_FLAGS_W(w)                                               \
     if (_obj->flags & MLINE_FLAGS_##w)                                       \
-      LOG_TRACE (#w " (%d) ", MLINE_FLAGS_##w)
+      LOG_TRACE (#w " (0x%x) ", MLINE_FLAGS_##w)
 #  define LOG_MLINE_FLAGS                                                    \
     DECODER_OR_ENCODER                                                       \
       {                                                                      \
@@ -1035,7 +1036,7 @@
 #ifndef LOG_MLINE_JUSTIFICATION
 #  define LOG_MLINE_JUSTIFICATION_W(w)                                      \
     if (_obj->justification == MLINE_JUSTIFICATION_##w)                     \
-      LOG_TRACE (#w " (%d) ", MLINE_JUSTIFICATION_##w)
+      LOG_TRACE (#w " (0x%x) ", MLINE_JUSTIFICATION_##w)
 #  define LOG_MLINE_JUSTIFICATION                                           \
     DECODER_OR_ENCODER                                                      \
       {                                                                     \
@@ -1048,5 +1049,56 @@
           LOG_FLAG_MAX (_obj->justification, 3);                            \
           LOG_TRACE ("\n");                                                 \
         }                                                                   \
+      }
+#endif
+
+#ifndef LOG_LIGHT_TYPE
+#  define LOG_LIGHT_TYPE_W(w)                                               \
+    if (_obj->type == LIGHT_TYPE_##w)                                       \
+      LOG_TRACE (#w " (0x%x) ", LIGHT_TYPE_##w)
+#  define LOG_LIGHT_TYPE                                                    \
+    DECODER_OR_ENCODER                                                      \
+      {                                                                     \
+      if (_obj->type)                                                       \
+        {                                                                   \
+          LOG_TRACE ("      ");                                             \
+          LOG_LIGHT_TYPE_W (DISTANT);                                       \
+          LOG_LIGHT_TYPE_W (POINT);                                         \
+          LOG_LIGHT_TYPE_W (SPOT);                                          \
+          LOG_FLAG_MAX (_obj->type, 3);                                     \
+          LOG_TRACE ("\n");                                                 \
+        }                                                                   \
+      }
+#endif
+#ifndef LOG_LIGHT_ATTENUATION_TYPE
+#  define LOG_LIGHT_ATTENUATION_W(w)                                        \
+    if (_obj->attenuation_type == LIGHT_ATTENUATION_TYPE_##w)               \
+      LOG_TRACE (#w " (0x%x) ", LIGHT_ATTENUATION_TYPE_##w)
+#  define LOG_LIGHT_ATTENUATION_TYPE                                        \
+    DECODER_OR_ENCODER                                                      \
+      {                                                                     \
+        LOG_TRACE ("      ");                                               \
+        LOG_LIGHT_ATTENUATION_W (NONE);                                     \
+        LOG_LIGHT_ATTENUATION_W (INV_LINEAR);                               \
+        LOG_LIGHT_ATTENUATION_W (INV_SQUARE);                               \
+        LOG_FLAG_MAX (_obj->attenuation_type, 2);                           \
+        LOG_TRACE ("\n");                                                   \
+      }
+#endif
+#ifndef LOG_LIGHT_EXTLIGHT_SHAPE
+#  define LOG_EXTLIGHT_SHAPE_W(w)                                           \
+    if (_obj->extlight_shape == LIGHT_EXTLIGHT_SHAPE_##w)                   \
+      LOG_TRACE (#w " (0x%x) ", LIGHT_EXTLIGHT_SHAPE_##w)
+#  define LOG_LIGHT_EXTLIGHT_SHAPE                                          \
+    DECODER_OR_ENCODER                                                      \
+      {                                                                     \
+          LOG_TRACE ("      ");                                             \
+          LOG_EXTLIGHT_SHAPE_W (LINEAR);                                    \
+          LOG_EXTLIGHT_SHAPE_W (RECT);                                      \
+          LOG_EXTLIGHT_SHAPE_W (DISK);                                      \
+          LOG_EXTLIGHT_SHAPE_W (CYLINDER);                                  \
+          LOG_EXTLIGHT_SHAPE_W (SPHERE);                                    \
+          LOG_FLAG_MAX (_obj->extlight_shape, 4);                           \
+          LOG_TRACE ("\n");                                                 \
       }
 #endif
