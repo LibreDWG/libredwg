@@ -6073,6 +6073,10 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
              blocks_max != (BITCODE_RL)0 ? "block " : "", start, end,
              num_entities, size, blocks_max);
   LOG_INFO ("==========================================\n");
+  if (blocks_max != 0 && end & 0x40000000)
+    end &= 0x0FFFFFFF;
+  if (blocks_max != 0 && blocks_max & 0x80000000)
+    blocks_max &= 0x0FFFFFFF;
   if (size > dat->size || end > dat->size)
     {
       LOG_ERROR ("size overflow")
