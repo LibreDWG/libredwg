@@ -1603,6 +1603,7 @@ typedef struct _dwg_entity_LINE
   BITCODE_3BD end;
   BITCODE_BT thickness;
   BITCODE_BE extrusion;
+  BITCODE_2RD unknown_r11; // GH #586
 } Dwg_Entity_LINE;
 
 /**

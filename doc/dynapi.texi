@@ -2558,6 +2558,8 @@ RC
 BT,	DXF 39
 @item extrusion
 BE,	DXF 210
+@item unknown_r11
+2RD
 
 @end vtable
 @end indentedblock

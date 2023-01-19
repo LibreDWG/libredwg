@@ -14794,6 +14794,14 @@ static int test_LINE (const Dwg_Object *obj)
     line->thickness--;
   }
   {
+    BITCODE_2RD unknown_r11;
+    if (dwg_dynapi_entity_value (line, "LINE", "unknown_r11", &unknown_r11, NULL)
+        && !memcmp (&unknown_r11, &line->unknown_r11, sizeof (BITCODE_2RD)))
+        pass ();
+    else
+        fail ("LINE.unknown_r11 [2RD]");
+  }
+  {
     BITCODE_RC z_is_zero;
     if (dwg_dynapi_entity_value (line, "LINE", "z_is_zero", &z_is_zero, NULL)
         && z_is_zero == line->z_is_zero)

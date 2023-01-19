@@ -2308,6 +2308,8 @@ static const Dwg_DYNAPI_field _dwg_LINE_fields[] = {
     0,0,0, 39 },
   { "extrusion",	"BE", sizeof (BITCODE_BE),  OFF (struct _dwg_entity_LINE, extrusion),
     0,0,0, 210 },
+  { "unknown_r11",	"2RD", sizeof (BITCODE_2RD),  OFF (struct _dwg_entity_LINE, unknown_r11),
+    1,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_LINEARGRIPENTITY: (sorted by offset) */
