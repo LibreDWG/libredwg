@@ -5833,29 +5833,25 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         if (R11OPTS (8))
           {
             if (dat->version >= R_10)
-              {
-                FIELD_3RD (xline1_pt, 13);
-              }
+              FIELD_3RD (xline1_pt, 13)
             else
-              {
-                FIELD_2RD (xline1_pt, 13);
-              }
+              FIELD_2RD (xline1_pt, 13)
           }
         if (R11OPTS (16))
           {
             if (dat->version >= R_10)
-              {
-                FIELD_3RD (xline2_pt, 14);
-              }
+              FIELD_3RD (xline2_pt, 14)
             else
-              {
-                FIELD_2RD (xline2_pt, 14);
-              }
+              FIELD_2RD (xline2_pt, 14)
           }
         if (R11OPTS (0x100))
-          FIELD_RD (dim_rotation, 50);
+          FIELD_RD0 (dim_rotation, 50);
         if (R11OPTS (0x200))
-          FIELD_RD (oblique_angle, 52); // ext_line_rotation
+          FIELD_RD0 (oblique_angle, 52); // ext_line_rotation
+        if (R11OPTS (0x400))
+          FIELD_RD0 (text_rotation, 53);
+        if (R11OPTS (32768))
+          FIELD_HANDLE (dimstyle, 2, 0);
       }
       break;
     case FLAG_R11_DIMENSION_ALIGNED:
@@ -5866,27 +5862,21 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         if (R11OPTS (8))
           {
             if (dat->version >= R_10)
-              {
-                FIELD_3RD (xline1_pt, 13);
-              }
+              FIELD_3RD (xline1_pt, 13)
             else
-              {
-                FIELD_2RD (xline1_pt, 13);
-              }
+              FIELD_2RD (xline1_pt, 13)
           }
         if (R11OPTS (16))
           {
             if (dat->version >= R_10)
-              {
-                FIELD_3RD (xline2_pt, 14);
-              }
+              FIELD_3RD (xline2_pt, 14)
             else
-              {
-                FIELD_2RD (xline2_pt, 14);
-              }
+              FIELD_2RD (xline2_pt, 14)
           }
         if (R11OPTS (0x100))
           FIELD_RD (oblique_angle, 50);
+        if (R11OPTS (0x400))
+          FIELD_RD0 (text_rotation, 53);
         if (R11OPTS (32768))
           FIELD_HANDLE (dimstyle, 2, 0);
       }
@@ -5898,38 +5888,28 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         if (R11OPTS (8))
           {
             if (dat->version >= R_10)
-              {
-                FIELD_3RD (xline1start_pt, 13);
-              }
+              FIELD_3RD (xline1start_pt, 13)
             else
-              {
-                FIELD_2RD (xline1start_pt, 13);
-              }
+              FIELD_2RD (xline1start_pt, 13)
           }
         if (R11OPTS (16))
           {
             if (dat->version >= R_10)
-              {
-                FIELD_3RD (xline1end_pt, 14);
-              }
+              FIELD_3RD (xline1end_pt, 14)
             else
-              {
-                FIELD_2RD (xline1end_pt, 14);
-              }
+              FIELD_2RD (xline1end_pt, 14)
           }
         if (R11OPTS (32))
           {
             if (dat->version >= R_10)
-              {
-                FIELD_3RD (xline2start_pt, 15);
-              }
+              FIELD_3RD (xline2start_pt, 15)
             else
-              {
-                FIELD_2RD (xline2start_pt, 15);
-              }
+              FIELD_2RD (xline2start_pt, 15)
           }
         if (R11OPTS (64))
           FIELD_2RD (xline2end_pt, 16);
+        if (R11OPTS (0x400))
+          FIELD_RD0 (text_rotation, 53);
         if (R11OPTS (32768))
           FIELD_HANDLE (dimstyle, 2, 0);
       }
@@ -5942,18 +5922,14 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         if (R11OPTS (32))
           {
             if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION))
-              {
-                FIELD_3RD (first_arc_pt, 15);
-              }
+              FIELD_3RD (first_arc_pt, 15)
             else
-              {
-                FIELD_2RD (first_arc_pt, 15);
-              }
+              FIELD_2RD (first_arc_pt, 15)
           }
         if (R11OPTS (128))
           FIELD_RD (leader_len, 40);
-        if (R11OPTS (1024))
-          FIELD_RD (text_rotation, 53);
+        if (R11OPTS (0x400))
+          FIELD_RD0 (text_rotation, 53);
         if (R11OPTS (32768))
           FIELD_HANDLE (dimstyle, 2, 0);
       }
@@ -5966,16 +5942,16 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         if (R11OPTS (32))
           {
             if (dat->version >= R_10)
-              {
-                FIELD_3RD (first_arc_pt, 15);
-              }
+              FIELD_3RD (first_arc_pt, 15)
             else
-              {
-                FIELD_2RD (first_arc_pt, 15);
-              }
+              FIELD_2RD (first_arc_pt, 15)
           }
         if (R11OPTS (128))
           FIELD_RD (leader_len, 40);
+        if (R11OPTS (0x400))
+          FIELD_RD0 (text_rotation, 53);
+        if (R11OPTS (32768))
+          FIELD_HANDLE (dimstyle, 2, 0);
       }
       break;
     case FLAG_R11_DIMENSION_ANG3PT:
@@ -5986,36 +5962,31 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         if (R11OPTS (8))
           {
             if (dat->version >= R_10)
-              {
-                FIELD_3RD (xline1_pt, 13);
-              }
+              FIELD_3RD (xline1_pt, 13)
             else
-              {
-                FIELD_2RD (xline1_pt, 13);
-              }
+              FIELD_2RD (xline1_pt, 13)
           }
         if (R11OPTS (16))
           {
             if (dat->version >= R_10)
-              {
-                FIELD_3RD (xline2_pt, 14);
-              }
+              FIELD_3RD (xline2_pt, 14)
             else
-              {
-                FIELD_2RD (xline2_pt, 14);
-              }
+              FIELD_2RD (xline2_pt, 14)
           }
         if (R11OPTS (32))
           {
             if (dat->version >= R_10)
-              {
-                FIELD_3RD (center_pt, 15);
-              }
+              FIELD_3RD (center_pt, 15)
             else
-              {
-                FIELD_2RD (center_pt, 15);
-              }
+              FIELD_2RD (center_pt, 15)
           }
+        if (R11OPTS (64))
+          {
+            FIELD_RD0 (horiz_direction, 51);
+            FIELD_RD0 (text_rotation, 53); //??
+          }
+        if (R11OPTS (32768))
+          FIELD_HANDLE (dimstyle, 2, 0);
       }
       break;
     case FLAG_R11_DIMENSION_ORDINATE:
@@ -6026,25 +5997,19 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         if (R11OPTS (8))
           { // if dxf 13 (extension_defining_pt)
             if (dat->version >= R_10)
-              {
-                FIELD_3RD (feature_location_pt, 13);
-              }
+              FIELD_3RD (feature_location_pt, 13)
             else
-              {
-                FIELD_2RD (feature_location_pt, 13);
-              }
+              FIELD_2RD (feature_location_pt, 13)
           }
         if (R11OPTS (16))
           { // extension_defining_point2
             if (dat->version >= R_10)
-              {
-                FIELD_3RD (leader_endpt, 14);
-              }
+              FIELD_3RD (leader_endpt, 14)
             else
-              {
-                FIELD_2RD (leader_endpt, 14);
-              }
+              FIELD_2RD (leader_endpt, 14)
           }
+        if (R11OPTS (0x400))
+          FIELD_RD0 (text_rotation, 53);
         if (R11OPTS (32768))
           FIELD_HANDLE (dimstyle, 5, 0);
       }

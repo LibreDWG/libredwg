@@ -1655,7 +1655,9 @@ DWG_ENTITY (DIMENSION_ORDINATE)
         FIELD_2RD (leader_endpt, 14);
       }
     }
-    if (R11OPTS (32768))
+    if (R11OPTS (0x400))
+      FIELD_RD0 (text_rotation, 53);
+    if (R11OPTS (0x8000))
       FIELD_HANDLE (dimstyle, 5, 0);
   } else {
     FIELD_3BD (def_pt, 0);
@@ -1705,6 +1707,10 @@ DWG_ENTITY (DIMENSION_LINEAR)
       FIELD_RD (dim_rotation, 50);
     if (R11OPTS (0x200))
       FIELD_RD (oblique_angle, 52); // ext_line_rotation
+    if (R11OPTS (0x400))
+      FIELD_RD0 (text_rotation, 53);
+    if (R11OPTS (0x8000))
+      FIELD_HANDLE (dimstyle, 5, 0);
   }
   LATER_VERSIONS {
     FIELD_3BD (xline1_pt, 13);
@@ -1743,7 +1749,9 @@ DWG_ENTITY (DIMENSION_ALIGNED)
     }
     if (R11OPTS (0x100))
       FIELD_RD (oblique_angle, 50);
-    if (R11OPTS (32768))
+    if (R11OPTS (0x400))
+      FIELD_RD0 (text_rotation, 53);
+    if (R11OPTS (0x8000))
       FIELD_HANDLE (dimstyle, 2, 0);
   }
   LATER_VERSIONS {
@@ -1785,6 +1793,12 @@ DWG_ENTITY (DIMENSION_ANG3PT)
         FIELD_2RD (center_pt, 15);
       }
     }
+    if (R11OPTS (64)) {
+      FIELD_RD0 (horiz_direction, 51);
+      FIELD_RD0 (text_rotation, 53); //??
+    }
+    if (R11OPTS (0x8000))
+      FIELD_HANDLE (dimstyle, 2, 0);
   }
   LATER_VERSIONS {
     FIELD_3BD (def_pt, 0);
@@ -1830,7 +1844,10 @@ DWG_ENTITY (DIMENSION_ANG2LN)
     if (R11OPTS (64)) {
       FIELD_2RD (xline2end_pt, 16);
     }
-    if (R11OPTS (32768))
+    if (R11OPTS (0x400)) {
+      FIELD_RD0 (text_rotation, 53);
+    }
+    if (R11OPTS (0x8000))
       FIELD_HANDLE (dimstyle, 2, 0);
   }
   LATER_VERSIONS {
@@ -1864,6 +1881,10 @@ DWG_ENTITY (DIMENSION_RADIUS)
     }
     if (R11OPTS (128))
       FIELD_RD (leader_len, 40);
+    if (R11OPTS (0x400))
+      FIELD_RD0 (text_rotation, 53);
+    if (R11OPTS (0x8000))
+      FIELD_HANDLE (dimstyle, 2, 0);
   } LATER_VERSIONS {
     FIELD_3BD (def_pt, 0);
     FIELD_3BD (first_arc_pt, 15);
@@ -1891,9 +1912,9 @@ DWG_ENTITY (DIMENSION_DIAMETER)
     }
     if (R11OPTS (128))
       FIELD_RD (leader_len, 40);
-    if (R11OPTS (1024))
-      FIELD_RD (text_rotation, 53);
-    if (R11OPTS (32768))
+    if (R11OPTS (0x400))
+      FIELD_RD0 (text_rotation, 53);
+    if (R11OPTS (0x8000))
       FIELD_HANDLE (dimstyle, 2, 0);
   } LATER_VERSIONS {
     FIELD_3BD (first_arc_pt, 15);
