@@ -1703,6 +1703,8 @@ DWG_ENTITY (DIMENSION_LINEAR)
       FIELD_RD (dim_rotation, 50);
     if (R11OPTS (0x200))
       FIELD_RD (oblique_angle, 52); // ext_line_rotation
+    if (R11OPTS (1024))
+      FIELD_RD (text_rotation, 53);
     if (R11OPTS (32768))
       FIELD_HANDLE (dimstyle, 2, 0);
   }
@@ -1785,6 +1787,8 @@ DWG_ENTITY (DIMENSION_ANG3PT)
         FIELD_2RD (center_pt, 15);
       }
     }
+    if (R11OPTS (1024))
+      FIELD_RD (text_rotation, 53);
     if (R11OPTS (32768))
       FIELD_HANDLE (dimstyle, 2, 0);
   }
@@ -1832,6 +1836,8 @@ DWG_ENTITY (DIMENSION_ANG2LN)
     if (R11OPTS (64)) {
       FIELD_2RD (xline2end_pt, 16);
     }
+    if (R11OPTS (1024))
+      FIELD_RD (text_rotation, 53);
     if (R11OPTS (32768))
       FIELD_HANDLE (dimstyle, 2, 0);
   }
