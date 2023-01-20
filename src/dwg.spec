@@ -1599,7 +1599,7 @@ DWG_ENTITY_END
     }                                                                         \
     else                                                                      \
     {                                                                         \
-      SINCE (R_13b1)                                                            \
+      SINCE (R_13b1)                                                          \
       {                                                                       \
         FIELD_T (user_text, 1);                                               \
         FIELD_BD0 (text_rotation, 53);                                        \
@@ -1643,22 +1643,22 @@ DWG_ENTITY (DIMENSION_ORDINATE)
   PRE (R_13b1) {
     if (R11OPTS (8)) { // if dxf 13 (extension_defining_pt)
       if (dat->version >= R_10) {
-        FIELD_3RD (feature_location_pt, 13);
+        FIELD_3RD (feature_location_pt, 13)
       } else {
-        FIELD_2RD (feature_location_pt, 13);
+        FIELD_2RD (feature_location_pt, 13)
       }
     }
     if (R11OPTS (16)) { // extension_defining_point2
       if (dat->version >= R_10) {
-        FIELD_3RD (leader_endpt, 14);
+        FIELD_3RD (leader_endpt, 14)
       } else {
-        FIELD_2RD (leader_endpt, 14);
+        FIELD_2RD (leader_endpt, 14)
       }
     }
     if (R11OPTS (0x400))
       FIELD_RD0 (text_rotation, 53);
     if (R11OPTS (0x8000))
-      FIELD_HANDLE (dimstyle, 5, 0);
+      FIELD_HANDLE (dimstyle, 2, 0);
   } else {
     FIELD_3BD (def_pt, 0);
     FIELD_3BD (feature_location_pt, 13);
@@ -1691,16 +1691,16 @@ DWG_ENTITY (DIMENSION_LINEAR)
   PRE (R_13b1) {
     if (R11OPTS (8)) {
       if (dat->version >= R_10) {
-        FIELD_3RD (xline1_pt, 13);
+        FIELD_3RD (xline1_pt, 13)
       } else {
-        FIELD_2RD (xline1_pt, 13);
+        FIELD_2RD (xline1_pt, 13)
       }
     }
     if (R11OPTS (16)) {
       if (dat->version >= R_10) {
-        FIELD_3RD (xline2_pt, 14);
+        FIELD_3RD (xline2_pt, 14)
       } else {
-        FIELD_2RD (xline2_pt, 14);
+        FIELD_2RD (xline2_pt, 14)
       }
     }
     if (R11OPTS (0x100))
@@ -1710,7 +1710,7 @@ DWG_ENTITY (DIMENSION_LINEAR)
     if (R11OPTS (0x400))
       FIELD_RD0 (text_rotation, 53);
     if (R11OPTS (0x8000))
-      FIELD_HANDLE (dimstyle, 5, 0);
+      FIELD_HANDLE (dimstyle, 2, 0);
   }
   LATER_VERSIONS {
     FIELD_3BD (xline1_pt, 13);
@@ -1735,16 +1735,16 @@ DWG_ENTITY (DIMENSION_ALIGNED)
   PRE (R_13b1) {
     if (R11OPTS (8)) {
       if (dat->version >= R_10) {
-        FIELD_3RD (xline1_pt, 13);
+        FIELD_3RD (xline1_pt, 13)
       } else {
-        FIELD_2RD (xline1_pt, 13);
+        FIELD_2RD (xline1_pt, 13)
       }
     }
     if (R11OPTS (16)) {
       if (dat->version >= R_10) {
-        FIELD_3RD (xline2_pt, 14);
+        FIELD_3RD (xline2_pt, 14)
       } else {
-        FIELD_2RD (xline2_pt, 14);
+        FIELD_2RD (xline2_pt, 14)
       }
     }
     if (R11OPTS (0x100))
@@ -1774,23 +1774,23 @@ DWG_ENTITY (DIMENSION_ANG3PT)
   PRE (R_13b1) {
     if (R11OPTS (8)) {
       if (dat->version >= R_10) {
-        FIELD_3RD (xline1_pt, 13);
+        FIELD_3RD (xline1_pt, 13)
       } else {
-        FIELD_2RD (xline1_pt, 13);
+        FIELD_2RD (xline1_pt, 13)
       }
     }
     if (R11OPTS (16)) {
       if (dat->version >= R_10) {
-        FIELD_3RD (xline2_pt, 14);
+        FIELD_3RD (xline2_pt, 14)
       } else {
-        FIELD_2RD (xline2_pt, 14);
+        FIELD_2RD (xline2_pt, 14)
       }
     }
     if (R11OPTS (32)) {
       if (dat->version >= R_10) {
-        FIELD_3RD (center_pt, 15);
+        FIELD_3RD (center_pt, 15)
       } else {
-        FIELD_2RD (center_pt, 15);
+        FIELD_2RD (center_pt, 15)
       }
     }
     if (R11OPTS (64)) {
@@ -1822,23 +1822,23 @@ DWG_ENTITY (DIMENSION_ANG2LN)
   PRE (R_13b1) {
     if (R11OPTS (8)) {
       if (dat->version >= R_10) {
-        FIELD_3RD (xline1start_pt, 13);
+        FIELD_3RD (xline1start_pt, 13)
       } else {
-        FIELD_2RD (xline1start_pt, 13);
+        FIELD_2RD (xline1start_pt, 13)
       }
     }
     if (R11OPTS (16)) {
       if (dat->version >= R_10) {
-        FIELD_3RD (xline1end_pt, 14);
+        FIELD_3RD (xline1end_pt, 14)
       } else {
-        FIELD_2RD (xline1end_pt, 14);
+        FIELD_2RD (xline1end_pt, 14)
       }
     }
     if (R11OPTS (32)) {
       if (dat->version >= R_10) {
-        FIELD_3RD (xline2start_pt, 15);
+        FIELD_3RD (xline2start_pt, 15)
       } else {
-        FIELD_2RD (xline2start_pt, 15);
+        FIELD_2RD (xline2start_pt, 15)
       }
     }
     if (R11OPTS (64)) {

@@ -6011,7 +6011,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         if (R11OPTS (0x400))
           FIELD_RD0 (text_rotation, 53);
         if (R11OPTS (0x8000))
-          FIELD_HANDLE (dimstyle, 5, 0);
+          FIELD_HANDLE (dimstyle, 2, 0);
       }
       break;
     default:

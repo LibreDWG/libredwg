@@ -54,7 +54,7 @@
             // stringify the flag bits
 #  define LOG_OPTS_R11(e, w)                                                  \
     if (obj->type == DWG_TYPE_##e##_R11 && (R11OPTS (OPTS_R11_##e##_##w)))    \
-      LOG_TRACE (#w " (0x%x) ", OPTS_R11_##e##_##w)
+      LOG_TRACE (#w "(0x%x) ", OPTS_R11_##e##_##w)
 #  define LOG_OPTS_R11_MAX(e, v)                                              \
     if (obj->type == DWG_TYPE_##e##_R11 && _obj->opts_r11 > v)                \
         LOG_WARN ("Unknown opts_r11 (0x%x)", _obj->opts_r11 & ~(v))
@@ -207,7 +207,7 @@
             LOG_TRACE ("           ");
 #define LOG_EXTRA_R11(w)                                                      \
             if ((R11EXTRA (EXTRA_R11_##w)))  \
-              LOG_TRACE (#w " (0x%x) ", EXTRA_R11_##w)
+              LOG_TRACE (#w "(0x%x) ", EXTRA_R11_##w)
 
             LOG_EXTRA_R11 (UNKNOWN_1);
             LOG_EXTRA_R11 (HAS_EED);
