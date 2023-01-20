@@ -3946,6 +3946,8 @@ DWG_OBJECT (VIEW)
       FIELD_RSd (used, 0);
     FIELD_RD (VIEWSIZE, 40);
     FIELD_2RD (VIEWCTR, 10);
+    if (obj->size == 58)
+      FIELD_RC (unknown_r11, 0);
     if (obj->size > 58)
       FIELD_RD (view_width, 41);
     if (obj->size > 66)
