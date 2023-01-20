@@ -29,8 +29,8 @@
     FIELD_RC (zero_5[i], 0);
   }
 #endif
-  SINCE (R_2_0b)
-    FIELD_RC (is_maint, 0);
+  FIELD_RC (is_maint, 0);
+
   VERSIONS (R_2_0b, R_13b1) {
     FIELD_RC (zero_one_or_three, 0); // 1,3,0,5,0,0x00cd,0
     /*
@@ -47,6 +47,13 @@
     FIELD_CAST (numsections, RS, RL, 0); // 5
     FIELD_RS (numheader_vars, 0); // 74,83,101,104,114,120,122,129,158,160,204,205
     FIELD_RC (dwg_version, 0); // 0
+
+    FIELD_RLx (entities_start, 0);
+    FIELD_RLx (entities_end, 0);
+    FIELD_RLx (blocks_start, 0);
+    FIELD_RLx (blocks_size, 0);
+    FIELD_RLx (blocks_end, 0);
+    FIELD_RLx (blocks_max, 0);
   }
   SINCE (R_13b1) {
     FIELD_RC (zero_one_or_three, 0);

@@ -359,15 +359,17 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           {
             FIELD_RSd (used, 0); // -1
           }
-          _obj->block_addr = bit_read_RL (dat);
-          if (_obj->block_addr >= 0x40000000)
+          _obj->block_offset_r11 = bit_read_RL (dat);
+          if (_obj->block_offset_r11 >= 0x40000000)
             {
-              LOG_TRACE ("block_addr: 0x40000000 | " FORMAT_RLx " [RLx]\n",
-                         _obj->block_addr & 0x3fffffff);
+              LOG_TRACE ("block_offset_r11: 0x40000000 | " FORMAT_RLx " [RLx]\n",
+                         _obj->block_offset_r11 & 0x3fffffff);
             }
           else
             {
-              LOG_TRACE ("block_addr: " FORMAT_RL " [RL]\n", _obj->block_addr);
+              LOG_TRACE ("block_offset_r11: " FORMAT_RL " [RL] (0x%x)\n",
+                         _obj->block_offset_r11,
+                         _obj->block_offset_r11 + dwg->header.blocks_start);
             }
           // TODO Same as first field in >R_11?
           if (tbl->size == 38)
@@ -695,9 +697,10 @@ AFL_GCC_TOOBIG
 EXPORT int
 decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  BITCODE_RL entities_start = 0, entities_end = 0;
-  BITCODE_RL blocks_start = 0, blocks_size = 0, blocks_end = 0;
-  BITCODE_RL rl1, rl2, blocks_max = 0xFFFFFFFF, num_entities;
+  //BITCODE_RL entities_start = 0, entities_end = 0;
+  //BITCODE_RL blocks_start = 0, blocks_size = 0,
+  //           blocks_max = 0xFFFFFFFF;
+  BITCODE_RL rl1, rl2, num_entities, blocks_end = 0;
   BITCODE_RS rs2;
   Dwg_Object *obj = NULL;
   int tbl_id;
@@ -726,6 +729,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (error >= DWG_ERR_CRITICAL)
     return error;
 
+#if 0
   PRE (R_2_0b)
   {
     bit_read_RC (dat); // the 6th zero
@@ -762,6 +766,18 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       }
     blocks_max = bit_read_RL (dat); // 0x80000000
     LOG_TRACE ("blocks_max: " FORMAT_RLx " [RLx]\n", blocks_max);
+  }
+#endif
+  SINCE (R_2_0b)
+  {
+    blocks_end = dwg->header.blocks_end;
+    if (dwg->header.blocks_end == 0 && dwg->header.blocks_size != 0
+      && dwg->header.blocks_size != 0x40000000)
+      {
+        blocks_end = dwg->header.blocks_start + dwg->header.blocks_size;
+        LOG_TRACE ("blocks_end => " FORMAT_RLx "\n", blocks_end);
+      }
+
     tbl_id = 0;
     dwg->header.section[0].number = 0;
     dwg->header.section[0].type = (Dwg_Section_Type)SECTION_HEADER_R11;
@@ -826,8 +842,8 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     num_entities = 0;
   PRE (R_2_0b)
   {
-    entities_start = dat->byte;
-    entities_end = dwg->header_vars.dwg_size;
+    dwg->header.entities_start = dat->byte;
+    dwg->header.entities_end = dwg->header_vars.dwg_size;
   }
 
   // additional tables mixed-in since r10
@@ -845,7 +861,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_TRACE ("@0x%lx\n", dat->byte);
       if (decode_preR13_section_hdr ("APPID", SECTION_APPID, dat, dwg))
         return DWG_ERR_SECTIONNOTFOUND;
-      dat->byte = entities_start;
+      dat->byte = dwg->header.entities_start;
     }
   if (dwg->header.numheader_vars > 160) // r11
     {
@@ -857,27 +873,29 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_TRACE ("@0x%lx\n", dat->byte);
       if (decode_preR13_section_hdr ("VX", SECTION_VX, dat, dwg))
         return DWG_ERR_SECTIONNOTFOUND;
-      dat->byte = entities_start;
+      dat->byte = dwg->header.entities_start;
     }
 
   // entities
-  if (dat->byte != entities_start)
+  if (dat->byte != dwg->header.entities_start)
     {
-      LOG_WARN ("@0x%lx => entities_start 0x%x", dat->byte, entities_start);
-      if (dat->byte < entities_start)
+      LOG_WARN ("@0x%lx => entities_start 0x%x", dat->byte,
+                dwg->header.entities_start);
+      if (dat->byte < dwg->header.entities_start)
         {
-          _DEBUG_HERE (dat->byte - entities_start)
+          _DEBUG_HERE (dat->byte - dwg->header.entities_start)
         }
-      dat->byte = entities_start;
+      dat->byte = dwg->header.entities_start;
     }
-  error |= decode_preR13_entities (entities_start, entities_end, num_entities,
-                                   entities_end - entities_start, 0, dat, dwg);
+  error |= decode_preR13_entities (
+      dwg->header.entities_start, dwg->header.entities_end, num_entities,
+      dwg->header.entities_end - dwg->header.entities_start, 0, dat, dwg);
   if (error >= DWG_ERR_CRITICAL)
     return error;
-  if (dat->byte != entities_end)
+  if (dat->byte != dwg->header.entities_end)
     {
-      LOG_WARN ("@0x%lx => entities_end 0x%x", dat->byte, entities_end);
-      dat->byte = entities_end;
+      LOG_WARN ("@0x%lx => entities_end 0x%x", dat->byte, dwg->header.entities_end);
+      dat->byte = dwg->header.entities_end;
     }
   PRE (R_2_0b)
   {
@@ -925,26 +943,26 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     return error;
 
   // block entities
-  if (dat->byte != blocks_start)
+  if (dat->byte != dwg->header.blocks_start)
     {
       BITCODE_TF unknown;
-      int len = blocks_start - dat->byte;
-      LOG_WARN ("\n@0x%lx => blocks_start 0x%x", dat->byte, blocks_start);
-      if (dat->byte < blocks_start)
+      int len = dwg->header.blocks_start - dat->byte;
+      LOG_WARN ("\n@0x%lx => blocks_start 0x%x", dat->byte, dwg->header.blocks_start);
+      if (dat->byte < dwg->header.blocks_start)
         {
           unknown = bit_read_TF (dat, len);
           LOG_TRACE ("unknown (%d):", len);
           LOG_TRACE_TF (unknown, len);
           free (unknown);
         }
-      dat->byte = blocks_start;
+      dat->byte = dwg->header.blocks_start;
     }
-  if (blocks_size != 0 && blocks_size != 0x40000000)
+  if (dwg->header.blocks_size != 0 && dwg->header.blocks_size != 0x40000000)
     {
-      if (dwg->header.version == R_11 && blocks_start + 32 < blocks_end)
-        blocks_end -= 32; // ?? some sentinel probably
-      error |= decode_preR13_entities (blocks_start, blocks_end, 0,
-                                       blocks_size & 0x3FFFFFFF, blocks_max, dat,
+      if (dwg->header.version == R_11 && dwg->header.blocks_start + 32 < dwg->header.blocks_end)
+        dwg->header.blocks_end -= 32; // ?? some sentinel probably
+      error |= decode_preR13_entities (dwg->header.blocks_start, dwg->header.blocks_end, 0,
+                                       dwg->header.blocks_size & 0x3FFFFFFF, dwg->header.blocks_max, dat,
                                        dwg);
       if (error >= DWG_ERR_CRITICAL)
         return error;
@@ -974,21 +992,21 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("?1long: 0x%x\n", rl1);
 
   LOG_TRACE ("@0x%lx: 4 block ptrs chk\n", dat->byte);
-  if ((rl1 = bit_read_RL (dat)) != entities_start)
+  if ((rl1 = bit_read_RL (dat)) != dwg->header.entities_start)
     {
-      LOG_WARN ("entities_start %x/%x", rl1, entities_start);
+      LOG_WARN ("entities_start %x/%x", rl1, dwg->header.entities_start);
     }
-  if ((rl1 = bit_read_RL (dat)) != entities_end)
+  if ((rl1 = bit_read_RL (dat)) != dwg->header.entities_end)
     {
-      LOG_WARN ("entities_end %x/%x", rl1, entities_end);
+      LOG_WARN ("entities_end %x/%x", rl1, dwg->header.entities_end);
     }
-  if ((rl1 = bit_read_RL (dat)) != blocks_start)
+  if ((rl1 = bit_read_RL (dat)) != dwg->header.blocks_start)
     {
-      LOG_WARN ("blocks_start %x/%x", rl1, blocks_start);
+      LOG_WARN ("blocks_start %x/%x", rl1, dwg->header.blocks_start);
     }
-  if ((rl1 = bit_read_RL (dat)) != blocks_end)
+  if ((rl1 = bit_read_RL (dat)) != dwg->header.blocks_end)
     {
-      LOG_WARN ("blocks_end %x/%x", rl1, blocks_end);
+      LOG_WARN ("blocks_end %x/%x", rl1, dwg->header.blocks_end);
     }
   // 12 byte
   LOG_TRACE ("@0x%lx\n", dat->byte);
@@ -998,7 +1016,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   rl1 = bit_read_RL (dat);
   LOG_TRACE ("?1long: 0x%x\n", rl1);
 
-  rl1 = blocks_end + 36 + 4 * 4 + 12; // ??
+  rl1 = dwg->header.blocks_end + 36 + 4 * 4 + 12; // ??
   DEBUG_HERE
   UNKNOWN_UNTIL (rl1);
   LOG_TRACE ("@0x%lx\n", dat->byte);

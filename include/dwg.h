@@ -2358,7 +2358,7 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_H layout;
   BITCODE_RS unknown_r11;
   BITCODE_RS unknown1_r11;
-  BITCODE_RL block_addr;
+  BITCODE_RL block_offset_r11;
 } Dwg_Object_BLOCK_HEADER;
 
 /**
@@ -9245,6 +9245,12 @@ typedef struct _dwg_header
   BITCODE_RL thumbnail_address; /* THUMBNAIL or AdDb:Preview */
   BITCODE_RC dwg_version;
   BITCODE_RC maint_version;
+  BITCODE_RL entities_start;    /* < R13 */
+  BITCODE_RL entities_end;      /* < R13 */
+  BITCODE_RL blocks_start;      /* < R13 */
+  BITCODE_RL blocks_size;       /* < R13 */
+  BITCODE_RL blocks_end;        /* < R13 */
+  BITCODE_RL blocks_max;        /* < R13 */
   BITCODE_RS codepage;
   BITCODE_RC unknown_0;           /* R2004+ */
   BITCODE_RC app_dwg_version;     /* R2004+ */

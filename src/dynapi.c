@@ -1460,6 +1460,8 @@ static const Dwg_DYNAPI_field _dwg_DIMENSION_ANG3PT_fields[] = {
     1,0,0, 14 },
   { "center_pt",	"3BD", sizeof (BITCODE_3BD),  OFF (struct _dwg_entity_DIMENSION_ANG3PT, center_pt),
     1,0,0, 15 },
+  { "xline2end_pt",	"3RD", sizeof (BITCODE_3RD),  OFF (struct _dwg_entity_DIMENSION_ANG3PT, xline2end_pt),
+    1,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_DIMENSION_DIAMETER: (sorted by offset) */
@@ -7455,7 +7457,7 @@ static const Dwg_DYNAPI_field _dwg_BLOCK_HEADER_fields[] = {
     0,0,0, 0 },
   { "unknown1_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_BLOCK_HEADER, unknown1_r11),
     0,0,0, 0 },
-  { "block_addr",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_object_BLOCK_HEADER, block_addr),
+  { "block_offset_r11",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_object_BLOCK_HEADER, block_offset_r11),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };

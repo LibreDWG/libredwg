@@ -9594,6 +9594,14 @@ static int test_DIMENSION_ANG3PT (const Dwg_Object *obj)
     else
         fail ("DIMENSION_ANG3PT.xline2_pt [3BD]");
   }
+  {
+    BITCODE_3RD xline2end_pt;
+    if (dwg_dynapi_entity_value (dimension_ang3pt, "DIMENSION_ANG3PT", "xline2end_pt", &xline2end_pt, NULL)
+        && !memcmp (&xline2end_pt, &dimension_ang3pt->xline2end_pt, sizeof (BITCODE_3RD)))
+        pass ();
+    else
+        fail ("DIMENSION_ANG3PT.xline2end_pt [3RD]");
+  }
   if (failed && (is_class_unstable ("DIMENSION_ANG3PT") || is_class_debugging ("DIMENSION_ANG3PT")))
     {
       ok ("%s failed %d tests (TODO unstable)", "DIMENSION_ANG3PT", failed);
@@ -44285,27 +44293,27 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     block_header->blkisxref--;
   }
   {
-    BITCODE_RL block_addr;
-    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "block_addr", &block_addr, NULL)
-        && block_addr == block_header->block_addr)
-      pass ();
-    else
-      fail ("BLOCK_HEADER.block_addr [RL] %u != %u", block_header->block_addr, block_addr);
-    block_addr++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "block_addr", &block_addr, 0)
-        && block_addr == block_header->block_addr)
-      pass ();
-    else
-      fail ("BLOCK_HEADER.block_addr [RL] set+1 %u != %u", block_header->block_addr, block_addr);
-    block_header->block_addr--;
-  }
-  {
     BITCODE_H block_entity;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "block_entity", &block_entity, NULL)
         && !memcmp (&block_entity, &block_header->block_entity, sizeof (BITCODE_H)))
         pass ();
     else
         fail ("BLOCK_HEADER.block_entity [H]");
+  }
+  {
+    BITCODE_RL block_offset_r11;
+    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "block_offset_r11", &block_offset_r11, NULL)
+        && block_offset_r11 == block_header->block_offset_r11)
+      pass ();
+    else
+      fail ("BLOCK_HEADER.block_offset_r11 [RL] %u != %u", block_header->block_offset_r11, block_offset_r11);
+    block_offset_r11++;
+    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "block_offset_r11", &block_offset_r11, 0)
+        && block_offset_r11 == block_header->block_offset_r11)
+      pass ();
+    else
+      fail ("BLOCK_HEADER.block_offset_r11 [RL] set+1 %u != %u", block_header->block_offset_r11, block_offset_r11);
+    block_header->block_offset_r11--;
   }
   {
     BITCODE_RC block_scaling;

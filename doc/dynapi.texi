@@ -1569,6 +1569,8 @@ H,	DXF 2
 3BD,	DXF 14
 @item center_pt
 3BD,	DXF 15
+@item xline2end_pt
+3RD
 
 @end vtable
 @end indentedblock
@@ -8880,7 +8882,7 @@ H,	DXF 340
 RS
 @item unknown1_r11
 RS
-@item block_addr
+@item block_offset_r11
 RL
 
 @end vtable

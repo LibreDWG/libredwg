@@ -3462,16 +3462,21 @@ DWG_OBJECT (BLOCK_HEADER)
       FIELD_RSd (used, 0); // -1
 #endif
     }
-    FIELD_RL (block_addr, 0);
+    FIELD_RL (block_offset_r11, 0);
     DECODER_OR_ENCODER {
-      if (_obj->block_addr >= 0x40000000)
+      if (_obj->block_offset_r11 >= 0x40000000)
         {
-          LOG_TRACE ("block_addr: 0x40000000 | " FORMAT_RLx " [RLx]\n",
-                     _obj->block_addr & 0x3fffffff);
+          BITCODE_RL off = _obj->block_offset_r11 & 0x3fffffff;
+          LOG_TRACE ("block_offset_r11: 0x40000000 | " FORMAT_RLx
+                     " [RLx] (" FORMAT_RLx ")\n",
+                     off, off + dwg->header.blocks_start);
         }
       else
         {
-          LOG_TRACE ("block_addr: " FORMAT_RL " [RL]\n", _obj->block_addr);
+          LOG_TRACE ("block_offset_r11: " FORMAT_RLx " [RLx] (" FORMAT_RLx
+                     ")\n",
+                     _obj->block_offset_r11,
+                     _obj->block_offset_r11 + dwg->header.blocks_start);
         }
     }
     // TODO Same as first field in >R_11?
