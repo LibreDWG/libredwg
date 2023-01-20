@@ -1553,7 +1553,10 @@
   {                                                                           \
     Dwg_Object_Entity *_ent;                                                  \
     Dwg_Entity_##token *_obj;                                                 \
-    LOG_INFO ("Add entity " #token " [%d] ", obj->index)                      \
+    if (strEQc (#token, "DIMENSION_ANG2LN") && obj->parent->header.version < R_13b1) \
+      LOG_INFO ("Add entity DIMENSION [%d] ", obj->index)                     \
+    else                                                                      \
+      LOG_INFO ("Add entity " #token " [%d] ", obj->index)                    \
     obj->parent->num_entities++;                                              \
     obj->supertype = DWG_SUPERTYPE_ENTITY;                                    \
     if (!(int)obj->fixedtype)                                                 \

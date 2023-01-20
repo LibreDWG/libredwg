@@ -5817,6 +5817,7 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     // is the biggest.
     Dwg_Entity_DIMENSION_ANG2LN *_obj;
     Bit_Chain *str_dat = dat;
+    LOG_INFO ("Decode entity DIMENSION\n");
     _obj = _ent->tio.DIMENSION_ANG2LN;
     error |= decode_entity_preR13 (dat, obj, _ent);
     COMMON_ENTITY_DIMENSION
