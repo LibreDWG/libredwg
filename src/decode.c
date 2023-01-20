@@ -5981,10 +5981,9 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
               FIELD_2RD (center_pt, 15)
           }
         if (R11OPTS (64))
-          {
-            FIELD_RD0 (horiz_direction, 51);
-            FIELD_RD0 (text_rotation, 53); //??
-          }
+          FIELD_2RD (xline2end_pt, 0)
+        if (R11OPTS (0x400))
+          FIELD_RD0 (text_rotation, 53);
         if (R11OPTS (0x8000))
           FIELD_HANDLE (dimstyle, 2, 0);
       }

@@ -1689,7 +1689,7 @@ typedef struct _dwg_entity_DIMENSION_ANG3PT
   BITCODE_3BD xline1_pt;
   BITCODE_3BD xline2_pt;
   BITCODE_3BD center_pt;
-  BITCODE_BD horiz_direction;
+  BITCODE_3RD xline2end_pt; // preR13 only, DXF 16
 } Dwg_Entity_DIMENSION_ANG3PT;
 
 /**
