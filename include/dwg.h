@@ -2534,6 +2534,7 @@ typedef struct _dwg_object_VIEW
   BITCODE_H livesection;
   BITCODE_RS flag_3d;
   BITCODE_RC unknown_r2;
+  BITCODE_RC unknown_r11;
 } Dwg_Object_VIEW;
 
 /**
