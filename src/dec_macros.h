@@ -497,7 +497,7 @@
                (unsigned long)len);                                           \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")                                                          \
-    LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
+    LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                              \
   }
 #define FIELD_TFv(nam, len, dxf)                                              \
   {                                                                           \
@@ -508,25 +508,25 @@
                (unsigned long)len);                                           \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")                                                          \
-    LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
+    LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                              \
   }
 #define FIELD_TFF(nam, len, dxf)                                              \
   {                                                                           \
-    SINCE (R_13b1) { _VECTOR_CHKCOUNT_STATIC (nam, len, 1, dat) }             \
+    SINCE (R_13b1) { _VECTOR_CHKCOUNT_STATIC (nam, len, 8, dat) }             \
     bit_read_fixed (dat, _obj->nam, (int)len);                                \
     LOG_TRACE (#nam ": \"%.*s\" [TFF %d " #dxf "]", (int)len, _obj->nam, (int)len); \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")                                                          \
-    LOG_INSANE_TF (FIELD_VALUE (nam), (int)len);                              \
+    LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                              \
   }
 #define FIELD_TFFx(nam, len, dxf)                                             \
   {                                                                           \
-    SINCE (R_13b1) { _VECTOR_CHKCOUNT_STATIC (nam, len, 1, dat) }             \
+    SINCE (R_13b1) { _VECTOR_CHKCOUNT_STATIC (nam, len, 8, dat) }             \
     bit_read_fixed (dat, (BITCODE_RC*)_obj->nam, (int)len);                   \
     LOG_TRACE (#nam ": [TFFx %d " #dxf "]", (int)len);                        \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")                                                          \
-    LOG_INSANE_TF ((BITCODE_RC*)_obj->nam, (int)len);                         \
+    LOG_TRACE_TF ((BITCODE_RC*)_obj->nam, (int)len);                         \
   }
 #define FIELD_T16(nam, dxf) FIELDG (nam, T16, dxf)
 #define FIELD_TU16(nam, dxf)                                                  \
@@ -1051,7 +1051,7 @@
     }
 // for static TFF types with fixed size
 #define _VECTOR_CHKCOUNT_STATIC(nam, siz, maxelemsize, dat)                   \
-  if ((long long)(siz) > AVAIL_BITS (dat)                                     \
+  if ((long long)(8 * siz) > AVAIL_BITS (dat)                                 \
       || (long long)((siz) * (maxelemsize)) > AVAIL_BITS (dat)                \
       || dat->byte + (siz) > dat->size)                                       \
     {                                                                         \

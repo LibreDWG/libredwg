@@ -68163,7 +68163,7 @@ main (int argc, char *argv[])
               strcpy (tmp, "../test-data/");
               strcat (tmp, *ptr);
               if (stat (tmp, &attrib))
-                LOG_ERROR ("Env var INPUT not defined, %s not found\n", tmp)
+                LOG_ERROR ("Env var INPUT not defined, %s not found", tmp)
               else
                 error += test_dynapi (tmp);
             }
