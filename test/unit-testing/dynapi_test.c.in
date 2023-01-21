@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2019-2020 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2019-2023 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -86,7 +86,7 @@ test_dynapi (const char *filename)
   if (dwg_read_file (filename, &dwg) >= DWG_ERR_CRITICAL)
     {
       dwg_free (&dwg);
-      return 1;
+      return error + 1;
     }
 
   /* On cygwin32 the dynapi works fine, but the dwg->header_vars.VARS
@@ -127,7 +127,13 @@ main (int argc, char *argv[])
          //"2018/Dynblocks.dwg",
          //"example_r13.dwg",
          //"r12/work.dwg",
+         //"r11/ACEB10.dwg",
          //"r11/entities-3d.dwg",
+         //"r10/entities.dwg",
+         //"r9/entities.dwg",
+         //"r2.10/entities.dwg",
+         //"r2.6/entities.dwg",
+         //"r1.4/entities.dwg",
          NULL
         };
       for (ptr = (char**)&files[0]; *ptr; ptr++)

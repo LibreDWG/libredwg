@@ -143,7 +143,8 @@ main (int argc, char *argv[])
               "example_2010.dwg", "example_2013.dwg", "example_2018.dwg",
               "example_r14.dwg", "example_r13.dwg",
 #ifdef USE_WRITE
-              "r11/ACEB10.dwg", "r2.10/entities.dwg", "r2.6/entities.dwg",
+              "r11/ACEB10.dwg", "r11/entities-3d.dwg", "r10/entities.dwg",
+              "r9/entities.dwg", "r2.10/entities.dwg", "r2.6/entities.dwg",
               "r1.4/entities.dwg",
 #endif
               /* TODO

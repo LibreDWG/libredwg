@@ -12219,6 +12219,8 @@ H,	DXF 334
 RS
 @item unknown_r2
 RC
+@item unknown_r11
+RC
 
 @end vtable
 @end indentedblock

@@ -10057,6 +10057,8 @@ static const Dwg_DYNAPI_field _dwg_VIEW_fields[] = {
     0,0,0, 0 },
   { "unknown_r2",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_VIEW, unknown_r2),
     0,0,0, 0 },
+  { "unknown_r11",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_VIEW, unknown_r11),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_VIEW_CONTROL: (sorted by offset) */

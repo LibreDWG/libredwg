@@ -2,7 +2,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2019-2020 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2019-2023 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -60002,6 +60002,21 @@ static int test_VIEW (const Dwg_Object *obj)
         fail ("VIEW.ucsydir [3BD]");
   }
   {
+    BITCODE_RC unknown_r11;
+    if (dwg_dynapi_entity_value (view, "VIEW", "unknown_r11", &unknown_r11, NULL)
+        && unknown_r11 == view->unknown_r11)
+      pass ();
+    else
+      fail ("VIEW.unknown_r11 [RC] %u != %u", view->unknown_r11, unknown_r11);
+    unknown_r11++;
+    if (dwg_dynapi_entity_set_value (view, "VIEW", "unknown_r11", &unknown_r11, 0)
+        && unknown_r11 == view->unknown_r11)
+      pass ();
+    else
+      fail ("VIEW.unknown_r11 [RC] set+1 %u != %u", view->unknown_r11, unknown_r11);
+    view->unknown_r11--;
+  }
+  {
     BITCODE_RC unknown_r2;
     if (dwg_dynapi_entity_value (view, "VIEW", "unknown_r2", &unknown_r2, NULL)
         && unknown_r2 == view->unknown_r2)
@@ -68089,7 +68104,7 @@ test_dynapi (const char *filename)
   if (dwg_read_file (filename, &dwg) >= DWG_ERR_CRITICAL)
     {
       dwg_free (&dwg);
-      return 1;
+      return error + 1;
     }
 
   /* On cygwin32 the dynapi works fine, but the dwg->header_vars.VARS
@@ -68130,7 +68145,13 @@ main (int argc, char *argv[])
          //"2018/Dynblocks.dwg",
          //"example_r13.dwg",
          //"r12/work.dwg",
+         //"r11/ACEB10.dwg",
          //"r11/entities-3d.dwg",
+         //"r10/entities.dwg",
+         //"r9/entities.dwg",
+         //"r2.10/entities.dwg",
+         //"r2.6/entities.dwg",
+         //"r1.4/entities.dwg",
          NULL
         };
       for (ptr = (char**)&files[0]; *ptr; ptr++)
