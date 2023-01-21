@@ -365,6 +365,9 @@ TESTDATA = \
     test-data/r2.10/entities.dwg \
     test-data/r2.10/entities.dxf \
     test-data/r2.10/entities.scr \
+    test-data/r9/entities.dwg \
+    test-data/r9/entities.dxf \
+    test-data/r9/entities.scr \
     test-data/sample_2000.dwg \
     test-data/sample_2000.dxf \
     test-data/sample_2004.dxf \
