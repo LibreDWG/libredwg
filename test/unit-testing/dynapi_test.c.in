@@ -142,8 +142,8 @@ main (int argc, char *argv[])
           if (stat (*ptr, &attrib))
             {
               char tmp[80];
-              strcpy (tmp, "../test-data/");
-              strcat (tmp, *ptr);
+              strncpy (tmp, "../test-data/", sizeof (tmp));
+              strncat (tmp, *ptr, sizeof (tmp) - sizeof ("../test-data/") - 1);
               if (stat (tmp, &attrib))
                 LOG_ERROR ("Env var INPUT not defined, %s not found", tmp)
               else
