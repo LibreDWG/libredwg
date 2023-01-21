@@ -323,9 +323,10 @@
   FIELD_RS (DIMCLRT_C, 70); //ok
   FIELD_RS (SHADEDGE, 70); //ok
   FIELD_RS (SHADEDIF, 70); //ok
+  FIELD_RS (unknown_59, 0);
   FIELD_RS (UNITMODE, 70); //ok, new with r11
 
-  /* TODO Unknown 34 bytes */
+  /* TODO Unknown 32 bytes */
   DEBUG_HERE //53d
   UNKNOWN_UNTIL (0x55f);
   FIELD_TFv (unknown_unit1, 32, 1);
