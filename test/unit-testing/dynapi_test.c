@@ -307,24 +307,6 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_BS unknown_18;
-    if (dwg_dynapi_header_value (dwg, "unknown_18", &unknown_18, NULL)
-        && unknown_18 == dwg->header_vars.unknown_18)
-      pass ();
-    else
-      fail ("HEADER.unknown_18 [BS] %hu != %hu", dwg->header_vars.unknown_18, unknown_18);
-    unknown_18++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_18", &unknown_18, 0)
-        && unknown_18 == dwg->header_vars.unknown_18)
-      pass ();
-    else
-      fail ("HEADER.unknown_18 [BS] set+1 %hu != %hu",
-            dwg->header_vars.unknown_18, unknown_18);
-    unknown_18--;
-    dwg_dynapi_header_set_value (dwg, "unknown_18", &unknown_18, 0);
-
-  }
-  {
     BITCODE_H vx_table_record;
     if (dwg_dynapi_header_value (dwg, "VX_TABLE_RECORD", &vx_table_record, NULL)
         && !memcmp (&vx_table_record, &dwg->header_vars.VX_TABLE_RECORD, sizeof (dwg->header_vars.VX_TABLE_RECORD))
@@ -2861,6 +2843,24 @@ test_header (Dwg_Data *dwg)
       pass ();
     else
       fail ("HEADER.VPOINTZALT [3RD]");
+  }
+  {
+    BITCODE_RS flag_3d;
+    if (dwg_dynapi_header_value (dwg, "flag_3d", &flag_3d, NULL)
+        && flag_3d == dwg->header_vars.flag_3d)
+      pass ();
+    else
+      fail ("HEADER.flag_3d [RS] %hu != %hu", dwg->header_vars.flag_3d, flag_3d);
+    flag_3d++;
+    if (dwg_dynapi_header_set_value (dwg, "flag_3d", &flag_3d, 0)
+        && flag_3d == dwg->header_vars.flag_3d)
+      pass ();
+    else
+      fail ("HEADER.flag_3d [RS] set+1 %hu != %hu",
+            dwg->header_vars.flag_3d, flag_3d);
+    flag_3d--;
+    dwg_dynapi_header_set_value (dwg, "flag_3d", &flag_3d, 0);
+
   }
   {
     BITCODE_3BD ucsorg;

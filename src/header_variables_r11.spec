@@ -156,9 +156,7 @@
   FIELD_3RD (VPOINTXALT, 0); //(1,0,0)
   FIELD_3RD (VPOINTYALT, 0); //(0,1,0)
   FIELD_3RD (VPOINTZALT, 0); //(0,0,1)
-  //DEBUG_HERE //252
-  //UNKNOWN_UNTIL (0x2e1);
-  FIELD_RS (unknown_18, 0);
+  FIELD_RS (flag_3d, 0);
   FIELD_CAST (BLIPMODE, RS, B, 70);
   if (dwg->header.numheader_vars <= 83) // PRE(R_2_21)
      return 0;
