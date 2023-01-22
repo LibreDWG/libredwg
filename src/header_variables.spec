@@ -46,28 +46,28 @@
   SINCE (R_13b1)
     {
       IF_ENCODE_FROM_EARLIER_OR_DXF {
-        FIELD_VALUE (unknown_0) = 412148564080.0;
-        FIELD_VALUE (unknown_1) = 1.0;
-        FIELD_VALUE (unknown_2) = 1.0;
-        FIELD_VALUE (unknown_3) = 1.0;
+        FIELD_VALUE (unit1_ratio) = 412148564080.0;
+        FIELD_VALUE (unit2_ratio) = 1.0;
+        FIELD_VALUE (unit3_ratio) = 1.0;
+        FIELD_VALUE (unit4_ratio) = 1.0;
       }
-      FIELD_BD (unknown_0, 0); // unit conversions. i.e. meter / inch
-      FIELD_BD (unknown_1, 0);
-      FIELD_BD (unknown_2, 0);
-      FIELD_BD (unknown_3, 0);
+      FIELD_BD (unit1_ratio, 0); // unit conversions. i.e. meter / inch
+      FIELD_BD (unit2_ratio, 0);
+      FIELD_BD (unit3_ratio, 0);
+      FIELD_BD (unit4_ratio, 0);
     }
   VERSIONS (R_13b1, R_2004) { // undocumented as such in the ODA spec
       IF_ENCODE_FROM_EARLIER_OR_DXF {
-        free (FIELD_VALUE (unknown_text1));
-        FIELD_VALUE (unknown_text1) = strdup ("m");
+        free (FIELD_VALUE (unit1_name));
+        FIELD_VALUE (unit1_name) = strdup ("m");
       }
-      FIELD_TV (unknown_text1, 0);
-      FIELD_TV (unknown_text2, 0);
-      FIELD_TV (unknown_text3, 0);
-      FIELD_TV (unknown_text4, 0);
+      FIELD_TV (unit1_name, 0);
+      FIELD_TV (unit2_name, 0);
+      FIELD_TV (unit3_name, 0);
+      FIELD_TV (unit4_name, 0);
   }
   FREE {
-    FIELD_TV (unknown_text1, 0);
+    FIELD_TV (unit1_name, 0);
   }
   SINCE (R_13b1)
     {
@@ -677,10 +677,10 @@
   IF_FREE_OR_SINCE (R_2007) {
     // TODO split str_dat stream and get rid of this block
     SECTION_STRING_STREAM
-    FIELD_T (unknown_text1, 0);
-    FIELD_T (unknown_text2, 0);
-    FIELD_T (unknown_text3, 0);
-    FIELD_T (unknown_text4, 0);
+    FIELD_T (unit1_name, 0);
+    FIELD_T (unit2_name, 0);
+    FIELD_T (unit3_name, 0);
+    FIELD_T (unit4_name, 0);
     FIELD_T (MENU, 1);
     FIELD_T (DIMPOST, 1);
     FIELD_T (DIMAPOST, 1);

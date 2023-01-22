@@ -713,9 +713,21 @@ RL
 RL
 @item size
 RL
-@item unknown_0
+@item unit1_name
+TV
+@item unit1_ratio
 BD
-@item unknown_1
+@item unit2_name
+TV
+@item unit2_ratio
+BD
+@item unit3_name
+TV
+@item unit3_ratio
+BD
+@item unit4_name
+TV
+@item unit4_ratio
 BD
 @item unknown_10
 BS
@@ -735,8 +747,6 @@ BL
 BL
 @item unknown_17
 BL
-@item unknown_2
-BD
 @item unknown_20
 H
 @item unknown_21
@@ -744,8 +754,6 @@ BL
 @item unknown_22
 BL
 @item unknown_23
-BD
-@item unknown_3
 BD
 @item unknown_3f9
 RC
@@ -800,22 +808,6 @@ RS
 @item unknown_sec
 RS
 @item unknown_string
-T
-@item unknown_text1
-TV
-@item unknown_text2
-TV
-@item unknown_text3
-TV
-@item unknown_text4
-TV
-@item unknown_unit1
-T
-@item unknown_unit2
-T
-@item unknown_unit3
-T
-@item unknown_unit4
 T
 @item unknown_year
 RS

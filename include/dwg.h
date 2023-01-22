@@ -883,14 +883,14 @@ typedef struct _dwg_header_variables {
   BITCODE_RC ACADMAINTVER; /*!< r13+ */
   BITCODE_BLL REQUIREDVERSIONS; /*!< r2013+ */
   BITCODE_TV DWGCODEPAGE;  /*!< r10+ */
-  BITCODE_BD unknown_0; /* 412148564080.0 */
-  BITCODE_BD unknown_1; /* 1.0 */
-  BITCODE_BD unknown_2; /* 1.0 */
-  BITCODE_BD unknown_3; /* 1.0 */
-  BITCODE_TV unknown_text1; /* "" 4x pre 2007... */
-  BITCODE_TV unknown_text2; /* "" */
-  BITCODE_TV unknown_text3; /* "" */
-  BITCODE_TV unknown_text4; /* "" */
+  BITCODE_BD unit1_ratio; /* 412148564080.0 */
+  BITCODE_BD unit2_ratio; /* 1.0 */
+  BITCODE_BD unit3_ratio; /* 1.0 */
+  BITCODE_BD unit4_ratio; /* 1.0 */
+  BITCODE_TV unit1_name; /* "" 4x pre R13/2007... */
+  BITCODE_TV unit2_name; /* "" */
+  BITCODE_TV unit3_name; /* "" */
+  BITCODE_TV unit4_name; /* "" */
   BITCODE_BL unknown_8; /* 24L */
   BITCODE_BL unknown_9; /* 0L */
   BITCODE_BS unknown_10; /* 0 r13-r14 */
@@ -1278,10 +1278,6 @@ typedef struct _dwg_header_variables {
   BITCODE_RS unknown_52e;  /* r11 */
   BITCODE_RC unknown_530;  /* r11 */
   BITCODE_RS unknown_59;   /* r11 */
-  BITCODE_T unknown_unit1; /* r11 */
-  BITCODE_T unknown_unit2; /* r11 */
-  BITCODE_T unknown_unit3; /* r11 */
-  BITCODE_T unknown_unit4; /* r11 */
 } Dwg_Header_Variables;
 
 /* OBJECTS *******************************************************************/

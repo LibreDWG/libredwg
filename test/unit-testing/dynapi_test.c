@@ -145,112 +145,112 @@ test_header (Dwg_Data *dwg)
       fail ("HEADER.DWGCODEPAGE [TV]");
   }
   {
-    BITCODE_BD unknown_0;
-    if (dwg_dynapi_header_value (dwg, "unknown_0", &unknown_0, NULL)
-        && unknown_0 == dwg->header_vars.unknown_0)
+    BITCODE_BD unit1_ratio;
+    if (dwg_dynapi_header_value (dwg, "unit1_ratio", &unit1_ratio, NULL)
+        && unit1_ratio == dwg->header_vars.unit1_ratio)
       pass ();
     else
-      fail ("HEADER.unknown_0 [BD] %g != %g", dwg->header_vars.unknown_0, unknown_0);
-    unknown_0++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_0", &unknown_0, 0)
-        && unknown_0 == dwg->header_vars.unknown_0)
+      fail ("HEADER.unit1_ratio [BD] %g != %g", dwg->header_vars.unit1_ratio, unit1_ratio);
+    unit1_ratio++;
+    if (dwg_dynapi_header_set_value (dwg, "unit1_ratio", &unit1_ratio, 0)
+        && unit1_ratio == dwg->header_vars.unit1_ratio)
       pass ();
     else
-      fail ("HEADER.unknown_0 [BD] set+1 %g != %g",
-            dwg->header_vars.unknown_0, unknown_0);
-    unknown_0--;
-    dwg_dynapi_header_set_value (dwg, "unknown_0", &unknown_0, 0);
+      fail ("HEADER.unit1_ratio [BD] set+1 %g != %g",
+            dwg->header_vars.unit1_ratio, unit1_ratio);
+    unit1_ratio--;
+    dwg_dynapi_header_set_value (dwg, "unit1_ratio", &unit1_ratio, 0);
 
   }
   {
-    BITCODE_BD unknown_1;
-    if (dwg_dynapi_header_value (dwg, "unknown_1", &unknown_1, NULL)
-        && unknown_1 == dwg->header_vars.unknown_1)
+    BITCODE_BD unit2_ratio;
+    if (dwg_dynapi_header_value (dwg, "unit2_ratio", &unit2_ratio, NULL)
+        && unit2_ratio == dwg->header_vars.unit2_ratio)
       pass ();
     else
-      fail ("HEADER.unknown_1 [BD] %g != %g", dwg->header_vars.unknown_1, unknown_1);
-    unknown_1++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_1", &unknown_1, 0)
-        && unknown_1 == dwg->header_vars.unknown_1)
+      fail ("HEADER.unit2_ratio [BD] %g != %g", dwg->header_vars.unit2_ratio, unit2_ratio);
+    unit2_ratio++;
+    if (dwg_dynapi_header_set_value (dwg, "unit2_ratio", &unit2_ratio, 0)
+        && unit2_ratio == dwg->header_vars.unit2_ratio)
       pass ();
     else
-      fail ("HEADER.unknown_1 [BD] set+1 %g != %g",
-            dwg->header_vars.unknown_1, unknown_1);
-    unknown_1--;
-    dwg_dynapi_header_set_value (dwg, "unknown_1", &unknown_1, 0);
+      fail ("HEADER.unit2_ratio [BD] set+1 %g != %g",
+            dwg->header_vars.unit2_ratio, unit2_ratio);
+    unit2_ratio--;
+    dwg_dynapi_header_set_value (dwg, "unit2_ratio", &unit2_ratio, 0);
 
   }
   {
-    BITCODE_BD unknown_2;
-    if (dwg_dynapi_header_value (dwg, "unknown_2", &unknown_2, NULL)
-        && unknown_2 == dwg->header_vars.unknown_2)
+    BITCODE_BD unit3_ratio;
+    if (dwg_dynapi_header_value (dwg, "unit3_ratio", &unit3_ratio, NULL)
+        && unit3_ratio == dwg->header_vars.unit3_ratio)
       pass ();
     else
-      fail ("HEADER.unknown_2 [BD] %g != %g", dwg->header_vars.unknown_2, unknown_2);
-    unknown_2++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_2", &unknown_2, 0)
-        && unknown_2 == dwg->header_vars.unknown_2)
+      fail ("HEADER.unit3_ratio [BD] %g != %g", dwg->header_vars.unit3_ratio, unit3_ratio);
+    unit3_ratio++;
+    if (dwg_dynapi_header_set_value (dwg, "unit3_ratio", &unit3_ratio, 0)
+        && unit3_ratio == dwg->header_vars.unit3_ratio)
       pass ();
     else
-      fail ("HEADER.unknown_2 [BD] set+1 %g != %g",
-            dwg->header_vars.unknown_2, unknown_2);
-    unknown_2--;
-    dwg_dynapi_header_set_value (dwg, "unknown_2", &unknown_2, 0);
+      fail ("HEADER.unit3_ratio [BD] set+1 %g != %g",
+            dwg->header_vars.unit3_ratio, unit3_ratio);
+    unit3_ratio--;
+    dwg_dynapi_header_set_value (dwg, "unit3_ratio", &unit3_ratio, 0);
 
   }
   {
-    BITCODE_BD unknown_3;
-    if (dwg_dynapi_header_value (dwg, "unknown_3", &unknown_3, NULL)
-        && unknown_3 == dwg->header_vars.unknown_3)
+    BITCODE_BD unit4_ratio;
+    if (dwg_dynapi_header_value (dwg, "unit4_ratio", &unit4_ratio, NULL)
+        && unit4_ratio == dwg->header_vars.unit4_ratio)
       pass ();
     else
-      fail ("HEADER.unknown_3 [BD] %g != %g", dwg->header_vars.unknown_3, unknown_3);
-    unknown_3++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_3", &unknown_3, 0)
-        && unknown_3 == dwg->header_vars.unknown_3)
+      fail ("HEADER.unit4_ratio [BD] %g != %g", dwg->header_vars.unit4_ratio, unit4_ratio);
+    unit4_ratio++;
+    if (dwg_dynapi_header_set_value (dwg, "unit4_ratio", &unit4_ratio, 0)
+        && unit4_ratio == dwg->header_vars.unit4_ratio)
       pass ();
     else
-      fail ("HEADER.unknown_3 [BD] set+1 %g != %g",
-            dwg->header_vars.unknown_3, unknown_3);
-    unknown_3--;
-    dwg_dynapi_header_set_value (dwg, "unknown_3", &unknown_3, 0);
+      fail ("HEADER.unit4_ratio [BD] set+1 %g != %g",
+            dwg->header_vars.unit4_ratio, unit4_ratio);
+    unit4_ratio--;
+    dwg_dynapi_header_set_value (dwg, "unit4_ratio", &unit4_ratio, 0);
 
   }
   {
-    BITCODE_TV unknown_text1;
-    if (dwg_dynapi_header_value (dwg, "unknown_text1", &unknown_text1, NULL)
-        && !memcmp (&unknown_text1, &dwg->header_vars.unknown_text1, sizeof (dwg->header_vars.unknown_text1))
+    BITCODE_TV unit1_name;
+    if (dwg_dynapi_header_value (dwg, "unit1_name", &unit1_name, NULL)
+        && !memcmp (&unit1_name, &dwg->header_vars.unit1_name, sizeof (dwg->header_vars.unit1_name))
        )
       pass ();
     else
-      fail ("HEADER.unknown_text1 [TV]");
+      fail ("HEADER.unit1_name [TV]");
   }
   {
-    BITCODE_TV unknown_text2;
-    if (dwg_dynapi_header_value (dwg, "unknown_text2", &unknown_text2, NULL)
-        && !memcmp (&unknown_text2, &dwg->header_vars.unknown_text2, sizeof (dwg->header_vars.unknown_text2))
+    BITCODE_TV unit2_name;
+    if (dwg_dynapi_header_value (dwg, "unit2_name", &unit2_name, NULL)
+        && !memcmp (&unit2_name, &dwg->header_vars.unit2_name, sizeof (dwg->header_vars.unit2_name))
        )
       pass ();
     else
-      fail ("HEADER.unknown_text2 [TV]");
+      fail ("HEADER.unit2_name [TV]");
   }
   {
-    BITCODE_TV unknown_text3;
-    if (dwg_dynapi_header_value (dwg, "unknown_text3", &unknown_text3, NULL)
-        && !memcmp (&unknown_text3, &dwg->header_vars.unknown_text3, sizeof (dwg->header_vars.unknown_text3))
+    BITCODE_TV unit3_name;
+    if (dwg_dynapi_header_value (dwg, "unit3_name", &unit3_name, NULL)
+        && !memcmp (&unit3_name, &dwg->header_vars.unit3_name, sizeof (dwg->header_vars.unit3_name))
        )
       pass ();
     else
-      fail ("HEADER.unknown_text3 [TV]");
+      fail ("HEADER.unit3_name [TV]");
   }
   {
-    BITCODE_TV unknown_text4;
-    if (dwg_dynapi_header_value (dwg, "unknown_text4", &unknown_text4, NULL)
-        && !memcmp (&unknown_text4, &dwg->header_vars.unknown_text4, sizeof (dwg->header_vars.unknown_text4))
+    BITCODE_TV unit4_name;
+    if (dwg_dynapi_header_value (dwg, "unit4_name", &unit4_name, NULL)
+        && !memcmp (&unit4_name, &dwg->header_vars.unit4_name, sizeof (dwg->header_vars.unit4_name))
        )
       pass ();
     else
-      fail ("HEADER.unknown_text4 [TV]");
+      fail ("HEADER.unit4_name [TV]");
   }
   {
     BITCODE_BL unknown_8;
@@ -6092,42 +6092,6 @@ test_header (Dwg_Data *dwg)
     unknown_59--;
     dwg_dynapi_header_set_value (dwg, "unknown_59", &unknown_59, 0);
 
-  }
-  {
-    BITCODE_T unknown_unit1;
-    if (dwg_dynapi_header_value (dwg, "unknown_unit1", &unknown_unit1, NULL)
-        && !memcmp (&unknown_unit1, &dwg->header_vars.unknown_unit1, sizeof (dwg->header_vars.unknown_unit1))
-       )
-      pass ();
-    else
-      fail ("HEADER.unknown_unit1 [T]");
-  }
-  {
-    BITCODE_T unknown_unit2;
-    if (dwg_dynapi_header_value (dwg, "unknown_unit2", &unknown_unit2, NULL)
-        && !memcmp (&unknown_unit2, &dwg->header_vars.unknown_unit2, sizeof (dwg->header_vars.unknown_unit2))
-       )
-      pass ();
-    else
-      fail ("HEADER.unknown_unit2 [T]");
-  }
-  {
-    BITCODE_T unknown_unit3;
-    if (dwg_dynapi_header_value (dwg, "unknown_unit3", &unknown_unit3, NULL)
-        && !memcmp (&unknown_unit3, &dwg->header_vars.unknown_unit3, sizeof (dwg->header_vars.unknown_unit3))
-       )
-      pass ();
-    else
-      fail ("HEADER.unknown_unit3 [T]");
-  }
-  {
-    BITCODE_T unknown_unit4;
-    if (dwg_dynapi_header_value (dwg, "unknown_unit4", &unknown_unit4, NULL)
-        && !memcmp (&unknown_unit4, &dwg->header_vars.unknown_unit4, sizeof (dwg->header_vars.unknown_unit4))
-       )
-      pass ();
-    else
-      fail ("HEADER.unknown_unit4 [T]");
   }
 #line 47 "dynapi_test.c.in"
   return error;

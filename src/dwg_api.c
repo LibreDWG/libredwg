@@ -22110,15 +22110,15 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   if (error) // DWG_ERR_OUTOFMEM or DWG_ERR_INVALIDDWG
     return error;
 
-  dwg->header_vars.unknown_0 = 412148564080.0; // unit1_ration
-  dwg->header_vars.unknown_1 = 1.0;
-  dwg->header_vars.unknown_2 = 1.0;
-  dwg->header_vars.unknown_3 = 1.0;
+  dwg->header_vars.unit1_ratio = 412148564080.0; // m to ??
+  dwg->header_vars.unit2_ratio = 1.0;
+  dwg->header_vars.unit3_ratio = 1.0;
+  dwg->header_vars.unit4_ratio = 1.0;
   if (version > R_11) // also meter sometimes. unit1_text
     {
-      if (dwg->header_vars.unknown_text1)
-        free (dwg->header_vars.unknown_text1);
-      dwg->header_vars.unknown_text1 = dwg_add_u8_input (dwg, "m");
+      if (dwg->header_vars.unit1_name)
+        free (dwg->header_vars.unit1_name);
+      dwg->header_vars.unit1_name = dwg_add_u8_input (dwg, "m");
     }
   dwg->header_vars.DIMASO = 1;
   dwg->header_vars.DIMSHO = 1; // Obsolete
