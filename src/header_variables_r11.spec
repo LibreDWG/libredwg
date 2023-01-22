@@ -267,26 +267,27 @@
   FIELD_RD (DIMTVP, 40); //ok
   FIELD_TFv (unknown_string, 33, 1);
   FIELD_RS (HANDLING, 70); // use new HEX handles (should be RC)
-  //UNKNOWN_UNTIL (0x4ee);
-  /* TODO fix HANDSEED - 00 00 00 00 00 00 12 35 mean 0x1235 [RLx] */
   DECODER {
+    BITCODE_RC *restrict val;
     _obj->HANDSEED = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
-    _obj->HANDSEED->absolute_ref = (BITCODE_RL)bit_read_RL (dat);
-    LOG_TRACE ("HANDSEED: %lX [RSx 5]\n", _obj->HANDSEED->absolute_ref)
+    _obj->HANDSEED->handleref.code = 0;
+    _obj->HANDSEED->handleref.size = 8;
+    val = (BITCODE_RC *)&(_obj->HANDSEED->handleref.value);
+    for (int i = _obj->HANDSEED->handleref.size - 1; i >= 0; i--)
+      val[i] = bit_read_RC (dat);
+    LOG_TRACE ("HANDSEED: " FORMAT_H " [H 5]\n", ARGS_H (_obj->HANDSEED->handleref));
   }
-  ENCODER {
-    if (_obj->HANDSEED)
-      {
-        bit_write_RL (dat, _obj->HANDSEED->absolute_ref);
-        LOG_TRACE ("HANDSEED: %lX [RLx 5]\n", _obj->HANDSEED->absolute_ref)
-      }
-  }
+// TODO encoder
+//  ENCODER {
+//    if (_obj->HANDSEED)
+//      {
+//        bit_write_RL (dat, _obj->HANDSEED->absolute_ref);
+//        LOG_TRACE ("HANDSEED: %lX [RLx 5]\n", _obj->HANDSEED->absolute_ref)
+//      }
+//  }
   FREE {
     free (_obj->HANDSEED); _obj->HANDSEED = NULL;
   }
-  FIELD_RL (unknown_4f2, 70); //ok
-  //DEBUG_HERE
-  //UNKNOWN_UNTIL (0x4f6);
   FIELD_RS (SURFU, 70); //ok
   FIELD_RS (SURFV, 70); //ok
   FIELD_RS (SURFTYPE, 70); //ok
