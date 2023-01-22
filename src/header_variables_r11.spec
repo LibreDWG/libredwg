@@ -326,10 +326,10 @@
   FIELD_RS (SHADEDIF, 70); //ok
   FIELD_RS (unknown_59, 0);
   FIELD_RS (UNITMODE, 70); //ok, new with r11
-
-  /* TODO Unknown 32 bytes */
-  DEBUG_HERE //53d
-  UNKNOWN_UNTIL (0x55f);
+  FIELD_RD (unit1_ratio, 0); // unit conversions. i.e. meter / inch
+  FIELD_RD (unit2_ratio, 0);
+  FIELD_RD (unit3_ratio, 0);
+  FIELD_RD (unit4_ratio, 0);
   FIELD_TFv (unknown_unit1, 32, 1);
   FIELD_TFv (unknown_unit2, 32, 1);
   FIELD_TFv (unknown_unit3, 32, 1);

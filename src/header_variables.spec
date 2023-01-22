@@ -46,15 +46,15 @@
   SINCE (R_13b1)
     {
       IF_ENCODE_FROM_EARLIER_OR_DXF {
-        FIELD_VALUE (unknown_0) = 412148564080.0;
-        FIELD_VALUE (unknown_1) = 1.0;
-        FIELD_VALUE (unknown_2) = 1.0;
-        FIELD_VALUE (unknown_3) = 1.0;
+        FIELD_VALUE (unit1_ratio) = 412148564080.0;
+        FIELD_VALUE (unit2_ratio) = 1.0;
+        FIELD_VALUE (unit3_ratio) = 1.0;
+        FIELD_VALUE (unit4_ratio) = 1.0;
       }
-      FIELD_BD (unknown_0, 0); // unit conversions. i.e. meter / inch
-      FIELD_BD (unknown_1, 0);
-      FIELD_BD (unknown_2, 0);
-      FIELD_BD (unknown_3, 0);
+      FIELD_BD (unit1_ratio, 0); // unit conversions. i.e. meter / inch
+      FIELD_BD (unit2_ratio, 0);
+      FIELD_BD (unit3_ratio, 0);
+      FIELD_BD (unit4_ratio, 0);
     }
   VERSIONS (R_13b1, R_2004) { // undocumented as such in the ODA spec
       IF_ENCODE_FROM_EARLIER_OR_DXF {

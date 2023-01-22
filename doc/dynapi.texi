@@ -711,9 +711,13 @@ RL
 RL
 @item size
 RL
-@item unknown_0
+@item unit1_ratio
 BD
-@item unknown_1
+@item unit2_ratio
+BD
+@item unit3_ratio
+BD
+@item unit4_ratio
 BD
 @item unknown_10
 BS
@@ -735,8 +739,6 @@ BL
 BL
 @item unknown_18
 BS
-@item unknown_2
-BD
 @item unknown_20
 H
 @item unknown_21
@@ -744,8 +746,6 @@ BL
 @item unknown_22
 BL
 @item unknown_23
-BD
-@item unknown_3
 BD
 @item unknown_3f9
 RC

@@ -883,10 +883,10 @@ typedef struct _dwg_header_variables {
   BITCODE_RC ACADMAINTVER; /*!< r13+ */
   BITCODE_BLL REQUIREDVERSIONS; /*!< r2013+ */
   BITCODE_TV DWGCODEPAGE;  /*!< r10+ */
-  BITCODE_BD unknown_0; /* 412148564080.0 */
-  BITCODE_BD unknown_1; /* 1.0 */
-  BITCODE_BD unknown_2; /* 1.0 */
-  BITCODE_BD unknown_3; /* 1.0 */
+  BITCODE_BD unit1_ratio; /* 412148564080.0 */
+  BITCODE_BD unit2_ratio; /* 1.0 */
+  BITCODE_BD unit3_ratio; /* 1.0 */
+  BITCODE_BD unit4_ratio; /* 1.0 */
   BITCODE_TV unknown_unit1; /* "" 4x pre R13/2007... */
   BITCODE_TV unknown_unit2; /* "" */
   BITCODE_TV unknown_unit3; /* "" */
