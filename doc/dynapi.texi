@@ -701,6 +701,8 @@ RL
 RS
 @item dwg_size
 RL
+@item flag_3d
+RS
 @item layer_colors[128]
 RS
 @item numentities
@@ -733,8 +735,6 @@ BL
 BL
 @item unknown_17
 BL
-@item unknown_18
-BS
 @item unknown_2
 BD
 @item unknown_20
