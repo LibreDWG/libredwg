@@ -217,42 +217,6 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_TV unknown_text1;
-    if (dwg_dynapi_header_value (dwg, "unknown_text1", &unknown_text1, NULL)
-        && !memcmp (&unknown_text1, &dwg->header_vars.unknown_text1, sizeof (dwg->header_vars.unknown_text1))
-       )
-      pass ();
-    else
-      fail ("HEADER.unknown_text1 [TV]");
-  }
-  {
-    BITCODE_TV unknown_text2;
-    if (dwg_dynapi_header_value (dwg, "unknown_text2", &unknown_text2, NULL)
-        && !memcmp (&unknown_text2, &dwg->header_vars.unknown_text2, sizeof (dwg->header_vars.unknown_text2))
-       )
-      pass ();
-    else
-      fail ("HEADER.unknown_text2 [TV]");
-  }
-  {
-    BITCODE_TV unknown_text3;
-    if (dwg_dynapi_header_value (dwg, "unknown_text3", &unknown_text3, NULL)
-        && !memcmp (&unknown_text3, &dwg->header_vars.unknown_text3, sizeof (dwg->header_vars.unknown_text3))
-       )
-      pass ();
-    else
-      fail ("HEADER.unknown_text3 [TV]");
-  }
-  {
-    BITCODE_TV unknown_text4;
-    if (dwg_dynapi_header_value (dwg, "unknown_text4", &unknown_text4, NULL)
-        && !memcmp (&unknown_text4, &dwg->header_vars.unknown_text4, sizeof (dwg->header_vars.unknown_text4))
-       )
-      pass ();
-    else
-      fail ("HEADER.unknown_text4 [TV]");
-  }
-  {
     BITCODE_BL unknown_8;
     if (dwg_dynapi_header_value (dwg, "unknown_8", &unknown_8, NULL)
         && unknown_8 == dwg->header_vars.unknown_8)

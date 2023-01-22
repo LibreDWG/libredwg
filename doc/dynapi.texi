@@ -799,14 +799,6 @@ RS
 RS
 @item unknown_string
 T
-@item unknown_text1
-TV
-@item unknown_text2
-TV
-@item unknown_text3
-TV
-@item unknown_text4
-TV
 @item unknown_unit1
 T
 @item unknown_unit2

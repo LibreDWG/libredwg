@@ -887,10 +887,10 @@ typedef struct _dwg_header_variables {
   BITCODE_BD unknown_1; /* 1.0 */
   BITCODE_BD unknown_2; /* 1.0 */
   BITCODE_BD unknown_3; /* 1.0 */
-  BITCODE_TV unknown_text1; /* "" 4x pre 2007... */
-  BITCODE_TV unknown_text2; /* "" */
-  BITCODE_TV unknown_text3; /* "" */
-  BITCODE_TV unknown_text4; /* "" */
+  BITCODE_TV unknown_unit1; /* "" 4x pre R13/2007... */
+  BITCODE_TV unknown_unit2; /* "" */
+  BITCODE_TV unknown_unit3; /* "" */
+  BITCODE_TV unknown_unit4; /* "" */
   BITCODE_BL unknown_8; /* 24L */
   BITCODE_BL unknown_9; /* 0L */
   BITCODE_BS unknown_10; /* 0 r13-r14 */
@@ -1278,10 +1278,6 @@ typedef struct _dwg_header_variables {
   BITCODE_RS unknown_52e;  /* r11 */
   BITCODE_RC unknown_530;  /* r11 */
   BITCODE_RC unknown_59;   /* r11 */
-  BITCODE_T unknown_unit1; /* r11 */
-  BITCODE_T unknown_unit2; /* r11 */
-  BITCODE_T unknown_unit3; /* r11 */
-  BITCODE_T unknown_unit4; /* r11 */
 } Dwg_Header_Variables;
 
 /* OBJECTS *******************************************************************/
