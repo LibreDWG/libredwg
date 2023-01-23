@@ -30,6 +30,8 @@ add_executable(decode_test
   ../../src/classes.c
   ../../src/print.c
   tests_common.h)
+target_include_directories(decode_test PUBLIC
+  ${CMAKE_CURRENT_BINARY_DIR})
 add_test(decode_test ./decode_test)
 
 add_executable(dxf_test

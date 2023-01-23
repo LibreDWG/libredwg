@@ -53,6 +53,33 @@
 /* Define if you have the <ctype.h> header file. */
 #cmakedefine HAVE_CTYPE_H
 
+/* Define if you have the <dirent.h> header file. */
+#cmakedefine HAVE_DIRENT_H
+
+/* Define if you have the <endian.h> header file. */
+#cmakedefine HAVE_ENDIAN_H
+
+/* Define if you have the <sys/endian.h> header file. */
+#cmakedefine HAVE_SYS_ENDIAN_H
+
+/* Define if you have the <byteorder.h> header file. */
+#cmakedefine HAVE_BYTEORDER_H
+
+/* Define if you have the <sys/byteorder.h> header file. */
+#cmakedefine HAVE_SYS_BYTEORDER_H
+
+/* Define if you have the <byteswap.h> header file. */
+#cmakedefine HAVE_BYTESWAP_H
+
+/* Define if you have the <winsock2.h> header file. */
+#cmakedefine HAVE_WINSOCK2_H
+
+/* Define if you have the <machine/endian.h> header file. */
+#cmakedefine HAVE_MACHINE_ENDIAN_H
+
+/* Define if you have the <sys/param.h> header file. */
+#cmakedefine HAVE_SYS_PARAM_H
+
 /* Define if you have the <float.h> header file. */
 #cmakedefine HAVE_FLOAT_H
 
@@ -63,13 +90,13 @@
 #define HAVE_FUNC_ATTRIBUTE_FORMAT 1
 
 /* Define if the system has the `gnu_format' function attribute */
-#define HAVE_FUNC_ATTRIBUTE_GNU_FORMAT 1
+//#define HAVE_FUNC_ATTRIBUTE_GNU_FORMAT 1
 
 /* Define if the system has the `malloc' function attribute */
 #define HAVE_FUNC_ATTRIBUTE_MALLOC 1
 
 /* Define if the system has the `ms_format' function attribute */
-#define HAVE_FUNC_ATTRIBUTE_MS_FORMAT 1
+//#define HAVE_FUNC_ATTRIBUTE_MS_FORMAT 1
 
 /* Define if the system has the `returns_nonnull' function attribute */
 #define HAVE_FUNC_ATTRIBUTE_RETURNS_NONNULL 1
@@ -284,7 +311,9 @@
 /* #undef _UINT64_T */
 
 /* Needed for cygwin strdup */
-#define __XSI_VISIBLE 700
+#ifdef __CYGWIN__
+#  define __XSI_VISIBLE 700
+#endif
 
 /* Define to `__inline__' or `__inline' if that's what the C compiler
    calls it, or to nothing if 'inline' is not supported under any name.  */
