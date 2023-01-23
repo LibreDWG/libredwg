@@ -2,7 +2,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2022 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2023 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -267,27 +267,26 @@
   FIELD_RD (DIMTVP, 40); //ok
   FIELD_TFv (unknown_string, 33, 1);
   FIELD_RS (HANDLING, 70); // use new HEX handles (should be RC)
-  DECODER {
-    BITCODE_RC *restrict val;
+#ifdef IS_DECODER
+  {
     _obj->HANDSEED = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
     _obj->HANDSEED->handleref.code = 0;
     _obj->HANDSEED->handleref.size = 8;
-    val = (BITCODE_RC *)&(_obj->HANDSEED->handleref.value);
-    for (int i = _obj->HANDSEED->handleref.size - 1; i >= 0; i--)
-      val[i] = bit_read_RC (dat);
-    LOG_TRACE ("HANDSEED: " FORMAT_H " [H 5]\n", ARGS_H (_obj->HANDSEED->handleref));
+    _obj->HANDSEED->handleref.value = htobe64 (bit_read_RLL (dat));
+    _obj->HANDSEED->absolute_ref = _obj->HANDSEED->handleref.value;
+    LOG_TRACE ("HANDSEED: " FORMAT_H " [H 5]\n",
+               ARGS_H (_obj->HANDSEED->handleref));
   }
-// TODO encoder
-//  ENCODER {
-//    if (_obj->HANDSEED)
-//      {
-//        bit_write_RL (dat, _obj->HANDSEED->absolute_ref);
-//        LOG_TRACE ("HANDSEED: %lX [RLx 5]\n", _obj->HANDSEED->absolute_ref)
-//      }
-//  }
-  FREE {
-    free (_obj->HANDSEED); _obj->HANDSEED = NULL;
-  }
+#elif defined IS_ENCODER
+  if (_obj->HANDSEED)
+    {
+      bit_write_RLL (dat, be64toh (_obj->HANDSEED->absolute_ref));
+      LOG_TRACE ("HANDSEED: " FORMAT_H " [H 5]\n",
+                 ARGS_H (_obj->HANDSEED->handleref));
+    }
+#else
+  FIELD_HANDLE (HANDSEED, 0, 5)
+#endif
   FIELD_RS (SURFU, 70); //ok
   FIELD_RS (SURFV, 70); //ok
   FIELD_RS (SURFTYPE, 70); //ok
