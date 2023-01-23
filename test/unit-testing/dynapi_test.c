@@ -6076,6 +6076,24 @@ test_header (Dwg_Data *dwg)
 
   }
   {
+    BITCODE_RC unknown_59;
+    if (dwg_dynapi_header_value (dwg, "unknown_59", &unknown_59, NULL)
+        && unknown_59 == dwg->header_vars.unknown_59)
+      pass ();
+    else
+      fail ("HEADER.unknown_59 [RC] %u != %u", dwg->header_vars.unknown_59, unknown_59);
+    unknown_59++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_59", &unknown_59, 0)
+        && unknown_59 == dwg->header_vars.unknown_59)
+      pass ();
+    else
+      fail ("HEADER.unknown_59 [RC] set+1 %u != %u",
+            dwg->header_vars.unknown_59, unknown_59);
+    unknown_59--;
+    dwg_dynapi_header_set_value (dwg, "unknown_59", &unknown_59, 0);
+
+  }
+  {
     BITCODE_T unknown_unit1;
     if (dwg_dynapi_header_value (dwg, "unknown_unit1", &unknown_unit1, NULL)
         && !memcmp (&unknown_unit1, &dwg->header_vars.unknown_unit1, sizeof (dwg->header_vars.unknown_unit1))
