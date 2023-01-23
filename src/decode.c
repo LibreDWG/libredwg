@@ -20,15 +20,15 @@
  * modified by Denis Pruchkovsky
  */
 
-#define _POSIX_SOURCE 1
 #define _DEFAULT_SOURCE 1 // for endian byteswaps
 #define _BSD_SOURCE 1
-#include "config.h"
+#define _GNU_SOURCE 1 /* for memmem on linux */
 #ifdef __STDC_ALLOC_LIB__
 #  define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
 #else
 #  define _USE_BSD 1
 #endif
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1093,10 +1093,25 @@ bfr_read_32 (void *restrict dst, BITCODE_RC *restrict *restrict src,
   size_t n;
   uint32_t *dp = (uint32_t *)dst;
 
-  for (n = 0; n < size / sizeof (uint32_t); n++)
+  // src may be misaligned
+  if ((intptr_t)src % 4)
     {
-      *dp++ = le32toh (*(uint32_t *)*src);
-      *src += sizeof (uint32_t);
+      BITCODE_RC *restrict *restrict tmp = malloc (size);
+      memcpy ((void *)tmp, (const void *)src, size);
+      for (n = 0; n < size / sizeof (uint32_t); n++)
+        {
+          *dp++ = le32toh (*(uint32_t *)*tmp);
+          *tmp += sizeof (uint32_t);
+        }
+      free ((void *)tmp);
+    }
+  else
+    {
+      for (n = 0; n < size / sizeof (uint32_t); n++)
+        {
+          *dp++ = le32toh (*(uint32_t *)*src);
+          *src += sizeof (uint32_t);
+        }
     }
   size -= n * sizeof (uint32_t);
   assert (size == 0);

@@ -1,17 +1,22 @@
 #define DECODE_TEST_C
-#define _POSIX_SOURCE 1
 #define _DEFAULT_SOURCE 1
+#if defined(__linux__)
+#  define _GNU_SOURCE 1 /* for memmem on linux */
+#endif
 #define _BSD_SOURCE 1
+#ifdef __STDC_ALLOC_LIB__
+#  define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
+#else
+#  define _USE_BSD 1
+#endif
+
+#define IS_DECODER
 #include "../../src/common.h"
-#include "../../src/config.h"
 #include <stddef.h>
-#ifdef CLANG_DIAG_IGNORE
+
 CLANG_DIAG_IGNORE (-Wpragma-pack)
-#endif
 #include "decode.c"
-#ifdef CLANG_DIAG_IGNORE
 CLANG_DIAG_RESTORE
-#endif
 #include "tests_common.h"
 
 void read_literal_length_tests (void);

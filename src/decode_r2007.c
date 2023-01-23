@@ -17,6 +17,7 @@
  */
 
 #define IS_DECODER
+#define _GNU_SOURCE 1 /* for memmem on linux */
 
 #include "config.h"
 #include <stdio.h>

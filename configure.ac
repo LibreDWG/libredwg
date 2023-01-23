@@ -203,11 +203,17 @@ if test x$ac_cv_header_wchar_h = xyes; then
    AX_COMPILE_CHECK_SIZEOF([wchar_t], [#include <wchar.h>])
 fi
 dnl AX_GCC_BUILTIN(__builtin_offsetof)
-AC_DEFINE([_POSIX_C_SOURCE],[200809L],[Needed for strdup])
-if test x$host_os = xcygwin32 -o x$host_os" = "xcygwin64
-then
-   AC_DEFINE([__XSI_VISIBLE],[700],[Needed for cygwin strdup])
-fi
+case "$host_os" in
+darwin*|macos*)
+    AC_DEFINE([_POSIX_C_SOURCE],[900000L],[Needed for all APPLE extensions])
+    ;;
+*)
+    AC_DEFINE([_POSIX_C_SOURCE],[200809L],[Needed for strdup])
+    ;;
+esac
+case "$host_os" in
+cygwin*) AC_DEFINE([__XSI_VISIBLE],[700],[Needed for cygwin strdup]) ;;
+esac
 
 AX_IS_RELEASE([git-directory])
 dnl ability to override with a .git dir, to test release features

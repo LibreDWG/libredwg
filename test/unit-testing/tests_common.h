@@ -1,4 +1,10 @@
 #define TEST_COMMON_H
+#ifndef DECODE_TEST_C
+static unsigned int loglevel;
+#  define DWG_LOGLEVEL loglevel
+#  include "logging.h"
+#endif
+#include "common.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -7,13 +13,6 @@
 #if defined(BITS_TEST_C) || defined(DECODE_TEST_C)
 #  include "bits.h"
 #endif
-#ifndef DECODE_TEST_C
-static unsigned int loglevel;
-#  define DWG_LOGLEVEL loglevel
-#  include "logging.h"
-#endif
-#include "config.h"
-#include "common.h"
 
 #if defined(_WIN32) && defined(HAVE_FUNC_ATTRIBUTE_MS_FORMAT)                 \
     && !defined(__USE_MINGW_ANSI_STDIO)
