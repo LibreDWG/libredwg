@@ -1277,7 +1277,7 @@ typedef struct _dwg_header_variables {
   BITCODE_RS unknown_52c;  /* r11 */
   BITCODE_RS unknown_52e;  /* r11 */
   BITCODE_RC unknown_530;  /* r11 */
-  BITCODE_RC unknown_59;   /* r11 */
+  BITCODE_RS unknown_59;   /* r11 */
   BITCODE_T unknown_unit1; /* r11 */
   BITCODE_T unknown_unit2; /* r11 */
   BITCODE_T unknown_unit3; /* r11 */

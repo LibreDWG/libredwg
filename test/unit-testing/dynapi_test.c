@@ -5527,21 +5527,21 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_BL timezone;
-    if (dwg_dynapi_header_value (dwg, "TIMEZONE", &timezone, NULL)
-        && timezone == dwg->header_vars.TIMEZONE)
+    BITCODE_BL timezn;
+    if (dwg_dynapi_header_value (dwg, "TIMEZONE", &timezn, NULL)
+        && timezn == dwg->header_vars.TIMEZONE)
       pass ();
     else
-      fail ("HEADER.TIMEZONE [BL] %u != %u", dwg->header_vars.TIMEZONE, timezone);
-    timezone++;
-    if (dwg_dynapi_header_set_value (dwg, "TIMEZONE", &timezone, 0)
-        && timezone == dwg->header_vars.TIMEZONE)
+      fail ("HEADER.TIMEZONE [BL] %u != %u", dwg->header_vars.TIMEZONE, timezn);
+    timezn++;
+    if (dwg_dynapi_header_set_value (dwg, "TIMEZONE", &timezn, 0)
+        && timezn == dwg->header_vars.TIMEZONE)
       pass ();
     else
       fail ("HEADER.TIMEZONE [BL] set+1 %u != %u",
-            dwg->header_vars.TIMEZONE, timezone);
-    timezone--;
-    dwg_dynapi_header_set_value (dwg, "TIMEZONE", &timezone, 0);
+            dwg->header_vars.TIMEZONE, timezn);
+    timezn--;
+    dwg_dynapi_header_set_value (dwg, "TIMEZONE", &timezn, 0);
 
   }
   {
@@ -6073,6 +6073,24 @@ test_header (Dwg_Data *dwg)
             dwg->header_vars.unknown_530, unknown_530);
     unknown_530--;
     dwg_dynapi_header_set_value (dwg, "unknown_530", &unknown_530, 0);
+
+  }
+  {
+    BITCODE_RS unknown_59;
+    if (dwg_dynapi_header_value (dwg, "unknown_59", &unknown_59, NULL)
+        && unknown_59 == dwg->header_vars.unknown_59)
+      pass ();
+    else
+      fail ("HEADER.unknown_59 [RS] %hu != %hu", dwg->header_vars.unknown_59, unknown_59);
+    unknown_59++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_59", &unknown_59, 0)
+        && unknown_59 == dwg->header_vars.unknown_59)
+      pass ();
+    else
+      fail ("HEADER.unknown_59 [RS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_59, unknown_59);
+    unknown_59--;
+    dwg_dynapi_header_set_value (dwg, "unknown_59", &unknown_59, 0);
 
   }
   {

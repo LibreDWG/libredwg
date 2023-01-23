@@ -1367,6 +1367,7 @@ for (<$in>) {
         $lname =~ s/\[\d+\]$//g;
         $sname =~ s/\[\d+\]$//g;
       }
+      $var  =~ s/^timezone/timezn/; # global on darwin
       my $stype = $type;
       $type = 'BITCODE_'.$type unless ($type =~ /^(struct|Dwg_)/ or $type =~ /^[a-z]/);
       if (!$is_ptr) {
