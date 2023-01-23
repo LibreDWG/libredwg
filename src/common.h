@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009-2021 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2009-2023 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -36,67 +36,70 @@
 #endif
 
 #ifdef HAVE_ENDIAN_H
+#  ifndef _DEFAULT_SOURCE
+#    define _DEFAULT_SOURCE 1 /* for byteswap.h */
+#  endif
 #  include <endian.h>
 #elif defined HAVE_SYS_ENDIAN_H
 #  include <sys/endian.h>
 #elif defined HAVE_MACHINE_ENDIAN_H && defined __APPLE__
-# include <machine/endian.h>
-# include <libkern/OSByteOrder.h>
-# define htole32 OSSwapHostToLittleInt32
-# define le32toh OSSwapLittleToHostInt32
-# define htole64 OSSwapHostToLittleInt64
-# define le64toh OSSwapLittleToHostInt64
+#  include <machine/endian.h>
+#  include <libkern/OSByteOrder.h>
+#  define htole32 OSSwapHostToLittleInt32
+#  define le32toh OSSwapLittleToHostInt32
+#  define htole64 OSSwapHostToLittleInt64
+#  define le64toh OSSwapLittleToHostInt64
 #elif defined HAVE_WINSOCK2_H && defined __WINDOWS__
-# include <winsock2.h>
-# ifndef WORDS_BIGENDIAN
+#  include <winsock2.h>
+#  ifndef WORDS_BIGENDIAN
+#    define htole32(x) (x)
+#    define le32toh(x) (x)
+#    define htole64(x) (x)
+#    define le64toh(x) (x)
+#  else /* e.g. xbox 360 */
+#    define htole32(x) __builtin_bswap32(x)
+#    define le32toh(x) __builtin_bswap32(x)
+#    define htole64(x) __builtin_bswap64(x)
+#    define le64toh(x) __builtin_bswap64(x)
+#  endif
+#elif defined WORDS_BIGENDIAN
+/* TODO more converters */
+#  if defined HAVE_SYS_PARAM_H
+#    include <sys/param.h>
+#  endif
+#  if defined HAVE_SYS_BYTEORDER_H
+/* e.g. solaris */
+#    include <sys/byteorder.h>
+#    define htole32(x) BSWAP_32(x)
+#    define le32toh(x) BSWAP_32(x)
+#    define htole64(x) BSWAP_64(x)
+#    define le64toh(x) BSWAP_64(x)
+#  elif defined HAVE_BYTESWAP_H
+#    include <byteswap.h>
+#    define htole32(x) bswap32 (x)
+#    define le32toh(x) bswap32 (x)
+#    define htole64(x) bswap64 (x)
+#    define le64toh(x) bswap64 (x)
+#  elif defined HAVE_BYTEORDER_H
+#    include <byteorder.h>
+/* which os? riot-os */
+#    ifdef RIOT_VERSION
+#      define htole32(x) byteorder_swapl (x)
+#      define le32toh(x) byteorder_swapl (x)
+#      define htole64(x) byteorder_swapll (x)
+#      define le64toh(x) byteorder_swapll (x)
+#    else
+/* rtems/libcpu: ... */
+#      error unsupported big-endian platform with byteorder.h
+#    endif
+#  else
+#    error unsupported big-endian platform
+#  endif
+#else /* little endian: just pass-thru */
 #  define htole32(x) (x)
 #  define le32toh(x) (x)
 #  define htole64(x) (x)
 #  define le64toh(x) (x)
-# else /* e.g. xbox 360 */
-#  define htole32(x) __builtin_bswap32(x)
-#  define le32toh(x) __builtin_bswap32(x)
-#  define htole64(x) __builtin_bswap64(x)
-#  define le64toh(x) __builtin_bswap64(x)
-# endif
-#elif defined WORDS_BIGENDIAN
-/* TODO more converters */
-# if defined HAVE_SYS_PARAM_H
-#  include <sys/param.h>
-# endif
-# if defined HAVE_SYS_BYTEORDER_H
-/* e.g. solaris */
-#  include <sys/byteorder.h>
-#  define htole32(x) BSWAP_32(x)
-#  define le32toh(x) BSWAP_32(x)
-#  define htole64(x) BSWAP_64(x)
-#  define le64toh(x) BSWAP_64(x)
-# elif defined HAVE_BYTESWAP_H
-#  include <byteswap.h>
-#  define htole32(x) bswap32(x)
-#  define le32toh(x) bswap32(x)
-#  define htole64(x) bswap64(x)
-#  define le64toh(x) bswap64(x)
-# elif defined HAVE_BYTEORDER_H
-#  include <byteorder.h>
-/* which os? riot-os */
-#  ifdef RIOT_VERSION
-#   define htole32(x) byteorder_swapl(x)
-#   define le32toh(x) byteorder_swapl(x)
-#   define htole64(x) byteorder_swapll(x)
-#   define le64toh(x) byteorder_swapll(x)
-#  else
-/* rtems/libcpu: ... */
-#   error unsupported big-endian platform with byteorder.h
-#  endif
-# else
-#  error unsupported big-endian platform
-# endif
-#else /* little endian: just pass-thru */
-# define htole32(x) (x)
-# define le32toh(x) (x)
-# define htole64(x) (x)
-# define le64toh(x) (x)
 #endif
 
 /* Used warning suppressions:

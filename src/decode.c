@@ -21,7 +21,7 @@
  */
 
 #define _POSIX_SOURCE 1
-#define _DEFAULT_SOURCE 1
+#define _DEFAULT_SOURCE 1 // for endian byteswaps
 #define _BSD_SOURCE 1
 #include "config.h"
 #ifdef __STDC_ALLOC_LIB__

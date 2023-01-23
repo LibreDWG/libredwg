@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009-2010,2018-2022 Free Software Foundation, Inc.         */
+/*  Copyright (C) 2009-2010,2018-2023 Free Software Foundation, Inc.         */
 /*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
@@ -29,6 +29,9 @@
 #  define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
 #else
 #  define _USE_BSD 1
+#endif
+#ifndef _DEFAULT_SOURCE
+#  define _DEFAULT_SOURCE 1 /* for__USE_MISC byteswap.h */
 #endif
 #include <stdbool.h>
 #include <stdio.h>
