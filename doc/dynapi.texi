@@ -711,12 +711,20 @@ RL
 RL
 @item size
 RL
+@item unit1_name
+TV
 @item unit1_ratio
 BD
+@item unit2_name
+TV
 @item unit2_ratio
 BD
+@item unit3_name
+TV
 @item unit3_ratio
 BD
+@item unit4_name
+TV
 @item unit4_ratio
 BD
 @item unknown_10
@@ -798,14 +806,6 @@ RS
 @item unknown_sec
 RS
 @item unknown_string
-T
-@item unknown_unit1
-T
-@item unknown_unit2
-T
-@item unknown_unit3
-T
-@item unknown_unit4
 T
 @item unknown_year
 RS

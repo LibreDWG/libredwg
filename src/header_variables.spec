@@ -58,16 +58,16 @@
     }
   VERSIONS (R_13b1, R_2004) { // undocumented as such in the ODA spec
       IF_ENCODE_FROM_EARLIER_OR_DXF {
-        free (FIELD_VALUE (unknown_unit1));
-        FIELD_VALUE (unknown_unit1) = strdup ("m");
+        free (FIELD_VALUE (unit1_name));
+        FIELD_VALUE (unit1_name) = strdup ("m");
       }
-      FIELD_TV (unknown_unit1, 0);
-      FIELD_TV (unknown_unit2, 0);
-      FIELD_TV (unknown_unit3, 0);
-      FIELD_TV (unknown_unit4, 0);
+      FIELD_TV (unit1_name, 0);
+      FIELD_TV (unit2_name, 0);
+      FIELD_TV (unit3_name, 0);
+      FIELD_TV (unit4_name, 0);
   }
   FREE {
-    FIELD_TV (unknown_unit1, 0);
+    FIELD_TV (unit1_name, 0);
   }
   SINCE (R_13b1)
     {
@@ -677,10 +677,10 @@
   IF_FREE_OR_SINCE (R_2007) {
     // TODO split str_dat stream and get rid of this block
     SECTION_STRING_STREAM
-    FIELD_T (unknown_unit1, 0);
-    FIELD_T (unknown_unit2, 0);
-    FIELD_T (unknown_unit3, 0);
-    FIELD_T (unknown_unit4, 0);
+    FIELD_T (unit1_name, 0);
+    FIELD_T (unit2_name, 0);
+    FIELD_T (unit3_name, 0);
+    FIELD_T (unit4_name, 0);
     FIELD_T (MENU, 1);
     FIELD_T (DIMPOST, 1);
     FIELD_T (DIMAPOST, 1);

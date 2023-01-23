@@ -22116,9 +22116,9 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header_vars.unit4_ratio = 1.0;
   if (version > R_11) // also meter sometimes. unit1_text
     {
-      if (dwg->header_vars.unknown_unit1)
-        free (dwg->header_vars.unknown_unit1);
-      dwg->header_vars.unknown_unit1 = dwg_add_u8_input (dwg, "m");
+      if (dwg->header_vars.unit1_name)
+        free (dwg->header_vars.unit1_name);
+      dwg->header_vars.unit1_name = dwg_add_u8_input (dwg, "m");
     }
   dwg->header_vars.DIMASO = 1;
   dwg->header_vars.DIMSHO = 1; // Obsolete

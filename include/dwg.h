@@ -887,10 +887,10 @@ typedef struct _dwg_header_variables {
   BITCODE_BD unit2_ratio; /* 1.0 */
   BITCODE_BD unit3_ratio; /* 1.0 */
   BITCODE_BD unit4_ratio; /* 1.0 */
-  BITCODE_TV unknown_unit1; /* "" 4x pre R13/2007... */
-  BITCODE_TV unknown_unit2; /* "" */
-  BITCODE_TV unknown_unit3; /* "" */
-  BITCODE_TV unknown_unit4; /* "" */
+  BITCODE_TV unit1_name; /* "" 4x pre R13/2007... */
+  BITCODE_TV unit2_name; /* "" */
+  BITCODE_TV unit3_name; /* "" */
+  BITCODE_TV unit4_name; /* "" */
   BITCODE_BL unknown_8; /* 24L */
   BITCODE_BL unknown_9; /* 0L */
   BITCODE_BS unknown_10; /* 0 r13-r14 */

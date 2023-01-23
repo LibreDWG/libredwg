@@ -3248,10 +3248,10 @@ dwg_dynapi_header_set_value (Dwg_Data *restrict dwg,
           { "DIMPOST", "TFv", 16, OFF (struct _dwg_header_variables, DIMPOST), 1,1,1, 1 },
           { "DIMAPOST", "TFv", 16, OFF (struct _dwg_header_variables, DIMAPOST), 1,1,1, 1 },
           { "unknown_string", "TFv", 33, OFF (struct _dwg_header_variables, unknown_string), 1,1,1, 1 },
-          { "unknown_unit1", "TFv", 32, OFF (struct _dwg_header_variables, unknown_unit1), 1,1,1, 1 },
-          { "unknown_unit2", "TFv", 32, OFF (struct _dwg_header_variables, unknown_unit2), 1,1,1, 1 },
-          { "unknown_unit3", "TFv", 32, OFF (struct _dwg_header_variables, unknown_unit3), 1,1,1, 1 },
-          { "unknown_unit4", "TFv", 32, OFF (struct _dwg_header_variables, unknown_unit4), 1,1,1, 1 },
+          { "unit1_name", "TFv", 32, OFF (struct _dwg_header_variables, unit1_name), 1,1,1, 1 },
+          { "unit2_name", "TFv", 32, OFF (struct _dwg_header_variables, unit2_name), 1,1,1, 1 },
+          { "unit3_name", "TFv", 32, OFF (struct _dwg_header_variables, unit3_name), 1,1,1, 1 },
+          { "unit4_name", "TFv", 32, OFF (struct _dwg_header_variables, unit4_name), 1,1,1, 1 },
           { NULL }
         };
         if (f->is_string && dwg->header.from_version < R_13b1)
