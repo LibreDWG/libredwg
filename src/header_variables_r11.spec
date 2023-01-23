@@ -337,10 +337,10 @@
   FIELD_3RD (PUCSORG, 10); //ok
   FIELD_3RD (PUCSXDIR, 11); //ok
   FIELD_3RD (PUCSYDIR, 12); //ok
-  FIELD_RS (unknown_10, 70); //ff ff/-1
+  FIELD_RS (unknown_10a, 70); //ff ff/-1
   FIELD_RC (TILEMODE, 70); //ok
   FIELD_CAST (PLIMCHECK, RS, B, 70); //ok
-  FIELD_RS (unknown_10, 70); //0
+  FIELD_RS (unknown_10b, 70); //0
   FIELD_RC (unknown_11, 70); //0
   FIELD_3RD (PEXTMIN, 10); //ok 637
   FIELD_3RD (PEXTMAX, 10); //

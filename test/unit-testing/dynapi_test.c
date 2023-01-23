@@ -307,6 +307,42 @@ test_header (Dwg_Data *dwg)
 
   }
   {
+    BITCODE_BS unknown_10a;
+    if (dwg_dynapi_header_value (dwg, "unknown_10a", &unknown_10a, NULL)
+        && unknown_10a == dwg->header_vars.unknown_10a)
+      pass ();
+    else
+      fail ("HEADER.unknown_10a [BS] %hu != %hu", dwg->header_vars.unknown_10a, unknown_10a);
+    unknown_10a++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_10a", &unknown_10a, 0)
+        && unknown_10a == dwg->header_vars.unknown_10a)
+      pass ();
+    else
+      fail ("HEADER.unknown_10a [BS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_10a, unknown_10a);
+    unknown_10a--;
+    dwg_dynapi_header_set_value (dwg, "unknown_10a", &unknown_10a, 0);
+
+  }
+  {
+    BITCODE_BS unknown_10b;
+    if (dwg_dynapi_header_value (dwg, "unknown_10b", &unknown_10b, NULL)
+        && unknown_10b == dwg->header_vars.unknown_10b)
+      pass ();
+    else
+      fail ("HEADER.unknown_10b [BS] %hu != %hu", dwg->header_vars.unknown_10b, unknown_10b);
+    unknown_10b++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_10b", &unknown_10b, 0)
+        && unknown_10b == dwg->header_vars.unknown_10b)
+      pass ();
+    else
+      fail ("HEADER.unknown_10b [BS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_10b, unknown_10b);
+    unknown_10b--;
+    dwg_dynapi_header_set_value (dwg, "unknown_10b", &unknown_10b, 0);
+
+  }
+  {
     BITCODE_BS unknown_18;
     if (dwg_dynapi_header_value (dwg, "unknown_18", &unknown_18, NULL)
         && unknown_18 == dwg->header_vars.unknown_18)

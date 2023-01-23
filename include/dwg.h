@@ -894,6 +894,8 @@ typedef struct _dwg_header_variables {
   BITCODE_BL unknown_8; /* 24L */
   BITCODE_BL unknown_9; /* 0L */
   BITCODE_BS unknown_10; /* 0 r13-r14 */
+  BITCODE_BS unknown_10a; /* 0 <r11 */
+  BITCODE_BS unknown_10b; /* 0 <r11 */
   BITCODE_BS unknown_18;
   BITCODE_H VX_TABLE_RECORD; /*!< r11-r2000 code 5, no DXF */
   BITCODE_B DIMASO;

@@ -717,6 +717,10 @@ BD
 BD
 @item unknown_10
 BS
+@item unknown_10a
+BS
+@item unknown_10b
+BS
 @item unknown_11
 B
 @item unknown_12
