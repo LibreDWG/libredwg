@@ -79,7 +79,7 @@
   }
   VERSIONS (R_1_2, R_1_4) {
     FIELD_RD (DIMASZ, 40); //ok
-    FIELD_RD (unknown_7, 40); //?
+    FIELD_RD (aspect_ratio, 40); // calculated
     VERSION (R_1_2) {
       dwg->header.dwg_version = 2;
       return error;
@@ -89,7 +89,7 @@
     FIELD_CAST (PSLTSCALE, RS, B, 70);
     FIELD_RS (TREEDEPTH, 70);
     FIELD_RS (unknown_6, 0);
-    FIELD_RD (unknown_7, 0); // converted from older DWG file (0x01d0)
+    FIELD_RD (aspect_ratio, 0); // calculated
   }
   FIELD_RS (LUNITS, 70); //ok
   FIELD_RS (LUPREC, 70); //ok

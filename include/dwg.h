@@ -1009,7 +1009,6 @@ typedef struct _dwg_header_variables {
   BITCODE_RL unknown_4f2; /* -r11 */
   BITCODE_RS unknown_5;
   BITCODE_RS unknown_6;
-  BITCODE_RD unknown_7;
   BITCODE_H CLAYER;	/*!< code 5, DXF 8 */
   BITCODE_H TEXTSTYLE;	/*!< code 5, DXF 7 */
   BITCODE_H CELTYPE;	/*!< code 5, DXF 6 */
@@ -1282,6 +1281,7 @@ typedef struct _dwg_header_variables {
   BITCODE_T unknown_unit2; /* r11 */
   BITCODE_T unknown_unit3; /* r11 */
   BITCODE_T unknown_unit4; /* r11 */
+  BITCODE_RD aspect_ratio; /* r11 */
 } Dwg_Header_Variables;
 
 /* OBJECTS *******************************************************************/
