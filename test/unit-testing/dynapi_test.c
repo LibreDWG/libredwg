@@ -2260,24 +2260,6 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_RD unknown_7;
-    if (dwg_dynapi_header_value (dwg, "unknown_7", &unknown_7, NULL)
-        && unknown_7 == dwg->header_vars.unknown_7)
-      pass ();
-    else
-      fail ("HEADER.unknown_7 [RD] %g != %g", dwg->header_vars.unknown_7, unknown_7);
-    unknown_7++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_7", &unknown_7, 0)
-        && unknown_7 == dwg->header_vars.unknown_7)
-      pass ();
-    else
-      fail ("HEADER.unknown_7 [RD] set+1 %g != %g",
-            dwg->header_vars.unknown_7, unknown_7);
-    unknown_7--;
-    dwg_dynapi_header_set_value (dwg, "unknown_7", &unknown_7, 0);
-
-  }
-  {
     BITCODE_H clayer;
     if (dwg_dynapi_header_value (dwg, "CLAYER", &clayer, NULL)
         && !memcmp (&clayer, &dwg->header_vars.CLAYER, sizeof (dwg->header_vars.CLAYER))
@@ -6091,6 +6073,24 @@ test_header (Dwg_Data *dwg)
             dwg->header_vars.unknown_59, unknown_59);
     unknown_59--;
     dwg_dynapi_header_set_value (dwg, "unknown_59", &unknown_59, 0);
+
+  }
+  {
+    BITCODE_RD aspect_ratio;
+    if (dwg_dynapi_header_value (dwg, "aspect_ratio", &aspect_ratio, NULL)
+        && aspect_ratio == dwg->header_vars.aspect_ratio)
+      pass ();
+    else
+      fail ("HEADER.aspect_ratio [RD] %g != %g", dwg->header_vars.aspect_ratio, aspect_ratio);
+    aspect_ratio++;
+    if (dwg_dynapi_header_set_value (dwg, "aspect_ratio", &aspect_ratio, 0)
+        && aspect_ratio == dwg->header_vars.aspect_ratio)
+      pass ();
+    else
+      fail ("HEADER.aspect_ratio [RD] set+1 %g != %g",
+            dwg->header_vars.aspect_ratio, aspect_ratio);
+    aspect_ratio--;
+    dwg_dynapi_header_set_value (dwg, "aspect_ratio", &aspect_ratio, 0);
 
   }
 #line 47 "dynapi_test.c.in"

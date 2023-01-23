@@ -693,6 +693,8 @@ RC,	DXF 290
 B,	DXF 290
 @item _3DDWFPREC
 BD,	DXF 40
+@item aspect_ratio
+RD
 @item bitsize
 RL
 @item bitsize_hi
@@ -789,8 +791,6 @@ RS
 RS
 @item unknown_6
 RS
-@item unknown_7
-RD
 @item unknown_8
 BL
 @item unknown_9
