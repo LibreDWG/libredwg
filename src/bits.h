@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009-2021 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2009-2023 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -371,5 +371,23 @@ bool does_cross_unicode_datversion (Bit_Chain *restrict dat);
 /* Copy the whole content of tmp_data to dat, and reset tmp_dat */
 void bit_copy_chain (Bit_Chain *restrict orig_dat,
                      Bit_Chain *restrict tmp_dat);
+
+#ifdef NO_BYTESWAP_SUPPORT
+#define bswap_constant_64(x)			\
+  (  (((x) & 0xff00000000000000ULL) >> 56)	\
+   | (((x) & 0x00ff000000000000ULL) >> 40)	\
+   | (((x) & 0x0000ff0000000000ULL) >> 24)	\
+   | (((x) & 0x000000ff00000000ULL) >> 8)	\
+   | (((x) & 0x00000000ff000000ULL) << 8)	\
+   | (((x) & 0x0000000000ff0000ULL) << 24)	\
+   | (((x) & 0x000000000000ff00ULL) << 40)	\
+   | (((x) & 0x00000000000000ffULL) << 56))
+static inline uint64_t htobe64 (uint64_t x) {
+  return bswap_constant_64 (x);
+}
+static inline uint64_t be64toh (uint64_t x) {
+  return bswap_constant_64 (x);
+}
+#endif
 
 #endif

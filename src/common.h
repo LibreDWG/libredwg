@@ -49,6 +49,8 @@
 #  define le32toh OSSwapLittleToHostInt32
 #  define htole64 OSSwapHostToLittleInt64
 #  define le64toh OSSwapLittleToHostInt64
+#  define htobe64 OSSwapHostToBigInt64
+#  define be64toh OSSwapBigToHostInt64
 #elif defined HAVE_WINSOCK2_H && defined __WINDOWS__
 #  include <winsock2.h>
 #  ifndef WORDS_BIGENDIAN
@@ -56,11 +58,15 @@
 #    define le32toh(x) (x)
 #    define htole64(x) (x)
 #    define le64toh(x) (x)
+#    define htobe64(x) __builtin_bswap64(x)
+#    define be64toh(x) __builtin_bswap64(x)
 #  else /* e.g. xbox 360 */
 #    define htole32(x) __builtin_bswap32(x)
 #    define le32toh(x) __builtin_bswap32(x)
 #    define htole64(x) __builtin_bswap64(x)
 #    define le64toh(x) __builtin_bswap64(x)
+#    define htobe64(x) (x)
+#    define be64toh(x) (x)
 #  endif
 #elif defined WORDS_BIGENDIAN
 /* TODO more converters */
@@ -74,12 +80,16 @@
 #    define le32toh(x) BSWAP_32(x)
 #    define htole64(x) BSWAP_64(x)
 #    define le64toh(x) BSWAP_64(x)
+#    define htobe64(x) (x)
+#    define be64toh(x) (x)
 #  elif defined HAVE_BYTESWAP_H
 #    include <byteswap.h>
 #    define htole32(x) bswap32 (x)
 #    define le32toh(x) bswap32 (x)
 #    define htole64(x) bswap64 (x)
 #    define le64toh(x) bswap64 (x)
+#    define htobe64(x) (x)
+#    define be64toh(x) (x)
 #  elif defined HAVE_BYTEORDER_H
 #    include <byteorder.h>
 /* which os? riot-os */
@@ -88,6 +98,8 @@
 #      define le32toh(x) byteorder_swapl (x)
 #      define htole64(x) byteorder_swapll (x)
 #      define le64toh(x) byteorder_swapll (x)
+#      define htobe64(x) (x)
+#      define be64toh(x) (x)
 #    else
 /* rtems/libcpu: ... */
 #      error unsupported big-endian platform with byteorder.h
@@ -95,7 +107,8 @@
 #  else
 #    error unsupported big-endian platform
 #  endif
-#else /* little endian: just pass-thru */
+#else /* little endian: just pass-thru. i.e. mingw */
+#  define NO_BYTESWAP_SUPPORT
 #  define htole32(x) (x)
 #  define le32toh(x) (x)
 #  define htole64(x) (x)
