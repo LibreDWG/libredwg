@@ -192,8 +192,7 @@
   FIELD_TIMERLL (TDUSRTIMER, 40);
   FIELD_CAST (USRTIMER, RS, B, 70);
   FIELD_CAST (FASTZOOM, RS, B, 70);
-  FIELD_RS (unknown_10, 0);
-  //FIELD_CAST (SKPOLY, RS, B, 70);
+  FIELD_CAST (SKPOLY, RS, B, 70);
   FIELD_RS (unknown_mon, 0);
   FIELD_RS (unknown_day, 0);
   FIELD_RS (unknown_year, 0);
