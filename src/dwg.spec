@@ -2106,10 +2106,10 @@ DWG_ENTITY (POLYLINE_MESH)
   SUBCLASS (AcDbPolygonMesh)
   DXF {
     BITCODE_3RD pt = { 0.0, 0.0, 0.0 };
-    BITCODE_RC flag = FIELD_VALUE (flag);
+    BITCODE_BS flag = FIELD_VALUE (flag) | 16U;
     FIELD_B (has_vertex, 66);
     KEY (elevation); VALUE_3BD (pt, 10);
-    KEY (flag); VALUE_BS (flag | 16, 70);
+    KEY (flag); VALUE_BS (flag, 70);
   }
   PRE (R_13b1) {
     DXF {
@@ -2241,7 +2241,7 @@ DWG_ENTITY (SHAPE)
   VERSIONS (R_2_0, R_11) {
     FIELD_2RD (ins_pt, 10);
     FIELD_RD (scale, 40);
-    FIELD_RCu (style_id, 2);
+    FIELD_CAST (style_id, RC, BS, 2);
     if (R11OPTS (1))
       FIELD_RD0 (rotation, 50);
     if (R11OPTS (2))
@@ -3479,9 +3479,8 @@ DWG_OBJECT (BLOCK_HEADER)
                      _obj->block_offset_r11 + dwg->header.blocks_start);
         }
     }
-    // TODO Same as first field in >R_11?
     if (obj->size == 38)
-      FIELD_RC (unknown1_r11, 0);
+      FIELD_RC (unknown_r11, 0);
     SINCE (R_11)
     {
       FIELD_HANDLE (block_entity, 2, 0); // index? increasing value with another block
@@ -3594,7 +3593,7 @@ DWG_OBJECT (LAYER)
     FIELD_CMC (color, 62);
     FIELD_HANDLE (ltype, 2, 6);
     if (obj->size == 38)
-      FIELD_RC (flag0, 0);
+      FIELD_CAST (flag0, RC, BS, 0);
 
     DECODER {
       FIELD_VALUE (on)            = FIELD_VALUE (color.index) >= 0;

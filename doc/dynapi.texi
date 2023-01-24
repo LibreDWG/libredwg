@@ -8881,9 +8881,7 @@ H*,	DXF 331
 @item layout
 H,	DXF 340
 @item unknown_r11
-RS
-@item unknown1_r11
-RS
+RC
 @item block_offset_r11
 RL
 

@@ -374,12 +374,11 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
                          _obj->block_offset_r11,
                          _obj->block_offset_r11 + dwg->header.blocks_start);
             }
-          // TODO Same as first field in >R_11?
           if (tbl->size == 38)
-            FIELD_RC (unknown1_r11, 0);
+            FIELD_RC (unknown_r11, 0);
           SINCE (R_11)
           {
-            FIELD_HANDLE (block_entity, 2, 0); // index? increasing value with another block
+            FIELD_HANDLE (block_entity, 2, 0);
             FIELD_RC (flag2, 0);
             FIELD_RC (unknown_r11, 0);
           }

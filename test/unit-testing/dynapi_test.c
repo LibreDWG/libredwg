@@ -44617,33 +44617,18 @@ static int test_BLOCK_HEADER (const Dwg_Object *obj)
     block_header->preview_size--;
   }
   {
-    BITCODE_RS unknown1_r11;
-    if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "unknown1_r11", &unknown1_r11, NULL)
-        && unknown1_r11 == block_header->unknown1_r11)
-      pass ();
-    else
-      fail ("BLOCK_HEADER.unknown1_r11 [RS] %hu != %hu", block_header->unknown1_r11, unknown1_r11);
-    unknown1_r11++;
-    if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "unknown1_r11", &unknown1_r11, 0)
-        && unknown1_r11 == block_header->unknown1_r11)
-      pass ();
-    else
-      fail ("BLOCK_HEADER.unknown1_r11 [RS] set+1 %hu != %hu", block_header->unknown1_r11, unknown1_r11);
-    block_header->unknown1_r11--;
-  }
-  {
-    BITCODE_RS unknown_r11;
+    BITCODE_RC unknown_r11;
     if (dwg_dynapi_entity_value (block_header, "BLOCK_HEADER", "unknown_r11", &unknown_r11, NULL)
         && unknown_r11 == block_header->unknown_r11)
       pass ();
     else
-      fail ("BLOCK_HEADER.unknown_r11 [RS] %hu != %hu", block_header->unknown_r11, unknown_r11);
+      fail ("BLOCK_HEADER.unknown_r11 [RC] %u != %u", block_header->unknown_r11, unknown_r11);
     unknown_r11++;
     if (dwg_dynapi_entity_set_value (block_header, "BLOCK_HEADER", "unknown_r11", &unknown_r11, 0)
         && unknown_r11 == block_header->unknown_r11)
       pass ();
     else
-      fail ("BLOCK_HEADER.unknown_r11 [RS] set+1 %hu != %hu", block_header->unknown_r11, unknown_r11);
+      fail ("BLOCK_HEADER.unknown_r11 [RC] set+1 %u != %u", block_header->unknown_r11, unknown_r11);
     block_header->unknown_r11--;
   }
   {
