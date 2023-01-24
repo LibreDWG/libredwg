@@ -775,8 +775,6 @@ BS
 BS
 @item unknown_57
 BS
-@item unknown_58
-RS
 @item unknown_59
 RS
 @item unknown_6

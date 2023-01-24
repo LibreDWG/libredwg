@@ -1266,7 +1266,6 @@ typedef struct _dwg_header_variables {
   BITCODE_BD FRONTZ;
   BITCODE_BD BACKZ;
   BITCODE_RC UCSICON;
-  BITCODE_RS unknown_58;  /* r11 */
   BITCODE_RL oldCECOLOR_hi; /* r11, or RD */
   BITCODE_RL oldCECOLOR_lo; /* r11 */
   BITCODE_RS layer_colors[128]; /* r1.2 - r1.4 */
