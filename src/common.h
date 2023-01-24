@@ -240,6 +240,17 @@
 #  define ATTRIBUTE_NORETURN
 #endif
 
+#if defined(_WIN32) && defined(HAVE_FUNC_ATTRIBUTE_MS_FORMAT)                 \
+    && !defined(__USE_MINGW_ANSI_STDIO)
+#  define ATTRIBUTE_FORMAT(x, y) __attribute__ ((format (ms_printf, x, y)))
+#elif defined HAVE_FUNC_ATTRIBUTE_GNU_FORMAT
+#  define ATTRIBUTE_FORMAT(x, y) __attribute__ ((format (gnu_printf, x, y)))
+#elif defined HAVE_FUNC_ATTRIBUTE_FORMAT
+#  define ATTRIBUTE_FORMAT(x, y) __attribute__ ((format (printf, x, y)))
+#else
+#  define ATTRIBUTE_FORMAT(x, y)
+#endif
+
 #ifndef EXPORT
 #  if defined(_WIN32) && defined(ENABLE_SHARED)
 #    ifdef DLL_EXPORT
