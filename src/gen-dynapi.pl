@@ -75,8 +75,14 @@ if (@ccincdir and join(" ",@ccincdir) =~ /clang/) {
 }
 
 warn "using $CC with @ccincdir\n" if @ccincdir;
+my @sys_includes = ('/usr/include');
+my $dumpmachine = `$CC -dumpmachine`;
+if ($dumpmachine) {
+	chomp $dumpmachine;
+	push @sys_includes, '/usr/include/'.$dumpmachine;
+}
 my $c = Convert::Binary::C->new
-  ->Include('.', @ccincdir, '/usr/include')
+  ->Include('.', @ccincdir, @sys_includes)
   ->Define(@defines);
 my $hdr = "$topdir/include/dwg.h";
 $c->parse_file($hdr);
