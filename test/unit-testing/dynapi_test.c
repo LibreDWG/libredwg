@@ -5869,24 +5869,6 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_RS unknown_58;
-    if (dwg_dynapi_header_value (dwg, "unknown_58", &unknown_58, NULL)
-        && unknown_58 == dwg->header_vars.unknown_58)
-      pass ();
-    else
-      fail ("HEADER.unknown_58 [RS] %hu != %hu", dwg->header_vars.unknown_58, unknown_58);
-    unknown_58++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_58", &unknown_58, 0)
-        && unknown_58 == dwg->header_vars.unknown_58)
-      pass ();
-    else
-      fail ("HEADER.unknown_58 [RS] set+1 %hu != %hu",
-            dwg->header_vars.unknown_58, unknown_58);
-    unknown_58--;
-    dwg_dynapi_header_set_value (dwg, "unknown_58", &unknown_58, 0);
-
-  }
-  {
     BITCODE_RL oldcecolor_hi;
     if (dwg_dynapi_header_value (dwg, "oldCECOLOR_hi", &oldcecolor_hi, NULL)
         && oldcecolor_hi == dwg->header_vars.oldCECOLOR_hi)
