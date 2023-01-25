@@ -129,7 +129,7 @@ AX_INCLUDE_STRCASECMP
 
 # test for correct byteswap.h
 if test x$ac_cv_header_byteswap_h = xyes ; then
-   m4_foreach([FUNC], [le32toh,le64toh,htole32], [
+   m4_foreach([FUNC], [le32toh,le64toh,be64toh,htole32,htobe64], [
      AC_MSG_CHECKING([if FUNC is available])
      AC_LINK_IFELSE([AC_LANG_SOURCE([
 #include <byteswap.h>
@@ -140,7 +140,7 @@ main(void)
 	return 0;
 }
         ])], [AC_DEFINE(HAVE_[]m4_toupper(FUNC), [1],
-                [Define to 1 if] FUNC [is available.])
+                [Define to 1 if] FUNC [is available in <byteswap.h>.])
               AC_MSG_RESULT([yes])
         ], [AC_MSG_RESULT([no])])
         ])dnl

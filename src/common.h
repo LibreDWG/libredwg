@@ -113,6 +113,7 @@
 #  define le32toh(x) (x)
 #  define htole64(x) (x)
 #  define le64toh(x) (x)
+// for htobe64, be64toh see bits.h
 #endif
 
 /* Used warning suppressions:

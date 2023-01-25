@@ -42,6 +42,9 @@
 /* Define to 1 if you have the `basename' function. */
 #undef HAVE_BASENAME
 
+/* Define to 1 if be64toh is available in <byteswap.h>. */
+#undef HAVE_BE64TOH
+
 /* Define to 1 if you have the <byteorder.h> header file. */
 #undef HAVE_BYTEORDER_H
 
@@ -93,16 +96,19 @@
 /* Define to 1 if you have the `gmtime_r' function. */
 #undef HAVE_GMTIME_R
 
-/* Define to 1 if htole32 is available. */
+/* Define to 1 if htobe64 is available in <byteswap.h>. */
+#undef HAVE_HTOBE64
+
+/* Define to 1 if htole32 is available in <byteswap.h>. */
 #undef HAVE_HTOLE32
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Define to 1 if le32toh is available. */
+/* Define to 1 if le32toh is available in <byteswap.h>. */
 #undef HAVE_LE32TOH
 
-/* Define to 1 if le64toh is available. */
+/* Define to 1 if le64toh is available in <byteswap.h>. */
 #undef HAVE_LE64TOH
 
 /* Define to 1 if you have the <libgen.h> header file. */
