@@ -6313,7 +6313,8 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
             {
               LOG_ERROR ("offset %ld",
                          obj->address + obj->size - (dat->byte + 2));
-              dat->byte = obj->address + obj->size - 2;
+              if (obj->address + obj->size >= start && start > 60)
+                dat->byte = obj->address + obj->size - 2;
             }
           crc = bit_read_RS (dat);
           LOG_TRACE ("crc: %04X [RSx]\n", crc);
