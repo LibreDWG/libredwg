@@ -705,7 +705,8 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   //BITCODE_RL entities_start = 0, entities_end = 0;
   //BITCODE_RL blocks_start = 0, blocks_size = 0,
   //           blocks_max = 0xFFFFFFFF;
-  BITCODE_RL rl1, rl2, num_entities, blocks_end = 0;
+  BITCODE_RL rl1, rl2, num_entities;
+  BITCODE_RL blocks_start = 0, blocks_end = 0;
   BITCODE_RS rs2;
   Dwg_Object *obj = NULL;
   int tbl_id;
@@ -734,52 +735,19 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (error >= DWG_ERR_CRITICAL)
     return error;
 
-#if 0
-  PRE (R_2_0b)
-  {
-    bit_read_RC (dat); // the 6th zero
-    LOG_TRACE ("zero[6]: 0 [RC 0]\n");
-  }
   SINCE (R_2_0b)
   {
-    entities_start = bit_read_RL (dat);
-    LOG_TRACE ("entities_start: " FORMAT_RL " (" FORMAT_RLx ") [RL]\n",
-               entities_start, entities_start);
-    entities_end = bit_read_RL (dat);
-    LOG_TRACE ("entities_end: " FORMAT_RL " (" FORMAT_RLx ") [RL]\n",
-               entities_end, entities_end);
-    blocks_start = bit_read_RL (dat);
-    LOG_TRACE ("blocks_start: " FORMAT_RL " (" FORMAT_RLx ") [RL]\n",
-               blocks_start, blocks_start);
-    blocks_size = bit_read_RL (dat);
-    if (blocks_size >= 0x40000000)
-      {
-        LOG_TRACE ("blocks_size: 0x40000000 | " FORMAT_RLx " [RLx]\n",
-                   blocks_size & 0x3fffffff);
-      }
-    else
-      {
-        LOG_TRACE ("blocks_size: " FORMAT_RL " [RL]\n", blocks_size);
-      }
-    blocks_end = bit_read_RL (dat);
-    LOG_TRACE ("blocks_end: " FORMAT_RL " (" FORMAT_RLx ") [RL]\n", blocks_end,
-               blocks_end);
-    if (blocks_end == 0 && blocks_size != 0 && blocks_size != 0x40000000)
-      {
-        blocks_end = blocks_start + blocks_size;
-        LOG_TRACE ("blocks_end => " FORMAT_RLx "\n", blocks_end);
-      }
-    blocks_max = bit_read_RL (dat); // 0x80000000
-    LOG_TRACE ("blocks_max: " FORMAT_RLx " [RLx]\n", blocks_max);
-  }
-#endif
-  SINCE (R_2_0b)
-  {
+    blocks_start = dwg->header.blocks_start;
     blocks_end = dwg->header.blocks_end;
+    if (blocks_start > 0xffff)
+      {
+        blocks_start &= 0xffff;
+        LOG_TRACE ("blocks_start => " FORMAT_RLx "\n", blocks_start);
+      }
     if (dwg->header.blocks_end == 0 && dwg->header.blocks_size != 0
       && dwg->header.blocks_size != 0x40000000)
       {
-        blocks_end = dwg->header.blocks_start + dwg->header.blocks_size;
+        blocks_end = blocks_start + dwg->header.blocks_size;
         LOG_TRACE ("blocks_end => " FORMAT_RLx "\n", blocks_end);
       }
 
@@ -948,27 +916,27 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     return error;
 
   // block entities
-  if (dat->byte != dwg->header.blocks_start)
+  if (dat->byte != blocks_start)
     {
       BITCODE_TF unknown;
-      int len = dwg->header.blocks_start - dat->byte;
-      LOG_WARN ("\n@0x%lx => blocks_start 0x%x", dat->byte, dwg->header.blocks_start);
-      if (dat->byte < dwg->header.blocks_start)
+      int len = blocks_start - dat->byte;
+      LOG_WARN ("\n@0x%lx => blocks_start 0x%x", dat->byte, blocks_start);
+      if (dat->byte < blocks_start)
         {
           unknown = bit_read_TF (dat, len);
           LOG_TRACE ("unknown (%d):", len);
           LOG_TRACE_TF (unknown, len);
           free (unknown);
         }
-      dat->byte = dwg->header.blocks_start;
+      dat->byte = blocks_start;
     }
   if (dwg->header.blocks_size != 0 && dwg->header.blocks_size != 0x40000000)
     {
-      if (dwg->header.version == R_11 && dwg->header.blocks_start + 32 < dwg->header.blocks_end)
+      if (dwg->header.version == R_11 && blocks_start + 32 < blocks_end)
         dwg->header.blocks_end -= 32; // ?? some sentinel probably
-      error |= decode_preR13_entities (dwg->header.blocks_start, dwg->header.blocks_end, 0,
-                                       dwg->header.blocks_size & 0x3FFFFFFF, dwg->header.blocks_max, dat,
-                                       dwg);
+      error |= decode_preR13_entities (blocks_start, blocks_end, 0,
+                                       dwg->header.blocks_size & 0x3FFFFFFF,
+                                       dwg->header.blocks_max, dat, dwg);
       if (error >= DWG_ERR_CRITICAL)
         return error;
     }
