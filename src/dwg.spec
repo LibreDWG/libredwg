@@ -3463,14 +3463,14 @@ DWG_OBJECT (BLOCK_HEADER)
       FIELD_RSd (used, 0); // -1
 #endif
     }
-    FIELD_RL (block_offset_r11, 0);
+    FIELD_RLx (block_offset_r11, 0);
     DECODER_OR_ENCODER {
       if (_obj->block_offset_r11 >= 0x40000000)
         {
           BITCODE_RL off = _obj->block_offset_r11 & 0x3fffffff;
-          LOG_TRACE ("block_offset_r11: 0x40000000 | " FORMAT_RLx
+          LOG_TRACE ("block_offset_r11: " FORMAT_RLx
                      " [RLx] (" FORMAT_RLx ")\n",
-                     off, off + dwg->header.blocks_start);
+                     _obj->block_offset_r11, off + dwg->header.blocks_start);
         }
       else
         {
@@ -3484,7 +3484,7 @@ DWG_OBJECT (BLOCK_HEADER)
       FIELD_RC (unknown_r11, 0);
     SINCE (R_11)
     {
-      FIELD_HANDLE (block_entity, 2, 0); // index? increasing value with another block
+      FIELD_HANDLE (block_entity, 2, 0);
       FIELD_RC (flag2, 0);
       FIELD_RC (unknown_r11, 0);
     }

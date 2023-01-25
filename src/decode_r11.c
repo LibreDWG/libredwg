@@ -363,18 +363,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           {
             FIELD_RSd (used, 0); // -1
           }
-          _obj->block_offset_r11 = bit_read_RL (dat);
-          if (_obj->block_offset_r11 >= 0x40000000)
-            {
-              LOG_TRACE ("block_offset_r11: 0x40000000 | " FORMAT_RLx " [RLx]\n",
-                         _obj->block_offset_r11 & 0x3fffffff);
-            }
-          else
-            {
-              LOG_TRACE ("block_offset_r11: " FORMAT_RL " [RL] (0x%x)\n",
-                         _obj->block_offset_r11,
-                         _obj->block_offset_r11 + dwg->header.blocks_start);
-            }
+          FIELD_RLx (block_offset_r11, 0);
           if (tbl->size == 38)
             FIELD_RC (unknown_r11, 0);
           SINCE (R_11)
