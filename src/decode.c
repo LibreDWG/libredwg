@@ -18,6 +18,7 @@
  * modified by Till Heuschmann
  * modified by Reini Urban
  * modified by Denis Pruchkovsky
+ * modified by Michal Josef Špaček
  */
 
 #define _DEFAULT_SOURCE 1 // for endian byteswaps

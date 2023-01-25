@@ -13,6 +13,7 @@
 /*
  * decode_r11.c: preR13 decoding
  * written by Reini Urban
+ * modified by Michal Josef Špaček
  */
 
 #include "config.h"

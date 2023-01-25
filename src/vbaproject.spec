@@ -12,7 +12,7 @@
 /*****************************************************************************/
 
 /*
- * vbaproject.spec: AcDb:VBAProject section specification
+ * vbaproject.spec: AcDb:VBAProject section specification TODO
  * written by Reini Urban
  */
 

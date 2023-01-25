@@ -2,7 +2,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2010, 2018, 2022 Free Software Foundation, Inc.            */
+/*  Copyright (C) 2010, 2018-2023 Free Software Foundation, Inc.             */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -16,6 +16,7 @@
  * written by Felipe Corrêa da Silva Sances
  * modified by Anderson Cardoso
  * modified by Reini Urban
+ * modified by Michal Josef Špaček
  */
 
 //TODO: (here unknwon_* or in dwg.spec)

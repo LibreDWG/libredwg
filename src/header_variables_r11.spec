@@ -14,7 +14,7 @@
 /*
  * header_variables_r11.spec: DWG pre-R13 header variables specification
  * written by Reini Urban
- * improved by Michal Josef Špaček
+ * modified by Michal Josef Špaček
  */
 
   #include "spec.h"
