@@ -137,19 +137,13 @@
   if (dwg->header.numheader_vars <= 74)
     return 0;
   FIELD_RC (LIMCHECK, 70); //ok 1fa
-
   /* TODO Unknown structure (0x01fc-0x0228) 46 byte */
   // PLATFORM was until r11
-  // DEBUG_HERE //1fb
-  //UNKNOWN_UNTIL (0x229);
   FIELD_TFF (unknown_46, 46, 0);
   FIELD_RD (ELEVATION, 40); //ok
   FIELD_RD (THICKNESS, 40); //ok
   FIELD_3RD (VIEWDIR, 10);
-
-  /* TODO Unknown repeating variable - 18 floats, probably 6x 3d point */
-  // probably RD sysvars: LASTANGLE, LASTPOINT, LASTPT3D. until r11
-  // also there is VPOINTX/VPOINTY/VPOINTZ (replaced by VIEWDIR with r11)
+  // There are VPOINTX/VPOINTY/VPOINTZ (replaced by VIEWDIR with r11)
   FIELD_3RD (VPOINTX, 0); //(1,0,0)
   FIELD_3RD (VPOINTY, 0); //(0,1,0)
   FIELD_3RD (VPOINTZ, 0); //(0,0,1)
@@ -207,13 +201,11 @@
   FIELD_RD (PLINEWID, 40);
   if (dwg->header.numheader_vars <= 104)
     return 0;
-
   FIELD_RSd (USERI1, 70);
   FIELD_RSd (USERI2, 70);
   FIELD_RSd (USERI3, 70);
   FIELD_RSd (USERI4, 70);
   FIELD_RSd (USERI5, 70);
-
   FIELD_RD (USERR1, 40);
   FIELD_RD (USERR2, 40);
   FIELD_RD (USERR3, 40);
@@ -297,7 +289,6 @@
   FIELD_HANDLE (UCSNAME, 2, 2);
   if (dwg->header.numheader_vars <= 158) // r10
     return 0;
-
   /* Skip table APPID (0x512-0x51b) */
   UNKNOWN_UNTIL (0x51c);
   FIELD_CAST (WORLDVIEW, RS, B, 70);
@@ -305,16 +296,12 @@
     return 0;
   FIELD_RS (unknown_51e, 0);
   FIELD_RS (unknown_520, 0);
-  // TILEMODE came with r11
-
   /* Skip table DIMSTYLE (0x522-0x52b) */
   UNKNOWN_UNTIL (0x52c);
   /* TODO Unknown 5 bytes. (first two bytes sometimes ff ff) */
   FIELD_RS (unknown_52c, 0);
   FIELD_RS (unknown_52e, 0);
   FIELD_RC (unknown_530, 0);
-  //DEBUG_HERE
-  //UNKNOWN_UNTIL (0x531);
   FIELD_RS (DIMCLRD_C, 70); //ok
   FIELD_RS (DIMCLRE_C, 70); //ok
   FIELD_RS (DIMCLRT_C, 70); //ok
@@ -344,7 +331,6 @@
   FIELD_2RD (PLIMMIN, 10); //
   FIELD_2RD (PLIMMAX, 10); //
   FIELD_3RD (PINSBASE, 10);
-
   /* Skip table VX (0x69f-0x6a8) */
   UNKNOWN_UNTIL (0x6a9);
   FIELD_RS (MAXACTVP, 70); //ok
