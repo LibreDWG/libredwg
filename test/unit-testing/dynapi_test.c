@@ -12842,19 +12842,19 @@ static int test_HELIX (const Dwg_Object *obj)
     helix->scenario--;
   }
   {
-    BITCODE_BL splineflags1;
-    if (dwg_dynapi_entity_value (helix, "HELIX", "splineflags1", &splineflags1, NULL)
-        && splineflags1 == helix->splineflags1)
+    BITCODE_BL splineflags;
+    if (dwg_dynapi_entity_value (helix, "HELIX", "splineflags", &splineflags, NULL)
+        && splineflags == helix->splineflags)
       pass ();
     else
-      fail ("HELIX.splineflags1 [BL] %u != %u", helix->splineflags1, splineflags1);
-    splineflags1++;
-    if (dwg_dynapi_entity_set_value (helix, "HELIX", "splineflags1", &splineflags1, 0)
-        && splineflags1 == helix->splineflags1)
+      fail ("HELIX.splineflags [BL] %u != %u", helix->splineflags, splineflags);
+    splineflags++;
+    if (dwg_dynapi_entity_set_value (helix, "HELIX", "splineflags", &splineflags, 0)
+        && splineflags == helix->splineflags)
       pass ();
     else
-      fail ("HELIX.splineflags1 [BL] set+1 %u != %u", helix->splineflags1, splineflags1);
-    helix->splineflags1--;
+      fail ("HELIX.splineflags [BL] set+1 %u != %u", helix->splineflags, splineflags);
+    helix->splineflags--;
   }
   {
     BITCODE_3BD start_pt;
@@ -22155,19 +22155,19 @@ static int test_SPLINE (const Dwg_Object *obj)
     spline->scenario--;
   }
   {
-    BITCODE_BL splineflags1;
-    if (dwg_dynapi_entity_value (spline, "SPLINE", "splineflags1", &splineflags1, NULL)
-        && splineflags1 == spline->splineflags1)
+    BITCODE_BL splineflags;
+    if (dwg_dynapi_entity_value (spline, "SPLINE", "splineflags", &splineflags, NULL)
+        && splineflags == spline->splineflags)
       pass ();
     else
-      fail ("SPLINE.splineflags1 [BL] %u != %u", spline->splineflags1, splineflags1);
-    splineflags1++;
-    if (dwg_dynapi_entity_set_value (spline, "SPLINE", "splineflags1", &splineflags1, 0)
-        && splineflags1 == spline->splineflags1)
+      fail ("SPLINE.splineflags [BL] %u != %u", spline->splineflags, splineflags);
+    splineflags++;
+    if (dwg_dynapi_entity_set_value (spline, "SPLINE", "splineflags", &splineflags, 0)
+        && splineflags == spline->splineflags)
       pass ();
     else
-      fail ("SPLINE.splineflags1 [BL] set+1 %u != %u", spline->splineflags1, splineflags1);
-    spline->splineflags1--;
+      fail ("SPLINE.splineflags [BL] set+1 %u != %u", spline->splineflags, splineflags);
+    spline->splineflags--;
   }
   {
     BITCODE_B weighted;

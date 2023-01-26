@@ -1002,7 +1002,7 @@
       {                                                                     \
       if (_obj->annot_type)                                                 \
         {                                                                   \
-          LOG_TRACE ("      ");                                             \
+          LOG_TRACE ("           ");                                        \
           LOG_LEADER_ANNOTTYPE_W (MTEXT);                                   \
           LOG_LEADER_ANNOTTYPE_W (TOLERANCE);                               \
           LOG_LEADER_ANNOTTYPE_W (INSERT);                                  \
@@ -1022,7 +1022,7 @@
       {                                                                      \
       if (_obj->flags)                                                       \
         {                                                                    \
-          LOG_TRACE ("      ");                                              \
+          LOG_TRACE ("     ");                                               \
           LOG_MLINE_FLAGS_W (HAS_VERTEX);                                    \
           LOG_MLINE_FLAGS_W (CLOSED);                                        \
           LOG_MLINE_FLAGS_W (SUPPRESS_START_CAPS);                           \
@@ -1042,11 +1042,66 @@
       {                                                                     \
       if (_obj->justification)                                              \
         {                                                                   \
-          LOG_TRACE ("      ");                                             \
+          LOG_TRACE ("             ");                                      \
           LOG_MLINE_JUSTIFICATION_W (TOP);                                  \
           LOG_MLINE_JUSTIFICATION_W (MIDDLE);                               \
           LOG_MLINE_JUSTIFICATION_W (BOTTOM);                               \
           LOG_FLAG_MAX (_obj->justification, 3);                            \
+          LOG_TRACE ("\n");                                                 \
+        }                                                                   \
+      }
+#endif
+
+#ifndef LOG_SPLINE_SCENARIO
+#  define LOG_SPLINE_SCENARIO_W(w)                                          \
+    if (_obj->scenario == SPLINE_SCENARIO_##w)                              \
+      LOG_TRACE (#w "(0x%x) ", SPLINE_SCENARIO_##w)
+#  define LOG_SPLINE_SCENARIO                                               \
+    DECODER_OR_ENCODER                                                      \
+      {                                                                     \
+      if (_obj->scenario)                                                   \
+        {                                                                   \
+          LOG_TRACE ("         ");                                          \
+          LOG_SPLINE_SCENARIO_W (SPLINE);                                   \
+          LOG_SPLINE_SCENARIO_W (BEZIER);                                   \
+          LOG_FLAG_MAX (_obj->scenario, 2);                                 \
+          LOG_TRACE ("\n");                                                 \
+        }                                                                   \
+      }
+#endif
+#ifndef LOG_SPLINE_SPLINEFLAGS
+#  define LOG_SPLINE_SPLINEFLAGS_W(w)                                       \
+    if (_obj->splineflags & SPLINE_SPLINEFLAGS_##w)                         \
+      LOG_TRACE (#w "(0x%x) ", SPLINE_SPLINEFLAGS_##w)
+#  define LOG_SPLINE_SPLINEFLAGS                                            \
+    DECODER_OR_ENCODER                                                      \
+      {                                                                     \
+      if (_obj->splineflags)                                                \
+        {                                                                   \
+          LOG_TRACE ("            ");                                       \
+          LOG_SPLINE_SPLINEFLAGS_W (METHOD_FIT_POINTS);                     \
+          LOG_SPLINE_SPLINEFLAGS_W (CV_FRAME_SHOW);                         \
+          LOG_SPLINE_SPLINEFLAGS_W (CLOSED);                                \
+          LOG_FLAG_MAX (_obj->splineflags, 7);                              \
+          LOG_TRACE ("\n");                                                 \
+        }                                                                   \
+      }
+#endif
+#ifndef LOG_SPLINE_KNOTPARAM
+#  define LOG_SPLINE_KNOTPARAM_W(w)                                         \
+    if (_obj->knotparam == SPLINE_KNOTPARAM_##w)                            \
+      LOG_TRACE (#w "(0x%x) ", SPLINE_KNOTPARAM_##w)
+#  define LOG_SPLINE_KNOTPARAM                                              \
+    DECODER_OR_ENCODER                                                      \
+      {                                                                     \
+      if (_obj->knotparam)                                                  \
+        {                                                                   \
+          LOG_TRACE ("          ");                                         \
+          LOG_SPLINE_KNOTPARAM_W (CHORD);                                   \
+          LOG_SPLINE_KNOTPARAM_W (SQUARE_ROOT);                             \
+          LOG_SPLINE_KNOTPARAM_W (UNIFORM);                                 \
+          LOG_SPLINE_KNOTPARAM_W (CUSTOM);                                  \
+          LOG_FLAG_MAX (_obj->knotparam, 15);                               \
           LOG_TRACE ("\n");                                                 \
         }                                                                   \
       }

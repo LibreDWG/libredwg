@@ -734,8 +734,8 @@ add_spline (xmlNodePtr rootnode, const Dwg_Object *obj)
   newXMLProp ("KnotParameterization", inttochar (spline->knotparam));
   newXMLProp ("NumberOfControlPoints", inttochar (spline->num_ctrl_pts));
   newXMLProp ("NumberOfFitPoints", inttochar (spline->num_fit_pts));
-  newXMLcProp ("SplineFrame", spline->splineflags1 & 2 ? "1" : "0");
-  newXMLcProp ("SplineMethod", spline->splineflags1 & 1 ? "1" : "0");
+  newXMLcProp ("SplineFrame", spline->splineflags & 2 ? "1" : "0");
+  newXMLcProp ("SplineMethod", spline->splineflags & 1 ? "1" : "0");
 
   if (spline->num_ctrl_pts)
     {

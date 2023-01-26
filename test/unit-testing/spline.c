@@ -8,7 +8,7 @@ api_process (dwg_object *obj)
   BITCODE_RS flag;     /* computed */
   BITCODE_BS scenario; /* 1 spline, 2 bezier */
   BITCODE_BS degree;
-  BITCODE_BL splineflags1; /* 2013+: method fit points = 1, CV frame show = 2,
+  BITCODE_BL splineflags; /* 2013+: method fit points = 1, CV frame show = 2,
                               closed = 4 */
   BITCODE_BL knotparam;    /* 2013+: Chord = 0, Square root = 1, Uniform = 2,
                               Custom = 15 */
@@ -31,7 +31,7 @@ api_process (dwg_object *obj)
   dwg_ent_spline *spline = dwg_object_to_SPLINE (obj);
 
   CHK_ENTITY_TYPE (spline, SPLINE, flag, RS);
-  CHK_ENTITY_TYPE (spline, SPLINE, splineflags1, BL);
+  CHK_ENTITY_TYPE (spline, SPLINE, splineflags, BL);
   CHK_ENTITY_TYPE (spline, SPLINE, knotparam, BL);
   CHK_ENTITY_TYPE_W_OLD (spline, SPLINE, scenario, BS);
   if (scenario == 0 || scenario > 2)

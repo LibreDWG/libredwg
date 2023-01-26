@@ -2459,20 +2459,23 @@ DWG_ENTITY (SPLINE)
   //SUBCLASS (AcDbCurve)
   SUBCLASS (AcDbSpline)
   FIELD_BL (scenario, 0);
+  LOG_SPLINE_SCENARIO
   UNTIL (R_2013) {
     if (FIELD_VALUE (scenario) != 1 && FIELD_VALUE (scenario) != 2)
       LOG_ERROR ("unknown scenario %d", FIELD_VALUE (scenario));
     DECODER {
       if (FIELD_VALUE (scenario) == 1)
-        FIELD_VALUE (splineflags1) = 8;
+        FIELD_VALUE (splineflags) = 8;
       else if (FIELD_VALUE (scenario) == 2)
-        FIELD_VALUE (splineflags1) = 9;
+        FIELD_VALUE (splineflags) = 9;
     }
   }
   SINCE (R_2013) {
-    FIELD_BL (splineflags1, 0);
+    FIELD_BL (splineflags, 0);
+    LOG_SPLINE_SPLINEFLAGS
     FIELD_BL (knotparam, 0);
-    if (FIELD_VALUE (splineflags1) & 1)
+    LOG_SPLINE_KNOTPARAM
+    if (FIELD_VALUE (splineflags) & 1)
       FIELD_VALUE (scenario) = 2;
     if (FIELD_VALUE (knotparam) == 15)
       FIELD_VALUE (scenario) = 1;
@@ -2507,7 +2510,7 @@ DWG_ENTITY (SPLINE)
         (FIELD_VALUE (rational) << 2) + /* 4 */
         (FIELD_VALUE (weighted) << 4);  /* 16 */
         // ignore method fit points and closed bits
-        /*((FIELD_VALUE (splineflags1) & ~5) << 7)*/
+        /*((FIELD_VALUE (splineflags) & ~5) << 7)*/
       LOG_TRACE ("=> flag: %d [70]\n", FIELD_VALUE (flag));
     }
     FIELD_VECTOR (knots, BD, num_knots, 40);
@@ -2527,7 +2530,7 @@ DWG_ENTITY (SPLINE)
       // flag 32 in DXF
       FIELD_VALUE (flag) = 8 + 32 + // planar, not rational
         // ignore method fit points and closed bits
-        ((FIELD_VALUE (splineflags1) & ~5) << 7);
+        ((FIELD_VALUE (splineflags) & ~5) << 7);
       LOG_TRACE ("=> flag: %d [70]\n", FIELD_VALUE (flag));
       FIELD_VALUE (knot_tol) = 0.0000001;
       FIELD_VALUE (ctrl_tol) = 0.0000001;
@@ -8324,20 +8327,23 @@ DWG_ENTITY (HELIX)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbSpline)
   FIELD_BL (scenario, 0);
+  LOG_SPLINE_SCENARIO
   UNTIL (R_2013) {
     if (FIELD_VALUE (scenario) != 1 && FIELD_VALUE (scenario) != 2)
       LOG_ERROR ("unknown scenario %d", FIELD_VALUE (scenario));
     DECODER {
       if (FIELD_VALUE (scenario) == 1)
-        FIELD_VALUE (splineflags1) = 8;
+        FIELD_VALUE (splineflags) = 8;
       else if (FIELD_VALUE (scenario) == 2)
-        FIELD_VALUE (splineflags1) = 9;
+        FIELD_VALUE (splineflags) = 9;
     }
   }
   SINCE (R_2013) {
-    FIELD_BL (splineflags1, 0);
+    FIELD_BL (splineflags, 0);
+    LOG_SPLINE_SPLINEFLAGS
     FIELD_BL (knotparam, 0);
-    if (FIELD_VALUE (splineflags1) & 1)
+    LOG_SPLINE_KNOTPARAM
+    if (FIELD_VALUE (splineflags) & 1)
       FIELD_VALUE (scenario) = 2;
     if (FIELD_VALUE (knotparam) == 15)
       FIELD_VALUE (scenario) = 1;
@@ -8367,7 +8373,7 @@ DWG_ENTITY (HELIX)
         (FIELD_VALUE (rational) << 2) + /* 4 */
         (FIELD_VALUE (weighted) << 4);  /* 16 */
         // ignore method fit points and closed bits
-        /*((FIELD_VALUE (splineflags1) & ~5) << 7)*/
+        /*((FIELD_VALUE (splineflags) & ~5) << 7)*/
       LOG_TRACE ("=> flag: %d [70]\n", FIELD_VALUE (flag));
     }
     FIELD_VECTOR (knots, BD, num_knots, 40);
@@ -8387,7 +8393,7 @@ DWG_ENTITY (HELIX)
       // flag 32 in DXF
       FIELD_VALUE (flag) = 8 + 32 + // planar, not rational
         // ignore method fit points and closed bits
-        ((FIELD_VALUE (splineflags1) & ~5) << 7);
+        ((FIELD_VALUE (splineflags) & ~5) << 7);
       LOG_TRACE ("=> flag: %d [70]\n", FIELD_VALUE (flag));
     }
     FIELD_BD (fit_tol, 44); // def: 0.0000001

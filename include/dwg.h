@@ -1944,15 +1944,39 @@ typedef struct _dwg_SPLINE_control_point
   double w;
 } Dwg_SPLINE_control_point;
 
+enum
+{
+  SPLINETYPE_QUADRATIC = 5, // degree==2
+  SPLINETYPE_CUBIC = 6,     // default. degree==3
+};
+enum
+{
+  SPLINE_SCENARIO_SPLINE = 1,
+  SPLINE_SCENARIO_BEZIER = 2,
+};
+enum
+{ /* 2013+ */
+  SPLINE_SPLINEFLAGS_METHOD_FIT_POINTS = 1,
+  SPLINE_SPLINEFLAGS_CV_FRAME_SHOW = 2,
+  SPLINE_SPLINEFLAGS_CLOSED = 4,
+};
+enum
+{ /* 2013+ */
+  SPLINE_KNOTPARAM_CHORD = 0,
+  SPLINE_KNOTPARAM_SQUARE_ROOT = 1,
+  SPLINE_KNOTPARAM_UNIFORM = 2,
+  SPLINE_KNOTPARAM_CUSTOM = 15
+};
+
 typedef struct _dwg_entity_SPLINE
 {
   struct _dwg_object_entity *parent;
 
   BITCODE_RS flag; /* computed */
   BITCODE_BS scenario; /* 1 spline, 2 bezier */
-  BITCODE_BS degree;
-  BITCODE_BL splineflags1; /* 2013+: method fit points = 1, CV frame show = 2, closed = 4 */
-  BITCODE_BL knotparam;    /* 2013+: Chord = 0, Square root = 1, Uniform = 2, Custom = 15 */
+  BITCODE_BS degree;   /* 2 quadratic, 3 cubic */
+  BITCODE_BL splineflags; /* 2013+: method fit points = 1, CV frame show = 2, closed = 4 */
+  BITCODE_BL knotparam;   /* 2013+: Chord = 0, Square root = 1, Uniform = 2, Custom = 15 */
   BITCODE_BD fit_tol;
   BITCODE_3BD beg_tan_vec;
   BITCODE_3BD end_tan_vec;
@@ -4861,8 +4885,8 @@ typedef struct _dwg_entity_HELIX
   // AcDbSpline
   BITCODE_BS flag; /* computed */
   BITCODE_BS scenario; /* 1 spline, 2 bezier */
-  BITCODE_BS degree;
-  BITCODE_BL splineflags1; /* 2013+: method fit points = 1, CV frame show = 2, closed = 4 */
+  BITCODE_BS degree;   /* 2 quadratic, 3 cubic */
+  BITCODE_BL splineflags; /* 2013+: method fit points = 1, CV frame show = 2, closed = 4 */
   BITCODE_BL knotparam;    /* 2013+: Chord = 0, Square root = 1, Uniform = 2, Custom = 15 */
   BITCODE_BD fit_tol;
   BITCODE_3BD beg_tan_vec;

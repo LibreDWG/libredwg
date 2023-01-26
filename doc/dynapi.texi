@@ -2152,7 +2152,7 @@ BS,	DXF 70
 BS
 @item degree
 BS,	DXF 71
-@item splineflags1
+@item splineflags
 BL
 @item knotparam
 BL
@@ -4027,7 +4027,7 @@ RS
 BS
 @item degree
 BS,	DXF 71
-@item splineflags1
+@item splineflags
 BL
 @item knotparam
 BL
