@@ -1734,18 +1734,18 @@ const char *
 dwg_section_name (const Dwg_Data *dwg, const unsigned int sec_id)
 {
   if (dwg->header.version >= R_2004)
-    {
+    { // Dwg_Section_Type
       return (sec_id <= SECTION_SYSTEM_MAP) ? dwg_section_r2004_names[sec_id]
                                             : NULL;
     }
   else if (dwg->header.version > R_11)
-    {
+    { // Dwg_Section_Type_r13
       return (sec_id <= SECTION_AUXHEADER_R2000)
                  ? dwg_section_r13_names[sec_id]
                  : NULL;
     }
   else
-    {
+    { // Dwg_Section_Type_r11
       return (sec_id <= SECTION_VX) ? dwg_section_r11_names[sec_id] : NULL;
     }
 }
@@ -3047,6 +3047,7 @@ split_filepath (const char *filepath, char **extp)
 int
 dwg_sections_init (Dwg_Data *dwg)
 {
+  // how many sections we need to allocate internally (with holes)
   unsigned num_sections = 5;
   if (dwg->header.version < R_13b1)
     {
@@ -3083,14 +3084,14 @@ dwg_sections_init (Dwg_Data *dwg)
       LOG_ERROR ("Not enough sections: " FORMAT_RL, dwg->header.numsections);
       return DWG_ERR_INVALIDDWG;
     }
-  if (dwg->header.numsections > 10)
+  else if (dwg->header.numsections > 10)
     {
       LOG_ERROR ("Too many sections: " FORMAT_RL, dwg->header.numsections);
       return DWG_ERR_INVALIDDWG;
     }
 
   if (dwg->header.section)
-    dwg->header.section = (Dwg_Section *)realloc (
+    dwg->header.section = (Dwg_Section *)realloc ( // zero-based
         dwg->header.section, sizeof (Dwg_Section) * (num_sections + 1));
   else
     dwg->header.section

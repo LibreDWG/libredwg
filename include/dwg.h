@@ -8919,7 +8919,7 @@ typedef enum DWG_SECTION_TYPE_R13
   SECTION_2NDHEADER_R13 = 3,
   SECTION_MEASUREMENT_R13 = 4,
   SECTION_AUXHEADER_R2000 = 5,
-} Dwg_Section_Type_R13;
+} Dwg_Section_Type_r13;
 
 typedef enum DWG_SECTION_TYPE_R11 /* tables */
 {
@@ -8928,9 +8928,9 @@ typedef enum DWG_SECTION_TYPE_R11 /* tables */
   SECTION_LAYER = 2,
   SECTION_STYLE = 3,
   SECTION_LTYPE = 5,
-  SECTION_VIEW  = 6,
+  SECTION_VIEW = 6,
   // since r10:
-  SECTION_UCS   = 7,
+  SECTION_UCS = 7,
   SECTION_VPORT = 8,
   SECTION_APPID = 9,
   // since r11:

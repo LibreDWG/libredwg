@@ -1142,7 +1142,7 @@ is_section_critical (Dwg_Section_Type i)
 }
 #endif
 static bool
-is_section_r13_critical (Dwg_Section_Type_R13 i)
+is_section_r13_critical (Dwg_Section_Type_r13 i)
 {
   return i <= SECTION_HANDLES_R13 ? true : false;
 }
