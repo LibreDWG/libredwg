@@ -1273,7 +1273,7 @@ typedef struct _dwg_header_variables {
   BITCODE_RC unknown_3fa;  /* r11 */
   BITCODE_RS unknown_51e;  /* r11 */
   BITCODE_RS unknown_520;  /* r11 */
-  BITCODE_RS unknown_52c;  /* r11 */
+  BITCODE_RSd unknown_52c;  /* r11 */
   BITCODE_RS unknown_52e;  /* r11 */
   BITCODE_RC unknown_530;  /* r11 */
   BITCODE_RS unknown_59;   /* r11 */

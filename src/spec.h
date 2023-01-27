@@ -1157,3 +1157,14 @@
           LOG_TRACE ("\n");                                                 \
       }
 #endif
+
+#ifdef IS_DECODER
+#  define PRER13_SECTION_HDR(name) \
+  if (decode_preR13_section_hdr (#name, SECTION_##name, dat, dwg)) \
+    return DWG_ERR_SECTIONNOTFOUND
+#elif defined IS_ENCODER
+#  define PRER13_SECTION_HDR(name) \
+    encode_preR13_section_hdr (#name, SECTION_##name, dat, dwg)
+#else
+#  define PRER13_SECTION_HDR(name)
+#endif

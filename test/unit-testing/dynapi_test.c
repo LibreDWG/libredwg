@@ -5986,18 +5986,18 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_RS unknown_52c;
+    BITCODE_RSd unknown_52c;
     if (dwg_dynapi_header_value (dwg, "unknown_52c", &unknown_52c, NULL)
         && unknown_52c == dwg->header_vars.unknown_52c)
       pass ();
     else
-      fail ("HEADER.unknown_52c [RS] %hu != %hu", dwg->header_vars.unknown_52c, unknown_52c);
+      fail ("HEADER.unknown_52c [RSd] " FORMAT_RSd " != " FORMAT_RSd "", dwg->header_vars.unknown_52c, unknown_52c);
     unknown_52c++;
     if (dwg_dynapi_header_set_value (dwg, "unknown_52c", &unknown_52c, 0)
         && unknown_52c == dwg->header_vars.unknown_52c)
       pass ();
     else
-      fail ("HEADER.unknown_52c [RS] set+1 %hu != %hu",
+      fail ("HEADER.unknown_52c [RSd] set+1 " FORMAT_RSd " != " FORMAT_RSd "",
             dwg->header_vars.unknown_52c, unknown_52c);
     unknown_52c--;
     dwg_dynapi_header_set_value (dwg, "unknown_52c", &unknown_52c, 0);

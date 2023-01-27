@@ -797,7 +797,7 @@ static const Dwg_DYNAPI_field _dwg_header_variables_fields[] = {
     0,0,0, 0 },
   { "unknown_520",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_header_variables, unknown_520),
     0,0,0, 0 },
-  { "unknown_52c",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_header_variables, unknown_52c),
+  { "unknown_52c",	"RSd", sizeof (BITCODE_RSd),  OFF (struct _dwg_header_variables, unknown_52c),
     0,0,0, 0 },
   { "unknown_52e",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_header_variables, unknown_52e),
     0,0,0, 0 },

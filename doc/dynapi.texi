@@ -772,7 +772,7 @@ RS
 @item unknown_520
 RS
 @item unknown_52c
-RS
+RSd
 @item unknown_52e
 RS
 @item unknown_530
