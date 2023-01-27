@@ -23548,9 +23548,10 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->end.y = end_pt->y;
   _obj->end.z = end_pt->z;
 
+  if (dwg->header.version < R_10)
+    obj->type = DWG_TYPE_LINE_R11;
   if (dwg->header.version >= R_2_4 && dwg->header.version < R_10)
     {
-      obj->type = DWG_TYPE_LINE_R11;
       if (_obj->start.z != 0.0)
         {
           obj->type = DWG_TYPE_3DLINE_R11;
