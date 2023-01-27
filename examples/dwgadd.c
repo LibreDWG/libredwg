@@ -896,7 +896,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                                                "arc (%lf %lf %lf) %lf %lf %lf",
                                                &pt1.x, &pt1.y, &pt1.z, &f1,
                                                &f2, &height)) ent
-          = (lastent_t){ .u.arc = dwg_add_ARC (hdr, &pt1, f1, f2, height),
+          = (lastent_t){ .u.arc = dwg_add_ARC (hdr, &pt1, f1, deg2rad (f2), deg2rad (height)),
                          .type = DWG_TYPE_ARC };
       else SET_ENT (arc, ARC) else if (
           SSCANF_S (p,
