@@ -2418,7 +2418,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     BITCODE_RL hdr_offset, hdr_end;
     PRE (R_1_4)
       LOG_WARN (WE_CAN "We cannot encode pre-r1.4 DWG's yet");
-    //entities_start = entities_end = blocks_start = blocks_end = 0xFFFF;
 
     SINCE (R_2_0b)
     {
@@ -2440,26 +2439,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     hdr_offset = dat->byte;
 
     encode_preR13_header_variables (dat, dwg);
-    hdr_end = dat->byte;
 
-    SINCE (R_10)
-    {
-      dat->byte = 0x3ef;
-      encode_preR13_section_hdr ("UCS", SECTION_UCS, dat, dwg);
-      dat->byte = 0x500;
-      encode_preR13_section_hdr ("VPORT", SECTION_VPORT, dat, dwg);
-      dat->byte = 0x512;
-      encode_preR13_section_hdr ("APPID", SECTION_APPID, dat, dwg);
-      dat->byte = hdr_end;
-    }
-    SINCE (R_11)
-    {
-      dat->byte = 0x522;
-      encode_preR13_section_hdr ("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg);
-      dat->byte = 0x69f;
-      encode_preR13_section_hdr ("VX", SECTION_VX, dat, dwg);
-      dat->byte = hdr_end;
-    }
     SINCE (R_11)
     {
       BITCODE_TF r11_sentinel;
@@ -2479,7 +2459,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_TRACE ("\nentities %u 0x%x - 0x%x\n", numentities,
                dwg->header.entities_start,
                dwg->header.entities_end);
-    // pvzadr = dat->byte;
 
     PRE (R_2_0b)
     {

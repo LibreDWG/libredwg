@@ -806,36 +806,6 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     dwg->header.entities_end = dwg->header_vars.dwg_size;
   }
 
-  // additional tables mixed-in since r10
-  if (dwg->header.numheader_vars > 158) // r10
-    {
-      dat->byte = 0x3ef;
-      LOG_TRACE ("@0x%lx\n", dat->byte);
-      if (decode_preR13_section_hdr ("UCS", SECTION_UCS, dat, dwg))
-        return DWG_ERR_SECTIONNOTFOUND;
-      dat->byte = 0x500;
-      LOG_TRACE ("@0x%lx\n", dat->byte);
-      if (decode_preR13_section_hdr ("VPORT", SECTION_VPORT, dat, dwg))
-        return DWG_ERR_SECTIONNOTFOUND;
-      dat->byte = 0x512;
-      LOG_TRACE ("@0x%lx\n", dat->byte);
-      if (decode_preR13_section_hdr ("APPID", SECTION_APPID, dat, dwg))
-        return DWG_ERR_SECTIONNOTFOUND;
-      dat->byte = dwg->header.entities_start;
-    }
-  if (dwg->header.numheader_vars > 160) // r11
-    {
-      dat->byte = 0x522;
-      LOG_TRACE ("@0x%lx\n", dat->byte);
-      if (decode_preR13_section_hdr ("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg))
-        return DWG_ERR_SECTIONNOTFOUND;
-      dat->byte = 0x69f;
-      LOG_TRACE ("@0x%lx\n", dat->byte);
-      if (decode_preR13_section_hdr ("VX", SECTION_VX, dat, dwg))
-        return DWG_ERR_SECTIONNOTFOUND;
-      dat->byte = dwg->header.entities_start;
-    }
-
   // entities
   if (dat->byte != dwg->header.entities_start)
     {

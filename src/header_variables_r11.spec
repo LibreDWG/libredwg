@@ -234,7 +234,14 @@
   FIELD_CAST (MIRRTEXT, RS, B, 70);
   if (dwg->header.numheader_vars <= 129)
     return 0;
-  /* Skip table UCS (0x3ef-0x3f8) 10 byte */
+  /* Table UCS (0x3ef-0x3f8) 10 byte */
+#ifdef IS_DECODER
+if (decode_preR13_section_hdr ("UCS", SECTION_UCS, dat, dwg))
+    return DWG_ERR_SECTIONNOTFOUND;
+#endif
+#ifdef IS_ENCODER
+    encode_preR13_section_hdr ("UCS", SECTION_UCS, dat, dwg);
+#endif
   UNKNOWN_UNTIL (0x3f9);
   FIELD_RC (unknown_3f9, 0);
   FIELD_RC (unknown_3fa, 0);
@@ -281,22 +288,43 @@
   FIELD_RS (SURFTYPE, 70); //ok
   FIELD_RS (SURFTAB1, 70); //ok
   FIELD_RS (SURFTAB2, 70); //ok
-  /* Skip table VPORT (0x500-0x509 )*/
-  UNKNOWN_UNTIL (0x50a);
+  /* Table VPORT (0x500-0x509 )*/
+#ifdef IS_DECODER
+  if (decode_preR13_section_hdr ("VPORT", SECTION_VPORT, dat, dwg))
+    return DWG_ERR_SECTIONNOTFOUND;
+#endif
+#ifdef IS_ENCODER
+  encode_preR13_section_hdr ("VPORT", SECTION_VPORT, dat, dwg);
+#endif
+  // UNKNOWN_UNTIL (0x50a);
   FIELD_CAST (FLATLAND, RS, B, 70);
   FIELD_RS (SPLINETYPE, 70);
   FIELD_RS (UCSICON, 0);
   FIELD_HANDLE (UCSNAME, 2, 2);
   if (dwg->header.numheader_vars <= 158) // r10
     return 0;
-  /* Skip table APPID (0x512-0x51b) */
+  /* Table APPID (0x512-0x51b) */
+#ifdef IS_DECODER
+  if (decode_preR13_section_hdr ("APPID", SECTION_APPID, dat, dwg))
+    return DWG_ERR_SECTIONNOTFOUND;
+#endif
+#ifdef IS_ENCODER
+    encode_preR13_section_hdr ("APPID", SECTION_APPID, dat, dwg);
+#endif
   UNKNOWN_UNTIL (0x51c);
   FIELD_CAST (WORLDVIEW, RS, B, 70);
   if (dwg->header.numheader_vars <= 160) // r10
     return 0;
   FIELD_RS (unknown_51e, 0);
   FIELD_RS (unknown_520, 0);
-  /* Skip table DIMSTYLE (0x522-0x52b) */
+  /* Table DIMSTYLE (0x522-0x52b) */
+#ifdef IS_DECODER
+  if (decode_preR13_section_hdr ("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg))
+    return DWG_ERR_SECTIONNOTFOUND;
+#endif
+#ifdef IS_ENCODER
+    encode_preR13_section_hdr ("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg);
+#endif
   UNKNOWN_UNTIL (0x52c);
   /* TODO Unknown 5 bytes. (first two bytes sometimes ff ff) */
   FIELD_RS (unknown_52c, 0);
@@ -332,6 +360,13 @@
   FIELD_2RD (PLIMMAX, 10); //
   FIELD_3RD (PINSBASE, 10);
   /* Skip table VX (0x69f-0x6a8) */
+#ifdef IS_DECODER
+  if (decode_preR13_section_hdr ("VX", SECTION_VX, dat, dwg))
+    return DWG_ERR_SECTIONNOTFOUND;
+#endif
+#ifdef IS_ENCODER
+    encode_preR13_section_hdr ("VX", SECTION_VX, dat, dwg);
+#endif
   UNKNOWN_UNTIL (0x6a9);
   FIELD_RS (MAXACTVP, 70); //ok
   FIELD_RD (DIMGAP, 40);   //ok
