@@ -23548,20 +23548,6 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->end.y = end_pt->y;
   _obj->end.z = end_pt->z;
 
-  if (dwg->header.version >= R_10 && dwg->header.version <= R_11)
-    {
-      if (_obj->start.z != 0.0 || _obj->end.z != 0.0)
-        {
-          obj->type = DWG_TYPE_3DLINE_R11;
-          obj->fixedtype = DWG_TYPE__3DLINE;
-        }
-      else
-        {
-          obj->type = DWG_TYPE_LINE_R11;
-          if (_obj->start.z == 0.0 && _obj->end.z == 0.0)
-            obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
-        }
-    }
   if (dwg->header.version >= R_2_4 && dwg->header.version < R_10)
     {
       obj->type = DWG_TYPE_LINE_R11;
@@ -23576,6 +23562,20 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           obj->type = DWG_TYPE_3DLINE_R11;
           obj->fixedtype = DWG_TYPE__3DLINE;
           obj->tio.entity->opts_r11 |= 2;
+        }
+    }
+  if (dwg->header.version >= R_10 && dwg->header.version <= R_11)
+    {
+      if (_obj->start.z != 0.0 || _obj->end.z != 0.0)
+        {
+          obj->type = DWG_TYPE_3DLINE_R11;
+          obj->fixedtype = DWG_TYPE__3DLINE;
+        }
+      else
+        {
+          obj->type = DWG_TYPE_LINE_R11;
+          if (_obj->start.z == 0.0 && _obj->end.z == 0.0)
+            obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
         }
     }
   return _obj;
