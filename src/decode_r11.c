@@ -878,7 +878,6 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       *dat = dat_save;
       return DWG_ERR_SECTIONNOTFOUND;
     }
-#  if 1
   if (num_sections > 5) // r10
     {
       dat_save = *dat;
@@ -900,7 +899,6 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           return DWG_ERR_SECTIONNOTFOUND;
         }
     }
-#  endif
   if (error >= DWG_ERR_CRITICAL)
     return error;
 

@@ -9281,7 +9281,8 @@ typedef struct _dwg_header
   BITCODE_RL summaryinfo_address; /* R2004+ */
   BITCODE_RL vbaproj_address;     /* R2004+ */
   BITCODE_RL r2004_header_address; /* R2004+ */
-  BITCODE_RL numsections;
+  BITCODE_RL sections;            // as in the header, 5 or 6 usually
+  BITCODE_RL num_sections;        // as allocated, many more
   Dwg_Section *section;
   Dwg_Section_InfoHdr section_infohdr; /* R2004+ */
   Dwg_Section_Info *section_info;

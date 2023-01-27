@@ -130,7 +130,7 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   dwg->num_classes = 0;
   dwg->thumbnail.size = 0;
   dwg->thumbnail.chain = NULL;
-  dwg->header.numsections = 0;
+  dwg->header.num_sections = 0;
   dwg->header.section_infohdr.num_desc = 0;
   dwg->dwg_class = NULL;
   dwg->object_ref = NULL;
@@ -303,8 +303,8 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       return DWG_ERR_INVALIDDWG;
     }
   assert (dat->byte == 0x15);
-  dwg->header.numsections = bit_read_RL (dat);
-  LOG_TRACE ("\nnum_sections: " FORMAT_RL " [RL]\n", dwg->header.numsections)
+  dwg->header.sections = bit_read_RL (dat);
+  LOG_TRACE ("\nnum_sections: " FORMAT_RL " [RL]\n", dwg->header.sections)
   if ((error = dwg_sections_init (dwg)))
     return error;
   /* section 0: header vars
@@ -314,7 +314,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
    *         4: optional: MEASUREMENT
    *         5: optional: AuxHeader (no sentinels, since r13c3
    */
-  for (j = 0; j < dwg->header.numsections; j++)
+  for (j = 0; j < dwg->header.num_sections; j++)
     {
       dwg->header.section[j].number = bit_read_RC (dat);
       dwg->header.section[j].address = bit_read_RL (dat);
@@ -355,7 +355,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
    * Section 5 AuxHeader
    * R2000+, mostly redundant file header information
    */
-  if (dwg->header.numsections == 6 && dwg->header.version >= R_13c3)
+  if (dwg->header.sections == 6 && dwg->header.version >= R_13c3)
     {
       int i;
       Dwg_AuxHeader *_obj = &dwg->auxheader;
@@ -895,15 +895,15 @@ handles_section:
       FIELD_RL (size, 0);
       FIELD_BLx (address, 0);
 
-      if (dwg->header.numsections <= SECTION_2NDHEADER_R13)
+      if (dwg->header.sections <= SECTION_2NDHEADER_R13)
         {
           LOG_WARN (
               "Only %d num_sections, but 2ndheader found, extending to 4",
-              dwg->header.numsections);
-          dwg->header.numsections = SECTION_2NDHEADER_R13 + 1; /* 4 */
+              dwg->header.sections);
+          dwg->header.sections = SECTION_2NDHEADER_R13 + 1; /* 4 */
           dwg->header.section = (Dwg_Section *)realloc (
               dwg->header.section,
-              dwg->header.numsections * sizeof (Dwg_Section));
+              dwg->header.sections * sizeof (Dwg_Section));
           memset (&dwg->header.section[SECTION_2NDHEADER_R13], 0,
                   sizeof (Dwg_Section));
         }
@@ -945,7 +945,7 @@ handles_section:
         if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)
           {
             LOG_HANDLE ("1st header was:\n");
-            for (i = 0; i < dwg->header.numsections; i++)
+            for (i = 0; i < dwg->header.num_sections; i++)
               {
                 LOG_HANDLE ("section[" FORMAT_RL "] " FORMAT_RLd " " FORMAT_RLL
                             " " FORMAT_RL " \n",
@@ -991,7 +991,7 @@ handles_section:
    * Section 4: MEASUREMENT (Called PADDING section in the ODA)
    */
 
-  if (dwg->header.numsections > 4)
+  if (dwg->header.sections > 4)
     {
       BITCODE_RL v;
       LOG_INFO ("\n"
@@ -1416,7 +1416,7 @@ find_section (Dwg_Data *dwg, unsigned long int idx)
   BITCODE_BL i;
   if (dwg->header.section == 0 || idx == 0)
     return 0;
-  for (i = 0; i < dwg->header.numsections; ++i)
+  for (i = 0; i < dwg->header.num_sections; ++i)
     {
       if ((unsigned long int)dwg->header.section[i].number == idx)
         return &dwg->header.section[i];
@@ -1427,7 +1427,7 @@ find_section (Dwg_Data *dwg, unsigned long int idx)
 static int
 add_section (Dwg_Data *dwg)
 {
-  if (dwg->header.numsections == 0)
+  if (dwg->header.num_sections == 0)
     {
       dwg->header.section = (Dwg_Section *)calloc (1, sizeof (Dwg_Section));
     }
@@ -1435,8 +1435,8 @@ add_section (Dwg_Data *dwg)
     {
       dwg->header.section = (Dwg_Section *)realloc (
           dwg->header.section,
-          sizeof (Dwg_Section) * (dwg->header.numsections + 1));
-      memset (&dwg->header.section[dwg->header.numsections], 0,
+          sizeof (Dwg_Section) * (dwg->header.num_sections + 1));
+      memset (&dwg->header.section[dwg->header.num_sections], 0,
               sizeof (Dwg_Section));
     }
   if (!dwg->header.section)
@@ -1444,7 +1444,7 @@ add_section (Dwg_Data *dwg)
       LOG_ERROR ("Out of memory");
       return DWG_ERR_OUTOFMEM;
     }
-  dwg->header.numsections++;
+  dwg->header.num_sections++;
   return 0;
 }
 
@@ -1497,7 +1497,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   const BITCODE_RL section_map_id = dwg->r2004_header.section_map_id;
   int max_id = 0;
 
-  dwg->header.numsections = 0;
+  dwg->header.num_sections = 0;
   dwg->header.section = 0;
 
   // decompressed data
@@ -1531,7 +1531,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   i = 0;
   bytes_remaining = (long)decomp_data_size;
   ptr = decomp;
-  dwg->header.numsections = 0;
+  dwg->header.num_sections = 0;
 
   while (bytes_remaining >= 8)
     {
@@ -1608,13 +1608,13 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       LOG_WARN ("Invalid last_section_address: %" PRIx64 " != %" PRIx64,
                 section_address, dwg->r2004_header.last_section_address);
     }
-  if (dwg->header.numsections
+  if (dwg->header.sections
       != dwg->r2004_header.numgaps + dwg->r2004_header.numsections)
     {
       error |= DWG_ERR_VALUEOUTOFBOUNDS;
-      LOG_WARN ("Invalid num_sections: %d != numgaps: " FORMAT_RL
+      LOG_WARN ("Invalid sections: %d != numgaps: " FORMAT_RL
                 " + numsections: " FORMAT_RL,
-                dwg->header.numsections, dwg->r2004_header.numgaps,
+                dwg->header.sections, dwg->r2004_header.numgaps,
                 dwg->r2004_header.numsections);
     }
   if (!found_section_map_id)
@@ -1625,7 +1625,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       info = find_section (dwg, section_map_id);
       if (!info)
         {
-          i = dwg->header.numsections;
+          i = dwg->header.num_sections;
           add_section (dwg);
           LOG_WARN ("Add section_map_id [%d] %d => address 0x%" PRIx64, i,
                     section_map_id, section_map_address);
@@ -1648,7 +1648,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           LOG_WARN ("Repair invalid section_info_id [%d]: => %u", i - 1,
                     dwg->r2004_header.section_info_id);
           error |= DWG_ERR_VALUEOUTOFBOUNDS;
-          for (i = 0; i < (int)dwg->header.numsections; ++i)
+          for (i = 0; i < (int)dwg->header.num_sections; ++i)
             {
               dat->bit = 0;
               dat->byte = dwg->header.section[i].address;
@@ -1669,7 +1669,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             }
           if (!info || info->number != (int)dwg->r2004_header.section_info_id)
             {
-              i = dwg->header.numsections;
+              i = dwg->header.num_sections;
               add_section (dwg);
               error |= DWG_ERR_VALUEOUTOFBOUNDS;
               dwg->header.section[i].number

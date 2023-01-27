@@ -3047,21 +3047,43 @@ split_filepath (const char *filepath, char **extp)
 int
 dwg_sections_init (Dwg_Data *dwg)
 {
-  // how many sections we need to allocate internally (with holes)
-  unsigned num_sections = 5;
+  // num_sections: how many sections we need to allocate internally (with holes)
   if (dwg->header.version < R_13b1)
     {
-      if (!dwg->header.numsections)
-        dwg->header.numsections = 5;
-      // HEADER.numsections is always 5 even if it needs to be 8 or 10,
+      if (!dwg->header.num_sections)
+        dwg->header.num_sections = 5;
+      if (!dwg->header.sections)
+        dwg->header.sections = 5;
+      // HEADER.sections is always 5 even if it needs to be 8 or 10,
       // probably because the additional sections are embedded in HEADER_VARS.
       // 5 tables + header + block. VIEW = 6
-      if (dwg->header.numheader_vars > 158) // r10
-        num_sections += 3;
-      if (dwg->header.numheader_vars > 160) // r11
-        num_sections += 2;
-      // and there is one hole we need to skip over.
-      num_sections += 1;
+      if (dwg->header.numheader_vars)
+        {
+          if (dwg->header.numheader_vars > 129) // r10
+            // UCS, VPORT
+            dwg->header.num_sections += 2;
+          if (dwg->header.numheader_vars > 158) // r10 one
+            // APPID
+            dwg->header.num_sections += 1;
+          if (dwg->header.numheader_vars > 160) // r11
+            // DIMSTYLE, VX
+            dwg->header.num_sections += 2;
+        }
+      else
+        {
+          if (dwg->header.version >= R_10)
+            {
+              dwg->header.numheader_vars = 160;
+              dwg->header.num_sections += 3;
+            }
+          if (dwg->header.version >= R_11)
+            {
+              dwg->header.numheader_vars = 205;
+              dwg->header.num_sections += 2;
+            }
+        }
+      // and there is one hole 1,2,3,5,6 we need to skip over.
+      dwg->header.num_sections += 1;
     }
   else
     {
@@ -3072,30 +3094,34 @@ dwg_sections_init (Dwg_Data *dwg)
        *         4: optional: MEASUREMENT
        *         5: optional: AuxHeader (no sentinels, since r13c3)
        */
-      if (dwg->header.version >= R_13c3)
-        num_sections = 6;
-      if (!dwg->header.numsections) // ODA writes zeros.
-        dwg->header.numsections = num_sections;
-      if (num_sections != dwg->header.numsections)
-        num_sections = dwg->header.numsections;
+      if (!dwg->header.num_sections)
+        dwg->header.num_sections = dwg->header.version >= R_13c3 ? 6 : 5;
+      if (!dwg->header.sections) // ODA writes zeros.
+        dwg->header.sections = dwg->header.num_sections;
+      // newer DWG's have proper HEADER.sections
+      if (dwg->header.num_sections != dwg->header.sections)
+        dwg->header.num_sections = dwg->header.sections;
     }
-  if (dwg->header.numsections < 3)
+  LOG_TRACE ("num_sections => " FORMAT_RL "\n", dwg->header.num_sections);
+  if (dwg->header.num_sections < 3)
     {
-      LOG_ERROR ("Not enough sections: " FORMAT_RL, dwg->header.numsections);
+      LOG_ERROR ("Not enough sections: " FORMAT_RL, dwg->header.num_sections);
       return DWG_ERR_INVALIDDWG;
     }
-  else if (dwg->header.numsections > 10)
+  else if (dwg->header.num_sections > 28)
     {
-      LOG_ERROR ("Too many sections: " FORMAT_RL, dwg->header.numsections);
+      LOG_ERROR ("Too many sections: " FORMAT_RL, dwg->header.num_sections);
       return DWG_ERR_INVALIDDWG;
     }
 
   if (dwg->header.section)
-    dwg->header.section = (Dwg_Section *)realloc ( // zero-based
-        dwg->header.section, sizeof (Dwg_Section) * (num_sections + 1));
+    // zero-based
+    dwg->header.section = (Dwg_Section *)realloc (
+        dwg->header.section,
+        sizeof (Dwg_Section) * (dwg->header.num_sections + 1));
   else
-    dwg->header.section
-        = (Dwg_Section *)calloc (sizeof (Dwg_Section), num_sections + 1);
+    dwg->header.section = (Dwg_Section *)calloc (sizeof (Dwg_Section),
+                                                 dwg->header.num_sections + 1);
   if (!dwg->header.section)
     {
       LOG_ERROR ("Out of memory");
