@@ -23052,6 +23052,8 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       blkhdr->inserts[blkhdr->num_inserts - 1]
           = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
     }
+  if (dwg->header.version < R_2_0b)
+    _obj->block_name = (BITCODE_TV)name;
   if (dwg->header.version <= R_11)
     {
       obj->type = DWG_TYPE_INSERT_R11;
