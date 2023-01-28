@@ -23610,6 +23610,11 @@ dwg_add_DIMENSION_ALIGNED (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                            const dwg_point_3d *restrict text_midpt)
 {
   API_ADD_ENTITY (DIMENSION_ALIGNED);
+  if (dwg->header.version <= R_2_22)
+    {
+      LOG_ERROR ("Invalid entity %s <R7", "DIMENSION_ALIGNED")
+      return NULL;
+    }
   DIMENSION_DEFAULTS;
   ADD_CHECK_3DPOINT (xline1_pt);
   ADD_CHECK_3DPOINT (xline2_pt);
@@ -23640,6 +23645,11 @@ dwg_add_DIMENSION_ANG2LN (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict text_midpt)
 {
   API_ADD_ENTITY (DIMENSION_ANG2LN);
+  if (dwg->header.version <= R_2_22)
+    {
+      LOG_ERROR ("Invalid entity %s <R7", "DIMENSION_ANG2LN")
+      return NULL;
+    }
   DIMENSION_DEFAULTS;
   ADD_CHECK_3DPOINT (center_pt);
   ADD_CHECK_3DPOINT (xline1end_pt);
@@ -23674,6 +23684,11 @@ dwg_add_DIMENSION_ANG3PT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const dwg_point_3d *restrict text_midpt)
 {
   API_ADD_ENTITY (DIMENSION_ANG3PT);
+  if (dwg->header.version <= R_2_22)
+    {
+      LOG_ERROR ("Invalid entity %s <R7", "DIMENSION_ANG3PT")
+      return NULL;
+    }
   DIMENSION_DEFAULTS;
   ADD_CHECK_3DPOINT (center_pt);
   ADD_CHECK_3DPOINT (xline1_pt);
@@ -23706,6 +23721,11 @@ dwg_add_DIMENSION_DIAMETER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                             const double leader_len)
 {
   API_ADD_ENTITY (DIMENSION_DIAMETER);
+  if (dwg->header.version <= R_2_22)
+    {
+      LOG_ERROR ("Invalid entity %s <R7", "DIMENSION_DIAMETER")
+      return NULL;
+    }
   DIMENSION_DEFAULTS;
   ADD_CHECK_3DPOINT (chord_pt);
   ADD_CHECK_3DPOINT (far_chord_pt);
@@ -23732,6 +23752,11 @@ dwg_add_DIMENSION_ORDINATE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                             const bool use_x_axis)
 {
   API_ADD_ENTITY (DIMENSION_ORDINATE);
+  if (dwg->header.version <= R_2_22)
+    {
+      LOG_ERROR ("Invalid entity %s <R7", "DIMENSION_ORDINATE")
+      return NULL;
+    }
   DIMENSION_DEFAULTS;
   ADD_CHECK_3DPOINT (feature_location_pt);
   ADD_CHECK_3DPOINT (leader_endpt);
@@ -23757,6 +23782,11 @@ dwg_add_DIMENSION_RADIUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const double leader_len)
 {
   API_ADD_ENTITY (DIMENSION_RADIUS);
+  if (dwg->header.version <= R_2_22)
+    {
+      LOG_ERROR ("Invalid entity %s <R7", "DIMENSION_RADIUS")
+      return NULL;
+    }
   DIMENSION_DEFAULTS;
   ADD_CHECK_3DPOINT (center_pt);
   ADD_CHECK_3DPOINT (chord_pt);
@@ -23784,6 +23814,11 @@ dwg_add_DIMENSION_LINEAR (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                           const double rotation_angle)
 {
   API_ADD_ENTITY (DIMENSION_LINEAR);
+  if (dwg->header.version <= R_2_22)
+    {
+      LOG_ERROR ("Invalid entity %s <R7", "DIMENSION_LINEAR")
+      return NULL;
+    }
   DIMENSION_DEFAULTS;
   ADD_CHECK_3DPOINT (xline1_pt);
   ADD_CHECK_3DPOINT (xline2_pt);
@@ -23834,6 +23869,11 @@ dwg_add_3DFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const dwg_point_3d *restrict pt4 /* may be NULL */)
 {
   API_ADD_ENTITY (_3DFACE);
+  if (dwg->header.version <= R_2_22)
+    {
+      LOG_ERROR ("Invalid entity %s <R7", "3DFACE")
+      return NULL;
+    }
   ADD_CHECK_3DPOINT (pt1);
   ADD_CHECK_3DPOINT (pt2);
   ADD_CHECK_3DPOINT (pt3);
@@ -23979,6 +24019,11 @@ dwg_add_VIEWPORT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                   const char *restrict name)
 {
   API_ADD_ENTITY (VIEWPORT);
+  if (dwg->header.version <= R_11)
+    {
+      LOG_ERROR ("Invalid entity %s <R11", "VIEWPORT")
+      return NULL;
+    }
   // TODO get defaults from name
   _obj->lens_length = 50.0;
   _obj->VIEWDIR.z = 1.0;
