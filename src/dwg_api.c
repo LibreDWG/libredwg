@@ -21813,12 +21813,6 @@ dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert, const double height,
                 const int flags, const dwg_point_3d *restrict ins_pt,
                 const char *restrict tag,
                 const char *restrict text_value) __nonnull_all;
-/* internally used only by dwg_add_ATTRIB only */
-Dwg_Entity_ATTDEF *
-dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr, const double height,
-                const int mode, const char *restrict prompt,
-                const dwg_point_3d *restrict ins_pt, const char *restrict tag,
-                const char *restrict default_value) __nonnull_all;
 
 /* internally used only by dwg_add_POLYLINE* only */
 // fixme: Dwg_Entity_POLYLINE_2D* as 1st owner arg

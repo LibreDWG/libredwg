@@ -6337,6 +6337,11 @@ dwg_add_ARC (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
              const double radius,
              const double start_angle,
              const double end_angle) __nonnull_all;
+EXPORT Dwg_Entity_ATTDEF *
+dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr, const double height,
+                const int mode, const char *restrict prompt,
+                const dwg_point_3d *restrict ins_pt, const char *restrict tag,
+                const char *restrict default_value) __nonnull_all;
 EXPORT Dwg_Entity_CIRCLE*
 dwg_add_CIRCLE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const dwg_point_3d *restrict center,
