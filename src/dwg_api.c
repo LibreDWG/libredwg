@@ -22959,6 +22959,11 @@ dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr, const double height,
                 const char *restrict default_value)
 {
   API_ADD_ENTITY (ATTDEF);
+  if (dwg->header.version < R_2_0b)
+    {
+      LOG_ERROR ("Invalid entity %s <R4", "ATTDEF")
+      return NULL;
+    }
   ADD_CHECK_3DPOINT (ins_pt);
   ADD_CHECK_DOUBLE (height);
   _obj->prompt = dwg_add_u8_input (dwg, prompt);
