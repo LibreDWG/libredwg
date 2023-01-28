@@ -523,6 +523,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
     int type;
     union
     {
+      Dwg_Entity_ATTDEF *attdef;
       Dwg_Entity_LINE *line;
       Dwg_Entity_RAY *ray;
       Dwg_Entity_XLINE *xline;
@@ -571,6 +572,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
   } lastent_t;
   lastent_t ent;
   char text[120];
+  char prompt[120];
+  char tag[120];
+  char default_text[120];
 
   if (!dat->chain)
     abort ();
@@ -596,7 +600,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       dwg_point_3d pt4 = { 0.0, 0.0, 0.0 };
       dwg_point_3d scale = { 0.0, 0.0, 0.0 };
       double height = 0.0, rot = 0.0, len = 0.0, f1 = 0.0, f2 = 0.0;
-      int i1 = 0, i2 = 0;
+      int i1 = 0, i2 = 0, flags = 0;
       unsigned u = 0U;
 
       while (p < end && (*p == ' ' || *p == '\t'))
@@ -795,6 +799,18 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         {
           hdr = mspace->tio.object->tio.BLOCK_HEADER;
         }
+      else if (SSCANF_S (p, "attdef %lf %d " FMT_TBL " (%lf %lf %lf) " FMT_TBL " " FMT_TBL,
+                         &height, &flags, &prompt[0] SZ, &pt1.x, &pt1.y,
+                         &pt1.z, &tag[0] SZ, &default_text[0] SZ)) {
+        if (version < R_2_0b)
+          fn_error ("Invalid entity ATTDEF\n");
+        else
+          ent = (lastent_t){ .u.attdef = dwg_add_ATTDEF (hdr, height, flags,
+                                                         prompt, &pt1, tag,
+                                                         default_text),
+                             .type = DWG_TYPE_ATTDEF };
+      } else
+        SET_ENT (attdef, ATTDEF)
       else if (SSCANF_S (p, "line (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
                          &pt1.z, &pt2.x, &pt2.y, &pt2.z))
         ent = (lastent_t){ .u.line = dwg_add_LINE (hdr, &pt1, &pt2),
