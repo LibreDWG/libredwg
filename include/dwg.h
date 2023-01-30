@@ -8956,6 +8956,7 @@ typedef enum DWG_SECTION_TYPE_R11 /* tables */
   // since r10:
   SECTION_UCS = 7,
   SECTION_VPORT = 8,
+  // over 160 header vars
   SECTION_APPID = 9,
   // since r11:
   SECTION_DIMSTYLE = 10,

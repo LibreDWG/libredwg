@@ -479,7 +479,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       {
         for (i = 0; i < tbl->number; i++)
           {
-            // PREP_TABLE (UCS);
             Dwg_Object *obj;
             Dwg_Object_UCS *_obj;
             dwg_point_3d ucsorg, ucsxdir, ucsydir;
@@ -489,6 +488,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
                 = ctrl ? ctrl->tio.object->tio.UCS_CONTROL : NULL;
             if (!ctrl || dat->byte > dat->size || (num + i) > dwg->num_objects)
               return DWG_ERR_INVALIDDWG;
+            LOG_TRACE ("\n-- table entry UCS [%d]: 0x%lx\n", i, pos);
             flag = bit_read_RC (dat);
             name = bit_read_TF (dat, 32);
             if (!name)
@@ -507,10 +507,12 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             obj->size = tbl->size;
             obj->address = pos;
             _obj->flag = flag;
-            LOG_TRACE ("\n-- table entry UCS [%d]: 0x%lx\n", i, pos);
             LOG_TRACE ("flag: %u [RC 70]\n", flag);
             LOG_FLAG_UCS
             LOG_TRACE ("name: \"%s\" [TF 32 2]\n", name);
+            LOG_TRACE ("ucsorg: (%f %f) [2RD]\n", ucsorg.x, ucsorg.y);
+            LOG_TRACE ("ucsxdir: (%f %f) [2RD]\n", ucsxdir.x, ucsxdir.y);
+            LOG_TRACE ("ucsydir: (%f %f) [2RD]\n", ucsydir.x, ucsydir.y);
             free (name);
 
             CHK_ENDPOS;
@@ -691,16 +693,12 @@ AFL_GCC_TOOBIG
 EXPORT int
 decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  //BITCODE_RL entities_start = 0, entities_end = 0;
-  //BITCODE_RL blocks_start = 0, blocks_size = 0,
-  //           blocks_max = 0xFFFFFFFF;
   BITCODE_RL rl1, rl2, num_entities;
   BITCODE_RL blocks_start = 0, blocks_end = 0;
   BITCODE_RS rs2;
   Dwg_Object *obj = NULL;
   int tbl_id;
   int error = 0;
-  unsigned num_sections = 5;
   Bit_Chain dat_save = *dat;
 
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
@@ -878,18 +876,26 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       *dat = dat_save;
       return DWG_ERR_SECTIONNOTFOUND;
     }
-  if (num_sections > 5) // r10
+  if (dwg->header.num_sections >= SECTION_VPORT) // r10
     {
       dat_save = *dat;
       if (decode_preR13_section (SECTION_UCS, dat, dwg)
-          || decode_preR13_section (SECTION_VPORT, dat, dwg)
-          || decode_preR13_section (SECTION_APPID, dat, dwg))
+          || decode_preR13_section (SECTION_VPORT, dat, dwg))
         {
           *dat = dat_save;
           return DWG_ERR_SECTIONNOTFOUND;
         }
     }
-  if (num_sections > 8) // r11
+  if (dwg->header.num_sections >= SECTION_APPID) // r10
+    {
+      dat_save = *dat;
+      if (decode_preR13_section (SECTION_APPID, dat, dwg))
+        {
+          *dat = dat_save;
+          return DWG_ERR_SECTIONNOTFOUND;
+        }
+    }
+  if (dwg->header.num_sections >= SECTION_VX) // r11
     {
       dat_save = *dat;
       if (decode_preR13_section (SECTION_DIMSTYLE, dat, dwg)
@@ -985,7 +991,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   decode_preR13_section_chk (SECTION_STYLE, dat, dwg);
   decode_preR13_section_chk (SECTION_LTYPE, dat, dwg);
   decode_preR13_section_chk (SECTION_VIEW, dat, dwg);
-  if (num_sections > 5) // dead code?
+  if (dwg->header.num_sections > 5) // dead code?
     {
       decode_preR13_section_chk (SECTION_UCS, dat, dwg);
       decode_preR13_section_chk (SECTION_VPORT, dat, dwg);
