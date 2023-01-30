@@ -22612,6 +22612,12 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
       dwg->header_vars.numentities++;                                         \
     dwg_insert_entity ((Dwg_Object_BLOCK_HEADER *)blkhdr, obj)
 
+#  define API_UNADD_ENTITY                                                    \
+    if (dwg->header.version < R_13b1)                                         \
+      obj->type = -(obj->type);                                               \
+    else                                                                      \
+      obj->type = DWG_TYPE_UNUSED
+
 #  define ADD_OBJECT(token)                                                   \
     obj->type = obj->fixedtype = DWG_TYPE_##token;                            \
     obj->name = (char *)#token;                                               \
@@ -22962,6 +22968,7 @@ dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr, const double height,
   if (dwg->header.version < R_2_0b)
     {
       LOG_ERROR ("Invalid entity %s <r2.0b", "ATTDEF")
+      API_UNADD_ENTITY;
       return NULL;
     }
   ADD_CHECK_3DPOINT (ins_pt);
@@ -23617,7 +23624,8 @@ dwg_add_DIMENSION_ALIGNED (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (DIMENSION_ALIGNED);
   if (dwg->header.version <= R_2_22)
     {
-      LOG_ERROR ("Invalid entity %s <R7", "DIMENSION_ALIGNED")
+      LOG_ERROR ("Invalid entity %s <r2.22", "DIMENSION_ALIGNED")
+      API_UNADD_ENTITY;
       return NULL;
     }
   DIMENSION_DEFAULTS;
@@ -23652,7 +23660,8 @@ dwg_add_DIMENSION_ANG2LN (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (DIMENSION_ANG2LN);
   if (dwg->header.version <= R_2_22)
     {
-      LOG_ERROR ("Invalid entity %s <R7", "DIMENSION_ANG2LN")
+      LOG_ERROR ("Invalid entity %s <r2.22", "DIMENSION_ANG2LN")
+      API_UNADD_ENTITY;
       return NULL;
     }
   DIMENSION_DEFAULTS;
@@ -23691,7 +23700,8 @@ dwg_add_DIMENSION_ANG3PT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (DIMENSION_ANG3PT);
   if (dwg->header.version <= R_2_22)
     {
-      LOG_ERROR ("Invalid entity %s <R7", "DIMENSION_ANG3PT")
+      LOG_ERROR ("Invalid entity %s <r2.22", "DIMENSION_ANG3PT")
+      API_UNADD_ENTITY;
       return NULL;
     }
   DIMENSION_DEFAULTS;
@@ -23728,7 +23738,8 @@ dwg_add_DIMENSION_DIAMETER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (DIMENSION_DIAMETER);
   if (dwg->header.version <= R_2_22)
     {
-      LOG_ERROR ("Invalid entity %s <R7", "DIMENSION_DIAMETER")
+      LOG_ERROR ("Invalid entity %s <r2.22", "DIMENSION_DIAMETER")
+      API_UNADD_ENTITY;
       return NULL;
     }
   DIMENSION_DEFAULTS;
@@ -23759,7 +23770,8 @@ dwg_add_DIMENSION_ORDINATE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (DIMENSION_ORDINATE);
   if (dwg->header.version <= R_2_22)
     {
-      LOG_ERROR ("Invalid entity %s <R7", "DIMENSION_ORDINATE")
+      LOG_ERROR ("Invalid entity %s <r2.22", "DIMENSION_ORDINATE")
+      API_UNADD_ENTITY;
       return NULL;
     }
   DIMENSION_DEFAULTS;
@@ -23789,7 +23801,8 @@ dwg_add_DIMENSION_RADIUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (DIMENSION_RADIUS);
   if (dwg->header.version <= R_2_22)
     {
-      LOG_ERROR ("Invalid entity %s <R7", "DIMENSION_RADIUS")
+      LOG_ERROR ("Invalid entity %s <r2.22", "DIMENSION_RADIUS")
+      API_UNADD_ENTITY;
       return NULL;
     }
   DIMENSION_DEFAULTS;
@@ -23821,7 +23834,8 @@ dwg_add_DIMENSION_LINEAR (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (DIMENSION_LINEAR);
   if (dwg->header.version <= R_2_22)
     {
-      LOG_ERROR ("Invalid entity %s <R7", "DIMENSION_LINEAR")
+      LOG_ERROR ("Invalid entity %s <r2.22", "DIMENSION_LINEAR")
+      API_UNADD_ENTITY;
       return NULL;
     }
   DIMENSION_DEFAULTS;
@@ -23876,7 +23890,8 @@ dwg_add_3DFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (_3DFACE);
   if (dwg->header.version <= R_2_22)
     {
-      LOG_ERROR ("Invalid entity %s <R7", "3DFACE")
+      LOG_ERROR ("Invalid entity %s <r2.22", "3DFACE")
+      API_UNADD_ENTITY;
       return NULL;
     }
   ADD_CHECK_3DPOINT (pt1);
@@ -24026,7 +24041,8 @@ dwg_add_VIEWPORT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (VIEWPORT);
   if (dwg->header.version <= R_11)
     {
-      LOG_ERROR ("Invalid entity %s <R11", "VIEWPORT")
+      LOG_ERROR ("Invalid entity %s <r11", "VIEWPORT")
+      API_UNADD_ENTITY;
       return NULL;
     }
   // TODO get defaults from name
@@ -24058,7 +24074,8 @@ dwg_add_ELLIPSE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (ELLIPSE);
   if (dwg->header.version <= R_11)
     {
-      LOG_ERROR ("Invalid entity %s <R13", "3DSOLID")
+      LOG_ERROR ("Invalid entity %s <r11", "3DSOLID")
+      API_UNADD_ENTITY;
       return NULL;
     }
   ADD_CHECK_3DPOINT (center);
@@ -24095,7 +24112,8 @@ dwg_add_SPLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (SPLINE);
   if (dwg->header.version <= R_11)
     {
-      LOG_ERROR ("Invalid entity %s <R13", "3DSOLID")
+      LOG_ERROR ("Invalid entity %s <r11", "3DSOLID")
+      API_UNADD_ENTITY;
       return NULL;
     }
   ADD_CHECK_3DPOINT (beg_tan_vec);
@@ -24123,7 +24141,8 @@ dwg_add_REGION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (REGION);
   if (dwg->header.version <= R_11)
     {
-      LOG_ERROR ("Invalid entity %s <R13", "3DSOLID")
+      LOG_ERROR ("Invalid entity %s <r11", "3DSOLID")
+      API_UNADD_ENTITY;
       return NULL;
     }
   _obj->num_blocks = (int)(len / 4096);
@@ -24158,7 +24177,8 @@ dwg_add_3DSOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (_3DSOLID);
   if (dwg->header.version <= R_11)
     {
-      LOG_ERROR ("Invalid entity %s <R13", "3DSOLID")
+      LOG_ERROR ("Invalid entity %s <r11", "3DSOLID")
+      API_UNADD_ENTITY;
       return NULL;
     }
   _obj->num_blocks = (int)(len / 4096);
@@ -24194,7 +24214,8 @@ dwg_add_BODY (Dwg_Object_BLOCK_HEADER *restrict blkhdr, const char *acis_data)
   API_ADD_ENTITY (BODY);
   if (dwg->header.version <= R_11)
     {
-      LOG_ERROR ("Invalid entity %s <R13", "BODY")
+      LOG_ERROR ("Invalid entity %s <r11", "BODY")
+      API_UNADD_ENTITY;
       return NULL;
     }
   _obj->num_blocks = (int)(len / 4096);
@@ -24227,7 +24248,8 @@ dwg_add_RAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (RAY);
   if (dwg->header.version <= R_11)
     {
-      LOG_ERROR ("Invalid entity %s <R13", "RAY")
+      LOG_ERROR ("Invalid entity %s <r11", "RAY")
+      API_UNADD_ENTITY;
       return NULL;
     }
   ADD_CHECK_3DPOINT (point);
@@ -24247,7 +24269,8 @@ dwg_add_XLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (XLINE);
   if (dwg->header.version <= R_11)
     {
-      LOG_ERROR ("Invalid entity %s <R13", "XLINE")
+      LOG_ERROR ("Invalid entity %s <r11", "XLINE")
+      API_UNADD_ENTITY;
       return NULL;
     }
   ADD_CHECK_3DPOINT (point);
@@ -24424,7 +24447,8 @@ dwg_add_OLE2FRAME (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (OLE2FRAME);
   if (dwg->header.version <= R_11)
     {
-      LOG_ERROR ("Invalid entity %s <R13", "OLE2FRAME")
+      LOG_ERROR ("Invalid entity %s <r11", "OLE2FRAME")
+      API_UNADD_ENTITY;
       return NULL;
     }
   _obj->pt1.x = pt1->x;
@@ -24476,10 +24500,15 @@ dwg_add_LEADER (
 {
   API_ADD_ENTITY (LEADER);
   if (!num_points)
-    return NULL;
+    {
+      LOG_ERROR ("no num_points")
+      API_UNADD_ENTITY;
+      return NULL;
+    }
   if (dwg->header.version <= R_11)
     {
-      LOG_ERROR ("Invalid entity %s <R13", "LEADER")
+      LOG_ERROR ("Invalid entity %s <r11", "LEADER")
+      API_UNADD_ENTITY;
       return NULL;
     }
   _obj->points = calloc (num_points, sizeof (BITCODE_3BD));
@@ -24551,7 +24580,8 @@ dwg_add_TOLERANCE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->text_value = dwg_add_u8_input (dwg, text_value);
   if (dwg->header.version <= R_11)
     {
-      LOG_ERROR ("Invalid entity %s <R13", "TOLERANCE")
+      LOG_ERROR ("Invalid entity %s <r11", "TOLERANCE")
+      API_UNADD_ENTITY;
       return NULL;
     }
   ADD_CHECK_3DPOINT (ins_pt);
@@ -24582,7 +24612,8 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (MLINE);
   if (dwg->header.version <= R_11)
     {
-      LOG_ERROR ("Invalid entity %s <R13", "MLINE")
+      LOG_ERROR ("Invalid entity %s <r11", "MLINE")
+      API_UNADD_ENTITY;
       return NULL;
     }
   if (!num_verts)
@@ -24931,7 +24962,8 @@ dwg_add_GROUP (Dwg_Data *restrict dwg,
   API_ADD_OBJECT (GROUP);
   if (dwg->header.version <= R_11)
     {
-      LOG_ERROR ("Invalid entity %s <R13", "GROUP")
+      LOG_ERROR ("Invalid entity %s <r11", "GROUP")
+      API_UNADD_ENTITY;
       return NULL;
     }
   // find nod dict
@@ -25037,7 +25069,7 @@ dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       REQUIRE_CLASS ("LWPOLYLINE");
     if (dwg && dwg->header.version <= R_11)
       {
-        LOG_ERROR ("Invalid entity %s <R13", "LWPOLYLINE")
+        LOG_ERROR ("Invalid entity %s <r11", "LWPOLYLINE")
         return NULL;
       }
   }
@@ -25064,7 +25096,7 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       REQUIRE_CLASS ("HATCH");
     if (dwg && dwg->header.version <= R_11)
       {
-        LOG_ERROR ("Invalid entity %s <R13", "HATCH")
+        LOG_ERROR ("Invalid entity %s <r11", "HATCH")
         return NULL;
       }
   }
