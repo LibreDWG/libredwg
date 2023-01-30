@@ -281,6 +281,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   long unsigned int pvz;
   BITCODE_BL j, k;
   int error = 0;
+  int sentinel_size = 16;
   const char *section_names[]
       = { "AcDb:Header", "AcDb:Classes",  "AcDb:Handles",
           "2NDHEADER",   "AcDb:Template", "AcDb:AuxHeader" };
@@ -552,19 +553,30 @@ classes_section:
   if (memcmp (dwg_sentinel (DWG_SENTINEL_CLASS_BEGIN), &dat->chain[dat->byte],
               16)
       == 0)
-    dat->byte += 16;
+    {
+      dat->byte += 16;
+    }
   else
-    LOG_TRACE ("no class sentinel\n");
+    {
+      sentinel_size = 0;
+      LOG_TRACE ("no class sentinel\n");
+    }
   dat->bit = 0;
   size = bit_read_RL (dat);
-  LOG_TRACE ("         Size : %lu [RL]\n", size)
-  if (size != dwg->header.section[SECTION_CLASSES_R13].size - 38)
+  LOG_TRACE ("         Size : %lu [RL]\n", size);
+  if (size
+      != dwg->header.section[SECTION_CLASSES_R13].size
+             - ((sentinel_size * 2) + 6))
     {
       endpos = dwg->header.section[SECTION_CLASSES_R13].address
-               + dwg->header.section[SECTION_CLASSES_R13].size - 16;
-      LOG_WARN ("Invalid size %lu, should be: " FORMAT_RL ", endpos: %lu\n",
-                size, dwg->header.section[SECTION_CLASSES_R13].size - 38,
-                endpos)
+               + dwg->header.section[SECTION_CLASSES_R13].size - sentinel_size;
+      LOG_ERROR ("Invalid size %lu, should be: " FORMAT_RL ", endpos: %lu\n",
+                 size,
+                 dwg->header.section[SECTION_CLASSES_R13].size
+                     - ((sentinel_size * 2) + 6),
+                 endpos)
+      error |= DWG_ERR_SECTIONNOTFOUND;
+      goto handles_section;
     }
   else
     endpos = dat->byte + size;
