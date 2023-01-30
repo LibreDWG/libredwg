@@ -1092,28 +1092,43 @@ bfr_read_32 (void *restrict dst, BITCODE_RC *restrict *restrict src,
              size_t size)
 {
   size_t n;
-  uint32_t *dp = (uint32_t *)dst;
+  uint32_t *dp, *sp, *dp0, *sp0;
+  bool dst_unaligned = false;
+  bool src_unaligned = false;
+  assert (!(size % 4));
 
-  // src may be misaligned
-  if ((intptr_t)src % 4)
+  // dst may be misaligned
+  if ((intptr_t)dst % 4)
     {
-      BITCODE_RC *restrict *restrict tmp = malloc (size);
-      memcpy ((void *)tmp, (const void *)src, size);
-      for (n = 0; n < size / sizeof (uint32_t); n++)
-        {
-          *dp++ = le32toh (*(uint32_t *)*tmp);
-          *tmp += sizeof (uint32_t);
-        }
-      free ((void *)tmp);
+      dst_unaligned = true;
+      dp0 = dp = malloc (size);
     }
   else
+    dp = (uint32_t *)dst;
+  // likewise *src may be misaligned
+  if ((intptr_t)*src % 4)
     {
-      for (n = 0; n < size / sizeof (uint32_t); n++)
-        {
-          *dp++ = le32toh (*(uint32_t *)*src);
-          *src += sizeof (uint32_t);
-        }
+      src_unaligned = true;
+      sp0 = sp = malloc (size);
+      memcpy ((void *)sp, (const void *)*src, size);
     }
+  else
+    sp = (uint32_t *)*src;
+
+  for (n = 0; n < size / sizeof (uint32_t); n++)
+    {
+      *dp++ = le32toh (*sp);
+      sp++;
+    }
+
+  if (src_unaligned)
+    free ((void *)sp0);
+  if (dst_unaligned)
+    {
+      memcpy ((void *)dst, (const void *)dp0, size);
+      free ((void *)dp0);
+    }
+  *src += size;
   size -= n * sizeof (uint32_t);
   assert (size == 0);
 }
@@ -1124,28 +1139,41 @@ bfr_read_64 (void *restrict dst, BITCODE_RC *restrict *restrict src,
              size_t size)
 {
   size_t n;
-  uint64_t *dp = (uint64_t *)dst;
+  uint64_t *dp, *sp, *dp0, *sp0;
+  bool dst_unaligned = false;
+  bool src_unaligned = false;
+  assert (!(size % 8));
 
-  // src may be misaligned, needs 8
-  if ((intptr_t)src % 8)
+  // dst may be misaligned
+  if ((intptr_t)dst % 8)
     {
-      BITCODE_RC *restrict *restrict tmp = malloc (size);
-      memcpy ((void *)tmp, (const void *)src, size);
-      for (n = 0; n < size / sizeof (uint64_t); n++)
-        {
-          *dp++ = le64toh (*(uint64_t *)*tmp);
-          *tmp += sizeof (uint64_t);
-        }
-      free ((void *)tmp);
+      dst_unaligned = true;
+      dp0 = dp = malloc (size);
     }
   else
+    dp = (uint64_t *)dst;
+  // likewise *src may be misaligned
+  if ((intptr_t)*src % 8)
     {
-      for (n = 0; n < size / sizeof (uint64_t); n++)
-        {
-          *dp++ = le64toh (*(uint64_t *)*src);
-          *src += sizeof (uint64_t);
-        }
+      src_unaligned = true;
+      sp0 = sp = malloc (size);
+      memcpy ((void *)sp, (const void *)*src, size);
     }
+
+  for (n = 0; n < size / sizeof (uint64_t); n++)
+    {
+      *dp++ = le64toh (*sp);
+      sp++;
+    }
+
+  if (src_unaligned)
+    free ((void *)sp0);
+  if (dst_unaligned)
+    {
+      memcpy ((void *)dst, (const void *)dp0, size);
+      free ((void *)dp0);
+    }
+  *src += size;
   size -= n * sizeof (uint64_t);
   assert (size == 0);
 }
@@ -1499,7 +1527,8 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       if (error > DWG_ERR_CRITICAL)
         return error;
 
-      bfr_read_32 (&dwg->header.section[i], &ptr, 8); // only the first two fields
+      // only the first two fields: number, size
+      bfr_read_32 (&dwg->header.section[i], &ptr, 8);
       bytes_remaining -= 8;
       LOG_TRACE ("Section[%2d]=%2d,", i, (int)dwg->header.section[i].number)
       LOG_TRACE (" size: %5u,", dwg->header.section[i].size)
