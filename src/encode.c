@@ -2454,19 +2454,22 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     }
     SINCE (R_11)
     {
-      BITCODE_TF r11_sentinel;
       dat->byte = 0x522;
       encode_preR13_section_hdr ("DIMSTYLE", SECTION_DIMSTYLE, dat, dwg);
       dat->byte = 0x69f;
       encode_preR13_section_hdr ("VX", SECTION_VX, dat, dwg);
-
       dat->byte = hdr_end;
+    }
+    SINCE (R_11)
+    {
+      BITCODE_TF r11_sentinel;
       bit_write_RS (dat, 0); // patch the crc16 later
       r11_sentinel = dwg_sentinel (DWG_SENTINEL_R11_HEADER_END);
       bit_write_TF (dat, r11_sentinel, 16);
       LOG_TRACE ("r11_sentinel: ");
       LOG_TRACE_TF (r11_sentinel, 16)
     }
+
     dwg->header.entities_start = dat->byte;
     LOG_TRACE ("\nentities 0x%x:\n", dwg->header.entities_start);
     dwg->cur_index = 0;
