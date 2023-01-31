@@ -1459,7 +1459,8 @@ DWG_ENTITY (LINE)
     } else {
       FIELD_2RD (start, 10)
       FIELD_2RD (end, 11)
-      if (obj->size >= 56 && _ent->flag_r11 == FLAG_R11_HAS_ELEVATION) // GH #586
+      if (((! R11OPTS (1) && obj->size >= 56) || (R11OPTS (1) && obj->size >= 80))
+        && _ent->flag_r11 == FLAG_R11_HAS_ELEVATION) // GH #586
         FIELD_2RD (unknown_r11, 0)
     }
   }
