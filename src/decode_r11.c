@@ -252,6 +252,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   long unsigned int pos = tbl->address;
   BITCODE_RC flag;
   BITCODE_TF name;
+  BITCODE_RSd used;
   unsigned long oldpos = dat->byte;
 
   LOG_TRACE ("contents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n",
@@ -498,6 +499,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             name = bit_read_TF (dat, 32);
             if (!name)
               return DWG_ERR_INVALIDDWG;
+            SINCE (R_11)
+              used = (BITCODE_RSd)bit_read_RS (dat);
             ucsorg.x = bit_read_RD (dat);
             ucsorg.y = bit_read_RD (dat);
             ucsorg.z = bit_read_RD (dat);
@@ -515,9 +518,11 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             obj->size = tbl->size;
             obj->address = pos;
             _obj->flag = flag;
+            _obj->used = used;
             LOG_TRACE ("flag: %u [RC 70]\n", flag);
             LOG_FLAG_UCS
             LOG_TRACE ("name: \"%s\" [TF 32 2]\n", name);
+            LOG_TRACE ("used: " FORMAT_RSd " [RSd %d]\n", _obj->used, 0);
             LOG_TRACE ("ucsorg: (%f %f %f) [3RD]\n", ucsorg.x, ucsorg.y, ucsorg.z);
             LOG_TRACE ("ucsxdir: (%f %f %f) [3RD]\n", ucsxdir.x, ucsxdir.y, ucsxdir.z);
             LOG_TRACE ("ucsydir: (%f %f %f) [3RD]\n", ucsydir.x, ucsydir.y, ucsydir.z);
