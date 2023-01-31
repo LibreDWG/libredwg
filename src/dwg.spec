@@ -1356,8 +1356,8 @@ DWG_ENTITY (POLYLINE_3D)
     //  FIELD_RD (start_width, 40);
     //if (R11OPTS (4))
     //  FIELD_RS (curve_type, 75);
-    //if (R11OPTS (8))
-    //  FIELD_RD (end_width, 41);
+    if (R11OPTS (8))
+      FIELD_3RD (extrusion, 210);
     if (R11OPTS (16)) { // 3dmesh only
       FIELD_RC (curve_type, 75);
       LOG_POLYLINE_CURVETYPE
