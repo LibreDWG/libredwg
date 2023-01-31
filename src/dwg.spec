@@ -3460,12 +3460,6 @@ DWG_OBJECT (BLOCK_HEADER)
 
   PRE (R_13b1)
   {
-    SINCE (R_11)
-    {
-#ifndef IS_JSON
-      FIELD_RSd (used, 0); // -1
-#endif
-    }
     FIELD_RLx (block_offset_r11, 0);
     DECODER_OR_ENCODER {
       if (_obj->block_offset_r11 >= 0x40000000)
@@ -3592,8 +3586,6 @@ DWG_OBJECT (LAYER)
 
   COMMON_TABLE_FLAGS (Layer);
   PRE (R_13b1) {
-    SINCE (R_11)
-      FIELD_RSd (used, 0);
     FIELD_CMC (color, 62);
     FIELD_HANDLE (ltype, 2, 6);
     if (obj->size == 38)
@@ -3719,8 +3711,6 @@ DWG_OBJECT (STYLE)
     }
   }
   PRE (R_13b1) {
-    SINCE (R_11)
-      FIELD_RSd (used, 0);
     FIELD_RD (text_size, 40);
     FIELD_RD (width_factor, 41);
     FIELD_RD (oblique_angle, 50);
@@ -3801,10 +3791,6 @@ DWG_OBJECT (LTYPE)
   COMMON_TABLE_FLAGS (Linetype)
 
   PRE (R_13b1) {
-#ifndef IS_JSON
-    if (dwg->header.version == R_11)
-      FIELD_RSd (used, 0); // -1
-#endif
     FIELD_TFv (description, 48, 3);
   }
   LATER_VERSIONS {
@@ -3945,8 +3931,6 @@ DWG_OBJECT (VIEW)
   // subclass AbstractViewTableRecord:
   PRE (R_13b1)
   {
-    SINCE (R_11)
-      FIELD_RSd (used, 0);
     FIELD_RD (VIEWSIZE, 40);
     FIELD_2RD (VIEWCTR, 10);
     if (obj->size == 58)
