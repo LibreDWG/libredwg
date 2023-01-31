@@ -1,4 +1,4 @@
-# example dwgadd file. strings are utf8 and must not exceed length 255
+# example dwgadd file for r1.4. strings are utf8 and must not exceed length 255
 point (2 0 0)
 text "test" (0.0 1.0 0.0) 8
 block "bloko"

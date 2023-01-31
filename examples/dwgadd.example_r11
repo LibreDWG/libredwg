@@ -1,12 +1,12 @@
-# example dwgadd file. strings are utf8 and must not exceed length 255
+# example dwgadd file for r11. strings are utf8 and must not exceed length 255
 point (2 0 0)
 text "test" (0.0 1.0 0.0) 8
-attdef 8 0 "prompt" (0.0 1.0 0.0) "tag" "default_text"
-attribute 8 0 "prompt" (0.0 1.0 0.0) "tag" "text"
 block "bloko"
+attdef 8 0 "prompt" (0.0 1.0 0.0) "tag" "default_text"
 line (0 1 0) (1 1 0)
 endblk
 insert (0 1 0) "bloko" 1 1 1 0
+attrib.text = "text1"
 polyline_2d 2 ((0 1) (1 1))
 polyline_3d 2 ((0 1 0) (1 1 0))
 lwpolyline 2 ((0 1) (1 1))
