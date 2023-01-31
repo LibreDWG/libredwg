@@ -3258,7 +3258,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     calc_crc32 = bit_calc_CRC32 (0, &decrypted_data[0], 0x6c);
     _obj->crc32 = crc32;
     if (calc_crc32 != crc32)
-      LOG_INFO ("r2004_file_header CRC32 mismatch 0x%08x != 0x%08x (TODO)\n",
+      LOG_INFO ("r2004_file_header CRC32 mismatch 0x%08x != 0x%08x\n",
                 calc_crc32, crc32)
   }
 
@@ -3280,6 +3280,26 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     assert (dwg->r2004_header.section_map_address);
     dat->byte = dwg->r2004_header.section_map_address + 0x100;
     start = dwg->r2004_header.section_map_address;
+    // Some section_map_address overflow past the dwg. GH #617
+    // maybe search the magic type backwards then. (in 0x20 page boundary steps)
+    // e.g. 1344464555_1_2004
+    if (start > dat->size) {
+      BITCODE_RL section_type;
+      start = dat->size & 0xffffff00;
+      LOG_INFO ("Searching for the Section Page Map backwards @%x ...\n",
+                start - 0x20);
+      do
+        {
+          start -= 0x20;
+          dat->byte = start;
+          section_type = bit_read_RL (dat);
+          LOG_INSANE ("section_type: " FORMAT_RLx " @%lx\n",
+                      section_type, dat->byte - 4)
+        }
+      while (section_type != 0x41630e3b && dat->byte > 0x120);
+      if (section_type != 0x41630e3b)
+        LOG_INFO ("Not found\n")
+    }
     map = &dat->chain[start];
     LOG_INSANE ("section_map_address: 0x%x + 0x100:\n", start)
     LOG_INSANE_TF (map, 0x100)
