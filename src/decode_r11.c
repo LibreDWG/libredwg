@@ -302,7 +302,9 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     LOG_TRACE ("flag: %u [RC 70]\n", flag);                                   \
     LOG_FLAG_##token;                                                         \
     LOG_TRACE ("name: \"%s\" [TF 32 2]\n", name);                             \
-    free (name)
+    free (name);                                                              \
+    if (dwg->header.version == R_11)                                          \
+      FIELD_RSd (used, 0);
 
 #  define LOG_FLAG_BLOCK LOG_FLAG_Block
 #  define LOG_FLAG_LAYER LOG_FLAG_Layer
@@ -386,8 +388,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         {
           Bit_Chain *str_dat = dat;
           PREP_TABLE (LAYER);
-          SINCE (R_11)
-            FIELD_RSd (used, 0);
           FIELD_CMC (color, 62); // off if negative
           FIELD_HANDLE (ltype, 2, 6);
           if (tbl->size == 38)
@@ -401,8 +401,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       for (i = 0; i < tbl->number; i++)
         {
           PREP_TABLE (STYLE);
-          SINCE (R_11)
-            FIELD_RSd (used, 0);
           FIELD_RD (text_size, 40); // ok
           FIELD_RD (width_factor, 41);
           FIELD_RD (oblique_angle, 50);
@@ -424,8 +422,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             bit_reset_chain (dat);
             {
               PREP_TABLE (LTYPE);
-              if (dwg->header.version == R_11)
-                FIELD_RSd (used, 0); // -1
               FIELD_TFv (description, 48, 3);
               FIELD_RC (alignment, 72);
               FIELD_RCu (num_dashes, 73); //
@@ -451,8 +447,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         for (i = 0; i < tbl->number; i++)
           {
             PREP_TABLE (VIEW);
-            SINCE (R_11)
-              FIELD_RSd (used, 0);
             FIELD_RD (VIEWSIZE, 40);
             FIELD_2RD (VIEWCTR, 10);
             if (obj->size == 58)
