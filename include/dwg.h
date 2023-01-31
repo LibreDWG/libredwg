@@ -8411,6 +8411,7 @@ typedef struct _dwg_object_entity
   {
     Dwg_Entity_UNUSED *UNUSED;
     Dwg_DIMENSION_common *DIMENSION_common;
+    // clang-format off
     /* Start auto-generated entity-union. Do not touch. */
     Dwg_Entity__3DFACE *_3DFACE;
     Dwg_Entity__3DSOLID *_3DSOLID;
@@ -8511,6 +8512,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_XYGRIPENTITY *XYGRIPENTITY;
     Dwg_Entity_XYPARAMETERENTITY *XYPARAMETERENTITY;
     /* End auto-generated entity-union */
+    // clang-format on
   } tio;
 
   struct _dwg_struct *dwg;
@@ -8579,6 +8581,7 @@ typedef struct _dwg_object_object
   BITCODE_BL objid; /*!< link to the parent */
   union
   {
+    // clang-format off
     /* Start auto-generated object-union. Do not touch. */
     Dwg_Object_APPID *APPID;
     Dwg_Object_APPID_CONTROL *APPID_CONTROL;
@@ -8810,6 +8813,7 @@ typedef struct _dwg_object_object
 //    Dwg_Object_RAPIDRTRENDERENVIRONMENT *RAPIDRTRENDERENVIRONMENT;
 //    Dwg_Object_XREFPANELOBJECT *XREFPANELOBJECT;
     /* End auto-generated object-union */
+    // clang-format on
   } tio;
 
   struct _dwg_struct *dwg;
@@ -9813,6 +9817,7 @@ EXPORT int dwg_object_name (const char *const restrict name, // in
     Use dwg_encode_get_class for the variable types.
     Returns 0 or DWG_ERR_OUTOFMEM.
 */
+// clang-format off
 /* Start auto-generated content. Do not touch. */
 EXPORT int dwg_setup__3DFACE (Dwg_Object *obj);
 EXPORT int dwg_setup__3DSOLID (Dwg_Object *obj);
@@ -10140,6 +10145,7 @@ EXPORT int dwg_setup_ASSOCARRAYRECTANGULARPARAMETERS (Dwg_Object *obj);
   //EXPORT int dwg_setup_XREFPANELOBJECT (Dwg_Object *obj);
 #endif
 /* End auto-generated content */
+// clang-format on
 
 #ifdef __cplusplus
 }

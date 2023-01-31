@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2020-2022 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2020-2023 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -49,7 +49,9 @@ static unsigned int loglevel;
 // accepts only ASCII strings, for fuzzing only
 #ifdef HAVE_SSCANF_S
 #  define SSCANF_S sscanf_s
+// clang-format off
 #  define SZ ,119
+// clang-format on
 #  define FMT_NAME "%[a-zA-Z0-9_]"
 #  define FMT_TBL "\"%[a-zA-Z0-9._ -]\""
 #  define FMT_PATH "\"%[a-zA-Z0-9_. \\-]\""
@@ -543,6 +545,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       Dwg_Entity_DIMENSION_ANG2LN *dimang2ln;
       Dwg_Entity_DIMENSION_ANG3PT *dimang3pt;
       Dwg_Entity_BLOCK *block;
+      Dwg_Entity_ENDBLK *endblk;
       Dwg_Entity__3DFACE *_3dface;
       Dwg_Entity__3DSOLID *_3dsolid;
       Dwg_Entity_SOLID *solid;
@@ -570,7 +573,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       Dwg_Object_GROUP *group;
     } u;
   } lastent_t;
-  lastent_t ent;
+  lastent_t ent, insert;
   char text[120];
   char prompt[120];
   char tag[120];
@@ -764,20 +767,20 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
     {                                                                         \
       BITCODE_H hdl;                                                          \
       if (!ent.u.var || ent.type != DWG_TYPE_##name)                          \
-        fn_error ("Invalid type " #var ". Empty or wrong type\n");            \
+        fn_error ("Invalid type " #var ". Empty or wrong handle type\n");     \
       hdl = dwg_add_handleref (dwg, i1, u, NULL);                             \
       dwg_dynapi_entity_set_value (ent.u.var, #name, s1, hdl, 0);             \
     }                                                                         \
   else if (SSCANF_S (p, #var "." FMT_NAME " = %d", &s1[0] SZ, &i1))           \
     {                                                                         \
       if (!ent.u.var || ent.type != DWG_TYPE_##name)                          \
-        fn_error ("Invalid type " #var ". Empty or wrong type\n");            \
+        fn_error ("Invalid type " #var ". Empty or wrong int type\n");        \
       dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &i1, 0);             \
     }                                                                         \
   else if (SSCANF_S (p, #var "." FMT_NAME " = %lf", &s1[0] SZ, &f1))          \
     {                                                                         \
       if (!ent.u.var || ent.type != DWG_TYPE_##name)                          \
-        fn_error ("Invalid type " #var ". Empty or wrong type\n");            \
+        fn_error ("Invalid type " #var ". Empty or wrong float type\n");      \
       dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &f1, 0);             \
     }                                                                         \
   else if (SSCANF_S (p, #var "." FMT_NAME " = " FMT_ANY, &s1[0] SZ,           \
@@ -799,24 +802,32 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         {
           hdr = mspace->tio.object->tio.BLOCK_HEADER;
         }
-      else if (SSCANF_S (p, "attdef %lf %d " FMT_TBL " (%lf %lf %lf) " FMT_TBL " " FMT_TBL,
+      else if (SSCANF_S (p,
+                         "attdef %lf %d " FMT_TBL " (%lf %lf %lf) " FMT_TBL
+                         " " FMT_TBL,
                          &height, &flags, &prompt[0] SZ, &pt1.x, &pt1.y,
-                         &pt1.z, &tag[0] SZ, &default_text[0] SZ)) {
-        if (version < R_2_0b)
-          fn_error ("Invalid entity ATTDEF\n");
-        else
-          ent = (lastent_t){ .u.attdef = dwg_add_ATTDEF (hdr, height, flags,
-                                                         prompt, &pt1, tag,
-                                                         default_text),
-                             .type = DWG_TYPE_ATTDEF };
-      } else
-        SET_ENT (attdef, ATTDEF)
-      else if (SSCANF_S (p, "line (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
-                         &pt1.z, &pt2.x, &pt2.y, &pt2.z))
-        ent = (lastent_t){ .u.line = dwg_add_LINE (hdr, &pt1, &pt2),
-                           .type = DWG_TYPE_LINE };
+                         &pt1.z, &tag[0] SZ, &default_text[0] SZ))
+        {
+          if (version < R_2_0b)
+            fn_error ("Invalid entity ATTDEF\n");
+          else
+            ent = (lastent_t){ .u.attdef
+                               = dwg_add_ATTDEF (hdr, height, flags, prompt,
+                                                 &pt1, tag, default_text),
+                               .type = DWG_TYPE_ATTDEF };
+        }
       else
+        // clang-format off
+        SET_ENT (attdef, ATTDEF)
+      // clang-format on
+      else if (SSCANF_S (p, "line (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
+                         &pt1.z, &pt2.x, &pt2.y, &pt2.z)) ent
+          = (lastent_t){ .u.line = dwg_add_LINE (hdr, &pt1, &pt2),
+                         .type = DWG_TYPE_LINE };
+      else
+          // clang-format off
         SET_ENT (line, LINE)
+      // clang-format on
       else if (SSCANF_S (p, "ray (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
                          &pt1.z, &pt2.x, &pt2.y, &pt2.z))
       {
@@ -826,10 +837,12 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           ent = (lastent_t){ .u.ray = dwg_add_RAY (hdr, &pt1, &pt2),
                              .type = DWG_TYPE_RAY };
       }
-      else SET_ENT (
-          ray, RAY) else if (SSCANF_S (p, "xline (%lf %lf %lf) (%lf %lf %lf)",
-                                       &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y,
-                                       &pt2.z))
+      else
+          // clang-format off
+        SET_ENT (ray, RAY)
+      // clang-format on
+      else if (SSCANF_S (p, "xline (%lf %lf %lf) (%lf %lf %lf)", &pt1.x,
+                         &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z))
       {
         if (version <= R_11)
           fn_error ("Invalid entity XLINE\n");
@@ -837,21 +850,24 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           ent = (lastent_t){ .u.xline = dwg_add_XLINE (hdr, &pt1, &pt2),
                              .type = DWG_TYPE_XLINE };
       }
-      else SET_ENT (xline, XLINE) else if (SSCANF_S (p,
-                                                     "text " FMT_ANY
-                                                     " (%lf %lf %lf) %lf",
-                                                     &text[0] SZ, &pt1.x,
-                                                     &pt1.y, &pt1.z, &height))
+      else
+          // clang-format off
+        SET_ENT (xline, XLINE)
+      // clang-format on
+      else if (SSCANF_S (p, "text " FMT_ANY " (%lf %lf %lf) %lf", &text[0] SZ,
+                         &pt1.x, &pt1.y, &pt1.z, &height))
       {
         if (strlen (text) && text[strlen (text) - 1] == '"')
           text[strlen (text) - 1] = '\0'; // strip the \"
         ent = (lastent_t){ .u.text = dwg_add_TEXT (hdr, text, &pt1, height),
                            .type = DWG_TYPE_TEXT };
       }
-      else SET_ENT (
-          text, TEXT) else if (SSCANF_S (p, "mtext (%lf %lf %lf) %lf " FMT_ANY,
-                                         &pt1.x, &pt1.y, &pt1.z, &height,
-                                         &text[0] SZ))
+      else
+          // clang-format off
+        SET_ENT (text, TEXT)
+      // clang-format on
+      else if (SSCANF_S (p, "mtext (%lf %lf %lf) %lf " FMT_ANY, &pt1.x, &pt1.y,
+                         &pt1.z, &height, &text[0] SZ))
       {
         if (strlen (text) && text[strlen (text) - 1] == '"')
           text[strlen (text) - 1] = '\0'; // strip the \"
@@ -862,144 +878,231 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                              = dwg_add_MTEXT (hdr, &pt1, height, text),
                              .type = DWG_TYPE_MTEXT };
       }
-      else SET_ENT (
-          mtext, MTEXT) else if (SSCANF_S (p, "block " FMT_TBL, &text[0] SZ))
+      else
+          // clang-format off
+        SET_ENT (mtext, MTEXT)
+      // clang-format on
+      else if (SSCANF_S (p, "block " FMT_TBL, &text[0] SZ))
       {
         if (strlen (text) && text[strlen (text) - 1] == '"')
           text[strlen (text) - 1] = '\0'; // strip the \"
         ent = (lastent_t){ .u.block = dwg_add_BLOCK (hdr, text),
                            .type = DWG_TYPE_BLOCK };
       }
-      else SET_ENT (block, BLOCK) else if (memBEGINc (p, "endblk\n"))
-          dwg_add_ENDBLK (hdr);
+      else
+          // clang-format off
+        SET_ENT (block, BLOCK)
+      // clang-format on
+      else if (memBEGINc (p, "endblk\n")) dwg_add_ENDBLK (hdr);
+      else
+          // clang-format off
+        SET_ENT (endblk, ENDBLK)
+      // clang-format on
       else if (SSCANF_S (p, "insert (%lf %lf %lf) " FMT_TBL " %lf %lf %lf %lf",
                          &pt1.x, &pt1.y, &pt1.z, &text[0] SZ, &scale.x,
-                         &scale.y, &scale.z, &rot)) ent
-          = (lastent_t){ .u.insert
-                         = dwg_add_INSERT (hdr, &pt1, text, scale.x, scale.y,
-                                           scale.z, deg2rad (rot)),
-                         .type = DWG_TYPE_INSERT };
-      else SET_ENT (insert,
-                    INSERT) else if (SSCANF_S (p,
-                                               "minsert (%lf %lf %lf) " FMT_TBL
-                                               " %lf %lf %lf %lf %d %d "
-                                               "%lf %lf",
-                                               &pt1.x, &pt1.y, &pt1.z,
-                                               &text[0] SZ, &scale.x, &scale.y,
-                                               &scale.z, &rot, &i1, &i2, &f1,
-                                               &f2))
+                         &scale.y, &scale.z, &rot))
+      {
+        insert = ent = (lastent_t){ .u.insert = dwg_add_INSERT (
+                                        hdr, &pt1, text, scale.x, scale.y,
+                                        scale.z, deg2rad (rot)),
+                                    .type = DWG_TYPE_INSERT };
+      }
+      else
+          // clang-format off
+        SET_ENT (insert, INSERT)
+      // clang-format on
+      else if (SSCANF_S (p,
+                         "minsert (%lf %lf %lf) " FMT_TBL
+                         " %lf %lf %lf %lf %d %d "
+                         "%lf %lf",
+                         &pt1.x, &pt1.y, &pt1.z, &text[0] SZ, &scale.x,
+                         &scale.y, &scale.z, &rot, &i1, &i2, &f1, &f2))
       {
         if (version <= R_11)
           fn_error ("Invalid entity MINSERT\n");
         else
-          ent = (lastent_t){ .u.minsert = dwg_add_MINSERT (
-                                 hdr, &pt1, text, scale.x, scale.y, scale.z,
-                                 deg2rad (rot), i1, i2, f1, f2),
-                             .type = DWG_TYPE_MINSERT };
+          {
+            insert = ent
+                = (lastent_t){ .u.minsert = dwg_add_MINSERT (
+                                   hdr, &pt1, text, scale.x, scale.y, scale.z,
+                                   deg2rad (rot), i1, i2, f1, f2),
+                               .type = DWG_TYPE_MINSERT };
+          }
       }
-      else SET_ENT (minsert,
-                    MINSERT) else if (SSCANF_S (p, "point (%lf %lf %lf)",
-                                                &pt1.x, &pt1.y, &pt1.z)) ent
-          = (lastent_t){ .u.point = dwg_add_POINT (hdr, &pt1),
-                         .type = DWG_TYPE_POINT };
-      else SET_ENT (point,
-                    POINT) else if (SSCANF_S (p, "circle (%lf %lf %lf) %lf",
-                                              &pt1.x, &pt1.y, &pt1.z, &f1)) ent
-          = (lastent_t){ .u.circle = dwg_add_CIRCLE (hdr, &pt1, f1),
-                         .type = DWG_TYPE_CIRCLE };
-      else SET_ENT (circle,
-                    CIRCLE) else if (SSCANF_S (p,
-                                               "arc (%lf %lf %lf) %lf %lf %lf",
-                                               &pt1.x, &pt1.y, &pt1.z, &f1,
-                                               &f2, &height)) ent
-          = (lastent_t){ .u.arc = dwg_add_ARC (hdr, &pt1, f1, deg2rad (f2), deg2rad (height)),
-                         .type = DWG_TYPE_ARC };
-      else SET_ENT (arc, ARC) else if (
-          SSCANF_S (p,
-                    "dimension_aligned (%lf %lf %lf) (%lf %lf %lf) (%lf "
-                    "%lf %lf)",
-                    &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
-                    &pt3.y, &pt3.z)) ent
-          = (lastent_t){ .u.dimali
-                         = dwg_add_DIMENSION_ALIGNED (hdr, &pt1, &pt2, &pt3),
-                         .type = DWG_TYPE_DIMENSION_ALIGNED };
-      else SET_ENT (dimali, DIMENSION_ALIGNED) else if (
-          SSCANF_S (p,
-                    "dimension_linear (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
-                    "%lf) %lf",
-                    &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
-                    &pt3.y, &pt3.z, &rot)) ent
-          = (lastent_t){ .u.dimlin = dwg_add_DIMENSION_LINEAR (
-                             hdr, &pt1, &pt2, &pt3, deg2rad (rot)),
-                         .type = DWG_TYPE_DIMENSION_LINEAR };
-      else SET_ENT (dimlin, DIMENSION_LINEAR) else if (
-          SSCANF_S (p,
-                    "dimension_ang2ln (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
-                    "%lf) (%lf %lf %lf)",
-                    &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
-                    &pt3.y, &pt3.z, &pt4.x, &pt4.y, &pt4.z)) ent
-          = (lastent_t){ .u.dimang2ln = dwg_add_DIMENSION_ANG2LN (
-                             hdr, &pt1, &pt2, &pt3, &pt4),
-                         .type = DWG_TYPE_DIMENSION_ANG2LN };
-      else SET_ENT (dimang2ln, DIMENSION_ANG2LN) else if (
-          SSCANF_S (p,
-                    "dimension_ang3pt (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
-                    "%lf) (%lf %lf %lf)",
-                    &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
-                    &pt3.y, &pt3.z, &pt4.x, &pt4.y, &pt4.z)) ent
-          = (lastent_t){ .u.dimang3pt = dwg_add_DIMENSION_ANG3PT (
-                             hdr, &pt1, &pt2, &pt3, &pt4),
-                         .type = DWG_TYPE_DIMENSION_ANG3PT };
-      else SET_ENT (dimang3pt, DIMENSION_ANG3PT) else if (
-          SSCANF_S (p, "dimension_diameter (%lf %lf %lf) (%lf %lf %lf) %lf",
-                    &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len)) ent
-          = (lastent_t){ .u.dimdia
-                         = dwg_add_DIMENSION_DIAMETER (hdr, &pt1, &pt2, len),
-                         .type = DWG_TYPE_DIMENSION_DIAMETER };
-      else SET_ENT (dimdia, DIMENSION_DIAMETER) else if (
-          SSCANF_S (p, "dimension_ordinate (%lf %lf %lf) (%lf %lf %lf) %d",
-                    &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &i1)) ent
-          = (lastent_t){ .u.dimord = dwg_add_DIMENSION_ORDINATE (
-                             hdr, &pt1, &pt2, i1 ? true : false),
-                         .type = DWG_TYPE_DIMENSION_ORDINATE };
-      else SET_ENT (dimord, DIMENSION_ORDINATE) else if (
-          SSCANF_S (p, "dimension_radius (%lf %lf %lf) (%lf %lf %lf) %lf",
-                    &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len)) ent
+      else
+          // clang-format off
+        SET_ENT (minsert, MINSERT)
+      // clang-format on
+      else if (SSCANF_S (p, "point (%lf %lf %lf)", &pt1.x, &pt1.y, &pt1.z))
+      {
+        ent = (lastent_t){ .u.point = dwg_add_POINT (hdr, &pt1),
+                           .type = DWG_TYPE_POINT };
+      }
+      else
+          // clang-format off
+        SET_ENT (point, POINT)
+      // clang-format on
+      else if (SSCANF_S (p, "circle (%lf %lf %lf) %lf", &pt1.x, &pt1.y, &pt1.z,
+                         &f1))
+      {
+        ent = (lastent_t){ .u.circle = dwg_add_CIRCLE (hdr, &pt1, f1),
+                           .type = DWG_TYPE_CIRCLE };
+      }
+      else
+          // clang-format off
+        SET_ENT (circle, CIRCLE)
+      // clang-format on
+      else if (SSCANF_S (p, "arc (%lf %lf %lf) %lf %lf %lf", &pt1.x, &pt1.y,
+                         &pt1.z, &f1, &f2, &height))
+      {
+        ent = (lastent_t){ .u.arc = dwg_add_ARC (hdr, &pt1, f1, deg2rad (f2),
+                                                 deg2rad (height)),
+                           .type = DWG_TYPE_ARC };
+      }
+      else
+          // clang-format off
+        SET_ENT (arc, ARC)
+      // clang-format on
+      else if (SSCANF_S (p,
+                         "dimension_aligned (%lf %lf %lf) (%lf %lf %lf) (%lf "
+                         "%lf %lf)",
+                         &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
+                         &pt3.x, &pt3.y, &pt3.z))
+      {
+        ent = (lastent_t){ .u.dimali
+                           = dwg_add_DIMENSION_ALIGNED (hdr, &pt1, &pt2, &pt3),
+                           .type = DWG_TYPE_DIMENSION_ALIGNED };
+      }
+      else
+          // clang-format off
+        SET_ENT (dimali, DIMENSION_ALIGNED)
+      // clang-format on
+      else if (SSCANF_S (
+                   p,
+                   "dimension_linear (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
+                   "%lf) %lf",
+                   &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
+                   &pt3.y, &pt3.z, &rot))
+      {
+        ent = (lastent_t){ .u.dimlin = dwg_add_DIMENSION_LINEAR (
+                               hdr, &pt1, &pt2, &pt3, deg2rad (rot)),
+                           .type = DWG_TYPE_DIMENSION_LINEAR };
+      }
+      else
+          // clang-format off
+        SET_ENT (dimlin, DIMENSION_LINEAR)
+      // clang-format on
+      else if (SSCANF_S (
+                   p,
+                   "dimension_ang2ln (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
+                   "%lf) (%lf %lf %lf)",
+                   &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
+                   &pt3.y, &pt3.z, &pt4.x, &pt4.y, &pt4.z))
+      {
+        ent = (lastent_t){ .u.dimang2ln = dwg_add_DIMENSION_ANG2LN (
+                               hdr, &pt1, &pt2, &pt3, &pt4),
+                           .type = DWG_TYPE_DIMENSION_ANG2LN };
+      }
+      else
+          // clang-format off
+        SET_ENT (dimang2ln, DIMENSION_ANG2LN)
+      // clang-format on
+      else if (SSCANF_S (
+                   p,
+                   "dimension_ang3pt (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
+                   "%lf) (%lf %lf %lf)",
+                   &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
+                   &pt3.y, &pt3.z, &pt4.x, &pt4.y, &pt4.z))
+      {
+        ent = (lastent_t){ .u.dimang3pt = dwg_add_DIMENSION_ANG3PT (
+                               hdr, &pt1, &pt2, &pt3, &pt4),
+                           .type = DWG_TYPE_DIMENSION_ANG3PT };
+      }
+      else
+          // clang-format off
+        SET_ENT (dimang3pt, DIMENSION_ANG3PT)
+      // clang-format on
+      else if (SSCANF_S (p,
+                         "dimension_diameter (%lf %lf %lf) (%lf %lf %lf) %lf",
+                         &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len))
+      {
+        ent = (lastent_t){ .u.dimdia
+                           = dwg_add_DIMENSION_DIAMETER (hdr, &pt1, &pt2, len),
+                           .type = DWG_TYPE_DIMENSION_DIAMETER };
+      }
+      else
+          // clang-format off
+        SET_ENT (dimdia, DIMENSION_DIAMETER)
+      // clang-format on
+      else if (SSCANF_S (p,
+                         "dimension_ordinate (%lf %lf %lf) (%lf %lf %lf) %d",
+                         &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &i1))
+      {
+        ent = (lastent_t){ .u.dimord = dwg_add_DIMENSION_ORDINATE (
+                               hdr, &pt1, &pt2, i1 ? true : false),
+                           .type = DWG_TYPE_DIMENSION_ORDINATE };
+      }
+      else
+          // clang-format off
+        SET_ENT (dimord, DIMENSION_ORDINATE)
+      // clang-format on
+      else if (SSCANF_S (p, "dimension_radius (%lf %lf %lf) (%lf %lf %lf) %lf",
+                         &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len))
+          ent
           = (lastent_t){ .u.dimrad
                          = dwg_add_DIMENSION_RADIUS (hdr, &pt1, &pt2, len),
                          .type = DWG_TYPE_DIMENSION_RADIUS };
-      else SET_ENT (dimrad, DIMENSION_RADIUS) else if (
-          SSCANF_S (p,
-                    "3dface (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
-                    "%lf) (%lf %lf %lf)",
-                    &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
-                    &pt3.y, &pt3.z, &pt4.x, &pt4.y, &pt4.z)) ent
-          = (lastent_t){ .u._3dface
-                         = dwg_add_3DFACE (hdr, &pt1, &pt2, &pt3, &pt4),
-                         .type = DWG_TYPE__3DFACE };
+      else
+          // clang-format off
+        SET_ENT (dimrad, DIMENSION_RADIUS)
+      // clang-format on
+      else if (SSCANF_S (p,
+                         "3dface (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
+                         "%lf) (%lf %lf %lf)",
+                         &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
+                         &pt3.x, &pt3.y, &pt3.z, &pt4.x, &pt4.y, &pt4.z))
+      {
+        ent = (lastent_t){ .u._3dface
+                           = dwg_add_3DFACE (hdr, &pt1, &pt2, &pt3, &pt4),
+                           .type = DWG_TYPE__3DFACE };
+      }
       else if (SSCANF_S (p,
                          "3dface (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
                          "%lf)",
                          &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
-                         &pt3.x, &pt3.y, &pt3.z)) ent
-          = (lastent_t){ .u._3dface
-                         = dwg_add_3DFACE (hdr, &pt1, &pt2, &pt3, NULL),
-                         .type = DWG_TYPE__3DFACE };
-      else SET_ENT (_3dface, _3DFACE) else if (
-          SSCANF_S (p, "solid (%lf %lf %lf) (%lf %lf) (%lf %lf)  (%lf %lf)",
-                    &pt1.x, &pt1.y, &pt1.z, &p2.x, &p2.y, &p3.x, &p3.y, &p4.x,
-                    &p4.y)) ent
-          = (lastent_t){ .u.solid = dwg_add_SOLID (hdr, &pt1, &p2, &p3, &p4),
-                         .type = DWG_TYPE_SOLID };
-      else SET_ENT (solid, SOLID) else if (
-          SSCANF_S (p, "trace (%lf %lf %lf) (%lf %lf) (%lf %lf)  (%lf %lf)",
-                    &pt1.x, &pt1.y, &pt1.z, &p2.x, &p2.y, &p3.x, &p3.y, &p4.x,
-                    &p4.y)) ent
+                         &pt3.x, &pt3.y, &pt3.z))
+      {
+        ent = (lastent_t){ .u._3dface
+                           = dwg_add_3DFACE (hdr, &pt1, &pt2, &pt3, NULL),
+                           .type = DWG_TYPE__3DFACE };
+      }
+      else
+          // clang-format off
+        SET_ENT (_3dface, _3DFACE)
+      // clang-format on
+      else if (SSCANF_S (p,
+                         "solid (%lf %lf %lf) (%lf %lf) (%lf %lf)  (%lf %lf)",
+                         &pt1.x, &pt1.y, &pt1.z, &p2.x, &p2.y, &p3.x, &p3.y,
+                         &p4.x, &p4.y))
+      {
+        ent = (lastent_t){ .u.solid = dwg_add_SOLID (hdr, &pt1, &p2, &p3, &p4),
+                           .type = DWG_TYPE_SOLID };
+      }
+      else
+          // clang-format off
+        SET_ENT (solid, SOLID)
+      // clang-format on
+      else if (SSCANF_S (p,
+                         "trace (%lf %lf %lf) (%lf %lf) (%lf %lf)  (%lf %lf)",
+                         &pt1.x, &pt1.y, &pt1.z, &p2.x, &p2.y, &p3.x, &p3.y,
+                         &p4.x, &p4.y)) ent
           = (lastent_t){ .u.trace = dwg_add_TRACE (hdr, &pt1, &p2, &p3, &p4),
                          .type = DWG_TYPE_TRACE };
-      else SET_ENT (trace,
-                    TRACE) else if (SSCANF_S (p, "polyline_2d %d ((%lf %lf)",
-                                              &i1, &pt1.x, &pt1.y))
+      else
+          // clang-format off
+        SET_ENT (trace, TRACE)
+      // clang-format on
+      else if (SSCANF_S (p, "polyline_2d %d ((%lf %lf)", &i1, &pt1.x, &pt1.y))
       {
         dwg_point_2d *pts = scan_pts2d (i1, &p);
         if (i1 && pts)
@@ -1010,10 +1113,12 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             free (pts);
           }
       }
-      else SET_ENT (
-          polyline_2d,
-          POLYLINE_2D) else if (SSCANF_S (p, "polyline_3d %d ((%lf %lf %lf)",
-                                          &i1, &pt1.x, &pt1.y, &pt1.z))
+      else
+          // clang-format off
+        SET_ENT (polyline_2d, POLYLINE_2D)
+      // clang-format on
+      else if (SSCANF_S (p, "polyline_3d %d ((%lf %lf %lf)", &i1, &pt1.x,
+                         &pt1.y, &pt1.z))
       {
         dwg_point_3d *pts = scan_pts3d (i1, &p);
         if (i1 && pts)
@@ -1024,11 +1129,12 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             free (pts);
           }
       }
-      else SET_ENT (
-          polyline_3d,
-          POLYLINE_3D) else if (SSCANF_S (p,
-                                          "polyline_mesh %d %d ((%lf %lf %lf)",
-                                          &i1, &i2, &pt1.x, &pt1.y, &pt1.z))
+      else
+          // clang-format off
+        SET_ENT (polyline_3d, POLYLINE_3D)
+      // clang-format on
+      else if (SSCANF_S (p, "polyline_mesh %d %d ((%lf %lf %lf)", &i1, &i2,
+                         &pt1.x, &pt1.y, &pt1.z))
       {
         dwg_point_3d *pts = scan_pts3d (i1 * i2, &p);
         if (i1 && i2 && pts)
@@ -1039,39 +1145,54 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             free (pts);
           }
       }
-      else SET_ENT (polyline_mesh,
-                    POLYLINE_MESH) else if (SSCANF_S (p,
-                                                      "dictionary " FMT_TBL
-                                                      " " FMT_TBL " %u",
-                                                      &text[0] SZ, &s1[0] SZ,
-                                                      &u)) ent
-          = (lastent_t){ .u.dictionary = dwg_add_DICTIONARY (dwg, text, s1,
-                                                             (unsigned long)u),
-                         .type = DWG_TYPE_DICTIONARY };
-      else SET_ENT (
-          dictionary,
-          DICTIONARY) else if (ent.type == DWG_TYPE_DICTIONARY
-                               && SSCANF_S (p, "xrecord dictionary " FMT_TBL,
-                                            &text[0] SZ)) ent
-          = (lastent_t){ .u.xrecord = dwg_add_XRECORD (ent.u.dictionary, text),
-                         .type = DWG_TYPE_SOLID };
-      else SET_ENT (xrecord,
-                    XRECORD) else if (SSCANF_S (p,
-                                                "shape " FMT_PATH
-                                                " (%lf %lf %lf) %lf %lf",
-                                                &text[0] SZ, &pt1.x, &pt1.y,
-                                                &pt1.z, &scale.x, &rot)) ent
-          = (lastent_t){ .u.shape = dwg_add_SHAPE (hdr, text, &pt1, scale.x,
-                                                   deg2rad (rot)),
-                         .type = DWG_TYPE_SHAPE };
-      else SET_ENT (shape, SHAPE) else if (SSCANF_S (p, "viewport " FMT_TBL,
-                                                     &text[0] SZ)) ent
-          = (lastent_t){ .u.viewport = dwg_add_VIEWPORT (hdr, text),
-                         .type = DWG_TYPE_SOLID };
-      else SET_ENT (
-          viewport,
-          VIEWPORT) else if (SSCANF_S (p, "ellipse (%lf %lf %lf) %lf %lf",
-                                       &pt1.x, &pt1.y, &pt1.z, &f1, &f2))
+      else
+          // clang-format off
+        SET_ENT (polyline_mesh, POLYLINE_MESH)
+      // clang-format on
+      else if (SSCANF_S (p, "dictionary " FMT_TBL " " FMT_TBL " %u",
+                         &text[0] SZ, &s1[0] SZ, &u))
+      {
+        ent = (lastent_t){ .u.dictionary = dwg_add_DICTIONARY (
+                               dwg, text, s1, (unsigned long)u),
+                           .type = DWG_TYPE_DICTIONARY };
+      }
+      else
+          // clang-format off
+        SET_ENT (dictionary, DICTIONARY)
+      // clang-format on
+      else if (ent.type == DWG_TYPE_DICTIONARY
+               && SSCANF_S (p, "xrecord dictionary " FMT_TBL, &text[0] SZ))
+      {
+        ent = (lastent_t){ .u.xrecord
+                           = dwg_add_XRECORD (ent.u.dictionary, text),
+                           .type = DWG_TYPE_SOLID };
+      }
+      else
+          // clang-format off
+        SET_ENT (xrecord, XRECORD)
+      // clang-format on
+      else if (SSCANF_S (p, "shape " FMT_PATH " (%lf %lf %lf) %lf %lf",
+                         &text[0] SZ, &pt1.x, &pt1.y, &pt1.z, &scale.x, &rot))
+      {
+        ent = (lastent_t){ .u.shape = dwg_add_SHAPE (hdr, text, &pt1, scale.x,
+                                                     deg2rad (rot)),
+                           .type = DWG_TYPE_SHAPE };
+      }
+      else
+          // clang-format off
+        SET_ENT (shape, SHAPE)
+      // clang-format on
+      else if (SSCANF_S (p, "viewport " FMT_TBL, &text[0] SZ))
+      {
+        ent = (lastent_t){ .u.viewport = dwg_add_VIEWPORT (hdr, text),
+                           .type = DWG_TYPE_SOLID };
+      }
+      else
+          // clang-format off
+        SET_ENT (viewport, VIEWPORT)
+      // clang-format on
+      else if (SSCANF_S (p, "ellipse (%lf %lf %lf) %lf %lf", &pt1.x, &pt1.y,
+                         &pt1.z, &f1, &f2))
       {
         if (version <= R_11)
           fn_error ("Invalid entity ELLIPSE\n");
@@ -1079,9 +1200,12 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           ent = (lastent_t){ .u.ellipse = dwg_add_ELLIPSE (hdr, &pt1, f1, f2),
                              .type = DWG_TYPE_ELLIPSE };
       }
-      else SET_ENT (ellipse,
-                    ELLIPSE) else if (SSCANF_S (p, "spline %d ((%lf %lf %lf)",
-                                                &i1, &pt1.x, &pt1.y, &pt1.z))
+      else
+          // clang-format off
+        SET_ENT (ellipse, ELLIPSE)
+      // clang-format on
+      else if (SSCANF_S (p, "spline %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y,
+                         &pt1.z))
       {
         if (version <= R_11)
           fn_error ("Invalid entity SPLINE\n");
@@ -1099,10 +1223,13 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             free (fitpts);
           }
       }
-      else SET_ENT (
-          spline, SPLINE) else if (ent.type == DWG_TYPE_MTEXT
-                                   && SSCANF_S (p, "leader %d ((%lf %lf %lf)",
-                                                &i1, &pt1.x, &pt1.y, &pt1.z))
+      else
+          // clang-format off
+        SET_ENT (spline, SPLINE)
+      // clang-format on
+      else if (ent.type == DWG_TYPE_MTEXT
+               && SSCANF_S (p, "leader %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y,
+                            &pt1.z))
       {
         if (version <= R_11)
           fn_error ("Invalid entity LEADER\n");
@@ -1118,12 +1245,14 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             free (pts);
           }
       }
-      else SET_ENT (leader,
-                    LEADER) else if (SSCANF_S (p,
-                                               "tolerance " FMT_TBL
-                                               " (%lf %lf %lf) (%lf %lf %lf)",
-                                               &text[0] SZ, &pt1.x, &pt1.y,
-                                               &pt1.z, &pt2.x, &pt2.y, &pt2.z))
+      else
+          // clang-format off
+        SET_ENT (leader, LEADER)
+      // clang-format on
+      else if (SSCANF_S (p,
+                         "tolerance " FMT_TBL " (%lf %lf %lf) (%lf %lf %lf)",
+                         &text[0] SZ, &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y,
+                         &pt2.z))
       {
         if (version <= R_11)
           fn_error ("Invalid entity TOLERANCE\n");
@@ -1132,9 +1261,11 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                              = dwg_add_TOLERANCE (hdr, text, &pt1, &pt2),
                              .type = DWG_TYPE_TOLERANCE };
       }
-      else SET_ENT (
-          tolerance,
-          TOLERANCE) else if (SSCANF_S (p, "mlinestyle " FMT_TBL, &text[0] SZ))
+      else
+          // clang-format off
+        SET_ENT (tolerance, TOLERANCE)
+      // clang-format on
+      else if (SSCANF_S (p, "mlinestyle " FMT_TBL, &text[0] SZ))
       {
         if (version <= R_11)
           fn_error ("Invalid entity MLINESTYLE\n");
@@ -1142,33 +1273,65 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           ent = (lastent_t){ .u.mlinestyle = dwg_add_MLINESTYLE (dwg, text),
                              .type = DWG_TYPE_MLINESTYLE };
       }
-      else SET_ENT (
-          mlinestyle,
-          MLINESTYLE) else if (SSCANF_S (p, "layer " FMT_TBL, &text[0] SZ)) ent
-          = (lastent_t){ .u.layer = dwg_add_LAYER (dwg, text),
-                         .type = DWG_TYPE_LAYER };
-      else SET_ENT (layer, LAYER) else if (SSCANF_S (p, "style " FMT_TBL,
-                                                     &text[0] SZ)) ent
-          = (lastent_t){ .u.style = dwg_add_STYLE (dwg, text),
-                         .type = DWG_TYPE_STYLE };
-      else SET_ENT (style, STYLE) else if (SSCANF_S (p, "ltype " FMT_TBL,
-                                                     &text[0] SZ)) ent
-          = (lastent_t){ .u.ltype = dwg_add_LTYPE (dwg, text),
-                         .type = DWG_TYPE_LTYPE };
-      else SET_ENT (ltype, LTYPE) else if (SSCANF_S (p, "view " FMT_TBL,
-                                                     &text[0] SZ)) ent
-          = (lastent_t){ .u.view = dwg_add_VIEW (dwg, text),
-                         .type = DWG_TYPE_VIEW };
-      else SET_ENT (
-          view, VIEW) else if (SSCANF_S (p, "vport " FMT_TBL, &text[0] SZ)) ent
-          = (lastent_t){ .u.vport = dwg_add_VPORT (dwg, text),
-                         .type = DWG_TYPE_VPORT };
-      else SET_ENT (vport, VPORT) else if (SSCANF_S (p, "dimstyle " FMT_TBL,
-                                                     &text[0] SZ)) ent
-          = (lastent_t){ .u.dimstyle = dwg_add_DIMSTYLE (dwg, text),
-                         .type = DWG_TYPE_DIMSTYLE };
-      else SET_ENT (dimstyle, DIMSTYLE) else if (SSCANF_S (p, "group " FMT_TBL,
-                                                           &text[0] SZ))
+      else
+          // clang-format off
+        SET_ENT (mlinestyle, MLINESTYLE)
+      // clang-format on
+      else if (SSCANF_S (p, "layer " FMT_TBL, &text[0] SZ))
+      {
+        ent = (lastent_t){ .u.layer = dwg_add_LAYER (dwg, text),
+                           .type = DWG_TYPE_LAYER };
+      }
+      else
+          // clang-format off
+        SET_ENT (layer, LAYER)
+      // clang-format on
+      else if (SSCANF_S (p, "style " FMT_TBL, &text[0] SZ))
+      {
+        ent = (lastent_t){ .u.style = dwg_add_STYLE (dwg, text),
+                           .type = DWG_TYPE_STYLE };
+      }
+      else
+          // clang-format off
+        SET_ENT (style, STYLE)
+      // clang-format on
+      else if (SSCANF_S (p, "ltype " FMT_TBL, &text[0] SZ))
+      {
+        ent = (lastent_t){ .u.ltype = dwg_add_LTYPE (dwg, text),
+                           .type = DWG_TYPE_LTYPE };
+      }
+      else
+          // clang-format off
+        SET_ENT (ltype, LTYPE)
+      // clang-format on
+      else if (SSCANF_S (p, "view " FMT_TBL, &text[0] SZ))
+      {
+        ent = (lastent_t){ .u.view = dwg_add_VIEW (dwg, text),
+                           .type = DWG_TYPE_VIEW };
+      }
+      else
+          // clang-format off
+        SET_ENT (view, VIEW)
+      // clang-format on
+      else if (SSCANF_S (p, "vport " FMT_TBL, &text[0] SZ))
+      {
+        ent = (lastent_t){ .u.vport = dwg_add_VPORT (dwg, text),
+                           .type = DWG_TYPE_VPORT };
+      }
+      else
+          // clang-format off
+        SET_ENT (vport, VPORT)
+      // clang-format on
+      else if (SSCANF_S (p, "dimstyle " FMT_TBL, &text[0] SZ))
+      {
+        ent = (lastent_t){ .u.dimstyle = dwg_add_DIMSTYLE (dwg, text),
+                           .type = DWG_TYPE_DIMSTYLE };
+      }
+      else
+          // clang-format off
+        SET_ENT (dimstyle, DIMSTYLE)
+      // clang-format on
+      else if (SSCANF_S (p, "group " FMT_TBL, &text[0] SZ))
       {
         if (version <= R_11)
           fn_error ("Invalid entity GROUP\n");
@@ -1176,18 +1339,25 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           ent = (lastent_t){ .u.group = dwg_add_GROUP (dwg, text),
                              .type = DWG_TYPE_GROUP };
       }
-      else SET_ENT (group, GROUP) else if (
-          SSCANF_S (p,
-                    "ucs (%lf %lf %lf) (%lf %lf %lf) (%lf %lf %lf) " FMT_TBL,
-                    &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
-                    &pt3.y, &pt3.z, &text[0] SZ)) ent
-          = (lastent_t){ .u.ucs = dwg_add_UCS (dwg, &pt1, &pt2, &pt3, text),
-                         .type = DWG_TYPE_UCS };
-      else SET_ENT (ucs, UCS) else if (ent.type == DWG_TYPE_VIEWPORT
-                                       && SSCANF_S (p,
-                                                    "layout viewport " FMT_TBL
-                                                    " " FMT_ANY,
-                                                    &text[0] SZ, &s1[0] SZ))
+      else
+          // clang-format off
+        SET_ENT (group, GROUP)
+      // clang-format on
+      else if (SSCANF_S (
+                   p, "ucs (%lf %lf %lf) (%lf %lf %lf) (%lf %lf %lf) " FMT_TBL,
+                   &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
+                   &pt3.y, &pt3.z, &text[0] SZ))
+      {
+        ent = (lastent_t){ .u.ucs = dwg_add_UCS (dwg, &pt1, &pt2, &pt3, text),
+                           .type = DWG_TYPE_UCS };
+      }
+      else
+          // clang-format off
+        SET_ENT (ucs, UCS)
+      // clang-format on
+      else if (ent.type == DWG_TYPE_VIEWPORT
+               && SSCANF_S (p, "layout viewport " FMT_TBL " " FMT_ANY,
+                            &text[0] SZ, &s1[0] SZ))
       {
         Dwg_Object *obj = dwg_ent_generic_to_object (ent.u.viewport, &error);
         if (strlen (s1) && text[strlen (s1) - 1] == '"')
@@ -1274,9 +1444,11 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                                  hdr, &pt1, &pt2, height, i1, f1, f2),
                              .type = DWG_TYPE__3DSOLID };
       }
-      else SET_ENT (_3dsolid,
-                    _3DSOLID) else if (SSCANF_S (p, "HEADER." FMT_NAME " = %d",
-                                                 &s1[0] SZ, &i1))
+      else
+          // clang-format off
+        SET_ENT (_3dsolid, _3DSOLID)
+      // clang-format on
+      else if (SSCANF_S (p, "HEADER." FMT_NAME " = %d", &s1[0] SZ, &i1))
           dwg_dynapi_header_set_value (dwg, s1, &i1, 0);
       else if (SSCANF_S (p, "HEADER." FMT_NAME " = %lf", &s1[0] SZ, &f1))
           dwg_dynapi_header_set_value (dwg, s1, &f1, 0);
