@@ -211,15 +211,20 @@ decode_preR13_section_chk (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
                            Dwg_Data *restrict dwg)
 {
   Dwg_Section *tbl = &dwg->header.section[id];
-
-#  define CMP(f, type)                                                        \
-    if (tbl->f != f)                                                          \
-    LOG_ERROR ("decode_preR13_section_chk %s %s", tbl->name, #f)
-
-  // LOG_ERROR(name "->" #f " " FORMAT_##type " != " #f " " FORMAT_##type)
   BITCODE_RS id1, size;
   BITCODE_RL address;
   BITCODE_RLd number;
+
+#define CMP(f, type)                                                        \
+  if (tbl->f != f)                                                          \
+    LOG_ERROR ("decode_preR13_section_chk %s %s", tbl->name, #f)
+
+  if (id > dwg->header.num_sections)
+    {
+      LOG_ERROR ("decode_preR13_section_chk: Invalid table %d, have only %d", id,
+                 dwg->header.num_sections)
+      return;
+    }
   id1 = bit_read_RS (dat);
   size = bit_read_RS (dat);
   CMP (size, RS);
@@ -961,11 +966,17 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   decode_preR13_section_chk (SECTION_STYLE, dat, dwg);
   decode_preR13_section_chk (SECTION_LTYPE, dat, dwg);
   decode_preR13_section_chk (SECTION_VIEW, dat, dwg);
-  if (dwg->header.num_sections > 5) // dead code?
+  if (dwg->header.num_sections >= SECTION_VPORT)
     {
       decode_preR13_section_chk (SECTION_UCS, dat, dwg);
       decode_preR13_section_chk (SECTION_VPORT, dat, dwg);
+    }
+  if (dwg->header.num_sections >= SECTION_APPID)
+    {
       decode_preR13_section_chk (SECTION_APPID, dat, dwg);
+    }
+  if (dwg->header.num_sections >= SECTION_VX)
+    {
       decode_preR13_section_chk (SECTION_DIMSTYLE, dat, dwg);
       decode_preR13_section_chk (SECTION_VX, dat, dwg);
     }
