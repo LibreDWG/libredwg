@@ -2011,6 +2011,9 @@ DWG_ENTITY (_3DFACE)
         FIELD_3RD (corner3, 12)
         FIELD_3RD (corner4, 13)
       }
+      if (R11OPTS (1)) {
+        FIELD_RS (invis_flags, 70);
+      }
     }
   VERSIONS (R_13b1, R_14)
     {
