@@ -500,10 +500,13 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
               return DWG_ERR_INVALIDDWG;
             ucsorg.x = bit_read_RD (dat);
             ucsorg.y = bit_read_RD (dat);
+            ucsorg.z = bit_read_RD (dat);
             ucsxdir.x = bit_read_RD (dat);
             ucsxdir.y = bit_read_RD (dat);
+            ucsxdir.z = bit_read_RD (dat);
             ucsydir.x = bit_read_RD (dat);
             ucsydir.y = bit_read_RD (dat);
+            ucsydir.z = bit_read_RD (dat);
             _obj = dwg_add_UCS (dwg, &ucsorg, &ucsxdir, &ucsydir,
                                 (const char *)name);
             obj = dwg_obj_generic_to_object (_obj, &error);
@@ -515,9 +518,9 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             LOG_TRACE ("flag: %u [RC 70]\n", flag);
             LOG_FLAG_UCS
             LOG_TRACE ("name: \"%s\" [TF 32 2]\n", name);
-            LOG_TRACE ("ucsorg: (%f %f) [2RD]\n", ucsorg.x, ucsorg.y);
-            LOG_TRACE ("ucsxdir: (%f %f) [2RD]\n", ucsxdir.x, ucsxdir.y);
-            LOG_TRACE ("ucsydir: (%f %f) [2RD]\n", ucsydir.x, ucsydir.y);
+            LOG_TRACE ("ucsorg: (%f %f %f) [3RD]\n", ucsorg.x, ucsorg.y, ucsorg.z);
+            LOG_TRACE ("ucsxdir: (%f %f %f) [3RD]\n", ucsxdir.x, ucsxdir.y, ucsxdir.z);
+            LOG_TRACE ("ucsydir: (%f %f %f) [3RD]\n", ucsydir.x, ucsydir.y, ucsydir.z);
             free (name);
 
             CHK_ENDPOS;
