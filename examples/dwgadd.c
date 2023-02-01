@@ -418,7 +418,7 @@ scan_pts2d (unsigned num_pts, char **pp)
     exit (0);
   for (unsigned i = 0; i < num_pts; i++)
     {
-      if (SSCANF_S (p, "(%lf %lf)", &pts[i].x, &pts[i].y))
+      if (2 == SSCANF_S (p, "(%lf %lf)", &pts[i].x, &pts[i].y))
         {
           p = strchr (p, ')');
           if (!p)
@@ -462,7 +462,7 @@ scan_pts3d (unsigned num_pts, char **pp)
     exit (0);
   for (unsigned i = 0; i < num_pts; i++)
     {
-      if (SSCANF_S (p, "(%lf %lf %lf)", &pts[i].x, &pts[i].y, &pts[i].z))
+      if (3 == SSCANF_S (p, "(%lf %lf %lf)", &pts[i].x, &pts[i].y, &pts[i].z))
         {
           p = strchr (p, ')');
           if (!p)
@@ -485,6 +485,51 @@ scan_pts3d (unsigned num_pts, char **pp)
   else
     {
       free (pts);
+      return NULL;
+    }
+}
+
+static dwg_face *
+scan_faces (unsigned num, char **pp)
+{
+  char *p = *pp;
+  dwg_face *faces;
+
+  p = strchr (p, '(');
+  if (!p)
+    return NULL;
+  p++;
+  if (num > 5000)
+    exit (0);
+  faces = calloc (num, 4 * sizeof (int));
+  if (!faces)
+    exit (0);
+  for (unsigned i = 0; i < num; i++)
+    {
+      if (4 == SSCANF_S (p, "(%hd %hd %hd %hd)", &faces[i][0], &faces[i][1],
+                         &faces[i][2], &faces[i][3]))
+        {
+          p = strchr (p, ')');
+          if (!p)
+            break;
+          p++;
+        }
+      else
+        {
+          *pp = p;
+          p = NULL;
+          break;
+        }
+    }
+
+  if (p && num)
+    {
+      *pp = p;
+      return faces;
+    }
+  else
+    {
+      free (faces);
       return NULL;
     }
 }
@@ -560,6 +605,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       Dwg_Entity_POLYLINE_2D *polyline_2d;
       Dwg_Entity_POLYLINE_3D *polyline_3d;
       Dwg_Entity_POLYLINE_MESH *polyline_mesh;
+      Dwg_Entity_POLYLINE_PFACE *polyline_pface;
+      Dwg_Entity_LWPOLYLINE *lwpolyline;
       Dwg_Object_DICTIONARY *dictionary;
       Dwg_Object_XRECORD *xrecord;
       Dwg_Object_MLINESTYLE *mlinestyle;
@@ -624,7 +671,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
               LOG_ERROR ("readdwg seen, but DWG already exists");
               exit (1);
             }
-          if (SSCANF_S (p, "readdwg " FMT_PATH, &text[0] SZ))
+          if (1 == SSCANF_S (p, "readdwg " FMT_PATH, &text[0] SZ))
             {
               LOG_INFO ("readdwg %s\n", text)
               if ((error = dwg_read_file (text, *dwgp)) > DWG_ERR_CRITICAL)
@@ -650,7 +697,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
               LOG_ERROR ("readdxf seen, but DWG already exists");
               exit (1);
             }
-          if (SSCANF_S (p, "readdxf " FMT_PATH, &text[0] SZ))
+          if (1 == SSCANF_S (p, "readdxf " FMT_PATH, &text[0] SZ))
             {
               LOG_INFO ("readdxf %s\n", text)
               if ((error = dxf_read_file (text, *dwgp)) > DWG_ERR_CRITICAL)
@@ -676,7 +723,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
               LOG_ERROR ("readjson seen, but DWG already exists");
               exit (1);
             }
-          if (SSCANF_S (p, "readjson " FMT_PATH, &text[0] SZ))
+          if (1 == SSCANF_S (p, "readjson " FMT_PATH, &text[0] SZ))
             {
               Bit_Chain in_dat = EMPTY_CHAIN (0);
               LOG_INFO ("readjson %s\n", text)
@@ -888,8 +935,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           // clang-format off
         SET_ENT (xline, XLINE)
       // clang-format on
-      else if (5 == SSCANF_S (p, "text " FMT_ANY " (%lf %lf %lf) %lf", &text[0] SZ,
-                         &pt1.x, &pt1.y, &pt1.z, &height))
+        else if ((i1 = SSCANF_S (p, "text " FMT_ANY " (%lf %lf %lf) %lf", &text[0] SZ,
+                                 &pt1.x, &pt1.y, &pt1.z, &height)) > 4)
       {
         if (strlen (text) && text[strlen (text) - 1] == '"')
           text[strlen (text) - 1] = '\0'; // strip the \"
@@ -946,7 +993,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           // clang-format off
         SET_ENT (insert, INSERT)
       // clang-format on
-      else if (13 == SSCANF_S (p,
+      else if (12 == SSCANF_S (p,
                          "minsert (%lf %lf %lf) " FMT_TBL
                          " %lf %lf %lf %lf %d %d "
                          "%lf %lf",
@@ -1185,6 +1232,45 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else
           // clang-format off
         SET_ENT (polyline_mesh, POLYLINE_MESH)
+      // clang-format on
+      else if (5 == SSCANF_S (p, "polyline_pface %d %d ((%lf %lf %lf)", &i1, &i2,
+                              &pt1.x, &pt1.y, &pt1.z))
+      {
+        int face[4];
+        dwg_point_3d *verts = scan_pts3d (i1, &p);
+        dwg_face *faces = NULL;
+        if (4 == SSCANF_S (p, "((%d %d %d %d)", &face[0], &face[1], &face[2],
+                           &face[3]))
+          faces = scan_faces (i2, &p);
+        else
+          LOG_ERROR ("reading faces in %s", p)
+        if (i1 && i2 && verts && faces)
+          {
+            ent = (lastent_t){ .u.polyline_pface
+                               = dwg_add_POLYLINE_PFACE (hdr, i1, i2, verts, faces),
+                               .type = DWG_TYPE_POLYLINE_PFACE };
+            free (verts);
+            free (faces);
+          }
+      }
+      else
+          // clang-format off
+        SET_ENT (polyline_pface, POLYLINE_PFACE)
+      // clang-format on
+      else if (3 == SSCANF_S (p, "lwpolyline %d ((%lf %lf)", &i1, &pt1.x, &pt1.y))
+      {
+        dwg_point_2d *pts = scan_pts2d (i1, &p);
+        if (i1 && pts)
+          {
+            ent = (lastent_t){ .u.lwpolyline
+                               = dwg_add_LWPOLYLINE (hdr, i1, pts),
+                               .type = DWG_TYPE_LWPOLYLINE };
+            free (pts);
+          }
+      }
+      else
+          // clang-format off
+        SET_ENT (lwpolyline, LWPOLYLINE)
       // clang-format on
       else if (3 == SSCANF_S (p, "dictionary " FMT_TBL " " FMT_TBL " %u",
                               &text[0] SZ, &s1[0] SZ, &u))
@@ -1499,7 +1585,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       }
       else
         {
-          LOG_TRACE ("Ignored %s", p)
+          LOG_WARN ("Ignored %s", p)
         }
 
       p = next_line (p, end);
