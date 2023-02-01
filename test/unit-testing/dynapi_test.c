@@ -20007,6 +20007,21 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
     polyline_3d->curve_type--;
   }
   {
+    BITCODE_BD end_width;
+    if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "end_width", &end_width, NULL)
+        && end_width == polyline_3d->end_width)
+      pass ();
+    else
+      fail ("POLYLINE_3D.end_width [BD] %g != %g", polyline_3d->end_width, end_width);
+    end_width++;
+    if (dwg_dynapi_entity_set_value (polyline_3d, "POLYLINE_3D", "end_width", &end_width, 0)
+        && end_width == polyline_3d->end_width)
+      pass ();
+    else
+      fail ("POLYLINE_3D.end_width [BD] set+1 %g != %g", polyline_3d->end_width, end_width);
+    polyline_3d->end_width--;
+  }
+  {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &polyline_3d->extrusion, sizeof (BITCODE_BE)))
@@ -20090,6 +20105,21 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
         pass ();
     else
         fail ("POLYLINE_3D.seqend [H]");
+  }
+  {
+    BITCODE_BD start_width;
+    if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "start_width", &start_width, NULL)
+        && start_width == polyline_3d->start_width)
+      pass ();
+    else
+      fail ("POLYLINE_3D.start_width [BD] %g != %g", polyline_3d->start_width, start_width);
+    start_width++;
+    if (dwg_dynapi_entity_set_value (polyline_3d, "POLYLINE_3D", "start_width", &start_width, 0)
+        && start_width == polyline_3d->start_width)
+      pass ();
+    else
+      fail ("POLYLINE_3D.start_width [BD] set+1 %g != %g", polyline_3d->start_width, start_width);
+    polyline_3d->start_width--;
   }
   {
     BITCODE_H* vertex;

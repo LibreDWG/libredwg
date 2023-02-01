@@ -1557,6 +1557,8 @@ typedef struct _dwg_entity_POLYLINE_3D
   COMMON_ENTITY_POLYLINE;
 
   BITCODE_RC curve_type;
+  BITCODE_BD start_width;
+  BITCODE_BD end_width;
   BITCODE_RC flag;
   BITCODE_BE extrusion;
 } Dwg_Entity_POLYLINE_3D;

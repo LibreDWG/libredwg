@@ -3599,6 +3599,10 @@ H*
 H
 @item curve_type
 RC,	DXF 75
+@item start_width
+BD,	DXF 40
+@item end_width
+BD,	DXF 41
 @item flag
 RC,	DXF 70
 @item extrusion

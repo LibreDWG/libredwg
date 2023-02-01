@@ -1356,8 +1356,10 @@ DWG_ENTITY (POLYLINE_3D)
       FIELD_CAST (flag, RC, BS, 70);
       LOG_FLAG_POLYLINE
     }
-    //if (R11OPTS (2))
-    //  FIELD_RD (start_width, 40);
+    if (R11OPTS (2))
+      FIELD_RD (start_width, 40);
+    if (R11OPTS (4))
+      FIELD_RD (end_width, 41);
     if (R11OPTS (8))
       FIELD_3RD (extrusion, 210);
     if (R11OPTS (0x100)) { // 3dmesh only
