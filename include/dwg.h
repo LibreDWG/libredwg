@@ -7350,36 +7350,42 @@ typedef struct _dwg_object_BREAKPOINTREF
 typedef struct _dwg_entity_FLIPGRIPENTITY
 {
   struct _dwg_object_entity *parent;
+  //BLOCKGRIP_fields;
   // ??
 } Dwg_Entity_FLIPGRIPENTITY;
 
 typedef struct _dwg_entity_LINEARGRIPENTITY
 {
   struct _dwg_object_entity *parent;
+  //BLOCKGRIP_fields;
   // ??
 } Dwg_Entity_LINEARGRIPENTITY;
 
 typedef struct _dwg_entity_POLARGRIPENTITY
 {
   struct _dwg_object_entity *parent;
+  //BLOCKGRIP_fields;
   // ??
 } Dwg_Entity_POLARGRIPENTITY;
 
 typedef struct _dwg_entity_ROTATIONGRIPENTITY
 {
   struct _dwg_object_entity *parent;
+  //BLOCKGRIP_fields;
   // ??
 } Dwg_Entity_ROTATIONGRIPENTITY;
 
 typedef struct _dwg_entity_VISIBILITYGRIPENTITY
 {
   struct _dwg_object_entity *parent;
+  //BLOCKGRIP_fields;
   // ??
 } Dwg_Entity_VISIBILITYGRIPENTITY;
 
 typedef struct _dwg_entity_XYGRIPENTITY
 {
   struct _dwg_object_entity *parent;
+  //BLOCKGRIP_fields;
   // ??
 } Dwg_Entity_XYGRIPENTITY;
 
@@ -7450,10 +7456,10 @@ typedef struct _dwg_object_BLOCKANGULARCONSTRAINTPARAMETER
   struct _dwg_object_object *parent;
   BLOCKCONSTRAINTPARAMETER_fields;
   BITCODE_3BD center_pt;	/* DXF 1011 */
-  BITCODE_3BD end_pt;	/* DXF 1012 */
-  BITCODE_T expr_name;	/* DXF 305 */
+  BITCODE_3BD end_pt;		/* DXF 1012 */
+  BITCODE_T expr_name;		/* DXF 305 */
   BITCODE_T expr_description;	/* DXF 306 */
-  BITCODE_BD angle;	/* DXF 140, offset is the result */
+  BITCODE_BD angle;		/* DXF 140, offset is the result */
   BITCODE_B orientation_on_both_grips;	/* DXF 280 */
   BLOCKPARAMVALUESET_fields;
 } Dwg_Object_BLOCKANGULARCONSTRAINTPARAMETER;
@@ -7462,9 +7468,9 @@ typedef struct _dwg_object_BLOCKDIAMETRICCONSTRAINTPARAMETER
 {
   struct _dwg_object_object *parent;
   BLOCKCONSTRAINTPARAMETER_fields;
-  BITCODE_T expr_name;  /* DXF 305, a copy of the EvalExpr name */
-  BITCODE_T expr_description; /* DXF 306 */
-  BITCODE_BD distance;  /* DXF 140 */
+  BITCODE_T expr_name;  	/* DXF 305, a copy of the EvalExpr name */
+  BITCODE_T expr_description;	/* DXF 306 */
+  BITCODE_BD distance;  	/* DXF 140 */
   BITCODE_B orientation_on_both_grips;	/* DXF 280 */
   BLOCKPARAMVALUESET_fields;
 } Dwg_Object_BLOCKDIAMETRICCONSTRAINTPARAMETER;
@@ -7473,9 +7479,9 @@ typedef struct _dwg_object_BLOCKRADIALCONSTRAINTPARAMETER
 {
   struct _dwg_object_object *parent;
   BLOCKCONSTRAINTPARAMETER_fields;
-  BITCODE_T expr_name;  /* DXF 305, a copy of the EvalExpr name */
-  BITCODE_T expr_description; /* DXF 306 */
-  BITCODE_BD distance;  /* DXF 140 */
+  BITCODE_T expr_name;  	/* DXF 305, a copy of the EvalExpr name */
+  BITCODE_T expr_description;	/* DXF 306 */
+  BITCODE_BD distance;  	/* DXF 140 */
   BLOCKPARAMVALUESET_fields;
 } Dwg_Object_BLOCKRADIALCONSTRAINTPARAMETER;
 
