@@ -186,31 +186,6 @@
 #  undef LOG_OPTS_R11_MAX
           }
 #endif
-      if (R11FLAG (FLAG_R11_HAS_COLOR) && ! R11FLAG (FLAG_R11_HAS_PSPACE)) // 1
-        FIELD_RCd (color_r11, 0);
-      if (R11FLAG (FLAG_R11_HAS_LTYPE)) { // 2
-        PRE (R_11) {
-          FIELD_HANDLE (ltype, 1, 6);
-        }
-        LATER_VERSIONS {
-          FIELD_HANDLE (ltype, 2, 6);
-        }
-      }
-
-      // TODO: maybe move that to the entity
-      PRE (R_10) { // XXX Check precise version
-        if (R11FLAG (FLAG_R11_HAS_ELEVATION)) // 4
-          FIELD_RD (elevation_r11, 38);
-      } LATER_VERSIONS {
-        // skip flag 4 for LINE, POINT, 3DFACE (also the deleted variants)
-        if (R11FLAG (FLAG_R11_HAS_ELEVATION) // 4
-            && obj->fixedtype != DWG_TYPE_LINE
-            && obj->fixedtype != DWG_TYPE_POINT
-            && obj->fixedtype != DWG_TYPE__3DFACE)
-          FIELD_RD (elevation_r11, 38);
-      }
-      if (R11FLAG (FLAG_R11_HAS_THICKNESS)) // 8
-        FIELD_RD (thickness_r11, 39);
       if (R11FLAG (FLAG_R11_HAS_PSPACE)) { // 16
 #ifdef IS_DECODER
         _ent->entmode = 1;
@@ -237,9 +212,6 @@
 #undef LOG_EXTRA_R11
           }
 #endif
-        if (R11FLAG (FLAG_R11_HAS_COLOR)) {
-          FIELD_RCd (color_r11, 0);
-        }
       }
       if (R11EXTRA (EXTRA_R11_HAS_EED)) {
 #ifdef IS_DECODER
@@ -249,6 +221,31 @@
         // DXF, JSON and FREE handled elsewhere
 #endif
       }
+      if (R11FLAG (FLAG_R11_HAS_COLOR)) // 1
+        FIELD_RCd (color_r11, 0);
+      if (R11FLAG (FLAG_R11_HAS_LTYPE)) { // 2
+        PRE (R_11) {
+          FIELD_HANDLE (ltype, 1, 6);
+        }
+        LATER_VERSIONS {
+          FIELD_HANDLE (ltype, 2, 6);
+        }
+      }
+
+      // TODO: maybe move that to the entity
+      PRE (R_10) { // XXX Check precise version
+        if (R11FLAG (FLAG_R11_HAS_ELEVATION)) // 4
+          FIELD_RD (elevation_r11, 38);
+      } LATER_VERSIONS {
+        // skip flag 4 for LINE, POINT, 3DFACE (also the deleted variants)
+        if (R11FLAG (FLAG_R11_HAS_ELEVATION) // 4
+            && obj->fixedtype != DWG_TYPE_LINE
+            && obj->fixedtype != DWG_TYPE_POINT
+            && obj->fixedtype != DWG_TYPE__3DFACE)
+          FIELD_RD (elevation_r11, 38);
+      }
+      if (R11FLAG (FLAG_R11_HAS_THICKNESS)) // 8
+        FIELD_RD (thickness_r11, 39);
       if (R11FLAG (FLAG_R11_HAS_HANDLING)) { // 32
 #ifdef IS_DXF
         VALUE_H (obj->handle.value, 5);
