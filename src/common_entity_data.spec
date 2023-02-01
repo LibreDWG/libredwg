@@ -33,7 +33,7 @@
             // stringify the flag bits
 #  define LOG_FLAG_R11(w)                                                     \
     if (R11FLAG (FLAG_R11_##w))                                               \
-      LOG_TRACE (#w " (0x%x) ", FLAG_R11_##w)
+      LOG_TRACE (#w "(0x%x) ", FLAG_R11_##w)
 #  define LOG_FLAG_R11_MAX(v)                                                 \
     if (_obj->flag_r11 > v)                                                   \
       LOG_WARN ("Unknown flag_r11 (0x%x)", _obj->flag_r11 & ~255)
