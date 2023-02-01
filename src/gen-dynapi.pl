@@ -2514,7 +2514,7 @@ mv_if_not_same ("$ifile.tmp", $ifile);
 # NOTE: in the 2 #line's below use __LINE__ + 1
 __DATA__
 /* ex: set ro ft=c: -*- mode: c; buffer-read-only: t -*- */
-#line 2507 "gen-dynapi.pl"
+#line 2518 "gen-dynapi.pl"
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
@@ -2600,7 +2600,7 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
 @@list name_subclasses@@
 };
 
-#line 2593 "gen-dynapi.pl"
+#line 2604 "gen-dynapi.pl"
 struct _name
 {
   const char *const name;
@@ -3617,6 +3617,28 @@ dwg_has_subclass (const char *restrict classname, const char *restrict subclass)
   }
   return false;
 }
+
+EXPORT bool
+dwg_dynapi_is_angle (const char *restrict name, const char *restrict fieldname)
+{
+  Dwg_DYNAPI_field *f1 = NULL;
+#ifndef HAVE_NONNULL
+  if (!name || !fieldname)
+    return 0;
+#endif
+
+  f1 = dwg_dynapi_entity_field (name, fieldname);
+  if (!f1 && strEQc (name, "HEADER"))
+    f1 = dwg_dynapi_header_field (fieldname);
+  // there are no common angle fields
+  if (f1)
+    {
+      short dxf = f1->dxf;
+      return (dxf >= 50 && dxf < 60);
+    }
+  return false;
+}
+
 /* Local Variables: */
 /* mode: c */
 /* End: */

@@ -188,4 +188,8 @@ EXPORT bool dwg_has_subclass (const char *restrict classname,
                               const char *restrict subclass)
     __nonnull ((1, 2));
 
+EXPORT bool dwg_dynapi_is_angle (const char *restrict name,
+                                 const char *restrict fieldname)
+    __nonnull ((1, 2));
+
 #endif
