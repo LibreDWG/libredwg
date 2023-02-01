@@ -20007,6 +20007,14 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
     polyline_3d->curve_type--;
   }
   {
+    BITCODE_BE extrusion;
+    if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "extrusion", &extrusion, NULL)
+        && !memcmp (&extrusion, &polyline_3d->extrusion, sizeof (BITCODE_BE)))
+        pass ();
+    else
+        fail ("POLYLINE_3D.extrusion [BE]");
+  }
+  {
     BITCODE_H first_vertex;
     if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "first_vertex", &first_vertex, NULL)
         && !memcmp (&first_vertex, &polyline_3d->first_vertex, sizeof (BITCODE_H)))

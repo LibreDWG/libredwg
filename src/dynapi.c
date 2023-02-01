@@ -3182,6 +3182,8 @@ static const Dwg_DYNAPI_field _dwg_POLYLINE_3D_fields[] = {
     0,0,0, 75 },
   { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_POLYLINE_3D, flag),
     0,0,0, 70 },
+  { "extrusion",	"BE", sizeof (BITCODE_BE),  OFF (struct _dwg_entity_POLYLINE_3D, extrusion),
+    0,0,0, 210 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_POLYLINE_MESH: (sorted by offset) */

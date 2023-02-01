@@ -3601,6 +3601,8 @@ H
 RC,	DXF 75
 @item flag
 RC,	DXF 70
+@item extrusion
+BE,	DXF 210
 
 @end vtable
 @end indentedblock
