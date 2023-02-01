@@ -9,7 +9,7 @@ attdef 8 0 "prompt" (0.0 1.0 0.0) "tag" "default_text"
 line (0 1 0) (1 1 0)
 endblk
 insert (0 1 0) "bloko" 1 1 1 0
-attrib.text = "text1"
+attrib 8 0 (0.0 2.0 0.0) "tag" "text1"
 minsert (0 1 0) "bloko" 1 1 1 0 1 2 1 1
 polyline_2d 2 ((0 1) (1 1))
 polyline_3d 2 ((0 1 0) (1 1 0))

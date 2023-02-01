@@ -6267,7 +6267,7 @@ dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const double height) __nonnull_all;
 
 /* Experimental. Does not work yet properly */
-/* This adds the ATTRIB and ENDBLK to the insert,
+/* This should add the ATTRIB and ENDBLK to the insert,
    and the ATTDEF and ENDBLK to the block, if missing.
    flags, bitmask of:
    0 none
@@ -6342,6 +6342,13 @@ dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr, const double height,
                 const int mode, const char *restrict prompt,
                 const dwg_point_3d *restrict ins_pt, const char *restrict tag,
                 const char *restrict default_value) __nonnull_all;
+EXPORT Dwg_Entity_ATTRIB*
+dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert,
+                const double height,
+                const int flags,
+                const dwg_point_3d *restrict ins_pt,
+                const char* restrict tag,
+                const char* restrict text_value)  __nonnull_all;
 EXPORT Dwg_Entity_CIRCLE*
 dwg_add_CIRCLE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const dwg_point_3d *restrict center,

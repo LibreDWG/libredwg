@@ -22015,13 +22015,6 @@ dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
 
 #ifdef USE_WRITE
 
-/* internally used only by dwg_add_Attribute only */
-Dwg_Entity_ATTRIB *
-dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert, const double height,
-                const int flags, const dwg_point_3d *restrict ins_pt,
-                const char *restrict tag,
-                const char *restrict text_value) __nonnull_all;
-
 /* internally used only by dwg_add_POLYLINE* only */
 // fixme: Dwg_Entity_POLYLINE_2D* as 1st owner arg
 Dwg_Entity_VERTEX_2D *
@@ -23048,6 +23041,50 @@ dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _obj;
 }
 
+static Dwg_Entity_INSERT *
+add_attrib_links (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
+                  Dwg_Entity_INSERT *restrict insert,
+                  Dwg_Object *restrict insobj,
+                  Dwg_Object *restrict attobj)
+{
+  Dwg_Object *seqend = dwg_ref_object (insobj->parent, insert->seqend);
+  // prev attrib
+  Dwg_Object *lastobj = dwg_ref_object (insobj->parent, insert->last_attrib);
+  if (!insert->has_attribs || !seqend || !lastobj) // no ATTRIB and SEQEND yet
+    {
+      API_ADD_ENTITY (SEQEND);
+      insert->has_attribs = 1;
+      insert->num_owned = 1;
+      obj->tio.entity->entmode = 0;
+      obj->tio.entity->nolinks = 0;
+      obj->tio.entity->ownerhandle
+          = dwg_add_handleref (dwg, 4, insobj->handle.value, insobj);
+      insert->first_attrib
+          = dwg_add_handleref (dwg, 4, attobj->handle.value, insobj);
+      insert->last_attrib = insert->first_attrib;
+      insert->seqend = dwg_add_handleref (dwg, 3, obj->handle.value, insobj);
+      insert->attribs = malloc (sizeof (BITCODE_H));
+      insert->attribs[0] = insert->last_attrib;
+      in_postprocess_SEQEND (obj, insert->num_owned, insert->attribs);
+    }
+  else
+    {
+      Dwg_Data *dwg = insobj->parent;
+      insert->last_attrib
+          = dwg_add_handleref (dwg, 4, attobj->handle.value, insobj);
+      attobj->tio.entity->prev_entity = insert->last_attrib;
+      insert->num_owned++;
+      insert->attribs
+          = realloc (insert->attribs, insert->num_owned * sizeof (BITCODE_H));
+      lastobj->tio.entity->next_entity
+          = dwg_add_handleref (dwg, 3, attobj->handle.value, insobj);
+      insert->attribs[insert->num_owned - 1] = insert->last_attrib;
+      seqend = dwg_ref_object (dwg, insert->seqend);
+      in_postprocess_SEQEND (seqend, insert->num_owned, insert->attribs);
+    }
+  return insert;
+}
+
 /* This adds the ATTRIB and ENDBLK to the insert,
    and the ATTDEF and ENDBLK to the block. */
 EXPORT Dwg_Entity_ATTRIB *
@@ -23093,52 +23130,27 @@ dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert, const double height,
       return NULL;
     }
   // dwg->header_vars.AFLAGS = flags; FIXME
-  if (!insert->has_attribs) // no ATTRIB and SEQEND yet
-    {
-      API_ADD_ENTITY (SEQEND);
-      insert->has_attribs = 1;
-      insert->num_owned = 1;
-      insert->first_attrib
-          = dwg_add_handleref (dwg, 4, attobj->handle.value, insobj);
-      insert->last_attrib = insert->first_attrib;
-      insert->seqend = dwg_add_handleref (dwg, 3, obj->handle.value, insobj);
-      insert->attribs = malloc (sizeof (BITCODE_H));
-      insert->attribs[0] = insert->last_attrib;
-      in_postprocess_SEQEND (obj, insert->num_owned, insert->attribs);
-    }
-  else
-    {
-      Dwg_Data *dwg = insobj->parent;
-      Dwg_Object *seqend;
-      Dwg_Object *lastobj
-          = dwg_ref_object (dwg, insert->last_attrib); // prev attrib
-      insert->last_attrib = dwg_add_handleref (attobj->parent, 4,
-                                               attobj->handle.value, insobj);
-      attobj->tio.entity->prev_entity = insert->last_attrib;
-      insert->num_owned++;
-      insert->attribs
-          = realloc (insert->attribs, insert->num_owned * sizeof (BITCODE_H));
-      lastobj->tio.entity->next_entity
-          = dwg_add_handleref (dwg, 3, attobj->handle.value, insobj);
-      insert->attribs[insert->num_owned - 1] = insert->last_attrib
-          = dwg_add_handleref (dwg, 4, attobj->handle.value, insobj);
-      seqend = dwg_ref_object (dwg, insert->seqend);
-      in_postprocess_SEQEND (seqend, insert->num_owned, insert->attribs);
-    }
+  add_attrib_links (blkhdr, insert, insobj, attobj);
   return attrib;
 }
 
-/* internally used only by dwg_add_Attribute only */
 Dwg_Entity_ATTRIB *
 dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert, const double height,
                 const int flags, const dwg_point_3d *restrict ins_pt,
                 const char *restrict tag, const char *restrict text_value)
 {
-  Dwg_Object_BLOCK_HEADER *restrict blkhdr
+  int err;
+  Dwg_Object_BLOCK_HEADER *blkhdr
       = dwg_entity_owner ((dwg_ent_generic *)insert);
+  Dwg_Object *insobj = dwg_obj_generic_to_object (insert, &err);
   API_ADD_ENTITY (ATTRIB);
   ADD_CHECK_3DPOINT (ins_pt);
   ADD_CHECK_DOUBLE (height);
+  if (!insobj || err)
+    {
+      LOG_ERROR ("add_ATTRIB: No INSERT found");
+      return NULL;
+    }
   _obj->tag = dwg_add_u8_input (dwg, tag);
   _obj->text_value = dwg_add_u8_input (dwg, text_value);
   _obj->ins_pt.x = ins_pt->x;
@@ -23149,13 +23161,17 @@ dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert, const double height,
   if (dwg->header_vars.TEXTSTYLE)
     _obj->style = dwg_add_handleref (
         dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
-  // blkhdr->hasattrs = 1;
+  insert->has_attribs = 1;
+  // TODO: if !blkhdr->hasattrs: error no ATTDEF
+  insert->block_header = dwg_add_handleref (dwg, 3, blkobj->handle.value, insobj);
   if (dwg->header.version <= R_11)
     {
       obj->type = DWG_TYPE_ATTRIB_R11;
       if (_obj->elevation == 0.0)
         obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
+  // integrate into INSERT.attribs[]
+  add_attrib_links (blkhdr, insert, insobj, obj);
   return _obj;
 }
 
@@ -23186,6 +23202,7 @@ dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr, const double height,
   if (dwg->header_vars.TEXTSTYLE)
     _obj->style = dwg_add_handleref (
         dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
+  blkhdr->hasattrs = 1;
   if (dwg->header.version <= R_11)
     {
       obj->type = DWG_TYPE_ATTDEF_R11;

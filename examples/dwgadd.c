@@ -526,6 +526,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
     union
     {
       Dwg_Entity_ATTDEF *attdef;
+      Dwg_Entity_ATTRIB *attrib;
       Dwg_Entity_LINE *line;
       Dwg_Entity_RAY *ray;
       Dwg_Entity_XLINE *xline;
@@ -820,6 +821,28 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         // clang-format off
         SET_ENT (attdef, ATTDEF)
       // clang-format on
+      else if (SSCANF_S (p,
+                         "attrib %lf %d (%lf %lf %lf) " FMT_TBL
+                         " " FMT_TBL,
+                         &height, &flags, &pt1.x, &pt1.y,
+                         &pt1.z, &tag[0] SZ, &text[0] SZ))
+        {
+          if (version < R_2_0b)
+            fn_error ("Invalid entity ATTRIB\n");
+          else if (!insert.u.insert)
+            fn_error ("Missing INSERT for ATTRIB\n");
+          else
+            {
+              ent = (lastent_t){ .u.attrib
+                               = dwg_add_ATTRIB (insert.u.insert, height,
+                                                 flags, &pt1, tag, text),
+                               .type = DWG_TYPE_ATTRIB };
+            }
+        }
+      else
+        // clang-format off
+        SET_ENT (attrib, ATTRIB)
+      // clang-format on
       else if (SSCANF_S (p, "line (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
                          &pt1.z, &pt2.x, &pt2.y, &pt2.z)) ent
           = (lastent_t){ .u.line = dwg_add_LINE (hdr, &pt1, &pt2),
@@ -890,10 +913,11 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_BLOCK };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (block, BLOCK)
-      // clang-format on
-      else if (memBEGINc (p, "endblk\n")) dwg_add_ENDBLK (hdr);
+        // clang-format on
+      else if (memBEGINc (p, "endblk\n"))
+        dwg_add_ENDBLK (hdr);
       else
           // clang-format off
         SET_ENT (endblk, ENDBLK)
