@@ -973,7 +973,7 @@
       {                                                                     \
       if (_obj->curve_type)                                                 \
         {                                                                   \
-          LOG_TRACE ("      ");                                             \
+          LOG_TRACE ("            ");                                       \
           LOG_POLYLINE_CURVETYPE_W (DEFAULT);                               \
           LOG_POLYLINE_CURVETYPE_W (QUADR_BSPLINE);                         \
           LOG_POLYLINE_CURVETYPE_W (CUBIC_BSPLINE);                         \
