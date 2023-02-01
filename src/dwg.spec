@@ -2142,7 +2142,7 @@ DWG_ENTITY (POLYLINE_MESH)
       if (R11OPTS (128))
         FIELD_RS (n_density, 74);
       if (R11OPTS (256)) {
-        FIELD_CAST (curve_type, RC, BS, 75);
+        FIELD_RS (curve_type, 75);
         LOG_POLYLINE_CURVETYPE
       }
     }
