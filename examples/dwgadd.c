@@ -1324,7 +1324,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else if (1 == SSCANF_S (p, "viewport " FMT_TBL, text SZ))
       {
         ent = (lastent_t){ .u.viewport = dwg_add_VIEWPORT (hdr, text),
-                           .type = DWG_TYPE_SOLID };
+                           .type = DWG_TYPE_VIEWPORT };
       }
       else
           // clang-format off
@@ -1500,7 +1500,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       {
         Dwg_Object *obj = dwg_ent_generic_to_object (ent.u.viewport, &error);
         if (ent.type != DWG_TYPE_VIEWPORT)
-          fn_error ("layout viewport: Missing viewport\n");
+          fn_error ("layout viewport: last entity is not a viewport\n");
         if (strlen (s1) && text[strlen (s1) - 1] == '"')
           text[strlen (s1) - 1] = '\0'; // strip the \"
         if (!error)

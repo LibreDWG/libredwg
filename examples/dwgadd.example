@@ -31,7 +31,6 @@ point (2 0 0)
 solid (0 0 0) (2 0) (2 1) (0 2)
 trace (0 0 0) (2 0) (2 1) (0 2)
 shape "roman.shx" (0 0 0) 2 45
-viewport "Viewport1"
 ellipse (0 0 0) 2.0 0.75
 spline 3 ((0 0 0) (2 0 0) (2 1 0)) (0 2 0) (0 3 0)
 ray (0 0 0) (2 0 0)
@@ -42,13 +41,14 @@ mtext (0 1 0) 10 "test\ntext"
 leader 2 ((0 0 0) (0 1 0)) mtext 15
 tolerance "testtekst" (0 0 0) (0 0 1)
 mlinestyle "Double"
-mlinestyle.start_angle = 1.12
+mlinestyle.start_angle = 45
 mline 4 ((3.9 1.5 0) (3.2 1.8 0) (4.6 1.0 0) (3.8 1.7 0))
 dimstyle "Dim1"
 dimstyle.DIMSCALE = 2.0
 dimstyle.DIMUPT = 1
 ucs (0 0 0) (1 0 0) (2.5 0 0) "Ucs1"
 ucs.ucs_elevation = 1.0
+viewport "Viewport1"
 layout viewport "Model" "ANSI_A_(8.50_x_11.00_Inches)"
 torus (10 5 0) (0 0 1) 19 2.78
 sphere (10 5 0) (0 0 1) 15
