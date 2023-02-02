@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <getopt.h>
@@ -411,6 +412,8 @@ scan_pts2d (unsigned num_pts, char **pp)
   if (!p)
     return NULL;
   p++;
+  while (isspace(*p))
+    p++;
   if (num_pts > 5000)
     exit (0);
   pts = calloc (num_pts, 16);
@@ -418,6 +421,8 @@ scan_pts2d (unsigned num_pts, char **pp)
     exit (0);
   for (unsigned i = 0; i < num_pts; i++)
     {
+      while (isspace(*p))
+        p++;
       if (2 == SSCANF_S (p, "(%lf %lf)", &pts[i].x, &pts[i].y))
         {
           p = strchr (p, ')');
@@ -435,6 +440,10 @@ scan_pts2d (unsigned num_pts, char **pp)
 
   if (p)
     {
+      if (*p == ')')
+        p++;
+      while (isspace(*p))
+        p++;
       *pp = p;
       return pts;
     }
@@ -455,6 +464,8 @@ scan_pts3d (unsigned num_pts, char **pp)
   if (!p)
     return NULL;
   p++;
+  while (isspace(*p))
+    p++;
   if (num_pts > 5000)
     exit (0);
   pts = calloc (num_pts, 24);
@@ -462,6 +473,8 @@ scan_pts3d (unsigned num_pts, char **pp)
     exit (0);
   for (unsigned i = 0; i < num_pts; i++)
     {
+      while (isspace(*p))
+        p++;
       if (3 == SSCANF_S (p, "(%lf %lf %lf)", &pts[i].x, &pts[i].y, &pts[i].z))
         {
           p = strchr (p, ')');
@@ -479,6 +492,10 @@ scan_pts3d (unsigned num_pts, char **pp)
 
   if (p && num_pts)
     {
+      if (*p == ')')
+        p++;
+      while (isspace(*p))
+        p++;
       *pp = p;
       return pts;
     }
@@ -499,6 +516,8 @@ scan_faces (unsigned num, char **pp)
   if (!p)
     return NULL;
   p++;
+  while (isspace(*p))
+    p++;
   if (num > 5000)
     exit (0);
   faces = calloc (num, 4 * sizeof (int));
@@ -506,6 +525,8 @@ scan_faces (unsigned num, char **pp)
     exit (0);
   for (unsigned i = 0; i < num; i++)
     {
+      while (isspace(*p))
+        p++;
       if (4 == SSCANF_S (p, "(%hd %hd %hd %hd)", &faces[i][0], &faces[i][1],
                          &faces[i][2], &faces[i][3]))
         {
@@ -524,6 +545,10 @@ scan_faces (unsigned num, char **pp)
 
   if (p && num)
     {
+      if (*p == ')')
+        p++;
+      while (isspace(*p))
+        p++;
       *pp = p;
       return faces;
     }
@@ -1253,12 +1278,12 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                               &pt1.x, &pt1.y, &pt1.z))
       {
         int face[4];
-        dwg_point_3d *verts = scan_pts3d (i1, &p);
         dwg_face *faces = NULL;
+        dwg_point_3d *verts = scan_pts3d (i1, &p);
         if (4 == SSCANF_S (p, "((%d %d %d %d)", &face[0], &face[1], &face[2],
                            &face[3]))
           faces = scan_faces (i2, &p);
-        else
+        else if (i2) // else no faces
           LOG_ERROR ("reading faces in %s", p)
         if (i1 && i2 && verts && faces)
           {
