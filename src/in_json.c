@@ -990,7 +990,7 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RC (is_maint, 0)
       FIELD_RC (zero_one_or_three, 0)
       // preR13 only
-      FIELD_RC (unknown_3, 0)
+      FIELD_RC (numentity_sections, 0)
       FIELD_RS (sections, 0)
       FIELD_RS (numheader_vars, 0)
       FIELD_RL (thumbnail_address, 0) //@0x0d
