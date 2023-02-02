@@ -852,8 +852,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       if (!ent.u.var || ent.type != DWG_TYPE_##name)                          \
         fn_error ("Invalid type " #var ". Empty or wrong int type\n");        \
       if (dwg_dynapi_is_angle (#name, s1))                                    \
-        i1 = deg2rad (i1);                                                    \
-      dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &i1, 0);             \
+        f1 = deg2rad (i1);                                                    \
+      dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &f1, 0);             \
       LOG_TRACE (#var ".%s = %d\n", s1, i1);                                  \
     }                                                                         \
   else if (2 == SSCANF_S (p, #var "." FMT_NAME " = %lf\n", s1 SZ, &f1))   \

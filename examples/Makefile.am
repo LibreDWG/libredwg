@@ -239,6 +239,13 @@ regen-man: dwgfuzz dwgadd
 	  pod2man --release="@VERSION@" --section=5 --center="User Commands" $(srcdir)/$$base.pod >$$p; done
 endif
 
+.c.ic: # replace the original .c with the expanded version.
+	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+	$(COMPILE) -c -E -P -o $@ $<
+	$(CLANG_FORMAT) -i $@
+	$(am__mv) $< $<.orig
+	$(am__mv) $@ $<
+
 # emacs flymake-mode
 check-syntax:
 	test -n "$(CHK_SOURCES)" && \
