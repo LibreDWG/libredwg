@@ -1171,6 +1171,8 @@ bfr_read_64 (void *restrict dst, BITCODE_RC *restrict *restrict src,
       sp0 = sp = malloc (size);
       memcpy ((void *)sp, (const void *)*src, size);
     }
+  else
+    sp = (uint64_t *)src;
 
   for (n = 0; n < size / sizeof (uint64_t); n++)
     {
