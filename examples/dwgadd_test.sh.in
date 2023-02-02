@@ -63,13 +63,16 @@ dwgaddtest AC1015 r2000
 # wrong DICTIONARY.ownerhandle
 dwgaddtest AC1014 r14 dwgadd.example_r11
 dwgaddtest AC1012 r13 dwgadd.example_r11
-# --verify failed with error 0x100
+# --verify fails with error 0x100 (VX.size overflow)
 dwgaddtest AC1009 r11 dwgadd.example_r11
-dwgaddtest AC1006 r10 dwgadd.example_r11
-dwgaddtest AC1004 r9 dwgadd.example_r11
-dwgaddtest AC2.10 r2.10 dwgadd.example_r11
-dwgaddtest AC1003 r2.6 dwgadd.example_r11
-dwgaddtest AC1.40 r1.4 dwgadd.example_r1
+#sed -e'/^dimstyle/d;/^ucs/d;/^lwpolyline/d;/^viewport/d;' <"$srcdir/dwgadd.example_r11" >"$srcdir/dwgadd.example_r10"
+dwgaddtest AC1006 r10 dwgadd.example_r10
+dwgaddtest AC1004 r9 dwgadd.example_r10
+#sed -e'/^dimension/d;/^3dface/d;' <"$srcdir/dwgadd.example_r10" >"$srcdir/dwgadd.example_r2_10"
+dwgaddtest AC2.10 r2.10 dwgadd.example_r2_10
+dwgaddtest AC1003 r2.6 dwgadd.example_r2_10
+#rm -f "$srcdir/dwgadd.example_r10" "$srcdir/dwgadd.example_r2_10"
+dwgaddtest AC1.40 r1.4 dwgadd.example_r1_4
 
 # not yet supported
 #dwgaddtest AC1018 r2004
@@ -89,7 +92,6 @@ dwgaddtest AC1015 r2000 $tmp
 echo "point (0 0 0)" >$tmp
 cat $tmp
 dwgaddtest AC1015 r2000 $tmp
-#FIXME not added: GH #388
 dwgaddtest AC1009 r11 $tmp
 
 # cleanup

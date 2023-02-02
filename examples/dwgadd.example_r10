@@ -24,8 +24,3 @@ dimension_linear (2 0 0) (2 1 0) (0 0 0) 90
 solid (0 0 0) (2 0) (2 1) (0 2)
 trace (0 0 0) (2 0) (2 1) (0 2)
 shape "roman.shx" (0 0 0) 2 45
-dimstyle "Dim1"
-dimstyle.DIMSCALE = 2.0
-dimstyle.DIMUPT = 1
-ucs (0 0 0) (1 0 0) (2.5 0 0) "Ucs1"
-ucs.ucs_elevation = 1.0
