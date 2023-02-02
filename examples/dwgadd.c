@@ -454,7 +454,7 @@ scan_pts2d (unsigned num_pts, char **pp)
     {
       if (*p == ')')
         p++;
-      while (isspace(*p))
+      while (isspace(*p) && *p != '\n')
         p++;
       *pp = p;
       return pts;
@@ -506,7 +506,7 @@ scan_pts3d (unsigned num_pts, char **pp)
     {
       if (*p == ')')
         p++;
-      while (isspace(*p))
+      while (isspace(*p) && *p != '\n')
         p++;
       *pp = p;
       return pts;
@@ -559,7 +559,7 @@ scan_faces (unsigned num, char **pp)
     {
       if (*p == ')')
         p++;
-      while (isspace(*p))
+      while (isspace(*p) && *p != '\n')
         p++;
       *pp = p;
       return faces;
