@@ -252,7 +252,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   long unsigned int pos = tbl->address;
   BITCODE_RC flag;
   BITCODE_TF name;
-  BITCODE_RSd used;
+  BITCODE_RSd used = -1;
   unsigned long oldpos = dat->byte;
 
   LOG_TRACE ("contents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n",
