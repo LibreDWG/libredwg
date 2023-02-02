@@ -496,13 +496,13 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_RC unknown_46[46];
-    if (dwg_dynapi_header_value (dwg, "unknown_46[46]", &unknown_46, NULL)
-        && !memcmp (&unknown_46, &dwg->header_vars.unknown_46, sizeof (dwg->header_vars.unknown_46))
+    BITCODE_RC menuext[46];
+    if (dwg_dynapi_header_value (dwg, "MENUEXT[46]", &menuext, NULL)
+        && !memcmp (&menuext, &dwg->header_vars.MENUEXT, sizeof (dwg->header_vars.MENUEXT))
        )
       pass ();
     else
-      fail ("HEADER.unknown_46[46] [RC]");
+      fail ("HEADER.MENUEXT[46] [RC]");
   }
   {
     BITCODE_B blipmode;

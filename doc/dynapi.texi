@@ -417,6 +417,8 @@ BS,	DXF 70
 BS,	DXF 70
 @item MENU
 TV,	DXF 1
+@item MENUEXT[46]
+RC
 @item MIRRTEXT
 B,	DXF 70
 @item NORTHDIRECTION
@@ -760,8 +762,6 @@ BD
 @item unknown_3f9
 RC
 @item unknown_3fa
-RC
-@item unknown_46[46]
 RC
 @item unknown_4f2
 RL

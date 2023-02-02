@@ -114,7 +114,7 @@
     if (FIELD_VALUE (MENU)) // already created by add_Document
       free (FIELD_VALUE (MENU));
   }
-  FIELD_TFv (MENU, 15, 1);
+  FIELD_TFv (MENU, 15, 1); // optionally extended by MENUEXT below
   FIELD_RD (DIMSCALE, 40); //ok 0x1a3
   FIELD_RD (DIMASZ, 40); //ok
   FIELD_RD (DIMEXO, 40); //ok
@@ -137,9 +137,15 @@
   if (dwg->header.numheader_vars <= 74)
     return 0;
   FIELD_RC (LIMCHECK, 70); //ok 1fa
-  /* TODO Unknown structure (0x01fc-0x0228) 46 byte */
-  // PLATFORM was until r11
-  FIELD_TFF (unknown_46, 46, 0);
+  FIELD_TFF (MENUEXT, 46, 0);
+  DECODER {    
+    if (_obj->MENUEXT[1]) {
+      size_t len = strlen ((char*)&_obj->MENUEXT[1]);
+      _obj->MENU = realloc (_obj->MENU, strlen (_obj->MENU) + len + 1);
+      strncat (_obj->MENU, (char*)&_obj->MENUEXT[1], len);
+      LOG_TRACE ("MENU => \"%s\"\n", _obj->MENU);
+    }
+  }
   FIELD_RD (ELEVATION, 40); //ok
   FIELD_RD (THICKNESS, 40); //ok
   FIELD_3RD (VIEWDIR, 10);
