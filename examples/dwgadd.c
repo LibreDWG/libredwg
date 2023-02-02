@@ -34,6 +34,7 @@
 #include "bits.h"
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
+#include "classes.h"
 #include <dwg_api.h>
 #ifndef DISABLE_JSON
 #  include "in_json.h"
@@ -79,6 +80,17 @@ fn_version (void)
 {
   printf ("dwgadd %s\n", PACKAGE_VERSION);
   return 0;
+}
+
+static void
+log_p (unsigned level, char *p)
+{
+  char *n = strchr (p, '\n');
+  int size = n ? n - p : (int)strlen (p);
+  if (DWG_LOGLEVEL >= level)
+    {
+      HANDLER (OUTPUT, "%.*s\n", size, p);
+    }
 }
 
 static int
@@ -632,6 +644,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       Dwg_Entity_POLYLINE_MESH *polyline_mesh;
       Dwg_Entity_POLYLINE_PFACE *polyline_pface;
       Dwg_Entity_LWPOLYLINE *lwpolyline;
+      Dwg_Entity_MLINE *mline;
       Dwg_Object_DICTIONARY *dictionary;
       Dwg_Object_XRECORD *xrecord;
       Dwg_Object_MLINESTYLE *mlinestyle;
@@ -840,41 +853,63 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
 
 // set entity/object field values.
 #define SET_ENT(var, name)                                                    \
-  if (4 == SSCANF_S (p, #var "." FMT_NAME " = %d.%d.%X\n", s1 SZ, &i1,    \
-                     &i2, &u))                                                \
+  if (4                                                                       \
+      == SSCANF_S (p, #var "." FMT_NAME " = %d.%d.%X\n", s1 SZ, &i1, &i2,     \
+                   &u))                                                       \
     {                                                                         \
       BITCODE_H hdl;                                                          \
       if (!ent.u.var || ent.type != DWG_TYPE_##name)                          \
-        fn_error ("Invalid type " #var ". Empty or wrong handle type\n");     \
+        {                                                                     \
+          log_p (DWG_LOGLEVEL_ERROR, p);                                      \
+          LOG_ERROR ("wrong last entity type 0x%x, needing " #var "\n",       \
+                     ent.type);                                               \
+          exit (1);                                                           \
+        }                                                                     \
       hdl = dwg_add_handleref (dwg, i1, u, NULL);                             \
       dwg_dynapi_entity_set_value (ent.u.var, #name, s1, hdl, 0);             \
       LOG_TRACE (#var ".%s = %d.%d.%X\n", s1, i1, i2, u);                     \
     }                                                                         \
-  else if (2 == SSCANF_S (p, #var "." FMT_NAME " = %d\n", s1 SZ, &i1))    \
+  else if (2 == SSCANF_S (p, #var "." FMT_NAME " = %d\n", s1 SZ, &i1))        \
     {                                                                         \
       if (!ent.u.var || ent.type != DWG_TYPE_##name)                          \
-        fn_error ("Invalid type " #var ". Empty or wrong int type\n");        \
+        {                                                                     \
+          log_p (DWG_LOGLEVEL_ERROR, p);                                      \
+          LOG_ERROR ("wrong last entity type 0x%x, needing " #var "\n",       \
+                     ent.type);                                               \
+          exit (1);                                                           \
+        }                                                                     \
       if (dwg_dynapi_is_angle (#name, s1))                                    \
         f1 = deg2rad (i1);                                                    \
       dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &f1, 0);             \
       LOG_TRACE (#var ".%s = %d\n", s1, i1);                                  \
     }                                                                         \
-  else if (2 == SSCANF_S (p, #var "." FMT_NAME " = %lf\n", s1 SZ, &f1))   \
+  else if (2 == SSCANF_S (p, #var "." FMT_NAME " = %lf\n", s1 SZ, &f1))       \
     {                                                                         \
       if (!ent.u.var || ent.type != DWG_TYPE_##name)                          \
-        fn_error ("Invalid type " #var ". Empty or wrong float type\n");      \
+        {                                                                     \
+          log_p (DWG_LOGLEVEL_ERROR, p);                                      \
+          LOG_ERROR ("wrong last entity type 0x%x, needing " #var "\n",       \
+                     ent.type);                                               \
+          exit (1);                                                           \
+        }                                                                     \
       if (dwg_dynapi_is_angle (#name, s1))                                    \
         f1 = deg2rad (f1);                                                    \
       dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &f1, 0);             \
       LOG_TRACE (#var ".%s = %f\n", s1, f1);                                  \
     }                                                                         \
-  else if (2 == SSCANF_S (p, #var "." FMT_NAME " = " FMT_ANY "\n", s1 SZ, \
-                     text SZ))                                            \
+  else if (2                                                                  \
+           == SSCANF_S (p, #var "." FMT_NAME " = " FMT_ANY "\n", s1 SZ,       \
+                        text SZ))                                             \
     {                                                                         \
       if (strlen (text) && text[strlen (text) - 1] == '"')                    \
         text[strlen (text) - 1] = '\0';                                       \
       if (!ent.u.var || ent.type != DWG_TYPE_##name)                          \
-        fn_error ("Invalid type " #var ". Empty or wrong type\n");            \
+        {                                                                     \
+          log_p (DWG_LOGLEVEL_ERROR, p);                                      \
+          LOG_ERROR ("wrong last entity type 0x%x, needing " #var "\n",       \
+                     ent.type);                                               \
+          exit (1);                                                           \
+        }                                                                     \
       dwg_dynapi_entity_set_value (ent.u.var, #name, s1, text, 1);            \
       LOG_TRACE (#var ".%s = \"%s\"\n", s1, text);                            \
     }
@@ -899,7 +934,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          &pt1.z, tag SZ, default_text SZ))
         {
           if (version < R_2_0b)
-            fn_error ("Invalid entity ATTDEF\n");
+            fn_error ("Invalid entity ATTDEF <r2.0b\n");
           LOG_TRACE ("add_ATTDEF %s %f %d \"%s\" (%f %f %f) \"%s\" \"%s\"\n",
                      hdr_s, height, flags, prompt, pt1.x, pt1.y, pt1.z,
                      tag, default_text);
@@ -919,9 +954,12 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          &pt1.z, tag SZ, text SZ))
         {
           if (version < R_2_0b)
-            fn_error ("Invalid entity ATTRIB\n");
+            fn_error ("Invalid entity ATTRIB <r2.0b\n");
           if (insert.type == DWG_TYPE_UNUSED)
-            fn_error ("Missing INSERT for ATTRIB\n");
+            {
+              log_p (DWG_LOGLEVEL_ERROR, p);
+              fn_error ("Missing INSERT for ATTRIB\n");
+            }
           LOG_TRACE ("add_ATTRIB insert %f %d (%f %f %f) \"%s\" \"%s\"\n",
                      height, flags, pt1.x, pt1.y, pt1.z, tag, text);
           ent = (lastent_t){ .u.attrib
@@ -949,7 +987,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          &pt1.z, &pt2.x, &pt2.y, &pt2.z))
       {
         if (version <= R_11)
-          fn_error ("Invalid entity RAY\n");
+          fn_error ("Invalid entity RAY <r13\n");
         LOG_TRACE ("add_RAY %s (%f %f %f) (%f %f %f)\n",
                    hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z);
         ent = (lastent_t){ .u.ray = dwg_add_RAY (hdr, &pt1, &pt2),
@@ -1350,7 +1388,10 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            &face[3]))
           faces = scan_faces (i2, &p);
         else if (i2) // else no faces
-          LOG_ERROR ("reading faces in %s", p)
+          {
+            log_p (DWG_LOGLEVEL_ERROR, p);
+            LOG_ERROR ("reading faces");
+          }
         if (i1 && i2 && verts && faces)
           {
             LOG_TRACE ("add_POLYLINE_PFACE %s %d %d ((%f %f %f)",
@@ -1396,9 +1437,31 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           }
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (lwpolyline, LWPOLYLINE)
-      // clang-format on
+        // clang-format on
+      else if (4 == SSCANF_S (p, "mline %d ((%lf %lf %lf)", &i1, &pt1.x,
+                              &pt1.y, &pt1.z))
+      {
+        dwg_point_3d *pts = scan_pts3d (i1, &p);
+        if (i1 && pts)
+          {
+            LOG_TRACE ("add_MLINE %s %d ((%f %f %f)", hdr_s, i1, pt1.x,
+                       pt1.y, pt1.z);
+            for (i = 1; i < i1; i++)
+              {
+                LOG_TRACE (" (%f %f %f)", pts[i].x, pts[i].y, pts[i].z);
+              }
+            LOG_TRACE (")\n");
+            ent = (lastent_t){ .u.mline = dwg_add_MLINE (hdr, i1, pts),
+                               .type = DWG_TYPE_MLINE };
+            free (pts);
+          }
+      }
+      else
+        // clang-format off
+        SET_ENT (mline, MLINE)
+        // clang-format on
       else if (3 == SSCANF_S (p, "dictionary " FMT_TBL " " FMT_TBL " %u",
                               text SZ, s1 SZ, &u))
       {
@@ -1451,7 +1514,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          &pt1.z, &f1, &f2))
       {
         if (version <= R_11)
-          fn_error ("Invalid entity ELLIPSE\n");
+          fn_error ("Invalid entity ELLIPSE <r13\n");
         LOG_TRACE ("add_ELLIPSE %s (%f %f %f) %f %f\n", hdr_s, pt1.x,
                    pt1.y, pt1.z, f1, f2);
         ent = (lastent_t){ .u.ellipse = dwg_add_ELLIPSE (hdr, &pt1, f1, f2),
@@ -1467,7 +1530,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       {
         dwg_point_3d *fitpts;
         if (version <= R_11)
-          fn_error ("Invalid entity SPLINE\n");
+          fn_error ("Invalid entity SPLINE <r13\n");
         fitpts = scan_pts3d (i1, &p);
         if (i1 && fitpts
             && SSCANF_S (p, ") (%lf %lf %lf) (%lf %lf %lf)", &pt2.x, &pt2.y,
@@ -1597,9 +1660,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_VPORT };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (vport, VPORT)
-      // clang-format on
+        // clang-format on
       else if (1 == SSCANF_S (p, "dimstyle " FMT_TBL, text SZ))
       {
         if (version < R_11)
@@ -1609,9 +1672,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_DIMSTYLE };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (dimstyle, DIMSTYLE)
-      // clang-format on
+        // clang-format on
       else if (1 == SSCANF_S (p, "group " FMT_TBL, text SZ))
       {
         if (version <= R_11)
