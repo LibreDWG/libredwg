@@ -646,7 +646,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       Dwg_Object_GROUP *group;
     } u;
   } lastent_t;
-  lastent_t ent, insert;
+  lastent_t ent, insert, dict, mtext;
   char text[120];
   char prompt[120];
   char tag[120];
@@ -656,6 +656,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
   if (!dat->chain)
     abort ();
   dwg = *dwgp;
+  insert.type = DWG_TYPE_UNUSED;
+  dict.type = DWG_TYPE_UNUSED;
+  mtext.type = DWG_TYPE_UNUSED;
   if (!dwg->header.version)
     version = R_2000;
   else
@@ -897,16 +900,13 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         {
           if (version < R_2_0b)
             fn_error ("Invalid entity ATTDEF\n");
-          else
-            {
-              LOG_TRACE ("add_ATTDEF %s %f %d \"%s\" (%f %f %f) \"%s\" \"%s\"\n",
-                         hdr_s, height, flags, prompt, pt1.x, pt1.y, pt1.z,
-                         tag, default_text);
-              ent = (lastent_t){ .u.attdef
-                               = dwg_add_ATTDEF (hdr, height, flags, prompt,
-                                                 &pt1, tag, default_text),
-                               .type = DWG_TYPE_ATTDEF };
-            }
+          LOG_TRACE ("add_ATTDEF %s %f %d \"%s\" (%f %f %f) \"%s\" \"%s\"\n",
+                     hdr_s, height, flags, prompt, pt1.x, pt1.y, pt1.z,
+                     tag, default_text);
+          ent = (lastent_t){ .u.attdef
+                             = dwg_add_ATTDEF (hdr, height, flags, prompt,
+                                               &pt1, tag, default_text),
+                             .type = DWG_TYPE_ATTDEF };
         }
       else
         // clang-format off
@@ -920,17 +920,14 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         {
           if (version < R_2_0b)
             fn_error ("Invalid entity ATTRIB\n");
-          else if (!insert.u.insert)
+          if (insert.type == DWG_TYPE_UNUSED)
             fn_error ("Missing INSERT for ATTRIB\n");
-          else
-            {
-              LOG_TRACE ("add_ATTRIB insert %f %d (%f %f %f) \"%s\" \"%s\"\n",
-                         height, flags, pt1.x, pt1.y, pt1.z, tag, text);
-              ent = (lastent_t){ .u.attrib
-                               = dwg_add_ATTRIB (insert.u.insert, height,
-                                                 flags, &pt1, tag, text),
-                               .type = DWG_TYPE_ATTRIB };
-            }
+          LOG_TRACE ("add_ATTRIB insert %f %d (%f %f %f) \"%s\" \"%s\"\n",
+                     height, flags, pt1.x, pt1.y, pt1.z, tag, text);
+          ent = (lastent_t){ .u.attrib
+                             = dwg_add_ATTRIB (insert.u.insert, height,
+                                               flags, &pt1, tag, text),
+                             .type = DWG_TYPE_ATTRIB };
         }
       else
         // clang-format off
@@ -953,9 +950,10 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       {
         if (version <= R_11)
           fn_error ("Invalid entity RAY\n");
-        else
-          ent = (lastent_t){ .u.ray = dwg_add_RAY (hdr, &pt1, &pt2),
-                             .type = DWG_TYPE_RAY };
+        LOG_TRACE ("add_RAY %s (%f %f %f) (%f %f %f)\n",
+                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z);
+        ent = (lastent_t){ .u.ray = dwg_add_RAY (hdr, &pt1, &pt2),
+                           .type = DWG_TYPE_RAY };
       }
       else
           // clang-format off
@@ -966,16 +964,17 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       {
         if (version <= R_11)
           fn_error ("Invalid entity XLINE\n");
-        else
-          ent = (lastent_t){ .u.xline = dwg_add_XLINE (hdr, &pt1, &pt2),
-                             .type = DWG_TYPE_XLINE };
+        LOG_TRACE ("add_XLINE %s (%f %f %f) (%f %f %f)\n",
+                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z);
+        ent = (lastent_t){ .u.xline = dwg_add_XLINE (hdr, &pt1, &pt2),
+                           .type = DWG_TYPE_XLINE };
       }
       else
           // clang-format off
         SET_ENT (xline, XLINE)
       // clang-format on
-      else if ((i1 = SSCANF_S (p, "text " FMT_ANY " (%lf %lf %lf) %lf\n", text,
-                               &pt1.x, &pt1.y, &pt1.z, &height)) >= 5)
+      else if ((i = SSCANF_S (p, "text " FMT_ANY " (%lf %lf %lf) %lf\n", text,
+                              &pt1.x, &pt1.y, &pt1.z, &height)) >= 5)
       {
         if (strlen (text) && text[strlen (text) - 1] == '"')
           text[strlen (text) - 1] = '\0'; // strip the \"
@@ -995,15 +994,16 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           text[strlen (text) - 1] = '\0'; // strip the \"
         if (version <= R_11)
           fn_error ("Invalid entity MTEXT\n");
-        else
-          ent = (lastent_t){ .u.mtext
-                             = dwg_add_MTEXT (hdr, &pt1, height, text),
-                             .type = DWG_TYPE_MTEXT };
+        LOG_TRACE ("add_MTEXT %s (%f %f %f) %f \"%s\"\n",
+                   hdr_s, pt1.x, pt1.y, pt1.z, height, text);
+        mtext = ent = (lastent_t){ .u.mtext = dwg_add_MTEXT (hdr, &pt1,
+                                                             height, text),
+                                   .type = DWG_TYPE_MTEXT };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (mtext, MTEXT)
-      // clang-format on
+        // clang-format on
       else if (1 == SSCANF_S (p, "block " FMT_TBL, text SZ))
       {
         if (strlen (text) && text[strlen (text) - 1] == '"')
@@ -1016,7 +1016,10 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         SET_ENT (block, BLOCK)
         // clang-format on
       else if (memBEGINc (p, "endblk\n"))
-        dwg_add_ENDBLK (hdr);
+        {
+          LOG_TRACE ("add_ENDBLK\n");
+          dwg_add_ENDBLK (hdr);
+        }
       else
           // clang-format off
         SET_ENT (endblk, ENDBLK)
@@ -1025,6 +1028,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          &pt1.x, &pt1.y, &pt1.z, text SZ, &scale.x,
                          &scale.y, &scale.z, &rot))
       {
+        LOG_TRACE ("add_INSERT %s (%f %f %f) \"%s\" %f %f %f %f\n", hdr_s,
+                   pt1.x, pt1.y, pt1.z, text, scale.x, scale.y, scale.z,
+                   deg2rad (rot));
         insert = ent = (lastent_t){ .u.insert = dwg_add_INSERT (
                                         hdr, &pt1, text, scale.x, scale.y,
                                         scale.z, deg2rad (rot)),
@@ -1043,14 +1049,15 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       {
         if (version <= R_11)
           fn_error ("Invalid entity MINSERT\n");
-        else
-          {
-            insert = ent
-                = (lastent_t){ .u.minsert = dwg_add_MINSERT (
-                                   hdr, &pt1, text, scale.x, scale.y, scale.z,
-                                   deg2rad (rot), i1, i2, f1, f2),
-                               .type = DWG_TYPE_MINSERT };
-          }
+        LOG_TRACE (
+            "add_MINSERT %s (%f %f %f) \"%s\" %f %f %f %f %d %d %f %f\n",
+            hdr_s, pt1.x, pt1.y, pt1.z, text, scale.x, scale.y, scale.z,
+            deg2rad (rot), i1, i2, f1, f2);
+        insert = ent
+            = (lastent_t){ .u.minsert = dwg_add_MINSERT (
+                               hdr, &pt1, text, scale.x, scale.y, scale.z,
+                               deg2rad (rot), i1, i2, f1, f2),
+                           .type = DWG_TYPE_MINSERT };
       }
       else
           // clang-format off
@@ -1058,6 +1065,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       // clang-format on
       else if (3 == SSCANF_S (p, "point (%lf %lf %lf)", &pt1.x, &pt1.y, &pt1.z))
       {
+        LOG_TRACE ("add_POINT %s (%f %f %f)\n", hdr_s, pt1.x, pt1.y, pt1.z);
         ent = (lastent_t){ .u.point = dwg_add_POINT (hdr, &pt1),
                            .type = DWG_TYPE_POINT };
       }
@@ -1068,6 +1076,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else if (4 == SSCANF_S (p, "circle (%lf %lf %lf) %lf", &pt1.x, &pt1.y,
                               &pt1.z, &f1))
       {
+        LOG_TRACE ("add_CIRCLE %s (%f %f %f) %f\n", hdr_s, pt1.x, pt1.y, pt1.z, f1);
         ent = (lastent_t){ .u.circle = dwg_add_CIRCLE (hdr, &pt1, f1),
                            .type = DWG_TYPE_CIRCLE };
       }
@@ -1076,10 +1085,12 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         SET_ENT (circle, CIRCLE)
       // clang-format on
       else if (6 == SSCANF_S (p, "arc (%lf %lf %lf) %lf %lf %lf", &pt1.x, &pt1.y,
-                         &pt1.z, &f1, &f2, &height))
+                              &pt1.z, &len, &f1, &f2))
       {
-        ent = (lastent_t){ .u.arc = dwg_add_ARC (hdr, &pt1, f1, deg2rad (f2),
-                                                 deg2rad (height)),
+        LOG_TRACE ("add_ARC %s (%f %f %f) %f %f %f\n", hdr_s, pt1.x, pt1.y, pt1.z,
+                   len, deg2rad (f1), deg2rad (f2));
+        ent = (lastent_t){ .u.arc = dwg_add_ARC (hdr, &pt1, len, deg2rad (f1),
+                                                 deg2rad (f2)),
                            .type = DWG_TYPE_ARC };
       }
       else
@@ -1092,6 +1103,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
                          &pt3.x, &pt3.y, &pt3.z))
       {
+        LOG_TRACE ("add_DIMENSION_ALIGNED %s (%f %f %f) (%f %f %f) (%f %f %f)\n",
+                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z,
+                   pt3.x, pt3.y, pt3.z);
         ent = (lastent_t){ .u.dimali
                            = dwg_add_DIMENSION_ALIGNED (hdr, &pt1, &pt2, &pt3),
                            .type = DWG_TYPE_DIMENSION_ALIGNED };
@@ -1107,6 +1121,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                    &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
                    &pt3.y, &pt3.z, &rot))
       {
+        LOG_TRACE ("add_DIMENSION_LINEAR %s (%f %f %f) (%f %f %f) (%f %f %f) %f\n",
+                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z,
+                   pt3.x, pt3.y, pt3.z, deg2rad (rot));
         ent = (lastent_t){ .u.dimlin = dwg_add_DIMENSION_LINEAR (
                                hdr, &pt1, &pt2, &pt3, deg2rad (rot)),
                            .type = DWG_TYPE_DIMENSION_LINEAR };
@@ -1122,6 +1139,10 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                    &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
                    &pt3.y, &pt3.z, &pt4.x, &pt4.y, &pt4.z))
       {
+        LOG_TRACE ("add_DIMENSION_ANG2LN %s (%f %f %f) (%f %f %f) (%f %f %f) "
+                   "(%f %f %f)\n",
+                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x,
+                   pt3.y, pt3.z, pt4.x, pt4.y, pt4.z);
         ent = (lastent_t){ .u.dimang2ln = dwg_add_DIMENSION_ANG2LN (
                                hdr, &pt1, &pt2, &pt3, &pt4),
                            .type = DWG_TYPE_DIMENSION_ANG2LN };
@@ -1137,6 +1158,10 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                    &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
                    &pt3.y, &pt3.z, &pt4.x, &pt4.y, &pt4.z))
       {
+        LOG_TRACE ("add_DIMENSION_ANG3PT %s (%f %f %f) (%f %f %f) (%f %f %f) "
+                   "(%f %f %f)\n",
+                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x,
+                   pt3.y, pt3.z, pt4.x, pt4.y, pt4.z);
         ent = (lastent_t){ .u.dimang3pt = dwg_add_DIMENSION_ANG3PT (
                                hdr, &pt1, &pt2, &pt3, &pt4),
                            .type = DWG_TYPE_DIMENSION_ANG3PT };
@@ -1149,6 +1174,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          "dimension_diameter (%lf %lf %lf) (%lf %lf %lf) %lf",
                          &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len))
       {
+        LOG_TRACE ("add_DIMENSION_DIAMETER %s (%f %f %f) (%f %f %f) %f\n",
+                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, len);
         ent = (lastent_t){ .u.dimdia
                            = dwg_add_DIMENSION_DIAMETER (hdr, &pt1, &pt2, len),
                            .type = DWG_TYPE_DIMENSION_DIAMETER };
@@ -1161,6 +1188,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          "dimension_ordinate (%lf %lf %lf) (%lf %lf %lf) %d",
                          &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &i1))
       {
+        LOG_TRACE ("add_DIMENSION_ORDINATE %s (%f %f %f) (%f %f %f) %s\n",
+                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z,
+                   i1 ? "true" : "false");
         ent = (lastent_t){ .u.dimord = dwg_add_DIMENSION_ORDINATE (
                                hdr, &pt1, &pt2, i1 ? true : false),
                            .type = DWG_TYPE_DIMENSION_ORDINATE };
@@ -1171,10 +1201,13 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       // clang-format on
       else if (7 == SSCANF_S (p, "dimension_radius (%lf %lf %lf) (%lf %lf %lf) %lf",
                          &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len))
-          ent
-          = (lastent_t){ .u.dimrad
+      {
+        LOG_TRACE ("add_DIMENSION_RADIUS %s (%f %f %f) (%f %f %f) %f\n",
+                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, len);
+        ent = (lastent_t){ .u.dimrad
                          = dwg_add_DIMENSION_RADIUS (hdr, &pt1, &pt2, len),
                          .type = DWG_TYPE_DIMENSION_RADIUS };
+      }
       else
           // clang-format off
         SET_ENT (dimrad, DIMENSION_RADIUS)
@@ -1185,6 +1218,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
                          &pt3.x, &pt3.y, &pt3.z, &pt4.x, &pt4.y, &pt4.z))
       {
+        LOG_TRACE ("add_3DFACE %s (%f %f %f) (%f %f %f) (%f %f %f) (%f %f %f)\n",
+                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x,
+                   pt3.y, pt3.z, pt4.x, pt4.y, pt4.z);
         ent = (lastent_t){ .u._3dface
                            = dwg_add_3DFACE (hdr, &pt1, &pt2, &pt3, &pt4),
                            .type = DWG_TYPE__3DFACE };
@@ -1195,6 +1231,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
                          &pt3.x, &pt3.y, &pt3.z))
       {
+        LOG_TRACE ("add_3DFACE %s (%f %f %f) (%f %f %f) (%f %f %f) NULL\n",
+                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x,
+                   pt3.y, pt3.z);
         ent = (lastent_t){ .u._3dface
                            = dwg_add_3DFACE (hdr, &pt1, &pt2, &pt3, NULL),
                            .type = DWG_TYPE__3DFACE };
@@ -1208,6 +1247,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          &pt1.x, &pt1.y, &pt1.z, &p2.x, &p2.y, &p3.x, &p3.y,
                          &p4.x, &p4.y))
       {
+        LOG_TRACE ("add_SOLID %s (%f %f %f) (%f %f %f) (%f %f %f) (%f %f %f)\n",
+                   hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x,
+                   pt3.y, pt3.z, pt4.x, pt4.y, pt4.z);
         ent = (lastent_t){ .u.solid = dwg_add_SOLID (hdr, &pt1, &p2, &p3, &p4),
                            .type = DWG_TYPE_SOLID };
       }
@@ -1220,8 +1262,11 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          &pt1.x, &pt1.y, &pt1.z, &p2.x, &p2.y, &p3.x, &p3.y,
                          &p4.x, &p4.y))
         {
+          LOG_TRACE ("add_TRACE %s (%f %f %f) (%f %f) (%f %f) (%f %f)\n",
+                     hdr_s, pt1.x, pt1.y, pt1.z, p2.x, p2.y, p3.x, p3.y,
+                     p4.x, p4.y);
           ent = (lastent_t){ .u.trace = dwg_add_TRACE (hdr, &pt1, &p2, &p3, &p4),
-                         .type = DWG_TYPE_TRACE };
+                             .type = DWG_TYPE_TRACE };
         }
       else
           // clang-format off
@@ -1232,6 +1277,13 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         dwg_point_2d *pts = scan_pts2d (i1, &p);
         if (i1 && pts)
           {
+            LOG_TRACE ("add_POLYLINE_2D %s %d ((%f %f)", hdr_s, i1, pt1.x,
+                       pt1.y);
+            for (i = 1; i < i1; i++)
+              {
+                LOG_TRACE (" (%f %f)", pts[i].x, pts[i].y);
+              }
+            LOG_TRACE (")\n");
             ent = (lastent_t){ .u.polyline_2d
                                = dwg_add_POLYLINE_2D (hdr, i1, pts),
                                .type = DWG_TYPE_POLYLINE_2D };
@@ -1248,6 +1300,13 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         dwg_point_3d *pts = scan_pts3d (i1, &p);
         if (i1 && pts)
           {
+            LOG_TRACE ("add_POLYLINE_3D %s %d ((%f %f %f)", hdr_s, i1, pt1.x,
+                       pt1.y, pt1.z);
+            for (i = 1; i < i1; i++)
+              {
+                LOG_TRACE (" (%f %f %f)", pts[i].x, pts[i].y, pts[i].z);
+              }
+            LOG_TRACE (")\n");
             ent = (lastent_t){ .u.polyline_3d
                                = dwg_add_POLYLINE_3D (hdr, i1, pts),
                                .type = DWG_TYPE_POLYLINE_3D };
@@ -1264,6 +1323,13 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         dwg_point_3d *pts = scan_pts3d (i1 * i2, &p);
         if (i1 && i2 && pts)
           {
+            LOG_TRACE ("add_POLYLINE_MESH %s %d %d ((%f %f %f)",
+                       hdr_s, i1, i2, pt1.x, pt1.y, pt1.z);
+            for (i = 1; i < i1; i++)
+              {
+                LOG_TRACE (" (%f %f %f)", pts[i].x, pts[i].y, pts[i].z);
+              }
+            LOG_TRACE (")\n");
             ent = (lastent_t){ .u.polyline_mesh
                                = dwg_add_POLYLINE_MESH (hdr, i1, i2, pts),
                                .type = DWG_TYPE_POLYLINE_MESH };
@@ -1287,6 +1353,19 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           LOG_ERROR ("reading faces in %s", p)
         if (i1 && i2 && verts && faces)
           {
+            LOG_TRACE ("add_POLYLINE_PFACE %s %d %d ((%f %f %f)",
+                       hdr_s, i1, i2, pt1.x, pt1.y, pt1.z);
+            for (i=1; i < i1; i++)
+              {
+                LOG_TRACE (" (%f %f %f)", verts[i].x, verts[i].y, verts[i].z);
+              }
+            LOG_TRACE (") (");
+            for (i=0; i < i2; i++)
+              {
+                LOG_TRACE (" (%d %d %d %d)", faces[i][0], faces[i][1],
+                           faces[i][2], faces[i][3]);
+              }
+            LOG_TRACE (")\n");
             ent = (lastent_t){ .u.polyline_pface
                                = dwg_add_POLYLINE_PFACE (hdr, i1, i2, verts, faces),
                                .type = DWG_TYPE_POLYLINE_PFACE };
@@ -1303,6 +1382,13 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         dwg_point_2d *pts = scan_pts2d (i1, &p);
         if (i1 && pts)
           {
+            LOG_TRACE ("add_LWPOLYLINE %s %d ((%f %f)",
+                       hdr_s, i1, pt1.x, pt1.y);
+            for (i = 1; i < i1; i++)
+              {
+                LOG_TRACE (" (%f %f)", pts[i].x, pts[i].y);
+              }
+            LOG_TRACE (")\n");
             ent = (lastent_t){ .u.lwpolyline
                                = dwg_add_LWPOLYLINE (hdr, i1, pts),
                                .type = DWG_TYPE_LWPOLYLINE };
@@ -1316,20 +1402,23 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else if (3 == SSCANF_S (p, "dictionary " FMT_TBL " " FMT_TBL " %u",
                               text SZ, s1 SZ, &u))
       {
-        ent = (lastent_t){ .u.dictionary = dwg_add_DICTIONARY (
-                               dwg, text, s1, (unsigned long)u),
-                           .type = DWG_TYPE_DICTIONARY };
+        LOG_TRACE ("add_DICTIONARY \"%s\" \"%s\" %u\n", text, s1, u);
+        dict = ent = (lastent_t){ .u.dictionary = dwg_add_DICTIONARY (
+                                      dwg, text, s1, (unsigned long)u),
+                                  .type = DWG_TYPE_DICTIONARY };
       }
       else
           // clang-format off
         SET_ENT (dictionary, DICTIONARY)
       // clang-format on
-      else if (ent.type == DWG_TYPE_DICTIONARY
-               && 1 == SSCANF_S (p, "xrecord dictionary " FMT_TBL, text SZ))
+      else if (1 == SSCANF_S (p, "xrecord dictionary " FMT_TBL, text SZ))
       {
+        if (dict.type != DWG_TYPE_DICTIONARY)
+          fn_error ("xrecord: missing dictionary\n");
+        LOG_TRACE ("add_XRECORD dictionary \"%s\"\n", text);
         ent = (lastent_t){ .u.xrecord
-                           = dwg_add_XRECORD (ent.u.dictionary, text),
-                           .type = DWG_TYPE_SOLID };
+                             = dwg_add_XRECORD (dict.u.dictionary, text),
+                           .type = DWG_TYPE_XRECORD };
       }
       else
           // clang-format off
@@ -1338,6 +1427,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else if (6 == SSCANF_S (p, "shape " FMT_PATH " (%lf %lf %lf) %lf %lf",
                               text SZ, &pt1.x, &pt1.y, &pt1.z, &scale.x, &rot))
       {
+        LOG_TRACE ("add_SHAPE %s \"%s\" (%f %f %f) %f %f\n", hdr_s, text,
+                   pt1.x, pt1.y, pt1.z, scale.x, deg2rad (rot));
         ent = (lastent_t){ .u.shape = dwg_add_SHAPE (hdr, text, &pt1, scale.x,
                                                      deg2rad (rot)),
                            .type = DWG_TYPE_SHAPE };
@@ -1348,6 +1439,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       // clang-format on
       else if (1 == SSCANF_S (p, "viewport " FMT_TBL, text SZ))
       {
+        LOG_TRACE ("add_VIEWPORT %s \"%s\"\n", hdr_s, text);
         ent = (lastent_t){ .u.viewport = dwg_add_VIEWPORT (hdr, text),
                            .type = DWG_TYPE_VIEWPORT };
       }
@@ -1360,9 +1452,10 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       {
         if (version <= R_11)
           fn_error ("Invalid entity ELLIPSE\n");
-        else
-          ent = (lastent_t){ .u.ellipse = dwg_add_ELLIPSE (hdr, &pt1, f1, f2),
-                             .type = DWG_TYPE_ELLIPSE };
+        LOG_TRACE ("add_ELLIPSE %s (%f %f %f) %f %f\n", hdr_s, pt1.x,
+                   pt1.y, pt1.z, f1, f2);
+        ent = (lastent_t){ .u.ellipse = dwg_add_ELLIPSE (hdr, &pt1, f1, f2),
+                           .type = DWG_TYPE_ELLIPSE };
       }
       else
           // clang-format off
@@ -1372,21 +1465,28 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                == SSCANF_S (p, "spline %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y,
                             &pt1.z))
       {
+        dwg_point_3d *fitpts;
         if (version <= R_11)
           fn_error ("Invalid entity SPLINE\n");
-        else
+        fitpts = scan_pts3d (i1, &p);
+        if (i1 && fitpts
+            && SSCANF_S (p, ") (%lf %lf %lf) (%lf %lf %lf)", &pt2.x, &pt2.y,
+                         &pt2.z, &pt3.x, &pt3.y, &pt3.z))
           {
-            dwg_point_3d *fitpts = scan_pts3d (i1, &p);
-            if (i1 && fitpts
-                && SSCANF_S (p, ") (%lf %lf %lf) (%lf %lf %lf)", &pt2.x,
-                             &pt2.y, &pt2.z, &pt3.x, &pt3.y, &pt3.z))
+            LOG_TRACE ("add_SPLINE %s %d ((%f %f %f)", hdr_s, i1, pt1.x, pt1.y,
+                       pt1.z);
+            for (i = 1; i < i1; i++)
               {
-                ent = (lastent_t){ .u.spline = dwg_add_SPLINE (hdr, i1, fitpts,
-                                                               &pt2, &pt3),
-                                   .type = DWG_TYPE_SPLINE };
+                LOG_TRACE (" (%f %f %f)", fitpts[i].x, fitpts[i].y,
+                           fitpts[i].z);
               }
-            free (fitpts);
+            LOG_TRACE (" (%f %f %f) (%f %f %f)\n", pt2.x, pt2.y, pt2.z, pt3.x,
+                       pt3.y, pt3.z);
+            ent = (lastent_t){ .u.spline
+                               = dwg_add_SPLINE (hdr, i1, fitpts, &pt2, &pt3),
+                               .type = DWG_TYPE_SPLINE };
           }
+        free (fitpts);
       }
       else
           // clang-format off
@@ -1396,19 +1496,26 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                && SSCANF_S (p, "leader %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y,
                             &pt1.z))
       {
+        dwg_point_3d *pts;
         if (version <= R_11)
-          fn_error ("Invalid entity LEADER\n");
-        else
+          fn_error ("Invalid entity LEADER <r13\n");
+        if (mtext.type != DWG_TYPE_MTEXT)
+          fn_error ("LEADER: Missing mtext\n");
+        pts = scan_pts3d (i1, &p);
+        if (i1 && pts && SSCANF_S (p, ") mtext %d", &i2))
           {
-            dwg_point_3d *pts = scan_pts3d (i1, &p);
-            if (i1 && pts && SSCANF_S (p, ") mtext %d", &i2))
+            LOG_TRACE ("add_LEADER %s %d ((%f %f %f)", hdr_s, i1, pt1.x, pt1.y,
+                       pt1.z);
+            for (i = 1; i < i1; i++)
               {
-                ent = (lastent_t){ .u.leader = dwg_add_LEADER (
-                                       hdr, i1, pts, ent.u.mtext, i2),
-                                   .type = DWG_TYPE_LEADER };
+                LOG_TRACE (" (%f %f %f)", pts[i].x, pts[i].y, pts[i].z);
               }
-            free (pts);
+            LOG_TRACE (" mtext %d\n", i2);
+            ent = (lastent_t){ .u.leader = dwg_add_LEADER (hdr, i1, pts,
+                                                           mtext.u.mtext, i2),
+                               .type = DWG_TYPE_LEADER };
           }
+        free (pts);
       }
       else
           // clang-format off
@@ -1420,11 +1527,12 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          &pt2.z))
       {
         if (version <= R_11)
-          fn_error ("Invalid entity TOLERANCE\n");
-        else
-          ent = (lastent_t){ .u.tolerance
-                             = dwg_add_TOLERANCE (hdr, text, &pt1, &pt2),
-                             .type = DWG_TYPE_TOLERANCE };
+          fn_error ("Invalid entity TOLERANCE <r13\n");
+        LOG_TRACE ("add_TOLERANCE %s \"%s\" (%f %f %f) (%f %f %f)\n", hdr_s, text,
+                   pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z);
+        ent = (lastent_t){ .u.tolerance
+                           = dwg_add_TOLERANCE (hdr, text, &pt1, &pt2),
+                           .type = DWG_TYPE_TOLERANCE };
       }
       else
           // clang-format off
@@ -1433,10 +1541,10 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else if (1 == SSCANF_S (p, "mlinestyle " FMT_TBL, text SZ))
       {
         if (version <= R_11)
-          fn_error ("Invalid entity MLINESTYLE\n");
-        else
-          ent = (lastent_t){ .u.mlinestyle = dwg_add_MLINESTYLE (dwg, text),
-                             .type = DWG_TYPE_MLINESTYLE };
+          fn_error ("Invalid entity MLINESTYLE <r13\n");
+        LOG_TRACE ("add_MLINESTYLE \"%s\"\n", text);
+        ent = (lastent_t){ .u.mlinestyle = dwg_add_MLINESTYLE (dwg, text),
+                           .type = DWG_TYPE_MLINESTYLE };
       }
       else
           // clang-format off
@@ -1444,6 +1552,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       // clang-format on
       else if (1 == SSCANF_S (p, "layer " FMT_TBL, text SZ))
       {
+        LOG_TRACE ("add_LAYER \"%s\"\n", text);
         ent = (lastent_t){ .u.layer = dwg_add_LAYER (dwg, text),
                            .type = DWG_TYPE_LAYER };
       }
@@ -1453,6 +1562,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       // clang-format on
       else if (1 == SSCANF_S (p, "style " FMT_TBL, text SZ))
       {
+        LOG_TRACE ("add_STYLE \"%s\"\n", text);
         ent = (lastent_t){ .u.style = dwg_add_STYLE (dwg, text),
                            .type = DWG_TYPE_STYLE };
       }
@@ -1462,6 +1572,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       // clang-format on
       else if (1 == SSCANF_S (p, "ltype " FMT_TBL, text SZ))
       {
+        LOG_TRACE ("add_LTYPE \"%s\"\n", text);
         ent = (lastent_t){ .u.ltype = dwg_add_LTYPE (dwg, text),
                            .type = DWG_TYPE_LTYPE };
       }
@@ -1471,6 +1582,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       // clang-format on
       else if (1 == SSCANF_S (p, "view " FMT_TBL, text SZ))
       {
+        LOG_TRACE ("add_VIEW \"%s\"\n", text);
         ent = (lastent_t){ .u.view = dwg_add_VIEW (dwg, text),
                            .type = DWG_TYPE_VIEW };
       }
@@ -1480,6 +1592,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       // clang-format on
       else if (1 == SSCANF_S (p, "vport " FMT_TBL, text SZ))
       {
+        LOG_TRACE ("add_VPORT \"%s\"\n", text);
         ent = (lastent_t){ .u.vport = dwg_add_VPORT (dwg, text),
                            .type = DWG_TYPE_VPORT };
       }
@@ -1489,6 +1602,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       // clang-format on
       else if (1 == SSCANF_S (p, "dimstyle " FMT_TBL, text SZ))
       {
+        if (version < R_11)
+          fn_error ("Invalid table DIMSTYLE <r11\n");
+        LOG_TRACE ("add_DIMSTYLE \"%s\"\n", text);
         ent = (lastent_t){ .u.dimstyle = dwg_add_DIMSTYLE (dwg, text),
                            .type = DWG_TYPE_DIMSTYLE };
       }
@@ -1499,10 +1615,10 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else if (1 == SSCANF_S (p, "group " FMT_TBL, text SZ))
       {
         if (version <= R_11)
-          fn_error ("Invalid entity GROUP\n");
-        else
-          ent = (lastent_t){ .u.group = dwg_add_GROUP (dwg, text),
-                             .type = DWG_TYPE_GROUP };
+          fn_error ("Invalid object GROUP < r13\n");
+        LOG_TRACE ("add_GROUP \"%s\"\n", text);
+        ent = (lastent_t){ .u.group = dwg_add_GROUP (dwg, text),
+                           .type = DWG_TYPE_GROUP };
       }
       else
           // clang-format off
@@ -1513,6 +1629,11 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                    &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
                    &pt3.y, &pt3.z, text SZ))
       {
+        if (version < R_10)
+          fn_error ("Invalid table UCS <r10\n");
+        LOG_TRACE ("add_UCS (%f %f %f) (%f %f %f) (%f %f %f) \"%s\"\n", pt1.x,
+                   pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x, pt3.y, pt3.z,
+                   text);
         ent = (lastent_t){ .u.ucs = dwg_add_UCS (dwg, &pt1, &pt2, &pt3, text),
                            .type = DWG_TYPE_UCS };
       }
@@ -1524,6 +1645,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                               text SZ, s1 SZ))
       {
         Dwg_Object *obj = dwg_ent_generic_to_object (ent.u.viewport, &error);
+        if (version <= R_11)
+          fn_error ("Invalid object LAYOUT <r13\n");
         if (ent.type != DWG_TYPE_VIEWPORT)
           fn_error ("layout viewport: last entity is not a viewport\n");
         if (strlen (s1) && text[strlen (s1) - 1] == '"')
@@ -1537,19 +1660,21 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          &f2))
       {
         if (version <= R_11)
-          fn_error ("Invalid entity TORUS\n");
-        else
-          ent = (lastent_t){ .u._3dsolid
-                             = dwg_add_TORUS (hdr, &pt1, &pt2, f1, f2),
-                             .type = DWG_TYPE__3DSOLID };
+          fn_error ("Invalid entity TORUS <r13\n");
+        LOG_TRACE ("add_TORUS %s (%f %f %f) (%f %f %f) %f %f\n", hdr_s,
+                   pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, f1, f2);
+        ent = (lastent_t){ .u._3dsolid
+                           = dwg_add_TORUS (hdr, &pt1, &pt2, f1, f2),
+                           .type = DWG_TYPE__3DSOLID };
       }
       else if (7 == SSCANF_S (p, "sphere (%lf %lf %lf) (%lf %lf %lf) %lf", &pt1.x,
                          &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &f1))
       {
         if (version <= R_11)
-          fn_error ("Invalid entity SPHERE\n");
-        else
-          ent = (lastent_t){ .u._3dsolid
+          fn_error ("Invalid entity SPHERE <r13\n");
+        LOG_TRACE ("add_SPHERE %s (%f %f %f) (%f %f %f) %f\n", hdr_s,
+                   pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, f1);
+        ent = (lastent_t){ .u._3dsolid
                              = dwg_add_SPHERE (hdr, &pt1, &pt2, f1),
                              .type = DWG_TYPE__3DSOLID };
       }
@@ -1559,21 +1684,25 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                    &f1, &f2, &len))
       {
         if (version <= R_11)
-          fn_error ("Invalid entity CYLINDER\n");
-        else
-          ent = (lastent_t){ .u._3dsolid = dwg_add_CYLINDER (
-                                 hdr, &pt1, &pt2, height, f1, f2, len),
-                             .type = DWG_TYPE__3DSOLID };
+          fn_error ("Invalid entity CYLINDER <r13\n");
+        LOG_TRACE ("add_CYLINDER %s (%f %f %f) (%f %f %f) %f %f %f %f", hdr_s,
+                   pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, height, f1, f2,
+                   len);
+        ent = (lastent_t){ .u._3dsolid = dwg_add_CYLINDER (
+                               hdr, &pt1, &pt2, height, f1, f2, len),
+                           .type = DWG_TYPE__3DSOLID };
       }
       else if (10 == SSCANF_S (p, "cone (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf %lf",
                          &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z,
                          &height, &f1, &f2, &len))
       {
         if (version <= R_11)
-          fn_error ("Invalid entity CONE\n");
-        else
-          ent = (lastent_t){ .u._3dsolid = dwg_add_CONE (hdr, &pt1, &pt2,
-                                                         height, f1, f2, len),
+          fn_error ("Invalid entity CONE <r13\n");
+        LOG_TRACE ("add_CONE %s (%f %f %f) (%f %f %f) %f %f %f %f", hdr_s,
+                   pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, height, f1, f2,
+                   len);
+        ent = (lastent_t){ .u._3dsolid = dwg_add_CONE (hdr, &pt1, &pt2,
+                                                       height, f1, f2, len),
                              .type = DWG_TYPE__3DSOLID };
       }
       else if (9 == SSCANF_S (p, "wedge (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf",
@@ -1581,22 +1710,26 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          &f1, &height))
       {
         if (version <= R_11)
-          fn_error ("Invalid entity wedge\n");
-        else
-          ent = (lastent_t){ .u._3dsolid = dwg_add_WEDGE (hdr, &pt1, &pt2, len,
-                                                          f1, height),
-                             .type = DWG_TYPE__3DSOLID };
+          fn_error ("Invalid entity WEDGE <r13\n");
+        LOG_TRACE ("add_WEDGE %s (%f %f %f) (%f %f %f) %f %f %f", hdr_s,
+                   pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, len, f1,
+                   height);
+        ent = (lastent_t){ .u._3dsolid = dwg_add_WEDGE (hdr, &pt1, &pt2, len,
+                                                        f1, height),
+                           .type = DWG_TYPE__3DSOLID };
       }
       else if (9 == SSCANF_S (p, "box (%lf %lf %lf) (%lf %lf %lf) %lf %lf %lf",
                          &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len,
                          &f1, &height))
       {
         if (version <= R_11)
-          fn_error ("Invalid entity BOX\n");
-        else
-          ent = (lastent_t){ .u._3dsolid
+          fn_error ("Invalid entity BOX <r13\n");
+        LOG_TRACE ("add_BOX %s (%f %f %f) (%f %f %f) %f %f %f", hdr_s,
+                   pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, len, f1,
+                   height);
+        ent = (lastent_t){ .u._3dsolid
                              = dwg_add_BOX (hdr, &pt1, &pt2, len, f1, height),
-                             .type = DWG_TYPE__3DSOLID };
+                           .type = DWG_TYPE__3DSOLID };
       }
       else if (10 == SSCANF_S (p,
                          "pyramid (%lf %lf %lf) (%lf %lf %lf) %lf %d %lf %lf",
@@ -1604,9 +1737,10 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          &height, &i1, &f1, &f2))
       {
         if (version <= R_11)
-          fn_error ("Invalid entity PYRAMID\n");
-        else
-          ent = (lastent_t){ .u._3dsolid = dwg_add_PYRAMID (
+          fn_error ("Invalid entity PYRAMID <r13\n");
+        LOG_TRACE ("add_PYRAMID %s (%f %f %f) (%f %f %f) %f %d %f %f", hdr_s,
+                   pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, height, i1, f1, f2);
+        ent = (lastent_t){ .u._3dsolid = dwg_add_PYRAMID (
                                  hdr, &pt1, &pt2, height, i1, f1, f2),
                              .type = DWG_TYPE__3DSOLID };
       }
