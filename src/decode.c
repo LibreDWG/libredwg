@@ -3350,7 +3350,7 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     int i;
 
     dat->byte = 0x06;
-    if (dat->from_version > R_2021)
+    if (dat->from_version >= R_2022)
       dat->byte = 0x07;
       // clang-format off
     #include "header.spec"

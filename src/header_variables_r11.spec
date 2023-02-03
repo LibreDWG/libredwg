@@ -149,7 +149,7 @@
   FIELD_RD (ELEVATION, 40); //ok
   FIELD_RD (THICKNESS, 40); //ok
   FIELD_3RD (VIEWDIR, 10);
-  // There are VPOINTX/VPOINTY/VPOINTZ (replaced by VIEWDIR with r11)
+  // replaced by VIEWDIR with r11
   FIELD_3RD (VPOINTX, 0); //(1,0,0)
   FIELD_3RD (VPOINTY, 0); //(0,1,0)
   FIELD_3RD (VPOINTZ, 0); //(0,0,1)

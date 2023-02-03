@@ -285,31 +285,32 @@ typedef enum DWG_VERSION_TYPE
   R_2000,	/* AC1015/0x16 AutoCAD Release 2000 */
   R_2000i,	/* AC1016/0x17 AutoCAD Release 2000i */
   R_2002,	/* AC1017/0x18 AutoCAD Release 2002 */
-  R_2004a,	/* AC402b/0x18 AutoCAD 2004 alpha a */
+  R_2004a,	/* AC402a/0x18 AutoCAD 2004 alpha a */
   R_2004b,	/* AC402b/0x18 AutoCAD 2004 alpha b */
   R_2004c,	/* AC1018/0x18 AutoCAD 2004 beta */
   R_2004,	/* AC1018/0x19 AutoCAD Release 2004 - 2006 */
-  R_2005,	/* AC1019/0x19 AutoCAD 2005 */
-  R_2006,	/* AC1020/0x19 AutoCAD 2006 */
+  //R_2005,	/* AC1019/0x19 AutoCAD 2005 */
+  //R_2006,	/* AC1020/0x19 AutoCAD 2006 */
+  R_2007a,	/* AC701a/0x19 AutoCAD 2007 alpha 1 */
   R_2007b,	/* AC1021/0x19 AutoCAD 2007 beta */
   R_2007,	/* AC1021/0x1b AutoCAD Release 2007 - 2009 */
-  R_2008,	/* AC1022/0x1b AutoCAD 2008 */
-  R_2009,	/* AC1023/0x1b AutoCAD 2009 */
+  //R_2008,	/* AC1022/0x1b AutoCAD 2008 */
+  //R_2009,	/* AC1023/0x1b AutoCAD 2009 */
   R_2010b,	/* AC1024/0x1b AutoCAD 2009 */
   R_2010,	/* AC1024/0x1c AutoCAD Release 2010 - 2012 */
-  R_2011,	/* AC1025/0x1d AutoCAD 2011 */
-  R_2012,	/* AC1026/0x1e AutoCAD 2012 */
+  //R_2011,	/* AC1025/0x1d AutoCAD 2011 */
+  //R_2012,	/* AC1026/0x1e AutoCAD 2012 */
   R_2013b,	/* AC1027/0x1e AutoCAD 2013 beta */
   R_2013,	/* AC1027/0x1f AutoCAD Release 2013 - 2017 */
-  R_2014,	/* AC1028/0x1f AutoCAD 2014 */
-  R_2015,	/* AC1029/0x1f AutoCAD 2015 */
-  R_2016,	/* AC1030/0x1f AutoCAD 2016 */
-  R_2017,	/* AC1031/0x20 AutoCAD 2017 */
+  //R_2014,	/* AC1028/0x1f AutoCAD 2014 */
+  //R_2015,	/* AC1029/0x1f AutoCAD 2015 */
+  //R_2016,	/* AC1030/0x1f AutoCAD 2016 */
+  //R_2017,	/* AC1031/0x20 AutoCAD 2017 */
   R_2018b,	/* AC1032/0x20 AutoCAD 2018 beta */
   R_2018,	/* AC1032/0x21 AutoCAD Release 2018 - 2021 */
-  R_2019,	/* AC1033/0x22AutoCAD 2019 */
-  R_2020,	/* AC1034/0x23 AutoCAD 2020 */
-  R_2021,	/* AC1035/0x24 AutoCAD 2021 */
+  //R_2019,	/* AC1033/0x22AutoCAD 2019 */
+  //R_2020,	/* AC1034/0x23 AutoCAD 2020 */
+  //R_2021,	/* AC1035/0x24 AutoCAD 2021 */
   R_2022,	/* AC103-4 AutoCAD Release 2022? */
   R_AFTER
 } Dwg_Version_Type;

@@ -85,8 +85,6 @@ common_versions_tests (void)
   assert (dwg_version_hdr_type2 ("AC402b", 0) == R_2004b);
   assert (dwg_version_hdr_type2 ("AC1018", 0x19) == R_2004);
   assert (dwg_version_hdr_type2 ("AC1019", 0x18) == R_INVALID);
-  assert (dwg_version_hdr_type2 ("AC1019", 0x19) == R_2005);
-  assert (dwg_version_hdr_type2 ("AC1020", 0x19) == R_2006);
   assert (dwg_version_hdr_type2 ("AC1021", 0x1a) == R_2007b);
   assert (dwg_version_hdr_type2 ("AC1021", 0x1b) == R_2007);
   assert (dwg_version_hdr_type ("AC1018") == R_2004);
