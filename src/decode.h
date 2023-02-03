@@ -104,10 +104,12 @@ void section_string_stream (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 /* for decode_r11.c */
 int decode_preR13_DIMENSION (Bit_Chain *restrict dat,
                              Dwg_Object *restrict obj);
+int decode_preR13_sentinel (Dwg_Sentinel sentinel, const char name_of_sentinel[50],
+                            Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 int decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                             unsigned num_entities, BITCODE_RL size,
-                            BITCODE_RL blocks_max, Bit_Chain *restrict dat,
-                            Dwg_Data *restrict dwg);
+                            Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                            int entity_section_index);
 
 /* from dwg.c */
 // from dat.fh

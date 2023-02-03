@@ -6153,267 +6153,315 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 }
 
 int
+decode_preR13_sentinel (Dwg_Sentinel sentinel, const char name_of_sentinel[50],
+                        Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  int error = 0;
+  BITCODE_TF r11_sentinel;
+
+  r11_sentinel = bit_read_TF (dat, 16);
+  if (!r11_sentinel)
+    return error | DWG_ERR_INVALIDDWG;
+  LOG_TRACE ("%s: ", name_of_sentinel);
+  LOG_TRACE_TF (r11_sentinel, 16)
+  if (memcmp (r11_sentinel, dwg_sentinel (sentinel), 16))
+    {
+      LOG_ERROR ("%s mismatch", name_of_sentinel);
+      error |= DWG_ERR_WRONGCRC;
+    }
+  free (r11_sentinel);
+
+  return error;
+}
+
+// sentinel on begin and end is part of this decoding in case of R11
+// start and end addresses are without sentinel
+int
 decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                         unsigned num_entities, BITCODE_RL size,
-                        BITCODE_RL blocks_max, Bit_Chain *restrict dat,
-                        Dwg_Data *restrict dwg)
+                        Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
+                        int entity_section_index)
 {
   int error = 0;
   BITCODE_BL num = dwg->num_objects;
-  unsigned long oldpos = dat->byte;
+  BITCODE_RL real_start = start;
+  unsigned long oldpos;
+  const char *entities_section[]
+      = { "entities", "block entities",  "extra entities", };
 
-  dat->bit = 0;
-  LOG_TRACE ("\n%sentities: (" FORMAT_RLx "-" FORMAT_RLx
-             " (%u), size " FORMAT_RL ", 0x%x)\n",
-             blocks_max != (BITCODE_RL)0 ? "block " : "", start, end,
-             num_entities, size, blocks_max);
+  LOG_TRACE ("\n%s: (" FORMAT_RLx "-" FORMAT_RLx
+             " (%u), size " FORMAT_RL ")\n", entities_section[entity_section_index],
+             start, end, num_entities, size);
   LOG_INFO ("==========================================\n");
-  if (blocks_max != 0 && end & 0x40000000)
-    end &= 0x0FFFFFFF;
-  if (blocks_max != 0 && blocks_max & 0x80000000)
-    blocks_max &= 0x0FFFFFFF;
-  if (size > dat->size || end > dat->size)
+
+  // with sentinel in case of R11
+  SINCE (R_11)
+    real_start -= 16;
+
+  // report unknown data before entites block
+  if (start != end && real_start > 0 && dat->byte != real_start)
     {
-      LOG_ERROR ("size overflow")
-      return DWG_ERR_INVALIDDWG;
+      LOG_WARN ("\n@0x%lx => start 0x%x", dat->byte, real_start);
+      if (dat->byte < real_start)
+        {
+          if (real_start > dat->size)
+            {
+               UNKNOWN_UNTIL (dat->size);
+            }
+          else
+            {
+               UNKNOWN_UNTIL (real_start);
+            }
+        }
     }
-  if (end != 0 && start == end)
-    // with empty entities, ignore num_entities as they include block ents
-    return 0;
-  if (end == 0 && size == 0) // empty blocks
-    return 0;
-  while (dat->byte < oldpos + end)
+
+  SINCE (R_11)
     {
-      Dwg_Object *obj;
-      Dwg_Object_Entity *ent, *_ent;
-      BITCODE_RS type, crc;
+      if (entity_section_index == 0)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_ENTITIES_BEGIN,
+                                       "DWG_SENTINEL_R11_ENTITIES_BEGIN", dat, dwg);
+      else if (entity_section_index == 1)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN,
+                                       "DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN", dat, dwg);
+      else if (entity_section_index == 2)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_EXTRA_ENTITIES_BEGIN,
+                                       "DWG_SENTINEL_R11_EXTRA_ENTITIES_BEGIN", dat, dwg);
+    }
 
-      if (!num)
-        dwg->object
-            = (Dwg_Object *)calloc (REFS_PER_REALLOC, sizeof (Dwg_Object));
-      else if (num >= dwg->num_alloced_objects)
+  if (end > start && start == dat->byte)
+    {
+      oldpos = dat->byte;
+      dat->bit = 0;
+      while (dat->byte < oldpos + size)
         {
-          while (num >= dwg->num_alloced_objects)
-            dwg->num_alloced_objects *= 2;
-          dwg->object = (Dwg_Object *)realloc (
-              dwg->object, dwg->num_alloced_objects * sizeof (Dwg_Object));
-          LOG_TRACE ("REALLOC dwg->object vector to %u\n",
-                     dwg->num_alloced_objects)
-          dwg->dirty_refs = 1;
-        }
-      if (!dwg->object)
-        {
-          LOG_ERROR ("Out of memory");
-          return DWG_ERR_OUTOFMEM;
-        }
-      obj = &dwg->object[num];
-      memset (obj, 0, sizeof (Dwg_Object));
-      dwg->num_objects++;
-      obj->index = num;
-      obj->parent = dwg;
-      obj->address = dat->byte;
-      obj->supertype = DWG_SUPERTYPE_ENTITY;
+          Dwg_Object *obj;
+          Dwg_Object_Entity *ent, *_ent;
+          BITCODE_RS type, crc;
 
-      PRE (R_2_0b)
-      {
-        type = bit_read_RS (dat);
-        obj->type = (BITCODE_RC)type;
-        LOG_TRACE ("type: " FORMAT_RS " [RS]\n", type);
-        if (type > 127) { // deleted. moved into BLOCK
-          type = abs ((int8_t)obj->type);
-          LOG_TRACE ("deleted, type => " FORMAT_RCd "\n", type);
-        }
-      }
-      else
-      {
-        obj->type = bit_read_RC (dat);
-        LOG_TRACE ("type: " FORMAT_RCd " [RCd]\n", obj->type);
-        type = obj->type & 0x7F;
-        if (obj->type > 127) { // deleted. moved into BLOCK
-          LOG_TRACE ("deleted, type => " FORMAT_RCd "\n", type);
-        }
-      }
+          if (!num)
+            dwg->object
+                = (Dwg_Object *)calloc (REFS_PER_REALLOC, sizeof (Dwg_Object));
+          else if (num >= dwg->num_alloced_objects)
+            {
+              while (num >= dwg->num_alloced_objects)
+                dwg->num_alloced_objects *= 2;
+              dwg->object = (Dwg_Object *)realloc (
+                  dwg->object, dwg->num_alloced_objects * sizeof (Dwg_Object));
+              LOG_TRACE ("REALLOC dwg->object vector to %u\n",
+                         dwg->num_alloced_objects)
+              dwg->dirty_refs = 1;
+            }
+          if (!dwg->object)
+            {
+              LOG_ERROR ("Out of memory");
+              return DWG_ERR_OUTOFMEM;
+            }
+          obj = &dwg->object[num];
+          memset (obj, 0, sizeof (Dwg_Object));
+          dwg->num_objects++;
+          obj->index = num;
+          obj->parent = dwg;
+          obj->address = dat->byte;
+          obj->supertype = DWG_SUPERTYPE_ENTITY;
 
-      switch (type)
-        {
-        case 1:
-          error |= dwg_decode_LINE (dat, obj);
-          break;
-        case 2:
-          error |= dwg_decode_POINT (dat, obj);
-          break;
-        case 3:
-          error |= dwg_decode_CIRCLE (dat, obj);
-          break;
-        case 4:
-          error |= dwg_decode_SHAPE (dat, obj);
-          break;
-        case 5:
-          error |= dwg_decode_REPEAT (dat, obj);
-          break;
-        case 6:
-          error |= dwg_decode_ENDREP (dat, obj);
-          break;
-        case 7:
-          error |= dwg_decode_TEXT (dat, obj);
-          break;
-        case 8:
-          error |= dwg_decode_ARC (dat, obj);
-          break;
-        case 9:
-          error |= dwg_decode_TRACE (dat, obj);
-          break;
-        case 10:
-          error |= dwg_decode_LOAD (dat, obj);
-          break;
-        case 11:
-          error |= dwg_decode_SOLID (dat, obj);
-          break;
-        case 12:
-          error |= dwg_decode_BLOCK (dat, obj);
-          break;
-        case 13:
-          error |= dwg_decode_ENDBLK (dat, obj);
-          break;
-        case 14:
-          error |= dwg_decode_INSERT (dat, obj);
-          break;
-        case 15:
-          error |= dwg_decode_ATTDEF (dat, obj);
-          break;
-        case 16:
-          error |= dwg_decode_ATTRIB (dat, obj);
-          break;
-        case 17:
-          error |= dwg_decode_SEQEND (dat, obj);
-          break;
-        case 18: /* another polyline */
-        case 19:
-          { // which polyline
-            BITCODE_RC flag;
-            dat->byte += 5;
-            flag = bit_read_RC (dat);
-            dat->byte -= 6;
-            if (flag & 8)
-              error |= dwg_decode_POLYLINE_3D (dat, obj);
-            else if (flag & 16)
-              error |= dwg_decode_POLYLINE_MESH (dat, obj);
-            else if (flag & 64)
-              error |= dwg_decode_POLYLINE_PFACE (dat, obj);
-            else
-              error |= dwg_decode_POLYLINE_2D (dat, obj);
-          }
-          break;
-        case 20:
-          { // which vertex?
-            BITCODE_RC flag;
-            dat->byte += 5;
-            flag = bit_read_RC (dat);
-            dat->byte -= 6;
-            if (flag & 32)
-              error |= dwg_decode_VERTEX_3D (dat, obj);
-            else if (flag & 64 && !(flag & 128))
-              error |= dwg_decode_VERTEX_MESH (dat, obj);
-            else if (flag & (64 + 128))
-              error |= dwg_decode_VERTEX_PFACE (dat, obj);
-            else if (flag & 128 && !(flag & 64))
-              error |= dwg_decode_VERTEX_PFACE_FACE (dat, obj);
-            else
-              error |= dwg_decode_VERTEX_2D (dat, obj);
-          }
-          break;
-        case 21:
-          error |= dwg_decode__3DLINE (dat, obj);
-          break;
-        case 22:
-          error |= dwg_decode__3DFACE (dat, obj);
-          break;
-        case 23:
-          error |= decode_preR13_DIMENSION (dat, obj);
-          break;
-        case 24:
-          error |= dwg_decode_VIEWPORT (dat, obj);
-          break;
-        /*
-        case 25:
-          error |= dwg_decode_3DLINE (dat, obj);
-          break;
-        */
-        default:
-          dat->byte--;
-          DEBUG_HERE;
-          LOG_ERROR ("Unknown object type %d", type);
-          error |= DWG_ERR_SECTIONNOTFOUND;
-          break;
-        }
-
-      assert (!dat->bit);
-      PRE (R_2_0b)
-      {
-        obj->size = dat->byte - oldpos;
-        oldpos = dat->byte;
-        if (obj->type > 127) // deleted
+          PRE (R_2_0b)
           {
-            obj->fixedtype = DWG_TYPE_UNUSED;
-            dwg->num_entities--; // for stats only
+            type = bit_read_RS (dat);
+            obj->type = (BITCODE_RC)type;
+            LOG_TRACE ("type: " FORMAT_RS " [RS]\n", type);
+            if (type > 127) { // deleted. moved into BLOCK
+              type = abs ((int8_t)obj->type);
+              LOG_TRACE ("deleted, type => " FORMAT_RCd "\n", type);
+            }
           }
-        if (num + 1 > dwg->num_objects)
-          break;
-      }
-      SINCE (R_2_0b) // Pre R_2_0 doesn't contain size of entity
-      {
-        PRE (R_11) // no crc16
-        {
-          if (obj->address + obj->size != dat->byte)
-            {
-              LOG_ERROR ("offset %ld", obj->address + obj->size - dat->byte);
-              if (obj->size)
-                dat->byte = obj->address + obj->size;
+          else
+          {
+            obj->type = bit_read_RC (dat);
+            LOG_TRACE ("type: " FORMAT_RCd " [RCd]\n", obj->type);
+            type = obj->type & 0x7F;
+            if (obj->type > 127) { // deleted. moved into BLOCK
+              LOG_TRACE ("deleted, type => " FORMAT_RCd "\n", type);
             }
-        }
-        LATER_VERSIONS
-        {
-          if (obj->address + obj->size != dat->byte + 2)
-            {
-              LOG_ERROR ("offset %ld",
-                         obj->address + obj->size - (dat->byte + 2));
-              if (obj->address + obj->size >= start && start > 60)
-                dat->byte = obj->address + obj->size - 2;
-            }
-          crc = bit_read_RS (dat);
-          LOG_TRACE ("crc: %04X [RSx]\n", crc);
-        }
-      }
-      LOG_TRACE ("\n");
-      num++;
+          }
 
-      if (end > 0 && dat->byte >= end)
-        {
-          if (size == 0
-              && blocks_max != 0) // else we just loop until end with wrong num
+          switch (type)
             {
-              LOG_ERROR (
-                  "overflow with wrong blocks num_entities 0x%lx > 0x%x, %u",
-                  dat->byte, end, num_entities);
+            case 1:
+              error |= dwg_decode_LINE (dat, obj);
+              break;
+            case 2:
+              error |= dwg_decode_POINT (dat, obj);
+              break;
+            case 3:
+              error |= dwg_decode_CIRCLE (dat, obj);
+              break;
+            case 4:
+              error |= dwg_decode_SHAPE (dat, obj);
+              break;
+            case 5:
+              error |= dwg_decode_REPEAT (dat, obj);
+              break;
+            case 6:
+              error |= dwg_decode_ENDREP (dat, obj);
+              break;
+            case 7:
+              error |= dwg_decode_TEXT (dat, obj);
+              break;
+            case 8:
+              error |= dwg_decode_ARC (dat, obj);
+              break;
+            case 9:
+              error |= dwg_decode_TRACE (dat, obj);
+              break;
+            case 10:
+              error |= dwg_decode_LOAD (dat, obj);
+              break;
+            case 11:
+              error |= dwg_decode_SOLID (dat, obj);
+              break;
+            case 12:
+              error |= dwg_decode_BLOCK (dat, obj);
+              break;
+            case 13:
+              error |= dwg_decode_ENDBLK (dat, obj);
+              break;
+            case 14:
+              error |= dwg_decode_INSERT (dat, obj);
+              break;
+            case 15:
+              error |= dwg_decode_ATTDEF (dat, obj);
+              break;
+            case 16:
+              error |= dwg_decode_ATTRIB (dat, obj);
+              break;
+            case 17:
+              error |= dwg_decode_SEQEND (dat, obj);
+              break;
+            case 18: /* another polyline */
+            case 19:
+              { // which polyline
+                BITCODE_RC flag;
+                dat->byte += 5;
+                flag = bit_read_RC (dat);
+                dat->byte -= 6;
+                if (flag & 8)
+                  error |= dwg_decode_POLYLINE_3D (dat, obj);
+                else if (flag & 16)
+                  error |= dwg_decode_POLYLINE_MESH (dat, obj);
+                else if (flag & 64)
+                  error |= dwg_decode_POLYLINE_PFACE (dat, obj);
+                else
+                  error |= dwg_decode_POLYLINE_2D (dat, obj);
+              }
+              break;
+            case 20:
+              { // which vertex?
+                BITCODE_RC flag;
+                dat->byte += 5;
+                flag = bit_read_RC (dat);
+                dat->byte -= 6;
+                if (flag & 32)
+                  error |= dwg_decode_VERTEX_3D (dat, obj);
+                else if (flag & 64 && !(flag & 128))
+                  error |= dwg_decode_VERTEX_MESH (dat, obj);
+                else if (flag & (64 + 128))
+                  error |= dwg_decode_VERTEX_PFACE (dat, obj);
+                else if (flag & 128 && !(flag & 64))
+                  error |= dwg_decode_VERTEX_PFACE_FACE (dat, obj);
+                else
+                  error |= dwg_decode_VERTEX_2D (dat, obj);
+              }
+              break;
+            case 21:
+              error |= dwg_decode__3DLINE (dat, obj);
+              break;
+            case 22:
+              error |= dwg_decode__3DFACE (dat, obj);
+              break;
+            case 23:
+              error |= decode_preR13_DIMENSION (dat, obj);
+              break;
+            case 24:
+              error |= dwg_decode_VIEWPORT (dat, obj);
+              break;
+            /*
+            case 25:
+              error |= dwg_decode_3DLINE (dat, obj);
+              break;
+            */
+            default:
+              dat->byte--;
+              DEBUG_HERE;
+              LOG_ERROR ("Unknown object type %d", type);
               error |= DWG_ERR_SECTIONNOTFOUND;
+              break;
             }
-          dat->byte = end;
-          return error;
-        }
-      SINCE (R_2_0b)
-      {
-        if (obj->size < 2 || obj->size > 0x1000) // FIXME
+
+          assert (!dat->bit);
+          PRE (R_2_0b)
           {
-            LOG_ERROR ("wrong obj->size %u", obj->size);
-            error |= DWG_ERR_SECTIONNOTFOUND;
-            if (end)
-              dat->byte = end;
+            obj->size = dat->byte - oldpos;
+            if (obj->type > 127) // deleted
+              {
+                obj->fixedtype = DWG_TYPE_UNUSED;
+                dwg->num_entities--; // for stats only
+              }
+            if (num + 1 > dwg->num_objects)
+              break;
           }
-      }
+          SINCE (R_2_0b) // Pre R_2_0 doesn't contain size of entity
+          {
+            PRE (R_11) // no crc16
+            {
+              if (obj->address + obj->size != dat->byte)
+                {
+                  LOG_ERROR ("offset %ld", obj->address + obj->size - dat->byte);
+                  if (obj->size > 2)
+                    dat->byte = obj->address + obj->size;
+                }
+            }
+            LATER_VERSIONS
+            {
+              if (obj->address + obj->size != dat->byte + 2)
+                {
+                  LOG_ERROR ("offset %ld",
+                             obj->address + obj->size - (dat->byte + 2));
+                  if (obj->address + obj->size >= start && start > 60)
+                    dat->byte = obj->address + obj->size - 2;
+                }
+              crc = bit_read_RS (dat);
+              LOG_TRACE ("crc: %04X [RSx]\n", crc);
+            }
+          }
+          num++;
+          if (dat->byte < oldpos + size)
+            LOG_TRACE ("\n");
+        }
+
+        if (dat->byte != end)
+          {
+            LOG_ERROR ("@0x%lx => end 0x%x", dat->byte, end);
+            return DWG_ERR_INVALIDDWG;
+          }
     }
 
-  if (end)
-    dat->byte = end;
+
+  SINCE (R_11)
+    {
+      if (entity_section_index == 0)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_ENTITIES_END,
+                                       "DWG_SENTINEL_R11_ENTITIES_END", dat, dwg);
+      else if (entity_section_index == 1)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_BLOCK_ENTITIES_END,
+                                       "DWG_SENTINEL_R11_BLOCK_ENTITIES_END", dat, dwg);
+      else if (entity_section_index == 2)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_EXTRA_ENTITIES_END,
+                                       "DWG_SENTINEL_R11_EXTRA_ENTITIES_END", dat, dwg);
+    }
+
+  LOG_INFO ("==========================================\n");
+  LOG_TRACE ("%s: end\n", entities_section[entity_section_index]);
+
   return error;
 }
 

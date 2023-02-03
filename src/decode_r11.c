@@ -256,7 +256,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   BITCODE_RSd used = -1;
   unsigned long oldpos = dat->byte;
 
-  LOG_TRACE ("contents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n",
+  LOG_TRACE ("\ncontents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n",
              tbl->name, id, tbl->size, (long)tbl->number,
              (unsigned long)tbl->address,
              (unsigned long)(tbl->address
@@ -732,7 +732,8 @@ EXPORT int
 decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_RL rl1, rl2, num_entities;
-  BITCODE_RL blocks_start = 0, blocks_end = 0;
+  BITCODE_RL block_entities_start = 0, block_entities_end = 0, block_entities_size = 0;
+  BITCODE_RL extra_entities_start = 0, extra_entities_end = 0, extra_entities_size = 0;
   BITCODE_RS rs2;
   Dwg_Object *obj = NULL;
   int tbl_id;
@@ -762,19 +763,25 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   SINCE (R_2_0b)
   {
-    blocks_start = dwg->header.blocks_start;
-    blocks_end = dwg->header.blocks_end;
-    if (blocks_start > 0xffff)
+    // Block entities
+    block_entities_start = dwg->header.block_entities_start;
+    block_entities_size = dwg->header.block_entities_size;
+    if (block_entities_size > 0xffffff)
       {
-        blocks_start &= 0xffff;
-        LOG_TRACE ("blocks_start => " FORMAT_RLx "\n", blocks_start);
+        block_entities_size &= 0xffffff;
+        LOG_TRACE ("block_enties_size => " FORMAT_RLx "\n", block_entities_size);
       }
-    if (dwg->header.blocks_end == 0 && dwg->header.blocks_size != 0
-      && dwg->header.blocks_size != 0x40000000)
+    block_entities_end = block_entities_start + block_entities_size;
+
+    // Extra entities
+    extra_entities_start = dwg->header.extra_entities_start;
+    extra_entities_size = dwg->header.extra_entities_size;
+    if (extra_entities_size > 0xffffff)
       {
-        blocks_end = blocks_start + dwg->header.blocks_size;
-        LOG_TRACE ("blocks_end => " FORMAT_RLx "\n", blocks_end);
+        extra_entities_size &= 0xffffff;
+        LOG_TRACE ("extra_enties_size => " FORMAT_RLx "\n", extra_entities_size);
       }
+    extra_entities_end = extra_entities_start + extra_entities_size;
 
     tbl_id = 0;
     dwg->header.section[0].number = 0;
@@ -812,7 +819,6 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   {
     // crc16 + DWG_SENTINEL_R11_ENTITIES_BEGIN
     BITCODE_RS crc, crcc;
-    BITCODE_TF r11_sentinel;
     crcc = bit_calc_CRC (0xC0C1, &dat->chain[0], dat->byte); // from 0 to now
     crc = bit_read_RS (dat);
     LOG_TRACE ("crc: %04X [RSx] from 0-0x%lx\n", crc, dat->byte - 2);
@@ -821,17 +827,6 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         LOG_ERROR ("Header CRC mismatch %04X <=> %04X", crc, crcc);
         error |= DWG_ERR_WRONGCRC;
       }
-    r11_sentinel = bit_read_TF (dat, 16);
-    if (!r11_sentinel)
-      return error | DWG_ERR_INVALIDDWG;
-    LOG_TRACE ("r11_sentinel: ");
-    LOG_TRACE_TF (r11_sentinel, 16) // == C46E6854F86E3330633EC1852ADC9401
-    if (memcmp (r11_sentinel, dwg_sentinel (DWG_SENTINEL_R11_ENTITIES_BEGIN), 16))
-      {
-        LOG_ERROR ("DWG_SENTINEL_R11_ENTITIES_BEGIN mismatch");
-        error |= DWG_ERR_WRONGCRC;
-      }
-    free (r11_sentinel);
   }
 
   PRE (R_10)
@@ -845,35 +840,18 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
 
   // entities
-  if (dat->byte != dwg->header.entities_start)
-    {
-      LOG_WARN ("@0x%lx => entities_start 0x%x", dat->byte,
-                dwg->header.entities_start);
-      if (dat->byte < dwg->header.entities_start)
-        {
-          _DEBUG_HERE (dat->byte - dwg->header.entities_start)
-        }
-      dat->byte = dwg->header.entities_start;
-    }
   error |= decode_preR13_entities (
       dwg->header.entities_start, dwg->header.entities_end, num_entities,
-      dwg->header.entities_end - dwg->header.entities_start, 0, dat, dwg);
+      dwg->header.entities_end - dwg->header.entities_start, dat, dwg, 0);
   if (error >= DWG_ERR_CRITICAL)
     return error;
-  if (dat->byte != dwg->header.entities_end)
-    {
-      LOG_WARN ("@0x%lx => entities_end 0x%x", dat->byte, dwg->header.entities_end);
-      dat->byte = dwg->header.entities_end;
-    }
+
   PRE (R_2_0b)
   {
     // this has usually some slack at the end.
     return error;
   }
-  LOG_INFO ("==========================================\n")
-  // dat->byte += 20; /* crc + sentinel? 20 byte */
-  if (!dwg->next_hdl)
-    dwg_set_next_hdl (dwg, 0x22);
+
   dat_save = *dat;
   if (decode_preR13_section (SECTION_BLOCK, dat, dwg)
       || decode_preR13_section (SECTION_LAYER, dat, dwg)
@@ -917,32 +895,20 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     return error;
 
   // block entities
-  if (dat->byte != blocks_start)
-    {
-      BITCODE_TF unknown;
-      int len = blocks_start - dat->byte;
-      LOG_WARN ("\n@0x%lx => blocks_start 0x%x", dat->byte, blocks_start);
-      if (dat->byte < blocks_start)
-        {
-          unknown = bit_read_TF (dat, len);
-          LOG_TRACE ("unknown (%d):", len);
-          LOG_TRACE_TF (unknown, len);
-          free (unknown);
-        }
-      dat->byte = blocks_start;
-    }
-  if (dwg->header.blocks_size != 0 && dwg->header.blocks_size != 0x40000000)
-    {
-      if (dwg->header.version == R_11 && blocks_start + 32 < blocks_end)
-        dwg->header.blocks_end -= 32; // ?? some sentinel probably
-      error |= decode_preR13_entities (blocks_start, blocks_end, 0,
-                                       dwg->header.blocks_size & 0x3FFFFFFF,
-                                       dwg->header.blocks_max, dat, dwg);
-      if (error >= DWG_ERR_CRITICAL)
-        return error;
-    }
+  error |= decode_preR13_entities (block_entities_start, block_entities_end, 0,
+                                   block_entities_size, dat, dwg, 1);
+  if (error >= DWG_ERR_CRITICAL)
+    return error;
+
+  // extra entities.
+  error |= decode_preR13_entities (extra_entities_start, extra_entities_end, 0,
+                                   extra_entities_size, dat, dwg, 2);
+  if (error >= DWG_ERR_CRITICAL)
+    return error;
 
   PRE (R_11) { return error; }
+
+  LOG_TRACE ("\n");
   // only since r11 (AC1009)
   LOG_TRACE ("AUXHEADER: @0x%lx\n", dat->byte);
   // 36 byte: 9x long
@@ -974,13 +940,13 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       LOG_WARN ("entities_end %x/%x", rl1, dwg->header.entities_end);
     }
-  if ((rl1 = bit_read_RL (dat)) != dwg->header.blocks_start)
+  if ((rl1 = bit_read_RL (dat)) != block_entities_start)
     {
-      LOG_WARN ("blocks_start %x/%x", rl1, dwg->header.blocks_start);
+      LOG_WARN ("block_entities_start %x/%x", rl1, block_entities_start);
     }
-  if ((rl1 = bit_read_RL (dat)) != dwg->header.blocks_end)
+  if ((rl1 = bit_read_RL (dat)) != block_entities_end)
     {
-      LOG_WARN ("blocks_end %x/%x", rl1, dwg->header.blocks_end);
+      LOG_WARN ("block_entities_end %x/%x", rl1, block_entities_end);
     }
   // 12 byte
   LOG_TRACE ("@0x%lx\n", dat->byte);
@@ -990,7 +956,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   rl1 = bit_read_RL (dat);
   LOG_TRACE ("?1long: 0x%x\n", rl1);
 
-  rl1 = dwg->header.blocks_end + 36 + 4 * 4 + 12; // ??
+  rl1 = block_entities_end + 36 + 4 * 4 + 12; // ??
   DEBUG_HERE
   UNKNOWN_UNTIL (rl1);
   LOG_TRACE ("@0x%lx\n", dat->byte);
