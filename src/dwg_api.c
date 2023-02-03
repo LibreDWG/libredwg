@@ -23289,7 +23289,10 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     {
       obj->type = DWG_TYPE_INSERT_R11;
       if (_obj->ins_pt.z == 0.0)
-        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+        {
+          obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+          obj->tio.entity->opts_r11 = 1;
+        }
     }
   return _obj;
 }
@@ -23344,7 +23347,10 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     {
       obj->type = DWG_TYPE_INSERT_R11;
       if (_obj->ins_pt.z == 0.0)
-        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+        {
+          obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+          obj->tio.entity->opts_r11 = 1;
+        }
     }
   return _obj;
 }
@@ -23368,7 +23374,10 @@ dwg_add_VERTEX_2D (Dwg_Entity_POLYLINE_2D *restrict pline,
     {
       obj->type = DWG_TYPE_VERTEX_R11;
       if (_obj->point.z == 0.0)
-        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+        {
+          obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+          obj->tio.entity->opts_r11 = OPTS_R11_VERTEX_HAS_FLAG;
+        }
     }
   return _obj;
 }
@@ -23392,7 +23401,10 @@ dwg_add_VERTEX_3D (Dwg_Entity_POLYLINE_3D *restrict pline,
     {
       obj->type = DWG_TYPE_VERTEX_R11;
       if (_obj->point.z == 0.0)
-        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+        {
+          obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+          obj->tio.entity->opts_r11 = OPTS_R11_VERTEX_HAS_FLAG;
+        }
     }
   return _obj;
 }
@@ -23413,7 +23425,11 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (!_pl->vertex)
     return NULL;
   if (num_pts)
-    _pl->has_vertex = 1;
+    {
+      _pl->has_vertex = 1;
+      obj->tio.entity->flag_r11 = FLAG_R11_HAS_ATTRIBS;
+      obj->tio.entity->opts_r11 = 1;
+    }
   for (int i = 0; i < num_pts; i++)
     {
       _vtx = dwg_add_VERTEX_2D (_pl, &pts[i]);
@@ -23471,7 +23487,11 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (!_pl->vertex)
     return NULL;
   if (num_pts)
-    _pl->has_vertex = 1;
+    {
+      _pl->has_vertex = 1;
+      obj->tio.entity->flag_r11 = FLAG_R11_HAS_ATTRIBS;
+      obj->tio.entity->opts_r11 = OPTS_R11_POLYLINE_HAS_FLAG;
+    }
   for (int i = 0; i < num_pts; i++)
     {
       _vtx = dwg_add_VERTEX_3D (_pl, &pts[i]);
@@ -23528,7 +23548,10 @@ dwg_add_VERTEX_PFACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
   _obj->point.y = point->y;
   _obj->point.z = point->z;
   if (dwg->header.version <= R_11)
-    obj->type = DWG_TYPE_VERTEX_R11;
+    {
+      obj->type = DWG_TYPE_VERTEX_R11;
+      obj->tio.entity->opts_r11 = OPTS_R11_VERTEX_HAS_FLAG;
+    }
   _obj->flag = 0xc0;
   return _obj;
 }
@@ -23552,6 +23575,7 @@ dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
     {
       obj->type = DWG_TYPE_VERTEX_R11;
       obj->tio.entity->flag_r11 = 128;
+      obj->tio.entity->opts_r11 = OPTS_R11_VERTEX_HAS_FLAG;
     }
   return _obj;
 }
@@ -23577,6 +23601,8 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (!_pl->vertex)
     return NULL;
   _pl->has_vertex = 1;
+  obj->tio.entity->opts_r11 = OPTS_R11_POLYLINE_HAS_FLAG;
+  obj->tio.entity->flag_r11 = FLAG_R11_HAS_ATTRIBS;
   _pl->numverts = numverts;
   _pl->numfaces = numfaces;
   _pl->num_owned = numverts + numfaces;
@@ -23652,9 +23678,12 @@ dwg_add_VERTEX_MESH (Dwg_Entity_POLYLINE_MESH *restrict pline,
   if (dwg->header.version <= R_11)
     {
       obj->type = DWG_TYPE_VERTEX_R11;
-      obj->tio.entity->flag_r11 = 255;
+      //obj->tio.entity->flag_r11 = 0;
       if (_obj->point.z != 0.0)
-        obj->tio.entity->flag_r11 |= 64;
+        {
+          obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+          obj->tio.entity->opts_r11 = OPTS_R11_VERTEX_HAS_FLAG;
+        }
     }
   _obj->flag = 0x40;
   return _obj;
@@ -23717,7 +23746,16 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
   pl->tio.entity->next_entity = NULL;
   if (dwg->header.version <= R_11)
-    obj->type = DWG_TYPE_POLYLINE_R11;
+    {
+      obj->type = DWG_TYPE_POLYLINE_R11;
+      obj->tio.entity->opts_r11 = OPTS_R11_POLYLINE_HAS_FLAG;
+      if (_pl->num_owned)
+        obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ATTRIBS;
+      if (num_m_verts)
+        obj->tio.entity->opts_r11 |= OPTS_R11_POLYLINE_HAS_M_VERTS;
+      if (num_n_verts)
+        obj->tio.entity->opts_r11 |= OPTS_R11_POLYLINE_HAS_N_VERTS;
+    }
   in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
   return _pl;
 }
