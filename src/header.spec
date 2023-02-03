@@ -50,10 +50,10 @@
 
     FIELD_RLx (entities_start, 0);
     FIELD_RLx (entities_end, 0);
-    FIELD_RLx (blocks_start, 0);
-    FIELD_RLx (blocks_size, 0);
-    FIELD_RLx (blocks_end, 0);
-    FIELD_RLx (blocks_max, 0);
+    FIELD_RLx (block_entities_start, 0);
+    FIELD_RLx (block_entities_size, 0);
+    FIELD_RLx (extra_entities_start, 0);
+    FIELD_RLx (extra_entities_size, 0);
   }
   SINCE (R_13b1) {
     FIELD_RC (zero_one_or_three, 0);

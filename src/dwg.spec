@@ -3497,14 +3497,14 @@ DWG_OBJECT (BLOCK_HEADER)
           BITCODE_RL off = _obj->block_offset_r11 & 0x3fffffff;
           LOG_TRACE ("block_offset_r11: " FORMAT_RLx
                      " [RLx] (" FORMAT_RLx ")\n",
-                     _obj->block_offset_r11, off + dwg->header.blocks_start);
+                     _obj->block_offset_r11, off + dwg->header.block_entities_start);
         }
       else
         {
           LOG_TRACE ("block_offset_r11: " FORMAT_RLx " [RLx] (" FORMAT_RLx
                      ")\n",
                      _obj->block_offset_r11,
-                     _obj->block_offset_r11 + dwg->header.blocks_start);
+                     _obj->block_offset_r11 + dwg->header.block_entities_start);
         }
     }
     if (obj->size == 38)
