@@ -928,7 +928,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           LOG_TRACE ("mspace\n");
         }
       else if (8 == SSCANF_S (p,
-                         "attdef %lf %d " FMT_ANY " (%lf %lf %lf) " FMT_TBL
+                         "attdef %lf %d " FMT_ANY " (%lf %lf %lf) " FMT_ANY
                          " " FMT_ANY,
                          &height, &flags, prompt SZ, &pt1.x, &pt1.y,
                          &pt1.z, tag SZ, default_text SZ))
@@ -948,7 +948,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         SET_ENT (attdef, ATTDEF)
       // clang-format on
       else if (7 == SSCANF_S (p,
-                         "attrib %lf %d (%lf %lf %lf) " FMT_TBL
+                         "attrib %lf %d (%lf %lf %lf) " FMT_ANY
                          " " FMT_ANY,
                          &height, &flags, &pt1.x, &pt1.y,
                          &pt1.z, tag SZ, text SZ))
