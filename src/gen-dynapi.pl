@@ -3621,7 +3621,7 @@ dwg_has_subclass (const char *restrict classname, const char *restrict subclass)
 EXPORT bool
 dwg_dynapi_is_angle (const char *restrict name, const char *restrict fieldname)
 {
-  Dwg_DYNAPI_field *f1 = NULL;
+  const Dwg_DYNAPI_field *f1 = NULL;
 #ifndef HAVE_NONNULL
   if (!name || !fieldname)
     return 0;
