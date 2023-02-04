@@ -671,9 +671,10 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
   if (!dat->chain)
     abort ();
   dwg = *dwgp;
-  insert.type = DWG_TYPE_UNUSED;
-  dict.type = DWG_TYPE_UNUSED;
-  mtext.type = DWG_TYPE_UNUSED;
+  ent = (lastent_t){ .type = DWG_TYPE_UNUSED, .u.insert = NULL };
+  insert = (lastent_t){ .type = DWG_TYPE_UNUSED, .u.insert = NULL };
+  dict = (lastent_t){ .type = DWG_TYPE_UNUSED, .u.dictionary = NULL };
+  mtext = (lastent_t){ .type = DWG_TYPE_UNUSED, .u.mtext = NULL };
   if (!dwg->header.version)
     version = R_2000;
   else
