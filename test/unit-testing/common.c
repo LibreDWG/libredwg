@@ -13,13 +13,14 @@
 #  define _DARWIN_C_SOURCE /* for DT_DIR */
 #endif
 #include <dirent.h>
+#include "dwg.h"
+#define DWG_LOGLEVEL loglevel
+#include "../../src/logging.h"
+#include "dwg_api.h"
 #include "../../src/common.h"
 #include "../../src/classes.h"
 static int silent;
 #include "tests_common.h"
-
-#include "dwg.h"
-#include "dwg_api.h"
 
 dwg_data g_dwg;
 const char *stability;

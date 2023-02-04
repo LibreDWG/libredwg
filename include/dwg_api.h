@@ -6260,7 +6260,7 @@ EXPORT int
 dwg_add_entity_defaults (Dwg_Data *restrict dwg,
                          Dwg_Object_Entity *restrict ent) __nonnull_all;
 
-/* utf-8 string without lowercase letters, space or !. maxlen 255 */
+/* utf-8 string without lowercase letters, space or !. maxlen 256 */
 EXPORT bool
 dwg_is_valid_tag (const char *tag);
   

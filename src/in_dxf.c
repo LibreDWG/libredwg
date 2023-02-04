@@ -57,7 +57,6 @@ static unsigned int loglevel;
 // dwg_api.h is too big
 Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
                                        int *restrict error);
-bool dwg_is_valid_tag (const char *tag);
 #endif
 // from dwg.c
 BITCODE_H

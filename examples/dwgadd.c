@@ -28,14 +28,15 @@
 #include <getopt.h>
 
 #include <dwg.h>
+#define DWG_LOGLEVEL loglevel
+#include "logging.h"
+#include <dwg_api.h>
+
 #include "common.h"
 #include "decode.h"
 #include "encode.h"
 #include "bits.h"
-#define DWG_LOGLEVEL loglevel
-#include "logging.h"
 #include "classes.h"
-#include <dwg_api.h>
 #ifndef DISABLE_JSON
 #  include "in_json.h"
 #  include "out_json.h"

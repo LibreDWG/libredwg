@@ -386,7 +386,16 @@ DWG_ENTITY (ATTDEF)
       FIELD_RD (height, 40);
       FIELD_TV (default_value, 1);
       FIELD_TV (prompt, 3);
+      ENCODER {
+        // TODO check if fixable
+        if (!dwg_is_valid_tag (FIELD_VALUE (tag)))
+          LOG_WARN ("Invalid tag %s", FIELD_VALUE (tag))
+      }
       FIELD_TV (tag, 2);
+      DECODER {
+        if (!dwg_is_valid_tag (FIELD_VALUE (tag)))
+          LOG_WARN ("Invalid tag %s", FIELD_VALUE (tag))
+      }
       FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
       LOG_FLAG_ATTDEF
       //if (R11OPTS (1)) { // since when?

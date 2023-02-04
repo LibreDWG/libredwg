@@ -35,11 +35,6 @@
 #include "classes.h"
 #include "in_json.h"
 
-#ifndef _DWG_API_H_
-// dwg_api.h is too big
-bool dwg_is_valid_tag (const char *tag);
-#endif
-
 static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"

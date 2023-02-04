@@ -31,16 +31,18 @@
 #  include <wctype.h>
 #endif
 #include <assert.h>
-
 #ifdef HAVE_MALLOC_H
 #  include <malloc.h>
 #endif
+
 #include "dwg.h"
+#define _DWG_API_C
 #include "common.h"
+
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
-#include "bits.h"
 #include "dwg_api.h"
+#include "bits.h"
 #include "classes.h"
 #include "decode.h"
 #include "encode.h"
@@ -22013,6 +22015,44 @@ dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
   return (char *)encr_sat_data;
 }
 
+/* utf-8 string without lowercase letters, space or ! */
+EXPORT bool
+dwg_is_valid_tag (const char *tag)
+{
+  if (!tag || strchr (tag, ' ') || strchr (tag, '!') || strlen (tag) > 256)
+    return false;
+#ifdef HAVE_WCTYPE_H
+  {
+    // decode utf-8, check wide-chars
+    BITCODE_TU wstr = bit_utf8_to_TU ((char*)tag, 0);
+    size_t len = bit_wcs2nlen (wstr, 256);
+    if (len > 256 || !len)
+      {
+        free (wstr);
+        return false;
+      }
+    for (size_t i = 0; i < len; i++)
+      {
+        if (iswlower (wstr[i]))
+          {
+            free (wstr);
+            return false;
+          }
+      }
+    free (wstr);
+  }
+#else
+  // only ascii support, no wctype nor maxlen checks
+  while (*tag)
+    {
+      if (islower (*tag))
+        return false;
+      tag++;
+    }
+#endif
+  return true;
+}
+
 /********************************************************************
  *                    FUNCTIONS FOR ADDING OBJECTS                  *
  ********************************************************************/
@@ -23087,44 +23127,6 @@ add_attrib_links (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       in_postprocess_SEQEND (seqend, insert->num_owned, insert->attribs);
     }
   return insert;
-}
-
-/* utf-8 string without lowercase letters, space or ! */
-EXPORT bool
-dwg_is_valid_tag (const char *tag)
-{
-  if (!tag || strchr (tag, ' ') || strchr (tag, '!') || strlen (tag) > 256)
-    return false;
-  {
-#ifdef HAVE_WCTYPE_H
-  // decode utf-8, check wide-chars
-    BITCODE_TU wstr = bit_utf8_to_TU ((char*)tag, 0);
-    size_t len = bit_wcs2nlen (wstr, 256);
-    if (len > 256 || !len)
-      {
-        free (wstr);
-        return false;
-      }
-    for (size_t i = 0; i < len; i++)
-      {
-        if (iswlower (wstr[i]))
-          {
-            free (wstr);
-            return false;
-          }
-      }
-    free (wstr);
-  }
-#else
-  // only ascii support, no wctype nor maxlen checks
-  while (*tag)
-    {
-      if (islower (*tag))
-        return false;
-      tag++;
-    }
-#endif
-  return true;
 }
 
 /* This adds the ATTRIB and ENDBLK to the insert,

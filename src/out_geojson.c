@@ -33,15 +33,16 @@
 #include <assert.h>
 
 #define IS_PRINT
+#include "dwg.h"
+#define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
+#include "logging.h"
+#include "dwg_api.h"
+
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
 #include "decode.h"
 #include "out_json.h"
-
-#define DWG_LOGLEVEL DWG_LOGLEVEL_NONE
-#include "logging.h"
-#include "dwg_api.h"
 
 /* the current version per spec block */
 static unsigned int cur_ver = 0;

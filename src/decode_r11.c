@@ -32,6 +32,16 @@
 #include <assert.h>
 
 #define IS_DECODER
+#define _DECODE_R11_C
+#ifdef USE_TRACING
+/* This flag means we have checked the environment variable
+   LIBREDWG_TRACE and set `loglevel' appropriately.  */
+static bool env_var_checked_p;
+#endif /* USE_TRACING */
+#define DWG_LOGLEVEL loglevel
+#include "logging.h"
+#include "dwg_api.h" // for the preR13 add API
+
 #include "common.h"
 #include "bits.h"
 #include "dwg.h"
@@ -53,15 +63,6 @@ static unsigned int errors = 0;
 #  endif
 #endif
 
-#ifdef USE_TRACING
-/* This flag means we have checked the environment variable
-   LIBREDWG_TRACE and set `loglevel' appropriately.  */
-static bool env_var_checked_p;
-#endif /* USE_TRACING */
-#define DWG_LOGLEVEL loglevel
-
-#include "logging.h"
-#include "dwg_api.h" // for preR13 only
 #include "dynapi.h"
 #include "dec_macros.h"
 #include "decode_r11.h"

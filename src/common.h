@@ -28,6 +28,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <inttypes.h>
+#include <stdbool.h>
 #include <time.h>
 #include "dwg.h"
 
@@ -478,5 +479,10 @@ void dwg_log_proxyflag (const int _loglevel, const int maxlevel,
                         const BITCODE_BS flag);
 void dwg_log_dataflags (const int _loglevel, const int maxlevel,
                         const BITCODE_RC flag);
+
+// in the public API, but we don't use that for most internal modules
+#if !defined _DWG_API_H_ && !defined _DWG_API_C
+bool dwg_is_valid_tag (const char *tag);
+#endif
 
 #endif

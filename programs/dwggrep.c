@@ -45,9 +45,9 @@ static const int verbose = 0;
 
 #include "dwg.h"
 #include "logging.h"
+#include "dwg_api.h"
 #include "common.h"
 #include "bits.h"
-#include "dwg_api.h"
 
 #ifndef HAVE_PCRE2_H
 #  define PCRE2_MULTILINE 1
