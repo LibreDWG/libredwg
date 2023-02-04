@@ -5709,7 +5709,9 @@ DWG_ENTITY (PROXY_ENTITY)
     LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
     LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
     dat->opts &= 0xf0;
+    dat->size++;
     FIELD_TF (data, _obj->data_size, 310);
+    dat->size--;
     dat->opts = opts;
   }
   ENCODER {
@@ -5808,7 +5810,9 @@ DWG_OBJECT (PROXY_OBJECT)
     LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
     FIELD_VALUE (num_objids) = 0;
     dat->opts &= 0xf0;
+    dat->size++;
     FIELD_TF (data, _obj->data_size, 310);
+    dat->size--;
     dat->opts = opts;
   }
   ENCODER {
