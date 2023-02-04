@@ -5,11 +5,11 @@
 #version 2000
 text "test" (0.0 1.0 0.0) 8
 block "bloko"
-attdef 8 0 "prompt" (0.0 1.0 0.0) "tag" "default_text"
+attdef 8 0 "prompt" (0.0 1.0 0.0) TAG "default_text"
 line (0 1 0) (1 1 0)
 endblk
 insert (0 1 0) "bloko" 1 1 1 0
-attrib 8 0 (0.0 2.0 0.0) "tag" "text1"
+attrib 8 0 (0.0 2.0 0.0) TAG "text1"
 minsert (0 1 0) "bloko" 1 1 1 0 1 2 1 1
 minsert.rotation = 90
 polyline_2d 2 ((0 1) (1 1))

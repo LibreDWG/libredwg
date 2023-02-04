@@ -118,7 +118,7 @@ dnl We just want to know if it's needed
 ac_cv_func_malloc_0_nonnull=yes
 ac_cv_func_realloc_0_nonnull=yes
 AC_CHECK_HEADERS([stdlib.h string.h stddef.h unistd.h malloc.h wchar.h ctype.h \
-                  float.h limits.h \
+                  wctype.h float.h limits.h \
                   libgen.h getopt.h alloca.h valgrind/valgrind.h \
                   sys/param.h])
 AC_CHECK_HEADERS([endian.h sys/endian.h machine/endian.h winsock2.h \

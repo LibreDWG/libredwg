@@ -258,6 +258,9 @@
 /* Define to 1 if you have the `wcsstr' function. */
 #undef HAVE_WCSSTR
 
+/* Define to 1 if you have the <wctype.h> header file. */
+#undef HAVE_WCTYPE_H
+
 /* Define if -Wformat-y2k is supported. */
 #undef HAVE_WFORMAT_Y2K
 

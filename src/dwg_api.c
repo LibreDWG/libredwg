@@ -26,6 +26,10 @@
 #include <inttypes.h>
 #include <math.h>
 #include <time.h>
+#include <ctype.h>
+#ifdef HAVE_WCTYPE_H
+#  include <wctype.h>
+#endif
 #include <assert.h>
 
 #ifdef HAVE_MALLOC_H
@@ -23085,6 +23089,44 @@ add_attrib_links (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return insert;
 }
 
+/* utf-8 string without lowercase letters, space or ! */
+EXPORT bool
+dwg_is_valid_tag (const char *tag)
+{
+  if (!tag || strchr (tag, ' ') || strchr (tag, '!') || strlen (tag) > 256)
+    return false;
+  {
+#ifdef HAVE_WCTYPE_H
+  // decode utf-8, check wide-chars
+    BITCODE_TU wstr = bit_utf8_to_TU ((char*)tag, 0);
+    size_t len = bit_wcs2nlen (wstr, 256);
+    if (len > 256 || !len)
+      {
+        free (wstr);
+        return false;
+      }
+    for (size_t i = 0; i < len; i++)
+      {
+        if (iswlower (wstr[i]))
+          {
+            free (wstr);
+            return false;
+          }
+      }
+    free (wstr);
+  }
+#else
+  // only ascii support, no wctype nor maxlen checks
+  while (*tag)
+    {
+      if (islower (*tag))
+        return false;
+      tag++;
+    }
+#endif
+  return true;
+}
+
 /* This adds the ATTRIB and ENDBLK to the insert,
    and the ATTDEF and ENDBLK to the block. */
 EXPORT Dwg_Entity_ATTRIB *
@@ -23100,6 +23142,11 @@ dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert, const double height,
   Dwg_Entity_ATTRIB *attrib;
   int err;
 
+  if (!dwg_is_valid_tag (tag))
+    {
+      LOG_ERROR ("add_Attribute: Invalid tag %s", tag);
+      return NULL;
+    }
   ADD_CHECK_3DPOINT (ins_pt);
   ADD_CHECK_DOUBLE (height);
   insobj = dwg_obj_generic_to_object (insert, &err);
@@ -23149,6 +23196,13 @@ dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert, const double height,
   if (!insobj || err)
     {
       LOG_ERROR ("add_ATTRIB: No INSERT found");
+      API_UNADD_ENTITY;
+      return NULL;
+    }
+  if (!dwg_is_valid_tag (tag))
+    {
+      LOG_ERROR ("add_ATTRIB: Invalid tag %s", tag);
+      API_UNADD_ENTITY;
       return NULL;
     }
   _obj->tag = dwg_add_u8_input (dwg, tag);
@@ -23186,6 +23240,12 @@ dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr, const double height,
   if (dwg->header.version < R_2_0b)
     {
       LOG_ERROR ("Invalid entity %s <r2.0b", "ATTDEF")
+      API_UNADD_ENTITY;
+      return NULL;
+    }
+  if (!dwg_is_valid_tag (tag))
+    {
+      LOG_ERROR ("add_ATTRIB: Invalid tag %s", tag);
       API_UNADD_ENTITY;
       return NULL;
     }

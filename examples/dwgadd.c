@@ -55,6 +55,7 @@ static unsigned int loglevel;
 #  define SZ ,119
 // clang-format on
 #  define FMT_NAME "%[a-zA-Z0-9_]"
+#  define FMT_TAG "%[^ !]"
 #  define FMT_TBL "\"%[a-zA-Z0-9._ -]\""
 #  define FMT_PATH "\"%[a-zA-Z0-9_. \\-]\""
 #  define FMT_ANY "\"%[^\"]"
@@ -62,6 +63,7 @@ static unsigned int loglevel;
 #  define SSCANF_S sscanf
 #  define SZ
 #  define FMT_NAME "%119[a-zA-Z0-9_]"
+#  define FMT_TAG "%119[^ !]"
 #  define FMT_TBL "\"%119[a-zA-Z0-9._ -]\""
 #  define FMT_PATH "\"%119[a-zA-Z0-9_. \\-]\""
 #  define FMT_ANY "\"%119[^\"]\""
@@ -928,14 +930,14 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           LOG_TRACE ("mspace\n");
         }
       else if (8 == SSCANF_S (p,
-                         "attdef %lf %d " FMT_ANY " (%lf %lf %lf) " FMT_ANY
+                         "attdef %lf %d " FMT_ANY " (%lf %lf %lf) " FMT_TAG
                          " " FMT_ANY,
                          &height, &flags, prompt SZ, &pt1.x, &pt1.y,
                          &pt1.z, tag SZ, default_text SZ))
         {
           if (version < R_2_0b)
             fn_error ("Invalid entity ATTDEF <r2.0b\n");
-          LOG_TRACE ("add_ATTDEF %s %f %d \"%s\" (%f %f %f) \"%s\" \"%s\"\n",
+          LOG_TRACE ("add_ATTDEF %s %f %d \"%s\" (%f %f %f) %s \"%s\"\n",
                      hdr_s, height, flags, prompt, pt1.x, pt1.y, pt1.z,
                      tag, default_text);
           ent = (lastent_t){ .u.attdef
@@ -948,7 +950,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         SET_ENT (attdef, ATTDEF)
       // clang-format on
       else if (7 == SSCANF_S (p,
-                         "attrib %lf %d (%lf %lf %lf) " FMT_ANY
+                         "attrib %lf %d (%lf %lf %lf) " FMT_TAG
                          " " FMT_ANY,
                          &height, &flags, &pt1.x, &pt1.y,
                          &pt1.z, tag SZ, text SZ))
@@ -960,7 +962,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
               log_p (DWG_LOGLEVEL_ERROR, p);
               fn_error ("Missing INSERT for ATTRIB\n");
             }
-          LOG_TRACE ("add_ATTRIB insert %f %d (%f %f %f) \"%s\" \"%s\"\n",
+          LOG_TRACE ("add_ATTRIB insert %f %d (%f %f %f) %s \"%s\"\n",
                      height, flags, pt1.x, pt1.y, pt1.z, tag, text);
           ent = (lastent_t){ .u.attrib
                              = dwg_add_ATTRIB (insert.u.insert, height,

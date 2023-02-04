@@ -237,6 +237,9 @@
 /* Define if you have the `wcsnlen' function. */
 #cmakedefine HAVE_WCSNLEN
 
+/* Define if you have the <wctype.h> header file. */
+#cmakedefine HAVE_WCTYPE_H
+
 /* Define if the system has the type `_Bool'. */
 #define HAVE__BOOL 1
 

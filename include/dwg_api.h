@@ -6260,6 +6260,10 @@ EXPORT int
 dwg_add_entity_defaults (Dwg_Data *restrict dwg,
                          Dwg_Object_Entity *restrict ent) __nonnull_all;
 
+/* utf-8 string without lowercase letters, space or !. maxlen 255 */
+EXPORT bool
+dwg_is_valid_tag (const char *tag);
+  
 EXPORT Dwg_Entity_TEXT*
 dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               const char* restrict text_value,
