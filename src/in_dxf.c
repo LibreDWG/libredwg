@@ -54,8 +54,10 @@ static unsigned int loglevel;
 #include "in_dxf.h"
 
 #ifndef _DWG_API_H_
+// dwg_api.h is too big
 Dwg_Object *dwg_obj_generic_to_object (const void *restrict obj,
                                        int *restrict error);
+bool dwg_is_valid_tag (const char *tag);
 #endif
 // from dwg.c
 BITCODE_H
@@ -10186,6 +10188,14 @@ new_object (char *restrict name, char *restrict dxfname,
               BITCODE_RC dataflags;
               if (pair->code == 10 || pair->code == 20)
                 goto search_field;
+              else if (pair->code == 2
+                       && (obj->fixedtype == DWG_TYPE_ATTRIB
+                           || obj->fixedtype == DWG_TYPE_ATTDEF)
+                       && !dwg_is_valid_tag (pair->value.s))
+                {
+                  LOG_ERROR ("Invalid tag %s ignored\n", pair->value.s);
+                  goto next_pair;
+                }
               else if (pair->code == 30 && pair->value.d == 0.0)
                 {
                   dwg_dynapi_entity_value (_obj, obj->name, "dataflags",

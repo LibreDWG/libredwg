@@ -35,6 +35,11 @@
 #include "classes.h"
 #include "in_json.h"
 
+#ifndef _DWG_API_H_
+// dwg_api.h is too big
+bool dwg_is_valid_tag (const char *tag);
+#endif
+
 static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
@@ -3127,6 +3132,20 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else
             // search_field:
             {
+              if (t->type == JSMN_STRING && is_entity && strEQc (key, "tag"))
+                {
+                  int sz = t->end - t->start;
+                  char *tag = malloc (sz + 1);
+                  memcpy (tag, &dat->chain[t->start], sz);
+                  tag[sz] = '\0';
+                  if (!dwg_is_valid_tag (tag))
+                    {
+                      LOG_ERROR ("Invalid tag %s ignored\n", tag);
+                      free (tag);
+                      break;
+                    }
+                  free (tag);
+                }
               if (_set_struct_field (dat, obj, tokens, _obj, name, key,
                                      fields))
                 continue;
