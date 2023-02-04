@@ -10192,8 +10192,7 @@ new_object (char *restrict name, char *restrict dxfname,
                            || obj->fixedtype == DWG_TYPE_ATTDEF)
                        && !dwg_is_valid_tag (pair->value.s))
                 {
-                  LOG_ERROR ("Invalid tag %s ignored\n", pair->value.s);
-                  goto next_pair;
+                  LOG_ERROR ("Invalid %s.tag %s\n", obj->name, pair->value.s);
                 }
               else if (pair->code == 30 && pair->value.d == 0.0)
                 {

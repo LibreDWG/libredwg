@@ -192,7 +192,18 @@ DWG_ENTITY (ATTRIB)
       FIELD_2RD (ins_pt, 10);
       FIELD_RD (height, 40);
       FIELD_TV (text_value, 1);
+#ifdef IS_ENCODER
+      if (!dwg_is_valid_tag (FIELD_VALUE (tag))) {
+        LOG_WARN ("Fixup invalid tag %s", FIELD_VALUE (tag));
+        FIELD_VALUE (tag) = fixup_invalid_tag (dat, FIELD_VALUE (tag));
+        LOG_WARN ("to %s", FIELD_VALUE (tag));
+      }
+#endif
       FIELD_TV (tag, 2);
+      DECODER {
+        if (!dwg_is_valid_tag (FIELD_VALUE (tag)))
+          LOG_WARN ("Invalid tag %s", FIELD_VALUE (tag))
+      }
       FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
       LOG_FLAG_ATTRIB
       if (R11OPTS (2)) {
@@ -386,11 +397,13 @@ DWG_ENTITY (ATTDEF)
       FIELD_RD (height, 40);
       FIELD_TV (default_value, 1);
       FIELD_TV (prompt, 3);
-      ENCODER {
-        // TODO check if fixable
-        if (!dwg_is_valid_tag (FIELD_VALUE (tag)))
-          LOG_WARN ("Invalid tag %s", FIELD_VALUE (tag))
+#ifdef IS_ENCODER
+      if (!dwg_is_valid_tag (FIELD_VALUE (tag))) {
+        LOG_WARN ("Fixup invalid tag %s", FIELD_VALUE (tag));
+        FIELD_VALUE (tag) = fixup_invalid_tag (dat, FIELD_VALUE (tag));
+        LOG_WARN ("to %s", FIELD_VALUE (tag));
       }
+#endif
       FIELD_TV (tag, 2);
       DECODER {
         if (!dwg_is_valid_tag (FIELD_VALUE (tag)))
@@ -5783,8 +5796,13 @@ DWG_OBJECT (PROXY_OBJECT)
                    dat->size, obj->size);
         _obj->data_numbits
             = ((obj->address * 8) + obj->bitsize) - bit_position (dat);
-        _obj->data_size = _obj->data_numbits % 8;
-        if (_obj->data_numbits) _obj->data_size++;
+        _obj->data_size = _obj->data_numbits / 8;
+        if (_obj->data_numbits % 8) _obj->data_size++;
+      }
+    else
+      if (!_obj->data_size) {
+        _obj->data_size = _obj->data_numbits / 8;
+        if (_obj->data_numbits % 8) _obj->data_size++;
       }
     LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
     LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
@@ -5812,7 +5830,10 @@ DWG_OBJECT (PROXY_OBJECT)
 #endif
 #if defined IS_DECODER || defined IS_ENCODER
   {
-    int bits = _obj->data_numbits - (_obj->data_size * 8);
+    int bits;
+    if (!_obj->data_size)
+      _obj->data_size = _obj->data_numbits / 8;
+    bits = _obj->data_numbits - (_obj->data_size * 8);
     if (!(bits > -8 && bits <= 0))
       LOG_ERROR ("Invalid data_numbits %u - (_obj->data_size %u * 8): %d",
                  _obj->data_numbits, _obj->data_size, bits);

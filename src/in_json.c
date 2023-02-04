@@ -3133,11 +3133,9 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   char *tag = malloc (sz + 1);
                   memcpy (tag, &dat->chain[t->start], sz);
                   tag[sz] = '\0';
-                  if (!dwg_is_valid_tag (tag))
+                  if (sz <= 0 || !dwg_is_valid_tag (tag))
                     {
-                      LOG_ERROR ("Invalid tag %s ignored\n", tag);
-                      free (tag);
-                      break;
+                      LOG_WARN ("Invalid %s.tag: %s\n", obj->name, tag);
                     }
                   free (tag);
                 }

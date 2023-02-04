@@ -42,6 +42,9 @@
 #ifdef HAVE_CTYPE_H
 #  include <ctype.h>
 #endif
+#ifdef HAVE_WCTYPE_H
+#  include <wctype.h>
+#endif
 
 #define DWG_MAX_OBJSIZE 0x100000
 
@@ -3817,6 +3820,52 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 }
 // clang-format off
 AFL_GCC_POP
+
+/* utf-8 string without lowercase letters, space or ! */
+static BITCODE_T
+fixup_invalid_tag (const Bit_Chain *restrict dat, char *restrict tag)
+{
+  size_t len;
+  int changed = 0;
+  BITCODE_TV newtag;
+  BITCODE_TU wstr;
+  if (!tag)
+    return NULL;
+  if (IS_FROM_TU (dat))
+    wstr = (BITCODE_TU)tag;
+  else
+    wstr = bit_utf8_to_TU ((char*)tag, 0);
+  len = bit_wcs2len (wstr);
+  for (size_t i = 0; i < len; i++)
+    {
+      if (i > 256)
+        {
+          wstr[i] = 0;
+          changed++;
+          break;
+        }
+#ifdef HAVE_WCTYPE_H
+      if (iswlower (wstr[i]))
+        {
+          wstr[i] = towupper (wstr[i]);
+          changed++;
+        }
+#endif
+      if (wstr[i] == L' ' || wstr[i] == L'!')
+        {
+          wstr[i] = L'_';
+          changed++;
+        }
+    }
+  if (changed && dat->version < R_2007)
+    {
+      newtag = bit_convert_TU (wstr);
+      free (wstr);
+      return newtag;
+    }
+  else
+    return (BITCODE_T)tag;
+}
 
 //static int encode_preR13 (Dwg_Data * restrict dwg, Bit_Chain * restrict dat)
 //{
