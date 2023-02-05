@@ -27,10 +27,10 @@
 #include <math.h>
 #include <time.h>
 #include <ctype.h>
+#include <assert.h>
 #ifdef HAVE_WCTYPE_H
 #  include <wctype.h>
 #endif
-#include <assert.h>
 #ifdef HAVE_MALLOC_H
 #  include <malloc.h>
 #endif
@@ -38,10 +38,10 @@
 #include "dwg.h"
 #define _DWG_API_C
 #include "common.h"
-
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
 #include "dwg_api.h"
+
 #include "bits.h"
 #include "classes.h"
 #include "decode.h"

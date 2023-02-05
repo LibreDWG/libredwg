@@ -28,7 +28,7 @@ dnl one place. For information on how to properly maintain the library
 dnl version information, refer to the libtool manual, section "Updating
 dnl library version information":
 dnl http://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
-AC_SUBST([LIBREDWG_SO_VERSION], [0:12:0])
+AC_SUBST([LIBREDWG_SO_VERSION], [0:13:0])
 AC_SUBST([TARBALL_VERSION_FILE])
 
 AC_CONFIG_MACRO_DIR([m4])
@@ -472,7 +472,7 @@ AM_CONDITIONAL(HAVE_GPERF, test -n "$GPERF")
 
 AC_MSG_CHECKING([for latest clang-format])
 CLANG_FORMAT=
-for clangfmt in clang-format{,-mp}{,-devel,-{12,11,10,9,8,7,6,5,4,3}{,.9,.8,.7,.6,.5,.4,.3,.2,.1,.0}}
+for clangfmt in clang-format{,-mp}{,-devel,-{17,16,15,14,13,12,11,10,9,8,7,6,5,4,3}{,.9,.8,.7,.6,.5,.4,.3,.2,.1,.0}}
 do
     if which "$clangfmt" &>/dev/null; then
         CLANG_FORMAT="$clangfmt"
