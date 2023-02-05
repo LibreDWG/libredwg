@@ -48,9 +48,9 @@ jobs:
     - run: sh autogen.sh
     - run: ./configure ${{ matrix.CONFIGURE_ARGS }}
     - if: matrix.CONFIGURE_ARGS != '--enable-release'
-      run: make
-    - if: matrix.CONFIGURE_ARGS != '--enable-gcov --disable-bindings' && matrix.CONFIGURE_ARGS != '--enable-release'
-      run: make check
+      run: make -j
+    - if: matrix.CONFIGURE_ARGS != '--enable-gcov --disable-bindings' && matrix.CONFIGURE_ARGS != '--enable-release' && startsWith(github.ref, 'refs/heads/')
+      run: make -j check
     #  run: |
     #    python -m pip install cpp-coveralls
     #    make gcov
@@ -96,8 +96,8 @@ jobs:
         fetch-depth: 1
         submodules: recursive
     - run: cmake -DLIBREDWG_LIBONLY=On .
-    - run: make
-    - run: make test
+    - run: make -j
+    - run: make -j test
   macOS:
     name: macOS
     runs-on: macOS-latest
@@ -165,9 +165,16 @@ jobs:
     - shell: msys2 {0}
       run: ./configure --disable-dependency-tracking
     - shell: msys2 {0}
-      run: make V=1
+      run: make -j
+    - if: failure()
+      run: make -C src dwg_api.i; tar cfz artefact-failure.tgz src/dwg_api.i src/config.h
+    - if: failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: artefact-failure.tgz
+        path: artefact-failure.tgz
     - shell: msys2 {0}
-      run: make check V=1
+      run: make -j check
   mingw-cmake:
     runs-on: windows-latest
     timeout-minutes: 20
@@ -182,4 +189,4 @@ jobs:
         fetch-depth: 1
         submodules: recursive
     - run: cmake -G "MinGW Makefiles" .
-    - run: mingw32-make
+    - run: mingw32-make -j
