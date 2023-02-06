@@ -2447,7 +2447,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       BITCODE_TF r11_sentinel;
       bit_write_RS (dat, 0); // patch the crc16 later
-      r11_sentinel = dwg_sentinel (DWG_SENTINEL_R11_HEADER_END);
+      r11_sentinel = dwg_sentinel (DWG_SENTINEL_R11_ENTITIES_BEGIN);
       bit_write_TF (dat, r11_sentinel, 16);
       LOG_TRACE ("r11_sentinel: ");
       LOG_TRACE_TF (r11_sentinel, 16)

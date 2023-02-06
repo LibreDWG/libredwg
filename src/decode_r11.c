@@ -780,7 +780,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   SINCE (R_11)
   {
-    // crc16 + DWG_SENTINEL_R11_HEADER_END
+    // crc16 + DWG_SENTINEL_R11_ENTITIES_BEGIN
     BITCODE_RS crc, crcc;
     BITCODE_TF r11_sentinel;
     crcc = bit_calc_CRC (0xC0C1, &dat->chain[0], dat->byte); // from 0 to now
@@ -796,9 +796,9 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       return error | DWG_ERR_INVALIDDWG;
     LOG_TRACE ("r11_sentinel: ");
     LOG_TRACE_TF (r11_sentinel, 16) // == C46E6854F86E3330633EC1852ADC9401
-    if (memcmp (r11_sentinel, dwg_sentinel (DWG_SENTINEL_R11_HEADER_END), 16))
+    if (memcmp (r11_sentinel, dwg_sentinel (DWG_SENTINEL_R11_ENTITIES_BEGIN), 16))
       {
-        LOG_ERROR ("DWG_SENTINEL_R11_HEADER_END mismatch");
+        LOG_ERROR ("DWG_SENTINEL_R11_ENTITIES_BEGIN mismatch");
         error |= DWG_ERR_WRONGCRC;
       }
     free (r11_sentinel);
