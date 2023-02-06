@@ -2626,7 +2626,7 @@ bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
 
 /** converts UTF-8 (dxf,json) to ASCII TV.
     Unquotes \" to ", \\ to \,
-    undo json_cquote(), \uxxxx or other unicode => \U+XXXX.
+    undo json_cquote(), \\uxxxx or other unicode => \\U+XXXX.
     Returns NULL if not enough room in dest.
 */
 char *
