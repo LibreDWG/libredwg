@@ -349,6 +349,9 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
     {
       LOG_ERROR ("File %s too small, %lu byte.\n", filename,
                  (long unsigned int)size)
+      free (dat.chain);
+      dat.chain = NULL;
+      dat.size = 0;
       return DWG_ERR_IOERROR;
     }
   // properly end the buffer for strtol()/... readers
