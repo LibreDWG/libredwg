@@ -70,6 +70,27 @@ void dwg_set_next_objhandle (Dwg_Object *obj);
 int dwg_dxfclass_require (Dwg_Data *restrict dwg,
                           const char *restrict dxfname);
 
+#ifdef USE_WRITE
+/* internally used only by dwg_add_POLYLINE* only */
+// fixme: Dwg_Entity_POLYLINE_2D* as 1st owner arg
+Dwg_Entity_VERTEX_2D *
+dwg_add_VERTEX_2D (Dwg_Entity_POLYLINE_2D *restrict pline,
+                   const dwg_point_2d *restrict point) __nonnull_all;
+Dwg_Entity_VERTEX_3D *
+dwg_add_VERTEX_3D (Dwg_Entity_POLYLINE_3D *restrict pline,
+                   const dwg_point_3d *restrict point) __nonnull_all;
+Dwg_Entity_VERTEX_MESH *
+dwg_add_VERTEX_MESH (Dwg_Entity_POLYLINE_MESH *restrict pline,
+                     const dwg_point_3d *restrict point) __nonnull_all;
+Dwg_Entity_VERTEX_PFACE *
+dwg_add_VERTEX_PFACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
+                      const dwg_point_3d *restrict point) __nonnull_all;
+Dwg_Entity_VERTEX_PFACE_FACE *
+dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
+                           const dwg_face vertind) __nonnull_all;
+
+#endif
+
 /**
  * Return an object fieldvalue
  */
@@ -22023,7 +22044,7 @@ dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
 EXPORT bool
 dwg_is_valid_tag (const char *tag)
 {
-  if (!tag || strchr (tag, ' ') || strchr (tag, '!') || strlen (tag) > 256)
+  if (strchr (tag, ' ') || strchr (tag, '!') || strlen (tag) > 256)
     return false;
 #ifdef HAVE_WCTYPE_H
   {
@@ -22062,27 +22083,6 @@ dwg_is_valid_tag (const char *tag)
  ********************************************************************/
 
 #ifdef USE_WRITE
-
-/* internally used only by dwg_add_POLYLINE* only */
-// fixme: Dwg_Entity_POLYLINE_2D* as 1st owner arg
-EXPORT Dwg_Entity_VERTEX_2D *
-dwg_add_VERTEX_2D (Dwg_Entity_POLYLINE_2D *restrict pline,
-                   const dwg_point_2d *restrict point) __nonnull_all;
-EXPORT Dwg_Entity_VERTEX_3D *
-dwg_add_VERTEX_3D (Dwg_Entity_POLYLINE_3D *restrict pline,
-                   const dwg_point_3d *restrict point) __nonnull_all;
-EXPORT Dwg_Entity_VERTEX_MESH *
-dwg_add_VERTEX_MESH (Dwg_Entity_POLYLINE_MESH *restrict pline,
-                     const dwg_point_3d *restrict point) __nonnull_all;
-EXPORT Dwg_Entity_VERTEX_PFACE *
-dwg_add_VERTEX_PFACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
-                      const dwg_point_3d *restrict point) __nonnull_all;
-EXPORT Dwg_Entity_VERTEX_PFACE_FACE *
-dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
-                           const dwg_face vertind) __nonnull_all;
-EXPORT Dwg_Entity_SEQEND *
-dwg_add_SEQEND (dwg_ent_generic *restrict owner) __nonnull_all;
-
 #  define NEW_OBJECT(dwg, obj)                                                \
     {                                                                         \
       BITCODE_BL idx = dwg->num_objects;                                      \
@@ -23193,9 +23193,8 @@ dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert, const double height,
                 const char *restrict tag, const char *restrict text_value)
 {
   int err;
-  Dwg_Object_BLOCK_HEADER *blkhdr
-      = dwg_entity_owner ((dwg_ent_generic *)insert);
-  Dwg_Object *insobj = dwg_obj_generic_to_object (insert, &err);
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner (insert);
+  Dwg_Object *restrict insobj = dwg_obj_generic_to_object (insert, &err);
   API_ADD_ENTITY (ATTRIB);
   ADD_CHECK_3DPOINT (ins_pt);
   ADD_CHECK_DOUBLE (height);
@@ -23422,12 +23421,11 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 }
 
 // TODO blkhdr => pline owner
-EXPORT Dwg_Entity_VERTEX_2D *
+Dwg_Entity_VERTEX_2D *
 dwg_add_VERTEX_2D (Dwg_Entity_POLYLINE_2D *restrict pline,
                    const dwg_point_2d *restrict point)
 {
-  Dwg_Object_BLOCK_HEADER *restrict blkhdr
-      = dwg_entity_owner ((dwg_ent_generic *)pline);
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner (pline);
   API_ADD_ENTITY (VERTEX_2D);
   obj->tio.entity->entmode = 0;
   obj->tio.entity->ownerhandle
@@ -23448,12 +23446,11 @@ dwg_add_VERTEX_2D (Dwg_Entity_POLYLINE_2D *restrict pline,
   return _obj;
 }
 
-EXPORT Dwg_Entity_VERTEX_3D *
+Dwg_Entity_VERTEX_3D *
 dwg_add_VERTEX_3D (Dwg_Entity_POLYLINE_3D *restrict pline,
                    const dwg_point_3d *restrict point)
 {
-  Dwg_Object_BLOCK_HEADER *restrict blkhdr
-      = dwg_entity_owner ((dwg_ent_generic *)pline);
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner (pline);
   API_ADD_ENTITY (VERTEX_3D);
   obj->tio.entity->entmode = 0;
   obj->tio.entity->ownerhandle
@@ -23599,12 +23596,11 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _pl;
 }
 
-EXPORT Dwg_Entity_VERTEX_PFACE *
+Dwg_Entity_VERTEX_PFACE *
 dwg_add_VERTEX_PFACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
                       const dwg_point_3d *restrict point)
 {
-  Dwg_Object_BLOCK_HEADER *restrict blkhdr
-      = dwg_entity_owner ((dwg_ent_generic *)pline);
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner (pline);
   API_ADD_ENTITY (VERTEX_PFACE);
   obj->tio.entity->entmode = 0;
   obj->tio.entity->ownerhandle
@@ -23622,12 +23618,11 @@ dwg_add_VERTEX_PFACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
   return _obj;
 }
 
-EXPORT Dwg_Entity_VERTEX_PFACE_FACE *
+Dwg_Entity_VERTEX_PFACE_FACE *
 dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
                            const dwg_face vertind)
 {
-  Dwg_Object_BLOCK_HEADER *restrict blkhdr
-      = dwg_entity_owner ((dwg_ent_generic *)pline);
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner (pline);
   API_ADD_ENTITY (VERTEX_PFACE_FACE);
   obj->tio.entity->entmode = 0;
   obj->tio.entity->ownerhandle
@@ -23727,12 +23722,11 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return _pl;
 }
 
-EXPORT Dwg_Entity_VERTEX_MESH *
+Dwg_Entity_VERTEX_MESH *
 dwg_add_VERTEX_MESH (Dwg_Entity_POLYLINE_MESH *restrict pline,
                      const dwg_point_3d *restrict point)
 {
-  Dwg_Object_BLOCK_HEADER *restrict blkhdr
-      = dwg_entity_owner ((dwg_ent_generic *)pline);
+  Dwg_Object_BLOCK_HEADER *restrict blkhdr = dwg_entity_owner (pline);
   API_ADD_ENTITY (VERTEX_MESH);
   obj->tio.entity->entmode = 0;
   obj->tio.entity->ownerhandle

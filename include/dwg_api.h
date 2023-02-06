@@ -6251,18 +6251,19 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
 /* insert entity into mspace, pspace or other block */
 EXPORT int dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                               Dwg_Object *restrict obj) __nonnull_all;
-/* returns BLOCK_HEADER owner for generic entity from ent->ownerhandle */
-Dwg_Object_BLOCK_HEADER *
-dwg_entity_owner (const void *_ent) __nonnull_all;
 
 /* Set defaults from HEADER: CLAYER, linewt, ltype_scale, color, ... */
 EXPORT int
 dwg_add_entity_defaults (Dwg_Data *restrict dwg,
                          Dwg_Object_Entity *restrict ent) __nonnull_all;
 
+/* returns BLOCK_HEADER owner for generic entity from ent->ownerhandle. */
+EXPORT Dwg_Object_BLOCK_HEADER *
+dwg_entity_owner (const void *_ent) __nonnull_all;
+
 /* utf-8 string without lowercase letters, space or !. maxlen 256 */
 EXPORT bool
-dwg_is_valid_tag (const char *tag);
+dwg_is_valid_tag (const char *tag) __nonnull_all;
   
 EXPORT Dwg_Entity_TEXT*
 dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
@@ -6293,6 +6294,8 @@ dwg_add_BLOCK (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const char* restrict name) __nonnull_all;
 EXPORT Dwg_Entity_ENDBLK*
 dwg_add_ENDBLK (Dwg_Object_BLOCK_HEADER *restrict blkhdr) __nonnull_all;
+EXPORT Dwg_Entity_SEQEND*
+dwg_add_SEQEND (dwg_ent_generic *restrict blkhdr) __nonnull_all;
 
 /* Experimental. Does not work yet properly */
 EXPORT Dwg_Entity_INSERT*
