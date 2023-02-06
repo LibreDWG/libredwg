@@ -55,9 +55,12 @@ EXTRA_DIST = $(top_srcdir)/.version libredwg.spec Dockerfile \
              $(JSON_DIST) \
 	     $(VALGRIND_SUPPRESSIONS_FILE)
 
-.PHONY: check-dwg check-dxf check-json check-dwg-valgrind \
-        regen-man man manual refman scan-build gcov \
-	unknown regen-unknown full-regen-unknown regen-gperf regen-dynapi
+.PHONY: check-dwg check-dxf check-dxfb check-json check-dwg-valgrind check-svg \
+	check-docker cppcheck log-dwg \
+	regen-swig-patch release-web \
+        regen-man man manual refman scan-build gcov cover codecov coveralls \
+	unknown regen-unknown full-regen-unknown regen-gperf regen-dynapi \
+	maintainer-clean-local distuninstallcheck dist-hook
 
 dist-hook:
 	echo dist-hook distdir="$(distdir)"
@@ -217,6 +220,14 @@ check-svg: all
 check-docker: dist
 	docker build --build-arg distdir="$(distdir)" --rm -t $(distdir) \
 	             -f $(srcdir)/Dockerfile-dist .
+cppcheck:
+if HAVE_CPPCHECK
+	$(MAKE) -C src $@
+	$(MAKE) -C programs $@
+	$(MAKE) -C examples $@
+	$(CPPCHECK) -j4 --inline-suppr -I$(top_srcdir)/include -Isrc test/unit-testing/*.c
+	$(CPPCHECK) -j4 --inline-suppr -I$(top_srcdir)/include -Isrc test/xmlsuite/*.c
+endif
 log-dwg: all
 	for d in `find $(srcdir)/test/test-data \
 		$(srcdir)/test/test-old \

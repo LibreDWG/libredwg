@@ -20,6 +20,7 @@
 WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS   = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD       = $(top_builddir)/src/libredwg.la
+CPPCHECK    = @CPPCHECK@
 
 if USE_WRITE
 bin_PROGRAMS     = dwgadd
@@ -66,7 +67,7 @@ llvmfuzz_standalone_LDADD   = $(top_builddir)/src/libredwg.la $(top_builddir)/sr
 
 all: $(check_PROGRAMS)
 
-.PHONY: check-syntax regen-unknown full-regen-unknown dsymutil gcov
+.PHONY: check-syntax regen-unknown full-regen-unknown dsymutil gcov cppcheck
 
 if HAVE_PERL
 # maintainer rules only
@@ -120,6 +121,11 @@ endif
 TESTS = $(top_builddir)/programs/alive.test
 if USE_WRITE
 TESTS += dwgadd_test.sh
+endif
+
+cppcheck:
+if HAVE_CPPCHECK
+	$(CPPCHECK) -j4 --inline-suppr -I$(top_srcdir)/include -I../src $(srcdir)/*.c
 endif
 
 alldxf_unknowns = \

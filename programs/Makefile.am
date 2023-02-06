@@ -20,6 +20,7 @@
 WARN_CFLAGS = @WARN_CFLAGS@
 AM_CFLAGS   = -I$(top_srcdir)/include -I$(top_srcdir)/src $(WARN_CFLAGS)
 LDADD       = $(top_builddir)/src/libredwg.la
+CPPCHECK    = @CPPCHECK@
 
 bin_PROGRAMS    = dwgread
 noinst_PROGRAMS =
@@ -95,6 +96,11 @@ TESTS += svg.test
 endif
 endif
 
+cppcheck:
+if HAVE_CPPCHECK
+	$(CPPCHECK) -j4 -I$(top_srcdir)/include -I../src $(srcdir)/*.c
+endif
+
 EXTRA_DIST  = suffix.inc escape.h geom.h common.inc $(TESTS) cmp_dxf.pl
 CLEANFILES  = {example_,sample_,entities_,ACEB10_r11}*.{bmp,ps,svg,dxf,log,json}
 if USE_WRITE
@@ -105,7 +111,7 @@ endif
 MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i *.ii *.log
 DISTCLEANFILES       = core alive.test dxf.test json.test svg.test
 
-.PHONY: man dsymutil clean-dsymutil check-syntax
+.PHONY: man dsymutil clean-dsymutil check-syntax check-cppcheck
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

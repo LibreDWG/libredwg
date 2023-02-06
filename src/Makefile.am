@@ -24,6 +24,7 @@ if ENABLE_SHARED
 AM_CFLAGS += -DDLL_EXPORT
 endif
 libredwg_la_LDFLAGS = -version-info $(LIBREDWG_SO_VERSION) -no-undefined -lm
+CPPCHECK = @CPPCHECK@
 
 libredwg_la_SOURCES = \
 	dwg.c \
@@ -167,11 +168,16 @@ endif
 	$(am__mv) $< $<.orig
 	$(am__mv) $@ $<
 
+cppcheck:
+if HAVE_CPPCHECK
+	$(CPPCHECK) -j4 --inline-suppr -I$(top_srcdir)/include -I. $(srcdir)/*.c
+endif
+
 # emacs flymake-mode
 check-syntax:
 	test -n "$(CHK_SOURCES)" && \
 	  nice $(COMPILE) -O0 -o /dev/null -S $(CHK_SOURCES)
-.PHONY: check-syntax
+.PHONY: check-syntax cppcheck
 
 if ENABLE_GCOV
 AM_CFLAGS += @GCOV_CFLAGS@

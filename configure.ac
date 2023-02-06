@@ -616,6 +616,12 @@ dnl AC_MSG_WARN([srcdir: $srcdir ac_builddir: $ac_builddir builddir: $builddir])
 AM_CONDITIONAL([HAVE_INSRCDIR], [test x"$srcdir" = x"."])
 
 AC_CHECK_PROGS([CPPCHECK], [cppcheck])
+if test -n "$CPPCHECK"; then
+  AC_MSG_CHECKING([CPPCHECK version])
+  [cppcheck_version=`"$CPPCHECK" --version 2>&1 | grep 'Cppcheck ' | cut -c10-`]
+  AC_MSG_RESULT([$cppcheck_version])
+fi
+AM_CONDITIONAL([HAVE_CPPCHECK], [test -n "$CPPCHECK"])
 
 AC_CHECK_PROGS([PICAT], [picat])
 if test -n "$PICAT"; then
