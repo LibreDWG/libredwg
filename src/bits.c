@@ -1224,6 +1224,7 @@ bit_write_DD (Bit_Chain *dat, double value, double default_value)
       if (uint_value[0] == uint_default[0])
         {
           // first 4 bits eq, i.e. next 2 bits also
+          // cppcheck-suppress objectIndex
           if (uint_value[1] == uint_default[1])
             {
               bits = 1;
@@ -1758,8 +1759,16 @@ bit_embed_TU_size (BITCODE_TU restrict wstr, const int len)
         {
           if (write + 1 >= size) // TODO should not happen
             {
+              char *tmp;
               size += 2;
-              str = (char *)realloc (str, size);
+              tmp = (char *)realloc (str, size);
+              if (!tmp)
+                {
+                  free (str);
+                  return NULL;
+                }
+              else
+                str = tmp;
             }
           str[write++] = c & 0xFF;
         }
@@ -1767,8 +1776,16 @@ bit_embed_TU_size (BITCODE_TU restrict wstr, const int len)
         {
           if (write + 7 > size)
             {
+              char *tmp;
               size += 8;
-              str = (char *)realloc (str, size);
+              tmp = (char *)realloc (str, size);
+              if (!tmp)
+                {
+                  free (str);
+                  return NULL;
+                }
+              else
+                str = tmp;
             }
           str[write++] = '\\';
           str[write++] = 'U';
@@ -2527,7 +2544,18 @@ bit_convert_TU (const BITCODE_TU restrict wstr)
 
 #define EXTEND_SIZE(str, i, len)                                              \
   if (i > len)                                                                \
-  str = (char *)realloc (str, i + 1)
+    {                                                                         \
+      char *_tmp = (char *)realloc (str, i + 1);                              \
+      if (!_tmp)                                                              \
+        {                                                                     \
+          free (str);                                                         \
+          loglevel = 1;                                                       \
+          LOG_ERROR ("Out of memory");                                        \
+          return NULL;                                                        \
+        }                                                                     \
+      else                                                                    \
+        str = _tmp;                                                           \
+    }
 
 /* converts UCS-2LE to UTF-8. len is the wstr length, not the resulting
    utf8-size. single pass with realloc. */

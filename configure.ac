@@ -615,6 +615,8 @@ AM_CONDITIONAL([HAVE_PATCH], [test -n "$PATCH"])
 dnl AC_MSG_WARN([srcdir: $srcdir ac_builddir: $ac_builddir builddir: $builddir])
 AM_CONDITIONAL([HAVE_INSRCDIR], [test x"$srcdir" = x"."])
 
+AC_CHECK_PROGS([CPPCHECK], [cppcheck])
+
 AC_CHECK_PROGS([PICAT], [picat])
 if test -n "$PICAT"; then
   AC_MSG_CHECKING([PICAT version])
