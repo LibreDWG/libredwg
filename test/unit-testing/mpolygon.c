@@ -217,6 +217,7 @@ api_process (dwg_object *obj)
         }
     }
 
+  CHK_ENTITY_TYPE (_obj, MPOLYGON, num_boundary_handles, BL);
   if (!dwg_dynapi_entity_value (_obj, "MPOLYGON", "boundary_handles",
                                 &boundary_handles, NULL))
     fail ("MPOLYGON.boundary_handles");
