@@ -120,8 +120,13 @@ htmlwescape (BITCODE_TU wstr)
       const int off = d - dest;
       if (off >= len - 8)
         {
+          char *_tmp;
           len += 16;
-          dest = realloc (dest, len);
+          _tmp = realloc (dest, len);
+          if (!_tmp)
+            return NULL;
+          else
+            dest = _tmp;
           d = dest + off;
           *d = 0;
         }
