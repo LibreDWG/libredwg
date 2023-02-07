@@ -167,6 +167,7 @@ get_bmp (char *dwgfile, char *bmpfile)
     {
       bmp_free_dwg (&dwg);
       perror ("writing BMP magic");
+      fclose (fh);
       return 1;
     }
   retval = fwrite (&bmp_h.file_size, 4, 3, fh);
@@ -174,18 +175,19 @@ get_bmp (char *dwgfile, char *bmpfile)
     {
       bmp_free_dwg (&dwg);
       perror ("writing BMP file_size");
+      fclose (fh);
       return 1;
     }
 
   /* Write data (DIB header + bitmap) */
   retval = fwrite (data, sizeof (char), size, fh);
+  fclose (fh);
   if (!retval)
     {
       bmp_free_dwg (&dwg);
       perror ("writing BMP header");
       return 1;
     }
-  fclose (fh);
 
   printf ("Success. Written thumbnail image to '%s'\n", bmpfile);
   bmp_free_dwg (&dwg);
