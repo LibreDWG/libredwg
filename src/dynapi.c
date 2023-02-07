@@ -14314,7 +14314,9 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
         {
           char *str = (char *)calloc (f->size, 1);
           strncpy (str, *(char**)value, f->size);
+          // we copy just the pointer, not the string
           memcpy (old, &str, sizeof (char*)); // size of ptr
+          // cppcheck-suppress memleak
         }
       // ascii
       else if (f->is_string && dwg_version < R_2007)
@@ -14323,7 +14325,9 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
           size_t len = strlen (*(char**)value);
           char *str = (char *)malloc (len+1);
           memcpy (str, *(char**)value, len+1);
+          // we copy just the pointer, not the string
           memcpy (old, &str, sizeof (char*)); // size of ptr
+          // cppcheck-suppress memleak
         }
       // or wide
       else if (strNE (f->type, "TF") && (f->is_string && dwg_version >= R_2007))
