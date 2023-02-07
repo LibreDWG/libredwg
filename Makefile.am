@@ -225,8 +225,10 @@ if HAVE_CPPCHECK
 	$(MAKE) -C src $@
 	$(MAKE) -C programs $@
 	$(MAKE) -C examples $@
-	$(CPPCHECK) -j4 --inline-suppr -I$(top_srcdir)/include -Isrc test/unit-testing/*.c
-	$(CPPCHECK) -j4 --inline-suppr -I$(top_srcdir)/include -Isrc test/xmlsuite/*.c
+	$(CPPCHECK) -DDEBUG_CLASSES -DUSE_WRITE -DHAVE_SCANDIR -j4 --inline-suppr \
+		-I$(top_srcdir)/include -Isrc test/unit-testing/*.c
+	$(CPPCHECK) -DDEBUG -j4 --inline-suppr -I$(top_srcdir)/include -Isrc \
+		test/xmlsuite/*.c
 endif
 log-dwg: all
 	for d in `find $(srcdir)/test/test-data \
