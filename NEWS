@@ -1,12 +1,12 @@
 GNU LibreDWG NEWS -- history of user-visible changes.  -*-indented-text-*-
-Copyright (C) 2022 Free Software Foundation, Inc.
+Copyright (C) 2023 Free Software Foundation, Inc.
 See the end for copying conditions.
 
 LibreDWG version 0.13.0 - 2023/?? - beta:
 
 Major features:
-  * Added experimental pre-R13 DWG decode support for most old formats (with
-    Michal Spacek).
+  * Added experimental pre-R13 DWG decode support for most old formats
+    (with Michal Spacek). DXF not yet.
   * Fixed dwgadd: (Dmitry Sinyavin #388, #415)
   * New authors: Michal Josef Špaček (preR13 formats),
     Dmitry Sinyavin (dwgadd fixes).
