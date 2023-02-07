@@ -98,7 +98,7 @@ endif
 
 cppcheck:
 if HAVE_CPPCHECK
-	$(CPPCHECK) -j4 -I$(top_srcdir)/include -I../src $(srcdir)/*.c
+	$(CPPCHECK) -j4 --inline-suppr -I$(top_srcdir)/include -I../src $(srcdir)/*.c
 endif
 
 EXTRA_DIST  = suffix.inc escape.h geom.h common.inc $(TESTS) cmp_dxf.pl

@@ -1967,6 +1967,7 @@ main (int argc, char *argv[])
   if (errcode != 0 && errcode != 100)
     {
       pcre2_get_error_message_8 (errcode, (PCRE2_UCHAR8 *)buf, 4096);
+      // cppcheck-suppress preprocessorErrorDirective
       LOG_ERROR ("pcre2_compile_8 error %d: %s with %s", errcode, buf,
                  pattern);
       return 1;
