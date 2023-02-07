@@ -114,6 +114,7 @@
     if (FIELD_VALUE (MENU)) // already created by add_Document
       free (FIELD_VALUE (MENU));
   }
+  // cppcheck-suppress doubleFree
   FIELD_TFv (MENU, 15, 1); // optionally extended by MENUEXT below
   FIELD_RD (DIMSCALE, 40); //ok 0x1a3
   FIELD_RD (DIMASZ, 40); //ok
