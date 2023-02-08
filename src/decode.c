@@ -4232,7 +4232,7 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   SINCE (R_2007)
   {
     SINCE (R_2010)
-    LOG_HANDLE (" bitsize: " FORMAT_RL ",", obj->bitsize);
+      LOG_HANDLE (" bitsize: " FORMAT_RL ",", obj->bitsize);
     if (obj->bitsize > obj->size * 8)
       {
         obj->bitsize = obj->size * 8;
@@ -4242,7 +4242,7 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
       }
     // restrict the hdl_dat stream. already done for r2007
     SINCE (R_2010)
-    error |= obj_handle_stream (dat, obj, hdl_dat);
+      error |= obj_handle_stream (dat, obj, hdl_dat);
     // and set the string stream (restricted to size)
     if (obj->type >= 500 || obj_has_strings (obj->type))
       error |= obj_string_stream (dat, obj, str_dat);
@@ -4255,27 +4255,32 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
         str_dat->size = 0;
       }
   }
+  SINCE (R_13b1)
+  {
+    error |= bit_read_H (dat, &obj->handle);
+    if (error & DWG_ERR_INVALIDHANDLE || !obj->handle.value
+        || !obj->handle.size || obj->handle.code)
+      {
+        LOG_ERROR ("Invalid object handle " FORMAT_H " at pos @%lu.%u",
+                   ARGS_H (obj->handle), dat->byte, dat->bit);
+        // TODO reconstruct the handle and search in the bitsoup?
+        if (has_wrong_bitsize)
+          obj->bitsize = 0;
+        obj->tio.object->num_eed = 0;
+        return error | DWG_ERR_INVALIDHANDLE;
+      }
+    LOG_TRACE ("handle: " FORMAT_H " [H 5]\n", ARGS_H (obj->handle))
+  }
 
-  error |= bit_read_H (dat, &obj->handle);
-  if (error & DWG_ERR_INVALIDHANDLE || !obj->handle.value || !obj->handle.size
-      || obj->handle.code)
-    {
-      LOG_ERROR ("Invalid object handle " FORMAT_H " at pos @%lu.%u",
-                 ARGS_H (obj->handle), dat->byte, dat->bit);
-      // TODO reconstruct the handle and search in the bitsoup?
-      if (has_wrong_bitsize)
-        obj->bitsize = 0;
-      obj->tio.object->num_eed = 0;
-      return error | DWG_ERR_INVALIDHANDLE;
-    }
-  LOG_TRACE ("handle: " FORMAT_H " [H 5]\n", ARGS_H (obj->handle))
-
-  if (has_wrong_bitsize)
-    LOG_WARN ("Skip eed")
-  else
-    error |= dwg_decode_eed (dat, _obj);
-  if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
-    return error;
+  SINCE (R_13b1)
+  {
+    if (has_wrong_bitsize)
+      LOG_WARN ("Skip eed")
+      else
+        error |= dwg_decode_eed (dat, _obj);
+    if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
+      return error;
+  }
 
   VERSIONS (R_13b1, R_14)
   {
