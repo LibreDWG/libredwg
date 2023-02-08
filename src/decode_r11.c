@@ -255,12 +255,27 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   BITCODE_TF name;
   BITCODE_RSd used = -1;
   unsigned long oldpos;
+  BITCODE_RL real_start = tbl->address;
 
   LOG_TRACE ("\ncontents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n",
              tbl->name, id, tbl->size, (long)tbl->number,
              (unsigned long)tbl->address,
              (unsigned long)(tbl->address
                              + ((unsigned long long)tbl->number * tbl->size)))
+
+  // with sentinel in case of R11
+  SINCE (R_11)
+    real_start -= 16;
+
+  // report unknown data before table
+  if (dat->byte != real_start)
+    {
+      LOG_WARN ("\n@0x%lx => start 0x%x", dat->byte, real_start);
+      if (dat->byte < real_start)
+        {
+          UNKNOWN_UNTIL (real_start);
+        }
+    }
 
   SINCE (R_11)
     {
