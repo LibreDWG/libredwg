@@ -6175,6 +6175,118 @@ decode_preR13_sentinel (Dwg_Sentinel sentinel,
   return error;
 }
 
+static void
+decode_preR13_section_chk (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
+                           Dwg_Data *restrict dwg)
+{
+  Dwg_Section *tbl = &dwg->header.section[id];
+  BITCODE_RS id1, size;
+  BITCODE_RL address;
+  BITCODE_RLd number;
+
+#define CMP(f, type)                                                        \
+  if (tbl->f != f)                                                          \
+    LOG_ERROR ("decode_preR13_section_chk %s %s", tbl->name, #f)
+
+  if (id > dwg->header.num_sections)
+    {
+      LOG_ERROR ("decode_preR13_section_chk: Invalid table %d, have only %d", id,
+                 dwg->header.num_sections)
+      return;
+    }
+  id1 = bit_read_RS (dat);
+  size = bit_read_RS (dat);
+  CMP (size, RS);
+  number = (BITCODE_RLd)bit_read_RS (dat);
+  CMP (number, RL);
+  address = bit_read_RL (dat);
+  CMP (address, RL)
+#  undef CMP
+  LOG_TRACE ("chk table %-8s [%2d]: size:%-4u nr:%-3ld (0x%x)\n", tbl->name,
+             id1, size, (long)number, address)
+}
+
+// only in R11
+int
+decode_preR13_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  int error = 0;
+  BITCODE_RS crc, crcc;
+  Dwg_AuxHeader *_obj = &dwg->auxheader;
+
+  LOG_TRACE ("\nAUXHEADER: @0x%lx\n", dat->byte);
+  error |= decode_preR13_sentinel(DWG_SENTINEL_R11_AUX_HEADER_BEGIN,
+                                 "DWG_SENTINEL_R11_AUX_HEADER_BEGIN", dat, dwg);
+  FIELD_RS (num_auxheader_variables, 0);
+  FIELD_RS (auxheader_size, 0);
+  FIELD_RLx (entities_start, 0);
+  if (_obj->entities_start != dwg->header.entities_start)
+    {
+      LOG_WARN ("entities_start %x/%x", _obj->entities_start, dwg->header.entities_start);
+    }
+  FIELD_RLx (entities_end, 0);
+  if (_obj->entities_end != dwg->header.entities_end)
+    {
+      LOG_WARN ("entities_end %x/%x", _obj->entities_end, dwg->header.entities_end);
+    }
+  FIELD_RLx (block_entities_start, 0);
+  if (_obj->block_entities_start != dwg->header.block_entities_start)
+    {
+      LOG_WARN ("block_entities_start %x/%x", _obj->block_entities_start, dwg->header.block_entities_start);
+    }
+  FIELD_RLx (extra_entities_start, 0);
+  if (_obj->extra_entities_start != dwg->header.extra_entities_start)
+    {
+      LOG_WARN ("extra_entities_start %x/%x", _obj->extra_entities_start, dwg->header.extra_entities_start);
+    }
+  FIELD_RS (R11_HANDLING, 0);
+  {
+    _obj->R11_HANDSEED = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
+    _obj->R11_HANDSEED->handleref.code = 0;
+    _obj->R11_HANDSEED->handleref.size = 8;
+    _obj->R11_HANDSEED->handleref.value = htobe64 (bit_read_RLL (dat));
+    _obj->R11_HANDSEED->absolute_ref = _obj->R11_HANDSEED->handleref.value;
+    LOG_TRACE ("R11_HANDSEED: " FORMAT_H " [H 5]\n",
+               ARGS_H (_obj->R11_HANDSEED->handleref));
+  }
+  FIELD_RS (num_aux_tables, 0);
+  decode_preR13_section_chk (SECTION_BLOCK, dat, dwg);
+  decode_preR13_section_chk (SECTION_LAYER, dat, dwg);
+  decode_preR13_section_chk (SECTION_STYLE, dat, dwg);
+  decode_preR13_section_chk (SECTION_LTYPE, dat, dwg);
+  decode_preR13_section_chk (SECTION_VIEW, dat, dwg);
+  if (dwg->header.num_sections >= SECTION_VPORT)
+    {
+      decode_preR13_section_chk (SECTION_UCS, dat, dwg);
+      decode_preR13_section_chk (SECTION_VPORT, dat, dwg);
+    }
+  if (dwg->header.num_sections >= SECTION_APPID)
+    {
+      decode_preR13_section_chk (SECTION_APPID, dat, dwg);
+    }
+  if (dwg->header.num_sections >= SECTION_VX)
+    {
+      decode_preR13_section_chk (SECTION_DIMSTYLE, dat, dwg);
+      decode_preR13_section_chk (SECTION_VX, dat, dwg);
+    }
+  FIELD_RLx (auxheader_address, 0);
+  crcc = bit_calc_CRC (0xC0C1,
+                       &dat->chain[_obj->auxheader_address + 16], // after sentinel (16 bytes)
+                       _obj->auxheader_size - 2);                 // minus crc length (2 bytes)
+  crc = bit_read_RS (dat);
+  LOG_TRACE ("crc: %04X [RSx] from 0x%x-0x%lx\n", crc, _obj->auxheader_address + 16, dat->byte - 2);
+  if (crc != crcc)
+    {
+      LOG_ERROR ("AUX header CRC mismatch %04X <=> %04X", crc, crcc);
+      error |= DWG_ERR_WRONGCRC;
+    }
+  error |= decode_preR13_sentinel(DWG_SENTINEL_R11_AUX_HEADER_END,
+                                 "DWG_SENTINEL_R11_AUX_HEADER_END", dat, dwg);
+  LOG_TRACE("\n");
+
+  return error;
+}
+
 // sentinel on begin and end is part of this decoding in case of R11
 // start and end addresses are without sentinel
 int
