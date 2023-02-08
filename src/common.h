@@ -394,7 +394,8 @@ typedef enum DWG_SENTINEL
 
 unsigned char *dwg_sentinel (const Dwg_Sentinel sentinel);
 // used by unit-tests
-EXPORT char *strrplc (const char *s, const char *from, const char *to);
+EXPORT char *strrplc (const char *s, const char *from, const char *to)
+  __nonnull_all;
 
 #define strEQ(s1, s2) !strcmp ((s1), (s2))
 #define strNE(s1, s2) strcmp ((s1), (s2))
@@ -444,34 +445,36 @@ void *memmem (const void *h0, size_t k, const void *n0, size_t l)
 // returns the first
 #define SHIFT_HV(_obj, numfield, hvfield)                                     \
   shift_hv (_obj->hvfield, &_obj->numfield)
-BITCODE_H shift_hv (BITCODE_H *hv, BITCODE_BL *num_p);
+BITCODE_H shift_hv (BITCODE_H *hv, BITCODE_BL *num_p) __nonnull_all;
 
 // used in dwg.spec
 Dwg_Handle *dwg_find_first_type_handle (Dwg_Data *restrict dwg,
-                                        enum DWG_OBJECT_TYPE type);
+                                        enum DWG_OBJECT_TYPE type) __nonnull_all;
 
 // <path-to>/dxf.ext => copy of "dxf", "ext"
 // Returns a malloc'ed copy of basename, and
 // sets ext to the char behind the last "." of filepath
-char *split_filepath (const char *filepath, char **extp);
+char *split_filepath (const char *filepath, char **extp) __nonnull_all;
 
 const struct dwg_versions *dwg_version_struct (const Dwg_Version_Type version);
 /* Returns the AC header magic string [6] */
 const char *dwg_version_codes (const Dwg_Version_Type version);
 /* Finds version from the magic char[6] header and the matching
    dwg_version number. */
-Dwg_Version_Type dwg_version_hdr_type2 (const char *hdr, unsigned dwg_version);
+Dwg_Version_Type dwg_version_hdr_type2 (const char *hdr,
+                                        unsigned dwg_version) __nonnull_all;
 
 // converts TIMEBLL to struct tm. useful for asctime(tm) or strftime
-struct tm *cvt_TIMEBLL (struct tm *tm, BITCODE_TIMEBLL date);
+struct tm *cvt_TIMEBLL (struct tm *tm, BITCODE_TIMEBLL date) __nonnull_all;
 
 /* Exported functions not in the API */
 const char *dwg_ref_tblname (const Dwg_Data *restrict dwg,
-                             Dwg_Object_Ref *restrict ref, int *alloced);
+                             Dwg_Object_Ref *restrict ref, int *alloced)
+  __nonnull_all;
 const char *dwg_ref_objname (const Dwg_Data *restrict dwg,
-                             Dwg_Object_Ref *restrict ref);
+                             Dwg_Object_Ref *restrict ref) __nonnull_all;
 
-int dwg_sections_init (Dwg_Data *dwg);
+int dwg_sections_init (Dwg_Data *dwg) __nonnull_all;
 
 /* in seconds */
 long tm_offset (void);

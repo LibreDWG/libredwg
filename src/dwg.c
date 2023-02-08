@@ -3028,8 +3028,10 @@ split_filepath (const char *filepath, char **extp)
 {
   char *copy, *base, *dot;
   // int len;
+#ifndef HAVE_NONNULL
   if (!filepath)
     return NULL;
+#endif
   copy = strdup (filepath);
 #ifdef HAVE_BASENAME
   base = basename (copy);
