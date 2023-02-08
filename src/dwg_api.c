@@ -22044,6 +22044,10 @@ dwg_encrypt_SAT1 (BITCODE_BL blocksize, BITCODE_RC *restrict acis_data,
 EXPORT bool
 dwg_is_valid_tag (const char *tag)
 {
+#ifndef HAVE_NONNULL
+  if (!tag)
+    return false;
+#endif
   if (strchr (tag, ' ') || strchr (tag, '!') || strlen (tag) > 256)
     return false;
 #ifdef HAVE_WCTYPE_H

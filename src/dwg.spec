@@ -193,7 +193,7 @@ DWG_ENTITY (ATTRIB)
       FIELD_RD (height, 40);
       FIELD_TV (text_value, 1);
 #ifdef IS_ENCODER
-      if (!dwg_is_valid_tag (FIELD_VALUE (tag))) {
+      if (FIELD_VALUE (tag) && !dwg_is_valid_tag (FIELD_VALUE (tag))) {
         LOG_WARN ("Fixup invalid tag %s", FIELD_VALUE (tag));
         FIELD_VALUE (tag) = fixup_invalid_tag (dat, FIELD_VALUE (tag));
         LOG_WARN ("to %s", FIELD_VALUE (tag));
@@ -201,7 +201,7 @@ DWG_ENTITY (ATTRIB)
 #endif
       FIELD_TV (tag, 2);
       DECODER {
-        if (!dwg_is_valid_tag (FIELD_VALUE (tag)))
+        if (FIELD_VALUE (tag) && !dwg_is_valid_tag (FIELD_VALUE (tag)))
           LOG_WARN ("Invalid tag %s", FIELD_VALUE (tag))
       }
       FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset
@@ -398,7 +398,7 @@ DWG_ENTITY (ATTDEF)
       FIELD_TV (default_value, 1);
       FIELD_TV (prompt, 3);
 #ifdef IS_ENCODER
-      if (!dwg_is_valid_tag (FIELD_VALUE (tag))) {
+      if (FIELD_VALUE (tag) && !dwg_is_valid_tag (FIELD_VALUE (tag))) {
         LOG_WARN ("Fixup invalid tag %s", FIELD_VALUE (tag));
         FIELD_VALUE (tag) = fixup_invalid_tag (dat, FIELD_VALUE (tag));
         LOG_WARN ("to %s", FIELD_VALUE (tag));
@@ -406,7 +406,7 @@ DWG_ENTITY (ATTDEF)
 #endif
       FIELD_TV (tag, 2);
       DECODER {
-        if (!dwg_is_valid_tag (FIELD_VALUE (tag)))
+        if (FIELD_VALUE (tag) && !dwg_is_valid_tag (FIELD_VALUE (tag)))
           LOG_WARN ("Invalid tag %s", FIELD_VALUE (tag))
       }
       FIELD_RC (flags, 70); // 1 invisible, 2 constant, 4 verify, 8 preset

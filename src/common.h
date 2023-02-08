@@ -482,7 +482,7 @@ void dwg_log_dataflags (const int _loglevel, const int maxlevel,
 
 // in the public API, but we don't use that for most internal modules
 #if !defined _DWG_API_H_ && !defined _DWG_API_C && !defined DYNAPI_TEST_C && !defined ADD_TEST_C && !defined DXF_TEST_C
-bool dwg_is_valid_tag (const char *tag);
+bool dwg_is_valid_tag (const char *tag) __nonnull_all;
 #endif
 
 #endif
