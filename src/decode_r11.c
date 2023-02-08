@@ -254,13 +254,49 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   BITCODE_RC flag;
   BITCODE_TF name;
   BITCODE_RSd used = -1;
-  unsigned long oldpos = dat->byte;
+  unsigned long oldpos;
 
   LOG_TRACE ("\ncontents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n",
              tbl->name, id, tbl->size, (long)tbl->number,
              (unsigned long)tbl->address,
              (unsigned long)(tbl->address
                              + ((unsigned long long)tbl->number * tbl->size)))
+
+  SINCE (R_11)
+    {
+      if (id == SECTION_BLOCK)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_BLOCKS_BEGIN,
+                                       "DWG_SENTINEL_R11_BLOCKS_BEGIN", dat, dwg);
+      else if (id == SECTION_LAYER)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_LAYERS_BEGIN,
+                                       "DWG_SENTINEL_R11_LAYERS_BEGIN", dat, dwg);
+      else if (id == SECTION_STYLE)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_STYLES_BEGIN,
+                                       "DWG_SENTINEL_R11_STYLES_BEGIN", dat, dwg);
+      else if (id == SECTION_LTYPE)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_LINETYPES_BEGIN,
+                                       "DWG_SENTINEL_R11_LINETYPES_BEGIN", dat, dwg);
+      else if (id == SECTION_VIEW)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_VIEWS_BEGIN,
+                                       "DWG_SENTINEL_R11_VIEWS_BEGIN", dat, dwg);
+      else if (id == SECTION_UCS)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_UCS_BEGIN,
+                                       "DWG_SENTINEL_R11_UCS_BEGIN", dat, dwg);
+      else if (id == SECTION_VPORT)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_VPORTS_BEGIN,
+                                       "DWG_SENTINEL_R11_VPORTS_BEGIN", dat, dwg);
+      else if (id == SECTION_APPID)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_APPIDS_BEGIN,
+                                       "DWG_SENTINEL_R11_APPIDS_BEGIN", dat, dwg);
+      else if (id == SECTION_DIMSTYLE)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_DIMSTYLES_BEGIN,
+                                       "DWG_SENTINEL_R11_DIMSTYLES_BEGIN", dat, dwg);
+      else if (id == SECTION_VX)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_VXS_BEGIN,
+                                       "DWG_SENTINEL_R11_VXS_BEGIN", dat, dwg);
+    }
+
+  oldpos = dat->byte;
   dat->byte = tbl->address;
   dat->bit = 0;
   if ((unsigned long)(tbl->number * tbl->size) > dat->size - dat->byte)
@@ -652,10 +688,46 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         break;
       }
     }
+
   if (tbl->address && tbl->number && tbl->size)
     dat->byte = tbl->address + (tbl->number * tbl->size);
   else
     dat->byte = oldpos;
+
+  SINCE (R_11)
+    {
+      if (id == SECTION_BLOCK)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_BLOCKS_END,
+                                       "DWG_SENTINEL_R11_BLOCKS_END", dat, dwg);
+      else if (id == SECTION_LAYER)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_LAYERS_END,
+                                       "DWG_SENTINEL_R11_LAYERS_END", dat, dwg);
+      else if (id == SECTION_STYLE)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_STYLES_END,
+                                       "DWG_SENTINEL_R11_STYLES_END", dat, dwg);
+      else if (id == SECTION_LTYPE)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_LINETYPES_END,
+                                       "DWG_SENTINEL_R11_LINETYPES_END", dat, dwg);
+      else if (id == SECTION_VIEW)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_VIEWS_END,
+                                       "DWG_SENTINEL_R11_VIEWS_END", dat, dwg);
+      else if (id == SECTION_UCS)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_UCS_END,
+                                       "DWG_SENTINEL_R11_UCS_END", dat, dwg);
+      else if (id == SECTION_VPORT)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_VPORTS_END,
+                                       "DWG_SENTINEL_R11_VPORTS_END", dat, dwg);
+      else if (id == SECTION_APPID)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_APPIDS_END,
+                                       "DWG_SENTINEL_R11_APPIDS_END", dat, dwg);
+      else if (id == SECTION_DIMSTYLE)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_DIMSTYLES_END,
+                                       "DWG_SENTINEL_R11_DIMSTYLES_END", dat, dwg);
+      else if (id == SECTION_VX)
+        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_VXS_END,
+                                       "DWG_SENTINEL_R11_VXS_END", dat, dwg);
+    }
+
   return error;
 }
 
