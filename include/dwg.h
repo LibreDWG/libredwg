@@ -2808,6 +2808,9 @@ typedef struct _dwg_object_VX_TABLE_RECORD
   BITCODE_B is_on;
   BITCODE_H viewport;
   BITCODE_H prev_entry;
+  BITCODE_RS vport_entity_address;
+  BITCODE_RSd unknown1;
+  BITCODE_RS unknown2;
 } Dwg_Object_VX_TABLE_RECORD;
 
 /**

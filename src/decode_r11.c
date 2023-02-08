@@ -637,10 +637,40 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       // SINCE R_11
       case SECTION_VX:
         {
-          if (tbl->number)
+          for (i = 0; i < tbl->number; i++)
             {
-              LOG_WARN ("VX table ignored");
-              tbl->number = 0;
+              Dwg_Object *obj;
+              Dwg_Object_VX_TABLE_RECORD *_obj;
+              Dwg_Object *ctrl;
+              Dwg_Object_VX_CONTROL *_ctrl;
+              LOG_TRACE ("\n-- table entry VX_TABLE_RECORD [%d]: 0x%lx\n", i, pos);
+              flag = bit_read_RC (dat);
+              name = bit_read_TF (dat, 32);
+              _obj = dwg_add_VX (dwg, (const char *)name);
+              _obj->flag = flag;
+              LOG_TRACE ("name: \"%s\" [TF 32 2]\n", name);
+              LOG_TRACE ("flag: %u [RC 70]\n", flag);
+              //LOG_FLAG_VX
+              free (name);
+              obj = dwg_obj_generic_to_object (_obj, &error);
+              if (obj)
+                {
+                  obj->size = tbl->size;
+                  obj->address = pos;
+                }
+              ctrl = dwg_get_first_object (dwg, DWG_TYPE_VX_CONTROL);
+              if (ctrl)
+                {
+                  _ctrl = ctrl->tio.object->tio.VX_CONTROL;
+                  _ctrl->entries[i]
+                      = dwg_add_handleref (dwg, 2, obj->handle.value, obj);
+                }
+              SINCE (R_11)
+                FIELD_RSd (used, 0);
+              FIELD_RS (vport_entity_address, 0);
+              FIELD_RSd (unknown1, 0);
+              FIELD_RS (unknown2, 0);
+              CHK_ENDPOS;
             }
         }
         break;
