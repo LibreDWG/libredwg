@@ -9377,6 +9377,16 @@ typedef struct _dwg_auxheader
   BITCODE_RL zero_7;
   BITCODE_RL zero_8;     /* ?? */
   BITCODE_RS zero_18[3]; /* R2018+ */
+  BITCODE_RS num_auxheader_variables; /* < R13 */
+  BITCODE_RS auxheader_size;          /* < R13 */
+  BITCODE_RL entities_start;          /* < R13 */
+  BITCODE_RL entities_end;            /* < R13 */
+  BITCODE_RL block_entities_start;    /* < R13 */
+  BITCODE_RL extra_entities_start;    /* < R13 */
+  BITCODE_RLx auxheader_address;      /* < R13 */
+  BITCODE_RS num_aux_tables;          /* < R13 */
+  BITCODE_BS R11_HANDLING;  /* TODO Merge with HANDSEED */
+  BITCODE_H R11_HANDSEED;   /* TODO Merge with HANDSEED */
 } Dwg_AuxHeader;
 
 typedef struct _dwg_summaryinfo
