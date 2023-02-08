@@ -6153,7 +6153,8 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 }
 
 int
-decode_preR13_sentinel (Dwg_Sentinel sentinel, const char name_of_sentinel[50],
+decode_preR13_sentinel (Dwg_Sentinel sentinel,
+                        const char *restrict sentinel_name,
                         Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
@@ -6161,13 +6162,13 @@ decode_preR13_sentinel (Dwg_Sentinel sentinel, const char name_of_sentinel[50],
 
   r11_sentinel = bit_read_TF (dat, 16);
   if (!r11_sentinel)
-    return error | DWG_ERR_INVALIDDWG;
-  LOG_TRACE ("%s: ", name_of_sentinel);
+    return DWG_ERR_INVALIDDWG;
+  LOG_TRACE ("%s: ", sentinel_name);
   LOG_TRACE_TF (r11_sentinel, 16)
   if (memcmp (r11_sentinel, dwg_sentinel (sentinel), 16))
     {
-      LOG_ERROR ("%s mismatch", name_of_sentinel);
-      error |= DWG_ERR_WRONGCRC;
+      LOG_ERROR ("%s mismatch", sentinel_name);
+      error = DWG_ERR_WRONGCRC;
     }
   free (r11_sentinel);
 
