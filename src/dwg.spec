@@ -4634,12 +4634,23 @@ DWG_OBJECT_END
 DWG_OBJECT (VX_TABLE_RECORD)
 
   COMMON_TABLE_FLAGS (VX)
-  FIELD_B (is_on, 290); // bit 1 of 70
-  FIELD_VALUE (flag) |= FIELD_VALUE (is_on) << 1;
+  PRE (R_13b1)
+    {
+      SINCE (R_11)
+        FIELD_RSd (used, 0);
+      FIELD_RS (vport_entity_address, 0);
+      FIELD_RSd (unknown1, 0);
+      FIELD_RS (unknown2, 0);
+    }
+  LATER_VERSIONS
+    {
+      FIELD_B (is_on, 290); // bit 1 of 70
+      FIELD_VALUE (flag) |= FIELD_VALUE (is_on) << 1;
 
-  START_OBJECT_HANDLE_STREAM;
-  FIELD_HANDLE (viewport, 4, 338);
-  FIELD_HANDLE (prev_entry, 5, 340);
+      START_OBJECT_HANDLE_STREAM;
+      FIELD_HANDLE (viewport, 4, 338);
+      FIELD_HANDLE (prev_entry, 5, 340);
+    }
 
 DWG_OBJECT_END
 
