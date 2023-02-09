@@ -6367,7 +6367,8 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
           if (obj->address + obj->size != dat->byte)
             {
               LOG_ERROR ("offset %ld", obj->address + obj->size - dat->byte);
-              dat->byte = obj->address + obj->size;
+              if (obj->size)
+                dat->byte = obj->address + obj->size;
             }
         }
         LATER_VERSIONS
