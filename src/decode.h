@@ -43,6 +43,17 @@ int dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 Dwg_Object_Ref *dwg_find_objectref (const Dwg_Data *restrict dwg,
                                     const Dwg_Object *restrict obj);
 
+int dwg_decode_BLOCK_HEADER (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_LAYER (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_STYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_LTYPE (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_VIEW (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_UCS (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_VPORT (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_APPID (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_VX_TABLE_RECORD (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+
 // reused with the importers
 void decode_BACKGROUND_type (const Dwg_Object *obj);
 

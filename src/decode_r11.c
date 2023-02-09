@@ -79,16 +79,6 @@ static unsigned int errors = 0;
 
 void dwg_set_next_hdl (Dwg_Data *dwg, unsigned long value);
 
-int dwg_decode_BLOCK_HEADER (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
-int dwg_decode_LAYER (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
-int dwg_decode_STYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
-int dwg_decode_LTYPE (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
-int dwg_decode_VIEW (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
-int dwg_decode_UCS (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
-int dwg_decode_VPORT (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
-int dwg_decode_APPID (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
-int dwg_decode_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
-
 /*------------------------------------------------------------------------------
  * Private functions
  */
@@ -257,7 +247,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   SINCE (R_11)
     {
 #define DECODE_PRER13_SENTINEL(ID) \
-      error |= decode_preR13_sentinel(ID, #ID, dat, dwg)
+      error |= decode_preR13_sentinel (ID, #ID, dat, dwg)
 
       switch (id)
         {
@@ -429,42 +419,46 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
     // SINCE R_11
     case SECTION_VX:
+      for (i = 0; i < tbl->number; i++)
         {
-          for (i = 0; i < tbl->number; i++)
+#if 1
+          NEW_OBJECT;
+          error |= dwg_decode_VX_TABLE_RECORD (dat, obj);
+          CHK_ENDPOS;
+#else
+          //Dwg_Object *obj;
+          Dwg_Object_VX_TABLE_RECORD *_obj;
+          Dwg_Object *ctrl;
+          Dwg_Object_VX_CONTROL *_ctrl;
+          LOG_TRACE ("\n-- table entry VX_TABLE_RECORD [%d]: 0x%lx\n", i, pos);
+          flag = bit_read_RC (dat);
+          name = bit_read_TF (dat, 32);
+          _obj = dwg_add_VX (dwg, (const char *)name);
+          _obj->flag = flag;
+          LOG_TRACE ("name: \"%s\" [TF 32 2]\n", name);
+          LOG_TRACE ("flag: %u [RC 70]\n", flag);
+          //LOG_FLAG_VX
+          free (name);
+          obj = dwg_obj_generic_to_object (_obj, &error);
+          if (obj)
             {
-              Dwg_Object *obj;
-              Dwg_Object_VX_TABLE_RECORD *_obj;
-              Dwg_Object *ctrl;
-              Dwg_Object_VX_CONTROL *_ctrl;
-              LOG_TRACE ("\n-- table entry VX_TABLE_RECORD [%d]: 0x%lx\n", i, pos);
-              flag = bit_read_RC (dat);
-              name = bit_read_TF (dat, 32);
-              _obj = dwg_add_VX (dwg, (const char *)name);
-              _obj->flag = flag;
-              LOG_TRACE ("name: \"%s\" [TF 32 2]\n", name);
-              LOG_TRACE ("flag: %u [RC 70]\n", flag);
-              //LOG_FLAG_VX
-              free (name);
-              obj = dwg_obj_generic_to_object (_obj, &error);
-              if (obj)
-                {
-                  obj->size = tbl->size;
-                  obj->address = pos;
-                }
-              ctrl = dwg_get_first_object (dwg, DWG_TYPE_VX_CONTROL);
-              if (ctrl)
-                {
-                  _ctrl = ctrl->tio.object->tio.VX_CONTROL;
-                  _ctrl->entries[i]
-                      = dwg_add_handleref (dwg, 2, obj->handle.value, obj);
-                }
-              SINCE (R_11)
-                FIELD_RSd (used, 0);
-              FIELD_RS (vport_entity_address, 0);
-              FIELD_RSd (unknown1, 0);
-              FIELD_RS (unknown2, 0);
-              CHK_ENDPOS;
+              obj->size = tbl->size;
+              obj->address = pos;
             }
+          ctrl = dwg_get_first_object (dwg, DWG_TYPE_VX_CONTROL);
+          if (ctrl)
+            {
+              _ctrl = ctrl->tio.object->tio.VX_CONTROL;
+              _ctrl->entries[i]
+                = dwg_add_handleref (dwg, 2, obj->handle.value, obj);
+            }
+          SINCE (R_11)
+            FIELD_RSd (used, 0);
+          FIELD_RS (vport_entity_address, 0);
+          FIELD_RSd (unknown1, 0);
+          FIELD_RS (unknown2, 0);
+          CHK_ENDPOS;
+#endif
         }
         break;
 
@@ -473,7 +467,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         LOG_ERROR ("Invalid table id %d", id);
         tbl->number = 0;
         break;
-      }
     }
 
   if (tbl->address && tbl->number && tbl->size)
@@ -641,7 +634,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       return DWG_ERR_INVALIDDWG;
     }
 
-  LOG_INFO ("==========================================\n")
+  LOG_TRACE ("==========================================\n")
   error |= decode_preR13_header_variables (dat, dwg);
   LOG_TRACE ("@0x%lx\n", dat->byte);
   if (error >= DWG_ERR_CRITICAL)

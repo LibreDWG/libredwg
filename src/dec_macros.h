@@ -1632,7 +1632,7 @@
     return error;                                                             \
   }                                                                           \
                                                                               \
-  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                   \
+  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                     \
   static int dwg_decode_##token##_private (                                   \
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \
@@ -1728,7 +1728,7 @@
       Bit_Chain *obj_dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,             \
       Dwg_Object *restrict obj);                                              \
                                                                               \
-  int dwg_decode_##token (Bit_Chain *restrict dat,                            \
+  static int dwg_decode_##token (Bit_Chain *restrict dat,                     \
                           Dwg_Object *restrict obj)                           \
   {                                                                           \
     int error = dwg_setup_##token (obj);                                      \
@@ -1767,5 +1767,87 @@
       }
 
 #define DWG_OBJECT_END DWG_ENTITY_END
+
+// only for exported BLOCK_HEADER, LAYER, STYLE, LTYPE, VIEW, UCS, VPORT,
+// APPID, DIMSTYLE, VX_TABLE_RECORD table records, needed for the r11 add API.
+#define DWG_TABLE(token)                                                      \
+  EXPORT int dwg_setup_##token (Dwg_Object *obj)                              \
+  {                                                                           \
+    Dwg_Object_##token *_obj;                                                 \
+    LOG_INFO ("Add table record " #token " [%d] ", obj->index)                \
+    obj->supertype = DWG_SUPERTYPE_OBJECT;                                    \
+    obj->tio.object                                                           \
+        = (Dwg_Object_Object *)calloc (1, sizeof (Dwg_Object_Object));        \
+    if (!obj->tio.object)                                                     \
+      return DWG_ERR_OUTOFMEM;                                                \
+    _obj = obj->tio.object->tio.token                                         \
+        = (Dwg_Object_##token *)calloc (1, sizeof (Dwg_Object_##token));      \
+    if (!_obj)                                                                \
+      {                                                                       \
+        free (obj->tio.object);                                               \
+        obj->tio.object = NULL;                                               \
+        obj->fixedtype = DWG_TYPE_FREED;                                      \
+        return DWG_ERR_OUTOFMEM;                                              \
+      }                                                                       \
+    if (!(int)obj->fixedtype)                                                 \
+      {                                                                       \
+        obj->fixedtype = DWG_TYPE_##token;                                    \
+        obj->name = (char *)#token;                                           \
+      }                                                                       \
+    if (!(int)obj->type && obj->fixedtype <= DWG_TYPE_LAYOUT)                 \
+      {                                                                       \
+        obj->type = DWG_TYPE_##token;                                         \
+      }                                                                       \
+    obj->dxfname = (char *)#token;                                            \
+    if (obj->parent->opts & DWG_OPTS_IN)                                      \
+      {                                                                       \
+        obj->dxfname = strdup (obj->dxfname);                                 \
+        if (obj->parent->opts & DWG_OPTS_INJSON)                              \
+          obj->name = strdup (obj->name);                                     \
+      }                                                                       \
+    _obj->parent = obj->tio.object;                                           \
+    obj->tio.object->dwg = obj->parent;                                       \
+    obj->tio.object->objid = obj->index; /* obj ptr itself might move */      \
+    return 0;                                                                 \
+  }                                                                           \
+  static int dwg_decode_##token##_private (                                   \
+      Bit_Chain *obj_dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,             \
+      Dwg_Object *restrict obj);                                              \
+                                                                              \
+  int dwg_decode_##token (Bit_Chain *restrict dat,                            \
+                          Dwg_Object *restrict obj)                           \
+  {                                                                           \
+    int error = dwg_setup_##token (obj);                                      \
+    Bit_Chain hdl_dat = *dat;                                                 \
+    if (error)                                                                \
+      return error;                                                           \
+    SINCE (R_2007)                                                            \
+    {                                                                         \
+      Bit_Chain obj_dat = *dat, str_dat = *dat;                               \
+      error                                                                   \
+          = dwg_decode_##token##_private (&obj_dat, &hdl_dat, &str_dat, obj); \
+    }                                                                         \
+    else                                                                      \
+    {                                                                         \
+      error = dwg_decode_##token##_private (dat, &hdl_dat, dat, obj);         \
+    }                                                                         \
+    return error;                                                             \
+  }                                                                           \
+                                                                              \
+  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                     \
+  static int dwg_decode_##token##_private (                                   \
+      Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
+      Dwg_Object *restrict obj)                                               \
+  {                                                                           \
+    BITCODE_BL vcount, rcount3, rcount4;                                      \
+    int error = 0;                                                            \
+    Dwg_Object_##token *_obj = NULL;                                          \
+    Dwg_Data *dwg = obj->parent;                                              \
+    LOG_INFO ("Decode table record " #token "\n")                             \
+    _obj = obj->tio.object->tio.token;                                        \
+    error = dwg_decode_object (dat, hdl_dat, str_dat, obj->tio.object);       \
+    if (error >= DWG_ERR_CRITICAL || dat->byte > dat->size)                   \
+      return error;
+
 
 #endif

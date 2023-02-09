@@ -1175,6 +1175,8 @@
 #elif defined IS_ENCODER
 #  define PRER13_SECTION_HDR(name) \
     encode_preR13_section_hdr (#name, SECTION_##name, dat, dwg)
+#  define DWG_TABLE(token) DWG_OBJECT (token)
 #else
 #  define PRER13_SECTION_HDR(name)
+#  define DWG_TABLE(token) DWG_OBJECT (token)
 #endif
