@@ -6181,17 +6181,17 @@ int
 decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                         unsigned num_entities, BITCODE_RL size,
                         Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
-                        int entity_section_index)
+                        EntitySectionIndexR11 entity_section)
 {
   int error = 0;
   BITCODE_BL num = dwg->num_objects;
   BITCODE_RL real_start = start;
   unsigned long oldpos;
   const char *entities_section[]
-      = { "entities", "block entities",  "extra entities", };
+      = { "entities", "block entities",  "extra entities" };
 
   LOG_TRACE ("\n%s: (" FORMAT_RLx "-" FORMAT_RLx
-             " (%u), size " FORMAT_RL ")\n", entities_section[entity_section_index],
+             " (%u), size " FORMAT_RL ")\n", entities_section[entity_section],
              start, end, num_entities, size);
   LOG_INFO ("==========================================\n");
 
@@ -6218,15 +6218,21 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
 
   SINCE (R_11)
     {
-      if (entity_section_index == 0)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_ENTITIES_BEGIN,
-                                       "DWG_SENTINEL_R11_ENTITIES_BEGIN", dat, dwg);
-      else if (entity_section_index == 1)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN,
-                                       "DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN", dat, dwg);
-      else if (entity_section_index == 2)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_EXTRA_ENTITIES_BEGIN,
-                                       "DWG_SENTINEL_R11_EXTRA_ENTITIES_BEGIN", dat, dwg);
+#define DECODE_PRER13_SENTINEL(ID) \
+      error |= decode_preR13_sentinel(ID, #ID, dat, dwg)
+
+      switch (entity_section)
+        {
+        case entities_section_index:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_ENTITIES_BEGIN); break;
+        case block_entities_section_index:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN); break;
+        case extra_entities_section_index:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_EXTRA_ENTITIES_BEGIN); break;
+        default:
+          LOG_ERROR ("Internal error: Illegal entity_section %d 0-2\n", (int)entity_section);
+          return DWG_ERR_INTERNALERROR;
+        }
     }
 
   if (end > start && start == dat->byte)
@@ -6449,19 +6455,22 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
 
   SINCE (R_11)
     {
-      if (entity_section_index == 0)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_ENTITIES_END,
-                                       "DWG_SENTINEL_R11_ENTITIES_END", dat, dwg);
-      else if (entity_section_index == 1)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_BLOCK_ENTITIES_END,
-                                       "DWG_SENTINEL_R11_BLOCK_ENTITIES_END", dat, dwg);
-      else if (entity_section_index == 2)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_EXTRA_ENTITIES_END,
-                                       "DWG_SENTINEL_R11_EXTRA_ENTITIES_END", dat, dwg);
+      switch (entity_section)
+        {
+        case entities_section_index:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_ENTITIES_END); break;
+        case block_entities_section_index:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_BLOCK_ENTITIES_END); break;
+        case extra_entities_section_index:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_EXTRA_ENTITIES_END); break;
+        default:
+          LOG_ERROR ("Internal error: Illegal entity_section %d 0-2\n", (int)entity_section);
+          return DWG_ERR_INTERNALERROR;
+        }
     }
 
   LOG_INFO ("==========================================\n");
-  LOG_TRACE ("%s: end\n", entities_section[entity_section_index]);
+  LOG_TRACE ("%s: end\n", entities_section[entity_section]);
 
   return error;
 }

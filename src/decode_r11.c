@@ -265,7 +265,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
   // with sentinel in case of R11
   SINCE (R_11)
-    real_start -= 16;
+    real_start -= 16; // the sentinel size
 
   // report unknown data before table
   if (dat->byte != real_start)
@@ -279,36 +279,45 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
   SINCE (R_11)
     {
-      if (id == SECTION_BLOCK)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_BLOCKS_BEGIN,
-                                       "DWG_SENTINEL_R11_BLOCKS_BEGIN", dat, dwg);
-      else if (id == SECTION_LAYER)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_LAYERS_BEGIN,
-                                       "DWG_SENTINEL_R11_LAYERS_BEGIN", dat, dwg);
-      else if (id == SECTION_STYLE)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_STYLES_BEGIN,
-                                       "DWG_SENTINEL_R11_STYLES_BEGIN", dat, dwg);
-      else if (id == SECTION_LTYPE)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_LINETYPES_BEGIN,
-                                       "DWG_SENTINEL_R11_LINETYPES_BEGIN", dat, dwg);
-      else if (id == SECTION_VIEW)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_VIEWS_BEGIN,
-                                       "DWG_SENTINEL_R11_VIEWS_BEGIN", dat, dwg);
-      else if (id == SECTION_UCS)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_UCS_BEGIN,
-                                       "DWG_SENTINEL_R11_UCS_BEGIN", dat, dwg);
-      else if (id == SECTION_VPORT)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_VPORTS_BEGIN,
-                                       "DWG_SENTINEL_R11_VPORTS_BEGIN", dat, dwg);
-      else if (id == SECTION_APPID)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_APPIDS_BEGIN,
-                                       "DWG_SENTINEL_R11_APPIDS_BEGIN", dat, dwg);
-      else if (id == SECTION_DIMSTYLE)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_DIMSTYLES_BEGIN,
-                                       "DWG_SENTINEL_R11_DIMSTYLES_BEGIN", dat, dwg);
-      else if (id == SECTION_VX)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_VXS_BEGIN,
-                                       "DWG_SENTINEL_R11_VXS_BEGIN", dat, dwg);
+#define DECODE_PRER13_SENTINEL(ID) \
+      error |= decode_preR13_sentinel(ID, #ID, dat, dwg)
+
+      switch (id)
+        {
+        case SECTION_BLOCK:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_BLOCKS_BEGIN);
+          break;
+        case SECTION_LAYER:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_LAYERS_BEGIN);
+          break;
+        case SECTION_STYLE:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_STYLES_BEGIN);
+          break;
+        case SECTION_LTYPE:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_LINETYPES_BEGIN);
+          break;
+        case SECTION_VIEW:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_VIEWS_BEGIN);
+          break;
+        case SECTION_UCS:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_UCS_BEGIN);
+          break;
+        case SECTION_VPORT:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_VPORTS_BEGIN);
+          break;
+        case SECTION_APPID:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_APPIDS_BEGIN);
+          break;
+        case SECTION_DIMSTYLE:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_DIMSTYLES_BEGIN);
+          break;
+        case SECTION_VX:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_VXS_BEGIN);
+          break;
+        default:
+          LOG_ERROR ("Internal error: Invalid section id %d", (int)id);
+          return DWG_ERR_INTERNALERROR;
+        }
     }
 
   oldpos = dat->byte;
@@ -741,37 +750,44 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
   SINCE (R_11)
     {
-      if (id == SECTION_BLOCK)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_BLOCKS_END,
-                                       "DWG_SENTINEL_R11_BLOCKS_END", dat, dwg);
-      else if (id == SECTION_LAYER)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_LAYERS_END,
-                                       "DWG_SENTINEL_R11_LAYERS_END", dat, dwg);
-      else if (id == SECTION_STYLE)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_STYLES_END,
-                                       "DWG_SENTINEL_R11_STYLES_END", dat, dwg);
-      else if (id == SECTION_LTYPE)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_LINETYPES_END,
-                                       "DWG_SENTINEL_R11_LINETYPES_END", dat, dwg);
-      else if (id == SECTION_VIEW)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_VIEWS_END,
-                                       "DWG_SENTINEL_R11_VIEWS_END", dat, dwg);
-      else if (id == SECTION_UCS)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_UCS_END,
-                                       "DWG_SENTINEL_R11_UCS_END", dat, dwg);
-      else if (id == SECTION_VPORT)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_VPORTS_END,
-                                       "DWG_SENTINEL_R11_VPORTS_END", dat, dwg);
-      else if (id == SECTION_APPID)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_APPIDS_END,
-                                       "DWG_SENTINEL_R11_APPIDS_END", dat, dwg);
-      else if (id == SECTION_DIMSTYLE)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_DIMSTYLES_END,
-                                       "DWG_SENTINEL_R11_DIMSTYLES_END", dat, dwg);
-      else if (id == SECTION_VX)
-        error |= decode_preR13_sentinel(DWG_SENTINEL_R11_VXS_END,
-                                       "DWG_SENTINEL_R11_VXS_END", dat, dwg);
+      switch (id)
+        {
+        case SECTION_BLOCK:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_BLOCKS_END);
+          break;
+        case SECTION_LAYER:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_LAYERS_END);
+          break;
+        case SECTION_STYLE:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_STYLES_END);
+          break;
+        case SECTION_LTYPE:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_LINETYPES_END);
+          break;
+        case SECTION_VIEW:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_VIEWS_END);
+          break;
+        case SECTION_UCS:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_UCS_END);
+          break;
+        case SECTION_VPORT:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_VPORTS_END);
+          break;
+        case SECTION_APPID:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_APPIDS_END);
+          break;
+        case SECTION_DIMSTYLE:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_DIMSTYLES_END);
+          break;
+        case SECTION_VX:
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_VXS_END);
+          break;
+        default:
+          LOG_ERROR ("Internal error: Invalid section id %d", (int)id);
+          return DWG_ERR_INTERNALERROR;
+        }
     }
+#undef DECODE_PRER13_SENTINEL
 
   return error;
 }

@@ -31,6 +31,13 @@
 
 #define REFS_PER_REALLOC 128
 
+typedef enum ENTITY_SECTION_INDEX_R11
+{
+  entities_section_index = 0,
+  block_entities_section_index,
+  extra_entities_section_index
+} EntitySectionIndexR11;
+
 EXPORT int dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 int dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 Dwg_Object_Ref *dwg_find_objectref (const Dwg_Data *restrict dwg,
@@ -109,7 +116,7 @@ int decode_preR13_sentinel (Dwg_Sentinel sentinel, const char *sentinel_name,
 int decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                             unsigned num_entities, BITCODE_RL size,
                             Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
-                            int entity_section_index);
+                            EntitySectionIndexR11 entity_section_index);
 
 /* from dwg.c */
 // from dat.fh
