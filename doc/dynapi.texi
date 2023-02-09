@@ -12701,6 +12701,12 @@ B,	DXF 290
 H,	DXF 338
 @item prev_entry
 H,	DXF 340
+@item vport_entity_address
+RS
+@item unknown1
+RSd
+@item unknown2
+RS
 
 @end vtable
 @end indentedblock

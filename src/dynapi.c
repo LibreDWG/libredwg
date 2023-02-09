@@ -10477,6 +10477,12 @@ static const Dwg_DYNAPI_field _dwg_VX_TABLE_RECORD_fields[] = {
     1,0,0, 338 },
   { "prev_entry",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_VX_TABLE_RECORD, prev_entry),
     1,0,0, 340 },
+  { "vport_entity_address",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_VX_TABLE_RECORD, vport_entity_address),
+    0,0,0, 0 },
+  { "unknown1",	"RSd", sizeof (BITCODE_RSd),  OFF (struct _dwg_object_VX_TABLE_RECORD, unknown1),
+    0,0,0, 0 },
+  { "unknown2",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_VX_TABLE_RECORD, unknown2),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_WIPEOUTVARIABLES: (sorted by offset) */

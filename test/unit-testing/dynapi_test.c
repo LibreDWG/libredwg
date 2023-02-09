@@ -62868,6 +62868,36 @@ static int test_VX_TABLE_RECORD (const Dwg_Object *obj)
         fail ("VX_TABLE_RECORD.prev_entry [H]");
   }
   {
+    BITCODE_RSd unknown1;
+    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "unknown1", &unknown1, NULL)
+        && unknown1 == vx_table_record->unknown1)
+      pass ();
+    else
+      fail ("VX_TABLE_RECORD.unknown1 [RSd] " FORMAT_RSd " != " FORMAT_RSd "", vx_table_record->unknown1, unknown1);
+    unknown1++;
+    if (dwg_dynapi_entity_set_value (vx_table_record, "VX_TABLE_RECORD", "unknown1", &unknown1, 0)
+        && unknown1 == vx_table_record->unknown1)
+      pass ();
+    else
+      fail ("VX_TABLE_RECORD.unknown1 [RSd] set+1 " FORMAT_RSd " != " FORMAT_RSd "", vx_table_record->unknown1, unknown1);
+    vx_table_record->unknown1--;
+  }
+  {
+    BITCODE_RS unknown2;
+    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "unknown2", &unknown2, NULL)
+        && unknown2 == vx_table_record->unknown2)
+      pass ();
+    else
+      fail ("VX_TABLE_RECORD.unknown2 [RS] %hu != %hu", vx_table_record->unknown2, unknown2);
+    unknown2++;
+    if (dwg_dynapi_entity_set_value (vx_table_record, "VX_TABLE_RECORD", "unknown2", &unknown2, 0)
+        && unknown2 == vx_table_record->unknown2)
+      pass ();
+    else
+      fail ("VX_TABLE_RECORD.unknown2 [RS] set+1 %hu != %hu", vx_table_record->unknown2, unknown2);
+    vx_table_record->unknown2--;
+  }
+  {
     BITCODE_RSd used;
     if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "used", &used, NULL)
         && used == vx_table_record->used)
@@ -62889,6 +62919,21 @@ static int test_VX_TABLE_RECORD (const Dwg_Object *obj)
         pass ();
     else
         fail ("VX_TABLE_RECORD.viewport [H]");
+  }
+  {
+    BITCODE_RS vport_entity_address;
+    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "vport_entity_address", &vport_entity_address, NULL)
+        && vport_entity_address == vx_table_record->vport_entity_address)
+      pass ();
+    else
+      fail ("VX_TABLE_RECORD.vport_entity_address [RS] %hu != %hu", vx_table_record->vport_entity_address, vport_entity_address);
+    vport_entity_address++;
+    if (dwg_dynapi_entity_set_value (vx_table_record, "VX_TABLE_RECORD", "vport_entity_address", &vport_entity_address, 0)
+        && vport_entity_address == vx_table_record->vport_entity_address)
+      pass ();
+    else
+      fail ("VX_TABLE_RECORD.vport_entity_address [RS] set+1 %hu != %hu", vx_table_record->vport_entity_address, vport_entity_address);
+    vx_table_record->vport_entity_address--;
   }
   {
     BITCODE_H xref;
