@@ -6401,6 +6401,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               DEBUG_HERE;
               LOG_ERROR ("Unknown object type %d", type);
               error |= DWG_ERR_SECTIONNOTFOUND;
+              dat->byte++;
               break;
             }
 
