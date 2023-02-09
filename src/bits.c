@@ -3166,7 +3166,7 @@ bit_write_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
     and returns -1
  */
 int
-bit_search_sentinel (Bit_Chain *dat, unsigned char sentinel[16])
+bit_search_sentinel (Bit_Chain *dat, const unsigned char sentinel[16])
 {
   long unsigned int i, j;
 
@@ -3190,7 +3190,7 @@ bit_search_sentinel (Bit_Chain *dat, unsigned char sentinel[16])
 }
 
 void
-bit_write_sentinel (Bit_Chain *dat, unsigned char sentinel[16])
+bit_write_sentinel (Bit_Chain *dat, const unsigned char sentinel[16])
 {
   int i;
 

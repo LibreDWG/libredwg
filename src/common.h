@@ -376,11 +376,11 @@ extern const unsigned char dwg_bits_size[];
 #endif
 
 /**
- * References of sentinels
+ * Index of sentinels into sentinels[]
  */
 typedef enum DWG_SENTINEL
 {
-  DWG_SENTINEL_HEADER_END,
+  DWG_SENTINEL_HEADER_END = 0,
   DWG_SENTINEL_THUMBNAIL_BEGIN,
   DWG_SENTINEL_THUMBNAIL_END,
   DWG_SENTINEL_VARIABLE_BEGIN,
@@ -419,7 +419,7 @@ typedef enum DWG_SENTINEL
   DWG_SENTINEL_R11_AUX_HEADER_END
 } Dwg_Sentinel;
 
-unsigned char *dwg_sentinel (const Dwg_Sentinel sentinel);
+const unsigned char *dwg_sentinel (const Dwg_Sentinel sentinel_id);
 // used by unit-tests
 EXPORT char *strrplc (const char *s, const char *from, const char *to)
   __nonnull_all;

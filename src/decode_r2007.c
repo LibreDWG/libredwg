@@ -2326,7 +2326,7 @@ read_2007_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   static Bit_Chain sec_dat = { 0 };
   int error;
   BITCODE_RL size;
-  unsigned char *sentinel;
+  const unsigned char *sentinel;
 
   error = read_data_section (&sec_dat, dat, sections_map, pages_map,
                              SECTION_PREVIEW);

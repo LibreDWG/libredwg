@@ -3165,7 +3165,7 @@ read_2004_section_preview (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         free (sec_dat.chain);
       return error;
     }
-  sentinel = dwg_sentinel (DWG_SENTINEL_THUMBNAIL_BEGIN);
+  sentinel = (unsigned char *)dwg_sentinel (DWG_SENTINEL_THUMBNAIL_BEGIN);
   if (memcmp (sentinel, sec_dat.chain, 16))
     {
       LOG_WARN ("thumbnail sentinel mismatch");
