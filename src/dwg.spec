@@ -1269,41 +1269,19 @@ DWG_ENTITY (POLYLINE_2D)
       FIELD_RS (curve_type, 75);
       LOG_POLYLINE_CURVETYPE
     }
-    if (R11OPTS (0x8000)) {
+    if (R11OPTS (0x8000)) { // replaced by entity in extra entities section
       DECODER {
-        // GH #5480> curve_fit vertex
-        if (_ent->flag_r11 == 0 && obj->size > 20)
-          {
-            BITCODE_2RD pt;
-            BITCODE_RC flag = FIELD_VALUE (flag);
-            Dwg_Entity_VERTEX_2D *v;
-            pt.x = bit_read_RD (dat);
-            pt.y = bit_read_RD (dat);
-            LOG_TRACE ("=> VERTEX_2D: (%f, %f) [2RD 10]\n", pt.x, pt.y);
-            ((Dwg_Object*)obj)->fixedtype = DWG_TYPE_VERTEX_2D;
-            ((Dwg_Object*)obj)->type = DWG_TYPE_VERTEX_R11;
-            ((Dwg_Object*)obj)->dxfname = (char *)"VERTEX";
-            ((Dwg_Object*)obj)->name = (char *)"VERTEX_2D";
-            v = obj->tio.entity->tio.VERTEX_2D;
-            v->flag = flag | FLAG_VERTEX_EXTRA_VERTEX;
-            v->point.x = pt.x;
-            v->point.y = pt.y;
-            _obj = (Dwg_Entity_POLYLINE_2D *)v;
-          }
-        else if (_ent->flag_r11 == 0)
-          {
-            FIELD_VALUE (flag) |= FLAG_POLYLINE_CURVE_FIT;
-            FIELD_VALUE (curve_type) = 5;
-            LOG_TRACE ("=> FLAG_POLYLINE_CURVE_FIT\n");
-          }
+        int crc_len = 0;
+        SINCE (R_11)
+        {
+          crc_len = 2;
+        }
+        // there are some unknown data sometime
+        UNKNOWN_UNTIL (obj->address + obj->size - crc_len);
       }
     }
-    //  LOG_POLYLINE_CURVETYPE
     DECODER {
       FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
-    }
-    DXF {
-      FIELD_RS0 (curve_type, 75);
     }
   }
   SINCE (R_13b1)
