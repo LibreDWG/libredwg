@@ -273,8 +273,8 @@
       if (ref)                                                                \
         free (ref);                                                           \
       ref = dwg_decode_preR13_handleref (dat, code);                          \
-      LOG_TRACE (#nam ": %hd [H(%s) %d]\n", (short)ref->r11_idx,              \
-                 code == 2 ? "RSd" : "RC", dxf)                               \
+      LOG_TRACE (#nam ": 0x%hx [H(%s) %d]\n", (short)ref->r11_idx,              \
+                 code == 2 ? "RSx" : "RC", dxf)                               \
     }                                                                         \
     LATER_VERSIONS                                                            \
     {                                                                         \

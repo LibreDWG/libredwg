@@ -344,9 +344,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 #  define CHK_ENDPOS                                                          \
     SINCE (R_11)                                                              \
     {                                                                         \
-      BITCODE_RS crc16 = bit_read_RS (dat);                                   \
-      LOG_TRACE ("crc16: %04X\n", crc16);                                     \
-      /* TODO check crc */                                                    \
+      if (!bit_check_CRC (dat, obj->address, 0xC0C1))                         \
+        error |= DWG_ERR_WRONGCRC;                                            \
     }                                                                         \
     pos = tbl->address + (long)((i + 1) * tbl->size);                         \
     if (pos != dat->byte)                                                     \
