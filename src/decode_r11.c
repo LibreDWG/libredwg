@@ -584,12 +584,6 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     // clang-format on
   }
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x14
-
-  // setup all the new control objects
-  error |= dwg_add_Document (dwg, 0);
-  if (error >= DWG_ERR_CRITICAL)
-    return error;
-
   SINCE (R_2_0b)
   {
     // Block entities
@@ -598,20 +592,27 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     if (blocks_size > 0xffffff)
       {
         blocks_size &= 0xffffff;
-        LOG_TRACE ("block_size => " FORMAT_RLx "\n", blocks_size);
+        LOG_TRACE ("blocks_size => " FORMAT_RLx "\n", blocks_size);
       }
     blocks_end = blocks_start + blocks_size;
-
     // Extra entities
     extras_start = dwg->header.extras_start;
     extras_size = dwg->header.extras_size;
     if (extras_size > 0xffffff)
       {
         extras_size &= 0xffffff;
-        LOG_TRACE ("extra_size => " FORMAT_RLx "\n", extras_size);
+        LOG_TRACE ("extras_size => " FORMAT_RLx "\n", extras_size);
       }
     extras_end = extras_start + extras_size;
+  }
 
+  // setup all the new control objects
+  error |= dwg_add_Document (dwg, 0);
+  if (error >= DWG_ERR_CRITICAL)
+    return error;
+
+  SINCE (R_2_0b)
+  {
     tbl_id = 0;
     dwg->header.section[0].number = 0;
     dwg->header.section[0].type = (Dwg_Section_Type)SECTION_HEADER_R11;
