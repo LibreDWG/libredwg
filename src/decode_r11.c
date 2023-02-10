@@ -306,19 +306,47 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       dwg->dirty_refs = 1;
     }
 
+#  define SET_CONTROL(token)                                                  \
+    Dwg_Object *ctrl;                                                         \
+    Dwg_Object_##token##_CONTROL *_ctrl = NULL;                               \
+    ctrl = dwg_get_first_object (dwg, DWG_TYPE_##token##_CONTROL);            \
+    if (ctrl)                                                                 \
+      {                                                                       \
+        _ctrl = ctrl->tio.object->tio.token##_CONTROL;                        \
+        _ctrl->entries = calloc (tbl->number, sizeof (BITCODE_H));            \
+        _ctrl->num_entries = tbl->number;                                     \
+        LOG_TRACE (#token "_CONTROL.num_entries = %u\n", tbl->number);        \
+      }
+
 #  define NEW_OBJECT                                                          \
     dwg_add_object (dwg);                                                     \
     if (dat->byte > dat->size || (num + i) > dwg->num_objects)                \
       return DWG_ERR_INVALIDDWG;                                              \
     obj = &dwg->object[num++];                                                \
     obj->address = dat->byte;                                                 \
-    obj->size = tbl->size
+    obj->size = tbl->size;
+
+#  define ADD_CTRL_ENTRY                                                      \
+    if (_ctrl)                                                                \
+      {                                                                       \
+        BITCODE_H ref;                                                        \
+        if (!obj->handle.value)                                               \
+          obj->handle.value = num;                                            \
+        ref = _ctrl->entries[i]                                               \
+            = dwg_add_handleref (dwg, 2, obj->handle.value, obj);             \
+        ref->r11_idx = i;                                                     \
+        LOG_TRACE ("%s.entries[%u] = " FORMAT_REF " [H 0]\n", ctrl->name, i,  \
+                   ARGS_REF (ref));                                           \
+      }                                                                       \
+    else                                                                      \
+      return error | DWG_ERR_INVALIDDWG
 
 #  define CHK_ENDPOS                                                          \
     SINCE (R_11)                                                              \
     {                                                                         \
       BITCODE_RS crc16 = bit_read_RS (dat);                                   \
       LOG_TRACE ("crc16: %04X\n", crc16);                                     \
+      /* TODO check crc */                                                    \
     }                                                                         \
     pos = tbl->address + (long)((i + 1) * tbl->size);                         \
     if (pos != dat->byte)                                                     \
@@ -332,135 +360,140 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   switch (id)
     {
     case SECTION_BLOCK:
-      for (i = 0; i < tbl->number; i++)
-        {
-          NEW_OBJECT;
-          error |= dwg_decode_BLOCK_HEADER (dat, obj);
-          CHK_ENDPOS;
-        }
+      {
+        SET_CONTROL (BLOCK);
+        for (i = 0; i < tbl->number; i++)
+          {
+            NEW_OBJECT;
+            error |= dwg_decode_BLOCK_HEADER (dat, obj);
+            ADD_CTRL_ENTRY;
+            CHK_ENDPOS;
+          }
+      }
       break;
 
     case SECTION_LAYER:
-      for (i = 0; i < tbl->number; i++)
-        {
-          NEW_OBJECT;
-          error |= dwg_decode_LAYER (dat, obj);
-          CHK_ENDPOS;
-        }
+      {
+        SET_CONTROL (LAYER);
+        for (i = 0; i < tbl->number; i++)
+          {
+            NEW_OBJECT;
+            error |= dwg_decode_LAYER (dat, obj);
+            ADD_CTRL_ENTRY;
+            CHK_ENDPOS;
+          }
+      }
       break;
 
     // was a text STYLE table, became a STYLE object
     case SECTION_STYLE:
-      for (i = 0; i < tbl->number; i++)
-        {
-          NEW_OBJECT;
-          error |= dwg_decode_STYLE (dat, obj);
-          CHK_ENDPOS;
-        }
+      {
+        SET_CONTROL (STYLE);
+        for (i = 0; i < tbl->number; i++)
+          {
+            NEW_OBJECT;
+            error |= dwg_decode_STYLE (dat, obj);
+            ADD_CTRL_ENTRY;
+            CHK_ENDPOS;
+          }
+      }
       break;
 
     case SECTION_LTYPE:
-      for (i = 0; i < tbl->number; i++)
-        {
-          NEW_OBJECT;
-          error |= dwg_decode_LTYPE (dat, obj);
-          CHK_ENDPOS;
-        }
+      {
+        SET_CONTROL (LTYPE);
+        for (i = 0; i < tbl->number; i++)
+          {
+            NEW_OBJECT;
+            error |= dwg_decode_LTYPE (dat, obj);
+            ADD_CTRL_ENTRY;
+            CHK_ENDPOS;
+          }
+      }
       break;
 
     case SECTION_VIEW:
-      for (i = 0; i < tbl->number; i++)
-        {
-          NEW_OBJECT;
-          error |= dwg_decode_VIEW (dat, obj);
-          CHK_ENDPOS;
-        }
+      {
+        SET_CONTROL (VIEW);
+        for (i = 0; i < tbl->number; i++)
+          {
+            NEW_OBJECT;
+            error |= dwg_decode_VIEW (dat, obj);
+            ADD_CTRL_ENTRY;
+            CHK_ENDPOS;
+          }
+      }
       break;
 
     // SINCE R_11
     case SECTION_UCS:
-      for (i = 0; i < tbl->number; i++)
-        {
-          NEW_OBJECT;
-          error |= dwg_decode_UCS (dat, obj);
-          CHK_ENDPOS;
-        }
+      {
+        SET_CONTROL (UCS);
+        for (i = 0; i < tbl->number; i++)
+          {
+            NEW_OBJECT;
+            error |= dwg_decode_UCS (dat, obj);
+            ADD_CTRL_ENTRY;
+            CHK_ENDPOS;
+          }
+      }
       break;
 
     // SINCE R_11
     case SECTION_VPORT:
-      for (i = 0; i < tbl->number; i++)
-        {
-          NEW_OBJECT;
-          error |= dwg_decode_VPORT (dat, obj);
-          CHK_ENDPOS;
-        }
+      {
+        SET_CONTROL (VPORT);
+        for (i = 0; i < tbl->number; i++)
+          {
+            NEW_OBJECT;
+            error |= dwg_decode_VPORT (dat, obj);
+            ADD_CTRL_ENTRY;
+            CHK_ENDPOS;
+          }
+      }
       break;
 
     // SINCE R_11
     case SECTION_APPID:
-      for (i = 0; i < tbl->number; i++)
-        {
-          NEW_OBJECT;
-          error |= dwg_decode_APPID (dat, obj);
-          CHK_ENDPOS;
-        }
+      {
+        SET_CONTROL (APPID);
+        for (i = 0; i < tbl->number; i++)
+          {
+            NEW_OBJECT;
+            error |= dwg_decode_APPID (dat, obj);
+            ADD_CTRL_ENTRY;
+            CHK_ENDPOS;
+          }
+      }
       break;
 
     // SINCE R_11
     case SECTION_DIMSTYLE:
-      for (i = 0; i < tbl->number; i++)
-        {
-          NEW_OBJECT;
-          error |= dwg_decode_DIMSTYLE (dat, obj);
-          CHK_ENDPOS;
-        }
+      {
+        SET_CONTROL (DIMSTYLE);
+        for (i = 0; i < tbl->number; i++)
+          {
+            NEW_OBJECT;
+            error |= dwg_decode_DIMSTYLE (dat, obj);
+            ADD_CTRL_ENTRY;
+            CHK_ENDPOS;
+          }
+      }
       break;
 
     // SINCE R_11
     case SECTION_VX:
-      for (i = 0; i < tbl->number; i++)
-        {
-#if 1
-          NEW_OBJECT;
-          error |= dwg_decode_VX_TABLE_RECORD (dat, obj);
-          CHK_ENDPOS;
-#else
-          //Dwg_Object *obj;
-          Dwg_Object_VX_TABLE_RECORD *_obj;
-          Dwg_Object *ctrl;
-          Dwg_Object_VX_CONTROL *_ctrl;
-          LOG_TRACE ("\n-- table entry VX_TABLE_RECORD [%d]: 0x%lx\n", i, pos);
-          flag = bit_read_RC (dat);
-          name = bit_read_TF (dat, 32);
-          _obj = dwg_add_VX (dwg, (const char *)name);
-          _obj->flag = flag;
-          LOG_TRACE ("name: \"%s\" [TF 32 2]\n", name);
-          LOG_TRACE ("flag: %u [RC 70]\n", flag);
-          //LOG_FLAG_VX
-          free (name);
-          obj = dwg_obj_generic_to_object (_obj, &error);
-          if (obj)
-            {
-              obj->size = tbl->size;
-              obj->address = pos;
-            }
-          ctrl = dwg_get_first_object (dwg, DWG_TYPE_VX_CONTROL);
-          if (ctrl)
-            {
-              _ctrl = ctrl->tio.object->tio.VX_CONTROL;
-              _ctrl->entries[i]
-                = dwg_add_handleref (dwg, 2, obj->handle.value, obj);
-            }
-          SINCE (R_11)
-            FIELD_RSd (used, 0);
-          FIELD_RS (vport_entity_address, 0);
-          FIELD_RSd (unknown1, 0);
-          FIELD_RS (unknown2, 0);
-          CHK_ENDPOS;
-#endif
-        }
-        break;
+      {
+        SET_CONTROL (VX);
+        for (i = 0; i < tbl->number; i++)
+          {
+            NEW_OBJECT;
+            error |= dwg_decode_VX_TABLE_RECORD (dat, obj);
+            ADD_CTRL_ENTRY;
+            CHK_ENDPOS;
+          }
+      }
+      break;
 
       case SECTION_HEADER_R11:
       default:
