@@ -33,9 +33,9 @@
 
 typedef enum ENTITY_SECTION_INDEX_R11
 {
-  entities_section_index = 0,
-  block_entities_section_index,
-  extra_entities_section_index
+  ENTITIES_SECTION_INDEX = 0,
+  BLOCKS_SECTION_INDEX,
+  EXTRAS_SECTION_INDEX
 } EntitySectionIndexR11;
 
 EXPORT int dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
@@ -128,7 +128,7 @@ int decode_preR13_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 int decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                             unsigned num_entities, BITCODE_RL size,
                             Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
-                            EntitySectionIndexR11 entity_section_index);
+                            const EntitySectionIndexR11 entity_section_index);
 
 /* from dwg.c */
 // from dat.fh

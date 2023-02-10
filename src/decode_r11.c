@@ -561,8 +561,8 @@ EXPORT int
 decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   BITCODE_RL num_entities;
-  BITCODE_RL block_entities_start = 0, block_entities_end = 0, block_entities_size = 0;
-  BITCODE_RL extra_entities_start = 0, extra_entities_end = 0, extra_entities_size = 0;
+  BITCODE_RL blocks_start = 0, blocks_end = 0, blocks_size = 0;
+  BITCODE_RL extras_start = 0, extras_end = 0, extras_size = 0;
   BITCODE_RS rs2;
   Dwg_Object *obj = NULL;
   int tbl_id;
@@ -593,24 +593,24 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   SINCE (R_2_0b)
   {
     // Block entities
-    block_entities_start = dwg->header.block_entities_start;
-    block_entities_size = dwg->header.block_entities_size;
-    if (block_entities_size > 0xffffff)
+    blocks_start = dwg->header.blocks_start;
+    blocks_size = dwg->header.blocks_size;
+    if (blocks_size > 0xffffff)
       {
-        block_entities_size &= 0xffffff;
-        LOG_TRACE ("block_enties_size => " FORMAT_RLx "\n", block_entities_size);
+        blocks_size &= 0xffffff;
+        LOG_TRACE ("block_size => " FORMAT_RLx "\n", blocks_size);
       }
-    block_entities_end = block_entities_start + block_entities_size;
+    blocks_end = blocks_start + blocks_size;
 
     // Extra entities
-    extra_entities_start = dwg->header.extra_entities_start;
-    extra_entities_size = dwg->header.extra_entities_size;
-    if (extra_entities_size > 0xffffff)
+    extras_start = dwg->header.extras_start;
+    extras_size = dwg->header.extras_size;
+    if (extras_size > 0xffffff)
       {
-        extra_entities_size &= 0xffffff;
-        LOG_TRACE ("extra_enties_size => " FORMAT_RLx "\n", extra_entities_size);
+        extras_size &= 0xffffff;
+        LOG_TRACE ("extra_size => " FORMAT_RLx "\n", extras_size);
       }
-    extra_entities_end = extra_entities_start + extra_entities_size;
+    extras_end = extras_start + extras_size;
 
     tbl_id = 0;
     dwg->header.section[0].number = 0;
@@ -671,7 +671,8 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   // entities
   error |= decode_preR13_entities (
       dwg->header.entities_start, dwg->header.entities_end, num_entities,
-      dwg->header.entities_end - dwg->header.entities_start, dat, dwg, 0);
+      dwg->header.entities_end - dwg->header.entities_start, dat, dwg,
+      ENTITIES_SECTION_INDEX);
   if (error >= DWG_ERR_CRITICAL)
     return error;
 
@@ -724,14 +725,14 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     return error;
 
   // block entities
-  error |= decode_preR13_entities (block_entities_start, block_entities_end, 0,
-                                   block_entities_size, dat, dwg, 1);
+  error |= decode_preR13_entities (blocks_start, blocks_end, 0, blocks_size,
+                                   dat, dwg, BLOCKS_SECTION_INDEX);
   if (error >= DWG_ERR_CRITICAL)
     return error;
 
-  // extra entities.
-  error |= decode_preR13_entities (extra_entities_start, extra_entities_end, 0,
-                                   extra_entities_size, dat, dwg, 2);
+  // extra entities
+  error |= decode_preR13_entities (extras_start, extras_end, 0, extras_size,
+                                   dat, dwg, EXTRAS_SECTION_INDEX);
   if (error >= DWG_ERR_CRITICAL)
     return error;
 

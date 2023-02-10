@@ -44,16 +44,17 @@
        AC1009: 3, 5, 204; 3, 5, 205
      */
     FIELD_RS (numentity_sections, 0); // 3
-    FIELD_CAST (sections, RS, RL, 0); // 5 or 6
+    FIELD_CAST (sections, RS, RL, 0); // 5 or 6. the real size is num_sections
     FIELD_RS (numheader_vars, 0); // 74,83,101,104,114,120,122,129,158,160,204,205
     FIELD_RC (dwg_version, 0); // 0
 
+    // The 3 entitity data sections
     FIELD_RLx (entities_start, 0);
     FIELD_RLx (entities_end, 0);
-    FIELD_RLx (block_entities_start, 0);
-    FIELD_RLx (block_entities_size, 0);
-    FIELD_RLx (extra_entities_start, 0);
-    FIELD_RLx (extra_entities_size, 0);
+    FIELD_RLx (blocks_start, 0);
+    FIELD_RLx (blocks_size, 0);
+    FIELD_RLx (extras_start, 0);
+    FIELD_RLx (extras_size, 0);
   }
   SINCE (R_13b1) {
     FIELD_RC (zero_one_or_three, 0);

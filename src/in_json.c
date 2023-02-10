@@ -993,6 +993,13 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RC (numentity_sections, 0)
       FIELD_RS (sections, 0)
       FIELD_RS (numheader_vars, 0)
+      FIELD_RL (entities_start, 0)
+      FIELD_RL (entities_end, 0)
+      FIELD_RL (blocks_start, 0)
+      FIELD_RL (blocks_size, 0)
+      FIELD_RL (extras_start, 0)
+      FIELD_RL (extras_size, 0)
+
       FIELD_RL (thumbnail_address, 0) //@0x0d
       FIELD_RC (dwg_version, 0)
       FIELD_RC (maint_version, 0)
