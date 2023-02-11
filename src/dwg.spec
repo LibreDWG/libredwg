@@ -1269,9 +1269,11 @@ DWG_ENTITY (POLYLINE_2D)
       FIELD_RS (curve_type, 75);
       LOG_POLYLINE_CURVETYPE
     }
-    if (R11OPTS (0x8000)) {
+    if (obj->type == DWG_TYPE_PLINE_R11 &&
+        R11OPTS (OPTS_R11_POLYLINE_HAS_EXTRA))
+    {
       DECODER {
-        // GH #5480> curve_fit vertex
+        // GH #548 Optional user-provided curve_fit vertex
         if (_ent->flag_r11 == 0 && obj->size > 20)
           {
             BITCODE_2RD pt;
@@ -1298,12 +1300,8 @@ DWG_ENTITY (POLYLINE_2D)
           }
       }
     }
-    //  LOG_POLYLINE_CURVETYPE
     DECODER {
       FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
-    }
-    DXF {
-      FIELD_RS0 (curve_type, 75);
     }
   }
   SINCE (R_13b1)

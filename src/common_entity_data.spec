@@ -73,7 +73,17 @@
       LOG_TRACE (#w "(0x%x) ", OPTS_R11_##e##_##w)
 #  define LOG_OPTS_R11_MAX(e, v)                                              \
     if (obj->type == DWG_TYPE_##e##_R11 && _obj->opts_r11 > v)                \
-        LOG_WARN ("Unknown opts_r11 (0x%x)", _obj->opts_r11 & ~(v))
+        LOG_WARN ("Unknown " #e " opts_r11 (0x%x)", _obj->opts_r11 & ~(v))
+#  define LOG_OPTS_R11_POLYLINE(w)                                            \
+    if ((obj->type == DWG_TYPE_POLYLINE_R11                                   \
+         || obj->type == DWG_TYPE_PLINE_R11)                                  \
+        && (R11OPTS (OPTS_R11_POLYLINE_##w)))                                 \
+    LOG_TRACE (#w "(0x%x) ", OPTS_R11_POLYLINE_##w)
+#  define LOG_OPTS_R11_POLYLINE_MAX(v)                                        \
+    if ((obj->type == DWG_TYPE_POLYLINE_R11                                   \
+         || obj->type == DWG_TYPE_PLINE_R11)                                  \
+        && _obj->opts_r11 > v)                                                \
+    LOG_WARN ("Unknown POLYLINE opts_r11 (0x%x)", _obj->opts_r11 & ~(v))
 
             LOG_OPTS_R11 (3DFACE, HAS_Z_FIRST);
             LOG_OPTS_R11 (3DFACE, HAS_Z_SECOND);
@@ -148,16 +158,17 @@
             LOG_OPTS_R11 (LINE, HAS_EXTRUSION);
             LOG_OPTS_R11_MAX (LINE, 1);
 
-            LOG_OPTS_R11 (POLYLINE, HAS_FLAG);
-            LOG_OPTS_R11 (POLYLINE, HAS_START_WIDTH);
-            LOG_OPTS_R11 (POLYLINE, HAS_END_WIDTH);
-            LOG_OPTS_R11 (POLYLINE, HAS_EXTRUSION);
-            LOG_OPTS_R11 (POLYLINE, HAS_M_VERTS);
-            LOG_OPTS_R11 (POLYLINE, HAS_N_VERTS);
-            LOG_OPTS_R11 (POLYLINE, HAS_M_DENSITY);
-            LOG_OPTS_R11 (POLYLINE, HAS_N_DENSITY);
-            LOG_OPTS_R11 (POLYLINE, HAS_CURVETYPE);
-            LOG_OPTS_R11_MAX (POLYLINE, 511);
+            LOG_OPTS_R11_POLYLINE (HAS_FLAG);
+            LOG_OPTS_R11_POLYLINE (HAS_START_WIDTH);
+            LOG_OPTS_R11_POLYLINE (HAS_END_WIDTH);
+            LOG_OPTS_R11_POLYLINE (HAS_EXTRUSION);
+            LOG_OPTS_R11_POLYLINE (HAS_M_VERTS);
+            LOG_OPTS_R11_POLYLINE (HAS_N_VERTS);
+            LOG_OPTS_R11_POLYLINE (HAS_M_DENSITY);
+            LOG_OPTS_R11_POLYLINE (HAS_N_DENSITY);
+            LOG_OPTS_R11_POLYLINE (HAS_CURVETYPE);
+            LOG_OPTS_R11_POLYLINE (HAS_EXTRA);
+            LOG_OPTS_R11_POLYLINE_MAX (OPTS_R11_POLYLINE_HAS_EXTRA);
 
             LOG_OPTS_R11 (SHAPE, HAS_ROTATION);
             LOG_OPTS_R11 (SHAPE, HAS_LOAD_NUM);
