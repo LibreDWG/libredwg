@@ -71,8 +71,6 @@ C<line.field = value> syntax. E.g. C<line.layer = "0">
 
 =item B<xline> (3dpoint) (3dpoint)
 
-=item B<xline> (3dpoint) (3dpoint)
-
 =item B<text> "text_value" (ins_pt) height
 
 =item B<mtext> (ins_pt) height "text_value"
