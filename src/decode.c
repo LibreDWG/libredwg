@@ -6560,8 +6560,6 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 }
               if (!bit_check_CRC (dat, obj->address, 0xC0C1))
                 error |= DWG_ERR_WRONGCRC;
-              //crc = bit_read_RS (dat);
-              //LOG_TRACE ("crc: %04X [RSx]\n", crc);
             }
           }
           num++;

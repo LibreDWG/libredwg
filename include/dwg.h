@@ -1548,6 +1548,8 @@ typedef struct _dwg_entity_POLYLINE_2D
   BITCODE_BT thickness;
   BITCODE_BD elevation;
   BITCODE_BE extrusion;
+  BITCODE_RLL extra1_r11;
+  BITCODE_RLL extra2_r11;
 } Dwg_Entity_POLYLINE_2D;
 
 /**

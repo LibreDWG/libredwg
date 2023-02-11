@@ -1269,36 +1269,11 @@ DWG_ENTITY (POLYLINE_2D)
       FIELD_RS (curve_type, 75);
       LOG_POLYLINE_CURVETYPE
     }
-    if (obj->type == DWG_TYPE_PLINE_R11 &&
-        R11OPTS (OPTS_R11_POLYLINE_HAS_EXTRA))
+    if (R11OPTS (OPTS_R11_POLYLINE_HAS_EXTRA) &&
+        obj->size > 20)
     {
-      DECODER {
-        // GH #548 Optional user-provided curve_fit vertex
-        if (_ent->flag_r11 == 0 && obj->size > 20)
-          {
-            BITCODE_2RD pt;
-            BITCODE_RC flag = FIELD_VALUE (flag);
-            Dwg_Entity_VERTEX_2D *v;
-            pt.x = bit_read_RD (dat);
-            pt.y = bit_read_RD (dat);
-            LOG_TRACE ("=> VERTEX_2D: (%f, %f) [2RD 10]\n", pt.x, pt.y);
-            ((Dwg_Object*)obj)->fixedtype = DWG_TYPE_VERTEX_2D;
-            ((Dwg_Object*)obj)->type = DWG_TYPE_VERTEX_R11;
-            ((Dwg_Object*)obj)->dxfname = (char *)"VERTEX";
-            ((Dwg_Object*)obj)->name = (char *)"VERTEX_2D";
-            v = obj->tio.entity->tio.VERTEX_2D;
-            v->flag = flag | FLAG_VERTEX_EXTRA_VERTEX;
-            v->point.x = pt.x;
-            v->point.y = pt.y;
-            _obj = (Dwg_Entity_POLYLINE_2D *)v;
-          }
-        else if (_ent->flag_r11 == 0)
-          {
-            FIELD_VALUE (flag) |= FLAG_POLYLINE_CURVE_FIT;
-            FIELD_VALUE (curve_type) = 5;
-            LOG_TRACE ("=> FLAG_POLYLINE_CURVE_FIT\n");
-          }
-      }
+      FIELD_RLL (extra1_r11, 0);
+      FIELD_RLL (extra2_r11, 0);
     }
     DECODER {
       FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
