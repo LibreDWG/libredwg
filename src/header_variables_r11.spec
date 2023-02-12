@@ -138,7 +138,9 @@
   if (dwg->header.numheader_vars <= 74)
     return 0;
   FIELD_RC (LIMCHECK, 70); //ok 1fa
+#ifndef IS_JSON
   FIELD_TFF (MENUEXT, 46, 0);
+#endif
   DECODER {    
     if (_obj->MENUEXT[1]) {
       size_t len = strlen ((char*)&_obj->MENUEXT[1]);

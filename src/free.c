@@ -1605,7 +1605,8 @@ dwg_free (Dwg_Data *dwg)
       FREE_IF (dwg->header.section);
       for (i = 0; i < dwg->second_header.num_handlers; i++)
         FREE_IF (dwg->second_header.handlers[i].data);
-      // auxheader has no strings
+      FREE_IF (dwg->auxheader.R11_HANDSEED);
+
       for (i = 0; i < dwg->num_objects; ++i)
         {
           if (dwg_obj_is_control (&dwg->object[i]))

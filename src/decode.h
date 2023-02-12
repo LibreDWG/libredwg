@@ -33,15 +33,26 @@
 
 typedef enum ENTITY_SECTION_INDEX_R11
 {
-  entities_section_index = 0,
-  block_entities_section_index,
-  extra_entities_section_index
+  ENTITIES_SECTION_INDEX = 0,
+  BLOCKS_SECTION_INDEX,
+  EXTRAS_SECTION_INDEX
 } EntitySectionIndexR11;
 
 EXPORT int dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 int dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 Dwg_Object_Ref *dwg_find_objectref (const Dwg_Data *restrict dwg,
                                     const Dwg_Object *restrict obj);
+
+int dwg_decode_BLOCK_HEADER (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_LAYER (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_STYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_LTYPE (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_VIEW (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_UCS (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_VPORT (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_APPID (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_VX_TABLE_RECORD (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 
 // reused with the importers
 void decode_BACKGROUND_type (const Dwg_Object *obj);
@@ -117,7 +128,7 @@ int decode_preR13_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 int decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                             unsigned num_entities, BITCODE_RL size,
                             Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
-                            EntitySectionIndexR11 entity_section_index);
+                            const EntitySectionIndexR11 entity_section_index);
 
 /* from dwg.c */
 // from dat.fh

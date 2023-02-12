@@ -3467,7 +3467,7 @@ DWG_OBJECT (BLOCK_CONTROL)
 DWG_OBJECT_END
 
 /* (49/T1) */
-DWG_OBJECT (BLOCK_HEADER)
+DWG_TABLE (BLOCK_HEADER)
 
   //DXF: the name must be from the block_entity!
   COMMON_TABLE_FLAGS (Block)
@@ -3495,16 +3495,13 @@ DWG_OBJECT (BLOCK_HEADER)
       if (_obj->block_offset_r11 >= 0x40000000)
         {
           BITCODE_RL off = _obj->block_offset_r11 & 0x3fffffff;
-          LOG_TRACE ("block_offset_r11: " FORMAT_RLx
-                     " [RLx] (" FORMAT_RLx ")\n",
-                     _obj->block_offset_r11, off + dwg->header.block_entities_start);
+          LOG_TRACE ("abs. offset => " FORMAT_RLx "\n",
+                     off + dwg->header.blocks_start);
         }
       else
         {
-          LOG_TRACE ("block_offset_r11: " FORMAT_RLx " [RLx] (" FORMAT_RLx
-                     ")\n",
-                     _obj->block_offset_r11,
-                     _obj->block_offset_r11 + dwg->header.block_entities_start);
+          LOG_TRACE ("abs. offset => " FORMAT_RLx "\n",
+                     _obj->block_offset_r11 + dwg->header.blocks_start);
         }
     }
     if (obj->size == 38)
@@ -3612,7 +3609,7 @@ DWG_OBJECT (LAYER_CONTROL)
 DWG_OBJECT_END
 
 /* (51/T2) */
-DWG_OBJECT (LAYER)
+DWG_TABLE (LAYER)
 
   COMMON_TABLE_FLAGS (Layer);
   PRE (R_13b1) {
@@ -3727,7 +3724,7 @@ DWG_OBJECT (STYLE_CONTROL)
 DWG_OBJECT_END
 
 /* (53/T3) preR13+DXF: STYLE, documented as SHAPEFILE */
-DWG_OBJECT (STYLE)
+DWG_TABLE (STYLE)
 
   COMMON_TABLE_FLAGS (TextStyle)
 
@@ -3816,7 +3813,7 @@ DWG_OBJECT_END
 /* (57/T4)
  * Unstable, ACAD import errors
  */
-DWG_OBJECT (LTYPE)
+DWG_TABLE (LTYPE)
 
   COMMON_TABLE_FLAGS (Linetype)
 
@@ -3954,7 +3951,7 @@ DWG_OBJECT (VIEW_CONTROL)
 DWG_OBJECT_END
 
 /* (61/T5) */
-DWG_OBJECT (VIEW)
+DWG_TABLE (VIEW)
 
   COMMON_TABLE_FLAGS (View)
 
@@ -4072,7 +4069,7 @@ DWG_OBJECT (UCS_CONTROL)
 DWG_OBJECT_END
 
 /* (63/T6) */
-DWG_OBJECT (UCS)
+DWG_TABLE (UCS)
 
   COMMON_TABLE_FLAGS (UCS)
   PRE (R_13b1)
@@ -4124,7 +4121,7 @@ DWG_OBJECT (VPORT_CONTROL)
 DWG_OBJECT_END
 
 /* (65) */
-DWG_OBJECT (VPORT)
+DWG_TABLE (VPORT)
 
   COMMON_TABLE_FLAGS (Viewport)
 
@@ -4319,7 +4316,7 @@ DWG_OBJECT (APPID_CONTROL)
 DWG_OBJECT_END
 
 /* (67/T8) Registered Apps */
-DWG_OBJECT (APPID)
+DWG_TABLE (APPID)
 
   COMMON_TABLE_FLAGS (RegApp)
   SINCE (R_13b1) {
@@ -4350,7 +4347,7 @@ DWG_OBJECT (DIMSTYLE_CONTROL)
 DWG_OBJECT_END
 
 /* (69/T9) */
-DWG_OBJECT (DIMSTYLE)
+DWG_TABLE (DIMSTYLE)
 
   DXF {
     FIELD_VALUE (flag) = FIELD_VALUE (flag0);
@@ -4631,7 +4628,7 @@ DWG_OBJECT_END
 
 /* (71/T10)
 */
-DWG_OBJECT (VX_TABLE_RECORD)
+DWG_TABLE (VX_TABLE_RECORD)
 
   COMMON_TABLE_FLAGS (VX)
   PRE (R_13b1)

@@ -2400,10 +2400,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
     if (!_obj->codepage)
       _obj->codepage = 30;
-    if (!_obj->block_entities_size)
-      _obj->block_entities_size = 0x40000000;
-    if (!_obj->extra_entities_size)
-      _obj->extra_entities_size = 0x80000000;
+    if (!_obj->blocks_size)
+      _obj->blocks_size = 0x40000000;
+    if (!_obj->extras_size)
+      _obj->extras_size = 0x80000000;
 
     // clang-format off
     #include "header.spec"
@@ -2489,35 +2489,35 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       encode_preR13_section (SECTION_VIEW, dat, dwg);
 
       // encode block entities
-      dwg->header.block_entities_start = dat->byte;
-      num_block_entities = encode_preR13_entities (dwg->header.block_entities_start, dat, dwg,
+      dwg->header.blocks_start = dat->byte;
+      num_block_entities = encode_preR13_entities (dwg->header.blocks_start, dat, dwg,
                                                    &error);
-      dwg->header.block_entities_size
-          = 0x40000000 + (dat->byte - dwg->header.block_entities_start);
+      dwg->header.blocks_size
+          = 0x40000000 + (dat->byte - dwg->header.blocks_start);
       LOG_TRACE ("block_entities   0x%x - 0x%x (0x%x)\n",
-                 dwg->header.block_entities_start,
-                 dwg->header.block_entities_start + (dwg->header.block_entities_size & 0xffffff),
-                 dwg->header.block_entities_size);
+                 dwg->header.blocks_start,
+                 dwg->header.blocks_start + (dwg->header.blocks_size & 0xffffff),
+                 dwg->header.blocks_size);
 
       // encode extra entities.
-      dwg->header.extra_entities_start = dat->byte;
-      num_extra_entities = encode_preR13_entities (dwg->header.extra_entities_start, dat, dwg,
+      dwg->header.extras_start = dat->byte;
+      num_extra_entities = encode_preR13_entities (dwg->header.extras_start, dat, dwg,
                                                    &error);
-      dwg->header.extra_entities_size
-          = 0x80000000 + (dat->byte - dwg->header.extra_entities_start);
+      dwg->header.extras_size
+          = 0x80000000 + (dat->byte - dwg->header.extras_start);
       LOG_TRACE ("extra_entities   0x%x - 0x%x (0x%x)\n",
-                 dwg->header.extra_entities_start,
-                 dwg->header.extra_entities_start + (dwg->header.extra_entities_size & 0xffffff),
-                 dwg->header.extra_entities_size);
+                 dwg->header.extras_start,
+                 dwg->header.extras_start + (dwg->header.extras_size & 0xffffff),
+                 dwg->header.extras_size);
 
       // patch these numbers into the header
       dat->byte = 0x14; // header section_address
       bit_write_RL (dat, dwg->header.entities_start);
       bit_write_RL (dat, dwg->header.entities_end);
-      bit_write_RL (dat, dwg->header.block_entities_start);
-      bit_write_RL (dat, dwg->header.block_entities_size);
-      bit_write_RL (dat, dwg->header.extra_entities_start);
-      bit_write_RL (dat, dwg->header.extra_entities_size);
+      bit_write_RL (dat, dwg->header.blocks_start);
+      bit_write_RL (dat, dwg->header.blocks_size);
+      bit_write_RL (dat, dwg->header.extras_start);
+      bit_write_RL (dat, dwg->header.extras_size);
       SINCE (R_11)
       {
         BITCODE_RS crc;
@@ -2526,13 +2526,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         LOG_TRACE ("crc: %04X [RSx] from 0-0x%lx\n", crc, dat->byte);
         bit_write_RS (dat, crc);
       }
-      dat->byte = dwg->header.extra_entities_start + (dwg->header.extra_entities_size & 0xffffff);
+      dat->byte = dwg->header.extras_start + (dwg->header.extras_size & 0xffffff);
     }
     VERSIONS (R_2_0b, R_9c1)
     {
       dat->byte = hdr_offset + (3 * 8);
       bit_write_RS (dat, numentities);
-      dat->byte = dwg->header.extra_entities_start + (dwg->header.extra_entities_size & 0xffffff);
+      dat->byte = dwg->header.extras_start + (dwg->header.extras_size & 0xffffff);
     }
     LOG_TRACE ("Wrote %lu bytes\n", dat->byte);
     return error;

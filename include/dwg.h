@@ -9291,10 +9291,10 @@ typedef struct _dwg_header
   BITCODE_RC maint_version;
   BITCODE_RL entities_start;    /* < R13 */
   BITCODE_RL entities_end;      /* < R13 */
-  BITCODE_RL block_entities_start; /* < R13 */
-  BITCODE_RL block_entities_size;  /* < R13 */
-  BITCODE_RL extra_entities_start; /* < R13 */
-  BITCODE_RL extra_entities_size;  /* < R13 */
+  BITCODE_RL blocks_start;      /* < R13 */
+  BITCODE_RL blocks_size;       /* < R13 */
+  BITCODE_RL extras_start;      /* < R13 */
+  BITCODE_RL extras_size;       /* < R13 */
   BITCODE_RS codepage;
   BITCODE_RC unknown_0;           /* R2004+ */
   BITCODE_RC app_dwg_version;     /* R2004+ */
@@ -9381,8 +9381,8 @@ typedef struct _dwg_auxheader
   BITCODE_RS auxheader_size;          /* < R13 */
   BITCODE_RL entities_start;          /* < R13 */
   BITCODE_RL entities_end;            /* < R13 */
-  BITCODE_RL block_entities_start;    /* < R13 */
-  BITCODE_RL extra_entities_start;    /* < R13 */
+  BITCODE_RL blocks_start;            /* < R13 */
+  BITCODE_RL extras_start;            /* < R13 */
   BITCODE_RLx auxheader_address;      /* < R13 */
   BITCODE_RS num_aux_tables;          /* < R13 */
   BITCODE_BS R11_HANDLING;  /* TODO Merge with HANDSEED */
