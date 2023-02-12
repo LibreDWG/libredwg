@@ -320,7 +320,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
 #  define NEW_OBJECT                                                          \
     dwg_add_object (dwg);                                                     \
-    if (dat->byte > dat->size || (num + i) > dwg->num_objects)                \
+    if (dat->byte > dat->size)                                                \
       return DWG_ERR_INVALIDDWG;                                              \
     obj = &dwg->object[num++];                                                \
     obj->address = dat->byte;                                                 \
@@ -653,12 +653,21 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     // The 5 tables (num_sections always 5): 3 RS + 1 RL address
     LOG_INFO ("==========================================\n")
     dat_save = *dat;
-    if (decode_preR13_section_hdr ("BLOCK", SECTION_BLOCK, dat, dwg)
-        || decode_preR13_section_hdr ("LAYER", SECTION_LAYER, dat, dwg)
-        || decode_preR13_section_hdr ("STYLE", SECTION_STYLE, dat, dwg)
-        || decode_preR13_section_hdr ("LTYPE", SECTION_LTYPE, dat, dwg)
-        || decode_preR13_section_hdr ("VIEW", SECTION_VIEW, dat, dwg))
-      return DWG_ERR_SECTIONNOTFOUND;
+    error |= decode_preR13_section_hdr ("BLOCK", SECTION_BLOCK, dat, dwg);
+    if (error >= DWG_ERR_CRITICAL)
+      return error;
+    error |= decode_preR13_section_hdr ("LAYER", SECTION_LAYER, dat, dwg);
+    if (error >= DWG_ERR_CRITICAL)
+      return error;
+    error |= decode_preR13_section_hdr ("STYLE", SECTION_STYLE, dat, dwg);
+    if (error >= DWG_ERR_CRITICAL)
+      return error;
+    error |= decode_preR13_section_hdr ("LTYPE", SECTION_LTYPE, dat, dwg);
+    if (error >= DWG_ERR_CRITICAL)
+      return error;
+    error |= decode_preR13_section_hdr ("VIEW", SECTION_VIEW, dat, dwg);
+    if (error >= DWG_ERR_CRITICAL)
+      return error;
   }
   LOG_TRACE ("@0x%lx\n", dat->byte); // 0x5e
   if (dat->size < 0x1f0)             // AC1.50 0x1f9 74 vars
@@ -715,47 +724,45 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     return error;
   }
 
-  dat_save = *dat;
-  if (decode_preR13_section (SECTION_BLOCK, dat, dwg)
-      || decode_preR13_section (SECTION_LAYER, dat, dwg)
-      || decode_preR13_section (SECTION_STYLE, dat, dwg)
-      || decode_preR13_section (SECTION_LTYPE, dat, dwg)
-      || decode_preR13_section (SECTION_VIEW, dat, dwg))
-    {
-      *dat = dat_save;
-      return DWG_ERR_SECTIONNOTFOUND;
-    }
+  error |= decode_preR13_section (SECTION_BLOCK, dat, dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    return error;
+  error |= decode_preR13_section (SECTION_LAYER, dat, dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    return error;
+  error |= decode_preR13_section (SECTION_STYLE, dat, dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    return error;
+  error |= decode_preR13_section (SECTION_LTYPE, dat, dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    return error;
+  error |= decode_preR13_section (SECTION_VIEW, dat, dwg);
+  if (error >= DWG_ERR_CRITICAL)
+    return error;
   if (dwg->header.num_sections >= SECTION_VPORT) // r10
     {
-      dat_save = *dat;
-      if (decode_preR13_section (SECTION_UCS, dat, dwg)
-          || decode_preR13_section (SECTION_VPORT, dat, dwg))
-        {
-          *dat = dat_save;
-          return DWG_ERR_SECTIONNOTFOUND;
-        }
+      error |= decode_preR13_section (SECTION_UCS, dat, dwg);
+      if (error >= DWG_ERR_CRITICAL)
+        return error;
+      error |= decode_preR13_section (SECTION_VPORT, dat, dwg);
+      if (error >= DWG_ERR_CRITICAL)
+        return error;
     }
   if (dwg->header.num_sections >= SECTION_APPID) // r10
     {
-      dat_save = *dat;
-      if (decode_preR13_section (SECTION_APPID, dat, dwg))
-        {
-          *dat = dat_save;
-          return DWG_ERR_SECTIONNOTFOUND;
-        }
+      error |= decode_preR13_section (SECTION_APPID, dat, dwg);
+      if (error >= DWG_ERR_CRITICAL)
+        return error;
     }
   if (dwg->header.num_sections >= SECTION_VX) // r11
     {
-      dat_save = *dat;
-      if (decode_preR13_section (SECTION_DIMSTYLE, dat, dwg)
-          || decode_preR13_section (SECTION_VX, dat, dwg))
-        {
-          *dat = dat_save;
-          return DWG_ERR_SECTIONNOTFOUND;
-        }
+      error |= decode_preR13_section (SECTION_DIMSTYLE, dat, dwg);
+      if (error >= DWG_ERR_CRITICAL)
+        return error;
+      error |= decode_preR13_section (SECTION_VX, dat, dwg);
+      if (error >= DWG_ERR_CRITICAL)
+        return error;
     }
-  if (error >= DWG_ERR_CRITICAL)
-    return error;
 
   // block entities
   error |= decode_preR13_entities (blocks_start, blocks_end, 0, blocks_size,
