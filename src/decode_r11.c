@@ -176,8 +176,6 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
       Dwg_Object *obj = dwg_get_first_object (dwg, DWG_TYPE_##TBL##_CONTROL); \
       if (obj)                                                                \
         {                                                                     \
-          Dwg_Object_##TBL##_CONTROL *_obj                                    \
-              = obj->tio.object->tio.TBL##_CONTROL;                           \
           obj->size = tbl->size;                                              \
           obj->address = tbl->address;                                        \
         }                                                                     \
