@@ -3572,6 +3572,10 @@ BT,	DXF 39
 BD
 @item extrusion
 BE,	DXF 210
+@item extra_r11_size
+BL
+@item extra_r11
+TV
 
 @end vtable
 @end indentedblock

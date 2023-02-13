@@ -254,7 +254,7 @@ sub dxf_in {
     $f = '';
     s/DXF \{ //;
     if (!$n) {
-      if (/^DWG_(ENTITY|OBJECT)\s?\((\w+)\)/) {
+      if (/^DWG_(ENTITY|OBJECT|TABLE)\s?\((\w+)\)/) {
         $n = $2;
         $n =~ s/^_3/3/;
         warn $n;
@@ -281,7 +281,7 @@ sub dxf_in {
       $defined{$n}++;
       warn "define $n fields";
     # i.e. after #define
-    } elsif (/^DWG_(ENTITY|OBJECT)\s?\((\w+)\)/) {
+    } elsif (/^DWG_(ENTITY|OBJECT|TABLE)\s?\((\w+)\)/) {
       $n = $2;
       $n =~ s/^_3/3/;
       warn $n;

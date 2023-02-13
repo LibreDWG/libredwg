@@ -19850,6 +19850,31 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
     polyline_2d->end_width--;
   }
   {
+    BITCODE_TV extra_r11;
+    if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "extra_r11", &extra_r11, NULL)
+        && extra_r11
+           ? strEQ ((char *)extra_r11, (char *)polyline_2d->extra_r11)
+           : !polyline_2d->extra_r11)
+      pass ();
+    else
+      fail ("POLYLINE_2D.extra_r11 [TV] '%s' <> '%s'", extra_r11, polyline_2d->extra_r11);
+  }
+  {
+    BITCODE_BL extra_r11_size;
+    if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "extra_r11_size", &extra_r11_size, NULL)
+        && extra_r11_size == polyline_2d->extra_r11_size)
+      pass ();
+    else
+      fail ("POLYLINE_2D.extra_r11_size [BL] %u != %u", polyline_2d->extra_r11_size, extra_r11_size);
+    extra_r11_size++;
+    if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "extra_r11_size", &extra_r11_size, 0)
+        && extra_r11_size == polyline_2d->extra_r11_size)
+      pass ();
+    else
+      fail ("POLYLINE_2D.extra_r11_size [BL] set+1 %u != %u", polyline_2d->extra_r11_size, extra_r11_size);
+    polyline_2d->extra_r11_size--;
+  }
+  {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &polyline_2d->extrusion, sizeof (BITCODE_BE)))
