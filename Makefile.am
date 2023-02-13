@@ -54,9 +54,19 @@ EXTRA_DIST = $(top_srcdir)/.version libredwg.spec Dockerfile \
 	     build-aux/swig_python.patch \
              $(JSON_DIST) \
 	     $(VALGRIND_SUPPRESSIONS_FILE)
+SH_SOURCES = dwg.in dxf.in dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check \
+	json-check log.in svg.in rw.in \
+	logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
+	dynapi_test_all.sh.in unit_testing_all.sh.in \
+	autogen.sh dxf-roundtrip.sh unit_testing_all.sh.in test-dxf.sh
+	build-aux/gendocs.sh build-aux/codecov_io.sh build-aux/smoke.sh \
+	build-aux/clang-format-all.sh \
+	programs/dwgfilter.in programs/alive.test.in programs/dxf.test.in \
+	programs/json.test.in programs/svg.test.in \
+	examples/dwgadd_test.sh.in
 
 .PHONY: check-dwg check-dxf check-dxfb check-json check-dwg-valgrind check-svg \
-	check-docker cppcheck log-dwg \
+	check-docker cppcheck log-dwg shfmt regen-shfmt \
 	regen-swig-patch release-web \
         regen-man man manual refman scan-build gcov cover codecov coveralls \
 	unknown regen-unknown full-regen-unknown regen-gperf regen-dynapi \
@@ -230,6 +240,16 @@ if HAVE_CPPCHECK
 	$(CPPCHECK) -DDEBUG -j4 --inline-suppr -I$(top_srcdir)/include -Isrc \
 		test/xmlsuite/*.c
 endif
+
+shfmt:
+if HAVE_SHFMT
+	shfmt -i 4 -kp -d $(addprefix $(top_srcdir)/,$(SH_SOURCES))
+endif
+regen-shfmt:
+if HAVE_SHFMT
+	shfmt -i 4 -kp -w $(addprefix $(top_srcdir)/,$(SH_SOURCES))
+endif
+
 log-dwg: all
 	for d in `find $(srcdir)/test/test-data \
 		$(srcdir)/test/test-old \
