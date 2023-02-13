@@ -1269,9 +1269,10 @@ DWG_ENTITY (POLYLINE_2D)
       FIELD_RS (curve_type, 75);
       LOG_POLYLINE_CURVETYPE
     }
-    if (R11OPTS (OPTS_R11_POLYLINE_HAS_EXTRA) &&
+    if (R11OPTS (OPTS_R11_POLYLINE_IN_EXTRA) &&
         obj->size > 20)
     {
+      // Note: layer is then the extras_start offset
       FIELD_RLL (extra1_r11, 0);
       FIELD_RLL (extra2_r11, 0);
     }

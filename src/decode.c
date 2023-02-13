@@ -6392,6 +6392,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
           obj->address = dat->byte;
           obj->supertype = DWG_SUPERTYPE_ENTITY;
 
+          LOG_HANDLE ("@offset: 0x%lx\n", dat->byte - start);
           PRE (R_2_0b)
           {
             type = bit_read_RS (dat);
