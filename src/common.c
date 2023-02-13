@@ -473,7 +473,7 @@ shift_hv (BITCODE_H *hv, BITCODE_BL *num_p)
   return ref;
 }
 
-/* from my dwg11.c, 1995 */
+/* from my dwg11.c, 1995 - rurban */
 struct tm *
 cvt_TIMEBLL (struct tm *tm, BITCODE_TIMEBLL date)
 {
@@ -503,6 +503,10 @@ cvt_TIMEBLL (struct tm *tm, BITCODE_TIMEBLL date)
       je = TRUNC ((jb - jd) / 30.6001);
 
       tm->tm_mday = (int)(jb - jd - TRUNC (30.6001 * je));
+      if (tm->tm_mday < 1)
+        tm->tm_mday = 1;
+      else if (tm->tm_mday > 31)
+        tm->tm_mday %= 31;
       tm->tm_mon = (int)(je - 1);
       if (tm->tm_mon > 12)
         tm->tm_mon -= 12;
@@ -516,6 +520,8 @@ cvt_TIMEBLL (struct tm *tm, BITCODE_TIMEBLL date)
     }
   tm->tm_hour = (int)floor (t / 3600.0);
   t -= tm->tm_hour * 3600.0;
+  if (ja >= 1000)
+    tm->tm_hour = tm->tm_hour % 24;
   tm->tm_min = (int)floor (t / 60.0);
   ss = t - (tm->tm_min * 60.0);
   tm->tm_sec = (int)ss;
