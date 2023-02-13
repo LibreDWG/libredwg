@@ -1273,8 +1273,14 @@ DWG_ENTITY (POLYLINE_2D)
         obj->size > 20)
     {
       // Note: layer is then the extras_start offset
-      FIELD_RLL (extra1_r11, 0);
-      FIELD_RLL (extra2_r11, 0);
+      DECODER {
+        _obj->extra_r11_size = obj->address + obj->size - dat->byte;
+        if (dat->version >= R_11b1)
+          _obj->extra_r11_size -= 2;
+        if (_obj->extra_r11_size > obj->size)
+          _obj->extra_r11_size = 0;
+      }
+      FIELD_TFv (extra_r11, _obj->extra_r11_size, 0);
     }
     DECODER {
       FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
