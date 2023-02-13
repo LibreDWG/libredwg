@@ -6392,6 +6392,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
           obj->address = dat->byte;
           obj->supertype = DWG_SUPERTYPE_ENTITY;
 
+          LOG_HANDLE ("@offset: 0x%lx\n", dat->byte - start);
           PRE (R_2_0b)
           {
             type = bit_read_RS (dat);
@@ -6560,8 +6561,6 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 }
               if (!bit_check_CRC (dat, obj->address, 0xC0C1))
                 error |= DWG_ERR_WRONGCRC;
-              //crc = bit_read_RS (dat);
-              //LOG_TRACE ("crc: %04X [RSx]\n", crc);
             }
           }
           num++;

@@ -116,7 +116,7 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s2, ": " FORMAT_##type " [" #type " %d]"),   \
                          rcount1, rcount2, _obj->nam, dxfgroup);              \
               GCC46_DIAG_RESTORE                                              \
@@ -125,7 +125,7 @@
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s1, ": " FORMAT_##type " [" #type " %d]"),   \
                          rcount1, _obj->nam, dxfgroup);                       \
               GCC46_DIAG_RESTORE                                              \
@@ -148,7 +148,7 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s2, ": " FORMAT_##type " " #type "\n"),      \
                          rcount1, rcount2, _obj->nam)                         \
               GCC46_DIAG_RESTORE                                              \
@@ -157,7 +157,7 @@
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s1, ": " FORMAT_##type " " #type "\n"),      \
                          rcount1, _obj->nam)                                  \
               GCC46_DIAG_RESTORE                                              \
@@ -201,7 +201,7 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s2, ": (" FORMAT_BD ", " FORMAT_BD           \
                                      ") [" #type " %d]"),                     \
                          rcount1, rcount2, _obj->nam.x, _obj->nam.y, dxf)     \
@@ -211,7 +211,7 @@
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
               LOG_TRACE (strcat (s1, ": (" FORMAT_BD ", " FORMAT_BD           \
                                      ") [" #type " %d]"),                     \
                          rcount1, _obj->nam.x, _obj->nam.y, dxf)              \
@@ -273,7 +273,7 @@
       if (ref)                                                                \
         free (ref);                                                           \
       ref = dwg_decode_preR13_handleref (dat, code);                          \
-      LOG_TRACE (#nam ": 0x%hx [H(%s) %d]\n", (short)ref->r11_idx,              \
+      LOG_TRACE (#nam ": 0x%hx [H(%s) %d]\n", (short)ref->r11_idx,            \
                  code == 2 ? "RSx" : "RC", dxf)                               \
     }                                                                         \
     LATER_VERSIONS                                                            \
@@ -1674,7 +1674,7 @@
                                   : "");                                      \
   }                                                                           \
   return error & ~DWG_ERR_UNHANDLEDCLASS;                                     \
-  }
+}
 
 #define DWG_OBJECT(token)                                                     \
   EXPORT int dwg_setup_##token (Dwg_Object *obj)                              \

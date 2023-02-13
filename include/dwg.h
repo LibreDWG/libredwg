@@ -1548,6 +1548,8 @@ typedef struct _dwg_entity_POLYLINE_2D
   BITCODE_BT thickness;
   BITCODE_BD elevation;
   BITCODE_BE extrusion;
+  BITCODE_BL extra_r11_size;
+  BITCODE_TV extra_r11;
 } Dwg_Entity_POLYLINE_2D;
 
 /**
@@ -8229,6 +8231,7 @@ enum {
   OPTS_R11_POLYLINE_HAS_M_DENSITY = 64,
   OPTS_R11_POLYLINE_HAS_N_DENSITY = 128,
   OPTS_R11_POLYLINE_HAS_CURVETYPE = 256,
+  OPTS_R11_POLYLINE_IN_EXTRA = 0x8000,
 };
 
 enum {
