@@ -16,18 +16,18 @@ log=
 for d in "$@"; do
     # we do use bash
     case $d in
-        -v*) v="$d"
+        -v*)
+             v="$d"
              ;;
-        -l*) log="$(cut "$d" -c2-)"
+        -l*)
+             log="$(cut "$d" -c2-)"
              ;;
         *)
         if [ ! -f "$d" ]; then
-            if [ -f "$srcdir/test/test-data/$d" ]
-            then
-                d="$srcdir/test/test-data/$d";
+            if [ -f "$srcdir/test/test-data/$d" ]; then
+                d="$srcdir/test/test-data/$d"
             else
-                if [ -f "$srcdir/test/test-data/$d.dwg" ]
-                then
+                if [ -f "$srcdir/test/test-data/$d.dwg" ]; then
                     d="$srcdir/test/test-data/$d.dwg"
                 fi
             fi

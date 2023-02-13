@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # test dwg2dxf via teigha roundtrips
 # for f in test/test-data/20*/*.dwg; do ./dxf-roundtrip.sh $f; done
-case `uname` in
+case $(uname) in
     Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
     Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
     Windows) TeighaFileConverter=TeighaFileConverter ;;
@@ -12,22 +12,34 @@ if [ ! -f $full ]; then
     echo $full not found
     exit
 fi
-f=`basename $full .dwg`
-r=`basename $(dirname $full)`
+f=$(basename $full .dwg)
+r=$(basename $(dirname $full))
 case $r in
     20*)      ;;
     r9)       r=9 ;;
     r1[0234]) r=${r:1} ;;
     *)  case $f in
-            *_20*)      r=${f:(-4)}; f=`basename $f _$r` ;;
-            *_r9)       r=9;         f=`basename $f _r$r` ;;
-            *_r1[0234]) r=${f:(-2)}; f=`basename $f _r$r` ;;
-            *) echo wrong version $r; exit ;;
-        esac ;;
+            *_20*)
+                        r=${f:(-4)}
+                                     f=$(basename $f _$r)
+                                                         ;;
+            *_r9)
+                        r=9
+                                     f=$(basename $f _r$r)
+                                                          ;;
+            *_r1[0234])
+                        r=${f:(-2)}
+                                     f=$(basename $f _r$r)
+                                                          ;;
+            *)
+               echo wrong version $r
+                                      exit
+                                           ;;
+    esac     ;;
 esac
 
 echo programs/dwg2dxf -v4 -o ${f}_${r}.dxf $full
-programs/dwg2dxf -v4 -o ${f}_${r}.dxf $full 2>${f}_${r}.log || \
+programs/dwg2dxf -v4 -o ${f}_${r}.dxf $full 2>${f}_${r}.log ||
     grep Error ${f}_${r}.log
 
 mv ${f}_${r}.dxf test/
@@ -37,7 +49,7 @@ mv test/${f}_${r}.dxf ./
 
 if [ -f ${f}_${r}.dwg ]; then
     echo test ${f}_${r}.dwg created from ${f}_${r}.dxf
-    programs/dwgread -v4 ${f}_${r}.dwg 2>${f}_${r}_dxf.log || \
+    programs/dwgread -v4 ${f}_${r}.dwg 2>${f}_${r}_dxf.log ||
         grep Error ${f}_${r}_dxf.log
 else
     cat ${f}_${r}.dwg.err

@@ -34,15 +34,12 @@ for d in "$srcdir"/test/test-big/2*/*.dwg; do
     #(sleep 10s; kill %1 2>/dev/null) &
 done
 
-if test -d "$srcdir/test/test-old"
-then
+if test -d "$srcdir/test/test-old"; then
     echo test/test-old
     cd "$srcdir/test/test-old" || exit
-    for d in r* 20*
-    do
+    for d in r* 20*; do
         cd "$d" || exit
-        for f in */*.dwg
-        do
+        for f in */*.dwg; do
             xd="$(dirname "$f")"
             dir="$(basename "$xd")"
             log="$(basename "$f" .dwg)_${dir}_${d}.log"

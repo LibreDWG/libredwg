@@ -24,37 +24,39 @@ for d in "$@"; do
     case $d in
         -y) ;; # the default
         --as=*) args="$args $d" ;;
-        -Ijson) args="$args $d"
+        -Ijson)
+                args="$args $d"
                 ext=json
                 ;;
-        -Idxf)  args="$args $d"
+        -Idxf)
+                args="$args $d"
                 ext=dxf
                 ;;
-        -Idxfb)  args="$args $d"
+        -Idxfb)
+                 args="$args $d"
                 ext=dxfb
                 ;;
-        --force-free) args="$args $d"
+        --force-free)
+                      args="$args $d"
              ;;
-        -v*) v="$d"
+        -v*)
+             v="$d"
              ;;
-        --big) timeout=
+        --big)
+               timeout=
                big=1
              ;;
         *)
         if [ ! -f "$d" ]; then
-            if [ -f "$srcdir/test/test-data/$d" ]
-            then
-                d="$srcdir/test/test-data/$d";
-            elif [ -f "$srcdir/test/test-data/$d.json" ]
-            then
+            if [ -f "$srcdir/test/test-data/$d" ]; then
+                d="$srcdir/test/test-data/$d"
+            elif [ -f "$srcdir/test/test-data/$d.json" ]; then
                 d="$srcdir/test/test-data/$d.json"
                 ext=json
-            elif [ -f "$srcdir/test/test-data/$d.dxf" ]
-            then
+            elif [ -f "$srcdir/test/test-data/$d.dxf" ]; then
                 d="$srcdir/test/test-data/$d.dxf"
                 ext=dxf
-            elif [ -f "$srcdir/test/test-data/$d.dwg" ]
-            then
+            elif [ -f "$srcdir/test/test-data/$d.dwg" ]; then
                 d="$srcdir/test/test-data/$d.dwg"
                 ext=dwg
             fi
@@ -82,7 +84,10 @@ for d in "$@"; do
                 *.DXFB) ext=dxfb ;;
                 *.json) ext=json ;;
                 *.JSON) ext=json ;;
-                *)      echo "Illegal extension for $d"; exit ;;
+                *)
+                        echo "Illegal extension for $d"
+                                                         exit
+                                                              ;;
             esac
         fi
         b=$(basename "$d" .$ext)

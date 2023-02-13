@@ -34,34 +34,34 @@ for d in "$@"; do
             -b)     args="$args $d" ;;
             -Ijson) ext=json  ;;
             -Idxf)  ext=dxf   ;;
-            -Idxfb) args="$args $d"; ext=dxf ;;
+            -Idxfb)
+                    args="$args $d"
+                                     ext=dxf
+                                             ;;
             -o)     next_is_o=1 ;;
-            -o*)    if [ -n "$DASH" ]; then
+            -o*)
+                    if [ -n "$DASH" ]; then
                         out="$(echo "$d" | awk '{ string=substr($0, 3); print string; }')"
-                    else
+            else
                         out="$(cut "$d" -c2-)"
-                    fi
+            fi
                     ;;
             -y)     ;;
             *)
                 if [ ! -f "$d" ]; then
-                    if [ -f "$srcdir/test/test-data/$d" ]
-                    then
-                        d="$srcdir/test/test-data/$d";
-                    elif [ -f "$srcdir/test/test-data/$d.dwg" ]
-                    then
+                    if [ -f "$srcdir/test/test-data/$d" ]; then
+                        d="$srcdir/test/test-data/$d"
+                elif     [ -f "$srcdir/test/test-data/$d.dwg" ]; then
                         d="$srcdir/test/test-data/$d.dwg"
                         ext=dwg
-                    elif [ -f "$srcdir/test/test-data/$d.json" ]
-                    then
+                elif     [ -f "$srcdir/test/test-data/$d.json" ]; then
                         d="$srcdir/test/test-data/$d.json"
                         ext=json
-                    elif [ -f "$srcdir/test/test-data/$d.dxf" ]
-                    then
+                elif     [ -f "$srcdir/test/test-data/$d.dxf" ]; then
                         d="$srcdir/test/test-data/$d.dxf"
                         ext=dxf
-                    fi
                 fi
+            fi
                 xd=$(dirname "$d")
                 dir=_$(basename "$xd")
                 case "$d" in
@@ -73,7 +73,7 @@ for d in "$@"; do
                         x1=$(dirname "$xd")
                         dir=_$(basename "$xd")_$(basename "$x1")
                         ;;
-                esac
+            esac
                 if [ "$dir" = "_test-data" ]; then dir=""; fi
                 if [ "$dir" = "_td" ]; then dir=""; fi
                 if [ "$dir" = "_." ]; then dir=""; fi
@@ -86,8 +86,11 @@ for d in "$@"; do
                     *.DXFB) ext=dxf ;;
                     *.json) ext=json ;;
                     *.JSON) ext=json ;;
-                    *)      echo "Illegal extension for $d"; exit ;;
-                esac
+                    *)
+                            echo "Illegal extension for $d"
+                                                             exit
+                                                                  ;;
+            esac
                 b=$(basename "$d" .$ext)
                 log="$b$dir.log"
                 [ -n "$out" ] || out="$b$dir.dxf"
@@ -95,11 +98,11 @@ for d in "$@"; do
                     echo "$timeout @LTEXEC@ programs/dwg2dxf $args $v -o $out $d 2>$log"
                     # shellcheck disable=SC2086
                     $timeout @LTEXEC@ programs/dwg2dxf $args "$v" -o "$out" "$d" 2>"$log"
-                else
+            else
                     echo "$timeout @LTEXEC@ programs/dxfwrite $args $v -o $out $d 2>$log"
                     # shellcheck disable=SC2086
                     $timeout @LTEXEC@ programs/dxfwrite $args "$v" -o "$out" "$d" 2>"$log"
-                fi
+            fi
                 tail -n2 "$log"
                 out=
                 ;;

@@ -14,16 +14,15 @@ ob="$b"
 
 for d in "$@"; do
     case $d in
-        -v*) v="$d"
+        -v*)
+             v="$d"
              ;;
         *)
         if [ ! -f "$d" ]; then
-            if [ -f "$srcdir/test/test-data/$d" ]
-            then
-                d="$srcdir/test/test-data/$d";
+            if [ -f "$srcdir/test/test-data/$d" ]; then
+                d="$srcdir/test/test-data/$d"
             else
-                if [ -f "$srcdir/test/test-data/$d.dwg" ]
-                then
+                if [ -f "$srcdir/test/test-data/$d.dwg" ]; then
                     d="$srcdir/test/test-data/$d.dwg"
                 fi
             fi

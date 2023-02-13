@@ -12,11 +12,10 @@
 
 set -x
 rm -rf autom4te.cache config.status
-if test -d .git -a -f build-aux/git-version-gen
-then
+if test -d .git -a -f build-aux/git-version-gen; then
     git fetch --tags
     rm .tarball-version
-    v=`build-aux/git-version-gen .tarball-version`
+    v=$(build-aux/git-version-gen .tarball-version)
     echo $v >.tarball-version
     echo $v >.version
 fi

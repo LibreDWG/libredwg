@@ -2,7 +2,7 @@
 # dwg -> dxfb
 # dxfb -> dwg2
 # teigha dxfb -> dwg (check out_dxfb)
-# teigha dwg2 -> dxf (check in_dxf) 
+# teigha dwg2 -> dxf (check in_dxf)
 d="${1:-example_2000}"
 b="$(basename "$d" .dwg)"
 dir="$(dirname "$d")"
@@ -19,11 +19,12 @@ case $r in
     20*)          ;;
     r9)       r=9 ;;
     r1[0234]) r=${r:1} ;;
-    *)  case $b in
+    *)
+        case $b in
             *_20*)      r=${b:(-4)} ;;
             *_r9)       r=9         ;;
             *_r1[0234]) r=${b:(-2)} ;;
-        esac
+    esac
         ;;
 esac
 
