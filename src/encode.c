@@ -372,14 +372,14 @@ const unsigned char unknown_section[53]
   }
 #define FIELD_TIMEBLL(nam, dxf)                                               \
   {                                                                           \
-    bit_write_TIMEBLL (dat, (BITCODE_TIMEBLL)_obj->nam);                      \
+    bit_write_TIMEBLL (dat, _obj->nam);                      \
     LOG_TRACE (#nam ": " FORMAT_BL "." FORMAT_BL " [TIMEBLL %d]",             \
                _obj->nam.days, _obj->nam.ms, dxf);                            \
     LOG_POS                                                                   \
   }
 #define FIELD_TIMERLL(nam, dxf)                                               \
   {                                                                           \
-    bit_write_TIMERLL (dat, (BITCODE_TIMERLL)_obj->nam);                      \
+    bit_write_TIMERLL (dat, _obj->nam);                      \
     LOG_TRACE (#nam ": " FORMAT_RL "." FORMAT_RL " [TIMERLL %d]",             \
                _obj->nam.days, _obj->nam.ms, dxf);                            \
     LOG_POS                                                                   \
