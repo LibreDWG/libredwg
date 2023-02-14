@@ -1156,9 +1156,11 @@ get_first_owned_entity (const Dwg_Object *hdr)
       if (_hdr->entities && _hdr->num_owned && _hdr->entities[0])
         {
           Dwg_Data *dwg = hdr->parent;
-          if (dwg->dirty_refs || !_hdr->entities[0]->obj)
-            dwg_resolve_objectrefs_silent (dwg);
-          return _hdr->entities[0]->obj;
+          Dwg_Object *obj = dwg_ref_object (dwg, _hdr->entities[0]);
+          if (version < R_13b1 && obj && obj->fixedtype == DWG_TYPE_JUMP)
+            return dwg_resolve_jump (obj);
+          else
+            return obj;
         }
       else
         return NULL;
@@ -1250,12 +1252,17 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
     }
   else if (version >= R_2004 || version < R_13b1)
     {
+      Dwg_Object *obj;
       Dwg_Object_Ref *ref;
       _hdr->__iterator++;
       if (_hdr->__iterator == _hdr->num_owned)
         return NULL;
       ref = _hdr->entities ? _hdr->entities[_hdr->__iterator] : NULL;
-      return ref ? dwg_ref_object (dwg, ref) : NULL;
+      obj = ref ? dwg_ref_object (dwg, ref) : NULL;
+      if (version < R_13b1 && obj && obj->fixedtype == DWG_TYPE_JUMP)
+        return dwg_resolve_jump (obj);
+      else
+        return obj;
     }
 
   LOG_ERROR ("Unsupported version %s\n", dwg_version_type (version));
@@ -1495,14 +1502,19 @@ get_next_owned_block_entity (const Dwg_Object *restrict hdr,
         return NULL;
       return dwg_next_entity (current);
     }
-  if (version > R_2000)
+  if (version > R_2000 || version < R_13b1)
     {
+      Dwg_Object *obj;
       Dwg_Object_Ref *ref;
       _hdr->__iterator++;
       if (_hdr->__iterator == _hdr->num_owned)
         return NULL;
       ref = _hdr->entities ? _hdr->entities[_hdr->__iterator] : NULL;
-      return ref ? dwg_ref_object (dwg, ref) : NULL;
+      obj = ref ? dwg_ref_object (dwg, ref) : NULL;
+      if (version < R_13b1 && obj && obj->fixedtype == DWG_TYPE_JUMP)
+        return dwg_resolve_jump (obj);
+      else
+        return obj;
     }
 
   LOG_ERROR ("Unsupported version %s\n", dwg_version_type (version));
@@ -3063,6 +3075,52 @@ dwg_ref_tblname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref,
   if (!name)
     *alloced = 0;
   return name ? name : "";
+}
+
+static Dwg_Object *
+search_r11_section (const Dwg_Data *dwg,
+                    const Dwg_Entity_Sections jump_section,
+                    const BITCODE_RL jump_address)
+{
+  BITCODE_RL section_addr, abs_addr;
+  switch (jump_section)
+    {
+    case DWG_ENTITY_SECTION:
+      section_addr = dwg->header.entities_start;
+      break;
+    case DWG_BLOCKS_SECTION:
+      section_addr = dwg->header.blocks_start;
+      break;
+    case DWG_EXTRA_SECTION:
+      section_addr = dwg->header.extras_start;
+      break;
+    default:
+      LOG_ERROR ("Invalid jump_section %u", jump_section);
+      section_addr = 0;
+    }
+  abs_addr = jump_address + section_addr;
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
+  LOG_HANDLE ("resolve JUMP %u %x => addr %x\n", jump_section, jump_address,
+              abs_addr);
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *obj = &dwg->object[i];
+      if (obj->address == abs_addr)
+        return obj;
+    }
+  LOG_WARN ("JUMP %u %x not found", jump_section, jump_address);
+  return NULL;
+}
+
+EXPORT Dwg_Object *
+dwg_resolve_jump (const Dwg_Object *obj)
+{
+  Dwg_Entity_JUMP *_obj = obj->tio.entity->tio.JUMP;
+  if (obj->fixedtype != DWG_TYPE_JUMP)
+    return (Dwg_Object *)obj;
+  else
+    return search_r11_section (obj->parent, _obj->jump_entity_section,
+                                 _obj->jump_address);
 }
 
 EXPORT unsigned long

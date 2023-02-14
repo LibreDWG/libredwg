@@ -9777,6 +9777,7 @@ EXPORT Dwg_Object *dwg_resolve_handle_silent (const Dwg_Data *restrict dwg,
 EXPORT int dwg_resolve_handleref (Dwg_Object_Ref *restrict ref,
                                   const Dwg_Object *restrict obj);
 
+EXPORT Dwg_Object *dwg_resolve_jump (const Dwg_Object *obj);
 EXPORT Dwg_Section_Type dwg_section_type (const char *restrict name);
 EXPORT Dwg_Section_Type dwg_section_wtype (const DWGCHAR *restrict wname);
 EXPORT const char *dwg_section_name (const Dwg_Data *dwg, const unsigned int sec_id);

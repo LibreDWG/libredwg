@@ -3303,7 +3303,7 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
   // fool the warnings. this table is nowhere to be found in the wild. maybe
   // pre-R_11
-  if (0)
+  PRE (R_13b1)
     {
       Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_VX_CONTROL);
       if (ctrl)

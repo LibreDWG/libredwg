@@ -389,6 +389,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           {
             NEW_OBJECT;
             error |= dwg_decode_BLOCK_HEADER (dat, obj);
+            //PUSH_HV (_hdr, num_owned, entities, ref);
             ADD_CTRL_ENTRY;
             CHK_ENDPOS;
           }

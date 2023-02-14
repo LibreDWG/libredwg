@@ -6384,11 +6384,20 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
   unsigned long oldpos;
   const char *entities_section[]
       = { "entities", "blocks entities", "extras entities" };
+  Dwg_Object *hdr = NULL;
+  Dwg_Object_BLOCK_HEADER *_hdr = NULL;
 
   LOG_TRACE ("\n%s: (" FORMAT_RLx "-" FORMAT_RLx
              " (%u), size " FORMAT_RL ")\n", entities_section[entity_section],
              start, end, num_entities, size);
   LOG_INFO ("==========================================\n");
+  if (entity_section != BLOCKS_SECTION_INDEX)
+    {
+      hdr = dwg_model_space_object (dwg);
+      if (hdr && hdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
+        _hdr = hdr->tio.object->tio.BLOCK_HEADER;
+    }
+  // TODO search current offset in block_offset_r11 in BLOCK_HEADER's
 
   // with sentinel in case of R11
   SINCE (R_11)
@@ -6525,9 +6534,12 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               break;
             case 12:
               error |= dwg_decode_BLOCK (dat, obj);
+              // TODO search current offset in block_offset_r11 in BLOCK_HEADER's
+              // set new _hdr if NULL
               break;
             case 13:
               error |= dwg_decode_ENDBLK (dat, obj);
+              // set _hdr to NULL for next BLOCK_HEADER
               break;
             case 14:
               error |= dwg_decode_INSERT (dat, obj);
@@ -6642,6 +6654,15 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                     error |= DWG_ERR_WRONGCRC;
                 }
               }
+            }
+          // add to block header
+          if (obj->fixedtype != DWG_TYPE_UNUSED
+              && obj->supertype == DWG_SUPERTYPE_ENTITY && _hdr)
+            {
+              BITCODE_H ref = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
+              PUSH_HV (_hdr, num_owned, entities, ref);
+              obj->tio.entity->ownerhandle
+                  = dwg_add_handleref (dwg, 4, hdr->handle.value, obj);
             }
           num++;
           if (dat->byte < oldpos + size)
