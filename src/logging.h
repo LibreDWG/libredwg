@@ -52,28 +52,28 @@
 #define HANDLER fprintf
 #define OUTPUT stderr
 
-#define LOG(level, args...)                                                   \
+#define LOG(level, ...)                                                   \
   {                                                                           \
     if (DWG_LOGLEVEL >= DWG_LOGLEVEL_##level)                                 \
       {                                                                       \
-        HANDLER (OUTPUT, args);                                               \
+        HANDLER (OUTPUT, ##__VA_ARGS__);                                               \
       }                                                                       \
   }
-#define LOG_ERROR(args...)                                                    \
+#define LOG_ERROR(...)                                                    \
   {                                                                           \
     if (DWG_LOGLEVEL >= DWG_LOGLEVEL_ERROR)                                   \
       {                                                                       \
         HANDLER (OUTPUT, "ERROR: ");                                          \
-        LOG (ERROR, args)                                                     \
+        LOG (ERROR, ##__VA_ARGS__)                                                     \
         HANDLER (OUTPUT, "\n");                                               \
       }                                                                       \
   }
-#define LOG_WARN(args...)                                                     \
+#define LOG_WARN(...)                                                     \
   {                                                                           \
     if (DWG_LOGLEVEL >= DWG_LOGLEVEL_ERROR)                                   \
       {                                                                       \
         HANDLER (OUTPUT, "Warning: ");                                        \
-        LOG (ERROR, args)                                                     \
+        LOG (ERROR, ##__VA_ARGS__)                                                     \
         HANDLER (OUTPUT, "\n");                                               \
       }                                                                       \
   }
@@ -96,11 +96,11 @@
     }
 #endif
 
-#define LOG_INFO(args...) LOG (INFO, args)
-#define LOG_TRACE(args...) LOG (TRACE, args)
-#define LOG_HANDLE(args...) LOG (HANDLE, args)
-#define LOG_INSANE(args...) LOG (INSANE, args)
-#define LOG_ALL(args...) LOG (ALL, args)
+#define LOG_INFO(...) LOG (INFO, ##__VA_ARGS__)
+#define LOG_TRACE(...) LOG (TRACE, ##__VA_ARGS__)
+#define LOG_HANDLE(...) LOG (HANDLE, ##__VA_ARGS__)
+#define LOG_INSANE(...) LOG (INSANE, ##__VA_ARGS__)
+#define LOG_ALL(...) LOG (ALL, ##__VA_ARGS__)
 
 #ifndef LOG_POS
 #  define LOG_POS                                                             \
@@ -115,7 +115,7 @@
     LOG_TRACE ("%s[%d]: \"%ls\" [%s %d]", s, (int)i, (wchar_t *)wstr, #type,  \
                dxf)                                                           \
     LOG_POS
-#  define LOG_TEXT_UNICODE(level, args) LOG (level, args)
+#  define LOG_TEXT_UNICODE(level, ...) LOG (level, ##__VA_ARGS__)
 #else
 #  define LOG_TRACE_TU(s, wstr, dxf)                                          \
     {                                                                         \

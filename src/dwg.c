@@ -30,7 +30,9 @@
 #ifdef AX_STRCASECMP_HEADER
 #  include AX_STRCASECMP_HEADER
 #endif
+#ifdef HAVE_LIBGEN_H
 #include <libgen.h> // basename
+#endif //HAVE_LIBGEN_H
 
 #include "bits.h"
 #include "common.h"

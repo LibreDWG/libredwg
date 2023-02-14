@@ -1104,7 +1104,7 @@ bfr_read_32 (void *restrict dst, BITCODE_RC *restrict *restrict src,
              size_t size)
 {
   size_t n;
-  uint32_t *dp, *sp, *dp0, *sp0;
+  uint32_t *dp=0, *sp=0, *dp0=0, *sp0=0;
   bool dst_unaligned = false;
   bool src_unaligned = false;
   assert (!(size % 4));
@@ -1151,7 +1151,7 @@ bfr_read_64 (void *restrict dst, BITCODE_RC *restrict *restrict src,
              size_t size)
 {
   size_t n;
-  uint64_t *dp, *sp, *dp0, *sp0;
+  uint64_t *dp=0, *sp=0, *dp0=0, *sp0=0;
   bool dst_unaligned = false;
   bool src_unaligned = false;
   assert (!(size % 8));
@@ -3214,25 +3214,25 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
   Bit_Chain *hdl_dat = file_dat;
 
   {
-    const unsigned long size = sizeof (Dwg_R2004_Header);
-    BITCODE_RC decrypted_data[size];
+#define R2004_H_SIZE sizeof (Dwg_R2004_Header)
+    BITCODE_RC decrypted_data[R2004_H_SIZE];
     Bit_Chain decrypted_header_dat = *file_dat;
     Bit_Chain *dat;
     BITCODE_RL crc32, calc_crc32;
 
-    decrypted_header_dat.size = size;
+    decrypted_header_dat.size = R2004_H_SIZE;
     decrypted_header_dat.chain = decrypted_data;
     decrypted_header_dat.byte = decrypted_header_dat.bit = 0;
-    if (file_dat->size < size + (file_dat->byte + 80))
+    if (file_dat->size < R2004_H_SIZE + (file_dat->byte + 80))
       {
         LOG_ERROR ("Size underflow %lu for R2004_Header", file_dat->size);
         return DWG_ERR_INVALIDDWG;
       }
 
     LOG_HANDLE ("encrypted R2004_Header (@%u.0-%lu.0, %lu):\n", 0x80,
-                size + 0x80, size);
-    LOG_TF (HANDLE, &file_dat->chain[0x80], (int)size);
-    decrypt_R2004_header (decrypted_data, &file_dat->chain[0x80], size);
+                R2004_H_SIZE + 0x80, R2004_H_SIZE);
+    LOG_TF (HANDLE, &file_dat->chain[0x80], (int)R2004_H_SIZE);
+    decrypt_R2004_header (decrypted_data, &file_dat->chain[0x80], R2004_H_SIZE);
 
     dat = &decrypted_header_dat;
     dat->bit = dat->byte = 0;
@@ -3778,7 +3778,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
                 end = dat->byte;
               if (_obj->fixedtype == DWG_TYPE_MLEADERSTYLE)
                 { // check for is_new_format: has extended data for APPID
-                  // “ACAD_MLEADERVER”
+//ACAD_MLEADERVER
                   Dwg_Object_Ref ref;
                   ref.obj = NULL;
                   ref.handleref = obj->eed[idx].handle;
