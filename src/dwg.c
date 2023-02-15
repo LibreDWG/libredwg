@@ -72,6 +72,10 @@ dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
 // used in encode.c
 void set_handle_size (Dwg_Handle *restrict hdl);
 
+void dwg_ordered_ref_appended (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref);
+Dwg_Object_Ref *dwg_ordered_ref_find (Dwg_Data *restrict dwg, const BITCODE_RC code,
+                                      const unsigned long absref);
+
 /*------------------------------------------------------------------------------
  * Public functions
  */
@@ -2024,11 +2028,19 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
   else
     {
       // search of this code-absref pair already exists
+      /*
       for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
         {
           Dwg_Object_Ref *refi = dwg->object_ref[i];
           if (refi->absolute_ref == absref && refi->handleref.code == code)
             return refi;
+        }
+        */
+      //change lsearch to bsearch
+      Dwg_Object_Ref *reff = dwg_ordered_ref_find (dwg, code, absref);
+      if (NULL != reff)
+        {
+          return reff;
         }
     }
   // else create a new global ref
@@ -2037,6 +2049,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
   ref->absolute_ref = absref;
   ref->obj = NULL;
   // fill ->obj later
+  dwg_ordered_ref_appended (dwg, ref);
   return ref;
 }
 
@@ -3191,4 +3204,231 @@ dwg_log_dataflags (const int _loglevel, const int maxlevel,
       if (flag & 128)
         HANDLER (OUTPUT, "  vert_alignment (128)\n");
     }
+}
+
+static int
+Dwg_Object_Ref_compare (const Dwg_Object_Ref *key, const Dwg_Object_Ref **ppR)
+{
+  int retVal = (int)key->handleref.code - (int)(*ppR)->handleref.code;
+  if (0 != retVal)
+    {
+      return retVal;
+    }
+  return (long)key->absolute_ref - (long)(*ppR)->absolute_ref;
+}
+
+// from M$ bsearch.c
+/***
+ *void *bsearch_ex() - do a binary search on an array
+ *
+ *Purpose:
+ *   Does a binary search of a sorted array for a key.
+ *
+ *Entry:
+ *   const void *key    - key to search for
+ *   const void *base   - base of sorted array to search
+ *   size_t num         - number of elements in array
+ *   size_t width       - number of bytes per element
+ *   int (*compare)(const void* item1,const void* item2) - pointer to function
+ *that compares two array elements, returning neg when #1 < #2, pos when #1 >
+ *#2, and 0 when they are equal. Function is passed pointers to two array
+ *elements. const void** ppBefore - pointer to key's insert pos in array,if key
+ *not exist if *ppBefore = NULL,key should append at tail if ppBefore = NULL,
+ *caller don't care about insert pos.
+ *
+ *Exit:
+ *   if key is found:
+ *           returns pointer to occurrence of key in array
+ *           *ppBefore = NULL
+ *   if key is not found:
+ *           returns NULL
+ *           *ppBefore pointer to key's insert pos in array
+ *
+ *Exceptions:
+ *   Input parameters are validated. Refer to the validation section of the
+ *function.
+ *
+ *******************************************************************************/
+static void *
+bsearch_ex (const void *key, const void *base, size_t num, size_t width,
+            int (*compare) (const void *item1, const void *item2),
+            const void **ppBefore)
+{
+  if (NULL != ppBefore)
+    {
+      *ppBefore = NULL;
+    }
+  if (0 == num)
+    {
+      return NULL;
+    }
+  size_t num_now = num;
+  char *lo = (char *)base;
+  char *hi = (char *)base + (num_now - 1) * width;
+  for (; lo <= hi;)
+    {
+      if (0 == num_now)
+        {
+          break;
+        }
+      if (1 == num_now)
+        {
+          if (0 == compare (key, lo))
+            {
+              // key == lo
+              return lo;
+            }
+          break;
+        }
+      else
+        {
+          size_t half = num_now / 2;
+          char *mid = lo + (num_now & 1 ? half : (half - 1)) * width;
+          int result = compare (key, mid);
+          if (0 == result)
+            {
+              // key == mid
+              return mid;
+            }
+          if (result < 0)
+            {
+              // key < mid
+              hi = mid - width;
+              num_now = num_now & 1 ? half : half - 1;
+            }
+          else
+            {
+              // key > mid
+              lo = mid + width;
+              num_now = half;
+            }
+        }
+    }
+  if (NULL != ppBefore)
+    {
+      if (compare (key, lo) > 0)
+        {
+          // key > lo
+          lo += width;
+          if (lo < (char *)base + num * width)
+            {
+              *ppBefore = lo;
+            }
+        }
+      else
+        {
+          // key < lo
+          *ppBefore = lo;
+        }
+    }
+  return NULL;
+}
+
+void
+dwg_ordered_ref_appended (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
+{
+  if (DWG_HDL_OWNER != ref->handleref.code
+      && DWG_HDL_SOFTOWN != ref->handleref.code
+      && DWG_HDL_HARDOWN != ref->handleref.code
+      && DWG_HDL_SOFTPTR != ref->handleref.code
+      && DWG_HDL_HARDPTR != ref->handleref.code)
+    {
+      return;
+    }
+  if (-1 == dwg->num_ordered_object_refs)
+    {
+      // bsearch disabled
+      return;
+    }
+  if (0 == dwg->num_ordered_object_refs)
+    {
+      dwg->ordered_object_ref = (Dwg_Object_Ref **)calloc (
+          REFS_PER_REALLOC, sizeof (Dwg_Object_Ref *));
+    }
+  else
+    {
+      if (0 == (dwg->num_ordered_object_refs % REFS_PER_REALLOC))
+        {
+          Dwg_Object_Ref **old = dwg->ordered_object_ref;
+          dwg->ordered_object_ref = (Dwg_Object_Ref **)realloc (
+              old, sizeof (Dwg_Object_Ref *)
+                       * (dwg->num_ordered_object_refs + REFS_PER_REALLOC));
+          if (NULL == dwg->ordered_object_ref)
+            {
+              // realloc failure,back to linear search
+              free (old);
+              dwg->num_ordered_object_refs = -1;
+              return;
+            }
+        }
+    }
+  Dwg_Object_Ref **pBefore = NULL;
+  Dwg_Object_Ref **pFound = (Dwg_Object_Ref **)bsearch_ex (
+      ref, dwg->ordered_object_ref, dwg->num_ordered_object_refs,
+      sizeof (Dwg_Object_Ref *),
+      (int (*) (const void *item1, const void *item2))Dwg_Object_Ref_compare,
+      (const void **)&pBefore);
+  if (NULL == pFound)
+    {
+      // no dup!
+      if (NULL != pBefore)
+        {
+          // insert
+          size_t numCopy = dwg->num_ordered_object_refs
+                           - (pBefore - dwg->ordered_object_ref);
+          memmove (&pBefore[1], pBefore, sizeof (Dwg_Object_Ref *) * numCopy);
+          *pBefore = ref;
+        }
+      else
+        {
+          // append
+          dwg->ordered_object_ref[dwg->num_ordered_object_refs] = ref;
+        }
+      dwg->num_ordered_object_refs++;
+    }
+  else
+    {
+      // dup key, error !!!
+    }
+}
+
+Dwg_Object_Ref *
+dwg_ordered_ref_find (Dwg_Data *restrict dwg, const BITCODE_RC code,
+                      const unsigned long absref)
+{
+  if (0 == dwg->num_object_refs)
+    {
+      return NULL;
+    }
+  Dwg_Object_Ref key;
+
+  key.handleref.code = code;
+  key.absolute_ref = absref;
+  if (0 != dwg->num_ordered_object_refs && NULL != dwg->ordered_object_ref)
+    {
+      Dwg_Object_Ref **pFound = (Dwg_Object_Ref **)bsearch (
+          &key, dwg->ordered_object_ref, dwg->num_ordered_object_refs,
+          sizeof (Dwg_Object_Ref *),
+          (int (*) (const void *item1,
+                    const void *item2))Dwg_Object_Ref_compare);
+      if (NULL != pFound)
+        {
+          return *pFound;
+        }
+      return NULL;
+    }
+
+  // if can't alloc memory for bsearch,use lsearch.
+  if (-1 == dwg->num_ordered_object_refs)
+    {
+      for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
+        {
+          Dwg_Object_Ref *pRef = dwg->object_ref[i];
+          if (0 == Dwg_Object_Ref_compare (&key, &pRef))
+            {
+              return pRef;
+            }
+        }
+    }
+  return NULL;
 }

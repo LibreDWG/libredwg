@@ -1646,6 +1646,8 @@ dwg_free (Dwg_Data *dwg)
           dwg->object_map = NULL;
         }
       dwg->num_objects = dwg->num_classes = dwg->num_object_refs = 0;
+      FREE_IF (dwg->ordered_object_ref);
+      dwg->num_ordered_object_refs = 0;
 #undef FREE_IF
     }
 }

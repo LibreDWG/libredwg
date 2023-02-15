@@ -9573,6 +9573,9 @@ typedef struct _dwg_struct
   unsigned int num_acis_sab_hdl;  // temporary, until we can parse acds for SAB data, r2013+
   BITCODE_H *acis_sab_hdl;
   unsigned long next_hdl; // for add_document handle holes
+
+  size_t num_ordered_object_refs; /*!< number of ordered object refs */
+  Dwg_Object_Ref **ordered_object_ref; /*!< list of all object refs order by code/abs_ref */
 } Dwg_Data;
 
 #define DWG_OPTS_LOGLEVEL 0xf
