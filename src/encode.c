@@ -5781,9 +5781,9 @@ find_prev_entity (Dwg_Object *obj)
         }
     }
     */
-  if (dwg->prev_entity < obj->index)
+  if (dwg->prev_entity_index < obj->index)
     {
-      Dwg_Object *prev = &dwg->object[dwg->prev_entity];
+      Dwg_Object *prev = &dwg->object[dwg->prev_entity_index];
       if (prev->supertype == DWG_SUPERTYPE_ENTITY
           && prev->tio.entity->entmode == obj->tio.entity->entmode)
         {

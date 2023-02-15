@@ -72,9 +72,19 @@ dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
 // used in encode.c
 void set_handle_size (Dwg_Handle *restrict hdl);
 
-void dwg_ordered_ref_appended (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref);
-Dwg_Object_Ref *dwg_ordered_ref_find (Dwg_Data *restrict dwg, const BITCODE_RC code,
-                                      const unsigned long absref);
+static void ordered_ref_add (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref);
+
+static Dwg_Object_Ref *ordered_ref_find (Dwg_Data *restrict dwg,
+                                         const BITCODE_RC code,
+                                         const unsigned long absref);
+
+static int ordered_ref_cmp (const Dwg_Object_Ref *key,
+                            const Dwg_Object_Ref **ppR);
+
+static void *bsearch_ex (const void *key, const void *base, size_t num,
+                         size_t width,
+                         int (*compare) (const void *item1, const void *item2),
+                         const void **ppBefore);
 
 /*------------------------------------------------------------------------------
  * Public functions
@@ -2037,7 +2047,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
         }
         */
       //change lsearch to bsearch
-      Dwg_Object_Ref *reff = dwg_ordered_ref_find (dwg, code, absref);
+      Dwg_Object_Ref *reff = ordered_ref_find (dwg, code, absref);
       if (NULL != reff)
         {
           return reff;
@@ -2049,7 +2059,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
   ref->absolute_ref = absref;
   ref->obj = NULL;
   // fill ->obj later
-  dwg_ordered_ref_appended (dwg, ref);
+  ordered_ref_add (dwg, ref);
   return ref;
 }
 
@@ -3206,8 +3216,8 @@ dwg_log_dataflags (const int _loglevel, const int maxlevel,
     }
 }
 
-static int
-Dwg_Object_Ref_compare (const Dwg_Object_Ref *key, const Dwg_Object_Ref **ppR)
+int
+ordered_ref_cmp (const Dwg_Object_Ref *key, const Dwg_Object_Ref **ppR)
 {
   int retVal = (int)key->handleref.code - (int)(*ppR)->handleref.code;
   if (0 != retVal)
@@ -3249,7 +3259,7 @@ Dwg_Object_Ref_compare (const Dwg_Object_Ref *key, const Dwg_Object_Ref **ppR)
  *function.
  *
  *******************************************************************************/
-static void *
+void *
 bsearch_ex (const void *key, const void *base, size_t num, size_t width,
             int (*compare) (const void *item1, const void *item2),
             const void **ppBefore)
@@ -3325,7 +3335,7 @@ bsearch_ex (const void *key, const void *base, size_t num, size_t width,
 }
 
 void
-dwg_ordered_ref_appended (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
+ordered_ref_add (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
 {
   if (DWG_HDL_OWNER != ref->handleref.code
       && DWG_HDL_SOFTOWN != ref->handleref.code
@@ -3366,7 +3376,7 @@ dwg_ordered_ref_appended (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
   Dwg_Object_Ref **pFound = (Dwg_Object_Ref **)bsearch_ex (
       ref, dwg->ordered_object_ref, dwg->num_ordered_object_refs,
       sizeof (Dwg_Object_Ref *),
-      (int (*) (const void *item1, const void *item2))Dwg_Object_Ref_compare,
+      (int (*) (const void *item1, const void *item2))ordered_ref_cmp,
       (const void **)&pBefore);
   if (NULL == pFound)
     {
@@ -3393,7 +3403,7 @@ dwg_ordered_ref_appended (Dwg_Data *restrict dwg, Dwg_Object_Ref *ref)
 }
 
 Dwg_Object_Ref *
-dwg_ordered_ref_find (Dwg_Data *restrict dwg, const BITCODE_RC code,
+ordered_ref_find (Dwg_Data *restrict dwg, const BITCODE_RC code,
                       const unsigned long absref)
 {
   if (0 == dwg->num_object_refs)
@@ -3409,8 +3419,7 @@ dwg_ordered_ref_find (Dwg_Data *restrict dwg, const BITCODE_RC code,
       Dwg_Object_Ref **pFound = (Dwg_Object_Ref **)bsearch (
           &key, dwg->ordered_object_ref, dwg->num_ordered_object_refs,
           sizeof (Dwg_Object_Ref *),
-          (int (*) (const void *item1,
-                    const void *item2))Dwg_Object_Ref_compare);
+          (int (*) (const void *item1, const void *item2))ordered_ref_cmp);
       if (NULL != pFound)
         {
           return *pFound;
@@ -3424,7 +3433,7 @@ dwg_ordered_ref_find (Dwg_Data *restrict dwg, const BITCODE_RC code,
       for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
         {
           Dwg_Object_Ref *pRef = dwg->object_ref[i];
-          if (0 == Dwg_Object_Ref_compare (&key, &pRef))
+          if (0 == ordered_ref_cmp (&key, &pRef))
             {
               return pRef;
             }

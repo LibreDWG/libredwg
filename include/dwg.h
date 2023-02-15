@@ -9576,7 +9576,7 @@ typedef struct _dwg_struct
 
   BITCODE_BL num_ordered_object_refs; /*!< number of ordered object refs */
   Dwg_Object_Ref **ordered_object_ref; /*!< list of all object refs order by code/abs_ref */
-  BITCODE_BL prev_entity; // last entity appended
+  BITCODE_BL prev_entity_index; // last entity appended
 } Dwg_Data;
 
 #define DWG_OPTS_LOGLEVEL 0xf
