@@ -98,11 +98,13 @@ endif()
 #include(CheckCCompilerFlag)
 configure_file(src/cmakeconfig.h.in src/config.h)
 if(CMAKE_MAJOR_VERSION GREATER 2)
-  include(TestBigEndian)
-  test_big_endian(IS_BIG_ENDIAN)
-  if(IS_BIG_ENDIAN)
-    message(ERROR "Big Endian not supported: <${error}>")
-    add_definitions(-DWORDS_BIGENDIAN)
+  if (NOT MSVC)
+    include(TestBigEndian)
+    test_big_endian(IS_BIG_ENDIAN)
+    if(IS_BIG_ENDIAN)
+      message(ERROR "Big Endian not supported: <${error}>")
+      add_definitions(-DWORDS_BIGENDIAN)
+    endif()
   endif()
 endif()
 
@@ -113,7 +115,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 if((CMAKE_MAJOR_VERSION EQUAL 3 AND CMAKE_MINOR_VERSION GREATER_EQUAL 9)
-   AND (CMAKE_BUILD_TYPE STREQUAL "Release"))
+   AND (CMAKE_BUILD_TYPE STREQUAL "Release") AND (NOT MSVC))
   cmake_policy(SET CMP0069 NEW)
   include(CheckIPOSupported)
   check_ipo_supported(RESULT ipo_supported OUTPUT error)
@@ -262,10 +264,12 @@ add_custom_target(
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 if(MSVC)
-  #untested
   install(TARGETS redwg RUNTIME PUBLIC_HEADER
-          ${executables_TARGETS}
           DESTINATION libredwg-${PACKAGE_VERSION})
+  if(NOT LIBREDWG_LIBONLY)
+    install(TARGETS ${executables_TARGETS}
+          DESTINATION libredwg-${PACKAGE_VERSION})
+  endif()
   install(TARGETS redwg
           LIBRARY
           COMPONENT redwg

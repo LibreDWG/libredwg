@@ -190,3 +190,15 @@ jobs:
         submodules: recursive
     - run: cmake -G "MinGW Makefiles" .
     - run: mingw32-make -j VERBOSE=1
+  vs2019:
+    runs-on: windows-2019
+    timeout-minutes: 20
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - run: cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_BUILD_TYPE=Release .
+    - run: cmake --build .
+    - run: ctest .
