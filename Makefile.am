@@ -281,6 +281,10 @@ coveralls: gcov
 	coveralls -e test -e bindings
 endif
 
+compile_commands.json: Makefile
+	+$(MAKE) clean
+	bear -- make
+
 $(BUILT_SOURCES):
 	echo $(VERSION) > $@-t && mv $@-t $@
 
