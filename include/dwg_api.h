@@ -7159,6 +7159,11 @@ dwg_geom_transform_OCS (dwg_point_3d *out,
                         const dwg_point_3d pt,
                         const dwg_point_3d ext) __nonnull_all;
 
+EXPORT void *dwg_mem_malloc (size_t nSize);
+EXPORT void *dwg_mem_calloc (size_t nItem, size_t nSize);
+EXPORT void *dwg_mem_realloc (void *ptr, size_t nSize);
+EXPORT void dwg_mem_free (void *ptr);
+
 #ifdef __cplusplus
 }
 #endif

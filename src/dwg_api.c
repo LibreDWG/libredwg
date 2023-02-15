@@ -28186,3 +28186,30 @@ dwg_add_WIPEOUTVARIABLES (Dwg_Data *dwg /* ... */)
 // XYPARAMETERENTITY
 
 #endif /* USE_WRITE */
+
+void *
+dwg_mem_malloc (size_t nSize)
+{
+  return malloc (nSize);
+}
+
+void *
+dwg_mem_calloc (size_t nItem, size_t nSize)
+{
+  return calloc (nItem, nSize);
+}
+
+void *
+dwg_mem_realloc (void *ptr, size_t nSize)
+{
+  return realloc (ptr, nSize);
+}
+
+void
+dwg_mem_free (void *ptr)
+{
+  if (NULL != ptr)
+    {
+      free (ptr);
+    }
+}
