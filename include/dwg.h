@@ -9574,7 +9574,7 @@ typedef struct _dwg_struct
   BITCODE_H *acis_sab_hdl;
   unsigned long next_hdl; // for add_document handle holes
 
-  size_t num_ordered_object_refs; /*!< number of ordered object refs */
+  BITCODE_BL num_ordered_object_refs; /*!< number of ordered object refs */
   Dwg_Object_Ref **ordered_object_ref; /*!< list of all object refs order by code/abs_ref */
 } Dwg_Data;
 
