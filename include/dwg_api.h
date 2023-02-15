@@ -6231,6 +6231,8 @@ EXPORT dwg_class *dwg_get_class (const dwg_data *dwg, unsigned int index);
    are supported yet. For DXF you can try all versions >= R_13.
  */
 
+EXPORT Dwg_Data *dwg_new_Document0 (const int loglevel);
+
 EXPORT Dwg_Data *dwg_new_Document (const Dwg_Version_Type version,
                                    const int imperial, const int loglevel);
 EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial);

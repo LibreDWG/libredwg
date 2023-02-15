@@ -22736,6 +22736,15 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   return 0;
 }
 
+/* Initialize a empty dwg. */
+EXPORT Dwg_Data *
+dwg_new_Document0 (const int loglevel)
+{
+  Dwg_Data *dwg = calloc (1, sizeof (Dwg_Data));
+  dwg->opts = log_level;
+  return dwg;
+}
+
 /* Initialize a new dwg. Which template, imperial or metric */
 EXPORT Dwg_Data *
 dwg_new_Document (const Dwg_Version_Type version, const int imperial,
