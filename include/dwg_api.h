@@ -6235,6 +6235,10 @@ EXPORT Dwg_Data *dwg_new_Document (const Dwg_Version_Type version,
                                    const int imperial, const int loglevel);
 EXPORT int dwg_add_Document (Dwg_Data *restrict dwg, const int imperial);
 
+/** Free the whole DWG. all tables, sections, objects, ... ,and dwg self
+ */
+EXPORT void dwg_free_Document (Dwg_Data *restrict dwg);
+
 /* Convert UTF-8 strings to BITCODE_T fields. Returns a copy of the string. */
 EXPORT BITCODE_T dwg_add_u8_input (Dwg_Data *restrict dwg,
                                    const char *restrict u8str) __nonnull_all;

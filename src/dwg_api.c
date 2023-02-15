@@ -22749,6 +22749,17 @@ dwg_new_Document (const Dwg_Version_Type version, const int imperial,
   return dwg;
 }
 
+/** Free the whole DWG. all tables, sections, objects, ... ,and dwg self
+ */
+void dwg_free_Document (Dwg_Data *restrict dwg)
+{
+  if (NULL != dwg)
+    {
+      dwg_free (dwg);
+      free (dwg);
+    }
+}
+
 /* Returns <0 on error, the new 50x klass id on success..
    -1 out of memory.
    Takes UTF-8 names only */
