@@ -5766,9 +5766,24 @@ find_prev_entity (Dwg_Object *obj)
   Dwg_Data *dwg = obj->parent;
   if (obj->supertype != DWG_SUPERTYPE_ENTITY)
     return NULL;
+  /*
   for (BITCODE_BL i = obj->index - 1; i > 0; i--)
     {
       Dwg_Object *prev = &dwg->object[i];
+      if (prev->supertype == DWG_SUPERTYPE_ENTITY
+          && prev->tio.entity->entmode == obj->tio.entity->entmode)
+        {
+          if (prev->fixedtype == DWG_TYPE_SEQEND
+              || prev->fixedtype == DWG_TYPE_ENDBLK)
+            return NULL;
+          else
+            return prev;
+        }
+    }
+    */
+  if (dwg->prev_entity < obj->index)
+    {
+      Dwg_Object *prev = &dwg->object[dwg->prev_entity];
       if (prev->supertype == DWG_SUPERTYPE_ENTITY
           && prev->tio.entity->entmode == obj->tio.entity->entmode)
         {

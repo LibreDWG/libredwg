@@ -23083,6 +23083,11 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
         }
     }
   in_postprocess_handles (obj);
+  //for speed up find_prev_entity
+  if (DWG_SUPERTYPE_ENTITY == obj->fixedtype)
+    {
+      dwg->prev_entity = obj->index;
+    }
   return 0;
 }
 
