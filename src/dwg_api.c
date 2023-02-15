@@ -22738,7 +22738,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
 
 /* Initialize a empty dwg. */
 EXPORT Dwg_Data *
-dwg_new_Document0 (const int loglevel)
+dwg_new_Document0 (const int log_level)
 {
   Dwg_Data *dwg = calloc (1, sizeof (Dwg_Data));
   dwg->opts = log_level;
