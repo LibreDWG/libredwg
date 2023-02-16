@@ -219,9 +219,13 @@
 #  define __nonnull_all __attribute__ ((__nonnull__))
 #  define HAVE_NONNULL
 #else
-#  define __nonnull(params)
+#  ifndef __nonnull
+#    define __nonnull(params)
+#    undef HAVE_NONNULL
+#  else
+#    define HAVE_NONNULL
+#  endif
 #  define __nonnull_all
-#  undef HAVE_NONNULL
 #endif
 
 #ifdef HAVE_FUNC_ATTRIBUTE_MALLOC
