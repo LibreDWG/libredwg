@@ -173,11 +173,14 @@ if HAVE_CPPCHECK
 	$(CPPCHECK) -j4 --inline-suppr -I$(top_srcdir)/include -I. $(srcdir)/*.c
 endif
 
+clang-tidy: ../compile_commands.json
+	$(CLANG_TIDY) --checks='-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling' $(srcdir)/*.c
+
 # emacs flymake-mode
 check-syntax:
 	test -n "$(CHK_SOURCES)" && \
 	  nice $(COMPILE) -O0 -o /dev/null -S $(CHK_SOURCES)
-.PHONY: check-syntax cppcheck
+.PHONY: check-syntax cppcheck clang-tidy
 
 if ENABLE_GCOV
 AM_CFLAGS += @GCOV_CFLAGS@

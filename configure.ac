@@ -488,6 +488,21 @@ fi
 AC_MSG_RESULT($CLANG_FORMAT)
 AC_SUBST(CLANG_FORMAT)
 
+AC_MSG_CHECKING([for latest clang-tidy])
+CLANG_TIDY=
+for clangtidy in clang-format{,-mp}{,-devel,-{17,16,15,14,13,12,11,10,9,8,7,6,5,4,3}{,.9,.8,.7,.6,.5,.4,.3,.2,.1,.0}}
+do
+    if which "$clangtidy" &>/dev/null; then
+        CLANG_TIDY="$clangtidy"
+        break
+    fi
+done
+if test -z "$CLANG_TIDY"; then
+    CLANG_TIDY=echo
+fi
+AC_MSG_RESULT($CLANG_TIDY)
+AC_SUBST(CLANG_TIDY)
+
 dnl Check for mingw, cross and wine
 AM_CONDITIONAL([HAVE_MINGW], [test "x$host_os" = "xmingw32" -o "x$host_os" = "xmingw64"])
 AM_CONDITIONAL([HAVE_MINGW_CROSS],

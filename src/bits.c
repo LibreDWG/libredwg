@@ -1981,7 +1981,7 @@ bit_embed_TU (BITCODE_TU restrict wstr)
 
   if (!wstr)
     return NULL;
-  while ((c = *tmp++))
+  while (*tmp++)
     len++;
   return bit_embed_TU_size (wstr, len);
 }
@@ -2030,12 +2030,19 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
           else
             {
               BITCODE_TV str = bit_embed_TU ((BITCODE_TU)s);
-              length = strlen ((const char *)str) + 1;
-              bit_write_BS (dat, length);
-              for (i = 0; i < length; i++)
-                bit_write_RC (dat, (unsigned char)str[i]);
               if (str)
-                free (str);
+                {
+                  length = strlen ((const char *)str);
+                  bit_write_BS (dat, length + 1);
+                  for (i = 0; i < length; i++)
+                    bit_write_RC (dat, (unsigned char)str[i]);
+                  bit_write_RC (dat, 0);
+                  free (str);
+                }
+              else
+                {
+                  bit_write_BS (dat, 0);
+                }
             }
         }
       else
