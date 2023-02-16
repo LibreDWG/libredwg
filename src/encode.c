@@ -4232,7 +4232,9 @@ encode_preR13_entities (unsigned long offset, Bit_Chain *restrict dat,
         case DWG_TYPE_SEQEND_R11:
           *error |= dwg_encode_SEQEND (dat, obj);
           break;
-        case DWG_TYPE_PLINE_R11: /* another polyline */
+        case DWG_TYPE_JUMP_R11:
+          *error |= dwg_encode_JUMP (dat, obj);
+          break;
         case DWG_TYPE_POLYLINE_R11:
           // checks fixedtype
           *error |= encode_preR13_POLYLINE (dat, obj);

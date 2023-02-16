@@ -13341,6 +13341,70 @@ static int test_INSERT (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_JUMP (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_JUMP *restrict jump = obj->tio.entity->tio.JUMP;
+  failed = 0;
+  if (!obj_obj || !jump)
+    {
+      fail ("NULL JUMP");
+      return 1;
+    }
+  {
+    BITCODE_RL jump_address;
+    if (dwg_dynapi_entity_value (jump, "JUMP", "jump_address", &jump_address, NULL)
+        && jump_address == jump->jump_address)
+      pass ();
+    else
+      fail ("JUMP.jump_address [RL] %u != %u", jump->jump_address, jump_address);
+    jump_address++;
+    if (dwg_dynapi_entity_set_value (jump, "JUMP", "jump_address", &jump_address, 0)
+        && jump_address == jump->jump_address)
+      pass ();
+    else
+      fail ("JUMP.jump_address [RL] set+1 %u != %u", jump->jump_address, jump_address);
+    jump->jump_address--;
+  }
+  {
+    BITCODE_RL jump_address_raw;
+    if (dwg_dynapi_entity_value (jump, "JUMP", "jump_address_raw", &jump_address_raw, NULL)
+        && jump_address_raw == jump->jump_address_raw)
+      pass ();
+    else
+      fail ("JUMP.jump_address_raw [RL] %u != %u", jump->jump_address_raw, jump_address_raw);
+    jump_address_raw++;
+    if (dwg_dynapi_entity_set_value (jump, "JUMP", "jump_address_raw", &jump_address_raw, 0)
+        && jump_address_raw == jump->jump_address_raw)
+      pass ();
+    else
+      fail ("JUMP.jump_address_raw [RL] set+1 %u != %u", jump->jump_address_raw, jump_address_raw);
+    jump->jump_address_raw--;
+  }
+  {
+    Dwg_Entity_Sections jump_entity_section;
+    if (dwg_dynapi_entity_value (jump, "JUMP", "jump_entity_section", &jump_entity_section, NULL)
+        && !memcmp (&jump_entity_section, &jump->jump_entity_section, sizeof (Dwg_Entity_Sections)))
+        pass ();
+    else
+        fail ("JUMP.jump_entity_section [Dwg_Entity_Sections]");
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (jump, "JUMP", "parent", &parent, NULL)
+        && !memcmp (&parent, &jump->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("JUMP.parent [struct _dwg_object_entity*]");
+  }
+  if (failed && (is_class_unstable ("JUMP") || is_class_debugging ("JUMP")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "JUMP", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_LARGE_RADIAL_DIMENSION (const Dwg_Object *obj)
 {
   int error = 0;
@@ -63423,6 +63487,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_IMAGE(obj);
   else  if (obj->fixedtype == DWG_TYPE_INSERT)
     error += test_INSERT(obj);
+  else  if (obj->fixedtype == DWG_TYPE_JUMP)
+    error += test_JUMP(obj);
   else  if (obj->fixedtype == DWG_TYPE_LARGE_RADIAL_DIMENSION)
     error += test_LARGE_RADIAL_DIMENSION(obj);
   else  if (obj->fixedtype == DWG_TYPE_LEADER)
@@ -64051,6 +64117,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_IMAGE (obj);
   else  if (obj->fixedtype == DWG_TYPE_INSERT)
     error += test_INSERT (obj);
+  else  if (obj->fixedtype == DWG_TYPE_JUMP)
+    error += test_JUMP (obj);
   else  if (obj->fixedtype == DWG_TYPE_LARGE_RADIAL_DIMENSION)
     error += test_LARGE_RADIAL_DIMENSION (obj);
   else  if (obj->fixedtype == DWG_TYPE_LEADER)
@@ -64893,6 +64961,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_INSERT): %d != "
                "dwg_dynapi_fields_size (\"INSERT\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_JUMP);
+  size2 = dwg_dynapi_fields_size ("JUMP");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_JUMP): %d != "
+               "dwg_dynapi_fields_size (\"JUMP\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_LARGE_RADIAL_DIMENSION);

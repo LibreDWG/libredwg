@@ -2854,6 +2854,8 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
       return dwg_dxf__3DLINE (dat, obj);
     case DWG_TYPE_LOAD:
       return dwg_dxf_LOAD (dat, obj);
+    case DWG_TYPE_JUMP:
+      return dwg_dxf_JUMP (dat, obj);
 
     default:
       if (obj->type == obj->parent->layout_type)

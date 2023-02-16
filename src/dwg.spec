@@ -11380,6 +11380,56 @@ DWG_ENTITY (LOAD)
   //COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
+/* (none/18) R_2_0b-R_13b1 */
+DWG_ENTITY (JUMP)
+  FIELD_RLx (jump_address_raw, 0);
+  DECODER {
+    int len;
+    BITCODE_TF trailing;
+    _obj->jump_address = _obj->jump_address_raw;
+    _obj->jump_entity_section = 0;
+    if (_obj->jump_address_raw > 0xffffff)
+      {
+        _obj->jump_address &= 0xffffff;
+        _obj->jump_entity_section = (_obj->jump_address_raw & 0xff000000) >> 24;
+      }
+    LOG_TRACE ("jump_entity_section: ");
+    switch (_obj->jump_entity_section)
+      {
+      case DWG_ENTITY_SECTION:
+        LOG_TRACE ("DWG_ENTITY_SECTION");
+        break;
+      case DWG_BLOCKS_SECTION:
+        LOG_TRACE ("DWG_BLOCKS_SECTION");
+        break;
+      case DWG_EXTRA_SECTION:
+        LOG_TRACE ("DWG_EXTRA_SECTION");
+        break;
+      default:
+        LOG_ERROR ("Unknown entity section");
+      }
+    LOG_TRACE ("\n");
+    LOG_TRACE ("jump_address: " FORMAT_RLx "\n", _obj->jump_address);
+
+    /* crc16 in jump entity is before the end of entity often */
+    if (dat->version >= R_11b1)
+      {
+        if (!bit_check_CRC (dat, obj->address, 0xC0C1))
+          error |= DWG_ERR_WRONGCRC;
+      }
+
+    /* log trailing data */
+    if (dat->byte < obj->address + obj->size)
+      {
+        len = obj->address + obj->size - dat->byte;
+        trailing = bit_read_TF (dat, len);
+        LOG_TRACE ("trailing (%d): ", len);
+        LOG_TRACE_TF (trailing, len);
+        free (trailing);
+      }
+  }
+DWG_ENTITY_END
+
 DWG_OBJECT (POINTCLOUDDEF)
   DECODE_UNKNOWN_BITS
   SUBCLASS (AcDbPointCloudDef)

@@ -1729,6 +1729,7 @@ decl_dxfb_process_INSERT (MINSERT)
       if (0)
         {
           // bypass -Wunused-function
+          dwg_dxfb_JUMP (dat, obj);
           dwg_dxfb_LOAD (dat, obj);
           dwg_dxfb_MLINE (dat, obj);
         }
@@ -1759,6 +1760,7 @@ decl_dxfb_process_INSERT (MINSERT)
     case DWG_TYPE_ENDREP:
     case DWG_TYPE__3DLINE:
     case DWG_TYPE_LOAD:
+    case DWG_TYPE_JUMP:
       LOG_INFO ("Skip unsupported object %s\n", obj->name);
       break;
 

@@ -2300,6 +2300,25 @@ TV,	DXF 2
 @end vtable
 @end indentedblock
 
+@strong{JUMP} @anchor{JUMP}
+@cindex entity, JUMP
+@vindex JUMP
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item jump_address_raw
+RL
+@item jump_address
+RL
+@item jump_entity_section
+Dwg_Entity_Sections
+
+@end vtable
+@end indentedblock
+
 @strong{LARGE_RADIAL_DIMENSION} @anchor{LARGE_RADIAL_DIMENSION}
 @cindex entity, LARGE_RADIAL_DIMENSION
 @vindex LARGE_RADIAL_DIMENSION

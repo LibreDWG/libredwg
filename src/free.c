@@ -859,6 +859,9 @@ free_preR13_object (Dwg_Object *obj)
     case DWG_TYPE_LOAD:
       dwg_free_LOAD (dat, obj);
       break;
+    case DWG_TYPE_JUMP:
+      dwg_free_JUMP (dat, obj);
+      break;
     case DWG_TYPE_DICTIONARY:
       dwg_free_DICTIONARY (dat, obj);
       break;

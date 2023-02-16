@@ -333,6 +333,12 @@ typedef enum DWG_CLASS_STABILITY {
   DWG_CLASS_UNHANDLED
 } Dwg_Class_Stability;
 
+typedef enum DWG_ENTITY_SECTIONS {
+  DWG_ENTITY_SECTION = 0,
+  DWG_BLOCKS_SECTION = 0x40,
+  DWG_EXTRA_SECTION = 0x80
+} Dwg_Entity_Sections;
+
 /**
  Object supertypes that exist in dwg-files.
  */
@@ -676,6 +682,7 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE__3DLINE,
   DWG_TYPE_REPEAT,
   DWG_TYPE_ENDREP,
+  DWG_TYPE_JUMP,
   /* pre2.0 entities */
   DWG_TYPE_LOAD,
   // after 1.0 add new types here for binary compat
@@ -705,7 +712,7 @@ typedef enum DWG_OBJECT_TYPE_R11
   DWG_TYPE_ATTDEF_R11 = 15,
   DWG_TYPE_ATTRIB_R11 = 16,
   DWG_TYPE_SEQEND_R11 = 17,
-  DWG_TYPE_PLINE_R11 = 18,
+  DWG_TYPE_JUMP_R11 = 18,
   DWG_TYPE_POLYLINE_R11 = 19, // also mesh/pfaces
   DWG_TYPE_VERTEX_R11 = 20,   // also mesh/pface vertices
   DWG_TYPE_3DLINE_R11 = 21,
@@ -1535,7 +1542,7 @@ typedef struct _dwg_entity_VERTEX_PFACE_FACE
   BITCODE_H seqend
 
 /**
- 2D POLYLINE (15/18) entity
+ 2D POLYLINE (15/19) entity
  */
 typedef struct _dwg_entity_POLYLINE_2D
 {
@@ -8017,6 +8024,18 @@ typedef struct _dwg_entity_LOAD
 } Dwg_Entity_LOAD;
 
 /**
+ JUMP (none/18) entity
+ */
+typedef struct _dwg_entity_JUMP
+{
+  struct _dwg_object_entity *parent;
+
+  BITCODE_RL jump_address_raw;
+  BITCODE_RL jump_address;
+  Dwg_Entity_Sections jump_entity_section;
+} Dwg_Entity_JUMP;
+
+/**
  3DLINE (none/21) entity
  */
 typedef struct _dwg_entity_3DLINE
@@ -8495,6 +8514,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_ARC_DIMENSION *ARC_DIMENSION;
     Dwg_Entity_ENDREP *ENDREP;
     Dwg_Entity_HELIX *HELIX;
+    Dwg_Entity_JUMP *JUMP;
     Dwg_Entity_LARGE_RADIAL_DIMENSION *LARGE_RADIAL_DIMENSION;
     Dwg_Entity_PLANESURFACE *PLANESURFACE;
     Dwg_Entity_POINTCLOUD *POINTCLOUD;
@@ -9994,6 +10014,7 @@ EXPORT int dwg_setup__3DLINE (Dwg_Object *obj);
 EXPORT int dwg_setup_ARC_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_ENDREP (Dwg_Object *obj);
 EXPORT int dwg_setup_HELIX (Dwg_Object *obj);
+EXPORT int dwg_setup_JUMP (Dwg_Object *obj);
 EXPORT int dwg_setup_LARGE_RADIAL_DIMENSION (Dwg_Object *obj);
 EXPORT int dwg_setup_PLANESURFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_POINTCLOUD (Dwg_Object *obj);

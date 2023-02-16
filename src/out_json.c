@@ -1748,6 +1748,8 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       return dwg_json__3DLINE (dat, obj);
     case DWG_TYPE_LOAD:
       return dwg_json_LOAD (dat, obj);
+    case DWG_TYPE_JUMP:
+      return dwg_json_JUMP (dat, obj);
     case DWG_TYPE_LAYOUT:
       return dwg_json_LAYOUT (dat, obj);
     default:

@@ -60,14 +60,17 @@
           LOG_TRACE("size: %d [RS]", obj->size);
           LOG_POS
         }
-        FIELD_HANDLE (layer, 2, 8);
+        if (obj->type != DWG_TYPE_JUMP_R11)
+          FIELD_HANDLE (layer, 2, 8);
       }
-      FIELD_RSx (opts_r11, 0); // i.e. dataflags
+      if (obj->type != DWG_TYPE_JUMP_R11)
+        {
+          FIELD_RSx (opts_r11, 0); // i.e. dataflags
 #ifdef IS_DECODER
-        if (_obj->opts_r11)
-          {
-            LOG_TRACE ("          ");
-            // stringify the flag bits
+          if (_obj->opts_r11)
+            {
+              LOG_TRACE ("          ");
+              // stringify the flag bits
 #  define LOG_OPTS_R11(e, w)                                                  \
     if (obj->type == DWG_TYPE_##e##_R11 && (R11OPTS (OPTS_R11_##e##_##w)))    \
       LOG_TRACE (#w "(0x%x) ", OPTS_R11_##e##_##w)
@@ -75,128 +78,127 @@
     if (obj->type == DWG_TYPE_##e##_R11 && _obj->opts_r11 > v)                \
         LOG_WARN ("Unknown " #e " opts_r11 (0x%x)", _obj->opts_r11 & ~(v))
 #  define LOG_OPTS_R11_POLYLINE(w)                                            \
-    if ((obj->type == DWG_TYPE_POLYLINE_R11                                   \
-         || obj->type == DWG_TYPE_PLINE_R11)                                  \
+    if (obj->type == DWG_TYPE_POLYLINE_R11                                    \
         && (R11OPTS (OPTS_R11_POLYLINE_##w)))                                 \
     LOG_TRACE (#w "(0x%x) ", OPTS_R11_POLYLINE_##w)
 #  define LOG_OPTS_R11_POLYLINE_MAX(v)                                        \
-    if ((obj->type == DWG_TYPE_POLYLINE_R11                                   \
-         || obj->type == DWG_TYPE_PLINE_R11)                                  \
+    if (obj->type == DWG_TYPE_POLYLINE_R11                                    \
         && _obj->opts_r11 > v)                                                \
     LOG_WARN ("Unknown POLYLINE opts_r11 (0x%x)", _obj->opts_r11 & ~(v))
 
-            LOG_OPTS_R11 (3DFACE, HAS_Z_FIRST);
-            LOG_OPTS_R11 (3DFACE, HAS_Z_SECOND);
-            LOG_OPTS_R11 (3DFACE, HAS_Z_THIRD);
-            LOG_OPTS_R11 (3DFACE, HAS_Z_FOURTH);
-            LOG_OPTS_R11_MAX (3DFACE, 15);
+              LOG_OPTS_R11 (3DFACE, HAS_Z_FIRST);
+              LOG_OPTS_R11 (3DFACE, HAS_Z_SECOND);
+              LOG_OPTS_R11 (3DFACE, HAS_Z_THIRD);
+              LOG_OPTS_R11 (3DFACE, HAS_Z_FOURTH);
+              LOG_OPTS_R11_MAX (3DFACE, 15);
 
-            LOG_OPTS_R11 (3DLINE, HAS_Z_FIRST);
-            LOG_OPTS_R11 (3DLINE, HAS_Z_SECOND);
-            LOG_OPTS_R11_MAX (3DLINE, 3);
+              LOG_OPTS_R11 (3DLINE, HAS_Z_FIRST);
+              LOG_OPTS_R11 (3DLINE, HAS_Z_SECOND);
+              LOG_OPTS_R11_MAX (3DLINE, 3);
 
-            LOG_OPTS_R11 (ARC, HAS_EXTRUSION);
-            LOG_OPTS_R11_MAX (ARC, 1);
+              LOG_OPTS_R11 (ARC, HAS_EXTRUSION);
+              LOG_OPTS_R11_MAX (ARC, 1);
 
-            LOG_OPTS_R11 (ATTDEF, UNKNOWN_1);
-            LOG_OPTS_R11 (ATTDEF, HAS_ROTATION);
-            LOG_OPTS_R11 (ATTDEF, HAS_WIDTH_FACTOR);
-            LOG_OPTS_R11 (ATTDEF, HAS_OBLIQUE_ANGLE);
-            LOG_OPTS_R11 (ATTDEF, HAS_STYLE);
-            LOG_OPTS_R11 (ATTDEF, HAS_GENERATION);
-            LOG_OPTS_R11 (ATTDEF, HAS_HORIZ_ALIGNMENT);
-            LOG_OPTS_R11 (ATTDEF, HAS_ALIGNMENT_POINT);
-            LOG_OPTS_R11_MAX (ATTDEF, 255);
+              LOG_OPTS_R11 (ATTDEF, UNKNOWN_1);
+              LOG_OPTS_R11 (ATTDEF, HAS_ROTATION);
+              LOG_OPTS_R11 (ATTDEF, HAS_WIDTH_FACTOR);
+              LOG_OPTS_R11 (ATTDEF, HAS_OBLIQUE_ANGLE);
+              LOG_OPTS_R11 (ATTDEF, HAS_STYLE);
+              LOG_OPTS_R11 (ATTDEF, HAS_GENERATION);
+              LOG_OPTS_R11 (ATTDEF, HAS_HORIZ_ALIGNMENT);
+              LOG_OPTS_R11 (ATTDEF, HAS_ALIGNMENT_POINT);
+              LOG_OPTS_R11_MAX (ATTDEF, 255);
 
-            LOG_OPTS_R11 (ATTRIB, UNKNOWN_1);
-            LOG_OPTS_R11 (ATTRIB, HAS_ROTATION);
-            LOG_OPTS_R11 (ATTRIB, HAS_WIDTH_FACTOR);
-            LOG_OPTS_R11 (ATTRIB, HAS_OBLIQUE_ANGLE);
-            LOG_OPTS_R11 (ATTRIB, HAS_STYLE);
-            LOG_OPTS_R11 (ATTRIB, HAS_GENERATION);
-            LOG_OPTS_R11 (ATTRIB, HAS_HORIZ_ALIGNMENT);
-            LOG_OPTS_R11 (ATTRIB, HAS_ALIGNMENT_POINT);
-            LOG_OPTS_R11_MAX (ATTRIB, 255);
+              LOG_OPTS_R11 (ATTRIB, UNKNOWN_1);
+              LOG_OPTS_R11 (ATTRIB, HAS_ROTATION);
+              LOG_OPTS_R11 (ATTRIB, HAS_WIDTH_FACTOR);
+              LOG_OPTS_R11 (ATTRIB, HAS_OBLIQUE_ANGLE);
+              LOG_OPTS_R11 (ATTRIB, HAS_STYLE);
+              LOG_OPTS_R11 (ATTRIB, HAS_GENERATION);
+              LOG_OPTS_R11 (ATTRIB, HAS_HORIZ_ALIGNMENT);
+              LOG_OPTS_R11 (ATTRIB, HAS_ALIGNMENT_POINT);
+              LOG_OPTS_R11_MAX (ATTRIB, 255);
 
-            LOG_OPTS_R11 (BLOCK, UNKNOWN_1);
-            LOG_OPTS_R11 (BLOCK, HAS_XREF_PNAME);
-            LOG_OPTS_R11 (BLOCK, HAS_BLOCK_NAME);
-            LOG_OPTS_R11_MAX (BLOCK, 7);
+              LOG_OPTS_R11 (BLOCK, UNKNOWN_1);
+              LOG_OPTS_R11 (BLOCK, HAS_XREF_PNAME);
+              LOG_OPTS_R11 (BLOCK, HAS_BLOCK_NAME);
+              LOG_OPTS_R11_MAX (BLOCK, 7);
 
-            LOG_OPTS_R11 (CIRCLE, HAS_EXTRUSION);
-            LOG_OPTS_R11_MAX (CIRCLE, 1);
+              LOG_OPTS_R11 (CIRCLE, HAS_EXTRUSION);
+              LOG_OPTS_R11_MAX (CIRCLE, 1);
 
-            LOG_OPTS_R11 (DIMENSION, HAS_DXF12);
-            LOG_OPTS_R11 (DIMENSION, HAS_FLAG);
-            LOG_OPTS_R11 (DIMENSION, HAS_TEXT);
-            LOG_OPTS_R11 (DIMENSION, HAS_DXF13);
-            LOG_OPTS_R11 (DIMENSION, HAS_DXF14);
-            LOG_OPTS_R11 (DIMENSION, HAS_DXF15);
-            LOG_OPTS_R11 (DIMENSION, HAS_ANGLES);
-            LOG_OPTS_R11 (DIMENSION, HAS_DXF40);
-            LOG_OPTS_R11 (DIMENSION, HAS_ROTATION);
-            LOG_OPTS_R11 (DIMENSION, UNKNOWN_512);
-            LOG_OPTS_R11 (DIMENSION, HAS_DXF53);
-            LOG_OPTS_R11 (DIMENSION, UNKNOWN_2048);
-            LOG_OPTS_R11 (DIMENSION, UNKNOWN_4096);
-            LOG_OPTS_R11 (DIMENSION, UNKNOWN_8192);
-            LOG_OPTS_R11 (DIMENSION, UNKNOWN_16384);
-            LOG_OPTS_R11 (DIMENSION, HAS_DIMSTYLE);
-            LOG_OPTS_R11_MAX (DIMENSION, 65535);
+              LOG_OPTS_R11 (DIMENSION, HAS_DXF12);
+              LOG_OPTS_R11 (DIMENSION, HAS_FLAG);
+              LOG_OPTS_R11 (DIMENSION, HAS_TEXT);
+              LOG_OPTS_R11 (DIMENSION, HAS_DXF13);
+              LOG_OPTS_R11 (DIMENSION, HAS_DXF14);
+              LOG_OPTS_R11 (DIMENSION, HAS_DXF15);
+              LOG_OPTS_R11 (DIMENSION, HAS_ANGLES);
+              LOG_OPTS_R11 (DIMENSION, HAS_DXF40);
+              LOG_OPTS_R11 (DIMENSION, HAS_ROTATION);
+              LOG_OPTS_R11 (DIMENSION, UNKNOWN_512);
+              LOG_OPTS_R11 (DIMENSION, HAS_DXF53);
+              LOG_OPTS_R11 (DIMENSION, UNKNOWN_2048);
+              LOG_OPTS_R11 (DIMENSION, UNKNOWN_4096);
+              LOG_OPTS_R11 (DIMENSION, UNKNOWN_8192);
+              LOG_OPTS_R11 (DIMENSION, UNKNOWN_16384);
+              LOG_OPTS_R11 (DIMENSION, HAS_DIMSTYLE);
+              LOG_OPTS_R11_MAX (DIMENSION, 65535);
 
-            LOG_OPTS_R11 (INSERT, HAS_SCALE_X);
-            LOG_OPTS_R11 (INSERT, HAS_SCALE_Y);
-            LOG_OPTS_R11 (INSERT, HAS_ROTATION);
-            LOG_OPTS_R11 (INSERT, HAS_SCALE_Z);
-            LOG_OPTS_R11 (INSERT, HAS_NUM_COLS);
-            LOG_OPTS_R11 (INSERT, HAS_NUM_ROWS);
-            LOG_OPTS_R11 (INSERT, HAS_COL_SPACING);
-            LOG_OPTS_R11 (INSERT, HAS_ROW_SPACING);
-            LOG_OPTS_R11 (INSERT, HAS_EXTRUSION);
-            LOG_OPTS_R11_MAX (INSERT, 511);
+              LOG_OPTS_R11 (INSERT, HAS_SCALE_X);
+              LOG_OPTS_R11 (INSERT, HAS_SCALE_Y);
+              LOG_OPTS_R11 (INSERT, HAS_ROTATION);
+              LOG_OPTS_R11 (INSERT, HAS_SCALE_Z);
+              LOG_OPTS_R11 (INSERT, HAS_NUM_COLS);
+              LOG_OPTS_R11 (INSERT, HAS_NUM_ROWS);
+              LOG_OPTS_R11 (INSERT, HAS_COL_SPACING);
+              LOG_OPTS_R11 (INSERT, HAS_ROW_SPACING);
+              LOG_OPTS_R11 (INSERT, HAS_EXTRUSION);
+              LOG_OPTS_R11_MAX (INSERT, 511);
 
-            LOG_OPTS_R11 (LINE, HAS_EXTRUSION);
-            LOG_OPTS_R11_MAX (LINE, 1);
+              LOG_OPTS_R11 (LINE, HAS_EXTRUSION);
+              LOG_OPTS_R11_MAX (LINE, 1);
 
-            LOG_OPTS_R11_POLYLINE (HAS_FLAG);
-            LOG_OPTS_R11_POLYLINE (HAS_START_WIDTH);
-            LOG_OPTS_R11_POLYLINE (HAS_END_WIDTH);
-            LOG_OPTS_R11_POLYLINE (HAS_EXTRUSION);
-            LOG_OPTS_R11_POLYLINE (HAS_M_VERTS);
-            LOG_OPTS_R11_POLYLINE (HAS_N_VERTS);
-            LOG_OPTS_R11_POLYLINE (HAS_M_DENSITY);
-            LOG_OPTS_R11_POLYLINE (HAS_N_DENSITY);
-            LOG_OPTS_R11_POLYLINE (HAS_CURVETYPE);
-            LOG_OPTS_R11_POLYLINE (IN_EXTRA); // then layer is the extras_offset
-            LOG_OPTS_R11_POLYLINE_MAX (OPTS_R11_POLYLINE_IN_EXTRA);
+              LOG_OPTS_R11_POLYLINE (HAS_FLAG);
+              LOG_OPTS_R11_POLYLINE (HAS_START_WIDTH);
+              LOG_OPTS_R11_POLYLINE (HAS_END_WIDTH);
+              LOG_OPTS_R11_POLYLINE (HAS_EXTRUSION);
+              LOG_OPTS_R11_POLYLINE (HAS_M_VERTS);
+              LOG_OPTS_R11_POLYLINE (HAS_N_VERTS);
+              LOG_OPTS_R11_POLYLINE (HAS_M_DENSITY);
+              LOG_OPTS_R11_POLYLINE (HAS_N_DENSITY);
+              LOG_OPTS_R11_POLYLINE (HAS_CURVETYPE);
+              LOG_OPTS_R11_POLYLINE (IN_EXTRA); // then layer is the extras_offset
+              LOG_OPTS_R11_POLYLINE_MAX (OPTS_R11_POLYLINE_IN_EXTRA);
 
-            LOG_OPTS_R11 (SHAPE, HAS_ROTATION);
-            LOG_OPTS_R11 (SHAPE, HAS_LOAD_NUM);
-            LOG_OPTS_R11_MAX (SHAPE, 3);
+              LOG_OPTS_R11 (SHAPE, HAS_ROTATION);
+              LOG_OPTS_R11 (SHAPE, HAS_LOAD_NUM);
+              LOG_OPTS_R11_MAX (SHAPE, 3);
 
-            LOG_OPTS_R11 (TEXT, HAS_ROTATION);
-            LOG_OPTS_R11 (TEXT, HAS_WIDTH_FACTOR);
-            LOG_OPTS_R11 (TEXT, HAS_OBLIQUE_ANGLE);
-            LOG_OPTS_R11 (TEXT, HAS_STYLE);
-            LOG_OPTS_R11 (TEXT, HAS_GENERATION);
-            LOG_OPTS_R11 (TEXT, HAS_HORIZ_ALIGNMENT);
-            LOG_OPTS_R11 (TEXT, HAS_ALIGNMENT_POINT);
-            LOG_OPTS_R11 (TEXT, HAS_EXTRUSION);
-            LOG_OPTS_R11 (TEXT, ALIGNED_VERT_TO);
-            LOG_OPTS_R11_MAX (TEXT, 511);
+              LOG_OPTS_R11 (TEXT, HAS_ROTATION);
+              LOG_OPTS_R11 (TEXT, HAS_WIDTH_FACTOR);
+              LOG_OPTS_R11 (TEXT, HAS_OBLIQUE_ANGLE);
+              LOG_OPTS_R11 (TEXT, HAS_STYLE);
+              LOG_OPTS_R11 (TEXT, HAS_GENERATION);
+              LOG_OPTS_R11 (TEXT, HAS_HORIZ_ALIGNMENT);
+              LOG_OPTS_R11 (TEXT, HAS_ALIGNMENT_POINT);
+              LOG_OPTS_R11 (TEXT, HAS_EXTRUSION);
+              LOG_OPTS_R11 (TEXT, ALIGNED_VERT_TO);
+              LOG_OPTS_R11_MAX (TEXT, 511);
 
-            LOG_OPTS_R11 (VERTEX, HAS_START_WIDTH);
-            LOG_OPTS_R11 (VERTEX, HAS_END_WIDTH);
-            LOG_OPTS_R11 (VERTEX, HAS_BULGE);
-            LOG_OPTS_R11 (VERTEX, HAS_FLAG);
-            LOG_OPTS_R11 (VERTEX, HAS_TANGENT_DIR);
-            LOG_OPTS_R11_MAX (VERTEX, 31);
+              LOG_OPTS_R11 (VERTEX, HAS_START_WIDTH);
+              LOG_OPTS_R11 (VERTEX, HAS_END_WIDTH);
+              LOG_OPTS_R11 (VERTEX, HAS_BULGE);
+              LOG_OPTS_R11 (VERTEX, HAS_FLAG);
+              LOG_OPTS_R11 (VERTEX, HAS_TANGENT_DIR);
+              LOG_OPTS_R11_MAX (VERTEX, 31);
 
-            LOG_TRACE ("\n");
+              LOG_TRACE ("\n");
 #  undef LOG_OPTS_R11
 #  undef LOG_OPTS_R11_MAX
-          }
+            }
 #endif
+        }
       if (R11FLAG (FLAG_R11_HAS_PSPACE)) { // 16
 #ifdef IS_DECODER
         _ent->entmode = 1;

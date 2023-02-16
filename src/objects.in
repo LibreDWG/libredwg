@@ -87,6 +87,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "HELIX",                     "HELIX",                      DWG_TYPE_HELIX,	1,	UNSTABLE
 "IMAGE",                     "IMAGE",                      DWG_TYPE_IMAGE,	1,	STABLE
 "INSERT",                    "INSERT",                     DWG_TYPE_INSERT,	1,	STABLE
+"JUMP",                      "JUMP",                       DWG_TYPE_JUMP,	1,	UNSTABLE
 "LARGE_RADIAL_DIMENSION",    "LARGE_RADIAL_DIMENSION",     DWG_TYPE_LARGE_RADIAL_DIMENSION,	1,	UNSTABLE
 "LEADER",                    "LEADER",                     DWG_TYPE_LEADER,	1,	STABLE
 "LIGHT",                     "LIGHT",                      DWG_TYPE_LIGHT,	1,	STABLE

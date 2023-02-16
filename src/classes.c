@@ -356,7 +356,8 @@ static const char *const _dwg_type_names_variable[] = {
   "_3DLINE",                            /* 735 */
   "REPEAT",                             /* 736 */
   "ENDREP",                             /* 737 */
-  "LOAD",                               /* 738 */
+  "JUMP",                               /* 738 */
+  "LOAD",                               /* 739 */
   /* End auto-generated variable */
 };
 
@@ -917,7 +918,8 @@ static const char *_dwg_dxfnames_variable[] = {
   "3DLINE",                                     /* 735 */
   "REPEAT",                                     /* 736 */
   "ENDREP",                                     /* 737 */
-  "LOAD",                                       /* 738 */
+  "JUMP",                                       /* 738 */
+  "LOAD",                                       /* 739 */
   /* End auto-generated dxfnames */
 };
 
