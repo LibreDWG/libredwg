@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <libps/pslib.h>
-#include <getopt.h>
+#include "my_getopt.h"
 
 #include <dwg.h>
 #include <dwg_api.h>

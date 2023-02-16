@@ -990,8 +990,8 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RC (is_maint, 0)
       FIELD_RC (zero_one_or_three, 0)
       // preR13 only
-      FIELD_RC (numentity_sections, 0)
-      FIELD_RS (sections, 0)
+      FIELD_RS (numentity_sections, 0)
+      FIELD_RL (sections, 0)
       FIELD_RS (numheader_vars, 0)
       FIELD_RL (entities_start, 0)
       FIELD_RL (entities_end, 0)
@@ -3457,7 +3457,7 @@ json_AuxHeader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       if (0) ; // else
       FIELD_VECTOR_INL (aux_intro, RC, 3, 0)
       FIELD_RSx (dwg_version, 0)
-      FIELD_RS (maint_version, 0)
+      FIELD_RL (maint_version, 0)
       FIELD_RL (numsaves, 0)
       FIELD_RL (minus_1, 0)
       FIELD_RS (numsaves_1, 0)

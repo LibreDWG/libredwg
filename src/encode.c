@@ -39,7 +39,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <assert.h>
-#ifdef HAVE_CTYPE_H
+#if defined HAVE_CTYPE_H || defined _MSC_VER
 #  include <ctype.h>
 #endif
 #ifdef HAVE_WCTYPE_H
@@ -5216,7 +5216,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
                     {
                       eed->size = new_size;
                       bit_write_BS (dat, new_size);
-                      LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]", last_size,
+                      LOG_TRACE ("EED[%d] size: %d [BS]", last_size,
                                  new_size);
                       LOG_POS;
                       bit_write_H (dat, last_handle);
@@ -5256,7 +5256,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       if (EED_ALLOWED)
         {
           bit_write_BS (dat, new_size);
-          LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]", last_size, new_size);
+          LOG_TRACE ("EED[%d] size: %d [BS]", last_size, new_size);
           LOG_POS;
           bit_write_H (dat, last_handle);
           LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]", last_size,

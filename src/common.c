@@ -27,6 +27,7 @@
 #include <assert.h>
 #include <time.h>
 #include <math.h>
+#include <ctype.h>
 #include "logging.h"
 
 // See also
@@ -547,3 +548,36 @@ tm_offset (void)
   gmt = mktime (tm);
   return (long)difftime (rawtime, gmt);
 }
+
+// portability compat funcs
+
+#ifndef HAVE_STRCASECMP
+EXPORT int strcasecmp (const char *a, const char *b)
+{
+  size_t l2;
+  int r1 = strcmp (a, b);
+  if (!r1)
+    return 0;
+  l2 = strlen (b);
+  for (size_t i = 0; i < strlen (a); i++)
+    {
+      if (i > l2)
+        return 1;
+      if (toupper (a[i]) != toupper (b[i]))
+        return toupper (a[i]) < toupper (b[i]);
+    }
+  return 0;
+}
+#endif
+
+#ifdef _MSC_VER
+EXPORT char *basename(char *path)
+{
+  // I've looked at the winsdk basename implementation. It's a clusterfuck,
+  // because they have 2-byte widechars. We only accept utf-8 paths
+  char *p = strrchr (path, '/');
+  if (!p)
+    p = strrchr (path, '\\');
+  return p;
+}
+#endif

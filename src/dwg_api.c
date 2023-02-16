@@ -1258,7 +1258,7 @@ dwg_get_HEADER_utf8text (const Dwg_Data *restrict dwg,
                          int *isnewp)
 {
 #  ifndef HAVE_NONNULL
-  if (dwg && fieldname && out)
+  if (dwg && fieldname && textp)
 #  endif
     return dwg_dynapi_header_utf8text (dwg, fieldname, textp, isnewp, NULL);
 #  ifndef HAVE_NONNULL

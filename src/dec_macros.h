@@ -23,7 +23,7 @@
 #define DEC_MACROS_H
 
 #include "config.h"
-#ifdef HAVE_CTYPE_H
+#if defined HAVE_CTYPE_H || defined _MSC_VER
 #  include <ctype.h>
 #endif
 

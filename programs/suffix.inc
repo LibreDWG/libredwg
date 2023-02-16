@@ -29,7 +29,11 @@
 #endif
 #include <stdlib.h>
 #include <stdio.h>
-#include <libgen.h>
+#ifdef HAVE_LIBGEN_H
+#  include <libgen.h>
+#else
+  char *basename (char *);
+#endif
 #include <string.h>
 
 char *

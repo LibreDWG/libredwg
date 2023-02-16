@@ -1,4 +1,5 @@
-# See https://jake-shadle.github.io/xwin/ for how to get the MSVC headers and libs on linux via xwin to /opt/xwin
+# cross-compile on linux x64 to the windows msvc runtime via clang-cl.
+# See https://jake-shadle.github.io/xwin/ for how to get the MSVC headers and libs on linux via xwin to /opt/xwin (x86_64 only)
 # cmake -G Ninja -DCMAKE_TOOLCHAIN_FILE="`realpath ../clang-cl-msvc.cmake`" -DMSVC_BASE=/opt/xwin/crt -DWINSDK_BASE=/opt/xwin/sdk -DHOST_ARCH=x86_64 -DCMAKE_BUILD_TYPE=Release ..
 #
 #cmake_policy(SET CMP0009 OLD)
@@ -70,18 +71,8 @@ init_user_prop(HOST_ARCH)
 init_user_prop(MSVC_BASE)
 init_user_prop(WINSDK_BASE)
 #init_user_prop(WINSDK_VER)
-init_user_prop(LLVM_VER)
-init_user_prop(CLANG_VER)
-
-if(LLVM_VER STREQUAL "")
-  message(STATUS "LLVM_VER not set assuming version 14")
-  set(LLVM_VER 14)
-endif()
-
-if(CLANG_VER STREQUAL "")
-  message(STATUS "CLANG_VER not set assuming version 14")
-  set(CLANG_VER 14)
-endif()
+init_user_prop(LLVM_SUFFIX)
+init_user_prop(CLANG_SUFFIX)
 
 if(NOT HOST_ARCH)
   set(HOST_ARCH x86_64)
@@ -95,11 +86,14 @@ elseif(HOST_ARCH STREQUAL "armv7" OR HOST_ARCH STREQUAL "arm")
 elseif(HOST_ARCH STREQUAL "i686" OR HOST_ARCH STREQUAL "x86")
   set(TRIPLE_ARCH "i686")
   set(WINSDK_ARCH "x86")
-elseif(HOST_ARCH STREQUAL "x86_64" OR HOST_ARCH STREQUAL "x64")
+elseif(HOST_ARCH STREQUAL "x86_64")
+  set(TRIPLE_ARCH "x86_64")
+  set(WINSDK_ARCH "x86_64")
+elseif(HOST_ARCH STREQUAL "x64")
   set(TRIPLE_ARCH "x86_64")
   set(WINSDK_ARCH "x64")
 else()
-  message(SEND_ERROR "Unknown host architecture ${HOST_ARCH}. Must be aarch64 (or arm64), armv7 (or arm), i686 (or x86), or x86_64 (or x64).")
+  message(SEND_ERROR "Unknown host architecture ${HOST_ARCH}. Must be aarch64 (or arm64), armv7 (or arm), i686 (or x86), x86_64 or x64.")
 endif()
 
 set(MSVC_INCLUDE "${MSVC_BASE}/include")
@@ -119,7 +113,7 @@ if(NOT EXISTS "${WINSDK_BASE}" OR
    NOT EXISTS "${WINSDK_INCLUDE}" OR
    NOT EXISTS "${WINSDK_LIB}")
   message(SEND_ERROR
-          "CMake variable WINSDK_BASE and WINSDK_VER must resolve to a valid "
+          "CMake variable WINSDK_BASE must resolve to a valid "
           "Windows SDK installation")
 endif()
 
@@ -131,21 +125,21 @@ if(NOT EXISTS "${WINSDK_INCLUDE}/um/WINDOWS.H")
 endif()
 
 # Attempt to find the clang-cl binary
-find_program(CLANG_CL_PATH NAMES clang-cl-${CLANG_VER})
+find_program(CLANG_CL_PATH NAMES clang-cl${CLANG_SUFFIX})
 if(${CLANG_CL_PATH} STREQUAL "CLANG_CL_PATH-NOTFOUND")
-  message(SEND_ERROR "Unable to find clang-cl-${CLANG_VER}")
+  message(SEND_ERROR "Unable to find clang-cl${CLANG_SUFFIX}")
 endif()
 
 # Attempt to find the llvm-link binary
-find_program(LLD_LINK_PATH NAMES lld-link-${LLVM_VER})
+find_program(LLD_LINK_PATH NAMES lld-link${LLVM_SUFFIX})
 if(${LLD_LINK_PATH} STREQUAL "LLD_LINK_PATH-NOTFOUND")
-  message(SEND_ERROR "Unable to find lld-link-${LLVM_VER}")
+  message(SEND_ERROR "Unable to find lld-link${LLVM_SUFFIX}")
 endif()
 
 # Attempt to find the native clang binary
-find_program(CLANG_PATH NAMES clang-${CLANG_VER})
+find_program(CLANG_PATH NAMES clang${CLANG_SUFFIX})
 if(${CLANG_PATH} STREQUAL "CLANG_PATH-NOTFOUND")
-  message(SEND_ERROR "Unable to find clang-${CLANG_VER}")
+  message(SEND_ERROR "Unable to find clang${CLANG_SUFFIX}")
 endif()
 
 set(CMAKE_C_COMPILER "${CLANG_CL_PATH}" CACHE FILEPATH "")

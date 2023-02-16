@@ -20,19 +20,21 @@ add_executable(common_test
   tests_common.h)
 add_test(common_test ./common_test)
 
-add_executable(decode_test
-  decode_test.c
-  ../../src/bits.c
-  ../../src/hash.c
-  ../../src/decode_r2007.c
-  ../../src/common.c
-  ../../src/objects.c
-  ../../src/classes.c
-  ../../src/print.c
-  tests_common.h)
-target_include_directories(decode_test PUBLIC
-  ${CMAKE_CURRENT_BINARY_DIR})
-add_test(decode_test ./decode_test)
+if (NOT WINDOWS)
+  add_executable(decode_test
+    decode_test.c
+    ../../src/bits.c
+    ../../src/hash.c
+    ../../src/decode_r2007.c
+    ../../src/common.c
+    ../../src/objects.c
+    ../../src/classes.c
+    ../../src/print.c
+    tests_common.h)
+  target_include_directories(decode_test PUBLIC
+    ${CMAKE_CURRENT_BINARY_DIR})
+  add_test(decode_test ./decode_test)
+endif()
 
 add_executable(dxf_test
   dxf_test.c

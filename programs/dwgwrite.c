@@ -22,9 +22,11 @@
 #ifdef AX_STRCASECMP_HEADER
 #  include AX_STRCASECMP_HEADER
 #endif
-#include <sys/stat.h>
-#include <unistd.h>
-#include <getopt.h>
+#ifdef HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
+#include "my_stat.h"
+#include "my_getopt.h"
 #ifdef HAVE_VALGRIND_VALGRIND_H
 #  include <valgrind/valgrind.h>
 #endif
@@ -33,6 +35,7 @@
 #include "common.h"
 #include "bits.h"
 #include "suffix.inc"
+#include "my_getopt.h"
 #include "decode.h"
 #include "encode.h"
 #ifndef DISABLE_JSON

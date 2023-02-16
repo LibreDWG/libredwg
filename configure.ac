@@ -1,6 +1,6 @@
 dnl configure.ac
 
-dnl Copyright (C) 2010, 2014-2015, 2018-2021 Free Software Foundation, Inc.
+dnl Copyright (C) 2010, 2014-2015, 2018-2023 Free Software Foundation, Inc.
 dnl
 dnl This program is free software, licensed under the terms of the GNU
 dnl General Public License as published by the Free Software Foundation,
@@ -118,8 +118,8 @@ dnl We just want to know if it's needed
 ac_cv_func_malloc_0_nonnull=yes
 ac_cv_func_realloc_0_nonnull=yes
 AC_CHECK_HEADERS([stdlib.h string.h stddef.h unistd.h malloc.h wchar.h ctype.h])
-AC_CHECK_HEADERS([wctype.h float.h limits.h sys/param.h])
-AC_CHECK_HEADERS([libgen.h getopt.h alloca.h valgrind/valgrind.h])
+AC_CHECK_HEADERS([wctype.h float.h limits.h sys/param.h direct.h libgen.h])
+AC_CHECK_HEADERS([getopt.h alloca.h valgrind/valgrind.h])
 AC_CHECK_HEADERS([endian.h sys/endian.h machine/endian.h winsock2.h], [break])
 AC_CHECK_HEADERS([byteorder.h byteswap.h sys/byteorder.h], [break])
 AC_C_BIGENDIAN

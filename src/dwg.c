@@ -24,13 +24,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include <sys/stat.h>
 #include <assert.h>
+#include "../programs/my_stat.h"
 // strings.h or string.h
 #ifdef AX_STRCASECMP_HEADER
 #  include AX_STRCASECMP_HEADER
 #endif
-#include <libgen.h> // basename
+#ifdef HAVE_LIBGEN_H
+#  include <libgen.h> // basename
+#else
+char* basename (char *);
+#endif
 
 #include "bits.h"
 #include "common.h"
@@ -83,7 +87,7 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
   size_t size;
   if (!dat->size && fp)
     {
-      struct stat attrib;
+      struct_stat_t attrib;
       int fd = fileno (fp);
       if (fd >= 0 && !fstat (fd, &attrib))
         dat->size = attrib.st_size;
@@ -196,7 +200,7 @@ EXPORT int
 dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
 {
   FILE *fp;
-  struct stat attrib;
+  struct_stat_t attrib;
   size_t size;
   Bit_Chain bit_chain = { 0 };
   int error;
@@ -244,7 +248,9 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
     }
   else
     {
+#ifdef HAVE_SYS_STAT_H
       bit_chain.size = attrib.st_size;
+#endif
       error = dat_read_file (&bit_chain, fp, filename);
       if (error >= DWG_ERR_CRITICAL)
         return error;
@@ -284,14 +290,16 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
 {
   int error;
   FILE *fp;
-  struct stat attrib;
+  struct_stat_t attrib;
   size_t size;
   Bit_Chain dat = { 0 };
   Dwg_Version_Type version;
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
 
-  if (!filename || stat (filename, &attrib))
+  if (!filename
+      || stat (filename, &attrib)
+      )
     {
       LOG_ERROR ("File not found: %s\n", filename ? filename : "(null)")
       return DWG_ERR_IOERROR;
@@ -320,7 +328,9 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   dwg->header.version = version;
 
   memset (&dat, 0, sizeof (Bit_Chain));
+#ifdef HAVE_SYS_STAT_H
   dat.size = attrib.st_size;
+#endif
   dat.chain = (unsigned char *)calloc (1, dat.size + 2);
   if (!dat.chain)
     {
@@ -409,7 +419,7 @@ EXPORT int
 dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
 {
   FILE *fh;
-  struct stat attrib;
+  struct_stat_t attrib;
   Bit_Chain dat = { 0 };
   int error;
 

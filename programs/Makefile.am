@@ -101,7 +101,8 @@ if HAVE_CPPCHECK
 	$(CPPCHECK) -j4 --inline-suppr -I$(top_srcdir)/include -I../src $(srcdir)/*.c
 endif
 
-EXTRA_DIST  = suffix.inc escape.h geom.h common.inc $(TESTS) cmp_dxf.pl
+EXTRA_DIST  = suffix.inc escape.h geom.h my_getopt.h my_stat.h common.inc \
+	      $(TESTS) cmp_dxf.pl
 CLEANFILES  = {example_,sample_,entities_,ACEB10_r11}*.{bmp,ps,svg,dxf,log,json}
 if USE_WRITE
 CLEANFILES += {example_,sample_,entities_,ACEB10_r11}*rewrite.{dwg,log}

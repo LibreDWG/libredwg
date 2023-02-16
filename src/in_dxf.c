@@ -4901,8 +4901,8 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
           if (mode == TABLEFORMAT)
             {
               o->data_flags = pair->value.u;
-              LOG_TRACE ("%s.%s.data_flags = " FORMAT_BSx " [BSx %d]\n",
-                         obj->name, key, pair->value.i, pair->code);
+              LOG_TRACE ("%s.%s.data_flags = 0x%x [BSx %d]\n",
+                         obj->name, key, pair->value.u, pair->code);
             }
           else
             goto unknown_default;
@@ -4911,8 +4911,7 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
           if (mode == TABLEFORMAT)
             {
               o->margin_override_flags = pair->value.u;
-              LOG_TRACE ("%s.%s.margin_override_flags = " FORMAT_BSx
-                         " [BSx %d]\n",
+              LOG_TRACE ("%s.%s.margin_override_flags = 0x%x [BSx %d]\n",
                          obj->name, key, pair->value.u, pair->code);
             }
           else

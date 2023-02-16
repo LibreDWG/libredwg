@@ -34,7 +34,7 @@
 #  include <string.h>
 #  include <ctype.h>
 #endif
-#include <getopt.h>
+#include "my_getopt.h"
 #ifdef HAVE_PCRE2_H
 // use both, 8 and 16 (r2007+)
 #  define PCRE2_CODE_UNIT_WIDTH 0
