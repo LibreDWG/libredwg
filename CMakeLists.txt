@@ -6,17 +6,20 @@ cmake_minimum_required(VERSION 2.8)
 # for smaller builds and lib.
 
 if(MSVC)
-    # Disable some overly strict MSVC warnings.
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -wd4244 -wd4800 -wd4805 -wd4101 -D_CRT_NONSTDC_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS")
+  set(redwg libredwg)
+  # Disable some overly strict MSVC warnings.
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -wd4244 -wd4800 -wd4805 -wd4101 -D_CRT_NONSTDC_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS")
+else()
+  set(redwg redwg)
 endif()
 
 if (EXISTS ".version")
-    file(READ .version NL_PACKAGE_VERSION)
+  file(READ .version NL_PACKAGE_VERSION)
 else()
-    find_package(Git)
-    set(PACKAGE_VERSION "")
-    execute_process(COMMAND ${GIT_EXECUTABLE} describe --long --tags --always
-                    OUTPUT_VARIABLE NL_PACKAGE_VERSION)
+  find_package(Git)
+  set(PACKAGE_VERSION "")
+  execute_process(COMMAND ${GIT_EXECUTABLE} describe --long --tags --always
+                  OUTPUT_VARIABLE NL_PACKAGE_VERSION)
 endif()
 string(STRIP "${NL_PACKAGE_VERSION}" PACKAGE_VERSION)
 
@@ -170,21 +173,21 @@ set(libredwg_SOURCES
     ${write_SOURCES}
     src/print.c)
 
-add_library(redwg
+add_library(${redwg}
     ${libredwg_HEADERS}
     ${libredwg_SOURCES})
-set_target_properties(redwg PROPERTIES
+set_target_properties(${redwg} PROPERTIES
   PUBLIC_HEADER "${libredwg_HEADERS}")
 if (BUILD_SHARED_LIBS)
-  target_compile_definitions(redwg PUBLIC DLL_EXPORT;ENABLE_SHARED)
+  target_compile_definitions(${redwg} PUBLIC DLL_EXPORT;ENABLE_SHARED)
 endif()
-target_include_directories(redwg PRIVATE
+target_include_directories(${redwg} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_BINARY_DIR}/src)
-target_include_directories(redwg PUBLIC
+target_include_directories(${redwg} PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-link_libraries(redwg -lm ${CMAKE_THREAD_LIBS_INIT})
+link_libraries(${redwg} -lm ${CMAKE_THREAD_LIBS_INIT})
 
 if(NOT LIBREDWG_LIBONLY)
   if(NOT HAVE_GETOPT_H)
@@ -207,9 +210,9 @@ if(NOT LIBREDWG_LIBONLY)
 
   if (HAVE_PCRE2_H)
     if(HAVE_PCRE2_16)
-      target_link_libraries(dwggrep redwg -lpcre2-8 -lpcre2-16)
+      target_link_libraries(dwggrep ${redwg} -lpcre2-8 -lpcre2-16)
     else()
-      target_link_libraries(dwggrep redwg -lpcre2-8)
+      target_link_libraries(dwggrep ${redwg} -lpcre2-8)
     endif(HAVE_PCRE2_16)
     #target_include_directories(dwggrep PUBLIC pcre2)
   endif(HAVE_PCRE2_H)
@@ -229,8 +232,15 @@ include_directories(BEFORE
   ${CMAKE_CURRENT_SOURCE_DIR}/src
   ${CMAKE_CURRENT_BINARY_DIR}/src)
 
+set(CAN_TEST OFF cache bool "can test")
 if(NOT CMAKE_CROSSCOMPILING)
-  enable_testing()
+  set(CAN_TEST ON FORCE)
+endif(NOT CMAKE_CROSSCOMPILING)
+if(UNIX)
+  set(CAN_TEST ON FORCE)
+endif(UNIX)
+enable_testing()
+if(CAN_TEST)
   if(NOT LIBREDWG_LIBONLY)
     set(top_builddir ${CMAKE_CURRENT_BINARY_DIR})
     set(top_srcdir ${CMAKE_CURRENT_SOURCE_DIR})
@@ -244,21 +254,23 @@ if(NOT CMAKE_CROSSCOMPILING)
     else()
       set(DISABLE_JSON )
     endif()
-    configure_file(programs/alive.test.in alive.test @ONLY)
-    add_test(alive.test alive.test)
-    if(NOT LIBREDWG_DISABLE_DXF)
-      configure_file(programs/dxf.test.in dxf.test @ONLY)
-      add_test(dxf.test dxf.test)
-      if(NOT LIBREDWG_DISABLE_JSON)
-        configure_file(programs/json.test.in json.test @ONLY)
-        add_test(json.test json.test)
-      endif()
-    endif()
-    configure_file(programs/svg.test.in svg.test @ONLY)
-    add_test(svg.test svg.test)
+    if(UNIX)
+      configure_file(programs/alive.test.in alive.test @ONLY)
+      add_test(alive.test alive.test)
+      if(NOT LIBREDWG_DISABLE_DXF)
+        configure_file(programs/dxf.test.in dxf.test @ONLY)
+        add_test(dxf.test dxf.test)
+        if(NOT LIBREDWG_DISABLE_JSON)
+          configure_file(programs/json.test.in json.test @ONLY)
+          add_test(json.test json.test)
+        endif(NOT LIBREDWG_DISABLE_JSON)
+      endif(NOT LIBREDWG_DISABLE_DXF)
+      configure_file(programs/svg.test.in svg.test @ONLY)
+      add_test(svg.test svg.test)
+    endif(UNIX)
   endif(NOT LIBREDWG_LIBONLY)
   add_subdirectory(test/unit-testing)
-endif(NOT CMAKE_CROSSCOMPILING)
+endif(CAN_TEST)
 
 add_custom_target(
   regen-dynapi
@@ -278,19 +290,19 @@ add_custom_target(
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 if(MSVC)
-  install(TARGETS redwg RUNTIME PUBLIC_HEADER
+  install(TARGETS ${redwg} RUNTIME PUBLIC_HEADER
           DESTINATION libredwg-${PACKAGE_VERSION})
   if(NOT LIBREDWG_LIBONLY)
     install(TARGETS ${executables_TARGETS}
           DESTINATION libredwg-${PACKAGE_VERSION})
   endif()
-  install(TARGETS redwg
+  install(TARGETS ${redwg}
           LIBRARY
-          COMPONENT redwg
+          COMPONENT ${redwg}
           DESTINATION libredwg-${PACKAGE_VERSION})
 else()
   include(GNUInstallDirs)
-  install(TARGETS redwg PUBLIC_HEADER
+  install(TARGETS ${redwg} PUBLIC_HEADER
           DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
   if(NOT LIBREDWG_LIBONLY)
     install(TARGETS ${executables_TARGETS}
@@ -299,9 +311,10 @@ else()
 endif()
 install(TARGETS RUNTIME)
 
-if(MSVC)
-  #untested
+if(WIN32)
   add_custom_target(dist
-    COMMAND zip libredwg-${PACKAGE_VERSION}.zip dwg*.exe dxf*.exe libredwg-*.dll
-    DEPENDS redwg)
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/README README
+    COMMAND zip libredwg-${PACKAGE_VERSION}.zip dwg*.exe dxf*.exe *.lib *.dll README
+                doc/LibreDWG.pdf
+    DEPENDS ${redwg})
 endif()
