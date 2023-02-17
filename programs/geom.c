@@ -17,6 +17,7 @@
  */
 
 #include "../src/config.h"
+#include <string.h>
 #include <math.h>
 #include <dwg.h>
 #include "geom.h"
@@ -61,7 +62,7 @@ transform_OCS_2d (BITCODE_2DPOINT *out, BITCODE_2DPOINT pt, BITCODE_BE ext)
       /* This is called the "Arbitrary Axis Algorithm" to calculate
          the OCS x-axis from the extrusion z-vector (the "normal") */
       BITCODE_3DPOINT ax, ay, az, be;
-      be = (BITCODE_3DPOINT)ext;
+      memcpy (&be, &ext, sizeof (BITCODE_3DPOINT));
       normalize (&az, be);
       if ((fabs (az.x) < 1 / 64.0) && (fabs (az.y) < 1 / 64.0))
         {
@@ -101,7 +102,7 @@ transform_OCS (BITCODE_3DPOINT *out, BITCODE_3DPOINT pt, BITCODE_BE ext)
       /* This is called the "Arbitrary Axis Algorithm" to calculate
          the OCS x-axis from the extrusion z-vector */
       BITCODE_3DPOINT ax, ay, az, be;
-      be = (BITCODE_3DPOINT)ext;
+      memcpy (&be, &ext, sizeof (BITCODE_3DPOINT));
       normalize (&az, be);
       if ((fabs (az.x) < 1 / 64.0) && (fabs (az.y) < 1 / 64.0))
         {
