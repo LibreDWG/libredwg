@@ -22861,7 +22861,7 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
 
 #  define API_UNADD_ENTITY                                                    \
     if (dwg->header.version < R_13b1)                                         \
-      obj->type = -(obj->type);                                               \
+      obj->type = -(long)(obj->type);                                         \
     else                                                                      \
       obj->type = DWG_TYPE_UNUSED
 

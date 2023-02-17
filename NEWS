@@ -10,6 +10,9 @@ Major features:
   * Fixed dwgadd: (Dmitry Sinyavin #388, #415)
   * New authors: Michal Josef Špaček (preR13 DWG formats),
     Dmitry Sinyavin (dwgadd fixes).
+  * Add support for VS2019 (msvc with ucrt) and clang-cl cross-compilation
+    to Windows. (it is not error compatible to msvc, msvc errors much more).
+    Tested ok with tcc and a patched chibicc.
 Minor features:
   * Added a third *int alloced arg to dwg_dynapi_handle_name()
   * Renamed HEADER.unknown_s[] fields. (Michal Spacek #412)

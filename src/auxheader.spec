@@ -2,7 +2,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018,2020 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2023 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -42,28 +42,31 @@
 
   FIELD_VECTOR_INL (aux_intro, RC, 3, 0) /* ff 77 01 */
   FIELD_RSx (dwg_version, 0);
+#ifndef IS_JSON
   UNTIL (R_2013) {
     FIELD_CAST (maint_version, RL, RS, 0);
-  } LATER_VERSIONS {
+  } LATER_VERSIONS
+#endif
     FIELD_RL (maint_version, 0);
-  }
   FIELD_RL (numsaves, 0);
   FIELD_RL (minus_1, 0);
   FIELD_RS (numsaves_1, 0);
   FIELD_RS (numsaves_2, 0);
   FIELD_RL (zero, 0);
   FIELD_RSx (dwg_version_1, 0);
+#ifndef IS_JSON
   UNTIL (R_2013) {
     FIELD_CAST (maint_version_1, RL, RS, 0);
-  } LATER_VERSIONS {
+  } LATER_VERSIONS
+#endif
     FIELD_RL (maint_version_1, 0);
-  }
   FIELD_RSx (dwg_version_2, 0);
+#ifndef IS_JSON
   UNTIL (R_2013) {
     FIELD_CAST (maint_version_2, RL, RS, 0);
-  } LATER_VERSIONS {
+  } LATER_VERSIONS
+#endif
     FIELD_RL (maint_version_2, 0);
-  }
   FIELD_VECTOR_INL (unknown_6rs, RS, 6, 0)
   FIELD_VECTOR_INL (unknown_5rl, RL, 5, 0)
   //DEBUG_HERE;

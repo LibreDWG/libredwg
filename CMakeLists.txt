@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 2.8)
 
 if(MSVC)
     # Disable some overly strict MSVC warnings.
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -wd4244 -wd4800 -wd4805 -D_CRT_NONSTDC_NO_WARNINGS")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -wd4244 -wd4800 -wd4805 -wd4101 -D_CRT_NONSTDC_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS")
 endif()
 
 if (EXISTS ".version")
@@ -175,7 +175,9 @@ add_library(redwg
     ${libredwg_SOURCES})
 set_target_properties(redwg PROPERTIES
   PUBLIC_HEADER "${libredwg_HEADERS}")
-target_compile_definitions(redwg PUBLIC DLL_EXPORT)
+if (BUILD_SHARED_LIBS)
+  target_compile_definitions(redwg PUBLIC DLL_EXPORT;ENABLE_SHARED)
+endif()
 target_include_directories(redwg PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_BINARY_DIR}/src)

@@ -91,6 +91,8 @@
 /* Define if you have the `floor' function. */
 #cmakedefine HAVE_FLOOR
 
+// TODO versions
+#ifdef __GNUC__
 /* Define if the system has the `format' function attribute */
 #define HAVE_FUNC_ATTRIBUTE_FORMAT 1
 
@@ -105,6 +107,7 @@
 
 /* Define if the system has the `returns_nonnull' function attribute */
 #define HAVE_FUNC_ATTRIBUTE_RETURNS_NONNULL 1
+#endif
 
 /* Define if you have the <getopt.h> header file. */
 #cmakedefine HAVE_GETOPT_H

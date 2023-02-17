@@ -9563,8 +9563,8 @@ new_object (char *restrict name, char *restrict dxfname,
                   sscanf (p, SCANF_2X, &revision_bytes[_i]);
                   p += 2;
                 }
-              revision_bytes[8]
-                  = '\0'; // insist on an ending 0 byte, even if never used.
+              // insist on an ending 0 byte, even if never used.
+              revision_bytes[8] = '\0';
               dwg_dynapi_entity_set_value (_obj, obj->name, "revision_major",
                                            &revision_major, 0);
               dwg_dynapi_entity_set_value (_obj, obj->name, "revision_minor1",
