@@ -1931,8 +1931,8 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           SECTION (BLOCK);
           {
             Dwg_Section *_obj = tbl;
-            FIELD_RS (size, 0);
-            FIELD_RS (number, 0);
+            FIELD_RL (size, 0);
+            FIELD_RL (number, 0);
             FIELD_RS (flags, 0);
             FIELD_RLL (address, 0);
           }
@@ -1966,8 +1966,8 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           SECTION (LAYER);
           {
             Dwg_Section *_obj = tbl;
-            FIELD_RS (size, 0);
-            FIELD_RS (number, 0);
+            FIELD_RL (size, 0);
+            FIELD_RL (number, 0);
             FIELD_RS (flags, 0);
             FIELD_RLL (address, 0);
           }
@@ -1988,8 +1988,8 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           SECTION (STYLE);
           {
             Dwg_Section *_obj = tbl;
-            FIELD_RS (size, 0);
-            FIELD_RS (number, 0);
+            FIELD_RL (size, 0);
+            FIELD_RL (number, 0);
             FIELD_RS (flags, 0);
             FIELD_RLL (address, 0);
           }
@@ -2016,8 +2016,8 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           SECTION (LTYPE);
           {
             Dwg_Section *_obj = tbl;
-            FIELD_RS (size, 0);
-            FIELD_RS (number, 0);
+            FIELD_RL (size, 0);
+            FIELD_RL (number, 0);
             FIELD_RS (flags, 0);
             FIELD_RLL (address, 0);
           }
@@ -2044,8 +2044,8 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           SECTION (VIEW);
           {
             Dwg_Section *_obj = tbl;
-            FIELD_RS (size, 0);
-            FIELD_RS (number, 0);
+            FIELD_RL (size, 0);
+            FIELD_RL (number, 0);
             FIELD_RS (flags, 0);
             FIELD_RLL (address, 0);
           }
@@ -2077,8 +2077,8 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           SECTION (UCS);
           {
             Dwg_Section *_obj = tbl;
-            FIELD_RS (size, 0);
-            FIELD_RS (number, 0);
+            FIELD_RL (size, 0);
+            FIELD_RL (number, 0);
             FIELD_RS (flags, 0);
             FIELD_RLL (address, 0);
           }
