@@ -18,11 +18,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <math.h>
-#include <sys/stat.h>
 
 #include "config.h"
+#ifdef HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
+#include "../../programs/my_stat.h"
 #include "common.h"
 #include "decode.h"
 #include "tests_common.h"
