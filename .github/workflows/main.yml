@@ -189,7 +189,9 @@ jobs:
         fetch-depth: 1
         submodules: recursive
     - run: cmake -G "MinGW Makefiles" .
-    - run: mingw32-make -j VERBOSE=1
+    - run: mingw32-make -j VERBOSE=1 | tee make.log
+    - if: failure()
+      run: tar cfz msys-failure.tgz make.log src/config.h
   vs2019:
     runs-on: windows-2019
     timeout-minutes: 20
@@ -203,3 +205,5 @@ jobs:
     - run: cmake --build . --config Release
     - run: copy Release/libredwg.dll test/unit-testing/Release/
     - run: ctest .
+    - if: failure()
+      run: tar cfz msvc-failure.tgz Testing/Temporary/LastTest.log src/config.h
