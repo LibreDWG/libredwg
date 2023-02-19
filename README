@@ -25,8 +25,7 @@ The strings API is utf-8 (wtf8 really, Windows UCS-2 has no surrogate
 pairs), and encodes to the internal 8-bit or UCS-2 strings, depending
 on the DWG version.
 
-Sometimes we hang on our IRC channel which is #libredwg at irc.freenode.net
-If you don't find us there, please email the package maintainers:
+For contact file a ticket or email the package maintainers:
 
 Reini Urban <rurban AT cpan.org>
 
@@ -37,7 +36,7 @@ Rodrigo Rodrigues da Silva <pitanga AT members.fsf.org>
 Hardeep Singh Rai <hardeep.rai AT gmail DOT com>
 
 If you are looking for general information about the project, check our website:
-http://www.gnu.org/software/libredwg
+http://www.gnu.org/software/libredwg/
 
 == Building and installing the library ==
 
@@ -49,6 +48,7 @@ Optionally:
 
 - gperf to update static hashes for several API's
   Only needed when you added objects or changed the dwg.spec significantly
+- cmake
 - TeXinfo for building the docs
 - pslib for dwg2ps: http://pslib.sourceforge.net/doc/pslib.html
 - pcre2 with 8bit and 16bit libraries for dwggrep regexp support
@@ -57,7 +57,7 @@ Optionally:
   and the libxml2 python bindings.
 - Perl 5 for the perl bindings
 - doxygen to generate the reference manual
-- jq to check json validity
+- jq to check json validity, and as dwgfilter backend
 - shellcheck to check shell scripts
 - rpmlint to check the spec validity
 - jinq with some svg11 relaxng to check SVG validity.
@@ -71,6 +71,9 @@ Optionally:
   npm install -g @mapbox/geojsonhint
 - geojson-validation as 2nd geojson fallback linter
   npm install -g geojson-validation
+- shfmt to format shell scripts
+- clang-format format source code
+- clang-tidy to check source code
 - valgrind to find leaks and memory bugs
 - timeout to help tests with large or hanging DWG's
 - GNU parallel to speed up special tests (not the moreutils parallel!)
@@ -150,11 +153,13 @@ customize the installation dirs.  Other options recognized by configure are:
 
 See the following scripts how we build on Windows:
 
+* .github/workflows/main.yml: via msys/autotools or cmake
 * build-aux/smoke.sh: cross-compilation recipes
 * build-aux/msys2.bat: msys2 deps
 * .appveyor.yml: windows smoker
 
-We only support C99 compilers and POSIX environments, i.e. cygwin or msys or cross.
+We only support C99 compilers and POSIX environments, i.e. cygwin or msys or cross,
+but now also mingw and Visual Studio 2019 via cmake.
 stdint.h and inttypes.h must be available.
 Pre-compiled Windows binaries are here: https://github.com/LibreDWG/libredwg/releases
 
@@ -181,6 +186,9 @@ The programs and examples directories contains some application code that uses o
 * dwg2ps -- Opens a DWG file and outputs an PostScript file.  This code
   depends on the PSlib library.  On Debian-based systems this is usually
   available as a package named pslib-dev. This is very limited so far.
+
+* dwgfilter -- Applies JSON filters via JQ. Either as structured grep,
+  or to mass change certain values.
 
 * dwg2SVG -- Opens a DWG file and outputs an SVG (Scalable Vector Graphics)
   file.  SVG is a W3C standard for 2d vector graphics.  You can open these
