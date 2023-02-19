@@ -38,12 +38,14 @@
  * But we need the win32 UTF-16 variant, not UTF-32.
  * i.e. only on Windows, AIX, Solaris
  */
-# if defined(HAVE_WCHAR_H) && defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
-#  include <wchar.h>
-#  define HAVE_NATIVE_WCHAR2
-#  define DWGCHAR wchar_t
-#  define dwg_wchar_t wchar_t
-# endif
+# if defined(HAVE_WCHAR_H) && defined(SIZEOF_WCHAR_T)
+#    if SIZEOF_WCHAR_T == 2
+#      include <wchar.h>
+#      define HAVE_NATIVE_WCHAR2
+#      define DWGCHAR wchar_t
+#      define dwg_wchar_t wchar_t
+#    endif
+#  endif
 #endif
 
 #ifndef EXPORT

@@ -39,7 +39,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <assert.h>
-#ifdef HAVE_CTYPE_H
+#if defined HAVE_CTYPE_H || defined _MSC_VER
 #  include <ctype.h>
 #endif
 #ifdef HAVE_WCTYPE_H
@@ -372,14 +372,14 @@ const unsigned char unknown_section[53]
   }
 #define FIELD_TIMEBLL(nam, dxf)                                               \
   {                                                                           \
-    bit_write_TIMEBLL (dat, (BITCODE_TIMEBLL)_obj->nam);                      \
+    bit_write_TIMEBLL (dat, _obj->nam);                                       \
     LOG_TRACE (#nam ": " FORMAT_BL "." FORMAT_BL " [TIMEBLL %d]",             \
                _obj->nam.days, _obj->nam.ms, dxf);                            \
     LOG_POS                                                                   \
   }
 #define FIELD_TIMERLL(nam, dxf)                                               \
   {                                                                           \
-    bit_write_TIMERLL (dat, (BITCODE_TIMERLL)_obj->nam);                      \
+    bit_write_TIMERLL (dat, _obj->nam);                                       \
     LOG_TRACE (#nam ": " FORMAT_RL "." FORMAT_RL " [TIMERLL %d]",             \
                _obj->nam.days, _obj->nam.ms, dxf);                            \
     LOG_POS                                                                   \
@@ -5216,7 +5216,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
                     {
                       eed->size = new_size;
                       bit_write_BS (dat, new_size);
-                      LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]", last_size,
+                      LOG_TRACE ("EED[%d] size: %d [BS]", last_size,
                                  new_size);
                       LOG_POS;
                       bit_write_H (dat, last_handle);
@@ -5256,7 +5256,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       if (EED_ALLOWED)
         {
           bit_write_BS (dat, new_size);
-          LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]", last_size, new_size);
+          LOG_TRACE ("EED[%d] size: %d [BS]", last_size, new_size);
           LOG_POS;
           bit_write_H (dat, last_handle);
           LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]", last_size,

@@ -41,9 +41,11 @@
 #  endif
 #endif
 #include <string.h>
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
+#include "my_getopt.h"
 #include <math.h>
-#include <getopt.h>
 #ifdef HAVE_VALGRIND_VALGRIND_H
 #  include <valgrind/valgrind.h>
 #endif
@@ -55,6 +57,7 @@
 #include "escape.h"
 #include "geom.h"
 #include "suffix.inc"
+#include "my_getopt.h"
 
 static int opts = 0;
 static int mspace = 0; // only mspace, even when pspace is defined

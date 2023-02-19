@@ -4,7 +4,9 @@
 #define CMAKE_BUILD 1
 
 /* Defined to <strings.h> or <string.h> if strcasecmp is found */
+#ifndef _MSC_VER
 #define AX_STRCASECMP_HEADER <strings.h>
+#endif
 
 /* Define to one of `_getb67', `GETB67', `getb67' for Cray-2 and Cray-YMP
    systems. This function is required for `alloca.c' support on those systems.
@@ -56,6 +58,9 @@
 /* Define if you have the <dirent.h> header file. */
 #cmakedefine HAVE_DIRENT_H
 
+/* Define if you have the <direct.h> header file. */
+#cmakedefine HAVE_DIRECT_H
+
 /* Define if you have the <endian.h> header file. */
 #cmakedefine HAVE_ENDIAN_H
 
@@ -86,6 +91,8 @@
 /* Define if you have the `floor' function. */
 #cmakedefine HAVE_FLOOR
 
+// TODO versions
+#ifdef __GNUC__
 /* Define if the system has the `format' function attribute */
 #define HAVE_FUNC_ATTRIBUTE_FORMAT 1
 
@@ -100,6 +107,7 @@
 
 /* Define if the system has the `returns_nonnull' function attribute */
 #define HAVE_FUNC_ATTRIBUTE_RETURNS_NONNULL 1
+#endif
 
 /* Define if you have the <getopt.h> header file. */
 #cmakedefine HAVE_GETOPT_H
@@ -210,8 +218,11 @@
 /* Define if you have the `strtoull' function. */
 #cmakedefine HAVE_STRTOULL
 
-/* Define if you have the <sys/stat.h> header file. */
-#cmakedefine HAVE_SYS_STAT_H
+/* Define if you have the <sys/stat.h> header file.
+   Currently we require this, because all platforms provide it,
+   but our clang-cl toolchain doesn't find it.
+ */
+#define HAVE_SYS_STAT_H
 
 /* Define if you have the <sys/types.h> header file. */
 #cmakedefine HAVE_SYS_TYPES_H

@@ -4901,8 +4901,8 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
           if (mode == TABLEFORMAT)
             {
               o->data_flags = pair->value.u;
-              LOG_TRACE ("%s.%s.data_flags = " FORMAT_BSx " [BSx %d]\n",
-                         obj->name, key, pair->value.i, pair->code);
+              LOG_TRACE ("%s.%s.data_flags = 0x%x [BSx %d]\n",
+                         obj->name, key, pair->value.u, pair->code);
             }
           else
             goto unknown_default;
@@ -4911,8 +4911,7 @@ add_CellStyle (Dwg_Object *restrict obj, Dwg_CellStyle *o, const char *key,
           if (mode == TABLEFORMAT)
             {
               o->margin_override_flags = pair->value.u;
-              LOG_TRACE ("%s.%s.margin_override_flags = " FORMAT_BSx
-                         " [BSx %d]\n",
+              LOG_TRACE ("%s.%s.margin_override_flags = 0x%x [BSx %d]\n",
                          obj->name, key, pair->value.u, pair->code);
             }
           else
@@ -9564,8 +9563,8 @@ new_object (char *restrict name, char *restrict dxfname,
                   sscanf (p, SCANF_2X, &revision_bytes[_i]);
                   p += 2;
                 }
-              revision_bytes[8]
-                  = '\0'; // insist on an ending 0 byte, even if never used.
+              // insist on an ending 0 byte, even if never used.
+              revision_bytes[8] = '\0';
               dwg_dynapi_entity_set_value (_obj, obj->name, "revision_major",
                                            &revision_major, 0);
               dwg_dynapi_entity_set_value (_obj, obj->name, "revision_minor1",

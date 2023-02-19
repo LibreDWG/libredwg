@@ -28,7 +28,7 @@
 #include <inttypes.h>
 #include <math.h>
 #include <assert.h>
-#if defined(HAVE_WCHAR_H) && defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
+#ifdef HAVE_NATIVE_WCHAR2
 #  include <wchar.h>
 #endif
 // else we roll our own, Latin-1 only.
@@ -1356,7 +1356,7 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
     // miscompiled. apparently fixed in gcc-9.3, but 9.3 is still broken for
     // cperl.
 #  if defined(__GNUC__) && (__GNUC__ == 9) && (__GNUC_MINOR__ <= 2)           \
-      && (SIZEOF_SIZE_T == 8)                                                 \
+      && defined(SIZEOF_SIZE_T) && (SIZEOF_SIZE_T == 8)                       \
       && (defined(__x86_64__) || defined(__x86_64) || defined(_M_AMD64)       \
           || defined(_M_X64))
   {
@@ -1955,7 +1955,7 @@ size_t
 bit_strnlen (const char *restrict str, const size_t maxlen)
 {
   size_t len;
-  char *c = str;
+  char *c = (char *restrict)str;
 
   if (!str)
     return 0;

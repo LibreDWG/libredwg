@@ -1258,7 +1258,7 @@ dwg_get_HEADER_utf8text (const Dwg_Data *restrict dwg,
                          int *isnewp)
 {
 #  ifndef HAVE_NONNULL
-  if (dwg && fieldname && out)
+  if (dwg && fieldname && textp)
 #  endif
     return dwg_dynapi_header_utf8text (dwg, fieldname, textp, isnewp, NULL);
 #  ifndef HAVE_NONNULL
@@ -22861,7 +22861,7 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
 
 #  define API_UNADD_ENTITY                                                    \
     if (dwg->header.version < R_13b1)                                         \
-      obj->type = -(obj->type);                                               \
+      obj->type = -(long)(obj->type);                                         \
     else                                                                      \
       obj->type = DWG_TYPE_UNUSED
 

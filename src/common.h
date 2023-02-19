@@ -32,6 +32,10 @@
 #include <time.h>
 #include "dwg.h"
 
+#if !defined AX_STRCASECMP_HEADER && !defined HAVE_STRCASECMP
+EXPORT int strcasecmp (const char *a, const char *b);
+#endif
+
 #if defined WORDS_BIGENDIAN && !WORDS_BIGENDIAN
 # undef WORDS_BIGENDIAN
 #endif

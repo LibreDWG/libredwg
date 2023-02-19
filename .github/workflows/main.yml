@@ -189,4 +189,21 @@ jobs:
         fetch-depth: 1
         submodules: recursive
     - run: cmake -G "MinGW Makefiles" .
-    - run: mingw32-make -j VERBOSE=1
+    - run: mingw32-make -j VERBOSE=1 | tee make.log
+    - if: failure()
+      run: tar cfz msys-failure.tgz make.log src/config.h
+  vs2019:
+    runs-on: windows-2019
+    timeout-minutes: 20
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - run: cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_BUILD_TYPE=Release .
+    - run: cmake --build . --config Release
+    - run: copy Release/libredwg.dll test/unit-testing/Release/
+    - run: ctest .
+    - if: failure()
+      run: tar cfz msvc-failure.tgz Testing/Temporary/LastTest.log src/config.h

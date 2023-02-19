@@ -22,9 +22,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <getopt.h>
+#include "my_getopt.h"
+#ifdef HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
+#include "my_stat.h"
 
 #include <dwg.h>
 #include "../src/common.h"

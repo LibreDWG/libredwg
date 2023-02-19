@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include <getopt.h>
+#include "my_getopt.h"
 #ifdef HAVE_VALGRIND_VALGRIND_H
 #  include <valgrind/valgrind.h>
 #endif

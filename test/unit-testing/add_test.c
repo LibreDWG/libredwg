@@ -18,15 +18,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <math.h>
-#include <sys/stat.h>
 #include <assert.h>
 
 static int tracelevel;
 static int debug;
 static int cnt = 0;
+
 #include "config.h"
+#ifdef HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
+#include "../../programs/my_stat.h"
 #include "dwg.h"
 #include "tests_common.h"
 #include "dwg_api.h"

@@ -3146,7 +3146,7 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
             wstr = bit_utf8_to_TU (*(char **)value, 0);
           else // source is already TU
             {
-#if defined(HAVE_WCHAR_H) && defined(SIZEOF_WCHAR_T) && SIZEOF_WCHAR_T == 2
+#ifdef HAVE_NATIVE_WCHAR2
               wstr = (BITCODE_TU)malloc (2 * (wcslen (*(wchar_t **)value) + 1));
               wcscpy ((wchar_t *)wstr, *(wchar_t **)value);
 #else
@@ -3604,7 +3604,7 @@ dwg_has_subclass (const char *restrict classname, const char *restrict subclass)
 {
   struct _name_subclasses *f;
 #ifndef HAVE_NONNULL
-  if (!classname || !name)
+  if (!classname || !subclass)
     return false;
 #endif
   f = (struct _name_subclasses *)bsearch (classname, dwg_name_subclasses,

@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2009-2020 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2009-2023 Free Software Foundation, Inc.                   */
 /*  Copyright (C) 2010 Thien-Thi Nguyen                                      */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
@@ -29,7 +29,7 @@
 #ifdef AX_STRCASECMP_HEADER
 #  include AX_STRCASECMP_HEADER
 #endif
-#include <getopt.h>
+#include "my_getopt.h"
 #ifdef HAVE_VALGRIND_VALGRIND_H
 #  include <valgrind/valgrind.h>
 #endif
@@ -42,6 +42,10 @@
 #  ifndef DISABLE_JSON
 #    include "out_json.h"
 #  endif
+#endif
+
+#if !defined HAVE_STRCASECMP
+int strcasecmp (const char *a, const char *b);
 #endif
 
 static int opts = 1;

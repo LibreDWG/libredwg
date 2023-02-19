@@ -21,9 +21,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <sys/stat.h>
-#include <getopt.h>
+#ifdef HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
+#include "my_stat.h"
+#include "my_getopt.h"
 #ifdef HAVE_VALGRIND_VALGRIND_H
 #  include <valgrind/valgrind.h>
 #endif
@@ -33,6 +35,7 @@
 #include "bits.h"
 #include "logging.h"
 #include "suffix.inc"
+#include "my_getopt.h"
 #include "out_dxf.h"
 
 static int opts = 1;
@@ -281,7 +284,7 @@ main (int argc, char *argv[])
       if (minimal)
         dwg.opts |= DWG_OPTS_MINIMAL;
       {
-        struct stat attrib;
+        struct_stat_t attrib;
         if (!stat (filename_out, &attrib)) // exists
           {
             if (!overwrite)

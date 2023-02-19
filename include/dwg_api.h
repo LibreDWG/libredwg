@@ -6599,57 +6599,57 @@ dwg_add_PDFUNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
 /* All the ACSH methods and 3d primitives are still experimental.
    They do not work yet properly */
-Dwg_Object_ACSH_BOX_CLASS*
+EXPORT Dwg_Object_ACSH_BOX_CLASS*
 dwg_add_ACSH_BOX_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                         const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                         const double length, const double width,
                         const double height) __nonnull_all;
-Dwg_Object_ACSH_CHAMFER_CLASS*
+EXPORT Dwg_Object_ACSH_CHAMFER_CLASS*
 dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                             const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                             const int bl92, const double base_dist,
                             const double other_dist, const int num_edges,
                             const int32_t* edges, const int bl95) __nonnull_all;
-Dwg_Object_ACSH_CONE_CLASS*
+EXPORT Dwg_Object_ACSH_CONE_CLASS*
 dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                          const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                          const double height, const double major_radius,
                          const double minor_radius, const double x_radius)
   __nonnull_all;
-Dwg_Object_ACSH_CYLINDER_CLASS*
+EXPORT Dwg_Object_ACSH_CYLINDER_CLASS*
 dwg_add_ACSH_CYLINDER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                              const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                              const double height, const double major_radius,
                              const double minor_radius, const double x_radius)
   __nonnull_all;
-Dwg_Object_ACSH_PYRAMID_CLASS*
+EXPORT Dwg_Object_ACSH_PYRAMID_CLASS*
 dwg_add_ACSH_PYRAMID_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                             const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                             const double height, const int sides,
                             const double radius, const double topradius)
   __nonnull_all;
-Dwg_Object_ACSH_SPHERE_CLASS*
+EXPORT Dwg_Object_ACSH_SPHERE_CLASS*
 dwg_add_ACSH_SPHERE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                            const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                            const double radius)
   __nonnull_all;
-Dwg_Object_ACSH_TORUS_CLASS*
+EXPORT Dwg_Object_ACSH_TORUS_CLASS*
 dwg_add_ACSH_TORUS_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                           const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                           const double major_radius, const double minor_radius)
   __nonnull_all;
-Dwg_Object_ACSH_WEDGE_CLASS*
+EXPORT Dwg_Object_ACSH_WEDGE_CLASS*
 dwg_add_ACSH_WEDGE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                           const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
                           const double length, const double width,
                           const double height) __nonnull_all;
-Dwg_Object_EVALUATION_GRAPH*
+EXPORT Dwg_Object_EVALUATION_GRAPH*
 dwg_add_EVALUATION_GRAPH (Dwg_Data *restrict dwg,
                           const int has_graph,
                           const int nodeid,
                           const unsigned num_evalexpr,
                           const BITCODE_H *restrict evalexpr) __nonnull ((1));
-Dwg_Object_ACSH_HISTORY_CLASS*
+EXPORT Dwg_Object_ACSH_HISTORY_CLASS*
 dwg_add_ACSH_HISTORY_CLASS (Dwg_Entity_3DSOLID *restrict region,
                             const int h_nodeid) __nonnull_all;
 
@@ -6748,18 +6748,19 @@ dwg_add_TABLE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
    The names are all accepted as UTF-8 only.
    On NULL names just create the CONTROL object/resp. NOD entry.
  */
-Dwg_Object_BLOCK_CONTROL*
-dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps) __nonnull_all;
+EXPORT Dwg_Object_BLOCK_CONTROL *
+dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms,
+                       const int ps) __nonnull_all;
 
 EXPORT Dwg_Object_BLOCK_HEADER *
-dwg_add_BLOCK_HEADER (Dwg_Data *restrict dwg,
-                      const char *restrict name) __nonnull ((1,2));
+dwg_add_BLOCK_HEADER (Dwg_Data *restrict dwg, const char *restrict name)
+    __nonnull ((1, 2));
 EXPORT Dwg_Object_UCS *dwg_add_UCS (Dwg_Data *restrict dwg,
                                     const dwg_point_3d *restrict origin,
                                     const dwg_point_3d *restrict x_axis,
                                     const dwg_point_3d *restrict y_axis,
                                     const char *restrict name) __nonnull ((1));
-EXPORT Dwg_Object_LAYER*
+EXPORT Dwg_Object_LAYER *
 dwg_add_LAYER (Dwg_Data *restrict dwg,
                const char *restrict name /* maybe NULL */) __nonnull ((1));
 EXPORT Dwg_Object_STYLE*
@@ -6796,18 +6797,18 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg,
 EXPORT Dwg_Object_PROXY_OBJECT *
 dwg_add_PROXY_OBJECT (Dwg_Data *restrict dwg, char *name, char *key
                       /*, size, data */) __nonnull_all;
-EXPORT Dwg_Entity_PROXY_ENTITY *
-dwg_add_PROXY_ENTITY (Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */) __nonnull_all;
+EXPORT Dwg_Entity_PROXY_ENTITY *dwg_add_PROXY_ENTITY (
+    Dwg_Object_BLOCK_HEADER *restrict blkhdr /* ... */) __nonnull_all;
 EXPORT Dwg_Object_LAYERFILTER *
 dwg_add_LAYERFILTER (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 EXPORT Dwg_Object_LAYER_INDEX *
 dwg_add_LAYER_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
-EXPORT Dwg_Object_SPATIAL_FILTER *
-dwg_add_SPATIAL_FILTER (Dwg_Entity_INSERT *restrict insert /*, clip_verts... */) __nonnull_all;
+EXPORT Dwg_Object_SPATIAL_FILTER *dwg_add_SPATIAL_FILTER (
+    Dwg_Entity_INSERT *restrict insert /*, clip_verts... */) __nonnull_all;
 EXPORT Dwg_Object_SPATIAL_INDEX *
 dwg_add_SPATIAL_INDEX (Dwg_Data *restrict dwg /* ... */) __nonnull_all;
 
-EXPORT Dwg_Object_WIPEOUTVARIABLES*
+EXPORT Dwg_Object_WIPEOUTVARIABLES *
 dwg_add_WIPEOUTVARIABLES (Dwg_Data *dwg /* ... */) __nonnull_all;
 
 /* List of yet supported and unsupported add entity and object API from objects.inc,
@@ -7141,10 +7142,10 @@ dwg_add_WIPEOUTVARIABLES (Dwg_Data *dwg /* ... */) __nonnull_all;
 EXPORT double
 dwg_geom_angle_normalize (double angle);
 
-dwg_point_3d *
+EXPORT dwg_point_3d *
 dwg_geom_normalize (dwg_point_3d *out, const dwg_point_3d pt) __nonnull_all;
 
-dwg_point_3d *
+EXPORT dwg_point_3d *
 dwg_geom_cross (dwg_point_3d *out, const dwg_point_3d pt1, const dwg_point_3d pt2) __nonnull_all;
 
 /* Transform a 3D point via its OCS (extrusion or normal) */
