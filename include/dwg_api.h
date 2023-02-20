@@ -322,12 +322,12 @@ Dwg_Entity_##token **dwg_getall_##token (Dwg_Object_Ref * hdr) \
 }
 
 /* Returns a NULL-terminated array of all objects of a specific type */
-#define DWG_GETALL_OBJECT_DECL(token) \
-EXPORT \
-Dwg_Object_##token **dwg_getall_##token (Dwg_Data *dwg)
+#define DWG_GETALL_OBJECT_DECL(token)                                         \
+  EXPORT                                                                      \
+  Dwg_Object_##token **dwg_getall_##token (Dwg_Data *dwg)
 
-#define DWG_GET_FIRST_OBJECT_DECL(token) \
-EXPORT Dwg_Object_##token *dwg_get_first_##token (Dwg_Data *dwg)
+#define DWG_GET_FIRST_OBJECT_DECL(token)                                      \
+  EXPORT Dwg_Object_##token *dwg_get_first_##token (Dwg_Data *dwg)
 
 #define DWG_GETALL_OBJECT(token) \
 EXPORT \
@@ -379,13 +379,13 @@ EXPORT Dwg_Object_##token *dwg_get_first_##token (Dwg_Data *dwg)              \
   }
 
 // Cast a Dwg_Object to Entity
-#define CAST_DWG_OBJECT_TO_ENTITY_DECL(token) \
-EXPORT \
-Dwg_Entity_##token *dwg_object_to_##token (Dwg_Object *obj)
+#define CAST_DWG_OBJECT_TO_ENTITY_DECL(token)                                 \
+  EXPORT                                                                      \
+  Dwg_Entity_##token *dwg_object_to_##token (Dwg_Object *obj)
 
-#define CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(token) \
-EXPORT \
-Dwg_Entity_##token *dwg_object_to_##token (Dwg_Object *obj);
+#define CAST_DWG_OBJECT_TO_ENTITY_BYNAME_DECL(token)                          \
+  EXPORT                                                                      \
+  Dwg_Entity_##token *dwg_object_to_##token (Dwg_Object *obj);
 
 // Only for fixed typed entities, < 500
 // Dwg_Entity* -> Dwg_Object_TYPE*
@@ -430,9 +430,9 @@ Dwg_Entity_##token *dwg_object_to_##token (Dwg_Object *obj) \
   return ret_obj; \
 }
 
-#define CAST_DWG_OBJECT_TO_OBJECT_DECL(token) \
-EXPORT \
-Dwg_Object_##token *dwg_object_to_##token (Dwg_Object *obj)
+#define CAST_DWG_OBJECT_TO_OBJECT_DECL(token)                                 \
+  EXPORT                                                                      \
+  Dwg_Object_##token *dwg_object_to_##token (Dwg_Object *obj)
 
 // Dwg_Object* -> Dwg_Object_TYPE*
 #define CAST_DWG_OBJECT_TO_OBJECT(token) \

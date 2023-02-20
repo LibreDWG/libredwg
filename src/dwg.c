@@ -506,7 +506,6 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
   BITCODE_RC i, num_headers, type = 0;
   int found;
   BITCODE_RL header_size, address = 0, osize;
-  unsigned long oldpos;
   Bit_Chain dat = { 0 };
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
@@ -520,7 +519,6 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
       return NULL;
     }
   // dat.byte = 0; sentinel at 16
-  oldpos = dat.byte;
   dat.bit = 0;
   dat.opts = dwg->opts;
   dat.from_version = dwg->header.from_version;
@@ -2949,6 +2947,7 @@ dwg_ref_objname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
 
 // supports tables entries and everything with a name.
 // r2007 names are returned as malloc'ed utf-8
+ATTRIBUTE_MALLOC
 const char *
 dwg_ref_tblname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref,
                  int *alloced)
@@ -3027,12 +3026,12 @@ dwg_set_next_objhandle (Dwg_Object *obj)
     }
   hash_set (dwg->object_map, obj->handle.value, (uint32_t)obj->index);
   dwg->next_hdl = 0;
-  return;
 }
 
 // <path-to>/dxf.ext => copy of "dxf", "ext"
 // returns a malloc'ed copy of basename without extension, and
 // sets ext to the char behind the last "." of basename
+ATTRIBUTE_MALLOC
 char *
 split_filepath (const char *filepath, char **extp)
 {
