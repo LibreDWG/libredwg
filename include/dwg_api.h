@@ -335,6 +335,7 @@ extern "C"
   }
 
 /* Returns a NULL-terminated array of all objects of a specific type */
+/* TODO: ATTRIBUTE_MALLOC */
 #define DWG_GETALL_OBJECT_DECL(token)                                         \
   EXPORT                                                                      \
   Dwg_Object_##token **dwg_getall_##token (Dwg_Data *dwg)
