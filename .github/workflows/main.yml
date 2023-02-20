@@ -207,3 +207,38 @@ jobs:
     - run: ctest .
     - if: failure()
       run: tar cfz msvc-failure.tgz Testing/Temporary/LastTest.log src/config.h
+  vs2019-ninja:
+    runs-on: windows-2019
+    timeout-minutes: 20
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - name: ilammy/msvc-dev-cmd
+      uses: ilammy/msvc-dev-cmd@v1.3.0
+    - run: choco install ninja
+      # use the preinstalled vcpkg from image
+      # https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md#package-management
+    - name: Setup vcpkg
+      uses: lukka/run-vcpkg@v10
+      with:
+        vcpkgDirectory: C:/vcpkg
+        doNotUpdateVcpkg: true  # the preinstalled vcpkg is updated regularly      
+    - name: cmake -G "Ninja"
+      shell: cmd
+      run: |
+        cmake -G "Ninja" ^
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release ^
+          -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake ^
+          -DVCPKG_TARGET_TRIPLET=x64-windows-static-release ^
+          -DVERBOSE_CONFIGURE=ON ^
+          -DCMAKE_CXX_COMPILER=cl ^
+          -DCMAKE_C_COMPILER=cl
+    - run: ninja
+    - name: prep test
+      run: copy libredwg.dll test\unit-testing\
+    - run: ninja test
