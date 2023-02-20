@@ -28,8 +28,12 @@
 #include <math.h>
 #include "../programs/my_stat.h"
 // strings.h or string.h
-#ifdef AX_STRCASECMP_HEADER
-#  include AX_STRCASECMP_HEADER
+#ifndef __PCC__
+#  ifdef AX_STRCASECMP_HEADER
+#    include AX_STRCASECMP_HEADER
+#  endif
+#elif defined HAVE_STRINGS_H
+#  include <strings.h>
 #endif
 #ifdef HAVE_LIBGEN_H
 #  include <libgen.h> // basename
