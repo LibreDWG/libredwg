@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 # Supported options -DLIBREDWG_LIBONLY=On
 #                   -DLIBREDWG_DISABLE_WRITE=On
 #                   -DLIBREDWG_DISABLE_JSON=On
+#                   -DENABLE_MIMALLOC=On
 # for smaller builds and lib.
 
 if(MSVC)
@@ -73,6 +74,7 @@ CHECK_INCLUDE_FILE("direct.h" HAVE_DIRECT_H)
 CHECK_INCLUDE_FILE("sys/param.h" HAVE_SYS_PARAM_H)
 CHECK_INCLUDE_FILE("sys/types.h" HAVE_SYS_TYPES_H)
 CHECK_INCLUDE_FILE("libps/pslib.h" HAVE_LIBPS_PSLIB_H)
+CHECK_INCLUDE_FILE("mimalloc-override.h" HAVE_MIMALLOC_OVERRIDE_H)
 include(CheckSymbolExists)
 check_symbol_exists("floor" "math.h" HAVE_FLOOR)
 check_symbol_exists("memmem" "string.h" HAVE_MEMMEM)
@@ -106,6 +108,16 @@ if (NOT WCHAR_T)
 endif()
 if (WCHAR_T EQUAL 2)
   set(HAVE_PCRE2_16 1)
+endif()
+if (NOT HAVE_MIMALLOC_OVERRIDE_H)
+  if (ENABLE_MIMALLOC)
+    message(WARNING "Should not ENABLE_MIMALLOC without mimalloc-override.h")
+  endif()
+endif()
+if (ENABLE_MIMALLOC)
+  SET(LIBS "-lm -lmimalloc")
+else()
+  SET(LIBS "-lm")
 endif()
 #include(CheckCCompilerFlag)
 configure_file(src/cmakeconfig.h.in src/config.h)
@@ -187,7 +199,7 @@ target_include_directories(${redwg} PRIVATE
 target_include_directories(${redwg} PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-link_libraries(${redwg} -lm ${CMAKE_THREAD_LIBS_INIT})
+link_libraries(${redwg} ${LIBS} ${CMAKE_THREAD_LIBS_INIT})
 
 if(NOT LIBREDWG_LIBONLY)
   if(NOT HAVE_GETOPT_H)

@@ -122,6 +122,8 @@ AC_CHECK_HEADERS([wctype.h float.h limits.h sys/param.h direct.h libgen.h])
 AC_CHECK_HEADERS([getopt.h alloca.h valgrind/valgrind.h])
 AC_CHECK_HEADERS([endian.h sys/endian.h machine/endian.h winsock2.h], [break])
 AC_CHECK_HEADERS([byteorder.h byteswap.h sys/byteorder.h], [break])
+dnl optionally use a better allocator with --enable-mimalloc
+AC_CHECK_HEADERS([mimalloc-override.h])
 AC_C_BIGENDIAN
 AC_CHECK_HEADER_STDBOOL
 AX_INCLUDE_STRCASECMP
@@ -309,7 +311,7 @@ AC_CHECK_FUNCS([scandir],[],
   AC_MSG_WARN([BSD/POSIX scandir not found. No helper unit_testing_all.sh]))
 AC_CHECK_FUNCS([floor sqrt])
 AC_CHECK_LIB([m],[floor])
-AC_CHECK_LIB([m],[sqrt])
+#AC_CHECK_LIB([m],[sqrt])
 AC_CHECK_FUNCS([sincos])
 AC_CHECK_FUNCS([memchr memmove strcasecmp strchr strstr strrchr strtol strtoul strtoull strnlen])
 AC_CHECK_FUNCS([memmem],[],
@@ -416,6 +418,24 @@ AS_IF([test x$enable_bindings = xno],
   AC_DEFINE([DISABLE_BINDINGS],1,[Define to disable bindings.])
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
+
+AC_MSG_CHECKING([for --enable-mimalloc])
+if test "x$ac_cv_header_mimalloc_override_h" = "xyes"
+then
+  AC_ARG_ENABLE([mimalloc],AS_HELP_STRING([--enable-mimalloc],[
+    Enable mimalloc.]),
+    [enable_mimalloc=yes])
+  if test x$enable_mimalloc = xyes; then
+     AC_DEFINE([ENABLE_MIMALLOC],1,[Define to 1 if mimalloc-override.h should be used.])
+     LIBS="$LIBS -lmimalloc"
+    AC_MSG_RESULT(yes)
+  else
+    AC_MSG_RESULT(no)
+  fi
+else
+  AC_MSG_RESULT(no mimalloc headers found)
+fi
+AM_CONDITIONAL([ENABLE_MIMALLOC], [test x$enable_mimalloc = xyes])
 
 AC_MSG_CHECKING([for --enable-gcov])
 AC_ARG_ENABLE(gcov,

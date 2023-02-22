@@ -21,6 +21,9 @@
 /* Define to disable JSON and GeoJSON in/out modules. */
 #undef DISABLE_JSON
 
+/* Define to 1 if mimalloc-override.h should be used. */
+#undef ENABLE_MIMALLOC
+
 /* Define to 1 if a shared library will be built */
 #undef ENABLE_SHARED
 
@@ -144,6 +147,9 @@
 
 /* Define to 1 if you have the `memmove' function. */
 #undef HAVE_MEMMOVE
+
+/* Define to 1 if you have the <mimalloc-override.h> header file. */
+#undef HAVE_MIMALLOC_OVERRIDE_H
 
 /* Define to 1 if -lpcre2-16 is used also */
 #undef HAVE_PCRE2_16

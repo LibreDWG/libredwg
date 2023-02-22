@@ -24,6 +24,9 @@ if ENABLE_SHARED
 AM_CFLAGS += -DDLL_EXPORT
 endif
 libredwg_la_LDFLAGS = -version-info $(LIBREDWG_SO_VERSION) -no-undefined -lm
+if ENABLE_MIMALLOC
+libredwg_la_LDFLAGS += -lmimalloc
+endif
 CPPCHECK = @CPPCHECK@
 
 libredwg_la_SOURCES = \

@@ -30,6 +30,9 @@
 /* Define if a shared library will be built */
 #cmakedefine ENABLE_SHARED
 
+/* Define to 1 if mimalloc-override.h should be used. */
+#cmakedefine ENABLE_MIMALLOC
+
 /* Define if pointers to integers require aligned access */
 /* #undef HAVE_ALIGNED_ACCESS_REQUIRED */
 
@@ -81,6 +84,9 @@
 
 /* Define if you have the <machine/endian.h> header file. */
 #cmakedefine HAVE_MACHINE_ENDIAN_H
+
+/* Define to 1 if you have the <mimalloc-override.h> header file. */
+#cmakedefine HAVE_MIMALLOC_OVERRIDE_H
 
 /* Define if you have the <sys/param.h> header file. */
 #cmakedefine HAVE_SYS_PARAM_H

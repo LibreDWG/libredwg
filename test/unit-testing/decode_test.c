@@ -11,8 +11,8 @@
 #endif
 
 #define IS_DECODER
+#include <stdlib.h>
 #include "../../src/common.h"
-#include <stddef.h>
 
 CLANG_DIAG_IGNORE (-Wpragma-pack)
 #include "decode.c"

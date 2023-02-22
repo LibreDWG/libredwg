@@ -121,6 +121,10 @@ EXPORT int strcasecmp (const char *a, const char *b);
 // for htobe64, be64toh see bits.h
 #endif
 
+#ifdef ENABLE_MIMALLOC
+#  include <mimalloc-override.h>
+#endif
+
 /* Used warning suppressions:
    CLANG_DIAG_IGNORE (-Wpragma-pack)
    CLANG_DIAG_IGNORE (-Wmissing-prototypes) - also in gcc since 2.95, but not
