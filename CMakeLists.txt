@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 2.8)
 #                   -DLIBREDWG_DISABLE_WRITE=On
 #                   -DLIBREDWG_DISABLE_JSON=On
 #                   -DENABLE_MIMALLOC=On
+#                   -DENABLE_LTO=Off
 # for smaller builds and lib.
 
 if(MSVC)
@@ -27,6 +28,7 @@ string(STRIP "${NL_PACKAGE_VERSION}" PACKAGE_VERSION)
 option(BUILD_SHARED_LIBS "shared libredwg library" ON)
 option(LIBREDWG_LIBONLY "only the libredwg library" OFF)
 option(LIBREDWG_DISABLE_WRITE "no libredwg write support" OFF)
+option(ENABLE_LTO "IPO/LTO Link Time Optimizations (default ON)" ON)
 # FIXME enable
 # option(LIBREDWG_DISABLE_BINDINGS "no libredwg perl and python bindings" ON)
 option(LIBREDWG_DISABLE_JSON "no libredwg json support" OFF)
@@ -139,7 +141,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 if((CMAKE_MAJOR_VERSION EQUAL 3 AND CMAKE_MINOR_VERSION GREATER_EQUAL 9)
-   AND (CMAKE_BUILD_TYPE STREQUAL "Release") AND (NOT MSVC))
+   AND (CMAKE_BUILD_TYPE STREQUAL "Release") AND (NOT MSVC) AND (ENABLE_LTO))
   cmake_policy(SET CMP0069 NEW)
   include(CheckIPOSupported)
   check_ipo_supported(RESULT ipo_supported OUTPUT error)
