@@ -3653,7 +3653,9 @@ DWG_TABLE (LAYER)
       (FIELD_VALUE (color.index) < 0 ? 32 : 0);
   }
 
-  START_OBJECT_HANDLE_STREAM;
+  SINCE (R_13b1) {
+    START_OBJECT_HANDLE_STREAM;
+  }
   SINCE (R_2000) {
     FIELD_HANDLE (plotstyle, 5, 0);
   }
@@ -3914,7 +3916,9 @@ DWG_TABLE (LTYPE)
     }
   } // r13
 
-  START_OBJECT_HANDLE_STREAM;
+  SINCE (R_13b1) {
+    START_OBJECT_HANDLE_STREAM;
+  }
 
 DWG_OBJECT_END
 
@@ -4031,7 +4035,9 @@ DWG_TABLE (VIEW)
   SINCE (R_2007) {
     FIELD_B (is_camera_plottable, 73);
   }
-  START_OBJECT_HANDLE_STREAM;
+  SINCE (R_13b1) {
+    START_OBJECT_HANDLE_STREAM;
+  }
   SINCE (R_2007) {
     FIELD_HANDLE0 (livesection, 4, 334); // a SECTIONOBJECT?
   }
@@ -4087,7 +4093,9 @@ DWG_TABLE (UCS)
     END_REPEAT_BLOCK
     END_REPEAT (orthopts);
   }
-  START_OBJECT_HANDLE_STREAM;
+  SINCE (R_13b1) {
+    START_OBJECT_HANDLE_STREAM;
+  }
 DWG_OBJECT_END
 
 /* (64) */
@@ -4276,7 +4284,9 @@ DWG_TABLE (VPORT)
       }
     }
 
-    START_OBJECT_HANDLE_STREAM;
+    SINCE (R_13b1) {
+      START_OBJECT_HANDLE_STREAM;
+    }
     SINCE (R_2000) {
       FIELD_HANDLE0 (named_ucs, 5, 345);
       FIELD_HANDLE0 (base_ucs, 5, 346);
@@ -4305,7 +4315,9 @@ DWG_TABLE (APPID)
       FIELD_RC (unknown, 71);
     }
   }
-  START_OBJECT_HANDLE_STREAM;
+  SINCE (R_13b1) {
+    START_OBJECT_HANDLE_STREAM;
+  }
 DWG_OBJECT_END
 
 /* (68) */
