@@ -4612,8 +4612,6 @@ DWG_TABLE (VX_TABLE_RECORD)
   COMMON_TABLE_FLAGS (VX)
   PRE (R_13b1)
     {
-      SINCE (R_11)
-        FIELD_RSd (used, 0);
       FIELD_RS (vport_entity_address, 0);
       FIELD_RSd (unknown1, 0);
       FIELD_RS (unknown2, 0);
