@@ -3952,7 +3952,6 @@ DWG_TABLE (VIEW)
       FIELD_RC (unknown_r2, 0);
     SINCE (R_10) {
       FIELD_3RD (view_target, 12);
-      FIELD_3RD (VIEWDIR, 0);
       FIELD_CAST (VIEWMODE, RS, 4BITS, 0);
       FIELD_RD (lens_length, 42); // defaults to 50.0
       FIELD_RD (front_clip_z, 43);
