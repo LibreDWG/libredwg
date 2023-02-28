@@ -3703,7 +3703,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
 int
 dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
 {
-  BITCODE_BS size;
+  BITCODE_BS size = 0;
   int error = 0;
   unsigned int idx = 0;
   Dwg_Data *dwg = obj->dwg;
