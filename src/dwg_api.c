@@ -23063,6 +23063,7 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
         }
     }
   in_postprocess_handles (obj);
+  dwg->prev_entity_index = obj->index;
   return 0;
 }
 
