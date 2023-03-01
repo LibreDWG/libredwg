@@ -47,7 +47,7 @@ VALGRIND_SUPPRESSIONS_FILES = @VALGRIND_SUPPRESSIONS_FILE@
 VALGRIND_OPTS = --leak-check=full --show-reachable=no --num-callers=30
 JSON_DIST = jsmn/jsmn.h jsmn/LICENSE jsmn/README.md
 doc_DIST = README HACKING NEWS TODO
-EXTRA_DIST = $(top_srcdir)/.version libredwg.spec Dockerfile \
+EXTRA_DIST = $(top_srcdir)/.version libredwg.spec build-aux/Dockerfile \
 	     dwg.in dxf.in dxf-allcvt.lsp dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check json-check \
 	     log.in svg.in rw.in logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
 	     cmp-objs.pl \

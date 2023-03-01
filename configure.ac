@@ -50,7 +50,8 @@ AC_CANONICAL_HOST
 
 dnl Checks for programs
 PKG_PROG_PKG_CONFIG
-AC_PROG_CC
+dnl AC_PROG_CC
+AM_PROG_CC_C_O
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
@@ -161,7 +162,6 @@ else
 fi
 
 dnl Checks for typedefs, structures, and compiler characteristics
-AC_PROG_CC
 case $CFLAGS in
      *-fsanitize=undefined*)   ax_cv_have_aligned_access_required=yes  ;;
      *-fsanitize=*,undefined*) ax_cv_have_aligned_access_required=yes  ;;

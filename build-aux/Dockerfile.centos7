@@ -1,0 +1,22 @@
+# podman/docker build -t libredwg-centos7 build-aux -f build-aux/Dockerfile.centos7
+
+FROM centos:7 as centos7
+RUN yum -y update; yum clean all
+# RUN yum -y install sudo epel-release; yum clean all
+RUN yum -y install autoconf automake libtool make file swig texinfo \
+      git gcc libxml2 python3-libxml2 pcre2 pcre2-devel \
+      pcre2-utf32; yum clean all
+
+WORKDIR /app
+RUN gcc --version; make --version; automake --version; autoconf --version; git --version; python --version; swig -version
+RUN git clone --depth 1 -c http.sslVerify=false https://github.com/LibreDWG/libredwg && \
+    cd libredwg && \
+    sh autogen.sh && \
+    CC='gcc -std=gnu99' ./configure --disable-bindings && \
+    make -j V=1 && \
+    make -j check V=1 && \
+    mkdir install && \
+    make install DESTDIR="$PWD/install" && \
+    make check DOCKER=1 DESTDIR="$PWD/install"
+
+CMD [ "sh" ]

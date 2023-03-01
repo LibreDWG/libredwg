@@ -19,10 +19,20 @@ if test -d .git -a -f build-aux/git-version-gen; then
     echo $v >.tarball-version
     echo $v >.version
 fi
+
+amver=$(automake --version | head -n1 | perl -lne'/ \d\.(\d+)/ && print $1')
+if [ $amver -gt 0 -a $amver -lt 14 ]; then
+    if [ $amver -lt 13 ]; then
+        perl -p -i.bak -e 's/1.14 gnu no-define serial-tests dist-xz info-in-builddir/1.11 gnu no-define/' configure.ac
+    else
+        perl -p -i.bak -e 's/1.14 gnu no-define serial-tests dist-xz info-in-builddir/1.13 gnu no-define serial-tests dist-xz/' configure.ac
+    fi
+fi
+
 set -e
 autoreconf --install --symlink "$@" -I m4
 
-if [ -x "$(which git)" ]; then
+if command -v git &>/dev/null; then
     git submodule update --init --recursive
 else
     curl https://raw.githubusercontent.com/zserge/jsmn/master/jsmn.h -o jsmn/jsmn.h

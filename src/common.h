@@ -45,6 +45,25 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #    define _DEFAULT_SOURCE 1 /* for byteswap.h */
 #  endif
 #  include <endian.h>
+// centos 7 quirks
+#  if !defined(HAVE_BE64TOH) && defined(HAVE_BYTESWAP_H) && !defined(be64toh)
+#    include <byteswap.h>
+#    ifndef WORDS_BIGENDIAN
+#      define htole32(x) (x)
+#      define le32toh(x) (x)
+#      define htole64(x) (x)
+#      define le64toh(x) (x)
+#      define htobe64(x) bswap_64(x)
+#      define be64toh(x) bswap_64(x)
+#    else
+#      define htole32(x) bswap_32(x)
+#      define le32toh(x) bswap_32(x)
+#      define htole64(x) bswap_64(x)
+#      define le64toh(x) bswap_64(x)
+#      define htobe64(x) (x)
+#      define be64toh(x) (x)
+#    endif
+#  endif
 #elif defined HAVE_SYS_ENDIAN_H
 #  include <sys/endian.h>
 #elif defined HAVE_MACHINE_ENDIAN_H && defined __APPLE__
