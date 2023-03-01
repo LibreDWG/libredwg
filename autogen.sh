@@ -32,7 +32,7 @@ fi
 set -e
 autoreconf --install --symlink "$@" -I m4
 
-if [ -x "$(which git)" ]; then
+if command -v git &>/dev/null; then
     git submodule update --init --recursive
 else
     curl https://raw.githubusercontent.com/zserge/jsmn/master/jsmn.h -o jsmn/jsmn.h
