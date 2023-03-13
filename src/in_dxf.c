@@ -7025,8 +7025,11 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict o, Bit_Chain *restrict dat,
         *jp = 0;
       return 1; // found
     }
-  else if (pair->code == 41) // ctrl_pts[].z 3BD
+  else if (pair->code == 41) // ctrl_pts[].w 3BD
     {
+      if (j == 0)
+        j = (int)o->num_ctrl_pts;
+      j--;
       if (!o->ctrl_pts || j >= (int)o->num_ctrl_pts)
         {
           LOG_ERROR ("SPLINE.ctrl_pts[%d] overflow, max %d", j,
@@ -7038,6 +7041,8 @@ add_SPLINE (Dwg_Entity_SPLINE *restrict o, Bit_Chain *restrict dat,
                  o->ctrl_pts[j].w);
       j++;
       *jp = j;
+      if (j == (int)o->num_ctrl_pts)
+        *jp = 0;
       return 1; // found
     }
   else if (pair->code == 11) // fit_pts[].x 3BD
