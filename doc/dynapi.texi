@@ -2404,6 +2404,8 @@ BD,	DXF 40
 BD,	DXF 41
 @item hookline_dir
 B,	DXF 74
+@item hookline_on
+B,	DXF 75
 @item arrowhead_on
 B,	DXF 71
 @item arrowhead_type
@@ -2418,8 +2420,8 @@ B
 BS
 @item byblock_color
 BS,	DXF 77
-@item hookline_on
-B,	DXF 75
+@item unknown_bit_4
+B
 @item unknown_bit_5
 B
 @item associated_annotation

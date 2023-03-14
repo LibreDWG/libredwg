@@ -14003,6 +14003,21 @@ static int test_LEADER (const Dwg_Object *obj)
     leader->unknown_bit_3--;
   }
   {
+    BITCODE_B unknown_bit_4;
+    if (dwg_dynapi_entity_value (leader, "LEADER", "unknown_bit_4", &unknown_bit_4, NULL)
+        && unknown_bit_4 == leader->unknown_bit_4)
+      pass ();
+    else
+      fail ("LEADER.unknown_bit_4 [B] " FORMAT_B " != " FORMAT_B "", leader->unknown_bit_4, unknown_bit_4);
+    unknown_bit_4++;
+    if (dwg_dynapi_entity_set_value (leader, "LEADER", "unknown_bit_4", &unknown_bit_4, 0)
+        && unknown_bit_4 == leader->unknown_bit_4)
+      pass ();
+    else
+      fail ("LEADER.unknown_bit_4 [B] set+1 " FORMAT_B " != " FORMAT_B "", leader->unknown_bit_4, unknown_bit_4);
+    leader->unknown_bit_4--;
+  }
+  {
     BITCODE_B unknown_bit_5;
     if (dwg_dynapi_entity_value (leader, "LEADER", "unknown_bit_5", &unknown_bit_5, NULL)
         && unknown_bit_5 == leader->unknown_bit_5)

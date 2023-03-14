@@ -3314,12 +3314,14 @@ DWG_ENTITY (LEADER)
   DXF { FIELD_HANDLE (dimstyle, 5, 3); }
   FIELD_B (unknown_bit_1, 0);
   DXF { FIELD_B (arrowhead_on, 71); }
-  FIELD_BS (path_type, 72); // 0: straight, 1: spline
+  FIELD_BS (path_type, 72); // 0: straight, 1: spline, 2: unknown (hookline_on?)
   LOG_LEADER_PATHTYPE
   FIELD_BS (annot_type, 73); // 0: text, 1: tol, 2: insert, 3 (def): none
   LOG_LEADER_ANNOTTYPE
   DXF {
-    FIELD_B (hookline_dir, 74); // same as hor_vector?
+    if (FIELD_VALUE (hookline_dir) || FIELD_VALUE (hookline_on))
+      FIELD_B (hookline_dir, 74);
+    FIELD_B0 (hookline_on, 75);
     FIELD_BD (box_height, 40);
     FIELD_BD (box_width, 41);
   }
@@ -3339,10 +3341,22 @@ DWG_ENTITY (LEADER)
 
   FIELD_BD (box_height, 0);
   FIELD_BD (box_width, 0);
-  FIELD_B (hookline_dir, 0); // same as hor_vector?
+  FIELD_B (hookline_dir, 0); // if hook line is on x direction
   FIELD_B (arrowhead_on, 0);
-  FIELD_BS (arrowhead_type, 0);
-
+  ENCODER {
+    if (FIELD_VALUE (hookline_on))
+      FIELD_VALUE(arrowhead_type) |= 8;
+  }
+  FIELD_BSx (arrowhead_type, 0);
+  DECODER {
+    // Note that ODA doesn't spec it, and ODA's code does
+    // take bit 1 from path_type instead
+    FIELD_VALUE (hookline_on) = FIELD_VALUE (arrowhead_type) & 8 ? 0 : 1;
+    LOG_TRACE("=> hookline_on: %d [B 75]\n", FIELD_VALUE (hookline_on));
+  }
+  JSON {
+    FIELD_B (hookline_on, 0);
+  }
   VERSIONS (R_13b1, R_14)
     {
       FIELD_BD (dimasz, 0);
@@ -3350,13 +3364,13 @@ DWG_ENTITY (LEADER)
       FIELD_B (unknown_bit_3, 0);
       FIELD_BS (unknown_short_1, 0);
       FIELD_BS (byblock_color, 77);
-      FIELD_B (hookline_on, 75);
+      FIELD_B (unknown_bit_4, 0);
       FIELD_B (unknown_bit_5, 0);
     }
 
   SINCE (R_2000)
     {
-      FIELD_B (hookline_on, 75);
+      FIELD_B (unknown_bit_4, 0);
       FIELD_B (unknown_bit_5, 0);
     }
 

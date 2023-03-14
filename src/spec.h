@@ -997,7 +997,7 @@
           LOG_LEADER_PATHTYPE_W (STRAIGHT);                                 \
           LOG_LEADER_PATHTYPE_W (SPLINE);                                   \
           LOG_LEADER_PATHTYPE_W (UNKNOWN);                                  \
-          LOG_FLAG_MAX (_obj->path_type, 2);                                \
+          LOG_FLAG_MAX (_obj->path_type, 3);                                \
           LOG_TRACE ("\n");                                                 \
         }                                                                   \
       }

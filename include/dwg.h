@@ -2258,6 +2258,7 @@ typedef struct _dwg_entity_LEADER
   BITCODE_BD box_height;     /*< DXF(40) */
   BITCODE_BD box_width;      /*< DXF(41) */
   BITCODE_B hookline_dir;
+  BITCODE_B hookline_on;     /*< DXF(75) computed from arrowhead_type & 8 */
   BITCODE_B arrowhead_on;
   BITCODE_BS arrowhead_type;
   BITCODE_BD dimasz;
@@ -2265,7 +2266,7 @@ typedef struct _dwg_entity_LEADER
   BITCODE_B unknown_bit_3;
   BITCODE_BS unknown_short_1;
   BITCODE_BS byblock_color;
-  BITCODE_B hookline_on;
+  BITCODE_B unknown_bit_4;
   BITCODE_B unknown_bit_5;
   BITCODE_H associated_annotation; /* DXF 340 Hard reference to associated annotation (mtext, tolerance, or insert entity) */
   BITCODE_H dimstyle;
