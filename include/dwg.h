@@ -2257,7 +2257,7 @@ typedef struct _dwg_entity_LEADER
   BITCODE_BD dimgap;         /* R_13-R_14 only */
   BITCODE_BD box_height;     /*< DXF(40) */
   BITCODE_BD box_width;      /*< DXF(41) */
-  BITCODE_B hookline_dir;
+  BITCODE_B hookline_onxdir;
   BITCODE_B hookline_on;     /*< DXF(75) computed */
   BITCODE_B arrowhead_on;
   BITCODE_BS arrowhead_type;
@@ -8385,7 +8385,8 @@ enum {
 enum {
   LEADER_PATHTYPE_STRAIGHT = 0,
   LEADER_PATHTYPE_SPLINE = 1,
-  LEADER_PATHTYPE_UNKNOWN = 2,
+  LEADER_PATHTYPE_ARROWHEAD_ON = 2,
+  LEADER_PATHTYPE_HOOKLINE_ON = 4,
 };
 enum {
   LEADER_ANNOTTYPE_MTEXT = 0,

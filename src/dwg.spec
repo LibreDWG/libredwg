@@ -3311,18 +3311,39 @@ DWG_ENTITY (LEADER)
 
   //SUBCLASS (AcDbCurve)
   SUBCLASS (AcDbLeader)
-  DXF { FIELD_HANDLE (dimstyle, 5, 3); }
-  FIELD_B (unknown_bit_1, 0);
-  DXF { FIELD_B (arrowhead_on, 71); }
-  FIELD_BS (path_type, 72); // 0: straight, 1: spline
-  LOG_LEADER_PATHTYPE
-  FIELD_BS (annot_type, 73); // 0: text, 1: tol, 2: insert, 3 (def): none
-  LOG_LEADER_ANNOTTYPE
   DXF {
+    BITCODE_BS path_type;
+    FIELD_HANDLE (dimstyle, 5, 3);
+    FIELD_B (arrowhead_on, 71);
+    path_type = FIELD_VALUE (path_type) & 1;
+    VALUE_BS (path_type, 72); // 0: straight, 1: spline
+    FIELD_BS (annot_type, 73); // 0: text, 1: tol, 2: insert, 3 (def): none
     FIELD_B (hookline_dir, 74);
     FIELD_B (hookline_on, 75);
     FIELD_BD (box_height, 40);
     FIELD_BD (box_width, 41);
+  } else {
+    FIELD_B (unknown_bit_1, 0); // always 0
+    FIELD_BS (annot_type, 0);
+    LOG_LEADER_ANNOTTYPE
+    ENCODER {
+      if (FIELD_VALUE(arrowhead_on))
+        FIELD_VALUE(path_type) |= LEADER_PATHTYPE_ARROWHEAD_ON;
+      if (FIELD_VALUE(hookline_on))
+        FIELD_VALUE(path_type) |= LEADER_PATHTYPE_HOOKLINE_ON;
+    }
+    FIELD_BS (path_type, 0); // plus rest bits, like hookline_on
+    LOG_LEADER_PATHTYPE
+    DECODER {
+      if (FIELD_VALUE(path_type) & LEADER_PATHTYPE_ARROWHEAD_ON)
+        FIELD_VALUE(arrowhead_on) = 1;
+      if (FIELD_VALUE(path_type) & LEADER_PATHTYPE_HOOKLINE_ON)
+        FIELD_VALUE(hookline_on) = 1;
+    }
+    JSON {
+      FIELD_B (arrowhead_on, 0);
+      FIELD_B (hookline_on, 0);
+    }
   }
   FIELD_BL (num_points, 76);
   FIELD_3DPOINT_VECTOR (points, num_points, 10);
@@ -3340,20 +3361,9 @@ DWG_ENTITY (LEADER)
 
   FIELD_BD (box_height, 0);
   FIELD_BD (box_width, 0);
-  FIELD_B (hookline_dir, 0); // if hook line is on x direction
+  FIELD_B (hookline_onxdir, 0); // if hook line is on x direction
   FIELD_B (arrowhead_on, 0);
-  ENCODER {
-    if (FIELD_VALUE(hookline_on))
-      FIELD_VALUE(arrowhead_type) |= 8;
-  }
   FIELD_BS (arrowhead_type, 0);
-  DECODER {
-    if (FIELD_VALUE(arrowhead_type) & 8)
-      FIELD_VALUE(hookline_on) = 1;
-  }
-  JSON {
-    FIELD_B (hookline_on, 0);
-  }
   VERSIONS (R_13b1, R_14)
     {
       FIELD_BD (dimasz, 0);
