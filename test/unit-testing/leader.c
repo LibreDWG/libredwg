@@ -15,6 +15,7 @@ api_process (dwg_object *obj)
   BITCODE_BD box_height;
   BITCODE_BD box_width;
   BITCODE_B hookline_dir;
+  BITCODE_B hookline_on;
   BITCODE_B arrowhead_on;
   BITCODE_BS arrowhead_type;
   BITCODE_BD dimasz;
@@ -22,7 +23,7 @@ api_process (dwg_object *obj)
   BITCODE_B unknown_bit_3;
   BITCODE_BS unknown_short_1;
   BITCODE_BS byblock_color;
-  BITCODE_B hookline_on;
+  BITCODE_B unknown_bit_4;
   BITCODE_B unknown_bit_5;
   BITCODE_H associated_annotation;
   BITCODE_H dimstyle;
@@ -56,6 +57,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (leader, LEADER, unknown_short_1, BS);
   CHK_ENTITY_TYPE_W_OLD (leader, LEADER, byblock_color, BS);
   CHK_ENTITY_TYPE (leader, LEADER, hookline_on, B);
+  CHK_ENTITY_TYPE (leader, LEADER, unknown_bit_4, B);
   CHK_ENTITY_TYPE (leader, LEADER, unknown_bit_5, B);
 
   CHK_ENTITY_H (leader, LEADER, associated_annotation);

@@ -3319,7 +3319,8 @@ DWG_ENTITY (LEADER)
   FIELD_BS (annot_type, 73); // 0: text, 1: tol, 2: insert, 3 (def): none
   LOG_LEADER_ANNOTTYPE
   DXF {
-    FIELD_B (hookline_dir, 74); // same as hor_vector?
+    FIELD_B (hookline_dir, 74);
+    FIELD_B (hookline_on, 75);
     FIELD_BD (box_height, 40);
     FIELD_BD (box_width, 41);
   }
@@ -3339,10 +3340,20 @@ DWG_ENTITY (LEADER)
 
   FIELD_BD (box_height, 0);
   FIELD_BD (box_width, 0);
-  FIELD_B (hookline_dir, 0); // same as hor_vector?
+  FIELD_B (hookline_dir, 0); // if hook line is on x direction
   FIELD_B (arrowhead_on, 0);
+  ENCODER {
+    if (FIELD_VALUE(hookline_on))
+      FIELD_VALUE(arrowhead_type) |= 8;
+  }
   FIELD_BS (arrowhead_type, 0);
-
+  DECODER {
+    if (FIELD_VALUE(arrowhead_type) & 8)
+      FIELD_VALUE(hookline_on) = 1;
+  }
+  JSON {
+    FIELD_B (hookline_on, 0);
+  }
   VERSIONS (R_13b1, R_14)
     {
       FIELD_BD (dimasz, 0);
@@ -3350,13 +3361,13 @@ DWG_ENTITY (LEADER)
       FIELD_B (unknown_bit_3, 0);
       FIELD_BS (unknown_short_1, 0);
       FIELD_BS (byblock_color, 77);
-      FIELD_B (hookline_on, 75);
+      FIELD_B (unknown_bit_4, 0);
       FIELD_B (unknown_bit_5, 0);
     }
 
   SINCE (R_2000)
     {
-      FIELD_B (hookline_on, 75);
+      FIELD_B (unknown_bit_4, 0);
       FIELD_B (unknown_bit_5, 0);
     }
 
