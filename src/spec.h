@@ -996,7 +996,6 @@
           LOG_TRACE ("           ");                                        \
           LOG_LEADER_PATHTYPE_W (STRAIGHT);                                 \
           LOG_LEADER_PATHTYPE_W (SPLINE);                                   \
-          LOG_LEADER_PATHTYPE_W (UNKNOWN);                                  \
           LOG_FLAG_MAX (_obj->path_type, 3);                                \
           LOG_TRACE ("\n");                                                 \
         }                                                                   \
@@ -1017,7 +1016,7 @@
           LOG_LEADER_ANNOTTYPE_W (TOLERANCE);                               \
           LOG_LEADER_ANNOTTYPE_W (INSERT);                                  \
           LOG_LEADER_ANNOTTYPE_W (NO_ANNOT);                                \
-          LOG_FLAG_MAX (_obj->annot_type, 3);                               \
+          LOG_FLAG_MAX (_obj->annot_type, 15);                              \
           LOG_TRACE ("\n");                                                 \
         }                                                                   \
       }

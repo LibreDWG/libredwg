@@ -3314,10 +3314,10 @@ DWG_ENTITY (LEADER)
   DXF { FIELD_HANDLE (dimstyle, 5, 3); }
   FIELD_B (unknown_bit_1, 0);
   DXF { FIELD_B (arrowhead_on, 71); }
-  FIELD_BS (path_type, 72); // 0: straight, 1: spline, 2: unknown (hookline_on?)
-  LOG_LEADER_PATHTYPE
   FIELD_BS (annot_type, 73); // 0: text, 1: tol, 2: insert, 3 (def): none
   LOG_LEADER_ANNOTTYPE
+  FIELD_BS (path_type, 72); // 0: straight, 1: spline
+  LOG_LEADER_PATHTYPE
   DXF {
     if (FIELD_VALUE (hookline_dir) || FIELD_VALUE (hookline_on))
       FIELD_B (hookline_dir, 74);
