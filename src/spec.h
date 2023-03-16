@@ -993,7 +993,7 @@
       {                                                                     \
       if (_obj->path_type)                                                  \
         {                                                                   \
-          LOG_TRACE ("      ");                                             \
+          LOG_TRACE ("           ");                                        \
           LOG_LEADER_PATHTYPE_W (STRAIGHT);                                 \
           LOG_LEADER_PATHTYPE_W (SPLINE);                                   \
           LOG_LEADER_PATHTYPE_W (UNKNOWN);                                  \
@@ -1012,7 +1012,7 @@
       {                                                                     \
       if (_obj->annot_type)                                                 \
         {                                                                   \
-          LOG_TRACE ("           ");                                        \
+          LOG_TRACE ("            ");                                       \
           LOG_LEADER_ANNOTTYPE_W (MTEXT);                                   \
           LOG_LEADER_ANNOTTYPE_W (TOLERANCE);                               \
           LOG_LEADER_ANNOTTYPE_W (INSERT);                                  \
