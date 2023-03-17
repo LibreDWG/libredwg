@@ -327,10 +327,9 @@
   FIELD_3RD (PUCSXDIR, 11); //ok
   FIELD_3RD (PUCSYDIR, 12); //ok
   FIELD_HANDLE (PUCSNAME, 2, 2);
-  FIELD_RC (TILEMODE, 70); //ok
+  FIELD_RS (TILEMODE, 70); //ok
   FIELD_CAST (PLIMCHECK, RS, B, 70); //ok
   FIELD_RS (unknown_10, 70); //0 todo hex
-  FIELD_RC (unknown_11, 70); //0 todo hex
   FIELD_3RD (PEXTMIN, 10); //ok 637
   FIELD_3RD (PEXTMAX, 10); //
   FIELD_2RD (PLIMMIN, 10); //
