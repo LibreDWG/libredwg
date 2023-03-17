@@ -3620,8 +3620,8 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       if (eed_need_size (8, size))
         return DWG_ERR_INVALIDEED;
       PRE (R_13b1) {
-        data->u.eed_3.layer = (BITCODE_RLL)bit_read_RC (dat);
-        LOG_TRACE ("layer: " FORMAT_RLL " [RC]", data->u.eed_3.layer);
+        data->u.eed_3.layer = (BITCODE_RLL)bit_read_RS (dat);
+        LOG_TRACE ("layer: " FORMAT_RLL " [RS]", data->u.eed_3.layer);
       }
       LATER_VERSIONS {
         data->u.eed_3.layer = bit_read_RLL (dat);
