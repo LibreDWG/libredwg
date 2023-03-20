@@ -12097,7 +12097,6 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                   if ((blkhdr = dwg_ref_object (dwg, ent->ownerhandle))
                       && blkhdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
                     {
-                      Dwg_Object *prev_entity;
                       Dwg_Object_BLOCK_HEADER *_hdr
                           = blkhdr->tio.object->tio.BLOCK_HEADER;
                       ent->ownerhandle->obj = NULL; // still dirty
@@ -12107,10 +12106,8 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                                  " [H] (blocks)\n",
                                  ARGS_REF (_hdr->endblk_entity));
 
-                      if ((prev_entity = find_prev_entity (obj)))
+                      if (_hdr->last_entity)
                         {
-                          _hdr->last_entity = dwg_add_handleref (
-                              dwg, 4, prev_entity->handle.value, NULL);
                           LOG_TRACE ("BLOCK_HEADER.last_entity = " FORMAT_REF
                                      " [H] (blocks)\n",
                                      ARGS_REF (_hdr->last_entity));
@@ -12142,14 +12139,19 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                       && dwg->header.version < R_2004
                       && (blkhdr = dwg_ref_object (dwg, ent->ownerhandle))
                       && blkhdr->fixedtype == DWG_TYPE_BLOCK_HEADER
-                      && (_hdr = blkhdr->tio.object->tio.BLOCK_HEADER)
-                      && !_hdr->first_entity)
+                      && (_hdr = blkhdr->tio.object->tio.BLOCK_HEADER))
                     {
-                      _hdr->first_entity = dwg_add_handleref (
-                          dwg, 4, obj->handle.value, NULL);
-                      LOG_TRACE ("BLOCK_HEADER.first_entity = " FORMAT_REF
-                                 " [H] (blocks)\n",
-                                 ARGS_REF (_hdr->first_entity));
+                      _hdr->last_entity = dwg_add_handleref(
+                        dwg, 4, obj->handle.value, NULL);
+
+                      if (!_hdr->first_entity)
+                        {
+                          _hdr->first_entity = _hdr->last_entity;
+
+                          LOG_TRACE("BLOCK_HEADER.first_entity = " FORMAT_REF
+                              " [H] (blocks)\n",
+                              ARGS_REF(_hdr->first_entity));
+                        }
                     }
                 }
             }
