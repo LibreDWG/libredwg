@@ -3600,8 +3600,8 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
     case 1:
       if (eed_need_size (3, size))
         return DWG_ERR_INVALIDEED;
-      data->u.eed_1.unknown_r11 = bit_read_RS (dat);
-      LOG_TRACE ("application name: " FORMAT_RS " [RC]", data->u.eed_1.unknown_r11);
+      data->u.eed_1.appid_index = bit_read_RS (dat);
+      LOG_TRACE ("application name: " FORMAT_RS " [RC]", data->u.eed_1.appid_index);
       break;
     case 2:
       if (eed_need_size (1, size))
