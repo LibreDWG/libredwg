@@ -147,6 +147,24 @@ test_header (Dwg_Data *dwg)
       fail ("HEADER.DWGCODEPAGE [TV]");
   }
   {
+    BITCODE_RS dwgcodepage_id;
+    if (dwg_dynapi_header_value (dwg, "dwgcodepage_id", &dwgcodepage_id, NULL)
+        && dwgcodepage_id == dwg->header_vars.dwgcodepage_id)
+      pass ();
+    else
+      fail ("HEADER.dwgcodepage_id [RS] %hu != %hu", dwg->header_vars.dwgcodepage_id, dwgcodepage_id);
+    dwgcodepage_id++;
+    if (dwg_dynapi_header_set_value (dwg, "dwgcodepage_id", &dwgcodepage_id, 0)
+        && dwgcodepage_id == dwg->header_vars.dwgcodepage_id)
+      pass ();
+    else
+      fail ("HEADER.dwgcodepage_id [RS] set+1 %hu != %hu",
+            dwg->header_vars.dwgcodepage_id, dwgcodepage_id);
+    dwgcodepage_id--;
+    dwg_dynapi_header_set_value (dwg, "dwgcodepage_id", &dwgcodepage_id, 0);
+
+  }
+  {
     BITCODE_BD unit1_ratio;
     if (dwg_dynapi_header_value (dwg, "unit1_ratio", &unit1_ratio, NULL)
         && unit1_ratio == dwg->header_vars.unit1_ratio)
@@ -5914,42 +5932,6 @@ test_header (Dwg_Data *dwg)
       pass ();
     else
       fail ("HEADER.layer_colors[128] [RS]");
-  }
-  {
-    BITCODE_RC unknown_3f9;
-    if (dwg_dynapi_header_value (dwg, "unknown_3f9", &unknown_3f9, NULL)
-        && unknown_3f9 == dwg->header_vars.unknown_3f9)
-      pass ();
-    else
-      fail ("HEADER.unknown_3f9 [RC] %u != %u", dwg->header_vars.unknown_3f9, unknown_3f9);
-    unknown_3f9++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_3f9", &unknown_3f9, 0)
-        && unknown_3f9 == dwg->header_vars.unknown_3f9)
-      pass ();
-    else
-      fail ("HEADER.unknown_3f9 [RC] set+1 %u != %u",
-            dwg->header_vars.unknown_3f9, unknown_3f9);
-    unknown_3f9--;
-    dwg_dynapi_header_set_value (dwg, "unknown_3f9", &unknown_3f9, 0);
-
-  }
-  {
-    BITCODE_RC unknown_3fa;
-    if (dwg_dynapi_header_value (dwg, "unknown_3fa", &unknown_3fa, NULL)
-        && unknown_3fa == dwg->header_vars.unknown_3fa)
-      pass ();
-    else
-      fail ("HEADER.unknown_3fa [RC] %u != %u", dwg->header_vars.unknown_3fa, unknown_3fa);
-    unknown_3fa++;
-    if (dwg_dynapi_header_set_value (dwg, "unknown_3fa", &unknown_3fa, 0)
-        && unknown_3fa == dwg->header_vars.unknown_3fa)
-      pass ();
-    else
-      fail ("HEADER.unknown_3fa [RC] set+1 %u != %u",
-            dwg->header_vars.unknown_3fa, unknown_3fa);
-    unknown_3fa--;
-    dwg_dynapi_header_set_value (dwg, "unknown_3fa", &unknown_3fa, 0);
-
   }
   {
     BITCODE_RS unknown_51e;
