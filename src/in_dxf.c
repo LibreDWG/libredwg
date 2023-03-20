@@ -1441,8 +1441,6 @@ dxf_fixup_header (Dwg_Data *dwg)
         hdr->codepage = 40;
       else if (strEQc (vars->DWGCODEPAGE, "ANSI_950"))
         hdr->codepage = 41;
-      else if (strEQc (vars->DWGCODEPAGE, "ANSI_1258"))
-        hdr->codepage = 44;
       else if (strEQc (vars->DWGCODEPAGE, "ANSI_1361"))
         hdr->codepage = 42;
       else if (strEQc (vars->DWGCODEPAGE, "UTF-16"))
