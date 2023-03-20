@@ -705,6 +705,8 @@ RL
 RS
 @item dwg_size
 RL
+@item dwgcodepage_id
+RS
 @item flag_3d
 RS
 @item layer_colors[128]
@@ -759,10 +761,6 @@ BL
 BL
 @item unknown_23
 BD
-@item unknown_3f9
-RC
-@item unknown_3fa
-RC
 @item unknown_4f2
 RL
 @item unknown_5

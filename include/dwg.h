@@ -887,6 +887,7 @@ typedef struct _dwg_header_variables {
   BITCODE_RC ACADMAINTVER; /*!< r13+ */
   BITCODE_BLL REQUIREDVERSIONS; /*!< r2013+ */
   BITCODE_TV DWGCODEPAGE;  /*!< r10+ */
+  BITCODE_RS dwgcodepage_id;  /*!< r10+ */
   BITCODE_BD unit1_ratio; /* 412148564080.0 */
   BITCODE_BD unit2_ratio; /* 1.0 */
   BITCODE_BD unit3_ratio; /* 1.0 */
@@ -1272,8 +1273,6 @@ typedef struct _dwg_header_variables {
   BITCODE_RL oldCECOLOR_hi; /* r11, or RD */
   BITCODE_RL oldCECOLOR_lo; /* r11 */
   BITCODE_RS layer_colors[128]; /* r1.2 - r1.4 */
-  BITCODE_RC unknown_3f9;  /* r11 */
-  BITCODE_RC unknown_3fa;  /* r11 */
   BITCODE_RS unknown_51e;  /* r11 */
   BITCODE_RS unknown_520;  /* r11 */
   BITCODE_RSd unknown_52c;  /* r11 */
