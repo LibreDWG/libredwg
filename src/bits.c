@@ -47,6 +47,7 @@ static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
 #include "bits.h"
+#include "common.h"
 
 /*------------------------------------------------------------------------------
  * Public functions
@@ -2721,11 +2722,13 @@ bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
 /** converts UTF-8 (dxf,json) to ASCII TV.
     optionally unquotes \" to ", \\ to \, undo json_cquote(),
     \\uxxxx or other unicode => \\U+XXXX.
+    TODO codepage conversion
     Returns NULL if not enough room in dest.
 */
 char *
 bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
-                const int destlen, const int srclen, const unsigned cquoted)
+                const int destlen, const int srclen, const unsigned cquoted,
+                const BITCODE_RS codepage)
 {
   unsigned char c;
   unsigned char *s = (unsigned char *)src;
@@ -2835,6 +2838,32 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
   else
     *dest = '\0';
   return d;
+}
+
+/** converts old codepaged strings to UTF-8.
+ */
+char *
+bit_TV_to_utf8 (char *restrict dest, const unsigned char *restrict src,
+                const int destlen, const int srclen, const BITCODE_RS codepage)
+{
+#ifdef HAVE_ICONV
+  if (codepage == CP_UTF8)
+    return (char*)src;
+  {
+    const char *charset = dwg_codepage_iconvstr (codepage);
+    iconv_t cd;
+    size_t nconv;
+    if (!charset)
+      return (char*)src;
+    cd = iconv_open ("UTF-8", charset);
+    nconv = iconv (cd, (char **)&src, (size_t *)&srclen, (char **)&dest,
+                   (size_t *)&destlen);
+    iconv_close (cd);
+    return dest;
+  }
+#else
+  return (char*)src;
+#endif
 }
 
 /** converts UTF-8 to UCS-2. Returns a copy.

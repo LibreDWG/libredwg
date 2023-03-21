@@ -369,7 +369,7 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
         goto outofmemory;
       dat->chain[t->end] = '\0';
       while (!bit_utf8_to_TV (key, &dat->chain[t->start], len,
-                              t->end - t->start, 1))
+                              t->end - t->start, 1, dat->codepage))
         {
           LOG_INSANE ("Not enough room in quoted string len=%d\n", len - 8)
           len += 8;
@@ -447,7 +447,7 @@ json_fixed_string (Bit_Chain *restrict dat, const int len,
       int dlen = len;
       dat->chain[t->end] = '\0';
       while (!bit_utf8_to_TV (key, &dat->chain[t->start], dlen,
-                              t->end - t->start, 1))
+                              t->end - t->start, 1, dat->codepage))
         {
           LOG_INSANE ("Not enough room in quoted string len=%d\n", len)
           dlen += 8;

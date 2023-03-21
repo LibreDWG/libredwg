@@ -208,57 +208,6 @@ typedef BITCODE_TV BITCODE_D2T;
 # define FORMAT_TU "\"%hn\""       /* will print garbage */
 #endif
 
-/* Version dependent strings */
-/* May not be changed, as it directly maps to the dwg->header.codepage number */
-typedef enum _dwg_codepage
-{
-  CP_UTF8 = 0,
-  CP_US_ASCII = 1,
-  CP_ISO_8859_1,
-  CP_ISO_8859_2,
-  CP_ISO_8859_3,
-  CP_ISO_8859_4,
-  CP_ISO_8859_5,
-  CP_ISO_8859_6,
-  CP_ISO_8859_7,
-  CP_ISO_8859_8,
-  CP_ISO_8859_9,
-  CP_CP437,
-  CP_CP850,
-  CP_CP852,
-  CP_CP855,
-  CP_CP857,
-  CP_CP860,
-  CP_CP861,
-  CP_CP863,
-  CP_CP864,
-  CP_CP865,
-  CP_CP869,
-  CP_CP932,
-  CP_MACINTOSH,
-  CP_BIG5,
-  CP_CP949 = 25,
-  CP_CP866 = 27, /* == JOHAB */
-  CP_ANSI_1250,
-  CP_ANSI_1251 = 29,
-  CP_ANSI_1252 = 30,
-  CP_GB2312 = 31,
-  CP_ANSI_1253,
-  CP_ANSI_1254,
-  CP_ANSI_1255,
-  CP_ANSI_1256,
-  CP_ANSI_1257,
-  CP_ANSI_874,
-  CP_ANSI_932,
-  CP_ANSI_936,
-  CP_ANSI_949,
-  CP_ANSI_950,
-  CP_ANSI_1361,
-  CP_UTF16 = 43,
-  CP_ANSI_1258 = 44,
-  CP_DWG
-} Dwg_Codepage;
-  
 typedef struct _dwg_time_bll
 {
   BITCODE_BL days;
@@ -946,7 +895,7 @@ typedef struct _dwg_header_variables {
   BITCODE_RC ACADMAINTVER; /*!< r13+ */
   BITCODE_BLL REQUIREDVERSIONS; /*!< r2013+ */
   BITCODE_TV DWGCODEPAGE;  /*!< r10+ */
-  BITCODE_RS dwgcodepage_id;  /*!< r10+ */
+  BITCODE_RS codepage;     /*!< <r11 */
   BITCODE_BD unit1_ratio; /* 412148564080.0 */
   BITCODE_BD unit2_ratio; /* 1.0 */
   BITCODE_BD unit3_ratio; /* 1.0 */
@@ -9003,6 +8952,7 @@ typedef struct _dwg_chain
   Dwg_Version_Type version;
   Dwg_Version_Type from_version;
   FILE *fh;
+  BITCODE_RS codepage;
   */
 } Dwg_Chain;
 

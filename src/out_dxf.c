@@ -2986,13 +2986,23 @@ dxf_format (int code)
   return "(unknown code)";
 }
 
-/* num => string. for the reverse see in_dxf.c:dxf_fixup_header()
-   TODO: maybe use a table.
+/* num => string. for the reverse see in_dxf.c:dxf_set_DWGCODEPAGE()
  */
 RETURNS_NONNULL
 const char *
 dxf_codepage (int code, Dwg_Data *dwg)
 {
+  const char *ret = dwg_codepage_dxfstr (code);
+  if (!ret)
+    {
+      if (dwg->header.version >= R_2007)
+        return "UTF-8"; // dwg internally: UCS-16, for DXF: UTF-8
+      else
+        return "";
+    }
+  else
+    return ret;
+  /*  
   if (code == 30 || code == 0)
     return "ANSI_1252"; // WesternEurope Windows
   else if (code == 1)
@@ -3085,6 +3095,7 @@ dxf_codepage (int code, Dwg_Data *dwg)
     return "UTF-8"; // dwg internally: UCS-16, for DXF: UTF-8
   else
     return "";
+  */
 }
 
 // see

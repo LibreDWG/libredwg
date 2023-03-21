@@ -699,10 +699,10 @@ RL
 RL
 @item circle_zoom_percent
 RS
+@item codepage
+RS
 @item dwg_size
 RL
-@item dwgcodepage_id
-RS
 @item flag_3d
 RS
 @item layer_colors[128]

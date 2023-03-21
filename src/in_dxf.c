@@ -1365,10 +1365,19 @@ dxf_set_DWGCODEPAGE (Dwg_Data *dwg)
 
   if (!vars->DWGCODEPAGE)
     return;
+  hdr->codepage = dwg_codepage_int (vars->DWGCODEPAGE);
+  if (hdr->codepage == CP_DWG)
+    {
+      LOG_ERROR ("Invalid DWGCODEPAGE %s", vars->DWGCODEPAGE);
+      hdr->codepage = 0;
+    }
+  else
+    LOG_TRACE ("HEADER.codepage = %d [%s]\n", hdr->codepage, vars->DWGCODEPAGE);
+/*  
   if (strEQc (vars->DWGCODEPAGE, "ANSI_1252"))
     hdr->codepage = CP_ANSI_1252;
   else if (strEQc (vars->DWGCODEPAGE, "UTF-8"))
-    hdr->codepage = CP_UTF8; /* 0 */
+    hdr->codepage = CP_UTF8;
   else if (strEQc (vars->DWGCODEPAGE, "US_ASCII"))
     hdr->codepage = CP_US_ASCII;
   else if (strEQc (vars->DWGCODEPAGE, "ISO-8859-1"))
@@ -1384,7 +1393,7 @@ dxf_set_DWGCODEPAGE (Dwg_Data *dwg)
   else if (strEQc (vars->DWGCODEPAGE, "ISO-8859-6"))
     hdr->codepage = CP_ISO_8859_6;
   else if (strEQc (vars->DWGCODEPAGE, "ISO-8859-7"))
-    hdr->codepage = CP_ISO_8859_7; /* 8 */
+    hdr->codepage = CP_ISO_8859_7;
   else if (strEQc (vars->DWGCODEPAGE, "ISO-8859-8"))
     hdr->codepage = CP_ISO_8859_8;
   else if (strEQc (vars->DWGCODEPAGE, "ISO-8859-9"))
@@ -1455,11 +1464,7 @@ dxf_set_DWGCODEPAGE (Dwg_Data *dwg)
     hdr->codepage = CP_UTF16;
   else if (strEQc (vars->DWGCODEPAGE, "ANSI_1258"))
     hdr->codepage = CP_ANSI_1258;
-  else
-    {
-      LOG_ERROR ("Invalid DWGCODEPAGE %s", vars->DWGCODEPAGE);
-    }
-  LOG_TRACE ("HEADER.codepage = %d [%s]\n", hdr->codepage, vars->DWGCODEPAGE);
+*/
 }
 
 static void

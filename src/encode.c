@@ -2304,6 +2304,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dat->from_version = dwg->header.from_version;
       dat->opts = dwg->opts;
     }
+  dat->codepage = dwg->header.codepage;
 
   /*------------------------------------------------------------
    * Header

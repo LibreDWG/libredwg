@@ -69,6 +69,7 @@ typedef struct _bit_chain
   Dwg_Version_Type version;
   Dwg_Version_Type from_version;
   FILE *fh;
+  BITCODE_RS codepage;
 } Bit_Chain;
 
 #define EMPTY_CHAIN(size)                                                     \
@@ -298,7 +299,13 @@ EXPORT char *bit_TU_to_utf8_len (const BITCODE_TU restrict wstr,
 EXPORT char *bit_utf8_to_TV (char *restrict dest,
                              const unsigned char *restrict src,
                              const int destlen, const int srclen,
-                             const unsigned cquoted);
+                             const unsigned cquoted,
+                             const BITCODE_RS codepage);
+/** converts old codepaged strings to UTF-8.
+ */
+char *
+bit_TV_to_utf8 (char *restrict dest, const unsigned char *restrict src,
+                const int destlen, const int srclen, const BITCODE_RS codepage);
 
 /** Converts UTF-8 to UCS-2. Returns a copy.
     Needed by dwg importers, writers (e.g. dxf2dwg)
@@ -352,7 +359,8 @@ void bit_chain_free (Bit_Chain *dat);
   (to)->opts = (from)->opts;                                                  \
   (to)->version = (from)->version;                                            \
   (to)->from_version = (from)->from_version;                                  \
-  (to)->fh = (from)->fh
+  (to)->fh = (from)->fh;                                                      \
+  (to)->codepage = (from)->codepage
 
 void bit_print (Bit_Chain *dat, long unsigned int size);
 

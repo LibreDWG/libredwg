@@ -23,6 +23,9 @@
 #ifdef HAVE_CTYPE_H
 #  include <ctype.h>
 #endif
+#ifdef HAVE_ICONV
+#  include <iconv.h>
+#endif
 
 #define IS_JSON
 #include "common.h"
@@ -239,13 +242,15 @@ static char *_path_field (const char *path);
           {                                                                   \
             const int _len = 6 * len + 1;                                     \
             char _buf[256];                                                   \
-            fprintf (dat->fh, "\"%s\"", json_cquote (_buf, str, _len));       \
+            fprintf (dat->fh, "\"%s\"",                                       \
+                     json_cquote (_buf, str, _len, dat->codepage));           \
           }                                                                   \
         else                                                                  \
           {                                                                   \
             const int _len = 6 * len + 1;                                     \
             char *_buf = (char *)malloc (_len);                               \
-            fprintf (dat->fh, "\"%s\"", json_cquote (_buf, str, _len));       \
+            fprintf (dat->fh, "\"%s\"",                                       \
+                     json_cquote (_buf, str, _len, dat->codepage));           \
             free (_buf);                                                      \
           }                                                                   \
       }                                                                       \
@@ -285,7 +290,8 @@ static char *_path_field (const char *path);
     if (len < 42)                                                             \
       {                                                                       \
         char _buf[256];                                                       \
-        char *p = json_cquote (_buf, (const char *)_obj->nam, _l1);           \
+        char *p = json_cquote (_buf, (const char *)_obj->nam, _l1,            \
+                               dat->codepage);                                \
         fprintf (dat->fh, "\"%s\"", p);                                       \
         /*                                                                    \
         size_t lp = strlen (p);                                               \
@@ -298,7 +304,8 @@ static char *_path_field (const char *path);
     else                                                                      \
       {                                                                       \
         char *_buf = (char *)malloc (_l1);                                    \
-        char *p = json_cquote (_buf, (const char *)_obj->nam, _l1);           \
+        char *p = json_cquote (_buf, (const char *)_obj->nam, _l1,            \
+                               dat->codepage);                                \
         fprintf (dat->fh, "\"%s\"", p);                                       \
         free (_buf);                                                          \
       }                                                                       \
@@ -1332,15 +1339,25 @@ wcquote (wchar_t *restrict dest, const wchar_t *restrict src)
 
 #endif /* HAVE_NATIVE_WCHAR2 */
 
+// also converts from codepage to utf8
 char *
-json_cquote (char *restrict dest, const char *restrict src, const int len)
+json_cquote (char *restrict dest, const char *restrict src, const int len,
+             const BITCODE_RS codepage)
 {
   unsigned char c;
   unsigned char *s = (unsigned char *)src;
   const char *endp = dest + len;
   char *d = dest;
+
   if (!src)
     return (char *)"";
+#ifdef HAVE_ICONV
+  if (codepage >= CP_US_ASCII && codepage <= CP_ANSI_1258)
+    {
+      src = bit_TV_to_utf8 (dest, src, len, strlen (src), codepage);
+      s = (unsigned char *)src;
+    }
+#endif
   while ((c = *s++))
     {
       if (dest >= endp)
@@ -1423,8 +1440,9 @@ json_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               char buf[256]; // acis lines are not much longer
               if (*p == '\n' && p - s < 256)
                 {
-                  FIRSTPREFIX fprintf (dat->fh, "\"%s\"",
-                                       json_cquote (buf, s, p - s));
+                  FIRSTPREFIX fprintf (
+                      dat->fh, "\"%s\"",
+                      json_cquote (buf, s, p - s, dat->codepage));
                   s = p + 1;
                 }
             }

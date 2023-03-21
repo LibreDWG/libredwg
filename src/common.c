@@ -93,6 +93,79 @@ const struct dwg_versions dwg_versions[] = {
   { R_AFTER, "r>2022", NULL, "AutoCAD Release >2022", 0 },
 };
 
+// synced with typedef enum _dwg_codepage in common.h
+#ifdef HAVE_ICONV
+const char *
+dwg_codepage_iconvstr (BITCODE_RS cp)
+{
+  // for iconv
+  const char *_codepage_iconvstr[]
+    = { "UTF8",         "US-ASCII",
+        "ISO-8859-1",   "ISO-8859-2",
+        "ISO-8859-3",   "ISO-8859-4",
+        "ISO-8859-5",   "ISO-8859-6",
+        "ISO-8859-7",   "ISO-8859-8",
+        "ISO-8859-9",   "CP437",
+        "CP850",        "CP852",
+        "CP855",        "CP857",
+        "CP860",        "CP861",
+        "CP863",        "CP864",
+        "CP865",        "CP869",
+        "CP932",        "MACINTOSH",
+        "BIG5",         "CP949",        /* 25 */
+        "JOHAB",        "CP866",        /* also JOHAB */
+        "WINDOWS-1250", "WINDOWS-1251", /* 29 */
+        "WINDOWS-1252",                 /* 30 */
+        "GB2312",       "WINDOWS-1253",
+        "WINDOWS-1254", "WINDOWS-1255",
+        "WINDOWS-1256", "WINDOWS-1257",
+        "WINDOWS-874",  "WINDOWS-932",
+        "WINDOWS-936",  "WINDOWS-949",
+        "WINDOWS-950",  "WINDOWS-1361",
+        "UTF16", /* 43 */
+        "WINDOWS-1258", NULL };
+  if (cp <= CP_DWG)
+    return _codepage_iconvstr[cp];
+  else
+    return NULL;
+}
+#endif
+
+const char *_codepage_dxfstr[]
+    = { "UTF8",       "US_ASCII",   "ISO-8859-1", "ISO-8859-2", "ISO-8859-3",
+        "ISO-8859-4", "ISO-8859-5", "ISO-8859-6", "ISO-8859-7", "ISO-8859-8",
+        "ISO-8859-9", "CP437",      "CP850",      "CP852",      "CP855",
+        "CP857",      "CP860",      "CP861",      "CP863",      "CP864",
+        "CP865",      "CP869",      "CP932",      "MACINTOSH",  "BIG5",
+        "CP949",                   /* 25 */
+        "JOHAB",      "CP866",     /* also JOHAB */
+        "ANSI_1250",  "ANSI_1251", /* 29 */
+        "ANSI_1252",               /* 30 WesternEurope Windows */
+        "GB2312",     "ANSI_1253",  "ANSI_1254",  "ANSI_1255",  "ANSI_1256",
+        "ANSI_1257",  "ANSI_874",   "ANSI_932",   "ANSI_936",   "ANSI_949",
+        "ANSI_950",   "ANSI_1361",  "UTF16", /* 43 */
+        "ANSI_1258",  NULL };
+
+const char *
+dwg_codepage_dxfstr (BITCODE_RS cp)
+{
+  if (cp <= CP_DWG)
+    return _codepage_dxfstr[cp];
+  else
+    return NULL;
+}
+
+BITCODE_RS
+dwg_codepage_int (const char *s)
+{
+  for (BITCODE_RS i = 0; i < CP_DWG; i++)
+    {
+      if (strEQ (s, _codepage_dxfstr[i]))
+        return i;
+    }
+  return CP_DWG;
+}
+
 const unsigned char *
 dwg_sentinel (const Dwg_Sentinel sentinel_id)
 {

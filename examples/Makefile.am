@@ -31,7 +31,7 @@ EXTRA_PROGRAMS   = unknown bd bits llvmfuzz llvmfuzz_standalone
 load_dwg_SOURCES = load_dwg.c
 load_dwg_LDADD   = $(top_builddir)/src/libredwg.la
 if !HAVE_MINGW
-load_dwg_LDADD   += $(top_builddir)/src/bits.lo
+load_dwg_LDADD   += $(top_builddir)/src/bits.lo $(top_builddir)/src/common.lo
 endif
 dwg2svg2_SOURCES = dwg2svg2.c
 dwgadd_SOURCES   = dwgadd.c

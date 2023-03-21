@@ -146,14 +146,14 @@ static unsigned int cur_ver = 0;
         const int _len = 6 * len + 1;                                         \
         char _buf[256];                                                       \
         PREFIX fprintf (dat->fh, "\"" #name "\": \"%s\",\n",                  \
-                        json_cquote (_buf, str, _len));                       \
+                        json_cquote (_buf, str, _len, dat->codepage));        \
       }                                                                       \
     else                                                                      \
       {                                                                       \
         const int _len = 6 * len + 1;                                         \
         char *_buf = (char *)malloc (_len);                                   \
         PREFIX fprintf (dat->fh, "\"" #name "\": \"%s\",\n",                  \
-                        json_cquote (_buf, str, _len));                       \
+                        json_cquote (_buf, str, _len, dat->codepage));        \
         free (_buf);                                                          \
       }                                                                       \
   }

@@ -147,21 +147,21 @@ test_header (Dwg_Data *dwg)
       fail ("HEADER.DWGCODEPAGE [TV]");
   }
   {
-    BITCODE_RS dwgcodepage_id;
-    if (dwg_dynapi_header_value (dwg, "dwgcodepage_id", &dwgcodepage_id, NULL)
-        && dwgcodepage_id == dwg->header_vars.dwgcodepage_id)
+    BITCODE_RS codepage;
+    if (dwg_dynapi_header_value (dwg, "codepage", &codepage, NULL)
+        && codepage == dwg->header_vars.codepage)
       pass ();
     else
-      fail ("HEADER.dwgcodepage_id [RS] %hu != %hu", dwg->header_vars.dwgcodepage_id, dwgcodepage_id);
-    dwgcodepage_id++;
-    if (dwg_dynapi_header_set_value (dwg, "dwgcodepage_id", &dwgcodepage_id, 0)
-        && dwgcodepage_id == dwg->header_vars.dwgcodepage_id)
+      fail ("HEADER.codepage [RS] %hu != %hu", dwg->header_vars.codepage, codepage);
+    codepage++;
+    if (dwg_dynapi_header_set_value (dwg, "codepage", &codepage, 0)
+        && codepage == dwg->header_vars.codepage)
       pass ();
     else
-      fail ("HEADER.dwgcodepage_id [RS] set+1 %hu != %hu",
-            dwg->header_vars.dwgcodepage_id, dwgcodepage_id);
-    dwgcodepage_id--;
-    dwg_dynapi_header_set_value (dwg, "dwgcodepage_id", &dwgcodepage_id, 0);
+      fail ("HEADER.codepage [RS] set+1 %hu != %hu",
+            dwg->header_vars.codepage, codepage);
+    codepage--;
+    dwg_dynapi_header_set_value (dwg, "codepage", &codepage, 0);
 
   }
   {

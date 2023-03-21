@@ -22235,11 +22235,12 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
     }
   else
     {
-      // TODO Encode unicode to \U+... bit_utf8_to_TV
+      // TODO Encode unicode to \U+... bit_utf8_to_TV. codepage conversions
 #  if 0
       int size = 1024;
       char *dest = malloc (size);
-      char *tgt = bit_utf8_to_TV (dest, u8str, size, strlen(u8str), 0);
+      char *tgt = bit_utf8_to_TV (dest, u8str, size, strlen(u8str), 0,
+                                  dwg->header.codepage);
       if (!dest)
         {
           LOG_ERROR ("Out of memory");
@@ -22254,7 +22255,8 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
               return NULL;
             }
           dest = realloc (dest, size);
-          tgt = bit_utf8_to_TV (dest, u8str, size, strlen(u8str), 0);
+          tgt = bit_utf8_to_TV (dest, u8str, size, strlen(u8str), 0,
+                                dwg->header.codepage);
         }
       return tgt;
 #  endif
