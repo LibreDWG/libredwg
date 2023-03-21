@@ -125,6 +125,12 @@
 #  undef HAVE_GETOPT_LONG
 #endif
 
+/* Define if you have the iconv() function. */
+#cmakedefine HAVE_ICONV
+
+/* Define if you have the <iconv.h> header file. */
+#cmakedefine HAVE_ICONV_H
+
 /* Define if you have the <inttypes.h> header file. */
 #cmakedefine HAVE_INTTYPES_H
 

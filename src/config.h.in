@@ -108,6 +108,12 @@
 /* Define to 1 if htole32 is available in <byteswap.h>. */
 #undef HAVE_HTOLE32
 
+/* Define if you have the iconv() function. */
+#undef HAVE_ICONV
+
+/* Define to 1 if you have the <iconv.h> header file. */
+#undef HAVE_ICONV_H
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
@@ -278,6 +284,9 @@
 
 /* Define to 1 if the system has the type `_Bool'. */
 #undef HAVE__BOOL
+
+/* Define as const if the declaration of iconv() needs const. */
+#undef ICONV_CONST
 
 /* Define to 1 if this is a release, skipping unstable DWG features, unknown
    DWG versions and objects. */

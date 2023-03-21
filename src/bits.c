@@ -32,6 +32,9 @@
 #  include <wchar.h>
 #endif
 // else we roll our own, Latin-1 only.
+#if defined HAVE_ICONV && defined HAVE_ICONV_H
+#  include <iconv.h>
+#endif
 
 #ifdef DWG_ABORT
 static unsigned int errors = 0;
