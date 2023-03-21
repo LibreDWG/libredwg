@@ -1993,14 +1993,22 @@ bit_embed_TU (BITCODE_TU restrict wstr)
 void
 bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
 {
-  int i;
-  int length = (chain && *chain) ? strlen ((const char *)chain) : 0;
+  size_t i;
+  size_t length = (chain && *chain) ? strlen ((const char *)chain) : 0;
   if (dat->version <= R_2000 && length)
     length++;
+  if (length > UINT16_MAX)
+    {
+      // silently truncate overlong strings for now
+      loglevel = 1;
+      LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
+      length = UINT16_MAX;
+      chain[UINT16_MAX - 1] = '\0';
+    }
   if (dat->from_version < R_13b1)
-    bit_write_RS (dat, length);
+    bit_write_RS (dat, (BITCODE_BS)length);
   else
-    bit_write_BS (dat, length);
+    bit_write_BS (dat, (BITCODE_BS)length);
   for (i = 0; i < length; i++)
     bit_write_RC (dat, (unsigned char)chain[i]);
 }
@@ -2017,7 +2025,7 @@ ishex (int c)
 void
 bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
 {
-  int i, length;
+  size_t i, length;
 
   // only if from r2007+ DWG. not JSON, DXF, add API.
   if (IS_FROM_TU (dat))
@@ -2033,9 +2041,19 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
               if (str)
                 {
                   length = strlen ((const char *)str);
-                  bit_write_BS (dat, length + 1);
-                  for (i = 0; i < length; i++)
-                    bit_write_RC (dat, (unsigned char)str[i]);
+                  if (length > UINT16_MAX)
+                    {
+                      loglevel = 1;
+                      LOG_WARN ("Overlong string truncated (len=%lu)",
+                                (unsigned long)length);
+                      length = UINT16_MAX - 1;
+                    }
+                  bit_write_BS (dat, (BITCODE_BS)(length + 1));
+                  if (length)
+                    {
+                      for (i = 0; i < length; i++)
+                        bit_write_RC (dat, (unsigned char)str[i]);
+                    }
                   bit_write_RC (dat, 0);
                   free (str);
                 }
@@ -2328,15 +2346,21 @@ bit_read_TU32 (Bit_Chain *restrict dat)
 void
 bit_write_TU (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
 {
-  unsigned int i;
-  unsigned int length;
+  size_t i, length;
 
   if (chain)
     length = bit_wcs2len (chain) + 1;
   else
     length = 0;
+  if (length > UINT16_MAX)
+    {
+      loglevel = 1;
+      LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
+      length = UINT16_MAX;
+      chain[UINT16_MAX - 1] = '\0';
+    }
 
-  bit_write_BS (dat, length);
+  bit_write_BS (dat, (BITCODE_BS)length);
   for (i = 0; i < length; i++)
     bit_write_RS (dat, chain[i]); // probably without byte swapping
 }
@@ -2345,15 +2369,21 @@ bit_write_TU (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
 void
 bit_write_TU16 (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
 {
-  unsigned int i;
-  unsigned int length;
+  size_t i, length;
 
   if (chain)
     length = bit_wcs2len (chain) + 1;
   else
     length = 0;
+  if (length > UINT16_MAX)
+    {
+      loglevel = 1;
+      LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
+      length = UINT16_MAX;
+      chain[UINT16_MAX - 1] = '\0';
+    }
 
-  bit_write_RS (dat, length);
+  bit_write_RS (dat, (BITCODE_RS)length);
   for (i = 0; i < length; i++)
     bit_write_RS (dat, chain[i]);
 }
@@ -2361,8 +2391,7 @@ bit_write_TU16 (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
 void
 bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)
 {
-  unsigned int i;
-  unsigned int length;
+  size_t i, length;
 
   if (dat->version >= R_2007)
     {
@@ -2370,7 +2399,14 @@ bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)
         length = bit_wcs2len ((BITCODE_TU)chain) + 1;
       else
         length = 0;
-      bit_write_RL (dat, length * 2);
+      if (length > INT32_MAX)
+        {
+          loglevel = 1;
+          LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
+          length = INT32_MAX;
+          chain[INT32_MAX - 1] = '\0';
+        }
+      bit_write_RL (dat, (BITCODE_RL)(length * 2));
       for (i = 0; i < length; i++)
         bit_write_RS (dat, chain[i]);
     }
@@ -2380,7 +2416,14 @@ bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)
         length = strlen (chain) + 1;
       else
         length = 0;
-      bit_write_RL (dat, length);
+      if (length > UINT32_MAX)
+        {
+          loglevel = 1;
+          LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
+          length = UINT32_MAX;
+          chain[UINT32_MAX - 1] = '\0';
+        }
+      bit_write_RL (dat, (BITCODE_RL)length);
       for (i = 0; i < length; i++)
         bit_write_RC (dat, chain[i]);
     }
@@ -2389,8 +2432,7 @@ bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)
 void
 bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
 {
-  unsigned int i;
-  unsigned int length;
+  size_t i, length;
 
   if (dat->version >= R_2007)
     {
@@ -2398,7 +2440,14 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
         length = bit_wcs2len ((BITCODE_TU)chain) + 1;
       else
         length = 0;
-      bit_write_RL (dat, length * 4);
+      if (length > UINT32_MAX / 4)
+        {
+          loglevel = 1;
+          LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
+          length = UINT32_MAX / 4;
+          chain[length - 1] = '\0';
+        }
+      bit_write_RL (dat, (BITCODE_RL)(length * 4));
       for (i = 0; i < length; i++)
         bit_write_RL (dat, chain[i]);
     }
@@ -2408,7 +2457,14 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
         length = strlen (chain) + 1;
       else
         length = 0;
-      bit_write_RL (dat, length);
+      if (length > UINT32_MAX)
+        {
+          loglevel = 1;
+          LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
+          length = UINT32_MAX;
+          chain[UINT32_MAX - 1] = '\0';
+        }
+      bit_write_RL (dat, (BITCODE_RL)length);
       for (i = 0; i < length; i++)
         bit_write_RC (dat, chain[i]);
     }
@@ -2786,10 +2842,17 @@ BITCODE_TU
 bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
 {
   BITCODE_TU wstr;
-  int i = 0;
-  int len = strlen (str);
+  size_t i = 0;
+  size_t len = strlen (str);
   unsigned char c;
 
+  if (len > 0xFFFE)
+    {
+      loglevel = 1;
+      LOG_WARN ("Overlong string truncated (len=%lu)",
+                (unsigned long)len);
+      len = UINT16_MAX - 1;
+    }
   wstr = (BITCODE_TU)malloc (2 * (len + 1));
   if (!wstr)
     {
@@ -2797,7 +2860,7 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
       LOG_ERROR ("Out of memory")
       return NULL;
     }
-  while (len >= 0 && (c = *str++))
+  while (len && (c = *str++))
     {
       len--;
       if (c < 128)
@@ -3241,7 +3304,8 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
     }
   else
     {
-      dat->chain = (unsigned char *)realloc (dat->chain, dat->size + size);
+      dat->chain
+          = (unsigned char *)realloc (dat->chain, (size_t)dat->size + size);
       if (!dat->chain)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;

@@ -956,7 +956,7 @@ dwg_type_dxfname (const Dwg_Object_Type type)
 void
 object_alias (char *restrict name)
 {
-  const int len = strlen (name);
+  const size_t len = strlen (name);
   // check aliases (dxfname => name)
   if (strEQc (name, "ACAD_PROXY_OBJECT"))
     strcpy (name, "PROXY_OBJECT");
@@ -990,7 +990,7 @@ object_alias (char *restrict name)
 void
 entity_alias (char *restrict name)
 {
-  const int len = strlen (name);
+  const size_t len = strlen (name);
   // check aliases (dxfname => name)
   if (strEQc (name, "ACAD_TABLE"))
     strcpy (name, "TABLE");

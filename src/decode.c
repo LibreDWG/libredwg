@@ -935,7 +935,7 @@ handles_section:
       UNTIL (R_2000)
       {
         FIELD_RC (num_sections, 0); // r14: 5, r2000: 6
-        for (i = 0; i < MIN (6, FIELD_VALUE (num_sections)); i++)
+        for (i = 0; i < MIN (6U, FIELD_VALUE (num_sections)); i++)
           {
             // address+sizes of sections 0-2 is correct, 3+4 is empty
             FIELD_RC (section[i].nr, 0);
