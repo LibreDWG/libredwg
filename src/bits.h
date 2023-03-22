@@ -293,19 +293,20 @@ EXPORT char *bit_TU_to_utf8_len (const BITCODE_TU restrict wstr,
                                  const int len) ATTRIBUTE_MALLOC;
 
 /** Converts UTF-8 (dxf,json) to ASCII TV.
-    \uxxxx or other unicode => \U+XXXX
+    \uxxxx or other unicode => \U+XXXX if not representable in this codepage.
     If cquoted unquotes \" to ", undo json_cquote(),
     Returns NULL if not enough room in dest. */
 EXPORT char *bit_utf8_to_TV (char *restrict dest,
                              const unsigned char *restrict src,
-                             const int destlen, const int srclen,
+                             const size_t destlen, const size_t srclen,
                              const unsigned cquoted,
                              const BITCODE_RS codepage);
-/** converts old codepaged strings to UTF-8.
+/** converts old codepage'd strings to UTF-8.
+    TODO convert \U+XXXX also if representable.
+    returns NULL on errors, or the unchanged src string, or a copy.
  */
-char *
-bit_TV_to_utf8 (char *restrict dest, const unsigned char *restrict src,
-                const int destlen, const int srclen, const BITCODE_RS codepage);
+EXPORT
+char *bit_TV_to_utf8 (char *restrict src, const BITCODE_RS codepage) ATTRIBUTE_MALLOC;
 
 /** Converts UTF-8 to UCS-2. Returns a copy.
     Needed by dwg importers, writers (e.g. dxf2dwg)

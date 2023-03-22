@@ -28,6 +28,7 @@
 #include <inttypes.h>
 #include <math.h>
 #include <assert.h>
+#include <errno.h>
 #ifdef HAVE_NATIVE_WCHAR2
 #  include <wchar.h>
 #endif
@@ -2727,7 +2728,7 @@ bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
 */
 char *
 bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
-                const int destlen, const int srclen, const unsigned cquoted,
+                const size_t destlen, const size_t srclen, const unsigned cquoted,
                 const BITCODE_RS codepage)
 {
   unsigned char c;
@@ -2840,24 +2841,57 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
   return d;
 }
 
-/** converts old codepaged strings to UTF-8.
+/** converts old codepage'd strings to UTF-8.
  */
+EXPORT ATTRIBUTE_MALLOC
 char *
-bit_TV_to_utf8 (char *restrict dest, const unsigned char *restrict src,
-                const int destlen, const int srclen, const BITCODE_RS codepage)
+bit_TV_to_utf8 (char *restrict src,
+                const BITCODE_RS codepage)
 {
+  // TODO: convert \\U+XXXX chars to UTF-8 also
 #ifdef HAVE_ICONV
   if (codepage == CP_UTF8)
     return (char*)src;
   {
     const char *charset = dwg_codepage_iconvstr (codepage);
+    const size_t srclen = strlen (src);
     iconv_t cd;
-    size_t nconv;
+    size_t nconv = (size_t)-1;
+    size_t destlen = trunc(srclen * 1.5);
+    char *dest;
     if (!charset)
       return (char*)src;
     cd = iconv_open ("UTF-8", charset);
-    nconv = iconv (cd, (char **)&src, (size_t *)&srclen, (char **)&dest,
-                   (size_t *)&destlen);
+    if (cd == (iconv_t) -1)
+      {
+        LOG_ERROR ("iconv_open (\"UTF-8\", \"%s\") failed with errno %d",
+                   charset, errno);
+        return NULL;
+      }
+    dest = malloc (destlen);
+    while (nconv == (size_t)-1 && dest != NULL)
+      {
+        nconv = iconv (cd, (char ** restrict)&src, (size_t *)&srclen, (char **)&dest,
+                       (size_t *)&destlen);
+        if (nconv == (size_t)-1)
+          {
+            if (errno != EINVAL) // probably dest buffer too small
+              {
+                char *dest_new;
+                destlen *= 2;
+                dest_new = realloc (dest, destlen);
+                if (dest_new)
+                  dest = dest_new;
+              }
+            else
+              {
+                LOG_ERROR ("iconv \"%s\" failed with errno %d", src, errno);
+                free (dest);
+                dest = NULL;
+                break;
+              }
+          }
+      }
     iconv_close (cd);
     return dest;
   }

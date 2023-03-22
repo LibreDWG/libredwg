@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "tests_common.h"
 
+/*
 void bit_advance_position_tests (void);
 void bit_read_B_tests (void);
 void bit_write_B_tests (void);
@@ -27,8 +28,9 @@ void bit_read_RD_tests (void);
 void bit_write_RD_tests (void);
 void bit_read_H_tests (void);
 void bit_write_H_tests (void);
+*/
 
-void
+static void
 bit_advance_position_tests (void)
 {
   Bit_Chain bitchain = strtobt ("10101010");
@@ -39,7 +41,7 @@ bit_advance_position_tests (void)
   bitfree (&bitchain);
 }
 
-void
+static void
 bit_read_B_tests (void)
 {
   Bit_Chain bitchain = strtobt ("101010");
@@ -51,7 +53,7 @@ bit_read_B_tests (void)
   bitfree (&bitchain);
 }
 
-void
+static void
 bit_write_B_tests (void)
 {
   Bit_Chain bitchain = strtobt ("0000000");
@@ -64,7 +66,7 @@ bit_write_B_tests (void)
   bitfree (&bitchain);
 }
 
-void
+static void
 bit_read_BB_tests (void)
 {
   Bit_Chain bitchain = strtobt ("10101010");
@@ -76,7 +78,7 @@ bit_read_BB_tests (void)
   bitfree (&bitchain);
 }
 
-void
+static void
 bit_write_BB_tests (void)
 {
   Bit_Chain bitchain = strtobt ("01000000");
@@ -90,7 +92,7 @@ bit_write_BB_tests (void)
   bitfree (&bitchain);
 }
 
-void
+static void
 bit_read_3B_tests (void)
 {
   Bit_Chain bitchain = strtobt ("100111");
@@ -112,7 +114,7 @@ bit_read_3B_tests (void)
   bitfree (&bitchain);
 }
 
-void
+static void
 bit_write_3B_tests (void)
 {
   Bit_Chain bitchain = strtobt ("01000000");
@@ -129,7 +131,7 @@ bit_write_3B_tests (void)
 /* This function calls tests for bit_write_4BITS_tests()
    Used in VIEW view_mode, type 71
  */
-void
+static void
 bit_write_4BITS_tests (void)
 {
   Bit_Chain bitchain = strtobt ("00000000");
@@ -143,7 +145,7 @@ bit_write_4BITS_tests (void)
   bitfree (&bitchain);
 }
 
-void
+static void
 bit_read_4BITS_tests (void)
 {
   Bit_Chain bitchain = strtobt ("11111111");
@@ -179,7 +181,7 @@ bit_read_4BITS_tests (void)
   test_4bits ("1111", 0xF);
 }
 
-void
+static void
 bit_read_BLL_tests (void)
 {
   /* 001 => 1, 00000011 */
@@ -192,7 +194,7 @@ bit_read_BLL_tests (void)
   bitfree (&bitchain);
 }
 
-void
+static void
 bit_read_RC_tests (void)
 {
   Bit_Chain bitchain = strtobt ("11111111");
@@ -204,7 +206,7 @@ bit_read_RC_tests (void)
   bitfree (&bitchain);
 }
 
-void
+static void
 bit_write_RC_tests (void)
 {
   Bit_Chain bitchain = strtobt ("00000000");
@@ -216,7 +218,7 @@ bit_write_RC_tests (void)
   bitfree (&bitchain);
 }
 
-void
+static void
 bit_read_RS_tests (void)
 {
   Bit_Chain bitchain = strtobt ("1111111100000001");
@@ -229,7 +231,7 @@ bit_read_RS_tests (void)
   bitfree (&bitchain);
 }
 
-void
+static void
 bit_write_RS_tests (void)
 {
   Bit_Chain bitchain = strtobt ("1111111111111111");
@@ -242,7 +244,7 @@ bit_write_RS_tests (void)
   bitfree (&bitchain);
 }
 
-void
+static void
 bit_write_RL_tests (void)
 {
   Bit_Chain bitchain = strtobt ("11111111"
@@ -259,7 +261,7 @@ bit_write_RL_tests (void)
   bitfree (&bitchain);
 }
 
-void
+static void
 bit_read_RL_tests (void)
 { /* 7f         f7         bf        7d */
   Bit_Chain bitchain = strtobt ("01111111"
@@ -275,7 +277,7 @@ bit_read_RL_tests (void)
   bitfree (&bitchain);
 }
 
-void
+static void
 bit_read_RD_tests (void)
 {
   Bit_Chain bitchain;
@@ -295,7 +297,7 @@ bit_read_RD_tests (void)
     fail ("bit_read_RD");
 }
 
-void
+static void
 bit_write_RD_tests (void)
 {
   Bit_Chain bitchain;
@@ -314,7 +316,7 @@ bit_write_RD_tests (void)
   bitfree (&bitchain);
 }
 
-void
+static void
 bit_read_H_tests (void)
 {
 #if defined(__MINGW64_VERSION_MAJOR) && defined(__GNUC__) && __GNUC__ >= 9
@@ -355,7 +357,7 @@ bit_read_H_tests (void)
   test_H_r_case ("00000010" "00000010" "00001010", R_11, 0, 0, 2, 522);
 }
 
-void
+static void
 bit_write_H_tests (void)
 {
   Bit_Chain bitchain;
@@ -391,6 +393,85 @@ bit_write_H_tests (void)
   // preR13
   test_H_w_case(0, 1, 2, R_11);
   test_H_w_case(0, 2, 522, R_11);
+}
+
+static void
+bit_utf8_to_TV_tests (void)
+{
+  char dest[128];
+  char *p;
+  const char *src1 = "TestË\\\"END";
+  const char *src2 = "Test\u0234\"END"; // Latin Small Letter L with Curl, not in any codepage
+
+  p = bit_utf8_to_TV (dest, (const unsigned char *)src1, sizeof (dest),
+                      strlen (src1), 0, CP_ISO_8859_1);
+  // FIXME Ë (U+00CB) can really be represented in CP_ISO_8859_1,
+  // so no conversion to \U+XXXX needed
+  if (strEQc (p, "TestË\\\"END"))
+    pass ();
+  else
+    fail ("bit_utf8_to_TV %s as ISO_8859_1", p);
+  // cquoted
+  p = bit_utf8_to_TV (dest, (const unsigned char *)src1, sizeof (dest),
+                      strlen (src1), 1, CP_ISO_8859_1);
+  if (strEQc (p, "TestË\"END"))
+    pass ();
+  else
+    fail ("bit_utf8_to_TV %s cquoted", p);
+
+  p = bit_utf8_to_TV (dest, (const unsigned char *)src1, sizeof (dest),
+                      strlen (src1), 0, CP_ISO_8859_7);
+  // Ë (U+00CB) can not be represented in CP_ISO_8859_7
+  if (strEQc (p, "Test\\U+00CB\\\"END"))
+    pass ();
+  else
+    fail ("bit_utf8_to_TV %s as ISO_8859_7", p);
+
+  // \u0234 must be converted to \U+0234 in any codepage
+  p = bit_utf8_to_TV (dest, (const unsigned char *)src2, sizeof (dest),
+                      strlen (src1), 0, CP_ISO_8859_1);
+  if (strEQc (p, "Test\\U+0234\"END"))
+    pass ();
+  else
+    fail ("bit_utf8_to_TV %s", p);
+}
+
+static void
+bit_TV_to_utf8_tests (void)
+{
+  char *p;
+  const char *srcu = "Test\\U+0234";
+  const char *src1 = "TestÄ";
+  const char *src2 = "TestĆ";
+  const char *src7 = "TestΣ";
+
+  p = bit_TV_to_utf8 ((char *)srcu, CP_ISO_8859_1);
+  if (strEQc (p, "Test\xC8\xB4"))
+    pass ();
+  else
+    fail ("bit_TV_to_utf8 %s", p);
+  free (p);
+
+  p = bit_TV_to_utf8 ((char *)src1, CP_ISO_8859_1);
+  if (strEQc (p, "Test\xC8\xB4"))
+    pass ();
+  else
+    fail ("bit_TV_to_utf8 %s", p);
+  free (p);
+
+  p = bit_TV_to_utf8 ((char *)src2, CP_ISO_8859_2);
+  if (strEQc (p, "TestĆ"))
+    pass ();
+  else
+    fail ("bit_TV_to_utf8 %s", p);
+  free (p);
+
+  p = bit_TV_to_utf8 ((char *)src7, CP_ISO_8859_7);
+  if (strEQc (p, "TestΣ"))
+    pass ();
+  else
+    fail ("bit_TV_to_utf8 %s", p);
+  free (p);
 }
 
 int
@@ -429,8 +510,10 @@ main (int argc, char const *argv[])
   bit_write_RL_tests ();
   bit_read_RD_tests ();
   bit_write_RD_tests ();
-  bit_read_H_tests();
-  bit_write_H_tests();
+  bit_utf8_to_TV_tests ();
+  bit_TV_to_utf8_tests ();
+  bit_read_H_tests ();
+  bit_write_H_tests ();
 
   // Prepare the testcase
   bitchain.size = 100;

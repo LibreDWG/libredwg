@@ -237,7 +237,7 @@ static char *_path_field (const char *path);
         && (1 || strchr (str, '"') || strchr (str, '\\')                      \
             || strchr (str, '\n')))                                           \
       {                                                                       \
-        const int len = strlen (str);                                         \
+        const size_t len = strlen (str);                                      \
         if (len < 42)                                                         \
           {                                                                   \
             const int _len = 6 * len + 1;                                     \
@@ -1341,7 +1341,7 @@ wcquote (wchar_t *restrict dest, const wchar_t *restrict src)
 
 // also converts from codepage to utf8
 char *
-json_cquote (char *restrict dest, const char *restrict src, const int len,
+json_cquote (char *restrict dest, const char *restrict src, const size_t len,
              const BITCODE_RS codepage)
 {
   unsigned char c;
@@ -1352,10 +1352,12 @@ json_cquote (char *restrict dest, const char *restrict src, const int len,
   if (!src)
     return (char *)"";
 #ifdef HAVE_ICONV
-  if (codepage >= CP_US_ASCII && codepage <= CP_ANSI_1258)
+  if (codepage > CP_US_ASCII && codepage <= CP_ANSI_1258)
     {
-      src = bit_TV_to_utf8 (dest, src, len, strlen (src), codepage);
-      s = (unsigned char *)src;
+      char *tmp = bit_TV_to_utf8 ((char* restrict)src, codepage);
+      if (tmp)
+        s = (unsigned char *)tmp;
+      // else conversion failed. ignore
     }
 #endif
   while ((c = *s++))
