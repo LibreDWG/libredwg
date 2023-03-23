@@ -51,7 +51,7 @@ for d in "$@"; do
                 *.DXF)  ext=dxf ;;
                 *.json) ext=json ;;
                 *.JSON) ext=json ;;
-                *)      echo "Illegal extension for $d"; exit ;;
+                *)      ext=dwg; echo "Assume DWG file for $d";;
             esac
         fi
         b=$(basename "$d" .$ext)
