@@ -215,10 +215,6 @@ BS,	DXF 70
 BSd,	DXF 70
 @item DIMLWE
 BSd,	DXF 70
-@item DIMMALTTZ
-BS
-@item DIMMALTZ
-BS
 @item DIMMZF
 BD
 @item DIMMZS

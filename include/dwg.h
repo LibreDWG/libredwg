@@ -1108,8 +1108,6 @@ typedef struct _dwg_header_variables {
   BITCODE_BS DIMFIT;    /*!< r13-r14 only RC */
   BITCODE_B DIMUPT;
   BITCODE_BS DIMTZIN;   /*!< r13-r14 only RC */
-  BITCODE_BS DIMMALTZ;  /*!< r13-r14 only RC */
-  BITCODE_BS DIMMALTTZ; /*!< r13-r14 only RC */
   BITCODE_BS DIMTAD;    /*!< r13-r14 only RC */
   BITCODE_BS DIMUNIT;
   BITCODE_BS DIMAUNIT;
@@ -1159,8 +1157,8 @@ typedef struct _dwg_header_variables {
   BITCODE_BS DIMLUNIT;
   BITCODE_BS DIMDSEP;
   BITCODE_BS DIMTMOVE;
-  BITCODE_BS DIMALTZ;
-  BITCODE_BS DIMALTTZ;
+  BITCODE_BS DIMALTZ;  /*!< r13-r14 only RC */
+  BITCODE_BS DIMALTTZ; /*!< r13-r14 only RC */
   BITCODE_BS DIMATFIT;
   BITCODE_B  DIMFXLON;  /*!< r2007+ */
   BITCODE_B  DIMTXTDIRECTION; /*!< r2010+ */
