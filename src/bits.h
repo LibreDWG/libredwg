@@ -306,7 +306,8 @@ EXPORT char *bit_utf8_to_TV (char *restrict dest,
     returns NULL on errors, or the unchanged src string, or a copy.
  */
 EXPORT
-char *bit_TV_to_utf8 (char *restrict src, const BITCODE_RS codepage) ATTRIBUTE_MALLOC;
+char *bit_TV_to_utf8 (const char *restrict src,
+                      const BITCODE_RS codepage) ATTRIBUTE_MALLOC;
 
 /** Converts UTF-8 to UCS-2. Returns a copy.
     Needed by dwg importers, writers (e.g. dxf2dwg)

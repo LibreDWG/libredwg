@@ -20,15 +20,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#ifdef HAVE_CTYPE_H
-#  include <ctype.h>
-#endif
+#include <ctype.h>
 #ifdef HAVE_ICONV
 #  include <iconv.h>
 #endif
 
 #define IS_JSON
 #include "common.h"
+#include "codepages.h"
 #include "bits.h"
 #include "dwg.h"
 #include "decode.h"

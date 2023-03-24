@@ -14,6 +14,7 @@ endif(WIN32)
 add_executable(bits_test
   bits_test.c
   ../../src/bits.c
+  ../../src/codepages.c
   ../../src/classes.c
   ../../src/objects.c
   tests_common.h)
@@ -26,6 +27,7 @@ endif()
 add_executable(hash_test
   hash_test.c
   ../../src/bits.c
+  ../../src/codepages.c
   ../../src/hash.c
   ../../src/classes.c
   tests_common.h)
@@ -46,6 +48,7 @@ add_executable(decode_test
   ../../src/dwg.c
   ../../src/common.c
   ../../src/bits.c
+  ../../src/codepages.c
   ../../src/hash.c
   ../../src/decode_r2007.c
   ../../src/objects.c
@@ -72,6 +75,7 @@ add_test(dxf_test dxf_test${EXE_EXT})
 add_executable(dynapi_test
   dynapi_test.c
   ../../src/bits.c
+  ../../src/codepages.c
   ../../src/objects.c
   ../../src/classes.c
   tests_common.h)

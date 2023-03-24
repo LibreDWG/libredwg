@@ -1,6 +1,6 @@
 ## Makefile.am
 ##
-## Copyright (C) 2010,2018-2020 Free Software Foundation, Inc.
+## Copyright (C) 2010,2018-2023 Free Software Foundation, Inc.
 ##
 ## This file is part of LibreDWG.
 ##
@@ -32,6 +32,7 @@ CPPCHECK = @CPPCHECK@
 libredwg_la_SOURCES = \
 	dwg.c \
 	common.c \
+	codepages.c \
 	bits.c \
 	decode.c \
         decode_r11.c \
@@ -100,6 +101,7 @@ EXTRA_HEADERS = \
 	common.h \
 	importer.h \
 	classes.h \
+	codepages.h \
 	bits.h \
 	myalloca.h \
 	decode.h \

@@ -353,56 +353,6 @@ EXPORT int strcasecmp (const char *a, const char *b);
  Data types (including compressed forms) used through the project
 */
 
-/* May not be changed, as it directly maps to the dwg->header.codepage number */
-typedef enum _dwg_codepage
-{
-  CP_UTF8 = 0,
-  CP_US_ASCII = 1,
-  CP_ISO_8859_1,
-  CP_ISO_8859_2,
-  CP_ISO_8859_3,
-  CP_ISO_8859_4,
-  CP_ISO_8859_5,
-  CP_ISO_8859_6,
-  CP_ISO_8859_7,
-  CP_ISO_8859_8,
-  CP_ISO_8859_9,
-  CP_CP437,
-  CP_CP850,
-  CP_CP852,
-  CP_CP855,
-  CP_CP857,
-  CP_CP860,
-  CP_CP861,
-  CP_CP863,
-  CP_CP864,
-  CP_CP865,
-  CP_CP869,
-  CP_CP932,
-  CP_MACINTOSH,
-  CP_BIG5,
-  CP_CP949 = 25,
-  CP_CP866 = 27, /* == JOHAB */
-  CP_ANSI_1250,
-  CP_ANSI_1251 = 29,
-  CP_ANSI_1252 = 30,
-  CP_GB2312 = 31,
-  CP_ANSI_1253,
-  CP_ANSI_1254,
-  CP_ANSI_1255,
-  CP_ANSI_1256,
-  CP_ANSI_1257,
-  CP_ANSI_874,
-  CP_ANSI_932,
-  CP_ANSI_936,
-  CP_ANSI_949,
-  CP_ANSI_950,
-  CP_ANSI_1361,
-  CP_UTF16 = 43,
-  CP_ANSI_1258 = 44,
-  CP_DWG
-} Dwg_Codepage;
-
 // keep in sync with common.c dwg_bits_name
 typedef enum DWG_BITS
 {
@@ -596,11 +546,5 @@ void dwg_log_dataflags (const int _loglevel, const int maxlevel,
 #if !defined _DWG_API_H_ && !defined _DWG_API_C && !defined DYNAPI_TEST_C && !defined ADD_TEST_C && !defined DXF_TEST_C
 bool dwg_is_valid_tag (const char *tag) __nonnull_all;
 #endif
-
-#ifdef HAVE_ICONV
-const char *dwg_codepage_iconvstr (BITCODE_RS cp);
-#endif
-const char *dwg_codepage_dxfstr (BITCODE_RS cp);
-BITCODE_RS dwg_codepage_int (const char *s); // dxfstr
 
 #endif

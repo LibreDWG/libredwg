@@ -33,6 +33,7 @@
 #define IS_DXF
 #include "common.h"
 #include "bits.h"
+#include "codepages.h"
 #include "dwg.h"
 #include "decode.h"
 #include "encode.h"

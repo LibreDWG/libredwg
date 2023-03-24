@@ -2,6 +2,7 @@
 #include "config.h"
 #include "bits.h"
 #include "common.h"
+#include "codepages.h"
 #include "decode_r11.h"
 #include <string.h>
 #include <stdlib.h>
@@ -407,14 +408,14 @@ bit_utf8_to_TV_tests (void)
                       strlen (src1), 0, CP_ISO_8859_1);
   // FIXME Ë (U+00CB) can really be represented in CP_ISO_8859_1,
   // so no conversion to \U+XXXX needed
-  if (strEQc (p, "TestË\\\"END"))
+  if (strEQc (p, "Test\xcb\\\"END"))
     pass ();
   else
     fail ("bit_utf8_to_TV %s as ISO_8859_1", p);
   // cquoted
   p = bit_utf8_to_TV (dest, (const unsigned char *)src1, sizeof (dest),
                       strlen (src1), 1, CP_ISO_8859_1);
-  if (strEQc (p, "TestË\"END"))
+  if (strEQc (p, "Test\xcb\"END"))
     pass ();
   else
     fail ("bit_utf8_to_TV %s cquoted", p);
@@ -433,7 +434,7 @@ bit_utf8_to_TV_tests (void)
   if (strEQc (p, "Test\\U+0234\"END"))
     pass ();
   else
-    fail ("bit_utf8_to_TV %s", p);
+    fail ("bit_utf8_to_TV %s => %s ISO_8859_1", src2, p);
 }
 
 static void
@@ -441,37 +442,41 @@ bit_TV_to_utf8_tests (void)
 {
   char *p;
   const char *srcu = "Test\\U+0234";
-  const char *src1 = "TestÄ";
-  const char *src2 = "TestĆ";
-  const char *src7 = "TestΣ";
+  const char *src1 = "Test\xc4"; // Ä
+  const char *src2 = "Test\xc6"; // Ć \U+0106
+  const char *src7 = "Test\xd3"; // Σ
 
   p = bit_TV_to_utf8 ((char *)srcu, CP_ISO_8859_1);
-  if (strEQc (p, "Test\xC8\xB4"))
+  if (strEQc (p, "Test\xc8\xb4"))
     pass ();
   else
-    fail ("bit_TV_to_utf8 %s", p);
-  free (p);
+    fail ("bit_TV_to_utf8 %s ISO_8859_1", p); // TODO
+  if (p != srcu)
+    free (p);
 
   p = bit_TV_to_utf8 ((char *)src1, CP_ISO_8859_1);
-  if (strEQc (p, "Test\xC8\xB4"))
+  if (strEQc (p, "TestÄ")) // \xc3\x84 as utf-8
     pass ();
   else
-    fail ("bit_TV_to_utf8 %s", p);
-  free (p);
+    fail ("bit_TV_to_utf8 %s ISO_8859_1", p);
+  if (p != src1)
+    free (p);
 
   p = bit_TV_to_utf8 ((char *)src2, CP_ISO_8859_2);
   if (strEQc (p, "TestĆ"))
     pass ();
   else
-    fail ("bit_TV_to_utf8 %s", p);
-  free (p);
+    fail ("bit_TV_to_utf8 %s ISO_8859_2", p);
+  if (p != src2)
+    free (p);
 
   p = bit_TV_to_utf8 ((char *)src7, CP_ISO_8859_7);
   if (strEQc (p, "TestΣ"))
     pass ();
   else
-    fail ("bit_TV_to_utf8 %s", p);
-  free (p);
+    fail ("bit_TV_to_utf8 %s ISO_8859_7", p);
+  if (p != src7)
+    free (p);
 }
 
 int

@@ -37,6 +37,7 @@
 #define IS_INDXF
 #include "common.h"
 #include "importer.h"
+#include "codepages.h"
 #include "bits.h"
 #include "dwg.h"
 #include "out_dxf.h"

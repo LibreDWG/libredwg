@@ -33,7 +33,7 @@
 #  include <wchar.h>
 #endif
 // else we roll our own, Latin-1 only.
-#if defined HAVE_ICONV && defined HAVE_ICONV_H
+#ifdef HAVE_ICONV_H
 #  include <iconv.h>
 #endif
 
@@ -49,6 +49,7 @@ static unsigned int loglevel;
 #include "logging.h"
 #include "bits.h"
 #include "common.h"
+#include "codepages.h"
 
 /*------------------------------------------------------------------------------
  * Public functions
@@ -2723,7 +2724,7 @@ bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
 /** converts UTF-8 (dxf,json) to ASCII TV.
     optionally unquotes \" to ", \\ to \, undo json_cquote(),
     \\uxxxx or other unicode => \\U+XXXX.
-    TODO codepage conversion
+    codepage conversion
     Returns NULL if not enough room in dest.
 */
 char *
@@ -2736,6 +2737,8 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
   const char *endp = dest + destlen;
   const unsigned char *ends = src + srclen;
   char *d = dest;
+  const bool is_asian_cp
+    = dwg_codepage_isasian ((const Dwg_Codepage)codepage);
 
   while ((c = *s++))
     {
@@ -2784,14 +2787,30 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
           /* ignore invalid utf8 for now */
           if (dest + 7 < endp)
             {
+              unsigned char c1;
+              wchar_t wc1;
               BITCODE_RS wc = ((c & 0x1f) << 6) | (*s & 0x3f);
-              *dest++ = '\\';
-              *dest++ = 'U';
-              *dest++ = '+';
-              *dest++ = heX (wc >> 12);
-              *dest++ = heX (wc >> 8);
-              *dest++ = heX (wc >> 4);
-              *dest++ = heX (wc);
+              // is representable as 2-byte
+              if (is_asian_cp
+                  && (wc1 = dwg_codepage_wc ((Dwg_Codepage)codepage, wc)))
+                {
+                  *dest++ = wc1 >> 4;
+                  *dest++ = wc1 & 0xff;
+                }
+              // is representable as byte
+              else if (!is_asian_cp
+                       && (c1 = dwg_codepage_c ((Dwg_Codepage)codepage, wc)))
+                *dest++ = c1;
+              else
+                {
+                  *dest++ = '\\';
+                  *dest++ = 'U';
+                  *dest++ = '+';
+                  *dest++ = heX (wc >> 12);
+                  *dest++ = heX (wc >> 8);
+                  *dest++ = heX (wc >> 4);
+                  *dest++ = heX (wc);
+                }
               s++;
             }
           else
@@ -2812,15 +2831,29 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
             }
           if (dest + 7 < endp && s + 1 <= ends)
             {
+              unsigned char c1;
+              wchar_t wc1;
               BITCODE_RS wc = ((c & 0x0f) << 12) | ((*s & 0x3f) << 6)
                               | (*(s + 1) & 0x3f);
-              *dest++ = '\\';
-              *dest++ = 'U';
-              *dest++ = '+';
-              *dest++ = heX (wc >> 12);
-              *dest++ = heX (wc >> 8);
-              *dest++ = heX (wc >> 4);
-              *dest++ = heX (wc);
+              if (is_asian_cp
+                  && (wc1 = dwg_codepage_wc ((Dwg_Codepage)codepage, wc)))
+                {
+                  *dest++ = wc1 >> 4;
+                  *dest++ = wc1 & 0xff;
+                }
+              else if (!is_asian_cp
+                       && (c1 = dwg_codepage_wc ((Dwg_Codepage)codepage, wc)))
+                *dest++ = c1;
+              else
+                {
+                  *dest++ = '\\';
+                  *dest++ = 'U';
+                  *dest++ = '+';
+                  *dest++ = heX (wc >> 12);
+                  *dest++ = heX (wc >> 8);
+                  *dest++ = heX (wc >> 4);
+                  *dest++ = heX (wc);
+                }
             }
           else
             return NULL;
@@ -2845,7 +2878,7 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
  */
 EXPORT ATTRIBUTE_MALLOC
 char *
-bit_TV_to_utf8 (char *restrict src,
+bit_TV_to_utf8 (const char *restrict src,
                 const BITCODE_RS codepage)
 {
   // TODO: convert \\U+XXXX chars to UTF-8 also
@@ -2853,12 +2886,12 @@ bit_TV_to_utf8 (char *restrict src,
   if (codepage == CP_UTF8)
     return (char*)src;
   {
-    const char *charset = dwg_codepage_iconvstr (codepage);
+    const char *charset = dwg_codepage_iconvstr ((Dwg_Codepage)codepage);
     const size_t srclen = strlen (src);
     iconv_t cd;
     size_t nconv = (size_t)-1;
     size_t destlen = trunc(srclen * 1.5);
-    char *dest;
+    char *dest, *odest;
     if (!charset)
       return (char*)src;
     cd = iconv_open ("UTF-8", charset);
@@ -2868,32 +2901,38 @@ bit_TV_to_utf8 (char *restrict src,
                    charset, errno);
         return NULL;
       }
-    dest = malloc (destlen);
+    odest = dest = malloc (destlen);
     while (nconv == (size_t)-1 && dest != NULL)
       {
-        nconv = iconv (cd, (char ** restrict)&src, (size_t *)&srclen, (char **)&dest,
-                       (size_t *)&destlen);
+        nconv = iconv (cd, (char **restrict)&src, (size_t *)&srclen,
+                       (char **)&dest, (size_t *)&destlen);
         if (nconv == (size_t)-1)
           {
             if (errno != EINVAL) // probably dest buffer too small
               {
                 char *dest_new;
                 destlen *= 2;
-                dest_new = realloc (dest, destlen);
+                dest_new = realloc (odest, destlen);
                 if (dest_new)
-                  dest = dest_new;
+                  odest = dest = dest_new;
               }
             else
               {
                 LOG_ERROR ("iconv \"%s\" failed with errno %d", src, errno);
-                free (dest);
+                free (odest);
                 dest = NULL;
                 break;
               }
           }
       }
+    if (dest)
+      {
+        // flush the remains
+        iconv (cd, NULL, (size_t *)&srclen, (char **)&dest, (size_t *)&destlen);
+        *dest = '\0';
+      }
     iconv_close (cd);
-    return dest;
+    return odest;
   }
 #else
   return (char*)src;
