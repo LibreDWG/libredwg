@@ -46873,36 +46873,6 @@ static int test_DIMSTYLE (const Dwg_Object *obj)
     dimstyle->DIMLWE--;
   }
   {
-    BITCODE_BS DIMMALTTZ;
-    if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMMALTTZ", &DIMMALTTZ, NULL)
-        && DIMMALTTZ == dimstyle->DIMMALTTZ)
-      pass ();
-    else
-      fail ("DIMSTYLE.DIMMALTTZ [BS] %hu != %hu", dimstyle->DIMMALTTZ, DIMMALTTZ);
-    DIMMALTTZ++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMMALTTZ", &DIMMALTTZ, 0)
-        && DIMMALTTZ == dimstyle->DIMMALTTZ)
-      pass ();
-    else
-      fail ("DIMSTYLE.DIMMALTTZ [BS] set+1 %hu != %hu", dimstyle->DIMMALTTZ, DIMMALTTZ);
-    dimstyle->DIMMALTTZ--;
-  }
-  {
-    BITCODE_BS DIMMALTZ;
-    if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMMALTZ", &DIMMALTZ, NULL)
-        && DIMMALTZ == dimstyle->DIMMALTZ)
-      pass ();
-    else
-      fail ("DIMSTYLE.DIMMALTZ [BS] %hu != %hu", dimstyle->DIMMALTZ, DIMMALTZ);
-    DIMMALTZ++;
-    if (dwg_dynapi_entity_set_value (dimstyle, "DIMSTYLE", "DIMMALTZ", &DIMMALTZ, 0)
-        && DIMMALTZ == dimstyle->DIMMALTZ)
-      pass ();
-    else
-      fail ("DIMSTYLE.DIMMALTZ [BS] set+1 %hu != %hu", dimstyle->DIMMALTZ, DIMMALTZ);
-    dimstyle->DIMMALTZ--;
-  }
-  {
     BITCODE_BD DIMMZF;
     if (dwg_dynapi_entity_value (dimstyle, "DIMSTYLE", "DIMMZF", &DIMMZF, NULL)
         && DIMMZF == dimstyle->DIMMZF)

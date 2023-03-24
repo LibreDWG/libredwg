@@ -34,8 +34,8 @@ api_process (dwg_object *obj)
   BITCODE_BS DIMFIT;  /*!< r13-r14 only RC */
   BITCODE_B DIMUPT;
   BITCODE_BS DIMTZIN;   /*!< r13-r14 only RC */
-  BITCODE_BS DIMMALTZ;  /*!< r13-r14 only RC */
-  BITCODE_BS DIMMALTTZ; /*!< r13-r14 only RC */
+  BITCODE_BS DIMALTZ;   /*!< r13-r14 only RC */
+  BITCODE_BS DIMALTTZ;  /*!< r13-r14 only RC */
   BITCODE_BS DIMTAD;    /*!< r13-r14 only RC */
   BITCODE_BS DIMUNIT;
   BITCODE_BS DIMAUNIT;
@@ -84,8 +84,6 @@ api_process (dwg_object *obj)
   BITCODE_BS DIMLUNIT;
   BITCODE_BS DIMDSEP;
   BITCODE_BS DIMTMOVE;
-  BITCODE_BS DIMALTZ;
-  BITCODE_BS DIMALTTZ;
   BITCODE_BS DIMATFIT;
   BITCODE_B DIMFXLON;        /*!< r2007+ */
   BITCODE_B DIMTXTDIRECTION; /*!< r2010+ */
@@ -136,8 +134,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMFIT, BS);  /*!< r13-r14 only RC */
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMUPT, B);
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMTZIN, BS);   /*!< r13-r14 only RC */
-  CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMMALTZ, BS);  /*!< r13-r14 only RC */
-  CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMMALTTZ, BS); /*!< r13-r14 only RC */
+  CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMALTZ, BS);   /*!< r13-r14 only RC */
+  CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMALTTZ, BS);  /*!< r13-r14 only RC */
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMTAD, BS);    /*!< r13-r14 only RC */
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMUNIT, BS);
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMAUNIT, BS);
@@ -185,8 +183,6 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMLUNIT, BS);
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMDSEP, BS);
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMTMOVE, BS);
-  CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMALTZ, BS);
-  CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMALTTZ, BS);
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMATFIT, BS);
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMFXLON, B);        /*!< r2007+ */
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, DIMTXTDIRECTION, B); /*!< r2010+ */
