@@ -3369,42 +3369,6 @@ test_header (Dwg_Data *dwg)
 
   }
   {
-    BITCODE_BS dimmaltz;
-    if (dwg_dynapi_header_value (dwg, "DIMMALTZ", &dimmaltz, NULL)
-        && dimmaltz == dwg->header_vars.DIMMALTZ)
-      pass ();
-    else
-      fail ("HEADER.DIMMALTZ [BS] %hu != %hu", dwg->header_vars.DIMMALTZ, dimmaltz);
-    dimmaltz++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMMALTZ", &dimmaltz, 0)
-        && dimmaltz == dwg->header_vars.DIMMALTZ)
-      pass ();
-    else
-      fail ("HEADER.DIMMALTZ [BS] set+1 %hu != %hu",
-            dwg->header_vars.DIMMALTZ, dimmaltz);
-    dimmaltz--;
-    dwg_dynapi_header_set_value (dwg, "DIMMALTZ", &dimmaltz, 0);
-
-  }
-  {
-    BITCODE_BS dimmalttz;
-    if (dwg_dynapi_header_value (dwg, "DIMMALTTZ", &dimmalttz, NULL)
-        && dimmalttz == dwg->header_vars.DIMMALTTZ)
-      pass ();
-    else
-      fail ("HEADER.DIMMALTTZ [BS] %hu != %hu", dwg->header_vars.DIMMALTTZ, dimmalttz);
-    dimmalttz++;
-    if (dwg_dynapi_header_set_value (dwg, "DIMMALTTZ", &dimmalttz, 0)
-        && dimmalttz == dwg->header_vars.DIMMALTTZ)
-      pass ();
-    else
-      fail ("HEADER.DIMMALTTZ [BS] set+1 %hu != %hu",
-            dwg->header_vars.DIMMALTTZ, dimmalttz);
-    dimmalttz--;
-    dwg_dynapi_header_set_value (dwg, "DIMMALTTZ", &dimmalttz, 0);
-
-  }
-  {
     BITCODE_BS dimtad;
     if (dwg_dynapi_header_value (dwg, "DIMTAD", &dimtad, NULL)
         && dimtad == dwg->header_vars.DIMTAD)
