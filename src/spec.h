@@ -608,7 +608,7 @@
         LOG_FLAG_TABLE_W (IS_XREF_REF);                                       \
         LOG_FLAG_TABLE_W (IS_XREF_RESOLVED);                                  \
         LOG_FLAG_TABLE_W (IS_XREF_DEP);                                       \
-        LOG_FLAG_W (VIEWPORT, DELETED);                                       \
+        LOG_FLAG_TABLE_W (IS_REMOVED);                                        \
         LOG_FLAG_TABLE_MAX (255);                                             \
         LOG_TRACE ("\n");                                                     \
       }
