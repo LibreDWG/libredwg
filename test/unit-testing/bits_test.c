@@ -450,7 +450,7 @@ bit_TV_to_utf8_tests (void)
   if (strEQc (p, "Test\xc8\xb4"))
     pass ();
   else
-    fail ("bit_TV_to_utf8 %s ISO_8859_1", p); // TODO
+    fail ("bit_TV_to_utf8 %s ISO_8859_1", p);
   if (p != srcu)
     free (p);
 

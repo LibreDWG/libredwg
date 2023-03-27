@@ -302,7 +302,7 @@ EXPORT char *bit_utf8_to_TV (char *restrict dest,
                              const unsigned cquoted,
                              const BITCODE_RS codepage);
 /** converts old codepage'd strings to UTF-8.
-    TODO convert \U+XXXX also if representable.
+    convert \U+XXXX also if representable.
     returns NULL on errors, or the unchanged src string, or a copy.
  */
 EXPORT
@@ -315,6 +315,8 @@ char *bit_TV_to_utf8 (const char *restrict src,
  */
 EXPORT BITCODE_TU bit_utf8_to_TU (char *restrict str,
                                   const unsigned cquoted) ATTRIBUTE_MALLOC;
+// convert all \\U+XXXX sequences to UTF-8
+char *bit_u_expand (const char *src) ATTRIBUTE_MALLOC;
 
 /* compare an ASCII/TU string to ASCII name */
 int bit_eq_T (Bit_Chain *restrict dat, const BITCODE_T restrict str1,

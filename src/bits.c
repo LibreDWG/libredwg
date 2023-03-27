@@ -2874,6 +2874,33 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
   return d;
 }
 
+ATTRIBUTE_MALLOC
+char *
+bit_u_expand (const char *src)
+{
+  char *ret = (char *)src;
+  char *p = (char *)src;
+  // convert all \U+XXXX sequences to UTF-8
+  while ((p = strstr (p, "\\U+")) && strlen (p) >= 7
+         && ishex (p[3]) && ishex (p[4]) && ishex (p[5])
+         && ishex (p[6]))
+    {
+      char d[8];
+      uint16_t wc;
+      if (1 == sscanf (p, "\\U+%4hx", &wc))
+        {
+          uint16_t wp[2] = { wc, 0 };
+          // the u8 is always shorter than the src sequence of len 7
+          char *u8 = bit_convert_TU (&wp[0]);
+          size_t l = strlen (u8);
+          memcpy (p, u8, l);
+          memcpy (&p[l], &p[7], strlen (&p[7]) + 1);
+          free (u8);
+        }
+    }
+  return ret;
+}
+
 /** converts old codepage'd strings to UTF-8.
  */
 EXPORT ATTRIBUTE_MALLOC
@@ -2881,10 +2908,9 @@ char *
 bit_TV_to_utf8 (const char *restrict src,
                 const BITCODE_RS codepage)
 {
-  // TODO: convert \\U+XXXX chars to UTF-8 also
 #ifdef HAVE_ICONV
   if (codepage == CP_UTF8)
-    return (char*)src;
+    return bit_u_expand (src);
   {
     const char *charset = dwg_codepage_iconvstr ((Dwg_Codepage)codepage);
     const size_t srclen = strlen (src);
@@ -2932,10 +2958,10 @@ bit_TV_to_utf8 (const char *restrict src,
         *dest = '\0';
       }
     iconv_close (cd);
-    return odest;
+    return bit_u_expand (odest);
   }
 #else
-  return (char*)src;
+  return bit_u_expand (src);
 #endif
 }
 
