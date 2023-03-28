@@ -139,10 +139,19 @@ dwg_iconv_helper (Dwg_Codepage codepage, wchar_t wc, int dir, int asian)
     if (!dir)
       { // from charset to unicode
         cd = iconv_open ("UTF-32", charset);
+        if (wc < 0xFF && !asian)
+            srclen = 1;
+        else if (asian && wc > 0xFFFF)
+            srclen = 4;
+        else if (wc > 0xFFFFFF)
+            srclen = 4;
+        else if (wc > 0xFFFF)
+            srclen = 3;
       }
     else
       { // from unicode to charset
         cd = iconv_open (charset, "UTF-32");
+        srclen = 4;
       }
     if (cd == (iconv_t) -1)
       {
@@ -153,14 +162,6 @@ dwg_iconv_helper (Dwg_Codepage codepage, wchar_t wc, int dir, int asian)
       }
     u1.wc = wc;
     u1.w[1] = 0;
-    if (wc < 0xFF && !asian)
-      srclen = 1;
-    else if (asian && wc > 0xFFFF)
-      srclen = 4;
-    else if (wc > 0xFFFFFF)
-      srclen = 4;
-    else if (wc > 0xFFFF)
-      srclen = 3;
     u2.wc = 0;
     //u2.s[4] = '\0';
     u2.w[1] = 0;

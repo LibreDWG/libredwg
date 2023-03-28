@@ -401,13 +401,13 @@ bit_utf8_to_TV_tests (void)
 {
   char dest[128];
   char *p;
-  const char *src1 = "TestË\\\"END";
+  const char *src1 = "TestË\\\"END"; // \xc3\x8b
   const char *src2 = "Test\u0234\"END"; // Latin Small Letter L with Curl, not in any codepage
 
   p = bit_utf8_to_TV (dest, (const unsigned char *)src1, sizeof (dest),
                       strlen (src1), 0, CP_ISO_8859_1);
-  // FIXME Ë (U+00CB) can really be represented in CP_ISO_8859_1,
-  // so no conversion to \U+XXXX needed
+  // Ë can really be represented in ISO_8859_1,
+  // so no conversion to \U+XXXX needed. just convert from utf-8 to latin-1
   if (strEQc (p, "Test\xcb\\\"END"))
     pass ();
   else
@@ -422,7 +422,7 @@ bit_utf8_to_TV_tests (void)
 
   p = bit_utf8_to_TV (dest, (const unsigned char *)src1, sizeof (dest),
                       strlen (src1), 0, CP_ISO_8859_7);
-  // Ë (U+00CB) can not be represented in CP_ISO_8859_7
+  // But Ë (U+00CB) can not be represented in ISO_8859_7
   if (strEQc (p, "Test\\U+00CB\\\"END"))
     pass ();
   else
@@ -435,6 +435,7 @@ bit_utf8_to_TV_tests (void)
     pass ();
   else
     fail ("bit_utf8_to_TV %s => %s ISO_8859_1", src2, p);
+  // TODO: asian double-byte codepages
 }
 
 static void
@@ -454,6 +455,7 @@ bit_TV_to_utf8_tests (void)
   if (p != srcu)
     free (p);
 
+#ifdef HAVE_ICONV
   p = bit_TV_to_utf8 ((char *)src1, CP_ISO_8859_1);
   if (strEQc (p, "TestÄ")) // \xc3\x84 as utf-8
     pass ();
@@ -477,6 +479,7 @@ bit_TV_to_utf8_tests (void)
     fail ("bit_TV_to_utf8 %s ISO_8859_7", p);
   if (p != src7)
     free (p);
+#endif
 }
 
 int
