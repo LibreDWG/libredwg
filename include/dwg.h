@@ -2466,7 +2466,6 @@ typedef struct _dwg_object_STYLE
   BITCODE_BD last_height;
   BITCODE_T font_file;
   BITCODE_T bigfont_file;
-  BITCODE_RS unknown;
 } Dwg_Object_STYLE;
 
 /* 54 and 55 are UNKNOWN OBJECTS */

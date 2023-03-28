@@ -11759,8 +11759,6 @@ BD,	DXF 42
 T,	DXF 3
 @item bigfont_file
 T,	DXF 4
-@item unknown
-RS
 
 @end vtable
 @end indentedblock

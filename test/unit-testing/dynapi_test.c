@@ -57926,21 +57926,6 @@ static int test_STYLE (const Dwg_Object *obj)
     style->text_size--;
   }
   {
-    BITCODE_RS unknown;
-    if (dwg_dynapi_entity_value (style, "STYLE", "unknown", &unknown, NULL)
-        && unknown == style->unknown)
-      pass ();
-    else
-      fail ("STYLE.unknown [RS] %hu != %hu", style->unknown, unknown);
-    unknown++;
-    if (dwg_dynapi_entity_set_value (style, "STYLE", "unknown", &unknown, 0)
-        && unknown == style->unknown)
-      pass ();
-    else
-      fail ("STYLE.unknown [RS] set+1 %hu != %hu", style->unknown, unknown);
-    style->unknown--;
-  }
-  {
     BITCODE_RSd used;
     if (dwg_dynapi_entity_value (style, "STYLE", "used", &used, NULL)
         && used == style->used)

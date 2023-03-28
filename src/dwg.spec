@@ -3788,6 +3788,7 @@ DWG_TABLE (STYLE)
 #endif
 
     START_OBJECT_HANDLE_STREAM;
+    // Note: the ODA spec lists the ownerhandle as shapefile control here
   }
 
 DWG_OBJECT_END

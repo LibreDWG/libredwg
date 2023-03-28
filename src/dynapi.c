@@ -9697,8 +9697,6 @@ static const Dwg_DYNAPI_field _dwg_STYLE_fields[] = {
     1,1,1, 3 },
   { "bigfont_file",	"T", sizeof (BITCODE_T),  OFF (struct _dwg_object_STYLE, bigfont_file),
     1,1,1, 4 },
-  { "unknown",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_STYLE, unknown),
-    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_STYLE_CONTROL: (sorted by offset) */
