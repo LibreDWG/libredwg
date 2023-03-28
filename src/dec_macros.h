@@ -920,16 +920,21 @@
       double bd;                                                              \
       Dwg_Handle hdl;                                                         \
       rs = 24;                                                                \
-      if (objsize && dat->byte + 24 > objsize)                                \
+      if (objsize > 0 && dat->byte + rs > objsize)                            \
         rs = objsize - dat->byte;                                             \
+      if (dat->byte + rs > dat->size)                                         \
+        rs = dat->size - dat->byte - 1;                                       \
       tmp = bit_read_TF (dat, rs);                                            \
-      if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)                                \
+      if (tmp)                                                                \
         {                                                                     \
-          bit_fprint_bits (OUTPUT, tmp, rs * 8);                              \
-          HANDLER (OUTPUT, "\n");                                             \
+          if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)                            \
+            {                                                                 \
+              bit_fprint_bits (OUTPUT, tmp, rs * 8);                          \
+              HANDLER (OUTPUT, "\n");                                         \
+            }                                                                 \
+          LOG_TRACE_TF (tmp, rs);                                             \
+          free (tmp);                                                         \
         }                                                                     \
-      LOG_TRACE_TF (tmp, rs);                                                 \
-      free (tmp);                                                             \
       SINCE (R_13b1)                                                          \
       {                                                                       \
         *dat = here;                                                          \
@@ -993,7 +998,7 @@
   _DEBUG_HERE (obj->size)
 #define DEBUG_HERE                                                            \
   DEBUG_POS                                                                   \
-  _DEBUG_HERE (0)
+  _DEBUG_HERE (0UL)
 
 // check for overflow into next object (invalid num_elems)
 #define AVAIL_BITS(dat)                                                       \

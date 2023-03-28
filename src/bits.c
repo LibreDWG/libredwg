@@ -136,12 +136,12 @@ bit_reset_chain (Bit_Chain *dat)
 #endif
 
 #define CHK_OVERFLOW_PLUS(plus, func, retval)                                 \
-  if (dat->byte + plus > dat->size                                            \
+  if ((dat->byte + plus > dat->size)                                          \
       || (((dat->byte + plus) * 8) + dat->bit > dat->size * 8))               \
     {                                                                         \
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                               \
       LOG_ERROR ("%s buffer overflow at %lu.%u + %d > %lu", func, dat->byte,  \
-                 (int)(plus), dat->bit, dat->size)                            \
+                 dat->bit, (int)(plus), dat->size)                            \
       return retval;                                                          \
     }
 
