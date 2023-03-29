@@ -181,7 +181,11 @@
   FIELD_TFv (DIMBLK_T, 33, 1);
   FIELD_RS (circle_zoom_percent, 0);
   FIELD_RS (COORDS, 0);
+#ifdef IS_JSON
+  FIELD_CMC (CECOLOR, 62);
+#else
   FIELD_RS (CECOLOR.index, 62);
+#endif
   FIELD_HANDLE (CELTYPE, 2, 6); // ff for BYLAYER, fe for BYBLOCK
   FIELD_TIMERLL (TDCREATE, 40);
   FIELD_TIMERLL (TDUPDATE, 40);
