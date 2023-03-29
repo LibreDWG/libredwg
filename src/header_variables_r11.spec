@@ -72,7 +72,11 @@
   FIELD_RD (TRACEWID, 40); //ok
   FIELD_HANDLE (CLAYER, 2, 8);
   PRE (R_2_0) {
+#ifdef IS_JSON
+    FIELD_CMC (CECOLOR, 62);
+#else
     FIELD_RS (CECOLOR.index, 62);
+#endif
   } else {
     FIELD_RL (oldCECOLOR_lo, 0); // CECOLOR converted from older DWG file
     FIELD_RL (oldCECOLOR_hi, 0); //            -"-
