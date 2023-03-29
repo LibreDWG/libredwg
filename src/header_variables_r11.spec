@@ -36,7 +36,11 @@
   FIELD_RD (VIEWSIZE, 40);
   FIELD_RS (SNAPMODE, 70);    //unhandled by ODA
   PRE (R_2_0) {
+#ifdef IS_JSON
+    FIELD_2RD (SNAPUNIT, 10);
+#else
     FIELD_RD (SNAPUNIT.x, 10);
+#endif
   }
   LATER_VERSIONS {
     FIELD_2RD (SNAPUNIT, 14);   //??
@@ -47,7 +51,11 @@
   }
   FIELD_RS (GRIDMODE, 70);    //76 ??
   PRE (R_2_0) {
+#ifdef IS_JSON
+    FIELD_2RD (GRIDUNIT, 10);
+#else
     FIELD_RD (GRIDUNIT.x, 10);
+#endif
   }
   LATER_VERSIONS {
     FIELD_2RD (GRIDUNIT, 10);
