@@ -2729,8 +2729,8 @@ bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
 */
 char *
 bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
-                const size_t destlen, const size_t srclen, const unsigned cquoted,
-                const BITCODE_RS codepage)
+                const size_t destlen, const size_t srclen,
+                const unsigned cquoted, const BITCODE_RS codepage)
 {
   unsigned char c;
   unsigned char *s = (unsigned char *)src;

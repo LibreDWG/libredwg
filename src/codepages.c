@@ -23,6 +23,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <assert.h>
 #if defined HAVE_ICONV && defined HAVE_ICONV_H
 #  include <iconv.h>
 #endif
@@ -33,6 +34,96 @@
 static unsigned int loglevel;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
+
+#include "codepages/ISO-8859-2.h"
+#include "codepages/ISO-8859-3.h"
+#include "codepages/ISO-8859-4.h"
+#include "codepages/ISO-8859-5.h"
+#include "codepages/ISO-8859-6.h"
+#include "codepages/ISO-8859-7.h"
+#include "codepages/ISO-8859-8.h"
+#include "codepages/ISO-8859-9.h"
+#include "codepages/CP437.h"
+#include "codepages/CP850.h"
+#include "codepages/CP852.h"
+#include "codepages/CP855.h"
+#include "codepages/CP857.h"
+#include "codepages/CP860.h"
+#include "codepages/CP861.h"
+#include "codepages/CP863.h"
+#include "codepages/CP864.h"
+#include "codepages/CP865.h"
+#include "codepages/CP869.h"
+#include "codepages/MACINTOSH.h"
+#include "codepages/BIG5.h"
+#include "codepages/CP949.h"
+#include "codepages/JOHAB.h"
+#include "codepages/CP866.h"
+#include "codepages/WINDOWS-1250.h"
+#include "codepages/WINDOWS-1251.h"
+#include "codepages/WINDOWS-1252.h"
+#include "codepages/GB2312.h"
+#include "codepages/WINDOWS-1253.h"
+#include "codepages/WINDOWS-1254.h"
+#include "codepages/WINDOWS-1255.h"
+#include "codepages/WINDOWS-1256.h"
+#include "codepages/WINDOWS-1257.h"
+#include "codepages/WINDOWS-874.h"
+#include "codepages/WINDOWS-932.h"
+#include "codepages/WINDOWS-936.h"
+#include "codepages/WINDOWS-949.h"
+#include "codepages/WINDOWS-950.h"
+#include "codepages/WINDOWS-1361.h"
+#include "codepages/WINDOWS-1258.h"
+
+static const uint16_t* cp_fntbl[] = {
+    NULL, // UTF8
+    NULL, // US-ASCII
+    NULL, // ISO-8859-1
+    cptbl_iso_8859_2,
+    cptbl_iso_8859_3,
+    cptbl_iso_8859_4,
+    cptbl_iso_8859_5,
+    cptbl_iso_8859_6,
+    cptbl_iso_8859_7,
+    cptbl_iso_8859_8,
+    cptbl_iso_8859_9,
+    cptbl_cp437,
+    cptbl_cp850,
+    cptbl_cp852,
+    cptbl_cp855,
+    cptbl_cp857,
+    cptbl_cp860,
+    cptbl_cp861,
+    cptbl_cp863,
+    cptbl_cp864,
+    cptbl_cp865,
+    cptbl_cp869,
+    cptbl_windows_932, /* same as cp932 */
+    cptbl_macintosh,
+    cptbl_big5,
+    cptbl_cp949,        /* 25 */
+    cptbl_johab,        /* 26 */
+    cptbl_cp866,
+    cptbl_windows_1250,
+    cptbl_windows_1251, /* 29 */
+    cptbl_windows_1252, /* 30 */
+    cptbl_gb2312,
+    cptbl_windows_1253,
+    cptbl_windows_1254,
+    cptbl_windows_1255,
+    cptbl_windows_1256,
+    cptbl_windows_1257,
+    cptbl_windows_874,
+    cptbl_windows_932,
+    cptbl_windows_936,
+    cptbl_windows_949,
+    cptbl_windows_950,
+    cptbl_windows_1361, /* 42 ~ JOHAB */
+    NULL,               /* 43 UTF16 */
+    cptbl_windows_1258,
+    NULL
+};
 
 // synced with typedef enum _dwg_codepage in codepages.h
 #ifdef HAVE_ICONV
@@ -55,7 +146,7 @@ dwg_codepage_iconvstr (Dwg_Codepage cp)
         "CP865",        "CP869",
         "CP932",        "MACINTOSH",
         "BIG5",         "CP949",        /* 25 */
-        "JOHAB",        "CP866",        /* also JOHAB */
+        "JOHAB",        "CP866",
         "WINDOWS-1250", "WINDOWS-1251", /* 29 */
         "WINDOWS-1252",                 /* 30 */
         "GB2312",       "WINDOWS-1253",
@@ -80,7 +171,7 @@ const char *_codepage_dxfstr[]
         "CP857",      "CP860",      "CP861",      "CP863",      "CP864",
         "CP865",      "CP869",      "CP932",      "MACINTOSH",  "BIG5",
         "CP949",                   /* 25 */
-        "JOHAB",      "CP866",     /* also JOHAB */
+        "JOHAB",      "CP866",
         "ANSI_1250",  "ANSI_1251", /* 29 */
         "ANSI_1252",               /* 30 WesternEurope Windows */
         "GB2312",     "ANSI_1253",  "ANSI_1254",  "ANSI_1255",  "ANSI_1256",
@@ -114,10 +205,33 @@ dwg_codepage_int (const char *s)
    asian = 1: 2-byte CJK charset, else 1-byte (0-255)
 */
 static wchar_t
-dwg_iconv_helper (Dwg_Codepage codepage, wchar_t wc, int dir, int asian)
+codepage_helper (const Dwg_Codepage codepage, const wchar_t wc,
+                  const int dir, const int asian)
 {
-  if (codepage == CP_UTF8)
-    return wc;
+#if 1
+  const uint16_t *fntbl;
+  uint16_t maxc;
+  assert (codepage != CP_UTF8 && codepage != CP_UTF16 &&
+          codepage != CP_US_ASCII && codepage != CP_ISO_8859_1);
+  fntbl = cp_fntbl[codepage];
+  maxc = fntbl[0];
+  assert (maxc);
+  if (dir) // from unicode to charset
+    { // reverse lookup
+      for (uint16_t i = 0x80; i < maxc; i++) {
+        if (wc == fntbl[i])
+          return i;
+      }
+      return 0;
+    }
+  else
+    {
+      if (wc < maxc)
+        return fntbl[wc];
+      else
+        return 0;
+    }
+#else
   {
     union {
       wchar_t wc;
@@ -180,6 +294,7 @@ dwg_iconv_helper (Dwg_Codepage codepage, wchar_t wc, int dir, int asian)
     // convert dest to result
     return u2.wc;
   }
+#endif
 }
 
 // returns the matching unicode codepoint,
@@ -187,25 +302,22 @@ dwg_iconv_helper (Dwg_Codepage codepage, wchar_t wc, int dir, int asian)
 wchar_t
 dwg_codepage_uc (Dwg_Codepage cp, unsigned char c)
 {
-  if (c < 128 || cp == CP_ISO_8859_1)
+  if (c < 128)
     return (wchar_t)c;
-#ifdef HAVE_ICONV
-  return dwg_iconv_helper (cp, (wchar_t)c, 0, 0);
-#else
-  return 0;
-#endif
+  else if (cp == CP_US_ASCII)
+    return 0;
+  if (cp == CP_ISO_8859_1 || cp == CP_UTF8 || cp == CP_UTF16)
+    return (wchar_t)c;
+  return codepage_helper (cp, (wchar_t)c, 0, 0);
 }
 // for wide asian chars
 wchar_t
 dwg_codepage_uwc (Dwg_Codepage cp, uint16_t c)
 {
-  if (c < 128)
+  if (c < 128 || cp == CP_UTF8 || cp == CP_UTF16)
     return (wchar_t)c;
-#ifdef HAVE_ICONV
-  return dwg_iconv_helper (cp, (wchar_t)c, 0, 1);
-#else
-  return 0;
-#endif
+  // todo: johab exceptions
+  return codepage_helper (cp, (wchar_t)c, 0, 1);
 }
 // returns the matching codepoint,
 // or 0 if the codepage does not contain the wide character
@@ -213,26 +325,23 @@ unsigned char
 dwg_codepage_c (Dwg_Codepage cp, wchar_t wc)
 {
   if (wc < 128)
-    return wc & 0xff;
-  if (cp == CP_ISO_8859_1)
+    {
+      if (cp == CP_US_ASCII || cp == CP_UTF8 || cp == CP_UTF16)
+        return wc & 0xff;
+    }
+  else if (cp == CP_US_ASCII)
+    return 0;
+  if (cp == CP_ISO_8859_1 || cp == CP_UTF8)
     return wc < 256 ? wc : 0;
-#ifdef HAVE_ICONV
-  return (unsigned char)dwg_iconv_helper (cp, wc, 1, 0);
-#else
-  return 0;
-#endif
+  return (unsigned char)codepage_helper (cp, wc, 1, 0);
 }
 // for wide asian chars
 uint16_t
 dwg_codepage_wc (Dwg_Codepage cp, wchar_t wc)
 {
-  if (wc < 128)
+  if (wc < 128 || cp == CP_UTF8 || cp == CP_UTF16)
     return wc & 0xffff;
-#ifdef HAVE_ICONV
-  return (uint16_t)dwg_iconv_helper (cp, wc, 1, 1);
-#else
-  return 0;
-#endif
+  return (uint16_t)codepage_helper (cp, wc, 1, 1);
 }
 
 // for wide asian chars
@@ -241,7 +350,7 @@ dwg_codepage_isasian (const Dwg_Codepage cp)
 {
   if (cp >= CP_BIG5 && cp <= CP_CP866)
     return true;
-  else if (cp == CP_UTF16 || cp == CP_GB2312)
+  else if (cp >= CP_ANSI_932 && cp <= CP_ANSI_1258)
     return true;
   else
     return false;

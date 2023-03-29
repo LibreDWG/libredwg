@@ -59,7 +59,7 @@ typedef enum _dwg_codepage
   CP_MACINTOSH, // 23
   CP_BIG5,
   CP_CP949 = 25, // Korean (Wansung + Johab)
-  // ??
+  CP_JOHAB = 26, // Johab?
   CP_CP866 = 27, // Russian
   CP_ANSI_1250 = 28, // Central + Eastern European
   CP_ANSI_1251 = 29, // Cyrillic

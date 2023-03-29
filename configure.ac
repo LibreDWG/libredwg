@@ -897,6 +897,7 @@ dnl Write it out
 AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
+	src/codepages/Makefile
 	doc/Makefile
 	programs/Makefile
 	examples/Makefile
