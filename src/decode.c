@@ -5584,6 +5584,44 @@ dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   return 0;
 }
 
+int
+dwg_decode_unknown_rest (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
+{
+  // check in which object stream we are: common, object, text or handles?
+  // for now we only need the text
+
+  // bitsize does not include the handles size
+  int num_bytes;
+  unsigned long pos = bit_position (dat);
+  long num_bits;
+  if (pos < obj->bitsize) // data or text
+    num_bits = obj->bitsize - pos;
+  else // or handles
+    num_bits = (8 * obj->size) - pos;
+  if (num_bits < 0)
+    return DWG_ERR_VALUEOUTOFBOUNDS;
+
+  obj->num_unknown_bits = (BITCODE_RL)num_bits;
+  num_bytes = num_bits / 8;
+  if (num_bits % 8)
+    num_bytes++;
+
+  obj->unknown_bits = bit_read_bits (dat, num_bits);
+  if (!obj->unknown_bits)
+    {
+      bit_set_position (dat, pos);
+      return DWG_ERR_VALUEOUTOFBOUNDS;
+    }
+  // [num_bits (commonsize, hdlpos, strsize) num_bytes TF]
+  LOG_TRACE ("unknown_bits [%ld (%lu,%ld,%d) %d TF]: ", num_bits,
+             obj->common_size, obj->bitsize - obj->common_size,
+             (int)obj->stringstream_size, num_bytes);
+  LOG_TRACE_TF (obj->unknown_bits, num_bytes);
+  LOG_TRACE ("\n");
+  bit_set_position (dat, pos);
+  return 0;
+}
+
 /* We need the full block name, not from BLOCK_HEADER, but the BLOCK entity.
    unicode is allocated as utf-8.
  */

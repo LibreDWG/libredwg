@@ -3098,14 +3098,16 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
             }
           else if (strEQc (key, "num_unknown_bits")
-                   && memBEGINc (obj->name, "UNKNOWN_"))
+                   && (memBEGINc (obj->name, "UNKNOWN_")
+                       || strEQc (obj->name, "STYLE")))
             {
               obj->num_unknown_bits = json_long (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
               LOG_TRACE ("num_unknown_bits: %d\n", (int)obj->num_unknown_bits);
             }
           else if (strEQc (key, "unknown_bits")
-                   && memBEGINc (obj->name, "UNKNOWN_"))
+                   && (memBEGINc (obj->name, "UNKNOWN_")
+                       || strEQc (obj->name, "STYLE")))
             {
               const int len = t->end - t->start;
               char *hex = json_string (dat, tokens);
@@ -3119,6 +3121,8 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               free (hex);
               if (!obj->num_unknown_bits)
                 obj->num_unknown_bits = blen * 8; // minus some padding bits
+              if (obj->unknown_bits)
+                free (obj->unknown_bits);
               obj->unknown_bits = buf;
               // LOG_TRACE ("%s: '%.*s' [%s] (binary)\n", key, blen, buf,
               //            f->type);

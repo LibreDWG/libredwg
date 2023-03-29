@@ -501,8 +501,41 @@
 #endif
 
 #define DECODE_UNKNOWN_BITS                                                   \
+  JSON                                                                        \
+  {                                                                           \
+    int num_bytes = obj->num_unknown_bits / 8;                                \
+    if (obj->num_unknown_bits & 8)                                            \
+      num_bytes++;                                                            \
+    KEY (num_unknown_bits);                                                   \
+    VALUE_RL (obj->num_unknown_bits, 0);                                      \
+    KEY (unknown_bits);                                                       \
+    VALUE_BINARY (obj->unknown_bits, num_bytes, 0);                           \
+  }                                                                           \
   DECODER { dwg_decode_unknown (dat, (Dwg_Object *restrict)obj); }            \
   FREE { VALUE_TF (obj->unknown_bits, 0); }
+
+#if defined IS_JSON
+#  define UNKNOWN_BITS_REST                                                   \
+    {                                                                         \
+      int num_bytes = obj->num_unknown_bits / 8;                              \
+      if (obj->num_unknown_bits & 8)                                          \
+        num_bytes++;                                                          \
+      KEY (num_unknown_bits);                                                 \
+      VALUE_RL (obj->num_unknown_bits, 0);                                    \
+      KEY (unknown_bits);                                                     \
+      VALUE_BINARY (obj->unknown_bits, num_bytes, 0);                         \
+    }
+#elif defined IS_DECODER
+#  define UNKNOWN_BITS_REST                                                   \
+    dwg_decode_unknown_rest (dat, (Dwg_Object *restrict)obj)
+#elif defined IS_ENCODER
+#  define UNKNOWN_BITS_REST                                                   \
+    dwg_encode_unknown_rest (dat, (Dwg_Object *restrict)obj)
+#elif defined IS_FREE
+#  define UNKNOWN_BITS_REST VALUE_TF (obj->unknown_bits, 0)
+#else
+#  define UNKNOWN_BITS_REST
+#endif
 
 #ifndef START_OBJECT_HANDLE_STREAM
 #  define START_OBJECT_HANDLE_STREAM                                          \
