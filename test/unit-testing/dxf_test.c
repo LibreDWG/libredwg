@@ -123,8 +123,8 @@ test_subclass (const Dwg_Data *restrict dwg, const void *restrict ptr,
                 value = bit_convert_TU ((BITCODE_TU)value);
                 if (!value) // some conversion error, invalid wchar (nyi)
                   {
-                    fail ("%s[%d].%s: %s [STRING %s]", fieldname, index, key,
-                          value, field.type);
+                    fail ("%s[%d].%s: NULL [STRING %s]", fieldname, index, key,
+                          field.type);
                   }
                 else
                   {
