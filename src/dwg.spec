@@ -2021,6 +2021,7 @@ DWG_ENTITY (_3DFACE)
       }
       if (R11OPTS (1)) {
         FIELD_RS (invis_flags, 70);
+        LOG_3DFACE_INVISIBLE
       }
     }
   VERSIONS (R_13b1, R_14)
@@ -2030,6 +2031,7 @@ DWG_ENTITY (_3DFACE)
       FIELD_3BD (corner3, 12);
       FIELD_3BD (corner4, 13);
       FIELD_BS0 (invis_flags, 70);
+      LOG_3DFACE_INVISIBLE
     }
   SINCE (R_2000)
     {
@@ -2063,6 +2065,7 @@ DWG_ENTITY (_3DFACE)
       FIELD_3DD (corner4, corner3, 13);
       if (!FIELD_VALUE (has_no_flags))
         FIELD_BS0 (invis_flags, 70);
+        LOG_3DFACE_INVISIBLE
     }
 
   COMMON_ENTITY_HANDLE_DATA;
