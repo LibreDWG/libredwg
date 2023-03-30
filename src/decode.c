@@ -6218,6 +6218,7 @@ decode_preR13_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
   BITCODE_RS crc, crcc;
   Dwg_AuxHeader *_obj = &dwg->auxheader;
+  unsigned long pos = dat->byte;
 
   LOG_TRACE ("\nAUXHEADER: @0x%lx\n", dat->byte);
   error |= decode_preR13_sentinel(DWG_SENTINEL_R11_AUX_HEADER_BEGIN,
@@ -6275,17 +6276,34 @@ decode_preR13_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       decode_preR13_section_chk (SECTION_VX, dat, dwg);
     }
   FIELD_RLx (auxheader_address, 0);
-  crcc = bit_calc_CRC (
-      0xC0C1,
-      &dat->chain[_obj->auxheader_address + 16], // after sentinel (16 bytes)
-      _obj->auxheader_size - 2);                 // minus crc length (2 bytes)
-  crc = bit_read_RS (dat);
-  LOG_TRACE ("crc: %04X [RSx] from 0x%x-0x%lx\n", crc,
-             _obj->auxheader_address + 16, dat->byte - 2);
-  if (crc != crcc)
+  if (_obj->auxheader_address < pos
+      || _obj->auxheader_address + 16 > dat->size
+      || _obj->auxheader_address + _obj->auxheader_size > dat->size)
     {
-      LOG_ERROR ("AUX header CRC mismatch %04X <=> %04X", crc, crcc);
+      LOG_ERROR ("Invalid auxheader_address %04X", _obj->auxheader_address);
       error |= DWG_ERR_WRONGCRC;
+      return error;
+    }
+  if (_obj->auxheader_address != pos)
+    {
+      LOG_WARN ("Invalid auxheader_address %04X", _obj->auxheader_address);
+      error |= DWG_ERR_WRONGCRC;
+    }
+  else
+    {
+      crcc = bit_calc_CRC (0xC0C1,
+                           // after sentinel (16 bytes)
+                           &dat->chain[_obj->auxheader_address + 16],
+                           // minus crc length (2 bytes)
+                           _obj->auxheader_size - 2); 
+      crc = bit_read_RS (dat);
+      LOG_TRACE ("crc: %04X [RSx] from 0x%x-0x%lx\n", crc,
+                 _obj->auxheader_address + 16, dat->byte - 2);
+      if (crc != crcc)
+        {
+          LOG_ERROR ("AUX header CRC mismatch %04X <=> %04X", crc, crcc);
+          error |= DWG_ERR_WRONGCRC;
+        }
     }
   error
       |= decode_preR13_sentinel (DWG_SENTINEL_R11_AUX_HEADER_END,
