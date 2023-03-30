@@ -5858,7 +5858,7 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
                        BITCODE_H *owned)
 {
   Dwg_Data *dwg = obj->parent;
-  Dwg_Entity_SEQEND *o = obj->tio.entity->tio.SEQEND;
+  //Dwg_Entity_SEQEND *o = obj->tio.entity->tio.SEQEND;
   Dwg_Object *owner;
   Dwg_Entity_POLYLINE_2D *ow;
   const char *owhdls; // the name of the H*
