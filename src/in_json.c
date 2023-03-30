@@ -1076,9 +1076,24 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       f = (Dwg_DYNAPI_field *)dwg_dynapi_header_field (key);
       if (!f)
         {
-          LOG_WARN ("Unknown key HEADER.%s", key)
-          json_advance_unknown (dat, tokens, t->type, 0);
-          continue;
+          if (t->type == JSMN_ARRAY && strEQc (key, "layer_colors"))
+            {
+              tokens->index++;
+              for (int index = 0; index < MAX (t->size, 128); index++)
+                {
+                  dwg->header_vars.layer_colors[index]
+                    = (BITCODE_RS)json_long (dat, tokens);
+                  LOG_TRACE ("%s: " FORMAT_RS " [RS]\n", key,
+                             dwg->header_vars.layer_colors[index]);
+                }
+              JSON_TOKENS_CHECK_OVERFLOW_ERR;
+            }
+          else
+            {
+              LOG_WARN ("Unknown key HEADER.%s", key)
+                json_advance_unknown (dat, tokens, t->type, 0);
+              continue;
+            }
         }
       else if (t->type == JSMN_PRIMITIVE
                && (strEQc (f->type, "BD") || strEQc (f->type, "RD")))
