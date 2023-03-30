@@ -402,17 +402,24 @@
       flags = _ent->color.flag;
       if (flags & 0x20)
         {
+#ifdef IS_ENCODER
+          _ent->color.alpha_raw
+              = _ent->color.alpha_type << 24 | _ent->color.alpha;
+#endif
 #ifndef IS_DXF
-          FIELD_BLx (color.alpha, 0);
+          FIELD_BLx (color.alpha_raw, 0);
 #endif
 #ifdef IS_DECODER
           /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
-          _ent->color.alpha_type = _ent->color.alpha >> 24;
-          _ent->color.alpha = _ent->color.alpha & 0xFF;
-          LOG_TRACE (" color.alpha_type: %d [ENC 440]\n", _ent->color.alpha_type);
+          _ent->color.alpha_type = _ent->color.alpha_raw >> 24;
+          LOG_TRACE (" color.alpha_type: %d [ENC]\n", _ent->color.alpha_type);
+          _ent->color.alpha = _ent->color.alpha_raw & 0xFF;
+          LOG_TRACE (" color.alpha: %u [ENC 440]\n", _ent->color.alpha);
 #endif
           JSON {
+            FIELD_BL (color.alpha_raw, 0);
             FIELD_BB (color.alpha_type, 0);
+            FIELD_RC (color.alpha, 0);
           }
         }
       if (flags & 0x40)

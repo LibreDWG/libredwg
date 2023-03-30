@@ -834,6 +834,7 @@ typedef struct _dwg_color /* CmColor: R15 and earlier */
   BITCODE_T  book_name;  /* DXF 430, DXF: "book_name$name" */
   // Entities only:
   BITCODE_H  handle;
+  BITCODE_BL alpha_raw;
   BITCODE_BB alpha_type; /* 0 BYLAYER, 1 BYBLOCK, 3 alpha */
   BITCODE_RC alpha;      /* DXF 440. 0-255 */
 } Dwg_Color;
