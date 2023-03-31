@@ -6315,10 +6315,13 @@ decode_preR13_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   FIELD_RLx (auxheader_address, 0);
   if (_obj->auxheader_address < pos
-      || _obj->auxheader_address + 16 > dat->size
-      || _obj->auxheader_address + _obj->auxheader_size > dat->size)
+      // lower bound
+      || _obj->auxheader_address > UINT32_MAX - 16
+      // upper bound
+      || _obj->auxheader_address + 16 + _obj->auxheader_size > dat->size)
     {
-      LOG_ERROR ("Invalid auxheader_address %04X", _obj->auxheader_address);
+      LOG_ERROR ("Invalid auxheader_address %04X or size %u",
+                 _obj->auxheader_address, (unsigned)_obj->auxheader_size);
       error |= DWG_ERR_WRONGCRC;
       return error;
     }
