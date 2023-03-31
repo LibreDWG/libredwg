@@ -2886,9 +2886,11 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
         {
           /* ignore invalid utf8 for now */
           if (len >= 1)
-            wstr[i++] = ((c & 0x1f) << 6) | (str[1] & 0x3f);
-          len--;
-          str++;
+            {
+              wstr[i++] = ((c & 0x1f) << 6) | (str[1] & 0x3f);
+              len--;
+              str++;
+            }
         }
       else if ((c & 0xf0) == 0xe0)
         {
@@ -2900,17 +2902,19 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
             {
               LOG_WARN ("utf-8: BAD_CONTINUATION_BYTE %s", str);
             }
-          if (len >= 1 && c == 0xe0 && (unsigned char)str[1] < 0xa0)
+          else if (len >= 1 && c == 0xe0 && (unsigned char)str[1] < 0xa0)
             {
               LOG_WARN ("utf-8: NON_SHORTEST %s", str);
             }
-          if (len >= 2)
-            wstr[i++] = ((c & 0x0f) << 12) | ((str[1] & 0x3f) << 6)
-                        | (str[2] & 0x3f);
-          str++;
-          str++;
-          len--;
-          len--;
+          else if (len >= 2)
+            {
+              wstr[i++] = ((c & 0x0f) << 12) | ((str[1] & 0x3f) << 6)
+                | (str[2] & 0x3f);
+              str++;
+              str++;
+              len--;
+              len--;
+            }
         }
       /* everything above 0xf0 exceeds ucs-2, 4-6 byte seqs */
     }
