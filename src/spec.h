@@ -1198,18 +1198,18 @@
 
 #ifndef LOG_3DFACE_INVISIBLE
 #  define LOG_INVISIBLE_W(w)                                                \
-    if (_obj->invis_flags & FACE3D_INVISIBLE_##w)                          \
-      LOG_TRACE (#w "(0x%x) ", FACE3D_INVISIBLE_##w)
+    if (_obj->invis_flags & _3DFACE_INVISIBLE_##w)                          \
+      LOG_TRACE (#w "(0x%x) ", _3DFACE_INVISIBLE_##w)
 #  define LOG_3DFACE_INVISIBLE                                              \
     DECODER_OR_ENCODER                                                      \
       {                                                                     \
       if (_obj->invis_flags)                                                \
         {                                                                   \
           LOG_TRACE ("             ");                                      \
-          LOG_INVISIBLE_W (FIRST_EDGE);                                     \
-          LOG_INVISIBLE_W (SECOND_EDGE);                                    \
-          LOG_INVISIBLE_W (THIRD_EDGE);                                     \
-          LOG_INVISIBLE_W (FOURTH_EDGE);                                    \
+          LOG_INVISIBLE_W (EDGE1);                                          \
+          LOG_INVISIBLE_W (EDGE2);                                          \
+          LOG_INVISIBLE_W (EDGE3);                                          \
+          LOG_INVISIBLE_W (EDGE4);                                          \
           LOG_FLAG_MAX (_obj->invis_flags, 15);                             \
           LOG_TRACE ("\n");                                                 \
         }                                                                   \
