@@ -314,6 +314,85 @@ bit_write_RD_tests (void)
   bitfree (&bitchain);
 }
 
+void
+bit_read_H_tests (void)
+{
+#if defined(__MINGW64_VERSION_MAJOR) && defined(__GNUC__) && __GNUC__ >= 9
+  return;
+#endif
+
+  Bit_Chain bitchain;
+  Dwg_Handle result;
+  int ret;
+
+#define test_H_r_case(s, dwg_ver, r, c, si, v)                                \
+  bitchain = strtobt (s);                                                     \
+  bitchain.version = dwg_ver;                                                 \
+  ret = bit_read_H (&bitchain, &result);                                      \
+  if (ret == r && result.code == c && result.size == si                       \
+      && result.value == v)                                                   \
+    ok ("bit_read_H: " FORMAT_H, ARGS_H (result));                            \
+  else {                                                                      \
+    fail ("bit_read_H: %s (result " FORMAT_H ")", s, ARGS_H (result));        \
+    /*bit_print (&bitchain, sizeof (Dwg_Handle));                           */\
+  }                                                                           \
+  bitfree (&bitchain)
+
+  //              code   size   value
+  test_H_r_case ("0100" "0001" "00000101", R_14, 0, 4, 1, 5);
+  test_H_r_case ("1100" "0001" "00001011", R_14, 0, 12, 1, 11);
+  test_H_r_case ("0100" "0001" "00001100", R_14, 0, 4, 1, 12);
+  test_H_r_case ("0011" "0000", R_14, 0, 3, 0, 0);
+  test_H_r_case ("0101" "0000", R_14, 0, 5, 0, 0);
+  test_H_r_case ("0010" "0001" "00011000", R_14, 0, 2, 1, 24);
+  test_H_r_case ("0000" "0001" "00000001", R_14, 0, 0, 1, 1);
+  test_H_r_case ("0010" "0010" "00000010" "00001010", R_14, 0, 2, 2, 522);
+  test_H_r_case ("0101" "0001" "01011110", R_14, 0, 5, 1, 94);
+  test_H_r_case ("0010" "0001" "01100100", R_14, 0, 2, 1, 100);
+  // preR13
+  //              size       value
+  test_H_r_case ("00000001" "00000010", R_11, 0, 0, 1, 2);
+  test_H_r_case ("00000010" "00000010" "00001010", R_11, 0, 0, 2, 522);
+}
+
+void
+bit_write_H_tests (void)
+{
+  Bit_Chain bitchain;
+  unsigned long byte;
+  Dwg_Handle handle;
+
+#define test_H_w_case(c, si, v, dwg_ver)                                      \
+  handle.code = c;                                                            \
+  handle.size = si;                                                           \
+  handle.value = v;                                                           \
+  byte = 1 + handle.size;                                                     \
+  bitprepare (&bitchain, sizeof (Dwg_Handle));                                \
+  bitchain.version = dwg_ver;                                                 \
+  bit_write_H (&bitchain, &handle);                                           \
+  bit_print (&bitchain, sizeof (Dwg_Handle));                                 \
+  if (bitchain.byte == byte && bitchain.bit == 0)                             \
+    ok ("bit_write_H: " FORMAT_H, ARGS_H (handle));                           \
+  else                                                                        \
+    fail ("bit_write_H (" FORMAT_H ") @%lu.%d", ARGS_H (handle),              \
+          bitchain.byte, bitchain.bit);                                       \
+  bitfree (&bitchain)
+
+  test_H_w_case(4, 1, 5, R_14);
+  test_H_w_case(12, 1, 11, R_14);
+  test_H_w_case(4, 1, 12, R_14);
+  test_H_w_case(3, 0, 0, R_14);
+  test_H_w_case(5, 0, 0, R_14);
+  test_H_w_case(2, 1, 24, R_14);
+  test_H_w_case(0, 1, 1, R_14);
+  test_H_w_case(2, 2, 522, R_14);
+  test_H_w_case(5, 1, 94, R_14);
+  test_H_w_case(2, 1, 100, R_14);
+  // preR13
+  test_H_w_case(0, 1, 2, R_11);
+  test_H_w_case(0, 2, 522, R_11);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -350,9 +429,8 @@ main (int argc, char const *argv[])
   bit_write_RL_tests ();
   bit_read_RD_tests ();
   bit_write_RD_tests ();
-  // TODO
-  // bit_read_H_tests();
-  // bit_write_H_tests();
+  bit_read_H_tests();
+  bit_write_H_tests();
 
   // Prepare the testcase
   bitchain.size = 100;
@@ -532,40 +610,6 @@ main (int argc, char const *argv[])
   else
     fail ("bit_read_BT %f", dbl);
 
-    // mingw-w64 gcc-9.2.0 miscompilation in bit_read_H with val[i]: (%rbx)
-    // being dat+1
-#if defined(__MINGW64_VERSION_MAJOR) && defined(__GNUC__) && __GNUC__ >= 9
-  if (0)
-#endif
-    {
-      int i;
-      Dwg_Handle handles[]
-          = { { 4, 1, 5 },  { 12, 1, 11 }, { 4, 1, 12 }, { 3, 0, 0 },
-              { 5, 0, 0 },  { 2, 1, 24 },  { 0, 1, 1 },  { 2, 2, 522 },
-              { 5, 1, 94 }, { 2, 1, 100 } };
-      Dwg_Handle handle;
-      pos = bit_position (&bitchain);
-      for (i = 0; i < 10; i++)
-        {
-          unsigned long byte = 63 + handles[i].size;
-          bit_write_H (&bitchain, &handles[i]);
-          if (bitchain.byte == byte && bitchain.bit == 4)
-            pass ();
-          else
-            fail ("bit_write_H (" FORMAT_H ") @%lu.%d", ARGS_H (handles[i]),
-                  bitchain.byte, bitchain.bit);
-
-          bit_set_position (&bitchain, pos);
-          bit_read_H (&bitchain, &handle);
-          if (handle.code == handles[i].code && handle.size == handles[i].size
-              && handle.value == handles[i].value)
-            pass ();
-          else
-            fail ("bit_read_H (" FORMAT_H ")", ARGS_H (handle));
-
-          bit_set_position (&bitchain, pos);
-        }
-    }
 #define _CRC 0x6024
   bit_advance_position (&bitchain, -2L);
   {
