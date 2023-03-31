@@ -356,7 +356,7 @@ strrplc (const char *s, const char *from, const char *to)
   const char *p = strstr (s, from);
   if (p)
     {
-      int len = strlen (s) - (strlen (from) - strlen (to));
+      long len = strlen (s) - (strlen (from) - strlen (to));
       char *dest = (char *)calloc (1, 80);
       int i = p - s;
       assert (len < 80);

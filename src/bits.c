@@ -3491,7 +3491,7 @@ bit_write_sentinel (Bit_Chain *dat, const unsigned char sentinel[16])
 }
 
 void
-bit_chain_init (Bit_Chain *dat, const int size)
+bit_chain_init (Bit_Chain *dat, const size_t size)
 {
   dat->chain = (unsigned char *)calloc (1, size);
   if (!dat->chain)
@@ -3500,13 +3500,13 @@ bit_chain_init (Bit_Chain *dat, const int size)
       LOG_ERROR ("Out of memory")
       abort ();
     }
-  dat->size = (long unsigned int)size;
+  dat->size = size;
   dat->byte = 0;
   dat->bit = 0;
 }
 
 void
-bit_chain_init_dat (Bit_Chain *restrict dat, const int size,
+bit_chain_init_dat (Bit_Chain *restrict dat, const size_t size,
                     const Bit_Chain *restrict from_dat)
 {
   bit_chain_init (dat, size);
@@ -3527,7 +3527,7 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
   else
     {
       dat->chain
-          = (unsigned char *)realloc (dat->chain, (size_t)dat->size + size);
+          = (unsigned char *)realloc (dat->chain, dat->size + size);
       if (!dat->chain)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
