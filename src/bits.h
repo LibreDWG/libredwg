@@ -316,7 +316,7 @@ char *bit_TV_to_utf8 (const char *restrict src,
 EXPORT BITCODE_TU bit_utf8_to_TU (char *restrict str,
                                   const unsigned cquoted) ATTRIBUTE_MALLOC;
 // convert all \\U+XXXX sequences to UTF-8
-char *bit_u_expand (const char *src) ATTRIBUTE_MALLOC;
+char *bit_u_expand (char *src) ATTRIBUTE_MALLOC;
 
 /* compare an ASCII/TU string to ASCII name */
 int bit_eq_T (Bit_Chain *restrict dat, const BITCODE_T restrict str1,

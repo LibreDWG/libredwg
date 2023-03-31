@@ -402,7 +402,12 @@ bit_utf8_to_TV_tests (void)
   char dest[128];
   char *p;
   const char *src1 = "TestË\\\"END"; // \xc3\x8b
-  const char *src2 = "Test\u0234\"END"; // Latin Small Letter L with Curl, not in any codepage
+  const char *src2 =
+#ifndef _MSC_VER
+    "Test\u0234\"END"; // Latin Small Letter L with Curl, not in any codepage
+#else
+    "Test\xc8\xb4\"END";
+#endif
 
   p = bit_utf8_to_TV (dest, (const unsigned char *)src1, sizeof (dest),
                       strlen (src1), 0, CP_ISO_8859_1);
@@ -442,23 +447,25 @@ static void
 bit_TV_to_utf8_tests (void)
 {
   char *p;
-  const char *srcu = "Test\\U+0234";
+  char *srcu = strdup ("Test\\U+0234");
   const char *src1 = "Test\xc4"; // Ä
   const char *src2 = "Test\xc6"; // Ć \U+0106
   const char *src7 = "Test\xd3"; // Σ
 
+  ok ("bit_TV_to_utf8_tests init");
   p = bit_TV_to_utf8 ((char *)srcu, CP_ISO_8859_1);
   if (strEQc (p, "Test\xc8\xb4"))
-    pass ();
+    ok ("bit_TV_to_utf8_tests 1");
   else
     fail ("bit_TV_to_utf8 %s ISO_8859_1", p);
   if (p != srcu)
     free (p);
+  free (srcu);
 
-#ifdef HAVE_ICONV
+  //#ifdef HAVE_ICONV
   p = bit_TV_to_utf8 ((char *)src1, CP_ISO_8859_1);
   if (strEQc (p, "TestÄ")) // \xc3\x84 as utf-8
-    pass ();
+    ok ("bit_TV_to_utf8_tests 2");
   else
     fail ("bit_TV_to_utf8 %s ISO_8859_1", p);
   if (p != src1)
@@ -466,7 +473,7 @@ bit_TV_to_utf8_tests (void)
 
   p = bit_TV_to_utf8 ((char *)src2, CP_ISO_8859_2);
   if (strEQc (p, "TestĆ"))
-    pass ();
+    ok ("bit_TV_to_utf8_tests 3");
   else
     fail ("bit_TV_to_utf8 %s ISO_8859_2", p);
   if (p != src2)
@@ -474,12 +481,12 @@ bit_TV_to_utf8_tests (void)
 
   p = bit_TV_to_utf8 ((char *)src7, CP_ISO_8859_7);
   if (strEQc (p, "TestΣ"))
-    pass ();
+    ok ("bit_TV_to_utf8_tests 4");
   else
     fail ("bit_TV_to_utf8 %s ISO_8859_7", p);
   if (p != src7)
     free (p);
-#endif
+  //#endif
 }
 
 int

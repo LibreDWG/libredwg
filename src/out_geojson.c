@@ -159,7 +159,7 @@ static unsigned int cur_ver = 0;
   }
 #define PAIR_S(name, str)                                                     \
   if (str)                                                                    \
-  PAIR_Sc (name, str)
+    PAIR_Sc (name, str)
 #define PAIR_D(name, value)                                                   \
   {                                                                           \
     PREFIX fprintf (dat->fh, "\"" #name "\": %d,\n", value);                  \

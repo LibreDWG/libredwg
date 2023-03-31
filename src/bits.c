@@ -2876,10 +2876,10 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
 
 ATTRIBUTE_MALLOC
 char *
-bit_u_expand (const char *src)
+bit_u_expand (char *src)
 {
-  char *ret = (char *)src;
-  char *p = (char *)src;
+  char *ret = src;
+  char *p = src;
   // convert all \U+XXXX sequences to UTF-8
   while ((p = strstr (p, "\\U+")) && strlen (p) >= 7
          && ishex (p[3]) && ishex (p[4]) && ishex (p[5])
@@ -2887,17 +2887,28 @@ bit_u_expand (const char *src)
     {
       char d[8];
       uint16_t wc;
+      //printf("p: %s %p\n", p, p);
       if (1 == sscanf (p, "\\U+%4hx", &wc))
         {
           uint16_t wp[2] = { wc, 0 };
           // the u8 is always shorter than the src sequence of len 7
           char *u8 = bit_convert_TU (&wp[0]);
+          size_t lp = strlen (p);
           size_t l = strlen (u8);
-          memcpy (p, u8, l);
-          memcpy (&p[l], &p[7], strlen (&p[7]) + 1);
-          free (u8);
+          //printf("wc: %hu\n", wc);
+          //printf("u8: %s, l: %zu, lp: %zu\n", u8, l, lp);
+          //printf("u8: { %hx, %hx }\n", (unsigned char)u8[0], (unsigned char)u8[1]);
+          memcpy (p, u8, l + 1);
+          if (lp > 7)
+            {
+              //printf("p[7]: %d, l: %zu\n", (int)p[7], lp);
+              memcpy (&p[l], &p[7], lp - 6);
+            }
+          if (u8 != (char *)&wp[0])
+            free (u8);
         }
     }
+  //printf("ret: %s\n", ret);
   return ret;
 }
 
@@ -2908,15 +2919,17 @@ char *
 bit_TV_to_utf8 (const char *restrict src,
                 const BITCODE_RS codepage)
 {
-#ifdef HAVE_ICONV
   if (codepage == CP_UTF8)
-    return bit_u_expand (src);
+    return bit_u_expand ((char *)src);
   {
-    const char *charset = dwg_codepage_iconvstr ((Dwg_Codepage)codepage);
+    const bool is_asian_cp
+      = dwg_codepage_isasian ((const Dwg_Codepage)codepage);
     const size_t srclen = strlen (src);
+    size_t destlen = is_asian_cp ? srclen * 3 : trunc (srclen * 1.5);
+#ifdef HAVE_ICONV
+    const char *charset = dwg_codepage_iconvstr ((Dwg_Codepage)codepage);
     iconv_t cd;
     size_t nconv = (size_t)-1;
-    size_t destlen = trunc(srclen * 1.5);
     char *dest, *odest;
     if (!charset)
       return (char*)src;
@@ -2959,10 +2972,70 @@ bit_TV_to_utf8 (const char *restrict src,
       }
     iconv_close (cd);
     return bit_u_expand (odest);
-  }
 #else
-  return bit_u_expand (src);
+    size_t i = 0;
+    char *str = calloc (1, destlen + 1);
+    char *tmp = (char *)src;
+    uint16_t c = 0;
+    //printf("cp: %u\n", codepage);
+    //printf("src: %s\n", src);
+    //printf("destlen: %zu\n", destlen);
+    // UTF8 encode
+    while ((c = (0xFF & *tmp)) && i < destlen)
+      {
+        wchar_t wc;
+        tmp++;
+        //printf("c: %hu\n", c);
+        //printf("i: %zu\n", i);
+        //printf("str: %s\n", str);
+        //if (is_asian_cp)
+        //  c = (c << 16) + *tmp++;
+        if (c < 0x80)
+          str[i++] = c & 0xFF;
+        else if ((wc = dwg_codepage_uc ((Dwg_Codepage)codepage, c & 0xFF)))
+          {
+            c = wc;
+            //printf("wc: %u\n", (unsigned)wc);
+            if (c < 0x80) // stayed below
+              str[i++] = c & 0xFF;
+          }
+        if (c >= 0x80 && c < 0x800)
+          {
+            EXTEND_SIZE (str, i + 1, destlen);
+            str[i++] = (c >> 6) | 0xC0;
+            str[i++] = (c & 0x3F) | 0x80;
+          }
+        else if (c >= 0x800)
+          {  /* windows ucs-2 has no D800-DC00 surrogate pairs. go straight up
+              */
+            /*if (i+3 > len) {
+              str = realloc(str, i+3);
+              len = i+2;
+            }*/
+            EXTEND_SIZE (str, i + 2, destlen);
+            str[i++] = (c >> 12) | 0xE0;
+            str[i++] = ((c >> 6) & 0x3F) | 0x80;
+            str[i++] = (c & 0x3F) | 0x80;
+          }
+        /*
+        else if (c < 0x110000)
+          {
+            EXTEND_SIZE(str, i + 3, len);
+            str[i++] = (c >> 18) | 0xF0;
+            str[i++] = ((c >> 12) & 0x3F) | 0x80;
+            str[i++] = ((c >> 6) & 0x3F) | 0x80;
+            str[i++] = (c & 0x3F) | 0x80;
+          }
+        else
+          HANDLER (OUTPUT, "ERROR: overlarge unicode codepoint U+%0X", c);
+       */
+      }
+    //printf("=> str: %s, i: %zu\n", str, i);
+    EXTEND_SIZE (str, i + 1, destlen);
+    str[i] = '\0';
+    return bit_u_expand (str);
 #endif
+  }
 }
 
 /** converts UTF-8 to UCS-2. Returns a copy.

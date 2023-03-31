@@ -1350,7 +1350,6 @@ json_cquote (char *restrict dest, const char *restrict src, const size_t len,
 
   if (!src)
     return (char *)"";
-#ifdef HAVE_ICONV
   if (codepage > CP_US_ASCII && codepage <= CP_ANSI_1258)
     {
       char *tmp = bit_TV_to_utf8 ((char* restrict)src, codepage);
@@ -1358,7 +1357,6 @@ json_cquote (char *restrict dest, const char *restrict src, const size_t len,
         s = (unsigned char *)tmp;
       // else conversion failed. ignore
     }
-#endif
   while ((c = *s++))
     {
       if (dest >= endp)
