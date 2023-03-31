@@ -98,6 +98,13 @@ jobs:
     - run: cmake -DLIBREDWG_LIBONLY=On .
     - run: make -j
     - run: make -j test
+    - if: failure()
+      run: tar cfz cmake-failure.tgz Testing/Temporary/LastTest.log src/config.h
+    - if: failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: cmake-failure.tgz
+        path: cmake-failure.tgz
   macOS:
     name: macOS
     runs-on: macOS-latest
@@ -192,6 +199,11 @@ jobs:
     - run: mingw32-make -j VERBOSE=1 | tee make.log
     - if: failure()
       run: tar cfz msys-failure.tgz make.log src/config.h
+    - if: failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: msys-failure.tgz
+        path: msys-failure.tgz
   vs2019:
     runs-on: windows-2019
     timeout-minutes: 20
@@ -204,9 +216,14 @@ jobs:
     - run: cmake -G "Visual Studio 16 2019" -A x64 -DCMAKE_BUILD_TYPE=Release .
     - run: cmake --build . --config Release
     - run: copy Release/libredwg.dll test/unit-testing/Release/
-    - run: ctest .
+    - run: ctest . --output-on-failure
     - if: failure()
       run: tar cfz msvc-failure.tgz Testing/Temporary/LastTest.log src/config.h
+    - if: failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: msvc-failure.tgz
+        path: msvc-failure.tgz
   vs2019-ninja:
     runs-on: windows-2019
     timeout-minutes: 20
@@ -241,4 +258,4 @@ jobs:
     - run: ninja
     - name: prep test
       run: copy libredwg.dll test\unit-testing\
-    - run: ninja test
+    - run: ctest . --output-on-failure
