@@ -680,7 +680,7 @@ DWG_ENTITY (SEQEND)
 
   //SUBCLASS (AcDbSequenceEnd) //unused
   PRE (R_13b1) {
-    FIELD_RL (unknown_r11, 0);
+    FIELD_RLx (begin_addr_r11, 0);
   }
   COMMON_ENTITY_HANDLE_DATA;
 
