@@ -6604,23 +6604,26 @@ dwg_add_PDFUNDERLAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 
 /* All the ACSH methods and 3d primitives are still experimental.
    They do not work yet properly */
-EXPORT Dwg_Object_ACSH_BOX_CLASS*
+EXPORT Dwg_Object_ACSH_BOX_CLASS *
 dwg_add_ACSH_BOX_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                        const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
+                        const dwg_point_3d *restrict origin_pt,
+                        const dwg_point_3d *restrict normal,
                         const double length, const double width,
                         const double height) __nonnull_all;
-EXPORT Dwg_Object_ACSH_CHAMFER_CLASS*
+EXPORT Dwg_Object_ACSH_CHAMFER_CLASS *
 dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                            const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
-                            const int bl92, const double base_dist,
-                            const double other_dist, const int num_edges,
-                            const int32_t* edges, const int bl95) __nonnull_all;
-EXPORT Dwg_Object_ACSH_CONE_CLASS*
+                            const dwg_point_3d *restrict origin_pt,
+                            const dwg_point_3d *restrict normal, const int bl92,
+                            const double base_dist, const double other_dist,
+                            const int num_edges, const int32_t *edges,
+                            const int bl95) __nonnull_all;
+EXPORT Dwg_Object_ACSH_CONE_CLASS *
 dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
-                         const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
+                         const dwg_point_3d *restrict origin_pt,
+                         const dwg_point_3d *restrict normal,
                          const double height, const double major_radius,
-                         const double minor_radius, const double x_radius)
-  __nonnull_all;
+                         const double minor_radius,
+                         const double x_radius) __nonnull_all;
 EXPORT Dwg_Object_ACSH_CYLINDER_CLASS*
 dwg_add_ACSH_CYLINDER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
                              const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,

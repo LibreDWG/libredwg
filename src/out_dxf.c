@@ -1872,9 +1872,9 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   if (_obj->num_blocks)
     num_blocks = _obj->num_blocks;
   if (!_obj->block_size)
-    _obj->block_size = calloc (num_blocks, sizeof (BITCODE_BL));
+    _obj->block_size = (BITCODE_BL *)calloc (num_blocks, sizeof (BITCODE_BL));
   if (!_obj->encr_sat_data)
-    _obj->encr_sat_data = calloc (num_blocks, sizeof (char *));
+    _obj->encr_sat_data = (char **)calloc (num_blocks, sizeof (char *));
 
   _obj->_dxf_sab_converted = 1;
   if (!_obj->sab_size)
@@ -2310,13 +2310,13 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
       { // chunks of 4096
         if (i >= num_blocks)
           {
-            _obj->block_size
-                = realloc (_obj->block_size, (i + 2) * sizeof (BITCODE_BL));
-            _obj->encr_sat_data
-                = realloc (_obj->encr_sat_data, (i + 1) * sizeof (char **));
+            _obj->block_size = (BITCODE_BL *)realloc (
+                _obj->block_size, (i + 2) * sizeof (BITCODE_BL));
+            _obj->encr_sat_data = (char **)realloc (
+                _obj->encr_sat_data, (i + 1) * sizeof (char **));
             num_blocks = i + 1;
           }
-        _obj->encr_sat_data[i] = calloc (4096, 1);
+        _obj->encr_sat_data[i] = (char *)calloc (4096, 1);
         memcpy (_obj->encr_sat_data[i], &dest.chain[off], 4096);
         _obj->block_size[i] = 4096;
         LOG_TRACE ("block_size[%d] = 4096\n", i);
@@ -2327,13 +2327,13 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
     // and the smaller rest
     if (i >= num_blocks)
       {
-        _obj->block_size
-            = realloc (_obj->block_size, (i + 2) * sizeof (BITCODE_BL));
-        _obj->encr_sat_data
-            = realloc (_obj->encr_sat_data, (i + 1) * sizeof (char **));
+        _obj->block_size = (BITCODE_BL *)realloc (
+            _obj->block_size, (i + 2) * sizeof (BITCODE_BL));
+        _obj->encr_sat_data = (char **)realloc (_obj->encr_sat_data,
+                                                (i + 1) * sizeof (char **));
         num_blocks = i + 1;
       }
-    _obj->encr_sat_data[i] = calloc (size + 1, 1); // shrink it
+    _obj->encr_sat_data[i] = (char *)calloc (size + 1, 1); // shrink it
     memcpy (_obj->encr_sat_data[i], &dest.chain[off], size);
     _obj->block_size[i] = size;
     LOG_TRACE ("block_size[%d] = %lu\n", i, size);
@@ -2344,8 +2344,8 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   _obj->version = 1; // conversion complete
 
   if (i + 2 >= num_blocks)
-    _obj->block_size
-        = realloc (_obj->block_size, (i + 2) * sizeof (BITCODE_BL));
+    _obj->block_size = (BITCODE_BL *)realloc (_obj->block_size,
+                                              (i + 2) * sizeof (BITCODE_BL));
   _obj->num_blocks = i;
   _obj->block_size[i + 1] = 0;
   return 0;

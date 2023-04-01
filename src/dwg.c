@@ -1071,7 +1071,7 @@ dwg_paper_space_object (Dwg_Data *dwg)
 EXPORT Dwg_Object *
 get_first_owned_entity (const Dwg_Object *hdr)
 {
-  unsigned int version = hdr->parent->header.version;
+  const Dwg_Version_Type version = hdr->parent->header.version;
   Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
   if (hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
     {
@@ -1145,7 +1145,7 @@ get_next_owned_entity (const Dwg_Object *restrict hdr,
                        const Dwg_Object *restrict current)
 {
   Dwg_Data *dwg = hdr->parent;
-  Dwg_Version_Type version = dwg->header.version;
+  const Dwg_Version_Type version = dwg->header.version;
   Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
   if (hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
     {
@@ -1201,7 +1201,7 @@ EXPORT Dwg_Object *
 get_first_owned_subentity (const Dwg_Object *owner)
 {
   Dwg_Data *dwg = owner->parent;
-  Dwg_Version_Type version = dwg->header.version;
+  const Dwg_Version_Type version = dwg->header.version;
   const unsigned int type = owner->fixedtype;
   if (type == DWG_TYPE_INSERT)
     {
@@ -1450,7 +1450,7 @@ get_last_owned_block (const Dwg_Object *restrict hdr)
 {
   Dwg_Data *dwg = hdr->parent;
   Dwg_Object_BLOCK_HEADER *restrict _hdr = hdr->tio.object->tio.BLOCK_HEADER;
-  unsigned int version = dwg->header.version;
+  const Dwg_Version_Type version = dwg->header.version;
   if (hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
     {
       LOG_ERROR ("Invalid BLOCK_HEADER type %d", hdr->fixedtype);

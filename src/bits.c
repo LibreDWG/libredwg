@@ -2946,7 +2946,7 @@ bit_TV_to_utf8 (const char *restrict src,
         return NULL;
       }
     osrc = (char *)src;
-    odest = dest = malloc (destlen);
+    odest = dest = (char*)malloc (destlen);
     while (nconv == (size_t)-1)
       {
         nconv = iconv (cd, (char **restrict)&src, (size_t *)&srclen,
@@ -2957,7 +2957,7 @@ bit_TV_to_utf8 (const char *restrict src,
               {
                 char *dest_new;
                 destlen *= 2;
-                dest_new = realloc (odest, destlen);
+                dest_new = (char*)realloc (odest, destlen);
                 if (dest_new)
                   odest = dest = dest_new;
               }

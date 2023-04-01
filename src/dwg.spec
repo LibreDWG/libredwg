@@ -2647,7 +2647,7 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                 }
               else
                 {
-                  FIELD_VALUE (encr_sat_data[i]) = calloc(1,1);
+                  FIELD_VALUE (encr_sat_data[i]) = (char*)calloc (1, 1);
                   FIELD_VALUE (block_size[i]) = 0;
                 }
             }
@@ -11396,11 +11396,24 @@ DWG_ENTITY (JUMP)
     int len;
     BITCODE_TF trailing;
     _obj->jump_address = _obj->jump_address_raw;
-    _obj->jump_entity_section = 0;
+    _obj->jump_entity_section = DWG_ENTITY_SECTION;
     if (_obj->jump_address_raw > 0xffffff)
       {
         _obj->jump_address &= 0xffffff;
-        _obj->jump_entity_section = (_obj->jump_address_raw & 0xff000000) >> 24;
+        switch ((_obj->jump_address_raw & 0xff000000) >> 24)
+          {
+          case 0:
+            break;
+          case 0x40:
+            _obj->jump_entity_section = DWG_BLOCKS_SECTION;
+            break;
+          case 0x80:
+            _obj->jump_entity_section = DWG_EXTRA_SECTION;
+            break;
+          default:
+            LOG_ERROR ("Invalid jump_entity_section %x ignored",
+                       (_obj->jump_address_raw & 0xff000000) >> 24)
+          }
       }
     LOG_TRACE ("jump_entity_section: ");
     switch (_obj->jump_entity_section)

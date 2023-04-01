@@ -315,10 +315,11 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         if (_ctrl->num_entries != tbl->number)                                \
           {                                                                   \
             if (_ctrl->entries)                                               \
-              _ctrl->entries = realloc (_ctrl->entries,                       \
-                                        tbl->number * sizeof (BITCODE_H));    \
+              _ctrl->entries = (BITCODE_H *)realloc (                         \
+                  _ctrl->entries, tbl->number * sizeof (BITCODE_H));          \
             else                                                              \
-              _ctrl->entries = calloc (tbl->number, sizeof (BITCODE_H));      \
+              _ctrl->entries                                                  \
+                  = (BITCODE_H *)calloc (tbl->number, sizeof (BITCODE_H));    \
             _ctrl->num_entries = tbl->number;                                 \
             LOG_TRACE (#token "_CONTROL.num_entries = %u\n", tbl->number);    \
           }                                                                   \

@@ -19,7 +19,7 @@
 
 #include "config.h"
 #ifdef HAVE_SINCOS
-#  define _GNU_SOURCE
+#  define _GNU_SOURCE 1
 #endif
 #include <stdlib.h>
 #include <stdint.h>
@@ -1544,7 +1544,7 @@ dwg_ent_set_POINT3D (void *restrict _obj, const char *restrict fieldname,
 {
 #  ifndef HAVE_NONNULL
   if (!_obj || !fieldname || !point)
-    return NULL;
+    return false;
 #  endif
   {
     dwg_point_3d dummy;
@@ -22149,13 +22149,13 @@ add_ent_reactor (Dwg_Object_Entity *obj, unsigned long absolute_ref)
   if (obj->num_reactors)
     {
       obj->num_reactors++;
-      obj->reactors
-          = realloc (obj->reactors, obj->num_reactors * sizeof (BITCODE_H));
+      obj->reactors = (BITCODE_H *)realloc (
+          obj->reactors, obj->num_reactors * sizeof (BITCODE_H));
     }
   else
     {
       obj->num_reactors = 1;
-      obj->reactors = calloc (1, sizeof (BITCODE_H));
+      obj->reactors = (BITCODE_H *)calloc (1, sizeof (BITCODE_H));
     }
   obj->reactors[obj->num_reactors - 1]
       = dwg_add_handleref (obj->dwg, 4, absolute_ref, NULL);
@@ -22167,13 +22167,13 @@ add_obj_reactor (Dwg_Object_Object *obj, unsigned long absolute_ref)
   if (obj->num_reactors)
     {
       obj->num_reactors++;
-      obj->reactors
-          = realloc (obj->reactors, obj->num_reactors * sizeof (BITCODE_H));
+      obj->reactors = (BITCODE_H *)realloc (
+          obj->reactors, obj->num_reactors * sizeof (BITCODE_H));
     }
   else
     {
       obj->num_reactors = 1;
-      obj->reactors = calloc (1, sizeof (BITCODE_H));
+      obj->reactors = (BITCODE_H *)calloc (1, sizeof (BITCODE_H));
     }
   obj->reactors[obj->num_reactors - 1]
       = dwg_add_handleref (obj->dwg, 4, absolute_ref, NULL);
@@ -22238,7 +22238,7 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
       // TODO Encode unicode to \U+... bit_utf8_to_TV. codepage conversions
 #  if 0
       int size = 1024;
-      char *dest = malloc (size);
+      char *dest = (char *)malloc (size);
       char *tgt = bit_utf8_to_TV (dest, u8str, size, strlen(u8str), 0,
                                   dwg->header.codepage);
       if (!dest)
@@ -22254,7 +22254,7 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
               LOG_ERROR ("Out of memory");
               return NULL;
             }
-          dest = realloc (dest, size);
+          dest = (char*)realloc (dest, size);
           tgt = bit_utf8_to_TV (dest, u8str, size, strlen(u8str), 0,
                                 dwg->header.codepage);
         }
@@ -22264,7 +22264,7 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
         {
           // those old names are usually 32byte, and bit_write_TF
           // might heap-overflow then.
-          char *buf = malloc (32);
+          char *buf = (char *)malloc (32);
           strncpy (buf, u8str, 32);
           buf[31] = '\0';
           return buf;
@@ -22435,7 +22435,8 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   dwg->header_vars.FLAGS = 0x2a1d; // or 0x281d
   dwg->header_vars.CELWEIGHT = -1; // => FLAGS & 0x1f + lweight lookup
   now = time (NULL);
-  dwg->header_vars.TDCREATE = (BITCODE_TIMEBLL){ now / 3600, now / 86400 };
+  dwg->header_vars.TDCREATE = (BITCODE_TIMEBLL){ (BITCODE_BL)(now / 3600L),
+                                                 (BITCODE_BL)(now / 86400L) };
   // CECOLOR.index: 256 [CMC.BS 62]
   dwg->header_vars.CECOLOR = (BITCODE_CMC){ 256, 0 }; // ByLayer
   if (version > R_11)
@@ -22760,7 +22761,7 @@ EXPORT Dwg_Data *
 dwg_new_Document (const Dwg_Version_Type version, const int imperial,
                   const int log_level)
 {
-  Dwg_Data *dwg = calloc (1, sizeof (Dwg_Data));
+  Dwg_Data *dwg = (Dwg_Data *)calloc (1, sizeof (Dwg_Data));
   dwg->header.version = version;
   dwg->opts = log_level;
 
@@ -22841,7 +22842,7 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
     if (obj->type >= DWG_TYPE_GROUP)                                          \
       ENCODE_GET_CLASS (obj->parent, obj);                                    \
     LOG_TRACE ("  ADD_ENTITY %s [%d]\n", obj->name, obj->index)               \
-    _obj = calloc (1, sizeof (Dwg_Entity_##token));                           \
+    _obj = (Dwg_Entity_##token *)calloc (1, sizeof (Dwg_Entity_##token));     \
     obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;                  \
     obj->tio.entity->tio.token->parent = obj->tio.entity;                     \
     obj->tio.entity->objid = obj->index;                                      \
@@ -22897,7 +22898,7 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
     if (obj->type >= DWG_TYPE_GROUP)                                          \
       ENCODE_GET_CLASS (obj->parent, obj);                                    \
     LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index)               \
-    _obj = calloc (1, sizeof (Dwg_Object_##token));                           \
+    _obj = (Dwg_Object_##token *)calloc (1, sizeof (Dwg_Object_##token));     \
     obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;                  \
     obj->tio.object->tio.token->parent = obj->tio.object;                     \
     obj->tio.object->objid = obj->index
@@ -23132,7 +23133,7 @@ add_attrib_links (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           = dwg_add_handleref (dwg, 4, attobj->handle.value, insobj);
       insert->last_attrib = insert->first_attrib;
       insert->seqend = dwg_add_handleref (dwg, 3, obj->handle.value, insobj);
-      insert->attribs = malloc (sizeof (BITCODE_H));
+      insert->attribs = (BITCODE_H *)malloc (sizeof (BITCODE_H));
       insert->attribs[0] = insert->last_attrib;
       IN_POSTPROCESS_SEQEND (obj, insert->num_owned, insert->attribs);
     }
@@ -23143,8 +23144,8 @@ add_attrib_links (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           = dwg_add_handleref (dwg, 4, attobj->handle.value, insobj);
       attobj->tio.entity->prev_entity = insert->last_attrib;
       insert->num_owned++;
-      insert->attribs
-          = realloc (insert->attribs, insert->num_owned * sizeof (BITCODE_H));
+      insert->attribs = (BITCODE_H *)realloc (
+          insert->attribs, insert->num_owned * sizeof (BITCODE_H));
       lastobj->tio.entity->next_entity
           = dwg_add_handleref (dwg, 3, attobj->handle.value, insobj);
       insert->attribs[insert->num_owned - 1] = insert->last_attrib;
@@ -23362,10 +23363,10 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       blkhdr->is_xref_ref = 1;
       blkhdr->num_inserts++;
       if (!blkhdr->inserts)
-        blkhdr->inserts = calloc (1, sizeof (BITCODE_H));
+        blkhdr->inserts = (BITCODE_H *)calloc (1, sizeof (BITCODE_H));
       else
-        blkhdr->inserts = realloc (blkhdr->inserts,
-                                   blkhdr->num_inserts * sizeof (BITCODE_H));
+        blkhdr->inserts = (BITCODE_H *)realloc (
+            blkhdr->inserts, blkhdr->num_inserts * sizeof (BITCODE_H));
       blkhdr->inserts[blkhdr->num_inserts - 1]
           = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
     }
@@ -23422,10 +23423,10 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       blkhdr->is_xref_ref = 1;
       blkhdr->num_inserts++;
       if (!blkhdr->inserts)
-        blkhdr->inserts = calloc (1, sizeof (BITCODE_H));
+        blkhdr->inserts = (BITCODE_H *)calloc (1, sizeof (BITCODE_H));
       else
-        blkhdr->inserts = realloc (blkhdr->inserts,
-                                   blkhdr->num_inserts * sizeof (BITCODE_H));
+        blkhdr->inserts = (BITCODE_H *)realloc (
+            blkhdr->inserts, blkhdr->num_inserts * sizeof (BITCODE_H));
       blkhdr->inserts[blkhdr->num_inserts - 1]
           = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
     }
@@ -23505,7 +23506,7 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (POLYLINE_2D);
   pl = obj;
   _pl = _obj;
-  _pl->vertex = malloc (num_pts * sizeof (BITCODE_H));
+  _pl->vertex = (BITCODE_H *)malloc (num_pts * sizeof (BITCODE_H));
   if (!_pl->vertex)
     return NULL;
   if (num_pts)
@@ -23567,7 +23568,7 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (POLYLINE_3D);
   pl = obj;
   _pl = _obj;
-  _pl->vertex = malloc (num_pts * sizeof (BITCODE_H));
+  _pl->vertex = (BITCODE_H *)malloc (num_pts * sizeof (BITCODE_H));
   if (!_pl->vertex)
     return NULL;
   if (num_pts)
@@ -23678,8 +23679,8 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (POLYLINE_PFACE);
   pl = obj;
   _pl = _obj;
-  _pl->vertex
-      = malloc (((unsigned long)numverts + numfaces) * sizeof (BITCODE_H));
+  _pl->vertex = (BITCODE_H *)malloc (((unsigned long)numverts + numfaces)
+                                     * sizeof (BITCODE_H));
   if (!_pl->vertex)
     return NULL;
   _pl->has_vertex = 1;
@@ -23783,8 +23784,8 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   API_ADD_ENTITY (POLYLINE_MESH);
   pl = obj;
   _pl = _obj;
-  _pl->vertex
-      = malloc ((unsigned long)num_m_verts * num_n_verts * sizeof (BITCODE_H));
+  _pl->vertex = (BITCODE_H *)malloc ((unsigned long)num_m_verts * num_n_verts
+                                     * sizeof (BITCODE_H));
   if (!_pl->vertex)
     return NULL;
   _pl->flag = 16;
@@ -24464,7 +24465,7 @@ dwg_add_SPLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->end_tan_vec.z = end_tan_vec->z;
   _obj->num_fit_pts = (BITCODE_BL)num_fit_pts;
   assert (sizeof (BITCODE_3BD) == sizeof (dwg_point_3d));
-  _obj->fit_pts = malloc (num_fit_pts * sizeof (BITCODE_3BD));
+  _obj->fit_pts = (BITCODE_3BD *)malloc (num_fit_pts * sizeof (BITCODE_3BD));
   memcpy (_obj->fit_pts, fit_pts, num_fit_pts * sizeof (BITCODE_3BD));
   return _obj;
 }
@@ -24488,8 +24489,8 @@ dwg_add_REGION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     _obj->num_blocks++;
   j = _obj->num_blocks;
   _obj->acis_data = (BITCODE_RC *)strdup (acis_data);
-  _obj->block_size = calloc (j + 1, sizeof (BITCODE_BL));
-  _obj->encr_sat_data = calloc (j + 1, sizeof (char *));
+  _obj->block_size = (BITCODE_BL *)calloc (j + 1, sizeof (BITCODE_BL));
+  _obj->encr_sat_data = (char **)calloc (j + 1, sizeof (char *));
   _obj->version = 1;
   _obj->unknown = 1;
   for (unsigned i = 0; i < _obj->num_blocks; i++)
@@ -24524,8 +24525,8 @@ dwg_add_3DSOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     _obj->num_blocks++;
   j = _obj->num_blocks;
   _obj->acis_data = (BITCODE_RC *)strdup (acis_data);
-  _obj->block_size = calloc (j + 1, sizeof (BITCODE_BL));
-  _obj->encr_sat_data = calloc (j + 1, sizeof (char *));
+  _obj->block_size = (BITCODE_BL *)calloc (j + 1, sizeof (BITCODE_BL));
+  _obj->encr_sat_data = (char **)calloc (j + 1, sizeof (char *));
   _obj->version = 1;
   _obj->unknown = 1;
   for (unsigned i = 0; i < j; i++)
@@ -24561,8 +24562,8 @@ dwg_add_BODY (Dwg_Object_BLOCK_HEADER *restrict blkhdr, const char *acis_data)
     _obj->num_blocks++;
   j = _obj->num_blocks;
   _obj->acis_data = (BITCODE_RC *)strdup (acis_data);
-  _obj->block_size = calloc (j + 1, sizeof (BITCODE_BL));
-  _obj->encr_sat_data = calloc (j + 1, sizeof (char *));
+  _obj->block_size = (BITCODE_BL *)calloc (j + 1, sizeof (BITCODE_BL));
+  _obj->encr_sat_data = (char **)calloc (j + 1, sizeof (char *));
   _obj->version = 1;
   _obj->unknown = 1;
   for (unsigned i = 0; i < _obj->num_blocks; i++)
@@ -24849,7 +24850,7 @@ dwg_add_LEADER (
       API_UNADD_ENTITY;
       return NULL;
     }
-  _obj->points = calloc (num_points, sizeof (BITCODE_3BD));
+  _obj->points = (BITCODE_3BD *)calloc (num_points, sizeof (BITCODE_3BD));
   _obj->num_points = num_points;
   for (unsigned i = 0; i < num_points; i++)
     {
@@ -24956,7 +24957,7 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     }
   if (!num_verts)
     return NULL;
-  _obj->verts = calloc (num_verts, sizeof (Dwg_MLINE_vertex));
+  _obj->verts = (Dwg_MLINE_vertex *)calloc (num_verts, sizeof (Dwg_MLINE_vertex));
   _obj->num_verts = num_verts;
   _obj->base_point.x = verts[0].x;
   _obj->base_point.y = verts[0].y;
@@ -25034,13 +25035,14 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           memcpy (&dir, &ay, sizeof (dwg_point_3d));
           _obj->verts[i].miter_direction = dir;
         }
-      _obj->verts[i].lines = calloc (_obj->num_lines, sizeof (Dwg_MLINE_line));
+      _obj->verts[i].lines = (Dwg_MLINE_line *)calloc (
+          _obj->num_lines, sizeof (Dwg_MLINE_line));
       for (unsigned j = 0; j < _obj->num_lines; j++)
         {
           _obj->verts[i].lines[j].parent = _obj->verts;
           _obj->verts[i].lines[j].num_segparms = 2;
           _obj->verts[i].lines[j].segparms
-              = calloc (_obj->verts[i].lines[j].num_segparms, 8);
+              = (BITCODE_BD *)calloc (_obj->verts[i].lines[j].num_segparms, 8);
           for (unsigned k = 0; k < _obj->verts[i].lines[j].num_segparms; k++)
             { // TODO
               _obj->verts[i].lines[j].segparms[k] = 0.0;
@@ -25113,11 +25115,11 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
         LOG_TRACE (#record ".name = %s\n", _obj->name);                       \
         __VA_ARGS__                                                           \
         if (_ctrl->entries)                                                   \
-          _ctrl->entries = realloc (                                          \
+          _ctrl->entries = (BITCODE_H *)realloc (                             \
               _ctrl->entries, (_ctrl->num_entries + 1) * sizeof (BITCODE_H)); \
         else                                                                  \
-          _ctrl->entries                                                      \
-              = calloc (_ctrl->num_entries + 1, sizeof (BITCODE_H));          \
+          _ctrl->entries = (BITCODE_H *)calloc (_ctrl->num_entries + 1,       \
+                                                sizeof (BITCODE_H));          \
         _ctrl->entries[_ctrl->num_entries]                                    \
             = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);            \
         LOG_TRACE (#control ".entries[%d] = " FORMAT_REF "\n",                \
@@ -25378,7 +25380,7 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const char *restrict name)
     {
       _obj->start_angle = _obj->end_angle = deg2rad (90.0);
       _obj->num_lines = 2;
-      _obj->lines = calloc (2, sizeof (Dwg_MLINESTYLE_line));
+      _obj->lines = (Dwg_MLINESTYLE_line *)calloc (2, sizeof (Dwg_MLINESTYLE_line));
       _obj->lines[0].parent = _obj;
       _obj->lines[0].offset = 0.5;
       _obj->lines[0].color = (BITCODE_CMC){ 256, 0 };
@@ -25461,7 +25463,8 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     _obj->num_paths = num_paths;
     //_obj->num_boundary_handles = num_paths;
     //_obj->boundary_handles = calloc (1, sizeof (BITCODE_H));
-    _obj->paths = calloc (num_paths, sizeof (Dwg_HATCH_Path));
+    _obj->paths
+        = (Dwg_HATCH_Path *)calloc (num_paths, sizeof (Dwg_HATCH_Path));
     for (unsigned i = 0; i < num_paths; i++)
       {
         Dwg_Object_Type type = pathobjs[i]->fixedtype;
@@ -25479,7 +25482,8 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         _obj->paths[i].parent = _obj;
         // one path per object only here
         _obj->paths[i].num_boundary_handles = 1;
-        _obj->paths[i].boundary_handles = calloc (1, sizeof (BITCODE_H));
+        _obj->paths[i].boundary_handles
+            = (BITCODE_H *)calloc (1, sizeof (BITCODE_H));
         _obj->paths[i].boundary_handles[0]
             = dwg_add_handleref (dwg, 4, pathobjs[i]->handle.value, NULL);
         if (is_associative)
@@ -25492,7 +25496,8 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               Dwg_Entity_LINE *line = pathobjs[i]->tio.entity->tio.LINE;
               _obj->paths[i].flag = 1 + (is_associative ? 0x200 : 0);
               _obj->paths[i].num_segs_or_paths = 1;
-              _obj->paths[i].segs = calloc (1, sizeof (Dwg_HATCH_PathSeg));
+              _obj->paths[i].segs = (Dwg_HATCH_PathSeg *)calloc (
+                  1, sizeof (Dwg_HATCH_PathSeg));
               _obj->paths[i].segs[0].parent = &_obj->paths[i];
               _obj->paths[i].segs[0].curve_type = 1;
               _obj->paths[i].segs[0].first_endpoint.x = line->start.x;
@@ -25507,7 +25512,8 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               _obj->paths[i].flag
                   = 0x21 + (is_associative ? 0x200 : 0); // is_open
               _obj->paths[i].num_segs_or_paths = 1;
-              _obj->paths[i].segs = calloc (1, sizeof (Dwg_HATCH_PathSeg));
+              _obj->paths[i].segs = (Dwg_HATCH_PathSeg *)calloc (
+                  1, sizeof (Dwg_HATCH_PathSeg));
               _obj->paths[i].segs[0].parent = &_obj->paths[i];
               _obj->paths[i].segs[0].curve_type = 2;
               _obj->paths[i].segs[0].center.x = arc->center.x;
@@ -25523,7 +25529,8 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               Dwg_Entity_CIRCLE *arc = pathobjs[i]->tio.entity->tio.CIRCLE;
               _obj->paths[i].flag = 1 + (is_associative ? 0x200 : 0);
               _obj->paths[i].num_segs_or_paths = 1;
-              _obj->paths[i].segs = calloc (1, sizeof (Dwg_HATCH_PathSeg));
+              _obj->paths[i].segs = (Dwg_HATCH_PathSeg *)calloc (
+                  1, sizeof (Dwg_HATCH_PathSeg));
               _obj->paths[i].segs[0].parent = &_obj->paths[i];
               _obj->paths[i].segs[0].curve_type = 2;
               _obj->paths[i].segs[0].center.x = arc->center.x;
@@ -25539,7 +25546,8 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               Dwg_Entity_ELLIPSE *ell = pathobjs[i]->tio.entity->tio.ELLIPSE;
               _obj->paths[i].flag = 1 + (is_associative ? 0x200 : 0);
               _obj->paths[i].num_segs_or_paths = 1;
-              _obj->paths[i].segs = calloc (1, sizeof (Dwg_HATCH_PathSeg));
+              _obj->paths[i].segs = (Dwg_HATCH_PathSeg *)calloc (
+                  1, sizeof (Dwg_HATCH_PathSeg));
               _obj->paths[i].segs[0].parent = &_obj->paths[i];
               _obj->paths[i].segs[0].curve_type = 3;
               _obj->paths[i].segs[0].center.x = ell->center.x;
@@ -25589,8 +25597,8 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                       num = pline->num_points - 1;
                     }
                   _obj->paths[i].num_segs_or_paths = num;
-                  _obj->paths[i].segs
-                      = calloc (num, sizeof (Dwg_HATCH_PathSeg));
+                  _obj->paths[i].segs = (Dwg_HATCH_PathSeg *)calloc (
+                      1, sizeof (Dwg_HATCH_PathSeg));
                   for (unsigned j = 0; j < num; j++)
                     {
                       unsigned k = j + 1;
@@ -25614,8 +25622,9 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                   _obj->paths[i].bulges_present = 1;
                   _obj->paths[i].closed = pline->flag & 512 ? 1 : 0;
                   _obj->paths[i].num_segs_or_paths = pline->num_points;
-                  _obj->paths[i].polyline_paths = calloc (
-                      pline->num_points, sizeof (Dwg_HATCH_PolylinePath));
+                  _obj->paths[i].polyline_paths
+                      = (Dwg_HATCH_PolylinePath *)calloc (
+                          pline->num_points, sizeof (Dwg_HATCH_PolylinePath));
                   for (unsigned j = 0; j < pline->num_points; j++)
                     {
                       _obj->paths[i].polyline_paths[j].parent
@@ -25640,7 +25649,8 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
               _obj->paths[i].closed = pline->flag & 1 ? 1 : 0;
               _obj->paths[i].num_segs_or_paths = pline->num_owned;
               _obj->paths[i].polyline_paths
-                  = calloc (pline->num_owned, sizeof (Dwg_HATCH_PolylinePath));
+                  = (Dwg_HATCH_PolylinePath *)calloc (
+                      pline->num_owned, sizeof (Dwg_HATCH_PolylinePath));
               pts = dwg_object_polyline_2d_get_points (pathobjs[i], &error);
               if (error)
                 return NULL;
@@ -25901,7 +25911,7 @@ dwg_add_XRECORD_binary (Dwg_Object_XRECORD *restrict _obj, const short dxf,
   rbuf->type = dxf;
   rbuf->value.str.size = size;
   rbuf->value.str.is_tu = 0;
-  rbuf->value.str.u.data = malloc (size);
+  rbuf->value.str.u.data = (char*)malloc (size);
   memcpy (rbuf->value.str.u.data, data, size);
   _obj->xdata_size += 3 + size; // 2 + 1 + len
   return _obj;
@@ -25930,7 +25940,7 @@ dwg_add_XRECORD_string (Dwg_Object_XRECORD *restrict _obj, const short dxf,
       = (dwg && dwg->header.version < R_2007) ? dwg->header.codepage : 30;
   rbuf->value.str.is_tu = 0;
   rbuf->value.str.size = len;
-  rbuf->value.str.u.data = malloc (len);
+  rbuf->value.str.u.data = (char*)malloc (len);
   memcpy (rbuf->value.str.u.data, str, len); // utf-8 or single-byte
   _obj->xdata_size += 4 + len;
   return _obj;
@@ -25985,7 +25995,7 @@ dwg_add_VBA_PROJECT (Dwg_Data *restrict dwg, const BITCODE_BL size,
     _obj->data_size = size;
     // add the data to dwg->vbaproject, the SECTION_VBAPROJECT
     dwg->vbaproject.size = size;
-    dwg->vbaproject.unknown_bits = malloc (size);
+    dwg->vbaproject.unknown_bits = (BITCODE_TF)malloc (size);
     // memcpy (_obj->data, data, size);
     memcpy (dwg->vbaproject.unknown_bits, data, size);
     // header.vbaproj_address is set in encode
@@ -26171,7 +26181,8 @@ dwg_add_EVALUATION_GRAPH (Dwg_Data *restrict dwg, const int has_graph,
   _obj->first_nodeid = e_nodeid;
   _obj->first_nodeid_copy = e_nodeid;
   _obj->num_nodes = num_nodes;
-  _obj->nodes = calloc (_obj->num_nodes, sizeof (Dwg_EVAL_Node));
+  _obj->nodes
+      = (Dwg_EVAL_Node *)calloc (_obj->num_nodes, sizeof (Dwg_EVAL_Node));
   for (unsigned i = 0; i < num_nodes; i++)
     {
       _obj->nodes[i].parent = _obj;
@@ -26184,7 +26195,8 @@ dwg_add_EVALUATION_GRAPH (Dwg_Data *restrict dwg, const int has_graph,
       _obj->nodes[i].node[2] = -1;
       _obj->nodes[i].node[3] = -1;
     }
-  _obj->edges = calloc (_obj->num_edges, sizeof (Dwg_EVAL_Edge));
+  _obj->edges
+      = (Dwg_EVAL_Edge *)calloc (_obj->num_edges, sizeof (Dwg_EVAL_Edge));
   for (unsigned i = 0; i < _obj->num_edges; i++)
     {
       _obj->edges[i].parent = _obj;
@@ -26378,7 +26390,7 @@ dwg_init_ACSH_CLASS (Dwg_Data *restrict dwg, Dwg_Object *restrict obj,
   _obj->history_node.step_id = 97;    //?
   _obj->history_node.material = NULL; // => MATERIAL of LAYER "0"
   dwg_geom_normal_to_matrix9 (normal, &matrix);
-  _obj->history_node.trans = calloc (16, 8);
+  _obj->history_node.trans = (BITCODE_BD *)calloc (16, 8);
   _obj->history_node.trans[0] = matrix[0];
   _obj->history_node.trans[1] = matrix[1];
   _obj->history_node.trans[2] = matrix[2];
@@ -26439,7 +26451,7 @@ ACSH_init_evalgraph (Dwg_Data *restrict dwg, void *restrict _acsh,
   Dwg_Object_ACSH_HISTORY_CLASS *hist;
   Dwg_Object_EVALUATION_GRAPH *eval;
   Dwg_Object *solidobj, *histobj, *evalobj, *acsh;
-  BITCODE_H *evalexpr = calloc (1, sizeof (BITCODE_H));
+  BITCODE_H *evalexpr = (BITCODE_H *)calloc (1, sizeof (BITCODE_H));
 
   acsh = dwg_obj_generic_to_object (_acsh, &error);
   solidobj = dwg_obj_generic_to_object (solid, &error);
@@ -26706,9 +26718,10 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.z = origin_pt->z;
     solid->acis_empty_bit = 1;
 
-    _obj = dwg_add_ACSH_BOX_CLASS ((void *)solid, origin_pt,
-                                   normal ? normal : &defnormal, length, width,
-                                   height);
+    // solid only needed for the dwg
+    _obj = dwg_add_ACSH_BOX_CLASS (
+        (Dwg_Object_EVALUATION_GRAPH *)(void *)solid, origin_pt,
+        normal ? normal : &defnormal, length, width, height);
     ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
@@ -26738,7 +26751,7 @@ dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
     _obj->num_edges = num_edges;
     if (num_edges)
       {
-        _obj->edges = calloc (num_edges, 4);
+        _obj->edges = (BITCODE_BL *)calloc (num_edges, 4);
         memcpy (_obj->edges, edges, num_edges * 4);
       }
     _obj->bl95 = bl95;
@@ -26815,7 +26828,8 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->acis_empty_bit = 1;
 
     _obj = dwg_add_ACSH_CHAMFER_CLASS (
-        (void *)solid, origin_pt, normal ? normal : &defnormal, bl92,
+        (Dwg_Object_EVALUATION_GRAPH *)(void *)solid, origin_pt,
+        normal ? normal : &defnormal, bl92,
         base_dist, other_dist, num_edges, edges, bl95);
     ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
@@ -26941,9 +26955,10 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.z = origin_pt->z;
     solid->acis_empty_bit = 1;
 
-    _obj = dwg_add_ACSH_CONE_CLASS ((void *)solid, origin_pt,
-                                    normal ? normal : &defnormal, height,
-                                    major_radius, minor_radius, x_radius);
+    _obj = dwg_add_ACSH_CONE_CLASS (
+        (Dwg_Object_EVALUATION_GRAPH *)(void *)solid, origin_pt,
+        normal ? normal : &defnormal, height, major_radius, minor_radius,
+        x_radius);
     ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
@@ -27068,9 +27083,10 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.z = origin_pt->z;
     solid->acis_empty_bit = 1;
 
-    _obj = dwg_add_ACSH_CYLINDER_CLASS ((void *)solid, origin_pt,
-                                        normal ? normal : &defnormal, height,
-                                        major_radius, minor_radius, x_radius);
+    _obj = dwg_add_ACSH_CYLINDER_CLASS (
+        (Dwg_Object_EVALUATION_GRAPH *)(void *)solid, origin_pt,
+        normal ? normal : &defnormal, height, major_radius, minor_radius,
+        x_radius);
     ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
@@ -27162,9 +27178,9 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.z = origin_pt->z;
     solid->acis_empty_bit = 1;
 
-    _obj = dwg_add_ACSH_PYRAMID_CLASS ((void *)solid, origin_pt,
-                                       normal ? normal : &defnormal, height,
-                                       sides, radius, topradius);
+    _obj = dwg_add_ACSH_PYRAMID_CLASS (
+        (Dwg_Object_EVALUATION_GRAPH *)(void *)solid, origin_pt,
+        normal ? normal : &defnormal, height, sides, radius, topradius);
     ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
@@ -27305,8 +27321,9 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.z = origin_pt->z;
     solid->acis_empty_bit = 1;
 
-    _obj = dwg_add_ACSH_SPHERE_CLASS ((void *)solid, origin_pt,
-                                      normal ? normal : &defnormal, radius);
+    _obj = dwg_add_ACSH_SPHERE_CLASS (
+        (Dwg_Object_EVALUATION_GRAPH *)(void *)solid, origin_pt,
+        normal ? normal : &defnormal, radius);
     ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
@@ -27410,9 +27427,9 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.z = origin_pt->z;
     solid->acis_empty_bit = 1;
 
-    _obj = dwg_add_ACSH_TORUS_CLASS ((void *)solid, origin_pt,
-                                     normal ? normal : &defnormal,
-                                     major_radius, minor_radius);
+    _obj = dwg_add_ACSH_TORUS_CLASS (
+        (Dwg_Object_EVALUATION_GRAPH *)(void *)solid, origin_pt,
+        normal ? normal : &defnormal, major_radius, minor_radius);
     ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }
@@ -27671,9 +27688,9 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     solid->point.z = origin_pt->z;
     solid->acis_empty_bit = 1;
 
-    _obj = dwg_add_ACSH_WEDGE_CLASS ((void *)solid, origin_pt,
-                                     normal ? normal : &defnormal, length,
-                                     width, height);
+    _obj = dwg_add_ACSH_WEDGE_CLASS (
+        (Dwg_Object_EVALUATION_GRAPH *)(void *)solid, origin_pt,
+        normal ? normal : &defnormal, length, width, height);
     ACSH_init_evalgraph (dwg, _obj, solid);
     return solid;
   }

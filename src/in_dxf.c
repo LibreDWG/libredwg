@@ -358,9 +358,11 @@ dxf_read_rl (Bit_Chain *dat)
         dat->byte++;
       if (dat->chain[dat->byte] == '\n')
         dat->byte++;
-      if (num > UINT32_MAX)
+      /*
+      if (num > (long)0xffffffff)
         LOG_ERROR ("%s: RL overflow %ld (at %lu)", __FUNCTION__, num,
                    dat->byte);
+      */
       return (BITCODE_RL)num;
     }
 }
@@ -571,7 +573,7 @@ dxf_read_pair (Bit_Chain *dat)
     case DWG_VT_STRING:
       dxf_read_string (dat, &pair->value.s);
       if (!pair->value.s && pair->code != 0)
-        pair->value.s = calloc (1, 1);
+        pair->value.s = (char*)calloc (1, 1);
       LOG_TRACE ("  dxf (%d, \"%s\")\n", (int)pair->code, pair->value.s);
       // dynapi_set_helper converts from utf-8 to unicode, not here.
       // we need to know the type of the target field, if TV or T
@@ -604,7 +606,7 @@ dxf_read_pair (Bit_Chain *dat)
       // zero-terminated. TODO hex decode here already?
       dxf_read_string (dat, &pair->value.s);
       if (!pair->value.s)
-        pair->value.s = calloc (1, 1);
+        pair->value.s = (char*)calloc (1, 1);
       LOG_TRACE ("  dxf (%d, %s)\n", (int)pair->code, pair->value.s);
       break;
     case DWG_VT_HANDLE:

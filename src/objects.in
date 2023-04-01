@@ -395,7 +395,7 @@ EXPORT int dwg_object_name (const char *const restrict name,
       if (is_entp)
         *is_entp = result->isent;
       if (stabilityp)
-        *stabilityp = result->stability;
+        *stabilityp = (Dwg_Class_Stability)result->stability;
       return 1;
     }
   return 0;

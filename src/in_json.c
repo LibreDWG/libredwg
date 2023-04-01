@@ -427,7 +427,7 @@ json_fixed_string (Bit_Chain *restrict dat, const int len,
                    jsmntokens_t *restrict tokens)
 {
   const jsmntok_t *t = &tokens->tokens[tokens->index];
-  char *key = malloc (len + 1);
+  char *key = (char *)malloc (len + 1);
   int l;
   JSON_TOKENS_CHECK_OVERFLOW_NULL;
   l = t->end - t->start;
@@ -2758,7 +2758,8 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   if (dwg->header.from_version < R_13b1)
     {
-      dwg->header.section = calloc (SECTION_VX + 1, sizeof (Dwg_Section));
+      dwg->header.section
+          = (Dwg_Section *)calloc (SECTION_VX + 1, sizeof (Dwg_Section));
     }
   dwg->num_objects += size;
   for (i = 0; i < size; i++)
@@ -3208,7 +3209,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               if (t->type == JSMN_STRING && is_entity && strEQc (key, "tag"))
                 {
                   int sz = t->end - t->start;
-                  char *tag = malloc (sz + 1);
+                  char *tag = (char *)malloc (sz + 1);
                   memcpy (tag, &dat->chain[t->start], sz);
                   tag[sz] = '\0';
                   if (sz <= 0 || !dwg_is_valid_tag (tag))

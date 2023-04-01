@@ -1962,8 +1962,8 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   CLEARFIRST;
   SECTION (TABLES);
-  // TODO on r11 we might have up to VX tables
-  for (Dwg_Section_Type_r11 id = SECTION_BLOCK; id <= SECTION_VIEW; id++)
+  // TODO on r11 we might have up to VX tables. FIXME __cplusplus
+  for (int id = SECTION_BLOCK; id <= SECTION_VIEW; id++)
     {
       int error;
       Dwg_Section *tbl = &dwg->header.section[id];

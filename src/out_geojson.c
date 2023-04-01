@@ -389,14 +389,15 @@ normalize_polygon_orient (BITCODE_BL numpts, dwg_point_2d **const pts_p)
     {
       // reverse and return a copy
       unsigned last = numpts - 1;
-      dwg_point_2d *new = malloc (numpts * sizeof (BITCODE_2RD));
+      dwg_point_2d *newpts
+          = (dwg_point_2d *)malloc (numpts * sizeof (BITCODE_2RD));
       // fprintf (stderr, "%u pts, sum %f: reverse orient\n", numpts, sum);
       for (unsigned i = 0; i < numpts; i++)
         {
-          new[i].x = pts[last - i].x;
-          new[i].y = pts[last - i].y;
+          newpts[i].x = pts[last - i].x;
+          newpts[i].y = pts[last - i].y;
         }
-      *pts_p = new;
+      *pts_p = newpts;
       return 1;
     }
   else

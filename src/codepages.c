@@ -193,10 +193,10 @@ dwg_codepage_dxfstr (Dwg_Codepage cp)
 Dwg_Codepage
 dwg_codepage_int (const char *s)
 {
-  for (Dwg_Codepage i = CP_UTF8; i <= CP_ANSI_1258; i++)
+  for (int i = 0; i <= (int)CP_ANSI_1258; i++)
     {
       if (strEQ (s, _codepage_dxfstr[i]))
-        return i;
+        return (Dwg_Codepage)i;
     }
   return CP_UNDEFINED;
 }

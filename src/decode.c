@@ -1113,7 +1113,7 @@ bfr_read_32 (void *restrict dst, BITCODE_RC *restrict *restrict src,
   if ((intptr_t)dst % 4)
     {
       dst_unaligned = true;
-      dp0 = dp = malloc (size);
+      dp0 = dp = (uint32_t*)malloc (size);
     }
   else
     dp = (uint32_t *)dst;
@@ -1121,7 +1121,7 @@ bfr_read_32 (void *restrict dst, BITCODE_RC *restrict *restrict src,
   if ((intptr_t)*src % 4)
     {
       src_unaligned = true;
-      sp0 = sp = malloc (size);
+      sp0 = sp = (uint32_t*)malloc (size);
       memcpy ((void *)sp, (const void *)*src, size);
     }
   else
@@ -1160,7 +1160,7 @@ bfr_read_64 (void *restrict dst, BITCODE_RC *restrict *restrict src,
   if ((intptr_t)dst % 8)
     {
       dst_unaligned = true;
-      dp0 = dp = malloc (size);
+      dp0 = dp = (uint64_t*)malloc (size);
     }
   else
     dp = (uint64_t *)dst;
@@ -1168,7 +1168,7 @@ bfr_read_64 (void *restrict dst, BITCODE_RC *restrict *restrict src,
   if ((intptr_t)*src % 8)
     {
       src_unaligned = true;
-      sp0 = sp = malloc (size);
+      sp0 = sp = (uint64_t*)malloc (size);
       memcpy ((void *)sp, (const void *)*src, size);
     }
   else
