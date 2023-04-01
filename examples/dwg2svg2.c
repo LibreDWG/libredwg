@@ -24,6 +24,10 @@
 #include <math.h>
 #include <getopt.h>
 
+#ifdef ENABLE_MIMALLOC
+#  include <mimalloc-override.h>
+#endif
+
 #include <dwg.h>
 #include <dwg_api.h>
 #include "../programs/geom.h"

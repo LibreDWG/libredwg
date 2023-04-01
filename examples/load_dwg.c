@@ -37,7 +37,7 @@
 #endif
 #include "dwg.h"
 #include "dwg_api.h"
-#include "bits.h"
+#include "../src/bits.h"
 
 #include "../programs/suffix.inc"
 static int help (void);
