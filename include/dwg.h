@@ -75,7 +75,7 @@ extern "C" {
 
 /* The FORMAT_* are for logging only */
 typedef unsigned char BITCODE_RC;
-#ifdef _MSC_VER
+#if defined _MSC_VER && !defined __clang__
 # define FORMAT_RC "0x%2x"
 # define SCANF_2X "%2X"
 #else
