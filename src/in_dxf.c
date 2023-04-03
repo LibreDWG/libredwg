@@ -11856,7 +11856,10 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               pair = new_object (table, dxfname, dat, dwg, ctrl_id,
                                  (BITCODE_BL *)&i);
               if (!pair)
-                return DWG_ERR_INVALIDDWG;
+                {
+                  free (dxfname);
+                  return DWG_ERR_INVALIDDWG;
+                }
               obj = &dwg->object[dwg->num_objects - 1];
               // A minimal DXF will have no handle values
               if (!obj->handle.value)
@@ -11906,13 +11909,19 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                         {
                           _obj->strings_area = (BITCODE_TF)xcalloc (512, 1);
                           if (!_obj->strings_area)
-                            goto outofmem;
+                            {
+                              free (dxfname);
+                              goto outofmem;
+                            }
                         }
                       if (dwg->header.version <= R_2004)
                         {
                           _obj->strings_area = (BITCODE_TF)xcalloc (256, 1);
                           if (!_obj->strings_area)
-                            goto outofmem;
+                            {
+                              free (dxfname);
+                              goto outofmem;
+                            }
                         }
                     }
                 }
@@ -11988,7 +11997,7 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       dxf_free_pair (pair);
       pair = dxf_read_pair (dat);
       DXF_CHECK_EOF;
-    }
+    } // while (pair)
   dxf_free_pair (pair);
   return 0;
 
@@ -12032,7 +12041,10 @@ dxf_blocks_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 }
               pair = new_object (name, dxfname, dat, dwg, 0, &i);
               if (!pair)
-                return DWG_ERR_INVALIDDWG;
+                {
+                  free (dxfname);
+                  return DWG_ERR_INVALIDDWG;
+                }
               obj = &dwg->object[idx];
               if (obj->type == DWG_TYPE_BLOCK)
                 {
@@ -12259,7 +12271,10 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           dxf_free_pair (pair);
           pair = new_object (name, dxfname, dat, dwg, 0, NULL);
           if (!pair)
-            return DWG_ERR_INVALIDDWG;
+            {
+              free (dxfname);
+              return DWG_ERR_INVALIDDWG;
+            }
           if (pair->code == 0 && pair->value.s)
             {
               Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
@@ -12323,7 +12338,10 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               dxf_free_pair (pair);
               pair = new_object (name, dxfname, dat, dwg, 0, NULL);
               if (!pair)
-                return DWG_ERR_INVALIDDWG;
+                {
+                  free (dxfname);
+                  return DWG_ERR_INVALIDDWG;
+                }
             }
           else
             {
