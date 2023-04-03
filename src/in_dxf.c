@@ -1349,10 +1349,9 @@ dxf_fixup_header (Dwg_Data *dwg)
   // Dwg_AuxHeader *aux = &dwg->auxheader;
   LOG_TRACE ("dxf_fixup_header\n");
   if (dwg->header.version == R_INVALID)
-    {
-      dwg->header.version = R_2000;
-      dwg->header.from_version = R_12;
-    }
+    dwg->header.version = R_2000;
+  if (dwg->header.from_version == R_INVALID)
+    dwg->header.from_version = R_11;
   if (vars->HANDSEED)
     vars->HANDSEED->handleref.code = 0;
   if (vars->DWGCODEPAGE)
