@@ -11751,9 +11751,9 @@ new_object (char *restrict name, char *restrict dxfname,
                   BITCODE_BD ang = deg2rad (pair->value.d);
                   UPGRADE_ENTITY (DIMENSION_ALIGNED, DIMENSION_LINEAR)
                   dwg_dynapi_entity_set_value (_obj, "DIMENSION_LINEAR",
-                                               "ext_line_rotation", &ang, 1);
+                                               "oblique_angle", &ang, 1);
                   LOG_TRACE ("%s.%s = %f (from DEG %f°) [%s %d]\n", name,
-                             "ext_line_rotation", ang, pair->value.d, "BD",
+                             "oblique_angle", ang, pair->value.d, "BD",
                              52);
                 }
               else if (obj->fixedtype == DWG_TYPE_DIMENSION_ALIGNED
