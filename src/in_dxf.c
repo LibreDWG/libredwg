@@ -11804,8 +11804,9 @@ static int
 dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   char table[80];
-  Dxf_Pair *pair = dxf_read_pair (dat);
+  Dxf_Pair *pair;
 
+  pair = dxf_read_pair (dat);
   table[0] = '\0'; // init
   while (pair)     // read next 0 TABLE
     {
@@ -11924,6 +11925,12 @@ dxf_tables_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 = ctrl->tio.object->tio.BLOCK_CONTROL;
             int at_end = 1;
             unsigned num_entries = _ctrl->num_entries;
+            if (!dwg_obj_is_control (ctrl))
+              {
+                LOG_ERROR ("Missing CONTROL object");
+                dxf_free_pair (pair);
+                return 1;
+              }
             // A minimal DXF will have no handle values, assign them then
             if (!ctrl->handle.value)
               {
