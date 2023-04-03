@@ -24,6 +24,7 @@
 /* DECODER_ENCODER_OR_JSON really, or just NOT_DXF */
 #  define DECODER_OR_ENCODER if (0)
 #  define DXF_OR_PRINT if (0)
+#  define DXF_OR_FREE if (0)
 #  define DXF if (0)
 #  define JSON if (0)
 #  define FREE if (0)
@@ -466,6 +467,8 @@
 #  define DXF if (1)
 #  undef DXF_OR_PRINT
 #  define DXF_OR_PRINT if (1)
+#  undef DXF_OR_FREE
+#  define DXF_OR_FREE if (1)
 #  undef IF_IS_DXF
 #  define IF_IS_DXF 1
 #endif
@@ -482,6 +485,8 @@
 #if defined(IS_FREE)
 #  undef FREE
 #  define FREE if (1)
+#  undef DXF_OR_FREE
+#  define DXF_OR_FREE if (1)
 #  undef IF_IS_FREE
 #  define IF_IS_FREE 1
 #  undef IF_FREE_OR_SINCE

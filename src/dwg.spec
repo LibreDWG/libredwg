@@ -2537,6 +2537,9 @@ DWG_ENTITY (SPLINE)
         SET_PARENT_OBJ (ctrl_pts[rcount1]);
     END_REPEAT_BLOCK
     END_REPEAT (ctrl_pts);
+    DXF_OR_FREE {
+      FIELD_3DPOINT_VECTOR (fit_pts, num_fit_pts, 11);
+    } // else calc. fit_pts
   }
   else { // bezier spline, scenario 2
     DECODER {
