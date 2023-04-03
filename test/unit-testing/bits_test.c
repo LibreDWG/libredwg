@@ -440,7 +440,21 @@ bit_utf8_to_TV_tests (void)
     pass ();
   else
     fail ("bit_utf8_to_TV %s => %s ISO_8859_1", src2, p);
-  // TODO: asian double-byte codepages
+
+  // asian double-byte codepages
+  p = bit_utf8_to_TV (dest, (const unsigned char *)src1, sizeof (dest),
+                      strlen (src1), 0, CP_CP949);
+  // And Ë (U+00CB) can not be represented in CP949
+  if (strEQc (p, "Test\\U+00CB\\\"END"))
+    pass ();
+  else
+    fail ("bit_utf8_to_TV %s as CP949", p);
+  p = bit_utf8_to_TV (dest, (const unsigned char *)"시험", sizeof (dest),
+                      strlen (src1), 0, CP_CP949);
+  if (strEQc (p, "\xdc\xc3\x7e\xe8"))
+    pass ();
+  else
+    fail ("bit_utf8_to_TV %s as CP949", p);
 }
 
 static void
@@ -451,21 +465,22 @@ bit_TV_to_utf8_tests (void)
   const char *src1 = "Test\xc4"; // Ä
   const char *src2 = "Test\xc6"; // Ć \U+0106
   const char *src7 = "Test\xd3"; // Σ
+  // echo -n "시험" | iconv -f utf8 -t cp949 | od -t x1
+  char *src_kor = strdup ("\xbd\xc3\xc7\xe8");
 
   ok ("bit_TV_to_utf8_tests init");
   p = bit_TV_to_utf8 ((char *)srcu, CP_ISO_8859_1);
   if (strEQc (p, "Test\xc8\xb4"))
-    ok ("bit_TV_to_utf8_tests 1");
+    ok ("bit_TV_to_utf8_tests 8859-1");
   else
     fail ("bit_TV_to_utf8 %s ISO_8859_1", p);
   if (p != srcu)
     free (p);
   free (srcu);
 
-  //#ifdef HAVE_ICONV
   p = bit_TV_to_utf8 ((char *)src1, CP_ISO_8859_1);
   if (strEQc (p, "TestÄ")) // \xc3\x84 as utf-8
-    ok ("bit_TV_to_utf8_tests 2");
+    ok ("bit_TV_to_utf8_tests 8859-1");
   else
     fail ("bit_TV_to_utf8 %s ISO_8859_1", p);
   if (p != src1)
@@ -473,7 +488,7 @@ bit_TV_to_utf8_tests (void)
 
   p = bit_TV_to_utf8 ((char *)src2, CP_ISO_8859_2);
   if (strEQc (p, "TestĆ"))
-    ok ("bit_TV_to_utf8_tests 3");
+    ok ("bit_TV_to_utf8_tests 8859-2");
   else
     fail ("bit_TV_to_utf8 %s ISO_8859_2", p);
   if (p != src2)
@@ -481,12 +496,37 @@ bit_TV_to_utf8_tests (void)
 
   p = bit_TV_to_utf8 ((char *)src7, CP_ISO_8859_7);
   if (strEQc (p, "TestΣ"))
-    ok ("bit_TV_to_utf8_tests 4");
+    ok ("bit_TV_to_utf8_tests 8859-7");
   else
     fail ("bit_TV_to_utf8 %s ISO_8859_7", p);
   if (p != src7)
     free (p);
-  //#endif
+
+  p = bit_TV_to_utf8 (src_kor, CP_CP949);
+  if
+#ifndef _MSC_VER
+    (strEQc (p, "시험"))
+#else
+    // echo "시험" | od -t x1
+    // U+feff U+c2dc U+d5d8
+    (strEQc (p, "\xc2\xbd\xc3\x83\xc3\x87\xc3\xa8"))
+             /* "\xec\x8b\x9c\xed\x97\x98" */
+#endif
+    ok ("bit_TV_to_utf8_tests CP949");
+  else
+    {
+#ifdef _MSC_VER
+      ok ("TODO bit_TV_to_utf8 %s CP_CP949 (len=%zu)", p, strlen (p));
+#else
+      fail ("bit_TV_to_utf8 %s CP_CP949 (len=%zu)", p, strlen (p));
+#endif
+      for (size_t i = 0; i < strlen (p); i++)
+        printf ("\\x%02x", (unsigned char)p[i]);
+      printf ("\n");
+    }
+  if (p != src_kor)
+    free (p);
+  free (src_kor);
 }
 
 int

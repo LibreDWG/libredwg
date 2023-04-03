@@ -2006,7 +2006,7 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
   if (length > UINT16_MAX)
     {
       // silently truncate overlong strings for now
-      loglevel = 1;
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
       length = UINT16_MAX;
       chain[UINT16_MAX - 1] = '\0';
@@ -2049,7 +2049,7 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
                   length = strlen ((const char *)str);
                   if (length > UINT16_MAX)
                     {
-                      loglevel = 1;
+                      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
                       LOG_WARN ("Overlong string truncated (len=%lu)",
                                 (unsigned long)length);
                       length = UINT16_MAX - 1;
@@ -2306,6 +2306,7 @@ bit_read_TU32 (Bit_Chain *restrict dat)
         {                   // only UCS-2
           bit_set_position (dat, pos);
           len = size / 2;
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_HANDLE ("TU32 is only UCS-2\n");
           for (i = 0; i < len; i++)
             {
@@ -2360,7 +2361,7 @@ bit_write_TU (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
     length = 0;
   if (length > UINT16_MAX)
     {
-      loglevel = 1;
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
       length = UINT16_MAX;
       chain[UINT16_MAX - 1] = '\0';
@@ -2383,7 +2384,7 @@ bit_write_TU16 (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
     length = 0;
   if (length > UINT16_MAX)
     {
-      loglevel = 1;
+      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
       length = UINT16_MAX;
       chain[UINT16_MAX - 1] = '\0';
@@ -2407,7 +2408,7 @@ bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)
         length = 0;
       if (length > INT32_MAX)
         {
-          loglevel = 1;
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
           length = INT32_MAX;
           chain[INT32_MAX - 1] = '\0';
@@ -2424,7 +2425,7 @@ bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)
         length = 0;
       if (length > UINT32_MAX)
         {
-          loglevel = 1;
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
           length = UINT32_MAX;
           chain[UINT32_MAX - 1] = '\0';
@@ -2448,7 +2449,7 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
         length = 0;
       if (length > UINT32_MAX / 4)
         {
-          loglevel = 1;
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
           length = UINT32_MAX / 4;
           chain[length - 1] = '\0';
@@ -2465,7 +2466,7 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
         length = 0;
       if (length > UINT32_MAX)
         {
-          loglevel = 1;
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
           length = UINT32_MAX;
           chain[UINT32_MAX - 1] = '\0';
@@ -2536,7 +2537,7 @@ bit_convert_TU (const BITCODE_TU restrict wstr)
   str = (char *)malloc (len + 1);
   if (!str)
     {
-      loglevel = 1;
+      loglevel |= 1;
       LOG_ERROR ("Out of memory")
       return NULL;
     }
@@ -2641,7 +2642,7 @@ bit_TU_to_utf8_len (const BITCODE_TU restrict wstr, const int len)
   str = (char *)malloc (len + 1);
   if (!str)
     {
-      loglevel = 1;
+      loglevel |= 1;
       LOG_ERROR ("Out of memory")
       return NULL;
     }
@@ -2823,10 +2824,12 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
               && (*s < 0x80 || *s > 0xBF || *(s + 1) < 0x80
                   || *(s + 1) > 0xBF))
             {
+              loglevel |= 1;
               LOG_WARN ("utf-8: BAD_CONTINUATION_BYTE %s", s);
             }
           if (dest + 1 < endp && c == 0xe0 && *s < 0xa0)
             {
+              loglevel |= 1;
               LOG_WARN ("utf-8: NON_SHORTEST %s", s);
             }
           if (dest + 7 < endp && s + 1 <= ends)
@@ -2881,7 +2884,8 @@ bit_u_expand (char *src)
   char *ret = src;
   char *p = src;
   // convert all \U+XXXX sequences to UTF-8
-  while ((p = strstr (p, "\\U+")) && strlen (p) >= 7
+  while (strlen (p) >= 7
+         && (p = strstr (p, "\\U+"))
          && ishex (p[3]) && ishex (p[4]) && ishex (p[5])
          && ishex (p[6]))
     {
@@ -2930,18 +2934,20 @@ bit_TV_to_utf8 (const char *restrict src,
     const char *charset = dwg_codepage_iconvstr ((Dwg_Codepage)codepage);
     iconv_t cd;
     size_t nconv = (size_t)-1;
-    char *dest, *odest;
+    char *dest, *odest, *osrc;
     if (!charset)
       return (char*)src;
     cd = iconv_open ("UTF-8", charset);
     if (cd == (iconv_t) -1)
       {
+        loglevel |= 1;
         LOG_ERROR ("iconv_open (\"UTF-8\", \"%s\") failed with errno %d",
                    charset, errno);
         return NULL;
       }
+    osrc = (char *)src;
     odest = dest = malloc (destlen);
-    while (nconv == (size_t)-1 && dest != NULL)
+    while (nconv == (size_t)-1)
       {
         nconv = iconv (cd, (char **restrict)&src, (size_t *)&srclen,
                        (char **)&dest, (size_t *)&destlen);
@@ -2957,19 +2963,17 @@ bit_TV_to_utf8 (const char *restrict src,
               }
             else
               {
+                loglevel |= 1;
                 LOG_ERROR ("iconv \"%s\" failed with errno %d", src, errno);
                 free (odest);
-                dest = NULL;
-                break;
+                iconv_close (cd);
+                return bit_u_expand (osrc);
               }
           }
       }
-    if (dest)
-      {
-        // flush the remains
-        iconv (cd, NULL, (size_t *)&srclen, (char **)&dest, (size_t *)&destlen);
-        *dest = '\0';
-      }
+    // flush the remains
+    iconv (cd, NULL, (size_t *)&srclen, (char **)&dest, (size_t *)&destlen);
+    *dest = '\0';
     iconv_close (cd);
     return bit_u_expand (odest);
 #else
@@ -3052,7 +3056,7 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
 
   if (len > 0xFFFE)
     {
-      loglevel = 1;
+      loglevel |= 1;
       LOG_WARN ("Overlong string truncated (len=%lu)",
                 (unsigned long)len);
       len = UINT16_MAX - 1;
@@ -3060,7 +3064,7 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
   wstr = (BITCODE_TU)calloc (2, len + 1);
   if (!wstr)
     {
-      loglevel = 1;
+      loglevel |= 1;
       LOG_ERROR ("Out of memory")
       return NULL;
     }
@@ -3104,10 +3108,12 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
                   || (unsigned char)str[2] < 0x80
                   || (unsigned char)str[2] > 0xBF))
             {
+              loglevel |= 1;
               LOG_WARN ("utf-8: BAD_CONTINUATION_BYTE %s", str);
             }
           else if (len >= 1 && c == 0xe0 && (unsigned char)str[1] < 0xa0)
             {
+              loglevel |= 1;
               LOG_WARN ("utf-8: NON_SHORTEST %s", str);
             }
           else if (len >= 2)
@@ -3289,11 +3295,13 @@ bit_read_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
         }
       else
         {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("Invalid CMC flag 0x%x ignored", color->flag);
           color->flag = 0;
         }
       if (color->method < 0xc0 || color->method > 0xc8)
         {
+          loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_ERROR ("Invalid CMC method 0x%x ignored", color->method);
           color->method = 0xc2;
           color->rgb = 0xc2000000 | (color->rgb & 0xffffff);
