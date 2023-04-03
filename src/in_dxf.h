@@ -187,6 +187,7 @@ BITCODE_RC dxf_find_lweight (const int lw);
 #define UPGRADE_ENTITY(FROM, TO)                                              \
   obj->type = obj->fixedtype = DWG_TYPE_##TO;                                 \
   obj->name = (char *)#TO;                                                    \
+  free (obj->dxfname);                                                        \
   obj->dxfname = strdup (obj->name);                                          \
   strcpy (name, obj->name);                                                   \
   LOG_TRACE ("change type to %s\n", name);                                    \

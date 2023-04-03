@@ -1287,6 +1287,7 @@ dxf_header_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             {
               LOG_TRACE ("HEADER.%s [%s %d]\n", &field[1], f->type,
                          pair->code);
+              // TODO need to free old string values
               dwg_dynapi_header_set_value (dwg, &field[1], &pair->value, 1);
             }
           else
@@ -9033,6 +9034,7 @@ new_object (char *restrict name, char *restrict dxfname,
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_LINEAR;
                       obj->name = (char *)"DIMENSION_LINEAR";
+                      free (obj->dxfname);
                       obj->dxfname = strdup (obj->name);
                       strcpy (name, obj->name);
                       LOG_TRACE ("change type to %s\n", name);
@@ -9043,6 +9045,7 @@ new_object (char *restrict name, char *restrict dxfname,
                       // new pairs
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_ALIGNED;
                       obj->name = (char *)"DIMENSION_ALIGNED";
+                      free (obj->dxfname);
                       obj->dxfname = strdup (obj->name);
                       strcpy (name, obj->name);
                       LOG_TRACE ("change type to %s\n", name);
@@ -9051,6 +9054,7 @@ new_object (char *restrict name, char *restrict dxfname,
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_ORDINATE;
                       obj->name = (char *)"DIMENSION_ORDINATE";
+                      free (obj->dxfname);
                       obj->dxfname = strdup (obj->name);
                       strcpy (name, obj->name);
                       LOG_TRACE ("change type to %s\n", name);
@@ -9059,6 +9063,7 @@ new_object (char *restrict name, char *restrict dxfname,
                     {
                       obj->type = obj->fixedtype = DWG_TYPE_DIMENSION_DIAMETER;
                       obj->name = (char *)"DIMENSION_DIAMETER";
+                      free (obj->dxfname);
                       obj->dxfname = strdup (obj->name);
                       strcpy (name, obj->name);
                       LOG_TRACE ("change type to %s\n", name);
@@ -11747,7 +11752,6 @@ new_object (char *restrict name, char *restrict dxfname,
                        && pair->code == 52)
                 {
                   BITCODE_BD ang = deg2rad (pair->value.d);
-                  free (obj->dxfname);
                   UPGRADE_ENTITY (DIMENSION_ALIGNED, DIMENSION_LINEAR)
                   dwg_dynapi_entity_set_value (_obj, "DIMENSION_LINEAR",
                                                "ext_line_rotation", &ang, 1);
@@ -11759,7 +11763,6 @@ new_object (char *restrict name, char *restrict dxfname,
                        && pair->code == 50)
                 {
                   BITCODE_BD ang = deg2rad (pair->value.d);
-                  free (obj->dxfname);
                   UPGRADE_ENTITY (DIMENSION_ALIGNED, DIMENSION_LINEAR)
                   dwg_dynapi_entity_set_value (_obj, "DIMENSION_LINEAR",
                                                "dim_rotation", &ang, 1);
@@ -12264,6 +12267,7 @@ dxf_entities_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
              && (is_dwg_entity (name) || strEQc (name, "DIMENSION")))
         {
           char *dxfname = strdup (pair->value.s);
+          //LOG_HANDLE ("dxfname = strdup (%s)\n", dxfname);
           if (dwg->num_objects)
             {
               Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
@@ -12342,6 +12346,7 @@ dxf_objects_read (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           if (is_dwg_object (name))
             {
               char *dxfname = strdup (pair->value.s);
+              //LOG_HANDLE ("dxfname = strdup (%s)\n", dxfname);
               dxf_free_pair (pair);
               pair = new_object (name, dxfname, dat, dwg, 0, NULL);
               if (!pair)
