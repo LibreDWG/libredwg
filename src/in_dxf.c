@@ -8137,6 +8137,7 @@ add_AcDbSectionViewStyle (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   Dxf_Pair *pair;
   FIELD_BL (flags, 90);
   pair = dxf_read_pair (dat);              // skip 71 . 1
+  dxf_free_pair (pair);
   FIELD_HANDLE (identifier_style, 5, 340); // textstyle
   FIELD_CMC2004 (identifier_color, 62);
   FIELD_BD (identifier_height, 40); // 5.0
@@ -8151,6 +8152,7 @@ add_AcDbSectionViewStyle (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_BD (identifier_offset, 40);
   FIELD_BLd (arrow_position, 90);
   pair = dxf_read_pair (dat);         // skip 71 . 2
+  dxf_free_pair (pair);
   FIELD_HANDLE (plane_ltype, 5, 340); // ltype
   FIELD_BLd (plane_linewt, 90);
   FIELD_CMC2004 (plane_line_color, 62);
@@ -8161,6 +8163,7 @@ add_AcDbSectionViewStyle (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_BD (end_line_overshoot, 40);
   FIELD_BD (end_line_length, 40);
   pair = dxf_read_pair (dat);                  // skip 71 . 3
+  dxf_free_pair (pair);
   FIELD_HANDLE (viewlabel_text_style, 5, 340); // textstyle
   FIELD_CMC2004 (viewlabel_text_color, 62);
   FIELD_BD (viewlabel_text_height, 40);
@@ -8169,6 +8172,7 @@ add_AcDbSectionViewStyle (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_BL (viewlabel_alignment, 90);
   FIELD_T (viewlabel_pattern, 300);
   pair = dxf_read_pair (dat); // skip 71 . 4
+  dxf_free_pair (pair);
   FIELD_CMC2004 (hatch_color, 62);
   FIELD_CMC2004 (hatch_bg_color, 62);
   FIELD_T (hatch_pattern, 300);
@@ -8203,6 +8207,7 @@ add_AcDbDetailViewStyle (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   Dxf_Pair *pair;
   FIELD_BL (flags, 90);
   pair = dxf_read_pair (dat);              // skip 71 . 1
+  dxf_free_pair (pair);
   FIELD_HANDLE (identifier_style, 5, 340); // textstyle
   FIELD_CMC2004 (identifier_color, 62);
   FIELD_BD (identifier_height, 40); // 5.0
@@ -8213,10 +8218,12 @@ add_AcDbDetailViewStyle (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_BD (identifier_offset, 40);
   FIELD_RC (identifier_placement, 280);
   pair = dxf_read_pair (dat);            // skip 71 . 2
+  dxf_free_pair (pair);
   FIELD_HANDLE (boundary_ltype, 5, 340); // ltype
   FIELD_BLd (boundary_linewt, 90);
   FIELD_CMC2004 (boundary_line_color, 62);
   pair = dxf_read_pair (dat);                  // skip 71 . 3
+  dxf_free_pair (pair);
   FIELD_HANDLE (viewlabel_text_style, 5, 340); // textstyle
   FIELD_CMC2004 (viewlabel_text_color, 62);
   FIELD_BD (viewlabel_text_height, 40);
@@ -8225,6 +8232,7 @@ add_AcDbDetailViewStyle (Dwg_Object *restrict obj, Bit_Chain *restrict dat)
   FIELD_BL (viewlabel_alignment, 90);
   FIELD_T (viewlabel_pattern, 300);
   pair = dxf_read_pair (dat);              // skip 71 . 4
+  dxf_free_pair (pair);
   FIELD_HANDLE (connection_ltype, 5, 340); // ltype
   FIELD_BLd (connection_linewt, 90);
   FIELD_CMC2004 (connection_line_color, 62);
