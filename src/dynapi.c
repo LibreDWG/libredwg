@@ -14329,8 +14329,8 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
           char *str = (char *)calloc (f->size, 1);
           strncpy (str, *(char**)value, f->size);
           // we copy just the pointer, not the string
+          free (*(char **)old);
           memcpy (old, &str, sizeof (char*)); // size of ptr
-          // cppcheck-suppress memleak
         }
       // ascii
       else if (f->is_string && dwg_version < R_2007)
@@ -14340,8 +14340,8 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
           char *str = (char *)malloc (len+1);
           memcpy (str, *(char**)value, len+1);
           // we copy just the pointer, not the string
+          free (*(char **)old);
           memcpy (old, &str, sizeof (char*)); // size of ptr
-          // cppcheck-suppress memleak
         }
       // or wide
       else if (strNE (f->type, "TF") && (f->is_string && dwg_version >= R_2007))
@@ -14363,13 +14363,11 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
               memcpy (wstr, value, length * 2);
 #endif
             }
+          free (*(char **)old);
           memcpy (old, &wstr, sizeof (char*)); // size of ptr
         }
       else
-        {
-          free (*(char **)old);
-          memcpy (old, value, sizeof (char*));
-        }
+        memcpy (old, value, sizeof (char*));
     }
   else
     memcpy (old, value, f->size);
@@ -14490,11 +14488,6 @@ dwg_dynapi_header_set_value (Dwg_Data *restrict dwg,
               }
           }
         old = &((char*)_obj)[f->offset];
-        if (f->is_malloc && *(char**)old)
-          {
-            fprintf (stderr, "HEADER.%s: free (%p)\n", f->name, *(char**)old);
-            free (*(char**)old);
-          }
         dynapi_set_helper (old, f, dwg->header.version, value, is_utf8);
 
         // Set also FLAGS
