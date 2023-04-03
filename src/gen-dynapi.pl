@@ -3161,7 +3161,10 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
           memcpy (old, &wstr, sizeof (char*)); // size of ptr
         }
       else
-        memcpy (old, value, sizeof (char*));
+        {
+          free (*(char **)old);
+          memcpy (old, value, sizeof (char*));
+        }
     }
   else
     memcpy (old, value, f->size);
@@ -3282,6 +3285,11 @@ dwg_dynapi_header_set_value (Dwg_Data *restrict dwg,
               }
           }
         old = &((char*)_obj)[f->offset];
+        if (f->is_malloc && *(char**)old)
+          {
+            fprintf (stderr, "HEADER.%s: free (%p)\n", f->name, *(char**)old);
+            free (*(char**)old);
+          }
         dynapi_set_helper (old, f, dwg->header.version, value, is_utf8);
 
         // Set also FLAGS
