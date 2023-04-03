@@ -9207,15 +9207,19 @@ new_object (char *restrict name, char *restrict dxfname,
         else                                                                  \
           goto start_loop; /* failure */                                      \
       }
-              else
-                CHK_SUBCLASS (AcDbBlockParameter, AcDbBlockParameter)
-              else CHK_SUBCLASS (AcDbBlockGripExpr, AcDbBlockGripExpr) else CHK_SUBCLASS (AcDbBlockAlignmentGrip, BLOCKALIGNMENTGRIP) else CHK_SUBCLASS (AcDbBlockLinearGrip, BLOCKALIGNMENTGRIP) else CHK_SUBCLASS (
-                  AcDbBlockFlipGrip,
-                  BLOCKFLIPGRIP) else CHK_SUBCLASS (AcDbRenderEnvironment,
-                                                    RENDERENVIRONMENT) else CHK_SUBCLASS (AcDbRenderGlobal,
-                                                                                          RENDERGLOBAL) else CHK_SUBCLASS (AcDbRenderEntry,
-                                                                                                                           RENDERENTRY) else CHK_SUBCLASS (AcDbRenderSettings,
-                                                                                                                                                           RENDERSETTINGS)
+
+              // clang-format off
+              else CHK_SUBCLASS (AcDbBlockParameter, AcDbBlockParameter)
+              else CHK_SUBCLASS (AcDbBlockGripExpr, AcDbBlockGripExpr)
+              else CHK_SUBCLASS (AcDbBlockAlignmentGrip, BLOCKALIGNMENTGRIP)
+              else CHK_SUBCLASS (AcDbBlockLinearGrip, BLOCKALIGNMENTGRIP)
+              else CHK_SUBCLASS (AcDbBlockFlipGrip, BLOCKFLIPGRIP)
+              else CHK_SUBCLASS (AcDbRenderEnvironment, RENDERENVIRONMENT)
+              else CHK_SUBCLASS (AcDbRenderGlobal, RENDERGLOBAL)
+              else CHK_SUBCLASS (AcDbRenderEntry, RENDERENTRY)
+              else CHK_SUBCLASS (AcDbRenderSettings, RENDERSETTINGS)
+              // clang-format on
+
               // more DYNBLOCKs
 #  define else_do_strict_subclass(SUBCLASS)                                   \
     else if (strEQc (subclass, #SUBCLASS))                                    \
@@ -9229,22 +9233,18 @@ new_object (char *restrict name, char *restrict dxfname,
         goto start_loop; /* failure */                                        \
     }
 
-                  else_do_strict_subclass (AcDbBlock1PtParameter)
-                      else_do_strict_subclass (AcDbBlock2PtParameter)
-                          else_do_strict_subclass (AcDbBlockAction)
-                              else_do_strict_subclass (
-                                  AcDbBlockActionWithBasePt)
-                                  else_do_strict_subclass (AcDbBlockFlipAction)
-                                      else_do_strict_subclass (
-                                          AcDbBlockMoveAction)
-                                          else_do_strict_subclass (
-                                              AcDbBlockRotationAction)
-                                              else_do_strict_subclass (
-                                                  AcDbBlockScaleAction)
-                                                  else_do_strict_subclass (
-                                                      AcDbBlockStretchAction)
-                                                      else_do_strict_subclass (
-                                                          AcDbBlockRotationParameter)
+              // clang-format off
+              else_do_strict_subclass (AcDbBlock1PtParameter)
+              else_do_strict_subclass (AcDbBlock2PtParameter)
+              else_do_strict_subclass (AcDbBlockAction)
+              else_do_strict_subclass (AcDbBlockActionWithBasePt)
+              else_do_strict_subclass (AcDbBlockFlipAction)
+              else_do_strict_subclass (AcDbBlockMoveAction)
+              else_do_strict_subclass (AcDbBlockRotationAction)
+              else_do_strict_subclass (AcDbBlockScaleAction)
+              else_do_strict_subclass (AcDbBlockStretchAction)
+              else_do_strict_subclass (AcDbBlockRotationParameter)
+              // clang-format on
             }
           break;
         case 101:
