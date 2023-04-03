@@ -308,7 +308,7 @@ dxf_read_rc (Bit_Chain *dat)
         dat->byte++;
       if (dat->chain[dat->byte] == '\n')
         dat->byte++;
-      if (num > 65534)
+      if (num > UINT8_MAX)
         LOG_ERROR ("%s: RC overflow %ld (at %lu)", __FUNCTION__, num,
                    dat->byte);
       return (BITCODE_RC)num;
@@ -332,7 +332,7 @@ dxf_read_rs (Bit_Chain *dat)
         dat->byte++;
       if (dat->chain[dat->byte] == '\n')
         dat->byte++;
-      if (num > 65534)
+      if (num > UINT16_MAX)
         LOG_ERROR ("%s: RS overflow %ld (at %lu)", __FUNCTION__, num,
                    dat->byte);
       return (BITCODE_RS)num;
@@ -357,7 +357,7 @@ dxf_read_rl (Bit_Chain *dat)
         dat->byte++;
       if (dat->chain[dat->byte] == '\n')
         dat->byte++;
-      if (num > INT_MAX)
+      if (num > UINT32_MAX)
         LOG_ERROR ("%s: RL overflow %ld (at %lu)", __FUNCTION__, num,
                    dat->byte);
       return (BITCODE_RL)num;
@@ -382,9 +382,6 @@ dxf_read_rll (Bit_Chain *dat)
         dat->byte++;
       if (dat->chain[dat->byte] == '\n')
         dat->byte++;
-      if ((unsigned long)num > LONG_MAX) // or wrap to negative
-        LOG_ERROR ("%s: long overflow %ld (at %lu)", __FUNCTION__, (long)num,
-                   dat->byte);
       return num;
     }
 }
@@ -6413,7 +6410,7 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
               BITCODE_H *hdls;
               // can be -1
               BITCODE_BL num_entries = pair->value.i < 0 ? 0 : pair->value.i;
-              if (num_entries > 32767 // BS overflow
+              if (num_entries > INT32_MAX // BS overflow
                   && obj->fixedtype != DWG_TYPE_BLOCK_CONTROL
                   && obj->fixedtype != DWG_TYPE_LAYER_CONTROL
                   && obj->fixedtype != DWG_TYPE_VIEW_CONTROL
