@@ -1329,7 +1329,7 @@ json_CLASSES (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   return 0;
 }
 
-static inline bool
+static bool
 eed_need_size (Bit_Chain *restrict dat, Dwg_Eed *restrict eed,
                const unsigned int i, const int need, int *havep)
 {
