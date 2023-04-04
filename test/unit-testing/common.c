@@ -92,12 +92,16 @@ main (int argc, char *argv[])
   int i = 1, cov = 1;
   //#ifdef USE_TRACING
   char *trace = getenv ("LIBREDWG_TRACE");
+  char *skip;
   silent = is_make_silent ();
   if (trace)
     loglevel = atoi (trace);
   else
     loglevel = silent ? 0 : 2;
-    //#endif
+  //#endif
+  skip = getenv ("LESS_TESTS");
+  if (skip && atoi (skip))
+    return 0;
 
 #ifdef DWG_TYPE
   if (is_type_stable (DWG_TYPE))

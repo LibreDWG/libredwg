@@ -381,9 +381,11 @@ if !HAVE_MINGW
 check_minimal += decode_test
 endif
 
-check_PROGRAMS = \
-	$(check_minimal) \
-	$(testobjects)
+if CHECK_LESS
+check_PROGRAMS = $(check_minimal)
+else
+check_PROGRAMS = $(check_minimal) $(testobjects)
+endif
 
 check-prep: $(check_PROGRAMS)
 list:

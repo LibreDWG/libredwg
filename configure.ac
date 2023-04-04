@@ -343,7 +343,7 @@ esac
 dnl x86_64-mingw-w64-gcc-9.2 is seriously broken, and not just mingw-w64
 
 dnl --enable-debug sets DEBUG_CLASSES, will crash acad import
-AC_MSG_CHECKING([--enable-debug])
+AC_MSG_CHECKING([for --enable-debug])
 AC_ARG_ENABLE([debug],AS_HELP_STRING([--enable-debug],[
     Enable unstable DEBUG_CLASSES (default: no).]),
   [if test x$ac_compiler_gnu = xyes; then
@@ -360,7 +360,7 @@ AX_ADD_FORTIFY_SOURCE
 AX_C_RESTRICT
 
 dnl Feature: --disable-write
-AC_MSG_CHECKING([--disable-write])
+AC_MSG_CHECKING([for --disable-write])
 AC_ARG_ENABLE([write],AS_HELP_STRING([--disable-write],[
     Disable write support (default: no).]),[],[enable_write=yes])
 AM_CONDITIONAL([USE_WRITE], [test x$enable_write != xno])
@@ -372,7 +372,7 @@ AS_IF([test x$enable_write != xno],
    AC_MSG_RESULT([yes])])
 
 dnl Feature: --enable-trace
-AC_MSG_CHECKING([--enable-trace])
+AC_MSG_CHECKING([for --enable-trace])
 AC_ARG_ENABLE([trace],AS_HELP_STRING([--enable-trace],[
     Enable runtime tracing (default: no).  When enabled, the environment
     variable LIBREDWG_TRACE is consulted on the first decode/encode attempt.
@@ -389,7 +389,7 @@ AC_CHECK_FUNCS([setenv],[],
     ))
 
 dnl --disable-dxf only useful for faster debug/test cycles
-AC_MSG_CHECKING([--disable-dxf])
+AC_MSG_CHECKING([for --disable-dxf])
 AC_ARG_ENABLE([dxf],AS_HELP_STRING([--disable-dxf],[
     Disable DXF, JSON and other in/out modules (default: no).]),[],[enable_dxf=yes])
 AM_CONDITIONAL([DISABLE_DXF], [test x$enable_dxf = xno])
@@ -399,7 +399,7 @@ AS_IF([test x$enable_dxf = xno],
   AC_MSG_RESULT([no (default)]))
 
 dnl --disable-json only useful for slim libraries (i.e. SolveSpace)
-AC_MSG_CHECKING([--disable-json])
+AC_MSG_CHECKING([for --disable-json])
 AC_ARG_ENABLE([json],AS_HELP_STRING([--disable-json],[
     Disable JSON and GeoJSON in/out modules (default: no).]),[],[enable_json=yes])
 AM_CONDITIONAL([DISABLE_JSON], [test x$enable_json = xno])
@@ -410,7 +410,7 @@ AS_IF([test x$enable_json = xno],
   AC_MSG_RESULT([no (default)]))
 
 dnl --disable-bindings
-AC_MSG_CHECKING([--disable-bindings])
+AC_MSG_CHECKING([for --disable-bindings])
 AC_ARG_ENABLE([bindings],AS_HELP_STRING([--disable-bindings],[
     Disable SWIG bindings (default: no).]),[],[enable_bindings=yes])
 AM_CONDITIONAL([DISABLE_BINDINGS], [test x$enable_bindings = xno])
@@ -418,6 +418,16 @@ AS_IF([test x$enable_bindings = xno],
   AC_DEFINE([DISABLE_BINDINGS],1,[Define to disable bindings.])
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
+
+dnl --enable-check-less
+AC_MSG_CHECKING([for --enable-check-less])
+AC_ARG_ENABLE([check-less],AS_HELP_STRING([--enable-check-less],[
+    Enable check less unit-tests (default: no).  When enabled (e.g. in mingw),
+    the unit-tests include only the minimal API tests.]),
+  [check_less=yes
+  AC_MSG_RESULT([yes])],
+  AC_MSG_RESULT([no (default)]))
+AM_CONDITIONAL([CHECK_LESS], [test x$check_less = xyes])
 
 AC_MSG_CHECKING([for --enable-mimalloc])
 if test "x$ac_cv_header_mimalloc_override_h" = "xyes"

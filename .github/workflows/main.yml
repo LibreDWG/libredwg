@@ -163,7 +163,7 @@ jobs:
       run: sh ./autogen.sh
       continue-on-error: true
     - shell: msys2 {0}
-      run: ./configure --disable-dependency-tracking
+      run: ./configure --disable-dependency-tracking --enable-check-less
     - shell: msys2 {0}
       run: make -j
     - if: failure()
