@@ -3409,7 +3409,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   dwg->header.section_infohdr.num_desc = info_id + 1;
                   dwg->header.section_info
                       = realloc (dwg->header.section_info,
-                                 (info_id + 1) * sizeof (Dwg_Section));
+                                 (info_id + 1) * sizeof (Dwg_Section_Info));
                 }
               info = &dwg->header.section_info[info_id];
               info->fixedtype = type;
