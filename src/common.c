@@ -356,13 +356,14 @@ strrplc (const char *s, const char *from, const char *to)
   const char *p = strstr (s, from);
   if (p)
     {
-      long len = strlen (s) - (strlen (from) - strlen (to));
+      const size_t l1 = strlen (from);
+      const size_t l2 = strlen (to);
       char *dest = (char *)calloc (1, 80);
-      int i = p - s;
-      assert (len < 80);
+      long i = p - s;
+      assert (strlen (s) - ((long)l1 - l2) < 80);
       memcpy (dest, s, i);
-      strcat (dest, to);
-      strcat (dest, s + i + strlen (from));
+      strncat (dest, to, 79 - l2);
+      strncat (dest, s + i + l1, 79 - l1);
       return dest;
     }
   else
