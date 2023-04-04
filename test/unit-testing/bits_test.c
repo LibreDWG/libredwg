@@ -158,17 +158,21 @@ bit_read_4BITS_tests (void)
           bitchain.chain[0]);
   bitfree (&bitchain);
 
+  // FIXME chibicc
 #define test_4bits(s, x)                                                      \
   bitchain = strtobt (s);                                                     \
   result = bit_read_4BITS (&bitchain);                                        \
   if (result == x)                                                            \
     pass ();                                                                  \
   else                                                                        \
-    fail ("bit_read_4BITS 0x%X != 0xF dat:%x", (unsigned)result,              \
-          bitchain.chain[0]);                                                 \
+    fail ("bit_read_4BITS 0x%X != 0x%X dat:%x", (unsigned)result,             \
+          x, bitchain.chain[0]);                                              \
   bitfree (&bitchain)
 
   test_4bits ("0000", 0x0);
+#ifdef __chibicc__
+  printf ("chibicc bugs:\n");
+#endif
   test_4bits ("0001", 0x1);
   test_4bits ("0010", 0x2);
   test_4bits ("0011", 0x3);
@@ -177,8 +181,11 @@ bit_read_4BITS_tests (void)
   test_4bits ("0111", 0x7);
   test_4bits ("1000", 0x8);
   test_4bits ("1001", 0x9);
+  test_4bits ("1010", 0xA);
+  test_4bits ("1011", 0xB);
   test_4bits ("1100", 0xC);
   test_4bits ("1101", 0xD);
+  test_4bits ("1110", 0xE);
   test_4bits ("1111", 0xF);
 }
 
