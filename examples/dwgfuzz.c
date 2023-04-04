@@ -143,7 +143,7 @@ help (void)
   printf ("\n"
           " --version        display the version and exit\n");
   printf (" --help           display this help and exit\n");
-  exit (0);
+  return 0;
 }
 
 // for LLVMFuzzerTestOneInput see llvmfuzz.c
@@ -213,9 +213,9 @@ main (int argc, char *argv[])
     mode = GEOJSON;
 #endif
   else if (strEQc (argv[1], "--version"))
-    version ();
+    return version ();
   else if (strEQc (argv[1], "--help"))
-    help ();
+    return help ();
   else
     return 1;
   if (mode == INVALID)

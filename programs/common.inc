@@ -21,21 +21,23 @@
 #include <string.h>
 
 /* returns number of consumed args */
-int verbosity(int argc, char **argv, int i, unsigned int *opts)
+int
+verbosity (int argc, char **argv, int i, unsigned int *opts)
 {
   unsigned int loglevel = 2;
   char log_str[4];
-  if (!strcmp(argv[i], "--verbose") || // --verbose 2 or --verbose
-      !strcmp(argv[i], "-v")) // -v 0 or -v
+  if (!strcmp (argv[i], "--verbose") || // --verbose 2 or --verbose
+      !strcmp (argv[i], "-v"))          // -v 0 or -v
     {
       int num_args;
       if (argc > i)
         {
-          long l = strtol(argv[i+1], NULL, 10);
+          long l = strtol (argv[i + 1], NULL, 10);
           if (l < 0 || l > 10)
             {
-              printf("Invalid verbosity %s\n", argv[i+1]); // -vbla
-              exit(help());
+              printf ("Invalid verbosity %s\n", argv[i + 1]); // -vbla
+              exit (help ());
+              return 1;
             }
           loglevel = (unsigned int)l;
           num_args = 2;
@@ -46,32 +48,33 @@ int verbosity(int argc, char **argv, int i, unsigned int *opts)
           loglevel = 2;
         }
       *opts = loglevel;
-      sprintf(log_str, "%d", loglevel);
+      sprintf (log_str, "%d", loglevel);
 #if defined(USE_TRACING) && defined(HAVE_SETENV)
-      setenv("LIBREDWG_TRACE", log_str, 1);
+      setenv ("LIBREDWG_TRACE", log_str, 1);
 #endif
       return num_args;
     }
 
-  if (!strncmp(argv[i], "-v", 2)) // -v0
+  if (!strncmp (argv[i], "-v", 2)) // -v0
     {
       char *opt = argv[i];
-      long l = strtol(&opt[2], NULL, 10);
+      long l = strtol (&opt[2], NULL, 10);
       if (l < 0 || l > 10)
         {
-          printf("Invalid verbosity %s\n", opt); // -vbla
-          exit(help());
+          printf ("Invalid verbosity %s\n", opt); // -vbla
+          exit (help ());
+          return 0;
         }
       loglevel = (unsigned int)l;
       *opts = loglevel;
-      sprintf(log_str, "%d", loglevel);
+      sprintf (log_str, "%d", loglevel);
 #if defined(USE_TRACING) && defined(HAVE_SETENV)
-      setenv("LIBREDWG_TRACE", log_str, 1);
+      setenv ("LIBREDWG_TRACE", log_str, 1);
 #endif
       return 1;
     }
 
-  printf("Invalid verbosity %s\n", argv[i]); // -vbla
-  exit(1);
+  printf ("Invalid verbosity %s\n", argv[i]); // -vbla
+  exit (1);
+  return 0;
 }
-

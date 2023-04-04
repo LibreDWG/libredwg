@@ -132,7 +132,7 @@ help (void)
   printf ("\n"
           " --version        display the version and exit\n");
   printf (" --help           display this help and exit\n");
-  exit (0);
+  return 0;
 }
 
 static int opts = 1;
