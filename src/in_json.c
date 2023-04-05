@@ -1133,8 +1133,8 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                    || strEQc (f->type, "BB") || strEQc (f->type, "RS")
                    || strEQc (f->type, "BS") || strEQc (f->type, "RL")
                    || strEQc (f->type, "BL") || strEQc (f->type, "RLL")
-                   || strEQc (f->type, "BLd") || strEQc (f->type, "BSd")
-                   || strEQc (f->type, "BLL")))
+                   || strEQc (f->type, "RSd") || strEQc (f->type, "BLd")
+                   || strEQc (f->type, "BSd") || strEQc (f->type, "BLL")))
         {
           long num = json_long (dat, tokens);
           LOG_TRACE ("%s: %ld [%s]\n", key, num, f->type)

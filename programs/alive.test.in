@@ -180,11 +180,11 @@ run ()
                 TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG" ;;
         esac
     fi
-    # They even crash
+    # json parser error
     if test "$bprog" = "dxfwrite"
     then
-        case $ddwg in
-            r11|r2.*) TESTPROG="echo SKIP" ;;
+        case $dwg in
+            r11/ACEB10*) TESTPROG="echo SKIP"; todo=1;;
         esac
     fi
     if test "$bprog" = "dwgfuzz" -a -n "@HAVE_ASAN@"
