@@ -70,7 +70,7 @@ void dwg_set_next_objhandle (Dwg_Object *obj);
 int dwg_dxfclass_require (Dwg_Data *restrict dwg,
                           const char *restrict dxfname);
 
-#ifdef USE_WRITE
+//#ifdef USE_WRITE
 /* internally used only by dwg_add_POLYLINE* only */
 // fixme: Dwg_Entity_POLYLINE_2D* as 1st owner arg
 Dwg_Entity_VERTEX_2D *
@@ -89,7 +89,7 @@ Dwg_Entity_VERTEX_PFACE_FACE *
 dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
                            const dwg_face vertind) __nonnull_all;
 
-#endif
+//#endif
 
 /**
  * Return an object fieldvalue
@@ -22089,7 +22089,7 @@ dwg_is_valid_tag (const char *tag)
  *                    FUNCTIONS FOR ADDING OBJECTS                  *
  ********************************************************************/
 
-#ifdef USE_WRITE
+//#ifdef USE_WRITE
 #  define NEW_OBJECT(dwg, obj)                                                \
     {                                                                         \
       BITCODE_BL idx = dwg->num_objects;                                      \
@@ -22306,6 +22306,20 @@ default_numheader_vars (Dwg_Data *dwg, const Dwg_Version_Type version)
   else if (version <= R_13b1)
     dwg->header.numheader_vars = 205;
 }
+
+// preR13 --disable-write support
+#ifdef USE_WRITE
+#  define IN_POSTPROCESS_HANDLES(obj) in_postprocess_handles (obj)
+#  define IN_POSTPROCESS_SEQEND(obj, b, c) in_postprocess_SEQEND (obj, b, c)
+#  define ENCODE_GET_CLASS(dwg, obj) (void)dwg_encode_get_class (dwg, obj)
+/* Now implemented in dxfclasses.c as gperf lookup */
+#  define REQUIRE_CLASS(cname) dwg_require_class (dwg, cname, sizeof (cname) - 1)
+#else
+#  define IN_POSTPROCESS_HANDLES(obj)
+#  define IN_POSTPROCESS_SEQEND(obj, b, c)
+#  define ENCODE_GET_CLASS(dwg, obj) while (0) {}
+#  define REQUIRE_CLASS(cname) while (0) {}
+#endif
 
 /* The Document API should be similar to the public VBA interface */
 
@@ -22788,9 +22802,6 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
   return klass->number;
 }
 
-/* Now implemented in dxfclasses.c as gperf lookup */
-#  define REQUIRE_CLASS(name) dwg_require_class (dwg, name, sizeof (name) - 1)
-
 #  define NEW_ENTITY(dwg, obj)                                                \
     {                                                                         \
       BITCODE_BL idx = dwg->num_objects;                                      \
@@ -22828,7 +22839,7 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
     if (dwg->opts & DWG_OPTS_INJSON)                                          \
       obj->name = strdup (obj->name);                                         \
     if (obj->type >= DWG_TYPE_GROUP)                                          \
-      (void)dwg_encode_get_class (obj->parent, obj);                          \
+      ENCODE_GET_CLASS (obj->parent, obj);                                    \
     LOG_TRACE ("  ADD_ENTITY %s [%d]\n", obj->name, obj->index)               \
     _obj = calloc (1, sizeof (Dwg_Entity_##token));                           \
     obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;                  \
@@ -22859,7 +22870,7 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
         = dwg_add_handleref (dwg, 5, blkobj->handle.value, obj);              \
     dwg_set_next_objhandle (obj);                                             \
     LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H (obj->handle));              \
-    in_postprocess_handles (obj);                                             \
+    IN_POSTPROCESS_HANDLES (obj);                                             \
     if (dwg->header.version < R_10)                                           \
       dwg->header_vars.numentities++;                                         \
     dwg_insert_entity ((Dwg_Object_BLOCK_HEADER *)blkhdr, obj)
@@ -22884,7 +22895,7 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
     if (dwg->opts & DWG_OPTS_INJSON)                                          \
       obj->name = strdup (obj->name);                                         \
     if (obj->type >= DWG_TYPE_GROUP)                                          \
-      (void)dwg_encode_get_class (obj->parent, obj);                          \
+      ENCODE_GET_CLASS (obj->parent, obj);                                    \
     LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index)               \
     _obj = calloc (1, sizeof (Dwg_Object_##token));                           \
     obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;                  \
@@ -22900,7 +22911,7 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
     ADD_OBJECT (token);                                                       \
     dwg_set_next_objhandle (obj);                                             \
     LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H (obj->handle));              \
-    in_postprocess_handles (obj)
+    IN_POSTPROCESS_HANDLES (obj)
 
 EXPORT int
 dwg_add_entity_defaults (Dwg_Data *restrict dwg,
@@ -23067,7 +23078,7 @@ dwg_insert_entity (Dwg_Object_BLOCK_HEADER *restrict _owner,
             ent->prev_entity = dwg_add_handleref (dwg, 4, 0, NULL);
         }
     }
-  in_postprocess_handles (obj);
+  IN_POSTPROCESS_HANDLES (obj);
   dwg->prev_entity_index = obj->index;
   return 0;
 }
@@ -23123,7 +23134,7 @@ add_attrib_links (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       insert->seqend = dwg_add_handleref (dwg, 3, obj->handle.value, insobj);
       insert->attribs = malloc (sizeof (BITCODE_H));
       insert->attribs[0] = insert->last_attrib;
-      in_postprocess_SEQEND (obj, insert->num_owned, insert->attribs);
+      IN_POSTPROCESS_SEQEND (obj, insert->num_owned, insert->attribs);
     }
   else
     {
@@ -23138,7 +23149,7 @@ add_attrib_links (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           = dwg_add_handleref (dwg, 3, attobj->handle.value, insobj);
       insert->attribs[insert->num_owned - 1] = insert->last_attrib;
       seqend = dwg_ref_object (dwg, insert->seqend);
-      in_postprocess_SEQEND (seqend, insert->num_owned, insert->attribs);
+      IN_POSTPROCESS_SEQEND (seqend, insert->num_owned, insert->attribs);
     }
   return insert;
 }
@@ -23540,7 +23551,7 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     obj->type = DWG_TYPE_POLYLINE_R11;
 
   _pl->num_owned = num_pts;
-  in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
+  IN_POSTPROCESS_SEQEND (obj, _pl->num_owned, _pl->vertex);
   return _pl;
 }
 
@@ -23602,7 +23613,7 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     obj->type = DWG_TYPE_POLYLINE_R11;
 
   _pl->num_owned = num_pts;
-  in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
+  IN_POSTPROCESS_SEQEND (obj, _pl->num_owned, _pl->vertex);
   return _pl;
 }
 
@@ -23725,7 +23736,7 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     }
   _pl->seqend
       = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
-  in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
+  IN_POSTPROCESS_SEQEND (obj, _pl->num_owned, _pl->vertex);
   pl->tio.entity->next_entity = NULL; // fixup
   if (dwg->header.version <= R_11)
     obj->type = DWG_TYPE_POLYLINE_R11;
@@ -23826,7 +23837,7 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       if (num_n_verts)
         obj->tio.entity->opts_r11 |= OPTS_R11_POLYLINE_HAS_N_VERTS;
     }
-  in_postprocess_SEQEND (obj, _pl->num_owned, _pl->vertex);
+  IN_POSTPROCESS_SEQEND (obj, _pl->num_owned, _pl->vertex);
   return _pl;
 }
 
@@ -28166,4 +28177,4 @@ dwg_add_WIPEOUTVARIABLES (Dwg_Data *dwg /* ... */)
 // XREFPANELOBJECT
 // XYPARAMETERENTITY
 
-#endif /* USE_WRITE */
+//#endif /* USE_WRITE */

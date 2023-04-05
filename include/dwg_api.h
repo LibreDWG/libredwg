@@ -6222,7 +6222,8 @@ EXPORT dwg_class *dwg_get_class (const dwg_data *dwg, unsigned int index);
 /********************************************************************
  *                    FUNCTIONS FOR ADDING OBJECTS                  *
  ********************************************************************/
-/* This is only useful for DXF exports or dwg USE_WRITE support */
+/* This is only useful for DXF exports or dwg USE_WRITE support,
+   but also needed to read preR13 DWG's. */
 
 /* All BITCODE_T/char* input strings are encoded as UTF-8, as with the dynapi.
    Most names are copied, since most names are considered to be constant.

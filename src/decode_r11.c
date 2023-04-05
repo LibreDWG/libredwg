@@ -75,7 +75,7 @@ static unsigned int errors = 0;
 //#define LOG_POS LOG_INSANE (" @%lu.%u\n", dat->byte, dat->bit)
 
 // This needs the add API
-#ifdef USE_WRITE
+//#ifdef USE_WRITE
 
 void dwg_set_next_hdl (Dwg_Data *dwg, unsigned long value);
 
@@ -192,7 +192,7 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
       CASE_TBL (APPID); // since r11
       CASE_TBL (VX);
     default:
-      LOG_ERROR ("Yet unhandled section id %d", id);
+      LOG_ERROR ("Illegal section id %d", id);
     }
   if (tbl->number && (tbl->address + (tbl->number * tbl->size) > dat->size))
     {
@@ -579,19 +579,19 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   return 0;
 }
 
-#else  // USE_WRITE
-EXPORT int
-decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
-                      Dwg_Object_Entity *_ent)
-{
-  return DWG_ERR_INTERNALERROR;
-}
-EXPORT Dwg_Object_Ref *
-dwg_decode_preR13_handleref (Bit_Chain *restrict dat, int size)
-{
-  return NULL;
-}
-#endif // USE_WRITE
+//#else  // USE_WRITE
+//EXPORT int
+//decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
+//                      Dwg_Object_Entity *_ent)
+//{
+//  return DWG_ERR_INTERNALERROR;
+//}
+//EXPORT Dwg_Object_Ref *
+//dwg_decode_preR13_handleref (Bit_Chain *restrict dat, int size)
+//{
+//  return NULL;
+//}
+//#endif // USE_WRITE
 
 AFL_GCC_TOOBIG
 EXPORT int
@@ -607,10 +607,10 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain dat_save = *dat;
 
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-#ifndef USE_WRITE
-  fprintf (stderr, "Cannot create pre-R13 documents with --disable-write\n");
-  return DWG_ERR_INTERNALERROR;
-#else
+//#ifndef USE_WRITE
+//  fprintf (stderr, "Cannot create pre-R13 documents with --disable-write\n");
+//  return DWG_ERR_INTERNALERROR;
+//#else
   {
     int i;
     Dwg_Header *_obj = (Dwg_Header *)&dwg->header;
@@ -800,7 +800,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (dwg->dirty_refs)
     dwg_resolve_objectrefs_silent (dwg);
   return 0;
-#endif // USE_WRITE
+  //#endif // USE_WRITE
 }
 AFL_GCC_POP
 
