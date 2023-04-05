@@ -2758,8 +2758,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   if (dwg->header.from_version < R_13b1)
     {
-      // 5 plus the header, plus a hole
-      dwg->header.section = calloc (7, sizeof (Dwg_Section));
+      dwg->header.section = calloc (SECTION_VX + 1, sizeof (Dwg_Section));
     }
   dwg->num_objects += size;
   for (i = 0; i < size; i++)
