@@ -5118,6 +5118,10 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
         }
       }
       break;
+    case 1:
+      bit_write_RS (dat, data->u.eed_1.appid_index);
+      LOG_TRACE ("appid_index: " FORMAT_RS " [RS]", data->u.eed_1.appid_index);
+      break;
     case 2:
       bit_write_RC (dat, data->u.eed_2.close);
       LOG_TRACE ("close: %d [RC]", (int)data->u.eed_2.close);
