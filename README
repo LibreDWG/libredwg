@@ -21,9 +21,10 @@ conversion, dxf and json converters, dwggrep to search for text, and
 dwglayer to print the list of layers.  More are in the pipeline.
 Please contact us if you want to help.
 
-The strings API is utf-8 (wtf8 really, Windows UCS-2 has no surrogate
+The strings API is UTF-8 (WTF8 really, Windows UCS-2 has no surrogate
 pairs), and encodes to the internal 8-bit or UCS-2 strings, depending
-on the DWG version.
+on the DWG version. Older DWG's are encoded in ~30 codepages, which we
+convert to unicode/UTF-8.
 
 For contact file a ticket or email the package maintainers:
 
@@ -46,12 +47,14 @@ You need the following dependencies:
 
 Optionally:
 
+- libiconv: optional codepage conversion. without it's just a bit slower.
+- libmimalloc: faster memory allocation, but usually not worth the hassle.
+- pslib for dwg2ps: http://pslib.sourceforge.net/doc/pslib.html
+- pcre2 with 8bit and 16bit libraries for dwggrep regexp support.
 - gperf to update static hashes for several API's
   Only needed when you added objects or changed the dwg.spec significantly
-- cmake
+- cmake, ninja
 - TeXinfo for building the docs
-- pslib for dwg2ps: http://pslib.sourceforge.net/doc/pslib.html
-- pcre2 with 8bit and 16bit libraries for dwggrep regexp support
 - SWIG 1.7+
 - Python 2.7 or 3.x development headers (debian: python-dev; yum: python-devel)
   and the libxml2 python bindings.
@@ -72,7 +75,7 @@ Optionally:
 - geojson-validation as 2nd geojson fallback linter
   npm install -g geojson-validation
 - shfmt to format shell scripts
-- clang-format format source code
+- clang-format to format the C source code
 - clang-tidy to check source code
 - valgrind to find leaks and memory bugs
 - timeout to help tests with large or hanging DWG's
@@ -112,11 +115,9 @@ customize the installation dirs.  Other options recognized by configure are:
 
   --disable-write
 
-    Disable DWG write support (default: no). When enabled, you activate the write
-    support for the DWG format.
-    This is an experimental feature. Rewriting most DWG's to the r2000 format
-    usually works fine, DWG versions since r2004 are not yet supported, and the
-    API usage is very rough so far.
+    Disable DWG write support (default: no).
+    Write support only works for earlier versions until r2004. Rewriting most DWG's
+    <= r2004 usually works fine.
 
   --disable-bindings
 
@@ -153,19 +154,19 @@ customize the installation dirs.  Other options recognized by configure are:
 
 See the following scripts how we build on Windows:
 
-* .github/workflows/main.yml: via msys/autotools or cmake
+* .github/workflows/main.yml: via msys/autotools, or cmake. gcc, clang-cl or VS2019.
 * build-aux/smoke.sh: cross-compilation recipes
 * build-aux/msys2.bat: msys2 deps
 * .appveyor.yml: windows smoker
 
-We only support C99 compilers and POSIX environments, i.e. cygwin or msys or cross,
-but now also mingw and Visual Studio 2019 via cmake.
+We do support mingw, clang-cl and now also Visual Studio 2019 via cmake.
 stdint.h and inttypes.h must be available.
 Pre-compiled Windows binaries are here: https://github.com/LibreDWG/libredwg/releases
 
 == Example usage of the library ==
 
-The programs and examples directories contains some application code that uses our lib:
+The programs and examples directories contains some application code
+that uses our lib:
 
 * dwgread -- A DWG reader supporting various output formats, such as
   JSON, DXF, DXFB, GeoJSON. Later also YAML, XML/OGR, GPX, SVG, PS.
