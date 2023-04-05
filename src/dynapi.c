@@ -3170,7 +3170,7 @@ static const Dwg_DYNAPI_field _dwg_POLYLINE_2D_fields[] = {
     0,0,0, 210 },
   { "extra_r11_size",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_POLYLINE_2D, extra_r11_size),
     0,0,0, 0 },
-  { "extra_r11",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_POLYLINE_2D, extra_r11),
+  { "extra_r11_text",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_POLYLINE_2D, extra_r11_text),
     1,1,1, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };

@@ -3589,7 +3589,7 @@ BD
 BE,	DXF 210
 @item extra_r11_size
 BL
-@item extra_r11
+@item extra_r11_text
 TV
 
 @end vtable

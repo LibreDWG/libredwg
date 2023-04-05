@@ -1280,7 +1280,7 @@ DWG_ENTITY (POLYLINE_2D)
         if (_obj->extra_r11_size > obj->size)
           _obj->extra_r11_size = 0;
       }
-      FIELD_TFv (extra_r11, _obj->extra_r11_size, 0);
+      FIELD_TFv (extra_r11_text, _obj->extra_r11_size, 0);
     }
     DECODER {
       FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;

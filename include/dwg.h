@@ -1560,7 +1560,7 @@ typedef struct _dwg_entity_POLYLINE_2D
   BITCODE_BD elevation;
   BITCODE_BE extrusion;
   BITCODE_BL extra_r11_size;
-  BITCODE_TV extra_r11;
+  BITCODE_TV extra_r11_text;
 } Dwg_Entity_POLYLINE_2D;
 
 /**
