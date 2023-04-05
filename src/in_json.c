@@ -638,12 +638,20 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   if (t->type != JSMN_ARRAY || (t->size != 2 && t->size != 4 && t->size != 5))
     {
       LOG_ERROR ("JSON HANDLE must be ARRAY of [ code, value ] or [ code, "
-                 "size, value, absref, [r11_idx] ]")
+                 "size, value, absref [, r11_idx] ] or [ size, r11_idx ]")
       return NULL;
     }
   JSON_TOKENS_CHECK_OVERFLOW_NULL
   tokens->index++;
   code = json_long (dat, tokens);
+  if (i < 0)
+    {
+      LOG_TRACE ("%s.%s: ", name, key);
+    }
+  else // H*
+    {
+      LOG_TRACE ("%s.%s[%d]: ", name, key, i);
+    }
   if (t->size >= 4)
     {
       size = json_long (dat, tokens);
@@ -672,29 +680,27 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           ref->handleref.value = (unsigned long)value;
           ref->absolute_ref = (unsigned long)absref;
         }
+      if (t->size > 4)
+        LOG_TRACE (FORMAT_REF11 " [H]\n", ARGS_REF11 (ref))
+      else
+        LOG_TRACE (FORMAT_REF " [H]\n", ARGS_REF (ref))
     }
-  else
+  else if (dat->from_version >= R_13b1)
     {
       absref = json_long (dat, tokens);
       ref = dwg_add_handleref (dwg, code, absref,
                                (!code || code >= 6) ? obj : NULL);
+      LOG_TRACE (FORMAT_REF " [H]\n", ARGS_REF (ref))
     }
-  if (i < 0)
+  else
     {
-      if (t->size > 4)
-        LOG_TRACE ("%s.%s: " FORMAT_REF " idx: " FORMAT_RSd " [H(RS)]\n", name,
-                   key, ARGS_REF (ref), ref->r11_idx)
-      else
-        LOG_TRACE ("%s.%s: " FORMAT_REF " [H]\n", name, key, ARGS_REF (ref))
-    }
-  else // H*
-    {
-      if (t->size > 4)
-        LOG_TRACE ("%s.%s[%d]: " FORMAT_REF " idx: " FORMAT_RSd " [H(RS)]\n",
-                   name, key, i, ARGS_REF (ref), ref->r11_idx)
-      else
-        LOG_TRACE ("%s.%s[%d]: " FORMAT_REF " [H]\n", name, key, i,
-                   ARGS_REF (ref))
+      size = code;
+      absref = json_long (dat, tokens);
+      // TODO r11_idx resolver
+      ref = dwg_add_handleref (dwg, 0, absref, obj);
+      ref->r11_idx = absref;
+      ref->handleref.size = size;
+      LOG_TRACE (FORMAT_REF11 " [H]\n", ARGS_REF11 (ref))
     }
   return ref;
 }
@@ -1988,8 +1994,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                    || strEQc (f->type, "BS") || strEQc (f->type, "RL")
                    || strEQc (f->type, "BL") || strEQc (f->type, "RLL")
                    || strEQc (f->type, "BLd") || strEQc (f->type, "BSd")
-                   || strEQc (f->type, "BLL") || strEQc (f->type, "RSd")
-                   || strEQc (f->type, "4BITS")))
+                   || strEQc (f->type, "RCd") || strEQc (f->type, "RSd")
+                   || strEQc (f->type, "BLL") || strEQc (f->type, "4BITS")))
         {
           long num = json_long (dat, tokens);
           JSON_TOKENS_CHECK_OVERFLOW_ERR
