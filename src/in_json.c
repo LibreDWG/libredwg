@@ -657,10 +657,17 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           || (unsigned long)value != ref->handleref.value)
         {
           // Wrong user-input: GH #346 mingw64, oss-fuzz #39755
-          LOG_ERROR ("Invalid handle %.*s => " FORMAT_REF
-                     " code=%ld size=%ld value=%ld absref=%ld\n",
-                     t->end - t->start, &dat->chain[t->start], ARGS_REF (ref),
-                     code, size, value, absref);
+          // but valid for !HANDLING preR13
+          if (strEQ (name, "HEADER")
+              && !dwg->header_vars.HANDLING
+              && dat->from_version <= R_11
+              && (strEQc (key, "HANDSEED") || strEQc (key, "UCSNAME")))
+            ;
+          else
+            LOG_ERROR ("Invalid handle %.*s => " FORMAT_REF
+                       " code=%ld size=%ld value=%ld absref=%ld",
+                       t->end - t->start, &dat->chain[t->start], ARGS_REF (ref),
+                       code, size, value, absref);
           ref->handleref.size = (BITCODE_RC)size;
           ref->handleref.value = (unsigned long)value;
           ref->absolute_ref = (unsigned long)absref;
@@ -673,9 +680,22 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                                (!code || code >= 6) ? obj : NULL);
     }
   if (i < 0)
-    LOG_TRACE ("%s.%s: " FORMAT_REF " [H]\n", name, key, ARGS_REF (ref))
+    {
+      if (t->size > 4)
+        LOG_TRACE ("%s.%s: " FORMAT_REF " idx: " FORMAT_RSd " [H(RS)]\n", name,
+                   key, ARGS_REF (ref), ref->r11_idx)
+      else
+        LOG_TRACE ("%s.%s: " FORMAT_REF " [H]\n", name, key, ARGS_REF (ref))
+    }
   else // H*
-    LOG_TRACE ("%s.%s[%d]: " FORMAT_REF " [H]\n", name, key, i, ARGS_REF (ref))
+    {
+      if (t->size > 4)
+        LOG_TRACE ("%s.%s[%d]: " FORMAT_REF " idx: " FORMAT_RSd " [H(RS)]\n",
+                   name, key, i, ARGS_REF (ref), ref->r11_idx)
+      else
+        LOG_TRACE ("%s.%s[%d]: " FORMAT_REF " [H]\n", name, key, i,
+                   ARGS_REF (ref))
+    }
   return ref;
 }
 
@@ -2752,7 +2772,10 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
           else if (!oldobj->type)
             {
-              LOG_ERROR ("Required %s.type missing, skipped", oldobj->name)
+              if (dwg->header.from_version >= R_13b1
+                   || (oldobj->fixedtype != DWG_TYPE_BLOCK
+                      && oldobj->fixedtype != DWG_TYPE_ENDBLK))
+                LOG_ERROR ("Required %s.type missing, skipped", oldobj->name)
               dwg_free_object (obj);
               obj = oldobj;
               i--;

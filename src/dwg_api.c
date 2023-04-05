@@ -22704,7 +22704,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     if (dwg->header.version <= R_11) // fixup the type
       {
         obj = dwg_obj_generic_to_object (block, &error);
-        obj->type = DWG_TYPE_UNUSED_R11; // dont encode it
+        obj->type = DWG_TYPE_UNUSED_R11; // don't encode it
       }
   }
   {
@@ -22713,7 +22713,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
     if (dwg->header.version <= R_11) // fixup the type
       {
         obj = dwg_obj_generic_to_object (endblk, &error);
-        obj->type = DWG_TYPE_UNUSED_R11; // dont encode it
+        obj->type = DWG_TYPE_UNUSED_R11; // don't encode it
       }
   }
   if (dwg->header.version >= R_2000)

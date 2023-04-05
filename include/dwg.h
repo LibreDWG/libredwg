@@ -694,7 +694,8 @@ typedef enum DWG_OBJECT_TYPE
 
 typedef enum DWG_OBJECT_TYPE_R11
 {
-  DWG_TYPE_UNUSED_R11 = 0, // i.e. all the added table or iterator objects (mspace block)
+  // UNUSED_R11: i.e. all the added table or iterator objects (mspace block)
+  DWG_TYPE_UNUSED_R11 = 0,
   DWG_TYPE_LINE_R11 = 1,
   DWG_TYPE_POINT_R11 = 2,
   DWG_TYPE_CIRCLE_R11 = 3,
@@ -797,7 +798,7 @@ typedef struct _dwg_object_ref
   struct _dwg_object* obj;
   Dwg_Handle handleref;
   unsigned long absolute_ref;
-  BITCODE_RS r11_idx; // preR13 only, the TABLE index (also used for DXF)
+  BITCODE_RSd r11_idx; // preR13 only, the TABLE index (also used for DXF)
 } Dwg_Object_Ref;
 
 typedef Dwg_Object_Ref* BITCODE_H;
