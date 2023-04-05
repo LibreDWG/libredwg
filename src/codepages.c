@@ -182,7 +182,7 @@ const char *_codepage_dxfstr[]
 const char *
 dwg_codepage_dxfstr (Dwg_Codepage cp)
 {
-  if (cp <= CP_DWG)
+  if (cp <= CP_ANSI_1258)
     return _codepage_dxfstr[cp];
   else
     return NULL;

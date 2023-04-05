@@ -260,14 +260,13 @@
   if (dwg->header.numheader_vars <= 129)
     return 0;
   PRER13_SECTION_HDR (UCS); /* (0x3ef-0x3f8) 10 byte */
+  ENCODER {
+    FIELD_VALUE (codepage) = dwg->header.codepage;
+  }
   FIELD_RS (codepage, 0);
   DECODER {
     dwg->header.codepage = FIELD_VALUE (codepage);
   }
-  ENCODER {
-    FIELD_VALUE (codepage) = dwg->header.codepage;
-  }
-  /* TODO DXF value DWGCODEPAGE */
   FIELD_3RD (UCSORG, 10); //ok
   FIELD_3RD (UCSXDIR, 11); //ok
   FIELD_3RD (UCSYDIR, 12); //ok

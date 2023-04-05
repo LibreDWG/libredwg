@@ -34,7 +34,7 @@
   SINCE (R_2018) {
     HEADER_VALUE (ACADMAINTVER, RL, 90, dwg->header.maint_version);
   }
-  SINCE (R_10) {
+  SINCE (R_13b1) {
     HEADER_VALUE_TV (DWGCODEPAGE, 3, codepage);
   }
   SINCE (R_2004) {
@@ -372,7 +372,7 @@
   HEADER_RS (PSLTSCALE, 70);
 
   HEADER_RS (TREEDEPTH, 70);
-  UNTIL (R_11) {
+  VERSIONS (R_11b1, R_12) {
     HEADER_VALUE_TV (DWGCODEPAGE, 3, codepage);
   }
   VERSIONS (R_10, R_2000) {

@@ -2991,9 +2991,9 @@ dxf_format (int code)
  */
 RETURNS_NONNULL
 const char *
-dxf_codepage (int code, Dwg_Data *dwg)
+dxf_codepage (BITCODE_RS code, Dwg_Data *dwg)
 {
-  const char *ret = dwg_codepage_dxfstr (code);
+  const char *ret = dwg_codepage_dxfstr ((Dwg_Codepage)code);
   if (!ret)
     {
       if (dwg->header.version >= R_2007)
@@ -3003,100 +3003,6 @@ dxf_codepage (int code, Dwg_Data *dwg)
     }
   else
     return ret;
-  /*  
-  if (code == 30 || code == 0)
-    return "ANSI_1252"; // WesternEurope Windows
-  else if (code == 1)
-    return "US_ASCII";
-  else if (code == 2)
-    return "ISO-8859-1"; // WesternEurope Latin-1
-  else if (code == 3)
-    return "ISO-8859-2"; // MiddleEurope Latin-2
-  else if (code == 4)
-    return "ISO-8859-3"; // SouthEurope Latin-3
-  else if (code == 5)
-    return "ISO-8859-4"; // NorthEurope Latin-4
-  else if (code == 6)
-    return "ISO-8859-5"; // Cyrillic
-  else if (code == 7)
-    return "ISO-8859-6"; // Arabic
-  else if (code == 8)
-    return "ISO-8859-7"; // Greek
-  else if (code == 9)
-    return "ISO-8859-8"; // Hebrew
-  else if (code == 10)
-    return "ISO-8859-9"; // Turkish Latin-5
-  else if (code == 11)
-    return "CP437"; // DOS-US, DOS Latin US
-  else if (code == 12)
-    return "CP850"; // WesternEurope DOS
-  else if (code == 13)
-    return "CP852"; // CentralEurope DOS
-  else if (code == 14)
-    return "CP855"; // Cyrillic DOS
-  else if (code == 15)
-    return "CP857"; // Turkish DOS
-  else if (code == 16)
-    return "CP860"; // Portuguese DOS
-  else if (code == 17)
-    return "CP861"; // Icelandic DOS
-  else if (code == 18)
-    return "CP863"; // French DOS
-  else if (code == 19)
-    return "CP864"; // Arabic DOS
-  else if (code == 20)
-    return "CP865"; // Nordic DOS
-  else if (code == 21)
-    return "CP869"; // Greek DOS
-  else if (code == 22)
-    return "CP932"; // Japanese Shift JIS DOS
-  else if (code == 23)
-    return "MACINTOSH";
-  else if (code == 24)
-    return "BIG5"; // Taiwan DOS
-  else if (code == 25)
-    return "CP949"; // Korean UnifiedHangulCode DOS
-  else if (code == 26)
-    return "JOHAB"; // Korean cp1361 DOS
-  else if (code == 27)
-    return "CP866"; // Russian DOS
-  else if (code == 28)
-    return "ANSI_1250"; // CentralEurope Windows
-  else if (code == 29)
-    return "ANSI_1251"; // Cyrillic Windows
-  else if (code == 31)
-    return "GB2312"; // SimplifiedChinese
-  else if (code == 32)
-    return "ANSI_1253"; // Greek Windows
-  else if (code == 33)
-    return "ANSI_1254"; // Turkish Windows
-  else if (code == 34)
-    return "ANSI_1255"; // Hebrew Windows
-  else if (code == 35)
-    return "ANSI_1256"; // Arabic Windows
-  else if (code == 36)
-    return "ANSI_1257"; // Baltic Windows
-  else if (code == 37)
-    return "ANSI_874"; // Thai Windows
-  else if (code == 38)
-    return "ANSI_932"; // Japanese Windows
-  else if (code == 39)
-    return "ANSI_936"; // gbk UnifiedChinese Windows
-  else if (code == 40)
-    return "ANSI_949"; // Korean Windows
-  else if (code == 41)
-    return "ANSI_950"; // TradChinese Windows
-  else if (code == 42)
-    return "ANSI_1361"; // Korean JOHAB Windows
-  else if (code == 43)
-    return "ANSI_1200"; // UTF-16 LE Microsoft
-  else if (code == 44)
-    return "ANSI_1258"; // Vietnamese Windows
-  else if (dwg->header.version >= R_2007)
-    return "UTF-8"; // dwg internally: UCS-16, for DXF: UTF-8
-  else
-    return "";
-  */
 }
 
 // see

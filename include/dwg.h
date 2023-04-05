@@ -894,7 +894,7 @@ typedef struct _dwg_header_variables {
   BITCODE_RL bitsize;
   BITCODE_RC ACADMAINTVER; /*!< r13+ */
   BITCODE_BLL REQUIREDVERSIONS; /*!< r2013+ */
-  BITCODE_TV DWGCODEPAGE;  /*!< r10+ */
+  BITCODE_TV DWGCODEPAGE;  /*!< DXF 3, r11+ */
   BITCODE_RS codepage;     /*!< <r11 */
   BITCODE_BD unit1_ratio; /* 412148564080.0 */
   BITCODE_BD unit2_ratio; /* 1.0 */
