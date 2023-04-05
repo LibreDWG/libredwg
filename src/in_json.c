@@ -2779,7 +2779,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           if (dwg->header.from_version >= R_13b1 && !oldobj->handle.value)
             {
               LOG_ERROR ("Required %s.handle missing, skipped", oldobj->name)
-              dwg_free_object (obj);
+              dwg_free_object (oldobj);
               obj = oldobj;
               i--;
             }
@@ -2789,16 +2789,19 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                    || (oldobj->fixedtype != DWG_TYPE_BLOCK
                       && oldobj->fixedtype != DWG_TYPE_ENDBLK))
                 LOG_ERROR ("Required %s.type missing, skipped", oldobj->name)
-              dwg_free_object (obj);
+              if (!oldobj->parent)
+                oldobj->parent = dwg;
+              dwg_free_object (oldobj);
               obj = oldobj;
               i--;
-              size--;
             }
           else if (oldobj->fixedtype == DWG_TYPE_UNUSED)
             {
               LOG_ERROR ("Required %s.fixedtype missing, skipped",
                          oldobj->name);
-              dwg_free_object (obj);
+              if (!oldobj->parent)
+                oldobj->parent = dwg;
+              dwg_free_object (oldobj);
               obj = oldobj;
               i--;
             }

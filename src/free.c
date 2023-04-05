@@ -606,6 +606,8 @@ free_preR13_object (Dwg_Object *obj)
   Dwg_Data *dwg;
   Bit_Chain *dat = &pdat;
 
+  //if (obj->name)
+  //  LOG_HANDLE ("free_preR13_object: %s %d\n", obj->name, obj->index)
   if (obj && obj->parent)
     {
       dwg = obj->parent;
