@@ -78,7 +78,7 @@ typedef enum _dwg_codepage
   CP_ANSI_1361, // ~ JOHAB
   CP_UTF16 = 43,
   CP_ANSI_1258 = 44, // Vietnamese
-  CP_DWG = 0xff // should not happen
+  CP_UNDEFINED = 0xff // mostly R11
 } Dwg_Codepage;
 
 #ifdef HAVE_ICONV

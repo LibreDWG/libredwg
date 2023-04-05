@@ -1367,17 +1367,17 @@ dxf_set_DWGCODEPAGE (Dwg_Data *dwg)
   if (!vars->DWGCODEPAGE)
     return;
   // r11 usually has "undefined"
-  if (hdr->from_version <= R12 && strEQc (vars->DWGCODEPAGE, "undefined"))
-    hdr->codepage = 0;
+  if (hdr->from_version <= R_12 && strEQc (vars->DWGCODEPAGE, "undefined"))
+    hdr->codepage = CP_UNDEFINED;
   else
-    hdr->codepage = dwg_codepage_int (vars->DWGCODEPAGE);
-  if (hdr->codepage == CP_DWG)
     {
-      LOG_ERROR ("Invalid DWGCODEPAGE %s", vars->DWGCODEPAGE);
-      hdr->codepage = 0;
+      hdr->codepage = dwg_codepage_int (vars->DWGCODEPAGE);
+      if (hdr->codepage == CP_UNDEFINED)
+        LOG_ERROR ("Invalid DWGCODEPAGE %s", vars->DWGCODEPAGE)
+      else
+        LOG_TRACE ("HEADER.codepage = %d [%s]\n", hdr->codepage,
+                   vars->DWGCODEPAGE);
     }
-  else
-    LOG_TRACE ("HEADER.codepage = %d [%s]\n", hdr->codepage, vars->DWGCODEPAGE);
 }
 
 static void

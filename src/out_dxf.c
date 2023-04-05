@@ -2994,10 +2994,14 @@ const char *
 dxf_codepage (BITCODE_RS code, Dwg_Data *dwg)
 {
   const char *ret = dwg_codepage_dxfstr ((Dwg_Codepage)code);
+  if (dwg->header.from_version <= R_12 && code == 0)
+    return "undefined";
   if (!ret)
     {
       if (dwg->header.version >= R_2007)
         return "UTF-8"; // dwg internally: UCS-16, for DXF: UTF-8
+      else if (dwg->header.version <= R_12)
+        return "undefined";
       else
         return "";
     }

@@ -157,7 +157,7 @@ dwg_codepage_iconvstr (Dwg_Codepage cp)
         "WINDOWS-950",  "WINDOWS-1361",
         "UTF16", /* 43 */
         "WINDOWS-1258", NULL };
-  if (cp <= CP_DWG)
+  if (cp <= CP_ANSI_1258)
     return _codepage_iconvstr[cp];
   else
     return NULL;
@@ -184,6 +184,8 @@ dwg_codepage_dxfstr (Dwg_Codepage cp)
 {
   if (cp <= CP_ANSI_1258)
     return _codepage_dxfstr[cp];
+  else if (cp == CP_UNDEFINED)
+    return "undefined";
   else
     return NULL;
 }
@@ -196,7 +198,7 @@ dwg_codepage_int (const char *s)
       if (strEQ (s, _codepage_dxfstr[i]))
         return i;
     }
-  return CP_DWG;
+  return CP_UNDEFINED;
 }
 
 /* helper to check if a codepoint exists in the codepage,
