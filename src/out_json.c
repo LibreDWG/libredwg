@@ -134,12 +134,15 @@ static char *_path_field (const char *path);
 #define FORMAT_H "[%u, %lu]"
 #define ARGS_HREF(ref)                                                        \
   ref->handleref.code, ref->handleref.size, ref->handleref.value,             \
-      ref->absolute_ref, ref->r11_idx
+  ref->absolute_ref
+#define ARGS_HREF11(ref)                                                      \
+  ref->handleref.size, ref->r11_idx
 #undef FORMAT_RD
 #undef FORMAT_BD
 #define FORMAT_RD "%.14f"
 #define FORMAT_BD FORMAT_RD
-#define FORMAT_HREF "[%u, %u, %lu, %lu, %u]"
+#define FORMAT_HREF "[%u, %u, %lu, %lu]"
+#define FORMAT_HREF11 "[%u, %hd]"
 #define FORMAT_RLL "%" PRIu64
 #define FORMAT_BLL "%" PRIu64
 #define FORMAT_RC "%d"
@@ -318,7 +321,14 @@ static char *_path_field (const char *path);
 #define VALUE_HANDLE(hdlptr, nam, handle_code, dxf)                           \
   if (hdlptr)                                                                 \
     {                                                                         \
-      fprintf (dat->fh, FORMAT_HREF "", ARGS_HREF (hdlptr));                  \
+      PRE (R_13b1)                                                            \
+      {                                                                       \
+        fprintf (dat->fh, FORMAT_HREF11 "", ARGS_HREF11 (hdlptr));            \
+      }                                                                       \
+      LATER_VERSIONS                                                          \
+      {                                                                       \
+        fprintf (dat->fh, FORMAT_HREF "", ARGS_HREF (hdlptr));                \
+      }                                                                       \
     }                                                                         \
   else                                                                        \
     {                                                                         \
@@ -329,8 +339,16 @@ static char *_path_field (const char *path);
   {                                                                           \
     if (_obj->nam)                                                            \
       {                                                                       \
-        FIRSTPREFIX fprintf (dat->fh, "\"%s\": " FORMAT_HREF "",              \
-                             _path_field (#nam), ARGS_HREF (_obj->nam));      \
+        PRE (R_13b1)                                                          \
+        {                                                                     \
+          FIRSTPREFIX fprintf (dat->fh, "\"%s\": " FORMAT_HREF11 "",          \
+                               _path_field (#nam), ARGS_HREF11 (_obj->nam));  \
+        }                                                                     \
+        LATER_VERSIONS                                                        \
+        {                                                                     \
+          FIRSTPREFIX fprintf (dat->fh, "\"%s\": " FORMAT_HREF "",            \
+                               _path_field (#nam), ARGS_HREF (_obj->nam));    \
+        }                                                                     \
       }                                                                       \
     else                                                                      \
       {                                                                       \
@@ -354,7 +372,14 @@ static char *_path_field (const char *path);
   PRINTFIRST;                                                                 \
   if (_obj->nam)                                                              \
     {                                                                         \
-      PREFIX fprintf (dat->fh, FORMAT_HREF "", ARGS_HREF (_obj->nam));        \
+      PRE (R_13b1)                                                            \
+      {                                                                       \
+        PREFIX fprintf (dat->fh, FORMAT_HREF11 "", ARGS_HREF11 (_obj->nam));  \
+      }                                                                       \
+      LATER_VERSIONS                                                          \
+      {                                                                       \
+        PREFIX fprintf (dat->fh, FORMAT_HREF "", ARGS_HREF (_obj->nam));      \
+      }                                                                       \
     }                                                                         \
   else                                                                        \
     {                                                                         \

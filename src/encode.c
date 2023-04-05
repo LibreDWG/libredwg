@@ -653,14 +653,24 @@ const unsigned char unknown_section[53]
   {                                                                           \
     PRE (R_13b1)                                                              \
     {                                                                         \
-      short idx = (hdlptr) ? (hdlptr)->r11_idx : 0;                           \
+      short idx = (hdlptr) ? (hdlptr)->r11_idx : -1;                          \
+      short size = (hdlptr)           ? hdlptr->handleref.size                \
+                   : handle_code == 1 ? 1                                     \
+                                      : 2;                                    \
       /* = handle_size really, not code */                                    \
-      if (handle_code == 1)                                                   \
+      if (size == 1)                                                          \
         bit_write_RC (dat, idx);                                              \
-      else                                                                    \
+      else if (size == 2)                                                     \
         bit_write_RS (dat, idx);                                              \
-      LOG_TRACE (#nam ": %hd [%s %d]\n", (short)idx,                          \
-                 handle_code == 2 ? "RSd" : "RC", dxf)                        \
+      else if (size == 8)                                                     \
+        bit_write_RLL (dat, be64toh ((hdlptr)->handleref.value));             \
+      else                                                                    \
+        LOG_ERROR (#nam ": Invalid size %d %hd [H %d]", size, idx, dxf)       \
+      LOG_TRACE (#nam ": %hd [%s %d]\n", idx,                                 \
+                 size == 1   ? "RC"                                           \
+                 : size == 2 ? "RSd"                                          \
+                             : "RLL",                                         \
+                 dxf)                                                         \
     }                                                                         \
     IF_ENCODE_SINCE_R13                                                       \
     {                                                                         \
@@ -691,7 +701,9 @@ const unsigned char unknown_section[53]
 // for obj->handle 0.x.x only, DXF 5
 #define VALUE_H(hdl, dxf)                                                     \
   {                                                                           \
-    PRE (R_13b1) { bit_write_H (dat, &hdl); }                                 \
+    PRE (R_13b1) {                                                            \
+      bit_write_H (dat, &hdl);                                                \
+    }                                                                         \
     else                                                                      \
     {                                                                         \
       bit_write_H (hdl_dat, &hdl);                                            \

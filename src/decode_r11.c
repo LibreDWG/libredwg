@@ -104,10 +104,11 @@ dwg_decode_preR13_handleref (Bit_Chain *restrict dat, int size)
       LOG_ERROR ("Out of memory");
       return NULL;
     }
+  ref->handleref.size = size;
   if (size == 2)
-    ref->r11_idx = bit_read_RS (dat);
+    ref->r11_idx = (BITCODE_RSd)bit_read_RS (dat);
   else
-    ref->r11_idx = (BITCODE_RS)bit_read_RC (dat);
+    ref->r11_idx = (BITCODE_RCd)bit_read_RC (dat);
   return ref;
 }
 
