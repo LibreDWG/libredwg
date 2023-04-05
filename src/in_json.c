@@ -3031,7 +3031,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   if (obj->dxfname && strNE (obj->dxfname, dxfname))
                     {
                       if (memBEGINc (dxfname, "UNKNOWN_") || !saw_dxfname)
-                        LOG_TRACE ("Changed dxfname %s => %s", obj->dxfname,
+                        LOG_TRACE ("Changed dxfname %s => %s\n", obj->dxfname,
                                    dxfname)
                       else
                         LOG_WARN ("Changed wrong dxfname %s => %s",
@@ -3084,6 +3084,18 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                       break;
                     case DWG_TYPE_VIEW:
                       id = SECTION_VIEW;
+                      break;
+                    case DWG_TYPE_VPORT:
+                      id = SECTION_VPORT;
+                      break;
+                    case DWG_TYPE_APPID:
+                      id = SECTION_APPID;
+                      break;
+                    case DWG_TYPE_DIMSTYLE:
+                      id = SECTION_DIMSTYLE;
+                      break;
+                    case DWG_TYPE_VX_TABLE_RECORD:
+                      id = SECTION_VX;
                       break;
                     default:
                       LOG_ERROR ("Invalid table type %s %u", obj->name,
