@@ -1720,6 +1720,12 @@ decl_dxfb_process_INSERT (MINSERT)
     case DWG_TYPE_TOLERANCE:
       return dwg_dxfb_TOLERANCE (dat, obj);
     case DWG_TYPE_MLINE:
+      if (0)
+        {
+          // bypass -Wunused-function
+          dwg_dxfb_JUMP (dat, obj);
+          dwg_dxfb_LOAD (dat, obj);
+        }
 #ifdef DEBUG_CLASSES
       // TODO: looks good, but acad import crashes
       return dwg_dxfb_MLINE (dat, obj);
@@ -1727,12 +1733,8 @@ decl_dxfb_process_INSERT (MINSERT)
       LOG_WARN ("Unhandled Entity MLINE in out_dxfb %u/%lX", obj->index,
                 obj->handle.value)
       if (0)
-        {
-          // bypass -Wunused-function
-          dwg_dxfb_JUMP (dat, obj);
-          dwg_dxfb_LOAD (dat, obj);
-          dwg_dxfb_MLINE (dat, obj);
-        }
+        // bypass -Wunused-function
+        dwg_dxfb_MLINE (dat, obj);
       return DWG_ERR_UNHANDLEDCLASS;
 #endif
     case DWG_TYPE_BLOCK_CONTROL:

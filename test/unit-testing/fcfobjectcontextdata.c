@@ -1,4 +1,4 @@
-// unstable
+// unstable. no coverage
 #define DWG_TYPE DWG_TYPE_FCFOBJECTCONTEXTDATA
 #include "common.c"
 
