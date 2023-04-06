@@ -25598,7 +25598,7 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                     }
                   _obj->paths[i].num_segs_or_paths = num;
                   _obj->paths[i].segs = (Dwg_HATCH_PathSeg *)calloc (
-                      1, sizeof (Dwg_HATCH_PathSeg));
+                      num, sizeof (Dwg_HATCH_PathSeg));
                   for (unsigned j = 0; j < num; j++)
                     {
                       unsigned k = j + 1;
