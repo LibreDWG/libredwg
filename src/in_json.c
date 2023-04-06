@@ -1019,14 +1019,14 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RS (numentity_sections, 0)
       FIELD_RL (sections, 0)
       FIELD_RS (numheader_vars, 0)
-      FIELD_RL (entities_start, 0)
-      FIELD_RL (entities_end, 0)
-      FIELD_RL (blocks_start, 0)
-      FIELD_RL (blocks_size, 0)
-      FIELD_RL (extras_start, 0)
-      FIELD_RL (extras_size, 0)
+      FIELD_RLx (entities_start, 0)
+      FIELD_RLx (entities_end, 0)
+      FIELD_RLx (blocks_start, 0)
+      FIELD_RLx (blocks_size, 0)
+      FIELD_RLx (extras_start, 0)
+      FIELD_RLx (extras_size, 0)
 
-      FIELD_RL (thumbnail_address, 0) //@0x0d
+      FIELD_RLx (thumbnail_address, 0) //@0x0d
       FIELD_RC (dwg_version, 0)
       FIELD_RC (maint_version, 0)
       FIELD_RS (codepage, 0) //@0x13: 29/30 for ANSI_1252, since r2007 UTF-16
@@ -2794,6 +2794,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               dwg_free_object (oldobj);
               obj = oldobj;
               i--;
+              size--;
             }
           else if (oldobj->fixedtype == DWG_TYPE_UNUSED)
             {

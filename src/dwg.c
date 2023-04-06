@@ -2244,6 +2244,32 @@ dwg_find_dicthandle_objname (Dwg_Data *restrict dwg, BITCODE_H dict,
   return NULL;
 }
 
+/* Return the first object of the given type. */
+Dwg_Object *
+dwg_find_first_type (Dwg_Data *restrict dwg, enum DWG_OBJECT_TYPE type)
+{
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+    {
+      if (dwg->object[i].fixedtype == type)
+        return &dwg->object[i];
+    }
+  return NULL;
+}
+
+/* Return the last object of the given type. */
+Dwg_Object *
+dwg_find_last_type (Dwg_Data *restrict dwg, enum DWG_OBJECT_TYPE type)
+{
+  for (BITCODE_BL i = dwg->num_objects - 1; i != 0; i--)
+    {
+      if (dwg->object[i].fixedtype == type)
+        return &dwg->object[i];
+    }
+  if (dwg->object[0].fixedtype == type)
+    return &dwg->object[0];
+  return NULL;
+}
+
 /* Return the handle of the first object of the given type. */
 Dwg_Handle *
 dwg_find_first_type_handle (Dwg_Data *restrict dwg, enum DWG_OBJECT_TYPE type)

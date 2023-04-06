@@ -181,12 +181,12 @@ run ()
         esac
     fi
     # json parser error
-    if test "$bprog" = "dxfwrite"
-    then
-        case $dwg in
-            r11/ACEB10*) TESTPROG="echo SKIP"; todo=1;;
-        esac
-    fi
+    #if test "$bprog" = "dxfwrite"
+    #then
+    #    case $dwg in
+    #        r11/ACEB10*) TESTPROG="echo SKIP"; todo=1;;
+    #    esac
+    #fi
     if test "$bprog" = "dwgfuzz" -a -n "@HAVE_ASAN@"
     then
        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
@@ -229,7 +229,7 @@ run ()
                     CYGWIN*) todo=1 ;;
                     *) ;;
                 esac
-                if grep -E -q '_(r11|r2\.10|r2\.6|r1\.4)\.json' $arg; then
+                if grep -E -q '_(r11|r10|r2\.10|r2\.6|r1\.4)\.json' $arg; then
                     todo=1
                 fi
                 ;;
@@ -258,6 +258,7 @@ run ()
             tmpnum=$((i+1))
             echo "$(basename "$0"): TODO $prog $tmpnum failures"
             ls -l "$log"
+            tail -n100 "$log"
         fi
     fi
     if [ x"$MINGW" != x ] && [ x"$OLDTESTPROG" != x ]; then
@@ -283,10 +284,14 @@ clean ()
       rm "./$b-dwgwrite.dwg" 2>/dev/null
       rm "./${b}_new.dwg" 2>/dev/null
   done
-  rm "./entities.dxf" 2>/dev/null
+  rm "./entities*.dwg" 2>/dev/null
+  rm "./entities*.dxf" 2>/dev/null
+  rm "./entities*.json" 2>/dev/null
   rm "./entities.dwg" 2>/dev/null
-  rm "./entities_*.dxf" 2>/dev/null
-  rm "./entities_*.json" 2>/dev/null
+  rm "./entities-3d.dwg" 2>/dev/null
+  rm "./entities-3d_r11.dwg" 2>/dev/null
+  rm "./entities-3d_r11.json" 2>/dev/null
+  rm "./ACEB10.dwg" 2>/dev/null
   rm "./ACEB10.dxf" 2>/dev/null
   rm "./ACEB10_*.dxf" 2>/dev/null
   rm "./ACEB10_*.json" 2>/dev/null
@@ -337,6 +342,7 @@ if [ -f cmp_dxf.pl ] && [ -e dwg2dxf ]; then
     for dwg in $DATA; do
         case $dwg in
             r11/*)   ;; # cannot outdxf preR13 yet
+            r10/*)   ;; # cannot outdxf preR13 yet
             r2*/*)   ;; # cannot outdxf preR13 yet
             r1.4/*)  ;; # cannot outdxf preR13 yet
             *)       run "dwg2dxf${EXEEXT}" "$dwg" ;;
