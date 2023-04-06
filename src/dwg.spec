@@ -6479,6 +6479,7 @@ DWG_ENTITY (TABLE)
       VERSION (R_2013)
         FIELD_BL (unknown_bl1, 0);
       // i.e. TABLECONTENT: 20.4.96.2 AcDbTableContent subclass: 20.4.97
+      // FIXME: same offset as TABLECONTENT, or subclass
       TABLECONTENTs_fields;
 
 #undef row
@@ -6696,7 +6697,9 @@ DWG_ENTITY (TABLE)
           }
         SET_PARENT_OBJ (cell);
     END_REPEAT_BLOCK
+#ifndef IS_FREE // FIXME: bogus cells value 0x21, not a pointer
     END_REPEAT (cells);
+#endif
     #undef cell
     /* End Cell Data (remaining data applies to entire table)*/
   
