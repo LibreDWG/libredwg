@@ -2412,7 +2412,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           _obj->app_dwg_version = _obj->dwg_version;
       }
     if (!_obj->codepage)
-      _obj->codepage = 30;
+      _obj->codepage = dat->codepage;
     if (!_obj->blocks_size)
       _obj->blocks_size = 0x40000000;
     if (!_obj->extras_size)
@@ -5067,7 +5067,6 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
             {
               BITCODE_RS length = data->u.eed_0_r2007.length;
               BITCODE_RS *s = (BITCODE_RS *)&data->u.eed_0_r2007.string;
-              BITCODE_RS codepage = 30; // FIXME
               char *dest;
               if (length + 5 + dat->byte >= dat->size)
                 bit_chain_alloc_size (dat,
@@ -5079,10 +5078,11 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
                 }
               dest = bit_embed_TU_size (s, length);
               bit_write_RC (dat, length);
-              bit_write_RS_LE (dat, codepage);
+              bit_write_RS_LE (dat, dat->codepage);
               bit_write_TF (dat, (unsigned char *)dest, length);
-              LOG_TRACE ("string: len=%d [RC] cp=%d [RS_LE] \"%s\" [TF]",
-                         length, codepage, dest);
+              LOG_TRACE ("string: len=" FORMAT_RS " [RC] cp=" FORMAT_RS
+                         " [RS_LE] \"%s\" [TF]",
+                         length, dat->codepage, dest);
               free (dest);
             }
           else
@@ -5095,7 +5095,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
               bit_write_RS_LE (dat, data->u.eed_0.codepage);
               bit_write_TF (dat, (BITCODE_TF)data->u.eed_0.string,
                             data->u.eed_0.length);
-              LOG_TRACE ("string: len=%d [RC] cp=%d [RS_LE] \"%s\" [TF]",
+              LOG_TRACE ("string: len=" FORMAT_RS " [RC] cp=" FORMAT_RS
+                         " [RS_LE] \"%s\" [TF]",
                          data->u.eed_0.length, data->u.eed_0.codepage,
                          data->u.eed_0.string);
             }

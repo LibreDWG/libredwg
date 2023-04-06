@@ -429,6 +429,7 @@ dwg_write_file (const char *restrict filename, const Dwg_Data *restrict dwg)
   dat.opts = dwg->opts;
   dat.version = (Dwg_Version_Type)dwg->header.version;
   dat.from_version = (Dwg_Version_Type)dwg->header.from_version;
+  dat.codepage = dwg->header.codepage;
 
   // json HACK. no wide chars from JSON, because we just encode to R_2000
   if (dwg->opts & (DWG_OPTS_INJSON | DWG_OPTS_INDXF))

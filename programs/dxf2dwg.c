@@ -156,6 +156,7 @@ main (int argc, char *argv[])
         {
           memset (&out_dat, 0, sizeof (out_dat));
           bit_chain_set_version (&out_dat, &dat);
+          dat->codepage = dwg->header.codepage;
           out_dat.version = R_2000;
           dwg_encode (&dwg, &out_dat);
           free (out_dat.chain);
