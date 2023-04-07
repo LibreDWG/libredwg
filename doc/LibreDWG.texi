@@ -478,6 +478,7 @@ native fallback types int/long, which are different across platforms.
 * INFO::              The info of all used sections
 * SYSTEM_MAP::        The map of all used sections and its chunked pages
 * Tables::            How the old tables are mapped into the new objects
+* EXTRAS::            The r10-r11 EXTRAS entity section
 @end menu
 
 The r2000 format (used for r13-r2000) knows the following 6 sections:
@@ -513,8 +514,15 @@ The r2004 and r2007 format (used for r2004-r2018) knows the following sections:
     INFO
     SYSTEM_MAP
 
-The old pre-R13 formats (from r1.1 to r11) have no objects and sections,
-but the 5 @ref{Tables}:
+The old pre-R13 formats (from r1.1 to r11) have those sections, with the
+tables interleaved into the HEADER.
+
+    HEADER
+    ENTITIES
+    BLOCKS entities
+    EXTRAS entities
+
+With (from r1.1 to r10) those 5 @ref{Tables}:
 
     BLOCKS
     LAYER
@@ -723,6 +731,80 @@ All blocks are accessed via all other model_space BLOCK_HEADER's,
 @code{get_first_owned_block (BLOCK_HEADER)}.  Each CONTROL object
 holds a list of all table records, i.e. entries.  Each table record
 entry has a name and other common table fields.
+
+@node EXTRAS
+@section EXTRAS entities section
+
+Before R13 we had no objects, just the 5-10 tables, and the entities divided into 3 sections.
+The entities, the blocks and the extras.
+Blocks just contains the entities from each BLOCK to the ENDBLK entity.
+
+Extras contain entities which had no room in the original section,
+e.g. when closing a polyline, which needs one additional byte. Thus
+the original entity is replaced by an undocumented JUMP entity, which
+gives the offset into the EXTRAS section, until a JUMP in the EXTRAS
+jumps back to the next original entity.
+
+See e.g. @file{r10/entities.dwg}
+
+The JUMP [31] replaces the POLYLINE_2D entity which got later
+closed. An open POLYLINE_2D needs size 8, but closed 9 bytes. Hence
+they added the new closed replacement to the extras section at offset
+0, index [66], and added another JUMP [67] back to the next original
+entity. Here it jumps back to the VERTEX_2D [32] at offset 0x84f.
+
+@example
+  type: 18 [RCd]
+  Add entity JUMP [31] Decode entity JUMP
+  ===========================
+  Entity number: 31, Type: 18, Addr: 847
+  flag_r11: 0x0 [RC 0]
+  size: 8 [RS]
+  jump_address_raw: 0x80000000 [RLx 0]
+  jump_entity_section: DWG_EXTRA_SECTION
+  jump_address: 0x0
+
+  type: 20 [RCd]
+  Add entity VERTEX_2D [32] Decode entity VERTEX_2D
+  ===========================
+  Entity number: 32, Type: 20, Addr: 84f
+  flag_r11: 0x0 [RC 0]
+  size: 24 [RS]
+  layer: 0 [H(RSd) 8]
+  opts_r11: 0x0 [RSx 0]
+  point: (5.500000, 7.500000) [2RD 10]
+
+  ....
+
+  extras entities: (0x10c0-0x10d1 (0), size 17)
+  ==========================================
+  type: 19 [RCd]
+  Add entity POLYLINE_2D [66] Decode entity POLYLINE_2D
+  ===========================
+  Entity number: 66, Type: 19, Addr: 10c0
+  flag_r11: 0x80 [RC 0]
+            HAS_ATTRIBS(0x80)
+  size: 9 [RS]
+  layer: 0 [H(RSd) 8]
+  opts_r11: 0x1 [RSx 0]
+            HAS_FLAG(0x1)
+  flag: 0x1 [RC 70]
+        CLOSED(0x1)
+
+  type: 18 [RCd]
+  Add entity JUMP [67] Decode entity JUMP
+  ===========================
+  Entity number: 67, Type: 18, Addr: 10c9
+  flag_r11: 0x0 [RC 0]
+  size: 8 [RS]
+  jump_address_raw: 0x84f [RLx 0]
+  jump_entity_section: DWG_ENTITY_SECTION
+  jump_address: 0x84f
+  ==========================================
+  extras entities: end
+@end example
+
+The entity iterator knows about these jumps.
 
 @node Structures
 @chapter Structures
