@@ -982,16 +982,21 @@ dwg_model_space_ref (Dwg_Data *dwg)
 {
   Dwg_Object *obj;
   Dwg_Object_BLOCK_CONTROL *block_control;
+  if (dwg->dirty_refs)
+    dwg_resolve_objectrefs_silent (dwg);
   if (dwg->header_vars.BLOCK_RECORD_MSPACE
+      && !dwg->dirty_refs
       && dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
     return dwg->header_vars.BLOCK_RECORD_MSPACE;
-  if (dwg->block_control.model_space && dwg->block_control.model_space->obj)
+  if (dwg->block_control.model_space && !dwg->dirty_refs
+      && dwg->block_control.model_space->obj)
     {
       dwg->header_vars.BLOCK_RECORD_MSPACE = dwg->block_control.model_space;
       return dwg->block_control.model_space;
     }
   block_control = dwg_block_control (dwg);
   if (block_control && block_control->model_space
+      && !dwg->dirty_refs
       && block_control->model_space->obj)
     {
       dwg->block_control.model_space = block_control->model_space;
@@ -1003,6 +1008,7 @@ dwg_model_space_ref (Dwg_Data *dwg)
     return NULL;
   block_control = obj->tio.object->tio.BLOCK_CONTROL;
   if (block_control && block_control->model_space
+      && !dwg->dirty_refs
       && block_control->model_space->obj)
     {
       dwg->block_control.model_space = block_control->model_space;
@@ -1017,10 +1023,15 @@ dwg_model_space_ref (Dwg_Data *dwg)
 EXPORT Dwg_Object_Ref *
 dwg_paper_space_ref (Dwg_Data *dwg)
 {
+  if (dwg->dirty_refs)
+    dwg_resolve_objectrefs_silent (dwg);
   if (dwg->header_vars.BLOCK_RECORD_PSPACE
+      && !dwg->dirty_refs
       && dwg->header_vars.BLOCK_RECORD_PSPACE->obj)
     return dwg->header_vars.BLOCK_RECORD_PSPACE;
-  return dwg->block_control.paper_space && dwg->block_control.paper_space->obj
+  return dwg->block_control.paper_space
+    && !dwg->dirty_refs
+    && dwg->block_control.paper_space->obj
              ? dwg->block_control.paper_space
              : NULL;
 }
@@ -1033,12 +1044,16 @@ dwg_model_space_object (Dwg_Data *dwg)
   Dwg_Object_Ref *msref = dwg_model_space_ref (dwg);
   Dwg_Object_BLOCK_CONTROL *ctrl;
 
-  if (msref && msref->obj && msref->obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
+  if (dwg->dirty_refs)
+    dwg_resolve_objectrefs_silent (dwg);
+  if (msref && !dwg->dirty_refs && msref->obj
+      && msref->obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
     return msref->obj;
   ctrl = dwg_block_control (dwg);
-  if (ctrl && ctrl->model_space && ctrl->model_space->obj)
+  if (ctrl && ctrl->model_space && !dwg->dirty_refs && ctrl->model_space->obj)
     return ctrl->model_space->obj;
   if (dwg->header_vars.BLOCK_RECORD_MSPACE
+      && !dwg->dirty_refs
       && dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
     return dwg->header_vars.BLOCK_RECORD_MSPACE->obj;
   if (!dwg->object_map) // for dwg_add_Document()
@@ -1054,12 +1069,15 @@ dwg_paper_space_object (Dwg_Data *dwg)
   Dwg_Object_Ref *psref = dwg_paper_space_ref (dwg);
   Dwg_Object_BLOCK_CONTROL *ctrl;
 
-  if (psref && psref->obj && psref->obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
+  if (dwg->dirty_refs)
+    dwg_resolve_objectrefs_silent (dwg);
+  if (psref && !dwg->dirty_refs && psref->obj
+      && psref->obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
     return psref->obj;
   ctrl = dwg_block_control (dwg);
-  if (ctrl && ctrl->paper_space && ctrl->paper_space->obj)
+  if (ctrl && ctrl->paper_space && !dwg->dirty_refs && ctrl->paper_space->obj)
     return ctrl->paper_space->obj;
-  if (dwg->header_vars.BLOCK_RECORD_PSPACE
+  if (dwg->header_vars.BLOCK_RECORD_PSPACE && !dwg->dirty_refs
       && dwg->header_vars.BLOCK_RECORD_PSPACE->obj)
     return dwg->header_vars.BLOCK_RECORD_PSPACE->obj;
   else
@@ -1081,6 +1099,9 @@ get_first_owned_entity (const Dwg_Object *hdr)
 
   if (R_13b1 <= version && version <= R_2000)
     {
+      Dwg_Data *dwg = hdr->parent;
+      if (dwg->dirty_refs)
+        dwg_resolve_objectrefs_silent (dwg);
       /* With r2000 we rather follow the next_entity chain */
       return _hdr->first_entity ? _hdr->first_entity->obj : NULL;
     }
@@ -1089,8 +1110,9 @@ get_first_owned_entity (const Dwg_Object *hdr)
       _hdr->__iterator = 0;
       if (_hdr->entities && _hdr->num_owned && _hdr->entities[0])
         {
-          if (!_hdr->entities[0]->obj)
-            dwg_resolve_objectrefs_silent (hdr->parent);
+          Dwg_Data *dwg = hdr->parent;
+          if (dwg->dirty_refs || !_hdr->entities[0]->obj)
+            dwg_resolve_objectrefs_silent (dwg);
           return _hdr->entities[0]->obj;
         }
       else
