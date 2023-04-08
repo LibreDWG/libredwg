@@ -14687,7 +14687,7 @@ dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
     return NULL;
 #endif
 
-  obj = dwg_ref_object_silent (dwg, hdl);
+  obj = dwg_ref_object_silent ((Dwg_Data *)dwg, hdl);
   if (!obj)
     return NULL;
   {

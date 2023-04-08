@@ -9746,13 +9746,12 @@ EXPORT Dwg_Object *dwg_next_object (const Dwg_Object *obj);
 EXPORT Dwg_Object *dwg_next_entity (const Dwg_Object *obj);
 EXPORT unsigned long dwg_next_handle (const Dwg_Data *dwg);
 
-EXPORT Dwg_Object *dwg_ref_object (const Dwg_Data *restrict dwg,
+EXPORT Dwg_Object *dwg_ref_object (Dwg_Data *restrict dwg,
                                    Dwg_Object_Ref *restrict ref);
-
-EXPORT Dwg_Object *dwg_ref_object_relative (const Dwg_Data *restrict dwg,
+EXPORT Dwg_Object *dwg_ref_object_relative (Dwg_Data *restrict dwg,
                                             Dwg_Object_Ref *restrict ref,
                                             const Dwg_Object *restrict obj);
-EXPORT Dwg_Object *dwg_ref_object_silent (const Dwg_Data *restrict dwg,
+EXPORT Dwg_Object *dwg_ref_object_silent (Dwg_Data *restrict dwg,
                                           Dwg_Object_Ref *restrict ref);
 
 EXPORT Dwg_Object *get_first_owned_entity (const Dwg_Object *restrict hdr);

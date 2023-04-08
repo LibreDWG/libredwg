@@ -1900,7 +1900,7 @@ EXPORT int dwg_object_name (const char *const restrict name,
       if (is_entp)
         *is_entp = result->isent;
       if (stabilityp)
-        *stabilityp = result->stability;
+        *stabilityp = (Dwg_Class_Stability)result->stability;
       return 1;
     }
   return 0;
@@ -3482,7 +3482,7 @@ dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
     return NULL;
 #endif
 
-  obj = dwg_ref_object_silent (dwg, hdl);
+  obj = dwg_ref_object_silent ((Dwg_Data *)dwg, hdl);
   if (!obj)
     return NULL;
   {

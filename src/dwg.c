@@ -717,7 +717,7 @@ dwg_get_layers (const Dwg_Data *dwg)
       = (Dwg_Object_LAYER **)calloc (num_layers, sizeof (Dwg_Object_LAYER *));
   for (i = 0; i < num_layers; i++)
     {
-      Dwg_Object *obj = dwg_ref_object (dwg, _ctrl->entries[i]);
+      Dwg_Object *obj = dwg_ref_object ((Dwg_Data *)dwg, _ctrl->entries[i]);
       if (obj && obj->fixedtype == DWG_TYPE_LAYER)
         layers[i] = obj->tio.object->tio.LAYER;
     }
@@ -770,8 +770,16 @@ dwg_get_entities (const Dwg_Data *dwg)
 EXPORT Dwg_Object_LAYER *
 dwg_get_entity_layer (const Dwg_Object_Entity *ent)
 {
-  // TODO: empty means default layer 0
-  return ent->layer ? ent->layer->obj->tio.object->tio.LAYER : NULL;
+  Dwg_Object *obj;
+  // we'd really need the dwg_api or dwg to check dirty_refs
+  if (ent
+      && ent->layer
+      && (obj = ent->layer->obj)
+      && obj->fixedtype == DWG_TYPE_LAYER)
+    return obj->tio.object->tio.LAYER;
+  else
+    // TODO: empty means default layer 0
+    return NULL;
 }
 
 EXPORT Dwg_Object *
@@ -790,10 +798,12 @@ dwg_next_object (const Dwg_Object *obj)
  * Find an object given its handle
  */
 EXPORT Dwg_Object *
-dwg_ref_object (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
+dwg_ref_object (Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
 {
   if (!ref)
     return NULL;
+  if (dwg->dirty_refs)
+    dwg_resolve_objectrefs_silent (dwg);
   if (ref->obj && !dwg->dirty_refs)
     return ref->obj;
   // Without obj we don't get an absolute_ref from relative OFFSETOBJHANDLE
@@ -817,7 +827,7 @@ dwg_ref_object (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
  * OFFSETOBJHANDLE, handleref.code > 6.
  */
 EXPORT Dwg_Object *
-dwg_ref_object_relative (const Dwg_Data *restrict dwg,
+dwg_ref_object_relative (Dwg_Data *restrict dwg,
                          Dwg_Object_Ref *restrict ref,
                          const Dwg_Object *restrict obj)
 {
@@ -882,11 +892,13 @@ dwg_resolve_handle_silent (const Dwg_Data *dwg, const BITCODE_BL absref)
 }
 
 EXPORT Dwg_Object *
-dwg_ref_object_silent (const Dwg_Data *restrict dwg,
+dwg_ref_object_silent (Dwg_Data *restrict dwg,
                        Dwg_Object_Ref *restrict ref)
 {
   if (!ref)
     return NULL;
+  if (dwg->dirty_refs)
+    dwg_resolve_objectrefs_silent (dwg);
   if (dwg->dirty_refs == 0 && ref->obj != NULL)
     return ref->obj;
   if ((ref->handleref.code < 6
@@ -975,7 +987,7 @@ dwg_block_control (Dwg_Data *dwg)
 
 /** Returns the model space block object for the DWG.
     On r2010 and r2013 it could be different to the canonical
-   dwg->block_control.model_space.
+    dwg->block_control.model_space.
 */
 EXPORT Dwg_Object_Ref *
 dwg_model_space_ref (Dwg_Data *dwg)
@@ -1041,24 +1053,42 @@ dwg_paper_space_ref (Dwg_Data *dwg)
 EXPORT Dwg_Object *
 dwg_model_space_object (Dwg_Data *dwg)
 {
+  Dwg_Object *obj;
   Dwg_Object_Ref *msref = dwg_model_space_ref (dwg);
   Dwg_Object_BLOCK_CONTROL *ctrl;
 
-  if (dwg->dirty_refs)
-    dwg_resolve_objectrefs_silent (dwg);
-  if (msref && !dwg->dirty_refs && msref->obj
-      && msref->obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
-    return msref->obj;
+  if (msref
+      && (obj = dwg_ref_object (dwg, msref))
+      && obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
+    return obj;
   ctrl = dwg_block_control (dwg);
-  if (ctrl && ctrl->model_space && !dwg->dirty_refs && ctrl->model_space->obj)
-    return ctrl->model_space->obj;
-  if (dwg->header_vars.BLOCK_RECORD_MSPACE
-      && !dwg->dirty_refs
-      && dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
-    return dwg->header_vars.BLOCK_RECORD_MSPACE->obj;
+  msref = ctrl ? ctrl->model_space : NULL;
+  if (msref && (obj = dwg_ref_object (dwg, msref))
+      && obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
+    {
+      if (!dwg->header_vars.BLOCK_RECORD_MSPACE)
+        dwg->header_vars.BLOCK_RECORD_MSPACE = msref;
+      return obj;
+    }
+  msref = dwg->header_vars.BLOCK_RECORD_MSPACE;
+  if (msref && (obj = dwg_ref_object (dwg, msref))
+      && obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
+    {
+      if (ctrl)
+        ctrl->model_space = msref;
+      return obj;
+    }
   if (!dwg->object_map) // for dwg_add_Document()
     dwg->object_map = hash_new (100);
-  return dwg_resolve_handle (dwg, dwg->header.version >= R_2000 ? 0x1F : 0x17);
+  // TODO <= r11
+  obj = dwg_resolve_handle (dwg, dwg->header.version >= R_2000 ? 0x1F : 0x17);
+  if (obj && obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
+    return obj;
+  obj = dwg_find_first_type (dwg, DWG_TYPE_BLOCK_HEADER);
+  if (obj && obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
+    return obj;
+  else
+    return NULL;
 }
 
 /** Returns the paper space block object for the DWG.
@@ -1066,20 +1096,33 @@ dwg_model_space_object (Dwg_Data *dwg)
 EXPORT Dwg_Object *
 dwg_paper_space_object (Dwg_Data *dwg)
 {
+  Dwg_Object *obj;
   Dwg_Object_Ref *psref = dwg_paper_space_ref (dwg);
   Dwg_Object_BLOCK_CONTROL *ctrl;
 
-  if (dwg->dirty_refs)
-    dwg_resolve_objectrefs_silent (dwg);
-  if (psref && !dwg->dirty_refs && psref->obj
-      && psref->obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
-    return psref->obj;
+  if (psref
+      && (obj = dwg_ref_object (dwg, psref))
+      && obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
+    return obj;
   ctrl = dwg_block_control (dwg);
-  if (ctrl && ctrl->paper_space && !dwg->dirty_refs && ctrl->paper_space->obj)
-    return ctrl->paper_space->obj;
-  if (dwg->header_vars.BLOCK_RECORD_PSPACE && !dwg->dirty_refs
-      && dwg->header_vars.BLOCK_RECORD_PSPACE->obj)
-    return dwg->header_vars.BLOCK_RECORD_PSPACE->obj;
+  psref = ctrl ? ctrl->paper_space : NULL;
+  if (psref
+      && (obj = dwg_ref_object (dwg, psref))
+      && obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
+    {
+      if (!dwg->header_vars.BLOCK_RECORD_PSPACE)
+        dwg->header_vars.BLOCK_RECORD_PSPACE = psref;
+      return obj;
+    }
+  psref = dwg->header_vars.BLOCK_RECORD_PSPACE;
+  if (psref
+      && (obj = dwg_ref_object (dwg, psref))
+      && obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
+    {
+      if (ctrl)
+        ctrl->paper_space = psref;
+      return obj;
+    }
   else
     return NULL;
 }
@@ -2990,7 +3033,7 @@ dwg_color_method_name (unsigned m)
 const char *
 dwg_ref_objname (const Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
 {
-  Dwg_Object *restrict obj = dwg_ref_object_silent (dwg, ref);
+  Dwg_Object *restrict obj = dwg_ref_object_silent ((Dwg_Data *)dwg, ref);
   return obj ? obj->name : "";
 }
 

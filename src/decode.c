@@ -1072,18 +1072,15 @@ dwg_find_objectref (const Dwg_Data *restrict dwg,
 void
 dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg)
 {
-  BITCODE_BL i;
-  Dwg_Object *restrict obj;
-  int oldloglevel = loglevel;
-
+  const int oldloglevel = loglevel;
   loglevel = 0;
   // Dwg_Object_Ref->obj are stored all over. dirty it to update dynamically.
   // TODO: this is now forever. find a way to resolve all objs also.
   dwg->dirty_refs = 1;
-  for (i = 0; i < dwg->num_object_refs; i++)
+  for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
     {
       // scan num_objects for the id (absolute_ref)
-      obj = dwg_resolve_handle (dwg, dwg->object_ref[i]->absolute_ref);
+      Dwg_Object *restrict obj = dwg_resolve_handle (dwg, dwg->object_ref[i]->absolute_ref);
       dwg->object_ref[i]->obj = obj;
     }
   dwg->dirty_refs = 0;
