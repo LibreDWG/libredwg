@@ -2937,6 +2937,14 @@ bit_TV_to_utf8 (const char *restrict src,
     char *dest, *odest, *osrc;
     if (!charset)
       return (char*)src;
+    osrc = (char *)src;
+    odest = dest = (char*)malloc (destlen);
+    if (!odest)
+      {
+        loglevel |= 1;
+        LOG_ERROR ("Out of memory")
+        return NULL;
+      }
     cd = iconv_open ("UTF-8", charset);
     if (cd == (iconv_t) -1)
       {
@@ -2945,8 +2953,6 @@ bit_TV_to_utf8 (const char *restrict src,
                    charset, errno);
         return NULL;
       }
-    osrc = (char *)src;
-    odest = dest = (char*)malloc (destlen);
     while (nconv == (size_t)-1)
       {
         nconv = iconv (cd, (char **restrict)&src, (size_t *)&srclen,
@@ -2960,6 +2966,13 @@ bit_TV_to_utf8 (const char *restrict src,
                 dest_new = (char*)realloc (odest, destlen);
                 if (dest_new)
                   odest = dest = dest_new;
+                else
+                  {
+                    loglevel |= 1;
+                    iconv_close (cd);
+                    LOG_ERROR ("Out of memory");
+                    return NULL;
+                  }
               }
             else
               {
