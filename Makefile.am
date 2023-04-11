@@ -261,6 +261,29 @@ log-dwg: all
 	  ./log "$$d"; \
 	done
 
+check-ossfuzz: all
+	+for d in `$(srcdir)/test/ossfuzz -iname \*.dwg -size -40M`; do \
+	  ./log "$$d"; \
+	done
+	+for d in `find $(srcdir)/test/ossfuzz/indwg* -type f -size -40M`; do \
+	  ./log "$$d"; \
+	done
+	+for d in `find $(srcdir)/test/ossfuzz/outdxf* -type f -size -40M`; do \
+	  ./dxf "$$d"; \
+	done
+	+for d in `find $(srcdir)/test/ossfuzz/outjson -type f -size -40M`; do \
+	  ./json "$$d"; \
+	done
+	+for d in `find $(srcdir)/test/ossfuzz/outgeojson -type f -size -40M`; do \
+	  $(LTEXEC) programs/dwgread -Ogeojson -o/dev/null "$$d"; \
+	done
+	+for d in `find $(srcdir)/test/ossfuzz/in{dxf,dxfb,json} -type f -size -40M`; do \
+	  ./dwg "$$d"; \
+	done
+	+for d in `find $(srcdir)/test/ossfuzz/outsvg -type f -size -40M`; do \
+	  ./svg "$$d"; \
+	done
+
 # clang-analyzer.llvm.org, debian: clang-tools-{6.0,7}, redhat: clang-analyzer
 SCAN_BUILD = scan-build
 scan-build: clean

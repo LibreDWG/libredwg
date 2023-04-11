@@ -44,6 +44,7 @@ compile_commands.json
 /test/test-data-r*/
 /test/test-data/
 /test/test-old/
+/test/ossfuzz/
 # test-data symlinks
 /test-data
 /td
