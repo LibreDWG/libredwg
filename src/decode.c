@@ -6627,8 +6627,13 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
           num++;
           if (dat->byte < oldpos + size)
             LOG_TRACE ("\n");
+          if (dat->byte >= dat->size && dat->byte != end)
+            {
+              LOG_ERROR ("Too many entities, buffer overflow %lu >= %lu",
+                         dat->byte, dat->size);
+              return DWG_ERR_INVALIDDWG;
+            }
         }
-
         if (dat->byte != end)
           {
             LOG_ERROR ("@0x%lx => end 0x%x", dat->byte, end);
