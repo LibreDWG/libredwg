@@ -195,6 +195,11 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
     default:
       LOG_ERROR ("Illegal section id %d", id);
     }
+  if (tbl->number > 0 && tbl->size < 33)
+    {
+      LOG_ERROR ("Wrong %s.number or size", tbl->name)
+      return 1; // DWG_ERR_SECTIONNOTFOUND;
+    }
   if (tbl->number && (tbl->address + (tbl->number * tbl->size) > dat->size))
     {
       LOG_ERROR ("%s.size overflow", tbl->name)
@@ -358,7 +363,10 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     if (pos != dat->byte)                                                     \
       {                                                                       \
         LOG_ERROR ("offset %ld", pos - dat->byte);                            \
-        /*return DWG_ERR_SECTIONNOTFOUND;*/                                   \
+        /* In the table header the size OR number can be wrong. */            \
+        /* Here we catch the wrong number. */                                 \
+        if (tbl->number > 0 && tbl->size < 33)                                \
+          return DWG_ERR_SECTIONNOTFOUND;                                     \
       }                                                                       \
     LOG_TRACE ("\n")                                                          \
     dat->byte = pos
