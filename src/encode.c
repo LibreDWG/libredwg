@@ -4074,7 +4074,7 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_to,
       return 0;
     }
   LOG_INFO ("===========================\n"
-            "Entities from " FORMAT_BL " to " FORMAT_BL " from 0x%x, \n",
+            "Entities from " FORMAT_BL " to " FORMAT_BL " from 0x%x\n",
             index_from, index_to, (unsigned)dat->byte);
   for (unsigned index = index_from; index < index_to; index++)
     {
@@ -4108,16 +4108,17 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_to,
               (unsigned)dat->byte);
           continue;
         }
-      // check if block or entity member
-      if (index_from) // is block
+      // check if block/extras or entity member
+      if (!index_from) // is entity
         {
-          if (obj->tio.entity->entmode == 2) // is entity
-            continue;
-        }
-      else
-        {
-          if (obj->tio.entity->entmode == 3) // is block
-            continue;
+          if (obj->tio.entity->entmode == 3) // but belongs to a block
+            {
+              LOG_TRACE ("Skip block %s in entities section, number: %d, "
+                         "type: %d, Addr: %lx (0x%x)\n",
+                         obj->name, obj->index, obj->type, obj->address,
+                         (unsigned)dat->byte);
+              continue;
+            }
           numentities++;
         }
       while (dat->byte + obj->size >= dat->size)
