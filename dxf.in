@@ -87,9 +87,9 @@ for d in "$@"; do
                     *.json) ext=json ;;
                     *.JSON) ext=json ;;
                     *)
-                            echo "Illegal extension for $d"
-                                                             exit
-                                                                  ;;
+                            ext=dwg
+                            echo "Assume DWG file for $d"
+                            ;;
             esac
                 b=$(basename "$d" .$ext)
                 log="$b$dir.log"
