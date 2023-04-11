@@ -1982,11 +1982,12 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           }
           PRE (R_13b1)
           {
-            FIELD_RL (block_offset_r11, 0);
+            FIELD_RLx (block_offset_r11, 0);
           }
           SINCE (R_11)
           {
-            FIELD_RS (unknown_r11, 0);
+            if (!obj->size || obj->size == 38)
+              FIELD_RC (unknown_r11, 0);
             FIELD_HANDLE (block_entity, 2, 0);
             FIELD_RC (flag2, 0);
             FIELD_RC (unknown_r11, 0);
