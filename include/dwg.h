@@ -9599,6 +9599,10 @@ typedef struct _dwg_struct
   unsigned long next_hdl; // for add_document handle holes
 
   BITCODE_BL prev_entity_index; // for speedup find_prev_entity
+  
+  //for speedup dwg_add_handleref
+  Dwg_Object_Ref **object_ordered_ref; /*!< list of all ordered objects refs */
+  BITCODE_BL num_object_ordered_refs; /*!< number of ordered objects refs */
 } Dwg_Data;
 
 #define DWG_OPTS_LOGLEVEL 0xf
