@@ -2222,19 +2222,20 @@ bit_read_TU16 (Bit_Chain *restrict dat)
 BITCODE_T32
 bit_read_T32 (Bit_Chain *restrict dat)
 {
-  BITCODE_RL i, size;
+  BITCODE_RL i;
+  BITCODE_RLL size;
 
-  size = bit_read_RL (dat);
+  size = (BITCODE_RL)bit_read_RL (dat);
   // only if from r2007+ DWG, not JSON, DXF
   if (IS_FROM_TU (dat))
     {
       BITCODE_TU wstr;
       BITCODE_RL len = size / 2;
-      if (dat->byte + size >= dat->size)
+      if (size + dat->byte >= dat->size || size > dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("%s buffer overflow at %lu, size %u", __FUNCTION__,
-                     dat->byte, size)
+          LOG_ERROR ("%s buffer overflow at %lu, size %lu", __FUNCTION__,
+                     dat->byte, (unsigned long)size)
           return NULL;
         }
       wstr = (BITCODE_TU)malloc (size + 2);
@@ -2252,11 +2253,11 @@ bit_read_T32 (Bit_Chain *restrict dat)
   else
     {
       BITCODE_T32 str;
-      if (dat->byte + size >= dat->size)
+      if (size + dat->byte >= dat->size || size > dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("%s buffer overflow at %lu, size %u", __FUNCTION__,
-                     dat->byte, size)
+          LOG_ERROR ("%s buffer overflow at %lu, size %lu", __FUNCTION__,
+                     dat->byte, (unsigned long)size)
           return NULL;
         }
       str = (BITCODE_T32)malloc (size + 1);
@@ -2278,20 +2279,21 @@ bit_read_T32 (Bit_Chain *restrict dat)
 BITCODE_TU32
 bit_read_TU32 (Bit_Chain *restrict dat)
 {
-  BITCODE_RL i, size;
+  BITCODE_RL i;
+  BITCODE_RLL size;
 
-  size = bit_read_RL (dat);
+  size = (BITCODE_RL)bit_read_RL (dat);
   // only if from r2007+ DWG, not JSON, DXF
   if (IS_FROM_TU (dat))
     {
       BITCODE_TU wstr;
       BITCODE_RL rl1, len = size / 4;
       unsigned long pos = bit_position (dat);
-      if (dat->byte + size >= dat->size)
+      if (size + dat->byte >= dat->size || size > dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("%s buffer overflow at %lu, size %u", __FUNCTION__,
-                     dat->byte, size)
+          LOG_ERROR ("%s buffer overflow at %lu, size %lu", __FUNCTION__,
+                     dat->byte, (unsigned long)size)
           return NULL;
         }
       wstr = (BITCODE_TU)malloc (size + 2);
@@ -2327,11 +2329,11 @@ bit_read_TU32 (Bit_Chain *restrict dat)
   else
     {
       BITCODE_T32 str;
-      if (dat->byte + size >= dat->size)
+      if (size + dat->byte >= dat->size || size > dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("%s buffer overflow at %lu, size %u", __FUNCTION__,
-                     dat->byte, size)
+          LOG_ERROR ("%s buffer overflow at %lu, size %lu", __FUNCTION__,
+                     dat->byte, (unsigned long)size)
           return NULL;
         }
       str = (BITCODE_T32)malloc (size + 1);
