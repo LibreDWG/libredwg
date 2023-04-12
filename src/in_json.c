@@ -632,13 +632,13 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
              jsmntokens_t *restrict tokens, const char *name, const char *key,
              const Dwg_Object *restrict obj, const int i)
 {
-  long code, size, value, absref;
+  long code, size, value, absref, r11_idx;
   const jsmntok_t *t = &tokens->tokens[tokens->index];
   BITCODE_H ref;
-  if (t->type != JSMN_ARRAY || (t->size != 2 && t->size != 4 && t->size != 5))
+  if (t->type != JSMN_ARRAY || t->size < 2 || t->size > 5)
     {
-      LOG_ERROR ("JSON HANDLE must be ARRAY of [ code, value ] or [ code, "
-                 "size, value, absref [, r11_idx] ] or [ size, r11_idx ]")
+      LOG_ERROR ("JSON HANDLE must be ARRAY of [ code, value ] or "
+                 "[ code, size, value, absref ] or [ size, r11_idx, absref ]")
       return NULL;
     }
   JSON_TOKENS_CHECK_OVERFLOW_NULL
@@ -660,7 +660,7 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       ref = dwg_add_handleref (dwg, code, absref,
                                (!code || code >= 6) ? obj : NULL);
       if (t->size > 4)
-        ref->r11_idx = json_long (dat, tokens);
+        ref->r11_idx = json_long (dat, tokens); // unused
       if ((BITCODE_RC)size != ref->handleref.size
           || (unsigned long)value != ref->handleref.value)
         {
@@ -692,13 +692,23 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                                (!code || code >= 6) ? obj : NULL);
       LOG_TRACE (FORMAT_REF " [H]\n", ARGS_REF (ref))
     }
-  else
+  else // r11 for HANDLING=1 and/or _CONTROL entries
     {
       size = code;
-      absref = json_long (dat, tokens);
-      // TODO r11_idx resolver
-      ref = dwg_add_handleref (dwg, 0, absref, obj);
-      ref->r11_idx = absref;
+      code = 0;
+      r11_idx = json_long (dat, tokens);
+      if (t->size == 3)
+        {
+          code = 3; // r11 control entries default to 3
+          absref = json_long (dat, tokens);
+        }
+      else
+        absref = r11_idx; // 2nd item, the value
+      ref = dwg_add_handleref (dwg, code, absref, NULL);
+      if (t->size == 2)
+        ref->handleref.value = absref;
+      else
+        ref->r11_idx = r11_idx;
       ref->handleref.size = size;
       LOG_TRACE (FORMAT_REF11 " [H]\n", ARGS_REF11 (ref))
     }
@@ -3132,12 +3142,18 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   LOG_ERROR ("Required %s.handle missing", name);
                   goto harderr;
                 }
-              LOG_TRACE ("size: %d\n", obj->size)
+              LOG_TRACE ("%s.size: %d\n", obj->name, obj->size)
             }
           else if (strEQc (key, "bitsize") && !obj->bitsize)
             {
               obj->bitsize = json_long (dat, tokens);
-              LOG_TRACE ("bitsize: %d\n", obj->bitsize)
+              LOG_TRACE ("%s.bitsize: %d\n", obj->name, obj->bitsize)
+              JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
+            }
+          else if (strEQc (key, "address") && !obj->address)
+            {
+              obj->address = json_long (dat, tokens);
+              LOG_TRACE ("%s.address: 0x%lx\n", obj->name, obj->address)
               JSON_TOKENS_CHECK_OVERFLOW (goto harderr)
             }
           else if (strEQc (key, "handle") && !obj->handle.value)

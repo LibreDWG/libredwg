@@ -136,13 +136,13 @@ static char *_path_field (const char *path);
   ref->handleref.code, ref->handleref.size, ref->handleref.value,             \
   ref->absolute_ref
 #define ARGS_HREF11(ref)                                                      \
-  ref->handleref.size, ref->r11_idx
+  ref->handleref.size, ref->r11_idx, ref->absolute_ref
 #undef FORMAT_RD
 #undef FORMAT_BD
 #define FORMAT_RD "%.14f"
 #define FORMAT_BD FORMAT_RD
 #define FORMAT_HREF "[%u, %u, %lu, %lu]"
-#define FORMAT_HREF11 "[%u, %hd]"
+#define FORMAT_HREF11 "[%u, %hd, %lu]"
 #define FORMAT_RLL "%" PRIu64
 #define FORMAT_BLL "%" PRIu64
 #define FORMAT_RC "%d"
