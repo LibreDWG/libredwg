@@ -141,18 +141,21 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
       LOG_ERROR ("%s.size overflow @%lu", name, dat->byte)
       return DWG_ERR_SECTIONNOTFOUND;
     }
+  tbl->type = (Dwg_Section_Type)id;
   tbl->size = bit_read_RS (dat);
   tbl->number = bit_read_RS (dat);
   tbl->flags_r11 = bit_read_RS (dat);
   tbl->address = bit_read_RL (dat);
   strncpy (tbl->name, name, sizeof (tbl->name) - 1);
   tbl->name[sizeof (tbl->name) - 1] = '\0';
-  LOG_TRACE ("ptr table %s [%d]: to:0x%lx\n", tbl->name, id,
+  LOG_TRACE ("\nptr table %s [%d]: (0x%lx-0x%lx)\n", tbl->name, id,
+             (unsigned long)tbl->address,
              (unsigned long)(tbl->address + (tbl->number * tbl->size)));
   LOG_TRACE ("%s.size: " FORMAT_RS " [RS]\n", tbl->name, tbl->size);
   LOG_TRACE ("%s.number: " FORMAT_RS " [RS]\n", tbl->name, tbl->number);
   LOG_TRACE ("%s.flags_r11: " FORMAT_RSx " [RS]\n", tbl->name, tbl->flags_r11);
-  LOG_TRACE ("%s.address: " FORMAT_RLx " [RL]\n", tbl->name, (BITCODE_RL)tbl->address);
+  LOG_TRACE ("%s.address: " FORMAT_RLx " [RL]\n", tbl->name,
+             (BITCODE_RL)tbl->address);
 
   switch (id)
     {
@@ -179,8 +182,11 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
       Dwg_Object *obj = dwg_get_first_object (dwg, DWG_TYPE_##TBL##_CONTROL); \
       if (obj)                                                                \
         {                                                                     \
+          Dwg_Object_##TBL##_CONTROL *_obj                                    \
+            = obj->tio.object->tio.TBL##_CONTROL;                             \
           obj->size = tbl->size;                                              \
           obj->address = tbl->address;                                        \
+          _obj->flags_r11 = tbl->flags_r11;                                   \
         }                                                                     \
     }                                                                         \
     break
@@ -320,6 +326,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     if (ctrl)                                                                 \
       {                                                                       \
         _ctrl = ctrl->tio.object->tio.token##_CONTROL;                        \
+        ctrl->size = tbl->size;                                               \
         if (_ctrl->num_entries != tbl->number)                                \
           {                                                                   \
             if (_ctrl->entries)                                               \
@@ -339,7 +346,6 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       return DWG_ERR_INVALIDDWG;                                              \
     obj = &dwg->object[num++];                                                \
     obj->address = dat->byte;                                                 \
-    obj->size = tbl->size;
 
 #  define ADD_CTRL_ENTRY                                                      \
     if (_ctrl)                                                                \

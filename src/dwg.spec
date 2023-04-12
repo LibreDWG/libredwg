@@ -3458,7 +3458,15 @@ DWG_ENTITY_END
 /* (48) */
 DWG_OBJECT (BLOCK_CONTROL)
 
-  FIELD_BL (num_entries, 70);
+  PRE (R_13b1) {
+    //VALUE_RS (obj->size, 0);
+    FIELD_RS (num_entries, 70);
+    FIELD_RSx (flags_r11, 0);
+    JSON { KEY (address); }
+    VALUE_RLx (obj->address, 0);
+  } LATER_VERSIONS {
+    FIELD_BL (num_entries, 70); // or BS?
+  }
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
   FIELD_HANDLE (model_space, 3, 0);
@@ -3602,7 +3610,15 @@ DWG_OBJECT_END
 /* (50) */
 DWG_OBJECT (LAYER_CONTROL)
 
-  FIELD_BL (num_entries, 70);
+  PRE (R_13b1) {
+    //VALUE_RS (obj->size, 0);
+    FIELD_RS (num_entries, 70);
+    FIELD_RSx (flags_r11, 0);
+    JSON { KEY (address); }
+    VALUE_RLx (obj->address, 0);
+  } LATER_VERSIONS {
+    FIELD_BL (num_entries, 70);
+  }
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
@@ -3719,7 +3735,15 @@ DWG_OBJECT_END
 /* STYLE table (52) */
 DWG_OBJECT (STYLE_CONTROL)
 
-  FIELD_BL (num_entries, 70);
+  PRE (R_13b1) {
+    //VALUE_RS (obj->size, 0);
+    FIELD_RS (num_entries, 70);
+    FIELD_RSx (flags_r11, 0);
+    JSON { KEY (address); }
+    VALUE_RLx (obj->address, 0);
+  } LATER_VERSIONS {
+    FIELD_BL (num_entries, 70);
+  }
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
@@ -3753,8 +3777,7 @@ DWG_TABLE (STYLE)
       FIELD_VALUE (is_shape)    = FIELD_VALUE (flag) & 4;
       FIELD_VALUE (is_vertical) = FIELD_VALUE (flag) & 1;
     }
-  }
-  LATER_VERSIONS {
+  } LATER_VERSIONS {
     FIELD_BD (text_size, 40);
     FIELD_BD (width_factor, 41); // xScale
     FIELD_BD (oblique_angle, 50);
@@ -3807,7 +3830,15 @@ DWG_OBJECT_END
 /* (56) */
 DWG_OBJECT (LTYPE_CONTROL)
 
-  FIELD_BS (num_entries, 70);
+  PRE (R_13b1) {
+    //VALUE_RS (obj->size, 0);
+    FIELD_RS (num_entries, 70);
+    FIELD_RSx (flags_r11, 0);
+    JSON { KEY (address); }
+    VALUE_RLx (obj->address, 0);
+  } LATER_VERSIONS {
+    FIELD_BS (num_entries, 70);
+  }
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
   FIELD_HANDLE (byblock, 3, 0);
@@ -3951,7 +3982,15 @@ DWG_OBJECT_END
 /* (60) */
 DWG_OBJECT (VIEW_CONTROL)
 
-  FIELD_BL (num_entries, 70);
+  PRE (R_13b1) {
+    //VALUE_RS (obj->size, 0);
+    FIELD_RS (num_entries, 70);
+    FIELD_RSx (flags_r11, 0);
+    JSON { KEY (address); }
+    VALUE_RLx (obj->address, 0);
+  } LATER_VERSIONS {
+    FIELD_BL (num_entries, 70);
+  }
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
@@ -4070,7 +4109,15 @@ DWG_OBJECT_END
 /* (62) */
 DWG_OBJECT (UCS_CONTROL)
 
-  FIELD_BS (num_entries, 70); //BS or BL?
+  PRE (R_13b1) {
+    //VALUE_RS (obj->size, 0);
+    FIELD_RS (num_entries, 70);
+    FIELD_RSx (flags_r11, 0);
+    JSON { KEY (address); }
+    VALUE_RLx (obj->address, 0);
+  } LATER_VERSIONS {
+    FIELD_BS (num_entries, 70); //BS or BL?
+  }
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
@@ -4124,7 +4171,15 @@ DWG_OBJECT_END
 /* (64) */
 DWG_OBJECT (VPORT_CONTROL)
 
-  FIELD_BS (num_entries, 70);
+  PRE (R_13b1) {
+    //VALUE_RS (obj->size, 0);
+    FIELD_RS (num_entries, 70);
+    FIELD_RSx (flags_r11, 0);
+    JSON { KEY (address); }
+    VALUE_RLx (obj->address, 0);
+  } LATER_VERSIONS {
+    FIELD_BS (num_entries, 70); //BS or BL?
+  }
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
@@ -4321,7 +4376,15 @@ DWG_OBJECT_END
 /* (66) */
 DWG_OBJECT (APPID_CONTROL)
 
-  FIELD_BS (num_entries, 70);
+  PRE (R_13b1) {
+    //VALUE_RS (obj->size, 0);
+    FIELD_RS (num_entries, 70);
+    FIELD_RSx (flags_r11, 0);
+    JSON { KEY (address); }
+    VALUE_RLx (obj->address, 0);
+  } LATER_VERSIONS {
+    FIELD_BS (num_entries, 70); //BS or BL?
+  }
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
 
@@ -4346,14 +4409,20 @@ DWG_OBJECT_END
 /* (68) */
 DWG_OBJECT (DIMSTYLE_CONTROL)
 
-  FIELD_BS (num_entries, 70);
-  SINCE (R_2000)
-    {
-      SUBCLASS (AcDbDimStyleTable)
-      /* number of additional hard handles, undocumented */
-      FIELD_RCu (num_morehandles, 71);
-    }
-
+  PRE (R_13b1) {
+    //VALUE_RS (obj->size, 0);
+    FIELD_RS (num_entries, 70);
+    FIELD_RSx (flags_r11, 0);
+    JSON { KEY (address); }
+    VALUE_RLx (obj->address, 0);
+  } LATER_VERSIONS {
+    FIELD_BS (num_entries, 70); //BS or BL?
+  }
+  SINCE (R_2000) {
+    SUBCLASS (AcDbDimStyleTable)
+    /* number of additional hard handles, undocumented */
+    FIELD_RCu (num_morehandles, 71);
+  }
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
   HANDLE_VECTOR (morehandles, num_morehandles, 5, 340);
@@ -4633,7 +4702,15 @@ DWG_OBJECT_END
 /* (70) */
 DWG_OBJECT (VX_CONTROL)
 
-  FIELD_BS (num_entries, 70);
+  PRE (R_13b1) {
+    //VALUE_RS (obj->size, 0);
+    FIELD_RS (num_entries, 70);
+    FIELD_RSx (flags_r11, 0);
+    JSON { KEY (address); }
+    VALUE_RLx (obj->address, 0);
+  } LATER_VERSIONS {
+    FIELD_BS (num_entries, 70); //BS or BL?
+  }
   SUBCLASS (AcDbVXTable)
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 4, 0);

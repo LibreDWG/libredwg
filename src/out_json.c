@@ -157,6 +157,7 @@ static char *_path_field (const char *path);
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)
 #define VALUE_RS(value, dxf) VALUE (value, RS, dxf)
 #define VALUE_RL(value, dxf) VALUE (value, RL, dxf)
+#define VALUE_RLx(value, dxf) VALUE ((BITCODE_RL)value, RL, dxf)
 #define VALUE_RLL(value, dxf) VALUE (value, RLL, dxf)
 #ifdef IS_RELEASE
 #  define VALUE_RD(value, dxf)                                                \
@@ -1957,13 +1958,19 @@ json_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+// unused
 static int
 json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
+  int max_id = SECTION_VIEW;
+  VERSIONS (R_10, R_11)
+    max_id = SECTION_DIMSTYLE;
+  VERSIONS (R_11, R_13b1)
+    max_id = SECTION_VX;
   CLEARFIRST;
   SECTION (TABLES);
-  // TODO on r11 we might have up to VX tables. FIXME __cplusplus
-  for (int id = SECTION_BLOCK; id <= SECTION_VIEW; id++)
+  // FIXME __cplusplus
+  for (int id = SECTION_BLOCK; id <= max_id; id++)
     {
       int error;
       Dwg_Section *tbl = &dwg->header.section[id];
@@ -1977,7 +1984,8 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             Dwg_Section *_obj = tbl;
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
-            FIELD_RS (flags, 0);
+            PRE (R_13b1)
+              FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
           for (int32_t i = 0; i < tbl->number; i++)
@@ -1992,8 +2000,7 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 FIELD_RSd (used, 0); // -1
               PRE (R_13b1) {
                 FIELD_RL (block_offset_r11, 0)
-              }
-              LATER_VERSIONS {
+              } LATER_VERSIONS {
                 FIELD_RC (block_scaling, 0)
               }
               SINCE (R_11)
@@ -2012,7 +2019,8 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             Dwg_Section *_obj = tbl;
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
-            FIELD_RS (flags, 0);
+            PRE (R_13b1)
+              FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
           for (int32_t i = 0; i < tbl->number; i++)
@@ -2034,7 +2042,8 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             Dwg_Section *_obj = tbl;
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
-            FIELD_RS (flags, 0);
+            PRE (R_13b1)
+              FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
           for (int32_t i = 0; i < tbl->number; i++)
@@ -2062,7 +2071,8 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             Dwg_Section *_obj = tbl;
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
-            FIELD_RS (flags, 0);
+            PRE (R_13b1)
+              FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
           for (int32_t i = 0; i < tbl->number; i++)
@@ -2090,7 +2100,8 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             Dwg_Section *_obj = tbl;
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
-            FIELD_RS (flags, 0);
+            PRE (R_13b1)
+              FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
           for (int32_t i = 0; i < tbl->number; i++)
@@ -2123,7 +2134,8 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             Dwg_Section *_obj = tbl;
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
-            FIELD_RS (flags, 0);
+            PRE (R_13b1)
+              FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
           for (int32_t i = 0; i < tbl->number; i++)

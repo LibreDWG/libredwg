@@ -141,6 +141,9 @@
 #ifndef VALUE_BL
 #  define VALUE_BL(value, dxf)
 #endif
+#ifndef VALUE_RLx
+#  define VALUE_RLx(value, dxf) VALUE_RL(value, dxf)
+#endif
 #ifndef KEY
 #  define KEY(nam)
 #endif

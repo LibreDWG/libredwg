@@ -141,6 +141,7 @@ const unsigned char unknown_section[53]
 #define VALUE_RC(value, dxf) VALUE (value, RC, dxf)
 #define VALUE_RS(value, dxf) VALUE (value, RS, dxf)
 #define VALUE_RL(value, dxf) VALUE (value, RL, dxf)
+#define VALUE_RLx(value, dxf) VALUE (value, RL, dxf)
 #define VALUE_BS(value, dxf) VALUE (value, BS, dxf)
 #define VALUE_BL(value, dxf) VALUE (value, BL, dxf)
 #define VALUE_RD(value, dxf) VALUE (value, RD, dxf)
@@ -1872,6 +1873,7 @@ encode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
     {
       switch (id)
         {
+          // FIXME: address and size might need to be computed
 #define ENCODE_CTRL_TO_TABLE(idtoken, ctrltoken)                              \
   case SECTION_##idtoken:                                                     \
     {                                                                         \
@@ -1883,8 +1885,8 @@ encode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
           tbl->name[sizeof (tbl->name) - 1] = '\0';                           \
           tbl->size = obj->size;                                              \
           tbl->number = _obj->num_entries;                                    \
-          tbl->flags = 0x8007 + i; /* 0x8008 - 0x800c */                      \
-          tbl->address = obj->address;                                        \
+          tbl->flags_r11 = 0x8007 + i; /* 0x8008 - 0x800c */                  \
+          tbl->address = obj->address ? obj->address : dat->byte;             \
         }                                                                     \
       else                                                                    \
         LOG_WARN (#ctrltoken " hdr not found")                                \
@@ -1906,16 +1908,17 @@ encode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
 #undef ENCODE_CTRL_TO_TABLE
         }
     }
-  LOG_TRACE ("ptr table %s [%d]: to:0x%lx\n", tbl->name, id,
+  LOG_TRACE ("\nptr table %s [%d]: to:0x%lx\n", tbl->name, id,
              (unsigned long)(tbl->address + (tbl->number * tbl->size)));
   bit_write_RS (dat, tbl->size);
   bit_write_RS (dat, tbl->number);
   bit_write_RS (dat, tbl->flags_r11);
-  bit_write_RL (dat, tbl->address);
+  bit_write_RL (dat, tbl->address); // TODO might need to be patched
   LOG_TRACE ("%s.size: " FORMAT_RS " [RS]\n", tbl->name, tbl->size);
   LOG_TRACE ("%s.number: " FORMAT_RS " [RS]\n", tbl->name, tbl->number);
   LOG_TRACE ("%s.flags_r11: " FORMAT_RSx " [RS]\n", tbl->name, tbl->flags_r11);
-  LOG_TRACE ("%s.address: " FORMAT_RLx " [RL]\n", tbl->name, (BITCODE_RL)tbl->address);
+  LOG_TRACE ("%s.address: " FORMAT_RLx " [RL]\n", tbl->name,
+             (BITCODE_RL)tbl->address);
 }
 
 static int
