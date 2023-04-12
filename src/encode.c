@@ -2458,10 +2458,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       encode_preR13_section_hdr ("STYLE", SECTION_STYLE, dat, dwg);
       encode_preR13_section_hdr ("LTYPE", SECTION_LTYPE, dat, dwg);
       encode_preR13_section_hdr ("VIEW", SECTION_VIEW, dat, dwg);
+      /* The rest is embedded into header_variables_r11.spec below */
     }
 
     hdr_offset = dat->byte;
-
     encode_preR13_header_variables (dat, dwg);
 
     SINCE (R_11)
@@ -2517,6 +2517,19 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       encode_preR13_section (SECTION_STYLE, dat, dwg);
       encode_preR13_section (SECTION_LTYPE, dat, dwg);
       encode_preR13_section (SECTION_VIEW, dat, dwg);
+
+      if (dwg->header.num_sections >= SECTION_VPORT)
+        {
+          encode_preR13_section (SECTION_UCS, dat, dwg);
+          encode_preR13_section (SECTION_VPORT, dat, dwg);
+        }
+      if (dwg->header.num_sections >= SECTION_APPID)
+        encode_preR13_section (SECTION_APPID, dat, dwg);
+      if (dwg->header.num_sections >= SECTION_VX)
+        {
+          encode_preR13_section (SECTION_DIMSTYLE, dat, dwg);
+          encode_preR13_section (SECTION_VX, dat, dwg);
+        }
 
       // encode block entities
       dwg->header.blocks_start = dat->byte;
