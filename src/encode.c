@@ -1879,31 +1879,43 @@ encode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
       if (obj)                                                                \
         {                                                                     \
           Dwg_Object_##ctrltoken *_obj = obj->tio.object->tio.ctrltoken;      \
+          strncpy (tbl->name, obj->name, sizeof (tbl->name) - 1);             \
+          tbl->name[sizeof (tbl->name) - 1] = '\0';                           \
           tbl->size = obj->size;                                              \
           tbl->number = _obj->num_entries;                                    \
           tbl->flags = 0x8007 + i; /* 0x8008 - 0x800c */                      \
           tbl->address = obj->address;                                        \
         }                                                                     \
+      else                                                                    \
+        LOG_WARN (#ctrltoken " hdr not found")                                \
       break;                                                                  \
     }
-          ENCODE_CTRL_TO_TABLE (BLOCK, BLOCK_CONTROL)
-          ENCODE_CTRL_TO_TABLE (LAYER, LAYER_CONTROL)
-          ENCODE_CTRL_TO_TABLE (STYLE, STYLE_CONTROL)
-          ENCODE_CTRL_TO_TABLE (LTYPE, LTYPE_CONTROL)
-          ENCODE_CTRL_TO_TABLE (VIEW, VIEW_CONTROL)
+        case SECTION_HEADER_R11:
         default:
           break;
+        ENCODE_CTRL_TO_TABLE (BLOCK, BLOCK_CONTROL)
+        ENCODE_CTRL_TO_TABLE (LAYER, LAYER_CONTROL)
+        ENCODE_CTRL_TO_TABLE (STYLE, STYLE_CONTROL)
+        ENCODE_CTRL_TO_TABLE (LTYPE, LTYPE_CONTROL)
+        ENCODE_CTRL_TO_TABLE (VIEW, VIEW_CONTROL)
+        ENCODE_CTRL_TO_TABLE (UCS, UCS_CONTROL)
+        ENCODE_CTRL_TO_TABLE (VPORT, VPORT_CONTROL)
+        ENCODE_CTRL_TO_TABLE (APPID, APPID_CONTROL)
+        ENCODE_CTRL_TO_TABLE (DIMSTYLE, DIMSTYLE_CONTROL)
+        ENCODE_CTRL_TO_TABLE (VX, VX_CONTROL)
 #undef ENCODE_CTRL_TO_TABLE
         }
     }
+  LOG_TRACE ("ptr table %s [%d]: to:0x%lx\n", tbl->name, id,
+             (unsigned long)(tbl->address + (tbl->number * tbl->size)));
   bit_write_RS (dat, tbl->size);
   bit_write_RS (dat, tbl->number);
-  bit_write_RS (dat, tbl->flags);
+  bit_write_RS (dat, tbl->flags_r11);
   bit_write_RL (dat, tbl->address);
-  LOG_TRACE (
-      "ptr table %-8s [%2d]: size:%-4u num:%-2ld (0x%lx-0x%lx) flags:0x%x\n",
-      tbl->name, id, tbl->size, (long)tbl->number, (unsigned long)tbl->address,
-      (unsigned long)(tbl->address + (tbl->number * tbl->size)), tbl->flags)
+  LOG_TRACE ("%s.size: " FORMAT_RS " [RS]\n", tbl->name, tbl->size);
+  LOG_TRACE ("%s.number: " FORMAT_RS " [RS]\n", tbl->name, tbl->number);
+  LOG_TRACE ("%s.flags_r11: " FORMAT_RSx " [RS]\n", tbl->name, tbl->flags_r11);
+  LOG_TRACE ("%s.address: " FORMAT_RLx " [RL]\n", tbl->name, (BITCODE_RL)tbl->address);
 }
 
 static int
@@ -1945,8 +1957,9 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
              obj->size, obj->address, dat->byte);                             \
   if (obj->fixedtype != DWG_TYPE_##token)                                     \
     {                                                                         \
-      LOG_ERROR ("Wrong type %s, expected %s",                                \
-                 dwg_type_name (obj->fixedtype), "DWG_TYPE_" #token);         \
+      LOG_ERROR ("Wrong type %s at [%d], expected %s",                        \
+                 dwg_type_name (obj->fixedtype), num + i,                     \
+                 "DWG_TYPE_" #token);                                         \
       continue;                                                               \
     }                                                                         \
   FIELD_RC (flag, 70);                                                        \
@@ -1961,21 +1974,6 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       for (i = 0; i < tblnum; i++)
         {
           PREP_TABLE (BLOCK_HEADER);
-          /*
-  Dwg_Object *obj = &dwg->object[num + i];
-  Dwg_Object_BLOCK_HEADER *_obj = obj->tio.object->tio.BLOCK_HEADER;
-  LOG_TRACE ("contents table BLOCK_HEADER [%d]: size:%u (0x%lx, 0x%lx)\n", i,
-             obj->size, obj->address, dat->byte);
-  if (obj->fixedtype != DWG_TYPE_BLOCK_HEADER)
-    {
-      LOG_ERROR ("Wrong type %s, expected %s", dwg_type_name (obj->fixedtype),
-                 "DWG_TYPE_BLOCK_HEADER");
-      continue;
-    }
-  FIELD_RC (flag, 70);
-  FIELD_TFv (name, 32, 2);
-          */
-
           SINCE (R_11)
           {
             FIELD_RSd (used, 0);

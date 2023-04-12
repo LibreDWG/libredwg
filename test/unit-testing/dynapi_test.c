@@ -29773,6 +29773,21 @@ static int test_APPID_CONTROL (const Dwg_Object *obj)
       fail ("APPID_CONTROL.entries [H*] * %u num_entries", count);
   }
   {
+    BITCODE_RS flags_r11;
+    if (dwg_dynapi_entity_value (appid_control, "APPID_CONTROL", "flags_r11", &flags_r11, NULL)
+        && flags_r11 == appid_control->flags_r11)
+      pass ();
+    else
+      fail ("APPID_CONTROL.flags_r11 [RS] %hu != %hu", appid_control->flags_r11, flags_r11);
+    flags_r11++;
+    if (dwg_dynapi_entity_set_value (appid_control, "APPID_CONTROL", "flags_r11", &flags_r11, 0)
+        && flags_r11 == appid_control->flags_r11)
+      pass ();
+    else
+      fail ("APPID_CONTROL.flags_r11 [RS] set+1 %hu != %hu", appid_control->flags_r11, flags_r11);
+    appid_control->flags_r11--;
+  }
+  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value (appid_control, "APPID_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == appid_control->num_entries)
@@ -44237,6 +44252,21 @@ static int test_BLOCK_CONTROL (const Dwg_Object *obj)
       fail ("BLOCK_CONTROL.entries [H*] * %u num_entries", count);
   }
   {
+    BITCODE_RS flags_r11;
+    if (dwg_dynapi_entity_value (block_control, "BLOCK_CONTROL", "flags_r11", &flags_r11, NULL)
+        && flags_r11 == block_control->flags_r11)
+      pass ();
+    else
+      fail ("BLOCK_CONTROL.flags_r11 [RS] %hu != %hu", block_control->flags_r11, flags_r11);
+    flags_r11++;
+    if (dwg_dynapi_entity_set_value (block_control, "BLOCK_CONTROL", "flags_r11", &flags_r11, 0)
+        && flags_r11 == block_control->flags_r11)
+      pass ();
+    else
+      fail ("BLOCK_CONTROL.flags_r11 [RS] set+1 %hu != %hu", block_control->flags_r11, flags_r11);
+    block_control->flags_r11--;
+  }
+  {
     BITCODE_H model_space;
     if (dwg_dynapi_entity_value (block_control, "BLOCK_CONTROL", "model_space", &model_space, NULL)
         && !memcmp (&model_space, &block_control->model_space, sizeof (BITCODE_H)))
@@ -47503,6 +47533,21 @@ static int test_DIMSTYLE_CONTROL (const Dwg_Object *obj)
       fail ("DIMSTYLE_CONTROL.entries [H*] * %u num_entries", count);
   }
   {
+    BITCODE_RS flags_r11;
+    if (dwg_dynapi_entity_value (dimstyle_control, "DIMSTYLE_CONTROL", "flags_r11", &flags_r11, NULL)
+        && flags_r11 == dimstyle_control->flags_r11)
+      pass ();
+    else
+      fail ("DIMSTYLE_CONTROL.flags_r11 [RS] %hu != %hu", dimstyle_control->flags_r11, flags_r11);
+    flags_r11++;
+    if (dwg_dynapi_entity_set_value (dimstyle_control, "DIMSTYLE_CONTROL", "flags_r11", &flags_r11, 0)
+        && flags_r11 == dimstyle_control->flags_r11)
+      pass ();
+    else
+      fail ("DIMSTYLE_CONTROL.flags_r11 [RS] set+1 %hu != %hu", dimstyle_control->flags_r11, flags_r11);
+    dimstyle_control->flags_r11--;
+  }
+  {
     BITCODE_H* morehandles;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (dimstyle_control, "DIMSTYLE_CONTROL", "num_morehandles", &count, NULL)
@@ -50288,6 +50333,21 @@ static int test_LAYER_CONTROL (const Dwg_Object *obj)
       fail ("LAYER_CONTROL.entries [H*] * %u num_entries", count);
   }
   {
+    BITCODE_RS flags_r11;
+    if (dwg_dynapi_entity_value (layer_control, "LAYER_CONTROL", "flags_r11", &flags_r11, NULL)
+        && flags_r11 == layer_control->flags_r11)
+      pass ();
+    else
+      fail ("LAYER_CONTROL.flags_r11 [RS] %hu != %hu", layer_control->flags_r11, flags_r11);
+    flags_r11++;
+    if (dwg_dynapi_entity_set_value (layer_control, "LAYER_CONTROL", "flags_r11", &flags_r11, 0)
+        && flags_r11 == layer_control->flags_r11)
+      pass ();
+    else
+      fail ("LAYER_CONTROL.flags_r11 [RS] set+1 %hu != %hu", layer_control->flags_r11, flags_r11);
+    layer_control->flags_r11--;
+  }
+  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value (layer_control, "LAYER_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == layer_control->num_entries)
@@ -51143,6 +51203,21 @@ static int test_LTYPE_CONTROL (const Dwg_Object *obj)
       pass ();
     else
       fail ("LTYPE_CONTROL.entries [H*] * %u num_entries", count);
+  }
+  {
+    BITCODE_RS flags_r11;
+    if (dwg_dynapi_entity_value (ltype_control, "LTYPE_CONTROL", "flags_r11", &flags_r11, NULL)
+        && flags_r11 == ltype_control->flags_r11)
+      pass ();
+    else
+      fail ("LTYPE_CONTROL.flags_r11 [RS] %hu != %hu", ltype_control->flags_r11, flags_r11);
+    flags_r11++;
+    if (dwg_dynapi_entity_set_value (ltype_control, "LTYPE_CONTROL", "flags_r11", &flags_r11, 0)
+        && flags_r11 == ltype_control->flags_r11)
+      pass ();
+    else
+      fail ("LTYPE_CONTROL.flags_r11 [RS] set+1 %hu != %hu", ltype_control->flags_r11, flags_r11);
+    ltype_control->flags_r11--;
   }
   {
     BITCODE_BS num_entries;
@@ -57992,6 +58067,21 @@ static int test_STYLE_CONTROL (const Dwg_Object *obj)
       fail ("STYLE_CONTROL.entries [H*] * %u num_entries", count);
   }
   {
+    BITCODE_RS flags_r11;
+    if (dwg_dynapi_entity_value (style_control, "STYLE_CONTROL", "flags_r11", &flags_r11, NULL)
+        && flags_r11 == style_control->flags_r11)
+      pass ();
+    else
+      fail ("STYLE_CONTROL.flags_r11 [RS] %hu != %hu", style_control->flags_r11, flags_r11);
+    flags_r11++;
+    if (dwg_dynapi_entity_set_value (style_control, "STYLE_CONTROL", "flags_r11", &flags_r11, 0)
+        && flags_r11 == style_control->flags_r11)
+      pass ();
+    else
+      fail ("STYLE_CONTROL.flags_r11 [RS] set+1 %hu != %hu", style_control->flags_r11, flags_r11);
+    style_control->flags_r11--;
+  }
+  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value (style_control, "STYLE_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == style_control->num_entries)
@@ -59486,6 +59576,21 @@ static int test_UCS_CONTROL (const Dwg_Object *obj)
       fail ("UCS_CONTROL.entries [H*] * %u num_entries", count);
   }
   {
+    BITCODE_RS flags_r11;
+    if (dwg_dynapi_entity_value (ucs_control, "UCS_CONTROL", "flags_r11", &flags_r11, NULL)
+        && flags_r11 == ucs_control->flags_r11)
+      pass ();
+    else
+      fail ("UCS_CONTROL.flags_r11 [RS] %hu != %hu", ucs_control->flags_r11, flags_r11);
+    flags_r11++;
+    if (dwg_dynapi_entity_set_value (ucs_control, "UCS_CONTROL", "flags_r11", &flags_r11, 0)
+        && flags_r11 == ucs_control->flags_r11)
+      pass ();
+    else
+      fail ("UCS_CONTROL.flags_r11 [RS] set+1 %hu != %hu", ucs_control->flags_r11, flags_r11);
+    ucs_control->flags_r11--;
+  }
+  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value (ucs_control, "UCS_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == ucs_control->num_entries)
@@ -60121,6 +60226,21 @@ static int test_VIEW_CONTROL (const Dwg_Object *obj)
       pass ();
     else
       fail ("VIEW_CONTROL.entries [H*] * %u num_entries", count);
+  }
+  {
+    BITCODE_RS flags_r11;
+    if (dwg_dynapi_entity_value (view_control, "VIEW_CONTROL", "flags_r11", &flags_r11, NULL)
+        && flags_r11 == view_control->flags_r11)
+      pass ();
+    else
+      fail ("VIEW_CONTROL.flags_r11 [RS] %hu != %hu", view_control->flags_r11, flags_r11);
+    flags_r11++;
+    if (dwg_dynapi_entity_set_value (view_control, "VIEW_CONTROL", "flags_r11", &flags_r11, 0)
+        && flags_r11 == view_control->flags_r11)
+      pass ();
+    else
+      fail ("VIEW_CONTROL.flags_r11 [RS] set+1 %hu != %hu", view_control->flags_r11, flags_r11);
+    view_control->flags_r11--;
   }
   {
     BITCODE_BS num_entries;
@@ -62682,6 +62802,21 @@ static int test_VPORT_CONTROL (const Dwg_Object *obj)
       fail ("VPORT_CONTROL.entries [H*] * %u num_entries", count);
   }
   {
+    BITCODE_RS flags_r11;
+    if (dwg_dynapi_entity_value (vport_control, "VPORT_CONTROL", "flags_r11", &flags_r11, NULL)
+        && flags_r11 == vport_control->flags_r11)
+      pass ();
+    else
+      fail ("VPORT_CONTROL.flags_r11 [RS] %hu != %hu", vport_control->flags_r11, flags_r11);
+    flags_r11++;
+    if (dwg_dynapi_entity_set_value (vport_control, "VPORT_CONTROL", "flags_r11", &flags_r11, 0)
+        && flags_r11 == vport_control->flags_r11)
+      pass ();
+    else
+      fail ("VPORT_CONTROL.flags_r11 [RS] set+1 %hu != %hu", vport_control->flags_r11, flags_r11);
+    vport_control->flags_r11--;
+  }
+  {
     BITCODE_BS num_entries;
     if (dwg_dynapi_entity_value (vport_control, "VPORT_CONTROL", "num_entries", &num_entries, NULL)
         && num_entries == vport_control->num_entries)
@@ -62731,6 +62866,21 @@ static int test_VX_CONTROL (const Dwg_Object *obj)
       pass ();
     else
       fail ("VX_CONTROL.entries [H*] * %u num_entries", count);
+  }
+  {
+    BITCODE_RS flags_r11;
+    if (dwg_dynapi_entity_value (vx_control, "VX_CONTROL", "flags_r11", &flags_r11, NULL)
+        && flags_r11 == vx_control->flags_r11)
+      pass ();
+    else
+      fail ("VX_CONTROL.flags_r11 [RS] %hu != %hu", vx_control->flags_r11, flags_r11);
+    flags_r11++;
+    if (dwg_dynapi_entity_set_value (vx_control, "VX_CONTROL", "flags_r11", &flags_r11, 0)
+        && flags_r11 == vx_control->flags_r11)
+      pass ();
+    else
+      fail ("VX_CONTROL.flags_r11 [RS] set+1 %hu != %hu", vx_control->flags_r11, flags_r11);
+    vx_control->flags_r11--;
   }
   {
     BITCODE_BS num_entries;

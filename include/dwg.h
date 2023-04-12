@@ -2338,7 +2338,8 @@ typedef struct _dwg_entity_MLINE
 #define COMMON_TABLE_CONTROL_FIELDS  \
   struct _dwg_object_object *parent; \
   BITCODE_BS num_entries;            \
-  BITCODE_H* entries
+  BITCODE_H* entries;                \
+  BITCODE_RS flags_r11
 
 // table entries may be imported from xref's
 
@@ -8926,7 +8927,6 @@ typedef struct _dwg_object
   Dwg_Handle handle;
   struct _dwg_struct *parent;
   Dwg_Class *klass;          /* the optional class of a variable object */
-  //BITCODE_RC flag_r11;
 
   BITCODE_RL bitsize;        /* common + object fields, but no handles */
   unsigned long bitsize_pos; /* bitsize offset in bits: r13-2007 */
@@ -9032,7 +9032,7 @@ typedef struct _dwg_section
   BITCODE_RL comp_data_size;
   BITCODE_RL compression_type;
   BITCODE_RL checksum;
-  BITCODE_RS flags; /* preR13 */
+  BITCODE_RS flags_r11;
 } Dwg_Section;
 
 /* Dwg_R2007_Section:

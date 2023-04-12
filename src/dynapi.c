@@ -4821,6 +4821,8 @@ static const Dwg_DYNAPI_field _dwg_APPID_CONTROL_fields[] = {
     0,0,0, 70 },
   { "entries",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_APPID_CONTROL, entries),
     1,1,0, 0 },
+  { "flags_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_APPID_CONTROL, flags_r11),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_ASSOC2DCONSTRAINTGROUP: (sorted by offset) */
@@ -7391,6 +7393,8 @@ static const Dwg_DYNAPI_field _dwg_BLOCK_CONTROL_fields[] = {
     0,0,0, 70 },
   { "entries",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_BLOCK_CONTROL, entries),
     1,1,0, 0 },
+  { "flags_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_BLOCK_CONTROL, flags_r11),
+    0,0,0, 0 },
   { "model_space",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLOCK_CONTROL, model_space),
     1,0,0, 0 },
   { "paper_space",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_BLOCK_CONTROL, paper_space),
@@ -7933,6 +7937,8 @@ static const Dwg_DYNAPI_field _dwg_DIMSTYLE_CONTROL_fields[] = {
     0,0,0, 70 },
   { "entries",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_DIMSTYLE_CONTROL, entries),
     1,1,0, 0 },
+  { "flags_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_DIMSTYLE_CONTROL, flags_r11),
+    0,0,0, 0 },
   { "num_morehandles",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_DIMSTYLE_CONTROL, num_morehandles),
     0,0,0, 71 },
   { "morehandles",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_DIMSTYLE_CONTROL, morehandles),
@@ -8415,6 +8421,8 @@ static const Dwg_DYNAPI_field _dwg_LAYER_CONTROL_fields[] = {
     0,0,0, 70 },
   { "entries",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_LAYER_CONTROL, entries),
     1,1,0, 0 },
+  { "flags_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_LAYER_CONTROL, flags_r11),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_LAYER_INDEX: (sorted by offset) */
@@ -8573,6 +8581,8 @@ static const Dwg_DYNAPI_field _dwg_LTYPE_CONTROL_fields[] = {
     0,0,0, 70 },
   { "entries",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_LTYPE_CONTROL, entries),
     1,1,0, 0 },
+  { "flags_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_LTYPE_CONTROL, flags_r11),
+    0,0,0, 0 },
   { "bylayer",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_LTYPE_CONTROL, bylayer),
     1,0,0, 0 },
   { "byblock",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_object_LTYPE_CONTROL, byblock),
@@ -9707,6 +9717,8 @@ static const Dwg_DYNAPI_field _dwg_STYLE_CONTROL_fields[] = {
     0,0,0, 70 },
   { "entries",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_STYLE_CONTROL, entries),
     1,1,0, 0 },
+  { "flags_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_STYLE_CONTROL, flags_r11),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_SUN: (sorted by offset) */
@@ -9957,6 +9969,8 @@ static const Dwg_DYNAPI_field _dwg_UCS_CONTROL_fields[] = {
     0,0,0, 70 },
   { "entries",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_UCS_CONTROL, entries),
     1,1,0, 0 },
+  { "flags_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_UCS_CONTROL, flags_r11),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_UNKNOWN_OBJ: (sorted by offset) */
@@ -10071,6 +10085,8 @@ static const Dwg_DYNAPI_field _dwg_VIEW_CONTROL_fields[] = {
     0,0,0, 70 },
   { "entries",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_VIEW_CONTROL, entries),
     1,1,0, 0 },
+  { "flags_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_VIEW_CONTROL, flags_r11),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_VISUALSTYLE: (sorted by offset) */
@@ -10447,6 +10463,8 @@ static const Dwg_DYNAPI_field _dwg_VPORT_CONTROL_fields[] = {
     0,0,0, 70 },
   { "entries",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_VPORT_CONTROL, entries),
     1,1,0, 0 },
+  { "flags_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_VPORT_CONTROL, flags_r11),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_VX_CONTROL: (sorted by offset) */
@@ -10457,6 +10475,8 @@ static const Dwg_DYNAPI_field _dwg_VX_CONTROL_fields[] = {
     0,0,0, 70 },
   { "entries",	"H*", sizeof (BITCODE_H*),  OFF (struct _dwg_object_VX_CONTROL, entries),
     1,1,0, 0 },
+  { "flags_r11",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_VX_CONTROL, flags_r11),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_object_VX_TABLE_RECORD: (sorted by offset) */

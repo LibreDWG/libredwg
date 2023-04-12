@@ -143,14 +143,16 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
     }
   tbl->size = bit_read_RS (dat);
   tbl->number = bit_read_RS (dat);
-  tbl->flags = bit_read_RS (dat);
+  tbl->flags_r11 = bit_read_RS (dat);
   tbl->address = bit_read_RL (dat);
   strncpy (tbl->name, name, sizeof (tbl->name) - 1);
-  tbl->name[63] = '\0';
-  LOG_TRACE (
-      "ptr table %-8s [%2d]: size:%-4u num:%-2d (0x%lx-0x%lx) flags:0x%x\n",
-      tbl->name, id, tbl->size, tbl->number, (unsigned long)tbl->address,
-      (unsigned long)(tbl->address + (tbl->number * tbl->size)), tbl->flags)
+  tbl->name[sizeof (tbl->name) - 1] = '\0';
+  LOG_TRACE ("ptr table %s [%d]: to:0x%lx\n", tbl->name, id,
+             (unsigned long)(tbl->address + (tbl->number * tbl->size)));
+  LOG_TRACE ("%s.size: " FORMAT_RS " [RS]\n", tbl->name, tbl->size);
+  LOG_TRACE ("%s.number: " FORMAT_RS " [RS]\n", tbl->name, tbl->number);
+  LOG_TRACE ("%s.flags_r11: " FORMAT_RSx " [RS]\n", tbl->name, tbl->flags_r11);
+  LOG_TRACE ("%s.address: " FORMAT_RLx " [RL]\n", tbl->name, (BITCODE_RL)tbl->address);
 
   switch (id)
     {
@@ -163,7 +165,7 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
                 = obj->tio.object->tio.BLOCK_CONTROL;
             obj->size = tbl->size;
             obj->address = tbl->address;
-            // obj->flag_r11 = tbl->flags;
+            _obj->flags_r11 = tbl->flags_r11;
             //  we cannot set _obj->num_entries, as we add BLOCK's via
             //  add_BLOCK_HEADER
             dwg->block_control = *_obj;
