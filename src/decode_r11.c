@@ -352,7 +352,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       {                                                                       \
         BITCODE_H ref;                                                        \
         if (!obj->handle.value)                                               \
-          obj->handle.value = num;                                            \
+          obj->handle.value = obj->index;                                     \
         ref = _ctrl->entries[i]                                               \
             = dwg_add_handleref (dwg, 2, obj->handle.value, obj);             \
         ref->r11_idx = i;                                                     \

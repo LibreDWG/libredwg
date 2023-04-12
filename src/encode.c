@@ -1862,8 +1862,11 @@ static void
 encode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
                            Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
+  static BITCODE_BL addr = 0;
   Dwg_Section *tbl = &dwg->header.section[id];
   int i = id < 5 ? id : id - 1;
+  if (id == SECTION_BLOCK)
+    addr = dwg->header.entities_end + (dat->version >= R_11 ? 0x20 : 0);
   // SECTION_BLOCK = 1,
   // SECTION_LAYER = 2,
   // SECTION_STYLE = 3,
@@ -1873,7 +1876,7 @@ encode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
     {
       switch (id)
         {
-          // FIXME: address and size might need to be computed
+
 #define ENCODE_CTRL_TO_TABLE(idtoken, ctrltoken)                              \
   case SECTION_##idtoken:                                                     \
     {                                                                         \
@@ -1886,7 +1889,10 @@ encode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
           tbl->size = obj->size;                                              \
           tbl->number = _obj->num_entries;                                    \
           tbl->flags_r11 = 0x8007 + i; /* 0x8008 - 0x800c */                  \
-          tbl->address = obj->address ? obj->address : dat->byte;             \
+          tbl->address = addr;                                                \
+          addr += tbl->size * tbl->number;                                    \
+          if (dat->version >= R_11)                                           \
+            addr += 0x20;                                                     \
         }                                                                     \
       else                                                                    \
         LOG_WARN (#ctrltoken " hdr not found")                                \
@@ -1913,7 +1919,7 @@ encode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
   bit_write_RS (dat, tbl->size);
   bit_write_RS (dat, tbl->number);
   bit_write_RS (dat, tbl->flags_r11);
-  bit_write_RL (dat, tbl->address); // TODO might need to be patched
+  bit_write_RL (dat, tbl->address); // needs to be patched
   LOG_TRACE ("%s.size: " FORMAT_RS " [RS]\n", tbl->name, tbl->size);
   LOG_TRACE ("%s.number: " FORMAT_RS " [RS]\n", tbl->name, tbl->number);
   LOG_TRACE ("%s.flags_r11: " FORMAT_RSx " [RS]\n", tbl->name, tbl->flags_r11);

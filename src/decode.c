@@ -1080,7 +1080,8 @@ dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg)
   for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
     {
       // scan num_objects for the id (absolute_ref)
-      Dwg_Object *restrict obj = dwg_resolve_handle (dwg, dwg->object_ref[i]->absolute_ref);
+      Dwg_Object *restrict obj
+          = dwg_resolve_handle (dwg, dwg->object_ref[i]->absolute_ref);
       dwg->object_ref[i]->obj = obj;
     }
   dwg->dirty_refs = 0;
