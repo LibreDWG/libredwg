@@ -786,7 +786,7 @@ main (int argc, char const *argv[])
   pos = bit_position (&bitchain);
 
   bit_write_TV (&bitchain, (char *)"GNU"); // we don't store the \0
-  if (bitchain.byte == 70 && bitchain.bit == 2)
+  if (bitchain.byte == 69 && bitchain.bit == 2)
     pass ();
   else
     fail ("bit_write_TV @%ld.%d", bitchain.byte, bitchain.bit);
@@ -901,7 +901,7 @@ main (int argc, char const *argv[])
     color.name = (char *)"Some color";
     color.book_name = (char *)"DIC(3) Catalog";
     bit_write_CMC (&bitchain, &bitchain, &color);
-    if (bitchain.byte == 131 && bitchain.bit == 0)
+    if (bitchain.byte == 133 && bitchain.bit == 0)
       pass ();
     else
       fail ("bit_write_CMC (r2004) @%ld.%d", bitchain.byte, bitchain.bit);
@@ -935,7 +935,7 @@ main (int argc, char const *argv[])
   bitchain.byte = 0;
   {
     int ret = bit_search_sentinel (&bitchain, sentinel);
-    if (bitchain.byte == 148)
+    if (bitchain.byte == 150)
       pass ();
     else
       {
@@ -946,7 +946,7 @@ main (int argc, char const *argv[])
   {
     unsigned int check
         = bit_calc_CRC (0xC0C1, (unsigned char *)bitchain.chain, 124L);
-    if (check == 0x43B8)
+    if (check == 0xFEC1)
       pass ();
     else
       fail ("bit_calc_CRC %04X", check);

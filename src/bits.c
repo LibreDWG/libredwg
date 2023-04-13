@@ -1698,10 +1698,11 @@ bit_read_TV (Bit_Chain *restrict dat)
   else
     length = bit_read_BS (dat);
   CHK_OVERFLOW_PLUS (length, __FUNCTION__, NULL)
+  if (!loglevel)
+    loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   chain = (unsigned char *)malloc (length + 1);
   if (!chain)
     {
-      loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("Out of memory");
       return NULL;
     }
@@ -1711,6 +1712,7 @@ bit_read_TV (Bit_Chain *restrict dat)
   // only observed >=r2004 as writer app
   if (length > 0 && dat->from_version > R_2000 && chain[length - 1] != '\0')
     LOG_HANDLE ("TV-not-ZERO %u\n ", length)
+  // and preR2000 the final \0 is not included in the length (ie == strlen)
   else if (length > 0 && dat->from_version <= R_2000
            && chain[length - 1] == '\0')
     LOG_HANDLE ("TV-ZERO %u\n", length)
@@ -1994,15 +1996,13 @@ bit_embed_TU (BITCODE_TU restrict wstr)
 
 /** Write ASCIIZ text.
     Starting with r2004 as writer (not target version) acad always
-    writes a terminating zero.
+    writes a terminating zero, and includes it in the length.
  */
 void
 bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
 {
   size_t i;
   size_t length = (chain && *chain) ? strlen ((const char *)chain) : 0;
-  if (dat->version <= R_2000 && length)
-    length++;
   if (length > UINT16_MAX)
     {
       // silently truncate overlong strings for now
@@ -2012,9 +2012,13 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
       chain[UINT16_MAX - 1] = '\0';
     }
   if (dat->from_version < R_13b1)
-    bit_write_RS (dat, (BITCODE_BS)length);
+    bit_write_RS (dat, (BITCODE_RS)length);
   else
-    bit_write_BS (dat, (BITCODE_BS)length);
+    {
+      if (dat->version >= R_2004 && length)
+        length++;
+      bit_write_BS (dat, (BITCODE_BS)length);
+    }
   for (i = 0; i < length; i++)
     bit_write_RC (dat, (unsigned char)chain[i]);
 }
