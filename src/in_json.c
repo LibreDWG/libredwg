@@ -1153,9 +1153,20 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else if (t->type == JSMN_STRING
                && (strEQc (f->type, "TV") || strEQc (f->type, "T")))
         {
+          size_t len;
           char *str = json_string (dat, tokens);
-          LOG_TRACE ("%s: \"%s\" [%s]\n", key, str, f->type)
-          dwg_dynapi_header_set_value (dwg, key, &str, 1);
+          LOG_TRACE ("%s: \"%s\" [%s]\n", key, str, f->type);
+          if (dwg->header.version < R_13b1
+              && strEQc (key, "MENU")
+              && (len = strlen (str) > 15))
+            { // split into MENU + MENUEXT
+              strncpy ((char*)dwg->header_vars.MENUEXT, &str[15], 45);
+              str[15] = '\0';
+              dwg->header_vars.MENU = strdup (str);
+              dwg->header_vars.MENUEXT[45] = '\0';
+            }
+          else
+            dwg_dynapi_header_set_value (dwg, key, &str, 1);
           free (str);
         }
       else if (t->type == JSMN_ARRAY

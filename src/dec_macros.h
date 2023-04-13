@@ -507,7 +507,7 @@
                (unsigned long)len);                                           \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")                                                          \
-    LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                              \
+    LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
   }
 #define FIELD_TFv(nam, len, dxf)                                              \
   {                                                                           \
@@ -518,7 +518,7 @@
                (unsigned long)len);                                           \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")                                                          \
-    LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                              \
+    LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
   }
 #define FIELD_TFF(nam, len, dxf)                                              \
   {                                                                           \
