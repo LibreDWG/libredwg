@@ -3470,7 +3470,9 @@ DWG_OBJECT (BLOCK_CONTROL)
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
   FIELD_HANDLE (model_space, 3, 0);
-  FIELD_HANDLE (paper_space, 3, 0);
+  SINCE (R_13b1) {
+    FIELD_HANDLE (paper_space, 3, 0);
+  }
 
 DWG_OBJECT_END
 
@@ -3841,8 +3843,10 @@ DWG_OBJECT (LTYPE_CONTROL)
   }
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
-  FIELD_HANDLE (byblock, 3, 0);
-  FIELD_HANDLE (bylayer, 3, 0);
+  SINCE (R_13b1) {
+    FIELD_HANDLE (byblock, 3, 0);
+    FIELD_HANDLE (bylayer, 3, 0);
+  }
 
 DWG_OBJECT_END
 
@@ -4425,7 +4429,9 @@ DWG_OBJECT (DIMSTYLE_CONTROL)
   }
   CONTROL_HANDLE_STREAM;
   HANDLE_VECTOR (entries, num_entries, 2, 0);
-  HANDLE_VECTOR (morehandles, num_morehandles, 5, 340);
+  SINCE (R_13b1) {
+    HANDLE_VECTOR (morehandles, num_morehandles, 5, 340);
+  }
 
 DWG_OBJECT_END
 
