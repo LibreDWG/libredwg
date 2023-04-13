@@ -704,7 +704,7 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         }
       else
         absref = r11_idx; // 2nd item, the value
-      ref = dwg_add_handleref (dwg, code, absref, NULL);
+      ref = dwg_add_handleref (dwg, code, absref, obj);
       if (t->size == 2)
         ref->handleref.value = absref;
       else

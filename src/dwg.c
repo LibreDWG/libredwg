@@ -811,9 +811,7 @@ dwg_ref_object (Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
   if ((ref->handleref.code < 6 && dwg_resolve_handleref (ref, NULL))
       || ref->absolute_ref)
     {
-      Dwg_Object *obj;
-      loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
-      obj = dwg_resolve_handle (dwg, ref->absolute_ref);
+      Dwg_Object *obj = dwg_resolve_handle (dwg, ref->absolute_ref);
       if (!dwg->dirty_refs && obj)
         ref->obj = obj;
       return obj;
@@ -858,7 +856,7 @@ dwg_resolve_handle (const Dwg_Data *dwg, const unsigned long absref)
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   i = hash_get (dwg->object_map, (uint32_t)absref);
   if (i != HASH_NOT_FOUND)
-    LOG_HANDLE ("object_map{%lX} => %u\n", absref, i);
+    LOG_HANDLE ("[object_map{%lX} => %u] ", absref, i);
   if (i == HASH_NOT_FOUND
       || (BITCODE_BL)i >= dwg->num_objects) // the latter being an invalid
                                             // handle (read from DWG)
@@ -872,6 +870,7 @@ dwg_resolve_handle (const Dwg_Data *dwg, const unsigned long absref)
         }
       return NULL;
     }
+  LOG_INSANE ("[resolve %lX => %u] ", absref, i);
   return &dwg->object[i]; // allow value 0
 }
 
