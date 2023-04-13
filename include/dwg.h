@@ -783,7 +783,7 @@ typedef struct _dwg_handle
 #define FORMAT_REF "(%u.%u.%lX) abs:%lX"
 #define ARGS_REF(ref) (ref)->handleref.code, (ref)->handleref.size, \
     (ref)->handleref.value, (ref)->absolute_ref
-#define FORMAT_REF11 "(%d, %hd) abs:%lX"
+#define FORMAT_REF11 "(%d, %hd, %lu)"
 #define ARGS_REF11(ref) (ref)->handleref.size, (ref)->r11_idx, \
        (ref)->absolute_ref
 

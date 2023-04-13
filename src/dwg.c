@@ -855,6 +855,7 @@ dwg_resolve_handle (const Dwg_Data *dwg, const unsigned long absref)
   uint32_t i;
   if (!absref) // illegal usage
     return NULL;
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   i = hash_get (dwg->object_map, (uint32_t)absref);
   if (i != HASH_NOT_FOUND)
     LOG_HANDLE ("object_map{%lX} => %u\n", absref, i);
@@ -954,6 +955,8 @@ dwg_resolve_handleref (Dwg_Object_Ref *restrict ref,
       break;
     default:
       ref->absolute_ref = ref->handleref.value;
+      if (!loglevel && obj && obj->parent)
+        loglevel = obj->parent->opts & DWG_OPTS_LOGLEVEL;
       LOG_WARN ("Invalid handle pointer code %d", ref->handleref.code);
       return 0;
     }
@@ -2037,6 +2040,7 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
   if (obj && (code == 0 || !offset) && absref) // only if same obj
     {
       Dwg_Data *dwg = obj->parent;
+      loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
       LOG_HANDLE ("object_map{%lX} = %u\n", absref, obj->index);
       assert (dwg);
       if (!dwg->object_map) // for dwg_add_document()
@@ -2083,6 +2087,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
                    const unsigned long absref, const Dwg_Object *restrict obj)
 {
   Dwg_Object_Ref *ref;
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   // ENTITY, DICTIONARY, XRECORD or class may need to be relative.
   // GROUP needs to be absolute. DICTIONARYVAr absolute
   // TODO: prev_entity/next_entity also
@@ -2102,7 +2107,11 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
         {
           Dwg_Object_Ref *refi = dwg->object_ref[i];
           if (refi->absolute_ref == absref && refi->handleref.code == code)
-            return refi;
+            {
+              LOG_HANDLE ("[existing handleref " FORMAT_REF "] ",
+                          ARGS_REF (refi))
+              return refi;
+            }
         }
     }
   // else create a new global ref
@@ -2110,6 +2119,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
   dwg_add_handle (&ref->handleref, code, absref, obj);
   ref->absolute_ref = absref;
   ref->obj = NULL;
+  LOG_HANDLE ("[add handleref " FORMAT_REF "] ", ARGS_REF(ref))
   // fill ->obj later
   return ref;
 }
@@ -2140,6 +2150,7 @@ EXPORT BITCODE_H
 dwg_find_table_control (Dwg_Data *restrict dwg, const char *restrict table)
 {
   BITCODE_BL i;
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   for (i = 0; i < dwg->num_objects; i++)
     {
       if (dwg->object[i].name && strEQ (dwg->object[i].name, table))
@@ -2172,6 +2183,7 @@ dwg_find_dictionary (Dwg_Data *restrict dwg, const char *restrict name)
   // The NOD (Named Object Dict) must be always the very first DICTIONARY
   Dwg_Object_DICTIONARY *nod;
   Dwg_Object *obj = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   if (!obj || !obj->tio.object || obj->fixedtype != DWG_TYPE_DICTIONARY)
     {
       LOG_ERROR ("dwg_find_dictionary: 1st NOD DICTIONARY not found")
@@ -2215,6 +2227,7 @@ dwg_find_dicthandle (Dwg_Data *restrict dwg, BITCODE_H dict,
   Dwg_Object_DICTIONARY *_obj;
   Dwg_Object *obj = dwg_resolve_handle (dwg, dict->absolute_ref);
 
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   if (!obj || !obj->tio.object)
     {
       LOG_TRACE ("dwg_find_dicthandle: Could not resolve dict " FORMAT_REF
@@ -2261,6 +2274,7 @@ dwg_find_dicthandle_objname (Dwg_Data *restrict dwg, BITCODE_H dict,
   Dwg_Object_DICTIONARY *_obj;
   Dwg_Object *obj = dwg_resolve_handle (dwg, dict->absolute_ref);
 
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   if (!obj || !obj->tio.object)
     {
       LOG_TRACE ("dwg_find_dicthandle: Could not resolve dict " FORMAT_REF
@@ -2523,6 +2537,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
   Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
   Dwg_Header_Variables *vars = &dwg->header_vars;
 
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   if (!dwg || !name || !table)
     return NULL;
   // look for the _CONTROL table, and search for name in all entries
@@ -2620,6 +2635,7 @@ dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
     return NULL;
   if (!handle->absolute_ref)
     return NULL;
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   // look for the _CONTROL table, and search for name in all entries
   ctrl = dwg_ctrl_table (dwg, table);
   if (!ctrl)
@@ -3153,6 +3169,7 @@ split_filepath (const char *filepath, char **extp)
 int
 dwg_sections_init (Dwg_Data *dwg)
 {
+  loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   // num_sections: how many sections we need to allocate internally (with holes)
   if (dwg->header.version < R_13b1)
     {
