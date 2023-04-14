@@ -1017,10 +1017,10 @@ bit_read_UMC (Bit_Chain *dat)
   LOG_ERROR (
       "bit_read_UMC: error parsing modular char, i=%d,j=%d,result=0x%lx", i, j,
       result)
-  LOG_HANDLE ("  @%lu.%u: [0x%x 0x%x 0x%x 0x%x 0x%x]\n", dat->byte - 5,
-              dat->bit, dat->chain[dat->byte - 5], dat->chain[dat->byte - 4],
-              dat->chain[dat->byte - 3], dat->chain[dat->byte - 2],
-              dat->chain[dat->byte - 1])
+  LOG_HANDLE ("  @%lu.%u: [0x%x 0x%x 0x%x 0x%x 0x%x 0x%x]\n", dat->byte - 6,
+              dat->bit, dat->chain[dat->byte - 6], dat->chain[dat->byte - 5],
+              dat->chain[dat->byte - 4], dat->chain[dat->byte - 3],
+              dat->chain[dat->byte - 2], dat->chain[dat->byte - 1])
   return 0; /* error... */
 }
 
@@ -3591,9 +3591,9 @@ bit_print (Bit_Chain *dat, long unsigned int size)
   long unsigned int i, j;
 
   printf ("---------------------------------------------------------");
-  if (size > dat->size)
-    size = dat->size;
-  for (i = 0; i < size; i++)
+  if (size > (dat->size - dat->byte))
+    size = dat->size - dat->byte;
+  for (i = dat->byte; i < size; i++)
     {
       if (i % 16 == 0)
         printf ("\n[0x%04X]: ", (unsigned int)i);

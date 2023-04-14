@@ -107,6 +107,7 @@ bitprepare (Bit_Chain *dat, size_t size)
   dat->size = size + 1;
   dat->fh = NULL;
   dat->chain = (unsigned char *)calloc (size + 1, 1);
+  dat->codepage = 30; // ANSI_1252
 }
 
 /*

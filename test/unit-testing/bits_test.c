@@ -8,29 +8,6 @@
 #include <stdlib.h>
 #include "tests_common.h"
 
-/*
-void bit_advance_position_tests (void);
-void bit_read_B_tests (void);
-void bit_write_B_tests (void);
-void bit_read_BB_tests (void);
-void bit_write_BB_tests (void);
-void bit_read_3B_tests (void);
-void bit_write_3B_tests (void);
-void bit_read_4BITS_tests (void);
-void bit_write_4BITS_tests (void);
-void bit_read_BLL_tests (void);
-void bit_read_RC_tests (void);
-void bit_write_RC_tests (void);
-void bit_read_RS_tests (void);
-void bit_write_RS_tests (void);
-void bit_read_RL_tests (void);
-void bit_write_RL_tests (void);
-void bit_read_RD_tests (void);
-void bit_write_RD_tests (void);
-void bit_read_H_tests (void);
-void bit_write_H_tests (void);
-*/
-
 static void
 bit_advance_position_tests (void)
 {
@@ -380,12 +357,14 @@ bit_write_H_tests (void)
   bitprepare (&bitchain, sizeof (Dwg_Handle));                                \
   bitchain.version = dwg_ver;                                                 \
   bit_write_H (&bitchain, &handle);                                           \
-  bit_print (&bitchain, sizeof (Dwg_Handle));                                 \
   if (bitchain.byte == byte && bitchain.bit == 0)                             \
     ok ("bit_write_H: " FORMAT_H, ARGS_H (handle));                           \
   else                                                                        \
-    fail ("bit_write_H (" FORMAT_H ") @%lu.%d", ARGS_H (handle),              \
-          bitchain.byte, bitchain.bit);                                       \
+    {                                                                         \
+      bit_print (&bitchain, sizeof (Dwg_Handle));                             \
+      fail ("bit_write_H (" FORMAT_H ") @%lu.%d", ARGS_H (handle),            \
+            bitchain.byte, bitchain.bit);                                     \
+    }                                                                         \
   bitfree (&bitchain)
 
   test_H_w_case(4, 1, 5, R_14);
@@ -401,6 +380,61 @@ bit_write_H_tests (void)
   // preR13
   test_H_w_case(0, 1, 2, R_11);
   test_H_w_case(0, 2, 522, R_11);
+}
+
+static void
+bit_UMC_bug_tests (void)
+{
+  BITCODE_UMC umc;
+  BITCODE_MC mc;
+  Bit_Chain bitchain;
+  bitprepare (&bitchain, 6);
+
+  bit_write_TF (&bitchain, (BITCODE_TF)"\x01\xc6\x00", 3);
+  bitchain.byte = 0;
+  if ((umc = bit_read_UMC (&bitchain)) == 1)
+    {
+      ok ("bit_read_UMC 1");
+      if ((mc = bit_read_MC (&bitchain)) == 70)
+        ok ("bit_read_MC 70");
+      else
+        {
+          fail ("bit_read_MC %lu != 70", mc);
+          bitchain.byte = 0;
+          bit_print (&bitchain, 3);
+        }
+    }
+  else
+    {
+      fail ("bit_read_UMC %lu != 1", umc);
+      bitchain.byte = 0;
+      bit_print (&bitchain, 6);
+    }
+
+  bitchain.byte = 0;
+  // UMC bug GH #662 still
+  bit_write_TF (&bitchain, (BITCODE_TF)"\xd2\xec\xa9\xf2\x92\xa2\x01", 6);
+  bitchain.byte = 0;
+  if ((umc = bit_read_UMC (&bitchain)) == 5571349214802)
+    {
+      ok ("bit_read_UMC 1");
+      if ((mc = bit_read_MC (&bitchain)) == 78)
+        ok ("bit_read_MC 78");
+      else
+        {
+          fail ("bit_read_MC %lu != 78", mc);
+          bitchain.byte = 0;
+          bit_print (&bitchain, 3);
+        }
+    }
+  else
+    {
+      fail ("bit_read_UMC %lu != 1", umc);
+      bitchain.byte = 0;
+      bit_print (&bitchain, 6);
+    }
+
+  bitfree (&bitchain);
 }
 
 static void
@@ -576,6 +610,7 @@ main (int argc, char const *argv[])
   bit_TV_to_utf8_tests ();
   bit_read_H_tests ();
   bit_write_H_tests ();
+  bit_UMC_bug_tests ();
 
   // Prepare the testcase
   bitchain.size = 100;
