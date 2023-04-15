@@ -61,6 +61,7 @@ jobs:
     - if: matrix.CONFIGURE_ARGS == '--enable-release'
       name: Run make distcheck if --enable-release
       run: |
+        sudo apt-get -y update
         sudo apt-get -y install texlive help2man libconvert-binary-c-perl
         make distcheck
     - if: matrix.CONFIGURE_ARGS == '--enable-release' && startsWith(github.ref, 'refs/tags/')
