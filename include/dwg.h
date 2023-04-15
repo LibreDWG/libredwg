@@ -158,12 +158,6 @@ typedef int32_t BITCODE_RLd;
 # define FORMAT_BLx "%x"
 #endif
 */
-typedef long BITCODE_MC;
-#define FORMAT_MC  "%ld"
-typedef unsigned long BITCODE_UMC;
-#define FORMAT_UMC "%lu"
-typedef BITCODE_BL BITCODE_MS;
-#define FORMAT_MS FORMAT_BL
 typedef BITCODE_DOUBLE BITCODE_RD;
 #define FORMAT_RD "%f"
 /* Since R2004 */
@@ -171,6 +165,12 @@ typedef uint64_t BITCODE_RLL;
 typedef uint64_t BITCODE_BLL;
 #define FORMAT_RLL "0x%" PRIx64
 #define FORMAT_BLL "%" PRIu64
+typedef int32_t BITCODE_MC;
+#define FORMAT_MC FORMAT_RSd
+typedef uint64_t BITCODE_UMC;
+#define FORMAT_UMC FORMAT_RLL
+typedef BITCODE_BL BITCODE_MS;
+#define FORMAT_MS FORMAT_BL
 #ifndef HAVE_NATIVE_WCHAR2
   typedef BITCODE_RS dwg_wchar_t;
 # define DWGCHAR dwg_wchar_t

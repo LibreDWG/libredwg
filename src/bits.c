@@ -915,7 +915,7 @@ bit_read_MC (Bit_Chain *dat)
 {
   int i, j;
   int negative;
-  unsigned char byte[5];
+  unsigned char byte[8];
   BITCODE_UMC result;
 
   negative = 0;
@@ -942,7 +942,7 @@ bit_read_MC (Bit_Chain *dat)
 
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   LOG_ERROR (
-      "bit_read_MC: error parsing modular char. i=%d, j=%d, result=0x%lx,\n"
+      "bit_read_MC: error parsing modular char. i=%d, j=%d, result=" FORMAT_UMC ",\n"
       " @%lu.@%u: [0x%x 0x%x 0x%x 0x%x 0x%x]",
       i, j, result, dat->byte - 5, dat->bit, dat->chain[dat->byte - 5],
       dat->chain[dat->byte - 4], dat->chain[dat->byte - 3],
@@ -993,8 +993,8 @@ bit_read_UMC (Bit_Chain *dat)
 {
   int i, j;
 // eg handle FD485E65F
-#define MAX_BYTE_UMC 6
-  unsigned char byte[MAX_BYTE_UMC] = { 0, 0, 0, 0, 0, 0 };
+#define MAX_BYTE_UMC 8
+  unsigned char byte[MAX_BYTE_UMC] = { 0, 0, 0, 0, 0, 0, 0, 0 };
   BITCODE_UMC result;
 
   result = 0;
@@ -1015,7 +1015,7 @@ bit_read_UMC (Bit_Chain *dat)
 
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   LOG_ERROR (
-      "bit_read_UMC: error parsing modular char, i=%d,j=%d,result=0x%lx", i, j,
+      "bit_read_UMC: error parsing modular char, i=%d,j=%d,result=" FORMAT_UMC, i, j,
       result)
   LOG_HANDLE ("  @%lu.%u: [0x%x 0x%x 0x%x 0x%x 0x%x 0x%x]\n", dat->byte - 6,
               dat->bit, dat->chain[dat->byte - 6], dat->chain[dat->byte - 5],
@@ -1024,20 +1024,20 @@ bit_read_UMC (Bit_Chain *dat)
   return 0; /* error... */
 }
 
-/** Write 1 modular char (max 5 bytes, unsigned).
+/** Write 1 modular char (max 8 bytes, unsigned).
  */
 void
 bit_write_UMC (Bit_Chain *dat, BITCODE_UMC val)
 {
   int i, j;
   int negative;
-  unsigned char byte[5];
+  unsigned char byte[MAX_BYTE_UMC];
   BITCODE_UMC mask;
   BITCODE_UMC value;
 
   value = val;
   mask = 0x0000007f;
-  for (i = 4, j = 0; i >= 0; i--, j += 7)
+  for (i = MAX_BYTE_UMC - 1, j = 0; i >= 0; i--, j += 7)
     {
       byte[i] = (unsigned char)((value & mask) >> j);
       byte[i] |= 0x80;
@@ -1050,7 +1050,7 @@ bit_write_UMC (Bit_Chain *dat, BITCODE_UMC val)
   if (byte[i] & 0x40 && i > 0)
     i--;
   byte[i] &= 0x7f;
-  for (j = 4; j >= i; j--)
+  for (j = MAX_BYTE_UMC - 1; j >= i; j--)
     bit_write_RC (dat, byte[j]);
 }
 
@@ -1078,7 +1078,9 @@ bit_read_MS (Bit_Chain *dat)
       result |= ((BITCODE_MS)word[i] << j);
     }
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-  LOG_ERROR ("bit_read_MS: error parsing modular short, i=%d,j=%d", i, j)
+  LOG_ERROR (
+      "bit_read_MS: error parsing modular short, i=%d,j=%d,result=" FORMAT_MS,
+      i, j, result)
   return 0; /* error... */
 }
 

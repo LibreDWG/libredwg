@@ -2539,13 +2539,17 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
       // encode block entities
       dwg->header.blocks_start = dat->byte;
-      if (first_block) {
-        BITCODE_BL endblk_index;
-        last_endblk = dwg_find_last_type (dwg, DWG_TYPE_ENDBLK);
-        endblk_index = last_endblk ? last_endblk->index : dwg->num_objects - 1;
-        num_block_entities = encode_preR13_entities (
+      if (first_block)
+        {
+          BITCODE_BL endblk_index;
+          last_endblk = dwg_find_last_type (dwg, DWG_TYPE_ENDBLK);
+          endblk_index
+              = last_endblk ? last_endblk->index : dwg->num_objects - 1;
+          num_block_entities = encode_preR13_entities (
               last_entity_idx + 1, endblk_index, dat, dwg, &error);
         }
+      else
+        num_block_entities = 0;        
       dwg->header.blocks_size
           = 0x40000000 + (dat->byte - dwg->header.blocks_start);
       LOG_TRACE ("block_entities   0x%x - 0x%x (0x%x)\n",
@@ -4626,7 +4630,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     obj->address = dat->byte;
     bit_write_BOT (dat, obj->type);
     LOG_INFO (
-        ", Size: %d [MS], Hdlsize: %lu [UMC], Type: %d [BOT], Address: %lu\n",
+        ", Size: %d [MS], Hdlsize: " FORMAT_UMC " [UMC], Type: %d [BOT], Address: %lu\n",
         obj->size, (unsigned long)obj->handlestream_size, obj->type,
         obj->address)
   }
@@ -5041,7 +5045,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         if (!obj->handlestream_size && obj->bitsize)
           obj->handlestream_size = (obj->size * 8) - obj->bitsize;
         bit_write_UMC (dat, obj->handlestream_size);
-        LOG_TRACE ("-handlestream_size: %lu [UMC]\n", obj->handlestream_size);
+        LOG_TRACE ("-handlestream_size: " FORMAT_UMC " [UMC]\n", obj->handlestream_size);
       }
       VERSIONS (R_13b1, R_2007)
       {

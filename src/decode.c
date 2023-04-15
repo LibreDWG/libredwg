@@ -748,7 +748,7 @@ handles_section:
           oldpos = dat->byte;
           // The offset from the previous handle. default: 1, unsigned.
           // Basically how many objects have been deleted here.
-          handleoff = bit_read_UMC (dat); // broken on high values
+          handleoff = bit_read_UMC (dat);
           // The offset from the previous address. default: obj->size, signed.
           offset = bit_read_MC (dat);
           prevsize = dwg->num_objects ? dwg->object[dwg->num_objects - 1].size + 4
@@ -759,7 +759,8 @@ handles_section:
               || (offset > -4 && offset < prevsize - 8))
             {
               if (offset == prevsize)
-                LOG_WARN ("handleoff %lu looks wrong, max_handles %x - "
+                LOG_WARN ("handleoff " FORMAT_UMC
+                          " looks wrong, max_handles %x - "
                           "last_handle %lx = %lx (@%lu)",
                           handleoff, (unsigned)max_handles, last_handle,
                           max_handles - last_handle, oldpos);
@@ -769,18 +770,21 @@ handles_section:
                       && prevsize > 0))
                 {
                   if (offset != prevsize)
-                    LOG_WARN ("offset %ld looks wrong, should be prevsize %ld + 4",
+                    LOG_WARN ("offset " FORMAT_MC
+                              " looks wrong, should be prevsize " FORMAT_MC
+                              " + 4",
                               offset, prevsize - 4);
-                  handleoff = 1;
-                  offset = prevsize;
-                  LOG_WARN ("Recover invalid handleoff to %lu and offset to %ld",
-                            handleoff, offset);
+                  // handleoff = 1;
+                  // offset = prevsize;
+                  // LOG_WARN ("Recover invalid handleoff to %lu and offset to
+                  // %ld",
+                  //           handleoff, offset);
                 }
             }
           last_offset += offset;
           LOG_TRACE ("\nNext object: %lu ", (unsigned long)dwg->num_objects)
-          LOG_TRACE ("Handleoff: %lX [UMC] Offset: " FORMAT_MC " [MC]",
-                     handleoff, offset)
+          LOG_TRACE ("Handleoff: " FORMAT_UMC " [UMC]"
+                     " Offset: " FORMAT_MC " [MC]", handleoff, offset)
           LOG_HANDLE (" @%lu", last_offset)
           LOG_TRACE ("\n")
 
@@ -2513,17 +2517,20 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                       && prevsize > 0))
                 {
                   if (offset != prevsize)
-                    LOG_WARN ("offset %ld looks wrong, should be prevsize %ld + 4",
+                    LOG_WARN ("offset " FORMAT_MC
+                              " looks wrong, should be prevsize " FORMAT_MC
+                              " + 4",
                               offset, prevsize - 4);
-                  handleoff = 1;
-                  offset = prevsize;
-                  LOG_WARN ("Recover invalid handleoff to %lu and offset to %ld",
-                            handleoff, offset);
+                  // handleoff = 1;
+                  // offset = prevsize;
+                  // LOG_WARN ("Recover invalid handleoff to %lu and offset to
+                  // %ld",
+                  //           handleoff, offset);
                 }
             }
           last_offset += offset;
           LOG_TRACE ("\n< Next object: %lu ", (unsigned long)dwg->num_objects)
-          LOG_HANDLE ("Handleoff: %lX [UMC] "
+          LOG_HANDLE ("Handleoff: " FORMAT_UMC " [UMC] "
                       "Offset: " FORMAT_MC " [MC] @%lu\n",
                       handleoff, offset, last_offset);
 
@@ -4086,7 +4093,7 @@ obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   if (!obj->handlestream_size) // with strings we already did calc. it
     {
       obj->handlestream_size = (obj->size * 8) - obj->bitsize;
-      LOG_TRACE (" Hdlsize: %lu,", obj->handlestream_size);
+      LOG_TRACE (" Hdlsize: " FORMAT_UMC ",", obj->handlestream_size);
     }
   hdl_dat->size = obj->size;
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_HANDLE)

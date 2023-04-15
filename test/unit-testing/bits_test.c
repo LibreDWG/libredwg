@@ -392,44 +392,36 @@ bit_UMC_bug_tests (void)
 
   bit_write_TF (&bitchain, (BITCODE_TF)"\x01\xc6\x00", 3);
   bitchain.byte = 0;
-  if ((umc = bit_read_UMC (&bitchain)) == 1)
+  if ((umc = bit_read_UMC (&bitchain)) == 1UL)
     {
       ok ("bit_read_UMC 1");
       if ((mc = bit_read_MC (&bitchain)) == 70)
         ok ("bit_read_MC 70");
       else
         {
-          fail ("bit_read_MC %lu != 70", mc);
+          fail ("bit_read_MC " FORMAT_MC " != 70", mc);
           bitchain.byte = 0;
           bit_print (&bitchain, 3);
         }
     }
   else
     {
-      fail ("bit_read_UMC %lu != 1", umc);
+      fail ("bit_read_UMC " FORMAT_UMC " != 1", umc);
       bitchain.byte = 0;
       bit_print (&bitchain, 6);
     }
 
   bitchain.byte = 0;
-  // UMC bug GH #662 still
-  bit_write_TF (&bitchain, (BITCODE_TF)"\xd2\xec\xa9\xf2\x92\xa2\x01", 6);
+  // UMC bug GH #662 (also #386, #126)
+  bit_write_TF (&bitchain, (BITCODE_TF)"\xd2\xec\xa9\xf2\x92\xa2\x01", 7);
   bitchain.byte = 0;
-  if ((umc = bit_read_UMC (&bitchain)) == 5571349214802)
+  if ((umc = bit_read_UMC (&bitchain)) == 5571349214802UL) // 0x5112E4A7652
     {
-      ok ("bit_read_UMC 1");
-      if ((mc = bit_read_MC (&bitchain)) == 78)
-        ok ("bit_read_MC 78");
-      else
-        {
-          fail ("bit_read_MC %lu != 78", mc);
-          bitchain.byte = 0;
-          bit_print (&bitchain, 3);
-        }
+      ok ("bit_read_UMC 0x5112E4A7652");
     }
   else
     {
-      fail ("bit_read_UMC %lu != 1", umc);
+      fail ("bit_read_UMC " FORMAT_UMC " != 0x5112E4A7652", umc);
       bitchain.byte = 0;
       bit_print (&bitchain, 6);
     }

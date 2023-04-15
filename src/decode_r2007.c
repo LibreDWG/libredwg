@@ -1751,7 +1751,7 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
           offset = bit_read_MC (&hdl_dat);
           last_offset += offset;
           LOG_TRACE ("\nNext object: %lu ", (unsigned long)dwg->num_objects)
-          LOG_TRACE ("Handleoff: " FORMAT_MC " [UMC] "
+          LOG_TRACE ("Handleoff: " FORMAT_UMC " [UMC] "
                      "Offset: " FORMAT_MC " [MC] @%lu\n",
                      handleoff, offset, last_offset)
 

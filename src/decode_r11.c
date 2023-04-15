@@ -211,7 +211,7 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
   if (tbl->number > 0 && (tbl->address + (tbl->number * tbl->size) > dat->size))
     {
       LOG_ERROR ("%s.size overflow %lu > %lu", tbl->name,
-                 tbl->address + (tbl->number * tbl->size), dat->size);
+                 (unsigned long)(tbl->address + (tbl->number * tbl->size)), (unsigned long)dat->size);
       return DWG_ERR_INVALIDDWG;
     }
   return 0;
