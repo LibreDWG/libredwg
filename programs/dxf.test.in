@@ -97,7 +97,9 @@ for dwg in "$DATADIR"/sample_2*.dwg; do
 done
 
 # Note that UNSTABLE classes are now skipped, just the single CLASS entry
-for dwg in "$DATADIR"/example_*.dwg; do
+for dwg in "$DATADIR"/example_*.dwg
+do
+    test -L "$dwg" && break
     dxf="$(echo "$dwg" | sed 's,.dwg,.dxf,')"
     tgt="../$(basename "$dxf")"
     log="$(basename "$tgt").log"
@@ -113,8 +115,10 @@ for dwg in "$DATADIR"/example_*.dwg; do
         done
     fi
 done
+
 # shellcheck disable=SC2043
-for dwg in "$DATADIR"/2004/Underlay.dwg; do
+for dwg in "$DATADIR"/2004/Underlay.dwg
+do
     dxf="$(echo "$dwg" | sed 's,.dwg,.dxf,')"
     tgt="../$(basename "$dxf" .dxf)_2004.dxf"
     log="$(basename "$tgt").log"
