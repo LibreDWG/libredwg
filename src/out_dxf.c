@@ -906,6 +906,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
                               const Dwg_Object *restrict obj)                 \
   {                                                                           \
     int error = 0;                                                            \
+    const Dwg_Data *dwg = obj->parent;                                        \
     Bit_Chain *hdl_dat = dat;                                                 \
     Bit_Chain *str_dat = dat;                                                 \
     if (obj->fixedtype != DWG_TYPE_##token)                                   \
@@ -938,12 +939,11 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
       record (obj->dxfname);                                                  \
     else                                                                      \
       RECORD (token);                                                         \
-    LOG_INFO ("Entity " #token ":\n")                                         \
-    SINCE (R_11)                                                              \
-    {                                                                         \
-      LOG_TRACE ("Entity handle: " FORMAT_H "\n", ARGS_H (obj->handle));      \
+    LOG_INFO ("Entity " #token "\n")                                          \
+    if (obj->handle.value)                                                    \
+      LOG_TRACE ("handle: " FORMAT_H "\n", ARGS_H (obj->handle));             \
+    if (dat->version > R_11 || dwg->header_vars.HANDLING)                     \
       fprintf (dat->fh, "%3i\r\n%lX\r\n", 5, obj->handle.value);              \
-    }                                                                         \
     error |= dxf_common_entity_handle_data (dat, obj);                        \
     error |= dwg_dxf_##token##_private (dat, hdl_dat, str_dat, obj);          \
     error |= dxf_write_eed (dat, obj->tio.object);                            \
@@ -972,7 +972,7 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
   {                                                                           \
     int error = 0;                                                            \
     Bit_Chain *hdl_dat = dat, *str_dat = dat;                                 \
-    LOG_INFO ("Object " #token ":\n")                                         \
+    LOG_INFO ("Object " #token "\n")                                          \
     if (obj->fixedtype != DWG_TYPE_##token)                                   \
       {                                                                       \
         LOG_ERROR ("Invalid type 0x%x, expected 0x%x %s", obj->fixedtype,     \
@@ -1015,13 +1015,13 @@ static int dwg_dxf_TABLECONTENT (Bit_Chain *restrict dat,
         if (dwg_obj_is_table (obj))                                           \
           {                                                                   \
             char *_name = dwg_obj_table_get_name (obj, &error);               \
-            LOG_TRACE ("Object handle: " FORMAT_H ", name: %s\n",             \
+            LOG_TRACE ("handle: " FORMAT_H ", name: %s\n",                    \
                        ARGS_H (obj->handle), _name);                          \
             if (IS_FROM_TU (dat))                                             \
               free (_name);                                                   \
           }                                                                   \
         else                                                                  \
-          LOG_TRACE ("Object handle: " FORMAT_H "\n", ARGS_H (obj->handle))   \
+          LOG_TRACE ("handle: " FORMAT_H "\n", ARGS_H (obj->handle))          \
       }                                                                       \
     error |= dwg_dxf_##token##_private (dat, hdl_dat, str_dat, obj);          \
     error |= dxf_write_eed (dat, obj->tio.object);                            \

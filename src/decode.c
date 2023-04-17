@@ -6562,6 +6562,8 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                             hdr = o;
                             hdr_handle = hdr->handle.value;
                             _hdr = o->tio.object->tio.BLOCK_HEADER;
+                            if (!obj->tio.entity->tio.BLOCK->name)
+                              obj->tio.entity->tio.BLOCK->name = strdup (_hdr->name);
                             break;
                           }
                       }

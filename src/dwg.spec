@@ -615,6 +615,7 @@ DWG_ENTITY_END
 DWG_ENTITY (BLOCK)
 
   SUBCLASS (AcDbBlockBegin)
+#ifndef IS_DXF
   PRE (R_2_0b) {
     FIELD_TV (name, 2);
     FIELD_2RD (base_pt, 10);
@@ -623,17 +624,18 @@ DWG_ENTITY (BLOCK)
     FIELD_2RD (base_pt, 10);
     if (R11OPTS (2))
       FIELD_TV (xref_pname, 1);
-    if (R11OPTS (4))
-      FIELD_TV (name, 3);
+    if (R11OPTS (4)) {
+      FIELD_TV (name, 2);
+    }
     FREE { // set via dwg_add_BLOCK
       FIELD_TV (name, 2);
     }
   }
+#endif
   SINCE (R_13b1) {
     BLOCK_NAME (name, 2) // special pre-R13 naming rules
     COMMON_ENTITY_HANDLE_DATA;
   }
-
 #ifdef IS_DXF
   {
     Dwg_Object_BLOCK_HEADER *_hdr = NULL;
@@ -642,7 +644,6 @@ DWG_ENTITY (BLOCK)
               ? _ent->ownerhandle->obj : NULL;
     if (!hdr)
       hdr = dwg_ref_object (dwg, _ent->ownerhandle);
-
     if (!hdr || hdr->fixedtype != DWG_TYPE_BLOCK_HEADER)
       {
         Dwg_Bitcode_3RD nullpt = { 0.0, 0.0, 0.0 };
@@ -655,7 +656,8 @@ DWG_ENTITY (BLOCK)
         VALUE_BL (_hdr->flag & 0x3f, 70);
         VALUE_3BD (_hdr->base_pt, 10);
       }
-    BLOCK_NAME (name, 3); // for entget() from BLOCK_HEADER
+    SINCE (R_13)
+      BLOCK_NAME (name, 3); // for entget() from BLOCK_HEADER
     if (_hdr) {
       VALUE_T (_hdr->xref_pname, 1);   // from BLOCK_HEADER
       VALUE_T0 (_hdr->description, 4); // from BLOCK_HEADER
