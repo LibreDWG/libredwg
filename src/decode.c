@@ -6381,7 +6381,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
   int error = 0;
   BITCODE_BL num = dwg->num_objects;
   BITCODE_RL real_start = start;
-  unsigned long oldpos;
+  unsigned long oldpos, hdr_handle = 0;
   const char *entities_section[]
       = { "entities", "blocks entities", "extras entities" };
   Dwg_Object *hdr = NULL;
@@ -6395,7 +6395,13 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
     {
       hdr = dwg_model_space_object (dwg);
       if (hdr && hdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
-        _hdr = hdr->tio.object->tio.BLOCK_HEADER;
+        {
+          _hdr = hdr->tio.object->tio.BLOCK_HEADER;
+          _hdr->block_offset_r11 = (BITCODE_RL)-1;
+          if (!hdr->handle.value)
+            hdr->handle.value = dwg_next_handle (dwg);
+          hdr_handle = hdr->handle.value;
+        }
     }
   // TODO search current offset in block_offset_r11 in BLOCK_HEADER's
 
@@ -6533,13 +6539,47 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               error |= dwg_decode_SOLID (dat, obj);
               break;
             case 12:
-              error |= dwg_decode_BLOCK (dat, obj);
-              // TODO search current offset in block_offset_r11 in BLOCK_HEADER's
-              // set new _hdr if NULL
+              {
+                // search current offset in block_offset_r11 in BLOCK_HEADER's and
+                // set new _hdr
+                BITCODE_RL cur_offset = ((dat->byte - 1) - start) | 0x40000000;
+                error |= dwg_decode_BLOCK (dat, obj);
+                if (!_hdr && entity_section == BLOCKS_SECTION_INDEX)
+                  {
+                    for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
+                      {
+                        Dwg_Object *o = &dwg->object[i];
+                        if (o->fixedtype == DWG_TYPE_BLOCK_HEADER
+                            && o->tio.object && o->tio.object->tio.BLOCK_HEADER
+                            && cur_offset
+                                   == o->tio.object->tio.BLOCK_HEADER
+                                          ->block_offset_r11)
+                          {
+                            LOG_TRACE (
+                                "found BLOCK_HEADER \"%s\" at block_offset_r11 "
+                                "0x%x\n", o->tio.object->tio.BLOCK_HEADER->name,
+                                cur_offset);
+                            hdr = o;
+                            hdr_handle = hdr->handle.value;
+                            _hdr = o->tio.object->tio.BLOCK_HEADER;
+                            break;
+                          }
+                      }
+                    if (!_hdr)
+                      {
+                        const char *name = obj->fixedtype == DWG_TYPE_BLOCK ?
+                          obj->tio.entity->tio.BLOCK->name : "(null)";
+                        LOG_WARN ("found no BLOCK_HEADER %s block_offset_r11 0x%x\n",
+                                  name, cur_offset);
+                        hdr = NULL;
+                      }
+                }
+              }
               break;
             case 13:
               error |= dwg_decode_ENDBLK (dat, obj);
-              // set _hdr to NULL for next BLOCK_HEADER
+              hdr = NULL;
+              _hdr = NULL;
               break;
             case 14:
               error |= dwg_decode_INSERT (dat, obj);
@@ -6659,10 +6699,15 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
           if (obj->fixedtype != DWG_TYPE_UNUSED
               && obj->supertype == DWG_SUPERTYPE_ENTITY && _hdr)
             {
-              BITCODE_H ref = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
+              BITCODE_H ref;
+              if (!obj->handle.value)
+                obj->handle.value = dwg_next_handle (dwg);
+              ref = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
+              // if (dwg->dirty_refs)
+                  // find _hdr again from hdr_handle
               PUSH_HV (_hdr, num_owned, entities, ref);
               obj->tio.entity->ownerhandle
-                  = dwg_add_handleref (dwg, 4, hdr->handle.value, obj);
+                  = dwg_add_handleref (dwg, 4, hdr_handle, obj);
             }
           num++;
           if (dat->byte < oldpos + size)
