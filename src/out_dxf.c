@@ -322,6 +322,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
     {
       char _buf[128];
       int k;
+      char *comma;
       fprintf (dat->fh, "%3i\r\n", dxf);
 #ifndef DEBUG_CLASSES
       if (bit_isnan (value))
@@ -329,16 +330,18 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #endif
       snprintf (_buf, 127, DXF_FORMAT_FLT, value);
       k = strlen (_buf);
-      if (strrchr (_buf, '.') && _buf[k - 1] == '0')
+      comma = strrchr (_buf, '.');
+      if (comma) // reduce precision
         {
-          for (k--; k > 1 && _buf[k - 1] != '.' && _buf[k] == '0'; k--)
-            _buf[k] = '\0';
+          if (_buf[k - 1] == '0')
+            for (k--; k > 1 && _buf[k - 1] != '.' && _buf[k] == '0'; k--)
+              _buf[k] = '\0';
+          // max len 17 after-comma places, resp. 18 with -
+          if (value < 0.0)
+            _buf[DXF_FLT_MAXLEN + 1] = '\0';
+          else
+            _buf[DXF_FLT_MAXLEN] = '\0';
         }
-      // max len 17 resp. 18 with -
-      if (value < 0.0)
-        _buf[DXF_FLT_MAXLEN + 1] = '\0';
-      else
-        _buf[DXF_FLT_MAXLEN] = '\0';
       fprintf (dat->fh, "%s\r\n", _buf);
     }
 }

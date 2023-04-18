@@ -25,7 +25,7 @@
 #  error in_dxf.h must be included after out_dxf.h because of FORMAT_BD
 #endif
 
-#define DXF_FORMAT_FLT "%-16.16f"
+#define DXF_FORMAT_FLT "%-16.16G"
 #define DXF_FLT_MAXLEN 18
 
 const char *dxf_format (int code) RETURNS_NONNULL;
