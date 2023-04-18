@@ -1773,9 +1773,10 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   LOG_TRACE ("encrypted:  %d\n", dwg->header.section_infohdr.encrypted)
   LOG_TRACE ("num_desc2:  %d/0x%x\n", dwg->header.section_infohdr.num_desc2,
              dwg->header.section_infohdr.num_desc2)
-  if (dwg->header.section_infohdr.num_desc > 0x2f00000)
+  if (dwg->header.section_infohdr.num_desc
+      > 0xc0000000 / sizeof (Dwg_Section_Info))
     {
-      LOG_ERROR ("Illegal num_desc2");
+      LOG_ERROR ("Illegal num_desc");
       free (decomp);
       dwg->header.section_infohdr.num_desc = 0;
       dwg->header.section_infohdr.num_desc2 = 0;

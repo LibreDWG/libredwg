@@ -2945,7 +2945,7 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
           SUB_FIELD_BL (materials[rcount1], array_index, 0);                  \
           SUB_FIELD_BL (materials[rcount1], mat_absref, 0); /* ?? */          \
           SUB_FIELD_HANDLE (materials[rcount1], material_handle, 5, 0);       \
-          SET_PARENT (materials[rcount1], (Dwg_Entity__3DSOLID *)_obj);        \
+          SET_PARENT (materials[rcount1], (Dwg_Entity__3DSOLID *)_obj);       \
         END_REPEAT_BLOCK                                                      \
         END_REPEAT (materials);                                               \
       }                                                                       \
