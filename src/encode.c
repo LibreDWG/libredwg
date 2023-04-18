@@ -2959,11 +2959,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       Dwg_Object *obj;
       BITCODE_BL index = omap[i].index;
-      unsigned long hdloff = omap[i].handle - (i ? omap[i - 1].handle : 0);
+      BITCODE_UMC hdloff = omap[i].handle - (i ? omap[i - 1].handle : 0);
       int off = dat->byte - (i ? omap[i - 1].address : 0);
       unsigned long end_address;
-      LOG_TRACE ("\n> Next object: " FORMAT_BL
-                 " Handleoff: %lX [UMC] Offset: %d [MC] @%lu\n"
+      LOG_TRACE ("\n> Next object: " FORMAT_BL " Handleoff: " FORMAT_UMC
+                 " [UMC] Offset: " FORMAT_MC " [MC] @%lu\n"
                  "==========================================\n",
                  i, hdloff, off, dat->byte);
       omap[i].address = dat->byte;
@@ -3053,14 +3053,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       index = omap[i].index;
       handleoff = omap[i].handle - last_handle;
       bit_write_UMC (dat, handleoff);
-      LOG_HANDLE ("Handleoff(%3i): %4lX [UMC] (%4lX), ", index, handleoff,
-                  omap[i].handle)
+      LOG_HANDLE ("Handleoff(%3i): " FORMAT_UMC " [UMC] (%4lX), ", index,
+                  handleoff, omap[i].handle)
       last_handle = omap[i].handle;
 
       offset = omap[i].address - last_offset;
       bit_write_MC (dat, offset);
       last_offset = omap[i].address;
-      LOG_HANDLE ("Offset: %8d [MC] @%lu\n", (int)offset, last_offset);
+      LOG_HANDLE ("Offset: " FORMAT_MC " [MC] @%lu\n", (int)offset, last_offset);
 
       ckr_missing = 1;
       if (dat->byte - pvzadr > 2030) // 2029
@@ -4619,8 +4619,9 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   PRE (R_2010)
   {
     bit_write_BS (dat, obj->type);
-    LOG_INFO (", Size: %d [MS], Type: %d [BS], Address: %lu\n", obj->size,
-              obj->type, obj->address)
+    LOG_INFO (", Size: " FORMAT_MS " [MS], Type: " FORMAT_BS
+              " [BS], Address: %lu\n",
+              obj->size, obj->type, obj->address)
   }
   LATER_VERSIONS
   {
@@ -4629,10 +4630,9 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     bit_write_UMC (dat, obj->handlestream_size);
     obj->address = dat->byte;
     bit_write_BOT (dat, obj->type);
-    LOG_INFO (
-        ", Size: %d [MS], Hdlsize: " FORMAT_UMC " [UMC], Type: %d [BOT], Address: %lu\n",
-        obj->size, (unsigned long)obj->handlestream_size, obj->type,
-        obj->address)
+    LOG_INFO (", Size: " FORMAT_MS " [MS], Hdlsize: " FORMAT_UMC
+              " [UMC], Type: %d [BOT], Address: %lu\n",
+              obj->size, obj->handlestream_size, obj->type, obj->address)
   }
 
   /* Write the specific type to dat */

@@ -697,7 +697,7 @@ main (int argc, char const *argv[])
       if ((mc = bit_read_MC (&bitchain) == (BITCODE_MC)umc))
         pass ();
       else
-        fail ("bit_read_MC %ld", (long)mc);
+        fail ("bit_read_MC " FORMAT_MC, mc);
       bit_set_position (&bitchain, pos);
       // beware of wrap here on 32bit: 0x8777 7777 => 0x7777 7777
       if (umc >= 0x87777777UL)
@@ -706,6 +706,7 @@ main (int argc, char const *argv[])
 
   for (umc = 1; umc <= 0x88000000UL; umc <<= 4)
     {
+      BITCODE_UMC umc1;
       umc += 7;
       pos = bit_position (&bitchain);
       bit_write_UMC (&bitchain, umc);
@@ -716,10 +717,10 @@ main (int argc, char const *argv[])
 
       bit_set_position (&bitchain, pos);
       // bit_print (&bitchain, 5);
-      if ((mc = (BITCODE_UMC)bit_read_UMC (&bitchain) == umc))
+      if ((umc1 = bit_read_UMC (&bitchain) == umc))
         pass ();
       else
-        fail ("bit_read_UMC %lu", (BITCODE_UMC)mc);
+        fail ("bit_read_UMC " FORMAT_UMC, umc1);
       bit_set_position (&bitchain, pos);
       // beware of wrap here on 32bit: 0x8777 7777 => 0x7777 7777
       if (umc >= 0x87777777UL)
