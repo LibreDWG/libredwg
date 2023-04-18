@@ -122,8 +122,8 @@ common_cvt_TIMEBLL_tests (void)
     date.ms = rand ();
     if (sizeof (long) > sizeof (int))
       {
-        date.days |= (long)rand () << 32;
-        date.ms |= (long)rand () << 32;
+        date.days |= (uint64_t)rand () << 32;
+        date.ms |= (uint64_t)rand () << 32;
       }
     // 2020 is the latest possible year for these tests
     if (date.days > 2459191)
