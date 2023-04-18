@@ -605,7 +605,8 @@ else
     fi
 fi
 
-if test x$enable_python != xno && test -n "$XML2_LIBS"; then
+if test x$enable_python != xno && test -n "$XML2_LIBS" && test x$cross_compiling = xno
+then
   AC_MSG_CHECKING([for the libxml2 Python package])
   ac_python_libxml2_result=`$PYTHON -c "import libxml2" 2>&1`
   if test $? -eq 0; then
