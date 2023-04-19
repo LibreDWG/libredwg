@@ -18,10 +18,6 @@
 #ifndef DECODE_R11_H
 #define DECODE_R11_H
 
-#define ARGS_HREF11(ref)                                                      \
-  ref->handleref.size, ref->r11_idx, ref->absolute_ref
-#define FORMAT_HREF11 "[%u, %hd, %lu]"
-
 // exported only for unit-testing/decode_test
 // not part of the public API
 EXPORT int decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);

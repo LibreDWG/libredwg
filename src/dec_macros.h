@@ -38,6 +38,11 @@
 // redeclare versions to be from, not target
 #include "importer.h"
 
+// different to out_json
+#define ARGS_HREF11(ref)                                                      \
+  ref->handleref.size, ref->r11_idx, ref->absolute_ref
+#define FORMAT_HREF11 "[%u, %hd, %lX]"
+
 #undef LOG_POS
 #define LOG_POS                                                               \
   LOG_INSANE (" @%lu.%u", obj ? dat->byte - obj->address : dat->byte,         \

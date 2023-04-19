@@ -3468,7 +3468,7 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
   int error = 0;
   const Dwg_Object_BLOCK_HEADER *restrict _hdr
       = hdr->tio.object->tio.BLOCK_HEADER;
-  Dwg_Object *restrict obj = get_first_owned_block (hdr); // BLOCK
+  Dwg_Object *restrict obj = get_first_owned_block (hdr);
   Dwg_Object *restrict endblk = NULL;
   unsigned long int mspace_ref = mspace ? mspace->handle.value : 0;
   unsigned long int pspace_ref = pspace ? pspace->handle.value : 0;
@@ -3491,15 +3491,15 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
         if (IS_FROM_TU (dat))
           {
             char *s = bit_convert_TU ((BITCODE_TU)_hdr->name);
-            LOG_ERROR ("BLOCK_HEADER %s block_entity[0] missing", s);
+            LOG_ERROR ("BLOCK_HEADER %s first_owned_entity missing", s);
             free (s);
           }
         else
-          LOG_ERROR ("BLOCK_HEADER %s block_entity[0] missing", _hdr->name);
+          LOG_ERROR ("BLOCK_HEADER %s first_owned_entity missing", _hdr->name);
         return DWG_ERR_INVALIDDWG;
       }
-      else LOG_WARN ("BLOCK_HEADER %s block_entity[0] missing", _hdr->name);
     }
+
   // Skip all *Model_Space and *Paper_Space entities, esp. new ones: UNDERLAY,
   // MULTILEADER, ... They are all under ENTITIES later. But WIPEOUT and
   // VIEWPORT is here. Note: the objects may vary (e.g. example_2000), but the
@@ -3510,6 +3510,7 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
     obj = NULL;
   else
     obj = get_first_owned_entity (hdr); // first_entity or entities[0]
+
   while (obj)
     {
       if (obj->supertype == DWG_SUPERTYPE_ENTITY

@@ -6573,9 +6573,16 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                             hdr = o;
                             hdr_handle = hdr->handle.value;
                             _hdr = o->tio.object->tio.BLOCK_HEADER;
+                            if (!obj->handle.value)
+                              obj->handle.value = dwg_next_handle (dwg);
+                            _hdr->block_entity = dwg_add_handleref (
+                                dwg, 3, obj->handle.value, hdr);
+                            LOG_TRACE ("BLOCK_HEADER.block_entity: " FORMAT_HREF11 "\n",
+                                       ARGS_HREF11 (_hdr->block_entity));
                             if (!obj->tio.entity->tio.BLOCK->name)
                               obj->tio.entity->tio.BLOCK->name = strdup (_hdr->name);
-                            LOG_TRACE ("next entities owned by BLOCK \"%s\" (%lx)\n", _hdr->name, hdr_handle);
+                            //LOG_TRACE ("next entities owned by BLOCK \"%s\" (%lx)\n",
+                            //           _hdr->name, hdr_handle);
                             block_idx++;
                             break;
                           }
@@ -6593,6 +6600,12 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               break;
             case 13:
               error |= dwg_decode_ENDBLK (dat, obj);
+              if (!obj->handle.value)
+                obj->handle.value = dwg_next_handle (dwg);
+              _hdr->endblk_entity
+                  = dwg_add_handleref (dwg, 3, obj->handle.value, hdr);
+              LOG_TRACE ("BLOCK_HEADER.endblk_entity: " FORMAT_HREF11 "\n",
+                         ARGS_HREF11 (_hdr->endblk_entity));
               hdr = NULL;
               _hdr = NULL;
               break;
@@ -6721,11 +6734,12 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               BITCODE_H ref;
               if (!obj->handle.value)
                 obj->handle.value = dwg_next_handle (dwg);
-              ref = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
+              ref = dwg_add_handleref (dwg, 3, obj->handle.value, hdr);
               // if (dwg->dirty_refs)
                   // find _hdr again from hdr_handle
               LOG_TRACE ("BLOCK_HEADER \"%s\".", _hdr->name);
-              PUSH_HV (_hdr, num_owned, entities, ref);
+              if (obj->fixedtype != DWG_TYPE_BLOCK)
+                PUSH_HV (_hdr, num_owned, entities, ref);
               obj->tio.entity->ownerhandle
                   = dwg_add_handleref (dwg, 4, hdr_handle, obj);
               obj->tio.entity->ownerhandle->r11_idx = block_idx;

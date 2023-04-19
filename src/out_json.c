@@ -142,6 +142,7 @@ static char *_path_field (const char *path);
 #define FORMAT_RD "%.14f"
 #define FORMAT_BD FORMAT_RD
 #define FORMAT_HREF "[%u, %u, %lu, %lu]"
+#undef FORMAT_HREF11
 #define FORMAT_HREF11 "[%u, %hd, %lu]"
 #define FORMAT_RLL "%" PRIu64
 #define FORMAT_BLL "%" PRIu64
