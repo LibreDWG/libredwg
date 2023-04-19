@@ -687,7 +687,7 @@ output_object (Dwg_Object *obj)
       return 0;
     }
 
-  switch (obj->type)
+  switch (obj->fixedtype)
     {
     case DWG_TYPE_INSERT:
       output_INSERT (obj);
