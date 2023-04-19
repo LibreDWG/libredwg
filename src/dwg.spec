@@ -2258,10 +2258,15 @@ DWG_ENTITY (SHAPE)
   VERSIONS (R_2_0, R_11) {
     FIELD_2RD (ins_pt, 10);
     FIELD_RD (scale, 40);
-    FIELD_CAST (style_id, RC, BS, 2);
+    DXF {
+      // TODO style is optional. convert from style_id
+      FIELD_HANDLE (style, 5, 2);
+    } else {
+      FIELD_CAST (style_id, RC, BS, 0);
+    }
     if (R11OPTS (1))
       FIELD_RD0 (rotation, 50);
-    if (R11OPTS (2))
+    if (R11OPTS (2)) // HAS_LOAD_NUM
       FIELD_HANDLE (style, 1, 0); // -> shapename 2
     if (R11OPTS (4))
       FIELD_RD0 (width_factor, 41);
