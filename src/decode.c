@@ -6387,6 +6387,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
       = { "entities", "blocks entities", "extras entities" };
   Dwg_Object *hdr = NULL;
   Dwg_Object_BLOCK_HEADER *_hdr = NULL;
+  BITCODE_BL block_idx = 0;
 
   LOG_TRACE ("\n%s: (" FORMAT_RLx "-" FORMAT_RLx
              " (%u), size " FORMAT_RL ")\n", entities_section[entity_section],
@@ -6402,6 +6403,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
           if (!hdr->handle.value)
             hdr->handle.value = dwg_next_handle (dwg);
           hdr_handle = hdr->handle.value;
+          LOG_TRACE ("owned by BLOCK %s (%lx)\n", _hdr->name, hdr_handle);
         }
     }
   // TODO search current offset in block_offset_r11 in BLOCK_HEADER's
@@ -6569,6 +6571,8 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                             _hdr = o->tio.object->tio.BLOCK_HEADER;
                             if (!obj->tio.entity->tio.BLOCK->name)
                               obj->tio.entity->tio.BLOCK->name = strdup (_hdr->name);
+                            LOG_TRACE ("next entities owned by BLOCK \"%s\" (%lx)\n", _hdr->name, hdr_handle);
+                            block_idx++;
                             break;
                           }
                       }
@@ -6703,8 +6707,12 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               }
             }
           // add to block header
-          if (obj->fixedtype != DWG_TYPE_UNUSED
-              && obj->supertype == DWG_SUPERTYPE_ENTITY && _hdr)
+          if (_hdr
+              && obj->supertype == DWG_SUPERTYPE_ENTITY
+              && obj->fixedtype != DWG_TYPE_UNUSED
+              && obj->fixedtype != DWG_TYPE_JUMP
+              && obj->type != DWG_TYPE_VERTEX_R11
+              && obj->fixedtype != DWG_TYPE_SEQEND)
             {
               BITCODE_H ref;
               if (!obj->handle.value)
@@ -6712,9 +6720,13 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               ref = dwg_add_handleref (dwg, 3, obj->handle.value, NULL);
               // if (dwg->dirty_refs)
                   // find _hdr again from hdr_handle
+              LOG_TRACE ("BLOCK_HEADER \"%s\".", _hdr->name);
               PUSH_HV (_hdr, num_owned, entities, ref);
               obj->tio.entity->ownerhandle
                   = dwg_add_handleref (dwg, 4, hdr_handle, obj);
+              obj->tio.entity->ownerhandle->r11_idx = block_idx;
+              LOG_TRACE ("ownerhandle: " FORMAT_HREF11 "\n",
+                         ARGS_HREF11 (obj->tio.entity->ownerhandle));
             }
           num++;
           if (dat->byte < oldpos + size)
