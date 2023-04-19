@@ -6391,7 +6391,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
       = { "entities", "blocks entities", "extras entities" };
   Dwg_Object *hdr = NULL;
   Dwg_Object_BLOCK_HEADER *_hdr = NULL;
-  BITCODE_BL block_idx = 0;
+  BITCODE_BL block_idx = 0, hdr_index = 0;
 
   LOG_TRACE ("\n%s: (" FORMAT_RLx "-" FORMAT_RLx
              " (%u), size " FORMAT_RL ")\n", entities_section[entity_section],
@@ -6402,6 +6402,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
       hdr = dwg_model_space_object (dwg);
       if (hdr && hdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
         {
+          hdr_index = hdr->index;
           _hdr = hdr->tio.object->tio.BLOCK_HEADER;
           _hdr->block_offset_r11 = (BITCODE_RL)-1;
           if (!hdr->handle.value)
@@ -6572,6 +6573,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                                 cur_offset);
                             hdr = o;
                             hdr_handle = hdr->handle.value;
+                            hdr_index = o->index;
                             _hdr = o->tio.object->tio.BLOCK_HEADER;
                             if (!obj->handle.value)
                               obj->handle.value = dwg_next_handle (dwg);
@@ -6600,12 +6602,14 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               break;
             case 13:
               error |= dwg_decode_ENDBLK (dat, obj);
-              if (!obj->handle.value)
-                obj->handle.value = dwg_next_handle (dwg);
-              _hdr->endblk_entity
-                  = dwg_add_handleref (dwg, 3, obj->handle.value, hdr);
-              LOG_TRACE ("BLOCK_HEADER.endblk_entity: " FORMAT_HREF11 "\n",
-                         ARGS_HREF11 (_hdr->endblk_entity));
+              if (_hdr)
+                {
+                  hdr = &dwg->object[hdr_index];
+                  _hdr->endblk_entity
+                    = dwg_add_handleref (dwg, 3, obj->handle.value, hdr);
+                  LOG_TRACE ("BLOCK_HEADER.endblk_entity: " FORMAT_HREF11 "\n",
+                             ARGS_HREF11 (_hdr->endblk_entity));
+                }
               hdr = NULL;
               _hdr = NULL;
               break;
@@ -6734,6 +6738,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               BITCODE_H ref;
               if (!obj->handle.value)
                 obj->handle.value = dwg_next_handle (dwg);
+              hdr = &dwg->object[hdr_index];
               ref = dwg_add_handleref (dwg, 3, obj->handle.value, hdr);
               // if (dwg->dirty_refs)
                   // find _hdr again from hdr_handle

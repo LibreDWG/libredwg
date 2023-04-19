@@ -1425,21 +1425,14 @@ get_first_owned_block (const Dwg_Object *hdr)
       return NULL;
     }
 
-  if (1 || version >= R_13b1)
+  if (_hdr->block_entity)
+    return dwg_ref_object (dwg, _hdr->block_entity);
+  else
     {
-      if (_hdr->block_entity)
-        {
-          if (!_hdr->block_entity->obj)
-            dwg_resolve_objectrefs_silent (dwg);
-          return dwg_ref_object (dwg, _hdr->block_entity);
-        }
-      else
-        {
-          Dwg_Object *obj = (Dwg_Object *)hdr;
-          while (obj && obj->fixedtype != DWG_TYPE_BLOCK)
-            obj = dwg_next_object (obj);
-          return obj;
-        }
+      Dwg_Object *obj = (Dwg_Object *)hdr;
+      while (obj && obj->fixedtype != DWG_TYPE_BLOCK)
+        obj = dwg_next_object (obj);
+      return obj;
     }
   LOG_ERROR ("Unsupported version %s\n", dwg_version_type (version));
   return NULL;
