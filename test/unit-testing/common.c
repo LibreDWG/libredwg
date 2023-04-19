@@ -362,43 +362,43 @@ main (int argc, char *argv[])
                   prefix, "2018/ACI_20160321_A_30_east.dwg", cov);
               error += test_code_nodist (
                   prefix,
-                  "../test-old/2018/from_autocad_2021/Annotation - Metric.dwg",
+                  "../test-old/2018/from_autocad_2021/Annotation_-_Metric.dwg",
                   cov);
               error += test_code_nodist (prefix,
                                          "../test-old/2018/from_autocad_2021/"
-                                         "Annotation - Imperial.dwg",
+                                         "Annotation_-_Imperial.dwg",
                                          cov);
               error += test_code_nodist (
                   prefix,
-                  "../test-old/2018/from_autocad_2021/Civil - Metric.dwg",
+                  "../test-old/2018/from_autocad_2021/Civil_-_Metric.dwg",
                   cov);
               error += test_code_nodist (
                   prefix,
-                  "../test-old/2018/from_autocad_2021/Civil - Imperial.dwg",
+                  "../test-old/2018/from_autocad_2021/Civil_-_Imperial.dwg",
                   cov);
               error += test_code_nodist (
                   prefix,
-                  "../test-old/2018/from_autocad_2021/Electrical - Metric.dwg",
+                  "../test-old/2018/from_autocad_2021/Electrical_-_Metric.dwg",
                   cov);
               error += test_code_nodist (prefix,
                                          "../test-old/2018/from_autocad_2021/"
-                                         "Electrical - Imperial.dwg",
+                                         "Electrical_-_Imperial.dwg",
                                          cov);
               error += test_code_nodist (
                   prefix,
-                  "../test-old/2018/from_autocad_2021/Mechanical - Metric.dwg",
+                  "../test-old/2018/from_autocad_2021/Mechanical_-_Metric.dwg",
                   cov);
               error += test_code_nodist (prefix,
                                          "../test-old/2018/from_autocad_2021/"
-                                         "Mechanical - Imperial.dwg",
+                                         "Mechanical_-_Imperial.dwg",
                                          cov);
               error += test_code_nodist (
                   prefix,
-                  "../test-old/2018/from_autocad_2021/Structural - Metric.dwg",
+                  "../test-old/2018/from_autocad_2021/Structural_-_Metric.dwg",
                   cov);
               error += test_code_nodist (prefix,
                                          "../test-old/2018/from_autocad_2021/"
-                                         "Structural - Imperial.dwg",
+                                         "Structural_-_Imperial.dwg",
                                          cov);
             }
           if (DWG_TYPE == DWG_TYPE_FIELD || DWG_TYPE == DWG_TYPE_FIELDLIST)
@@ -555,11 +555,11 @@ main (int argc, char *argv[])
             {
               error += test_code_nodist (
                   prefix,
-                  "../test-old/2018/from_autocad_2021/Annotation - Metric.dwg",
+                  "../test-old/2018/from_autocad_2021/Annotation_-_Metric.dwg",
                   cov);
               error += test_code_nodist (prefix,
                                          "../test-old/2018/from_autocad_2021/"
-                                         "Annotation - Imperial.dwg",
+                                         "Annotation_-_Imperial.dwg",
                                          cov);
             }
           if (DWG_TYPE == DWG_TYPE_BLOCKVISIBILITYPARAMETER
