@@ -2550,8 +2550,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
       else
         num_block_entities = 0;        
-      dwg->header.blocks_size
-          = 0x40000000 + (dat->byte - dwg->header.blocks_start);
+      dwg->header.blocks_size = (dat->byte - dwg->header.blocks_start);
+      if (dwg->header.version > R_2_22)
+          dwg->header.blocks_size += 0x40000000;
       LOG_TRACE ("block_entities   0x%x - 0x%x (0x%x)\n",
                  dwg->header.blocks_start,
                  dwg->header.blocks_start + (dwg->header.blocks_size & 0xffffff),

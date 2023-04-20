@@ -6541,9 +6541,13 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               break;
             case 12:
               {
+                BITCODE_RL cur_offset;
+                BITCODE_RL cur_offset_prefix = 0;
+                if (dat->version > R_2_22)
+                  cur_offset_prefix += 0x40000000;
                 // search current offset in block_offset_r11 in BLOCK_HEADER's and
                 // set new _hdr
-                BITCODE_RL cur_offset = ((dat->byte - 1) - start) | 0x40000000;
+                cur_offset = ((dat->byte - 1) - start) | cur_offset_prefix;
                 error |= dwg_decode_BLOCK (dat, obj);
                 if (!_hdr && entity_section == BLOCKS_SECTION_INDEX)
                   {
