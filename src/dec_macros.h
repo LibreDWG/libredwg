@@ -1087,6 +1087,8 @@
     {                                                                         \
       VECTOR_CHKCOUNT (name, type, size, dat)                                 \
       _obj->name = (BITCODE_##type *)calloc (size, sizeof (BITCODE_##type));  \
+      if (!_obj->name)                                                        \
+        return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           _obj->name[vcount] = bit_read_##type (dat);                         \
@@ -1100,6 +1102,8 @@
       SUB_VECTOR_CHKCOUNT (o, name, type, size, dat)                          \
       _obj->o.name                                                            \
           = (BITCODE_##type *)calloc (size, sizeof (BITCODE_##type));         \
+      if (!_obj->o.name)                                                      \
+        return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           _obj->o.name[vcount] = bit_read_##type (dat);                       \
@@ -1113,6 +1117,8 @@
       SUB_VECTOR_CHKCOUNT (o, name, type, _obj->o.sizefield, dat)             \
       _obj->o.name = (BITCODE_##type *)calloc (_obj->o.sizefield,             \
                                                sizeof (BITCODE_##type));      \
+      if (!_obj->o.name)                                                      \
+        return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->o.sizefield; vcount++)      \
         {                                                                     \
           _obj->o.name[vcount] = bit_read_##type (dat);                       \
@@ -1152,6 +1158,8 @@
       _VECTOR_CHKCOUNT (name, _obj->size,                                     \
                         dat->from_version >= R_2007 ? 18 : 2, dat)            \
       _obj->name = (char **)calloc (_obj->size, sizeof (char *));             \
+      if (!_obj->name)                                                        \
+        return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
           PRE (R_2007)                                                        \
@@ -1174,6 +1182,8 @@
       int _dxf = dxf;                                                         \
       VECTOR_CHKCOUNT (name, type, size, dat)                                 \
       _obj->name = (BITCODE_##type *)calloc (size, sizeof (BITCODE_##type));  \
+      if (!_obj->name)                                                        \
+        return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           _obj->name[vcount] = bit_read_##type (dat);                         \
@@ -1189,6 +1199,8 @@
   if (_obj->o.size > 0)                                                       \
     {                                                                         \
       _obj->o.name = (BITCODE_RC*)calloc (_obj->o.size, typesize);            \
+      if (!_obj->o.name)                                                      \
+        return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
         {                                                                     \
           switch (typesize)                                                   \
@@ -1221,6 +1233,8 @@
   if (_obj->size > 0)                                                         \
     {                                                                         \
       _obj->name = (BITCODE_2RD *)calloc (_obj->size, sizeof (BITCODE_2RD));  \
+      if (!_obj->name)                                                        \
+        return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
           FIELD_2RD (name[vcount], dxf);                                      \
@@ -1235,6 +1249,8 @@
     {                                                                         \
       _obj->o.name                                                            \
           = (BITCODE_2RD *)calloc (_obj->o.size, sizeof (BITCODE_2RD));       \
+      if (!_obj->o.name)                                                      \
+        return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
         {                                                                     \
           SUB_FIELD_2RD (o, name[vcount], dxf);                               \
@@ -1248,6 +1264,8 @@
   if (_obj->size > 0)                                                         \
     {                                                                         \
       _obj->name = (BITCODE_2RD *)calloc (_obj->size, sizeof (BITCODE_2RD));  \
+      if (!_obj->name)                                                        \
+        return DWG_ERR_OUTOFMEM;                                              \
       FIELD_2RD (name[0], dxf);                                               \
       for (vcount = 1; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
@@ -1279,6 +1297,8 @@
     {                                                                         \
       _obj->name                                                              \
           = (BITCODE_3DPOINT *)calloc (_obj->size, sizeof (BITCODE_3DPOINT)); \
+      if (!_obj->name)                                                        \
+        return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
           FIELD_3DPOINT (name[vcount], dxf);                                  \
@@ -1290,6 +1310,8 @@
     {                                                                         \
       _obj->o.name                                                            \
           = (BITCODE_3BD *)calloc (_obj->o.size, sizeof (BITCODE_3BD));       \
+      if (!_obj->o.name)                                                      \
+        return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
         {                                                                     \
           SUB_FIELD_3BD (o, name[vcount], dxf);                               \
@@ -1303,6 +1325,8 @@
   if (size > 0)                                                               \
     {                                                                         \
       FIELD_VALUE (nam) = (BITCODE_H *)calloc (size, sizeof (BITCODE_H));     \
+      if (!_obj->nam)                                                         \
+        return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
         {                                                                     \
           FIELD_HANDLE_N (nam[vcount], vcount, code, dxf);                    \
@@ -1319,6 +1343,8 @@
       BITCODE_BL _size = _obj->o.sizefield;                                   \
       HANDLE_VECTOR_CHKCOUNT (nam, _size)                                     \
       _obj->o.nam = (BITCODE_H *)calloc (_size, sizeof (BITCODE_H));          \
+      if (!_obj->o.nam)                                                       \
+        return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < _size; vcount++)                              \
         {                                                                     \
           SUB_FIELD_HANDLE (o, nam[vcount], code, dxf);                       \
@@ -1353,6 +1379,8 @@
       HANDLE_VECTOR_CHKCOUNT (reactors, obj->tio.object->num_reactors)        \
       obj->tio.object->reactors = (BITCODE_H *)calloc (                       \
           obj->tio.object->num_reactors, sizeof (BITCODE_H));                 \
+      if (!obj->tio.object->reactors)                                         \
+        return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < obj->tio.object->num_reactors; vcount++)      \
         {                                                                     \
           VALUE_HANDLE_N (obj->tio.object->reactors[vcount], reactors,        \
@@ -1366,6 +1394,8 @@
       HANDLE_VECTOR_CHKCOUNT (reactors, _ent->num_reactors)                   \
       _ent->reactors                                                          \
           = (BITCODE_H *)calloc (_ent->num_reactors, sizeof (BITCODE_H));     \
+      if (!_ent->reactors)                                                    \
+        return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < _ent->num_reactors; vcount++)                 \
         {                                                                     \
           VALUE_HANDLE_N (_ent->reactors[vcount], reactors, vcount, code,     \
@@ -1518,20 +1548,32 @@
 // unchecked with constant times
 #define REPEAT_CN(times, name, type)                                          \
   if (times > 0)                                                              \
-    _obj->name = (type *)calloc (times, sizeof (type));                       \
+    {                                                                         \
+      _obj->name = (type *)calloc (times, sizeof (type));                     \
+      if (!_obj->name)                                                        \
+        return DWG_ERR_OUTOFMEM;                                              \
+    }                                                                         \
   for (rcount1 = 0; rcount1 < (BITCODE_BL)times; rcount1++)
 // checked with constant times
 #define REPEAT_N(times, name, type)                                           \
   REPEAT_CHKCOUNT (name, times, type)                                         \
   if (times > 0)                                                              \
-    _obj->name = (type *)calloc (times, sizeof (type));                       \
+    {                                                                         \
+      _obj->name = (type *)calloc (times, sizeof (type));                     \
+      if (!_obj->name)                                                        \
+        return DWG_ERR_OUTOFMEM;                                              \
+    }                                                                         \
   for (rcount1 = 0; rcount1 < (BITCODE_BL)times; rcount1++)
 
 // checked with var. times
 #define _REPEAT(times, name, type, idx)                                       \
   REPEAT_CHKCOUNT_LVAL (name, _obj->times, type)                              \
   if (_obj->times > 0)                                                        \
-    _obj->name = (type *)calloc (_obj->times, sizeof (type));                 \
+    {                                                                         \
+      _obj->name = (type *)calloc (_obj->times, sizeof (type));               \
+      if (!_obj->name)                                                        \
+        return DWG_ERR_OUTOFMEM;                                              \
+    }                                                                         \
   for (rcount##idx = 0; rcount##idx < (BITCODE_BL)_obj->times; rcount##idx++)
 // unchecked with var. times
 #define _REPEAT_C(times, name, type, idx)                                     \
@@ -1541,7 +1583,11 @@
 // unchecked with constant times
 #define _REPEAT_CN(times, name, type, idx)                                    \
   if (times > 0)                                                              \
-    _obj->name = (type *)calloc (times, sizeof (type));                       \
+    {                                                                         \
+      _obj->name = (type *)calloc (times, sizeof (type));                     \
+      if (!_obj->name)                                                        \
+        return DWG_ERR_OUTOFMEM;                                              \
+    }                                                                         \
   if (_obj->name)                                                             \
     for (rcount##idx = 0; rcount##idx < (BITCODE_BL)times; rcount##idx++)
 // not allocating versions unchecked: _REPEAT_CNF
