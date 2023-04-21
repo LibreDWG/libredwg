@@ -62,6 +62,7 @@ init:
 build_script:
   - if "%CYGWIN%"=="1" set PATH=%CYG_ROOT%\bin;c:\Windows\system32;c:\Windows;c:\Windows\system32\Wbem
   - if "%CYGWIN%"=="1" %CYG_ROOT%\bin\sh -lc "cygcheck -dc cygwin"
+  - if "%CYGWIN%"=="1" git config --system --add safe.directory /cygdrive/c/projects/libredwg
   #- if "%CYGWIN%"=="1" if "%PLATFORM%"=="x86" set CFG_ARG=--disable-python
   #- if "%CYGWIN%"=="1" set CFG_ARG=--enable-python=python3.6m
   #-bash -c "rm /usr/bin/python{,2,2.7.exe}; ls -al /usr/bin/python*"
