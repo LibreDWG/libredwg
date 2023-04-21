@@ -14,10 +14,6 @@ environment:
       ARCH: win32
       PLATFORM: x86
     - CYGWIN: 1
-      PLATFORM: x86
-      ARCH: cygwin32
-      ISETUP: setup-x86
-    - CYGWIN: 1
       PLATFORM: x64
       ARCH: cygwin64
       ISETUP: setup-x86_64
