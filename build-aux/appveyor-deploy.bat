@@ -24,6 +24,7 @@ rem libssp-0.dll needed for -fstack-protector
 copy c:\%MSYS2_DIR%\%MSYSTEM%\bin\libssp-0.dll *.*
 copy c:\%MSYS2_DIR%\%MSYSTEM%\bin\libpcre2-16-0.dll *.*
 copy c:\%MSYS2_DIR%\%MSYSTEM%\bin\libpcre2-8-0.dll *.*
+copy c:\%MSYS2_DIR%\%MSYSTEM%\bin\libiconv-2.dll *.*
 copy ..\programs\.libs\*.exe *.*
 copy ..\programs\dwgfilter *.*
 mkdir examples
