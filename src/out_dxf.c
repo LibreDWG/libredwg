@@ -1206,16 +1206,16 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
           && (strchr (str, '\n') || strchr (str, '\r')
               || strstr (str, "\\M+1")))
         {
+          static char _buf[1024] = { 0 };
           const int origlen = strlen (str);
           int len = (2 * origlen) + 1;
-          char _buf[1024];
           if (len > 1024)
             { // FIXME: maybe we need this for chunked strings
               fprintf (dat->fh, "\r\n");
               LOG_ERROR ("Overlarge DXF string, len=%d", origlen);
               return;
             }
-          _buf[len - 1] = '\0';
+          *_buf = '\0';
           len = strlen (cquote (_buf, len, str));
           if (len > 255 && dxf == 1)
             {
