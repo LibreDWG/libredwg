@@ -7,9 +7,9 @@ b="$(basename "$d" .dwg)"
 dir="$(dirname "$d")"
 r="$(basename "$dir")"
 case $dir in
-    *test/test-data) ;;
+    *test/test-data)   ;;
     *test/test-data/*) b="${b}_${r}" ;;
-    *td) ;;
+    *td)               ;;
     *td/*)             b="${b}_${r}" ;;
     .)                 ;;
     *)                 b="${b}_${r}" ;;
@@ -22,7 +22,7 @@ case $r in
             *_20*)      r="${b:(-4)}" ;;
             *_r9)       r=9           ;;
             *_r1[0234]) r="${b:(-2)}" ;;
-    esac     ;;
+    esac      ;;
 esac
 
 # first create a dwg log to compare against

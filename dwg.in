@@ -85,9 +85,20 @@ for d in "$@"; do
                 *.json) ext=json ;;
                 *.JSON) ext=json ;;
                 *)
-                        echo "Illegal extension for $d"
-                                                         exit
-                                                              ;;
+                if [ "$(head -c1 "$d")" = "{" ]; then
+                       ext=json
+                       args="$args -Ijson"
+                elif     [ "$(head -c4 "$d")" = "Auto" ]; then
+                       ext=dxfb
+                       args="$args -Idxfb"
+                elif     [ "$(head -n1 "$d")" = "  0" ]; then
+                       ext=dxf
+                       args="$args -Idxf"
+                else
+                       echo "Illegal extension for $d"
+                      exit
+                fi
+                ;;
             esac
         fi
         b=$(basename "$d" .$ext)
