@@ -2483,12 +2483,19 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     dwg->header.entities_start = dat->byte;
     LOG_TRACE ("\nentities 0x%x:\n", dwg->header.entities_start);
     dwg->cur_index = 0;
-    // until the first BLOCK
-    first_block = dwg_find_first_type (dwg, DWG_TYPE_BLOCK);
-    if (first_block)
-      last_entity_idx = first_block->index ? first_block->index - 1 : 0;
+    PRE (R_2_0b)
+      {
+        last_entity_idx = dwg->num_objects - 1;
+      }
     else
-      last_entity_idx = dwg->num_objects - 1;
+      {
+        // until the first BLOCK
+        first_block = dwg_find_first_type (dwg, DWG_TYPE_BLOCK);
+        if (first_block)
+          last_entity_idx = first_block->index ? first_block->index - 1 : 0;
+        else
+          last_entity_idx = dwg->num_objects - 1;
+      }
     numentities = encode_preR13_entities (0, last_entity_idx, dat, dwg, &error);
     dwg->cur_index += numentities;
     //dwg->header.entities_end = dat->byte;
@@ -2536,7 +2543,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           encode_preR13_section (SECTION_DIMSTYLE, dat, dwg);
           encode_preR13_section (SECTION_VX, dat, dwg);
         }
-
       // encode block entities
       dwg->header.blocks_start = dat->byte;
       if (first_block)
@@ -2549,14 +2555,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               last_entity_idx + 1, endblk_index, dat, dwg, &error);
         }
       else
-        num_block_entities = 0;        
+        num_block_entities = 0;
       dwg->header.blocks_size = (dat->byte - dwg->header.blocks_start);
       if (dwg->header.version > R_2_22)
-          dwg->header.blocks_size += 0x40000000;
-      LOG_TRACE ("block_entities   0x%x - 0x%x (0x%x)\n",
-                 dwg->header.blocks_start,
-                 dwg->header.blocks_start + (dwg->header.blocks_size & 0xffffff),
-                 dwg->header.blocks_size);
+        dwg->header.blocks_size += 0x40000000;
+      LOG_TRACE (
+          "block_entities   0x%x - 0x%x (0x%x)\n", dwg->header.blocks_start,
+          dwg->header.blocks_start + (dwg->header.blocks_size & 0xffffff),
+          dwg->header.blocks_size);
 
       // encode extra entities.
       first_jump = dwg_find_last_type (dwg, DWG_TYPE_JUMP);
@@ -2578,7 +2584,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dat->byte = 0x14; // header section_address
       dat->bit = 0;
       bit_write_RL (dat, dwg->header.entities_start);
-      LOG_TRACE ("@0x14:\nentities_start: 0x%x [RLx]\n", dwg->header.entities_start);
+      LOG_TRACE ("@0x14:\nentities_start: 0x%x [RLx]\n",
+                 dwg->header.entities_start);
       bit_write_RL (dat, dwg->header.entities_end);
       LOG_TRACE ("entities_end: 0x%x [RLx]\n", dwg->header.entities_end);
       bit_write_RL (dat, dwg->header.blocks_start);
@@ -2597,7 +2604,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         LOG_TRACE ("crc: %04X [RSx] from 0-0x%lx\n", crc, dat->byte);
         bit_write_RS (dat, crc);
       }
-      dat->byte = dwg->header.extras_start + (dwg->header.extras_size & 0xffffff);
+      dat->byte
+        = dwg->header.extras_start + (dwg->header.extras_size & 0xffffff);
     }
     VERSIONS (R_2_0b, R_9c1)
     {
@@ -4085,23 +4093,23 @@ encode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 }
 
 static BITCODE_RL
-encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_to,
+encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last,
                         Bit_Chain *restrict dat,
                         Dwg_Data *restrict dwg, int *restrict error)
 {
   BITCODE_RL numentities = 0;
-  if (index_from > index_to || index_to > dwg->num_objects)
+  if (index_from > index_last || index_last >= dwg->num_objects)
     {
-      LOG_ERROR ("Invalid index_from " FORMAT_BL " or index_to " FORMAT_BL
+      LOG_ERROR ("Invalid index_from " FORMAT_BL " or index_last " FORMAT_BL
                  " with " FORMAT_BL " num_objects",
-                 index_from, index_to, dwg->num_objects);
+                 index_from, index_last, dwg->num_objects);
       *error |= DWG_ERR_SECTIONNOTFOUND;
       return 0;
     }
   LOG_INFO ("===========================\n"
             "Entities from " FORMAT_BL " to " FORMAT_BL " from 0x%x\n",
-            index_from, index_to, (unsigned)dat->byte);
-  for (unsigned index = index_from; index < index_to; index++)
+            index_from, index_last, (unsigned)dat->byte);
+  for (unsigned index = index_from; index <= index_last; index++)
     {
       Dwg_Object *obj = &dwg->object[index];
       unsigned long size_pos = 0UL;
@@ -4136,7 +4144,8 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_to,
       // check if block/extras or entity member
       if (!index_from) // is entity
         {
-          if (obj->tio.entity->entmode == 3) // but belongs to a block
+          // but belongs to a block
+          if (dat->version >= R_2_0b && obj->tio.entity->entmode == 3)
             {
               LOG_TRACE ("Skip block %s in entities section, number: %d, "
                          "type: %d, Addr: %lx (0x%x)\n",
