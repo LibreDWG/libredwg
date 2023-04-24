@@ -33,19 +33,19 @@ for d in "$@"; do
                 ext=dxf
                 ;;
         -Idxfb)
-                 args="$args $d"
+                args="$args $d"
                 ext=dxfb
                 ;;
         --force-free)
-                      args="$args $d"
-             ;;
+                args="$args $d"
+                ;;
         -v*)
-             v="$d"
-             ;;
+                v="$d"
+                ;;
         --big)
-               timeout=
-               big=1
-             ;;
+                timeout=
+                big=1
+                ;;
         *)
         if [ ! -f "$d" ]; then
             if [ -f "$srcdir/test/test-data/$d" ]; then

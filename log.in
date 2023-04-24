@@ -3,6 +3,7 @@
 # create -v4 logs for DWGs, you can override -v?
 srcdir="@srcdir@"
 top_builddir="@top_builddir@"
+timeout="@TIMEOUT_10@"
 
 make -s -j4 -C src || exit 1
 make -s -j4 -C programs dwgread || exit 1
@@ -12,6 +13,8 @@ v=-v4
 test -z "$v" && echo $top_builddir
 ob="$b"
 log=
+args=
+big=
 
 for d in "$@"; do
     # we do use bash
@@ -22,6 +25,13 @@ for d in "$@"; do
         -l*)
              log="$(cut "$d" -c2-)"
              ;;
+        --force-free)
+             args="$args $d"
+             ;;
+        --big)
+             timeout=
+             big=1
+             ;;
         *)
         if [ ! -f "$d" ]; then
             if [ -f "$srcdir/test/test-data/$d" ]; then
@@ -31,6 +41,14 @@ for d in "$@"; do
                     d="$srcdir/test/test-data/$d.dwg"
                 fi
             fi
+        fi
+        if [ -n "$timeout" ]; then
+            filesize="$(wc -c <"$d")"
+            [ "$filesize" -gt 8000000 ] && timeout=
+        elif [ -z "$big" ] && [ -z "$timeout" ]; then
+            # reset timeout
+            filesize="$(wc -c <"$d")"
+            [ "$filesize" -lt 8000000 ] && timeout="@TIMEOUT_30@"
         fi
         xd=$(dirname "$d")
         dir=_$(basename "$xd")
@@ -52,9 +70,12 @@ for d in "$@"; do
         b=$(basename "$d" .dwg)
         b=$(basename "$b" .DWG)
         [ -z "$log" ] && log="$b$dir.log"
-        echo "@TIMEOUT_10@ @LTEXEC@ programs/dwgread $v $d 2>$log"
+        ori_timeout="$timeout"
+        echo "$timeout @LTEXEC@ programs/dwgread $v $d 2>$log"
         # (sleep 12s; killall dwgread 2>/dev/null) &
-        @TIMEOUT_10@ @LTEXEC@ programs/dwgread "$v" "$d" 2>"$log"
+        # shellcheck disable=SC2086
+        $timeout @LTEXEC@ programs/dwgread $args "$v" "$d" 2>"$log"
+        timeout="$ori_timeout"
         tail -n2 "$log"
         log=
         ;;

@@ -16,7 +16,10 @@ someone should probably think about and resolve them!
   you will also need GNU Texinfo to build the manual.
   See e.g. the github action for recipes, or .appveyor.yml
   for another Mingw recipe.
-  The compiler needs to support C99, i.e. MSVC cannot be used.
+  The compiler needs to support C99, but even MSVC can also be used
+  since 0.12.5
+  The recommended development compiler is tinycc, as compilation times are
+  10x faster than with gcc or clang.
 
 * coding standards
 
@@ -70,8 +73,10 @@ someone should probably think about and resolve them!
   Whenever you change a class or any class field (add, remove, rename, change a type),
   add a separate make regen-dynapi commit, as result of this command. So the small change
   is separated from the automatically created changes by gen-dynapi.pl.
+  This requires cpan Convert::Binary::C
 
   This command updates several generated lists of objects, classes, and its tests.
+  Note that with tinycc this will not work.
 
 * change log maintenance
 
@@ -195,6 +200,8 @@ someone should probably think about and resolve them!
 
   But it is easier to pass --disable-shared to configure and call
   gdb --args directly.
+
+  I have the bash alias ltgdba='libtool --mode=execute gdb -q --args'
 
 * mingw cross-compilation
 
