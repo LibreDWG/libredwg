@@ -54,7 +54,7 @@ EXTRA_DIST = $(top_srcdir)/.version libredwg.spec build-aux/Dockerfile \
 	     build-aux/swig_python.patch \
              $(JSON_DIST) \
 	     $(VALGRIND_SUPPRESSIONS_FILE)
-SH_SOURCES = dwg.in dxf.in dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check \
+shell_sources = dwg.in dxf.in dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check \
 	json-check log.in svg.in rw.in \
 	logs-all-parallel.sh.in logs-all-serial.sh.in unknown.sh \
 	dynapi_test_all.sh.in unit_testing_all.sh.in \
@@ -243,11 +243,11 @@ endif
 
 shfmt:
 if HAVE_SHFMT
-	shfmt -i 4 -kp -d $(addprefix $(top_srcdir)/,$(SH_SOURCES))
+	shfmt -i 4 -kp -d $(addprefix $(top_srcdir)/,$(shell_sources))
 endif
 regen-shfmt:
 if HAVE_SHFMT
-	shfmt -i 4 -kp -w $(addprefix $(top_srcdir)/,$(SH_SOURCES))
+	shfmt -i 4 -kp -w $(addprefix $(top_srcdir)/,$(shell_sources))
 endif
 
 log-dwg: all
