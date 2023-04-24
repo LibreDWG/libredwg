@@ -1377,7 +1377,7 @@ dxf_set_DWGCODEPAGE (Dwg_Data *dwg)
       if (hdr->codepage == CP_UNDEFINED)
         LOG_ERROR ("Invalid DWGCODEPAGE %s", vars->DWGCODEPAGE)
       else
-        LOG_TRACE ("HEADER.codepage = %d [%s]\n", hdr->codepage,
+        LOG_TRACE ("HEADER.codepage = %u [%s]\n", hdr->codepage,
                    vars->DWGCODEPAGE);
     }
 }

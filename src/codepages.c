@@ -23,6 +23,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <ctype.h>
 #include <assert.h>
 #if defined HAVE_ICONV && defined HAVE_ICONV_H
 #  include <iconv.h>
@@ -196,6 +197,8 @@ dwg_codepage_int (const char *s)
   for (int i = 0; i <= (int)CP_ANSI_1258; i++)
     {
       if (strEQ (s, _codepage_dxfstr[i]))
+        return (Dwg_Codepage)i;
+      if (islower (*s) && 0 == strcasecmp (s, _codepage_dxfstr[i]))
         return (Dwg_Codepage)i;
     }
   return CP_UNDEFINED;
