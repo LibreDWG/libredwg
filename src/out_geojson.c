@@ -427,8 +427,8 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
       Dwg_Object *layer
           = obj->tio.entity->layer ? obj->tio.entity->layer->obj : NULL;
       if (layer
-          && (layer->type == DWG_TYPE_LAYER
-              || layer->type == DWG_TYPE_DICTIONARY))
+          && (layer->fixedtype == DWG_TYPE_LAYER
+              || layer->fixedtype == DWG_TYPE_DICTIONARY))
         {
           name = dwg_obj_table_get_name (layer, &error);
           if (!error)
@@ -469,7 +469,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     }
 
   // if has notes and opt. an mtext frame_text
-  if (obj->type == DWG_TYPE_GEOPOSITIONMARKER)
+  if (obj->fixedtype == DWG_TYPE_GEOPOSITIONMARKER)
     {
       Dwg_Entity_GEOPOSITIONMARKER *_obj
           = obj->tio.entity->tio.GEOPOSITIONMARKER;
@@ -484,7 +484,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           PAIR_S (Text, _obj->notes)
         }
     }
-  else if (obj->type == DWG_TYPE_TEXT)
+  else if (obj->fixedtype == DWG_TYPE_TEXT)
     {
       Dwg_Entity_TEXT *_obj = obj->tio.entity->tio.TEXT;
       if (IS_FROM_TU (dat))
@@ -498,7 +498,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           PAIR_S (Text, _obj->text_value)
         }
     }
-  else if (obj->type == DWG_TYPE_MTEXT)
+  else if (obj->fixedtype == DWG_TYPE_MTEXT)
     {
       Dwg_Entity_MTEXT *_obj = obj->tio.entity->tio.MTEXT;
       if (IS_FROM_TU (dat))
@@ -512,11 +512,11 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           PAIR_S (Text, _obj->text)
         }
     }
-  else if (obj->type == DWG_TYPE_INSERT)
+  else if (obj->fixedtype == DWG_TYPE_INSERT)
     {
       Dwg_Entity_INSERT *_obj = obj->tio.entity->tio.INSERT;
       Dwg_Object *hdr = dwg_ref_get_object (_obj->block_header, &error);
-      if (!error && hdr && hdr->type == DWG_TYPE_BLOCK_HEADER)
+      if (!error && hdr && hdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
         {
           Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
           char *text;
@@ -532,11 +532,11 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
             }
         }
     }
-  else if (obj->type == DWG_TYPE_MINSERT)
+  else if (obj->fixedtype == DWG_TYPE_MINSERT)
     {
       Dwg_Entity_MINSERT *_obj = obj->tio.entity->tio.MINSERT;
       Dwg_Object *hdr = dwg_ref_get_object (_obj->block_header, &error);
-      if (!error && hdr && hdr->type == DWG_TYPE_BLOCK_HEADER)
+      if (!error && hdr && hdr->fixedtype == DWG_TYPE_BLOCK_HEADER)
         {
           Dwg_Object_BLOCK_HEADER *_hdr = hdr->tio.object->tio.BLOCK_HEADER;
           char *text;
@@ -622,7 +622,7 @@ dwg_geojson_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   Dwg_Class *klass;
   int is_entity;
 
-  i = obj->type - 500;
+  i = obj->fixedtype - 500;
   if (i < 0 || i >= (int)dwg->num_classes)
     return 0;
   if (obj->fixedtype == DWG_TYPE_UNKNOWN_ENT
@@ -903,7 +903,8 @@ dwg_geojson_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     case DWG_TYPE_LWPOLYLINE:
       return dwg_geojson_LWPOLYLINE (dat, obj, is_last);
     default:
-      if (obj->parent && obj->type != obj->parent->layout_type)
+      if (obj->parent && dat->version > R_12
+          && obj->fixedtype != obj->parent->layout_type)
         return dwg_geojson_variable_type (obj->parent, dat, obj, is_last);
     }
   return 0;
