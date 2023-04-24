@@ -1510,8 +1510,8 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       const Dwg_Object *obj = &dwg->object[i];
       if (obj->supertype != DWG_SUPERTYPE_OBJECT)
         continue;
-      if (obj->fixedtype
-          == DWG_TYPE_BLOCK_HEADER) // processed later, --tables finds BLOCK
+      // processed later, --tables finds BLOCK
+      if (obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
         continue;
       if (numtype) // search for allowed --type and skip if not
         {
@@ -1529,8 +1529,8 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
         }
 
 #define ELSEMATCH(OBJECT)                                                     \
-  else if (obj->fixedtype == DWG_TYPE_##OBJECT) found                         \
-      += match_##OBJECT (filename, obj);
+  else if (obj->fixedtype == DWG_TYPE_##OBJECT)                               \
+    found += match_##OBJECT (filename, obj);
 
       if (obj->fixedtype == DWG_TYPE_LAYER)
         found += match_LAYER (filename, obj);
@@ -1651,7 +1651,7 @@ match_preR13_entities (const char *restrict filename,
       ELSEMATCH (ATTDEF)
       if (!opt_text)
         {
-          if (obj->type == 23) /* DIMENSION */
+          if (obj->type == DWG_TYPE_DIMENSION_R11)
             found += match_DIMENSION (filename, obj);
           ELSEMATCH (VIEWPORT)
           ELSEMATCH (BLOCK)
@@ -2022,8 +2022,8 @@ main (int argc, char *argv[])
         count += match_OBJECTS (filename, &dwg);
       if (dwg.header.version < R_13b1)
         { // FIXME hack
-          // mspace_ref = (Dwg_Object_Ref *)calloc (1, sizeof
-          // (Dwg_Object_Ref)); mspace_ref->obj = &dwg.object[0];
+          // mspace_ref = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
+          // mspace_ref->obj = &dwg.object[0];
           count += match_preR13_entities (filename, &dwg, false);
         }
       else
