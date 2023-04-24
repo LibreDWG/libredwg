@@ -34,6 +34,8 @@
 
 #if !defined AX_STRCASECMP_HEADER && !defined HAVE_STRCASECMP
 EXPORT int strcasecmp (const char *a, const char *b);
+#else
+#  include AX_STRCASECMP_HEADER
 #endif
 
 #if defined WORDS_BIGENDIAN && !WORDS_BIGENDIAN
