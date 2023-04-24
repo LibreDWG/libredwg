@@ -243,6 +243,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
              (unsigned long)(tbl->address
                              + ((unsigned long long)tbl->number * tbl->size)))
 
+  if (!tbl->size || !tbl->number)
+    return 0;
   // with sentinel in case of R11
   SINCE (R_11)
     real_start -= 16; // the sentinel size
@@ -259,8 +261,10 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
   SINCE (R_11)
     {
-#define DECODE_PRER13_SENTINEL(ID) \
-      error |= decode_preR13_sentinel (ID, #ID, dat, dwg)
+#define DECODE_PRER13_SENTINEL(ID)                                            \
+  error |= decode_preR13_sentinel (ID, #ID, dat, dwg);                        \
+  if (error >= DWG_ERR_SECTIONNOTFOUND)                                       \
+    return error
 
       switch (id)
         {

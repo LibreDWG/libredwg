@@ -6228,7 +6228,7 @@ decode_preR13_sentinel (Dwg_Sentinel sentinel,
   if (memcmp (r11_sentinel, dwg_sentinel (sentinel), 16))
     {
       LOG_ERROR ("%s mismatch", sentinel_name);
-      error = DWG_ERR_WRONGCRC;
+      error = DWG_ERR_SECTIONNOTFOUND;
     }
   free (r11_sentinel);
 
