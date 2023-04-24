@@ -2486,6 +2486,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     PRE (R_2_0b)
       {
         last_entity_idx = dwg->num_objects - 1;
+        first_block = NULL;
       }
     else
       {
