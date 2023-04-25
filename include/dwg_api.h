@@ -58,7 +58,10 @@
 #if (defined(__GNUC__) && ((__GNUC__ * 100) + __GNUC_MINOR__) >= 303) && !defined(__cplusplus)
 #  undef __nonnull
 #  define __nonnull(params) __attribute__ ((__nonnull__ params))
-#  define __nonnull_all __attribute__ ((__nonnull__))
+// cygwin/newlib has this
+#  ifndef __nonnull_all
+#    define __nonnull_all __attribute__ ((__nonnull__))
+#  endif
 #  define HAVE_NONNULL
 #else
 #  undef __nonnull
