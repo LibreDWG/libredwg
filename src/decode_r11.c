@@ -243,14 +243,12 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
              (unsigned long)(tbl->address
                              + ((unsigned long long)tbl->number * tbl->size)))
 
-  if (!tbl->size || !tbl->number)
-    return 0;
   // with sentinel in case of R11
   SINCE (R_11)
     real_start -= 16; // the sentinel size
 
   // report unknown data before table
-  if (dat->byte != real_start)
+  if (tbl->address && dat->byte != real_start)
     {
       LOG_WARN ("\n@0x%lx => start 0x%x", dat->byte, real_start);
       if (dat->byte < real_start)
@@ -305,7 +303,8 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     }
 
   oldpos = dat->byte;
-  dat->byte = tbl->address;
+  if (tbl->address)
+    dat->byte = tbl->address;
   dat->bit = 0;
   if ((unsigned long)(tbl->number * tbl->size) > dat->size - dat->byte)
     {
