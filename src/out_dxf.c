@@ -3450,8 +3450,16 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
   unsigned long int mspace_ref = mspace ? mspace->handle.value : 0;
   unsigned long int pspace_ref = pspace ? pspace->handle.value : 0;
 
-  if (obj)
-    error |= dwg_dxf_object (dat, obj, i);
+  if (obj && obj->fixedtype == DWG_TYPE_BLOCK)
+    {
+      // skip *MODEL_SPACE before r11
+      if (dat->version < R_11
+          && obj->tio.entity->tio.BLOCK->name
+          && strcasecmp (obj->tio.entity->tio.BLOCK->name, "*MODEL_SPACE"))
+        ;
+      else
+        error |= dwg_dxf_object (dat, obj, i);
+    }
   else
     {
       SINCE (R_2004)

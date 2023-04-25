@@ -1437,8 +1437,6 @@ get_first_owned_block (const Dwg_Object *hdr)
           return obj;
         }
     }
-
-  // TODO: preR13 block table
   LOG_ERROR ("Unsupported version %s\n", dwg_version_type (version));
   return NULL;
 }
