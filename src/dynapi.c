@@ -352,7 +352,7 @@ static const Dwg_DYNAPI_field _dwg_header_variables_fields[] = {
   { "FLAGS",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_header_variables, FLAGS),
     0,0,0, 0 },
   { "FLATLAND",	"B", sizeof (BITCODE_B),  OFF (struct _dwg_header_variables, FLATLAND),
-    0,0,0, 0 },
+    0,0,0, 70 },
   { "FRONTZ",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_header_variables, FRONTZ),
     0,0,0, 0 },
   { "GRIDMODE",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_header_variables, GRIDMODE),

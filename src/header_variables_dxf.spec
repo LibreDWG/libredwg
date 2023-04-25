@@ -296,11 +296,24 @@
   SINCE (R_2000) {
     HEADER_HANDLE_NAME (UCSBASE, 2, UCS);
   }
+  VERSION (R_10) {
+    HEADER_RS (FLATLAND, 70);
+  }
   SINCE (R_9) {
     HEADER_HANDLE_NAME (UCSNAME, 2, UCS);
     HEADER_3D (UCSORG);
-    HEADER_3D (UCSXDIR);
-    HEADER_3D (UCSYDIR);
+    PRE (R_11)
+    {
+      HEADER_9 (UCSXORI);
+      VALUE_3BD (dwg->header_vars.UCSXDIR, 10);
+      HEADER_9 (UCSYORI);
+      VALUE_3BD (dwg->header_vars.UCSYDIR, 10);
+    }
+    LATER_VERSIONS
+    {
+      HEADER_3D (UCSXDIR);
+      HEADER_3D (UCSYDIR);
+    }
   }
   SINCE (R_2000) {
     HEADER_HANDLE_NAME (UCSORTHOREF, 2, UCS);

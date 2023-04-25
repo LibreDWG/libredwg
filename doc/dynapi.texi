@@ -326,7 +326,7 @@ TV,	DXF 2
 @item FLAGS
 BL
 @item FLATLAND
-B
+B,	DXF 70
 @item FRONTZ
 BD
 @item GRIDMODE
