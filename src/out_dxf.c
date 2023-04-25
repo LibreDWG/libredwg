@@ -3077,6 +3077,10 @@ dxf_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   return 0;
 }
 
+// r2.6-r9: LTYPE, LAYER, STYLE, VIEW
+// r10: VPORT, LTYPE, LAYER, STYLE, VIEW, UCS
+// r11: VPORT, LTYPE, LAYER, STYLE, VIEW, UCS, APPID, DIMSTYLE
+// >=r13: VPORT, LTYPE, LAYER, STYLE, VIEW, UCS, APPID, DIMSTYLE, BLOCK_RECORD
 static int
 dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
@@ -3130,17 +3134,20 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         TABLE (LTYPE);
         COMMON_TABLE_CONTROL_FLAGS;
         error |= dwg_dxf_LTYPE_CONTROL (dat, ctrl);
-        // first the 2 builtin ltypes: ByBlock, ByLayer
-        if ((obj = dwg_ref_object (dwg, dwg->header_vars.LTYPE_BYBLOCK))
-            && obj->type == DWG_TYPE_LTYPE)
-          {
-            error |= dwg_dxf_LTYPE (dat, obj);
-          }
-        if ((obj = dwg_ref_object (dwg, dwg->header_vars.LTYPE_BYLAYER))
-            && obj->type == DWG_TYPE_LTYPE)
-          {
-            error |= dwg_dxf_LTYPE (dat, obj);
-          }
+        SINCE (R_12)
+        {
+          // first the 2 builtin ltypes: ByBlock, ByLayer
+          if ((obj = dwg_ref_object (dwg, dwg->header_vars.LTYPE_BYBLOCK))
+              && obj->type == DWG_TYPE_LTYPE)
+            {
+              error |= dwg_dxf_LTYPE (dat, obj);
+            }
+          if ((obj = dwg_ref_object (dwg, dwg->header_vars.LTYPE_BYLAYER))
+              && obj->type == DWG_TYPE_LTYPE)
+            {
+              error |= dwg_dxf_LTYPE (dat, obj);
+            }
+        }
         // here LTYPE_CONTINUOUS is already included
         for (i = 0; i < _ctrl->num_entries; i++)
           {
@@ -3304,33 +3311,34 @@ dxf_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         ENDTAB ();
       }
   }
-  // fool the warnings. this table is nowhere to be found in the wild. maybe
-  // pre-R_11
-  PRE (R_13b1)
-    {
-      Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_VX_CONTROL);
-      if (ctrl)
-        {
-          Dwg_Object_VX_CONTROL *_ctrl = ctrl->tio.object->tio.VX_CONTROL;
-          Dwg_Object *obj = ctrl;
-          TABLE (VX);
-          COMMON_TABLE_CONTROL_FLAGS;
-          error |= dwg_dxf_VX_CONTROL (dat, ctrl);
-          for (i = 0; i < _ctrl->num_entries; i++)
-            {
-              if (!_ctrl->entries)
-                break;
-              if (!_ctrl->entries[i])
-                continue;
-              obj = dwg_ref_object (dwg, _ctrl->entries[i]);
-              if (obj && obj->type == DWG_TYPE_VX_TABLE_RECORD)
-                {
-                  error |= dwg_dxf_VX_TABLE_RECORD (dat, obj);
-                }
-            }
-          ENDTAB ();
-        }
-    }
+  PRE (R_2004) // nowhere found yet in DXF's (r11-r2000)
+  {
+    Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_VX_CONTROL);
+    if (ctrl)
+      {
+        Dwg_Object_VX_CONTROL *_ctrl = ctrl->tio.object->tio.VX_CONTROL;
+        if (_ctrl->num_entries)
+          {
+            Dwg_Object *obj = ctrl;
+            TABLE (VX);
+            COMMON_TABLE_CONTROL_FLAGS;
+            error |= dwg_dxf_VX_CONTROL (dat, ctrl);
+            for (i = 0; i < _ctrl->num_entries; i++)
+              {
+                if (!_ctrl->entries)
+                  break;
+                if (!_ctrl->entries[i])
+                  continue;
+                obj = dwg_ref_object (dwg, _ctrl->entries[i]);
+                if (obj && obj->type == DWG_TYPE_VX_TABLE_RECORD)
+                  {
+                    error |= dwg_dxf_VX_TABLE_RECORD (dat, obj);
+                  }
+              }
+            ENDTAB ();
+          }
+      }
+  }
 
   SINCE (R_12)
   {
@@ -3711,12 +3719,13 @@ dwg_write_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           if (dxf_classes_write (dat, dwg) >= DWG_ERR_CRITICAL)
             goto fail;
         }
-
-      if (dxf_tables_write (dat, dwg) >= DWG_ERR_CRITICAL)
-        goto fail;
-
-      if (dxf_blocks_write (dat, dwg) >= DWG_ERR_CRITICAL)
-        goto fail;
+      SINCE (R_2_0)
+        {
+          if (dxf_tables_write (dat, dwg) >= DWG_ERR_CRITICAL)
+            goto fail;
+          if (dxf_blocks_write (dat, dwg) >= DWG_ERR_CRITICAL)
+            goto fail;
+        }
     }
 
   if (dxf_entities_write (dat, dwg) >= DWG_ERR_CRITICAL)
