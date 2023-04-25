@@ -366,10 +366,21 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define FIELD_HANDLE_NAME(nam, dxf, table)                                    \
   {                                                                           \
     Dwg_Object_Ref *ref = _obj->nam;                                          \
-    Dwg_Object *o = ref ? ref->obj : NULL;                                    \
+    Dwg_Object *o = ref ? dwg_ref_object ((Dwg_Data*)dwg, ref) : NULL;        \
     if (o && strEQc (o->dxfname, #table))                                     \
       dxf_cvt_tablerecord (                                                   \
           dat, o, o ? o->tio.object->tio.table->name : (char *)"0", dxf);     \
+    else if (dat->from_version <= R_12)                                       \
+      {                                                                       \
+        char *name = dwg_handle_name ((Dwg_Data*)dwg, #table, ref);           \
+        if (name)                                                             \
+          {                                                                   \
+            fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);                    \
+            free (name);                                                      \
+          }                                                                   \
+        else                                                                  \
+          fprintf (dat->fh, "%3i\r\n\r\n", dxf);                              \
+      }                                                                       \
     else                                                                      \
       {                                                                       \
         VALUE_TFF ("", dxf)                                                   \
@@ -378,10 +389,21 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #define SUB_FIELD_HANDLE_NAME(ob, nam, dxf, table)                            \
   {                                                                           \
     Dwg_Object_Ref *ref = _obj->ob.nam;                                       \
-    Dwg_Object *o = ref ? ref->obj : NULL;                                    \
+    Dwg_Object *o = ref ? dwg_ref_object (dwg, ref) : NULL;                   \
     if (o && strEQc (o->dxfname, #table))                                     \
       dxf_cvt_tablerecord (                                                   \
           dat, o, o ? o->tio.object->tio.table->name : (char *)"0", dxf);     \
+    else if (dat->from_version <= R_12)                                       \
+      {                                                                       \
+        char *name = dwg_handle_name ((Dwg_Data*)dwg, #table, ref);           \
+        if (name)                                                             \
+          {                                                                   \
+            fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);                    \
+            free (name);                                                      \
+          }                                                                   \
+        else                                                                  \
+          fprintf (dat->fh, "%3i\r\n\r\n", dxf);                              \
+      }                                                                       \
     else                                                                      \
       {                                                                       \
         VALUE_TFF ("", dxf)                                                   \

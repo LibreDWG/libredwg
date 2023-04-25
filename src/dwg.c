@@ -806,6 +806,10 @@ dwg_ref_object (Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
     dwg_resolve_objectrefs_silent (dwg);
   if (ref->obj && !dwg->dirty_refs)
     return ref->obj;
+  //if (dwg->header.from_version < R_12 && !ref->absolute_ref)
+  //  { // resolve r11_idx to absolute_ref, looking up in the table entries
+  //    LOG_WARN ("Cannot resolve r11_idx %u", ref->r11_idx)
+  //  }
   // Without obj we don't get an absolute_ref from relative OFFSETOBJHANDLE
   // handle types.
   if ((ref->handleref.code < 6 && dwg_resolve_handleref (ref, NULL))
@@ -2642,7 +2646,9 @@ dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
 
   if (!dwg || !table || !handle)
     return NULL;
-  if (!handle->absolute_ref)
+  if (dwg->header.from_version < R_12 && !handle->absolute_ref)
+    ;
+  else if (!handle->absolute_ref)
     return NULL;
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
   // look for the _CONTROL table, and search for name in all entries
@@ -2687,8 +2693,16 @@ dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
       hobj = dwg_resolve_handle (dwg, hdlv[i]->absolute_ref);
       if (!hobj || !hobj->tio.object || !hobj->tio.object->tio.APPID)
         continue;
-      if (hdlv[i]->absolute_ref != handle->absolute_ref)
-        continue;
+      if (dwg->header.from_version > R_12)
+        {
+          if (hdlv[i]->absolute_ref != handle->absolute_ref)
+            continue;
+        }
+      else
+        {
+          if (i != (BITCODE_BL)handle->r11_idx)
+            continue;
+        }
       _o = hobj->tio.object->tio.APPID;
       name = hobj->name;
       /* For BLOCK search the BLOCK entities instead.
