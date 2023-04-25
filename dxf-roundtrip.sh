@@ -20,21 +20,21 @@ case $r in
     r1[0234]) r=${r:1} ;;
     *)  case $f in
             *_20*)
-                        r=${f:(-4)}
-                                     f=$(basename $f _$r)
-                                                         ;;
+                r=${f:(-4)}
+                f=$(basename $f _$r)
+                ;;
             *_r9)
-                        r=9
-                                     f=$(basename $f _r$r)
-                                                          ;;
+                r=9
+                f=$(basename $f _r$r)
+                ;;
             *_r1[0234])
-                        r=${f:(-2)}
-                                     f=$(basename $f _r$r)
-                                                          ;;
+                r=${f:(-2)}
+                f=$(basename $f _r$r)
+                ;;
             *)
                echo wrong version $r
-                                      exit
-                                           ;;
+               exit
+               ;;
     esac     ;;
 esac
 

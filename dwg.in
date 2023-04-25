@@ -101,7 +101,7 @@ for d in "$@"; do
                 ;;
             esac
         fi
-        b=$(basename "$d" .$ext)
+        b=$(basename "$d" ."$ext")
         log="$b$dir.$ext.log"
         out="$b$dir.dwg"
         ori_timeout="$timeout"
