@@ -41,6 +41,7 @@ pcdatadir = $(libdir)/pkgconfig
 pcdata_DATA = libredwg.pc
 BUILT_SOURCES = $(top_srcdir)/.version
 LTEXEC = @LTEXEC@
+SHFMT = @SHFMT@
 
 VALGRIND_SUPPRESSIONS = @VALGRIND_SUPPRESSIONS@
 VALGRIND_SUPPRESSIONS_FILES = @VALGRIND_SUPPRESSIONS_FILE@
@@ -66,7 +67,7 @@ shell_sources = dwg.in dxf.in dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check \
 	examples/dwgadd_test.sh.in
 
 .PHONY: check-dwg check-dxf check-dxfb check-json check-dwg-valgrind check-svg \
-	check-docker cppcheck log-dwg shfmt regen-shfmt \
+	check-docker cppcheck log-dwg shfmt regen-shfmt shellcheck \
 	regen-swig-patch release-web \
         regen-man man manual refman scan-build gcov cover codecov coveralls \
 	unknown regen-unknown full-regen-unknown regen-gperf regen-dynapi \
@@ -158,6 +159,7 @@ TESTS += log dwg dxf json svg rw logs-all.sh dynapi_test_all.sh unit_testing_all
 	 programs/alive.test programs/dxf.test programs/json.test programs/svg.test \
 	 examples/dwgadd_test.sh
 TESTS_ENVIRONMENT = $(SHELLCHECK)
+shellcheck: $(SHELLCHECK) $(TESTS)
 # TEST_EXTENSIONS = .sh
 # SPEC_LOG_COMPILER = $(SHELLCHECK)
 else
@@ -185,7 +187,8 @@ check-dwg-valgrind: all
 check-dxf: all
 	-for f in $(srcdir)/test/test-data/Drawing_*.dwg \
                   $(srcdir)/test/test-data/sample_*.dwg \
-                  $(srcdir)/test/test-data/example_*.dwg; \
+                  $(srcdir)/test/test-data/example_*.dwg \
+                  $(srcdir)/test/test-data/r*/entities*.dwg; \
           do \
             env MAKEFLAGS= $(srcdir)/dxf-check $$f; \
           done
@@ -197,7 +200,8 @@ check-dxf: all
 check-dxfb: all
 	-for f in $(srcdir)/test/test-data/Drawing_*.dwg \
                   $(srcdir)/test/test-data/sample_*.dwg \
-                  $(srcdir)/test/test-data/example_*.dwg; \
+                  $(srcdir)/test/test-data/example_*.dwg \
+                  $(srcdir)/test/test-data/r*/entities*.dwg; \
           do \
             env MAKEFLAGS= $(srcdir)/dxfb-check $$f; \
           done
@@ -209,7 +213,8 @@ check-dxfb: all
 check-json: all
 	-for f in $(srcdir)/test/test-data/Drawing_*.dwg \
                   $(srcdir)/test/test-data/sample_*.dwg \
-                  $(srcdir)/test/test-data/example_*.dwg; \
+                  $(srcdir)/test/test-data/example_*.dwg \
+                  $(srcdir)/test/test-data/r*/entities*.dwg; \
           do \
             env MAKEFLAGS= $(srcdir)/json-check $$f; \
           done
@@ -221,7 +226,8 @@ check-json: all
 check-svg: all
 	-for f in $(srcdir)/test/test-data/Drawing_*.dwg \
             $(srcdir)/test/test-data/sample_*.dwg \
-            $(srcdir)/test/test-data/example_*.dwg; \
+            $(srcdir)/test/test-data/example_*.dwg \
+	    $(srcdir)/test/test-data/r*/entities*.dwg; \
           do env MAKEFLAGS= ./svg $$f; done
 	-for d in r14 2000 2004 2007 2010 2013 2018; do \
 	   for f in $(srcdir)/test/test-data/$$d/*.dwg; \
@@ -244,11 +250,13 @@ endif
 SHFMT_FLAGS=-i 4 -kp -p
 shfmt:
 if HAVE_SHFMT
-	echo disabled shfmt $(SHFMT_FLAGS) -d $(addprefix $(top_srcdir)/,$(shell_sources))
+	for s in $(shell_sources); do \
+	  $(SHFMT) $(SHFMT_FLAGS) -d $(top_srcdir)/$$s; done
 endif
 regen-shfmt:
 if HAVE_SHFMT
-	echo disabled shfmt $(SHFMT_FLAGS) -w $(addprefix $(top_srcdir)/,$(shell_sources))
+	for s in $(shell_sources); do \
+	  $(SHFMT) $(SHFMT_FLAGS) -w $(top_srcdir)/$$s; done
 endif
 
 log-dwg: all
