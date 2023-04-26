@@ -15,7 +15,7 @@ ob="$b"
 log=
 args=
 big=
-
+gerr=0
 for d in "$@"; do
     # we do use bash
     case $d in
@@ -34,25 +34,30 @@ for d in "$@"; do
              ;;
         *)
         if [ ! -f "$d" ]; then
-            if [ -f "$srcdir/test/test-data/$d" ]; then
+            if [ -f "$srcdir/test/test-data/$d" ]
+            then
                 d="$srcdir/test/test-data/$d"
             else
-                if [ -f "$srcdir/test/test-data/$d.dwg" ]; then
+                if [ -f "$srcdir/test/test-data/$d.dwg" ]
+                then
                     d="$srcdir/test/test-data/$d.dwg"
                 fi
             fi
         fi
-        if [ -n "$timeout" ]; then
+        if [ -n "$timeout" ]
+        then
             filesize="$(wc -c <"$d")"
             [ "$filesize" -gt 8000000 ] && timeout=
-        elif [ -z "$big" ] && [ -z "$timeout" ]; then
+        elif [ -z "$big" ] && [ -z "$timeout" ]
+        then
             # reset timeout
             filesize="$(wc -c <"$d")"
             [ "$filesize" -lt 8000000 ] && timeout="@TIMEOUT_30@"
         fi
         xd=$(dirname "$d")
         dir=_$(basename "$xd")
-        if [ -z "$log" ]; then
+        if [ -z "$log" ]
+        then
             case "$d" in
                 *to/*)
                     x1=$(dirname "$xd")
@@ -75,6 +80,8 @@ for d in "$@"; do
         # (sleep 12s; killall dwgread 2>/dev/null) &
         # shellcheck disable=SC2086
         $timeout @LTEXEC@ programs/dwgread $args "$v" "$d" 2>"$log"
+        err=$?
+        [ $err -gt $gerr ] && gerr=$err
         timeout="$ori_timeout"
         tail -n2 "$log"
         log=
@@ -83,3 +90,4 @@ for d in "$@"; do
 done
 v=
 b="$ob"
+if [ $gerr -gt 128 ]; then exit 1; fi

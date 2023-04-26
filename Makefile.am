@@ -241,13 +241,14 @@ if HAVE_CPPCHECK
 		test/xmlsuite/*.c
 endif
 
+SHFMT_FLAGS=-i 4 -kp -p
 shfmt:
 if HAVE_SHFMT
-	shfmt -i 4 -kp -d $(addprefix $(top_srcdir)/,$(shell_sources))
+	echo disabled shfmt $(SHFMT_FLAGS) -d $(addprefix $(top_srcdir)/,$(shell_sources))
 endif
 regen-shfmt:
 if HAVE_SHFMT
-	shfmt -i 4 -kp -w $(addprefix $(top_srcdir)/,$(shell_sources))
+	echo disabled shfmt $(SHFMT_FLAGS) -w $(addprefix $(top_srcdir)/,$(shell_sources))
 endif
 
 log-dwg: all

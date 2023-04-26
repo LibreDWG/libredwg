@@ -191,7 +191,9 @@ check_roundtrip() {
             i=$((i+1))
             echo "expect=$expect" >"$log"
             echo "got=$got" >>"$log"
+            # shellcheck disable=SC2016
             @PERL@ -nle'/^Add entity (\w+) / && print $1' "$log1" >"$log1".tmp
+            # shellcheck disable=SC2016
             @PERL@ -nle'/^Add entity (\w+) / && print $1' "$log2" >"$log2".tmp
             diff -b -U0 "$log1".tmp "$log2".tmp | grep -v '^@@' | tee "$log"
             rm "$log1".tmp "$log2".tmp 2>/dev/null

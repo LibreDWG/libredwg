@@ -6,6 +6,7 @@ d="${1:-example_2000}"
 b="$(basename "$d" .dwg)"
 dir="$(dirname "$d")"
 r="$(basename "$dir")"
+
 case $dir in
     *test/test-data)   ;;
     *test/test-data/*) b="${b}_${r}" ;;
@@ -30,9 +31,13 @@ esac
 mv "$b.log" "$b.log.orig"
 rm "./$b.json" "./$b.dwg" 2>/dev/null
 
-./json -v4 "$d"
+if ! ./json -v4 "$d"; then
+    exit 2
+fi
 if [ -f "$b.json" ]; then
-    ./dwg -y -v4 "$b.json"
+    if ! ./dwg -y -v4 "$b.json"; then
+        exit 1
+    fi
 fi
 
 if [ -f "$b.dwg" ]; then

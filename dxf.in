@@ -21,6 +21,7 @@ test -z "$v" && echo $top_builddir
 args=-y
 out=
 next_is_o=
+gerr=0
 
 for d in "$@"; do
     if [ -n "$next_is_o" ]; then
@@ -42,26 +43,26 @@ for d in "$@"; do
             -o*)
                     if [ -n "$DASH" ]; then
                         out="$(echo "$d" | awk '{ string=substr($0, 3); print string; }')"
-            else
+                    else
                         out="$(cut "$d" -c2-)"
-            fi
+                    fi
                     ;;
             -y)     ;;
             *)
                 if [ ! -f "$d" ]; then
                     if [ -f "$srcdir/test/test-data/$d" ]; then
                         d="$srcdir/test/test-data/$d"
-                elif     [ -f "$srcdir/test/test-data/$d.dwg" ]; then
+                    elif [ -f "$srcdir/test/test-data/$d.dwg" ]; then
                         d="$srcdir/test/test-data/$d.dwg"
                         ext=dwg
-                elif     [ -f "$srcdir/test/test-data/$d.json" ]; then
+                    elif [ -f "$srcdir/test/test-data/$d.json" ]; then
                         d="$srcdir/test/test-data/$d.json"
                         ext=json
-                elif     [ -f "$srcdir/test/test-data/$d.dxf" ]; then
+                    elif [ -f "$srcdir/test/test-data/$d.dxf" ]; then
                         d="$srcdir/test/test-data/$d.dxf"
                         ext=dxf
+                    fi
                 fi
-            fi
                 xd=$(dirname "$d")
                 dir=_$(basename "$xd")
                 case "$d" in
@@ -73,7 +74,7 @@ for d in "$@"; do
                         x1=$(dirname "$xd")
                         dir=_$(basename "$xd")_$(basename "$x1")
                         ;;
-            esac
+                esac
                 if [ "$dir" = "_test-data" ]; then dir=""; fi
                 if [ "$dir" = "_td" ]; then dir=""; fi
                 if [ "$dir" = "_." ]; then dir=""; fi
@@ -90,7 +91,7 @@ for d in "$@"; do
                             ext=dwg
                             echo "Assume DWG file for $d"
                             ;;
-            esac
+                esac
                 b=$(basename "$d" .$ext)
                 log="$b$dir.log"
                 [ -n "$out" ] || out="$b$dir.dxf"
@@ -98,14 +99,19 @@ for d in "$@"; do
                     echo "$timeout @LTEXEC@ programs/dwg2dxf $args $v -o $out $d 2>$log"
                     # shellcheck disable=SC2086
                     $timeout @LTEXEC@ programs/dwg2dxf $args "$v" -o "$out" "$d" 2>"$log"
-            else
+                    err=$?
+                    [ $err -gt $gerr ] && gerr=$err
+                else
                     echo "$timeout @LTEXEC@ programs/dxfwrite $args $v -o $out $d 2>$log"
                     # shellcheck disable=SC2086
                     $timeout @LTEXEC@ programs/dxfwrite $args "$v" -o "$out" "$d" 2>"$log"
-            fi
+                    err=$?
+                    [ $err -gt $gerr ] && gerr=$err
+                fi
                 tail -n2 "$log"
                 out=
                 ;;
         esac
     fi
 done
+if [ $gerr -gt 128 ]; then exit 1; fi

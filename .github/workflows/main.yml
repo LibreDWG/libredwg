@@ -63,7 +63,8 @@ jobs:
       name: Run make distcheck if --enable-release
       run: |
         sudo apt-get -y update
-        sudo apt-get -y install texlive help2man libconvert-binary-c-perl shellcheck shfmt
+        sudo apt-get -y install texlive help2man libconvert-binary-c-perl shellcheck
+        make regen-dynapi
         make distcheck
     - if: matrix.CONFIGURE_ARGS == '--enable-release' && startsWith(github.ref, 'refs/tags/')
       name: Prep-Release

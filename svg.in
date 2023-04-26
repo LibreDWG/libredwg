@@ -2,6 +2,7 @@
 # create -v3 logs and SVG from dwg's with dwg2SVG
 srcdir="@srcdir@"
 top_builddir="@top_builddir@"
+timeout="@TIMEOUT_10@"
 
 make -s -C src
 make -s -C programs dwg2SVG
@@ -11,6 +12,11 @@ v=-v3
 test -z "$v" && echo $top_builddir
 out=
 ob="$b"
+gerr=0
+case "$CFLAGS" in
+    *-DDEBUG_CLASSES*) timeout="" ;;
+    *) ;;
+esac
 
 for d in "$@"; do
     case $d in
@@ -35,8 +41,10 @@ for d in "$@"; do
         b=$(basename "$d" .dwg)
         log="$b$dir.svg.log"
         out="$b$dir.svg"
-        echo @TIMEOUT_10@ @LTEXEC@ programs/dwg2SVG "$v" "$d" \>"$out" 2\>"$log"
-        @TIMEOUT_10@ @LTEXEC@ programs/dwg2SVG "$v" "$d" >"$out" 2>"$log"
+        echo "$timeout @LTEXEC@ programs/dwg2SVG $v $d \>$out 2\>$log"
+        $timeout @LTEXEC@ programs/dwg2SVG "$v" "$d" >"$out" 2>"$log"
+        err=$?
+        [ $err -gt $gerr ] && gerr=$err
         tail -n2 "$log"
         echo "@RUN_JING@ $out"
         @RUN_JING@ "$out"
@@ -45,3 +53,4 @@ for d in "$@"; do
 done
 v=
 b="$ob"
+if [ $gerr -gt 128 ]; then exit 1; fi

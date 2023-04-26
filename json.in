@@ -18,6 +18,7 @@ test -z "$v" && echo $top_builddir
 out=
 ob="$b"
 ext=
+gerr=0
 
 for d in "$@"; do
     case $d in
@@ -25,24 +26,21 @@ for d in "$@"; do
              ;;
         *)
         if [ ! -f "$d" ]; then
-            if [ -f "$srcdir/test/test-data/$d" ]
-            then
+            if [ -f "$srcdir/test/test-data/$d" ]; then
                 d="$srcdir/test/test-data/$d";
-            elif [ -f "$srcdir/test/test-data/$d.dwg" ]
-            then
+            elif [ -f "$srcdir/test/test-data/$d.dwg" ]; then
                 d="$srcdir/test/test-data/$d.dwg"
                 ext=dwg
-            elif [ -f "$srcdir/test/test-data/$d.dxf" ]
-            then
+            elif [ -f "$srcdir/test/test-data/$d.dxf" ]; then
                 d="$srcdir/test/test-data/$d.dxf"
                 ext=dxf
             fi
         fi
         xd=$(dirname "$d")
         dir=_$(basename "$xd")
-        if [ "$dir" = "_test-data" ]; then dir=""; fi
-        if [ "$dir" = "_td" ]; then dir=""; fi
-        if [ "$dir" = "_." ]; then dir=""; fi
+        [ "$dir" = "_test-data" ] && dir=""
+        [ "$dir" = "_td" ] && dir=""
+        [ "$dir" = "_." ] && dir=""
         if [ -z "$ext" ]; then
             case $(basename "$d") in
                 *.dwg)  ext=dwg ;;
@@ -59,9 +57,12 @@ for d in "$@"; do
         out="$b$dir.json"
         echo "$timeout @LTEXEC@ programs/dwgread $v -Ojson -o $out $d 2>$log"
         $timeout @LTEXEC@ programs/dwgread "$v" -Ojson -o "$out" "$d" 2>"$log"
+        err=$?
+        [ $err -gt $gerr ] && gerr=$err
         tail -n2 "$log"
         ;;
     esac
 done
 v=
 b=$ob
+if [ $gerr -gt 128 ]; then exit 1; fi

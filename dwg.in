@@ -19,6 +19,7 @@ args=-y
 out=
 ob="$b"
 big=
+gerr=0
 
 for d in "$@"; do
     case $d in
@@ -109,6 +110,8 @@ for d in "$@"; do
         echo "$timeout @LTEXEC@ programs/dwgwrite $args $v -o $out $d 2>$log"
         # shellcheck disable=SC2086
         $timeout @LTEXEC@ programs/dwgwrite $args "$v" -o "$out" "$d" 2>"$log"
+        err=$?
+        [ $err -gt $gerr ] && gerr=$err
         timeout="$ori_timeout"
         tail -n2 "$log"
         ;;
@@ -117,3 +120,4 @@ done
 v=
 args=
 b=$ob
+[ $gerr -gt 128 ] && exit 1

@@ -17,6 +17,7 @@ v=-v3
 test -z "$v" && echo $top_builddir
 args=
 ob="$b"
+gerr=0
 
 for d in "$@"; do
     case $d in
@@ -42,6 +43,8 @@ for d in "$@"; do
         echo "$timeout @LTEXEC@ programs/dwgrewrite $args $v $d 2>$log"
         # shellcheck disable=SC2086
         $timeout @LTEXEC@ programs/dwgrewrite $args "$v" "$d" 2>"$log"
+        err=$?
+        [ $err -gt $gerr ] && gerr=$err
         tail "$log"
         ;;
     esac
@@ -49,3 +52,4 @@ done
 args=
 v=
 b=$ob
+if [ $gerr -gt 128 ]; then exit 1; fi
