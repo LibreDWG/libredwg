@@ -1,7 +1,7 @@
 #!/bin/sh
 # json.test
 #
-# Copyright (C) 2018-2020 Free Software Foundation, Inc.
+# Copyright (C) 2018-2023 Free Software Foundation, Inc.
 #
 # This program is free software, licensed under the terms of the GNU
 # General Public License as published by the Free Software Foundation,
@@ -20,10 +20,10 @@ EXEEXT="@EXEEXT@"
 i=0
 DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
 DATA="$DATA example_2013 example_2018 example_r14"
-#TODO="r11/ACEL10"
-SED=@SED@
-JQ=@JQ@
-GEOJSONLINT=@GEOJSONLINT@
+#TODO="example_r13 r11/ACEB10 r11/entities-3d r10/entities r2.10/entities r2.6/entities r1.4/entities"
+SED="@SED@"
+JQ="@JQ@"
+GEOJSONLINT="@GEOJSONLINT@"
 [ -z "$SED" ] && echo "$SED"
 [ -z "$JQ" ] && echo "$JQ"
 [ -z "$GEOJSONLINT" ] && echo "$GEOJSONLINT"
@@ -40,9 +40,20 @@ check_roundtrip() {
         tgt="$(basename "$dwg")"
         log1="$(basename "$dwg" .dwg).log.orig"
         log2="$(basename "$dwg" .dwg).log"
-        @LTEXEC@ "./dwgread${EXEEXT}" -y -v2 -o "$json" "$dwg" 2>"$log1" >/dev/null
-        @LTEXEC@ "./dwgwrite${EXEEXT}" -y -v0 -o "$tgt" "$json" 2>/dev/null >/dev/null
-        @LTEXEC@ "./dwgread${EXEEXT}" -v2 "$tgt" 2>"$log2" >/dev/null
+        if ! @LTEXEC@ "./dwgread${EXEEXT}" -y -v2 -o "$json" "$dwg" 2>"$log1" >/dev/null; then
+            echo "json $dwg failed"
+            tail "$log1"
+            exit 1
+        fi
+        if ! @LTEXEC@ "./dwgwrite${EXEEXT}" -y -v0 -o "$tgt" "$json" 2>/dev/null >/dev/null; then
+            echo "dwgwrite $json failed"
+            exit 1
+        fi
+        if ! @LTEXEC@ "./dwgread${EXEEXT}" -v2 "$tgt" 2>"$log2" >/dev/null; then
+            echo "dwgread resulting $tgt failed"
+            tail "$log2"
+            exit 1
+        fi
         expect1="$(grep -E -c '^Add entity' "$log1")"
         got1="$(grep -E -c '^Add entity' "$log2")"
         expect2="$(grep -E -c '^Add object' "$log1")"
