@@ -67,7 +67,7 @@ shell_sources = dwg.in dxf.in dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check \
 	examples/dwgadd_test.sh.in
 
 .PHONY: check-dwg check-dxf check-dxfb check-json check-dwg-valgrind check-svg \
-	check-docker cppcheck log-dwg shfmt regen-shfmt shellcheck \
+	check-docker cppcheck log-dwg shfmt regen-shfmt check-shellcheck \
 	regen-swig-patch release-web \
         regen-man man manual refman scan-build gcov cover codecov coveralls \
 	unknown regen-unknown full-regen-unknown regen-gperf regen-dynapi \
@@ -159,7 +159,8 @@ TESTS += log dwg dxf json svg rw logs-all.sh dynapi_test_all.sh unit_testing_all
 	 programs/alive.test programs/dxf.test programs/json.test programs/svg.test \
 	 examples/dwgadd_test.sh
 TESTS_ENVIRONMENT = $(SHELLCHECK)
-shellcheck: $(SHELLCHECK) $(TESTS)
+check-shellcheck:
+	$(SHELLCHECK) $(TESTS)
 # TEST_EXTENSIONS = .sh
 # SPEC_LOG_COMPILER = $(SHELLCHECK)
 else

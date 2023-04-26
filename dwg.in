@@ -120,4 +120,4 @@ done
 v=
 args=
 b=$ob
-[ $gerr -gt 128 ] && exit 1
+if [ $gerr -gt 128 ]; then exit 1; fi
