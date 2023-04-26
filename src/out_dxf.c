@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2018-2021 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2018-2023 Free Software Foundation, Inc.                   */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -1544,7 +1544,7 @@ dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   return 0;
 }
 
-// r13+ converts STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock
+// r2000+ converts STANDARD to Standard, BYLAYER to ByLayer, BYBLOCK to ByBlock
 static void
 dxf_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                      char *restrict name, const int dxf)
@@ -1555,7 +1555,7 @@ dxf_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         {
           name = bit_convert_TU ((BITCODE_TU)name);
         }
-      if (dat->from_version >= R_13b1 && dat->version < R_13b1)
+      if (dat->from_version >= R_2000 && dat->version < R_2000)
         { // convert the other way round, from newer to older
           if (strEQc (name, "Standard"))
             fprintf (dat->fh, "%3i\r\nSTANDARD\r\n", dxf);
@@ -1570,13 +1570,13 @@ dxf_cvt_tablerecord (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         }
       else
         { // convert some standard names
-          if (dat->version >= R_13b1 && strEQc (name, "STANDARD"))
+          if (dat->version >= R_2000 && strEQc (name, "STANDARD"))
             fprintf (dat->fh, "%3i\r\nStandard\r\n", dxf);
-          else if (dat->version >= R_13b1 && strEQc (name, "BYLAYER"))
+          else if (dat->version >= R_2000 && strEQc (name, "BYLAYER"))
             fprintf (dat->fh, "%3i\r\nByLayer\r\n", dxf);
-          else if (dat->version >= R_13b1 && strEQc (name, "BYBLOCK"))
+          else if (dat->version >= R_2000 && strEQc (name, "BYBLOCK"))
             fprintf (dat->fh, "%3i\r\nByBlock\r\n", dxf);
-          else if (dat->version >= R_13b1 && strEQc (name, "*ACTIVE"))
+          else if (dat->version >= R_2000 && strEQc (name, "*ACTIVE"))
             fprintf (dat->fh, "%3i\r\n*Active\r\n", dxf);
           else
             fprintf (dat->fh, "%3i\r\n%s\r\n", dxf, name);
