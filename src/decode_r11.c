@@ -349,6 +349,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       return DWG_ERR_INVALIDDWG;                                              \
     obj = &dwg->object[num++];                                                \
     obj->address = dat->byte;                                                 \
+    obj->size = tbl->size;                                                    \
 
 #  define ADD_CTRL_ENTRY                                                      \
     if (_ctrl)                                                                \
