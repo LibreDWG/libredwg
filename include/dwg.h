@@ -1822,6 +1822,7 @@ typedef struct _dwg_entity_POLYLINE_MESH
   BITCODE_BS num_n_verts;
   BITCODE_BS m_density;
   BITCODE_BS n_density;
+  BITCODE_BE extrusion;
 } Dwg_Entity_POLYLINE_MESH;
 
 /**

@@ -2142,6 +2142,8 @@ DWG_ENTITY (POLYLINE_MESH)
       DECODER {
         FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
       }
+      if (R11OPTS (8))
+        FIELD_3RD (extrusion, 210);
       if (R11OPTS (16))
         FIELD_RS (num_m_verts, 71);
       if (R11OPTS (32))
