@@ -47,7 +47,7 @@ for d in "$@"; do
         if [ -n "$timeout" ]
         then
             filesize="$(wc -c <"$d")"
-            [ "$filesize" -gt 8000000 ] && timeout=
+            [ "$filesize" -gt 8000000 ] && timeout="@TIMEOUT_30@"
         elif [ -z "$big" ] && [ -z "$timeout" ]
         then
             # reset timeout
