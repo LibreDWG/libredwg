@@ -329,7 +329,7 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
 #endif
       snprintf (_buf, 127, DXF_FORMAT_FLT, value);
       comma = strrchr (_buf, '.');
-      if (comma) // reduce precision
+      if (0 && comma) // reduce precision
         {
           int k = strlen (_buf);
           if (_buf[k - 1] == '0' || _buf[k - 1] == ' ')

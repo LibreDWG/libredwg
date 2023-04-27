@@ -8838,7 +8838,8 @@ new_object (char *restrict name, char *restrict dxfname,
     {
       BITCODE_H style;
       Dwg_Entity_MTEXT *o = obj->tio.entity->tio.MTEXT;
-      o->x_axis_dir.x = 1.0;
+      if (!o->x_axis_dir.x)
+        o->x_axis_dir.x = 1.0;
       // set style to Standard (5.1.11)
       style = dwg_find_tablehandle_silent (dwg, "Standard", "STYLE");
       if (style)
