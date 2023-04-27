@@ -1196,6 +1196,7 @@ DWG_ENTITY (VERTEX_PFACE)
   }
   LATER_VERSIONS {
     FIELD_RC (flag, 0);
+    LOG_FLAG_VERTEX
     FIELD_3BD (point, 10);
   }
   DXF { FIELD_RC (flag, 70); }
