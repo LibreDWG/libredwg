@@ -1858,6 +1858,72 @@ section_info_rebuild (Dwg_Data *dwg, Dwg_Section_Type lasttype)
     }
 }
 
+// see below for the elements
+static void
+calc_preR13_ctrl_size (Dwg_Data *restrict dwg, Dwg_Object *obj)
+{
+  const Dwg_Version_Type ver = dwg->header.version;
+  switch (obj->fixedtype){
+  case DWG_TYPE_BLOCK_CONTROL:
+    if (ver == R_11)
+      obj->size = 45;
+    else if (ver <= R_10)
+      obj->size = 37;
+    break;
+  case DWG_TYPE_LAYER_CONTROL:
+    if (ver == R_11)
+      obj->size = 41;
+    else if (ver <= R_10)
+      obj->size = 37;
+    break;
+  case DWG_TYPE_STYLE_CONTROL:
+    if (ver == R_11)
+      obj->size = 198;
+    else if (ver == R_2_10)
+      obj->size = 130;
+    else if (ver <= R_10) // also r2.4, r2.5
+      obj->size = 194;
+    break;
+  case DWG_TYPE_LTYPE_CONTROL:
+    if (ver == R_11)
+      obj->size = 191;
+    else if (ver <= R_10)
+      obj->size = 187;
+    break;
+  case DWG_TYPE_VIEW_CONTROL:
+    if (ver <= R_11)
+      obj->size = 153;
+    else if (ver == R_10)
+      obj->size = 149;
+    else if (ver <= R_9)
+      obj->size = 91;
+    break;
+  case DWG_TYPE_UCS_CONTROL:
+    if (ver == R_11)
+      obj->size = 109;
+    else if (ver == R_10)
+      obj->size = 105;
+    break;
+  case DWG_TYPE_VPORT_CONTROL:
+    if (ver == R_11)
+      obj->size = 253;
+    else if (ver == R_10)
+      obj->size = 249;
+    break;
+  case DWG_TYPE_APPID_CONTROL:
+    obj->size = 253;
+    break;
+  case DWG_TYPE_DIMSTYLE_CONTROL:
+    obj->size = 324;
+    break;
+  case DWG_TYPE_VX_CONTROL:
+    obj->size = 43;
+    break;
+  default:
+    break;
+  }
+}
+
 static void
 encode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
                            Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
@@ -1886,6 +1952,8 @@ encode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
           Dwg_Object_##ctrltoken *_obj = obj->tio.object->tio.ctrltoken;      \
           strncpy (tbl->name, obj->name, sizeof (tbl->name) - 1);             \
           tbl->name[sizeof (tbl->name) - 1] = '\0';                           \
+          if (!obj->size)                                                     \
+            calc_preR13_ctrl_size (dwg, obj);                                 \
           tbl->size = obj->size;                                              \
           tbl->number = _obj->num_entries;                                    \
           tbl->flags_r11 = 0x8007 + i; /* 0x8008 - 0x800c */                  \
@@ -1916,10 +1984,10 @@ encode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
     }
   LOG_TRACE ("\nptr table %s [%d]: to:0x%lx\n", tbl->name, id,
              (unsigned long)(tbl->address + (tbl->number * tbl->size)));
-  bit_write_RS (dat, tbl->size);
+  bit_write_RS (dat, tbl->size); // calculated
   bit_write_RS (dat, tbl->number);
   bit_write_RS (dat, tbl->flags_r11);
-  bit_write_RL (dat, tbl->address); // needs to be patched
+  bit_write_RL (dat, tbl->address); // TODO needs to be patched
   LOG_TRACE ("%s.size: " FORMAT_RS " [RS]\n", tbl->name, tbl->size);
   LOG_TRACE ("%s.number: " FORMAT_RS " [RS]\n", tbl->name, tbl->number);
   LOG_TRACE ("%s.flags_r11: " FORMAT_RSx " [RS]\n", tbl->name, tbl->flags_r11);
@@ -2499,7 +2567,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
     numentities = encode_preR13_entities (0, last_entity_idx, dat, dwg, &error);
     dwg->cur_index += numentities;
-    //dwg->header.entities_end = dat->byte;
+    if (!dwg->header.entities_end)
+      dwg->header.entities_end = dat->byte;
     LOG_TRACE ("\nentities %u 0x%x - 0x%x\n", numentities,
                dwg->header.entities_start,
                dwg->header.entities_end);
