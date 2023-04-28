@@ -165,13 +165,6 @@ run ()
     then
        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
     fi
-    # preR13 imports and outdxf also still leak. GH #466
-    if test "$bprog" = "dxfwrite" -a -n "@HAVE_ASAN@"
-    then
-        case $ddwg in
-            r11|r2.*) TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG" ;;
-        esac
-    fi
     # load_dwg r2000|r13|r14 leaks
     if test "$bprog" = "load_dwg" -a -n "@HAVE_ASAN@"
     then
@@ -180,13 +173,6 @@ run ()
                 TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG" ;;
         esac
     fi
-    # json parser error
-    #if test "$bprog" = "dxfwrite"
-    #then
-    #    case $dwg in
-    #        r11/ACEB10*) TESTPROG="echo SKIP"; todo=1;;
-    #    esac
-    #fi
     if test "$bprog" = "dwgfuzz" -a -n "@HAVE_ASAN@"
     then
        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
@@ -195,27 +181,7 @@ run ()
     then
        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
     fi
-    # rewrite leaking 3DSOLID
-    #if test $bprog = dwgrewrite -a -n "@HAVE_ASAN@" -a "$bdwg" = example_2000
-    #then
-    #   TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
-    #fi
-    # injson leaks fixed, GH #197
-    #if test $bprog = dwgwrite -a -n "@HAVE_ASAN@"
-    #then
-    #   TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
-    #fi
     echo "$TESTPROG $prog $arg 2>$log"
-    # writers can hang
-    #if test $bprog = dwgrewrite -o $bprog = dwgwrite -o $bprog = dxf2dwg
-    #then
-    #    if test x$MINGW != x; then
-    #        OLDTESTPROG=$TESTPROG
-    #        TESTPROG=echo
-    #    else
-    #        (sleep 10s; killall $bprog 2>/dev/null) &
-    #    fi
-    #fi
     # shellcheck disable=SC2086
     if $TESTPROG ./$prog $arg >"$log" 2>&1
     then
