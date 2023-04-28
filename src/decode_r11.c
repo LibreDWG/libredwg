@@ -96,9 +96,10 @@ static int decode_preR13_section (Dwg_Section_Type_r11 id,
  */
 
 EXPORT Dwg_Object_Ref *
-dwg_decode_preR13_handleref (Bit_Chain *restrict dat, int size)
+dwg_decode_preR13_handleref (Bit_Chain *restrict dat, int size,
+                             Dwg_Data *restrict dwg)
 {
-  Dwg_Object_Ref *ref = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
+  Dwg_Object_Ref *ref = dwg_new_ref (dwg);
   if (!ref)
     {
       LOG_ERROR ("Out of memory");
@@ -608,20 +609,6 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   obj->common_size = bit_position (dat) - obj->bitsize_pos;
   return 0;
 }
-
-//#else  // USE_WRITE
-//EXPORT int
-//decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
-//                      Dwg_Object_Entity *_ent)
-//{
-//  return DWG_ERR_INTERNALERROR;
-//}
-//EXPORT Dwg_Object_Ref *
-//dwg_decode_preR13_handleref (Bit_Chain *restrict dat, int size)
-//{
-//  return NULL;
-//}
-//#endif // USE_WRITE
 
 AFL_GCC_TOOBIG
 EXPORT int

@@ -278,7 +278,7 @@
     {                                                                         \
       if (ref)                                                                \
         free (ref);                                                           \
-      ref = dwg_decode_preR13_handleref (dat, code);                          \
+      ref = dwg_decode_preR13_handleref (dat, code /*as size */, dwg);        \
       LOG_TRACE (#nam ": %hd [H(%s) %d]\n", (short)ref->r11_idx,              \
                  code == 1 ? "RC" : "RSd", dxf)                               \
     }                                                                         \
@@ -333,7 +333,7 @@
   {                                                                           \
     PRE (R_13b1)                                                              \
     {                                                                         \
-      ref = dwg_decode_preR13_handleref (dat, code);                          \
+      ref = dwg_decode_preR13_handleref (dat, code, dwg);                     \
       LOG_TRACE (#nam "[%d]: " FORMAT_RS " [RS %d]\n", (int)vcount,           \
                  ref->r11_idx, dxf);                                          \
     }                                                                         \

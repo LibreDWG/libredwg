@@ -25,5 +25,6 @@ EXPORT int decode_entity_preR13 (Bit_Chain *restrict dat,
                                  Dwg_Object *restrict obj,
                                  Dwg_Object_Entity *ent);
 EXPORT Dwg_Object_Ref *dwg_decode_preR13_handleref (Bit_Chain *restrict dat,
-                                                    int size);
+                                                    int size,
+                                                    Dwg_Data *restrict dwg);
 #endif
