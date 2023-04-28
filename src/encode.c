@@ -2498,6 +2498,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       _obj->blocks_size = 0x40000000;
     if (!_obj->extras_size)
       _obj->extras_size = 0x80000000;
+    VERSIONS (R_2_0b, R_13b1) {
+      _obj->numentity_sections = 3;
+    }
 
     // clang-format off
     #include "header.spec"
