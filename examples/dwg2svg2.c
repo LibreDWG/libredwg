@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /*  LibreDWG - free implementation of the DWG file format                    */
 /*                                                                           */
-/*  Copyright (C) 2013-2020 Free Software Foundation, Inc.                   */
+/*  Copyright (C) 2013-2020,2023 Free Software Foundation, Inc.              */
 /*                                                                           */
 /*  This library is free software, licensed under the terms of the GNU       */
 /*  General Public License as published by the Free Software Foundation,     */
@@ -285,27 +285,27 @@ output_object (dwg_object *obj)
       return;
     }
 
-  if (dwg_object_get_type (obj) == DWG_TYPE_INSERT)
+  if (dwg_object_get_fixedtype (obj) == DWG_TYPE_INSERT)
     {
       output_INSERT (obj);
     }
 
-  if (dwg_object_get_type (obj) == DWG_TYPE_LINE)
+  if (dwg_object_get_fixedtype (obj) == DWG_TYPE_LINE)
     {
       output_LINE (obj);
     }
 
-  if (dwg_object_get_type (obj) == DWG_TYPE_CIRCLE)
+  if (dwg_object_get_fixedtype (obj) == DWG_TYPE_CIRCLE)
     {
       output_CIRCLE (obj);
     }
 
-  if (dwg_object_get_type (obj) == DWG_TYPE_TEXT)
+  if (dwg_object_get_fixedtype (obj) == DWG_TYPE_TEXT)
     {
       output_TEXT (obj);
     }
 
-  if (dwg_object_get_type (obj) == DWG_TYPE_ARC)
+  if (dwg_object_get_fixedtype (obj) == DWG_TYPE_ARC)
     {
       output_ARC (obj);
     }
@@ -363,6 +363,7 @@ output_SVG (dwg_data *dwg)
   unsigned int i, num_hdr_objs;
   int error;
   dwg_obj_block_control *_ctrl;
+  dwg_object_ref *hdr;
   dwg_object_ref **hdr_refs;
 
   double dx = dwg_model_x_max (dwg) - dwg_model_x_min (dwg);
@@ -404,7 +405,9 @@ output_SVG (dwg_data *dwg)
   printf ("\t</defs>\n");
 
   output_BLOCK_HEADER (dwg_model_space_ref (dwg));
-  output_BLOCK_HEADER (dwg_paper_space_ref (dwg));
+  hdr = dwg_paper_space_ref (dwg);
+  if (hdr)
+    output_BLOCK_HEADER (dwg_paper_space_ref (dwg));
   free (hdr_refs);
 
   printf ("</svg>\n");
