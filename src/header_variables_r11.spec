@@ -302,6 +302,12 @@
       LOG_TRACE ("HANDSEED: " FORMAT_H " [H 5]\n",
                  ARGS_H (_obj->HANDSEED->handleref));
     }
+  else
+    {
+      unsigned long handseed = dwg_next_handle (dwg);
+      bit_write_RLL (dat, handseed);
+      LOG_TRACE ("HANDSEED: (0.8.%lX) [H 5]\n", handseed);
+    }
 #else
   FIELD_HANDLE (HANDSEED, 0, 5)
 #endif
