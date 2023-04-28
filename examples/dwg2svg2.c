@@ -11,7 +11,9 @@
 /*****************************************************************************/
 
 /*
- * dwg2svg2.c: convert a DWG to SVG via the API
+ * dwg2svg2.c: convert a DWG to SVG via the API.
+   if there are paperspace entities, only output them. else all modelspace
+   entities.
  * written by Gaganjyot Singh
  * modified by Reini Urban
  */
@@ -245,10 +247,12 @@ output_INSERT (dwg_object *obj)
   dwg_ent_insert *insert;
   dwg_point_3d ins_pt, _scale;
   dwg_handle *obj_handle, *ins_handle;
+  Dwg_Data *dwg;
 
   insert = dwg_object_to_INSERT (obj);
   if (!insert)
     log_error ("dwg_object_to_INSERT");
+  dwg = obj->parent;
   index = dwg_object_get_index (obj, &error);
   log_if_error ("object_get_index");
   dynget (insert, "INSERT", "rotation", &rotation);
@@ -260,7 +264,7 @@ output_INSERT (dwg_object *obj)
     log_error ("insert->block_header");
   abs_ref = insert->block_header->absolute_ref;
 
-  if (insert->block_header->handleref.code == 5)
+  if (insert->block_header->handleref.code == 5 || dwg->header.version < R_13)
     {
       printf ("\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) "
               "rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%X\" /><!-- "
@@ -276,42 +280,45 @@ output_INSERT (dwg_object *obj)
     }
 }
 
-static void
+static int
 output_object (dwg_object *obj)
 {
+  int i = 0;
   if (!obj)
     {
       fprintf (stderr, "object is NULL\n");
-      return;
+      return 0;
     }
 
   if (dwg_object_get_fixedtype (obj) == DWG_TYPE_INSERT)
     {
+      i++;
       output_INSERT (obj);
     }
-
-  if (dwg_object_get_fixedtype (obj) == DWG_TYPE_LINE)
+  else if (dwg_object_get_fixedtype (obj) == DWG_TYPE_LINE)
     {
+      i++;
       output_LINE (obj);
     }
-
-  if (dwg_object_get_fixedtype (obj) == DWG_TYPE_CIRCLE)
+  else if (dwg_object_get_fixedtype (obj) == DWG_TYPE_CIRCLE)
     {
+      i++;
       output_CIRCLE (obj);
     }
-
-  if (dwg_object_get_fixedtype (obj) == DWG_TYPE_TEXT)
+  else if (dwg_object_get_fixedtype (obj) == DWG_TYPE_TEXT)
     {
+      i++;
       output_TEXT (obj);
     }
-
-  if (dwg_object_get_fixedtype (obj) == DWG_TYPE_ARC)
+  else if (dwg_object_get_fixedtype (obj) == DWG_TYPE_ARC)
     {
+      i++;
       output_ARC (obj);
     }
+  return i;
 }
 
-static void
+static int
 output_BLOCK_HEADER (dwg_object_ref *ref)
 {
   dwg_object *hdr, *obj;
@@ -319,22 +326,29 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
   int error;
   BITCODE_RL abs_ref;
   char *name;
+  int i = 0;
 
   if (!ref)
     {
       fprintf (stderr,
                "Empty BLOCK."
                " Could not output an SVG symbol for this BLOCK_HEADER\n");
-      return;
+      return 0;
     }
   hdr = dwg_ref_get_object (ref, &error);
   if (!hdr || error)
-    return;
+    {
+      abs_ref = dwg_ref_get_absref (ref, &error);
+      fprintf (stderr, "Failed to resolve BLOCK handle %X.\n",
+               (unsigned)abs_ref);
+      return 0;
+    }
   abs_ref = dwg_ref_get_absref (ref, &error);
 
   _hdr = dwg_object_to_BLOCK_HEADER (hdr);
   if (_hdr)
     {
+      i++;
       dynget (_hdr, "BLOCK_HEADER", "name", &name);
       // name = dwg_obj_block_header_get_name (_hdr, &error);
       printf ("\t<g id=\"symbol-%X\" >\n\t\t<!-- %s -->\n",
@@ -350,11 +364,11 @@ output_BLOCK_HEADER (dwg_object_ref *ref)
   obj = get_first_owned_entity (hdr);
   while (obj)
     {
-      output_object (obj);
+      i += output_object (obj);
       obj = get_next_owned_entity (hdr, obj);
     }
-
   printf ("\t</g>\n");
+  return i;
 }
 
 static void
@@ -365,6 +379,8 @@ output_SVG (dwg_data *dwg)
   dwg_obj_block_control *_ctrl;
   dwg_object_ref *hdr;
   dwg_object_ref **hdr_refs;
+  dwg_object_ref *ms = dwg_model_space_ref (dwg);
+  dwg_object_ref *ps = dwg_paper_space_ref (dwg);
 
   double dx = dwg_model_x_max (dwg) - dwg_model_x_min (dwg);
   double dy = dwg_model_y_max (dwg) - dwg_model_y_min (dwg);
@@ -396,18 +412,21 @@ output_SVG (dwg_data *dwg)
           "   height=\"%f\"\n"
           ">\n",
           page_width, page_height);
-  printf ("\t<defs>\n");
 
+  printf ("\t<defs>\n");
   for (i = 0; i < num_hdr_objs; i++)
     {
+      hdr = hdr_refs[i];
+      if (hdr == ms || hdr == ps)
+        continue;
       output_BLOCK_HEADER (hdr_refs[i]);
     }
   printf ("\t</defs>\n");
 
-  output_BLOCK_HEADER (dwg_model_space_ref (dwg));
-  hdr = dwg_paper_space_ref (dwg);
-  if (hdr)
-    output_BLOCK_HEADER (dwg_paper_space_ref (dwg));
+  if (ps)
+    i = output_BLOCK_HEADER (ps);
+  if (!ps || !i)
+    output_BLOCK_HEADER (ms);
   free (hdr_refs);
 
   printf ("</svg>\n");
