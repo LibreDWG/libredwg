@@ -193,12 +193,12 @@ static BITCODE_BL rcount1, rcount2;
 #define FIELD_TIMEBLL(name, dxf)
 #define FIELD_TIMERLL(name, dxf)
 #define FIELD_CMC(color, dxf)                                                 \
-  {                                                                           \
+  SINCE (R_2004) {                                                            \
     FIELD_T (color.name, 0);                                                  \
     FIELD_T (color.book_name, 0);                                             \
   }
 #define SUB_FIELD_CMC(o, color, dxf)                                          \
-  {                                                                           \
+  SINCE (R_2004) {                                                            \
     VALUE_TV (_obj->o.color.name, 0);                                         \
     VALUE_TV (_obj->o.color.book_name, 0);                                    \
   }
