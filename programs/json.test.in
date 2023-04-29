@@ -19,8 +19,8 @@ EXEEXT="@EXEEXT@"
 
 i=0
 DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
-DATA="$DATA example_2013 example_2018 example_r14"
-#TODO="example_r13 r11/ACEB10 r11/entities-3d r10/entities r2.10/entities r2.6/entities r1.4/entities"
+DATA="$DATA example_2013 example_2018 example_r14 example_r13"
+TODO="r11/entities-3d r11/ACEB10 r10/entities r2.10/entities r2.6/entities r1.4/entities"
 SED="@SED@"
 JQ="@JQ@"
 GEOJSONLINT="@GEOJSONLINT@"
@@ -28,7 +28,7 @@ GEOJSONLINT="@GEOJSONLINT@"
 [ -z "$JQ" ] && echo "$JQ"
 [ -z "$GEOJSONLINT" ] && echo "$GEOJSONLINT"
 
-for d in $DATA; do
+for d in $TODO $DATA; do
     b="$(basename "$d")"
     rm "./$b.json" 2>/dev/null
 done
@@ -40,15 +40,18 @@ check_roundtrip() {
         tgt="$(basename "$dwg")"
         log1="$(basename "$dwg" .dwg).log.orig"
         log2="$(basename "$dwg" .dwg).log"
+        echo "@LTEXEC@ ./dwgread${EXEEXT} -y -v2 -o $json $dwg 2>$log1"
         if ! @LTEXEC@ "./dwgread${EXEEXT}" -y -v2 -o "$json" "$dwg" 2>"$log1" >/dev/null; then
             echo "json $dwg failed"
             tail "$log1"
             exit 1
         fi
+        echo "@LTEXEC@ ./dwgwrite${EXEEXT} -y -v0 -o $tgt $json"
         if ! @LTEXEC@ "./dwgwrite${EXEEXT}" -y -v0 -o "$tgt" "$json" 2>/dev/null >/dev/null; then
             echo "dwgwrite $json failed"
             exit 1
         fi
+        echo "@LTEXEC@ ./dwgread${EXEEXT} -v2 $tgt 2>$log2"
         if ! @LTEXEC@ "./dwgread${EXEEXT}" -v2 "$tgt" 2>"$log2" >/dev/null; then
             echo "dwgread resulting $tgt failed"
             tail "$log2"
@@ -75,7 +78,7 @@ check_roundtrip() {
     fi
 }
 
-for dwg in $DATA; do
+for dwg in $TODO $DATA; do
     json="$(basename "$dwg" .dwg).json"
     log="$json.log"
     dwg="${DATADIR}/$dwg.dwg"
