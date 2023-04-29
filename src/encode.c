@@ -2705,15 +2705,16 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       {
         dwg->header.num_sections = dwg->header.version < R_2000 ? 5 : 6;
         // minimal DXF:
-        if (!dwg->header_vars.HANDSEED || !dwg->header_vars.TDCREATE.days)
-          {
-            dwg->header.num_sections = 5;
-            // hack to trigger IF_ENCODE_FROM_EARLIER defaults. undone after
-            // HEADER
-            dat->from_version = R_11;
-            if (dat->version <= dat->from_version)
-              dat->from_version = (Dwg_Version_Type)((int)dat->version - 1);
-          }
+        //if (dwg->opts & (DWG_OPTS_INDXF | DWG_OPTS_MINIMAL)
+        //    && (!dwg->header_vars.HANDSEED || !dwg->header_vars.TDCREATE.days))
+        //  {
+        //    dwg->header.num_sections = 5;
+        //    // hack to trigger IF_ENCODE_FROM_EARLIER defaults. undone after
+        //    // HEADER
+        //    dat->from_version = R_11;
+        //    if (dat->version <= dat->from_version)
+        //      dat->from_version = (Dwg_Version_Type)((int)dat->version - 1);
+        //  }
       }
     dwg_sections_init (dwg);
     LOG_TRACE ("sections: " FORMAT_RL " [RL]\n", dwg->header.sections);
