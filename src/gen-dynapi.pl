@@ -493,6 +493,7 @@ $DXF{'INSERT'}->{'block_header'} = 2;
 $DXF{'MINSERT'}->{'block_header'} = 2;
 $DXF{'POLYLINE_3D'}->{'flag'} = 70;
 $DXF{'POLYLINE_MESH'}->{'flag'} = 70;
+$DXF{'SHAPE'}->{'style_id'} = 2; # r11_idx => name
 $DXF{'VISUALSTYLE'}->{'edge_hide_precision_flag'} = 290;
 $DXF{'VISUALSTYLE'}->{'is_internal_use_only'} = 291;
 # $DXF{'VISUALSTYLE'}->{'face_lighting_model'} = 71;
