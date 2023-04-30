@@ -1464,11 +1464,14 @@ json_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           for (; *p; p++)
             {
               char buf[256]; // acis lines are not much longer
-              if (*p == '\n' && p - s < 256)
+              // and skip the final ^M
+              if ((*p == '\r' || *p == '\n') && p - s < 256)
                 {
                   FIRSTPREFIX fprintf (
                       dat->fh, "\"%s\"",
                       json_cquote (buf, s, p - s, dat->codepage));
+                  if (*p == '\r' && *(p + 1) == '\n')
+                    p++;
                   s = p + 1;
                 }
             }
