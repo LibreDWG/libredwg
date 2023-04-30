@@ -2690,22 +2690,22 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
       // encode extra entities.
       first_jump = dwg_find_last_type (dwg, DWG_TYPE_JUMP);
+      write_sentinel (dat, DWG_SENTINEL_R11_EXTRA_ENTITIES_BEGIN);
+      dwg->header.extras_start = dat->byte;
       if (first_jump)
         {
-          write_sentinel (dat, DWG_SENTINEL_R11_EXTRA_ENTITIES_BEGIN);
-          dwg->header.extras_start = dat->byte;
           dwg->cur_index += num_block_entities;
           num_extra_entities = encode_preR13_entities (
               dwg->cur_index, dwg->num_objects - 1, dat, dwg, &error);
           dwg->header.extras_size
               = 0x80000000 + (dat->byte - dwg->header.extras_start);
-          write_sentinel (dat, DWG_SENTINEL_R11_EXTRA_ENTITIES_END);
-          LOG_TRACE ("extra_entities   0x%x - 0x%x (0x%x)\n",
-                     dwg->header.extras_start,
-                     dwg->header.extras_start
-                         + (dwg->header.extras_size & 0xffffff),
-                     dwg->header.extras_size);
         }
+      write_sentinel (dat, DWG_SENTINEL_R11_EXTRA_ENTITIES_END);
+      LOG_TRACE ("extra_entities   0x%x - 0x%x (0x%x)\n",
+                 dwg->header.extras_start,
+                 dwg->header.extras_start
+                 + (dwg->header.extras_size & 0xffffff),
+                 dwg->header.extras_size);
       LOG_TRACE ("@0x%lx -> ", dat->byte);
       // patch these numbers into the header
       dat->byte = 0x14; // header section_address
