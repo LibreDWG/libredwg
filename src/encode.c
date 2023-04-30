@@ -1129,9 +1129,12 @@ void set_handle_size (Dwg_Handle *restrict hdl);
 
 static void write_sentinel (Bit_Chain *dat, const Dwg_Sentinel sentinel_id)
 {
-  bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (sentinel_id), 16);
-  LOG_TRACE ("sentinel: %u [16]", sentinel_id);
-  LOG_RPOS
+  SINCE (R_11)
+  {
+    bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (sentinel_id), 16);
+    LOG_TRACE ("sentinel: %u [16]", sentinel_id);
+    LOG_RPOS
+  }
 }
 
 static BITCODE_RL
@@ -2055,8 +2058,7 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   switch (id)
     {
     case SECTION_BLOCK:
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_BLOCKS_BEGIN);
+      write_sentinel (dat, DWG_SENTINEL_R11_BLOCKS_BEGIN);
       PREP_CTRL (BLOCK_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
@@ -2079,13 +2081,11 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           }
           CHK_ENDPOS;
         }
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_BLOCKS_END);
+      write_sentinel (dat, DWG_SENTINEL_R11_BLOCKS_END);
       break;
 
     case SECTION_LAYER:
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_LAYERS_BEGIN);
+      write_sentinel (dat, DWG_SENTINEL_R11_LAYERS_BEGIN);
       PREP_CTRL (LAYER_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
@@ -2097,14 +2097,12 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_HANDLE (ltype, 2, 6);
           CHK_ENDPOS;
         }
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_LAYERS_END);
+      write_sentinel (dat, DWG_SENTINEL_R11_LAYERS_END);
       break;
 
     // was a text STYLE table, became a STYLE object
     case SECTION_STYLE:
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_STYLES_BEGIN);
+      write_sentinel (dat, DWG_SENTINEL_R11_STYLES_BEGIN);
       PREP_CTRL (STYLE_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
@@ -2119,13 +2117,11 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           //   FIELD_TFv (bigfont_file, 64, 4); // 92d
           CHK_ENDPOS;
         }
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_STYLES_END);
+      write_sentinel (dat, DWG_SENTINEL_R11_STYLES_END);
       break;
 
     case SECTION_LTYPE:
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_LINETYPES_BEGIN);
+      write_sentinel (dat, DWG_SENTINEL_R11_LINETYPES_BEGIN);
       PREP_CTRL (LTYPE_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
@@ -2139,13 +2135,11 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
           CHK_ENDPOS;
         }
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_LINETYPES_END);
+      write_sentinel (dat, DWG_SENTINEL_R11_LINETYPES_END);
       break;
 
     case SECTION_VIEW:
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_VIEWS_BEGIN);
+      write_sentinel (dat, DWG_SENTINEL_R11_VIEWS_BEGIN);
       PREP_CTRL (VIEW_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
@@ -2162,13 +2156,11 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_RD (twist_angle, 50);
           CHK_ENDPOS;
         }
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_VIEWS_END);
+      write_sentinel (dat, DWG_SENTINEL_R11_VIEWS_END);
       break;
 
     case SECTION_UCS:
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_UCS_BEGIN);
+      write_sentinel (dat, DWG_SENTINEL_R11_UCS_BEGIN);
       PREP_CTRL (UCS_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
@@ -2178,13 +2170,11 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_2RD (ucsydir, 12);
           CHK_ENDPOS;
         }
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_UCS_END);
+      write_sentinel (dat, DWG_SENTINEL_R11_UCS_END);
       break;
 
     case SECTION_VPORT:
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_VPORTS_BEGIN);
+      write_sentinel (dat, DWG_SENTINEL_R11_VPORTS_BEGIN);
       PREP_CTRL (VPORT_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
@@ -2218,26 +2208,22 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
           CHK_ENDPOS;
         }
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_VPORTS_END);
+      write_sentinel (dat, DWG_SENTINEL_R11_VPORTS_END);
       break;
 
     case SECTION_APPID:
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_APPIDS_BEGIN);
+      write_sentinel (dat, DWG_SENTINEL_R11_APPIDS_BEGIN);
       PREP_CTRL (APPID_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
           PREP_TABLE (APPID);
           CHK_ENDPOS;
         }
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_APPIDS_END);
+      write_sentinel (dat, DWG_SENTINEL_R11_APPIDS_END);
       break;
 
     case SECTION_DIMSTYLE:
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_DIMSTYLES_BEGIN);
+      write_sentinel (dat, DWG_SENTINEL_R11_DIMSTYLES_BEGIN);
       PREP_CTRL (DIMSTYLE_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
@@ -2287,20 +2273,17 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_RD (DIMGAP, 147);    // e59
           CHK_ENDPOS;                //-e63
         }
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_DIMSTYLES_END);
+      write_sentinel (dat, DWG_SENTINEL_R11_DIMSTYLES_END);
       break;
 
     case SECTION_VX:
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_VXS_BEGIN);
+      write_sentinel (dat, DWG_SENTINEL_R11_VXS_BEGIN);
       if (tblnum)
         {
           LOG_WARN ("VX table ignored");
           tblnum = 0;
         }
-      SINCE (R_11)
-        write_sentinel (dat, DWG_SENTINEL_R11_VXS_END);
+      write_sentinel (dat, DWG_SENTINEL_R11_VXS_END);
       break;
 
     case SECTION_HEADER_R11:
@@ -2621,8 +2604,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     LOG_TRACE ("\nentities %u 0x%x - 0x%x\n", numentities,
                dwg->header.entities_start,
                dwg->header.entities_end);
-    SINCE (R_11)
-      write_sentinel (dat, DWG_SENTINEL_R11_ENTITIES_END);
+    write_sentinel (dat, DWG_SENTINEL_R11_ENTITIES_END);
 
     // patch all the section tbl->address
     addr = dwg->header.entities_end + (dat->version >= R_11 ? 0x20 : 0);
@@ -2690,14 +2672,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           last_endblk = dwg_find_last_type (dwg, DWG_TYPE_ENDBLK);
           endblk_index
               = last_endblk ? last_endblk->index : dwg->num_objects - 1;
-          SINCE (R_11)
-            write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN);
+          write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN);
           dwg->header.blocks_start = dat->byte;
           num_block_entities = encode_preR13_entities (
               last_entity_idx + 1, endblk_index, dat, dwg, &error);
           dwg->header.blocks_size = (dat->byte - dwg->header.blocks_start);
-          SINCE (R_11)
-            write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_ENTITIES_END);
+          write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_ENTITIES_END);
         }
       else
         {
@@ -2715,16 +2695,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       first_jump = dwg_find_last_type (dwg, DWG_TYPE_JUMP);
       if (first_jump)
         {
-          SINCE (R_11)
-            write_sentinel (dat, DWG_SENTINEL_R11_EXTRA_ENTITIES_BEGIN);
+          write_sentinel (dat, DWG_SENTINEL_R11_EXTRA_ENTITIES_BEGIN);
           dwg->header.extras_start = dat->byte;
           dwg->cur_index += num_block_entities;
           num_extra_entities = encode_preR13_entities (
               dwg->cur_index, dwg->num_objects - 1, dat, dwg, &error);
           dwg->header.extras_size
               = 0x80000000 + (dat->byte - dwg->header.extras_start);
-          SINCE (R_11)
-            write_sentinel (dat, DWG_SENTINEL_R11_EXTRA_ENTITIES_END);
+          write_sentinel (dat, DWG_SENTINEL_R11_EXTRA_ENTITIES_END);
           LOG_TRACE ("extra_entities   0x%x - 0x%x (0x%x)\n",
                      dwg->header.extras_start,
                      dwg->header.extras_start
@@ -4533,7 +4511,7 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
             unsigned long pos = dat->byte;
             obj->size = dat->byte - obj->address;
             SINCE (R_11)
-            obj->size += 2; // crc16
+              obj->size += 2; // crc16
             dat->byte = size_pos;
             bit_write_RS (dat, obj->size);
             LOG_TRACE ("-size: %u [RL] (@%lu.%u)\n", obj->size, dat->byte,
