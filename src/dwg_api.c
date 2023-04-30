@@ -25111,6 +25111,7 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
       {                                                                       \
         API_ADD_OBJECT (record);                                              \
         _record = _obj;                                                       \
+        _obj->used = -1;                                                      \
         _obj->name = dwg_add_u8_input (dwg, name);                            \
         LOG_TRACE (#record ".name = %s\n", _obj->name);                       \
         __VA_ARGS__                                                           \

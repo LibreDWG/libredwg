@@ -2039,6 +2039,7 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   LOG_TRACE ("\nctrl " #token " [%d]: num:%u\n", num, tblnum)
 
 #define PREP_TABLE(token)                                                     \
+  BITCODE_RL pvzadr = dat->byte;                                              \
   Dwg_Object *obj = &dwg->object[num + i];                                    \
   Dwg_Object_##token *_obj = obj->tio.object->tio.token;                      \
   LOG_TRACE ("contents table " #token " [%d]: size:%u (0x%lx, 0x%lx)\n", i,   \
@@ -2051,9 +2052,13 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       continue;                                                               \
     }                                                                         \
   FIELD_RC (flag, 70);                                                        \
-  FIELD_TFv (name, 32, 2)
+  FIELD_TFv (name, 32, 2);                                                    \
+  SINCE (R_11)                                                                \
+    FIELD_RSd (used, 0)
 
-#define CHK_ENDPOS dwg->cur_index += tblnum
+#define CHK_ENDPOS                                                            \
+  dwg->cur_index += tblnum;                                                   \
+  bit_write_CRC (dat, pvzadr, 0xC0C1);
 
   switch (id)
     {
@@ -2063,14 +2068,8 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       for (i = 0; i < tblnum; i++)
         {
           PREP_TABLE (BLOCK_HEADER);
-          SINCE (R_11)
-          {
-            FIELD_RSd (used, 0);
-          }
           PRE (R_13b1)
-          {
             FIELD_RLx (block_offset_r11, 0);
-          }
           SINCE (R_11)
           {
             if (!obj->size || obj->size == 38)
@@ -2091,8 +2090,6 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         {
           Bit_Chain *str_dat = dat;
           PREP_TABLE (LAYER);
-
-          FIELD_CAST (flag, RC, RS, 70); // 860
           FIELD_CMC (color, 62);         // off if negative
           FIELD_HANDLE (ltype, 2, 6);
           CHK_ENDPOS;
