@@ -6228,6 +6228,7 @@ decode_preR13_sentinel (Dwg_Sentinel sentinel,
   if (!r11_sentinel)
     return DWG_ERR_INVALIDDWG;
   LOG_TRACE ("%s: ", sentinel_name);
+  LOG_RPOS
   LOG_TRACE_TF (r11_sentinel, 16)
   if (memcmp (r11_sentinel, dwg_sentinel (sentinel), 16))
     {

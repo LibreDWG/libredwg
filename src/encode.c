@@ -1994,7 +1994,8 @@ encode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
   bit_write_RS (dat, tbl->size); // calculated
   bit_write_RS (dat, tbl->number);
   bit_write_RS (dat, tbl->flags_r11);
-  bit_write_RL (dat, tbl->address); // TODO needs to be patched
+  tbl->address = dat->byte;
+  bit_write_RL (dat, 0xDEADBEAF); // patched later
   LOG_TRACE ("%s.size: " FORMAT_RS " [RS]\n", tbl->name, tbl->size);
   LOG_TRACE ("%s.number: " FORMAT_RS " [RS]\n", tbl->name, tbl->number);
   LOG_TRACE ("%s.flags_r11: " FORMAT_RSx " [RS]\n", tbl->name, tbl->flags_r11);
@@ -2562,7 +2563,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   PRE (R_13b1)
   {
     BITCODE_RL numentities;
-    BITCODE_RL hdr_offset, hdr_end;
+    BITCODE_RL hdr_offset, hdr_end, addr;
     BITCODE_BL last_entity_idx;
     Dwg_Object *first_block;
 
@@ -2622,6 +2623,25 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                dwg->header.entities_end);
     SINCE (R_11)
       write_sentinel (dat, DWG_SENTINEL_R11_ENTITIES_END);
+
+    // patch all the section tbl->address
+    addr = dwg->header.entities_end + (dat->version >= R_11 ? 0x20 : 0);
+    for (int id = (int)SECTION_BLOCK; id <= (int)dwg->header.num_sections; id++)
+      {
+        Dwg_Section *tbl = &dwg->header.section[id];
+        BITCODE_RL pos = dat->byte;
+        if (!tbl->address)
+          continue;
+        dat->byte = tbl->address;
+        LOG_TRACE ("%s.address => 0x%x [RLx] @%x\n", tbl->name, addr, tbl->address);
+        bit_write_RL (dat, addr);
+        tbl->address = addr;
+        addr += tbl->size * tbl->number;
+        if (dat->version >= R_11)
+          addr += 0x20;
+        dat->byte = pos;
+      }
+
     PRE (R_2_0b)
     {
       // patch these numbers into the header
