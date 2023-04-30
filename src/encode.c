@@ -2293,6 +2293,116 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   return error;
 }
 
+// only in R11
+static void
+encode_preR13_section_chk (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
+                           Dwg_Data *restrict dwg)
+{
+  Dwg_Section *tbl;
+  if (!dwg->header.num_sections)
+    dwg->header.num_sections = SECTION_VX; // r11
+  if (id > dwg->header.num_sections)
+    {
+      LOG_ERROR ("encode_preR13_section_chk: Invalid table %d, have only %d", id,
+                 dwg->header.num_sections)
+      return;
+    }
+  tbl = &dwg->header.section[id];
+  bit_write_RS (dat, (BITCODE_RS)id);
+  bit_write_RS (dat, tbl->size);
+  bit_write_RS (dat, tbl->number);
+  bit_write_RL (dat, tbl->address);
+  LOG_TRACE ("chk table %-8s [%2d]: size:%-4u nr:%-3ld (0x%x)\n", tbl->name,
+             id, tbl->size, (long)tbl->number, tbl->address)
+}
+
+// only in R11
+static int
+encode_preR13_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+{
+  int error = 0;
+  BITCODE_RS crc, crcc;
+  Dwg_AuxHeader *_obj = &dwg->auxheader;
+  Dwg_Object *obj = NULL;
+  unsigned long pos = dat->byte;
+
+  LOG_TRACE ("\nAUXHEADER: @0x%lx\n", dat->byte);
+  _obj->auxheader_address = dat->byte;
+  if (!_obj->num_auxheader_variables)
+    {
+      _obj->num_auxheader_variables = 16;
+      _obj->auxheader_size = 138;
+      _obj->num_aux_tables = 10;
+      _obj->entities_start = dwg->header.entities_start;
+      _obj->entities_end = dwg->header.entities_end;
+      _obj->blocks_start = dwg->header.blocks_start;
+      _obj->extras_start = dwg->header.extras_start;
+      _obj->R11_HANDLING = dwg->header_vars.HANDLING;
+    }
+  write_sentinel (dat, DWG_SENTINEL_R11_AUX_HEADER_BEGIN);
+  FIELD_RS (num_auxheader_variables, 0);
+  FIELD_RS (auxheader_size, 0);
+  FIELD_RLx (entities_start, 0);
+  if (_obj->entities_start != dwg->header.entities_start)
+    {
+      LOG_WARN ("entities_start %x/%x", _obj->entities_start, dwg->header.entities_start);
+    }
+  FIELD_RLx (entities_end, 0);
+  if (_obj->entities_end != dwg->header.entities_end)
+    {
+      LOG_WARN ("entities_end %x/%x", _obj->entities_end, dwg->header.entities_end);
+    }
+  FIELD_RLx (blocks_start, 0);
+  if (_obj->blocks_start != dwg->header.blocks_start)
+    {
+      LOG_WARN ("blocks_start %x/%x", _obj->blocks_start, dwg->header.blocks_start);
+    }
+  FIELD_RLx (extras_start, 0);
+  if (_obj->extras_start != dwg->header.extras_start)
+    {
+      LOG_WARN ("extras_start %x/%x", _obj->extras_start, dwg->header.extras_start);
+    }
+  FIELD_RS (R11_HANDLING, 0);
+  {
+    if (!_obj->R11_HANDSEED)
+      {
+        _obj->R11_HANDSEED = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
+        _obj->R11_HANDSEED->handleref.code = 0;
+        _obj->R11_HANDSEED->handleref.size = 8;
+      }
+    bit_write_RLL (dat, htobe64 (_obj->R11_HANDSEED->handleref.value));
+    _obj->R11_HANDSEED->absolute_ref = _obj->R11_HANDSEED->handleref.value;
+    LOG_TRACE ("R11_HANDSEED: " FORMAT_H " [H 5]\n",
+               ARGS_H (_obj->R11_HANDSEED->handleref));
+  }
+  FIELD_RS (num_aux_tables, 0);
+  encode_preR13_section_chk (SECTION_BLOCK, dat, dwg);
+  encode_preR13_section_chk (SECTION_LAYER, dat, dwg);
+  encode_preR13_section_chk (SECTION_STYLE, dat, dwg);
+  encode_preR13_section_chk (SECTION_LTYPE, dat, dwg);
+  encode_preR13_section_chk (SECTION_VIEW, dat, dwg);
+  if (dwg->header.num_sections >= SECTION_VPORT)
+    {
+      encode_preR13_section_chk (SECTION_UCS, dat, dwg);
+      encode_preR13_section_chk (SECTION_VPORT, dat, dwg);
+    }
+  if (dwg->header.num_sections >= SECTION_APPID)
+    {
+      encode_preR13_section_chk (SECTION_APPID, dat, dwg);
+    }
+  if (dwg->header.num_sections >= SECTION_VX)
+    {
+      encode_preR13_section_chk (SECTION_DIMSTYLE, dat, dwg);
+      encode_preR13_section_chk (SECTION_VX, dat, dwg);
+    }
+  FIELD_RLx (auxheader_address, 0);
+  bit_write_CRC (dat, _obj->auxheader_address + 16, 0xC0C1);
+  write_sentinel (dat, DWG_SENTINEL_R11_AUX_HEADER_END);
+  LOG_TRACE ("\n");
+
+  return error;
+}
+
 /**
  * dwg_encode(): the current generic encoder entry point.
  *
@@ -2706,6 +2816,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                  dwg->header.extras_start
                  + (dwg->header.extras_size & 0xffffff),
                  dwg->header.extras_size);
+      SINCE (R_11)
+        error |= encode_preR13_auxheader (dat, dwg);
       LOG_TRACE ("@0x%lx -> ", dat->byte);
       // patch these numbers into the header
       dat->byte = 0x14; // header section_address
@@ -2751,6 +2863,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                       : dwg->header.blocks_start
                             + (dwg->header.blocks_size & 0xffffff);
     }
+
     LOG_TRACE ("Wrote %lu bytes\n", dat->byte);
     return error;
   }
@@ -2790,7 +2903,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     /*------------------------------------------------------------
      * AuxHeader section 5
-     * R2000+, mostly redundant file header information
+     * R11+, mostly redundant file header information
      */
     if (dwg->header.sections > 5)
       {
