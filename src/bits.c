@@ -3511,15 +3511,6 @@ bit_search_sentinel (Bit_Chain *dat, const unsigned char sentinel[16])
 }
 
 void
-bit_write_sentinel (Bit_Chain *dat, const unsigned char sentinel[16])
-{
-  int i;
-
-  for (i = 0; i < 16; i++)
-    bit_write_RC (dat, sentinel[i]);
-}
-
-void
 bit_chain_init (Bit_Chain *dat, const size_t size)
 {
   dat->chain = (unsigned char *)calloc (1, size);

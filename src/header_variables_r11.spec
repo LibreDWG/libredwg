@@ -368,4 +368,4 @@
   FIELD_RD (PELEVATION, 40); //ok
   if (dwg->header.numheader_vars <= 204)
     return 0;
-  FIELD_CAST (VISRETAIN, RS, B, 70); //ok
+  FIELD_CAST (VISRETAIN, RS, B, 70); // r11

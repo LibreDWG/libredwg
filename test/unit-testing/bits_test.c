@@ -951,8 +951,7 @@ main (int argc, char const *argv[])
   bitchain.byte++;
   bitchain.bit = 0;
   {
-    bit_write_sentinel (&bitchain, sentinel);
-
+    bit_write_TF (&bitchain, sentinel, 16);
     if (bitchain.chain[--bitchain.byte] == 0x5F)
       pass ();
     else

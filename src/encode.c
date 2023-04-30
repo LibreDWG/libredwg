@@ -1127,6 +1127,13 @@ void set_handle_size (Dwg_Handle *restrict hdl);
  * Public functions
  */
 
+static void write_sentinel (Bit_Chain *dat, const Dwg_Sentinel sentinel_id)
+{
+  bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (sentinel_id), 16);
+  LOG_TRACE ("sentinel: %u [16]", sentinel_id);
+  LOG_RPOS
+}
+
 static BITCODE_RL
 encode_patch_RLsize (Bit_Chain *dat, long unsigned int pvzadr)
 {
@@ -2048,8 +2055,7 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     {
     case SECTION_BLOCK:
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_BLOCKS_BEGIN),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_BLOCKS_BEGIN);
       PREP_CTRL (BLOCK_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
@@ -2073,14 +2079,12 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           CHK_ENDPOS;
         }
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_BLOCKS_END),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_BLOCKS_END);
       break;
 
     case SECTION_LAYER:
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_LAYERS_BEGIN),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_LAYERS_BEGIN);
       PREP_CTRL (LAYER_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
@@ -2093,15 +2097,13 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           CHK_ENDPOS;
         }
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_LAYERS_END),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_LAYERS_END);
       break;
 
     // was a text STYLE table, became a STYLE object
     case SECTION_STYLE:
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_STYLES_BEGIN),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_STYLES_BEGIN);
       PREP_CTRL (STYLE_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
@@ -2117,14 +2119,12 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           CHK_ENDPOS;
         }
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_STYLES_END),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_STYLES_END);
       break;
 
     case SECTION_LTYPE:
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_LINETYPES_BEGIN),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_LINETYPES_BEGIN);
       PREP_CTRL (LTYPE_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
@@ -2139,14 +2139,12 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           CHK_ENDPOS;
         }
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_LINETYPES_END),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_LINETYPES_END);
       break;
 
     case SECTION_VIEW:
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_VIEWS_BEGIN),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_VIEWS_BEGIN);
       PREP_CTRL (VIEW_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
@@ -2164,14 +2162,12 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           CHK_ENDPOS;
         }
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_VIEWS_END),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_VIEWS_END);
       break;
 
     case SECTION_UCS:
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_UCS_BEGIN),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_UCS_BEGIN);
       PREP_CTRL (UCS_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
@@ -2182,14 +2178,12 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           CHK_ENDPOS;
         }
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_UCS_END),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_UCS_END);
       break;
 
     case SECTION_VPORT:
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_VPORTS_BEGIN),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_VPORTS_BEGIN);
       PREP_CTRL (VPORT_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
@@ -2224,14 +2218,12 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           CHK_ENDPOS;
         }
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_VPORTS_END),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_VPORTS_END);
       break;
 
     case SECTION_APPID:
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_APPIDS_BEGIN),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_APPIDS_BEGIN);
       PREP_CTRL (APPID_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
@@ -2239,14 +2231,12 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           CHK_ENDPOS;
         }
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_APPIDS_END),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_APPIDS_END);
       break;
 
     case SECTION_DIMSTYLE:
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_DIMSTYLES_BEGIN),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_DIMSTYLES_BEGIN);
       PREP_CTRL (DIMSTYLE_CONTROL)
       for (i = 0; i < tblnum; i++)
         {
@@ -2297,22 +2287,19 @@ encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           CHK_ENDPOS;                //-e63
         }
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_DIMSTYLES_END),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_DIMSTYLES_END);
       break;
 
     case SECTION_VX:
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_VXS_BEGIN),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_VXS_BEGIN);
       if (tblnum)
         {
           LOG_WARN ("VX table ignored");
           tblnum = 0;
         }
       SINCE (R_11)
-        bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_VXS_END),
-                      16);
+        write_sentinel (dat, DWG_SENTINEL_R11_VXS_END);
       break;
 
     case SECTION_HEADER_R11:
@@ -2600,12 +2587,16 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     hdr_offset = dat->byte;
     encode_preR13_header_variables (dat, dwg);
-
+    hdr_end = dat->byte;
+    // the sentinel starts 16 before entities_start
+    SINCE (R_11)
+      {
+        bit_write_RS (dat, 0); // crc placeholder
+        LOG_TRACE ("crc 0 [RSx]\n");
+        write_sentinel (dat, DWG_SENTINEL_R11_ENTITIES_BEGIN);
+      }
     dwg->header.entities_start = dat->byte;
     LOG_TRACE ("\nentities 0x%x:\n", dwg->header.entities_start);
-    SINCE (R_11)
-      bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_ENTITIES_BEGIN),
-                    16);
     dwg->cur_index = 0;
     PRE (R_2_0b)
       {
@@ -2630,8 +2621,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                dwg->header.entities_start,
                dwg->header.entities_end);
     SINCE (R_11)
-      bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_ENTITIES_END),
-                    16);
+      write_sentinel (dat, DWG_SENTINEL_R11_ENTITIES_END);
     PRE (R_2_0b)
     {
       // patch these numbers into the header
@@ -2681,15 +2671,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           endblk_index
               = last_endblk ? last_endblk->index : dwg->num_objects - 1;
           SINCE (R_11)
-            bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN),
-                          16);
+            write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN);
           dwg->header.blocks_start = dat->byte;
           num_block_entities = encode_preR13_entities (
               last_entity_idx + 1, endblk_index, dat, dwg, &error);
           dwg->header.blocks_size = (dat->byte - dwg->header.blocks_start);
           SINCE (R_11)
-            bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_BLOCK_ENTITIES_END),
-                          16);
+            write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_ENTITIES_END);
         }
       else
         {
@@ -2708,8 +2696,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       if (first_jump)
         {
           SINCE (R_11)
-            bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_EXTRA_ENTITIES_BEGIN),
-                          16);
+            write_sentinel (dat, DWG_SENTINEL_R11_EXTRA_ENTITIES_BEGIN);
           dwg->header.extras_start = dat->byte;
           dwg->cur_index += num_block_entities;
           num_extra_entities = encode_preR13_entities (
@@ -2717,8 +2704,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           dwg->header.extras_size
               = 0x80000000 + (dat->byte - dwg->header.extras_start);
           SINCE (R_11)
-            bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (DWG_SENTINEL_R11_EXTRA_ENTITIES_END),
-                          16);
+            write_sentinel (dat, DWG_SENTINEL_R11_EXTRA_ENTITIES_END);
           LOG_TRACE ("extra_entities   0x%x - 0x%x (0x%x)\n",
                      dwg->header.extras_start,
                      dwg->header.extras_start
@@ -2746,8 +2732,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       {
         BITCODE_RS crc;
         dat->byte = dwg->header.entities_start - 18;
+        assert (dat->byte == hdr_end);
         crc = bit_calc_CRC (0xC0C1, &dat->chain[0], dat->byte);
-        LOG_TRACE ("crc: %04X [RSx] from 0-0x%lx\n", crc, dat->byte);
+        LOG_TRACE ("crc: %04X [RSx] from 0-0x%lx\n", crc, dat->byte); // -0x6bd
         bit_write_RS (dat, crc);
       }
       dat->byte = dwg->header.extras_start
@@ -2804,7 +2791,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     section_address = dat->byte;                // save section address
     dat->byte += (dwg->header.sections * 9); /* RC + 2*RL */
     bit_write_CRC (dat, 0, 0xC0C1);
-    bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_HEADER_END));
+    write_sentinel (dat, DWG_SENTINEL_HEADER_END);
 
     /*------------------------------------------------------------
      * AuxHeader section 5
@@ -2903,7 +2890,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   dat->bit = 0;
   LOG_TRACE ("\n=======> Thumbnail:       %4u\n", (unsigned)dat->byte);
   // dwg->thumbnail.size = 0; // to disable
-  bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_BEGIN));
+  write_sentinel (dat, DWG_SENTINEL_THUMBNAIL_BEGIN);
   if (dwg->thumbnail.size == 0)
     {
       bit_write_RL (dat, 5); // overall size
@@ -2915,7 +2902,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       bit_write_TF (dat, dwg->thumbnail.chain, dwg->thumbnail.size);
     }
-  bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_THUMBNAIL_END));
+  write_sentinel (dat, DWG_SENTINEL_THUMBNAIL_END);
 
   {
     BITCODE_RL bmpsize;
@@ -2944,7 +2931,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     }
   dwg->header.section[0].number = 0;
   dwg->header.section[0].address = dat->byte;
-  bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_VARIABLE_BEGIN));
+  write_sentinel (dat, DWG_SENTINEL_VARIABLE_BEGIN);
 
   pvzadr = dat->byte; // Size position
   {
@@ -2960,7 +2947,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     // XXX trying to fix CRC 2-byte overflow. Must find actual reason.
     // dat->byte -= 2;
-    bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_VARIABLE_END));
+    write_sentinel (dat, DWG_SENTINEL_VARIABLE_END);
     assert ((long)dat->byte > (long)dwg->header.section[0].address);
     dwg->header.section[0].size
         = (BITCODE_RL)((long)dat->byte - (long)dwg->header.section[0].address);
@@ -2988,7 +2975,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
     dwg->header.section[sec_id].number = 1;
     dwg->header.section[sec_id].address = dat->byte; // FIXME
-    bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_CLASS_BEGIN));
+    write_sentinel (dat, DWG_SENTINEL_CLASS_BEGIN);
     pvzadr = dat->byte;    // Size position
     bit_write_RL (dat, 0); // Size placeholder
 
@@ -3050,7 +3037,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     assert (pvzadr);
     encode_patch_RLsize (dat, pvzadr);
     bit_write_CRC (dat, pvzadr, 0xC0C1);
-    bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_CLASS_END));
+    write_sentinel (dat, DWG_SENTINEL_CLASS_END);
     dwg->header.section[SECTION_CLASSES_R13].size
         = dat->byte - dwg->header.section[SECTION_CLASSES_R13].address;
     LOG_TRACE ("       Classes (end): %4u\n", (unsigned)dat->byte);
@@ -3304,8 +3291,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->header.section[SECTION_2NDHEADER_R13].address = _obj->address;
       dwg->header.section[SECTION_2NDHEADER_R13].size = _obj->size;
       LOG_INFO ("\n=======> Second Header: %4u\n", (unsigned)dat->byte);
-      bit_write_sentinel (dat,
-                          dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_BEGIN));
+      write_sentinel (dat, DWG_SENTINEL_SECOND_HEADER_BEGIN);
 
       pvzadr = dat->byte; // Keep the first address of the section to write its
                           // size later
@@ -3392,7 +3378,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           FIELD_RL (junk_r14_2, 0);
         }
       }
-      bit_write_sentinel (dat, dwg_sentinel (DWG_SENTINEL_SECOND_HEADER_END));
+      write_sentinel (dat, DWG_SENTINEL_SECOND_HEADER_END);
       dwg->header.section[SECTION_2NDHEADER_R13].size
           = dat->byte - _obj->address;
     }

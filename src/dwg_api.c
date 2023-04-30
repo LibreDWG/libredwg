@@ -22301,7 +22301,7 @@ default_numheader_vars (Dwg_Data *dwg, const Dwg_Version_Type version)
     dwg->header.numheader_vars = 158;
   else if (version <= R_10)
     dwg->header.numheader_vars = 160;
-  else if (version <= R_11)
+  else if (version < R_11)
     dwg->header.numheader_vars = 204;
   else if (version <= R_13b1)
     dwg->header.numheader_vars = 205;

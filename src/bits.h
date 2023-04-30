@@ -350,7 +350,6 @@ void bit_write_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
                     Dwg_Color *restrict color);
 
 int bit_search_sentinel (Bit_Chain *dat, const unsigned char sentinel[16]);
-void bit_write_sentinel (Bit_Chain *dat, const unsigned char sentinel[16]);
 
 void bit_chain_init (Bit_Chain *dat, const size_t size);
 void bit_chain_init_dat (Bit_Chain *restrict dat, const size_t size,
