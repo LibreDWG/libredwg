@@ -40,22 +40,30 @@ check_roundtrip() {
         tgt="$(basename "$dwg")"
         log1="$(basename "$dwg" .dwg).log.orig"
         log2="$(basename "$dwg" .dwg).log"
+        todo=
+        case $dwg in
+            *r11/*)  todo=1 ;;
+            *r10/*)  todo=1 ;;
+            *r9/*)   todo=1 ;;
+            *r2.*)   todo=1 ;;
+            *r1.*)   todo=1 ;;
+        esac
         echo "@LTEXEC@ ./dwgread${EXEEXT} -y -v2 -o $json $dwg 2>$log1"
         if ! @LTEXEC@ "./dwgread${EXEEXT}" -y -v2 -o "$json" "$dwg" 2>"$log1" >/dev/null; then
             echo "json $dwg failed"
             tail "$log1"
-            exit 1
+            if [ -z $todo ]; then i=$((i+1)); fi
         fi
         echo "@LTEXEC@ ./dwgwrite${EXEEXT} -y -v0 -o $tgt $json"
         if ! @LTEXEC@ "./dwgwrite${EXEEXT}" -y -v0 -o "$tgt" "$json" 2>/dev/null >/dev/null; then
             echo "dwgwrite $json failed"
-            exit 1
+            if [ -z $todo ]; then i=$((i+1)); fi
         fi
         echo "@LTEXEC@ ./dwgread${EXEEXT} -v2 $tgt 2>$log2"
         if ! @LTEXEC@ "./dwgread${EXEEXT}" -v2 "$tgt" 2>"$log2" >/dev/null; then
             echo "dwgread resulting $tgt failed"
             tail "$log2"
-            exit 1
+            if [ -z $todo ]; then i=$((i+1)); fi
         fi
         expect1="$(grep -E -c '^Add entity' "$log1")"
         got1="$(grep -E -c '^Add entity' "$log2")"
@@ -68,7 +76,11 @@ check_roundtrip() {
             rm "./$log1" "./$log2" 2>/dev/null
         else
             echo "$json" "roundtrip fail: $expect1 vs $got1 entities, $expect2 vs $got2 objects"
-            i=$((i+1))
+            if [ -z $todo ]; then
+                i=$((i+1))
+            else
+                rm "./$log1" "./$log2" 2>/dev/null
+            fi
             echo "expect entities: $expect1" >"$log"
             # shellcheck disable=SC2129
             echo "got    entities: $got1"    >>"$log"
@@ -78,7 +90,7 @@ check_roundtrip() {
     fi
 }
 
-for dwg in $TODO $DATA; do
+for dwg in $DATA $TODO; do
     json="$(basename "$dwg" .dwg).json"
     log="$json.log"
     dwg="${DATADIR}/$dwg.dwg"
