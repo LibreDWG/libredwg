@@ -41,12 +41,20 @@ if [ -f "$b.json" ]; then
 fi
 
 if [ -f "$b.dwg" ]; then
+    # teigha can only write from r12-r2018
+    can_teigha=1
     case $(uname) in
         Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
         Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
         Windows) TeighaFileConverter=TeighaFileConverter ;;
+        *)       can_teigha=0 ;;
     esac
-    if [ -x "$TeighaFileConverter" ]; then
+    case $r in
+        r2.*)     can_teigha=0 ;;
+        r9)       can_teigha=0 ;;
+        r1[012])  can_teigha=0 ;;
+    esac
+    if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
         cp "./$b.dwg" test/
         echo TeighaFileConverter "test" "." "ACAD$r" DXF 0 1 "$b.dwg"
         $TeighaFileConverter "test" "." "ACAD$r" DXF 0 1 "$b.dwg"
