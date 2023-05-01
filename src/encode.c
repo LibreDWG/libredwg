@@ -1935,12 +1935,15 @@ calc_preR13_ctrl_size (Dwg_Data *restrict dwg, Dwg_Object *obj)
 }
 
 static void
-encode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
+encode_preR13_section_hdr (const char *restrict name, const Dwg_Section_Type_r11 id,
                            Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   static BITCODE_BL addr = 0;
-  Dwg_Section *tbl = &dwg->header.section[id];
-  int i = id < 5 ? id : id - 1;
+  Dwg_Section *tbl;
+  int i;
+  assert (id <= SECTION_VX);
+  tbl = &dwg->header.section[id];
+  i = id < 5 ? id : id - 1;
   if (id == SECTION_BLOCK)
     addr = dwg->header.entities_end + (dat->version >= R_11 ? 0x20 : 0);
   // SECTION_BLOCK = 1,
@@ -2002,22 +2005,23 @@ encode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
   LOG_TRACE ("%s.size: " FORMAT_RS " [RS]\n", tbl->name, tbl->size);
   LOG_TRACE ("%s.number: " FORMAT_RS " [RS]\n", tbl->name, tbl->number);
   LOG_TRACE ("%s.flags_r11: " FORMAT_RSx " [RS]\n", tbl->name, tbl->flags_r11);
-  LOG_TRACE ("%s.address: " FORMAT_RLx " [RL]\n", tbl->name,
+  LOG_TRACE ("%s.address: " FORMAT_RLx " [RL] (patch addr)\n", tbl->name,
              (BITCODE_RL)tbl->address);
 }
 
 static int
-encode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
+encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
                        Dwg_Data *restrict dwg)
 {
   Dwg_Section *tbl = &dwg->header.section[id];
   int i = 0;
+  int error = 0;
   BITCODE_BL vcount;
   int tblnum = tbl->number;
-  int error = 0;
   BITCODE_RL num = tbl->objid_r11; // from decode_r11
   Bit_Chain *hdl_dat = dat;
   Dwg_Object *ctrl;
+  assert (id <= SECTION_VX);
 
 #define PREP_CTRL(token)                                                      \
   if (!num) /* don't trust tbl. from json or dxf */                           \
@@ -2682,10 +2686,19 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     // the sentinel starts 16 before entities_start
     SINCE (R_11)
       {
+        if (!dwg->header.num_sections)
+          dwg->header.num_sections = SECTION_VX;
         bit_write_RS (dat, 0); // crc placeholder
         LOG_TRACE ("crc 0 [RSx]\n");
         write_sentinel (dat, DWG_SENTINEL_R11_ENTITIES_BEGIN);
       }
+    else
+      if (!dwg->header.num_sections)
+        dwg->header.num_sections = dwg->header.numheader_vars <= 158
+          ? SECTION_VPORT
+          : dwg->header.numheader_vars <= 160
+            ? SECTION_APPID
+            : SECTION_VX;
     dwg->header.entities_start = dat->byte;
     LOG_TRACE ("\nentities 0x%x:\n", dwg->header.entities_start);
     dwg->cur_index = 0;
@@ -3368,7 +3381,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       assert (dat->chain[1] == 'C');
     }
   PRE (R_2004)
-  assert (dat->byte);
+    assert (dat->byte);
 #endif
   pvzadr = dat->byte;
   bit_write_RS_LE (dat, 2); // last section_size 2
