@@ -235,7 +235,7 @@ const unsigned char unknown_section[53]
   }
 #define FIELD_TF(nam, len, dxf)                                               \
   {                                                                           \
-    LOG_TRACE (#nam ": [TF %d %d]\n", (int)len, dxf);                         \
+    LOG_TRACE (#nam ": %s [TF %d %d]\n", _obj->nam, (int)len, dxf);           \
     if (len > 0)                                                              \
       {                                                                       \
         if (!_obj->nam)                                                       \
@@ -2042,8 +2042,14 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
 #define PREP_TABLE(token)                                                     \
   BITCODE_RL pvzadr = dat->byte;                                              \
-  Dwg_Object *obj = &dwg->object[num + i];                                    \
-  Dwg_Object_##token *_obj = obj->tio.object->tio.token;                      \
+  Dwg_Object *obj = dwg_get_next_object(dwg, DWG_TYPE_##token, num + i);      \
+  Dwg_Object_##token *_obj;                                                   \
+  if (!obj)                                                                   \
+    {                                                                         \
+      LOG_ERROR ("No table %s after pos %u found", #token, num + i);          \
+      continue;                                                               \
+    }                                                                         \
+  _obj = obj->tio.object->tio.token;                                          \
   LOG_TRACE ("contents table " #token " [%d]: (0x%lx, 0x%lx)\n", i,           \
              obj->address, dat->byte);                                        \
   if (obj->fixedtype != DWG_TYPE_##token)                                     \

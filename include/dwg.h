@@ -9775,6 +9775,9 @@ EXPORT Dwg_Object *get_next_owned_block_entity (const Dwg_Object *restrict hdr,
                                                 const Dwg_Object *restrict current);
 EXPORT Dwg_Object *dwg_get_first_object (const Dwg_Data *dwg,
                                          const Dwg_Object_Type type);
+EXPORT Dwg_Object *dwg_get_next_object (const Dwg_Data *dwg,
+                                        const Dwg_Object_Type type,
+                                        const BITCODE_RL index);
 
 EXPORT Dwg_Object *dwg_resolve_handle (const Dwg_Data *restrict dwg,
                                        const unsigned long absref);

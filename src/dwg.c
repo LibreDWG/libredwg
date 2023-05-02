@@ -1578,6 +1578,20 @@ dwg_get_first_object (const Dwg_Data *dwg, const Dwg_Object_Type type)
   return NULL;
 }
 
+EXPORT Dwg_Object *
+dwg_get_next_object (const Dwg_Data *dwg, const Dwg_Object_Type type,
+                     const BITCODE_RL index)
+{
+  for (unsigned i = index; i < dwg->num_objects; i++)
+    {
+      Dwg_Object *const obj = &dwg->object[i];
+      if (obj->fixedtype == type && obj->tio.object
+          && obj->tio.object->tio.APPID)
+        return obj;
+    }
+  return NULL;
+}
+
 EXPORT int
 dwg_class_is_entity (const Dwg_Class *restrict klass)
 {
