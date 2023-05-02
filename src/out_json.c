@@ -945,7 +945,7 @@ _prefix (Bit_Chain *dat)
     if (obj->dxfname && strNE (obj->dxfname, #token))                         \
       FIELD_TEXT (dxfname, obj->dxfname);                                     \
     _FIELD (index, RL, 0);                                                    \
-    _FIELD (type, RL, 0);                                                     \
+    _FIELD (type, RSd, 0);                                                    \
     SINCE (R_13b1)                                                            \
     {                                                                         \
       KEY (handle);                                                           \

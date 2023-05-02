@@ -1127,15 +1127,13 @@ void set_handle_size (Dwg_Handle *restrict hdl);
  * Public functions
  */
 
-static void write_sentinel (Bit_Chain *dat, const Dwg_Sentinel sentinel_id)
-{
-  SINCE (R_11)
-  {
-    bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (sentinel_id), 16);
-    LOG_TRACE ("sentinel: %u [16]", sentinel_id);
-    LOG_RPOS
-  }
-}
+#define write_sentinel(dat, sentinel_id)                                      \
+    SINCE (R_11)                                                              \
+    {                                                                         \
+      bit_write_TF (dat, (BITCODE_TF)dwg_sentinel (sentinel_id), 16);         \
+      LOG_TRACE (#sentinel_id " [16]");                                       \
+      LOG_RPOS                                                                \
+    }                                                                         \
 
 static BITCODE_RL
 encode_patch_RLsize (Bit_Chain *dat, long unsigned int pvzadr)
@@ -4387,9 +4385,9 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
           continue;
         }
       // deleted, i.e. moved to a BLOCK
-      if (obj->fixedtype == DWG_TYPE_UNUSED)
+      if (obj->fixedtype == DWG_TYPE_UNUSED || obj->type > 128)
         {
-          LOG_TRACE ("Skip deleted entity %s, number: %d, type: %d, Addr: %lx "
+          LOG_TRACE ("\nSkip deleted entity %s, number: %d, type: %d, Addr: %lx "
                      "(0x%x)\n",
                      obj->name, obj->index, obj->type, obj->address,
                      (unsigned)dat->byte);
