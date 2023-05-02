@@ -2044,8 +2044,8 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   BITCODE_RL pvzadr = dat->byte;                                              \
   Dwg_Object *obj = &dwg->object[num + i];                                    \
   Dwg_Object_##token *_obj = obj->tio.object->tio.token;                      \
-  LOG_TRACE ("contents table " #token " [%d]: size:%u (0x%lx, 0x%lx)\n", i,   \
-             obj->size, obj->address, dat->byte);                             \
+  LOG_TRACE ("contents table " #token " [%d]: (0x%lx, 0x%lx)\n", i,           \
+             obj->address, dat->byte);                                        \
   if (obj->fixedtype != DWG_TYPE_##token)                                     \
     {                                                                         \
       LOG_ERROR ("Wrong type %s at [%d], expected %s",                        \
@@ -2172,9 +2172,9 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           //    obj->tio.object->flag_r11 |= FLAG_R11_HAS_ELEVATION;
           //    obj->tio.object->elevation_r11 = FIELD_VALUE (ucsorg.z);
           //  }
-          FIELD_2RD (ucsorg, 10);
-          FIELD_2RD (ucsxdir, 11);
-          FIELD_2RD (ucsydir, 12);
+          FIELD_3RD (ucsorg, 10);
+          FIELD_3RD (ucsxdir, 11);
+          FIELD_3RD (ucsydir, 12);
           CHK_ENDPOS;
         }
       write_sentinel (dat, DWG_SENTINEL_R11_UCS_END);
