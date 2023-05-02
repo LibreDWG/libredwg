@@ -8283,6 +8283,8 @@ enum {
   OPTS_R11_VERTEX_HAS_BULGE = 4,
   OPTS_R11_VERTEX_HAS_FLAG = 8,
   OPTS_R11_VERTEX_HAS_TANGENT_DIR = 16,
+  OPTS_R11_VERTEX_UNKNOWN_32 = 0x20,  // only seen with n-mesh
+  OPTS_R11_VERTEX_IS_N_VERT = 0x4000, // or vice versa
 };
 
 enum {

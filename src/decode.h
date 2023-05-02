@@ -121,11 +121,11 @@ int read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
 void section_string_stream (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                             BITCODE_RL bitsize, Bit_Chain *restrict str);
 /* for decode_r11.c */
+int decode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 int decode_preR13_DIMENSION (Bit_Chain *restrict dat,
                              Dwg_Object *restrict obj);
 int decode_preR13_sentinel (Dwg_Sentinel sentinel, const char *sentinel_name,
                             Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
-int decode_preR13_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 int decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                             unsigned num_entities, BITCODE_RL size,
                             Bit_Chain *restrict dat, Dwg_Data *restrict dwg,

@@ -800,7 +800,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   // aux header
   SINCE (R_11) {
-    error |= decode_preR13_auxheader(dat, dwg);
+    error |= decode_r11_auxheader(dat, dwg);
     if (error >= DWG_ERR_CRITICAL)
       return error;
   }

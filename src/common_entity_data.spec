@@ -194,7 +194,9 @@
               LOG_OPTS_R11 (VERTEX, HAS_BULGE);
               LOG_OPTS_R11 (VERTEX, HAS_FLAG);
               LOG_OPTS_R11 (VERTEX, HAS_TANGENT_DIR);
-              LOG_OPTS_R11_MAX (VERTEX, 31);
+              LOG_OPTS_R11 (VERTEX, UNKNOWN_32);
+              LOG_OPTS_R11 (VERTEX, IS_N_VERT);
+              LOG_OPTS_R11_MAX (VERTEX, 0x403f);
 
               LOG_TRACE ("\n");
 #  undef LOG_OPTS_R11

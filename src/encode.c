@@ -2305,8 +2305,8 @@ encode_preR13_section_chk (const Dwg_Section_Type_r11 id, Bit_Chain *restrict da
     dwg->header.num_sections = SECTION_VX; // r11
   if (id > dwg->header.num_sections)
     {
-      LOG_ERROR ("encode_preR13_section_chk: Invalid table %d, have only %d", id,
-                 dwg->header.num_sections)
+      LOG_ERROR ("encode_preR13_section_chk: Invalid table %d, have only %d",
+                 id, dwg->header.num_sections)
       return;
     }
   tbl = &dwg->header.section[id];
@@ -2315,12 +2315,12 @@ encode_preR13_section_chk (const Dwg_Section_Type_r11 id, Bit_Chain *restrict da
   bit_write_RS (dat, tbl->number);
   bit_write_RL (dat, tbl->address);
   LOG_TRACE ("chk table %-8s [%2d]: size:%-4u nr:%-3ld (0x%x)\n", tbl->name,
-             id, tbl->size, (long)tbl->number, tbl->address)
+             id, tbl->size, (long)tbl->number, (unsigned)tbl->address)
 }
 
 // only in R11
 static int
-encode_preR13_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+encode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
   BITCODE_RS crc, crcc;
@@ -2347,22 +2347,26 @@ encode_preR13_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   FIELD_RLx (entities_start, 0);
   if (_obj->entities_start != dwg->header.entities_start)
     {
-      LOG_WARN ("entities_start %x/%x", _obj->entities_start, dwg->header.entities_start);
+      LOG_WARN ("entities_start %x/%x", _obj->entities_start,
+                dwg->header.entities_start);
     }
   FIELD_RLx (entities_end, 0);
   if (_obj->entities_end != dwg->header.entities_end)
     {
-      LOG_WARN ("entities_end %x/%x", _obj->entities_end, dwg->header.entities_end);
+      LOG_WARN ("entities_end %x/%x", _obj->entities_end,
+                dwg->header.entities_end);
     }
   FIELD_RLx (blocks_start, 0);
   if (_obj->blocks_start != dwg->header.blocks_start)
     {
-      LOG_WARN ("blocks_start %x/%x", _obj->blocks_start, dwg->header.blocks_start);
+      LOG_WARN ("blocks_start %x/%x", _obj->blocks_start,
+                dwg->header.blocks_start);
     }
   FIELD_RLx (extras_start, 0);
   if (_obj->extras_start != dwg->header.extras_start)
     {
-      LOG_WARN ("extras_start %x/%x", _obj->extras_start, dwg->header.extras_start);
+      LOG_WARN ("extras_start %x/%x", _obj->extras_start,
+                dwg->header.extras_start);
     }
   FIELD_RS (R11_HANDLING, 0);
   {
@@ -2733,7 +2737,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         if (!tbl->address)
           continue;
         dat->byte = tbl->address;
-        LOG_TRACE ("%s.address => 0x%x [RLx] @%x\n", tbl->name, addr, tbl->address);
+        LOG_TRACE ("%s.address => " FORMAT_RLx " [RLx] @%x\n", tbl->name,
+                   addr, (unsigned)tbl->address);
         bit_write_RL (dat, addr);
         tbl->address = addr;
         addr += tbl->size * tbl->number;
@@ -2828,7 +2833,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                  + (dwg->header.extras_size & 0xffffff),
                  dwg->header.extras_size);
       SINCE (R_11)
-        error |= encode_preR13_auxheader (dat, dwg);
+        error |= encode_r11_auxheader (dat, dwg);
       LOG_TRACE ("@0x%lx -> ", dat->byte);
       // patch these numbers into the header
       dat->byte = 0x14; // header section_address

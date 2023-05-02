@@ -6273,7 +6273,7 @@ decode_preR13_section_chk (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
 // only in R11
 int
-decode_preR13_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
+decode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
   BITCODE_RS crc, crcc;
@@ -6464,6 +6464,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
           Dwg_Object *obj;
           Dwg_Object_Entity *ent, *_ent;
           BITCODE_RS type, crc;
+          BITCODE_RC pline_flag = 0;
 
           if (!num)
             dwg->object
@@ -6625,21 +6626,21 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               break;
             case 17:
               error |= dwg_decode_SEQEND (dat, obj);
+              pline_flag = 0;
               break;
             case 18:
               error |= dwg_decode_JUMP (dat, obj);
               break;
             case 19:
               { // which polyline
-                BITCODE_RC flag;
                 dat->byte += 5;
-                flag = bit_read_RC (dat);
+                pline_flag = bit_read_RC (dat);
                 dat->byte -= 6;
-                if (flag & 8)
+                if (pline_flag & 8)
                   error |= dwg_decode_POLYLINE_3D (dat, obj);
-                else if (flag & 16)
+                else if (pline_flag & 16)
                   error |= dwg_decode_POLYLINE_MESH (dat, obj);
-                else if (flag & 64)
+                else if (pline_flag & 64)
                   error |= dwg_decode_POLYLINE_PFACE (dat, obj);
                 else
                   error |= dwg_decode_POLYLINE_2D (dat, obj);
@@ -6651,13 +6652,13 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 dat->byte += 5;
                 flag = bit_read_RC (dat);
                 dat->byte -= 6;
-                if (flag & 32)
+                if (pline_flag & 8)
                   error |= dwg_decode_VERTEX_3D (dat, obj);
-                else if (flag & 64 && !(flag & 128))
+                else if (pline_flag & 16)
                   error |= dwg_decode_VERTEX_MESH (dat, obj);
-                else if (flag & (64 + 128))
+                else if (pline_flag & 64 && flag & (64 + 128))
                   error |= dwg_decode_VERTEX_PFACE (dat, obj);
-                else if (flag & 128 && !(flag & 64))
+                else if (pline_flag & 64 && !(flag & 64))
                   error |= dwg_decode_VERTEX_PFACE_FACE (dat, obj);
                 else
                   error |= dwg_decode_VERTEX_2D (dat, obj);
