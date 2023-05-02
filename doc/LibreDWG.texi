@@ -85,8 +85,8 @@ LibreDWG is neither associated with Autodesk, nor with the Open Design Alliance.
 @cindex license
 
 LibreDWG is a free C library to read and write @dfn{DWG files}.
-The DWG file format was created in the 1970s for the then-emerging
-CAD applications.
+The DWG file format is proprietary and was created in the 1970s for
+one then-emerging CAD application.
 
 This library is part of the GNU project, released under the aegis of
 GNU.  It is made available under GPLv3+, i.e., under the terms of the
@@ -139,23 +139,19 @@ Here is a list of features that are still missing:
 
 @table @asis
 
-@item Writing pre-R13 and r2004+ DWG
+@item Writing r2004+ DWG
 Writing DWG formats for r2004 and later: r2007, r2010, r2013, r2018 is an
 ongoing effort. You need to patch the code to enable writing to the r2004+ format.
 See the @code{work/2004} branch.
 Writing to the specific r2007 format is not implemented.
 We write as default in the r2000 format only.
 
-Writing pre-R13 DWG's is possible, but some automatic conversions from
-new table objects to the old table sections are not complete. pre-R13
-had no objects nor handles, only tables and entities.
-
 @item Reading binary DXF
 DXF support is now mostly implemented.
 ASCII DXF's are generated fully, with much more elements and fields and other free libraries,
 but AutoCAD @registeredsymbol{} fails to import some of them. See the @file{TODO} file for a detailed coverage report.
 
-Reading binary DXF is still under construction, done about 80%.
+Reading binary DXF should be complete but is undertested.
 
 @item Reading and writing pre-R13 DXF
 Reading and writing pre-R13 DXF's is work in progress.
@@ -273,7 +269,8 @@ Some projects that use DWG (and specifically LibreDWG) are:
 @url{http://grass.osgeo.org/}
 @end table
 
-Plans are to add support for SolveSpace, OpenSCAD and PythonCAD.
+Plans are to add support for SolveSpace, LibreCAD, FreeCAD, OpenSCAD
+and PythonCAD.
 
 Related libraries:
 
@@ -282,7 +279,8 @@ Related libraries:
 The old version (documented in Esperanto) which was forked to LibreDWG in 2009.
 But in the meantime it got a DXF reader.
 @item libdxfrw
-Read the DWG format for all versions r13+ but with much less elements, only those needed for DXF.
+Read the DWG format for all versions r13+ but with much less elements,
+only those needed for DXF.
 Written in C++, under the GPLv2 license.
 @item libopencad
 Read the r2000 DWG format.
@@ -293,8 +291,8 @@ The OpenDWG's license does not allow the usage in free software projects.
 
 Compared to libdwg, libdxfrw and libopencad, LibreDWG can read and
 write much more DWG versions and details. Which is especially important for
-attached links and data from third party applications: BIM, MAP, GIS, AEC, MECH, ...,
-for 3D solids and dynamic parametric constraints.
+attached links and data from third party applications:
+BIM, MAP, GIS, AEC, MECH, ..., for 3D solids and dynamic parametric constraints.
 
 @node Usage
 @chapter Usage
@@ -538,9 +536,8 @@ With r11 came the additional tables:
     DIMSTYLE
     VX
 
-But we convert them internally to the r2000/r2004 objects and control objects.
-
-@xref{Tables}.
+But we convert them internally to the r2004 table record and
+table control objects. @xref{Tables}.
 
 @node HEADER_
 @section HEADER Section
@@ -550,8 +547,9 @@ But we convert them internally to the r2000/r2004 objects and control objects.
 @node OBJECTS_
 @section OBJECTS Section
 
-The OBJECTS Section is usually split up into multiple pages (separate sections of type AcDbObjects)
-and contains all entities and objects. It is indexed by @ref{HANDLES}.
+The OBJECTS Section is usually split up into multiple pages (separate
+sections of type AcDbObjects) and contains all entities and
+objects. It is indexed by @ref{HANDLES}.
 
 @xref{Objects, OBJECTS}.
 
@@ -805,6 +803,7 @@ entity. Here it jumps back to the VERTEX_2D [32] at offset 0x84f.
 @end example
 
 The entity iterator knows about these jumps.
+The DXF structure resolves those jumps, and inserts the replaced entities.
 
 @node Structures
 @chapter Structures
@@ -1010,8 +1009,8 @@ hand-holding and manual conversions when converting from newer formats still.
 See @file{src/in_dxf.c} for a high-level usage example.
 The default codepage is Latin-1, 30.
 
-The highest level function for encoding a bitstream to a file is @code{dwg_write_file},
-which dumps the dwg to a file.
+The highest level function for encoding a bitstream to a file is
+@code{dwg_write_file}, which dumps the dwg to a file.
 
 @deftypefn {Function} int dwg_write_file (char *@var{filename}, Dwg_Data *@var{dwg})
 Open @var{filename} and write the @var{dwg} to it.
@@ -1239,14 +1238,17 @@ add api to DWG/DXF: add reads strings as UTF-8, and encodes it from UTF-8 to TV 
 
 We can write ASCII DXF files in various versions, with much more data
 than other free DWG libraries, but not as stable as the unfree Teigha
-library yet.  AutoCAD @registeredsymbol{} fails to import some of our files still (~10%
-failure rate).
+library yet.  AutoCAD @registeredsymbol{} fails to import some of our
+files still (~10% failure rate).
 
 Options: @code{--minimal} (see @code{dwg2dxf} or @code{dwgread}) creates
 only a short header with a ACADVER and HANDSEED element, and the
 entities, without any subclass markers, reactors or handles.
 
-Reading DXF is under construction and works for most entities.
+Support for the different r1.x DXF format is not planned.
+
+Reading DXF works for most objects.
+Converting a minimal DXF to DWG may fail, and needs some fixes.
 
 @node DXFB
 @subsection DXFB
@@ -1267,15 +1269,16 @@ readable 1:1 mapping of the DWG structures, and carries much more
 information than the DXF format. The idea is to dump a DWG to JSON and
 filter/query or postprocess it with more powerful JSON query tools
 such as @b{jq} (@url{https://stedolan.github.io/jq/}), and optionally
-import it back in. @xref{Programs, dwgfilter, Programs: dwgfilter}. JSON is much better structured than DXF.
+import it back in. @xref{Programs, dwgfilter, Programs:
+dwgfilter}. JSON is much better structured than DXF.
 
 The current first level objects are all the section names, like
 ``HEADER'', ``CLASSES'', ``OBJECTS''. For more see the specs.
 
 Note that for the versions before R13 we convert all tables to table
-control and record objects internally, which does not reflect the DWG and DXF
-structure fully.  But we can easier use our iterators needed for DXF
-support. @xref{Tables}.
+control and record objects internally, so that we can use our iterators
+needed for DXF support. This does not reflect the internal DWG structure.
+@xref{Tables}.
 
 
 @node GeoJSON
@@ -1386,16 +1389,6 @@ Options:
        -o outfile, --file outfile
               also defines the output fmt. Default: stdout
 
-       -a rNNNN, --as rNNNN writes the output format as another
-              version.  Valid versions are r1.2, r1.3, r1.4,
-              r2.0b, r2.0, r2.10, r2.21, r2.22, r2.4, r2.5, r2.6, r9,
-              r9c1, r10, r11b1, r11b2, r11, r13b1, r13b2, r13, r13c3,
-              r14, r2000b, r2000, r2000i r2002, r2004a, r2004b,
-              r2004c, r2004, r2005, r2006, r2007b, r2007, r2008, r2009,
-              r2010b, r2010, r2011, r2012, r2013b, r2013, r2014,
-              r2015, r2016, r2017, r2018b r2018, r2019, r2020, r2021,
-              r2022.
-
        --help display this help and exit
 
        --version
@@ -1414,7 +1407,7 @@ For now can only create r1.2-r2000 DWG files.
 @anchor{dxfwrite}
 
 Create a DXF from a given input file (@code{DWG}, @pxref{DXF}, @pxref{DXFB, Binary DXF}, @pxref{JSON}),
-optionally via @code{--as=rNNNN} as another version. Highly experimental.
+optionally via @code{--as=rNNNN} as another version. Experimental.
 Supports the same options as @code{dwg2dxf}.
 
 @item @file{dwg2dxf}
@@ -1559,7 +1552,7 @@ See also @url{https://github.com/LibreDWG/libredwg-fuzz} for our fuzzing setup t
 @cindex dwgadd
 @anchor{dwgadd}
 is the easiest way to create DWG's (or DXF, JSON) from scratch or add entities to an existing DWG.
-It accepts a very simple file with commands to create entities or objects.
+It accepts a very simple file with commands to create entities or objects and set its properties.
 See @code{man 1 dwgadd} and @code{man 5 dwgadd}.
 
 @end table
@@ -1607,7 +1600,7 @@ To report bugs or suggest enhancements for GNU LibreDWG, please
 or send electronic mail to @email{libredwg@@gnu.org}.
 (If you use the web interface, you don't need to also send email,
 since that is done automatically.)
-Pull requests at the @uref{https://github.com/LibreDWG/libredwg, github mirror} are also accepted for now.
+Issues and pull requests at the @uref{https://github.com/LibreDWG/libredwg, github mirror} are also accepted.
 
 @cindex checklist for bug reports
 For bug reports, please include enough information for the maintainers
