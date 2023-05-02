@@ -155,7 +155,7 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
   LOG_TRACE ("%s.size: " FORMAT_RS " [RS]\n", tbl->name, tbl->size);
   LOG_TRACE ("%s.number: " FORMAT_RS " [RS]\n", tbl->name, tbl->number);
   LOG_TRACE ("%s.flags_r11: " FORMAT_RSx " [RS]\n", tbl->name, tbl->flags_r11);
-  LOG_TRACE ("%s.address: " FORMAT_RLx " [RL]\n", tbl->name,
+  LOG_TRACE ("%s.address: " FORMAT_RLx " [RL]\n\n", tbl->name,
              (BITCODE_RL)tbl->address);
 
   switch (id)
@@ -212,7 +212,8 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
   if (tbl->number > 0 && (tbl->address + (tbl->number * tbl->size) > dat->size))
     {
       LOG_ERROR ("%s.size overflow %lu > %lu", tbl->name,
-                 (unsigned long)(tbl->address + (tbl->number * tbl->size)), (unsigned long)dat->size);
+                 (unsigned long)(tbl->address + (tbl->number * tbl->size)),
+                 (unsigned long)dat->size);
       return DWG_ERR_INVALIDDWG;
     }
   return 0;

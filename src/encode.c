@@ -2164,6 +2164,14 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       for (i = 0; i < tblnum; i++)
         {
           PREP_TABLE (UCS);
+          // check ucs_elevation. maybe set flag_r11 & HAS_ELEVATION
+          if (FIELD_VALUE (ucs_elevation) != 0.0)
+            FIELD_VALUE (ucsorg.z) = FIELD_VALUE (ucs_elevation);
+          //if (FIELD_VALUE (ucsorg.z) != 0.0)
+          //  {
+          //    obj->tio.object->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+          //    obj->tio.object->elevation_r11 = FIELD_VALUE (ucsorg.z);
+          //  }
           FIELD_2RD (ucsorg, 10);
           FIELD_2RD (ucsxdir, 11);
           FIELD_2RD (ucsydir, 12);

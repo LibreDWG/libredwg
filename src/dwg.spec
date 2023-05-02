@@ -4134,6 +4134,13 @@ DWG_OBJECT_END
 DWG_TABLE (UCS)
 
   COMMON_TABLE_FLAGS (UCS)
+  PRE (R_2000)
+  {
+    ENCODER {
+      if (FIELD_VALUE (ucs_elevation))
+        FIELD_VALUE (ucsorg).z = FIELD_VALUE (ucs_elevation);
+    }
+  }
   PRE (R_13b1)
   {
     FIELD_3RD (ucsorg, 10);
