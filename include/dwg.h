@@ -3038,7 +3038,8 @@ typedef struct _dwg_HATCH_Path
   struct _dwg_entity_HATCH *parent;
   /* Segment path */
   BITCODE_BL flag; /* 2: is_polyline, 4: is_derived, 8: is_textbox,
-                      0x20: is_open, 0x80: is_textisland, 0x100: is_duplicate, 0x200: is_annotative */
+                      0x20: is_open, 0x80: is_textisland, 0x100: is_duplicate,
+                      0x200: is_annotative */
   BITCODE_BL num_segs_or_paths;
   Dwg_HATCH_PathSeg* segs;
 

@@ -1575,12 +1575,12 @@
   for (rcount1 = 0; rcount1 < (BITCODE_BL)times; rcount1++)
 
 // checked with var. times
-#define _REPEAT(times, name, type, idx)                                       \
-  REPEAT_CHKCOUNT_LVAL (name, _obj->times, type)                              \
+#define _REPEAT(times, nam, type, idx)                                        \
+  REPEAT_CHKCOUNT_LVAL (nam, _obj->times, type)                               \
   if (_obj->times > 0)                                                        \
     {                                                                         \
-      _obj->name = (type *)calloc (_obj->times, sizeof (type));               \
-      if (!_obj->name)                                                        \
+      _obj->nam = (type *)calloc (_obj->times, sizeof (type));                \
+      if (!_obj->nam)                                                         \
         return DWG_ERR_OUTOFMEM;                                              \
     }                                                                         \
   for (rcount##idx = 0; rcount##idx < (BITCODE_BL)_obj->times; rcount##idx++)

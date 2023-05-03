@@ -2063,6 +2063,32 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               old = &((char *)_obj)[f->offset];
               memcpy (old, &buf, f->size);
             }
+          // is r11 fixed size string? (tables and controls,
+          // marked as TV, not TF)
+          else if (dwg->header.from_version <= R_12
+                   && (dwg_obj_is_table (obj)
+                       || dwg_obj_is_control (obj)))
+            {
+              char *old;
+              // sizes:
+              // 16: DIMSTYLE.DIM*
+              // 32: *.name
+              // 48: LTYPE.description
+              // 64: STYLE.font_file, bigfont_file
+              // 66: DIMSTYLE.DIMBLK2_T
+              const int k = strEQc(key, "name") ? 32
+                : obj->fixedtype == DWG_TYPE_LTYPE ? 48
+                : obj->fixedtype == DWG_TYPE_DIMSTYLE
+                  && strEQc(key, "DIMBLK2_T") ? 66
+                : obj->fixedtype == DWG_TYPE_DIMSTYLE ? 16
+                : 64;
+              str = (char *)realloc (str, k);
+              memset (&str[len + 1], 0, k - len - 1);
+              LOG_TRACE ("%s.%s: \"%s\" [TF %d %d]\n", name, key, str, k,
+                         f->dxf);
+              old = &((char *)_obj)[f->offset];
+              memcpy (old, &str, sizeof (char *));
+            }
           else if (strEQc (f->type, "TF")) // oleclient, strings_area, ...
                                            // fixup size field
             {
