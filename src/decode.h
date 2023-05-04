@@ -124,7 +124,7 @@ void section_string_stream (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 int decode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 int decode_preR13_DIMENSION (Bit_Chain *restrict dat,
                              Dwg_Object *restrict obj);
-int decode_preR13_sentinel (Dwg_Sentinel sentinel, const char *sentinel_name,
+int decode_preR13_sentinel (const Dwg_Sentinel sentinel, const char *restrict sentinel_name,
                             Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 int decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                             unsigned num_entities, BITCODE_RL size,

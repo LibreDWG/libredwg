@@ -6217,23 +6217,38 @@ decode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 }
 
 int
-decode_preR13_sentinel (Dwg_Sentinel sentinel,
+decode_preR13_sentinel (const Dwg_Sentinel sentinel,
                         const char *restrict sentinel_name,
                         Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int error = 0;
-  BITCODE_TF r11_sentinel;
+  const unsigned char *const wanted = dwg_sentinel (sentinel);
+  BITCODE_TF r11_sentinel = bit_read_TF (dat, 16);
 
-  r11_sentinel = bit_read_TF (dat, 16);
   if (!r11_sentinel)
     return DWG_ERR_INVALIDDWG;
   LOG_TRACE ("%s: ", sentinel_name);
   LOG_RPOS
   LOG_TRACE_TF (r11_sentinel, 16)
-  if (memcmp (r11_sentinel, dwg_sentinel (sentinel), 16))
+  if (memcmp (r11_sentinel, wanted, 16))
     {
-      LOG_ERROR ("%s mismatch", sentinel_name);
-      error = DWG_ERR_SECTIONNOTFOUND;
+      unsigned long pos = MAX (dat->byte, 200) - 200;
+      unsigned long len = MIN (dat->size - dat->byte, 400);
+      // search +- 1000 bytes around
+      char *found = memmem (&dat->chain[pos], len, wanted, 16);
+      if (!found)
+        {
+          LOG_ERROR ("%s not found at %lu", sentinel_name, dat->byte - 16);
+          error = DWG_ERR_SECTIONNOTFOUND;
+        }
+      else
+        {
+          pos = (ptrdiff_t)found - (ptrdiff_t)&dat->chain[pos];
+          LOG_WARN ("%s not found at %lu, but at %lu", sentinel_name,
+                    dat->byte - 16, pos);
+          dat->byte = pos + 16;
+          error = DWG_ERR_WRONGCRC;
+        }
     }
   free (r11_sentinel);
 
@@ -6271,6 +6286,9 @@ decode_preR13_section_chk (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
              id1, size, (long)number, address)
 }
 
+#define DECODE_PRER13_SENTINEL(ID) \
+      error |= decode_preR13_sentinel (ID, #ID, dat, dwg)
+
 // only in R11
 int
 decode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
@@ -6281,8 +6299,7 @@ decode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   unsigned long pos = dat->byte;
 
   LOG_TRACE ("\nAUXHEADER: @0x%lx\n", dat->byte);
-  error |= decode_preR13_sentinel(DWG_SENTINEL_R11_AUX_HEADER_BEGIN,
-                                 "DWG_SENTINEL_R11_AUX_HEADER_BEGIN", dat, dwg);
+  DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_AUX_HEADER_BEGIN);
   FIELD_RS (num_auxheader_variables, 0);
   FIELD_RS (auxheader_size, 0);
   FIELD_RLx (entities_start, 0);
@@ -6369,9 +6386,7 @@ decode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           error |= DWG_ERR_WRONGCRC;
         }
     }
-  error
-      |= decode_preR13_sentinel (DWG_SENTINEL_R11_AUX_HEADER_END,
-                                 "DWG_SENTINEL_R11_AUX_HEADER_END", dat, dwg);
+  DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_AUX_HEADER_END);
   LOG_TRACE ("\n");
 
   return error;
@@ -6438,9 +6453,6 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
 
   SINCE (R_11)
     {
-#define DECODE_PRER13_SENTINEL(ID) \
-      error |= decode_preR13_sentinel(ID, #ID, dat, dwg)
-
       switch (entity_section)
         {
         case ENTITIES_SECTION_INDEX:
