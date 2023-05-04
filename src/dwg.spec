@@ -1059,16 +1059,6 @@ DWG_ENTITY (VERTEX_2D)
     }
     if (R11OPTS (16))
       FIELD_RD (tangent_dir, 50);
-    // if (R11FLAG (32)) // => VERTEX_3D
-    //   FIELD_RD (point.z, 30)
-    // if (R11FLAG (64)) // => VERTEX_MESH
-    //   FIELD_RD (point.z, 30)
-    // if (R11FLAG (128) && !R11FLAG (64)) // => PFACE_FACE index
-    //   FIELD_RS (vertind[0], 71);
-    //   FIELD_RS (vertind[1], 72);
-    //   FIELD_RS (vertind[2], 73);
-    //   if (FIELD_VALUE (vertind[3]))
-    //    FIELD_RS (vertind[3], 74);
   }
   SINCE (R_13b1)
   {
@@ -1145,12 +1135,9 @@ DWG_ENTITY (VERTEX_3D)
   SUBCLASS (AcDb3dPolylineVertex)
   PRE (R_13b1)
   {
-    FIELD_VALUE (flag) = R11FLAG (255);
-    if (R11FLAG (FLAG_R11_HAS_ELEVATION)) {
-      FIELD_3RD (point, 10);
-    } else {
-      FIELD_2RD (point, 10);
-    }
+    FIELD_2RD (point, 10);
+    FIELD_RC (flag, 0);
+    LOG_FLAG_VERTEX
   }
   LATER_VERSIONS {
     FIELD_RC (flag, 0);
@@ -1170,8 +1157,9 @@ DWG_ENTITY (VERTEX_MESH)
   SUBCLASS (AcDbPolyFaceMeshVertex)
   PRE (R_13b1)
   {
-    FIELD_VALUE (flag) = R11FLAG (255);
-    FIELD_3RD (point, 10);
+    FIELD_2RD (point, 10);
+    FIELD_RC (flag, 0);
+    LOG_FLAG_VERTEX
   }
   LATER_VERSIONS {
     FIELD_RC (flag, 0);
@@ -1191,8 +1179,11 @@ DWG_ENTITY (VERTEX_PFACE)
   SUBCLASS (AcDbPolyFaceMeshVertex)
   PRE (R_13b1)
   {
-    FIELD_VALUE (flag) = R11FLAG (255);
-    FIELD_3RD (point, 10);
+    FIELD_2RD (point, 10);
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_FLAG)) {
+      FIELD_RC (flag, 0);
+      LOG_FLAG_VERTEX
+    }
   }
   LATER_VERSIONS {
     FIELD_RC (flag, 0);
@@ -1229,11 +1220,22 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
   //FIELD_VALUE (pt) = { 0.0, 0.0, 0.0 };
   PRE (R_13b1)
   {
-    FIELD_VALUE (flag) = R11FLAG (255);
-    FIELD_RS (vertind[0], 71);
-    FIELD_RS (vertind[1], 72);
-    FIELD_RS (vertind[2], 73);
-    FIELD_RS (vertind[3], 74);
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_FLAG)) {
+      FIELD_RC (flag, 0);
+      LOG_FLAG_VERTEX
+    }
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX1)) {
+      FIELD_RS (vertind[0], 71);
+    }
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX2)) {
+      FIELD_RS (vertind[1], 72);
+    }
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX3)) {
+      FIELD_RS (vertind[2], 73);
+    }
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX4)) {
+      FIELD_RS (vertind[3], 74);
+    }
   }
   LATER_VERSIONS {
     FIELD_VALUE (flag) = 128;
@@ -1268,6 +1270,10 @@ DWG_ENTITY (POLYLINE_2D)
       FIELD_RD (end_width, 41);
     if (R11OPTS (8))
       FIELD_3RD (extrusion, 210);
+    if (R11OPTS (16))
+      FIELD_RS (num_m_verts, 71);
+    if (R11OPTS (32))
+      FIELD_RS (num_n_verts, 72);
     if (R11OPTS (0x100)) {
       FIELD_RS (curve_type, 75);
       LOG_POLYLINE_CURVETYPE
@@ -2089,8 +2095,14 @@ DWG_ENTITY (POLYLINE_PFACE)
     FIELD_VALUE (has_vertex) = 1;
   }
   PRE (R_13b1) {
-    FIELD_RS (numverts, 71);
-    FIELD_RS (numfaces, 72);
+    if (R11OPTS (1)) {
+      FIELD_CAST (flag, RC, BS, 70);
+      LOG_FLAG_POLYLINE
+    }
+    if (R11OPTS (16))
+      FIELD_RS (numverts, 71);
+    if (R11OPTS (32))
+      FIELD_RS (numfaces, 72);
   }
   LATER_VERSIONS {
     FIELD_BS (numverts, 71);

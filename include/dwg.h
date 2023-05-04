@@ -1561,6 +1561,8 @@ typedef struct _dwg_entity_POLYLINE_2D
   BITCODE_BE extrusion;
   BITCODE_BL extra_r11_size;
   BITCODE_TV extra_r11_text;
+  BITCODE_BS num_m_verts; // sometime used in preR13, to delete
+  BITCODE_BS num_n_verts; // sometime used in preR13, to delete
 } Dwg_Entity_POLYLINE_2D;
 
 /**
@@ -1805,6 +1807,7 @@ typedef struct _dwg_entity_POLYLINE_PFACE
 {
   COMMON_ENTITY_POLYLINE;
 
+  BITCODE_BS flag;
   BITCODE_BS numverts;
   BITCODE_BS numfaces;
 } Dwg_Entity_POLYLINE_PFACE;
@@ -8284,8 +8287,11 @@ enum {
   OPTS_R11_VERTEX_HAS_BULGE = 4,
   OPTS_R11_VERTEX_HAS_FLAG = 8,
   OPTS_R11_VERTEX_HAS_TANGENT_DIR = 16,
-  OPTS_R11_VERTEX_UNKNOWN_32 = 0x20,  // only seen with n-mesh
-  OPTS_R11_VERTEX_IS_N_VERT = 0x4000, // or vice versa
+  OPTS_R11_VERTEX_HAS_INDEX1 = 0x20,
+  OPTS_R11_VERTEX_HAS_INDEX2 = 0x40,
+  OPTS_R11_VERTEX_HAS_INDEX3 = 0x80,
+  OPTS_R11_VERTEX_HAS_INDEX4 = 0x200,
+  OPTS_R11_VERTEX_HAS_NOT_X_Y = 0x4000, // only seen with n-mesh
 };
 
 enum {

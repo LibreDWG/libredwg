@@ -194,8 +194,11 @@
               LOG_OPTS_R11 (VERTEX, HAS_BULGE);
               LOG_OPTS_R11 (VERTEX, HAS_FLAG);
               LOG_OPTS_R11 (VERTEX, HAS_TANGENT_DIR);
-              LOG_OPTS_R11 (VERTEX, UNKNOWN_32);
-              LOG_OPTS_R11 (VERTEX, IS_N_VERT);
+              LOG_OPTS_R11 (VERTEX, HAS_INDEX1);
+              LOG_OPTS_R11 (VERTEX, HAS_INDEX2);
+              LOG_OPTS_R11 (VERTEX, HAS_INDEX3);
+              LOG_OPTS_R11 (VERTEX, HAS_NOT_X_Y);
+              LOG_OPTS_R11 (VERTEX, HAS_INDEX4);
               LOG_OPTS_R11_MAX (VERTEX, 0x403f);
 
               LOG_TRACE ("\n");
