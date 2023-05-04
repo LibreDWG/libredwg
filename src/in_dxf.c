@@ -1953,6 +1953,11 @@ is_table_name (const char *restrict name)
          || strEQc (name, "BLOCK_HEADER");
 }
 
+#  define CHK_dashes(i, array)                                                \
+    if (i < 0 || i >= (int)o->num##array || !o->array)                        \
+      return NULL;                                                            \
+    assert (o->array);                                                        \
+    assert (i >= 0 && i < (int)o->num##array)
 #  define CHK_array(i, array)                                                 \
     if (i < 0 || i >= (int)o->num_##array || !o->array)                       \
       return NULL;                                                            \
@@ -1965,14 +1970,14 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 {
   Dwg_Object_LTYPE *o = obj->tio.object->tio.LTYPE;
   Dwg_Data *dwg = obj->parent;
-  int num_dashes = (int)o->num_dashes;
+  int num_dashes = (int)o->numdashes;
   int is_tu = 0;
 
   o->dashes
-      = (Dwg_LTYPE_dash *)xcalloc (o->num_dashes, sizeof (Dwg_LTYPE_dash));
+      = (Dwg_LTYPE_dash *)xcalloc (o->numdashes, sizeof (Dwg_LTYPE_dash));
   if (!o->dashes)
     {
-      o->num_dashes = 0;
+      o->numdashes = 0;
       return NULL;
     }
   for (int j = -1; j < num_dashes;)
@@ -1982,7 +1987,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       else if (pair->code == 49)
         {
           j++;
-          CHK_array (j, dashes);
+          CHK_dashes (j, dashes);
           o->dashes[j].length = pair->value.d;
           LOG_TRACE ("LTYPE.dashes[%d].length = %f [BD 49]\n", j,
                      pair->value.d);
@@ -1991,7 +1996,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 74)
         {
-          CHK_array (j, dashes);
+          CHK_dashes (j, dashes);
           o->dashes[j].shape_flag = pair->value.i;
           LOG_TRACE ("LTYPE.dashes[%d].shape_flag = %d [BS 74]\n", j,
                      pair->value.i);
@@ -2002,7 +2007,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           if (j < 0)
             j++;
-          CHK_array (j, dashes);
+          CHK_dashes (j, dashes);
           o->dashes[j].complex_shapecode = pair->value.i;
           LOG_TRACE ("LTYPE.dashes[%d].complex_shapecode = %d [BS 75]\n", j,
                      pair->value.i);
@@ -2011,7 +2016,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           if (j < 0)
             j++;
-          CHK_array (j, dashes);
+          CHK_dashes (j, dashes);
           o->dashes[j].style
               = dwg_add_handleref (obj->parent, 5, pair->value.u, obj);
           LOG_TRACE ("LTYPE.dashes[%d].style = " FORMAT_REF " [H 340]\n", j,
@@ -2019,28 +2024,28 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         }
       else if (pair->code == 44)
         {
-          CHK_array (j, dashes);
+          CHK_dashes (j, dashes);
           o->dashes[j].x_offset = pair->value.d;
           LOG_TRACE ("LTYPE.dashes[%d].x_offset = %f [BD 44]\n", j,
                      pair->value.d);
         }
       else if (pair->code == 45)
         {
-          CHK_array (j, dashes);
+          CHK_dashes (j, dashes);
           o->dashes[j].y_offset = pair->value.d;
           LOG_TRACE ("LTYPE.dashes[%d].y_offset = %f [BD 45]\n", j,
                      pair->value.d);
         }
       else if (pair->code == 46)
         {
-          CHK_array (j, dashes);
+          CHK_dashes (j, dashes);
           o->dashes[j].scale = pair->value.d;
           LOG_TRACE ("LTYPE.dashes[%d].scale = %f [BD 46]\n", j,
                      pair->value.d);
         }
       else if (pair->code == 50)
         {
-          CHK_array (j, dashes);
+          CHK_dashes (j, dashes);
           o->dashes[j].rotation = deg2rad (pair->value.d);
           LOG_TRACE ("LTYPE.dashes[%d].rotation = %f [BD 50]\n", j,
                      o->dashes[j].rotation);
@@ -2049,7 +2054,7 @@ add_LTYPE_dashes (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           static int dash_i = 0;
           is_tu = obj->parent->header.version >= R_2007;
-          CHK_array (j, dashes);
+          CHK_dashes (j, dashes);
           o->dashes[j].text = dwg_add_u8_input (obj->parent, pair->value.s);
           LOG_TRACE ("LTYPE.dashes[%d].text = %s [T 9]\n", j, pair->value.s);
           // write into strings_area

@@ -3872,7 +3872,7 @@ DWG_TABLE (LTYPE)
     FIELD_BD (pattern_len, 0); // total length
   }
   FIELD_RC (alignment, 72);
-  FIELD_RCu (num_dashes, 73);
+  FIELD_RCu (numdashes, 73);
   DXF { FIELD_BD (pattern_len, 40); }
   PRE (R_13b1)
   {
@@ -3889,7 +3889,7 @@ DWG_TABLE (LTYPE)
   }
   SINCE (R_13b1)
   {
-    REPEAT (num_dashes, dashes, Dwg_LTYPE_dash)
+    REPEAT (numdashes, dashes, Dwg_LTYPE_dash)
     REPEAT_BLOCK
       SUB_FIELD_BD (dashes[rcount1],length, 49);
       DXF {
@@ -3935,7 +3935,7 @@ DWG_TABLE (LTYPE)
       FIELD_BINARY (strings_area, 256, 0);
       DECODER {
         unsigned int dash_i = 0;
-        for (rcount1 = 0; _obj->strings_area && rcount1 < _obj->num_dashes; rcount1++)
+        for (rcount1 = 0; _obj->strings_area && rcount1 < _obj->numdashes; rcount1++)
           {
             if (_obj->dashes[rcount1].shape_flag & 2)
               {
@@ -3957,7 +3957,7 @@ DWG_TABLE (LTYPE)
       FIELD_BINARY (strings_area, 512, 0);
       DECODER {
         unsigned int dash_i = 0;
-        for (rcount1 = 0; _obj->strings_area && rcount1 < _obj->num_dashes; rcount1++)
+        for (rcount1 = 0; _obj->strings_area && rcount1 < _obj->numdashes; rcount1++)
           {
             if (_obj->dashes[rcount1].shape_flag & 2)
               {

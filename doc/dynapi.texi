@@ -10326,7 +10326,7 @@ T,	DXF 3
 BD,	DXF 40
 @item alignment
 RC,	DXF 72
-@item num_dashes
+@item numdashes
 RC,	DXF 73
 @item dashes
 Dwg_LTYPE_dash*

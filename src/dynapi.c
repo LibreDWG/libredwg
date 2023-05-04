@@ -8559,7 +8559,7 @@ static const Dwg_DYNAPI_field _dwg_LTYPE_fields[] = {
     0,0,0, 40 },
   { "alignment",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_LTYPE, alignment),
     0,0,0, 72 },
-  { "num_dashes",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_LTYPE, num_dashes),
+  { "numdashes",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_object_LTYPE, numdashes),
     0,0,0, 73 },
   { "dashes",	"Dwg_LTYPE_dash*", sizeof (Dwg_LTYPE_dash*),  OFF (struct _dwg_object_LTYPE, dashes),
     1,1,0, 0 },

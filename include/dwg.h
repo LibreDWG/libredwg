@@ -2511,7 +2511,7 @@ typedef struct _dwg_object_LTYPE
   BITCODE_TV description;
   BITCODE_BD pattern_len;
   BITCODE_RC alignment;
-  BITCODE_RC num_dashes;
+  BITCODE_RC numdashes; // can be 0 in r11, even with 12 entries
   // could be made a union if we care
   Dwg_LTYPE_dash* dashes;
   BITCODE_RD dashes_r11[12];

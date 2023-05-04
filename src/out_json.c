@@ -2092,9 +2092,9 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
               FIELD_TFv (description, 48, 3);
               FIELD_RC (alignment, 72);
-              FIELD_RCu (num_dashes, 73);
+              FIELD_RCu (numdashes, 73);
               FIELD_RD (pattern_len, 40);
-              FIELD_VECTOR (dashes_r11, RD, num_dashes, 49);
+              FIELD_VECTOR_INL (dashes_r11, RD, 12, 49);
               ENDRECORD ();
             }
           ENDSEC ();

@@ -50966,12 +50966,12 @@ static int test_LTYPE (const Dwg_Object *obj)
   {
     Dwg_LTYPE_dash* dashes;
     BITCODE_BL count = 0;
-    if (dwg_dynapi_entity_value (ltype, "LTYPE", "num_dashes", &count, NULL)
+    if (dwg_dynapi_entity_value (ltype, "LTYPE", "numdashes", &count, NULL)
         && dwg_dynapi_entity_value (ltype, "LTYPE", "dashes", &dashes, NULL)
         && dashes == ltype->dashes)
       pass ();
     else
-      fail ("LTYPE.dashes [Dwg_LTYPE_dash*] * %u num_dashes", count);
+      fail ("LTYPE.dashes [Dwg_LTYPE_dash*] * %u numdashes", count);
   }
   {
     BITCODE_RD dashes_r11[12];
@@ -51077,19 +51077,19 @@ static int test_LTYPE (const Dwg_Object *obj)
       fail ("LTYPE.name [TV] '%s' <> '%s'", name, ltype->name);
   }
   {
-    BITCODE_RC num_dashes;
-    if (dwg_dynapi_entity_value (ltype, "LTYPE", "num_dashes", &num_dashes, NULL)
-        && num_dashes == ltype->num_dashes)
+    BITCODE_RC numdashes;
+    if (dwg_dynapi_entity_value (ltype, "LTYPE", "numdashes", &numdashes, NULL)
+        && numdashes == ltype->numdashes)
       pass ();
     else
-      fail ("LTYPE.num_dashes [RC] %u != %u", ltype->num_dashes, num_dashes);
-    num_dashes++;
-    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "num_dashes", &num_dashes, 0)
-        && num_dashes == ltype->num_dashes)
+      fail ("LTYPE.numdashes [RC] %u != %u", ltype->numdashes, numdashes);
+    numdashes++;
+    if (dwg_dynapi_entity_set_value (ltype, "LTYPE", "numdashes", &numdashes, 0)
+        && numdashes == ltype->numdashes)
       pass ();
     else
-      fail ("LTYPE.num_dashes [RC] set+1 %u != %u", ltype->num_dashes, num_dashes);
-    ltype->num_dashes--;
+      fail ("LTYPE.numdashes [RC] set+1 %u != %u", ltype->numdashes, numdashes);
+    ltype->numdashes--;
   }
   {
     struct _dwg_object_object* parent;

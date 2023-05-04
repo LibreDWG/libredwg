@@ -2132,8 +2132,8 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           PREP_TABLE (LTYPE);
           FIELD_TFv (description, 48, 3);
           FIELD_RC (alignment, 72);
-          FIELD_RC (num_dashes, 73);
-          FIELD_VECTOR (dashes_r11, RD, num_dashes, 340);
+          FIELD_RC (numdashes, 73);
+          FIELD_VECTOR_INL (dashes_r11, RD, 12, 340);
           // ... 106 byte
           // 3, 40, 49, 74, 75, 340, 46, 50, 44, 45, 9
 

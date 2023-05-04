@@ -2011,7 +2011,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         }
       // all numfields are calculated from actual array sizes
       // for easier adding or deleting entries.
-      else if (t->type == JSMN_PRIMITIVE && (memBEGINc (key, "num_")))
+      else if (t->type == JSMN_PRIMITIVE && memBEGINc (key, "num_"))
         {
           tokens->index++;
           JSON_TOKENS_CHECK_OVERFLOW_ERR;
@@ -2696,8 +2696,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               LOG_TRACE ("%s: %f [%s]\n", key, arr[index], f->type);
               dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
             }
-          f = dwg_dynapi_entity_field (name, "num_dashes");
-          dwg_dynapi_field_set_value (dwg, _obj, f, &t->size, 0);
+          //f = dwg_dynapi_entity_field (name, "numdashes");
+          //dwg_dynapi_field_set_value (dwg, _obj, f, &t->size, 0);
           JSON_TOKENS_CHECK_OVERFLOW_ERR;
         }
       return error | (f && f->name ? 1 : 0); // found or not

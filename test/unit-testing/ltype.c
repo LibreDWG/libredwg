@@ -16,7 +16,7 @@ api_process (dwg_object *obj)
   BITCODE_TV description;
   BITCODE_BD pattern_len;
   BITCODE_RC alignment;
-  BITCODE_RC num_dashes;
+  BITCODE_RC numdashes;
   Dwg_LTYPE_dash *dashes;
   BITCODE_RD dashes_r11[12];
   BITCODE_B has_strings_area; /* if some shape_flag & 4 (ODA bug) */
@@ -36,7 +36,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_UTF8TEXT (ltype, LTYPE, description);
   CHK_ENTITY_TYPE (ltype, LTYPE, pattern_len, BD);
   CHK_ENTITY_TYPE (ltype, LTYPE, alignment, RC);
-  CHK_ENTITY_TYPE (ltype, LTYPE, num_dashes, RCd);
+  CHK_ENTITY_TYPE (ltype, LTYPE, numdashes, RCd);
   if (!dwg_dynapi_entity_value (ltype, "LTYPE", "dashes", &dashes, NULL))
     fail ("LTYPE.dashes");
   else
@@ -46,8 +46,9 @@ api_process (dwg_object *obj)
           if (!dwg_dynapi_entity_value (ltype, "LTYPE", "dashes_r11",
                                         &dashes_r11, NULL))
             fail ("LTYPE.dashes_r11");
+          numdashes = 12;
         }
-      for (BITCODE_BL i = 0; i < num_dashes; i++)
+      for (BITCODE_BL i = 0; i < numdashes; i++)
         {
           if (dwg_version <= R_13b1)
             {

@@ -1530,7 +1530,6 @@ EOF
              # VECTOR_N
              and $var !~ /(_transform|_transmatrix1?|shhn_pts)$/) {
       my %countfield = (
-        attribs => 'num_owned',
         attribs => 'num_owned', # XXX TABLE
         vertex => 'num_owned',
         itemhandles => 'numitems',
@@ -1543,12 +1542,12 @@ EOF
         layer_entries => 'num_entries',
         readdeps  => 'num_deps',
         writedeps => 'num_deps',
-        dashes_r11 => 'num_dashes',
+        dashes_r11 => 'numdashes',
         texts => 'numitems',
         encr_sat_data => 'num_blocks',
         );
       my $countfield = exists $countfield{$var} ? $countfield{$var} : "num_$var";
-      $countfield = 'num_dashes' if $name eq 'LTYPE' and $var eq 'styles';
+      $countfield = 'numdashes' if $name eq 'LTYPE' and $var =~ /^(styles|dashes)$/;
       my $count = 1;
       if ($var eq 'encr_sat_data') {
         print $fh <<"EOF";
