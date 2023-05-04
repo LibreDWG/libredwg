@@ -2117,8 +2117,8 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           FIELD_RC (generation, 71);
           FIELD_RD (last_height, 42);
           FIELD_TFv (font_file, 64, 3); // 8ed
-          // SINCE (R_13b1)
-          //   FIELD_TFv (bigfont_file, 64, 4); // 92d
+          SINCE (R_2_4)
+            FIELD_TFv (bigfont_file, 64, 4); // 92d
           CHK_ENDPOS;
         }
       write_sentinel (dat, DWG_SENTINEL_R11_STYLES_END);
