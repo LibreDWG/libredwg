@@ -6580,10 +6580,21 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                             _hdr = o->tio.object->tio.BLOCK_HEADER;
                             if (!obj->handle.value)
                               obj->handle.value = dwg_next_handle (dwg);
-                            _hdr->block_entity = dwg_add_handleref (
-                                dwg, 3, obj->handle.value, hdr);
-                            LOG_TRACE ("BLOCK_HEADER.block_entity: " FORMAT_HREF11 "\n",
-                                       ARGS_HREF11 (_hdr->block_entity));
+                            if (!_hdr->block_entity)
+                              _hdr->block_entity = dwg_add_handleref (
+                                  dwg, 3, obj->handle.value, obj);
+                            else
+                              {
+                                _hdr->block_entity->handleref.code = 3;
+                                _hdr->block_entity->absolute_ref =
+                                  _hdr->block_entity->handleref.value =
+                                  obj->handle.value;
+                                _hdr->block_entity->obj = obj;
+                              }
+                            LOG_TRACE (
+                                "BLOCK_HEADER.block_entity: " FORMAT_HREF11
+                                "\n",
+                                ARGS_HREF11 (_hdr->block_entity));
                             if (!obj->tio.entity->tio.BLOCK->name)
                               obj->tio.entity->tio.BLOCK->name = strdup (_hdr->name);
                             //LOG_TRACE ("next entities owned by BLOCK \"%s\" (%lx)\n",

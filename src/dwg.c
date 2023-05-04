@@ -2137,6 +2137,8 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
   // else create a new global ref
   ref = dwg_new_ref (dwg);
   dwg_add_handle (&ref->handleref, code, absref, obj);
+  if (dwg->header.from_version <= R_12)
+    ref->handleref.size = 2;
   ref->absolute_ref = absref;
   ref->obj = NULL;
   LOG_HANDLE ("[add handleref " FORMAT_REF "] ", ARGS_REF(ref))
