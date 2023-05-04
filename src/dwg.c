@@ -2120,7 +2120,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
                || (obj->fixedtype > DWG_TYPE_GROUP
                    && obj->fixedtype != DWG_TYPE_DICTIONARYVAR)))))
     ;
-  else
+  else if (dwg->header.from_version > R_12 || absref)
     {
       // search of this code-absref pair already exists
       for (BITCODE_BL i = 0; i < dwg->num_object_refs; i++)
