@@ -694,6 +694,7 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   else // r11 for HANDLING=1 and/or _CONTROL entries
     {
+      // [size idx absref]
       size = code;
       code = 0;
       r11_idx = json_long (dat, tokens);

@@ -3527,8 +3527,7 @@ DWG_TABLE (BLOCK_HEADER)
     SINCE (R_11)
     {
       FIELD_HANDLE (block_entity, 2, 0);
-      FIELD_RC (flag2, 0);
-      FIELD_RC (unknown_r11, 0);
+      FIELD_RSd (flag2, 0);
     }
     FIELD_VALUE (anonymous)    = FIELD_VALUE (flag) & 1;
     FIELD_VALUE (hasattrs)     = FIELD_VALUE (flag) & 2;

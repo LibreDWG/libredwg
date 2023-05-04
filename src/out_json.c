@@ -135,6 +135,7 @@ static char *_path_field (const char *path);
 #define ARGS_HREF(ref)                                                        \
   ref->handleref.code, ref->handleref.size, ref->handleref.value,             \
   ref->absolute_ref
+
 #define ARGS_HREF11(ref)                                                      \
   ref->handleref.size, ref->r11_idx, ref->absolute_ref
 #undef FORMAT_RD

@@ -2373,7 +2373,6 @@ typedef struct _dwg_object_BLOCK_HEADER
 {
   COMMON_TABLE_FIELDS;
   BITCODE_BL __iterator;
-  BITCODE_RC flag2;   /* preR13 */
   BITCODE_B anonymous;    /* flag 70 bit 1 */
   BITCODE_B hasattrs;     /* flag 70 bit 2 */
   BITCODE_B blkisxref;    /* flag 70 bit 3 */
@@ -2396,6 +2395,7 @@ typedef struct _dwg_object_BLOCK_HEADER
   BITCODE_H endblk_entity;
   BITCODE_H* inserts;
   BITCODE_H layout;
+  BITCODE_RS flag2;       /* preR13 */
   BITCODE_RC unknown_r11;
   BITCODE_RL block_offset_r11;
 } Dwg_Object_BLOCK_HEADER;

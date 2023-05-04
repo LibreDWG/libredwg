@@ -8853,8 +8853,6 @@ B
 H
 @item __iterator
 BL
-@item flag2
-RC
 @item anonymous
 B
 @item hasattrs
@@ -8899,6 +8897,8 @@ H
 H*,	DXF 331
 @item layout
 H,	DXF 340
+@item flag2
+RS
 @item unknown_r11
 RC
 @item block_offset_r11

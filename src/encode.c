@@ -2083,8 +2083,7 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
             if (!obj->size || obj->size == 38)
               FIELD_RC (unknown_r11, 0);
             FIELD_HANDLE (block_entity, 2, 0);
-            FIELD_RC (flag2, 0);
-            FIELD_RC (unknown_r11, 0);
+            FIELD_RSd (flag2, 0);
           }
           CHK_ENDPOS;
         }
