@@ -4302,12 +4302,13 @@ encode_preR13_POLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   return error;
 }
 
+#if 0
 static int
 encode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   int error = 0;
   unsigned flag_r11 = (unsigned)obj->tio.entity->flag_r11;
-  obj->type = DWG_TYPE_DIMENSION_R11;
+  //obj->type = DWG_TYPE_DIMENSION_R11; // or deleted
   if (!flag_r11)
     {
       switch (obj->fixedtype)
@@ -4371,6 +4372,7 @@ encode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     }
   return error;
 }
+#endif
 
 static BITCODE_RL
 encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last,
@@ -4639,14 +4641,30 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
         case DWG_TYPE__3DFACE:
           *error |= dwg_encode__3DFACE (dat, obj);
           break;
+          //if (obj-fixedtype < DWG_TYPE_DIMENSION_ORDINATE
+          //    || obj-fixedtype > DWG_TYPE_DIMENSION_DIAMETER)
+          //  *error |= encode_preR13_DIMENSION (dat, obj);
         case DWG_TYPE_DIMENSION_ORDINATE:
+          *error |= dwg_encode_DIMENSION_ORDINATE (dat, obj);
+          break;
         case DWG_TYPE_DIMENSION_LINEAR:
+          *error |= dwg_encode_DIMENSION_LINEAR (dat, obj);
+          break;
         case DWG_TYPE_DIMENSION_ALIGNED:
+          *error |= dwg_encode_DIMENSION_ALIGNED (dat, obj);
+          break;
         case DWG_TYPE_DIMENSION_ANG3PT:
+          *error |= dwg_encode_DIMENSION_ANG3PT (dat, obj);
+          break;
         case DWG_TYPE_DIMENSION_ANG2LN:
+          *error |= dwg_encode_DIMENSION_ANG2LN (dat, obj);
+          break;
         case DWG_TYPE_DIMENSION_RADIUS:
+          *error |= dwg_encode_DIMENSION_RADIUS (dat, obj);
+          break;
         case DWG_TYPE_DIMENSION_DIAMETER:
-          *error |= encode_preR13_DIMENSION (dat, obj);
+          *error |= dwg_encode_DIMENSION_DIAMETER (dat, obj);
+          break;
           break;
         case DWG_TYPE_VIEWPORT:
           *error |= dwg_encode_VIEWPORT (dat, obj);
