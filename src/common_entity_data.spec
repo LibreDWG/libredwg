@@ -197,9 +197,14 @@
               LOG_OPTS_R11 (VERTEX, HAS_INDEX1);
               LOG_OPTS_R11 (VERTEX, HAS_INDEX2);
               LOG_OPTS_R11 (VERTEX, HAS_INDEX3);
-              LOG_OPTS_R11 (VERTEX, HAS_NOT_X_Y);
+              LOG_OPTS_R11 (VERTEX, UNKNOWN_256);
               LOG_OPTS_R11 (VERTEX, HAS_INDEX4);
-              LOG_OPTS_R11_MAX (VERTEX, 0x403f);
+              LOG_OPTS_R11 (VERTEX, UNKNOWN_1024);
+              LOG_OPTS_R11 (VERTEX, UNKNOWN_2048);
+              LOG_OPTS_R11 (VERTEX, UNKNOWN_4096);
+              LOG_OPTS_R11 (VERTEX, UNKNOWN_8192);
+              LOG_OPTS_R11 (VERTEX, HAS_NOT_X_Y);
+              LOG_OPTS_R11_MAX (VERTEX, 32704);
 
               LOG_TRACE ("\n");
 #  undef LOG_OPTS_R11
