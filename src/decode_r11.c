@@ -17,11 +17,6 @@
  */
 
 #include "config.h"
-//#ifdef __STDC_ALLOC_LIB__
-//#  define __STDC_WANT_LIB_EXT2__ 1 /* for strdup */
-//#else
-//#  define _USE_BSD 1
-//#endif
 #ifndef _DEFAULT_SOURCE
 #  define _DEFAULT_SOURCE 1 /* for byteswap.h */
 #endif
@@ -70,12 +65,6 @@ static unsigned int errors = 0;
 // need spec.h for the LOG_FLAG_TABLE*
 #define ACTION decode
 #include "spec.h"
-
-//#undef LOG_POS
-//#define LOG_POS LOG_INSANE (" @%lu.%u\n", dat->byte, dat->bit)
-
-// This needs the add API
-//#ifdef USE_WRITE
 
 void dwg_set_next_hdl (Dwg_Data *dwg, unsigned long value);
 
@@ -239,11 +228,11 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   unsigned long oldpos;
   BITCODE_RL real_start = tbl->address;
 
-  LOG_TRACE ("\ncontents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n\n",
-             tbl->name, id, tbl->size, (long)tbl->number,
-             (unsigned long)tbl->address,
-             (unsigned long)(tbl->address
-                             + ((unsigned long long)tbl->number * tbl->size)))
+  LOG_TRACE (
+      "\ncontents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n\n",
+      tbl->name, id, tbl->size, (long)tbl->number, (unsigned long)tbl->address,
+      (unsigned long)(tbl->address
+                      + ((unsigned long long)tbl->number * tbl->size)))
 
   // with sentinel in case of R11
   SINCE (R_11)
@@ -598,10 +587,6 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Bit_Chain dat_save = *dat;
 
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-//#ifndef USE_WRITE
-//  fprintf (stderr, "Cannot create pre-R13 documents with --disable-write\n");
-//  return DWG_ERR_INTERNALERROR;
-//#else
   {
     int i;
     Dwg_Header *_obj = (Dwg_Header *)&dwg->header;
@@ -791,7 +776,6 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (dwg->dirty_refs)
     dwg_resolve_objectrefs_silent (dwg);
   return 0;
-  //#endif // USE_WRITE
 }
 AFL_GCC_POP
 

@@ -76,7 +76,7 @@ for d in "$@"; do
         b=$(basename "$b" .DWG)
         [ -z "$log" ] && log="$b$dir.log"
         ori_timeout="$timeout"
-        echo "$timeout @LTEXEC@ programs/dwgread $v $d 2>$log"
+        echo "$timeout @LTEXEC@ programs/dwgread $args $v $d 2>$log"
         # (sleep 12s; killall dwgread 2>/dev/null) &
         # shellcheck disable=SC2086
         $timeout @LTEXEC@ programs/dwgread $args "$v" "$d" 2>"$log"
