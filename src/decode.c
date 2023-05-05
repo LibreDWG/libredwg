@@ -6243,7 +6243,7 @@ decode_preR13_sentinel (const Dwg_Sentinel sentinel,
         }
       else
         {
-          pos = (ptrdiff_t)found - (ptrdiff_t)&dat->chain[pos];
+          pos = (ptrdiff_t)found - (ptrdiff_t)&dat->chain[0];
           LOG_WARN ("%s not found at %lu, but at %lu", sentinel_name,
                     dat->byte - 16, pos);
           dat->byte = pos + 16;
