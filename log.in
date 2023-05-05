@@ -23,7 +23,7 @@ for d in "$@"; do
              v="$d"
              ;;
         -l*)
-             log="$(cut "$d" -c2-)"
+             log="$(echo "$d" | cut -c2-)"
              ;;
         --force-free)
              args="$args $d"
