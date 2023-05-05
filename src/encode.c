@@ -2192,33 +2192,29 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       for (i = 0; i < tblnum; i++)
         {
           PREP_TABLE (VPORT);
-          FIELD_RD (VIEWSIZE, 40);
-          FIELD_RD (aspect_ratio, 41);
-          FIELD_2RD (VIEWCTR, 12);
-          FIELD_3RD (view_target, 17);
-          FIELD_3RD (VIEWDIR, 16);
-          FIELD_RD (view_twist, 50);
-          FIELD_RD (lens_length, 42);
-          FIELD_RD (front_clip_z, 43);
-          FIELD_RD (back_clip_z, 33);
-          FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
-
           FIELD_2RD (lower_left, 10);
           FIELD_2RD (upper_right, 11);
-          FIELD_RC (UCSFOLLOW, 71);
-          FIELD_RS (circle_zoom, 72);
-          FIELD_RC (FASTZOOM, 73);
-          FIELD_RC (UCSICON, 74);
-          FIELD_RC (GRIDMODE, 76);
-          FIELD_2RD (GRIDUNIT, 15);
-          FIELD_CAST (SNAPMODE, RS, B, 70); // 75
-          FIELD_RC (SNAPSTYLE, 70);         // 77
+          FIELD_3RD (view_target, 17);
+          FIELD_3RD (VIEWDIR, 16);
+          FIELD_RD (view_twist, 51);
+          FIELD_RD (VIEWSIZE, 40);
+          FIELD_2RD (VIEWCTR, 12);
+          FIELD_RD (aspect_ratio, 41);
+          FIELD_RD (lens_length, 42);
+          FIELD_RD (front_clip_z, 43);
+          FIELD_RD (back_clip_z, 44);
+          FIELD_RS (UCSFOLLOW, 71);
+          FIELD_RS (circle_zoom, 72); //circle sides
+          FIELD_RS (FASTZOOM, 73);
+          FIELD_RS (UCSICON, 74);
+          FIELD_RS (SNAPMODE, 75);
+          FIELD_RS (GRIDMODE, 76);
+          FIELD_RS (SNAPSTYLE, 77);
           FIELD_RS (SNAPISOPAIR, 78);
           FIELD_RD (SNAPANG, 50);
           FIELD_2RD (SNAPBASE, 13);
           FIELD_2RD (SNAPUNIT, 14);
-          // ... 74 byte
-
+          FIELD_2RD (GRIDUNIT, 15);
           CHK_ENDPOS;
         }
       write_sentinel (dat, DWG_SENTINEL_R11_VPORT_END);
