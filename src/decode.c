@@ -6299,7 +6299,7 @@ decode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   unsigned long pos = dat->byte;
 
   LOG_TRACE ("\nAUXHEADER: @0x%lx\n", dat->byte);
-  DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_AUX_HEADER_BEGIN);
+  DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_AUXHEADER_BEGIN);
   FIELD_RS (num_auxheader_variables, 0);
   FIELD_RS (auxheader_size, 0);
   FIELD_RLx (entities_start, 0);
@@ -6386,7 +6386,7 @@ decode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           error |= DWG_ERR_WRONGCRC;
         }
     }
-  DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_AUX_HEADER_END);
+  DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_AUXHEADER_END);
   LOG_TRACE ("\n");
 
   return error;

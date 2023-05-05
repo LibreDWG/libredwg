@@ -268,36 +268,23 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
       switch (id)
         {
-        case SECTION_BLOCK:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_BLOCKS_BEGIN);
-          break;
-        case SECTION_LAYER:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_LAYERS_BEGIN);
-          break;
-        case SECTION_STYLE:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_STYLES_BEGIN);
-          break;
-        case SECTION_LTYPE:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_LINETYPES_BEGIN);
-          break;
-        case SECTION_VIEW:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_VIEWS_BEGIN);
-          break;
-        case SECTION_UCS:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_UCS_BEGIN);
-          break;
-        case SECTION_VPORT:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_VPORTS_BEGIN);
-          break;
-        case SECTION_APPID:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_APPIDS_BEGIN);
-          break;
-        case SECTION_DIMSTYLE:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_DIMSTYLES_BEGIN);
-          break;
-        case SECTION_VX:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_VXS_BEGIN);
-          break;
+#define CASE_SENTINEL_BEGIN(id)                                   \
+        case SECTION_##id:                                        \
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_##id##_BEGIN); \
+          break
+
+          CASE_SENTINEL_BEGIN (BLOCK);
+          CASE_SENTINEL_BEGIN (LAYER);
+          CASE_SENTINEL_BEGIN (STYLE);
+          CASE_SENTINEL_BEGIN (LTYPE);
+          CASE_SENTINEL_BEGIN (VIEW);
+          CASE_SENTINEL_BEGIN (UCS);
+          CASE_SENTINEL_BEGIN (VPORT);
+          CASE_SENTINEL_BEGIN (APPID);
+          CASE_SENTINEL_BEGIN (DIMSTYLE);
+          CASE_SENTINEL_BEGIN (VX);
+#undef CASE_SENTINEL_BEGIN
+
         default:
           LOG_ERROR ("Internal error: Invalid section id %d", (int)id);
           return DWG_ERR_INTERNALERROR;
@@ -541,42 +528,28 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     {
       switch (id)
         {
-        case SECTION_BLOCK:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_BLOCKS_END);
-          break;
-        case SECTION_LAYER:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_LAYERS_END);
-          break;
-        case SECTION_STYLE:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_STYLES_END);
-          break;
-        case SECTION_LTYPE:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_LINETYPES_END);
-          break;
-        case SECTION_VIEW:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_VIEWS_END);
-          break;
-        case SECTION_UCS:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_UCS_END);
-          break;
-        case SECTION_VPORT:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_VPORTS_END);
-          break;
-        case SECTION_APPID:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_APPIDS_END);
-          break;
-        case SECTION_DIMSTYLE:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_DIMSTYLES_END);
-          break;
-        case SECTION_VX:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_VXS_END);
-          break;
+#define CASE_SENTINEL_END(id)                                     \
+        case SECTION_##id:                                        \
+          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_##id##_END);   \
+          break
+
+          CASE_SENTINEL_END (BLOCK);
+          CASE_SENTINEL_END (LAYER);
+          CASE_SENTINEL_END (STYLE);
+          CASE_SENTINEL_END (LTYPE);
+          CASE_SENTINEL_END (VIEW);
+          CASE_SENTINEL_END (UCS);
+          CASE_SENTINEL_END (VPORT);
+          CASE_SENTINEL_END (APPID);
+          CASE_SENTINEL_END (DIMSTYLE);
+          CASE_SENTINEL_END (VX);
         default:
           LOG_ERROR ("Internal error: Invalid section id %d", (int)id);
           return DWG_ERR_INTERNALERROR;
         }
     }
 #undef DECODE_PRER13_SENTINEL
+#undef CASE_SENTINEL_END
 
   return error;
 }
