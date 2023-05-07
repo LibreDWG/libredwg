@@ -22365,13 +22365,16 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   // dwg->header.zero_one_or_three = 1;
   // dwg->header.dwg_version = 0x17; // prefer encode if dwg_version is 0
   dwg_ver_struct = (struct dwg_versions *)dwg_version_struct (version);
-  dwg->header.dwg_version = dwg_ver_struct->dwg_version;
-  // dwg->header.maint_version = 29;
-  dwg->header.codepage = 30; // FIXME: local codepage if <r2007
-  // with decode_r11 we already proper numheader_vars
+  if (!dwg->header.codepage)
+    dwg->header.codepage = 30; // FIXME: local OS codepage
+  // with decode_r11 we already have proper numheader_vars
   if (!dwg->header.numheader_vars
       || dwg->header.version != dwg->header.from_version)
-    default_numheader_vars (dwg, version);
+    {
+      dwg->header.dwg_version = dwg_ver_struct->dwg_version;
+      // dwg->header.maint_version = 29;
+      default_numheader_vars (dwg, version);
+    }
   error = dwg_sections_init (dwg);
   if (error) // DWG_ERR_OUTOFMEM or DWG_ERR_INVALIDDWG
     return error;

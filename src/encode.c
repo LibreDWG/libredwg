@@ -2272,7 +2272,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         = dwg_version_struct (dwg->header.version);
     Dwg_Header *_obj = &dwg->header;
     Dwg_Object *obj = NULL;
-    if (!_obj->dwg_version) // ie from DXF
+    if ((dwg->header.version < R_13b1 && !_obj->numheader_vars) // ie from DXF
+        || (dwg->header.version >= R_13b1 && !_obj->dwg_version))
       {
         _obj->zero_one_or_three = 1;
         if (_verp)
