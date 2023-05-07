@@ -3534,7 +3534,7 @@ DWG_TABLE (BLOCK_HEADER)
                      _obj->block_offset_r11 + dwg->header.blocks_start);
         }
     }
-    if (obj->size == 38)
+    if (!obj->size || obj->size == 38)
       FIELD_RC (unknown_r11, 0);
     SINCE (R_11)
     {

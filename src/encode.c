@@ -64,6 +64,10 @@ Dwg_Object_APPID *dwg_add_APPID (Dwg_Data *restrict dwg,
                                  const char *restrict name);
 unsigned long dwg_obj_generic_handlevalue (void *_obj);
 
+static int
+encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
+                       Dwg_Data *restrict dwg);
+
 /* The logging level for the write (encode) path.  */
 static unsigned int loglevel;
 /* the current version per spec block */
@@ -2005,304 +2009,6 @@ encode_preR13_section_hdr (const char *restrict name, const Dwg_Section_Type_r11
   LOG_TRACE ("%s.flags_r11: " FORMAT_RSx " [RS]\n", tbl->name, tbl->flags_r11);
   LOG_TRACE ("%s.address: " FORMAT_RLx " [RL] (patch addr)\n", tbl->name,
              (BITCODE_RL)tbl->address);
-}
-
-static int
-encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
-                       Dwg_Data *restrict dwg)
-{
-  Dwg_Section *tbl = &dwg->header.section[id];
-  int i = 0;
-  int error = 0;
-  BITCODE_BL vcount;
-  int tblnum = tbl->number;
-  BITCODE_RL num = tbl->objid_r11; // from decode_r11
-  Bit_Chain *hdl_dat = dat;
-  Dwg_Object *ctrl;
-  assert (id <= SECTION_VX);
-
-#define PREP_CTRL(token)                                                      \
-  if (!num) /* don't trust tbl. from json or dxf */                           \
-    {                                                                         \
-      Dwg_Object_##token *_ctrl;                                              \
-      Dwg_Object *ref = NULL;                                                 \
-      ctrl = dwg_get_first_object (dwg, DWG_TYPE_##token);                    \
-      if (!ctrl)                                                              \
-        {                                                                     \
-          LOG_ERROR ("No " #token " found");                                  \
-          return DWG_ERR_INVALIDTYPE;                                         \
-        }                                                                     \
-      _ctrl = ctrl->tio.object->tio.token;                                    \
-      tblnum = _ctrl->num_entries;                                            \
-      if (tblnum)                                                             \
-        ref = dwg_ref_object (dwg, _ctrl->entries[0]);                        \
-      num = ref ? ref->index : 0;                                             \
-    }                                                                         \
-  LOG_TRACE ("\nctrl " #token " [%d]: num:%u\n", num, tblnum)
-
-#define PREP_TABLE(token)                                                     \
-  BITCODE_RL pvzadr = dat->byte;                                              \
-  Dwg_Object *obj = dwg_get_next_object(dwg, DWG_TYPE_##token, num + i);      \
-  Dwg_Object_##token *_obj;                                                   \
-  if (!obj)                                                                   \
-    {                                                                         \
-      LOG_ERROR ("No table %s after pos %u found", #token, num + i);          \
-      continue;                                                               \
-    }                                                                         \
-  _obj = obj->tio.object->tio.token;                                          \
-  LOG_TRACE ("contents table " #token " [%d]: (0x%lx, 0x%lx)\n", i,           \
-             obj->address, dat->byte);                                        \
-  if (obj->fixedtype != DWG_TYPE_##token)                                     \
-    {                                                                         \
-      LOG_ERROR ("Wrong type %s at [%d], expected %s",                        \
-                 dwg_type_name (obj->fixedtype), num + i,                     \
-                 "DWG_TYPE_" #token);                                         \
-      continue;                                                               \
-    }                                                                         \
-  FIELD_RC (flag, 70);                                                        \
-  FIELD_TFv (name, 32, 2);                                                    \
-  SINCE (R_11)                                                                \
-    FIELD_RSd (used, 0)
-
-#define CHK_ENDPOS                                                            \
-  dwg->cur_index += tblnum;                                                   \
-  bit_write_CRC (dat, pvzadr, 0xC0C1);
-
-  switch (id)
-    {
-    case SECTION_BLOCK:
-      write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_BEGIN);
-      PREP_CTRL (BLOCK_CONTROL)
-      for (i = 0; i < tblnum; i++)
-        {
-          PREP_TABLE (BLOCK_HEADER);
-          PRE (R_13b1)
-            FIELD_RLx (block_offset_r11, 0);
-          SINCE (R_11)
-          {
-            if (!obj->size || obj->size == 38)
-              FIELD_RC (unknown_r11, 0);
-            FIELD_HANDLE (block_entity, 2, 0);
-            FIELD_RSd (flag2, 0);
-          }
-          CHK_ENDPOS;
-        }
-      write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_END);
-      break;
-
-    case SECTION_LAYER:
-      write_sentinel (dat, DWG_SENTINEL_R11_LAYER_BEGIN);
-      PREP_CTRL (LAYER_CONTROL)
-      for (i = 0; i < tblnum; i++)
-        {
-          Bit_Chain *str_dat = dat;
-          PREP_TABLE (LAYER);
-          FIELD_CMC (color, 62);         // off if negative
-          FIELD_HANDLE (ltype, 2, 6);
-          CHK_ENDPOS;
-        }
-      write_sentinel (dat, DWG_SENTINEL_R11_LAYER_END);
-      break;
-
-    // was a text STYLE table, became a STYLE object
-    case SECTION_STYLE:
-      write_sentinel (dat, DWG_SENTINEL_R11_STYLE_BEGIN);
-      PREP_CTRL (STYLE_CONTROL)
-      for (i = 0; i < tblnum; i++)
-        {
-          PREP_TABLE (STYLE);
-          FIELD_RD (text_size, 40); // ok
-          FIELD_RD (width_factor, 41);
-          FIELD_RD (oblique_angle, 50);
-          FIELD_RC (generation, 71);
-          FIELD_RD (last_height, 42);
-          FIELD_TFv (font_file, 64, 3); // 8ed
-          SINCE (R_2_4)
-            FIELD_TFv (bigfont_file, 64, 4); // 92d
-          CHK_ENDPOS;
-        }
-      write_sentinel (dat, DWG_SENTINEL_R11_STYLE_END);
-      break;
-
-    case SECTION_LTYPE:
-      write_sentinel (dat, DWG_SENTINEL_R11_LTYPE_BEGIN);
-      PREP_CTRL (LTYPE_CONTROL)
-      for (i = 0; i < tblnum; i++)
-        {
-          PREP_TABLE (LTYPE);
-          FIELD_TFv (description, 48, 3);
-          FIELD_RC (alignment, 72);
-          FIELD_RC (numdashes, 73);
-          FIELD_RD (pattern_len, 40);
-          FIELD_VECTOR_INL (dashes_r11, RD, 12, 340);
-          // ... 106 byte
-          // 3, 40, 49, 74, 75, 340, 46, 50, 44, 45, 9
-
-          CHK_ENDPOS;
-        }
-      write_sentinel (dat, DWG_SENTINEL_R11_LTYPE_END);
-      break;
-
-    case SECTION_VIEW:
-      write_sentinel (dat, DWG_SENTINEL_R11_VIEW_BEGIN);
-      PREP_CTRL (VIEW_CONTROL)
-      for (i = 0; i < tblnum; i++)
-        {
-          PREP_TABLE (VIEW);
-          FIELD_RD (VIEWSIZE, 40);
-          FIELD_2RD (VIEWCTR, 10);
-          FIELD_RD (view_width, 41);
-          FIELD_3RD (view_target, 12);
-          FIELD_3RD (VIEWDIR, 11);
-          FIELD_CAST (VIEWMODE, RS, 4BITS, 71);
-          FIELD_RD (lens_length, 42);
-          FIELD_RD (front_clip_z, 43);
-          FIELD_RD (back_clip_z, 44);
-          FIELD_RD (twist_angle, 50);
-          CHK_ENDPOS;
-        }
-      write_sentinel (dat, DWG_SENTINEL_R11_VIEW_END);
-      break;
-
-    case SECTION_UCS:
-      write_sentinel (dat, DWG_SENTINEL_R11_UCS_BEGIN);
-      PREP_CTRL (UCS_CONTROL)
-      for (i = 0; i < tblnum; i++)
-        {
-          PREP_TABLE (UCS);
-          // check ucs_elevation. maybe set flag_r11 & HAS_ELEVATION
-          if (FIELD_VALUE (ucs_elevation) != 0.0)
-            FIELD_VALUE (ucsorg.z) = FIELD_VALUE (ucs_elevation);
-          //if (FIELD_VALUE (ucsorg.z) != 0.0)
-          //  {
-          //    obj->tio.object->flag_r11 |= FLAG_R11_HAS_ELEVATION;
-          //    obj->tio.object->elevation_r11 = FIELD_VALUE (ucsorg.z);
-          //  }
-          FIELD_3RD (ucsorg, 10);
-          FIELD_3RD (ucsxdir, 11);
-          FIELD_3RD (ucsydir, 12);
-          CHK_ENDPOS;
-        }
-      write_sentinel (dat, DWG_SENTINEL_R11_UCS_END);
-      break;
-
-    case SECTION_VPORT:
-      write_sentinel (dat, DWG_SENTINEL_R11_VPORT_BEGIN);
-      PREP_CTRL (VPORT_CONTROL)
-      for (i = 0; i < tblnum; i++)
-        {
-          PREP_TABLE (VPORT);
-          FIELD_2RD (lower_left, 10);
-          FIELD_2RD (upper_right, 11);
-          FIELD_3RD (view_target, 17);
-          FIELD_3RD (VIEWDIR, 16);
-          FIELD_RD (view_twist, 51);
-          FIELD_RD (VIEWSIZE, 40);
-          FIELD_2RD (VIEWCTR, 12);
-          FIELD_RD (aspect_ratio, 41);
-          FIELD_RD (lens_length, 42);
-          FIELD_RD (front_clip_z, 43);
-          FIELD_RD (back_clip_z, 44);
-          FIELD_RS (UCSFOLLOW, 71);
-          FIELD_RS (circle_zoom, 72); //circle sides
-          FIELD_RS (FASTZOOM, 73);
-          FIELD_RS (UCSICON, 74);
-          FIELD_RS (SNAPMODE, 75);
-          FIELD_RS (GRIDMODE, 76);
-          FIELD_RS (SNAPSTYLE, 77);
-          FIELD_RS (SNAPISOPAIR, 78);
-          FIELD_RD (SNAPANG, 50);
-          FIELD_2RD (SNAPBASE, 13);
-          FIELD_2RD (SNAPUNIT, 14);
-          FIELD_2RD (GRIDUNIT, 15);
-          CHK_ENDPOS;
-        }
-      write_sentinel (dat, DWG_SENTINEL_R11_VPORT_END);
-      break;
-
-    case SECTION_APPID:
-      write_sentinel (dat, DWG_SENTINEL_R11_APPID_BEGIN);
-      PREP_CTRL (APPID_CONTROL)
-      for (i = 0; i < tblnum; i++)
-        {
-          PREP_TABLE (APPID);
-          CHK_ENDPOS;
-        }
-      write_sentinel (dat, DWG_SENTINEL_R11_APPID_END);
-      break;
-
-    case SECTION_DIMSTYLE:
-      write_sentinel (dat, DWG_SENTINEL_R11_DIMSTYLE_BEGIN);
-      PREP_CTRL (DIMSTYLE_CONTROL)
-      for (i = 0; i < tblnum; i++)
-        {
-          // unsigned long off;
-          PREP_TABLE (DIMSTYLE);   // d1f
-          FIELD_RD (DIMSCALE, 40); // d42
-          FIELD_RD (DIMASZ, 41);
-          FIELD_RD (DIMEXO, 42);
-          FIELD_RD (DIMDLI, 43);
-          FIELD_RD (DIMEXE, 44);
-          FIELD_RD (DIMRND, 45);
-          FIELD_RD (DIMDLE, 46);
-          FIELD_RD (DIMTP, 47);
-          FIELD_RD (DIMTM, 48); // ok
-          FIELD_RD (DIMTXT, 140);
-          FIELD_RD (DIMCEN, 141); // ok
-          FIELD_RD (DIMTSZ, 142);
-          FIELD_RD (DIMALTF, 143);
-          FIELD_RD (DIMLFAC, 144);
-          FIELD_RD (DIMTVP, 145); // db2
-          FIELD_RC (DIMTOL, 71);  // dba
-          FIELD_RC (DIMLIM, 72);  // dbb
-          FIELD_RC (DIMTIH, 73);
-          FIELD_RC (DIMTOH, 74);
-          FIELD_RC (DIMSE1, 75);
-          FIELD_RC (DIMSE2, 76);
-          FIELD_CAST (DIMTAD, RC, RS, 77); // ok
-          FIELD_CAST (DIMZIN, RC, BS, 78); // dc1
-          FIELD_RC (DIMALT, 170);
-          FIELD_CAST (DIMALTD, RC, BS, 171); // ok
-          FIELD_RC (DIMTOFL, 172);           // ok
-          FIELD_RC (DIMSAH, 173);            // ok
-          FIELD_RC (DIMTIX, 174);            // ok
-          FIELD_RC (DIMSOXD, 175);           // ok
-          FIELD_TFv (DIMPOST, 16, 3);        // ok dc8
-          FIELD_TFv (DIMAPOST, 16, 4);       // dd8
-          FIELD_TFv (DIMBLK_T, 16, 5);       //?? unsupported by ODA
-          FIELD_TFv (DIMBLK1_T, 16, 6);      //?? unsupported by ODA
-          FIELD_TFv (DIMBLK2_T, 66, 7);      //?? unsupported by ODA
-          // DEBUG_HERE; //e18
-          // dat->byte += 50; //unknown: DIMSHO, DIMASO (global)
-          FIELD_RS (DIMCLRD_N, 176); // e4a
-          FIELD_RS (DIMCLRE_N, 177);
-          FIELD_RS (DIMCLRT_N, 178); // e4e
-          FIELD_RC (DIMUPT, 0);      //??
-          FIELD_RD (DIMTFAC, 146);   // e51
-          FIELD_RD (DIMGAP, 147);    // e59
-          CHK_ENDPOS;                //-e63
-        }
-      write_sentinel (dat, DWG_SENTINEL_R11_DIMSTYLE_END);
-      break;
-
-    case SECTION_VX:
-      write_sentinel (dat, DWG_SENTINEL_R11_VX_BEGIN);
-      if (tblnum)
-        {
-          LOG_WARN ("VX table ignored");
-          tblnum = 0;
-        }
-      write_sentinel (dat, DWG_SENTINEL_R11_VX_END);
-      break;
-
-    case SECTION_HEADER_R11:
-    default:
-      LOG_ERROR ("Invalid table id %d", id);
-      tbl->number = 0;
-      break;
-    }
-  // dat->byte = tbl->address + (tbl->number * tbl->size);
-  return error;
 }
 
 // only in R11
@@ -4255,6 +3961,205 @@ fixup_invalid_tag (const Bit_Chain *restrict dat, char *restrict tag)
 // clang-format on
 
 static int
+encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
+                       Dwg_Data *restrict dwg)
+{
+  Dwg_Section *tbl = &dwg->header.section[id];
+  int i = 0;
+  int error = 0;
+  BITCODE_BL vcount;
+  int tblnum = tbl->number;
+  BITCODE_RL num = tbl->objid_r11; // from decode_r11
+  Bit_Chain *hdl_dat = dat;
+  Dwg_Object *ctrl;
+  assert (id <= SECTION_VX);
+
+#define PREP_CTRL(token)                                                      \
+  if (!num) /* don't trust tbl. from json or dxf */                           \
+    {                                                                         \
+      Dwg_Object_##token *_ctrl;                                              \
+      Dwg_Object *ref = NULL;                                                 \
+      ctrl = dwg_get_first_object (dwg, DWG_TYPE_##token);                    \
+      if (!ctrl)                                                              \
+        {                                                                     \
+          LOG_ERROR ("No " #token " found");                                  \
+          return DWG_ERR_INVALIDTYPE;                                         \
+        }                                                                     \
+      _ctrl = ctrl->tio.object->tio.token;                                    \
+      tblnum = _ctrl->num_entries;                                            \
+      if (tblnum)                                                             \
+        ref = dwg_ref_object (dwg, _ctrl->entries[0]);                        \
+      num = ref ? ref->index : 0;                                             \
+    }                                                                         \
+  LOG_TRACE ("\nctrl " #token " [%d]: num:%u\n", num, tblnum)
+
+#define PREP_TABLE(token)                                                     \
+  BITCODE_RL pvzadr = dat->byte;                                              \
+  Dwg_Object *obj = dwg_get_next_object(dwg, DWG_TYPE_##token, num + i);      \
+  Dwg_Object_##token *_obj;                                                   \
+  if (!obj)                                                                   \
+    {                                                                         \
+      LOG_ERROR ("No table %s after pos %u found", #token, num + i);          \
+      continue;                                                               \
+    }                                                                         \
+  _obj = obj->tio.object->tio.token;                                          \
+  LOG_TRACE ("contents table " #token " [%d]: (0x%lx, 0x%lx)\n", i,           \
+             obj->address, dat->byte);                                        \
+  if (obj->fixedtype != DWG_TYPE_##token)                                     \
+    {                                                                         \
+      LOG_ERROR ("Wrong type %s at [%d], expected %s",                        \
+                 dwg_type_name (obj->fixedtype), num + i,                     \
+                 "DWG_TYPE_" #token);                                         \
+      continue;                                                               \
+    }
+
+#define CHK_ENDPOS                                                            \
+  dwg->cur_index += tblnum;                                                   \
+  bit_write_CRC (dat, pvzadr, 0xC0C1);
+
+  switch (id)
+    {
+    case SECTION_BLOCK:
+      write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_BEGIN);
+      PREP_CTRL (BLOCK_CONTROL)
+      for (i = 0; i < tblnum; i++)
+        {
+          PREP_TABLE (BLOCK_HEADER);
+          error |= dwg_encode_BLOCK_HEADER (dat, obj);
+          CHK_ENDPOS;
+        }
+      write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_END);
+      break;
+
+    case SECTION_LAYER:
+      write_sentinel (dat, DWG_SENTINEL_R11_LAYER_BEGIN);
+      PREP_CTRL (LAYER_CONTROL)
+      for (i = 0; i < tblnum; i++)
+        {
+          PREP_TABLE (LAYER);
+          error |= dwg_encode_LAYER (dat, obj);
+          CHK_ENDPOS;
+        }
+      write_sentinel (dat, DWG_SENTINEL_R11_LAYER_END);
+      break;
+
+    // was a text STYLE table, became a STYLE object
+    case SECTION_STYLE:
+      write_sentinel (dat, DWG_SENTINEL_R11_STYLE_BEGIN);
+      PREP_CTRL (STYLE_CONTROL)
+      for (i = 0; i < tblnum; i++)
+        {
+          PREP_TABLE (STYLE);
+          error |= dwg_encode_STYLE (dat, obj);
+          CHK_ENDPOS;
+        }
+      write_sentinel (dat, DWG_SENTINEL_R11_STYLE_END);
+      break;
+
+    case SECTION_LTYPE:
+      write_sentinel (dat, DWG_SENTINEL_R11_LTYPE_BEGIN);
+      PREP_CTRL (LTYPE_CONTROL)
+      for (i = 0; i < tblnum; i++)
+        {
+          PREP_TABLE (LTYPE);
+          error |= dwg_encode_LTYPE (dat, obj);
+          CHK_ENDPOS;
+        }
+      write_sentinel (dat, DWG_SENTINEL_R11_LTYPE_END);
+      break;
+
+    case SECTION_VIEW:
+      write_sentinel (dat, DWG_SENTINEL_R11_VIEW_BEGIN);
+      PREP_CTRL (VIEW_CONTROL)
+      for (i = 0; i < tblnum; i++)
+        {
+          PREP_TABLE (VIEW);
+          error |= dwg_encode_VIEW (dat, obj);
+          CHK_ENDPOS;
+        }
+      write_sentinel (dat, DWG_SENTINEL_R11_VIEW_END);
+      break;
+
+    case SECTION_UCS:
+      write_sentinel (dat, DWG_SENTINEL_R11_UCS_BEGIN);
+      PREP_CTRL (UCS_CONTROL)
+      for (i = 0; i < tblnum; i++)
+        {
+          PREP_TABLE (UCS);
+          // check ucs_elevation. maybe set flag_r11 & HAS_ELEVATION
+          if (FIELD_VALUE (ucs_elevation) != 0.0)
+            FIELD_VALUE (ucsorg.z) = FIELD_VALUE (ucs_elevation);
+          /*
+          //if (FIELD_VALUE (ucsorg.z) != 0.0)
+          //  {
+          //    obj->tio.object->flag_r11 |= FLAG_R11_HAS_ELEVATION;
+          //    obj->tio.object->elevation_r11 = FIELD_VALUE (ucsorg.z);
+          //  }
+          */
+          error |= dwg_encode_UCS (dat, obj);
+          CHK_ENDPOS;
+        }
+      write_sentinel (dat, DWG_SENTINEL_R11_UCS_END);
+      break;
+
+    case SECTION_VPORT:
+      write_sentinel (dat, DWG_SENTINEL_R11_VPORT_BEGIN);
+      PREP_CTRL (VPORT_CONTROL)
+      for (i = 0; i < tblnum; i++)
+        {
+          PREP_TABLE (VPORT);
+          error |= dwg_encode_VPORT (dat, obj);
+          CHK_ENDPOS;
+        }
+      write_sentinel (dat, DWG_SENTINEL_R11_VPORT_END);
+      break;
+
+    case SECTION_APPID:
+      write_sentinel (dat, DWG_SENTINEL_R11_APPID_BEGIN);
+      PREP_CTRL (APPID_CONTROL)
+      for (i = 0; i < tblnum; i++)
+        {
+          PREP_TABLE (APPID);
+          error |= dwg_encode_APPID (dat, obj);
+          CHK_ENDPOS;
+        }
+      write_sentinel (dat, DWG_SENTINEL_R11_APPID_END);
+      break;
+
+    case SECTION_DIMSTYLE:
+      write_sentinel (dat, DWG_SENTINEL_R11_DIMSTYLE_BEGIN);
+      PREP_CTRL (DIMSTYLE_CONTROL)
+      for (i = 0; i < tblnum; i++)
+        {
+          PREP_TABLE (DIMSTYLE);   // d1f
+          error |= dwg_encode_DIMSTYLE (dat, obj);
+          CHK_ENDPOS;                //-e63
+        }
+      write_sentinel (dat, DWG_SENTINEL_R11_DIMSTYLE_END);
+      break;
+
+    case SECTION_VX:
+      write_sentinel (dat, DWG_SENTINEL_R11_VX_BEGIN);
+      if (tblnum)
+        {
+          LOG_WARN ("VX table ignored");
+          //error |= dwg_encode_VX (dat, obj);
+          tblnum = 0;
+        }
+      write_sentinel (dat, DWG_SENTINEL_R11_VX_END);
+      break;
+
+    case SECTION_HEADER_R11:
+    default:
+      LOG_ERROR ("Invalid table id %d", id);
+      tbl->number = 0;
+      break;
+    }
+  // dat->byte = tbl->address + (tbl->number * tbl->size);
+  return error;
+}
+
+static int
 encode_preR13_POLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   int error = 0;
@@ -5953,14 +5858,19 @@ dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *dat,
     if (obj->bitsize)
       // the handle stream offset
       obj->hdlpos = bit_position (dat) + obj->bitsize;
-    SINCE (R_2007) { obj_string_stream (dat, obj, str_dat); }
+    SINCE (R_2007)
+    {
+      obj_string_stream (dat, obj, str_dat);
+    }
     if (!_obj || !obj->tio.object)
       return DWG_ERR_INVALIDDWG;
 
-    bit_write_H (dat, &obj->handle);
-    LOG_TRACE ("handle: " FORMAT_H " [H 5]\n", ARGS_H (obj->handle));
-    error |= dwg_encode_eed (dat, obj);
-
+    SINCE (R_13b1)
+    {
+      bit_write_H (dat, &obj->handle);
+      LOG_TRACE ("handle: " FORMAT_H " [H 5]\n", ARGS_H (obj->handle));
+      error |= dwg_encode_eed (dat, obj);
+    }
     VERSIONS (R_13b1, R_14)
     {
       obj->bitsize_pos = bit_position (dat);
