@@ -4017,7 +4017,8 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
 #define CHK_ENDPOS                                                            \
   dwg->cur_index += tblnum;                                                   \
-  bit_write_CRC (dat, pvzadr, 0xC0C1);
+  SINCE (R_11)                                                                \
+    bit_write_CRC (dat, pvzadr, 0xC0C1)
 
   switch (id)
     {
