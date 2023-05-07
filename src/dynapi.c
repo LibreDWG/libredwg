@@ -3172,6 +3172,10 @@ static const Dwg_DYNAPI_field _dwg_POLYLINE_2D_fields[] = {
     0,0,0, 0 },
   { "extra_r11_text",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_POLYLINE_2D, extra_r11_text),
     1,1,1, 0 },
+  { "num_m_verts",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_POLYLINE_2D, num_m_verts),
+    0,0,0, 71 },
+  { "num_n_verts",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_POLYLINE_2D, num_n_verts),
+    0,0,0, 72 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_POLYLINE_3D: (sorted by offset) */
@@ -3248,6 +3252,8 @@ static const Dwg_DYNAPI_field _dwg_POLYLINE_PFACE_fields[] = {
     1,1,0, 0 },
   { "seqend",	"H", sizeof (BITCODE_H),  OFF (struct _dwg_entity_POLYLINE_PFACE, seqend),
     1,0,0, 0 },
+  { "flag",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_POLYLINE_PFACE, flag),
+    0,0,0, 70 },
   { "numverts",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_POLYLINE_PFACE, numverts),
     0,0,0, 71 },
   { "numfaces",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_POLYLINE_PFACE, numfaces),

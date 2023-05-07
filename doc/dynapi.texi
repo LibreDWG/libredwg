@@ -3591,6 +3591,10 @@ BE,	DXF 210
 BL
 @item extra_r11_text
 TV
+@item num_m_verts
+BS,	DXF 71
+@item num_n_verts
+BS,	DXF 72
 
 @end vtable
 @end indentedblock
@@ -3688,6 +3692,8 @@ H
 H*
 @item seqend
 H
+@item flag
+BS,	DXF 70
 @item numverts
 BS,	DXF 71
 @item numfaces

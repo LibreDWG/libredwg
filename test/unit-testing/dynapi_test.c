@@ -19956,6 +19956,36 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
         fail ("POLYLINE_2D.last_vertex [H]");
   }
   {
+    BITCODE_BS num_m_verts;
+    if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "num_m_verts", &num_m_verts, NULL)
+        && num_m_verts == polyline_2d->num_m_verts)
+      pass ();
+    else
+      fail ("POLYLINE_2D.num_m_verts [BS] %hu != %hu", polyline_2d->num_m_verts, num_m_verts);
+    num_m_verts++;
+    if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "num_m_verts", &num_m_verts, 0)
+        && num_m_verts == polyline_2d->num_m_verts)
+      pass ();
+    else
+      fail ("POLYLINE_2D.num_m_verts [BS] set+1 %hu != %hu", polyline_2d->num_m_verts, num_m_verts);
+    polyline_2d->num_m_verts--;
+  }
+  {
+    BITCODE_BS num_n_verts;
+    if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "num_n_verts", &num_n_verts, NULL)
+        && num_n_verts == polyline_2d->num_n_verts)
+      pass ();
+    else
+      fail ("POLYLINE_2D.num_n_verts [BS] %hu != %hu", polyline_2d->num_n_verts, num_n_verts);
+    num_n_verts++;
+    if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "num_n_verts", &num_n_verts, 0)
+        && num_n_verts == polyline_2d->num_n_verts)
+      pass ();
+    else
+      fail ("POLYLINE_2D.num_n_verts [BS] set+1 %hu != %hu", polyline_2d->num_n_verts, num_n_verts);
+    polyline_2d->num_n_verts--;
+  }
+  {
     BITCODE_BL num_owned;
     if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "num_owned", &num_owned, NULL)
         && num_owned == polyline_2d->num_owned)
@@ -20388,6 +20418,21 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
         pass ();
     else
         fail ("POLYLINE_PFACE.first_vertex [H]");
+  }
+  {
+    BITCODE_BS flag;
+    if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "flag", &flag, NULL)
+        && flag == polyline_pface->flag)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.flag [BS] %hu != %hu", polyline_pface->flag, flag);
+    flag++;
+    if (dwg_dynapi_entity_set_value (polyline_pface, "POLYLINE_PFACE", "flag", &flag, 0)
+        && flag == polyline_pface->flag)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.flag [BS] set+1 %hu != %hu", polyline_pface->flag, flag);
+    polyline_pface->flag--;
   }
   {
     BITCODE_B has_vertex;
