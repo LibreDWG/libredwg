@@ -1971,7 +1971,8 @@ encode_preR13_section_hdr (const char *restrict name, const Dwg_Section_Type_r11
             calc_preR13_ctrl_size (dwg, obj);                                 \
           tbl->size = obj->size;                                              \
           tbl->number = _obj->num_entries;                                    \
-          tbl->flags_r11 = 0x8007 + i; /* 0x8008 - 0x800c */                  \
+          /* flags_r11 0x8008 - 0x800c */                                     \
+          tbl->flags_r11 = (dwg->header.version >= R_9) ? 0 : 0x8007 + i;     \
           tbl->address = addr;                                                \
           addr += tbl->size * tbl->number;                                    \
           if (dat->version >= R_11)                                           \
