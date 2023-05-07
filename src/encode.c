@@ -4161,19 +4161,17 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   return error;
 }
 
+/*
 static int
 encode_preR13_POLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
   int error = 0;
-  BITCODE_RC flag_r11 = obj->tio.entity->flag_r11;
   switch (obj->fixedtype)
     {
     case DWG_TYPE_VERTEX_2D:
-      obj->tio.entity->flag_r11 |= 4;
       error = dwg_encode_VERTEX_2D (dat, obj);
       break;
     case DWG_TYPE_VERTEX_3D:
-      obj->tio.entity->flag_r11 &= ~4;
       error = dwg_encode_VERTEX_3D (dat, obj);
       break;
     case DWG_TYPE_VERTEX_MESH:
@@ -4204,78 +4202,7 @@ encode_preR13_POLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     }
   return error;
 }
-
-#if 0
-static int
-encode_preR13_DIMENSION (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
-{
-  int error = 0;
-  unsigned flag_r11 = (unsigned)obj->tio.entity->flag_r11;
-  //obj->type = DWG_TYPE_DIMENSION_R11; // or deleted
-  if (!flag_r11)
-    {
-      switch (obj->fixedtype)
-        {
-        case DWG_TYPE_DIMENSION_LINEAR:
-          obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_LINEAR;
-          break;
-        case DWG_TYPE_DIMENSION_ALIGNED:
-          obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_ALIGNED;
-          break;
-        case DWG_TYPE_DIMENSION_ANG2LN:
-          obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_ANG2LN;
-          break;
-        case DWG_TYPE_DIMENSION_DIAMETER:
-          obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_DIAMETER;
-          break;
-        case DWG_TYPE_DIMENSION_RADIUS:
-          obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_RADIUS;
-          break;
-        case DWG_TYPE_DIMENSION_ANG3PT:
-          obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_ANG3PT;
-          break;
-        case DWG_TYPE_DIMENSION_ORDINATE:
-          obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_ORDINATE;
-          break;
-        default:
-          LOG_ERROR ("Unknown preR13 DIMENSION fixedtype %u", obj->fixedtype);
-          error |= DWG_ERR_VALUEOUTOFBOUNDS;
-        }
-      LOG_TRACE ("-flag_r11: %u\n", obj->tio.entity->flag_r11)
-    }
-  if (flag_r11 >= 64)
-    flag_r11 -= 64;
-  switch (flag_r11)
-    {
-    case FLAG_R11_DIMENSION_LINEAR:
-      error |= dwg_encode_DIMENSION_LINEAR (dat, obj);
-      break;
-    case FLAG_R11_DIMENSION_ALIGNED:
-      error |= dwg_encode_DIMENSION_ALIGNED (dat, obj);
-      break;
-    case FLAG_R11_DIMENSION_ANG2LN:
-      error |= dwg_encode_DIMENSION_ANG2LN (dat, obj);
-      break;
-    case FLAG_R11_DIMENSION_DIAMETER:
-      error |= dwg_encode_DIMENSION_DIAMETER (dat, obj);
-      break;
-    case FLAG_R11_DIMENSION_RADIUS:
-      error |= dwg_encode_DIMENSION_RADIUS (dat, obj);
-      break;
-    case FLAG_R11_DIMENSION_ANG3PT:
-      error |= dwg_encode_DIMENSION_ANG3PT (dat, obj);
-      break;
-    case FLAG_R11_DIMENSION_ORDINATE:
-      error |= dwg_encode_DIMENSION_ORDINATE (dat, obj);
-      break;
-    default:
-      LOG_ERROR ("Unknown preR13 DIMENSION flag_r11 %u",
-                 obj->tio.entity->flag_r11);
-      error |= DWG_ERR_VALUEOUTOFBOUNDS;
-    }
-  return error;
-}
-#endif
+*/
 
 static BITCODE_RL
 encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last,
@@ -4465,117 +4392,50 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
         LOG_INFO ("type: %d [RC]\n", obj->type)
       }
 
+#define CASE_ENCODE_TYPE(ty)                                                  \
+  case DWG_TYPE_##ty:                                                         \
+    *error |= dwg_encode_##ty (dat, obj);                                     \
+    break
+
       switch (obj->fixedtype)
         {
-        case DWG_TYPE_LINE:
-          *error |= dwg_encode_LINE (dat, obj);
-          break;
-        case DWG_TYPE_POINT:
-          *error |= dwg_encode_POINT (dat, obj);
-          break;
-        case DWG_TYPE_CIRCLE:
-          *error |= dwg_encode_CIRCLE (dat, obj);
-          break;
-        case DWG_TYPE_SHAPE:
-          *error |= dwg_encode_SHAPE (dat, obj);
-          break;
-        case DWG_TYPE_REPEAT:
-          *error |= dwg_encode_REPEAT (dat, obj);
-          break;
-        case DWG_TYPE_ENDREP:
-          *error |= dwg_encode_ENDREP (dat, obj);
-          break;
-        case DWG_TYPE_TEXT:
-          *error |= dwg_encode_TEXT (dat, obj);
-          break;
-        case DWG_TYPE_ARC:
-          *error |= dwg_encode_ARC (dat, obj);
-          break;
-        case DWG_TYPE_TRACE:
-          *error |= dwg_encode_TRACE (dat, obj);
-          break;
-        case DWG_TYPE_LOAD:
-          /* convert from pre r2.0 */
-          *error |= dwg_encode_LOAD (dat, obj);
-          break;
-        case DWG_TYPE_SOLID:
-          *error |= dwg_encode_SOLID (dat, obj);
-          break;
-        case DWG_TYPE_BLOCK:
-          *error |= dwg_encode_BLOCK (dat, obj);
-          break;
-        case DWG_TYPE_ENDBLK:
-          *error |= dwg_encode_ENDBLK (dat, obj);
-          break;
-        case DWG_TYPE_MINSERT:
-          *error |= dwg_encode_MINSERT (dat, obj);
-          break;
-        case DWG_TYPE_INSERT:
-          *error |= dwg_encode_INSERT (dat, obj);
-          break;
-        case DWG_TYPE_ATTDEF:
-          *error |= dwg_encode_ATTDEF (dat, obj);
-          break;
-        case DWG_TYPE_ATTRIB:
-          *error |= dwg_encode_ATTRIB (dat, obj);
-          break;
-        case DWG_TYPE_SEQEND:
-          *error |= dwg_encode_SEQEND (dat, obj);
-          break;
-        case DWG_TYPE_JUMP:
-          *error |= dwg_encode_JUMP (dat, obj);
-          break;
-        case DWG_TYPE_POLYLINE_2D:
-        case DWG_TYPE_POLYLINE_3D:
-        case DWG_TYPE_POLYLINE_PFACE:
-        case DWG_TYPE_POLYLINE_MESH:
-          *error |= encode_preR13_POLYLINE (dat, obj);
-          break;
-        case DWG_TYPE_VERTEX_2D:
-        case DWG_TYPE_VERTEX_3D:
-        case DWG_TYPE_VERTEX_MESH:
-        case DWG_TYPE_VERTEX_PFACE:
-        case DWG_TYPE_VERTEX_PFACE_FACE:
-          *error |= encode_preR13_POLYLINE (dat, obj);
-          break;
-        case DWG_TYPE__3DLINE:
-          *error |= dwg_encode__3DLINE (dat, obj);
-          break;
-        case DWG_TYPE__3DFACE:
-          *error |= dwg_encode__3DFACE (dat, obj);
-          break;
-          //if (obj-fixedtype < DWG_TYPE_DIMENSION_ORDINATE
-          //    || obj-fixedtype > DWG_TYPE_DIMENSION_DIAMETER)
-          //  *error |= encode_preR13_DIMENSION (dat, obj);
-        case DWG_TYPE_DIMENSION_ORDINATE:
-          *error |= dwg_encode_DIMENSION_ORDINATE (dat, obj);
-          break;
-        case DWG_TYPE_DIMENSION_LINEAR:
-          *error |= dwg_encode_DIMENSION_LINEAR (dat, obj);
-          break;
-        case DWG_TYPE_DIMENSION_ALIGNED:
-          *error |= dwg_encode_DIMENSION_ALIGNED (dat, obj);
-          break;
-        case DWG_TYPE_DIMENSION_ANG3PT:
-          *error |= dwg_encode_DIMENSION_ANG3PT (dat, obj);
-          break;
-        case DWG_TYPE_DIMENSION_ANG2LN:
-          *error |= dwg_encode_DIMENSION_ANG2LN (dat, obj);
-          break;
-        case DWG_TYPE_DIMENSION_RADIUS:
-          *error |= dwg_encode_DIMENSION_RADIUS (dat, obj);
-          break;
-        case DWG_TYPE_DIMENSION_DIAMETER:
-          *error |= dwg_encode_DIMENSION_DIAMETER (dat, obj);
-          break;
-          break;
-        case DWG_TYPE_VIEWPORT:
-          *error |= dwg_encode_VIEWPORT (dat, obj);
-          break;
-        /*
-        case DWG_TYPE_UNKNOWN:
-          break;
-        */
+        CASE_ENCODE_TYPE (LINE);
+        CASE_ENCODE_TYPE (POINT);
+        CASE_ENCODE_TYPE (CIRCLE);
+        CASE_ENCODE_TYPE (SHAPE);
+        CASE_ENCODE_TYPE (REPEAT);
+        CASE_ENCODE_TYPE (ENDREP);
+        CASE_ENCODE_TYPE (TEXT);
+        CASE_ENCODE_TYPE (ARC);
+        CASE_ENCODE_TYPE (TRACE);
+        CASE_ENCODE_TYPE (LOAD);  /* convert from pre r2.0 */
+        CASE_ENCODE_TYPE (SOLID);
+        CASE_ENCODE_TYPE (BLOCK);
+        CASE_ENCODE_TYPE (ENDBLK);
+        CASE_ENCODE_TYPE (INSERT);
+        CASE_ENCODE_TYPE (ATTDEF);
+        CASE_ENCODE_TYPE (ATTRIB);
+        CASE_ENCODE_TYPE (SEQEND);
+        CASE_ENCODE_TYPE (JUMP);
+        CASE_ENCODE_TYPE (POLYLINE_2D);
+        CASE_ENCODE_TYPE (POLYLINE_3D);
+        CASE_ENCODE_TYPE (POLYLINE_PFACE);
+        CASE_ENCODE_TYPE (POLYLINE_MESH);
+        CASE_ENCODE_TYPE (VERTEX_2D);
+        CASE_ENCODE_TYPE (VERTEX_3D);
+        CASE_ENCODE_TYPE (VERTEX_MESH);
+        CASE_ENCODE_TYPE (VERTEX_PFACE);
+        CASE_ENCODE_TYPE (VERTEX_PFACE_FACE);
+        CASE_ENCODE_TYPE (_3DLINE);
+        CASE_ENCODE_TYPE (_3DFACE);
+        CASE_ENCODE_TYPE (DIMENSION_ORDINATE);
+        CASE_ENCODE_TYPE (DIMENSION_LINEAR);
+        CASE_ENCODE_TYPE (DIMENSION_ALIGNED);
+        CASE_ENCODE_TYPE (DIMENSION_ANG3PT);
+        CASE_ENCODE_TYPE (DIMENSION_ANG2LN);
+        CASE_ENCODE_TYPE (DIMENSION_RADIUS);
+        CASE_ENCODE_TYPE (DIMENSION_DIAMETER);
+        CASE_ENCODE_TYPE (VIEWPORT);
         default:
           DEBUG_HERE;
           LOG_ERROR ("Unknown object type %d", obj->type)
