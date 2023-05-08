@@ -2083,8 +2083,11 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   && strEQc(key, "DIMBLK2_T") ? 66
                 : obj->fixedtype == DWG_TYPE_DIMSTYLE ? 16
                 : 64;
-              str = (char *)realloc (str, k);
-              memset (&str[len + 1], 0, k - len - 1);
+              str = (char *)realloc (str, k + 1);
+              if ((unsigned)k > len)
+                memset (&str[len + 1], 0, k - len - 1);
+              else
+                str[k] = '\0';
               LOG_TRACE ("%s.%s: \"%s\" [TF %d %d]\n", name, key, str, k,
                          f->dxf);
               old = &((char *)_obj)[f->offset];
