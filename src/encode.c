@@ -2129,7 +2129,7 @@ encode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 /**
  * dwg_encode(): the current generic encoder entry point.
  *
- * TODO: preR13 tables, 2007 maps.
+ * TODO: 2007 maps.
  * 2010+ uses the 2004 format.
  * Returns a summary bitmask of all errors.
  */
@@ -2151,11 +2151,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   Dwg_Section_Type sec_id;
   Dwg_Version_Type orig_from_version = dwg->header.from_version;
   Bit_Chain sec_dat[SECTION_SYSTEM_MAP + 1]; // to encode each r2004 section
-  // preR13 vars:
-  //BITCODE_RL entities_start, entities_end;
-  //BITCODE_RL blocks_start, blocks_end;
-  //BITCODE_RL blocks_offset = 0x40000000;
-  //BITCODE_RL blocks_max = 0x80000000;
 
   dwg->cur_index = 0;
   if (dwg->opts)
@@ -2381,6 +2376,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     BITCODE_BL last_entity_idx;
     Dwg_Object *first_block;
 
+    if (dwg->header.version == R_INVALID)
+      {
+        LOG_ERROR (WE_CAN "Invalid or missing FILEHEADER.version");
+        return DWG_ERR_INVALIDDWG;
+      }
     PRE (R_1_4)
       LOG_WARN (WE_CAN "We cannot encode pre-r1.4 DWG's yet");
 
@@ -2448,27 +2448,29 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     // patch all the section tbl->address
     addr = dwg->header.entities_end + (dat->version >= R_11 ? 0x20 : 0);
-    for (int id = (int)SECTION_BLOCK; id <= (int)dwg->header.num_sections; id++)
-      {
-        Dwg_Section *tbl = &dwg->header.section[id];
-        BITCODE_RL pos = dat->byte;
-        if (!tbl->address)
-          continue;
-        dat->byte = tbl->address;
-        LOG_TRACE ("%s.address => " FORMAT_RLx " [RLx] @%x\n", tbl->name,
-                   addr, (unsigned)tbl->address);
-        bit_write_RL (dat, addr);
-        tbl->address = addr;
-        addr += tbl->size * tbl->number;
-        if (dat->version >= R_11)
-          addr += 0x20;
-        dat->byte = pos;
-      }
-
     PRE (R_2_0b)
     {
       // patch these numbers into the header
       BITCODE_RL dwg_size = dat->byte;
+
+      for (int id = (int)SECTION_BLOCK; id <= (int)dwg->header.num_sections;
+           id++)
+        {
+          Dwg_Section *tbl = &dwg->header.section[id];
+          BITCODE_RL pos = dat->byte;
+          if (!tbl->address)
+            continue;
+          dat->byte = tbl->address;
+          LOG_TRACE ("%s.address => " FORMAT_RLx " [RLx] @%x\n", tbl->name,
+                     addr, (unsigned)tbl->address);
+          bit_write_RL (dat, addr);
+          tbl->address = addr;
+          addr += tbl->size * tbl->number;
+          if (dat->version >= R_11)
+            addr += 0x20;
+          dat->byte = pos;
+        }
+
       dat->byte = 0x0c + 24;
       if (dwg_size != dwg->header_vars.dwg_size)
         LOG_TRACE ("-dwg_size: %u [RL] @%u.0\n", dwg_size,
