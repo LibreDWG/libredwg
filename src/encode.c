@@ -5200,7 +5200,38 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
     {
     case 0:
       {
-        PRE (R_2007)
+        PRE (R_13b1)
+        {
+          // TU only if from r2007+ DWG, not JSON, DXF
+          BITCODE_RS length = data->u.eed_0.is_tu ? data->u.eed_0.length
+            : data->u.eed_0_r2007.length;
+          char *s;
+          if (length + 1 + dat->byte >= dat->size)
+            bit_chain_alloc_size (dat,
+                                  (length + 1 + dat->byte) - dat->size);
+          if (length > 255)
+            {
+              LOG_ERROR ("eed: overlong string %d stripped", (int)length);
+              length = 255;
+            }
+          if (data->u.eed_0.is_tu)
+            {
+              char *dest = bit_embed_TU_size (
+                  (BITCODE_RS *)&data->u.eed_0_r2007.string, length);
+              s = dest;
+            }
+          else
+            {
+              s = (char *)data->u.eed_0.string;
+            }
+          bit_write_RC (dat, length);
+          bit_write_TF (dat, (unsigned char *)s, length);
+          LOG_TRACE ("string: len=" FORMAT_RC " [RC] \"%s\" [TF]",
+                     length, s);
+          if (data->u.eed_0.is_tu)
+            free (s);
+        }
+        VERSIONS (R_13b1, R_2007)
         {
           // only if from r2007+ DWG, not JSON, DXF
           if (data->u.eed_0.is_tu)
@@ -5290,11 +5321,24 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       break;
     case 2:
       bit_write_RC (dat, data->u.eed_2.close);
-      LOG_TRACE ("close: %d [RC]", (int)data->u.eed_2.close);
+      if (data->u.eed_2.close)
+        {
+          LOG_TRACE ("close: " FORMAT_RC " [RC]", data->u.eed_2.close);
+        }
+      else
+        {
+          LOG_TRACE ("open: " FORMAT_RC " [RC]", data->u.eed_2.close);
+        }
       break;
     case 3:
-      bit_write_RLL (dat, data->u.eed_3.layer);
-      LOG_TRACE ("layer: 0x%lX [RLL]", (unsigned long)data->u.eed_3.layer);
+      PRE (R_13b1) {
+        bit_write_RS (dat, (BITCODE_RS)data->u.eed_3.layer);
+        LOG_TRACE ("layer: " FORMAT_RS " [RS]", (BITCODE_RS)data->u.eed_3.layer);
+      }
+      LATER_VERSIONS {
+        bit_write_RLL (dat, data->u.eed_3.layer);
+        LOG_TRACE ("layer: 0x%lX [RLL]", (unsigned long)data->u.eed_3.layer);
+      }
       break;
     case 4:
       bit_write_RC (dat, data->u.eed_4.length);

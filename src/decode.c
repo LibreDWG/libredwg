@@ -3555,7 +3555,8 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
           return DWG_ERR_INVALIDEED;
         bit_read_fixed (dat, (BITCODE_RC *)data->u.eed_0.string, lenc);
         data->u.eed_0.string[lenc] = '\0';
-        LOG_TRACE ("string: len=%d [RC] \"%s\" [TF]", (int)lenc, data->u.eed_0.string);
+        LOG_TRACE ("string: len=%d [RC] \"%s\" [TF]", (int)lenc,
+                   data->u.eed_0.string);
       }
       VERSIONS (R_13b1, R_2007b)
       {
@@ -3620,7 +3621,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       if (eed_need_size (3, size))
         return DWG_ERR_INVALIDEED;
       data->u.eed_1.appid_index = bit_read_RS (dat);
-      LOG_TRACE ("application name: " FORMAT_RS " [RC]", data->u.eed_1.appid_index);
+      LOG_TRACE ("appid_index: " FORMAT_RS " [RS]", data->u.eed_1.appid_index);
       break;
     case 2:
       if (eed_need_size (1, size))
