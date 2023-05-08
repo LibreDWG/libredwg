@@ -2362,13 +2362,16 @@ dwg_find_first_type (Dwg_Data *restrict dwg, enum DWG_OBJECT_TYPE type)
 Dwg_Object *
 dwg_find_last_type (Dwg_Data *restrict dwg, enum DWG_OBJECT_TYPE type)
 {
-  for (BITCODE_BL i = dwg->num_objects - 1; i != 0; i--)
+  if (dwg->num_objects)
     {
-      if (dwg->object[i].fixedtype == type)
-        return &dwg->object[i];
+      for (BITCODE_BL i = dwg->num_objects - 1; i != 0; i--)
+        {
+          if (dwg->object[i].fixedtype == type)
+            return &dwg->object[i];
+        }
+      if (dwg->object[0].fixedtype == type)
+        return &dwg->object[0];
     }
-  if (dwg->object[0].fixedtype == type)
-    return &dwg->object[0];
   return NULL;
 }
 
