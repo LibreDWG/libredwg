@@ -155,7 +155,7 @@ main (int argc, char *argv[])
           memset (&out_dat, 0, sizeof (out_dat));
           bit_chain_set_version (&out_dat, &dat);
           out_dat.version = R_2000;
-          out_dat.codepage = dwg->header.codepage;
+          out_dat.codepage = dwg.header.codepage;
           if (dwg_encode (&dwg, &out_dat) >= DWG_ERR_CRITICAL)
             exit (0);
           free (out_dat.chain);
