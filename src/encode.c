@@ -2448,14 +2448,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     // patch all the section tbl->address
     addr = dwg->header.entities_end + (dat->version >= R_11 ? 0x20 : 0);
-    PRE (R_2_0b)
-    {
-      // patch these numbers into the header
-      BITCODE_RL dwg_size = dat->byte;
-
-      for (int id = (int)SECTION_BLOCK; id <= (int)dwg->header.num_sections;
-           id++)
-        {
+    for (int id = (int)SECTION_BLOCK; id <= (int)dwg->header.num_sections;
+         id++)
+      {
           Dwg_Section *tbl = &dwg->header.section[id];
           BITCODE_RL pos = dat->byte;
           if (!tbl->address)
@@ -2469,8 +2464,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           if (dat->version >= R_11)
             addr += 0x20;
           dat->byte = pos;
-        }
+      }
 
+    PRE (R_2_0b)
+    {
+      // patch these numbers into the header
+      BITCODE_RL dwg_size = dat->byte;
       dat->byte = 0x0c + 24;
       if (dwg_size != dwg->header_vars.dwg_size)
         LOG_TRACE ("-dwg_size: %u [RL] @%u.0\n", dwg_size,
