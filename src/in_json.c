@@ -2687,15 +2687,20 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       else if (t->type == JSMN_ARRAY && strEQc (key, "dashes_r11")
                && (f = dwg_dynapi_entity_field (name, "dashes_r11[12]")))
         {
-          BITCODE_RD arr[12];
+          BITCODE_RD arr[12] = { 0.0 };
           tokens->index++;
+          dwg_dynapi_field_get_value (_obj, f, &arr);
           for (int index = 0; index < t->size; index++)
             {
-              dwg_dynapi_field_get_value (_obj, f, &arr);
-              arr[index] = json_float (dat, tokens);
-              LOG_TRACE ("%s: %f [%s]\n", key, arr[index], f->type);
-              dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
+              if (index < 12)
+                {
+                  arr[index] = json_float (dat, tokens);
+                  LOG_TRACE ("%s: %f [%s]\n", key, arr[index], f->type);
+                }
+              else
+                tokens->index++;
             }
+          dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
           //f = dwg_dynapi_entity_field (name, "numdashes");
           //dwg_dynapi_field_set_value (dwg, _obj, f, &t->size, 0);
           JSON_TOKENS_CHECK_OVERFLOW_ERR;
