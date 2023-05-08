@@ -19,8 +19,8 @@ EXEEXT="@EXEEXT@"
 
 i=0
 DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
-DATA="$DATA example_2013 example_2018 example_r14 example_r13"
-TODO="r11/entities-3d r11/ACEB10 r10/entities r2.10/entities r2.6/entities r1.4/entities"
+DATA="$DATA example_2013 example_2018 example_r14 example_r13 r2.10/entities r2.6/entities"
+TODO="r11/entities-3d r11/ACEB10 r10/entities r1.4/entities"
 SED="@SED@"
 JQ="@JQ@"
 GEOJSONLINT="@GEOJSONLINT@"
@@ -42,10 +42,8 @@ check_roundtrip() {
         log2="$(basename "$dwg" .dwg).log"
         todo=
         case $dwg in
-            *r11/*)  todo=1 ;;
-            *r10/*)  todo=1 ;;
-            *r9/*)   todo=1 ;;
-            *r2.*)   todo=1 ;;
+            *r11/A*)  todo=1 ;;
+            *r10/*)   todo=1 ;;
             *r1.*)   todo=1 ;;
         esac
         echo "@LTEXEC@ ./dwgread${EXEEXT} -y -v2 -o $json $dwg 2>$log1"
