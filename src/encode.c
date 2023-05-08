@@ -2506,6 +2506,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           encode_preR13_section (SECTION_VX, dat, dwg);
         }
       // encode block entities
+      write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN);
       dwg->header.blocks_start = dat->byte;
       if (first_block)
         {
@@ -2513,18 +2514,16 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           last_endblk = dwg_find_last_type (dwg, DWG_TYPE_ENDBLK);
           endblk_index
               = last_endblk ? last_endblk->index : dwg->num_objects - 1;
-          write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN);
-          dwg->header.blocks_start = dat->byte;
           num_block_entities = encode_preR13_entities (
               last_entity_idx + 1, endblk_index, dat, dwg, &error);
           dwg->header.blocks_size = (dat->byte - dwg->header.blocks_start);
-          write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_ENTITIES_END);
         }
       else
         {
           num_block_entities = 0;
           dwg->header.blocks_size = 0;
         }
+      write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_ENTITIES_END);
       if (dwg->header.version > R_2_22)
         dwg->header.blocks_size += 0x40000000;
       LOG_TRACE (
