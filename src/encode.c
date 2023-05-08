@@ -6140,7 +6140,7 @@ void
 in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
                        BITCODE_H *owned)
 {
-  Dwg_Data *dwg = obj->parent;
+  Dwg_Data *dwg;
   //Dwg_Entity_SEQEND *o = obj->tio.entity->tio.SEQEND;
   Dwg_Object *owner;
   Dwg_Entity_POLYLINE_2D *ow;
@@ -6149,8 +6149,9 @@ in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
   const char *lastfield;
 
   LOG_TRACE ("in_postprocess_SEQEND (%u):\n", (unsigned)num_owned);
-  if (obj->fixedtype != DWG_TYPE_SEQEND)
+  if (!obj || obj->fixedtype != DWG_TYPE_SEQEND || !obj->tio.entity)
     return;
+  dwg = obj->parent;
   owner = dwg_ref_object (dwg, obj->tio.entity->ownerhandle);
   if (!owner)
     {
