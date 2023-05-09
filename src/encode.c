@@ -671,11 +671,12 @@ const unsigned char unknown_section[53]
         bit_write_RLL (dat, be64toh ((hdlptr)->handleref.value));             \
       else                                                                    \
         LOG_ERROR (#nam ": Invalid size %d %hd [H %d]", size, idx, dxf)       \
-      LOG_TRACE (#nam ": %hd [%s %d]\n", idx,                                 \
+      LOG_TRACE (#nam ": %hd [%s %d]", idx,                                   \
                  size == 1   ? "RC"                                           \
                  : size == 2 ? "RSd"                                          \
                              : "RLL",                                         \
                  dxf)                                                         \
+      LOG_POS                                                       \
     }                                                                         \
     IF_ENCODE_SINCE_R13                                                       \
     {                                                                         \
@@ -706,14 +707,12 @@ const unsigned char unknown_section[53]
 // for obj->handle 0.x.x only, DXF 5
 #define VALUE_H(hdl, dxf)                                                     \
   {                                                                           \
-    PRE (R_13b1) {                                                            \
+    LOG_TRACE ("handle: " FORMAT_H " [H %d]", ARGS_H (hdl), dxf);             \
+    LOG_RPOS                                                                  \
+    PRE (R_13b1)                                                              \
       bit_write_H (dat, &hdl);                                                \
-    }                                                                         \
     else                                                                      \
-    {                                                                         \
       bit_write_H (hdl_dat, &hdl);                                            \
-    }                                                                         \
-    LOG_TRACE ("handle: " FORMAT_H " [H %d]\n", ARGS_H (hdl), dxf);           \
   }
 
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \
@@ -5208,6 +5207,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
 {
   unsigned long pos = bit_position (dat);
   unsigned long size;
+  if (dat->byte + 24 >= dat->size)
+    bit_chain_alloc (dat);
   bit_write_RC (dat, data->code);
   LOG_TRACE ("EED[%d] code: %d [RC] ", i, data->code);
   switch (data->code)
@@ -5286,7 +5287,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
                          data->u.eed_0.string);
             }
         }
-        LATER_VERSIONS
+        SINCE (R_2007)
         {
           // from ASCII DWG or JSON, DXF
           if (!data->u.eed_0.is_tu)
@@ -5355,6 +5356,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       }
       break;
     case 4:
+      if (data->u.eed_4.length + 1 + dat->byte >= dat->size)
+        bit_chain_alloc (dat);
       bit_write_RC (dat, data->u.eed_4.length);
       bit_write_TF (dat, (BITCODE_TF)data->u.eed_4.data, data->u.eed_4.length);
       LOG_TRACE ("binary: ");
@@ -5362,7 +5365,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       break;
     case 5:
       bit_write_RLL (dat, (BITCODE_RLL)data->u.eed_5.entity);
-      LOG_TRACE ("entity: 0x%lX [ulong]", data->u.eed_5.entity);
+      LOG_TRACE ("entity: 0x%lX [RLL]", data->u.eed_5.entity);
       break;
     case 10:
     case 11:
@@ -5446,21 +5449,16 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           if (eed->raw && !need_recalc)
             {
               did_raw = 1;
-              if (dat->version <= R_12)
-                {
-                  bit_write_RS (dat, size);
-                  LOG_TRACE ("EED[%d] size: " FORMAT_BS " [RS]", i, size);
-                }
-              else
+              if (dat->version > R_12)
                 {
                   bit_write_BS (dat, size);
                   LOG_TRACE ("EED[%d] size: " FORMAT_BS " [BS]", i, size);
+                  LOG_POS
+                  bit_write_H (dat, &eed->handle);
+                  LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]", i,
+                             ARGS_H (eed->handle));
+                  LOG_POS
                 }
-              LOG_POS
-              bit_write_H (dat, &eed->handle);
-              LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]", i,
-                         ARGS_H (eed->handle));
-              LOG_POS
               LOG_TRACE ("EED[%d] raw [TF %d]\n", i, size);
               bit_write_TF (dat, eed->raw, size);
               LOG_TRACE_TF (eed->raw, size);
@@ -5493,11 +5491,11 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
                           bit_write_BS (dat, new_size);
                           LOG_TRACE ("EED[%d] size: %d [BS]", last_size,
                                      new_size);
+                          LOG_POS;
+                          bit_write_H (dat, last_handle);
+                          LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]",
+                                     last_size, ARGS_H (*last_handle));
                         }
-                      LOG_POS;
-                      bit_write_H (dat, last_handle);
-                      LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]", last_size,
-                                 ARGS_H (*last_handle));
                       LOG_POS;
                       LOG_TRACE ("flush eed_data %lu.%d\n", dat1.byte,
                                  dat1.bit);
@@ -5535,17 +5533,18 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
             {
               bit_write_RS (dat, new_size);
               LOG_TRACE ("EED[%d] size: %d [RS]", last_size, new_size);
+              LOG_POS;
             }
           else
             {
               bit_write_BS (dat, new_size);
               LOG_TRACE ("EED[%d] size: %d [BS]", last_size, new_size);
+              LOG_POS;
+              bit_write_H (dat, last_handle);
+              LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]", last_size,
+                         ARGS_H (*last_handle));
+              LOG_POS;
             }
-          LOG_POS;
-          bit_write_H (dat, last_handle);
-          LOG_TRACE ("EED[%d] handle: " FORMAT_H " [H]", last_size,
-                     ARGS_H (*last_handle));
-          LOG_POS;
           last_handle = NULL;
         }
       else
@@ -5560,13 +5559,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
   if (dat1.byte)
     LOG_TRACE ("flush eed_data %lu.%d\n", dat1.byte, dat1.bit);
   dat_flush (dat, &dat1);
-  if (dat->version <= R_12)
-    {
-      bit_write_RS (dat, 0);
-      if (i)
-        LOG_TRACE ("EED[%d] size: 0 [RS] (end)\n", i);
-    }
-  else
+  if (dat->version > R_12)
     {
       bit_write_BS (dat, 0);
       if (i)

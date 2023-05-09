@@ -3663,7 +3663,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       if (eed_need_size (8, size))
         return DWG_ERR_INVALIDEED;
       data->u.eed_5.entity = (unsigned long)bit_read_RLL (dat);
-      LOG_TRACE ("entity: 0x%lX [ulong]", data->u.eed_5.entity);
+      LOG_TRACE ("entity: 0x%lX [RLL]", data->u.eed_5.entity);
       break;
     case 10:
     case 11:
@@ -3899,9 +3899,9 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
         }
       idx++;
     }
-  LOG_HANDLE ("EED[%u] size: " FORMAT_BS " [BS] (end)\n", idx, size);
+  LOG_HANDLE ("EED[%u] size: " FORMAT_BS " (end)", idx, size);
+  LOG_RPOS
   LOG_TRACE ("num_eed: " FORMAT_BL "\n", obj->num_eed);
-  // LOG_RPOS
   return error;
 }
 

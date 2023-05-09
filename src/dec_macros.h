@@ -276,11 +276,14 @@
   {                                                                           \
     PRE (R_13b1)                                                              \
     {                                                                         \
+      unsigned long _pos = bit_position (dat);                                \
       if (ref)                                                                \
         free (ref);                                                           \
       ref = dwg_decode_preR13_handleref (dat, code /*as size */, dwg);        \
-      LOG_TRACE (#nam ": %hd [H(%s) %d]\n", (short)ref->r11_idx,              \
+      LOG_TRACE (#nam ": %hd [H(%s) %d]", (short)ref->r11_idx,                \
                  code == 1 ? "RC" : "RSd", dxf)                               \
+      LOG_INSANE (" @%lu.%u", _pos / 8, (unsigned)(_pos % 8));                \
+      LOG_TRACE ("\n");                                                       \
     }                                                                         \
     LATER_VERSIONS                                                            \
     {                                                                         \
@@ -321,21 +324,29 @@
   VALUE_HANDLE (_obj->o.nam, o.nam, code, dxf)
 #define VALUE_H(hdl, dxf)                                                     \
   {                                                                           \
-    PRE (R_13b1) { error |= bit_read_H (dat, &hdl); }                         \
+    unsigned long pos = bit_position (dat);                                   \
+    PRE (R_13b1)                                                              \
+      error |= bit_read_H (dat, &hdl);                                        \
     else                                                                      \
     {                                                                         \
+      pos = bit_position (hdl_dat);                                           \
       error |= bit_read_H (hdl_dat, &hdl);                                    \
     }                                                                         \
-    LOG_TRACE ("handle: " FORMAT_H " [H %d]\n", ARGS_H (hdl), dxf);           \
+    LOG_TRACE ("handle: " FORMAT_H " [H %d]", ARGS_H (hdl), dxf);             \
+    LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                    \
+    LOG_TRACE ("\n");                                                         \
   }
 
 #define VALUE_HANDLE_N(ref, nam, vcount, code, dxf)                           \
   {                                                                           \
     PRE (R_13b1)                                                              \
     {                                                                         \
+      unsigned long pos = bit_position (dat);                                 \
       ref = dwg_decode_preR13_handleref (dat, code, dwg);                     \
-      LOG_TRACE (#nam "[%d]: " FORMAT_RS " [RS %d]\n", (int)vcount,           \
+      LOG_TRACE (#nam "[%d]: " FORMAT_RS " [RS %d]", (int)vcount,             \
                  ref->r11_idx, dxf);                                          \
+      LOG_INSANE (" @%lu.%u", pos / 8, (unsigned)(pos % 8));                  \
+      LOG_TRACE ("\n");                                                       \
     }                                                                         \
     LATER_VERSIONS                                                            \
     {                                                                         \
