@@ -1185,7 +1185,7 @@ dwg_next_entity (const Dwg_Object *restrict obj)
   if (obj == NULL || obj->parent == NULL
       || obj->supertype != DWG_SUPERTYPE_ENTITY)
     return NULL;
-  if (obj->parent->header.version < R_2004)
+  if (obj->parent->header.version < R_2004 && obj->parent->header.version > R_12)
     {
       if (!obj->tio.entity) // decoding error
         goto next_obj;
@@ -2348,7 +2348,7 @@ dwg_find_dicthandle_objname (Dwg_Data *restrict dwg, BITCODE_H dict,
 
 /* Return the first object of the given type. */
 Dwg_Object *
-dwg_find_first_type (Dwg_Data *restrict dwg, enum DWG_OBJECT_TYPE type)
+dwg_find_first_type (const Dwg_Data *restrict dwg, const enum DWG_OBJECT_TYPE type)
 {
   for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
     {
@@ -2360,7 +2360,7 @@ dwg_find_first_type (Dwg_Data *restrict dwg, enum DWG_OBJECT_TYPE type)
 
 /* Return the last object of the given type. */
 Dwg_Object *
-dwg_find_last_type (Dwg_Data *restrict dwg, enum DWG_OBJECT_TYPE type)
+dwg_find_last_type (const Dwg_Data *restrict dwg, const enum DWG_OBJECT_TYPE type)
 {
   if (dwg->num_objects)
     {
@@ -2377,7 +2377,8 @@ dwg_find_last_type (Dwg_Data *restrict dwg, enum DWG_OBJECT_TYPE type)
 
 /* Return the handle of the first object of the given type. */
 Dwg_Handle *
-dwg_find_first_type_handle (Dwg_Data *restrict dwg, enum DWG_OBJECT_TYPE type)
+dwg_find_first_type_handle (const Dwg_Data *restrict dwg,
+                            const enum DWG_OBJECT_TYPE type)
 {
   for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
     {

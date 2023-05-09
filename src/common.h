@@ -509,12 +509,13 @@ void *memmem (const void *h0, size_t k, const void *n0, size_t l)
 BITCODE_H shift_hv (BITCODE_H *hv, BITCODE_BL *num_p) __nonnull_all;
 
 // used in dwg.spec
-Dwg_Object *dwg_find_first_type (Dwg_Data *restrict dwg,
-                                 enum DWG_OBJECT_TYPE type) __nonnull_all;
-Dwg_Object *dwg_find_last_type (Dwg_Data *restrict dwg,
-                                enum DWG_OBJECT_TYPE type) __nonnull_all;
-Dwg_Handle *dwg_find_first_type_handle (Dwg_Data *restrict dwg,
-                                        enum DWG_OBJECT_TYPE type) __nonnull_all;
+Dwg_Object *dwg_find_first_type (const Dwg_Data *restrict dwg,
+                                 const enum DWG_OBJECT_TYPE type) __nonnull_all;
+Dwg_Object *dwg_find_last_type (const Dwg_Data *restrict dwg,
+                                const enum DWG_OBJECT_TYPE type) __nonnull_all;
+Dwg_Handle *dwg_find_first_type_handle (const Dwg_Data *restrict dwg,
+                                        const enum DWG_OBJECT_TYPE type)
+  __nonnull_all;
 
 // <path-to>/dxf.ext => copy of "dxf", "ext"
 // Returns a malloc'ed copy of basename, and

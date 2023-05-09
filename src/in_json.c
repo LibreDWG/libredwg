@@ -1946,6 +1946,35 @@ json_set_numfield (void *restrict _obj,
   }                                                                           \
   break;
 
+static void
+json_fixup_JUMP (Dwg_Entity_JUMP *_obj)
+{
+  if (_obj->jump_address_raw > 0xffffff)
+    {
+      _obj->jump_address &= 0xffffff;
+      LOG_TRACE ("jump_address => " FORMAT_BLx "\n", _obj->jump_address);
+      switch ((_obj->jump_address_raw & 0xff000000) >> 24)
+        {
+        case 0:
+          LOG_TRACE ("jump_entity_section => DWG_ENTITIES_SECTION\n");
+          break;
+        case 0x40:
+          _obj->jump_entity_section = DWG_BLOCKS_SECTION;
+          LOG_TRACE ("jump_entity_section => DWG_BLOCKS_SECTION\n");
+          break;
+        case 0x80:
+          _obj->jump_entity_section = DWG_EXTRA_SECTION;
+          LOG_TRACE ("jump_entity_section => DWG_EXTRA_SECTION\n");
+          break;
+        default:
+          LOG_ERROR ("Invalid jump_entity_section %x ignored",
+                     (_obj->jump_address_raw & 0xff000000) >> 24)
+        }
+    }
+  else
+    LOG_TRACE ("jump_entity_section => DWG_ENTITIES_SECTION\n");
+}
+
 // e.g. for TF strings: preview + preview_size.
 static void
 json_set_sizefield (void *restrict _obj,
@@ -2031,6 +2060,11 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           JSON_TOKENS_CHECK_OVERFLOW_ERR
           LOG_TRACE ("%s.%s: %ld [%s]\n", name, key, num, f->type);
           dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
+          if (strEQc (name, "JUMP") && strEQc (key, "jump_address_raw"))
+            {
+              json_fixup_JUMP (_obj);
+              LOG_TRACE ("%s.%s: 0x%lx [RLx]\n", name, key, num);
+            }
         }
       // TFF not yet in dynapi.c
       else if (t->type == JSMN_STRING
