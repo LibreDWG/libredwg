@@ -130,8 +130,8 @@ static char *_path_field (const char *path);
 #undef FORMAT_BLX
 #undef FORMAT_4BITS
 #undef ARGS_H
-#define ARGS_H(hdl) hdl.code, hdl.value
-#define FORMAT_H "[%u, %lu]"
+#define ARGS_H(hdl) hdl.code, hdl.size, hdl.value
+#define FORMAT_H "[%u, %u, %lu]"
 #define ARGS_HREF(ref)                                                        \
   ref->handleref.code, ref->handleref.size, ref->handleref.value,             \
   ref->absolute_ref
@@ -335,9 +335,10 @@ static char *_path_field (const char *path);
     }                                                                         \
   else                                                                        \
     {                                                                         \
-      fprintf (dat->fh, "[0, 0]");                                            \
+      fprintf (dat->fh, "[0, 0, 0]");                                         \
     }
-#define VALUE_H(hdl, dxf) fprintf (dat->fh, FORMAT_H "", hdl.code, hdl.value)
+#define VALUE_H(hdl, dxf)                                                     \
+  fprintf (dat->fh, FORMAT_H "", ARGS_H (hdl))
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \
   {                                                                           \
     if (_obj->nam)                                                            \
@@ -1078,7 +1079,7 @@ json_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
               VALUE_BINARY (data->u.eed_4.data, data->u.eed_4.length, 0);
               break;
             case 5:
-              fprintf (dat->fh, FORMAT_H "", 5, data->u.eed_5.entity);
+              fprintf (dat->fh, FORMAT_H "", 5, 8, data->u.eed_5.entity);
               break;
             case 10:
             case 11:

@@ -687,6 +687,9 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   else if (dat->from_version >= R_13b1)
     {
+      // code as 1st
+      if (t->size == 3) // since 0.12.5.5543 [code size value]
+        size = json_long (dat, tokens);
       absref = json_long (dat, tokens);
       ref = dwg_add_handleref (dwg, code, absref,
                                (!code || code >= 6) ? obj : NULL);
@@ -694,19 +697,25 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
     }
   else // r11 for HANDLING=1 and/or _CONTROL entries
     {
-      // [size idx absref]
+      // [size idx absref] or [0 size absref]
       size = code;
       code = 0;
       r11_idx = json_long (dat, tokens);
       if (t->size == 3)
         {
-          code = 3; // r11 control entries default to 3
+          if (size == 0) // since 0.12.5.5543 [0 size value]
+            {
+              size = r11_idx;
+              r11_idx = 0;
+            }
+          else
+            code = 3; // r11 control entries default to 3
           absref = json_long (dat, tokens);
         }
       else
         absref = r11_idx; // 2nd item, the value
       ref = dwg_add_handleref (dwg, code, absref, obj);
-      if (t->size == 2)
+      if (t->size == 2)  // [size idx absref]
         ref->handleref.value = absref;
       else
         ref->r11_idx = r11_idx;
