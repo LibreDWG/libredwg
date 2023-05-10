@@ -1331,6 +1331,76 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
 DWG_ENTITY_END
 
 /* (15/19)
+   Pre R13 polyline.
+*/
+DWG_ENTITY (POLYLINE)
+  PRE (R_13b1)
+  {
+    if (R11OPTS (0x1)) {
+      FIELD_CAST (flag, RC, BS, 70);
+      LOG_FLAG_POLYLINE
+    }
+    if (R11OPTS (0x2))
+      FIELD_RD (start_width, 40);
+    if (R11OPTS (0x4))
+      FIELD_RD (end_width, 41);
+    if (R11OPTS (0x8))
+      FIELD_3RD (extrusion, 210);
+    if (R11OPTS (0x10))
+      FIELD_RS (num_m_verts, 71);
+    if (R11OPTS (0x20))
+      FIELD_RS (num_n_verts, 72);
+    if (R11OPTS (0x40))
+      FIELD_RS (m_density, 73);
+    if (R11OPTS (0x80))
+      FIELD_RS (n_density, 74);
+    if (R11OPTS (0x100)) {
+      FIELD_RS (curve_type, 75);
+      LOG_POLYLINE_CURVETYPE
+    }
+  }
+DWG_ENTITY_END
+
+/* (none/20)
+   Pre R13 vertex.
+*/
+DWG_ENTITY (VERTEX)
+  PRE (R_13b1)
+  {
+    if (! R11OPTS(OPTS_R11_VERTEX_HAS_NOT_X_Y)) {
+#ifdef IN_JSON
+    FIELD_3RD (point, 10)
+#else
+    FIELD_2RD (point, 10);
+#endif
+    }
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_START_WIDTH))
+      FIELD_RD (start_width, 40);
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_END_WIDTH))
+      FIELD_RD (end_width, 41);
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_BULGE))
+      FIELD_RD (bulge, 42);
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_FLAG)) {
+      FIELD_RC (flag, 0);
+      LOG_FLAG_VERTEX
+    }
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX1)) {
+      FIELD_RS (vertind[0], 71);
+    }
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX2)) {
+      FIELD_RS (vertind[1], 72);
+    }
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX3)) {
+      FIELD_RS (vertind[2], 73);
+    }
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX4)) {
+      FIELD_RS (vertind[3], 74);
+    }
+  }
+DWG_ENTITY_END
+
+/* (15/none)
+>>>>>>> 5ec9a501 (Add common preR13 POLYLINE and VERTEX entities)
    r11 has all-in-one: n/m mesh (FLAG 16). curve-fit (FLAG 2),
    spline-fit (FLAGS 4), 3dpline (FLAG 8), pface_mesh: FLAG 64
    is_closed FLAG(1)
