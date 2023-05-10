@@ -572,6 +572,7 @@ extern "C"
   typedef struct _dwg_entity_MTEXT		dwg_ent_mtext;
   typedef struct _dwg_entity_OLEFRAME		dwg_ent_oleframe;
   typedef struct _dwg_entity_POINT		dwg_ent_point;
+  typedef struct _dwg_entity_POLYLINE		dwg_ent_polyline;
   typedef struct _dwg_entity_POLYLINE_2D		dwg_ent_polyline_2d;
   typedef struct _dwg_entity_POLYLINE_3D		dwg_ent_polyline_3d;
   typedef struct _dwg_entity_POLYLINE_MESH		dwg_ent_polyline_mesh;
@@ -586,6 +587,7 @@ extern "C"
   typedef struct _dwg_entity_TOLERANCE		dwg_ent_tolerance;
   typedef struct _dwg_entity_TRACE		dwg_ent_trace;
   typedef struct _dwg_entity_UNKNOWN_ENT		dwg_ent_unknown_ent;
+  typedef struct _dwg_entity_VERTEX		dwg_ent_vertex;
   typedef struct _dwg_entity_VERTEX_2D		dwg_ent_vertex_2d;
   typedef struct _dwg_entity_VERTEX_3D		dwg_ent_vertex_3d;
   typedef struct _dwg_entity_VERTEX_PFACE_FACE		dwg_ent_vert_pface_face;
@@ -1696,6 +1698,7 @@ extern "C"
   dwg_get_OBJECT_DECL (ent_mtext, MTEXT);
   dwg_get_OBJECT_DECL (ent_oleframe, OLEFRAME);
   dwg_get_OBJECT_DECL (ent_point, POINT);
+  dwg_get_OBJECT_DECL (ent_polyline, POLYLINE);
   dwg_get_OBJECT_DECL (ent_polyline_2d, POLYLINE_2D);
   dwg_get_OBJECT_DECL (ent_polyline_3d, POLYLINE_3D);
   dwg_get_OBJECT_DECL (ent_polyline_mesh, POLYLINE_MESH);
@@ -1710,6 +1713,7 @@ extern "C"
   dwg_get_OBJECT_DECL (ent_tolerance, TOLERANCE);
   dwg_get_OBJECT_DECL (ent_trace, TRACE);
   dwg_get_OBJECT_DECL (ent_unknown_ent, UNKNOWN_ENT);
+  dwg_get_OBJECT_DECL (ent_vertex, VERTEX);
   dwg_get_OBJECT_DECL (ent_vertex_2d, VERTEX_2D);
   dwg_get_OBJECT_DECL (ent_vertex_3d, VERTEX_3D);
   dwg_get_OBJECT_DECL (ent_vert_pface_face, VERTEX_PFACE_FACE);
@@ -2828,6 +2832,7 @@ extern "C"
   DWG_GETALL_ENTITY_DECL (MTEXT);
   DWG_GETALL_ENTITY_DECL (OLEFRAME);
   DWG_GETALL_ENTITY_DECL (POINT);
+  DWG_GETALL_ENTITY_DECL (POLYLINE);
   DWG_GETALL_ENTITY_DECL (POLYLINE_2D);
   DWG_GETALL_ENTITY_DECL (POLYLINE_3D);
   DWG_GETALL_ENTITY_DECL (POLYLINE_MESH);
@@ -2843,6 +2848,7 @@ extern "C"
   DWG_GETALL_ENTITY_DECL (TOLERANCE);
   DWG_GETALL_ENTITY_DECL (TRACE);
   DWG_GETALL_ENTITY_DECL (UNKNOWN_ENT);
+  DWG_GETALL_ENTITY_DECL (VERTEX);
   DWG_GETALL_ENTITY_DECL (VERTEX_2D);
   DWG_GETALL_ENTITY_DECL (VERTEX_3D);
   DWG_GETALL_ENTITY_DECL (VERTEX_MESH);
@@ -3979,6 +3985,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_ENTITY_DECL (MTEXT);
   CAST_DWG_OBJECT_TO_ENTITY_DECL (OLEFRAME);
   CAST_DWG_OBJECT_TO_ENTITY_DECL (POINT);
+  CAST_DWG_OBJECT_TO_ENTITY_DECL (POLYLINE);
   CAST_DWG_OBJECT_TO_ENTITY_DECL (POLYLINE_2D);
   CAST_DWG_OBJECT_TO_ENTITY_DECL (POLYLINE_3D);
   CAST_DWG_OBJECT_TO_ENTITY_DECL (POLYLINE_MESH);
@@ -3994,6 +4001,7 @@ extern "C"
   CAST_DWG_OBJECT_TO_ENTITY_DECL (TOLERANCE);
   CAST_DWG_OBJECT_TO_ENTITY_DECL (TRACE);
   CAST_DWG_OBJECT_TO_ENTITY_DECL (UNKNOWN_ENT);
+  CAST_DWG_OBJECT_TO_ENTITY_DECL (VERTEX);
   CAST_DWG_OBJECT_TO_ENTITY_DECL (VERTEX_2D);
   CAST_DWG_OBJECT_TO_ENTITY_DECL (VERTEX_3D);
   CAST_DWG_OBJECT_TO_ENTITY_DECL (VERTEX_MESH);
