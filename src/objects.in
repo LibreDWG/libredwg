@@ -114,6 +114,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "POINTCLOUDEX",              "ACDBPOINTCLOUDEX",           DWG_TYPE_POINTCLOUDEX,	1,	UNSTABLE
 "POINTPARAMETERENTITY",      "POINTPARAMETERENTITY",       DWG_TYPE_POINTPARAMETERENTITY,	1,	DEBUGGING
 "POLARGRIPENTITY",           "POLARGRIPENTITY",            DWG_TYPE_POLARGRIPENTITY,	1,	DEBUGGING
+"POLYLINE",                  "POLYLINE",                   DWG_TYPE_POLYLINE,	1,	STABLE
 "POLYLINE_2D",               "POLYLINE",                   DWG_TYPE_POLYLINE_2D,	1,	STABLE
 "POLYLINE_3D",               "POLYLINE",                   DWG_TYPE_POLYLINE_3D,	1,	STABLE
 "POLYLINE_MESH",             "POLYLINE",                   DWG_TYPE_POLYLINE_MESH,	1,	STABLE
@@ -137,6 +138,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "TOLERANCE",                 "TOLERANCE",                  DWG_TYPE_TOLERANCE,	1,	STABLE
 "TRACE",                     "TRACE",                      DWG_TYPE_TRACE,	1,	STABLE
 "UNKNOWN_ENT",               "UNKNOWN_ENT",                DWG_TYPE_UNKNOWN_ENT,	1,	STABLE
+"VERTEX",                    "VERTEX",                     DWG_TYPE_VERTEX,	1,	STABLE
 "VERTEX_2D",                 "VERTEX",                     DWG_TYPE_VERTEX_2D,	1,	STABLE
 "VERTEX_3D",                 "VERTEX",                     DWG_TYPE_VERTEX_3D,	1,	STABLE
 "VERTEX_MESH",               "VERTEX",                     DWG_TYPE_VERTEX_MESH,	1,	STABLE

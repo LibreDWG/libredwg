@@ -4343,17 +4343,10 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
             case DWG_TYPE_SEQEND:
               obj->type = DELETED (DWG_TYPE_SEQEND_R11);
               break;
-            case DWG_TYPE_POLYLINE_2D:
-            case DWG_TYPE_POLYLINE_3D:
-            case DWG_TYPE_POLYLINE_PFACE:
-            case DWG_TYPE_POLYLINE_MESH:
+            case DWG_TYPE_POLYLINE:
               obj->type = DELETED (DWG_TYPE_POLYLINE_R11);
               break;
-            case DWG_TYPE_VERTEX_2D:
-            case DWG_TYPE_VERTEX_3D:
-            case DWG_TYPE_VERTEX_MESH:
-            case DWG_TYPE_VERTEX_PFACE:
-            case DWG_TYPE_VERTEX_PFACE_FACE:
+            case DWG_TYPE_VERTEX:
               obj->type = DELETED (DWG_TYPE_VERTEX_R11);
               break;
             case DWG_TYPE__3DLINE:
@@ -4423,15 +4416,8 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
         CASE_ENCODE_TYPE (ATTRIB);
         CASE_ENCODE_TYPE (SEQEND);
         CASE_ENCODE_TYPE (JUMP);
-        CASE_ENCODE_TYPE (POLYLINE_2D);
-        CASE_ENCODE_TYPE (POLYLINE_3D);
-        CASE_ENCODE_TYPE (POLYLINE_PFACE);
-        CASE_ENCODE_TYPE (POLYLINE_MESH);
-        CASE_ENCODE_TYPE (VERTEX_2D);
-        CASE_ENCODE_TYPE (VERTEX_3D);
-        CASE_ENCODE_TYPE (VERTEX_MESH);
-        CASE_ENCODE_TYPE (VERTEX_PFACE);
-        CASE_ENCODE_TYPE (VERTEX_PFACE_FACE);
+        CASE_ENCODE_TYPE (POLYLINE);
+        CASE_ENCODE_TYPE (VERTEX);
         CASE_ENCODE_TYPE (_3DLINE);
         CASE_ENCODE_TYPE (_3DFACE);
         CASE_ENCODE_TYPE (DIMENSION_ORDINATE);
