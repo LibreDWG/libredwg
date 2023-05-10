@@ -1,4 +1,4 @@
-/* ANSI-C code produced by gperf version 3.2 */
+/* ANSI-C code produced by gperf version 3.1 */
 /* Command-line: gperf --output-file src/dxfclasses.tmp.c src/dxfclasses.in  */
 /* Computed positions: -k'2,6,10,12,21' */
 
@@ -134,11 +134,6 @@ hash (const char *str, size_t len)
     {
       default:
         hval += asso_values[(unsigned char)str[20]];
-#if defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang_major__ && defined __clang_minor__ && __clang_major__ + (__clang_minor__ >= 9) > 3))
-      [[fallthrough]];
-#elif defined __GNUC__ && __GNUC__ >= 7
-      __attribute__ ((__fallthrough__));
-#endif
       /*FALLTHROUGH*/
       case 20:
       case 19:
@@ -150,31 +145,16 @@ hash (const char *str, size_t len)
       case 13:
       case 12:
         hval += asso_values[(unsigned char)str[11]+1];
-#if defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang_major__ && defined __clang_minor__ && __clang_major__ + (__clang_minor__ >= 9) > 3))
-      [[fallthrough]];
-#elif defined __GNUC__ && __GNUC__ >= 7
-      __attribute__ ((__fallthrough__));
-#endif
       /*FALLTHROUGH*/
       case 11:
       case 10:
         hval += asso_values[(unsigned char)str[9]];
-#if defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang_major__ && defined __clang_minor__ && __clang_major__ + (__clang_minor__ >= 9) > 3))
-      [[fallthrough]];
-#elif defined __GNUC__ && __GNUC__ >= 7
-      __attribute__ ((__fallthrough__));
-#endif
       /*FALLTHROUGH*/
       case 9:
       case 8:
       case 7:
       case 6:
         hval += asso_values[(unsigned char)str[5]];
-#if defined __cplusplus && (__cplusplus >= 201703L || (__cplusplus >= 201103L && defined __clang_major__ && defined __clang_minor__ && __clang_major__ + (__clang_minor__ >= 9) > 3))
-      [[fallthrough]];
-#elif defined __GNUC__ && __GNUC__ >= 7
-      __attribute__ ((__fallthrough__));
-#endif
       /*FALLTHROUGH*/
       case 5:
       case 4:

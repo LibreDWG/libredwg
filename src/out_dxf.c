@@ -2886,6 +2886,10 @@ static int dwg_dxf_object (Bit_Chain *restrict dat,
       return dwg_dxf_LOAD (dat, obj);
     case DWG_TYPE_JUMP:
       return dwg_dxf_JUMP (dat, obj);
+    case DWG_TYPE_POLYLINE_R11:
+      return dwg_dxf_POLYLINE_R11 (dat, obj);
+    case DWG_TYPE_VERTEX_R11:
+      return dwg_dxf_VERTEX_R11 (dat, obj);
 
     default:
       if (obj->type == obj->parent->layout_type)

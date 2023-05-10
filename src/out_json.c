@@ -1844,6 +1844,10 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       return dwg_json_LOAD (dat, obj);
     case DWG_TYPE_JUMP:
       return dwg_json_JUMP (dat, obj);
+    case DWG_TYPE_POLYLINE_R11:
+      return dwg_json_POLYLINE_R11 (dat, obj);
+    case DWG_TYPE_VERTEX_R11:
+      return dwg_json_VERTEX_R11 (dat, obj);
     case DWG_TYPE_LAYOUT:
       return dwg_json_LAYOUT (dat, obj);
     default:

@@ -865,6 +865,12 @@ free_preR13_object (Dwg_Object *obj)
     case DWG_TYPE_JUMP:
       dwg_free_JUMP (dat, obj);
       break;
+    case DWG_TYPE_POLYLINE_R11:
+      dwg_free_POLYLINE_R11 (dat, obj);
+      break;
+    case DWG_TYPE_VERTEX_R11:
+      dwg_free_VERTEX_R11 (dat, obj);
+      break;
     case DWG_TYPE_DICTIONARY:
       dwg_free_DICTIONARY (dat, obj);
       break;

@@ -491,8 +491,6 @@ $DXF{'BLOCK'}->{'filename'} = 4;
 $DXF{'3DLINE'}->{'thickness'} = 39;
 $DXF{'INSERT'}->{'block_header'} = 2;
 $DXF{'MINSERT'}->{'block_header'} = 2;
-$DXF{'POLYLINE_3D'}->{'flag'} = 70;
-$DXF{'POLYLINE_MESH'}->{'flag'} = 70;
 $DXF{'SHAPE'}->{'style_id'} = 2; # r11_idx => name
 $DXF{'VISUALSTYLE'}->{'edge_hide_precision_flag'} = 290;
 $DXF{'VISUALSTYLE'}->{'is_internal_use_only'} = 291;
@@ -524,7 +522,7 @@ $DXF{$_}->{'has_attribs'} = 66 for qw(INSERT MINSERT);
 #$DXF{$_}->{'has_vertex'} = 66 for qw(POLYLINE_2D POLYLINE_3D POLYLINE_PFACE);
 $DXF{UNDERLAYDEFINITION}->{'filename'} = 1;
 $DXF{UNDERLAYDEFINITION}->{'name'} = 2;
-$DXF{$_}->{'flag'} = 70 for qw(VERTEX_3D VERTEX_MESH VERTEX_PFACE_FACE POLYLINE_PFACE);
+$DXF{$_}->{'flag'} = 70 for qw(VERTEX_3D VERTEX_MESH VERTEX_PFACE_FACE VERTEX_R11 POLYLINE_3D POLYLINE_MESH POLYLINE_PFACE POLYLINE_R11);
 my @solids = qw(3DSOLID REGION BODY
                 EXTRUDEDSURFACE LOFTEDSURFACE NURBSURFACE PLANESURFACE REVOLVEDSURFACE SWEPTSURFACE
                 ACSH_BREP_CLASS);
@@ -682,11 +680,13 @@ my %DXFNAME =
     POLYLINE_3D    => "POLYLINE",
     POLYLINE_MESH  => "POLYLINE",
     POLYLINE_PFACE => "POLYLINE",
+    POLYLINE_R11   => "POLYLINE",
     VERTEX_2D         => "VERTEX",
     VERTEX_3D         => "VERTEX",
     VERTEX_MESH       => "VERTEX",
     VERTEX_PFACE      => "VERTEX",
     VERTEX_PFACE_FACE => "VERTEX",
+    VERTEX_R11        => "VERTEX",
     DIMENSION_ALIGNED  => "DIMENSION",
     DIMENSION_ANG2LN   => "DIMENSION",
     DIMENSION_ANG3PT   => "DIMENSION",
@@ -1880,7 +1880,7 @@ EXPORT int dwg_object_name (const char *const restrict name,
   const struct _dwg_dxfname* result;
   const size_t len = strlen (name);
   // only allow UPPERCASE 7-bit names
-  if (strspn (name, "ABCDEFGHIJKLMNOPQRSTUVWXYZ_23") != len)
+  if (strspn (name, "ABCDEFGHIJKLMNOPQRSTUVWXYZ_123") != len)
     return 0;
   result = in_word_set (name, len);
   if (result)
