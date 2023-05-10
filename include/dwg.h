@@ -2351,75 +2351,72 @@ typedef struct _dwg_entity_MINSERT
   BITCODE_H   seqend;
 } Dwg_Entity_MINSERT;
 
+#define COMMON_ENTITY_VERTEX                                                  \
+  struct _dwg_object_entity *parent;                                          \
+  BITCODE_RC flag;                                                            \
+  BITCODE_3BD point;                                                          \
+  BITCODE_BD start_width;                                                     \
+  BITCODE_BD end_width;                                                       \
+  BITCODE_BL id; /* R2010+ */                                                 \
+  BITCODE_BD bulge;                                                           \
+  BITCODE_BD tangent_dir;                                                     \
+  BITCODE_BSd vertind[4]
+
 /**
  VERTEX_2D (10/20) entity
  */
 typedef struct _dwg_entity_VERTEX_2D
 {
-  struct _dwg_object_entity *parent;
-
-  BITCODE_RC flag;  /*<! DXF 70 (see LOG_FLAG_VERTEX)
-                      1:  EXTRA_VERTEX
-                      2:  CURVE_FIT
-                      8:  SPLINE_FIT
-                      16: SPLINE_FRAME_CONTROL_POINT
-                    */
-  BITCODE_3BD point;
-  BITCODE_BD start_width;
-  BITCODE_BD end_width;
-  BITCODE_BL id; /* R2010+ */
-  BITCODE_BD bulge;
-  BITCODE_BD tangent_dir;
+  COMMON_ENTITY_VERTEX;
 } Dwg_Entity_VERTEX_2D;
 
 /**
- VERTEX_3D (11) entity
+ VERTEX_3D (11/20) entity
  */
 typedef struct _dwg_entity_VERTEX_3D
 {
-  struct _dwg_object_entity *parent;
-
-  BITCODE_RC flag;  /*<! DXF 70 (see LOG_FLAG_VERTEX)
-                      8:  SPLINE_FIT
-                      16: SPLINE_FRAME_CONTROL_POINT
-                      32: 3D
-                      64: MESH (AcDbPolyFaceMeshVertex)
-                    */
-  BITCODE_3BD point;
+  COMMON_ENTITY_VERTEX;
 } Dwg_Entity_VERTEX_3D;
 
 /**
- VERTEX_MESH (12) - same as VERTEX_3D entity
- flag: 64 (MESH)
+ VERTEX_MESH (12/20) - same as VERTEX_3D entity
+ just flag: 64 (MESH)
  */
 typedef Dwg_Entity_VERTEX_3D Dwg_Entity_VERTEX_MESH;
 
 /**
- VERTEX_PFACE (13) - same as VERTEX_3D entity
- flag: 64 (MESH)
-       128 (PFACE_MESH)
+ VERTEX_PFACE (13/20) - same as VERTEX_3D entity
+ just flag: 64 (MESH)
+            128 (PFACE_MESH)
  */
 typedef Dwg_Entity_VERTEX_3D Dwg_Entity_VERTEX_PFACE;
 
 /**
- VERTEX_PFACE_FACE (14) entity
+ VERTEX_PFACE_FACE (14/20) entity
  */
 typedef struct _dwg_entity_VERTEX_PFACE_FACE
 {
-  struct _dwg_object_entity *parent;
-
-  BITCODE_RC flag;
-  BITCODE_BSd vertind[4];
+  COMMON_ENTITY_VERTEX;
 } Dwg_Entity_VERTEX_PFACE_FACE;
 
+// TODO compile-time spezialize fields on types
 #define COMMON_ENTITY_POLYLINE                                                \
   struct _dwg_object_entity *parent;                                          \
+  BITCODE_BS flag;                                                            \
   BITCODE_B has_vertex;                                                       \
   BITCODE_BL num_owned;                                                       \
   BITCODE_H first_vertex;                                                     \
   BITCODE_H last_vertex;                                                      \
   BITCODE_H *vertex;                                                          \
-  BITCODE_H seqend
+  BITCODE_H seqend;                                                           \
+  BITCODE_BS curve_type;                                                      \
+  BITCODE_BD start_width;                                                     \
+  BITCODE_BD end_width;                                                       \
+  BITCODE_BE extrusion;                                                       \
+  BITCODE_BS num_m_verts;                                                     \
+  BITCODE_BS num_n_verts;                                                     \
+  BITCODE_BS m_density;                                                       \
+  BITCODE_BS n_density
 
 /**
  2D POLYLINE (15/19) entity
@@ -2427,19 +2424,10 @@ typedef struct _dwg_entity_VERTEX_PFACE_FACE
 typedef struct _dwg_entity_POLYLINE_2D
 {
   COMMON_ENTITY_POLYLINE;
-
-  BITCODE_BS flag;        /* 1: closed, 2: curve_fit, 4: spline_fit, 8: 3d, 0x10: 3dmesh,
-                             0x20: mesh_closed_in_n, 0x40: polyface_mesh, 0x80: ltype_continuous */
-  BITCODE_BS curve_type;
-  BITCODE_BD start_width;
-  BITCODE_BD end_width;
+  /* flag: 1: closed, 2: curve_fit, 4: spline_fit, 8: 3d, 0x10: 3dmesh,
+     0x20: mesh_closed_in_n, 0x40: polyface_mesh, 0x80: ltype_continuous */
   BITCODE_BT thickness;
   BITCODE_BD elevation;
-  BITCODE_BE extrusion;
-  BITCODE_BL extra_r11_size;
-  BITCODE_TV extra_r11_text;
-  BITCODE_BS num_m_verts; // sometime used in preR13, to delete
-  BITCODE_BS num_n_verts; // sometime used in preR13, to delete
 } Dwg_Entity_POLYLINE_2D;
 
 /**
@@ -2448,12 +2436,11 @@ typedef struct _dwg_entity_POLYLINE_2D
 typedef struct _dwg_entity_POLYLINE_3D
 {
   COMMON_ENTITY_POLYLINE;
-
-  BITCODE_RC curve_type;
-  BITCODE_BD start_width;
-  BITCODE_BD end_width;
-  BITCODE_RC flag;
-  BITCODE_BE extrusion;
+  //BITCODE_RC curve_type;
+  //BITCODE_BD start_width;
+  //BITCODE_BD end_width;
+  //BITCODE_RC flag;
+  //BITCODE_BE extrusion;
 } Dwg_Entity_POLYLINE_3D;
 
 /**
@@ -2684,9 +2671,9 @@ typedef struct _dwg_entity_POLYLINE_PFACE
 {
   COMMON_ENTITY_POLYLINE;
 
-  BITCODE_BS flag;
-  BITCODE_BS numverts;
-  BITCODE_BS numfaces;
+  //BITCODE_BS flag;
+  //BITCODE_BS numverts;
+  //BITCODE_BS numfaces;
 } Dwg_Entity_POLYLINE_PFACE;
 
 /**
@@ -2696,12 +2683,12 @@ typedef struct _dwg_entity_POLYLINE_MESH
 {
   COMMON_ENTITY_POLYLINE;
 
-  BITCODE_BS flag;
-  BITCODE_BS curve_type;
-  BITCODE_BS num_m_verts;
-  BITCODE_BS num_n_verts;
-  BITCODE_BS m_density;
-  BITCODE_BS n_density;
+  //BITCODE_BS flag;
+  //BITCODE_BS curve_type;
+  //BITCODE_BS num_m_verts;
+  //BITCODE_BS num_n_verts;
+  //BITCODE_BS m_density;
+  //BITCODE_BS n_density;
 } Dwg_Entity_POLYLINE_MESH;
 
 /**
