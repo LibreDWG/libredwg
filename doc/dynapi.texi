@@ -3590,6 +3590,8 @@ struct _dwg_object_entity*
 
 @item parent
 struct _dwg_object_entity*
+@item flag
+BS,	DXF 70
 @item has_vertex
 B,	DXF 66
 @item num_owned
@@ -3602,28 +3604,26 @@ H
 H*
 @item seqend
 H
-@item flag
-BS,	DXF 70
 @item curve_type
 BS,	DXF 75
 @item start_width
 BD,	DXF 40
 @item end_width
 BD,	DXF 41
+@item extrusion
+BE,	DXF 210
+@item num_m_verts
+BS
+@item num_n_verts
+BS
+@item m_density
+BS
+@item n_density
+BS
 @item thickness
 BT,	DXF 39
 @item elevation
 BD
-@item extrusion
-BE,	DXF 210
-@item extra_r11_size
-BL
-@item extra_r11_text
-TV
-@item num_m_verts
-BS,	DXF 71
-@item num_n_verts
-BS,	DXF 72
 
 @end vtable
 @end indentedblock
@@ -3637,6 +3637,8 @@ BS,	DXF 72
 
 @item parent
 struct _dwg_object_entity*
+@item flag
+BS,	DXF 70
 @item has_vertex
 B,	DXF 66
 @item num_owned
@@ -3650,15 +3652,21 @@ H*
 @item seqend
 H
 @item curve_type
-RC,	DXF 75
+BS,	DXF 75
 @item start_width
-BD,	DXF 40
+BD
 @item end_width
-BD,	DXF 41
-@item flag
-RC,	DXF 70
+BD
 @item extrusion
-BE,	DXF 210
+BE
+@item num_m_verts
+BS
+@item num_n_verts
+BS
+@item m_density
+BS
+@item n_density
+BS
 
 @end vtable
 @end indentedblock
@@ -3672,6 +3680,8 @@ BE,	DXF 210
 
 @item parent
 struct _dwg_object_entity*
+@item flag
+BS,	DXF 70
 @item has_vertex
 B,	DXF 66
 @item num_owned
@@ -3684,10 +3694,14 @@ H
 H*
 @item seqend
 H
-@item flag
-BS,	DXF 70
 @item curve_type
 BS,	DXF 75
+@item start_width
+BD
+@item end_width
+BD
+@item extrusion
+BE
 @item num_m_verts
 BS,	DXF 71
 @item num_n_verts
@@ -3709,6 +3723,8 @@ BS,	DXF 74
 
 @item parent
 struct _dwg_object_entity*
+@item flag
+BS,	DXF 70
 @item has_vertex
 B,	DXF 66
 @item num_owned
@@ -3721,12 +3737,22 @@ H
 H*
 @item seqend
 H
-@item flag
-BS,	DXF 70
-@item numverts
+@item curve_type
+BS
+@item start_width
+BD
+@item end_width
+BD
+@item extrusion
+BE
+@item num_m_verts
 BS,	DXF 71
-@item numfaces
+@item num_n_verts
 BS,	DXF 72
+@item m_density
+BS
+@item n_density
+BS
 
 @end vtable
 @end indentedblock
@@ -4664,6 +4690,8 @@ BL,	DXF 91
 BD,	DXF 42
 @item tangent_dir
 BD,	DXF 50
+@item vertind
+BS
 
 @end vtable
 @end indentedblock
@@ -4681,6 +4709,18 @@ struct _dwg_object_entity*
 RC,	DXF 70
 @item point
 3BD,	DXF 10
+@item start_width
+BD
+@item end_width
+BD
+@item id
+BL
+@item bulge
+BD
+@item tangent_dir
+BD
+@item vertind
+BS
 
 @end vtable
 @end indentedblock
@@ -4712,6 +4752,18 @@ RC,	DXF 70
 struct _dwg_object_entity*
 @item flag
 RC,	DXF 70
+@item point
+3BD
+@item start_width
+BD
+@item end_width
+BD
+@item id
+BL
+@item bulge
+BD
+@item tangent_dir
+BD
 @item vertind
 BS,	DXF 71
 

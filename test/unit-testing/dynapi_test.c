@@ -20035,31 +20035,6 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
     polyline_2d->end_width--;
   }
   {
-    BITCODE_BL extra_r11_size;
-    if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "extra_r11_size", &extra_r11_size, NULL)
-        && extra_r11_size == polyline_2d->extra_r11_size)
-      pass ();
-    else
-      fail ("POLYLINE_2D.extra_r11_size [BL] %u != %u", polyline_2d->extra_r11_size, extra_r11_size);
-    extra_r11_size++;
-    if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "extra_r11_size", &extra_r11_size, 0)
-        && extra_r11_size == polyline_2d->extra_r11_size)
-      pass ();
-    else
-      fail ("POLYLINE_2D.extra_r11_size [BL] set+1 %u != %u", polyline_2d->extra_r11_size, extra_r11_size);
-    polyline_2d->extra_r11_size--;
-  }
-  {
-    BITCODE_TV extra_r11_text;
-    if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "extra_r11_text", &extra_r11_text, NULL)
-        && extra_r11_text
-           ? strEQ ((char *)extra_r11_text, (char *)polyline_2d->extra_r11_text)
-           : !polyline_2d->extra_r11_text)
-      pass ();
-    else
-      fail ("POLYLINE_2D.extra_r11_text [TV] '%s' <> '%s'", extra_r11_text, polyline_2d->extra_r11_text);
-  }
-  {
     BITCODE_BE extrusion;
     if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "extrusion", &extrusion, NULL)
         && !memcmp (&extrusion, &polyline_2d->extrusion, sizeof (BITCODE_BE)))
@@ -20112,6 +20087,36 @@ static int test_POLYLINE_2D (const Dwg_Object *obj)
         pass ();
     else
         fail ("POLYLINE_2D.last_vertex [H]");
+  }
+  {
+    BITCODE_BS m_density;
+    if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "m_density", &m_density, NULL)
+        && m_density == polyline_2d->m_density)
+      pass ();
+    else
+      fail ("POLYLINE_2D.m_density [BS] %hu != %hu", polyline_2d->m_density, m_density);
+    m_density++;
+    if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "m_density", &m_density, 0)
+        && m_density == polyline_2d->m_density)
+      pass ();
+    else
+      fail ("POLYLINE_2D.m_density [BS] set+1 %hu != %hu", polyline_2d->m_density, m_density);
+    polyline_2d->m_density--;
+  }
+  {
+    BITCODE_BS n_density;
+    if (dwg_dynapi_entity_value (polyline_2d, "POLYLINE_2D", "n_density", &n_density, NULL)
+        && n_density == polyline_2d->n_density)
+      pass ();
+    else
+      fail ("POLYLINE_2D.n_density [BS] %hu != %hu", polyline_2d->n_density, n_density);
+    n_density++;
+    if (dwg_dynapi_entity_set_value (polyline_2d, "POLYLINE_2D", "n_density", &n_density, 0)
+        && n_density == polyline_2d->n_density)
+      pass ();
+    else
+      fail ("POLYLINE_2D.n_density [BS] set+1 %hu != %hu", polyline_2d->n_density, n_density);
+    polyline_2d->n_density--;
   }
   {
     BITCODE_BS num_m_verts;
@@ -20232,18 +20237,18 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
       return 1;
     }
   {
-    BITCODE_RC curve_type;
+    BITCODE_BS curve_type;
     if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "curve_type", &curve_type, NULL)
         && curve_type == polyline_3d->curve_type)
       pass ();
     else
-      fail ("POLYLINE_3D.curve_type [RC] %u != %u", polyline_3d->curve_type, curve_type);
+      fail ("POLYLINE_3D.curve_type [BS] %hu != %hu", polyline_3d->curve_type, curve_type);
     curve_type++;
     if (dwg_dynapi_entity_set_value (polyline_3d, "POLYLINE_3D", "curve_type", &curve_type, 0)
         && curve_type == polyline_3d->curve_type)
       pass ();
     else
-      fail ("POLYLINE_3D.curve_type [RC] set+1 %u != %u", polyline_3d->curve_type, curve_type);
+      fail ("POLYLINE_3D.curve_type [BS] set+1 %hu != %hu", polyline_3d->curve_type, curve_type);
     polyline_3d->curve_type--;
   }
   {
@@ -20278,18 +20283,18 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
         fail ("POLYLINE_3D.first_vertex [H]");
   }
   {
-    BITCODE_RC flag;
+    BITCODE_BS flag;
     if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "flag", &flag, NULL)
         && flag == polyline_3d->flag)
       pass ();
     else
-      fail ("POLYLINE_3D.flag [RC] %u != %u", polyline_3d->flag, flag);
+      fail ("POLYLINE_3D.flag [BS] %hu != %hu", polyline_3d->flag, flag);
     flag++;
     if (dwg_dynapi_entity_set_value (polyline_3d, "POLYLINE_3D", "flag", &flag, 0)
         && flag == polyline_3d->flag)
       pass ();
     else
-      fail ("POLYLINE_3D.flag [RC] set+1 %u != %u", polyline_3d->flag, flag);
+      fail ("POLYLINE_3D.flag [BS] set+1 %hu != %hu", polyline_3d->flag, flag);
     polyline_3d->flag--;
   }
   {
@@ -20314,6 +20319,66 @@ static int test_POLYLINE_3D (const Dwg_Object *obj)
         pass ();
     else
         fail ("POLYLINE_3D.last_vertex [H]");
+  }
+  {
+    BITCODE_BS m_density;
+    if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "m_density", &m_density, NULL)
+        && m_density == polyline_3d->m_density)
+      pass ();
+    else
+      fail ("POLYLINE_3D.m_density [BS] %hu != %hu", polyline_3d->m_density, m_density);
+    m_density++;
+    if (dwg_dynapi_entity_set_value (polyline_3d, "POLYLINE_3D", "m_density", &m_density, 0)
+        && m_density == polyline_3d->m_density)
+      pass ();
+    else
+      fail ("POLYLINE_3D.m_density [BS] set+1 %hu != %hu", polyline_3d->m_density, m_density);
+    polyline_3d->m_density--;
+  }
+  {
+    BITCODE_BS n_density;
+    if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "n_density", &n_density, NULL)
+        && n_density == polyline_3d->n_density)
+      pass ();
+    else
+      fail ("POLYLINE_3D.n_density [BS] %hu != %hu", polyline_3d->n_density, n_density);
+    n_density++;
+    if (dwg_dynapi_entity_set_value (polyline_3d, "POLYLINE_3D", "n_density", &n_density, 0)
+        && n_density == polyline_3d->n_density)
+      pass ();
+    else
+      fail ("POLYLINE_3D.n_density [BS] set+1 %hu != %hu", polyline_3d->n_density, n_density);
+    polyline_3d->n_density--;
+  }
+  {
+    BITCODE_BS num_m_verts;
+    if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "num_m_verts", &num_m_verts, NULL)
+        && num_m_verts == polyline_3d->num_m_verts)
+      pass ();
+    else
+      fail ("POLYLINE_3D.num_m_verts [BS] %hu != %hu", polyline_3d->num_m_verts, num_m_verts);
+    num_m_verts++;
+    if (dwg_dynapi_entity_set_value (polyline_3d, "POLYLINE_3D", "num_m_verts", &num_m_verts, 0)
+        && num_m_verts == polyline_3d->num_m_verts)
+      pass ();
+    else
+      fail ("POLYLINE_3D.num_m_verts [BS] set+1 %hu != %hu", polyline_3d->num_m_verts, num_m_verts);
+    polyline_3d->num_m_verts--;
+  }
+  {
+    BITCODE_BS num_n_verts;
+    if (dwg_dynapi_entity_value (polyline_3d, "POLYLINE_3D", "num_n_verts", &num_n_verts, NULL)
+        && num_n_verts == polyline_3d->num_n_verts)
+      pass ();
+    else
+      fail ("POLYLINE_3D.num_n_verts [BS] %hu != %hu", polyline_3d->num_n_verts, num_n_verts);
+    num_n_verts++;
+    if (dwg_dynapi_entity_set_value (polyline_3d, "POLYLINE_3D", "num_n_verts", &num_n_verts, 0)
+        && num_n_verts == polyline_3d->num_n_verts)
+      pass ();
+    else
+      fail ("POLYLINE_3D.num_n_verts [BS] set+1 %hu != %hu", polyline_3d->num_n_verts, num_n_verts);
+    polyline_3d->num_n_verts--;
   }
   {
     BITCODE_BL num_owned;
@@ -20403,6 +20468,29 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
     else
       fail ("POLYLINE_MESH.curve_type [BS] set+1 %hu != %hu", polyline_mesh->curve_type, curve_type);
     polyline_mesh->curve_type--;
+  }
+  {
+    BITCODE_BD end_width;
+    if (dwg_dynapi_entity_value (polyline_mesh, "POLYLINE_MESH", "end_width", &end_width, NULL)
+        && end_width == polyline_mesh->end_width)
+      pass ();
+    else
+      fail ("POLYLINE_MESH.end_width [BD] %g != %g", polyline_mesh->end_width, end_width);
+    end_width++;
+    if (dwg_dynapi_entity_set_value (polyline_mesh, "POLYLINE_MESH", "end_width", &end_width, 0)
+        && end_width == polyline_mesh->end_width)
+      pass ();
+    else
+      fail ("POLYLINE_MESH.end_width [BD] set+1 %g != %g", polyline_mesh->end_width, end_width);
+    polyline_mesh->end_width--;
+  }
+  {
+    BITCODE_BE extrusion;
+    if (dwg_dynapi_entity_value (polyline_mesh, "POLYLINE_MESH", "extrusion", &extrusion, NULL)
+        && !memcmp (&extrusion, &polyline_mesh->extrusion, sizeof (BITCODE_BE)))
+        pass ();
+    else
+        fail ("POLYLINE_MESH.extrusion [BE]");
   }
   {
     BITCODE_H first_vertex;
@@ -20542,6 +20630,21 @@ static int test_POLYLINE_MESH (const Dwg_Object *obj)
         fail ("POLYLINE_MESH.seqend [H]");
   }
   {
+    BITCODE_BD start_width;
+    if (dwg_dynapi_entity_value (polyline_mesh, "POLYLINE_MESH", "start_width", &start_width, NULL)
+        && start_width == polyline_mesh->start_width)
+      pass ();
+    else
+      fail ("POLYLINE_MESH.start_width [BD] %g != %g", polyline_mesh->start_width, start_width);
+    start_width++;
+    if (dwg_dynapi_entity_set_value (polyline_mesh, "POLYLINE_MESH", "start_width", &start_width, 0)
+        && start_width == polyline_mesh->start_width)
+      pass ();
+    else
+      fail ("POLYLINE_MESH.start_width [BD] set+1 %g != %g", polyline_mesh->start_width, start_width);
+    polyline_mesh->start_width--;
+  }
+  {
     BITCODE_H* vertex;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (polyline_mesh, "POLYLINE_MESH", "num_owned", &count, NULL)
@@ -20569,6 +20672,44 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
       fail ("NULL POLYLINE_PFACE");
       return 1;
     }
+  {
+    BITCODE_BS curve_type;
+    if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "curve_type", &curve_type, NULL)
+        && curve_type == polyline_pface->curve_type)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.curve_type [BS] %hu != %hu", polyline_pface->curve_type, curve_type);
+    curve_type++;
+    if (dwg_dynapi_entity_set_value (polyline_pface, "POLYLINE_PFACE", "curve_type", &curve_type, 0)
+        && curve_type == polyline_pface->curve_type)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.curve_type [BS] set+1 %hu != %hu", polyline_pface->curve_type, curve_type);
+    polyline_pface->curve_type--;
+  }
+  {
+    BITCODE_BD end_width;
+    if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "end_width", &end_width, NULL)
+        && end_width == polyline_pface->end_width)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.end_width [BD] %g != %g", polyline_pface->end_width, end_width);
+    end_width++;
+    if (dwg_dynapi_entity_set_value (polyline_pface, "POLYLINE_PFACE", "end_width", &end_width, 0)
+        && end_width == polyline_pface->end_width)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.end_width [BD] set+1 %g != %g", polyline_pface->end_width, end_width);
+    polyline_pface->end_width--;
+  }
+  {
+    BITCODE_BE extrusion;
+    if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "extrusion", &extrusion, NULL)
+        && !memcmp (&extrusion, &polyline_pface->extrusion, sizeof (BITCODE_BE)))
+        pass ();
+    else
+        fail ("POLYLINE_PFACE.extrusion [BE]");
+  }
   {
     BITCODE_H first_vertex;
     if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "first_vertex", &first_vertex, NULL)
@@ -20616,6 +20757,66 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
         fail ("POLYLINE_PFACE.last_vertex [H]");
   }
   {
+    BITCODE_BS m_density;
+    if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "m_density", &m_density, NULL)
+        && m_density == polyline_pface->m_density)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.m_density [BS] %hu != %hu", polyline_pface->m_density, m_density);
+    m_density++;
+    if (dwg_dynapi_entity_set_value (polyline_pface, "POLYLINE_PFACE", "m_density", &m_density, 0)
+        && m_density == polyline_pface->m_density)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.m_density [BS] set+1 %hu != %hu", polyline_pface->m_density, m_density);
+    polyline_pface->m_density--;
+  }
+  {
+    BITCODE_BS n_density;
+    if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "n_density", &n_density, NULL)
+        && n_density == polyline_pface->n_density)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.n_density [BS] %hu != %hu", polyline_pface->n_density, n_density);
+    n_density++;
+    if (dwg_dynapi_entity_set_value (polyline_pface, "POLYLINE_PFACE", "n_density", &n_density, 0)
+        && n_density == polyline_pface->n_density)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.n_density [BS] set+1 %hu != %hu", polyline_pface->n_density, n_density);
+    polyline_pface->n_density--;
+  }
+  {
+    BITCODE_BS num_m_verts;
+    if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "num_m_verts", &num_m_verts, NULL)
+        && num_m_verts == polyline_pface->num_m_verts)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.num_m_verts [BS] %hu != %hu", polyline_pface->num_m_verts, num_m_verts);
+    num_m_verts++;
+    if (dwg_dynapi_entity_set_value (polyline_pface, "POLYLINE_PFACE", "num_m_verts", &num_m_verts, 0)
+        && num_m_verts == polyline_pface->num_m_verts)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.num_m_verts [BS] set+1 %hu != %hu", polyline_pface->num_m_verts, num_m_verts);
+    polyline_pface->num_m_verts--;
+  }
+  {
+    BITCODE_BS num_n_verts;
+    if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "num_n_verts", &num_n_verts, NULL)
+        && num_n_verts == polyline_pface->num_n_verts)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.num_n_verts [BS] %hu != %hu", polyline_pface->num_n_verts, num_n_verts);
+    num_n_verts++;
+    if (dwg_dynapi_entity_set_value (polyline_pface, "POLYLINE_PFACE", "num_n_verts", &num_n_verts, 0)
+        && num_n_verts == polyline_pface->num_n_verts)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.num_n_verts [BS] set+1 %hu != %hu", polyline_pface->num_n_verts, num_n_verts);
+    polyline_pface->num_n_verts--;
+  }
+  {
     BITCODE_BL num_owned;
     if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "num_owned", &num_owned, NULL)
         && num_owned == polyline_pface->num_owned)
@@ -20629,36 +20830,6 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
     else
       fail ("POLYLINE_PFACE.num_owned [BL] set+1 %u != %u", polyline_pface->num_owned, num_owned);
     polyline_pface->num_owned--;
-  }
-  {
-    BITCODE_BS numfaces;
-    if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "numfaces", &numfaces, NULL)
-        && numfaces == polyline_pface->numfaces)
-      pass ();
-    else
-      fail ("POLYLINE_PFACE.numfaces [BS] %hu != %hu", polyline_pface->numfaces, numfaces);
-    numfaces++;
-    if (dwg_dynapi_entity_set_value (polyline_pface, "POLYLINE_PFACE", "numfaces", &numfaces, 0)
-        && numfaces == polyline_pface->numfaces)
-      pass ();
-    else
-      fail ("POLYLINE_PFACE.numfaces [BS] set+1 %hu != %hu", polyline_pface->numfaces, numfaces);
-    polyline_pface->numfaces--;
-  }
-  {
-    BITCODE_BS numverts;
-    if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "numverts", &numverts, NULL)
-        && numverts == polyline_pface->numverts)
-      pass ();
-    else
-      fail ("POLYLINE_PFACE.numverts [BS] %hu != %hu", polyline_pface->numverts, numverts);
-    numverts++;
-    if (dwg_dynapi_entity_set_value (polyline_pface, "POLYLINE_PFACE", "numverts", &numverts, 0)
-        && numverts == polyline_pface->numverts)
-      pass ();
-    else
-      fail ("POLYLINE_PFACE.numverts [BS] set+1 %hu != %hu", polyline_pface->numverts, numverts);
-    polyline_pface->numverts--;
   }
   {
     struct _dwg_object_entity* parent;
@@ -20675,6 +20846,21 @@ static int test_POLYLINE_PFACE (const Dwg_Object *obj)
         pass ();
     else
         fail ("POLYLINE_PFACE.seqend [H]");
+  }
+  {
+    BITCODE_BD start_width;
+    if (dwg_dynapi_entity_value (polyline_pface, "POLYLINE_PFACE", "start_width", &start_width, NULL)
+        && start_width == polyline_pface->start_width)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.start_width [BD] %g != %g", polyline_pface->start_width, start_width);
+    start_width++;
+    if (dwg_dynapi_entity_set_value (polyline_pface, "POLYLINE_PFACE", "start_width", &start_width, 0)
+        && start_width == polyline_pface->start_width)
+      pass ();
+    else
+      fail ("POLYLINE_PFACE.start_width [BD] set+1 %g != %g", polyline_pface->start_width, start_width);
+    polyline_pface->start_width--;
   }
   {
     BITCODE_H* vertex;
@@ -25458,6 +25644,14 @@ static int test_VERTEX_2D (const Dwg_Object *obj)
       fail ("VERTEX_2D.tangent_dir [BD] set+1 %g != %g", vertex_2d->tangent_dir, tangent_dir);
     vertex_2d->tangent_dir--;
   }
+  {
+    BITCODE_BS vertind[4];
+    if (dwg_dynapi_entity_value (vertex_2d, "VERTEX_2D", "vertind", &vertind, NULL)
+        && !memcmp (&vertind, &vertex_2d->vertind, sizeof (BITCODE_BS)))
+        pass ();
+    else
+        fail ("VERTEX_2D.vertind [BS]");
+  }
   if (failed && (is_class_unstable ("VERTEX_2D") || is_class_debugging ("VERTEX_2D")))
     {
       ok ("%s failed %d tests (TODO unstable)", "VERTEX_2D", failed);
@@ -25477,6 +25671,36 @@ static int test_VERTEX_3D (const Dwg_Object *obj)
       return 1;
     }
   {
+    BITCODE_BD bulge;
+    if (dwg_dynapi_entity_value (vertex_3d, "VERTEX_3D", "bulge", &bulge, NULL)
+        && bulge == vertex_3d->bulge)
+      pass ();
+    else
+      fail ("VERTEX_3D.bulge [BD] %g != %g", vertex_3d->bulge, bulge);
+    bulge++;
+    if (dwg_dynapi_entity_set_value (vertex_3d, "VERTEX_3D", "bulge", &bulge, 0)
+        && bulge == vertex_3d->bulge)
+      pass ();
+    else
+      fail ("VERTEX_3D.bulge [BD] set+1 %g != %g", vertex_3d->bulge, bulge);
+    vertex_3d->bulge--;
+  }
+  {
+    BITCODE_BD end_width;
+    if (dwg_dynapi_entity_value (vertex_3d, "VERTEX_3D", "end_width", &end_width, NULL)
+        && end_width == vertex_3d->end_width)
+      pass ();
+    else
+      fail ("VERTEX_3D.end_width [BD] %g != %g", vertex_3d->end_width, end_width);
+    end_width++;
+    if (dwg_dynapi_entity_set_value (vertex_3d, "VERTEX_3D", "end_width", &end_width, 0)
+        && end_width == vertex_3d->end_width)
+      pass ();
+    else
+      fail ("VERTEX_3D.end_width [BD] set+1 %g != %g", vertex_3d->end_width, end_width);
+    vertex_3d->end_width--;
+  }
+  {
     BITCODE_RC flag;
     if (dwg_dynapi_entity_value (vertex_3d, "VERTEX_3D", "flag", &flag, NULL)
         && flag == vertex_3d->flag)
@@ -25490,6 +25714,21 @@ static int test_VERTEX_3D (const Dwg_Object *obj)
     else
       fail ("VERTEX_3D.flag [RC] set+1 %u != %u", vertex_3d->flag, flag);
     vertex_3d->flag--;
+  }
+  {
+    BITCODE_BL id;
+    if (dwg_dynapi_entity_value (vertex_3d, "VERTEX_3D", "id", &id, NULL)
+        && id == vertex_3d->id)
+      pass ();
+    else
+      fail ("VERTEX_3D.id [BL] %u != %u", vertex_3d->id, id);
+    id++;
+    if (dwg_dynapi_entity_set_value (vertex_3d, "VERTEX_3D", "id", &id, 0)
+        && id == vertex_3d->id)
+      pass ();
+    else
+      fail ("VERTEX_3D.id [BL] set+1 %u != %u", vertex_3d->id, id);
+    vertex_3d->id--;
   }
   {
     struct _dwg_object_entity* parent;
@@ -25506,6 +25745,44 @@ static int test_VERTEX_3D (const Dwg_Object *obj)
         pass ();
     else
         fail ("VERTEX_3D.point [3BD]");
+  }
+  {
+    BITCODE_BD start_width;
+    if (dwg_dynapi_entity_value (vertex_3d, "VERTEX_3D", "start_width", &start_width, NULL)
+        && start_width == vertex_3d->start_width)
+      pass ();
+    else
+      fail ("VERTEX_3D.start_width [BD] %g != %g", vertex_3d->start_width, start_width);
+    start_width++;
+    if (dwg_dynapi_entity_set_value (vertex_3d, "VERTEX_3D", "start_width", &start_width, 0)
+        && start_width == vertex_3d->start_width)
+      pass ();
+    else
+      fail ("VERTEX_3D.start_width [BD] set+1 %g != %g", vertex_3d->start_width, start_width);
+    vertex_3d->start_width--;
+  }
+  {
+    BITCODE_BD tangent_dir;
+    if (dwg_dynapi_entity_value (vertex_3d, "VERTEX_3D", "tangent_dir", &tangent_dir, NULL)
+        && tangent_dir == vertex_3d->tangent_dir)
+      pass ();
+    else
+      fail ("VERTEX_3D.tangent_dir [BD] %g != %g", vertex_3d->tangent_dir, tangent_dir);
+    tangent_dir++;
+    if (dwg_dynapi_entity_set_value (vertex_3d, "VERTEX_3D", "tangent_dir", &tangent_dir, 0)
+        && tangent_dir == vertex_3d->tangent_dir)
+      pass ();
+    else
+      fail ("VERTEX_3D.tangent_dir [BD] set+1 %g != %g", vertex_3d->tangent_dir, tangent_dir);
+    vertex_3d->tangent_dir--;
+  }
+  {
+    BITCODE_BS vertind[4];
+    if (dwg_dynapi_entity_value (vertex_3d, "VERTEX_3D", "vertind", &vertind, NULL)
+        && !memcmp (&vertind, &vertex_3d->vertind, sizeof (BITCODE_BS)))
+        pass ();
+    else
+        fail ("VERTEX_3D.vertind [BS]");
   }
   if (failed && (is_class_unstable ("VERTEX_3D") || is_class_debugging ("VERTEX_3D")))
     {
@@ -25562,6 +25839,36 @@ static int test_VERTEX_PFACE_FACE (const Dwg_Object *obj)
       return 1;
     }
   {
+    BITCODE_BD bulge;
+    if (dwg_dynapi_entity_value (vertex_pface_face, "VERTEX_PFACE_FACE", "bulge", &bulge, NULL)
+        && bulge == vertex_pface_face->bulge)
+      pass ();
+    else
+      fail ("VERTEX_PFACE_FACE.bulge [BD] %g != %g", vertex_pface_face->bulge, bulge);
+    bulge++;
+    if (dwg_dynapi_entity_set_value (vertex_pface_face, "VERTEX_PFACE_FACE", "bulge", &bulge, 0)
+        && bulge == vertex_pface_face->bulge)
+      pass ();
+    else
+      fail ("VERTEX_PFACE_FACE.bulge [BD] set+1 %g != %g", vertex_pface_face->bulge, bulge);
+    vertex_pface_face->bulge--;
+  }
+  {
+    BITCODE_BD end_width;
+    if (dwg_dynapi_entity_value (vertex_pface_face, "VERTEX_PFACE_FACE", "end_width", &end_width, NULL)
+        && end_width == vertex_pface_face->end_width)
+      pass ();
+    else
+      fail ("VERTEX_PFACE_FACE.end_width [BD] %g != %g", vertex_pface_face->end_width, end_width);
+    end_width++;
+    if (dwg_dynapi_entity_set_value (vertex_pface_face, "VERTEX_PFACE_FACE", "end_width", &end_width, 0)
+        && end_width == vertex_pface_face->end_width)
+      pass ();
+    else
+      fail ("VERTEX_PFACE_FACE.end_width [BD] set+1 %g != %g", vertex_pface_face->end_width, end_width);
+    vertex_pface_face->end_width--;
+  }
+  {
     BITCODE_RC flag;
     if (dwg_dynapi_entity_value (vertex_pface_face, "VERTEX_PFACE_FACE", "flag", &flag, NULL)
         && flag == vertex_pface_face->flag)
@@ -25577,12 +25884,65 @@ static int test_VERTEX_PFACE_FACE (const Dwg_Object *obj)
     vertex_pface_face->flag--;
   }
   {
+    BITCODE_BL id;
+    if (dwg_dynapi_entity_value (vertex_pface_face, "VERTEX_PFACE_FACE", "id", &id, NULL)
+        && id == vertex_pface_face->id)
+      pass ();
+    else
+      fail ("VERTEX_PFACE_FACE.id [BL] %u != %u", vertex_pface_face->id, id);
+    id++;
+    if (dwg_dynapi_entity_set_value (vertex_pface_face, "VERTEX_PFACE_FACE", "id", &id, 0)
+        && id == vertex_pface_face->id)
+      pass ();
+    else
+      fail ("VERTEX_PFACE_FACE.id [BL] set+1 %u != %u", vertex_pface_face->id, id);
+    vertex_pface_face->id--;
+  }
+  {
     struct _dwg_object_entity* parent;
     if (dwg_dynapi_entity_value (vertex_pface_face, "VERTEX_PFACE_FACE", "parent", &parent, NULL)
         && !memcmp (&parent, &vertex_pface_face->parent, sizeof (struct _dwg_object_entity*)))
         pass ();
     else
         fail ("VERTEX_PFACE_FACE.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_3BD point;
+    if (dwg_dynapi_entity_value (vertex_pface_face, "VERTEX_PFACE_FACE", "point", &point, NULL)
+        && !memcmp (&point, &vertex_pface_face->point, sizeof (BITCODE_3BD)))
+        pass ();
+    else
+        fail ("VERTEX_PFACE_FACE.point [3BD]");
+  }
+  {
+    BITCODE_BD start_width;
+    if (dwg_dynapi_entity_value (vertex_pface_face, "VERTEX_PFACE_FACE", "start_width", &start_width, NULL)
+        && start_width == vertex_pface_face->start_width)
+      pass ();
+    else
+      fail ("VERTEX_PFACE_FACE.start_width [BD] %g != %g", vertex_pface_face->start_width, start_width);
+    start_width++;
+    if (dwg_dynapi_entity_set_value (vertex_pface_face, "VERTEX_PFACE_FACE", "start_width", &start_width, 0)
+        && start_width == vertex_pface_face->start_width)
+      pass ();
+    else
+      fail ("VERTEX_PFACE_FACE.start_width [BD] set+1 %g != %g", vertex_pface_face->start_width, start_width);
+    vertex_pface_face->start_width--;
+  }
+  {
+    BITCODE_BD tangent_dir;
+    if (dwg_dynapi_entity_value (vertex_pface_face, "VERTEX_PFACE_FACE", "tangent_dir", &tangent_dir, NULL)
+        && tangent_dir == vertex_pface_face->tangent_dir)
+      pass ();
+    else
+      fail ("VERTEX_PFACE_FACE.tangent_dir [BD] %g != %g", vertex_pface_face->tangent_dir, tangent_dir);
+    tangent_dir++;
+    if (dwg_dynapi_entity_set_value (vertex_pface_face, "VERTEX_PFACE_FACE", "tangent_dir", &tangent_dir, 0)
+        && tangent_dir == vertex_pface_face->tangent_dir)
+      pass ();
+    else
+      fail ("VERTEX_PFACE_FACE.tangent_dir [BD] set+1 %g != %g", vertex_pface_face->tangent_dir, tangent_dir);
+    vertex_pface_face->tangent_dir--;
   }
   {
     BITCODE_BS vertind[4];
