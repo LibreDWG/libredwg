@@ -711,6 +711,8 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_REPEAT,
   DWG_TYPE_ENDREP,
   DWG_TYPE_JUMP,
+  DWG_TYPE_POLYLINE,
+  DWG_TYPE_VERTEX,
   /* pre2.0 entities */
   DWG_TYPE_LOAD,
   // after 1.0 add new types here for binary compat
@@ -8954,6 +8956,40 @@ typedef struct _dwg_entity_JUMP
 } Dwg_Entity_JUMP;
 
 /**
+ Pre R13 POLYLINE (none/19) entity
+ */
+typedef struct _dwg_entity_POLYLINE
+{
+  struct _dwg_object_entity *parent;
+
+  BITCODE_RS flag;
+  BITCODE_RD start_width;
+  BITCODE_RD end_width;
+  BITCODE_3RD extrusion;
+  BITCODE_RS curve_type;
+  BITCODE_RS num_m_verts;
+  BITCODE_RS num_n_verts;
+  BITCODE_RS m_density;
+  BITCODE_RS n_density;
+} Dwg_Entity_POLYLINE;
+
+/**
+ Pre R13 VERTEX (none/20) entity
+ */
+typedef struct _dwg_entity_VERTEX
+{
+  struct _dwg_object_entity *parent;
+
+  BITCODE_RC flag;
+  BITCODE_2RD point;
+  BITCODE_RD start_width;
+  BITCODE_RD end_width;
+  BITCODE_RD bulge;
+  BITCODE_RD tangent_dir;
+  BITCODE_BS vertind[4];
+} Dwg_Entity_VERTEX;
+
+/**
  3DLINE (none/21) entity
  */
 typedef struct _dwg_entity_3DLINE
@@ -9458,6 +9494,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_MTEXT *MTEXT;
     Dwg_Entity_OLEFRAME *OLEFRAME;
     Dwg_Entity_POINT *POINT;
+    Dwg_Entity_POLYLINE *POLYLINE;
     Dwg_Entity_POLYLINE_2D *POLYLINE_2D;
     Dwg_Entity_POLYLINE_3D *POLYLINE_3D;
     Dwg_Entity_POLYLINE_MESH *POLYLINE_MESH;
@@ -9473,6 +9510,7 @@ typedef struct _dwg_object_entity
     Dwg_Entity_TOLERANCE *TOLERANCE;
     Dwg_Entity_TRACE *TRACE;
     Dwg_Entity_UNKNOWN_ENT *UNKNOWN_ENT;
+    Dwg_Entity_VERTEX *VERTEX;
     Dwg_Entity_VERTEX_2D *VERTEX_2D;
     Dwg_Entity_VERTEX_3D *VERTEX_3D;
     Dwg_Entity_VERTEX_MESH *VERTEX_MESH;
@@ -11751,6 +11789,7 @@ EXPORT int dwg_setup_MLINE (Dwg_Object *obj);
 EXPORT int dwg_setup_MTEXT (Dwg_Object *obj);
 EXPORT int dwg_setup_OLEFRAME (Dwg_Object *obj);
 EXPORT int dwg_setup_POINT (Dwg_Object *obj);
+EXPORT int dwg_setup_POLYLINE (Dwg_Object *obj);
 EXPORT int dwg_setup_POLYLINE_2D (Dwg_Object *obj);
 EXPORT int dwg_setup_POLYLINE_3D (Dwg_Object *obj);
 EXPORT int dwg_setup_POLYLINE_MESH (Dwg_Object *obj);
@@ -11766,6 +11805,7 @@ EXPORT int dwg_setup_TEXT (Dwg_Object *obj);
 EXPORT int dwg_setup_TOLERANCE (Dwg_Object *obj);
 EXPORT int dwg_setup_TRACE (Dwg_Object *obj);
 EXPORT int dwg_setup_UNKNOWN_ENT (Dwg_Object *obj);
+EXPORT int dwg_setup_VERTEX (Dwg_Object *obj);
 EXPORT int dwg_setup_VERTEX_2D (Dwg_Object *obj);
 EXPORT int dwg_setup_VERTEX_3D (Dwg_Object *obj);
 EXPORT int dwg_setup_VERTEX_MESH (Dwg_Object *obj);

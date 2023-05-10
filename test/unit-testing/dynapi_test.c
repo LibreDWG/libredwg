@@ -20095,6 +20095,160 @@ static int test_POLARGRIPENTITY (const Dwg_Object *obj)
     }
   return failed;
 }
+static int test_POLYLINE (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_POLYLINE *restrict polyline = obj->tio.entity->tio.POLYLINE;
+  failed = 0;
+  if (!obj_obj || !polyline)
+    {
+      fail ("NULL POLYLINE");
+      return 1;
+    }
+  {
+    BITCODE_RS curve_type;
+    if (dwg_dynapi_entity_value (polyline, "POLYLINE", "curve_type", &curve_type, NULL)
+        && curve_type == polyline->curve_type)
+      pass ();
+    else
+      fail ("POLYLINE.curve_type [RS] %hu != %hu", polyline->curve_type, curve_type);
+    curve_type++;
+    if (dwg_dynapi_entity_set_value (polyline, "POLYLINE", "curve_type", &curve_type, 0)
+        && curve_type == polyline->curve_type)
+      pass ();
+    else
+      fail ("POLYLINE.curve_type [RS] set+1 %hu != %hu", polyline->curve_type, curve_type);
+    polyline->curve_type--;
+  }
+  {
+    BITCODE_RD end_width;
+    if (dwg_dynapi_entity_value (polyline, "POLYLINE", "end_width", &end_width, NULL)
+        && end_width == polyline->end_width)
+      pass ();
+    else
+      fail ("POLYLINE.end_width [RD] %g != %g", polyline->end_width, end_width);
+    end_width++;
+    if (dwg_dynapi_entity_set_value (polyline, "POLYLINE", "end_width", &end_width, 0)
+        && end_width == polyline->end_width)
+      pass ();
+    else
+      fail ("POLYLINE.end_width [RD] set+1 %g != %g", polyline->end_width, end_width);
+    polyline->end_width--;
+  }
+  {
+    BITCODE_3RD extrusion;
+    if (dwg_dynapi_entity_value (polyline, "POLYLINE", "extrusion", &extrusion, NULL)
+        && !memcmp (&extrusion, &polyline->extrusion, sizeof (BITCODE_3RD)))
+        pass ();
+    else
+        fail ("POLYLINE.extrusion [3RD]");
+  }
+  {
+    BITCODE_RS flag;
+    if (dwg_dynapi_entity_value (polyline, "POLYLINE", "flag", &flag, NULL)
+        && flag == polyline->flag)
+      pass ();
+    else
+      fail ("POLYLINE.flag [RS] %hu != %hu", polyline->flag, flag);
+    flag++;
+    if (dwg_dynapi_entity_set_value (polyline, "POLYLINE", "flag", &flag, 0)
+        && flag == polyline->flag)
+      pass ();
+    else
+      fail ("POLYLINE.flag [RS] set+1 %hu != %hu", polyline->flag, flag);
+    polyline->flag--;
+  }
+  {
+    BITCODE_RS m_density;
+    if (dwg_dynapi_entity_value (polyline, "POLYLINE", "m_density", &m_density, NULL)
+        && m_density == polyline->m_density)
+      pass ();
+    else
+      fail ("POLYLINE.m_density [RS] %hu != %hu", polyline->m_density, m_density);
+    m_density++;
+    if (dwg_dynapi_entity_set_value (polyline, "POLYLINE", "m_density", &m_density, 0)
+        && m_density == polyline->m_density)
+      pass ();
+    else
+      fail ("POLYLINE.m_density [RS] set+1 %hu != %hu", polyline->m_density, m_density);
+    polyline->m_density--;
+  }
+  {
+    BITCODE_RS n_density;
+    if (dwg_dynapi_entity_value (polyline, "POLYLINE", "n_density", &n_density, NULL)
+        && n_density == polyline->n_density)
+      pass ();
+    else
+      fail ("POLYLINE.n_density [RS] %hu != %hu", polyline->n_density, n_density);
+    n_density++;
+    if (dwg_dynapi_entity_set_value (polyline, "POLYLINE", "n_density", &n_density, 0)
+        && n_density == polyline->n_density)
+      pass ();
+    else
+      fail ("POLYLINE.n_density [RS] set+1 %hu != %hu", polyline->n_density, n_density);
+    polyline->n_density--;
+  }
+  {
+    BITCODE_RS num_m_verts;
+    if (dwg_dynapi_entity_value (polyline, "POLYLINE", "num_m_verts", &num_m_verts, NULL)
+        && num_m_verts == polyline->num_m_verts)
+      pass ();
+    else
+      fail ("POLYLINE.num_m_verts [RS] %hu != %hu", polyline->num_m_verts, num_m_verts);
+    num_m_verts++;
+    if (dwg_dynapi_entity_set_value (polyline, "POLYLINE", "num_m_verts", &num_m_verts, 0)
+        && num_m_verts == polyline->num_m_verts)
+      pass ();
+    else
+      fail ("POLYLINE.num_m_verts [RS] set+1 %hu != %hu", polyline->num_m_verts, num_m_verts);
+    polyline->num_m_verts--;
+  }
+  {
+    BITCODE_RS num_n_verts;
+    if (dwg_dynapi_entity_value (polyline, "POLYLINE", "num_n_verts", &num_n_verts, NULL)
+        && num_n_verts == polyline->num_n_verts)
+      pass ();
+    else
+      fail ("POLYLINE.num_n_verts [RS] %hu != %hu", polyline->num_n_verts, num_n_verts);
+    num_n_verts++;
+    if (dwg_dynapi_entity_set_value (polyline, "POLYLINE", "num_n_verts", &num_n_verts, 0)
+        && num_n_verts == polyline->num_n_verts)
+      pass ();
+    else
+      fail ("POLYLINE.num_n_verts [RS] set+1 %hu != %hu", polyline->num_n_verts, num_n_verts);
+    polyline->num_n_verts--;
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (polyline, "POLYLINE", "parent", &parent, NULL)
+        && !memcmp (&parent, &polyline->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("POLYLINE.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_RD start_width;
+    if (dwg_dynapi_entity_value (polyline, "POLYLINE", "start_width", &start_width, NULL)
+        && start_width == polyline->start_width)
+      pass ();
+    else
+      fail ("POLYLINE.start_width [RD] %g != %g", polyline->start_width, start_width);
+    start_width++;
+    if (dwg_dynapi_entity_set_value (polyline, "POLYLINE", "start_width", &start_width, 0)
+        && start_width == polyline->start_width)
+      pass ();
+    else
+      fail ("POLYLINE.start_width [RD] set+1 %g != %g", polyline->start_width, start_width);
+    polyline->start_width--;
+  }
+  if (failed && (is_class_unstable ("POLYLINE") || is_class_debugging ("POLYLINE")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "POLYLINE", failed);
+      failed = 0;
+    }
+  return failed;
+}
 static int test_POLYLINE_2D (const Dwg_Object *obj)
 {
   int error = 0;
@@ -25507,6 +25661,123 @@ static int test_TRACE (const Dwg_Object *obj)
   if (failed && (is_class_unstable ("TRACE") || is_class_debugging ("TRACE")))
     {
       ok ("%s failed %d tests (TODO unstable)", "TRACE", failed);
+      failed = 0;
+    }
+  return failed;
+}
+static int test_VERTEX (const Dwg_Object *obj)
+{
+  int error = 0;
+  const Dwg_Object_Entity *restrict obj_obj = obj->tio.entity;
+  Dwg_Entity_VERTEX *restrict vertex = obj->tio.entity->tio.VERTEX;
+  failed = 0;
+  if (!obj_obj || !vertex)
+    {
+      fail ("NULL VERTEX");
+      return 1;
+    }
+  {
+    BITCODE_RD bulge;
+    if (dwg_dynapi_entity_value (vertex, "VERTEX", "bulge", &bulge, NULL)
+        && bulge == vertex->bulge)
+      pass ();
+    else
+      fail ("VERTEX.bulge [RD] %g != %g", vertex->bulge, bulge);
+    bulge++;
+    if (dwg_dynapi_entity_set_value (vertex, "VERTEX", "bulge", &bulge, 0)
+        && bulge == vertex->bulge)
+      pass ();
+    else
+      fail ("VERTEX.bulge [RD] set+1 %g != %g", vertex->bulge, bulge);
+    vertex->bulge--;
+  }
+  {
+    BITCODE_RD end_width;
+    if (dwg_dynapi_entity_value (vertex, "VERTEX", "end_width", &end_width, NULL)
+        && end_width == vertex->end_width)
+      pass ();
+    else
+      fail ("VERTEX.end_width [RD] %g != %g", vertex->end_width, end_width);
+    end_width++;
+    if (dwg_dynapi_entity_set_value (vertex, "VERTEX", "end_width", &end_width, 0)
+        && end_width == vertex->end_width)
+      pass ();
+    else
+      fail ("VERTEX.end_width [RD] set+1 %g != %g", vertex->end_width, end_width);
+    vertex->end_width--;
+  }
+  {
+    BITCODE_RC flag;
+    if (dwg_dynapi_entity_value (vertex, "VERTEX", "flag", &flag, NULL)
+        && flag == vertex->flag)
+      pass ();
+    else
+      fail ("VERTEX.flag [RC] %u != %u", vertex->flag, flag);
+    flag++;
+    if (dwg_dynapi_entity_set_value (vertex, "VERTEX", "flag", &flag, 0)
+        && flag == vertex->flag)
+      pass ();
+    else
+      fail ("VERTEX.flag [RC] set+1 %u != %u", vertex->flag, flag);
+    vertex->flag--;
+  }
+  {
+    struct _dwg_object_entity* parent;
+    if (dwg_dynapi_entity_value (vertex, "VERTEX", "parent", &parent, NULL)
+        && !memcmp (&parent, &vertex->parent, sizeof (struct _dwg_object_entity*)))
+        pass ();
+    else
+        fail ("VERTEX.parent [struct _dwg_object_entity*]");
+  }
+  {
+    BITCODE_2RD point;
+    if (dwg_dynapi_entity_value (vertex, "VERTEX", "point", &point, NULL)
+        && !memcmp (&point, &vertex->point, sizeof (BITCODE_2RD)))
+        pass ();
+    else
+        fail ("VERTEX.point [2RD]");
+  }
+  {
+    BITCODE_RD start_width;
+    if (dwg_dynapi_entity_value (vertex, "VERTEX", "start_width", &start_width, NULL)
+        && start_width == vertex->start_width)
+      pass ();
+    else
+      fail ("VERTEX.start_width [RD] %g != %g", vertex->start_width, start_width);
+    start_width++;
+    if (dwg_dynapi_entity_set_value (vertex, "VERTEX", "start_width", &start_width, 0)
+        && start_width == vertex->start_width)
+      pass ();
+    else
+      fail ("VERTEX.start_width [RD] set+1 %g != %g", vertex->start_width, start_width);
+    vertex->start_width--;
+  }
+  {
+    BITCODE_RD tangent_dir;
+    if (dwg_dynapi_entity_value (vertex, "VERTEX", "tangent_dir", &tangent_dir, NULL)
+        && tangent_dir == vertex->tangent_dir)
+      pass ();
+    else
+      fail ("VERTEX.tangent_dir [RD] %g != %g", vertex->tangent_dir, tangent_dir);
+    tangent_dir++;
+    if (dwg_dynapi_entity_set_value (vertex, "VERTEX", "tangent_dir", &tangent_dir, 0)
+        && tangent_dir == vertex->tangent_dir)
+      pass ();
+    else
+      fail ("VERTEX.tangent_dir [RD] set+1 %g != %g", vertex->tangent_dir, tangent_dir);
+    vertex->tangent_dir--;
+  }
+  {
+    BITCODE_BS vertind[4];
+    if (dwg_dynapi_entity_value (vertex, "VERTEX", "vertind", &vertind, NULL)
+        && !memcmp (&vertind, &vertex->vertind, sizeof (BITCODE_BS)))
+        pass ();
+    else
+        fail ("VERTEX.vertind [BS]");
+  }
+  if (failed && (is_class_unstable ("VERTEX") || is_class_debugging ("VERTEX")))
+    {
+      ok ("%s failed %d tests (TODO unstable)", "VERTEX", failed);
       failed = 0;
     }
   return failed;
@@ -63984,6 +64255,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_POINTPARAMETERENTITY(obj);
   else  if (obj->fixedtype == DWG_TYPE_POLARGRIPENTITY)
     error += test_POLARGRIPENTITY(obj);
+  else  if (obj->fixedtype == DWG_TYPE_POLYLINE)
+    error += test_POLYLINE(obj);
   else  if (obj->fixedtype == DWG_TYPE_POLYLINE_2D)
     error += test_POLYLINE_2D(obj);
   else  if (obj->fixedtype == DWG_TYPE_POLYLINE_3D)
@@ -64028,6 +64301,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_TOLERANCE(obj);
   else  if (obj->fixedtype == DWG_TYPE_TRACE)
     error += test_TRACE(obj);
+  else  if (obj->fixedtype == DWG_TYPE_VERTEX)
+    error += test_VERTEX(obj);
   else  if (obj->fixedtype == DWG_TYPE_VERTEX_2D)
     error += test_VERTEX_2D(obj);
   else  if (obj->fixedtype == DWG_TYPE_VERTEX_3D)
@@ -64614,6 +64889,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_POINTPARAMETERENTITY (obj);
   else  if (obj->fixedtype == DWG_TYPE_POLARGRIPENTITY)
     error += test_POLARGRIPENTITY (obj);
+  else  if (obj->fixedtype == DWG_TYPE_POLYLINE)
+    error += test_POLYLINE (obj);
   else  if (obj->fixedtype == DWG_TYPE_POLYLINE_2D)
     error += test_POLYLINE_2D (obj);
   else  if (obj->fixedtype == DWG_TYPE_POLYLINE_3D)
@@ -64658,6 +64935,8 @@ test_object (const Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
     error += test_TOLERANCE (obj);
   else  if (obj->fixedtype == DWG_TYPE_TRACE)
     error += test_TRACE (obj);
+  else  if (obj->fixedtype == DWG_TYPE_VERTEX)
+    error += test_VERTEX (obj);
   else  if (obj->fixedtype == DWG_TYPE_VERTEX_2D)
     error += test_VERTEX_2D (obj);
   else  if (obj->fixedtype == DWG_TYPE_VERTEX_3D)
@@ -65628,6 +65907,14 @@ test_sizes (void)
                "dwg_dynapi_fields_size (\"POLARGRIPENTITY\"): %d\n", size1, size2);
       error++;
     }
+  size1 = sizeof (Dwg_Entity_POLYLINE);
+  size2 = dwg_dynapi_fields_size ("POLYLINE");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_POLYLINE): %d != "
+               "dwg_dynapi_fields_size (\"POLYLINE\"): %d\n", size1, size2);
+      error++;
+    }
   size1 = sizeof (Dwg_Entity_POLYLINE_2D);
   size2 = dwg_dynapi_fields_size ("POLYLINE_2D");
   if (size1 != size2)
@@ -65810,6 +66097,14 @@ test_sizes (void)
     {
       fprintf (stderr, "sizeof(Dwg_Entity_UNKNOWN_ENT): %d != "
                "dwg_dynapi_fields_size (\"UNKNOWN_ENT\"): %d\n", size1, size2);
+      error++;
+    }
+  size1 = sizeof (Dwg_Entity_VERTEX);
+  size2 = dwg_dynapi_fields_size ("VERTEX");
+  if (size1 != size2)
+    {
+      fprintf (stderr, "sizeof(Dwg_Entity_VERTEX): %d != "
+               "dwg_dynapi_fields_size (\"VERTEX\"): %d\n", size1, size2);
       error++;
     }
   size1 = sizeof (Dwg_Entity_VERTEX_2D);
