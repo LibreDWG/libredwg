@@ -2565,7 +2565,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
       SINCE (R_11)
         error |= encode_r11_auxheader (dat, dwg);
-      LOG_TRACE ("@0x%lx -> ", dat->byte);
+      addr = dat->byte;
+      LOG_TRACE ("@0x%lx -> ", addr);
       // patch these numbers into the header
       dat->byte = 0x14; // header section_address
       dat->bit = 0;
@@ -2591,11 +2592,6 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         LOG_TRACE ("crc: %04X [RSx] from 0-0x%lx\n", crc, dat->byte); // -0x6bd
         bit_write_RS (dat, crc);
       }
-      dat->byte = dwg->header.extras_start
-                      ? dwg->header.extras_start
-                            + (dwg->header.extras_size & 0xffffff)
-                      : dwg->header.blocks_start
-                            + (dwg->header.blocks_size & 0xffffff);
     }
     VERSIONS (R_2_0b, R_9c1)
     {
@@ -2604,14 +2600,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       LOG_TRACE ("0x%lx", dat->byte);
       bit_write_RS (dat, numentities);
       LOG_TRACE ("numentities: %u [RS]\n", numentities);
-      dat->byte = dwg->header.extras_start
-                      ? dwg->header.extras_start
-                            + (dwg->header.extras_size & 0xffffff)
-                      : dwg->header.blocks_start
-                            + (dwg->header.blocks_size & 0xffffff);
     }
-
+    dat->byte = addr;
     LOG_TRACE ("Wrote %lu bytes\n", dat->byte);
+    dat->size = addr;
     return error;
   }
   VERSIONS (R_13b1, R_2004)
