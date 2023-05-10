@@ -3167,13 +3167,10 @@ dwg_next_handle (const Dwg_Data *dwg)
           if (ref->absolute_ref > seed)
             seed = ref->absolute_ref;
         }
-      return seed + 1;
     }
-  else
-    {
-      Dwg_Object *obj = &dwg->object[dwg->num_objects - 1];
-      return obj->handle.value + 1;
-    }
+  else if (dwg->num_objects)
+    seed = dwg->object[dwg->num_objects - 1].handle.value;
+  return seed + 1;
 }
 
 // on init some handles have holes on purpose.
