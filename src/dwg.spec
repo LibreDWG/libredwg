@@ -1116,26 +1116,88 @@ DWG_ENTITY (_3DLINE)
   //COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
+/* (none/19)
+   Pre R13 polyline.
+   TODO compile-time spezialize fields on types
+*/
+#define COMMON_POLYLINE_R11                    \
+  DXF {                                        \
+      if (R11OPTS (0x10))                      \
+        FIELD_RS (num_m_verts, 71);            \
+      if (R11OPTS (0x20))                      \
+        FIELD_RS (num_n_verts, 72);            \
+      FIELD_RS0 (m_density, 73);               \
+      FIELD_RS0 (n_density, 74);               \
+      FIELD_BS0 (curve_type, 75);              \
+  } else {                                     \
+    if (R11OPTS (0x1)) {                       \
+      FIELD_CAST (flag, RC, BS, 70);           \
+      LOG_FLAG_POLYLINE                        \
+    }                                          \
+    DECODER {                                  \
+      FIELD_VALUE (has_vertex) =               \
+        R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;\
+    }                                          \
+    if (R11OPTS (0x2))                         \
+      FIELD_RD (start_width, 40);              \
+    if (R11OPTS (0x4))                         \
+      FIELD_RD (end_width, 41);                \
+    if (R11OPTS (0x8))                         \
+      FIELD_3RD (extrusion, 210);              \
+    if (R11OPTS (0x10))                        \
+      FIELD_RS (num_m_verts, 71);              \
+    if (R11OPTS (0x20))                        \
+      /* same as numfaces for PFACE */         \
+      FIELD_RS (num_n_verts, 72);              \
+    if (R11OPTS (0x40))                        \
+      FIELD_RS (m_density, 73);                \
+    if (R11OPTS (0x80))                        \
+      FIELD_RS (n_density, 74);                \
+    if (R11OPTS (0x100)) {                     \
+      FIELD_RS (curve_type, 75);               \
+      LOG_POLYLINE_CURVETYPE                   \
+    }                                          \
+  }
+
+/* (none/20)
+   Pre R13 vertex.
+   has all-in-one: n/m mesh (FLAG 16). curve-fit (FLAG 2),
+   spline-fit (FLAGS 4), 3dpline (FLAG 8), pface_mesh: FLAG 64
+   is_closed FLAG(1)
+*/
+#define COMMON_VERTEX_R11                                \
+    if (! R11OPTS(OPTS_R11_VERTEX_HAS_NOT_X_Y))          \
+      FIELD_2RD (point, 10);                             \
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_START_WIDTH))       \
+      FIELD_RD (start_width, 40);                        \
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_END_WIDTH))         \
+      FIELD_RD (end_width, 41);                          \
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_BULGE))             \
+      FIELD_RD (bulge, 42);                              \
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_FLAG)) {            \
+      FIELD_RC (flag, 0);                                \
+      LOG_FLAG_VERTEX                                    \
+    }                                                    \
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX1)) {          \
+      FIELD_RSd (vertind[0], 71);                        \
+    }                                                    \
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX2)) {          \
+      FIELD_RSd (vertind[1], 72);                        \
+    }                                                    \
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX3)) {          \
+      FIELD_RSd (vertind[2], 73);                        \
+    }                                                    \
+    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX4)) {          \
+      FIELD_RSd (vertind[3], 74);                        \
+    }                                                    \
+
 /* (10/20) */
 DWG_ENTITY (VERTEX_2D)
 
   SUBCLASS (AcDbVertex)
   SUBCLASS (AcDb2dVertex)
-  PRE (R_13b1)
-  {
-    FIELD_2RD (point, 10);
-    if (R11OPTS (1))
-      FIELD_RD (start_width, 40);
-    if (R11OPTS (2))
-      FIELD_RD (end_width, 41);
-    if (R11OPTS (4))
-      FIELD_RD (bulge, 42);
-    if (R11OPTS (8)) {
-      FIELD_RC (flag, 0);
-      LOG_FLAG_VERTEX
-    }
-    if (R11OPTS (16))
-      FIELD_RD (tangent_dir, 50);
+  PRE (R_13b1) {
+    COMMON_VERTEX_R11
   }
   SINCE (R_13b1)
   {
@@ -1210,13 +1272,8 @@ DWG_ENTITY (VERTEX_3D)
 
   SUBCLASS (AcDbVertex)
   SUBCLASS (AcDb3dPolylineVertex)
-  PRE (R_13b1)
-  {
-    FIELD_2RD (point, 10);
-    if (R11OPTS (8)) {
-      FIELD_RC (flag, 0);
-      LOG_FLAG_VERTEX
-    }
+  PRE (R_13b1) {
+    COMMON_VERTEX_R11
   }
   LATER_VERSIONS {
     FIELD_RC (flag, 0);
@@ -1234,11 +1291,8 @@ DWG_ENTITY (VERTEX_MESH)
 
   SUBCLASS (AcDbVertex)
   SUBCLASS (AcDbPolyFaceMeshVertex)
-  PRE (R_13b1)
-  {
-    FIELD_2RD (point, 10);
-    FIELD_RC (flag, 0);
-    LOG_FLAG_VERTEX
+  PRE (R_13b1) {
+    COMMON_VERTEX_R11
   }
   LATER_VERSIONS {
     FIELD_RC (flag, 0);
@@ -1256,13 +1310,8 @@ DWG_ENTITY (VERTEX_PFACE)
 
   SUBCLASS (AcDbVertex)
   SUBCLASS (AcDbPolyFaceMeshVertex)
-  PRE (R_13b1)
-  {
-    FIELD_2RD (point, 10);
-    if (R11OPTS (OPTS_R11_VERTEX_HAS_FLAG)) {
-      FIELD_RC (flag, 0);
-      LOG_FLAG_VERTEX
-    }
+  PRE (R_13b1) {
+    COMMON_VERTEX_R11
   }
   LATER_VERSIONS {
     FIELD_RC (flag, 0);
@@ -1299,24 +1348,8 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
   FIELD_VECTOR_INL (vertind, BSd, 4, 71);
 #else
   //FIELD_VALUE (pt) = { 0.0, 0.0, 0.0 };
-  PRE (R_13b1)
-  {
-    if (R11OPTS (OPTS_R11_VERTEX_HAS_FLAG)) {
-      FIELD_RC (flag, 0);
-      LOG_FLAG_VERTEX
-    }
-    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX1)) {
-      FIELD_RSd (vertind[0], 71);
-    }
-    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX2)) {
-      FIELD_RSd (vertind[1], 72);
-    }
-    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX3)) {
-      FIELD_RSd (vertind[2], 73);
-    }
-    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX4)) {
-      FIELD_RSd (vertind[3], 74);
-    }
+  PRE (R_13b1) {
+    COMMON_VERTEX_R11
   }
   LATER_VERSIONS {
     FIELD_VALUE (flag) = 128;
@@ -1331,50 +1364,13 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
 DWG_ENTITY_END
 
 /* (15/19)
-   r11 has all-in-one: n/m mesh (FLAG 16). curve-fit (FLAG 2),
-   spline-fit (FLAGS 4), 3dpline (FLAG 8), pface_mesh: FLAG 64
-   is_closed FLAG(1)
 */
 DWG_ENTITY (POLYLINE_2D)
 
   //SUBCLASS (AcDbCurve)
   SUBCLASS (AcDb2dPolyline)
-  PRE (R_13b1)
-  {
-    if (R11OPTS (1)) {
-      FIELD_CAST (flag, RC, BS, 70);
-      LOG_FLAG_POLYLINE
-    }
-    if (R11OPTS (2))
-      FIELD_RD (start_width, 40);
-    if (R11OPTS (4))
-      FIELD_RD (end_width, 41);
-    if (R11OPTS (8))
-      FIELD_3RD (extrusion, 210);
-    if (R11OPTS (16))
-      FIELD_RS (num_m_verts, 71);
-    if (R11OPTS (32))
-      FIELD_RS (num_n_verts, 72);
-    if (R11OPTS (0x100)) {
-      FIELD_RS (curve_type, 75);
-      LOG_POLYLINE_CURVETYPE
-    }
-    if (R11OPTS (OPTS_R11_POLYLINE_IN_EXTRA) &&
-        obj->size > 20)
-    {
-      // Note: layer is then the extras_start offset
-      DECODER {
-        _obj->extra_r11_size = (obj->address + obj->size - dat->byte) & 0xFFFFFFFF;
-        if (dat->version >= R_11b1)
-          _obj->extra_r11_size -= 2;
-        if (_obj->extra_r11_size > obj->size)
-          _obj->extra_r11_size = 0;
-      }
-      FIELD_TFv (extra_r11_text, _obj->extra_r11_size, 0);
-    }
-    DECODER {
-      FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
-    }
+  PRE (R_13b1) {
+    COMMON_POLYLINE_R11
   }
   SINCE (R_13b1)
   {
@@ -1442,30 +1438,14 @@ DWG_ENTITY (POLYLINE_3D)
   else {
     FIELD_VALUE (has_vertex) = 1;
   }
-  PRE (R_13b1)
-  {
-    if (R11OPTS (1)) {
-      FIELD_CAST (flag, RC, BS, 70);
-      LOG_FLAG_POLYLINE
-    }
-    if (R11OPTS (2))
-      FIELD_RD (start_width, 40);
-    if (R11OPTS (4))
-      FIELD_RD (end_width, 41);
-    if (R11OPTS (8))
-      FIELD_3RD (extrusion, 210);
-    if (R11OPTS (0x100)) { // 3dmesh only
-      FIELD_RS (curve_type, 75);
-      LOG_POLYLINE_CURVETYPE
-    }
-    DECODER {
-      FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
-    }
+  PRE (R_13b1) {
+    COMMON_POLYLINE_R11
   }
-  LATER_VERSIONS {
-    FIELD_RC0 (curve_type, 75);
+  SINCE (R_13b1) {
+    DXF { FIELD_RC0 (curve_type, 75); }
+    else { FIELD_CAST (curve_type, RC, RS, 75); }
     LOG_POLYLINE_CURVETYPE
-    FIELD_RC (flag, 0);
+    FIELD_CAST (flag, RC, RS, 0);
     LOG_FLAG_POLYLINE
   }
   SINCE (R_2004a) {
@@ -2179,7 +2159,7 @@ DWG_ENTITY (_3DFACE)
 
 DWG_ENTITY_END
 
-/* (29) */
+/* (29/19) */
 DWG_ENTITY (POLYLINE_PFACE)
 
   SUBCLASS (AcDbPolyFaceMesh)
@@ -2193,18 +2173,11 @@ DWG_ENTITY (POLYLINE_PFACE)
     FIELD_VALUE (has_vertex) = 1;
   }
   PRE (R_13b1) {
-    if (R11OPTS (1)) {
-      FIELD_CAST (flag, RC, BS, 70);
-      LOG_FLAG_POLYLINE
-    }
-    if (R11OPTS (16))
-      FIELD_RS (numverts, 71);
-    if (R11OPTS (32))
-      FIELD_RS (numfaces, 72);
+    COMMON_POLYLINE_R11
   }
-  LATER_VERSIONS {
-    FIELD_BS (numverts, 71);
-    FIELD_BS (numfaces, 72);
+  SINCE (R_13b1) {
+    FIELD_BS (num_m_verts, 71);
+    FIELD_BS (num_n_verts, 72);
   }
 
   SINCE (R_2004a) {
@@ -2227,7 +2200,7 @@ DWG_ENTITY (POLYLINE_PFACE)
 
 DWG_ENTITY_END
 
-/* (30) */
+/* (30/19) */
 DWG_ENTITY (POLYLINE_MESH)
 
   SUBCLASS (AcDbPolygonMesh)
@@ -2239,35 +2212,9 @@ DWG_ENTITY (POLYLINE_MESH)
     KEY (flag); VALUE_BS (flag, 70);
   }
   PRE (R_13b1) {
-    DXF {
-      FIELD_RS (num_m_verts, 71);
-      FIELD_RS (num_n_verts, 72);
-      FIELD_RS0 (m_density, 73);
-      FIELD_RS0 (n_density, 74);
-      FIELD_BS0 (curve_type, 75);
-    } else {
-      if (R11OPTS (1)) {
-        FIELD_CAST (flag, RC, BS, 70);
-        LOG_FLAG_POLYLINE
-      }
-      DECODER {
-        FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
-      }
-      if (R11OPTS (16))
-        FIELD_RS (num_m_verts, 71);
-      if (R11OPTS (32))
-        FIELD_RS (num_n_verts, 72);
-      if (R11OPTS (64))
-        FIELD_RS (m_density, 73);
-      if (R11OPTS (128))
-        FIELD_RS (n_density, 74);
-      if (R11OPTS (256)) {
-        FIELD_RS (curve_type, 75);
-        LOG_POLYLINE_CURVETYPE
-      }
-    }
+    COMMON_POLYLINE_R11
   }
-  LATER_VERSIONS {
+  SINCE (R_13b1) {
     FIELD_BS (flag, 0);
     LOG_FLAG_POLYLINE
     FIELD_BS (curve_type, 75);

@@ -16592,7 +16592,7 @@ dwg_ent_polyline_pface_get_numpoints (
   if (pface)
     {
       *error = 0;
-      return pface->numverts;
+      return pface->num_m_verts;
     }
   else
     {
@@ -26427,8 +26427,8 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                               | OPTS_R11_POLYLINE_HAS_N_VERTS;
   // obj->tio.entity->flag_r11 = FLAG_R11_HAS_ATTRIBS; // not
   _obj->flag = FLAG_POLYLINE_PFACE_MESH;
-  _pl->numverts = numverts;
-  _pl->numfaces = numfaces;
+  _pl->num_m_verts = numverts;
+  _pl->num_n_verts = numfaces;
   _pl->num_owned = numverts + numfaces;
   for (unsigned i = 0; i < numverts; i++)
     {
