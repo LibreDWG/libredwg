@@ -6,7 +6,6 @@ api_process (dwg_object *obj)
 {
   int error;
   BITCODE_BS vertind[4];
-  dwg_point_3d pt;
 
   dwg_ent_vert_pface_face *ent = dwg_object_to_VERTEX_PFACE_FACE (obj);
 
