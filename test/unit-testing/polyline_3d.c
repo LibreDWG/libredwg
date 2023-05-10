@@ -5,23 +5,34 @@ void
 api_process (dwg_object *obj)
 {
   int error;
+  BITCODE_RS flag, curve_type;
   BITCODE_BL num_owned, numpoints;
-  BITCODE_RC flag, curve_type;
   dwg_point_3d *points;
   BITCODE_H first_vertex, last_vertex, *vertex, seqend;
   Dwg_Version_Type version = obj->parent->header.version;
 
   dwg_ent_polyline_3d *polyline_3d = dwg_object_to_POLYLINE_3D (obj);
 
-  CHK_ENTITY_TYPE_W_OLD (polyline_3d, POLYLINE_3D, flag, RC);
-  CHK_ENTITY_TYPE_W_OLD (polyline_3d, POLYLINE_3D, curve_type, RC);
-  CHK_ENTITY_TYPE (polyline_3d, POLYLINE_3D, num_owned, BL);
-  numpoints = dwg_object_polyline_3d_get_numpoints (obj, &error);
-  if (error)
-    fail ("polyline_3d_get_numpoints");
-  if (numpoints != num_owned)
-    ok ("TODO polyline_3d_get_numpoints: %d != num_owned: %d", numpoints,
-        num_owned);
+  if (version <= R_12)
+    {
+      CHK_ENTITY_TYPE (polyline_3d, POLYLINE_3D, flag, RS);
+      CHK_ENTITY_TYPE (polyline_3d, POLYLINE_3D, curve_type, RS);
+    }
+  else
+    {
+      CHK_ENTITY_TYPE (polyline_3d, POLYLINE_3D, curve_type, RC);
+      CHK_ENTITY_TYPE_W_OLD (polyline_3d, POLYLINE_3D, flag, RC);
+      CHK_ENTITY_TYPE (polyline_3d, POLYLINE_3D, num_owned, BL);
+      numpoints = dwg_object_polyline_3d_get_numpoints (obj, &error);
+      if (error)
+        fail ("polyline_3d_get_numpoints");
+      if (version >= R_2004)
+        {
+          if (numpoints != num_owned)
+            ok ("TODO polyline_3d_get_numpoints: %d != num_owned: %d", numpoints,
+                num_owned);
+        }
+    }
 
   points = dwg_object_polyline_3d_get_points (obj, &error);
   if (!error)
@@ -41,5 +52,8 @@ api_process (dwg_object *obj)
     {
       CHK_ENTITY_HV (polyline_3d, POLYLINE_3D, vertex, num_owned);
     }
-  CHK_ENTITY_H (polyline_3d, POLYLINE_3D, seqend);
+  if (version >= R_13b1)
+    {
+      CHK_ENTITY_H (polyline_3d, POLYLINE_3D, seqend);
+    }
 }
