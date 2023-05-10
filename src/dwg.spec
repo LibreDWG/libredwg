@@ -1039,7 +1039,7 @@ DWG_ENTITY (_3DLINE)
   //COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
-/* (10/20) */
+/* (10/none) */
 DWG_ENTITY (VERTEX_2D)
 
   SUBCLASS (AcDbVertex)
@@ -1132,7 +1132,7 @@ DWG_ENTITY (VERTEX_2D)
 
 DWG_ENTITY_END
 
-/* (11/20) */
+/* (11/none) */
 DWG_ENTITY (VERTEX_3D)
 
   SUBCLASS (AcDbVertex)
@@ -1154,7 +1154,7 @@ DWG_ENTITY (VERTEX_3D)
 
 DWG_ENTITY_END
 
-/* (12/20) */
+/* (12/none) */
 DWG_ENTITY (VERTEX_MESH)
 
   SUBCLASS (AcDbVertex)
@@ -1176,7 +1176,7 @@ DWG_ENTITY (VERTEX_MESH)
 
 DWG_ENTITY_END
 
-/* (13/20) */
+/* (13/none) */
 DWG_ENTITY (VERTEX_PFACE)
 
   SUBCLASS (AcDbVertex)
@@ -1200,7 +1200,7 @@ DWG_ENTITY (VERTEX_PFACE)
 
 DWG_ENTITY_END
 
-/* (14/20) */
+/* (14/none) */
 DWG_ENTITY (VERTEX_PFACE_FACE)
 
   SUBCLASS (AcDbFaceRecord)
@@ -1253,7 +1253,7 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
   COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
-/* (15/19)
+/* (15/none)
    r11 has all-in-one: n/m mesh (FLAG 16). curve-fit (FLAG 2),
    spline-fit (FLAGS 4), 3dpline (FLAG 8), pface_mesh: FLAG 64
    is_closed FLAG(1)
@@ -1351,7 +1351,7 @@ DWG_ENTITY (POLYLINE_2D)
 
 DWG_ENTITY_END
 
-/* (16/19) */
+/* (16/none) */
 DWG_ENTITY (POLYLINE_3D)
 
   SUBCLASS (AcDb3dPolyline)

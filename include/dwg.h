@@ -1494,7 +1494,7 @@ typedef struct _dwg_entity_MINSERT
 } Dwg_Entity_MINSERT;
 
 /**
- VERTEX_2D (10/20) entity
+ VERTEX_2D (10/none) entity
  */
 typedef struct _dwg_entity_VERTEX_2D
 {
@@ -1510,7 +1510,7 @@ typedef struct _dwg_entity_VERTEX_2D
 } Dwg_Entity_VERTEX_2D;
 
 /**
- VERTEX_3D (11) entity
+ VERTEX_3D (11/none) entity
  */
 typedef struct _dwg_entity_VERTEX_3D
 {
@@ -1521,17 +1521,17 @@ typedef struct _dwg_entity_VERTEX_3D
 } Dwg_Entity_VERTEX_3D;
 
 /**
- VERTEX_MESH (12) - same as VERTEX_3D entity
+ VERTEX_MESH (12/none) - same as VERTEX_3D entity
  */
 typedef Dwg_Entity_VERTEX_3D Dwg_Entity_VERTEX_MESH;
 
 /**
- VERTEX_PFACE (13) - same as VERTEX_3D entity
+ VERTEX_PFACE (13/none) - same as VERTEX_3D entity
  */
 typedef Dwg_Entity_VERTEX_3D Dwg_Entity_VERTEX_PFACE;
 
 /**
- VERTEX_PFACE_FACE (14) entity
+ VERTEX_PFACE_FACE (14/none) entity
  */
 typedef struct _dwg_entity_VERTEX_PFACE_FACE
 {
@@ -1551,7 +1551,7 @@ typedef struct _dwg_entity_VERTEX_PFACE_FACE
   BITCODE_H seqend
 
 /**
- 2D POLYLINE (15/19) entity
+ 2D POLYLINE (15/none) entity
  */
 typedef struct _dwg_entity_POLYLINE_2D
 {
@@ -1572,7 +1572,7 @@ typedef struct _dwg_entity_POLYLINE_2D
 } Dwg_Entity_POLYLINE_2D;
 
 /**
- 3D POLYLINE (16/19) entity
+ 3D POLYLINE (16/none) entity
  */
 typedef struct _dwg_entity_POLYLINE_3D
 {
