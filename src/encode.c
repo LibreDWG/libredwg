@@ -2566,7 +2566,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       SINCE (R_11)
         error |= encode_r11_auxheader (dat, dwg);
       addr = dat->byte;
-      LOG_TRACE ("@0x%lx -> ", addr);
+      LOG_TRACE ("@0x%x -> ", addr);
       // patch these numbers into the header
       dat->byte = 0x14; // header section_address
       dat->bit = 0;
