@@ -610,10 +610,10 @@ dwg_print_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
       return dwg_print_LOAD (dat, obj);
     case DWG_TYPE_JUMP:
       return dwg_print_JUMP (dat, obj);
-    case DWG_TYPE_POLYLINE:
-      return dwg_print_POLYLINE (dat, obj);
-    case DWG_TYPE_VERTEX:
-      return dwg_print_VERTEX (dat, obj);
+    case DWG_TYPE_POLYLINE_R11:
+      return dwg_print_POLYLINE_R11 (dat, obj);
+    case DWG_TYPE_VERTEX_R11:
+      return dwg_print_VERTEX_R11 (dat, obj);
     default:
       if (obj->type == obj->parent->layout_type)
         {
