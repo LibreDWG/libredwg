@@ -251,18 +251,7 @@ const unsigned char unknown_section[53]
         /* Luckily TFF's are only preR13 */                                   \
         else                                                                  \
           {                                                                   \
-            size_t rlen;                                                      \
-            if (dat->version < R_13b1                                         \
-                && (rlen = strlen ((char *)_obj->nam)) < (unsigned)len)       \
-              {                                                               \
-                bit_write_TF (dat, (BITCODE_TF)_obj->nam, rlen);              \
-                for (int _i = 0; _i < (int)(len - rlen); _i++)                \
-                  bit_write_RC (dat, 0);                                      \
-              }                                                               \
-            else                                                              \
-              {                                                               \
-                bit_write_TF (dat, (BITCODE_TF)_obj->nam, len);               \
-              }                                                               \
+            bit_write_TF (dat, (BITCODE_TF)_obj->nam, len);                   \
           }                                                                   \
       }                                                                       \
     LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \

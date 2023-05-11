@@ -47,6 +47,9 @@ static wchar_t *wcquote (wchar_t *restrict dest, const wchar_t *restrict src);
 static void print_wcquote (Bit_Chain *restrict dat,
                            dwg_wchar_t *restrict wstr);
 #endif
+// write even past the \0, to keep existing slack
+void json_write_TF (Bit_Chain *restrict dat, const BITCODE_TF restrict src,
+                    const size_t len);
 
 static int json_3dsolid (Bit_Chain *restrict dat,
                          const Dwg_Object *restrict obj,
@@ -290,21 +293,21 @@ static char *_path_field (const char *path);
   }
 #define FIELD_TFv(nam, len, dxf)                                              \
   {                                                                           \
-    const int _l1 = 6 * len + 1;                                              \
+    /* const int _l1 = 6 * len + 1; */                                        \
     FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));            \
+    json_write_TF (dat, (const BITCODE_TF)_obj->nam, len);                    \
+    /*                                                                        \
     if (len < 42)                                                             \
       {                                                                       \
         char _buf[256];                                                       \
         char *p = json_cquote (_buf, (const char *)_obj->nam, _l1,            \
                                dat->codepage);                                \
         fprintf (dat->fh, "\"%s\"", p);                                       \
-        /*                                                                    \
         size_t lp = strlen (p);                                               \
         fprintf (dat->fh, "\"%s", p);                                         \
         for (int _i = lp; _i < (int)len; _i++)                                \
           fprintf (dat->fh, "\\u0000");                                       \
         fprintf (dat->fh, "\"");                                              \
-        */                                                                    \
       }                                                                       \
     else                                                                      \
       {                                                                       \
@@ -314,6 +317,7 @@ static char *_path_field (const char *path);
         fprintf (dat->fh, "\"%s\"", p);                                       \
         free (_buf);                                                          \
       }                                                                       \
+    */                                                                        \
   }
 #define FIELD_TF(nam, len, dxf) FIELD_TFv (nam, len, dxf)
 #define FIELD_TFF(nam, len, dxf) FIELD_TFv (nam, len, dxf)
@@ -1366,6 +1370,59 @@ wcquote (wchar_t *restrict dest, const wchar_t *restrict src)
 }
 
 #endif /* HAVE_NATIVE_WCHAR2 */
+
+/* Write even past the \0, to keep existing slack.
+   Don't convert to utf8.
+*/
+void
+json_write_TF (Bit_Chain *restrict dat, const BITCODE_TF restrict src,
+               const size_t len)
+{
+  const size_t slen = strlen ((char*)src);
+  bool has_slack = false;
+  fputc ('"', dat->fh);
+  for (size_t i = 0; i < len; i++)
+    {
+      const unsigned char c = src[i];
+      if (c == '\r' || c == '\n' || c == '"')
+        fputc ('\\', dat->fh);
+      else if (c == '\\' && i + 6 < len && src[i] == 'U' && src[i + 1] == '+'
+               && ishex (src[i + 2]) && ishex (src[i + 3])
+               && ishex (src[i + 4]) && ishex (src[i + 5]))
+        {
+          fputc ('\\', dat->fh);
+          fputc ('u', dat->fh);
+          i += 3;
+        }
+      else if (c == '\0')
+        {
+          // see if there's slack after the NUL terminator
+          if (!has_slack && i == slen)
+            {
+              for (size_t j = i; j < len; j++)
+                if (src[j])
+                  {
+                    has_slack = true;
+                    break;
+                  }
+            }
+          if (has_slack)
+            fprintf (dat->fh, "\\u00%02x", c);
+          else
+            {
+              fputc ('"', dat->fh);
+              return;
+            }
+        }
+      else if (c < 0x1f)
+        {
+          fprintf (dat->fh, "\\u00%02x", c);
+        }
+      else
+        fputc (c, dat->fh);
+    }
+  fputc ('"', dat->fh);
+}
 
 // also converts from codepage to utf8
 char *

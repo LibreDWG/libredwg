@@ -427,11 +427,11 @@ json_fixed_string (Bit_Chain *restrict dat, const int len,
                    jsmntokens_t *restrict tokens)
 {
   const jsmntok_t *t = &tokens->tokens[tokens->index];
-  char *key = (char *)malloc (len + 1);
+  char *str = (char *)calloc (len + 1, 1);
   int l;
   JSON_TOKENS_CHECK_OVERFLOW_NULL;
   l = t->end - t->start;
-  if (!key)
+  if (!str)
     goto outofmemory;
   if (t->type != JSMN_STRING)
     {
@@ -446,33 +446,39 @@ json_fixed_string (Bit_Chain *restrict dat, const int len,
     {
       int dlen = len;
       dat->chain[t->end] = '\0';
-      while (!bit_utf8_to_TV (key, &dat->chain[t->start], dlen,
-                              t->end - t->start, 1, dat->codepage))
+      while (!bit_utf8_to_TV (str, &dat->chain[t->start], dlen, l, 1,
+                              dat->codepage))
         {
           LOG_INSANE ("Not enough room in quoted string len=%d\n", len)
           dlen += 8;
-          if (dlen > 6 * (t->end - t->start))
+          if (dlen > 6 * l)
             {
-              LOG_ERROR ("bit_utf8_to_TV loop len=%d vs %d \"%.*s\"", len,
-                         t->end - t->start, t->end - t->start,
-                         &dat->chain[t->start]);
+              LOG_ERROR ("bit_utf8_to_TV loop len=%d vs %d \"%.*s\"", len, l,
+                         l, &dat->chain[t->start]);
               // len = t->end - t->start;
-              free (key);
+              free (str);
               goto normal;
             }
-          key = (char *)realloc (key, dlen);
-          if (!key)
+          str = (char *)realloc (str, dlen);
+          if (!str)
             goto outofmemory;
         }
     }
   else
     {
+      char *p;
     normal:
-      memcpy (key, &dat->chain[t->start], len);
-      key[len] = '\0';
+      if (l > len)
+        {
+          memcpy (str, &dat->chain[t->start], len);
+          LOG_WARN ("Overlarge JSON TF value \"%.*s\" stripped to \"%s\"", l,
+                     &dat->chain[t->start], str);
+        }
+      else
+        memcpy (str, &dat->chain[t->start], l);
     }
   tokens->index++;
-  return key;
+  return str;
 outofmemory:
   LOG_ERROR ("Out of memory");
   return NULL;
@@ -2126,11 +2132,9 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   && strEQc(key, "DIMBLK2_T") ? 66
                 : obj->fixedtype == DWG_TYPE_DIMSTYLE ? 16
                 : 64;
-              str = (char *)realloc (str, k + 1);
-              if ((unsigned)k > len)
-                memset (&str[len + 1], 0, k - len - 1);
-              else
-                str[k] = '\0';
+              tokens->index--;
+              free (str);
+              str = json_fixed_string (dat, k, tokens);
               LOG_TRACE ("%s.%s: \"%s\" [TF %d %d]\n", name, key, str, k,
                          f->dxf);
               old = &((char *)_obj)[f->offset];
