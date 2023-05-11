@@ -363,8 +363,8 @@ static const char *const _dwg_type_names_variable[] = {
   "REPEAT",                                                   /* 741 */
   "ENDREP",                                                   /* 742 */
   "JUMP",                                                     /* 743 */
-  "POLYLINE",                                                 /* 744 */
-  "VERTEX",                                                   /* 745 */
+  "POLYLINE_R11",                                             /* 744 */
+  "VERTEX_R11",                                               /* 745 */
   "LOAD",                                                     /* 746 */
   "ABSHDRAWINGSETTINGS",                                      /* 747 */
   "ACAECUSTOBJ",                                              /* 748 */
@@ -1729,8 +1729,8 @@ static const char *_dwg_dxfnames_variable[] = {
   "REPEAT",                                                   /* 741 */
   "ENDREP",                                                   /* 742 */
   "JUMP",                                                     /* 743 */
-  "POLYLINE",                                                 /* 744 */
-  "VERTEX",                                                   /* 745 */
+  "POLYLINE_R11",                                             /* 744 */
+  "VERTEX_R11",                                               /* 745 */
   "LOAD",                                                     /* 746 */
   "ABSHDRAWINGSETTINGS",                                      /* 747 */
   "ACAECUSTOBJ",                                              /* 748 */
