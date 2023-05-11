@@ -1048,84 +1048,65 @@ DWG_ENTITY (VERTEX_2D)
 
   SUBCLASS (AcDbVertex)
   SUBCLASS (AcDb2dVertex)
-  PRE (R_13b1)
-  {
-    FIELD_2RD (point, 10);
-    if (R11OPTS (1))
-      FIELD_RD (start_width, 40);
-    if (R11OPTS (2))
-      FIELD_RD (end_width, 41);
-    if (R11OPTS (4))
-      FIELD_RD (bulge, 42);
-    if (R11OPTS (8)) {
-      FIELD_RC (flag, 0);
-      LOG_FLAG_VERTEX
-    }
-    if (R11OPTS (16))
-      FIELD_RD (tangent_dir, 50);
-  }
   SINCE (R_13b1)
   {
     FIELD_RC (flag, 0);
     LOG_FLAG_VERTEX
     FIELD_3BD (point, 10);
-
+  }
   /* Decoder and Encoder routines could be the same but then we
      wouldn't compress data when saving. So we explicitly implemented
      the encoder routine with the compression technique described in
      the spec. --Juca */
-    DXF_OR_PRINT {
-      if (FIELD_VALUE (flag) != 0) {
-        FIELD_BD0 (start_width, 40);
-        FIELD_BD0 (end_width, 41);
+  DXF_OR_PRINT {
+    if (FIELD_VALUE (flag) != 0) {
+      FIELD_BD0 (start_width, 40);
+      FIELD_BD0 (end_width, 41);
+    }
+  }
+  DECODER {
+    FIELD_BD (start_width, 40);
+    if (FIELD_VALUE (start_width) < 0)
+      {
+        FIELD_VALUE (start_width) = -FIELD_VALUE (start_width);
+        FIELD_VALUE (end_width) = FIELD_VALUE (start_width);
       }
-    }
-    DECODER
-    {
-      FIELD_BD (start_width, 40);
-      if (FIELD_VALUE (start_width) < 0)
-        {
-          FIELD_VALUE (start_width) = -FIELD_VALUE (start_width);
-          FIELD_VALUE (end_width) = FIELD_VALUE (start_width);
-        }
-      else
-        {
-          FIELD_BD (end_width, 41);
-        }
-    }
+    else
+      {
+        FIELD_BD (end_width, 41);
+      }
+  }
 
-  ENCODER
-    {
-      if (FIELD_VALUE (start_width) && FIELD_VALUE (start_width) == FIELD_VALUE (end_width))
-        {
-          //TODO: This is ugly! We should have a better way of doing such things
-          FIELD_VALUE (start_width) = -FIELD_VALUE (start_width);
-          FIELD_BD (start_width, 40);
-          FIELD_VALUE (start_width) = -FIELD_VALUE (start_width);
-        }
-      else
-        {
-          FIELD_BD (start_width, 40);
-          FIELD_BD (end_width, 41);
-        }
-    }
+  ENCODER {
+    if (FIELD_VALUE (start_width) && FIELD_VALUE (start_width) == FIELD_VALUE (end_width))
+      {
+        //TODO: This is ugly! We should have a better way of doing such things
+        FIELD_VALUE (start_width) = -FIELD_VALUE (start_width);
+        FIELD_BD (start_width, 40);
+        FIELD_VALUE (start_width) = -FIELD_VALUE (start_width);
+      }
+    else
+      {
+        FIELD_BD (start_width, 40);
+        FIELD_BD (end_width, 41);
+      }
+  }
 
-    DXF {
-      if (FIELD_VALUE (flag) != 0)
-        FIELD_BD0 (bulge, 42);
-    } else {
-      FIELD_BD (bulge, 42);
-    }
-    SINCE (R_2010b) {
-      FIELD_BL0 (id, 91);
-    }
-    DXF {
-      FIELD_RC0 (flag, 70);
-      if (FIELD_VALUE (flag) != 0)
-        FIELD_BD (tangent_dir, 50);
-    } else {
+  DXF {
+    if (FIELD_VALUE (flag) != 0)
+      FIELD_BD0 (bulge, 42);
+  } else {
+    FIELD_BD (bulge, 42);
+  }
+  SINCE (R_2010b) {
+    FIELD_BL0 (id, 91);
+  }
+  DXF {
+    FIELD_RC0 (flag, 70);
+    if (FIELD_VALUE (flag) != 0)
       FIELD_BD (tangent_dir, 50);
-    }
+  } else {
+    FIELD_BD (tangent_dir, 50);
   }
 
   COMMON_ENTITY_HANDLE_DATA;
@@ -1137,15 +1118,7 @@ DWG_ENTITY (VERTEX_3D)
 
   SUBCLASS (AcDbVertex)
   SUBCLASS (AcDb3dPolylineVertex)
-  PRE (R_13b1)
-  {
-    FIELD_2RD (point, 10);
-    if (R11OPTS (8)) {
-      FIELD_RC (flag, 0);
-      LOG_FLAG_VERTEX
-    }
-  }
-  LATER_VERSIONS {
+  SINCE (R_13b1) {
     FIELD_RC (flag, 0);
     LOG_FLAG_VERTEX
     FIELD_3BD (point, 10);
@@ -1161,13 +1134,8 @@ DWG_ENTITY (VERTEX_MESH)
 
   SUBCLASS (AcDbVertex)
   SUBCLASS (AcDbPolyFaceMeshVertex)
-  PRE (R_13b1)
+  SINCE (R_13b1)
   {
-    FIELD_2RD (point, 10);
-    FIELD_RC (flag, 0);
-    LOG_FLAG_VERTEX
-  }
-  LATER_VERSIONS {
     FIELD_RC (flag, 0);
     LOG_FLAG_VERTEX
     FIELD_3BD (point, 10);
@@ -1183,15 +1151,8 @@ DWG_ENTITY (VERTEX_PFACE)
 
   SUBCLASS (AcDbVertex)
   SUBCLASS (AcDbPolyFaceMeshVertex)
-  PRE (R_13b1)
+  SINCE (R_13b1)
   {
-    FIELD_2RD (point, 10);
-    if (R11OPTS (OPTS_R11_VERTEX_HAS_FLAG)) {
-      FIELD_RC (flag, 0);
-      LOG_FLAG_VERTEX
-    }
-  }
-  LATER_VERSIONS {
     FIELD_RC (flag, 0);
     LOG_FLAG_VERTEX
     FIELD_3BD (point, 10);
@@ -1226,26 +1187,8 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
   FIELD_VECTOR_INL (vertind, BS, 4, 71);
 #else
   //FIELD_VALUE (pt) = { 0.0, 0.0, 0.0 };
-  PRE (R_13b1)
+  SINCE (R_13b1)
   {
-    if (R11OPTS (OPTS_R11_VERTEX_HAS_FLAG)) {
-      FIELD_RC (flag, 0);
-      LOG_FLAG_VERTEX
-    }
-    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX1)) {
-      FIELD_RS (vertind[0], 71);
-    }
-    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX2)) {
-      FIELD_RS (vertind[1], 72);
-    }
-    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX3)) {
-      FIELD_RS (vertind[2], 73);
-    }
-    if (R11OPTS (OPTS_R11_VERTEX_HAS_INDEX4)) {
-      FIELD_RS (vertind[3], 74);
-    }
-  }
-  LATER_VERSIONS {
     FIELD_VALUE (flag) = 128;
     FIELD_BS (vertind[0], 71);
     FIELD_BS (vertind[1], 72);
@@ -1260,7 +1203,7 @@ DWG_ENTITY_END
 /* (15/19)
    Pre R13 polyline.
 */
-DWG_ENTITY (POLYLINE)
+DWG_ENTITY (POLYLINE_R11)
   PRE (R_13b1)
   {
     if (R11OPTS (0x1)) {
@@ -1273,6 +1216,7 @@ DWG_ENTITY (POLYLINE)
       FIELD_RD (end_width, 41);
     if (R11OPTS (0x8))
       FIELD_3RD (extrusion, 210);
+    // TODO numverts, numfaces for PFACE
     if (R11OPTS (0x10))
       FIELD_RS (num_m_verts, 71);
     if (R11OPTS (0x20))
@@ -1290,16 +1234,15 @@ DWG_ENTITY_END
 
 /* (none/20)
    Pre R13 vertex.
+   has all-in-one: n/m mesh (FLAG 16). curve-fit (FLAG 2),
+   spline-fit (FLAGS 4), 3dpline (FLAG 8), pface_mesh: FLAG 64
+   is_closed FLAG(1)
 */
-DWG_ENTITY (VERTEX)
+DWG_ENTITY (VERTEX_R11)
   PRE (R_13b1)
   {
     if (! R11OPTS(OPTS_R11_VERTEX_HAS_NOT_X_Y)) {
-#ifdef IN_JSON
-    FIELD_3RD (point, 10)
-#else
-    FIELD_2RD (point, 10);
-#endif
+      FIELD_2RD (point, 10);
     }
     if (R11OPTS (OPTS_R11_VERTEX_HAS_START_WIDTH))
       FIELD_RD (start_width, 40);
@@ -1326,8 +1269,7 @@ DWG_ENTITY (VERTEX)
   }
 DWG_ENTITY_END
 
-/* (15/none)
->>>>>>> 5ec9a501 (Add common preR13 POLYLINE and VERTEX entities)
+/* (15/19)
    r11 has all-in-one: n/m mesh (FLAG 16). curve-fit (FLAG 2),
    spline-fit (FLAGS 4), 3dpline (FLAG 8), pface_mesh: FLAG 64
    is_closed FLAG(1)
@@ -1336,43 +1278,6 @@ DWG_ENTITY (POLYLINE_2D)
 
   //SUBCLASS (AcDbCurve)
   SUBCLASS (AcDb2dPolyline)
-  PRE (R_13b1)
-  {
-    if (R11OPTS (1)) {
-      FIELD_CAST (flag, RC, BS, 70);
-      LOG_FLAG_POLYLINE
-    }
-    if (R11OPTS (2))
-      FIELD_RD (start_width, 40);
-    if (R11OPTS (4))
-      FIELD_RD (end_width, 41);
-    if (R11OPTS (8))
-      FIELD_3RD (extrusion, 210);
-    if (R11OPTS (16))
-      FIELD_RS (num_m_verts, 71);
-    if (R11OPTS (32))
-      FIELD_RS (num_n_verts, 72);
-    if (R11OPTS (0x100)) {
-      FIELD_RS (curve_type, 75);
-      LOG_POLYLINE_CURVETYPE
-    }
-    if (R11OPTS (OPTS_R11_POLYLINE_IN_EXTRA) &&
-        obj->size > 20)
-    {
-      // Note: layer is then the extras_start offset
-      DECODER {
-        _obj->extra_r11_size = (obj->address + obj->size - dat->byte) & 0xFFFFFFFF;
-        if (dat->version >= R_11b1)
-          _obj->extra_r11_size -= 2;
-        if (_obj->extra_r11_size > obj->size)
-          _obj->extra_r11_size = 0;
-      }
-      FIELD_TFv (extra_r11_text, _obj->extra_r11_size, 0);
-    }
-    DECODER {
-      FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
-    }
-  }
   SINCE (R_13b1)
   {
     DXF {
@@ -1439,27 +1344,7 @@ DWG_ENTITY (POLYLINE_3D)
   else {
     FIELD_VALUE (has_vertex) = 1;
   }
-  PRE (R_13b1)
-  {
-    if (R11OPTS (1)) {
-      FIELD_CAST (flag, RC, BS, 70);
-      LOG_FLAG_POLYLINE
-    }
-    if (R11OPTS (2))
-      FIELD_RD (start_width, 40);
-    if (R11OPTS (4))
-      FIELD_RD (end_width, 41);
-    if (R11OPTS (8))
-      FIELD_3RD (extrusion, 210);
-    if (R11OPTS (0x100)) { // 3dmesh only
-      FIELD_RS (curve_type, 75);
-      LOG_POLYLINE_CURVETYPE
-    }
-    DECODER {
-      FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
-    }
-  }
-  LATER_VERSIONS {
+  SINCE (R_13b1) {
     FIELD_RC0 (curve_type, 75);
     LOG_POLYLINE_CURVETYPE
     FIELD_RC (flag, 0);
@@ -2182,17 +2067,7 @@ DWG_ENTITY (POLYLINE_PFACE)
   else {
     FIELD_VALUE (has_vertex) = 1;
   }
-  PRE (R_13b1) {
-    if (R11OPTS (1)) {
-      FIELD_CAST (flag, RC, BS, 70);
-      LOG_FLAG_POLYLINE
-    }
-    if (R11OPTS (16))
-      FIELD_RS (numverts, 71);
-    if (R11OPTS (32))
-      FIELD_RS (numfaces, 72);
-  }
-  LATER_VERSIONS {
+  SINCE (R_13b1) {
     FIELD_BS (numverts, 71);
     FIELD_BS (numfaces, 72);
   }
@@ -2228,36 +2103,7 @@ DWG_ENTITY (POLYLINE_MESH)
     KEY (elevation); VALUE_3BD (pt, 10);
     KEY (flag); VALUE_BS (flag, 70);
   }
-  PRE (R_13b1) {
-    DXF {
-      FIELD_RS (num_m_verts, 71);
-      FIELD_RS (num_n_verts, 72);
-      FIELD_RS0 (m_density, 73);
-      FIELD_RS0 (n_density, 74);
-      FIELD_BS0 (curve_type, 75);
-    } else {
-      if (R11OPTS (1)) {
-        FIELD_CAST (flag, RC, BS, 70);
-        LOG_FLAG_POLYLINE
-      }
-      DECODER {
-        FIELD_VALUE (has_vertex) = R11FLAG (FLAG_R11_HAS_ATTRIBS) ? 1 : 0;
-      }
-      if (R11OPTS (16))
-        FIELD_RS (num_m_verts, 71);
-      if (R11OPTS (32))
-        FIELD_RS (num_n_verts, 72);
-      if (R11OPTS (64))
-        FIELD_RS (m_density, 73);
-      if (R11OPTS (128))
-        FIELD_RS (n_density, 74);
-      if (R11OPTS (256)) {
-        FIELD_RS (curve_type, 75);
-        LOG_POLYLINE_CURVETYPE
-      }
-    }
-  }
-  LATER_VERSIONS {
+  SINCE (R_13b1) {
     FIELD_BS (flag, 0);
     LOG_FLAG_POLYLINE
     FIELD_BS (curve_type, 75);
