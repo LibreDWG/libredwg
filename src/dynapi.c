@@ -3180,30 +3180,6 @@ static const Dwg_DYNAPI_field _dwg_POLARGRIPENTITY_fields[] = {
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_entity_POLYLINE: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_POLYLINE_fields[] = {
-  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_POLYLINE, parent),
-    1,1,0, 0 },
-  { "flag",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_POLYLINE, flag),
-    0,0,0, 70 },
-  { "start_width",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_POLYLINE, start_width),
-    0,0,0, 40 },
-  { "end_width",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_POLYLINE, end_width),
-    0,0,0, 41 },
-  { "extrusion",	"3RD", sizeof (BITCODE_3RD),  OFF (struct _dwg_entity_POLYLINE, extrusion),
-    1,0,0, 210 },
-  { "curve_type",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_POLYLINE, curve_type),
-    0,0,0, 75 },
-  { "num_m_verts",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_POLYLINE, num_m_verts),
-    0,0,0, 71 },
-  { "num_n_verts",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_POLYLINE, num_n_verts),
-    0,0,0, 72 },
-  { "m_density",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_POLYLINE, m_density),
-    0,0,0, 73 },
-  { "n_density",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_POLYLINE, n_density),
-    0,0,0, 74 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
 /* from typedef struct _dwg_entity_POLYLINE_2D: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_POLYLINE_2D_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_POLYLINE_2D, parent),
@@ -3234,14 +3210,6 @@ static const Dwg_DYNAPI_field _dwg_POLYLINE_2D_fields[] = {
     0,0,0, 0 },
   { "extrusion",	"BE", sizeof (BITCODE_BE),  OFF (struct _dwg_entity_POLYLINE_2D, extrusion),
     0,0,0, 210 },
-  { "extra_r11_size",	"BL", sizeof (BITCODE_BL),  OFF (struct _dwg_entity_POLYLINE_2D, extra_r11_size),
-    0,0,0, 0 },
-  { "extra_r11_text",	"TV", sizeof (BITCODE_TV),  OFF (struct _dwg_entity_POLYLINE_2D, extra_r11_text),
-    1,1,1, 0 },
-  { "num_m_verts",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_POLYLINE_2D, num_m_verts),
-    0,0,0, 71 },
-  { "num_n_verts",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_POLYLINE_2D, num_n_verts),
-    0,0,0, 72 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_POLYLINE_3D: (sorted by offset) */
@@ -3263,13 +3231,13 @@ static const Dwg_DYNAPI_field _dwg_POLYLINE_3D_fields[] = {
   { "curve_type",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_POLYLINE_3D, curve_type),
     0,0,0, 75 },
   { "start_width",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_POLYLINE_3D, start_width),
-    0,0,0, 40 },
+    0,0,0, 0 },
   { "end_width",	"BD", sizeof (BITCODE_BD),  OFF (struct _dwg_entity_POLYLINE_3D, end_width),
-    0,0,0, 41 },
+    0,0,0, 0 },
   { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_POLYLINE_3D, flag),
     0,0,0, 70 },
   { "extrusion",	"BE", sizeof (BITCODE_BE),  OFF (struct _dwg_entity_POLYLINE_3D, extrusion),
-    0,0,0, 210 },
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_POLYLINE_MESH: (sorted by offset) */
@@ -3324,6 +3292,30 @@ static const Dwg_DYNAPI_field _dwg_POLYLINE_PFACE_fields[] = {
     0,0,0, 71 },
   { "numfaces",	"BS", sizeof (BITCODE_BS),  OFF (struct _dwg_entity_POLYLINE_PFACE, numfaces),
     0,0,0, 72 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_entity_POLYLINE_R11: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_POLYLINE_R11_fields[] = {
+  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_POLYLINE_R11, parent),
+    1,1,0, 0 },
+  { "flag",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_POLYLINE_R11, flag),
+    0,0,0, 70 },
+  { "start_width",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_POLYLINE_R11, start_width),
+    0,0,0, 40 },
+  { "end_width",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_POLYLINE_R11, end_width),
+    0,0,0, 41 },
+  { "extrusion",	"3RD", sizeof (BITCODE_3RD),  OFF (struct _dwg_entity_POLYLINE_R11, extrusion),
+    1,0,0, 210 },
+  { "curve_type",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_POLYLINE_R11, curve_type),
+    0,0,0, 75 },
+  { "num_m_verts",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_POLYLINE_R11, num_m_verts),
+    0,0,0, 71 },
+  { "num_n_verts",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_POLYLINE_R11, num_n_verts),
+    0,0,0, 72 },
+  { "m_density",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_POLYLINE_R11, m_density),
+    0,0,0, 73 },
+  { "n_density",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_POLYLINE_R11, n_density),
+    0,0,0, 74 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_PROXY_ENTITY: (sorted by offset) */
@@ -4110,26 +4102,6 @@ static const Dwg_DYNAPI_field _dwg_UNKNOWN_ENT_fields[] = {
     1,1,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
-/* from typedef struct _dwg_entity_VERTEX: (sorted by offset) */
-static const Dwg_DYNAPI_field _dwg_VERTEX_fields[] = {
-  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_VERTEX, parent),
-    1,1,0, 0 },
-  { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_VERTEX, flag),
-    0,0,0, 0 },
-  { "point",	"2RD", sizeof (BITCODE_2RD),  OFF (struct _dwg_entity_VERTEX, point),
-    1,0,0, 10 },
-  { "start_width",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_VERTEX, start_width),
-    0,0,0, 40 },
-  { "end_width",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_VERTEX, end_width),
-    0,0,0, 41 },
-  { "bulge",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_VERTEX, bulge),
-    0,0,0, 42 },
-  { "tangent_dir",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_VERTEX, tangent_dir),
-    0,0,0, 0 },
-  { "vertind",	"BS", 4 * sizeof (BITCODE_BS),  OFF (struct _dwg_entity_VERTEX, vertind),
-    0,0,0, 0 },
-  {NULL,	NULL,	0,	0,	0,0,0, 0},
-};
 /* from typedef struct _dwg_entity_VERTEX_2D: (sorted by offset) */
 static const Dwg_DYNAPI_field _dwg_VERTEX_2D_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_VERTEX_2D, parent),
@@ -4168,6 +4140,26 @@ static const Dwg_DYNAPI_field _dwg_VERTEX_PFACE_FACE_fields[] = {
     0,0,0, 70 },
   { "vertind",	"BSd", 4 * sizeof (BITCODE_BSd),  OFF (struct _dwg_entity_VERTEX_PFACE_FACE, vertind),
     0,0,0, 71 },
+  {NULL,	NULL,	0,	0,	0,0,0, 0},
+};
+/* from typedef struct _dwg_entity_VERTEX_R11: (sorted by offset) */
+static const Dwg_DYNAPI_field _dwg_VERTEX_R11_fields[] = {
+  { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_VERTEX_R11, parent),
+    1,1,0, 0 },
+  { "flag",	"RC", sizeof (BITCODE_RC),  OFF (struct _dwg_entity_VERTEX_R11, flag),
+    0,0,0, 0 },
+  { "point",	"2RD", sizeof (BITCODE_2RD),  OFF (struct _dwg_entity_VERTEX_R11, point),
+    1,0,0, 10 },
+  { "start_width",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_VERTEX_R11, start_width),
+    0,0,0, 40 },
+  { "end_width",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_VERTEX_R11, end_width),
+    0,0,0, 41 },
+  { "bulge",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_VERTEX_R11, bulge),
+    0,0,0, 42 },
+  { "tangent_dir",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_VERTEX_R11, tangent_dir),
+    0,0,0, 0 },
+  { "vertind",	"RS", 4 * sizeof (BITCODE_RS),  OFF (struct _dwg_entity_VERTEX_R11, vertind),
+    0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
 /* from typedef struct _dwg_entity_VIEWPORT: (sorted by offset) */
@@ -14179,11 +14171,11 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "POINTPARAMETERENTITY", DWG_TYPE_POINTPARAMETERENTITY /*(691)*/, _dwg_POINTPARAMETERENTITY_fields, sizeof (struct _dwg_entity_POINTPARAMETERENTITY) },	/* 1021 */
   { "POINTPATH", DWG_TYPE_POINTPATH /*(692)*/, _dwg_POINTPATH_fields, sizeof (struct _dwg_object_POINTPATH) },	/* 1022 */
   { "POLARGRIPENTITY", DWG_TYPE_POLARGRIPENTITY /*(693)*/, _dwg_POLARGRIPENTITY_fields, sizeof (struct _dwg_entity_POLARGRIPENTITY) },	/* 1023 */
-  { "POLYLINE", DWG_TYPE_POLYLINE /*(744)*/, _dwg_POLYLINE_fields, sizeof (struct _dwg_entity_POLYLINE) },	/* 1024 */
-  { "POLYLINE_2D", DWG_TYPE_POLYLINE_2D /*(15)*/, _dwg_POLYLINE_2D_fields, sizeof (struct _dwg_entity_POLYLINE_2D) },	/* 1025 */
-  { "POLYLINE_3D", DWG_TYPE_POLYLINE_3D /*(16)*/, _dwg_POLYLINE_3D_fields, sizeof (struct _dwg_entity_POLYLINE_3D) },	/* 1026 */
-  { "POLYLINE_MESH", DWG_TYPE_POLYLINE_MESH /*(30)*/, _dwg_POLYLINE_MESH_fields, sizeof (struct _dwg_entity_POLYLINE_MESH) },	/* 1027 */
-  { "POLYLINE_PFACE", DWG_TYPE_POLYLINE_PFACE /*(29)*/, _dwg_POLYLINE_PFACE_fields, sizeof (struct _dwg_entity_POLYLINE_PFACE) },	/* 1028 */
+  { "POLYLINE_2D", DWG_TYPE_POLYLINE_2D /*(15)*/, _dwg_POLYLINE_2D_fields, sizeof (struct _dwg_entity_POLYLINE_2D) },	/* 1024 */
+  { "POLYLINE_3D", DWG_TYPE_POLYLINE_3D /*(16)*/, _dwg_POLYLINE_3D_fields, sizeof (struct _dwg_entity_POLYLINE_3D) },	/* 1025 */
+  { "POLYLINE_MESH", DWG_TYPE_POLYLINE_MESH /*(30)*/, _dwg_POLYLINE_MESH_fields, sizeof (struct _dwg_entity_POLYLINE_MESH) },	/* 1026 */
+  { "POLYLINE_PFACE", DWG_TYPE_POLYLINE_PFACE /*(29)*/, _dwg_POLYLINE_PFACE_fields, sizeof (struct _dwg_entity_POLYLINE_PFACE) },	/* 1027 */
+  { "POLYLINE_R11", DWG_TYPE_POLYLINE_R11 /*(744)*/, _dwg_POLYLINE_R11_fields, sizeof (struct _dwg_entity_POLYLINE_R11) },	/* 1028 */
   { "PROXY_ENTITY", DWG_TYPE_PROXY_ENTITY /*(498)*/, _dwg_PROXY_ENTITY_fields, sizeof (struct _dwg_entity_PROXY_ENTITY) },	/* 1029 */
   { "PROXY_OBJECT", DWG_TYPE_PROXY_OBJECT /*(499)*/, _dwg_PROXY_OBJECT_fields, sizeof (struct _dwg_object_PROXY_OBJECT) },	/* 1030 */
   { "RADIMLGOBJECTCONTEXTDATA", DWG_TYPE_RADIMLGOBJECTCONTEXTDATA /*(694)*/, _dwg_RADIMLGOBJECTCONTEXTDATA_fields, sizeof (struct _dwg_object_RADIMLGOBJECTCONTEXTDATA) },	/* 1031 */
@@ -14257,12 +14249,12 @@ static const struct _name_type_fields dwg_name_types[] = {
   { "VAACIMAGEINVENTORY", DWG_TYPE_VAACIMAGEINVENTORY /*(1540)*/, NULL, 0 },	/* 1099 */
   { "VAACXREFPANELOBJECT", DWG_TYPE_VAACXREFPANELOBJECT /*(1541)*/, NULL, 0 },	/* 1100 */
   { "VBA_PROJECT", DWG_TYPE_VBA_PROJECT /*(81)*/, _dwg_VBA_PROJECT_fields, sizeof (struct _dwg_object_VBA_PROJECT) },	/* 1101 */
-  { "VERTEX", DWG_TYPE_VERTEX /*(745)*/, _dwg_VERTEX_fields, sizeof (struct _dwg_entity_VERTEX) },	/* 1102 */
-  { "VERTEX_2D", DWG_TYPE_VERTEX_2D /*(10)*/, _dwg_VERTEX_2D_fields, sizeof (struct _dwg_entity_VERTEX_2D) },	/* 1103 */
-  { "VERTEX_3D", DWG_TYPE_VERTEX_3D /*(11)*/, _dwg_VERTEX_3D_fields, sizeof (struct _dwg_entity_VERTEX_3D) },	/* 1104 */
-  { "VERTEX_MESH", DWG_TYPE_VERTEX_MESH /*(12)*/, _dwg_VERTEX_3D_fields, sizeof (struct _dwg_entity_VERTEX_3D) },	/* 1105 */
-  { "VERTEX_PFACE", DWG_TYPE_VERTEX_PFACE /*(13)*/, _dwg_VERTEX_3D_fields, sizeof (struct _dwg_entity_VERTEX_3D) },	/* 1106 */
-  { "VERTEX_PFACE_FACE", DWG_TYPE_VERTEX_PFACE_FACE /*(14)*/, _dwg_VERTEX_PFACE_FACE_fields, sizeof (struct _dwg_entity_VERTEX_PFACE_FACE) },	/* 1107 */
+  { "VERTEX_2D", DWG_TYPE_VERTEX_2D /*(10)*/, _dwg_VERTEX_2D_fields, sizeof (struct _dwg_entity_VERTEX_2D) },	/* 1102 */
+  { "VERTEX_3D", DWG_TYPE_VERTEX_3D /*(11)*/, _dwg_VERTEX_3D_fields, sizeof (struct _dwg_entity_VERTEX_3D) },	/* 1103 */
+  { "VERTEX_MESH", DWG_TYPE_VERTEX_MESH /*(12)*/, _dwg_VERTEX_3D_fields, sizeof (struct _dwg_entity_VERTEX_3D) },	/* 1104 */
+  { "VERTEX_PFACE", DWG_TYPE_VERTEX_PFACE /*(13)*/, _dwg_VERTEX_3D_fields, sizeof (struct _dwg_entity_VERTEX_3D) },	/* 1105 */
+  { "VERTEX_PFACE_FACE", DWG_TYPE_VERTEX_PFACE_FACE /*(14)*/, _dwg_VERTEX_PFACE_FACE_fields, sizeof (struct _dwg_entity_VERTEX_PFACE_FACE) },	/* 1106 */
+  { "VERTEX_R11", DWG_TYPE_VERTEX_R11 /*(745)*/, _dwg_VERTEX_R11_fields, sizeof (struct _dwg_entity_VERTEX_R11) },	/* 1107 */
   { "VIEW", DWG_TYPE_VIEW /*(61)*/, _dwg_VIEW_fields, sizeof (struct _dwg_object_VIEW) },	/* 1108 */
   { "VIEWPORT", DWG_TYPE_VIEWPORT /*(34)*/, _dwg_VIEWPORT_fields, sizeof (struct _dwg_entity_VIEWPORT) },	/* 1109 */
   { "VIEW_CONTROL", DWG_TYPE_VIEW_CONTROL /*(60)*/, _dwg_VIEW_CONTROL_fields, sizeof (struct _dwg_object_VIEW_CONTROL) },	/* 1110 */
@@ -14664,11 +14656,11 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
   { "POINTPARAMETERENTITY", {"AcDbEntity", "AcDbBlockPointParameterEntity", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "POINTPATH", {"AcDbObject", "AcDbPointPath", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "POLARGRIPENTITY", {"AcDbEntity", "AcDbBlockPolarGripEntity", NULL, NULL, NULL, NULL, NULL, NULL} },
-  { "POLYLINE", {"AcDbEntity", NULL, NULL, NULL, NULL, NULL, NULL, NULL} },
   { "POLYLINE_2D", {"AcDbEntity", "AcDb2dPolyline", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "POLYLINE_3D", {"AcDbEntity", "AcDb3dPolyline", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "POLYLINE_MESH", {"AcDbEntity", "AcDbPolygonMesh", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "POLYLINE_PFACE", {"AcDbEntity", "AcDbPolyFaceMesh", NULL, NULL, NULL, NULL, NULL, NULL} },
+  { "POLYLINE_R11", {"AcDbEntity", NULL, NULL, NULL, NULL, NULL, NULL, NULL} },
   { "PROXY_ENTITY", {"AcDbEntity", "AcDbProxyEntity", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "PROXY_OBJECT", {"AcDbObject", "AcDbZombieObject", "AcDbZombieObject", "AcDbProxyObject", NULL, NULL, NULL, NULL} },
   { "RADIMLGOBJECTCONTEXTDATA", {"AcDbObject", "AcDbObjectContextData", "AcDbAnnotScaleObjectContextData", "AcDbDimensionObjectContextData", "AcDbRadialDimensionLargeObjectContextData", NULL, NULL, NULL} },
@@ -14719,12 +14711,12 @@ static const struct _name_subclasses dwg_name_subclasses[] = {
   { "UNKNOWN_ENT", {"AcDbEntity", NULL, NULL, NULL, NULL, NULL, NULL, NULL} },
   { "UNKNOWN_OBJ", {"AcDbObject", NULL, NULL, NULL, NULL, NULL, NULL, NULL} },
   { "VBA_PROJECT", {"AcDbObject", "AcDbVbaProject", NULL, NULL, NULL, NULL, NULL, NULL} },
-  { "VERTEX", {"AcDbEntity", NULL, NULL, NULL, NULL, NULL, NULL, NULL} },
   { "VERTEX_2D", {"AcDbEntity", "AcDbVertex", "AcDb2dVertex", NULL, NULL, NULL, NULL, NULL} },
   { "VERTEX_3D", {"AcDbEntity", "AcDbVertex", "AcDb3dPolylineVertex", NULL, NULL, NULL, NULL, NULL} },
   { "VERTEX_MESH", {"AcDbEntity", "AcDbVertex", "AcDbPolyFaceMeshVertex", NULL, NULL, NULL, NULL, NULL} },
   { "VERTEX_PFACE", {"AcDbEntity", "AcDbVertex", "AcDbPolyFaceMeshVertex", NULL, NULL, NULL, NULL, NULL} },
   { "VERTEX_PFACE_FACE", {"AcDbEntity", "AcDbFaceRecord", NULL, NULL, NULL, NULL, NULL, NULL} },
+  { "VERTEX_R11", {"AcDbEntity", NULL, NULL, NULL, NULL, NULL, NULL, NULL} },
   { "VIEW", {"AcDbSymbolTableRecord", "AcDbViewTableRecord", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "VIEWPORT", {"AcDbEntity", "AcDbViewport", NULL, NULL, NULL, NULL, NULL, NULL} },
   { "VIEW_CONTROL", {"AcDbSymbolTable", NULL, NULL, NULL, NULL, NULL, NULL, NULL} },
