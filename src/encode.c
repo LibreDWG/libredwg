@@ -5137,6 +5137,10 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
   case DWG_TYPE_##ty:                                                         \
     *error |= dwg_encode_##ty (dat, obj);                                     \
     break
+#define CASE_ENCODE_TYPE_R11(ty,gen)                                          \
+  case DWG_TYPE_##ty:                                                         \
+    *error |= dwg_encode_##gen##_R11 (dat, obj);                              \
+    break
 
       switch (obj->fixedtype)
         {
@@ -5158,8 +5162,15 @@ encode_preR13_entities (EntitySectionIndexR11 section, Bit_Chain *restrict dat,
         CASE_ENCODE_TYPE (ATTRIB);
         CASE_ENCODE_TYPE (SEQEND);
         CASE_ENCODE_TYPE (JUMP);
-        CASE_ENCODE_TYPE (POLYLINE);
-        CASE_ENCODE_TYPE (VERTEX);
+        CASE_ENCODE_TYPE_R11 (POLYLINE_2D, POLYLINE);
+        CASE_ENCODE_TYPE_R11 (POLYLINE_3D, POLYLINE);
+        CASE_ENCODE_TYPE_R11 (POLYLINE_MESH, POLYLINE);
+        CASE_ENCODE_TYPE_R11 (POLYLINE_PFACE, POLYLINE);
+        CASE_ENCODE_TYPE_R11 (VERTEX_2D, VERTEX);
+        CASE_ENCODE_TYPE_R11 (VERTEX_3D, VERTEX);
+        CASE_ENCODE_TYPE_R11 (VERTEX_MESH, VERTEX);
+        CASE_ENCODE_TYPE_R11 (VERTEX_PFACE, VERTEX);
+        CASE_ENCODE_TYPE_R11 (VERTEX_PFACE_FACE, VERTEX);
         CASE_ENCODE_TYPE (_3DLINE);
         CASE_ENCODE_TYPE (_3DFACE);
         CASE_ENCODE_TYPE (DIMENSION_ORDINATE);
