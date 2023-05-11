@@ -6547,40 +6547,40 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
 
           switch (abstype)
             {
-            case DWG_TYPE_LINE_R11:
+            case DWG_TYPE_LINE_r11:
               error |= dwg_decode_LINE (dat, obj);
               break;
-            case DWG_TYPE_POINT_R11:
+            case DWG_TYPE_POINT_r11:
               error |= dwg_decode_POINT (dat, obj);
               break;
-            case DWG_TYPE_CIRCLE_R11:
+            case DWG_TYPE_CIRCLE_r11:
               error |= dwg_decode_CIRCLE (dat, obj);
               break;
-            case DWG_TYPE_SHAPE_R11:
+            case DWG_TYPE_SHAPE_r11:
               error |= dwg_decode_SHAPE (dat, obj);
               break;
-            case DWG_TYPE_REPEAT_R11:
+            case DWG_TYPE_REPEAT_r11:
               error |= dwg_decode_REPEAT (dat, obj);
               break;
-            case DWG_TYPE_ENDREP_R11:
+            case DWG_TYPE_ENDREP_r11:
               error |= dwg_decode_ENDREP (dat, obj);
               break;
-            case DWG_TYPE_TEXT_R11:
+            case DWG_TYPE_TEXT_r11:
               error |= dwg_decode_TEXT (dat, obj);
               break;
-            case DWG_TYPE_ARC_R11:
+            case DWG_TYPE_ARC_r11:
               error |= dwg_decode_ARC (dat, obj);
               break;
-            case DWG_TYPE_TRACE_R11:
+            case DWG_TYPE_TRACE_r11:
               error |= dwg_decode_TRACE (dat, obj);
               break;
-            case DWG_TYPE_LOAD_R11:
+            case DWG_TYPE_LOAD_r11:
               error |= dwg_decode_LOAD (dat, obj);
               break;
-            case DWG_TYPE_SOLID_R11:
+            case DWG_TYPE_SOLID_r11:
               error |= dwg_decode_SOLID (dat, obj);
               break;
-            case DWG_TYPE_BLOCK_R11:
+            case DWG_TYPE_BLOCK_r11:
               {
                 BITCODE_RL cur_offset;
                 BITCODE_RL cur_offset_prefix = 0;
@@ -6646,7 +6646,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 }
               }
               break;
-            case DWG_TYPE_ENDBLK_R11:
+            case DWG_TYPE_ENDBLK_r11:
               error |= dwg_decode_ENDBLK (dat, obj);
               if (_hdr)
                 {
@@ -6659,22 +6659,22 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               hdr = NULL;
               _hdr = NULL;
               break;
-            case DWG_TYPE_INSERT_R11:
+            case DWG_TYPE_INSERT_r11:
               error |= dwg_decode_INSERT (dat, obj);
               break;
-            case DWG_TYPE_ATTDEF_R11:
+            case DWG_TYPE_ATTDEF_r11:
               error |= dwg_decode_ATTDEF (dat, obj);
               break;
-            case DWG_TYPE_ATTRIB_R11:
+            case DWG_TYPE_ATTRIB_r11:
               error |= dwg_decode_ATTRIB (dat, obj);
               break;
-            case DWG_TYPE_SEQEND_R11:
+            case DWG_TYPE_SEQEND_r11:
               error |= dwg_decode_SEQEND (dat, obj);
               break;
-            case DWG_TYPE_JUMP_R11:
+            case DWG_TYPE_JUMP_r11:
               error |= dwg_decode_JUMP (dat, obj);
               break;
-            case DWG_TYPE_POLYLINE_R11:
+            case DWG_TYPE_POLYLINE_r11:
               { // which polyline
                 BITCODE_RC flag_r11;
                 BITCODE_RS opts_r11;
@@ -6734,7 +6734,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 }
               }
               break;
-            case DWG_TYPE_VERTEX_R11:
+            case DWG_TYPE_VERTEX_r11:
               { // which vertex?
                 BITCODE_RC flag_r11;
                 BITCODE_RS opts_r11;
@@ -6805,16 +6805,16 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 }
               }
               break;
-            case DWG_TYPE_3DLINE_R11:
+            case DWG_TYPE_3DLINE_r11:
               error |= dwg_decode__3DLINE (dat, obj);
               break;
-            case DWG_TYPE_3DFACE_R11:
+            case DWG_TYPE_3DFACE_r11:
               error |= dwg_decode__3DFACE (dat, obj);
               break;
-            case DWG_TYPE_DIMENSION_R11:
+            case DWG_TYPE_DIMENSION_r11:
               error |= decode_preR13_DIMENSION (dat, obj);
               break;
-            case DWG_TYPE_VIEWPORT_R11:
+            case DWG_TYPE_VIEWPORT_r11:
               error |= dwg_decode_VIEWPORT (dat, obj);
               break;
             default:
@@ -6833,7 +6833,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
             if (num + 1 > dwg->num_objects)
               break;
           }
-          if (obj->type != DWG_TYPE_JUMP_R11)
+          if (obj->type != DWG_TYPE_JUMP_r11)
             {
               SINCE (R_2_0b) // Pre R_2_0 doesn't contain size of entity
               {
@@ -6866,7 +6866,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               && obj->supertype == DWG_SUPERTYPE_ENTITY
               && obj->fixedtype != DWG_TYPE_UNUSED
               && obj->fixedtype != DWG_TYPE_JUMP
-              && obj->type != DWG_TYPE_VERTEX_R11
+              && obj->type != DWG_TYPE_VERTEX_r11
               && obj->fixedtype != DWG_TYPE_SEQEND)
             {
               BITCODE_H ref;

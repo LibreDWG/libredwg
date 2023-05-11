@@ -4263,7 +4263,7 @@ encode_preR13_entities (EntitySectionIndexR11 section,
                      obj->name, obj->index, obj->type, obj->address, dat->byte);
         }
       // skip first 2 mspace block/endblk entities
-      if (obj->type == DWG_TYPE_UNUSED_R11 && obj->index < 13)
+      if (obj->type == DWG_TYPE_UNUSED_r11 && obj->index < 13)
         {
           LOG_HANDLE ("Unused entity %s, number: %d, Fixedtype: %d, Addr: %zx (0x%zx)\n",
                      obj->name, obj->index, obj->fixedtype, obj->address,
