@@ -60,10 +60,10 @@
           LOG_TRACE("size: %d [RS]", obj->size);
           LOG_POS
         }
-        if (obj->type != DWG_TYPE_JUMP_R11)
+        if (obj->type != DWG_TYPE_JUMP_r11)
           FIELD_HANDLE (layer, 2, 8);
       }
-      if (obj->type != DWG_TYPE_JUMP_R11)
+      if (obj->type != DWG_TYPE_JUMP_r11)
         {
           FIELD_RSx (opts_r11, 0); // i.e. dataflags
 #ifdef IS_DECODER
@@ -72,17 +72,17 @@
               LOG_TRACE ("          ");
               // stringify the flag bits
 #  define LOG_OPTS_R11(e, w)                                                  \
-    if (obj->type == DWG_TYPE_##e##_R11 && (R11OPTS (OPTS_R11_##e##_##w)))    \
+    if (obj->type == DWG_TYPE_##e##_r11 && (R11OPTS (OPTS_R11_##e##_##w)))    \
       LOG_TRACE (#w "(0x%x) ", OPTS_R11_##e##_##w)
 #  define LOG_OPTS_R11_MAX(e, v)                                              \
-    if (obj->type == DWG_TYPE_##e##_R11 && _obj->opts_r11 > v)                \
+    if (obj->type == DWG_TYPE_##e##_r11 && _obj->opts_r11 > v)                \
         LOG_WARN ("Unknown " #e " opts_r11 (0x%x)", _obj->opts_r11 & ~(v))
 #  define LOG_OPTS_R11_POLYLINE(w)                                            \
-    if (obj->type == DWG_TYPE_POLYLINE_R11                                    \
+    if (obj->type == DWG_TYPE_POLYLINE_r11                                    \
         && (R11OPTS (OPTS_R11_POLYLINE_##w)))                                 \
     LOG_TRACE (#w "(0x%x) ", OPTS_R11_POLYLINE_##w)
 #  define LOG_OPTS_R11_POLYLINE_MAX(v)                                        \
-    if (obj->type == DWG_TYPE_POLYLINE_R11                                    \
+    if (obj->type == DWG_TYPE_POLYLINE_r11                                    \
         && _obj->opts_r11 > v)                                                \
     LOG_WARN ("Unknown POLYLINE opts_r11 (0x%x)", _obj->opts_r11 & ~(v))
 

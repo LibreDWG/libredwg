@@ -535,11 +535,11 @@ DWG_GETALL_ENTITY (OLE2FRAME)
 DWG_GETALL_ENTITY (OLEFRAME)
 DWG_GETALL_ENTITY (PDFUNDERLAY)
 DWG_GETALL_ENTITY (POINT)
-DWG_GETALL_ENTITY (POLYLINE)
 DWG_GETALL_ENTITY (POLYLINE_2D)
 DWG_GETALL_ENTITY (POLYLINE_3D)
 DWG_GETALL_ENTITY (POLYLINE_MESH)
 DWG_GETALL_ENTITY (POLYLINE_PFACE)
+DWG_GETALL_ENTITY (POLYLINE_R11)
 DWG_GETALL_ENTITY (PROXY_ENTITY)
 DWG_GETALL_ENTITY (RAY)
 DWG_GETALL_ENTITY (REGION)
@@ -552,12 +552,12 @@ DWG_GETALL_ENTITY (TEXT)
 DWG_GETALL_ENTITY (TOLERANCE)
 DWG_GETALL_ENTITY (TRACE)
 DWG_GETALL_ENTITY (UNKNOWN_ENT)
-DWG_GETALL_ENTITY (VERTEX)
 DWG_GETALL_ENTITY (VERTEX_2D)
 DWG_GETALL_ENTITY (VERTEX_3D)
 DWG_GETALL_ENTITY (VERTEX_MESH)
 DWG_GETALL_ENTITY (VERTEX_PFACE)
 DWG_GETALL_ENTITY (VERTEX_PFACE_FACE)
+DWG_GETALL_ENTITY (VERTEX_R11)
 DWG_GETALL_ENTITY (VIEWPORT)
 DWG_GETALL_ENTITY (XLINE)
 /* unstable */
@@ -876,11 +876,11 @@ CAST_DWG_OBJECT_TO_ENTITY (MLINE)
 CAST_DWG_OBJECT_TO_ENTITY (MTEXT)
 CAST_DWG_OBJECT_TO_ENTITY (OLEFRAME)
 CAST_DWG_OBJECT_TO_ENTITY (POINT)
-CAST_DWG_OBJECT_TO_ENTITY (POLYLINE)
 CAST_DWG_OBJECT_TO_ENTITY (POLYLINE_2D)
 CAST_DWG_OBJECT_TO_ENTITY (POLYLINE_3D)
 CAST_DWG_OBJECT_TO_ENTITY (POLYLINE_MESH)
 CAST_DWG_OBJECT_TO_ENTITY (POLYLINE_PFACE)
+CAST_DWG_OBJECT_TO_ENTITY (POLYLINE_R11)
 CAST_DWG_OBJECT_TO_ENTITY (PROXY_ENTITY)
 CAST_DWG_OBJECT_TO_ENTITY (RAY)
 CAST_DWG_OBJECT_TO_ENTITY (REGION)
@@ -892,12 +892,12 @@ CAST_DWG_OBJECT_TO_ENTITY (TEXT)
 CAST_DWG_OBJECT_TO_ENTITY (TOLERANCE)
 CAST_DWG_OBJECT_TO_ENTITY (TRACE)
 CAST_DWG_OBJECT_TO_ENTITY (UNKNOWN_ENT)
-CAST_DWG_OBJECT_TO_ENTITY (VERTEX)
 CAST_DWG_OBJECT_TO_ENTITY (VERTEX_2D)
 CAST_DWG_OBJECT_TO_ENTITY (VERTEX_3D)
 CAST_DWG_OBJECT_TO_ENTITY (VERTEX_MESH)
 CAST_DWG_OBJECT_TO_ENTITY (VERTEX_PFACE)
 CAST_DWG_OBJECT_TO_ENTITY (VERTEX_PFACE_FACE)
+CAST_DWG_OBJECT_TO_ENTITY (VERTEX_R11)
 CAST_DWG_OBJECT_TO_ENTITY (VIEWPORT)
 CAST_DWG_OBJECT_TO_ENTITY (XLINE)
 /* untyped > 500 */
@@ -22264,7 +22264,7 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
         }
       return tgt;
 #  endif
-      if (dwg->header.version <= R_11 && strlen (u8str) < 32)
+      if (dwg->header.version <= R_12 && strlen (u8str) < 32)
         {
           // those old names are usually 32byte, and bit_write_TF
           // might heap-overflow then.
@@ -22709,19 +22709,19 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   {
     // BLOCK: (5.1.24)
     Dwg_Entity_BLOCK *block = dwg_add_BLOCK (mspace, "*MODEL_SPACE");
-    if (dwg->header.version <= R_11) // fixup the type
+    if (dwg->header.version <= R_12) // fixup the type
       {
         obj = dwg_obj_generic_to_object (block, &error);
-        obj->type = DWG_TYPE_UNUSED_R11; // don't encode it
+        obj->type = DWG_TYPE_UNUSED_r11; // don't encode it
       }
   }
   {
     // ENDBLK: (5.1.25)
     Dwg_Entity_ENDBLK *endblk = dwg_add_ENDBLK (mspace);
-    if (dwg->header.version <= R_11) // fixup the type
+    if (dwg->header.version <= R_12) // fixup the type
       {
         obj = dwg_obj_generic_to_object (endblk, &error);
-        obj->type = DWG_TYPE_UNUSED_R11; // don't encode it
+        obj->type = DWG_TYPE_UNUSED_r11; // don't encode it
       }
   }
   if (dwg->header.version >= R_2000)
@@ -23109,9 +23109,9 @@ dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (dwg->header_vars.TEXTSTYLE)
     _obj->style = dwg_add_handleref (
         dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_TEXT_R11;
+      obj->type = DWG_TYPE_TEXT_r11;
       if (_obj->elevation == 0.0)
         obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
@@ -23252,9 +23252,9 @@ dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert, const double height,
   insert->has_attribs = 1;
   // TODO: if !blkhdr->hasattrs: error no ATTDEF
   insert->block_header = dwg_add_handleref (dwg, 3, blkobj->handle.value, insobj);
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_ATTRIB_R11;
+      obj->type = DWG_TYPE_ATTRIB_r11;
       if (_obj->elevation == 0.0)
         obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
@@ -23297,9 +23297,9 @@ dwg_add_ATTDEF (Dwg_Object_BLOCK_HEADER *restrict blkhdr, const double height,
     _obj->style = dwg_add_handleref (
         dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
   blkhdr->hasattrs = 1;
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_ATTDEF_R11;
+      obj->type = DWG_TYPE_ATTDEF_r11;
       if (_obj->elevation == 0.0)
         obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
@@ -23311,8 +23311,8 @@ dwg_add_BLOCK (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const char *restrict name)
 {
   API_ADD_ENTITY (BLOCK);
-  if (dwg->header.version <= R_11)
-    obj->type = DWG_TYPE_BLOCK_R11;
+  if (dwg->header.version <= R_12)
+    obj->type = DWG_TYPE_BLOCK_r11;
   _obj->name = dwg_add_u8_input (dwg, name);
   return _obj;
 }
@@ -23321,8 +23321,8 @@ EXPORT Dwg_Entity_ENDBLK *
 dwg_add_ENDBLK (Dwg_Object_BLOCK_HEADER *restrict blkhdr)
 {
   API_ADD_ENTITY (ENDBLK);
-  if (dwg->header.version <= R_11)
-    obj->type = DWG_TYPE_ENDBLK_R11;
+  if (dwg->header.version <= R_12)
+    obj->type = DWG_TYPE_ENDBLK_r11;
   dwg_fixup_BLOCKS_entities (dwg);
   return _obj;
 }
@@ -23332,8 +23332,8 @@ EXPORT Dwg_Entity_SEQEND *
 dwg_add_SEQEND (dwg_ent_generic *restrict blkhdr)
 {
   API_ADD_ENTITY (SEQEND);
-  if (dwg->header.version <= R_11)
-    obj->type = DWG_TYPE_SEQEND_R11;
+  if (dwg->header.version <= R_12)
+    obj->type = DWG_TYPE_SEQEND_r11;
   return _obj;
 }
 
@@ -23379,9 +23379,9 @@ dwg_add_INSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     }
   if (dwg->header.version < R_2_0b)
     _obj->block_name = strdup (name);
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_INSERT_R11;
+      obj->type = DWG_TYPE_INSERT_r11;
       if (_obj->ins_pt.z == 0.0)
         {
           obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
@@ -23437,9 +23437,9 @@ dwg_add_MINSERT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       blkhdr->inserts[blkhdr->num_inserts - 1]
           = dwg_add_handleref (dwg, 4, obj->handle.value, NULL);
     }
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_INSERT_R11;
+      obj->type = DWG_TYPE_INSERT_r11;
       if (_obj->ins_pt.z == 0.0)
         {
           obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
@@ -23463,9 +23463,9 @@ dwg_add_VERTEX_2D (Dwg_Entity_POLYLINE_2D *restrict pline,
   _obj->point.x = point->x;
   _obj->point.y = point->y;
   _obj->flag = 0x20;
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_VERTEX_R11;
+      obj->type = DWG_TYPE_VERTEX_r11;
       if (_obj->point.z == 0.0)
         {
           obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
@@ -23489,9 +23489,9 @@ dwg_add_VERTEX_3D (Dwg_Entity_POLYLINE_3D *restrict pline,
   _obj->point.y = point->y;
   _obj->point.z = point->z;
   _obj->flag = 0x20;
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_VERTEX_R11;
+      obj->type = DWG_TYPE_VERTEX_r11;
       if (_obj->point.z == 0.0)
         {
           obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
@@ -23555,8 +23555,8 @@ dwg_add_POLYLINE_2D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _pl->seqend
       = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
   pl->tio.entity->next_entity = NULL;
-  if (dwg->header.version <= R_11)
-    obj->type = DWG_TYPE_POLYLINE_R11;
+  if (dwg->header.version <= R_12)
+    obj->type = DWG_TYPE_POLYLINE_r11;
 
   _pl->num_owned = num_pts;
   IN_POSTPROCESS_SEQEND (obj, _pl->num_owned, _pl->vertex);
@@ -23617,8 +23617,8 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _pl->seqend
       = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
   pl->tio.entity->next_entity = NULL;
-  if (dwg->header.version <= R_11)
-    obj->type = DWG_TYPE_POLYLINE_R11;
+  if (dwg->header.version <= R_12)
+    obj->type = DWG_TYPE_POLYLINE_r11;
 
   _pl->num_owned = num_pts;
   IN_POSTPROCESS_SEQEND (obj, _pl->num_owned, _pl->vertex);
@@ -23638,9 +23638,9 @@ dwg_add_VERTEX_PFACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
   _obj->point.x = point->x;
   _obj->point.y = point->y;
   _obj->point.z = point->z;
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_VERTEX_R11;
+      obj->type = DWG_TYPE_VERTEX_r11;
       obj->tio.entity->opts_r11 = OPTS_R11_VERTEX_HAS_FLAG;
     }
   _obj->flag = 0xc0;
@@ -23661,9 +23661,9 @@ dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
   _obj->vertind[1] = vertind[1];
   _obj->vertind[2] = vertind[2];
   _obj->vertind[3] = vertind[3];
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_VERTEX_R11;
+      obj->type = DWG_TYPE_VERTEX_r11;
       obj->tio.entity->flag_r11 = 128;
       obj->tio.entity->opts_r11 = OPTS_R11_VERTEX_HAS_FLAG;
     }
@@ -23746,8 +23746,8 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
   IN_POSTPROCESS_SEQEND (obj, _pl->num_owned, _pl->vertex);
   pl->tio.entity->next_entity = NULL; // fixup
-  if (dwg->header.version <= R_11)
-    obj->type = DWG_TYPE_POLYLINE_R11;
+  if (dwg->header.version <= R_12)
+    obj->type = DWG_TYPE_POLYLINE_r11;
   return _pl;
 }
 
@@ -23764,9 +23764,9 @@ dwg_add_VERTEX_MESH (Dwg_Entity_POLYLINE_MESH *restrict pline,
   _obj->point.x = point->x;
   _obj->point.y = point->y;
   _obj->point.z = point->z;
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_VERTEX_R11;
+      obj->type = DWG_TYPE_VERTEX_r11;
       //obj->tio.entity->flag_r11 = 0;
       if (_obj->point.z != 0.0)
         {
@@ -23834,9 +23834,9 @@ dwg_add_POLYLINE_MESH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _pl->seqend
       = dwg_add_handleref (dwg, 3, dwg_obj_generic_handlevalue (_seq), pl);
   pl->tio.entity->next_entity = NULL;
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_POLYLINE_R11;
+      obj->type = DWG_TYPE_POLYLINE_r11;
       obj->tio.entity->opts_r11 = OPTS_R11_POLYLINE_HAS_FLAG;
       if (_pl->num_owned)
         obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ATTRIBS;
@@ -23864,9 +23864,9 @@ dwg_add_ARC (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->end_angle = end_angle;
   ADD_CHECK_ANGLE (_obj->start_angle);
   ADD_CHECK_ANGLE (_obj->end_angle);
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_ARC_R11;
+      obj->type = DWG_TYPE_ARC_r11;
       if (_obj->center.z == 0.0)
         obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
@@ -23883,9 +23883,9 @@ dwg_add_CIRCLE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->center.y = center->y;
   _obj->center.z = center->z;
   _obj->radius = radius;
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_CIRCLE_R11;
+      obj->type = DWG_TYPE_CIRCLE_r11;
       // UNTESTED
       if (_obj->center.z == 0.0)
         obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
@@ -23909,32 +23909,32 @@ dwg_add_LINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->end.z = end_pt->z;
 
   if (dwg->header.version < R_10)
-    obj->type = DWG_TYPE_LINE_R11;
+    obj->type = DWG_TYPE_LINE_r11;
   if (dwg->header.version >= R_2_4 && dwg->header.version < R_10)
     {
       if (_obj->start.z != 0.0)
         {
-          obj->type = DWG_TYPE_3DLINE_R11;
+          obj->type = DWG_TYPE_3DLINE_r11;
           obj->fixedtype = DWG_TYPE__3DLINE;
           obj->tio.entity->opts_r11 |= 1;
         }
       if (_obj->end.z != 0.0)
         {
-          obj->type = DWG_TYPE_3DLINE_R11;
+          obj->type = DWG_TYPE_3DLINE_r11;
           obj->fixedtype = DWG_TYPE__3DLINE;
           obj->tio.entity->opts_r11 |= 2;
         }
     }
-  if (dwg->header.version >= R_10 && dwg->header.version <= R_11)
+  if (dwg->header.version >= R_10 && dwg->header.version <= R_12)
     {
       if (_obj->start.z != 0.0 || _obj->end.z != 0.0)
         {
-          obj->type = DWG_TYPE_3DLINE_R11;
+          obj->type = DWG_TYPE_3DLINE_r11;
           obj->fixedtype = DWG_TYPE__3DLINE;
         }
       else
         {
-          obj->type = DWG_TYPE_LINE_R11;
+          obj->type = DWG_TYPE_LINE_r11;
           if (_obj->start.z == 0.0 && _obj->end.z == 0.0)
             obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
         }
@@ -23988,9 +23988,9 @@ dwg_add_DIMENSION_ALIGNED (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->xline2_pt.y = xline2_pt->y;
   _obj->xline2_pt.z = xline2_pt->z;
   // TODO calc oblique_angle
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_DIMENSION_R11;
+      obj->type = DWG_TYPE_DIMENSION_r11;
       obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_ALIGNED;
     }
   return _obj;
@@ -24028,9 +24028,9 @@ dwg_add_DIMENSION_ANG2LN (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->xline2end_pt.x = xline2end_pt->x;
   _obj->xline2end_pt.y = xline2end_pt->y;
   _obj->xline2end_pt.z = xline2end_pt->z;
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_DIMENSION_R11;
+      obj->type = DWG_TYPE_DIMENSION_r11;
       obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_ANG2LN;
     }
   return _obj;
@@ -24067,9 +24067,9 @@ dwg_add_DIMENSION_ANG3PT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->xline2_pt.x = xline2_pt->x;
   _obj->xline2_pt.y = xline2_pt->y;
   _obj->xline2_pt.z = xline2_pt->z;
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_DIMENSION_R11;
+      obj->type = DWG_TYPE_DIMENSION_r11;
       obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_ANG3PT;
     }
   return _obj;
@@ -24099,9 +24099,9 @@ dwg_add_DIMENSION_DIAMETER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->first_arc_pt.y = chord_pt->y;
   _obj->first_arc_pt.z = chord_pt->z;
   _obj->leader_len = leader_len;
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_DIMENSION_R11;
+      obj->type = DWG_TYPE_DIMENSION_r11;
       obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_DIAMETER;
     }
   return _obj;
@@ -24130,9 +24130,9 @@ dwg_add_DIMENSION_ORDINATE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->leader_endpt.y = leader_endpt->y;
   _obj->leader_endpt.z = leader_endpt->z;
   _obj->flag2 = (BITCODE_RC)use_x_axis;
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_DIMENSION_R11;
+      obj->type = DWG_TYPE_DIMENSION_r11;
       obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_ORDINATE;
     }
   return _obj;
@@ -24162,9 +24162,9 @@ dwg_add_DIMENSION_RADIUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->first_arc_pt.y = chord_pt->y;
   _obj->first_arc_pt.z = chord_pt->z;
   _obj->leader_len = leader_len;
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_DIMENSION_R11;
+      obj->type = DWG_TYPE_DIMENSION_r11;
       obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_RADIUS;
     }
   return _obj;
@@ -24200,9 +24200,9 @@ dwg_add_DIMENSION_LINEAR (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->dim_rotation = rotation_angle;
   ADD_CHECK_ANGLE (_obj->dim_rotation);
   // TODO calc oblique_angle
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_DIMENSION_R11;
+      obj->type = DWG_TYPE_DIMENSION_r11;
       obj->tio.entity->flag_r11 = 64 + FLAG_R11_DIMENSION_LINEAR;
     }
   return _obj;
@@ -24217,9 +24217,9 @@ dwg_add_POINT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->x = pt->x;
   _obj->y = pt->y;
   _obj->z = pt->z;
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_POINT_R11;
+      obj->type = DWG_TYPE_POINT_r11;
       if (_obj->z == 0.0)
         obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
@@ -24281,8 +24281,8 @@ dwg_add_3DFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       _obj->z_is_zero = 1;
       obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
-  if (dwg->header.version <= R_11)
-    obj->type = DWG_TYPE_3DFACE_R11;
+  if (dwg->header.version <= R_12)
+    obj->type = DWG_TYPE_3DFACE_r11;
 
   _obj->has_no_flags = 1; // set invis_flags extra
   return _obj;
@@ -24309,9 +24309,9 @@ dwg_add_SOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->corner3.y = pt3->y;
   _obj->corner4.x = pt4->x;
   _obj->corner4.y = pt4->y;
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_SOLID_R11;
+      obj->type = DWG_TYPE_SOLID_r11;
       if (_obj->elevation != 0.0)
         obj->tio.entity->opts_r11 |= 2;
     }
@@ -24339,9 +24339,9 @@ dwg_add_TRACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->corner3.y = pt3->y;
   _obj->corner4.x = pt4->x;
   _obj->corner4.y = pt4->y;
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_TRACE_R11;
+      obj->type = DWG_TYPE_TRACE_r11;
       if (_obj->elevation == 0.0)
         obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
@@ -24371,9 +24371,9 @@ dwg_add_SHAPE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     }
   else
     _obj->style_id = 1; // Standard
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
-      obj->type = DWG_TYPE_SHAPE_R11;
+      obj->type = DWG_TYPE_SHAPE_r11;
       if (_obj->ins_pt.z == 0.0)
         obj->tio.entity->flag_r11 |= FLAG_R11_HAS_ELEVATION;
     }
@@ -24385,7 +24385,7 @@ dwg_add_VIEWPORT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                   const char *restrict name)
 {
   API_ADD_ENTITY (VIEWPORT);
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
       LOG_ERROR ("Invalid entity %s <r11", "VIEWPORT")
       API_UNADD_ENTITY;
@@ -24407,8 +24407,8 @@ dwg_add_VIEWPORT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   _obj->UCSVP = 1;
   _obj->ucsxdir.x = 1.0;
   _obj->ucsydir.y = 1.0;
-  if (dwg->header.version <= R_11)
-    obj->type = DWG_TYPE_VIEWPORT_R11;
+  if (dwg->header.version <= R_12)
+    obj->type = DWG_TYPE_VIEWPORT_r11;
   return _obj;
 }
 
@@ -24418,7 +24418,7 @@ dwg_add_ELLIPSE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                  const double axis_ratio)
 {
   API_ADD_ENTITY (ELLIPSE);
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
       LOG_ERROR ("Invalid entity %s <r11", "3DSOLID")
       API_UNADD_ENTITY;
@@ -24456,7 +24456,7 @@ dwg_add_SPLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const dwg_point_3d *restrict end_tan_vec)
 {
   API_ADD_ENTITY (SPLINE);
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
       LOG_ERROR ("Invalid entity %s <r11", "3DSOLID")
       API_UNADD_ENTITY;
@@ -24485,7 +24485,7 @@ dwg_add_REGION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   unsigned j;
   int acis_data_idx = 0;
   API_ADD_ENTITY (REGION);
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
       LOG_ERROR ("Invalid entity %s <r11", "3DSOLID")
       API_UNADD_ENTITY;
@@ -24521,7 +24521,7 @@ dwg_add_3DSOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   unsigned j;
   int acis_data_idx = 0;
   API_ADD_ENTITY (_3DSOLID);
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
       LOG_ERROR ("Invalid entity %s <r11", "3DSOLID")
       API_UNADD_ENTITY;
@@ -24558,7 +24558,7 @@ dwg_add_BODY (Dwg_Object_BLOCK_HEADER *restrict blkhdr, const char *acis_data)
   unsigned j;
   int acis_data_idx = 0;
   API_ADD_ENTITY (BODY);
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
       LOG_ERROR ("Invalid entity %s <r11", "BODY")
       API_UNADD_ENTITY;
@@ -24592,7 +24592,7 @@ dwg_add_RAY (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
              const dwg_point_3d *restrict vector) /* different to VBA */
 {
   API_ADD_ENTITY (RAY);
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
       LOG_ERROR ("Invalid entity %s <r11", "RAY")
       API_UNADD_ENTITY;
@@ -24613,7 +24613,7 @@ dwg_add_XLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                const dwg_point_3d *restrict vector) /* different to VBA */
 {
   API_ADD_ENTITY (XLINE);
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
       LOG_ERROR ("Invalid entity %s <r11", "XLINE")
       API_UNADD_ENTITY;
@@ -24791,7 +24791,7 @@ dwg_add_OLE2FRAME (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 {
   // const Dwg_Object_Ref *pspace =  dwg_paper_space_ref (dwg);
   API_ADD_ENTITY (OLE2FRAME);
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
       LOG_ERROR ("Invalid entity %s <r11", "OLE2FRAME")
       API_UNADD_ENTITY;
@@ -24851,7 +24851,7 @@ dwg_add_LEADER (
       API_UNADD_ENTITY;
       return NULL;
     }
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
       LOG_ERROR ("Invalid entity %s <r11", "LEADER")
       API_UNADD_ENTITY;
@@ -24924,7 +24924,7 @@ dwg_add_TOLERANCE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 {
   API_ADD_ENTITY (TOLERANCE);
   _obj->text_value = dwg_add_u8_input (dwg, text_value);
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
       LOG_ERROR ("Invalid entity %s <r11", "TOLERANCE")
       API_UNADD_ENTITY;
@@ -24956,7 +24956,7 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   BITCODE_H mlstyref;
   Dwg_Object_MLINESTYLE *mlstyle = NULL;
   API_ADD_ENTITY (MLINE);
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
       LOG_ERROR ("Invalid entity %s <r11", "MLINE")
       API_UNADD_ENTITY;
@@ -25308,7 +25308,7 @@ dwg_add_GROUP (Dwg_Data *restrict dwg,
   Dwg_Object_Ref *groupdict;
   Dwg_Object *nod = dwg_get_first_object (dwg, DWG_TYPE_DICTIONARY);
   API_ADD_OBJECT (GROUP);
-  if (dwg->header.version <= R_11)
+  if (dwg->header.version <= R_12)
     {
       LOG_ERROR ("Invalid entity %s <r11", "GROUP")
       API_UNADD_ENTITY;
@@ -25415,7 +25415,7 @@ dwg_add_LWPOLYLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Data *dwg = hdr ? hdr->parent : NULL;
     if (dwg && dwg->header.version < R_2000)
       REQUIRE_CLASS ("LWPOLYLINE");
-    if (dwg && dwg->header.version <= R_11)
+    if (dwg && dwg->header.version <= R_12)
       {
         LOG_ERROR ("Invalid entity %s <r11", "LWPOLYLINE")
         return NULL;
@@ -25442,7 +25442,7 @@ dwg_add_HATCH (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Data *dwg = hdr ? hdr->parent : NULL;
     if (dwg && dwg->header.version < R_2000)
       REQUIRE_CLASS ("HATCH");
-    if (dwg && dwg->header.version <= R_11)
+    if (dwg && dwg->header.version <= R_12)
       {
         LOG_ERROR ("Invalid entity %s <r11", "HATCH")
         return NULL;

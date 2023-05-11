@@ -1651,7 +1651,7 @@ match_preR13_entities (const char *restrict filename,
       ELSEMATCH (ATTDEF)
       if (!opt_text)
         {
-          if (obj->type == DWG_TYPE_DIMENSION_R11)
+          if (obj->type == DWG_TYPE_DIMENSION_r11)
             found += match_DIMENSION (filename, obj);
           ELSEMATCH (VIEWPORT)
           ELSEMATCH (BLOCK)

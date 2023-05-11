@@ -4252,7 +4252,7 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
           continue;
         }
       // skip mspace block/endblk
-      if (obj->type == DWG_TYPE_UNUSED_R11)
+      if (obj->type == DWG_TYPE_UNUSED_r11)
         {
           LOG_TRACE (
               "Skip entity %s, number: %d, Fixedtype: %d, Addr: %lx (0x%x)\n",
@@ -4282,7 +4282,7 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
                 "Entity %s, number: %d, Addr: %lu (0x%x)\n",
                 obj->name, obj->index, obj->address, (unsigned)dat->byte);
       if (obj->type == 0
-          || (obj->type > DWG_TYPE_UNKNOWN_R11 && obj->fixedtype != 0))
+          || (obj->type > DWG_TYPE_UNKNOWN_r11 && obj->fixedtype != 0))
         {
           // set the r11 type from the fixedtype. eg when downconverting
           switch (obj->fixedtype)
@@ -4291,69 +4291,76 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
    !deleted ? TYPE : (uint8_t)((int8_t)TYPE - 128);
 
             case DWG_TYPE_LINE:
-              obj->type = DELETED (DWG_TYPE_LINE_R11);
+              obj->type = DELETED (DWG_TYPE_LINE_r11);
               break;
             case DWG_TYPE_POINT:
-              obj->type = DELETED (DWG_TYPE_POINT_R11);
+              obj->type = DELETED (DWG_TYPE_POINT_r11);
               break;
             case DWG_TYPE_CIRCLE:
-              obj->type = DELETED (DWG_TYPE_CIRCLE_R11);
+              obj->type = DELETED (DWG_TYPE_CIRCLE_r11);
               break;
             case DWG_TYPE_SHAPE:
-              obj->type = DELETED (DWG_TYPE_SHAPE_R11);
+              obj->type = DELETED (DWG_TYPE_SHAPE_r11);
               break;
             case DWG_TYPE_REPEAT:
-              obj->type = DELETED (DWG_TYPE_REPEAT_R11);
+              obj->type = DELETED (DWG_TYPE_REPEAT_r11);
               break;
             case DWG_TYPE_ENDREP:
-              obj->type = DELETED (DWG_TYPE_ENDREP_R11);
+              obj->type = DELETED (DWG_TYPE_ENDREP_r11);
               break;
             case DWG_TYPE_TEXT:
-              obj->type = DELETED (DWG_TYPE_TEXT_R11);
+              obj->type = DELETED (DWG_TYPE_TEXT_r11);
               break;
             case DWG_TYPE_ARC:
-              obj->type = DELETED (DWG_TYPE_ARC_R11);
+              obj->type = DELETED (DWG_TYPE_ARC_r11);
               break;
             case DWG_TYPE_TRACE:
-              obj->type = DELETED (DWG_TYPE_TRACE_R11);
+              obj->type = DELETED (DWG_TYPE_TRACE_r11);
               break;
             case DWG_TYPE_LOAD:
               /* convert from pre r2.0 */
-              obj->type = DELETED (DWG_TYPE_LOAD_R11);
+              obj->type = DELETED (DWG_TYPE_LOAD_r11);
               break;
             case DWG_TYPE_SOLID:
-              obj->type = DELETED (DWG_TYPE_SOLID_R11);
+              obj->type = DELETED (DWG_TYPE_SOLID_r11);
               break;
             case DWG_TYPE_BLOCK:
-              obj->type = DELETED (DWG_TYPE_BLOCK_R11);
+              obj->type = DELETED (DWG_TYPE_BLOCK_r11);
               break;
             case DWG_TYPE_ENDBLK:
-              obj->type = DELETED (DWG_TYPE_ENDBLK_R11);
+              obj->type = DELETED (DWG_TYPE_ENDBLK_r11);
               break;
             case DWG_TYPE_INSERT:
             case DWG_TYPE_MINSERT:
-              obj->type = DELETED (DWG_TYPE_INSERT_R11);
+              obj->type = DELETED (DWG_TYPE_INSERT_r11);
               break;
             case DWG_TYPE_ATTDEF:
-              obj->type = DELETED (DWG_TYPE_ATTDEF_R11);
+              obj->type = DELETED (DWG_TYPE_ATTDEF_r11);
               break;
             case DWG_TYPE_ATTRIB:
-              obj->type = DELETED (DWG_TYPE_ATTRIB_R11);
+              obj->type = DELETED (DWG_TYPE_ATTRIB_r11);
               break;
             case DWG_TYPE_SEQEND:
-              obj->type = DELETED (DWG_TYPE_SEQEND_R11);
+              obj->type = DELETED (DWG_TYPE_SEQEND_r11);
               break;
-            case DWG_TYPE_POLYLINE:
-              obj->type = DELETED (DWG_TYPE_POLYLINE_R11);
+            case DWG_TYPE_POLYLINE_2D:
+            case DWG_TYPE_POLYLINE_3D:
+            case DWG_TYPE_POLYLINE_PFACE:
+            case DWG_TYPE_POLYLINE_MESH:
+              obj->type = DELETED (DWG_TYPE_POLYLINE_r11);
               break;
-            case DWG_TYPE_VERTEX:
-              obj->type = DELETED (DWG_TYPE_VERTEX_R11);
+            case DWG_TYPE_VERTEX_2D:
+            case DWG_TYPE_VERTEX_3D:
+            case DWG_TYPE_VERTEX_MESH:
+            case DWG_TYPE_VERTEX_PFACE:
+            case DWG_TYPE_VERTEX_PFACE_FACE:
+              obj->type = DELETED (DWG_TYPE_VERTEX_r11);
               break;
             case DWG_TYPE__3DLINE:
-              obj->type = DELETED (DWG_TYPE_3DLINE_R11);
+              obj->type = DELETED (DWG_TYPE_3DLINE_r11);
               break;
             case DWG_TYPE__3DFACE:
-              obj->type = DELETED (DWG_TYPE_3DFACE_R11);
+              obj->type = DELETED (DWG_TYPE_3DFACE_r11);
               break;
             case DWG_TYPE_DIMENSION_LINEAR:
             case DWG_TYPE_DIMENSION_ALIGNED:
@@ -4362,10 +4369,10 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
             case DWG_TYPE_DIMENSION_RADIUS:
             case DWG_TYPE_DIMENSION_ANG3PT:
             case DWG_TYPE_DIMENSION_ORDINATE:
-              obj->type = DELETED (DWG_TYPE_DIMENSION_R11);
+              obj->type = DELETED (DWG_TYPE_DIMENSION_r11);
               break;
             case DWG_TYPE_VIEWPORT:
-              obj->type = DELETED (DWG_TYPE_VIEWPORT_R11);
+              obj->type = DELETED (DWG_TYPE_VIEWPORT_r11);
 #undef DELETED
               break;
             default:
@@ -4395,6 +4402,10 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
   case DWG_TYPE_##ty:                                                         \
     *error |= dwg_encode_##ty (dat, obj);                                     \
     break
+#define CASE_ENCODE_TYPE_R11(ty,gen)                                          \
+  case DWG_TYPE_##ty:                                                         \
+    *error |= dwg_encode_##gen##_R11 (dat, obj);                              \
+    break
 
       switch (obj->fixedtype)
         {
@@ -4416,8 +4427,15 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
         CASE_ENCODE_TYPE (ATTRIB);
         CASE_ENCODE_TYPE (SEQEND);
         CASE_ENCODE_TYPE (JUMP);
-        CASE_ENCODE_TYPE (POLYLINE);
-        CASE_ENCODE_TYPE (VERTEX);
+        CASE_ENCODE_TYPE_R11 (POLYLINE_2D, POLYLINE);
+        CASE_ENCODE_TYPE_R11 (POLYLINE_3D, POLYLINE);
+        CASE_ENCODE_TYPE_R11 (POLYLINE_MESH, POLYLINE);
+        CASE_ENCODE_TYPE_R11 (POLYLINE_PFACE, POLYLINE);
+        CASE_ENCODE_TYPE_R11 (VERTEX_2D, VERTEX);
+        CASE_ENCODE_TYPE_R11 (VERTEX_3D, VERTEX);
+        CASE_ENCODE_TYPE_R11 (VERTEX_MESH, VERTEX);
+        CASE_ENCODE_TYPE_R11 (VERTEX_PFACE, VERTEX);
+        CASE_ENCODE_TYPE_R11 (VERTEX_PFACE_FACE, VERTEX);
         CASE_ENCODE_TYPE (_3DLINE);
         CASE_ENCODE_TYPE (_3DFACE);
         CASE_ENCODE_TYPE (DIMENSION_ORDINATE);

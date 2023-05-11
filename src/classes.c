@@ -357,8 +357,8 @@ static const char *const _dwg_type_names_variable[] = {
   "REPEAT",                             /* 736 */
   "ENDREP",                             /* 737 */
   "JUMP",                               /* 738 */
-  "POLYLINE",                           /* 739 */
-  "VERTEX",                             /* 740 */
+  "POLYLINE_R11",                       /* 739 */
+  "VERTEX_R11",                         /* 740 */
   "LOAD",                               /* 741 */
   /* End auto-generated variable */
 };
@@ -921,8 +921,8 @@ static const char *_dwg_dxfnames_variable[] = {
   "REPEAT",                                     /* 736 */
   "ENDREP",                                     /* 737 */
   "JUMP",                                       /* 738 */
-  "POLYLINE",                                   /* 739 */
-  "VERTEX",                                     /* 740 */
+  "POLYLINE_R11",                               /* 739 */
+  "VERTEX_R11",                                 /* 740 */
   "LOAD",                                       /* 741 */
   /* End auto-generated dxfnames */
 };
