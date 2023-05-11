@@ -191,6 +191,7 @@ testobjects = \
 	polyline_3d \
 	polyline_mesh \
 	polyline_pface \
+	polyline_r11 \
 	pointcloud \
 	pointcloudex \
 	pointclouddef \
