@@ -639,22 +639,22 @@ free_preR13_object (Dwg_Object *obj)
       // handle only entities with extra vectors specially
       switch (obj->type)
         {
-        case DWG_TYPE_TEXT_R11:
+        case DWG_TYPE_TEXT_r11:
           dwg_free_TEXT (dat, obj);
           break;
-        case DWG_TYPE_ATTRIB_R11:
+        case DWG_TYPE_ATTRIB_r11:
           dwg_free_ATTRIB (dat, obj);
           break;
-        case DWG_TYPE_ATTDEF_R11:
+        case DWG_TYPE_ATTDEF_r11:
           dwg_free_ATTDEF (dat, obj);
           break;
-        case DWG_TYPE_BLOCK_R11:
+        case DWG_TYPE_BLOCK_r11:
           dwg_free_BLOCK (dat, obj);
           break;
-        case DWG_TYPE_INSERT_R11:
+        case DWG_TYPE_INSERT_r11:
           dwg_free_INSERT (dat, obj);
           break;
-        case DWG_TYPE_DIMENSION_R11:
+        case DWG_TYPE_DIMENSION_r11:
           switch (obj->tio.entity->flag_r11)
             {
             case 64:
