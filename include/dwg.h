@@ -705,8 +705,8 @@ typedef enum DWG_OBJECT_TYPE
   DWG_TYPE_REPEAT,
   DWG_TYPE_ENDREP,
   DWG_TYPE_JUMP,
-  DWG_TYPE_POLYLINE,
-  DWG_TYPE_VERTEX,
+  DWG_TYPE_POLYLINE_R11,
+  DWG_TYPE_VERTEX_R11,
   /* pre2.0 entities */
   DWG_TYPE_LOAD,
   // after 1.0 add new types here for binary compat
@@ -1621,10 +1621,6 @@ typedef struct _dwg_entity_POLYLINE_2D
   BITCODE_BT thickness;
   BITCODE_BD elevation;
   BITCODE_BE extrusion;
-  BITCODE_BL extra_r11_size;
-  BITCODE_TV extra_r11_text;
-  BITCODE_BS num_m_verts; // sometime used in preR13, to delete
-  BITCODE_BS num_n_verts; // sometime used in preR13, to delete
 } Dwg_Entity_POLYLINE_2D;
 
 /**
@@ -8134,7 +8130,7 @@ typedef struct _dwg_entity_JUMP
 /**
  Pre R13 POLYLINE (none/19) entity
  */
-typedef struct _dwg_entity_POLYLINE
+typedef struct _dwg_entity_POLYLINE_R11
 {
   struct _dwg_object_entity *parent;
 
@@ -8143,16 +8139,19 @@ typedef struct _dwg_entity_POLYLINE
   BITCODE_RD end_width;
   BITCODE_3RD extrusion;
   BITCODE_RS curve_type;
+  //BITCODE_RS numverts;
+  //BITCODE_RS numfaces;
   BITCODE_RS num_m_verts;
   BITCODE_RS num_n_verts;
   BITCODE_RS m_density;
   BITCODE_RS n_density;
-} Dwg_Entity_POLYLINE;
+  //BITCODE_H seqend;
+} Dwg_Entity_POLYLINE_R11;
 
 /**
  Pre R13 VERTEX (none/20) entity
  */
-typedef struct _dwg_entity_VERTEX
+typedef struct _dwg_entity_VERTEX_R11
 {
   struct _dwg_object_entity *parent;
 
@@ -8162,8 +8161,8 @@ typedef struct _dwg_entity_VERTEX
   BITCODE_RD end_width;
   BITCODE_RD bulge;
   BITCODE_RD tangent_dir;
-  BITCODE_BS vertind[4];
-} Dwg_Entity_VERTEX;
+  BITCODE_RS vertind[4];
+} Dwg_Entity_VERTEX_R11;
 
 /**
  3DLINE (none/21) entity
@@ -8668,11 +8667,11 @@ typedef struct _dwg_object_entity
     Dwg_Entity_MTEXT *MTEXT;
     Dwg_Entity_OLEFRAME *OLEFRAME;
     Dwg_Entity_POINT *POINT;
-    Dwg_Entity_POLYLINE *POLYLINE;
     Dwg_Entity_POLYLINE_2D *POLYLINE_2D;
     Dwg_Entity_POLYLINE_3D *POLYLINE_3D;
     Dwg_Entity_POLYLINE_MESH *POLYLINE_MESH;
     Dwg_Entity_POLYLINE_PFACE *POLYLINE_PFACE;
+    Dwg_Entity_POLYLINE_R11 *POLYLINE_R11;
     Dwg_Entity_PROXY_ENTITY *PROXY_ENTITY;
     Dwg_Entity_RAY *RAY;
     Dwg_Entity_REGION *REGION;
@@ -8684,12 +8683,12 @@ typedef struct _dwg_object_entity
     Dwg_Entity_TOLERANCE *TOLERANCE;
     Dwg_Entity_TRACE *TRACE;
     Dwg_Entity_UNKNOWN_ENT *UNKNOWN_ENT;
-    Dwg_Entity_VERTEX *VERTEX;
     Dwg_Entity_VERTEX_2D *VERTEX_2D;
     Dwg_Entity_VERTEX_3D *VERTEX_3D;
     Dwg_Entity_VERTEX_MESH *VERTEX_MESH;
     Dwg_Entity_VERTEX_PFACE *VERTEX_PFACE;
     Dwg_Entity_VERTEX_PFACE_FACE *VERTEX_PFACE_FACE;
+    Dwg_Entity_VERTEX_R11 *VERTEX_R11;
     Dwg_Entity_VIEWPORT *VIEWPORT;
     Dwg_Entity_XLINE *XLINE;
     /* untyped > 500 */
@@ -10161,11 +10160,11 @@ EXPORT int dwg_setup_MLINE (Dwg_Object *obj);
 EXPORT int dwg_setup_MTEXT (Dwg_Object *obj);
 EXPORT int dwg_setup_OLEFRAME (Dwg_Object *obj);
 EXPORT int dwg_setup_POINT (Dwg_Object *obj);
-EXPORT int dwg_setup_POLYLINE (Dwg_Object *obj);
 EXPORT int dwg_setup_POLYLINE_2D (Dwg_Object *obj);
 EXPORT int dwg_setup_POLYLINE_3D (Dwg_Object *obj);
 EXPORT int dwg_setup_POLYLINE_MESH (Dwg_Object *obj);
 EXPORT int dwg_setup_POLYLINE_PFACE (Dwg_Object *obj);
+EXPORT int dwg_setup_POLYLINE_R11 (Dwg_Object *obj);
 EXPORT int dwg_setup_PROXY_ENTITY (Dwg_Object *obj);
 EXPORT int dwg_setup_RAY (Dwg_Object *obj);
 EXPORT int dwg_setup_REGION (Dwg_Object *obj);
@@ -10177,12 +10176,12 @@ EXPORT int dwg_setup_TEXT (Dwg_Object *obj);
 EXPORT int dwg_setup_TOLERANCE (Dwg_Object *obj);
 EXPORT int dwg_setup_TRACE (Dwg_Object *obj);
 EXPORT int dwg_setup_UNKNOWN_ENT (Dwg_Object *obj);
-EXPORT int dwg_setup_VERTEX (Dwg_Object *obj);
 EXPORT int dwg_setup_VERTEX_2D (Dwg_Object *obj);
 EXPORT int dwg_setup_VERTEX_3D (Dwg_Object *obj);
 EXPORT int dwg_setup_VERTEX_MESH (Dwg_Object *obj);
 EXPORT int dwg_setup_VERTEX_PFACE (Dwg_Object *obj);
 EXPORT int dwg_setup_VERTEX_PFACE_FACE (Dwg_Object *obj);
+EXPORT int dwg_setup_VERTEX_R11 (Dwg_Object *obj);
 EXPORT int dwg_setup_VIEWPORT (Dwg_Object *obj);
 EXPORT int dwg_setup_XLINE (Dwg_Object *obj);
 EXPORT int dwg_setup_APPID (Dwg_Object *obj);
