@@ -713,6 +713,12 @@ free_preR13_object (Dwg_Object *obj)
         case DWG_TYPE_INSERT_r11:
           dwg_free_INSERT (dat, obj);
           break;
+        case DWG_TYPE_POLYLINE_r11:
+          dwg_free_POLYLINE_R11 (dat, obj);
+          break;
+        case DWG_TYPE_VERTEX_r11:
+          dwg_free_VERTEX_R11 (dat, obj);
+          break;
         case DWG_TYPE_DIMENSION_r11:
           switch (obj->tio.entity->flag_r11)
             {
@@ -779,6 +785,9 @@ free_preR13_object (Dwg_Object *obj)
     case DWG_TYPE_INSERT:
       dwg_free_INSERT (dat, obj);
       break;
+    case DWG_TYPE_VERTEX_R11:
+      dwg_free_VERTEX_R11 (dat, obj);
+      break;
     case DWG_TYPE_VERTEX_2D:
       dwg_free_VERTEX_2D (dat, obj);
       break;
@@ -793,6 +802,9 @@ free_preR13_object (Dwg_Object *obj)
       break;
     case DWG_TYPE_VERTEX_PFACE_FACE:
       dwg_free_VERTEX_PFACE_FACE (dat, obj);
+      break;
+    case DWG_TYPE_POLYLINE_R11:
+      dwg_free_POLYLINE_R11 (dat, obj);
       break;
     case DWG_TYPE_POLYLINE_2D:
       dwg_free_POLYLINE_2D (dat, obj);
