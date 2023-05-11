@@ -94,7 +94,7 @@ hash (const char *str, size_t len)
       1375, 1375, 1375, 1375, 1375, 1375, 1375, 1375, 1375, 1375,
       1375, 1375, 1375, 1375, 1375, 1375, 1375, 1375, 1375, 1375,
       1375, 1375, 1375, 1375, 1375, 1375, 1375, 1375, 1375, 1375,
-      1375, 1375, 1375, 1375, 1375, 1375, 1375, 1375, 1375, 1375,
+      1375, 1375, 1375, 1375, 1375, 1375, 1375, 1375, 1375,    0,
         10,   65,    0, 1375, 1375, 1375, 1375, 1375, 1375, 1375,
       1375, 1375, 1375, 1375, 1375,   10,   70,   30,   10,   25,
        265,  325,  210,    5,  420,    0,   50,   10,  130,    0,
@@ -319,10 +319,10 @@ struct stringpool_t
     char stringpool_str398[sizeof("ASSOCOFFSETSURFACEACTIONBODY")];
     char stringpool_str399[sizeof("FIELDLIST")];
     char stringpool_str400[sizeof("POINTCLOUD")];
+    char stringpool_str402[sizeof("POLYLINE_R11")];
     char stringpool_str403[sizeof("IDBUFFER")];
     char stringpool_str406[sizeof("POINTCLOUDDEF_REACTOR")];
     char stringpool_str416[sizeof("POLYLINE_2D")];
-    char stringpool_str418[sizeof("POLYLINE")];
     char stringpool_str419[sizeof("BLOCKHORIZONTALCONSTRAINTPARAMETER")];
     char stringpool_str421[sizeof("TEXTOBJECTCONTEXTDATA")];
     char stringpool_str422[sizeof("BLOCKROTATEACTION")];
@@ -439,6 +439,7 @@ struct stringpool_t
     char stringpool_str771[sizeof("ACSH_WEDGE_CLASS")];
     char stringpool_str776[sizeof("IMAGE_BACKGROUND")];
     char stringpool_str778[sizeof("ACSH_REVOLVE_CLASS")];
+    char stringpool_str780[sizeof("VERTEX_R11")];
     char stringpool_str782[sizeof("BLOCK_HEADER")];
     char stringpool_str783[sizeof("TVDEVICEPROPERTIES")];
     char stringpool_str785[sizeof("FCFOBJECTCONTEXTDATA")];
@@ -475,7 +476,6 @@ struct stringpool_t
     char stringpool_str1016[sizeof("UNKNOWN_ENT")];
     char stringpool_str1029[sizeof("CURVEPATH")];
     char stringpool_str1043[sizeof("VIEWPORT")];
-    char stringpool_str1056[sizeof("VERTEX")];
     char stringpool_str1071[sizeof("WIPEOUTVARIABLES")];
     char stringpool_str1083[sizeof("VPORT_CONTROL")];
     char stringpool_str1110[sizeof("VX_TABLE_RECORD")];
@@ -645,10 +645,10 @@ static const struct stringpool_t stringpool_contents =
     "ASSOCOFFSETSURFACEACTIONBODY",
     "FIELDLIST",
     "POINTCLOUD",
+    "POLYLINE_R11",
     "IDBUFFER",
     "POINTCLOUDDEF_REACTOR",
     "POLYLINE_2D",
-    "POLYLINE",
     "BLOCKHORIZONTALCONSTRAINTPARAMETER",
     "TEXTOBJECTCONTEXTDATA",
     "BLOCKROTATEACTION",
@@ -765,6 +765,7 @@ static const struct stringpool_t stringpool_contents =
     "ACSH_WEDGE_CLASS",
     "IMAGE_BACKGROUND",
     "ACSH_REVOLVE_CLASS",
+    "VERTEX_R11",
     "BLOCK_HEADER",
     "TVDEVICEPROPERTIES",
     "FCFOBJECTCONTEXTDATA",
@@ -801,7 +802,6 @@ static const struct stringpool_t stringpool_contents =
     "UNKNOWN_ENT",
     "CURVEPATH",
     "VIEWPORT",
-    "VERTEX",
     "WIPEOUTVARIABLES",
     "VPORT_CONTROL",
     "VX_TABLE_RECORD",
@@ -1236,18 +1236,18 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str399,                        "FIELDLIST",                         DWG_TYPE_FIELDLIST,	0,	STABLE},
 #line 112 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str400,                "ACDBPOINTCLOUD",             DWG_TYPE_POINTCLOUD,	1,	UNSTABLE},
-      {-1}, {-1},
+      {-1},
+#line 120 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str402,              "POLYLINE_R11",               DWG_TYPE_POLYLINE_R11,	1,	STABLE},
 #line 297 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str403,                         "IDBUFFER",                          DWG_TYPE_IDBUFFER,	0,	STABLE},
       {-1}, {-1},
 #line 331 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str406,            "ACDBPOINTCLOUDDEF_REACTOR",         DWG_TYPE_POINTCLOUDDEF_REACTOR,	0,	UNSTABLE},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-#line 117 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str416,               "POLYLINE",                   DWG_TYPE_POLYLINE_2D,	1,	STABLE},
-      {-1},
 #line 116 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str418,                  "POLYLINE",                   DWG_TYPE_POLYLINE,	1,	STABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str416,               "POLYLINE",                   DWG_TYPE_POLYLINE_2D,	1,	STABLE},
+      {-1}, {-1},
 #line 235 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str419, "BLOCKHORIZONTALCONSTRAINTPARAMETER",  DWG_TYPE_BLOCKHORIZONTALCONSTRAINTPARAMETER,	0,	UNSTABLE},
       {-1},
@@ -1295,7 +1295,7 @@ in_word_set (const char *str, size_t len)
 #line 157 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str468,               "ACSH_BOOLEAN_CLASS",                DWG_TYPE_ACSH_BOOLEAN_CLASS,	0,	STABLE},
       {-1}, {-1},
-#line 118 "src/objects.in"
+#line 117 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str471,               "POLYLINE",                   DWG_TYPE_POLYLINE_3D,	1,	STABLE},
 #line 210 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str472,      "ACDBASSOCPATCHSURFACEACTIONBODY",   DWG_TYPE_ASSOCPATCHSURFACEACTIONBODY,	0,	UNSTABLE},
@@ -1361,7 +1361,7 @@ in_word_set (const char *str, size_t len)
       {-1}, {-1},
 #line 74 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str528,        "DIMENSION",                  DWG_TYPE_DIMENSION_ORDINATE,	1,	STABLE},
-#line 120 "src/objects.in"
+#line 119 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str529,            "POLYLINE",                   DWG_TYPE_POLYLINE_PFACE,	1,	STABLE},
 #line 220 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str530,             "ACDBASSOCVALUEDEPENDENCY",          DWG_TYPE_ASSOCVALUEDEPENDENCY,	0,	UNSTABLE},
@@ -1446,7 +1446,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str616,               "DWFUNDERLAY",                DWG_TYPE_DWFUNDERLAY,	1,	STABLE},
 #line 53 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str617,                   "3DLINE",                     DWG_TYPE__3DLINE,	1,	STABLE},
-#line 119 "src/objects.in"
+#line 118 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str618,             "POLYLINE",                   DWG_TYPE_POLYLINE_MESH,	1,	STABLE},
 #line 81 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str619,            "FLIPGRIPENTITY",             DWG_TYPE_FLIPGRIPENTITY,	1,	DEBUGGING},
@@ -1563,7 +1563,10 @@ in_word_set (const char *str, size_t len)
       {-1},
 #line 168 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str778,               "ACSH_REVOLVE_CLASS",                DWG_TYPE_ACSH_REVOLVE_CLASS,	0,	DEBUGGING},
-      {-1}, {-1}, {-1},
+      {-1},
+#line 145 "src/objects.in"
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str780,                "VERTEX_R11",                 DWG_TYPE_VERTEX_R11,	1,	STABLE},
+      {-1},
 #line 264 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str782,                     "BLOCK_HEADER",                      DWG_TYPE_BLOCK_HEADER,	0,	STABLE},
 #line 360 "src/objects.in"
@@ -1572,7 +1575,7 @@ in_word_set (const char *str, size_t len)
 #line 288 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str785,             "ACDB_FCFOBJECTCONTEXTDATA_CLASS",   DWG_TYPE_FCFOBJECTCONTEXTDATA,	0,	UNSTABLE},
       {-1}, {-1}, {-1},
-#line 142 "src/objects.in"
+#line 141 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str789,                 "VERTEX",                     DWG_TYPE_VERTEX_3D,	1,	STABLE},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
@@ -1597,13 +1600,13 @@ in_word_set (const char *str, size_t len)
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1}, {-1},
-#line 141 "src/objects.in"
+#line 140 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str854,                 "VERTEX",                     DWG_TYPE_VERTEX_2D,	1,	STABLE},
       {-1}, {-1},
-#line 144 "src/objects.in"
+#line 143 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str857,              "VERTEX",                     DWG_TYPE_VERTEX_PFACE,	1,	STABLE},
       {-1}, {-1}, {-1}, {-1},
-#line 145 "src/objects.in"
+#line 144 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str862,         "VERTEX",                     DWG_TYPE_VERTEX_PFACE_FACE,	1,	STABLE},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
 #line 304 "src/objects.in"
@@ -1680,11 +1683,8 @@ in_word_set (const char *str, size_t len)
 #line 146 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1043,                  "VIEWPORT",                   DWG_TYPE_VIEWPORT,	1,	STABLE},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1},
-#line 140 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1056,                    "VERTEX",                     DWG_TYPE_VERTEX,	1,	STABLE},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
-      {-1}, {-1}, {-1}, {-1}, {-1},
+      {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
 #line 372 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1071,                 "WIPEOUTVARIABLES",                  DWG_TYPE_WIPEOUTVARIABLES,	0,	STABLE},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
@@ -1698,7 +1698,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1110,                  "VX_TABLE_RECORD",                   DWG_TYPE_VX_TABLE_RECORD,	0,	STABLE},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1},
-#line 143 "src/objects.in"
+#line 142 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str1121,               "VERTEX",                     DWG_TYPE_VERTEX_MESH,	1,	STABLE},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
