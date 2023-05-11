@@ -2508,6 +2508,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               last_entity_idx + 1, endblk_index, dat, dwg, &error);
           dwg->cur_index = endblk_index + 1;
           dwg->header.blocks_size = (dat->byte - dwg->header.blocks_start);
+          if (num_block_entities != endblk_index - last_entity_idx)
+            {
+              LOG_WARN ("Wrong num_block_entities %u -> %u\n", num_block_entities,
+                        endblk_index - last_entity_idx);
+              num_block_entities = endblk_index - last_entity_idx;
+            }
         }
       else
         {
@@ -2517,8 +2523,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_ENTITIES_END);
       if (dwg->header.version > R_2_22)
         dwg->header.blocks_size += 0x40000000;
-      LOG_TRACE ("block_entities [%u - %u] 0x%x - 0x%x (0x%x)\n",
-                 last_entity_idx + 1, endblk_index, dwg->header.blocks_start,
+      LOG_TRACE ("\nblock_entities %u [%u - %u] 0x%x - 0x%x (0x%x)\n",
+                 num_block_entities, last_entity_idx + 1, endblk_index,
+                 dwg->header.blocks_start,
                  dwg->header.blocks_start
                      + (dwg->header.blocks_size & 0xffffff),
                  dwg->header.blocks_size);
@@ -2535,7 +2542,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               = 0x80000000 + (dat->byte - dwg->header.extras_start);
         }
       write_sentinel (dat, DWG_SENTINEL_R11_EXTRA_ENTITIES_END);
-      LOG_TRACE ("extra_entities [%u - %u] 0x%x - 0x%x (0x%x)\n",
+      LOG_TRACE ("\nextra_entities [%u - %u] 0x%x - 0x%x (0x%x)\n",
                  jump_index, dwg->num_objects - 1,
                  dwg->header.extras_start,
                  dwg->header.extras_start
@@ -2543,13 +2550,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                  dwg->header.extras_size);
       PRE (R_10)
       {
-        if (dwg->header_vars.numentities
-            != numentities + num_block_entities + num_extra_entities)
+        if (dwg->header_vars.numentities != numentities + num_block_entities)
           {
-            dwg->header_vars.numentities
-              = numentities + num_block_entities + num_extra_entities;
-            // TODO: patch header_vars and crc
-            LOG_WARN ("numentities: %u @??\n", dwg->header_vars.numentities);
+            dwg->header_vars.numentities = numentities + num_block_entities;
+            LOG_WARN ("Fixed numentities: %u [RS]\n", dwg->header_vars.numentities);
           }
       }
       SINCE (R_11)
@@ -2587,8 +2591,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       LOG_TRACE ("@0x%lx ->", dat->byte);
       dat->byte = hdr_offset + (3 * 8);
       LOG_TRACE ("0x%lx", dat->byte);
-      bit_write_RS (dat, numentities);
-      LOG_TRACE ("numentities: %u [RS]\n", numentities);
+      bit_write_RS (dat, dwg->header_vars.numentities);
+      LOG_TRACE ("numentities: %u [RS]\n", dwg->header_vars.numentities);
     }
     dat->byte = addr;
     LOG_TRACE ("Wrote %lu bytes\n", dat->byte);
@@ -4261,11 +4265,10 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
                          (unsigned)dat->byte);
               continue;
             }
-          numentities++;
         }
       while (dat->byte + obj->size >= dat->size)
         bit_chain_alloc (dat);
-
+      numentities++;
       obj->address = dat->byte;
       LOG_INFO ("===========================\n"
                 "Entity %s, number: %d, Addr: %lu (0x%x)\n",
