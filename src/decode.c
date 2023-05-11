@@ -7230,10 +7230,10 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               error |= dwg_decode_JUMP (dat, obj);
               break;
             case DWG_TYPE_POLYLINE_r11:
-              error |= dwg_decode_POLYLINE (dat, obj);
+              error |= dwg_decode_POLYLINE_R11 (dat, obj);
               break;
             case DWG_TYPE_VERTEX_r11:
-              error |= dwg_decode_VERTEX (dat, obj);
+              error |= dwg_decode_VERTEX_R11 (dat, obj);
               break;
             case DWG_TYPE_3DLINE_r11:
               error |= dwg_decode__3DLINE (dat, obj);
@@ -7250,6 +7250,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
             default:
               dat->byte--;
               DEBUG_HERE;
+              LOG_ERROR ("Unknown object type %u", (unsigned)abstype);
               obj->type
                   = (BITCODE_BS)(DWG_TYPE_UNKNOWN_r11 | (obj->type & 0x80));
               obj->fixedtype = DWG_TYPE_UNKNOWN_ENT;
