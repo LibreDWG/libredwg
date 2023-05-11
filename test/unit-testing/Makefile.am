@@ -203,6 +203,7 @@ testobjects = \
 	planesurface \
 	plotsettings \
 	point \
+	polyline_r11 \
 	polyline_2d \
 	polyline_3d \
 	polyline_mesh \
@@ -256,6 +257,7 @@ testobjects = \
 	unknown_ent \
 	unknown_obj \
 	vba_project \
+	vertex_r11 \
 	vertex_2d \
 	vertex_3d \
 	vertex_mesh \
