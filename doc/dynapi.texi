@@ -3601,37 +3601,6 @@ struct _dwg_object_entity*
 @end vtable
 @end indentedblock
 
-@strong{POLYLINE} @anchor{POLYLINE}
-@cindex entity, POLYLINE
-@vindex POLYLINE
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_entity*
-@item flag
-RS,	DXF 70
-@item start_width
-RD,	DXF 40
-@item end_width
-RD,	DXF 41
-@item extrusion
-3RD,	DXF 210
-@item curve_type
-RS,	DXF 75
-@item num_m_verts
-RS,	DXF 71
-@item num_n_verts
-RS,	DXF 72
-@item m_density
-RS,	DXF 73
-@item n_density
-RS,	DXF 74
-
-@end vtable
-@end indentedblock
-
 @strong{POLYLINE_2D} @anchor{POLYLINE_2D}
 @cindex entity, POLYLINE_2D
 @vindex POLYLINE_2D
@@ -3667,14 +3636,6 @@ BT,	DXF 39
 BD
 @item extrusion
 BE,	DXF 210
-@item extra_r11_size
-BL
-@item extra_r11_text
-TV
-@item num_m_verts
-BS,	DXF 71
-@item num_n_verts
-BS,	DXF 72
 
 @end vtable
 @end indentedblock
@@ -3703,13 +3664,13 @@ H
 @item curve_type
 RC,	DXF 75
 @item start_width
-BD,	DXF 40
+BD
 @item end_width
-BD,	DXF 41
+BD
 @item flag
 RC,	DXF 70
 @item extrusion
-BE,	DXF 210
+BE
 
 @end vtable
 @end indentedblock
@@ -3778,6 +3739,37 @@ BS,	DXF 70
 BS,	DXF 71
 @item numfaces
 BS,	DXF 72
+
+@end vtable
+@end indentedblock
+
+@strong{POLYLINE_R11} @anchor{POLYLINE_R11}
+@cindex entity, POLYLINE_R11
+@vindex POLYLINE_R11
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item flag
+RS,	DXF 70
+@item start_width
+RD,	DXF 40
+@item end_width
+RD,	DXF 41
+@item extrusion
+3RD,	DXF 210
+@item curve_type
+RS,	DXF 75
+@item num_m_verts
+RS,	DXF 71
+@item num_n_verts
+RS,	DXF 72
+@item m_density
+RS,	DXF 73
+@item n_density
+RS,	DXF 74
 
 @end vtable
 @end indentedblock
@@ -4700,33 +4692,6 @@ struct _dwg_object_entity*
 @end vtable
 @end indentedblock
 
-@strong{VERTEX} @anchor{VERTEX}
-@cindex entity, VERTEX
-@vindex VERTEX
-
-@indentedblock
-@vtable @code
-
-@item parent
-struct _dwg_object_entity*
-@item flag
-RC
-@item point
-2RD,	DXF 10
-@item start_width
-RD,	DXF 40
-@item end_width
-RD,	DXF 41
-@item bulge
-RD,	DXF 42
-@item tangent_dir
-RD
-@item vertind
-BS
-
-@end vtable
-@end indentedblock
-
 @strong{VERTEX_2D} @anchor{VERTEX_2D}
 @cindex entity, VERTEX_2D
 @vindex VERTEX_2D
@@ -4800,6 +4765,33 @@ struct _dwg_object_entity*
 RC,	DXF 70
 @item vertind
 BSd,	DXF 71
+
+@end vtable
+@end indentedblock
+
+@strong{VERTEX_R11} @anchor{VERTEX_R11}
+@cindex entity, VERTEX_R11
+@vindex VERTEX_R11
+
+@indentedblock
+@vtable @code
+
+@item parent
+struct _dwg_object_entity*
+@item flag
+RC
+@item point
+2RD,	DXF 10
+@item start_width
+RD,	DXF 40
+@item end_width
+RD,	DXF 41
+@item bulge
+RD,	DXF 42
+@item tangent_dir
+RD
+@item vertind
+RS
 
 @end vtable
 @end indentedblock
