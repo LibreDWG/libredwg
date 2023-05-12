@@ -28,21 +28,21 @@
 #define _XSTR(s) _STR(s)
 #define _STR(s)  #s
 
-#define WARN_UNHANDLED_CLASS \
-      LOG_WARN ("Unhandled Class %s %d %s (0x%x%s) %u/%lX", is_entity ? "entity" : "object",\
-               klass->number, klass->dxfname, klass->proxyflag,\
-               klass->is_zombie ? "is_zombie" : "",\
-               obj->index, obj->handle.value)
-#define WARN_UNSTABLE_CLASS \
-      LOG_WARN ("Unstable Class %s %d %s (0x%x%s) %u/%lX", is_entity ? "entity" : "object",\
-               klass->number, klass->dxfname, klass->proxyflag,\
-               klass->is_zombie ? "is_zombie" : "",\
-               obj->index, obj->handle.value)
+#define WARN_UNHANDLED_CLASS                                                  \
+  LOG_WARN ("Unhandled Class %s %d %s (0x%x%s) %u/" FORMAT_RLLx,              \
+            is_entity ? "entity" : "object", klass->number, klass->dxfname,   \
+            klass->proxyflag, klass->is_zombie ? "is_zombie" : "",            \
+            obj->index, obj->handle.value)
+#define WARN_UNSTABLE_CLASS                                                   \
+  LOG_WARN ("Unstable Class %s %d %s (0x%x%s) %u/" FORMAT_RLLx,               \
+            is_entity ? "entity" : "object", klass->number, klass->dxfname,   \
+            klass->proxyflag, klass->is_zombie ? "is_zombie" : "",            \
+            obj->index, obj->handle.value)
 #if defined(IS_FREE) || defined(IS_PRINT)
-# undef WARN_UNSTABLE_CLASS
-# undef WARN_UNHANDLED_CLASS
-# define WARN_UNSTABLE_CLASS
-# define WARN_UNHANDLED_CLASS
+#  undef WARN_UNSTABLE_CLASS
+#  undef WARN_UNHANDLED_CLASS
+#  define WARN_UNSTABLE_CLASS
+#  define WARN_UNHANDLED_CLASS
 #endif
 
 #define DISALLOW_DXF(action, _name) \

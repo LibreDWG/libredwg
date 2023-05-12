@@ -1065,8 +1065,8 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 /*--------------------------------------------------------------------------------*/
 typedef struct
 {
-  unsigned long handle;
-  long address;
+  BITCODE_RLL handle;
+  unsigned long address;
   BITCODE_BL index;
 } Object_Map;
 
@@ -1354,7 +1354,7 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     { // POINT is better than DUMMY to preserve the next_entity chain.
       // TODO much better would be PROXY_ENTITY
       Dwg_Entity_POINT *_obj = obj->tio.entity->tio.POINT;
-      LOG_WARN ("fixup unsupported %s %lX as POINT", obj->dxfname,
+      LOG_WARN ("fixup unsupported %s " FORMAT_RLLx " as POINT", obj->dxfname,
                 obj->handle.value);
       if (!obj->tio.entity->xdicobjhandle)
         obj->tio.entity->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
@@ -1421,7 +1421,7 @@ encode_unknown_as_dummy (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
           name = "DUMMY";
           dxfname = "DUMMY";
         }
-      LOG_INFO ("fixup unsupported %s %lX as %s, Type %d\n", obj->dxfname,
+      LOG_INFO ("fixup unsupported %s " FORMAT_RLLx " as %s, Type %d\n", obj->dxfname,
                 obj->handle.value, name, obj->type);
       if (!obj->tio.object->xdicobjhandle)
         obj->tio.object->xdicobjhandle = dwg_add_handleref (dwg, 3, 0, NULL);
@@ -2915,7 +2915,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       LOG_HANDLE ("\nSorting objects...\n");
       for (i = 0; i < dwg->num_objects; i++)
-        fprintf (OUTPUT, "Object(%3i): %4lX / idx: %u\n", i,
+        fprintf (OUTPUT, "Object(%3i): " FORMAT_RLLx " / idx: %u\n", i,
                  dwg->object[i].handle.value, dwg->object[i].index);
     }
   // init unsorted
@@ -2941,8 +2941,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       LOG_HANDLE ("\nSorted handles:\n");
       for (i = 0; i < dwg->num_objects; i++)
-        fprintf (OUTPUT, "Handle(%3i): %4lX / idx: %u\n", i, omap[i].handle,
-                 omap[i].index);
+        fprintf (OUTPUT, "Handle(%3i): " FORMAT_RLLx " / idx: %u\n", i,
+                 omap[i].handle, omap[i].index);
     }
 
   /* Write the sorted objects
@@ -3005,7 +3005,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       LOG_HANDLE ("\nSorted objects:\n");
       for (i = 0; i < dwg->num_objects; i++)
-        LOG_HANDLE ("Object(%d): %lX / Address: %ld / Idx: %d\n", i,
+        LOG_HANDLE ("Object(%d): " FORMAT_RLLx " / Address: %ld / Idx: %d\n", i,
                     omap[i].handle, omap[i].address, omap[i].index);
     }
 
@@ -3045,8 +3045,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       index = omap[i].index;
       handleoff = omap[i].handle - last_handle;
       bit_write_UMC (dat, handleoff);
-      LOG_HANDLE ("Handleoff(%3i): " FORMAT_UMC " [UMC] (%4lX), ", index,
-                  handleoff, omap[i].handle)
+      LOG_HANDLE ("Handleoff(%3i): " FORMAT_UMC " [UMC] (" FORMAT_RLLx "), ",
+                  index, handleoff, omap[i].handle)
       last_handle = omap[i].handle;
 
       offset = omap[i].address - last_offset;
@@ -5349,7 +5349,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       break;
     case 5:
       bit_write_RLL (dat, (BITCODE_RLL)data->u.eed_5.entity);
-      LOG_TRACE ("entity: 0x%lX [RLL]", data->u.eed_5.entity);
+      LOG_TRACE ("entity: 0x" FORMAT_RLLx " [RLL]", data->u.eed_5.entity);
       break;
     case 10:
     case 11:
@@ -6330,7 +6330,7 @@ in_postprocess_handles (Dwg_Object *restrict obj)
                   prev->tio.entity->nolinks = 0;
                   prev->tio.entity->next_entity
                       = dwg_add_handleref (dwg, 4, obj->handle.value, prev);
-                  LOG_TRACE ("prev %s(%lX).next_entity = " FORMAT_REF "\n",
+                  LOG_TRACE ("prev %s(" FORMAT_RLLx ").next_entity = " FORMAT_REF "\n",
                              prev->name, prev->handle.value,
                              ARGS_REF (prev->tio.entity->next_entity));
                   ent->nolinks = 0;

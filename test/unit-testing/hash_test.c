@@ -30,14 +30,14 @@ main (int argc, char const *argv[])
       // i = maxrand(i)+1; for a more realistic workload
       hash_set (hash, rnd, rnd + 1);
     }
-  ok ("hash size(%d) => %u", max, hash->size);
+  ok ("hash size(%d) => %" PRIu64, max, hash->size);
 
   for (i = 1; i < max / PRESSURE_FACTOR; i++)
     {
-      uint32_t v;
+      uint64_t v;
       uint32_t rnd = maxrand (i) + 1;
       if ((v = hash_get (hash, rnd)) != rnd + 1)
-        fail ("hash_get(%d) => %d", rnd, v);
+        fail ("hash_get(%d) => %" PRIu64, rnd, v);
     }
 
   hash_free (hash);

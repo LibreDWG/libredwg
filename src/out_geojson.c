@@ -417,7 +417,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   char tmp[64];
 
   PAIR_Sc (type, "Feature");
-  sprintf (tmp, "%lX", obj->handle.value);
+  snprintf (tmp, sizeof (tmp), FORMAT_RLLx, obj->handle.value);
   PAIR_Sc (id, tmp);
   KEY (properties);
   SAMEHASH;
@@ -445,7 +445,8 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
               || obj->tio.entity->color.method == 0xc2) // Entity
           && obj->tio.entity->color.index == 256)
         {
-          sprintf (tmp, "#%06X", obj->tio.entity->color.rgb & 0xffffff);
+          snprintf (tmp, sizeof (tmp), "#%06X",
+                    obj->tio.entity->color.rgb & 0xffffff);
           PAIR_Sc (Color, tmp);
         }
       else if ((obj->tio.entity->color.index != 256)
@@ -553,7 +554,7 @@ dwg_geojson_feature (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
         }
     }
   // PAIR_NULL(ExtendedEntity);
-  sprintf (tmp, "%lX", obj->handle.value);
+  snprintf (tmp, sizeof (tmp), FORMAT_RLLx, obj->handle.value);
   LASTPAIR_Sc (EntityHandle, tmp);
   ENDHASH;
 }

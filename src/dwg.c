@@ -852,15 +852,15 @@ dwg_ref_object_relative (Dwg_Data *restrict dwg,
  * Note that absref 0 is illegal here, I think.
  */
 EXPORT Dwg_Object *
-dwg_resolve_handle (const Dwg_Data *dwg, const unsigned long absref)
+dwg_resolve_handle (const Dwg_Data *dwg, const BITCODE_RLL absref)
 {
-  uint32_t i;
+  uint64_t i;
   if (!absref) // illegal usage
     return NULL;
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
-  i = hash_get (dwg->object_map, (uint32_t)absref);
+  i = hash_get (dwg->object_map, absref);
   if (i != HASH_NOT_FOUND)
-    LOG_HANDLE ("[object_map{%lX} => %u] ", absref, i);
+    LOG_HANDLE ("[object_map{" FORMAT_RLLx "} => " FORMAT_BLL "] ", absref, i);
   if (i == HASH_NOT_FOUND
       || (BITCODE_BL)i >= dwg->num_objects) // the latter being an invalid
                                             // handle (read from DWG)
@@ -868,13 +868,13 @@ dwg_resolve_handle (const Dwg_Data *dwg, const unsigned long absref)
       // ignore warning on invalid handles. These are warned earlier already
       if (absref && absref < dwg->num_objects)
         {
-          LOG_WARN ("Object handle not found, %lu/%lX in " FORMAT_BL
-                    " objects",
+          LOG_WARN ("Object handle not found, " FORMAT_BLL "/" FORMAT_RLL
+                    " in " FORMAT_BL " objects",
                     absref, absref, dwg->num_objects);
         }
       return NULL;
     }
-  LOG_INSANE ("[resolve %lX => %u] ", absref, i);
+  LOG_INSANE ("[resolve " FORMAT_RLLx " => " FORMAT_BLL "] ", absref, i);
   return &dwg->object[i]; // allow value 0
 }
 
@@ -882,12 +882,12 @@ dwg_resolve_handle (const Dwg_Data *dwg, const unsigned long absref)
  * Silent variant of dwg_resolve_handle
  */
 EXPORT Dwg_Object *
-dwg_resolve_handle_silent (const Dwg_Data *dwg, const BITCODE_BL absref)
+dwg_resolve_handle_silent (const Dwg_Data *dwg, const BITCODE_RLL absref)
 {
-  uint32_t i;
+  uint64_t i;
   if (!absref) // illegal usage
     return NULL;
-  i = hash_get (dwg->object_map, (uint32_t)absref);
+  i = hash_get (dwg->object_map, absref);
   if (i == HASH_NOT_FOUND
       || (BITCODE_BL)i >= dwg->num_objects) // the latter being an invalid
                                             // handle (read from DWG)
@@ -2052,7 +2052,7 @@ set_handle_size (Dwg_Handle *restrict hdl)
  */
 EXPORT int
 dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
-                const unsigned long absref, const Dwg_Object *restrict obj)
+                const BITCODE_RLL absref, const Dwg_Object *restrict obj)
 {
   int offset = obj ? (absref - (int)obj->handle.value) : 0;
   hdl->code = code;
@@ -2061,11 +2061,11 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
     {
       Dwg_Data *dwg = obj->parent;
       loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
-      LOG_HANDLE ("object_map{%lX} = %u\n", absref, obj->index);
+      LOG_HANDLE ("object_map{" FORMAT_RLLx "} = %u\n", absref, obj->index);
       assert (dwg);
       if (!dwg->object_map) // for dwg_add_document()
         dwg->object_map = hash_new (100);
-      hash_set (dwg->object_map, absref, (uint32_t)obj->index);
+      hash_set (dwg->object_map, absref, (uint64_t)obj->index);
     }
 
   set_handle_size (hdl);
@@ -2159,7 +2159,7 @@ dwg_dup_handleref (Dwg_Data *restrict dwg, const Dwg_Object_Ref *restrict ref)
 
 // Creates a non-global, free'able handle ref.
 EXPORT Dwg_Object_Ref *
-dwg_add_handleref_free (const BITCODE_RC code, const unsigned long absref)
+dwg_add_handleref_free (const BITCODE_RC code, const BITCODE_RLL absref)
 {
   Dwg_Object_Ref *ref = (Dwg_Object_Ref *)calloc (1, sizeof (Dwg_Object_Ref));
   dwg_add_handle (&ref->handleref, code, absref, NULL);
@@ -3148,11 +3148,11 @@ dwg_resolve_jump (const Dwg_Object *obj)
                                  _obj->jump_address);
 }
 
-EXPORT unsigned long
+EXPORT BITCODE_RLL
 dwg_next_handle (const Dwg_Data *dwg)
 {
   BITCODE_H last_hdl;
-  unsigned long seed = 0;
+  BITCODE_RLL seed = 0;
   // check the object map for the next available handle
   last_hdl = dwg->num_object_refs ? dwg->object_ref[dwg->num_object_refs - 1]
                                   : NULL;
@@ -3174,11 +3174,11 @@ dwg_next_handle (const Dwg_Data *dwg)
 }
 
 // on init some handles have holes on purpose.
-void dwg_set_next_hdl (Dwg_Data *dwg, const unsigned long value);
+void dwg_set_next_hdl (Dwg_Data *dwg, const BITCODE_RLL value);
 void dwg_set_next_objhandle (Dwg_Object *obj);
 
 void
-dwg_set_next_hdl (Dwg_Data *dwg, const unsigned long value)
+dwg_set_next_hdl (Dwg_Data *dwg, const BITCODE_RLL value)
 {
   dwg->next_hdl = value;
 }
@@ -3193,7 +3193,7 @@ dwg_set_next_objhandle (Dwg_Object *obj)
     {
       obj->handle.value = dwg->next_hdl;
       set_handle_size (&obj->handle);
-      hash_set (dwg->object_map, obj->handle.value, (uint32_t)obj->index);
+      hash_set (dwg->object_map, obj->handle.value, (uint64_t)obj->index);
       dwg->next_hdl = 0;
       return;
     }
@@ -3211,7 +3211,7 @@ dwg_set_next_objhandle (Dwg_Object *obj)
       obj->handle.value = lastobj->handle.value + 1;
       set_handle_size (&obj->handle);
     }
-  hash_set (dwg->object_map, obj->handle.value, (uint32_t)obj->index);
+  hash_set (dwg->object_map, obj->handle.value, (uint64_t)obj->index);
   dwg->next_hdl = 0;
 }
 

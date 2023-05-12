@@ -663,7 +663,7 @@ output_INSERT (Dwg_Object *obj)
       transform_OCS (&ins_pt, insert->ins_pt, insert->extrusion);
       printf ("\t<!-- insert-%d -->\n", obj->index);
       printf ("\t<use id=\"dwg-object-%d\" transform=\"translate(%f %f) "
-              "rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-%lX\" />"
+              "rotate(%f) scale(%f %f)\" xlink:href=\"#symbol-" FORMAT_RLLx "\" />"
               "<!-- block_header->handleref: " FORMAT_H " -->\n",
               obj->index, transform_X (ins_pt.x), transform_Y (ins_pt.y),
               (180.0 / M_PI) * insert->rotation, insert->scale.x,
@@ -793,7 +793,7 @@ output_BLOCK_HEADER (Dwg_Object_Ref *ref)
       if (!escaped || strcmp (escaped, "*Model_Space") != 0)
         {
           is_g = 1;
-          printf ("\t<g id=\"symbol-%lX\" >\n\t\t<!-- %s -->\n",
+          printf ("\t<g id=\"symbol-" FORMAT_RLLx "\" >\n\t\t<!-- %s -->\n",
                   ref->absolute_ref, escaped ? escaped : "");
         }
       else

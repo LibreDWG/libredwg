@@ -463,7 +463,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   // after sentinel
   dat->byte = pvz = dwg->header.section[SECTION_HEADER_R13].address + 16;
-  // LOG_HANDLE ("@ 0x%lx.%lu\n", bit_position (dat)/8, bit_position (dat)%8);
+  // LOG_HANDLE ("@ 0x" FORMAT_RLLx ".%lu\n", bit_position (dat)/8, bit_position (dat)%8);
 #define MAX_HEADER_SIZE 2048
   dwg->header_vars.size = bit_read_RL (dat);
   LOG_TRACE ("         Length: " FORMAT_RL " [RL]\n", dwg->header_vars.size)
@@ -478,7 +478,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   error |= dwg_decode_header_variables (dat, dat, dat, dwg);
 
-  // LOG_HANDLE ("@ 0x%lx.%lu\n", bit_position (dat)/8, bit_position (dat)%8);
+  // LOG_HANDLE ("@ 0x" FORMAT_RLLx ".%lu\n", bit_position (dat)/8, bit_position (dat)%8);
   // check slack
   // Check CRC, hardcoded to 2 before end sentinel
   if (dwg->header_vars.size < MAX_HEADER_SIZE)
@@ -502,8 +502,8 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       goto classes_section;
     }
   crc2 = 0;
-  // LOG_HANDLE ("@ 0x%lx\n", bit_position (dat)/8);
-  // LOG_HANDLE ("HEADER_R13.address of size 0x%lx\n", pvz);
+  // LOG_HANDLE ("@ 0x" FORMAT_RLLx "\n", bit_position (dat)/8);
+  // LOG_HANDLE ("HEADER_R13.address of size 0x" FORMAT_RLLx "\n", pvz);
   // LOG_HANDLE ("HEADER_R13.size %d\n",
   // dwg->header.section[SECTION_HEADER_R13].size);
   // typical sizes: 400-599
@@ -718,12 +718,11 @@ handles_section:
   do
     {
       long unsigned int last_offset = 0;
-      long unsigned int last_handle = 0;
+      BITCODE_RLL last_handle = 0;
       long unsigned int oldpos = 0;
-      long unsigned int maxh
-          = (unsigned long)dwg->header.section[SECTION_HANDLES_R13].size << 1;
-      BITCODE_BL max_handles
-          = maxh < INT32_MAX ? (BITCODE_BL)maxh
+      BITCODE_RLL maxh = (BITCODE_RLL)dwg->header.section[SECTION_HANDLES_R13].size << 1;
+      BITCODE_RLL max_handles
+          = maxh < INT32_MAX ? maxh
                              : dwg->header.section[SECTION_HANDLES_R13].size;
       int added;
 
@@ -742,7 +741,7 @@ handles_section:
           BITCODE_MC prevsize;
           BITCODE_UMC handleoff;
           BITCODE_MC offset;
-          // BITCODE_BL last_handle = dwg->num_objects
+          // BITCODE_RLL last_handle = dwg->num_objects
           //   ? dwg->object[dwg->num_objects - 1].handle.value : 0;
 
           oldpos = dat->byte;
@@ -761,7 +760,7 @@ handles_section:
               if (offset == prevsize)
                 LOG_WARN ("handleoff " FORMAT_UMC
                           " looks wrong, max_handles %x - "
-                          "last_handle %lx = %lx (@%lu)",
+                          "last_handle " FORMAT_RLLx " = " FORMAT_RLLx " (@%lu)",
                           handleoff, (unsigned)max_handles, last_handle,
                           max_handles - last_handle, oldpos);
               if (offset == 1
@@ -2499,7 +2498,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           int added;
           BITCODE_UMC handleoff;
           BITCODE_MC offset;
-          BITCODE_BL last_handle
+          BITCODE_RLL last_handle
               = dwg->num_objects
                     ? dwg->object[dwg->num_objects - 1].handle.value
                     : 0;
@@ -3663,7 +3662,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       if (eed_need_size (8, size))
         return DWG_ERR_INVALIDEED;
       data->u.eed_5.entity = (unsigned long)bit_read_RLL (dat);
-      LOG_TRACE ("entity: 0x%lX [RLL]", data->u.eed_5.entity);
+      LOG_TRACE ("entity: 0x" FORMAT_RLLx " [RLL]", data->u.eed_5.entity);
       break;
     case 10:
     case 11:
@@ -3822,7 +3821,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
                                       = obj->tio.MLEADERSTYLE;
                                   mstyle->class_version
                                       = 2; // real value with code 70 follows
-                                  LOG_TRACE ("EED found ACAD_MLEADERVER %lX\n",
+                                  LOG_TRACE ("EED found ACAD_MLEADERVER " FORMAT_RLLx "\n",
                                              ref.absolute_ref);
                                 }
                             }
@@ -4914,7 +4913,7 @@ check_POLYLINE_handles (Dwg_Object *obj)
         layer->obj = dwg_ref_object_relative (dwg, layer, obj);
       if (!layer || !layer->obj)
         { // maybe a reactor pointing forwards or vertex
-          LOG_WARN ("Wrong POLYLINE.layer %lX",
+          LOG_WARN ("Wrong POLYLINE.layer " FORMAT_RLLx "",
                     layer ? layer->handleref.value : 0L);
           if (_obj->num_owned > 0 && _obj->vertex)
             {
@@ -4927,7 +4926,7 @@ check_POLYLINE_handles (Dwg_Object *obj)
                   Dwg_Object *seq;
                   obj->tio.entity->layer = layer = vertex;
                   LOG_WARN (
-                      "POLYLINE.layer is vertex[0] %lX, shift em, NULL seqend",
+                      "POLYLINE.layer is vertex[0] " FORMAT_RLLx ", shift em, NULL seqend",
                       layer->handleref.value);
                   /* shift vertices one back */
                   for (i = 0; i < _obj->num_owned - 1; i++)
@@ -4942,7 +4941,7 @@ check_POLYLINE_handles (Dwg_Object *obj)
                   seq = dwg_next_object (obj);
                   if (seq && seq->type == DWG_TYPE_SEQEND)
                     {
-                      LOG_WARN ("POLYLINE.seqend = POLYLINE+1 %lX",
+                      LOG_WARN ("POLYLINE.seqend = POLYLINE+1 " FORMAT_RLLx "",
                                 seq->handle.value);
                       seqend = _obj->seqend = dwg_find_objectref (dwg, seq);
                     }
@@ -4951,7 +4950,7 @@ check_POLYLINE_handles (Dwg_Object *obj)
                       seq = seqend ? dwg_next_object (seqend->obj) : NULL;
                       if (seq && seq->type == DWG_TYPE_SEQEND)
                         {
-                          LOG_WARN ("POLYLINE.seqend = VERTEX+1 %lX",
+                          LOG_WARN ("POLYLINE.seqend = VERTEX+1 " FORMAT_RLLx "",
                                     seq->handle.value);
                           seqend = _obj->seqend
                               = dwg_find_objectref (dwg, seq);
@@ -4989,7 +4988,7 @@ check_POLYLINE_handles (Dwg_Object *obj)
                    && v->obj->fixedtype != DWG_TYPE_VERTEX_PFACE
                    && v->obj->fixedtype != DWG_TYPE_VERTEX_PFACE_FACE)
             {
-              LOG_WARN ("Wrong POLYLINE.vertex[%d] %lX %s", i,
+              LOG_WARN ("Wrong POLYLINE.vertex[%d] " FORMAT_RLLx " %s", i,
                         v->handleref.value, v->obj->dxfname)
             }
         }
@@ -5215,7 +5214,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                    || owner->fixedtype == DWG_TYPE_MINSERT)
             {
               /* SEQEND handle for the owner needed in validate_INSERT */
-              hash_set (dwg->object_map, obj->handle.value, (uint32_t)num);
+              hash_set (dwg->object_map, obj->handle.value, (uint64_t)num);
               (void)dwg_validate_INSERT (owner);
             }
           else if (owner->fixedtype == DWG_TYPE_POLYLINE_2D
@@ -5227,7 +5226,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
                   = owner->tio.entity->tio.POLYLINE_2D;
               if (!_obj->seqend)
                 /* SEQEND handle for the owner needed in validate_POLYLINE */
-                hash_set (dwg->object_map, obj->handle.value, (uint32_t)num);
+                hash_set (dwg->object_map, obj->handle.value, (uint64_t)num);
               (void)dwg_validate_POLYLINE (owner);
             }
         }
@@ -5529,9 +5528,9 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
 
   if (obj->handle.value)
     { // empty only with UNKNOWN
-      LOG_HANDLE (" object_map{%lX} = %lu\n", obj->handle.value,
+      LOG_HANDLE (" object_map{" FORMAT_RLLx "} = %lu\n", obj->handle.value,
                   (unsigned long)num);
-      hash_set (dwg->object_map, obj->handle.value, (uint32_t)num);
+      hash_set (dwg->object_map, obj->handle.value, (uint64_t)num);
     }
 
   if (dat->byte > 8 * dat->size)
@@ -5684,7 +5683,8 @@ dwg_validate_INSERT (Dwg_Object *restrict obj)
         return 1;
       if (!seqend || next == seqend->obj)
         {
-          LOG_TRACE ("unsorted INSERT %lX SEQEND %lX ATTRIB\n",
+          LOG_TRACE ("unsorted INSERT " FORMAT_RLLx " SEQEND " FORMAT_RLLx
+                     " ATTRIB\n",
                      obj->handle.value,
                      seqend && seqend->obj ? seqend->obj->handle.value : 0L)
           return 0;
@@ -5698,7 +5698,7 @@ dwg_validate_INSERT (Dwg_Object *restrict obj)
         return 1;
       if (!seqend || next == seqend->obj)
         {
-          LOG_TRACE ("unsorted INSERT %lX SEQEND %lX ATTRIB\n",
+          LOG_TRACE ("unsorted INSERT " FORMAT_RLLx " SEQEND " FORMAT_RLLx " ATTRIB\n",
                      obj->handle.value,
                      seqend && seqend->obj ? seqend->obj->handle.value : 0L)
           return 0;
@@ -5786,7 +5786,8 @@ dwg_validate_POLYLINE (Dwg_Object *restrict obj)
              layer,vertex*,seqend. check the types then also */
           if (first_vertex->obj->index < obj->index)
             {
-              LOG_WARN ("skip wrong POLYLINE.vertex[0] handle %lX < %lX\n",
+              LOG_WARN ("skip wrong POLYLINE.vertex[0] handle " FORMAT_RLLx
+                        " < " FORMAT_RLLx "\n",
                         first_vertex->obj->handle.value, obj->handle.value);
               if (_obj->num_owned > 1)
                 first_vertex = _obj->vertex[1];
@@ -5854,9 +5855,9 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
               Dwg_Object_Ref *prev = j > 0 ? _obj->entities[j - 1] : NULL;
               Dwg_Object_Ref *next
                   = j + 1 < _obj->num_owned ? _obj->entities[j + 1] : NULL;
-              unsigned long prev_ref = prev ? prev->absolute_ref : 0;
-              unsigned long next_ref = next ? next->absolute_ref : 0;
-              unsigned long cur_ref = hdl ? hdl->absolute_ref : 0;
+              BITCODE_RLL prev_ref = prev ? prev->absolute_ref : 0;
+              BITCODE_RLL next_ref = next ? next->absolute_ref : 0;
+              BITCODE_RLL cur_ref = hdl ? hdl->absolute_ref : 0;
 
               if (!o)
                 continue;
@@ -5899,7 +5900,8 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                 {
                   if (!_obj->first_entity)
                     {
-                      LOG_TRACE ("first_entity: %4lX\n", hdl->absolute_ref);
+                      LOG_TRACE ("first_entity: " FORMAT_RLLx "\n",
+                                 hdl->absolute_ref);
                       _obj->first_entity
                           = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
                     }
@@ -5907,7 +5909,7 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                            != hdl->absolute_ref)
                     {
                       LOG_WARN ("Fixup wrong BLOCK_HEADER %s.first_entity "
-                                "from %4lX to %4lX",
+                                "from " FORMAT_RLLx " to " FORMAT_RLLx,
                                 _objname, _obj->first_entity->absolute_ref,
                                 hdl->absolute_ref);
                       changes++;
@@ -5922,14 +5924,15 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                       LOG_TRACE ("nolinks: 0\n");
                       ent->nolinks = 0;
                     }
-                  LOG_TRACE (" %4lX: prev_entity %4lX, ", hdl->absolute_ref,
-                             prev_ref);
+                  LOG_TRACE (" " FORMAT_RLLx ": prev_entity " FORMAT_RLLx ", ",
+                             hdl->absolute_ref, prev_ref);
                   ent->prev_entity = dwg_add_handleref (dwg, 4, prev_ref, o);
                 }
               else if (ent->prev_entity->absolute_ref != prev_ref)
                 {
                   LOG_WARN ("Fixup wrong BLOCK_HEADER "
-                            "%s.entities[%d].prev_entity from %4lX to %4lX",
+                            "%s.entities[%d].prev_entity from " FORMAT_RLLx
+                            " to " FORMAT_RLLx,
                             _objname, j, ent->prev_entity->absolute_ref,
                             prev_ref);
                   changes++;
@@ -5937,7 +5940,7 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                 }
               if (ent->next_entity == NULL)
                 {
-                  LOG_TRACE (" next_entity %4lX\n", next_ref);
+                  LOG_TRACE (" next_entity " FORMAT_RLLx "\n", next_ref);
                   ent->next_entity = dwg_add_handleref (dwg, 4, next_ref, o);
                   if (!next_ref)
                     {
@@ -5948,7 +5951,8 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
               else if (ent->next_entity->absolute_ref != next_ref)
                 {
                   LOG_WARN ("Fixup wrong BLOCK_HEADER "
-                            "%s.entities[%d].next_entity from %4lX to %4lX",
+                            "%s.entities[%d].next_entity from " FORMAT_RLLx
+                            " to " FORMAT_RLLx,
                             _objname, j, ent->next_entity->absolute_ref,
                             next_ref);
                   changes++;
@@ -5958,7 +5962,8 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                 {
                   if (!_obj->last_entity)
                     {
-                      LOG_TRACE ("last_entity: %4lX\n", hdl->absolute_ref);
+                      LOG_TRACE ("last_entity: " FORMAT_RLLx "\n",
+                                 hdl->absolute_ref);
                       _obj->last_entity
                           = dwg_add_handleref (dwg, 4, hdl->absolute_ref, o);
                     }
@@ -5966,7 +5971,7 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                            != hdl->absolute_ref)
                     {
                       LOG_WARN ("Fixup wrong BLOCK_HEADER %s.last_entity from "
-                                "%4lX to %4lX",
+                                FORMAT_RLLx " to " FORMAT_RLLx,
                                 _objname, _obj->last_entity->absolute_ref,
                                 hdl->absolute_ref);
                       changes++;

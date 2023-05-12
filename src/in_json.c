@@ -1581,7 +1581,7 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     case 3:
                       eed_need_size (dat, obj->eed, i, 4, &have);
                       data->u.eed_3.layer = json_long (dat, tokens);
-                      LOG_TRACE ("eed[%u].data.layer 0x%lX\n", i,
+                      LOG_TRACE ("eed[%u].data.layer 0x%lx\n", i,
                                  (unsigned long)data->u.eed_3.layer);
                       break;
                     case 4:

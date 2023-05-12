@@ -65,6 +65,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
 
 #define ACTION dxfb
 
+#define FMT_H "%" PRIX64
 #define FIELD(nam, type)
 #define FIELDG(nam, type, dxf)                                                \
   if (dxf)                                                                    \
@@ -141,12 +142,13 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
 
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1
+// I would rather assume 8-byte LE. like FIELD_RLL
 #define VALUE_HANDLE(ref, nam, handle_code, dxf)                              \
   if (dxf)                                                                    \
     {                                                                         \
       char _s[18];                                                            \
-      snprintf (_s, 18, "%lX", ref ? ref->absolute_ref : 0UL);                \
-      _s[17] = '\0';                                                          \
+      snprintf (_s, sizeof (_s), FMT_H, ref ? ref->absolute_ref : 0UL); \
+      _s[sizeof (_s) - 1] = '\0';                                             \
       VALUE_TV (_s, dxf);                                                     \
     }
 // TODO: try to resolve the handle. rather write 0 than in invalid handle:
@@ -501,12 +503,13 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
     HEADER_9 (nam);                                                           \
     VALUE_H (ref ? ref->handleref.value : 0UL, dxf);                          \
   }
+// I would rather assume 8-byte LE
 #define VALUE_H(value, dxf)                                                   \
   if (dxf)                                                                    \
     {                                                                         \
       char _s[18];                                                            \
-      snprintf (_s, 18, "%lX", value);                                        \
-      _s[17] = '\0';                                                          \
+      snprintf (_s, sizeof (_s), FMT_H, (BITCODE_RLL)(value));                \
+      _s[sizeof (_s) - 1] = '\0';                                             \
       VALUE_TV (_s, dxf);                                                     \
     }
 #define HEADER_H(nam, dxf)                                                    \
@@ -1730,7 +1733,7 @@ decl_dxfb_process_INSERT (MINSERT)
       // TODO: looks good, but acad import crashes
       return dwg_dxfb_MLINE (dat, obj);
 #else
-      LOG_WARN ("Unhandled Entity MLINE in out_dxfb %u/%lX", obj->index,
+      LOG_WARN ("Unhandled Entity MLINE in out_dxfb %u/" FMT_H, obj->index,
                 obj->handle.value)
       if (0)
         // bypass -Wunused-function

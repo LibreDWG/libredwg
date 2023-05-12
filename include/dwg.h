@@ -163,8 +163,8 @@ typedef BITCODE_DOUBLE BITCODE_RD;
 /* Since R2004 */
 typedef uint64_t BITCODE_RLL;
 typedef uint64_t BITCODE_BLL;
-#define FORMAT_RLLx "%" PRIx64
-#define FORMAT_RLL "0x%" PRIx64
+#define FORMAT_RLLx "%" PRIX64
+#define FORMAT_RLL "0x%" PRIX64
 #define FORMAT_BLL "%" PRIu64
 typedef int32_t BITCODE_MC;
 #define FORMAT_MC FORMAT_RSd
@@ -8091,7 +8091,7 @@ typedef struct _dwg_entity_eed_data
       unsigned char data[1]; // inlined
     } eed_4;
     struct { /* 5 (1005) entity */
-      unsigned long entity;
+      BITCODE_RLL entity;
     } eed_5;
     struct { /* 10-13 point */
       BITCODE_3RD point;
@@ -9615,7 +9615,7 @@ typedef struct _dwg_struct
   unsigned int layout_type;
   unsigned int num_acis_sab_hdl;  // temporary, until we can parse acds for SAB data, r2013+
   BITCODE_H *acis_sab_hdl;
-  unsigned long next_hdl; // for add_document handle holes
+  BITCODE_RLL next_hdl; // for add_document handle holes
 
   BITCODE_BL prev_entity_index; // for speedup find_prev_entity
 } Dwg_Data;
@@ -9763,7 +9763,7 @@ dwg_get_entity_layer (const Dwg_Object_Entity *restrict);
 
 EXPORT Dwg_Object *dwg_next_object (const Dwg_Object *obj);
 EXPORT Dwg_Object *dwg_next_entity (const Dwg_Object *obj);
-EXPORT unsigned long dwg_next_handle (const Dwg_Data *dwg);
+EXPORT BITCODE_RLL dwg_next_handle (const Dwg_Data *dwg);
 
 EXPORT Dwg_Object *dwg_ref_object (Dwg_Data *restrict dwg,
                                    Dwg_Object_Ref *restrict ref);
@@ -9793,9 +9793,9 @@ EXPORT Dwg_Object *dwg_get_next_object (const Dwg_Data *dwg,
                                         const BITCODE_RL index);
 
 EXPORT Dwg_Object *dwg_resolve_handle (const Dwg_Data *restrict dwg,
-                                       const unsigned long absref);
+                                       BITCODE_RLL absref);
 EXPORT Dwg_Object *dwg_resolve_handle_silent (const Dwg_Data *restrict dwg,
-                                              const BITCODE_BL absref);
+                                              const BITCODE_RLL absref);
 EXPORT int dwg_resolve_handleref (Dwg_Object_Ref *restrict ref,
                                   const Dwg_Object *restrict obj);
 
@@ -9823,7 +9823,7 @@ EXPORT Dwg_Object_Ref * dwg_new_ref (Dwg_Data *restrict dwg);
  *  There obj is NULL.
  */
 EXPORT int dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
-                           const unsigned long value,
+                           const BITCODE_RLL value,
                            const Dwg_Object *restrict obj);
 
 /** Returns an existing ref with the same ownership (hard/soft, owner/pointer)
@@ -9832,7 +9832,7 @@ EXPORT int dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
 */
 EXPORT Dwg_Object_Ref *dwg_add_handleref (Dwg_Data *restrict dwg,
                                           const BITCODE_RC code,
-                                          const unsigned long value,
+                                          const BITCODE_RLL value,
                                           const Dwg_Object *restrict obj);
 /** Return a link to the global ref or a new one. Or a NULLHDL. */
 EXPORT Dwg_Object_Ref *
@@ -9840,7 +9840,7 @@ dwg_dup_handleref (Dwg_Data *restrict dwg, const Dwg_Object_Ref *restrict ref);
 
 /** Creates a non-global, free'able handle ref. Never relative */
 EXPORT Dwg_Object_Ref *
-dwg_add_handleref_free (const BITCODE_RC code, const unsigned long absref);
+dwg_add_handleref_free (const BITCODE_RC code, const BITCODE_RLL absref);
 
 EXPORT const char *dwg_version_type (const Dwg_Version_Type version);
 EXPORT Dwg_Version_Type dwg_version_as (const char *version);

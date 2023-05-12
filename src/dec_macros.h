@@ -41,7 +41,7 @@
 // different to out_json
 #define ARGS_HREF11(ref)                                                      \
   ref->handleref.size, ref->r11_idx, ref->absolute_ref
-#define FORMAT_HREF11 "[%u, %hd, %lX]"
+#define FORMAT_HREF11 "[%u, %hd, " FORMAT_RLLx "]"
 
 #undef LOG_POS
 #define LOG_POS                                                               \
@@ -914,7 +914,7 @@
           LOG_TRACE (#o "." #color ".rgb: 0x%06x [ENC.BL %d]\n",              \
                      (unsigned)_obj->o.color.rgb, dxf + 420 - 62);            \
         if (_obj->o.color.flag & 0x40 && _obj->o.color.handle)                \
-          LOG_TRACE (#o "." #color ".handle: %lX [ENC.H %d]\n",               \
+          LOG_TRACE (#o "." #color ".handle: " FORMAT_RLLx " [ENC.H %d]\n",   \
                      _obj->o.color.handle->handleref.value, dxf + 430 - 62);  \
       }                                                                       \
   }

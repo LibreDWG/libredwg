@@ -1558,12 +1558,12 @@ match_OBJECTS (const char *restrict filename, Dwg_Data *restrict dwg)
       ELSEMATCH (FIELD)
       ELSEMATCH (TABLECONTENT)
       ELSEMATCH (GEODATA)
-      else if (obj->fixedtype == DWG_TYPE_PDFDEFINITION) found
-          += match_UNDERLAYDEFINITION (filename, obj);
-      else if (obj->fixedtype == DWG_TYPE_DGNDEFINITION) found
-          += match_UNDERLAYDEFINITION (filename, obj);
-      else if (obj->fixedtype == DWG_TYPE_DWFDEFINITION) found
-          += match_UNDERLAYDEFINITION (filename, obj);
+      else if (obj->fixedtype == DWG_TYPE_PDFDEFINITION)
+        found += match_UNDERLAYDEFINITION (filename, obj);
+      else if (obj->fixedtype == DWG_TYPE_DGNDEFINITION)
+        found += match_UNDERLAYDEFINITION (filename, obj);
+      else if (obj->fixedtype == DWG_TYPE_DWFDEFINITION)
+        found += match_UNDERLAYDEFINITION (filename, obj);
       ELSEMATCH (VISUALSTYLE)
       ELSEMATCH (TABLESTYLE)
       ELSEMATCH (SUNSTUDY)
@@ -1689,14 +1689,14 @@ match_BLOCK_HEADER (const char *restrict filename,
   MATCH_OBJECT (BLOCK_HEADER, description, 4);
 
   if (verbose)
-    fprintf (stderr, "HDR: %d, HANDLE: %lX\n", hdr->index, hdr->handle.value);
+    fprintf (stderr, "HDR: %d, HANDLE: " FORMAT_RLLx "\n", hdr->index, hdr->handle.value);
   for (obj = get_first_owned_entity (hdr); obj;
        obj = get_next_owned_entity (hdr, obj)) // without subentities
     {
       if (!obj)
         break;
       if (verbose)
-        fprintf (stderr, "%s [%d], HANDLE: %lX\n", obj->name, obj->index,
+        fprintf (stderr, "%s [%d], HANDLE: " FORMAT_RLLx "\n", obj->name, obj->index,
                  obj->handle.value);
       if (numtype) // search for allowed --type and skip if not
         {
