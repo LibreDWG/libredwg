@@ -563,6 +563,23 @@ json_long (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
   return strtol ((char *)&dat->chain[t->start], NULL, 10);
 }
 
+static uint64_t
+json_longlong (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
+{
+  const jsmntok_t *t = &tokens->tokens[tokens->index];
+  // int len = t->end - t->start;
+  if (t->type != JSMN_PRIMITIVE)
+    {
+      LOG_ERROR ("Expected JSON PRIMITIVE");
+      json_advance_unknown (dat, tokens, t->type, 0);
+      JSON_TOKENS_CHECK_OVERFLOW (return 0)
+      return 0;
+    }
+  JSON_TOKENS_CHECK_OVERFLOW (return 0)
+  tokens->index++;
+  return strtoll ((char *)&dat->chain[t->start], NULL, 10);
+}
+
 static void
 json_3DPOINT (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
               const char *restrict name, const char *restrict key,
@@ -950,7 +967,7 @@ json_vector (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
         }
       else if (strEQc (type, "RLL"))
         {
-          a_rll[k] = json_long (dat, tokens);
+          a_rll[k] = json_longlong (dat, tokens);
           LOG_TRACE ("%s[%d]: " FORMAT_RLL " [%s]\n", key, k, a_rll[k], type);
         }
       else if (strEQc (type, "BL"))
@@ -1158,12 +1175,18 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                && (strEQc (f->type, "RC") || strEQc (f->type, "B")
                    || strEQc (f->type, "BB") || strEQc (f->type, "RS")
                    || strEQc (f->type, "BS") || strEQc (f->type, "RL")
-                   || strEQc (f->type, "BL") || strEQc (f->type, "RLL")
-                   || strEQc (f->type, "RSd") || strEQc (f->type, "BLd")
-                   || strEQc (f->type, "BSd") || strEQc (f->type, "BLL")))
+                   || strEQc (f->type, "BL") || strEQc (f->type, "RSd")
+                   || strEQc (f->type, "BLd") || strEQc (f->type, "BSd")))
         {
           long num = json_long (dat, tokens);
           LOG_TRACE ("%s: %ld [%s]\n", key, num, f->type)
+          dwg_dynapi_header_set_value (dwg, key, &num, 0);
+        }
+      else if (t->type == JSMN_PRIMITIVE
+               && (strEQc (f->type, "RLL") || strEQc (f->type, "BLL")))
+        {
+          uint64_t num = json_longlong (dat, tokens);
+          LOG_TRACE ("%s: " FORMAT_RLL " [%s]\n", key, num, f->type)
           dwg_dynapi_header_set_value (dwg, key, &num, 0);
         }
       else if (t->type == JSMN_STRING
@@ -2066,10 +2089,9 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                && (strEQc (f->type, "RC") || strEQc (f->type, "B")
                    || strEQc (f->type, "BB") || strEQc (f->type, "RS")
                    || strEQc (f->type, "BS") || strEQc (f->type, "RL")
-                   || strEQc (f->type, "BL") || strEQc (f->type, "RLL")
-                   || strEQc (f->type, "BLd") || strEQc (f->type, "BSd")
-                   || strEQc (f->type, "RCd") || strEQc (f->type, "RSd")
-                   || strEQc (f->type, "BLL") || strEQc (f->type, "4BITS")))
+                   || strEQc (f->type, "BL") || strEQc (f->type, "BLd")
+                   || strEQc (f->type, "BSd") || strEQc (f->type, "RCd")
+                   || strEQc (f->type, "RSd") || strEQc (f->type, "4BITS")))
         {
           long num = json_long (dat, tokens);
           JSON_TOKENS_CHECK_OVERFLOW_ERR
@@ -2080,6 +2102,14 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               json_fixup_JUMP (_obj);
               LOG_TRACE ("%s.%s: 0x%lx [RLx]\n", name, key, num);
             }
+        }
+      else if (t->type == JSMN_PRIMITIVE
+               && (strEQc (f->type, "RLL") || strEQc (f->type, "BLL")))
+        {
+          uint64_t num = json_long (dat, tokens);
+          JSON_TOKENS_CHECK_OVERFLOW_ERR
+          LOG_TRACE ("%s.%s: " FORMAT_RLL " [%s]\n", name, key, num, f->type);
+          dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
         }
       // TFF not yet in dynapi.c
       else if (t->type == JSMN_STRING
