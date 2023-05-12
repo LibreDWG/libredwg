@@ -230,7 +230,7 @@ do_match (const int is16, const char *restrict filename,
               if (src[i] == '\0' || !len)
                 {
                   if (!opt_count)
-                    print_match (is16, filename, entity, dxfgroup, text);
+                    print_match (0, filename, entity, dxfgroup, text);
                   return 1;
                 }
             }
@@ -241,7 +241,7 @@ do_match (const int is16, const char *restrict filename,
       if (strcasestr (text, pattern))
         {
           if (!opt_count)
-            print_match (is16, filename, entity, dxfgroup, text);
+            print_match (0, filename, entity, dxfgroup, text);
           return 1;
         }
 #  endif
@@ -251,7 +251,7 @@ do_match (const int is16, const char *restrict filename,
       if (strstr (text, pattern))
         {
           if (!opt_count)
-            print_match (is16, filename, entity, dxfgroup, text);
+            print_match (0, filename, entity, dxfgroup, text);
           return 1;
         }
     }
@@ -310,8 +310,8 @@ do_match (const int is16, const char *restrict filename,
 #  define MATCH_TYPE(type, ENTITY, text_field, dxfgroup)                      \
     text = (char *)obj->tio.type->tio.ENTITY->text_field;                     \
     if (text)                                                                 \
-    found += do_match (obj->parent->header.version >= R_2007, filename,       \
-                       #ENTITY, dxfgroup, text)
+      found += do_match (obj->parent->header.version >= R_2007, filename,       \
+                         #ENTITY, dxfgroup, text)
 #else
 #  define MATCH_TYPE(type, ENTITY, text_field, dxfgroup)                      \
     text = (char *)obj->tio.type->tio.ENTITY->text_field;                     \
