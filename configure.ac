@@ -164,16 +164,6 @@ else
 fi
 
 dnl Checks for typedefs, structures, and compiler characteristics
-case $CFLAGS in
-     *-fsanitize=undefined*)   ax_cv_have_aligned_access_required=yes  ;;
-     *-fsanitize=*,undefined*) ax_cv_have_aligned_access_required=yes  ;;
-esac
-case $CC in
-     *-fsanitize=undefined*)   ax_cv_have_aligned_access_required=yes  ;;
-     *-fsanitize=*,undefined*) ax_cv_have_aligned_access_required=yes  ;;
-esac
-AX_CHECK_ALIGNED_ACCESS_REQUIRED
-
 case $CC in
      *-fsanitize=address*)     HAVE_ASAN=yes ;;
      *-fsanitize=*,address*)   HAVE_ASAN=yes ;;
@@ -192,6 +182,20 @@ case $CFLAGS in
 esac
 AC_SUBST(HAVE_ASAN)
 AM_CONDITIONAL([HAVE_ASAN], [test -n "$HAVE_ASAN"])
+
+case $CFLAGS in
+     *-fsanitize=undefined*)   ax_cv_have_aligned_access_required=yes  ;;
+     *-fsanitize=*,undefined*) ax_cv_have_aligned_access_required=yes  ;;
+esac
+case $CC in
+     *-fsanitize=undefined*)   ax_cv_have_aligned_access_required=yes  ;;
+     *-fsanitize=*,undefined*) ax_cv_have_aligned_access_required=yes  ;;
+esac
+dnl technically 32bit only, but check the aligned branches more often
+if test "$HAVE_ASAN" = "yes"; then
+   ax_cv_have_aligned_access_required=yes
+fi
+AX_CHECK_ALIGNED_ACCESS_REQUIRED
 
 AC_TYPE_SIZE_T
 AC_TYPE_INT16_T
