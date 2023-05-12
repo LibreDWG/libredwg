@@ -163,6 +163,7 @@ typedef BITCODE_DOUBLE BITCODE_RD;
 /* Since R2004 */
 typedef uint64_t BITCODE_RLL;
 typedef uint64_t BITCODE_BLL;
+#define FORMAT_RLLx "%" PRIx64
 #define FORMAT_RLL "0x%" PRIx64
 #define FORMAT_BLL "%" PRIu64
 typedef int32_t BITCODE_MC;
@@ -774,16 +775,16 @@ typedef struct _dwg_handle
 {
   BITCODE_RC code; /*!< OFFSETOBJHANDLE if > 6 */
   BITCODE_RC size;
-  unsigned long value;
+  BITCODE_RLL value;
   BITCODE_B is_global; // to be freed or not
 } Dwg_Handle;
 
-#define FORMAT_H "%u.%u.%lX"
+#define FORMAT_H "%u.%u." FORMAT_RLLx
 #define ARGS_H(hdl) (hdl).code, (hdl).size, (hdl).value
-#define FORMAT_REF "(%u.%u.%lX) abs:%lX"
+#define FORMAT_REF "(%u.%u." FORMAT_RLLx ") abs:" FORMAT_BLL
 #define ARGS_REF(ref) (ref)->handleref.code, (ref)->handleref.size, \
     (ref)->handleref.value, (ref)->absolute_ref
-#define FORMAT_REF11 "(%d, %hd, %lu)"
+#define FORMAT_REF11 "(%d, %hd, " FORMAT_BLL ")"
 #define ARGS_REF11(ref) (ref)->handleref.size, (ref)->r11_idx, \
        (ref)->absolute_ref
 
@@ -800,7 +801,7 @@ typedef struct _dwg_object_ref
 {
   struct _dwg_object* obj;
   Dwg_Handle handleref;
-  unsigned long absolute_ref;
+  BITCODE_RLL absolute_ref;
   BITCODE_RSd r11_idx; // preR13 only, the TABLE index (also used for DXF)
 } Dwg_Object_Ref;
 

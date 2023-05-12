@@ -2104,7 +2104,7 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
 // or creates it. May return a freshly allocated ref via dwg_new_ref.
 EXPORT Dwg_Object_Ref *
 dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
-                   const unsigned long absref, const Dwg_Object *restrict obj)
+                   const BITCODE_RLL absref, const Dwg_Object *restrict obj)
 {
   Dwg_Object_Ref *ref;
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
