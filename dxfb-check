@@ -45,8 +45,15 @@ if [ -f "$b.dxfb" ]; then
         Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
         Windows) TeighaFileConverter=TeighaFileConverter ;;
     esac
+    if [ ! -x "$TeighaFileConverter" ]; then
+        case $(uname) in
+            Darwin)  TeighaFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
+            Linux)   TeighaFileConverter=/usr/bin/ODAFileConverter ;;
+            Windows) TeighaFileConverter=ODAFileConverter ;;
+        esac
+    fi
     if [ -x "$TeighaFileConverter" ]; then
-        echo TeighaFileConverter "." "test" "ACAD$r" DWG 0 1 "$b.dxfb"
+        echo "$TeighaFileConverter . test ACAD$r DWG 0 1 $b.dxfb"
         $TeighaFileConverter "." "test" "ACAD$r" DWG 0 1 "$b.dxfb"
         mv "test/$b.dwg.err" "$b.dxfb2dwg.err"
         cat "$b.dxfb2dwg.err"
@@ -61,13 +68,8 @@ if [ -f "$b.dxfb" ]; then
 fi
 
 if [ -f "$b.dwg" ]; then
-    case $(uname) in
-        Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
-        Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
-        Windows) TeighaFileConverter=TeighaFileConverter ;;
-    esac
     if [ -x "$TeighaFileConverter" ]; then
-        echo TeighaFileConverter "." "test" "ACAD$r" DXF 0 1 "$b.dwg"
+        echo "$TeighaFileConverter . test ACAD$r DXF 0 1 $b.dwg"
         $TeighaFileConverter "." "test" "ACAD$r" DXF 0 1 "$b.dwg"
         mv "test/$b.dxf.err" "$b.dxfb.err"
         cat "$b.dxfb.err"
