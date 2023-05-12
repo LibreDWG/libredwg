@@ -2266,8 +2266,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               LOG_ERROR ("Illegal old json format");
               return DWG_ERR_INVALIDDWG;
             }
-          hdls
-              = size1 ? (BITCODE_H *)calloc (size1, sizeof (BITCODE_H)) : NULL;
+          hdls = size1 ? (BITCODE_H *)calloc (size1, sizeof (BITCODE_H)) : NULL;
           json_set_numfield (_obj, fields, key, (long)size1);
           tokens->index++;
           for (int k = 0; k < t->size; k++)

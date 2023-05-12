@@ -3940,10 +3940,6 @@ DWG_TABLE (LTYPE)
     END_REPEAT (dashes);
     
     UNTIL (R_2004) {
-      JSON {
-        if (FIELD_VALUE (has_strings_area))
-          FIELD_BINARY (strings_area, 256, 0);
-      }
       FIELD_BINARY (strings_area, 256, 0);
       DECODER {
         unsigned int dash_i = 0;

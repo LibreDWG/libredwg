@@ -525,7 +525,7 @@
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")                                                          \
-    LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
+    /* LOG_TRACE_TF (FIELD_VALUE (nam), (int)len); */                         \
   }
 #define FIELD_TFv(nam, len, dxf)                                              \
   {                                                                           \
@@ -538,7 +538,7 @@
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")                                                          \
-    LOG_TRACE_TF (FIELD_VALUE (nam), (int)len);                               \
+    /* LOG_TRACE_TF (FIELD_VALUE (nam), (int)len); */                         \
   }
 #define FIELD_TFF(nam, len, dxf)                                              \
   {                                                                           \

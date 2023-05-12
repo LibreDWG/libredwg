@@ -813,8 +813,8 @@ main (int argc, char const *argv[])
   bit_advance_position (&bitchain, 16L);
   pos = bit_position (&bitchain);
 
-  bit_write_TV (&bitchain, (char *)"GNU"); // we don't store the \0
-  if (bitchain.byte == 69 && bitchain.bit == 2)
+  bit_write_TV (&bitchain, (char *)"GNU"); // we store the \0 since r13
+  if (bitchain.byte == 70 && bitchain.bit == 2)
     pass ();
   else
     fail ("bit_write_TV @%ld.%d", bitchain.byte, bitchain.bit);

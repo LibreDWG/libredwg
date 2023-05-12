@@ -25093,7 +25093,7 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
     /* first check TABLE_CONTROL */                                           \
     Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_##control);        \
     Dwg_Object_##control *_ctrl;                                              \
-    unsigned long ctrlhdl;                                                    \
+    unsigned long ctrlhdl, ctrlidx;                                           \
     if (!ctrl || !ctrl->tio.object || !ctrl->tio.object->tio.control)         \
       {                                                                       \
         API_ADD_OBJECT (control);                                             \
@@ -25110,6 +25110,7 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
         _ctrl = ctrl->tio.object->tio.control;                                \
       }                                                                       \
     ctrlhdl = ctrl->handle.value;                                             \
+    ctrlidx = ctrl->index;                                                    \
     if (name || strEQc (#record, "BLOCK_HEADER"))                             \
       {                                                                       \
         API_ADD_OBJECT (record);                                              \
@@ -25117,6 +25118,9 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms, const int ps)
         _obj->used = -1;                                                      \
         _obj->name = dwg_add_u8_input (dwg, name);                            \
         LOG_TRACE (#record ".name = %s\n", _obj->name);                       \
+        ctrl = &dwg->object[ctrlidx];                                         \
+        ctrl->size = 0;                                                       \
+        ctrl->bitsize = 0;                                                    \
         __VA_ARGS__                                                           \
         if (_ctrl->entries)                                                   \
           _ctrl->entries = (BITCODE_H *)realloc (                             \

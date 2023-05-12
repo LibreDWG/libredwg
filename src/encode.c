@@ -1183,9 +1183,8 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
     // But sooner or later we want to delete yet unsupported objects
     // (Dictionaries, MATERIAL, VISUALSTYLE, dynblocks, surfaces, assoc*, ...)
 
-    // add APPID
+    // add APPID (already searched above)
 #if 1
-
   _obj = dwg_add_APPID (dwg, "LibreDWG");
   return dwg_obj_generic_handlevalue (_obj);
 
@@ -2671,13 +2670,39 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               FIELD_VALUE (HANDSEED) = dwg->header_vars.HANDSEED->absolute_ref;
           }
 
-          // clang-format off
+        // clang-format off
         #include "auxheader.spec"
         // clang-format on
 
         assert (!dat->bit);
-        dwg->header.section[SECTION_AUXHEADER_R2000].size
-            = dat->byte - dwg->header.section[SECTION_AUXHEADER_R2000].address;
+        // padding 2 with r2000
+        if (dwg->header.section[SECTION_AUXHEADER_R2000].size)
+          {
+            if (dat->byte != dwg->header.section[SECTION_AUXHEADER_R2000].address +
+                dwg->header.section[SECTION_AUXHEADER_R2000].size)
+              {
+                LOG_WARN (
+                    "padding: %ld\n",
+                    (long)(dwg->header.section[SECTION_AUXHEADER_R2000].address
+                           + dwg->header.section[SECTION_AUXHEADER_R2000].size)
+                        - dat->byte);
+                dat->byte
+                    = dwg->header.section[SECTION_AUXHEADER_R2000].address
+                      + dwg->header.section[SECTION_AUXHEADER_R2000].size;
+              }
+          }
+        else
+          {
+            if (dwg->header.thumbnail_address
+                && dat->byte != dwg->header.thumbnail_address)
+              {
+                LOG_WARN ("padding %ld\n",
+                          (long)(dwg->header.thumbnail_address - dat->byte));
+                dat->byte = dwg->header.thumbnail_address;
+              }
+            dwg->header.section[SECTION_AUXHEADER_R2000].size
+              = dat->byte - dwg->header.section[SECTION_AUXHEADER_R2000].address;
+          }
       }
   }
 
