@@ -26,17 +26,7 @@
 #include "classes.h"
 
 // v3.1 changed len type from unsigned int to size_t (gperf d519d1a821511eaa22eae6d9019a548aea21e6)
-// macOS 12.6.5 lies about its version, reporting 3.0 but emitting size_t
-#ifdef GPERF_VERSION
-#  if GPERF_VERSION < 301 && !defined HAVE_GPERF_SIZE_T
-#    define SIZE_TYPE unsigned int
-#  else
-#    define SIZE_TYPE size_t
-#  endif
-#else
-#  define SIZE_TYPE size_t
-#endif
-static const struct _dwg_dxfname * in_word_set (const char *str, SIZE_TYPE len);
+static const struct _dwg_dxfname * in_word_set (const char *str, size_t len);
 
 #define STABLE (unsigned)DWG_CLASS_STABLE
 #define UNSTABLE (unsigned)DWG_CLASS_UNSTABLE
