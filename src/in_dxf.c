@@ -6232,27 +6232,27 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
   dxfname = strdup (ctrlname);
 
   // clang-format off
-  ADD_TABLE_IF (LTYPE, LTYPE_CONTROL)
+  ADD_TABLE_IF1 (LTYPE, LTYPE_CONTROL)
   else
-  ADD_TABLE_IF (VPORT, VPORT_CONTROL)
+  ADD_TABLE_IF1 (VPORT, VPORT_CONTROL)
   else
-  ADD_TABLE_IF (APPID, APPID_CONTROL)
+  ADD_TABLE_IF1 (APPID, APPID_CONTROL)
   else
-  ADD_TABLE_IF (BLOCK_RECORD, BLOCK_CONTROL)
+  ADD_TABLE_IF1 (BLOCK_RECORD, BLOCK_CONTROL)
   else
-  ADD_TABLE_IF (DIMSTYLE, DIMSTYLE_CONTROL)
+  ADD_TABLE_IF1 (DIMSTYLE, DIMSTYLE_CONTROL)
   else
-  ADD_TABLE_IF (LAYER, LAYER_CONTROL)
+  ADD_TABLE_IF1 (LAYER, LAYER_CONTROL)
   else
-  ADD_TABLE_IF (STYLE, STYLE_CONTROL)
+  ADD_TABLE_IF1 (STYLE, STYLE_CONTROL)
   else
-  ADD_TABLE_IF (UCS, UCS_CONTROL)
+  ADD_TABLE_IF1 (UCS, UCS_CONTROL)
   else
-  ADD_TABLE_IF (VIEW, VIEW_CONTROL)
+  ADD_TABLE_IF1 (VIEW, VIEW_CONTROL)
   else
-  ADD_TABLE_IF (VX_TABLE_RECORD, VX_CONTROL)
+  ADD_TABLE_IF1 (VX_TABLE_RECORD, VX_CONTROL)
   else
-  ADD_TABLE_IF (BLOCK_RECORD, BLOCK_CONTROL)
+  ADD_TABLE_IF1 (BLOCK_RECORD, BLOCK_CONTROL)
   else
   // clang-format on
   {
@@ -9988,7 +9988,7 @@ new_object (char *restrict name, char *restrict dxfname,
                 {
                   assert (o->text);
                   if (strlen (o->text) < len)
-                    o->text = realloc (o->text, len + 1);
+                    o->text = (char*)realloc (o->text, len + 1);
                   strcpy (o->text, pair->value.s);
                   written += len;
                   LOG_TRACE ("MTEXT.text += %u/%u [TV 3]\n", len, written);
@@ -12720,7 +12720,7 @@ dwg_read_dxf (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       Dwg_Object_BLOCK_HEADER *_obj;
       char *dxfname = strdup ((char *)"BLOCK_HEADER");
       NEW_OBJECT (dwg, obj);
-      ADD_OBJECT (BLOCK_HEADER);
+      ADD_OBJECT1 (BLOCK_HEADER, BLOCK_HEADER);
       // dwg->header.version probably here still unknown. <r2000: 0x17
       // later fixed up when reading $ACADVER and the BLOCK_HEADER.name
       _obj->name = dwg_add_u8_input (dwg, "*Model_Space");

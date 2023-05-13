@@ -139,6 +139,8 @@ BITCODE_RC dxf_find_lweight (const int lw);
     obj->tio.entity->dwg = dwg;                                               \
   }
 
+#ifndef __cplusplus
+
 #define ADD_OBJECT(token)                                                     \
   obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
   obj->name = (char *)#token;                                                 \
@@ -150,6 +152,8 @@ BITCODE_RC dxf_find_lweight (const int lw);
   obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;                    \
   obj->tio.object->tio.token->parent = obj->tio.object;                       \
   obj->tio.object->objid = obj->index
+
+#define ADD_OBJECT1(token, tgt) ADD_OBJECT (token)
 
 #define ADD_ENTITY(token)                                                     \
   obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
@@ -166,10 +170,58 @@ BITCODE_RC dxf_find_lweight (const int lw);
   obj->tio.entity->tio.token->parent = obj->tio.entity;                       \
   obj->tio.entity->objid = obj->index
 
+#else
+
+#define ADD_OBJECT(token)                                                     \
+  obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
+  obj->name = (char *)#token;                                                 \
+  obj->dxfname = dxfname;                                                     \
+  if (obj->type >= DWG_TYPE_GROUP)                                            \
+    (void)dwg_encode_get_class (obj->parent, obj);                            \
+  LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index)                 \
+  _obj = reinterpret_cast<Dwg_Object_APPID *> (calloc (1, sizeof (Dwg_Object_##token))); \
+  obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;                    \
+  obj->tio.object->tio.token->parent = obj->tio.object;                       \
+  obj->tio.object->objid = obj->index
+
+#define ADD_OBJECT1(token, tgt)                                                \
+  obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
+  obj->name = (char *)#token;                                                 \
+  obj->dxfname = dxfname;                                                     \
+  if (obj->type >= DWG_TYPE_GROUP)                                            \
+    (void)dwg_encode_get_class (obj->parent, obj);                            \
+  LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index)                 \
+  _obj = reinterpret_cast<Dwg_Object_##tgt *> (calloc (1, sizeof (Dwg_Object_##token))); \
+  obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;                    \
+  obj->tio.object->tio.token->parent = obj->tio.object;                       \
+  obj->tio.object->objid = obj->index
+
+#define ADD_ENTITY(token)                                                     \
+  obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
+  if (strlen (#token) > 3 && !memcmp (#token, "_3D", 3))                      \
+    obj->name = (char *)&#token[1];                                           \
+  else                                                                        \
+    obj->name = (char *)#token;                                               \
+  obj->dxfname = dxfname;                                                     \
+  if (obj->type >= DWG_TYPE_GROUP)                                            \
+    (void)dwg_encode_get_class (obj->parent, obj);                            \
+  LOG_TRACE ("  ADD_ENTITY %s [%d]\n", obj->name, obj->index)                 \
+  _obj = reinterpret_cast<Dwg_Object_APPID *> ((char*)calloc (1, sizeof (Dwg_Entity_##token))); \
+  obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;                    \
+  obj->tio.entity->tio.token->parent = obj->tio.entity;                       \
+  obj->tio.entity->objid = obj->index
+
+#endif // __cplusplus
+
 #define ADD_TABLE_IF(nam, token)                                              \
   if (strEQc (name, #nam))                                                    \
     {                                                                         \
       ADD_OBJECT (token);                                                     \
+    }
+#define ADD_TABLE_IF1(nam, token)                                             \
+  if (strEQc (name, #nam))                                                    \
+    {                                                                         \
+      ADD_OBJECT1 (token, LTYPE_CONTROL);                                     \
     }
 
 #define STRADD_TV(field, string)                                              \
@@ -184,6 +236,8 @@ BITCODE_RC dxf_find_lweight (const int lw);
       field = dwg_add_u8_input (dwg, string);                                 \
     }
 
+#ifndef __cplusplus
+
 #define UPGRADE_ENTITY(FROM, TO)                                              \
   obj->type = obj->fixedtype = DWG_TYPE_##TO;                                 \
   obj->name = (char *)#TO;                                                    \
@@ -197,5 +251,23 @@ BITCODE_RC dxf_find_lweight (const int lw);
       _obj = realloc (_obj, sizeof (Dwg_Entity_##TO));                        \
       obj->tio.entity->tio.TO = (Dwg_Entity_##TO *)_obj;                      \
     }
+
+#else
+
+#define UPGRADE_ENTITY(FROM, TO)                                              \
+  obj->type = obj->fixedtype = DWG_TYPE_##TO;                                 \
+  obj->name = (char *)#TO;                                                    \
+  free (obj->dxfname);                                                        \
+  obj->dxfname = strdup (obj->name);                                          \
+  strcpy (name, obj->name);                                                   \
+  LOG_TRACE ("change type to %s\n", name);                                    \
+  if (sizeof (Dwg_Entity_##TO) > sizeof (Dwg_Entity_##FROM))                  \
+    {                                                                         \
+      LOG_TRACE ("realloc to %s\n", name);                                    \
+      _obj = reinterpret_cast<Dwg_Object_APPID *> ((char*)realloc (_obj, sizeof (Dwg_Entity_##TO))); \
+      obj->tio.entity->tio.TO = (Dwg_Entity_##TO *)_obj;                      \
+    }
+
+#endif // cplusplus
 
 #endif
