@@ -496,6 +496,14 @@ then
     AC_MSG_RESULT([$GPERF_VERSION])
     AC_DEFINE_UNQUOTED([GPERF_VERSION],[$GPERF_VERSION],
        [versions earlier than 301 will have no size_t])
+    AC_MSG_CHECKING([GPERF API])
+    GPERF_API=$(echo 1 | gperf | grep in_word_set)
+    AC_MSG_RESULT([$GPERF_API])
+    if echo "$GPERF_API" | grep size_t >/dev/null; then
+      HAVE_GPERF_SIZE_T=yes
+      AC_DEFINE_UNQUOTED([HAVE_GPERF_SIZE_T],[$HAVE_GPERF_SIZE_T],
+       [macOS 12.6.5 lies about its gperf version, using size_t as 3.0])
+    fi
 fi
 AC_SUBST(GPERF)
 AC_SUBST(GPERF_VERSION)

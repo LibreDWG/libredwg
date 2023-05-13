@@ -102,6 +102,9 @@
 /* Define to 1 if you have the `gmtime_r' function. */
 #undef HAVE_GMTIME_R
 
+/* macOS 12.6.5 lies about its gperf version, using size_t as 3.0 */
+#undef HAVE_GPERF_SIZE_T
+
 /* Define to 1 if htobe64 is available in <byteswap.h>. */
 #undef HAVE_HTOBE64
 
