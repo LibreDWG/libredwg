@@ -74,7 +74,7 @@ typedef struct _bit_chain
 
 #define EMPTY_CHAIN(size)                                                     \
   {                                                                           \
-    NULL, size, 0L, 0, 0, 0, 0, NULL                                          \
+    NULL, size, 0UL, 0, 0, R_INVALID, R_INVALID, NULL, 0                      \
   }
 
 // only if from r2007+ DWG, not JSON, DXF, add API

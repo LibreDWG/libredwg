@@ -431,7 +431,7 @@ scan_pts2d (unsigned num_pts, char **pp)
     p++;
   if (num_pts > 5000)
     exit (0);
-  pts = calloc (num_pts, 16);
+  pts = (dwg_point_2d *)calloc (num_pts, 16);
   if (!pts)
     exit (0);
   for (unsigned i = 0; i < num_pts; i++)
@@ -483,7 +483,7 @@ scan_pts3d (unsigned num_pts, char **pp)
     p++;
   if (num_pts > 5000)
     exit (0);
-  pts = calloc (num_pts, 24);
+  pts = (dwg_point_3d *)calloc (num_pts, 24);
   if (!pts)
     exit (0);
   for (unsigned i = 0; i < num_pts; i++)
@@ -535,7 +535,7 @@ scan_faces (unsigned num, char **pp)
     p++;
   if (num > 5000)
     exit (0);
-  faces = calloc (num, 4 * sizeof (int));
+  faces = (dwg_face *)calloc (num, 4 * sizeof (int));
   if (!faces)
     exit (0);
   for (unsigned i = 0; i < num; i++)

@@ -170,13 +170,13 @@ entity_color (Dwg_Object_Entity *ent)
     {
       const Dwg_RGB_Palette *palette = dwg_rgb_palette ();
       const Dwg_RGB_Palette *rgb = &palette[ent->color.index];
-      char *s = malloc (8);
+      char *s = (char*)malloc (8);
       sprintf (s, "#%02x%02x%02x", rgb->r, rgb->g, rgb->b);
       return s;
     }
   else if (ent->color.flag & 0x80 && !(ent->color.flag & 0x40))
     {
-      char *s = malloc (8);
+      char *s = (char*)malloc (8);
       sprintf (s, "#%06x", ent->color.rgb & 0x00ffffff);
       return s;
     }
