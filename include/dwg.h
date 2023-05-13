@@ -31,6 +31,7 @@
 
 /* for uint64_t, but not in swig */
 #ifndef SWIGIMPORTED
+#  include <stddef.h>
 #  include <stdint.h>
 #  include <inttypes.h>
 
@@ -8929,7 +8930,7 @@ typedef struct _dwg_class
 typedef struct _dwg_object
 {
   BITCODE_RL size;       /*!< in bytes */
-  unsigned long address; /*!< byte offset in the file */
+  size_t address;	 /*!< byte offset in the file */
   unsigned int type;     /*!< fixed or variable (class - 500) */
   BITCODE_RL index;      /*!< into dwg->object[] */
   enum DWG_OBJECT_TYPE fixedtype; /*!< into a global list */
@@ -8948,13 +8949,13 @@ typedef struct _dwg_object
   Dwg_Class *klass;          /* the optional class of a variable object */
 
   BITCODE_RL bitsize;        /* common + object fields, but no handles */
-  unsigned long bitsize_pos; /* bitsize offset in bits: r13-2007 */
-  unsigned long hdlpos;      /* relative offset, in bits */
+  size_t bitsize_pos; /* bitsize offset in bits: r13-2007 */
+  size_t hdlpos;      /* relative offset, in bits */
   BITCODE_B  was_bitsize_set;    /* internally for encode only */
   BITCODE_B  has_strings;        /*!< r2007+ */
   BITCODE_RL stringstream_size;  /*!< r2007+ in bits, unused */
   BITCODE_UMC handlestream_size; /*!< r2010+ in bits */
-  unsigned long common_size; /* relative offset from type ... end common_entity_data */
+  size_t common_size; /* relative offset from type ... end common_entity_data */
 
   BITCODE_RL num_unknown_bits;
   BITCODE_TF unknown_bits;
@@ -8967,8 +8968,8 @@ typedef struct _dwg_object
 typedef struct _dwg_chain
 {
   unsigned char *chain;
-  long unsigned int size;
-  long unsigned int byte;
+  size_t size;
+  size_t byte;
   unsigned char bit;
   /* NOT:
   unsigned char opts;
@@ -9033,9 +9034,9 @@ typedef enum DWG_SECTION_TYPE_R11 /* tables */
 
 typedef struct _dwg_section
 {
-  int32_t    number; /* preR13: num_entries, r2007: id */
+  BITCODE_RLd number; /* preR13: num_entries, r2007: id */
   BITCODE_RL size;   /* now unsigned */
-  uint64_t   address;
+  BITCODE_RLL address;
   BITCODE_RL objid_r11;
   /* r2000+: */
   BITCODE_RL parent;
@@ -9378,8 +9379,8 @@ typedef struct _dwg_R2004_Header /* encrypted */
   BITCODE_RL x40;
   BITCODE_RL section_map_id;
   BITCODE_RLL section_map_address;
-  BITCODE_RLd  section_info_id;
-  BITCODE_RL section_array_size;
+  BITCODE_RLd section_info_id;
+  BITCODE_RLd section_array_size;
   BITCODE_RL gap_array_size;
   BITCODE_RLx crc32; /* p 2.14.2 32bit CRC 2004+ */
   BITCODE_RC padding[12];
@@ -9495,13 +9496,13 @@ typedef struct _dwg_security
 
 typedef struct _dwg_vbaproject
 {
-  int size;
+  BITCODE_RL size;
   BITCODE_TF unknown_bits;
 } Dwg_VBAProject;
 
 typedef struct _dwg_appinfohistory
 {
-  int size;
+  BITCODE_RL size;
   BITCODE_TF unknown_bits;
 } Dwg_AppInfoHistory;
 

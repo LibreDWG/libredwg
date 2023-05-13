@@ -85,13 +85,13 @@
 #  undef LOG
 #  undef LOG_WARN
 #  undef LOG_ERROR
-#  define LOG(...)                                                        \
+#  define LOG(...)                                                            \
     {                                                                         \
     }
-#  define LOG_WARN(...)                                                   \
+#  define LOG_WARN(...)                                                       \
     {                                                                         \
     }
-#  define LOG_ERROR(...)                                                  \
+#  define LOG_ERROR(...)                                                      \
     {                                                                         \
     }
 #endif
@@ -104,7 +104,7 @@
 
 #ifndef LOG_POS
 #  define LOG_POS                                                             \
-    LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                              \
+    LOG_INSANE (" @%zu.%u", dat->byte, dat->bit)                              \
     LOG_TRACE ("\n")
 #endif
 #ifdef HAVE_NATIVE_WCHAR2

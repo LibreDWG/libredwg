@@ -26,7 +26,7 @@
 char *ATTRIBUTE_MALLOC
 htmlescape (const char *restrict src, const int cp)
 {
-  int len;
+  size_t len;
   char *dest, *d, *end;
   unsigned char *s;
   if (!src)

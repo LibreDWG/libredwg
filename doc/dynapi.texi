@@ -15233,7 +15233,7 @@ RLL
 @item section_info_id
 RLd
 @item section_array_size
-RL
+RLd
 @item gap_array_size
 RL
 @item crc32

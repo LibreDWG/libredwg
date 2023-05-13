@@ -29,6 +29,7 @@
 #include <math.h>
 #include <assert.h>
 #include <errno.h>
+#include <limits.h>
 #ifdef HAVE_NATIVE_WCHAR2
 #  include <wchar.h>
 #endif
@@ -60,19 +61,19 @@ static unsigned int loglevel;
 void
 bit_advance_position (Bit_Chain *dat, long advance)
 {
-  const unsigned long pos = bit_position (dat);
-  const unsigned long endpos = dat->size * 8;
+  const size_t pos = bit_position (dat);
+  const size_t endpos = dat->size * 8;
   long bits = (long)dat->bit + advance;
   if (pos + advance > endpos)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("%s buffer overflow at pos %lu.%u, size %lu, advance by %ld",
+      LOG_ERROR ("%s buffer overflow at pos %zu.%u, size %zu, advance by %ld",
                  __FUNCTION__, dat->byte, dat->bit, dat->size, advance);
     }
   else if ((long)pos + advance < 0)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("buffer underflow at pos %lu.%u, size %lu, advance by %ld",
+      LOG_ERROR ("buffer underflow at pos %zu.%u, size %zu, advance by %ld",
                  dat->byte, dat->bit, dat->size, advance)
       dat->byte = 0;
       dat->bit = 0;
@@ -84,7 +85,7 @@ bit_advance_position (Bit_Chain *dat, long advance)
 
 /* Absolute get in bits
  */
-unsigned long
+size_t
 bit_position (Bit_Chain *dat)
 {
   return (dat->byte * 8) + (dat->bit & 7);
@@ -93,14 +94,14 @@ bit_position (Bit_Chain *dat)
 /* Absolute set in bits
  */
 void
-bit_set_position (Bit_Chain *dat, unsigned long bitpos)
+bit_set_position (Bit_Chain *dat, size_t bitpos)
 {
   dat->byte = bitpos >> 3;
   dat->bit = bitpos & 7;
   if (dat->byte > dat->size || (dat->byte == dat->size && dat->bit))
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("%s buffer overflow at %lu, have %lu", __FUNCTION__,
+      LOG_ERROR ("%s buffer overflow at %zu, have %zu", __FUNCTION__,
                  dat->byte, dat->size)
     }
 }
@@ -109,7 +110,7 @@ bit_set_position (Bit_Chain *dat, unsigned long bitpos)
 void
 bit_reset_chain (Bit_Chain *dat)
 {
-  unsigned long pos = dat->byte;
+  size_t pos = dat->byte;
   dat->byte = 0;
   if (pos < dat->size) // not already overflowed
     dat->chain += pos;
@@ -123,7 +124,7 @@ bit_reset_chain (Bit_Chain *dat)
         || ((dat->byte * 8) + dat->bit > dat->size * 8))                      \
       {                                                                       \
         loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                             \
-        LOG_ERROR ("%s buffer overflow at %lu.%u > %lu", func, dat->byte,     \
+        LOG_ERROR ("%s buffer overflow at %zu.%u > %zu", func, dat->byte,     \
                    dat->bit, dat->size)                                       \
         if (++errors > DWG_ABORT_LIMIT)                                       \
           abort ();                                                           \
@@ -135,7 +136,7 @@ bit_reset_chain (Bit_Chain *dat)
         || ((dat->byte * 8) + dat->bit > dat->size * 8))                      \
       {                                                                       \
         loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                             \
-        LOG_ERROR ("%s buffer overflow at %lu.%u > %lu", func, dat->byte,     \
+        LOG_ERROR ("%s buffer overflow at %zu.%u > %zu", func, dat->byte,     \
                    dat->bit, dat->size)                                       \
         return retval;                                                        \
       }
@@ -146,7 +147,7 @@ bit_reset_chain (Bit_Chain *dat)
       || (((dat->byte + plus) * 8) + dat->bit > dat->size * 8))               \
     {                                                                         \
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;                               \
-      LOG_ERROR ("%s buffer overflow at %lu.%u + %d > %lu", func, dat->byte,  \
+      LOG_ERROR ("%s buffer overflow at %zu.%u + %d > %zu", func, dat->byte,  \
                  dat->bit, (int)(plus), dat->size)                            \
       return retval;                                                          \
     }
@@ -337,7 +338,7 @@ bit_read_RC (Bit_Chain *dat)
       else
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("%s buffer overflow at %lu", __FUNCTION__, dat->byte + 1)
+          LOG_ERROR ("%s buffer overflow at %zu", __FUNCTION__, dat->byte + 1)
           return 0;
         }
     }
@@ -943,7 +944,7 @@ bit_read_MC (Bit_Chain *dat)
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   LOG_ERROR (
       "bit_read_MC: error parsing modular char. i=%d, j=%d, result=" FORMAT_UMC ",\n"
-      " @%lu.@%u: [0x%x 0x%x 0x%x 0x%x 0x%x]",
+      " @%zu.@%u: [0x%x 0x%x 0x%x 0x%x 0x%x]",
       i, j, result, dat->byte - 5, dat->bit, dat->chain[dat->byte - 5],
       dat->chain[dat->byte - 4], dat->chain[dat->byte - 3],
       dat->chain[dat->byte - 2], dat->chain[dat->byte - 1])
@@ -1017,7 +1018,7 @@ bit_read_UMC (Bit_Chain *dat)
   LOG_ERROR (
       "bit_read_UMC: error parsing modular char, i=%d,j=%d,result=" FORMAT_UMC, i, j,
       result)
-  LOG_HANDLE ("  @%lu.%u: [0x%x 0x%x 0x%x 0x%x 0x%x 0x%x]\n", dat->byte - 6,
+  LOG_HANDLE ("  @%zu.%u: [0x%x 0x%x 0x%x 0x%x 0x%x 0x%x]\n", dat->byte - 6,
               dat->bit, dat->chain[dat->byte - 6], dat->chain[dat->byte - 5],
               dat->chain[dat->byte - 4], dat->chain[dat->byte - 3],
               dat->chain[dat->byte - 2], dat->chain[dat->byte - 1])
@@ -1316,7 +1317,7 @@ bit_write_BT (Bit_Chain *dat, double value)
 int
 bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
 {
-  unsigned long pos = dat->byte;
+  size_t pos = dat->byte;
   handle->code = bit_read_RC (dat);
   if (pos == dat->byte)
     return DWG_ERR_INVALIDHANDLE;
@@ -1334,13 +1335,12 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
           return DWG_ERR_INVALIDHANDLE;
         }
       handle->code = 0;
-      val = (BITCODE_RC *)&(handle->value);
-      for (int i = handle->size - 1; i >= 0; i--)
-        val[i] = bit_read_RC (dat);
-      return 0;
     }
-  handle->size = handle->code & 0xf;
-  handle->code = (handle->code & 0xf0) >> 4;
+  else
+    {
+      handle->size = handle->code & 0xf;
+      handle->code = (handle->code & 0xf0) >> 4;
+    }
 
   // size must not exceed 8
   if (handle->size > sizeof (BITCODE_RC *) || handle->code > 14)
@@ -1404,7 +1404,7 @@ bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   union
   {
     unsigned char p[8];
-    unsigned long v;
+    uint64_t v;
   } val;
   unsigned char size;
 
@@ -1483,7 +1483,7 @@ bit_read_CRC (Bit_Chain *dat)
       dat->bit = 0;
     }
   result = bit_read_RS (dat);
-  LOG_TRACE ("read CRC at %lu: %04X\n", dat->byte, result)
+  LOG_TRACE ("read CRC at %zu: %04X\n", dat->byte, result)
 
   return result;
 }
@@ -1491,11 +1491,11 @@ bit_read_CRC (Bit_Chain *dat)
 /** Read and check old 16bit CRC.
  */
 int
-bit_check_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
+bit_check_CRC (Bit_Chain *dat, size_t start_address, uint16_t seed)
 {
   uint16_t calculated;
   uint16_t read;
-  long size;
+  size_t size;
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
 
   if (dat->bit > 0)
@@ -1507,23 +1507,24 @@ bit_check_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
   if (start_address > dat->byte || dat->byte >= dat->size)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("%s buffer overflow at pos %lu-%lu, size %lu", __FUNCTION__,
+      LOG_ERROR ("%s buffer overflow at pos %zu-%zu, size %zu", __FUNCTION__,
                  start_address, dat->byte, dat->size)
       return 0;
     }
+  assert (dat->byte >= start_address);
   size = dat->byte - start_address;
   calculated = bit_calc_CRC (seed, &dat->chain[start_address], size);
   read = bit_read_RS (dat);
   LOG_TRACE ("crc: %04X [RSx]\n", read);
   if (calculated == read)
     {
-      LOG_HANDLE (" check_CRC %lu-%lu = %ld: %04X == %04X\n", start_address,
+      LOG_HANDLE (" check_CRC %zu-%zu = %zu: %04X == %04X\n", start_address,
                   dat->byte - 2, size, calculated, read)
       return 1;
     }
   else
     {
-      LOG_WARN ("check_CRC mismatch %lu-%lu = %ld: %04X <=> %04X\n",
+      LOG_WARN ("check_CRC mismatch %zu-%zu = %zu: %04X <=> %04X\n",
                 start_address, dat->byte - 2, size, calculated, read)
       return 0;
     }
@@ -1532,10 +1533,10 @@ bit_check_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
 /** Create and write old 16bit CRC.
  */
 uint16_t
-bit_write_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
+bit_write_CRC (Bit_Chain *dat, size_t start_address, uint16_t seed)
 {
   uint16_t crc;
-  long size;
+  size_t size;
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
 
   while (dat->bit > 0)
@@ -1546,25 +1547,25 @@ bit_write_CRC (Bit_Chain *dat, long unsigned int start_address, uint16_t seed)
   if (start_address > dat->byte || dat->byte >= dat->size)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("%s buffer overflow at pos %lu-%lu, size %lu", __FUNCTION__,
+      LOG_ERROR ("%s buffer overflow at pos %zu-%zu, size %zu", __FUNCTION__,
                  start_address, dat->byte, dat->size)
       return 0;
     }
+  assert (dat->byte >= start_address);
   size = dat->byte - start_address;
   crc = bit_calc_CRC (seed, &dat->chain[start_address], size);
 
-  LOG_TRACE ("write CRC %04X from %lu-%lu = %ld\n", crc, start_address,
+  LOG_TRACE ("write CRC %04X from %zu-%zu = %zu\n", crc, start_address,
              dat->byte, size);
   bit_write_RS (dat, crc);
   return crc;
 }
 
 uint16_t
-bit_write_CRC_LE (Bit_Chain *dat, long unsigned int start_address,
-                  uint16_t seed)
+bit_write_CRC_LE (Bit_Chain *dat, size_t start_address, uint16_t seed)
 {
   uint16_t crc;
-  long size;
+  size_t size;
 
   while (dat->bit > 0)
     bit_write_B (dat, 0);
@@ -1574,15 +1575,16 @@ bit_write_CRC_LE (Bit_Chain *dat, long unsigned int start_address,
   if (start_address > dat->byte || dat->byte >= dat->size)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("%s buffer overflow at pos %lu-%lu, size %lu", __FUNCTION__,
+      LOG_ERROR ("%s buffer overflow at pos %zu-%zu, size %zu", __FUNCTION__,
                  start_address, dat->byte, dat->size)
       return 0;
     }
+  assert (dat->byte >= start_address);
   size = dat->byte - start_address;
   crc = bit_calc_CRC (seed, &dat->chain[start_address], size);
 
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-  LOG_TRACE ("write CRC %04X from %lu-%lu = %ld\n", crc, start_address,
+  LOG_TRACE ("write CRC %04X from %zu-%zu = %zu\n", crc, start_address,
              dat->byte, size);
   bit_write_RS_LE (dat, crc);
   return crc;
@@ -1590,16 +1592,17 @@ bit_write_CRC_LE (Bit_Chain *dat, long unsigned int start_address,
 
 void
 bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
-                unsigned int length)
+                size_t length)
 {
   if (dat->byte + length > dat->size)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("%s buffer overflow at pos %lu, size %lu", __FUNCTION__,
+      LOG_ERROR ("%s buffer overflow at pos %zu, size %zu", __FUNCTION__,
                  dat->byte, dat->size)
       memset (dest, 0, length);
       return;
     }
+  assert (dat->byte + length <= dat->size);
   if (dat->bit == 0)
     {
       memcpy (dest, &dat->chain[dat->byte], length);
@@ -1620,7 +1623,7 @@ bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
  */
 ATTRIBUTE_MALLOC
 BITCODE_TF
-bit_read_TF (Bit_Chain *restrict dat, unsigned int length)
+bit_read_TF (Bit_Chain *restrict dat, size_t length)
 {
   BITCODE_RC *chain;
   CHK_OVERFLOW_PLUS (length, __FUNCTION__, NULL)
@@ -1643,9 +1646,9 @@ bit_read_TF (Bit_Chain *restrict dat, unsigned int length)
  */
 ATTRIBUTE_MALLOC
 BITCODE_TF
-bit_read_bits (Bit_Chain *dat, unsigned long bits)
+bit_read_bits (Bit_Chain *dat, size_t bits)
 {
-  unsigned bytes = bits / 8;
+  unsigned bytes = (bits / 8) & UINT_MAX;
   int rest = bits % 8;
   BITCODE_RC *restrict chain;
   CHK_OVERFLOW_PLUS (bytes, __FUNCTION__, NULL)
@@ -1679,15 +1682,15 @@ bit_read_bits (Bit_Chain *dat, unsigned long bits)
  */
 void
 bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
-              unsigned int length)
+              size_t length)
 {
   if (!chain)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("Empty TF with length %u", length);
+      LOG_ERROR ("Empty TF with length %zu", length);
       if (length <= 128) // either chain or length is wrong
         {
-          for (unsigned int i = 0; i < length; i++)
+          for (size_t i = 0; i < length; i++)
             bit_write_RC (dat, 0);
         }
       return;
@@ -1699,7 +1702,7 @@ bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
     }
   else
     {
-      for (unsigned int i = 0; i < length; i++)
+      for (size_t i = 0; i < length; i++)
         bit_write_RC (dat, (BITCODE_RC)chain[i]);
     }
 }
@@ -2029,7 +2032,7 @@ bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict chain)
     {
       // silently truncate overlong strings for now
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
+      LOG_WARN ("Overlong string truncated (len=%zu)", length);
       length = UINT16_MAX;
       chain[UINT16_MAX - 1] = '\0';
     }
@@ -2076,8 +2079,7 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
                   if (length > UINT16_MAX)
                     {
                       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-                      LOG_WARN ("Overlong string truncated (len=%lu)",
-                                (unsigned long)length);
+                      LOG_WARN ("Overlong string truncated (len=%zu)", length);
                       length = UINT16_MAX - 1;
                     }
                   bit_write_BS (dat, (BITCODE_BS)(length + 1));
@@ -2260,8 +2262,8 @@ bit_read_T32 (Bit_Chain *restrict dat)
       if (size + dat->byte >= dat->size || size > dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("%s buffer overflow at %lu, size %lu", __FUNCTION__,
-                     dat->byte, (unsigned long)size)
+          LOG_ERROR ("%s buffer overflow at %zu, size " FORMAT_BLL,
+                     __FUNCTION__, dat->byte, size)
           return NULL;
         }
       wstr = (BITCODE_TU)malloc (size + 2);
@@ -2282,8 +2284,8 @@ bit_read_T32 (Bit_Chain *restrict dat)
       if (size + dat->byte >= dat->size || size > dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("%s buffer overflow at %lu, size %lu", __FUNCTION__,
-                     dat->byte, (unsigned long)size)
+          LOG_ERROR ("%s buffer overflow at %zu, size " FORMAT_BLL,
+                     __FUNCTION__, dat->byte, size)
           return NULL;
         }
       str = (BITCODE_T32)malloc (size + 1);
@@ -2314,12 +2316,12 @@ bit_read_TU32 (Bit_Chain *restrict dat)
     {
       BITCODE_TU wstr;
       BITCODE_RL rl1, len = size / 4;
-      unsigned long pos = bit_position (dat);
+      size_t pos = bit_position (dat);
       if (size + dat->byte >= dat->size || size > dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("%s buffer overflow at %lu, size %lu", __FUNCTION__,
-                     dat->byte, (unsigned long)size)
+          LOG_ERROR ("%s buffer overflow at %zu, size " FORMAT_BLL,
+                     __FUNCTION__, dat->byte, size)
           return NULL;
         }
       wstr = (BITCODE_TU)malloc (size + 2);
@@ -2358,8 +2360,8 @@ bit_read_TU32 (Bit_Chain *restrict dat)
       if (size + dat->byte >= dat->size || size > dat->size)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_ERROR ("%s buffer overflow at %lu, size %lu", __FUNCTION__,
-                     dat->byte, (unsigned long)size)
+          LOG_ERROR ("%s buffer overflow at %zu, size " FORMAT_BLL,
+                     __FUNCTION__, dat->byte, size)
           return NULL;
         }
       str = (BITCODE_T32)malloc (size + 1);
@@ -2390,7 +2392,7 @@ bit_write_TU (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
   if (length > UINT16_MAX)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
+      LOG_WARN ("Overlong string truncated (len=%zu)", length);
       length = UINT16_MAX;
       chain[UINT16_MAX - 1] = '\0';
     }
@@ -2413,7 +2415,7 @@ bit_write_TU16 (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
   if (length > UINT16_MAX)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
+      LOG_WARN ("Overlong string truncated (len=%zu)", length);
       length = UINT16_MAX;
       chain[UINT16_MAX - 1] = '\0';
     }
@@ -2437,7 +2439,7 @@ bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)
       if (length > INT32_MAX)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
+          LOG_WARN ("Overlong string truncated (len=%zu)", length);
           length = INT32_MAX;
           chain[INT32_MAX - 1] = '\0';
         }
@@ -2454,7 +2456,7 @@ bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict chain)
       if (length > UINT32_MAX)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
+          LOG_WARN ("Overlong string truncated (len=%zu)", length);
           length = UINT32_MAX;
           chain[UINT32_MAX - 1] = '\0';
         }
@@ -2478,7 +2480,7 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
       if (length > UINT32_MAX / 4)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
+          LOG_WARN ("Overlong string truncated (len=%zu)", length);
           length = UINT32_MAX / 4;
           chain[length - 1] = '\0';
         }
@@ -2495,7 +2497,7 @@ bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict chain)
       if (length > UINT32_MAX)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-          LOG_WARN ("Overlong string truncated (len=%lu)", (unsigned long)length);
+          LOG_WARN ("Overlong string truncated (len=%zu)", length);
           length = UINT32_MAX;
           chain[UINT32_MAX - 1] = '\0';
         }
@@ -3098,8 +3100,7 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
   if (len > 0xFFFE)
     {
       loglevel |= 1;
-      LOG_WARN ("Overlong string truncated (len=%lu)",
-                (unsigned long)len);
+      LOG_WARN ("Overlong string truncated (len=%zu)", len);
       len = UINT16_MAX - 1;
     }
   wstr = (BITCODE_TU)calloc (2, len + 1);
@@ -3509,7 +3510,7 @@ bit_write_ENC (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
 int
 bit_search_sentinel (Bit_Chain *dat, const unsigned char sentinel[16])
 {
-  long unsigned int i, j;
+  size_t i, j;
 
   if (dat->size < 16) // too short
     return 0;
@@ -3598,10 +3599,10 @@ bit_chain_free (Bit_Chain *dat)
 }
 
 void
-bit_print (Bit_Chain *dat, long unsigned int size)
+bit_print (Bit_Chain *dat, size_t size)
 {
   unsigned char sig;
-  long unsigned int i, j;
+  size_t i, j;
 
   printf ("---------------------------------------------------------");
   if (size > (dat->size - dat->byte))
@@ -3609,7 +3610,7 @@ bit_print (Bit_Chain *dat, long unsigned int size)
   for (i = dat->byte; i < size; i++)
     {
       if (i % 16 == 0)
-        printf ("\n[0x%04X]: ", (unsigned int)i);
+        printf ("\n[0x%04X]: ", (unsigned int)i & 0xffffffff);
       printf ("%02X ", (unsigned char)dat->chain[i]);
       if (i % 16 == 15)
         for (j = i - 15; j <= i; j++)
@@ -3687,9 +3688,9 @@ bit_write_hexbits (Bit_Chain *restrict dat, const char *restrict bytes)
 }
 
 void
-bit_print_bits (unsigned char *bits, long unsigned int bitsize)
+bit_print_bits (unsigned char *bits, size_t bitsize)
 {
-  for (long unsigned int i = 0; i < bitsize; i++)
+  for (size_t i = 0; i < bitsize; i++)
     {
       unsigned char bit = i % 8;
       unsigned char result = (bits[i / 8] & (0x80 >> bit)) >> (7 - bit);
@@ -3700,9 +3701,9 @@ bit_print_bits (unsigned char *bits, long unsigned int bitsize)
 }
 
 void
-bit_fprint_bits (FILE *fp, unsigned char *bits, long unsigned int bitsize)
+bit_fprint_bits (FILE *fp, unsigned char *bits, size_t bitsize)
 {
-  for (long unsigned int i = 0; i < bitsize; i++)
+  for (size_t i = 0; i < bitsize; i++)
     {
       unsigned char bit = i % 8;
       unsigned char result = (bits[i / 8] & (0x80 >> bit)) >> (7 - bit);
@@ -3713,10 +3714,10 @@ bit_fprint_bits (FILE *fp, unsigned char *bits, long unsigned int bitsize)
 }
 
 void
-bit_explore_chain (Bit_Chain *dat, long unsigned int datsize)
+bit_explore_chain (Bit_Chain *dat, size_t datsize)
 {
-  unsigned char sig;
-  long unsigned int i, k;
+  unsigned char sig, k;
+  size_t i;
 
   if (datsize > dat->size)
     datsize = dat->size;
@@ -3729,7 +3730,7 @@ bit_explore_chain (Bit_Chain *dat, long unsigned int datsize)
       for (i = 0; i < datsize - 1; i++)
         {
           if (i % 16 == 0)
-            printf ("\n[0x%04X]: ", (unsigned int)i);
+            printf ("\n[0x%04X]: ", (unsigned int)i & 0xffffffff);
           sig = bit_read_RC (dat);
           printf ("%c", sig >= ' ' && sig < 128 ? sig : '.');
         }
@@ -3739,7 +3740,7 @@ bit_explore_chain (Bit_Chain *dat, long unsigned int datsize)
 }
 
 uint16_t
-bit_calc_CRC (const uint16_t seed, unsigned char *addr, long len)
+bit_calc_CRC (const uint16_t seed, unsigned char *addr, size_t len)
 {
   unsigned char al;
   uint16_t dx = seed;
@@ -3786,7 +3787,7 @@ bit_calc_CRC (const uint16_t seed, unsigned char *addr, long len)
 }
 
 uint32_t
-bit_calc_CRC32 (const uint32_t seed, unsigned char *addr, long len)
+bit_calc_CRC32 (const uint32_t seed, unsigned char *addr, size_t len)
 {
 
   static const uint32_t crctable[256] = {
@@ -3859,9 +3860,9 @@ does_cross_unicode_datversion (Bit_Chain *restrict dat)
 void
 bit_copy_chain (Bit_Chain *restrict dat, Bit_Chain *restrict tmp_dat)
 {
-  unsigned long i;
-  unsigned long dat_bits = bit_position (tmp_dat);
-  unsigned long size = tmp_dat->byte;
+  size_t i;
+  size_t dat_bits = bit_position (tmp_dat);
+  size_t size = tmp_dat->byte;
   while (dat->byte + size > dat->size)
     bit_chain_alloc (dat);
   // check if dat is byte aligned, tmp_dat always is. we can use memcpy then.

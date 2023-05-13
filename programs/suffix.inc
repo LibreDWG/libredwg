@@ -53,7 +53,7 @@ suffix (const char *filename, const char *ext)
 #else
   char *base = copy;
 #endif
-  int len = (base ? strlen (base) : 0) + 1 + strlen (ext) + 1;
+  size_t len = (base ? strlen (base) : 0) + 1 + strlen (ext) + 1;
   char *rv = (char *)malloc (len);
   char *dot;
 

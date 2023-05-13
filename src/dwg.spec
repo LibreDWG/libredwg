@@ -1283,7 +1283,7 @@ DWG_ENTITY (POLYLINE_2D)
     {
       // Note: layer is then the extras_start offset
       DECODER {
-        _obj->extra_r11_size = obj->address + obj->size - dat->byte;
+        _obj->extra_r11_size = (obj->address + obj->size - dat->byte) & 0xFFFFFFFF;
         if (dat->version >= R_11b1)
           _obj->extra_r11_size -= 2;
         if (_obj->extra_r11_size > obj->size)
@@ -2727,8 +2727,8 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
               // Note that r2013+ has End-of-ASM-data (not ACIS anymore, but their fork)
               const char end[] = "\016\003End\016\002of\016\004ACIS\r\004data";
               const char end1[] = "\016\003End\016\002of\016\003ASM\r\004data";
-              long pos = dat->byte;
-              BITCODE_BL size = dat->size - dat->byte - 1;
+              size_t pos = dat->byte;
+              size_t size = dat->size - dat->byte - 1;
               FIELD_VALUE (acis_data) = (unsigned char*)calloc (size, 1);
               // Binary SAB. unencrypted, documented format until "End-of-ACIS-data"
               // TODO There exist also SAB streams with a given number of records, but I
@@ -2737,29 +2737,33 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
               // Or even parse the whole SAB format here, and store the SAB different
               // to the ASCII acis_data.
               FIELD_TFF (acis_data, size, 1); // SAB "ACIS BinaryFile"
-              LOG_TRACE ("Unknown ACIS 2 SAB sab_size " FORMAT_BL " starting at %ld\n",
+              LOG_TRACE ("Unknown ACIS 2 SAB sab_size %zu starting at %zu\n",
                          size, pos);
-              if ((p = (char*)memmem (_obj->acis_data, size, end, strlen (end))))
+              if ((p = (char *)memmem (_obj->acis_data, size, end,
+                                       strlen (end))))
                 {
                   size = p - (char*)_obj->acis_data;
                   size += strlen (end);
                   dat->byte = pos + size;
-                  _obj->sab_size = size;
-                  LOG_TRACE ("Found End-of-ACIS-data. sab_size: " FORMAT_BL ", new pos: %lu\n",
-                             size, dat->byte);
+                  _obj->sab_size = size & 0xFFFFFFFF;
+                  LOG_TRACE (
+                      "Found End-of-ACIS-data. sab_size: %zu, new pos: %zu\n",
+                      size, dat->byte);
                 }
-              else if ((p = (char*)memmem (_obj->acis_data, size, end1, strlen (end1))))
+              else if ((p = (char *)memmem (_obj->acis_data, size, end1,
+                                            strlen (end1))))
                 {
                   size = p - (char*)_obj->acis_data;
                   size += strlen (end1);
                   dat->byte = pos + size;
-                  _obj->sab_size = size;
-                  LOG_TRACE ("Found End-of-ASM-data. sab_size: " FORMAT_BL ", new pos: %lu\n",
-                             size, dat->byte);
+                  _obj->sab_size = size & 0xFFFFFFFF;
+                  LOG_TRACE (
+                      "Found End-of-ASM-data. sab_size: %zu, new pos: %zu\n",
+                      size, dat->byte);
                 }
               else
                 LOG_TRACE ("No End-of-ACIS or ASM data marker found\n");
-              _obj->sab_size = _obj->block_size[0] = size;
+              _obj->block_size[0] = _obj->sab_size = size & 0xFFFFFFFF;
             }
           else
             LOG_WARN ("SAB from AcDs blob not yet implemented");
@@ -2774,10 +2778,11 @@ static int decode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
 #endif //#if IS_DECODER
 
 #ifdef IS_ENCODER
-#define ENCODE_3DSOLID encode_3dsolid(dat, hdl_dat, obj, (Dwg_Entity_3DSOLID *)_obj);
-static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
-                           Dwg_Object *restrict obj,
-                           Dwg_Entity_3DSOLID *restrict _obj)
+#  define ENCODE_3DSOLID                                                      \
+    encode_3dsolid (dat, hdl_dat, obj, (Dwg_Entity_3DSOLID *)_obj);
+static int
+encode_3dsolid (Bit_Chain *dat, Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
+                Dwg_Entity_3DSOLID *restrict _obj)
 {
   Dwg_Data* dwg = obj->parent;
   BITCODE_BL i = 0;
@@ -2804,10 +2809,13 @@ static int encode_3dsolid (Bit_Chain* dat, Bit_Chain* hdl_dat,
                   return error;
                 }
               // Later split into 4096 byte sized blocks
-              FIELD_VALUE (block_size) = (BITCODE_BL*)calloc (2, sizeof (BITCODE_BL));
-              FIELD_VALUE (block_size[0]) = strlen ((char*)FIELD_VALUE (acis_data));
+              FIELD_VALUE (block_size)
+                  = (BITCODE_BL *)calloc (2, sizeof (BITCODE_BL));
+              FIELD_VALUE (block_size[0])
+                  = strlen ((char *)FIELD_VALUE (acis_data)) & 0xFFFFFFFF;
               FIELD_VALUE (block_size[1]) = 0;
-              LOG_TRACE ("default block_size[0] = %d\n", (int)FIELD_VALUE (block_size[0]));
+              LOG_TRACE ("default block_size[0] = %d\n",
+                         (int)FIELD_VALUE (block_size[0]));
               num_blocks = 1;
             }
           /* insecure. e.g. oss-fuzz issue 32165
@@ -3483,7 +3491,7 @@ DWG_OBJECT (BLOCK_CONTROL)
     FIELD_RS (num_entries, 70);
     FIELD_RSx (flags_r11, 0);
     JSON { KEY (address); }
-    VALUE_RLx (obj->address, 0);
+    VALUE_RLx (obj->address & 0xFFFFFFFF, 0);
   } LATER_VERSIONS {
     FIELD_BL (num_entries, 70); // or BS?
   }
@@ -3636,7 +3644,7 @@ DWG_OBJECT (LAYER_CONTROL)
     FIELD_RS (num_entries, 70);
     FIELD_RSx (flags_r11, 0);
     JSON { KEY (address); }
-    VALUE_RLx (obj->address, 0);
+    VALUE_RLx (obj->address & 0xFFFFFFFF, 0);
   } LATER_VERSIONS {
     FIELD_BL (num_entries, 70);
   }
@@ -3761,7 +3769,7 @@ DWG_OBJECT (STYLE_CONTROL)
     FIELD_RS (num_entries, 70);
     FIELD_RSx (flags_r11, 0);
     JSON { KEY (address); }
-    VALUE_RLx (obj->address, 0);
+    VALUE_RLx (obj->address & 0xFFFFFFFF, 0);
   } LATER_VERSIONS {
     FIELD_BL (num_entries, 70);
   }
@@ -3856,7 +3864,7 @@ DWG_OBJECT (LTYPE_CONTROL)
     FIELD_RS (num_entries, 70);
     FIELD_RSx (flags_r11, 0);
     JSON { KEY (address); }
-    VALUE_RLx (obj->address, 0);
+    VALUE_RLx (obj->address & 0xFFFFFFFF, 0);
   } LATER_VERSIONS {
     FIELD_BS (num_entries, 70);
   }
@@ -3954,7 +3962,9 @@ DWG_TABLE (LTYPE)
                   }
                 _obj->dashes[rcount1].text = (char*)&_obj->strings_area[dash_i];
                 LOG_TRACE ("dashes[%u] @%u\n", rcount1, dash_i);
-                dash_i += strnlen (_obj->dashes[rcount1].text, 256 - dash_i) + 1;
+                dash_i += (unsigned)(strnlen (_obj->dashes[rcount1].text,
+                                              256 - dash_i)
+                                     + 1);
               }
           }
       }
@@ -3964,7 +3974,7 @@ DWG_TABLE (LTYPE)
     if (FIELD_VALUE (has_strings_area)) {
       FIELD_BINARY (strings_area, 512, 0);
       DECODER {
-        unsigned int dash_i = 0;
+        BITCODE_RS dash_i = 0;
         for (rcount1 = 0; _obj->strings_area && rcount1 < _obj->numdashes; rcount1++)
           {
             if (_obj->dashes[rcount1].shape_flag & 2)
@@ -3976,8 +3986,8 @@ DWG_TABLE (LTYPE)
                   }
                 _obj->dashes[rcount1].text = (char *)&_obj->strings_area[dash_i];
                 LOG_TRACE ("dashes[%u] @%u\n", rcount1, dash_i);
-                dash_i += (2 * bit_wcs2nlen ((BITCODE_TU)_obj->dashes[rcount1].text,
-                                             256 - (dash_i / 2))) + 2;
+                dash_i += ((2 * bit_wcs2nlen ((BITCODE_TU)_obj->dashes[rcount1].text,
+                                             256 - (dash_i / 2))) + 2 ) & 0xFFFF;
               }
           }
       }
@@ -4001,7 +4011,7 @@ DWG_OBJECT (VIEW_CONTROL)
     FIELD_RS (num_entries, 70);
     FIELD_RSx (flags_r11, 0);
     JSON { KEY (address); }
-    VALUE_RLx (obj->address, 0);
+    VALUE_RLx (obj->address & 0xFFFFFFFF, 0);
   } LATER_VERSIONS {
     FIELD_BL (num_entries, 70);
   }
@@ -4128,7 +4138,7 @@ DWG_OBJECT (UCS_CONTROL)
     FIELD_RS (num_entries, 70);
     FIELD_RSx (flags_r11, 0);
     JSON { KEY (address); }
-    VALUE_RLx (obj->address, 0);
+    VALUE_RLx (obj->address & 0xFFFFFFFF, 0);
   } LATER_VERSIONS {
     FIELD_BS (num_entries, 70); //BS or BL?
   }
@@ -4197,7 +4207,7 @@ DWG_OBJECT (VPORT_CONTROL)
     FIELD_RS (num_entries, 70);
     FIELD_RSx (flags_r11, 0);
     JSON { KEY (address); }
-    VALUE_RLx (obj->address, 0);
+    VALUE_RLx (obj->address & 0xFFFFFFFF, 0);
   } LATER_VERSIONS {
     FIELD_BS (num_entries, 70); //BS or BL?
   }
@@ -4402,7 +4412,7 @@ DWG_OBJECT (APPID_CONTROL)
     FIELD_RS (num_entries, 70);
     FIELD_RSx (flags_r11, 0);
     JSON { KEY (address); }
-    VALUE_RLx (obj->address, 0);
+    VALUE_RLx (obj->address & 0xFFFFFFFF, 0);
   } LATER_VERSIONS {
     FIELD_BS (num_entries, 70); //BS or BL?
   }
@@ -4435,7 +4445,7 @@ DWG_OBJECT (DIMSTYLE_CONTROL)
     FIELD_RS (num_entries, 70);
     FIELD_RSx (flags_r11, 0);
     JSON { KEY (address); }
-    VALUE_RLx (obj->address, 0);
+    VALUE_RLx (obj->address & 0xFFFFFFFF, 0);
   } LATER_VERSIONS {
     FIELD_BS (num_entries, 70); //BS or BL?
   }
@@ -4730,7 +4740,7 @@ DWG_OBJECT (VX_CONTROL)
     FIELD_RS (num_entries, 70);
     FIELD_RSx (flags_r11, 0);
     JSON { KEY (address); }
-    VALUE_RLx (obj->address, 0);
+    VALUE_RLx (obj->address & 0xFFFFFFFF, 0);
   } LATER_VERSIONS {
     FIELD_BS (num_entries, 70); //BS or BL?
   }
@@ -5816,15 +5826,19 @@ DWG_ENTITY (PROXY_ENTITY)
 
   DECODER {
     unsigned char opts = dat->opts;
-    _obj->data_numbits = (dat->size * 8) - bit_position (dat);
-    _obj->data_size = dat->size - dat->byte;
+    _obj->data_numbits = ((dat->size * 8) - bit_position (dat)) & 0xFFFFFFFF;
+    _obj->data_size = (dat->size - dat->byte) & 0xFFFFFFFF;
     if (dat->size > obj->size)
       {
-        LOG_TRACE ("dat not restricted, dat->size %lu > obj->size %u\n",
-                   dat->size, obj->size);
-        _obj->data_numbits = ((obj->address * 8) + obj->bitsize) - bit_position (dat);
-        _obj->data_size = _obj->data_numbits % 8;
-        if (_obj->data_numbits) _obj->data_size++;
+            LOG_TRACE (
+                "dat not restricted, dat->size %zu > obj->size " FORMAT_RL
+                "\n", dat->size, obj->size);
+            _obj->data_numbits
+                = (((obj->address * 8) + obj->bitsize) - bit_position (dat))
+                  & 0xFFFFFFFF;
+            _obj->data_size = _obj->data_numbits % 8;
+            if (_obj->data_numbits)
+                  _obj->data_size++;
       }
     LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
     LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
@@ -5867,7 +5881,7 @@ DWG_ENTITY (PROXY_ENTITY)
   COMMON_ENTITY_HANDLE_DATA;
 #ifdef IS_DECODER
   {
-    unsigned long pos = bit_position (hdl_dat);
+    size_t pos = bit_position (hdl_dat);
     unsigned char opts = dat->opts;
     dat->opts &= 0xf0;
     _obj->num_objids = 0;
@@ -5910,21 +5924,23 @@ DWG_OBJECT (PROXY_OBJECT)
 
   DECODER {
     unsigned char opts = dat->opts;
-    _obj->data_numbits = (dat->size * 8) - bit_position (dat);
-    _obj->data_size = dat->size - dat->byte;
+    _obj->data_numbits = ((dat->size * 8) - bit_position (dat)) & 0xFFFFFFFF;
+    _obj->data_size = (dat->size - dat->byte) & 0xFFFFFFFF;
     if (dat->size > obj->size)
       {
-        LOG_TRACE ("dat not restricted, dat->size %lu > obj->size %u\n",
+        LOG_TRACE ("dat not restricted, dat->size %zu > obj->size %u\n",
                    dat->size, obj->size);
         _obj->data_numbits
-            = ((obj->address * 8) + obj->bitsize) - bit_position (dat);
+          = (((obj->address * 8) + obj->bitsize) - bit_position (dat)) & 0xFFFFFFFF;
         _obj->data_size = _obj->data_numbits / 8;
-        if (_obj->data_numbits % 8) _obj->data_size++;
+        if (_obj->data_numbits % 8)
+          _obj->data_size++;
       }
     else
       if (!_obj->data_size) {
         _obj->data_size = _obj->data_numbits / 8;
-        if (_obj->data_numbits % 8) _obj->data_size++;
+        if (_obj->data_numbits % 8)
+          _obj->data_size++;
       }
     LOG_TRACE ("data_numbits: " FORMAT_BL "\n", _obj->data_numbits);
     LOG_TRACE ("data_size: " FORMAT_BL "\n", _obj->data_size);
@@ -5957,7 +5973,7 @@ DWG_OBJECT (PROXY_OBJECT)
     int bits;
     if (!_obj->data_size)
       _obj->data_size = _obj->data_numbits / 8;
-    bits = _obj->data_numbits - (_obj->data_size * 8);
+    bits = _obj->data_numbits - (int)(_obj->data_size * 8);
     if (!(bits > -8 && bits <= 0))
       LOG_ERROR ("Invalid data_numbits %u - (_obj->data_size %u * 8): %d",
                  _obj->data_numbits, _obj->data_size, bits);
@@ -5971,7 +5987,7 @@ DWG_OBJECT (PROXY_OBJECT)
   START_OBJECT_HANDLE_STREAM;
 #ifdef IS_DECODER
   {
-    unsigned long pos = bit_position (hdl_dat);
+    size_t pos = bit_position (hdl_dat);
     unsigned char opts = dat->opts;
     dat->opts &= 0xf0;
     _obj->num_objids = 0;
@@ -7204,7 +7220,7 @@ DWG_OBJECT (XRECORD)
     }
   }
   ENCODER {
-    unsigned long pos = bit_position (dat);
+    size_t pos = bit_position (dat);
     unsigned xdata_size = _obj->xdata_size;
     FIELD_BL (xdata_size, 0);
     FIELD_XDATA (xdata, xdata_size);
@@ -7219,11 +7235,9 @@ DWG_OBJECT (XRECORD)
     FIELD_BL (xdata_size, 0);
     FIELD_XDATA (xdata, xdata_size);
   }
-#ifndef IS_DXF
   SINCE (R_2000) {
-    FIELD_BS (cloning, 280);
+    FIELD_BS (cloning, 0);
   }
-#endif
 
   START_OBJECT_HANDLE_STREAM;
   DECODER {
@@ -11496,7 +11510,7 @@ DWG_ENTITY_END
 DWG_ENTITY (JUMP)
   FIELD_RLx (jump_address_raw, 0);
   DECODER {
-    int len;
+    size_t len;
     BITCODE_TF trailing;
     _obj->jump_address = _obj->jump_address_raw;
     _obj->jump_entity_section = DWG_ENTITY_SECTION;
@@ -11548,7 +11562,7 @@ DWG_ENTITY (JUMP)
       {
         len = obj->address + obj->size - dat->byte;
         trailing = bit_read_TF (dat, len);
-        LOG_TRACE ("trailing (%d): ", len);
+        LOG_TRACE ("trailing (%zu): ", len);
         LOG_TRACE_TF (trailing, len);
         free (trailing);
       }

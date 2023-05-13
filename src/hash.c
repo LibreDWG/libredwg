@@ -154,7 +154,8 @@ hash_set (dwg_inthash *hash, uint64_t key, uint64_t value)
             {
               // HANDLER (OUTPUT, "resize at %d\n", hash->size);
               hash_resize (hash);
-              return hash_set (hash, key, value);
+              hash_set (hash, key, value);
+              return;
             }
           while (hash->array[i].key) // find next empty slot
             {

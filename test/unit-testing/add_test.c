@@ -52,7 +52,7 @@ enum _temp_complex_types
 // copied from in-dxf.c
 static unsigned
 in_hex2bin (unsigned char *restrict dest, const char *restrict src,
-            unsigned destlen)
+            size_t destlen)
 {
   char *pos = (char *)src;
   // 124x faster, but no error checks.
@@ -706,7 +706,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
               "0000000000FFFFFFFFFFFFFFFFFFFFFFFF00000000000000000000000000000"
               "000000000000000000000000000000000000000000000000000000000000000"
               "000000000000";
-        const int blen = strlen (hex) / 2;
+        const size_t blen = strlen (hex) / 2;
         BITCODE_TF data = malloc (blen + 1);
         in_hex2bin (data, hex, blen);
         dwg_add_VBA_PROJECT (dwg, blen, data);

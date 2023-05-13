@@ -140,17 +140,17 @@ static unsigned int cur_ver = 0;
 // guaranteed non-null str
 #define PAIR_Sc(name, str)                                                    \
   {                                                                           \
-    const int len = strlen (str);                                             \
+    const size_t len = strlen (str);                                          \
     if (len < 42)                                                             \
       {                                                                       \
-        const int _len = 6 * len + 1;                                         \
+        const size_t _len = 6 * len + 1;                                      \
         char _buf[256];                                                       \
         PREFIX fprintf (dat->fh, "\"" #name "\": \"%s\",\n",                  \
                         json_cquote (_buf, str, _len, dat->codepage));        \
       }                                                                       \
     else                                                                      \
       {                                                                       \
-        const int _len = 6 * len + 1;                                         \
+        const size_t _len = 6 * len + 1;                                      \
         char *_buf = (char *)malloc (_len);                                   \
         PREFIX fprintf (dat->fh, "\"" #name "\": \"%s\",\n",                  \
                         json_cquote (_buf, str, _len, dat->codepage));        \
@@ -369,7 +369,7 @@ static unsigned int cur_ver = 0;
   ENDARRAY;
 
 #define WARN_UNSTABLE_CLASS                                                   \
-  LOG_WARN ("Unstable Class %s %d %s (0x%x%s) -@%ld",                         \
+  LOG_WARN ("Unstable Class %s %d %s (0x%x%s) -@%zu",                         \
             is_entity ? "entity" : "object", klass->number, dxfname,          \
             klass->proxyflag, klass->is_zombie ? "is_zombie" : "",            \
             obj->address + obj->size)

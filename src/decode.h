@@ -76,13 +76,11 @@ Dwg_Object_Ref *dwg_decode_handleref_with_code (Bit_Chain *restrict hdl_dat,
 int dwg_decode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
                                  Bit_Chain *str_dat, Dwg_Data *restrict dwg);
 int dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
-                           Bit_Chain *hdl_dat, long unsigned int address);
+                           Bit_Chain *hdl_dat, size_t address);
 int obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                        Bit_Chain *restrict hdl_dat);
 void bfr_read (void *restrict dst, BITCODE_RC *restrict *restrict src,
                size_t size);
-void decrypt_R2004_header (BITCODE_RC *restrict dest,
-                           const BITCODE_RC *restrict src, unsigned size);
 void bfr_read_32 (void *restrict dst, BITCODE_RC *restrict *restrict src,
                   size_t size);
 void bfr_read_64 (void *restrict dst, BITCODE_RC *restrict *restrict src,
@@ -92,6 +90,8 @@ void bfr_read_64 (void *restrict dst, BITCODE_RC *restrict *restrict src,
 void dwg_free_xdata_resbuf (Dwg_Resbuf *restrict rbuf);
 
 /* reused with encode */
+void decrypt_R2004_header (BITCODE_RC *restrict dest,
+                           const BITCODE_RC *restrict src, size_t size);
 void dwg_resolve_objectrefs_silent (Dwg_Data *restrict dwg);
 uint32_t dwg_section_page_checksum (const uint32_t seed,
                                     Bit_Chain *restrict dat, int32_t size);
@@ -111,7 +111,7 @@ void dxf_3dsolid_revisionguid (Dwg_Entity_3DSOLID *_obj);
 /* from decode_r2007.c */
 int obj_string_stream (Bit_Chain *dat, Dwg_Object *restrict obj,
                        Bit_Chain *str_dat);
-unsigned long obj_stream_position (Bit_Chain *restrict dat,
+size_t obj_stream_position (Bit_Chain *restrict dat,
                                    Bit_Chain *restrict hdl_dat,
                                    Bit_Chain *restrict str_dat);
 
@@ -124,7 +124,8 @@ void section_string_stream (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 int decode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 int decode_preR13_DIMENSION (Bit_Chain *restrict dat,
                              Dwg_Object *restrict obj);
-int decode_preR13_sentinel (const Dwg_Sentinel sentinel, const char *restrict sentinel_name,
+int decode_preR13_sentinel (const Dwg_Sentinel sentinel,
+                            const char *restrict sentinel_name,
                             Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 int decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                             unsigned num_entities, BITCODE_RL size,

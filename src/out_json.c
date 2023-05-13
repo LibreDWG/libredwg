@@ -176,10 +176,10 @@ static char *_path_field (const char *path);
 #define _VALUE_RD(value, dxf)                                                 \
   {                                                                           \
     char _buf[256];                                                           \
-    int k;                                                                    \
+    size_t k;                                                                 \
     snprintf (_buf, 255, FORMAT_RD, value);                                   \
     k = strlen (_buf);                                                        \
-    if (strrchr (_buf, '.') && _buf[k - 1] == '0')                            \
+    if (k > 0 && strrchr (_buf, '.') && _buf[k - 1] == '0')                   \
       {                                                                       \
         for (k--; k > 1 && _buf[k - 1] != '.' && _buf[k] == '0'; k--)         \
           _buf[k] = '\0';                                                     \
@@ -248,14 +248,14 @@ static char *_path_field (const char *path);
         const size_t len = strlen (str);                                      \
         if (len < 42)                                                         \
           {                                                                   \
-            const int _len = 6 * len + 1;                                     \
+            const size_t _len = 6 * len + 1;                                  \
             char _buf[256];                                                   \
             fprintf (dat->fh, "\"%s\"",                                       \
                      json_cquote (_buf, str, _len, dat->codepage));           \
           }                                                                   \
         else                                                                  \
           {                                                                   \
-            const int _len = 6 * len + 1;                                     \
+            const size_t _len = 6 * len + 1;                                  \
             char *_buf = (char *)malloc (_len);                               \
             fprintf (dat->fh, "\"%s\"",                                       \
                      json_cquote (_buf, str, _len, dat->codepage));           \
@@ -2051,7 +2051,7 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
-          for (int32_t i = 0; i < tbl->number; i++)
+          for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)
             {
               Dwg_Object *obj = &dwg->object[num + i];
               Dwg_Object_BLOCK_HEADER *_obj
@@ -2086,7 +2086,7 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
-          for (int32_t i = 0; i < tbl->number; i++)
+          for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)
             {
               Dwg_Object *obj = &dwg->object[num + i];
               Dwg_Object_LAYER *_obj = obj->tio.object->tio.LAYER;
@@ -2109,7 +2109,7 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
-          for (int32_t i = 0; i < tbl->number; i++)
+          for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)
             {
               Dwg_Object *obj = &dwg->object[num + i];
               Dwg_Object_STYLE *_obj = obj->tio.object->tio.STYLE;
@@ -2138,7 +2138,7 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
-          for (int32_t i = 0; i < tbl->number; i++)
+          for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)
             {
               BITCODE_BL vcount;
               Dwg_Object *obj = &dwg->object[num + i];
@@ -2167,7 +2167,7 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
-          for (int32_t i = 0; i < tbl->number; i++)
+          for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)
             {
               BITCODE_BL vcount;
               Dwg_Object *obj = &dwg->object[num + i];
@@ -2201,7 +2201,7 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
-          for (int32_t i = 0; i < tbl->number; i++)
+          for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)
             {
               BITCODE_BL vcount;
               Dwg_Object *obj = &dwg->object[num + i];
@@ -2279,7 +2279,7 @@ json_thumbnail_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         _obj->chain += 16; /* skip the sentinel */
       KEY (THUMBNAILIMAGE);
       HASH;
-      FIRSTPREFIX fprintf (dat->fh, "\"size\": %lu", _obj->size);
+      FIRSTPREFIX fprintf (dat->fh, "\"size\": %zu", _obj->size);
       FIELD_BINARY (chain, _obj->size, 310);
       if (dwg->header.from_version >= R_2004)
         _obj->chain -= 16; /* undo for free */

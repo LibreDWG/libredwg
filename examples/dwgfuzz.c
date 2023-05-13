@@ -253,13 +253,13 @@ main (int argc, char *argv[])
       if (!dat.chain)
         dat.chain = __AFL_FUZZ_TESTCASE_BUF;
       dat.size = __AFL_FUZZ_TESTCASE_LEN;
-      printf ("Fuzzing from shared memory (%lu)\n", dat.size);
+      printf ("Fuzzing from shared memory (%zu)\n", dat.size);
 #elif FUZZ_MODE == FUZZ_STDIN
       // still 10x faster than the old file-forking fuzzer.
       dat.size = 0;
       // dat.chain = NULL;
       dat_read_stream (&dat, stdin);
-      printf ("Fuzzing from stdin (%lu)\n", dat.size);
+      printf ("Fuzzing from stdin (%zu)\n", dat.size);
 #elif FUZZ_MODE == FUZZ_FILE
       dat.size = 0;
       fp = fopen (argv[2], "rb");
@@ -267,7 +267,7 @@ main (int argc, char *argv[])
         return 0;
       dat_read_file (&dat, fp, argv[2]);
       fclose (fp);
-      printf ("Fuzzing from file (%lu)\n", dat.size);
+      printf ("Fuzzing from file (%zu)\n", dat.size);
 #else
 #  error Missing FUZZ_MODE
 #endif

@@ -129,7 +129,7 @@ static void dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color,
       {                                                                       \
         if (!size)                                                            \
           GROUP (dxf);                                                        \
-        for (unsigned long j = 0; j < (unsigned long)(size); j++)             \
+        for (size_t j = 0; j < (size_t)(size); j++)                           \
           {                                                                   \
             if ((j % 127) == 0)                                               \
               {                                                               \
@@ -332,8 +332,8 @@ dxf_print_rd (Bit_Chain *dat, BITCODE_RD value, int dxf)
       comma = strrchr (_buf, '.');
       if (0 && comma) // reduce precision
         {
-          int k = strlen (_buf);
-          if (_buf[k - 1] == '0' || _buf[k - 1] == ' ')
+          size_t k = strlen (_buf);
+          if (k > 0 && (_buf[k - 1] == '0' || _buf[k - 1] == ' '))
             for (k--; k > 1 && _buf[k - 1] != '.' && (_buf[k] == '0' || _buf[k] == ' '); k--)
               _buf[k] = '\0';
           // max len 17 after-comma places, resp. 18 with -
@@ -1158,7 +1158,7 @@ dxf_CMC (Bit_Chain *restrict dat, Dwg_Color *restrict color, const int dxf,
 "\U+3053\U+306E\U+56F3\U+67A0\U+306F\U+30B5\U+30F3\U+30D7\U+30EB\U+3067\U+3059\U+3002\U+793E\U+5185\U+306E\U+898F\U+683C\U+3084\U+30D7\U+30ED\U+30C3\U+30BF\U+306E\U+51FA\U+529B\U+7BC4\U+56F2\U+306B\U+5408\U+308F\U+305B\U+3066\U+9069\U+5F53\U+306B\U+5909\U+66F4\U+3057\U+3066\U+3054\U+5229\U+7528\U+304F\U+3060\U+3055\U+3044\U+3002"
 */
 static char *
-cquote (char *restrict dest, const int len, const char *restrict src)
+cquote (char *restrict dest, const size_t len, const char *restrict src)
 {
   char c;
   char *d = dest;
@@ -1231,12 +1231,12 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
               || strstr (str, "\\M+1")))
         {
           static char _buf[1024] = { 0 };
-          const int origlen = strlen (str);
-          int len = (2 * origlen) + 1;
+          const size_t origlen = strlen (str);
+          size_t len = (2 * origlen) + 1;
           if (len > 1024)
             { // FIXME: maybe we need this for chunked strings
               fprintf (dat->fh, "\r\n");
-              LOG_ERROR ("Overlarge DXF string, len=%d", origlen);
+              LOG_ERROR ("Overlarge DXF string, len=%zu", origlen);
               return;
             }
           *_buf = '\0';
@@ -1247,7 +1247,7 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
               // GROUP 1 already printed
               while (len > 0)
                 {
-                  fprintf (dat->fh, "%.*s\r\n", len > 255 ? 255 : len, bufp);
+                  fprintf (dat->fh, "%.*s\r\n", len > 255 ? 255 : (int)len, bufp);
                   len -= 255;
                   bufp += 255;
                   if (len > 0)
@@ -1259,13 +1259,13 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
         }
       else
         {
-          int len = strlen (str);
+          size_t len = strlen (str);
           if (len > 255 && dxf == 1)
             {
               // GROUP 1 already printed
               while (len > 0)
                 {
-                  fprintf (dat->fh, "%.*s\r\n", len > 255 ? 255 : len, str);
+                  fprintf (dat->fh, "%.*s\r\n", len > 255 ? 255 : (int)len, str);
                   len -= 255;
                   str += 255;
                   if (len > 0)
@@ -1873,7 +1873,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   BITCODE_RC c;
   char *p = (char *)&_obj->acis_data[15];
   // char *end, *dest, *enddest;
-  long unsigned int size;
+  int64_t size;
   BITCODE_RL version, num_records, num_entities, has_history;
   // char *product_string, *acis_version, *date;
   BITCODE_RD num_mm_units, resabs, resnor;
@@ -1934,7 +1934,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
 #  define SAB_RD1()                                                           \
     {                                                                         \
       double f = bit_read_RD (&src);                                          \
-      int s;                                                                  \
+      int s;                                                               \
       if (dest.byte + 16 >= dest.size)                                        \
         bit_chain_alloc (&dest);                                              \
       if (l + 16 > 255)                                                       \
@@ -1951,14 +1951,16 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
 // key is ignored here. header only
 #  define SAB_T(key)                                                          \
     {                                                                         \
-      int len, s;                                                             \
+      unsigned len;                                                           \
+      int s;                                                                  \
       c = bit_read_RC (&src);                                                 \
       LOG_HANDLE (#key " [%d] ", c)                                           \
       len = bit_read_RC (&src);                                               \
-      s = sprintf ((char *)&dest.chain[dest.byte], "%d ", len);               \
+      s = sprintf ((char *)&dest.chain[dest.byte], "%u ",                     \
+                   len & 0xFF);                                               \
       dest.byte += s;                                                         \
       l += s;                                                                 \
-      LOG_TRACE ("%d %.*s ", len, len, &src.chain[src.byte]);                 \
+      LOG_TRACE ("%u %.*s ", len, (int)len, &src.chain[src.byte]);            \
       bit_write_TF (&dest, &src.chain[src.byte], len);                        \
       bit_write_TF (&dest, (BITCODE_TF) " ", 1);                              \
       l += len + 1;                                                           \
@@ -1984,7 +1986,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
       }                                                                       \
     bit_write_TF (&dest, (BITCODE_TF)x, strlen (x));                          \
     bit_write_TF (&dest, (BITCODE_TF) " ", 1);                                \
-    l += strlen (x) + 1;                                                      \
+    l += ((strlen (x) + 1) & 0xFFFFFFFF);                               \
     LOG_TRACE ("%s ", x)
 
   // create the two vectors encr_sat_data[] and block_size[] on the fly from
@@ -2148,7 +2150,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
               }
             if (dest.byte + len + 1 >= dest.size)
               bit_chain_alloc (&dest);
-            LOG_TRACE ("%.*s%s", len, &src.chain[src.byte], " ")
+            LOG_TRACE ("%.*s%s", (int)len, &src.chain[src.byte], " ")
             bit_write_TF (&dest, &src.chain[src.byte], len);
             src.byte += len;
             bit_write_TF (&dest, (BITCODE_TF) " ", 1);
@@ -2174,7 +2176,7 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
                 LOG_TRACE ("Split overlong SAT line\n");
                 l = 0;
               }
-            LOG_TRACE ("%.*s%s", len, &src.chain[src.byte], " ")
+            LOG_TRACE ("%.*s%s", (int)len, &src.chain[src.byte], " ")
             bit_write_TF (&dest, &src.chain[src.byte], len);
             src.byte += len;
             bit_write_TF (&dest, (BITCODE_TF) " ", 1);
@@ -2330,9 +2332,9 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
   // if (strEQc((char*)&dest.chain[dest.byte-17], "End-of-ACIS-data "))
   //  dest.byte -= 17;
   bit_write_TF (&dest, (BITCODE_TF) "\n", 1);
-  size = dest.byte; // total size
+  size = (int64_t)dest.byte; // total size
   {
-    unsigned long off = 0;
+    size_t off = 0;
     while (size > 4096)
       { // chunks of 4096
         if (i >= num_blocks)
@@ -2362,8 +2364,8 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
       }
     _obj->encr_sat_data[i] = (char *)calloc (size + 1, 1); // shrink it
     memcpy (_obj->encr_sat_data[i], &dest.chain[off], size);
-    _obj->block_size[i] = size;
-    LOG_TRACE ("block_size[%d] = %lu\n", i, size);
+    _obj->block_size[i] = (BITCODE_BL)(size & 0xFFFFFFFF);
+    LOG_TRACE ("block_size[%d] = %" PRId64 "\n", i, size);
   }
   bit_chain_free (&dest);
   LOG_TRACE ("\n");
@@ -3470,8 +3472,8 @@ dxf_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
       = hdr->tio.object->tio.BLOCK_HEADER;
   Dwg_Object *restrict obj = get_first_owned_block (hdr);
   Dwg_Object *restrict endblk = NULL;
-  unsigned long int mspace_ref = mspace ? mspace->handle.value : 0;
-  unsigned long int pspace_ref = pspace ? pspace->handle.value : 0;
+  BITCODE_RLL mspace_ref = mspace ? mspace->handle.value : 0;
+  BITCODE_RLL pspace_ref = pspace ? pspace->handle.value : 0;
 
   if (obj && obj->fixedtype == DWG_TYPE_BLOCK)
     {

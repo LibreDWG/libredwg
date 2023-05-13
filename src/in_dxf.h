@@ -89,7 +89,7 @@ typedef struct _array_hdls
 
 array_hdls *array_push (array_hdls *restrict hdls, const char *restrict field,
                         const char *restrict name, const int code);
-array_hdls *new_array_hdls (int size);
+array_hdls *new_array_hdls (uint32_t size);
 void free_array_hdls (array_hdls *hdls);
 
 void dxf_add_field (Dwg_Object *restrict obj, const char *restrict name,
@@ -103,8 +103,8 @@ BITCODE_H find_tablehandle (Dwg_Data *restrict dwg, Dxf_Pair *restrict pair);
 int is_table_name (const char *restrict name) __nonnull_all;
 int is_textlike (Dwg_Object *restrict obj) __nonnull_all;
 // for in_dxf and in_json
-unsigned in_hex2bin (unsigned char *restrict dest, char *restrict src,
-                     unsigned destlen) __nonnull_all;
+size_t in_hex2bin (unsigned char *restrict dest, char *restrict src,
+                   size_t destlen) __nonnull_all;
 
 BITCODE_RC dxf_find_lweight (const int lw);
 

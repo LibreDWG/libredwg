@@ -6178,7 +6178,7 @@ EXPORT Dwg_Handle *dwg_obj_get_handleref (const dwg_obj_obj *restrict obj,
 EXPORT dwg_object *
 dwg_obj_generic_to_object (const void *restrict obj,
                            int *restrict error) __nonnull ((2));
-EXPORT unsigned long
+EXPORT BITCODE_RLL
 dwg_obj_generic_handlevalue (void *_obj) __nonnull_all;
 Dwg_Data *
 dwg_obj_generic_dwg (const void *restrict obj,

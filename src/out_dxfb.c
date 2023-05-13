@@ -1368,18 +1368,18 @@ dxfb_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           for (i = 0; i < FIELD_VALUE (num_blocks); i++)
             {
               char *s = FIELD_VALUE (encr_sat_data[i]);
-              int len = strlen (s);
+              size_t len = strlen (s);
               // FIELD_BL (block_size[i], 0);
               // DXF 1 + 3 if >255
               while (len > 0)
                 {
                   char *n = strchr (s, '\n');
-                  int l = len > 255 ? 255 : len;
-                  if (n && (n - s < len))
+                  int l = len > 255 ? 255 : len & 0xff;
+                  if (n && ((long)(n - s) < (long)len))
                     l = n - s;
                   if (l)
                     {
-                      if (l < 255)
+                      if (len < 255)
                         {
                           VALUE_BINARY (s, l, 1);
                         }
@@ -2269,8 +2269,8 @@ dxfb_block_write (Bit_Chain *restrict dat, const Dwg_Object *restrict hdr,
       = hdr->tio.object->tio.BLOCK_HEADER;
   Dwg_Object *restrict endblk;
   Dwg_Data *dwg = hdr->parent;
-  unsigned long int mspace_ref = mspace ? mspace->handle.value : 0;
-  unsigned long int pspace_ref = pspace ? pspace->handle.value : 0;
+  BITCODE_RLL mspace_ref = mspace ? mspace->handle.value : 0;
+  BITCODE_RLL pspace_ref = pspace ? pspace->handle.value : 0;
 
   if (obj)
     error |= dwg_dxfb_object (dat, obj, i);

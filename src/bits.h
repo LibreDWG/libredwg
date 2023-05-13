@@ -62,8 +62,8 @@
 typedef struct _bit_chain
 {
   unsigned char *chain;
-  long unsigned int size;
-  long unsigned int byte;
+  size_t size;
+  size_t byte;
   unsigned char bit;
   unsigned char opts; // from dwg->opts, see DWG_OPTS_*
   Dwg_Version_Type version;
@@ -87,8 +87,8 @@ typedef struct _bit_chain
 /* Functions for raw data manipulations.
  */
 void bit_advance_position (Bit_Chain *dat, long advance);
-unsigned long bit_position (Bit_Chain *dat);
-void bit_set_position (Bit_Chain *dat, unsigned long bitpos);
+size_t bit_position (Bit_Chain *dat);
+void bit_set_position (Bit_Chain *dat, size_t bitpos);
 void bit_reset_chain (Bit_Chain *dat);
 
 BITCODE_B
@@ -211,26 +211,26 @@ void bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle);
 
 uint16_t bit_read_CRC (Bit_Chain *dat);
 
-int bit_check_CRC (Bit_Chain *dat, long unsigned int start_address,
+int bit_check_CRC (Bit_Chain *dat, size_t start_address,
                    const uint16_t seed);
-uint16_t bit_write_CRC (Bit_Chain *dat, long unsigned int start_address,
+uint16_t bit_write_CRC (Bit_Chain *dat, size_t start_address,
                         const uint16_t seed);
 // object-map only
-uint16_t bit_write_CRC_LE (Bit_Chain *dat, long unsigned int start_address,
+uint16_t bit_write_CRC_LE (Bit_Chain *dat, size_t start_address,
                            const uint16_t seed);
 
-uint16_t bit_calc_CRC (const uint16_t seed, unsigned char *adr, long len);
-uint32_t bit_calc_CRC32 (const uint32_t seed, unsigned char *adr, long len);
+uint16_t bit_calc_CRC (const uint16_t seed, unsigned char *adr, size_t len);
+uint32_t bit_calc_CRC32 (const uint32_t seed, unsigned char *adr, size_t len);
 
 void bit_read_fixed (Bit_Chain *restrict dat, BITCODE_RC *restrict dest,
-                     unsigned int length);
+                     size_t length);
 
 /* read fixed-length ASCII string */
-BITCODE_TF bit_read_TF (Bit_Chain *dat, unsigned int length) ATTRIBUTE_MALLOC;
-BITCODE_TF bit_read_bits (Bit_Chain *dat, unsigned long bits) ATTRIBUTE_MALLOC;
+BITCODE_TF bit_read_TF (Bit_Chain *dat, size_t length) ATTRIBUTE_MALLOC;
+BITCODE_TF bit_read_bits (Bit_Chain *dat, size_t bits) ATTRIBUTE_MALLOC;
 
 void bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
-                   unsigned int length);
+                   size_t length);
 
 /* read ASCII string, with length as BS */
 BITCODE_TV bit_read_TV (Bit_Chain *restrict dat);
@@ -365,14 +365,14 @@ void bit_chain_free (Bit_Chain *dat);
   (to)->fh = (from)->fh;                                                      \
   (to)->codepage = (from)->codepage
 
-void bit_print (Bit_Chain *dat, long unsigned int size);
+void bit_print (Bit_Chain *dat, size_t size);
 
 void bit_write_bits (Bit_Chain *restrict dat, const char *restrict bits);
 long bit_write_hexbits (Bit_Chain *restrict dat, const char *restrict bytes);
-void bit_print_bits (unsigned char *bits, long unsigned int bitsize);
+void bit_print_bits (unsigned char *bits, size_t bitsize);
 void bit_fprint_bits (FILE *fp, unsigned char *bits,
-                      long unsigned int bitsize);
-void bit_explore_chain (Bit_Chain *dat, long unsigned int datsize);
+                      size_t bitsize);
+void bit_explore_chain (Bit_Chain *dat, size_t datsize);
 
 BITCODE_BD bit_nan (void);
 int bit_isnan (BITCODE_BD number);
@@ -403,4 +403,4 @@ void bit_copy_chain (Bit_Chain *restrict orig_dat,
 #  endif
 #endif // NO_BYTESWAP_SUPPORT
 
-#endif
+#endif // BITS_H

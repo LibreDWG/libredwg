@@ -134,9 +134,9 @@ Bit_Chain
 strtobt (const char *binarystring)
 {
   Bit_Chain dat;
-  int i;
-  const int length = strlen (binarystring);
-  int size_needed = length / 8;
+  size_t i;
+  const size_t length = strlen (binarystring);
+  unsigned size_needed = (unsigned)(length / 8);
   if (length % 8)
     size_needed++;
 

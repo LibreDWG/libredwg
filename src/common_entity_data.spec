@@ -311,15 +311,15 @@
             FIELD_BLL (preview_size, 160);
           }
 #endif
-        if ((int)_ent->preview_size >= 0 && _ent->preview_size < 210210)
+        if ((long)_ent->preview_size >= 0 && _ent->preview_size < 210210)
           {
             FIELD_BINARY (preview, _ent->preview_size, 310);
           }
 #ifndef IS_FREE
         else
           {
-            LOG_ERROR ("Invalid preview_size: %lu kB",
-                      (unsigned long)(_ent->preview_size / 1000));
+            LOG_ERROR ("Invalid preview_size: " FORMAT_BLL " kB",
+                      _ent->preview_size / 1000);
             error |= DWG_ERR_VALUEOUTOFBOUNDS;
           }
 #endif
@@ -337,7 +337,7 @@
       bit_write_RL (dat, obj->bitsize);
 #endif
 #ifndef IS_FREE
-      LOG_TRACE ("bitsize: " FORMAT_BL " @%lu.%u\n", obj->bitsize,
+      LOG_TRACE ("bitsize: " FORMAT_BL " @%zu.%u\n", obj->bitsize,
                  dat->byte, dat->bit)
 #endif
 #ifdef IS_DECODER

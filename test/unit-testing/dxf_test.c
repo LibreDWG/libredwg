@@ -896,7 +896,7 @@ main (int argc, char *argv[])
     {
       const char *dxffile = dxf->dxf;
       struct stat attrib;
-      int len = strlen (dxffile);
+      size_t len = strlen (dxffile);
       char *dwgfile = strdup (dxffile);
       char *s = strrchr (dwgfile, '.');
       *(s + 2) = 'w';

@@ -16,6 +16,7 @@
 #  undef _GNU_SOURCE
 #  define _GNU_SOURCE
 #  include <string.h>
+#  include <limits.h>
 #  include "decode.h"
 
 #  define DECODER if (0)

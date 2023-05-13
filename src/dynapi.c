@@ -12330,7 +12330,7 @@ static const Dwg_DYNAPI_field _dwg_R2004_Header_fields[] = {
     0,0,0, 0 },
   { "section_info_id",	"RLd", sizeof (BITCODE_RLd),  OFF (struct _dwg_R2004_Header, section_info_id),
     0,0,0, 0 },
-  { "section_array_size",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_R2004_Header, section_array_size),
+  { "section_array_size",	"RLd", sizeof (BITCODE_RLd),  OFF (struct _dwg_R2004_Header, section_array_size),
     0,0,0, 0 },
   { "gap_array_size",	"RL", sizeof (BITCODE_RL),  OFF (struct _dwg_R2004_Header, gap_array_size),
     0,0,0, 0 },
@@ -13859,7 +13859,7 @@ _find_entity (const char *name)
                            _name_struct_cmp);
   if (p)
     {
-      const int i = (p - (char *)dwg_name_types) / sizeof (dwg_name_types[0]);
+      const ptrdiff_t i = (p - (char *)dwg_name_types) / sizeof (dwg_name_types[0]);
       return &dwg_name_types[i];
     }
   else
@@ -13876,7 +13876,7 @@ _find_subclass (const char *name)
                            _name_struct_cmp);
   if (p)
     {
-      const int i = (p - (char *)dwg_list_subclasses) / sizeof (dwg_list_subclasses[0]);
+      const ptrdiff_t i = (p - (char *)dwg_list_subclasses) / sizeof (dwg_list_subclasses[0]);
       return &dwg_list_subclasses[i];
     }
   else
@@ -14786,17 +14786,17 @@ ATTRIBUTE_MALLOC char*
 dwg_dynapi_subclass_name (const char *restrict type)
 {
   char *name = NULL;
-  int len = strlen (type);
+  size_t len = strlen (type);
   if (memBEGINc (type, "Dwg_Object_"))
     {
-      const int off = strlen ("Dwg_Object_"); // PLOTSETTINGS
+      const size_t off = strlen ("Dwg_Object_"); // PLOTSETTINGS
       name = strdup (&type[off]);
       if (type[len - 1] == '*')
         name[len - off - 1] = '\0';
     }
   else if (memBEGINc (type, "Dwg_Entity_"))
     {
-      const int off = strlen ("Dwg_Entity_");
+      const size_t off = strlen ("Dwg_Entity_");
       name = strdup (&type[off]);
       if (type[len - 1] == '*')
         name[len - off - 1] = '\0';
@@ -14809,21 +14809,21 @@ dwg_dynapi_subclass_name (const char *restrict type)
     }
   else if (memBEGINc (type, "struct _dwg_entity_"))
     {
-      const int off = strlen ("struct _dwg_entity_"); // TABLE
+      const size_t off = strlen ("struct _dwg_entity_"); // TABLE
       name = strdup (&type[off]);
       if (type[len - 1] == '*')
         name[len - off - 1] = '\0';
     }
   else if (memBEGINc (type, "struct _dwg_object_"))
     {
-      const int off = strlen ("struct _dwg_object_"); // CELLSTYLEMAP*, EVALUATION_GRAPH, ...
+      const size_t off = strlen ("struct _dwg_object_"); // CELLSTYLEMAP*, EVALUATION_GRAPH, ...
       name = strdup (&type[off]);
       if (type[len - 1] == '*')
         name[len - off - 1] = '\0';
     }
   else if (memBEGINc (type, "struct _dwg_")) // CellStyle*
     {
-      const int off = strlen ("struct _dwg_");
+      const size_t off = strlen ("struct _dwg_");
       name = strdup (&type[off]);
       if (type[len - 1] == '*')
         name[len - off - 1] = '\0';

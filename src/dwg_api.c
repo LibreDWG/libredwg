@@ -21924,7 +21924,7 @@ dwg_obj_generic_to_object (const void *restrict _vobj, int *restrict error)
   \param[in]  _obj   dwg_obj_generic* (layer, block_header, xrecord, ...) as void
 * to avoid casts.
 */
-EXPORT unsigned long
+EXPORT BITCODE_RLL
 dwg_obj_generic_handlevalue (void *_obj)
 {
   int error;
@@ -24477,7 +24477,7 @@ EXPORT Dwg_Entity_REGION *
 dwg_add_REGION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                 const char *acis_data)
 {
-  const int len = strlen (acis_data);
+  const size_t len = strlen (acis_data);
   unsigned j;
   int acis_data_idx = 0;
   API_ADD_ENTITY (REGION);
@@ -24487,7 +24487,7 @@ dwg_add_REGION (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       API_UNADD_ENTITY;
       return NULL;
     }
-  _obj->num_blocks = (int)(len / 4096);
+  _obj->num_blocks = (BITCODE_BL)((len / 4096) & 0xFFFFFFFF);
   if (len % 4096)
     _obj->num_blocks++;
   j = _obj->num_blocks;
@@ -24513,7 +24513,7 @@ EXPORT Dwg_Entity__3DSOLID *
 dwg_add_3DSOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                  const char *acis_data)
 {
-  const int len = strlen (acis_data);
+  const size_t len = strlen (acis_data);
   unsigned j;
   int acis_data_idx = 0;
   API_ADD_ENTITY (_3DSOLID);
@@ -24523,7 +24523,7 @@ dwg_add_3DSOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       API_UNADD_ENTITY;
       return NULL;
     }
-  _obj->num_blocks = (int)(len / 4096);
+  _obj->num_blocks = (BITCODE_BL)((len / 4096) & 0xFFFFFFFF);
   if (len % 4096)
     _obj->num_blocks++;
   j = _obj->num_blocks;
@@ -24550,7 +24550,7 @@ dwg_add_3DSOLID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 EXPORT Dwg_Entity_BODY *
 dwg_add_BODY (Dwg_Object_BLOCK_HEADER *restrict blkhdr, const char *acis_data)
 {
-  const int len = strlen (acis_data);
+  const size_t len = strlen (acis_data);
   unsigned j;
   int acis_data_idx = 0;
   API_ADD_ENTITY (BODY);
@@ -24560,7 +24560,7 @@ dwg_add_BODY (Dwg_Object_BLOCK_HEADER *restrict blkhdr, const char *acis_data)
       API_UNADD_ENTITY;
       return NULL;
     }
-  _obj->num_blocks = (int)(len / 4096);
+  _obj->num_blocks = (BITCODE_BL)((len / 4096) & 0xFFFFFFFF);
   if (len % 4096)
     _obj->num_blocks++;
   j = _obj->num_blocks;
@@ -26508,7 +26508,7 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 #  define ACIS_BOX_SIZE 7500
     char acis_data[ACIS_BOX_SIZE];
     char date[48];
-    unsigned date_size = dwg_acis_date (date, 48);
+    size_t date_size = dwg_acis_date (date, 48);
     // origin: 7.791946762401224191 11.02220663951163004 1.271660108551718515
     // length: 4.416106 [BD 40]
     // width: 2.044413 [BD 41]
@@ -26520,7 +26520,7 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         // version num_records num_entities has_history
         "700 104 1 0 \n"
         // product acis_version date
-        "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %zu %s \n"
         // num_mm_units resabs resnor
         "25.39999999999999858 9.999999999999999547e-07 "
         "1.000000000000000036e-10\n"
@@ -26802,13 +26802,13 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       0.0, 0.0, 1.0 };
     char acis_data[1048];
     char date[48];
-    unsigned date_size = dwg_acis_date (date, 48);
+    size_t date_size = dwg_acis_date (date, 48);
     // acis version 106 (r14) would be nicer
     const char base_acis_format[] = /* len = 890 => 957 */
       // version num_records num_entities has_history
       "400 6 1 0 \n"
       // product acis_version date
-      "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+      "8 LibreDWG 19 ASM 223.0.1.1930 NT %zu %s \n"
       // num_mm_units resabs resnor
       "25.39999999999999858 9.999999999999999547e-07 1.000000000000000036e-10\n"
       "body $-1 -1 $-1 $1 $-1 $2 #\n"
@@ -26902,12 +26902,12 @@ dwg_add_CONE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     double dbl_pi = 2.0 * M_PI; // i.e. 360
     char acis_data[1600];
     char date[48];
-    unsigned date_size = dwg_acis_date (date, 48);
+    size_t date_size = dwg_acis_date (date, 48);
     const char cone_acis_format[] = /* len = 1200? => 1338 */
         // version num_records num_entities has_history
         "400 27 1 0 \n"
         // product acis_version date
-        "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %zu %s \n"
         // num_mm_units resabs resnor
         "25.39999999999999858 9.999999999999999547e-07 "
         "1.000000000000000036e-10\n"
@@ -27026,13 +27026,13 @@ dwg_add_CYLINDER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     double dbl_pi = 2.0 * M_PI; // i.e. 360
     char acis_data[2000];
     char date[48];
-    unsigned date_size = dwg_acis_date (date, 48);
+    size_t date_size = dwg_acis_date (date, 48);
     // acis version 106 (r14) would be nicer
     const char cylinder_acis_format[] = /* len = 890 => 1609 */
         // version num_records num_entities has_history
         "400 30 1 0 \n"
         // product acis_version date
-        "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %zu %s \n"
         // num_mm_units resabs resnor
         "25.39999999999999858 9.999999999999999547e-07 "
         "1.000000000000000036e-10\n"
@@ -27151,13 +27151,13 @@ dwg_add_PYRAMID (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     dwg_matrix9 matrix = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
     char acis_data[1048];
     char date[48];
-    unsigned date_size = dwg_acis_date (date, 48);
+    size_t date_size = dwg_acis_date (date, 48);
     // acis version 106 (r14) would be nicer
     const char base_acis_format[] = /* len = 890 => 957 */
         // version num_records num_entities has_history
         "400 6 1 0 \n"
         // product acis_version date
-        "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %zu %s \n"
         // num_mm_units resabs resnor
         "25.39999999999999858 9.999999999999999547e-07 "
         "1.000000000000000036e-10\n"
@@ -27294,12 +27294,12 @@ dwg_add_SPHERE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     dwg_matrix9 matrix = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
     char acis_data[650];
     char date[48];
-    unsigned date_size = dwg_acis_date (date, 48);
+    size_t date_size = dwg_acis_date (date, 48);
     const char sphere_acis_format[] = /* len = 524 => 552 */
         // version num_records num_entities has_history
         "400 7 1 0 \n"
         // product acis_version date
-        "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %zu %s \n"
         // num_mm_units resabs resnor
         "25.39999999999999858 9.999999999999999547e-07 "
         "1.000000000000000036e-10\n"
@@ -27386,13 +27386,13 @@ dwg_add_TORUS (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     dwg_matrix9 matrix = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
     char acis_data[1048];
     char date[48];
-    unsigned date_size = dwg_acis_date (date, 48);
+    size_t date_size = dwg_acis_date (date, 48);
     // acis version 106 (r14) would be nicer
     const char torus_acis_format[] = /* len = 890 => 957 */
         // version num_records num_entities has_history
         "400 19 1 0 \n"
         // product acis_version date
-        "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %zu %s \n"
         // num_mm_units resabs resnor
         "25.39999999999999858 9.999999999999999547e-07 "
         "1.000000000000000036e-10\n"
@@ -27493,7 +27493,7 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 #  define WEDGE_ACIS_SIZE 6500
     char acis_data[WEDGE_ACIS_SIZE];
     char date[48];
-    unsigned date_size = dwg_acis_date (date, 48);
+    size_t date_size = dwg_acis_date (date, 48);
     // the center is in the middle
     const double l2 = length / 2;            // 1.674079
     const double w2 = width / 2;             // 1.244932
@@ -27505,7 +27505,7 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
         // version num_records num_entities has_history
         "400 87 1 0 \n"
         // product acis_version date
-        "8 LibreDWG 19 ASM 223.0.1.1930 NT %u %s \n"
+        "8 LibreDWG 19 ASM 223.0.1.1930 NT %zu %s \n"
         // num_mm_units resabs resnor
         "25.39999999999999858 9.999999999999999547e-07 "
         "1.000000000000000036e-10\n"

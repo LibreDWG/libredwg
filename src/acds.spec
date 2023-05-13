@@ -22,7 +22,7 @@
   static char _AcDs_Schema_Prop_types[] = {0, 0, 2, 1, 2, 4, 8, 1, 2, 4, 8, 4, 8, 0, 0, 0};
 
   DECODER {
-    LOG_TRACE ("unknown_bits [%ld (%u,%d,%d) %ld TF]: ", dat->size * 8,
+    LOG_TRACE ("unknown_bits [%zu (%u,%d,%d) %zu TF]: ", dat->size * 8,
                0, 0, 0, dat->size);
     LOG_TRACE_TF (dat->chain, (int)dat->size);
     LOG_TRACE ("\n");
@@ -346,15 +346,15 @@
     while ((s = (char *)memmem (&dat->chain[i], dat->size - i, start,
                                 strlen (start))))
       {
-        unsigned j = s - (char*)&dat->chain[0]; // absolute_offset of found range
+        size_t j = s - (char*)&dat->chain[0]; // absolute_offset of found range
         if ((e = (char *)memmem (s, dat->size - j, end, strlen (end))))
           {
             BITCODE_H hdl;
             Dwg_Object *o;
             Dwg_Entity_3DSOLID *sol;
-            unsigned size = e - s;
+            size_t size = e - s;
             size += strlen (end);
-            LOG_TRACE ("acis_sab_data[%d]: found %s at %u, size %u\n",
+            LOG_TRACE ("acis_sab_data[%d]: found %s at %zu, size %zu\n",
                        num_acis_sab_data, start, j, size);
             if (!dwg->num_acis_sab_hdl)
               {
@@ -384,16 +384,19 @@
             dwg_dynapi_entity_set_value (sol, o->name, "version", &version, 0);
             // FIXME only until we can write acds:
             dwg_dynapi_entity_set_value (sol, o->name, "acis_empty", &acis_empty, 0);
-            // o->tio.entity->has_ds_data = 0; // maybe there is more, like the wires and silhuettes
-            LOG_TRACE ("%s.acis_data = %u " FORMAT_REF "\n", o->name, size, ARGS_REF (hdl))
-            free (hdl); // it is a non-global, free'able handleref. Created in common_entity_data.spec
-            i = j + size; // next offset to try
+            // o->tio.entity->has_ds_data = 0; // maybe there is more, like the
+            // wires and silhuettes
+            LOG_TRACE ("%s.acis_data = %zu " FORMAT_REF "\n", o->name, size,
+                       ARGS_REF (hdl))
+            free (hdl); // it is a non-global, free'able handleref. Created in
+                        // common_entity_data.spec
+            i = (j + size) & UINT_MAX; // next offset to try
           }
         else
           {
-            LOG_WARN ("No End-of-ASM-data found from %u - %lu for %d-th SAB data",
+            LOG_WARN ("No End-of-ASM-data found from %zu - %zu for %d-th SAB data",
                        j, dat->size, num_acis_sab_data);
-            i = j + 20;
+            i = (j + 20) & UINT_MAX;
           }
       }
     if (wanted == num_acis_sab_data)
@@ -403,7 +406,8 @@
       }
     else
       {
-        LOG_WARN ("Not matching number of %u 3DSOLID entities and %u AcDs SAB data\n",
+        LOG_WARN ("Not matching number of %u 3DSOLID entities and %u AcDs SAB "
+                  "data\n",
                   wanted, num_acis_sab_data);
         while (dwg->num_acis_sab_hdl > 0)
           free (SHIFT_HV (dwg, num_acis_sab_hdl, acis_sab_hdl));

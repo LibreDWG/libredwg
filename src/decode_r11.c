@@ -128,12 +128,13 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
 
   if (dat->byte + 10 > dat->size)
     {
-      LOG_ERROR ("%s.size overflow @%lu", name, dat->byte)
+      LOG_ERROR ("%s.size overflow @%zu", name, dat->byte)
       return DWG_ERR_SECTIONNOTFOUND;
     }
   tbl->type = (Dwg_Section_Type)id;
-  tbl->size = bit_read_RS (dat);
-  tbl->number = bit_read_RS (dat);
+  tbl->size = (BITCODE_RL)bit_read_RS (dat);
+  // RC in r2000, RL in 2004
+  tbl->number = (BITCODE_RLd)((BITCODE_RSd)bit_read_RS (dat));
   tbl->flags_r11 = bit_read_RS (dat);
   tbl->address = bit_read_RL (dat);
   strncpy (tbl->name, name, sizeof (tbl->name) - 1);
@@ -141,10 +142,10 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
   LOG_TRACE ("\nptr table %s [%d]: (0x%lx-0x%lx)\n", tbl->name, id,
              (unsigned long)tbl->address,
              (unsigned long)(tbl->address + (tbl->number * tbl->size)));
-  LOG_TRACE ("%s.size: " FORMAT_RS " [RS]\n", tbl->name, tbl->size);
-  LOG_TRACE ("%s.number: " FORMAT_RS " [RS]\n", tbl->name, tbl->number);
+  LOG_TRACE ("%s.size: " FORMAT_RS " [RS]\n", tbl->name, (BITCODE_RS)tbl->size);
+  LOG_TRACE ("%s.number: " FORMAT_RS " [RS]\n", tbl->name, (BITCODE_RS)tbl->number);
   LOG_TRACE ("%s.flags_r11: " FORMAT_RSx " [RS]\n", tbl->name, tbl->flags_r11);
-  LOG_TRACE ("%s.address: " FORMAT_RLx " [RL]\n\n", tbl->name,
+  LOG_TRACE ("%s.address: " FORMAT_RL " [RL]\n\n", tbl->name,
              (BITCODE_RL)tbl->address);
 
   switch (id)
@@ -195,14 +196,15 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
     }
   if (tbl->number > 0 && tbl->size < 33)
     {
-      LOG_ERROR ("Wrong %s.number or size", tbl->name)
+      LOG_ERROR ("Wrong %s.number " FORMAT_RLd " or size %u", tbl->name,
+                 tbl->number, (unsigned)tbl->size)
       return 1; // DWG_ERR_SECTIONNOTFOUND;
     }
   if (tbl->number > 0 && (tbl->address + (tbl->number * tbl->size) > dat->size))
     {
-      LOG_ERROR ("%s.size overflow %lu > %lu", tbl->name,
-                 (unsigned long)(tbl->address + (tbl->number * tbl->size)),
-                 (unsigned long)dat->size);
+      LOG_ERROR ("%s.size overflow %zu > %zu", tbl->name,
+                 (size_t)(tbl->address + (tbl->number * tbl->size)),
+                 dat->size);
       return DWG_ERR_INVALIDDWG;
     }
   return 0;
@@ -217,22 +219,21 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   Dwg_Section *tbl = &dwg->header.section[id];
   Bit_Chain *hdl_dat = dat;
   Dwg_Object *obj;
-  int i;
-  BITCODE_BL vcount;
   int error = 0;
-  long unsigned int num = dwg->num_objects;
-  long unsigned int pos = tbl->address;
-  BITCODE_RC flag;
+  BITCODE_RLd i;
+  BITCODE_RL vcount;
+  BITCODE_RL num = dwg->num_objects;
+  size_t pos = tbl->address;
+  size_t oldpos;
+  size_t real_start = pos;
   BITCODE_TF name;
   BITCODE_RSd used = -1;
-  unsigned long oldpos;
-  BITCODE_RL real_start = tbl->address;
+  BITCODE_RC flag;
 
   LOG_TRACE (
-      "\ncontents table %-8s [%2d]: size:%-4u num:%-3ld (0x%lx-0x%lx)\n\n",
-      tbl->name, id, tbl->size, (long)tbl->number, (unsigned long)tbl->address,
-      (unsigned long)(tbl->address
-                      + ((unsigned long long)tbl->number * tbl->size)))
+      "\ncontents table %-8s [%2d]: size:%-4u num:%-3ld (" FORMAT_RLL "-" FORMAT_RLL ")\n\n",
+      tbl->name, id, tbl->size, (long)tbl->number, tbl->address,
+      tbl->address + (tbl->number * tbl->size))
 
   // with sentinel in case of R11
   SINCE (R_11)
@@ -241,7 +242,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   // report unknown data before table
   if (tbl->address && dat->byte != real_start)
     {
-      LOG_WARN ("\n@0x%lx => start 0x%x", dat->byte, real_start);
+      LOG_WARN ("\n@0x%zx => start 0x%zx", dat->byte, real_start);
       if (dat->byte < real_start)
         {
           UNKNOWN_UNTIL (real_start);
@@ -284,7 +285,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   if (tbl->address)
     dat->byte = tbl->address;
   dat->bit = 0;
-  if ((unsigned long)(tbl->number * tbl->size) > dat->size - dat->byte)
+  if ((size_t)(tbl->number * tbl->size) > dat->size - dat->byte)
     {
       LOG_ERROR ("Overlarge table num_entries %ld or size %ld for %-8s [%2d]",
                  (long)tbl->number, (long)tbl->size, tbl->name, id);
@@ -353,7 +354,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     pos = tbl->address + (long)((i + 1) * tbl->size);                         \
     if (pos != dat->byte)                                                     \
       {                                                                       \
-        LOG_ERROR ("offset %ld", pos - dat->byte);                            \
+        LOG_ERROR ("offset %ld", (long)(pos - dat->byte));                    \
         /* In the table header the size OR number can be wrong. */            \
         /* Here we catch the wrong number. */                                 \
         if (tbl->number > 0 && tbl->size < 33)                                \
@@ -557,7 +558,7 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   obj->address
       = dat->byte - 1; // already read the type. size includes the type
   LOG_INFO ("===========================\n"
-            "Entity number: %d, Type: %d, Addr: %lx\n",
+            "Entity number: %d, Type: %d, Addr: %zx\n",
             obj->index, obj->type, obj->address);
   _obj->entmode = is_block ? 3 : 2; // ent or block
 
@@ -597,7 +598,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     #include "header.spec"
     // clang-format on
   }
-  LOG_TRACE ("@0x%lx\n", dat->byte); // 0x14
+  LOG_TRACE ("@0x%zx\n", dat->byte); // 0x14
   SINCE (R_2_0b)
   {
     // Block entities
@@ -651,7 +652,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     if (error >= DWG_ERR_CRITICAL)
       return error;
   }
-  LOG_TRACE ("@0x%lx\n", dat->byte); // 0x5e
+  LOG_TRACE ("@0x%zx\n", dat->byte); // 0x5e
   if (dat->size < 0x1f0)             // AC1.50 0x1f9 74 vars
     {
       LOG_ERROR ("DWG too small %zu", (size_t)dat->size)
@@ -660,7 +661,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   LOG_TRACE ("==========================================\n")
   error |= decode_preR13_header_variables (dat, dwg);
-  LOG_TRACE ("@0x%lx\n", dat->byte);
+  LOG_TRACE ("@0x%zx\n", dat->byte);
   if (error >= DWG_ERR_CRITICAL)
     return error;
   if (dat->byte + 2 >= dat->size)
@@ -674,7 +675,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     BITCODE_RS crc, crcc;
     crcc = bit_calc_CRC (0xC0C1, &dat->chain[0], dat->byte); // from 0 to now
     crc = bit_read_RS (dat);
-    LOG_TRACE ("crc: %04X [RSx] from 0-0x%lx\n", crc, dat->byte - 2);
+    LOG_TRACE ("crc: %04X [RSx] from 0-0x%zx\n", crc, dat->byte - 2);
     if (crc != crcc)
       {
         LOG_ERROR ("Header CRC mismatch %04X <=> %04X", crc, crcc);
@@ -688,7 +689,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     num_entities = 0;
   PRE (R_2_0b)
   {
-    dwg->header.entities_start = dat->byte;
+    dwg->header.entities_start = dat->byte & 0xFFFFFFFF;
     dwg->header.entities_end = dwg->header_vars.dwg_size;
   }
 
@@ -767,9 +768,9 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   if (dat->byte < dat->size)
     {
-      int len = dat->size - dat->byte;
+      size_t len = dat->size - dat->byte;
       BITCODE_TF unknown = bit_read_TF (dat, len);
-      LOG_TRACE ("unknown (%d):", len);
+      LOG_TRACE ("unknown (%zu):", len);
       LOG_TRACE_TF (unknown, len);
       free (unknown);
     }

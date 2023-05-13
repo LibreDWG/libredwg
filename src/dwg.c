@@ -105,8 +105,8 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
   if (size != dat->size)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("Could not read file (%lu out of %lu): %s\n",
-                 (long unsigned int)size, dat->size, filename)
+      LOG_ERROR ("Could not read file (%zu out of %zu): %s\n",
+                 size, dat->size, filename)
       fclose (fp);
       free (dat->chain);
       dat->chain = NULL;
@@ -172,8 +172,8 @@ dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
 
   if (dat->size == 0)
     {
-      LOG_ERROR ("Could not read from stream (%lu out of %lu)\n",
-                 (long unsigned int)size, dat->size);
+      LOG_ERROR ("Could not read from stream (%zu out of %zu)\n",
+                 size, dat->size);
       fclose (fp);
       free (dat->chain);
       dat->chain = NULL;
@@ -348,8 +348,8 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   fclose (fp);
   if (size != dat.size)
     {
-      LOG_ERROR ("Could not read the entire file (%lu out of %lu): %s\n",
-                 (long unsigned int)size, dat.size, filename)
+      LOG_ERROR ("Could not read the entire file (%zu out of %zu): %s\n",
+                 size, dat.size, filename)
       free (dat.chain);
       dat.chain = NULL;
       dat.size = 0;
@@ -357,8 +357,8 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
     }
   if (size < 256)
     {
-      LOG_ERROR ("File %s too small, %lu byte.\n", filename,
-                 (long unsigned int)size)
+      LOG_ERROR ("File %s too small, %zu byte.\n", filename,
+                 size)
       free (dat.chain);
       dat.chain = NULL;
       dat.size = 0;
@@ -541,7 +541,7 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
   LOG_TRACE ("overall size: " FORMAT_RL " [RL]\n", osize);
   if (osize > (dat.size - 4))
     {
-      LOG_ERROR ("Preview overflow > %ld", dat.size - 4);
+      LOG_ERROR ("Preview overflow > %zu", dat.size - 4);
       return NULL;
     }
   num_headers = bit_read_RC (&dat);
@@ -576,7 +576,7 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
           LOG_INFO ("\t\tBMP size: %i [RL]\n", *size)
           if (*size > (dat.size - 4))
             {
-              LOG_ERROR ("BMP thumbnail overflow > %ld", dat.size - 4);
+              LOG_ERROR ("BMP thumbnail overflow > %zu", dat.size - 4);
               return NULL;
             }
         }
@@ -601,10 +601,10 @@ dwg_bmp (const Dwg_Data *restrict dwg, BITCODE_RL *restrict size)
     }
   dat.byte += header_size;
   if (*size)
-    LOG_TRACE ("BMP offset: %lu\n", dat.byte);
+    LOG_TRACE ("BMP offset: %zu\n", dat.byte);
   if (dat.byte + *size > dat.size)
     {
-      LOG_ERROR ("Preview overflow %lu + " FORMAT_RL " > %lu", dat.byte, *size,
+      LOG_ERROR ("Preview overflow %zu + " FORMAT_RL " > %zu", dat.byte, *size,
                  dat.size);
       *size = 0;
       return NULL;

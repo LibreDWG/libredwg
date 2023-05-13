@@ -39,6 +39,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <assert.h>
+#include <limits.h>
 #if defined HAVE_CTYPE_H || defined _MSC_VER
 #  include <ctype.h>
 #endif
@@ -62,7 +63,7 @@ BITCODE_T dwg_add_u8_input (Dwg_Data *restrict dwg,
                             const char *restrict u8str);
 Dwg_Object_APPID *dwg_add_APPID (Dwg_Data *restrict dwg,
                                  const char *restrict name);
-unsigned long dwg_obj_generic_handlevalue (void *_obj);
+BITCODE_RLL dwg_obj_generic_handlevalue (void *_obj);
 
 static int
 encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
@@ -71,7 +72,7 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 /* The logging level for the write (encode) path.  */
 static unsigned int loglevel;
 /* the current version per spec block */
-static unsigned int cur_ver = 0;
+static Dwg_Version_Type cur_ver = R_INVALID;
 static BITCODE_BL rcount1 = 0, rcount2 = 0;
 
 #ifdef USE_TRACING
@@ -122,14 +123,14 @@ const unsigned char unknown_section[53]
 
 #undef LOG_POS
 #define LOG_POS                                                               \
-  LOG_INSANE (" @%lu.%u", obj ? dat->byte - obj->address : dat->byte,         \
+  LOG_INSANE (" @%zu.%u", obj ? dat->byte - obj->address : dat->byte,         \
               dat->bit)                                                       \
   LOG_TRACE ("\n")
 #define LOG_RPOS                                                              \
-  LOG_INSANE (" @%lu.%u", dat->byte, dat->bit)                                \
+  LOG_INSANE (" @%zu.%u", dat->byte, dat->bit)                                \
   LOG_TRACE ("\n")
 #define LOG_HPOS                                                              \
-  LOG_INSANE (" @%lu.%u",                                                     \
+  LOG_INSANE (" @%zu.%u",                                                     \
               obj && hdl_dat->byte > obj->address                             \
                   ? hdl_dat->byte - obj->address                              \
                   : hdl_dat->byte,                                            \
@@ -383,7 +384,7 @@ const unsigned char unknown_section[53]
   {                                                                           \
     bit_write_CMC (dat, str_dat, &_obj->color);                               \
     LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->color.index, dxf);    \
-    LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte,     \
+    LOG_INSANE (" @%zu.%u\n", obj ? dat->byte - obj->address : dat->byte,     \
                 dat->bit)                                                     \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
@@ -396,7 +397,7 @@ const unsigned char unknown_section[53]
         if (_obj->color.flag & 2)                                             \
           LOG_TRACE (#color ".bookname: %s [CMC.T]\n",                        \
                      _obj->color.book_name);                                  \
-        LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, \
+        LOG_INSANE (" @%zu.%u\n", obj ? dat->byte - obj->address : dat->byte, \
                     dat->bit)                                                 \
       }                                                                       \
   }
@@ -404,7 +405,7 @@ const unsigned char unknown_section[53]
   {                                                                           \
     bit_write_CMC (dat, str_dat, &_obj->o.color);                             \
     LOG_TRACE (#color ".index: %d [CMC.BS %d]\n", _obj->o.color.index, dxf);  \
-    LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte,     \
+    LOG_INSANE (" @%zu.%u\n", obj ? dat->byte - obj->address : dat->byte,     \
                 dat->bit)                                                     \
     if (dat->version >= R_2004)                                               \
       {                                                                       \
@@ -417,7 +418,7 @@ const unsigned char unknown_section[53]
         if (_obj->o.color.flag & 2)                                           \
           LOG_TRACE (#color ".bookname: %s [CMC.T]\n",                        \
                      _obj->o.color.book_name);                                \
-        LOG_INSANE (" @%lu.%u\n", obj ? dat->byte - obj->address : dat->byte, \
+        LOG_INSANE (" @%zu.%u\n", obj ? dat->byte - obj->address : dat->byte, \
                     dat->bit)                                                 \
       }                                                                       \
   }
@@ -426,14 +427,14 @@ const unsigned char unknown_section[53]
   if (var)                                                                    \
     {                                                                         \
       int _i;                                                                 \
-      for (_i = 0; _i < (len); _i++)                                          \
+      for (_i = 0; _i < (int)(len); _i++)                                     \
         {                                                                     \
           LOG (level, "%02X", (unsigned char)((char *)var)[_i]);              \
         }                                                                     \
       LOG (level, "\n");                                                      \
       if (DWG_LOGLEVEL >= DWG_LOGLEVEL_INSANE)                                \
         {                                                                     \
-          for (_i = 0; _i < (len); _i++)                                      \
+          for (_i = 0; _i < (int)(len); _i++)                                 \
             {                                                                 \
               unsigned char c = ((unsigned char *)var)[_i];                   \
               LOG_INSANE ("%-2c", isprint (c) ? c : ' ');                     \
@@ -589,8 +590,8 @@ const unsigned char unknown_section[53]
         {                                                                     \
           if (dat->version < R_2007)                                          \
             {                                                                 \
-              unsigned _len = strlen (_obj->nam[vcount]);                     \
-              bit_write_BS (dat, _len);                                       \
+              size_t _len = strlen (_obj->nam[vcount]);                       \
+              bit_write_BS (dat, _len & 0xFFFFFFFF);                          \
               bit_write_TF (dat, (BITCODE_TF)_obj->nam[vcount], _len);        \
               LOG_TRACE (#nam "[%d]: \"%s\" [TV1 %d]", (int)vcount,           \
                          _obj->nam[vcount], dxf)                              \
@@ -805,7 +806,7 @@ const unsigned char unknown_section[53]
     }
 
 #define START_HANDLE_STREAM                                                   \
-  LOG_INSANE ("HANDLE_STREAM @%lu.%u\n", dat->byte - obj->address, dat->bit)  \
+  LOG_INSANE ("HANDLE_STREAM @%zu.%u\n", dat->byte - obj->address, dat->bit)  \
   if (!obj->bitsize || /* DD sizes can vary, but let unknown_bits asis */     \
       has_entity_DD (obj) || /* strings may be zero-terminated or not */      \
       obj_has_strings (obj)                                                   \
@@ -813,16 +814,16 @@ const unsigned char unknown_section[53]
           && obj->fixedtype != DWG_TYPE_UNKNOWN_OBJ                           \
           && obj->fixedtype != DWG_TYPE_UNKNOWN_ENT))                         \
     {                                                                         \
-      obj->bitsize = bit_position (dat) - (obj->address * 8);                 \
+      obj->bitsize = (bit_position (dat) - (obj->address * 8)) & 0xFFFFFFFF;  \
       LOG_TRACE (                                                             \
-          "-bitsize calc from HANDLE_STREAM " FORMAT_RL " @%lu.%u (%lu)\n",   \
+          "-bitsize calc from HANDLE_STREAM " FORMAT_RL " @%zu.%u (%zu)\n",   \
           obj->bitsize, dat->byte - obj->address, dat->bit, obj->address);    \
       obj->was_bitsize_set = 1;                                               \
     }                                                                         \
   if (!obj->hdlpos)                                                           \
     obj->hdlpos = bit_position (dat);                                         \
   {                                                                           \
-    unsigned long _hpos = bit_position (hdl_dat);                             \
+    size_t _hpos = bit_position (hdl_dat);                                    \
     if (_hpos > 0)                                                            \
       {                                                                       \
         /* save away special accumulated hdls, need to write common first */  \
@@ -852,13 +853,13 @@ static void
 obj_flush_hdlstream (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                      Bit_Chain *restrict hdl_dat)
 {
-  unsigned long datpos = bit_position (dat);
-  unsigned long hdlpos = bit_position (hdl_dat);
-  unsigned long objpos = obj->address * 8;
+  size_t datpos = bit_position (dat);
+  size_t hdlpos = bit_position (hdl_dat);
+  size_t objpos = obj->address * 8;
 #if 0
   unsigned char* oldchain = dat->chain;
 #endif
-  LOG_TRACE ("Flush handle stream of size %lu (@%lu.%u) to @%lu.%lu\n", hdlpos,
+  LOG_TRACE ("Flush handle stream of size %zu (@%zu.%u) to @%zu.%zu\n", hdlpos,
              hdl_dat->byte, hdl_dat->bit, (datpos - objpos) / 8,
              (datpos - objpos) % 8);
   // This might change dat->chain
@@ -1058,7 +1059,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 #define DEBUG_POS                                                             \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
-      LOG_TRACE ("DEBUG_POS @%u.%u / 0x%x (%lu)\n", (unsigned int)dat->byte,  \
+      LOG_TRACE ("DEBUG_POS @%u.%u / 0x%x (%zu)\n", (unsigned int)dat->byte,  \
                  dat->bit, (unsigned int)dat->byte, bit_position (dat));      \
     }
 
@@ -1066,7 +1067,7 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 typedef struct
 {
   BITCODE_RLL handle;
-  unsigned long address;
+  size_t address;
   BITCODE_BL index;
 } Object_Map;
 
@@ -1101,11 +1102,11 @@ void dwg_encode_handleref_with_code (Bit_Chain *hdl_dat,
                                      Dwg_Object_Ref *restrict ref,
                                      unsigned int code);
 int dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
-                           unsigned long address);
+                           size_t address);
 
 static int dwg_encode_xdata (Bit_Chain *restrict dat,
                              Dwg_Object_XRECORD *restrict obj, unsigned size);
-static unsigned long add_LibreDWG_APPID (Dwg_Data *dwg);
+static BITCODE_RLL add_LibreDWG_APPID (Dwg_Data *dwg);
 static BITCODE_BL add_DUMMY_eed (Dwg_Object *obj);
 static void fixup_NOD (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
 
@@ -1128,21 +1129,21 @@ void set_handle_size (Dwg_Handle *restrict hdl);
     }                                                                         \
 
 static BITCODE_RL
-encode_patch_RLsize (Bit_Chain *dat, long unsigned int pvzadr)
+encode_patch_RLsize (Bit_Chain *dat, size_t pvzadr)
 {
-  unsigned long pos;
+  size_t pos;
   BITCODE_RL size;
   if (dat->bit) // padding
     {
       dat->bit = 0;
       dat->byte++;
     }
-  size = dat->byte - pvzadr - 4; // minus the RL size
+  size = (dat->byte - pvzadr - 4) & 0xFFFFFFFF; // minus the RL size
   pos = bit_position (dat);
   assert (pvzadr);
   bit_set_position (dat, pvzadr * 8);
   bit_write_RL (dat, size);
-  LOG_TRACE ("size: " FORMAT_RL " [RL] @%lu\n", size, pvzadr);
+  LOG_TRACE ("size: " FORMAT_RL " [RL] @%zu\n", size, pvzadr);
   bit_set_position (dat, pos);
   return size;
 }
@@ -1165,7 +1166,7 @@ is_section_r13_critical (Dwg_Section_Type_r13 i)
 
 /* Limitations: */
 
-static unsigned long
+static BITCODE_RLL
 add_LibreDWG_APPID (Dwg_Data *dwg)
 {
   BITCODE_H appid = dwg_find_tablehandle_silent (dwg, "LibreDWG", "APPID");
@@ -1173,7 +1174,7 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
   Dwg_Object *obj;
   Dwg_Object_APPID *_obj;
   Dwg_Object_APPID_CONTROL *o;
-  unsigned long absref;
+  BITCODE_RLL absref;
   // int error = 0;
 
   if (appid)
@@ -1194,7 +1195,7 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
   if (!appctl)
     {
       LOG_ERROR ("APPID_CONTROL not found")
-      return 0;
+      return 0UL;
     }
   absref = dwg->object[dwg->num_objects - 1].handle.value + 1;
   dwg_add_object (dwg);
@@ -1241,8 +1242,9 @@ add_DUMMY_eed (Dwg_Object *obj)
   char *name = obj->dxfname;
   BITCODE_H appid;
   Dwg_Eed_Data *data;
+  size_t len;
+  BITCODE_BS size;
   int i = 1, off = 0;
-  int len, size;
   const bool is_tu = dwg->header.version >= R_2007;
 
   // FIXME
@@ -1270,9 +1272,9 @@ add_DUMMY_eed (Dwg_Object *obj)
     }
   ent->num_eed = 1;
   ent->eed = (Dwg_Eed *)calloc (2, sizeof (Dwg_Eed));
-  len = strlen (name);
-  size = is_tu ? 1 + 2 + ((len + 1) * 2) // RC + RS_LE + wstr
-               : 1 + 3 + len + 1;        // RC + RC+RS_LE + str
+  len = (int)strlen (name);
+  size = is_tu ? 1 + 2 + (((len + 1) & 0xFFFF) * 2) // RC + RS_LE + wstr
+               : 1 + 3 + (len & 0xFF) + 1;          // RC + RC+RS_LE + str
   data = ent->eed[0].data = (Dwg_Eed_Data *)calloc (size + 3, 1);
   ent->eed[0].size = size;
   dwg_add_handle (&ent->eed[0].handle, 5, appid->absolute_ref, NULL);
@@ -1281,17 +1283,17 @@ add_DUMMY_eed (Dwg_Object *obj)
     {
       BITCODE_TU wstr = bit_utf8_to_TU (name, 0);
       data->u.eed_0_r2007.is_tu = 1;
-      data->u.eed_0_r2007.length = len; // RS
+      data->u.eed_0_r2007.length = len & 0xFFFF; // RS
       memcpy (data->u.eed_0_r2007.string, wstr, len * 2);
     }
   else
     {
       data->u.eed_0.is_tu = 0;
-      data->u.eed_0.length = len;  // RC
+      data->u.eed_0.length = len & 0xFF; // RC
       data->u.eed_0.codepage = 30; // RS
       memcpy (data->u.eed_0.string, name, len);
     }
-  LOG_TRACE ("-EED[0]: code: 0, string: %s (len: %d)\n", name, len);
+  LOG_TRACE ("-EED[0]: code: 0, string: %s (len: %zu)\n", name, len);
 
   if (!obj->num_unknown_bits)
     return 1;
@@ -1299,7 +1301,7 @@ add_DUMMY_eed (Dwg_Object *obj)
   len = obj->num_unknown_bits / 8;
   if (obj->num_unknown_bits % 8)
     len++;
-  size = (len / 256) + 1;
+  size = ((len / 256) + 1) & 0xFFFF;
   if (size > 1) // we already reserved for two eeds
     {
       ent->eed = (Dwg_Eed *)realloc (ent->eed, (1 + size) * sizeof (Dwg_Eed));
@@ -1307,7 +1309,7 @@ add_DUMMY_eed (Dwg_Object *obj)
     }
   do
     {
-      int l = len > 255 ? 255 : len;
+      unsigned l = len > 255 ? 255 : len & 0xFF;
       ent->num_eed++;
       ent->eed[i].size = 0;
       ent->eed[0].size += l + 2;
@@ -1316,7 +1318,7 @@ add_DUMMY_eed (Dwg_Object *obj)
       data->u.eed_4.length = l; // also just an RC. max 256, how odd
       memcpy (data->u.eed_4.data, &obj->unknown_bits[off],
               data->u.eed_4.length);
-      LOG_TRACE ("-EED[%d]: code: 4, unknown_bits: %d\n", i,
+      LOG_TRACE ("-EED[%d]: code: 4, unknown_bits: %u\n", i,
                  data->u.eed_4.length);
       if (len > 255)
         {
@@ -1780,7 +1782,7 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   uint32_t i = 0;
   uint32_t match = 0, oldlen = 0;
   uint32_t len = 0;
-  unsigned long pos = bit_position (dat);
+  size_t pos = bit_position (dat);
   LOG_WARN ("compress_R2004_section %d", decomp_data_size);
   assert (decomp_data_size > MIN_COMPRESSED_SECTION);
   while (i < decomp_data_size - MIN_COMPRESSED_SECTION)
@@ -1808,7 +1810,7 @@ compress_R2004_section (Bit_Chain *restrict dat, BITCODE_RC *restrict decomp,
   bit_write_RC (dat, 0x11);
   bit_write_RC (dat, 0);
   bit_write_RC (dat, 0);
-  *comp_data_size = bit_position (dat) - pos;
+  *comp_data_size = (bit_position (dat) - pos) & 0xFFFFFFFF;
   LOG_INSANE ("> 11 0 => %u\n", *comp_data_size)
   return 0;
 }
@@ -1985,8 +1987,8 @@ encode_preR13_section_hdr (const char *restrict name, const Dwg_Section_Type_r11
 #undef ENCODE_CTRL_TO_TABLE
         }
     }
-  LOG_TRACE ("\nptr table %s [%d]: to:0x%lx\n", tbl->name, id,
-             (unsigned long)(tbl->address + (tbl->number * tbl->size)));
+  LOG_TRACE ("\nptr table %s [%d]: to:0x%zx\n", tbl->name, id,
+             (size_t)(tbl->address + (tbl->number * tbl->size)));
   bit_write_RS (dat, tbl->size); // calculated
   bit_write_RS (dat, tbl->number);
   bit_write_RS (dat, tbl->flags_r11);
@@ -2007,10 +2009,10 @@ encode_preR13_section_chk (const Dwg_Section_Type_r11 id, Bit_Chain *restrict da
   Dwg_Section *tbl;
   if (!dwg->header.num_sections)
     dwg->header.num_sections = SECTION_VX; // r11
-  if (id > dwg->header.num_sections)
+  if ((BITCODE_RL)id > dwg->header.num_sections)
     {
-      LOG_ERROR ("encode_preR13_section_chk: Invalid table %d, have only %d",
-                 id, dwg->header.num_sections)
+      LOG_ERROR ("encode_preR13_section_chk: Invalid table %u, have only %u",
+                 (unsigned)id, (unsigned)dwg->header.num_sections)
       return;
     }
   tbl = &dwg->header.section[id];
@@ -2018,8 +2020,8 @@ encode_preR13_section_chk (const Dwg_Section_Type_r11 id, Bit_Chain *restrict da
   bit_write_RS (dat, tbl->size);
   bit_write_RS (dat, tbl->number);
   bit_write_RL (dat, tbl->address);
-  LOG_TRACE ("chk table %-8s [%2d]: size:%-4u nr:%-3ld (0x%x)\n", tbl->name,
-             id, tbl->size, (long)tbl->number, (unsigned)tbl->address)
+  LOG_TRACE ("chk table %-8s [%2d]: size:%-4u nr:%-3ld (0x%zx)\n", tbl->name,
+             id, tbl->size, (long)tbl->number, (size_t)tbl->address)
 }
 
 // only in R11
@@ -2030,10 +2032,10 @@ encode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_RS crc, crcc;
   Dwg_AuxHeader *_obj = &dwg->auxheader;
   Dwg_Object *obj = NULL;
-  unsigned long pos = dat->byte;
+  size_t pos = dat->byte;
 
-  LOG_TRACE ("\nAUXHEADER: @0x%lx\n", dat->byte);
-  _obj->auxheader_address = dat->byte;
+  LOG_TRACE ("\nAUXHEADER: @0x%zx\n", dat->byte);
+  _obj->auxheader_address = dat->byte & 0xFFFFFFFF;
   if (!_obj->num_auxheader_variables)
     {
       _obj->num_auxheader_variables = 16;
@@ -2127,12 +2129,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   int ckr_missing = 1;
   int error = 0;
   BITCODE_BL i, j;
-  long unsigned int section_address;
-  long unsigned int pvzadr;
+  size_t section_address;
+  size_t pvzadr;
+  size_t last_offset;
   unsigned int ckr;
   unsigned int sec_size = 0;
-  long unsigned int last_offset;
-  BITCODE_BL last_handle;
+  BITCODE_RLL last_handle;
   Object_Map *omap;
   Bit_Chain *old_dat = NULL, *str_dat, *hdl_dat;
   Dwg_Section_Type sec_id;
@@ -2192,7 +2194,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
       if (fixup)
         {
-          unsigned long new_appid;
+          BITCODE_RLL new_appid;
           BITCODE_BS placeholder_type = 0;
           LOG_TRACE ("Found unsupported objects, add APPID LibreDWG\n");
           new_appid = add_LibreDWG_APPID (dwg);
@@ -2358,8 +2360,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
   PRE (R_13b1)
   {
-    BITCODE_RL numentities;
-    BITCODE_RL hdr_offset, hdr_end, addr;
+    BITCODE_RL numentities, addr;
+    size_t hdr_offset, hdr_end;
     BITCODE_BL last_entity_idx;
     Dwg_Object *first_block;
 
@@ -2406,7 +2408,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           : dwg->header.numheader_vars <= 160
             ? SECTION_APPID
             : SECTION_VX;
-    dwg->header.entities_start = dat->byte;
+    dwg->header.entities_start = dat->byte & 0xFFFFFFFF;
     LOG_TRACE ("\nentities 0x%x:\n", dwg->header.entities_start);
     dwg->cur_index = 0;
     PRE (R_2_0b)
@@ -2427,7 +2429,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
     dwg->cur_index += numentities;
     if (!dwg->header.entities_end)
-      dwg->header.entities_end = dat->byte;
+      dwg->header.entities_end = dat->byte & 0xFFFFFFFF;
     LOG_TRACE ("\nentities %u 0x%x - 0x%x\n", numentities,
                dwg->header.entities_start,
                dwg->header.entities_end);
@@ -2439,7 +2441,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
          id++)
       {
           Dwg_Section *tbl = &dwg->header.section[id];
-          BITCODE_RL pos = dat->byte;
+          BITCODE_RL pos = dat->byte & 0xFFFFFFFF;
           if (!tbl->address)
             continue;
           dat->byte = tbl->address;
@@ -2456,18 +2458,18 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     PRE (R_2_0b)
     {
       // patch these numbers into the header
-      BITCODE_RL dwg_size = dat->byte;
+      BITCODE_RL dwg_size = dat->byte & 0xFFFFFFFF;
       dat->byte = 0x0c + 24;
       if (dwg_size != dwg->header_vars.dwg_size)
-        LOG_TRACE ("-dwg_size: %u [RL] @%u.0\n", dwg_size,
-                   (unsigned)dat->byte);
+        LOG_TRACE ("-dwg_size: %u [RL] @%zu.0\n", (unsigned)dwg_size,
+                   dat->byte);
       bit_write_RL (dat, dwg_size);
       if (numentities != dwg->header_vars.numentities)
-        LOG_TRACE ("-numentities: %u [RS] @%u.0\n", numentities,
-                   (unsigned)dat->byte);
-      bit_write_RS (dat, numentities);
+        LOG_TRACE ("-numentities: %u [RS] @%zu.0\n", (unsigned)numentities,
+                   dat->byte);
+      bit_write_RS (dat, numentities & 0xFFFF);
       dat->byte = dwg_size;
-      LOG_TRACE ("Wrote %u bytes\n", dwg_size);
+      LOG_TRACE ("Wrote %u bytes\n", (unsigned)dwg_size);
       return error;
     }
     SINCE (R_2_0b)
@@ -2497,7 +2499,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
       // encode block entities
       write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN);
-      dwg->header.blocks_start = dat->byte;
+      dwg->header.blocks_start = dat->byte & 0xFFFFFFFF;
       if (first_block)
         {
           last_endblk = dwg_find_last_type (dwg, DWG_TYPE_ENDBLK);
@@ -2506,7 +2508,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           num_block_entities = encode_preR13_entities (
               last_entity_idx + 1, endblk_index, dat, dwg, &error);
           dwg->cur_index = endblk_index + 1;
-          dwg->header.blocks_size = (dat->byte - dwg->header.blocks_start);
+          dwg->header.blocks_size
+              = (dat->byte - dwg->header.blocks_start) & 0xFFFFFFFF;
           if (num_block_entities != endblk_index - last_entity_idx)
             {
               LOG_WARN ("Wrong num_block_entities %u -> %u\n", num_block_entities,
@@ -2532,13 +2535,14 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // encode extra entities.
       jump_index = dwg->cur_index < dwg->num_objects - 1 ? dwg->cur_index : 0;
       write_sentinel (dat, DWG_SENTINEL_R11_EXTRA_ENTITIES_BEGIN);
-      dwg->header.extras_start = dat->byte;
+      dwg->header.extras_start = dat->byte & 0xFFFFFFFF;
       if (jump_index)
         {
           num_extra_entities = encode_preR13_entities (
               jump_index, dwg->num_objects - 1, dat, dwg, &error);
           dwg->header.extras_size
-              = 0x80000000 + (dat->byte - dwg->header.extras_start);
+            = 0x80000000 + ((dat->byte - dwg->header.extras_start)
+                            & 0x8FFFFFFF);
         }
       write_sentinel (dat, DWG_SENTINEL_R11_EXTRA_ENTITIES_END);
       LOG_TRACE ("\nextra_entities [%u - %u] 0x%x - 0x%x (0x%x)\n",
@@ -2552,12 +2556,12 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         if (dwg->header_vars.numentities != numentities + num_block_entities)
           {
             dwg->header_vars.numentities = numentities + num_block_entities;
-            LOG_WARN ("Fixed numentities: %u [RS]\n", dwg->header_vars.numentities);
+            LOG_WARN ("Fixed numentities: %u\n", dwg->header_vars.numentities);
           }
       }
       SINCE (R_11)
         error |= encode_r11_auxheader (dat, dwg);
-      addr = dat->byte;
+      addr = dat->byte & 0xFFFFFFFF;
       LOG_TRACE ("@0x%x -> ", addr);
       // patch these numbers into the header
       dat->byte = 0x14; // header section_address
@@ -2581,20 +2585,20 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         dat->byte = dwg->header.entities_start - 18;
         assert (dat->byte == hdr_end);
         crc = bit_calc_CRC (0xC0C1, &dat->chain[0], dat->byte);
-        LOG_TRACE ("crc: %04X [RSx] from 0-0x%lx\n", crc, dat->byte); // -0x6bd
+        LOG_TRACE ("crc: %04X [RSx] from 0-0x%zx\n", crc, dat->byte); // -0x6bd
         bit_write_RS (dat, crc);
       }
     }
     VERSIONS (R_2_0b, R_9c1)
     {
-      LOG_TRACE ("@0x%lx ->", dat->byte);
+      LOG_TRACE ("@0x%zx ->", dat->byte);
       dat->byte = hdr_offset + (3 * 8);
-      LOG_TRACE ("0x%lx", dat->byte);
+      LOG_TRACE ("0x%zx", dat->byte);
       bit_write_RS (dat, dwg->header_vars.numentities);
       LOG_TRACE ("numentities: %u [RS]\n", dwg->header_vars.numentities);
     }
     dat->byte = addr;
-    LOG_TRACE ("Wrote %lu bytes\n", dat->byte);
+    LOG_TRACE ("Wrote %zu bytes\n", dat->byte);
     dat->size = addr;
     return error;
   }
@@ -2682,10 +2686,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                 dwg->header.section[SECTION_AUXHEADER_R2000].size)
               {
                 LOG_WARN (
-                    "padding: %ld\n",
-                    (long)(dwg->header.section[SECTION_AUXHEADER_R2000].address
+                    "padding: %" PRId64 "\n",
+                    (int64_t)(dwg->header.section[SECTION_AUXHEADER_R2000].address
                            + dwg->header.section[SECTION_AUXHEADER_R2000].size)
-                        - dat->byte);
+                    - (int64_t)dat->byte);
                 dat->byte
                     = dwg->header.section[SECTION_AUXHEADER_R2000].address
                       + dwg->header.section[SECTION_AUXHEADER_R2000].size;
@@ -2694,14 +2698,16 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         else
           {
             if (dwg->header.thumbnail_address
-                && dat->byte != dwg->header.thumbnail_address)
+                && (dat->byte  & 0xFFFFFFFF) != dwg->header.thumbnail_address)
               {
                 LOG_WARN ("padding %ld\n",
                           (long)(dwg->header.thumbnail_address - dat->byte));
                 dat->byte = dwg->header.thumbnail_address;
               }
             dwg->header.section[SECTION_AUXHEADER_R2000].size
-              = dat->byte - dwg->header.section[SECTION_AUXHEADER_R2000].address;
+                = (dat->byte
+                   - dwg->header.section[SECTION_AUXHEADER_R2000].address)
+                  & 0xFFFFFFFF;
           }
       }
   }
@@ -2750,7 +2756,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   else
   {
     if (!dwg->header.thumbnail_address)
-      dwg->header.thumbnail_address = dat->byte;
+      dwg->header.thumbnail_address = dat->byte & 0xFFFFFFFF;
   }
   dat->bit = 0;
   LOG_TRACE ("\n=======> Thumbnail:       %4u\n", (unsigned)dat->byte);
@@ -2773,7 +2779,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     BITCODE_RL bmpsize;
     dwg_bmp (dwg, &bmpsize);
     if (bmpsize > dwg->thumbnail.size)
-      LOG_ERROR ("BMP size overflow: %i > %lu\n", bmpsize,
+      LOG_ERROR ("BMP size overflow: %i > %zu\n", bmpsize,
                  dwg->thumbnail.size);
   }
   LOG_TRACE ("         Thumbnail (end): %4u\n", (unsigned)dat->byte);
@@ -2904,11 +2910,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     bit_write_CRC (dat, pvzadr, 0xC0C1);
     write_sentinel (dat, DWG_SENTINEL_CLASS_END);
     dwg->header.section[SECTION_CLASSES_R13].size
-        = dat->byte - dwg->header.section[SECTION_CLASSES_R13].address;
-    LOG_TRACE ("       Classes (end): %4u\n", (unsigned)dat->byte);
-
-    bit_write_RL (dat,
-                  0x0DCA); // 0xDCA Unknown bitlong inter class and objects
+      = (dat->byte - dwg->header.section[SECTION_CLASSES_R13].address) & 0xFFFFFFFF;
+    LOG_TRACE ("       Classes (end): %4zu\n", dat->byte);
+    bit_write_RL (dat, 0x0DCA);
     LOG_TRACE ("unknown: %04X [RL]\n", 0x0DCA);
   }
 
@@ -2923,7 +2927,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     str_dat = hdl_dat = dat = &sec_dat[sec_id];
     bit_chain_set_version (dat, old_dat);
   }
-  LOG_INFO ("\n=======> Objects: %4u\n", (unsigned)dat->byte);
+  LOG_INFO ("\n=======> Objects: %4zu\n", dat->byte);
   pvzadr = dat->byte;
 
   /* Sort object-map by ascending handles
@@ -2966,8 +2970,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       LOG_HANDLE ("\nSorted handles:\n");
       for (i = 0; i < dwg->num_objects; i++)
-        fprintf (OUTPUT, "Handle(%3i): " FORMAT_RLLx " / idx: %u\n", i,
-                 omap[i].handle, omap[i].index);
+        fprintf (OUTPUT, "Handle(%3i): " FORMAT_RLLx " / idx: " FORMAT_BL "\n",
+                 i, omap[i].handle, omap[i].index);
     }
 
   /* Write the sorted objects
@@ -2977,10 +2981,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       Dwg_Object *obj;
       BITCODE_BL index = omap[i].index;
       BITCODE_UMC hdloff = omap[i].handle - (i ? omap[i - 1].handle : 0);
-      int off = dat->byte - (i ? omap[i - 1].address : 0);
-      unsigned long end_address;
+      BITCODE_MC off = (dat->byte - (i ? omap[i - 1].address : 0)) & INT32_MAX;
+      size_t end_address;
       LOG_TRACE ("\n> Next object: " FORMAT_BL " Handleoff: " FORMAT_UMC
-                 " [UMC] Offset: " FORMAT_MC " [MC] @%lu\n"
+                 " [UMC] Offset: " FORMAT_MC " [MC] @%zu\n"
                  "==========================================\n",
                  i, hdloff, off, dat->byte);
       omap[i].address = dat->byte;
@@ -3017,7 +3021,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           assert (dat->chain[1] == 'C');
         }
 #endif
-      end_address = omap[i].address + (unsigned long)obj->size; // from RL
+      end_address = omap[i].address + (size_t)obj->size; // from RL
       if (end_address > dat->size)
         {
           assert (obj->size < DWG_MAX_OBJSIZE);
@@ -3030,8 +3034,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     {
       LOG_HANDLE ("\nSorted objects:\n");
       for (i = 0; i < dwg->num_objects; i++)
-        LOG_HANDLE ("Object(%d): " FORMAT_RLLx " / Address: %ld / Idx: %d\n", i,
-                    omap[i].handle, omap[i].address, omap[i].index);
+        LOG_HANDLE ("Object(%d): " FORMAT_RLLx
+                    " / Address: %zu / Idx: " FORMAT_BL "\n",
+                    i, omap[i].handle, omap[i].address, omap[i].index);
     }
 
   /* Unknown CRC between objects and object map
@@ -3074,21 +3079,21 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                   index, handleoff, omap[i].handle)
       last_handle = omap[i].handle;
 
-      offset = omap[i].address - last_offset;
+      offset = (omap[i].address - last_offset) & INT32_MAX;
       bit_write_MC (dat, offset);
       last_offset = omap[i].address;
-      LOG_HANDLE ("Offset: " FORMAT_MC " [MC] @%lu\n", (int)offset, last_offset);
+      LOG_HANDLE ("Offset: " FORMAT_MC " [MC] @%zu\n", offset, last_offset);
 
       ckr_missing = 1;
       if (dat->byte - pvzadr > 2030) // 2029
         {
           ckr_missing = 0;
-          sec_size = dat->byte - pvzadr;
+          sec_size = (dat->byte - pvzadr) & UINT_MAX;
           assert (pvzadr);
           // i.e. encode_patch_RS_LE_size
           dat->chain[pvzadr] = sec_size >> 8;
           dat->chain[pvzadr + 1] = sec_size & 0xFF;
-          LOG_TRACE ("Handles page size: %u [RS_LE] @%lu\n", sec_size, pvzadr);
+          LOG_TRACE ("Handles page size: %u [RS_LE] @%zu\n", sec_size, pvzadr);
           bit_write_CRC_LE (dat, pvzadr, 0xC0C1);
 
           pvzadr = dat->byte;
@@ -3100,7 +3105,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   // printf ("Obj size: %u\n", i);
   if (ckr_missing)
     {
-      sec_size = dat->byte - pvzadr;
+      sec_size = (dat->byte - pvzadr) & UINT_MAX;
 #ifndef NDEBUG
       PRE (R_2004)
       assert (pvzadr);
@@ -3110,7 +3115,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // i.e. encode_patch_RS_LE_size
       dat->chain[pvzadr] = sec_size >> 8;
       dat->chain[pvzadr + 1] = sec_size & 0xFF;
-      LOG_TRACE ("Handles page size: %u [RS_LE] @%lu\n", sec_size, pvzadr);
+      LOG_TRACE ("Handles page size: %u [RS_LE] @%zu\n", sec_size, pvzadr);
       bit_write_CRC_LE (dat, pvzadr, 0xC0C1);
     }
 #ifndef NDEBUG
@@ -3129,13 +3134,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 #endif
   pvzadr = dat->byte;
   bit_write_RS_LE (dat, 2); // last section_size 2
-  LOG_TRACE ("Handles page size: %u [RS_LE] @%lu\n", 2, pvzadr);
+  LOG_TRACE ("Handles page size: %u [RS_LE] @%zu\n", 2, pvzadr);
   bit_write_CRC_LE (dat, pvzadr, 0xC0C1);
 
   /* Calculate and write the size of the object map
    */
   dwg->header.section[sec_id].size
-      = dat->byte - dwg->header.section[sec_id].address;
+    = (dat->byte - dwg->header.section[sec_id].address) & 0xFFFFFFFF;
   free (omap);
 
   /*------------------------------------------------------------
@@ -3151,16 +3156,16 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 
       assert (dat->byte);
       if (!_obj->address)
-        _obj->address = dat->byte;
+        _obj->address = dat->byte & 0xFFFFFFFF;
       dwg->header.section[SECTION_2NDHEADER_R13].number = 3;
       dwg->header.section[SECTION_2NDHEADER_R13].address = _obj->address;
       dwg->header.section[SECTION_2NDHEADER_R13].size = _obj->size;
-      LOG_INFO ("\n=======> Second Header: %4u\n", (unsigned)dat->byte);
+      LOG_INFO ("\n=======> Second Header: %4zu\n", dat->byte);
       write_sentinel (dat, DWG_SENTINEL_SECOND_HEADER_BEGIN);
 
       pvzadr = dat->byte; // Keep the first address of the section to write its
                           // size later
-      LOG_TRACE ("pvzadr: %u\n", (unsigned)pvzadr);
+      LOG_TRACE ("pvzadr: %zu\n", pvzadr);
       if (!_obj->size && !_obj->num_sections)
         {
           const char *code = dwg_version_codes (dwg->header.version);
@@ -3193,7 +3198,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         {
           LOG_WARN ("second_header->address %u != %u", FIELD_VALUE (address),
                     (unsigned)(pvzadr - 16));
-          FIELD_VALUE (address) = pvzadr - 16;
+          FIELD_VALUE (address) = (pvzadr - 16) & 0xFFFFFFFF;
           dwg->header.section[SECTION_2NDHEADER_R13].address = _obj->address;
           dwg->header.section[SECTION_2NDHEADER_R13].size = _obj->size;
         }
@@ -3245,7 +3250,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       }
       write_sentinel (dat, DWG_SENTINEL_SECOND_HEADER_END);
       dwg->header.section[SECTION_2NDHEADER_R13].size
-          = dat->byte - _obj->address;
+        = (dat->byte - _obj->address) & 0xFFFFFFFF;
     }
   else if (dwg->header.num_sections > SECTION_2NDHEADER_R13
            && dwg->header.version < R_2004) // TODO
@@ -3274,7 +3279,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       if ((int)dwg->header.num_sections <= (int)sec_id)
         dwg->header.section = (Dwg_Section *)realloc (
             dwg->header.section, (sec_id + 1) * sizeof (Dwg_Section));
-      LOG_INFO ("\n=======> MEASUREMENT: @%4lu\n", dat->byte);
+      LOG_INFO ("\n=======> MEASUREMENT: @%4zu\n", dat->byte);
       dwg->header.section[sec_id].number = 4;
       dwg->header.section[sec_id].address = dat->byte;
       dwg->header.section[sec_id].size = 4;
@@ -3325,7 +3330,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               str_dat = hdl_dat = dat = &sec_dat[type];
               bit_chain_set_version (dat, old_dat);
 #include "objfreespace.spec"
-              LOG_TRACE ("-size: %lu\n", dat->byte)
+              LOG_TRACE ("-size: %zu\n", dat->byte)
             }
             break;
           case SECTION_REVHISTORY:
@@ -3335,7 +3340,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               str_dat = hdl_dat = dat = &sec_dat[type];
               bit_chain_set_version (dat, old_dat);
 #include "revhistory.spec"
-              LOG_TRACE ("-size: %lu\n", dat->byte)
+              LOG_TRACE ("-size: %zu\n", dat->byte)
             }
             break;
           case SECTION_SUMMARYINFO:
@@ -3345,7 +3350,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               str_dat = hdl_dat = dat = &sec_dat[type];
               bit_chain_set_version (dat, old_dat);
 #include "summaryinfo.spec"
-              LOG_TRACE ("-size: %lu\n", dat->byte)
+              LOG_TRACE ("-size: %zu\n", dat->byte)
             }
             break;
           case SECTION_APPINFO:
@@ -3355,7 +3360,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               str_dat = hdl_dat = dat = &sec_dat[type];
               bit_chain_set_version (dat, old_dat);
 #include "appinfo.spec"
-              LOG_TRACE ("-size: %lu\n", dat->byte)
+              LOG_TRACE ("-size: %zu\n", dat->byte)
             }
             break;
           case SECTION_APPINFOHISTORY:
@@ -3366,7 +3371,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               str_dat = hdl_dat = dat = &sec_dat[type];
               bit_chain_set_version (dat, old_dat);
 #  include "appinfohistory.spec"
-              LOG_TRACE ("-size: %lu\n", dat->byte)
+              LOG_TRACE ("-size: %zu\n", dat->byte)
 #endif
             }
             break;
@@ -3377,7 +3382,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               str_dat = hdl_dat = dat = &sec_dat[type];
               bit_chain_set_version (dat, old_dat);
 #include "filedeplist.spec"
-              LOG_TRACE ("-size: %lu\n", dat->byte)
+              LOG_TRACE ("-size: %zu\n", dat->byte)
             }
             break;
           case SECTION_SECURITY:
@@ -3387,7 +3392,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               str_dat = hdl_dat = dat = &sec_dat[type];
               bit_chain_set_version (dat, old_dat);
 #include "security.spec"
-              LOG_TRACE ("-size: %lu\n", dat->byte)
+              LOG_TRACE ("-size: %zu\n", dat->byte)
             }
             break;
           case SECTION_SIGNATURE:
@@ -3400,7 +3405,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               {
 #  include "signature.spec"
               }
-              LOG_TRACE ("-size: %lu\n", dat->byte)
+              LOG_TRACE ("-size: %zu\n", dat->byte)
 #endif
             }
             break;
@@ -3414,7 +3419,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               {
 #  include "acds.spec"
               }
-              LOG_TRACE ("-size: %lu\n", dat->byte)
+              LOG_TRACE ("-size: %zu\n", dat->byte)
 #endif
             }
             break;
@@ -3625,7 +3630,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
 #ifndef HAVE_COMPRESS_R2004_SECTION
         _obj->compressed = 1;
 #endif
-        LOG_HANDLE ("InfoHdr @%lu.0\n", dat->byte);
+        LOG_HANDLE ("InfoHdr @%zu.0\n", dat->byte);
         FIELD_RL (num_desc, 0);
         FIELD_RL (compressed, 0);
         FIELD_RL (max_size, 0);
@@ -3695,7 +3700,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           _obj->address = address;
           FIELD_RLL (address, 0);
           address += _obj->size;
-          if (_obj->number < 0) // gap. unused. we deleted all gaps
+          if (_obj->number > INT32_MAX) // gap. unused. we deleted all gaps
             {
               FIELD_RL (parent, 0);
               FIELD_RL (left, 0);
@@ -3703,8 +3708,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               FIELD_RL (x00, 0);
             }
         }
-      dwg->r2004_header.decomp_data_size = dat->byte; // system_map_size
-      LOG_TRACE ("-size: %lu\n", dat->byte);
+      dwg->r2004_header.decomp_data_size = dat->byte & 0xFFFFFFFF; // system_map_size
+      LOG_TRACE ("-size: %zu\n", dat->byte);
 
       dat = old_dat;
 #ifndef NDEBUG
@@ -3731,7 +3736,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           dat->size = dat->byte + size;
           bit_chain_alloc (dat);
         }
-      LOG_HANDLE ("@%lu.0\n", dat->byte);
+      LOG_HANDLE ("@%zu.0\n", dat->byte);
       for (i = 0; i < ARRAY_SIZE (stream_order); i++)
         {
           Dwg_Section_Info *info;
@@ -3739,7 +3744,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           info = find_section_info_type (dwg, (Dwg_Section_Type)type);
           if (info)
             {
-              LOG_TRACE ("Write %s pages @%lu (%u/%lu)\n",
+              LOG_TRACE ("Write %s pages @%zu (%u/%zu)\n",
                          dwg_section_name (dwg, type), dat->byte,
                          info->num_sections, sec_dat[type].size);
               for (unsigned k = 0; k < info->num_sections; k++)
@@ -3761,11 +3766,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                     assert (info->fixedtype == sec->type);
 #endif
                   if (info->fixedtype == SECTION_SUMMARYINFO)
-                    dwg->header.summaryinfo_address = dat->byte;
+                    dwg->header.summaryinfo_address = dat->byte & 0xFFFFFFFF;
                   else if (info->fixedtype == SECTION_PREVIEW)
-                    dwg->header.thumbnail_address = dat->byte;
+                    dwg->header.thumbnail_address = dat->byte & 0xFFFFFFFF;
                   else if (info->fixedtype == SECTION_VBAPROJECT)
-                    dwg->header.vbaproj_address = dat->byte;
+                    dwg->header.vbaproj_address = dat->byte & 0xFFFFFFFF;
                   else if (info->fixedtype == SECTION_SYSTEM_MAP)
                     {
                       dwg->r2004_header.section_map_address
@@ -3875,7 +3880,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                    (unsigned)dwg->header.section[j].address);
         LOG_TRACE ("section[%u].size:   %4u [RL]\n", j,
                    (int)dwg->header.section[j].size);
-        if ((unsigned long)dwg->header.section[j].address
+        if ((size_t)dwg->header.section[j].address
                 + dwg->header.section[j].size
             > dat->size)
           {
@@ -4019,7 +4024,7 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   LOG_TRACE ("\nctrl " #token " [%d]: num:%u\n", num, tblnum)
 
 #define PREP_TABLE(token)                                                     \
-  BITCODE_RL pvzadr = dat->byte;                                              \
+  size_t pvzadr = dat->byte;                                                  \
   Dwg_Object *obj = dwg_get_next_object(dwg, DWG_TYPE_##token, num + i);      \
   Dwg_Object_##token *_obj;                                                   \
   if (!obj)                                                                   \
@@ -4028,7 +4033,7 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       continue;                                                               \
     }                                                                         \
   _obj = obj->tio.object->tio.token;                                          \
-  LOG_TRACE ("contents table " #token " [%d]: (0x%lx, 0x%lx)\n", i,           \
+  LOG_TRACE ("contents table " #token " [%d]: (0x%zx, 0x%zx)\n", i,           \
              obj->address, dat->byte);                                        \
   if (obj->fixedtype != DWG_TYPE_##token)                                     \
     {                                                                         \
@@ -4248,13 +4253,13 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
   for (unsigned index = index_from; index <= index_last; index++)
     {
       Dwg_Object *obj = &dwg->object[index];
-      unsigned long size_pos = 0UL;
+      size_t size_pos = 0UL;
       bool deleted = obj->type >= 128;
       // skip table objects or uninitialized entities
       if (obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity)
         {
           if (obj->index && obj->fixedtype)
-            LOG_TRACE ("Skip object %s, number: %d, Fixedtype: %d, Addr: %lx "
+            LOG_TRACE ("Skip object %s, number: %d, Fixedtype: %d, Addr: %zx "
                        "(0x%x)\n",
                        obj->name, obj->index, obj->fixedtype, obj->address,
                        (unsigned)dat->byte);
@@ -4263,7 +4268,7 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
       // deleted, i.e. moved to a BLOCK
       if (obj->fixedtype == DWG_TYPE_UNUSED)
         {
-          LOG_TRACE ("\nSkip deleted entity %s, number: %d, type: %d, Addr: %lx "
+          LOG_TRACE ("\nSkip deleted entity %s, number: %d, type: %d, Addr: %zx "
                      "(0x%x)\n",
                      obj->name, obj->index, obj->type, obj->address,
                      (unsigned)dat->byte);
@@ -4273,7 +4278,7 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
       if (obj->type == DWG_TYPE_UNUSED_R11)
         {
           LOG_TRACE (
-              "Skip entity %s, number: %d, Fixedtype: %d, Addr: %lx (0x%x)\n",
+              "Skip entity %s, number: %d, Fixedtype: %d, Addr: %zx (0x%x)\n",
               obj->name, obj->index, obj->fixedtype, obj->address,
               (unsigned)dat->byte);
           continue;
@@ -4285,7 +4290,7 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
           if (dat->version >= R_2_0b && obj->tio.entity->entmode == 3)
             {
               LOG_TRACE ("Skip block %s in entities section, number: %d, "
-                         "type: %d, Addr: %lx (0x%x)\n",
+                         "type: %d, Addr: %zx (0x%x)\n",
                          obj->name, obj->index, obj->type, obj->address,
                          (unsigned)dat->byte);
               continue;
@@ -4296,7 +4301,7 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
       numentities++;
       obj->address = dat->byte;
       LOG_INFO ("===========================\n"
-                "Entity %s, number: %d, Addr: %lu (0x%x)\n",
+                "Entity %s, number: %d, Addr: %zu (0x%x)\n",
                 obj->name, obj->index, obj->address, (unsigned)dat->byte);
       if (obj->type == 0
           || (obj->type > DWG_TYPE_UNKNOWN_R11 && obj->fixedtype != 0))
@@ -4469,13 +4474,13 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
         // patchup size
         if (!obj->size)
           {
-            unsigned long pos = dat->byte;
-            obj->size = dat->byte - obj->address;
+            size_t pos = dat->byte;
+            obj->size = (dat->byte - obj->address) & 0xFFFFFFFF;
             SINCE (R_11)
               obj->size += 2; // crc16
             dat->byte = size_pos;
             bit_write_RS (dat, obj->size);
-            LOG_TRACE ("-size: %u [RL] (@%lu.%u)\n", obj->size, dat->byte,
+            LOG_TRACE ("-size: %u [RL] (@%zu.%u)\n", obj->size, dat->byte,
                        dat->bit)
             dat->byte = pos;
           }
@@ -4483,7 +4488,7 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
         {
           BITCODE_RS crc = bit_calc_CRC (0xC0C1, &dat->chain[obj->address],
                                          obj->size - 2);
-          LOG_TRACE ("crc: %04X [RSx] from 0x%lx-0x%lx\n", crc, obj->address,
+          LOG_TRACE ("crc: %04X [RSx] from 0x%zx-0x%zx\n", crc, obj->address,
                      dat->byte);
           bit_write_RS (dat, crc);
         }
@@ -4660,7 +4665,7 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 
   if (dwg->opts & DWG_OPTS_IN) // DXF or JSON import
     {
-      unsigned long pos = bit_position (dat);
+      size_t pos = bit_position (dat);
 
       /* Should not be triggered. Only when undef ENCODE_UNKNOWN_AS_DUMMY */
       if (is_type_unstable (obj->fixedtype)
@@ -4673,7 +4678,7 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
         }
       dat->byte = obj->address;
       dat->bit = 0;
-      LOG_TRACE ("fixup Type: %d [BS] @%lu\n", obj->type, obj->address);
+      LOG_TRACE ("fixup Type: %d [BS] @%zu\n", obj->type, obj->address);
       bit_write_BS (dat, obj->type); // fixup wrong type
       bit_set_position (dat, pos);
     }
@@ -4694,14 +4699,12 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
 
 int
 dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
-                       unsigned long address)
+                       size_t address)
 {
   int error = 0;
-  // unsigned long oldpos;
-  unsigned long end_address = address + obj->size;
+  size_t end_address = address + obj->size;
   Dwg_Data *dwg = obj->parent;
 
-  // oldpos = bit_position (dat);
   PRE (R_2004)
   {
     if (!address)
@@ -4731,7 +4734,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   {
     bit_write_BS (dat, obj->type);
     LOG_INFO (", Size: " FORMAT_MS " [MS], Type: " FORMAT_BS
-              " [BS], Address: %lu\n",
+              " [BS], Address: %zu\n",
               obj->size, obj->type, obj->address)
   }
   LATER_VERSIONS
@@ -4742,7 +4745,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     obj->address = dat->byte;
     bit_write_BOT (dat, obj->type);
     LOG_INFO (", Size: " FORMAT_MS " [MS], Hdlsize: " FORMAT_UMC
-              " [UMC], Type: %d [BOT], Address: %lu\n",
+              " [UMC], Type: %d [BOT], Address: %zu\n",
               obj->size, obj->handlestream_size, obj->type, obj->address)
   }
 
@@ -5091,7 +5094,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
   if (!obj->size || dwg->header.from_version != dwg->header.version
       || obj->was_bitsize_set)
     {
-      BITCODE_BL pos = bit_position (dat);
+      size_t pos = bit_position (dat);
       BITCODE_RL old_size = obj->size;
       if (dwg->header.version < R_2004 || obj->index)
         {
@@ -5102,7 +5105,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
       if (dat->byte > obj->address)
         {
           // The size and CRC fields are not included in the obj->size
-          obj->size = dat->byte - obj->address;
+          obj->size = (dat->byte - obj->address) & 0xFFFFFFFF;
           if (dat->bit)
             obj->size++;
         }
@@ -5115,16 +5118,16 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
               // already
               && !obj->was_bitsize_set))
         {
-          LOG_TRACE ("-bitsize calc from address (no handle) @%lu.%u\n",
+          LOG_TRACE ("-bitsize calc from address (no handle) @%zu.%u\n",
                      dat->byte - obj->address, dat->bit);
-          obj->bitsize = pos - (obj->address * 8);
+          obj->bitsize = (pos - (obj->address * 8)) & 0xFFFFFFFF;
         }
       bit_set_position (dat, address * 8);
       if (obj->size > 0x7fff && old_size <= 0x7fff)
         {
           // with overlarge sizes >0x7fff memmove dat right by 2, one more RS
           // added.
-          LOG_INFO ("overlarge size %u > 0x7fff (was %u) @%lu\n",
+          LOG_INFO ("overlarge size %u > 0x7fff (was %u) @%zu\n",
                     (unsigned)obj->size, old_size, dat->byte);
           if (dat->byte + obj->size + 2 >= dat->size)
             bit_chain_alloc_size (dat,
@@ -5140,7 +5143,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
         {
           // with old overlarge sizes >0x7fff memmove dat left by 2, one RS
           // removed.
-          LOG_INFO ("was overlarge size %u < 0x7fff @%lu\n",
+          LOG_INFO ("was overlarge size %u < 0x7fff @%zu\n",
                     (unsigned)old_size, dat->byte);
           memmove (&dat->chain[dat->byte], &dat->chain[dat->byte + 2],
                    obj->size);
@@ -5150,7 +5153,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           pos -= 16;
         }
       bit_write_MS (dat, obj->size);
-      LOG_TRACE ("-size: %u [MS] @%lu\n", obj->size, address);
+      LOG_TRACE ("-size: %u [MS] @%zu\n", obj->size, address);
       SINCE (R_2013)
       {
         if (!obj->handlestream_size && obj->bitsize)
@@ -5164,8 +5167,8 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
           {
             bit_set_position (dat, obj->bitsize_pos);
             bit_write_RL (dat, obj->bitsize);
-            LOG_TRACE ("-bitsize: %u [RL] @%lu.%lu\n", obj->bitsize,
-                       obj->bitsize_pos / 8, obj->bitsize_pos % 8);
+            LOG_TRACE ("-bitsize: %u [RL] @%zu.%u\n", obj->bitsize,
+                       obj->bitsize_pos / 8, (unsigned)obj->bitsize_pos % 8);
           }
       }
       bit_set_position (dat, pos);
@@ -5181,7 +5184,7 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
     {
       if (obj->size)
         {
-          LOG_ERROR ("Wrong object size: %lu + %u = %lu != %lu: %ld off",
+          LOG_ERROR ("Wrong object size: %zu + %u = %zu != %zu: %ld off",
                      address, obj->size, end_address, dat->byte,
                      (long)(end_address - dat->byte));
           // dat->byte = end_address;
@@ -5214,8 +5217,8 @@ static int
 dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
                      const int i)
 {
-  unsigned long pos = bit_position (dat);
-  unsigned long size;
+  size_t pos = bit_position (dat);
+  size_t size;
   if (dat->byte + 24 >= dat->size)
     bit_chain_alloc (dat);
   bit_write_RC (dat, data->code);
@@ -5361,7 +5364,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       }
       LATER_VERSIONS {
         bit_write_RLL (dat, data->u.eed_3.layer);
-        LOG_TRACE ("layer: 0x%lX [RLL]", (unsigned long)data->u.eed_3.layer);
+        LOG_TRACE ("layer: " FORMAT_RLL " [RLL]", data->u.eed_3.layer);
       }
       break;
     case 4:
@@ -5374,7 +5377,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       break;
     case 5:
       bit_write_RLL (dat, (BITCODE_RLL)data->u.eed_5.entity);
-      LOG_TRACE ("entity: 0x" FORMAT_RLLx " [RLL]", data->u.eed_5.entity);
+      LOG_TRACE ("entity: " FORMAT_RLL " [RLL]", data->u.eed_5.entity);
       break;
     case 10:
     case 11:
@@ -5420,14 +5423,14 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
 static int
 dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
-  // unsigned long off = obj->address;
+  // size_t off = obj->address;
   // unsigned dat_size = 0;
   Dwg_Handle *last_handle = NULL;
   Bit_Chain dat1 = { 0 };
   int i, num_eed = obj->tio.object->num_eed;
   BITCODE_BS size = 0;
-  int last_size = 0;
-  int new_size = 0;
+  BITCODE_RS last_size = 0;
+  BITCODE_RS new_size = 0;
   int did_raw = 0;
   int need_recalc = does_cross_unicode_datversion (dat);
 
@@ -5506,7 +5509,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
                                      last_size, ARGS_H (*last_handle));
                         }
                       LOG_POS;
-                      LOG_TRACE ("flush eed_data %lu.%d\n", dat1.byte,
+                      LOG_TRACE ("flush eed_data %zu.%d\n", dat1.byte,
                                  dat1.bit);
                       dat_flush (dat, &dat1);
                     }
@@ -5566,7 +5569,7 @@ dwg_encode_eed (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
         }
     }
   if (dat1.byte)
-    LOG_TRACE ("flush eed_data %lu.%d\n", dat1.byte, dat1.bit);
+    LOG_TRACE ("flush eed_data %zu.%d\n", dat1.byte, dat1.bit);
   dat_flush (dat, &dat1);
   if (dat->version > R_12)
     {
@@ -5606,7 +5609,7 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
   {
     obj->bitsize_pos = bit_position (dat);
     bit_write_RL (dat, obj->bitsize);
-    LOG_TRACE ("bitsize: %u [RL] (@%lu.%lu)\n", obj->bitsize,
+    LOG_TRACE ("bitsize: %u [RL] (@%zu.%zu)\n", obj->bitsize,
                obj->bitsize_pos / 8, obj->bitsize_pos % 8);
   }
   obj->was_bitsize_set = 0;
@@ -5624,7 +5627,7 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
         {
           obj->hdlpos += 8;
           // LOG_HANDLE ("(bitsize: " FORMAT_RL ", ", obj->bitsize);
-          LOG_HANDLE ("hdlpos: %lu\n", obj->hdlpos);
+          LOG_HANDLE ("hdlpos: %zu\n", obj->hdlpos);
         }
     }
     // and set the string stream (restricted to size)
@@ -5635,7 +5638,7 @@ dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
   {
     bit_write_H (dat, &obj->handle);
     LOG_TRACE ("handle: " FORMAT_H " [H 5]", ARGS_H (obj->handle))
-    LOG_INSANE (" @%lu.%u", dat->byte - obj->address, dat->bit)
+    LOG_INSANE (" @%zu.%u", dat->byte - obj->address, dat->bit)
     LOG_TRACE ("\n")
 
     error |= dwg_encode_eed (dat, obj);
@@ -5823,7 +5826,7 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
   if (!_obj->HANDSEED) // minimal or broken DXF
     {
       BITCODE_H last_hdl;
-      unsigned long seed = 0;
+      BITCODE_RLL seed = 0;
       dwg->opts |= DWG_OPTS_MINIMAL;
       dat->from_version = (Dwg_Version_Type)((int)dat->version - 1);
       LOG_TRACE ("encode from minimal DXF\n");
@@ -5837,7 +5840,7 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
         {
           // find the largest handle
           seed = last_hdl->absolute_ref;
-          LOG_TRACE ("compute HANDSEED %lu ", seed);
+          LOG_TRACE ("compute HANDSEED " FORMAT_RLLx " ", seed);
           for (unsigned i = 0; i < dwg->num_object_refs; i++)
             {
               Dwg_Object_Ref *ref = dwg->object_ref[i];
@@ -5845,7 +5848,7 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
                 seed = ref->absolute_ref;
             }
           _obj->HANDSEED->absolute_ref = seed + 1;
-          LOG_TRACE ("-> %lu\n", seed);
+          LOG_TRACE ("-> " FORMAT_RLLx "\n", seed);
         }
       else
         _obj->HANDSEED->absolute_ref = 0x72E;
@@ -5870,7 +5873,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
   int i;
   unsigned j = 0;
   // BITCODE_BL num_xdata = _obj->num_xdata;
-  unsigned long start = dat->byte, end = start + xdata_size;
+  size_t start = dat->byte, end = start + xdata_size;
   Dwg_Data *dwg = _obj->parent->dwg;
   Dwg_Object *obj = &dwg->object[_obj->parent->objid];
 
@@ -5881,7 +5884,7 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
   while (rbuf)
     {
       bit_write_RS (dat, rbuf->type);
-      LOG_INSANE ("xdata[%u] type: " FORMAT_RS " [RS] @%lu.%u\n", j,
+      LOG_INSANE ("xdata[%u] type: " FORMAT_RS " [RS] @%zu.%u\n", j,
                   rbuf->type, dat->byte - obj->address, dat->bit)
       type = dwg_resbuf_value_type (rbuf->type);
       switch (type)
@@ -5896,14 +5899,14 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
               {
                 BITCODE_TV news = bit_embed_TU_size (rbuf->value.str.u.wdata,
                                                      rbuf->value.str.size);
-                size_t len = strlen (news);
-                bit_write_RS (dat, len);
+                unsigned len = (unsigned)strlen (news);
+                bit_write_RS (dat, len & 0xFFFF);
                 bit_write_RC (dat, rbuf->value.str.codepage);
                 if (rbuf->value.str.u.data)
                   bit_write_TF (dat, (BITCODE_TF) news, len);
                 else
                   bit_write_TF (dat, (BITCODE_TF) "", 0);
-                LOG_TRACE ("xdata[%u]: \"%s\" [TF %zu %d]", j,
+                LOG_TRACE ("xdata[%u]: \"%s\" [TF %u %d]", j,
                            rbuf->value.str.u.data, len, rbuf->type);
                 free (news);
               }
@@ -6040,20 +6043,20 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
           break;
         }
     }
-  if (_obj->xdata_size != dat->byte - start)
+  if (_obj->xdata_size != ((dat->byte - start) & 0xFFFFFFFF))
     {
       if (dat->opts & DWG_OPTS_IN) // imprecise xdata_size: calculate
         {
-          _obj->xdata_size = dat->byte - start;
+          _obj->xdata_size = (dat->byte - start) & 0xFFFFFFFF;
           LOG_TRACE ("-xdata_size: " FORMAT_BL " (calculated)\n",
                      _obj->xdata_size);
           return error;
         }
       else
         {
-          LOG_WARN ("xdata Written %lu, expected " FORMAT_BL,
+          LOG_WARN ("xdata Written %zu, expected " FORMAT_BL,
                     dat->byte - start, _obj->xdata_size);
-          _obj->xdata_size = dat->byte - start;
+          _obj->xdata_size = (dat->byte - start) & 0xFFFFFFFF;
           return error ? error : 1;
         }
     }

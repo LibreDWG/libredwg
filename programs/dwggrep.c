@@ -204,11 +204,12 @@ do_match (const int is16, const char *restrict filename,
   if (options & PCRE2_CASELESS)
     {
 #  ifndef HAVE_STRCASESTR
-      int i, len, dmax;
+      size_t i, len;
+      size_t dmax;
       char *dest = text;
-      int dlen = dmax = strlen (text);
+      size_t dlen = dmax = strlen (text);
       char *src = pattern;
-      int slen = strlen (pattern);
+      size_t slen = strlen (pattern);
 
       while (*dest && dmax)
         {
@@ -1845,7 +1846,7 @@ main (int argc, char *argv[])
   int i = 1, j;
   char *filename;
   Dwg_Data dwg;
-  int plen;
+  size_t plen;
   int errcode;
 #ifdef HAVE_PCRE2_H
   PCRE2_SIZE erroffset;
@@ -1954,7 +1955,8 @@ main (int argc, char *argv[])
   plen = strlen (pattern);
 #ifdef HAVE_PCRE2_H
   pcre2_config_8 (PCRE2_CONFIG_JIT, &have_jit);
-  ri8 = pcre2_compile_8 ((PCRE2_SPTR8)pattern, plen, /* pattern */
+  ri8 = pcre2_compile_8 ((PCRE2_SPTR8)pattern,       /* pattern */
+                         plen & 0xFFFFFFFF,          /* uint32_t */
                          options,                    /* options */
                          &errcode,                   /* errors */
                          &erroffset,                 /* error offset */
@@ -1979,7 +1981,8 @@ main (int argc, char *argv[])
 #  ifdef HAVE_PCRE2_16
   pcre2_config_16 (PCRE2_CONFIG_JIT, &have_jit);
   pattern16 = bit_utf8_to_TU (pattern, 0);
-  ri16 = pcre2_compile_16 ((PCRE2_SPTR16)pattern16, plen, /* pattern */
+  ri16 = pcre2_compile_16 ((PCRE2_SPTR16)pattern16,       /* pattern */
+                           plen & 0xFFFFFFFF,             /* uint32_t */
                            options,                       /* options */
                            &errcode,                      /* errors */
                            &erroffset,                    /* error offset */
