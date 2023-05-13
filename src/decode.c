@@ -6241,7 +6241,7 @@ decode_preR13_sentinel (const Dwg_Sentinel sentinel,
       unsigned long pos = MAX (dat->byte, 200) - 200;
       unsigned long len = MIN (dat->size - dat->byte, 400);
       // search +- 1000 bytes around
-      char *found = memmem (&dat->chain[pos], len, wanted, 16);
+      char *found = (char*)memmem (&dat->chain[pos], len, wanted, 16);
       if (!found)
         {
           LOG_ERROR ("%s not found at %lu", sentinel_name, dat->byte - 16);

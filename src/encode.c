@@ -5251,7 +5251,7 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
           bit_write_RC (dat, length);
           bit_write_TF (dat, (unsigned char *)s, length);
           LOG_TRACE ("string: len=" FORMAT_RC " [RC] \"%s\" [TF]",
-                     length, s);
+                     length & 0xff, s);
           if (data->u.eed_0.is_tu)
             free (s);
         }

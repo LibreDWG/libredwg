@@ -2104,7 +2104,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           dwg_dynapi_field_set_value (dwg, _obj, f, &num, 0);
           if (strEQc (name, "JUMP") && strEQc (key, "jump_address_raw"))
             {
-              json_fixup_JUMP (_obj);
+              json_fixup_JUMP ((Dwg_Entity_JUMP *)_obj);
               LOG_TRACE ("%s.%s: 0x%lx [RLx]\n", name, key, num);
             }
         }
