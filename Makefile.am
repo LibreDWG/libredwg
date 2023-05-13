@@ -119,7 +119,15 @@ regen-dynapi: $(srcdir)/src/gen-dynapi.pl $(srcdir)/include/dwg.h
 	-$(PERL) $(srcdir)/src/gen-dynapi.pl
 # $(MAKE) -C src $(abs_top_srcdir)/src/dxfclasses.c
 regen-gperf:
-	-$(GPERF) --output-file src/dxfclasses.c src/dxfclasses.in
+	-cd $(abs_top_srcdir) && \
+	  $(GPERF) --output-file src/dxfclasses.tmp.c src/dxfclasses.in && \
+	  sed -e's,size_t len,SIZE_TYPE len,' <src/dxfclasses.tmp.c >src/dxfclasses.c && \
+	  sed -e's,register ,,g' <src/dxfclasses.tmp.c >src/dxfclasses.c && \
+	  rm -f src/dxfclasses.tmp.c && \
+	  $(GPERF) --output-file src/objects.tmp.c src/objects.in && \
+	  sed -e's,size_t len,SIZE_TYPE len,' <src/objects.tmp.c >src/objects.c && \
+	  sed -e's,register ,,g' <src/objects.tmp.c >src/objects.c && \
+	  rm -f src/objects.tmp.c
 regen-unknown:
 	$(MAKE) -C examples $@
 full-regen-unknown:

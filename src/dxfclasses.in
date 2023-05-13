@@ -44,7 +44,7 @@ EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
 #  define SIZE_TYPE size_t
 #endif
 // internal
-static const struct Dwg_DXFClass *in_word_set (register const char *str, register SIZE_TYPE len);
+static const struct Dwg_DXFClass *in_word_set (const char *str, SIZE_TYPE len);
 
 enum apptypes
 {

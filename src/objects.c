@@ -67,7 +67,7 @@
 #else
 #  define SIZE_TYPE size_t
 #endif
-static const struct _dwg_dxfname * in_word_set (register const char *str, register SIZE_TYPE len);
+static const struct _dwg_dxfname * in_word_set (const char *str, SIZE_TYPE len);
 
 #define STABLE (unsigned)DWG_CLASS_STABLE
 #define UNSTABLE (unsigned)DWG_CLASS_UNSTABLE
@@ -92,7 +92,7 @@ inline
 #endif
 #endif
 static unsigned int
-hash (register const char *str, register SIZE_TYPE len)
+hash (const char *str, size_t len)
 {
   static const unsigned short asso_values[] =
     {
@@ -110,7 +110,7 @@ hash (register const char *str, register SIZE_TYPE len)
       1272, 1272, 1272, 1272, 1272, 1272, 1272, 1272, 1272, 1272,
       1272, 1272, 1272, 1272, 1272, 1272, 1272, 1272, 1272
     };
-  register unsigned int hval = len;
+  unsigned int hval = len;
 
   switch (hval)
     {
@@ -807,7 +807,7 @@ static const struct stringpool_t stringpool_contents =
   };
 #define stringpool ((const char *) &stringpool_contents)
 const struct _dwg_dxfname *
-in_word_set (register const char *str, register SIZE_TYPE len)
+in_word_set (const char *str, size_t len)
 {
   static const struct _dwg_dxfname wordlist[] =
     {
@@ -1696,14 +1696,14 @@ in_word_set (register const char *str, register SIZE_TYPE len)
 
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
     {
-      register unsigned int key = hash (str, len);
+      unsigned int key = hash (str, len);
 
       if (key <= MAX_HASH_VALUE)
         {
-          register int o = wordlist[key].name;
+          int o = wordlist[key].name;
           if (o >= 0)
             {
-              register const char *s = o + stringpool;
+              const char *s = o + stringpool;
 
               if (*str == *s && !strcmp (str + 1, s + 1))
                 return &wordlist[key];

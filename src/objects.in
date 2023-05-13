@@ -35,7 +35,7 @@
 #else
 #  define SIZE_TYPE size_t
 #endif
-static const struct _dwg_dxfname * in_word_set (register const char *str, register SIZE_TYPE len);
+static const struct _dwg_dxfname * in_word_set (const char *str, SIZE_TYPE len);
 
 #define STABLE (unsigned)DWG_CLASS_STABLE
 #define UNSTABLE (unsigned)DWG_CLASS_UNSTABLE
