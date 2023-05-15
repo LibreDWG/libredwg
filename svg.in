@@ -4,9 +4,19 @@ srcdir="@srcdir@"
 top_builddir="@top_builddir@"
 timeout="@TIMEOUT_10@"
 
+if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
+    TESTPROG="$LOG_COMPILER $LOG_FLAGS"
+elif [ -n "@WINE@" ]; then
+    TESTPROG="@WINE@"
+else
+    TESTPROG="@LTEXEC@"
+fi
+
 make -s -C src
 make -s -C programs dwg2SVG
-@DSYMUTIL@ programs/dwg2SVG
+if [ -n "@DSYMUTIL@" ]; then
+    @DSYMUTIL@ programs/dwg2SVG
+fi
 v=-v3
 # dummy to please shellcheck
 test -z "$v" && echo $top_builddir
@@ -41,8 +51,9 @@ for d in "$@"; do
         b=$(basename "$d" .dwg)
         log="$b$dir.svg.log"
         out="$b$dir.svg"
-        echo "$timeout @LTEXEC@ programs/dwg2SVG $v $d \>$out 2\>$log"
-        $timeout @LTEXEC@ programs/dwg2SVG "$v" "$d" >"$out" 2>"$log"
+        echo "$timeout $TESTPROG programs/dwg2SVG $v $d \>$out 2\>$log"
+        # shellcheck disable=SC2086
+        $timeout $TESTPROG programs/dwg2SVG "$v" "$d" >"$out" 2>"$log"
         err=$?
         [ $err -gt $gerr ] && gerr=$err
         tail -n2 "$log"

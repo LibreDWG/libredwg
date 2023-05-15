@@ -156,6 +156,8 @@ run ()
     if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
         TESTPROG="$LOG_COMPILER $LOG_FLAGS"
         log="$TEST_SUITE_LOG"
+    elif [ -n "@WINE@" ]; then
+        TESTPROG="@WINE@"
     else
         # libtool only if shared
         TESTPROG="@LTEXEC@"
@@ -227,9 +229,6 @@ run ()
             tail -n100 "$log"
         fi
     fi
-    if [ x"$MINGW" != x ] && [ x"$OLDTESTPROG" != x ]; then
-        TESTPROG="$OLDTESTPROG"
-    fi
 }
 
 DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
@@ -289,8 +288,8 @@ fi
 
 case $PROGS in
     *dwggrep*)
-        echo "@LTEXEC@ dwggrep${EXEEXT} -i -c tekst ${DATADIR}/example_*.dwg"
-        n="$(@LTEXEC@ "./dwggrep${EXEEXT}" -i -c tekst "${DATADIR}"/example_*.dwg | tr -d "\r")"
+        echo "$TESTPROG dwggrep${EXEEXT} -i -c tekst ${DATADIR}/example_*.dwg"
+        n="$($TESTPROG "./dwggrep${EXEEXT}" -i -c tekst "${DATADIR}"/example_*.dwg | tr -d "\r")"
         if test "$n" != "24"; then
             i=$((i+1))
             echo "dwggrep failure $?"

@@ -5,13 +5,23 @@ top_builddir="@top_builddir@"
 CFLAGS="@CFLAGS@"
 timeout="@TIMEOUT_30@"
 
+if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
+    TESTPROG="$LOG_COMPILER $LOG_FLAGS"
+elif [ -n "@WINE@" ]; then
+    TESTPROG="@WINE@"
+else
+    TESTPROG="@LTEXEC@"
+fi
+
 case "$CFLAGS" in
     *-DDEBUG_CLASSES*) timeout= ;;
     *) ;;
 esac
 make -s -C src
-make -s -C programs dwg2dxf dxfwrite
-@DSYMUTIL@ programs/dwg2dxf programs/dxfwrite
+make -s -C programs dwg2dxf@EXEEXT@ dxfwrite@EXEEXT@
+if [ -n "@DSYMUTIL@" ]; then
+    @DSYMUTIL@ programs/dwg2dxf programs/dxfwrite
+fi
 v=-v3
 # dummy to please shellcheck
 test -z "$v" && echo $top_builddir
@@ -96,15 +106,15 @@ for d in "$@"; do
                 log="$b$dir.log"
                 [ -n "$out" ] || out="$b$dir.dxf"
                 if [ "$ext" = "dwg" ]; then
-                    echo "$timeout @LTEXEC@ programs/dwg2dxf $args $v -o $out $d 2>$log"
+                    echo "$timeout $TESTPROG programs/dwg2dxf $args $v -o $out $d 2>$log"
                     # shellcheck disable=SC2086
-                    $timeout @LTEXEC@ programs/dwg2dxf $args "$v" -o "$out" "$d" 2>"$log"
+                    $timeout $TESTPROG programs/dwg2dxf $args "$v" -o "$out" "$d" 2>"$log"
                     err=$?
                     [ $err -gt $gerr ] && gerr=$err
                 else
-                    echo "$timeout @LTEXEC@ programs/dxfwrite $args $v -o $out $d 2>$log"
+                    echo "$timeout $TESTPROG programs/dxfwrite $args $v -o $out $d 2>$log"
                     # shellcheck disable=SC2086
-                    $timeout @LTEXEC@ programs/dxfwrite $args "$v" -o "$out" "$d" 2>"$log"
+                    $timeout $TESTPROG programs/dxfwrite $args "$v" -o "$out" "$d" 2>"$log"
                     err=$?
                     [ $err -gt $gerr ] && gerr=$err
                 fi

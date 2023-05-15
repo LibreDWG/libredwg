@@ -14,6 +14,7 @@
 [ -z "$DATADIR" ] && DATADIR="@top_srcdir@/test/test-data"
 top_builddir="@top_builddir@"
 EXEEXT="@EXEEXT@"
+WINE="@WINE@"
 # artefact for "shellcheck"
 [ -z "$top_builddir" ] && echo $top_builddir
 
@@ -35,6 +36,14 @@ for d in $TODO $DATA; do
     rm "./$b.json" 2>/dev/null
 done
 
+if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
+    TESTPROG="$LOG_COMPILER $LOG_FLAGS"
+elif [ -n "$WINE" ]; then
+    TESTPROG="@WINE@"
+else
+    TESTPROG="@LTEXEC@"
+fi
+
 check_roundtrip() {
     if [ -f "$dwg" ] && [ -x dwgwrite ]
     then
@@ -47,19 +56,19 @@ check_roundtrip() {
             *r11/A*)  todo=1 ;;
             *r1.*)   todo=1 ;;
         esac
-        echo "@LTEXEC@ ./dwgread${EXEEXT} -y -v2 -o $json $dwg 2>$log1"
-        if ! @LTEXEC@ "./dwgread${EXEEXT}" -y -v2 -o "$json" "$dwg" 2>"$log1" >/dev/null; then
+        echo "./dwgread${EXEEXT} -y -v2 -o $json $dwg 2>$log1"
+        if ! $TESTPROG "./dwgread${EXEEXT}" -y -v2 -o "$json" "$dwg" 2>"$log1" >/dev/null; then
             echo "json $dwg failed"
             tail "$log1"
             if [ -z $todo ]; then i=$((i+1)); fi
         fi
-        echo "@LTEXEC@ ./dwgwrite${EXEEXT} -y -v0 -o $tgt $json"
-        if ! @LTEXEC@ "./dwgwrite${EXEEXT}" -y -v0 -o "$tgt" "$json" 2>/dev/null >/dev/null; then
+        echo "./dwgwrite${EXEEXT} -y -v0 -o $tgt $json"
+        if ! $TESTPROG "./dwgwrite${EXEEXT}" -y -v0 -o "$tgt" "$json" 2>/dev/null >/dev/null; then
             echo "dwgwrite $json failed"
             if [ -z $todo ]; then i=$((i+1)); fi
         fi
-        echo "@LTEXEC@ ./dwgread${EXEEXT} -v2 $tgt 2>$log2"
-        if ! @LTEXEC@ "./dwgread${EXEEXT}" -v2 "$tgt" 2>"$log2" >/dev/null; then
+        echo "./dwgread${EXEEXT} -v2 $tgt 2>$log2"
+        if ! $TESTPROG "./dwgread${EXEEXT}" -v2 "$tgt" 2>"$log2" >/dev/null; then
             echo "dwgread resulting $tgt failed"
             tail "$log2"
             if [ -z $todo ]; then i=$((i+1)); fi
@@ -95,7 +104,7 @@ for dwg in $DATA $TODO; do
     dwg="${DATADIR}/$dwg.dwg"
     echo "dwgread${EXEEXT}" -Ojson -o"$json" "$dwg"
     # With --enable-debug fixup nan
-    if @LTEXEC@ "./dwgread${EXEEXT}" -Ojson -o"$json" "$dwg" 2>/dev/null && \
+    if $TESTPROG "./dwgread${EXEEXT}" -Ojson -o"$json" "$dwg" 2>/dev/null && \
        @JSON_SED_NAN@ "$json" && \
        $JQ . "$json" >"$json.log" 2>&1
     then
@@ -107,7 +116,7 @@ for dwg in $DATA $TODO; do
 
     geojson="$(basename "$dwg" .dwg).geojson"
     echo "./dwgread${EXEEXT}" -o"$geojson" "$dwg"
-    if @LTEXEC@ "./dwgread${EXEEXT}" -Ogeojson -o"$geojson" "$dwg" 2>/dev/null && \
+    if $TESTPROG "./dwgread${EXEEXT}" -Ogeojson -o"$geojson" "$dwg" 2>/dev/null && \
        @JSON_SED_NAN@ "$geojson" && \
        $JQ . "$geojson" >>"$json.log" 2>&1
     then
@@ -130,7 +139,7 @@ then
     dwg="$DATADIR/example_2000.dwg"
     json="example_2000.json"
     echo "dwgread -O geojson $DATADIR/example_2000.dwg | jq ."
-    if @LTEXEC@ "./dwgread${EXEEXT}" -O geojson "$DATADIR/example_2000.dwg" | $JQ . >"$json.log" 2>&1
+    if $TESTPROG "./dwgread${EXEEXT}" -O geojson "$DATADIR/example_2000.dwg" | $JQ . >"$json.log" 2>&1
     then
         echo pipe to geojson ok
         rm "./$json.log"
@@ -140,7 +149,7 @@ then
     fi
 
     echo "dwgread -O json $DATADIR/example_2000.dwg | jq ."
-    if @LTEXEC@ "./dwgread${EXEEXT}" -O json "$DATADIR/example_2000.dwg" | $JQ . >"$json.log" 2>&1
+    if $TESTPROG "./dwgread${EXEEXT}" -O json "$DATADIR/example_2000.dwg" | $JQ . >"$json.log" 2>&1
     then
         echo pipe to json ok
         rm "./$json.log"

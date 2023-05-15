@@ -5,13 +5,23 @@ top_builddir="@top_builddir@"
 CFLAGS="@CFLAGS@"
 timeout="@TIMEOUT_30@"
 
+if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
+    TESTPROG="$LOG_COMPILER $LOG_FLAGS"
+elif [ -n "@WINE@" ]; then
+    TESTPROG="@WINE@"
+else
+    TESTPROG="@LTEXEC@"
+fi
+
 case "$CFLAGS" in
     *-DDEBUG_CLASSES*) timeout= ;;
     *) ;;
 esac
 make -s -j4 -C src
-make -s -j4 -C programs dwgwrite
-@DSYMUTIL@ programs/dwgwrite
+make -s -j4 -C programs dwgwrite@EXEEXT@
+if [ -n "@DSYMUTIL@" ]; then
+    @DSYMUTIL@ programs/dwgwrite
+fi
 v=-v3
 # dummy to please shellcheck
 test -z "$v" && echo $top_builddir
@@ -107,9 +117,9 @@ for d in "$@"; do
         out="$b$dir.dwg"
         ori_timeout="$timeout"
         [ "$ext" = "dxf" ] && timeout="env ASAN_OPTIONS=detect_leaks=0 $timeout"
-        echo "$timeout @LTEXEC@ programs/dwgwrite $args $v -o $out $d 2>$log"
+        echo "$timeout $TESTPROG programs/dwgwrite $args $v -o $out $d 2>$log"
         # shellcheck disable=SC2086
-        $timeout @LTEXEC@ programs/dwgwrite $args "$v" -o "$out" "$d" 2>"$log"
+        $timeout $TESTPROG programs/dwgwrite $args "$v" -o "$out" "$d" 2>"$log"
         err=$?
         [ $err -gt $gerr ] && gerr=$err
         timeout="$ori_timeout"

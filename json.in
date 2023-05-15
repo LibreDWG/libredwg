@@ -5,13 +5,23 @@ top_builddir="@top_builddir@"
 CFLAGS="@CFLAGS@"
 timeout="@TIMEOUT_30@"
 
+if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
+    TESTPROG="$LOG_COMPILER $LOG_FLAGS"
+elif [ -n "@WINE@" ]; then
+    TESTPROG="@WINE@"
+else
+    TESTPROG="@LTEXEC@"
+fi
+
 case "$CFLAGS" in
     *-DDEBUG_CLASSES*) timeout="" ;;
     *) ;;
 esac
 make -s -C src
-make -s -C programs dwgread
-@DSYMUTIL@ programs/dwgread
+make -s -C programs dwgread@EXEEXT@
+if [ -n "@DSYMUTIL@" ]; then
+    @DSYMUTIL@ programs/dwgread
+fi
 v=-v3
 # dummy to please shellcheck
 test -z "$v" && echo $top_builddir
@@ -55,8 +65,9 @@ for d in "$@"; do
         b=$(basename "$d" .$ext)
         log="$b$dir.log"
         out="$b$dir.json"
-        echo "$timeout @LTEXEC@ programs/dwgread $v -Ojson -o $out $d 2>$log"
-        $timeout @LTEXEC@ programs/dwgread "$v" -Ojson -o "$out" "$d" 2>"$log"
+        echo "$timeout $TESTPROG programs/dwgread $v -Ojson -o $out $d 2>$log"
+        # shellcheck disable=SC2086
+        $timeout $TESTPROG programs/dwgread "$v" -Ojson -o "$out" "$d" 2>"$log"
         err=$?
         [ $err -gt $gerr ] && gerr=$err
         tail -n2 "$log"

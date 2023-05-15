@@ -5,9 +5,19 @@ srcdir="@srcdir@"
 top_builddir="@top_builddir@"
 timeout="@TIMEOUT_10@"
 
+if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
+    TESTPROG="$LOG_COMPILER $LOG_FLAGS"
+elif [ -n "@WINE@" ]; then
+    TESTPROG="@WINE@"
+else
+    TESTPROG="@LTEXEC@"
+fi
+
 make -s -j4 -C src || exit 1
-make -s -j4 -C programs dwgread || exit 1
-@DSYMUTIL@ programs/dwgread
+make -s -j4 -C programs dwgread@EXEEXT@ || exit 1
+if [ -n "@DSYMUTIL@" ]; then
+    @DSYMUTIL@ programs/dwgread
+fi
 v=-v4
 # dummy to please shellcheck
 test -z "$v" && echo $top_builddir
@@ -79,7 +89,7 @@ for d in "$@"; do
         echo "$timeout @LTEXEC@ programs/dwgread $args $v $d 2>$log"
         # (sleep 12s; killall dwgread 2>/dev/null) &
         # shellcheck disable=SC2086
-        $timeout @LTEXEC@ programs/dwgread $args "$v" "$d" 2>"$log"
+        $timeout $TESTPROG programs/dwgread $args "$v" "$d" 2>"$log"
         err=$?
         [ $err -gt $gerr ] && gerr=$err
         timeout="$ori_timeout"

@@ -15,12 +15,19 @@
 [ -z "$DATADIR" ] && DATADIR="@top_srcdir@/test/test-data"
 top_builddir="@top_builddir@"
 EXEEXT="@EXEEXT@"
+if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
+    TESTPROG="$LOG_COMPILER $LOG_FLAGS"
+elif [ -n "$WINE" ]; then
+    TESTPROG="@WINE@"
+else
+    TESTPROG="@LTEXEC@"
+fi
 # shellcheck disable=SC2157
 if [ -n "@HAVE_ASAN@" ]
 then
-    DXF2DWG="env ASAN_OPTIONS=detect_leaks=0 @LTEXEC@ ./dxf2dwg${EXEEXT}"
+    DXF2DWG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG ./dxf2dwg${EXEEXT}"
 else    
-    DXF2DWG="@LTEXEC@ ./dxf2dwg${EXEEXT}"
+    DXF2DWG="$TESTPROG ./dxf2dwg${EXEEXT}"
 fi
 # artefact for "shellcheck"
 [ -z "$top_builddir" ] && echo $top_builddir
@@ -32,7 +39,7 @@ is_release="$(grep -c 'IS_RELEASE 1' ../src/config.h)"
 
 check_subentity() {
     if [ -f "$dwg" ] && [ -f "$dxf" ]; then
-        @LTEXEC@ "./dwg2dxf${EXEEXT}" -y -v4 -o "$tgt" "$dwg" 2>/dev/null
+        $TESTPROG "./dwg2dxf${EXEEXT}" -y -v4 -o "$tgt" "$dwg" 2>/dev/null
         grep -A8 ^VERTEX "$dxf" >tmp1
         grep -A8 ^VERTEX "$tgt" >tmp2
         d="$(diff -b -U1 tmp1 tmp2)"
@@ -75,7 +82,7 @@ done
 
 check_acdb_dxfname() {
     if [ -f "$dwg" ] && [ -f "$dxf" ]; then
-        @LTEXEC@ "./dwg2dxf${EXEEXT}" -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
+        $TESTPROG "./dwg2dxf${EXEEXT}" -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
         expect="$(grep -c "^$dxfname" "$dxf")"
         if [ -n "$1" ]; then expect="$1"; fi
         got=$(grep -c "^$dxfname" "$tgt")
@@ -139,7 +146,7 @@ done
 # check vertex - seqend order
 check_pline_order() {
     if [ -f "$dwg" ] && [ -f "$dxf" ]; then
-        @LTEXEC@ "./dwg2dxf${EXEEXT}" -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
+        $TESTPROG "./dwg2dxf${EXEEXT}" -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
         got="$(grep -E '^(POLYLINE|VERTEX|SEQEND)' "$tgt")"
         expect="$(grep -E '^(POLYLINE|VERTEX|SEQEND)' "$dxf")"
         if [ "$got" = "$expect" ]
@@ -156,7 +163,7 @@ check_pline_order() {
 # check insert - attrib - seqend order
 check_insert_order() {
     if [ -f "$dwg" ] && [ -f "$dxf" ]; then
-        @LTEXEC@ "./dwg2dxf${EXEEXT}" -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
+        $TESTPROG "./dwg2dxf${EXEEXT}" -y -v0 -o "$tgt" "$dwg" 2>/dev/null >/dev/null
         got="$(grep -E '^(INSERT|ATTRIB|SEQEND)' "$tgt")"
         expect="$(grep -E '^(INSERT|ATTRIB|SEQEND)' "$dxf")"
         if [ "$got" = "$expect" ]
@@ -178,7 +185,7 @@ check_roundtrip() {
         tgt="$(basename "$dwg")"
         log1="$(basename "$dwg" .dwg).log1"
         log2="$(basename "$dwg" .dwg).log2"
-        if ! @LTEXEC@ "./dwg2dxf${EXEEXT}" -y -v2 -o "$dxf" "$dwg" 2>"$log1" >/dev/null; then
+        if ! $TESTPROG "./dwg2dxf${EXEEXT}" -y -v2 -o "$dxf" "$dwg" 2>"$log1" >/dev/null; then
             echo "dwg2dxf $dwg failed"
             exit 1
         fi
@@ -186,7 +193,7 @@ check_roundtrip() {
             echo "$DXF2DWG -y -v0 -o $tgt $dxf failed"
             exit 1
         fi
-        if ! @LTEXEC@ "./dwgread${EXEEXT}" -v2 "$tgt" 2>"$log2" >/dev/null; then
+        if ! $TESTPROG "./dwgread${EXEEXT}" -v2 "$tgt" 2>"$log2" >/dev/null; then
             echo "dwgread $tgt failed"
             exit 1
         fi

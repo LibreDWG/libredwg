@@ -4,6 +4,14 @@ top_builddir="@top_builddir@"
 # dummy to please shellcheck
 test -z "$top_builddir" && echo $top_builddir
 
+if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
+    TESTPROG="$LOG_COMPILER $LOG_FLAGS"
+elif [ -n "@WINE@" ]; then
+    TESTPROG="@WINE@"
+else
+    TESTPROG="@LTEXEC@"
+fi
+
 for d in "$srcdir"/test/test-data/*.dwg "$srcdir"/test/test-data/*/*.dwg; do
-    INPUT="$d" @LTEXEC@ test/unit-testing/dynapi_test || echo "$d"
+    INPUT="$d" $TESTPROG test/unit-testing/dynapi_test || echo "$d"
 done
