@@ -393,12 +393,8 @@ void bit_copy_chain (Bit_Chain *restrict orig_dat,
    | (((x) & 0x0000000000ff0000ULL) << 24)	\
    | (((x) & 0x000000000000ff00ULL) << 40)	\
    | (((x) & 0x00000000000000ffULL) << 56))
-static inline uint64_t htobe64 (uint64_t x) {
-  return bswap_constant_64 (x);
-}
-static inline uint64_t be64toh (uint64_t x) {
-  return bswap_constant_64 (x);
-}
+#define htobe64(x) bswap_constant_64 (x)
+#define be64toh(x) bswap_constant_64 (x)
 #endif
 
 #endif
