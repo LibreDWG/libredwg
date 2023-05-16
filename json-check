@@ -49,10 +49,17 @@ if [ -f "$b.dwg" ]; then
         Windows) TeighaFileConverter=TeighaFileConverter ;;
         *)       can_teigha=0 ;;
     esac
+    if [ ! -x "$TeighaFileConverter" ]; then
+        case $(uname) in
+            Darwin)  TeighaFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
+            Linux)   TeighaFileConverter=/usr/bin/ODAFileConverter ;;
+            Windows) TeighaFileConverter=ODAFileConverter ;;
+        esac
+    fi
     case $r in
         r2.*)     can_teigha=0 ;;
         r9)       can_teigha=0 ;;
-        r1[012])  can_teigha=0 ;;
+        r1[01])   can_teigha=0 ;;
     esac
     if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
         cp "./$b.dwg" test/
@@ -61,7 +68,9 @@ if [ -f "$b.dwg" ]; then
         mv "./$b.dxf.err" "$b.json.err"
     else
         rm "$b.json.err" 2>/dev/null
-        echo TeighaFileConverter not installed
+        if [ ! -x "$TeighaFileConverter" ]; then
+            echo "(Teigha|ODA)FileConverter not installed"
+        fi
     fi
 
     ./log -v3 "$b.dwg"

@@ -39,7 +39,8 @@ if ! ./dxf -b -y -v4 -o "$b.dxfb" "$d"; then
 fi
 if [ -f "$b.dxfb" ]; then
     mv "./$b.log" "$b.dwg2dxfb.log"
-
+    # teigha can only write from r12-r2018
+    can_teigha=1
     case $(uname) in
         Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
         Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
@@ -52,14 +53,21 @@ if [ -f "$b.dxfb" ]; then
             Windows) TeighaFileConverter=ODAFileConverter ;;
         esac
     fi
-    if [ -x "$TeighaFileConverter" ]; then
+    case $r in
+        r2.*)     can_teigha=0 ;;
+        r9)       can_teigha=0 ;;
+        r1[01])   can_teigha=0 ;;
+    esac
+    if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
         echo "$TeighaFileConverter . test ACAD$r DWG 0 1 $b.dxfb"
         $TeighaFileConverter "." "test" "ACAD$r" DWG 0 1 "$b.dxfb"
         mv "test/$b.dwg.err" "$b.dxfb2dwg.err"
         cat "$b.dxfb2dwg.err"
     else
         rm "$b.dxfb2dwg.err" 2>/dev/null
-        echo TeighaFileConverter not installed
+        if [ ! -x "$TeighaFileConverter" ]; then
+            echo "(Teigha|ODA)FileConverter not installed"
+        fi
     fi
 
     if ! ./dwg -y -v4 "$b.dxfb"; then

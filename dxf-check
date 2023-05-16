@@ -44,19 +44,35 @@ if [ -f "$b.dxf" ]; then
 fi
 
 if [ -f "$b.dwg" ]; then
+    # teigha can only write from r12-r2018
+    can_teigha=1
     case $(uname) in
         Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
         Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
         Windows) TeighaFileConverter=TeighaFileConverter ;;
     esac
-    if [ -x "$TeighaFileConverter" ]; then
+    if [ ! -x "$TeighaFileConverter" ]; then
+        case $(uname) in
+            Darwin)  TeighaFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
+            Linux)   TeighaFileConverter=/usr/bin/ODAFileConverter ;;
+            Windows) TeighaFileConverter=ODAFileConverter ;;
+        esac
+    fi
+    case $r in
+        r2.*)     can_teigha=0 ;;
+        r9)       can_teigha=0 ;;
+        r1[01])   can_teigha=0 ;;
+    esac
+    if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
         echo TeighaFileConverter "." "test" "ACAD$r" DXF 0 1 "$b.dwg"
         $TeighaFileConverter "." "test" "ACAD$r" DXF 0 1 "$b.dwg"
         mv "test/$b.dxf.err" "$b.dxf.err"
         cat "$b.dxf.err"
     else
         rm "$b.dxf.err" 2>/dev/null
-        echo TeighaFileConverter not installed
+        if [ ! -x "$TeighaFileConverter" ]; then
+            echo "(Teigha|ODA)FileConverter not installed"
+        fi
     fi
 
     ./log -v3 "$b.dwg"
