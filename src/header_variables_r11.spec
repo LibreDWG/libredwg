@@ -287,10 +287,12 @@
   FIELD_RS (HANDLING, 70); // use new HEX handles (should be RC)
 #ifdef IS_DECODER
   {
+    BITCODE_RLL v;
     _obj->HANDSEED = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
     _obj->HANDSEED->handleref.code = 0;
     _obj->HANDSEED->handleref.size = 8;
-    _obj->HANDSEED->handleref.value = htobe64 (bit_read_RLL (dat));
+    v = bit_read_RLL (dat);
+    _obj->HANDSEED->handleref.value = htobe64 (v);
     _obj->HANDSEED->absolute_ref = _obj->HANDSEED->handleref.value;
     LOG_TRACE ("HANDSEED: " FORMAT_H " [H 5]\n",
                ARGS_H (_obj->HANDSEED->handleref));

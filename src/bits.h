@@ -384,17 +384,23 @@ void bit_copy_chain (Bit_Chain *restrict orig_dat,
                      Bit_Chain *restrict tmp_dat);
 
 #ifdef NO_BYTESWAP_SUPPORT
-#define bswap_constant_64(x)			\
-  (  (((x) & 0xff00000000000000ULL) >> 56)	\
-   | (((x) & 0x00ff000000000000ULL) >> 40)	\
-   | (((x) & 0x0000ff0000000000ULL) >> 24)	\
-   | (((x) & 0x000000ff00000000ULL) >> 8)	\
-   | (((x) & 0x00000000ff000000ULL) << 8)	\
-   | (((x) & 0x0000000000ff0000ULL) << 24)	\
-   | (((x) & 0x000000000000ff00ULL) << 40)	\
-   | (((x) & 0x00000000000000ffULL) << 56))
-#define htobe64(x) bswap_constant_64 (x)
-#define be64toh(x) bswap_constant_64 (x)
-#endif
+// Warning: evaluates x 8 times!
+#  define bswap_constant_64(x)                                              \
+    ((((x)&0xff00000000000000ULL) >> 56)                                    \
+     | (((x)&0x00ff000000000000ULL) >> 40)                                  \
+     | (((x)&0x0000ff0000000000ULL) >> 24)                                  \
+     | (((x)&0x000000ff00000000ULL) >> 8)                                   \
+     | (((x)&0x00000000ff000000ULL) << 8)                                   \
+     | (((x)&0x0000000000ff0000ULL) << 24)                                  \
+     | (((x)&0x000000000000ff00ULL) << 40)                                  \
+     | (((x)&0x00000000000000ffULL) << 56))
+#  ifndef WORDS_BIGENDIAN
+#    define htobe64(x) bswap_constant_64 (x)
+#    define be64toh(x) bswap_constant_64 (x)
+#  else
+#    define htobe64(x) (x)
+#    define be64toh(x) (x)
+#  endif
+#endif // NO_BYTESWAP_SUPPORT
 
 #endif
