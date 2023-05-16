@@ -17,7 +17,7 @@ top_builddir="@top_builddir@"
 EXEEXT="@EXEEXT@"
 if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
     TESTPROG="$LOG_COMPILER $LOG_FLAGS"
-elif [ -n "$WINE" ]; then
+elif [ -n "@WINE@" ]; then
     TESTPROG="@WINE@"
 else
     TESTPROG="@LTEXEC@"

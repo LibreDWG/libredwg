@@ -14,7 +14,6 @@
 [ -z "$DATADIR" ] && DATADIR="@top_srcdir@/test/test-data"
 top_builddir="@top_builddir@"
 EXEEXT="@EXEEXT@"
-WINE="@WINE@"
 # artefact for "shellcheck"
 [ -z "$top_builddir" ] && echo $top_builddir
 
@@ -38,7 +37,7 @@ done
 
 if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
     TESTPROG="$LOG_COMPILER $LOG_FLAGS"
-elif [ -n "$WINE" ]; then
+elif [ -n "@WINE@" ]; then
     TESTPROG="@WINE@"
 else
     TESTPROG="@LTEXEC@"

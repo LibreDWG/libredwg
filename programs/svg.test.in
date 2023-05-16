@@ -16,6 +16,13 @@ top_builddir="@top_builddir@"
 EXEEXT="@EXEEXT@"
 # artefact for "shellcheck"
 [ -z "$top_builddir" ] && echo $top_builddir
+if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
+    TESTPROG="$LOG_COMPILER $LOG_FLAGS"
+elif [ -n "@WINE@" ]; then
+    TESTPROG="@WINE@"
+else
+    TESTPROG="@LTEXEC@"
+fi
 
 i=0
 DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
@@ -32,7 +39,8 @@ for dwg in $DATA; do
     dwg="${DATADIR}/$dwg.dwg"
     echo "dwg2SVG${EXEEXT} $dwg >$svg &&"
     echo "  @RUN_JING@ $svg"
-    if @TIMEOUT_10@ @LTEXEC@ "./dwg2SVG${EXEEXT}" "$dwg" >"$svg" 2>"$log" && \
+    # shellcheck disable=SC2086
+    if @TIMEOUT_10@ $TESTPROG "./dwg2SVG${EXEEXT}" "$dwg" >"$svg" 2>"$log" && \
        @RUN_JING@ "$svg"
     then
         rm "./$svg.log" "./$svg"
