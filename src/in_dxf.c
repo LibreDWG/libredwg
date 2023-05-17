@@ -244,7 +244,11 @@ xcalloc (size_t n, size_t s)
 
 #ifndef DISABLE_DXF
 
-static inline void
+static
+#ifndef __AFL_COMPILER
+inline
+#endif
+void
 dxf_skip_ws (Bit_Chain *dat)
 {
   const int is_binary = dat->opts & DWG_OPTS_DXFB;

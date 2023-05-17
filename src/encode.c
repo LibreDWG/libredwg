@@ -5677,7 +5677,9 @@ static int
 encode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
+#ifndef __AFL_COMPILER
   Dwg_Object *obj = NULL;
+#endif
   Bit_Chain *hdl_dat = dat;
   int error = 0;
 
@@ -5693,7 +5695,7 @@ dwg_encode_handleref (Bit_Chain *hdl_dat, Dwg_Object *restrict obj,
                       Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
 {
   // this function should receive a Object_Ref without an abs_ref, calculate it
-  // and return a Dwg_Handle this should be a higher level function not sure if
+  // and return a Dwg_Handle. This should be a higher level function not sure if
   // the prototype is correct
   assert (obj);
 }
@@ -5767,7 +5769,7 @@ dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *dat,
                    Bit_Chain *restrict hdl_dat, Bit_Chain *str_dat)
 {
   int error = 0;
-  BITCODE_BL vcount;
+  //BITCODE_BL vcount;
 
   hdl_dat->from_version = dat->from_version;
   hdl_dat->version = dat->version;
@@ -5820,7 +5822,9 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
                              Bit_Chain *str_dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
+#ifndef __AFL_COMPILER
   Dwg_Object *obj = NULL;
+#endif
   Dwg_Version_Type old_from = dat->from_version;
 
   if (!_obj->HANDSEED) // minimal or broken DXF
@@ -6125,7 +6129,7 @@ dwg_link_prev (Dwg_Object_Ref *restrict prev_ref, Dwg_Object *restrict obj)
 static Dwg_Object_Ref *
 dwg_link_next (Dwg_Object_Ref *restrict next_ref, Dwg_Object *restrict obj)
 {
-  Dwg_Object *prev, *next;
+  Dwg_Object *next;
   Dwg_Object_Ref *prev_ref;
   Dwg_Data *dwg = obj ? obj->parent : NULL;
   if (!next_ref)
@@ -6315,7 +6319,9 @@ void
 in_postprocess_handles (Dwg_Object *restrict obj)
 {
   Dwg_Data *dwg = obj->parent;
+#ifndef __AFL_COMPILER
   const char *name = obj->name;
+#endif
   int is_entity = obj->supertype == DWG_SUPERTYPE_ENTITY;
 
   // common_entity_handle_data:
