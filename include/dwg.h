@@ -77,7 +77,7 @@ extern "C" {
 typedef unsigned char BITCODE_RC;
 #if defined _MSC_VER && !defined __clang__
 # define FORMAT_RC "0x%2x"
-# define SCANF_2X "%2X"
+# define SCANF_2X "%2hhX"
 #else
 # define FORMAT_RC "0x%hhx"
 # define SCANF_2X "%2hhX"
