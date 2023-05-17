@@ -1701,6 +1701,11 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                 char *s = json_string (dat, tokens);
                 size_t len = strlen (s);
                 JSON_TOKENS_CHECK_OVERFLOW_ERR
+                if (len > 0xFFFF)
+                  {
+                    LOG_ERROR ("xdata string overflow len=%zu", len);
+                    return DWG_ERR_INVALIDDWG;
+                  }
                 rbuf->value.str.size = len & 0xFFFF;
                 // here the xdata_size gets re-calculated from size
                 PRE (R_2007) // from version
@@ -1710,7 +1715,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   rbuf->value.str.codepage = dwg->header.codepage;
                   LOG_TRACE ("xdata[%u]: \"%s\" [TV %d]\n", i, s,
                              (int)rbuf->type);
-                  size += len + 3;
+                  size += (len & 0xFFFF) + 3;
                 }
                 LATER_VERSIONS
                 {
@@ -1718,7 +1723,7 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                   rbuf->value.str.u.wdata = bit_utf8_to_TU (s, 0);
                   free (s);
                   LOG_TRACE_TU ("xdata", rbuf->value.str.u.wdata, rbuf->type);
-                  size += (len * 2) + 2;
+                  size += ((len * 2) & 0xFFFF) + 2;
                 }
               }
               break;
