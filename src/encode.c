@@ -4056,6 +4056,11 @@ encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       for (i = 0; i < tblnum; i++)
         {
           PREP_TABLE (BLOCK_HEADER);
+          if (strEQc (_obj->name, "*MODEL_SPACE"))
+            {
+              LOG_TRACE ("Skip *MODEL_SPACE\n");
+              continue;
+            }
           error |= dwg_encode_BLOCK_HEADER (dat, obj);
           CHK_ENDPOS;
         }

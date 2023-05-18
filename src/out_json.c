@@ -1781,6 +1781,12 @@ dwg_json_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
     case DWG_TYPE_BLOCK_CONTROL:
       return dwg_json_BLOCK_CONTROL (dat, obj);
     case DWG_TYPE_BLOCK_HEADER:
+      if (dat->version <= R_12
+          && strEQc (obj->tio.object->tio.BLOCK_HEADER->name, "*MODEL_SPACE"))
+        {
+          LOG_TRACE ("Skip *MODEL_SPACE\n");
+          return 0;
+        }
       return dwg_json_BLOCK_HEADER (dat, obj);
     case DWG_TYPE_LAYER_CONTROL:
       return dwg_json_LAYER_CONTROL (dat, obj);
@@ -2056,6 +2062,13 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               Dwg_Object *obj = &dwg->object[num + i];
               Dwg_Object_BLOCK_HEADER *_obj
                   = obj->tio.object->tio.BLOCK_HEADER;
+              PRE (R_13b1) {
+                if (strEQc (_obj->name, "*MODEL_SPACE"))
+                  {
+                    LOG_TRACE ("Skip *MODEL_SPACE\n");
+                    continue;
+                  }
+              }
               RECORD (BLOCK_HEADER);
               FIELD_RC (flag, 70);
               FIELD_TFv (name, 32, 2);
