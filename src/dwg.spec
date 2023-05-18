@@ -11493,10 +11493,10 @@ DWG_ENTITY_END
 
 /* (none/6) pre r2.1 only */
 DWG_ENTITY (ENDREP)
-  FIELD_RS (num_cols, 70);
-  FIELD_RS (num_rows, 71);
-  FIELD_RD (col_spacing, 40);
-  FIELD_RD (row_spacing, 41);
+  FIELD_RS (numcols, 70);
+  FIELD_RS (numrows, 71);
+  FIELD_RD (colspacing, 40);
+  FIELD_RD (rowspacing, 41);
   //COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 

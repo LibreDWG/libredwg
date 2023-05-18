@@ -1866,13 +1866,13 @@ struct _dwg_object_entity*
 
 @item parent
 struct _dwg_object_entity*
-@item num_cols
+@item numcols
 RS,	DXF 70
-@item num_rows
+@item numrows
 RS,	DXF 71
-@item col_spacing
+@item colspacing
 RD,	DXF 40
-@item row_spacing
+@item rowspacing
 RD,	DXF 41
 
 @end vtable

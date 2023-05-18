@@ -8014,10 +8014,10 @@ typedef struct _dwg_entity_ENDREP
 {
   struct _dwg_object_entity *parent;
 
-  BITCODE_RS num_cols;     // DXF 70
-  BITCODE_RS num_rows;     // DXF 71
-  BITCODE_RD col_spacing;  // DXF 40
-  BITCODE_RD row_spacing;  // DXF 41
+  BITCODE_RS numcols;      // DXF 70
+  BITCODE_RS numrows;      // DXF 71
+  BITCODE_RD colspacing;   // DXF 40
+  BITCODE_RD rowspacing;   // DXF 41
 } Dwg_Entity_ENDREP;
 
 /**

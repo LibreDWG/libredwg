@@ -11003,49 +11003,49 @@ static int test_ENDREP (const Dwg_Object *obj)
       return 1;
     }
   {
-    BITCODE_RD col_spacing;
-    if (dwg_dynapi_entity_value (endrep, "ENDREP", "col_spacing", &col_spacing, NULL)
-        && col_spacing == endrep->col_spacing)
+    BITCODE_RD colspacing;
+    if (dwg_dynapi_entity_value (endrep, "ENDREP", "colspacing", &colspacing, NULL)
+        && colspacing == endrep->colspacing)
       pass ();
     else
-      fail ("ENDREP.col_spacing [RD] %g != %g", endrep->col_spacing, col_spacing);
-    col_spacing++;
-    if (dwg_dynapi_entity_set_value (endrep, "ENDREP", "col_spacing", &col_spacing, 0)
-        && col_spacing == endrep->col_spacing)
+      fail ("ENDREP.colspacing [RD] %g != %g", endrep->colspacing, colspacing);
+    colspacing++;
+    if (dwg_dynapi_entity_set_value (endrep, "ENDREP", "colspacing", &colspacing, 0)
+        && colspacing == endrep->colspacing)
       pass ();
     else
-      fail ("ENDREP.col_spacing [RD] set+1 %g != %g", endrep->col_spacing, col_spacing);
-    endrep->col_spacing--;
+      fail ("ENDREP.colspacing [RD] set+1 %g != %g", endrep->colspacing, colspacing);
+    endrep->colspacing--;
   }
   {
-    BITCODE_RS num_cols;
-    if (dwg_dynapi_entity_value (endrep, "ENDREP", "num_cols", &num_cols, NULL)
-        && num_cols == endrep->num_cols)
+    BITCODE_RS numcols;
+    if (dwg_dynapi_entity_value (endrep, "ENDREP", "numcols", &numcols, NULL)
+        && numcols == endrep->numcols)
       pass ();
     else
-      fail ("ENDREP.num_cols [RS] %hu != %hu", endrep->num_cols, num_cols);
-    num_cols++;
-    if (dwg_dynapi_entity_set_value (endrep, "ENDREP", "num_cols", &num_cols, 0)
-        && num_cols == endrep->num_cols)
+      fail ("ENDREP.numcols [RS] %hu != %hu", endrep->numcols, numcols);
+    numcols++;
+    if (dwg_dynapi_entity_set_value (endrep, "ENDREP", "numcols", &numcols, 0)
+        && numcols == endrep->numcols)
       pass ();
     else
-      fail ("ENDREP.num_cols [RS] set+1 %hu != %hu", endrep->num_cols, num_cols);
-    endrep->num_cols--;
+      fail ("ENDREP.numcols [RS] set+1 %hu != %hu", endrep->numcols, numcols);
+    endrep->numcols--;
   }
   {
-    BITCODE_RS num_rows;
-    if (dwg_dynapi_entity_value (endrep, "ENDREP", "num_rows", &num_rows, NULL)
-        && num_rows == endrep->num_rows)
+    BITCODE_RS numrows;
+    if (dwg_dynapi_entity_value (endrep, "ENDREP", "numrows", &numrows, NULL)
+        && numrows == endrep->numrows)
       pass ();
     else
-      fail ("ENDREP.num_rows [RS] %hu != %hu", endrep->num_rows, num_rows);
-    num_rows++;
-    if (dwg_dynapi_entity_set_value (endrep, "ENDREP", "num_rows", &num_rows, 0)
-        && num_rows == endrep->num_rows)
+      fail ("ENDREP.numrows [RS] %hu != %hu", endrep->numrows, numrows);
+    numrows++;
+    if (dwg_dynapi_entity_set_value (endrep, "ENDREP", "numrows", &numrows, 0)
+        && numrows == endrep->numrows)
       pass ();
     else
-      fail ("ENDREP.num_rows [RS] set+1 %hu != %hu", endrep->num_rows, num_rows);
-    endrep->num_rows--;
+      fail ("ENDREP.numrows [RS] set+1 %hu != %hu", endrep->numrows, numrows);
+    endrep->numrows--;
   }
   {
     struct _dwg_object_entity* parent;
@@ -11056,19 +11056,19 @@ static int test_ENDREP (const Dwg_Object *obj)
         fail ("ENDREP.parent [struct _dwg_object_entity*]");
   }
   {
-    BITCODE_RD row_spacing;
-    if (dwg_dynapi_entity_value (endrep, "ENDREP", "row_spacing", &row_spacing, NULL)
-        && row_spacing == endrep->row_spacing)
+    BITCODE_RD rowspacing;
+    if (dwg_dynapi_entity_value (endrep, "ENDREP", "rowspacing", &rowspacing, NULL)
+        && rowspacing == endrep->rowspacing)
       pass ();
     else
-      fail ("ENDREP.row_spacing [RD] %g != %g", endrep->row_spacing, row_spacing);
-    row_spacing++;
-    if (dwg_dynapi_entity_set_value (endrep, "ENDREP", "row_spacing", &row_spacing, 0)
-        && row_spacing == endrep->row_spacing)
+      fail ("ENDREP.rowspacing [RD] %g != %g", endrep->rowspacing, rowspacing);
+    rowspacing++;
+    if (dwg_dynapi_entity_set_value (endrep, "ENDREP", "rowspacing", &rowspacing, 0)
+        && rowspacing == endrep->rowspacing)
       pass ();
     else
-      fail ("ENDREP.row_spacing [RD] set+1 %g != %g", endrep->row_spacing, row_spacing);
-    endrep->row_spacing--;
+      fail ("ENDREP.rowspacing [RD] set+1 %g != %g", endrep->rowspacing, rowspacing);
+    endrep->rowspacing--;
   }
   if (failed && (is_class_unstable ("ENDREP") || is_class_debugging ("ENDREP")))
     {

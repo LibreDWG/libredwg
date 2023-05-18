@@ -1700,13 +1700,13 @@ static const Dwg_DYNAPI_field _dwg_ENDBLK_fields[] = {
 static const Dwg_DYNAPI_field _dwg_ENDREP_fields[] = {
   { "parent",	"struct _dwg_object_entity*", sizeof (void *),  OFF (struct _dwg_entity_ENDREP, parent),
     1,1,0, 0 },
-  { "num_cols",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_ENDREP, num_cols),
+  { "numcols",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_ENDREP, numcols),
     0,0,0, 70 },
-  { "num_rows",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_ENDREP, num_rows),
+  { "numrows",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_entity_ENDREP, numrows),
     0,0,0, 71 },
-  { "col_spacing",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_ENDREP, col_spacing),
+  { "colspacing",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_ENDREP, colspacing),
     0,0,0, 40 },
-  { "row_spacing",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_ENDREP, row_spacing),
+  { "rowspacing",	"RD", sizeof (BITCODE_RD),  OFF (struct _dwg_entity_ENDREP, rowspacing),
     0,0,0, 41 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
