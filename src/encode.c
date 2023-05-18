@@ -1059,8 +1059,8 @@ EXPORT long dwg_add_##token (Dwg_Data * dwg)     \
 #define DEBUG_POS                                                             \
   if (DWG_LOGLEVEL >= DWG_LOGLEVEL_TRACE)                                     \
     {                                                                         \
-      LOG_TRACE ("DEBUG_POS @%u.%u / 0x%x (%zu)\n", (unsigned int)dat->byte,  \
-                 dat->bit, (unsigned int)dat->byte, bit_position (dat));      \
+      LOG_TRACE ("DEBUG_POS @%zu.%u / 0x%zx (%zu)\n", dat->byte, dat->bit,    \
+                 dat->byte, bit_position (dat));                              \
     }
 
 /*--------------------------------------------------------------------------------*/
@@ -2646,8 +2646,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         Dwg_Object *obj = NULL;
         BITCODE_BL vcount;
         assert (!dat->bit);
-        LOG_INFO ("\n=======> AuxHeader: %8u\n",
-                  (unsigned)dat->byte); // size: 123
+        LOG_INFO ("\n=======> AuxHeader: %8zu\n", dat->byte); // size: 123
 
         dwg->header.section[SECTION_AUXHEADER_R2000].number = 5;
         dwg->header.section[SECTION_AUXHEADER_R2000].address = dat->byte;
@@ -2759,7 +2758,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->header.thumbnail_address = dat->byte & 0xFFFFFFFF;
   }
   dat->bit = 0;
-  LOG_TRACE ("\n=======> Thumbnail:       %4u\n", (unsigned)dat->byte);
+  LOG_TRACE ("\n=======> Thumbnail:       %4zu\n", dat->byte);
   // dwg->thumbnail.size = 0; // to disable
   write_sentinel (dat, DWG_SENTINEL_THUMBNAIL_BEGIN);
   if (dwg->thumbnail.size == 0)
@@ -2782,7 +2781,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       LOG_ERROR ("BMP size overflow: %i > %zu\n", bmpsize,
                  dwg->thumbnail.size);
   }
-  LOG_TRACE ("         Thumbnail (end): %4u\n", (unsigned)dat->byte);
+  LOG_TRACE ("         Thumbnail (end): %4zu\n", dat->byte);
 
   /*------------------------------------------------------------
    * Header Variables
@@ -2794,7 +2793,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     str_dat = hdl_dat = dat = &sec_dat[sec_id];
   }
   assert (!dat->bit);
-  LOG_INFO ("\n=======> Header Variables:   %4u\n", (unsigned)dat->byte);
+  LOG_INFO ("\n=======> Header Variables:   %4zu\n", dat->byte);
   if (!dwg->header.section)
     {
       LOG_ERROR ("Empty header.section");
@@ -2819,10 +2818,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     // XXX trying to fix CRC 2-byte overflow. Must find actual reason.
     // dat->byte -= 2;
     write_sentinel (dat, DWG_SENTINEL_VARIABLE_END);
-    assert ((long)dat->byte > (long)dwg->header.section[0].address);
+    assert ((int64_t)dat->byte > (int64_t)dwg->header.section[0].address);
     dwg->header.section[0].size
-        = (BITCODE_RL)((long)dat->byte - (long)dwg->header.section[0].address);
-    LOG_TRACE ("         Header Variables (end): %4u\n", (unsigned)dat->byte);
+        = ((int64_t)dat->byte - (int64_t)dwg->header.section[0].address)
+          & 0xFFFFFFFF;
+    LOG_TRACE ("         Header Variables (end): %4zu\n", dat->byte);
 
     /*------------------------------------------------------------
      * Classes
@@ -2836,7 +2836,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     }
     else
       sec_id = (Dwg_Section_Type)SECTION_CLASSES_R13;
-    LOG_INFO ("\n=======> Classes: %4u (%d)\n", (unsigned)dat->byte,
+    LOG_INFO ("\n=======> Classes: %4zu (%d)\n", dat->byte,
               dwg->num_classes);
     if (dwg->num_classes > 5000)
       {
@@ -3048,7 +3048,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
    * Object-map
    * split into chunks of max. 2030
    */
-  LOG_INFO ("\n=======> Object Map: %4u\n", (unsigned)dat->byte);
+  LOG_INFO ("\n=======> Object Map: %4zu\n", dat->byte);
   SINCE (R_2004)
   {
     sec_id = SECTION_HANDLES;
@@ -3870,7 +3870,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     assert (section_address);
     dat->byte = section_address;
     dat->bit = 0;
-    LOG_INFO ("\n=======> section addresses: %4u\n", (unsigned)dat->byte);
+    LOG_INFO ("\n=======> section addresses: %4zu\n", dat->byte);
     for (j = 0; j < dwg->header.num_sections; j++)
       {
         LOG_TRACE ("section[%u].number: %4d [RC] %s\n", j,
@@ -4248,8 +4248,8 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
       return 0;
     }
   LOG_INFO ("===========================\n"
-            "Entities from " FORMAT_BL " to " FORMAT_BL " from 0x%x\n",
-            index_from, index_last, (unsigned)dat->byte);
+            "Entities from " FORMAT_BL " to " FORMAT_BL " from 0x%zx\n",
+            index_from, index_last, dat->byte);
   for (unsigned index = index_from; index <= index_last; index++)
     {
       Dwg_Object *obj = &dwg->object[index];
@@ -4260,9 +4260,9 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
         {
           if (obj->index && obj->fixedtype)
             LOG_TRACE ("Skip object %s, number: %d, Fixedtype: %d, Addr: %zx "
-                       "(0x%x)\n",
+                       "(0x%zx)\n",
                        obj->name, obj->index, obj->fixedtype, obj->address,
-                       (unsigned)dat->byte);
+                       dat->byte);
           continue;
         }
       // deleted, i.e. moved to a BLOCK
@@ -4297,8 +4297,8 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
       numentities++;
       obj->address = dat->byte;
       LOG_INFO ("===========================\n"
-                "Entity %s, number: %d, Addr: %zu (0x%x)\n",
-                obj->name, obj->index, obj->address, (unsigned)dat->byte);
+                "Entity %s, number: %d, Addr: %zu (0x%zx)\n",
+                obj->name, obj->index, obj->address, dat->byte);
       PRE (R_2_0b)
       {
         bit_write_RS (dat, obj->type);

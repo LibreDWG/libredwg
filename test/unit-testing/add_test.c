@@ -50,7 +50,7 @@ enum _temp_complex_types
 };
 
 // copied from in-dxf.c
-static unsigned
+static size_t
 in_hex2bin (unsigned char *restrict dest, const char *restrict src,
             size_t destlen)
 {
