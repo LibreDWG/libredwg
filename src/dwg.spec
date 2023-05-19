@@ -437,8 +437,8 @@ DWG_ENTITY (ATTDEF)
       if (R11OPTS (128)) {
         FIELD_2RD (alignment_pt, 11);
       }
-      if (R11OPTS (256)) {
-        FIELD_CAST (vert_alignment, RC, BS, 73);
+      if (R11OPTS (0x200)) {
+        FIELD_CAST (vert_alignment, RC, BS, 74);
         LOG_VERT_ALIGNMENT
       }
     }
