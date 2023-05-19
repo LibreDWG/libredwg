@@ -633,12 +633,17 @@
 #define FIELD_BE(nam, dxf)                                                    \
   {                                                                           \
     bit_read_BE (dat, &_obj->nam.x, &_obj->nam.y, &_obj->nam.z);              \
-    if (_obj->nam.z != 1.0)                                                   \
+    if (dat->version >= R_2000 && FIELD_VALUE (nam.x) == 0.0 &&               \
+        FIELD_VALUE (nam.y) == 0.0 && FIELD_VALUE (nam.z) == 1.0)             \
       {                                                                       \
-        LOG_TRACE (#nam ": (%f, %f, %f) [BE %d]\n", _obj->nam.x, _obj->nam.y, \
-                   _obj->nam.z, dxf);                                         \
-        LOG_POS;                                                              \
+        LOG_TRACE (#nam ": default 0,0,1 [B %d]", dxf)                        \
       }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        LOG_TRACE (#nam ": (%f, %f, %f) [BE %d]", _obj->nam.x, _obj->nam.y,   \
+                 _obj->nam.z, dxf)                                            \
+      }                                                                       \
+    LOG_POS;                                                                  \
   }
 #define TRACE_DD                                                              \
   {                                                                           \
