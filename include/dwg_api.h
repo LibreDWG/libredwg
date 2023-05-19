@@ -289,39 +289,40 @@ typedef BITCODE_BS dwg_face[4];
 EXPORT Dwg_Entity_##token **dwg_getall_##token (Dwg_Object_Ref * hdr)
 
 /* Checks now also variable classes */
-#define DWG_GETALL_ENTITY(token) \
-EXPORT \
-Dwg_Entity_##token **dwg_getall_##token (Dwg_Object_Ref * hdr) \
-{ \
-  int i=0, counts=0; \
-  Dwg_Entity_##token ** ret_##token; \
-  Dwg_Object * obj; \
-  if (!hdr || !hdr->obj) \
-    return NULL; \
-  obj = get_first_owned_entity (hdr->obj); \
-  while (obj) \
-    { \
-      if (obj->fixedtype == DWG_TYPE_##token) \
-        counts++; \
-      obj = get_next_owned_entity (hdr->obj, obj); \
-    } \
-  if (!counts) \
-    return NULL; \
-  ret_##token = (Dwg_Entity_##token **)malloc ((counts + 1) * sizeof(Dwg_Entity_##token *)); \
-  obj = get_first_owned_entity (hdr->obj); \
-  while (obj) \
-    { \
-      if (obj->fixedtype == DWG_TYPE_##token) \
-        { \
-          ret_##token[i] = obj->tio.entity->tio.token; \
-          i++; \
-          if (i >= counts) \
-            break; \
-        } \
-        obj = get_next_owned_entity (hdr->obj, obj); \
-    } \
-  ret_##token[i] = NULL; \
-  return ret_##token; \
+#define DWG_GETALL_ENTITY(token)                                              \
+EXPORT                                                                        \
+Dwg_Entity_##token **dwg_getall_##token (Dwg_Object_Ref *hdr)                 \
+{                                                                             \
+    int i = 0, counts = 0;                                                    \
+    Dwg_Entity_##token **ret_##token;                                         \
+    Dwg_Object *obj;                                                          \
+    if (!hdr || !hdr->obj)                                                    \
+      return NULL;                                                            \
+    obj = get_first_owned_entity (hdr->obj);                                  \
+    while (obj)                                                               \
+      {                                                                       \
+        if (obj->fixedtype == DWG_TYPE_##token)                               \
+          counts++;                                                           \
+        obj = get_next_owned_entity (hdr->obj, obj);                          \
+      }                                                                       \
+    if (!counts)                                                              \
+      return NULL;                                                            \
+    ret_##token = (Dwg_Entity_##token **)malloc (                             \
+        (counts + 1) * sizeof (Dwg_Entity_##token *));                        \
+    obj = get_first_owned_entity (hdr->obj);                                  \
+    while (obj)                                                               \
+      {                                                                       \
+        if (obj->fixedtype == DWG_TYPE_##token)                               \
+          {                                                                   \
+            ret_##token[i] = obj->tio.entity->tio.token;                      \
+            i++;                                                              \
+            if (i >= counts)                                                  \
+              break;                                                          \
+          }                                                                   \
+        obj = get_next_owned_entity (hdr->obj, obj);                          \
+      }                                                                       \
+    ret_##token[i] = NULL;                                                    \
+    return ret_##token;                                                       \
 }
 
 /* Returns a NULL-terminated array of all objects of a specific type */
@@ -332,39 +333,40 @@ Dwg_Entity_##token **dwg_getall_##token (Dwg_Object_Ref * hdr) \
 #define DWG_GET_FIRST_OBJECT_DECL(token)                                      \
   EXPORT Dwg_Object_##token *dwg_get_first_##token (Dwg_Data *dwg)
 
-#define DWG_GETALL_OBJECT(token) \
-EXPORT \
-Dwg_Object_##token **dwg_getall_##token (Dwg_Data *dwg) \
-{ \
-  BITCODE_BL i, c, counts = 0; \
-  Dwg_Object_##token ** ret_##token; \
-  for (i = 0; i < dwg->num_objects; i++) \
-    { \
-      const Dwg_Object *const obj = &dwg->object[i]; \
-      if (obj->supertype == DWG_SUPERTYPE_OBJECT \
-          && obj->fixedtype == DWG_TYPE_##token) \
-        { \
-          counts++; \
-        } \
-    } \
-  if (!counts) \
-    return NULL; \
-  ret_##token = (Dwg_Object_##token **)malloc ((counts + 1) * sizeof(Dwg_Object_##token *)); \
-  for (c = 0, i = 0; i < dwg->num_objects; i++) \
-    { \
-      const Dwg_Object *const obj = &dwg->object[i]; \
-      if (obj->supertype == DWG_SUPERTYPE_OBJECT \
-          && obj->fixedtype == DWG_TYPE_##token) \
-        { \
-          ret_##token[c] = obj->tio.object->tio.token; \
-          c++; \
-          if (c >= counts) \
-            break; \
-        } \
-    } \
-  ret_##token[c] = NULL; \
-  return ret_##token; \
-}
+#define DWG_GETALL_OBJECT(token)                                              \
+  EXPORT                                                                      \
+  Dwg_Object_##token **dwg_getall_##token (Dwg_Data *dwg)                     \
+  {                                                                           \
+    BITCODE_BL i, c, counts = 0;                                              \
+    Dwg_Object_##token **ret_##token;                                         \
+    for (i = 0; i < dwg->num_objects; i++)                                    \
+      {                                                                       \
+        const Dwg_Object *const obj = &dwg->object[i];                        \
+        if (obj->supertype == DWG_SUPERTYPE_OBJECT                            \
+            && obj->fixedtype == DWG_TYPE_##token)                            \
+          {                                                                   \
+            counts++;                                                         \
+          }                                                                   \
+      }                                                                       \
+    if (!counts)                                                              \
+      return NULL;                                                            \
+    ret_##token = (Dwg_Object_##token **)malloc (                             \
+        (counts + 1) * sizeof (Dwg_Object_##token *));                        \
+    for (c = 0, i = 0; i < dwg->num_objects; i++)                             \
+      {                                                                       \
+        const Dwg_Object *const obj = &dwg->object[i];                        \
+        if (obj->supertype == DWG_SUPERTYPE_OBJECT                            \
+            && obj->fixedtype == DWG_TYPE_##token)                            \
+          {                                                                   \
+            ret_##token[c] = obj->tio.object->tio.token;                      \
+            c++;                                                              \
+            if (c >= counts)                                                  \
+              break;                                                          \
+          }                                                                   \
+      }                                                                       \
+    ret_##token[c] = NULL;                                                    \
+    return ret_##token;                                                       \
+  }
 
 #define DWG_GET_FIRST_OBJECT(token)                                           \
 EXPORT Dwg_Object_##token *dwg_get_first_##token (Dwg_Data *dwg)              \
@@ -392,87 +394,91 @@ EXPORT Dwg_Object_##token *dwg_get_first_##token (Dwg_Data *dwg)              \
 
 // Only for fixed typed entities, < 500
 // Dwg_Entity* -> Dwg_Object_TYPE*
-#define CAST_DWG_OBJECT_TO_ENTITY(token) \
-EXPORT \
-Dwg_Entity_##token *dwg_object_to_##token (Dwg_Object *obj) \
-{                                                      \
-  Dwg_Entity_##token *ret_obj = NULL;                  \
-  if (obj &&                                           \
-      obj->tio.entity &&                               \
-      (obj->type == DWG_TYPE_##token ||                \
-       obj->fixedtype == DWG_TYPE_##token))            \
-    {                                                  \
-      ret_obj = obj->tio.entity->tio.token;            \
-    }                                                  \
-  else                                                 \
-    {                                                  \
-      loglevel = obj && obj->parent ? obj->parent->opts & DWG_OPTS_LOGLEVEL : 0; \
-      LOG_ERROR("Invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
-    }                                                  \
-  return ret_obj;                                      \
-}
+#define CAST_DWG_OBJECT_TO_ENTITY(token)                                      \
+  EXPORT                                                                      \
+  Dwg_Entity_##token *dwg_object_to_##token (Dwg_Object *obj)                 \
+  {                                                                           \
+    Dwg_Entity_##token *ret_obj = NULL;                                       \
+    if (obj && obj->tio.entity                                                \
+        && (obj->type == DWG_TYPE_##token                                     \
+            || obj->fixedtype == DWG_TYPE_##token))                           \
+      {                                                                       \
+        ret_obj = obj->tio.entity->tio.token;                                 \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        loglevel                                                              \
+            = obj && obj->parent ? obj->parent->opts & DWG_OPTS_LOGLEVEL : 0; \
+        LOG_ERROR ("Invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
+      }                                                                       \
+    return ret_obj;                                                           \
+  }
 
 /// for all classes, types > 500. IMAGE, OLE2FRAME, WIPEOUT
-#define CAST_DWG_OBJECT_TO_ENTITY_BYNAME(token) \
-EXPORT \
-Dwg_Entity_##token *dwg_object_to_##token (Dwg_Object *obj) \
-{ \
-    Dwg_Entity_##token *ret_obj = NULL; \
-    if (obj && obj->tio.entity && \
-        (obj->type == DWG_TYPE_##token || obj->fixedtype == DWG_TYPE_##token)) \
-      { \
-        ret_obj = obj->tio.entity->tio.token; \
-      } \
-    else \
-      { \
-        loglevel = obj && obj->parent ? obj->parent->opts & DWG_OPTS_LOGLEVEL : 0; \
-        LOG_ERROR("Invalid %s type: got %s, 0x%x", #token, \
-                  obj ? obj->dxfname : "<no obj>", \
-                  obj ? obj->type : 0); \
-      } \
-  return ret_obj; \
-}
+#define CAST_DWG_OBJECT_TO_ENTITY_BYNAME(token)                               \
+  EXPORT                                                                      \
+  Dwg_Entity_##token *dwg_object_to_##token (Dwg_Object *obj)                 \
+  {                                                                           \
+    Dwg_Entity_##token *ret_obj = NULL;                                       \
+    if (obj && obj->tio.entity                                                \
+        && (obj->type == DWG_TYPE_##token                                     \
+            || obj->fixedtype == DWG_TYPE_##token))                           \
+      {                                                                       \
+        ret_obj = obj->tio.entity->tio.token;                                 \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        loglevel                                                              \
+            = obj && obj->parent ? obj->parent->opts & DWG_OPTS_LOGLEVEL : 0; \
+        LOG_ERROR ("Invalid %s type: got %s, 0x%x", #token,                   \
+                   obj ? obj->dxfname : "<no obj>", obj ? obj->type : 0);     \
+      }                                                                       \
+    return ret_obj;                                                           \
+  }
 
 #define CAST_DWG_OBJECT_TO_OBJECT_DECL(token)                                 \
   EXPORT                                                                      \
   Dwg_Object_##token *dwg_object_to_##token (Dwg_Object *obj)
 
 // Dwg_Object* -> Dwg_Object_TYPE*
-#define CAST_DWG_OBJECT_TO_OBJECT(token) \
-EXPORT \
-Dwg_Object_##token *dwg_object_to_##token (Dwg_Object *obj) \
-{ \
-    Dwg_Object_##token *ret_obj = NULL; \
-    if (obj && obj->tio.object && \
-        (obj->type == DWG_TYPE_##token || obj->fixedtype == DWG_TYPE_##token)) \
-      { \
-        ret_obj = obj->tio.object->tio.token; \
-      } \
-    else \
-      { \
-        loglevel = obj && obj->parent ? obj->parent->opts & DWG_OPTS_LOGLEVEL : 0; \
-        LOG_ERROR("Invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
-      } \
-  return ret_obj; \
-}
+#define CAST_DWG_OBJECT_TO_OBJECT(token)                                      \
+  EXPORT                                                                      \
+  Dwg_Object_##token *dwg_object_to_##token (Dwg_Object *obj)                 \
+  {                                                                           \
+    Dwg_Object_##token *ret_obj = NULL;                                       \
+    if (obj && obj->tio.object                                                \
+        && (obj->type == DWG_TYPE_##token                                     \
+            || obj->fixedtype == DWG_TYPE_##token))                           \
+      {                                                                       \
+        ret_obj = obj->tio.object->tio.token;                                 \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        loglevel                                                              \
+            = obj && obj->parent ? obj->parent->opts & DWG_OPTS_LOGLEVEL : 0; \
+        LOG_ERROR ("Invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
+      }                                                                       \
+    return ret_obj;                                                           \
+  }
 
 // unused, we have now fixedtype.
-#define CAST_DWG_OBJECT_TO_OBJECT_BYNAME(token, dxfname) \
-EXPORT \
-Dwg_Object_##token *dwg_object_to_##token (Dwg_Object *obj) \
-{ \
-    Dwg_Object_##token *ret_obj = NULL; \
-    if (obj && obj->dxfname && !strcmp(obj->dxfname, #dxfname)) \
-      { \
-        ret_obj = obj->tio.object->tio.token; \
-      } \
-    else \
-      { \
-        loglevel = obj && obj->parent ? obj->parent->opts & DWG_OPTS_LOGLEVEL : 0; \
-        LOG_ERROR("Invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
-      } \
-  return ret_obj; \
-}
+#define CAST_DWG_OBJECT_TO_OBJECT_BYNAME(token, dxfname)                      \
+  EXPORT                                                                      \
+  Dwg_Object_##token *dwg_object_to_##token (Dwg_Object *obj)                 \
+  {                                                                           \
+    Dwg_Object_##token *ret_obj = NULL;                                       \
+    if (obj && obj->dxfname && !strcmp (obj->dxfname, #dxfname))              \
+      {                                                                       \
+        ret_obj = obj->tio.object->tio.token;                                 \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        loglevel                                                              \
+            = obj && obj->parent ? obj->parent->opts & DWG_OPTS_LOGLEVEL : 0; \
+        LOG_ERROR ("Invalid %s type: got 0x%x", #token, obj ? obj->type : 0); \
+      }                                                                       \
+    return ret_obj;                                                           \
+  }
 
 ///////////////////////////////////////////////////////////////////////////
 
