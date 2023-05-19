@@ -4286,13 +4286,13 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
       // deleted, i.e. moved to a BLOCK
       if (obj->fixedtype == DWG_TYPE_UNUSED)
         {
-          LOG_TRACE ("Deleted entity %s, number: %d, type: %d, Addr: %lx (0x%zx)\n",
+          LOG_TRACE ("Deleted entity %s, number: %d, type: %d, Addr: %zx (0x%zx)\n",
                      obj->name, obj->index, obj->type, obj->address, dat->byte);
         }
       // skip first 2 mspace block/endblk entities
       if (obj->type == DWG_TYPE_UNUSED_R11 && obj->index < 8)
         {
-          LOG_TRACE ("Unused entity %s, number: %d, Fixedtype: %d, Addr: %lx (0x%zx)\n",
+          LOG_TRACE ("Unused entity %s, number: %d, Fixedtype: %d, Addr: %zx (0x%zx)\n",
                      obj->name, obj->index, obj->fixedtype, obj->address,
                      dat->byte);
           continue;
