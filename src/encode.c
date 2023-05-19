@@ -446,8 +446,21 @@ const unsigned char unknown_section[53]
 #define LOG_INSANE_TF(var, len) LOG_TF (INSANE, var, len)
 
 #define FIELD_BE(nam, dxf)                                                    \
-  bit_write_BE (dat, FIELD_VALUE (nam.x), FIELD_VALUE (nam.y),                \
-                FIELD_VALUE (nam.z));
+  {                                                                           \
+    bit_write_BE (dat, FIELD_VALUE (nam.x), FIELD_VALUE (nam.y),              \
+                  FIELD_VALUE (nam.z));                                       \
+    if (dat->version >= R_2000 && FIELD_VALUE (nam.x) == 0.0 &&               \
+        FIELD_VALUE (nam.y) == 0.0 && FIELD_VALUE (nam.z) == 1.0)             \
+      {                                                                       \
+        LOG_TRACE (#nam ": default 0,0,1 [B %d]", dxf)                        \
+      }                                                                       \
+    else                                                                      \
+      {                                                                       \
+        LOG_TRACE (#nam ": (%f, %f, %f) [BE %d]", _obj->nam.x, _obj->nam.y,   \
+                 _obj->nam.z, dxf)                                            \
+      }                                                                       \
+    LOG_POS                                                                   \
+  }
 
 #define OVERFLOW_CHECK(nam, size)                                             \
   if ((long)(size) > 0xff00L || (!_obj->nam && size) || (_obj->nam && !size)) \
