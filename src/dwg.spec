@@ -226,7 +226,7 @@ DWG_ENTITY (ATTRIB)
         FIELD_CAST (horiz_alignment, RC, BS, 72);
         LOG_HORIZ_ALIGNMENT
       }
-      if (R11OPTS (128)) { // flag2_1
+      if (R11OPTS (128)) {
         FIELD_2RD (alignment_pt, 11);
       }
       if (R11OPTS (0x200)) {
