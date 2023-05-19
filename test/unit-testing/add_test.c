@@ -874,7 +874,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
       else if (todo)                                                          \
         ok ("TODO found no " #token);                                         \
       else if (!objs)                                                         \
-        fail ("found no " #token " at all");                                  \
+        fail ("found no " #token " at all (mspace %p)", mspace_ref);          \
       else if (!objs[0])                                                      \
         fail ("found no " #token);                                            \
       free (objs);                                                            \
