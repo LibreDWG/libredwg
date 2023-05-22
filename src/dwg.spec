@@ -1971,6 +1971,8 @@ DWG_ENTITY (POINT)
     if (dat->version >= R_10 && !R11FLAG (FLAG_R11_HAS_ELEVATION)) {
       FIELD_RD (z, 30);
     }
+    if (R11OPTS (1))
+      FIELD_3RD (extrusion, 210);
   } LATER_VERSIONS {
     FIELD_BD (x, 10);
     FIELD_BD (y, 20);
