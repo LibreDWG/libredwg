@@ -1906,6 +1906,8 @@ DWG_ENTITY (DIMENSION_RADIUS)
       FIELD_RD (leader_len, 40);
     if (R11OPTS (0x400))
       FIELD_RD0 (text_rotation, 53);
+    if (R11OPTS (0x4000))
+      FIELD_3RD (extrusion, 210);
     if (R11OPTS (0x8000))
       FIELD_HANDLE (dimstyle, 2, 0);
   } LATER_VERSIONS {
@@ -1937,6 +1939,8 @@ DWG_ENTITY (DIMENSION_DIAMETER)
       FIELD_RD (leader_len, 40);
     if (R11OPTS (0x400))
       FIELD_RD0 (text_rotation, 53);
+    if (R11OPTS (0x4000))
+      FIELD_3RD (extrusion, 210);
     if (R11OPTS (0x8000))
       FIELD_HANDLE (dimstyle, 2, 0);
   } LATER_VERSIONS {
