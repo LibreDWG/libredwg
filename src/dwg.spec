@@ -229,6 +229,8 @@ DWG_ENTITY (ATTRIB)
       if (R11OPTS (128)) {
         FIELD_2RD (alignment_pt, 11);
       }
+      if (R11OPTS (0x100))
+        FIELD_3RD (extrusion, 210);
       if (R11OPTS (0x200)) {
         FIELD_CAST (vert_alignment, RC, BS, 74);
         LOG_VERT_ALIGNMENT
@@ -437,6 +439,8 @@ DWG_ENTITY (ATTDEF)
       if (R11OPTS (128)) {
         FIELD_2RD (alignment_pt, 11);
       }
+      if (R11OPTS (0x100))
+        FIELD_3RD (extrusion, 210);
       if (R11OPTS (0x200)) {
         FIELD_CAST (vert_alignment, RC, BS, 74);
         LOG_VERT_ALIGNMENT
