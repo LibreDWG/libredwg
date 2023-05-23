@@ -8255,6 +8255,7 @@ enum {
 
 enum {
   OPTS_R11_POINT_HAS_EXTRUSION = 1,
+  OPTS_R11_POINT_HAS_X_ANG = 2,
 };
 
 enum {
