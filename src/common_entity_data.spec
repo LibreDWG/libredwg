@@ -180,7 +180,9 @@
 
               LOG_OPTS_R11 (SHAPE, HAS_ROTATION);
               LOG_OPTS_R11 (SHAPE, HAS_LOAD_NUM);
-              LOG_OPTS_R11_MAX (SHAPE, 3);
+              LOG_OPTS_R11 (SHAPE, HAS_WIDTH_FACTOR);
+              LOG_OPTS_R11 (SHAPE, HAS_OBLIQUE_ANGLE);
+              LOG_OPTS_R11_MAX (SHAPE, 15);
 
               LOG_OPTS_R11 (SOLID, HAS_EXTRUSION);
               LOG_OPTS_R11_MAX (SOLID, 1);
