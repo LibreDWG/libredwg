@@ -90,7 +90,7 @@
     }
   }
   VERSIONS (R_1_2, R_1_4) {
-    FIELD_RD (DIMASZ, 40); //ok
+    FIELD_RD (DIMARROW, 40); //ok
     FIELD_RD (aspect_ratio, 40); // calculated
     VERSION (R_1_2) {
       dwg->header.dwg_version = 2;
