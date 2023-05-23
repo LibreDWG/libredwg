@@ -164,7 +164,8 @@
               LOG_OPTS_R11_MAX (LINE, 1);
 
               LOG_OPTS_R11 (POINT, HAS_EXTRUSION);
-              LOG_OPTS_R11_MAX (POINT, 1);
+              LOG_OPTS_R11 (POINT, HAS_X_ANG);
+              LOG_OPTS_R11_MAX (POINT, 3);
 
               LOG_OPTS_R11_POLYLINE (HAS_FLAG);
               LOG_OPTS_R11_POLYLINE (HAS_START_WIDTH);

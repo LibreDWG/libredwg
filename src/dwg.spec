@@ -1979,6 +1979,8 @@ DWG_ENTITY (POINT)
     }
     if (R11OPTS (1))
       FIELD_3RD (extrusion, 210);
+    if (R11OPTS (2))
+      FIELD_RD (x_ang, 50);
   } LATER_VERSIONS {
     FIELD_BD (x, 10);
     FIELD_BD (y, 20);
