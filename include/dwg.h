@@ -922,7 +922,7 @@ typedef struct _dwg_header_variables {
   BITCODE_B REGENMODE;
   BITCODE_B FILLMODE;
   BITCODE_B QTEXTMODE;
-  BITCODE_B PSLTSCALE;
+  BITCODE_B PSLTSCALE; /* r10- */
   BITCODE_B LIMCHECK;
   BITCODE_RC MENUEXT[46];
   BITCODE_B BLIPMODE;
@@ -956,7 +956,7 @@ typedef struct _dwg_header_variables {
   BITCODE_BS PROXYGRAPHICS;
   BITCODE_BS MEASUREMENT; /* 0 English, 1 Metric. Stored as Section 4 */
   BITCODE_BS DRAGMODE;
-  BITCODE_BS TREEDEPTH;
+  BITCODE_BS TREEDEPTH; /* r11- */
   BITCODE_BS LUNITS;
   BITCODE_BS LUPREC;
   BITCODE_BS AUNITS;
@@ -1025,8 +1025,11 @@ typedef struct _dwg_header_variables {
   BITCODE_BS HANDLING; /* <r14: default 1 */
   BITCODE_H HANDSEED;
   BITCODE_RL unknown_4f2; /* -r11 */
-  BITCODE_RS unknown_5;
-  BITCODE_RS unknown_6;
+  BITCODE_RS unknown_5; /* r2-r11 */
+  BITCODE_RS unknown_6; /* r10-r11 */
+  BITCODE_RS unknown_6a; /* r2-r9 */
+  BITCODE_RS unknown_6b; /* r2-r9 */
+  BITCODE_RS unknown_6c; /* r2-r9 */
   BITCODE_H CLAYER;	/*!< code 5, DXF 8 */
   BITCODE_H TEXTSTYLE;	/*!< code 5, DXF 7 */
   BITCODE_H CELTYPE;	/*!< code 5, DXF 6 */

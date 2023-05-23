@@ -98,9 +98,15 @@
     }
   } else {
     FIELD_RS (unknown_5, 0);
-    FIELD_CAST (PSLTSCALE, RS, B, 70);
-    FIELD_RS (TREEDEPTH, 70);
-    FIELD_RS (unknown_6, 0);
+    VERSIONS (R_2_0b, R_9) {
+      FIELD_RS (unknown_6a, 0);
+      FIELD_RS (unknown_6b, 0);
+      FIELD_RS (unknown_6c, 0);
+    } else {
+      FIELD_CAST (PSLTSCALE, RS, B, 70);
+      FIELD_RS (TREEDEPTH, 70);
+      FIELD_RS (unknown_6, 0);
+    }
     FIELD_RD (aspect_ratio, 0); // calculated
   }
   FIELD_RS (LUNITS, 70); //ok
