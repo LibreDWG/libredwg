@@ -2280,6 +2280,60 @@ test_header (Dwg_Data *dwg)
 
   }
   {
+    BITCODE_RS unknown_6a;
+    if (dwg_dynapi_header_value (dwg, "unknown_6a", &unknown_6a, NULL)
+        && unknown_6a == dwg->header_vars.unknown_6a)
+      pass ();
+    else
+      fail ("HEADER.unknown_6a [RS] %hu != %hu", dwg->header_vars.unknown_6a, unknown_6a);
+    unknown_6a++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_6a", &unknown_6a, 0)
+        && unknown_6a == dwg->header_vars.unknown_6a)
+      pass ();
+    else
+      fail ("HEADER.unknown_6a [RS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_6a, unknown_6a);
+    unknown_6a--;
+    dwg_dynapi_header_set_value (dwg, "unknown_6a", &unknown_6a, 0);
+
+  }
+  {
+    BITCODE_RS unknown_6b;
+    if (dwg_dynapi_header_value (dwg, "unknown_6b", &unknown_6b, NULL)
+        && unknown_6b == dwg->header_vars.unknown_6b)
+      pass ();
+    else
+      fail ("HEADER.unknown_6b [RS] %hu != %hu", dwg->header_vars.unknown_6b, unknown_6b);
+    unknown_6b++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_6b", &unknown_6b, 0)
+        && unknown_6b == dwg->header_vars.unknown_6b)
+      pass ();
+    else
+      fail ("HEADER.unknown_6b [RS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_6b, unknown_6b);
+    unknown_6b--;
+    dwg_dynapi_header_set_value (dwg, "unknown_6b", &unknown_6b, 0);
+
+  }
+  {
+    BITCODE_RS unknown_6c;
+    if (dwg_dynapi_header_value (dwg, "unknown_6c", &unknown_6c, NULL)
+        && unknown_6c == dwg->header_vars.unknown_6c)
+      pass ();
+    else
+      fail ("HEADER.unknown_6c [RS] %hu != %hu", dwg->header_vars.unknown_6c, unknown_6c);
+    unknown_6c++;
+    if (dwg_dynapi_header_set_value (dwg, "unknown_6c", &unknown_6c, 0)
+        && unknown_6c == dwg->header_vars.unknown_6c)
+      pass ();
+    else
+      fail ("HEADER.unknown_6c [RS] set+1 %hu != %hu",
+            dwg->header_vars.unknown_6c, unknown_6c);
+    unknown_6c--;
+    dwg_dynapi_header_set_value (dwg, "unknown_6c", &unknown_6c, 0);
+
+  }
+  {
     BITCODE_H clayer;
     if (dwg_dynapi_header_value (dwg, "CLAYER", &clayer, NULL)
         && !memcmp (&clayer, &dwg->header_vars.CLAYER, sizeof (dwg->header_vars.CLAYER))
@@ -3519,6 +3573,24 @@ test_header (Dwg_Data *dwg)
             dwg->header_vars.DIMSCALE, dimscale);
     dimscale--;
     dwg_dynapi_header_set_value (dwg, "DIMSCALE", &dimscale, 0);
+
+  }
+  {
+    BITCODE_BD dimarrow;
+    if (dwg_dynapi_header_value (dwg, "DIMARROW", &dimarrow, NULL)
+        && dimarrow == dwg->header_vars.DIMARROW)
+      pass ();
+    else
+      fail ("HEADER.DIMARROW [BD] %g != %g", dwg->header_vars.DIMARROW, dimarrow);
+    dimarrow++;
+    if (dwg_dynapi_header_set_value (dwg, "DIMARROW", &dimarrow, 0)
+        && dimarrow == dwg->header_vars.DIMARROW)
+      pass ();
+    else
+      fail ("HEADER.DIMARROW [BD] set+1 %g != %g",
+            dwg->header_vars.DIMARROW, dimarrow);
+    dimarrow--;
+    dwg_dynapi_header_set_value (dwg, "DIMARROW", &dimarrow, 0);
 
   }
   {
