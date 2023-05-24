@@ -133,6 +133,8 @@ TV,	DXF 1
 T
 @item DIMARCSYM
 BS,	DXF 70
+@item DIMARROW
+BD
 @item DIMASO
 B,	DXF 70
 @item DIMASSOC
@@ -782,6 +784,12 @@ BS
 @item unknown_59
 RS
 @item unknown_6
+RS
+@item unknown_6a
+RS
+@item unknown_6b
+RS
+@item unknown_6c
 RS
 @item unknown_8
 BL
