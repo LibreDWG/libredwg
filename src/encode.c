@@ -580,7 +580,8 @@ const unsigned char unknown_section[53]
       for (vcount = 0; vcount < (BITCODE_BL)_obj->size; vcount++)             \
         {                                                                     \
           if (dat->version != dat->from_version)                              \
-            FIELD_##type (nam[vcount], dxf) else if (dat->version < R_2007)   \
+            FIELD_##type (nam[vcount], dxf)                                   \
+          else if (dat->version < R_2007)                                     \
             {                                                                 \
               bit_write_TV (dat, (BITCODE_TV)_obj->nam[vcount]);              \
               LOG_TRACE (#nam "[%d]: \"%s\" [TV %d]", (int)vcount,            \
