@@ -22264,9 +22264,9 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
         {
           // those old names are usually 32byte, and bit_write_TF
           // might heap-overflow then.
-          char *buf = (char *)malloc (32);
+          char *buf = (char *)malloc (33);
           strncpy (buf, u8str, 32);
-          buf[31] = '\0';
+          buf[32] = '\0';
           return buf;
         }
       else
