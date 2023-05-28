@@ -183,7 +183,7 @@ run ()
     then
        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
     fi
-    echo "$TESTPROG $prog $arg 2>$log"
+    echo "$prog $arg 2>$log"
     # shellcheck disable=SC2086
     if $TESTPROG ./$prog $arg >"$log" 2>&1
     then
