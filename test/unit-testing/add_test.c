@@ -877,6 +877,8 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
         fail ("found no " #token " at all (mspace %p)", mspace_ref);          \
       else if (!objs[0])                                                      \
         fail ("found no " #token);                                            \
+      else if (objs && objs[0] && objs[1])                                    \
+        ok ("found many " #token "'s");                                       \
       free (objs);                                                            \
     }                                                                         \
     break
@@ -892,6 +894,8 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
         fail ("found no " #token " at all");                                  \
       else if (!objs[0])                                                      \
         fail ("found no " #token);                                            \
+      else if (objs && objs[0] && objs[1])                                    \
+        ok ("found many " #token "'s");                                       \
       free (objs);                                                            \
     }                                                                         \
     break
