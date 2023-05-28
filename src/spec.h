@@ -512,7 +512,7 @@
 #define DECODE_UNKNOWN_BITS                                                   \
   JSON                                                                        \
   {                                                                           \
-    int num_bytes = obj->num_unknown_bits / 8;                                \
+    unsigned num_bytes = obj->num_unknown_bits / 8;                           \
     if (obj->num_unknown_bits & 8)                                            \
       num_bytes++;                                                            \
     KEY (num_unknown_bits);                                                   \
@@ -526,7 +526,7 @@
 #if defined IS_JSON
 #  define UNKNOWN_BITS_REST                                                   \
     {                                                                         \
-      int num_bytes = obj->num_unknown_bits / 8;                              \
+      unsigned num_bytes = obj->num_unknown_bits / 8;                         \
       if (obj->num_unknown_bits & 8)                                          \
         num_bytes++;                                                          \
       KEY (num_unknown_bits);                                                 \

@@ -5109,12 +5109,12 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
 int
 dwg_encode_unknown_rest (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 {
-  int len = obj->num_unknown_bits / 8;
+  unsigned len = obj->num_unknown_bits / 8;
   const int mod = obj->num_unknown_bits % 8;
   if (mod)
     len++;
   bit_write_TF (dat, obj->unknown_bits, len);
-  LOG_TRACE ("unknown_bits: %d/%u [TF]\n", len,
+  LOG_TRACE ("unknown_bits: %u/%u [TF]\n", len,
              (unsigned)obj->num_unknown_bits);
   LOG_TRACE_TF (obj->unknown_bits, len);
   if (mod)

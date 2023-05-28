@@ -3833,6 +3833,8 @@ DWG_TABLE (STYLE)
     //DEBUG_HERE
     //1001 1000 1071 mandatory r2007+ if .ttf
     //long truetype font’s pitch and family, charset, and italic and bold flags
+    //if not ttf: 38 410330503F
+    //if ttf: 52 4103320CDE500F
 #ifdef IS_DXF
     {
       char _buf[256];
