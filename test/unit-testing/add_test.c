@@ -476,7 +476,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
         // cfb signature at offset 0x10
         // Interesting are the VBA_Project/VBA/ThisDrawing and
         // VBA_Project/VBA/_VBA_PROJECT streams eg: pip install compoundfiles
-        const char *hex
+        const char hex[]
             = "0000000000000000001C000019000000D0CF11E0A1B11AE1000000000000000"
               "000000000000000003E000300FEFF0900060000000000000000000000010000"
               "000100000000000000001000000200000001000000FEFFFFFF0000000000000"
@@ -706,7 +706,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
               "0000000000FFFFFFFFFFFFFFFFFFFFFFFF00000000000000000000000000000"
               "000000000000000000000000000000000000000000000000000000000000000"
               "000000000000";
-        const size_t blen = strlen (hex) / 2;
+        const BITCODE_BL blen = ((sizeof (hex) -1) / 2) & 0xFFFFFFFF;
         BITCODE_TF data = malloc (blen + 1);
         in_hex2bin (data, hex, blen);
         dwg_add_VBA_PROJECT (dwg, blen, data);
