@@ -23,17 +23,18 @@ concurrency:
 jobs:
   linux:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 50
     strategy:
       fail-fast: true
       matrix:
         CONFIGURE_ARGS:
-          - --disable-bindings CFLAGS="-O1 -fno-omit-frame-pointer -fsanitize=address,undefined -fno-var-tracking"
+          - CFLAGS="-O0 -fno-omit-frame-pointer -fsanitize=address -fno-var-tracking" --disable-bindings
           - CC="clang"
           - --enable-release
           - --enable-gcov --disable-bindings
           - --disable-write
-          - --disable-bindings CFLAGS="-O2 -m32"
+          - CFLAGS="-O2 -m32" --disable-bindings
+          - CFLAGS="-O2 -fno-omit-frame-pointer -fsanitize=undefined -fno-var-tracking" --disable-bindings --enable-check-less
     steps:
     - uses: actions/checkout@v3
       with:
