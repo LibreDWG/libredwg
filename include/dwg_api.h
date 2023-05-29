@@ -6486,16 +6486,16 @@ EXPORT Dwg_Object_DICTIONARY *
 dwg_add_DICTIONARY (Dwg_Data *restrict dwg,
                     const char* restrict name, /* the NOD entry */
                     const char* restrict text, /* maybe NULL */
-                    const unsigned long absolute_ref) __nonnull ((1));
+                    const BITCODE_RLL absolute_ref) __nonnull ((1));
 EXPORT Dwg_Object_DICTIONARY*
 dwg_add_DICTIONARY_item (Dwg_Object_DICTIONARY* _obj,
                          const char* restrict text,
-                         const unsigned long absolute_ref)  __nonnull_all;
+                         const BITCODE_RLL absolute_ref)  __nonnull_all;
 EXPORT Dwg_Object_DICTIONARYWDFLT *
 dwg_add_DICTIONARYWDFLT (Dwg_Data *restrict dwg,
                          const char* restrict name, /* the NOD entry */
                          const char* restrict text, /* maybe NULL */
-                         const unsigned long absolute_ref) __nonnull ((1));
+                         const BITCODE_RLL absolute_ref) __nonnull ((1));
 EXPORT Dwg_Entity_OLE2FRAME*
 dwg_add_OLE2FRAME (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                    const dwg_point_3d *restrict pt1,
@@ -6766,8 +6766,8 @@ dwg_add_TABLE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
    On NULL names just create the CONTROL object/resp. NOD entry.
  */
 EXPORT Dwg_Object_BLOCK_CONTROL *
-dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const int ms,
-                       const int ps) __nonnull_all;
+dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const unsigned ms,
+                       const unsigned ps) __nonnull_all;
 
 EXPORT Dwg_Object_BLOCK_HEADER *
 dwg_add_BLOCK_HEADER (Dwg_Data *restrict dwg, const char *restrict name)
