@@ -20,6 +20,7 @@
  */
 
 #include <string.h>
+#include <limits.h>
 #include "config.h"
 #include "dwg.h"
 #include "common.h"

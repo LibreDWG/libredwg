@@ -121,12 +121,14 @@ regen-dynapi: $(srcdir)/src/gen-dynapi.pl $(srcdir)/include/dwg.h
 regen-gperf:
 	-cd $(abs_top_srcdir) && \
 	  $(GPERF) --output-file src/dxfclasses.tmp.c src/dxfclasses.in && \
-	  sed -e's,unsigned int len,size_t len,' <src/dxfclasses.tmp.c >src/dxfclasses.c && \
-	  sed -e's,register ,,g' <src/dxfclasses.tmp.c >src/dxfclasses.c && \
+	  sed -e's,unsigned int hval = len;,unsigned int hval = len \& UINT_MAX;,' \
+	      -e's,unsigned int len,size_t len,;' -e 's,register ,,g' <src/dxfclasses.tmp.c \
+	                                                              >src/dxfclasses.c && \
 	  rm -f src/dxfclasses.tmp.c && \
 	  $(GPERF) --output-file src/objects.tmp.c src/objects.in && \
-	  sed -e's,unsigned int len,size_t len,' <src/objects.tmp.c >src/objects.c && \
-	  sed -e's,register ,,g' <src/objects.tmp.c >src/objects.c && \
+	  sed -e's,unsigned int hval = len;,unsigned int hval = len \& UINT_MAX;,' \
+	      -e's,unsigned int len,size_t len,' -e's,register ,,g' <src/objects.tmp.c \
+	                                                            >src/objects.c && \
 	  rm -f src/objects.tmp.c
 regen-unknown:
 	$(MAKE) -C examples $@

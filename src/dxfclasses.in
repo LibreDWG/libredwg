@@ -22,6 +22,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdbool.h>
+#include <limits.h>
 #include "config.h"
 #include "dwg.h"
 #include "common.h"
@@ -31,7 +32,7 @@ int dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
                    const bool is_entity);
 // export
 EXPORT int dwg_require_class (Dwg_Data *restrict dwg,
-                              const char *const restrict dxfname, const int len);
+                              const char *const restrict dxfname, const size_t len);
 
 // v3.1 changed len type from unsigned int to size_t (gperf d519d1a821511eaa22eae6d9019a548aea21e6)
 static const struct Dwg_DXFClass *in_word_set (const char *str, size_t len);
@@ -313,7 +314,7 @@ AEC_REFEDIT_STATUS_TRACKER,		"AecDbRefEditStatusTracker",    AEC60, 0
    -3 invalid apptype for class. (should not happen)
 */
 EXPORT int
-dwg_require_class (Dwg_Data *restrict dwg, const char *const restrict dxfname, const int len)
+dwg_require_class (Dwg_Data *restrict dwg, const char *const restrict dxfname, const size_t len)
 {
   const struct Dwg_DXFClass* result;
   for (BITCODE_BL i = 0; i < dwg->num_classes; i++)
