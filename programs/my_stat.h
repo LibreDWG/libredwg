@@ -25,18 +25,21 @@ struct stat
 };
 #endif
 
-#if defined _MSC_VER
+#if defined _MSC_VER & !defined HAVE_SYS_STAT_H
 typedef struct _stat struct_stat_t;
-int _access (const char *path, int mode);
+#else
+typedef struct stat struct_stat_t;
+#endif
 
+#if defined _MSC_VER
+int _access (const char *path, int mode);
 #  define access(fn, m) _access (fn, m)
-#  define S_ISREG(m) ((m & 0170000) == _S_IFREG)
+#  ifndef S_ISREG
+#    define S_ISREG(m) ((m & 0170000) == _S_IFREG)
+#  endif
 #  ifndef W_OK
 #    define W_OK 0
 #  endif
-
-#else
-typedef struct stat struct_stat_t;
 #endif // _MSC_VER
 
 #endif // MY_STAT_H
