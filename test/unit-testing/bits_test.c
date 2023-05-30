@@ -561,6 +561,35 @@ bit_TV_to_utf8_tests (void)
   free (src_kor);
 }
 
+static void
+bit_read_TF_tests (void)
+{
+  Bit_Chain bitchain = strtobt ("01000111"   // 47 (G)
+                                "01001110"   // 4E (N)
+                                "01010101"); // 55 (U)
+  char *result = (char *)bit_read_TF (&bitchain, 3);
+  if (!strcmp (result, "GNU"))
+    ok ("bit_read_TF");
+  else
+    fail ("bit_read_TF");
+
+  bitfree (&bitchain);
+}
+
+static void
+bit_write_TF_tests (void)
+{
+  Bit_Chain bitchain;
+  bitprepare (&bitchain, 3);
+  bit_write_TF (&bitchain, (BITCODE_TF)"GNU", 3);
+  if (bitchain.byte == 3 && bitchain.bit == 0)
+    ok ("bit_write_TF");
+  else
+    fail ("bit_write_TF @%zu.%u", bitchain.byte, bitchain.bit);
+
+  bitfree (&bitchain);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -601,6 +630,8 @@ main (int argc, char const *argv[])
   bit_read_H_tests ();
   bit_write_H_tests ();
   bit_UMC_bug_tests ();
+  bit_read_TF_tests ();
+  bit_write_TF_tests ();
 
   // Prepare the testcase
   bitchain.size = 100;
