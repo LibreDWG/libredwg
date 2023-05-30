@@ -1127,7 +1127,8 @@ bit_write_BE (Bit_Chain *dat, double x, double y, double z)
     bit_write_B (dat, 1);
   else
     {
-      bit_write_B (dat, 0);
+      if (dat->version >= R_2000)
+        bit_write_B (dat, 0);
       bit_write_BD (dat, x);
       bit_write_BD (dat, y);
       // normalize
