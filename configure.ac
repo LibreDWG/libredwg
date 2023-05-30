@@ -238,11 +238,11 @@ ax_cv_check_cflags__Wswitch_enum=no
 if test x$enable_shared = xyes -a x$ac_compiler_gnu = xyes; then
   AX_COMPILER_FLAGS([WARN_CFLAGS],[AM_LDFLAGS],[$ax_is_release],
     [-fno-semantic-interposition -fwrapv -fno-common -fvisibility=hidden -fno-strict-aliasing \
-     -fno-delete-null-pointer-checks -fno-strict-overflow])
+     -fno-delete-null-pointer-checks])
 else
   AX_COMPILER_FLAGS([WARN_CFLAGS],[AM_LDFLAGS],[$ax_is_release],
     [-fwrapv -fno-common -fvisibility=hidden -fno-strict-aliasing \
-    -fno-delete-null-pointer-checks -fno-strict-overflow])
+    -fno-delete-null-pointer-checks])
 fi
 dnl if test x$ax_cv_check_cflags__Wunused_but_set_variable = xyes; then
 dnl   WARN_CFLAGS="$WARN_CFLAGS -Wno-unused-but-set-variable"
