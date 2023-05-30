@@ -667,6 +667,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
   char default_text[120];
   const char *hdr_s = "mspace";
 
+  LOG_TRACE ("==========================================\n");
   if (!dat->chain)
     abort ();
   dwg = *dwgp;
@@ -851,6 +852,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           hdr = mspace->tio.object->tio.BLOCK_HEADER;
           orig_num = dwg->num_objects;
           initial = 0;
+          LOG_TRACE ("==========================================\n");
         }
 
 // set entity/object field values.
@@ -1814,15 +1816,22 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         SET_ENT (_3dsolid, _3DSOLID)
         // clang-format on
       else if (2 == SSCANF_S (p, "HEADER." FMT_NAME " = %lf\n", s1 SZ, &f1))
-        dwg_dynapi_header_set_value (dwg, s1, &f1, 0);
+        {
+          dwg_dynapi_header_set_value (dwg, s1, &f1, 0);
+          LOG_TRACE ("HEADER.%s1 = %lf\n", s1, f1);
+        }
       else if (2 == SSCANF_S (p, "HEADER." FMT_NAME " = %d\n", s1 SZ, &i1))
-        dwg_dynapi_header_set_value (dwg, s1, &i1, 0);
+        {
+          dwg_dynapi_header_set_value (dwg, s1, &i1, 0);
+          LOG_TRACE ("HEADER.%s1 = %d\n", s1, i1);
+        }
       else if (1 == SSCANF_S (p, "HEADER." FMT_NAME " = " FMT_ANY "\n", s1 SZ,
                               text SZ))
       {
         if (strlen (text) && text[strlen (text) - 1] == '"')
           text[strlen (text) - 1] = '\0'; // strip the \"
         dwg_dynapi_header_set_value (dwg, s1, text, 1);
+        LOG_TRACE ("HEADER.%s1 = \"%s\"\n", s1, text);
       }
       else
         {
