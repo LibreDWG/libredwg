@@ -4,6 +4,7 @@
 #readjson "example_2000.json"
 #version 2000
 HEADER.VIEWSIZE = 1.2345
+HEADER.ANGBASE = 90
 text "test" (0.0 1.0 0.0) 8
 block "bloko"
 attdef 8 0 "prompt" (0.0 1.0 0.0) TAG "default_text"

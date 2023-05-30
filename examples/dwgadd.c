@@ -37,6 +37,7 @@
 #include "encode.h"
 #include "bits.h"
 #include "classes.h"
+#include "dynapi.h"
 #ifndef DISABLE_JSON
 #  include "in_json.h"
 #  include "out_json.h"
@@ -878,14 +879,77 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       if (!ent.u.var || ent.type != DWG_TYPE_##name)                          \
         {                                                                     \
           log_p (DWG_LOGLEVEL_ERROR, p);                                      \
-          LOG_ERROR ("wrong last entity type 0x%x, needing " #var "\n",       \
-                     ent.type);                                               \
+          LOG_ERROR ("wrong last entity type 0x%x, needing " #var, ent.type); \
           exit (1);                                                           \
         }                                                                     \
-      if (dwg_dynapi_is_angle (#name, s1))                                    \
-        f1 = deg2rad (f1);                                                    \
-      dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &f1, 0);             \
-      LOG_TRACE (#var ".%s = %f\n", s1, f1);                                  \
+      if (2 == SSCANF_S (p, #var "." FMT_NAME " = %d\n", s1 SZ, &i1)          \
+          && i1 == f1)                                                        \
+        {                                                                     \
+          const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field (#name, s1);    \
+          if (!f || f->is_string)                                             \
+            {                                                                 \
+              log_p (DWG_LOGLEVEL_ERROR, p);                                  \
+              LOG_ERROR ("Invalid entity field %s.%s", #name, s1);            \
+              exit (1);                                                       \
+            }                                                                 \
+          else if (dwg_dynapi_is_float (f))                                   \
+            {                                                                 \
+              if (f->dxf >= 50 && f->dxf < 60) /* is_angle */                 \
+                f1 = deg2rad (i1);                                            \
+              dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &f1, 0);     \
+              LOG_TRACE (#var ".%s = %f\n", s1, f1);                          \
+            }                                                                 \
+          else if (sizeof (i1) == f->size)                                    \
+            dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &i1, 0);       \
+          else                                                                \
+            {                                                                 \
+              switch (sizeof (i1))                                            \
+                {                                                             \
+                case 1:                                                       \
+                  {                                                           \
+                    BITCODE_RC b = (unsigned)i1 & 0xFF;                       \
+                    dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &b,    \
+                                                 0);                          \
+                    break;                                                    \
+                  }                                                           \
+                case 2:                                                       \
+                  {                                                           \
+                    BITCODE_RS s = (unsigned)i1 & 0xFFFF;                     \
+                    dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &s,    \
+                                                 0);                          \
+                    break;                                                    \
+                  }                                                           \
+                case 4:                                                       \
+                  {                                                           \
+                    BITCODE_RL l = (BITCODE_RL)i1 & 0xFFFFFFFF;               \
+                    dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &l,    \
+                                                 0);                          \
+                    break;                                                    \
+                  }                                                           \
+                case 8:                                                       \
+                  {                                                           \
+                    BITCODE_RLL rll = (BITCODE_RLL)i1;                        \
+                    dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &rll,  \
+                                                 0);                          \
+                    break;                                                    \
+                  }                                                           \
+                default:                                                      \
+                  {                                                           \
+                    LOG_ERROR ("Invalid entity field %s.%s size %u", #name,   \
+                               s1, f->size);                                  \
+                    exit (1);                                                 \
+                  }                                                           \
+                }                                                             \
+            }                                                                 \
+          LOG_TRACE (#var ".%s = %d\n", s1, i1);                              \
+        }                                                                     \
+      else                                                                    \
+        {                                                                     \
+          if (dwg_dynapi_is_angle (#name, s1))                                \
+            f1 = deg2rad (f1);                                                \
+          dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &f1, 0);         \
+          LOG_TRACE (#var ".%s = %f\n", s1, f1);                              \
+        }                                                                     \
     }                                                                         \
   else if (2 == SSCANF_S (p, #var "." FMT_NAME " = %d\n", s1 SZ, &i1))        \
     {                                                                         \
@@ -897,8 +961,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           exit (1);                                                           \
         }                                                                     \
       if (dwg_dynapi_is_angle (#name, s1))                                    \
-        f1 = deg2rad (i1);                                                    \
-      dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &f1, 0);             \
+        i1 = deg2rad (i1);                                                    \
+      dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &i1, 0);             \
       LOG_TRACE (#var ".%s = %d\n", s1, i1);                                  \
     }                                                                         \
   else if (2                                                                  \
@@ -1079,9 +1143,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                                     .type = DWG_TYPE_INSERT };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (insert, INSERT)
-      // clang-format on
+        // clang-format on
       else if (12 == SSCANF_S (p,
                          "minsert (%lf %lf %lf) " FMT_TBL
                          " %lf %lf %lf %lf %d %d "
@@ -1102,9 +1166,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_MINSERT };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (minsert, MINSERT)
-      // clang-format on
+        // clang-format on
       else if (3 == SSCANF_S (p, "point (%lf %lf %lf)", &pt1.x, &pt1.y, &pt1.z))
       {
         LOG_TRACE ("add_POINT %s (%f %f %f)\n", hdr_s, pt1.x, pt1.y, pt1.z);
@@ -1817,13 +1881,68 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         // clang-format on
       else if (2 == SSCANF_S (p, "HEADER." FMT_NAME " = %lf\n", s1 SZ, &f1))
         {
-          dwg_dynapi_header_set_value (dwg, s1, &f1, 0);
-          LOG_TRACE ("HEADER.%s1 = %lf\n", s1, f1);
-        }
-      else if (2 == SSCANF_S (p, "HEADER." FMT_NAME " = %d\n", s1 SZ, &i1))
-        {
-          dwg_dynapi_header_set_value (dwg, s1, &i1, 0);
-          LOG_TRACE ("HEADER.%s1 = %d\n", s1, i1);
+          if (2 == SSCANF_S (p, "HEADER." FMT_NAME " = %d\n", s1 SZ, &i1)
+              && i1 == f1)
+            {
+              const Dwg_DYNAPI_field *f = dwg_dynapi_header_field (s1);
+              if (!f || f->is_string)
+                {
+                  log_p (DWG_LOGLEVEL_ERROR, p);
+                  LOG_ERROR ("Invalid HEADER.%s", s1);
+                  exit (1);
+                }
+              else if (dwg_dynapi_is_float (f))
+                {
+                  if (f->dxf >= 50 && f->dxf < 60) /* is_angle */
+                    f1 = deg2rad (i1);
+                  dwg_dynapi_header_set_value (dwg, s1, &f1, 0);
+                  LOG_TRACE ("HEADER.%s = %lf\n", s1, f1);
+                }
+              // is integer
+              else if (sizeof (i1) == f->size)
+                dwg_dynapi_header_set_value (dwg, s1, &i1, 0);
+              else
+                {
+                  switch (sizeof (i1))
+                    {
+                    case 1:
+                      {
+                        BITCODE_RC rc = (unsigned)i1 & 0xFF;
+                        dwg_dynapi_header_set_value (dwg, s1, &rc, 0);
+                        break;
+                      }
+                    case 2:
+                      {
+                        BITCODE_RS rs = (unsigned)i1 & 0xFFFF;
+                        dwg_dynapi_header_set_value (dwg, s1, &rs, 0);
+                        break;
+                      }
+                    case 4:
+                      {
+                        BITCODE_RL rl = (BITCODE_RL)i1 & 0xFFFFFFFF;
+                        dwg_dynapi_header_set_value (dwg, s1, &rl, 0);
+                        break;
+                      }
+                    case 8:
+                      {
+                        BITCODE_RLL rll = (BITCODE_RLL)i1;
+                        dwg_dynapi_header_set_value (dwg, s1, &rll, 0);
+                        break;
+                      }
+                    default:
+                      {
+                        LOG_ERROR ("Invalid header.%s size %u", s1, f->size);
+                        exit (1);
+                      }
+                    }
+                  LOG_TRACE ("HEADER.%s = %d\n", s1, i1);
+                }
+            }
+          else // float
+            {
+              dwg_dynapi_header_set_value (dwg, s1, &f1, 0);
+              LOG_TRACE ("HEADER.%s = %lf\n", s1, f1);
+            }
         }
       else if (1 == SSCANF_S (p, "HEADER." FMT_NAME " = " FMT_ANY "\n", s1 SZ,
                               text SZ))

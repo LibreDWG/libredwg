@@ -14883,6 +14883,21 @@ dwg_dynapi_is_angle (const char *restrict name, const char *restrict fieldname)
   return false;
 }
 
+EXPORT bool
+dwg_dynapi_is_float (const Dwg_DYNAPI_field *f)
+{
+#ifndef HAVE_NONNULL
+  if (!f)
+    return false;
+#endif
+  if (f->size == 8 &&
+      (strEQc (f->type, "BD") ||
+       strEQc (f->type, "RD")))
+        return true;
+  else
+      return false;
+}
+
 /* Local Variables: */
 /* mode: c */
 /* End: */
