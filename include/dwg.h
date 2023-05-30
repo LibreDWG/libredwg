@@ -168,7 +168,7 @@ typedef uint64_t BITCODE_BLL;
 #define FORMAT_RLL "0x%" PRIX64
 #define FORMAT_BLL "%" PRIu64
 typedef int32_t BITCODE_MC;
-#define FORMAT_MC FORMAT_RSd
+#define FORMAT_MC "%" PRId32
 typedef uint64_t BITCODE_UMC;
 #define FORMAT_UMC FORMAT_RLL
 typedef BITCODE_BL BITCODE_MS;
