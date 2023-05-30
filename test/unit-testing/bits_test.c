@@ -645,6 +645,160 @@ bit_write_TF_tests (void)
   bitfree (&bitchain);
 }
 
+static void
+bit_read_BE_tests (void)
+{
+  double x, y, z;
+  Bit_Chain bitchain;
+
+  bitchain = strtobt ("1");
+  bitchain.from_version = R_2000;
+  bit_read_BE (&bitchain, &x, &y, &z);
+  if (x == 0.0 && y == 0.0 && z == 1.0)
+    ok ("bit_read_BE (0.0 0.0 1.1) R_2000");
+  else
+    fail ("bit_read_BE (%f,%f,%f) R_2000", x, y, z);
+
+  bitprepare (&bitchain, 25);
+  bitchain.from_version = R_2000;
+  bit_write_B (&bitchain, 0);
+  bit_write_BD (&bitchain, 20.2535);
+  bit_write_BD (&bitchain, 10.2523);
+  bit_write_BD (&bitchain, 52.32563);
+  bit_set_position (&bitchain, 0);
+  bit_read_BE (&bitchain, &x, &y, &z);
+  if (x == 20.2535 && y == 10.2523 && z == 52.32563)
+    ok ("bit_read_BE (20.2535 10.2523 52.32563) R_2000");
+  else
+    fail ("bit_read_BE (%f,%f,%f) R_2000", x, y, z);
+
+  bitchain = strtobt ("10100100");
+  bitchain.from_version = R_14;
+  bit_read_BE (&bitchain, &x, &y, &z);
+  if (x == 0.0 && y == 0.0 && z == 1.0)
+    ok ("bit_read_BE (0.0 0.0 1.1) R_14");
+  else
+    fail ("bit_read_BE (%f,%f,%f) R_14", x, y, z);
+
+  bitprepare (&bitchain, 25);
+  bitchain.from_version = R_14;
+  bit_write_BD (&bitchain, 20.2535);
+  bit_write_BD (&bitchain, 10.2523);
+  bit_write_BD (&bitchain, 52.32563);
+  bit_set_position (&bitchain, 0);
+  bit_read_BE (&bitchain, &x, &y, &z);
+  if (x == 20.2535 && y == 10.2523 && z == 52.32563)
+    ok ("bit_read_BE (20.2535 10.2523 52.32563) R_14");
+  else
+    fail ("bit_read_BE (%f,%f,%f) R_14", x, y, z);
+
+  bitfree (&bitchain);
+}
+
+static void
+bit_write_BE_tests (void)
+{
+  Bit_Chain bitchain;
+
+  bitprepare (&bitchain, 25);
+  bitchain.version = R_2000;
+  bit_write_BE (&bitchain, 0.0, 0.0, 1.0);
+  if (bitchain.byte == 0 && bitchain.bit == 1)
+    ok ("bit_write_BE (0.0 0.0 1.1) R_2000");
+  else
+    fail ("bit_write_BE @%zu.%u R_2000", bitchain.byte, bitchain.bit);
+
+  bit_set_position (&bitchain, 0);
+  bitprepare (&bitchain, 25);
+  bitchain.version = R_2000;
+  bit_write_BE (&bitchain, 20.2535, 10.2523, 52.32563);
+  if (bitchain.byte == 24 && bitchain.bit == 7)
+    ok ("bit_write_BE (20.2535 10.2523 52.32563) R_2000");
+  else
+    fail ("bit_write_BE @%zu.%u R_2000", bitchain.byte, bitchain.bit);
+
+  bit_set_position (&bitchain, 0);
+  bitprepare (&bitchain, 25);
+  bitchain.version = R_14;
+  bit_write_BE (&bitchain, 0.0, 0.0, 1.0);
+  if (bitchain.byte == 0 && bitchain.bit == 6)
+    ok ("bit_write_BE (0.0 0.0 1.1) R_14");
+  else
+    fail ("bit_write_BE @%zu.%u R_14", bitchain.byte, bitchain.bit);
+
+  bit_set_position (&bitchain, 0);
+  bitprepare (&bitchain, 25);
+  bitchain.version = R_14;
+  bit_write_BE (&bitchain, 20.2535, 10.2523, 52.32563);
+  if (bitchain.byte == 24 && bitchain.bit == 6)
+    ok ("bit_write_BE (20.2535 10.2523 52.32563) R_14");
+  else
+    fail ("bit_write_BE @%zu.%u R_14", bitchain.byte, bitchain.bit);
+
+  bitfree (&bitchain);
+}
+
+static void
+bit_read_BD_tests (void)
+{
+  double ret;
+  Bit_Chain bitchain = strtobt ("10");
+  ret = bit_read_BD (&bitchain);
+  if (ret == 0.0)
+    ok ("bit_read_BD (0.0)");
+  else
+    fail ("bit_read_BD %f (0.0)", ret);
+
+  bitchain = strtobt ("01");
+  ret = bit_read_BD (&bitchain);
+  if (ret == 1.0)
+    ok ("bit_read_BD (1.0)");
+  else
+    fail ("bit_read_BD %f (1.0)", ret);
+
+  bitprepare (&bitchain, 9);
+  bit_write_BB (&bitchain, 0);
+  bit_write_RD (&bitchain, 1.2345);
+  bit_set_position (&bitchain, 0);
+  ret = bit_read_BD (&bitchain);
+  if (ret == 1.2345)
+    ok ("bit_read_BD (1.2345)");
+  else
+    fail ("bit_read_BD %f (1.2345)", ret);
+
+  bitfree (&bitchain);
+}
+
+static void
+bit_write_BD_tests (void)
+{
+  Bit_Chain bitchain;
+  bitprepare (&bitchain, 1);
+  bit_write_BD (&bitchain, 0.0);
+  if (bitchain.byte == 0 && bitchain.bit == 2)
+    ok ("bit_write_BD (0.0)");
+  else
+    fail ("bit_write_BD (0.0)");
+
+  bit_set_position (&bitchain, 0);
+  bitprepare (&bitchain, 1);
+  bit_write_BD (&bitchain, 1.0);
+  if (bitchain.byte == 0 && bitchain.bit == 2)
+    ok ("bit_write_BD (1.0)");
+  else
+    fail ("bit_write_BD (1.0)");
+
+  bit_set_position (&bitchain, 0);
+  bitprepare (&bitchain, 9);
+  bit_write_BD (&bitchain, 1.2345);
+  if (bitchain.byte == 8 && bitchain.bit == 2)
+    ok ("bit_write_BD (1.2345)");
+  else
+    fail ("bit_write_BD (1.2345)");
+
+  bitfree (&bitchain);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -689,6 +843,8 @@ main (int argc, char const *argv[])
   bit_write_TV_tests ();
   bit_read_TF_tests ();
   bit_write_TF_tests ();
+  bit_read_BE_tests ();
+  bit_write_BE_tests ();
 
   // Prepare the testcase
   bitchain.size = 100;
@@ -826,22 +982,7 @@ main (int argc, char const *argv[])
   else
     fail ("bit_read_MS %d", bs);
 
-  bit_write_BE (&bitchain, 20.2535, 10.2523, 52.32563);
-  if (bitchain.bit == 7 && bitchain.byte == 37)
-    pass ();
-  else
-    fail ("bit_write_BE @%zu.%u", bitchain.byte, bitchain.bit);
-
-  bit_advance_position (&bitchain, -199L);
-  {
-    double x, y, z;
-    bit_read_BE (&bitchain, &x, &y, &z);
-    if (x == 20.2535 && y == 10.2523 && z == 52.32563)
-      pass ();
-    else
-      fail ("bit_read_BE (%f,%f,%f)", x, y, z);
-  }
-
+  bit_advance_position (&bitchain, 199L);
   pos = bit_position (&bitchain);
   bit_write_DD (&bitchain, 20.256, 50.252);
   if (bitchain.bit == 1 && bitchain.byte == 46)
@@ -869,7 +1010,7 @@ main (int argc, char const *argv[])
   else
     fail ("bit_read_BT %f", dbl);
 
-#define _CRC 0x6024
+#define _CRC 0xA816
   bit_advance_position (&bitchain, -2L);
   {
     uint16_t crc = bit_write_CRC (&bitchain, 0UL, 0x64);
