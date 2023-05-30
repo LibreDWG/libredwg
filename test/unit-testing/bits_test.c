@@ -562,6 +562,61 @@ bit_TV_to_utf8_tests (void)
 }
 
 static void
+bit_read_TV_tests (void)
+{
+  char *result;
+  Bit_Chain bitchain = strtobt ("00000011"   // 03 (3)
+                                "00000000"   // 00
+                                "01000111"   // 47 (G)
+                                "01001110"   // 4E (N)
+                                "01010101"); // 55 (U)
+  bitchain.from_version = R_11;
+  result = (char *)bit_read_TV (&bitchain);
+  if (!strcmp (result, "GNU"))
+    ok ("bit_read_TV (<R_13)");
+  else
+    fail ("bit_read_TV (<R_13): %s", result);
+
+  bitchain = strtobt ("01"         // BB (1)
+                      "00000100"   // RC (3)
+                      "01000111"   // 47 (G)
+                      "01001110"   // 4E (N)
+                      "01010101"   // 55 (U)
+                      "00000000"); // 00 (\0)
+  bitchain.from_version = R_13;
+  result = (char *)bit_read_TV (&bitchain);
+  if (!strcmp (result, "GNU"))
+    ok ("bit_read_TV (>R_13)");
+  else
+    fail ("bit_read_TV (>R_13): %s", result);
+
+  bitfree (&bitchain);
+}
+
+static void
+bit_write_TV_tests (void)
+{
+  Bit_Chain bitchain;
+  bitprepare (&bitchain, 6);
+  bitchain.from_version = R_11;
+  bit_write_TV (&bitchain, (char *)"GNU");
+  if (bitchain.byte == 5 && bitchain.bit == 0)
+    ok ("bit_write_TV (<R_13)");
+  else
+    fail ("bit_write_TV @%zu.%u", bitchain.byte, bitchain.bit);
+
+  bit_set_position (&bitchain, 0);
+  bitchain.from_version = R_13;
+  bit_write_TV (&bitchain, (char *)"GNU");
+  if (bitchain.byte == 5 && bitchain.bit == 2)
+    ok ("bit_write_TV (>R_13)");
+  else
+    fail ("bit_write_TV @%zu.%u", bitchain.byte, bitchain.bit);
+
+  bitfree (&bitchain);
+}
+
+static void
 bit_read_TF_tests (void)
 {
   Bit_Chain bitchain = strtobt ("01000111"   // 47 (G)
@@ -630,6 +685,8 @@ main (int argc, char const *argv[])
   bit_read_H_tests ();
   bit_write_H_tests ();
   bit_UMC_bug_tests ();
+  bit_read_TV_tests ();
+  bit_write_TV_tests ();
   bit_read_TF_tests ();
   bit_write_TF_tests ();
 
@@ -840,22 +897,7 @@ main (int argc, char const *argv[])
   else
     fail ("bit_calc_CRC %X", bs);
   bit_advance_position (&bitchain, 16L);
-  pos = bit_position (&bitchain);
 
-  bit_write_TV (&bitchain, (char *)"GNU"); // we store the \0 since r13
-  if (bitchain.byte == 70 && bitchain.bit == 2)
-    pass ();
-  else
-    fail ("bit_write_TV @%zu.%u", bitchain.byte, bitchain.bit);
-
-  bit_set_position (&bitchain, pos);
-  str = bit_read_TV (&bitchain);
-  if (!strcmp (str, "GNU"))
-    pass ();
-  else
-    fail ("bit_read_TV");
-  bit_set_position (&bitchain, pos);
-  free (str);
   for (int i = 0; i < 6; i++)
     bit_write_B (&bitchain,
                  0); // padding for the T BS, to have aligned strings at 67
