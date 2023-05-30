@@ -873,20 +873,6 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       dwg_dynapi_entity_set_value (ent.u.var, #name, s1, hdl, 0);             \
       LOG_TRACE (#var ".%s = %d.%d.%X\n", s1, i1, i2, u);                     \
     }                                                                         \
-  else if (2 == SSCANF_S (p, #var "." FMT_NAME " = %d\n", s1 SZ, &i1))        \
-    {                                                                         \
-      if (!ent.u.var || ent.type != DWG_TYPE_##name)                          \
-        {                                                                     \
-          log_p (DWG_LOGLEVEL_ERROR, p);                                      \
-          LOG_ERROR ("wrong last entity type 0x%x, needing " #var "\n",       \
-                     ent.type);                                               \
-          exit (1);                                                           \
-        }                                                                     \
-      if (dwg_dynapi_is_angle (#name, s1))                                    \
-        f1 = deg2rad (i1);                                                    \
-      dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &f1, 0);             \
-      LOG_TRACE (#var ".%s = %d\n", s1, i1);                                  \
-    }                                                                         \
   else if (2 == SSCANF_S (p, #var "." FMT_NAME " = %lf\n", s1 SZ, &f1))       \
     {                                                                         \
       if (!ent.u.var || ent.type != DWG_TYPE_##name)                          \
@@ -900,6 +886,20 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         f1 = deg2rad (f1);                                                    \
       dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &f1, 0);             \
       LOG_TRACE (#var ".%s = %f\n", s1, f1);                                  \
+    }                                                                         \
+  else if (2 == SSCANF_S (p, #var "." FMT_NAME " = %d\n", s1 SZ, &i1))        \
+    {                                                                         \
+      if (!ent.u.var || ent.type != DWG_TYPE_##name)                          \
+        {                                                                     \
+          log_p (DWG_LOGLEVEL_ERROR, p);                                      \
+          LOG_ERROR ("wrong last entity type 0x%x, needing " #var "\n",       \
+                     ent.type);                                               \
+          exit (1);                                                           \
+        }                                                                     \
+      if (dwg_dynapi_is_angle (#name, s1))                                    \
+        f1 = deg2rad (i1);                                                    \
+      dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &f1, 0);             \
+      LOG_TRACE (#var ".%s = %d\n", s1, i1);                                  \
     }                                                                         \
   else if (2                                                                  \
            == SSCANF_S (p, #var "." FMT_NAME " = " FMT_ANY "\n", s1 SZ,       \
@@ -1585,9 +1585,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         free (pts);
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (leader, LEADER)
-      // clang-format on
+        // clang-format on
       else if (7 == SSCANF_S (p,
                          "tolerance " FMT_TBL " (%lf %lf %lf) (%lf %lf %lf)",
                          text SZ, &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y,
@@ -1602,9 +1602,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_TOLERANCE };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (tolerance, TOLERANCE)
-      // clang-format on
+        // clang-format on
       else if (1 == SSCANF_S (p, "mlinestyle " FMT_TBL, text SZ))
       {
         if (version <= R_11)
@@ -1614,9 +1614,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_MLINESTYLE };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (mlinestyle, MLINESTYLE)
-      // clang-format on
+        // clang-format on
       else if (1 == SSCANF_S (p, "layer " FMT_TBL, text SZ))
       {
         LOG_TRACE ("add_LAYER \"%s\"\n", text);
@@ -1624,9 +1624,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_LAYER };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (layer, LAYER)
-      // clang-format on
+        // clang-format on
       else if (1 == SSCANF_S (p, "style " FMT_TBL, text SZ))
       {
         LOG_TRACE ("add_STYLE \"%s\"\n", text);
@@ -1634,9 +1634,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_STYLE };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (style, STYLE)
-      // clang-format on
+        // clang-format on
       else if (1 == SSCANF_S (p, "ltype " FMT_TBL, text SZ))
       {
         LOG_TRACE ("add_LTYPE \"%s\"\n", text);
@@ -1644,9 +1644,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_LTYPE };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (ltype, LTYPE)
-      // clang-format on
+        // clang-format on
       else if (1 == SSCANF_S (p, "view " FMT_TBL, text SZ))
       {
         LOG_TRACE ("add_VIEW \"%s\"\n", text);
@@ -1688,9 +1688,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_GROUP };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (group, GROUP)
-      // clang-format on
+        // clang-format on
       else if (10 == SSCANF_S (
                    p, "ucs (%lf %lf %lf) (%lf %lf %lf) (%lf %lf %lf) " FMT_TBL,
                    &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &pt3.x,
@@ -1705,9 +1705,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_UCS };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (ucs, UCS)
-      // clang-format on
+        // clang-format on
       else if (2 == SSCANF_S (p, "layout viewport " FMT_TBL " " FMT_ANY,
                               text SZ, s1 SZ))
       {
@@ -1812,13 +1812,13 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                              .type = DWG_TYPE__3DSOLID };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (_3dsolid, _3DSOLID)
-      // clang-format on
-      else if (2 == SSCANF_S (p, "HEADER." FMT_NAME " = %d\n", s1 SZ, &i1))
-        dwg_dynapi_header_set_value (dwg, s1, &i1, 0);
+        // clang-format on
       else if (2 == SSCANF_S (p, "HEADER." FMT_NAME " = %lf\n", s1 SZ, &f1))
         dwg_dynapi_header_set_value (dwg, s1, &f1, 0);
+      else if (2 == SSCANF_S (p, "HEADER." FMT_NAME " = %d\n", s1 SZ, &i1))
+        dwg_dynapi_header_set_value (dwg, s1, &i1, 0);
       else if (1 == SSCANF_S (p, "HEADER." FMT_NAME " = " FMT_ANY "\n", s1 SZ,
                               text SZ))
       {
