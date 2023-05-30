@@ -79,11 +79,9 @@ api_process (dwg_object *obj)
     else
       for (i = 0; i < num_clippings; i++)
         {
-          CHK_SUBCLASS_TYPE (clippings[i], POINTCLOUD_Clippings, is_inverted,
-                             B);
+          CHK_SUBCLASS_TYPE (clippings[i], POINTCLOUD_Clippings, is_inverted, B);
           CHK_SUBCLASS_TYPE (clippings[i], POINTCLOUD_Clippings, type, BS);
-          CHK_SUBCLASS_TYPE (clippings[i], POINTCLOUD_Clippings, num_vertices,
-                             BS);
+          CHK_SUBCLASS_TYPE (clippings[i], POINTCLOUD_Clippings, num_vertices, BL);
           CHK_SUBCLASS_2DPOINTS (clippings[i], POINTCLOUD_Clippings, vertices,
                                  clippings[i].num_vertices);
           CHK_SUBCLASS_TYPE (clippings[i], POINTCLOUD_Clippings, z_min, BD);

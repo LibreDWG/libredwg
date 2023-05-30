@@ -79,7 +79,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, plane_linewt, BLd);
   CHK_ENTITY_CMC (_obj, SECTIONVIEWSTYLE, plane_line_color);
   CHK_ENTITY_H (_obj, SECTIONVIEWSTYLE, plane_ltype);
-  CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, bend_linewt, BS);
+  CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, bend_linewt, BLd);
   CHK_ENTITY_CMC (_obj, SECTIONVIEWSTYLE, bend_line_color);
   CHK_ENTITY_H (_obj, SECTIONVIEWSTYLE, bend_ltype);
   CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, bend_line_length, BD);

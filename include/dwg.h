@@ -8946,7 +8946,7 @@ typedef struct _dwg_object
 {
   BITCODE_RL size;       /*!< in bytes */
   size_t address;	 /*!< byte offset in the file */
-  unsigned int type;     /*!< fixed or variable (class - 500) */
+  BITCODE_BS type;       /*!< fixed or variable (class - 500) */
   BITCODE_RL index;      /*!< into dwg->object[] */
   enum DWG_OBJECT_TYPE fixedtype; /*!< into a global list */
   char *name;            /*!< our public entity/object name */
