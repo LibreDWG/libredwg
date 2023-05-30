@@ -229,7 +229,7 @@ const unsigned char unknown_section[53]
     if (dat->version < R_2007)                                                \
       {                                                                       \
         bit_write_T (dat, _obj->nam);                                         \
-        LOG_TRACE (#nam ": \"%s\" [T %d]", _obj->nam, dxf);                   \
+        LOG_TRACE (#nam ": \"%s\" [T %d]", _obj->nam ? _obj->nam : "", dxf);  \
         LOG_POS                                                               \
       }                                                                       \
     else                                                                      \

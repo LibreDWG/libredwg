@@ -1688,7 +1688,8 @@ bit_write_TF (Bit_Chain *restrict dat, BITCODE_TF restrict chain,
   if (!chain)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("Empty TF with length %zu", length);
+      if (length > 0)
+        LOG_ERROR ("Empty TF with length %zu", length);
       if (length <= 128) // either chain or length is wrong
         {
           for (size_t i = 0; i < length; i++)
