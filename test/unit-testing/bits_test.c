@@ -845,6 +845,8 @@ main (int argc, char const *argv[])
   bit_write_TF_tests ();
   bit_read_BE_tests ();
   bit_write_BE_tests ();
+  bit_read_BD_tests ();
+  bit_write_BD_tests ();
 
   // Prepare the testcase
   bitchain.size = 100;
