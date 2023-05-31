@@ -22584,7 +22584,8 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       // PLOTSTYLE (2.1.F)
       plh = dwg_add_PLACEHOLDER (dwg); // PLOTSTYLE
       obj = dwg_obj_generic_to_object (plh, &error);
-      obj->tio.object->ownerhandle = dwg_add_handleref (dwg, 4, UINT64_C (0xE), obj);
+      obj->tio.object->ownerhandle
+          = dwg_add_handleref (dwg, 4, UINT64_C (0xE), obj);
       add_obj_reactor (obj->tio.object, UINT64_C (0xE));
     }
   else
@@ -25154,11 +25155,17 @@ dwg_add_BLOCK_HEADER (Dwg_Data *restrict dwg, const char *restrict name)
 EXPORT Dwg_Object_LAYER *
 dwg_add_LAYER (Dwg_Data *restrict dwg, const char *restrict name)
 {
-  // Dwg_Object_Ref *plotstyle = dwg_ctrl_table (dwg, "PLOTSTYLE"); //
-  // PLOTSTYLE dict
-  //  TODO: since when do we add a plotstyle?
-  API_ADD_TABLE (LAYER, LAYER_CONTROL,
-                 { _obj->plotstyle = dwg_add_handleref (dwg, 5, UINT64_C (0xF), NULL); });
+  if (dwg->header.version >= R_2000)
+    {
+      // PLOTSTYLE placeholder
+      API_ADD_TABLE (LAYER, LAYER_CONTROL, {
+        _obj->plotstyle = dwg_add_handleref (dwg, 5, UINT64_C (0xF), NULL);
+      });
+    }
+  else
+    {
+      API_ADD_TABLE (LAYER, LAYER_CONTROL);
+    }
 }
 
 EXPORT Dwg_Object_STYLE *
