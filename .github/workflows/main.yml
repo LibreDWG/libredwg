@@ -244,8 +244,7 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
-    - name: ilammy/msvc-dev-cmd
-      uses: ilammy/msvc-dev-cmd@v1.3.0
+    - uses: ilammy/msvc-dev-cmd@v1.12.1
     - run: choco install ninja
       # use the preinstalled vcpkg from image
       # https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md#package-management
