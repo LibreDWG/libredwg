@@ -1378,12 +1378,17 @@ void
 json_write_TF (Bit_Chain *restrict dat, const BITCODE_TF restrict src,
                const size_t len)
 {
-  const size_t slen = strlen ((char*)src);
+  const size_t slen = src ? strlen ((char*)src) : 0;
   bool has_slack = false;
   fputc ('"', dat->fh);
+  if (!slen)
+    {
+      fputc ('"', dat->fh);
+      return;
+    }
   for (size_t i = 0; i < len; i++)
     {
-      const unsigned char c = src[i];
+      const unsigned char c = i < slen ? src[i] : 0;
       if (c == '\r' || c == '\n' || c == '"')
         fputc ('\\', dat->fh);
       else if (c == '\\' && i + 6 < len && src[i] == 'U' && src[i + 1] == '+'
