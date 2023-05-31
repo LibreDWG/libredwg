@@ -1458,10 +1458,17 @@ dxf_fixup_header (Dwg_Data *dwg)
     hdr->is_maint = 0x4;
 
   if (!vars->FINGERPRINTGUID)
-    vars->FINGERPRINTGUID = strdup ("{00000000-0000-0000-0000-000000000000}");
+    {
+      vars->FINGERPRINTGUID = dwg->header.from_version >= R_2007
+        ? (BITCODE_TV)bit_utf8_to_TU ((char*)"{00000000-0000-0000-0000-000000000000}", 0)
+        : strdup ("{00000000-0000-0000-0000-000000000000}");
+    }
   if (!vars->VERSIONGUID)
-    vars->VERSIONGUID
-        = strdup ("{DE6A95C3-2D01-4A77-AC28-3C42FCFFF657}"); // R_2000
+    {
+      vars->VERSIONGUID = dwg->header.from_version >= R_2007
+        ? (BITCODE_TV)bit_utf8_to_TU ((char*)"{A6BF05D3-02A0-4EB8-9AEE-9443625E66B6}", 0)
+        : (BITCODE_TV)strdup ("{DE6A95C3-2D01-4A77-AC28-3C42FCFFF657}"); // R_2000
+    }
 }
 
 static int
