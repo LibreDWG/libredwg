@@ -293,31 +293,8 @@ static char *_path_field (const char *path);
   }
 #define FIELD_TFv(nam, len, dxf)                                              \
   {                                                                           \
-    /* const int _l1 = 6 * len + 1; */                                        \
     FIRSTPREFIX fprintf (dat->fh, "\"%s\": ", _path_field (#nam));            \
     json_write_TF (dat, (const BITCODE_TF)_obj->nam, len);                    \
-    /*                                                                        \
-    if (len < 42)                                                             \
-      {                                                                       \
-        char _buf[256];                                                       \
-        char *p = json_cquote (_buf, (const char *)_obj->nam, _l1,            \
-                               dat->codepage);                                \
-        fprintf (dat->fh, "\"%s\"", p);                                       \
-        size_t lp = strlen (p);                                               \
-        fprintf (dat->fh, "\"%s", p);                                         \
-        for (int _i = lp; _i < (int)len; _i++)                                \
-          fprintf (dat->fh, "\\u0000");                                       \
-        fprintf (dat->fh, "\"");                                              \
-      }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        char *_buf = (char *)malloc (_l1);                                    \
-        char *p = json_cquote (_buf, (const char *)_obj->nam, _l1,            \
-                               dat->codepage);                                \
-        fprintf (dat->fh, "\"%s\"", p);                                       \
-        free (_buf);                                                          \
-      }                                                                       \
-    */                                                                        \
   }
 #define FIELD_TF(nam, len, dxf) FIELD_TFv (nam, len, dxf)
 #define FIELD_TFF(nam, len, dxf) FIELD_TFv (nam, len, dxf)
@@ -1388,7 +1365,7 @@ json_write_TF (Bit_Chain *restrict dat, const BITCODE_TF restrict src,
     }
   for (size_t i = 0; i < len; i++)
     {
-      const unsigned char c = i < slen ? src[i] : 0;
+      const unsigned char c = src[i];
       if (c == '\r' || c == '\n' || c == '"')
         fputc ('\\', dat->fh);
       else if (c == '\\' && i + 6 < len && src[i] == 'U' && src[i + 1] == '+'
@@ -1412,7 +1389,7 @@ json_write_TF (Bit_Chain *restrict dat, const BITCODE_TF restrict src,
                   }
             }
           if (has_slack)
-            fprintf (dat->fh, "\\u00%02x", c);
+            fprintf (dat->fh, "\\u0000");
           else
             {
               fputc ('"', dat->fh);
