@@ -1091,7 +1091,7 @@ static int dwg_encode_entity (Dwg_Object *restrict obj, Bit_Chain *dat,
                               Bit_Chain *restrict hdl_dat, Bit_Chain *str_dat);
 static int dwg_encode_object (Dwg_Object *restrict obj, Bit_Chain *dat,
                               Bit_Chain *restrict hdl_dat, Bit_Chain *str_dat);
-static BITCODE_RL encode_preR13_entities (BITCODE_BL index_from, BITCODE_BL pos_to,
+static BITCODE_RL encode_preR13_entities (EntitySectionIndexR11 section,
                                           Bit_Chain *restrict dat,
                                           Dwg_Data *restrict dwg,
                                           int *restrict error);
@@ -2375,7 +2375,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   {
     BITCODE_RL numentities, addr;
     size_t hdr_offset, hdr_end;
-    BITCODE_BL last_entity_idx;
+    BITCODE_BL last_entity_idx, end_idx;
+    BITCODE_BLd first_entity_idx = 0;
     Dwg_Object *first_block;
 
     if (dwg->header.version == R_INVALID)
@@ -2422,30 +2423,15 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             ? SECTION_APPID
             : SECTION_VX;
     dwg->header.entities_start = dat->byte & 0xFFFFFFFF;
-    LOG_TRACE ("\nentities 0x%x:\n", dwg->header.entities_start);
+    //LOG_TRACE ("\nentities 0x%x:\n", dwg->header.entities_start);
     dwg->cur_index = 0;
-    PRE (R_2_0b)
-      {
-        last_entity_idx = dwg->num_objects - 1;
-        first_block = NULL;
-      }
-    else
-      {
-        // until the first BLOCK
-        first_block = dwg_find_first_type (dwg, DWG_TYPE_BLOCK);
-        if (first_block)
-          last_entity_idx = first_block->index ? first_block->index - 1 : 0;
-        else
-          last_entity_idx = dwg->num_objects - 1;
-      }
-    numentities = encode_preR13_entities (0, last_entity_idx, dat, dwg, &error);
-
+    // collect all entities (non-blocks)
+    numentities = encode_preR13_entities (ENTITIES_SECTION_INDEX, dat, dwg, &error);
     dwg->cur_index += numentities;
     if (!dwg->header.entities_end)
       dwg->header.entities_end = dat->byte & 0xFFFFFFFF;
     LOG_TRACE ("\nentities %u 0x%x - 0x%x\n", numentities,
-               dwg->header.entities_start,
-               dwg->header.entities_end);
+               dwg->header.entities_start, dwg->header.entities_end);
     write_sentinel (dat, DWG_SENTINEL_R11_ENTITIES_END);
 
     // patch all the section tbl->address
@@ -2513,22 +2499,13 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       // encode block entities
       write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN);
       dwg->header.blocks_start = dat->byte & 0xFFFFFFFF;
-      if (first_block)
+      if (dat->version >= R_2_0b &&
+          (first_block = dwg_find_first_type (dwg, DWG_TYPE_BLOCK)))
         {
-          last_endblk = dwg_find_last_type (dwg, DWG_TYPE_ENDBLK);
-          if (last_endblk)
-            endblk_index = last_endblk->index;
           num_block_entities = encode_preR13_entities (
-              last_entity_idx + 1, endblk_index, dat, dwg, &error);
-          dwg->cur_index = endblk_index + 1;
+              BLOCKS_SECTION_INDEX, dat, dwg, &error);
           dwg->header.blocks_size
               = (dat->byte - dwg->header.blocks_start) & 0xFFFFFFFF;
-          if (num_block_entities != endblk_index - last_entity_idx)
-            {
-              LOG_WARN ("Wrong num_block_entities %u -> %u\n", num_block_entities,
-                        endblk_index - last_entity_idx);
-              num_block_entities = endblk_index - last_entity_idx;
-            }
         }
       else
         {
@@ -2538,31 +2515,29 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       write_sentinel (dat, DWG_SENTINEL_R11_BLOCK_ENTITIES_END);
       if (dwg->header.version > R_2_22)
         dwg->header.blocks_size += 0x40000000;
-      LOG_TRACE ("\nblock_entities %u [%u - %u] 0x%x - 0x%x (0x%x)\n",
-                 num_block_entities, last_entity_idx + 1, endblk_index,
+      LOG_TRACE ("\nblock_entities %u 0x%x - 0x%x (0x%x)\n",
+                 num_block_entities, 
                  dwg->header.blocks_start,
                  dwg->header.blocks_start
                      + (dwg->header.blocks_size & 0xffffff),
                  dwg->header.blocks_size);
 
       // encode extra entities.
-      jump_index = dwg->cur_index < dwg->num_objects - 1 ? dwg->cur_index : 0;
       write_sentinel (dat, DWG_SENTINEL_R11_EXTRA_ENTITIES_BEGIN);
       dwg->header.extras_start = dat->byte & 0xFFFFFFFF;
-      if (jump_index)
+      if (dwg->num_objects)
         {
-          num_extra_entities = encode_preR13_entities (
-              jump_index, dwg->num_objects - 1, dat, dwg, &error);
+          num_extra_entities = encode_preR13_entities (EXTRAS_SECTION_INDEX,
+                                                       dat, dwg, &error);
           dwg->header.extras_size
-            = 0x80000000 + ((dat->byte - dwg->header.extras_start)
-                            & 0x8FFFFFFF);
+              = 0x80000000
+                + ((dat->byte - dwg->header.extras_start) & 0x8FFFFFFF);
         }
       write_sentinel (dat, DWG_SENTINEL_R11_EXTRA_ENTITIES_END);
-      LOG_TRACE ("\nextra_entities [%u - %u] 0x%x - 0x%x (0x%x)\n",
-                 jump_index, dwg->num_objects - 1,
+      LOG_TRACE ("\nextra_entities %u 0x%x - 0x%x (0x%x)\n",
+                 num_extra_entities,
                  dwg->header.extras_start,
-                 dwg->header.extras_start
-                 + (dwg->header.extras_size & 0xffffff),
+                 dwg->header.extras_start + (dwg->header.extras_size & 0xffffff),
                  dwg->header.extras_size);
       PRE (R_10)
       {
@@ -4251,24 +4226,22 @@ encode_preR13_POLYLINE (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
 }
 */
 
+// blocks might be mixed in-between normal entities. from BLOCK to ENDBLK
+// extras begin with a jump, until a jump back
 static BITCODE_RL
-encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last,
+encode_preR13_entities (EntitySectionIndexR11 section,
                         Bit_Chain *restrict dat,
                         Dwg_Data *restrict dwg, int *restrict error)
 {
   BITCODE_RL numentities = 0;
-  if (index_from > index_last || index_last >= dwg->num_objects)
-    {
-      LOG_ERROR ("Invalid index_from " FORMAT_BL " or index_last " FORMAT_BL
-                 " with " FORMAT_BL " num_objects",
-                 index_from, index_last, dwg->num_objects);
-      *error |= DWG_ERR_SECTIONNOTFOUND;
-      return 0;
-    }
+  bool in_blocks = false;
+  bool in_extras = false;
   LOG_INFO ("===========================\n"
-            "Entities from " FORMAT_BL " to " FORMAT_BL " from 0x%zx\n",
-            index_from, index_last, dat->byte);
-  for (unsigned index = index_from; index <= index_last; index++)
+            "%s from 0x%zx\n", section == ENTITIES_SECTION_INDEX
+            ? "Entities"
+            : section == BLOCKS_SECTION_INDEX
+            ? "Blocks" : "Extras", dat->byte);
+  for (unsigned index = 0; index < dwg->num_objects; index++)
     {
       Dwg_Object *obj = &dwg->object[index];
       size_t size_pos = 0UL;
@@ -4277,7 +4250,7 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
       if (obj->supertype != DWG_SUPERTYPE_ENTITY || !obj->tio.entity)
         {
           if (obj->index && obj->fixedtype)
-            LOG_TRACE ("Skip object %s, number: %d, Fixedtype: %d, Addr: %zx "
+            LOG_HANDLE ("Skip object %s, number: %d, Fixedtype: %d, Addr: %zx "
                        "(0x%zx)\n",
                        obj->name, obj->index, obj->fixedtype, obj->address,
                        dat->byte);
@@ -4290,17 +4263,27 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
                      obj->name, obj->index, obj->type, obj->address, dat->byte);
         }
       // skip first 2 mspace block/endblk entities
-      if (obj->type == DWG_TYPE_UNUSED_R11 && obj->index < 8)
+      if (obj->type == DWG_TYPE_UNUSED_R11 && obj->index < 13)
         {
-          LOG_TRACE ("Unused entity %s, number: %d, Fixedtype: %d, Addr: %zx (0x%zx)\n",
+          LOG_HANDLE ("Unused entity %s, number: %d, Fixedtype: %d, Addr: %zx (0x%zx)\n",
                      obj->name, obj->index, obj->fixedtype, obj->address,
                      dat->byte);
           continue;
         }
       // check if block/extras or entity member
-      if (!index_from) // is entity
+      if (section == ENTITIES_SECTION_INDEX) // is entity
         {
           // but belongs to a block
+          if (obj->fixedtype == DWG_TYPE_BLOCK)
+            {
+              Dwg_Object *next_endblk
+                = dwg_get_next_object (dwg, DWG_TYPE_ENDBLK, obj->index);
+              if (next_endblk && next_endblk->index > obj->index)
+                index += (next_endblk->index - obj->index);
+              else
+                in_blocks = true;
+              continue;
+            }
           if (dat->version >= R_2_0b && obj->tio.entity->entmode == 3)
             {
               LOG_TRACE ("Skip block %s in entities section, number: %d, "
@@ -4309,7 +4292,30 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
                          dat->byte);
               continue;
             }
+          if (in_blocks)
+            continue;
         }
+      else if (section == BLOCKS_SECTION_INDEX)
+        {
+          //if (dat->version < R_2_0b || obj->tio.entity->entmode != 3)
+          //  {
+          //    LOG_TRACE ("Skip entity %s in block section, number: %d, "
+          //               "type: %d, Addr: %zx (0x%zx)\n",
+          //               obj->name, obj->index, obj->type, obj->address,
+          //               dat->byte);
+          //    continue;
+          //  }
+          if (obj->fixedtype == DWG_TYPE_BLOCK)
+            in_blocks = true;
+          if (!in_blocks)
+            continue;
+        }
+      if (!in_extras && obj->fixedtype == DWG_TYPE_JUMP)
+        in_extras = true; // jump into
+      if (section == EXTRAS_SECTION_INDEX && !in_extras)
+        continue;
+      // jump back below
+      
       while (dat->byte + obj->size >= dat->size)
         bit_chain_alloc (dat);
       numentities++;
@@ -4380,6 +4386,14 @@ encode_preR13_entities (const BITCODE_BL index_from, const BITCODE_BL index_last
           LOG_ERROR ("Unknown object type %d", obj->type)
           break;
         }
+
+      if (in_blocks && obj->fixedtype == DWG_TYPE_ENDBLK)
+        in_blocks = false;
+      else if (!in_blocks && obj->fixedtype == DWG_TYPE_BLOCK)
+        in_blocks = true;
+      if (in_extras && obj->fixedtype == DWG_TYPE_JUMP)
+        in_extras = false; // jump back
+
       SINCE (R_2_0)
       {
         // patchup size
