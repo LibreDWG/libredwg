@@ -1944,7 +1944,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
               LOG_TRACE ("HEADER.%s = %lf\n", s1, f1);
             }
         }
-      else if (1 == SSCANF_S (p, "HEADER." FMT_NAME " = " FMT_ANY "\n", s1 SZ,
+      else if (2 == SSCANF_S (p, "HEADER." FMT_NAME " = " FMT_ANY "\n", s1 SZ,
                               text SZ))
       {
         if (strlen (text) && text[strlen (text) - 1] == '"')
