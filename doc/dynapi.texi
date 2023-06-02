@@ -12750,9 +12750,9 @@ H,	DXF 338
 H,	DXF 340
 @item vport_entity_address
 RS
-@item unknown1
+@item r11_viewport_index
 RSd
-@item unknown2
+@item r11_prev_entry_index
 RS
 
 @end vtable

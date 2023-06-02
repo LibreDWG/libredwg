@@ -10519,9 +10519,9 @@ static const Dwg_DYNAPI_field _dwg_VX_TABLE_RECORD_fields[] = {
     1,0,0, 340 },
   { "vport_entity_address",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_VX_TABLE_RECORD, vport_entity_address),
     0,0,0, 0 },
-  { "unknown1",	"RSd", sizeof (BITCODE_RSd),  OFF (struct _dwg_object_VX_TABLE_RECORD, unknown1),
+  { "r11_viewport_index",	"RSd", sizeof (BITCODE_RSd),  OFF (struct _dwg_object_VX_TABLE_RECORD, r11_viewport_index),
     0,0,0, 0 },
-  { "unknown2",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_VX_TABLE_RECORD, unknown2),
+  { "r11_prev_entry_index",	"RS", sizeof (BITCODE_RS),  OFF (struct _dwg_object_VX_TABLE_RECORD, r11_prev_entry_index),
     0,0,0, 0 },
   {NULL,	NULL,	0,	0,	0,0,0, 0},
 };
