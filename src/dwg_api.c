@@ -23128,6 +23128,8 @@ add_attrib_links (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (!insert->has_attribs || !seqend || !lastobj) // no ATTRIB and SEQEND yet
     {
       API_ADD_ENTITY (SEQEND);
+      if (dwg->header.version <= R_12)
+        obj->type = DWG_TYPE_SEQEND_R11;
       insert->has_attribs = 1;
       insert->num_owned = 1;
       obj->tio.entity->entmode = 0;
@@ -23160,7 +23162,7 @@ add_attrib_links (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   return insert;
 }
 
-/* This adds the ATTRIB and ENDBLK to the insert,
+/* This adds the ATTRIB and SEQEND to the insert,
    and the ATTDEF and ENDBLK to the block. */
 EXPORT Dwg_Entity_ATTRIB *
 dwg_add_Attribute (Dwg_Entity_INSERT *restrict insert, const double height,
