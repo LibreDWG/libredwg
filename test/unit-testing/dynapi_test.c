@@ -63142,34 +63142,34 @@ static int test_VX_TABLE_RECORD (const Dwg_Object *obj)
         fail ("VX_TABLE_RECORD.prev_entry [H]");
   }
   {
-    BITCODE_RSd unknown1;
-    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "unknown1", &unknown1, NULL)
-        && unknown1 == vx_table_record->unknown1)
+    BITCODE_RS r11_prev_entry_index;
+    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "r11_prev_entry_index", &r11_prev_entry_index, NULL)
+        && r11_prev_entry_index == vx_table_record->r11_prev_entry_index)
       pass ();
     else
-      fail ("VX_TABLE_RECORD.unknown1 [RSd] " FORMAT_RSd " != " FORMAT_RSd "", vx_table_record->unknown1, unknown1);
-    unknown1++;
-    if (dwg_dynapi_entity_set_value (vx_table_record, "VX_TABLE_RECORD", "unknown1", &unknown1, 0)
-        && unknown1 == vx_table_record->unknown1)
+      fail ("VX_TABLE_RECORD.r11_prev_entry_index [RS] %hu != %hu", vx_table_record->r11_prev_entry_index, r11_prev_entry_index);
+    r11_prev_entry_index++;
+    if (dwg_dynapi_entity_set_value (vx_table_record, "VX_TABLE_RECORD", "r11_prev_entry_index", &r11_prev_entry_index, 0)
+        && r11_prev_entry_index == vx_table_record->r11_prev_entry_index)
       pass ();
     else
-      fail ("VX_TABLE_RECORD.unknown1 [RSd] set+1 " FORMAT_RSd " != " FORMAT_RSd "", vx_table_record->unknown1, unknown1);
-    vx_table_record->unknown1--;
+      fail ("VX_TABLE_RECORD.r11_prev_entry_index [RS] set+1 %hu != %hu", vx_table_record->r11_prev_entry_index, r11_prev_entry_index);
+    vx_table_record->r11_prev_entry_index--;
   }
   {
-    BITCODE_RS unknown2;
-    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "unknown2", &unknown2, NULL)
-        && unknown2 == vx_table_record->unknown2)
+    BITCODE_RSd r11_viewport_index;
+    if (dwg_dynapi_entity_value (vx_table_record, "VX_TABLE_RECORD", "r11_viewport_index", &r11_viewport_index, NULL)
+        && r11_viewport_index == vx_table_record->r11_viewport_index)
       pass ();
     else
-      fail ("VX_TABLE_RECORD.unknown2 [RS] %hu != %hu", vx_table_record->unknown2, unknown2);
-    unknown2++;
-    if (dwg_dynapi_entity_set_value (vx_table_record, "VX_TABLE_RECORD", "unknown2", &unknown2, 0)
-        && unknown2 == vx_table_record->unknown2)
+      fail ("VX_TABLE_RECORD.r11_viewport_index [RSd] " FORMAT_RSd " != " FORMAT_RSd "", vx_table_record->r11_viewport_index, r11_viewport_index);
+    r11_viewport_index++;
+    if (dwg_dynapi_entity_set_value (vx_table_record, "VX_TABLE_RECORD", "r11_viewport_index", &r11_viewport_index, 0)
+        && r11_viewport_index == vx_table_record->r11_viewport_index)
       pass ();
     else
-      fail ("VX_TABLE_RECORD.unknown2 [RS] set+1 %hu != %hu", vx_table_record->unknown2, unknown2);
-    vx_table_record->unknown2--;
+      fail ("VX_TABLE_RECORD.r11_viewport_index [RSd] set+1 " FORMAT_RSd " != " FORMAT_RSd "", vx_table_record->r11_viewport_index, r11_viewport_index);
+    vx_table_record->r11_viewport_index--;
   }
   {
     BITCODE_RSd used;

@@ -2830,8 +2830,8 @@ typedef struct _dwg_object_VX_TABLE_RECORD
   BITCODE_H viewport;
   BITCODE_H prev_entry;
   BITCODE_RS vport_entity_address;
-  BITCODE_RSd unknown1;
-  BITCODE_RS unknown2;
+  BITCODE_RSd r11_viewport_index;
+  BITCODE_RS r11_prev_entry_index;
 } Dwg_Object_VX_TABLE_RECORD;
 
 /**
