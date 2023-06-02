@@ -1571,6 +1571,14 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                         */
                       }
                       break;
+                    case 1:
+                      if (eed_need_size (dat, obj->eed, i, 3, &have))
+                        data = obj->eed[i].data;
+                      data->u.eed_1.appid_index
+                          = (BITCODE_RS)json_long (dat, tokens);
+                      LOG_TRACE ("eed[%u].data.appid_index %d\n", i,
+                                 (int)data->u.eed_1.appid_index);
+                      break;
                     case 2:
                       if (eed_need_size (dat, obj->eed, i, 1, &have))
                         data = obj->eed[i].data;
@@ -1631,14 +1639,6 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                       data->u.eed_40.real = json_float (dat, tokens);
                       LOG_TRACE ("eed[%u].data.value %f\n", i,
                                  data->u.eed_40.real);
-                      break;
-                    case 1:
-                      if (eed_need_size (dat, obj->eed, i, 3, &have))
-                        data = obj->eed[i].data;
-                      data->u.eed_1.appid_index
-                          = (BITCODE_RS)json_long (dat, tokens);
-                      LOG_TRACE ("eed[%u].data.appid_index %d\n", i,
-                                 (int)data->u.eed_1.appid_index);
                       break;
                     case 70:
                       if (eed_need_size (dat, obj->eed, i, 2, &have))
