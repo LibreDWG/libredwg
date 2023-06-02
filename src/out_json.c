@@ -1050,6 +1050,9 @@ json_eed (Bit_Chain *restrict dat, const Dwg_Object_Object *restrict obj)
                   VALUE_TEXT_TU (data->u.eed_0_r2007.string);
                 }
               break;
+            case 1:
+              VALUE_RS (data->u.eed_1.appid_index, 0);
+              break;
             case 2:
               VALUE_RC (data->u.eed_2.close, 0);
               break;
