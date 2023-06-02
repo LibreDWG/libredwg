@@ -1958,6 +1958,19 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         free (str);
         LOG_TRACE ("HEADER.%s = \"%s\"\n", s1, text);
       }
+      else if (4 == SSCANF_S (p, "HEADER." FMT_NAME " = (%lf %lf %lf)",
+                              s1 SZ, &pt1.x, &pt1.y, &pt1.z))
+        {
+          LOG_TRACE ("HEADER.%s = (%f %f %f)\n", s1, pt1.x, pt1.y, pt1.z);
+          dwg_dynapi_header_set_value (dwg, s1, &pt1, 0);
+        }
+      else if (3 == SSCANF_S (p, "HEADER." FMT_NAME " = (%lf %lf)",
+                         s1 SZ, &pt1.x, &pt1.y))
+        {
+          pt1.z = 0.0;
+          LOG_TRACE ("HEADER.%s = (%f %f)\n", s1, pt1.x, pt1.y);
+          dwg_dynapi_header_set_value (dwg, s1, &pt1, 0);
+        }
       else
         {
           char *n = strchr (p, '\n');

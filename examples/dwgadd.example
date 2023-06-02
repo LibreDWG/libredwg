@@ -7,6 +7,8 @@ HEADER.VIEWSIZE = 1.2345
 HEADER.ANGBASE = 90
 HEADER.LUPREC = 3
 HEADER.MENU = "other"
+HEADER.INSBASE = (1 0 0)
+HEADER.LIMMIN = (12 9)
 text "test" (0.0 1.0 0.0) 8
 block "bloko"
 attdef 8 0 "prompt" (0.0 1.0 0.0) TAG "default_text"
