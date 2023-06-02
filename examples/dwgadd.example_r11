@@ -35,3 +35,6 @@ dimstyle.DIMSCALE = 2.0
 dimstyle.DIMUPT = 1
 ucs (0 1 0) (1 0 0) (0 0 1) "UCS1"
 ucs.ucs_elevation = 1.0
+layer "foo"
+line (0 0 0) (100 0 100)
+line.layer = "foo"
