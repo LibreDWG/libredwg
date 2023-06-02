@@ -1950,7 +1950,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         if (strlen (text) && text[strlen (text) - 1] == '"')
           text[strlen (text) - 1] = '\0'; // strip the \"
         dwg_dynapi_header_set_value (dwg, s1, text, 1);
-        LOG_TRACE ("HEADER.%s1 = \"%s\"\n", s1, text);
+        LOG_TRACE ("HEADER.%s = \"%s\"\n", s1, text);
       }
       else
         {
