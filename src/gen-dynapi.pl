@@ -3115,7 +3115,7 @@ dynapi_set_helper (void *restrict old, const Dwg_DYNAPI_field *restrict f,
         {
           char *str = (char *)calloc (f->size, 1);
           strncpy (str, *(char**)value, f->size);
-          // we copy just the pointer, not the string
+          // we copy just the pointer to heap-alloced str, not the string
           free (*(char **)old);
           memcpy (old, &str, sizeof (char*)); // size of ptr
         }

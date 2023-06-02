@@ -969,6 +969,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
            == SSCANF_S (p, #var "." FMT_NAME " = " FMT_ANY "\n", s1 SZ,       \
                         text SZ))                                             \
     {                                                                         \
+      char *str;                                                              \
       if (strlen (text) && text[strlen (text) - 1] == '"')                    \
         text[strlen (text) - 1] = '\0';                                       \
       if (!ent.u.var || ent.type != DWG_TYPE_##name)                          \
@@ -978,7 +979,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                      ent.type);                                               \
           exit (1);                                                           \
         }                                                                     \
-      dwg_dynapi_entity_set_value (ent.u.var, #name, s1, text, 1);            \
+      str = strdup (text);                                                    \
+      dwg_dynapi_entity_set_value (ent.u.var, #name, s1, &str, 1);            \
+      free (str);                                                             \
       LOG_TRACE (#var ".%s = \"%s\"\n", s1, text);                            \
     }
 
@@ -1947,9 +1950,12 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else if (2 == SSCANF_S (p, "HEADER." FMT_NAME " = " FMT_ANY "\n", s1 SZ,
                               text SZ))
       {
+        char *str;
         if (strlen (text) && text[strlen (text) - 1] == '"')
           text[strlen (text) - 1] = '\0'; // strip the \"
-        dwg_dynapi_header_set_value (dwg, s1, text, 1);
+        str = strdup (text);
+        dwg_dynapi_header_set_value (dwg, s1, &str, 1);
+        free (str);
         LOG_TRACE ("HEADER.%s = \"%s\"\n", s1, text);
       }
       else
