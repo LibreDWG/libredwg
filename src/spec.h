@@ -647,12 +647,23 @@
         LOG_FLAG_TABLE_MAX (255);                                             \
         LOG_TRACE ("\n");                                                     \
       }
+#  define LOG_FLAG_VX                                                         \
+    if (_obj->flag)                                                           \
+      {                                                                       \
+        LOG_TRACE ("      ");                                                 \
+        LOG_FLAG_W (VX, IS_ON);                                               \
+        LOG_FLAG_TABLE_W (IS_XREF_REF);                                       \
+        LOG_FLAG_TABLE_W (IS_XREF_RESOLVED);                                  \
+        LOG_FLAG_TABLE_W (IS_XREF_DEP);                                       \
+        LOG_FLAG_TABLE_W (IS_REMOVED);                                        \
+        LOG_FLAG_TABLE_MAX (255);                                             \
+        LOG_TRACE ("\n");                                                     \
+      }
 #  define LOG_FLAG_Viewport LOG_FLAG_TABLE_COMMON
 #  define LOG_FLAG_RegApp LOG_FLAG_TABLE_COMMON
 #  define LOG_FLAG_DimStyle LOG_FLAG_TABLE_COMMON
 #  define LOG_FLAG_Linetype LOG_FLAG_TABLE_COMMON
 #  define LOG_FLAG_UCS LOG_FLAG_TABLE_COMMON
-#  define LOG_FLAG_VX LOG_FLAG_TABLE_COMMON
 #endif
 
 #ifndef COMMON_TABLE_FLAGS
