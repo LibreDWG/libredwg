@@ -246,6 +246,7 @@ testobjects = \
 	vertex_mesh \
 	vertex_pface \
 	vertex_pface_face \
+	vertex_r11 \
 	view \
 	view_control \
 	viewport \
