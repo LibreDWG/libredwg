@@ -23608,10 +23608,9 @@ dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
           _pl->last_vertex
               = dwg_add_handleref (dwg, 4, vtx->handle.value, NULL);
           // set flag 1 if closed
-          if (pts[i].x == pts[0].x && pts[i].y == pts[0].y && pts[i].z == pts[0].z)
-            {
-              _obj->flag |= FLAG_POLYLINE_CLOSED;
-            }
+          if (pts[i].x == pts[0].x && pts[i].y == pts[0].y
+              && pts[i].z == pts[0].z)
+            _obj->flag |= FLAG_POLYLINE_CLOSED;
         }
     }
   _seq = dwg_add_SEQEND ((dwg_ent_generic *)_pl);
@@ -23672,8 +23671,8 @@ dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
       = dwg_add_handleref (dwg, 4, dwg_obj_generic_handlevalue (pline), obj);
   obj->tio.entity->opts_r11
       = OPTS_R11_VERTEX_HAS_FLAG | OPTS_R11_VERTEX_HAS_INDEX1
-        | OPTS_R11_VERTEX_HAS_INDEX2 | OPTS_R11_VERTEX_HAS_INDEX3
-        | 0x100 | OPTS_R11_VERTEX_HAS_NOT_X_Y;
+        | OPTS_R11_VERTEX_HAS_INDEX2 | OPTS_R11_VERTEX_HAS_INDEX3 | 0x100
+        | OPTS_R11_VERTEX_HAS_NOT_X_Y;
   _obj->flag = FLAG_VERTEX_PFACE_MESH;
   _obj->vertind[0] = vertind[0];
   _obj->vertind[1] = vertind[1];
@@ -23709,9 +23708,10 @@ dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
   if (!_pl->vertex)
     return NULL;
   _pl->has_vertex = 1;
-  obj->tio.entity->opts_r11 = OPTS_R11_POLYLINE_HAS_FLAG | OPTS_R11_POLYLINE_HAS_M_VERTS
-    | OPTS_R11_POLYLINE_HAS_N_VERTS;
-  //obj->tio.entity->flag_r11 = FLAG_R11_HAS_ATTRIBS; // not
+  obj->tio.entity->opts_r11 = OPTS_R11_POLYLINE_HAS_FLAG
+                              | OPTS_R11_POLYLINE_HAS_M_VERTS
+                              | OPTS_R11_POLYLINE_HAS_N_VERTS;
+  // obj->tio.entity->flag_r11 = FLAG_R11_HAS_ATTRIBS; // not
   _obj->flag = FLAG_POLYLINE_PFACE_MESH;
   _pl->numverts = numverts;
   _pl->numfaces = numfaces;
