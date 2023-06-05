@@ -549,6 +549,15 @@ scan_faces (unsigned num, char **pp)
             break;
           p++;
         }
+      else if (3 == SSCANF_S (p, "(%hd %hd %hd)", &faces[i][0], &faces[i][1],
+                         &faces[i][2]))
+        {
+          p = strchr (p, ')');
+          if (!p)
+            break;
+          faces[i][3] = 0;
+          p++;
+        }
       else
         {
           *pp = p;
@@ -1458,6 +1467,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         if (4 == SSCANF_S (p, "((%d %d %d %d)", &face[0], &face[1], &face[2],
                            &face[3]))
           faces = scan_faces (i2, &p);
+        else if (3 == SSCANF_S (p, "((%d %d %d)", &face[0], &face[1], &face[2]))
+          faces = scan_faces (i2, &p);
         else if (i2) // else no faces
           {
             log_p (DWG_LOGLEVEL_ERROR, p);
@@ -1474,8 +1485,15 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             LOG_TRACE (") (");
             for (i=0; i < i2; i++)
               {
-                LOG_TRACE (" (%d %d %d %d)", faces[i][0], faces[i][1],
-                           faces[i][2], faces[i][3]);
+                if (faces[i][3])
+                  {
+                    LOG_TRACE (" (%d %d %d %d)", faces[i][0], faces[i][1],
+                               faces[i][2], faces[i][3]);
+                  }
+                else
+                  {
+                    LOG_TRACE (" (%d %d %d)", faces[i][0], faces[i][1], faces[i][2]);
+                  }
               }
             LOG_TRACE (")\n");
             ent = (lastent_t){ .u.polyline_pface
@@ -1486,9 +1504,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           }
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (polyline_pface, POLYLINE_PFACE)
-      // clang-format on
+        // clang-format on
       else if (3 == SSCANF_S (p, "lwpolyline %d ((%lf %lf)", &i1, &pt1.x, &pt1.y))
       {
         dwg_point_2d *pts = scan_pts2d (i1, &p);

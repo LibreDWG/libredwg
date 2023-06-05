@@ -9,6 +9,7 @@ HEADER.LUPREC = 3
 HEADER.MENU = "other"
 HEADER.INSBASE = (1 0 0)
 HEADER.LIMMIN = (12 9)
+point (2 0 0)
 text "test" (0.0 1.0 0.0) 8
 block "bloko"
 attdef 8 0 "prompt" (0.0 1.0 0.0) TAG "default_text"
@@ -19,12 +20,12 @@ attrib 8 0 (0.0 2.0 0.0) TAG "text1"
 minsert (0 1 0) "bloko" 1 1 1 0 1 2 1 1
 minsert.rotation = 90
 polyline_2d 2 ((0 1) (1 1))
-polyline_3d 2 ((0 1 0) (1 1 0))
+polyline_3d 2 ((0 1 0.5) (1 1 -0.5))
 lwpolyline 2 ((0 1) (1 1))
 arc (0.0 1.0 0.0) 0.5 0.0 3.0
 circle (0.0 1.0 0.0) 0.5
-polyline_pface 5 3 ((0 0 0) (2 0 0) (2 2 0) (1 2 0) (1 1 0)) ((0 1 2 3) (1 2 3 4) (2 3 4 5))
-polyline_mesh 3 2 ((0 0 0) (2 0 0) (2 2 0) (1 2 0) (1 1 0) (0 1 0))
+polyline_pface 5 3 ((0 0 1) (2 0 1) (2 2 0) (1 2 0.5) (1 1 -0.5)) ((0 1 2 3) (1 2 -3 4) (2 -3 4))
+polyline_mesh 3 2 ((0 0 1) (2 0 2) (2 2 1) (1 2 0.5) (1 1 -1) (0 1 0))
 dimension_aligned (0 0 0) (2 0 0) (2 2 0)
 dimension_ang2ln (0 0 0) (2 0 0) (2 2 0) (2 2 0)
 dimension_ang3pt (0 0 0) (2 0 0) (2 1 0) (2 2 0)
@@ -32,7 +33,6 @@ dimension_diameter (0 0 0) (2 0 0) 2
 dimension_ordinate (0 0 0) (2 0 0) 1
 dimension_radius (0 0 0) (2 0 0) 1
 dimension_linear (2 0 0) (2 1 0) (0 0 0) 90
-point (2 0 0)
 3dface (0 0 0) (2 0 0) (2 1 0) (0 2 0)
 solid (0 0 0) (2 0) (2 1) (0 2)
 trace (0 0 0) (2 0) (2 1) (0 2)

@@ -282,7 +282,10 @@ typedef struct _dwg_LWPLINE_widths
   double end;
 } dwg_lwpline_widths;
 
-typedef BITCODE_BS dwg_face[4];
+/* invisible face edge if negative.
+   no 4th edge (ie a triangle) if the last face has index 0 (starts with 1)
+*/
+typedef BITCODE_BSd dwg_face[4];
 
 /* Returns a NULL-terminated array of all entities of a specific type from a BLOCK */
 #define DWG_GETALL_ENTITY_DECL(token) \
@@ -6341,6 +6344,9 @@ EXPORT Dwg_Entity_POLYLINE_3D*
 dwg_add_POLYLINE_3D (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                      const int num_pts,
                      const dwg_point_3d *restrict pts) __nonnull_all;
+/* invisible face edge if negative
+   no 4th edge (ie a triangle) if the last face has index 0 (starts with 1)
+*/
 EXPORT Dwg_Entity_POLYLINE_PFACE*
 dwg_add_POLYLINE_PFACE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                         const unsigned numverts,
