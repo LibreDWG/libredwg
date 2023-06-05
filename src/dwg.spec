@@ -1217,8 +1217,7 @@ DWG_ENTITY (VERTEX_PFACE_FACE)
     FIELD_BS (vertind[0], 71);
     FIELD_BS (vertind[1], 72);
     FIELD_BS (vertind[2], 73);
-    if (FIELD_VALUE (vertind[3]))
-      FIELD_BS (vertind[3], 74);
+    FIELD_BS0 (vertind[3], 74);
   }
 #else
   //FIELD_VALUE (pt) = { 0.0, 0.0, 0.0 };
