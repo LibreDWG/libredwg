@@ -4446,8 +4446,6 @@ DWG_TABLE (APPID)
     } else {
       FIELD_RC (unknown, 71);
     }
-  }
-  SINCE (R_13b1) {
     START_OBJECT_HANDLE_STREAM;
   }
 DWG_OBJECT_END
