@@ -1369,8 +1369,11 @@ json_write_TF (Bit_Chain *restrict dat, const BITCODE_TF restrict src,
   for (size_t i = 0; i < len; i++)
     {
       const unsigned char c = src[i];
-      if (c == '\r' || c == '\n' || c == '"')
-        fputc ('\\', dat->fh);
+      if (c == '\r' || c == '\n' || c == '"' || c == '\\')
+        {
+          fputc ('\\', dat->fh);
+          fputc (c, dat->fh);
+        }
       else if (c == '\\' && i + 6 < len && src[i] == 'U' && src[i + 1] == '+'
                && ishex (src[i + 2]) && ishex (src[i + 3])
                && ishex (src[i + 4]) && ishex (src[i + 5]))
@@ -1400,9 +1403,7 @@ json_write_TF (Bit_Chain *restrict dat, const BITCODE_TF restrict src,
             }
         }
       else if (c < 0x1f)
-        {
-          fprintf (dat->fh, "\\u00%02x", c);
-        }
+        fprintf (dat->fh, "\\u00%02x", c);
       else
         fputc (c, dat->fh);
     }
