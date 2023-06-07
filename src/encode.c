@@ -1873,6 +1873,24 @@ section_info_rebuild (Dwg_Data *dwg, Dwg_Section_Type lasttype)
     }
 }
 
+static void
+calc_preR13_ctrl_flags_r11 (Dwg_Data *restrict dwg, Dwg_Section *tbl, int i)
+{
+  const Dwg_Version_Type ver = dwg->header.version;
+  /* TODO Saved by R_2_0 is unknown */
+  /* TODO Drawings from AutoCAD release distribution had increasing numbers */
+  if (ver <= R_2_10) {
+    /* Different numbers 0x800f, 0x8010, 0x8011 all same from saved drawing by r2.17/r2.18 */
+    tbl->flags_r11 = 0x800f;
+  } else if (ver < R_9) {
+    /* Increasing values (0x8008 - 0x800c), saved by R2.6 */
+    tbl->flags_r11 = 0x8007 + i;
+  } else {
+    /* Saved from R9, R10 and R11 */
+    tbl->flags_r11 = 0;
+  }
+}
+
 // see below for the elements
 static void
 calc_preR13_ctrl_size (Dwg_Data *restrict dwg, Dwg_Object *obj)
@@ -1974,8 +1992,8 @@ encode_preR13_section_hdr (const char *restrict name, const Dwg_Section_Type_r11
             calc_preR13_ctrl_size (dwg, obj);                                 \
           tbl->size = obj->size;                                              \
           tbl->number = _obj->num_entries;                                    \
-          /* flags_r11 0x8008 - 0x800c */                                     \
-          tbl->flags_r11 = (dwg->header.version >= R_9) ? 0 : 0x8007 + i;     \
+          if (!tbl->flags_r11)                                                \
+            calc_preR13_ctrl_flags_r11 (dwg, tbl, i);                         \
           tbl->address = addr;                                                \
           addr += tbl->size * tbl->number;                                    \
           if (dat->version >= R_11)                                           \
