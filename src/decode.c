@@ -1974,6 +1974,7 @@ read_R2004_section_info (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
 }
 
 /* Encrypted Section Header */
+#pragma pack(push)
 #pragma pack(1)
 typedef union _encrypted_section_header
 {
@@ -6925,5 +6926,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
 
   return error;
 }
+
+#pragma pack(pop)
 
 #undef IS_DECODER
