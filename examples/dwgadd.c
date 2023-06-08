@@ -1011,7 +1011,8 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          "attdef %lf %d " FMT_ANY " (%lf %lf %lf) " FMT_TAG
                          " " FMT_ANY,
                          &height, &flags, prompt SZ, &pt1.x, &pt1.y,
-                         &pt1.z, tag SZ, default_text SZ))
+                         &pt1.z, tag SZ, default_text SZ)
+               && hdr)
         {
           if (version < R_2_0b)
             fn_error ("Invalid entity ATTDEF <r2.0b\n");
