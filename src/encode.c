@@ -2552,6 +2552,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               = 0x80000000
                 + ((dat->byte - dwg->header.extras_start) & 0x8FFFFFFF);
         }
+      else
+        num_extra_entities = 0;
       write_sentinel (dat, DWG_SENTINEL_R11_EXTRA_ENTITIES_END);
       LOG_TRACE ("\nextra_entities %u 0x%x - 0x%x (0x%x)\n",
                  num_extra_entities,
