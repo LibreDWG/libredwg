@@ -1232,7 +1232,7 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
         {
           static char _buf[1024] = { 0 };
           const size_t origlen = strlen (str);
-          size_t len = (2 * origlen) + 1;
+          long len = (long)((2 * origlen) + 1);
           if (len > 1024)
             { // FIXME: maybe we need this for chunked strings
               fprintf (dat->fh, "\r\n");
@@ -1240,14 +1240,15 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
               return;
             }
           *_buf = '\0';
-          len = strlen (cquote (_buf, len, str));
+          len = (long)strlen (cquote (_buf, len, str));
           if (len > 255 && dxf == 1)
             {
               char *bufp = &_buf[0];
               // GROUP 1 already printed
               while (len > 0)
                 {
-                  fprintf (dat->fh, "%.*s\r\n", len > 255 ? 255 : (int)len, bufp);
+                  int rlen = len > 255 ? 255 : len;
+                  fprintf (dat->fh, "%.*s\r\n", rlen, bufp);
                   len -= 255;
                   bufp += 255;
                   if (len > 0)
@@ -1259,16 +1260,17 @@ dxf_fixup_string (Bit_Chain *restrict dat, char *restrict str, const int opts,
         }
       else
         {
-          size_t len = strlen (str);
+          long len = (long)strlen (str);
           if (len > 255 && dxf == 1)
             {
               // GROUP 1 already printed
               while (len > 0)
                 {
-                  fprintf (dat->fh, "%.*s\r\n", len > 255 ? 255 : (int)len, str);
+                  int rlen = len > 255 ? 255 : len;
+                  fprintf (dat->fh, "%.*s\r\n", (int)rlen, str);
                   len -= 255;
                   str += 255;
-                  if (len > 0)
+                  if (len > 255)
                     fprintf (dat->fh, "  3\r\n");
                 }
             }

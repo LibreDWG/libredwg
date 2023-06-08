@@ -29,7 +29,7 @@
 #  error in_dxf.h must be included after decode.h because of FORMAT_BD
 #endif
 
-#define REFS_PER_REALLOC 128
+#define REFS_PER_REALLOC 16384
 
 typedef enum ENTITY_SECTION_INDEX_R11
 {
