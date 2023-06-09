@@ -385,6 +385,15 @@ AC_ARG_ENABLE([trace],AS_HELP_STRING([--enable-trace],[
   AC_MSG_RESULT([yes]),
   AC_MSG_RESULT([no (default)]))
 
+AC_MSG_CHECKING([for --disable-werror])
+AC_ARG_ENABLE([werror],AS_HELP_STRING([--disable-werror],[
+    Disable -Werror (default: no).]),[],[enable_werror=yes])
+AS_IF([test x$enable_werror != xno],
+  [AC_DEFINE([HAVE_WERROR],1,[If -Werror is enabled.])
+   WARN_CFLAGS="-Werror $WARN_CFLAGS"
+   AC_MSG_RESULT([no (default)])],
+  [AC_MSG_RESULT([yes])])
+
 AC_CHECK_FUNCS([setenv],[],
   AS_IF([test x$enable_trace = xyes],
     [AC_MSG_WARN([setenv not found. --enable-trace is limited with cmdline apps.

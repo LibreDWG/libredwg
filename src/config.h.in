@@ -282,6 +282,9 @@
 /* Define to 1 if you have the <wctype.h> header file. */
 #undef HAVE_WCTYPE_H
 
+/* If -Werror is enabled. */
+#undef HAVE_WERROR
+
 /* Define if -Wformat-y2k is supported. */
 #undef HAVE_WFORMAT_Y2K
 

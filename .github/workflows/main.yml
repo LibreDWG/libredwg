@@ -204,7 +204,7 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
-    - run: cmake -G "MinGW Makefiles" .
+    - run: cmake -G "MinGW Makefiles" -DDISABLE_WERROR=ON .
     - run: mingw32-make -j VERBOSE=1 | tee make.log
     - if: failure()
       run: tar cfz msys-failure.tgz make.log src/config.h

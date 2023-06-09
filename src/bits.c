@@ -871,7 +871,7 @@ bit_nan (void)
 #ifdef IS_RELEASE
   return 0.0;
 #else
-  double result;
+  double result = 0;
   int32_t *res = (int32_t *)&result;
   res[0] = -1;
   res[1] = -1;
