@@ -1553,7 +1553,7 @@
               SAFEDXFNAME, (unsigned long)times,                              \
               (unsigned long)((times) * sizeof (type)), AVAIL_BITS (dat));    \
   if ((int64_t)((times) * sizeof (type)) > AVAIL_BITS (dat)                   \
-      || times > 0xc0000000 / sizeof (type))                                  \
+      || (sizeof (times) > 4 && times > 0xc0000000 / sizeof (type)))          \
     {                                                                         \
       LOG_ERROR ("Invalid %s." #name " x %ld\n", SAFEDXFNAME, (long)times);   \
       times = 0;                                                              \
