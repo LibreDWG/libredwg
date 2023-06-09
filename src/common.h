@@ -187,6 +187,18 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #  define CLANG_DIAG_RESTORE
 #endif
 
+/* for GCC80_DIAG_IGNORE (-Wstringop-truncation)
+   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88780
+ */
+#if _GNUC_VERSION >= 800
+#  define GCC80_DIAG_IGNORE(x)                                                \
+    _Pragma ("GCC diagnostic push") CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
+#  define GCC80_DIAG_RESTORE _Pragma ("GCC diagnostic pop")
+#else
+#  define GCC80_DIAG_IGNORE(w)
+#  define GCC80_DIAG_RESTORE
+#endif
+
 /* for GCC46_DIAG_IGNORE (-Wdeprecated-declarations) or (-Wformat-nonliteral),
    stacked inside functions.
    clang 10.2 defines gcc compat version 4.2 though (402) */
@@ -214,8 +226,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #  define GCC31_DIAG_IGNORE(w)
 #endif
 /* for GCC33_DIAG_IGNORE (-Wswitch-enum) outside functions
-   -Wswitch-enum appeared first with gcc 3.3.6
- */
+   -Wswitch-enum appeared first with gcc 3.3.6 */
 #if _GNUC_VERSION >= 330 && !defined HAVE_CC_DIAG_STACK
 #  define GCC33_DIAG_IGNORE(x) CC_DIAG_PRAGMA (GCC diagnostic ignored #x)
 #else

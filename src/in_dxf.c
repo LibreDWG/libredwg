@@ -6236,9 +6236,11 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
       const char _control[] = "_CONTROL";
       // -Wstringop-truncation bug:
       // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88780
+      GCC80_DIAG_IGNORE (-Wstringop-truncation)
       strncpy (ctrlname, name, sizeof (ctrlname) - sizeof (_control) - 1);
       ctrlname[sizeof (ctrlname) - sizeof (_control)] = '\0';
-      strcat (ctrlname, _control);
+      strncat (ctrlname, _control, sizeof (ctrlname) - 1);
+      GCC80_DIAG_RESTORE
     }
   LOG_TRACE ("add %s\n", ctrlname);
   dxfname = strdup (ctrlname);
@@ -6317,10 +6319,12 @@ new_table_control (const char *restrict name, Bit_Chain *restrict dat,
             // also set the matching HEADER.*_CONTROL_OBJECT
             // -Wstringop-truncation bug:
             // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88780
+            GCC80_DIAG_IGNORE (-Wstringop-truncation)
             strncpy (ctrlobj, ctrlname,
                      sizeof (ctrlobj) - sizeof (_object) - 1);
             ctrlname[sizeof (ctrlobj) - sizeof (_object)] = '\0';
-            strcat (ctrlobj, _object);
+            strncat (ctrlobj, _object, sizeof (ctrlobj) - 1);
+            GCC80_DIAG_RESTORE
             dwg_dynapi_header_set_value (dwg, ctrlobj, &ref, 0);
             LOG_TRACE ("HEADER.%s = " FORMAT_REF " [H 0]\n", ctrlobj,
                        ARGS_REF (ref));
