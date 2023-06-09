@@ -350,7 +350,7 @@ const unsigned char dwg_bits_size[] = {
    "ref[rcount1].classname"). s is a global constant (#nam), so we cannot
    change it in-place.
  */
-char *
+EXPORT char *
 strrplc (const char *s, const char *from, const char *to)
 {
   const char *p = strstr (s, from);

@@ -859,7 +859,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           *dwgp = dwg;
 
           mspace = dwg_model_space_object (dwg);
-          hdr = mspace->tio.object->tio.BLOCK_HEADER;
+          hdr = mspace ? mspace->tio.object->tio.BLOCK_HEADER : NULL;
           orig_num = dwg->num_objects;
           initial = 0;
           LOG_TRACE ("==========================================\n");
@@ -997,15 +997,28 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       if (memBEGINc (p, "pspace\n"))
         {
           Dwg_Object *pspace = dwg_paper_space_object (dwg);
-          hdr = pspace->tio.object->tio.BLOCK_HEADER;
-          hdr_s = "pspace";
-          LOG_TRACE ("pspace\n");
+          if (pspace)
+            {
+              hdr = pspace->tio.object->tio.BLOCK_HEADER;
+              hdr_s = "pspace";
+              LOG_TRACE ("pspace\n");
+            }
+          else
+            fn_error ("Empty pspace object\n");
         }
       else if (memBEGINc (p, "mspace\n"))
         {
-          hdr = mspace->tio.object->tio.BLOCK_HEADER;
-          hdr_s = "mspace";
-          LOG_TRACE ("mspace\n");
+          if (mspace)
+            {
+              // gcc -O2 ubsan bug
+              GCC80_DIAG_IGNORE (-Wmaybe-uninitialized)
+              hdr = mspace->tio.object->tio.BLOCK_HEADER;
+              GCC80_DIAG_RESTORE
+              hdr_s = "mspace";
+              LOG_TRACE ("mspace\n");
+            }
+          else
+            fn_error ("Empty mspace object\n");
         }
       else if (8 == SSCANF_S (p,
                          "attdef %lf %d " FMT_ANY " (%lf %lf %lf) " FMT_TAG
@@ -1019,10 +1032,12 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           LOG_TRACE ("add_ATTDEF %s %f %d \"%s\" (%f %f %f) %s \"%s\"\n",
                      hdr_s, height, flags, prompt, pt1.x, pt1.y, pt1.z,
                      tag, default_text);
+          GCC80_DIAG_IGNORE (-Wmaybe-uninitialized)
           ent = (lastent_t){ .u.attdef
                              = dwg_add_ATTDEF (hdr, height, flags, prompt,
                                                &pt1, tag, default_text),
                              .type = DWG_TYPE_ATTDEF };
+          GCC80_DIAG_RESTORE
         }
       else
         // clang-format off

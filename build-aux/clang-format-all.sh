@@ -92,6 +92,7 @@ for dir in "$@"; do
            -e's, (-Wpragma - pack), (-Wpragma-pack),;' \
            -e's, (-Wswitch - enum), (-Wswitch-enum),;' \
            -e's, (-Wformat - y2k), (-Wformat-y2k),;' \
+           -e's, (-Wmaybe - uninitialized), (-Wmaybe-uninitialized),;' \
            -e's, (-Wstringop - truncation), (-Wstringop-truncation),;' \
         `grep -l 'DIAG_IGNORE' */*.{c,h} *.{c,h}`
     if [ X$dir = Xexamples ]; then

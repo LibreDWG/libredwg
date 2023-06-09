@@ -1380,10 +1380,11 @@ api_common_entity (dwg_object *obj)
           if (g_counter > g_countmax)                                         \
             pass ();                                                          \
           else                                                                \
-            ok (#name "." #field ":\t" FORMAT_##typ, field);                  \
+            ok (#name "." #field ":\t" FORMAT_##typ, (BITCODE_##typ)field);   \
         }                                                                     \
       else                                                                    \
-        fail (#name "." #field ":\t" FORMAT_##typ " [" #typ "]", field);      \
+        fail (#name "." #field ":\t" FORMAT_##typ " [" #typ "]",              \
+              (BITCODE_##typ)field);                                          \
     }
 
 #define CHK_ENTITY_CMC(ent, name, field)                                      \
@@ -1711,11 +1712,12 @@ api_common_entity (dwg_object *obj)
             if (g_counter > g_countmax)                                       \
               pass ();                                                        \
             else                                                              \
-              ok (#name "." #field ":\t" FORMAT_##typ, ptr.field);            \
+              ok (#name "." #field ":\t" FORMAT_##typ,                        \
+                  (BITCODE_##typ)ptr.field);                                  \
           }                                                                   \
         else                                                                  \
           fail (#name "." #field ":\t" FORMAT_##typ " [" #typ "]",            \
-                ptr.field);                                                   \
+                (BITCODE_##typ)ptr.field);                                    \
       }                                                                       \
   }
 #define CHK_SUBCLASS_3RD(ptr, name, field)                                    \
