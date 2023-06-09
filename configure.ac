@@ -270,7 +270,8 @@ AX_GCC_FUNC_ATTRIBUTE(format)
 AX_GCC_FUNC_ATTRIBUTE(malloc)
 AX_GCC_FUNC_ATTRIBUTE(returns_nonnull)
 AX_GCC_FUNC_ATTRIBUTE(noreturn)
-if test x$ax_cv_check_cflags__Wformat_y2k = xyes
+if test x$ax_cv_check_cflags__Wformat_y2k = xyes || \
+   test x$ax_cv_check_cflags__Wformat_2__Wformat_y2k = xyes
 then
   AC_DEFINE(HAVE_WFORMAT_Y2K, 1, [Define if -Wformat-y2k is supported.])
 fi

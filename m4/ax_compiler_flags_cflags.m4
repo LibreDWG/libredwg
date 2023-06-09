@@ -26,7 +26,7 @@
 #   and this notice are preserved.  This file is offered as-is, without any
 #   warranty.
 
-#serial 17
+#serial 18
 
 AC_DEFUN([AX_COMPILER_FLAGS_CFLAGS],[
     AC_REQUIRE([AC_PROG_SED])
@@ -128,6 +128,25 @@ AC_DEFUN([AX_COMPILER_FLAGS_CFLAGS],[
             $6 dnl
             $7 dnl
         ],ax_warn_cflags_variable,[$ax_compiler_flags_test])
+        # mingw gcc requires -Wformat with the -Wformat suboptions
+        if test x$ax_cv_check_cflags__Wformat_2 = xyes
+        then
+            if test x$ax_cv_check_cflags__Wformat_nonliteral = xno
+            then
+                AX_CHECK_COMPILE_FLAG([-Wformat=2 -Wformat-nonliteral],
+                  [AX_APPEND_FLAG([-Wformat-nonliteral], [ax_warn_cflags_variable])], [], [$ax_compiler_flags_test], [])
+            fi
+            if test x$ax_cv_check_cflags__Wformat_security = xno
+            then
+                AX_CHECK_COMPILE_FLAG([-Wformat=2 -Wformat-security],
+                  [AX_APPEND_FLAG([-Wformat-security], [ax_warn_cflags_variable])], [], [$ax_compiler_flags_test], [])
+            fi
+            if test x$ax_cv_check_cflags__Wformat_y2k = xno
+            then
+                AX_CHECK_COMPILE_FLAG([-Wformat=2 -Wformat-y2k],
+                  [AX_APPEND_FLAG([-Wformat-y2k], [ax_warn_cflags_variable])], [], [$ax_compiler_flags_test], [])
+            fi
+        fi
         if test "$ax_compiler_cxx" = "no" ; then
             # C-only flags. Warn in C++
             AX_APPEND_COMPILE_FLAGS([ dnl
