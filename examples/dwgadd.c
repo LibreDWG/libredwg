@@ -1027,7 +1027,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else
         // clang-format off
         SET_ENT (attdef, ATTDEF)
-      // clang-format on
+        // clang-format on
       else if (7 == SSCANF_S (p,
                          "attrib %lf %d (%lf %lf %lf) " FMT_TAG
                          " " FMT_ANY,
@@ -1051,7 +1051,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else
         // clang-format off
         SET_ENT (attrib, ATTRIB)
-      // clang-format on
+        // clang-format on
       else if (6 == SSCANF_S (p, "line (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
                          &pt1.z, &pt2.x, &pt2.y, &pt2.z))
         {
@@ -1061,9 +1061,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          .type = DWG_TYPE_LINE };
         }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (line, LINE)
-      // clang-format on
+        // clang-format on
       else if (6 == SSCANF_S (p, "ray (%lf %lf %lf) (%lf %lf %lf)", &pt1.x, &pt1.y,
                          &pt1.z, &pt2.x, &pt2.y, &pt2.z))
       {
@@ -1075,9 +1075,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_RAY };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (ray, RAY)
-      // clang-format on
+        // clang-format on
       else if (6 == SSCANF_S (p, "xline (%lf %lf %lf) (%lf %lf %lf)", &pt1.x,
                          &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z))
       {
@@ -1089,9 +1089,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_XLINE };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (xline, XLINE)
-      // clang-format on
+        // clang-format on
       else if ((i = SSCANF_S (p, "text " FMT_ANY " (%lf %lf %lf) %lf\n", text,
                               &pt1.x, &pt1.y, &pt1.z, &height)) >= 5)
       {
@@ -1103,9 +1103,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_TEXT };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (text, TEXT)
-      // clang-format on
+        // clang-format on
       else if (5 == SSCANF_S (p, "mtext (%lf %lf %lf) %lf " FMT_ANY, &pt1.x, &pt1.y,
                          &pt1.z, &height, text SZ))
       {
@@ -1140,9 +1140,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           dwg_add_ENDBLK (hdr);
         }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (endblk, ENDBLK)
-      // clang-format on
+        // clang-format on
       else if (8 == SSCANF_S (p, "insert (%lf %lf %lf) " FMT_TBL " %lf %lf %lf %lf",
                          &pt1.x, &pt1.y, &pt1.z, text SZ, &scale.x,
                          &scale.y, &scale.z, &rot))
@@ -1189,9 +1189,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_POINT };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (point, POINT)
-      // clang-format on
+        // clang-format on
       else if (4 == SSCANF_S (p, "circle (%lf %lf %lf) %lf", &pt1.x, &pt1.y,
                               &pt1.z, &f1))
       {
@@ -1200,9 +1200,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_CIRCLE };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (circle, CIRCLE)
-      // clang-format on
+        // clang-format on
       else if (6 == SSCANF_S (p, "arc (%lf %lf %lf) %lf %lf %lf", &pt1.x, &pt1.y,
                               &pt1.z, &len, &f1, &f2))
       {
@@ -1213,9 +1213,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_ARC };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (arc, ARC)
-      // clang-format on
+        // clang-format on
       else if (9 == SSCANF_S (p,
                          "dimension_aligned (%lf %lf %lf) (%lf %lf %lf) (%lf "
                          "%lf %lf)",
@@ -1230,9 +1230,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_DIMENSION_ALIGNED };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (dimali, DIMENSION_ALIGNED)
-      // clang-format on
+        // clang-format on
       else if (10 == SSCANF_S (
                    p,
                    "dimension_linear (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
@@ -1248,9 +1248,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_DIMENSION_LINEAR };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (dimlin, DIMENSION_LINEAR)
-      // clang-format on
+        // clang-format on
       else if (12 == SSCANF_S (
                    p,
                    "dimension_ang2ln (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
@@ -1267,9 +1267,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_DIMENSION_ANG2LN };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (dimang2ln, DIMENSION_ANG2LN)
-      // clang-format on
+        // clang-format on
       else if (12 == SSCANF_S (
                    p,
                    "dimension_ang3pt (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
@@ -1286,9 +1286,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_DIMENSION_ANG3PT };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (dimang3pt, DIMENSION_ANG3PT)
-      // clang-format on
+        // clang-format on
       else if (7 == SSCANF_S (p,
                          "dimension_diameter (%lf %lf %lf) (%lf %lf %lf) %lf",
                          &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len))
@@ -1300,9 +1300,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_DIMENSION_DIAMETER };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (dimdia, DIMENSION_DIAMETER)
-      // clang-format on
+        // clang-format on
       else if (7 == SSCANF_S (p,
                          "dimension_ordinate (%lf %lf %lf) (%lf %lf %lf) %d",
                          &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &i1))
@@ -1315,9 +1315,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_DIMENSION_ORDINATE };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (dimord, DIMENSION_ORDINATE)
-      // clang-format on
+        // clang-format on
       else if (7 == SSCANF_S (p, "dimension_radius (%lf %lf %lf) (%lf %lf %lf) %lf",
                          &pt1.x, &pt1.y, &pt1.z, &pt2.x, &pt2.y, &pt2.z, &len))
       {
@@ -1328,9 +1328,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          .type = DWG_TYPE_DIMENSION_RADIUS };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (dimrad, DIMENSION_RADIUS)
-      // clang-format on
+        // clang-format on
       else if (12 == SSCANF_S (p,
                          "3dface (%lf %lf %lf) (%lf %lf %lf) (%lf %lf "
                          "%lf) (%lf %lf %lf)",
@@ -1358,9 +1358,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE__3DFACE };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (_3dface, _3DFACE)
-      // clang-format on
+        // clang-format on
       else if (9 == SSCANF_S (p,
                          "solid (%lf %lf %lf) (%lf %lf) (%lf %lf)  (%lf %lf)",
                          &pt1.x, &pt1.y, &pt1.z, &p2.x, &p2.y, &p3.x, &p3.y,
@@ -1373,9 +1373,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_SOLID };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (solid, SOLID)
-      // clang-format on
+        // clang-format on
       else if (9 == SSCANF_S (p,
                          "trace (%lf %lf %lf) (%lf %lf) (%lf %lf)  (%lf %lf)",
                          &pt1.x, &pt1.y, &pt1.z, &p2.x, &p2.y, &p3.x, &p3.y,
@@ -1388,9 +1388,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                              .type = DWG_TYPE_TRACE };
         }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (trace, TRACE)
-      // clang-format on
+        // clang-format on
       else if (3 == SSCANF_S (p, "polyline_2d %d ((%lf %lf)", &i1, &pt1.x, &pt1.y))
       {
         dwg_point_2d *pts = scan_pts2d (i1, &p);
@@ -1410,9 +1410,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           }
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (polyline_2d, POLYLINE_2D)
-      // clang-format on
+        // clang-format on
       else if (4 == SSCANF_S (p, "polyline_3d %d ((%lf %lf %lf)", &i1, &pt1.x,
                               &pt1.y, &pt1.z))
       {
@@ -1433,9 +1433,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           }
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (polyline_3d, POLYLINE_3D)
-      // clang-format on
+        // clang-format on
       else if (5 == SSCANF_S (p, "polyline_mesh %d %d ((%lf %lf %lf)", &i1, &i2,
                               &pt1.x, &pt1.y, &pt1.z))
       {
@@ -1456,9 +1456,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           }
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (polyline_mesh, POLYLINE_MESH)
-      // clang-format on
+        // clang-format on
       else if (5 == SSCANF_S (p, "polyline_pface %d %d ((%lf %lf %lf)", &i1, &i2,
                               &pt1.x, &pt1.y, &pt1.z))
       {
@@ -1561,9 +1561,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                                   .type = DWG_TYPE_DICTIONARY };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (dictionary, DICTIONARY)
-      // clang-format on
+        // clang-format on
       else if (1 == SSCANF_S (p, "xrecord dictionary " FMT_TBL, text SZ))
       {
         if (dict.type != DWG_TYPE_DICTIONARY)
@@ -1574,9 +1574,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_XRECORD };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (xrecord, XRECORD)
-      // clang-format on
+        // clang-format on
       else if (6 == SSCANF_S (p, "shape " FMT_PATH " (%lf %lf %lf) %lf %lf",
                               text SZ, &pt1.x, &pt1.y, &pt1.z, &scale.x, &rot))
       {
@@ -1587,9 +1587,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_SHAPE };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (shape, SHAPE)
-      // clang-format on
+        // clang-format on
       else if (1 == SSCANF_S (p, "viewport " FMT_TBL, text SZ))
       {
         LOG_TRACE ("add_VIEWPORT %s \"%s\"\n", hdr_s, text);
@@ -1597,9 +1597,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_VIEWPORT };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (viewport, VIEWPORT)
-      // clang-format on
+        // clang-format on
       else if (5 == SSCANF_S (p, "ellipse (%lf %lf %lf) %lf %lf", &pt1.x, &pt1.y,
                          &pt1.z, &f1, &f2))
       {
@@ -1611,9 +1611,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_ELLIPSE };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (ellipse, ELLIPSE)
-      // clang-format on
+        // clang-format on
       else if (4
                == SSCANF_S (p, "spline %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y,
                             &pt1.z))
@@ -1642,9 +1642,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         free (fitpts);
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (spline, SPLINE)
-      // clang-format on
+        // clang-format on
       else if (ent.type == DWG_TYPE_MTEXT
                && SSCANF_S (p, "leader %d ((%lf %lf %lf)", &i1, &pt1.x, &pt1.y,
                             &pt1.z))
@@ -1740,9 +1740,9 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                            .type = DWG_TYPE_VIEW };
       }
       else
-          // clang-format off
+        // clang-format off
         SET_ENT (view, VIEW)
-      // clang-format on
+        // clang-format on
       else if (1 == SSCANF_S (p, "vport " FMT_TBL, text SZ))
       {
         LOG_TRACE ("add_VPORT \"%s\"\n", text);
