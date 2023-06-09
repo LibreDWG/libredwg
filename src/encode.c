@@ -2021,13 +2021,14 @@ encode_preR13_section_hdr (const char *restrict name, const Dwg_Section_Type_r11
     }
   LOG_TRACE ("\nptr table %s [%d]: to:0x%zx\n", tbl->name, id,
              (size_t)(tbl->address + (tbl->number * tbl->size)));
-  bit_write_RS (dat, tbl->size); // calculated
-  bit_write_RS (dat, tbl->number);
+  bit_write_RS (dat, tbl->size & 0xFFFF); // calculated
+  bit_write_RS (dat, (BITCODE_RS)tbl->number);
   bit_write_RS (dat, tbl->flags_r11);
   tbl->address = dat->byte;
   bit_write_RL (dat, 0xDEADBEAF); // patched later
-  LOG_TRACE ("%s.size: " FORMAT_RS " [RS]\n", tbl->name, tbl->size);
-  LOG_TRACE ("%s.number: " FORMAT_RS " [RS]\n", tbl->name, tbl->number);
+  LOG_TRACE ("%s.size: " FORMAT_RL " [RS]\n", tbl->name, tbl->size);
+  LOG_TRACE ("%s.number: " FORMAT_RS " [RS]\n", tbl->name,
+             (BITCODE_RS)tbl->number);
   LOG_TRACE ("%s.flags_r11: " FORMAT_RSx " [RS]\n", tbl->name, tbl->flags_r11);
   LOG_TRACE ("%s.address: " FORMAT_RLx " [RL] (patch addr)\n", tbl->name,
              (BITCODE_RL)tbl->address);
