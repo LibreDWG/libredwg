@@ -1,15 +1,15 @@
 #define TEST_COMMON_H
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stddef.h>
+#include <stdarg.h>
 #ifndef DECODE_TEST_C
 static unsigned int loglevel;
 #  define DWG_LOGLEVEL loglevel
 #  include "logging.h"
 #endif
 #include "common.h"
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stddef.h>
-#include <stdarg.h>
 #if defined(BITS_TEST_C) || defined(DECODE_TEST_C)
 #  include "bits.h"
 #endif

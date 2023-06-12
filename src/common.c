@@ -20,7 +20,6 @@
 
 #include "config.h"
 #define COMMON_C
-#include "common.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,6 +27,7 @@
 #include <time.h>
 #include <math.h>
 #include <ctype.h>
+#include "common.h"
 #include "logging.h"
 
 // See also

@@ -1,6 +1,6 @@
 #define COMMON_TEST_C
-#include <stddef.h>
 #include <stdlib.h>
+#include <stddef.h>
 #include <locale.h>
 #include "tests_common.h"
 #include "../../src/common.c"
