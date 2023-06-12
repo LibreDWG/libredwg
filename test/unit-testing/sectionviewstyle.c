@@ -107,7 +107,7 @@ api_process (dwg_object *obj)
   // CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_arrowheads, B);
   // CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_viewlabel, B);
   // CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_all_plane_lines, B);
-  // CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_all_bend_indentifiers, B);
+  // CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_all_bend_identifiers, B);
   // CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_end_and_bend_lines, B);
   // CHK_ENTITY_TYPE (_obj, SECTIONVIEWSTYLE, show_hatching, B);
 }

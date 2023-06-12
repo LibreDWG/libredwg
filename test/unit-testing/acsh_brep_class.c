@@ -43,7 +43,7 @@ api_process (dwg_object *obj)
           CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, selection_marker, BLd);
           PRE (R_2004)
           {
-            CHK_SUBCLASS_TYPE (wires[i], 3DSOLID_wire, color, BS);
+            CHK_SUBCLASS_TYPE_CAST (wires[i], 3DSOLID_wire, color, BS, BL);
           }
           else
           {

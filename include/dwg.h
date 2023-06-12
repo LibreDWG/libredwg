@@ -7018,9 +7018,10 @@ typedef struct _dwg_object_SECTIONVIEWSTYLE
   BITCODE_BL viewstyle_flags; /* DXF 90. 1: cannot_rename */
   // AcDbSectionViewStyle
   BITCODE_BS class_version; /*!< DXF 70 0 */
-  BITCODE_BL flags; /* DXF 90. 1: cont_labeling, 2: show_arrowheads, 4: show_viewlabel, 
-                       8: show_allplanelines, 0x10: show_allbendids, 0x20 show_end+bendlines
-                       0x40: show_hatch ... */
+  BITCODE_BL flags; /* DXF 90. 1: is_continuous_labeling, 2: show_arrowheads,
+                       4: show_viewlabel,  8: show_all_plane_lines,
+                       0x10: show_all_bend_identifiers,
+                       0x20 show_end_and_bend_lines, 0x40: show_hatching ... */
   BITCODE_H identifier_style;
   BITCODE_CMC identifier_color;
   BITCODE_BD identifier_height;

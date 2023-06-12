@@ -1380,12 +1380,30 @@ api_common_entity (dwg_object *obj)
           if (g_counter > g_countmax)                                         \
             pass ();                                                          \
           else                                                                \
+            ok (#name "." #field ":\t" FORMAT_##typ, field);                  \
+        }                                                                     \
+      else                                                                    \
+        fail (#name "." #field ":\t" FORMAT_##typ " [" #typ "]", field);      \
+    }
+#define CHK_ENTITY_TYPE_CAST(ent, name, field, typ, cast)                     \
+  {                                                                           \
+    BITCODE_##cast _value;                                                    \
+  if (!dwg_dynapi_entity_value (ent, #name, #field, &field, NULL))            \
+    fail (#name "." #field);                                                  \
+  else                                                                        \
+    {                                                                         \
+      if (field == ent->field)                                                \
+        {                                                                     \
+          if (g_counter > g_countmax)                                         \
+            pass ();                                                          \
+          else                                                                \
             ok (#name "." #field ":\t" FORMAT_##typ, (BITCODE_##typ)field);   \
         }                                                                     \
       else                                                                    \
         fail (#name "." #field ":\t" FORMAT_##typ " [" #typ "]",              \
               (BITCODE_##typ)field);                                          \
-    }
+    }                                                                         \
+  }
 
 #define CHK_ENTITY_CMC(ent, name, field)                                      \
   if (!dwg_dynapi_entity_value (ent, #name, #field, &field, NULL))            \
@@ -1698,6 +1716,31 @@ api_common_entity (dwg_object *obj)
 #define CHK_SUBCLASS_TYPE(ptr, name, field, typ)                              \
   {                                                                           \
     BITCODE_##typ _value;                                                     \
+    bool _ok;                                                                 \
+    if (dwg_dynapi_entity_fields (#name))                                     \
+      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);     \
+    else                                                                      \
+      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &_value, NULL);   \
+    if (!_ok)                                                                 \
+      fail (#name "." #field);                                                \
+    else                                                                      \
+      {                                                                       \
+        if (ptr.field == _value)                                              \
+          {                                                                   \
+            if (g_counter > g_countmax)                                       \
+              pass ();                                                        \
+            else                                                              \
+              ok (#name "." #field ":\t" FORMAT_##typ,                        \
+                  (BITCODE_##typ)ptr.field);                                  \
+          }                                                                   \
+        else                                                                  \
+          fail (#name "." #field ":\t" FORMAT_##typ " [" #typ "]",            \
+                (BITCODE_##typ)ptr.field);                                    \
+      }                                                                       \
+  }
+#define CHK_SUBCLASS_TYPE_CAST(ptr, name, field, typ, cast)                   \
+  {                                                                           \
+    BITCODE_##cast _value;                                                    \
     bool _ok;                                                                 \
     if (dwg_dynapi_entity_fields (#name))                                     \
       _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &_value, NULL);     \

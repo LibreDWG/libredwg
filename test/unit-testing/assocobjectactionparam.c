@@ -10,7 +10,7 @@ api_process (dwg_object *obj)
   BITCODE_BL asdap_class_version; // 0
   BITCODE_H dep;
   /* AcDbAssocObjectActionParam */
-  BITCODE_BL class_version; /*!< DXF 90 */
+  BITCODE_BS class_version; /*!< DXF 90 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
   //#ifdef DEBUG_CLASSES
