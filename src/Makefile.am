@@ -163,15 +163,15 @@ endif
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-	$(COMPILE) -c -E -o $@ $<
+	$(COMPILE) -E -o $@ $<
 
 .c.ii: # no linemarkers
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-	$(COMPILE) -c -E -P -o $@ $<
+	$(COMPILE) -E -P -o $@ $<
 
 .c.ic: # replace the original .c with the expanded version.
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-	$(COMPILE) -c -E -P -o $@ $<
+	$(COMPILE) -E -P -o $@ $<
 	$(CLANG_FORMAT) -i $@
 	$(am__mv) $< $<.orig
 	$(am__mv) $@ $<

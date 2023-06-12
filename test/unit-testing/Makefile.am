@@ -402,7 +402,7 @@ dynapi_test.c: dynapi_test.c.in \
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-	$(COMPILE) -c -E -o $@ $<
+	$(COMPILE) -E -o $@ $<
 
 TESTS = $(check_PROGRAMS)
 if HAVE_PERL
