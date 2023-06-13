@@ -599,12 +599,16 @@ fn_error (const char *msg)
   exit (1);
 }
 
+#define CHK_MISSING_BLOCK_HEADER                                              \
+  if (!hdr)                                                                   \
+    fn_error ("Missing block header\n");                                      \
+
 static int
 dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
 {
   Dwg_Data *dwg = NULL;
-  Dwg_Object *mspace;
-  Dwg_Object_BLOCK_HEADER *hdr;
+  Dwg_Object *mspace = NULL;
+  Dwg_Object_BLOCK_HEADER *hdr = NULL;
   const char *end;
   char *p;
   Dwg_Version_Type version;
@@ -1024,14 +1028,14 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                          "attdef %lf %d " FMT_ANY " (%lf %lf %lf) " FMT_TAG
                          " " FMT_ANY,
                          &height, &flags, prompt SZ, &pt1.x, &pt1.y,
-                         &pt1.z, tag SZ, default_text SZ)
-               && hdr)
+                         &pt1.z, tag SZ, default_text SZ))
         {
           if (version < R_2_0b)
             fn_error ("Invalid entity ATTDEF <r2.0b\n");
           LOG_TRACE ("add_ATTDEF %s %f %d \"%s\" (%f %f %f) %s \"%s\"\n",
                      hdr_s, height, flags, prompt, pt1.x, pt1.y, pt1.z,
                      tag, default_text);
+          CHK_MISSING_BLOCK_HEADER
           GCC80_DIAG_IGNORE (-Wmaybe-uninitialized)
           ent = (lastent_t){ .u.attdef
                              = dwg_add_ATTDEF (hdr, height, flags, prompt,
@@ -1072,6 +1076,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         {
           LOG_TRACE ("add_LINE %s (%f %f %f) (%f %f %f)\n",
                      hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z);
+          CHK_MISSING_BLOCK_HEADER
           ent = (lastent_t){ .u.line = dwg_add_LINE (hdr, &pt1, &pt2),
                          .type = DWG_TYPE_LINE };
         }
@@ -1086,6 +1091,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           fn_error ("Invalid entity RAY <r13\n");
         LOG_TRACE ("add_RAY %s (%f %f %f) (%f %f %f)\n",
                    hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.ray = dwg_add_RAY (hdr, &pt1, &pt2),
                            .type = DWG_TYPE_RAY };
       }
@@ -1100,6 +1106,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           fn_error ("Invalid entity XLINE\n");
         LOG_TRACE ("add_XLINE %s (%f %f %f) (%f %f %f)\n",
                    hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.xline = dwg_add_XLINE (hdr, &pt1, &pt2),
                            .type = DWG_TYPE_XLINE };
       }
@@ -1114,8 +1121,11 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           text[strlen (text) - 1] = '\0'; // strip the \"
         LOG_TRACE ("add_TEXT %s %s (%f %f %f) %f\n", hdr_s, text, pt1.x,
                    pt1.y, pt1.z, height);
+        CHK_MISSING_BLOCK_HEADER
+        GCC80_DIAG_IGNORE (-Wmaybe-uninitialized)
         ent = (lastent_t){ .u.text = dwg_add_TEXT (hdr, text, &pt1, height),
                            .type = DWG_TYPE_TEXT };
+        GCC80_DIAG_RESTORE
       }
       else
         // clang-format off
@@ -1130,6 +1140,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           fn_error ("Invalid entity MTEXT\n");
         LOG_TRACE ("add_MTEXT %s (%f %f %f) %f \"%s\"\n",
                    hdr_s, pt1.x, pt1.y, pt1.z, height, text);
+        CHK_MISSING_BLOCK_HEADER
         mtext = ent = (lastent_t){ .u.mtext = dwg_add_MTEXT (hdr, &pt1,
                                                              height, text),
                                    .type = DWG_TYPE_MTEXT };
@@ -1142,6 +1153,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       {
         if (strlen (text) && text[strlen (text) - 1] == '"')
           text[strlen (text) - 1] = '\0'; // strip the \"
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.block = dwg_add_BLOCK (hdr, text),
                            .type = DWG_TYPE_BLOCK };
       }
@@ -1165,6 +1177,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         LOG_TRACE ("add_INSERT %s (%f %f %f) \"%s\" %f %f %f %f\n", hdr_s,
                    pt1.x, pt1.y, pt1.z, text, scale.x, scale.y, scale.z,
                    deg2rad (rot));
+        CHK_MISSING_BLOCK_HEADER
         insert = ent = (lastent_t){ .u.insert = dwg_add_INSERT (
                                         hdr, &pt1, text, scale.x, scale.y,
                                         scale.z, deg2rad (rot)),
@@ -1187,6 +1200,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
             "add_MINSERT %s (%f %f %f) \"%s\" %f %f %f %f %d %d %f %f\n",
             hdr_s, pt1.x, pt1.y, pt1.z, text, scale.x, scale.y, scale.z,
             deg2rad (rot), i1, i2, f1, f2);
+        CHK_MISSING_BLOCK_HEADER
         insert = ent
             = (lastent_t){ .u.minsert = dwg_add_MINSERT (
                                hdr, &pt1, text, scale.x, scale.y, scale.z,
@@ -1200,6 +1214,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else if (3 == SSCANF_S (p, "point (%lf %lf %lf)", &pt1.x, &pt1.y, &pt1.z))
       {
         LOG_TRACE ("add_POINT %s (%f %f %f)\n", hdr_s, pt1.x, pt1.y, pt1.z);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.point = dwg_add_POINT (hdr, &pt1),
                            .type = DWG_TYPE_POINT };
       }
@@ -1211,6 +1226,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                               &pt1.z, &f1))
       {
         LOG_TRACE ("add_CIRCLE %s (%f %f %f) %f\n", hdr_s, pt1.x, pt1.y, pt1.z, f1);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.circle = dwg_add_CIRCLE (hdr, &pt1, f1),
                            .type = DWG_TYPE_CIRCLE };
       }
@@ -1223,6 +1239,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       {
         LOG_TRACE ("add_ARC %s (%f %f %f) %f %f %f\n", hdr_s, pt1.x, pt1.y, pt1.z,
                    len, deg2rad (f1), deg2rad (f2));
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.arc = dwg_add_ARC (hdr, &pt1, len, deg2rad (f1),
                                                  deg2rad (f2)),
                            .type = DWG_TYPE_ARC };
@@ -1240,6 +1257,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         LOG_TRACE ("add_DIMENSION_ALIGNED %s (%f %f %f) (%f %f %f) (%f %f %f)\n",
                    hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z,
                    pt3.x, pt3.y, pt3.z);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.dimali
                            = dwg_add_DIMENSION_ALIGNED (hdr, &pt1, &pt2, &pt3),
                            .type = DWG_TYPE_DIMENSION_ALIGNED };
@@ -1258,6 +1276,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         LOG_TRACE ("add_DIMENSION_LINEAR %s (%f %f %f) (%f %f %f) (%f %f %f) %f\n",
                    hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z,
                    pt3.x, pt3.y, pt3.z, deg2rad (rot));
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.dimlin = dwg_add_DIMENSION_LINEAR (
                                hdr, &pt1, &pt2, &pt3, deg2rad (rot)),
                            .type = DWG_TYPE_DIMENSION_LINEAR };
@@ -1277,6 +1296,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                    "(%f %f %f)\n",
                    hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x,
                    pt3.y, pt3.z, pt4.x, pt4.y, pt4.z);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.dimang2ln = dwg_add_DIMENSION_ANG2LN (
                                hdr, &pt1, &pt2, &pt3, &pt4),
                            .type = DWG_TYPE_DIMENSION_ANG2LN };
@@ -1296,6 +1316,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                    "(%f %f %f)\n",
                    hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x,
                    pt3.y, pt3.z, pt4.x, pt4.y, pt4.z);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.dimang3pt = dwg_add_DIMENSION_ANG3PT (
                                hdr, &pt1, &pt2, &pt3, &pt4),
                            .type = DWG_TYPE_DIMENSION_ANG3PT };
@@ -1310,6 +1331,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       {
         LOG_TRACE ("add_DIMENSION_DIAMETER %s (%f %f %f) (%f %f %f) %f\n",
                    hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, len);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.dimdia
                            = dwg_add_DIMENSION_DIAMETER (hdr, &pt1, &pt2, len),
                            .type = DWG_TYPE_DIMENSION_DIAMETER };
@@ -1325,6 +1347,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         LOG_TRACE ("add_DIMENSION_ORDINATE %s (%f %f %f) (%f %f %f) %s\n",
                    hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z,
                    i1 ? "true" : "false");
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.dimord = dwg_add_DIMENSION_ORDINATE (
                                hdr, &pt1, &pt2, i1 ? true : false),
                            .type = DWG_TYPE_DIMENSION_ORDINATE };
@@ -1338,6 +1361,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       {
         LOG_TRACE ("add_DIMENSION_RADIUS %s (%f %f %f) (%f %f %f) %f\n",
                    hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, len);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.dimrad
                          = dwg_add_DIMENSION_RADIUS (hdr, &pt1, &pt2, len),
                          .type = DWG_TYPE_DIMENSION_RADIUS };
@@ -1355,6 +1379,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         LOG_TRACE ("add_3DFACE %s (%f %f %f) (%f %f %f) (%f %f %f) (%f %f %f)\n",
                    hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x,
                    pt3.y, pt3.z, pt4.x, pt4.y, pt4.z);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u._3dface
                            = dwg_add_3DFACE (hdr, &pt1, &pt2, &pt3, &pt4),
                            .type = DWG_TYPE__3DFACE };
@@ -1368,6 +1393,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         LOG_TRACE ("add_3DFACE %s (%f %f %f) (%f %f %f) (%f %f %f) NULL\n",
                    hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x,
                    pt3.y, pt3.z);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u._3dface
                            = dwg_add_3DFACE (hdr, &pt1, &pt2, &pt3, NULL),
                            .type = DWG_TYPE__3DFACE };
@@ -1384,6 +1410,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         LOG_TRACE ("add_SOLID %s (%f %f %f) (%f %f %f) (%f %f %f) (%f %f %f)\n",
                    hdr_s, pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, pt3.x,
                    pt3.y, pt3.z, pt4.x, pt4.y, pt4.z);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.solid = dwg_add_SOLID (hdr, &pt1, &p2, &p3, &p4),
                            .type = DWG_TYPE_SOLID };
       }
@@ -1399,6 +1426,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           LOG_TRACE ("add_TRACE %s (%f %f %f) (%f %f) (%f %f) (%f %f)\n",
                      hdr_s, pt1.x, pt1.y, pt1.z, p2.x, p2.y, p3.x, p3.y,
                      p4.x, p4.y);
+          CHK_MISSING_BLOCK_HEADER
           ent = (lastent_t){ .u.trace = dwg_add_TRACE (hdr, &pt1, &p2, &p3, &p4),
                              .type = DWG_TYPE_TRACE };
         }
@@ -1418,6 +1446,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                 LOG_TRACE (" (%f %f)", pts[i].x, pts[i].y);
               }
             LOG_TRACE (")\n");
+            CHK_MISSING_BLOCK_HEADER
             ent = (lastent_t){ .u.polyline_2d
                                = dwg_add_POLYLINE_2D (hdr, i1, pts),
                                .type = DWG_TYPE_POLYLINE_2D };
@@ -1441,6 +1470,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                 LOG_TRACE (" (%f %f %f)", pts[i].x, pts[i].y, pts[i].z);
               }
             LOG_TRACE (")\n");
+            CHK_MISSING_BLOCK_HEADER
             ent = (lastent_t){ .u.polyline_3d
                                = dwg_add_POLYLINE_3D (hdr, i1, pts),
                                .type = DWG_TYPE_POLYLINE_3D };
@@ -1464,6 +1494,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                 LOG_TRACE (" (%f %f %f)", pts[i].x, pts[i].y, pts[i].z);
               }
             LOG_TRACE (")\n");
+            CHK_MISSING_BLOCK_HEADER
             ent = (lastent_t){ .u.polyline_mesh
                                = dwg_add_POLYLINE_MESH (hdr, i1, i2, pts),
                                .type = DWG_TYPE_POLYLINE_MESH };
@@ -1512,6 +1543,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                   }
               }
             LOG_TRACE (")\n");
+            CHK_MISSING_BLOCK_HEADER
             ent = (lastent_t){ .u.polyline_pface
                                = dwg_add_POLYLINE_PFACE (hdr, i1, i2, verts, faces),
                                .type = DWG_TYPE_POLYLINE_PFACE };
@@ -1535,6 +1567,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                 LOG_TRACE (" (%f %f)", pts[i].x, pts[i].y);
               }
             LOG_TRACE (")\n");
+            CHK_MISSING_BLOCK_HEADER
             ent = (lastent_t){ .u.lwpolyline
                                = dwg_add_LWPOLYLINE (hdr, i1, pts),
                                .type = DWG_TYPE_LWPOLYLINE };
@@ -1558,6 +1591,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                 LOG_TRACE (" (%f %f %f)", pts[i].x, pts[i].y, pts[i].z);
               }
             LOG_TRACE (")\n");
+            CHK_MISSING_BLOCK_HEADER
             ent = (lastent_t){ .u.mline = dwg_add_MLINE (hdr, i1, pts),
                                .type = DWG_TYPE_MLINE };
             free (pts);
@@ -1597,6 +1631,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       {
         LOG_TRACE ("add_SHAPE %s \"%s\" (%f %f %f) %f %f\n", hdr_s, text,
                    pt1.x, pt1.y, pt1.z, scale.x, deg2rad (rot));
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.shape = dwg_add_SHAPE (hdr, text, &pt1, scale.x,
                                                      deg2rad (rot)),
                            .type = DWG_TYPE_SHAPE };
@@ -1608,6 +1643,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
       else if (1 == SSCANF_S (p, "viewport " FMT_TBL, text SZ))
       {
         LOG_TRACE ("add_VIEWPORT %s \"%s\"\n", hdr_s, text);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.viewport = dwg_add_VIEWPORT (hdr, text),
                            .type = DWG_TYPE_VIEWPORT };
       }
@@ -1622,6 +1658,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           fn_error ("Invalid entity ELLIPSE <r13\n");
         LOG_TRACE ("add_ELLIPSE %s (%f %f %f) %f %f\n", hdr_s, pt1.x,
                    pt1.y, pt1.z, f1, f2);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.ellipse = dwg_add_ELLIPSE (hdr, &pt1, f1, f2),
                            .type = DWG_TYPE_ELLIPSE };
       }
@@ -1650,6 +1687,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
               }
             LOG_TRACE (" (%f %f %f) (%f %f %f)\n", pt2.x, pt2.y, pt2.z, pt3.x,
                        pt3.y, pt3.z);
+            CHK_MISSING_BLOCK_HEADER
             ent = (lastent_t){ .u.spline
                                = dwg_add_SPLINE (hdr, i1, fitpts, &pt2, &pt3),
                                .type = DWG_TYPE_SPLINE };
@@ -1679,6 +1717,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
                 LOG_TRACE (" (%f %f %f)", pts[i].x, pts[i].y, pts[i].z);
               }
             LOG_TRACE (" mtext %d\n", i2);
+            CHK_MISSING_BLOCK_HEADER
             ent = (lastent_t){ .u.leader = dwg_add_LEADER (hdr, i1, pts,
                                                            mtext.u.mtext, i2),
                                .type = DWG_TYPE_LEADER };
@@ -1698,6 +1737,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           fn_error ("Invalid entity TOLERANCE <r13\n");
         LOG_TRACE ("add_TOLERANCE %s \"%s\" (%f %f %f) (%f %f %f)\n", hdr_s, text,
                    pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u.tolerance
                            = dwg_add_TOLERANCE (hdr, text, &pt1, &pt2),
                            .type = DWG_TYPE_TOLERANCE };
@@ -1831,6 +1871,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           fn_error ("Invalid entity TORUS <r13\n");
         LOG_TRACE ("add_TORUS %s (%f %f %f) (%f %f %f) %f %f\n", hdr_s,
                    pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, f1, f2);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u._3dsolid
                            = dwg_add_TORUS (hdr, &pt1, &pt2, f1, f2),
                            .type = DWG_TYPE__3DSOLID };
@@ -1842,6 +1883,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           fn_error ("Invalid entity SPHERE <r13\n");
         LOG_TRACE ("add_SPHERE %s (%f %f %f) (%f %f %f) %f\n", hdr_s,
                    pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, f1);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u._3dsolid
                              = dwg_add_SPHERE (hdr, &pt1, &pt2, f1),
                              .type = DWG_TYPE__3DSOLID };
@@ -1856,6 +1898,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         LOG_TRACE ("add_CYLINDER %s (%f %f %f) (%f %f %f) %f %f %f %f", hdr_s,
                    pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, height, f1, f2,
                    len);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u._3dsolid = dwg_add_CYLINDER (
                                hdr, &pt1, &pt2, height, f1, f2, len),
                            .type = DWG_TYPE__3DSOLID };
@@ -1869,6 +1912,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         LOG_TRACE ("add_CONE %s (%f %f %f) (%f %f %f) %f %f %f %f", hdr_s,
                    pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, height, f1, f2,
                    len);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u._3dsolid = dwg_add_CONE (hdr, &pt1, &pt2,
                                                        height, f1, f2, len),
                              .type = DWG_TYPE__3DSOLID };
@@ -1882,6 +1926,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         LOG_TRACE ("add_WEDGE %s (%f %f %f) (%f %f %f) %f %f %f", hdr_s,
                    pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, len, f1,
                    height);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u._3dsolid = dwg_add_WEDGE (hdr, &pt1, &pt2, len,
                                                         f1, height),
                            .type = DWG_TYPE__3DSOLID };
@@ -1895,6 +1940,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
         LOG_TRACE ("add_BOX %s (%f %f %f) (%f %f %f) %f %f %f", hdr_s,
                    pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, len, f1,
                    height);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u._3dsolid
                              = dwg_add_BOX (hdr, &pt1, &pt2, len, f1, height),
                            .type = DWG_TYPE__3DSOLID };
@@ -1908,6 +1954,7 @@ dwg_add_dat (Dwg_Data **dwgp, Bit_Chain *dat)
           fn_error ("Invalid entity PYRAMID <r13\n");
         LOG_TRACE ("add_PYRAMID %s (%f %f %f) (%f %f %f) %f %d %f %f", hdr_s,
                    pt1.x, pt1.y, pt1.z, pt2.x, pt2.y, pt2.z, height, i1, f1, f2);
+        CHK_MISSING_BLOCK_HEADER
         ent = (lastent_t){ .u._3dsolid = dwg_add_PYRAMID (
                                  hdr, &pt1, &pt2, height, i1, f1, f2),
                              .type = DWG_TYPE__3DSOLID };
