@@ -1719,11 +1719,16 @@ bit_read_TV (Bit_Chain *restrict dat)
   unsigned int length;
   unsigned char *chain;
 
-  CHK_OVERFLOW_PLUS (1, __FUNCTION__, NULL)
   if (dat->from_version < R_13b1)
-    length = bit_read_RS (dat);
+    {
+      CHK_OVERFLOW_PLUS (2, __FUNCTION__, NULL)
+      length = bit_read_RS (dat);
+    }
   else
-    length = bit_read_BS (dat);
+    {
+      CHK_OVERFLOW_PLUS (1, __FUNCTION__, NULL)
+      length = bit_read_BS (dat);
+    }
   CHK_OVERFLOW_PLUS (length, __FUNCTION__, NULL)
   if (!loglevel)
     loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
