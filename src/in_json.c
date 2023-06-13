@@ -365,7 +365,7 @@ json_string (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens)
   if (memchr (&dat->chain[t->start], '\\', len))
     {
       len += 8;
-      key = (char *)malloc (len);
+      key = (char *)calloc (1, len);
       if (!key)
         goto outofmemory;
       dat->chain[t->end] = '\0';

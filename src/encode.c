@@ -4538,7 +4538,10 @@ dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
       klass = &dwg->dwg_class[i];
       if (!klass->dxfname)
         return NULL;
-      obj->dxfname = klass->dxfname;
+      if (dwg->opts & DWG_OPTS_IN)
+        obj->dxfname = strdup (klass->dxfname);
+      else
+        obj->dxfname = klass->dxfname;
     }
   return klass;
 }
