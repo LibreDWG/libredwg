@@ -15,6 +15,7 @@
 [ -z "$DATADIR" ] && DATADIR="@top_srcdir@/test/test-data"
 top_builddir="@top_builddir@"
 EXEEXT="@EXEEXT@"
+DEBUG_CLASSES="@DEBUG_CLASSES@"
 if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
     TESTPROG="$LOG_COMPILER $LOG_FLAGS"
 elif [ -n "@WINE@" ]; then
@@ -29,13 +30,10 @@ then
 else    
     DXF2DWG="$TESTPROG ./dxf2dwg${EXEEXT}"
 fi
-# artefact for "shellcheck"
-[ -z "$top_builddir" ] && echo $top_builddir
 
 i=0
 rm -f ./*dxf.log
-enable_debug="$(grep '^CFLAGS =' Makefile | grep 'DDEBUG_CLASSES')"
-is_release="$(grep -c 'IS_RELEASE 1' ../src/config.h)"
+is_release="$(grep -c 'IS_RELEASE 1' $top_builddir/src/config.h)"
 
 check_subentity() {
     if [ -f "$dwg" ] && [ -f "$dxf" ]; then
@@ -90,7 +88,7 @@ check_acdb_dxfname() {
         then
             echo "$tgt $dxfname ok"
         else
-            echo "$tgt $dxfname fail: $got != $expect"
+            echo "$tgt $dxfname fail: got $got != expect $expect"
             i=$((i+1))
             grep -2 "^$dxfname" "$tgt" >"$log"
         fi
@@ -118,16 +116,14 @@ do
     tgt="../$(basename "$dxf")"
     log="$(basename "$tgt").log"
     rm "./$log" 2>/dev/null
-    if [ "$tgt" != "../example_r14.dxf" ] && [ "$tgt" != "../example_r13.dxf" ]; then
-        for dxfname in ACDBPERSSUBENTMANAGER ACDBASSOCDEPENDENCY
-        do
-            if [ -z "$enable_debug" ]; then
-                check_acdb_dxfname 1
-            else
-                check_acdb_dxfname
-            fi
-        done
-    fi
+    for dxfname in ACDBPERSSUBENTMANAGER ACDBASSOCDEPENDENCY
+    do
+        if [ "$DEBUG_CLASSES" = "1" ]; then
+            check_acdb_dxfname
+        else
+            check_acdb_dxfname 1
+        fi
+    done
 done
 
 # shellcheck disable=SC2043
@@ -198,8 +194,8 @@ check_roundtrip() {
             exit 1
         fi
         # We dont write unstable entities yet. WIPEOUT is converted to POINT in encode, but skipped at out_dxf
-        if [ -n "$enable_debug" ] && [ -z "$is_release" ]; then
-            expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (WIPEOUT|UNKNOWN_ENT)')"
+        if [ "$DEBUG_CLASSES" = "1" ] && [ -z "$is_release" ]; then
+            expect="$(grep -E '^Add entity' "$log1" | grep -c -v 'entity UNKNOWN_ENT')"
         else
             expect="$(grep -E '^Add entity' "$log1" | grep -E -c -v 'entity (WIPEOUT|ARC_DIMENSION|HELIX|UNKNOWN_ENT)')"
         fi
@@ -257,7 +253,8 @@ do
     check_insert_order
 done
 
-for year in 2000 2004 2007 2010 2013 2018
+# r14 fails on MINSERT
+for year in 2000 2004 2007 2010 2013 2018 r13 # r14
 do
     base=example
     dwg="$DATADIR/${base}_${year}.dwg"
@@ -266,6 +263,17 @@ do
     rm "./$log" 2>/dev/null
     check_roundtrip
 done
+#for d in r11/ACEB10 r11/entities-2d r10/entities r9/entities r2.10/entities \
+#         r2.6/entities r1.4/entities
+#do
+#    base="$(basename $d)"
+#    year="$(dirname $d)"
+#    dwg="$DATADIR/$d.dwg"
+#    tgt="../${base}_${year}"
+#    log="$tgt.dxf.log"
+#    rm "./$log" 2>/dev/null
+#    check_roundtrip
+#done
 
 if test "0" = "$i" ; then
     rm ./*.dxf.log 2>/dev/null
