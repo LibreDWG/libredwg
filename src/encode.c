@@ -4555,8 +4555,8 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
                           Dwg_Object *restrict obj)
 {
   int is_entity;
+  BITCODE_BS oldtype = obj->type;
   Dwg_Class *klass = dwg_encode_get_class (dwg, obj);
-
   if (!klass)
     return DWG_ERR_INVALIDTYPE;
   is_entity = dwg_class_is_entity (klass);
@@ -4616,7 +4616,6 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   if (dwg->opts & DWG_OPTS_IN) // DXF or JSON import
     {
       size_t pos = bit_position (dat);
-
       /* Should not be triggered. Only when undef ENCODE_UNKNOWN_AS_DUMMY */
       if (is_type_unstable (obj->fixedtype)
           && (obj->fixedtype == DWG_TYPE_WIPEOUT
@@ -4626,14 +4625,17 @@ dwg_encode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
           obj->type = is_entity ? DWG_TYPE_UNKNOWN_ENT : DWG_TYPE_PLACEHOLDER;
           klass->dxfname = strdup (is_entity ? "UNKNOWN_ENT" : "UNKNOWN_OBJ");
         }
-      dat->byte = obj->address;
-      dat->bit = 0;
-      LOG_TRACE ("fixup Type: %d [BS] @%zu\n", obj->type, obj->address);
-      bit_write_BS (dat, obj->type); // fixup wrong type
-      bit_set_position (dat, pos);
+      if (oldtype != obj->type)
+        {
+          dat->byte = obj->address;
+          dat->bit = 0;
+          LOG_TRACE ("fixup Type: %d [BS] @%zu\n", obj->type, obj->address);
+          bit_write_BS (dat, obj->type); // fixup wrong type
+          bit_set_position (dat, pos);
+        }
     }
 
-    // clang-format off
+  // clang-format off
   #include "classes.inc"
   // clang-format on
 
