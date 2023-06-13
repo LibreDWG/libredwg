@@ -4486,7 +4486,7 @@ dwg_encode_get_class (Dwg_Data *dwg, Dwg_Object *obj)
   if (!dwg || !dwg->dwg_class)
     return NULL;
   // indxf has a different class order
-  if (obj->dxfname) // search class by name, not offset
+  if (obj->dxfname && !strEQc(obj->dxfname, "TABLE")) // search class by name, not offset
     {
       int invalid_klass = 0;
       for (i = 0; i < dwg->num_classes; i++)
