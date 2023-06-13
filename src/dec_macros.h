@@ -1193,11 +1193,15 @@
             LOG_TRACE (#name "[%d]: \"%s\" [TV %d]", (int)vcount,             \
                        _obj->name[vcount], dxf)                               \
             LOG_POS                                                           \
+            if (!_obj->name[vcount])                                          \
+              return DWG_ERR_VALUEOUTOFBOUNDS;                                \
           }                                                                   \
           LATER_VERSIONS                                                      \
           {                                                                   \
             _obj->name[vcount] = (char *)bit_read_##type (dat);               \
             LOG_TRACE_TU_I (#name, vcount, _obj->name[vcount], type, dxf)     \
+            if (!_obj->name[vcount])                                          \
+              return DWG_ERR_VALUEOUTOFBOUNDS;                                \
           }                                                                   \
         }                                                                     \
     }

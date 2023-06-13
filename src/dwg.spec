@@ -9790,14 +9790,14 @@ DWG_OBJECT (DIMASSOC)
       SUB_VALUEOUTOFBOUNDS (ref[rcount1], num_xrefs, 100)
       SUB_HANDLE_VECTOR (ref[rcount1], xrefs, num_xrefs, 4, 331);
 
-// restrict only when writing, not when reading?
-//if (FIELD_VALUE (ref[rcount1].osnap_type) == 6 || FIELD_VALUE (ref[rcount1].osnap_type) == 11)
-//  {
+      // restrict only when writing, not when reading?
+      //if (FIELD_VALUE (ref[rcount1].osnap_type) == 6 || FIELD_VALUE (ref[rcount1].osnap_type) == 11)
+      // {
       SUB_FIELD_BL0 (ref[rcount1], main_subent_type, 73);
       SUB_FIELD_BL (ref[rcount1], main_gsmarker, 91);
       SUB_FIELD_BL (ref[rcount1], num_xrefpaths, 0);
       FIELD_VECTOR_T (ref[rcount1].xrefpaths, T, ref[rcount1].num_xrefpaths, 301)
-//  }
+      // }
       SUB_FIELD_B  (ref[rcount1], has_lastpt_ref, 75);
       if (FIELD_VALUE (ref[rcount1].has_lastpt_ref))
         {

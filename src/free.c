@@ -1591,7 +1591,6 @@ dwg_free (Dwg_Data *dwg)
       else
         dwg_free_header_vars (dwg);
       dwg_free_summaryinfo (dwg);
-      FREE_IF (dwg->thumbnail.chain);
       if (dwg->header.section_infohdr.num_desc)
         {
           for (i = 0; i < dwg->header.section_infohdr.num_desc; ++i)
@@ -1603,6 +1602,7 @@ dwg_free (Dwg_Data *dwg)
       dwg_free_security (dwg);
       dwg_free_acds (dwg);
 
+      FREE_IF (dwg->thumbnail.chain);
       FREE_IF (dwg->vbaproject.unknown_bits);
       FREE_IF (dwg->revhistory.histories);
       FREE_IF (dwg->appinfohistory.unknown_bits);
