@@ -897,7 +897,7 @@ static const char *_dwg_dxfnames_variable[] = {
   "SUNSTUDY",                                   /* 714 */
   "SWEPTSURFACE",                               /* 715 */
   "ACAD_TABLE",                                 /* 716 */
-  "TABLE",                                      /* 717 */
+  "TABLECONTENT",                               /* 717 */
   "TABLEGEOMETRY",                              /* 718 */
   "TABLESTYLE",                                 /* 719 */
   "ACDB_TEXTOBJECTCONTEXTDATA_CLASS",           /* 720 */

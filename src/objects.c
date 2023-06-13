@@ -1013,7 +1013,7 @@ in_word_set (const char *str, size_t len)
 #line 88 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str246,     "LINEARPARAMETERENTITY",      DWG_TYPE_LINEARPARAMETERENTITY,	1,	DEBUGGING},
 #line 348 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str247,                     "TABLE",                             DWG_TYPE_TABLECONTENT,	0,	DEBUGGING},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str247,                     "TABLECONTENT",                      DWG_TYPE_TABLECONTENT,	0,	DEBUGGING},
 #line 158 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str248,               "ACSH_PYRAMID_CLASS",                DWG_TYPE_ACSH_PYRAMID_CLASS,	0,	UNSTABLE},
 #line 128 "src/objects.in"

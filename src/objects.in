@@ -345,7 +345,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "STYLE_CONTROL",                    "STYLE_CONTROL",                     DWG_TYPE_STYLE_CONTROL,	0,	STABLE
 "SUN",                              "SUN",                               DWG_TYPE_SUN,	0,	UNSTABLE
 "SUNSTUDY",                         "SUNSTUDY",                          DWG_TYPE_SUNSTUDY,	0,	DEBUGGING
-"TABLECONTENT",                     "TABLE",                             DWG_TYPE_TABLECONTENT,	0,	DEBUGGING
+"TABLECONTENT",                     "TABLECONTENT",                      DWG_TYPE_TABLECONTENT,	0,	DEBUGGING
 "TABLEGEOMETRY",                    "TABLEGEOMETRY",                     DWG_TYPE_TABLEGEOMETRY,	0,	STABLE
 "TABLESTYLE",                       "TABLESTYLE",                        DWG_TYPE_TABLESTYLE,	0,	UNSTABLE
 "TEXTOBJECTCONTEXTDATA",            "ACDB_TEXTOBJECTCONTEXTDATA_CLASS",  DWG_TYPE_TEXTOBJECTCONTEXTDATA,	0,	UNSTABLE
