@@ -10427,29 +10427,29 @@ T,	DXF 1
 @item description
 T,	DXF 2
 @item ambient_color
-Dwg_MATERIAL_color
+Dwg_MATERIAL_color,	DXF 70
 @item diffuse_color
-Dwg_MATERIAL_color
+Dwg_MATERIAL_color,	DXF 71
 @item diffusemap
-Dwg_MATERIAL_mapper
+Dwg_MATERIAL_mapper,	DXF 42
 @item specular_gloss_factor
 BD,	DXF 44
 @item specular_color
-Dwg_MATERIAL_color
+Dwg_MATERIAL_color,	DXF 76
 @item specularmap
-Dwg_MATERIAL_mapper
+Dwg_MATERIAL_mapper,	DXF 42
 @item reflectionmap
-Dwg_MATERIAL_mapper
+Dwg_MATERIAL_mapper,	DXF 48
 @item opacity_percent
 BD,	DXF 140
 @item opacitymap
-Dwg_MATERIAL_mapper
+Dwg_MATERIAL_mapper,	DXF 141
 @item bumpmap
-Dwg_MATERIAL_mapper
+Dwg_MATERIAL_mapper,	DXF 143
 @item refraction_index
 BD,	DXF 145
 @item refractionmap
-Dwg_MATERIAL_mapper
+Dwg_MATERIAL_mapper,	DXF 146
 @item color_bleed_scale
 BD,	DXF 460
 @item indirect_bump_scale
