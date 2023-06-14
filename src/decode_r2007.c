@@ -1070,9 +1070,10 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
               return NULL;
             }
 
-          if (ptr + 56 >= ptr_end)
+          if (ptr + 56 > ptr_end)
             {
-              LOG_ERROR ("Section[%d]->pages[%d] overflow", j, i);
+              LOG_ERROR ("Section[%d]->pages[%d] overflow (%p > %p)", j,
+                         i, ptr + 56, ptr_end);
               free (section->pages[i]);
               section->num_pages = i; // skip this last section
               break;
