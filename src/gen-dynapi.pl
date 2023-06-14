@@ -532,6 +532,21 @@ $DXF{$_}->{'has_attribs'} = 66 for qw(INSERT MINSERT);
 $DXF{UNDERLAYDEFINITION}->{'filename'} = 1;
 $DXF{UNDERLAYDEFINITION}->{'name'} = 2;
 $DXF{$_}->{'flag'} = 70 for qw(VERTEX_3D VERTEX_MESH VERTEX_PFACE_FACE POLYLINE_PFACE);
+$DXF{MATERIAL}->{'ambient_color'} = 70; # [ 70 40 90 ]
+$DXF{MATERIAL}->{'diffuse_color'} = 71; # [ 71 41 91 ]
+$DXF{MATERIAL}->{'specular_color'} = 76; # [ 76 45 92 ]
+$DXF{MATERIAL}->{'diffusemap'} = 42; # [ 42, 72, 3, 73, 74, 75, 43 ]
+$DXF{MATERIAL}->{'specularmap'} = 42; # [ 46, 77, 4, 78, 79, 170, 47 ]
+$DXF{MATERIAL}->{'reflectionmap'} = 48; # [ 48, 171, 6, 172, 173, 174, 49 ]
+$DXF{MATERIAL}->{'opacitymap'} = 141; # [ 141, 175, 7, 176, 177, 178, 142 ]
+$DXF{MATERIAL}->{'bumpmap'} = 143; # [ 143, 179, 8, 270, 271, 272, 144 ]
+$DXF{MATERIAL}->{'refractionmap'} = 146; # [ 146, 273, 9, 274, 275, 276, 147 ]
+#$DXF{MATERIAL}->{'ambient_color.flag'} = 70;
+#$DXF{MATERIAL}->{'ambient_color.factor'} = 40;
+#$DXF{MATERIAL}->{'ambient_color.rgb'} = 90;
+#$DXF{MATERIAL}->{'diffuse_color.flag'} = 71;
+#$DXF{MATERIAL}->{'diffuse_color.factor'} = 41;
+#$DXF{MATERIAL}->{'diffuse_color.rgb'} = 91;
 my @solids = qw(3DSOLID REGION BODY
                 EXTRUDEDSURFACE LOFTEDSURFACE NURBSURFACE PLANESURFACE REVOLVEDSURFACE SWEPTSURFACE
                 ACSH_BREP_CLASS);
