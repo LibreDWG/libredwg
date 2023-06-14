@@ -7,6 +7,7 @@ d="${1:-example_2000}"
 b="$(basename "$d" .dwg)"
 dir="$(dirname "$d")"
 r="$(basename "$dir")"
+DEBUG_CLASSES=
 
 case $dir in
     *test/test-data)   ;;
@@ -96,8 +97,16 @@ if [ -f "$b.dwg" ]; then
 
     if false && [ -f "$log1" ] && [ -f "$log2" ]; then
         # Really interesting is the Section BLOCKS here. vs BLOCK_HEADER
-        # we dont write unstable entities yet.
-        grep -E '^Add entity' "$log1" | grep -E -v 'entity (ARC_DIMENSION|HELIX|SECTIONOBJECT|UNKNOWN_ENT)' >"$log1.tmp"
+        if grep -q '#define DEBUG_CLASSES' src/config.h; then
+            DEBUG_CLASSES=1
+        fi
+        if [ -z "$DEBUG_CLASSES" ]; then
+            # we dont write unstable entities yet.
+            grep -E '^Add entity' "$log1" | grep -E -v 'entity (ARC_DIMENSION|HELIX|SECTIONOBJECT|UNKNOWN_ENT)' >"$log1.tmp"
+        else
+            grep -E '^Add entity' "$log1" |
+                grep -E -v 'entity UNKNOWN_ENT' >"$log1.tmp"
+        fi
         grep -E '^Add entity' "$log2" >"$log2.tmp"
         if diff -bu0 "$log1.tmp" "$log2.tmp" >/dev/null 2>/dev/null; then
             echo entities roundtrip ok
