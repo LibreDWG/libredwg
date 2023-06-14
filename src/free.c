@@ -1235,7 +1235,13 @@ dwg_free_object (Dwg_Object *obj)
     }
   /* With indxf the dxfname is dynamic, just the name is const */
   if ((dwg->opts & DWG_OPTS_INDXF) || (dwg->opts & DWG_OPTS_INJSON))
-    FREE_IF (obj->dxfname);
+    {
+#ifdef DEBUG_CLASSES
+      if (strlen (obj->dxfname) == 5)
+        LOG_TRACE ("free dxfname: %s [5, %d]\n", obj->dxfname, obj->index);
+#endif
+      FREE_IF (obj->dxfname);
+    }
   /* With injson even the name is dynamic */
   if (dwg->opts & DWG_OPTS_INJSON)
     FREE_IF (obj->name);
