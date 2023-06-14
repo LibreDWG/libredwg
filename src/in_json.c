@@ -3577,6 +3577,10 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     }
                   free (obj->dxfname);
                   obj->dxfname = strdup (dxfname);
+#ifdef DEBUG_CLASSES
+                  if (strlen (dxfname) == 5)
+                    LOG_TRACE ("dxfname: %s [5, %d]\n", obj->dxfname, obj->index);
+#endif
                   // 498/499 select the PROXY free body in dwg_free_object
                   // (GHSA-v9c2-69pf-gwr5), so they must match fixedtype too.
                   if ((obj->type <= DWG_TYPE_LAYOUT
