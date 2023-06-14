@@ -3327,6 +3327,10 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                     }
                   free (obj->dxfname);
                   obj->dxfname = strdup (dxfname);
+#ifdef DEBUG_CLASSES
+                  if (strlen (dxfname) == 5)
+                    LOG_TRACE ("dxfname: %s [5, %d]\n", obj->dxfname, obj->index);
+#endif
                   if (obj->type <= DWG_TYPE_LAYOUT
                       && obj->fixedtype != obj->type
                       && dwg->header.from_version >= R_13b1)
