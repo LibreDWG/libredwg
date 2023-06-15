@@ -844,7 +844,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str66,            "RAPIDRTRENDERSETTINGS",             DWG_TYPE_RAPIDRTRENDERSETTINGS,	0,	UNSTABLE},
       {-1}, {-1}, {-1}, {-1},
 #line 116 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str71,                    "REPEAT",                     DWG_TYPE_REPEAT,	1,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str71,                    "REPEAT",                     DWG_TYPE_REPEAT,	1,	STABLE},
       {-1},
 #line 206 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str73, "ACDBASSOCRESTOREENTITYSTATEACTIONBODY",  DWG_TYPE_ASSOCRESTOREENTITYSTATEACTIONBODY,	0,	DEBUGGING},
@@ -1086,7 +1086,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str299,  "ALIGNMENTPARAMETERENTITY",   DWG_TYPE_ALIGNMENTPARAMETERENTITY,	1,	DEBUGGING},
       {-1},
 #line 73 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str301,                    "ENDREP",                     DWG_TYPE_ENDREP,	1,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str301,                    "ENDREP",                     DWG_TYPE_ENDREP,	1,	STABLE},
       {-1}, {-1}, {-1}, {-1},
 #line 55 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str306,                    "ATTDEF",                     DWG_TYPE_ATTDEF,	1,	STABLE},
@@ -1168,7 +1168,7 @@ in_word_set (const char *str, size_t len)
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str389,              "ACSH_CYLINDER_CLASS",               DWG_TYPE_ACSH_CYLINDER_CLASS,	0,	STABLE},
       {-1},
 #line 49 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str391,                    "3DLINE",                     DWG_TYPE__3DLINE,	1,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str391,                    "3DLINE",                     DWG_TYPE__3DLINE,	1,	STABLE},
 #line 143 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str392,         "XYPARAMETERENTITY",          DWG_TYPE_XYPARAMETERENTITY,	1,	DEBUGGING},
 #line 248 "src/objects.in"
@@ -1410,7 +1410,7 @@ in_word_set (const char *str, size_t len)
 #line 271 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str608,                         "DIMSTYLE",                          DWG_TYPE_DIMSTYLE,	0,	STABLE},
 #line 82 "src/objects.in"
-      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str609,                      "JUMP",                       DWG_TYPE_JUMP,	1,	UNSTABLE},
+      {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str609,                      "JUMP",                       DWG_TYPE_JUMP,	1,	STABLE},
       {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1},
 #line 257 "src/objects.in"
       {(int)(size_t)&((struct stringpool_t *)0)->stringpool_str618,                    "BREAKPOINTREF",                     DWG_TYPE_BREAKPOINTREF,	0,	DEBUGGING},

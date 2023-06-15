@@ -46,7 +46,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 %%
 # Entities
 "3DFACE",                    "3DFACE",                     DWG_TYPE__3DFACE,	1,	STABLE
-"3DLINE",                    "3DLINE",                     DWG_TYPE__3DLINE,	1,	UNSTABLE
+"3DLINE",                    "3DLINE",                     DWG_TYPE__3DLINE,	1,	STABLE
 "3DSOLID",                   "3DSOLID",                    DWG_TYPE__3DSOLID,	1,	STABLE
 "ALIGNMENTPARAMETERENTITY",  "ALIGNMENTPARAMETERENTITY",   DWG_TYPE_ALIGNMENTPARAMETERENTITY,	1,	DEBUGGING
 "ARC",                       "ARC",                        DWG_TYPE_ARC,	1,	STABLE
@@ -70,7 +70,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "DWFUNDERLAY",               "DWFUNDERLAY",                DWG_TYPE_DWFUNDERLAY,	1,	STABLE
 "ELLIPSE",                   "ELLIPSE",                    DWG_TYPE_ELLIPSE,	1,	STABLE
 "ENDBLK",                    "ENDBLK",                     DWG_TYPE_ENDBLK,	1,	STABLE
-"ENDREP",                    "ENDREP",                     DWG_TYPE_ENDREP,	1,	UNSTABLE
+"ENDREP",                    "ENDREP",                     DWG_TYPE_ENDREP,	1,	STABLE
 "EXTRUDEDSURFACE",           "EXTRUDEDSURFACE",            DWG_TYPE_EXTRUDEDSURFACE,	1,	DEBUGGING
 "FLIPGRIPENTITY",            "FLIPGRIPENTITY",             DWG_TYPE_FLIPGRIPENTITY,	1,	DEBUGGING
 "FLIPPARAMETERENTITY",       "FLIPPARAMETERENTITY",        DWG_TYPE_FLIPPARAMETERENTITY,	1,	DEBUGGING
@@ -79,7 +79,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "HELIX",                     "HELIX",                      DWG_TYPE_HELIX,	1,	UNSTABLE
 "IMAGE",                     "IMAGE",                      DWG_TYPE_IMAGE,	1,	STABLE
 "INSERT",                    "INSERT",                     DWG_TYPE_INSERT,	1,	STABLE
-"JUMP",                      "JUMP",                       DWG_TYPE_JUMP,	1,	UNSTABLE
+"JUMP",                      "JUMP",                       DWG_TYPE_JUMP,	1,	STABLE
 "LARGE_RADIAL_DIMENSION",    "LARGE_RADIAL_DIMENSION",     DWG_TYPE_LARGE_RADIAL_DIMENSION,	1,	UNSTABLE
 "LEADER",                    "LEADER",                     DWG_TYPE_LEADER,	1,	STABLE
 "LIGHT",                     "LIGHT",                      DWG_TYPE_LIGHT,	1,	STABLE
@@ -113,7 +113,7 @@ struct _dwg_dxfname {int name; const char *const dxfname; const Dwg_Object_Type 
 "PROXY_ENTITY",              "ACAD_ENTITY_OBJECT",         DWG_TYPE_PROXY_ENTITY,	1,	STABLE
 "RAY",                       "RAY",                        DWG_TYPE_RAY,	1,	STABLE
 "REGION",                    "REGION",                     DWG_TYPE_REGION,	1,	STABLE
-"REPEAT",                    "REPEAT",                     DWG_TYPE_REPEAT,	1,	UNSTABLE
+"REPEAT",                    "REPEAT",                     DWG_TYPE_REPEAT,	1,	STABLE
 "REVOLVEDSURFACE",           "REVOLVEDSURFACE",            DWG_TYPE_REVOLVEDSURFACE,	1,	DEBUGGING
 "ROTATIONGRIPENTITY",        "ROTATIONGRIPENTITY",         DWG_TYPE_ROTATIONGRIPENTITY,	1,	DEBUGGING
 "ROTATIONPARAMETERENTITY",   "ROTATIONPARAMETERENTITY",    DWG_TYPE_ROTATIONPARAMETERENTITY,	1,	DEBUGGING
