@@ -5452,6 +5452,10 @@ DWG_OBJECT (PLOTSETTINGS)
   SUBCLASS (AcDbPlotSettings)
   FIELD_T (printer_cfg_file, 1);
   FIELD_T (paper_size, 2);
+  DXF {
+    FIELD_T (canonical_media_name, 4);
+    FIELD_T (plotview_name, 6);
+  }
   FIELD_BSx (plot_flags, 0);
   FIELD_BD (left_margin, 40);
   FIELD_BD (bottom_margin, 41);
@@ -5459,7 +5463,7 @@ DWG_OBJECT (PLOTSETTINGS)
   FIELD_BD (top_margin, 43);
   FIELD_BD (paper_width, 44);
   FIELD_BD (paper_height, 45);
-  FIELD_T (canonical_media_name, 4);
+  FIELD_T (canonical_media_name, 0);
   FIELD_2BD_1 (plot_origin, 46);
   FIELD_BS (plot_paper_unit, 0);
   FIELD_BS (plot_rotation_mode, 0);
@@ -5471,7 +5475,7 @@ DWG_OBJECT (PLOTSETTINGS)
       if (_obj->plotview && !_obj->plotview_name)
         _obj->plotview_name = dwg_handle_name (dwg, "VIEW", _obj->plotview);
     }
-    FIELD_T (plotview_name, 6);
+    FIELD_T (plotview_name, 0);
     DECODER {
       _obj->plotview = dwg_find_tablehandle (dwg, _obj->plotview_name, "VIEW");
     }
@@ -5482,9 +5486,9 @@ DWG_OBJECT (PLOTSETTINGS)
         _obj->plotview = dwg_find_tablehandle (dwg, _obj->plotview_name, "VIEW");
     }
     DXF {
-      FIELD_T (plotview_name, 6);
+      FIELD_T (plotview_name, 0);
     } else {
-      FIELD_HANDLE (plotview, 4, 6);
+      FIELD_HANDLE (plotview, 4, 0);
     }
     DECODER {
       if (!_obj->plotview_name)
@@ -5522,6 +5526,10 @@ DWG_OBJECT (LAYOUT)
   SUBCLASS (AcDbPlotSettings)
   FIELD_T (plotsettings.printer_cfg_file, 1);
   FIELD_T (plotsettings.paper_size, 2);
+  DXF {
+    FIELD_T (plotsettings.canonical_media_name, 4);
+    FIELD_T (plotsettings.plotview_name, 6);
+  }
   FIELD_BSx (plotsettings.plot_flags, 0);
   FIELD_BD (plotsettings.left_margin, 40);
   FIELD_BD (plotsettings.bottom_margin, 41);
@@ -5529,8 +5537,8 @@ DWG_OBJECT (LAYOUT)
   FIELD_BD (plotsettings.top_margin, 43);
   FIELD_BD (plotsettings.paper_width, 44);
   FIELD_BD (plotsettings.paper_height, 45);
-  FIELD_T (plotsettings.canonical_media_name, 4);
-  FIELD_2BD_1 (plotsettings.plot_origin, 46);
+  FIELD_T (plotsettings.canonical_media_name, 0);
+  FIELD_2BD_1 (plotsettings.plot_origin, 46); // 46, 47
   FIELD_BS (plotsettings.plot_paper_unit, 0);
   FIELD_BS (plotsettings.plot_rotation_mode, 0);
   FIELD_BS (plotsettings.plot_type, 0);
@@ -5554,11 +5562,7 @@ DWG_OBJECT (LAYOUT)
         _obj->plotsettings.plotview = dwg_find_tablehandle (dwg,
                  _obj->plotsettings.plotview_name, "VIEW");
     }
-    DXF {
-      FIELD_T (plotsettings.plotview_name, 6);
-    } else {
-      FIELD_HANDLE (plotsettings.plotview, 4, 6);
-    }
+    FIELD_HANDLE (plotsettings.plotview, 4, 0);
     DECODER {
       if (!_obj->plotsettings.plotview_name)
         _obj->plotsettings.plotview_name = dwg_handle_name (dwg, "VIEW",
