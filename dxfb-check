@@ -3,6 +3,13 @@
 # dxfb -> dwg2
 # teigha dxfb -> dwg (check out_dxfb)
 # teigha dwg2 -> dxf (check in_dxf)
+v=-v4
+case $1 in
+    -v*)
+        v="$1"
+        shift
+        ;;
+esac
 d="${1:-example_2000}"
 b="$(basename "$d" .dwg)"
 dir="$(dirname "$d")"
@@ -31,11 +38,11 @@ case $r in
 esac
 
 # first create a dwg log to compare against
-./log -v3 "$d"
+./log "$v" "$d"
 mv "$b.log" "$b.log.orig"
 rm "./$b.dxf" "./$b.dwg" 2>/dev/null
 
-if ! ./dxf -b -y -v4 -o "$b.dxfb" "$d"; then
+if ! ./dxf -b -y "$v" -o "$b.dxfb" "$d"; then
    exit 2
 fi
 if [ -f "$b.dxfb" ]; then
@@ -71,7 +78,7 @@ if [ -f "$b.dxfb" ]; then
         fi
     fi
 
-    if ! ./dwg -y -v4 "$b.dxfb"; then
+    if ! ./dwg -y "$v" "$b.dxfb"; then
         exit 1
     fi
 fi
@@ -87,7 +94,7 @@ if [ -f "$b.dwg" ]; then
         echo TeighaFileConverter not installed
     fi
 
-    ./log -v3 "$b.dwg"
+    ./log "$v" "$b.dwg"
     log1="$b.log.orig"
     log2="$b.log"
     echo diff -bu "log1" "$log2"

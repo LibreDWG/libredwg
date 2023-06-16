@@ -2,6 +2,13 @@
 # dwg -> dxf
 # dxf -> dwg2
 # teigha dwg2 -> dxf2
+v=-v4
+case $1 in
+    -v*)
+        v="$1"
+        shift
+        ;;
+esac
 d="${1:-example_2000}"
 b="$(basename "$d" .dwg)"
 dir="$(dirname "$d")"
@@ -30,16 +37,16 @@ case $r in
 esac
 
 # first create a dwg log to compare against
-./log -v3 "$d"
+./log "$v" "$d"
 mv "$b.log" "$b.log.orig"
 rm "./$b.dxf" "./$b.dwg" 2>/dev/null
 
-if ! ./dxf -y -v4 "$d"; then
+if ! ./dxf -y "$v" "$d"; then
     exit 2
 fi
 if [ -f "$b.dxf" ]; then
     mv "./$b.log" "$b.dwg2dxf.log"
-    if ! ./dwg -y -v4 "$b.dxf"; then
+    if ! ./dwg -y "$v" "$b.dxf"; then
         exit 1
     fi
 fi
@@ -76,7 +83,7 @@ if [ -f "$b.dwg" ]; then
         fi
     fi
 
-    ./log -v3 "$b.dwg"
+    ./log "$v" "$b.dwg"
     log1="$b.log.orig"
     log2="$b.log"
     echo diff -bu "log1" "$log2"
