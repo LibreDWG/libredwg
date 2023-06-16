@@ -821,7 +821,8 @@ const unsigned char unknown_section[53]
 
 #define START_HANDLE_STREAM                                                   \
   LOG_INSANE ("HANDLE_STREAM @%zu.%u\n", dat->byte - obj->address, dat->bit)  \
-  if (!obj->bitsize || /* DD sizes can vary, but let unknown_bits asis */     \
+  if (1 ||                                                                    \
+      !obj->bitsize || /* DD sizes can vary, but let unknown_bits asis */     \
       has_entity_DD (obj) || /* strings may be zero-terminated or not */      \
       obj_has_strings (obj)                                                   \
       || (dwg->header.version != dwg->header.from_version                     \
