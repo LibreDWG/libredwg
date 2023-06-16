@@ -3828,12 +3828,6 @@ DWG_TABLE (STYLE)
     FIELD_BD (last_height, 42);
     FIELD_T (font_file, 3);
     FIELD_T (bigfont_file, 4);
-    UNKNOWN_BITS_REST;
-    //DEBUG_HERE
-    //1001 1000 1071 mandatory r2007+ if .ttf
-    //long truetype font’s pitch and family, charset, and italic and bold flags
-    //if not ttf: 38 410330503F
-    //if ttf: 52 4103320CDE500F
 #ifdef IS_DXF
     {
       char _buf[256];
