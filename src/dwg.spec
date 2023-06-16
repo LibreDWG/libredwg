@@ -5102,6 +5102,7 @@ DWG_ENTITY (HATCH)
       END_REPEAT (deflines);
     }
 
+  JSON { FIELD_B (has_derived, 0); }
   if (FIELD_VALUE (has_derived))
     FIELD_BD (pixel_size, 47);
   FIELD_BL (num_seeds, 98);
