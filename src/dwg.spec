@@ -4753,7 +4753,7 @@ DWG_OBJECT (VX_CONTROL)
   }
   SUBCLASS (AcDbVXTable)
   CONTROL_HANDLE_STREAM;
-  HANDLE_VECTOR (entries, num_entries, 4, 0);
+  HANDLE_VECTOR (entries, num_entries, 2, 0);
 
 DWG_OBJECT_END
 
