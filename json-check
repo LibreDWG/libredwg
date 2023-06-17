@@ -30,7 +30,8 @@ case $r in
             *_20*)      r="${b:(-4)}" ;;
             *_r9)       r=9           ;;
             *_r1[0234]) r="${b:(-2)}" ;;
-    esac      ;;
+            *_R20*)     r="${b:(-4)}" ;;
+        esac      ;;
 esac
 
 # first create a dwg log to compare against
@@ -48,7 +49,7 @@ if [ -f "$b.json" ]; then
 fi
 
 if [ -f "$b.dwg" ]; then
-    # teigha can only write from r12-r2018
+    # teigha supports r9-r2018. r2.10: Unsupported early .dwg file version
     can_teigha=1
     case $(uname) in
         Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
@@ -64,16 +65,16 @@ if [ -f "$b.dwg" ]; then
         esac
     fi
     case $r in
-        r2.*)     can_teigha=0 ;;
-        r1.*)     can_teigha=0 ;;
-        r9)       can_teigha=0 ;;
-        r1[01])   can_teigha=0 ;;
+        r2\.*)     can_teigha=0 ;;
+        r1\.*)     can_teigha=0 ;;
     esac
     if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
-        cp "./$b.dwg" test/
-        echo TeighaFileConverter "test" "." "ACAD$r" DXF 0 1 "$b.dwg"
-        $TeighaFileConverter "test" "." "ACAD$r" DXF 0 1 "$b.dwg"
-        mv "./$b.dxf.err" "$b.json.err"
+        echo TeighaFileConverter . . "ACAD$r" DXF 0 1 "$b.dwg"
+        $TeighaFileConverter . . "ACAD$r" DXF 0 1 "$b.dwg"
+        if [ -e "./$b.dxf.err" ]; then
+            mv "./$b.dxf.err" "$b.json.err"
+            cat "$b.json.err"
+        fi
     else
         rm "$b.json.err" 2>/dev/null
         if [ ! -x "$TeighaFileConverter" ]; then
