@@ -5058,18 +5058,18 @@ DWG_ENTITY (HATCH)
           SUB_FIELD_B (paths[rcount1],bulges_present, 72);
           SUB_FIELD_B (paths[rcount1],closed, 73);
           SUB_FIELD_BL (paths[rcount1],num_segs_or_paths, 93);
-#define polyline_paths paths[rcount1].polyline_paths
-          REPEAT2 (paths[rcount1].num_segs_or_paths, polyline_paths, Dwg_HATCH_PolylinePath)
+#define pline_paths paths[rcount1].polyline_paths
+          REPEAT2 (paths[rcount1].num_segs_or_paths, pline_paths, Dwg_HATCH_PolylinePath)
           REPEAT_BLOCK
-              SUB_FIELD_2RD (polyline_paths[rcount2],point, 10);
+              SUB_FIELD_2RD (pline_paths[rcount2],point, 10);
               if (FIELD_VALUE (paths[rcount1].bulges_present))
                 {
-                  SUB_FIELD_BD (polyline_paths[rcount2],bulge, 42);
+                  SUB_FIELD_BD (pline_paths[rcount2],bulge, 42);
                 }
-              SET_PARENT (polyline_paths[rcount2], &_obj->paths[rcount1]);
+              SET_PARENT (pline_paths[rcount2], &_obj->paths[rcount1]);
           END_REPEAT_BLOCK
-          END_REPEAT (polyline_paths);
-#undef polyline_paths
+          END_REPEAT (pline_paths);
+#undef pline_paths
         }
       SUB_FIELD_BL (paths[rcount1],num_boundary_handles, 97);
       DECODER {
@@ -5269,18 +5269,18 @@ DWG_ENTITY (MPOLYGON)
           SUB_FIELD_B (paths[rcount1],bulges_present, 72);
           SUB_FIELD_B (paths[rcount1],closed, 73);
           SUB_FIELD_BL (paths[rcount1],num_segs_or_paths, 93);
-#define polyline_paths paths[rcount1].polyline_paths
-          REPEAT2 (paths[rcount1].num_segs_or_paths, polyline_paths, Dwg_HATCH_PolylinePath)
+#define pline_paths paths[rcount1].polyline_paths
+          REPEAT2 (paths[rcount1].num_segs_or_paths, pline_paths, Dwg_HATCH_PolylinePath)
           REPEAT_BLOCK
-              SUB_FIELD_2RD (polyline_paths[rcount2],point, 10);
+              SUB_FIELD_2RD (pline_paths[rcount2],point, 10);
               if (FIELD_VALUE (paths[rcount1].bulges_present))
                 {
-                  SUB_FIELD_BD (polyline_paths[rcount2],bulge, 42);
+                  SUB_FIELD_BD (pline_paths[rcount2],bulge, 42);
                 }
-              SET_PARENT (polyline_paths[rcount2], &_obj->paths[rcount1]);
+              SET_PARENT (pline_paths[rcount2], &_obj->paths[rcount1]);
           END_REPEAT_BLOCK
-          END_REPEAT (polyline_paths);
-#undef polyline_paths
+          END_REPEAT (pline_paths);
+#undef pline_paths
         }
       SUB_FIELD_BL (paths[rcount1],num_boundary_handles, 97);
       //DECODER {
