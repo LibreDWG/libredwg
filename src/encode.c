@@ -6422,4 +6422,100 @@ dwg_set_dataflags (Dwg_Object *obj)
     }
 }
 
+// from >2007 to 2000
+void
+downconvert_TABLESTYLE (Dwg_Object *restrict obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_TABLESTYLE *_obj = obj->tio.object ? obj->tio.object->tio.TABLESTYLE
+    : NULL;
+  if (!obj || obj->fixedtype != DWG_TYPE_TABLESTYLE)
+    {
+      LOG_ERROR ("Invalid type %u for downconvert_TABLESTYLE", obj ? obj->fixedtype : 0);
+      return;
+    }
+  LOG_WARN ("Downconverting TABLESTYLE with loosing information")
+  if (!_obj->num_rowstyles)
+    {
+      _obj->num_rowstyles = 3;
+      _obj->rowstyles = calloc (3, sizeof (Dwg_TABLESTYLE_rowstyles));
+    }
+  // 0: data, 1: title, 2: header
+  // assert (strEQc (_obj->sty.name, "Table"));
+  LOG_TRACE ("TABLESTYLE.sty.name: %s\n", _obj->sty.name);
+  _obj->rowstyles[0].text_style = _obj->sty.cellstyle.content_format.text_style;
+  _obj->rowstyles[0].text_height = _obj->sty.cellstyle.content_format.text_height;
+  _obj->rowstyles[0].text_alignment = _obj->sty.cellstyle.content_format.cell_alignment;
+  _obj->rowstyles[0].text_color = _obj->sty.cellstyle.content_format.content_color;
+  _obj->rowstyles[0].fill_color = _obj->sty.cellstyle.bg_color;
+  //_obj->rowstyles[0].has_bg_color = _obj->sty.cellstyle.bg_color.rgb ?;
+  /*
+  _obj->rowstyles[0].data_type = _obj->sty.cellstyle.content_format.value_data_type;
+  _obj->rowstyles[0].unit_type = _obj->sty.cellstyle.content_format.value_unit_type;
+  {
+    char *u8 = bit_convert_TU (_obj->sty.cellstyle.content_format.value_format_string);
+    size_t destlen = strlen (u8) + 1;
+    char *dest = malloc (destlen);
+    _obj->rowstyles[0].format_string = bit_utf8_to_TV (dest, u8, destlen, destlen - 1, 0,
+                                                       dwg->header.codepage);
+  }
+  */
+  if (!_obj->rowstyles[0].num_borders)
+    {
+      _obj->rowstyles[0].num_borders = 6;
+      _obj->rowstyles[0].borders = calloc (6, sizeof (Dwg_TABLESTYLE_border));
+    }
+  // borders/grid: top, horizontal inside, bottom, left, vertical inside, right
+  if (_obj->sty.cellstyle.borders)
+    {
+      for (unsigned i = 0; i < 6; i++)
+        {
+          if (i >= _obj->sty.cellstyle.num_borders)
+            break;
+          _obj->rowstyles[0].borders[i].linewt = _obj->sty.cellstyle.borders[i].linewt;
+          _obj->rowstyles[0].borders[i].visible = _obj->sty.cellstyle.borders[i].visible;
+          _obj->rowstyles[0].borders[i].color = _obj->sty.cellstyle.borders[i].color;
+        }
+      free (_obj->sty.cellstyle.borders);
+      _obj->sty.cellstyle.borders = NULL;
+      _obj->sty.cellstyle.num_borders = 0;
+    }
+  // title
+  if (!_obj->rowstyles[1].num_borders)
+    {
+      _obj->rowstyles[1].num_borders = 6;
+      _obj->rowstyles[1].borders = calloc (6, sizeof (Dwg_TABLESTYLE_border));
+    }
+  if (_obj->ovr.type == 1)
+    {
+      //assert (strEQc (_obj->ovr.name, "_TITLE"));
+      LOG_TRACE ("TABLESTYLE.ovr.name: %s\n", _obj->ovr.name);
+      _obj->rowstyles[0].text_style = _obj->ovr.cellstyle.content_format.text_style;
+      _obj->rowstyles[0].text_height = _obj->ovr.cellstyle.content_format.text_height;
+      _obj->rowstyles[0].text_alignment = _obj->ovr.cellstyle.content_format.cell_alignment;
+      _obj->rowstyles[0].text_color = _obj->ovr.cellstyle.content_format.content_color;
+      _obj->rowstyles[0].fill_color = _obj->ovr.cellstyle.bg_color;
+      if (_obj->ovr.cellstyle.borders)
+        {
+          for (unsigned i = 0; i < 6; i++)
+            {
+              if (i >= _obj->ovr.cellstyle.num_borders)
+                break;
+              _obj->rowstyles[0].borders[i].linewt = _obj->ovr.cellstyle.borders[i].linewt;
+              _obj->rowstyles[0].borders[i].visible = _obj->ovr.cellstyle.borders[i].visible;
+              _obj->rowstyles[0].borders[i].color = _obj->ovr.cellstyle.borders[i].color;
+            }
+          free (_obj->ovr.cellstyle.borders);
+          _obj->ovr.cellstyle.borders = NULL;
+          _obj->ovr.cellstyle.num_borders = 0;
+        }
+    }
+  // header
+  if (!_obj->rowstyles[2].num_borders)
+    {
+      _obj->rowstyles[2].num_borders = 6;
+      _obj->rowstyles[2].borders = calloc (6, sizeof (Dwg_TABLESTYLE_border));
+    }
+}
+
 #undef IS_ENCODER

@@ -3325,7 +3325,9 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             }
           else if (strEQc (key, "unknown_bits")
                    && (memBEGINc (obj->name, "UNKNOWN_")
-                       || strEQc (obj->name, "STYLE")))
+                       || strEQc (obj->name, "STYLE")
+                       || (dwg->header.version == dwg->header.from_version)
+                       ))
             {
               const int len = t->end - t->start;
               char *hex = json_string (dat, tokens);

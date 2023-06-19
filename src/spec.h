@@ -355,7 +355,8 @@
       if (dat->version < R_2004)                                              \
         dat->version = R_2004;                                                \
       FIELD_CMC (name, dxf);                                                  \
-      dat->version = _ver;                                                    \
+      if (_ver != dat->version)                                               \
+        dat->version = _ver;                                                  \
     }
 #endif
 #ifndef SUB_FIELD_CMTC
@@ -365,7 +366,8 @@
       if (dat->version < R_2004)                                              \
         dat->version = R_2004;                                                \
       SUB_FIELD_CMC (o, name, dxf);                                           \
-      dat->version = _ver;                                                    \
+      if (_ver != dat->version)                                               \
+        dat->version = _ver;                                                  \
     }
 #endif
 // on DXF skip if 0

@@ -102,6 +102,8 @@ static BITCODE_BL rcount1, rcount2;
 #define ANYCODE -1
 #define FIELD_HANDLE(nam, code, dxf) VALUE_HANDLE (_obj->nam, nam, code, dxf)
 #define SUB_FIELD_HANDLE(o, nam, code, dxf)                                   \
+  if (obj->fixedtype == DWG_TYPE_TABLESTYLE)                                  \
+    LOG_HANDLE ("free TABLESTYLE.%s.%s\n", #o, #nam);                         \
   VALUE_HANDLE (_obj->o.nam, nam, code, dxf)
 // compare to dwg_decode_handleref_with_code: not all refs are stored in the
 // object_ref vector, like relative ptrs and NULL.
@@ -599,6 +601,55 @@ dwg_free_variable_type_private (Dwg_Object *restrict obj)
   return DWG_ERR_UNHANDLEDCLASS;
 }
 
+// after downconvert_TABLESTYLE()
+// we need to pass through the old code, as the new code is handled in the spec
+// free() following from_version, not version.
+static void free_TABLESTYLE_r2010 (Bit_Chain *restrict dat, Dwg_Object *restrict obj) {
+  Dwg_Object_TABLESTYLE *_obj
+      = obj->tio.object ? obj->tio.object->tio.TABLESTYLE : NULL;
+  if (!obj || obj->fixedtype != DWG_TYPE_TABLESTYLE)
+    {
+      LOG_ERROR ("Invalid fixedtype %u for free_TABLESTYLE_r2010",
+                 obj ? obj->fixedtype : 0);
+      return;
+    }
+  LOG_HANDLE ("free_TABLESTYLE_r2010\n");
+  if (_obj->rowstyles)
+    for (unsigned i = 0; i < 3; i++)
+      {
+        for (unsigned j = 0; j < 6; j++)
+          {
+            SUB_FIELD_CMTC (rowstyles[i].borders[j], color, 0);
+          }
+        FREE_IF (_obj->rowstyles[i].borders);
+        SUB_FIELD_HANDLE (rowstyles[i],text_style, 5, 7);
+        SUB_FIELD_CMTC (rowstyles[i],text_color, 0);
+        SUB_FIELD_CMTC (rowstyles[i],fill_color, 0);
+      }
+  FREE_IF (_obj->rowstyles);
+  _obj->num_rowstyles = 0;
+  for (unsigned j = 0; j < _obj->sty.cellstyle.num_borders; j++)
+    {
+      SUB_FIELD_HANDLE (sty.cellstyle.borders[j], ltype, 3, 340);
+      SUB_FIELD_CMTC (sty.cellstyle.borders[j], color, 0);
+    }
+  FIELD_CMTC (sty.cellstyle.bg_color, 62);
+  FIELD_T (sty.cellstyle.content_format.value_format_string, 300);
+  if (_obj->numoverrides)
+    {
+      for (unsigned j = 0; j < _obj->ovr.cellstyle.num_borders; j++)
+        {
+          SUB_FIELD_HANDLE (ovr.cellstyle.borders[j], ltype, 3, 340);
+          SUB_FIELD_CMTC (ovr.cellstyle.borders[j], color, 0);
+        }
+      FIELD_CMTC (ovr.cellstyle.bg_color, 62);
+      FIELD_T (ovr.cellstyle.content_format.value_format_string, 300);
+    }
+  FIELD_TV (name, 3);
+  FIELD_TV (sty.name, 300);
+  FIELD_TV (ovr.name, 300);
+}
+
 static void
 free_preR13_object (Dwg_Object *obj)
 {
@@ -911,7 +962,11 @@ dwg_free_object (Dwg_Object *obj)
     free_preR13_object (obj);
     return;
   }
-
+  if (obj->fixedtype == DWG_TYPE_TABLESTYLE
+      && dwg->header.from_version > R_2007)
+    {
+      free_TABLESTYLE_r2010 (dat, obj);
+    }
   switch (obj->type)
     {
     case DWG_TYPE_TEXT:

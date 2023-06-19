@@ -7093,8 +7093,16 @@ DWG_OBJECT (TABLESTYLE)
     FIELD_BD (vert_cell_margin, 41);
     FIELD_B (is_title_suppressed, 280);
     FIELD_B (is_header_suppressed, 281);
+#ifdef IS_ENCODER
+    if (dwg->header.from_version > R_2007)
+      downconvert_TABLESTYLE (obj);
+#endif
   }
   LATER_VERSIONS { // r2010+
+#ifdef IS_ENCODER
+    //if (dwg->header.from_version <= R_2007)
+    //  upconvert_TABLESTYLE (obj);
+#endif
     FIELD_RCd (unknown_rc, 70);
     FIELD_T (name, 3);
     FIELD_BL (unknown_bl1, 0);
@@ -7107,7 +7115,10 @@ DWG_OBJECT (TABLESTYLE)
     FIELD_T0 (sty.name, 300);
     DXF { VALUE_TFF ("CELLSTYLE_END", 309) }
 
-    DECODER { FIELD_VALUE (flow_direction) = _obj->sty.cellstyle.property_override_flags & 0x10000; }
+    DECODER {
+      FIELD_VALUE (flow_direction) =
+        _obj->sty.cellstyle.property_override_flags & 0x10000;
+    }
     FIELD_BL (numoverrides, 0);
     // FIXME style overrides for 0-6
     if (FIELD_VALUE (numoverrides))
@@ -7148,11 +7159,11 @@ DWG_OBJECT (TABLESTYLE)
         END_REPEAT_BLOCK
         END_REPEAT (rowstyle.borders)
 
-        SINCE (R_2007) {
-          SUB_FIELD_BL (rowstyle,data_type, 90);
-          SUB_FIELD_BL (rowstyle,unit_type, 91);
-          SUB_FIELD_TU (rowstyle,format_string, 1);
-        }
+        //SINCE (R_2007) {
+        //  SUB_FIELD_BL (rowstyle,data_type, 90);
+        //  SUB_FIELD_BL (rowstyle,unit_type, 91);
+        //  SUB_FIELD_TU (rowstyle,format_string, 1);
+        //}
         #undef border
     END_REPEAT_BLOCK
     END_REPEAT (rowstyles)

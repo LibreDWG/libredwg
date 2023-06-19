@@ -49,5 +49,6 @@ void in_postprocess_SEQEND (Dwg_Object *restrict obj, BITCODE_BL num_owned,
                             BITCODE_H *owned);
 void dwg_set_dataflags (Dwg_Object *obj);
 int dwg_encode_unknown_rest (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+void downconvert_TABLESTYLE (Dwg_Object *restrict obj);
 
 #endif

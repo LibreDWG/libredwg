@@ -171,7 +171,11 @@ run ()
     then
         case $bdwg in
             *_2000 | example_r14 | example_r13 )
-                TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG" ;;
+                TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
+                ;;
+            example_201*) # TABLESTYLE handles
+                TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
+                ;;
         esac
     fi
     if test "$bprog" = "dwgfuzz" -a -n "@HAVE_ASAN@"
@@ -181,6 +185,14 @@ run ()
     if test "$bprog" = "dwgadd" -a -n "@HAVE_ASAN@"
     then
        TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
+    fi
+    if test "$bprog" = "dwgrewrite" -a -n "@HAVE_ASAN@"
+    then
+        case $bdwg in
+            example_201*) # TABLESTYLE handles
+                TESTPROG="env ASAN_OPTIONS=detect_leaks=0 $TESTPROG"
+                ;;
+        esac
     fi
     echo "$prog $arg 2>$log"
     # shellcheck disable=SC2086
