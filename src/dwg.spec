@@ -4965,74 +4965,81 @@ DWG_ENTITY (HATCH)
             {
               LOG_ERROR ("Invalid HATCH.num_segs_or_paths " FORMAT_BL,
                         _obj->paths[rcount1].num_segs_or_paths);
-              _obj->paths[rcount1].num_segs_or_paths = 0;
+              FIELD_VALUE (paths[rcount1].num_segs_or_paths) = 0;
               JSON_END_REPEAT (paths);
               return DWG_ERR_VALUEOUTOFBOUNDS;
             }
-#define segs paths[rcount1].segs
-          REPEAT2 (paths[rcount1].num_segs_or_paths, segs, Dwg_HATCH_PathSeg)
+#define segx paths[rcount1].segs
+          REPEAT2 (paths[rcount1].num_segs_or_paths, segx, Dwg_HATCH_PathSeg)
           REPEAT_BLOCK
-              SUB_FIELD_RC (segs[rcount2],curve_type, 72); // 1-4
-              switch (FIELD_VALUE (segs[rcount2].curve_type))
+              SUB_FIELD_RC (segx[rcount2],curve_type, 72); // 1-4
+              switch (FIELD_VALUE (segx[rcount2].curve_type))
                 {
                     case 1: /* LINE */
-                      SUB_FIELD_2RD (segs[rcount2],first_endpoint, 10);
-                      SUB_FIELD_2RD (segs[rcount2],second_endpoint, 11);
+                      SUB_FIELD_2RD (segx[rcount2],first_endpoint, 10);
+                      SUB_FIELD_2RD (segx[rcount2],second_endpoint, 11);
                       break;
                     case 2: /* CIRCULAR ARC */
-                      SUB_FIELD_2RD (segs[rcount2], center, 10);
-                      SUB_FIELD_BD (segs[rcount2], radius, 40);
-                      SUB_FIELD_BD (segs[rcount2], start_angle, 50);
-                      SUB_FIELD_BD (segs[rcount2], end_angle, 51);
-                      SUB_FIELD_B (segs[rcount2], is_ccw, 73);
+                      SUB_FIELD_2RD (segx[rcount2], center, 10);
+                      SUB_FIELD_BD (segx[rcount2], radius, 40);
+                      SUB_FIELD_BD (segx[rcount2], start_angle, 50);
+                      SUB_FIELD_BD (segx[rcount2], end_angle, 51);
+                      SUB_FIELD_B (segx[rcount2], is_ccw, 73);
                       break;
                     case 3: /* ELLIPTICAL ARC */
-                      SUB_FIELD_2RD (segs[rcount2], center, 10);
-                      SUB_FIELD_2RD (segs[rcount2], endpoint, 11);
-                      SUB_FIELD_BD (segs[rcount2], minor_major_ratio, 40);
-                      SUB_FIELD_BD (segs[rcount2], start_angle, 50);
-                      SUB_FIELD_BD (segs[rcount2], end_angle, 51);
-                      SUB_FIELD_B (segs[rcount2], is_ccw, 73);
+                      SUB_FIELD_2RD (segx[rcount2], center, 10);
+                      SUB_FIELD_2RD (segx[rcount2], endpoint, 11);
+                      SUB_FIELD_BD (segx[rcount2], minor_major_ratio, 40);
+                      SUB_FIELD_BD (segx[rcount2], start_angle, 50);
+                      SUB_FIELD_BD (segx[rcount2], end_angle, 51);
+                      SUB_FIELD_B (segx[rcount2], is_ccw, 73);
                       break;
                     case 4: /* SPLINE */
-                      SUB_FIELD_BL (segs[rcount2], degree, 94);
-                      SUB_FIELD_B (segs[rcount2], is_rational, 73);
-                      SUB_FIELD_B (segs[rcount2], is_periodic, 74);
-                      SUB_FIELD_BL (segs[rcount2], num_knots, 95);
-                      SUB_FIELD_BL (segs[rcount2], num_control_points, 96);
-                      if (FIELD_VALUE (segs[rcount2].num_knots > 10000))
+                      SUB_FIELD_BL (segx[rcount2], degree, 94);
+                      SUB_FIELD_B (segx[rcount2], is_rational, 73);
+                      SUB_FIELD_B (segx[rcount2], is_periodic, 74);
+                      SUB_FIELD_BL (segx[rcount2], num_knots, 95);
+                      SUB_FIELD_BL (segx[rcount2], num_control_points, 96);
+                      if (FIELD_VALUE (segx[rcount2].num_knots > 10000))
                         {
-                          LOG_ERROR ("Invalid HATCH.paths.segs.num_knots " FORMAT_BL,
-                                    _obj->segs[rcount2].num_knots);
-                          _obj->segs[rcount2].num_knots = 0;
-                          JSON_END_REPEAT (segs);
+                          LOG_ERROR ("Invalid HATCH.paths[" FORMAT_BL
+                                     "].segs[" FORMAT_BL
+                                     "].num_knots " FORMAT_BL,
+                                     rcount1, rcount2,
+                                     FIELD_VALUE (segx[rcount2].num_knots));
+                          FIELD_VALUE (segx[rcount2].num_knots) = 0;
+                          JSON_END_REPEAT (segx);
                           JSON_END_REPEAT (paths);
                           return DWG_ERR_VALUEOUTOFBOUNDS;
                         }
-                      FIELD_VECTOR (segs[rcount2].knots, BD,
-                                    segs[rcount2].num_knots, 40);
-                      if (FIELD_VALUE (segs[rcount2].num_control_points > 10000))
+                      FIELD_VECTOR (segx[rcount2].knots, BD,
+                                    segx[rcount2].num_knots, 40);
+                      if (FIELD_VALUE (segx[rcount2].num_control_points > 10000))
                         {
-                          LOG_ERROR ("Invalid HATCH.paths.segs.num_control_points " FORMAT_BL,
-                                    _obj->segs[rcount2].num_control_points);
-                          _obj->segs[rcount2].num_control_points = 0;
-                          JSON_END_REPEAT (segs);
+                          LOG_ERROR (
+                              "Invalid HATCH.paths[" FORMAT_BL
+                              "].segs[" FORMAT_BL
+                              "].num_control_points " FORMAT_BL,
+                              rcount1, rcount2,
+                              FIELD_VALUE (segx[rcount2].num_control_points));
+                          FIELD_VALUE (segx[rcount2].num_control_points) = 0;
+                          JSON_END_REPEAT (segx);
                           JSON_END_REPEAT (paths);
                           return DWG_ERR_VALUEOUTOFBOUNDS;
                         }
-#define control_points segs[rcount2].control_points
-                      REPEAT3 (segs[rcount2].num_control_points, control_points, Dwg_HATCH_ControlPoint)
+#define control_points segx[rcount2].control_points
+                      REPEAT3 (segx[rcount2].num_control_points, control_points, Dwg_HATCH_ControlPoint)
                       REPEAT_BLOCK
                           SUB_FIELD_2RD (control_points[rcount3], point, 10);
-                          if (FIELD_VALUE (segs[rcount2].is_rational))
+                          if (FIELD_VALUE (segx[rcount2].is_rational))
                             SUB_FIELD_BD (control_points[rcount3], weight, 40)
-                          SET_PARENT (control_points[rcount3], &_obj->segs[rcount2]);
+                          SET_PARENT (control_points[rcount3], &FIELD_VALUE (segx[rcount2]));
                       END_REPEAT_BLOCK
                       END_REPEAT (control_points);
 #undef control_points
                       SINCE (R_2013) // r2014 really
                         {
-#define seg segs[rcount2]
+#define seg segx[rcount2]
                           SUB_FIELD_BL (seg, num_fitpts, 97);
                           FIELD_2RD_VECTOR (seg.fitpts, seg.num_fitpts, 11);
                         }
@@ -5042,15 +5049,15 @@ DWG_ENTITY (HATCH)
                                 FIELD_VALUE (seg.curve_type));
                       DEBUG_HERE_OBJ
                       FIELD_VALUE (seg.curve_type) = 0;
-                      JSON_END_REPEAT (segs);
+                      JSON_END_REPEAT (segx);
                       JSON_END_REPEAT (paths);
                       return DWG_ERR_VALUEOUTOFBOUNDS;
                 }
               SET_PARENT (seg, &_obj->paths[rcount1]);
 #undef seg
           END_REPEAT_BLOCK
-          END_REPEAT (segs);
-#undef segs
+          END_REPEAT (segx);
+#undef segx
         }
       else
         { /* POLYLINE PATH */
@@ -5175,92 +5182,99 @@ DWG_ENTITY (MPOLYGON)
             {
               LOG_ERROR ("Invalid HATCH.num_segs_or_paths " FORMAT_BL,
                         _obj->paths[rcount1].num_segs_or_paths);
-              _obj->paths[rcount1].num_segs_or_paths = 0;
+              FIELD_VALUE (paths[rcount1].num_segs_or_paths) = 0;
               JSON_END_REPEAT (paths);
               return DWG_ERR_VALUEOUTOFBOUNDS;
             }
-#define segs paths[rcount1].segs
-          REPEAT2 (paths[rcount1].num_segs_or_paths, segs, Dwg_HATCH_PathSeg)
+#define segx paths[rcount1].segs
+          REPEAT2 (paths[rcount1].num_segs_or_paths, segx, Dwg_HATCH_PathSeg)
           REPEAT_BLOCK
-              SUB_FIELD_RC (segs[rcount2],curve_type, 72); // 1-4
-              switch (FIELD_VALUE (segs[rcount2].curve_type))
+              SUB_FIELD_RC (segx[rcount2],curve_type, 72); // 1-4
+              switch (FIELD_VALUE (segx[rcount2].curve_type))
                 {
                     case 1: /* LINE */
-                      SUB_FIELD_2RD (segs[rcount2],first_endpoint, 10);
-                      SUB_FIELD_2RD (segs[rcount2],second_endpoint, 11);
+                      SUB_FIELD_2RD (segx[rcount2],first_endpoint, 10);
+                      SUB_FIELD_2RD (segx[rcount2],second_endpoint, 11);
                       break;
                     case 2: /* CIRCULAR ARC */
-                      SUB_FIELD_2RD (segs[rcount2], center, 10);
-                      SUB_FIELD_BD (segs[rcount2], radius, 40);
-                      SUB_FIELD_BD (segs[rcount2], start_angle, 50);
-                      SUB_FIELD_BD (segs[rcount2], end_angle, 51);
-                      SUB_FIELD_B (segs[rcount2], is_ccw, 73);
+                      SUB_FIELD_2RD (segx[rcount2], center, 10);
+                      SUB_FIELD_BD (segx[rcount2], radius, 40);
+                      SUB_FIELD_BD (segx[rcount2], start_angle, 50);
+                      SUB_FIELD_BD (segx[rcount2], end_angle, 51);
+                      SUB_FIELD_B (segx[rcount2], is_ccw, 73);
                       break;
                     case 3: /* ELLIPTICAL ARC */
-                      SUB_FIELD_2RD (segs[rcount2], center, 10);
-                      SUB_FIELD_2RD (segs[rcount2], endpoint, 11);
-                      SUB_FIELD_BD (segs[rcount2], minor_major_ratio, 40);
-                      SUB_FIELD_BD (segs[rcount2], start_angle, 50);
-                      SUB_FIELD_BD (segs[rcount2], end_angle, 51);
-                      SUB_FIELD_B (segs[rcount2], is_ccw, 73);
+                      SUB_FIELD_2RD (segx[rcount2], center, 10);
+                      SUB_FIELD_2RD (segx[rcount2], endpoint, 11);
+                      SUB_FIELD_BD (segx[rcount2], minor_major_ratio, 40);
+                      SUB_FIELD_BD (segx[rcount2], start_angle, 50);
+                      SUB_FIELD_BD (segx[rcount2], end_angle, 51);
+                      SUB_FIELD_B (segx[rcount2], is_ccw, 73);
                       break;
                     case 4: /* SPLINE */
-                      SUB_FIELD_BL (segs[rcount2], degree, 94);
-                      SUB_FIELD_B (segs[rcount2], is_rational, 73);
-                      SUB_FIELD_B (segs[rcount2], is_periodic, 74);
-                      SUB_FIELD_BL (segs[rcount2], num_knots, 95);
-                      SUB_FIELD_BL (segs[rcount2], num_control_points, 96);
-                      if (FIELD_VALUE (segs[rcount2].num_knots > 10000))
+                      SUB_FIELD_BL (segx[rcount2], degree, 94);
+                      SUB_FIELD_B (segx[rcount2], is_rational, 73);
+                      SUB_FIELD_B (segx[rcount2], is_periodic, 74);
+                      SUB_FIELD_BL (segx[rcount2], num_knots, 95);
+                      SUB_FIELD_BL (segx[rcount2], num_control_points, 96);
+                      if (FIELD_VALUE (segx[rcount2].num_knots) > 10000)
                         {
-                          LOG_ERROR ("Invalid HATCH.paths.segs.num_knots " FORMAT_BL,
-                                    _obj->segs[rcount2].num_knots);
-                          _obj->segs[rcount2].num_knots = 0;
-                          JSON_END_REPEAT (segs);
+                          LOG_ERROR ("Invalid HATCH.paths[" FORMAT_BL
+                                     "].segs[" FORMAT_BL
+                                     "].num_knots " FORMAT_BL,
+                                     rcount1, rcount2,
+                                     FIELD_VALUE (segx[rcount2].num_knots));
+                          FIELD_VALUE (segx[rcount2].num_knots) = 0;
+                          JSON_END_REPEAT (segx);
                           JSON_END_REPEAT (paths);
                           return DWG_ERR_VALUEOUTOFBOUNDS;
                         }
-                      FIELD_VECTOR (segs[rcount2].knots, BD,
-                                    segs[rcount2].num_knots, 40);
-                      if (FIELD_VALUE (segs[rcount2].num_control_points > 10000))
+                      FIELD_VECTOR (segx[rcount2].knots, BD,
+                                    segx[rcount2].num_knots, 40);
+                      if (FIELD_VALUE (segx[rcount2].num_control_points) > 10000)
                         {
-                          LOG_ERROR ("Invalid HATCH.paths.segs.num_control_points " FORMAT_BL,
-                                    _obj->segs[rcount2].num_control_points);
-                          _obj->segs[rcount2].num_control_points = 0;
-                          JSON_END_REPEAT (segs);
+                          LOG_ERROR (
+                              "Invalid HATCH.paths[" FORMAT_BL
+                              "].segs[" FORMAT_BL
+                              "].num_control_points " FORMAT_BL,
+                              rcount1, rcount2,
+                              FIELD_VALUE (segx[rcount2].num_control_points));
+                          FIELD_VALUE (segx[rcount2].num_control_points) = 0;
+                          JSON_END_REPEAT (segx);
                           JSON_END_REPEAT (paths);
                           return DWG_ERR_VALUEOUTOFBOUNDS;
                         }
-#define control_points segs[rcount2].control_points
-                      REPEAT3 (segs[rcount2].num_control_points, control_points, Dwg_HATCH_ControlPoint)
+#define control_points segx[rcount2].control_points
+                      REPEAT3 (segx[rcount2].num_control_points, control_points, Dwg_HATCH_ControlPoint)
                       REPEAT_BLOCK
                           SUB_FIELD_2RD (control_points[rcount3], point, 10);
-                          if (FIELD_VALUE (segs[rcount2].is_rational))
+                          if (FIELD_VALUE (segx[rcount2].is_rational))
                             SUB_FIELD_BD (control_points[rcount3], weight, 40)
-                          SET_PARENT (control_points[rcount3], &_obj->segs[rcount2]);
+                          SET_PARENT (control_points[rcount3], &FIELD_VALUE (segx[rcount2]));
                       END_REPEAT_BLOCK
                       END_REPEAT (control_points);
 #undef control_points
                       SINCE (R_2013) // r2014 really
                         {
-#define seg segs[rcount2]
+#define seg segx[rcount2]
                           SUB_FIELD_BL (seg, num_fitpts, 97);
                           FIELD_2RD_VECTOR (seg.fitpts, seg.num_fitpts, 11);
                         }
                       break;
                     default:
                       LOG_ERROR ("Invalid HATCH.curve_type %d\n",
-                                FIELD_VALUE (segs[rcount2].curve_type));
+                                FIELD_VALUE (segx[rcount2].curve_type));
                       DEBUG_HERE_OBJ
                       FIELD_VALUE (seg.curve_type) = 0;
-                      JSON_END_REPEAT (segs);
+                      JSON_END_REPEAT (segx);
                       JSON_END_REPEAT (paths);
                       return DWG_ERR_VALUEOUTOFBOUNDS;
                 }
               SET_PARENT (seg, &_obj->paths[rcount1]);
 #undef seg
           END_REPEAT_BLOCK
-          END_REPEAT (segs);
-#undef segs
+          END_REPEAT (segx);
+#undef segx
         }
       else
         { /* POLYLINE PATH */
