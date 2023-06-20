@@ -7535,7 +7535,7 @@ DWG_ENTITY (MULTILEADER)
   FIELD_BS (style_attachment, 176);
   FIELD_B (is_annotative, 293);
 
-  VERSIONS (R_2000, R_2007)
+  VERSIONS (R_14, R_2007)
     {
       FIELD_BL (num_arrowheads, 0);
       VALUEOUTOFBOUNDS (num_arrowheads, 5000)
