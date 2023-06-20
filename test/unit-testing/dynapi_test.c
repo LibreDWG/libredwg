@@ -14231,14 +14231,6 @@ static int test_LIGHT (const Dwg_Object *obj)
     light->class_version--;
   }
   {
-    BITCODE_CMC color;
-    if (dwg_dynapi_entity_value (light, "LIGHT", "color", &color, NULL)
-        && !memcmp (&color, &light->color, sizeof (BITCODE_CMC)))
-        pass ();
-    else
-        fail ("LIGHT.color [CMC]");
-  }
-  {
     BITCODE_BD extlight_length;
     if (dwg_dynapi_entity_value (light, "LIGHT", "extlight_length", &extlight_length, NULL)
         && extlight_length == light->extlight_length)
@@ -14492,6 +14484,14 @@ static int test_LIGHT (const Dwg_Object *obj)
     else
       fail ("LIGHT.lamp_color_type [BS] set+1 %hu != %hu", light->lamp_color_type, lamp_color_type);
     light->lamp_color_type--;
+  }
+  {
+    BITCODE_CMC light_color;
+    if (dwg_dynapi_entity_value (light, "LIGHT", "light_color", &light_color, NULL)
+        && !memcmp (&light_color, &light->light_color, sizeof (BITCODE_CMC)))
+        pass ();
+    else
+        fail ("LIGHT.light_color [CMC]");
   }
   {
     BITCODE_T name;
@@ -16459,14 +16459,6 @@ static int test_MPOLYGON (const Dwg_Object *obj)
     mpolygon->angle--;
   }
   {
-    BITCODE_CMC color;
-    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "color", &color, NULL)
-        && !memcmp (&color, &mpolygon->color, sizeof (BITCODE_CMC)))
-        pass ();
-    else
-        fail ("MPOLYGON.color [CMC]");
-  }
-  {
     Dwg_HATCH_Color* colors;
     BITCODE_BL count = 0;
     if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "num_colors", &count, NULL)
@@ -16578,6 +16570,14 @@ static int test_MPOLYGON (const Dwg_Object *obj)
     else
       fail ("MPOLYGON.gradient_tint [BD] set+1 %g != %g", mpolygon->gradient_tint, gradient_tint);
     mpolygon->gradient_tint--;
+  }
+  {
+    BITCODE_CMC hatch_color;
+    if (dwg_dynapi_entity_value (mpolygon, "MPOLYGON", "hatch_color", &hatch_color, NULL)
+        && !memcmp (&hatch_color, &mpolygon->hatch_color, sizeof (BITCODE_CMC)))
+        pass ();
+    else
+        fail ("MPOLYGON.hatch_color [CMC]");
   }
   {
     BITCODE_B is_associative;
@@ -17410,14 +17410,6 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     multileader->class_version--;
   }
   {
-    BITCODE_CMC color;
-    if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "color", &color, NULL)
-        && !memcmp (&color, &multileader->color, sizeof (BITCODE_CMC)))
-        pass ();
-    else
-        fail ("MULTILEADER.color [CMC]");
-  }
-  {
     Dwg_MLEADER_AnnotContext ctx;
     if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "ctx", &ctx, NULL)
         && !memcmp (&ctx, &multileader->ctx, sizeof (Dwg_MLEADER_AnnotContext)))
@@ -17576,26 +17568,34 @@ static int test_MULTILEADER (const Dwg_Object *obj)
     multileader->landing_dist--;
   }
   {
-    BITCODE_BLd linewt;
-    if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "linewt", &linewt, NULL)
-        && linewt == multileader->linewt)
-      pass ();
-    else
-      fail ("MULTILEADER.linewt [BLd] " FORMAT_BLd " != " FORMAT_BLd "", multileader->linewt, linewt);
-    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "linewt", &linewt, 0)
-        && linewt == multileader->linewt)
-      pass ();
-    else
-      fail ("MULTILEADER.linewt [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", multileader->linewt, linewt);
-    multileader->linewt--;
-  }
-  {
-    BITCODE_H ltype;
-    if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "ltype", &ltype, NULL)
-        && !memcmp (&ltype, &multileader->ltype, sizeof (BITCODE_H)))
+    BITCODE_CMC line_color;
+    if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "line_color", &line_color, NULL)
+        && !memcmp (&line_color, &multileader->line_color, sizeof (BITCODE_CMC)))
         pass ();
     else
-        fail ("MULTILEADER.ltype [H]");
+        fail ("MULTILEADER.line_color [CMC]");
+  }
+  {
+    BITCODE_BLd line_linewt;
+    if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "line_linewt", &line_linewt, NULL)
+        && line_linewt == multileader->line_linewt)
+      pass ();
+    else
+      fail ("MULTILEADER.line_linewt [BLd] " FORMAT_BLd " != " FORMAT_BLd "", multileader->line_linewt, line_linewt);
+    if (dwg_dynapi_entity_set_value (multileader, "MULTILEADER", "line_linewt", &line_linewt, 0)
+        && line_linewt == multileader->line_linewt)
+      pass ();
+    else
+      fail ("MULTILEADER.line_linewt [BLd] set+1 " FORMAT_BLd " != " FORMAT_BLd "", multileader->line_linewt, line_linewt);
+    multileader->line_linewt--;
+  }
+  {
+    BITCODE_H line_ltype;
+    if (dwg_dynapi_entity_value (multileader, "MULTILEADER", "line_ltype", &line_ltype, NULL)
+        && !memcmp (&line_ltype, &multileader->line_ltype, sizeof (BITCODE_H)))
+        pass ();
+    else
+        fail ("MULTILEADER.line_ltype [H]");
   }
   {
     BITCODE_H mleaderstyle;

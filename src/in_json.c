@@ -327,7 +327,7 @@ json_fixed_key (char *key, Bit_Chain *restrict dat,
     }
   if (len >= 80)
     {
-      LOG_ERROR ("Expected JSON STRING");
+      LOG_ERROR ("Overlong JSON STRING len=%d >= 80", len);
       tokens->index++;
       JSON_TOKENS_CHECK_OVERFLOW_VOID
       return;
@@ -790,7 +790,8 @@ json_CMC (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               long num = json_long (dat, tokens);
               JSON_TOKENS_CHECK_OVERFLOW_VOID
-              LOG_TRACE ("%s.%s.flag %u [CMC]\n", name, fname, (unsigned)num);
+              LOG_TRACE ("%s.%s.flag %lu [CMC]\n", name, fname,
+                         (unsigned long)num);
               color->flag = (BITCODE_BS)num;
             }
           else if (strEQc (key, "alpha"))
@@ -2251,7 +2252,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         }
       else if (strEQc (f->type, "CMC"))
         {
-          BITCODE_CMC color = { 0, 0, 0 };
+          BITCODE_CMC color = { 0, 0, 0, 0, 0, NULL, NULL, NULL,
+                                0, 0, 0};
           json_CMC (dat, dwg, tokens, name, key, &color);
           JSON_TOKENS_CHECK_OVERFLOW_ERR
           dwg_dynapi_field_set_value (dwg, _obj, f, &color, 1);

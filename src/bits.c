@@ -3443,7 +3443,8 @@ bit_write_CMC (Bit_Chain *dat, Bit_Chain *str_dat, Dwg_Color *restrict color)
     }
   else
     {
-      bit_downconvert_CMC (dat, color);
+      if (dat->from_version >= R_2004)
+        bit_downconvert_CMC (dat, color);
       if (dat->version < R_13b1)
         bit_write_RS (dat, color->index);
       else

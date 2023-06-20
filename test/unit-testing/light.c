@@ -10,7 +10,7 @@ api_process (dwg_object *obj)
   BITCODE_T name;
   BITCODE_BL type;
   BITCODE_B status;
-  BITCODE_CMC color;
+  BITCODE_CMC light_color;
   BITCODE_B plot_glyph;
   BITCODE_BD intensity;
   BITCODE_3BD position;
@@ -60,7 +60,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (light, LIGHT, type, BL);
   CHK_ENTITY_MAX (light, LIGHT, type, BL, 3);
   CHK_ENTITY_TYPE (light, LIGHT, status, B);
-  CHK_ENTITY_CMC (light, LIGHT, color);
+  CHK_ENTITY_CMC (light, LIGHT, light_color);
   CHK_ENTITY_TYPE (light, LIGHT, plot_glyph, B);
   CHK_ENTITY_TYPE (light, LIGHT, intensity, BD); // max 100.0?
   CHK_ENTITY_3RD (light, LIGHT, position);

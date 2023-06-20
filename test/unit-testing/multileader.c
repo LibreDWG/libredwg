@@ -11,9 +11,9 @@ api_process (dwg_object *obj)
   BITCODE_H mleaderstyle;
   BITCODE_BL flags;
   BITCODE_BS type;
-  BITCODE_CMC color;
-  BITCODE_H ltype;
-  BITCODE_BLd linewt;
+  BITCODE_CMC line_color;
+  BITCODE_H line_ltype;
+  BITCODE_BLd line_linewt;
   BITCODE_B has_landing;
   BITCODE_B has_dogleg;
   BITCODE_BD landing_dist;
@@ -223,9 +223,9 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (mleader, MULTILEADER, flags, BL);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, type, BS);
   // CHK_ENTITY_MAX (mleader, MULTILEADER, type, BS, 3);
-  CHK_ENTITY_CMC (mleader, MULTILEADER, color);
-  CHK_ENTITY_H (mleader, MULTILEADER, ltype);
-  CHK_ENTITY_TYPE (mleader, MULTILEADER, linewt, BLd);
+  CHK_ENTITY_CMC (mleader, MULTILEADER, line_color);
+  CHK_ENTITY_H (mleader, MULTILEADER, line_ltype);
+  CHK_ENTITY_TYPE (mleader, MULTILEADER, line_linewt, BLd);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, has_landing, B);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, has_dogleg, B);
   CHK_ENTITY_TYPE (mleader, MULTILEADER, landing_dist, BD);

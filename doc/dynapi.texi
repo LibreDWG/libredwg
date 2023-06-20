@@ -2470,7 +2470,7 @@ T,	DXF 1
 BL,	DXF 70
 @item status
 B,	DXF 290
-@item color
+@item light_color
 CMC,	DXF 63
 @item plot_glyph
 B,	DXF 291
@@ -2948,7 +2948,7 @@ B,	DXF 77
 BS,	DXF 78
 @item deflines
 Dwg_HATCH_DefLine*
-@item color
+@item hatch_color
 CMC,	DXF 62
 @item x_dir
 2RD,	DXF 11
@@ -3054,11 +3054,11 @@ H,	DXF 340
 BL,	DXF 90
 @item type
 BS,	DXF 170
-@item color
+@item line_color
 CMC,	DXF 91
-@item ltype
+@item line_ltype
 H,	DXF 341
-@item linewt
+@item line_linewt
 BLd,	DXF 171
 @item has_landing
 B,	DXF 290
@@ -15503,11 +15503,11 @@ BL
 @item borders
 Dwg_TABLESTYLE_border*
 @item data_type
-BL,	DXF 90
+BL
 @item unit_type
-BL,	DXF 91
+BL
 @item format_string
-TU,	DXF 1
+TU
 
 @end vtable
 @end indentedblock

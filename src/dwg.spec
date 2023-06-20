@@ -5327,7 +5327,7 @@ DWG_ENTITY (MPOLYGON)
     }
 #endif
 
-  FIELD_CMC (color, 62);
+  FIELD_CMC (hatch_color, 62);
   FIELD_2RD (x_dir, 11);
   FIELD_BL (num_boundary_handles, 99);
 
@@ -7505,9 +7505,9 @@ DWG_ENTITY (MULTILEADER)
   FIELD_HANDLE (mleaderstyle, 5, 340);
   FIELD_BLx (flags, 90); // override flags
   FIELD_BS (type, 170);
-  FIELD_CMC (color, 91);
-  FIELD_HANDLE (ltype, 5, 341);
-  FIELD_BLd (linewt, 171);
+  FIELD_CMC (line_color, 91);
+  FIELD_HANDLE (line_ltype, 5, 341);
+  FIELD_BLd (line_linewt, 171);
   FIELD_B (has_landing, 290);
   FIELD_B (has_dogleg, 291);
   FIELD_BD (landing_dist, 41);
@@ -8406,12 +8406,12 @@ DWG_ENTITY (LIGHT)
   FIELD_B (status, 290);
 #ifdef IS_DXF
   UNTIL (R_2000) {
-    FIELD_BL (color.rgb, 90);
+    FIELD_BL (light_color.rgb, 90);
   } else {
-    FIELD_CMC (color, 63);
+    FIELD_CMC (light_color, 63);
   }
 #else
-  FIELD_CMC (color, 63);
+  FIELD_CMC (light_color, 63);
 #endif
   FIELD_B (plot_glyph, 291); /* if it's plottable */
   FIELD_BD (intensity, 40);

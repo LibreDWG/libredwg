@@ -3138,7 +3138,7 @@ typedef struct _dwg_entity_MPOLYGON
   BITCODE_BS num_deflines;
   Dwg_HATCH_DefLine * deflines;
 
-  BITCODE_CMC color;  /* DXF 62 */
+  BITCODE_CMC hatch_color; /* DXF 62 */
   BITCODE_2RD x_dir;  /* DXF 11 (ocs) */
   BITCODE_BL num_boundary_handles; /* DXF 99 */
   //BITCODE_H* boundary_handles;
@@ -3337,9 +3337,9 @@ typedef struct _dwg_entity_MULTILEADER
   BITCODE_H mleaderstyle; /* DXF  340 */
   BITCODE_BL flags;       /* override. DXF 90 */
   BITCODE_BS type;
-  BITCODE_CMC color;
-  BITCODE_H ltype;
-  BITCODE_BLd linewt;
+  BITCODE_CMC line_color;
+  BITCODE_H line_ltype;
+  BITCODE_BLd line_linewt;
   BITCODE_B has_landing;
   BITCODE_B has_dogleg;
   BITCODE_BD landing_dist;
@@ -4793,7 +4793,7 @@ typedef struct _dwg_entity_LIGHT
   BITCODE_T name;       /*!< DXF 1 */
   BITCODE_BL type;      /*!< DXF 70, distant = 1; point = 2; spot = 3 */
   BITCODE_B status;     /*!< DXF 290, on or off */
-  BITCODE_CMC color;    /*!< DXF 63 + 421. r2000: 90 for the rgb value */
+  BITCODE_CMC light_color;  /*!< DXF 63 + 421. r2000: 90 for rgb */
   BITCODE_B plot_glyph; /*!< DXF 291 */
   BITCODE_BD intensity; /*!< DXF 40 */
   BITCODE_3BD position; /*!< DXF 10 */

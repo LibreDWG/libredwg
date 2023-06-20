@@ -33,7 +33,7 @@ api_process (dwg_object *obj)
   Dwg_HATCH_Path *paths;
   Dwg_HATCH_DefLine *deflines;
 
-  BITCODE_CMC color;
+  BITCODE_CMC hatch_color;
   BITCODE_2RD x_dir;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
@@ -235,7 +235,7 @@ api_process (dwg_object *obj)
   else if (boundary_handles)
     fail ("MPOLYGON.boundary_handles with !num_boundary_handles");
 
-  CHK_ENTITY_CMC (_obj, MPOLYGON, color);
+  CHK_ENTITY_CMC (_obj, MPOLYGON, hatch_color);
   CHK_ENTITY_2RD (_obj, MPOLYGON, x_dir);
   CHK_ENTITY_TYPE (_obj, MPOLYGON, num_boundary_handles, BL);
 #endif
