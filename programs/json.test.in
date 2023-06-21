@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # json.test
 #
 # Copyright (C) 2018-2023 Free Software Foundation, Inc.
@@ -134,6 +134,82 @@ for dwg in $DATA $TODO; do
 
     check_roundtrip
 done
+
+# teigha supports r9-r2018. r2.10: Unsupported early .dwg file version
+can_teigha=1
+case $(uname) in
+    Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
+    Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
+    Windows) TeighaFileConverter=TeighaFileConverter ;;
+    *)       can_teigha=0 ;;
+esac
+if [ ! -x "$TeighaFileConverter" ]; then
+    case $(uname) in
+        Darwin)  TeighaFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
+        Linux)   TeighaFileConverter=/usr/bin/ODAFileConverter ;;
+        Windows) TeighaFileConverter=ODAFileConverter ;;
+    esac
+fi
+
+check_oda() {
+    if [ -x "$TeighaFileConverter" ]
+    then
+        b="$(basename "$dwg")"
+        dir="$(dirname "$dwg")"
+        r="$(basename "$dir")"
+        can_teigha=1
+        #DATA=sample_2000 example_2000 example_2004 example_2007 example_2010
+        #     example_2013 example_2018 example_r14 example_r13
+        #     r11/entities-3d r2.10/entities r2.6/entities r10/entities r9/entities
+        #     2010/Text 2010/Leader 2018/Constraints
+        case $r in
+            20*)      ;;
+            r9)       r=9 ;;
+            r11)      r=12 ;;
+            r1[0234]) r=${r:1} ;;
+            r[12]\.*) r=${r:1}
+                      can_teigha=
+                      ;;
+            .)  case $b in
+                    *_20*)      r="${b:(-4)}" ;;
+                    *_r9)       r=9           ;;
+                    *_r11)      r=12          ;;
+                    *_r1[0234]) r="${b:(-2)}" ;;
+                esac
+                ;;
+        esac
+        if [ -n "$can_teigha" ] && [ ! -f "$b.dwg" ]; then
+            if [ ! -f "$b.json" ]; then
+                #echo "dwgread${EXEEXT}" -o"$b.json" "${DATADIR}/$dwg.dwg"
+                $TESTPROG "./dwgread${EXEEXT}" -o"$b.json" "${DATADIR}/$dwg.dwg" 2>/dev/null
+            fi
+            #echo "./dwgwrite${EXEEXT} -y -v0 -o $b.dwg $b.json"
+            $TESTPROG "./dwgwrite${EXEEXT}" -y -v0 -o "$b.dwg" "$b.json" 2>/dev/null
+        fi
+        if [ -n "$can_teigha" ] && [ -f "$b.dwg" ]; then
+            echo TeighaFileConverter . .. "ACAD$r" DXF 0 1 "$b.dwg" from "$dwg"
+            $TeighaFileConverter . .. "ACAD$r" DXF 0 1 "$b.dwg" >/dev/null 2>/dev/null
+            if [ -e "../$b.dxf.err" ]; then
+                mv "../$b.dxf.err" "$b.json.err"
+                cat "$b.json.err"
+                i=$((i+1))
+            fi
+            rm -f "../$b.dxf"
+        else
+            rm -f "./$b.json.err" 2>/dev/null
+        fi
+    fi
+}
+
+if [ -x "$TeighaFileConverter" ]
+then
+    echo TeighaFileConverter roundtrip checks
+    for dwg in $DATA 2010/Text 2010/Leader 2018/Constraints; do
+        check_oda
+    done
+else
+    echo "(Teigha|ODA)FileConverter not installed"
+fi
 
 if [ -n "$JQ" ]
 then
