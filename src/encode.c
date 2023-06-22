@@ -1124,6 +1124,8 @@ static int dwg_encode_xdata (Bit_Chain *restrict dat,
 static BITCODE_RLL add_LibreDWG_APPID (Dwg_Data *dwg);
 static BITCODE_BL add_DUMMY_eed (Dwg_Object *obj);
 static void fixup_NOD (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
+static void downconvert_MLEADERSTYLE (Dwg_Object *restrict obj);
+//static void downconvert_DIMSTYLE (Dwg_Object *restrict obj);
 
 /* Imported */
 BITCODE_H
@@ -2175,7 +2177,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   unsigned int ckr;
   unsigned int sec_size = 0;
   BITCODE_RLL last_handle;
-  Object_Map *omap;
+  Object_Map *restrict omap;
   Bit_Chain *old_dat = NULL, *str_dat, *hdl_dat;
   Dwg_Section_Type sec_id;
   Dwg_Version_Type orig_from_version = dwg->header.from_version;
@@ -2273,6 +2275,20 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         }
     }
 #endif
+  if (dwg->header.version < R_2010
+      && dwg->header.from_version >= R_2010)
+    {
+      // Scan for objects with EED for class_version fields.
+      LOG_TRACE ("Scan for downconverting objects to EED\n");
+      for (i = 0; i < dwg->num_objects; i++)
+        {
+          Dwg_Object *obj = &dwg->object[i];
+          if (obj->fixedtype == DWG_TYPE_MLEADERSTYLE)
+            downconvert_MLEADERSTYLE (obj);
+          //else if (obj->fixedtype == DWG_TYPE_DIMSTYLE)
+          //  downconvert_DIMSTYLE (obj); // so far Annotative only
+        }
+    }
 
   bit_chain_alloc (dat);
   hdl_dat = dat; // split later in objects/entities
@@ -6522,6 +6538,63 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
       _obj->rowstyles[2].num_borders = 6;
       _obj->rowstyles[2].borders = calloc (6, sizeof (Dwg_TABLESTYLE_border));
     }
+}
+
+// from >2007 to 2000, need to add a EED with the APPID.ACAD_MLEADERVER class_version
+static void
+downconvert_MLEADERSTYLE (Dwg_Object *restrict obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_MLEADERSTYLE *_obj;
+  Dwg_Object_Object *oo;
+  Dwg_Object *appidobj;
+  Dwg_Object_APPID *appid;
+  BITCODE_H hdl;
+  BITCODE_RLL eedhdl;
+  BITCODE_BL oindex;
+  unsigned int idx;
+
+  if (!obj || obj->fixedtype != DWG_TYPE_MLEADERSTYLE || !obj->tio.object)
+    {
+      LOG_ERROR ("Invalid type %u for downconvert_MLEADERSTYLE",
+                 obj ? obj->fixedtype : 0);
+      return;
+    }
+  oindex = obj->index;
+  hdl = dwg_find_tablehandle_silent (dwg, "ACAD_MLEADERVER", "APPID");
+  if (hdl)
+    {
+      eedhdl = hdl->handleref.value;
+      LOG_TRACE("Use APPID.ACAD_MLEADERVER " FORMAT_RLLx "\n", eedhdl);
+    }
+  else
+    {
+      appid = dwg_add_APPID (dwg, "ACAD_MLEADERVER");
+      eedhdl = dwg_obj_generic_handlevalue (appid);
+      LOG_TRACE("Added APPID.ACAD_MLEADERVER " FORMAT_RLLx "\n", eedhdl);
+    }
+  // obj may have moved, but dirty_refs is 0 (a dirty_objs is useless)
+  obj = &dwg->object[oindex];
+  if (obj->fixedtype != DWG_TYPE_MLEADERSTYLE || !obj->tio.object)
+    {
+      LOG_ERROR ("Invalid type %u for downconvert_MLEADERSTYLE",
+                 obj ? obj->fixedtype : 0);
+      return;
+    }
+  oo = obj->tio.object;
+  idx = oo->num_eed;
+  oo->num_eed += 2;
+  if (idx)
+    oo->eed = (Dwg_Eed *)realloc (oo->eed, oo->num_eed * sizeof (Dwg_Eed));
+  else
+    oo->eed = (Dwg_Eed *)calloc (2, sizeof (Dwg_Eed));
+  dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl, NULL);
+  oo->eed[idx].size = 3;
+  oo->eed[idx].data = calloc (3, 1);
+  oo->eed[idx].data->code = 70;
+  _obj = oo->tio.MLEADERSTYLE;
+  oo->eed[idx].data->u.eed_70.rs = _obj->class_version ? _obj->class_version : 2;
+  oo->eed[idx+1].size = 0;
 }
 
 #undef IS_ENCODER

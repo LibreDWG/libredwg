@@ -3812,8 +3812,8 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
                                 {
                                   Dwg_Object_MLEADERSTYLE *mstyle
                                       = obj->tio.MLEADERSTYLE;
-                                  mstyle->class_version
-                                      = 2; // real value with code 70 follows
+                                  // real value with code 70 follows
+                                  mstyle->class_version = 2;
                                   LOG_TRACE ("EED found ACAD_MLEADERVER " FORMAT_RLLx "\n",
                                              ref.absolute_ref);
                                 }

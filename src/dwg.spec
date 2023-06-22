@@ -7585,7 +7585,7 @@ DWG_OBJECT (MLEADERSTYLE)
     IF_ENCODE_FROM_EARLIER {
       FIELD_VALUE (class_version) = 2;
     }
-    // is also set on EED for APPID “ACAD_MLEADERVER”
+    // else set on EED for APPID “ACAD_MLEADERVER”
     FIELD_BS (class_version, 179);
     VALUEOUTOFBOUNDS (class_version, 10)
   }
