@@ -1193,7 +1193,8 @@ dwg_next_entity (const Dwg_Object *restrict obj)
       if (next && next->absolute_ref)
         {
           Dwg_Object *next_obj = dwg_ref_object_silent (obj->parent, next);
-          return (obj == next_obj) ? NULL : next_obj;
+          return (obj == next_obj
+                  || next_obj->supertype != DWG_SUPERTYPE_ENTITY) ? NULL : next_obj;
         }
       else
         goto next_obj;
