@@ -3395,3 +3395,14 @@ dwg_log_dataflags (const int _loglevel, const int maxlevel,
         HANDLER (OUTPUT, "  vert_alignment (128)\n");
     }
 }
+
+bool
+dwg_has_eed_appid (Dwg_Object_Object *restrict obj, const BITCODE_RLL absref)
+{
+  if (!obj->num_eed)
+    return false;
+  for (unsigned i=0; i < obj->num_eed; i++)
+    if (obj->eed[i].handle.value == absref)
+      return true;
+  return false;
+}
