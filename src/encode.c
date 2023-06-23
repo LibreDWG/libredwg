@@ -1125,7 +1125,7 @@ static BITCODE_RLL add_LibreDWG_APPID (Dwg_Data *dwg);
 static BITCODE_BL add_DUMMY_eed (Dwg_Object *obj);
 static void fixup_NOD (Dwg_Data *restrict dwg, Dwg_Object *restrict obj);
 static void downconvert_MLEADERSTYLE (Dwg_Object *restrict obj);
-//static void downconvert_DIMSTYLE (Dwg_Object *restrict obj);
+static void downconvert_DIMSTYLE (Dwg_Object *restrict obj);
 
 /* Imported */
 BITCODE_H
@@ -2285,8 +2285,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           Dwg_Object *obj = &dwg->object[i];
           if (obj->fixedtype == DWG_TYPE_MLEADERSTYLE)
             downconvert_MLEADERSTYLE (obj);
-          //else if (obj->fixedtype == DWG_TYPE_DIMSTYLE)
-          //  downconvert_DIMSTYLE (obj); // so far Annotative only
+          else if (obj->fixedtype == DWG_TYPE_DIMSTYLE)
+            downconvert_DIMSTYLE (obj); // so far Annotative only
         }
     }
 
@@ -6593,6 +6593,137 @@ downconvert_MLEADERSTYLE (Dwg_Object *restrict obj)
   oo->eed[idx].data->code = 70;
   _obj = oo->tio.MLEADERSTYLE;
   oo->eed[idx].data->u.eed_70.rs = _obj->class_version ? _obj->class_version : 2;
+  oo->eed[idx+1].size = 0;
+}
+
+static void downconvert_DIMSTYLE (Dwg_Object *restrict obj)
+{
+  Dwg_Data *dwg = obj->parent;
+  Dwg_Object_DIMSTYLE *_obj;
+  Dwg_Object_Object *oo;
+  Dwg_Object *appidobj;
+  Dwg_Object_APPID *appid;
+  BITCODE_RLL eedhdl1, eedhdl2, eedhdl3;
+  BITCODE_BL oindex;
+  BITCODE_H hdl;
+  unsigned int idx;
+
+  if (!obj || obj->fixedtype != DWG_TYPE_DIMSTYLE || !obj->tio.object)
+    {
+      LOG_ERROR ("Invalid type %u for downconvert_DIMSTYLE",
+                 obj ? obj->fixedtype : 0);
+      return;
+    }
+  // not yet ready
+  //if (obj->fixedtype == DWG_TYPE_DIMSTYLE) // FIXME
+  //  return;
+
+  _obj = obj->tio.object->tio.DIMSTYLE;
+  if (!bit_eq_TU ("Annotative", (BITCODE_TU)_obj->name))
+    return;
+  if (obj->tio.object->num_eed >= 2)
+    return;
+
+  oindex = obj->index;
+  hdl = dwg_find_tablehandle_silent (dwg, "AcadAnnotative", "APPID");
+  if (hdl)
+    {
+      eedhdl1 = hdl->handleref.value;
+      LOG_TRACE("Use APPID.AcadAnnotative " FORMAT_RLLx "\n", eedhdl1);
+    }
+  else
+    {
+      appid = dwg_add_APPID (dwg, "AcadAnnotative");
+      eedhdl1 = dwg_obj_generic_handlevalue (appid);
+      LOG_TRACE("Added APPID.AcadAnnotative " FORMAT_RLLx "\n", eedhdl1);
+    }
+  hdl = dwg_find_tablehandle_silent (dwg, "ACAD_DSTYLE_DIMJAG", "APPID");
+  if (hdl)
+    {
+      eedhdl2 = hdl->handleref.value;
+      LOG_TRACE("Use APPID.ACAD_DSTYLE_DIMJAG " FORMAT_RLLx "\n", eedhdl2);
+    }
+  else
+    {
+      appid = dwg_add_APPID (dwg, "ACAD_DSTYLE_DIMJAG");
+      eedhdl2 = dwg_obj_generic_handlevalue (appid);
+      LOG_TRACE("Added APPID.ACAD_DSTYLE_DIMJAG " FORMAT_RLLx "\n", eedhdl2);
+    }
+  hdl = dwg_find_tablehandle_silent (dwg, "ACAD_DSTYLE_DIMTALN", "APPID");
+  if (hdl)
+    {
+      eedhdl3 = hdl->handleref.value;
+      LOG_TRACE("Use APPID.ACAD_DSTYLE_DIMTALN " FORMAT_RLLx "\n", eedhdl3);
+    }
+  else
+    {
+      appid = dwg_add_APPID (dwg, "ACAD_DSTYLE_DIMTALN");
+      eedhdl3 = dwg_obj_generic_handlevalue (appid);
+      LOG_TRACE("Added APPID.ACAD_DSTYLE_DIMTALN " FORMAT_RLLx "\n", eedhdl3);
+    }
+  // obj may have moved, but dirty_refs is 0 (a dirty_objs is useless)
+  obj = &dwg->object[oindex];
+  if (obj->fixedtype != DWG_TYPE_DIMSTYLE || !obj->tio.object)
+    {
+      LOG_ERROR ("Invalid type %u for downconvert_DIMSTYLE",
+                 obj ? obj->fixedtype : 0);
+      return;
+    }
+  oo = obj->tio.object;
+  idx = oo->num_eed;
+  oo->num_eed += 10;
+  if (idx)
+    oo->eed = (Dwg_Eed *)realloc (oo->eed, oo->num_eed * sizeof (Dwg_Eed));
+  else
+    oo->eed = (Dwg_Eed *)calloc (10, sizeof (Dwg_Eed));
+  // AnnotativeData
+  dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl1, NULL);
+  oo->eed[idx].size = 28;
+  oo->eed[idx].data = calloc (18, 1);
+  oo->eed[idx].data->code = 0;
+  oo->eed[idx].data->u.eed_0.length = 14;
+  oo->eed[idx].data->u.eed_0.codepage = 30;
+  strcpy (oo->eed[idx].data->u.eed_0.string, "AnnotativeData");
+  idx++;
+  oo->eed[idx].data = calloc (2, 1);
+  oo->eed[idx].data->code = 2; // open
+  idx++;
+  oo->eed[idx].data = calloc (3, 1);
+  oo->eed[idx].data->code = 70;
+  oo->eed[idx].data->u.eed_70.rs = 1;
+  idx++;
+  oo->eed[idx].data = calloc (3, 1);
+  oo->eed[idx].data->code = 70;
+  oo->eed[idx].data->u.eed_70.rs = 1;
+  idx++;
+  oo->eed[idx].data = calloc (2, 1);
+  oo->eed[idx].data->code = 2;
+  oo->eed[idx].data->u.eed_2.close = 1;
+  idx++;
+  
+  // DIMJAG
+  dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl1, NULL);
+  oo->eed[idx].size = 12;
+  oo->eed[idx].data = calloc (3, 1);
+  oo->eed[idx].data->code = 70;
+  //_obj = oo->tio.DIMSTYLE;
+  oo->eed[idx].data->u.eed_70.rs = 388; // FIXME Which value?
+  idx++;
+  oo->eed[idx].data = calloc (9, 1);
+  oo->eed[idx].data->code = 40;
+  oo->eed[idx].data->u.eed_40.real = 1.5; // FIXME Which value?
+  // DIMTALN
+  idx++;
+  dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl2, NULL);
+  oo->eed[idx].size = 6;
+  oo->eed[idx].data = calloc (3, 1);
+  oo->eed[idx].data->code = 70;
+  //_obj = oo->tio.DIMSTYLE;
+  oo->eed[idx].data->u.eed_70.rs = 392; // FIXME Which value?
+  idx++;
+  oo->eed[idx].data = calloc (3, 1);
+  oo->eed[idx].data->code = 70;
+  oo->eed[idx].data->u.eed_70.rs = 0; // FIXME Which value?
   oo->eed[idx+1].size = 0;
 }
 
