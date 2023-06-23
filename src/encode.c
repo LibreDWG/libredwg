@@ -6616,10 +6616,6 @@ static void downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict 
                  obj ? obj->fixedtype : 0);
       return;
     }
-  // not yet ready
-  //if (obj->fixedtype == DWG_TYPE_DIMSTYLE) // FIXME
-  //  return;
-
   _obj = obj->tio.object->tio.DIMSTYLE;
   if (!bit_eq_T (dat, _obj->name, "Annotative"))
     return;

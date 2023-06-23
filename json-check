@@ -13,6 +13,7 @@ d="${1:-example_2000}"
 b="$(basename "$d" .dwg)"
 dir="$(dirname "$d")"
 r="$(basename "$dir")"
+exitcode=0
 
 case $dir in
     *test/test-data)   ;;
@@ -25,10 +26,12 @@ esac
 case $r in
     20*)      ;;
     r9)       r=9 ;;
+    r11)      r=12 ;;
     r1[0234]) r=${r:1} ;;
     *)  case $b in
             *_20*)      r="${b:(-4)}" ;;
             *_r9)       r=9           ;;
+            *_r11)      r=12          ;;
             *_r1[0234]) r="${b:(-2)}" ;;
             *_R20*)     r="${b:(-4)}" ;;
         esac      ;;
@@ -70,10 +73,11 @@ if [ -f "$b.dwg" ]; then
     esac
     if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
         echo TeighaFileConverter . . "ACAD$r" DXF 0 1 "$b.dwg"
-        $TeighaFileConverter . . "ACAD$r" DXF 0 1 "$b.dwg"
+        $TeighaFileConverter . . "ACAD$r" DXF 0 1 "$b.dwg" >/dev/null 2>/dev/null
         if [ -e "./$b.dxf.err" ]; then
             mv "./$b.dxf.err" "$b.json.err"
             cat "$b.json.err"
+            exitcode=1
         fi
     else
         rm "$b.json.err" 2>/dev/null
@@ -109,3 +113,4 @@ if [ -f "$b.dwg" ]; then
         fi
     fi
 fi
+exit $exitcode
