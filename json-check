@@ -55,16 +55,16 @@ if [ -f "$b.dwg" ]; then
     # teigha supports r9-r2018. r2.10: Unsupported early .dwg file version
     can_teigha=1
     case $(uname) in
-        Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
-        Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
-        Windows) TeighaFileConverter=TeighaFileConverter ;;
+        Darwin)  TeighaFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
+        Linux)   TeighaFileConverter=/usr/bin/ODAFileConverter ;;
+        Windows) TeighaFileConverter=ODAFileConverter ;;
         *)       can_teigha=0 ;;
     esac
     if [ ! -x "$TeighaFileConverter" ]; then
         case $(uname) in
-            Darwin)  TeighaFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
-            Linux)   TeighaFileConverter=/usr/bin/ODAFileConverter ;;
-            Windows) TeighaFileConverter=ODAFileConverter ;;
+            Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
+            Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
+            Windows) TeighaFileConverter=TeighaFileConverter ;;
         esac
     fi
     case $r in
