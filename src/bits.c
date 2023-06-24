@@ -3390,7 +3390,6 @@ bit_downconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color)
       if (!color->method && color->rgb & 0xFF000000)
         color->method = color->rgb >> 0x18;
       color->rgb &= 0x00FFFFFF;
-      color->index = dwg_find_color_index (color->rgb);
       switch (color->method)
         {
         case 0x0:
@@ -3402,6 +3401,7 @@ bit_downconvert_CMC (Bit_Chain *dat, Dwg_Color *restrict color)
           break;   // ByBlock
         case 0xc2: // Entity
         case 0xc3: // TrueColor
+          color->index = dwg_find_color_index (color->rgb);
           if (color->index == 256)
             color->index = color->rgb & 0xff;
           break;
