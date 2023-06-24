@@ -74,7 +74,7 @@ BITCODE_H
 dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
                              const char *restrict table);
 // used in encode.c
-void set_handle_size (Dwg_Handle *restrict hdl);
+void dwg_set_handle_size (Dwg_Handle *restrict hdl);
 
 /*------------------------------------------------------------------------------
  * Public functions
@@ -2028,7 +2028,7 @@ dxf_revcvt_lweight (const int lw)
 }
 
 void
-set_handle_size (Dwg_Handle *restrict hdl)
+dwg_set_handle_size (Dwg_Handle *restrict hdl)
 {
   if (hdl->value)
     {
@@ -2074,7 +2074,7 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
       hash_set (dwg->object_map, absref, (uint64_t)obj->index);
     }
 
-  set_handle_size (hdl);
+  dwg_set_handle_size (hdl);
   if ((code == 4 || code > 5) && obj && absref)
     {
       // change code to 6.0.0 or 8.0.0
@@ -2094,13 +2094,13 @@ dwg_add_handle (Dwg_Handle *restrict hdl, const BITCODE_RC code,
         {
           hdl->code = 10;
           hdl->value = offset;
-          set_handle_size (hdl);
+          dwg_set_handle_size (hdl);
         }
       else if (offset < 0)
         {
           hdl->code = 12;
           hdl->value = -offset;
-          set_handle_size (hdl);
+          dwg_set_handle_size (hdl);
         }
     }
   return 0;
@@ -3198,7 +3198,7 @@ dwg_set_next_objhandle (Dwg_Object *obj)
   if (dwg->next_hdl)
     {
       obj->handle.value = dwg->next_hdl;
-      set_handle_size (&obj->handle);
+      dwg_set_handle_size (&obj->handle);
       hash_set (dwg->object_map, obj->handle.value, (uint64_t)obj->index);
       dwg->next_hdl = 0;
       return;
@@ -3215,7 +3215,7 @@ dwg_set_next_objhandle (Dwg_Object *obj)
       if (!lastobj->handle.value && dwg->num_objects > 1)
         lastobj = &dwg->object[dwg->num_objects - 2];
       obj->handle.value = lastobj->handle.value + 1;
-      set_handle_size (&obj->handle);
+      dwg_set_handle_size (&obj->handle);
     }
   hash_set (dwg->object_map, obj->handle.value, (uint64_t)obj->index);
   dwg->next_hdl = 0;

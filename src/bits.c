@@ -1392,11 +1392,12 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
 }
 
 /** Write handle-references.
- *  TODO
- *  separate SoftPtr:   BB 0 + RLL
- *           HardPtr:   BB 1 + RLL
- *           SoftOwner: BB 2 + RLL
- *           HardOwner: BB 3 + RLL
+ * TODO
+ * separate SoftPtr:   BB 0 + RLL
+ *          HardPtr:   BB 1 + RLL
+ *          SoftOwner: BB 2 + RLL
+ *          HardOwner: BB 3 + RLL
+ * downconvert relative handles to abs. 4 to r2000
  */
 void
 bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)

@@ -68,6 +68,8 @@ BITCODE_RLL dwg_obj_generic_handlevalue (void *_obj);
 static int
 encode_preR13_section (const Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
                        Dwg_Data *restrict dwg);
+static void downconvert_relative_handle (BITCODE_H handle, Dwg_Object *restrict obj);
+
 
 /* The logging level for the write (encode) path.  */
 static unsigned int loglevel;
@@ -702,6 +704,12 @@ const unsigned char unknown_section[53]
               LOG_WARN ("Expected a CODE %d handle, got a %d", handle_code,   \
                         (hdlptr)->handleref.code);                            \
             }                                                                 \
+          else if (dat->version <= R_2000 && dat->from_version > R_2000       \
+                   && (hdlptr)->handleref.code > 5                            \
+                   && handle_code == 4)                                       \
+            {                                                                 \
+              downconvert_relative_handle (hdlptr, obj);                      \
+            }                                                                 \
           bit_write_H (hdl_dat, &(hdlptr)->handleref);                        \
           LOG_TRACE (#nam ": " FORMAT_REF " [H %d]", ARGS_REF (hdlptr), dxf)  \
           LOG_HPOS                                                            \
@@ -1131,7 +1139,7 @@ static void downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict 
 BITCODE_H
 dwg_find_tablehandle_silent (Dwg_Data *restrict dwg, const char *restrict name,
                              const char *restrict table);
-void set_handle_size (Dwg_Handle *restrict hdl);
+void dwg_set_handle_size (Dwg_Handle *restrict hdl);
 
 /*--------------------------------------------------------------------------------
  * Public functions
@@ -6440,6 +6448,46 @@ dwg_set_dataflags (Dwg_Object *obj)
         _obj->dataflags |= 0x40;
       if (_obj->vert_alignment != 0)
         _obj->dataflags |= 0x80;
+    }
+}
+
+// from >2000 to 2000-r13, no relative refs
+static void downconvert_relative_handle (BITCODE_H ref, Dwg_Object *restrict obj)
+{
+  assert (ref->handleref.code > 5);
+  if (ref->absolute_ref)
+    {
+      ref->handleref.value = ref->absolute_ref;
+      ref->handleref.code = 4;
+      dwg_set_handle_size (&ref->handleref);
+      return;
+    }
+  else
+    {
+      assert (obj);
+      switch (ref->handleref.code)
+        {
+        case 6:
+          ref->handleref.value = obj->handle.value + 1;
+          dwg_set_handle_size (&ref->handleref);
+          break;
+        case 8:
+          ref->handleref.value = obj->handle.value - 1;
+          break;
+        case 10:
+          ref->handleref.value = obj->handle.value + ref->handleref.value;
+          break;
+        case 12:
+          ref->handleref.value = (obj->handle.value - ref->handleref.value);
+          break;
+        case 14: // eg 2007 REGION.history_id (some very high number)
+          ref->handleref.value = obj->handle.value;
+          break;
+        default:
+          return;
+        }
+      ref->handleref.code = 4;
+      dwg_set_handle_size (&ref->handleref);
     }
 }
 
