@@ -27,11 +27,13 @@ esac
 case $r in
     20*)          ;;
     r9)       r=9 ;;
+    r11)      r=12 ;;
     r1[0234]) r=${r:1} ;;
     *)
         case $b in
             *_20*)      r=${b:(-4)} ;;
             *_r9)       r=9         ;;
+            *_r11)      r=12        ;;
             *_r1[0234]) r=${b:(-2)} ;;
             *_R20*)     r="${b:(-4)}" ;;
         esac ;;
@@ -50,15 +52,15 @@ if [ -f "$b.dxfb" ]; then
     # teigha can only write from r12-r2018
     can_teigha=1
     case $(uname) in
-        Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
-        Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
-        Windows) TeighaFileConverter=TeighaFileConverter ;;
+        Darwin)  TeighaFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
+        Linux)   TeighaFileConverter=/usr/bin/ODAFileConverter ;;
+        Windows) TeighaFileConverter=ODAFileConverter ;;
     esac
     if [ ! -x "$TeighaFileConverter" ]; then
         case $(uname) in
-            Darwin)  TeighaFileConverter=/Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter ;;
-            Linux)   TeighaFileConverter=/usr/bin/ODAFileConverter ;;
-            Windows) TeighaFileConverter=ODAFileConverter ;;
+            Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
+            Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
+            Windows) TeighaFileConverter=TeighaFileConverter ;;
         esac
     fi
     case $r in
