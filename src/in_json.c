@@ -2189,14 +2189,22 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               char *old;
               if (strEQc (key, "strings_area"))
                 {
-                  const int k = dwg->header.from_version > R_2004 ? 512 : 256;
-                  if (len > (size_t)k)
+                  const size_t k = dwg->header.from_version > R_2004 ? 512 : 256;
+                  const size_t blen = len / 2;
+                  // binary hexstring
+                  BITCODE_TF buf = (BITCODE_TF)malloc (blen);
+                  if ((len = in_hex2bin (buf, str, blen) != blen))
+                    LOG_ERROR ("in_hex2bin with key %s at pos %zu of %zu", key, len,
+                               blen);
+                  memcpy (str, buf, len);
+                  free (buf);
+                  if (len > k)
                     {
-                      LOG_ERROR ("Illegal %s.%s length %zu > %d, stripped",
+                      LOG_ERROR ("Illegal %s.%s length %zu > %zu, stripped",
                                  name, key, len, k);
-                      len = (size_t)k;
+                      len = k;
                     }
-                  else if (len != (size_t)k)
+                  else if (len != k)
                     {
                       str = (char *)realloc (str, k);
                       memset (&str[len + 1], 0, k - len - 1);
