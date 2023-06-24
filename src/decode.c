@@ -121,7 +121,6 @@ static int resolve_objectref_vector (Bit_Chain *restrict dat,
 EXPORT int
 dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
-  int i;
   char magic[8];
 
   dwg->num_object_refs = 0;

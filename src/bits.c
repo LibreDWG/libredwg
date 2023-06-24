@@ -1031,7 +1031,6 @@ void
 bit_write_UMC (Bit_Chain *dat, BITCODE_UMC val)
 {
   int i, j;
-  int negative;
   unsigned char byte[MAX_BYTE_UMC];
   BITCODE_UMC mask;
   BITCODE_UMC value;
@@ -1326,7 +1325,6 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   handle->value = 0;
   if (dat->from_version < R_13b1)
     {
-      BITCODE_RC *restrict val;
       handle->size = handle->code;
       if (handle->size > sizeof (BITCODE_RC *))
         {
@@ -2018,7 +2016,6 @@ bit_embed_TU (BITCODE_TU restrict wstr)
 {
   BITCODE_TU tmp = wstr;
   int len = 0;
-  uint16_t c = 0;
 
   if (!wstr)
     return NULL;
@@ -2927,7 +2924,6 @@ bit_u_expand (char *src)
          && ishex (p[3]) && ishex (p[4]) && ishex (p[5])
          && ishex (p[6]))
     {
-      char d[8];
       uint16_t wc;
       //printf("p: %s %p\n", p, p);
       if (1 == sscanf (p, "\\U+%4hx", &wc))
