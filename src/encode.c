@@ -6451,9 +6451,12 @@ dwg_set_dataflags (Dwg_Object *obj)
     }
 }
 
-// from >2000 to 2000-r13, no relative refs
+// from >2000 to 2000-r13, no relative refs.
+// only with older objects, not class objects.
 static void downconvert_relative_handle (BITCODE_H ref, Dwg_Object *restrict obj)
 {
+  if (obj && obj->type >= 500)
+    return;
   assert (ref->handleref.code > 5);
   if (ref->absolute_ref)
     {
