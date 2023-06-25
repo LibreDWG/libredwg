@@ -1359,7 +1359,7 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
 {
   BITCODE_RL data_size = 0;            // in byte
   BITCODE_RL start = obj->bitsize - 1; // in bits
-  size_t old_size;                 // in byte
+  size_t old_size;                     // in byte
   size_t old_byte;
   // assert (dat != str); // r2007 objects are the same, just entities not
   old_size = str->size;
@@ -1371,11 +1371,11 @@ obj_string_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
   str->size = (obj->bitsize / 8) + ((obj->bitsize % 8) ? 1 : 0);
   bit_set_position (str, start);
 
-  if (str->byte >= old_size - old_byte)
+  if (str->byte > old_size - old_byte)
     {
       LOG_ERROR ("obj_string_stream overflow, bitsize " FORMAT_RL
-                 " => " FORMAT_RL,
-                 obj->bitsize, obj->size * 8);
+                 " => " FORMAT_RL " (strpos %zu > diff %zu)",
+                 obj->bitsize, obj->size * 8, str->byte, old_size - old_byte);
       str->byte = old_byte;
       str->size = old_size;
       obj->has_strings = 0;
