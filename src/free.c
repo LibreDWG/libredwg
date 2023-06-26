@@ -302,6 +302,8 @@ static BITCODE_BL rcount1, rcount2;
 #define END_STRING_STREAM
 #define START_HANDLE_STREAM
 
+#include "spec.h"
+
 #define DWG_ENTITY(token)                                                     \
   static int dwg_free_##token##_private (Bit_Chain *dat, Bit_Chain *hdl_dat,  \
                                          Bit_Chain *str_dat,                  \

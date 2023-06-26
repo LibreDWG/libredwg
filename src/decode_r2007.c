@@ -40,6 +40,7 @@ static unsigned int cur_ver = 0;
 #define DWG_LOGLEVEL loglevel
 #include "logging.h"
 #include "dec_macros.h"
+#include "spec.h"
 
 // only for temp. debugging, to abort on obviously wrong sizes.
 // should be a bit larger then the filesize.

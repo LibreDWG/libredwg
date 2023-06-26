@@ -2975,7 +2975,6 @@ read_2004_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain old_dat, sec_dat = { 0 };
   int error;
-  Dwg_RevHistory *_obj = &dwg->revhistory;
   // compressed
   error
       = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_REVHISTORY);
@@ -6536,7 +6535,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
             LOG_TRACE ("type: " FORMAT_RCd " [RCd]\n", obj->type);
             if (obj->type > 127)
               { // deleted. moved into BLOCK
-                abstype = (Dwg_Object_Type_r11)obj->type & 0x7F;
+                abstype = (Dwg_Object_Type_r11)((unsigned)obj->type & 0x7F);
                 LOG_TRACE ("deleted\n");
               }
             else

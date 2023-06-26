@@ -6510,7 +6510,8 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
   if (!_obj->num_rowstyles)
     {
       _obj->num_rowstyles = 3;
-      _obj->rowstyles = calloc (3, sizeof (Dwg_TABLESTYLE_rowstyles));
+      _obj->rowstyles = (Dwg_TABLESTYLE_rowstyles *)calloc (
+          3, sizeof (Dwg_TABLESTYLE_rowstyles));
     }
   // 0: data, 1: title, 2: header
   // assert (strEQc (_obj->sty.name, "Table"));
@@ -6535,7 +6536,8 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
   if (!_obj->rowstyles[0].num_borders)
     {
       _obj->rowstyles[0].num_borders = 6;
-      _obj->rowstyles[0].borders = calloc (6, sizeof (Dwg_TABLESTYLE_border));
+      _obj->rowstyles[0].borders = (Dwg_TABLESTYLE_border *)calloc (
+          6, sizeof (Dwg_TABLESTYLE_border));
     }
   // borders/grid: top, horizontal inside, bottom, left, vertical inside, right
   if (_obj->sty.cellstyle.borders)
@@ -6556,7 +6558,8 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
   if (!_obj->rowstyles[1].num_borders)
     {
       _obj->rowstyles[1].num_borders = 6;
-      _obj->rowstyles[1].borders = calloc (6, sizeof (Dwg_TABLESTYLE_border));
+      _obj->rowstyles[1].borders = (Dwg_TABLESTYLE_border *)calloc (
+          6, sizeof (Dwg_TABLESTYLE_border));
     }
   if (_obj->ovr.type == 1)
     {
@@ -6586,7 +6589,8 @@ downconvert_TABLESTYLE (Dwg_Object *restrict obj)
   if (!_obj->rowstyles[2].num_borders)
     {
       _obj->rowstyles[2].num_borders = 6;
-      _obj->rowstyles[2].borders = calloc (6, sizeof (Dwg_TABLESTYLE_border));
+      _obj->rowstyles[2].borders = (Dwg_TABLESTYLE_border *)calloc (
+          6, sizeof (Dwg_TABLESTYLE_border));
     }
 }
 
@@ -6642,7 +6646,7 @@ downconvert_MLEADERSTYLE (Dwg_Object *restrict obj)
     oo->eed = (Dwg_Eed *)calloc (2, sizeof (Dwg_Eed));
   dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl, NULL);
   oo->eed[idx].size = 3;
-  oo->eed[idx].data = calloc (3, 1);
+  oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
   oo->eed[idx].data->code = 70;
   _obj = oo->tio.MLEADERSTYLE;
   oo->eed[idx].data->u.eed_70.rs = _obj->class_version ? _obj->class_version : 2;
@@ -6729,24 +6733,24 @@ static void downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict 
       // AnnotativeData
       dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl1, NULL);
       oo->eed[idx].size = 28;
-      oo->eed[idx].data = calloc (20, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (20, 1);
       oo->eed[idx].data->code = 0;
       oo->eed[idx].data->u.eed_0.length = 14; // sizeof ("AnnotativeData") - 1;
       oo->eed[idx].data->u.eed_0.codepage = 30;
       memcpy (oo->eed[idx].data->u.eed_0.string, "AnnotativeData", 15);
       idx++;
-      oo->eed[idx].data = calloc (2, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (2, 1);
       oo->eed[idx].data->code = 2; // open
       idx++;
-      oo->eed[idx].data = calloc (3, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
       oo->eed[idx].data->code = 70;
       oo->eed[idx].data->u.eed_70.rs = 1;
       idx++;
-      oo->eed[idx].data = calloc (3, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
       oo->eed[idx].data->code = 70;
       oo->eed[idx].data->u.eed_70.rs = 1;
       idx++;
-      oo->eed[idx].data = calloc (2, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (2, 1);
       oo->eed[idx].data->code = 2;
       oo->eed[idx].data->u.eed_2.close = 1;
       idx++;
@@ -6763,12 +6767,12 @@ static void downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict 
       // DIMJAG
       dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl2, NULL);
       oo->eed[idx].size = 12;
-      oo->eed[idx].data = calloc (3, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
       oo->eed[idx].data->code = 70;
       //_obj = oo->tio.DIMSTYLE;
       oo->eed[idx].data->u.eed_70.rs = 388; // FIXME Which value?
       idx++;
-      oo->eed[idx].data = calloc (9, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (9, 1);
       oo->eed[idx].data->code = 40;
       oo->eed[idx].data->u.eed_40.real = 1.5; // FIXME Which value?
       idx++;
@@ -6784,12 +6788,12 @@ static void downconvert_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict 
       // DIMTALN
       dwg_add_handle (&oo->eed[idx].handle, 5, eedhdl2, NULL);
       oo->eed[idx].size = 6;
-      oo->eed[idx].data = calloc (3, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
       oo->eed[idx].data->code = 70;
       //_obj = oo->tio.DIMSTYLE;
       oo->eed[idx].data->u.eed_70.rs = 392; // FIXME Which value?
       idx++;
-      oo->eed[idx].data = calloc (3, 1);
+      oo->eed[idx].data = (Dwg_Eed_Data *)calloc (3, 1);
       oo->eed[idx].data->code = 70;
       oo->eed[idx].data->u.eed_70.rs = 0; // FIXME Which value?
       idx++;

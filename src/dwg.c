@@ -201,7 +201,6 @@ dwg_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
 {
   FILE *fp;
   struct_stat_t attrib;
-  size_t size;
   Bit_Chain bit_chain = { 0 };
   int error;
 
@@ -2661,7 +2660,7 @@ dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
   BITCODE_H ctrl = NULL, *hdlv = NULL;
   Dwg_Object *obj;
   Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
-  Dwg_Header_Variables *vars = &dwg->header_vars;
+  //Dwg_Header_Variables *vars = &dwg->header_vars;
 
   if (!dwg || !table || !handle)
     return NULL;
