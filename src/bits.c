@@ -3860,7 +3860,8 @@ does_cross_unicode_datversion (Bit_Chain *restrict dat)
     return false;
 }
 
-/* Copy the whole content of tmp_data (0-byte) to dat, and reset tmp_dat.
+/* Append the whole content of tmp_data (0-byte) to dat (at datpos),
+   and reset tmp_dat pos to 0.
    WARN: This might change dat->chain  */
 void
 bit_copy_chain (Bit_Chain *restrict dat, Bit_Chain *restrict tmp_dat)
