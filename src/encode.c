@@ -5117,8 +5117,8 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                                   (dat->byte + obj->size + 2) - dat->size);
           memmove (&dat->chain[dat->byte + 2], &dat->chain[dat->byte],
                    obj->size);
-          obj->size += 2;
-          obj->bitsize += 16;
+          //obj->size += 2;
+          //obj->bitsize += 16;
           obj->bitsize_pos += 16;
           pos += 16;
         }
@@ -5130,8 +5130,8 @@ dwg_encode_add_object (Dwg_Object *restrict obj, Bit_Chain *restrict dat,
                     (unsigned)old_size, dat->byte);
           memmove (&dat->chain[dat->byte], &dat->chain[dat->byte + 2],
                    obj->size);
-          obj->size -= 2;
-          obj->bitsize -= 16;
+          //obj->size -= 2;
+          //obj->bitsize -= 16;
           obj->bitsize_pos -= 16;
           pos -= 16;
         }
