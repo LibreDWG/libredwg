@@ -3865,12 +3865,13 @@ does_cross_unicode_datversion (Bit_Chain *restrict dat)
 void
 bit_copy_chain (Bit_Chain *restrict dat, Bit_Chain *restrict tmp_dat)
 {
-  size_t i;
   size_t dat_bits = bit_position (tmp_dat);
-  size_t size = tmp_dat->byte;
+  size_t size = tmp_dat->byte; // bits should be 0
+  if (dat->chain == tmp_dat->chain)
+    return;
   while (dat->byte + size > dat->size)
     bit_chain_alloc (dat);
-  // check if both dat's are byte aligned
+  // check if both dat's are byte aligned (handles are)
   if (!dat->bit && !tmp_dat->bit)
     {
       memcpy (&dat->chain[dat->byte], &tmp_dat->chain[0], size);
@@ -3878,11 +3879,13 @@ bit_copy_chain (Bit_Chain *restrict dat, Bit_Chain *restrict tmp_dat)
     }
   else
     {
+      size_t i;
       bit_set_position (tmp_dat, 0);
       for (i = 0; i < size; i++)
         {
           bit_write_RC (dat, bit_read_RC (tmp_dat));
         }
+      // should be dead-code
       for (i = 0; i < dat_bits % 8; i++)
         {
           bit_write_B (dat, bit_read_B (tmp_dat));
