@@ -1451,21 +1451,21 @@ add_section (Dwg_Data *dwg)
 // needed for r2004+ encode and decode (check-only)
 // p 4.3: first calc with seed 0, then compress, then recalc with prev.
 // checksum
+// FIXME
 uint32_t
 dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat,
                            int32_t size)
 {
   uint32_t sum1 = seed & 0xffff;
   uint32_t sum2 = seed >> 0x10;
-  unsigned char *data = &(dat->chain[dat->byte]);
-  unsigned char *end = dat->chain + dat->size;
+  unsigned char *data = &dat->chain[dat->byte];
+  unsigned char *end = &dat->chain[dat->byte + size];
 
   while (size > 0 && data < end)
     {
-      uint32_t i;
       uint32_t chunksize = MIN (size, 0x15b0);
       size -= chunksize;
-      for (i = 0; i < chunksize && data < end; i++)
+      for (uint32_t i = 0; i < chunksize; i++)
         {
           sum1 += *data++;
           sum2 += sum1;
@@ -3278,7 +3278,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
    * Section Page Map
    */
   {
-    BITCODE_RL checksum;
+    BITCODE_RL checksum, checksum1;
     Bit_Chain *dat = file_dat;
     size_t old_address = dat->byte;
     size_t start;
@@ -3316,6 +3316,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     LOG_INSANE ("section_map_address: 0x%zx + 0x100:\n", start)
     LOG_INSANE_TF (map, 0x100)
     LOG_INSANE ("@0x%zx\n", dat->byte)
+
     FIELD_RLx (section_type, 0);
     if (FIELD_VALUE (section_type) != 0x41630e3b)
       {
@@ -3329,18 +3330,25 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     FIELD_RL (compression_type, 0);
     FIELD_RLx (checksum, 0);
     LOG_INSANE ("@0x%zx\n", dat->byte);
+    //memset (&dat->chain[dat->byte - 4], 0, 4);
     // seed 0xa751074, offset 0x100, size 16
     dat->byte = start + 0x100;
     // FIXME
-    checksum = dwg_section_page_checksum (0x0a751074, dat, 16);
+    checksum1 = dwg_section_page_checksum (0, dat, 16);
+    LOG_TRACE ("checksum1 0x%08x with seed and crc 0\n", (unsigned)checksum1);
+    //dat->byte = start + 0x110;
+    //bit_write_BL (dat, _obj->checksum);
+    //dat->byte = start + 0x100;
+    checksum = dwg_section_page_checksum (checksum1, dat, 16);
     dat->byte = start + 0x114;
     if (checksum == _obj->checksum)
       {
-        LOG_TRACE ("checksum: 0x%08x (verified)\n", checksum);
+        LOG_TRACE ("checksum: 0x%08x (verified)\n", (unsigned)checksum);
       }
     else
       {
-        LOG_WARN ("checksum: 0x%08x (calculated) CRC mismatch\n", checksum);
+        LOG_WARN ("checksum: 0x%08x (calculated) CRC mismatch 0x%zx-0x%zx\n",
+                  (unsigned)checksum, start + 0x100, start + 0x100 + 16);
         //error |= DWG_ERR_WRONGCRC;
       }
   }
