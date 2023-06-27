@@ -2559,7 +2559,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       else
         {
-          LOG_WARN ("Handles page CRC: %04X vs calc. %04X from %zu-%zu=%ld\n",
+          LOG_WARN ("Handles page CRC mismatch: %04X vs calc. %04X from %zu-%zu=%ld\n",
                     crc2, crc1, startpos, hdl_dat.byte - 2,
                     (long)(hdl_dat.byte - startpos - 2));
           error |= DWG_ERR_WRONGCRC;
@@ -3339,7 +3339,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
       }
     else
       {
-        LOG_WARN ("checksum: 0x%08x (calculated) mismatch\n", checksum);
+        LOG_WARN ("checksum: 0x%08x (calculated) CRC mismatch\n", checksum);
         error |= DWG_ERR_WRONGCRC;
       }
   }
