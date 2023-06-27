@@ -3870,10 +3870,9 @@ bit_copy_chain (Bit_Chain *restrict dat, Bit_Chain *restrict tmp_dat)
   size_t size = tmp_dat->byte;
   while (dat->byte + size > dat->size)
     bit_chain_alloc (dat);
-  // check if dat is byte aligned, tmp_dat always is. we can use memcpy then.
-  if (!dat->bit)
+  // check if both dat's are byte aligned
+  if (!dat->bit && !tmp_dat->bit)
     {
-      assert (!tmp_dat->bit);
       memcpy (&dat->chain[dat->byte], &tmp_dat->chain[0], size);
       dat->byte += size;
     }

@@ -829,7 +829,7 @@ const unsigned char unknown_section[53]
 
 #define START_HANDLE_STREAM                                                   \
   LOG_INSANE ("HANDLE_STREAM @%zu.%u\n", dat->byte - obj->address, dat->bit)  \
-  if (1 ||                                                                    \
+  if (1 ||             /* has floats */                                       \
       !obj->bitsize || /* DD sizes can vary, but let unknown_bits asis */     \
       has_entity_DD (obj) || /* strings may be zero-terminated or not */      \
       obj_has_strings (obj)                                                   \
@@ -854,9 +854,10 @@ const unsigned char unknown_section[53]
         Bit_Chain dat2;                                                       \
         bit_chain_init_dat (&dat2, 12, dat);                                  \
         hdl_dat = &dat2;                                                      \
-        ENCODE_COMMON_HANDLES                                                 \
+        ENCODE_COMMON_HANDLES /* owner, xdic, reactors */                     \
         obj_flush_hdlstream (obj, dat, hdl_dat); /* common */                 \
-        obj_flush_hdlstream (obj, dat, &dat1);   /* special accumulated */    \
+        /* special accumulated (e.g. xref) */                                 \
+        obj_flush_hdlstream (obj, dat, &dat1);                                \
         bit_chain_free (&dat1);                                               \
         bit_chain_free (&dat2);                                               \
         *hdl_dat = *dat;                                                      \
