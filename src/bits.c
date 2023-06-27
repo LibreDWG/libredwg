@@ -3860,15 +3860,19 @@ does_cross_unicode_datversion (Bit_Chain *restrict dat)
     return false;
 }
 
-/* Copy the whole content of tmp_data to dat, and reset tmp_dat.
+/* Copy the whole content of tmp_data (0-byte) to dat, and reset tmp_dat.
    WARN: This might change dat->chain  */
 void
 bit_copy_chain (Bit_Chain *restrict dat, Bit_Chain *restrict tmp_dat)
 {
   size_t dat_bits = bit_position (tmp_dat);
   size_t size = tmp_dat->byte; // bits should be 0
+  //assert (dat->chain != tmp_dat->chain);
   if (dat->chain == tmp_dat->chain)
-    return;
+    {
+      LOG_ERROR ("bit_copy_chain: dat->chain == tmp_dat->chain");
+      return;
+    }
   while (dat->byte + size > dat->size)
     bit_chain_alloc (dat);
   // check if both dat's are byte aligned (handles are)

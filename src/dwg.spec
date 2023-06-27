@@ -3004,7 +3004,6 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
     FIELD_BL (end_marker, 0);                                                 \
   }                                                                           \
                                                                               \
-  COMMON_ENTITY_HANDLE_DATA;                                                  \
   DXF {                                                                       \
     SINCE (R_2007) {                                                          \
       SUBCLASS (AcDb3dSolid);                                                 \
@@ -3035,16 +3034,19 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
 /* (37) */
 DWG_ENTITY (REGION)
   ACTION_3DSOLID;
+  COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 /* (38) */
 DWG_ENTITY (_3DSOLID)
   ACTION_3DSOLID;
+  COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 /* (39) */
 DWG_ENTITY (BODY)
   ACTION_3DSOLID;
+  COMMON_ENTITY_HANDLE_DATA;
 DWG_ENTITY_END
 
 /* (40) r13+ only */
@@ -12036,7 +12038,7 @@ DWG_OBJECT (ASSOCASMBODYACTIONPARAM)
   FIELD_HANDLE (dep, 4, 330);
   SUBCLASS (AcDbAssocAsmbodyActionParam);
   FIELD_BL (class_version, 90);
-  ACTION_3DSOLID
+  ACTION_3DSOLID;
   START_OBJECT_HANDLE_STREAM;
 DWG_OBJECT_END
 
