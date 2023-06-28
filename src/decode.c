@@ -72,6 +72,7 @@ static bool env_var_checked_p;
 
 #include "logging.h"
 #include "dec_macros.h"
+#include "classes.h"
 
 // #undef LOG_POS
 // #define LOG_POS LOG_INSANE (" @%" PRIuSIZE ".%u\n", dat->byte, dat->bit)
@@ -302,9 +303,11 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_RS crc, crc2;
   size_t size, startpos, endpos, lastmap, pvz = 0;
   size_t object_begin, object_end;
+  BITCODE_BL num = 0;
   BITCODE_BL j;
   int error = 0;
   int sentinel_size = 16;
+  int prescan_objects = (dwg->opts & DWG_OPTS_LOGLEVEL) >= DWG_LOGLEVEL_HANDLE;
   const char *section_names[]
       = { "AcDb:Header",       "AcDb:Classes",  "AcDb:Handles",
           "AcDb:ObjFreeSpace", "AcDb:Template", "AcDb:AuxHeader" };
@@ -732,7 +735,7 @@ classes_section:
 handles_section:
   dat->byte = dwg->header.section[SECTION_HANDLES_R13].address;
   dat->bit = 0;
-
+  startpos = dat->byte;
   lastmap = dat->byte + dwg->header.section[SECTION_HANDLES_R13].size; // 4
   dwg->num_objects = 0;
   object_begin = dat->size;
@@ -750,7 +753,7 @@ handles_section:
     {
       BITCODE_RLL last_handle = 0;
       size_t last_offset = 0;
-      size_t oldpos = 0;
+      size_t oldpos = 0, secpos;
       BITCODE_RLL maxh
           = (BITCODE_RLL)dwg->header.section[SECTION_HANDLES_R13].size << 1;
       BITCODE_RLL max_handles
@@ -759,7 +762,7 @@ handles_section:
       int added;
       pvz = dat->byte;
 
-      startpos = dat->byte;
+      secpos = dat->byte;
       section_size = bit_read_RS_BE (dat);
       LOG_TRACE ("Handles page size: %u [RS_BE]", section_size);
       LOG_HANDLE (" @%" PRIuSIZE, startpos);
@@ -770,13 +773,15 @@ handles_section:
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
 
-      while (dat->byte - startpos < section_size)
+      while (dat->byte - secpos < section_size)
         {
           BITCODE_MC prevsize;
           BITCODE_UMC handleoff;
           BITCODE_MC offset;
           // BITCODE_RLL last_handle = dwg->num_objects
           //   ? dwg->object[dwg->num_objects - 1].handle.value : 0;
+          if (prescan_objects != 2)
+            num = dwg->num_objects;
 
           oldpos = dat->byte;
           // The offset from the previous handle. default: 1, unsigned.
@@ -784,9 +789,7 @@ handles_section:
           handleoff = bit_read_UMC (dat);
           // The offset from the previous address. default: obj->size, signed.
           offset = bit_read_MC (dat);
-          prevsize = dwg->num_objects
-                         ? dwg->object[dwg->num_objects - 1].size + 4
-                         : 0L;
+          prevsize = num ? dwg->object[num - 1].size + 4 : 0L;
 
           if ((handleoff == 0) || (handleoff > (max_handles - last_handle))
               || (offset > -4 && offset < prevsize - 8))
@@ -816,11 +819,13 @@ handles_section:
                 }
             }
           last_offset += offset;
-          LOG_TRACE ("\nNext object: %lu ", (unsigned long)dwg->num_objects)
-          LOG_TRACE ("Handleoff: " FORMAT_UMC " [UMC]", handleoff)
-          LOG_HANDLE (" Offset: " FORMAT_MC " [MC] @%" PRIuSIZE, offset,
-                      last_offset)
-          LOG_TRACE ("\n")
+          LOG_TRACE ("\nNext object: %lu ", (unsigned long)num);
+          if (prescan_objects != 1)
+            {
+              LOG_TRACE ("Handleoff: " FORMAT_UMC " [UMC]", handleoff)
+              LOG_HANDLE (" Offset: " FORMAT_MC " [MC] @%zu", offset, last_offset)
+              LOG_TRACE ("\n")
+            }
 
           if (dat->byte == oldpos)
             break;
@@ -830,11 +835,13 @@ handles_section:
           if (object_begin > last_offset)
             object_begin = last_offset;
 
-          added = dwg_decode_add_object (dwg, dat, dat, last_offset);
+          added = dwg_decode_add_object (dwg, dat, dat, last_offset, num,
+                                         prescan_objects);
           if (added > 0)
             error |= added; // else not added (skipped) or -1 for re-allocated
-          if (dwg->num_objects)
-            last_handle = dwg->object[dwg->num_objects - 1].handle.value;
+          last_handle = dwg->object[num].handle.value;
+          if (prescan_objects == 2)
+            num++;
           // LOG_HANDLE ("dat: @%lu.%u\n", dat->byte, dat->bit);
         }
       if (dat->byte == oldpos)
@@ -869,8 +876,18 @@ handles_section:
           if (dat->from_version != R_14)
             error |= DWG_ERR_WRONGCRC;
         }
-      if (dat->byte >= lastmap)
+      if (dat->byte >= lastmap && !prescan_objects)
         break;
+      if (prescan_objects == 1 && (section_size <= 2 || dat->byte >= lastmap))
+        {
+          // reset, and scan again. now for real
+          LOG_INFO ("\nEnd of prescanning, now rescan for full\n"
+                    "=======================================\n");
+          dat->byte = startpos;
+          prescan_objects = 2;
+          section_size = 3;
+          num = 0;
+        }
     }
   while (section_size > 2);
 
@@ -2450,8 +2467,10 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   Bit_Chain obj_dat = { 0 }, hdl_dat = { 0 };
   BITCODE_RS section_size = 0;
-  size_t endpos;
+  BITCODE_BL num = 0;
+  size_t startpos, endpos;
   int error;
+  int prescan_objects = (dwg->opts & DWG_OPTS_LOGLEVEL) >= DWG_LOGLEVEL_HANDLE;
 
   obj_dat.opts = hdl_dat.opts = dwg->opts & DWG_OPTS_LOGLEVEL;
   error = read_2004_compressed_section (dat, dwg, &obj_dat, SECTION_OBJECTS);
@@ -2489,6 +2508,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
 #endif
 
+  startpos = hdl_dat.byte;
   endpos = hdl_dat.byte + hdl_dat.size;
   dwg->num_objects = 0;
 
@@ -2496,8 +2516,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     {
       size_t last_offset;
       // BITCODE_RLL last_handle;
-      size_t oldpos = 0;
-      size_t startpos = hdl_dat.byte;
+      size_t oldpos = 0, secpos = hdl_dat.byte;
       size_t max_handles = hdl_dat.size * 2;
       uint16_t crc1, crc2;
 
@@ -2517,19 +2536,17 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
 
       last_offset = 0;
-      while ((long)(hdl_dat.byte - startpos) < (long)section_size)
+      while ((long)(hdl_dat.byte - secpos) < (long)section_size)
         {
           int added;
           BITCODE_UMC handleoff;
+          BITCODE_RLL last_handle;
           BITCODE_MC offset;
-          BITCODE_RLL last_handle
-              = dwg->num_objects
-                    ? dwg->object[dwg->num_objects - 1].handle.value
-                    : 0;
-          BITCODE_MC prevsize
-              = dwg->num_objects ? dwg->object[dwg->num_objects - 1].size + 4
-                                 : 0;
-
+          BITCODE_MC prevsize;
+          if (prescan_objects != 2)
+            num = dwg->num_objects;
+          last_handle = num ? dwg->object[num - 1].handle.value : 0;
+          prevsize = num ? dwg->object[num - 1].size + 4 : 0;
           oldpos = hdl_dat.byte;
           // the offset from the previous handle. default: 1, unsigned
           handleoff = bit_read_UMC (&hdl_dat);
@@ -2557,52 +2574,68 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                 }
             }
           last_offset += offset;
-          LOG_TRACE ("\n< Next object: %lu ", (unsigned long)dwg->num_objects)
-          LOG_HANDLE ("Handleoff: " FORMAT_UMC " [UMC] "
-                      "Offset: " FORMAT_MC " [MC] @%" PRIuSIZE "\n",
-                      handleoff, offset, last_offset);
+          LOG_TRACE ("\n< Next object: %lu ", (unsigned long)num)
+          if (prescan_objects != 1)
+            {
+              LOG_HANDLE ("Handleoff: " FORMAT_UMC " [UMC] "
+                          "Offset: " FORMAT_MC " [MC] @%" PRIuSIZE "\n",
+                          handleoff, offset, last_offset);
+            }
 
           if (hdl_dat.byte == oldpos) // ?? completely unrelated
             break;
 
-          added = dwg_decode_add_object (dwg, &obj_dat, &obj_dat, last_offset);
+          added = dwg_decode_add_object (dwg, &obj_dat, &obj_dat, last_offset,
+                                         num, prescan_objects);
           if (added > 0)
             error |= added;
           // else re-allocated
           // we don't stop encoding on single errors, but we sum them all up
           // as combined bitmask
+          if (prescan_objects == 2)
+              num++;
         }
 
       if (hdl_dat.byte == oldpos)
         break;
 #if 0
-      if (!bit_check_CRC(&hdl_dat, startpos, 0xC0C1))
+      if (!bit_check_CRC(&hdl_dat, secpos, 0xC0C1))
         error |= DWG_ERR_WRONGCRC;
       //LOG_WARN("Handles section CRC mismatch at offset %zx", startpos);
 #else
-      crc1 = bit_calc_CRC (0xC0C1, &(hdl_dat.chain[startpos]),
-                           hdl_dat.byte - startpos);
+      crc1 = bit_calc_CRC (0xC0C1, &(hdl_dat.chain[secpos]),
+                           hdl_dat.byte - secpos);
       crc2 = bit_read_RS_BE (&hdl_dat);
       LOG_TRACE ("Handles page crc: %04X [RS_BE]\n", crc2);
       if (crc1 == crc2)
         {
           LOG_INSANE ("Handles page CRC: %04X from %" PRIuSIZE "-%" PRIuSIZE
                       "=%ld\n",
-                      crc2, startpos, hdl_dat.byte - 2,
+                      crc2, secpos, hdl_dat.byte - 2,
                       (long)(hdl_dat.byte - startpos - 2));
         }
       else
         {
           LOG_WARN ("Handles page CRC mismatch: %04X vs calc. %04X from "
                     "%" PRIuSIZE "-%" PRIuSIZE "=%ld\n",
-                    crc2, crc1, startpos, hdl_dat.byte - 2,
+                    crc2, crc1, secpos, hdl_dat.byte - 2,
                     (long)(hdl_dat.byte - startpos - 2));
           error |= DWG_ERR_WRONGCRC;
         }
 #endif
 
-      if (hdl_dat.byte >= endpos)
+      if (hdl_dat.byte >= endpos && !prescan_objects)
         break;
+      if (prescan_objects == 1 && (section_size <= 2 || hdl_dat.byte >= endpos))
+        {
+          // reset, and scan again. now for real
+          LOG_INFO ("\nEnd of prescanning, now rescan for full\n"
+                    "=======================================\n");
+          hdl_dat.byte = startpos;
+          prescan_objects = 2;
+          section_size = 3;
+          num = 0;
+        }
     }
   while (section_size > 2);
 
@@ -4172,113 +4205,6 @@ pt2        (35.27188116753285, -22.39344715050545, 0.0) [11]
   return 0;
 }
 
-// for all obj->type < 500. if to check for the has_strings bit after bitsize
-// TODO: generate this automatically
-static int
-obj_has_strings (unsigned int type)
-{
-  switch (type)
-    {
-    case DWG_TYPE_TEXT:
-    case DWG_TYPE_ATTRIB:
-    case DWG_TYPE_ATTDEF:
-    case DWG_TYPE_BLOCK:
-      return 1;
-    case DWG_TYPE_ENDBLK:
-    case DWG_TYPE_SEQEND:
-    case DWG_TYPE_INSERT:
-    case DWG_TYPE_MINSERT:
-    case DWG_TYPE_VERTEX_2D:
-    case DWG_TYPE_VERTEX_3D:
-    case DWG_TYPE_VERTEX_MESH:
-    case DWG_TYPE_VERTEX_PFACE:
-    case DWG_TYPE_VERTEX_PFACE_FACE:
-    case DWG_TYPE_POLYLINE_2D:
-    case DWG_TYPE_POLYLINE_3D:
-    case DWG_TYPE_ARC:
-    case DWG_TYPE_CIRCLE:
-    case DWG_TYPE_LINE:
-      return 0;
-    case DWG_TYPE_DIMENSION_ORDINATE:
-    case DWG_TYPE_DIMENSION_LINEAR:
-    case DWG_TYPE_DIMENSION_ALIGNED:
-    case DWG_TYPE_DIMENSION_ANG3PT:
-    case DWG_TYPE_DIMENSION_ANG2LN:
-    case DWG_TYPE_DIMENSION_RADIUS:
-    case DWG_TYPE_DIMENSION_DIAMETER:
-      return 1;
-    case DWG_TYPE_POINT:
-    case DWG_TYPE__3DFACE:
-    case DWG_TYPE_POLYLINE_PFACE:
-    case DWG_TYPE_POLYLINE_MESH:
-    case DWG_TYPE_SOLID:
-    case DWG_TYPE_TRACE:
-    case DWG_TYPE_SHAPE:
-      return 0;
-    case DWG_TYPE_VIEWPORT:
-      return 1;
-    case DWG_TYPE_ELLIPSE:
-    case DWG_TYPE_SPLINE:
-      return 0;
-    case DWG_TYPE_REGION:
-    case DWG_TYPE__3DSOLID:
-    case DWG_TYPE_BODY:
-      return 1;
-    case DWG_TYPE_RAY:
-    case DWG_TYPE_XLINE:
-      return 0;
-    case DWG_TYPE_DICTIONARY:
-    case DWG_TYPE_OLEFRAME:
-    case DWG_TYPE_MTEXT:
-    case DWG_TYPE_LEADER:
-    case DWG_TYPE_TOLERANCE:
-      return 1;
-    case DWG_TYPE_MLINE:
-      return 0;
-    case DWG_TYPE_BLOCK_CONTROL:
-    case DWG_TYPE_LAYER_CONTROL:
-    case DWG_TYPE_STYLE_CONTROL:
-    case DWG_TYPE_LTYPE_CONTROL:
-    case DWG_TYPE_VIEW_CONTROL:
-    case DWG_TYPE_UCS_CONTROL:
-    case DWG_TYPE_VPORT_CONTROL:
-    case DWG_TYPE_APPID_CONTROL:
-    case DWG_TYPE_DIMSTYLE_CONTROL:
-    case DWG_TYPE_VX_CONTROL:
-      return 0;
-    case DWG_TYPE_BLOCK_HEADER:
-    case DWG_TYPE_LAYER:
-    case DWG_TYPE_STYLE:
-    case DWG_TYPE_LTYPE:
-    case DWG_TYPE_VIEW:
-    case DWG_TYPE_UCS:
-    case DWG_TYPE_VPORT:
-    case DWG_TYPE_APPID:
-    case DWG_TYPE_DIMSTYLE:
-    case DWG_TYPE_VX_TABLE_RECORD:
-      return 1;
-    case DWG_TYPE_GROUP:
-    case DWG_TYPE_MLINESTYLE:
-    case DWG_TYPE_OLE2FRAME:
-      return 1;
-    case DWG_TYPE_DUMMY:
-    case DWG_TYPE_LONG_TRANSACTION:
-    case DWG_TYPE_LWPOLYLINE:
-      return 0;
-    case DWG_TYPE_HATCH:
-    case DWG_TYPE_XRECORD:
-      return 1;
-    case DWG_TYPE_PLACEHOLDER:
-      return 0;
-    case DWG_TYPE_VBA_PROJECT:
-    case DWG_TYPE_LAYOUT:
-    case DWG_TYPE_PROXY_ENTITY:
-    case DWG_TYPE_PROXY_OBJECT:
-    default:
-      return 1;
-    }
-}
-
 /* init and restrict the hdl_dat stream. */
 int
 obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
@@ -4362,7 +4288,7 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
     }
     // and set the string stream (restricted to size)
     // skip for all types without strings
-    if (obj->type >= 500 || obj_has_strings (obj->type))
+    if (obj->type >= 500 || obj_has_strings (obj))
       error |= obj_string_stream (dat, obj, str_dat);
     else
       {
@@ -4467,7 +4393,7 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
       error |= obj_handle_stream (dat, obj, hdl_dat);
     }
     // and set the string stream (restricted to size)
-    if (obj->type >= 500 || obj_has_strings (obj->type))
+    if (obj->type >= 500 || obj_has_strings (obj))
       error |= obj_string_stream (dat, obj, str_dat);
     else
       {
@@ -5258,6 +5184,16 @@ dwg_decode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *dat,
   return DWG_ERR_UNHANDLEDCLASS;
 }
 
+BITCODE_BL dwg_find_index_from_address (Dwg_Data *restrict dwg, size_t address)
+{
+  for (BITCODE_BL i = 0; i < dwg->num_objects; i++) {
+    Dwg_Object *obj = &dwg->object[i];
+    if (obj->address == address)
+      return i;
+  }
+  return dwg->num_objects;
+}
+
 /** Adds a new empty obj to the dwg->object[] array.
     The new object is at &dwg->object[dwg->num_objects-1].
 
@@ -5316,15 +5252,18 @@ dwg_add_object (Dwg_Data *restrict dwg)
     Returns 0 or some error codes on success.
     Returns -1 if the dwg->object pool was re-alloced.
     Returns some DWG_ERR_* otherwise.
+    On prescan_objects == 0 as before, add object and parse all.
+    On prescan_objects == 1 add object, and only parse until the type, then return.
+    On prescan_objects == 2 don't allocate the object (again).
  */
 int
 dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
-                       Bit_Chain *hdl_dat, size_t address)
+                       Bit_Chain *hdl_dat, size_t address, BITCODE_BL num,
+                       const int prescan_objects)
 {
   size_t objpos, restartpos;
   Bit_Chain abs_dat = { 0 };
   Dwg_Object *restrict obj;
-  BITCODE_BL num = dwg->num_objects;
   int error = 0;
   int realloced = 0;
 
@@ -5341,16 +5280,25 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
    * Reserve memory space for objects. A realloc violates all internal
    * pointers.
    */
-  realloced = dwg_add_object (dwg);
-  if (realloced > 0) // i.e. not realloced, but error
+  if (prescan_objects != 2)
     {
-      *dat = abs_dat;
-      return realloced; // i.e. DWG_ERR_OUTOFMEM
+      realloced = dwg_add_object (dwg);
+      if (realloced > 0) // i.e. not realloced, but error
+        {
+          *dat = abs_dat;
+          return realloced; // i.e. DWG_ERR_OUTOFMEM
+        }
     }
   obj = &dwg->object[num];
-  LOG_INFO ("==========================================\n"
-            "Object number: %lu/%lX",
-            (unsigned long)num, (unsigned long)num)
+  if (prescan_objects == 2 && !obj->parent)
+    {
+      obj->index = num;
+      obj->parent = dwg;
+    }
+  if (prescan_objects != 1)
+    LOG_INFO ("==========================================\n"
+              "Object number: %lu/%lX, ",
+              (unsigned long)num, (unsigned long)num)
 
   if (dat->byte >= dat->size)
     {
@@ -5364,7 +5312,7 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
   //     bit_explore_chain (dat, dat->byte, 16);
   // #endif
   obj->size = bit_read_MS (dat);
-  LOG_INFO (", Size: %d [MS]", obj->size)
+  LOG_INFO ("Size: %d [MS]", obj->size)
   SINCE (R_2010b)
   {
     /* This is not counted in the object size */
@@ -5411,6 +5359,17 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
   LOG_HANDLE (", Address: %" PRIuSIZE, obj->address);
   LOG_INFO ("\n");
   restartpos = bit_position (dat); // relative
+  if (prescan_objects == 1)
+    {
+      /* Reset to previous addresses for return */
+      if (obj->type < 500)
+        {
+          obj->fixedtype = (Dwg_Object_Type)obj->type;
+          LOG_INFO ("%s\n", dwg_type_name (obj->fixedtype));
+        }
+      *dat = abs_dat;
+      return realloced ? -1 : error; // re-alloced or not
+    }
 
   /* Check the type of the object
    */
