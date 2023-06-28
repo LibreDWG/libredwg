@@ -85,7 +85,7 @@ if [ -f "$b.dwg" ]; then
     else
         rm "$b.json.err" 2>/dev/null
         if [ ! -x "$TeighaFileConverter" ]; then
-            echo "(Teigha|ODA)FileConverter not installed"
+            echo "$baseFileConverter not installed"
         fi
     fi
 
