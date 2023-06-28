@@ -79,8 +79,10 @@ Dwg_Object_Ref *dwg_decode_handleref_with_code (Bit_Chain *restrict hdl_dat,
                                                 unsigned int code);
 int dwg_decode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
                                  Bit_Chain *str_dat, Dwg_Data *restrict dwg);
+BITCODE_BL dwg_find_index_from_address (Dwg_Data *restrict dwg, size_t address);
 int dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
-                           Bit_Chain *hdl_dat, size_t address);
+                           Bit_Chain *hdl_dat, size_t address, BITCODE_BL num,
+                           const int prescan_objects);
 int obj_handle_stream (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
                        Bit_Chain *restrict hdl_dat);
 void bfr_read (void *restrict dst, BITCODE_RC *restrict *restrict src,
