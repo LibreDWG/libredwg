@@ -1728,13 +1728,9 @@
     obj->parent->num_entities++;                                              \
     obj->supertype = DWG_SUPERTYPE_ENTITY;                                    \
     if (!(int)obj->fixedtype)                                                 \
-      {                                                                       \
-        obj->fixedtype = DWG_TYPE_##token;                                    \
-      }                                                                       \
+      obj->fixedtype = DWG_TYPE_##token;                                      \
     if (!(int)obj->type && obj->fixedtype <= DWG_TYPE_LAYOUT)                 \
-      {                                                                       \
-        obj->type = DWG_TYPE_##token;                                         \
-      }                                                                       \
+      obj->type = DWG_TYPE_##token;                                           \
     if (!obj->dxfname)                                                        \
       {                                                                       \
         if (strlen (#token) > 3 && !memcmp (#token, "_3D", 3))                \
@@ -1760,7 +1756,7 @@
         obj->dxfname = (char *)#token;                                        \
         obj->fixedtype = DWG_TYPE_UNKNOWN_ENT;                                \
       }                                                                       \
-    if (obj->parent->opts & DWG_OPTS_IN)                                      \
+    if (obj->parent && obj->parent->opts & DWG_OPTS_IN)                       \
       {                                                                       \
         obj->dxfname = strdup (obj->dxfname);                                 \
         if (obj->parent->opts & DWG_OPTS_INJSON)                              \
@@ -1870,14 +1866,11 @@
         return DWG_ERR_OUTOFMEM;                                              \
       }                                                                       \
     if (!(int)obj->fixedtype)                                                 \
-      {                                                                       \
-        obj->fixedtype = DWG_TYPE_##token;                                    \
-        obj->name = (char *)#token;                                           \
-      }                                                                       \
+      obj->fixedtype = DWG_TYPE_##token;                                      \
+    if (!obj->name)                                                           \
+      obj->name = (char *)#token;                                             \
     if (!(int)obj->type && obj->fixedtype <= DWG_TYPE_LAYOUT)                 \
-      {                                                                       \
-        obj->type = DWG_TYPE_##token;                                         \
-      }                                                                       \
+      obj->type = DWG_TYPE_##token;                                           \
     if (!obj->dxfname)                                                        \
       {                                                                       \
         if (strEQc (#token, "PLACEHOLDER"))                                   \
@@ -1893,7 +1886,7 @@
         obj->dxfname = (char *)#token;                                        \
         obj->fixedtype = DWG_TYPE_UNKNOWN_OBJ;                                \
       }                                                                       \
-    if (obj->parent->opts & DWG_OPTS_IN)                                      \
+    if (obj->parent && obj->parent->opts & DWG_OPTS_IN)                       \
       {                                                                       \
         obj->dxfname = strdup (obj->dxfname);                                 \
         if (obj->parent->opts & DWG_OPTS_INJSON)                              \
@@ -1970,14 +1963,11 @@
         return DWG_ERR_OUTOFMEM;                                              \
       }                                                                       \
     if (!(int)obj->fixedtype)                                                 \
-      {                                                                       \
-        obj->fixedtype = DWG_TYPE_##token;                                    \
-        obj->name = (char *)#token;                                           \
-      }                                                                       \
+      obj->fixedtype = DWG_TYPE_##token;                                      \
+    if (!obj->name)                                                           \
+      obj->name = (char *)#token;                                             \
     if (!(int)obj->type && obj->fixedtype <= DWG_TYPE_LAYOUT)                 \
-      {                                                                       \
-        obj->type = DWG_TYPE_##token;                                         \
-      }                                                                       \
+      obj->type = DWG_TYPE_##token;                                           \
     obj->dxfname = (char *)#token;                                            \
     if (obj->parent->opts & DWG_OPTS_IN)                                      \
       {                                                                       \
