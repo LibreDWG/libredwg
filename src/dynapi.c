@@ -14920,6 +14920,13 @@ dwg_dynapi_subclass_field (const char *restrict name, const char *restrict field
   return NULL;
 }
 
+/* The NULL terminated table of all header fields, for iteration. */
+EXPORT const Dwg_DYNAPI_field *
+dwg_dynapi_header_fields (void)
+{
+  return _dwg_header_variables_fields;
+}
+
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_header_field (const char *restrict fieldname)
 {
@@ -15725,7 +15732,7 @@ dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
 #endif
 
   obj = dwg_ref_object_silent ((Dwg_Data *)dwg, hdl);
-  if (!obj)
+  if (!obj || !obj->name || !obj->tio.object) // not decoded yet (prescan)
     return NULL;
   {
     const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field (obj->name, "name");

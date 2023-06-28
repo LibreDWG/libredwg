@@ -492,6 +492,8 @@
                   if (u8 && *u8)                                              \
                     HANDLER (OUTPUT, " => %s %s", dwg_ref_objname (dwg, ref), \
                              u8);                                             \
+                  else                                                        \
+                    HANDLER (OUTPUT, " => %s", dwg_ref_objname (dwg, ref));   \
                   if (u8 && alloced)                                          \
                     free ((void *)u8);                                        \
                 }                                                             \
@@ -523,6 +525,14 @@
     }                                                                         \
     LOG_TRACE ("handle: " FORMAT_H " [H %d]", ARGS_H (hdl), dxf);             \
     LOG_INSANE (" @%" PRIuSIZE ".%u", pos / 8, (unsigned)(pos % 8));          \
+    if (DWG_LOGLEVEL > DWG_LOGLEVEL_TRACE && hdl.value)                       \
+      {                                                                       \
+        const Dwg_Object *_ho = dwg_resolve_handle_silent (dwg, hdl.value);   \
+        if (!_ho && obj && obj->handle.value == hdl.value)                    \
+          _ho = obj;                                                          \
+        if (_ho)                                                              \
+          HANDLER (OUTPUT, " => %s", _ho->name ? _ho->name : _ho->dxfname);   \
+      }                                                                       \
     LOG_TRACE ("\n");                                                         \
   }
 
@@ -559,9 +569,12 @@
                 {                                                             \
                   int alloced;                                                \
                   const char *u8 = dwg_ref_tblname (dwg, ref, &alloced);      \
-                  HANDLER (OUTPUT, " => %s %s", dwg_ref_objname (dwg, ref),   \
-                           u8);                                               \
-                  if (alloced)                                                \
+                  if (u8 && *u8)                                              \
+                    HANDLER (OUTPUT, " => %s %s", dwg_ref_objname (dwg, ref), \
+                             u8);                                             \
+                  else                                                        \
+                    HANDLER (OUTPUT, " => %s", dwg_ref_objname (dwg, ref));   \
+                  if (u8 && alloced)                                          \
                     free ((void *)u8);                                        \
                 }                                                             \
             }                                                                 \
@@ -1834,13 +1847,9 @@
     obj->parent->num_entities++;                                              \
     obj->supertype = DWG_SUPERTYPE_ENTITY;                                    \
     if (!(int)obj->fixedtype)                                                 \
-      {                                                                       \
-        obj->fixedtype = DWG_TYPE_##token;                                    \
-      }                                                                       \
+      obj->fixedtype = DWG_TYPE_##token;                                      \
     if (!(int)obj->type && obj->fixedtype <= DWG_TYPE_LAYOUT)                 \
-      {                                                                       \
-        obj->type = DWG_TYPE_##token;                                         \
-      }                                                                       \
+      obj->type = DWG_TYPE_##token;                                           \
     if (!obj->dxfname)                                                        \
       {                                                                       \
         if (strlen (#token) > 3 && !memcmp (#token, "_3D", 3))                \
@@ -1866,7 +1875,7 @@
         obj->dxfname = (char *)#token;                                        \
         obj->fixedtype = DWG_TYPE_UNKNOWN_ENT;                                \
       }                                                                       \
-    if (obj->parent->opts & DWG_OPTS_IN)                                      \
+    if (obj->parent && obj->parent->opts & DWG_OPTS_IN)                       \
       {                                                                       \
         obj->dxfname = strdup (obj->dxfname);                                 \
         if (obj->parent->opts & DWG_OPTS_INJSON)                              \
@@ -1900,8 +1909,7 @@
     if (error)                                                                \
       return error;                                                           \
     SINCE (R_2007a)                                                           \
-    {                                                                         \
-      /* Keep these separate: TCC aliases combined struct declarations. */     \
+    { /* TCC: keep separate */                                                 \
       Bit_Chain obj_dat = *dat;                                               \
       Bit_Chain str_dat = *dat;                                               \
       error                                                                   \
@@ -1978,14 +1986,11 @@
         return DWG_ERR_OUTOFMEM;                                              \
       }                                                                       \
     if (!(int)obj->fixedtype)                                                 \
-      {                                                                       \
-        obj->fixedtype = DWG_TYPE_##token;                                    \
-        obj->name = (char *)#token;                                           \
-      }                                                                       \
+      obj->fixedtype = DWG_TYPE_##token;                                      \
+    if (!obj->name)                                                           \
+      obj->name = (char *)#token;                                             \
     if (!(int)obj->type && obj->fixedtype <= DWG_TYPE_LAYOUT)                 \
-      {                                                                       \
-        obj->type = DWG_TYPE_##token;                                         \
-      }                                                                       \
+      obj->type = DWG_TYPE_##token;                                           \
     if (!obj->dxfname)                                                        \
       {                                                                       \
         if (strEQc (#token, "PLACEHOLDER"))                                   \
@@ -2001,7 +2006,7 @@
         obj->dxfname = (char *)#token;                                        \
         obj->fixedtype = DWG_TYPE_UNKNOWN_OBJ;                                \
       }                                                                       \
-    if (obj->parent->opts & DWG_OPTS_IN)                                      \
+    if (obj->parent && obj->parent->opts & DWG_OPTS_IN)                       \
       {                                                                       \
         obj->dxfname = strdup (obj->dxfname);                                 \
         if (obj->parent->opts & DWG_OPTS_INJSON)                              \
@@ -2024,8 +2029,7 @@
     if (error)                                                                \
       return error;                                                           \
     SINCE (R_2007a)                                                           \
-    {                                                                         \
-      /* Keep these separate: TCC aliases combined struct declarations. */     \
+    { /* TCC: keep separate */                                                 \
       Bit_Chain obj_dat = *dat;                                               \
       Bit_Chain str_dat = *dat;                                               \
       error                                                                   \
@@ -2080,14 +2084,11 @@
         return DWG_ERR_OUTOFMEM;                                              \
       }                                                                       \
     if (!(int)obj->fixedtype)                                                 \
-      {                                                                       \
-        obj->fixedtype = DWG_TYPE_##token;                                    \
-        obj->name = (char *)#token;                                           \
-      }                                                                       \
+      obj->fixedtype = DWG_TYPE_##token;                                      \
+    if (!obj->name)                                                           \
+      obj->name = (char *)#token;                                             \
     if (!(int)obj->type && obj->fixedtype <= DWG_TYPE_LAYOUT)                 \
-      {                                                                       \
-        obj->type = DWG_TYPE_##token;                                         \
-      }                                                                       \
+      obj->type = DWG_TYPE_##token;                                           \
     obj->dxfname = (char *)#token;                                            \
     if (obj->parent->opts & DWG_OPTS_IN)                                      \
       {                                                                       \
@@ -2111,8 +2112,7 @@
     if (error)                                                                \
       return error;                                                           \
     SINCE (R_2007a)                                                           \
-    {                                                                         \
-      /* Keep these separate: TCC aliases combined struct declarations. */     \
+    { /* TCC: keep separate */                                                 \
       Bit_Chain obj_dat = *dat;                                               \
       Bit_Chain str_dat = *dat;                                               \
       error                                                                   \

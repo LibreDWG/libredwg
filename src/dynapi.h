@@ -136,6 +136,8 @@ EXPORT char *dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_header_field (const char *restrict fieldname) __nonnull ((1));
 
+EXPORT const Dwg_DYNAPI_field *dwg_dynapi_header_fields (void);
+
 EXPORT const Dwg_DYNAPI_field *
 dwg_dynapi_entity_field (const char *restrict name,
                          const char *restrict fieldname) __nonnull ((1, 2));
