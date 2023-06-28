@@ -530,7 +530,7 @@ dwg_free_variable_type (Dwg_Data *restrict dwg, Dwg_Object *restrict obj)
     }
 
   klass = &dwg->dwg_class[i];
-  if (!klass || !klass->dxfname)
+  if (!klass || !klass->dxfname || !obj->dxfname)
     {
       LOG_WARN ("No class for %s type %d found", obj->name, obj->type);
       return dwg_free_variable_no_class (dwg, obj);
