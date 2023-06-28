@@ -15619,7 +15619,7 @@ dwg_dynapi_handle_name (const Dwg_Data *restrict dwg,
 #endif
 
   obj = dwg_ref_object_silent ((Dwg_Data *)dwg, hdl);
-  if (!obj)
+  if (!obj || !obj->name)
     return NULL;
   {
     const Dwg_DYNAPI_field *f = dwg_dynapi_entity_field (obj->name, "name");
