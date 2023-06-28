@@ -1658,8 +1658,10 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
 {
   static Bit_Chain obj_dat = { 0 }, hdl_dat = { 0 };
   BITCODE_RS section_size = 0;
-  size_t endpos;
+  BITCODE_BL num = 0;
+  size_t endpos, startpos;
   int error;
+  int prescan_objects = (dwg->opts & DWG_OPTS_LOGLEVEL) >= DWG_LOGLEVEL_HANDLE;
 
   error = read_data_section (&obj_dat, dat, sections_map, pages_map,
                              SECTION_OBJECTS);
@@ -1685,6 +1687,7 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
     }
 
   /* From here on the same code as in decode:read_2004_section_handles */
+  startpos = hdl_dat.byte;
   endpos = hdl_dat.byte + hdl_dat.size;
   dwg->num_objects = 0;
 
@@ -1693,7 +1696,7 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
       size_t last_offset;
       // uint64_t last_handle;
       size_t oldpos = 0;
-      size_t startpos = hdl_dat.byte;
+      size_t secpos = hdl_dat.byte;
       uint16_t crc1, crc2;
 
       section_size = bit_read_RS_BE (&hdl_dat);
@@ -1705,54 +1708,72 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
         }
 
       last_offset = 0;
-      while ((long)(hdl_dat.byte - startpos) < (long)section_size)
+      while ((long)(hdl_dat.byte - secpos) < (long)section_size)
         {
           int added;
           BITCODE_UMC handleoff;
           BITCODE_MC offset;
+          if (prescan_objects != 2)
+            num = dwg->num_objects;
 
           oldpos = hdl_dat.byte;
           handleoff = bit_read_UMC (&hdl_dat);
           offset = bit_read_MC (&hdl_dat);
           last_offset += offset;
-          LOG_TRACE ("\nNext object: %lu ", (unsigned long)dwg->num_objects)
-          LOG_TRACE ("Handleoff: " FORMAT_UMC " [UMC] "
-                     "Offset: " FORMAT_MC " [MC] @%" PRIuSIZE "\n",
-                     handleoff, offset, last_offset)
+          LOG_TRACE ("\nNext object: " FORMAT_BL " ", num)
+          if (prescan_objects != 1)
+            {
+              LOG_TRACE ("Handleoff: " FORMAT_UMC " [UMC] "
+                         "Offset: " FORMAT_MC " [MC] @%" PRIuSIZE "\n",
+                         handleoff, offset, last_offset)
+            }
 
           if (hdl_dat.byte == oldpos)
             break;
 
-          added = dwg_decode_add_object (dwg, &obj_dat, hdl, last_offset);
+          added = dwg_decode_add_object (dwg, &obj_dat, hdl, last_offset, num,
+                                         prescan_objects);
           if (added > 0)
             error |= added;
+          if (prescan_objects == 2)
+            num++;
         }
 
       if (hdl_dat.byte == oldpos)
         break;
 #if 0
-      if (!bit_check_CRC(&hdl_dat, startpos, 0xC0C1))
-        LOG_WARN("Handles section CRC mismatch at offset %lx", startpos);
+      if (!bit_check_CRC(&hdl_dat, secpos, 0xC0C1))
+        LOG_WARN("Handles section CRC mismatch at offset %lx", secpos);
 #else
-      crc1 = bit_calc_CRC (0xC0C1, &(hdl_dat.chain[startpos]),
-                           hdl_dat.byte - startpos);
+      crc1 = bit_calc_CRC (0xC0C1, &(hdl_dat.chain[secpos]),
+                           hdl_dat.byte - secpos);
       crc2 = bit_read_RS_BE (&hdl_dat);
       if (crc1 == crc2)
         {
           LOG_INSANE ("Handles section page CRC: %04X from %zx-%zx\n", crc2,
-                      startpos, hdl_dat.byte - 2);
+                      secpos, hdl_dat.byte - 2);
         }
       else
         {
           LOG_WARN ("Handles section page CRC mismatch: %04X vs calc. %04X "
                     "from %zx-%zx\n",
-                    crc2, crc1, startpos, hdl_dat.byte - 2);
+                    crc2, crc1, secpos, hdl_dat.byte - 2);
           error |= DWG_ERR_WRONGCRC;
         }
 #endif
 
-      if (hdl_dat.byte >= endpos)
+      if (hdl_dat.byte >= endpos && !prescan_objects)
         break;
+      if (prescan_objects == 1 && (section_size <= 2 || hdl_dat.byte >= endpos))
+        {
+          // reset, and scan again. now for real
+          LOG_INFO ("\nEnd of prescanning, now rescan for full\n"
+                    "=======================================\n");
+          hdl_dat.byte = startpos;
+          prescan_objects = 2;
+          section_size = 3;
+          num = 0;
+        }
     }
   while (section_size > 2);
 
