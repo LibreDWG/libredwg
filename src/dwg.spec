@@ -2992,7 +2992,17 @@ static int free_3dsolid (Dwg_Object *restrict obj, Dwg_Entity_3DSOLID *restrict 
   SINCE (R_2013)                                                              \
   {                                                                           \
     FIELD_B (has_revision_guid, 0);                                           \
-    DXF { FIELD_TFF (revision_guid, 38, 2); }                                 \
+    DXF {                                                                     \
+      if (!_obj->revision_guid[0])                                            \
+        {                                                                     \
+          VALUE_TFF ("{00000000-0000-0000-0000-000000000000}", 2)             \
+          LOG_WARN ("empty revision_guid");                                   \
+        }                                                                     \
+      else                                                                    \
+        {                                                                     \
+          FIELD_TFF (revision_guid, 38, 2);                                   \
+        }                                                                     \
+    }                                                                         \
     else                                                                      \
     {                                                                         \
       FIELD_BL (revision_major, 0);                                           \

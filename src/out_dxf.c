@@ -2418,7 +2418,7 @@ dxf_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   BITCODE_BL i;
   int error = 0;
 
-  COMMON_ENTITY_HANDLE_DATA;
+  COMMON_ENTITY_HANDLE_DATA; // dummy
   FIELD_B0 (acis_empty, 290);
   if (!FIELD_VALUE (acis_empty))
     {
