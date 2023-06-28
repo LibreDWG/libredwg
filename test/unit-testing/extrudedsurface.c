@@ -28,11 +28,8 @@ api_process (dwg_object *obj)
   BITCODE_BD *sweep_entity_transmatrix; /*!< DXF 46: 16x BD */
   BITCODE_BD *path_entity_transmatrix;  /*!< DXF 47: 16x BD */
   BITCODE_B is_solid;                   /*!< DXF 290 */
-  BITCODE_BS
-      sweep_alignment_flags;                          /*!< DXF 290.
-                                                        0=No alignment, 1=Align sweep entity to
-                                                        path,                   2=Translate sweep entity
-                                                        to path,                          3=Translate path to sweep entity */
+  BITCODE_BS sweep_alignment_flags;     /*!< DXF 290 */
+  BITCODE_BS path_flags;                /*!< DXF 71 */
   BITCODE_B align_start;                              /*!< DXF 292 */
   BITCODE_B bank;                                     /*!< DXF 293 */
   BITCODE_B base_point_set;                           /*!< DXF 294 */
@@ -128,6 +125,7 @@ api_process (dwg_object *obj)
       }
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, is_solid, B);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, sweep_alignment_flags, BS);
+  CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, path_flags, BS);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, align_start, B);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, bank, B);
   CHK_ENTITY_TYPE (_obj, EXTRUDEDSURFACE, base_point_set, B);

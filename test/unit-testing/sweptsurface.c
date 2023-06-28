@@ -31,7 +31,8 @@ api_process (dwg_object *obj)
   BITCODE_BD scale_factor;
   BITCODE_BD align_angle;
   BITCODE_B is_solid;
-  BITCODE_RC sweep_alignment_flags;
+  BITCODE_BS sweep_alignment_flags;
+  BITCODE_BS path_flags;
   BITCODE_B align_start;
   BITCODE_B bank;
   BITCODE_B base_point_set;
@@ -137,7 +138,8 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, scale_factor, BD);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, align_angle, BD);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, is_solid, B);
-  CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, sweep_alignment_flags, RC);
+  CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, sweep_alignment_flags, BS);
+  CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, path_flags, BS);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, align_start, B);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, bank, B);
   CHK_ENTITY_TYPE (_obj, SWEPTSURFACE, base_point_set, B);
