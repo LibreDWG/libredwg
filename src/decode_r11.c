@@ -301,26 +301,31 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       dwg->dirty_refs = 1;
     }
 
-#  define SET_CONTROL(token)                                                  \
-    Dwg_Object *ctrl;                                                         \
-    Dwg_Object_##token##_CONTROL *_ctrl = NULL;                               \
-    ctrl = dwg_get_first_object (dwg, DWG_TYPE_##token##_CONTROL);            \
-    if (ctrl)                                                                 \
-      {                                                                       \
-        _ctrl = ctrl->tio.object->tio.token##_CONTROL;                        \
-        ctrl->size = tbl->size;                                               \
-        if (_ctrl->num_entries != tbl->number)                                \
-          {                                                                   \
-            if (_ctrl->entries)                                               \
+#define SET_CONTROL(token)                                                    \
+  Dwg_Object *ctrl;                                                           \
+  Dwg_Object_##token##_CONTROL *_ctrl = NULL;                                 \
+  ctrl = dwg_get_first_object (dwg, DWG_TYPE_##token##_CONTROL);              \
+  if (ctrl)                                                                   \
+    {                                                                         \
+      _ctrl = ctrl->tio.object->tio.token##_CONTROL;                          \
+      ctrl->size = tbl->size;                                                 \
+      if (tbl->number > _ctrl->num_entries)                                   \
+        {                                                                     \
+          if (_ctrl->entries)                                                 \
+            {                                                                 \
               _ctrl->entries = (BITCODE_H *)realloc (                         \
                   _ctrl->entries, tbl->number * sizeof (BITCODE_H));          \
-            else                                                              \
-              _ctrl->entries                                                  \
-                  = (BITCODE_H *)calloc (tbl->number, sizeof (BITCODE_H));    \
-            _ctrl->num_entries = tbl->number;                                 \
-            LOG_TRACE (#token "_CONTROL.num_entries = %u\n", tbl->number);    \
-          }                                                                   \
-      }
+              memset (&_ctrl->entries[_ctrl->num_entries], 0,                 \
+                      (tbl->number - _ctrl->num_entries)                      \
+                          * sizeof (BITCODE_H));                              \
+            }                                                                 \
+          else                                                                \
+            _ctrl->entries                                                    \
+                = (BITCODE_H *)calloc (tbl->number, sizeof (BITCODE_H));      \
+          _ctrl->num_entries = tbl->number;                                   \
+          LOG_TRACE (#token "_CONTROL.num_entries = %u\n", tbl->number);      \
+        }                                                                     \
+    }
 
 #  define NEW_OBJECT                                                          \
     dwg_add_object (dwg);                                                     \
