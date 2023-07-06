@@ -3286,10 +3286,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     LOG_INSANE ("@0x%zx\n", dat->byte)
 
     LOG_TRACE ("\n=== Read System Section (Section Page Map) @%lx ===\n\n",
-               (unsigned long)dwg->r2004_header.section_map_address)
-    if (!dwg->r2004_header.section_map_address)
-      return DWG_ERR_SECTIONNOTFOUND;
-    assert (dwg->r2004_header.section_map_address);
+               (unsigned long)dwg->r2004_header.section_map_address + 0x100)
     dat->byte = dwg->r2004_header.section_map_address + 0x100;
     start = dwg->r2004_header.section_map_address;
     // Some section_map_address overflow past the dwg. GH #617
