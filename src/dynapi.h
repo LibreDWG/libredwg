@@ -192,7 +192,6 @@ EXPORT bool dwg_dynapi_is_angle (const char *restrict name,
                                  const char *restrict fieldname)
     __nonnull ((1, 2));
 
-EXPORT bool dwg_dynapi_is_float (const Dwg_DYNAPI_field *f)
-    __nonnull ((1));
+EXPORT bool dwg_dynapi_is_float (const Dwg_DYNAPI_field *f) __nonnull ((1));
 
 #endif

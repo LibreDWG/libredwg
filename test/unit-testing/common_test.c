@@ -103,7 +103,7 @@ common_cvt_TIMEBLL_tests (void)
   static BITCODE_TIMEBLL date = { 0U, 0U };
   int g_failed = failed;
   failed = 0;
-  setlocale(LC_TIME, "en_UK.utf8");
+  setlocale (LC_TIME, "en_UK.utf8");
 
   date.days = 2456795;
   date.ms = 18527023;
@@ -112,40 +112,43 @@ common_cvt_TIMEBLL_tests (void)
     fail ("tm.tm_year %d != 2014 with 2456795.18527023", tm.tm_year + 1900);
 
   // check over- and underflows of each field
-  for (unsigned long i=0; i < maxtries; i++) {
-    time_t time;
-    struct tm tm1;
-    char buf[30];
-    char buf1[30];
+  for (unsigned long i = 0; i < maxtries; i++)
+    {
+      time_t time;
+      struct tm tm1;
+      char buf[30];
+      char buf1[30];
 
-    date.days = rand ();
-    date.ms = rand ();
-    if (sizeof (long) > sizeof (int))
-      {
-        date.days |= (uint64_t)rand () << 32;
-        date.ms |= (uint64_t)rand () << 32;
-      }
-    // 2020 is the latest possible year for these tests
-    if (date.days > 2459191)
-      date.days %= 2459191;
-    // 1970 is the oldest possible year for gmtime cross-checks
-    if (date.days < 25567)
-      date.days += 25567;
-    if (date.ms > 24 * 60 * 60 * 1000)
-      date.ms %= 24 * 60 * 60 * 1000;
+      date.days = rand ();
+      date.ms = rand ();
+      if (sizeof (long) > sizeof (int))
+        {
+          date.days |= (uint64_t)rand () << 32;
+          date.ms |= (uint64_t)rand () << 32;
+        }
+      // 2020 is the latest possible year for these tests
+      if (date.days > 2459191)
+        date.days %= 2459191;
+      // 1970 is the oldest possible year for gmtime cross-checks
+      if (date.days < 25567)
+        date.days += 25567;
+      if (date.ms > 24 * 60 * 60 * 1000)
+        date.ms %= 24 * 60 * 60 * 1000;
 
-    cvt_TIMEBLL (&tm, date);
+      cvt_TIMEBLL (&tm, date);
 
-    if (tm.tm_mon < 0 || tm.tm_mon > 11)
-      fail ("tm.tm_mon %d [0-11] with %u.%u", tm.tm_mon, date.days, date.ms);
-    if (tm.tm_mday < 1 || tm.tm_mday > 31)
-      fail ("tm.tm_mday %d [1-31] with %u.%u", tm.tm_mday, date.days, date.ms);
-    if (tm.tm_hour < 0 || tm.tm_hour > 23)
-      fail ("tm.tm_hour %d [0-23] with %u.%u", tm.tm_hour, date.days, date.ms);
-    if (tm.tm_min < 0 || tm.tm_min > 60)
-      fail ("tm.tm_min %d [0-60] with %u.%u", tm.tm_min, date.days, date.ms);
-    if (tm.tm_sec < 0 || tm.tm_sec > 60)
-      fail ("tm.tm_sec %d [0-60] with %u.%u", tm.tm_sec, date.days, date.ms);
+      if (tm.tm_mon < 0 || tm.tm_mon > 11)
+        fail ("tm.tm_mon %d [0-11] with %u.%u", tm.tm_mon, date.days, date.ms);
+      if (tm.tm_mday < 1 || tm.tm_mday > 31)
+        fail ("tm.tm_mday %d [1-31] with %u.%u", tm.tm_mday, date.days,
+              date.ms);
+      if (tm.tm_hour < 0 || tm.tm_hour > 23)
+        fail ("tm.tm_hour %d [0-23] with %u.%u", tm.tm_hour, date.days,
+              date.ms);
+      if (tm.tm_min < 0 || tm.tm_min > 60)
+        fail ("tm.tm_min %d [0-60] with %u.%u", tm.tm_min, date.days, date.ms);
+      if (tm.tm_sec < 0 || tm.tm_sec > 60)
+        fail ("tm.tm_sec %d [0-60] with %u.%u", tm.tm_sec, date.days, date.ms);
 
 #if 0
     // and compare against UTC time
@@ -170,9 +173,9 @@ common_cvt_TIMEBLL_tests (void)
       fail ("tm.tm_sec %d != %d", tm.tm_sec, tm1.tm_sec);
 #endif
 
-    if (failed)
-      break;
-  }
+      if (failed)
+        break;
+    }
 
   failed += g_failed;
   if (g_failed == failed)

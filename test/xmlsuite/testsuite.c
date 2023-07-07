@@ -96,8 +96,8 @@ common_entity_attrs (xmlNodePtr node, const Dwg_Object *obj)
   dwg_point_3d extrusion;
   double thickness;
 
-  // TODO: EntityTransparency (ByLayer), ObjectID=int, ObjectID32=int, Visible, TrueColor
-  // OwnerID=int OwnerID32=int TrueColor Document=dwg ptr
+  // TODO: EntityTransparency (ByLayer), ObjectID=int, ObjectID32=int, Visible,
+  // TrueColor OwnerID=int OwnerID32=int TrueColor Document=dwg ptr
 
   buf = doubletohex (obj->handle.value);
   newXMLProp ("Handle", buf);
@@ -313,7 +313,7 @@ add_lwpolyline (xmlNodePtr rootnode, const Dwg_Object *obj)
       sprintf ((char *)buf, "(%.4f %.4f %.4f %.4f %.4f %.4f ... )", pts[0].x,
                pts[0].y, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
       newXMLProp ("Coordinates", buf);
-      //free (buf);
+      // free (buf);
     }
   free (pts);
 
@@ -864,7 +864,7 @@ add_mtext (xmlNodePtr rootnode, const Dwg_Object *obj)
   Dwg_Entity_MTEXT *text = obj->tio.entity->tio.MTEXT;
   xmlChar *buf, *dtostring;
   xmlNodePtr node = newXMLEntity (rootnode);
-  //double rotation;
+  // double rotation;
   char *name;
   int error;
 
@@ -878,9 +878,9 @@ add_mtext (xmlNodePtr rootnode, const Dwg_Object *obj)
   buf = spointprepare2 (text->ins_pt.x, text->ins_pt.y);
   newXMLProp ("InsertionPoint", buf);
 
-  //rotation = geom_some(text->x_axis_dir);
-  //dtostring = doubletochar (rotation);
-  //newXMLProp ("Rotation", dtostring);
+  // rotation = geom_some(text->x_axis_dir);
+  // dtostring = doubletochar (rotation);
+  // newXMLProp ("Rotation", dtostring);
 
   buf = inttochar (text->attachment);
   newXMLProp ("AttachmentPoint", buf);
@@ -891,11 +891,11 @@ add_mtext (xmlNodePtr rootnode, const Dwg_Object *obj)
       dtostring = doubletochar (text->bg_fill_scale);
       newXMLProp ("BackgroundFill", dtostring);
     }
-  //if (text->bg_fill_flag == 1)
-  //  {
-  //    buf = colortochar (text->bg_fill_color);
-  //    newXMLProp ("BackgroundColor", buf);
-  //  }
+  // if (text->bg_fill_flag == 1)
+  //   {
+  //     buf = colortochar (text->bg_fill_color);
+  //     newXMLProp ("BackgroundColor", buf);
+  //   }
   buf = inttochar (text->flow_dir);
   newXMLProp ("DrawingDirection", buf);
   dtostring = doubletochar (text->text_height);
@@ -1040,9 +1040,9 @@ xml_dwg (char *dwgfilename, xmlNodePtr rootnode)
           add_xline (rootnode, obj);
           break;
 
-        /*case DWG_TYPE_TABLE:
-          add_table(rootnode, obj);
-          break;*/
+          /*case DWG_TYPE_TABLE:
+            add_table(rootnode, obj);
+            break;*/
 
         default:
           if (obj->type < 500 || (obj->type - 500) >= dwg.num_classes)

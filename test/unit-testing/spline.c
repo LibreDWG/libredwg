@@ -10,8 +10,8 @@ api_process (dwg_object *obj)
   BITCODE_BS degree;
   BITCODE_BL splineflags; /* 2013+: method fit points = 1, CV frame show = 2,
                               closed = 4 */
-  BITCODE_BL knotparam;    /* 2013+: Chord = 0, Square root = 1, Uniform = 2,
-                              Custom = 15 */
+  BITCODE_BL knotparam;   /* 2013+: Chord = 0, Square root = 1, Uniform = 2,
+                             Custom = 15 */
   BITCODE_BD fit_tol;
   BITCODE_3BD beg_tan_vec;
   BITCODE_3BD end_tan_vec;

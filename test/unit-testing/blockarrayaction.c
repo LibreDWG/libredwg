@@ -18,7 +18,7 @@ api_process (dwg_object *obj)
   BITCODE_BD row_offset;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  //#ifdef DEBUG_CLASSES
+  // #ifdef DEBUG_CLASSES
   dwg_obj_blockarrayaction *_obj = dwg_object_to_BLOCKARRAYACTION (obj);
 
   // AcDbBlockAction
@@ -37,5 +37,5 @@ api_process (dwg_object *obj)
     }
   CHK_ENTITY_TYPE (_obj, BLOCKARRAYACTION, column_offset, BD);
   CHK_ENTITY_TYPE (_obj, BLOCKARRAYACTION, row_offset, BD);
-  //#endif
+  // #endif
 }

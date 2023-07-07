@@ -13,9 +13,9 @@
 #define IS_DECODER
 #include <stdlib.h>
 #include "../../src/common.h"
-//CLANG_DIAG_IGNORE (-Wpragma-pack)
+// CLANG_DIAG_IGNORE (-Wpragma-pack)
 #include "decode.c"
-//CLANG_DIAG_RESTORE
+// CLANG_DIAG_RESTORE
 #include "tests_common.h"
 
 void read_literal_length_tests (void);

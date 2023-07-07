@@ -15,7 +15,7 @@ api_process (dwg_object *obj)
   BITCODE_BL index;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  //#ifdef DEBUG_CLASSES
+  // #ifdef DEBUG_CLASSES
   dwg_obj_assocfaceactionparam *_obj
       = dwg_object_to_ASSOCFACEACTIONPARAM (obj);
 
@@ -27,5 +27,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_H (_obj, ASSOCFACEACTIONPARAM, dep);
   CHK_ENTITY_TYPE (_obj, ASSOCFACEACTIONPARAM, class_version, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCFACEACTIONPARAM, index, BL);
-  //#endif
+  // #endif
 }

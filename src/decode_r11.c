@@ -110,7 +110,7 @@ decode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
   Bit_Chain *hdl_dat = dat;
   int error = 0;
 
-  // clang-format off
+// clang-format off
   #include "header_variables_r11.spec"
   // clang-format on
 
@@ -142,8 +142,10 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
   LOG_TRACE ("\nptr table %s [%d]: (0x%lx-0x%lx)\n", tbl->name, id,
              (unsigned long)tbl->address,
              (unsigned long)(tbl->address + (tbl->number * tbl->size)));
-  LOG_TRACE ("%s.size: " FORMAT_RS " [RS]\n", tbl->name, (BITCODE_RS)tbl->size);
-  LOG_TRACE ("%s.number: " FORMAT_RS " [RS]\n", tbl->name, (BITCODE_RS)tbl->number);
+  LOG_TRACE ("%s.size: " FORMAT_RS " [RS]\n", tbl->name,
+             (BITCODE_RS)tbl->size);
+  LOG_TRACE ("%s.number: " FORMAT_RS " [RS]\n", tbl->name,
+             (BITCODE_RS)tbl->number);
   LOG_TRACE ("%s.flags_r11: " FORMAT_RSx " [RS]\n", tbl->name, tbl->flags_r11);
   LOG_TRACE ("%s.address: " FORMAT_RL " [RL]\n\n", tbl->name,
              (BITCODE_RL)tbl->address);
@@ -167,14 +169,14 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
       }
       break;
 
-#  define CASE_TBL(TBL)                                                       \
+#define CASE_TBL(TBL)                                                         \
   case SECTION_##TBL:                                                         \
     {                                                                         \
       Dwg_Object *obj = dwg_get_first_object (dwg, DWG_TYPE_##TBL##_CONTROL); \
       if (obj)                                                                \
         {                                                                     \
           Dwg_Object_##TBL##_CONTROL *_obj                                    \
-            = obj->tio.object->tio.TBL##_CONTROL;                             \
+              = obj->tio.object->tio.TBL##_CONTROL;                           \
           obj->size = tbl->size;                                              \
           obj->address = tbl->address;                                        \
           _obj->flags_r11 = tbl->flags_r11;                                   \
@@ -200,7 +202,8 @@ decode_preR13_section_hdr (const char *restrict name, Dwg_Section_Type_r11 id,
                  tbl->number, (unsigned)tbl->size)
       return 1; // DWG_ERR_SECTIONNOTFOUND;
     }
-  if (tbl->number > 0 && (tbl->address + (tbl->number * tbl->size) > dat->size))
+  if (tbl->number > 0
+      && (tbl->address + (tbl->number * tbl->size) > dat->size))
     {
       LOG_ERROR ("%s.size overflow %zu > %zu", tbl->name,
                  (size_t)(tbl->address + (tbl->number * tbl->size)),
@@ -230,14 +233,14 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   BITCODE_RSd used = -1;
   BITCODE_RC flag;
 
-  LOG_TRACE (
-      "\ncontents table %-8s [%2d]: size:%-4u num:%-3ld (" FORMAT_RLL "-" FORMAT_RLL ")\n\n",
-      tbl->name, id, tbl->size, (long)tbl->number, tbl->address,
-      tbl->address + (tbl->number * tbl->size))
+  LOG_TRACE ("\ncontents table %-8s [%2d]: size:%-4u num:%-3ld (" FORMAT_RLL
+             "-" FORMAT_RLL ")\n\n",
+             tbl->name, id, tbl->size, (long)tbl->number, tbl->address,
+             tbl->address + (tbl->number * tbl->size))
 
   // with sentinel in case of R11
   SINCE (R_11)
-    real_start -= 16; // the sentinel size
+  real_start -= 16; // the sentinel size
 
   // report unknown data before table
   if (tbl->address && dat->byte != real_start)
@@ -250,36 +253,36 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     }
 
   SINCE (R_11)
-    {
+  {
 #define DECODE_PRER13_SENTINEL(ID)                                            \
   error |= decode_preR13_sentinel (ID, #ID, dat, dwg);                        \
   if (error >= DWG_ERR_SECTIONNOTFOUND)                                       \
-    return error
+  return error
 
-      switch (id)
-        {
-#define CASE_SENTINEL_BEGIN(id)                                   \
-        case SECTION_##id:                                        \
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_##id##_BEGIN); \
-          break
+    switch (id)
+      {
+#define CASE_SENTINEL_BEGIN(id)                                               \
+  case SECTION_##id:                                                          \
+    DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_##id##_BEGIN);                   \
+    break
 
-          CASE_SENTINEL_BEGIN (BLOCK);
-          CASE_SENTINEL_BEGIN (LAYER);
-          CASE_SENTINEL_BEGIN (STYLE);
-          CASE_SENTINEL_BEGIN (LTYPE);
-          CASE_SENTINEL_BEGIN (VIEW);
-          CASE_SENTINEL_BEGIN (UCS);
-          CASE_SENTINEL_BEGIN (VPORT);
-          CASE_SENTINEL_BEGIN (APPID);
-          CASE_SENTINEL_BEGIN (DIMSTYLE);
-          CASE_SENTINEL_BEGIN (VX);
+        CASE_SENTINEL_BEGIN (BLOCK);
+        CASE_SENTINEL_BEGIN (LAYER);
+        CASE_SENTINEL_BEGIN (STYLE);
+        CASE_SENTINEL_BEGIN (LTYPE);
+        CASE_SENTINEL_BEGIN (VIEW);
+        CASE_SENTINEL_BEGIN (UCS);
+        CASE_SENTINEL_BEGIN (VPORT);
+        CASE_SENTINEL_BEGIN (APPID);
+        CASE_SENTINEL_BEGIN (DIMSTYLE);
+        CASE_SENTINEL_BEGIN (VX);
 #undef CASE_SENTINEL_BEGIN
 
-        default:
-          LOG_ERROR ("Internal error: Invalid section id %d", (int)id);
-          return DWG_ERR_INTERNALERROR;
-        }
-    }
+      default:
+        LOG_ERROR ("Internal error: Invalid section id %d", (int)id);
+        return DWG_ERR_INTERNALERROR;
+      }
+  }
 
   oldpos = dat->byte;
   if (tbl->address)
@@ -327,46 +330,46 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
         }                                                                     \
     }
 
-#  define NEW_OBJECT                                                          \
-    dwg_add_object (dwg);                                                     \
-    if (dat->byte > dat->size)                                                \
-      return DWG_ERR_INVALIDDWG;                                              \
-    obj = &dwg->object[num++];                                                \
-    obj->address = dat->byte;                                                 \
-    obj->size = tbl->size;                                                    \
+#define NEW_OBJECT                                                            \
+  dwg_add_object (dwg);                                                       \
+  if (dat->byte > dat->size)                                                  \
+    return DWG_ERR_INVALIDDWG;                                                \
+  obj = &dwg->object[num++];                                                  \
+  obj->address = dat->byte;                                                   \
+  obj->size = tbl->size;
 
-#  define ADD_CTRL_ENTRY                                                      \
-    if (_ctrl)                                                                \
-      {                                                                       \
-        BITCODE_H ref;                                                        \
-        if (!obj->handle.value)                                               \
-          obj->handle.value = obj->index;                                     \
-        ref = _ctrl->entries[i]                                               \
-            = dwg_add_handleref (dwg, 2, obj->handle.value, obj);             \
-        ref->r11_idx = i;                                                     \
-        LOG_TRACE ("%s.entries[%u] = " FORMAT_REF " [H 0]\n", ctrl->name, i,  \
-                   ARGS_REF (ref));                                           \
-      }                                                                       \
-    else                                                                      \
-      return error | DWG_ERR_INVALIDDWG
-
-#  define CHK_ENDPOS                                                          \
-    SINCE (R_11)                                                              \
+#define ADD_CTRL_ENTRY                                                        \
+  if (_ctrl)                                                                  \
     {                                                                         \
-      if (!bit_check_CRC (dat, obj->address, 0xC0C1))                         \
-        error |= DWG_ERR_WRONGCRC;                                            \
+      BITCODE_H ref;                                                          \
+      if (!obj->handle.value)                                                 \
+        obj->handle.value = obj->index;                                       \
+      ref = _ctrl->entries[i]                                                 \
+          = dwg_add_handleref (dwg, 2, obj->handle.value, obj);               \
+      ref->r11_idx = i;                                                       \
+      LOG_TRACE ("%s.entries[%u] = " FORMAT_REF " [H 0]\n", ctrl->name, i,    \
+                 ARGS_REF (ref));                                             \
     }                                                                         \
-    pos = tbl->address + (long)((i + 1) * tbl->size);                         \
-    if (pos != dat->byte)                                                     \
-      {                                                                       \
-        LOG_ERROR ("offset %ld", (long)(pos - dat->byte));                    \
-        /* In the table header the size OR number can be wrong. */            \
-        /* Here we catch the wrong number. */                                 \
-        if (tbl->number > 0 && tbl->size < 33)                                \
-          return DWG_ERR_SECTIONNOTFOUND;                                     \
-      }                                                                       \
-    LOG_TRACE ("\n")                                                          \
-    dat->byte = pos
+  else                                                                        \
+    return error | DWG_ERR_INVALIDDWG
+
+#define CHK_ENDPOS                                                            \
+  SINCE (R_11)                                                                \
+  {                                                                           \
+    if (!bit_check_CRC (dat, obj->address, 0xC0C1))                           \
+      error |= DWG_ERR_WRONGCRC;                                              \
+  }                                                                           \
+  pos = tbl->address + (long)((i + 1) * tbl->size);                           \
+  if (pos != dat->byte)                                                       \
+    {                                                                         \
+      LOG_ERROR ("offset %ld", (long)(pos - dat->byte));                      \
+      /* In the table header the size OR number can be wrong. */              \
+      /* Here we catch the wrong number. */                                   \
+      if (tbl->number > 0 && tbl->size < 33)                                  \
+        return DWG_ERR_SECTIONNOTFOUND;                                       \
+    }                                                                         \
+  LOG_TRACE ("\n")                                                            \
+  dat->byte = pos
 
   switch (id)
     {
@@ -377,7 +380,7 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
           {
             NEW_OBJECT;
             error |= dwg_decode_BLOCK_HEADER (dat, obj);
-            //PUSH_HV (_hdr, num_owned, entities, ref);
+            // PUSH_HV (_hdr, num_owned, entities, ref);
             ADD_CTRL_ENTRY;
             CHK_ENDPOS;
           }
@@ -507,11 +510,11 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
       }
       break;
 
-      case SECTION_HEADER_R11:
-      default:
-        LOG_ERROR ("Invalid table id %d", id);
-        tbl->number = 0;
-        break;
+    case SECTION_HEADER_R11:
+    default:
+      LOG_ERROR ("Invalid table id %d", id);
+      tbl->number = 0;
+      break;
     }
 
   if (tbl->address && tbl->number && tbl->size)
@@ -520,29 +523,29 @@ decode_preR13_section (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
     dat->byte = oldpos;
 
   SINCE (R_11)
-    {
-      switch (id)
-        {
-#define CASE_SENTINEL_END(id)                                     \
-        case SECTION_##id:                                        \
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_##id##_END);   \
-          break
+  {
+    switch (id)
+      {
+#define CASE_SENTINEL_END(id)                                                 \
+  case SECTION_##id:                                                          \
+    DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_##id##_END);                     \
+    break
 
-          CASE_SENTINEL_END (BLOCK);
-          CASE_SENTINEL_END (LAYER);
-          CASE_SENTINEL_END (STYLE);
-          CASE_SENTINEL_END (LTYPE);
-          CASE_SENTINEL_END (VIEW);
-          CASE_SENTINEL_END (UCS);
-          CASE_SENTINEL_END (VPORT);
-          CASE_SENTINEL_END (APPID);
-          CASE_SENTINEL_END (DIMSTYLE);
-          CASE_SENTINEL_END (VX);
-        default:
-          LOG_ERROR ("Internal error: Invalid section id %d", (int)id);
-          return DWG_ERR_INTERNALERROR;
-        }
-    }
+        CASE_SENTINEL_END (BLOCK);
+        CASE_SENTINEL_END (LAYER);
+        CASE_SENTINEL_END (STYLE);
+        CASE_SENTINEL_END (LTYPE);
+        CASE_SENTINEL_END (VIEW);
+        CASE_SENTINEL_END (UCS);
+        CASE_SENTINEL_END (VPORT);
+        CASE_SENTINEL_END (APPID);
+        CASE_SENTINEL_END (DIMSTYLE);
+        CASE_SENTINEL_END (VX);
+      default:
+        LOG_ERROR ("Internal error: Invalid section id %d", (int)id);
+        return DWG_ERR_INTERNALERROR;
+      }
+  }
 #undef DECODE_PRER13_SENTINEL
 #undef CASE_SENTINEL_END
 
@@ -567,7 +570,7 @@ decode_entity_preR13 (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
             obj->index, obj->type, obj->address);
   _obj->entmode = is_block ? 3 : 2; // ent or block
 
-#  include "common_entity_data.spec"
+#include "common_entity_data.spec"
 
   if (!obj->handle.value) // can be set via FLAG_R11_HAS_HANDLING also
     {
@@ -599,7 +602,7 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Header *_obj = (Dwg_Header *)&dwg->header;
     Bit_Chain *hdl_dat = dat;
     dat->byte = 0x06;
-    // clang-format off
+// clang-format off
     #include "header.spec"
     // clang-format on
   }
@@ -689,9 +692,8 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   }
 
   PRE (R_10)
-    num_entities = dwg->header_vars.numentities;
-  else
-    num_entities = 0;
+  num_entities = dwg->header_vars.numentities;
+  else num_entities = 0;
   PRE (R_2_0b)
   {
     dwg->header.entities_start = dat->byte & 0xFFFFFFFF;
@@ -765,8 +767,9 @@ decode_preR13 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     return error;
 
   // aux header
-  SINCE (R_11) {
-    error |= decode_r11_auxheader(dat, dwg);
+  SINCE (R_11)
+  {
+    error |= decode_r11_auxheader (dat, dwg);
     if (error >= DWG_ERR_CRITICAL)
       return error;
   }

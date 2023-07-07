@@ -49,8 +49,8 @@ static unsigned int cur_ver = 0;
 
 /* https://tools.ietf.org/html/rfc7946#section-11.2 */
 // The default %f is good enough
-//#undef FORMAT_RD
-//#define FORMAT_RD %.6f
+// #undef FORMAT_RD
+// #define FORMAT_RD %.6f
 
 /*--------------------------------------------------------------------------------
  * See http://geojson.org/geojson-spec.html
@@ -159,7 +159,7 @@ static unsigned int cur_ver = 0;
   }
 #define PAIR_S(name, str)                                                     \
   if (str)                                                                    \
-    PAIR_Sc (name, str)
+  PAIR_Sc (name, str)
 #define PAIR_D(name, value)                                                   \
   {                                                                           \
     PREFIX fprintf (dat->fh, "\"" #name "\": %d,\n", value);                  \
@@ -194,9 +194,9 @@ static unsigned int cur_ver = 0;
   }
 #define ENDGEOMETRY LASTENDHASH
 
-//#define VALUE(value,type,dxf)
-//    fprintf(dat->fh, FORMAT_##type, value)
-//#define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
+// #define VALUE(value,type,dxf)
+//     fprintf(dat->fh, FORMAT_##type, value)
+// #define VALUE_RC(value,dxf) VALUE(value, RC, dxf)
 
 #define FIELD(name, type, dxf)
 #define _FIELD(name, type, value)

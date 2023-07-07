@@ -39,8 +39,7 @@
 #include "importer.h"
 
 // different to out_json
-#define ARGS_HREF11(ref)                                                      \
-  ref->handleref.size, ref->r11_idx, ref->absolute_ref
+#define ARGS_HREF11(ref) ref->handleref.size, ref->r11_idx, ref->absolute_ref
 #define FORMAT_HREF11 "[%u, %hd, " FORMAT_RLLx "]"
 
 #undef LOG_POS
@@ -122,7 +121,7 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
               LOG_TRACE (strcat (s2, ": " FORMAT_##type " [" #type " %d]"),   \
                          rcount1, rcount2, _obj->nam, dxfgroup);              \
               GCC46_DIAG_RESTORE                                              \
@@ -131,7 +130,7 @@
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
               LOG_TRACE (strcat (s1, ": " FORMAT_##type " [" #type " %d]"),   \
                          rcount1, _obj->nam, dxfgroup);                       \
               GCC46_DIAG_RESTORE                                              \
@@ -154,7 +153,7 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
               LOG_TRACE (strcat (s2, ": " FORMAT_##type " " #type "\n"),      \
                          rcount1, rcount2, _obj->nam)                         \
               GCC46_DIAG_RESTORE                                              \
@@ -163,7 +162,7 @@
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
               LOG_TRACE (strcat (s1, ": " FORMAT_##type " " #type "\n"),      \
                          rcount1, _obj->nam)                                  \
               GCC46_DIAG_RESTORE                                              \
@@ -207,7 +206,7 @@
           char *s2 = strrplc (s1, "[rcount2]", "[%d]");                       \
           if (s2)                                                             \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
               LOG_TRACE (strcat (s2, ": (" FORMAT_BD ", " FORMAT_BD           \
                                      ") [" #type " %d]"),                     \
                          rcount1, rcount2, _obj->nam.x, _obj->nam.y, dxf)     \
@@ -217,7 +216,7 @@
             }                                                                 \
           else                                                                \
             {                                                                 \
-              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                         \
+              GCC46_DIAG_IGNORE (-Wformat-nonliteral)                       \
               LOG_TRACE (strcat (s1, ": (" FORMAT_BD ", " FORMAT_BD           \
                                      ") [" #type " %d]"),                     \
                          rcount1, _obj->nam.x, _obj->nam.y, dxf)              \
@@ -326,7 +325,7 @@
   {                                                                           \
     size_t pos = bit_position (dat);                                          \
     PRE (R_13b1)                                                              \
-      error |= bit_read_H (dat, &hdl);                                        \
+    error |= bit_read_H (dat, &hdl);                                          \
     else                                                                      \
     {                                                                         \
       pos = bit_position (hdl_dat);                                           \
@@ -639,15 +638,15 @@
 #define FIELD_BE(nam, dxf)                                                    \
   {                                                                           \
     bit_read_BE (dat, &_obj->nam.x, &_obj->nam.y, &_obj->nam.z);              \
-    if (dat->version >= R_2000 && FIELD_VALUE (nam.x) == 0.0 &&               \
-        FIELD_VALUE (nam.y) == 0.0 && FIELD_VALUE (nam.z) == 1.0)             \
+    if (dat->version >= R_2000 && FIELD_VALUE (nam.x) == 0.0                  \
+        && FIELD_VALUE (nam.y) == 0.0 && FIELD_VALUE (nam.z) == 1.0)          \
       {                                                                       \
         LOG_TRACE (#nam ": default 0,0,1 [B %d]", dxf)                        \
       }                                                                       \
     else                                                                      \
       {                                                                       \
         LOG_TRACE (#nam ": (%f, %f, %f) [BE %d]", _obj->nam.x, _obj->nam.y,   \
-                 _obj->nam.z, dxf)                                            \
+                   _obj->nam.z, dxf)                                          \
       }                                                                       \
     LOG_POS;                                                                  \
   }
@@ -1161,7 +1160,8 @@
 #define FIELD_VECTOR_INL(name, type, size, dxf)                               \
   if (size > 0)                                                               \
     {                                                                         \
-      SINCE (R_13b1) {                                                        \
+      SINCE (R_13b1)                                                          \
+      {                                                                       \
         _VECTOR_CHKCOUNT_STATIC (name, size, TYPE_MAXELEMSIZE (type), dat)    \
       }                                                                       \
       for (vcount = 0; vcount < (BITCODE_BL)size; vcount++)                   \
@@ -1233,7 +1233,7 @@
 #define SUB_FIELD_VECTOR_TYPESIZE(o, name, size, typesize, dxf)               \
   if (_obj->o.size > 0)                                                       \
     {                                                                         \
-      _obj->o.name = (BITCODE_RC*)calloc (_obj->o.size, typesize);            \
+      _obj->o.name = (BITCODE_RC *)calloc (_obj->o.size, typesize);           \
       if (!_obj->o.name)                                                      \
         return DWG_ERR_OUTOFMEM;                                              \
       for (vcount = 0; vcount < (BITCODE_BL)_obj->o.size; vcount++)           \
@@ -1477,7 +1477,7 @@
 #define UNKNOWN_UNTIL(pos)                                                    \
   if (dat->byte < (size_t)(pos))                                              \
     {                                                                         \
-      long len = (long)((pos) - dat->byte);                                   \
+      long len = (long)((pos)-dat->byte);                                     \
       BITCODE_TF unknown = bit_read_TF (dat, (size_t)len);                    \
       LOG_TRACE ("unknown (%ld): ", len);                                     \
       LOG_TRACE_TF (unknown, len);                                            \
@@ -1514,7 +1514,7 @@
                     (long)(obj->hdlpos - _pos), dat->byte, dat->bit,          \
                     (long)(obj->hdlpos - _pos) >= 8 ? "MISSING"               \
                     : (long)(obj->hdlpos < _pos)    ? "OVERSHOOT"             \
-                                                    : "",                     \
+                                                    : "",                        \
                     obj->hdlpos / 8, (unsigned)obj->hdlpos % 8,               \
                     hdl_dat->byte, hdl_dat->bit);                             \
         bit_set_position (dat, obj->hdlpos);                                  \
@@ -1641,7 +1641,10 @@
 #define REPEAT4_C(times, name, type) _REPEAT_C (times, name, type, 4)
 
 #define COMMON_ENTITY_HANDLE_DATA                                             \
-  SINCE (R_13b1) { START_HANDLE_STREAM; }
+  SINCE (R_13b1)                                                              \
+  {                                                                           \
+    START_HANDLE_STREAM;                                                      \
+  }
 
 /** Add the empty entity or object with its three structs to the DWG.
     All fields are zero'd. TODO: some are initialized with default values, as
@@ -1734,7 +1737,7 @@
     return error;                                                             \
   }                                                                           \
                                                                               \
-  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                     \
+  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                   \
   static int dwg_decode_##token##_private (                                   \
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \
@@ -1776,7 +1779,7 @@
                                   : "");                                      \
   }                                                                           \
   return error & ~DWG_ERR_UNHANDLEDCLASS;                                     \
-}
+  }
 
 #define DWG_OBJECT(token)                                                     \
   EXPORT int dwg_setup_##token (Dwg_Object *obj)                              \
@@ -1831,7 +1834,7 @@
       Dwg_Object *restrict obj);                                              \
                                                                               \
   static int dwg_decode_##token (Bit_Chain *restrict dat,                     \
-                          Dwg_Object *restrict obj)                           \
+                                 Dwg_Object *restrict obj)                    \
   {                                                                           \
     int error = dwg_setup_##token (obj);                                      \
     Bit_Chain hdl_dat = *dat;                                                 \
@@ -1850,7 +1853,7 @@
     return error;                                                             \
   }                                                                           \
                                                                               \
-  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                     \
+  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                   \
   static int dwg_decode_##token##_private (                                   \
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \
@@ -1916,8 +1919,7 @@
       Bit_Chain *obj_dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,             \
       Dwg_Object *restrict obj);                                              \
                                                                               \
-  int dwg_decode_##token (Bit_Chain *restrict dat,                            \
-                          Dwg_Object *restrict obj)                           \
+  int dwg_decode_##token (Bit_Chain *restrict dat, Dwg_Object *restrict obj)  \
   {                                                                           \
     int error = dwg_setup_##token (obj);                                      \
     Bit_Chain hdl_dat = *dat;                                                 \
@@ -1936,7 +1938,7 @@
     return error;                                                             \
   }                                                                           \
                                                                               \
-  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                     \
+  GCC30_DIAG_IGNORE (-Wformat-nonliteral)                                   \
   static int dwg_decode_##token##_private (                                   \
       Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,                 \
       Dwg_Object *restrict obj)                                               \
@@ -1950,6 +1952,5 @@
     error = dwg_decode_object (dat, hdl_dat, str_dat, obj->tio.object);       \
     if (error >= DWG_ERR_CRITICAL || dat->byte > dat->size)                   \
       return error;
-
 
 #endif

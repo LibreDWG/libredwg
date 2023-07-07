@@ -1,4 +1,5 @@
-// TODO DEBUGGING GRUE_LTM_1090+_from_cadforum.cz, Annotation_-_Metric_from_autocad_2021_2018
+// TODO DEBUGGING GRUE_LTM_1090+_from_cadforum.cz,
+// Annotation_-_Metric_from_autocad_2021_2018
 #define DWG_TYPE DWG_TYPE_BLOCKPOLARSTRETCHACTION
 #include "common.c"
 
@@ -17,7 +18,7 @@ api_process (dwg_object *obj)
   BITCODE_BL *codes;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  //#ifdef DEBUG_CLASSES
+  // #ifdef DEBUG_CLASSES
   dwg_obj_blockpolarstretchaction *_obj
       = dwg_object_to_BLOCKPOLARSTRETCHACTION (obj);
 
@@ -44,5 +45,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, BLOCKPOLARSTRETCHACTION, num_codes, BL);
   CHK_ENTITY_VECTOR_TYPE (_obj, BLOCKPOLARSTRETCHACTION, codes, num_codes, BL);
   // ..
-  //#endif
+  // #endif
 }

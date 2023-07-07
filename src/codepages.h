@@ -30,7 +30,8 @@ typedef uint32_t wchar_t;
 #endif
 #include "dwg.h"
 
-/* May not be changed, as it directly maps to the dwg->header.codepage number */
+/* May not be changed, as it directly maps to the dwg->header.codepage number
+ */
 typedef enum _dwg_codepage
 {
   CP_UTF8 = 0,
@@ -44,40 +45,40 @@ typedef enum _dwg_codepage
   CP_ISO_8859_7,
   CP_ISO_8859_8,
   CP_ISO_8859_9,
-  CP_CP437, // DOS English
-  CP_CP850, // 12 DOS Latin-1
-  CP_CP852, // DOS Central European
-  CP_CP855, // DOS Cyrillic
-  CP_CP857, // DOS Turkish
-  CP_CP860, // DOS Portoguese
-  CP_CP861, // DOS Icelandic
-  CP_CP863, // DOS Hebrew
-  CP_CP864, // DOS Arabic (IBM)
-  CP_CP865, // DOS Nordic
-  CP_CP869, // DOS Greek
-  CP_CP932, // DOS Japanese
+  CP_CP437,     // DOS English
+  CP_CP850,     // 12 DOS Latin-1
+  CP_CP852,     // DOS Central European
+  CP_CP855,     // DOS Cyrillic
+  CP_CP857,     // DOS Turkish
+  CP_CP860,     // DOS Portoguese
+  CP_CP861,     // DOS Icelandic
+  CP_CP863,     // DOS Hebrew
+  CP_CP864,     // DOS Arabic (IBM)
+  CP_CP865,     // DOS Nordic
+  CP_CP869,     // DOS Greek
+  CP_CP932,     // DOS Japanese
   CP_MACINTOSH, // 23
   CP_BIG5,
-  CP_CP949 = 25, // Korean (Wansung + Johab)
-  CP_JOHAB = 26, // Johab?
-  CP_CP866 = 27, // Russian
+  CP_CP949 = 25,     // Korean (Wansung + Johab)
+  CP_JOHAB = 26,     // Johab?
+  CP_CP866 = 27,     // Russian
   CP_ANSI_1250 = 28, // Central + Eastern European
   CP_ANSI_1251 = 29, // Cyrillic
   CP_ANSI_1252 = 30, // Western European
-  CP_GB2312 = 31, // EUC-CN Chinese
-  CP_ANSI_1253, // Greek
-  CP_ANSI_1254, // Turkish
-  CP_ANSI_1255, // Hebrew
-  CP_ANSI_1256, // Arabic
-  CP_ANSI_1257, // Baltic
-  CP_ANSI_874, // Thai
-  CP_ANSI_932, // Japanese
-  CP_ANSI_936, // 39 Simplified Chinese
-  CP_ANSI_949, // Korean
-  CP_ANSI_950, // Trad Chinese
-  CP_ANSI_1361, // ~ JOHAB
+  CP_GB2312 = 31,    // EUC-CN Chinese
+  CP_ANSI_1253,      // Greek
+  CP_ANSI_1254,      // Turkish
+  CP_ANSI_1255,      // Hebrew
+  CP_ANSI_1256,      // Arabic
+  CP_ANSI_1257,      // Baltic
+  CP_ANSI_874,       // Thai
+  CP_ANSI_932,       // Japanese
+  CP_ANSI_936,       // 39 Simplified Chinese
+  CP_ANSI_949,       // Korean
+  CP_ANSI_950,       // Trad Chinese
+  CP_ANSI_1361,      // ~ JOHAB
   CP_UTF16 = 43,
-  CP_ANSI_1258 = 44, // Vietnamese
+  CP_ANSI_1258 = 44,  // Vietnamese
   CP_UNDEFINED = 0xff // mostly R11
 } Dwg_Codepage;
 

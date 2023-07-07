@@ -33,7 +33,7 @@
 #ifdef HAVE_LIBGEN_H
 #  include <libgen.h> // basename
 #else
-char* basename (char *);
+char *basename (char *);
 #endif
 
 #include "bits.h"
@@ -105,8 +105,8 @@ dat_read_file (Bit_Chain *restrict dat, FILE *restrict fp,
   if (size != dat->size)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-      LOG_ERROR ("Could not read file (%zu out of %zu): %s\n",
-                 size, dat->size, filename)
+      LOG_ERROR ("Could not read file (%zu out of %zu): %s\n", size, dat->size,
+                 filename)
       fclose (fp);
       free (dat->chain);
       dat->chain = NULL;
@@ -172,8 +172,8 @@ dat_read_stream (Bit_Chain *restrict dat, FILE *restrict fp)
 
   if (dat->size == 0)
     {
-      LOG_ERROR ("Could not read from stream (%zu out of %zu)\n",
-                 size, dat->size);
+      LOG_ERROR ("Could not read from stream (%zu out of %zu)\n", size,
+                 dat->size);
       fclose (fp);
       free (dat->chain);
       dat->chain = NULL;
@@ -296,9 +296,7 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
 
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
 
-  if (!filename
-      || stat (filename, &attrib)
-      )
+  if (!filename || stat (filename, &attrib))
     {
       LOG_ERROR ("File not found: %s\n", filename ? filename : "(null)")
       return DWG_ERR_IOERROR;
@@ -327,9 +325,9 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   dwg->header.version = version;
 
   memset (&dat, 0, sizeof (Bit_Chain));
-#ifdef HAVE_SYS_STAT_H
+#  ifdef HAVE_SYS_STAT_H
   dat.size = attrib.st_size;
-#endif
+#  endif
   dat.chain = (unsigned char *)calloc (1, dat.size + 2);
   if (!dat.chain)
     {
@@ -347,8 +345,8 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
   fclose (fp);
   if (size != dat.size)
     {
-      LOG_ERROR ("Could not read the entire file (%zu out of %zu): %s\n",
-                 size, dat.size, filename)
+      LOG_ERROR ("Could not read the entire file (%zu out of %zu): %s\n", size,
+                 dat.size, filename)
       free (dat.chain);
       dat.chain = NULL;
       dat.size = 0;
@@ -356,8 +354,7 @@ dxf_read_file (const char *restrict filename, Dwg_Data *restrict dwg)
     }
   if (size < 256)
     {
-      LOG_ERROR ("File %s too small, %zu byte.\n", filename,
-                 size)
+      LOG_ERROR ("File %s too small, %zu byte.\n", filename, size)
       free (dat.chain);
       dat.chain = NULL;
       dat.size = 0;
@@ -771,9 +768,7 @@ dwg_get_entity_layer (const Dwg_Object_Entity *ent)
 {
   Dwg_Object *obj;
   // we'd really need the dwg_api or dwg to check dirty_refs
-  if (ent
-      && ent->layer
-      && (obj = ent->layer->obj)
+  if (ent && ent->layer && (obj = ent->layer->obj)
       && obj->fixedtype == DWG_TYPE_LAYER)
     return obj->tio.object->tio.LAYER;
   else
@@ -805,12 +800,12 @@ dwg_ref_object (Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
     dwg_resolve_objectrefs_silent (dwg);
   if (ref->obj && !dwg->dirty_refs)
     return ref->obj;
-  //if (dwg->header.from_version < R_12 && !ref->absolute_ref)
-  //  { // resolve r11_idx to absolute_ref, looking up in the table entries
-  //    LOG_WARN ("Cannot resolve r11_idx %u", ref->r11_idx)
-  //  }
-  // Without obj we don't get an absolute_ref from relative OFFSETOBJHANDLE
-  // handle types.
+  // if (dwg->header.from_version < R_12 && !ref->absolute_ref)
+  //   { // resolve r11_idx to absolute_ref, looking up in the table entries
+  //     LOG_WARN ("Cannot resolve r11_idx %u", ref->r11_idx)
+  //   }
+  //  Without obj we don't get an absolute_ref from relative OFFSETOBJHANDLE
+  //  handle types.
   if ((ref->handleref.code < 6 && dwg_resolve_handleref (ref, NULL))
       || ref->absolute_ref)
     {
@@ -828,8 +823,7 @@ dwg_ref_object (Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
  * OFFSETOBJHANDLE, handleref.code > 6.
  */
 EXPORT Dwg_Object *
-dwg_ref_object_relative (Dwg_Data *restrict dwg,
-                         Dwg_Object_Ref *restrict ref,
+dwg_ref_object_relative (Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref,
                          const Dwg_Object *restrict obj)
 {
   if (ref->obj && !dwg->dirty_refs)
@@ -895,8 +889,7 @@ dwg_resolve_handle_silent (const Dwg_Data *dwg, const BITCODE_RLL absref)
 }
 
 EXPORT Dwg_Object *
-dwg_ref_object_silent (Dwg_Data *restrict dwg,
-                       Dwg_Object_Ref *restrict ref)
+dwg_ref_object_silent (Dwg_Data *restrict dwg, Dwg_Object_Ref *restrict ref)
 {
   if (!ref)
     return NULL;
@@ -1001,8 +994,7 @@ dwg_model_space_ref (Dwg_Data *dwg)
   Dwg_Object_BLOCK_CONTROL *block_control;
   if (dwg->dirty_refs)
     dwg_resolve_objectrefs_silent (dwg);
-  if (dwg->header_vars.BLOCK_RECORD_MSPACE
-      && !dwg->dirty_refs
+  if (dwg->header_vars.BLOCK_RECORD_MSPACE && !dwg->dirty_refs
       && dwg->header_vars.BLOCK_RECORD_MSPACE->obj)
     return dwg->header_vars.BLOCK_RECORD_MSPACE;
   if (dwg->block_control.model_space && !dwg->dirty_refs
@@ -1012,8 +1004,7 @@ dwg_model_space_ref (Dwg_Data *dwg)
       return dwg->block_control.model_space;
     }
   block_control = dwg_block_control (dwg);
-  if (block_control && block_control->model_space
-      && !dwg->dirty_refs
+  if (block_control && block_control->model_space && !dwg->dirty_refs
       && block_control->model_space->obj)
     {
       dwg->block_control.model_space = block_control->model_space;
@@ -1024,8 +1015,7 @@ dwg_model_space_ref (Dwg_Data *dwg)
   if (!obj)
     return NULL;
   block_control = obj->tio.object->tio.BLOCK_CONTROL;
-  if (block_control && block_control->model_space
-      && !dwg->dirty_refs
+  if (block_control && block_control->model_space && !dwg->dirty_refs
       && block_control->model_space->obj)
     {
       dwg->block_control.model_space = block_control->model_space;
@@ -1042,13 +1032,11 @@ dwg_paper_space_ref (Dwg_Data *dwg)
 {
   if (dwg->dirty_refs)
     dwg_resolve_objectrefs_silent (dwg);
-  if (dwg->header_vars.BLOCK_RECORD_PSPACE
-      && !dwg->dirty_refs
+  if (dwg->header_vars.BLOCK_RECORD_PSPACE && !dwg->dirty_refs
       && dwg->header_vars.BLOCK_RECORD_PSPACE->obj)
     return dwg->header_vars.BLOCK_RECORD_PSPACE;
-  return dwg->block_control.paper_space
-    && !dwg->dirty_refs
-    && dwg->block_control.paper_space->obj
+  return dwg->block_control.paper_space && !dwg->dirty_refs
+                 && dwg->block_control.paper_space->obj
              ? dwg->block_control.paper_space
              : NULL;
 }
@@ -1062,8 +1050,7 @@ dwg_model_space_object (Dwg_Data *dwg)
   Dwg_Object_Ref *msref = dwg_model_space_ref (dwg);
   Dwg_Object_BLOCK_CONTROL *ctrl;
 
-  if (msref
-      && (obj = dwg_ref_object (dwg, msref))
+  if (msref && (obj = dwg_ref_object (dwg, msref))
       && obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
     return obj;
   ctrl = dwg_block_control (dwg);
@@ -1105,14 +1092,12 @@ dwg_paper_space_object (Dwg_Data *dwg)
   Dwg_Object_Ref *psref = dwg_paper_space_ref (dwg);
   Dwg_Object_BLOCK_CONTROL *ctrl;
 
-  if (psref
-      && (obj = dwg_ref_object (dwg, psref))
+  if (psref && (obj = dwg_ref_object (dwg, psref))
       && obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
     return obj;
   ctrl = dwg_block_control (dwg);
   psref = ctrl ? ctrl->paper_space : NULL;
-  if (psref
-      && (obj = dwg_ref_object (dwg, psref))
+  if (psref && (obj = dwg_ref_object (dwg, psref))
       && obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
     {
       if (!dwg->header_vars.BLOCK_RECORD_PSPACE)
@@ -1120,8 +1105,7 @@ dwg_paper_space_object (Dwg_Data *dwg)
       return obj;
     }
   psref = dwg->header_vars.BLOCK_RECORD_PSPACE;
-  if (psref
-      && (obj = dwg_ref_object (dwg, psref))
+  if (psref && (obj = dwg_ref_object (dwg, psref))
       && obj->fixedtype == DWG_TYPE_BLOCK_HEADER)
     {
       if (ctrl)
@@ -1184,7 +1168,8 @@ dwg_next_entity (const Dwg_Object *restrict obj)
   if (obj == NULL || obj->parent == NULL
       || obj->supertype != DWG_SUPERTYPE_ENTITY)
     return NULL;
-  if (obj->parent->header.version < R_2004 && obj->parent->header.version > R_12)
+  if (obj->parent->header.version < R_2004
+      && obj->parent->header.version > R_12)
     {
       if (!obj->tio.entity) // decoding error
         goto next_obj;
@@ -1193,7 +1178,9 @@ dwg_next_entity (const Dwg_Object *restrict obj)
         {
           Dwg_Object *next_obj = dwg_ref_object_silent (obj->parent, next);
           return (obj == next_obj
-                  || next_obj->supertype != DWG_SUPERTYPE_ENTITY) ? NULL : next_obj;
+                  || next_obj->supertype != DWG_SUPERTYPE_ENTITY)
+                     ? NULL
+                     : next_obj;
         }
       else
         goto next_obj;
@@ -2146,7 +2133,7 @@ dwg_add_handleref (Dwg_Data *restrict dwg, const BITCODE_RC code,
     ref->handleref.size = 2;
   ref->absolute_ref = absref;
   ref->obj = NULL;
-  LOG_HANDLE ("[add handleref " FORMAT_REF "] ", ARGS_REF(ref))
+  LOG_HANDLE ("[add handleref " FORMAT_REF "] ", ARGS_REF (ref))
   // fill ->obj later
   return ref;
 }
@@ -2353,7 +2340,8 @@ dwg_find_dicthandle_objname (Dwg_Data *restrict dwg, BITCODE_H dict,
 
 /* Return the first object of the given type. */
 Dwg_Object *
-dwg_find_first_type (const Dwg_Data *restrict dwg, const enum DWG_OBJECT_TYPE type)
+dwg_find_first_type (const Dwg_Data *restrict dwg,
+                     const enum DWG_OBJECT_TYPE type)
 {
   for (BITCODE_BL i = 0; i < dwg->num_objects; i++)
     {
@@ -2365,7 +2353,8 @@ dwg_find_first_type (const Dwg_Data *restrict dwg, const enum DWG_OBJECT_TYPE ty
 
 /* Return the last object of the given type. */
 Dwg_Object *
-dwg_find_last_type (const Dwg_Data *restrict dwg, const enum DWG_OBJECT_TYPE type)
+dwg_find_last_type (const Dwg_Data *restrict dwg,
+                    const enum DWG_OBJECT_TYPE type)
 {
   if (dwg->num_objects)
     {
@@ -2660,7 +2649,7 @@ dwg_handle_name (Dwg_Data *restrict dwg, const char *restrict table,
   BITCODE_H ctrl = NULL, *hdlv = NULL;
   Dwg_Object *obj;
   Dwg_Object_APPID_CONTROL *_obj; // just some random generic type
-  //Dwg_Header_Variables *vars = &dwg->header_vars;
+  // Dwg_Header_Variables *vars = &dwg->header_vars;
 
   if (!dwg || !table || !handle)
     return NULL;
@@ -3150,7 +3139,7 @@ dwg_resolve_jump (const Dwg_Object *obj)
     return (Dwg_Object *)obj;
   else
     return search_r11_section (obj->parent, _obj->jump_entity_section,
-                                 _obj->jump_address);
+                               _obj->jump_address);
 }
 
 EXPORT BITCODE_RLL
@@ -3254,7 +3243,8 @@ int
 dwg_sections_init (Dwg_Data *dwg)
 {
   loglevel = dwg->opts & DWG_OPTS_LOGLEVEL;
-  // num_sections: how many sections we need to allocate internally (with holes)
+  // num_sections: how many sections we need to allocate internally (with
+  // holes)
   if (dwg->header.version < R_13b1)
     {
       if (!dwg->header.num_sections)
@@ -3400,7 +3390,7 @@ dwg_has_eed_appid (Dwg_Object_Object *restrict obj, const BITCODE_RLL absref)
 {
   if (!obj->num_eed)
     return false;
-  for (unsigned i=0; i < obj->num_eed; i++)
+  for (unsigned i = 0; i < obj->num_eed; i++)
     if (obj->eed[i].handle.value == absref)
       return true;
   return false;

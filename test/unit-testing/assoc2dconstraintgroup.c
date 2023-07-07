@@ -17,7 +17,7 @@ api_process (dwg_object *obj)
   Dwg_CONSTRAINTGROUPNODE *nodes;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  //#ifdef DEBUG_CLASSES
+  // #ifdef DEBUG_CLASSES
   dwg_obj_assoc2dconstraintgroup *_obj
       = dwg_object_to_ASSOC2DCONSTRAINTGROUP (obj);
   // ASSOCACTION
@@ -60,5 +60,5 @@ api_process (dwg_object *obj)
               (int)_obj->nodes[i].connections[j]);
         }
     }
-  //#endif
+  // #endif
 }

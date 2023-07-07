@@ -183,8 +183,7 @@ static BITCODE_RC *decode_rs (const BITCODE_RC *src, int block_count,
                               int data_size,
                               const unsigned src_size) ATTRIBUTE_MALLOC;
 static int decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
-                             BITCODE_RC *restrict src,
-                             const unsigned src_size,
+                             BITCODE_RC *restrict src, const unsigned src_size,
                              const BITCODE_RC *restrict dst_end);
 
 #define copy_1(offset) *dst++ = *(src + offset);
@@ -649,9 +648,9 @@ read_system_page (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
   int64_t page_size;
   long pedata_size;
 
-  BITCODE_RC *rsdata; // RS encoded data
-  BITCODE_RC *pedata; // Pre RS encoded data
-  BITCODE_RC *data, *data_end;  // The data RS unencoded and uncompressed
+  BITCODE_RC *rsdata;          // RS encoded data
+  BITCODE_RC *pedata;          // Pre RS encoded data
+  BITCODE_RC *data, *data_end; // The data RS unencoded and uncompressed
 
   if (repeat_count < 0 || repeat_count > DBG_MAX_COUNT
       || (uint64_t)size_comp >= dat->size
@@ -829,7 +828,7 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
   decomp_end = &decomp[max_decomp_size];
   LOG_HANDLE ("Alloc data section of size %" PRIu64 "\n", max_decomp_size)
 
-  //sec_dat->chain = decomp;
+  // sec_dat->chain = decomp;
   sec_dat->bit = 0;
   sec_dat->byte = 0;
   sec_dat->size = max_decomp_size;
@@ -868,8 +867,7 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
         {
           error = read_data_page (dat, &decomp[section_page->offset],
                                   page->size, section_page->comp_size,
-                                  section_page->uncomp_size,
-                                  decomp_end);
+                                  section_page->uncomp_size, decomp_end);
           if (error)
             {
               free (decomp);
@@ -1073,8 +1071,8 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
 
           if (ptr + 56 > ptr_end)
             {
-              LOG_ERROR ("Section[%d]->pages[%d] overflow (%p > %p)", j,
-                         i, ptr + 56, ptr_end);
+              LOG_ERROR ("Section[%d]->pages[%d] overflow (%p > %p)", j, i,
+                         ptr + 56, ptr_end);
               free (section->pages[i]);
               section->num_pages = i; // skip this last section
               break;
@@ -1874,7 +1872,7 @@ read_2007_section_summary (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   str_dat = dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-  // clang-format off
+// clang-format off
   #include "summaryinfo.spec"
   // clang-format on
 
@@ -1914,7 +1912,7 @@ read_2007_section_appinfo (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   str_dat = dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-  // clang-format off
+// clang-format off
   #include "appinfo.spec"
   // clang-format on
 
@@ -1955,7 +1953,7 @@ read_2007_section_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-  // clang-format off
+// clang-format off
   #include "auxheader.spec"
   // clang-format on
 
@@ -2039,7 +2037,7 @@ read_2007_section_revhistory (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-  // clang-format off
+// clang-format off
   #include "revhistory.spec"
   // clang-format on
 
@@ -2081,7 +2079,7 @@ read_2007_section_objfreespace (Bit_Chain *restrict dat,
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-  // clang-format off
+// clang-format off
   #include "objfreespace.spec"
   // clang-format on
 
@@ -2123,7 +2121,7 @@ read_2007_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-  // clang-format off
+// clang-format off
   #include "template.spec"
   // clang-format on
 
@@ -2169,7 +2167,7 @@ read_2007_section_filedeplist (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   str_dat = dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-  // clang-format off
+// clang-format off
   #include "filedeplist.spec"
   // clang-format on
 
@@ -2210,7 +2208,7 @@ read_2007_section_security (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
   str_dat = dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-  // clang-format off
+// clang-format off
   #include "security.spec"
   // clang-format on
 
@@ -2274,7 +2272,7 @@ acds_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_BL rcount1 = 0, rcount2 = 0;
   BITCODE_BL rcount3 = 0, rcount4, vcount;
 
-  // clang-format off
+// clang-format off
   #include "acds.spec"
   // clang-format on
 
@@ -2436,8 +2434,7 @@ read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
       goto error;
     }
   dat->byte = page->offset;
-  if ((size_t)file_header.sections_map_size_comp
-      > dat->size - dat->byte)
+  if ((size_t)file_header.sections_map_size_comp > dat->size - dat->byte)
     {
       LOG_ERROR ("%s Invalid comp_data_size %" PRId64 " > %zu bytes left",
                  __FUNCTION__, file_header.sections_map_size_comp,

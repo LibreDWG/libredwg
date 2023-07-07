@@ -146,10 +146,9 @@ static char *_path_field (const char *path);
 #define FORMAT_H "[%u, %u, " FORMAT_RLL "]"
 #define ARGS_HREF(ref)                                                        \
   ref->handleref.code, ref->handleref.size, ref->handleref.value,             \
-  ref->absolute_ref
+      ref->absolute_ref
 
-#define ARGS_HREF11(ref)                                                      \
-  ref->handleref.size, ref->r11_idx, ref->absolute_ref
+#define ARGS_HREF11(ref) ref->handleref.size, ref->r11_idx, ref->absolute_ref
 #define FORMAT_RC "%d"
 #define FORMAT_RSx FORMAT_RS
 #define FORMAT_RLx FORMAT_RL
@@ -318,8 +317,7 @@ static char *_path_field (const char *path);
     {                                                                         \
       fprintf (dat->fh, "[0, 0, 0]");                                         \
     }
-#define VALUE_H(hdl, dxf)                                                     \
-  fprintf (dat->fh, FORMAT_H "", ARGS_H (hdl))
+#define VALUE_H(hdl, dxf) fprintf (dat->fh, FORMAT_H "", ARGS_H (hdl))
 #define FIELD_HANDLE(nam, handle_code, dxf)                                   \
   {                                                                           \
     if (_obj->nam)                                                            \
@@ -478,8 +476,8 @@ static char *_path_field (const char *path);
 #define FIELD_RLL(nam, dxf) FIELD (nam, RLL, dxf)
 #define FIELD_MC(nam, dxf) FIELD (nam, MC, dxf)
 #define FIELD_MS(nam, dxf) FIELD (nam, MS, dxf)
-//#define FIELD_TF(nam, len, dxf) FIELD_TEXT (nam, _obj->nam)
-//#define FIELD_TFF(nam, len, dxf) FIELD_TEXT (nam, (const char*)_obj->nam)
+// #define FIELD_TF(nam, len, dxf) FIELD_TEXT (nam, _obj->nam)
+// #define FIELD_TFF(nam, len, dxf) FIELD_TEXT (nam, (const char*)_obj->nam)
 #define FIELD_TFFx(nam, len, dxf) FIELD_BINARY (nam, len, dxf)
 #define FIELD_TV(nam, dxf) FIELD_TEXT (nam, _obj->nam)
 #define FIELD_TU(nam, dxf) FIELD_TEXT_TU (nam, (BITCODE_TU)_obj->nam)
@@ -984,7 +982,10 @@ _prefix (Bit_Chain *dat)
     KEY (handle);                                                             \
     VALUE_H (obj->handle, 5);                                                 \
     _FIELD (size, RL, 0);                                                     \
-    SINCE (R_13b1) { _FIELD (bitsize, BL, 0); }                               \
+    SINCE (R_13b1)                                                            \
+    {                                                                         \
+      _FIELD (bitsize, BL, 0);                                                \
+    }                                                                         \
     error |= json_eed (dat, obj->tio.object);                                 \
     error |= json_common_object_handle_data (dat, obj);                       \
     return error | dwg_json_##token##_private (dat, hdl_dat, str_dat, obj);   \
@@ -1188,7 +1189,7 @@ json_common_entity_data (Bit_Chain *restrict dat,
 
   error |= json_eed (dat, (Dwg_Object_Object *)_ent);
 
-  // clang-format off
+// clang-format off
   #include "common_entity_handle_data.spec"
   #include "common_entity_data.spec"
   // clang-format on
@@ -1206,7 +1207,7 @@ json_common_object_handle_data (Bit_Chain *restrict dat,
   BITCODE_BL vcount = 0;
   _obj = obj->tio.object;
 
-  // clang-format off
+// clang-format off
   #include "common_object_handle_data.spec"
   // clang-format on
   return error;
@@ -1358,7 +1359,7 @@ void
 json_write_TF (Bit_Chain *restrict dat, const BITCODE_TF restrict src,
                const size_t len)
 {
-  const size_t slen = src ? strlen ((char*)src) : 0;
+  const size_t slen = src ? strlen ((char *)src) : 0;
   bool has_slack = false;
   fputc ('"', dat->fh);
   if (!slen)
@@ -1424,7 +1425,7 @@ json_cquote (char *restrict dest, const char *restrict src, const size_t len,
     return (char *)"";
   if (codepage > CP_US_ASCII && codepage <= CP_ANSI_1258)
     {
-      char *tmp = bit_TV_to_utf8 ((char* restrict)src, codepage);
+      char *tmp = bit_TV_to_utf8 ((char *restrict)src, codepage);
       if (tmp)
         s = (unsigned char *)tmp;
       // else conversion failed. ignore
@@ -1618,7 +1619,10 @@ json_3dsolid (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
       COMMON_ENTITY_HANDLE_DATA;
       if (FIELD_VALUE (version) > 1)
         {
-          SINCE (R_2007) { FIELD_HANDLE (history_id, 0, 350); }
+          SINCE (R_2007)
+          {
+            FIELD_HANDLE (history_id, 0, 350);
+          }
         }
     }
   return error;
@@ -1646,7 +1650,7 @@ dwg_json_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
     return DWG_ERR_INTERNALERROR;
   is_entity = dwg_class_is_entity (klass);
 
-  // clang-format off
+// clang-format off
   #include "classes.inc"
   // clang-format on
 
@@ -1927,7 +1931,7 @@ json_fileheader_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   RECORD (FILEHEADER); // single hash
   KEY (version);
   fprintf (dat->fh, "\"%s\"", dwg_version_codes (dwg->header.version));
-  // clang-format off
+// clang-format off
   #include "header.spec"
   // clang-format on
   ENDRECORD ();
@@ -1947,7 +1951,7 @@ json_preR13_header_write_private (Bit_Chain *restrict dat,
   int error = 0;
   const char *codepage = "ANSI_1252";
 
-  // clang-format off
+// clang-format off
   #include "header_variables_r11.spec"
   // clang-format on
   return error;
@@ -1967,7 +1971,7 @@ json_header_write_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         : (dwg->header.version >= R_2007)                         ? "UTF-8"
                                           : "ANSI_1252";
 
-  // clang-format off
+// clang-format off
   #include "header_variables.spec"
   // clang-format on
   return error;
@@ -2019,9 +2023,9 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 {
   int max_id = SECTION_VIEW;
   VERSIONS (R_10, R_11)
-    max_id = SECTION_DIMSTYLE;
+  max_id = SECTION_DIMSTYLE;
   VERSIONS (R_11, R_13b1)
-    max_id = SECTION_VX;
+  max_id = SECTION_VX;
   CLEARFIRST;
   SECTION (TABLES);
   // FIXME __cplusplus
@@ -2040,7 +2044,7 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
             PRE (R_13b1)
-              FIELD_RS (flags_r11, 0);
+            FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
           for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)
@@ -2048,7 +2052,8 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               Dwg_Object *obj = &dwg->object[num + i];
               Dwg_Object_BLOCK_HEADER *_obj
                   = obj->tio.object->tio.BLOCK_HEADER;
-              PRE (R_13b1) {
+              PRE (R_13b1)
+              {
                 if (strEQc (_obj->name, "*MODEL_SPACE"))
                   {
                     LOG_TRACE ("Skip *MODEL_SPACE\n");
@@ -2059,13 +2064,10 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
               FIELD_RC (flag, 70);
               FIELD_TFv (name, 32, 2);
               SINCE (R_11)
-                FIELD_RSd (used, 0); // -1
-              PRE (R_13b1) {
-                FIELD_RL (block_offset_r11, 0)
-              } LATER_VERSIONS {
-                FIELD_RC (block_scaling, 0)
-              }
-              SINCE (R_11)
+              FIELD_RSd (used, 0); // -1
+              PRE (R_13b1)
+              { FIELD_RL (block_offset_r11, 0) } LATER_VERSIONS{ FIELD_RC (
+                  block_scaling, 0) } SINCE (R_11)
               {
                 FIELD_HANDLE (block_entity, 2, 0);
                 FIELD_RC (flag2, 0);
@@ -2082,7 +2084,7 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
             PRE (R_13b1)
-              FIELD_RS (flags_r11, 0);
+            FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
           for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)
@@ -2105,7 +2107,7 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
             PRE (R_13b1)
-              FIELD_RS (flags_r11, 0);
+            FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
           for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)
@@ -2134,7 +2136,7 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
             PRE (R_13b1)
-              FIELD_RS (flags_r11, 0);
+            FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
           for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)
@@ -2163,7 +2165,7 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
             PRE (R_13b1)
-              FIELD_RS (flags_r11, 0);
+            FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
           for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)
@@ -2197,7 +2199,7 @@ json_tables_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
             FIELD_RL (size, 0);
             FIELD_RL (number, 0);
             PRE (R_13b1)
-              FIELD_RS (flags_r11, 0);
+            FIELD_RS (flags_r11, 0);
             FIELD_RLL (address, 0);
           }
           for (BITCODE_RLd i = 0; i < (BITCODE_RLd)tbl->number; i++)

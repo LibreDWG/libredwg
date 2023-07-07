@@ -943,7 +943,8 @@ bit_read_MC (Bit_Chain *dat)
 
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   LOG_ERROR (
-      "bit_read_MC: error parsing modular char. i=%d, j=%d, result=" FORMAT_UMC ",\n"
+      "bit_read_MC: error parsing modular char. i=%d, j=%d, result=" FORMAT_UMC
+      ",\n"
       " @%zu.@%u: [0x%x 0x%x 0x%x 0x%x 0x%x]",
       i, j, result, dat->byte - 5, dat->bit, dat->chain[dat->byte - 5],
       dat->chain[dat->byte - 4], dat->chain[dat->byte - 3],
@@ -1016,8 +1017,8 @@ bit_read_UMC (Bit_Chain *dat)
 
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
   LOG_ERROR (
-      "bit_read_UMC: error parsing modular char, i=%d,j=%d,result=" FORMAT_UMC, i, j,
-      result)
+      "bit_read_UMC: error parsing modular char, i=%d,j=%d,result=" FORMAT_UMC,
+      i, j, result)
   LOG_HANDLE ("  @%zu.%u: [0x%x 0x%x 0x%x 0x%x 0x%x 0x%x]\n", dat->byte - 6,
               dat->bit, dat->chain[dat->byte - 6], dat->chain[dat->byte - 5],
               dat->chain[dat->byte - 4], dat->chain[dat->byte - 3],
@@ -1409,25 +1410,25 @@ bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   unsigned char size;
 
   if (dat->version <= R_13b1)
-  {
-    bit_write_RC (dat, handle->size);
-    if (handle->size == 1)
-      bit_write_RC (dat, handle->value);
-    else if (handle->size == 2)
-      bit_write_RS_LE (dat, handle->value);
-    else if (handle->size == 4)
-      bit_write_RL_LE (dat, handle->value);
-    else if (handle->size == 8)
-      bit_write_RLL (dat, be64toh (handle->value));
-    else
-      {
-        BITCODE_RC *restrict str;
-        str = (BITCODE_RC *)&(handle->value);
-        for (i = handle->size - 1; i >= 0; i--)
-          bit_write_RC (dat, str[i]);
-      }
-    return;
-  }
+    {
+      bit_write_RC (dat, handle->size);
+      if (handle->size == 1)
+        bit_write_RC (dat, handle->value);
+      else if (handle->size == 2)
+        bit_write_RS_LE (dat, handle->value);
+      else if (handle->size == 4)
+        bit_write_RL_LE (dat, handle->value);
+      else if (handle->size == 8)
+        bit_write_RLL (dat, be64toh (handle->value));
+      else
+        {
+          BITCODE_RC *restrict str;
+          str = (BITCODE_RC *)&(handle->value);
+          for (i = handle->size - 1; i >= 0; i--)
+            bit_write_RC (dat, str[i]);
+        }
+      return;
+    }
   if (!handle)
     {
       bit_write_RC (dat, 0);
@@ -2773,8 +2774,7 @@ bit_utf8_to_TV (char *restrict dest, const unsigned char *restrict src,
   const char *endp = dest + destlen;
   const unsigned char *ends = src + srclen;
   char *d = dest;
-  const bool is_asian_cp
-    = dwg_codepage_isasian ((const Dwg_Codepage)codepage);
+  const bool is_asian_cp = dwg_codepage_isasian ((const Dwg_Codepage)codepage);
 
   while ((c = *s++))
     {
@@ -2919,13 +2919,11 @@ bit_u_expand (char *src)
   char *ret = src;
   char *p = src;
   // convert all \U+XXXX sequences to UTF-8
-  while (strlen (p) >= 7
-         && (p = strstr (p, "\\U+"))
-         && ishex (p[3]) && ishex (p[4]) && ishex (p[5])
-         && ishex (p[6]))
+  while (strlen (p) >= 7 && (p = strstr (p, "\\U+")) && ishex (p[3])
+         && ishex (p[4]) && ishex (p[5]) && ishex (p[6]))
     {
       uint16_t wc;
-      //printf("p: %s %p\n", p, p);
+      // printf("p: %s %p\n", p, p);
       if (1 == sscanf (p, "\\U+%4hx", &wc))
         {
           uint16_t wp[2] = { wc, 0 };
@@ -2933,35 +2931,34 @@ bit_u_expand (char *src)
           char *u8 = bit_convert_TU (&wp[0]);
           size_t lp = strlen (p);
           size_t l = strlen (u8);
-          //printf("wc: %hu\n", wc);
-          //printf("u8: %s, l: %zu, lp: %zu\n", u8, l, lp);
-          //printf("u8: { %hx, %hx }\n", (unsigned char)u8[0], (unsigned char)u8[1]);
+          // printf("wc: %hu\n", wc);
+          // printf("u8: %s, l: %zu, lp: %zu\n", u8, l, lp);
+          // printf("u8: { %hx, %hx }\n", (unsigned char)u8[0], (unsigned
+          // char)u8[1]);
           memcpy (p, u8, l + 1);
           if (lp > 7)
             {
-              //printf("p[7]: %d, l: %zu\n", (int)p[7], lp);
+              // printf("p[7]: %d, l: %zu\n", (int)p[7], lp);
               memcpy (&p[l], &p[7], lp - 6);
             }
           if (u8 != (char *)&wp[0])
             free (u8);
         }
     }
-  //printf("ret: %s\n", ret);
+  // printf("ret: %s\n", ret);
   return ret;
 }
 
 /** converts old codepage'd strings to UTF-8.
  */
-EXPORT ATTRIBUTE_MALLOC
-char *
-bit_TV_to_utf8 (const char *restrict src,
-                const BITCODE_RS codepage)
+EXPORT ATTRIBUTE_MALLOC char *
+bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
 {
   if (codepage == CP_UTF8)
     return bit_u_expand ((char *)src);
   {
     const bool is_asian_cp
-      = dwg_codepage_isasian ((const Dwg_Codepage)codepage);
+        = dwg_codepage_isasian ((const Dwg_Codepage)codepage);
     const size_t srclen = strlen (src);
     size_t destlen = is_asian_cp ? srclen * 3 : trunc (srclen * 1.5);
 #ifdef HAVE_ICONV
@@ -2970,9 +2967,9 @@ bit_TV_to_utf8 (const char *restrict src,
     size_t nconv = (size_t)-1;
     char *dest, *odest, *osrc;
     if (!charset)
-      return (char*)src;
+      return (char *)src;
     osrc = (char *)src;
-    odest = dest = (char*)malloc (destlen);
+    odest = dest = (char *)malloc (destlen);
     if (!odest)
       {
         loglevel |= 1;
@@ -2980,7 +2977,7 @@ bit_TV_to_utf8 (const char *restrict src,
         return NULL;
       }
     cd = iconv_open ("UTF-8", charset);
-    if (cd == (iconv_t) -1)
+    if (cd == (iconv_t)-1)
       {
         loglevel |= 1;
         LOG_ERROR ("iconv_open (\"UTF-8\", \"%s\") failed with errno %d",
@@ -2997,7 +2994,7 @@ bit_TV_to_utf8 (const char *restrict src,
               {
                 char *dest_new;
                 destlen *= 2;
-                dest_new = (char*)realloc (odest, destlen);
+                dest_new = (char *)realloc (odest, destlen);
                 if (dest_new)
                   odest = dest = dest_new;
                 else
@@ -3028,25 +3025,25 @@ bit_TV_to_utf8 (const char *restrict src,
     char *str = calloc (1, destlen + 1);
     char *tmp = (char *)src;
     uint16_t c = 0;
-    //printf("cp: %u\n", codepage);
-    //printf("src: %s\n", src);
-    //printf("destlen: %zu\n", destlen);
-    // UTF8 encode
+    // printf("cp: %u\n", codepage);
+    // printf("src: %s\n", src);
+    // printf("destlen: %zu\n", destlen);
+    //  UTF8 encode
     while ((c = (0xFF & *tmp)) && i < destlen)
       {
         wchar_t wc;
         tmp++;
-        //printf("c: %hu\n", c);
-        //printf("i: %zu\n", i);
-        //printf("str: %s\n", str);
-        //if (is_asian_cp)
-        //  c = (c << 16) + *tmp++;
+        // printf("c: %hu\n", c);
+        // printf("i: %zu\n", i);
+        // printf("str: %s\n", str);
+        // if (is_asian_cp)
+        //   c = (c << 16) + *tmp++;
         if (c < 0x80)
           str[i++] = c & 0xFF;
         else if ((wc = dwg_codepage_uc ((Dwg_Codepage)codepage, c & 0xFF)))
           {
             c = wc;
-            //printf("wc: %u\n", (unsigned)wc);
+            // printf("wc: %u\n", (unsigned)wc);
             if (c < 0x80) // stayed below
               str[i++] = c & 0xFF;
           }
@@ -3057,8 +3054,8 @@ bit_TV_to_utf8 (const char *restrict src,
             str[i++] = (c & 0x3F) | 0x80;
           }
         else if (c >= 0x800)
-          {  /* windows ucs-2 has no D800-DC00 surrogate pairs. go straight up
-              */
+          { /* windows ucs-2 has no D800-DC00 surrogate pairs. go straight up
+             */
             /*if (i+3 > len) {
               str = realloc(str, i+3);
               len = i+2;
@@ -3081,7 +3078,7 @@ bit_TV_to_utf8 (const char *restrict src,
           HANDLER (OUTPUT, "ERROR: overlarge unicode codepoint U+%0X", c);
        */
       }
-    //printf("=> str: %s, i: %zu\n", str, i);
+    // printf("=> str: %s, i: %zu\n", str, i);
     EXTEND_SIZE (str, i + 1, destlen);
     str[i] = '\0';
     return bit_u_expand (str);
@@ -3121,8 +3118,7 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
         {
           if (cquoted && c == '\\' && len > 1 &&
               // skip \" to " and \\ to \.
-              (*str == '"' || *str == '\\' || *str == 'r'
-               || *str == 'n'))
+              (*str == '"' || *str == '\\' || *str == 'r' || *str == 'n'))
             {
               c = *str++;
               if (c == 'r')
@@ -3165,7 +3161,7 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
           else if (len >= 2)
             {
               wstr[i++] = ((c & 0x0f) << 12) | ((str[1] & 0x3f) << 6)
-                | (str[2] & 0x3f);
+                          | (str[2] & 0x3f);
               str++;
               str++;
               len--;
@@ -3572,8 +3568,7 @@ bit_chain_alloc_size (Bit_Chain *dat, const size_t size)
     }
   else
     {
-      dat->chain
-          = (unsigned char *)realloc (dat->chain, dat->size + size);
+      dat->chain = (unsigned char *)realloc (dat->chain, dat->size + size);
       if (!dat->chain)
         {
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
@@ -3868,7 +3863,7 @@ bit_copy_chain (Bit_Chain *restrict dat, Bit_Chain *restrict tmp_dat)
 {
   size_t dat_bits = bit_position (tmp_dat);
   size_t size = tmp_dat->byte; // bits should be 0
-  //assert (dat->chain != tmp_dat->chain);
+  // assert (dat->chain != tmp_dat->chain);
   if (dat->chain == tmp_dat->chain)
     {
       LOG_ERROR ("bit_copy_chain: dat->chain == tmp_dat->chain");

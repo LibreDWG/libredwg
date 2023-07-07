@@ -12,7 +12,7 @@ api_process (dwg_object *obj)
   BITCODE_BL numlevels;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  //#ifdef DEBUG_CLASSES
+  // #ifdef DEBUG_CLASSES
   dwg_obj_assocarrayrectangularparameters *_obj
       = dwg_object_to_ASSOCARRAYRECTANGULARPARAMETERS (obj);
 
@@ -46,5 +46,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, ASSOCARRAYRECTANGULARPARAMETERS, numitems, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCARRAYRECTANGULARPARAMETERS, numrows, BL);
   CHK_ENTITY_TYPE (_obj, ASSOCARRAYRECTANGULARPARAMETERS, numlevels, BL);
-  //#endif
+  // #endif
 }

@@ -858,7 +858,7 @@ main (int argc, char *argv[])
   int big = 0;
   int is_docker = 0;
   char *docker;
-  // clang-format off
+// clang-format off
   #include "../../examples/alldxf_2.inc"
   // clang-format on
 

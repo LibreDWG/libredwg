@@ -15,7 +15,7 @@ api_process (dwg_object *obj)
   BITCODE_BS type; /*!< DXF 170 */
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  //#ifdef DEBUG_CLASSES
+  // #ifdef DEBUG_CLASSES
   dwg_obj_blockuserparameter *_obj = dwg_object_to_BLOCKUSERPARAMETER (obj);
 
   CHK_EVALEXPR (BLOCKUSERPARAMETER);
@@ -67,5 +67,5 @@ api_process (dwg_object *obj)
     }
 
   CHK_ENTITY_TYPE (_obj, BLOCKUSERPARAMETER, type, BS);
-  //#endif
+  // #endif
 }

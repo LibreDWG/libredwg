@@ -147,7 +147,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
   if (dxf)                                                                    \
     {                                                                         \
       char _s[18];                                                            \
-      snprintf (_s, sizeof (_s), FMT_H, ref ? ref->absolute_ref : 0UL); \
+      snprintf (_s, sizeof (_s), FMT_H, ref ? ref->absolute_ref : 0UL);       \
       _s[sizeof (_s) - 1] = '\0';                                             \
       VALUE_TV (_s, dxf);                                                     \
     }
@@ -1283,7 +1283,10 @@ dxfb_cvt_blockname (Bit_Chain *restrict dat, char *restrict name,
         VALUE_HANDLE (ctrl->tio.object->ownerhandle, ownerhandle, 3, 330);    \
       }                                                                       \
     }                                                                         \
-  SINCE (R_13b1) { VALUE_TV ("AcDbSymbolTable", 100); }
+  SINCE (R_13b1)                                                              \
+  {                                                                           \
+    VALUE_TV ("AcDbSymbolTable", 100);                                        \
+  }
 
 #define COMMON_TABLE_FLAGS(acdbname)                                          \
   SINCE (R_13b1)                                                              \
@@ -1907,7 +1910,10 @@ dxfb_classes_write (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       else
         VALUE_T (dwg->dwg_class[j].appname, 3)
       VALUE_RL (dwg->dwg_class[j].proxyflag, 90);
-      SINCE (R_2004) { VALUE_RL (dwg->dwg_class[j].num_instances, 91); }
+      SINCE (R_2004)
+      {
+        VALUE_RL (dwg->dwg_class[j].num_instances, 91);
+      }
       VALUE_RS (dwg->dwg_class[j].is_zombie, 280); // acad: was-a-zombie
       // Is-an-entity. 1f2 for entities, 1f3 for objects
       VALUE_RS (dwg->dwg_class[j].item_class_id == 0x1F2 ? 1 : 0, 281);

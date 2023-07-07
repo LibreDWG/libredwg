@@ -131,7 +131,10 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, display_brightness, BD);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, display_shadow_type, BL);
   CHK_ENTITY_TYPE (vsty, VISUALSTYLE, internal_only, B);
-  VERSION (R_2007) { CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bd2007_45, BD); }
+  VERSION (R_2007)
+  {
+    CHK_ENTITY_TYPE (vsty, VISUALSTYLE, bd2007_45, BD);
+  }
   SINCE (R_2013)
   {
     CHK_ENTITY_TYPE (vsty, VISUALSTYLE, num_props, BS);

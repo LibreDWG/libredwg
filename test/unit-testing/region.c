@@ -159,5 +159,8 @@ api_process (dwg_object *obj)
       CHK_ENTITY_TYPE (region, REGION, end_marker, BL);
     }
 
-  SINCE (R_2007) { CHK_ENTITY_H (region, REGION, history_id); }
+  SINCE (R_2007)
+  {
+    CHK_ENTITY_H (region, REGION, history_id);
+  }
 }

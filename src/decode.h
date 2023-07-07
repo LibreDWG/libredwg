@@ -40,11 +40,13 @@ typedef enum ENTITY_SECTION_INDEX_R11
 
 EXPORT int dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg);
 int dwg_decode_unknown (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
-int dwg_decode_unknown_rest (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_unknown_rest (Bit_Chain *restrict dat,
+                             Dwg_Object *restrict obj);
 Dwg_Object_Ref *dwg_find_objectref (const Dwg_Data *restrict dwg,
                                     const Dwg_Object *restrict obj);
 
-int dwg_decode_BLOCK_HEADER (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_BLOCK_HEADER (Bit_Chain *restrict dat,
+                             Dwg_Object *restrict obj);
 int dwg_decode_LAYER (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 int dwg_decode_STYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 int dwg_decode_LTYPE (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
@@ -53,7 +55,8 @@ int dwg_decode_UCS (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 int dwg_decode_VPORT (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 int dwg_decode_APPID (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
 int dwg_decode_DIMSTYLE (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
-int dwg_decode_VX_TABLE_RECORD (Bit_Chain *restrict dat, Dwg_Object *restrict obj);
+int dwg_decode_VX_TABLE_RECORD (Bit_Chain *restrict dat,
+                                Dwg_Object *restrict obj);
 
 // reused with the importers
 void decode_BACKGROUND_type (const Dwg_Object *obj);
@@ -112,8 +115,8 @@ void dxf_3dsolid_revisionguid (Dwg_Entity_3DSOLID *_obj);
 int obj_string_stream (Bit_Chain *dat, Dwg_Object *restrict obj,
                        Bit_Chain *str_dat);
 size_t obj_stream_position (Bit_Chain *restrict dat,
-                                   Bit_Chain *restrict hdl_dat,
-                                   Bit_Chain *restrict str_dat);
+                            Bit_Chain *restrict hdl_dat,
+                            Bit_Chain *restrict str_dat);
 
 void read_r2007_init (Dwg_Data *restrict dwg);
 int read_r2007_meta_data (Bit_Chain *dat, Bit_Chain *hdl_dat,

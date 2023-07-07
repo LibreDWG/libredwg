@@ -142,8 +142,8 @@ bit_read_4BITS_tests (void)
   if (result == x)                                                            \
     pass ();                                                                  \
   else                                                                        \
-    fail ("bit_read_4BITS 0x%X != 0x%X dat:%x", (unsigned)result,             \
-          x, bitchain.chain[0]);                                              \
+    fail ("bit_read_4BITS 0x%X != 0x%X dat:%x", (unsigned)result, x,          \
+          bitchain.chain[0]);                                                 \
   bitfree (&bitchain)
 
   test_4bits ("0000", 0x0);
@@ -304,9 +304,9 @@ bit_write_RD_tests (void)
 static void
 bit_read_H_tests (void)
 {
-//#if defined(__MINGW64_VERSION_MAJOR) && defined(__GNUC__) && __GNUC__ >= 9
-//  return;
-//#endif
+  // #if defined(__MINGW64_VERSION_MAJOR) && defined(__GNUC__) && __GNUC__ >= 9
+  //   return;
+  // #endif
   Bit_Chain bitchain;
   Dwg_Handle result;
   int ret;
@@ -315,30 +315,64 @@ bit_read_H_tests (void)
   bitchain = strtobt (s);                                                     \
   bitchain.version = dwg_ver;                                                 \
   ret = bit_read_H (&bitchain, &result);                                      \
-  if (ret == r && result.code == c && result.size == si                       \
-      && result.value == v)                                                   \
+  if (ret == r && result.code == c && result.size == si && result.value == v) \
     ok ("bit_read_H: " FORMAT_H, ARGS_H (result));                            \
-  else {                                                                      \
-    fail ("bit_read_H: %s (result " FORMAT_H ")", s, ARGS_H (result));        \
-    /*bit_print (&bitchain, sizeof (Dwg_Handle));                           */\
-  }                                                                           \
+  else                                                                        \
+    {                                                                         \
+      fail ("bit_read_H: %s (result " FORMAT_H ")", s, ARGS_H (result));      \
+      /*bit_print (&bitchain, sizeof (Dwg_Handle)); */                        \
+    }                                                                         \
   bitfree (&bitchain)
 
   //              code   size   value
-  test_H_r_case ("0100" "0001" "00000101", R_14, 0, 4, 1, 5);
-  test_H_r_case ("1100" "0001" "00001011", R_14, 0, 12, 1, 11);
-  test_H_r_case ("0100" "0001" "00001100", R_14, 0, 4, 1, 12);
-  test_H_r_case ("0011" "0000", R_14, 0, 3, 0, 0);
-  test_H_r_case ("0101" "0000", R_14, 0, 5, 0, 0);
-  test_H_r_case ("0010" "0001" "00011000", R_14, 0, 2, 1, 24);
-  test_H_r_case ("0000" "0001" "00000001", R_14, 0, 0, 1, 1);
-  test_H_r_case ("0010" "0010" "00000010" "00001010", R_14, 0, 2, 2, 522);
-  test_H_r_case ("0101" "0001" "01011110", R_14, 0, 5, 1, 94);
-  test_H_r_case ("0010" "0001" "01100100", R_14, 0, 2, 1, 100);
+  test_H_r_case ("0100"
+                 "0001"
+                 "00000101",
+                 R_14, 0, 4, 1, 5);
+  test_H_r_case ("1100"
+                 "0001"
+                 "00001011",
+                 R_14, 0, 12, 1, 11);
+  test_H_r_case ("0100"
+                 "0001"
+                 "00001100",
+                 R_14, 0, 4, 1, 12);
+  test_H_r_case ("0011"
+                 "0000",
+                 R_14, 0, 3, 0, 0);
+  test_H_r_case ("0101"
+                 "0000",
+                 R_14, 0, 5, 0, 0);
+  test_H_r_case ("0010"
+                 "0001"
+                 "00011000",
+                 R_14, 0, 2, 1, 24);
+  test_H_r_case ("0000"
+                 "0001"
+                 "00000001",
+                 R_14, 0, 0, 1, 1);
+  test_H_r_case ("0010"
+                 "0010"
+                 "00000010"
+                 "00001010",
+                 R_14, 0, 2, 2, 522);
+  test_H_r_case ("0101"
+                 "0001"
+                 "01011110",
+                 R_14, 0, 5, 1, 94);
+  test_H_r_case ("0010"
+                 "0001"
+                 "01100100",
+                 R_14, 0, 2, 1, 100);
   // preR13
   //              size       value
-  test_H_r_case ("00000001" "00000010", R_11, 0, 0, 1, 2);
-  test_H_r_case ("00000010" "00000010" "00001010", R_11, 0, 0, 2, 522);
+  test_H_r_case ("00000001"
+                 "00000010",
+                 R_11, 0, 0, 1, 2);
+  test_H_r_case ("00000010"
+                 "00000010"
+                 "00001010",
+                 R_11, 0, 0, 2, 522);
 }
 
 static void
@@ -366,19 +400,19 @@ bit_write_H_tests (void)
     }                                                                         \
   bitfree (&bitchain)
 
-  test_H_w_case(4, 1, 5, R_14);
-  test_H_w_case(12, 1, 11, R_14);
-  test_H_w_case(4, 1, 12, R_14);
-  test_H_w_case(3, 0, 0, R_14);
-  test_H_w_case(5, 0, 0, R_14);
-  test_H_w_case(2, 1, 24, R_14);
-  test_H_w_case(0, 1, 1, R_14);
-  test_H_w_case(2, 2, 522, R_14);
-  test_H_w_case(5, 1, 94, R_14);
-  test_H_w_case(2, 1, 100, R_14);
+  test_H_w_case (4, 1, 5, R_14);
+  test_H_w_case (12, 1, 11, R_14);
+  test_H_w_case (4, 1, 12, R_14);
+  test_H_w_case (3, 0, 0, R_14);
+  test_H_w_case (5, 0, 0, R_14);
+  test_H_w_case (2, 1, 24, R_14);
+  test_H_w_case (0, 1, 1, R_14);
+  test_H_w_case (2, 2, 522, R_14);
+  test_H_w_case (5, 1, 94, R_14);
+  test_H_w_case (2, 1, 100, R_14);
   // preR13
-  test_H_w_case(0, 1, 2, R_11);
-  test_H_w_case(0, 2, 522, R_11);
+  test_H_w_case (0, 1, 2, R_11);
+  test_H_w_case (0, 2, 522, R_11);
 }
 
 static void
@@ -389,7 +423,7 @@ bit_UMC_bug_tests (void)
   Bit_Chain bitchain;
   bitprepare (&bitchain, 6);
 
-  bit_write_TF (&bitchain, (BITCODE_TF)"\x01\xc6\x00", 3);
+  bit_write_TF (&bitchain, (BITCODE_TF) "\x01\xc6\x00", 3);
   bitchain.byte = 0;
   if ((umc = bit_read_UMC (&bitchain)) == 1UL)
     {
@@ -412,7 +446,7 @@ bit_UMC_bug_tests (void)
 
   bitchain.byte = 0;
   // UMC bug GH #662 (also #386, #126)
-  bit_write_TF (&bitchain, (BITCODE_TF)"\xd2\xec\xa9\xf2\x92\xa2\x01", 7);
+  bit_write_TF (&bitchain, (BITCODE_TF) "\xd2\xec\xa9\xf2\x92\xa2\x01", 7);
   bitchain.byte = 0;
   if ((umc = bit_read_UMC (&bitchain)) == 5571349214802UL) // 0x5112E4A7652
     {
@@ -436,9 +470,9 @@ bit_utf8_to_TV_tests (void)
   const char *src1 = "TestË\\\"END"; // \xc3\x8b
   const char *src2 =
 #ifndef _MSC_VER
-    "Test\u0234\"END"; // Latin Small Letter L with Curl, not in any codepage
+      "Test\u0234\"END"; // Latin Small Letter L with Curl, not in any codepage
 #else
-    "Test\xc8\xb4\"END";
+      "Test\xc8\xb4\"END";
 #endif
 
   p = bit_utf8_to_TV (dest, (const unsigned char *)src1, sizeof (dest),
@@ -537,12 +571,12 @@ bit_TV_to_utf8_tests (void)
   p = bit_TV_to_utf8 (src_kor, CP_CP949);
   if
 #ifndef _MSC_VER
-    (strEQc (p, "시험"))
+      (strEQc (p, "시험"))
 #else
-    // echo "시험" | od -t x1
-    // U+feff U+c2dc U+d5d8
-    (strEQc (p, "\xc2\xbd\xc3\x83\xc3\x87\xc3\xa8"))
-             /* "\xec\x8b\x9c\xed\x97\x98" */
+      // echo "시험" | od -t x1
+      // U+feff U+c2dc U+d5d8
+      (strEQc (p, "\xc2\xbd\xc3\x83\xc3\x87\xc3\xa8"))
+  /* "\xec\x8b\x9c\xed\x97\x98" */
 #endif
     ok ("bit_TV_to_utf8_tests CP949");
   else
@@ -636,7 +670,7 @@ bit_write_TF_tests (void)
 {
   Bit_Chain bitchain;
   bitprepare (&bitchain, 3);
-  bit_write_TF (&bitchain, (BITCODE_TF)"GNU", 3);
+  bit_write_TF (&bitchain, (BITCODE_TF) "GNU", 3);
   if (bitchain.byte == 3 && bitchain.bit == 0)
     ok ("bit_write_TF");
   else

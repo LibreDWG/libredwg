@@ -40,7 +40,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #endif
 
 #if defined WORDS_BIGENDIAN && !WORDS_BIGENDIAN
-# undef WORDS_BIGENDIAN
+#  undef WORDS_BIGENDIAN
 #endif
 
 #ifdef HAVE_ENDIAN_H
@@ -56,13 +56,13 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #      define le32toh(x) (x)
 #      define htole64(x) (x)
 #      define le64toh(x) (x)
-#      define htobe64(x) bswap_64(x)
-#      define be64toh(x) bswap_64(x)
+#      define htobe64(x) bswap_64 (x)
+#      define be64toh(x) bswap_64 (x)
 #    else
-#      define htole32(x) bswap_32(x)
-#      define le32toh(x) bswap_32(x)
-#      define htole64(x) bswap_64(x)
-#      define le64toh(x) bswap_64(x)
+#      define htole32(x) bswap_32 (x)
+#      define le32toh(x) bswap_32 (x)
+#      define htole64(x) bswap_64 (x)
+#      define le64toh(x) bswap_64 (x)
 #      define htobe64(x) (x)
 #      define be64toh(x) (x)
 #    endif
@@ -85,13 +85,13 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #    define le32toh(x) (x)
 #    define htole64(x) (x)
 #    define le64toh(x) (x)
-#    define htobe64(x) __builtin_bswap64(x)
-#    define be64toh(x) __builtin_bswap64(x)
+#    define htobe64(x) __builtin_bswap64 (x)
+#    define be64toh(x) __builtin_bswap64 (x)
 #  else /* e.g. xbox 360 */
-#    define htole32(x) __builtin_bswap32(x)
-#    define le32toh(x) __builtin_bswap32(x)
-#    define htole64(x) __builtin_bswap64(x)
-#    define le64toh(x) __builtin_bswap64(x)
+#    define htole32(x) __builtin_bswap32 (x)
+#    define le32toh(x) __builtin_bswap32 (x)
+#    define htole64(x) __builtin_bswap64 (x)
+#    define le64toh(x) __builtin_bswap64 (x)
 #    define htobe64(x) (x)
 #    define be64toh(x) (x)
 #  endif
@@ -103,10 +103,10 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #  if defined HAVE_SYS_BYTEORDER_H
 /* e.g. solaris */
 #    include <sys/byteorder.h>
-#    define htole32(x) BSWAP_32(x)
-#    define le32toh(x) BSWAP_32(x)
-#    define htole64(x) BSWAP_64(x)
-#    define le64toh(x) BSWAP_64(x)
+#    define htole32(x) BSWAP_32 (x)
+#    define le32toh(x) BSWAP_32 (x)
+#    define htole64(x) BSWAP_64 (x)
+#    define le64toh(x) BSWAP_64 (x)
 #    define htobe64(x) (x)
 #    define be64toh(x) (x)
 #  elif defined HAVE_BYTESWAP_H
@@ -161,7 +161,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 */
 #if defined(__GNUC__)
 #  define _GNUC_VERSION ((__GNUC__ * 100) + __GNUC_MINOR__)
-#  define CC_DIAG_PRAGMA(x) _Pragma (#  x)
+#  define CC_DIAG_PRAGMA(x) _Pragma (#x)
 #else
 #  define _GNUC_VERSION 0
 #  define CC_DIAG_PRAGMA(x)
@@ -303,9 +303,9 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #ifndef EXPORT
 #  if defined(_WIN32) && defined(ENABLE_SHARED)
 #    ifdef DLL_EXPORT
-#      define EXPORT __declspec(dllexport)
+#      define EXPORT __declspec (dllexport)
 #    else
-#      define EXPORT __declspec(dllimport)
+#      define EXPORT __declspec (dllimport)
 #    endif
 #  elif defined HAVE_ATTRIBUTE_VISIBILITY_DEFAULT
 #    define EXPORT __attribute__ ((visibility ("default")))
@@ -469,8 +469,8 @@ typedef enum DWG_SENTINEL
 
 const unsigned char *dwg_sentinel (const Dwg_Sentinel sentinel_id);
 // used by unit-tests
-EXPORT char *strrplc (const char *s, const char *from, const char *to)
-  __nonnull_all;
+EXPORT char *strrplc (const char *s, const char *from,
+                      const char *to) __nonnull_all;
 
 #define strEQ(s1, s2) !strcmp ((s1), (s2))
 #define strNE(s1, s2) (strcmp ((s1), (s2)) != 0)
@@ -523,13 +523,14 @@ void *memmem (const void *h0, size_t k, const void *n0, size_t l)
 BITCODE_H shift_hv (BITCODE_H *hv, BITCODE_BL *num_p) __nonnull_all;
 
 // used in dwg.spec
-Dwg_Object *dwg_find_first_type (const Dwg_Data *restrict dwg,
-                                 const enum DWG_OBJECT_TYPE type) __nonnull_all;
+Dwg_Object *
+dwg_find_first_type (const Dwg_Data *restrict dwg,
+                     const enum DWG_OBJECT_TYPE type) __nonnull_all;
 Dwg_Object *dwg_find_last_type (const Dwg_Data *restrict dwg,
                                 const enum DWG_OBJECT_TYPE type) __nonnull_all;
-Dwg_Handle *dwg_find_first_type_handle (const Dwg_Data *restrict dwg,
-                                        const enum DWG_OBJECT_TYPE type)
-  __nonnull_all;
+Dwg_Handle *
+dwg_find_first_type_handle (const Dwg_Data *restrict dwg,
+                            const enum DWG_OBJECT_TYPE type) __nonnull_all;
 
 // <path-to>/dxf.ext => copy of "dxf", "ext"
 // Returns a malloc'ed copy of basename, and
@@ -549,8 +550,8 @@ struct tm *cvt_TIMEBLL (struct tm *tm, BITCODE_TIMEBLL date) __nonnull_all;
 
 /* Exported functions not in the API */
 const char *dwg_ref_tblname (const Dwg_Data *restrict dwg,
-                             Dwg_Object_Ref *restrict ref, int *alloced)
-  __nonnull_all;
+                             Dwg_Object_Ref *restrict ref,
+                             int *alloced) __nonnull_all;
 const char *dwg_ref_objname (const Dwg_Data *restrict dwg,
                              Dwg_Object_Ref *restrict ref) __nonnull_all;
 
@@ -564,7 +565,8 @@ void dwg_log_dataflags (const int _loglevel, const int maxlevel,
                         const BITCODE_RC flag);
 
 // in the public API, but we don't use that for most internal modules
-#if !defined _DWG_API_H_ && !defined _DWG_API_C && !defined DYNAPI_TEST_C && !defined ADD_TEST_C && !defined DXF_TEST_C
+#if !defined _DWG_API_H_ && !defined _DWG_API_C && !defined DYNAPI_TEST_C     \
+    && !defined ADD_TEST_C && !defined DXF_TEST_C
 bool dwg_is_valid_tag (const char *tag) __nonnull_all;
 #endif
 

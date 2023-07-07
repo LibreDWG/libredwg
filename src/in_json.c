@@ -261,7 +261,7 @@ static Bit_Chain *g_dat;
   JSON_TOKENS_CHECK_OVERFLOW (return DWG_ERR_INVALIDDWG)
 #define JSON_TOKENS_CHECK_OVERFLOW_NULL                                       \
   JSON_TOKENS_CHECK_OVERFLOW (return NULL)
-#define JSON_TOKENS_CHECK_OVERFLOW_VOID JSON_TOKENS_CHECK_OVERFLOW (return )
+#define JSON_TOKENS_CHECK_OVERFLOW_VOID JSON_TOKENS_CHECK_OVERFLOW (return)
 
 // advance until next known first-level type
 // on OBJECT to end of OBJECT
@@ -473,7 +473,7 @@ json_fixed_string (Bit_Chain *restrict dat, const int len,
         {
           memcpy (str, &dat->chain[t->start], len);
           LOG_WARN ("Overlarge JSON TF value \"%.*s\" stripped to \"%s\"", l,
-                     &dat->chain[t->start], str);
+                    &dat->chain[t->start], str);
         }
       else
         memcpy (str, &dat->chain[t->start], l);
@@ -517,8 +517,8 @@ json_binary (Bit_Chain *restrict dat, jsmntokens_t *restrict tokens,
       return NULL;
     }
   if ((read = in_hex2bin (buf, pos, blen) != blen))
-    LOG_ERROR ("json_binary in_hex2bin with key %s at pos %zu of %zu", key, read,
-               blen);
+    LOG_ERROR ("json_binary in_hex2bin with key %s at pos %zu of %zu", key,
+               read, blen);
   if (buf)
     {
       buf[blen] = '\0';
@@ -695,16 +695,16 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
         {
           // Wrong user-input: GH #346 mingw64, oss-fuzz #39755
           // but valid for !HANDLING preR13
-          if (strEQ (name, "HEADER")
-              && !dwg->header_vars.HANDLING
+          if (strEQ (name, "HEADER") && !dwg->header_vars.HANDLING
               && dat->from_version <= R_11
               && (strEQc (key, "HANDSEED") || strEQc (key, "UCSNAME")))
             ;
           else
             LOG_ERROR ("Invalid handle %.*s => " FORMAT_REF
-                       " code=%ld size=%ld value=" FORMAT_RLL" absref=" FORMAT_RLL,
-                       t->end - t->start, &dat->chain[t->start], ARGS_REF (ref),
-                       code, size, value, absref);
+                       " code=%ld size=%ld value=" FORMAT_RLL
+                       " absref=" FORMAT_RLL,
+                       t->end - t->start, &dat->chain[t->start],
+                       ARGS_REF (ref), code, size, value, absref);
           ref->handleref.size = (BITCODE_RC)size;
           ref->handleref.value = value;
           ref->absolute_ref = absref;
@@ -744,7 +744,7 @@ json_HANDLE (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       else
         absref = r11_idx; // 2nd item, the value
       ref = dwg_add_handleref (dwg, code, absref, obj);
-      if (t->size == 2)  // [size absref]
+      if (t->size == 2) // [size absref]
         ref->handleref.value = absref;
       else
         ref->r11_idx = r11_idx;
@@ -1089,9 +1089,9 @@ json_FILEHEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
       FIELD_RL (summaryinfo_address, 0)
       FIELD_RL (vbaproj_address, 0)
       FIELD_RL (r2004_header_address, 0) /* mostly 128/0x80 */
-      // clang-format on
+          // clang-format on
 
-      else if (strEQc (key, "HEADER"))
+          else if (strEQc (key, "HEADER"))
       {
         LOG_WARN ("Unexpected next section %s", key)
         tokens->index--;
@@ -1158,7 +1158,7 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               for (int index = 0; index < MAX (t->size, 128); index++)
                 {
                   dwg->header_vars.layer_colors[index]
-                    = (BITCODE_RS)json_long (dat, tokens);
+                      = (BITCODE_RS)json_long (dat, tokens);
                   LOG_TRACE ("%s: " FORMAT_RS " [RS]\n", key,
                              dwg->header_vars.layer_colors[index]);
                 }
@@ -1167,7 +1167,7 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else
             {
               LOG_WARN ("Unknown key HEADER.%s", key)
-                json_advance_unknown (dat, tokens, t->type, 0);
+              json_advance_unknown (dat, tokens, t->type, 0);
               continue;
             }
         }
@@ -1202,11 +1202,10 @@ json_HEADER (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           size_t len;
           char *str = json_string (dat, tokens);
           LOG_TRACE ("%s: \"%s\" [%s]\n", key, str, f->type);
-          if (dwg->header.version < R_13b1
-              && strEQc (key, "MENU")
+          if (dwg->header.version < R_13b1 && strEQc (key, "MENU")
               && (len = strlen (str) > 15))
             { // split into MENU + MENUEXT
-              strncpy ((char*)dwg->header_vars.MENUEXT, &str[15], 45);
+              strncpy ((char *)dwg->header_vars.MENUEXT, &str[15], 45);
               str[15] = '\0';
               dwg->header_vars.MENU = strdup (str);
               dwg->header_vars.MENUEXT[45] = '\0';
@@ -1542,7 +1541,8 @@ json_eed (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
                           data->u.eed_0.length = len & 0xFFFF;
                           data->u.eed_0.codepage = dwg->header.codepage;
                           if (len)
-                            memcpy (&data->u.eed_0.string, s, (len + 1) & 0xFFFF);
+                            memcpy (&data->u.eed_0.string, s,
+                                    (len + 1) & 0xFFFF);
                           LOG_TRACE ("eed[%u].data.value \"%s\"\n", i, s);
                           have++; // ignore the ending NUL
                           free (s);
@@ -2159,8 +2159,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           // is r11 fixed size string? (tables and controls,
           // marked as TV, not TF)
           else if (dwg->header.from_version <= R_12
-                   && (dwg_obj_is_table (obj)
-                       || dwg_obj_is_control (obj)))
+                   && (dwg_obj_is_table (obj) || dwg_obj_is_control (obj)))
             {
               char *old;
               // sizes:
@@ -2169,12 +2168,13 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               // 48: LTYPE.description
               // 64: STYLE.font_file, bigfont_file
               // 66: DIMSTYLE.DIMBLK2_T
-              const int k = strEQc(key, "name") ? 32
-                : obj->fixedtype == DWG_TYPE_LTYPE ? 48
-                : obj->fixedtype == DWG_TYPE_DIMSTYLE
-                  && strEQc(key, "DIMBLK2_T") ? 66
-                : obj->fixedtype == DWG_TYPE_DIMSTYLE ? 16
-                : 64;
+              const int k = strEQc (key, "name")               ? 32
+                            : obj->fixedtype == DWG_TYPE_LTYPE ? 48
+                            : obj->fixedtype == DWG_TYPE_DIMSTYLE
+                                    && strEQc (key, "DIMBLK2_T")
+                                ? 66
+                            : obj->fixedtype == DWG_TYPE_DIMSTYLE ? 16
+                                                                  : 64;
               tokens->index--;
               free (str);
               str = json_fixed_string (dat, k, tokens);
@@ -2189,13 +2189,14 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               char *old;
               if (strEQc (key, "strings_area"))
                 {
-                  const size_t k = dwg->header.from_version > R_2004 ? 512 : 256;
+                  const size_t k
+                      = dwg->header.from_version > R_2004 ? 512 : 256;
                   const size_t blen = len / 2;
                   // binary hexstring
                   BITCODE_TF buf = (BITCODE_TF)malloc (blen);
                   if ((len = in_hex2bin (buf, str, blen) != blen))
-                    LOG_ERROR ("in_hex2bin with key %s at pos %zu of %zu", key, len,
-                               blen);
+                    LOG_ERROR ("in_hex2bin with key %s at pos %zu of %zu", key,
+                               len, blen);
                   memcpy (str, buf, len);
                   free (buf);
                   if (len > k)
@@ -2260,8 +2261,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         }
       else if (strEQc (f->type, "CMC"))
         {
-          BITCODE_CMC color = { 0, 0, 0, 0, 0, NULL, NULL, NULL,
-                                0, 0, 0};
+          BITCODE_CMC color = { 0, 0, 0, 0, 0, NULL, NULL, NULL, 0, 0, 0 };
           json_CMC (dat, dwg, tokens, name, key, &color);
           JSON_TOKENS_CHECK_OVERFLOW_ERR
           dwg_dynapi_field_set_value (dwg, _obj, f, &color, 1);
@@ -2283,7 +2283,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
               LOG_ERROR ("Illegal old json format");
               return DWG_ERR_INVALIDDWG;
             }
-          hdls = size1 ? (BITCODE_H *)calloc (size1, sizeof (BITCODE_H)) : NULL;
+          hdls
+              = size1 ? (BITCODE_H *)calloc (size1, sizeof (BITCODE_H)) : NULL;
           json_set_numfield (_obj, fields, key, (long)size1);
           tokens->index++;
           for (int k = 0; k < t->size; k++)
@@ -2802,8 +2803,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                 tokens->index++;
             }
           dwg_dynapi_field_set_value (dwg, _obj, f, &arr, 0);
-          //f = dwg_dynapi_entity_field (name, "numdashes");
-          //dwg_dynapi_field_set_value (dwg, _obj, f, &t->size, 0);
+          // f = dwg_dynapi_entity_field (name, "numdashes");
+          // dwg_dynapi_field_set_value (dwg, _obj, f, &t->size, 0);
           JSON_TOKENS_CHECK_OVERFLOW_ERR;
         }
       return error | (f && f->name ? 1 : 0); // found or not
@@ -2941,7 +2942,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else if (!oldobj->type)
             {
               if (dwg->header.from_version >= R_13b1
-                   || (oldobj->fixedtype != DWG_TYPE_BLOCK
+                  || (oldobj->fixedtype != DWG_TYPE_BLOCK
                       && oldobj->fixedtype != DWG_TYPE_ENDBLK))
                 LOG_ERROR ("Required %s.type missing, skipped", oldobj->name)
               if (!oldobj->parent)
@@ -3336,8 +3337,7 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           else if (strEQc (key, "unknown_bits")
                    && (memBEGINc (obj->name, "UNKNOWN_")
                        || strEQc (obj->name, "STYLE")
-                       || (dwg->header.version == dwg->header.from_version)
-                       ))
+                       || (dwg->header.version == dwg->header.from_version)))
             {
               const int len = t->end - t->start;
               char *hex = json_string (dat, tokens);

@@ -73,8 +73,8 @@ static bool env_var_checked_p;
 #include "logging.h"
 #include "dec_macros.h"
 
-//#undef LOG_POS
-//#define LOG_POS LOG_INSANE (" @%zu.%u\n", dat->byte, dat->bit)
+// #undef LOG_POS
+// #define LOG_POS LOG_INSANE (" @%zu.%u\n", dat->byte, dat->bit)
 
 /*------------------------------------------------------------------------------
  * Private functions
@@ -222,9 +222,18 @@ dwg_decode (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       }
     return error;
   }
-  VERSIONS (R_13b1, R_2000) { return decode_R13_R2000 (dat, dwg); }
-  VERSION (R_2004) { return decode_R2004 (dat, dwg); }
-  VERSION (R_2007) { return decode_R2007 (dat, dwg); }
+  VERSIONS (R_13b1, R_2000)
+  {
+    return decode_R13_R2000 (dat, dwg);
+  }
+  VERSION (R_2004)
+  {
+    return decode_R2004 (dat, dwg);
+  }
+  VERSION (R_2007)
+  {
+    return decode_R2007 (dat, dwg);
+  }
   SINCE (R_2010)
   {
     read_r2007_init (dwg); // sets loglevel only for now
@@ -286,7 +295,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Header *_obj = &dwg->header;
     Bit_Chain *hdl_dat = dat;
     dat->byte = 0x06;
-    // clang-format off
+// clang-format off
     #include "header.spec"
     // clang-format on
   }
@@ -340,7 +349,8 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   LOG_TRACE ("crc: %04X [RSx] from 0-%zu\n", (unsigned)crc, dat->byte - 2);
   if (crc != crc2)
     {
-      LOG_ERROR ("Header CRC mismatch %04X <=> %04X", (unsigned)crc, (unsigned)crc2);
+      LOG_ERROR ("Header CRC mismatch %04X <=> %04X", (unsigned)crc,
+                 (unsigned)crc2);
       error |= DWG_ERR_WRONGCRC;
     }
 
@@ -356,14 +366,14 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       int i;
       Dwg_AuxHeader *_obj = &dwg->auxheader;
       Bit_Chain *hdl_dat = dat;
-      size_t end_address
-          = dwg->header.section[SECTION_AUXHEADER_R2000].address
-            + dwg->header.section[SECTION_AUXHEADER_R2000].size;
+      size_t end_address = dwg->header.section[SECTION_AUXHEADER_R2000].address
+                           + dwg->header.section[SECTION_AUXHEADER_R2000].size;
 
       obj = NULL;
       dat->byte = dwg->header.section[SECTION_AUXHEADER_R2000].address;
       LOG_TRACE ("\n"
-                 "=======> AuxHeader:       %4zu\n", dat->byte)
+                 "=======> AuxHeader:       %4zu\n",
+                 dat->byte)
       LOG_TRACE ("         AuxHeader (end): %4zu\n", end_address)
       if (dat->size < end_address)
         {
@@ -375,7 +385,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           size_t old_size = dat->size;
           BITCODE_BL vcount;
           dat->size = end_address;
-          // clang-format off
+// clang-format off
           #include "auxheader.spec"
           // clang-format on
           dat->size = old_size;
@@ -456,7 +466,8 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     }
   // after sentinel
   dat->byte = pvz = dwg->header.section[SECTION_HEADER_R13].address + 16;
-  // LOG_HANDLE ("@ 0x" FORMAT_RLLx ".%zu\n", bit_position (dat)/8, bit_position (dat)%8);
+  // LOG_HANDLE ("@ 0x" FORMAT_RLLx ".%zu\n", bit_position (dat)/8,
+  // bit_position (dat)%8);
 #define MAX_HEADER_SIZE 2048
   dwg->header_vars.size = bit_read_RL (dat);
   LOG_TRACE ("         Length: " FORMAT_RL " [RL]\n", dwg->header_vars.size)
@@ -471,9 +482,9 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 
   error |= dwg_decode_header_variables (dat, dat, dat, dwg);
 
-  // LOG_HANDLE ("@ 0x" FORMAT_RLLx ".%zu\n", bit_position (dat)/8, bit_position (dat)%8);
-  // check slack
-  // Check CRC, hardcoded to 2 before end sentinel
+  // LOG_HANDLE ("@ 0x" FORMAT_RLLx ".%zu\n", bit_position (dat)/8,
+  // bit_position (dat)%8); check slack Check CRC, hardcoded to 2 before end
+  // sentinel
   if (dwg->header_vars.size < MAX_HEADER_SIZE)
     {
       size_t crcpos = pvz + dwg->header_vars.size + 4;
@@ -713,7 +724,8 @@ handles_section:
       BITCODE_RLL last_handle = 0;
       size_t last_offset = 0;
       size_t oldpos = 0;
-      BITCODE_RLL maxh = (BITCODE_RLL)dwg->header.section[SECTION_HANDLES_R13].size << 1;
+      BITCODE_RLL maxh
+          = (BITCODE_RLL)dwg->header.section[SECTION_HANDLES_R13].size << 1;
       BITCODE_RLL max_handles
           = maxh < INT32_MAX ? maxh
                              : dwg->header.section[SECTION_HANDLES_R13].size;
@@ -743,19 +755,19 @@ handles_section:
           handleoff = bit_read_UMC (dat);
           // The offset from the previous address. default: obj->size, signed.
           offset = bit_read_MC (dat);
-          prevsize = dwg->num_objects ? dwg->object[dwg->num_objects - 1].size + 4
-            : 0L;
+          prevsize = dwg->num_objects
+                         ? dwg->object[dwg->num_objects - 1].size + 4
+                         : 0L;
 
-          if ((handleoff == 0)
-              || (handleoff > (max_handles - last_handle))
+          if ((handleoff == 0) || (handleoff > (max_handles - last_handle))
               || (offset > -4 && offset < prevsize - 8))
             {
               if (offset == prevsize)
-                LOG_WARN ("handleoff " FORMAT_UMC
-                          " looks wrong, max_handles %x - "
-                          "last_handle " FORMAT_RLLx " = " FORMAT_RLLx " (@%zu)",
-                          handleoff, (unsigned)max_handles, last_handle,
-                          max_handles - last_handle, oldpos);
+                LOG_WARN (
+                    "handleoff " FORMAT_UMC " looks wrong, max_handles %x - "
+                    "last_handle " FORMAT_RLLx " = " FORMAT_RLLx " (@%zu)",
+                    handleoff, (unsigned)max_handles, last_handle,
+                    max_handles - last_handle, oldpos);
               if (offset == 1
                   || (offset > 0 && offset < prevsize && prevsize > 0)
                   || (offset < 0 && labs ((long)offset) < prevsize
@@ -776,7 +788,8 @@ handles_section:
           last_offset += offset;
           LOG_TRACE ("\nNext object: %lu ", (unsigned long)dwg->num_objects)
           LOG_TRACE ("Handleoff: " FORMAT_UMC " [UMC]"
-                     " Offset: " FORMAT_MC " [MC]", handleoff, offset)
+                     " Offset: " FORMAT_MC " [MC]",
+                     handleoff, offset)
           LOG_HANDLE (" @%zu", last_offset)
           LOG_TRACE ("\n")
 
@@ -817,8 +830,8 @@ handles_section:
       if (crc != crc2)
         {
           LOG_ERROR ("Handles Section[%d] page CRC mismatch %04X <=> %04X",
-                     (int)dwg->header.section[SECTION_HANDLES_R13].number,
-                     crc, crc2);
+                     (int)dwg->header.section[SECTION_HANDLES_R13].number, crc,
+                     crc2);
           // fails with r14
           // if (dwg->header.version == R_2000)
           //  return DWG_ERR_WRONGCRC;
@@ -887,8 +900,7 @@ handles_section:
       struct _dwg_second_header *_obj = &dwg->second_header;
       obj = NULL;
 
-      LOG_INFO ("\n=======> Second Header 3 (start): %8zu\n",
-                dat->byte - 16)
+      LOG_INFO ("\n=======> Second Header 3 (start): %8zu\n", dat->byte - 16)
       pvzadr = dat->byte;
       LOG_TRACE ("pvzadr: %zx\n", pvzadr)
 
@@ -1111,7 +1123,7 @@ bfr_read_32 (void *restrict dst, BITCODE_RC *restrict *restrict src,
   if ((intptr_t)dst % 4)
     {
       dst_unaligned = true;
-      dp0 = dp = (uint32_t*)malloc (size);
+      dp0 = dp = (uint32_t *)malloc (size);
     }
   else
     dp = (uint32_t *)dst;
@@ -1119,7 +1131,7 @@ bfr_read_32 (void *restrict dst, BITCODE_RC *restrict *restrict src,
   if ((intptr_t)*src % 4)
     {
       src_unaligned = true;
-      sp0 = sp = (uint32_t*)malloc (size);
+      sp0 = sp = (uint32_t *)malloc (size);
       memcpy ((void *)sp, (const void *)*src, size);
     }
   else
@@ -1158,7 +1170,7 @@ bfr_read_64 (void *restrict dst, BITCODE_RC *restrict *restrict src,
   if ((intptr_t)dst % 8)
     {
       dst_unaligned = true;
-      dp0 = dp = (uint64_t*)malloc (size);
+      dp0 = dp = (uint64_t *)malloc (size);
     }
   else
     dp = (uint64_t *)dst;
@@ -1166,7 +1178,7 @@ bfr_read_64 (void *restrict dst, BITCODE_RC *restrict *restrict src,
   if ((intptr_t)*src % 8)
     {
       src_unaligned = true;
-      sp0 = sp = (uint64_t*)malloc (size);
+      sp0 = sp = (uint64_t *)malloc (size);
       memcpy ((void *)sp, (const void *)*src, size);
     }
   else
@@ -1542,7 +1554,7 @@ read_R2004_section_map (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       bfr_read_32 (&dwg->header.section[i], &ptr, 8);
       bytes_remaining -= 8;
       LOG_TRACE ("Section[%2d]=%2d,", i, (int)dwg->header.section[i].number)
-        LOG_TRACE (" size: %5u,", (unsigned)dwg->header.section[i].size)
+      LOG_TRACE (" size: %5u,", (unsigned)dwg->header.section[i].size)
       dwg->header.section[i].address = section_address;
       if (dwg->header.section[i].number <= section_array_size) // GH #144
         {
@@ -2119,11 +2131,11 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
       bit_read_fixed (dat, es.char_data, 32);
 
       //? if encrypted properties: security_type & 2 ??
-      sec_mask = htole32(0x4164536b ^ address);
+      sec_mask = htole32 (0x4164536b ^ address);
       {
         int k;
         for (k = 0; k < 8; ++k)
-          es.long_data[k] = le32toh(es.long_data[k] ^ sec_mask);
+          es.long_data[k] = le32toh (es.long_data[k] ^ sec_mask);
       }
 
       LOG_INFO ("=== Section %s (%u) @%u ===\n", info->name, i, address)
@@ -2150,11 +2162,9 @@ read_2004_compressed_section (Bit_Chain *dat, Dwg_Data *restrict dwg,
 
       // GH #126 part 4
       LOG_INSANE ("info[%d]->max_decomp_size: %zu (0x%zx)\n", i,
-                  (size_t)info->max_decomp_size,
-                  (size_t)info->max_decomp_size)
+                  (size_t)info->max_decomp_size, (size_t)info->max_decomp_size)
       LOG_INSANE ("max_decomp_size:          %zu (0x%zx)\n",
-                  (size_t)max_decomp_size,
-                  (size_t)max_decomp_size)
+                  (size_t)max_decomp_size, (size_t)max_decomp_size)
       LOG_INSANE ("bytes_left:               %ld\n", bytes_left);
 
       // check if compressed at all
@@ -2501,8 +2511,7 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           handleoff = bit_read_UMC (&hdl_dat);
           // the offset from the previous address. default: obj->size
           offset = bit_read_MC (&hdl_dat);
-          if (!handleoff
-              || handleoff > max_handles - last_handle
+          if (!handleoff || handleoff > max_handles - last_handle
               || (offset > -4 && offset < prevsize))
             {
               LOG_WARN ("Ignore invalid handleoff (@%zu)", oldpos)
@@ -2559,7 +2568,8 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         }
       else
         {
-          LOG_WARN ("Handles page CRC mismatch: %04X vs calc. %04X from %zu-%zu=%ld\n",
+          LOG_WARN ("Handles page CRC mismatch: %04X vs calc. %04X from "
+                    "%zu-%zu=%ld\n",
                     crc2, crc1, startpos, hdl_dat.byte - 2,
                     (long)(hdl_dat.byte - startpos - 2));
           error |= DWG_ERR_WRONGCRC;
@@ -2585,7 +2595,7 @@ summaryinfo_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Object *obj = NULL;
   int error = 0;
 
-  // clang-format off
+// clang-format off
   #include "summaryinfo.spec"
   // clang-format on
 
@@ -2636,7 +2646,7 @@ auxheader_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dat->chain || !dat->size)
     return 1;
 
-  // clang-format off
+    // clang-format off
   #include "auxheader.spec"
   // clang-format on
 
@@ -2685,7 +2695,7 @@ appinfo_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   if (!dat->chain || !dat->size)
     return 1;
 
-  // clang-format off
+    // clang-format off
   #include "appinfo.spec"
   // clang-format on
 
@@ -2739,7 +2749,7 @@ filedeplist_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
   BITCODE_BL vcount;
 
-  // clang-format off
+// clang-format off
   #include "filedeplist.spec"
   // clang-format on
 
@@ -2788,7 +2798,7 @@ security_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   int error = 0;
   memset (_obj, 0, sizeof (Dwg_Security));
 
-  // clang-format off
+// clang-format off
   #include "security.spec"
   // clang-format on
 
@@ -2961,7 +2971,7 @@ revhistory_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Object *obj = NULL;
   int error = 0;
 
-  // clang-format off
+// clang-format off
   #include "revhistory.spec"
   // clang-format on
 
@@ -3026,7 +3036,7 @@ read_2004_section_objfreespace (Bit_Chain *restrict dat,
   dat = &sec_dat; // restrict in size
   bit_chain_set_version (&old_dat, dat);
 
-// clang-format off
+  // clang-format off
   #include "objfreespace.spec"
   // clang-format on
 
@@ -3046,7 +3056,7 @@ template_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   Dwg_Object *obj = NULL;
   int error = 0;
 
-// clang-format off
+  // clang-format off
   #include "template.spec"
   // clang-format on
 
@@ -3069,8 +3079,8 @@ read_2004_section_template (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   error = read_2004_compressed_section (dat, dwg, &sec_dat, SECTION_TEMPLATE);
   if (error >= DWG_ERR_CRITICAL || !sec_dat.chain)
     {
-      UNTIL (R_2004){ LOG_INFO ("%s section not found\n",
-                                "Template") } LATER_VERSIONS
+      UNTIL (R_2004)
+      { LOG_INFO ("%s section not found\n", "Template") } LATER_VERSIONS
       {
         // violated by Teigha 4.3.2
         LOG_ERROR ("%s section not found\n", "Template")
@@ -3103,7 +3113,7 @@ acds_private (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   BITCODE_BL rcount3 = 0, rcount4, vcount;
   int error = 0;
 
-// clang-format off
+  // clang-format off
   #include "acds.spec"
   // clang-format on
 
@@ -3247,7 +3257,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     dat->bit = 0;
     dat->byte = 0UL;
     LOG_TRACE ("\n#### r2004 File Header ####\n");
-    // clang-format off
+// clang-format off
     #include "r2004_file_header.spec"
     // clang-format on
 
@@ -3290,25 +3300,26 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     dat->byte = dwg->r2004_header.section_map_address + 0x100;
     start = dwg->r2004_header.section_map_address;
     // Some section_map_address overflow past the dwg. GH #617
-    // maybe search the magic type backwards then. (in 0x20 page boundary steps)
-    // e.g. 1344464555_1_2004
-    if (start > dat->size) {
-      BITCODE_RL section_type;
-      start = dat->size & 0xffffff00;
-      LOG_INFO ("Searching for the Section Page Map backwards @%zx ...\n",
-                start - 0x20);
-      do
-        {
-          start -= 0x20;
-          dat->byte = start;
-          section_type = bit_read_RL (dat);
-          LOG_INSANE ("section_type: " FORMAT_RLx " @%zx\n",
-                      section_type, dat->byte - 4)
-        }
-      while (section_type != 0x41630e3b && dat->byte > 0x120);
-      if (section_type != 0x41630e3b)
-        LOG_INFO ("Not found\n")
-    }
+    // maybe search the magic type backwards then. (in 0x20 page boundary
+    // steps) e.g. 1344464555_1_2004
+    if (start > dat->size)
+      {
+        BITCODE_RL section_type;
+        start = dat->size & 0xffffff00;
+        LOG_INFO ("Searching for the Section Page Map backwards @%zx ...\n",
+                  start - 0x20);
+        do
+          {
+            start -= 0x20;
+            dat->byte = start;
+            section_type = bit_read_RL (dat);
+            LOG_INSANE ("section_type: " FORMAT_RLx " @%zx\n", section_type,
+                        dat->byte - 4)
+          }
+        while (section_type != 0x41630e3b && dat->byte > 0x120);
+        if (section_type != 0x41630e3b)
+          LOG_INFO ("Not found\n")
+      }
     map = &dat->chain[start];
     LOG_INSANE ("section_map_address: 0x%zx + 0x100:\n", start)
     LOG_INSANE_TF (map, 0x100)
@@ -3327,15 +3338,15 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
     FIELD_RL (compression_type, 0);
     FIELD_RLx (checksum, 0);
     LOG_INSANE ("@0x%zx\n", dat->byte);
-    //memset (&dat->chain[dat->byte - 4], 0, 4);
-    // seed 0xa751074, offset 0x100, size 16
+    // memset (&dat->chain[dat->byte - 4], 0, 4);
+    //  seed 0xa751074, offset 0x100, size 16
     dat->byte = start + 0x100;
     // FIXME
     checksum1 = dwg_section_page_checksum (0, dat, 16);
     LOG_TRACE ("checksum1 0x%08x with seed and crc 0\n", (unsigned)checksum1);
-    //dat->byte = start + 0x110;
-    //bit_write_BL (dat, _obj->checksum);
-    //dat->byte = start + 0x100;
+    // dat->byte = start + 0x110;
+    // bit_write_BL (dat, _obj->checksum);
+    // dat->byte = start + 0x100;
     checksum = dwg_section_page_checksum (checksum1, dat, 16);
     dat->byte = start + 0x114;
     if (checksum == _obj->checksum)
@@ -3346,7 +3357,7 @@ decode_R2004_header (Bit_Chain *restrict file_dat, Dwg_Data *restrict dwg)
       {
         LOG_WARN ("checksum: 0x%08x (calculated) CRC mismatch 0x%zx-0x%zx\n",
                   (unsigned)checksum, start + 0x100, start + 0x100 + 16);
-        //error |= DWG_ERR_WRONGCRC;
+        // error |= DWG_ERR_WRONGCRC;
       }
   }
   return error;
@@ -3368,7 +3379,7 @@ decode_R2004 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     dat->byte = 0x06;
     if (dat->from_version >= R_2022)
       dat->byte = 0x07;
-    // clang-format off
+      // clang-format off
     #include "header.spec"
     // clang-format on
   }
@@ -3475,7 +3486,7 @@ decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object *obj = NULL;
 
     dat->byte = 0x06;
-    // clang-format off
+// clang-format off
     #include "header.spec"
     // clang-format on
   }
@@ -3635,11 +3646,13 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
     case 3:
       if (eed_need_size (8, size))
         return DWG_ERR_INVALIDEED;
-      PRE (R_13b1) {
+      PRE (R_13b1)
+      {
         data->u.eed_3.layer = (BITCODE_RLL)bit_read_RS (dat);
         LOG_TRACE ("layer: " FORMAT_RLL " [RS]", data->u.eed_3.layer);
       }
-      LATER_VERSIONS {
+      LATER_VERSIONS
+      {
         data->u.eed_3.layer = bit_read_RLL (dat);
         LOG_TRACE ("layer: " FORMAT_RLL " [RLL]", data->u.eed_3.layer);
       }
@@ -3739,7 +3752,7 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
       if (dat->from_version >= R_13b1)
         {
           size = bit_read_BS (dat);
-          if (! size)
+          if (!size)
             break;
           LOG_TRACE ("EED[%u] size: " FORMAT_BS " [BS]", idx, size);
         }
@@ -3818,8 +3831,10 @@ dwg_decode_eed (Bit_Chain *restrict dat, Dwg_Object_Object *restrict obj)
                                       = obj->tio.MLEADERSTYLE;
                                   // real value with code 70 follows
                                   mstyle->class_version = 2;
-                                  LOG_TRACE ("EED found ACAD_MLEADERVER " FORMAT_RLLx "\n",
-                                             ref.absolute_ref);
+                                  LOG_TRACE (
+                                      "EED found ACAD_MLEADERVER " FORMAT_RLLx
+                                      "\n",
+                                      ref.absolute_ref);
                                 }
                             }
                         }
@@ -4197,7 +4212,7 @@ dwg_decode_entity (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
     return error;
 
-  // clang-format off
+    // clang-format off
   #include "common_entity_data.spec"
   // clang-format on
 
@@ -4248,7 +4263,7 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   SINCE (R_2007)
   {
     SINCE (R_2010)
-      LOG_HANDLE (" bitsize: " FORMAT_RL ",", obj->bitsize);
+    LOG_HANDLE (" bitsize: " FORMAT_RL ",", obj->bitsize);
     if (obj->bitsize > obj->size * 8)
       {
         obj->bitsize = obj->size * 8;
@@ -4258,7 +4273,7 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
       }
     // restrict the hdl_dat stream. already done for r2007
     SINCE (R_2010)
-      error |= obj_handle_stream (dat, obj, hdl_dat);
+    error |= obj_handle_stream (dat, obj, hdl_dat);
     // and set the string stream (restricted to size)
     if (obj->type >= 500 || obj_has_strings (obj->type))
       error |= obj_string_stream (dat, obj, str_dat);
@@ -4292,8 +4307,8 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
   {
     if (has_wrong_bitsize)
       LOG_WARN ("Skip eed")
-      else
-        error |= dwg_decode_eed (dat, _obj);
+    else
+      error |= dwg_decode_eed (dat, _obj);
     if (error & (DWG_ERR_INVALIDEED | DWG_ERR_VALUEOUTOFBOUNDS))
       return error;
   }
@@ -4314,7 +4329,7 @@ dwg_decode_object (Bit_Chain *dat, Bit_Chain *hdl_dat, Bit_Chain *str_dat,
       error |= obj_handle_stream (dat, obj, hdl_dat);
   }
 
-  // clang-format off
+// clang-format off
   #include "common_object_handle_data.spec"
   // clang-format on
 
@@ -4590,7 +4605,7 @@ dwg_decode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
   Dwg_Object *obj = NULL;
   int error = 0;
 
-  // clang-format off
+// clang-format off
   #include "header_variables.spec"
   // clang-format on
 
@@ -4616,7 +4631,7 @@ dwg_decode_common_entity_handle_data (Bit_Chain *dat, Bit_Chain *hdl_dat,
   if (dat->from_version >= R_2007 && _ent->color.flag & 0x40)
     FIELD_HANDLE (color.handle, 0, 430);
 
-  // clang-format off
+    // clang-format off
   #include "common_entity_handle_data.spec"
   // clang-format on
 
@@ -4922,9 +4937,9 @@ check_POLYLINE_handles (Dwg_Object *obj)
                 {
                   Dwg_Object *seq;
                   obj->tio.entity->layer = layer = vertex;
-                  LOG_WARN (
-                      "POLYLINE.layer is vertex[0] " FORMAT_RLLx ", shift em, NULL seqend",
-                      layer->handleref.value);
+                  LOG_WARN ("POLYLINE.layer is vertex[0] " FORMAT_RLLx
+                            ", shift em, NULL seqend",
+                            layer->handleref.value);
                   /* shift vertices one back */
                   for (i = 0; i < _obj->num_owned - 1; i++)
                     {
@@ -4947,7 +4962,8 @@ check_POLYLINE_handles (Dwg_Object *obj)
                       seq = seqend ? dwg_next_object (seqend->obj) : NULL;
                       if (seq && seq->type == DWG_TYPE_SEQEND)
                         {
-                          LOG_WARN ("POLYLINE.seqend = VERTEX+1 " FORMAT_RLLx "",
+                          LOG_WARN ("POLYLINE.seqend = VERTEX+1 " FORMAT_RLLx
+                                    "",
                                     seq->handle.value);
                           seqend = _obj->seqend
                               = dwg_find_objectref (dwg, seq);
@@ -5024,7 +5040,7 @@ dwg_decode_variable_type (Dwg_Data *restrict dwg, Bit_Chain *dat,
   obj->dxfname = klass->dxfname;
   is_entity = dwg_class_is_entity (klass);
 
-  // clang-format off
+// clang-format off
   // global class dispatcher
   #include "classes.inc"
   // clang-format on
@@ -5169,7 +5185,10 @@ dwg_decode_add_object (Dwg_Data *restrict dwg, Bit_Chain *dat,
     }
   dat->size = obj->size;
 
-  SINCE (R_2010) { obj->type = bit_read_BOT (dat); }
+  SINCE (R_2010)
+  {
+    obj->type = bit_read_BOT (dat);
+  }
   else
   {
     obj->type = bit_read_BS (dat);
@@ -5695,7 +5714,8 @@ dwg_validate_INSERT (Dwg_Object *restrict obj)
         return 1;
       if (!seqend || next == seqend->obj)
         {
-          LOG_TRACE ("unsorted INSERT " FORMAT_RLLx " SEQEND " FORMAT_RLLx " ATTRIB\n",
+          LOG_TRACE ("unsorted INSERT " FORMAT_RLLx " SEQEND " FORMAT_RLLx
+                     " ATTRIB\n",
                      obj->handle.value,
                      seqend && seqend->obj ? seqend->obj->handle.value : 0L)
           return 0;
@@ -5967,8 +5987,8 @@ dwg_fixup_BLOCKS_entities (Dwg_Data *restrict dwg)
                   else if (_obj->last_entity->absolute_ref
                            != hdl->absolute_ref)
                     {
-                      LOG_WARN ("Fixup wrong BLOCK_HEADER %s.last_entity from "
-                                FORMAT_RLLx " to " FORMAT_RLLx,
+                      LOG_WARN ("Fixup wrong BLOCK_HEADER %s.last_entity "
+                                "from " FORMAT_RLLx " to " FORMAT_RLLx,
                                 _objname, _obj->last_entity->absolute_ref,
                                 hdl->absolute_ref);
                       changes++;
@@ -6244,7 +6264,7 @@ decode_preR13_sentinel (const Dwg_Sentinel sentinel,
       size_t pos = MAX (dat->byte, 200) - 200;
       size_t len = MIN (dat->size - dat->byte, 400);
       // search +- 1000 bytes around
-      char *found = (char*)memmem (&dat->chain[pos], len, wanted, 16);
+      char *found = (char *)memmem (&dat->chain[pos], len, wanted, 16);
       if (!found)
         {
           LOG_ERROR ("%s not found at %zu", sentinel_name, dat->byte - 16);
@@ -6275,7 +6295,7 @@ decode_preR13_section_chk (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
 
 #define CMP(f, type)                                                          \
   if (tbl->f != f)                                                            \
-    LOG_ERROR ("decode_preR13_section_chk %s %s", tbl->name, #f)
+  LOG_ERROR ("decode_preR13_section_chk %s %s", tbl->name, #f)
 
   if ((BITCODE_RL)id > dwg->header.num_sections)
     {
@@ -6291,13 +6311,13 @@ decode_preR13_section_chk (Dwg_Section_Type_r11 id, Bit_Chain *restrict dat,
   CMP (number, RLd);
   address = (BITCODE_RLL)bit_read_RL (dat);
   CMP (address, RLL)
-#  undef CMP
+#undef CMP
   LOG_TRACE ("chk table %-8s [%2d]: size:%-4u nr:%-3ld (" FORMAT_RLL ")\n",
              tbl->name, (int)id1, (unsigned)size, (long)number, address)
 }
 
-#define DECODE_PRER13_SENTINEL(ID) \
-      error |= decode_preR13_sentinel (ID, #ID, dat, dwg)
+#define DECODE_PRER13_SENTINEL(ID)                                            \
+  error |= decode_preR13_sentinel (ID, #ID, dat, dwg)
 
 // only in R11
 int
@@ -6339,7 +6359,7 @@ decode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
   FIELD_RS (R11_HANDLING, 0);
   {
     if (!_obj->R11_HANDSEED)
-      _obj->R11_HANDSEED = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
+      _obj->R11_HANDSEED = (BITCODE_H)calloc (1, sizeof (Dwg_Object_Ref));
     _obj->R11_HANDSEED->handleref.code = 0;
     _obj->R11_HANDSEED->handleref.size = 8;
     _obj->R11_HANDSEED->handleref.value = htobe64 (bit_read_RLL (dat));
@@ -6390,7 +6410,7 @@ decode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
                            // after sentinel (16 bytes)
                            &dat->chain[_obj->auxheader_address + 16],
                            // minus crc length (2 bytes)
-                           _obj->auxheader_size - 2); 
+                           _obj->auxheader_size - 2);
       crc = bit_read_RS (dat);
       LOG_TRACE ("crc: %04X [RSx] from 0x%x-0x%zx\n", crc,
                  _obj->auxheader_address + 16, dat->byte - 2);
@@ -6425,9 +6445,9 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
   Dwg_Object_BLOCK_HEADER *_hdr = NULL;
   BITCODE_BL block_idx = 0, hdr_index = 0;
 
-  LOG_TRACE ("\n%s: (" FORMAT_RLx "-" FORMAT_RLx
-             " (%u), size " FORMAT_RL ")\n", entities_section[entity_section],
-             start, end, num_entities, size);
+  LOG_TRACE ("\n%s: (" FORMAT_RLx "-" FORMAT_RLx " (%u), size " FORMAT_RL
+             ")\n",
+             entities_section[entity_section], start, end, num_entities, size);
   LOG_INFO ("==========================================\n");
   if (entity_section != BLOCKS_SECTION_INDEX)
     {
@@ -6440,14 +6460,15 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
           if (!hdr->handle.value)
             hdr->handle.value = dwg_next_handle (dwg);
           hdr_handle = hdr->handle.value;
-          LOG_TRACE ("owned by BLOCK %s (" FORMAT_RLLx ")\n", _hdr->name, hdr_handle);
+          LOG_TRACE ("owned by BLOCK %s (" FORMAT_RLLx ")\n", _hdr->name,
+                     hdr_handle);
         }
     }
   // TODO search current offset in block_offset_r11 in BLOCK_HEADER's
 
   // with sentinel in case of R11
   SINCE (R_11)
-    real_start -= 16;
+  real_start -= 16;
 
   // report unknown data before entites block
   if (start != end && real_start > 0 && (BITCODE_RL)dat->byte != real_start)
@@ -6457,31 +6478,34 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
         {
           if (real_start > dat->size)
             {
-               UNKNOWN_UNTIL (dat->size);
+              UNKNOWN_UNTIL (dat->size);
             }
           else
             {
-               UNKNOWN_UNTIL (real_start);
+              UNKNOWN_UNTIL (real_start);
             }
         }
     }
 
   SINCE (R_11)
-    {
-      switch (entity_section)
-        {
-        case ENTITIES_SECTION_INDEX:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_ENTITIES_BEGIN); break;
-        case BLOCKS_SECTION_INDEX:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN); break;
-        case EXTRAS_SECTION_INDEX:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_EXTRA_ENTITIES_BEGIN); break;
-        default:
-          LOG_ERROR ("Internal error: Illegal entity_section %d 0-2\n",
-                     (int)entity_section);
-          return DWG_ERR_INTERNALERROR;
-        }
-    }
+  {
+    switch (entity_section)
+      {
+      case ENTITIES_SECTION_INDEX:
+        DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_ENTITIES_BEGIN);
+        break;
+      case BLOCKS_SECTION_INDEX:
+        DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN);
+        break;
+      case EXTRAS_SECTION_INDEX:
+        DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_EXTRA_ENTITIES_BEGIN);
+        break;
+      default:
+        LOG_ERROR ("Internal error: Illegal entity_section %d 0-2\n",
+                   (int)entity_section);
+        return DWG_ERR_INTERNALERROR;
+      }
+  }
 
   if (end > start && start == dat->byte)
     {
@@ -6591,8 +6615,8 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 BITCODE_RL cur_offset_prefix = 0;
                 if (dat->version > R_2_22)
                   cur_offset_prefix += 0x40000000;
-                // search current offset in block_offset_r11 in BLOCK_HEADER's and
-                // set new _hdr
+                // search current offset in block_offset_r11 in BLOCK_HEADER's
+                // and set new _hdr
                 cur_offset = (((dat->byte - 1) - start) | cur_offset_prefix)
                              & 0xFFFFFFFF;
                 error |= dwg_decode_BLOCK (dat, obj);
@@ -6607,10 +6631,11 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                                    == o->tio.object->tio.BLOCK_HEADER
                                           ->block_offset_r11)
                           {
-                            LOG_TRACE (
-                                "found BLOCK_HEADER \"%s\" at block_offset_r11 "
-                                "0x%x\n", o->tio.object->tio.BLOCK_HEADER->name,
-                                cur_offset);
+                            LOG_TRACE ("found BLOCK_HEADER \"%s\" at "
+                                       "block_offset_r11 "
+                                       "0x%x\n",
+                                       o->tio.object->tio.BLOCK_HEADER->name,
+                                       cur_offset);
                             hdr = o;
                             hdr_handle = hdr->handle.value;
                             hdr_index = o->index;
@@ -6623,9 +6648,9 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                             else
                               {
                                 _hdr->block_entity->handleref.code = 3;
-                                _hdr->block_entity->absolute_ref =
-                                  _hdr->block_entity->handleref.value =
-                                  obj->handle.value;
+                                _hdr->block_entity->absolute_ref
+                                    = _hdr->block_entity->handleref.value
+                                    = obj->handle.value;
                                 _hdr->block_entity->obj = obj;
                               }
                             LOG_TRACE (
@@ -6633,22 +6658,27 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                                 "\n",
                                 ARGS_HREF11 (_hdr->block_entity));
                             if (!obj->tio.entity->tio.BLOCK->name)
-                              obj->tio.entity->tio.BLOCK->name = strdup (_hdr->name);
-                            //LOG_TRACE ("next entities owned by BLOCK \"%s\" (%lx)\n",
-                            //           _hdr->name, hdr_handle);
+                              obj->tio.entity->tio.BLOCK->name
+                                  = strdup (_hdr->name);
+                            // LOG_TRACE ("next entities owned by BLOCK \"%s\"
+                            // (%lx)\n",
+                            //            _hdr->name, hdr_handle);
                             block_idx++;
                             break;
                           }
                       }
                     if (!_hdr)
                       {
-                        const char *name = obj->fixedtype == DWG_TYPE_BLOCK ?
-                          obj->tio.entity->tio.BLOCK->name : "(null)";
-                        LOG_WARN ("found no BLOCK_HEADER %s block_offset_r11 0x%x\n",
-                                  name, cur_offset);
+                        const char *name
+                            = obj->fixedtype == DWG_TYPE_BLOCK
+                                  ? obj->tio.entity->tio.BLOCK->name
+                                  : "(null)";
+                        LOG_WARN (
+                            "found no BLOCK_HEADER %s block_offset_r11 0x%x\n",
+                            name, cur_offset);
                         hdr = NULL;
                       }
-                }
+                  }
               }
               break;
             case DWG_TYPE_ENDBLK_r11:
@@ -6657,7 +6687,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 {
                   hdr = &dwg->object[hdr_index];
                   _hdr->endblk_entity
-                    = dwg_add_handleref (dwg, 3, obj->handle.value, hdr);
+                      = dwg_add_handleref (dwg, 3, obj->handle.value, hdr);
                   LOG_TRACE ("BLOCK_HEADER.endblk_entity: " FORMAT_HREF11 "\n",
                              ARGS_HREF11 (_hdr->endblk_entity));
                 }
@@ -6696,47 +6726,53 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 dat->byte += 4;
                 opts_r11 = bit_read_RS (dat);
                 LOG_TRACE (" opts_r11: 0x%x", opts_r11);
-                if (opts_r11 & OPTS_R11_POLYLINE_HAS_FLAG) {
-                  if (flag_r11 & FLAG_R11_HAS_PSPACE) {
-                    extra_r11 = bit_read_RC (dat);
-                    LOG_TRACE (", extra_r11: 0x%x", extra_r11);
+                if (opts_r11 & OPTS_R11_POLYLINE_HAS_FLAG)
+                  {
+                    if (flag_r11 & FLAG_R11_HAS_PSPACE)
+                      {
+                        extra_r11 = bit_read_RC (dat);
+                        LOG_TRACE (", extra_r11: 0x%x", extra_r11);
+                      }
+                    if (flag_r11 & FLAG_R11_HAS_COLOR)
+                      dat->byte += 1;
+                    if (flag_r11 & FLAG_R11_HAS_LTYPE)
+                      dat->byte += 2;
+                    if (flag_r11 & FLAG_R11_HAS_THICKNESS)
+                      dat->byte += 8;
+                    if (flag_r11 & FLAG_R11_HAS_ELEVATION)
+                      dat->byte += 8;
+                    if (extra_r11 && extra_r11 & EXTRA_R11_HAS_EED)
+                      {
+                        eed_size = bit_read_RS (dat);
+                        LOG_TRACE (", eed_size: %d", eed_size);
+                        dat->byte += eed_size;
+                      }
+                    if (flag_r11 & FLAG_R11_HAS_HANDLING)
+                      {
+                        handling_len = bit_read_RC (dat);
+                        LOG_TRACE (", handling_len: %d", handling_len);
+                        dat->byte += handling_len;
+                      }
+                    if (extra_r11 && extra_r11 & EXTRA_R11_HAS_VIEWPORT)
+                      dat->byte += 2;
+                    pline_flag = bit_read_RC (dat);
+                    LOG_TRACE (", pline_flag: 0x%x\n", pline_flag);
+                    dat->byte = start_byte;
+                    if (pline_flag & FLAG_POLYLINE_3D)
+                      error |= dwg_decode_POLYLINE_3D (dat, obj);
+                    else if (pline_flag & FLAG_POLYLINE_MESH)
+                      error |= dwg_decode_POLYLINE_MESH (dat, obj);
+                    else if (pline_flag & FLAG_POLYLINE_PFACE_MESH)
+                      error |= dwg_decode_POLYLINE_PFACE (dat, obj);
+                    else
+                      error |= dwg_decode_POLYLINE_2D (dat, obj);
                   }
-                  if (flag_r11 & FLAG_R11_HAS_COLOR)
-                    dat->byte += 1;
-                  if (flag_r11 & FLAG_R11_HAS_LTYPE)
-                    dat->byte += 2;
-                  if (flag_r11 & FLAG_R11_HAS_THICKNESS)
-                    dat->byte += 8;
-                  if (flag_r11 & FLAG_R11_HAS_ELEVATION)
-                    dat->byte += 8;
-                  if (extra_r11 && extra_r11 & EXTRA_R11_HAS_EED) {
-                    eed_size = bit_read_RS (dat);
-                    LOG_TRACE (", eed_size: %d", eed_size);
-                    dat->byte += eed_size;
-                  }
-                  if (flag_r11 & FLAG_R11_HAS_HANDLING) {
-                    handling_len = bit_read_RC (dat);
-                    LOG_TRACE (", handling_len: %d", handling_len);
-                    dat->byte += handling_len;
-                  }
-                  if (extra_r11 && extra_r11 & EXTRA_R11_HAS_VIEWPORT)
-                    dat->byte += 2;
-                  pline_flag = bit_read_RC (dat);
-                  LOG_TRACE (", pline_flag: 0x%x\n", pline_flag);
-                  dat->byte = start_byte;
-                  if (pline_flag & FLAG_POLYLINE_3D)
-                    error |= dwg_decode_POLYLINE_3D (dat, obj);
-                  else if (pline_flag & FLAG_POLYLINE_MESH)
-                    error |= dwg_decode_POLYLINE_MESH (dat, obj);
-                  else if (pline_flag & FLAG_POLYLINE_PFACE_MESH)
-                    error |= dwg_decode_POLYLINE_PFACE (dat, obj);
-                  else
+                else
+                  {
+                    dat->byte = start_byte;
+                    LOG_TRACE ("\n");
                     error |= dwg_decode_POLYLINE_2D (dat, obj);
-                } else {
-                  dat->byte = start_byte;
-                  LOG_TRACE ("\n");
-                  error |= dwg_decode_POLYLINE_2D (dat, obj);
-                }
+                  }
               }
               break;
             case DWG_TYPE_VERTEX_r11:
@@ -6764,20 +6800,23 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                   dat->byte += 8;
                 if (flag_r11 & FLAG_R11_HAS_ELEVATION)
                   dat->byte += 8;
-                if (flag_r11 & FLAG_R11_HAS_PSPACE) {
-                  extra_r11 = bit_read_RC (dat);
-                  LOG_TRACE (", extra_r11: 0x%x", extra_r11);
-                }
-                if (extra_r11 && extra_r11 & EXTRA_R11_HAS_EED) {
-                  eed_size = bit_read_RS (dat);
-                  LOG_TRACE (", eed_size: %d", eed_size);
-                  dat->byte += eed_size;
-                }
-                if (flag_r11 & FLAG_R11_HAS_HANDLING) {
-                  handling_len = bit_read_RC (dat);
-                  LOG_TRACE (", handling_len: %d", handling_len);
-                  dat->byte += handling_len;
-                }
+                if (flag_r11 & FLAG_R11_HAS_PSPACE)
+                  {
+                    extra_r11 = bit_read_RC (dat);
+                    LOG_TRACE (", extra_r11: 0x%x", extra_r11);
+                  }
+                if (extra_r11 && extra_r11 & EXTRA_R11_HAS_EED)
+                  {
+                    eed_size = bit_read_RS (dat);
+                    LOG_TRACE (", eed_size: %d", eed_size);
+                    dat->byte += eed_size;
+                  }
+                if (flag_r11 & FLAG_R11_HAS_HANDLING)
+                  {
+                    handling_len = bit_read_RC (dat);
+                    LOG_TRACE (", handling_len: %d", handling_len);
+                    dat->byte += handling_len;
+                  }
                 if (extra_r11 && extra_r11 & EXTRA_R11_HAS_VIEWPORT)
                   dat->byte += 2;
                 if (!(opts_r11 & OPTS_R11_VERTEX_HAS_NOT_X_Y))
@@ -6788,26 +6827,29 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                   dat->byte += 8;
                 if (opts_r11 & OPTS_R11_VERTEX_HAS_BULGE)
                   dat->byte += 8;
-                if (opts_r11 & OPTS_R11_VERTEX_HAS_FLAG) {
-                  vertex_flag = bit_read_RC (dat);
-                  LOG_TRACE (", vertex_flag: 0x%x\n", vertex_flag);
-                  dat->byte = start_byte;
-                  if (vertex_flag & FLAG_VERTEX_3D)
-                    error |= dwg_decode_VERTEX_3D (dat, obj);
-                  else if (vertex_flag & FLAG_VERTEX_MESH &&
-                           vertex_flag & FLAG_VERTEX_PFACE_MESH)
-                    error |= dwg_decode_VERTEX_PFACE (dat, obj);
-                  else if (vertex_flag & FLAG_VERTEX_MESH)
-                    error |= dwg_decode_VERTEX_MESH (dat, obj);
-                  else if (vertex_flag & FLAG_VERTEX_PFACE_MESH)
-                    error |= dwg_decode_VERTEX_PFACE_FACE (dat, obj);
-                  else
+                if (opts_r11 & OPTS_R11_VERTEX_HAS_FLAG)
+                  {
+                    vertex_flag = bit_read_RC (dat);
+                    LOG_TRACE (", vertex_flag: 0x%x\n", vertex_flag);
+                    dat->byte = start_byte;
+                    if (vertex_flag & FLAG_VERTEX_3D)
+                      error |= dwg_decode_VERTEX_3D (dat, obj);
+                    else if (vertex_flag & FLAG_VERTEX_MESH
+                             && vertex_flag & FLAG_VERTEX_PFACE_MESH)
+                      error |= dwg_decode_VERTEX_PFACE (dat, obj);
+                    else if (vertex_flag & FLAG_VERTEX_MESH)
+                      error |= dwg_decode_VERTEX_MESH (dat, obj);
+                    else if (vertex_flag & FLAG_VERTEX_PFACE_MESH)
+                      error |= dwg_decode_VERTEX_PFACE_FACE (dat, obj);
+                    else
+                      error |= dwg_decode_VERTEX_2D (dat, obj);
+                  }
+                else
+                  {
+                    dat->byte = start_byte;
+                    LOG_TRACE ("\n");
                     error |= dwg_decode_VERTEX_2D (dat, obj);
-                } else {
-                  dat->byte = start_byte;
-                  LOG_TRACE ("\n");
-                  error |= dwg_decode_VERTEX_2D (dat, obj);
-                }
+                  }
               }
               break;
             case DWG_TYPE_3DLINE_r11:
@@ -6856,8 +6898,8 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
                 {
                   if (obj->address + obj->size != dat->byte + 2)
                     {
-                      LOG_ERROR ("offset %ld",
-                                 (long)(obj->address + obj->size - (dat->byte + 2)));
+                      LOG_ERROR ("offset %ld", (long)(obj->address + obj->size
+                                                      - (dat->byte + 2)));
                       if (obj->address + obj->size >= start && start > 60)
                         dat->byte = obj->address + obj->size - 2;
                     }
@@ -6867,8 +6909,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               }
             }
           // add to block header
-          if (_hdr
-              && obj->supertype == DWG_SUPERTYPE_ENTITY
+          if (_hdr && obj->supertype == DWG_SUPERTYPE_ENTITY
               && obj->fixedtype != DWG_TYPE_UNUSED
               && obj->fixedtype != DWG_TYPE_JUMP
               && obj->type != DWG_TYPE_VERTEX_r11
@@ -6880,7 +6921,7 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
               hdr = &dwg->object[hdr_index];
               ref = dwg_add_handleref (dwg, 3, obj->handle.value, hdr);
               // if (dwg->dirty_refs)
-                  // find _hdr again from hdr_handle
+              // find _hdr again from hdr_handle
               LOG_TRACE ("BLOCK_HEADER \"%s\".", _hdr->name);
               if (obj->fixedtype != DWG_TYPE_BLOCK)
                 PUSH_HV (_hdr, num_owned, entities, ref);
@@ -6901,29 +6942,31 @@ decode_preR13_entities (BITCODE_RL start, BITCODE_RL end,
             }
         }
       if ((BITCODE_RL)dat->byte != end)
-          {
-            LOG_ERROR ("@0x%zx => end 0x%x", dat->byte, end);
-            return DWG_ERR_INVALIDDWG;
-          }
-    }
-
-
-  SINCE (R_11)
-    {
-      switch (entity_section)
         {
-        case ENTITIES_SECTION_INDEX:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_ENTITIES_END); break;
-        case BLOCKS_SECTION_INDEX:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_BLOCK_ENTITIES_END); break;
-        case EXTRAS_SECTION_INDEX:
-          DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_EXTRA_ENTITIES_END); break;
-        default:
-          LOG_ERROR ("Internal error: Illegal entity_section %d 0-2\n",
-                     (int)entity_section);
-          return DWG_ERR_INTERNALERROR;
+          LOG_ERROR ("@0x%zx => end 0x%x", dat->byte, end);
+          return DWG_ERR_INVALIDDWG;
         }
     }
+
+  SINCE (R_11)
+  {
+    switch (entity_section)
+      {
+      case ENTITIES_SECTION_INDEX:
+        DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_ENTITIES_END);
+        break;
+      case BLOCKS_SECTION_INDEX:
+        DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_BLOCK_ENTITIES_END);
+        break;
+      case EXTRAS_SECTION_INDEX:
+        DECODE_PRER13_SENTINEL (DWG_SENTINEL_R11_EXTRA_ENTITIES_END);
+        break;
+      default:
+        LOG_ERROR ("Internal error: Illegal entity_section %d 0-2\n",
+                   (int)entity_section);
+        return DWG_ERR_INTERNALERROR;
+      }
+  }
 
   LOG_INFO ("==========================================\n");
   LOG_TRACE ("%s: end\n", entities_section[entity_section]);

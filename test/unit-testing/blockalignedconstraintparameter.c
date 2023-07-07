@@ -11,7 +11,7 @@ api_process (dwg_object *obj)
   BITCODE_BL i;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  //#ifdef DEBUG_CLASSES
+  // #ifdef DEBUG_CLASSES
   dwg_obj_blockalignedconstraintparameter *_obj
       = dwg_object_to_BLOCKALIGNEDCONSTRAINTPARAMETER (obj);
 
@@ -39,5 +39,5 @@ api_process (dwg_object *obj)
   CHK_ENTITY_3RD (_obj, BLOCKALIGNEDCONSTRAINTPARAMETER, endpt);
   // AcDbBlockConstraintParameter
   CHK_ENTITY_H (_obj, BLOCKALIGNEDCONSTRAINTPARAMETER, dependency);
-  //#endif
+  // #endif
 }

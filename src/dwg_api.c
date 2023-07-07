@@ -70,7 +70,7 @@ void dwg_set_next_objhandle (Dwg_Object *obj);
 int dwg_dxfclass_require (Dwg_Data *restrict dwg,
                           const char *restrict dxfname);
 
-//#ifdef USE_WRITE
+// #ifdef USE_WRITE
 /* internally used only by dwg_add_POLYLINE* only */
 // fixme: Dwg_Entity_POLYLINE_2D* as 1st owner arg
 Dwg_Entity_VERTEX_2D *
@@ -89,7 +89,7 @@ Dwg_Entity_VERTEX_PFACE_FACE *
 dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
                            const dwg_face vertind) __nonnull_all;
 
-//#endif
+// #endif
 
 /**
  * Return an object fieldvalue
@@ -141,7 +141,8 @@ dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
    from afl-fuzz, because there would be too many.
    These are the exceptions, needed in dwgwrite, ... */
 
-EXPORT dwg_get_OBJECT (ent_circle, CIRCLE)
+EXPORT
+dwg_get_OBJECT (ent_circle, CIRCLE)
 dwg_get_OBJECT (ent_line, LINE)
 
 CAST_DWG_OBJECT_TO_ENTITY (VERTEX_2D)
@@ -1181,11 +1182,11 @@ CAST_DWG_OBJECT_TO_OBJECT (ASSOCARRAYRECTANGULARPARAMETERS)
   CAST_DWG_OBJECT_TO_OBJECT (SUNSTUDY)
   CAST_DWG_OBJECT_TO_OBJECT (TABLECONTENT)
   CAST_DWG_OBJECT_TO_OBJECT (TVDEVICEPROPERTIES)
-// CAST_DWG_OBJECT_TO_OBJECT (ACDSRECORD)
-// CAST_DWG_OBJECT_TO_OBJECT (ACDSSCHEMA)
-// CAST_DWG_OBJECT_TO_OBJECT (NPOCOLLECTION)
-// CAST_DWG_OBJECT_TO_OBJECT (RAPIDRTRENDERENVIRONMENT)
-// CAST_DWG_OBJECT_TO_OBJECT (XREFPANELOBJECT)
+  // CAST_DWG_OBJECT_TO_OBJECT (ACDSRECORD)
+  // CAST_DWG_OBJECT_TO_OBJECT (ACDSSCHEMA)
+  // CAST_DWG_OBJECT_TO_OBJECT (NPOCOLLECTION)
+  // CAST_DWG_OBJECT_TO_OBJECT (RAPIDRTRENDERENVIRONMENT)
+  // CAST_DWG_OBJECT_TO_OBJECT (XREFPANELOBJECT)
 #  endif
 // clang-format: on
 /* End auto-generated content */
@@ -2954,11 +2955,9 @@ dwg_ent_ellipse_set_start_angle (dwg_ent_ellipse *restrict ellipse,
 }
 
 /** Returns the _dwg_entity_ELLIPSE::end_angle, DXF 42.
-  \code Usage: double end_angle = dwg_ent_ellipse_get_end_angle(ellipse, &error);
-  \endcode
-  \param[in]  ellipse dwg_ent_ellipse*
-  \param[out] error   int*, is set to 0 for ok, 1 on error
-  \deprecated
+  \code Usage: double end_angle = dwg_ent_ellipse_get_end_angle(ellipse,
+  &error); \endcode \param[in]  ellipse dwg_ent_ellipse* \param[out] error
+  int*, is set to 0 for ok, 1 on error \deprecated
 */
 double
 dwg_ent_ellipse_get_end_angle (const dwg_ent_ellipse *restrict ellipse,
@@ -6459,9 +6458,10 @@ dwg_ent_insert_get_num_owned (const dwg_ent_insert *restrict insert,
 // TODO get_name
 
 /** Returns the _dwg_entity_INSERT::block_header.
-  \code Usage: dwg_object* block_header = dwg_ent_insert_get_block_header(insert,
-&error); \endcode \param[in]  insert  dwg_ent_insert* \param[out] error   int*,
-is set to 0 for ok, 1 on error \deprecated
+  \code Usage: dwg_object* block_header =
+dwg_ent_insert_get_block_header(insert, &error); \endcode \param[in]  insert
+dwg_ent_insert* \param[out] error   int*, is set to 0 for ok, 1 on error
+\deprecated
 */
 EXPORT dwg_object *
 dwg_ent_insert_get_block_header (const dwg_ent_insert *restrict insert,
@@ -6740,11 +6740,9 @@ dwg_ent_minsert_has_attribs (dwg_ent_minsert *restrict minsert,
 }
 
 /** Returns the  _dwg_entity_MINSERT::num_owned count, no DXF.
-  \code Usage: BITCODE_BL count = dwg_ent_minsert_get_num_owned(minsert, &error);
-  \endcode
-  \param[in] minsert dwg_ent_minsert*
-  \param[out] error   int*, is set to 0 for ok, 1 on error
-  \deprecated
+  \code Usage: BITCODE_BL count = dwg_ent_minsert_get_num_owned(minsert,
+  &error); \endcode \param[in] minsert dwg_ent_minsert* \param[out] error int*,
+  is set to 0 for ok, 1 on error \deprecated
 */
 EXPORT BITCODE_BL
 dwg_ent_minsert_get_num_owned (const dwg_ent_minsert *restrict minsert,
@@ -6860,11 +6858,9 @@ dwg_ent_minsert_get_num_rows (const dwg_ent_minsert *restrict minsert,
 }
 
 /** Returns the _dwg_entity_MINSERT::col_spacing, DXF 44.
-  \code Usage: double spacing = dwg_ent_minsert_get_col_spacing(minsert, &error);
-  \endcode
-  \param[in] minsert dwg_ent_minsert*
-  \param[out] error   int*, is set to 0 for ok, 1 on error
-  \deprecated
+  \code Usage: double spacing = dwg_ent_minsert_get_col_spacing(minsert,
+  &error); \endcode \param[in] minsert dwg_ent_minsert* \param[out] error int*,
+  is set to 0 for ok, 1 on error \deprecated
 */
 EXPORT double
 dwg_ent_minsert_get_col_spacing (const dwg_ent_minsert *restrict minsert,
@@ -6908,11 +6904,9 @@ dwg_ent_minsert_set_col_spacing (dwg_ent_minsert *restrict minsert,
 }
 
 /** Returns the _dwg_entity_MINSERT::row_spacing, DXF 45.
-  \code Usage: double spacing = dwg_ent_minsert_get_row_spacing(minsert, &error);
-  \endcode
-  \param[in] minsert dwg_ent_minsert*
-  \param[out] error   int*, is set to 0 for ok, 1 on error
-  \deprecated
+  \code Usage: double spacing = dwg_ent_minsert_get_row_spacing(minsert,
+  &error); \endcode \param[in] minsert dwg_ent_minsert* \param[out] error int*,
+  is set to 0 for ok, 1 on error \deprecated
 */
 EXPORT double
 dwg_ent_minsert_get_row_spacing (const dwg_ent_minsert *restrict minsert,
@@ -7133,11 +7127,10 @@ dwg_obj_mlinestyle_set_flag (dwg_obj_mlinestyle *restrict mlinestyle,
 }
 
 /** Returns the _dwg_object_MLINESTYLE::start_angle, DXF 51 (radians)
-  \code Usage: double start_angle = dwg_obj_mlinestyle_get_start_angle(mlinestyle, &error);
-  \endcode
-  \param[in] mlinestyle  dwg_obj_mlinestyle
-  \param[out] error   int*, is set to 0 for ok, 1 on error
-  \deprecated
+  \code Usage: double start_angle =
+  dwg_obj_mlinestyle_get_start_angle(mlinestyle, &error); \endcode \param[in]
+  mlinestyle  dwg_obj_mlinestyle \param[out] error   int*, is set to 0 for ok,
+  1 on error \deprecated
 */
 EXPORT double
 dwg_obj_mlinestyle_get_start_angle (
@@ -7228,11 +7221,9 @@ dwg_obj_mlinestyle_set_end_angle (dwg_obj_mlinestyle *restrict mlinestyle,
 }
 
 /** Returns the _dwg_object_MLINESTYLE::num_lines, DXF 71.
-  \code Usage: char lines = dwg_obj_mlinestyle_get_num_lines(mlinestyle, &error);
-  \endcode
-  \param[in]  mlinestyle dwg_obj_mlinestyle
-  \param[out] error   int*, is set to 0 for ok, 1 on error
-  \deprecated
+  \code Usage: char lines = dwg_obj_mlinestyle_get_num_lines(mlinestyle,
+  &error); \endcode \param[in]  mlinestyle dwg_obj_mlinestyle \param[out] error
+  int*, is set to 0 for ok, 1 on error \deprecated
 */
 EXPORT char
 dwg_obj_mlinestyle_get_num_lines (
@@ -7278,10 +7269,8 @@ dwg_obj_appid_control_get_num_entries (
 }
 
 /** Returns the idx'th _dwg_entity_APPID:: object.
-  \code Usage: int num = dwg_obj_appid_control_get_appid(appcontrol, 0, &error);
-  \endcode
-  \param[in]  appid dwg_obj_appid_control*
-  \param[in]  idx
+  \code Usage: int num = dwg_obj_appid_control_get_appid(appcontrol, 0,
+  &error); \endcode \param[in]  appid dwg_obj_appid_control* \param[in]  idx
   \param[out] error   int*, is set to 0 for ok, 1 on error
   \deprecated
 */
@@ -7386,10 +7375,9 @@ dwg_obj_appid_set_flag (dwg_obj_appid *restrict appid, const BITCODE_RC flag,
 }
 
 /** Returns the  _dwg_entity_APPID_CONTROL:: object for the appid object.
-  \code Usage: dwg_obj_appid_control* appid = dwg_obj_appid_get_appid_control(appid, &error);
-  \endcode
-  \param[in]  appid dwg_obj_appid*
-  \param[out] error   int*, is set to 0 for ok, 1 on error
+  \code Usage: dwg_obj_appid_control* appid =
+dwg_obj_appid_get_appid_control(appid, &error); \endcode \param[in]  appid
+dwg_obj_appid* \param[out] error   int*, is set to 0 for ok, 1 on error
   \deprecated
 EXPORT */
 dwg_obj_appid_control *
@@ -7632,11 +7620,9 @@ dwg_ent_dim_set_horiz_dir (dwg_ent_dim *restrict dim, const double horiz_dir,
 }
 
 /** Returns the _dwg_entity_DIMENSION_common::lspace_factor, DXF 41.
-  \code Usage: double lspace_factor = dwg_ent_dim_get_lspace_factor(dim, &error);
-  \endcode
-  \param[in]  dim dwg_ent_dim*
-  \param[out] error   int*, is set to 0 for ok, 1 on error
-  \deprecated
+  \code Usage: double lspace_factor = dwg_ent_dim_get_lspace_factor(dim,
+  &error); \endcode \param[in]  dim dwg_ent_dim* \param[out] error   int*, is
+  set to 0 for ok, 1 on error \deprecated
 */
 EXPORT double
 dwg_ent_dim_get_lspace_factor (const dwg_ent_dim *restrict dim,
@@ -8370,11 +8356,9 @@ dwg_ent_dim_ordinate_get_def_pt (const dwg_ent_dim_ordinate *restrict dim,
 }
 
 /** Sets the 13 feature_location point
-  \code Usage: dwg_ent_dim_ordinate_set_feature_location_pt(dim, &point, &error);
-  \endcode
-  \param[in] dim_ordinate dwg_ent_dim_ordinate*
-  \param[out] dwg_point_3d
-  \param[out] error   int*, is set to 0 for ok, 1 on error
+  \code Usage: dwg_ent_dim_ordinate_set_feature_location_pt(dim, &point,
+  &error); \endcode \param[in] dim_ordinate dwg_ent_dim_ordinate* \param[out]
+  dwg_point_3d \param[out] error   int*, is set to 0 for ok, 1 on error
   \deprecated
 */
 EXPORT void
@@ -8401,11 +8385,9 @@ dwg_ent_dim_ordinate_set_feature_location_pt (
 }
 
 /** Returns the 13 feature_location point
-  \code Usage: dwg_ent_dim_ordinate_get_feature_location_pt(dim, &point, &error);
-  \endcode
-  \param[in] dim_ordinate dwg_ent_dim_ordinate*
-  \param[out] dwg_point_3d
-  \param[out] error   int*, is set to 0 for ok, 1 on error
+  \code Usage: dwg_ent_dim_ordinate_get_feature_location_pt(dim, &point,
+  &error); \endcode \param[in] dim_ordinate dwg_ent_dim_ordinate* \param[out]
+  dwg_point_3d \param[out] error   int*, is set to 0 for ok, 1 on error
   \deprecated
 */
 EXPORT void
@@ -14801,11 +14783,9 @@ dwg_ent_polyline_3d_set_curve_type (dwg_ent_polyline_3d *restrict pline3d,
  ********************************************************************/
 
 /** Returns the _dwg_entity_3DFACE::invis_flags, DXF 70.
-  \code Usage: BITCODE_BS flag = dwg_ent_3dface_get_invis_flags(_3dface, &error);
-  \endcode
-  \param[in] _3dface  dwg_ent_3dface*
-  \param[out] error   set to 0 for ok, 1 on error
-  \deprecated
+  \code Usage: BITCODE_BS flag = dwg_ent_3dface_get_invis_flags(_3dface,
+  &error); \endcode \param[in] _3dface  dwg_ent_3dface* \param[out] error   set
+  to 0 for ok, 1 on error \deprecated
 */
 EXPORT BITCODE_BS
 dwg_ent_3dface_get_invis_flags (const dwg_ent_3dface *restrict _3dface,
@@ -20506,10 +20486,9 @@ dwg_ent_lwpline_get_widths (const dwg_ent_lwpline *restrict lwpline,
 
 /** Returns the block control object from the block header
   \code
-    Usage: dwg_obj_block_control *blk = dwg_block_header_get_block_control(hdr, &error);
-  \endcode
-  \param[in] block_header
-  \param[out] error  set to 0 for ok, >0 if not found.
+    Usage: dwg_obj_block_control *blk = dwg_block_header_get_block_control(hdr,
+  &error); \endcode \param[in] block_header \param[out] error  set to 0 for ok,
+  >0 if not found.
 */
 dwg_obj_block_control *
 dwg_block_header_get_block_control (const dwg_obj_block_header *block_header,
@@ -20907,9 +20886,10 @@ dwg_object_tablectrl_get_ownerhandle (const dwg_object *restrict obj,
 }
 
 /** Get the xdicobjhandle from the generic table control object.
-  \code Usage: dwg_object_ref *ref = dwg_object_tablectrl_get_xdicobjhandle(obj,
-&error); \endcode \param[in]  obj    a TABLE_CONTROL dwg_object* \param[out]
-error  set to 0 for ok, >0 if not found.
+  \code Usage: dwg_object_ref *ref =
+dwg_object_tablectrl_get_xdicobjhandle(obj, &error); \endcode \param[in]  obj
+a TABLE_CONTROL dwg_object* \param[out] error  set to 0 for ok, >0 if not
+found.
 */
 EXPORT dwg_object_ref *
 dwg_object_tablectrl_get_xdicobjhandle (const dwg_object *restrict obj,
@@ -21103,7 +21083,8 @@ dwg_ent_get_num_eed (const dwg_obj_ent *restrict ent, int *restrict error)
   \endcode
   \param[in]  ent    dwg_obj_ent*
   \param[in]  idx  [0 - num_eed-1]
-  \param[out] error  set to 0 for ok, 1 if ent == NULL or 2 if idx out of bounds.
+  \param[out] error  set to 0 for ok, 1 if ent == NULL or 2 if idx out of
+  bounds.
 */
 EXPORT dwg_entity_eed *
 dwg_ent_get_eed (const dwg_obj_ent *restrict ent, const BITCODE_BL idx,
@@ -21132,7 +21113,8 @@ dwg_ent_get_eed (const dwg_obj_ent *restrict ent, const BITCODE_BL idx,
   \endcode
   \param[in]  ent    dwg_obj_ent*
   \param[in]  idx  [0 - num_eed-1]
-  \param[out] error  set to 0 for ok, 1 if ent == NULL or 2 if idx out of bounds.
+  \param[out] error  set to 0 for ok, 1 if ent == NULL or 2 if idx out of
+  bounds.
 */
 dwg_entity_eed_data *
 dwg_ent_get_eed_data (const dwg_obj_ent *restrict ent, const BITCODE_BL idx,
@@ -21921,7 +21903,8 @@ dwg_obj_generic_to_object (const void *restrict _vobj, int *restrict error)
   \code Usage: handle = dwg_obj_generic_handlevalue(_obj);
   \endcode
   \return The handle value or 0;
-  \param[in]  _obj   dwg_obj_generic* (layer, block_header, xrecord, ...) as void
+  \param[in]  _obj   dwg_obj_generic* (layer, block_header, xrecord, ...) as
+void
 * to avoid casts.
 */
 EXPORT BITCODE_RLL
@@ -22056,7 +22039,7 @@ dwg_is_valid_tag (const char *tag)
 #ifdef HAVE_WCTYPE_H
   {
     // decode utf-8, check wide-chars
-    BITCODE_TU wstr = bit_utf8_to_TU ((char*)tag, 0);
+    BITCODE_TU wstr = bit_utf8_to_TU ((char *)tag, 0);
     size_t len = bit_wcs2nlen (wstr, 256);
     if (len > 256 || !len)
       {
@@ -22089,20 +22072,20 @@ dwg_is_valid_tag (const char *tag)
  *                    FUNCTIONS FOR ADDING OBJECTS                  *
  ********************************************************************/
 
-//#ifdef USE_WRITE
-#  define NEW_OBJECT(dwg, obj)                                                \
-    {                                                                         \
-      BITCODE_BL idx = dwg->num_objects;                                      \
-      if (dwg_add_object (dwg) < 0)                                           \
-        dwg_resolve_objectrefs_silent (dwg);                                  \
-      obj = &dwg->object[idx];                                                \
-      dwg->cur_index++;                                                       \
-      obj->supertype = DWG_SUPERTYPE_OBJECT;                                  \
-      obj->tio.object                                                         \
-          = (Dwg_Object_Object *)calloc (1, sizeof (Dwg_Object_Object));      \
-      obj->tio.object->objid = obj->index;                                    \
-      obj->tio.object->dwg = dwg;                                             \
-    }
+// #ifdef USE_WRITE
+#define NEW_OBJECT(dwg, obj)                                                  \
+  {                                                                           \
+    BITCODE_BL idx = dwg->num_objects;                                        \
+    if (dwg_add_object (dwg) < 0)                                             \
+      dwg_resolve_objectrefs_silent (dwg);                                    \
+    obj = &dwg->object[idx];                                                  \
+    dwg->cur_index++;                                                         \
+    obj->supertype = DWG_SUPERTYPE_OBJECT;                                    \
+    obj->tio.object                                                           \
+        = (Dwg_Object_Object *)calloc (1, sizeof (Dwg_Object_Object));        \
+    obj->tio.object->objid = obj->index;                                      \
+    obj->tio.object->dwg = dwg;                                               \
+  }
 
 // returns BLOCK_HEADER owner for generic entity from ent->ownerhandle.
 EXPORT Dwg_Object_BLOCK_HEADER *
@@ -22181,49 +22164,49 @@ add_obj_reactor (Dwg_Object_Object *obj, BITCODE_RLL absolute_ref)
 
 // check if radian or degree, need to normalize.
 // max observed angle: 10.307697 in some ELLIPSE.end_angle
-#  define ADD_CHECK_ANGLE(angle)                                              \
-    if (isnan (angle))                                                        \
-      {                                                                       \
-        LOG_ERROR ("Invalid %s: NaN", #angle)                                 \
-        return NULL;                                                          \
-      }                                                                       \
-    if (fabs (angle) > 12.0)                                                  \
-      {                                                                       \
-        LOG_ERROR ("Invalid %s: %f needs to "                                 \
-                   "be radian (%f)",                                          \
-                   #angle, angle, deg2rad (angle))                            \
-        return NULL;                                                          \
-      }                                                                       \
-    if (fabs (angle) > M_PI)                                                  \
-      {                                                                       \
-        const double old = angle;                                             \
-        while (angle > M_PI)                                                  \
-          angle -= (M_PI * 2.0);                                              \
-        while (angle < -M_PI)                                                 \
-          angle += (M_PI * 2.0);                                              \
-        LOG_WARN ("Bad angle %s: %f normalized "                              \
-                  "to %f",                                                    \
-                  #angle, old, angle)                                         \
-      }
+#define ADD_CHECK_ANGLE(angle)                                                \
+  if (isnan (angle))                                                          \
+    {                                                                         \
+      LOG_ERROR ("Invalid %s: NaN", #angle)                                   \
+      return NULL;                                                            \
+    }                                                                         \
+  if (fabs (angle) > 12.0)                                                    \
+    {                                                                         \
+      LOG_ERROR ("Invalid %s: %f needs to "                                   \
+                 "be radian (%f)",                                            \
+                 #angle, angle, deg2rad (angle))                              \
+      return NULL;                                                            \
+    }                                                                         \
+  if (fabs (angle) > M_PI)                                                    \
+    {                                                                         \
+      const double old = angle;                                               \
+      while (angle > M_PI)                                                    \
+        angle -= (M_PI * 2.0);                                                \
+      while (angle < -M_PI)                                                   \
+        angle += (M_PI * 2.0);                                                \
+      LOG_WARN ("Bad angle %s: %f normalized "                                \
+                "to %f",                                                      \
+                #angle, old, angle)                                           \
+    }
 
-#  define ADD_CHECK_3DPOINT(pt)                                               \
-    if (isnan (pt->x) || isnan (pt->y) || isnan (pt->z))                      \
-      {                                                                       \
-        LOG_ERROR ("Invalid %s: NaN", #pt)                                    \
-        return NULL;                                                          \
-      }
-#  define ADD_CHECK_2DPOINT(pt)                                               \
-    if (isnan (pt->x) || isnan (pt->y))                                       \
-      {                                                                       \
-        LOG_ERROR ("Invalid %s: NaN", #pt)                                    \
-        return NULL;                                                          \
-      }
-#  define ADD_CHECK_DOUBLE(dbl)                                               \
-    if (isnan (dbl))                                                          \
-      {                                                                       \
-        LOG_ERROR ("Invalid %s: NaN", #dbl)                                   \
-        return NULL;                                                          \
-      }
+#define ADD_CHECK_3DPOINT(pt)                                                 \
+  if (isnan (pt->x) || isnan (pt->y) || isnan (pt->z))                        \
+    {                                                                         \
+      LOG_ERROR ("Invalid %s: NaN", #pt)                                      \
+      return NULL;                                                            \
+    }
+#define ADD_CHECK_2DPOINT(pt)                                                 \
+  if (isnan (pt->x) || isnan (pt->y))                                         \
+    {                                                                         \
+      LOG_ERROR ("Invalid %s: NaN", #pt)                                      \
+      return NULL;                                                            \
+    }
+#define ADD_CHECK_DOUBLE(dbl)                                                 \
+  if (isnan (dbl))                                                            \
+    {                                                                         \
+      LOG_ERROR ("Invalid %s: NaN", #dbl)                                     \
+      return NULL;                                                            \
+    }
 
 /* Convert UTF-8 strings to BITCODE_T fields */
 EXPORT BITCODE_T
@@ -22236,7 +22219,7 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
   else
     {
       // TODO Encode unicode to \U+... bit_utf8_to_TV. codepage conversions
-#  if 0
+#if 0
       int size = 1024;
       char *dest = (char *)malloc (size);
       char *tgt = bit_utf8_to_TV (dest, u8str, size, strlen(u8str), 0,
@@ -22259,7 +22242,7 @@ dwg_add_u8_input (Dwg_Data *restrict dwg, const char *restrict u8str)
                                 dwg->header.codepage);
         }
       return tgt;
-#  endif
+#endif
       if (dwg->header.version <= R_12 && strlen (u8str) < 32)
         {
           // those old names are usually 32byte, and bit_write_TF
@@ -22313,12 +22296,19 @@ default_numheader_vars (Dwg_Data *dwg, const Dwg_Version_Type version)
 #  define IN_POSTPROCESS_SEQEND(obj, b, c) in_postprocess_SEQEND (obj, b, c)
 #  define ENCODE_GET_CLASS(dwg, obj) (void)dwg_encode_get_class (dwg, obj)
 /* Now implemented in dxfclasses.c as gperf lookup */
-#  define REQUIRE_CLASS(cname) dwg_require_class (dwg, cname, sizeof (cname) - 1)
+#  define REQUIRE_CLASS(cname)                                                \
+    dwg_require_class (dwg, cname, sizeof (cname) - 1)
 #else
 #  define IN_POSTPROCESS_HANDLES(obj)
 #  define IN_POSTPROCESS_SEQEND(obj, b, c)
-#  define ENCODE_GET_CLASS(dwg, obj) while (0) {}
-#  define REQUIRE_CLASS(cname) while (0) {}
+#  define ENCODE_GET_CLASS(dwg, obj)                                          \
+    while (0)                                                                 \
+      {                                                                       \
+      }
+#  define REQUIRE_CLASS(cname)                                                \
+    while (0)                                                                 \
+      {                                                                       \
+      }
 #endif
 
 /* The Document API should be similar to the public VBA interface */
@@ -22445,7 +22435,8 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   if (version > R_11)
     {
       // HANDSEED: 0.1.49 [H 0] // FIXME needs to be updated on encode
-      dwg->header_vars.HANDSEED = dwg_add_handleref (dwg, 0, UINT64_C (0x25), NULL);
+      dwg->header_vars.HANDSEED
+          = dwg_add_handleref (dwg, 0, UINT64_C (0x25), NULL);
       dwg->header_vars.PEXTMIN
           = (BITCODE_3BD){ 100000000000000000000.0, 100000000000000000000.0,
                            100000000000000000000.0 };
@@ -22566,12 +22557,14 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       nod = dwg_add_DICTIONARY (dwg, NULL, (const BITCODE_T) "NAMED_OBJECT",
                                 0UL);
       dwg->header_vars.DICTIONARY_NAMED_OBJECT
-        = dwg_add_handleref (dwg, 3, UINT64_C (0xC), NULL);
+          = dwg_add_handleref (dwg, 3, UINT64_C (0xC), NULL);
       // DICTIONARY_ACAD_GROUP: (5.1.D) abs:D [H 0]
-      dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_GROUP", NULL, UINT64_C (0));
+      dwg_add_DICTIONARY (dwg, (const BITCODE_T) "ACAD_GROUP", NULL,
+                          UINT64_C (0));
       dwg->header_vars.DICTIONARY_ACAD_GROUP
-        = dwg_add_handleref (dwg, 5, UINT64_C (0xD), NULL);
-      dwg_add_DICTIONARY_item (nod, (const BITCODE_T) "ACAD_GROUP", UINT64_C (0xD));
+          = dwg_add_handleref (dwg, 5, UINT64_C (0xD), NULL);
+      dwg_add_DICTIONARY_item (nod, (const BITCODE_T) "ACAD_GROUP",
+                               UINT64_C (0xD));
     }
   if (version >= R_2000)
     {
@@ -22580,7 +22573,7 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       dwg_add_DICTIONARYWDFLT (dwg, (const BITCODE_T) "ACAD_PLOTSTYLENAME",
                                (const BITCODE_T) "Normal", UINT64_C (0xF));
       dwg->header_vars.DICTIONARY_PLOTSTYLENAME
-        = dwg_add_handleref (dwg, 5, UINT64_C (0xE), NULL);
+          = dwg_add_handleref (dwg, 5, UINT64_C (0xE), NULL);
       // PLOTSTYLE (2.1.F)
       plh = dwg_add_PLACEHOLDER (dwg); // PLOTSTYLE
       obj = dwg_obj_generic_to_object (plh, &error);
@@ -22597,10 +22590,12 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       // LAYER: (0.1.10)
       layer = dwg_add_LAYER (dwg, (const BITCODE_T) "0");
       layer->color = (BITCODE_CMC){ 7 };
-      layer->ltype = dwg_add_handleref (dwg, 5, UINT64_C (0x16), NULL); // Continuous
+      layer->ltype
+          = dwg_add_handleref (dwg, 5, UINT64_C (0x16), NULL); // Continuous
       layer->plotstyle = dwg_add_handleref (dwg, 5, UINT64_C (0xF), NULL);
       // CLAYER: (5.1.F) abs:F [H 8]
-      dwg->header_vars.CLAYER = dwg_add_handleref (dwg, 5, UINT64_C (0x10), NULL);
+      dwg->header_vars.CLAYER
+          = dwg_add_handleref (dwg, 5, UINT64_C (0x10), NULL);
       // ctrl = dwg_get_first_object (dwg, DWG_TYPE_LAYER_CONTROL);
       // if (ctrl)
       //   dwg->layer_control = ctrl->tio.object->tio.LAYER_CONTROL;
@@ -22609,8 +22604,10 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       style->font_file = dwg_add_u8_input (dwg, "txt");
       style->last_height = 0.2;
       // TEXTSTYLE: (5.1.11) [H 7]
-      dwg->header_vars.TEXTSTYLE = dwg_add_handleref (dwg, 5, UINT64_C (0x11), NULL);
-      dwg->header_vars.DIMTXSTY = dwg_add_handleref (dwg, 5, UINT64_C (0x11), NULL);
+      dwg->header_vars.TEXTSTYLE
+          = dwg_add_handleref (dwg, 5, UINT64_C (0x11), NULL);
+      dwg->header_vars.DIMTXSTY
+          = dwg_add_handleref (dwg, 5, UINT64_C (0x11), NULL);
       // ctrl = dwg_get_first_object (dwg, DWG_TYPE_STYLE_CONTROL);
       // if (ctrl)
       //   dwg->style_control = ctrl->tio.object->tio.STYLE_CONTROL;
@@ -22624,19 +22621,22 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       ltype = dwg_add_LTYPE (dwg, "BYBLOCK");
       ltype_ctrl->num_entries--;
       ltype_ctrl->byblock = dwg_add_handleref (dwg, 3, UINT64_C (0x14), NULL);
-      dwg->header_vars.LTYPE_BYBLOCK = dwg_add_handleref (dwg, 5, UINT64_C (0x14), NULL);
+      dwg->header_vars.LTYPE_BYBLOCK
+          = dwg_add_handleref (dwg, 5, UINT64_C (0x14), NULL);
       // LTYPE->bylayer: (3.1.15)
       dwg_add_LTYPE (dwg, "BYLAYER");
       ltype_ctrl->num_entries--;
       ltype_ctrl->bylayer = dwg_add_handleref (dwg, 3, UINT64_C (0x15), NULL);
-      dwg->header_vars.LTYPE_BYLAYER = dwg_add_handleref (dwg, 5, UINT64_C (0x15), NULL);
+      dwg->header_vars.LTYPE_BYLAYER
+          = dwg_add_handleref (dwg, 5, UINT64_C (0x15), NULL);
       // CELTYPE: (5.1.14) abs:14 [H 6]
-      dwg->header_vars.CELTYPE = dwg_add_handleref (dwg, 5, UINT64_C (0x15), NULL);
+      dwg->header_vars.CELTYPE
+          = dwg_add_handleref (dwg, 5, UINT64_C (0x15), NULL);
       // LTYPE_CONTINUOUS: (5.1.16)
       ltype = dwg_add_LTYPE (dwg, "CONTINUOUS");
       ltype->description = dwg_add_u8_input (dwg, "Solid line");
       dwg->header_vars.LTYPE_CONTINUOUS
-        = dwg_add_handleref (dwg, 5, UINT64_C (0x16), NULL);
+          = dwg_add_handleref (dwg, 5, UINT64_C (0x16), NULL);
     }
 
   if (version >= R_13b1)
@@ -22644,18 +22644,18 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
       // DICTIONARY ACAD_MLINESTYLE: (5.1.17) abs:E [H 0]
       dwg_add_DICTIONARY (dwg, "ACAD_MLINESTYLE", "Standard", UINT64_C (0x18));
       dwg->header_vars.DICTIONARY_ACAD_MLINESTYLE
-        = dwg_add_handleref (dwg, 5, UINT64_C (0x17), NULL);
+          = dwg_add_handleref (dwg, 5, UINT64_C (0x17), NULL);
       // MLINESTYLE: (0.1.18)
       mlstyle = dwg_add_MLINESTYLE (dwg, "Standard");
       obj = dwg_obj_generic_to_object (mlstyle, &error);
       if (!error)
         dwg->header_vars.CMLSTYLE
-          = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
+            = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
 
       // DICTIONARY ACAD_PLOTSETTINGS: (5.1.19)
       dwg_add_DICTIONARY (dwg, "ACAD_PLOTSETTINGS", NULL, 0);
       dwg->header_vars.DICTIONARY_PLOTSETTINGS
-        = dwg_add_handleref (dwg, 5, UINT64_C (0x19), NULL);
+          = dwg_add_handleref (dwg, 5, UINT64_C (0x19), NULL);
     }
   if (version >= R_2000)
     {
@@ -22724,26 +22724,26 @@ dwg_add_Document (Dwg_Data *restrict dwg, const int imperial)
   }
   if (dwg->header.version >= R_2000)
     {
-#  ifdef NEED_VPORT_FOR_MODEL_LAYOUT
+#ifdef NEED_VPORT_FOR_MODEL_LAYOUT
       // VPORT (0.1.26)
       vport_active = dwg_add_VPORT (dwg, "*Active");
       // LAYOUT (0.1.27)
       obj = dwg_obj_generic_to_object (vport_active, &error);
       layout = dwg_add_LAYOUT (obj, "Model", canonical_media_name);
-#  else
+#else
       layout = dwg_add_LAYOUT (mspaceobj, "Model", canonical_media_name);
-#  endif
+#endif
       obj = dwg_obj_generic_to_object (layout, &error);
       mspace->layout = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
 
-#  ifdef NEED_VPORT_FOR_MODEL_LAYOUT
+#ifdef NEED_VPORT_FOR_MODEL_LAYOUT
       // VIEWPORT (0.1.28)
       pviewport = dwg_add_VIEWPORT (pspace, "");
       // LAYOUT (0.1.29)
       obj = dwg_obj_generic_to_object (pviewport, &error);
-#  else
+#else
       obj = dwg_obj_generic_to_object (pspace, &error);
-#  endif
+#endif
       layout = dwg_add_LAYOUT (obj, "Layout1", canonical_media_name);
       obj = dwg_obj_generic_to_object (layout, &error);
       pspace->layout = dwg_add_handleref (dwg, 5, obj->handle.value, NULL);
@@ -22808,116 +22808,116 @@ dwg_add_class (Dwg_Data *restrict dwg, const char *const restrict dxfname,
   return klass->number;
 }
 
-#  define NEW_ENTITY(dwg, obj)                                                \
-    {                                                                         \
-      BITCODE_BL idx = dwg->num_objects;                                      \
-      if (dwg_add_object (dwg) < 0)                                           \
-        {                                                                     \
-          dwg_resolve_objectrefs_silent (dwg);                                \
-          blkobj = dwg_obj_generic_to_object (blkhdr, &error);                \
-        }                                                                     \
-      obj = &dwg->object[idx];                                                \
-      dwg->cur_index++;                                                       \
-      obj->supertype = DWG_SUPERTYPE_ENTITY;                                  \
-      obj->tio.entity                                                         \
-          = (Dwg_Object_Entity *)calloc (1, sizeof (Dwg_Object_Entity));      \
-      obj->tio.entity->objid = obj->index;                                    \
-      obj->tio.entity->dwg = dwg;                                             \
-    }
+#define NEW_ENTITY(dwg, obj)                                                  \
+  {                                                                           \
+    BITCODE_BL idx = dwg->num_objects;                                        \
+    if (dwg_add_object (dwg) < 0)                                             \
+      {                                                                       \
+        dwg_resolve_objectrefs_silent (dwg);                                  \
+        blkobj = dwg_obj_generic_to_object (blkhdr, &error);                  \
+      }                                                                       \
+    obj = &dwg->object[idx];                                                  \
+    dwg->cur_index++;                                                         \
+    obj->supertype = DWG_SUPERTYPE_ENTITY;                                    \
+    obj->tio.entity                                                           \
+        = (Dwg_Object_Entity *)calloc (1, sizeof (Dwg_Object_Entity));        \
+    obj->tio.entity->objid = obj->index;                                      \
+    obj->tio.entity->dwg = dwg;                                               \
+  }
 
 /* globals: dwg, obj, _obj, dxfname */
-#  define ADD_ENTITY(token)                                                   \
-    obj->fixedtype = DWG_TYPE_##token;                                        \
-    if (dwg->header.version > R_11)                                           \
-      obj->type = DWG_TYPE_##token;                                           \
-    obj->dxfname = (char *)dwg_type_dxfname (DWG_TYPE_##token);               \
-    if (memBEGINc (#token, "_3D"))                                            \
-      obj->name = (char *)&#token[1];                                         \
-    else                                                                      \
-      obj->name = (char *)#token;                                             \
-    if (!obj->dxfname)                                                        \
-      {                                                                       \
-        LOG_TRACE ("Unknown dxfname for %s\n", obj->name)                     \
-        obj->dxfname = obj->name;                                             \
-      }                                                                       \
-    if (dwg->opts & DWG_OPTS_IN)                                              \
-      obj->dxfname = strdup (obj->dxfname);                                   \
-    if (dwg->opts & DWG_OPTS_INJSON)                                          \
-      obj->name = strdup (obj->name);                                         \
-    if (obj->type >= DWG_TYPE_GROUP)                                          \
-      ENCODE_GET_CLASS (obj->parent, obj);                                    \
-    LOG_TRACE ("  ADD_ENTITY %s [%d]\n", obj->name, obj->index)               \
-    _obj = (Dwg_Entity_##token *)calloc (1, sizeof (Dwg_Entity_##token));     \
-    obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;                  \
-    obj->tio.entity->tio.token->parent = obj->tio.entity;                     \
-    obj->tio.entity->objid = obj->index;                                      \
-    dwg_add_entity_defaults (dwg, obj->tio.entity);                           \
-    if (strEQc (#token, "SEQEND") || memBEGINc (#token, "VERTEX"))            \
-    obj->tio.entity->linewt = 0x1c
+#define ADD_ENTITY(token)                                                     \
+  obj->fixedtype = DWG_TYPE_##token;                                          \
+  if (dwg->header.version > R_11)                                             \
+    obj->type = DWG_TYPE_##token;                                             \
+  obj->dxfname = (char *)dwg_type_dxfname (DWG_TYPE_##token);                 \
+  if (memBEGINc (#token, "_3D"))                                              \
+    obj->name = (char *)&#token[1];                                           \
+  else                                                                        \
+    obj->name = (char *)#token;                                               \
+  if (!obj->dxfname)                                                          \
+    {                                                                         \
+      LOG_TRACE ("Unknown dxfname for %s\n", obj->name)                       \
+      obj->dxfname = obj->name;                                               \
+    }                                                                         \
+  if (dwg->opts & DWG_OPTS_IN)                                                \
+    obj->dxfname = strdup (obj->dxfname);                                     \
+  if (dwg->opts & DWG_OPTS_INJSON)                                            \
+    obj->name = strdup (obj->name);                                           \
+  if (obj->type >= DWG_TYPE_GROUP)                                            \
+    ENCODE_GET_CLASS (obj->parent, obj);                                      \
+  LOG_TRACE ("  ADD_ENTITY %s [%d]\n", obj->name, obj->index)                 \
+  _obj = (Dwg_Entity_##token *)calloc (1, sizeof (Dwg_Entity_##token));       \
+  obj->tio.entity->tio.token = (Dwg_Entity_##token *)_obj;                    \
+  obj->tio.entity->tio.token->parent = obj->tio.entity;                       \
+  obj->tio.entity->objid = obj->index;                                        \
+  dwg_add_entity_defaults (dwg, obj->tio.entity);                             \
+  if (strEQc (#token, "SEQEND") || memBEGINc (#token, "VERTEX"))              \
+  obj->tio.entity->linewt = 0x1c
 
 /* globals: dxfname, blkhdr=owner */
-#  define API_ADD_ENTITY(token)                                               \
-    int error;                                                                \
-    Dwg_Object *obj;                                                          \
-    Dwg_Entity_##token *_obj;                                                 \
-    Dwg_Object *blkobj = dwg_obj_generic_to_object (blkhdr, &error);          \
-    Dwg_Data *dwg = blkobj && !error ? blkobj->parent : NULL;                 \
-    if (!dwg || !blkobj                                                       \
-        || !(blkobj->fixedtype == DWG_TYPE_BLOCK_HEADER                       \
-             || dwg_obj_has_subentity (blkobj)))                              \
-      {                                                                       \
-        LOG_ERROR ("Entity %s can not be added to %s", #token,                \
-                   blkobj ? dwg_type_name (blkobj->fixedtype) : "NULL");      \
-        return NULL;                                                          \
-      }                                                                       \
-    NEW_ENTITY (dwg, obj);                                                    \
-    ADD_ENTITY (token);                                                       \
-    obj->tio.entity->ownerhandle                                              \
-        = dwg_add_handleref (dwg, 5, blkobj->handle.value, obj);              \
-    dwg_set_next_objhandle (obj);                                             \
-    LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H (obj->handle));              \
-    IN_POSTPROCESS_HANDLES (obj);                                             \
-    if (dwg->header.version < R_10)                                           \
-      dwg->header_vars.numentities++;                                         \
-    dwg_insert_entity ((Dwg_Object_BLOCK_HEADER *)blkhdr, obj)
+#define API_ADD_ENTITY(token)                                                 \
+  int error;                                                                  \
+  Dwg_Object *obj;                                                            \
+  Dwg_Entity_##token *_obj;                                                   \
+  Dwg_Object *blkobj = dwg_obj_generic_to_object (blkhdr, &error);            \
+  Dwg_Data *dwg = blkobj && !error ? blkobj->parent : NULL;                   \
+  if (!dwg || !blkobj                                                         \
+      || !(blkobj->fixedtype == DWG_TYPE_BLOCK_HEADER                         \
+           || dwg_obj_has_subentity (blkobj)))                                \
+    {                                                                         \
+      LOG_ERROR ("Entity %s can not be added to %s", #token,                  \
+                 blkobj ? dwg_type_name (blkobj->fixedtype) : "NULL");        \
+      return NULL;                                                            \
+    }                                                                         \
+  NEW_ENTITY (dwg, obj);                                                      \
+  ADD_ENTITY (token);                                                         \
+  obj->tio.entity->ownerhandle                                                \
+      = dwg_add_handleref (dwg, 5, blkobj->handle.value, obj);                \
+  dwg_set_next_objhandle (obj);                                               \
+  LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H (obj->handle));                \
+  IN_POSTPROCESS_HANDLES (obj);                                               \
+  if (dwg->header.version < R_10)                                             \
+    dwg->header_vars.numentities++;                                           \
+  dwg_insert_entity ((Dwg_Object_BLOCK_HEADER *)blkhdr, obj)
 
-#  define API_UNADD_ENTITY                                                    \
-    if (dwg->header.version < R_13b1)                                         \
-      obj->type = -(long)(obj->type);                                         \
-    else                                                                      \
-      obj->type = DWG_TYPE_UNUSED
+#define API_UNADD_ENTITY                                                      \
+  if (dwg->header.version < R_13b1)                                           \
+    obj->type = -(long)(obj->type);                                           \
+  else                                                                        \
+    obj->type = DWG_TYPE_UNUSED
 
-#  define ADD_OBJECT(token)                                                   \
-    obj->type = obj->fixedtype = DWG_TYPE_##token;                            \
-    obj->name = (char *)#token;                                               \
-    obj->dxfname = (char *)dwg_type_dxfname (DWG_TYPE_##token);               \
-    if (!obj->dxfname)                                                        \
-      {                                                                       \
-        LOG_TRACE ("Unknown dxfname for %s\n", obj->name)                     \
-        obj->dxfname = obj->name;                                             \
-      }                                                                       \
-    if (dwg->opts & DWG_OPTS_IN)                                              \
-      obj->dxfname = strdup (obj->dxfname);                                   \
-    if (dwg->opts & DWG_OPTS_INJSON)                                          \
-      obj->name = strdup (obj->name);                                         \
-    if (obj->type >= DWG_TYPE_GROUP)                                          \
-      ENCODE_GET_CLASS (obj->parent, obj);                                    \
-    LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index)               \
-    _obj = (Dwg_Object_##token *)calloc (1, sizeof (Dwg_Object_##token));     \
-    obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;                  \
-    obj->tio.object->tio.token->parent = obj->tio.object;                     \
-    obj->tio.object->objid = obj->index
+#define ADD_OBJECT(token)                                                     \
+  obj->type = obj->fixedtype = DWG_TYPE_##token;                              \
+  obj->name = (char *)#token;                                                 \
+  obj->dxfname = (char *)dwg_type_dxfname (DWG_TYPE_##token);                 \
+  if (!obj->dxfname)                                                          \
+    {                                                                         \
+      LOG_TRACE ("Unknown dxfname for %s\n", obj->name)                       \
+      obj->dxfname = obj->name;                                               \
+    }                                                                         \
+  if (dwg->opts & DWG_OPTS_IN)                                                \
+    obj->dxfname = strdup (obj->dxfname);                                     \
+  if (dwg->opts & DWG_OPTS_INJSON)                                            \
+    obj->name = strdup (obj->name);                                           \
+  if (obj->type >= DWG_TYPE_GROUP)                                            \
+    ENCODE_GET_CLASS (obj->parent, obj);                                      \
+  LOG_TRACE ("  ADD_OBJECT %s [%d]\n", obj->name, obj->index)                 \
+  _obj = (Dwg_Object_##token *)calloc (1, sizeof (Dwg_Object_##token));       \
+  obj->tio.object->tio.token = (Dwg_Object_##token *)_obj;                    \
+  obj->tio.object->tio.token->parent = obj->tio.object;                       \
+  obj->tio.object->objid = obj->index
 
 /* globals: dwg */
-#  define API_ADD_OBJECT(token)                                               \
-    int error;                                                                \
-    Dwg_Object *obj;                                                          \
-    Dwg_Object_##token *_obj;                                                 \
-    NEW_OBJECT (dwg, obj);                                                    \
-    ADD_OBJECT (token);                                                       \
-    dwg_set_next_objhandle (obj);                                             \
-    LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H (obj->handle));              \
-    IN_POSTPROCESS_HANDLES (obj)
+#define API_ADD_OBJECT(token)                                                 \
+  int error;                                                                  \
+  Dwg_Object *obj;                                                            \
+  Dwg_Object_##token *_obj;                                                   \
+  NEW_OBJECT (dwg, obj);                                                      \
+  ADD_OBJECT (token);                                                         \
+  dwg_set_next_objhandle (obj);                                               \
+  LOG_TRACE ("  handle " FORMAT_H "\n", ARGS_H (obj->handle));                \
+  IN_POSTPROCESS_HANDLES (obj)
 
 EXPORT int
 dwg_add_entity_defaults (Dwg_Data *restrict dwg,
@@ -23119,8 +23119,7 @@ dwg_add_TEXT (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 static Dwg_Entity_INSERT *
 add_attrib_links (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                   Dwg_Entity_INSERT *restrict insert,
-                  Dwg_Object *restrict insobj,
-                  Dwg_Object *restrict attobj)
+                  Dwg_Object *restrict insobj, Dwg_Object *restrict attobj)
 {
   Dwg_Object *seqend = dwg_ref_object (insobj->parent, insert->seqend);
   // prev attrib
@@ -23251,7 +23250,8 @@ dwg_add_ATTRIB (Dwg_Entity_INSERT *restrict insert, const double height,
         dwg, 5, dwg->header_vars.TEXTSTYLE->absolute_ref, NULL);
   insert->has_attribs = 1;
   // TODO: if !blkhdr->hasattrs: error no ATTDEF
-  insert->block_header = dwg_add_handleref (dwg, 3, blkobj->handle.value, insobj);
+  insert->block_header
+      = dwg_add_handleref (dwg, 3, blkobj->handle.value, insobj);
   if (dwg->header.version <= R_12)
     {
       obj->type = DWG_TYPE_ATTRIB_r11;
@@ -23679,7 +23679,7 @@ dwg_add_VERTEX_PFACE_FACE (Dwg_Entity_POLYLINE_PFACE *restrict pline,
   _obj->vertind[2] = vertind[2];
   _obj->vertind[3] = vertind[3];
   if (vertind[3] != 0)
-    obj->tio.entity->opts_r11 |= OPTS_R11_VERTEX_HAS_INDEX4; 
+    obj->tio.entity->opts_r11 |= OPTS_R11_VERTEX_HAS_INDEX4;
   if (dwg->header.version <= R_12)
     {
       obj->type = DWG_TYPE_VERTEX_r11;
@@ -23788,7 +23788,7 @@ dwg_add_VERTEX_MESH (Dwg_Entity_POLYLINE_MESH *restrict pline,
   if (dwg->header.version <= R_12)
     {
       obj->type = DWG_TYPE_VERTEX_r11;
-      //obj->tio.entity->flag_r11 = 0;
+      // obj->tio.entity->flag_r11 = 0;
       obj->tio.entity->opts_r11 = OPTS_R11_VERTEX_HAS_FLAG;
       if (_obj->point.z != 0.0)
         {
@@ -23975,12 +23975,12 @@ dwg_require_DIMSTYLE_Standard (Dwg_Data *restrict dwg)
     }
 }
 
-#  define DIMENSION_DEFAULTS                                                  \
-    _obj->extrusion.z = 1.0;                                                  \
-    dwg_require_DIMSTYLE_Standard (dwg);                                      \
-    if (dwg->header_vars.DIMSTYLE)                                            \
-    _obj->dimstyle = dwg_add_handleref (                                      \
-        dwg, 5, dwg->header_vars.DIMSTYLE->absolute_ref, NULL)
+#define DIMENSION_DEFAULTS                                                    \
+  _obj->extrusion.z = 1.0;                                                    \
+  dwg_require_DIMSTYLE_Standard (dwg);                                        \
+  if (dwg->header_vars.DIMSTYLE)                                              \
+  _obj->dimstyle = dwg_add_handleref (                                        \
+      dwg, 5, dwg->header_vars.DIMSTYLE->absolute_ref, NULL)
 
 EXPORT Dwg_Entity_DIMENSION_ALIGNED *
 dwg_add_DIMENSION_ALIGNED (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
@@ -24985,7 +24985,8 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     }
   if (!num_verts)
     return NULL;
-  _obj->verts = (Dwg_MLINE_vertex *)calloc (num_verts, sizeof (Dwg_MLINE_vertex));
+  _obj->verts
+      = (Dwg_MLINE_vertex *)calloc (num_verts, sizeof (Dwg_MLINE_vertex));
   _obj->num_verts = num_verts;
   _obj->base_point.x = verts[0].x;
   _obj->base_point.y = verts[0].y;
@@ -25026,13 +25027,13 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
       // start_angle.
       if (i == 0)
         {
-#  if defined(HAVE_SINCOS) && !defined(__clang__)
+#if defined(HAVE_SINCOS) && !defined(__clang__)
           double cosa, sina;
           sincos (mlstyle->start_angle, &sina, &cosa);
-#  else
+#else
           const double cosa = cos (mlstyle->start_angle);
           const double sina = sin (mlstyle->start_angle);
-#  endif
+#endif
           dir = _obj->verts[i].vertex_direction;
           // rotate by the mlstyle->start_angle
           dir.x = (dir.x * cosa) - (dir.y * sina);
@@ -25085,13 +25086,15 @@ dwg_add_MLINE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
 /* This is a singleton and must be at 1. Must only be called from
  * dwg_add_Document() */
 EXPORT Dwg_Object_BLOCK_CONTROL *
-dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const unsigned ms, const unsigned ps)
+dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const unsigned ms,
+                       const unsigned ps)
 {
   API_ADD_OBJECT (BLOCK_CONTROL);
   // obj->handle.value = 1;
   // obj->handle.size = 1;
   // dwg->block_control = _obj; // but will be realloc'ed soon
-  dwg->header_vars.BLOCK_CONTROL_OBJECT = dwg_add_handleref (dwg, 3, UINT64_C (1), obj);
+  dwg->header_vars.BLOCK_CONTROL_OBJECT
+      = dwg_add_handleref (dwg, 3, UINT64_C (1), obj);
   dwg->header_vars.BLOCK_CONTROL_OBJECT->obj = obj;
   if (ms)
     {
@@ -25113,59 +25116,59 @@ dwg_add_BLOCK_CONTROL (Dwg_Data *restrict dwg, const unsigned ms, const unsigned
   return _obj;
 }
 
-#  define API_ADD_TABLE(record, control, ...)                                 \
-    Dwg_Object_##record *_record = NULL;                                      \
-    /* first check TABLE_CONTROL */                                           \
-    Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_##control);        \
-    Dwg_Object_##control *_ctrl;                                              \
-    BITCODE_RLL ctrlhdl, ctrlidx;                                             \
-    if (!ctrl || !ctrl->tio.object || !ctrl->tio.object->tio.control)         \
-      {                                                                       \
-        API_ADD_OBJECT (control);                                             \
-        dwg->header_vars.control##_OBJECT                                     \
-            = dwg_add_handleref (dwg, 3, obj->handle.value, obj);             \
-        LOG_TRACE (#control "_OBJECT = " FORMAT_REF "\n",                     \
-                   ARGS_REF (dwg->header_vars.control##_OBJECT));             \
-        dwg->header_vars.control##_OBJECT->obj = obj;                         \
-        ctrl = obj;                                                           \
-        _ctrl = _obj;                                                         \
-      }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        _ctrl = ctrl->tio.object->tio.control;                                \
-      }                                                                       \
-    ctrlhdl = ctrl->handle.value;                                             \
-    ctrlidx = ctrl->index;                                                    \
-    if (name || strEQc (#record, "BLOCK_HEADER"))                             \
-      {                                                                       \
-        API_ADD_OBJECT (record);                                              \
-        _record = _obj;                                                       \
-        _obj->used = -1;                                                      \
-        _obj->name = dwg_add_u8_input (dwg, name);                            \
-        LOG_TRACE (#record ".name = %s\n", _obj->name);                       \
-        ctrl = &dwg->object[ctrlidx];                                         \
-        ctrl->size = 0;                                                       \
-        ctrl->bitsize = 0;                                                    \
-        __VA_ARGS__                                                           \
-        if (_ctrl->entries)                                                   \
-          _ctrl->entries = (BITCODE_H *)realloc (                             \
-              _ctrl->entries, (_ctrl->num_entries + 1) * sizeof (BITCODE_H)); \
-        else                                                                  \
-          _ctrl->entries = (BITCODE_H *)calloc (_ctrl->num_entries + 1,       \
-                                                sizeof (BITCODE_H));          \
-        _ctrl->entries[_ctrl->num_entries]                                    \
-            = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);            \
-        LOG_TRACE (#control ".entries[%d] = " FORMAT_REF "\n",                \
-                   _ctrl->num_entries,                                        \
-                   ARGS_REF (_ctrl->entries[_ctrl->num_entries]));            \
-        _ctrl->num_entries++;                                                 \
-        obj->tio.object->ownerhandle                                          \
-            = dwg_add_handleref (dwg, 4, ctrlhdl, obj);                       \
-        _obj->is_xref_ref = 1;                                                \
-        return _obj;                                                          \
-      }                                                                       \
-    else                                                                      \
-      return NULL
+#define API_ADD_TABLE(record, control, ...)                                   \
+  Dwg_Object_##record *_record = NULL;                                        \
+  /* first check TABLE_CONTROL */                                             \
+  Dwg_Object *ctrl = dwg_get_first_object (dwg, DWG_TYPE_##control);          \
+  Dwg_Object_##control *_ctrl;                                                \
+  BITCODE_RLL ctrlhdl, ctrlidx;                                               \
+  if (!ctrl || !ctrl->tio.object || !ctrl->tio.object->tio.control)           \
+    {                                                                         \
+      API_ADD_OBJECT (control);                                               \
+      dwg->header_vars.control##_OBJECT                                       \
+          = dwg_add_handleref (dwg, 3, obj->handle.value, obj);               \
+      LOG_TRACE (#control "_OBJECT = " FORMAT_REF "\n",                       \
+                 ARGS_REF (dwg->header_vars.control##_OBJECT));               \
+      dwg->header_vars.control##_OBJECT->obj = obj;                           \
+      ctrl = obj;                                                             \
+      _ctrl = _obj;                                                           \
+    }                                                                         \
+  else                                                                        \
+    {                                                                         \
+      _ctrl = ctrl->tio.object->tio.control;                                  \
+    }                                                                         \
+  ctrlhdl = ctrl->handle.value;                                               \
+  ctrlidx = ctrl->index;                                                      \
+  if (name || strEQc (#record, "BLOCK_HEADER"))                               \
+    {                                                                         \
+      API_ADD_OBJECT (record);                                                \
+      _record = _obj;                                                         \
+      _obj->used = -1;                                                        \
+      _obj->name = dwg_add_u8_input (dwg, name);                              \
+      LOG_TRACE (#record ".name = %s\n", _obj->name);                         \
+      ctrl = &dwg->object[ctrlidx];                                           \
+      ctrl->size = 0;                                                         \
+      ctrl->bitsize = 0;                                                      \
+      __VA_ARGS__                                                             \
+      if (_ctrl->entries)                                                     \
+        _ctrl->entries = (BITCODE_H *)realloc (                               \
+            _ctrl->entries, (_ctrl->num_entries + 1) * sizeof (BITCODE_H));   \
+      else                                                                    \
+        _ctrl->entries = (BITCODE_H *)calloc (_ctrl->num_entries + 1,         \
+                                              sizeof (BITCODE_H));            \
+      _ctrl->entries[_ctrl->num_entries]                                      \
+          = dwg_add_handleref (dwg, 2, obj->handle.value, NULL);              \
+      LOG_TRACE (#control ".entries[%d] = " FORMAT_REF "\n",                  \
+                 _ctrl->num_entries,                                          \
+                 ARGS_REF (_ctrl->entries[_ctrl->num_entries]));              \
+      _ctrl->num_entries++;                                                   \
+      obj->tio.object->ownerhandle                                            \
+          = dwg_add_handleref (dwg, 4, ctrlhdl, obj);                         \
+      _obj->is_xref_ref = 1;                                                  \
+      return _obj;                                                            \
+    }                                                                         \
+  else                                                                        \
+    return NULL
 
 EXPORT Dwg_Object_BLOCK_HEADER *
 dwg_add_BLOCK_HEADER (Dwg_Data *restrict dwg, const char *restrict name)
@@ -25419,7 +25422,8 @@ dwg_add_MLINESTYLE (Dwg_Data *restrict dwg, const char *restrict name)
     {
       _obj->start_angle = _obj->end_angle = deg2rad (90.0);
       _obj->num_lines = 2;
-      _obj->lines = (Dwg_MLINESTYLE_line *)calloc (2, sizeof (Dwg_MLINESTYLE_line));
+      _obj->lines
+          = (Dwg_MLINESTYLE_line *)calloc (2, sizeof (Dwg_MLINESTYLE_line));
       _obj->lines[0].parent = _obj;
       _obj->lines[0].offset = 0.5;
       _obj->lines[0].color = (BITCODE_CMC){ 256, 0 };
@@ -25769,15 +25773,15 @@ rbuf_add (Dwg_Resbuf *rbuf)
     }
 }
 
-#  define CHECK_XRECORD                                                       \
-    int error;                                                                \
-    Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);               \
-    if (!obj || obj->fixedtype != DWG_TYPE_XRECORD)                           \
-      {                                                                       \
-        LOG_ERROR ("Not a XRECORD, but %s",                                   \
-                   obj ? dwg_type_name (obj->fixedtype) : "NULL");            \
-        return NULL;                                                          \
-      }
+#define CHECK_XRECORD                                                         \
+  int error;                                                                  \
+  Dwg_Object *obj = dwg_obj_generic_to_object (_obj, &error);                 \
+  if (!obj || obj->fixedtype != DWG_TYPE_XRECORD)                             \
+    {                                                                         \
+      LOG_ERROR ("Not a XRECORD, but %s",                                     \
+                 obj ? dwg_type_name (obj->fixedtype) : "NULL");              \
+      return NULL;                                                            \
+    }
 
 EXPORT Dwg_Object_XRECORD *
 dwg_add_XRECORD_bool (Dwg_Object_XRECORD *restrict _obj, const short dxf,
@@ -25950,7 +25954,7 @@ dwg_add_XRECORD_binary (Dwg_Object_XRECORD *restrict _obj, const short dxf,
   rbuf->type = dxf;
   rbuf->value.str.size = size;
   rbuf->value.str.is_tu = 0;
-  rbuf->value.str.u.data = (char*)malloc (size);
+  rbuf->value.str.u.data = (char *)malloc (size);
   memcpy (rbuf->value.str.u.data, data, size);
   _obj->xdata_size += 3 + size; // 2 + 1 + len
   return _obj;
@@ -25979,7 +25983,7 @@ dwg_add_XRECORD_string (Dwg_Object_XRECORD *restrict _obj, const short dxf,
       = (dwg && dwg->header.version < R_2007) ? dwg->header.codepage : 30;
   rbuf->value.str.is_tu = 0;
   rbuf->value.str.size = len;
-  rbuf->value.str.u.data = (char*)malloc (len);
+  rbuf->value.str.u.data = (char *)malloc (len);
   memcpy (rbuf->value.str.u.data, str, len); // utf-8 or single-byte
   _obj->xdata_size += 4 + len;
   return _obj;
@@ -26049,14 +26053,14 @@ dwg_add_LAYOUT (Dwg_Object *restrict vp, const char *restrict name,
 {
   int err;
   Dwg_Data *dwg = vp->parent;
-#  ifdef NEED_VPORT_FOR_MODEL_LAYOUT
+#ifdef NEED_VPORT_FOR_MODEL_LAYOUT
   if (vp->fixedtype != DWG_TYPE_VPORT && vp->fixedtype != DWG_TYPE_VIEWPORT)
     {
       LOG_ERROR ("LAYOUT can only be added to VPORT (in mspace) or VIEWPORT "
                  "(in pspace)");
       return NULL;
     }
-#  endif
+#endif
   {
     // TODL skip if <r2000
     REQUIRE_CLASS ("LAYOUT");
@@ -26368,7 +26372,7 @@ dwg_geom_normal_to_matrix9 (const dwg_point_3d *restrict normal,
                             dwg_matrix9 *matrix)
 {
   // TODO for now we keep the unrotated defaults
-#  if 0
+#if 0
   if (normal.x == 0.0 && normal.y == 0.0 && normal.z == 1.0)
     {
       dwg_matrix9 def_matrix = {
@@ -26399,7 +26403,7 @@ dwg_geom_normal_to_matrix9 (const dwg_point_3d *restrict normal,
       //??
       memcpy (&matrix, &ay, sizeof (dwg_point_3d));
     }
-#  endif
+#endif
   ;
 }
 
@@ -26536,7 +26540,7 @@ dwg_add_BOX (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_BOX_CLASS *_obj;
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_matrix9 matrix = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
-#  define ACIS_BOX_SIZE 7500
+#define ACIS_BOX_SIZE 7500
     char acis_data[ACIS_BOX_SIZE];
     char date[48];
     size_t date_size = dwg_acis_date (date, 48);
@@ -26798,7 +26802,7 @@ dwg_add_ACSH_CHAMFER_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
   }
 }
 
-#  if 0
+#if 0
 EXPORT Dwg_Entity_3DSOLID*
 dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
                  const dwg_point_3d *restrict origin_pt, const dwg_point_3d *restrict normal,
@@ -26874,7 +26878,7 @@ dwg_add_CHAMFER (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     return solid;
   }
 }
-#  endif
+#endif
 
 EXPORT Dwg_Object_ACSH_CONE_CLASS *
 dwg_add_ACSH_CONE_CLASS (Dwg_Object_EVALUATION_GRAPH *restrict evalgraph,
@@ -27521,7 +27525,7 @@ dwg_add_WEDGE (Dwg_Object_BLOCK_HEADER *restrict blkhdr,
     Dwg_Object_ACSH_WEDGE_CLASS *_obj;
     dwg_point_3d defnormal = { 0.0, 0.0, 1.0 };
     dwg_matrix9 matrix = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
-#  define WEDGE_ACIS_SIZE 6500
+#define WEDGE_ACIS_SIZE 6500
     char acis_data[WEDGE_ACIS_SIZE];
     char date[48];
     size_t date_size = dwg_acis_date (date, 48);
@@ -28233,4 +28237,4 @@ dwg_add_WIPEOUTVARIABLES (Dwg_Data *dwg /* ... */)
 // XREFPANELOBJECT
 // XYPARAMETERENTITY
 
-//#endif /* USE_WRITE */
+// #endif /* USE_WRITE */

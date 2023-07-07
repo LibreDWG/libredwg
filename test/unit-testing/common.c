@@ -90,7 +90,7 @@ main (int argc, char *argv[])
   char *dir = NULL;
   int error = 0;
   int i = 1, cov = 1;
-  //#ifdef USE_TRACING
+  // #ifdef USE_TRACING
   char *trace = getenv ("LIBREDWG_TRACE");
   char *skip;
   silent = is_make_silent ();
@@ -98,7 +98,7 @@ main (int argc, char *argv[])
     loglevel = atoi (trace);
   else
     loglevel = silent ? 0 : 2;
-  //#endif
+  // #endif
   skip = getenv ("LESS_TESTS");
   if (skip && atoi (skip))
     return 0;
@@ -759,8 +759,7 @@ main (int argc, char *argv[])
               || DWG_TYPE == DWG_TYPE_IMAGE_BACKGROUND
               || DWG_TYPE == DWG_TYPE_GRADIENT_BACKGROUND
               || DWG_TYPE == DWG_TYPE_GROUND_PLANE_BACKGROUND
-              || DWG_TYPE == DWG_TYPE_CAMERA
-              || DWG_TYPE == DWG_TYPE_DUMMY
+              || DWG_TYPE == DWG_TYPE_CAMERA || DWG_TYPE == DWG_TYPE_DUMMY
               || DWG_TYPE == DWG_TYPE_INDEX
               || DWG_TYPE == DWG_TYPE_LARGE_RADIAL_DIMENSION
               || DWG_TYPE == DWG_TYPE_LAYER_INDEX
@@ -816,8 +815,7 @@ main (int argc, char *argv[])
               || DWG_TYPE == DWG_TYPE_POLARGRIPENTITY
               || DWG_TYPE == DWG_TYPE_RADIMOBJECTCONTEXTDATA
               || DWG_TYPE == DWG_TYPE_RADIMLGOBJECTCONTEXTDATA
-              || DWG_TYPE == DWG_TYPE_RTEXT
-              || DWG_TYPE == DWG_TYPE_SUNSTUDY
+              || DWG_TYPE == DWG_TYPE_RTEXT || DWG_TYPE == DWG_TYPE_SUNSTUDY
               || DWG_TYPE == DWG_TYPE_TVDEVICEPROPERTIES
               || DWG_TYPE == DWG_TYPE_VISIBILITYPARAMETERENTITY
               || DWG_TYPE == DWG_TYPE_VISIBILITYGRIPENTITY
@@ -1388,21 +1386,21 @@ api_common_entity (dwg_object *obj)
 #define CHK_ENTITY_TYPE_CAST(ent, name, field, typ, cast)                     \
   {                                                                           \
     BITCODE_##cast _value;                                                    \
-  if (!dwg_dynapi_entity_value (ent, #name, #field, &field, NULL))            \
-    fail (#name "." #field);                                                  \
-  else                                                                        \
-    {                                                                         \
-      if (field == ent->field)                                                \
-        {                                                                     \
-          if (g_counter > g_countmax)                                         \
-            pass ();                                                          \
-          else                                                                \
-            ok (#name "." #field ":\t" FORMAT_##typ, (BITCODE_##typ)field);   \
-        }                                                                     \
-      else                                                                    \
-        fail (#name "." #field ":\t" FORMAT_##typ " [" #typ "]",              \
-              (BITCODE_##typ)field);                                          \
-    }                                                                         \
+    if (!dwg_dynapi_entity_value (ent, #name, #field, &field, NULL))          \
+      fail (#name "." #field);                                                \
+    else                                                                      \
+      {                                                                       \
+        if (field == ent->field)                                              \
+          {                                                                   \
+            if (g_counter > g_countmax)                                       \
+              pass ();                                                        \
+            else                                                              \
+              ok (#name "." #field ":\t" FORMAT_##typ, (BITCODE_##typ)field); \
+          }                                                                   \
+        else                                                                  \
+          fail (#name "." #field ":\t" FORMAT_##typ " [" #typ "]",            \
+                (BITCODE_##typ)field);                                        \
+      }                                                                       \
   }
 
 #define CHK_ENTITY_CMC(ent, name, field)                                      \

@@ -195,12 +195,14 @@ static BITCODE_BL rcount1, rcount2;
 #define FIELD_TIMEBLL(name, dxf)
 #define FIELD_TIMERLL(name, dxf)
 #define FIELD_CMC(color, dxf)                                                 \
-  SINCE (R_2004) {                                                            \
+  SINCE (R_2004)                                                              \
+  {                                                                           \
     FIELD_T (color.name, 0);                                                  \
     FIELD_T (color.book_name, 0);                                             \
   }
 #define SUB_FIELD_CMC(o, color, dxf)                                          \
-  SINCE (R_2004) {                                                            \
+  SINCE (R_2004)                                                              \
+  {                                                                           \
     VALUE_TV (_obj->o.color.name, 0);                                         \
     VALUE_TV (_obj->o.color.book_name, 0);                                    \
   }
@@ -409,7 +411,7 @@ dwg_free_common_entity_data (Dwg_Object *obj)
 
   FREE_IF (_ent->preview);
 
-  // clang-format off
+// clang-format off
   #include "common_entity_data.spec"
   if (dat->from_version >= R_2007 && _ent->color.flag & 0x40)
     FIELD_HANDLE (color.handle, 0, 430);
@@ -430,7 +432,7 @@ dwg_free_common_object_data (Dwg_Object *obj)
   BITCODE_BL vcount;
   int error = 0;
 
-  // clang-format off
+// clang-format off
   #include "common_object_handle_data.spec"
   // clang-format on
 }
@@ -606,7 +608,9 @@ dwg_free_variable_type_private (Dwg_Object *restrict obj)
 // after downconvert_TABLESTYLE()
 // we need to pass through the old code, as the new code is handled in the spec
 // free() following from_version, not version.
-static void free_TABLESTYLE_r2010 (Bit_Chain *restrict dat, Dwg_Object *restrict obj) {
+static void
+free_TABLESTYLE_r2010 (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
+{
   Dwg_Object_TABLESTYLE *_obj
       = obj->tio.object ? obj->tio.object->tio.TABLESTYLE : NULL;
   if (!obj || obj->fixedtype != DWG_TYPE_TABLESTYLE)
@@ -624,9 +628,9 @@ static void free_TABLESTYLE_r2010 (Bit_Chain *restrict dat, Dwg_Object *restrict
             SUB_FIELD_CMTC (rowstyles[i].borders[j], color, 0);
           }
         FREE_IF (_obj->rowstyles[i].borders);
-        SUB_FIELD_HANDLE (rowstyles[i],text_style, 5, 7);
-        SUB_FIELD_CMTC (rowstyles[i],text_color, 0);
-        SUB_FIELD_CMTC (rowstyles[i],fill_color, 0);
+        SUB_FIELD_HANDLE (rowstyles[i], text_style, 5, 7);
+        SUB_FIELD_CMTC (rowstyles[i], text_color, 0);
+        SUB_FIELD_CMTC (rowstyles[i], fill_color, 0);
       }
   FREE_IF (_obj->rowstyles);
   _obj->num_rowstyles = 0;
@@ -660,8 +664,8 @@ free_preR13_object (Dwg_Object *obj)
   Dwg_Data *dwg;
   Bit_Chain *dat = &pdat;
 
-  //if (obj->name)
-  //  LOG_HANDLE ("free_preR13_object: %s %d\n", obj->name, obj->index)
+  // if (obj->name)
+  //   LOG_HANDLE ("free_preR13_object: %s %d\n", obj->name, obj->index)
   if (obj && obj->parent)
     {
       dwg = obj->parent;
@@ -1526,7 +1530,7 @@ dwg_free_preR13_header_vars (Dwg_Data *dwg)
   // fields added by dwg_add_Document:
   FIELD_TV (MENU, 0);
 
-  // clang-format off
+// clang-format off
   #include "header_variables_r11.spec"
   // clang-format on
 
@@ -1540,7 +1544,7 @@ dwg_free_header_vars (Dwg_Data *dwg)
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
 
-  // clang-format off
+// clang-format off
   #include "header_variables.spec"
   // clang-format on
 
@@ -1554,7 +1558,7 @@ dwg_free_summaryinfo (Dwg_Data *dwg)
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
 
-  // clang-format off
+// clang-format off
   #include "summaryinfo.spec"
   // clang-format on
   return 0;
@@ -1567,7 +1571,7 @@ dwg_free_appinfo (Dwg_Data *dwg)
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
 
-  // clang-format off
+// clang-format off
   #include "appinfo.spec"
   // clang-format on
   return 0;
@@ -1580,7 +1584,7 @@ dwg_free_filedeplist (Dwg_Data *dwg)
   Bit_Chain *dat = &pdat;
   BITCODE_RL vcount;
 
-  // clang-format off
+// clang-format off
   #include "filedeplist.spec"
   // clang-format on
   return 0;
@@ -1592,7 +1596,7 @@ dwg_free_security (Dwg_Data *dwg)
   Dwg_Object *obj = NULL;
   Bit_Chain *dat = &pdat;
 
-  // clang-format off
+// clang-format off
   #include "security.spec"
   // clang-format on
   return 0;
@@ -1607,7 +1611,7 @@ dwg_free_acds (Dwg_Data *dwg)
   BITCODE_RL rcount3 = 0, rcount4, vcount;
   int error = 0;
 
-  // clang-format off
+// clang-format off
   #include "acds.spec"
   // clang-format on
   return 0;

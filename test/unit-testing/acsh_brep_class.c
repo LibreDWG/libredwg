@@ -154,5 +154,8 @@ api_process (dwg_object *obj)
       CHK_ENTITY_TYPE (_obj, ACSH_BREP_CLASS, end_marker, BL);
     }
 
-  SINCE (R_2007) { CHK_ENTITY_H (_obj, ACSH_BREP_CLASS, history_id); }
+  SINCE (R_2007)
+  {
+    CHK_ENTITY_H (_obj, ACSH_BREP_CLASS, history_id);
+  }
 }

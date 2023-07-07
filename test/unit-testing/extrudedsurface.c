@@ -17,19 +17,19 @@ api_process (dwg_object *obj)
   BITCODE_BL class_version;          /*!< DXF 90 */
   // sweep_options?
   // BITCODE_BD height;
-  BITCODE_3BD sweep_vector;             /*!< DXF 10 */
-  BITCODE_BD *sweep_transmatrix;        /*!< DXF 40: 16x BD */
-  BITCODE_BD draft_angle;               /*!< DXF 42 */
-  BITCODE_BD draft_start_distance;      /*!< DXF 43 */
-  BITCODE_BD draft_end_distance;        /*!< DXF 44 */
-  BITCODE_BD twist_angle;               /*!< DXF 45 */
-  BITCODE_BD scale_factor;              /*!< DXF 48 */
-  BITCODE_BD align_angle;               /*!< DXF 49 */
-  BITCODE_BD *sweep_entity_transmatrix; /*!< DXF 46: 16x BD */
-  BITCODE_BD *path_entity_transmatrix;  /*!< DXF 47: 16x BD */
-  BITCODE_B is_solid;                   /*!< DXF 290 */
-  BITCODE_BS sweep_alignment_flags;     /*!< DXF 290 */
-  BITCODE_BS path_flags;                /*!< DXF 71 */
+  BITCODE_3BD sweep_vector;                           /*!< DXF 10 */
+  BITCODE_BD *sweep_transmatrix;                      /*!< DXF 40: 16x BD */
+  BITCODE_BD draft_angle;                             /*!< DXF 42 */
+  BITCODE_BD draft_start_distance;                    /*!< DXF 43 */
+  BITCODE_BD draft_end_distance;                      /*!< DXF 44 */
+  BITCODE_BD twist_angle;                             /*!< DXF 45 */
+  BITCODE_BD scale_factor;                            /*!< DXF 48 */
+  BITCODE_BD align_angle;                             /*!< DXF 49 */
+  BITCODE_BD *sweep_entity_transmatrix;               /*!< DXF 46: 16x BD */
+  BITCODE_BD *path_entity_transmatrix;                /*!< DXF 47: 16x BD */
+  BITCODE_B is_solid;                                 /*!< DXF 290 */
+  BITCODE_BS sweep_alignment_flags;                   /*!< DXF 290 */
+  BITCODE_BS path_flags;                              /*!< DXF 71 */
   BITCODE_B align_start;                              /*!< DXF 292 */
   BITCODE_B bank;                                     /*!< DXF 293 */
   BITCODE_B base_point_set;                           /*!< DXF 294 */

@@ -15,7 +15,7 @@ api_process (dwg_object *obj)
   _3DSOLID_FIELDS;
 
   Dwg_Version_Type dwg_version = obj->parent->header.version;
-  //#ifdef DEBUG_CLASSES
+  // #ifdef DEBUG_CLASSES
   dwg_obj_assocasmbodyactionparam *_obj
       = dwg_object_to_ASSOCASMBODYACTIONPARAM (obj);
 
@@ -158,6 +158,9 @@ api_process (dwg_object *obj)
       CHK_ENTITY_TYPE (_obj, ASSOCASMBODYACTIONPARAM, end_marker, BL);
     }
 
-  SINCE (R_2007) { CHK_ENTITY_H (_obj, ASSOCASMBODYACTIONPARAM, history_id); }
-  //#endif
+  SINCE (R_2007)
+  {
+    CHK_ENTITY_H (_obj, ASSOCASMBODYACTIONPARAM, history_id);
+  }
+  // #endif
 }

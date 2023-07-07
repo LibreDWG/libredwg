@@ -89,8 +89,8 @@ hash_resize (dwg_inthash *hash)
 static inline uint64_t
 hash_func (uint64_t key)
 {
-  key = ((key >> 32) ^ key) * UINT64_C(0xd6e8feb86659fd93);
-  key = ((key >> 32) ^ key) * UINT64_C(0xd6e8feb86659fd93);
+  key = ((key >> 32) ^ key) * UINT64_C (0xd6e8feb86659fd93);
+  key = ((key >> 32) ^ key) * UINT64_C (0xd6e8feb86659fd93);
   key = (key >> 32) ^ key;
   return key;
 }

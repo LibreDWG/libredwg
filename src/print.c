@@ -215,7 +215,7 @@ static BITCODE_BL rcount1, rcount2;
 #define VALUE_RS(value, dxf) VALUE (value, RS, dxf)
 #define VALUE_RL(value, dxf) VALUE (value, RL, dxf)
 #define VALUE_RLx(value, dxf)                                                 \
-   LOG_TRACE (FORMAT_RLx " [RL " #dxf "]\n", (BITCODE_RL)value)
+  LOG_TRACE (FORMAT_RLx " [RL " #dxf "]\n", (BITCODE_RL)value)
 #define VALUE_RD(value, dxf) VALUE (value, RD, dxf)
 #define VALUE_BD(value, dxf) VALUE (value, BD, dxf)
 
@@ -416,7 +416,7 @@ dwg_print_variable_type (Dwg_Data *restrict dwg, Bit_Chain *restrict dat,
   // almost always false
   is_entity = dwg_class_is_entity (klass);
 
-  // clang-format off
+// clang-format off
   #include "classes.inc"
   // clang-format on
 
@@ -641,10 +641,9 @@ dwg_print_object (Bit_Chain *restrict dat, Dwg_Object *restrict obj)
           else // not a class
             {
               LOG_WARN ("Unknown object, skipping eed/reactors/xdic");
-              SINCE (R_2000){
-                LOG_INFO ("Object bitsize: %u\n", obj->bitsize)
-              } LOG_INFO ("Object handle: " FORMAT_H "\n",
-                          ARGS_H (obj->handle));
+              SINCE (R_2000)
+              { LOG_INFO ("Object bitsize: %u\n", obj->bitsize) } LOG_INFO (
+                  "Object handle: " FORMAT_H "\n", ARGS_H (obj->handle));
               return error | DWG_ERR_INVALIDTYPE;
             }
         }

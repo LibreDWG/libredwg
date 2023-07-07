@@ -69,9 +69,9 @@ const struct dwg_versions dwg_versions[] = {
   { R_2004, "r2004", "AC1018", "AutoCAD Release 2004", 0x19 },
   //{ R_2005, "r2005", "AC1019", "AutoCAD 2005", 0x19 }, // not seen
   //{ R_2006, "r2006", "AC1020", "AutoCAD 2006", 0x19 }, // not seen
-  { R_2007a,  "r2007a", "AC701a", "AutoCAD 2007 alpha", 0x1a },
-  { R_2007b,  "r2007b", "AC1021", "AutoCAD 2007 beta", 0x1a },
-  { R_2007,   "r2007", "AC1021", "AutoCAD Release 2007", 0x1b },
+  { R_2007a, "r2007a", "AC701a", "AutoCAD 2007 alpha", 0x1a },
+  { R_2007b, "r2007b", "AC1021", "AutoCAD 2007 beta", 0x1a },
+  { R_2007, "r2007", "AC1021", "AutoCAD Release 2007", 0x1b },
   //{ R_2008, "r2008", "AC1022", "AutoCAD 2008", 0x1b }, // not seen
   //{ R_2009, "r2009", "AC1023", "AutoCAD 2009", 0x1b }, // not seen
   { R_2010b, "r2010b", "AC1024", "AutoCAD 2010 beta", 0x1c },
@@ -89,7 +89,8 @@ const struct dwg_versions dwg_versions[] = {
   //{ R_2019, "r2019", "AC1033", "AutoCAD Release 2019", 0x22 }, // not seen
   //{ R_2020, "r2020", "AC1034", "AutoCAD Release 2020", 0x23 }, // not seen
   //{ R_2021, "r2021", "AC1035", "AutoCAD Release 2021", 0x23 }, // not seen
-  { R_2022, "r2022", "AC103-4", "AutoCAD 2022 beta", 0x24 }, // saw just the magic
+  { R_2022, "r2022", "AC103-4", "AutoCAD 2022 beta",
+    0x24 }, // saw just the magic
   { R_AFTER, "r>2022", NULL, "AutoCAD Release >2022", 0 },
 };
 
@@ -190,31 +191,37 @@ dwg_sentinel (const Dwg_Sentinel sentinel_id)
           // DWG_SENTINEL_R11_VX_END      1F35C9833118A790D4828BAAFA0EBB80
           { 0x1F, 0x35, 0xC9, 0x83, 0x31, 0x18, 0xA7, 0x90, 0xD4, 0x82, 0x8B,
             0xAA, 0xFA, 0x0E, 0xBB, 0x80 },
-          // DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN 722B7DEC3E8C886C7A720AFDC86C8426
+          // DWG_SENTINEL_R11_BLOCK_ENTITIES_BEGIN
+          // 722B7DEC3E8C886C7A720AFDC86C8426
           { 0x72, 0x2B, 0x7D, 0xEC, 0x3E, 0x8C, 0x88, 0x6C, 0x7A, 0x72, 0x0A,
             0xFD, 0xC8, 0x6C, 0x84, 0x26 },
-          // DWG_SENTINEL_R11_BLOCK_ENTITIES_END   8DD48213C1737793858DF50237937BD9
+          // DWG_SENTINEL_R11_BLOCK_ENTITIES_END
+          // 8DD48213C1737793858DF50237937BD9
           { 0x8D, 0xD4, 0x82, 0x13, 0xC1, 0x73, 0x77, 0x93, 0x85, 0x8D, 0xF5,
             0x02, 0x37, 0x93, 0x7B, 0xD9 },
-          // DWG_SENTINEL_R11_EXTRA_ENTITIES_BEGIN D5F9D3BB0AA969A6CD1C87C7EE804B17
+          // DWG_SENTINEL_R11_EXTRA_ENTITIES_BEGIN
+          // D5F9D3BB0AA969A6CD1C87C7EE804B17
           { 0xD5, 0xF9, 0xD3, 0xBB, 0x0A, 0xA9, 0x69, 0xA6, 0xCD, 0x1C, 0x87,
             0xC7, 0xEE, 0x80, 0x4B, 0x17 },
-          // DWG_SENTINEL_R11_EXTRA_ENTITIES_END   2A062C44F556965932E37838117FB4E8
+          // DWG_SENTINEL_R11_EXTRA_ENTITIES_END
+          // 2A062C44F556965932E37838117FB4E8
           { 0x2A, 0x06, 0x2C, 0x44, 0xF5, 0x56, 0x96, 0x59, 0x32, 0xE3, 0x78,
             0x38, 0x11, 0x7F, 0xB4, 0xE8 },
-          // DWG_SENTINEL_R11_AUXHEADER_BEGIN      298DD149A9731FEA99DE32F94D0AE019
+          // DWG_SENTINEL_R11_AUXHEADER_BEGIN 298DD149A9731FEA99DE32F94D0AE019
           { 0x29, 0x8D, 0xD1, 0x49, 0xA9, 0x73, 0x1F, 0xEA, 0x99, 0xDE, 0x32,
             0xF9, 0x4D, 0x0A, 0xE0, 0x19 },
-          // DWG_SENTINEL_R11_AUXHEADER_END        D6722EB6568CE0156621CD06B2F51FE6
+          // DWG_SENTINEL_R11_AUXHEADER_END D6722EB6568CE0156621CD06B2F51FE6
           { 0xD6, 0x72, 0x2E, 0xB6, 0x56, 0x8C, 0xE0, 0x15, 0x66, 0x21, 0xCD,
             0x06, 0xB2, 0xF5, 0x1F, 0xE6 },
           // DWG_SENTINEL_ILLEGAL (used for memcmp)
           { 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE,
             0xFE, 0xFE, 0xFE, 0xFE, 0xFE }
         };
-  if ((int)sentinel_id < 0 || (int)sentinel_id > DWG_SENTINEL_R11_AUXHEADER_END)
+  if ((int)sentinel_id < 0
+      || (int)sentinel_id > DWG_SENTINEL_R11_AUXHEADER_END)
     {
-      fprintf (stderr, "ERROR: sentinel_id %d out of bounds\n", (int)sentinel_id);
+      fprintf (stderr, "ERROR: sentinel_id %d out of bounds\n",
+               (int)sentinel_id);
       return sentinels[DWG_SENTINEL_R11_AUXHEADER_END + 1];
     }
   return (const unsigned char *)sentinels[sentinel_id];
@@ -553,7 +560,8 @@ tm_offset (void)
 // portability compat funcs
 
 #ifndef HAVE_STRCASECMP
-EXPORT int strcasecmp (const char *a, const char *b)
+EXPORT int
+strcasecmp (const char *a, const char *b)
 {
   size_t l2;
   int r1 = strcmp (a, b);
@@ -572,7 +580,8 @@ EXPORT int strcasecmp (const char *a, const char *b)
 #endif
 
 #ifdef _MSC_VER
-EXPORT char *basename(char *path)
+EXPORT char *
+basename (char *path)
 {
   // I've looked at the winsdk basename implementation. It's a clusterfuck,
   // because they have 2-byte widechars. We only accept utf-8 paths

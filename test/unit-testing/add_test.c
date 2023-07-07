@@ -706,7 +706,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
               "0000000000FFFFFFFFFFFFFFFFFFFFFFFF00000000000000000000000000000"
               "000000000000000000000000000000000000000000000000000000000000000"
               "000000000000";
-        const BITCODE_BL blen = ((sizeof (hex) -1) / 2) & 0xFFFFFFFF;
+        const BITCODE_BL blen = ((sizeof (hex) - 1) / 2) & 0xFFFFFFFF;
         BITCODE_TF data = malloc (blen + 1);
         in_hex2bin (data, hex, blen);
         dwg_add_VBA_PROJECT (dwg, blen, data);
@@ -846,8 +846,8 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
     {
       // TODO GH #572 flaky dxf tests
 #ifndef DISABLE_DXF
-      if (as_dxf && error == 0x800 &&
-          (type == DWG_TYPE_MTEXT || type == DWG_TYPE_LEADER))
+      if (as_dxf && error == 0x800
+          && (type == DWG_TYPE_MTEXT || type == DWG_TYPE_LEADER))
         {
           ok ("TODO dxfread %s from %s: %x (GH #572)", name, dwgfile, error);
           todo = 1;

@@ -211,8 +211,7 @@ void bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle);
 
 uint16_t bit_read_CRC (Bit_Chain *dat);
 
-int bit_check_CRC (Bit_Chain *dat, size_t start_address,
-                   const uint16_t seed);
+int bit_check_CRC (Bit_Chain *dat, size_t start_address, const uint16_t seed);
 uint16_t bit_write_CRC (Bit_Chain *dat, size_t start_address,
                         const uint16_t seed);
 // object-map only
@@ -370,8 +369,7 @@ void bit_print (Bit_Chain *dat, size_t size);
 void bit_write_bits (Bit_Chain *restrict dat, const char *restrict bits);
 long bit_write_hexbits (Bit_Chain *restrict dat, const char *restrict bytes);
 void bit_print_bits (unsigned char *bits, size_t bitsize);
-void bit_fprint_bits (FILE *fp, unsigned char *bits,
-                      size_t bitsize);
+void bit_fprint_bits (FILE *fp, unsigned char *bits, size_t bitsize);
 void bit_explore_chain (Bit_Chain *dat, size_t datsize);
 
 BITCODE_BD bit_nan (void);
@@ -385,14 +383,14 @@ void bit_copy_chain (Bit_Chain *restrict orig_dat,
 
 #ifdef NO_BYTESWAP_SUPPORT
 // Warning: evaluates x 8 times!
-#  define bswap_constant_64(x)                                              \
-    ((((x)&0xff00000000000000ULL) >> 56)                                    \
-     | (((x)&0x00ff000000000000ULL) >> 40)                                  \
-     | (((x)&0x0000ff0000000000ULL) >> 24)                                  \
-     | (((x)&0x000000ff00000000ULL) >> 8)                                   \
-     | (((x)&0x00000000ff000000ULL) << 8)                                   \
-     | (((x)&0x0000000000ff0000ULL) << 24)                                  \
-     | (((x)&0x000000000000ff00ULL) << 40)                                  \
+#  define bswap_constant_64(x)                                                \
+    ((((x)&0xff00000000000000ULL) >> 56)                                      \
+     | (((x)&0x00ff000000000000ULL) >> 40)                                    \
+     | (((x)&0x0000ff0000000000ULL) >> 24)                                    \
+     | (((x)&0x000000ff00000000ULL) >> 8)                                     \
+     | (((x)&0x00000000ff000000ULL) << 8)                                     \
+     | (((x)&0x0000000000ff0000ULL) << 24)                                    \
+     | (((x)&0x000000000000ff00ULL) << 40)                                    \
      | (((x)&0x00000000000000ffULL) << 56))
 #  ifndef WORDS_BIGENDIAN
 #    define htobe64(x) bswap_constant_64 (x)
