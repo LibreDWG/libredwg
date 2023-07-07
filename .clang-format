@@ -12,7 +12,12 @@ StatementMacros: ['SET_ENT',
                  'CAST_DWG_OBJECT_TO_ENTITY_BYNAME',
                  'CAST_DWG_OBJECT_TO_OBJECT',
                  'DISABLE_NODSTYLE',
-                 'ENCODE_CTRL_TO_TABLE'
+                 'ENCODE_CTRL_TO_TABLE',
+                 'PRE',
+                 'VERSION',
+                 'VERSIONS',
+                 'SINCE',
+                 'UNTIL'
                  ]
 WhitespaceSensitiveMacros: ['STRINGIZE', 'SZ']
 ...

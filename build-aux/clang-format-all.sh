@@ -82,6 +82,11 @@ for dir in "$@"; do
          \( -name '*.c' \
          -o -name '*.h' \) \
          -a \! \( -path './bindings/*' \
+               -o -path './codepages/*' \
+               -o -name dwg.h \
+               -o -name config.h \
+               -o -name objects.c \
+               -o -name dxfclasses.c \
                -o -name dynapi_test.c \
                -o -name dynapi.c \) \
          -exec "${FMT}" -i -verbose '{}' \;

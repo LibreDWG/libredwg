@@ -27,7 +27,9 @@
 #define LIBREDWG_VERSION_MAJOR 0
 #define LIBREDWG_VERSION_MINOR 10
 #define LIBREDWG_VERSION       ((LIBREDWG_VERSION_MAJOR * 100) + LIBREDWG_VERSION_MINOR)
-#define LIBREDWG_SO_VERSION    0:10:0
+// clang-format off
+#define LIBREDWG_SO_VERSION 0:10:0
+// clang-format on
 
 /* for uint64_t, but not in swig */
 #ifndef SWIGIMPORTED

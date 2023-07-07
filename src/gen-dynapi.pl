@@ -2050,7 +2050,7 @@ EOF
     out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
     print $out "#  ifdef DEBUG_CLASSES\n";
     out_classes ($out, \@entity_names, \%DEBUGGING, "  ".$tmpl);
-    out_classes ($out, \@entity_names, \%UNHANDLED, "// ".$tmpl);
+    out_classes ($out, \@entity_names, \%UNHANDLED, "  // ".$tmpl);
     print $out "#  endif\n";
 
     print $out <<'EOF';
@@ -2072,8 +2072,8 @@ EOF
     out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
     print $out "#  ifdef DEBUG_CLASSES\n";
     out_classes ($out, \@object_names, \%DEBUGGING, "  ".$tmpl);
-    out_classes ($out, \@object_names, \%UNHANDLED, "// ".$tmpl);
-    out_classes ($out, \@unhandled_names, \%UNHANDLED, "// ".$tmpl);
+    out_classes ($out, \@object_names, \%UNHANDLED, "  // ".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "  // ".$tmpl);
     print $out "#  endif\n";
     print $out "// clang-format: on\n";
     print $out "/* End auto-generated content */\n";
@@ -2229,8 +2229,8 @@ EOF
     print $out "/* unstable */\n";
     out_classes ($out, \@entity_names, \%UNSTABLE, $tmpl);
     print $out "#ifdef DEBUG_CLASSES\n";
-    out_classes ($out, \@entity_names, \%DEBUGGING, $tmpl);
-    out_classes ($out, \@entity_names, \%UNHANDLED, "// ".$tmpl);
+    out_classes ($out, \@entity_names, \%DEBUGGING, "  ".$tmpl);
+    out_classes ($out, \@entity_names, \%UNHANDLED, "  // ".$tmpl);
     print $out "#endif\n";
 
     print $out <<'EOF';
@@ -2253,9 +2253,9 @@ EOF
     print $out "/* unstable */\n";
     out_classes ($out, \@object_names, \%UNSTABLE, $tmpl);
     print $out "#ifdef DEBUG_CLASSES\n";
-    out_classes ($out, \@object_names, \%DEBUGGING, $tmpl);
-    out_classes ($out, \@object_names, \%UNHANDLED, "// ".$tmpl);
-    out_classes ($out, \@unhandled_names, \%UNHANDLED, "// ".$tmpl);
+    out_classes ($out, \@object_names, \%DEBUGGING, "  ".$tmpl);
+    out_classes ($out, \@object_names, \%UNHANDLED, "  // ".$tmpl);
+    out_classes ($out, \@unhandled_names, \%UNHANDLED, "  // ".$tmpl);
     print $out "#endif\n";
 
     print $out "/* End auto-generated content */\n";
