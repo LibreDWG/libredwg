@@ -76,7 +76,7 @@ if [ -f "$b.dxf" ]; then
 
     if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
         echo timeout 30 "$baseFileConverter" . . "ACAD$r" DWG 0 1 "$b.dxf"
-        timeout 30 $TeighaFileConverter . . "ACAD$r" DWG 0 1 "$b.dxf" \
+        timeout 30 "$TeighaFileConverter" . . "ACAD$r" DWG 0 1 "$b.dxf" \
                 >/dev/null 2>/dev/null
         if [ -e "./$b.dxf.err" ]; then
             mv "$b.dxf.err" "$b.dwg.err"
@@ -93,7 +93,7 @@ fi
 if [ -f "$b.dwg" ]; then
     if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
         echo timeout 30 "$baseFileConverter" . . "ACAD$r" DXF 0 1 "$b.dwg"
-        timeout 30 $TeighaFileConverter . . "ACAD$r" DXF 0 1 "$b.dwg" \
+        timeout 30 "$TeighaFileConverter" . . "ACAD$r" DXF 0 1 "$b.dwg" \
                 >/dev/null 2>/dev/null
         if [ -e "./$b.dxf.err" ]; then
             cat "$b.dxf.err"

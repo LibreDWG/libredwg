@@ -75,7 +75,7 @@ if [ -f "$b.dwg" ]; then
     esac
     if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
         echo timeout 30 "$baseFileConverter" . . "ACAD$r" DXF 0 1 "$b.dwg"
-        timeout 30 $TeighaFileConverter . . "ACAD$r" DXF 0 1 "$b.dwg" \
+        timeout 30 "$TeighaFileConverter" . . "ACAD$r" DXF 0 1 "$b.dwg" \
                 >/dev/null 2>/dev/null
         if [ -e "./$b.dxf.err" ]; then
             mv "./$b.dxf.err" "$b.json.err"
