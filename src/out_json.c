@@ -21,6 +21,7 @@
 #include <string.h>
 #include <assert.h>
 #include <ctype.h>
+#include <limits.h>
 #ifdef HAVE_ICONV
 #  include <iconv.h>
 #endif

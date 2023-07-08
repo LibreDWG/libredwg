@@ -25,6 +25,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <limits.h>
 
 #define IS_DECODER
 #define _DECODE_R11_C

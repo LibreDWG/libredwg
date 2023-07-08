@@ -26,7 +26,9 @@
 #include <stdint.h>
 #include <sys/types.h>
 #include <stdbool.h>
+#include <limits.h>
 #include <assert.h>
+
 #include "common.h"
 #include "bits.h"
 #include "decode.h"
