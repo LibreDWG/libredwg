@@ -2608,9 +2608,11 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           }
       }
       SINCE (R_11)
-      error |= encode_r11_auxheader (dat, dwg);
+        error |= encode_r11_auxheader (dat, dwg);
       addr = dat->byte & 0xFFFFFFFF;
       LOG_TRACE ("@0x%x -> ", addr);
+      if (error >= DWG_ERR_CRITICAL)
+        return error;
       // patch these numbers into the header
       dat->byte = 0x14; // header section_address
       dat->bit = 0;
@@ -2677,7 +2679,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         //      dat->from_version = (Dwg_Version_Type)((int)dat->version - 1);
         //  }
       }
-    dwg_sections_init (dwg);
+    error |= dwg_sections_init (dwg);
+    if (error >= DWG_ERR_CRITICAL)
+      return error;
     LOG_TRACE ("sections: " FORMAT_RL " [RL]\n", dwg->header.sections);
     bit_write_RL (dat, dwg->header.sections);
     section_address = dat->byte;             // save section address

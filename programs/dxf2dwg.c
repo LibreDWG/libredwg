@@ -314,7 +314,6 @@ main (int argc, char *argv[])
 
       dwg.opts = opts;
       dwg.header.version = dwg_version;
-      // printf ("Warning: dxf2dwg is still experimental.\n");
       printf ("Reading DXF file %s\n", filename_in);
       error = dxf_read_file (filename_in, &dwg);
       if (error >= DWG_ERR_CRITICAL)

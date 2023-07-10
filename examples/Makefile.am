@@ -63,7 +63,7 @@ endif
 else
 llvmfuzz_standalone_CFLAGS  = $(CFLAGS) $(AM_CFLAGS) -DSTANDALONE
 endif
-llvmfuzz_standalone_LDADD   = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo
+llvmfuzz_standalone_LDADD   = $(top_builddir)/src/libredwg.la $(top_builddir)/src/bits.lo $(top_builddir)/src/codepages.lo
 
 all: $(check_PROGRAMS)
 
