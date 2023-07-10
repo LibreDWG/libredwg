@@ -2970,10 +2970,12 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
       return (char *)src;
     osrc = (char *)src;
     odest = dest = (char *)malloc (destlen);
-    if (!odest)
+    if (!odest || destlen > 0x2FFFE)
       {
         loglevel |= 1;
-        LOG_ERROR ("Out of memory")
+        LOG_ERROR ("Out of memory");
+        if (odest)
+          free (odest);
         return NULL;
       }
     cd = iconv_open ("UTF-8", charset);
@@ -2994,6 +2996,14 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
               {
                 char *dest_new;
                 destlen *= 2;
+                if (destlen > 0x2FFFE)
+                  {
+                    loglevel |= 1;
+                    LOG_ERROR ("bit_TV_to_utf8: overlarge destlen %zu for %s",
+                               destlen, src);
+                    free (odest);
+                    return NULL;
+                  }
                 dest_new = (char *)realloc (odest, destlen);
                 if (dest_new)
                   odest = dest = dest_new;
@@ -3002,6 +3012,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
                     loglevel |= 1;
                     iconv_close (cd);
                     LOG_ERROR ("Out of memory");
+                    free (odest);
                     return NULL;
                   }
               }
