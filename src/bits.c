@@ -2984,6 +2984,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
         loglevel |= 1;
         LOG_ERROR ("iconv_open (\"UTF-8\", \"%s\") failed with errno %d",
                    charset, errno);
+        free (odest);
         return NULL;
       }
     while (nconv == (size_t)-1)
@@ -3001,6 +3002,7 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
                     loglevel |= 1;
                     LOG_ERROR ("bit_TV_to_utf8: overlarge destlen %zu for %s",
                                destlen, src);
+                    iconv_close (cd);
                     free (odest);
                     return NULL;
                   }
@@ -3010,8 +3012,8 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
                 else
                   {
                     loglevel |= 1;
-                    iconv_close (cd);
                     LOG_ERROR ("Out of memory");
+                    iconv_close (cd);
                     free (odest);
                     return NULL;
                   }
@@ -3020,8 +3022,8 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
               {
                 loglevel |= 1;
                 LOG_ERROR ("iconv \"%s\" failed with errno %d", src, errno);
-                free (odest);
                 iconv_close (cd);
+                free (odest);
                 return bit_u_expand (osrc);
               }
           }
