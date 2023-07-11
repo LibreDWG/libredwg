@@ -243,7 +243,7 @@ const unsigned char unknown_section[53]
 #define FIELD_TF(nam, len, dxf)                                               \
   {                                                                           \
     LOG_TRACE (#nam ": %s [TF %d %d]\n", _obj->nam, (int)len, dxf);           \
-    if (len > 0)                                                              \
+    if (len > 0 && len < MAX_SIZE_TF)                                         \
       {                                                                       \
         if (!_obj->nam)                                                       \
           { /* empty field, write zeros */                                    \
@@ -478,7 +478,8 @@ const unsigned char unknown_section[53]
       return DWG_ERR_VALUEOUTOFBOUNDS;                                        \
     }
 #define OVERFLOW_NULL_CHECK_LV(nam, size)                                     \
-  if ((long)(size) > 0xff00L || (!_obj->nam && size) || (_obj->nam && !size)) \
+  if ((size) > MAX_NUM || (!_obj->nam && size)                                \
+      || (_obj->nam && !size))                                                \
     {                                                                         \
       LOG_ERROR ("Invalid " #nam " %ld, set to 0", (long)size);               \
       size = 0;                                                               \

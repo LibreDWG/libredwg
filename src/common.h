@@ -33,6 +33,13 @@
 #include <time.h>
 #include "dwg.h"
 
+// DoS limits
+// limit number of vector elements to BS range
+#define MAX_NUM     0xFFFE
+// strings also 16bits
+#define MAX_SIZE_TF 0xFFF0
+#define MAX_SIZE_T  0xFFFE
+
 #if !defined AX_STRCASECMP_HEADER && !defined HAVE_STRCASECMP
 EXPORT int strcasecmp (const char *a, const char *b);
 #else

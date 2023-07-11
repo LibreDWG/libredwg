@@ -3111,7 +3111,7 @@ bit_utf8_to_TU (char *restrict str, const unsigned cquoted)
   size_t len = strlen (str);
   unsigned char c;
 
-  if (len > 0xFFFE)
+  if (len > MAX_SIZE_T)
     {
       loglevel |= 1;
       LOG_WARN ("Overlong string truncated (len=%zu)", len);
