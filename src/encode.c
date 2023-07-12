@@ -5680,9 +5680,7 @@ static int
 encode_preR13_header_variables (Bit_Chain *dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
-#ifndef __AFL_COMPILER
   Dwg_Object *obj = NULL;
-#endif
   Bit_Chain *hdl_dat = dat;
   int error = 0;
 
@@ -5831,9 +5829,7 @@ dwg_encode_header_variables (Bit_Chain *dat, Bit_Chain *hdl_dat,
                              Bit_Chain *str_dat, Dwg_Data *restrict dwg)
 {
   Dwg_Header_Variables *_obj = &dwg->header_vars;
-#ifndef __AFL_COMPILER
   Dwg_Object *obj = NULL;
-#endif
   Dwg_Version_Type old_from = dat->from_version;
 
   if (!_obj->HANDSEED) // minimal or broken DXF
