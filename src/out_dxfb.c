@@ -142,7 +142,7 @@ static int dxfb_3dsolid (Bit_Chain *restrict dat,
 
 #define FIELD_VALUE(nam) _obj->nam
 #define ANYCODE -1
-// I would rather assume 8-byte LE. like FIELD_RLL
+// a null-terminated string of the value as %X
 #define VALUE_HANDLE(ref, nam, handle_code, dxf)                              \
   if (dxf)                                                                    \
     {                                                                         \
