@@ -15,6 +15,7 @@ b="$(basename "$d" .dwg)"
 dir="$(dirname "$d")"
 r="$(basename "$dir")"
 DEBUG_CLASSES=
+exitcode=0
 
 case $dir in
     *test/test-data)   ;;
@@ -56,12 +57,14 @@ if [ -f "$b.dxfb" ]; then
         Linux)   TeighaFileConverter=/usr/bin/ODAFileConverter ;;
         Windows) TeighaFileConverter=ODAFileConverter ;;
     esac
+    baseFileConverter=ODAFileConverter
     if [ ! -x "$TeighaFileConverter" ]; then
         case $(uname) in
             Darwin)  TeighaFileConverter=/Applications/TeighaFileConverter.app/Contents/MacOS/TeighaFileConverter ;;
             Linux)   TeighaFileConverter=/usr/bin/TeighaFileConverter ;;
             Windows) TeighaFileConverter=TeighaFileConverter ;;
         esac
+        baseFileConverter=TeighaFileConverter
     fi
     case $r in
         r2.*)     can_teigha=0 ;;
@@ -69,14 +72,18 @@ if [ -f "$b.dxfb" ]; then
         r1[01])   can_teigha=0 ;;
     esac
     if [ -x "$TeighaFileConverter" ] && [ "$can_teigha" = "1" ]; then
-        echo "$TeighaFileConverter . test ACAD$r DWG 0 1 $b.dxfb"
-        $TeighaFileConverter "." "test" "ACAD$r" DWG 0 1 "$b.dxfb"
-        mv "test/$b.dwg.err" "$b.dxfb2dwg.err"
-        cat "$b.dxfb2dwg.err"
+        echo "$baseFileConverter . test ACAD$r DWG 0 1 $b.dxfb"
+        $TeighaFileConverter "." "test" "ACAD$r" DWG 0 1 "$b.dxfb" \
+                >/dev/null 2>/dev/null
+        if [ -e "test/$b.dwg.err" ]; then
+            mv "test/$b.dwg.err" "$b.dxfb2dwg.err"
+            cat "$b.dxfb2dwg.err"
+            exitcode=1
+        fi
     else
         rm "$b.dxfb2dwg.err" 2>/dev/null
         if [ ! -x "$TeighaFileConverter" ]; then
-            echo "(Teigha|ODA)FileConverter not installed"
+            echo "$baseFileConverter not installed"
         fi
     fi
 
@@ -87,13 +94,13 @@ fi
 
 if [ -f "$b.dwg" ]; then
     if [ -x "$TeighaFileConverter" ]; then
-        echo "$TeighaFileConverter . test ACAD$r DXF 0 1 $b.dwg"
+        echo "$baseFileConverter . test ACAD$r DXF 0 1 $b.dwg"
         $TeighaFileConverter "." "test" "ACAD$r" DXF 0 1 "$b.dwg"
         mv "test/$b.dxf.err" "$b.dxfb.err"
         cat "$b.dxfb.err"
     else
         rm "$b.dxfb.err" 2>/dev/null
-        echo TeighaFileConverter not installed
+        echo "$baseFileConverter not installed"
     fi
 
     ./log "$v" "$b.dwg"
@@ -134,3 +141,4 @@ if [ -f "$b.dwg" ]; then
         fi
     fi
 fi
+exit $exitcode
