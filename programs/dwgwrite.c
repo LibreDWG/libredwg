@@ -115,6 +115,9 @@ help (void)
 
 #ifdef __AFL_COMPILER
 __AFL_FUZZ_INIT ();
+// fastest mode via shared mem (crashes still)
+#define AFL_SHARED_MEM
+
 int
 main (int argc, char *argv[])
 {
@@ -128,10 +131,12 @@ main (int argc, char *argv[])
   dat.version = R_2000;
   printf ("Fuzzing in_json + encode from shared memory\n");
 
+#  ifdef AFL_SHARED_MEM
+  dat.chain = __AFL_FUZZ_TESTCASE_BUF;
+#  endif
   while (__AFL_LOOP (10000))
     {   // llvm_mode persistent, non-forking mode
-#  if 1 // fastest mode via shared mem (crashes still)
-      dat.chain = __AFL_FUZZ_TESTCASE_BUF;
+#  ifdef AFL_SHARED_MEM
       dat.size = __AFL_FUZZ_TESTCASE_LEN;
 #  elif 1 // still 1000x faster than the old file-forking fuzzer.
       /* from stdin: */

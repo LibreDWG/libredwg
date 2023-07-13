@@ -181,6 +181,7 @@ main (int argc, char *argv[])
 #endif
   } mode
       = INVALID;
+  __AFL_INIT ();
 
   if (argc <= 1 || !*argv[1])
     return 1;
@@ -229,7 +230,6 @@ main (int argc, char *argv[])
     return 1;
 #endif
 
-  __AFL_INIT ();
   memset (&dwg, 0, sizeof (dwg));
   dat.chain = NULL;
   // dat.opts = 3;;

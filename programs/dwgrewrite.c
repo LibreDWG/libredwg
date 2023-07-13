@@ -168,6 +168,9 @@ main (int argc, char *argv[])
           { "file", 1, 0, 'o' },      { "as", 1, 0, 'a' }, { "help", 0, 0, 0 },
           { "version", 0, 0, 0 },     { NULL, 0, NULL, 0 } };
 #endif
+#ifdef __AFL_HAVE_MANUAL_CONTROL
+  __AFL_INIT ();
+#endif
 
   // check args
   if (argc < 2)
@@ -265,7 +268,6 @@ main (int argc, char *argv[])
   dwg.opts = opts & 0xf;
 
 #ifdef __AFL_HAVE_MANUAL_CONTROL
-  __AFL_INIT ();
   while (__AFL_LOOP (1000))
     {
 #endif
