@@ -2989,8 +2989,13 @@ bit_TV_to_utf8 (const char *restrict src, const BITCODE_RS codepage)
       }
     while (nconv == (size_t)-1)
       {
+#ifdef WINICONV_CONST
+        nconv = iconv (cd, (WINICONV_CONST char **restrict)&src, (size_t *)&srclen,
+                       (char **)&dest, (size_t *)&destlen);
+#else
         nconv = iconv (cd, (char **restrict)&src, (size_t *)&srclen,
                        (char **)&dest, (size_t *)&destlen);
+#endif
         if (nconv == (size_t)-1)
           {
             if (errno != EINVAL) // probably dest buffer too small
