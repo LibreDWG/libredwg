@@ -1535,7 +1535,7 @@ dxf_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
         case DWG_VT_HANDLE:
         case DWG_VT_OBJECTID:
           fprintf (dat->fh, "%3i\r\n" FMT_H "\r\n", dxftype,
-                   *(uint64_t *)rbuf->value.hdl);
+                   rbuf->value.absref);
           break;
         case DWG_VT_INVALID:
           break; // skip

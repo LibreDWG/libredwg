@@ -1164,7 +1164,9 @@ json_xdata (Bit_Chain *restrict dat, const Dwg_Object_XRECORD *restrict obj)
           break;
         case DWG_VT_HANDLE:
         case DWG_VT_OBJECTID:
-          fprintf (dat->fh, FORMAT_H "", ARGS_H (rbuf->value.h));
+          VALUE_RLL (rbuf->value.absref, 0);
+          LOG_TRACE ("xdata[%u]: " FORMAT_RLLx " [H %d]\n", i,
+                     rbuf->value.absref, rbuf->type);
           break;
         case DWG_VT_INVALID:
         default:

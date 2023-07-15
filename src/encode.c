@@ -6030,10 +6030,9 @@ dwg_encode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict _obj,
         case DWG_VT_OBJECTID:
           if (dat->byte + 8 > end)
             break;
-          for (i = 0; i < 8; i++)
-            bit_write_RC (dat, rbuf->value.hdl[i]);
-          LOG_TRACE ("xdata[%u]: " FORMAT_H " [H %d]", j,
-                     ARGS_H (rbuf->value.h), rbuf->type);
+          bit_write_RLL (dat, rbuf->value.absref);
+          LOG_TRACE ("xdata[%u]: " FORMAT_RLLx " [H %d]", j,
+                     rbuf->value.absref, rbuf->type);
           LOG_POS;
           break;
         case DWG_VT_INVALID:

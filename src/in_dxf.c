@@ -6685,9 +6685,9 @@ add_xdata (Bit_Chain *restrict dat, Dwg_Object *restrict obj,
     case DWG_VT_HANDLE:
     case DWG_VT_OBJECTID:
       xdata_size += 8;
-      dwg_add_handle (&rbuf->value.h, 0, pair->value.u, obj);
-      LOG_TRACE ("xdata[%d]: " FORMAT_H " [H %d]\n", num_xdata,
-                 ARGS_H (rbuf->value.h), rbuf->type);
+      rbuf->value.absref = pair->value.rll;
+      LOG_TRACE ("xdata[%d]: " FORMAT_RLLx " [H %d]\n", num_xdata,
+                 rbuf->value.absref, rbuf->type);
       break;
     case DWG_VT_INVALID:
     default:

@@ -26013,7 +26013,7 @@ dwg_add_XRECORD_handle (Dwg_Object_XRECORD *restrict _obj, const short dxf,
     _obj->xdata = rbuf;
   _obj->num_xdata++;
   rbuf->type = dxf;
-  memcpy (&rbuf->value.h, &hdl, sizeof (Dwg_Handle));
+  rbuf->value.absref = hdl.value;
   _obj->xdata_size += 10; // 2 + 8
   return _obj;
 }

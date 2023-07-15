@@ -881,9 +881,8 @@ typedef struct _dwg_resbuf
     short   i16;
     int     i32;
     BITCODE_BLL i64;
+    BITCODE_RLL absref;
     double  dbl;
-    unsigned char hdl[8];
-    Dwg_Handle h;
     struct _dwg_binary_chunk str;
   } value;
   struct _dwg_resbuf *nextrb;

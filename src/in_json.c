@@ -1794,13 +1794,11 @@ json_xdata (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             case DWG_VT_HANDLE:
             case DWG_VT_OBJECTID:
               {
-                BITCODE_H hdl;
-                hdl = json_HANDLE (dat, dwg, tokens, name, "handle", NULL, -1);
-                LOG_TRACE ("xdata[%u]: " FORMAT_REF " [H %d]\n", i,
-                           ARGS_REF (hdl), (int)rbuf->type);
+                long l = json_long (dat, tokens);
                 JSON_TOKENS_CHECK_OVERFLOW_ERR
-                memcpy (&rbuf->value.h, &hdl->handleref,
-                        sizeof (hdl->handleref));
+                rbuf->value.absref = (BITCODE_RLL)l;
+                LOG_TRACE ("xdata[%u]: " FORMAT_RLLx " [H %d]\n", i,
+                           rbuf->value.absref, (int)rbuf->type);
                 size += 8;
               }
               break;

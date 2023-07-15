@@ -1157,7 +1157,7 @@ dxfb_write_xdata (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
           break;
         case DWG_VT_HANDLE:
         case DWG_VT_OBJECTID:
-          VALUE_H ((unsigned long)*(uint64_t *)rbuf->value.hdl, dxftype);
+          VALUE_H (rbuf->value.absref, dxftype);
           break;
         case DWG_VT_INVALID:
         default:
