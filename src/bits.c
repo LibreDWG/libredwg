@@ -543,20 +543,21 @@ bit_write_RLL (Bit_Chain *dat, BITCODE_RLL value)
 BITCODE_RD
 bit_read_RD (Bit_Chain *dat)
 {
-  int i;
-  unsigned char byte[8];
-  double *result;
+  union {
+    unsigned char b[8];
+    uint64_t u;
+    double d;
+  } u;
 
   // CHK_OVERFLOW_PLUS (8, __FUNCTION__, bit_nan ())
-  for (i = 0; i < 8; i++)
-    byte[i] = bit_read_RC (dat);
+  for (int i = 0; i < 8; i++)
+    u.b[i] = bit_read_RC (dat);
 
 #ifdef WORDS_BIGENDIAN
-  result = (double *)htole64 (byte);
+  return (double)htole64 (u.u);
 #else
-  result = (double *)byte;
+  return u.d;
 #endif
-  return (*result);
 }
 
 /** Write 1 raw double (8 bytes, IEEE-754).
@@ -564,15 +565,18 @@ bit_read_RD (Bit_Chain *dat)
 void
 bit_write_RD (Bit_Chain *dat, double value)
 {
-  int i;
-  unsigned char *val;
+  union {
+    unsigned char b[8];
+    uint64_t u;
+    double d;
+  } u;
 
-  val = (unsigned char *)&value;
+  u.d = value;
 #ifdef WORDS_BIGENDIAN
-  val = htole64 (val);
+  u.u = htole64 (u.u);
 #endif
-  for (i = 0; i < 8; i++)
-    bit_write_RC (dat, val[i]);
+  for (int i = 0; i < 8; i++)
+    bit_write_RC (dat, u.b[i]);
 }
 
 /** Read 1 bitshort (compacted data).
@@ -1355,7 +1359,7 @@ bit_read_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   {
     BITCODE_RC *restrict val;
     val = (BITCODE_RC *)&(handle->value);
-    for (i = 0; i < handle->size; i++)
+    for (unsigned i = 0; i < handle->size; i++)
       val[i] = bit_read_RC (dat);
   }
 #else
@@ -1445,7 +1449,7 @@ bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   val.v = handle->value;
 #ifdef WORDS_BIGENDIAN
   // support sizes <= 8, not just 4
-  for (i = 0; i < sizeof (val); i++)
+  for (i = 0; i < (int)sizeof (val); i++)
     if (val.p[i])
       break;
 #else
@@ -1458,11 +1462,8 @@ bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
   bit_write_RC (dat, size);
 
 #ifdef WORDS_BIGENDIAN
-  {
-    int j;
-    for (j = 0; j < i; j++)
-      bit_write_RC (dat, val[j]);
-  }
+  for (int j = 0; j < i; j++)
+    bit_write_RC (dat, val.p[j]);
 #else
   for (; i >= 0; i--)
     bit_write_RC (dat, val.p[i]);

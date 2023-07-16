@@ -5675,8 +5675,9 @@ dwg_dim_blockname (Dwg_Data *restrict dwg, const Dwg_Object *restrict obj)
 }
 
 /* Ensure that the given refs have rising objid's/indices (when read in natural
- * order) */
-static inline int
+ * order). With mips32 -O2 inline would fail.
+ */
+static int
 ref_after (const Dwg_Object_Ref *restrict r1,
            const Dwg_Object_Ref *restrict r2)
 {

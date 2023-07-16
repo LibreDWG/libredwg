@@ -84,6 +84,30 @@ jobs:
         files: |
           dist.sha256
           libredwg-*.tar.*
+  ppc64-big-endian:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - run: sudo apt-get -y update && sudo apt-get -y install gcc-powerpc64-linux-gnu libc6-ppc64-cross
+    - run: sh autogen.sh
+    - run: ./configure --host=powerpc64-linux-gnu --disable-bindings --disable-python
+    - run: make -j
+  mips32-big-endian:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+        submodules: recursive
+    - run: sudo apt-get -y update && sudo apt-get -y install gcc-mips-linux-gnu gcc-multilib-mips-linux-gnu
+    - run: sh autogen.sh
+    - run: CFLAGS=-Os ./configure --host=mips-linux-gnu --disable-bindings --disable-python
+    - run: make -j
   linux-cmake:
     runs-on: ubuntu-latest
     timeout-minutes: 20

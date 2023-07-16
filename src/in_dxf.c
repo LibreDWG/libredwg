@@ -244,12 +244,9 @@ xcalloc (size_t n, size_t s)
 
 #ifndef DISABLE_DXF
 
-static
-#  ifndef __AFL_COMPILER
-    inline
-#  endif
-    void
-    dxf_skip_ws (Bit_Chain *dat)
+/* With mips32 -O2 inline would fail. */
+static void
+dxf_skip_ws (Bit_Chain *dat)
 {
   const int is_binary = dat->opts & DWG_OPTS_DXFB;
   if (is_binary)
