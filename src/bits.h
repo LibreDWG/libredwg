@@ -91,111 +91,72 @@ size_t bit_position (Bit_Chain *dat);
 void bit_set_position (Bit_Chain *dat, size_t bitpos);
 void bit_reset_chain (Bit_Chain *dat);
 
-BITCODE_B
-bit_read_B (Bit_Chain *dat);
-
+BITCODE_B bit_read_B (Bit_Chain *dat);
 void bit_write_B (Bit_Chain *dat, unsigned char value);
 
-BITCODE_BB
-bit_read_BB (Bit_Chain *dat);
-
+BITCODE_BB bit_read_BB (Bit_Chain *dat);
 void bit_write_BB (Bit_Chain *dat, unsigned char value);
 
-BITCODE_3B
-bit_read_3B (Bit_Chain *dat);
-
+BITCODE_3B bit_read_3B (Bit_Chain *dat);
 void bit_write_3B (Bit_Chain *dat, unsigned char value);
 
-BITCODE_4BITS
-bit_read_4BITS (Bit_Chain *dat);
-
+BITCODE_4BITS bit_read_4BITS (Bit_Chain *dat);
 void bit_write_4BITS (Bit_Chain *dat, unsigned char value);
 
-BITCODE_RC
-bit_read_RC (Bit_Chain *dat);
-
+BITCODE_RC bit_read_RC (Bit_Chain *dat);
 void bit_write_RC (Bit_Chain *dat, unsigned char value);
 
-BITCODE_RS
-bit_read_RS (Bit_Chain *dat);
-
+BITCODE_RS bit_read_RS (Bit_Chain *dat);
+BITCODE_RS bit_read_RS_LE (Bit_Chain *dat);
 void bit_write_RS (Bit_Chain *dat, BITCODE_RS value);
-
-BITCODE_RS
-bit_read_RS_LE (Bit_Chain *dat);
-
 void bit_write_RS_LE (Bit_Chain *dat, BITCODE_RS value);
 
-BITCODE_RL
-bit_read_RL (Bit_Chain *dat);
-
+BITCODE_RL bit_read_RL (Bit_Chain *dat);
+BITCODE_RL bit_read_RL_LE (Bit_Chain *dat);
 void bit_write_RL (Bit_Chain *dat, BITCODE_RL value);
-
-BITCODE_RL
-bit_read_RL_LE (Bit_Chain *dat);
-
 void bit_write_RL_LE (Bit_Chain *dat, BITCODE_RL value);
 
-BITCODE_RLL
-bit_read_RLL (Bit_Chain *dat);
-
+BITCODE_RLL bit_read_RLL (Bit_Chain *dat);
+BITCODE_RLL bit_read_RLL_LE (Bit_Chain *dat);
 void bit_write_RLL (Bit_Chain *dat, BITCODE_RLL value);
+void bit_write_RLL_LE (Bit_Chain *dat, BITCODE_RLL value);
 
-BITCODE_RD
-bit_read_RD (Bit_Chain *dat);
-
+BITCODE_RD bit_read_RD (Bit_Chain *dat);
+BITCODE_RD bit_read_RD_LE (Bit_Chain *dat);
 void bit_write_RD (Bit_Chain *dat, BITCODE_RD value);
+void bit_write_RD_LE (Bit_Chain *dat, BITCODE_RD value);
 
 /* Functions for manipulating compacted data
  */
-BITCODE_BS
-bit_read_BS (Bit_Chain *dat);
-
+BITCODE_BS bit_read_BS (Bit_Chain *dat);
 void bit_write_BS (Bit_Chain *dat, BITCODE_BS value);
 
-BITCODE_BL
-bit_read_BL (Bit_Chain *dat);
-
+BITCODE_BL bit_read_BL (Bit_Chain *dat);
 void bit_write_BL (Bit_Chain *dat, BITCODE_BL value);
-
 void bit_write_BLd (Bit_Chain *dat, BITCODE_BLd value);
 
-BITCODE_BS
-bit_read_BOT (Bit_Chain *dat);
-
+BITCODE_BS bit_read_BOT (Bit_Chain *dat);
 void bit_write_BOT (Bit_Chain *dat, BITCODE_BS value);
 
-BITCODE_BLL
-bit_read_BLL (Bit_Chain *dat);
-BITCODE_BLL
-bit_read_3BLL (Bit_Chain *dat); /*unused but as documented*/
-
+BITCODE_BLL bit_read_BLL (Bit_Chain *dat);
+BITCODE_BLL bit_read_3BLL (Bit_Chain *dat); /*unused but as documented*/
 void bit_write_BLL (Bit_Chain *dat, BITCODE_BLL value);
 void bit_write_3BLL (Bit_Chain *dat, BITCODE_BLL value);
 
-BITCODE_BD
-bit_read_BD (Bit_Chain *dat);
-
+BITCODE_BD bit_read_BD (Bit_Chain *dat);
 void bit_write_BD (Bit_Chain *dat, BITCODE_BD value);
 
-BITCODE_MC
-bit_read_MC (Bit_Chain *dat);
-
+BITCODE_MC bit_read_MC (Bit_Chain *dat);
 void bit_write_MC (Bit_Chain *dat, BITCODE_MC value);
 
-BITCODE_UMC
-bit_read_UMC (Bit_Chain *dat);
-
+BITCODE_UMC bit_read_UMC (Bit_Chain *dat);
 void bit_write_UMC (Bit_Chain *dat, BITCODE_UMC value);
 
-BITCODE_MS
-bit_read_MS (Bit_Chain *dat);
-
+BITCODE_MS bit_read_MS (Bit_Chain *dat);
 void bit_write_MS (Bit_Chain *dat, BITCODE_MS value);
 
 void bit_read_BE (Bit_Chain *restrict dat, double *restrict x,
                   double *restrict y, double *restrict z);
-
 void bit_write_BE (Bit_Chain *dat, double x, double y, double z);
 void normalize_BE (BITCODE_3BD ext);
 
@@ -325,9 +286,6 @@ int bit_eq_TU (const char *str, BITCODE_TU restrict wstr);
 /* check if the string (ascii or unicode) is empty */
 int bit_empty_T (Bit_Chain *restrict dat, BITCODE_T restrict str);
 BITCODE_T bit_set_T (Bit_Chain *restrict dat, const char *restrict src);
-
-BITCODE_RL bit_read_L (Bit_Chain *dat);
-void bit_write_L (Bit_Chain *dat, BITCODE_RL value);
 
 BITCODE_TIMEBLL bit_read_TIMEBLL (Bit_Chain *dat);
 void bit_write_TIMEBLL (Bit_Chain *dat, BITCODE_TIMEBLL date);

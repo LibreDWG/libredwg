@@ -59,6 +59,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #  if !defined(HAVE_BE64TOH) && defined(HAVE_BYTESWAP_H) && !defined(be64toh)
 #    include <byteswap.h>
 #    ifndef WORDS_BIGENDIAN
+#      define htole16(x) (x)
 #      define htole32(x) (x)
 #      define le32toh(x) (x)
 #      define htole64(x) (x)
@@ -66,6 +67,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #      define htobe64(x) bswap_64 (x)
 #      define be64toh(x) bswap_64 (x)
 #    else
+#      define htole16(x) bswap_16 (x)
 #      define htole32(x) bswap_32 (x)
 #      define le32toh(x) bswap_32 (x)
 #      define htole64(x) bswap_64 (x)
@@ -79,6 +81,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #elif defined HAVE_MACHINE_ENDIAN_H && defined __APPLE__
 #  include <machine/endian.h>
 #  include <libkern/OSByteOrder.h>
+#  define htole16 OSSwapHostToLittleInt16
 #  define htole32 OSSwapHostToLittleInt32
 #  define le32toh OSSwapLittleToHostInt32
 #  define htole64 OSSwapHostToLittleInt64
@@ -88,6 +91,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #elif defined HAVE_WINSOCK2_H && defined __WINDOWS__
 #  include <winsock2.h>
 #  ifndef WORDS_BIGENDIAN
+#    define htole16(x) (x)
 #    define htole32(x) (x)
 #    define le32toh(x) (x)
 #    define htole64(x) (x)
@@ -95,6 +99,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #    define htobe64(x) __builtin_bswap64 (x)
 #    define be64toh(x) __builtin_bswap64 (x)
 #  else /* e.g. xbox 360 */
+#    define htole16(x) __builtin_bswap16 (x)
 #    define htole32(x) __builtin_bswap32 (x)
 #    define le32toh(x) __builtin_bswap32 (x)
 #    define htole64(x) __builtin_bswap64 (x)
@@ -110,6 +115,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #  if defined HAVE_SYS_BYTEORDER_H
 /* e.g. solaris */
 #    include <sys/byteorder.h>
+#    define htole16(x) BSWAP_16 (x)
 #    define htole32(x) BSWAP_32 (x)
 #    define le32toh(x) BSWAP_32 (x)
 #    define htole64(x) BSWAP_64 (x)
@@ -118,6 +124,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #    define be64toh(x) (x)
 #  elif defined HAVE_BYTESWAP_H
 #    include <byteswap.h>
+#    define htole16(x) bswap16 (x)
 #    define htole32(x) bswap32 (x)
 #    define le32toh(x) bswap32 (x)
 #    define htole64(x) bswap64 (x)
@@ -128,6 +135,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #    include <byteorder.h>
 /* which os? riot-os */
 #    ifdef RIOT_VERSION
+#      define htole16(x) byteorder_swap (x)
 #      define htole32(x) byteorder_swapl (x)
 #      define le32toh(x) byteorder_swapl (x)
 #      define htole64(x) byteorder_swapll (x)
@@ -143,6 +151,7 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #  endif
 #else /* little endian: just pass-thru. i.e. mingw */
 #  define NO_BYTESWAP_SUPPORT
+#  define htole16(x) (x)
 #  define htole32(x) (x)
 #  define le32toh(x) (x)
 #  define htole64(x) (x)

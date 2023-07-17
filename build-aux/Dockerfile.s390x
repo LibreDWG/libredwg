@@ -1,0 +1,19 @@
+# podman/docker build -t libredwg-s390x build-aux -f build-aux/Dockerfile.s390x
+
+FROM s390x/ubuntu as s390x
+RUN apt-get update -y
+RUN apt-get install -y --no-install-recommends autoconf automake libtool swig texinfo \
+    ca-certificates build-essential git gcc-s390x-linux-gnu perl python3 libxml2 \
+    python3-libxml2
+RUN update-ca-certificates
+WORKDIR /app
+RUN git clone -c http.sslVerify=false --recurse-submodules https://github.com/LibreDWG/libredwg && \
+    cd libredwg && \
+    ./configure --host=s390x-linux-gnu --disable-bindings && \
+    make -j `nproc` V=1 && \
+    mkdir install && \
+    make install DESTDIR="$PWD/install" && \
+    libtool --finish $PWD/install/usr/local/lib && \
+    make check DOCKER=1 DESTDIR="$PWD/install"
+
+CMD [ "sh" ]

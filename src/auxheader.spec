@@ -70,9 +70,9 @@
   FIELD_VECTOR_INL (unknown_6rs, RS, 6, 0)
   FIELD_VECTOR_INL (unknown_5rl, RL, 5, 0)
   //DEBUG_HERE;
-  FIELD_RD (TDCREATE, 0);
+  FIELD_RD_LE (TDCREATE, 0);
   //DEBUG_HERE;
-  FIELD_RD (TDUPDATE, 0);
+  FIELD_RD_LE (TDUPDATE, 0);
   FIELD_RLx (HANDSEED, 0);
   FIELD_RL (plot_stamp, 0);
   FIELD_RS (zero_1, 0);

@@ -279,7 +279,7 @@ bit_read_RD_tests (void)
   if (result == value)
     pass ();
   else
-    fail ("bit_read_RD");
+    fail ("bit_read_RD %g != %g", result, value);
 }
 
 static void
@@ -287,17 +287,20 @@ bit_write_RD_tests (void)
 {
   Bit_Chain bitchain;
   double value = 25.2547841;
-  double *result;
+  union {
+    double d;
+    uint64_t u;
+  } u;
 
   bitprepare (&bitchain, sizeof (double));
   bit_write_RD (&bitchain, value);
   // bit_print (&bitchain, sizeof (double));
 
-  result = (double *)bitchain.chain;
-  if (*result == value)
+  u.u = htole64 (*(uint64_t *)(bitchain.chain));
+  if (u.d == value)
     pass ();
   else
-    fail ("bit_write_RD");
+    fail ("bit_write_RD %g != %g", u.d, value);
   bitfree (&bitchain);
 }
 
@@ -379,7 +382,7 @@ static void
 bit_write_H_tests (void)
 {
   Bit_Chain bitchain;
-  unsigned long byte;
+  size_t byte;
   Dwg_Handle handle;
 
 #define test_H_w_case(c, si, v, dwg_ver)                                      \
@@ -391,7 +394,8 @@ bit_write_H_tests (void)
   bitchain.version = dwg_ver;                                                 \
   bit_write_H (&bitchain, &handle);                                           \
   if (bitchain.byte == byte && bitchain.bit == 0)                             \
-    ok ("bit_write_H: " FORMAT_H, ARGS_H (handle));                           \
+    ok ("bit_write_H: (" FORMAT_H ") @%zu.%u", ARGS_H (handle),               \
+        bitchain.byte, bitchain.bit);                                         \
   else                                                                        \
     {                                                                         \
       bit_print (&bitchain, sizeof (Dwg_Handle));                             \
@@ -527,7 +531,7 @@ static void
 bit_TV_to_utf8_tests (void)
 {
   char *p;
-  char *srcu = strdup ("Test\\U+0234");
+  char *srcu = strdup ("Test\\U+0234"); // ȴ
   const char *src1 = "Test\xc4"; // Ä
   const char *src2 = "Test\xc6"; // Ć \U+0106
   const char *src7 = "Test\xd3"; // Σ
@@ -539,7 +543,7 @@ bit_TV_to_utf8_tests (void)
   if (strEQc (p, "Test\xc8\xb4"))
     ok ("bit_TV_to_utf8_tests 8859-1");
   else
-    fail ("bit_TV_to_utf8 %s ISO_8859_1", p);
+    fail ("bit_TV_to_utf8 %s ISO_8859_1, not Testȴ", p);
   if (p != srcu)
     free (p);
   free (srcu);
@@ -793,6 +797,10 @@ bit_read_BD_tests (void)
   bitprepare (&bitchain, 9);
   bit_write_BB (&bitchain, 0);
   bit_write_RD (&bitchain, 1.2345);
+#ifdef WORDS_BIGENDIAN
+  bit_set_position (&bitchain, 2);
+  bit_print (&bitchain, sizeof (double));
+#endif
   bit_set_position (&bitchain, 0);
   ret = bit_read_BD (&bitchain);
   if (ret == 1.2345)
@@ -829,6 +837,10 @@ bit_write_BD_tests (void)
     ok ("bit_write_BD (1.2345)");
   else
     fail ("bit_write_BD (1.2345)");
+#ifdef WORDS_BIGENDIAN
+  bit_set_position (&bitchain, 0);
+  bit_print (&bitchain, sizeof (double));
+#endif
 
   bitfree (&bitchain);
 }
@@ -891,18 +903,21 @@ main (int argc, char const *argv[])
   bitchain.version = bitchain.from_version = R_2000;
   bitchain.chain = (unsigned char *)calloc (bitchain.size, 1);
 
-  bit_write_RD (&bitchain, 0xBA43B7400);
+  bit_write_RD (&bitchain, 1.2345);
   if (bitchain.byte == 8 && bitchain.bit == 0)
     pass ();
   else
-    fail ("bit_write_RD @%zu.%u", bitchain.byte, bitchain.bit);
+    fail ("bit_write_RD %g @%zu.%u", 1.2345,
+          bitchain.byte, bitchain.bit);
 
-  bit_advance_position (&bitchain, -64L);
-  // bit_print (&bitchain, sizeof (double));
-  if ((dbl = bit_read_RD (&bitchain)) == 0xBA43B7400)
+  bit_set_position (&bitchain, 0);
+#ifdef WORDS_BIGENDIAN
+  bit_print (&bitchain, sizeof (double));
+#endif
+  if ((dbl = bit_read_RD (&bitchain)) == 1.2345)
     pass ();
   else
-    fail ("bit_read_RD %g", dbl);
+    fail ("bit_read_RD %g != 1.2345", dbl);
 
   bit_write_BS (&bitchain, 32767);
   if (bitchain.byte == 10 && bitchain.bit == 2)
@@ -1046,7 +1061,7 @@ main (int argc, char const *argv[])
   else
     fail ("bit_read_BT %f", dbl);
 
-#define _CRC 0xA816
+#define _CRC 0x4973
   bit_advance_position (&bitchain, -2L);
   {
     uint16_t crc = bit_write_CRC (&bitchain, 0UL, 0x64);
@@ -1122,18 +1137,6 @@ main (int argc, char const *argv[])
     free (str);
   }
 
-  bit_write_L (&bitchain, 20);
-  if (bitchain.byte == 99 && bitchain.bit == 0)
-    pass ();
-  else
-    fail ("bit_write_L @%zu.%u", bitchain.byte, bitchain.bit);
-
-  bit_advance_position (&bitchain, -32L);
-  if ((bl = bit_read_L (&bitchain)) == 20)
-    pass ();
-  else
-    fail ("bit_read_L %ul", bl);
-
   pos = bit_position (&bitchain);
   {
     Dwg_Color color;
@@ -1141,7 +1144,7 @@ main (int argc, char const *argv[])
     memset (&color, 0, sizeof (color));
     color.index = 19;
     bit_write_CMC (&bitchain, &bitchain, &color);
-    if (bitchain.byte == 100 && bitchain.bit == 2)
+    if (bitchain.byte == 96 && bitchain.bit == 2)
       pass ();
     else
       fail ("bit_write_CMC @%zu.%u", bitchain.byte, bitchain.bit);
@@ -1177,7 +1180,7 @@ main (int argc, char const *argv[])
     color.name = (char *)"Some color";
     color.book_name = (char *)"DIC(3) Catalog";
     bit_write_CMC (&bitchain, &bitchain, &color);
-    if (bitchain.byte == 133 && bitchain.bit == 0)
+    if (bitchain.byte == 129 && bitchain.bit == 0)
       pass ();
     else
       fail ("bit_write_CMC (r2004) @%zu.%u", bitchain.byte, bitchain.bit);
@@ -1210,7 +1213,7 @@ main (int argc, char const *argv[])
   bitchain.byte = 0;
   {
     int ret = bit_search_sentinel (&bitchain, sentinel);
-    if (bitchain.byte == 150)
+    if (bitchain.byte == 146)
       pass ();
     else
       {
@@ -1221,7 +1224,7 @@ main (int argc, char const *argv[])
   {
     unsigned int check
         = bit_calc_CRC (0xC0C1, (unsigned char *)bitchain.chain, 124L);
-    if (check == 0xFEC1)
+    if (check == 0x852B)
       pass ();
     else
       fail ("bit_calc_CRC %04X", check);

@@ -295,7 +295,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Header *_obj = &dwg->header;
     Bit_Chain *hdl_dat = dat;
     dat->byte = 0x06;
-// clang-format off
+    // clang-format off
     #include "header.spec"
     // clang-format on
   }
@@ -316,7 +316,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
    *         2: object map
    *         3: (R13c3 and later): 2nd header (special table, no sentinels)
    *         4: optional: MEASUREMENT
-   *         5: optional: AuxHeader (no sentinels, since r13c3
+   *         5: optional: AuxHeader (no sentinels, since R13c3)
    */
   for (j = 0; j < dwg->header.num_sections; j++)
     {
@@ -385,7 +385,7 @@ decode_R13_R2000 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
           size_t old_size = dat->size;
           BITCODE_BL vcount;
           dat->size = end_address;
-// clang-format off
+          // clang-format off
           #include "auxheader.spec"
           // clang-format on
           dat->size = old_size;
@@ -1479,8 +1479,9 @@ dwg_section_page_checksum (const uint32_t seed, Bit_Chain *restrict dat,
       size -= chunksize;
       for (uint32_t i = 0; i < chunksize; i++)
         {
-          sum1 += *data++;
+          sum1 += htole32 (*data);
           sum2 += sum1;
+          data++;
         }
       sum1 %= 0xFFF1;
       sum2 %= 0xFFF1;
@@ -3486,7 +3487,7 @@ decode_R2007 (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
     Dwg_Object *obj = NULL;
 
     dat->byte = 0x06;
-// clang-format off
+    // clang-format off
     #include "header.spec"
     // clang-format on
   }
@@ -3671,8 +3672,8 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
     case 5:
       if (eed_need_size (8, size))
         return DWG_ERR_INVALIDEED;
-      data->u.eed_5.entity = bit_read_RLL (dat);
-      LOG_TRACE ("entity: 0x" FORMAT_RLLx " [RLL]", data->u.eed_5.entity);
+      data->u.eed_5.entity = htole64 (bit_read_RLL (dat));
+      LOG_TRACE ("entity: " FORMAT_RLL " [H]", data->u.eed_5.entity);
       break;
     case 10:
     case 11:
@@ -4817,6 +4818,8 @@ dwg_decode_xdata (Bit_Chain *restrict dat, Dwg_Object_XRECORD *restrict obj,
           rbuf->value.str.size = bit_read_RC (dat);
           if (dat->byte + rbuf->value.str.size > end_address)
             {
+              LOG_ERROR ("Invalid XDATA BINARY size %u",
+                         (unsigned)rbuf->value.str.size);
               rbuf->value.str.size = 0;
               break;
             }

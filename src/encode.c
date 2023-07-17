@@ -205,6 +205,11 @@ const unsigned char unknown_section[53]
 #define FIELD_RC(nam, dxf) FIELDG (nam, RC, dxf)
 #define FIELD_RS(nam, dxf) FIELDG (nam, RS, dxf)
 #define FIELD_RD(nam, dxf) FIELDG (nam, RD, dxf)
+#define FIELD_RD_LE(nam, dxf)                                                 \
+  {                                                                           \
+    bit_write_RD_LE (dat, _obj->nam);                                         \
+    FIELD_G_TRACE (nam, RD, dxf);                                             \
+  }
 #define FIELD_RL(nam, dxf) FIELDG (nam, RL, dxf)
 #define FIELD_RLL(nam, dxf) FIELDG (nam, RLL, dxf)
 #define FIELD_RLLu(nam, dxf)                                                  \
@@ -2447,7 +2452,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
         return DWG_ERR_INVALIDDWG;
       }
     PRE (R_1_4)
-    LOG_WARN (WE_CAN "We cannot encode pre-r1.4 DWG's yet");
+      LOG_WARN (WE_CAN "We cannot encode pre-r1.4 DWG's yet");
 
     SINCE (R_2_0b)
     {
@@ -2891,7 +2896,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
                           (sizeof (Dwg_Class) * dwg->num_classes) + 32, dat);
       str_dat = hdl_dat = dat = &sec_dat[sec_id];
     }
-    else sec_id = (Dwg_Section_Type)SECTION_CLASSES_R13;
+    else
+      sec_id = (Dwg_Section_Type)SECTION_CLASSES_R13;
     LOG_INFO ("\n=======> Classes: %4zu (%d)\n", dat->byte, dwg->num_classes);
     if (dwg->num_classes > 5000)
       {
@@ -3164,7 +3170,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       sec_size = (dat->byte - pvzadr) & UINT_MAX;
 #ifndef NDEBUG
       PRE (R_2004)
-      assert (pvzadr);
+        assert (pvzadr);
 #endif
       if (pvzadr + 1 >= dat->size)
         bit_chain_alloc (dat);
@@ -3186,7 +3192,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       assert (dat->chain[1] == 'C');
     }
   PRE (R_2004)
-  assert (dat->byte);
+    assert (dat->byte);
 #endif
   pvzadr = dat->byte;
   bit_write_RS_LE (dat, 2); // last section_size 2
@@ -3892,7 +3898,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
           = bit_calc_CRC32 (0, (unsigned char *)&dwg->r2004_header, 0x6c);
       LOG_HANDLE ("calc crc32: 0x%x\n", _obj->crc32);
 
-// clang-format off
+      // clang-format off
       #include "r2004_file_header.spec"
       // clang-format on
 
@@ -4034,11 +4040,6 @@ fixup_invalid_tag (const Bit_Chain *restrict dat, char *restrict tag)
   else
     return (BITCODE_T)tag;
 }
-
-//static int encode_preR13 (Dwg_Data * restrict dwg, Bit_Chain * restrict dat)
-//{
-//  return DWG_ERR_NOTYETSUPPORTED;
-//}
 
 #include "dwg.spec"
 // clang-format on
@@ -5376,8 +5377,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       LOG_TRACE_TF (data->u.eed_4.data, data->u.eed_4.length);
       break;
     case 5:
-      bit_write_RLL (dat, (BITCODE_RLL)data->u.eed_5.entity);
-      LOG_TRACE ("entity: " FORMAT_RLL " [RLL]", data->u.eed_5.entity);
+      bit_write_RLL (dat, htole64 ((BITCODE_RLL)data->u.eed_5.entity));
+      LOG_TRACE ("entity: " FORMAT_RLL " [H]", data->u.eed_5.entity);
       break;
     case 10:
     case 11:

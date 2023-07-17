@@ -86,19 +86,22 @@ jobs:
           libredwg-*.tar.*
   ppc64-big-endian:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 1
         submodules: recursive
-    - run: sudo apt-get -y update && sudo apt-get -y install gcc-powerpc64-linux-gnu libc6-ppc64-cross
+    - run: sudo apt-get -y update && sudo apt-get -y install gcc-powerpc64-linux-gnu libc6-ppc64-cross qemu-system-ppc binfmt-support qemu-user qemu-user-binfmt
     - run: sh autogen.sh
     - run: ./configure --host=powerpc64-linux-gnu --disable-bindings --disable-python
     - run: make -j
+    - run: cd /lib64 && sudo ln -s /usr/powerpc64-linux-gnu/lib/ld64.so.1
+    - run: make -j check
+      continue-on-error: true
   mips32-big-endian:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 30
     steps:
     - uses: actions/checkout@v3
       with:

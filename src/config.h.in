@@ -108,6 +108,9 @@
 /* Define to 1 if htobe64 is available in <byteswap.h>. */
 #undef HAVE_HTOBE64
 
+/* Define to 1 if htole16 is available in <byteswap.h>. */
+#undef HAVE_HTOLE16
+
 /* Define to 1 if htole32 is available in <byteswap.h>. */
 #undef HAVE_HTOLE32
 
