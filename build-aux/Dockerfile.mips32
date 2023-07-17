@@ -1,0 +1,20 @@
+# podman/docker build -t libredwg-mips32 build-aux -f build-aux/Dockerfile.mips32
+
+FROM dockcross/linux-mips as mips32
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends autoconf automake \
+    ca-certificates build-essential git gcc-mips-linux-gnu python3 libxml2 \
+    python3-libxml2 && \
+    update-ca-certificates
+WORKDIR /app
+RUN git clone -c http.sslVerify=false --recurse-submodules https://github.com/LibreDWG/libredwg && \
+    cd libredwg && \
+    sh autogen.sh && \
+    CFLAGS=-Os ./configure --host=mips-linux-gnu --disable-bindings && \
+    make -j `nproc` V=1 && \
+    mkdir install && \
+    make install DESTDIR="$PWD/install" && \
+    libtool --finish $PWD/install/usr/local/lib && \
+    make check DOCKER=1 DESTDIR="$PWD/install"
+
+CMD [ "sh" ]

@@ -9,7 +9,7 @@ RUN yum -y install autoconf automake libtool make file swig texinfo \
 
 WORKDIR /app
 RUN gcc --version; make --version; automake --version; autoconf --version; git --version; python --version; swig -version
-RUN git clone --depth 1 -c http.sslVerify=false https://github.com/LibreDWG/libredwg && \
+RUN git clone --depth 1 --recurse-submodules -c http.sslVerify=false https://github.com/LibreDWG/libredwg && \
     cd libredwg && \
     sh autogen.sh && \
     CC='gcc -std=gnu99' ./configure --disable-bindings && \
