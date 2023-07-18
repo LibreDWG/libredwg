@@ -8,7 +8,7 @@ api_process (dwg_object *obj)
   BITCODE_RC flag;
   BITCODE_B flag0;
   BITCODE_TV name;
-  BITCODE_RS used;
+  BITCODE_RSd used;
   BITCODE_B is_xref_ref;
   BITCODE_BS is_xref_resolved;
   BITCODE_B is_xref_dep;
@@ -108,7 +108,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, flag, RC);
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, flag0, B);
   CHK_ENTITY_UTF8TEXT (_obj, DIMSTYLE, name);
-  CHK_ENTITY_TYPE (_obj, DIMSTYLE, used, RS);
+  CHK_ENTITY_TYPE (_obj, DIMSTYLE, used, RSd);
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, is_xref_ref, B);
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, is_xref_resolved, BS);
   CHK_ENTITY_TYPE (_obj, DIMSTYLE, is_xref_dep, B);

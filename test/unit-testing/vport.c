@@ -7,7 +7,7 @@ api_process (dwg_object *obj)
   int error, isnew;
   BITCODE_RC flag;
   BITCODE_T name;
-  BITCODE_RS used;
+  BITCODE_RSd used;
   BITCODE_B is_xref_ref;
   BITCODE_BS is_xref_resolved;
   BITCODE_B is_xref_dep;
@@ -65,7 +65,7 @@ api_process (dwg_object *obj)
 
   CHK_ENTITY_TYPE (_obj, VPORT, flag, RC);
   CHK_ENTITY_UTF8TEXT (_obj, VPORT, name);
-  CHK_ENTITY_TYPE (_obj, VPORT, used, RS);
+  CHK_ENTITY_TYPE (_obj, VPORT, used, RSd);
   CHK_ENTITY_TYPE (_obj, VPORT, is_xref_ref, B);
   CHK_ENTITY_TYPE (_obj, VPORT, is_xref_resolved, BS);
   CHK_ENTITY_TYPE (_obj, VPORT, is_xref_dep, B);

@@ -8,7 +8,7 @@ api_process (dwg_object *obj)
   BITCODE_RC flag;  // DXF
   BITCODE_BS flag0; // DWG
   BITCODE_TV name;
-  BITCODE_RS used;
+  BITCODE_RSd used;
   BITCODE_B is_xref_ref;
   BITCODE_BS is_xref_resolved;
   BITCODE_B is_xref_dep;
@@ -33,7 +33,7 @@ api_process (dwg_object *obj)
   CHK_ENTITY_TYPE (layer, LAYER, flag, RCx);
   CHK_ENTITY_TYPE (layer, LAYER, flag0, BSx);
   CHK_ENTITY_UTF8TEXT_W_OBJ (layer, LAYER, name);
-  CHK_ENTITY_TYPE (layer, LAYER, used, RS);
+  CHK_ENTITY_TYPE (layer, LAYER, used, RSd);
   CHK_ENTITY_TYPE (layer, LAYER, is_xref_ref, B);
   CHK_ENTITY_TYPE (layer, LAYER, is_xref_resolved, BS);
   CHK_ENTITY_TYPE (layer, LAYER, is_xref_dep, B);
