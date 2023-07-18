@@ -162,7 +162,7 @@ typedef int32_t BITCODE_RLd;
 #endif
 */
 typedef BITCODE_DOUBLE BITCODE_RD;
-#define FORMAT_RD "%f"
+#define FORMAT_RD "%g"
 /* Since R2004 */
 typedef uint64_t BITCODE_RLL;
 typedef uint64_t BITCODE_BLL;
@@ -190,11 +190,11 @@ typedef char* BITCODE_TV;
 #define BITCODE_TU32 BITCODE_TV
 #define FORMAT_TU32 "\"%s\""
 typedef BITCODE_DOUBLE BITCODE_BT;
-#define FORMAT_BT "%f"
+#define FORMAT_BT "%g"
 typedef BITCODE_DOUBLE BITCODE_DD;
-#define FORMAT_DD "%f"
+#define FORMAT_DD "%g"
 typedef BITCODE_DOUBLE BITCODE_BD;
-#define FORMAT_BD "%f"
+#define FORMAT_BD "%g"
 typedef BITCODE_RC BITCODE_4BITS;
 #define FORMAT_4BITS "%1x"
 /* double stored as string. ARCALIGNEDTEXT */

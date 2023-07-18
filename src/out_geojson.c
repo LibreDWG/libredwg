@@ -48,9 +48,10 @@
 static unsigned int cur_ver = 0;
 
 /* https://tools.ietf.org/html/rfc7946#section-11.2 */
-// The default %f is good enough
-// #undef FORMAT_RD
-// #define FORMAT_RD %.6f
+#undef FORMAT_RD
+#define FORMAT_RD "%f"
+#undef FORMAT_BD
+#define FORMAT_BD FORMAT_RD
 
 /*--------------------------------------------------------------------------------
  * See http://geojson.org/geojson-spec.html
@@ -218,7 +219,7 @@ static unsigned int cur_ver = 0;
 #define FIELD_BS(name, dxf) FIELD (name, BS, dxf)
 #define FIELD_BL(name, dxf) FIELD (name, BL, dxf)
 #define FIELD_BLL(name, dxf) FIELD (name, BLL, dxf)
-#define FIELD_BD(name, dxf)
+#define FIELD_BD(name, dxf) FIELD (name, BD, dxf)
 #define FIELD_RC(name, dxf) FIELD (name, RC, dxf)
 #define FIELD_RS(name, dxf) FIELD (name, RS, dxf)
 #define FIELD_RD(name, dxf) FIELD_BD (name, dxf)
