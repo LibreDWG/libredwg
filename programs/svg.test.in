@@ -1,7 +1,7 @@
 #!/bin/sh
 # svg.test
 #
-# Copyright (C) 2020 Free Software Foundation, Inc.
+# Copyright (C) 2020,2023 Free Software Foundation, Inc.
 #
 # This program is free software, licensed under the terms of the GNU
 # General Public License as published by the Free Software Foundation,
@@ -14,12 +14,15 @@
 [ -z "$DATADIR" ] && DATADIR="@top_srcdir@/test/test-data"
 top_builddir="@top_builddir@"
 EXEEXT="@EXEEXT@"
+TESTS_ENVIRONMENT="@AM_TESTS_ENVIRONMENT@"
 # artefact for "shellcheck"
 [ -z "$top_builddir" ] && echo $top_builddir
 if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
     TESTPROG="$LOG_COMPILER $LOG_FLAGS"
 elif [ -n "@WINE@" ]; then
     TESTPROG="@WINE@"
+elif [ -n "$TESTS_ENVIRONMENT" ]; then
+    TESTPROG="$TESTS_ENVIRONMENT @LTEXEC@"
 else
     TESTPROG="@LTEXEC@"
 fi

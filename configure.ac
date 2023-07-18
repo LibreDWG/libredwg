@@ -570,6 +570,17 @@ if test "x$host_os" = "xmingw32" -a "x$build_os" != "xmingw32"; then
 fi
 AM_CONDITIONAL([HAVE_WINE], [test -n "$WINE"])
 AM_CONDITIONAL([HAVE_CYGWIN], [test x$host_os = xcygwin32 -o x$host_os" = "xcygwin64])
+# qemu test environment, debian style (redhat sys-root's are mostly broken)
+if test "$cross_compiling" = "yes" -a -n "$host_alias" -a -z "$WINE" \
+        -a -z "$AM_TESTS_ENVIRONMENT" \
+        -a "$enable_shared" = "yes" -a -d "/usr/$host_alias/lib" \
+        -a -e "/usr/$host_alias/lib/libc.so"
+then
+    AC_MSG_CHECKING([AM_TESTS_ENVIRONMENT])
+    AM_TESTS_ENVIRONMENT="env $shlibpath_var=/usr/$host_alias/lib"
+    AC_SUBST([AM_TESTS_ENVIRONMENT])
+    AC_MSG_RESULT([env $shlibpath_var=/usr/$host_alias/lib])
+fi
 if test -n "$HAVE_ASAN"
 then
         HAVE_ASAN_OR_LINUX=1

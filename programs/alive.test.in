@@ -35,6 +35,7 @@ PROGS=${PROGS:-"dwgread@EXEEXT@ dwgbmp@EXEEXT@ dwg2dxf@EXEEXT@ dwg2SVG@EXEEXT@ d
 top_builddir="@top_builddir@"
 # artefact for "shellcheck"
 [ -z "$top_builddir" ] && echo $top_builddir
+TESTS_ENVIRONMENT="@AM_TESTS_ENVIRONMENT@"
 DISABLE_JSON="@DISABLE_JSON@"
 DISABLE_WRITE="@DISABLE_WRITE@"
 EXEEXT="@EXEEXT@"
@@ -157,6 +158,8 @@ run ()
         log="$TEST_SUITE_LOG"
     elif [ -n "@WINE@" ]; then
         TESTPROG="@WINE@"
+    elif [ -n "$TESTS_ENVIRONMENT" ]; then
+        TESTPROG="$TESTS_ENVIRONMENT @LTEXEC@"
     else
         # libtool only if shared
         TESTPROG="@LTEXEC@"

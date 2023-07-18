@@ -4,11 +4,14 @@
 srcdir="@srcdir@"
 top_builddir="@top_builddir@"
 timeout="@TIMEOUT_10@"
+TESTS_ENVIRONMENT="@AM_TESTS_ENVIRONMENT@"
 
 if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
     TESTPROG="$LOG_COMPILER $LOG_FLAGS"
 elif [ -n "@WINE@" ]; then
     TESTPROG="@WINE@"
+elif [ -n "$TESTS_ENVIRONMENT" ]; then
+    TESTPROG="$TESTS_ENVIRONMENT @LTEXEC@"
 else
     TESTPROG="@LTEXEC@"
 fi
