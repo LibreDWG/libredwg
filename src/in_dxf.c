@@ -664,67 +664,6 @@ dxf_skip_comment (Bit_Chain *dat, Dxf_Pair *pair)
   return pair;
 }
 
-/*  destlen = strlen(src) / 2;
-    if ((written = in_hex2bin (malloc (destlen), src, destlen)) != destlen)
-      error
-
-    TODO: optimize for the typical line len 254 (destlen 127)
-
-    benchmarks:
-      checked hex2bin:   0.624826 sec (if < >)...
-       sscanf hex2bin:	20.150780 sec
-      lookup2 hex2bin:	 0.162167 sec (124x faster)
- */
-size_t
-in_hex2bin (unsigned char *restrict dest, char *restrict src, size_t destlen)
-{
-#  if 0
-  char *pos = (char *)src;
-  for (size_t i = 0; i < destlen; i++)
-    {
-      if (sscanf (pos, SCANF_2X, &dest[i]))
-        pos += 2;
-      else
-        return i;
-    }
-  return destlen;
-#  else
-  char *pos = (char *)src;
-  // 124x faster, but no error checks.
-  // src must consist of valid uppercase hex chars only
-  static const unsigned char h2b_lookup[] = {
-    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, // 01234567
-    0x08, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // 89:;<=>?
-    0x00, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x00, // @ABCDEFG
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // ...
-  };
-  const char *_end = pos + (destlen << 1);
-  /* slower
-  const char *_end4 = pos + ((destlen << 1) & ~0x3);
-  const int64_t magic = INT64_C(0x1001001000000000);
-  uint32_t *d32 = (uint32_t*)dest;
-  while (pos < _end4) {
-    uint32_t in;
-    uint64_t v, x;
-    memcpy (&in, pos, 4);
-    v = in;
-    x = (((0x00404040 & v) >> 6) * 9) + (v & 0x000F0F0F); // do 3
-    x = (((uint64_t)((int64_t)x * magic)) >> 48) & ~15;   // bswap and pack
-    v = ((v >> 30) * 9) + ((v >> 24) & 0x0F);             // do the 4th
-    *d32++ = (x | v);
-    pos += 4;
-  }*/
-  while (pos < _end)
-    {
-      unsigned char v1 = h2b_lookup[(pos[0] & 0x1F) ^ 0x10];
-      unsigned char v2 = h2b_lookup[(pos[1] & 0x1F) ^ 0x10];
-      *dest++ = (v1 << 4 | v2);
-      pos += 2;
-    }
-  return destlen;
-#  endif
-}
-
 /*--------------------------------------------------------------------------------
  * MACROS
  */
