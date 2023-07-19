@@ -339,6 +339,10 @@ bool does_cross_unicode_datversion (Bit_Chain *restrict dat);
 void bit_copy_chain (Bit_Chain *restrict orig_dat,
                      Bit_Chain *restrict tmp_dat);
 
+// for in_dxf and in_json
+size_t in_hex2bin (unsigned char *restrict dest, char *restrict src,
+                   size_t destlen) __nonnull_all;
+
 #ifdef NO_BYTESWAP_SUPPORT
 // Warning: evaluates x 8 times!
 #  define bswap_constant_64(x)                                                \
