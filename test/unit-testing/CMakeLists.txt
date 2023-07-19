@@ -85,6 +85,8 @@ add_test(dynapi_test ${TARGET_SYSTEM_EMULATOR} dynapi_test${CMAKE_EXECUTABLE_SUF
 if(NOT LIBREDWG_DISABLE_WRITE)
   add_executable(add_test
     add_test.c
+    ../../src/bits.c
+    ../../src/codepages.c
     ../../src/classes.c
     tests_common.h)
   # this does not find test-data, because it is under Release/Debug
