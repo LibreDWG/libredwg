@@ -248,6 +248,9 @@ DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
 DATA="$DATA example_2013 example_2018 example_r14 example_r13 r1.4/entities"
 TODO="r11/ACEB10 r11/entities-3d r10/entities r2.10/entities r2.6/entities"
 [ "$DISABLE_WRITE" = "1" ] || DATA="$DATA $TODO"
+if [ -n "$CHECK_MINIMAL" ]; then
+    DATA="sample_2000 example_2000 example_2004 example_2007 example_2010 example_2018"
+fi
 
 clean ()
 {

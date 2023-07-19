@@ -68,7 +68,7 @@ shell_sources = dwg.in dxf.in dxf-allcvt.sh test-dxf.sh dxf-check dxfb-check \
 
 .PHONY: check-dwg check-dxf check-dxfb check-json check-dwg-valgrind check-svg \
 	check-docker cppcheck log-dwg shfmt regen-shfmt check-shellcheck \
-	regen-swig-patch release-web \
+	check-minimal regen-swig-patch release-web \
         regen-man man manual refman scan-build gcov cover codecov coveralls \
 	unknown regen-unknown full-regen-unknown regen-gperf regen-dynapi \
 	maintainer-clean-local distuninstallcheck dist-hook
@@ -183,6 +183,9 @@ TESTS_ENVIRONMENT = $(RPMLINT)
 endif
 endif
 
+check-minimal:
+	$(MAKE) -C programs $@
+	$(MAKE) -C test/unit-testing $@
 check-dwg: all
 	-mv check-dwg.log check-dwg.log~ 2>/dev/null
 	for d in `find $(srcdir)/test/test-data -iname \*.dwg -size -40M`; do \

@@ -72,7 +72,8 @@ llvmfuzz_standalone_LDADD   = $(top_builddir)/src/libredwg.la $(top_builddir)/sr
 
 all: $(check_PROGRAMS)
 
-.PHONY: check-syntax regen-unknown full-regen-unknown dsymutil gcov cppcheck
+.PHONY: check-syntax regen-unknown full-regen-unknown dsymutil gcov cppcheck \
+	check-minimal
 
 if HAVE_PERL
 # maintainer rules only
@@ -127,6 +128,8 @@ TESTS = $(top_builddir)/programs/alive.test
 if USE_WRITE
 TESTS += dwgadd_test.sh
 endif
+
+check-minimal:
 
 cppcheck:
 if HAVE_CPPCHECK

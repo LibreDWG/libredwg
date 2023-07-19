@@ -96,6 +96,9 @@ TESTS += svg.test
 endif
 endif
 
+check-minimal: $(bin_PROGRAMS)
+	$(MAKE) check TESTS=alive.test CHECK_MINIMAL=1
+
 cppcheck:
 if HAVE_CPPCHECK
 	$(CPPCHECK) -j4 --inline-suppr -I$(top_srcdir)/include -I../src $(srcdir)/*.c
@@ -112,7 +115,7 @@ endif
 MAINTAINERCLEANFILES = *_flymake.[ch] *~ *.i *.ii *.log
 DISTCLEANFILES       = core alive.test dxf.test json.test svg.test
 
-.PHONY: man dsymutil clean-dsymutil check-syntax check-cppcheck
+.PHONY: man dsymutil clean-dsymutil check-syntax check-cppcheck check-minimal
 
 .c.i:
 	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\

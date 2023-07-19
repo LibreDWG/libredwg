@@ -86,7 +86,7 @@ jobs:
           libredwg-*.tar.*
   ppc64-big-endian:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 25
     steps:
     - uses: actions/checkout@v3
       with:
@@ -97,11 +97,11 @@ jobs:
     - run: ./configure --host=powerpc64-linux-gnu --disable-bindings --disable-python
     - run: make -j
     - run: cd /lib64 && sudo ln -s /usr/powerpc64-linux-gnu/lib/ld64.so.1
-    - run: make -j check
+    - run: make -j check-minimal
       continue-on-error: true
   mips32-big-endian:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 25
     steps:
     - uses: actions/checkout@v3
       with:
