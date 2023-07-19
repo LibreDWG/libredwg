@@ -2547,6 +2547,7 @@ dwg_ctrl_table (Dwg_Data *restrict dwg, const char *restrict table)
 // Note that newer tables, like MATERIAL are stored in a DICTIONARY instead.
 // Note that we cannot set the ref->obj here, as it may still move by realloc
 // dwg->object[]
+// See also the silent variant: dwg_find_tablehandle_silent()
 EXPORT BITCODE_H
 dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
                       const char *restrict table)
@@ -2606,7 +2607,10 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
     return NULL;
   dwg_dynapi_entity_value (_obj, obj->name, "entries", &hdlv, NULL);
   if (!hdlv)
-    return NULL;
+    {
+      LOG_ERROR ("No %s.entries but %u num_entries\n", table, (unsigned)num_entries);
+      return NULL;
+    }
   for (i = 0; i < num_entries; i++)
     {
       char *hdlname;
@@ -2617,6 +2621,8 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
 
       if (!hdlv[i])
         continue;
+      LOG_INSANE ("%s.entries[%u/%u]: resolve_handle " FORMAT_RLLx "\n", obj->name,
+                  i, num_entries, hdlv[i]->absolute_ref);
       hobj = dwg_resolve_handle (dwg, hdlv[i]->absolute_ref);
       if (!hobj || !hobj->tio.object || !hobj->tio.object->tio.APPID)
         continue;
@@ -2628,6 +2634,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
       if (ok && hdlname
           && (strEQ (name, hdlname) || !strcasecmp (name, hdlname)))
         {
+          LOG_INSANE ("Found %s\n", name);
           if (isnew)
             free (hdlname);
           return hdlv[i];
@@ -2636,6 +2643,7 @@ dwg_find_tablehandle (Dwg_Data *restrict dwg, const char *restrict name,
         free (hdlname);
     }
 
+  LOG_INSANE ("Not found in %u APPID entries\n", num_entries);
   return NULL;
 }
 

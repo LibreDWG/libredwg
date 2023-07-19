@@ -5482,17 +5482,31 @@ DWG_OBJECT (PLOTSETTINGS)
   UNTIL (R_2000) {
     ENCODER {
       if (_obj->plotview && !_obj->plotview_name)
-        _obj->plotview_name = dwg_handle_name (dwg, "VIEW", _obj->plotview);
+        {
+          _obj->plotview_name = dwg_handle_name (dwg, "VIEW", _obj->plotview);
+          LOG_TRACE ("plotsettings.plotview_name => %s\n", _obj->plotview_name);
+        }
     }
     FIELD_T (plotview_name, 0);
     DECODER {
-      _obj->plotview = dwg_find_tablehandle (dwg, _obj->plotview_name, "VIEW");
+      if (!bit_empty_T (dat, _obj->plotview_name))
+        {
+          _obj->plotview
+            = dwg_find_tablehandle (dwg, _obj->plotview_name, "VIEW");
+          LOG_TRACE ("plotsettings.plotview => " FORMAT_REF "\n",
+                     ARGS_REF (_obj->plotview))
+        }
     }
   }
   LATER_VERSIONS {
     DECODER {
-      if (!_obj->plotview && _obj->plotview_name)
-        _obj->plotview = dwg_find_tablehandle (dwg, _obj->plotview_name, "VIEW");
+      if (!_obj->plotview && !bit_empty_T (dat, _obj->plotview_name))
+        {
+          _obj->plotview
+            = dwg_find_tablehandle (dwg, _obj->plotview_name, "VIEW");
+          LOG_TRACE ("plotsettings.plotview => " FORMAT_REF "\n",
+                     ARGS_REF (_obj->plotview))
+        }
     }
     DXF {
       FIELD_T (plotview_name, 0);
@@ -5500,8 +5514,11 @@ DWG_OBJECT (PLOTSETTINGS)
       FIELD_HANDLE (plotview, 4, 0);
     }
     DECODER {
-      if (!_obj->plotview_name)
-        _obj->plotview_name = dwg_handle_name (dwg, "VIEW", _obj->plotview);
+      if (!_obj->plotview_name && _obj->plotview)
+        {
+          _obj->plotview_name = dwg_handle_name (dwg, "VIEW", _obj->plotview);
+          LOG_TRACE ("plotsettings.plotview_name => %s\n", _obj->plotview_name);
+        }
     }
   }
   FREE { FIELD_TV (plotview_name, 6); FIELD_HANDLE (plotview, 5, 6); }
@@ -5556,26 +5573,41 @@ DWG_OBJECT (LAYOUT)
   UNTIL (R_2000) {
     ENCODER {
       if (_obj->plotsettings.plotview && !_obj->plotsettings.plotview_name)
-        _obj->plotsettings.plotview_name = dwg_handle_name (dwg, "VIEW",
+        {
+          _obj->plotsettings.plotview_name = dwg_handle_name (dwg, "VIEW",
                                              _obj->plotsettings.plotview);
+          LOG_TRACE ("plotsettings.plotview_name => %s\n", _obj->plotsettings.plotview_name);
+        }
     }
     FIELD_T (plotsettings.plotview_name, 6);
     DECODER {
-      _obj->plotsettings.plotview = dwg_find_tablehandle (dwg,
+      if (!bit_empty_T (dat, _obj->plotsettings.plotview_name))
+        {
+          _obj->plotsettings.plotview = dwg_find_tablehandle (dwg,
                                       _obj->plotsettings.plotview_name, "VIEW");
+          LOG_TRACE ("plotsettings.plotview => " FORMAT_REF "\n",
+                     ARGS_REF (_obj->plotsettings.plotview))
+        }
     }
   }
   LATER_VERSIONS {
     DECODER {
-      if (!_obj->plotsettings.plotview && _obj->plotsettings.plotview_name)
-        _obj->plotsettings.plotview = dwg_find_tablehandle (dwg,
-                 _obj->plotsettings.plotview_name, "VIEW");
+      if (!_obj->plotsettings.plotview && !bit_empty_T (dat, _obj->plotsettings.plotview_name))
+        {
+          _obj->plotsettings.plotview = dwg_find_tablehandle (dwg,
+              _obj->plotsettings.plotview_name, "VIEW");
+          LOG_TRACE ("plotsettings.plotview => " FORMAT_REF "\n",
+                     ARGS_REF (_obj->plotsettings.plotview))
+        }
     }
     FIELD_HANDLE (plotsettings.plotview, 4, 0);
     DECODER {
-      if (!_obj->plotsettings.plotview_name)
-        _obj->plotsettings.plotview_name = dwg_handle_name (dwg, "VIEW",
+      if (!_obj->plotsettings.plotview_name && _obj->plotsettings.plotview)
+        {
+          _obj->plotsettings.plotview_name = dwg_handle_name (dwg, "VIEW",
                                               _obj->plotsettings.plotview);
+          LOG_TRACE ("plotsettings.plotview_name => %s\n", _obj->plotsettings.plotview_name);
+        }
     }
   }
   FREE { FIELD_TV (plotsettings.plotview_name, 6); FIELD_HANDLE (plotsettings.plotview, 5, 6); }

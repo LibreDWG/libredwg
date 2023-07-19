@@ -1202,7 +1202,7 @@ is_section_r13_critical (Dwg_Section_Type_r13 i)
 static BITCODE_RLL
 add_LibreDWG_APPID (Dwg_Data *dwg)
 {
-  BITCODE_H appid = dwg_find_tablehandle_silent (dwg, "LibreDWG", "APPID");
+  BITCODE_H appid = dwg_find_tablehandle (dwg, "LibreDWG", "APPID");
   BITCODE_H appctl;
   Dwg_Object *obj;
   Dwg_Object_APPID *_obj;
@@ -1211,13 +1211,18 @@ add_LibreDWG_APPID (Dwg_Data *dwg)
   // int error = 0;
 
   if (appid)
-    return appid->absolute_ref;
+    {
+      LOG_INSANE ("APPID.LibreDWG found " FORMAT_RLLx "\n",
+                  appid->absolute_ref);
+      return appid->absolute_ref;
+    }
+  LOG_INSANE ("no APPID.LibreDWG found\n");
 
-    // This breaks json.test roundtrips tests as it adds a new object.
-    // But sooner or later we want to delete yet unsupported objects
-    // (Dictionaries, MATERIAL, VISUALSTYLE, dynblocks, surfaces, assoc*, ...)
+  // This breaks json.test roundtrips tests as it adds a new object.
+  // But sooner or later we want to delete yet unsupported objects
+  // (Dictionaries, MATERIAL, VISUALSTYLE, dynblocks, surfaces, assoc*, ...)
 
-    // add APPID (already searched above)
+  // add APPID (already searched above)
 #if 1
   _obj = dwg_add_APPID (dwg, "LibreDWG");
   return dwg_obj_generic_handlevalue (_obj);
