@@ -23,6 +23,9 @@ LDADD = $(top_builddir)/src/libredwg.la \
 	$(top_builddir)/src/objects.lo \
 	$(top_builddir)/src/classes.lo
 
+add_test_LDADD = $(LDADD) \
+	$(top_builddir)/src/codepages.lo \
+	$(top_builddir)/src/bits.lo
 bits_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/codepages.lo \
 	$(top_builddir)/src/bits.lo

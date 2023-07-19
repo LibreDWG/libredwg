@@ -49,31 +49,6 @@ enum _temp_complex_types
   TEMP_PDFDEFINITION3,
 };
 
-// copied from in-dxf.c
-static size_t
-in_hex2bin (unsigned char *restrict dest, const char *restrict src,
-            size_t destlen)
-{
-  char *pos = (char *)src;
-  // 124x faster, but no error checks.
-  // src must consist of valid uppercase hex chars only
-  static const unsigned char h2b_lookup[] = {
-    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, // 01234567
-    0x08, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // 89:;<=>?
-    0x00, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x00, // @ABCDEFG
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // ...
-  };
-  const char *_end = pos + (destlen << 1);
-  while (pos < _end)
-    {
-      unsigned char v1 = h2b_lookup[(pos[0] & 0x1F) ^ 0x10];
-      unsigned char v2 = h2b_lookup[(pos[1] & 0x1F) ^ 0x10];
-      *dest++ = (v1 << 4 | v2);
-      pos += 2;
-    }
-  return destlen;
-}
-
 static unsigned
 num_objects (void *vents)
 {
@@ -476,7 +451,7 @@ test_add (const Dwg_Object_Type type, const char *restrict file,
         // cfb signature at offset 0x10
         // Interesting are the VBA_Project/VBA/ThisDrawing and
         // VBA_Project/VBA/_VBA_PROJECT streams eg: pip install compoundfiles
-        const char hex[]
+        char hex[]
             = "0000000000000000001C000019000000D0CF11E0A1B11AE1000000000000000"
               "000000000000000003E000300FEFF0900060000000000000000000000010000"
               "000100000000000000001000000200000001000000FEFFFFFF0000000000000"
