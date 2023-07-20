@@ -45,7 +45,7 @@
 /* Define to 1 if you have the `basename' function. */
 #undef HAVE_BASENAME
 
-/* Define to 1 if be64toh is available in <byteswap.h>. */
+/* Define to 1 if be64toh is available in <endian.h>. */
 #undef HAVE_BE64TOH
 
 /* Define to 1 if you have the <byteorder.h> header file. */
@@ -105,16 +105,19 @@
 /* macOS 12.6.5 lies about its gperf version, using size_t as 3.0 */
 #undef HAVE_GPERF_SIZE_T
 
-/* Define to 1 if htobe16 is available in <byteswap.h>. */
+/* Define to 1 if htobe16 is available in <endian.h>. */
 #undef HAVE_HTOBE16
 
-/* Define to 1 if htobe32 is available in <byteswap.h>. */
+/* Define to 1 if htobe32 is available in <endian.h>. */
 #undef HAVE_HTOBE32
 
-/* Define to 1 if htobe64 is available in <byteswap.h>. */
+/* Define to 1 if htobe64 is available in <endian.h>. */
 #undef HAVE_HTOBE64
 
-/* Define to 1 if htole64 is available in <byteswap.h>. */
+/* Define to 1 if htole32 is available in <endian.h>. */
+#undef HAVE_HTOLE32
+
+/* Define to 1 if htole64 is available in <endian.h>. */
 #undef HAVE_HTOLE64
 
 /* Define if you have the iconv() function. */
@@ -126,13 +129,13 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Define to 1 if le16toh is available in <byteswap.h>. */
+/* Define to 1 if le16toh is available in <endian.h>. */
 #undef HAVE_LE16TOH
 
-/* Define to 1 if le32toh is available in <byteswap.h>. */
+/* Define to 1 if le32toh is available in <endian.h>. */
 #undef HAVE_LE32TOH
 
-/* Define to 1 if le64toh is available in <byteswap.h>. */
+/* Define to 1 if le64toh is available in <endian.h>. */
 #undef HAVE_LE64TOH
 
 /* Define to 1 if you have the <libgen.h> header file. */

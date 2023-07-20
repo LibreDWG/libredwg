@@ -124,7 +124,7 @@ AC_CHECK_HEADERS([stdlib.h string.h stddef.h unistd.h malloc.h wchar.h ctype.h])
 AC_CHECK_HEADERS([wctype.h float.h limits.h sys/param.h direct.h libgen.h iconv.h])
 AC_CHECK_HEADERS([getopt.h alloca.h valgrind/valgrind.h])
 AC_CHECK_HEADERS([endian.h sys/endian.h machine/endian.h winsock2.h], [break])
-AC_CHECK_HEADERS([byteorder.h byteswap.h sys/byteorder.h], [break])
+AC_CHECK_HEADERS([byteswap.h byteorder.h sys/byteorder.h], [break])
 dnl optionally use a better allocator with --enable-mimalloc
 AC_CHECK_HEADERS([mimalloc-override.h])
 AC_C_BIGENDIAN
@@ -132,11 +132,11 @@ AC_CHECK_HEADER_STDBOOL
 AX_INCLUDE_STRCASECMP
 
 # test for correct byteswap.h
-if test x$ac_cv_header_byteswap_h = xyes ; then
-   m4_foreach([FUNC], [le16toh,le32toh,le64toh,be64toh,htobe16,htobe32,htobe64,htole64], [
-     AC_MSG_CHECKING([if FUNC is available])
+if test x$ac_cv_header_endian_h = xyes ; then
+   m4_foreach([FUNC], [le16toh,le32toh,le64toh,htole32,htole64,htobe16,htobe32,htobe64,be64toh], [
+     AC_MSG_CHECKING([if FUNC is available in endian.h])
      AC_LINK_IFELSE([AC_LANG_SOURCE([
-#include <byteswap.h>
+#include <endian.h>
 int
 main(void)
 {
@@ -144,7 +144,7 @@ main(void)
 	return 0;
 }
         ])], [AC_DEFINE(HAVE_[]m4_toupper(FUNC), [1],
-                [Define to 1 if] FUNC [is available in <byteswap.h>.])
+                [Define to 1 if] FUNC [is available in <endian.h>.])
               AC_MSG_RESULT([yes])
         ], [AC_MSG_RESULT([no])])
         ])dnl

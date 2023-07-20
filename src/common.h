@@ -21,8 +21,11 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#ifndef _DEFAULT_SOURCE
+#  define _DEFAULT_SOURCE 1 /* for __USE_MISC byteswap macros */
+#endif
 #ifdef __XSI_VISIBLE
-#  undef __XSI_VISIBLE /* redefined in config.h */
+#  undef __XSI_VISIBLE /* redefined in config.h (cygwin strdup only) */
 #endif
 #include "config.h"
 #include <stddef.h>
@@ -51,29 +54,34 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #endif
 
 #ifdef HAVE_ENDIAN_H
-#  ifndef _DEFAULT_SOURCE
-#    define _DEFAULT_SOURCE 1 /* for byteswap.h */
-#  endif
+//#pragma message "_DEFAULT_SOURCE: " _DEFAULT_SOURCE
+//#pragma message "HAVE_HTOBE64: " HAVE_HTOBE64
+//#pragma message "HAVE_BYTESWAP_H: " HAVE_BYTESWAP_H
+//#pragma message "__USE_MISC: " __USE_MISC
+//#pragma message "LITTLE_ENDIAN: " LITTLE_ENDIAN
 #  include <endian.h>
-// centos 7 quirks
-#  if !defined(HAVE_BE64TOH) && defined(HAVE_BYTESWAP_H) && !defined(be64toh)
+//#pragma message "htobe64: " htobe64
+// centos 7/glibc quirks
+#  if defined(HAVE_BYTESWAP_H) && !defined(htobe64)
 #    include <byteswap.h>
 #    ifndef WORDS_BIGENDIAN
-#      define htole16(x) (x)
 #      define le16toh(x) (x)
 #      define htole32(x) (x)
 #      define le32toh(x) (x)
 #      define htole64(x) (x)
 #      define le64toh(x) (x)
+#      define htobe16(x) bswap_16 (x)
+#      define htobe32(x) bswap_32 (x)
 #      define htobe64(x) bswap_64 (x)
 #      define be64toh(x) bswap_64 (x)
 #    else
-#      define htole16(x) bswap_16 (x)
 #      define le16toh(x) bswap_16 (x)
 #      define htole32(x) bswap_32 (x)
 #      define le32toh(x) bswap_32 (x)
 #      define htole64(x) bswap_64 (x)
 #      define le64toh(x) bswap_64 (x)
+#      define htobe16(x) (x)
+#      define htobe32(x) (x)
 #      define htobe64(x) (x)
 #      define be64toh(x) (x)
 #    endif
@@ -83,32 +91,35 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #elif defined HAVE_MACHINE_ENDIAN_H && defined __APPLE__
 #  include <machine/endian.h>
 #  include <libkern/OSByteOrder.h>
-#  define htole16 OSSwapHostToLittleInt16
 #  define le16toh OSSwapLittleToHostInt16
 #  define htole32 OSSwapHostToLittleInt32
 #  define le32toh OSSwapLittleToHostInt32
 #  define htole64 OSSwapHostToLittleInt64
 #  define le64toh OSSwapLittleToHostInt64
+#  define htobe16 OSSwapHostToBigInt16
+#  define htobe32 OSSwapHostToBigInt32
 #  define htobe64 OSSwapHostToBigInt64
 #  define be64toh OSSwapBigToHostInt64
 #elif defined HAVE_WINSOCK2_H && defined __WINDOWS__
 #  include <winsock2.h>
 #  ifndef WORDS_BIGENDIAN
-#    define htole16(x) (x)
 #    define le16toh(x) (x)
 #    define htole32(x) (x)
 #    define le32toh(x) (x)
 #    define htole64(x) (x)
 #    define le64toh(x) (x)
+#    define htobe16(x) __builtin_bswap16 (x)
+#    define htobe32(x) __builtin_bswap32 (x)
 #    define htobe64(x) __builtin_bswap64 (x)
 #    define be64toh(x) __builtin_bswap64 (x)
 #  else /* e.g. xbox 360 */
-#    define htole16(x) __builtin_bswap16 (x)
 #    define le16toh(x) __builtin_bswap16 (x)
 #    define htole32(x) __builtin_bswap32 (x)
 #    define le32toh(x) __builtin_bswap32 (x)
 #    define htole64(x) __builtin_bswap64 (x)
 #    define le64toh(x) __builtin_bswap64 (x)
+#    define htobe16(x) (x)
+#    define htobe32(x) (x)
 #    define htobe64(x) (x)
 #    define be64toh(x) (x)
 #  endif
@@ -120,34 +131,37 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #  if defined HAVE_SYS_BYTEORDER_H
 /* e.g. solaris */
 #    include <sys/byteorder.h>
-#    define htole16(x) BSWAP_16 (x)
 #    define le16toh(x) BSWAP_16 (x)
 #    define htole32(x) BSWAP_32 (x)
 #    define le32toh(x) BSWAP_32 (x)
 #    define htole64(x) BSWAP_64 (x)
 #    define le64toh(x) BSWAP_64 (x)
+#    define htobe16(x) (x)
+#    define htobe32(x) (x)
 #    define htobe64(x) (x)
 #    define be64toh(x) (x)
 #  elif defined HAVE_BYTESWAP_H
 #    include <byteswap.h>
-#    define htole16(x) bswap16 (x)
-#    define le16toh(x) (x)
+#    define le16toh(x) bswap16 (x)
 #    define htole32(x) bswap32 (x)
 #    define le32toh(x) bswap32 (x)
 #    define htole64(x) bswap64 (x)
 #    define le64toh(x) bswap64 (x)
+#    define htobe16(x) (x)
+#    define htobe32(x) (x)
 #    define htobe64(x) (x)
 #    define be64toh(x) (x)
 #  elif defined HAVE_BYTEORDER_H
 #    include <byteorder.h>
 /* which os? riot-os */
 #    ifdef RIOT_VERSION
-#      define htole16(x) byteorder_swap (x)
-#      define le16toh(x) (x)
+#      define le16toh(x) byteorder_swap (x)
 #      define htole32(x) byteorder_swapl (x)
 #      define le32toh(x) byteorder_swapl (x)
 #      define htole64(x) byteorder_swapll (x)
 #      define le64toh(x) byteorder_swapll (x)
+#      define htobe16(x) (x)
+#      define htobe32(x) (x)
 #      define htobe64(x) (x)
 #      define be64toh(x) (x)
 #    else
@@ -159,13 +173,30 @@ EXPORT int strcasecmp (const char *a, const char *b);
 #  endif
 #else /* little endian: just pass-thru. i.e. mingw */
 #  define NO_BYTESWAP_SUPPORT
-#  define htole16(x) (x)
+// Warning: evaluates x times!
+#  define bswap_constant_16(x) ((((x) >> 8) & 0xff) | (((x) & 0xff) << 8))
+#  define bswap_constant_32(x)                                                \
+  ((((x) & 0xff000000) >> 24) | (((x) & 0x00ff0000) >>  8) |                  \
+   (((x) & 0x0000ff00) <<  8) | (((x) & 0x000000ff) << 24))
+#  define bswap_constant_64(x)                                                \
+    ((((x)&0xff00000000000000ULL) >> 56)                                      \
+     | (((x)&0x00ff000000000000ULL) >> 40)                                    \
+     | (((x)&0x0000ff0000000000ULL) >> 24)                                    \
+     | (((x)&0x000000ff00000000ULL) >> 8)                                     \
+     | (((x)&0x00000000ff000000ULL) << 8)                                     \
+     | (((x)&0x0000000000ff0000ULL) << 24)                                    \
+     | (((x)&0x000000000000ff00ULL) << 40)                                    \
+     | (((x)&0x00000000000000ffULL) << 56))
+
 #  define le16toh(x) (x)
 #  define htole32(x) (x)
 #  define le32toh(x) (x)
 #  define htole64(x) (x)
 #  define le64toh(x) (x)
-// for htobe64, be64toh see bits.h
+#  define htobe16(x) bswap_constant_16 (x)
+#  define htobe32(x) bswap_constant_32 (x)
+#  define htobe64(x) bswap_constant_64 (x)
+#  define be64toh(x) bswap_constant_64 (x)
 #endif
 
 #ifdef ENABLE_MIMALLOC

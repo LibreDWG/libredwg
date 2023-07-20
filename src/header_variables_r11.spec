@@ -306,7 +306,7 @@
 #elif defined IS_ENCODER
   if (_obj->HANDSEED)
     {
-      bit_write_RLL (dat, be64toh (_obj->HANDSEED->absolute_ref));
+      bit_write_RLL (dat, htobe64 (_obj->HANDSEED->absolute_ref));
       LOG_TRACE ("HANDSEED: " FORMAT_H " [H 5]\n",
                  ARGS_H (_obj->HANDSEED->handleref));
     }

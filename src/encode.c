@@ -23,6 +23,7 @@
  */
 
 // #define HAVE_COMPRESS_R2004_SECTION
+#define ENCODE_PATCH_RSSIZE
 
 #include "config.h"
 #ifdef __STDC_ALLOC_LIB__
@@ -674,7 +675,7 @@ const unsigned char unknown_section[53]
       else if (size == 2)                                                     \
         bit_write_RS (dat, idx);                                              \
       else if (size == 8)                                                     \
-        bit_write_RLL (dat, be64toh ((hdlptr)->handleref.value));             \
+        bit_write_RLL (dat, (hdlptr)->handleref.value);                       \
       else                                                                    \
         LOG_ERROR (#nam ": Invalid size %d %hd [H %d]", size, idx, dxf)       \
       LOG_TRACE (#nam ": %hd [%s %d]", idx,                                   \
@@ -1176,6 +1177,29 @@ encode_patch_RLsize (Bit_Chain *dat, size_t pvzadr)
   return size;
 }
 
+#ifdef ENCODE_PATCH_RSSIZE
+
+static BITCODE_RS
+encode_patch_RSsize (Bit_Chain *dat, size_t pvzadr)
+{
+  size_t pos;
+  BITCODE_RS size;
+  if (dat->bit) // padding
+    {
+      dat->bit = 0;
+      dat->byte++;
+    }
+  size = (dat->byte - pvzadr) & 0xFFFF;
+  pos = bit_position (dat);
+  assert (pvzadr);
+  bit_set_position (dat, pvzadr * 8);
+  bit_write_RS_BE (dat, size);
+  LOG_TRACE ("Size: " FORMAT_RS " [RS_BE] @%zu\n", size, pvzadr);
+  bit_set_position (dat, pos);
+  return size;
+}
+#endif
+
 /* if an error in this section should immediately return with a critical error,
  * like INVALIDDWG */
 #if 0
@@ -1306,8 +1330,8 @@ add_DUMMY_eed (Dwg_Object *obj)
   ent->num_eed = 1;
   ent->eed = (Dwg_Eed *)calloc (2, sizeof (Dwg_Eed));
   len = (int)strlen (name);
-  size = is_tu ? 1 + 2 + (((len + 1) & 0xFFFF) * 2) // RC + RS_LE + wstr
-               : 1 + 3 + (len & 0xFF) + 1;          // RC + RC+RS_LE + str
+  size = is_tu ? 1 + 2 + (((len + 1) & 0xFFFF) * 2) // RC + RS_BE + wstr
+               : 1 + 3 + (len & 0xFF) + 1;          // RC + RC+RS + str
   data = ent->eed[0].data = (Dwg_Eed_Data *)calloc (size + 3, 1);
   ent->eed[0].size = size;
   dwg_add_handle (&ent->eed[0].handle, 5, appid->absolute_ref, NULL);
@@ -1323,7 +1347,7 @@ add_DUMMY_eed (Dwg_Object *obj)
     {
       data->u.eed_0.is_tu = 0;
       data->u.eed_0.length = len & 0xFF; // RC
-      data->u.eed_0.codepage = 30;       // RS
+      data->u.eed_0.codepage = 30;       // RS_BE
       memcpy (data->u.eed_0.string, name, len);
     }
   LOG_TRACE ("-EED[0]: code: 0, string: %s (len: %zu)\n", name, len);
@@ -2734,7 +2758,7 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
               FIELD_VALUE (HANDSEED) = dwg->header_vars.HANDSEED->absolute_ref;
           }
 
-          // clang-format off
+        // clang-format off
         #include "auxheader.spec"
         // clang-format on
 
@@ -3152,13 +3176,16 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       if (dat->byte - pvzadr > 2030) // 2029
         {
           ckr_missing = 0;
-          sec_size = (dat->byte - pvzadr) & UINT_MAX;
           assert (pvzadr);
-          // i.e. encode_patch_RS_LE_size
+#ifdef ENCODE_PATCH_RSSIZE
+          encode_patch_RSsize (dat, pvzadr);
+#else
+          sec_size = (dat->byte - pvzadr) & UINT_MAX;
           dat->chain[pvzadr] = sec_size >> 8;
           dat->chain[pvzadr + 1] = sec_size & 0xFF;
-          LOG_TRACE ("Handles page size: %u [RS_LE] @%zu\n", sec_size, pvzadr);
-          bit_write_CRC_LE (dat, pvzadr, 0xC0C1);
+          LOG_TRACE ("Handles page size: %u [RS_BE] @%zu\n", sec_size, pvzadr);
+#endif
+          bit_write_CRC (dat, pvzadr, 0xC0C1);
 
           pvzadr = dat->byte;
           dat->byte += 2;
@@ -3169,18 +3196,21 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
   // printf ("Obj size: %u\n", i);
   if (ckr_missing)
     {
-      sec_size = (dat->byte - pvzadr) & UINT_MAX;
 #ifndef NDEBUG
       PRE (R_2004)
         assert (pvzadr);
 #endif
       if (pvzadr + 1 >= dat->size)
         bit_chain_alloc (dat);
-      // i.e. encode_patch_RS_LE_size
+#ifdef ENCODE_PATCH_RSSIZE
+      encode_patch_RSsize (dat, pvzadr);
+#else
+      sec_size = (dat->byte - pvzadr) & UINT_MAX;
       dat->chain[pvzadr] = sec_size >> 8;
       dat->chain[pvzadr + 1] = sec_size & 0xFF;
-      LOG_TRACE ("Handles page size: %u [RS_LE] @%zu\n", sec_size, pvzadr);
-      bit_write_CRC_LE (dat, pvzadr, 0xC0C1);
+      LOG_TRACE ("Handles page size: %u [RS_BE] @%zu\n", sec_size, pvzadr);
+#endif
+      bit_write_CRC_BE (dat, pvzadr, 0xC0C1);
     }
 #ifndef NDEBUG
   if (dwg->header.version >= R_1_2 && dwg->header.version < R_2004)
@@ -3197,9 +3227,9 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
     assert (dat->byte);
 #endif
   pvzadr = dat->byte;
-  bit_write_RS_LE (dat, 2); // last section_size 2
-  LOG_TRACE ("Handles page size: %u [RS_LE] @%zu\n", 2, pvzadr);
-  bit_write_CRC_LE (dat, pvzadr, 0xC0C1);
+  bit_write_RS_BE (dat, 2); // last section_size 2
+  LOG_TRACE ("Handles page size: %u [RS_BE] @%zu\n", 2, pvzadr);
+  bit_write_CRC_BE (dat, pvzadr, 0xC0C1);
 
   /* Calculate and write the size of the object map
    */
@@ -3347,9 +3377,8 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
       dwg->header.section[sec_id].address = dat->byte;
       dwg->header.section[sec_id].size = 4;
       // 0 - English, 1- Metric
-      bit_write_RL_LE (dat,
-                       (BITCODE_RL)dwg->header_vars.MEASUREMENT ? 256 : 0);
-      LOG_TRACE ("HEADER.MEASUREMENT: %d [RL_LE]\n",
+      bit_write_RL_BE (dat, htobe32 (dwg->header_vars.MEASUREMENT ? 256 : 0));
+      LOG_TRACE ("HEADER.MEASUREMENT: %d [RL_BE]\n",
                  dwg->header_vars.MEASUREMENT);
     }
 
@@ -5276,10 +5305,10 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
                 }
               dest = bit_embed_TU_size (s, length);
               bit_write_RC (dat, length);
-              bit_write_RS_LE (dat, dat->codepage);
+              bit_write_RS (dat, dat->codepage);
               bit_write_TF (dat, (unsigned char *)dest, length);
               LOG_TRACE ("string: len=" FORMAT_RS " [RC] cp=" FORMAT_RS
-                         " [RS_LE] \"%s\" [TF]",
+                         " [RS] \"%s\" [TF]",
                          length, dat->codepage, dest);
               free (dest);
             }
@@ -5290,11 +5319,11 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
               if (data->u.eed_0.length + 5 + dat->byte >= dat->size)
                 bit_chain_alloc (dat);
               bit_write_RC (dat, data->u.eed_0.length);
-              bit_write_RS_LE (dat, data->u.eed_0.codepage);
+              bit_write_RS_BE (dat, data->u.eed_0.codepage);
               bit_write_TF (dat, (BITCODE_TF)data->u.eed_0.string,
                             data->u.eed_0.length);
               LOG_TRACE ("string: len=" FORMAT_RS " [RC] cp=" FORMAT_RS
-                         " [RS_LE] \"%s\" [TF]",
+                         " [RS_BE] \"%s\" [TF]",
                          data->u.eed_0.length, data->u.eed_0.codepage,
                          data->u.eed_0.string);
             }

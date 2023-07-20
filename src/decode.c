@@ -732,8 +732,8 @@ handles_section:
       int added;
 
       startpos = dat->byte;
-      section_size = bit_read_RS_LE (dat);
-      LOG_TRACE ("Handles page size: %u [RS_LE] @%zu\n", section_size,
+      section_size = bit_read_RS_BE (dat);
+      LOG_TRACE ("Handles page size: %u [RS_BE] @%zu\n", section_size,
                  startpos);
       if (section_size > 2040)
         {
@@ -823,8 +823,8 @@ handles_section:
           LOG_ERROR ("Handles overflow @%zu", dat->byte)
           return DWG_ERR_VALUEOUTOFBOUNDS;
         }
-      crc = bit_read_RS_LE (dat);
-      LOG_TRACE ("\nHandles page crc: %04X [RS_LE] (%zu-%zu = %u)\n", crc,
+      crc = bit_read_RS_BE (dat);
+      LOG_TRACE ("\nHandles page crc: %04X [RSx_BE] (%zu-%zu = %u)\n", crc,
                  startpos, startpos + section_size, section_size);
       crc2 = bit_calc_CRC (0xC0C1, dat->chain + startpos, section_size);
       if (crc != crc2)
@@ -1014,8 +1014,8 @@ handles_section:
                                + dwg->header.section[4].size))
       dat->byte = dwg->header.section[4].address;
       dat->bit = 0;
-      v = bit_read_RL_LE (dat);
-      LOG_TRACE ("MEASUREMENT: " FORMAT_RL " [RL_LE] (0 English/256 Metric)\n",
+      v = bit_read_RL_BE (dat);
+      LOG_TRACE ("MEASUREMENT: " FORMAT_RL " [RL_BE] (0 English/256 Metric)\n",
                  v);
       dwg->header_vars.MEASUREMENT = v ? 1 : 0;
       // LOG_TRACE ("         Size bytes :\t%zu\n", dat->size)
@@ -2478,8 +2478,8 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
       size_t max_handles = hdl_dat.size * 2;
       uint16_t crc1, crc2;
 
-      section_size = bit_read_RS_LE (&hdl_dat);
-      LOG_TRACE ("\nHandles page size: %u [RS_LE]\n", section_size);
+      section_size = bit_read_RS_BE (&hdl_dat);
+      LOG_TRACE ("\nHandles page size: %u [RS_BE]\n", section_size);
       /* ***********************************************
        * ODA p. 251 "Note that each section is cut off at a maximum length of
        * 2032." BUT in fact files exist with 2036 section size */
@@ -2559,8 +2559,8 @@ read_2004_section_handles (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
 #else
       crc1 = bit_calc_CRC (0xC0C1, &(hdl_dat.chain[startpos]),
                            hdl_dat.byte - startpos);
-      crc2 = bit_read_RS_LE (&hdl_dat);
-      LOG_TRACE ("Handles page crc: %04X [RS_LE]\n", crc2);
+      crc2 = bit_read_RS_BE (&hdl_dat);
+      LOG_TRACE ("Handles page crc: %04X [RS_BE]\n", crc2);
       if (crc1 == crc2)
         {
           LOG_INSANE ("Handles page CRC: %04X from %zu-%zu=%ld\n", crc2,
@@ -3572,7 +3572,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
           return DWG_ERR_INVALIDEED;
         data->u.eed_0.is_tu = 0;
         data->u.eed_0.length = lenc = bit_read_RC (dat);
-        data->u.eed_0.codepage = bit_read_RS_LE (dat);
+        data->u.eed_0.codepage = bit_read_RS_BE (dat);
         if ((long)lenc > size - 4)
           {
             LOG_ERROR ("Invalid EED string len %d, max %d", lenc,
@@ -3595,7 +3595,7 @@ dwg_decode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
           return DWG_ERR_INVALIDEED;
         bit_read_fixed (dat, (BITCODE_RC *)data->u.eed_0.string, lenc);
         data->u.eed_0.string[lenc] = '\0';
-        LOG_TRACE ("string: len=%d [RC] cp=%d [RS_LE] \"%s\" [TF]", (int)lenc,
+        LOG_TRACE ("string: len=%d [RC] cp=%d [RS_BE] \"%s\" [TF]", (int)lenc,
                    (int)data->u.eed_0.codepage, data->u.eed_0.string);
       }
       SINCE (R_2007)

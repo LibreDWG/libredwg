@@ -189,11 +189,8 @@ static int decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
                              const BITCODE_RC *restrict dst_end);
 
 #define copy_1(offset) *dst++ = *(src + offset);
-
 #define copy_2(offset) dst = copy_bytes_2 (dst, src + offset);
-
 #define copy_3(offset) dst = copy_bytes_3 (dst, src + offset)
-
 // 4 and 8 is not reverse, 16 is
 #define copy_n(n, offset)                                                     \
   memcpy (dst, &src[offset], n);                                              \
@@ -1735,7 +1732,7 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
       size_t startpos = hdl_dat.byte;
       uint16_t crc1, crc2;
 
-      section_size = bit_read_RS_LE (&hdl_dat);
+      section_size = bit_read_RS_BE (&hdl_dat);
       LOG_TRACE ("\nSection size: %u\n", section_size);
       if (section_size > 2050)
         {
@@ -1775,7 +1772,7 @@ read_2007_section_handles (Bit_Chain *dat, Bit_Chain *hdl,
 #else
       crc1 = bit_calc_CRC (0xC0C1, &(hdl_dat.chain[startpos]),
                            hdl_dat.byte - startpos);
-      crc2 = bit_read_RS_LE (&hdl_dat);
+      crc2 = bit_read_RS_BE (&hdl_dat);
       if (crc1 == crc2)
         {
           LOG_INSANE ("Handles section page CRC: %04X from %zx-%zx\n", crc2,

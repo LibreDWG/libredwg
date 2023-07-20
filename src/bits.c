@@ -377,7 +377,7 @@ bit_write_RC (Bit_Chain *dat, unsigned char value)
   bit_advance_position (dat, 8);
 }
 
-/** Read 1 raw short (BE short).
+/** Read 1 raw short (LE).
  */
 BITCODE_RS
 bit_read_RS (Bit_Chain *dat)
@@ -391,21 +391,7 @@ bit_read_RS (Bit_Chain *dat)
   return (BITCODE_RS)(((BITCODE_RS)byte2 << 8) | byte1);
 }
 
-/** Read 1 raw short little-endian.
- */
-BITCODE_RS
-bit_read_RS_LE (Bit_Chain *dat)
-{
-  unsigned char byte1, byte2;
-
-  byte1 = bit_read_RC (dat);
-  CHK_OVERFLOW (__FUNCTION__, 0)
-  byte2 = bit_read_RC (dat);
-  // most significant byte first
-  return (BITCODE_RS)(((BITCODE_RS)byte1 << 8) | byte2);
-}
-
-/** Write 1 raw short (BE short).
+/** Write 1 raw short (LE).
  */
 void
 bit_write_RS (Bit_Chain *dat, BITCODE_RS value)
@@ -415,17 +401,31 @@ bit_write_RS (Bit_Chain *dat, BITCODE_RS value)
   bit_write_RC (dat, value >> 8);
 }
 
-/** Write 1 raw short little-endian.
+/** Read 1 raw short (BE).
+ */
+BITCODE_RS
+bit_read_RS_BE (Bit_Chain *dat)
+{
+  unsigned char byte1, byte2;
+
+  // most significant byte first
+  byte1 = bit_read_RC (dat);
+  CHK_OVERFLOW (__FUNCTION__, 0)
+  byte2 = bit_read_RC (dat);
+  return (BITCODE_RS)(((BITCODE_RS)byte1 << 8) | byte2);
+}
+
+/** Write 1 raw short (BE).
  */
 void
-bit_write_RS_LE (Bit_Chain *dat, BITCODE_RS value)
+bit_write_RS_BE (Bit_Chain *dat, BITCODE_RS value)
 {
   // most significant byte first
   bit_write_RC (dat, value >> 8);
   bit_write_RC (dat, value & 0xFF);
 }
 
-/** Read 1 raw long (4 byte, BE).
+/** Read 1 raw long (4 byte, LE).
  */
 BITCODE_RL
 bit_read_RL (Bit_Chain *dat)
@@ -439,7 +439,7 @@ bit_read_RL (Bit_Chain *dat)
   return ((((uint32_t)word2) << 16) | ((uint32_t)word1));
 }
 
-/** Write 1 raw long (4 byte, BE).
+/** Write 1 raw long (4 byte, LE).
  */
 void
 bit_write_RL (Bit_Chain *dat, BITCODE_RL value)
@@ -450,10 +450,10 @@ bit_write_RL (Bit_Chain *dat, BITCODE_RL value)
   bit_write_RS (dat, l >> 16);
 }
 
-/** Read 1 raw long (4 byte, LE).
+/** Read 1 raw long (4 byte, BE).
  */
 BITCODE_RL
-bit_read_RL_LE (Bit_Chain *dat)
+bit_read_RL_BE (Bit_Chain *dat)
 {
   BITCODE_RS word1, word2;
 
@@ -464,10 +464,10 @@ bit_read_RL_LE (Bit_Chain *dat)
   return ((((uint32_t)word1) << 16) | ((uint32_t)word2));
 }
 
-/** Write 1 raw long (4 byte, LE).
+/** Write 1 raw long (4 byte, BE).
  */
 void
-bit_write_RL_LE (Bit_Chain *dat, BITCODE_RL value)
+bit_write_RL_BE (Bit_Chain *dat, BITCODE_RL value)
 {
   // most significant word first
   const uint32_t l = value;
@@ -484,7 +484,7 @@ bit_read_RLL (Bit_Chain *dat)
     {
       BITCODE_RLL v;
       CHK_OVERFLOW_PLUS (8, __FUNCTION__, 0)
-      v = htole64 (*(uint64_t *)&dat->chain[dat->byte]);
+      v = le64toh (*(uint64_t *)&dat->chain[dat->byte]);
       dat->byte += 8;
       return v;
     }
@@ -499,6 +499,8 @@ bit_read_RLL (Bit_Chain *dat)
     }
 }
 
+/** Read 1 raw 64bit long (8 byte, BE).
+ */
 BITCODE_RLL
 bit_read_RLL_BE (Bit_Chain *dat)
 {
@@ -550,9 +552,18 @@ bit_read_RD (Bit_Chain *dat)
     uint64_t u;
     double d;
   } u;
-  // CHK_OVERFLOW_PLUS (8, __FUNCTION__, bit_nan ())
-  u.u = bit_read_RLL (dat);
-  return u.d;
+  CHK_OVERFLOW_PLUS (8, __FUNCTION__, bit_nan ())
+  if (!dat->bit)
+    {
+      u.u = le64toh (*(uint64_t *)&dat->chain[dat->byte]);
+      dat->byte += 8;
+      return u.d;
+    }
+  else
+    {
+      u.u = bit_read_RLL (dat);
+      return u.d;
+    }
 }
 
 /** Write 1 raw double (8 bytes, IEEE-754).
@@ -1212,11 +1223,11 @@ bit_write_DD (Bit_Chain *dat, double value, double default_value)
       const uint16_t *uint_default = (const uint16_t *)&uchar_default;
       // dbl: 7654 3210, little-endian only
       // check the first 2 bits for eq
-      if (uint_value[0] == uint_default[0])
+      if (le16toh (uint_value[0]) == le16toh (uint_default[0]))
         {
           // first 4 bits eq, i.e. next 2 bits also
           // cppcheck-suppress objectIndex
-          if (uint_value[1] == uint_default[1])
+          if (le16toh (uint_value[1]) == le16toh (uint_default[1]))
             {
               bits = 1;
               bit_write_BB (dat, 1);
@@ -1370,9 +1381,9 @@ bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
       if (handle->size == 1)
         bit_write_RC (dat, handle->value);
       else if (handle->size == 2)
-        bit_write_RS_LE (dat, handle->value);
+        bit_write_RS_BE (dat, handle->value);
       else if (handle->size == 4)
-        bit_write_RL_LE (dat, handle->value);
+        bit_write_RL_BE (dat, handle->value);
       else if (handle->size == 8)
         bit_write_RLL_BE (dat, handle->value);
       else
@@ -1496,14 +1507,14 @@ bit_write_CRC (Bit_Chain *dat, size_t start_address, uint16_t seed)
   size = dat->byte - start_address;
   crc = bit_calc_CRC (seed, &dat->chain[start_address], size);
 
-  LOG_TRACE ("write CRC %04X from %zu-%zu = %zu\n", crc, start_address,
+  LOG_TRACE ("write CRC %04X [RSx] from %zu-%zu = %zu\n", crc, start_address,
              dat->byte, size);
   bit_write_RS (dat, crc);
   return crc;
 }
 
 uint16_t
-bit_write_CRC_LE (Bit_Chain *dat, size_t start_address, uint16_t seed)
+bit_write_CRC_BE (Bit_Chain *dat, size_t start_address, uint16_t seed)
 {
   uint16_t crc;
   size_t size;
@@ -1525,9 +1536,9 @@ bit_write_CRC_LE (Bit_Chain *dat, size_t start_address, uint16_t seed)
   crc = bit_calc_CRC (seed, &dat->chain[start_address], size);
 
   loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
-  LOG_TRACE ("write CRC %04X from %zu-%zu = %zu\n", crc, start_address,
+  LOG_TRACE ("write CRC %04X [RSx_BE] from %zu-%zu = %zu\n", crc, start_address,
              dat->byte, size);
-  bit_write_RS_LE (dat, crc);
+  bit_write_RS_BE (dat, crc);
   return crc;
 }
 

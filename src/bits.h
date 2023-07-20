@@ -107,14 +107,14 @@ BITCODE_RC bit_read_RC (Bit_Chain *dat);
 void bit_write_RC (Bit_Chain *dat, unsigned char value);
 
 BITCODE_RS bit_read_RS (Bit_Chain *dat);
-BITCODE_RS bit_read_RS_LE (Bit_Chain *dat);
 void bit_write_RS (Bit_Chain *dat, BITCODE_RS value);
-void bit_write_RS_LE (Bit_Chain *dat, BITCODE_RS value);
+BITCODE_BS bit_read_RS_BE (Bit_Chain *dat);
+void bit_write_RS_BE (Bit_Chain *dat, BITCODE_BS value);
 
 BITCODE_RL bit_read_RL (Bit_Chain *dat);
-BITCODE_RL bit_read_RL_LE (Bit_Chain *dat);
+BITCODE_RL bit_read_RL_BE (Bit_Chain *dat);
 void bit_write_RL (Bit_Chain *dat, BITCODE_RL value);
-void bit_write_RL_LE (Bit_Chain *dat, BITCODE_RL value);
+void bit_write_RL_BE (Bit_Chain *dat, BITCODE_RL value);
 
 BITCODE_RLL bit_read_RLL (Bit_Chain *dat);
 BITCODE_RLL bit_read_RLL_BE (Bit_Chain *dat);
@@ -174,7 +174,7 @@ int bit_check_CRC (Bit_Chain *dat, size_t start_address, const uint16_t seed);
 uint16_t bit_write_CRC (Bit_Chain *dat, size_t start_address,
                         const uint16_t seed);
 // object-map only
-uint16_t bit_write_CRC_LE (Bit_Chain *dat, size_t start_address,
+uint16_t bit_write_CRC_BE (Bit_Chain *dat, size_t start_address,
                            const uint16_t seed);
 
 uint16_t bit_calc_CRC (const uint16_t seed, unsigned char *adr, size_t len);
@@ -340,25 +340,5 @@ void bit_copy_chain (Bit_Chain *restrict orig_dat,
 // for in_dxf and in_json
 size_t in_hex2bin (unsigned char *restrict dest, char *restrict src,
                    size_t destlen) __nonnull_all;
-
-#ifdef NO_BYTESWAP_SUPPORT
-// Warning: evaluates x 8 times!
-#  define bswap_constant_64(x)                                                \
-    ((((x)&0xff00000000000000ULL) >> 56)                                      \
-     | (((x)&0x00ff000000000000ULL) >> 40)                                    \
-     | (((x)&0x0000ff0000000000ULL) >> 24)                                    \
-     | (((x)&0x000000ff00000000ULL) >> 8)                                     \
-     | (((x)&0x00000000ff000000ULL) << 8)                                     \
-     | (((x)&0x0000000000ff0000ULL) << 24)                                    \
-     | (((x)&0x000000000000ff00ULL) << 40)                                    \
-     | (((x)&0x00000000000000ffULL) << 56))
-#  ifndef WORDS_BIGENDIAN
-#    define htobe64(x) bswap_constant_64 (x)
-#    define be64toh(x) bswap_constant_64 (x)
-#  else
-#    define htobe64(x) (x)
-#    define be64toh(x) (x)
-#  endif
-#endif // NO_BYTESWAP_SUPPORT
 
 #endif // BITS_H
