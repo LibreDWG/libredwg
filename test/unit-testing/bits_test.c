@@ -845,6 +845,73 @@ bit_write_BD_tests (void)
   bitfree (&bitchain);
 }
 
+static void
+in_hexbin_tests (void)
+{
+  Bit_Chain dat = {0};
+  char hex[] = "0921FFA02921FF302821FF302821FF302821FF30";
+  const unsigned char result[]
+      = { 0x09, 0x21, 0xFF, 0xA0, 0x29, 0x21, 0xFF, 0x30, 0x28, 0x21,
+          0xFF, 0x30, 0x28, 0x21, 0xFF, 0x30, 0x28, 0x21, 0xFF, 0x30 };
+  size_t written;
+  dat.size = ((sizeof (hex) - 1) / 2);
+  dat.chain = calloc (dat.size + 1, 1);
+  written = in_hex2bin (dat.chain, hex, dat.size);
+  if (written == dat.size && memcmp (dat.chain, result, dat.size) == 0)
+    {
+      ok ("in_hexbin");
+    }
+  else
+    {
+      fail ("in_hexbin \"%.*s\" %zu (%zu)", (int)written, dat.chain, written, dat.size);
+      for (size_t i = 0; i < dat.size; i++)
+        {
+          unsigned char c = bit_read_RC (&dat);
+          fprintf (stderr, "0x%02x", c);
+        }
+      fputs ("", stderr);
+    }
+  // all valid hex bytes
+  memset (dat.chain, 0, dat.size);
+  dat.size = 1;
+  hex[2] = '\0';
+  for (unsigned char c = '0'; c <= '9'; c++)
+    {
+      hex[0] = (char)c;
+      for (unsigned char d = '0'; d <= '9'; d++)
+        {
+          hex[1] = (char)d;
+          if (1 != in_hex2bin (dat.chain, hex, 1)
+              || dat.chain[0] != (unsigned char)(((c - '0') << 4) + (d - '0')))
+            fail ("in_hexbin \"%c%c\" => %02X", c, d, dat.chain[0]);
+        }
+    }
+  for (unsigned char c = 'A'; c <= 'F'; c++)
+    {
+      hex[0] = (char)c;
+      for (unsigned char d = 'A'; d <= 'F'; d++)
+        {
+          hex[1] = (char)d;
+          if (1 != in_hex2bin (dat.chain, hex, 1)
+              || dat.chain[0]
+                     != (unsigned char)(((c - 'A' + 10) << 4)
+                                        + (d - 'A' + 10)))
+            fail ("in_hexbin \"%c%c\" => %02X", c, d, dat.chain[0]);
+        }
+    }
+    // only with DEBUG we can detect wrong chars
+#ifndef NDEBUG
+  hex[0] = 'g';
+  written = in_hex2bin (dat.chain, hex, dat.size);
+  if (written == 0)
+    ok ("in_hexbin error (ignore the ERROR above)");
+  else
+    fail ("in_hexbin error");
+#endif
+
+  free (dat.chain);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -893,6 +960,7 @@ main (int argc, char const *argv[])
   bit_write_BE_tests ();
   bit_read_BD_tests ();
   bit_write_BD_tests ();
+  in_hexbin_tests ();
 
   // Prepare the testcase
   bitchain.size = 100;

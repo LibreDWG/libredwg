@@ -3903,8 +3903,22 @@ in_hex2bin (unsigned char *restrict dest, char *restrict src, size_t destlen)
   }*/
   while (pos < _end)
     {
-      unsigned char v1 = h2b_lookup[(pos[0] & 0x1F) ^ 0x10];
-      unsigned char v2 = h2b_lookup[(pos[1] & 0x1F) ^ 0x10];
+      unsigned char v1;
+      unsigned char v2;
+#ifndef NDEBUG
+      unsigned char p0 = (pos[0] & 0x1F) ^ 0x10;
+      unsigned char p1 = (pos[1] & 0x1F) ^ 0x10;
+      if (p0 > 22 || p1 > 22 // oob
+          || (p0 > 9 && p0 < 17)
+          || (p1 > 9 && p1 < 17)) // or hole
+        {
+          loglevel = 1;
+          LOG_ERROR ("Invalid hex string member %c%c", pos[0], pos[1]);
+          return 0;
+        }
+#  endif
+      v1 = h2b_lookup[(pos[0] & 0x1F) ^ 0x10];
+      v2 = h2b_lookup[(pos[1] & 0x1F) ^ 0x10];
       *dest++ = (v1 << 4 | v2);
       pos += 2;
     }
