@@ -2192,7 +2192,8 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   const size_t blen = len / 2;
                   // binary hexstring
                   BITCODE_TF buf = (BITCODE_TF)malloc (blen);
-                  if ((len = in_hex2bin (buf, str, blen) != blen))
+                  len = in_hex2bin (buf, str, blen);
+                  if (len != blen)
                     LOG_ERROR ("in_hex2bin with key %s at pos %zu of %zu", key,
                                len, blen);
                   memcpy (str, buf, len);
