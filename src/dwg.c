@@ -3013,9 +3013,9 @@ dwg_find_color_index (BITCODE_BL rgb)
 {
   Dwg_RGB_Palette pal;
   rgb &= 0x00ffffff;
-  pal.r = rgb & 0xff0000;
-  pal.g = rgb & 0x00ff00;
-  pal.b = rgb & 0x0000ff;
+  pal.r = (rgb >> 16) & 0xFF;
+  pal.g = (rgb >> 8) & 0xFF;
+  pal.b = rgb & 0xFF;
   // linear search is good enough for 256. the palette is unsorted.
   for (BITCODE_BS i = 0; i < 256; i++)
     {
