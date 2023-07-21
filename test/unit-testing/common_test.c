@@ -182,6 +182,28 @@ common_cvt_TIMEBLL_tests (void)
     ok ("cvt_TIMEBLL");
 }
 
+static void
+dwg_find_color_index_tests (void)
+{
+  BITCODE_BL rgb;
+  BITCODE_BS ret;
+
+#define test_rgb_case(_rgb, _ret)                         \
+  rgb = _rgb;                                             \
+  ret = dwg_find_color_index(rgb);                        \
+  if (ret == _ret)                                        \
+    ok ("dwg_find_color_index (0x%0x -> %d)", rgb, ret);  \
+  else                                                    \
+    fail ("dwg_find_color_index (0x%0x -> %d)", rgb, ret);
+
+  test_rgb_case (0xabff0000, 1);
+  test_rgb_case (0xab00ff00, 3);
+  test_rgb_case (0xab0000ff, 5);
+  test_rgb_case (0xabffffff, 7);
+  test_rgb_case (0xabbebebe, 254);
+  test_rgb_case (0xab000007, 256);
+}
+
 int
 main (int argc, char const *argv[])
 {
@@ -189,5 +211,6 @@ main (int argc, char const *argv[])
   common_memmem_tests ();
   common_versions_tests ();
   common_cvt_TIMEBLL_tests ();
+  dwg_find_color_index_tests ();
   return failed;
 }
