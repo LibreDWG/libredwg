@@ -1,4 +1,4 @@
-# iconv.m4 serial AM4 (gettext-0.11.3)
+# iconv.m4
 dnl Copyright (C) 2000-2002 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License.  As a special exception to the GNU General
@@ -8,6 +8,7 @@ dnl the same distribution terms as the rest of that program.
 
 dnl From Bruno Haible.
 dnl with modifications to support building with in-tree libiconv
+dnl and modernizing AC_TRY_LINK
 
 AC_DEFUN([AM_ICONV_LINKFLAGS_BODY],
 [
@@ -38,25 +39,26 @@ AC_DEFUN([AM_ICONV_LINK],
     dnl AC_TRY_LINK will then fail, the second AC_TRY_LINK will succeed.
     am_save_CPPFLAGS="$CPPFLAGS"
     CPPFLAGS="$CPPFLAGS $INCICONV"
-    AC_TRY_LINK([#include <stdlib.h>
-#include <iconv.h>],
-      [iconv_t cd = iconv_open("","");
-       iconv(cd,NULL,NULL,NULL,NULL);
-       iconv_close(cd);],
+    AC_LINK_IFELSE(
+      [AC_LANG_PROGRAM([[#include <stdlib.h>
+#include <iconv.h>]],
+        [[iconv_t cd = iconv_open("UTF-8","");
+          iconv(cd,NULL,NULL,NULL,NULL);
+          iconv_close(cd);]])],
       am_cv_func_iconv=yes)
     CPPFLAGS="$am_save_CPPFLAGS"
-
     if test "$am_cv_func_iconv" != yes && test -d ../libiconv; then
       for _libs in .libs _libs; do
         am_save_CPPFLAGS="$CPPFLAGS"
         am_save_LIBS="$LIBS"
         CPPFLAGS="$CPPFLAGS -I../libiconv/include"
         LIBS="$LIBS ../libiconv/lib/$_libs/libiconv.a"
-        AC_TRY_LINK([#include <stdlib.h>
-#include <iconv.h>],
-          [iconv_t cd = iconv_open("","");
-           iconv(cd,NULL,NULL,NULL,NULL);
-           iconv_close(cd);],
+        AC_LINK_IFELSE(
+          [AC_LANG_PROGRAM([[#include <stdlib.h>
+#include <iconv.h>]],
+            [[iconv_t cd = iconv_open("UTF-8","");
+              iconv(cd,NULL,NULL,NULL,NULL);
+              iconv_close(cd);]])],
           INCICONV="-I../libiconv/include"
           LIBICONV='${top_builddir}'/../libiconv/lib/$_libs/libiconv.a
           LTLIBICONV='${top_builddir}'/../libiconv/lib/libiconv.la
@@ -75,12 +77,12 @@ AC_DEFUN([AM_ICONV_LINK],
       am_save_LIBS="$LIBS"
       CPPFLAGS="$CPPFLAGS $INCICONV"
       LIBS="$LIBS $LIBICONV"
-      AC_TRY_LINK([#include <stdlib.h>
-#include <iconv.h>],
-        [iconv_t cd = iconv_open("","");
-         iconv(cd,NULL,NULL,NULL,NULL);
-         iconv_close(cd);],
-        am_cv_lib_iconv=yes
+      AC_LINK_IFELSE(
+        [AC_LANG_PROGRAM([[#include <stdlib.h>
+#include <iconv.h>]],
+          [[iconv_t cd = iconv_open("UTF-8","");
+            iconv(cd,NULL,NULL,NULL,NULL);
+            iconv_close(cd);]])],
         am_cv_func_iconv=yes)
       CPPFLAGS="$am_save_CPPFLAGS"
       LIBS="$am_save_LIBS"
