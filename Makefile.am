@@ -184,6 +184,7 @@ endif
 endif
 
 check-minimal:
+	$(MAKE) -C src
 	$(MAKE) -C programs $@
 	$(MAKE) -C test/unit-testing $@
 check-dwg: all
