@@ -2023,10 +2023,12 @@ dwg_set_handle_size (Dwg_Handle *restrict hdl)
       memset (&val, 0, sizeof (val));
       val = (unsigned char *)&hdl->value;
 #ifdef WORDS_BIGENDIAN
+      // the first NULL
       for (i = 0; i < (int)sizeof (hdl->value); i++)
-        if (val[i])
+        if (!val[i])
           break;
 #else
+      // vs. the last non-null
       for (i = sizeof (hdl->value) - 1; i >= 0; i--)
         if (val[i])
           break;
