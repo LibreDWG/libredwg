@@ -846,6 +846,69 @@ bit_write_BD_tests (void)
 }
 
 static void
+bit_read_CMC_tests (void)
+{
+  Dwg_Color color;
+  unsigned int result;
+  Bit_Chain bitchain;
+
+  /* pre R_13 version. */
+  bitchain = strtobt ("1111111100000001"); // RS
+  bitchain.from_version = bitchain.version = R_11;
+  result = bit_read_CMC (&bitchain, &bitchain, &color);
+  if (result == 0 && color.index == 511)
+    ok ("bit_read_CMC (<R_13)");
+  else
+    fail ("bit_read_CMC: index=%d (<R_13)", color.index);
+  bitfree (&bitchain);
+
+  /* pre R_2004 version. */
+  bitchain = strtobt ("00"                 // BB
+                      "1111111100000001"); // index RS
+  bitchain.from_version = bitchain.version = R_2000;
+  result = bit_read_CMC (&bitchain, &bitchain, &color);
+  if (result == 0 && color.index == 511)
+    ok ("bit_read_CMC (<R_2004)");
+  else
+    fail ("bit_read_CMC: index=%d (<R_2004)", color.index);
+  bitfree (&bitchain);
+
+  /* R_2004 version. */
+  bitchain = strtobt ("10"                                        // index BB
+                      "00"                                        // rgb BB
+                      // B       G          R          method
+                      "00000000" "00000000" "00000000" "11000011" // rgb RL
+                      "00000000");                                // flag RC
+  bitchain.from_version = bitchain.version = R_2004;
+  result = bit_read_CMC (&bitchain, &bitchain, &color);
+  if (result == 0 && color.index == 0 && color.rgb == 0xc3000000
+    && color.method == 195 && color.flag == 0)
+
+    ok ("bit_read_CMC (R_2004 - white)");
+  else
+    fail ("bit_read_CMC: index=%d, flag=%d, method=0x%0x, rgb=0x%08x (R_2004 - white)",
+      color.index, color.flag, color.method, color.rgb);
+  bitfree (&bitchain);
+
+  /* R_2004 version. */
+  bitchain = strtobt ("10"                                        // index BB
+                      "00"                                        // rgb BB
+                      // B       G          R          method
+                      "00000000" "00000000" "11111111" "11000011" // rgb RL
+                      "00000000");                                // flag RC
+  bitchain.from_version = bitchain.version = R_2004;
+  result = bit_read_CMC (&bitchain, &bitchain, &color);
+  if (result == 0 && color.index == 1 && color.rgb == 0xc3ff0000
+    && color.method == 195 && color.flag == 0)
+
+    ok ("bit_read_CMC (R_2004 - red)");
+  else
+    fail ("bit_read_CMC: index=%d, flag=%d, method=0x%0x, rgb=0x%08x (R_2004 - red)",
+      color.index, color.flag, color.method, color.rgb);
+  bitfree (&bitchain);
+}
+
+static void
 in_hexbin_tests (void)
 {
   Bit_Chain dat = {0};
@@ -960,6 +1023,7 @@ main (int argc, char const *argv[])
   bit_write_BE_tests ();
   bit_read_BD_tests ();
   bit_write_BD_tests ();
+  bit_read_CMC_tests ();
   in_hexbin_tests ();
 
   // Prepare the testcase
