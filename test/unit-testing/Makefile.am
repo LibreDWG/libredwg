@@ -46,13 +46,6 @@ dynapi_test_LDADD = $(LDADD) \
 dxf_test_LDADD = $(LDADD) \
 	$(top_builddir)/src/common.lo \
 	$(top_builddir)/src/dynapi.lo
-common_test_LDADD = $(LDADD) \
-	$(top_builddir)/src/dwg.lo \
-	$(top_builddir)/src/codepages.lo \
-	$(top_builddir)/src/bits.lo \
-	$(top_builddir)/src/hash.lo \
-	$(top_builddir)/src/decode.lo \
-	$(top_builddir)/src/decode_r2007.lo
 
 testobjects = \
 	jump \

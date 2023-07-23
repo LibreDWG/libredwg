@@ -192,9 +192,9 @@ dwg_find_color_index_tests (void)
   rgb = _rgb;                                             \
   ret = dwg_find_color_index(rgb);                        \
   if (ret == _ret)                                        \
-    ok ("dwg_find_color_index (0x%0x -> %d)", rgb, ret);  \
+    ok ("dwg_find_color_index (0x%0x) -> %u", rgb, ret);  \
   else                                                    \
-    fail ("dwg_find_color_index (0x%0x -> %d)", rgb, ret);
+    fail ("dwg_find_color_index (0x%0x) -> %u != %u", rgb, ret, _ret);
 
   test_rgb_case (0xabff0000, 1);
   test_rgb_case (0xab00ff00, 3);
