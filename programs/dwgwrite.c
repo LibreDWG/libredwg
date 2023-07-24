@@ -193,24 +193,22 @@ main (int argc, char *argv[])
   int option_index = 0;
   static struct option long_options[]
       = { { "verbose", 1, &opts, 1 }, // optional
-          { "format", 1, 0, 'I' },    { "file", 1, 0, 'o' },
-          { "as", 1, 0, 'a' },        { "help", 0, 0, 0 },
-          { "overwrite", 0, 0, 'y' }, { "version", 0, 0, 0 },
-          { "force-free", 0, 0, 0 },  { NULL, 0, NULL, 0 } };
+          { "format", 1, NULL, 'I' },    { "file", 1, NULL, 'o' },
+          { "as", 1, NULL, 'a' },        { "help", 0, NULL, 'h' },
+          { "overwrite", 0, NULL, 'y' }, { "version", 0, NULL, 0 },
+          { "force-free", 0, NULL, 0 },  { NULL, 0, NULL, 0 } };
 #endif
 
   if (argc < 2)
     return usage ();
 
-  while
-#ifdef HAVE_GETOPT_LONG
-      ((c
-        = getopt_long (argc, argv, "ya:v::I:o:h", long_options, &option_index))
-       != -1)
-#else
-      ((c = getopt (argc, argv, "ya:v::I:o:hi")) != -1)
-#endif
+  while (1)
     {
+#ifdef HAVE_GETOPT_LONG
+      c = getopt_long (argc, argv, "ya:v::I:o:h", long_options, &option_index);
+#else
+      c = getopt (argc, argv, "ya:v::I:o:hi");
+#endif
       if (c == -1)
         break;
       switch (c)
@@ -243,8 +241,6 @@ main (int argc, char *argv[])
             }
           if (!strcmp (long_options[option_index].name, "version"))
             return opt_version ();
-          if (!strcmp (long_options[option_index].name, "help"))
-            return help ();
           if (!strcmp (long_options[option_index].name, "force-free"))
             force_free = 1;
           break;

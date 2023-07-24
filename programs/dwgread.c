@@ -125,22 +125,21 @@ main (int argc, char *argv[])
   int option_index = 0;
   static struct option long_options[]
       = { { "verbose", 1, &opts, 1 }, // optional
-          { "format", 1, 0, 'O' },    { "file", 1, 0, 'o' },
-          { "help", 0, 0, 0 },        { "version", 0, 0, 0 },
-          { "force-free", 0, 0, 0 },  { NULL, 0, NULL, 0 } };
+          { "format", 1, NULL, 'O' },    { "file", 1,  NULL, 'o' },
+          { "help", 0, NULL, 0 },        { "version", 0, NULL, 0 },
+          { "force-free", 0, NULL, 0 },  { NULL, 0, NULL, 0 } };
 #endif
 
   if (argc < 2)
     return usage ();
 
-  while
-#ifdef HAVE_GETOPT_LONG
-      ((c = getopt_long (argc, argv, ":v::O:o:h", long_options, &option_index))
-       != -1)
-#else
-      ((c = getopt (argc, argv, ":v::O:o:hi")) != -1)
-#endif
+  while (1)
     {
+#ifdef HAVE_GETOPT_LONG
+      c = getopt_long (argc, argv, "v::O:o:h", long_options, &option_index);
+#else
+      c = getopt (argc, argv, "v::O:o:hi");
+#endif
       if (c == -1)
         break;
       switch (c)
@@ -185,27 +184,25 @@ main (int argc, char *argv[])
           return opt_version ();
 #endif
         case 'O':
-          fmt = optarg;
+          fmt = strdup (optarg);
           break;
         case 'o':
-          outfile = optarg;
+          outfile = strdup (optarg);
           if (!fmt && outfile != NULL)
             {
 #ifndef DISABLE_DXF
-#  ifndef DISABLE_JSON
-              if (strstr (outfile, ".json") || strstr (outfile, ".JSON"))
-                fmt = (char *)"json";
-              else
-#  endif
-                  if (strstr (outfile, ".dxf") || strstr (outfile, ".DXF"))
-                fmt = (char *)"dxf";
+              if (strstr (outfile, ".dxf") || strstr (outfile, ".DXF"))
+                fmt = strdup ("dxf");
               else if (strstr (outfile, ".dxfb") || strstr (outfile, ".DXFB"))
-                fmt = (char *)"dxfb";
-#  ifndef DISABLE_JSON
+                fmt = strdup ("dxfb");
+              else
+#endif
+#ifndef DISABLE_JSON
+              if (strstr (outfile, ".json") || strstr (outfile, ".JSON"))
+                fmt = strdup ("json");
               else if (strstr (outfile, ".geojson")
                        || strstr (outfile, ".GeoJSON"))
-                fmt = (char *)"geojson";
-#  endif
+                fmt = strdup ("geojson");
               else
 #endif
                 fprintf (stderr, "Unknown output format for %s\n", outfile);
@@ -333,6 +330,10 @@ done:
 #endif
   )
     {
+      if (fmt)
+        free ((char *)fmt);
+      if (outfile)
+        free ((char *)outfile);
       dwg_free (&dwg);
     }
 
