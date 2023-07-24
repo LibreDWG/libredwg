@@ -33,21 +33,22 @@ AC_DEFUN([AM_ICONV_LINK],
   AC_CACHE_CHECK(for iconv, am_cv_func_iconv, [
     am_cv_func_iconv="no, consider installing GNU libiconv"
     am_cv_lib_iconv=no
-    dnl Add $INCICONV to CPPFLAGS before performing the first check,
-    dnl because if the user has installed libiconv and not disabled its use
-    dnl via --without-libiconv-prefix, he wants to use it. This first
-    dnl AC_TRY_LINK will then fail, the second AC_TRY_LINK will succeed.
-    am_save_CPPFLAGS="$CPPFLAGS"
-    CPPFLAGS="$CPPFLAGS $INCICONV"
-    AC_LINK_IFELSE(
+    if test "$host_alias" != powerpc64-linux-gnu -o "$cross_compiling" != yes; then
+     dnl Add $INCICONV to CPPFLAGS before performing the first check,
+     dnl because if the user has installed libiconv and not disabled its use
+     dnl via --without-libiconv-prefix, he wants to use it. This first
+     dnl AC_TRY_LINK will then fail, the second AC_TRY_LINK will succeed.
+     am_save_CPPFLAGS="$CPPFLAGS"
+     CPPFLAGS="$CPPFLAGS $INCICONV"
+     AC_LINK_IFELSE(
       [AC_LANG_PROGRAM([[#include <stdlib.h>
 #include <iconv.h>]],
-        [[iconv_t cd = iconv_open("UTF-8","");
+        [[iconv_t cd = iconv_open("UTF-8","ISO-8859-1");
           iconv(cd,NULL,NULL,NULL,NULL);
           iconv_close(cd);]])],
       am_cv_func_iconv=yes)
-    CPPFLAGS="$am_save_CPPFLAGS"
-    if test "$am_cv_func_iconv" != yes && test -d ../libiconv; then
+     CPPFLAGS="$am_save_CPPFLAGS"
+     if test "$am_cv_func_iconv" != yes && test -d ../libiconv; then
       for _libs in .libs _libs; do
         am_save_CPPFLAGS="$CPPFLAGS"
         am_save_LIBS="$LIBS"
@@ -56,7 +57,7 @@ AC_DEFUN([AM_ICONV_LINK],
         AC_LINK_IFELSE(
           [AC_LANG_PROGRAM([[#include <stdlib.h>
 #include <iconv.h>]],
-            [[iconv_t cd = iconv_open("UTF-8","");
+            [[iconv_t cd = iconv_open("UTF-8","ISO-8859-1");
               iconv(cd,NULL,NULL,NULL,NULL);
               iconv_close(cd);]])],
           INCICONV="-I../libiconv/include"
@@ -70,9 +71,11 @@ AC_DEFUN([AM_ICONV_LINK],
           break
         fi
       done
+     fi
     fi
 
     if test "$am_cv_func_iconv" != yes; then
+     if test -a "$host_alias" != powerpc64-linux-gnu -o "$cross_compiling" != yes; then
       am_save_CPPFLAGS="$CPPFLAGS"
       am_save_LIBS="$LIBS"
       CPPFLAGS="$CPPFLAGS $INCICONV"
@@ -80,12 +83,13 @@ AC_DEFUN([AM_ICONV_LINK],
       AC_LINK_IFELSE(
         [AC_LANG_PROGRAM([[#include <stdlib.h>
 #include <iconv.h>]],
-          [[iconv_t cd = iconv_open("UTF-8","");
+          [[iconv_t cd = iconv_open("UTF-8","ISO-8859-1");
             iconv(cd,NULL,NULL,NULL,NULL);
             iconv_close(cd);]])],
         am_cv_func_iconv=yes)
       CPPFLAGS="$am_save_CPPFLAGS"
       LIBS="$am_save_LIBS"
+     fi
     fi
   ])
   if test "$am_cv_func_iconv" = yes; then

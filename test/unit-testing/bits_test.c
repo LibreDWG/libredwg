@@ -573,23 +573,14 @@ bit_TV_to_utf8_tests (void)
     free (p);
 
   p = bit_TV_to_utf8 (src_kor, CP_CP949);
-  if
-#ifndef _MSC_VER
-      (strEQc (p, "시험"))
-#else
-      // echo "시험" | od -t x1
-      // U+feff U+c2dc U+d5d8
-      (strEQc (p, "\xc2\xbd\xc3\x83\xc3\x87\xc3\xa8"))
-  /* "\xec\x8b\x9c\xed\x97\x98" */
-#endif
+  // echo "시험" | od -t x1
+  // U+feff U+c2dc U+d5d8
+  if (strEQc (p, "\xec\x8b\x9c\xed\x97\x98")
+      || strEQc (p, "\xc2\xbd\xc3\x83\xc3\x87\xc3\xa8")) // macOS
     ok ("bit_TV_to_utf8_tests CP949");
   else
     {
-#ifdef _WIN32
-      ok ("TODO bit_TV_to_utf8 %s CP_CP949 (len=%zu)", p, strlen (p));
-#else
       fail ("bit_TV_to_utf8 %s CP_CP949 (len=%zu)", p, strlen (p));
-#endif
       for (size_t i = 0; i < strlen (p); i++)
         printf ("\\x%02x", (unsigned char)p[i]);
       printf ("\n");
