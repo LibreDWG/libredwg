@@ -133,7 +133,7 @@ AX_INCLUDE_STRCASECMP
 
 # test for correct byteswap.h
 if test x$ac_cv_header_byteswap_h = xyes ; then
-   m4_foreach([FUNC], [le16toh,le32toh,le64toh,be64toh,htole16,htole32,htobe64], [
+   m4_foreach([FUNC], [le16toh,le32toh,le64toh,be64toh,htobe16,htobe32,htobe64,htole64], [
      AC_MSG_CHECKING([if FUNC is available])
      AC_LINK_IFELSE([AC_LANG_SOURCE([
 #include <byteswap.h>
@@ -933,14 +933,14 @@ AC_CONFIG_FILES([
 	bindings/Makefile
 	bindings/python/Makefile
 	test/Makefile
-	test/xmlsuite/Makefile
 	test/unit-testing/Makefile
+	test/xmlsuite/Makefile
 	libredwg.pc
 ])
 
-AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/Doxyfile])])
-AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/footer])])
-AM_COND_IF([HAVE_PERL], [AC_CONFIG_FILES([bindings/perl/Makefile.PL])])
+AM_COND_IF([DISABLE_BINDINGS], [],
+           [AM_COND_IF([HAVE_PERL], [AC_CONFIG_FILES([bindings/perl/Makefile.PL])])])
+AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/Doxyfile doc/footer])])
 AC_CONFIG_FILES([programs/dwgfilter], [chmod +x programs/dwgfilter])
 AC_CONFIG_FILES([programs/alive.test], [chmod +x programs/alive.test])
 AC_CONFIG_FILES([programs/dxf.test], [chmod +x programs/dxf.test])

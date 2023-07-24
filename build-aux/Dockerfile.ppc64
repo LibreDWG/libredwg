@@ -1,11 +1,9 @@
-# podman/docker build -t libredwg-ppc64 build-aux -f build-aux/Dockerfile.ppc64
+# podman/docker build -t libredwg-ppc64 . -f build-aux/Dockerfile.ppc64
 
 FROM docker.io/library/debian:11-slim as ppc64
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN true
 ENV TZ=UTC
-
-ARG BRANCH="-b smoke/bigendian"
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends autoconf automake libtool pkg-config m4 \
@@ -14,18 +12,38 @@ RUN apt-get update && \
       gcc-powerpc64-linux-gnu binutils-powerpc64-linux-gnu libc6-dev-ppc64-cross && \
     update-ca-certificates
 WORKDIR /app
-RUN autoconf --version; automake --version; git --version; powerpc64-linux-gnu-gcc --version
-RUN git clone --depth 1 ${BRANCH} --recurse-submodules \
-              https://github.com/LibreDWG/libredwg && \
-    cd libredwg && \
-    sh autogen.sh && \
-    ./configure CFLAGS='-O1 -mbig -mcpu=power7' --host=powerpc64-linux-gnu --disable-bindings && \
-    make -j `nproc` V=1
-RUN cd libredwg && \
-    make -s -j `nproc` check && \
-    mkdir install && \
-    make install DESTDIR="$PWD/install" && \
-    libtool --finish $PWD/install/usr/local/lib && \
-    LD_LIBRARY_PATH=/usr/powerpc64-linux-gnu/lib make check DOCKER=1 DESTDIR="$PWD/install"
+COPY m4 ./m4/
+COPY build-aux ./build-aux/
+COPY programs ./programs/
+COPY examples ./examples/
+COPY doc/Makefile.* doc/*.texi ./doc/
+COPY bindings/Makefile.* ./bindings/
+COPY bindings/python/ ./bindings/python/
+COPY bindings/perl/ ./bindings/perl/
+COPY test/Makefile.* ./test/
+COPY test/xmlsuite ./test/xmlsuite/
+COPY configure configure.ac Makefile.am Makefile.in json-check ./
+COPY *.in *.sh ./
+COPY include ./include/
+COPY src ./src/
+COPY src/codepages ./src/codepages/
+COPY jsmn/jsmn.h ./jsmn/
+COPY test/unit-testing ./test/unit-testing/
+RUN git --version; powerpc64-linux-gnu-gcc --version
+RUN touch NEWS README AUTHORS ChangeLog COPYING doc/Doxyfile.in doc/footer.in && \
+    autoreconf --install --symlink -I m4
+RUN ./configure CFLAGS='-O1 -mbig -mcpu=power7' --host=powerpc64-linux-gnu --disable-bindings && \
+    make -s -C src && \
+    make -s -C programs && \
+    make -s -C test/unit-testing bits_test add_test
+RUN cd /lib64 && ln -s /usr/powerpc64-linux-gnu/lib/ld64.so.1
+ENV LD_LIBRARY_PATH=/usr/powerpc64-linux-gnu/lib
+CMD [ "bash" ]
 
-CMD [ "sh" ]
+#RUN make -s -j `nproc` check && \
+#    mkdir install && \
+#    make install DESTDIR="$PWD/install" && \
+#    libtool --finish $PWD/install/usr/local/lib && \
+#    LD_LIBRARY_PATH=/usr/powerpc64-linux-gnu/lib make check DOCKER=1 DESTDIR="$PWD/install"
+#
+#CMD [ "sh" ]
