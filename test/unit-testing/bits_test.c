@@ -543,7 +543,13 @@ bit_TV_to_utf8_tests (void)
   if (strEQc (p, "Test\xc8\xb4"))
     ok ("bit_TV_to_utf8_tests 8859-1");
   else
-    fail ("bit_TV_to_utf8 %s ISO_8859_1, not Testȴ", p);
+    {
+      // on ppc64 it was U+3402	㐂 instead of U+0234
+      fail ("bit_TV_to_utf8 %s ISO_8859_1, not Testȴ", p);
+      for (size_t i = 0; i < strlen (p); i++)
+        printf ("\\x%02x", (unsigned char)p[i]);
+      printf ("\n");
+    }
   if (p != srcu)
     free (p);
   free (srcu);

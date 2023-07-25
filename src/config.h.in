@@ -123,6 +123,9 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
+/* Define to 1 if le16toh is available in <byteswap.h>. */
+#undef HAVE_LE16TOH
+
 /* Define to 1 if le32toh is available in <byteswap.h>. */
 #undef HAVE_LE32TOH
 
