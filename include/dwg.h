@@ -9430,8 +9430,8 @@ typedef struct _dwg_auxheader
   BITCODE_RL maint_version_2;
   BITCODE_RS unknown_6rs[6];
   BITCODE_RL unknown_5rl[5];
-  BITCODE_RD TDCREATE; /* ?? format TD */
-  BITCODE_RD TDUPDATE;
+  BITCODE_TIMERLL TDCREATE;
+  BITCODE_TIMERLL TDUPDATE;
   BITCODE_RL HANDSEED;
   BITCODE_RL plot_stamp;
   BITCODE_RS zero_1;

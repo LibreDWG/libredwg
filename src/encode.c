@@ -2731,8 +2731,10 @@ dwg_encode (Dwg_Data *restrict dwg, Bit_Chain *restrict dat)
             FIELD_VALUE (maint_version_2) = dwg->header.maint_version;
             memcpy (FIELD_VALUE (unknown_6rs), def_unknown_6rs,
                     sizeof (def_unknown_6rs));
-            FIELD_VALUE (TDCREATE) = dwg->header_vars.TDCREATE.value;
-            FIELD_VALUE (TDUPDATE) = dwg->header_vars.TDUPDATE.value;
+            memcpy (&_obj->TDCREATE, &dwg->header_vars.TDCREATE,
+                    sizeof (BITCODE_TIMERLL));
+            memcpy (&_obj->TDUPDATE, &dwg->header_vars.TDUPDATE,
+                    sizeof (BITCODE_TIMERLL));
             if (dwg->header_vars.HANDSEED)
               FIELD_VALUE (HANDSEED) = dwg->header_vars.HANDSEED->absolute_ref;
           }

@@ -32,8 +32,8 @@
       FIELD_VALUE (maint_version_2) = dwg->header.maint_version;
       memcpy (FIELD_VALUE (unknown_6rs), def_unknown_6rs, sizeof(def_unknown_6rs));
       memcpy (FIELD_VALUE (unknown_5rl), def_unknown_5rl, sizeof(def_unknown_5rl));
-      FIELD_VALUE (TDCREATE) = dwg->header_vars.TDCREATE.value;
-      FIELD_VALUE (TDUPDATE) = dwg->header_vars.TDUPDATE.value;
+      memcpy (&_obj->TDCREATE, &dwg->header_vars.TDCREATE, sizeof(BITCODE_TIMERLL));
+      memcpy (&_obj->TDUPDATE, &dwg->header_vars.TDUPDATE, sizeof(BITCODE_TIMERLL));
       FIELD_VALUE (HANDSEED) = dwg->header_vars.HANDSEED
                                    ? dwg->header_vars.HANDSEED->absolute_ref
                                    : 0;
@@ -49,7 +49,7 @@
 #endif
     FIELD_RL (maint_version, 0);
   FIELD_RL (numsaves, 0);
-  FIELD_RL (minus_1, 0);
+  FIELD_RLd (minus_1, 0);
   FIELD_RS (numsaves_1, 0);
   FIELD_RS (numsaves_2, 0);
   FIELD_RL (zero, 0);
@@ -69,10 +69,8 @@
     FIELD_RL (maint_version_2, 0);
   FIELD_VECTOR_INL (unknown_6rs, RS, 6, 0)
   FIELD_VECTOR_INL (unknown_5rl, RL, 5, 0)
-  //DEBUG_HERE;
-  FIELD_RD_LE (TDCREATE, 0);
-  //DEBUG_HERE;
-  FIELD_RD_LE (TDUPDATE, 0);
+  FIELD_TIMERLL (TDCREATE, 0);
+  FIELD_TIMERLL (TDUPDATE, 0);
   FIELD_RLx (HANDSEED, 0);
   FIELD_RL (plot_stamp, 0);
   FIELD_RS (zero_1, 0);
