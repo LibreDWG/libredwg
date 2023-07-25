@@ -32,6 +32,7 @@ AM_DISTCHECK_CONFIGURE_FLAGS = --enable-release
 if DISABLE_BINDINGS
 AM_DISTCHECK_CONFIGURE_FLAGS += --disable-bindings
 endif
+DIST_SUBDIRS = $(SUBDIRS)
 
 include_HEADERS = \
 	include/dwg.h \
@@ -143,9 +144,11 @@ manual:
 refman:
 	$(MAKE) -C doc $@
 regen-swig-patch:
+if !DISABLE_BINDINGS
 	$(MAKE) -C bindings/python
 	-difforig bindings/python/swig_python.c >xxxx
 	if test -s xxxx; then mv xxxx build-aux/swig_python.patch; fi
+endif
 
 WEB_DIR = $(srcdir)/../libredwg-web
 release-web: manual refman

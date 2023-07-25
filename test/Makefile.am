@@ -4,6 +4,7 @@ if HAVE_LIBXML2
 SUBDIRS += xmlsuite
 endif
 endif
+DIST_SUBDIRS = $(SUBDIRS)
 
 TESTDATA = \
     test-data/2000/Arc.dwg \
