@@ -475,7 +475,7 @@ bit_write_RL_LE (Bit_Chain *dat, BITCODE_RL value)
   bit_write_RS (dat, l & 0xFFFF);
 }
 
-/** Read 1 raw 64bit long (8 byte, BE).
+/** Read 1 raw 64bit long (8 byte, LE).
  */
 BITCODE_RLL
 bit_read_RLL (Bit_Chain *dat)
@@ -500,17 +500,28 @@ bit_read_RLL (Bit_Chain *dat)
 }
 
 BITCODE_RLL
-bit_read_RLL_LE (Bit_Chain *dat)
+bit_read_RLL_BE (Bit_Chain *dat)
 {
-  // most significant word first
-  BITCODE_RL word1, word2;
-  word1 = bit_read_RL (dat);
-  CHK_OVERFLOW (__FUNCTION__, 0)
-  word2 = bit_read_RL (dat);
-  return ((((uint64_t)word1) << 32) | ((uint64_t)word2));
+  if (!dat->bit)
+    {
+      BITCODE_RLL v;
+      CHK_OVERFLOW_PLUS (8, __FUNCTION__, 0)
+      v = be64toh (*(uint64_t *)&dat->chain[dat->byte]);
+      dat->byte += 8;
+      return v;
+    }
+  else
+    {
+      // most significant word first
+      BITCODE_RL word1, word2;
+      word1 = bit_read_RL (dat);
+      CHK_OVERFLOW (__FUNCTION__, 0)
+      word2 = bit_read_RL (dat);
+      return ((((uint64_t)word1) << 32) | ((uint64_t)word2));
+    }
 }
 
-/** Write 1 raw 64bit long  (8 byte, BE).
+/** Write 1 raw 64bit long  (8 byte, LE).
  */
 void
 bit_write_RLL (Bit_Chain *dat, BITCODE_RLL value)
@@ -520,10 +531,10 @@ bit_write_RLL (Bit_Chain *dat, BITCODE_RLL value)
   bit_write_RL (dat, value >> 32);
 }
 
-/** Write 1 raw 64bit long  (8 byte, LE).
+/** Write 1 raw 64bit long  (8 byte, BE).
  */
 void
-bit_write_RLL_LE (Bit_Chain *dat, BITCODE_RLL value)
+bit_write_RLL_BE (Bit_Chain *dat, BITCODE_RLL value)
 {
   // most significant byte first
   bit_write_RL (dat, value >> 32);
@@ -555,30 +566,6 @@ bit_write_RD (Bit_Chain *dat, double value)
   } u;
   u.d = value;
   bit_write_RLL (dat, u.u);
-}
-
-/** Read 1 raw double (8 bytes, IEEE-754, little-endian).
- */
-BITCODE_RD
-bit_read_RD_LE (Bit_Chain *dat)
-{
-  union {
-    uint64_t u;
-    double d;
-  } u;
-  u.u = bit_read_RLL_LE (dat);
-  return u.d;
-}
-
-void
-bit_write_RD_LE (Bit_Chain *dat, double value)
-{
-  union {
-    uint64_t u;
-    double d;
-  } u;
-  u.d = value;
-  bit_write_RLL_LE (dat, u.u);
 }
 
 /** Read 1 bitshort (compacted data).
@@ -1387,7 +1374,7 @@ bit_write_H (Bit_Chain *restrict dat, Dwg_Handle *restrict handle)
       else if (handle->size == 4)
         bit_write_RL_LE (dat, handle->value);
       else if (handle->size == 8)
-        bit_write_RLL_LE (dat, handle->value);
+        bit_write_RLL_BE (dat, handle->value);
       else
         {
           BITCODE_RC *restrict str;

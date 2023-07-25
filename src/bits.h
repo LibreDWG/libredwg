@@ -117,14 +117,12 @@ void bit_write_RL (Bit_Chain *dat, BITCODE_RL value);
 void bit_write_RL_LE (Bit_Chain *dat, BITCODE_RL value);
 
 BITCODE_RLL bit_read_RLL (Bit_Chain *dat);
-BITCODE_RLL bit_read_RLL_LE (Bit_Chain *dat);
+BITCODE_RLL bit_read_RLL_BE (Bit_Chain *dat);
 void bit_write_RLL (Bit_Chain *dat, BITCODE_RLL value);
-void bit_write_RLL_LE (Bit_Chain *dat, BITCODE_RLL value);
+void bit_write_RLL_BE (Bit_Chain *dat, BITCODE_RLL value);
 
 BITCODE_RD bit_read_RD (Bit_Chain *dat);
-BITCODE_RD bit_read_RD_LE (Bit_Chain *dat);
 void bit_write_RD (Bit_Chain *dat, BITCODE_RD value);
-void bit_write_RD_LE (Bit_Chain *dat, BITCODE_RD value);
 
 /* Functions for manipulating compacted data
  */

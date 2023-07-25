@@ -400,9 +400,6 @@
 #ifndef FIELD_2RD_1
 #  define FIELD_2RD_1(nam, dxf) FIELD_2RD (nam, dxf)
 #endif
-#ifndef FIELD_RD_LE
-#  define FIELD_RD_LE(nam, dxf) FIELD_RD (nam, dxf)
-#endif
 
 // double to text
 #ifndef FIELD_D2T

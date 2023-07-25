@@ -514,24 +514,6 @@
         FIELD_G_TRACE (nam, RD, dxf);                                         \
       }                                                                       \
   }
-#define FIELD_RD_LE(nam, dxf)                                                 \
-  {                                                                           \
-    _obj->nam = bit_read_RD_LE (dat);                                         \
-    if (bit_isnan (_obj->nam))                                                \
-      {                                                                       \
-        LOG_ERROR ("Invalid RD " #nam);                                       \
-        return DWG_ERR_VALUEOUTOFBOUNDS;                                      \
-      }                                                                       \
-    if (dxf >= 50 && dxf < 54)                                                \
-      {                                                                       \
-        LOG_TRACE (#nam ": " FORMAT_RD " [RD_LE %d]  %gº\n", _obj->nam, dxf,  \
-                   rad2deg (_obj->nam));                                      \
-      }                                                                       \
-    else                                                                      \
-      {                                                                       \
-        LOG_TRACE (#nam ": " FORMAT_RD " [RD_LE %d]\n", _obj->nam, dxf);      \
-      }                                                                       \
-  }
 #define FIELD_RL(nam, dxf) FIELDG (nam, RL, dxf)
 #define FIELD_RLL(nam, dxf) FIELDG (nam, RLL, dxf)
 #define FIELD_MC(nam, dxf) FIELDG (nam, MC, dxf)

@@ -205,11 +205,6 @@ const unsigned char unknown_section[53]
 #define FIELD_RC(nam, dxf) FIELDG (nam, RC, dxf)
 #define FIELD_RS(nam, dxf) FIELDG (nam, RS, dxf)
 #define FIELD_RD(nam, dxf) FIELDG (nam, RD, dxf)
-#define FIELD_RD_LE(nam, dxf)                                                 \
-  {                                                                           \
-    bit_write_RD_LE (dat, _obj->nam);                                         \
-    FIELD_G_TRACE (nam, RD, dxf);                                             \
-  }
 #define FIELD_RL(nam, dxf) FIELDG (nam, RL, dxf)
 #define FIELD_RLL(nam, dxf) FIELDG (nam, RLL, dxf)
 #define FIELD_RLLu(nam, dxf)                                                  \
@@ -5384,8 +5379,8 @@ dwg_encode_eed_data (Bit_Chain *restrict dat, Dwg_Eed_Data *restrict data,
       LOG_TRACE_TF (data->u.eed_4.data, data->u.eed_4.length);
       break;
     case 5:
-      bit_write_RLL (dat, htole64 ((BITCODE_RLL)data->u.eed_5.entity));
-      LOG_TRACE ("entity: " FORMAT_RLL " [H]", data->u.eed_5.entity);
+      bit_write_RLL_BE (dat, data->u.eed_5.entity);
+      LOG_TRACE ("entity: " FORMAT_RLLx " [RLL_BE]", data->u.eed_5.entity);
       break;
     case 10:
     case 11:
