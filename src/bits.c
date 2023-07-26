@@ -2207,7 +2207,7 @@ bit_read_TU16 (Bit_Chain *restrict dat)
       return NULL;
     }
   for (i = 0; i < length; i++)
-    chain[i] = le16toh (bit_read_RS (dat));
+    chain[i] = bit_read_RS (dat);
   chain[length] = 0;
   return chain;
 }
@@ -2241,7 +2241,7 @@ bit_read_T32 (Bit_Chain *restrict dat)
           return NULL;
         }
       for (i = 0; i < len; i++)
-        wstr[i] = le16toh (bit_read_RS (dat));
+        wstr[i] = bit_read_RS (dat);
       wstr[len] = 0;
       return (BITCODE_T32)wstr;
     }
@@ -2306,7 +2306,7 @@ bit_read_TU32 (Bit_Chain *restrict dat)
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_HANDLE ("TU32 is only UCS-2\n");
           for (i = 0; i < len; i++)
-            wstr[i] = le16toh (bit_read_RS (dat));
+            wstr[i] = bit_read_RS (dat);
         }
       else
         {
