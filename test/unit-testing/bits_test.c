@@ -1301,9 +1301,9 @@ main (int argc, char const *argv[])
           bitchain.byte, bitchain.bit);
 
   bit_set_position (&bitchain, 0);
-#ifdef WORDS_BIGENDIAN
-  bit_print (&bitchain, sizeof (double));
-#endif
+//#ifdef WORDS_BIGENDIAN
+//  bit_print (&bitchain, sizeof (double));
+//#endif
   if ((dbl = bit_read_RD (&bitchain)) == 1.2345)
     pass ();
   else
@@ -1318,9 +1318,9 @@ main (int argc, char const *argv[])
           bitchain.byte, bitchain.bit);
 
   bit_set_position (&bitchain, 1);
-#ifdef WORDS_BIGENDIAN
-  bit_print (&bitchain, sizeof (double));
-#endif
+//#ifdef WORDS_BIGENDIAN
+//  bit_print (&bitchain, sizeof (double));
+//#endif
   if ((dbl = bit_read_RD (&bitchain)) == 1.2345)
     pass ();
   else
@@ -1448,39 +1448,74 @@ main (int argc, char const *argv[])
     fail ("bit_calc_CRC %X", bs);
   bit_advance_position (&bitchain, 16L);
 
+  bit_set_position (&bitchain, 65 * 8);
   for (int i = 0; i < 6; i++)
-    bit_write_B (&bitchain,
-                 0); // padding for the T BS, to have aligned strings at 67
-  pos = bit_position (&bitchain); // 526
+    // padding for the T BS, to have aligned strings at 67
+    bit_write_B (&bitchain, 0);
+  // printf ("@%zu.%u\n", bitchain.byte, bitchain.bit);
+  pos = bit_position (&bitchain);
 
   {
     BITCODE_T wstr;
-    const uint16_t exp[] = { L'T', L'e', L'i', L'g', L'h', L'a', 0x2122, 0 };
+#ifdef WORDS_BIGENDIAN
+    BITCODE_TU ws;
+#endif
+    const uint16_t exp[] = { 'T', 'e', 'i', 'g', 'h', 'a', 0x2122, 0 };
     BITCODE_TV emb = bit_embed_TU ((BITCODE_TU)exp);
     if (strEQc (emb, "Teigha\\U+2122"))
       pass ();
     else
       fail ("bit_embed_TU \"%s\"", emb);
+    bitchain.from_version = R_2000;
     bitchain.version = R_2007;                         // @65.6
+    // wlen = 8
     bit_write_T (&bitchain, (char *)"Teigha\\U+2122"); // convert to unicode
-    if (bitchain.byte == 83 && bitchain.bit == 0 && // containing the ending 0L
+    // containing the ending 0L
+    // printf ("TU @%zu.%u\n", bitchain.byte, bitchain.bit);
+    if (bitchain.byte == 83 && bitchain.bit == 0 &&
         bitchain.chain[79] == 0x22 && bitchain.chain[80] == 0x21)
       pass ();
     else
-      fail ("bit_write_T => TU @%zu.%u", bitchain.byte, bitchain.bit);
+      fail ("bit_write_T => TU %x %x @%zu.%u", bitchain.chain[79],
+            bitchain.chain[80], bitchain.byte, bitchain.bit);
 
     bit_set_position (&bitchain, pos);
+    // fprintf (stderr, "bit_write_T => TU\n");
+    // bit_print (&bitchain, 18);
+    bitchain.version = R_2007;
     bitchain.from_version = R_2007;
-    bitchain.version = R_2000;
     wstr = bit_read_T (&bitchain);
-    if (wstr && !memcmp (wstr, exp, sizeof (exp)))
+#ifdef WORDS_BIGENDIAN
+    ws = (BITCODE_TU)wstr;
+#endif
+    // printf ("@%zu.%u\n", bitchain.byte, bitchain.bit);
+    if (bitchain.byte == 83 && bitchain.bit == 0 &&
+#ifndef WORDS_BIGENDIAN
+        wstr && !memcmp (wstr, exp, sizeof (exp))
+#else
+        ws[0] == le16toh ('T') &&
+        ws[1] == le16toh ('e') &&
+        ws[6] == le16toh (0x2122) &&
+        ws[7] == 0
+#endif
+        )
       pass ();
     else
-      fail ("bit_read_T => TU @%zu.%u", bitchain.byte, bitchain.bit);
+      {
+        fail ("bit_read_T => TU @%zu.%u", bitchain.byte, bitchain.bit);
+#ifdef WORDS_BIGENDIAN
+        bit_set_position (&bitchain, pos);
+        bit_print (&bitchain, 18);
+        fprintf (stderr, "ws[]: %u %u ... %x %u\n", ws[0], ws[1], ws[6],
+                 ws[7]);
+#endif
+      }
     bit_set_position (&bitchain, pos);
     free (wstr);
 
+    bitchain.version = R_2000;
     bit_write_T (&bitchain, (char *)exp); // convert to ASCII via embed
+    // printf ("TV @%zu.%u\n", bitchain.byte, bitchain.bit);
     if (bitchain.byte == 81 && bitchain.bit == 0)
       pass ();
     else
@@ -1491,17 +1526,30 @@ main (int argc, char const *argv[])
     bitchain.version = R_2000;
     bitchain.from_version = R_2007;
     str = bit_read_T (&bitchain);
+    // printf ("@%zu.%u\n", bitchain.byte, bitchain.bit);
     if (str && !strcmp (str, "Teigha\\U+2122"))
       pass ();
     else
-      fail ("bit_read_T => TV \"%s\" @%zu.%u", str, bitchain.byte,
-            bitchain.bit);
+      {
+        fail ("bit_read_T => TV \"%s\" @%zu.%u", str, bitchain.byte,
+              bitchain.bit);
+#ifdef WORDS_BIGENDIAN
+        {
+          size_t pos1;
+          pos1 = bit_position (&bitchain);
+          bit_set_position (&bitchain, pos);
+          bit_print (&bitchain, 16);
+          bit_set_position (&bitchain, pos1);
+        }
+#endif
+      }
     bitchain.from_version = bitchain.version = R_2004;
     free (str);
     free (emb);
   }
 
   pos = bit_position (&bitchain);
+  // printf ("@%zu.%u\n", bitchain.byte, bitchain.bit);
   {
     Dwg_Color color;
     bitchain.from_version = bitchain.version = R_2000;

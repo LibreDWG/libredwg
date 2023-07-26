@@ -1857,6 +1857,7 @@ bit_wcs2len (const BITCODE_TU restrict wstr)
           b += 2;
           c = TU_to_int (b);
         }
+      // fprintf (stderr, "* %s: %zu\n", __FUNCTION__, len);
       return len;
     }
   else
@@ -1867,6 +1868,7 @@ bit_wcs2len (const BITCODE_TU restrict wstr)
         {
           len++;
         }
+      // fprintf (stderr, "* %s: %zu\n", __FUNCTION__, len);
       return len;
     }
 }
@@ -2070,17 +2072,21 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
             }
           else
             {
-              uint16_t c;
-              BITCODE_TU ws = (BITCODE_TU)malloc ((strlen (s) + 1) * 2);
-              BITCODE_TU orig = ws;
-              while ((c = *s++))
+              const size_t len = strlen (s);
+              const char *endp = s + len;
+              BITCODE_TU ws = (BITCODE_TU)malloc ((len + 1) * 2);
+              const BITCODE_TU orig = ws;
+              while (s < endp)
                 {
+                  uint16_t c = *s++;
+                  // in this case the resulting len is shorter
                   if (c == '\\' && s[0] == 'U' && s[1] == '+' && ishex (s[2])
                       && ishex (s[3]) && ishex (s[4]) && ishex (s[5]))
                     {
                       unsigned x;
                       if (sscanf (&s[2], "%04X", &x) > 0)
                         {
+                          // fprintf (stderr, "* sscanf: 0x%04X\n", x);
                           *ws++ = x;
                           s += 6;
                         }
@@ -2091,7 +2097,11 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
                     *ws++ = c;
                 }
               *ws = 0;
-              bit_write_TU (dat, orig);
+              // bit_write_TU (dat, orig);
+              length = (ws - orig) + 1;
+              bit_write_BS (dat, (BITCODE_BS)length);
+              for (i = 0; i < length; i++)
+                bit_write_RS (dat, orig[i]);
               free (orig);
             }
         }
@@ -2108,24 +2118,24 @@ bit_read_TU (Bit_Chain *restrict dat)
 {
   unsigned int i;
   unsigned int length;
-  BITCODE_TU chain;
+  BITCODE_TU ws;
 
   CHK_OVERFLOW_PLUS (1, __FUNCTION__, NULL)
   length = bit_read_BS (dat);
   CHK_OVERFLOW_PLUS (length * 2, __FUNCTION__, NULL)
-  chain = (BITCODE_TU)malloc ((length + 1) * 2);
-  if (!chain)
+  ws = (BITCODE_TU)malloc ((length + 1) * 2);
+  if (!ws)
     {
       loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
       LOG_ERROR ("Out of memory")
       return NULL;
     }
   for (i = 0; i < length; i++)
-    chain[i] = bit_read_RS (dat); // probably without byte swapping
+    ws[i] = le16toh (bit_read_RS (dat));
   // normally not needed, as the DWG itself contains the ending 0 as last char
   // but we enforce writing it.
-  chain[length] = 0;
-  return chain;
+  ws[length] = 0;
+  return ws;
 }
 
 BITCODE_TU
@@ -2146,7 +2156,7 @@ bit_read_TU_len (Bit_Chain *restrict dat, unsigned int *lenp)
       return NULL;
     }
   for (i = 0; i < length; i++)
-    chain[i] = bit_read_RS (dat); // probably without byte swapping
+    chain[i] = le16toh (bit_read_RS (dat));
   // normally not needed, as the DWG itself contains the ending 0 as last char
   // but we enforce writing it.
   chain[length] = 0;
@@ -2197,7 +2207,7 @@ bit_read_TU16 (Bit_Chain *restrict dat)
       return NULL;
     }
   for (i = 0; i < length; i++)
-    chain[i] = bit_read_RS (dat);
+    chain[i] = le16toh (bit_read_RS (dat));
   chain[length] = 0;
   return chain;
 }
@@ -2231,7 +2241,7 @@ bit_read_T32 (Bit_Chain *restrict dat)
           return NULL;
         }
       for (i = 0; i < len; i++)
-        wstr[i] = bit_read_RS (dat);
+        wstr[i] = le16toh (bit_read_RS (dat));
       wstr[len] = 0;
       return (BITCODE_T32)wstr;
     }
@@ -2296,17 +2306,13 @@ bit_read_TU32 (Bit_Chain *restrict dat)
           loglevel = dat->opts & DWG_OPTS_LOGLEVEL;
           LOG_HANDLE ("TU32 is only UCS-2\n");
           for (i = 0; i < len; i++)
-            {
-              wstr[i] = bit_read_RS (dat);
-            }
+            wstr[i] = le16toh (bit_read_RS (dat));
         }
       else
         {
           wstr[0] = (BITCODE_RS)rl1;
           for (i = 1; i < len; i++)
-            {
-              wstr[i] = (BITCODE_RS)bit_read_RL (dat);
-            }
+            wstr[i] = (BITCODE_RS)bit_read_RL (dat);
         }
       wstr[len] = 0;
       return (BITCODE_T32)wstr;
@@ -2356,7 +2362,7 @@ bit_write_TU (Bit_Chain *restrict dat, BITCODE_TU restrict chain)
 
   bit_write_BS (dat, (BITCODE_BS)length);
   for (i = 0; i < length; i++)
-    bit_write_RS (dat, chain[i]); // probably without byte swapping
+    bit_write_RS (dat, chain[i]);
 }
 
 // Unicode with RS length
@@ -3551,15 +3557,15 @@ bit_print (Bit_Chain *dat, size_t size)
   printf ("---------------------------------------------------------");
   if (size > (dat->size - dat->byte))
     size = dat->size - dat->byte;
-  for (i = dat->byte; i < size; i++)
+  for (i = 0; i < size; i++)
     {
       if (i % 16 == 0)
-        printf ("\n[0x%04X]: ", (unsigned int)i & 0xffffffff);
-      printf ("%02X ", (unsigned char)dat->chain[i]);
+        printf ("\n[0x%04X]: ", (unsigned int)(dat->byte + i) & 0xffffffff);
+      printf ("%02X ", (unsigned char)dat->chain[dat->byte + i]);
       if (i % 16 == 15)
         for (j = i - 15; j <= i; j++)
           {
-            sig = dat->chain[j];
+            sig = dat->chain[dat->byte + j];
             printf ("%c", sig >= ' ' && sig < 128 ? sig : '.');
           }
     }
