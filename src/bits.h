@@ -196,23 +196,23 @@ BITCODE_TV bit_read_TV (Bit_Chain *restrict dat);
 void bit_write_TV (Bit_Chain *restrict dat, BITCODE_TV restrict value);
 
 /* read UCS-2 string, with length as BS */
-BITCODE_TU bit_read_TU (Bit_Chain *restrict dat);
-BITCODE_TU bit_read_TU_len (Bit_Chain *restrict dat, unsigned int *lenp);
+BITCODE_TU bit_read_TU (Bit_Chain *restrict dat) ATTRIBUTE_MALLOC;
+BITCODE_TU bit_read_TU_len (Bit_Chain *restrict dat, unsigned int *lenp) ATTRIBUTE_MALLOC;
 /* read ASCII string, with length as RS */
-BITCODE_TV bit_read_T16 (Bit_Chain *restrict dat);
+BITCODE_TV bit_read_T16 (Bit_Chain *restrict dat) ATTRIBUTE_MALLOC;
 /* read UCS-2 string, with length as RS */
-BITCODE_TU bit_read_TU16 (Bit_Chain *restrict dat);
+BITCODE_TU bit_read_TU16 (Bit_Chain *restrict dat) ATTRIBUTE_MALLOC;
 /* read ASCII/UCS-2 string, with length as RL */
-BITCODE_T32 bit_read_T32 (Bit_Chain *restrict dat);
+BITCODE_T32 bit_read_T32 (Bit_Chain *restrict dat) ATTRIBUTE_MALLOC;
 /* read ASCII/UCS-4 string, with length as RL */
-BITCODE_TU32 bit_read_TU32 (Bit_Chain *restrict dat);
+BITCODE_TU32 bit_read_TU32 (Bit_Chain *restrict dat) ATTRIBUTE_MALLOC;
 
 void bit_write_TU (Bit_Chain *restrict dat, BITCODE_TU restrict value);
 void bit_write_TU16 (Bit_Chain *restrict dat, BITCODE_TU restrict value);
 void bit_write_T32 (Bit_Chain *restrict dat, BITCODE_T32 restrict value);
 void bit_write_TU32 (Bit_Chain *restrict dat, BITCODE_TU32 restrict value);
 
-BITCODE_T bit_read_T (Bit_Chain *restrict dat);
+BITCODE_T bit_read_T (Bit_Chain *restrict dat) ATTRIBUTE_MALLOC;
 void bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict chain);
 
 /* Converts UCS-2 to ASCII (with \U+XXXX), returning a copy. */

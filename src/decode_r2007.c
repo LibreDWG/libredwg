@@ -590,7 +590,6 @@ decompress_r2007 (BITCODE_RC *restrict dst, const unsigned dst_size,
                              &length);
         }
     }
-
   return 0;
 }
 
@@ -893,15 +892,14 @@ read_data_section (Bit_Chain *sec_dat, Bit_Chain *dat,
   return 0;
 }
 
-/* endian specific code: */
 #define bfr_read_int16(_p)                                                    \
-  *((int16_t *)_p);                                                           \
+  le16toh (*((int16_t *)_p));                                                 \
   _p += 2;
 #define bfr_read_int64(_p)                                                    \
-  *((int64_t *)_p);                                                           \
+  le64toh (*((int64_t *)_p));                                                 \
   _p += 8;
 #define bfr_read_uint64(_p)                                                   \
-  *((uint64_t *)_p);                                                          \
+  le64toh (*((uint64_t *)_p));                                                \
   _p += 8;
 
 static DWGCHAR *
@@ -931,7 +929,7 @@ bfr_read_string (BITCODE_RC *restrict *restrict src, int64_t size)
   ptr = (uint16_t *)*src;
   for (i = 0; i < length; i++)
     {
-      *str++ = (DWGCHAR)(*ptr++);
+      *str++ = (DWGCHAR)le16toh (*ptr++);
     }
 
   *src += size;
@@ -958,7 +956,6 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
 
   ptr = data;
   ptr_end = data + size_uncomp;
-
   LOG_TRACE ("\n=== System Section (Section Map) ===\n")
 
   while (ptr < ptr_end)
@@ -971,10 +968,15 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
           sections_destroy (sections); // the root
           return NULL;
         }
-
-      bfr_read (section, &ptr, 64);
-
-      LOG_TRACE ("\nSection [%d]:\n", j)
+      LOG_TRACE ("\nSection [%d]:\n", j);
+      section->data_size = bfr_read_uint64 (ptr);
+      section->max_size = bfr_read_uint64 (ptr);
+      section->encrypted = bfr_read_uint64 (ptr);
+      section->hashcode = bfr_read_uint64 (ptr);
+      section->name_length = bfr_read_uint64 (ptr);
+      section->unknown = bfr_read_uint64 (ptr);
+      section->encoded = bfr_read_uint64 (ptr);
+      section->num_pages = bfr_read_uint64 (ptr);
       LOG_TRACE ("  data size:     %" PRIu64 "\n", section->data_size)
       LOG_TRACE ("  max size:      %" PRIu64 "\n", section->max_size)
       LOG_TRACE ("  encryption:    %" PRIu64 "\n", section->encrypted)
@@ -983,7 +985,6 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
       LOG_TRACE ("  unknown:       %" PRIu64 "\n", section->unknown)
       LOG_TRACE ("  encoding:      %" PRIu64 "\n", section->encoded)
       LOG_TRACE ("  num pages:     %" PRIu64 "\n", section->num_pages);
-
       // debugging sanity
 #if 1
       /* compressed */
@@ -1076,7 +1077,14 @@ read_sections_map (Bit_Chain *dat, int64_t size_comp, int64_t size_uncomp,
               section->num_pages = i; // skip this last section
               break;
             }
-          bfr_read (section->pages[i], &ptr, 56);
+
+          section->pages[i]->offset = bfr_read_uint64 (ptr);
+          section->pages[i]->size = bfr_read_uint64 (ptr);
+          section->pages[i]->id = bfr_read_int64 (ptr);
+          section->pages[i]->uncomp_size = bfr_read_uint64 (ptr);
+          section->pages[i]->comp_size = bfr_read_uint64 (ptr);
+          section->pages[i]->checksum = bfr_read_uint64 (ptr);
+          section->pages[i]->crc = bfr_read_uint64 (ptr);
 
           LOG_TRACE (" Page[%d]: ", i)
           LOG_TRACE (" offset: 0x%07" PRIx64, section->pages[i]->offset);
@@ -1269,12 +1277,11 @@ read_file_header (Bit_Chain *restrict dat,
   if (!pedata)
     return DWG_ERR_OUTOFMEM;
 
-  // Note: This is unportable to big-endian
-  seqence_crc = *((uint64_t *)pedata);
-  seqence_key = *((uint64_t *)&pedata[8]);
-  compr_crc = *((uint64_t *)&pedata[16]);
-  compr_len = *((int32_t *)&pedata[24]);
-  len2 = *((int32_t *)&pedata[28]);
+  seqence_crc = le64toh (*((uint64_t *)pedata));
+  seqence_key = le64toh (*((uint64_t *)&pedata[8]));
+  compr_crc = le64toh (*((uint64_t *)&pedata[16]));
+  compr_len = le32toh (*((int32_t *)&pedata[24]));
+  len2 = le32toh (*((int32_t *)&pedata[28]));
   LOG_TRACE ("seqence_crc64: %016" PRIX64 "\n", seqence_crc);
   LOG_TRACE ("seqence_key:   %016" PRIX64 "\n", seqence_key);
   LOG_TRACE ("compr_crc64:   %016" PRIX64 "\n", compr_crc);
@@ -1287,6 +1294,16 @@ read_file_header (Bit_Chain *restrict dat,
                               MIN (compr_len, pedata_size - 32), NULL);
   else
     memcpy (file_header, &pedata[32], sizeof (r2007_file_header));
+
+#ifdef WORDS_BIGENDIAN
+  {
+    uint64_t *fields  = (uint64_t *)file_header;
+    for (unsigned j = 0; j < sizeof (r2007_file_header) / 8; j++)
+      {
+        fields[j] = le64toh (fields[j]);
+      }
+  }
+#endif
 
   // check validity, for debugging only
   if (!error)
@@ -1580,8 +1597,8 @@ read_2007_section_classes (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
           dwg->dwg_class[i].cppname = (char *)bit_read_TU (&str);
           dwg->dwg_class[i].dxfname_u = bit_read_TU (&str);
           dwg->dwg_class[i].is_zombie = bit_read_B (&sec_dat); // DXF 280
-          dwg->dwg_class[i].item_class_id
-              = bit_read_BS (&sec_dat); // DXF 281, is_entity is 0x1f3
+          // DXF 281, is_entity is 0x1f3
+          dwg->dwg_class[i].item_class_id = bit_read_BS (&sec_dat);
 
           dwg->dwg_class[i].num_instances = bit_read_BL (&sec_dat); // DXF 91
           dwg->dwg_class[i].dwg_version = bit_read_BS (&sec_dat);

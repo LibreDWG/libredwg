@@ -2113,6 +2113,7 @@ bit_write_T (Bit_Chain *restrict dat, BITCODE_T restrict s)
 /** Read UCS-2 unicode text. no supplementary planes
  *  See also bfr_read_string()
  */
+ATTRIBUTE_MALLOC
 BITCODE_TU
 bit_read_TU (Bit_Chain *restrict dat)
 {
@@ -2138,6 +2139,7 @@ bit_read_TU (Bit_Chain *restrict dat)
   return ws;
 }
 
+ATTRIBUTE_MALLOC
 BITCODE_TU
 bit_read_TU_len (Bit_Chain *restrict dat, unsigned int *lenp)
 {
@@ -2166,6 +2168,7 @@ bit_read_TU_len (Bit_Chain *restrict dat, unsigned int *lenp)
 
 /** String16: Read ASCII prefixed by a RS length
  */
+ATTRIBUTE_MALLOC
 BITCODE_TV
 bit_read_T16 (Bit_Chain *restrict dat)
 {
@@ -2190,6 +2193,7 @@ bit_read_T16 (Bit_Chain *restrict dat)
 
 /** String16: Read Unicode prefixed by a RS length
  */
+ATTRIBUTE_MALLOC
 BITCODE_TU
 bit_read_TU16 (Bit_Chain *restrict dat)
 {
@@ -2214,6 +2218,7 @@ bit_read_TU16 (Bit_Chain *restrict dat)
 
 /** String32: Read ASCII/UCS-2 string prefixed by a RL size (not length)
  */
+ATTRIBUTE_MALLOC
 BITCODE_T32
 bit_read_T32 (Bit_Chain *restrict dat)
 {
@@ -2271,6 +2276,7 @@ bit_read_T32 (Bit_Chain *restrict dat)
 
 /** String32: Read ASCII/UCS-4 or -2 string prefixed by a RL size (not length)
  */
+ATTRIBUTE_MALLOC
 BITCODE_TU32
 bit_read_TU32 (Bit_Chain *restrict dat)
 {
