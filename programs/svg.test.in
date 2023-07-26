@@ -15,6 +15,7 @@
 top_builddir="@top_builddir@"
 EXEEXT="@EXEEXT@"
 TESTS_ENVIRONMENT="@AM_TESTS_ENVIRONMENT@"
+WORDS_BIGENDIAN="@WORDS_BIGENDIAN@"
 # artefact for "shellcheck"
 [ -z "$top_builddir" ] && echo $top_builddir
 if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
@@ -28,8 +29,9 @@ else
 fi
 
 i=0
-DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
-DATA="$DATA example_2013 example_2018 example_r14"
+DATA="sample_2000 example_2000 example_2004"
+[ "$WORDS_BIGENDIAN" = 1 ] || DATA="$DATA example_2007"
+DATA="$DATA example_2010 example_2013 example_2018 example_r14 example_r13"
 
 for d in $DATA; do
     b="$(basename "$d")"

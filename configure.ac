@@ -128,6 +128,12 @@ AC_CHECK_HEADERS([byteswap.h byteorder.h sys/byteorder.h], [break])
 dnl optionally use a better allocator with --enable-mimalloc
 AC_CHECK_HEADERS([mimalloc-override.h])
 AC_C_BIGENDIAN
+if test x$ac_cv_c_bigendian = xyes
+then
+  WORDS_BIGENDIAN=1
+fi
+AC_SUBST([WORDS_BIGENDIAN])
+AM_CONDITIONAL([WORDS_BIGENDIAN],[test x$ac_cv_c_bigendian = xyes])
 AC_CHECK_HEADER_STDBOOL
 AX_INCLUDE_STRCASECMP
 

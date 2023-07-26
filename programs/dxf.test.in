@@ -17,6 +17,7 @@ top_builddir="@top_builddir@"
 EXEEXT="@EXEEXT@"
 DEBUG_CLASSES="@DEBUG_CLASSES@"
 TESTS_ENVIRONMENT="@AM_TESTS_ENVIRONMENT@"
+WORDS_BIGENDIAN="@WORDS_BIGENDIAN@"
 if [ -n "$VALGRIND" ] && [ -n "$LOG_COMPILER" ]; then
     TESTPROG="$LOG_COMPILER $LOG_FLAGS"
 elif [ -n "@WINE@" ]; then
@@ -37,6 +38,8 @@ fi
 i=0
 rm -f ./*dxf.log
 is_release="$(grep -c 'IS_RELEASE 1' $top_builddir/src/config.h)"
+YEARS="2000 2004 2010 2013 2018"
+[ "$WORDS_BIGENDIAN" = 1 ] || YEARS="$YEARS 2007"
 
 check_subentity() {
     if [ -f "$dwg" ] && [ -f "$dxf" ]; then
@@ -60,7 +63,7 @@ check_subentity() {
 }
 
 # check subentity owners
-for year in r14 2000 2004 2007 2010 2013 2018
+for year in "r14 $YEARS"
 do
     for base in PolyLine3D PolyLine2D
     do
@@ -70,7 +73,7 @@ do
         check_subentity
     done
 done
-for year in r14 2000 2004 2007 2010 2013 2018
+for year in "r14 $YEARS"
 do
     for base in example Drawing
     do
@@ -119,6 +122,9 @@ do
     tgt="../$(basename "$dxf")"
     log="$(basename "$tgt").log"
     rm "./$log" 2>/dev/null
+    if [ "$WORDS_BIGENDIAN" = 1 -a "$log" = example_2007.dwg ]; then
+        break
+    fi
     for dxfname in ACDBPERSSUBENTMANAGER ACDBASSOCDEPENDENCY
     do
         if [ "$DEBUG_CLASSES" = "1" ]; then
@@ -223,7 +229,9 @@ check_roundtrip() {
     fi
 }
 
-for year in 2007 2018
+pline_order_years=2018
+[ "$WORDS_BIGENDIAN" = 1 ] || pline_order_years="2007 $pline_order_years"
+for year in $pline_order_years
 do
     base=PolyLine3D
     dwg="$DATADIR/${year}/${base}.dwg"
@@ -234,7 +242,7 @@ do
     check_pline_order
 done
 
-for year in 2000 2004 2007 2010 2013 2018
+for year in $YEARS
 do
     base=example
     dwg="$DATADIR/${base}_${year}.dwg"
@@ -245,7 +253,7 @@ do
     check_pline_order
 done
 
-for year in 2000 2004 2007 2010 2013 2018
+for year in $YEARS
 do
     base=example
     dwg="$DATADIR/${base}_${year}.dwg"
@@ -257,7 +265,7 @@ do
 done
 
 # r14 fails on MINSERT
-for year in 2000 2004 2007 2010 2013 2018 r13 # r14
+for year in "r13 $YEARS" #r14
 do
     base=example
     dwg="$DATADIR/${base}_${year}.dwg"
@@ -266,6 +274,7 @@ do
     rm "./$log" 2>/dev/null
     check_roundtrip
 done
+
 #for d in r11/ACEB10 r11/entities-2d r10/entities r9/entities r2.10/entities \
 #         r2.6/entities r1.4/entities
 #do

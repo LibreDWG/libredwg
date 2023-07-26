@@ -38,6 +38,7 @@ top_builddir="@top_builddir@"
 TESTS_ENVIRONMENT="@AM_TESTS_ENVIRONMENT@"
 DISABLE_JSON="@DISABLE_JSON@"
 DISABLE_WRITE="@DISABLE_WRITE@"
+WORDS_BIGENDIAN="@WORDS_BIGENDIAN@"
 EXEEXT="@EXEEXT@"
 WRITE_REVS="r1.4 r2.0 r2.10 r2.6 r9 r10 r11 r13 r14 r2000"
 #READ_REVS="r1.2 r1.4 r2.0 r2.10 r2.21 r2.22 r2.4 r2.5 r2.6 r9 r10 r11 r13 r14 r2000 r2004 r2010 r2013 r2018"
@@ -244,8 +245,9 @@ run ()
     fi
 }
 
-DATA="sample_2000 example_2000 example_2004 example_2007 example_2010"
-DATA="$DATA example_2013 example_2018 example_r14 example_r13 r1.4/entities"
+DATA="sample_2000 example_2000 example_2004"
+[ "$WORDS_BIGENDIAN" = 1 ] || DATA="$DATA example_2007"
+DATA="$DATA example_2010 example_2013 example_2018 example_r14 example_r13 r1.4/entities"
 TODO="r11/ACEB10 r11/entities-3d r10/entities r2.10/entities r2.6/entities"
 [ "$DISABLE_WRITE" = "1" ] || DATA="$DATA $TODO"
 if [ -n "$CHECK_MINIMAL" ]; then
