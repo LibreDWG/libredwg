@@ -1157,17 +1157,18 @@ bit_read_DD (Bit_Chain *dat, double default_value)
   if (two_bit_code == 2)
     {
       // dbl: 7654 3210
-      // first 2 bits eq (6-7), the rest not (0-5)
       uchar_result = (unsigned char *)&default_value;
       CHK_OVERFLOW_PLUS (6, __FUNCTION__, bit_nan ())
 #ifdef WORDS_BIGENDIAN
+      uchar_result[7] = bit_read_RC (dat);
+      uchar_result[6] = bit_read_RC (dat);
       uchar_result[5] = bit_read_RC (dat);
       uchar_result[4] = bit_read_RC (dat);
       uchar_result[3] = bit_read_RC (dat);
       uchar_result[2] = bit_read_RC (dat);
-      uchar_result[1] = bit_read_RC (dat);
-      uchar_result[0] = bit_read_RC (dat);
+      // keep the first 2 bytes
 #else
+      // first 2 bytes eq (6-7), the rest not (0-5)
       uchar_result[4] = bit_read_RC (dat);
       uchar_result[5] = bit_read_RC (dat);
       uchar_result[0] = bit_read_RC (dat);
@@ -1181,14 +1182,13 @@ bit_read_DD (Bit_Chain *dat, double default_value)
   else /* if (two_bit_code == 1) */
     {
       // first 4bits eq, only last 4
+#ifdef WORDS_BIGENDIAN
+      uint32_t *result = (uint32_t *)&default_value;
+      CHK_OVERFLOW_PLUS (4, __FUNCTION__, bit_nan ())
+      *result = bit_read_RL (dat);
+#else
       uchar_result = (unsigned char *)&default_value;
       CHK_OVERFLOW_PLUS (4, __FUNCTION__, bit_nan ())
-#ifdef WORDS_BIGENDIAN
-      uchar_result[3] = bit_read_RC (dat);
-      uchar_result[2] = bit_read_RC (dat);
-      uchar_result[1] = bit_read_RC (dat);
-      uchar_result[0] = bit_read_RC (dat);
-#else
       uchar_result[0] = bit_read_RC (dat);
       uchar_result[1] = bit_read_RC (dat);
       uchar_result[2] = bit_read_RC (dat);
@@ -3554,23 +3554,24 @@ bit_print (Bit_Chain *dat, size_t size)
   unsigned char sig;
   size_t i, j;
 
-  printf ("---------------------------------------------------------");
+  fprintf (stderr, "---------------------------------------------------------");
   if (size > (dat->size - dat->byte))
     size = dat->size - dat->byte;
   for (i = 0; i < size; i++)
     {
       if (i % 16 == 0)
-        printf ("\n[0x%04X]: ", (unsigned int)(dat->byte + i) & 0xffffffff);
-      printf ("%02X ", (unsigned char)dat->chain[dat->byte + i]);
+        fprintf (stderr,
+                 "\n[0x%04X]: ", (unsigned int)(dat->byte + i) & 0xffffffff);
+      fprintf (stderr, "%02X ", (unsigned char)dat->chain[dat->byte + i]);
       if (i % 16 == 15)
         for (j = i - 15; j <= i; j++)
           {
             sig = dat->chain[dat->byte + j];
-            printf ("%c", sig >= ' ' && sig < 128 ? sig : '.');
+            fprintf (stderr, "%c", sig >= ' ' && sig < 128 ? sig : '.');
           }
     }
-  puts ("");
-  puts ("---------------------------------------------------------");
+  fprintf (stderr,
+           "\n---------------------------------------------------------\n");
 }
 
 // The i-th bit of a string.
