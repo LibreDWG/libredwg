@@ -2172,7 +2172,7 @@ encode_r11_auxheader (Bit_Chain *restrict dat, Dwg_Data *restrict dwg)
         _obj->R11_HANDSEED->handleref.code = 0;
         _obj->R11_HANDSEED->handleref.size = 8;
       }
-    bit_write_RLL (dat, htobe64 (_obj->R11_HANDSEED->handleref.value));
+    bit_write_RLL_BE (dat, _obj->R11_HANDSEED->handleref.value);
     _obj->R11_HANDSEED->absolute_ref = _obj->R11_HANDSEED->handleref.value;
     LOG_TRACE ("R11_HANDSEED: " FORMAT_H " [H 5]\n",
                ARGS_H (_obj->R11_HANDSEED->handleref));

@@ -293,12 +293,10 @@
   FIELD_RS (HANDLING, 70); // use new HEX handles (should be RC)
 #ifdef IS_DECODER
   {
-    BITCODE_RLL v;
     _obj->HANDSEED = (BITCODE_H)calloc(1, sizeof(Dwg_Object_Ref));
     _obj->HANDSEED->handleref.code = 0;
     _obj->HANDSEED->handleref.size = 8;
-    v = bit_read_RLL (dat);
-    _obj->HANDSEED->handleref.value = htobe64 (v);
+    _obj->HANDSEED->handleref.value = bit_read_RLL_BE (dat);
     _obj->HANDSEED->absolute_ref = _obj->HANDSEED->handleref.value;
     LOG_TRACE ("HANDSEED: " FORMAT_H " [H 5]\n",
                ARGS_H (_obj->HANDSEED->handleref));
@@ -306,14 +304,14 @@
 #elif defined IS_ENCODER
   if (_obj->HANDSEED)
     {
-      bit_write_RLL (dat, htobe64 (_obj->HANDSEED->absolute_ref));
+      bit_write_RLL_BE (dat, _obj->HANDSEED->absolute_ref);
       LOG_TRACE ("HANDSEED: " FORMAT_H " [H 5]\n",
                  ARGS_H (_obj->HANDSEED->handleref));
     }
   else
     {
       unsigned long handseed = dwg_next_handle (dwg);
-      bit_write_RLL (dat, handseed);
+      bit_write_RLL_BE (dat, handseed);
       LOG_TRACE ("HANDSEED: (0.8.%lX) [H 5]\n", handseed);
     }
 #else
