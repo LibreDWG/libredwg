@@ -1740,22 +1740,26 @@ static int
 new_encr_sat_data_line (Dwg_Entity_3DSOLID *restrict _obj, Bit_Chain *dest,
                         unsigned int i)
 {
-  /*
+#if 0
   if (i + 1 >= _obj->num_blocks)
-    {
-      _obj->encr_sat_data = realloc (_obj->encr_sat_data, (i + 2) * sizeof
-  (char*)); _obj->block_size = realloc (_obj->block_size, (i + 2) * sizeof
-  (BITCODE_BL)); _obj->num_blocks = i + 1;
-    }
-  _obj->encr_sat_data[i] = calloc (dest->byte + 2, 1); // fresh, the dest buf
-  is too large bit_write_TF (dest, (BITCODE_TF) "\n\000", 2); // ensure proper
-  eol, dxf out relies on that. memcpy (_obj->encr_sat_data[i], dest->chain,
-  dest->byte); _obj->block_size[i] = dest->byte - 1; // dont count the final 0
+  {
+    _obj->encr_sat_data
+        = realloc (_obj->encr_sat_data, (i + 2) * sizeof (char *));
+    _obj->block_size
+        = realloc (_obj->block_size, (i + 2) * sizeof (BITCODE_BL));
+    _obj->num_blocks = i + 1;
+  }
+  // fresh, the dest buf is too large
+  _obj->encr_sat_data[i] = calloc (dest->byte + 2, 1);
+  // ensure proper eol, dxf out relies on that.
+  bit_write_TF (dest, (BITCODE_TF) "\n\000", 2);
+  memcpy (_obj->encr_sat_data[i], dest->chain, dest->byte);
+  _obj->block_size[i] = dest->byte - 1; // dont count the final 0
   bit_set_position (dest, 0);
   i++;
-  */
-  bit_write_TF (dest, (BITCODE_TF) "\n",
-                1); // ensure proper eol, dxf out relies on that
+#endif
+  // ensure proper eol, dxf out relies on that
+  bit_write_TF (dest, (BITCODE_TF) "\n", 1);
   return i;
 }
 
@@ -2085,9 +2089,11 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
         case 14: // subident
           {
             int len = bit_read_RC (&src);
+            if (len == 0)
+              return 0;
             if (src.byte + len >= src.size)
               {
-                LOG_ERROR ("Invalid SAB");
+                LOG_ERROR ("Invalid SAB len=%d [RC]", len);
                 bit_chain_free (&dest);
                 _obj->num_blocks = 0;
                 _obj->encr_sat_data[0] = NULL;
@@ -2127,8 +2133,8 @@ dwg_convert_SAB_to_SAT1 (Dwg_Entity_3DSOLID *restrict _obj)
             if (c == 13 && len < 80)
               {
                 memcpy (act_record, &src.chain[src.byte], len);
-                act_record[len]
-                    = '\0'; // to find identifier-specific true/false strings
+                // to find identifier-specific true/false strings
+                act_record[len] = '\0';
               }
             // TODO Begin-of-ACIS-History-Data => new line
             // TODO End-of-ACIS-History-Section => new line
